@@ -1,0 +1,30 @@
+{
+  "id": "nadeje_doziti_zdravi_65",
+  "name": "Naděje dožití ve zdraví (65 let)",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Doba dožití",
+  "definition": "Roky života bez omezení v běžných činnostech po 65. roce (Healthy Life Years).",
+  "unit": "let",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_hlye",
+      "params": { "geo": "CZ", "age": "Y65", "sex": "T" }
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat",
+    "params": { "geo": "EU27_2020", "age": "Y65", "sex": "T" }
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["Eurostat", "ČSÚ"],
+  "method_notes": "EU-SILC modul mini-EHIS. Self-reported. Pro ČR omezená historická srovnatelnost (změna metody 2014).",
+  "limitations": "Self-report má jiné psychometrické vlastnosti než klinické měření."
+}

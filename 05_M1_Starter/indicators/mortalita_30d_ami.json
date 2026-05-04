@@ -1,0 +1,30 @@
+{
+  "id": "mortalita_30d_ami",
+  "name": "30denní úmrtnost po IM (AMI)",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Klinická efektivnost",
+  "definition": "Riziko úmrtí do 30 dnů po hospitalizaci pro akutní infarkt myokardu, standardizováno na věk a pohlaví.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc_nrhosp",
+      "note": "Indikátor publikuje NRC. V M1–M3 použij OECD Health Statistics jako proxy zdroj. V M4+ napojit přímo na NRC datasety podle dohody o přístupu."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "AMI30DAYS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "AMI30DAYS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["NRC", "ÚZIS"],
+  "method_notes": "Mezinárodní srovnatelnost přes OECD HCQI. Standardizace na referenční OECD populaci.",
+  "limitations": "Zahrnuje pouze hospitalizované pacienty. Pacienti zemřelí mimo nemocnici nejsou v jmenovateli."
+}

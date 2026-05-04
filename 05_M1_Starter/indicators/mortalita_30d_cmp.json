@@ -1,0 +1,30 @@
+{
+  "id": "mortalita_30d_cmp",
+  "name": "30denní úmrtnost po cévní mozkové příhodě",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Klinická efektivnost",
+  "definition": "Standardizovaná 30denní úmrtnost po hospitalizaci pro ischemickou nebo hemoragickou CMP.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc_nrhosp",
+      "note": "Indikátor publikuje NRC. V M1–M3 použij OECD Health Statistics jako proxy. V M4+ napojit přímo na NRC datasety."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "STROKE30DAYS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "STROKE30DAYS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["NRC", "ÚZIS"],
+  "method_notes": "Standardizováno na věk a pohlaví. Pacient-level linkáž s úmrtním listem.",
+  "limitations": "Pacienti zemřelí před přijetím do nemocnice nejsou zahrnuti."
+}

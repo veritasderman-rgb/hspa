@@ -1,0 +1,30 @@
+{
+  "id": "pm25_expozice",
+  "name": "Expozice PM2.5",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizika životního prostředí",
+  "definition": "Roční průměrná koncentrace jemných prachových částic (PM2.5) v ambientním ovzduší, populačně vážená.",
+  "unit": "µg/m³",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eea",
+      "endpoint": "https://www.eea.europa.eu/data-and-maps/dashboards/air-quality-statistics"
+    },
+    "fallback": {
+      "type": "chmu_csv",
+      "url": "https://www.chmi.cz/files/portal/docs/uoco/oco_eng.html"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PM25_EXPOSURE",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["EEA", "ČHMÚ"],
+  "method_notes": "Populačně vážená (population-weighted) koncentrace. WHO doporučuje < 5 µg/m³.",
+  "limitations": "Národní průměr maskuje regionální výkyvy (Moravskoslezský kraj výrazně nad průměrem)."
+}

@@ -1,0 +1,30 @@
+{
+  "id": "kuractvi_denni",
+  "name": "Denní kuřáctví (15+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky",
+  "definition": "Podíl populace 15+, která denně kouří tabákové výrobky (EHIS).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ehis_szu",
+      "note": "EHIS běží v 5letých vlnách. Mezi vlnami extrapolace nebo náhradní zdroj (SZÚ Životní styl)."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "DAILY_SMOKING"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DAILY_SMOKING",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "5-yearly",
+  "stewards": ["SZÚ", "Eurostat"],
+  "method_notes": "Self-reported. EHIS je harmonizován v EU.",
+  "limitations": "Self-report typicky podhodnocuje skutečnou prevalenci o 5–15 %."
+}

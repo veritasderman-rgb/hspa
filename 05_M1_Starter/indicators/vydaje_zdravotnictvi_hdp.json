@@ -1,0 +1,30 @@
+{
+  "id": "vydaje_zdravotnictvi_hdp",
+  "name": "Výdaje na zdravotnictví / HDP",
+  "area": "Výstupy",
+  "domain": "Finanční stabilita",
+  "subdomain": "Fiskální udržitelnost",
+  "definition": "Celkové výdaje na zdravotnictví jako podíl HDP (System of Health Accounts SHA 2011).",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "csu_sha",
+      "note": "ČSÚ publikuje SHA report ročně. Endpoint v DataStat dohledat v M3."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "HEALTH_EXP_GDP"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HEALTH_EXP_GDP",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ČSÚ", "OECD"],
+  "method_notes": "Pro signal: pod OECD průměrem o > 5 % = warn (možná podfinancování), o > 10 % = bad. Nad průměrem nemusí být lepší.",
+  "limitations": "Vyšší výdaje neznamenají automaticky lepší výsledky. Direction kontextově závislý."
+}

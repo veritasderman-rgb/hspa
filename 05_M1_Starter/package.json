@@ -1,0 +1,26 @@
+{
+  "name": "zdrave-cesko-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HSPA dashboard for Czech Republic - live data from UZIS, CSU, OECD, Eurostat",
+  "type": "module",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "ingest": "node ingest/run.js",
+    "ingest:nrpzs": "node ingest/fetchers/uzis_nrpzs.js",
+    "ingest:csu": "node ingest/fetchers/csu.js",
+    "ingest:oecd": "node ingest/fetchers/oecd.js",
+    "ingest:eurostat": "node ingest/fetchers/eurostat.js",
+    "transform": "node ingest/transform.js",
+    "serve": "npx http-server . -p 8080 -c-1",
+    "test": "node --test tests/transform.test.js",
+    "validate:data": "node ingest/validate.js"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.6",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

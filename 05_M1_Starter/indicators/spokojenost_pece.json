@@ -1,0 +1,30 @@
+{
+  "id": "spokojenost_pece",
+  "name": "Spokojenost s dostupností péče",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Subjektivní spokojenost",
+  "definition": "Podíl respondentů, kteří jsou spokojeni s dostupností kvalitní zdravotní péče (Gallup World Poll, OECD Health at a Glance).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "code": "PERCEIVED_HEALTHCARE_QUALITY",
+      "dataset": "HEALTH_STAT"
+    },
+    "fallback": {
+      "type": "report",
+      "url": "https://www.oecd.org/en/publications/health-at-a-glance-2025_15a55280-en.html"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd_average",
+    "code": "PERCEIVED_HEALTHCARE_QUALITY"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["OECD", "Gallup"],
+  "method_notes": "Self-reported survey, n ≈ 1 000 respondentů na zemi.",
+  "limitations": "Subjektivní vnímání není totéž co objektivní kvalita."
+}

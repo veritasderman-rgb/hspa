@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zdravé Česko – Hodnocení výkonnosti zdravotního systému ČR</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #0B5394;
+  --primary-dark: #073763;
+  --accent: #E69138;
+  --good: #38761D;
+  --warn: #B45F06;
+  --bad: #990000;
+  --neutral: #5A6770;
+  --bg: #F7F9FB;
+  --card: #FFFFFF;
+  --border: #E1E8ED;
+  --text: #1F2D3A;
+  --muted: #607080;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+header.topbar {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: white;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-logo {
+  width: 44px; height: 44px;
+  background: white;
+  color: var(--primary-dark);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: bold;
+}
+.brand h1 { font-size: 20px; font-weight: 600; }
+.brand h1 small { display: block; font-size: 12px; opacity: 0.85; font-weight: 400; }
+.audience-switch { display: flex; gap: 4px; background: rgba(255,255,255,0.12); padding: 4px; border-radius: 8px; }
+.audience-switch button {
+  background: transparent; color: white; border: none;
+  padding: 8px 14px; cursor: pointer; border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+}
+.audience-switch button.active { background: white; color: var(--primary-dark); }
+
+nav.dimnav {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+nav.dimnav button {
+  background: none; border: none; padding: 16px 20px;
+  font-size: 14px; cursor: pointer; color: var(--muted);
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  font-weight: 500;
+}
+nav.dimnav button:hover { color: var(--primary); }
+nav.dimnav button.active {
+  color: var(--primary-dark);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+main { padding: 28px 32px 60px; max-width: 1400px; margin: 0 auto; }
+
+.hero-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+.hero-summary h2 { font-size: 22px; margin-bottom: 8px; }
+.hero-summary p.lead { color: var(--muted); margin-bottom: 22px; max-width: 800px; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.summary-card {
+  border-left: 4px solid var(--primary);
+  padding: 16px 18px;
+  background: var(--bg);
+  border-radius: 6px;
+}
+.summary-card.good { border-left-color: var(--good); }
+.summary-card.warn { border-left-color: var(--warn); }
+.summary-card.bad { border-left-color: var(--bad); }
+.summary-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 600; }
+.summary-card .value { font-size: 28px; font-weight: 700; color: var(--text); margin: 4px 0; }
+.summary-card .delta { font-size: 12px; color: var(--muted); }
+.summary-card .delta strong.up { color: var(--good); }
+.summary-card .delta strong.down { color: var(--bad); }
+
+.section { margin-bottom: 36px; }
+.section-title {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+.section-title h3 { font-size: 20px; color: var(--primary-dark); }
+.section-title .badge {
+  background: var(--primary);
+  color: white;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.section-title .desc { color: var(--muted); font-size: 13px; margin-left: auto; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+.indicator-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.indicator-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.indicator-card .top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.indicator-card h4 { font-size: 15px; font-weight: 600; line-height: 1.3; }
+.indicator-card .signal {
+  width: 14px; height: 14px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+.signal.good { background: var(--good); }
+.signal.warn { background: var(--warn); }
+.signal.bad { background: var(--bad); }
+.signal.neutral { background: var(--neutral); }
+.indicator-card .value-row {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;
+}
+.indicator-card .big-value { font-size: 30px; font-weight: 700; color: var(--primary-dark); }
+.indicator-card .unit { font-size: 13px; color: var(--muted); }
+.indicator-card .compare {
+  font-size: 12px; color: var(--muted);
+  background: var(--bg); padding: 6px 10px; border-radius: 6px;
+  margin-bottom: 10px;
+}
+.indicator-card .compare strong { color: var(--text); }
+.indicator-card .chart-wrap { height: 90px; margin-top: 8px; }
+.indicator-card .source { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.indicator-card .source a { color: var(--primary); text-decoration: none; }
+
+.audience-only { display: none; }
+body[data-audience="public"] .public { display: block; }
+body[data-audience="public"] .public-grid { display: grid; }
+body[data-audience="prof"] .prof { display: block; }
+body[data-audience="prof"] .prof-grid { display: grid; }
+body[data-audience="policy"] .policy { display: block; }
+body[data-audience="policy"] .policy-grid { display: grid; }
+
+.audience-banner {
+  background: linear-gradient(90deg, var(--bg) 0%, white 100%);
+  padding: 14px 20px;
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  color: var(--text);
+}
+.audience-banner strong { color: var(--primary-dark); }
+
+.dim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.dim-card {
+  padding: 18px;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dim-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(11,83,148,0.1); }
+.dim-card .dim-num { font-size: 28px; font-weight: 700; color: var(--accent); }
+.dim-card h5 { font-size: 16px; margin: 6px 0; color: var(--primary-dark); }
+.dim-card p { font-size: 12px; color: var(--muted); }
+.dim-card .progress-bar { margin-top: 10px; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.dim-card .progress-fill { height: 100%; background: var(--good); }
+
+.regional-section {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 22px;
+  margin-bottom: 28px;
+}
+.regional-section h3 { color: var(--primary-dark); font-size: 18px; margin-bottom: 14px; }
+.region-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.region-table th { background: var(--bg); padding: 10px; text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.region-table td { padding: 10px; border-bottom: 1px solid var(--border); }
+.region-table tr:hover { background: var(--bg); }
+.region-table .bar { display: inline-block; height: 8px; background: var(--primary); border-radius: 4px; vertical-align: middle; }
+.region-table .score { font-weight: 600; color: var(--primary-dark); }
+
+footer.bottom {
+  background: var(--primary-dark);
+  color: white;
+  padding: 28px 32px;
+  margin-top: 40px;
+}
+footer.bottom .row { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+footer.bottom h6 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.9; }
+footer.bottom p, footer.bottom a { font-size: 13px; color: white; opacity: 0.85; text-decoration: none; line-height: 1.7; }
+footer.bottom a:hover { opacity: 1; text-decoration: underline; }
+footer.bottom .disclaimer { max-width: 1400px; margin: 24px auto 0; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.15); font-size: 11px; opacity: 0.7; }
+
+.kpi-explainer {
+  background: #FFF8E7;
+  border: 1px solid #F5D78E;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.kpi-explainer strong { color: var(--warn); }
+
+@media (max-width: 768px) {
+  header.topbar { flex-direction: column; gap: 14px; }
+  main { padding: 18px 16px 40px; }
+  .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body data-audience="public">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">Z</div>
+    <h1>Zdravé Česko
+      <small>Hodnocení výkonnosti zdravotního systému ČR · HSPA</small>
+    </h1>
+  </div>
+  <div class="audience-switch" role="tablist">
+    <button data-aud="public" class="active">Pro veřejnost</button>
+    <button data-aud="prof">Pro odborníky</button>
+    <button data-aud="policy">Pro tvůrce politik</button>
+  </div>
+</header>
+
+<nav class="dimnav">
+  <button data-section="prehled" class="active">Přehled</button>
+  <button data-section="vysledky">Výsledky</button>
+  <button data-section="vystupy">Výstupy</button>
+  <button data-section="procesy">Procesy</button>
+  <button data-section="struktury">Struktury</button>
+  <button data-section="moduly">Tematické moduly</button>
+  <button data-section="regiony">Regionální srovnání</button>
+  <button data-section="metodika">Metodika &amp; data</button>
+</nav>
+
+<main id="content">
+
+<!-- ====================== PŘEHLED ====================== -->
+<section id="sec-prehled" class="section-view">
+
+  <div class="audience-banner public">
+    <strong>Vítejte.</strong> Tato stránka shrnuje, jak si české zdravotnictví stojí. Najdete zde 8 klíčových čísel, jejich srovnání s evropským průměrem a odkazy na detaily.
+  </div>
+  <div class="audience-banner prof">
+    <strong>Pohled odborníka.</strong> Zobrazena jsou data o klinické kvalitě, dostupnosti a procesech péče, srovnaná s OECD/EU benchmarky. Filtrujte podle dimenze, regionu nebo poskytovatele.
+  </div>
+  <div class="audience-banner policy">
+    <strong>Pohled tvůrce politik.</strong> Indikátory jsou navázány na strategické cíle Zdraví 2030 a Strategický rámec rozvoje péče o zdraví do 2035. Trend, mezera vůči OECD, doporučená opatření.
+  </div>
+
+  <div class="hero-summary">
+    <h2>Stav českého zdravotnictví 2025 v 8 číslech</h2>
+    <p class="lead">Klíčové ukazatele výkonnosti zdravotního systému ČR. Hodnoty pocházejí z OECD Health at a Glance 2025, NZIS/ÚZIS, ČSÚ a NRC. Aktualizováno 4× ročně.</p>
+
+    <div class="summary-grid">
+      <div class="summary-card warn">
+        <div class="label">Naděje dožití při narození</div>
+        <div class="value">79,9 let</div>
+        <div class="delta"><strong class="up">▲ +0,4</strong> oproti 2023 · OECD průměr 81,1</div>
+      </div>
+      <div class="summary-card good">
+        <div class="label">30denní úmrtnost po IM</div>
+        <div class="value">5,2 %</div>
+        <div class="delta"><strong class="up">▼ –0,3</strong> · OECD průměr 6,5 % (lépe než průměr)</div>
+      </div>
+      <div class="summary-card warn">
+        <div class="label">30denní úmrtnost po CMP</div>
+        <div class="value">11,2 %</div>
+        <div class="delta">stabilní · OECD průměr 7,7 %</div>
+      </div>
+      <div class="summary-card good">
+        <div class="label">Spokojenost s péčí</div>
+        <div class="value">75 %</div>
+        <div class="delta">OECD průměr 64 %</div>
+      </div>
+      <div class="summary-card good">
+        <div class="label">Lékaři / 1 000 obyvatel</div>
+        <div class="value">4,2</div>
+        <div class="delta">OECD průměr 3,9</div>
+      </div>
+      <div class="summary-card warn">
+        <div class="label">Výdaje na zdravotnictví / HDP</div>
+        <div class="value">8,5 %</div>
+        <div class="delta">OECD průměr 9,3 %</div>
+      </div>
+      <div class="summary-card bad">
+        <div class="label">PM2.5 expozice</div>
+        <div class="value">14,1 µg/m³</div>
+        <div class="delta">OECD průměr 11,2 µg/m³ (horší)</div>
+      </div>
+      <div class="summary-card warn">
+        <div class="label">Odvratitelná úmrtnost</div>
+        <div class="value">214 / 100 tis.</div>
+        <div class="delta">EU průměr 191 / 100 tis.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h3>4 oblasti × 12 domén HSPA</h3>
+    <span class="badge">OECD rámec 2023</span>
+    <span class="desc">Klikněte na doménu pro detail</span>
+  </div>
+
+  <div class="dim-grid" id="dimGrid"></div>
+
+</section>
+
+<!-- ====================== VÝSLEDKY ====================== -->
+<section id="sec-vysledky" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Výsledky · Outcomes</h3>
+    <span class="badge">2 domény</span>
+    <span class="desc">Co systém dosahuje pro zdraví obyvatel</span>
+  </div>
+
+  <div class="card-grid" id="vysledkyGrid"></div>
+</section>
+
+<!-- ====================== VÝSTUPY ====================== -->
+<section id="sec-vystupy" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Výstupy · Outputs</h3>
+    <span class="badge">3 domény</span>
+    <span class="desc">Dostupnost, kvalita a finanční stabilita</span>
+  </div>
+
+  <div class="card-grid" id="vystupyGrid"></div>
+</section>
+
+<!-- ====================== PROCESY ====================== -->
+<section id="sec-procesy" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Procesy · Processes</h3>
+    <span class="badge">3 domény</span>
+    <span class="desc">Jak je péče organizována a poskytována</span>
+  </div>
+
+  <div class="card-grid" id="procesyGrid"></div>
+</section>
+
+<!-- ====================== STRUKTURY ====================== -->
+<section id="sec-struktury" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Struktury · Structures</h3>
+    <span class="badge">4 domény</span>
+    <span class="desc">Pracovní síla, eHealth, financování, odolnost</span>
+  </div>
+
+  <div class="card-grid" id="strukturyGrid"></div>
+</section>
+
+<!-- ====================== TEMATICKÉ MODULY ====================== -->
+<section id="sec-moduly" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Tematické moduly</h3>
+    <span class="badge">Fáze 2–3</span>
+    <span class="desc">Hloubkový průřezový pohled na vybraná témata</span>
+  </div>
+
+  <div class="card-grid" id="moduleGrid"></div>
+</section>
+
+<!-- ====================== REGIONY ====================== -->
+<section id="sec-regiony" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Regionální srovnání</h3>
+    <span class="badge">14 krajů</span>
+    <span class="desc">Equity dimenze: územní nerovnosti</span>
+  </div>
+
+  <div class="regional-section">
+    <h3>Naděje dožití (muži, 2024)</h3>
+    <table class="region-table">
+      <thead><tr><th>Kraj</th><th>Hodnota</th><th>vs. ČR průměr</th><th>Vizualizace</th></tr></thead>
+      <tbody id="regionTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="regional-section">
+    <h3>Dostupnost lékařů primární péče (na 1 000 obyvatel)</h3>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:14px;">Pětina venkovských obcí čelí výrazné mezeře v dostupnosti všeobecných praktiků. Karlovarský a Ústecký kraj systematicky pod průměrem.</p>
+    <div style="height: 280px;"><canvas id="regionDoctors"></canvas></div>
+  </div>
+</section>
+
+<!-- ====================== METODIKA ====================== -->
+<section id="sec-metodika" class="section-view" style="display:none;">
+  <div class="section-title">
+    <h3>Metodika &amp; otevřená data</h3>
+    <span class="badge">Transparency</span>
+  </div>
+
+  <div class="kpi-explainer">
+    <strong>Princip:</strong> Každý ukazatel má veřejně dostupnou metodickou kartu (data source, výpočet, omezení, frekvence aktualizace, garant). Inspirace: belgický KCE / Sciensano model.
+  </div>
+
+  <div class="card-grid">
+    <div class="indicator-card">
+      <h4>Národní zdravotnický informační systém (NZIS)</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">Hlavní zdroj: 26 zdravotních registrů spravovaných ÚZIS ČR (zákon 372/2011 Sb.). Pokrývá hospitalizace, výkony, registry závažných nemocí, perinatální data, ambulantní výkony.</p>
+      <div class="source"><a href="https://www.uzis.cz/" target="_blank">uzis.cz · NZIS</a></div>
+    </div>
+    <div class="indicator-card">
+      <h4>OECD Health Statistics</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">Mezinárodní srovnání podle harmonizované metodiky (Health at a Glance, System of Health Accounts SHA 2011). Roční update.</p>
+      <div class="source"><a href="https://www.oecd.org/health/" target="_blank">oecd.org/health</a></div>
+    </div>
+    <div class="indicator-card">
+      <h4>Eurostat Public Health</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">EU-SILC, EHIS (Evropské výběrové šetření o zdraví), HFA-DB. Pro indikátory equity a subjektivního zdraví.</p>
+      <div class="source"><a href="https://ec.europa.eu/eurostat" target="_blank">eurostat</a></div>
+    </div>
+    <div class="indicator-card">
+      <h4>Národní referenční centrum (NRC)</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">Hodnocení kvality péče, indikátory na úrovni poskytovatele (PROMs/PREMs, HSMR, řízení DRG).</p>
+      <div class="source"><a href="https://www.nrc.cz/" target="_blank">nrc.cz</a></div>
+    </div>
+    <div class="indicator-card">
+      <h4>VZP / SZP datasety</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">Data zdravotních pojišťoven o čerpání péče (k-kódy, recept, farmakoterapie). Anonymizované dohodovací řízení datasety.</p>
+      <div class="source"><a href="https://www.vzp.cz/" target="_blank">vzp.cz</a></div>
+    </div>
+    <div class="indicator-card">
+      <h4>SZÚ – EHES, EHIS, životní prostředí</h4>
+      <p style="font-size:13px; color:var(--muted); margin: 10px 0;">Státní zdravotní ústav: rizikové faktory, expozice znečištění, screeningy, zdravotní gramotnost.</p>
+      <div class="source"><a href="https://szu.gov.cz/" target="_blank">szu.gov.cz</a></div>
+    </div>
+  </div>
+
+  <div class="kpi-explainer" style="margin-top: 22px;">
+    <strong>Governance dat:</strong> Koordinační orgán při MZČR + technické pracovní skupiny u garantů (ÚZIS, SZÚ, NRC, VZP/SZP). Roční stakeholder konference. Schválení indikátorů High-Level Advisory Board (HLAB).
+  </div>
+</section>
+
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>O projektu</h6>
+      <p>Zdravé Česko je veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA. Realizováno MZČR ve spolupráci s ÚZIS, SZÚ, NRC, VZP/SZP a OECD/WHO.</p>
+    </div>
+    <div>
+      <h6>Datové zdroje</h6>
+      <p><a href="https://www.uzis.cz/">ÚZIS · NZIS</a><br>
+      <a href="https://www.nzip.cz/">Národní zdravotnický informační portál</a><br>
+      <a href="https://www.oecd.org/health/">OECD Health</a><br>
+      <a href="https://ec.europa.eu/eurostat">Eurostat</a></p>
+    </div>
+    <div>
+      <h6>Inspirace</h6>
+      <p><a href="https://www.healthybelgium.be">healthybelgium.be (KCE / Sciensano)</a><br>
+      <a href="https://www.oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html">OECD HSPA pro ČR (2023)</a></p>
+    </div>
+    <div>
+      <h6>Ke stažení</h6>
+      <p><a href="#">Výroční zpráva HSPA 2025 (PDF)</a><br>
+      <a href="#">Otevřená data (CSV/JSON)</a><br>
+      <a href="#">API dokumentace</a><br>
+      <a href="#">Metodické karty indikátorů</a></p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Prototyp · květen 2026 · Mock data inspirovaná reálnými zdroji (OECD Health at a Glance 2025, ÚZIS NZIS 2024, KCE Belgie). Slouží pro demonstraci konceptu, nepoužívat pro rozhodování.
+  </div>
+</footer>
+
+<script>
+// ============== DATA ==============
+const dimensions = [
+  { id: 'zs', area: 'Výsledky', name: 'Zdravotní stav', score: 72, desc: 'Délka dožití, odvratitelná úmrtnost, subjektivní zdraví, zátěž nemocí.' },
+  { id: 'zr', area: 'Výsledky', name: 'Zdravotní rizika', score: 58, desc: 'Rizikové zvyky, výživa, pohyb, životní prostředí.' },
+  { id: 'do', area: 'Výstupy', name: 'Dostupnost péče', score: 78, desc: 'Finanční, geografická a časová dostupnost.' },
+  { id: 'kv', area: 'Výstupy', name: 'Kvalita', score: 74, desc: 'Bezpečí, klinická efektivnost, zaměření na člověka, odpovídající péče.' },
+  { id: 'fs', area: 'Výstupy', name: 'Finanční stabilita', score: 70, desc: 'Příjmy systému, fiskální udržitelnost, zdravotní pojištění.' },
+  { id: 'ip', area: 'Procesy', name: 'Integrované poskytování', score: 55, desc: 'Koordinace, kontinuita, dlouhodobá péče, prevence.' },
+  { id: 'ne', area: 'Procesy', name: 'Nákladově efektivní', score: 65, desc: 'Předpisy, hospitalizace, odvratitelné hospitalizace.' },
+  { id: 'sp', area: 'Procesy', name: 'Spravedlivé poskytování', score: 62, desc: 'Equity v přístupu k péči podle SES, věku, regionu.' },
+  { id: 'ps', area: 'Struktury', name: 'Pracovní síla', score: 64, desc: 'Současné a budoucí kapacity, věková struktura.' },
+  { id: 'eh', area: 'Struktury', name: 'eHealth a technologie', score: 50, desc: 'Infrastruktura informací, inovativní postupy, AI.' },
+  { id: 'fi', area: 'Struktury', name: 'Financování', score: 68, desc: 'Výdajová strana systému podle typů péče.' },
+  { id: 'od', area: 'Struktury', name: 'Odolnost', score: 60, desc: 'Schopnost absorbovat šoky (pandemie, krize).' },
+];
+
+// Indikátory s mock daty (ve skutečnosti by se načítaly z API)
+const indicators = {
+  vysledky: [
+    { name: 'Naděje dožití při narození', value: 79.9, unit: 'let', signal: 'warn', oecd: 81.1, trend: [78.6, 79.0, 79.5, 79.5, 79.9], desc: 'Průměrný počet let, který se dožije novorozenec za daných úmrtnostních poměrů.', source: 'ČSÚ · OECD' },
+    { name: 'Naděje dožití ve zdraví (HLY, 65+)', value: 8.4, unit: 'let', signal: 'bad', oecd: 10.2, trend: [8.2, 8.3, 8.4, 8.4, 8.4], desc: 'Roky života bez omezení v běžných činnostech po 65. roce.', source: 'Eurostat EU-SILC' },
+    { name: 'Odvratitelná úmrtnost (preventable)', value: 214, unit: '/ 100 tis.', signal: 'warn', oecd: 191, trend: [248, 235, 224, 219, 214], desc: 'Úmrtí, kterým by bylo možné zabránit primární prevencí.', source: 'Eurostat · ÚZIS NRZP' },
+    { name: 'Úmrtnost léčitelná zdravotní péčí', value: 119, unit: '/ 100 tis.', signal: 'warn', oecd: 96, trend: [136, 130, 124, 121, 119], desc: 'Úmrtí, kterým bylo možné zabránit včasnou a kvalitní léčbou.', source: 'Eurostat · ÚZIS' },
+    { name: 'Subjektivní zdraví – velmi dobré/dobré', value: 62, unit: '%', signal: 'warn', oecd: 68, trend: [60, 61, 62, 62, 62], desc: 'Podíl populace 16+ hodnotící své zdraví jako dobré nebo velmi dobré.', source: 'EU-SILC' },
+    { name: 'Sebevražednost', value: 12.8, unit: '/ 100 tis.', signal: 'warn', oecd: 11.3, trend: [13.5, 13.0, 12.9, 12.8, 12.8], desc: 'Standardizovaná úmrtnost na sebevraždy.', source: 'NRZP · ÚZIS' },
+    { name: 'Kuřáctví (denní, 15+)', value: 22.6, unit: '%', signal: 'bad', oecd: 16.0, trend: [25.0, 24.1, 23.5, 22.9, 22.6], desc: 'Podíl denních kuřáků v populaci 15+.', source: 'EHIS · SZÚ' },
+    { name: 'Konzumace alkoholu (čistého)', value: 11.6, unit: 'l/osobu', signal: 'bad', oecd: 8.6, trend: [11.8, 11.9, 11.8, 11.7, 11.6], desc: 'Spotřeba čistého alkoholu na osobu 15+ ročně.', source: 'OECD · ČSÚ' },
+    { name: 'Obezita dospělých (BMI≥30)', value: 21.5, unit: '%', signal: 'warn', oecd: 19.5, trend: [19.0, 20.2, 20.8, 21.2, 21.5], desc: 'Self-reported obezita podle EHIS.', source: 'EHIS 2024' },
+    { name: 'Expozice PM2.5', value: 14.1, unit: 'µg/m³', signal: 'bad', oecd: 11.2, trend: [16.5, 15.8, 15.0, 14.5, 14.1], desc: 'Roční průměrná koncentrace jemných prachových částic.', source: 'EEA · ČHMÚ' },
+  ],
+  vystupy: [
+    { name: 'Pokrytí veřejným pojištěním', value: 100, unit: '%', signal: 'good', oecd: 98, trend: [100,100,100,100,100], desc: 'Univerzální pokrytí.', source: 'VZP/SZP' },
+    { name: 'Out-of-pocket výdaje', value: 14.5, unit: '%', signal: 'good', oecd: 18.0, trend: [15.2, 15.0, 14.8, 14.6, 14.5], desc: 'Podíl přímých plateb pacientů na celkových výdajích.', source: 'SHA · ÚZIS' },
+    { name: 'Odložená péče z finančních důvodů', value: 2.1, unit: '%', signal: 'good', oecd: 4.4, trend: [2.5, 2.4, 2.3, 2.2, 2.1], desc: 'Podíl osob, které odložily péči kvůli nákladům.', source: 'EU-SILC' },
+    { name: 'Čekací doba na endoprotézu kyčle', value: 142, unit: 'dnů (medián)', signal: 'warn', oecd: 110, trend: [180, 165, 152, 148, 142], desc: 'Medián čekání na elektivní operaci.', source: 'NRC · NZIS' },
+    { name: 'Spokojenost s dostupností péče', value: 75, unit: '%', signal: 'good', oecd: 64, trend: [72, 73, 74, 75, 75], desc: 'OECD Health at a Glance perception survey.', source: 'OECD' },
+    { name: '30denní úmrtnost po IM (AMI)', value: 5.2, unit: '%', signal: 'good', oecd: 6.5, trend: [6.1, 5.8, 5.5, 5.3, 5.2], desc: 'Riziko úmrtí do 30 dnů po hospitalizaci pro AIM.', source: 'NRC · NRHOSP' },
+    { name: '30denní úmrtnost po CMP', value: 11.2, unit: '%', signal: 'warn', oecd: 7.7, trend: [13.8, 12.9, 12.0, 11.5, 11.2], desc: 'Standardizovaná 30denní úmrtnost po cévní mozkové příhodě.', source: 'NRC · NRHOSP' },
+    { name: 'Sectio cesarea', value: 26.0, unit: '%', signal: 'warn', oecd: 27.6, trend: [25.0, 25.3, 25.5, 25.7, 26.0], desc: 'Podíl porodů císařským řezem (NRRZ Perinatologie).', source: 'NRRZ · ÚZIS' },
+    { name: 'Hospital-acquired infekce (HAI)', value: 4.8, unit: '%', signal: 'warn', oecd: 4.5, trend: [5.5, 5.2, 5.0, 4.9, 4.8], desc: 'Bodová prevalence nemocničních infekcí.', source: 'SZÚ · ECDC PPS' },
+    { name: 'Spokojenost s komunikací lékaře', value: 81, unit: '%', signal: 'good', oecd: 78, trend: [78, 79, 80, 81, 81], desc: 'PREMs – patient-reported experience measure.', source: 'NRC PREMs' },
+    { name: 'Podíl výdajů na zdravotnictví / HDP', value: 8.5, unit: '%', signal: 'warn', oecd: 9.3, trend: [9.2, 8.9, 8.7, 8.5, 8.5], desc: 'Total health expenditure as % GDP.', source: 'SHA · ČSÚ' },
+    { name: 'Výdaje na zdravotnictví / obyvatel', value: 5014, unit: '$ PPP', signal: 'warn', oecd: 5967, trend: [4520, 4720, 4850, 4950, 5014], desc: 'Per capita zdravotní výdaje, PPP.', source: 'OECD SHA' },
+  ],
+  procesy: [
+    { name: 'Pacienti s registrovaným praktikem', value: 88, unit: '%', signal: 'good', oecd: 84, trend: [85, 86, 87, 88, 88], desc: 'Podíl populace s registrací u VPL.', source: 'SUKL · VZP' },
+    { name: 'Odvratitelné hospitalizace (diabetes)', value: 132, unit: '/ 100 tis.', signal: 'warn', oecd: 105, trend: [148, 142, 138, 135, 132], desc: 'Hospitalizace pro komplikace diabetu (PHC sensitive).', source: 'NRHOSP' },
+    { name: 'Odvratitelné hospitalizace (CHOPN/astma)', value: 168, unit: '/ 100 tis.', signal: 'bad', oecd: 122, trend: [185, 180, 175, 172, 168], desc: 'Hospitalizace pro astma/CHOPN.', source: 'NRHOSP' },
+    { name: 'Pokrytí očkováním (MMR, 2. dávka)', value: 85, unit: '%', signal: 'warn', oecd: 92, trend: [90, 88, 87, 86, 85], desc: 'Podíl 2letých dětí s 2. dávkou MMR.', source: 'SZÚ · NRO' },
+    { name: 'Účast na screeningu nádoru prsu (50–69 let)', value: 62, unit: '%', signal: 'warn', oecd: 60, trend: [60, 61, 62, 62, 62], desc: 'Two-year coverage screeningu mamografií.', source: 'NRRP · ÚZIS' },
+    { name: 'Účast na screeningu kolorekt. ca.', value: 32, unit: '%', signal: 'bad', oecd: 49, trend: [29, 30, 31, 32, 32], desc: 'Účast na screeningu KRK 50–74.', source: 'NRRP · ÚZIS' },
+    { name: 'Časná rehabilitace po CMP', value: 68, unit: '%', signal: 'warn', oecd: 78, trend: [62, 64, 66, 67, 68], desc: 'Podíl pacientů s rehabilitací do 7 dnů od CMP.', source: 'NRC · ICRC' },
+    { name: 'Antibiotic use (DDD/1000/den)', value: 19.4, unit: 'DDD', signal: 'warn', oecd: 18.0, trend: [21.5, 20.8, 20.2, 19.8, 19.4], desc: 'Spotřeba ATB ambulantně.', source: 'SUKL · ESAC' },
+    { name: 'Nerovnost v neuspokojených potřebách péče', value: 4.2, unit: 'p.b.', signal: 'warn', oecd: 3.0, trend: [4.8, 4.6, 4.5, 4.3, 4.2], desc: 'Rozdíl Q1 vs Q5 příjmů v reportovaných unmet needs.', source: 'EU-SILC' },
+  ],
+  struktury: [
+    { name: 'Lékaři / 1 000 obyvatel', value: 4.2, unit: '', signal: 'good', oecd: 3.9, trend: [4.0, 4.1, 4.1, 4.2, 4.2], desc: 'Praktikující lékaři.', source: 'NRZP · ÚZIS' },
+    { name: 'Sestry / 1 000 obyvatel', value: 9.0, unit: '', signal: 'warn', oecd: 9.2, trend: [9.2, 9.1, 9.0, 9.0, 9.0], desc: 'Praktikující všeobecné sestry.', source: 'NRZP · ÚZIS' },
+    { name: 'Podíl lékařů 55+', value: 36, unit: '%', signal: 'bad', oecd: 27, trend: [32, 33, 34, 35, 36], desc: 'Stárnutí lékařské pracovní síly.', source: 'NRZP' },
+    { name: 'Absolventi LF / 100 tis.', value: 14.2, unit: '', signal: 'warn', oecd: 13.5, trend: [13.0, 13.4, 13.8, 14.0, 14.2], desc: 'Roční počet absolventů lékařských fakult.', source: 'MŠMT · ÚZIS' },
+    { name: 'Sdílení zdravotní dokumentace eHealth', value: 31, unit: '%', signal: 'bad', oecd: 64, trend: [18, 22, 26, 29, 31], desc: 'Podíl zdravotnických zařízení s interoperabilní výměnou dat.', source: 'MZČR EZdraví' },
+    { name: 'Pokrytí ePreskripce', value: 96, unit: '%', signal: 'good', oecd: 71, trend: [88, 92, 94, 95, 96], desc: 'Podíl receptů vystavených elektronicky.', source: 'SUKL · NIA' },
+    { name: 'CT scannery / mil. obyvatel', value: 17.1, unit: '', signal: 'good', oecd: 28.8, trend: [16.5, 16.8, 17.0, 17.0, 17.1], desc: 'Hustota výpočetní tomografie.', source: 'OECD' },
+    { name: 'Investice do AI/digitálních inovací', value: 0.8, unit: '% výdajů', signal: 'bad', oecd: 2.1, trend: [0.4, 0.5, 0.6, 0.7, 0.8], desc: 'Podíl výdajů na digitalizaci a AI.', source: 'SHA expanded' },
+    { name: 'Kapacita lůžek dlouhodobé péče', value: 72, unit: '/ 1000 65+', signal: 'bad', oecd: 92, trend: [70, 71, 71, 72, 72], desc: 'Lůžka dlouhodobé péče na 1000 osob 65+.', source: 'ÚZIS' },
+    { name: 'Index připravenosti na pandemii', value: 64, unit: '/ 100', signal: 'warn', oecd: 70, trend: [55, 58, 60, 62, 64], desc: 'Resilience score (WHO/JEE methodology).', source: 'WHO/JEE' },
+  ],
+  modules: [
+    { name: '🧠 Modul: Mentální zdraví', value: 'Fáze 2', unit: '', signal: 'neutral', oecd: '', trend: [], desc: '20+ indikátorů: dostupnost psychiatrické péče, čekací doby, sebevražednost, antidepresiva, reforma psychiatrické péče.', source: 'NÚDZ · NRC' },
+    { name: '👴 Modul: Péče o seniory', value: 'Fáze 2', unit: '', signal: 'neutral', oecd: '', trend: [], desc: 'Dlouhodobá péče, geriatrické přístupy, pády, polypragmazie, integrace zdravotně-sociální.', source: 'MPSV · ÚZIS' },
+    { name: '🌱 Modul: Prevence', value: 'Fáze 2', unit: '', signal: 'neutral', oecd: '', trend: [], desc: 'Screeningy, očkování, zdravotní gramotnost, primární prevence.', source: 'SZÚ · MZČR' },
+    { name: '🏁 Modul: Péče v závěru života', value: 'Fáze 3', unit: '', signal: 'neutral', oecd: '', trend: [], desc: 'Paliativní péče, místo úmrtí, indikátory důstojnosti.', source: 'ÚZIS · ČSPM' },
+    { name: '⚖️ Modul: Equity', value: 'Fáze 2–3', unit: '', signal: 'neutral', oecd: '', trend: [], desc: 'Průřezový pohled na nerovnosti podle SES, regionu, pohlaví, etnicity.', source: 'EU-SILC · EHIS' },
+    { name: '🌍 Modul: Environmentální udržitelnost', value: 'Fáze 3', unit: '', signal: 'neutral', oecd: '', trend: [], desc: 'Carbon footprint zdravotnictví, odpady, energetika nemocnic. Inspirace Belgie 2023.', source: 'WHO · MŽP' },
+  ]
+};
+
+// Regiony – mock data
+const regions = [
+  { name: 'Praha', value: 78.4, doctors: 5.2 },
+  { name: 'Středočeský', value: 77.6, doctors: 3.8 },
+  { name: 'Jihočeský', value: 77.5, doctors: 3.9 },
+  { name: 'Plzeňský', value: 77.4, doctors: 4.0 },
+  { name: 'Karlovarský', value: 75.8, doctors: 3.4 },
+  { name: 'Ústecký', value: 75.3, doctors: 3.5 },
+  { name: 'Liberecký', value: 76.9, doctors: 3.7 },
+  { name: 'Královéhradecký', value: 77.7, doctors: 4.2 },
+  { name: 'Pardubický', value: 77.4, doctors: 3.8 },
+  { name: 'Vysočina', value: 77.2, doctors: 3.7 },
+  { name: 'Jihomoravský', value: 78.0, doctors: 4.6 },
+  { name: 'Olomoucký', value: 76.9, doctors: 4.3 },
+  { name: 'Zlínský', value: 77.5, doctors: 3.9 },
+  { name: 'Moravskoslezský', value: 76.4, doctors: 4.1 },
+];
+
+// ============== RENDERING ==============
+
+function buildIndicatorCard(ind, i, gridId) {
+  const card = document.createElement('div');
+  card.className = 'indicator-card';
+  const compareText = ind.oecd !== '' && ind.oecd !== undefined
+    ? `<div class="compare">vs. OECD/EU průměr: <strong>${ind.oecd}${ind.unit ? ' ' + ind.unit : ''}</strong></div>`
+    : '';
+  const chartId = `${gridId}-chart-${i}`;
+  const chartHTML = ind.trend.length ? `<div class="chart-wrap"><canvas id="${chartId}"></canvas></div>` : '';
+  card.innerHTML = `
+    <div class="top">
+      <h4>${ind.name}</h4>
+      <div class="signal ${ind.signal}" title="Hodnocení"></div>
+    </div>
+    <div class="value-row">
+      <span class="big-value">${ind.value}</span>
+      <span class="unit">${ind.unit}</span>
+    </div>
+    ${compareText}
+    <p style="font-size:12px; color:var(--muted);">${ind.desc}</p>
+    ${chartHTML}
+    <div class="source">Zdroj: ${ind.source}</div>
+  `;
+  return { el: card, chartId, trend: ind.trend, signal: ind.signal };
+}
+
+function renderGrid(area, gridId) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  const charts = [];
+  indicators[area].forEach((ind, i) => {
+    const { el, chartId, trend, signal } = buildIndicatorCard(ind, i, gridId);
+    grid.appendChild(el);
+    if (trend.length) charts.push({ chartId, trend, signal });
+  });
+  // Vykreslit sparkliny po vložení do DOM
+  setTimeout(() => {
+    charts.forEach(c => {
+      const ctx = document.getElementById(c.chartId);
+      if (!ctx) return;
+      const color = c.signal === 'good' ? '#38761D' : c.signal === 'warn' ? '#B45F06' : c.signal === 'bad' ? '#990000' : '#0B5394';
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['2020', '2021', '2022', '2023', '2024'],
+          datasets: [{
+            data: c.trend,
+            borderColor: color,
+            backgroundColor: color + '20',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            pointHoverRadius: 4,
+            borderWidth: 2,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { displayColors: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
+            y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888', maxTicksLimit: 3 } }
+          }
+        }
+      });
+    });
+  }, 100);
+}
+
+function renderDimensionGrid() {
+  const grid = document.getElementById('dimGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  dimensions.forEach((d, i) => {
+    const card = document.createElement('div');
+    card.className = 'dim-card';
+    const fillColor = d.score >= 70 ? '#38761D' : d.score >= 60 ? '#B45F06' : '#990000';
+    card.innerHTML = `
+      <div class="dim-num">${String(i+1).padStart(2,'0')}</div>
+      <h5>${d.name}</h5>
+      <p style="font-size:11px; text-transform:uppercase; color:var(--accent); font-weight:600; letter-spacing:0.5px;">${d.area}</p>
+      <p>${d.desc}</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:${d.score}%; background:${fillColor};"></div></div>
+      <p style="font-size:11px; margin-top:6px; color:var(--muted);">Souhrnné skóre: <strong style="color:${fillColor}">${d.score}/100</strong></p>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderRegions() {
+  const tbody = document.getElementById('regionTableBody');
+  if (!tbody) return;
+  const max = Math.max(...regions.map(r => r.value));
+  const min = Math.min(...regions.map(r => r.value));
+  const avg = 77.0;
+  regions.forEach(r => {
+    const pct = ((r.value - min) / (max - min)) * 100;
+    const diff = (r.value - avg).toFixed(1);
+    const color = r.value >= avg ? 'var(--good)' : 'var(--bad)';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.name}</td>
+      <td class="score">${r.value} let</td>
+      <td style="color:${color}">${diff > 0 ? '+' : ''}${diff}</td>
+      <td><div class="bar" style="width:${pct * 2}px; background:${color};"></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const ctx = document.getElementById('regionDoctors');
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: regions.map(r => r.name),
+        datasets: [{
+          label: 'Lékaři / 1 000 obyvatel',
+          data: regions.map(r => r.doctors),
+          backgroundColor: regions.map(r => r.doctors >= 4.0 ? '#38761D' : r.doctors >= 3.7 ? '#B45F06' : '#990000'),
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, max: 6 }
+        }
+      }
+    });
+  }
+}
+
+// ============== INTERAKCE ==============
+
+document.querySelectorAll('.audience-switch button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.audience-switch button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.body.dataset.audience = btn.dataset.aud;
+  });
+});
+
+document.querySelectorAll('nav.dimnav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav.dimnav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section-view').forEach(s => s.style.display = 'none');
+    const target = document.getElementById('sec-' + btn.dataset.section);
+    if (target) target.style.display = 'block';
+  });
+});
+
+// Init
+renderDimensionGrid();
+renderGrid('vysledky', 'vysledkyGrid');
+renderGrid('vystupy', 'vystupyGrid');
+renderGrid('procesy', 'procesyGrid');
+renderGrid('struktury', 'strukturyGrid');
+renderGrid('modules', 'moduleGrid');
+renderRegions();
+</script>
+
+</body>
+</html>

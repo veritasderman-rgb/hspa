@@ -1,0 +1,32 @@
+{
+  "id": "nadeje_doziti_total",
+  "name": "Naděje dožití při narození",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Doba dožití",
+  "definition": "Průměrný počet let, který se dožije novorozenec za daných úmrtnostních poměrů.",
+  "unit": "let",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/...",
+      "dataset": "DEM_NADEZE",
+      "dimensions": { "sex": "T", "uzemi": "CZ0", "vek": "0" }
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://csu.gov.cz/produkty/databaze-krok-otevrena-data"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "EVIETOTLPOPYRSCSU",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["ČSÚ", "ÚZIS"],
+  "method_notes": "Standardizováno na evropskou populaci. Dostupné od 1991.",
+  "limitations": "Nezohledňuje rozdíly v kvalitě života, jen v délce. Vázáno na rok narození."
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zdravé Česko – HSPA dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-audience="public">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">Z</div>
+    <h1>Zdravé Česko
+      <small>Hodnocení výkonnosti zdravotního systému ČR · HSPA</small>
+    </h1>
+  </div>
+  <div class="topbar-actions">
+    <span class="last-updated" id="lastUpdated">Načítám…</span>
+    <button class="btn-reload" id="btnReload" title="Načíst nejnovější data">⟳ Načíst znovu</button>
+  </div>
+  <div class="audience-switch" role="tablist">
+    <button data-aud="public" class="active">Pro veřejnost</button>
+    <button data-aud="prof">Pro odborníky</button>
+    <button data-aud="policy">Pro tvůrce politik</button>
+  </div>
+</header>
+
+<nav class="dimnav" id="dimnav">
+  <button data-area="all" class="active">Vše</button>
+  <button data-area="Výsledky">Výsledky</button>
+  <button data-area="Výstupy">Výstupy</button>
+  <button data-area="Procesy">Procesy</button>
+  <button data-area="Struktury">Struktury</button>
+</nav>
+
+<main id="content">
+
+  <div id="status" class="status hidden"></div>
+
+  <div class="audience-banner public">
+    <strong>Vítejte.</strong> Tato stránka shrnuje, jak si české zdravotnictví stojí. Najdete zde klíčové ukazatele s trendem a srovnáním s OECD/EU průměrem.
+  </div>
+  <div class="audience-banner prof">
+    <strong>Pohled odborníka.</strong> Indikátory s metodikou a benchmarky. Klikněte na kartu pro metodickou kartu.
+  </div>
+  <div class="audience-banner policy">
+    <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
+  </div>
+
+  <section class="section">
+    <div class="section-title">
+      <h3 id="gridTitle">Všechny indikátory</h3>
+      <span class="badge" id="gridBadge">0 indikátorů</span>
+      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+    </div>
+    <div class="card-grid" id="indicatorGrid"></div>
+  </section>
+
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>O projektu</h6>
+      <p>Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA. Realizováno MZČR ve spolupráci s ÚZIS, SZÚ, NRC, VZP/SZP.</p>
+    </div>
+    <div>
+      <h6>Datové zdroje</h6>
+      <p><a href="https://www.uzis.cz/">ÚZIS · NZIS</a><br>
+      <a href="https://csu.gov.cz/">ČSÚ · DataStat</a><br>
+      <a href="https://www.oecd.org/health/">OECD Health</a><br>
+      <a href="https://ec.europa.eu/eurostat">Eurostat</a></p>
+    </div>
+    <div>
+      <h6>Otevřená data</h6>
+      <p><a href="data/indicators.json">data/indicators.json</a><br>
+      <a href="data/regions.json">data/regions.json</a><br>
+      <a href="indicators/">Metodické karty</a></p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    M1 prototyp · květen 2026 · Hodnoty inspirované OECD Health at a Glance 2025. V budoucích milnících se napojí na živá API.
+  </div>
+</footer>
+
+<!-- Modal pro metodické karty -->
+<div class="modal-backdrop hidden" id="modalBackdrop">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script type="module" src="src/app.js"></script>
+
+</body>
+</html>

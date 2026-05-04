@@ -1,0 +1,30 @@
+{
+  "id": "lekari_per_1000",
+  "name": "Praktikující lékaři / 1 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Současné kapacity",
+  "definition": "Počet praktikujících lékařů na 1 000 obyvatel (head count).",
+  "unit": "/ 1 000",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrzp",
+      "note": "Národní registr zdravotnických pracovníků. Aktuálně NZIS publikuje agregát ročně. Endpoint v M2 dohledat v https://nrpzs.uzis.cz/api/doc"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "DOCTORS_HEAD"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DOCTORS_HEAD",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "OECD"],
+  "method_notes": "Head count, ne FTE. Zahrnuje všechny lékaře v aktivní praxi.",
+  "limitations": "Neukazuje regionální rozložení ani specializace."
+}
