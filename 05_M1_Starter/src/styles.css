@@ -76,16 +76,44 @@ body[data-audience="public"] .audience-banner.public,
 body[data-audience="prof"] .audience-banner.prof,
 body[data-audience="policy"] .audience-banner.policy { display: block; }
 
+.section { margin-bottom: 48px; }
+
 .section-title {
-  display: flex; align-items: baseline; gap: 12px;
+  display: flex; align-items: center; gap: 12px;
   margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border);
+  flex-wrap: wrap;
 }
 .section-title h3 { font-size: 20px; color: var(--primary-dark); }
-.section-title .badge {
+.badge {
   background: var(--primary); color: white; font-size: 11px;
-  padding: 3px 10px; border-radius: 10px; font-weight: 600;
+  padding: 3px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap;
+}
+.badge-secondary {
+  background: var(--neutral);
 }
 .section-title .desc { color: var(--muted); font-size: 13px; margin-left: auto; }
+
+/* Search + export actions row */
+.section-actions {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+}
+.search-input {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px; width: 200px;
+  background: var(--bg); color: var(--text);
+  outline: none;
+}
+.search-input:focus { border-color: var(--primary); background: white; }
+.btn-export {
+  background: white; color: var(--primary); border: 1px solid var(--border);
+  padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;
+  white-space: nowrap; font-weight: 500;
+}
+.btn-export:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+.no-results {
+  color: var(--muted); font-size: 14px; padding: 24px 0;
+}
 
 .card-grid {
   display: grid;
@@ -116,10 +144,20 @@ body[data-audience="policy"] .audience-banner.policy { display: block; }
 .signal.bad { background: var(--bad); }
 .signal.neutral { background: var(--neutral); }
 .indicator-card .value-row {
-  display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;
 }
 .indicator-card .big-value { font-size: 30px; font-weight: 700; color: var(--primary-dark); }
 .indicator-card .unit { font-size: 13px; color: var(--muted); }
+
+/* Year-on-year delta badge */
+.delta {
+  font-size: 12px; font-weight: 600; padding: 2px 7px;
+  border-radius: 10px; margin-left: auto;
+}
+.delta-good { background: #e6f4ea; color: var(--good); }
+.delta-bad  { background: #fce8e8; color: var(--bad); }
+.delta-neutral { background: #f0f4f8; color: var(--neutral); }
+
 .indicator-card .compare {
   font-size: 12px; color: var(--muted);
   background: var(--bg); padding: 6px 10px; border-radius: 6px; margin-bottom: 10px;
@@ -128,6 +166,12 @@ body[data-audience="policy"] .audience-banner.policy { display: block; }
 .indicator-card .chart-wrap { height: 80px; margin-top: 8px; }
 .indicator-card .source { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
 .indicator-card .source a { color: var(--primary); text-decoration: none; }
+
+/* Regional chart */
+.region-chart-wrap {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; height: 380px;
+}
 
 footer.bottom {
   background: var(--primary-dark); color: white; padding: 28px 32px; margin-top: 40px;
@@ -169,9 +213,24 @@ footer.bottom .disclaimer {
 .modal dl { display: grid; grid-template-columns: 160px 1fr; gap: 8px 16px; font-size: 14px; }
 .modal dt { font-weight: 600; color: var(--text); }
 .modal dd { color: var(--muted); }
-.modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
+.modal dd a { color: var(--primary); word-break: break-all; }
+.modal-section-title { margin-top: 20px; margin-bottom: 10px; font-size: 14px; color: var(--primary-dark); }
+
+/* Trend table in modal */
+.trend-table {
+  border-collapse: collapse; font-size: 13px; width: auto;
+}
+.trend-table th, .trend-table td {
+  border: 1px solid var(--border); padding: 6px 14px; text-align: right;
+}
+.trend-table th { background: var(--bg); font-weight: 600; color: var(--text); }
+.trend-table td:first-child, .trend-table th:first-child { text-align: left; }
 
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  .section-title { flex-direction: column; align-items: flex-start; }
+  .section-actions { margin-left: 0; width: 100%; }
+  .search-input { width: 100%; }
+  .modal dl { grid-template-columns: 1fr; }
 }
