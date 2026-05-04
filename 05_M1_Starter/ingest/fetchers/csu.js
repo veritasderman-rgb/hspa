@@ -14,6 +14,7 @@ import { CONFIG } from '../config.js';
 import { fetchWithRetry } from '../lib/http.js';
 import { readCacheIfFresh, writeCache } from '../lib/cache.js';
 import { parseCsv } from '../lib/csv.js';
+import { isJsonStat, parseJsonStat } from '../lib/jsonstat.js';
 import { CSU_DATASETS } from './csu_datasets.js';
 
 const SUMMARY_CACHE = 'csu_demografie.json';
@@ -26,8 +27,15 @@ const SUMMARY_CACHE = 'csu_demografie.json';
  */
 export function normalizeDataStat(raw) {
   if (raw == null) return [];
-  if (raw?.dataset?.value && raw?.dataset?.dimension) return parseJsonStat(raw.dataset);
-  if (raw?.value && raw?.dimension && raw?.id) return parseJsonStat(raw);
+  if (isJsonStat(raw)) {
+    return parseJsonStat(raw).map(o => ({
+      year: o.cas != null ? Number(o.cas) : (o.rok != null ? Number(o.rok) : null),
+      region: o.uzemi ?? o.region ?? o.geo ?? null,
+      sex: o.pohlavi ?? o.sex ?? null,
+      age: o.vek ?? o.age ?? null,
+      value: o.value,
+    }));
+  }
 
   const items = Array.isArray(raw) ? raw
     : raw.data ?? raw.observations ?? raw.items ?? raw.values ?? [];
@@ -48,51 +56,6 @@ function extractObservation(item) {
     age: age != null ? String(age) : null,
     value: valueRaw == null || valueRaw === '' ? null : Number(valueRaw),
   };
-}
-
-/**
- * Parser JSON-stat 2.0 (zjednodušený). Vyrobí jednu observaci na index.
- * Předpokládá, že dimensions mají category.label (jméno → kód).
- */
-function parseJsonStat(ds) {
-  const dimIds = ds.id;
-  const sizes = ds.size;
-  const values = ds.value;
-  const dims = dimIds.map(id => {
-    const cat = ds.dimension[id]?.category ?? {};
-    const codes = cat.index
-      ? (Array.isArray(cat.index) ? cat.index : Object.keys(cat.index).sort((a, b) => cat.index[a] - cat.index[b]))
-      : [];
-    return { id, codes };
-  });
-
-  const out = [];
-  const total = (Array.isArray(values) ? values.length : Object.keys(values).length);
-  for (let i = 0; i < total; i++) {
-    const v = Array.isArray(values) ? values[i] : values[String(i)];
-    if (v == null) continue;
-    const idx = unflatten(i, sizes);
-    const tags = {};
-    dims.forEach((d, k) => { tags[d.id] = d.codes[idx[k]]; });
-    out.push({
-      year: tags.cas != null ? Number(tags.cas) : (tags.rok != null ? Number(tags.rok) : null),
-      region: tags.uzemi ?? tags.region ?? tags.geo ?? null,
-      sex: tags.pohlavi ?? tags.sex ?? null,
-      age: tags.vek ?? tags.age ?? null,
-      value: Number(v),
-    });
-  }
-  return out;
-}
-
-function unflatten(index, sizes) {
-  const out = new Array(sizes.length);
-  let rem = index;
-  for (let k = sizes.length - 1; k >= 0; k--) {
-    out[k] = rem % sizes[k];
-    rem = Math.floor(rem / sizes[k]);
-  }
-  return out;
 }
 
 /**
