@@ -3,7 +3,20 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeSignal, loadMethodCards } from '../ingest/transform.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  computeSignal,
+  loadMethodCards,
+  buildIndicator,
+  extractBenchmark,
+  transform,
+} from '../ingest/transform.js';
+import { cachePath, ensureCacheDir, writeCache } from '../ingest/lib/cache.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, '..');
 
 test('computeSignal: higher_is_better, hodnota výrazně lepší než benchmark → good', () => {
   // value 81, benchmark 75 → +8 % → good (threshold good=2)
@@ -57,17 +70,141 @@ test('loadMethodCards: načte všech 10 vzorových karet', () => {
 });
 
 test('Každý indikátor v data/indicators.json má odpovídající metodickou kartu', async () => {
-  const fs = await import('node:fs');
-  const path = await import('node:path');
-  const { fileURLToPath } = await import('node:url');
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const ROOT = path.resolve(__dirname, '..');
-
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
   const cards = loadMethodCards();
   const cardIds = new Set(cards.map(c => c.id));
 
   for (const ind of data.indicators) {
     assert.ok(cardIds.has(ind.id), `indicator ${ind.id} has no method card`);
+  }
+});
+
+// ===== M5: extractBenchmark =====
+
+test('extractBenchmark: použije OECD ze summary, doplní EU ze seed', () => {
+  const oecd = { benchmarks: { foo: { oecd: { value: 81.1, year: 2024 } } } };
+  const eurostat = { benchmarks: {} };
+  const seed = { benchmark: { oecd: 80.0, eu: 80.5 } };
+  const out = extractBenchmark('foo', oecd, eurostat, seed);
+  assert.equal(out.oecd, 81.1);
+  assert.equal(out.eu, 80.5); // ze seedu
+});
+
+test('extractBenchmark: bez summary fallbackuje na seed', () => {
+  const out = extractBenchmark('foo', null, null, { benchmark: { oecd: 75, eu: 76 } });
+  assert.deepEqual(out, { oecd: 75, eu: 76 });
+});
+
+// ===== M5: buildIndicator – seed fallback =====
+
+test('buildIndicator: bez cache použije seed value/trend a spočte signal', () => {
+  const card = {
+    id: 'test_ind',
+    name: 'Test',
+    area: 'Výsledky',
+    domain: 'Zdravotní stav',
+    subdomain: 'X',
+    unit: 'let',
+    direction: 'higher_is_better',
+    signal_thresholds: { good: 2, warn: 5 },
+    data_source: { primary: { type: 'csu_datastat' } },
+    _method_card_path: 'indicators/test_ind.json',
+  };
+  const seed = {
+    value: 80, year: 2024,
+    trend: [{ year: 2023, value: 79 }, { year: 2024, value: 80 }],
+    benchmark: { oecd: 81, eu: 80 },
+    source: { fetched_at: '2026-01-01T00:00:00Z' },
+  };
+  const out = buildIndicator(card, { seed });
+  assert.equal(out.value, 80);
+  assert.equal(out.year, 2024);
+  assert.deepEqual(out.benchmark, { oecd: 81, eu: 80 });
+  assert.equal(out.signal, 'warn'); // 80 vs 81 → -1.2 % → warn
+  assert.equal(out.source.origin, 'seed');
+});
+
+// ===== M5: buildIndicator – cache override =====
+
+test('buildIndicator: ČSÚ cache přepíše seed value', () => {
+  ensureCacheDir();
+  writeCache('csu_csu_test.json', {
+    id: 'csu_test',
+    fetched_at: '2026-05-01T00:00:00Z',
+    observations: [
+      { year: 2023, region: 'CZ0', sex: 'T', value: 79.5 },
+      { year: 2024, region: 'CZ0', sex: 'T', value: 79.9 },
+    ],
+  });
+  try {
+    const card = {
+      id: 'csu_test',
+      name: 'Test', area: 'Výsledky', domain: 'X', subdomain: 'Y',
+      unit: 'let', direction: 'higher_is_better',
+      signal_thresholds: { good: 2, warn: 5 },
+      data_source: { primary: { type: 'csu_datastat' } },
+    };
+    const seed = { value: 70, trend: [], benchmark: { oecd: 80 } };
+    const out = buildIndicator(card, { seed });
+    assert.equal(out.value, 79.9);
+    assert.equal(out.year, 2024);
+    assert.equal(out.trend.length, 2);
+    assert.equal(out.source.origin, 'live');
+    assert.equal(out.signal, 'warn'); // 79.9 vs 80 → -0.125 %
+  } finally {
+    fs.unlinkSync(cachePath('csu_csu_test.json'));
+  }
+});
+
+test('buildIndicator: OECD cache poskytne value i benchmark', () => {
+  ensureCacheDir();
+  writeCache('oecd_oecd_test.json', {
+    indicator_id: 'oecd_test',
+    fetched_at: '2026-05-01T00:00:00Z',
+    cz: { year: 2024, value: 75 },
+    oecd: { year: 2024, value: 64, computed: false },
+    trend: [{ year: 2023, value: 74 }, { year: 2024, value: 75 }],
+  });
+  writeCache('oecd_benchmarks.json', {
+    benchmarks: { oecd_test: { cz: { year: 2024, value: 75 }, oecd: { year: 2024, value: 64 } } },
+  });
+  try {
+    const card = {
+      id: 'oecd_test',
+      name: 'Test', area: 'Výstupy', domain: 'X', subdomain: 'Y',
+      unit: '%', direction: 'higher_is_better',
+      signal_thresholds: { good: 2, warn: 5 },
+      data_source: { primary: { type: 'oecd' } },
+    };
+    const out = buildIndicator(card, {
+      seed: null,
+      oecdSummary: JSON.parse(fs.readFileSync(cachePath('oecd_benchmarks.json'), 'utf8')),
+    });
+    assert.equal(out.value, 75);
+    assert.equal(out.benchmark.oecd, 64);
+    assert.equal(out.signal, 'good'); // 75 vs 64 → +17 %
+  } finally {
+    fs.unlinkSync(cachePath('oecd_oecd_test.json'));
+    fs.unlinkSync(cachePath('oecd_benchmarks.json'));
+  }
+});
+
+// ===== M5: transform end-to-end =====
+
+test('transform: vyrobí validní data/indicators.json se všemi poli', async () => {
+  const tmpFile = path.join(ROOT, 'data', 'indicators.test.json');
+  const out = await transform({ outFile: tmpFile });
+  try {
+    assert.ok(out.version);
+    assert.ok(out.generated_at);
+    assert.equal(out.indicators.length, 10);
+    for (const ind of out.indicators) {
+      for (const f of ['id', 'name', 'area', 'value', 'unit', 'signal', 'trend', 'benchmark', 'source']) {
+        assert.ok(ind[f] != null, `${ind.id}: missing ${f}`);
+      }
+      assert.ok(['good', 'warn', 'bad', 'neutral'].includes(ind.signal));
+    }
+  } finally {
+    if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
   }
 });

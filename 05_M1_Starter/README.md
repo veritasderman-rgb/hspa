@@ -80,14 +80,54 @@ npm run ingest
 
 Frontend nesmí znát ÚZIS, OECD, ČSÚ. Načítá pouze `data/indicators.json`. Tvar viz `data/indicators.json` (10 vzorových záznamů s reálnými hodnotami z OECD Health at a Glance 2025).
 
-## Další kroky (M2–M8)
+## Stav implementace
 
-Pokračuj podle plánu `04_Plan_napojeni_na_API/PLAN_API_INTEGRACE.md`. Začni milníkem M2 — implementace `ingest/fetchers/uzis_nrpzs.js`.
+| Milník | Stav | Co je hotové |
+|---|---|---|
+| M1 · setup + datový kontrakt | ✅ | struktura, schema, 10 vzorových indikátorů |
+| M2 · ÚZIS NRPZS fetcher | ✅ | retry, cache, agregace kraj×obor, testy |
+| M3 · ČSÚ DataStat fetcher | ✅ | primary→CSV fallback, JSON-stat parser |
+| M4 · OECD/Eurostat fetchery | ✅ | SDMX-JSON, JSON-stat, mapping, computed mean |
+| M5 · transform vrstva | ✅ | extraktory, signal, seed fallback, 12 testů |
+| M6 · orchestrátor + cron | ✅ | snapshoty, GitHub Actions denně 06:00 UTC |
+| M7 · frontend interaktivita | ✅ | reload, modal, CSV export, localStorage fallback, stale indicator |
+| M8 · verifikace | ✅ | 55 testů, validate:data, npm run serve |
+| M9 · Vercel setup | ✅ | `vercel.json` se security headers + cache |
+| M10 · auto-deploy hook | ✅ | refresh.yml v `.github/workflows/` (root repa) |
+| M11 · pre-deploy gate | ✅ | deploy-check.yml na každý PR |
 
-Při zahájení každého sezení v Claude Code dej:
-1. Cestu k tomuto README a plánu
-2. Konkrétní milník (např. M2)
-3. Definici "hotovo" pro daný milník
+## Deploy na Vercel
+
+1. **Import repa**: vercel.com → Add New → Project → vyber `veritasderman-rgb/hspa`.
+2. **Project Settings**:
+   - Framework Preset: **Other**
+   - Root Directory: **`05_M1_Starter`**
+   - Build Command: _prázdné_ (statický web)
+   - Output Directory: _prázdné_
+   - Install Command: `npm ci` (volitelné — pro M5+ není potřeba běhové instalace)
+3. **Environment Variables**: žádné nejsou potřeba pro statický web.
+4. **Deploy** — Vercel automaticky detekuje `index.html` a publikuje statický web.
+
+Po pushi do `main` Vercel automaticky rebuildne. GitHub Actions cron (`refresh.yml`) v 06:00 UTC commitne aktualizovaná data → Vercel rebuild → uživatel vidí čerstvá čísla.
+
+### Datový tok
+
+```
+GitHub Actions cron 06:00 UTC
+   ↓ (npm run ingest)
+ingest/fetchers/* → ingest/cache/*
+   ↓ (transform)
+data/indicators.json + data/snapshot-YYYYMMDD.json
+   ↓ (git commit + push)
+Vercel auto-deploy
+   ↓
+CDN edge → uživatel
+```
+
+## Detailní plány
+
+- `04_Plan_napojeni_na_API/PLAN_API_INTEGRACE.md` — milníky M1–M8
+- `04_Plan_napojeni_na_API/PLAN_DEPLOY_VERCEL.md` — milníky M9–M12
 
 ---
-*Verze 0.1.0 · M1 starter · květen 2026*
+*Verze 0.2.0 · M1–M11 hotovo · květen 2026*

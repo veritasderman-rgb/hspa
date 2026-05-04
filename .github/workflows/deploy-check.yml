@@ -1,0 +1,37 @@
+name: Deploy check
+
+# Spouští se na každý PR proti main, který se dotýká dashboardu.
+# Pouští testy + validuje datový kontrakt. Slouží jako pre-deploy gate
+# před Vercel preview deploy.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '05_M1_Starter/**'
+      - '.github/workflows/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Validate data contract
+        run: npm run validate:data

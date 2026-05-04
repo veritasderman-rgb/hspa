@@ -3,6 +3,9 @@
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 const DATA_URL = 'data/indicators.json';
+const LS_KEY = 'zdrave-cesko/last-data';
+const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
+const STALE_HOURS = 26;
 
 let allIndicators = [];
 let activeArea = 'all';
@@ -30,19 +33,52 @@ function clearStatus() {
 
 // ====== DATA LOADING ======
 
+function applyData(data, { stale = false, source = 'live' } = {}) {
+  allIndicators = data.indicators || [];
+  const ageH = (Date.now() - new Date(data.generated_at).getTime()) / 3.6e6;
+  const isStale = stale || ageH > STALE_HOURS;
+  const label = source === 'cache'
+    ? `Offline kopie · ${fmtRelative(data.generated_at)}`
+    : `Aktualizováno ${fmtRelative(data.generated_at)}`;
+  const el = document.getElementById('lastUpdated');
+  el.textContent = label;
+  el.classList.toggle('stale', isStale);
+  return { isStale, ageH };
+}
+
+function saveToLocalStorage(data) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+    localStorage.setItem(LS_FETCHED_KEY, new Date().toISOString());
+  } catch { /* quota / private mode — ignoruj */ }
+}
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
+}
+
 async function loadData(bustCache = false) {
   const url = bustCache ? `${DATA_URL}?t=${Date.now()}` : DATA_URL;
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    allIndicators = data.indicators || [];
-    document.getElementById('lastUpdated').textContent =
-      `Aktualizováno ${fmtRelative(data.generated_at)}`;
+    applyData(data, { source: 'live' });
+    saveToLocalStorage(data);
     clearStatus();
     return data;
   } catch (err) {
-    showStatus(`Nepodařilo se načíst data: ${err.message}. Zobrazuji posledně známou verzi.`, 'error');
+    const cached = loadFromLocalStorage();
+    if (cached) {
+      applyData(cached, { stale: true, source: 'cache' });
+      showStatus(`Server nedostupný (${err.message}). Zobrazuji offline kopii z prohlížeče.`, 'warn');
+      return cached;
+    }
+    showStatus(`Nepodařilo se načíst data: ${err.message}. Žádná offline kopie není k dispozici.`, 'error');
     throw err;
   }
 }
@@ -156,10 +192,33 @@ async function openMethodCard(indicator) {
       </dl>
       <h3 style="margin-top:18px; font-size:14px;">Zdroje dat</h3>
       <pre>${JSON.stringify(card.data_source, null, 2)}</pre>
+      <div class="modal-actions">
+        <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
+      </div>
     `;
+    const csvBtn = document.getElementById('btnCsvExport');
+    if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
   } catch (err) {
     content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
   }
+}
+
+function exportTrendCsv(indicator) {
+  const rows = [['year', 'value', 'unit']];
+  for (const t of indicator.trend ?? []) rows.push([t.year, t.value, indicator.unit]);
+  const csv = rows.map(r => r.map(v => {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${indicator.id}_trend.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function closeModal() {
