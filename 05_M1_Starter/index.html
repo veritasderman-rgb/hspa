@@ -49,12 +49,58 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Souhrnný panel signálů -->
+  <div class="summary-bar">
+    <div class="summary-card good">
+      <span class="summary-num" id="summaryGood">–</span>
+      <span class="summary-label">Dobré</span>
+    </div>
+    <div class="summary-card warn">
+      <span class="summary-num" id="summaryWarn">–</span>
+      <span class="summary-label">Sledované</span>
+    </div>
+    <div class="summary-card bad">
+      <span class="summary-num" id="summaryBad">–</span>
+      <span class="summary-label">Kritické</span>
+    </div>
+    <div class="summary-card total">
+      <span class="summary-num" id="summaryTotal">–</span>
+      <span class="summary-label">Celkem</span>
+    </div>
+    <div class="summary-progress">
+      <div class="progress-bar">
+        <div class="pb-good" id="bar-good"></div>
+        <div class="pb-warn" id="bar-warn"></div>
+        <div class="pb-bad" id="bar-bad"></div>
+      </div>
+    </div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
       <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
     </div>
+
+    <!-- Lišta nástrojů: vyhledávání + řazení + export -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="search" id="searchInput" class="search-input" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+      </div>
+      <div class="sort-wrap">
+        <label for="sortSelect" class="sort-label">Řadit:</label>
+        <select id="sortSelect" class="sort-select">
+          <option value="default">Výchozí</option>
+          <option value="signal">Dle stavu (kritické první)</option>
+          <option value="name">Dle názvu A–Z</option>
+          <option value="area">Dle oblasti</option>
+        </select>
+      </div>
+      <button class="btn-export" id="btnExportCsv" title="Stáhnout zobrazené indikátory jako CSV">↓ Export CSV</button>
+    </div>
+
     <div class="card-grid" id="indicatorGrid"></div>
   </section>
 
@@ -86,9 +132,9 @@
 </footer>
 
 <!-- Modal pro metodické karty -->
-<div class="modal-backdrop hidden" id="modalBackdrop">
+<div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
   <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+    <button class="modal-close" id="modalClose" aria-label="Zavřít">×</button>
     <div id="modalContent"></div>
   </div>
 </div>
