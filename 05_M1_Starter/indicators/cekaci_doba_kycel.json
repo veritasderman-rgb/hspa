@@ -1,0 +1,37 @@
+{
+  "id": "cekaci_doba_kycel",
+  "name": "Čekací doba na náhradu kyčelního kloubu",
+  "area": "Procesy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Čekací doby",
+  "definition": "Medián počtu dní od indikace k provedení totální endoprotézy kyčelního kloubu (TEP kyčle).",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "vzp",
+      "note": "VZP/SZP záznamy — datum indikace vs. datum výkonu."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAITING_HIP"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITING_HIP",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "VZP",
+    "SZP",
+    "ČOS"
+  ],
+  "method_notes": "Čekací doby vzrostly v průběhu COVID-19 (2021) a postupně klesají. Ortopedická kapacita zůstává omezující faktor.",
+  "limitations": "Definice „indikace\" se liší dle poskytovatele. Přeshraniční péče a soukromé výkony nejsou zahrnuty."
+}

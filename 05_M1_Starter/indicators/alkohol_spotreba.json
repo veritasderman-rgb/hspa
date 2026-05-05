@@ -1,0 +1,37 @@
+{
+  "id": "alkohol_spotreba",
+  "name": "Spotřeba alkoholu (čistý alkohol, 15+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Alkohol",
+  "definition": "Roční spotřeba čistého (100%) alkoholu v litrech na osobu ve věku 15+ let, kombinací prodejních statistik a průzkumů.",
+  "unit": "l/os./rok",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "code": "ALCOHOL",
+      "dataset": "HEALTH_STAT"
+    },
+    "fallback": {
+      "type": "csu",
+      "note": "ČSÚ výroba a prodej nápojů."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ALCOHOL",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "SZÚ"
+  ],
+  "method_notes": "ČR dlouhodobě patří k zemím s nejvyšší spotřebou alkoholu v OECD.",
+  "limitations": "Zahrnuje přeshraniční nákupy a domácí výrobu jen přibližně. Turistický alkohol zkresluje data."
+}

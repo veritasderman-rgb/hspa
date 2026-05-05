@@ -1,0 +1,36 @@
+{
+  "id": "bezpecnost_padu_nemocnice",
+  "name": "Pády pacientů v nemocnici (na 1 000 hospitalizací)",
+  "area": "Procesy",
+  "domain": "Bezpečnost péče",
+  "subdomain": "Ošetřovatelská bezpečnost",
+  "definition": "Počet hlášených pádů pacienta s poraněním na 1 000 hospitalizací v akutní lůžkové péči.",
+  "unit": "na 1 000 hosp.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc",
+      "note": "Systém hlášení nežádoucích událostí NIMS (NRC)."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "PATIENT_FALLS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PATIENT_FALLS",
+    "dataset": "HEALTH_HCPS"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "NRC",
+    "ÚZIS"
+  ],
+  "method_notes": "Hlášení nežádoucích událostí je v ČR dobrovolné a podléhá underreportingu, zejména u menších nemocnic.",
+  "limitations": "Závisí na kultuře hlášení — větší hlášení může znamenat lepší safety kulturu, ne více pádů."
+}

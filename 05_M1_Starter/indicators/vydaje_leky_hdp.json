@@ -1,0 +1,37 @@
+{
+  "id": "vydaje_leky_hdp",
+  "name": "Výdaje na léčiva (% HDP)",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Farmaceutické výdaje",
+  "definition": "Celkové výdaje na léčivé přípravky (za zdravotní pojišťovny i přímé platby pacientů) jako % HDP.",
+  "unit": "% HDP",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "sukl",
+      "note": "Registr cen a úhrad SÚKL + NZIS výdaje ZP."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "PHARM_EXP_SHA"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PHARM_EXP_SHA",
+    "dataset": "SHA"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SÚKL",
+    "MZ ČR",
+    "MF ČR"
+  ],
+  "method_notes": "ČR mírně nad OECD průměrem. Generický podíl je relativně vysoký (~70 %), čímž omezuje nadměrný nárůst.",
+  "limitations": "Srovnání ovlivněno rozdíly v cenových politikách, doplňkových pojistných systémech a výši DPH na léky."
+}

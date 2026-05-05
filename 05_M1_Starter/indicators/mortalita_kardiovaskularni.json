@@ -1,0 +1,36 @@
+{
+  "id": "mortalita_kardiovaskularni",
+  "name": "Mortalita na kardiovaskulární nemoci (standardizovaná)",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "KVN",
+  "definition": "Počet zemřelých na choroby oběhové soustavy (MKN-10: I00–I99) na 100 000 obyvatel, přímo standardizováno na evropský standard EU-27.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "Registr příčin úmrtí (ÚZISaO)."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_cd_asdr2"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "CVD_MORT",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Přímá standardizace na věkové složení EU-27. Srovnatelné s OECD Health at a Glance 2025.",
+  "limitations": "Kvalita kódování příčin úmrtí se liší mezi kraji. Poddiagnostikované nebo přenásobené diagnózy."
+}

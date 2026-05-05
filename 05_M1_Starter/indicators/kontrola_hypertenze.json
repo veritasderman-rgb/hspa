@@ -1,0 +1,36 @@
+{
+  "id": "kontrola_hypertenze",
+  "name": "Kontrolovaná hypertenze (TK < 140/90 mmHg)",
+  "area": "Procesy",
+  "domain": "Péče o chronicky nemocné",
+  "subdomain": "KVN prevence",
+  "definition": "Podíl dospělých s diagnostikovanou hypertenzí, jejichž krevní tlak byl při posledním měření < 140/90 mmHg.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_ehes",
+      "note": "EHES (Euroepan Health Examination Survey) — naměřené hodnoty TK."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "HBP_CNTRL"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HBP_CNTRL",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "5 let (EHES)",
+  "stewards": [
+    "SZÚ",
+    "ČKS"
+  ],
+  "method_notes": "Naměřená data z EHES jsou spolehlivější než self-reportovaná data z EHIS.",
+  "limitations": "EHES probíhá každých 5 let — mezivlnné hodnoty jsou odhadnuty interpolací. Malá velikost vzorku v krajích."
+}

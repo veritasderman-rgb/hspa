@@ -1,0 +1,36 @@
+{
+  "id": "vakcinace_mmr_deti",
+  "name": "Vakcinace MMR u dětí (2 roky)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Očkování dětí",
+  "definition": "Podíl dětí ve věku 2 let, které obdržely obě dávky vakcíny MMR (spalničky, příušnice, zarděnky).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS — preventivní prohlídky a očkování."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "MMR_VAX"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MMR_VAX",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 1,
+    "warn": 3
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "SZÚ"
+  ],
+  "method_notes": "WHO cíl ≥ 95 % pro zajištění kolektivní imunity. ČR pod prahem — riziko epidemie spalniček.",
+  "limitations": "Data se sbírají na úrovni praktického lékaře — hlášení může mít zpožení 12–18 měsíců."
+}

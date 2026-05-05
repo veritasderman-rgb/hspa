@@ -1,0 +1,36 @@
+{
+  "id": "platba_z_kapsy_pct",
+  "name": "Přímé platby pacientů (% zdravotních výdajů)",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Finanční ochrana",
+  "definition": "Podíl přímých plateb pacientů (out-of-pocket, OOP) z celkových výdajů na zdravotnictví podle SHA (System of Health Accounts).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_sha",
+      "note": "Národní zdravotní účty (SHA) — MZ ČR."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "OOP_EXP"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "OOP_EXP",
+    "dataset": "SHA"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "MZ ČR",
+    "MF ČR"
+  ],
+  "method_notes": "Nižší OOP než OECD průměr = dobrá finanční ochrana. Trend klesá díky úhradovým mechanismům ZP.",
+  "limitations": "Neformální platby a zdravotní suplementy nejsou zahrnuty — skutečná zátěž je vyšší."
+}

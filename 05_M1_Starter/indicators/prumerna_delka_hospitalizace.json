@@ -1,0 +1,36 @@
+{
+  "id": "prumerna_delka_hospitalizace",
+  "name": "Průměrná délka hospitalizace (akutní péče)",
+  "area": "Výstupy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Efektivita",
+  "definition": "Průměrný počet dní strávených v nemocnici na jednu hospitalizaci (ALOS – Average Length of Stay) v zařízeních akutní péče.",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NRH, průměr přes všechny akutní DRG skupiny."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ALOS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ALOS",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "ALOS je proxy efektivity — kratší pobyt při zachování kvality = lepší. Trend v ČR klesá díky DRG reformě.",
+  "limitations": "Srovnání ovlivněno case-mixem. Kratší hospitalizace nemusí vždy znamenat lepší výsledky pro pacienta."
+}

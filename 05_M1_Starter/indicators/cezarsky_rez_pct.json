@@ -1,0 +1,36 @@
+{
+  "id": "cezarsky_rez_pct",
+  "name": "Míra císařského řezu",
+  "area": "Výstupy",
+  "domain": "Porodní péče",
+  "subdomain": "Intervenční porody",
+  "definition": "Podíl porodů provedených císařským řezem (SC) ze všech porodů v daném roce.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "Perinatální statistika ÚZIS — výkaz ÚZISu za porodnice."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "CS_RATE"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "CS_RATE",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "ČGS"
+  ],
+  "method_notes": "WHO doporučuje 10–15 % jako optimální míru SC. Hodnoty nad 20 % nemají prokázaný přínos pro matku ani dítě.",
+  "limitations": "Míra SC závisí na věku a rizikovosti populace rodičů, nikoli jen na systémových faktorech."
+}

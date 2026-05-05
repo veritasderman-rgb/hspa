@@ -1,0 +1,37 @@
+{
+  "id": "mortalita_onkologicka",
+  "name": "Mortalita na zhoubné novotvary (standardizovaná)",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Onkologie",
+  "definition": "Počet zemřelých na zhoubné novotvary (MKN-10: C00–C97) na 100 000 obyvatel, standardizováno.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc",
+      "note": "Národní onkologický registr (NOR), ÚZIS."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_cd_asdr2"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "CANC_MORT",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "NRC",
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Primárně z NOR doplněno certifikáty o příčinách úmrtí ČSÚ.",
+  "limitations": "Latence 2–3 roky pro konečná data. Zahrnuje i novotvary in situ u některých registrací."
+}

@@ -1,0 +1,37 @@
+{
+  "id": "screening_cervix",
+  "name": "Screening cervikálního karcinomu (ženy 20–64)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Onkologické screeningy",
+  "definition": "Podíl žen ve věku 20–64 let, které absolvovaly cytologické vyšetření cervixu v posledních 3 letech.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "Výkaznictví gynekologů — NZIS."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_ps_scrta"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "CERV_SCREEN",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "ČOS",
+    "MZ ČR"
+  ],
+  "method_notes": "Program organisovaného screeningu zaveden v ČR v roce 2014; přechod na HPV testy od 2026.",
+  "limitations": "Pokrytí podhodnoceno u žen bez praktického gynekologa nebo nízko socioekonomické skupiny."
+}

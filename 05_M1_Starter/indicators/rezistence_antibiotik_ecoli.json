@@ -1,0 +1,35 @@
+{
+  "id": "rezistence_antibiotik_ecoli",
+  "name": "Rezistence E. coli na fluorochinolony",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Escherichia coli rezistentních na fluorochinolony (ciprofloxacin) v národní síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu",
+      "note": "EARS-Net (European Antimicrobial Resistance Surveillance Network) — ČR data ze SZÚ."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_rs_resist"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_rs_resist"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ÚNMZ"
+  ],
+  "method_notes": "Fluorochinolony jsou důležitá záložní antibiotika. Rostoucí rezistence omezuje léčebné možnosti komunitních infekcí.",
+  "limitations": "Pouze invazivní izoláty — nezahrnuje ambulantní a komunitní izoláty, kde je rezistence vyšší."
+}

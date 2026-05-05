@@ -1,0 +1,36 @@
+{
+  "id": "obezita_prevalence",
+  "name": "Obezita (BMI ≥ 30, dospělí 18+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Nadváha a obezita",
+  "definition": "Podíl dospělých ve věku 18+ s indexem tělesné hmotnosti BMI ≥ 30 kg/m², zjišťováno z EHIS (European Health Interview Survey).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_ehis",
+      "note": "Evropský výzkum zdraví (EHIS) – ČR, SZÚ Praha."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "OBESITY"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "OBESITY",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "5 let (EHIS)",
+  "stewards": [
+    "SZÚ",
+    "ÚZIS"
+  ],
+  "method_notes": "Self-reportovaná data v mezivlnách interpolována lineárně. EHIS probíhá každých ~5 let.",
+  "limitations": "Self-reportovaná výška/váha podhodnocuje skutečnou obezitu o cca 2–4 %."
+}
