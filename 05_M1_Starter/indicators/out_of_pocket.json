@@ -1,0 +1,30 @@
+{
+  "id": "out_of_pocket",
+  "name": "Out-of-pocket výdaje",
+  "area": "Výstupy",
+  "domain": "Finanční stabilita",
+  "subdomain": "Fiskální udržitelnost",
+  "definition": "Podíl přímých plateb pacientů (out-of-pocket, OOP) na celkových výdajích na zdravotnictví.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "OECD"
+  ],
+  "signal_thresholds": {
+    "good": -3.0,
+    "warn": 2.0
+  },
+  "method_notes": "Metodika SHA 2011 (System of Health Accounts). OOP = přímé platby bez zpětného refundování.",
+  "limitations": "Nezachycuje neformální platby ani dobrovolné zdravotní pojištění.",
+  "data_source": {
+    "primary": {
+      "type": "sha_uzis"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "SHA_HEALTH"
+    }
+  }
+}

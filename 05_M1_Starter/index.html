@@ -49,12 +49,36 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Souhrnná statistika signálů -->
+  <div class="signal-summary" id="signalSummary" aria-label="Přehled hodnocení indikátorů">
+    <div class="sig-chip good" id="sumGood" title="Indikátory hodnocené jako dobré">
+      <span class="sig-dot good"></span>
+      <span class="sig-count" id="countGood">–</span>
+      <span class="sig-label">dobré</span>
+    </div>
+    <div class="sig-chip warn" id="sumWarn" title="Indikátory vyžadující pozornost">
+      <span class="sig-dot warn"></span>
+      <span class="sig-count" id="countWarn">–</span>
+      <span class="sig-label">varování</span>
+    </div>
+    <div class="sig-chip bad" id="sumBad" title="Indikátory v kritickém pásmu">
+      <span class="sig-dot bad"></span>
+      <span class="sig-count" id="countBad">–</span>
+      <span class="sig-label">kritické</span>
+    </div>
+    <div class="sig-legend">Kliknutím na kartu otevřete metodiku · dle OECD HSPA rámce 2023</div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="search-wrap">
+        <input type="search" id="searchInput" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+        <button class="search-clear hidden" id="searchClear" aria-label="Vymazat hledání">×</button>
+      </div>
     </div>
+    <div id="noResults" class="no-results hidden">Žádný indikátor neodpovídá hledání.</div>
     <div class="card-grid" id="indicatorGrid"></div>
   </section>
 

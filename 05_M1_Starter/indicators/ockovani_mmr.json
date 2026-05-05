@@ -1,0 +1,30 @@
+{
+  "id": "ockovani_mmr",
+  "name": "Pokrytí očkováním (MMR, 2. dávka)",
+  "area": "Procesy",
+  "domain": "Integrované poskytování",
+  "subdomain": "Prevence",
+  "definition": "Podíl dětí ve věku 2 let, které obdržely 2. dávku vakcíny MMR (spalničky-příušnice-zarděnky).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "MZČR"
+  ],
+  "signal_thresholds": {
+    "good": 2.0,
+    "warn": 5.0
+  },
+  "method_notes": "WHO/UNICEF metodika (WUENIC). ČR má povinné očkování; registrace v NRO.",
+  "limitations": "Klesající vakcinační ochota po COVID-19. 95 % threshold pro herd immunity.",
+  "data_source": {
+    "primary": {
+      "type": "szu_nro"
+    },
+    "fallback": {
+      "type": "who_unicef",
+      "code": "MCV2"
+    }
+  }
+}

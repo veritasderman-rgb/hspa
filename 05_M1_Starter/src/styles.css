@@ -171,7 +171,59 @@ footer.bottom .disclaimer {
 .modal dd { color: var(--muted); }
 .modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
 
+/* Signal summary bar */
+.signal-summary {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 20px; margin-bottom: 20px;
+}
+.sig-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 20px; cursor: default;
+  font-size: 14px; font-weight: 500;
+}
+.sig-chip.good { background: #EAF4E2; }
+.sig-chip.warn { background: #FFF4E0; }
+.sig-chip.bad  { background: #FEECEC; }
+.sig-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.sig-dot.good { background: var(--good); }
+.sig-dot.warn { background: var(--warn); }
+.sig-dot.bad  { background: var(--bad); }
+.sig-count { font-size: 20px; font-weight: 700; line-height: 1; color: var(--text); }
+.sig-label { font-size: 12px; color: var(--muted); }
+.sig-legend { margin-left: auto; font-size: 11px; color: var(--muted); text-align: right; }
+
+/* Search */
+.search-wrap {
+  position: relative; margin-left: auto; display: flex; align-items: center;
+}
+#searchInput {
+  width: 220px; padding: 7px 32px 7px 12px; border: 1px solid var(--border);
+  border-radius: 20px; font-size: 13px; color: var(--text);
+  background: var(--bg); outline: none; transition: border-color 0.15s;
+}
+#searchInput:focus { border-color: var(--primary); background: white; }
+.search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--muted); font-size: 18px;
+  cursor: pointer; line-height: 1; padding: 0 4px;
+}
+.search-clear:hover { color: var(--text); }
+.no-results {
+  text-align: center; padding: 40px; color: var(--muted);
+  font-size: 15px; background: white; border: 1px dashed var(--border); border-radius: 10px;
+}
+
+/* Highlight matched text */
+mark { background: #FFF176; border-radius: 2px; padding: 0 1px; }
+
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  .signal-summary { gap: 8px; }
+  .sig-legend { display: none; }
+  #searchInput { width: 160px; }
+  .section-title { flex-wrap: wrap; }
 }

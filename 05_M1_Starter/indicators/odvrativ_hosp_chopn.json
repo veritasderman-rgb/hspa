@@ -1,0 +1,30 @@
+{
+  "id": "odvrativ_hosp_chopn",
+  "name": "Odvratitelné hospitalizace (CHOPN/astma)",
+  "area": "Procesy",
+  "domain": "Nákladově efektivní",
+  "subdomain": "Primární péče",
+  "definition": "Standardizovaný počet hospitalizací pro astma a CHOPN na 100 000 obyvatel (ambulatory care sensitive).",
+  "unit": "/ 100 tis.",
+  "direction": "lower_is_better",
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "OECD"
+  ],
+  "signal_thresholds": {
+    "good": -10.0,
+    "warn": 20.0
+  },
+  "method_notes": "PHC sensitive conditions. Diagnózy: J45–J46 (astma), J44 (CHOPN). OECD HCQI metodika.",
+  "limitations": "Citlivý na standardizaci věkové struktury. Vyšší výskyt v průmyslových krajích.",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhosp"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "AMBU_COPD"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "cekaci_doba_kycel",
+  "name": "Čekací doba na endoprotézu kyčle",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Časová dostupnost",
+  "definition": "Medián čekací doby (ve dnech) od zapsání na čekací listinu do provedení elektivní náhrady kyčelního kloubu.",
+  "unit": "dnů (medián)",
+  "direction": "lower_is_better",
+  "frequency": "yearly",
+  "stewards": [
+    "NRC",
+    "ÚZIS"
+  ],
+  "signal_thresholds": {
+    "good": -20.0,
+    "warn": 30.0
+  },
+  "method_notes": "Administrativní data z NZIS. Srovnání v rámci OECD Waiting Times dataset.",
+  "limitations": "Metodika čekacích listů se liší mezi poskytovateli. Část čekacích listů není centralizovaná.",
+  "data_source": {
+    "primary": {
+      "type": "nrc_nzis"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAIT_HIP"
+    }
+  }
+}

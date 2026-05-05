@@ -6,6 +6,7 @@ const DATA_URL = 'data/indicators.json';
 
 let allIndicators = [];
 let activeArea = 'all';
+let searchQuery = '';
 
 // ====== UTIL ======
 
@@ -47,36 +48,80 @@ async function loadData(bustCache = false) {
   }
 }
 
+// ====== SIGNAL SUMMARY ======
+
+function updateSignalSummary(indicators) {
+  const counts = { good: 0, warn: 0, bad: 0 };
+  indicators.forEach(i => { if (counts[i.signal] !== undefined) counts[i.signal]++; });
+  document.getElementById('countGood').textContent = counts.good;
+  document.getElementById('countWarn').textContent = counts.warn;
+  document.getElementById('countBad').textContent = counts.bad;
+}
+
+// ====== SEARCH HIGHLIGHT ======
+
+function highlight(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return String(text).replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+}
+
 // ====== RENDERING ======
 
-function renderGrid(area = 'all') {
+function renderGrid(area = 'all', query = '') {
   const grid = document.getElementById('indicatorGrid');
   grid.innerHTML = '';
-  const filtered = area === 'all'
+
+  let filtered = area === 'all'
     ? allIndicators
     : allIndicators.filter(i => i.area === area);
 
+  if (query) {
+    const q = query.toLowerCase();
+    filtered = filtered.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      (i.domain || '').toLowerCase().includes(q) ||
+      (i.subdomain || '').toLowerCase().includes(q) ||
+      (i.source?.name || '').toLowerCase().includes(q)
+    );
+  }
+
+  const count = filtered.length;
   document.getElementById('gridBadge').textContent =
-    `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
+    `${count} indikátor${count === 1 ? '' : (count < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridTitle').textContent =
     area === 'all' ? 'Všechny indikátory' : `Oblast: ${area}`;
 
+  const noResults = document.getElementById('noResults');
+  if (count === 0) {
+    noResults.classList.remove('hidden');
+    return;
+  }
+  noResults.classList.add('hidden');
+
+  // Aktualizace summary jen při zobrazení všech (bez filtru oblasti)
+  if (area === 'all' && !query) updateSignalSummary(allIndicators);
+
   const charts = [];
-  filtered.forEach((ind, i) => {
+  filtered.forEach((ind) => {
     const card = document.createElement('div');
     card.className = 'indicator-card';
     card.dataset.indicatorId = ind.id;
 
     const chartId = `chart-${ind.id}`;
     const benchmark = ind.benchmark?.oecd ?? ind.benchmark?.eu ?? null;
+    const benchmarkLabel = ind.benchmark?.oecd != null ? 'OECD' : 'EU';
     const compareHTML = benchmark != null
-      ? `<div class="compare">vs. OECD průměr: <strong>${benchmark}${ind.unit ? ' ' + ind.unit : ''}</strong></div>`
+      ? `<div class="compare">vs. ${benchmarkLabel} průměr: <strong>${benchmark}${ind.unit ? ' ' + ind.unit : ''}</strong></div>`
       : '';
 
+    const nameHtml = highlight(ind.name, query);
+    const domainHtml = highlight(`${ind.area} · ${ind.domain}`, query);
+
     card.innerHTML = `
-      <div class="area-tag">${ind.area} · ${ind.domain}</div>
+      <div class="area-tag">${domainHtml}</div>
       <div class="top">
-        <h4>${ind.name}</h4>
+        <h4>${nameHtml}</h4>
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
       </div>
       <div class="value-row">
@@ -141,21 +186,26 @@ async function openMethodCard(indicator) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const card = await res.json();
 
+    const dirLabel = card.direction === 'lower_is_better' ? 'nižší = lepší' :
+                     card.direction === 'higher_is_better' ? 'vyšší = lepší' : card.direction;
+    const freqLabel = { yearly: 'Roční', every_2_years: 'Každé 2 roky',
+                        every_4_years: 'Každé 4 roky', every_5_years: 'Každých 5 let' };
+    const primarySrc = card.data_source?.primary;
+    const srcText = primarySrc ? `${primarySrc.type}${primarySrc.code ? ' · ' + primarySrc.code : ''}` : '–';
+
     content.innerHTML = `
       <h2>${card.name}</h2>
-      <div class="sub">${card.area} · ${card.domain} · ${card.subdomain || ''}</div>
+      <div class="sub">${card.area} · ${card.domain}${card.subdomain ? ' · ' + card.subdomain : ''}</div>
       <dl>
         <dt>Definice</dt><dd>${card.definition}</dd>
         <dt>Jednotka</dt><dd>${card.unit}</dd>
-        <dt>Směr</dt><dd>${card.direction}</dd>
-        <dt>Frekvence</dt><dd>${card.frequency}</dd>
+        <dt>Směr</dt><dd>${dirLabel}</dd>
+        <dt>Frekvence</dt><dd>${freqLabel[card.frequency] || card.frequency}</dd>
         <dt>Garanti</dt><dd>${(card.stewards || []).join(', ')}</dd>
-        <dt>Prahy signálu</dt><dd>good ≥ ${card.signal_thresholds.good} %, warn ≥ −${card.signal_thresholds.warn} %</dd>
         <dt>Metodika</dt><dd>${card.method_notes}</dd>
         <dt>Omezení</dt><dd>${card.limitations}</dd>
+        <dt>Primární zdroj</dt><dd>${srcText}${primarySrc?.note ? '<br><small style="color:var(--muted)">' + primarySrc.note + '</small>' : ''}</dd>
       </dl>
-      <h3 style="margin-top:18px; font-size:14px;">Zdroje dat</h3>
-      <pre>${JSON.stringify(card.data_source, null, 2)}</pre>
     `;
   } catch (err) {
     content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
@@ -184,8 +234,28 @@ function wireUp() {
       document.querySelectorAll('.dimnav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeArea = btn.dataset.area;
-      renderGrid(activeArea);
+      renderGrid(activeArea, searchQuery);
     });
+  });
+
+  // Search input
+  const searchInput = document.getElementById('searchInput');
+  const searchClear = document.getElementById('searchClear');
+  let searchTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = searchInput.value.trim();
+      searchClear.classList.toggle('hidden', !searchQuery);
+      renderGrid(activeArea, searchQuery);
+    }, 200);
+  });
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchQuery = '';
+    searchClear.classList.add('hidden');
+    renderGrid(activeArea, '');
+    searchInput.focus();
   });
 
   // Reload button
@@ -195,7 +265,7 @@ function wireUp() {
     btn.textContent = 'Načítám…';
     try {
       await loadData(true);
-      renderGrid(activeArea);
+      renderGrid(activeArea, searchQuery);
     } finally {
       btn.disabled = false;
       btn.textContent = '⟳ Načíst znovu';
@@ -216,6 +286,7 @@ function wireUp() {
   wireUp();
   try {
     await loadData();
+    updateSignalSummary(allIndicators);
     renderGrid('all');
   } catch (err) {
     console.error('Initial load failed:', err);
