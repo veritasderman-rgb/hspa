@@ -281,9 +281,9 @@ function renderGrid() {
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
       <div class="source">Zdroj: ${ind.source.name}</div>
     `;
-    card.addEventListener('click', () => openMethodCard(ind));
+    card.addEventListener('click', () => openIndicatorDetail(ind));
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openIndicatorDetail(ind); }
     });
     grid.appendChild(card);
 
@@ -526,6 +526,14 @@ function exportTrendCsv(indicator) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// ====== DETAIL STRÁNKA INDIKÁTORU ======
+
+function openIndicatorDetail(indicator) {
+  // Naviguj na samostatnou detail stránku s mapou krajů a kontextem.
+  // Modal s metodickou kartou je dostupný i nadále — z detail stránky a z odkazu v patičce karty.
+  window.location.href = `indikator.html?id=${encodeURIComponent(indicator.id)}`;
 }
 
 // ====== METODICKÁ KARTA (modal) ======

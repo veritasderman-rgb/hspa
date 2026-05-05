@@ -1,0 +1,39 @@
+{
+  "id": "nesplnene_potreby_pece",
+  "name": "Samohlášené nenaplněné potřeby zdravotní péče",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Bariéry v přístupu",
+  "definition": "Podíl populace 16+ let, která v posledních 12 měsících uvedla, že potřebovala lékařskou péči, ale nedostala ji — kvůli ceně, čekací době nebo vzdálenosti. Eurostat ukazatel hlth_silc_08 ze šetření EU-SILC.",
+  "unit": "% populace 16+",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "dataset": "hlth_silc_08",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_08/default/table",
+      "note": "EU-SILC modul Health, šetření Českého statistického úřadu (Životní podmínky domácností). Roční sběr."
+    },
+    "fallback": {
+      "type": "csu",
+      "note": "ČSÚ vykazuje stejný ukazatel pod kódem ŽPD/ZDR-12. Identická metodika, identické čísla."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "dataset": "hlth_silc_08",
+    "code": "EU27_2020"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 30
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "ČSÚ (sekce Životní podmínky)",
+    "ÚZIS (analytický panel)"
+  ],
+  "method_notes": "Tři dílčí důvody nedostupnosti se vykazují odděleně (cena, čekání, vzdálenost). Souhrnný ukazatel sčítá respondenty, kteří uvedli alespoň jeden důvod. Stratifikace podle příjmového kvintilu odhaluje ekonomický gradient — v dolním kvintilu jsou nenaplněné potřeby typicky 2–3× častější než v horním. Pro porovnání s OECD se používá obdobný ukazatel z OECD Health at a Glance, vychází ze stejných EU-SILC dat.",
+  "limitations": "Self-reporting → kulturní normy reportingu se liší (skandinávské země reportují vyšší citlivost než středoevropské). Měří percepci, nikoli klinicky validovaná zameškání péče. Zachycuje akutní bariéry, nikoli zhoršenou kvalitu péče. Roční výkyvy souvisí s pandemiemi a změnami v ekonomickém cyklu. Neobsahuje stomatologickou péči (samostatný ukazatel hlth_silc_09)."
+}

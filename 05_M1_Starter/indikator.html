@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detail indikátoru · Zdravé Česko</title>
+<meta name="description" content="Detailní pohled na jednotlivý indikátor HSPA: trend, regionální rozpad po krajích na mapě, srovnání s OECD/EU, metodika a souvislosti.">
+<meta name="robots" content="index, follow">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:14px">
+      <div class="brand-logo" aria-hidden="true">Z</div>
+      <h1>Zdravé Česko
+        <small>Detail indikátoru · HSPA</small>
+      </h1>
+    </a>
+  </div>
+  <div class="topbar-actions">
+    <a href="index.html" class="btn-reload" style="text-decoration:none">← Zpět na přehled</a>
+  </div>
+</header>
+
+<nav class="module-nav" aria-label="Moduly dashboardu">
+  <a href="index.html" class="module-tab active">Indikátory</a>
+  <a href="strategie.html" class="module-tab">Strategie</a>
+  <a href="jak-funguje.html" class="module-tab">Jak to funguje</a>
+</nav>
+
+<main id="content">
+  <div id="status" class="status hidden" aria-live="polite"></div>
+
+  <article class="indicator-detail">
+    <div id="detailRoot">
+      <p class="loading-msg">Načítám indikátor…</p>
+    </div>
+  </article>
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>O datech</h6>
+      <p>Hodnoty čerpány z národního souboru <a href="data/indicators.json">indicators.json</a>. Krajský rozpad pochází ze souboru <a href="data/regions.json">regions.json</a> (NUTS3 členění).</p>
+    </div>
+    <div>
+      <h6>Metodika</h6>
+      <p>Detail metodiky každého indikátoru je v samostatné metodické kartě (<a href="indicators/">indicators/&lt;id&gt;.json</a>) podle datového kontraktu HSPA.</p>
+    </div>
+    <div>
+      <h6>Citace</h6>
+      <p>Citujte: Zdravé Česko (2026) podle OECD (2023) HSPA Framework for the Czech Republic. <a href="https://doi.org/10.1787/5d59b667-en">DOI 10.1787/5d59b667-en</a></p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Občanská implementace OECD HSPA rámce pro ČR. Květen 2026.
+  </div>
+</footer>
+
+<script type="module" src="src/indicator-detail.js"></script>
+
+</body>
+</html>
