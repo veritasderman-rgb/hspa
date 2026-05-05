@@ -363,10 +363,94 @@ footer.bottom .disclaimer {
   .regions-chart-wrap { height: 360px; }
 }
 
+/* Screen-reader only utility — vizuálně skryté, ale čtečky to přečtou */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip-to-content link (pro klávesnicové uživatele) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 9999;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 0 0 6px 0;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: 0; }
+
+@media (max-width: 768px) {
+  header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
+  main { padding: 18px 16px 40px; }
+  .scorecard { grid-template-columns: repeat(2, 1fr); }
+  .section-actions { width: 100%; flex-wrap: wrap; }
+  .search-box { min-width: 0; flex: 1; }
+  .regions-wrap { grid-template-columns: 1fr; }
+  .regions-chart-wrap { height: 360px; }
+}
+
 @media print {
-  .topbar-actions, .audience-switch, .dimnav, .section-actions, .btn-export { display: none !important; }
-  .indicator-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
-  body { background: white; }
+  /* Skryj interaktivní prvky */
+  .topbar-actions,
+  .audience-switch,
+  .dimnav,
+  .section-actions,
+  .btn-export,
+  .btn-reload,
+  .btn-theme,
+  .regions-controls,
+  .modal-backdrop,
+  .skip-link { display: none !important; }
+
+  /* Layout */
+  body { background: #fff; color: #000; font-size: 11pt; }
+  main { padding: 0; max-width: 100%; }
+  header.topbar { border-bottom: 2px solid #000; padding: 8px 0; background: #fff; color: #000; box-shadow: none; }
+  header.topbar h1 { color: #000; }
+  header.topbar h1 small { color: #444; }
+
+  /* Scorecard */
+  .scorecard { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sc-tile { border: 1px solid #ccc; }
+
+  /* Karta grid — 2 sloupce */
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .indicator-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+
+  /* Skryj sparklines v tisku (Chart.js canvas se špatně tiskne) */
+  .chart-wrap { display: none; }
+
+  /* Regiony tabulka */
+  .regions-chart-wrap { display: none; }
+  .regions-table-wrap { width: 100%; }
+
+  /* Footer */
+  footer.bottom { border-top: 1px solid #ccc; padding-top: 8px; font-size: 9pt; }
+
+  /* Signály v BW tisku — použij text místo barvy */
+  .signal.good::after { content: " ✓"; }
+  .signal.bad::after { content: " ✗"; }
+  .signal.warn::after { content: " △"; }
+
+  /* Přidej URL za linky */
+  a[href]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #666; }
+  a[href^="data/"]::after, a[href^="#"]::after { content: ""; }
 }
 
 /* =================================================================
