@@ -351,6 +351,78 @@ export function extractFromNor(indicatorId) {
 }
 
 /**
+ * Z NRHZS screening cache spočítá pokrytí populace screeningem (%) za nejnovější rok
+ * a 5letý trend. Sčítá pocet_vysetrenych přes všechny okresy/věkové skupiny
+ * a děli celkovou populací.
+ *
+ * Konfigurace pres metadata indikátoru:
+ *   primary.dataset = 'nrhzs_screening_kolorektal' nebo 'nrhzs_screening_mamograf'
+ *   primary.sex_filter = 'F'/'T'/'M' (volitelné)
+ *
+ * Pro mamografický screening (pouze ženy) přepočet na pokrytí vyžaduje
+ * mít cílovou populaci jako jmenovatel — pokud dataset nemá sloupec
+ * `populace` (jen `pocet_vysetreni`), funkce vrátí absolutní počet
+ * vyšetření (jednotka pak musí být `vyšetření/rok`, ne `%`).
+ *
+ * @param {string} indicatorId
+ * @returns {{ value:number, year:number, trend:Array<{year,value}> } | null}
+ */
+export function extractFromNrhzsScreening(indicatorId) {
+  const cardFile = path.join(ROOT, 'indicators', `${indicatorId}.json`);
+  if (!fs.existsSync(cardFile)) return null;
+  const card = JSON.parse(fs.readFileSync(cardFile, 'utf8'));
+  const primary = card?.data_source?.primary;
+  if (primary?.type !== 'uzis_nrhzs_screening') return null;
+
+  const dataset = primary.dataset;
+  if (!dataset) return null;
+
+  const cache = readCacheFile(`uzis_${dataset}.json`);
+  if (!cache?.records?.length) return null;
+
+  const cols = cache.columns ?? Object.keys(cache.records[0] ?? {});
+  const yearCol = cols.find(c => /^(rok|year)$/i.test(c));
+  const sexCol = cols.find(c => /^(pohlavi|pohlaví|sex)$/i.test(c));
+  const examCol = cols.find(c => /^(pocet_vysetrenych|pocet_vysetreni|exam|count)$/i.test(c));
+  const popCol = cols.find(c => /^(populace|population|target_pop)$/i.test(c));
+  if (!yearCol || !examCol) return null;
+
+  const sexFilter = primary.sex_filter;
+  // Guard: pokud sex_filter požadovaný a sloupec chybí → null (analogicky NOR P2 fix)
+  if (sexFilter && !sexCol) return null;
+
+  const byYear = {};
+  for (const row of cache.records) {
+    if (sexFilter && sexCol && String(row[sexCol]).toUpperCase() !== String(sexFilter).toUpperCase()) continue;
+    const y = parseInt(row[yearCol], 10);
+    const exams = Number(row[examCol]);
+    if (!Number.isFinite(y) || !Number.isFinite(exams)) continue;
+    const bucket = byYear[y] ??= { exams: 0, pop: 0 };
+    bucket.exams += exams;
+    if (popCol) {
+      const p = Number(row[popCol]);
+      if (Number.isFinite(p)) bucket.pop += p;
+    }
+  }
+
+  const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
+  if (!years.length) return null;
+
+  const computeValue = (b) => {
+    if (popCol && b.pop > 0) {
+      // Pokrytí v procentech
+      return round((b.exams / b.pop) * 100, 1);
+    }
+    // Bez populace v datech → vrátit absolutní počet vyšetření
+    return b.exams;
+  };
+
+  const trend = years.slice(-5).map(y => ({ year: y, value: computeValue(byYear[y]) }));
+  const latest = trend[trend.length - 1];
+  return { value: latest.value, year: latest.year, trend };
+}
+
+/**
  * Z NRZP cache (records z `uzis_nzis_pracovnici.json`) spočítá počet
  * pracovníků dané role na 1 000 obyvatel ČR.
  *
@@ -501,6 +573,7 @@ const SOURCE_TYPE_TO_LABEL = {
   uzis_nzis: { name: 'ÚZIS · NZIS', url: 'https://www.uzis.cz/' },
   uzis_nrh: { name: 'ÚZIS · NRH', url: 'https://www.uzis.cz/' },
   uzis_nor: { name: 'ÚZIS · NOR', url: 'https://www.uzis.cz/' },
+  uzis_nrhzs_screening: { name: 'ÚZIS · NRHZS (screening)', url: 'https://www.uzis.cz/' },
   nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
@@ -536,6 +609,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     }
   } else if (primaryType === 'uzis_nor') {
     extracted = extractFromNor(card.id);
+  } else if (primaryType === 'uzis_nrhzs_screening') {
+    extracted = extractFromNrhzsScreening(card.id);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -564,6 +639,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     uzis_nrzp: 'uzis_nrzp_pracovnici.json',
     uzis_nrh: 'uzis_nrh_dlouhodoba_rada.json',
     uzis_nor: 'uzis_nor_incidence.json',
+    uzis_nrhzs_screening: card?.data_source?.primary?.dataset
+      ? `uzis_${card.data_source.primary.dataset}.json` : null,
   }[actualSourceType];
   const fetchedAt = extracted
     ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()
