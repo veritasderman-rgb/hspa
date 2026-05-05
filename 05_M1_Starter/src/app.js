@@ -57,7 +57,9 @@ function applyHash(state) {
   if (state.aud) {
     document.body.dataset.audience = state.aud;
     document.querySelectorAll('.audience-switch button').forEach(b => {
-      b.classList.toggle('active', b.dataset.aud === state.aud);
+      const isActive = b.dataset.aud === state.aud;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   }
 }
@@ -89,6 +91,12 @@ function debounce(fn, ms) {
 }
 
 // ====== DATA LOADING ======
+
+function chartAnimationOptions() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return reducedMotion ? { duration: 0 } : { duration: 500 };
+}
+
 
 function applyData(data, { stale = false, source = 'live' } = {}) {
   allIndicators = data.indicators || [];
@@ -307,6 +315,7 @@ function renderSparkline(ind, chartId) {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
       plugins: { legend: { display: false }, tooltip: { displayColors: false } },
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
@@ -428,6 +437,7 @@ function renderRegionDataset(ds) {
     options: {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(c.parsed.x < 100 ? 1 : 0)} ${ds.unit}` } },
@@ -471,6 +481,7 @@ function renderRegionsLegacy(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
       plugins: { legend: { display: false } },
       scales: { x: { min: Math.min(...sorted.map(r=>r.value))-1, max: Math.max(...sorted.map(r=>r.value))+1 },
                 y: { ticks: { font: { size: 11 } } } },
@@ -863,6 +874,7 @@ function renderModalChart(indicator) {
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
       plugins: {
         legend: { display: datasets.length > 1, position: 'top', labels: { font: { size: 11 }, boxWidth: 16 } },
         tooltip: { displayColors: true },
@@ -926,8 +938,12 @@ function wireUp() {
   // Audience switch
   document.querySelectorAll('.audience-switch button').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.audience-switch button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.audience-switch button').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       document.body.dataset.audience = btn.dataset.aud;
       writeHash();
     });
