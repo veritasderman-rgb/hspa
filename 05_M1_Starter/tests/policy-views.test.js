@@ -201,3 +201,81 @@ test('Real data: data/indicators.json obsahuje 42 indikátorů (40 + 2 NOR)', ()
   assert.ok(ids.has('incidence_kolorektalni'));
   assert.ok(ids.has('incidence_prsu'));
 });
+
+// =================================================================
+// M-NZIS-4: NRHZS screening (kolorektální + mamografický)
+// =================================================================
+
+import { extractFromNrhzsScreening } from '../ingest/transform.js';
+
+beforeEach(() => {
+  for (const name of ['uzis_nrhzs_screening_kolorektal.json', 'uzis_nrhzs_screening_mamograf.json']) {
+    const p = cachePath(name);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  }
+});
+
+test('extractFromNrhzsScreening: kolorektální pokrytí (% z populace)', () => {
+  ensureCacheDir();
+  // Reálný formát z NRHZS otevřených dat
+  writeCache('uzis_nrhzs_screening_kolorektal.json', {
+    columns: ['rok', 'pohlavi', 'vek_kod', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetrenych', 'populace'],
+    records: [
+      { rok: '2023', pohlavi: 'T', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '50000', populace: '200000' },
+      { rok: '2023', pohlavi: 'T', vek_kod: '55+', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '70000', populace: '300000' },
+      { rok: '2024', pohlavi: 'T', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '60000', populace: '200000' },
+      { rok: '2024', pohlavi: 'T', vek_kod: '55+', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetrenych: '80000', populace: '300000' },
+    ],
+  });
+  try {
+    const out = extractFromNrhzsScreening('screening_kolorektalni');
+    assert.ok(out, 'extract returned null');
+    // 2024: (60k+80k)/(200k+300k) = 140k/500k = 28 %
+    assert.equal(out.value, 28);
+    assert.equal(out.year, 2024);
+    assert.equal(out.trend.length, 2);
+    // 2023: (50k+70k)/(200k+300k) = 120k/500k = 24 %
+    assert.equal(out.trend[0].value, 24);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_kolorektal.json'));
+  }
+});
+
+test('extractFromNrhzsScreening: mamografie — sex_filter F bez populace vrátí absolutní počet', () => {
+  ensureCacheDir();
+  writeCache('uzis_nrhzs_screening_mamograf.json', {
+    columns: ['rok', 'pohlavi', 'vek_kod', 'okres_lau_kod', 'kraj_nuts_kod', 'pocet_vysetreni'],
+    records: [
+      { rok: '2024', pohlavi: 'F', vek_kod: '45-49', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetreni: '30000' },
+      { rok: '2024', pohlavi: 'F', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetreni: '40000' },
+      { rok: '2024', pohlavi: 'M', vek_kod: '50-54', okres_lau_kod: 'CZ010', kraj_nuts_kod: 'CZ010', pocet_vysetreni: '5' },  // šum (muži v mamografickém datasetu by neměli být — pojistka)
+    ],
+  });
+  try {
+    const out = extractFromNrhzsScreening('screening_mamograficky');
+    assert.ok(out);
+    // Filtruje 'F': 30k+40k = 70k, ignoruje 'M' šum
+    assert.equal(out.value, 70000);
+    assert.equal(out.year, 2024);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf.json'));
+  }
+});
+
+test('extractFromNrhzsScreening: bez cache → null (fallback na seed)', () => {
+  assert.equal(extractFromNrhzsScreening('screening_kolorektalni'), null);
+});
+
+test('extractFromNrhzsScreening: sex_filter bez sex sloupce v cache → null (P2 guard)', () => {
+  ensureCacheDir();
+  writeCache('uzis_nrhzs_screening_mamograf.json', {
+    columns: ['rok', 'vek_kod', 'pocet_vysetreni'], // chybí pohlavi
+    records: [{ rok: '2024', vek_kod: '50-54', pocet_vysetreni: '70000' }],
+  });
+  try {
+    // screening_mamograficky má sex_filter='F' — guard zabraní biased agregaci
+    assert.equal(extractFromNrhzsScreening('screening_mamograficky'), null);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf.json'));
+  }
+});
