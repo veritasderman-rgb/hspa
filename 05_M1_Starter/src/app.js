@@ -221,6 +221,12 @@ function destroyAllCharts() {
   chartInstances.clear();
 }
 
+function getChartAnimation() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? { duration: 0 }
+    : undefined;
+}
+
 function renderGrid() {
   const grid = document.getElementById('indicatorGrid');
   destroyAllCharts();
@@ -316,6 +322,7 @@ function renderSparkline(ind, chartId) {
     options: {
       responsive: true, maintainAspectRatio: false,
       animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: { legend: { display: false }, tooltip: { displayColors: false } },
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
@@ -438,6 +445,7 @@ function renderRegionDataset(ds) {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
       animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(c.parsed.x < 100 ? 1 : 0)} ${ds.unit}` } },
@@ -482,6 +490,7 @@ function renderRegionsLegacy(data) {
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: { legend: { display: false } },
       scales: { x: { min: Math.min(...sorted.map(r=>r.value))-1, max: Math.max(...sorted.map(r=>r.value))+1 },
                 y: { ticks: { font: { size: 11 } } } },
@@ -659,6 +668,7 @@ async function openMethodCard(indicator) {
   const content = document.getElementById('modalContent');
   content.innerHTML = '<p>Načítám metodickou kartu…</p>';
   modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden', 'false');
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
   modal.setAttribute('aria-label', indicator.name);
@@ -692,6 +702,7 @@ async function openMethodCard(indicator) {
 
 function closeModal() {
   document.getElementById('modalBackdrop').classList.add('hidden');
+  document.getElementById('modalBackdrop').setAttribute('aria-hidden', 'true');
   if (_modalChart) { _modalChart.destroy(); _modalChart = null; }
 }
 
@@ -927,8 +938,7 @@ function trapFocus(modal) {
     } else {
       if (document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
-    if (!modal.classList.contains('hidden')) return;
-    modal.removeEventListener('keydown', onKey);
+    if (modal.classList.contains('hidden')) modal.removeEventListener('keydown', onKey);
   });
 }
 
@@ -944,6 +954,9 @@ function wireUp() {
       });
       btn.classList.add('active');
       btn.setAttribute('aria-pressed', 'true');
+      document.querySelectorAll('.audience-switch button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
       document.body.dataset.audience = btn.dataset.aud;
       writeHash();
     });
