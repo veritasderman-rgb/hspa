@@ -1,0 +1,33 @@
+{
+  "id": "screening_mammo",
+  "name": "Pokrytí mamografickým screeningem (50–69 let)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Screeningové programy",
+  "definition": "Podíl žen ve věku 50–69 let, které absolvovaly mamografické vyšetření v rámci screeningového programu v daném dvouletém cyklu.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrscr",
+      "endpoint": "https://nrscr.uzis.cz/api/v1/screening/mammo",
+      "dataset": "NRSCR_MAMMO",
+      "dimensions": { "vek_od": 50, "vek_do": 69, "pohlavi": "F", "uzemi": "CZ" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "MAMMO_SCREEN",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MAMMO_SCREEN",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR", "ČOS"],
+  "method_notes": "Pokrytí je měřeno jako procento způsobilé populace vyšetřené v referenčním roce. Zahrnuje pouze vyšetření hrazená z veřejného zdravotního pojištění v rámci organizovaného screeningového programu.",
+  "limitations": "Nezahrnuje diagnostická mamografická vyšetření mimo screening. Dvouletý cyklus může způsobovat kolísání ročních hodnot."
+}

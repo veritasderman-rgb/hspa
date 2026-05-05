@@ -1,0 +1,33 @@
+{
+  "id": "doba_cekani_kycel",
+  "name": "Čekací doba – náhrada kyčelního kloubu",
+  "area": "Procesy",
+  "domain": "Přístup k péči",
+  "subdomain": "Čekací doby",
+  "definition": "Průměrný počet dní od rozhodnutí o indikaci k totální náhradě kyčelního kloubu (TEP) do provedení výkonu.",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhosp",
+      "endpoint": "https://nrhosp.uzis.cz/api/v1/cekaci-doby",
+      "dataset": "NRHOSP_CEKACI",
+      "dimensions": { "drg": "I47A", "uzemi": "CZ" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAITTIME_HIP",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITTIME_HIP",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR"],
+  "method_notes": "Čekací doba se počítá od data záznamu na čekací listinu do data provedení operace. Data pocházejí z národního registru hospitalizovaných (NRHOSP). Nárůst v 2021 byl způsoben COVID-19 restrikcemi a odložením plánových výkonů.",
+  "limitations": "Registrace na čekací listinu není v ČR plně standardizována. Část pacientů čeká bez formální registrace. Mezinárodní srovnání je ztíženo rozdílnými metodikami."
+}

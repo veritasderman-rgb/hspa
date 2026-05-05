@@ -1,0 +1,33 @@
+{
+  "id": "antibiotika_primarni_pece",
+  "name": "Předpis antibiotik v primární péči",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Racionální preskripce",
+  "definition": "Počet definovaných denních dávek (DDD) antibiotik předepsaných v primární péči na 1 000 obyvatel za den.",
+  "unit": "DDD/1000/den",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "sukl_nrlp",
+      "endpoint": "https://www.sukl.cz/modules/medication/detail.php",
+      "dataset": "NRLP_ATB",
+      "dimensions": { "atc_skupina": "J01", "uroven_pece": "ambulantni", "uzemi": "CZ" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ANTIBIOTICS_PC",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ANTIBIOTICS_PC",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["SÚKL", "MZ ČR", "SZÚ"],
+  "method_notes": "Metrika sleduje léky skupiny ATC J01 (systémová antibiotika) vydaná na lékařský předpis v ambulantní péči. DDD jsou standardizovány WHO. Klesající trend je výsledkem kampaní racionální preskripce a vzdělávání lékařů.",
+  "limitations": "DDD neodráží klinickou adekvátnost jednotlivých preskriptů. Části spotřeby (veterinární použití, nemocniční spotřeba) nejsou zahrnuty."
+}

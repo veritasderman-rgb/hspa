@@ -1,0 +1,33 @@
+{
+  "id": "screening_kolorektalni",
+  "name": "Pokrytí kolorektálním screeningem (50–75 let)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Screeningové programy",
+  "definition": "Podíl osob ve věku 50–75 let, které absolvovaly test na okultní krvácení do stolice (TOKS/iFOBT) nebo kolonoskopii v rámci screeningového programu.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrscr",
+      "endpoint": "https://nrscr.uzis.cz/api/v1/screening/kolorektum",
+      "dataset": "NRSCR_KOLORE",
+      "dimensions": { "vek_od": 50, "vek_do": 75, "uzemi": "CZ" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "COLO_SCREEN",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "COLO_SCREEN",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR", "ČGS"],
+  "method_notes": "Zahrnuje TOKS/iFOBT i primární screeningovou kolonoskopii. Počítáno jako kumulativní pokrytí v dvouletém okně.",
+  "limitations": "Kolorektální screening v ČR je historicky podfinancovaný z hlediska informovanosti. Data o kolonoskopii mohou zahrnovat i diagnostické výkony."
+}

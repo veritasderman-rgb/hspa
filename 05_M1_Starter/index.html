@@ -20,24 +20,24 @@
     <span class="last-updated" id="lastUpdated">Načítám…</span>
     <button class="btn-reload" id="btnReload" title="Načíst nejnovější data">⟳ Načíst znovu</button>
   </div>
-  <div class="audience-switch" role="tablist">
-    <button data-aud="public" class="active">Pro veřejnost</button>
-    <button data-aud="prof">Pro odborníky</button>
-    <button data-aud="policy">Pro tvůrce politik</button>
+  <div class="audience-switch" role="tablist" aria-label="Přepínač pohledu">
+    <button data-aud="public" class="active" aria-pressed="true">Pro veřejnost</button>
+    <button data-aud="prof" aria-pressed="false">Pro odborníky</button>
+    <button data-aud="policy" aria-pressed="false">Pro tvůrce politik</button>
   </div>
 </header>
 
-<nav class="dimnav" id="dimnav">
-  <button data-area="all" class="active">Vše</button>
-  <button data-area="Výsledky">Výsledky</button>
-  <button data-area="Výstupy">Výstupy</button>
-  <button data-area="Procesy">Procesy</button>
-  <button data-area="Struktury">Struktury</button>
+<nav class="dimnav" id="dimnav" aria-label="Filtry oblasti">
+  <button data-area="all" class="active" aria-pressed="true">Vše</button>
+  <button data-area="Výsledky" aria-pressed="false">Výsledky</button>
+  <button data-area="Výstupy" aria-pressed="false">Výstupy</button>
+  <button data-area="Procesy" aria-pressed="false">Procesy</button>
+  <button data-area="Struktury" aria-pressed="false">Struktury</button>
 </nav>
 
 <main id="content">
 
-  <div id="status" class="status hidden"></div>
+  <div id="status" class="status hidden" role="alert"></div>
 
   <div class="audience-banner public">
     <strong>Vítejte.</strong> Tato stránka shrnuje, jak si české zdravotnictví stojí. Najdete zde klíčové ukazatele s trendem a srovnáním s OECD/EU průměrem.
@@ -49,13 +49,59 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Souhrnný scorecard -->
+  <div class="scorecard" id="scorecard" aria-label="Souhrnné hodnocení">
+    <div class="scorecard-item good">
+      <span class="scorecard-count" id="scoreGood">–</span>
+      <span class="scorecard-label">Výborných</span>
+    </div>
+    <div class="scorecard-item warn">
+      <span class="scorecard-count" id="scoreWarn">–</span>
+      <span class="scorecard-label">Průměrných</span>
+    </div>
+    <div class="scorecard-item bad">
+      <span class="scorecard-count" id="scoreBad">–</span>
+      <span class="scorecard-label">Problematických</span>
+    </div>
+    <div class="scorecard-divider"></div>
+    <div class="scorecard-index">
+      <span class="scorecard-index-value" id="scoreIndex">–</span>
+      <span class="scorecard-index-label">Kompozitní index<br><small>% indikátorů nad benchmarkem</small></span>
+    </div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="section-controls">
+        <div class="search-wrap">
+          <input type="search" id="searchInput" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+        </div>
+        <div class="view-toggle" role="group" aria-label="Přepínač pohledu">
+          <button class="view-btn active" id="btnCardView" title="Zobrazit karty" aria-pressed="true">▦ Karty</button>
+          <button class="view-btn" id="btnTableView" title="Zobrazit tabulku" aria-pressed="false">☰ Tabulka</button>
+        </div>
+      </div>
     </div>
+    <div id="noResults" class="no-results hidden" role="status">Žádné indikátory neodpovídají hledanému výrazu.</div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="table-wrap hidden" id="indicatorTable">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Indikátor</th>
+            <th scope="col">Oblast</th>
+            <th scope="col">Hodnota</th>
+            <th scope="col">OECD průměr</th>
+            <th scope="col">Rok</th>
+            <th scope="col">Hodnocení</th>
+            <th scope="col">Zdroj</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
   </section>
 
 </main>
@@ -86,9 +132,9 @@
 </footer>
 
 <!-- Modal pro metodické karty -->
-<div class="modal-backdrop hidden" id="modalBackdrop">
+<div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+    <button class="modal-close" id="modalClose" aria-label="Zavřít">×</button>
     <div id="modalContent"></div>
   </div>
 </div>

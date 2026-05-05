@@ -1,0 +1,33 @@
+{
+  "id": "vakcinace_chripka_65plus",
+  "name": "Proočkovanost proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinační programy",
+  "definition": "Podíl osob ve věku 65 a více let, kteří byli očkováni proti sezónní chřipce v daném roce.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_epidat",
+      "endpoint": "https://epidat.szu.cz/api/v1/ockovani/chripka",
+      "dataset": "EPIDAT_VACC_FLU",
+      "dimensions": { "vek_od": 65, "uzemi": "CZ" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "INFLUVACOLD",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "INFLUVACOLD",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "MZ ČR", "VZP"],
+  "method_notes": "Data vychází ze systému EPIDAT SZÚ a dávkování vakcín hlášeného distributory. Referenční rok odpovídá chřipkové sezóně (říjen–březen).",
+  "limitations": "Cíl EU Health Union je 75 % proočkovanosti seniorů. ČR se výrazně odchyluje a trpí nízkou vakcinační ochotou v seniorní populaci. Data z pojišťoven mohou být úplnější než EPIDAT."
+}
