@@ -229,14 +229,14 @@ function renderPolicyExtras(filtered) {
   target.innerHTML = `
     <section class="policy-block">
       <header class="policy-block-header">
-        <h3>📅 Časová osa strategií</h3>
+        <h3>Časová osa strategií</h3>
         <p class="section-note">Horizonty platnosti aktivních strategií. Klik na pruh otevře detail.</p>
       </header>
       ${renderTimeline(filtered)}
     </section>
     <section class="policy-block">
       <header class="policy-block-header">
-        <h3>🏛️ Mapa zodpovědnosti</h3>
+        <h3>Mapa zodpovědnosti</h3>
         <p class="section-note">Kdo je vlastníkem/spolu-garantem které strategie. Top 16 institucí podle počtu strategií.</p>
       </header>
       ${renderResponsibilityMatrix(filtered)}
