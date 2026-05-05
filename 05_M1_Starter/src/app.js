@@ -57,7 +57,10 @@ function applyHash(state) {
   if (state.aud) {
     document.body.dataset.audience = state.aud;
     document.querySelectorAll('.audience-switch button').forEach(b => {
-      b.classList.toggle('active', b.dataset.aud === state.aud);
+      const isActive = b.dataset.aud === state.aud;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+      b.setAttribute('tabindex', isActive ? '0' : '-1');
     });
   }
 }
@@ -925,9 +928,14 @@ let _lastFocusedBeforeModal = null;
 function wireUp() {
   // Audience switch
   document.querySelectorAll('.audience-switch button').forEach(btn => {
+    btn.setAttribute('role', 'tab');
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.audience-switch button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      document.querySelectorAll('.audience-switch button').forEach(b => {
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-selected', String(isActive));
+        b.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
       document.body.dataset.audience = btn.dataset.aud;
       writeHash();
     });

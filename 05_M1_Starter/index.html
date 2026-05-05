@@ -33,10 +33,10 @@
     <button class="btn-reload" id="btnReload" title="Načíst nejnovější data">⟳ Načíst znovu</button>
     <button class="btn-theme" id="btnTheme" title="Přepnout světlý/tmavý režim" aria-label="Přepnout téma">🌙</button>
   </div>
-  <div class="audience-switch" role="tablist">
-    <button data-aud="public" class="active">Pro veřejnost</button>
-    <button data-aud="prof">Pro odborníky</button>
-    <button data-aud="policy">Pro tvůrce politik</button>
+  <div class="audience-switch" role="tablist" aria-label="Přepínač publika">
+    <button data-aud="public" class="active" role="tab" aria-selected="true" tabindex="0">Pro veřejnost</button>
+    <button data-aud="prof" role="tab" aria-selected="false" tabindex="-1">Pro odborníky</button>
+    <button data-aud="policy" role="tab" aria-selected="false" tabindex="-1">Pro tvůrce politik</button>
   </div>
 </header>
 
@@ -147,8 +147,8 @@
 
 <!-- Modal pro metodické karty -->
 <div class="modal-backdrop hidden" id="modalBackdrop">
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+  <div class="modal" id="modal" aria-label="Detail indikátoru">
+    <button class="modal-close" id="modalClose" aria-label="Zavřít detail indikátoru">×</button>
     <div id="modalContent"></div>
   </div>
 </div>
