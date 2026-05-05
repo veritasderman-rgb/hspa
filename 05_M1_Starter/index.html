@@ -49,13 +49,60 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Přehledové dlaždice signálů -->
+  <div class="signal-summary" id="signalSummary" aria-label="Přehled hodnocení indikátorů">
+    <div class="signal-tile total">
+      <span class="st-count" id="stTotal">–</span>
+      <span class="st-label">Celkem</span>
+    </div>
+    <div class="signal-tile good">
+      <span class="st-count" id="stGood">–</span>
+      <span class="st-label">Dobré</span>
+    </div>
+    <div class="signal-tile warn">
+      <span class="st-count" id="stWarn">–</span>
+      <span class="st-label">Průměrné</span>
+    </div>
+    <div class="signal-tile bad">
+      <span class="st-count" id="stBad">–</span>
+      <span class="st-label">Problematické</span>
+    </div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
       <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="search-wrap">
+        <input type="search" id="searchInput" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+        <button class="btn-export" id="btnExport" title="Stáhnout zobrazená data jako CSV">⬇ CSV</button>
+      </div>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="no-results hidden" id="noResults">Žádný indikátor neodpovídá vyhledávání.</div>
+  </section>
+
+  <!-- Regionální přehled -->
+  <section class="section" id="regionSection">
+    <div class="section-title">
+      <h3>Regionální přehled</h3>
+      <span class="badge">14 krajů</span>
+      <span class="desc">Naděje dožití (muži, 2024) · Lékaři / 1 000 obyv.</span>
+    </div>
+    <div class="region-layout">
+      <div class="region-chart-wrap">
+        <canvas id="regionChart"></canvas>
+      </div>
+      <div class="region-table-wrap">
+        <table class="region-table" id="regionTable">
+          <thead>
+            <tr><th>Kraj</th><th>Naděje dožití</th><th>Lékaři / 1 000</th></tr>
+          </thead>
+          <tbody id="regionTableBody"></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
 </main>
