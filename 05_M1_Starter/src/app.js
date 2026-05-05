@@ -483,10 +483,59 @@ function renderModalContent(card, indicator) {
       ${card.limitations ? `<dt>Omezení</dt><dd>${card.limitations}</dd>` : ''}
     </dl>
     ${card.data_source ? `<h3 class="ds-heading">Zdroje dat</h3>${renderDataSource(card.data_source)}` : ''}
+    <div class="modal-cross-links" id="modalCrossLinks"></div>
     <div class="modal-actions">
       <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
     </div>
   `;
+}
+
+// Cross-link cache pro modal
+let _crossLinksCache = null;
+async function loadCrossLinks() {
+  if (_crossLinksCache) return _crossLinksCache;
+  try {
+    const [s, e] = await Promise.all([
+      fetch('data/strategies.json').then(r => r.ok ? r.json() : { strategies: [] }).catch(() => ({ strategies: [] })),
+      fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
+    ]);
+    _crossLinksCache = { strategies: s.strategies ?? [], explainers: e.explainers ?? [] };
+  } catch {
+    _crossLinksCache = { strategies: [], explainers: [] };
+  }
+  return _crossLinksCache;
+}
+
+async function renderModalCrossLinks(indicatorId) {
+  const target = document.getElementById('modalCrossLinks');
+  if (!target) return;
+  const { strategies, explainers } = await loadCrossLinks();
+  const linkedStrategies = strategies.filter(s => (s.linked_indicators ?? []).includes(indicatorId));
+  const linkedExplainers = explainers.filter(e => (e.linked_indicators ?? []).includes(indicatorId));
+  if (!linkedStrategies.length && !linkedExplainers.length) return;
+
+  let html = '';
+  if (linkedStrategies.length) {
+    html += `<h3 class="ds-heading">Souvisí se strategiemi</h3><div class="chip-row">`;
+    html += linkedStrategies.slice(0, 6).map(s =>
+      `<a class="chip chip-strategy" href="strategie.html?id=${encodeURIComponent(s.id)}">${escapeText(s.title)}</a>`
+    ).join('');
+    html += `</div>`;
+  }
+  if (linkedExplainers.length) {
+    html += `<h3 class="ds-heading" style="margin-top:14px">Vysvětlení</h3><div class="chip-row">`;
+    html += linkedExplainers.map(e =>
+      `<a class="chip chip-explainer" href="jak-funguje.html?id=${encodeURIComponent(e.id)}">${escapeText(e.title)}</a>`
+    ).join('');
+    html += `</div>`;
+  }
+  target.innerHTML = html;
+}
+
+function escapeText(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 }
 
 function renderFallbackCard(indicator) {
@@ -530,12 +579,14 @@ async function openMethodCard(indicator) {
     content.insertAdjacentHTML('beforeend', renderModalContent(card, indicator));
     const csvBtn = document.getElementById('btnCsvExport');
     if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+    renderModalCrossLinks(indicator.id);
     return;
   }
 
   content.innerHTML = renderModalContent(card, indicator);
   const csvBtn = document.getElementById('btnCsvExport');
   if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+  renderModalCrossLinks(indicator.id);
 }
 
 function closeModal() {
