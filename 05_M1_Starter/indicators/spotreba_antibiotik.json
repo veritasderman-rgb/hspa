@@ -1,0 +1,30 @@
+{
+  "id": "spotreba_antibiotik",
+  "name": "Spotřeba antibiotik (ambulantní sektor)",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Bezpečnost a vhodnost preskripce",
+  "definition": "Definované denní dávky (DDD) antibiotik vydaných v primární péči na 1 000 obyvatel a den, podle ATC J01.",
+  "unit": "DDD/1000/den",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_amres",
+      "note": "Středisko AMR/ATB rezistence při SZÚ; data ze SÚKL distribuce + výkaznictví VZP/SZP."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ANTIBIOTIC_CONSUMPTION_PRIM"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ANTIBIOTIC_CONSUMPTION_PRIM",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ · NRL pro antibiotika", "SÚKL"],
+  "method_notes": "WHO ATC/DDD metodika. Sledováno ECDC ESAC-Net.",
+  "limitations": "Nezahrnuje veterinární spotřebu. Část parenterální preskripce může být v jiné kategorii."
+}

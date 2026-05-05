@@ -50,12 +50,46 @@
   </div>
 
   <section class="section">
+    <div class="scorecard" id="scorecard" role="region" aria-label="Souhrnný přehled signálů">
+      <div class="sc-tile sc-total"><span class="sc-num" id="scTotal">0</span><span class="sc-lbl">Celkem</span></div>
+      <div class="sc-tile sc-good"><span class="sc-num" id="scGood">0</span><span class="sc-lbl">Dobré</span></div>
+      <div class="sc-tile sc-warn"><span class="sc-num" id="scWarn">0</span><span class="sc-lbl">Ke sledování</span></div>
+      <div class="sc-tile sc-bad"><span class="sc-num" id="scBad">0</span><span class="sc-lbl">Kritické</span></div>
+      <div class="sc-tile sc-neutral"><span class="sc-num" id="scNeutral">0</span><span class="sc-lbl">Bez benchmarku</span></div>
+    </div>
+
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="section-actions">
+        <input type="search" id="searchBox" class="search-box" placeholder="Hledat indikátor…" aria-label="Vyhledat indikátor">
+        <select id="sortSelect" class="sort-select" aria-label="Řazení">
+          <option value="default">Výchozí</option>
+          <option value="signal">Signal (kritické první)</option>
+          <option value="name">Název A–Z</option>
+          <option value="trend">Meziroční trend</option>
+        </select>
+        <button class="btn-export" id="btnExportCsv" title="Stáhnout zobrazené indikátory jako CSV">⬇ CSV</button>
+      </div>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="empty-state hidden" id="emptyState">Žádný indikátor neodpovídá vašemu hledání.</div>
+  </section>
+
+  <section class="section regions-section">
+    <div class="section-title">
+      <h3>Regionální přehled — naděje dožití mužů (2024)</h3>
+      <span class="desc" id="regionsBadge"></span>
+    </div>
+    <div class="regions-wrap">
+      <div class="regions-chart-wrap"><canvas id="regionsChart" aria-label="Sloupcový graf 14 krajů ČR"></canvas></div>
+      <div class="regions-table-wrap">
+        <table class="regions-table" id="regionsTable">
+          <thead><tr><th>Kraj</th><th>Naděje dožití (let)</th><th>Δ od průměru ČR</th><th>Lékaři / 1 000</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
 </main>

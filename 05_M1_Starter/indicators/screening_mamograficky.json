@@ -1,0 +1,31 @@
+{
+  "id": "screening_mamograficky",
+  "name": "Pokrytí mamografickým screeningem (50–69)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Onkologický screening",
+  "definition": "Podíl žen 50–69 let, které absolvovaly mamografii v posledních 24 měsících.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "dataset": "Národní program screeningu karcinomu prsu",
+      "note": "Data z výkaznictví zdravotních pojišťoven; agregát publikuje ÚZIS ročně."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "BREAST_SCREENING"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "BREAST_SCREENING",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "Národní program screeningu karcinomu prsu"],
+  "method_notes": "Standardizováno na věk. Cíl WHO: ≥ 70 %.",
+  "limitations": "Adresné zvaní zavedeno až 2014; časový vývoj odráží i organizační kapacitu, ne jen poptávku."
+}

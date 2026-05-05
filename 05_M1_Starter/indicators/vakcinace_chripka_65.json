@@ -1,0 +1,30 @@
+{
+  "id": "vakcinace_chripka_65",
+  "name": "Proočkovanost proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinace dospělých",
+  "definition": "Podíl osob 65+ očkovaných proti sezónní chřipce v dané sezóně (ze státem hrazené vakcinace).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "Hlášení distributorů vakcín + výkaznictví praktických lékařů."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "INFLUENZA_VACC_65"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "INFLUENZA_VACC_65",
+    "dataset": "HEALTH_LVNG"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "ÚZIS"],
+  "method_notes": "WHO/ECDC cíl: ≥ 75 % populace 65+. ČR dlouhodobě výrazně pod cílem.",
+  "limitations": "Samoplátci a privátní očkování v některých letech podhodnoceno."
+}

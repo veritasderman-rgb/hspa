@@ -160,8 +160,10 @@ const SOURCE_TYPE_TO_LABEL = {
   eurostat_jsonstat: { name: 'Eurostat', url: 'https://ec.europa.eu/eurostat' },
   oecd: { name: 'OECD Health Statistics', url: 'https://stats.oecd.org/' },
   uzis_nrzp: { name: 'ÚZIS · NRZP', url: 'https://www.uzis.cz/' },
+  uzis_nzis: { name: 'ÚZIS · NZIS', url: 'https://www.uzis.cz/' },
   nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
+  szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
   eea: { name: 'EEA', url: 'https://www.eea.europa.eu/' },
 };
 
