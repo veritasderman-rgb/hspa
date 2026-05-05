@@ -1,0 +1,33 @@
+{
+  "id": "nemocnicni_postele",
+  "name": "Akutní nemocniční lůžka / 1 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Infrastruktura",
+  "subdomain": "Kapacita",
+  "definition": "Počet akutních nemocničních lůžek v lůžkových zdravotnických zařízeních na 1 000 obyvatel.",
+  "unit": "/ 1 000",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "endpoint": "https://www.uzis.cz/res/file/nrpzs/",
+      "dataset": "NRPZS_LUZKA",
+      "dimensions": { "typ": "akutni", "uzemi": "CZ0" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ACUBEDSAC",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ACUBEDSAC",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10, "warn": 30 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZČR"],
+  "method_notes": "Zahrnuje akutní lůžka ve všech segmentech. Nezahrnuje rehabilitační, psychiatrická ani dlouhodobá lůžka. Metodika SHA/OECD.",
+  "limitations": "Počet lůžek nemusí odrážet kvalitu péče. Trend k ambulantizaci snižuje průměr OECD přirozeně."
+}

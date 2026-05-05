@@ -148,6 +148,73 @@ footer.bottom .disclaimer {
 .status.warn { background: #FFF8E7; color: var(--warn); border: 1px solid #F5D78E; }
 .hidden { display: none !important; }
 
+/* Scorecard */
+.scorecard {
+  display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.scorecard-item {
+  flex: 1; min-width: 100px; background: white;
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; text-align: center;
+  border-top: 4px solid var(--border);
+}
+.scorecard-item.good { border-top-color: var(--good); }
+.scorecard-item.warn { border-top-color: var(--warn); }
+.scorecard-item.bad { border-top-color: var(--bad); }
+.scorecard-item.neutral { border-top-color: var(--neutral); }
+.scorecard-item.total { border-top-color: var(--primary); }
+.scorecard-count {
+  display: block; font-size: 28px; font-weight: 700;
+  color: var(--primary-dark); line-height: 1.1;
+}
+.scorecard-item.good .scorecard-count { color: var(--good); }
+.scorecard-item.warn .scorecard-count { color: var(--warn); }
+.scorecard-item.bad .scorecard-count { color: var(--bad); }
+.scorecard-label {
+  display: block; font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
+}
+
+/* Search bar */
+.search-bar {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.search-input-wrap {
+  position: relative; flex: 1; min-width: 200px;
+}
+.search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; pointer-events: none; opacity: 0.5;
+}
+#searchInput {
+  width: 100%; padding: 10px 14px 10px 36px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 14px; color: var(--text); background: white;
+  outline: none; transition: border-color 0.15s;
+}
+#searchInput:focus { border-color: var(--primary); }
+.signal-filter { display: flex; gap: 6px; flex-wrap: wrap; }
+.sig-btn {
+  background: white; border: 1px solid var(--border);
+  padding: 8px 14px; border-radius: 20px; cursor: pointer;
+  font-size: 13px; color: var(--muted); font-weight: 500;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.sig-btn:hover { border-color: var(--primary); color: var(--primary); }
+.sig-btn.active[data-sig="all"] { background: var(--primary); color: white; border-color: var(--primary); }
+.sig-btn.active[data-sig="good"] { background: var(--good); color: white; border-color: var(--good); }
+.sig-btn.active[data-sig="warn"] { background: var(--warn); color: white; border-color: var(--warn); }
+.sig-btn.active[data-sig="bad"] { background: var(--bad); color: white; border-color: var(--bad); }
+.sig-btn[data-sig="good"] { color: var(--good); }
+.sig-btn[data-sig="warn"] { color: var(--warn); }
+.sig-btn[data-sig="bad"] { color: var(--bad); }
+
+.no-results {
+  text-align: center; color: var(--muted); font-size: 15px;
+  padding: 48px 0;
+}
+
 /* Modal pro metodické karty */
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.5);
@@ -174,4 +241,29 @@ footer.bottom .disclaimer {
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  .scorecard { gap: 8px; }
+  .scorecard-item { min-width: 80px; padding: 10px 12px; }
+  .scorecard-count { font-size: 22px; }
+  .search-bar { gap: 10px; }
+}
+
+@media print {
+  header.topbar { background: none; color: var(--text); box-shadow: none; padding: 12px 0; }
+  .brand-logo { display: none; }
+  .topbar-actions, .audience-switch, nav.dimnav,
+  .btn-reload, .search-bar, .modal-backdrop { display: none !important; }
+  .audience-banner { display: none !important; }
+  body[data-audience="policy"] .audience-banner.policy { display: block !important; }
+  main { padding: 16px 0; }
+  .scorecard-item { border: 1px solid #ccc; break-inside: avoid; }
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .indicator-card {
+    break-inside: avoid; border: 1px solid #ccc;
+    box-shadow: none; transform: none !important;
+  }
+  .indicator-card .chart-wrap { height: 60px; }
+  footer.bottom { background: none; color: var(--text); padding: 12px 0; }
+  footer.bottom a { color: var(--text); }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 10px; color: #666; }
+  @page { margin: 1.5cm; }
 }

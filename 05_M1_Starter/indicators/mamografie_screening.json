@@ -1,0 +1,33 @@
+{
+  "id": "mamografie_screening",
+  "name": "Pokrytí mamografickým screeningem",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Screening",
+  "definition": "Podíl žen ve věku 45–69 let, které absolvovaly mamografické vyšetření v rámci screeningového programu v posledních 2 letech.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://www.uzis.cz/registry-nzis/",
+      "dataset": "SCREENING_MAMOGRAFIE",
+      "dimensions": { "vek": "45-69", "pohlavi": "F" }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_ps_scre",
+      "dimensions": { "screenc": "MAMM", "unit": "PC" }
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MAMMSCRN",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5, "warn": 10 },
+  "frequency": "biennially",
+  "stewards": ["ÚZIS", "SZÚ", "ČOS"],
+  "method_notes": "Organizovaný screening. Příležitostné vyšetření mimo program není zahrnuto. Evropský standard: 75 %+ pokrytí.",
+  "limitations": "Nezahrnuje ženy mimo věkový rámec 45–69 let. Dobrovolná účast ovlivněna povědomím a dostupností."
+}

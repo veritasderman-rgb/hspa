@@ -1,0 +1,33 @@
+{
+  "id": "sebeurcene_zdravi",
+  "name": "Subjektivní hodnocení zdraví (dobrý/výborný)",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Subjektivní zdraví",
+  "definition": "Podíl osob ve věku 15+ let, kteří svůj zdravotní stav hodnotí jako dobrý nebo výborný (škála: výborný / dobrý / uspokojivý / špatný / velmi špatný).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_ehis",
+      "endpoint": "https://szu.gov.cz/ehis/",
+      "dataset": "EHIS_ZDRAVI_SUBJEKTIVNI",
+      "dimensions": { "vek": "15plus", "pohlavi": "T" }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_silc_10",
+      "dimensions": { "isced11": "TOTAL", "n_classf": "VG" }
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "SELFGOODH",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 3, "warn": 8 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "ČSÚ"],
+  "method_notes": "EU-SILC a EHIS harmonizovaná data. Kombinuje kategorie ‚dobrý' a ‚výborný'. Věkově standardizováno na ESP 2013.",
+  "limitations": "Kulturní bias v hodnocení zdraví napříč zeměmi. Nekoreluje vždy s objektivními ukazateli."
+}

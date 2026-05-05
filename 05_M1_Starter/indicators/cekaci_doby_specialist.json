@@ -1,0 +1,33 @@
+{
+  "id": "cekaci_doby_specialist",
+  "name": "Čekací doby na specialistu",
+  "area": "Procesy",
+  "domain": "Přístup ke službám",
+  "subdomain": "Čekací doby",
+  "definition": "Průměrná čekací doba v kalendářních dnech od doporučení praktickým lékařem do první konzultace se specialistou.",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "endpoint": "https://www.uzis.cz/res/file/nrpzs/",
+      "dataset": "NRPZS_CEKACI_DOBY",
+      "dimensions": { "specials": ["kardiologie", "ortopedie", "neurologie"] }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAITSPECIALIST",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITSPECIALIST",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10, "warn": 20 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZČR"],
+  "method_notes": "Průměr za 5 nejčastějších specializací. Měřeno v pracovních dnech, převedeno na kalendářní dny (× 1,4). Srovnatelná metodika s OECD HCQI.",
+  "limitations": "Velká variance mezi specializacemi a regiony. Čekání z kapacitních vs. klinických důvodů není rozlišeno."
+}

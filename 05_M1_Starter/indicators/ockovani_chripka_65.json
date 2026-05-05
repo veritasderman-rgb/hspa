@@ -1,0 +1,33 @@
+{
+  "id": "ockovani_chripka_65",
+  "name": "Proočkovanost proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinace",
+  "definition": "Podíl osob ve věku 65 a více let, kteří byli očkováni proti sezónní chřipce v uplynulé sezóně.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_ehis",
+      "endpoint": "https://szu.gov.cz/ehis/",
+      "dataset": "EHIS_VAKCINACE",
+      "dimensions": { "vek": "65plus", "vakcina": "influenza" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "FLUVACCIN65",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "FLUVACCIN65",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5, "warn": 15 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "MZČR"],
+  "method_notes": "Administrativní data ze zdravotních pojišťoven. Populační základ: počet pojištěnců 65+. Cílová hodnota WHO: 75 %.",
+  "limitations": "Rozdíly v definici sezóny napříč zeměmi. Nezahrnuje neregistrovanou vakcinaci v zahraničí."
+}
