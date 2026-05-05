@@ -744,11 +744,15 @@ function benchmarkBarHTML(ind) {
 
   if (bestVal != null) {
     const p = Math.min(100, Math.round(bestVal / maxVal * 100));
+    const bestCountry = ind.benchmark?.oecd_best_country ?? null;
+    const tooltip = bestCountry
+      ? `Nejlepší výkon v OECD: ${bestCountry} (${bestVal}${ind.unit ? ' ' + ind.unit : ''})`
+      : 'Nejlepší výkon v OECD';
     rows += `
-    <div class="bm-row bm-best">
-      <span class="bm-key" title="Nejlepší výkon v OECD">Top</span>
+    <div class="bm-row bm-best" title="${escapeText(tooltip)}">
+      <span class="bm-key">Top</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#16A34A"></div></div>
-      <span class="bm-val">${bestVal}</span>
+      <span class="bm-val">${bestVal}${bestCountry ? `<small class="bm-country"> · ${escapeText(bestCountry)}</small>` : ''}</span>
     </div>`;
   }
 
