@@ -52,10 +52,14 @@ test('filterExplainers: filtr podle kategorie', () => {
   assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { category: 'classification' }).length, 1);
 });
 
-test('filterExplainers: search across tldrs', () => {
+test('filterExplainers: search across all 3 tldrs (public + expert + policy)', () => {
   assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'DRG' }).length, 1);
   assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'kódy' }).length, 1);
   assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'pojišťoven' }).length, 1);
+  // Regrese P2: policy-only term ("hybrid", "Variabilita", "Přechod") musí najít
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'hybrid' }).length, 1);
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'Variabilita' }).length, 1);
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'MKN-11' }).length, 1);
 });
 
 // ===== audienceText =====

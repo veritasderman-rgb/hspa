@@ -26,6 +26,7 @@ export function filterExplainers(items, { category, search }) {
       || (e.subtitle || '').toLowerCase().includes(q)
       || (e.tldr_public || '').toLowerCase().includes(q)
       || (e.tldr_expert || '').toLowerCase().includes(q)
+      || (e.tldr_policy || '').toLowerCase().includes(q)
     );
   }
   return xs;
