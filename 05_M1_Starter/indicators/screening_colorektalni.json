@@ -1,0 +1,32 @@
+{
+  "id": "screening_colorektalni",
+  "name": "Účast na screeningu kolorektálního karcinomu",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Screening",
+  "definition": "Podíl cílové populace (50–74 let) účastnící se národního programu screeningu kolorektálního karcinomu ve sledovaném roce.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS screening kolorektálního karcinomu — výkazy ZPP/6 od zdravotních pojišťoven.",
+      "url": "https://www.uzis.cz/sekce/preventivni-prohlídky-a-screening"
+    },
+    "fallback": {
+      "type": "eurostat",
+      "dataset": "hlth_ps_prev",
+      "description": "Participation in preventive health examinations"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "dataset": "hlth_ps_prev",
+    "description": "EU průměr účasti na screeningu CRC"
+  },
+  "signal_thresholds": { "good": 15, "warn": 30 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR", "VZP"],
+  "method_notes": "Národní program screeningu CRC spuštěn 2009 (TOKS od 50 let každé 2 roky, kolonoskopie od 55 let každých 10 let). Účast se postupně zvyšuje, ale zůstává nižší než v zemích EU.",
+  "limitations": "Metodika výpočtu se mění v čase. Zahrnutí soukromých screeningů mimo národní program problematické. EU srovnání obtížné — různé věkové hranice a metodiky."
+}

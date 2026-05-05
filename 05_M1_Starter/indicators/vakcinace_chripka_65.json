@@ -1,0 +1,32 @@
+{
+  "id": "vakcinace_chripka_65",
+  "name": "Vakcinace proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinace",
+  "definition": "Podíl osob ve věku 65 a více let, které obdržely vakcinaci proti chřipce v posledních 12 měsících.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS Vakcinace - roční výkaz o provedených očkováních dle věku a pohlaví.",
+      "url": "https://www.uzis.cz/sekce/vakcinace"
+    },
+    "fallback": {
+      "type": "eurostat",
+      "dataset": "hlth_ps_imm",
+      "description": "Immunisation coverage rates for vaccine-preventable diseases"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PRCTPPLVCCNFLZP65",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10, "warn": 20 },
+  "frequency": "yearly",
+  "stewards": ["SÚKL", "ÚZIS", "OECD"],
+  "method_notes": "Cíl WHO: 75% seniorů 65+. ČR je výrazně pod tímto cílem i pod průměrem OECD. Doporučení: Program Zdraví 2030 cíl 40 % do 2030.",
+  "limitations": "Data závisí na evidenci vykázaných vakcinací — soukromé vakcinace nemusí být vždy vykázány. Sezonní variabilita."
+}

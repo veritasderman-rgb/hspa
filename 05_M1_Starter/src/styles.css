@@ -125,9 +125,39 @@ body[data-audience="policy"] .audience-banner.policy { display: block; }
   background: var(--bg); padding: 6px 10px; border-radius: 6px; margin-bottom: 10px;
 }
 .indicator-card .compare strong { color: var(--text); }
-.indicator-card .chart-wrap { height: 80px; margin-top: 8px; }
-.indicator-card .source { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.indicator-card .chart-wrap { height: 90px; margin-top: 8px; }
+
+/* Footer s CSV tlačítkem */
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
+}
+.indicator-card .source { font-size: 11px; color: var(--muted); }
 .indicator-card .source a { color: var(--primary); text-decoration: none; }
+
+/* CSV export tlačítko */
+.btn-csv {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  font-size: 10px; padding: 3px 8px; border-radius: 4px; cursor: pointer;
+  white-space: nowrap; font-weight: 500;
+}
+.btn-csv:hover { background: var(--bg); color: var(--primary); border-color: var(--primary); }
+
+/* Delta chip: CZ vs OECD */
+.compare { font-size: 12px; color: var(--muted); background: var(--bg); padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.compare strong { color: var(--text); }
+.delta-chip {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+  white-space: nowrap;
+}
+.delta-good { background: #E6F4EA; color: var(--good); }
+.delta-bad { background: #FDECEA; color: var(--bad); }
+
+/* Year badge na hodnotě */
+.year-badge {
+  font-size: 11px; color: var(--muted); background: var(--bg);
+  border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; margin-left: 4px;
+}
 
 footer.bottom {
   background: var(--primary-dark); color: white; padding: 28px 32px; margin-top: 40px;
@@ -170,8 +200,30 @@ footer.bottom .disclaimer {
 .modal dt { font-weight: 600; color: var(--text); }
 .modal dd { color: var(--muted); }
 .modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
+.modal-section-title { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 20px; margin-bottom: 4px; }
+.btn-csv-modal {
+  margin-top: 16px; display: inline-block;
+  background: var(--primary); color: white; border: none;
+  padding: 9px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500;
+}
+.btn-csv-modal:hover { background: var(--primary-dark); }
+.error-msg { color: var(--bad); }
+
+/* ====== REGIONÁLNÍ SEKCE ====== */
+.region-section { margin-top: 40px; }
+.region-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+.region-tabs button {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 7px 16px; border-radius: 6px; cursor: pointer;
+  font-size: 13px; color: var(--muted); font-weight: 500;
+}
+.region-tabs button:hover { border-color: var(--primary); color: var(--primary); }
+.region-tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
+.region-chart-wrap { height: 420px; background: white; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.region-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
 
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  .region-chart-wrap { height: 520px; }
 }

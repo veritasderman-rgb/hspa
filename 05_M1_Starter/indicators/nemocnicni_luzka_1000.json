@@ -1,0 +1,32 @@
+{
+  "id": "nemocnicni_luzka_1000",
+  "name": "Nemocniční lůžka / 1 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Zdravotnická infrastruktura",
+  "subdomain": "Kapacita",
+  "definition": "Celkový počet nemocničních lůžek (akutní, dlouhodobá, psychiatrická) na 1 000 obyvatel.",
+  "unit": "/ 1 000",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "endpoint": "https://nrpzs.uzis.cz/api/v1/mista-poskytovani",
+      "note": "Kapacitní data z NRPZS. Počet lůžek dle druhu péče a kraje."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "BDSACTHSPBDSPOP",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "BDSACTHSPBDSPOP",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 20, "warn": 40 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "OECD"],
+  "method_notes": "ČR má více nemocničních lůžek než průměr OECD — historická infrastruktura. Trend pomalého poklesu v souladu s posunem k ambulantní péči.",
+  "limitations": "Směr indikátoru je context_dependent: vyšší počet lůžek nutně neznamená lepší systém — záleží na obsazenosti a délce hospitalizace. Benchmarking obtížný."
+}

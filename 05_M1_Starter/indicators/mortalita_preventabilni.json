@@ -1,0 +1,34 @@
+{
+  "id": "mortalita_preventabilni",
+  "name": "Preventabilní mortalita / 100 tis. obyvatel",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Preventabilní příčiny",
+  "definition": "Standardizovaná míra předčasné úmrtí (do 75 let), která jsou považována za preventabilní – tj. jejich výskytu by šlo předejít efektivními intervencemi v oblasti veřejného zdraví a prevence.",
+  "unit": "/ 100 tis.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "code": "MTHRTPRVNTBLALL",
+      "dataset": "HEALTH_STAT",
+      "dimensions": { "measure": "MTHRTPRVNTBLALL", "location": "CZE", "frequency": "A" }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "dataset": "hlth_cd_apyll",
+      "description": "Amenable and preventable deaths by sex and age"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MTHRTPRVNTBLALL",
+    "dataset": "HEALTH_STAT",
+    "filter": "OECD"
+  },
+  "signal_thresholds": { "good": 10, "warn": 20 },
+  "frequency": "yearly",
+  "stewards": ["OECD", "Eurostat", "ÚZIS"],
+  "method_notes": "Věkově standardizovaná míra na 100 000 obyvatel. Zahrnuje IHD, cévní mozkové příhody, nádory, dopravní nehody, sebevraždy a jiné příčiny dle OECD/Eurostat seznamu. Standardizace na populaci EU27 2013.",
+  "limitations": "Závisí na kvalitě kódování příčin smrti (MKN-10). Srovnatelnost mezi zeměmi ovlivněna různou praxí při vyplňování listu o prohlídce zemřelého."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "mortalita_kojenci",
+  "name": "Kojenecká mortalita / 1 000 živě narozených",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Kojenecká mortalita",
+  "definition": "Počet zemřelých kojenců (do 1 roku věku) na 1 000 živě narozených dětí v daném roce.",
+  "unit": "/ 1 000",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS - Přehled o pohybu obyvatelstva, KOJ (Kojenecká mortalita). Dostupné ročně z ÚZIS.",
+      "url": "https://www.uzis.cz/res/f/008296/pe2023_final.pdf"
+    },
+    "fallback": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/katalog/v1/datasety/DEM_NAROZENI/data",
+      "dimensions": { "uzemi": "CZ0" }
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MTHRTINFANT",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 20, "warn": 30 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "ČSÚ", "OECD"],
+  "method_notes": "Standardní mezinárodní definice WHO/OECD. ČR patří dlouhodobě pod průměr OECD — výsledek investic do neonatologické péče.",
+  "limitations": "Malé absolutní počty způsobují meziroční kolísání. Srovnatelnost ovlivněna různými definicemi živě narozených (hranice 500 g / 22 týdnů)."
+}
