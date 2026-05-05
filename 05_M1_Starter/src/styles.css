@@ -795,3 +795,102 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-size: 9px; color: var(--muted); font-weight: 500;
   margin-left: 2px; white-space: nowrap;
 }
+
+/* =================================================================
+   Úvodní hero sekce — collapsible "Co je HSPA"
+   ================================================================= */
+details.hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+details.hero[open] { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+details.hero:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+details.hero > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  user-select: none;
+  border-left: 3px solid var(--primary);
+  transition: background 0.15s;
+}
+details.hero > summary::-webkit-details-marker { display: none; }
+details.hero > summary::marker { content: ''; }
+details.hero > summary:hover { background: var(--bg); }
+details.hero[open] > summary { border-bottom: 1px solid var(--border); }
+
+.hero-summary-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hero-summary-q {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  letter-spacing: -0.005em;
+}
+.hero-summary-hint {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.hero-summary-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, color 0.15s;
+}
+details.hero[open] .hero-summary-icon {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+details.hero > summary:hover .hero-summary-icon { color: var(--primary); }
+
+.hero-content {
+  padding: 22px 28px 26px;
+}
+.hero-content p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 16px;
+  max-width: 90ch;
+}
+.hero-content p:last-of-type { margin-bottom: 0; }
+.hero-content p strong { color: var(--primary-dark); font-weight: 600; }
+.hero-content a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hero-content a:hover {
+  color: var(--primary-dark);
+  border-bottom-style: solid;
+}
+.hero-content .hero-sources {
+  margin-top: 22px !important;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 13px !important;
+  color: var(--muted);
+  max-width: none;
+}
+.hero-content .hero-sources strong { color: var(--text); }
+
+@media (max-width: 768px) {
+  details.hero { margin-bottom: 20px; }
+  details.hero > summary { padding: 14px 16px; }
+  .hero-summary-q { font-size: 15px; }
+  .hero-summary-hint { font-size: 11px; }
+  .hero-content { padding: 18px 18px 22px; }
+  .hero-content p { font-size: 14px; line-height: 1.7; }
+}
