@@ -1,0 +1,32 @@
+{
+  "id": "cekani_specialista",
+  "name": "Čekací doba na specialistu",
+  "area": "Procesy",
+  "domain": "Přístup k péči",
+  "subdomain": "Čekací doby",
+  "definition": "Podíl dospělých pacientů, kteří čekali na konzultaci specialisty déle než 2 měsíce.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "endpoint": "https://stats.oecd.org/SDMX-JSON/data/HEALTH_STAT/...",
+      "dataset": "HEALTH_STAT",
+      "code": "WDTSP2MPADMPRRS"
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.oecd.org/health/health-at-a-glance/"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WDTSP2MPADMPRRS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["MZ ČR", "ÚZIS"],
+  "method_notes": "Výsledky z průzkumu OECD Health Statistics. Podíl pacientů hlásících čekání >2 měsíce.",
+  "limitations": "Sebehodnocení pacientů; nerozlišuje urgentnost stavu."
+}

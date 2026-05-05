@@ -1,0 +1,32 @@
+{
+  "id": "vakcinace_chripka_65",
+  "name": "Vakcinace proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinace",
+  "definition": "Podíl osob ve věku 65 a více let očkovaných proti sezónní chřipce v posledním vakcinačním období.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://nrpzs.uzis.cz/api/v1/...",
+      "dataset": "ockovani_chripka"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "IVAXIN65POPLPRRS",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "IVAXIN65POPLPRRS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "ÚZIS"],
+  "method_notes": "Cíl EU WHO: ≥ 75 % pokrytí. Data ze systému NZIS/evidence ZP.",
+  "limitations": "Zahrnuje jen formálně registrované vakcinace. Neformální vakcinace (v cizině) nejsou zachyceny."
+}

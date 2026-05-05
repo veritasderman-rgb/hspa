@@ -49,13 +49,40 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <div class="search-bar">
+    <input type="search" id="searchInput" placeholder="🔍 Hledat indikátor…" autocomplete="off">
+    <span class="search-clear hidden" id="searchClear" title="Smazat hledání">×</span>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <span class="desc">Filtrujte výběrem oblasti v navigaci výše nebo použijte vyhledávání</span>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="no-results hidden" id="noResults">Žádné indikátory neodpovídají hledanému výrazu.</div>
+  </section>
+
+  <section class="section" id="regionSection">
+    <div class="section-title">
+      <h3>Regionální přehled</h3>
+      <span class="badge badge-secondary" id="regionBadge">Naděje dožití (muži)</span>
+      <span class="desc">Data za kraje ČR · 2024</span>
+    </div>
+    <div class="region-table-wrap">
+      <table class="region-table" id="regionTable">
+        <thead>
+          <tr>
+            <th>Kraj</th>
+            <th>Naděje dožití (muži) [let]</th>
+            <th>Lékaři / 1 000 ob.</th>
+            <th>Srovnání s průměrem</th>
+          </tr>
+        </thead>
+        <tbody id="regionTableBody"></tbody>
+      </table>
+    </div>
   </section>
 
 </main>

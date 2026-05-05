@@ -45,9 +45,9 @@ test('computeSignal: context_dependent → neutral', () => {
   assert.equal(s, 'neutral');
 });
 
-test('loadMethodCards: načte všech 10 vzorových karet', () => {
+test('loadMethodCards: načte všechny vzorové karty', () => {
   const cards = loadMethodCards();
-  assert.equal(cards.length, 10);
+  assert.ok(cards.length >= 10, `expected ≥10 cards, got ${cards.length}`);
   for (const c of cards) {
     assert.ok(c.id, `card missing id: ${JSON.stringify(c).slice(0, 80)}`);
     assert.ok(c.direction, `card ${c.id} missing direction`);

@@ -1,0 +1,32 @@
+{
+  "id": "screening_kolorektalniho_ca",
+  "name": "Pokrytí screeningem kolorektálního karcinomu",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Onkologický screening",
+  "definition": "Podíl dospělých ve věkové skupině 50–74 let, kteří absolvovali doporučené vyšetření na kolorektální karcinom (TOKS nebo kolonoskopie).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "dataset": "screening_kolorektalniho_ca",
+      "endpoint": "https://www.uzis.cz/res/f/008360/screening-zn-kolorekta.pdf"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "SCRCOLORC5074POPLPRRS",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "SCRCOLORC5074POPLPRRS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["MZ ČR", "ÚZIS", "SZÚ"],
+  "method_notes": "Organizovaný screening zaveden v ČR od 2009. Data z NZIS – výkaz S (ZP).",
+  "limitations": "Podíl odráží organizovaný screening; nezahrnuje samoplátce mimo systém."
+}

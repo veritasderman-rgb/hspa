@@ -1,0 +1,32 @@
+{
+  "id": "rehospitalizace_30d_chsn",
+  "name": "30denní rehospitalizace (chronické srdeční selhání)",
+  "area": "Procesy",
+  "domain": "Kontinuita péče",
+  "subdomain": "Přechod nemocnice → komunita",
+  "definition": "Podíl pacientů propuštěných s hlavní diagnózou chronického srdečního selhání (I50), kteří jsou znovu hospitalizováni do 30 dnů.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc_nrhosp",
+      "endpoint": "https://www.nrc.cz/",
+      "dataset": "NRHOSP_readmission"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "READMCHFP30DADMPRRS",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "READMCHFP30DADMPRRS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["NRC", "ÚZIS"],
+  "method_notes": "Standardizováno věkem a pohlavím. Zahrnuje rehospitalizace ze všech příčin do 30 dnů od propuštění.",
+  "limitations": "Nepostihuje přechody do jiných forem péče (ambulance, sociální péče)."
+}

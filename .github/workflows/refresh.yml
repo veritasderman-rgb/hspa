@@ -1,0 +1,56 @@
+name: Data refresh
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # každý den 6:00 UTC
+  workflow_dispatch:        # manuální spuštění
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ingest pipeline
+        run: npm run ingest
+        env:
+          NODE_ENV: production
+
+      - name: Validate data
+        run: npm run validate:data
+
+      - name: Run tests
+        run: npm test
+
+      - name: Snapshot data
+        run: |
+          DATE=$(date -u +%Y%m%d)
+          cp data/indicators.json "data/snapshot-${DATE}.json"
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "No data changes — skipping commit"
+          else
+            git commit -m "data: refresh $(date -u +%Y-%m-%d)"
+            git push
+          fi
