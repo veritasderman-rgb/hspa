@@ -14,7 +14,10 @@
     "transform": "node ingest/transform.js",
     "serve": "npx http-server . -p 8080 -c-1",
     "test": "node --test tests/*.test.js",
-    "validate:data": "node ingest/validate.js"
+    "validate:data": "node ingest/validate.js",
+    "validate:strategies": "node ingest/validate-strategies.js",
+    "validate:explainers": "node ingest/validate-explainers.js",
+    "validate:all": "node ingest/validate.js && node ingest/validate-strategies.js && node ingest/validate-explainers.js"
   },
   "dependencies": {
     "csv-parse": "^5.5.6",
