@@ -318,6 +318,10 @@ export function extractFromNor(indicatorId) {
   const sexCol = cols.find(c => /^(pohlavi|pohlaví|sex|gender)$/i.test(c));
   const incCol = cols.find(c => /^(incidence|hodnota|value|count|n|pocet|počet)$/i.test(c));
   if (!yearCol || !diagCol || !incCol) return null;
+  // Pokud je požadovaný sex filter ale sloupec chybí, raději vrátit null
+  // než agregovat napříč všemi pohlavími a aplikovat ženskou populaci
+  // jako jmenovatele — vzniknou systematicky vychýlené hodnoty.
+  if (sexFilter && !sexCol) return null;
 
   const byYear = {};
   for (const row of cache.records) {

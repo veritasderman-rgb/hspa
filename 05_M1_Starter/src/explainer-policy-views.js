@@ -20,6 +20,9 @@ export function buildGanttModel(steps) {
     return { idx: i, phase: s.phase, from: fromDate, to: explicitTo };
   }).filter(s => s.from);
 
+  // Žádný step neměl validní `from` → graceful skip render
+  if (sorted.length === 0) return null;
+
   for (let i = 0; i < sorted.length - 1; i++) {
     if (!sorted[i].to) sorted[i].to = sorted[i + 1].from;
   }

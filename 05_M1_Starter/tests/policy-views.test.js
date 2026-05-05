@@ -82,6 +82,16 @@ test('buildGanttModel: prázdný vstup → null', () => {
   assert.equal(buildGanttModel(null), null);
 });
 
+test('buildGanttModel: všechny from neplatné → null místo crash (codex P1)', () => {
+  // Regrese codex P1: před fixem .filter(s => s.from) vyrobilo []
+  // a sorted[0].from házelo TypeError při přístupu k .from undefined.
+  assert.equal(buildGanttModel([{ phase: 'X', from: 'not-a-date' }]), null);
+  assert.equal(buildGanttModel([
+    { phase: 'A', from: 'invalid' },
+    { phase: 'B' /* no from */ },
+  ]), null);
+});
+
 test('buildGanttModel: poslední krok bez to dostane default 14 dnů', () => {
   const m = buildGanttModel([{ phase: 'X', from: '2025-01-01' }]);
   assert.ok(m);
@@ -157,6 +167,27 @@ test('extractFromNor: filtr MKN-10 prefix C18 vrátí jen kolorektální', () =>
 
 test('extractFromNor: bez cache → null', () => {
   assert.equal(extractFromNor('incidence_kolorektalni'), null);
+});
+
+test('extractFromNor: sex_filter bez sex sloupce v cache → null (codex P2)', () => {
+  // Regrese codex P2: incidence_prsu má filter.sex='F' v metodické kartě.
+  // Pokud cache nemá sloupec pohlaví, dříve se filtr tiše ignoroval a
+  // hodnoty se agregovaly napříč všemi řádky → systematické vychýlení
+  // (žensky kontextovaný jmenovatel × všechna data včetně mužů).
+  ensureCacheDir();
+  writeCache('uzis_nor_incidence.json', {
+    columns: ['rok', 'diagnoza', 'incidence'], // chybí 'pohlavi'
+    records: [
+      { rok: '2023', diagnoza: 'C50', incidence: '145' },
+      { rok: '2023', diagnoza: 'C50', incidence: '150' }, // bez sex info
+    ],
+  });
+  try {
+    // incidence_prsu vyžaduje sex='F' — bez sloupce nelze filtrovat → null
+    assert.equal(extractFromNor('incidence_prsu'), null);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nor_incidence.json'));
+  }
 });
 
 test('extractFromNor: neznámý indicator id → null', () => {
