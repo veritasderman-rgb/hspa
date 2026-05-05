@@ -1,0 +1,72 @@
+name: Data Refresh
+
+on:
+  schedule:
+    # Každý den v 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Vynutit refresh i bez změny dat'
+        type: boolean
+        default: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ingest pipeline
+        run: npm run ingest
+        # Pokračovat i při selhání fetcherů — fallback na snapshot
+        continue-on-error: true
+
+      - name: Validate data
+        run: npm run validate:data
+
+      - name: Run tests
+        run: npm test
+
+      - name: Check for data changes
+        id: git_diff
+        run: |
+          git diff --quiet data/ || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit updated data
+        if: steps.git_diff.outputs.changed == 'true' || inputs.force
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "data: refresh $(date -u +%Y-%m-%d)"
+
+      - name: Push changes
+        if: steps.git_diff.outputs.changed == 'true' || inputs.force
+        run: git push origin HEAD
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Ingest pipeline failed — dashboard zobrazuje stará data."
+          # Slack webhook lze přidat jako secret SLACK_WEBHOOK_URL
+          # curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+          #   -H 'Content-type: application/json' \
+          #   --data '{"text":"❌ Zdravé Česko data refresh FAILED — viz CI logs."}'

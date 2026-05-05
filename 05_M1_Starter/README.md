@@ -15,8 +15,13 @@ Startovní balíček pro **milník M1** — refaktor mock prototypu na verzi nap
 | Transform | ✅ Hotovo | `ingest/transform.js` se signal logikou připravenou |
 | Orchestrátor | ✅ Hotovo | `ingest/run.js` |
 | GitHub Actions cron | ✅ Hotovo | `.github/workflows/refresh.yml` |
+| Frontend: Reload, audience switch, area filter | ✅ Hotovo | `src/app.js` |
+| Frontend: Fulltextové vyhledávání | ✅ Hotovo | live-filter karet v sekci header |
+| Frontend: Summary bar (good/warn/bad) | ✅ Hotovo | vizuální souhrn stavu systému |
+| Frontend: localStorage fallback | ✅ Hotovo | graceful degradation při offline |
+| Frontend: CSV export trend dat | ✅ Hotovo | tlačítko ↓ CSV na každé kartě |
+| Frontend: Přístupnost (ARIA, keyboard) | ✅ Hotovo | role, tabindex, aria-label |
 | Reálné fetchery (ÚZIS, ČSÚ, OECD) | ⏳ M2–M4 | toto je úkol pro Claude Code |
-| Frontend interaktivita | ⏳ M7 | Reload tlačítko, tooltip, CSV export |
 
 ## Rychlý start
 
@@ -90,4 +95,4 @@ Při zahájení každého sezení v Claude Code dej:
 3. Definici "hotovo" pro daný milník
 
 ---
-*Verze 0.1.0 · M1 starter · květen 2026*
+*Verze 0.2.0 · M1 kompletní · květen 2026*
