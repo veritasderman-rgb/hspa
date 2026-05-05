@@ -1,0 +1,31 @@
+{
+  "id": "screening_kolorektalni",
+  "name": "Pokrytí kolorektálním screeningem (50–75)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Onkologický screening",
+  "definition": "Podíl populace 50–75 let, která absolvovala TOKS nebo koloskopii v doporučeném intervalu (TOKS 1× ročně 50–54, 1× za 2 roky 55+; koloskopie 1× za 10 let).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "dataset": "Národní onkologický program",
+      "note": "Data z výkaznictví VZP/SZP, agregát publikuje ÚZIS."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "COLORECTAL_SCREENING"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "COLORECTAL_SCREENING",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "Národní onkologický program"],
+  "method_notes": "Standardizováno na věk. ČR má organizovaný screening od 2014.",
+  "limitations": "Reportováno za posledních 24 měsíců, nekryje úplně 2letý interval pro TOKS 55+."
+}

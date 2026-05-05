@@ -58,9 +58,9 @@ test('computeSignal: context_dependent → neutral', () => {
   assert.equal(s, 'neutral');
 });
 
-test('loadMethodCards: načte všech 10 vzorových karet', () => {
+test('loadMethodCards: načte všech 15 metodických karet (10 původních + 5 Procesy)', () => {
   const cards = loadMethodCards();
-  assert.equal(cards.length, 10);
+  assert.equal(cards.length, 15);
   for (const c of cards) {
     assert.ok(c.id, `card missing id: ${JSON.stringify(c).slice(0, 80)}`);
     assert.ok(c.direction, `card ${c.id} missing direction`);
@@ -262,7 +262,7 @@ test('transform: vyrobí validní data/indicators.json se všemi poli', async ()
   try {
     assert.ok(out.version);
     assert.ok(out.generated_at);
-    assert.equal(out.indicators.length, 10);
+    assert.equal(out.indicators.length, 15);
     for (const ind of out.indicators) {
       for (const f of ['id', 'name', 'area', 'value', 'unit', 'signal', 'trend', 'benchmark', 'source']) {
         assert.ok(ind[f] != null, `${ind.id}: missing ${f}`);

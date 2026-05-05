@@ -1,14 +1,19 @@
 // Frontend logika dashboardu Zdravé Česko.
-// Načítá data z /data/indicators.json a renderuje karty.
+// Načítá data z /data/indicators.json a renderuje karty + scorecard + regiony.
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 const DATA_URL = 'data/indicators.json';
+const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
 const STALE_HOURS = 26;
 
 let allIndicators = [];
 let activeArea = 'all';
+let activeSearch = '';
+let activeSort = 'default';
+const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
+let regionsChart = null;
 
 // ====== UTIL ======
 
@@ -31,6 +36,11 @@ function clearStatus() {
   document.getElementById('status').classList.add('hidden');
 }
 
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
 // ====== DATA LOADING ======
 
 function applyData(data, { stale = false, source = 'live' } = {}) {
@@ -43,7 +53,6 @@ function applyData(data, { stale = false, source = 'live' } = {}) {
   const el = document.getElementById('lastUpdated');
   el.textContent = label;
   el.classList.toggle('stale', isStale);
-  return { isStale, ageH };
 }
 
 function saveToLocalStorage(data) {
@@ -83,31 +92,112 @@ async function loadData(bustCache = false) {
   }
 }
 
+// ====== FILTERING / SORTING ======
+
+const SIGNAL_ORDER = { bad: 0, warn: 1, neutral: 2, good: 3 };
+
+export function filterAndSort(indicators, { area, search, sort }) {
+  let xs = indicators;
+  if (area && area !== 'all') xs = xs.filter(i => i.area === area);
+  if (search) {
+    const q = search.toLowerCase();
+    xs = xs.filter(i =>
+      (i.name || '').toLowerCase().includes(q)
+      || (i.domain || '').toLowerCase().includes(q)
+      || (i.subdomain || '').toLowerCase().includes(q)
+    );
+  }
+  if (sort === 'signal') {
+    xs = [...xs].sort((a, b) => (SIGNAL_ORDER[a.signal] ?? 9) - (SIGNAL_ORDER[b.signal] ?? 9));
+  } else if (sort === 'name') {
+    xs = [...xs].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'cs'));
+  } else if (sort === 'trend') {
+    xs = [...xs].sort((a, b) => Math.abs(yoyPct(b)) - Math.abs(yoyPct(a)));
+  }
+  return xs;
+}
+
+// ====== TREND ARROWS ======
+
+export function yoyPct(ind) {
+  const t = ind?.trend;
+  if (!Array.isArray(t) || t.length < 2) return 0;
+  const last = t[t.length - 1]?.value;
+  const prev = t[t.length - 2]?.value;
+  if (last == null || prev == null || prev === 0) return 0;
+  return ((last - prev) / prev) * 100;
+}
+
+export function trendArrow(ind) {
+  const pct = yoyPct(ind);
+  if (Math.abs(pct) < 0.5) return { glyph: '→', cls: 'flat', pct };
+  const positive = pct > 0;
+  // higher_is_better → růst je dobrý (zelená); lower_is_better → růst je špatný (červená)
+  const indicatorDir = (ind?.direction
+    ?? (ind?._direction)
+    ?? 'context_dependent');
+  let cls;
+  if (indicatorDir === 'context_dependent') cls = 'flat';
+  else {
+    const isImprovement = (indicatorDir === 'higher_is_better' && positive)
+      || (indicatorDir === 'lower_is_better' && !positive);
+    cls = isImprovement ? 'good' : 'bad';
+  }
+  return { glyph: positive ? '↑' : '↓', cls, pct };
+}
+
+// ====== SCORECARD ======
+
+function updateScorecard(visible) {
+  const counts = { good: 0, warn: 0, bad: 0, neutral: 0 };
+  for (const ind of visible) counts[ind.signal] = (counts[ind.signal] || 0) + 1;
+  document.getElementById('scTotal').textContent = visible.length;
+  document.getElementById('scGood').textContent = counts.good;
+  document.getElementById('scWarn').textContent = counts.warn;
+  document.getElementById('scBad').textContent = counts.bad;
+  document.getElementById('scNeutral').textContent = counts.neutral;
+}
+
 // ====== RENDERING ======
 
-function renderGrid(area = 'all') {
+function destroyAllCharts() {
+  for (const ch of chartInstances.values()) ch.destroy();
+  chartInstances.clear();
+}
+
+function renderGrid() {
   const grid = document.getElementById('indicatorGrid');
+  destroyAllCharts();
   grid.innerHTML = '';
-  const filtered = area === 'all'
-    ? allIndicators
-    : allIndicators.filter(i => i.area === area);
+  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort });
 
   document.getElementById('gridBadge').textContent =
     `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridTitle').textContent =
-    area === 'all' ? 'Všechny indikátory' : `Oblast: ${area}`;
+    activeArea === 'all' ? 'Všechny indikátory' : `Oblast: ${activeArea}`;
+  document.getElementById('emptyState').classList.toggle('hidden', filtered.length > 0);
+
+  updateScorecard(filtered);
 
   const charts = [];
-  filtered.forEach((ind, i) => {
+  filtered.forEach((ind) => {
     const card = document.createElement('div');
     card.className = 'indicator-card';
     card.dataset.indicatorId = ind.id;
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${ind.name}: ${ind.value} ${ind.unit}, signál ${ind.signal}`);
 
     const chartId = `chart-${ind.id}`;
     const benchmark = ind.benchmark?.oecd ?? ind.benchmark?.eu ?? null;
     const compareHTML = benchmark != null
       ? `<div class="compare">vs. OECD průměr: <strong>${benchmark}${ind.unit ? ' ' + ind.unit : ''}</strong></div>`
       : '';
+
+    const arrow = trendArrow(ind);
+    const arrowHTML = arrow.glyph === '→'
+      ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
+      : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
 
     card.innerHTML = `
       <div class="area-tag">${ind.area} · ${ind.domain}</div>
@@ -118,17 +208,20 @@ function renderGrid(area = 'all') {
       <div class="value-row">
         <span class="big-value">${ind.value}</span>
         <span class="unit">${ind.unit}</span>
+        ${arrowHTML}
+        ${ind.year ? `<span class="year-badge">${ind.year}</span>` : ''}
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
       <div class="source">Zdroj: ${ind.source.name}</div>
     `;
     card.addEventListener('click', () => openMethodCard(ind));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
+    });
     grid.appendChild(card);
 
-    if (Array.isArray(ind.trend) && ind.trend.length) {
-      charts.push({ ind, chartId });
-    }
+    if (Array.isArray(ind.trend) && ind.trend.length) charts.push({ ind, chartId });
   });
 
   // Render sparkliny po vložení do DOM
@@ -140,7 +233,7 @@ function renderGrid(area = 'all') {
         : ind.signal === 'warn' ? '#B45F06'
         : ind.signal === 'bad' ? '#990000' : '#0B5394';
       // eslint-disable-next-line no-undef
-      new Chart(ctx, {
+      const ch = new Chart(ctx, {
         type: 'line',
         data: {
           labels: ind.trend.map(t => t.year),
@@ -160,56 +253,104 @@ function renderGrid(area = 'all') {
           }
         }
       });
+      chartInstances.set(chartId, ch);
     });
   }, 50);
 }
 
-// ====== METODICKÁ KARTA (modal) ======
+// ====== REGIONS ======
 
-async function openMethodCard(indicator) {
-  const modal = document.getElementById('modalBackdrop');
-  const content = document.getElementById('modalContent');
-  content.innerHTML = '<p>Načítám metodickou kartu…</p>';
-  modal.classList.remove('hidden');
-
+async function loadAndRenderRegions() {
   try {
-    const res = await fetch(indicator.method_card_url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const card = await res.json();
+    const res = await fetch(REGIONS_URL);
+    if (!res.ok) return;
+    const data = await res.json();
+    renderRegions(data);
+  } catch { /* regiony jsou volitelné — bez nich dashboard funguje */ }
+}
 
-    content.innerHTML = `
-      <h2>${card.name}</h2>
-      <div class="sub">${card.area} · ${card.domain} · ${card.subdomain || ''}</div>
-      <dl>
-        <dt>Definice</dt><dd>${card.definition}</dd>
-        <dt>Jednotka</dt><dd>${card.unit}</dd>
-        <dt>Směr</dt><dd>${card.direction}</dd>
-        <dt>Frekvence</dt><dd>${card.frequency}</dd>
-        <dt>Garanti</dt><dd>${(card.stewards || []).join(', ')}</dd>
-        <dt>Prahy signálu</dt><dd>good ≥ ${card.signal_thresholds.good} %, warn ≥ −${card.signal_thresholds.warn} %</dd>
-        <dt>Metodika</dt><dd>${card.method_notes}</dd>
-        <dt>Omezení</dt><dd>${card.limitations}</dd>
-      </dl>
-      <h3 style="margin-top:18px; font-size:14px;">Zdroje dat</h3>
-      <pre>${JSON.stringify(card.data_source, null, 2)}</pre>
-      <div class="modal-actions">
-        <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
-      </div>
+function renderRegions(data) {
+  document.getElementById('regionsBadge').textContent =
+    `${data.regions.length} krajů · průměr ČR ${data.country_avg} let`;
+
+  const tbody = document.querySelector('#regionsTable tbody');
+  tbody.innerHTML = '';
+  const sorted = [...data.regions].sort((a, b) => b.value - a.value);
+  for (const r of sorted) {
+    const diff = (r.value - data.country_avg).toFixed(1);
+    const diffCls = diff > 0 ? 'pos' : diff < 0 ? 'neg' : '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.name}</td>
+      <td>${r.value.toFixed(1)}</td>
+      <td class="diff ${diffCls}">${diff > 0 ? '+' : ''}${diff}</td>
+      <td>${r.doctors_per_1000.toFixed(1)}</td>
     `;
-    const csvBtn = document.getElementById('btnCsvExport');
-    if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
-  } catch (err) {
-    content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
+    tbody.appendChild(tr);
   }
+
+  const ctx = document.getElementById('regionsChart');
+  if (!ctx) return;
+  if (regionsChart) regionsChart.destroy();
+  // eslint-disable-next-line no-undef
+  regionsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [
+        {
+          data: sorted.map(r => r.value),
+          backgroundColor: sorted.map(r => r.value >= data.country_avg ? '#38761D' : '#B45F06'),
+          borderWidth: 0,
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        annotation: undefined,
+        tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(1)} let` } },
+      },
+      scales: {
+        x: { min: Math.min(...sorted.map(r => r.value)) - 1, max: Math.max(...sorted.map(r => r.value)) + 1 },
+        y: { ticks: { font: { size: 11 } } },
+      },
+    },
+  });
+}
+
+// ====== CSV EXPORT ======
+
+function csvEscape(v) {
+  const s = String(v ?? '');
+  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function exportVisibleCsv() {
+  const visible = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort });
+  const header = ['id', 'name', 'area', 'domain', 'subdomain', 'value', 'unit', 'year', 'signal', 'oecd', 'eu', 'source'];
+  const rows = visible.map(i => [
+    i.id, i.name, i.area, i.domain, i.subdomain, i.value, i.unit, i.year, i.signal,
+    i.benchmark?.oecd ?? '', i.benchmark?.eu ?? '', i.source?.name ?? '',
+  ]);
+  const csv = '﻿' + [header, ...rows].map(r => r.map(csvEscape).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `zdrave_cesko_indikatory_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function exportTrendCsv(indicator) {
   const rows = [['year', 'value', 'unit']];
   for (const t of indicator.trend ?? []) rows.push([t.year, t.value, indicator.unit]);
-  const csv = rows.map(r => r.map(v => {
-    const s = String(v ?? '');
-    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  }).join(',')).join('\n');
+  const csv = '﻿' + rows.map(r => r.map(csvEscape).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -219,6 +360,78 @@ function exportTrendCsv(indicator) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// ====== METODICKÁ KARTA (modal) ======
+
+const DIRECTION_LABEL = {
+  higher_is_better: '↑ vyšší = lepší',
+  lower_is_better: '↓ nižší = lepší',
+  context_dependent: '↔ kontextové',
+};
+
+function renderDataSource(ds) {
+  if (!ds || typeof ds !== 'object') return '<em>Neuvedeno</em>';
+  const parts = [];
+  if (ds.primary) parts.push(`<div class="ds-block"><h4>Primární</h4>${renderSourceObj(ds.primary)}</div>`);
+  if (ds.fallback) parts.push(`<div class="ds-block"><h4>Záložní</h4>${renderSourceObj(ds.fallback)}</div>`);
+  return parts.join('') || '<em>Neuvedeno</em>';
+}
+
+function renderSourceObj(o) {
+  const pairs = Object.entries(o).filter(([k]) => k !== 'note');
+  const noteHTML = o.note ? `<p class="ds-note">${o.note}</p>` : '';
+  const tableHTML = pairs.length
+    ? `<table class="ds-table">${pairs.map(([k, v]) =>
+        `<tr><th>${k}</th><td>${typeof v === 'object' ? JSON.stringify(v) : String(v)}</td></tr>`
+      ).join('')}</table>`
+    : '';
+  return tableHTML + noteHTML;
+}
+
+async function openMethodCard(indicator) {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  content.innerHTML = '<p>Načítám metodickou kartu…</p>';
+  modal.classList.remove('hidden');
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+
+  try {
+    const res = await fetch(indicator.method_card_url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const card = await res.json();
+
+    content.innerHTML = `
+      <h2>${card.name}</h2>
+      <div class="sub">${card.area} · ${card.domain} · ${card.subdomain || ''}</div>
+      <div class="modal-summary">
+        <span class="signal-pill ${indicator.signal}">${indicator.signal}</span>
+        <span><strong>${indicator.value}</strong> ${indicator.unit} (${indicator.year ?? '?'})</span>
+        ${indicator.benchmark?.oecd != null ? `<span>OECD: <strong>${indicator.benchmark.oecd}</strong></span>` : ''}
+        ${indicator.benchmark?.eu != null ? `<span>EU: <strong>${indicator.benchmark.eu}</strong></span>` : ''}
+      </div>
+      <dl>
+        <dt>Definice</dt><dd>${card.definition}</dd>
+        <dt>Jednotka</dt><dd>${card.unit}</dd>
+        <dt>Směr</dt><dd>${DIRECTION_LABEL[card.direction] ?? card.direction}</dd>
+        <dt>Frekvence</dt><dd>${card.frequency}</dd>
+        <dt>Garanti</dt><dd>${(card.stewards || []).join(', ')}</dd>
+        <dt>Prahy signálu</dt><dd>good ≥ ${card.signal_thresholds.good} %, warn nad −${card.signal_thresholds.warn} %</dd>
+        <dt>Metodika</dt><dd>${card.method_notes}</dd>
+        <dt>Omezení</dt><dd>${card.limitations}</dd>
+      </dl>
+      <h3 class="ds-heading">Zdroje dat</h3>
+      ${renderDataSource(card.data_source)}
+      <div class="modal-actions">
+        <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
+      </div>
+    `;
+    const csvBtn = document.getElementById('btnCsvExport');
+    if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+  } catch (err) {
+    content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
+  }
 }
 
 function closeModal() {
@@ -243,9 +456,24 @@ function wireUp() {
       document.querySelectorAll('.dimnav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeArea = btn.dataset.area;
-      renderGrid(activeArea);
+      renderGrid();
     });
   });
+
+  // Search
+  const searchInput = document.getElementById('searchBox');
+  if (searchInput) {
+    const onSearch = debounce(() => { activeSearch = searchInput.value.trim(); renderGrid(); }, 200);
+    searchInput.addEventListener('input', onSearch);
+  }
+
+  // Sort
+  const sortSel = document.getElementById('sortSelect');
+  if (sortSel) sortSel.addEventListener('change', () => { activeSort = sortSel.value; renderGrid(); });
+
+  // CSV export-all
+  const btnCsv = document.getElementById('btnExportCsv');
+  if (btnCsv) btnCsv.addEventListener('click', exportVisibleCsv);
 
   // Reload button
   document.getElementById('btnReload').addEventListener('click', async () => {
@@ -254,7 +482,7 @@ function wireUp() {
     btn.textContent = 'Načítám…';
     try {
       await loadData(true);
-      renderGrid(activeArea);
+      renderGrid();
     } finally {
       btn.disabled = false;
       btn.textContent = '⟳ Načíst znovu';
@@ -272,10 +500,12 @@ function wireUp() {
 // ====== INIT ======
 
 (async () => {
+  if (typeof window === 'undefined') return; // skip in node test environment
   wireUp();
   try {
     await loadData();
-    renderGrid('all');
+    renderGrid();
+    loadAndRenderRegions();
   } catch (err) {
     console.error('Initial load failed:', err);
   }

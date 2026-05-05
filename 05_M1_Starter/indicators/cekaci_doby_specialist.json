@@ -1,0 +1,30 @@
+{
+  "id": "cekaci_doby_specialist",
+  "name": "Čekací doba na specialistu (medián)",
+  "area": "Procesy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Čekací doby",
+  "definition": "Medián počtu dní od žádanky k první konzultaci u ambulantního specialisty (kardiolog, ortoped, neurolog, gastroenterolog).",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS: čekací doby z výkaznictví zdravotních pojišťoven. Endpoint dohledat v rámci NZIS Open Data."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAITING_TIMES_SPECIALIST"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITING_TIMES_SPECIALIST",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["VZP/SZP", "ÚZIS"],
+  "method_notes": "Medián, ne průměr — robustní vůči extrémním hodnotám. Vážený průměr přes 4 vybrané specializace.",
+  "limitations": "Nezahrnuje neformální čekání před žádankou. Regionální variabilita významná."
+}
