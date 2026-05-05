@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak (ne)funguje české zdravotnictví · Zdravé Česko</title>
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-audience="public">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">Z</div>
+    <h1>Zdravé Česko
+      <small>Jak (ne)funguje české zdravotnictví</small>
+    </h1>
+  </div>
+  <div class="audience-switch" role="tablist">
+    <button data-aud="public">Pro veřejnost</button>
+    <button data-aud="expert">Pro odborníky</button>
+    <button data-aud="policy">Pro tvůrce politik</button>
+  </div>
+</header>
+
+<nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+
+<main id="content">
+
+  <div id="listView">
+    <section class="page-intro">
+      <h2>Jak (ne)funguje české zdravotnictví</h2>
+      <p class="lead">
+        Vysvětlení mechanismů — kdo platí péči, jak vzniká cena za operaci, co znamenají kódy v propouštěcí zprávě, kdo rozhoduje o úhradách. S autentickými citacemi z primárních zdrojů.
+      </p>
+      <p class="tone-note">
+        <strong>Tone-of-voice:</strong> faktické citace, žádný vlastní názor. <em>Měřit, ne soudit. Soudit nechat čtenáře.</em>
+      </p>
+    </section>
+
+    <div class="filters-row">
+      <nav class="cat-nav" aria-label="Filtr podle kategorie">
+        <button data-category="all" class="active">Vše</button>
+        <button data-category="money">💰 Peníze</button>
+        <button data-category="classification">📋 Klasifikace</button>
+        <button data-category="actors">🏛️ Hráči</button>
+        <button data-category="process">⚙️ Procesy</button>
+      </nav>
+      <div class="filters-actions">
+        <input type="search" id="searchBox" class="search-box" placeholder="Hledat téma…" aria-label="Vyhledat téma">
+        <span class="badge" id="countBadge">0</span>
+      </div>
+    </div>
+
+    <div id="explainerGrid" class="explainer-grid"></div>
+    <div class="empty-state hidden" id="emptyState">Žádné téma neodpovídá vašemu hledání.</div>
+  </div>
+
+  <article id="detailView" class="detail-view hidden"></article>
+
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>Zdroje a metoda</h6>
+      <p>Citace z primárních zdrojů: zápisy z dohodovacího řízení, MZČR vyhlášky, ÚZIS klasifikace, výroky veřejně známých zástupců institucí.</p>
+    </div>
+    <div>
+      <h6>Otevřená data</h6>
+      <p><a href="data/explainers.json">explainers.json</a><br>
+      <a href="data/strategies.json">strategies.json</a><br>
+      <a href="data/indicators.json">indicators.json</a></p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Citace ověřeny květen 2026. Bez politické agitace. Spravedlivé použití primárních zdrojů.
+  </div>
+</footer>
+
+<script type="module" src="src/explainers.js"></script>
+
+</body>
+</html>
