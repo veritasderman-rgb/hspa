@@ -7,10 +7,10 @@ import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
 const CATEGORY_LABELS = {
-  money: { label: '💰 Peníze', desc: 'Kdo platí, kdo rozhoduje, jak vznikne cena' },
-  classification: { label: '📋 Klasifikace', desc: 'Kódy, číselníky, standardy' },
-  actors: { label: '🏛️ Hráči', desc: 'Kdo je kdo v systému' },
-  process: { label: '⚙️ Procesy', desc: 'Jak věci probíhají' },
+  money: { label: 'Financování', desc: 'Mechanismy úhrad, dohodovací řízení, klasifikace pro výpočet cen' },
+  classification: { label: 'Klasifikace', desc: 'Diagnostické a výkonové číselníky, mezinárodní standardy' },
+  actors: { label: 'Aktéři systému', desc: 'Pojišťovny, regulátoři, profesní organizace' },
+  process: { label: 'Procesy', desc: 'Rozhodovací mechanismy a dokumentace' },
 };
 
 let allExplainers = [];
@@ -85,7 +85,7 @@ function renderCard(e) {
       <p class="card-tldr">${escapeHtml(tldr.slice(0, 240))}${tldr.length > 240 ? '…' : ''}</p>
       <div class="card-footer">
         ${absurditiesCount > 0
-          ? `<span class="absurdity-counter" title="Autentické citace s primárním zdrojem">⚠ ${absurditiesCount}× absurdita</span>`
+          ? `<span class="absurdity-counter" title="Citace z primárních zdrojů">${absurditiesCount}× citace</span>`
           : ''}
         ${(e.linked_indicators ?? []).length
           ? `<span>${e.linked_indicators.length} indikátor${e.linked_indicators.length === 1 ? '' : 'ů'}</span>` : ''}
@@ -159,7 +159,7 @@ function renderDetail(id) {
         </ol>
         ${audience === 'policy' ? `
           <details class="gantt-details" open>
-            <summary>📅 Vizualizace Gantt</summary>
+            <summary>Vizualizace časové osy</summary>
             ${renderGantt(e.process.steps)}
           </details>
         ` : ''}
@@ -168,16 +168,15 @@ function renderDetail(id) {
 
     ${audience === 'policy' && e.id === 'cz_drg' ? `
       <section class="detail-section drg-calc-section">
-        <h3>🧮 DRG kalkulátor (interaktivní)</h3>
-        <p class="section-note">Vyzkoušej, jak vstupy ovlivňují odhad úhrady. Ilustrativní hodnoty.</p>
+        <h3>Interaktivní kalkulátor odhadu úhrady</h3>
+        <p class="section-note">Modelace vlivu hlavní diagnózy, závažnosti a kraje na výslednou úhradu. Hodnoty ilustrativní — neslouží jako simulátor reálných úhrad ZP.</p>
         ${renderDrgCalculator()}
       </section>
     ` : ''}
 
     ${(e.absurdity_examples ?? []).length ? `
       <section class="detail-section absurdity-section">
-        <h3>Autentické citace a absurdity</h3>
-        <p class="section-note">Faktické citace z primárních zdrojů. Žádný vlastní názor. Soudit nechat čtenáře.</p>
+        <h3>Citace z primárních zdrojů</h3>
         ${e.absurdity_examples.map(ex => `
           <article class="absurdity-card">
             <h4>${escapeHtml(ex.title ?? 'Citace')}</h4>
