@@ -189,6 +189,71 @@ test('buildIndicator: OECD cache poskytne value i benchmark', () => {
   }
 });
 
+// ===== Regrese P1: zero-valued live observations se zachovají =====
+
+test('extractFromOecd: hodnota 0 NENÍ považována za chybějící', () => {
+  ensureCacheDir();
+  writeCache('oecd_zero_test.json', {
+    indicator_id: 'zero_test',
+    fetched_at: '2026-05-01T00:00:00Z',
+    cz: { year: 2024, value: 0 },
+    trend: [{ year: 2023, value: 0.1 }, { year: 2024, value: 0 }],
+  });
+  try {
+    const { extractFromOecd } = require('../ingest/transform.js');
+    // ESM dynamic import via static binding při startu testu — použij přímo
+    // import nahoře pokud by require nešel, ale node:test ESM zvládne require pro JSON.
+  } catch { /* ignore — fallback níže */ }
+
+  // Použij stávající importovaný modul
+  const card = {
+    id: 'zero_test',
+    name: 'Zero', area: 'Výsledky', domain: 'X', subdomain: 'Y',
+    unit: 'počet', direction: 'lower_is_better',
+    signal_thresholds: { good: 2, warn: 5 },
+    data_source: { primary: { type: 'oecd' } },
+  };
+  try {
+    const out = buildIndicator(card, { seed: { value: 5, trend: [] } });
+    assert.equal(out.value, 0, 'hodnota 0 musí být zachována, ne přepsána seed');
+    assert.equal(out.source.origin, 'live');
+    assert.equal(out.year, 2024);
+  } finally {
+    fs.unlinkSync(cachePath('oecd_zero_test.json'));
+  }
+});
+
+// ===== Regrese P2: source label sleduje skutečný zdroj při fallbacku =====
+
+test('buildIndicator: fallback z primary nrc_nrhosp na OECD označí source jako OECD', () => {
+  ensureCacheDir();
+  writeCache('oecd_nrc_test.json', {
+    indicator_id: 'nrc_test',
+    fetched_at: '2026-05-01T00:00:00Z',
+    cz: { year: 2024, value: 5.2 },
+    trend: [{ year: 2024, value: 5.2 }],
+  });
+  try {
+    const card = {
+      id: 'nrc_test',
+      name: 'Mortalita test', area: 'Výstupy', domain: 'Kvalita péče', subdomain: 'X',
+      unit: '%', direction: 'lower_is_better',
+      signal_thresholds: { good: 2, warn: 5 },
+      data_source: {
+        primary: { type: 'nrc_nrhosp' },
+        fallback: { type: 'oecd' },
+      },
+    };
+    const out = buildIndicator(card, { seed: { value: 99, trend: [], benchmark: { oecd: 6 } } });
+    assert.equal(out.value, 5.2);
+    assert.equal(out.source.name, 'OECD Health Statistics', 'source label musí odrážet skutečný zdroj (OECD), ne primary nrc_nrhosp');
+    assert.equal(out.source.fetched_at, '2026-05-01T00:00:00Z');
+    assert.equal(out.source.origin, 'live');
+  } finally {
+    fs.unlinkSync(cachePath('oecd_nrc_test.json'));
+  }
+});
+
 // ===== M5: transform end-to-end =====
 
 test('transform: vyrobí validní data/indicators.json se všemi poli', async () => {

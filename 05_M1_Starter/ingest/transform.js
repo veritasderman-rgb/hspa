@@ -96,7 +96,7 @@ export function extractFromCsu(id) {
 export function extractFromOecd(id) {
   const cache = readCacheFile(`oecd_${id}.json`);
   if (!cache) return null;
-  if (!cache.cz?.value) return null;
+  if (cache.cz?.value == null) return null;
   return {
     value: cache.cz.value,
     year: cache.cz.year,
@@ -109,7 +109,7 @@ export function extractFromOecd(id) {
  */
 export function extractFromEurostat(id) {
   const cache = readCacheFile(`eurostat_${id}.json`);
-  if (!cache?.cz?.value) return null;
+  if (cache?.cz?.value == null) return null;
   return {
     value: cache.cz.value,
     year: cache.cz.year,
@@ -173,6 +173,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
   const primaryType = card?.data_source?.primary?.type;
 
   let extracted = null;
+  let actualSourceType = primaryType;
   if (primaryType === 'csu_datastat' || primaryType === 'csu_sha') {
     extracted = extractFromCsu(card.id);
   } else if (primaryType === 'eurostat_jsonstat') {
@@ -184,6 +185,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
   if (!extracted && card?.data_source?.fallback?.type === 'oecd') {
     extracted = extractFromOecd(card.id);
+    if (extracted) actualSourceType = 'oecd';
   }
 
   // Posledni fallback: seed (M1 hodnoty)
@@ -196,13 +198,16 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
   const refValue = benchmark.oecd ?? benchmark.eu ?? null;
   const signal = computeSignal(value, refValue, card.direction, card.signal_thresholds);
 
-  const sourceLabel = SOURCE_TYPE_TO_LABEL[primaryType] ?? { name: primaryType ?? 'unknown', url: '' };
+  const sourceLabel = SOURCE_TYPE_TO_LABEL[actualSourceType] ?? { name: actualSourceType ?? 'unknown', url: '' };
   const sourceUsed = extracted ? 'live' : 'seed';
+  const cacheFileForSource = {
+    csu_datastat: `csu_${card.id}.json`,
+    csu_sha: `csu_${card.id}.json`,
+    eurostat_jsonstat: `eurostat_${card.id}.json`,
+    oecd: `oecd_${card.id}.json`,
+  }[actualSourceType];
   const fetchedAt = extracted
-    ? (readCacheFile(`csu_${card.id}.json`)?.fetched_at
-       ?? readCacheFile(`oecd_${card.id}.json`)?.fetched_at
-       ?? readCacheFile(`eurostat_${card.id}.json`)?.fetched_at
-       ?? new Date().toISOString())
+    ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()
     : (seed?.source?.fetched_at ?? new Date().toISOString());
 
   return {
