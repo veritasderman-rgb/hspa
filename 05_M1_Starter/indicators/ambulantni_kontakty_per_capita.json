@@ -1,0 +1,35 @@
+{
+  "id": "ambulantni_kontakty_per_capita",
+  "name": "Ambulantní kontakty (na osobu/rok)",
+  "area": "Výstupy",
+  "domain": "Ambulantní péče",
+  "subdomain": "Utilizace",
+  "definition": "Průměrný počet ambulantních návštěv lékaře (praktický lékař + specialisti) na obyvatele za rok.",
+  "unit": "kontaktů/os./rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NZIS ambulantní statistika."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "DOCTOR_CONS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DOCTOR_CONS",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS"
+  ],
+  "method_notes": "ČR má nadprůměrné počty kontaktů, což odráží strukturu systému s volným výběrem specialistů bez gatekeepera.",
+  "limitations": "Metodika se liší dle toho, co se počítá jako „kontakt\" (telefonát, online konzultace atp.)."
+}

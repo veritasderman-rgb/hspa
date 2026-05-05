@@ -6,6 +6,7 @@ const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
+const LS_THEME_KEY = 'zdrave-cesko/theme';
 const STALE_HOURS = 26;
 
 let allIndicators = [];
@@ -260,31 +261,64 @@ function renderGrid() {
 
 // ====== REGIONS ======
 
+let regionsData = null;
+let activeRegionDataset = null;
+
 async function loadAndRenderRegions() {
   try {
     const res = await fetch(REGIONS_URL);
     if (!res.ok) return;
     const data = await res.json();
-    renderRegions(data);
+
+    // Podpora obou formátů: v1 (single dataset) i v2 (multi-dataset)
+    if (data.datasets) {
+      regionsData = data;
+      populateRegionSelector(data.datasets);
+      renderRegionDataset(data.datasets[0]);
+    } else {
+      // Legacy v1
+      renderRegionsLegacy(data);
+    }
   } catch { /* regiony jsou volitelné — bez nich dashboard funguje */ }
 }
 
-function renderRegions(data) {
+function populateRegionSelector(datasets) {
+  const sel = document.getElementById('regionsSelect');
+  if (!sel) return;
+  sel.innerHTML = '';
+  datasets.forEach((ds, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = ds.name;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => {
+    const ds = regionsData.datasets[parseInt(sel.value, 10)];
+    if (ds) renderRegionDataset(ds);
+  });
+}
+
+function renderRegionDataset(ds) {
+  activeRegionDataset = ds;
   document.getElementById('regionsBadge').textContent =
-    `${data.regions.length} krajů · průměr ČR ${data.country_avg} let`;
+    `${ds.regions.length} krajů · průměr ČR ${ds.country_avg} ${ds.unit} (${ds.year})`;
+
+  const header = document.getElementById('regionsTableValueHeader');
+  if (header) header.textContent = `${ds.name} (${ds.unit})`;
 
   const tbody = document.querySelector('#regionsTable tbody');
   tbody.innerHTML = '';
-  const sorted = [...data.regions].sort((a, b) => b.value - a.value);
+  const betterHigher = ds.direction !== 'lower_is_better';
+  const sorted = [...ds.regions].sort((a, b) => betterHigher ? b.value - a.value : a.value - b.value);
+
   for (const r of sorted) {
-    const diff = (r.value - data.country_avg).toFixed(1);
-    const diffCls = diff > 0 ? 'pos' : diff < 0 ? 'neg' : '';
+    const diff = (r.value - ds.country_avg).toFixed(1);
+    const diffCls = (betterHigher ? diff > 0 : diff < 0) ? 'pos' : diff == 0 ? '' : 'neg';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${r.name}</td>
-      <td>${r.value.toFixed(1)}</td>
+      <td>${r.value.toFixed(r.value < 100 ? 1 : 0)}</td>
       <td class="diff ${diffCls}">${diff > 0 ? '+' : ''}${diff}</td>
-      <td>${r.doctors_per_1000.toFixed(1)}</td>
     `;
     tbody.appendChild(tr);
   }
@@ -297,26 +331,65 @@ function renderRegions(data) {
     type: 'bar',
     data: {
       labels: sorted.map(r => r.name),
-      datasets: [
-        {
-          data: sorted.map(r => r.value),
-          backgroundColor: sorted.map(r => r.value >= data.country_avg ? '#38761D' : '#B45F06'),
-          borderWidth: 0,
-        },
-      ],
+      datasets: [{
+        data: sorted.map(r => r.value),
+        backgroundColor: sorted.map(r => {
+          const aboveAvg = r.value >= ds.country_avg;
+          const isGood = betterHigher ? aboveAvg : !aboveAvg;
+          return isGood ? '#38761D' : '#B45F06';
+        }),
+        borderWidth: 0,
+      }],
     },
     options: {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        annotation: undefined,
-        tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(1)} let` } },
+        tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(c.parsed.x < 100 ? 1 : 0)} ${ds.unit}` } },
       },
       scales: {
-        x: { min: Math.min(...sorted.map(r => r.value)) - 1, max: Math.max(...sorted.map(r => r.value)) + 1 },
+        x: {
+          min: Math.min(...sorted.map(r => r.value)) * (betterHigher ? 0.97 : 0.97),
+          max: Math.max(...sorted.map(r => r.value)) * 1.03,
+        },
         y: { ticks: { font: { size: 11 } } },
       },
+    },
+  });
+}
+
+function renderRegionsLegacy(data) {
+  document.getElementById('regionsBadge').textContent =
+    `${data.regions.length} krajů · průměr ČR ${data.country_avg} let`;
+  const tbody = document.querySelector('#regionsTable tbody');
+  tbody.innerHTML = '';
+  const sorted = [...data.regions].sort((a, b) => b.value - a.value);
+  for (const r of sorted) {
+    const diff = (r.value - data.country_avg).toFixed(1);
+    const diffCls = diff > 0 ? 'pos' : diff < 0 ? 'neg' : '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.name}</td><td>${r.value.toFixed(1)}</td>
+      <td class="diff ${diffCls}">${diff > 0 ? '+' : ''}${diff}</td>`;
+    tbody.appendChild(tr);
+  }
+  const ctx = document.getElementById('regionsChart');
+  if (!ctx) return;
+  if (regionsChart) regionsChart.destroy();
+  // eslint-disable-next-line no-undef
+  regionsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => r.name),
+      datasets: [{ data: sorted.map(r => r.value),
+        backgroundColor: sorted.map(r => r.value >= data.country_avg ? '#38761D' : '#B45F06'),
+        borderWidth: 0 }],
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { min: Math.min(...sorted.map(r=>r.value))-1, max: Math.max(...sorted.map(r=>r.value))+1 },
+                y: { ticks: { font: { size: 11 } } } },
     },
   });
 }
@@ -389,6 +462,51 @@ function renderSourceObj(o) {
   return tableHTML + noteHTML;
 }
 
+function renderModalContent(card, indicator) {
+  return `
+    <h2>${card.name}</h2>
+    <div class="sub">${card.area} · ${card.domain}${card.subdomain ? ' · ' + card.subdomain : ''}</div>
+    <div class="modal-summary">
+      <span class="signal-pill ${indicator.signal}">${indicator.signal}</span>
+      <span><strong>${indicator.value}</strong> ${indicator.unit} (${indicator.year ?? '?'})</span>
+      ${indicator.benchmark?.oecd != null ? `<span>OECD: <strong>${indicator.benchmark.oecd}</strong></span>` : ''}
+      ${indicator.benchmark?.eu != null ? `<span>EU: <strong>${indicator.benchmark.eu}</strong></span>` : ''}
+    </div>
+    <dl>
+      <dt>Definice</dt><dd>${card.definition ?? '—'}</dd>
+      <dt>Jednotka</dt><dd>${card.unit ?? indicator.unit}</dd>
+      <dt>Směr</dt><dd>${DIRECTION_LABEL[card.direction] ?? card.direction ?? '—'}</dd>
+      <dt>Frekvence</dt><dd>${card.frequency ?? '—'}</dd>
+      <dt>Garanti</dt><dd>${(card.stewards || []).join(', ') || '—'}</dd>
+      ${card.signal_thresholds ? `<dt>Prahy signálu</dt><dd>good ≥ ${card.signal_thresholds.good} %, warn nad −${card.signal_thresholds.warn} %</dd>` : ''}
+      ${card.method_notes ? `<dt>Metodika</dt><dd>${card.method_notes}</dd>` : ''}
+      ${card.limitations ? `<dt>Omezení</dt><dd>${card.limitations}</dd>` : ''}
+    </dl>
+    ${card.data_source ? `<h3 class="ds-heading">Zdroje dat</h3>${renderDataSource(card.data_source)}` : ''}
+    <div class="modal-actions">
+      <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
+    </div>
+  `;
+}
+
+function renderFallbackCard(indicator) {
+  return {
+    name: indicator.name,
+    area: indicator.area,
+    domain: indicator.domain,
+    subdomain: indicator.subdomain,
+    definition: '—',
+    unit: indicator.unit,
+    direction: indicator.direction ?? 'context_dependent',
+    frequency: '—',
+    stewards: [],
+    signal_thresholds: null,
+    method_notes: null,
+    limitations: null,
+    data_source: indicator.source ? { primary: { type: indicator.source.name, note: indicator.source.url ?? '' } } : null,
+  };
+}
+
 async function openMethodCard(indicator) {
   const modal = document.getElementById('modalBackdrop');
   const content = document.getElementById('modalContent');
@@ -397,41 +515,27 @@ async function openMethodCard(indicator) {
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
 
+  let card;
   try {
     const res = await fetch(indicator.method_card_url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const card = await res.json();
-
-    content.innerHTML = `
-      <h2>${card.name}</h2>
-      <div class="sub">${card.area} · ${card.domain} · ${card.subdomain || ''}</div>
-      <div class="modal-summary">
-        <span class="signal-pill ${indicator.signal}">${indicator.signal}</span>
-        <span><strong>${indicator.value}</strong> ${indicator.unit} (${indicator.year ?? '?'})</span>
-        ${indicator.benchmark?.oecd != null ? `<span>OECD: <strong>${indicator.benchmark.oecd}</strong></span>` : ''}
-        ${indicator.benchmark?.eu != null ? `<span>EU: <strong>${indicator.benchmark.eu}</strong></span>` : ''}
-      </div>
-      <dl>
-        <dt>Definice</dt><dd>${card.definition}</dd>
-        <dt>Jednotka</dt><dd>${card.unit}</dd>
-        <dt>Směr</dt><dd>${DIRECTION_LABEL[card.direction] ?? card.direction}</dd>
-        <dt>Frekvence</dt><dd>${card.frequency}</dd>
-        <dt>Garanti</dt><dd>${(card.stewards || []).join(', ')}</dd>
-        <dt>Prahy signálu</dt><dd>good ≥ ${card.signal_thresholds.good} %, warn nad −${card.signal_thresholds.warn} %</dd>
-        <dt>Metodika</dt><dd>${card.method_notes}</dd>
-        <dt>Omezení</dt><dd>${card.limitations}</dd>
-      </dl>
-      <h3 class="ds-heading">Zdroje dat</h3>
-      ${renderDataSource(card.data_source)}
-      <div class="modal-actions">
-        <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
-      </div>
-    `;
+    card = await res.json();
+  } catch {
+    card = renderFallbackCard(indicator);
+    const notice = document.createElement('p');
+    notice.className = 'card-notice';
+    notice.textContent = 'Detailní metodická karta není dostupná. Zobrazuji základní data indikátoru.';
+    content.innerHTML = '';
+    content.appendChild(notice);
+    content.insertAdjacentHTML('beforeend', renderModalContent(card, indicator));
     const csvBtn = document.getElementById('btnCsvExport');
     if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
-  } catch (err) {
-    content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
+    return;
   }
+
+  content.innerHTML = renderModalContent(card, indicator);
+  const csvBtn = document.getElementById('btnCsvExport');
+  if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
 }
 
 function closeModal() {
@@ -439,6 +543,27 @@ function closeModal() {
 }
 
 // ====== INTERAKCE ======
+
+// ====== DARK MODE ======
+
+function initTheme() {
+  const saved = localStorage.getItem(LS_THEME_KEY);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved ?? (prefersDark ? 'dark' : 'light');
+  applyTheme(theme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const btn = document.getElementById('btnTheme');
+  if (btn) btn.textContent = theme === 'dark' ? '☀' : '🌙';
+  try { localStorage.setItem(LS_THEME_KEY, theme); } catch { /* ignore */ }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.dataset.theme ?? 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
 
 function wireUp() {
   // Audience switch
@@ -475,6 +600,10 @@ function wireUp() {
   const btnCsv = document.getElementById('btnExportCsv');
   if (btnCsv) btnCsv.addEventListener('click', exportVisibleCsv);
 
+  // Dark mode toggle
+  const btnTheme = document.getElementById('btnTheme');
+  if (btnTheme) btnTheme.addEventListener('click', toggleTheme);
+
   // Reload button
   document.getElementById('btnReload').addEventListener('click', async () => {
     const btn = document.getElementById('btnReload');
@@ -501,6 +630,7 @@ function wireUp() {
 
 (async () => {
   if (typeof window === 'undefined') return; // skip in node test environment
+  initTheme();
   wireUp();
   try {
     await loadData();

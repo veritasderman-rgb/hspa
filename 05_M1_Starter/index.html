@@ -19,6 +19,7 @@
   <div class="topbar-actions">
     <span class="last-updated" id="lastUpdated">Načítám…</span>
     <button class="btn-reload" id="btnReload" title="Načíst nejnovější data">⟳ Načíst znovu</button>
+    <button class="btn-theme" id="btnTheme" title="Přepnout světlý/tmavý režim" aria-label="Přepnout téma">🌙</button>
   </div>
   <div class="audience-switch" role="tablist">
     <button data-aud="public" class="active">Pro veřejnost</button>
@@ -78,14 +79,18 @@
 
   <section class="section regions-section">
     <div class="section-title">
-      <h3>Regionální přehled — naděje dožití mužů (2024)</h3>
+      <h3>Regionální přehled</h3>
       <span class="desc" id="regionsBadge"></span>
+    </div>
+    <div class="regions-controls">
+      <label for="regionsSelect" class="regions-label">Indikátor:</label>
+      <select id="regionsSelect" class="regions-select" aria-label="Vyberte indikátor pro regionální graf"></select>
     </div>
     <div class="regions-wrap">
       <div class="regions-chart-wrap"><canvas id="regionsChart" aria-label="Sloupcový graf 14 krajů ČR"></canvas></div>
       <div class="regions-table-wrap">
         <table class="regions-table" id="regionsTable">
-          <thead><tr><th>Kraj</th><th>Naděje dožití (let)</th><th>Δ od průměru ČR</th><th>Lékaři / 1 000</th></tr></thead>
+          <thead><tr><th>Kraj</th><th id="regionsTableValueHeader">Hodnota</th><th>Δ od průměru ČR</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>

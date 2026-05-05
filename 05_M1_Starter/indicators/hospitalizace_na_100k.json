@@ -1,0 +1,35 @@
+{
+  "id": "hospitalizace_na_100k",
+  "name": "Míra hospitalizací (všechna onemocnění)",
+  "area": "Výstupy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Utilizace",
+  "definition": "Počet akutních hospitalizací všech diagnóz (bez porodů) na 100 000 obyvatel za rok, ze NRH (Národní registr hospitalizovaných).",
+  "unit": "na 100 000 ob.",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NRH – Národní registr hospitalizovaných, ÚZIS."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "HOSP_RATE"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HOSP_RATE",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS"
+  ],
+  "method_notes": "Vysoká míra hospitalizací v ČR odráží historickou strukturu ambulantní péče i demografii. Nelze jednoznačně interpretovat jako dobrý/špatný výsledek.",
+  "limitations": "Ovlivněno kapacitou lůžek, demografií a preference ambulantní péče. Srovnání mezinárodně problematické z důvodu různých definic DRG."
+}

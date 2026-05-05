@@ -1,0 +1,37 @@
+{
+  "id": "sebevrazdy_per_100k",
+  "name": "Sebevraždy (standardizovaná míra)",
+  "area": "Výsledky",
+  "domain": "Duševní zdraví",
+  "subdomain": "Sebevražednost",
+  "definition": "Věkově standardizovaná míra sebevražd (MKN-10: X60–X84) na 100 000 obyvatel, standardizace na EU-27.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu",
+      "note": "Statistika přirozené měny – příčiny úmrtí."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_cd_asdr2"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "SUICIDE",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "ÚZIS",
+    "NÚDuSZ"
+  ],
+  "method_notes": "Sebevraždy jsou chronicky podregistrované — skutečné číslo může být o 10–20 % vyšší.",
+  "limitations": "Stigma a kódovací praktiky vedou k podregistraci. Nehody nezjasněného úmyslu se nezapočítávají."
+}

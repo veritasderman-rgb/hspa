@@ -1,0 +1,36 @@
+{
+  "id": "spokojenost_informovani",
+  "name": "Spokojenost pacientů s informováním",
+  "area": "Výstupy",
+  "domain": "Zkušenost pacienta",
+  "subdomain": "Komunikace",
+  "definition": "Podíl pacientů hodnotících komunikaci a informování ze strany zdravotnického personálu jako „dobré\" nebo „výborné\" v průzkumu spokojenosti.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc",
+      "note": "Průzkum spokojenosti NRC — hospitalizovaní pacienti."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "PAT_EXP"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PAT_EXP",
+    "dataset": "HEALTH_HCQU"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "NRC",
+    "MZ ČR"
+  ],
+  "method_notes": "Výběrový průzkum (n ≈ 5 000 hospitalizovaných ročně), stratifikovaný dle typu péče a krajů.",
+  "limitations": "Odpovídají jen ochotní respondenti — selection bias. Definice „informování\" se liší napříč zeměmi."
+}

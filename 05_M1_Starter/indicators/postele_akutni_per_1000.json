@@ -1,0 +1,36 @@
+{
+  "id": "postele_akutni_per_1000",
+  "name": "Akutní lůžka (na 1 000 obyvatel)",
+  "area": "Struktury",
+  "domain": "Nemocniční infrastruktura",
+  "subdomain": "Kapacita",
+  "definition": "Počet akutních nemocničních lůžek na 1 000 obyvatel (vykazovaná lůžka k 31. 12.).",
+  "unit": "na 1 000 ob.",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NRPZS + roční statistika zdravotnické infrastruktury ÚZIS."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ACUTE_BEDS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ACUTE_BEDS",
+    "dataset": "HEALTH_REAC"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "ČR nadprůměrně nad OECD — trend snižování akutních lůžek je záměrný v kontextu DRG a ambulantní substituce.",
+  "limitations": "Počet lůžek nezohledňuje obsazenost. Srovnání ovlivněno různými definicemi „akutního lůžka\" v zemích OECD."
+}

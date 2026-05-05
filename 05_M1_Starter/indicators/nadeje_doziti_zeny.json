@@ -1,0 +1,36 @@
+{
+  "id": "nadeje_doziti_zeny",
+  "name": "Naděje dožití při narození (ženy)",
+  "area": "Výsledky",
+  "domain": "Délka a kvalita života",
+  "subdomain": "Naděje dožití",
+  "definition": "Střední délka života žen narozených v daném roce za předpokladu, že po celý život platí věkově specifická úmrtnost příslušného roku.",
+  "unit": "let",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu",
+      "note": "ČSÚ demografická statistika, tabulky střední délky života."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "LIFE_EXP_F"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "LIFE_EXP_F",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": {
+    "good": 1,
+    "warn": 2
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "ÚZIS"
+  ],
+  "method_notes": "Kohorta narozených v roce t; standardizace WHO. COVID-19 způsobil pokles 2020–2021.",
+  "limitations": "Nezohledňuje kvalitu prožitých let. Vliv sociálních determinantů zachycen jen nepřímo."
+}

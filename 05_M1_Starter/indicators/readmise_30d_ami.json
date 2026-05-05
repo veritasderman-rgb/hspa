@@ -1,0 +1,36 @@
+{
+  "id": "readmise_30d_ami",
+  "name": "30denní readmise po AIM (akutní IM)",
+  "area": "Procesy",
+  "domain": "Bezpečnost péče",
+  "subdomain": "Readmise",
+  "definition": "Podíl pacientů propuštěných po hospitalizaci pro akutní infarkt myokardu, kteří byli rehospitalizováni z jakékoli příčiny do 30 dnů.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "NRH linkage — propojení záznamu hospitalizací dle rodného čísla."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "READM_AMI"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "READM_AMI",
+    "dataset": "HEALTH_HCQI"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "ČKS"
+  ],
+  "method_notes": "Nižší readmise než OECD průměr — pozitivní signál kvality péče po IM.",
+  "limitations": "Nezahrnuje pacienty, kteří zemřeli do 30 dnů mimo nemocnici. Ovlivněno délkou hospitalizace při první příjmu."
+}

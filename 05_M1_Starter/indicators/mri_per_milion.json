@@ -1,0 +1,36 @@
+{
+  "id": "mri_per_milion",
+  "name": "MRI skenery (na milion obyvatel)",
+  "area": "Struktury",
+  "domain": "Zdravotnická technika",
+  "subdomain": "Zobrazovací technologie",
+  "definition": "Počet magnetických rezonancí (MRI) na 1 000 000 obyvatel k 31. 12. daného roku.",
+  "unit": "na mil. ob.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "Registr zdravotnické techniky ÚZIS."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "MRI_UNIT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MRI_UNIT",
+    "dataset": "HEALTH_REAC"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "SÚKL"
+  ],
+  "method_notes": "ČR výrazně zaostává za OECD průměrem. Dlouhé čekací doby na MRI jsou opakovaně uváděny jako bariéra.",
+  "limitations": "Soukromé MRI, pro-pacient-pay ambulance nejsou vždy zahrnuty v registru."
+}

@@ -1,0 +1,36 @@
+{
+  "id": "ehealth_adoption",
+  "name": "Elektronické zdravotnictví — míra adopce (eHealth index)",
+  "area": "Struktury",
+  "domain": "Digitalizace zdravotnictví",
+  "subdomain": "eHealth",
+  "definition": "Kompozitní index míry adopce digitálního zdravotnictví (EHR pokrytí, ePrescription, telemedicína, datová interoperabilita) na škále 0–100.",
+  "unit": "index (0–100)",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_ehealth",
+      "note": "Průzkum MZ ČR o adopci eHealth, kombinovaný s DESI health dimenzí."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "EHEALTH_INDEX"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "isoc_ec_dii"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "MZ ČR",
+    "NÚDZ",
+    "UZIS"
+  ],
+  "method_notes": "Zahrnuje ePrescription (IZIP), eNeschopenka, NeSi/NZIP, elektronické žádanky. Legislativní rámec zlepšen zákonem o e-zdraví 2025–2035.",
+  "limitations": "Index je kompozitní — dílčí složky mají různou váhu. Mezinárodní srovnání ztěžováno rozdílnými metodikami."
+}
