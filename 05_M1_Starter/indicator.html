@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Detail indikátoru · Zdravé Česko</title>
+<meta name="description" content="Detailní pohled na jednotlivý HSPA indikátor — trend, srovnání s OECD/EU, regionální mapa, vysvětlení kontextu a metodika.">
+<meta name="robots" content="index, follow">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo" aria-hidden="true">Z</div>
+    <h1>Zdravé Česko
+      <small>Detail HSPA indikátoru</small>
+    </h1>
+  </div>
+  <div class="topbar-actions">
+    <a class="btn-reload" href="index.html" title="Zpět na přehled">← Přehled</a>
+  </div>
+</header>
+
+<nav class="module-nav" aria-label="Moduly dashboardu">
+  <a href="index.html" class="module-tab active">Indikátory</a>
+  <a href="strategie.html" class="module-tab">Strategie</a>
+  <a href="jak-funguje.html" class="module-tab">Jak to funguje</a>
+</nav>
+
+<main id="content">
+
+  <div id="status" class="status hidden" aria-live="polite"></div>
+
+  <article class="indicator-detail" id="detail">
+    <p>Načítám indikátor…</p>
+  </article>
+
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>O detailní stránce</h6>
+      <p>Stránka kombinuje data z <code>data/indicators.json</code> (časová řada, benchmark) a <code>data/regions.json</code> (rozpad po krajích NUTS-3) a metodickou kartu z adresáře <code>indicators/</code>.</p>
+    </div>
+    <div>
+      <h6>Datové zdroje</h6>
+      <p><a href="https://www.uzis.cz/">ÚZIS · NZIS</a><br>
+      <a href="https://csu.gov.cz/">ČSÚ · DataStat</a><br>
+      <a href="https://www.oecd.org/health/">OECD Health Statistics</a><br>
+      <a href="https://ec.europa.eu/eurostat">Eurostat</a></p>
+    </div>
+    <div>
+      <h6>Metodika</h6>
+      <p>Indikátor je hodnocen třemi signály (good/warn/bad) podle směru lepšího výkonu a relativní vzdálenosti od benchmarku OECD. Krajská variabilita se v některých případech čte v 3letém klouzavém průměru.</p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Občanská implementace OECD HSPA rámce pro ČR. Není oficiálním portálem MZČR.
+  </div>
+</footer>
+
+<script type="module" src="src/indicator.js"></script>
+
+</body>
+</html>

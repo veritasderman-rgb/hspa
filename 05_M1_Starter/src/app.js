@@ -281,9 +281,10 @@ function renderGrid() {
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
       <div class="source">Zdroj: ${ind.source.name}</div>
     `;
-    card.addEventListener('click', () => openMethodCard(ind));
+    const goDetail = () => navigateToDetail(ind.id);
+    card.addEventListener('click', goDetail);
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goDetail(); }
     });
     grid.appendChild(card);
 
@@ -526,6 +527,12 @@ function exportTrendCsv(indicator) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// Detail-page navigace
+function navigateToDetail(id) {
+  if (!id) return;
+  location.href = `indicator.html?id=${encodeURIComponent(id)}`;
 }
 
 // ====== METODICKÁ KARTA (modal) ======
@@ -833,10 +840,7 @@ function renderTopCritical() {
     <div class="top-critical-list">${items}</div>`;
 
   container.querySelectorAll('.top-critical-item').forEach(el => {
-    const handler = () => {
-      const ind = allIndicators.find(i => i.id === el.dataset.id);
-      if (ind) openMethodCard(ind);
-    };
+    const handler = () => navigateToDetail(el.dataset.id);
     el.addEventListener('click', handler);
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
   });

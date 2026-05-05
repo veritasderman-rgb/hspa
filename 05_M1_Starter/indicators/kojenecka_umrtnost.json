@@ -1,0 +1,43 @@
+{
+  "id": "kojenecka_umrtnost",
+  "name": "Kojenecká úmrtnost",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Mortalita do 1 roku",
+  "definition": "Počet zemřelých dětí ve věku 0–11 měsíců na 1 000 živě narozených v daném kalendářním roce. Klíčový sentinel-indikátor kvality perinatální péče, časné diagnostiky vrozených vad a dostupnosti specializované neonatologické péče (perinatologická centra).",
+  "unit": "‰ (na 1 000 živě narozených)",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/v1/data/dataset/DEM01-A",
+      "dataset": "DEM01",
+      "note": "ČSÚ — Demografická příručka, tabulka kojenecká úmrtnost. Roční granularita po krajích NUTS-3 (kraje 14)."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "demo_minfind",
+      "filter_extra": { "sex": "T", "geo": "CZ" },
+      "note": "Eurostat veřejné JSON-stat API; harmonizováno s národními statistikami členských států."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "INFANTMORTALITY",
+    "dataset": "HEALTH_STAT",
+    "filter": ".INFANTMORTALITY.TOT.PER1000LIVEBIRTHS",
+    "note": "OECD Health Statistics — věkově nestandardizováno, jen poměr (úmrtí/živě narozeným × 1 000)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ — Statistika přirozené měny",
+    "ÚZIS — Národní registr reprodukčního zdraví (NRRZ)",
+    "Česká neonatologická společnost ČLS JEP"
+  ],
+  "method_notes": "Definice WHO/OECD: živě narozený = každý plod, který po vybavení z těla matky projevil známku života bez ohledu na délku těhotenství. Některé státy (např. Francie do 2008) podhodnocovaly číslo nezahrnováním extrémně předčasných novorozenců — ČR aplikuje WHO definici od roku 1986. Komponenty: časná novorozenecká úmrtnost (0–6 dní), pozdní novorozenecká (7–27 dní), ponovorozenecká (28–365 dní). V ČR drží ~2/3 podíl perinatální složka.",
+  "limitations": "Při velmi nízkých hodnotách (ČR ~2,3 ‰) je krajská variabilita silně ovlivněna malými počty narozených (cca 100 000/rok celkem). Pro malé kraje (Karlovarský, Liberecký) doporučeno čtení v 3letém klouzavém průměru. Indikátor nezachycuje fetální úmrtnost (mrtvorozenost) ani úmrtnost matek — ty mají vlastní evidenci (NRRZ)."
+}
