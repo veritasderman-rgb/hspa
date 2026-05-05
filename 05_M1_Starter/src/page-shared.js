@@ -16,7 +16,10 @@ export function setAudience(value) {
   try { localStorage.setItem(AUDIENCE_KEY, value); } catch {}
   document.body.dataset.audience = value;
   document.querySelectorAll('.audience-switch button').forEach(b => {
-    b.classList.toggle('active', b.dataset.aud === value);
+    const isActive = b.dataset.aud === value;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', String(isActive));
+    b.setAttribute('tabindex', isActive ? '0' : '-1');
   });
   document.dispatchEvent(new CustomEvent('audiencechange', { detail: value }));
 }
@@ -25,7 +28,11 @@ export function wireAudienceSwitch() {
   const initial = getAudience();
   document.body.dataset.audience = initial;
   document.querySelectorAll('.audience-switch button').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.aud === initial);
+    const isActive = btn.dataset.aud === initial;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('role', 'tab');
+    btn.setAttribute('aria-selected', String(isActive));
+    btn.setAttribute('tabindex', isActive ? '0' : '-1');
     btn.addEventListener('click', () => setAudience(btn.dataset.aud));
   });
 }

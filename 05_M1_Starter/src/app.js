@@ -947,6 +947,7 @@ let _lastFocusedBeforeModal = null;
 function wireUp() {
   // Audience switch
   document.querySelectorAll('.audience-switch button').forEach(btn => {
+    btn.setAttribute('role', 'tab');
     btn.addEventListener('click', () => {
       document.querySelectorAll('.audience-switch button').forEach(b => {
         b.classList.remove('active');
