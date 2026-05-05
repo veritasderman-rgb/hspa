@@ -148,6 +148,41 @@ footer.bottom .disclaimer {
 .status.warn { background: #FFF8E7; color: var(--warn); border: 1px solid #F5D78E; }
 .hidden { display: none !important; }
 
+/* Scorecard */
+.scorecard {
+  display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.score-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; min-width: 130px;
+}
+.score-pill.good  { background: #EBF5E6; color: var(--good); border: 1px solid #BDD9B0; }
+.score-pill.warn  { background: #FFF4E6; color: var(--warn); border: 1px solid #F5D78E; }
+.score-pill.bad   { background: #FDECEC; color: var(--bad);  border: 1px solid #F2AAAA; }
+.score-icon { font-size: 15px; font-weight: 800; }
+.score-n { font-size: 26px; font-weight: 800; line-height: 1; }
+.score-label { font-size: 12px; font-weight: 500; opacity: 0.85; }
+
+/* Search */
+.search-box {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px; color: var(--text);
+  background: white; outline: none; width: 220px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  margin-left: auto;
+}
+.search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,83,148,0.12); }
+.section-title .desc { color: var(--muted); font-size: 13px; }
+
+/* Trend arrows */
+.trend-arrow {
+  font-size: 18px; font-weight: 700; line-height: 1; margin-left: 6px;
+}
+.trend-arrow.improving { color: var(--good); }
+.trend-arrow.declining { color: var(--bad); }
+.trend-arrow.stable    { color: var(--muted); }
+
 /* Modal pro metodické karty */
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.5);
@@ -170,6 +205,15 @@ footer.bottom .disclaimer {
 .modal dt { font-weight: 600; color: var(--text); }
 .modal dd { color: var(--muted); }
 .modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
+.modal .ds-title { margin-top: 20px; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.ds-block { background: var(--bg); border-radius: 8px; padding: 10px 14px; }
+.ds-row { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.ds-row:last-child { border-bottom: none; }
+.ds-label { font-weight: 600; color: var(--text); min-width: 90px; }
+.ds-val { color: var(--muted); flex: 1; }
+.ds-val a { color: var(--primary); text-decoration: none; }
+.ds-val a:hover { text-decoration: underline; }
+.ds-val small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
