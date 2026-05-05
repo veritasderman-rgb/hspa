@@ -7,6 +7,8 @@ const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
 const LS_THEME_KEY = 'zdrave-cesko/theme';
+const LS_AUDIENCE_KEY = 'zdrave-cesko/audience';
+const VALID_AUDIENCES = ['public', 'expert', 'policy'];
 const STALE_HOURS = 26;
 
 let allIndicators = [];
@@ -63,7 +65,7 @@ function applyHash(state) {
     document.querySelectorAll('.audience-switch button').forEach(b => {
       const isActive = b.dataset.aud === state.aud;
       b.classList.toggle('active', isActive);
-      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      b.setAttribute('aria-selected', String(isActive));
     });
   }
 }
@@ -87,6 +89,18 @@ function showStatus(msg, level = 'warn') {
 }
 function clearStatus() {
   document.getElementById('status').classList.add('hidden');
+}
+
+function setAudience(value) {
+  if (!VALID_AUDIENCES.includes(value)) return;
+  try { localStorage.setItem(LS_AUDIENCE_KEY, value); } catch {}
+  document.body.dataset.audience = value;
+  document.querySelectorAll('.audience-switch button').forEach(b => {
+    const active = b.dataset.aud === value;
+    b.classList.toggle('active', active);
+    b.setAttribute('aria-selected', String(active));
+  });
+  writeHash();
 }
 
 function debounce(fn, ms) {
@@ -1031,7 +1045,15 @@ function wireUp() {
 (async () => {
   if (typeof window === 'undefined') return; // skip in node test environment
   initTheme();
-  applyHash(readHash()); // Obnov stav z URL hash před wireUp
+  const hashState = readHash();
+  // Audience: URL hash má přednost, pak localStorage, pak HTML default (public)
+  if (!hashState.aud) {
+    try {
+      const saved = localStorage.getItem(LS_AUDIENCE_KEY);
+      if (saved && VALID_AUDIENCES.includes(saved)) hashState.aud = saved;
+    } catch {}
+  }
+  applyHash(hashState);
   wireUp();
   try {
     await loadData();

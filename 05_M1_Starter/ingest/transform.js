@@ -658,6 +658,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     trend,
     benchmark,
     signal,
+    direction: card.direction ?? 'context_dependent',
     source: {
       name: sourceLabel.name,
       url: sourceLabel.url,
