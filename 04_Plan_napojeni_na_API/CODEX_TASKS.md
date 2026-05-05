@@ -224,15 +224,88 @@ Optimalizovat dashboard pro **portrait mobile (320–480px)**. Cílit na touch-f
 - `src/styles.css` — aktualizovat `@media (max-width: 768px)` na `(max-width: 600px)` pro mobile breakpoint
 - Přidat `@media (max-width: 480px)` pro extreme mobile
 - `index.html` topbar — gridová layout pro mobile
+---
+
+## 🅴 Task E — UX audit + čitelnost stránky „Strategie“
+
+**Priorita:** vysoká (obsah je kvalitní, ale části jsou špatně čitelné pro veřejnost i policy publikum)
+**Odhad:** 3–5 hodin
+**Branch suggestion:** `codex/ux-audit-strategie-readability`
+
+### Cíl
+
+Proveď **rychlý UX audit** napříč webem se **zvláštním důrazem na stránku `strategie.html`** (zejména sekce se strategií, timeline, rolemi odpovědností a delšími texty). Cílem je zvýšit čitelnost, skenovatelnost a srozumitelnost bez změny datového modelu.
+
+### Scope (in)
+
+1. **UX audit (heuristiky + průchod flow)**
+   - Heuristiky: konzistence, hierarchie informací, orientace v obsahu, srozumitelnost termínů, kognitivní zátěž
+   - Průchod 3 hlavních flow:
+     - občan: „co je problém + co z toho plyne“
+     - expert: „jaké metriky/zdroje to potvrzují“
+     - policy: „co udělat, kdo za to odpovídá, v jakém čase“
+2. **Čitelnost textu na `strategie.html`**
+   - Zlepšit typografii dlouhých bloků (line-height, max-width, odsazení, mezititulky)
+   - Přidat vizuální „kotvy“: TL;DR box, sticky mini-TOC, zvýraznění klíčových vět
+   - Omezit „wall of text“: rozdělit obsah na kratší odstavce a bullet body (bez změny významu)
+3. **Skenovatelnost a informační hierarchie**
+   - Jasnější nadpisová struktura (`h1–h3`) a pořadí sekcí
+   - Lepší kontrast/oddělení bloků (cards, callouts, tables)
+   - Zkrátit délku řádků a sjednotit spacing mezi sekcemi
+4. **UX mikrointerakce (low-risk)**
+   - Lepší stavy hover/focus/active pro navigační prvky a strategie cards
+   - „Back to top“ na delších stránkách
+   - Jemné sticky chování navigace sekcí na desktopu
+5. **Evidence výstupů z auditu**
+   - Vytvořit krátký markdown report s nálezy, prioritami (P1/P2/P3) a mapou oprav
+   - Každému nálezu přiřadit konkrétní soubor/sekci
+
+### Scope (out)
+
+- Žádný redesign brandu ani změna vizuální identity
+- Žádná změna datových JSON kontraktů
+- Žádné nové frameworky/build step
+
+### Acceptance criteria
+
+- [ ] V repu je audit report `04_Plan_napojeni_na_API/UX_AUDIT_STRATEGIE.md` s prioritizací nálezů
+- [ ] `strategie.html` je čitelnější: méně dlouhých bloků, lepší mezititulky, vyšší skenovatelnost
+- [ ] Dlouhé textové sekce mají konzistentní typografii (max-width, line-height, spacing)
+- [ ] Navigace sekcemi je rychlá (sticky/kotvy) a funguje na desktop i mobile
+- [ ] Žádná regrese: `npm test` prochází
+- [ ] Zachovaný současný look & feel (inkrementální UX zlepšení, ne redesign)
+
+### Test plan
+
+```bash
+# Funkční/regresní testy
+npm test
+
+# Ruční UX checklist (strategie)
+# 1) Najdu do 10s: "co je problém", "co dělat", "kdo odpovídá"
+# 2) Přečtu dlouhý blok bez ztráty řádku (line length + spacing)
+# 3) Přeskočím mezi sekcemi pomocí kotev/sticky TOC
+# 4) Na mobilu není text nalepený na okraje a tabulky mají čitelné overflow chování
+```
+
+### Where to start
+
+- `05_M1_Starter/strategie.html` — struktura sekcí, kotvy, TL;DR bloky
+- `05_M1_Starter/src/styles.css` — typografie, spacing, max-width textových bloků, sticky TOC
+- `05_M1_Starter/src/strategy-policy-views.js` — případné rozdělení textu do čitelnějších bloků
+- `04_Plan_napojeni_na_API/STRATEGIES_INVENTORY.md` — kontrola terminologie a konzistence názvů
+
+
 
 ---
 
 ## Doporučené pořadí
 
 1. **Task A — Accessibility** první (právní povinnost, vysoký dopad)
-2. **Task D — Mobile** druhý (cíl mobile traffic, related WCAG)
-3. **Task B — Performance** třetí (after A+D, aby Lighthouse pokrýval všechno)
-4. **Task C — i18n** poslední (volitelný, mezinárodní publikum)
+2. **Task E — UX audit (Strategie)** druhý (čitelnost + orientace v obsahu)
+3. **Task D — Mobile** třetí (cíl mobile traffic, related WCAG)
+4. **Task B — Performance** čtvrtý (after A+D+E, aby Lighthouse pokrýval všechno)
+5. **Task C — i18n** poslední (volitelný, mezinárodní publikum)
 
 Každý task je nezávislý — lze poslat současně do 4 paralelních PR.
 
@@ -246,4 +319,4 @@ Každý task je nezávislý — lze poslat současně do 4 paralelních PR.
 - **Czech codebase** — komentáře a UI texty v češtině, identifikátory v angličtině
 - **`@codex address that feedback` workflow** — pokud Codex review vrátí P1/P2 issue, oprav ho s testem regrese (jako u P1 buildGanttModel a P2 NOR sex_filter)
 
-*Verze 1.0 · květen 2026 · 4 task briefs ready to send to Codex.*
+*Verze 1.1 · květen 2026 · 5 task briefs ready to send to Codex.*
