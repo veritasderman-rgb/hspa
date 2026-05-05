@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategie zdravotnictví ČR · Zdravé Česko</title>
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-audience="public">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">Z</div>
+    <h1>Zdravé Česko
+      <small>Strategie zdravotnictví ČR · rozcestí</small>
+    </h1>
+  </div>
+  <div class="audience-switch" role="tablist">
+    <button data-aud="public">Pro veřejnost</button>
+    <button data-aud="expert">Pro odborníky</button>
+    <button data-aud="policy">Pro tvůrce politik</button>
+  </div>
+</header>
+
+<nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+
+<main id="content">
+
+  <div id="listView">
+    <section class="page-intro">
+      <h2>Strategie zdravotnictví ČR</h2>
+      <p class="lead">
+        Rozcestí strategických dokumentů, programů a institucí, které řeší zdravotnictví v ČR — od národních (Zdraví 2035, eHealth, OECD HSPA Rámec) přes EU (EU4Health, EHDS) po globální (WHO, OECD).
+      </p>
+    </section>
+
+    <div class="filters-row">
+      <nav class="level-nav" aria-label="Filtr podle úrovně">
+        <button data-level="all" class="active">Vše</button>
+        <button data-level="national">Národní ČR</button>
+        <button data-level="sector">Sektorové</button>
+        <button data-level="institution">Instituce</button>
+        <button data-level="eu">EU</button>
+        <button data-level="global">WHO/OECD</button>
+        <button data-level="standard">Standardy</button>
+      </nav>
+      <div class="filters-actions">
+        <input type="search" id="searchBox" class="search-box" placeholder="Hledat strategii…" aria-label="Vyhledat strategii">
+        <span class="badge" id="countBadge">0</span>
+      </div>
+    </div>
+
+    <div id="strategyGrid" class="strategy-grid"></div>
+    <div class="empty-state hidden" id="emptyState">Žádná strategie neodpovídá vašemu hledání.</div>
+  </div>
+
+  <article id="detailView" class="detail-view hidden"></article>
+
+</main>
+
+<footer class="bottom">
+  <div class="row">
+    <div>
+      <h6>O projektu</h6>
+      <p>Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA.</p>
+    </div>
+    <div>
+      <h6>Otevřená data</h6>
+      <p><a href="data/strategies.json">strategies.json</a><br>
+      <a href="data/indicators.json">indicators.json</a><br>
+      <a href="data/explainers.json">explainers.json</a></p>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Strategie ověřeny květen 2026. Před produkčním nasazením doporučena re-verifikace přes <code>npm run validate:strategies</code>.
+  </div>
+</footer>
+
+<script type="module" src="src/strategies.js"></script>
+
+</body>
+</html>
