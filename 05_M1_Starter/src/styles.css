@@ -171,7 +171,84 @@ footer.bottom .disclaimer {
 .modal dd { color: var(--muted); }
 .modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
 
+/* Scorecard */
+.scorecard {
+  display: flex; align-items: center; gap: 20px;
+  background: white; border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 24px; margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.score-item { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 64px; }
+.score-num {
+  font-size: 28px; font-weight: 700; line-height: 1;
+}
+.score-label { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.score-item.good .score-num { color: var(--good); }
+.score-item.warn .score-num { color: var(--warn); }
+.score-item.bad  .score-num { color: var(--bad); }
+.score-item.neutral .score-num { color: var(--neutral); }
+.score-bar-wrap {
+  flex: 1; min-width: 120px; height: 10px;
+  background: var(--bg); border-radius: 5px; overflow: hidden;
+  margin-left: auto;
+}
+.score-bar {
+  height: 100%; width: 0; border-radius: 5px;
+  background: linear-gradient(90deg, var(--good) 0%, var(--accent) 100%);
+  transition: width 0.4s ease;
+}
+
+/* Section controls */
+.section-title { flex-wrap: wrap; }
+.section-controls {
+  display: flex; gap: 10px; align-items: center; margin-left: auto;
+}
+#searchInput {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px; width: 200px;
+  color: var(--text); background: var(--bg);
+  outline: none;
+}
+#searchInput:focus { border-color: var(--primary); background: white; }
+#sortSelect {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 10px; font-size: 13px; color: var(--text);
+  background: var(--bg); cursor: pointer; outline: none;
+}
+#sortSelect:focus { border-color: var(--primary); }
+
+/* Trend arrow na kartě */
+.trend-arrow {
+  font-size: 12px; font-weight: 700; padding: 2px 7px;
+  border-radius: 10px; white-space: nowrap;
+}
+.trend-arrow.up   { background: #E6F4EA; color: var(--good); }
+.trend-arrow.down { background: #FDE8E8; color: var(--bad); }
+.trend-arrow.flat { background: var(--bg); color: var(--muted); }
+
+/* Regionální tabulka */
+.region-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.region-table th {
+  text-align: left; padding: 10px 14px; background: var(--bg);
+  border-bottom: 2px solid var(--border); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); cursor: pointer;
+}
+.region-table th:hover { color: var(--primary); }
+.region-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.region-table tr:hover td { background: #F0F7FF; }
+.region-bar-cell { width: 200px; }
+.region-bar-track {
+  height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden;
+}
+.region-bar-fill { height: 100%; border-radius: 4px; background: var(--primary); }
+.region-diff.pos { color: var(--good); }
+.region-diff.neg { color: var(--bad); }
+
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  #searchInput { width: 140px; }
+  .region-bar-cell { display: none; }
 }

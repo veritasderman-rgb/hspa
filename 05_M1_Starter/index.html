@@ -49,13 +49,54 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Souhrnný scorecard -->
+  <div class="scorecard" id="scorecard">
+    <div class="score-item good">
+      <div class="score-num" id="scoreGood">–</div>
+      <div class="score-label">Dobře</div>
+    </div>
+    <div class="score-item warn">
+      <div class="score-num" id="scoreWarn">–</div>
+      <div class="score-label">Pozor</div>
+    </div>
+    <div class="score-item bad">
+      <div class="score-num" id="scoreBad">–</div>
+      <div class="score-label">Kritické</div>
+    </div>
+    <div class="score-item neutral">
+      <div class="score-num" id="scoreNeutral">–</div>
+      <div class="score-label">Sledováno</div>
+    </div>
+    <div class="score-bar-wrap" title="Podíl dobrých indikátorů">
+      <div class="score-bar" id="scoreBar"></div>
+    </div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="section-controls">
+        <input type="search" id="searchInput" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+        <select id="sortSelect" aria-label="Řazení">
+          <option value="default">Řazení: výchozí</option>
+          <option value="signal">Dle signálu</option>
+          <option value="name">Dle názvu A–Z</option>
+          <option value="trend">Dle trendu</option>
+        </select>
+      </div>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+  </section>
+
+  <!-- Regionální přehled -->
+  <section class="section" id="regionSection">
+    <div class="section-title">
+      <h3>Regionální přehled</h3>
+      <span class="badge" id="regionBadge">14 krajů</span>
+      <span class="desc">Naděje dožití (muži, 2024) · kraje ČR</span>
+    </div>
+    <div id="regionGrid"></div>
   </section>
 
 </main>
