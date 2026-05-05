@@ -1,0 +1,30 @@
+{
+  "id": "bmi_dospeli",
+  "name": "Nadváha a obezita (BMI ≥ 25, 18+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Stravovací návyky",
+  "definition": "Podíl populace 18 a více let s indexem tělesné hmotnosti (BMI) ≥ 25 — kategorie nadváha a obezita souhrnně (Eurostat hlth_ehis_bm1b).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_ehis_bm1b"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "SZÚ"
+  ],
+  "method_notes": "BMI = váha [kg] / výška² [m²]. Self-report (EHIS) — zpravidla podhodnocuje obezitu o 3–5 procentních bodů oproti měřeným datům (EHES).",
+  "limitations": "BMI nerozlišuje svalovou a tukovou hmotu — sportovci falešně klasifikováni jako nadváha."
+}

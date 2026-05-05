@@ -1,0 +1,31 @@
+{
+  "id": "prevalence_diabetu",
+  "name": "Prevalence diabetu (15+)",
+  "area": "Výsledky",
+  "domain": "Zátěž nemocí",
+  "subdomain": "Chronická onemocnění",
+  "definition": "Podíl populace 15 a více let s diagnostikovaným diabetem (DM 1. nebo 2. typu) podle Eurostat EHIS / NDR. Klíčový indikátor zátěže neinfekčními nemocemi.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ehis_szu",
+      "note": "EHIS běží v 5letých vlnách. Mezi vlnami se používá ÚZIS NDR (Národní diabetologický registr) jako národní zdroj."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DIABETES_PREVALENCE"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ÚZIS · NDR"
+  ],
+  "method_notes": "EU-harmonizovaný self-report (EHIS) + administrativní data (NDR). ČR má rostoucí prevalenci nad evropským průměrem — souvisí s obezitou.",
+  "limitations": "Nezahrnuje nediagnostikovaný diabetes (odhadem +30 % skutečné prevalence). Self-report v EHIS podléhá memory bias."
+}

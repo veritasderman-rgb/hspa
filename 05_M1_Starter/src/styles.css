@@ -787,3 +787,62 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Cross-link box v modalu indikátoru */
 .modal-cross-links { margin-top: 16px; }
 .modal-cross-links:empty { display: none; }
+
+/* =================================================================
+   Úvodní hero sekce na index.html (Co je HSPA)
+   ================================================================= */
+.hero {
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 44px;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 12px 0 0 12px;
+}
+.hero h2 {
+  font-size: 26px;
+  color: var(--primary-dark);
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.hero p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 16px;
+  max-width: 75ch;
+}
+.hero p:last-of-type { margin-bottom: 0; }
+.hero p strong { color: var(--primary-dark); font-weight: 600; }
+.hero a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--primary);
+  transition: color 0.15s, border-color 0.15s;
+}
+.hero a:hover {
+  color: var(--primary-dark);
+  border-bottom-style: solid;
+}
+.hero-sources {
+  margin-top: 22px !important;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 13px !important;
+  color: var(--muted);
+}
+.hero-sources strong { color: var(--text); }
+
+@media (max-width: 768px) {
+  .hero { padding: 24px 22px; margin-bottom: 22px; }
+  .hero h2 { font-size: 22px; }
+  .hero p { font-size: 14px; line-height: 1.7; }
+}

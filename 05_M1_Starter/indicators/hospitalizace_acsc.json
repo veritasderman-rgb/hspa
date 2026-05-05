@@ -1,0 +1,31 @@
+{
+  "id": "hospitalizace_acsc",
+  "name": "Odvratitelné hospitalizace (ACSC)",
+  "area": "Procesy",
+  "domain": "Koordinace péče",
+  "subdomain": "Ambulatory Care Sensitive Conditions",
+  "definition": "Hospitalizace pro stavy, kterým lze předejít efektivní ambulantní péčí — diabetes, chronická obstrukční plicní nemoc (CHOPN), srdeční selhání, hypertenze, astma. Nepřímý indikátor kvality primární péče.",
+  "unit": "/ 100 000 obyvatel",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrh",
+      "note": "NRH dlouhodobá řada — filtr MKN-10 J18, J44, J45, I50, E10, E11, K25, K26, I20, L03 (AHRQ ACSC seznam)."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ACSC_HOSP"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "OECD HCQI"
+  ],
+  "method_notes": "Definice OECD HCQI vychází z AHRQ Prevention Quality Indicators. Zahrnuje 5 chronických (diabetes, CHOPN, srdeční selhání, hypertenze, astma) + 2 akutní (pneumonie, dehydratace) ACSC. ČR vyšší než OECD průměr indikuje suboptimální koordinaci primární péče.",
+  "limitations": "Indikátor je proxy — nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a pacientského chování."
+}
