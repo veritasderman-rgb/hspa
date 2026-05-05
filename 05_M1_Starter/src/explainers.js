@@ -2,7 +2,7 @@
 // Načítá data/explainers.json + strategies.json (pro cross-link)
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
-import { wireAudienceSwitch, getAudience, audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
@@ -109,7 +109,6 @@ function renderDetail(id) {
   detail.classList.remove('hidden');
 
   const tldr = audienceText(e);
-  const audience = getAudience();
   const meta = CATEGORY_LABELS[e.category] ?? { label: e.category, desc: '' };
 
   // Cross-link
@@ -126,7 +125,6 @@ function renderDetail(id) {
     </header>
 
     <section class="detail-tldr">
-      <div class="audience-hint">Pohled <strong>${audienceLabel(audience)}</strong>:</div>
       <p>${escapeHtml(tldr)}</p>
     </section>
 
@@ -157,16 +155,14 @@ function renderDetail(id) {
             </li>
           `).join('')}
         </ol>
-        ${audience === 'policy' ? `
-          <details class="gantt-details" open>
-            <summary>Vizualizace časové osy</summary>
-            ${renderGantt(e.process.steps)}
-          </details>
-        ` : ''}
+        <details class="gantt-details" open>
+          <summary>Vizualizace časové osy (Gantt)</summary>
+          ${renderGantt(e.process.steps)}
+        </details>
       </section>
     ` : ''}
 
-    ${audience === 'policy' && e.id === 'cz_drg' ? `
+    ${e.id === 'cz_drg' ? `
       <section class="detail-section drg-calc-section">
         <h3>Interaktivní kalkulátor odhadu úhrady</h3>
         <p class="section-note">Modelace vlivu hlavní diagnózy, závažnosti a kraje na výslednou úhradu. Hodnoty ilustrativní — neslouží jako simulátor reálných úhrad ZP.</p>
@@ -232,13 +228,9 @@ function renderDetail(id) {
   `;
 
   // Wire-up dynamic widgets (DRG kalkulátor)
-  if (audience === 'policy' && e.id === 'cz_drg') {
+  if (e.id === 'cz_drg') {
     wireDrgCalculator();
   }
-}
-
-function audienceLabel(a) {
-  return ({ public: 'pro veřejnost', expert: 'pro odborníka', policy: 'pro tvůrce politik' })[a] ?? a;
 }
 
 function wireFilters() {
@@ -267,14 +259,7 @@ function wireFilters() {
 async function init() {
   if (typeof window === 'undefined') return;
 
-  wireAudienceSwitch();
   renderModuleNav('explainers');
-
-  document.addEventListener('audiencechange', () => {
-    const id = new URLSearchParams(window.location.search).get('id');
-    if (id) renderDetail(id);
-    else renderList();
-  });
 
   try {
     const [explsRes, stratsRes] = await Promise.all([

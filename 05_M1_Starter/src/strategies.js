@@ -2,7 +2,7 @@
 // Načítá data/strategies.json + data/explainers.json (pro tranzitivní cross-link)
 // a renderuje rozcestí (level filter, search) nebo detail (z URL ?id=...).
 
-import { wireAudienceSwitch, getAudience, audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
 import { buildIndex, loadLinks } from './strategy-links.js';
 import { renderTimeline, renderResponsibilityMatrix } from './strategy-policy-views.js';
 
@@ -144,7 +144,6 @@ function renderDetail(id) {
     </header>
 
     <section class="detail-tldr">
-      <div class="audience-hint">Pohled <strong>${audienceLabel(getAudience())}</strong>:</div>
       <p>${escapeHtml(tldr)}</p>
     </section>
 
@@ -213,14 +212,10 @@ function renderDetail(id) {
   `;
 }
 
-function audienceLabel(a) {
-  return ({ public: 'pro veřejnost', expert: 'pro odborníka', policy: 'pro tvůrce politik' })[a] ?? a;
-}
-
 function renderPolicyExtras(filtered) {
   const target = document.getElementById('policyExtras');
   if (!target) return;
-  if (getAudience() !== 'policy' || filtered.length === 0) {
+  if (filtered.length === 0) {
     target.innerHTML = '';
     target.classList.add('hidden');
     return;
@@ -270,15 +265,7 @@ function wireFilters() {
 async function init() {
   if (typeof window === 'undefined') return;
 
-  wireAudienceSwitch();
   renderModuleNav('strategies');
-
-  // Reagovat na změnu audience — překreslit detail/list
-  document.addEventListener('audiencechange', () => {
-    const id = new URLSearchParams(window.location.search).get('id');
-    if (id) renderDetail(id);
-    else renderList();
-  });
 
   try {
     const [stratsRes, explsRes] = await Promise.all([

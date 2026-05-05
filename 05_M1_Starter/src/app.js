@@ -6,9 +6,6 @@ const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
-const LS_THEME_KEY = 'zdrave-cesko/theme';
-const LS_AUDIENCE_KEY = 'zdrave-cesko/audience';
-const VALID_AUDIENCES = ['public', 'expert', 'policy'];
 const STALE_HOURS = 26;
 
 let allIndicators = [];
@@ -34,8 +31,6 @@ function writeHash() {
   if (activeSearch) p.set('q', activeSearch);
   if (activeSort && activeSort !== 'default') p.set('sort', activeSort);
   if (activeDomain) p.set('domain', activeDomain);
-  const aud = document.body.dataset.audience;
-  if (aud && aud !== 'public') p.set('aud', aud);
   const s = p.toString();
   history.replaceState(null, '', s ? '#' + s : location.pathname + location.search);
 }
@@ -43,9 +38,8 @@ function writeHash() {
 function applyHash(state) {
   if (state.area) {
     activeArea = state.area;
-    document.querySelectorAll('.dimnav button').forEach(b => {
-      b.classList.toggle('active', b.dataset.area === activeArea);
-    });
+    const areaSel = document.getElementById('areaFilter');
+    if (areaSel) areaSel.value = activeArea;
   }
   if (state.q) {
     activeSearch = state.q;
@@ -59,14 +53,6 @@ function applyHash(state) {
   }
   if (state.domain) {
     activeDomain = state.domain;
-  }
-  if (state.aud) {
-    document.body.dataset.audience = state.aud;
-    document.querySelectorAll('.audience-switch button').forEach(b => {
-      const isActive = b.dataset.aud === state.aud;
-      b.classList.toggle('active', isActive);
-      b.setAttribute('aria-selected', String(isActive));
-    });
   }
 }
 
@@ -89,18 +75,6 @@ function showStatus(msg, level = 'warn') {
 }
 function clearStatus() {
   document.getElementById('status').classList.add('hidden');
-}
-
-function setAudience(value) {
-  if (!VALID_AUDIENCES.includes(value)) return;
-  try { localStorage.setItem(LS_AUDIENCE_KEY, value); } catch {}
-  document.body.dataset.audience = value;
-  document.querySelectorAll('.audience-switch button').forEach(b => {
-    const active = b.dataset.aud === value;
-    b.classList.toggle('active', active);
-    b.setAttribute('aria-selected', String(active));
-  });
-  writeHash();
 }
 
 function debounce(fn, ms) {
@@ -729,9 +703,10 @@ function benchmarkBarHTML(ind) {
   const czVal = ind.value;
   const oecdVal = ind.benchmark?.oecd ?? null;
   const euVal = ind.benchmark?.eu ?? null;
-  if (oecdVal == null && euVal == null) return '';
+  const bestVal = ind.benchmark?.oecd_best ?? null;
+  if (oecdVal == null && euVal == null && bestVal == null) return '';
 
-  const refs = [czVal, oecdVal, euVal].filter(v => v != null);
+  const refs = [czVal, oecdVal, euVal, bestVal].filter(v => v != null);
   const maxVal = Math.max(...refs);
   if (maxVal === 0) return '';
 
@@ -751,7 +726,7 @@ function benchmarkBarHTML(ind) {
     const p = Math.min(100, Math.round(oecdVal / maxVal * 100));
     rows += `
     <div class="bm-row">
-      <span class="bm-key">OECD</span>
+      <span class="bm-key" title="Průměr OECD">OECD</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#4A90D9"></div></div>
       <span class="bm-val">${oecdVal}</span>
     </div>`;
@@ -761,9 +736,19 @@ function benchmarkBarHTML(ind) {
     const p = Math.min(100, Math.round(euVal / maxVal * 100));
     rows += `
     <div class="bm-row">
-      <span class="bm-key">EU</span>
+      <span class="bm-key" title="Průměr EU">EU</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#E69138"></div></div>
       <span class="bm-val">${euVal}</span>
+    </div>`;
+  }
+
+  if (bestVal != null) {
+    const p = Math.min(100, Math.round(bestVal / maxVal * 100));
+    rows += `
+    <div class="bm-row bm-best">
+      <span class="bm-key" title="Nejlepší výkon v OECD">Top</span>
+      <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#16A34A"></div></div>
+      <span class="bm-val">${bestVal}</span>
     </div>`;
   }
 
@@ -919,25 +904,6 @@ function renderModalChart(indicator) {
 
 // ====== DARK MODE ======
 
-function initTheme() {
-  const saved = localStorage.getItem(LS_THEME_KEY);
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved ?? (prefersDark ? 'dark' : 'light');
-  applyTheme(theme);
-}
-
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  const btn = document.getElementById('btnTheme');
-  if (btn) btn.textContent = theme === 'dark' ? '☀' : '🌙';
-  try { localStorage.setItem(LS_THEME_KEY, theme); } catch { /* ignore */ }
-}
-
-function toggleTheme() {
-  const current = document.documentElement.dataset.theme ?? 'light';
-  applyTheme(current === 'dark' ? 'light' : 'dark');
-}
-
 // ====== FOCUS TRAP (modal) ======
 
 function trapFocus(modal) {
@@ -962,50 +928,31 @@ function trapFocus(modal) {
 let _lastFocusedBeforeModal = null;
 
 function wireUp() {
-  // Audience switch
-  document.querySelectorAll('.audience-switch button').forEach(btn => {
-    btn.setAttribute('role', 'tab');
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.audience-switch button').forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-      document.body.dataset.audience = btn.dataset.aud;
-      writeHash();
-    });
-  });
-
-  // Area filter
-  document.querySelectorAll('.dimnav button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.dimnav button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeArea = btn.dataset.area;
+  // Area filter (dropdown <select>)
+  const areaSel = document.getElementById('areaFilter');
+  if (areaSel) {
+    areaSel.addEventListener('change', () => {
+      activeArea = areaSel.value;
       activeDomain = '';
       renderGrid();
+      writeHash();
     });
-  });
+  }
 
   // Search
   const searchInput = document.getElementById('searchBox');
   if (searchInput) {
-    const onSearch = debounce(() => { activeSearch = searchInput.value.trim(); renderGrid(); }, 200);
+    const onSearch = debounce(() => { activeSearch = searchInput.value.trim(); renderGrid(); writeHash(); }, 200);
     searchInput.addEventListener('input', onSearch);
   }
 
   // Sort
   const sortSel = document.getElementById('sortSelect');
-  if (sortSel) sortSel.addEventListener('change', () => { activeSort = sortSel.value; renderGrid(); });
+  if (sortSel) sortSel.addEventListener('change', () => { activeSort = sortSel.value; renderGrid(); writeHash(); });
 
   // CSV export-all
   const btnCsv = document.getElementById('btnExportCsv');
   if (btnCsv) btnCsv.addEventListener('click', exportVisibleCsv);
-
-  // Dark mode toggle
-  const btnTheme = document.getElementById('btnTheme');
-  if (btnTheme) btnTheme.addEventListener('click', toggleTheme);
 
   // Reload button
   document.getElementById('btnReload').addEventListener('click', async () => {
@@ -1044,15 +991,7 @@ function wireUp() {
 
 (async () => {
   if (typeof window === 'undefined') return; // skip in node test environment
-  initTheme();
   const hashState = readHash();
-  // Audience: URL hash má přednost, pak localStorage, pak HTML default (public)
-  if (!hashState.aud) {
-    try {
-      const saved = localStorage.getItem(LS_AUDIENCE_KEY);
-      if (saved && VALID_AUDIENCES.includes(saved)) hashState.aud = saved;
-    } catch {}
-  }
   applyHash(hashState);
   wireUp();
   try {

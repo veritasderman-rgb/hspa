@@ -1,46 +1,18 @@
-// Sdílené komponenty napříč stránkami: hlavička s audience switchem,
-// navigační lišta mezi moduly (Indikátory / Strategie / Jak to funguje).
+// Sdílené komponenty napříč stránkami: navigační lišta mezi moduly
+// (Indikátory / Strategie / Jak to funguje).
 
-export const AUDIENCE_KEY = 'zdrave-cesko/audience';
-export const AUDIENCES = ['public', 'expert', 'policy'];
-
-export function getAudience() {
-  try {
-    const saved = localStorage.getItem(AUDIENCE_KEY);
-    return AUDIENCES.includes(saved) ? saved : 'public';
-  } catch { return 'public'; }
-}
-
-export function setAudience(value) {
-  if (!AUDIENCES.includes(value)) return;
-  try { localStorage.setItem(AUDIENCE_KEY, value); } catch {}
-  document.body.dataset.audience = value;
-  document.querySelectorAll('.audience-switch button').forEach(b => {
-    const isActive = b.dataset.aud === value;
-    b.classList.toggle('active', isActive);
-    b.setAttribute('aria-selected', String(isActive));
-    b.setAttribute('tabindex', isActive ? '0' : '-1');
-  });
-  document.dispatchEvent(new CustomEvent('audiencechange', { detail: value }));
-}
-
-export function wireAudienceSwitch() {
-  const initial = getAudience();
-  document.body.dataset.audience = initial;
-  document.querySelectorAll('.audience-switch button').forEach(btn => {
-    const isActive = btn.dataset.aud === initial;
-    btn.classList.toggle('active', isActive);
-    btn.setAttribute('role', 'tab');
-    btn.setAttribute('aria-selected', String(isActive));
-    btn.setAttribute('tabindex', isActive ? '0' : '-1');
-    btn.addEventListener('click', () => setAudience(btn.dataset.aud));
-  });
+/**
+ * Vrátí TL;DR text indikátoru/strategie/explaineru.
+ * Vždy preferuje expert variantu (nejvíc obsahu pro publikum se zájmem
+ * o problematiku); fallback přes public na bázi.
+ */
+export function audienceText(obj) {
+  return obj.tldr_expert ?? obj.tldr_policy ?? obj.tldr_public ?? obj.tldr ?? '';
 }
 
 /**
- * Render společné navigační lišty mezi moduly.
- * Volá se z každé stránky, automaticky zvýrazní aktivní záložku
- * podle window.location.pathname.
+ * Render společné navigační lišty mezi moduly. Volá se z každé stránky,
+ * automaticky zvýrazní aktivní záložku podle window.location.pathname.
  */
 export function renderModuleNav(activeId) {
   const path = window.location.pathname;
@@ -61,15 +33,7 @@ export function renderModuleNav(activeId) {
 }
 
 /**
- * Render audience-aware text — vrátí správnou variantu podle aktuální audience.
- * @param {{ tldr_public?: string, tldr_expert?: string, tldr_policy?: string }} obj
- */
-export function audienceText(obj, audience = getAudience()) {
-  return obj[`tldr_${audience}`] ?? obj.tldr_public ?? obj.tldr ?? '';
-}
-
-/**
- * Pomocná funkce pro escape HTML před injection do innerHTML.
+ * Escape HTML pro injekci do innerHTML.
  */
 export function escapeHtml(s) {
   if (s == null) return '';
