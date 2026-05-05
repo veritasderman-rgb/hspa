@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { filterStrategies } from '../src/strategies.js';
 import { filterExplainers } from '../src/explainers.js';
-import { getAudience, audienceText } from '../src/page-shared.js';
+import { audienceText } from '../src/page-shared.js';
 
 const SAMPLE_STRATEGIES = [
   { id: 's1', title: 'Zdraví 2035', subtitle: 'rámec', owner: 'MZČR', level: 'national', topics: ['framework', 'public_health'], tags: ['MZČR'] },
@@ -64,30 +64,21 @@ test('filterExplainers: search across all 3 tldrs (public + expert + policy)', (
 
 // ===== audienceText =====
 
-test('audienceText: vrátí správnou variantu podle audience', () => {
+test('audienceText: vždy preferuje expert variantu', () => {
   const obj = {
     tldr_public: 'public text',
     tldr_expert: 'expert text',
     tldr_policy: 'policy text',
   };
-  assert.equal(audienceText(obj, 'public'), 'public text');
-  assert.equal(audienceText(obj, 'expert'), 'expert text');
-  assert.equal(audienceText(obj, 'policy'), 'policy text');
+  assert.equal(audienceText(obj), 'expert text');
 });
 
-test('audienceText: fallback na public, pokud chybí', () => {
-  const obj = { tldr_public: 'fallback' };
-  assert.equal(audienceText(obj, 'expert'), 'fallback');
+test('audienceText: fallback expert → policy → public', () => {
+  assert.equal(audienceText({ tldr_policy: 'policy', tldr_public: 'public' }), 'policy');
+  assert.equal(audienceText({ tldr_public: 'public' }), 'public');
+  assert.equal(audienceText({ tldr: 'legacy' }), 'legacy');
 });
 
 test('audienceText: pokud chybí vše, vrátí prázdný string', () => {
-  assert.equal(audienceText({}, 'public'), '');
-});
-
-// ===== getAudience =====
-
-test('getAudience: bez localStorage vrátí "public"', () => {
-  // V test prostředí localStorage neexistuje (Node), funkce má try/catch
-  const a = getAudience();
-  assert.ok(['public', 'expert', 'policy'].includes(a));
+  assert.equal(audienceText({}), '');
 });
