@@ -84,6 +84,18 @@ test('Každý indikátor v data/indicators.json má odpovídající metodickou k
   }
 });
 
+test('Regrese codex P2: context_dependent indikátory mají signal=neutral', () => {
+  // computeSignal vrací neutral pro context_dependent. Pokud má seed jiný
+  // signal, bude se ukazovat zelená/oranžová/červená u metriky, která má
+  // být nenormativní. Drift detection.
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const violations = data.indicators
+    .filter(i => i.direction === 'context_dependent' && i.signal !== 'neutral')
+    .map(i => `${i.id} (signal=${i.signal})`);
+  assert.equal(violations.length, 0,
+    `context_dependent indikátory s nenormativním signálem: ${violations.join(', ')}`);
+});
+
 // ===== M5: extractBenchmark =====
 
 test('extractBenchmark: použije OECD ze summary, doplní EU ze seed', () => {
