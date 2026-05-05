@@ -1,0 +1,33 @@
+{
+  "id": "kontinuita_pece_index",
+  "name": "Index koordinace primární péče",
+  "area": "Procesy",
+  "domain": "Koordinace péče",
+  "subdomain": "Integrace primární a specializované péče",
+  "definition": "Složený index (0–100) měřící koordinaci péče z pohledu pacienta: sdílení informací mezi lékaři, doporučovací proces, dostupnost výsledků. Měřeno dotazníkem CWF (Commonwealth Fund).",
+  "unit": "bodů",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "cwf_survey",
+      "url": "https://www.commonwealthfund.org/international-health-policy-surveys",
+      "dataset": "IHP_SURVEY",
+      "dimensions": { "country": "CZE", "domain": "coordination" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "COORDCARE",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "COORDCARE",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "biennial",
+  "stewards": ["ÚZIS", "MZ ČR", "SZÚ"],
+  "method_notes": "Skóre je aritmetickým průměrem tří dílčích subindexů (informační sdílení, doporučovací proces, follow-up). Měření probíhá jednou za dva roky.",
+  "limitations": "Dotazníkové šetření podléhá recall biasu. Vzorek ~1000 respondentů v ČR. Hodnoty interpolovány do meziletí."
+}

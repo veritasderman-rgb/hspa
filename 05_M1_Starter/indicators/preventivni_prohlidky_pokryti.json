@@ -1,0 +1,33 @@
+{
+  "id": "preventivni_prohlidky_pokryti",
+  "name": "Pokrytí preventivními prohlídkami",
+  "area": "Procesy",
+  "domain": "Prevence",
+  "subdomain": "Screeningové programy",
+  "definition": "Podíl oprávněných osob (18+), kteří se účastnili alespoň jedné preventivní prohlídky u praktického lékaře v daném roce.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "endpoint": "https://www.uzis.cz/res/f/008334",
+      "dataset": "PREVENCE_AMBULANCE",
+      "dimensions": { "typ": "preventivni", "vek": "18plus" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "PREVENTIVE",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PREVENTIVE",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "VZP", "SZP ČR"],
+  "method_notes": "Data z výkazů ambulantní péče (VZP + ostatní ZP). Pokrytí = návštěvy s kódem preventivní prohlídky / počet pojištěnců v daném věkovém pásmu.",
+  "limitations": "Podhodnoceno u osob bez praktického lékaře. Různé pojišťovny mohou mít mírně odlišné kódování preventivní péče."
+}

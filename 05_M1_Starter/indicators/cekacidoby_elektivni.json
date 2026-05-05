@@ -1,0 +1,33 @@
+{
+  "id": "cekacidoby_elektivni",
+  "name": "Čekací doby na elektivní výkony",
+  "area": "Procesy",
+  "domain": "Přístupnost péče",
+  "subdomain": "Čekací doby",
+  "definition": "Medián čekací doby (ve dnech) od rozhodnutí o plánovaném výkonu do provedení výkonu na ortopedii, kardiologii a oftalmologii.",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "endpoint": "https://nrpzs.uzis.cz/api/v1",
+      "dataset": "CEKACIDOBY",
+      "dimensions": { "obor": ["801", "105", "705"], "ukazatel": "median_dni" }
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "WAITTOTAL",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITTOTAL",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR"],
+  "method_notes": "Medián přes tři nejčastější elektivní specializace. Počítáno z NRPZS záznamu data přijetí vs. data výkonu pro plánované hospitalizace.",
+  "limitations": "Pokrývá jen hospitalizovanou péči — ambulantní čekání není systematicky sbíráno. Definice 'plánovaného výkonu' se může lišit mezi pracovišti."
+}

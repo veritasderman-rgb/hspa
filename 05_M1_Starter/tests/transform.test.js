@@ -45,9 +45,9 @@ test('computeSignal: context_dependent → neutral', () => {
   assert.equal(s, 'neutral');
 });
 
-test('loadMethodCards: načte všech 10 vzorových karet', () => {
+test('loadMethodCards: načte všech 13 karet (10 původní + 3 Procesy)', () => {
   const cards = loadMethodCards();
-  assert.equal(cards.length, 10);
+  assert.equal(cards.length, 13);
   for (const c of cards) {
     assert.ok(c.id, `card missing id: ${JSON.stringify(c).slice(0, 80)}`);
     assert.ok(c.direction, `card ${c.id} missing direction`);
@@ -70,4 +70,50 @@ test('Každý indikátor v data/indicators.json má odpovídající metodickou k
   for (const ind of data.indicators) {
     assert.ok(cardIds.has(ind.id), `indicator ${ind.id} has no method card`);
   }
+});
+
+test('data/indicators.json obsahuje přesně 13 indikátorů', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const ROOT = path.resolve(__dirname, '..');
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  assert.equal(data.indicators.length, 13);
+});
+
+test('Oblast Procesy má alespoň 3 indikátory', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const ROOT = path.resolve(__dirname, '..');
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const procesy = data.indicators.filter(i => i.area === 'Procesy');
+  assert.ok(procesy.length >= 3, `Procesy has only ${procesy.length} indicator(s)`);
+});
+
+test('Každý indikátor má povinné pole year', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const ROOT = path.resolve(__dirname, '..');
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  for (const ind of data.indicators) {
+    assert.ok(ind.year != null, `indicator ${ind.id} missing year`);
+    assert.ok(typeof ind.year === 'number', `indicator ${ind.id} year is not a number`);
+  }
+});
+
+test('computeSignal: lower_is_better, čekací doby — CZ lepší než OECD → good', () => {
+  // CZ 65 dní, OECD 80 dní → adjusted +18.75 % → good (threshold good=10)
+  const s = computeSignal(65, 80, 'lower_is_better', { good: 10, warn: 20 });
+  assert.equal(s, 'good');
+});
+
+test('computeSignal: higher_is_better, koordinace péče — CZ horší → warn', () => {
+  // CZ 68, OECD 74 → diff -8.1 % → warn (threshold good=5, warn=10)
+  const s = computeSignal(68, 74, 'higher_is_better', { good: 5, warn: 10 });
+  assert.equal(s, 'warn');
 });
