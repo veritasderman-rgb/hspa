@@ -16,6 +16,50 @@ let activeSort = 'default';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 let regionsChart = null;
 
+// ====== URL HASH STATE ======
+
+function readHash() {
+  const hash = location.hash.slice(1);
+  if (!hash) return {};
+  return Object.fromEntries(new URLSearchParams(hash));
+}
+
+function writeHash() {
+  const p = new URLSearchParams();
+  if (activeArea && activeArea !== 'all') p.set('area', activeArea);
+  if (activeSearch) p.set('q', activeSearch);
+  if (activeSort && activeSort !== 'default') p.set('sort', activeSort);
+  const aud = document.body.dataset.audience;
+  if (aud && aud !== 'public') p.set('aud', aud);
+  const s = p.toString();
+  history.replaceState(null, '', s ? '#' + s : location.pathname + location.search);
+}
+
+function applyHash(state) {
+  if (state.area) {
+    activeArea = state.area;
+    document.querySelectorAll('.dimnav button').forEach(b => {
+      b.classList.toggle('active', b.dataset.area === activeArea);
+    });
+  }
+  if (state.q) {
+    activeSearch = state.q;
+    const searchInput = document.getElementById('searchBox');
+    if (searchInput) searchInput.value = activeSearch;
+  }
+  if (state.sort) {
+    activeSort = state.sort;
+    const sortSel = document.getElementById('sortSelect');
+    if (sortSel) sortSel.value = activeSort;
+  }
+  if (state.aud) {
+    document.body.dataset.audience = state.aud;
+    document.querySelectorAll('.audience-switch button').forEach(b => {
+      b.classList.toggle('active', b.dataset.aud === state.aud);
+    });
+  }
+}
+
 // ====== UTIL ======
 
 function fmtRelative(iso) {
@@ -172,15 +216,28 @@ function renderGrid() {
   grid.innerHTML = '';
   const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort });
 
-  document.getElementById('gridBadge').textContent =
-    `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
+  const badge = `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
+  document.getElementById('gridBadge').textContent = badge;
   document.getElementById('gridTitle').textContent =
     activeArea === 'all' ? 'Všechny indikátory' : `Oblast: ${activeArea}`;
   document.getElementById('emptyState').classList.toggle('hidden', filtered.length > 0);
 
+  // ARIA live region — oznamuje asistivním technologiím změnu počtu výsledků
+  let liveRegion = document.getElementById('gridLiveRegion');
+  if (!liveRegion) {
+    liveRegion = document.createElement('div');
+    liveRegion.id = 'gridLiveRegion';
+    liveRegion.setAttribute('aria-live', 'polite');
+    liveRegion.setAttribute('aria-atomic', 'true');
+    liveRegion.className = 'sr-only';
+    document.getElementById('content').prepend(liveRegion);
+  }
+  liveRegion.textContent = `Zobrazeno ${badge}.`;
+
+  writeHash();
   updateScorecard(filtered);
 
-  const charts = [];
+  const pendingCharts = [];
   filtered.forEach((ind) => {
     const card = document.createElement('div');
     card.className = 'indicator-card';
@@ -222,41 +279,66 @@ function renderGrid() {
     });
     grid.appendChild(card);
 
-    if (Array.isArray(ind.trend) && ind.trend.length) charts.push({ ind, chartId });
+    if (Array.isArray(ind.trend) && ind.trend.length) pendingCharts.push({ ind, chartId });
   });
 
-  // Render sparkliny po vložení do DOM
-  setTimeout(() => {
-    charts.forEach(({ ind, chartId }) => {
-      const ctx = document.getElementById(chartId);
-      if (!ctx) return;
-      const color = ind.signal === 'good' ? '#38761D'
-        : ind.signal === 'warn' ? '#B45F06'
-        : ind.signal === 'bad' ? '#990000' : '#0B5394';
-      // eslint-disable-next-line no-undef
-      const ch = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ind.trend.map(t => t.year),
-          datasets: [{
-            data: ind.trend.map(t => t.value),
-            borderColor: color, backgroundColor: color + '22',
-            fill: true, tension: 0.3,
-            pointRadius: 2, pointHoverRadius: 4, borderWidth: 2,
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false }, tooltip: { displayColors: false } },
-          scales: {
-            x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
-            y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888', maxTicksLimit: 3 } }
-          }
-        }
-      });
-      chartInstances.set(chartId, ch);
-    });
-  }, 50);
+  renderChartsBatch(pendingCharts);
+}
+
+function renderSparkline(ind, chartId) {
+  const ctx = document.getElementById(chartId);
+  if (!ctx || chartInstances.has(chartId)) return;
+  const color = ind.signal === 'good' ? '#38761D'
+    : ind.signal === 'warn' ? '#B45F06'
+    : ind.signal === 'bad' ? '#990000' : '#0B5394';
+  // eslint-disable-next-line no-undef
+  const ch = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ind.trend.map(t => t.year),
+      datasets: [{
+        data: ind.trend.map(t => t.value),
+        borderColor: color, backgroundColor: color + '22',
+        fill: true, tension: 0.3,
+        pointRadius: 2, pointHoverRadius: 4, borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { displayColors: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
+        y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888', maxTicksLimit: 3 } }
+      }
+    }
+  });
+  chartInstances.set(chartId, ch);
+}
+
+function renderChartsBatch(pendingCharts) {
+  if (!pendingCharts.length) return;
+  // Lazy rendering: karty viditelné okamžitě, ostatní až při scrollu
+  if (typeof IntersectionObserver === 'undefined') {
+    // Fallback pro prostředí bez IntersectionObserver
+    setTimeout(() => pendingCharts.forEach(({ ind, chartId }) => renderSparkline(ind, chartId)), 50);
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const chartId = entry.target.querySelector('canvas')?.id;
+      if (!chartId) { obs.unobserve(entry.target); continue; }
+      const item = pendingCharts.find(c => c.chartId === chartId);
+      if (item) renderSparkline(item.ind, item.chartId);
+      obs.unobserve(entry.target);
+    }
+  }, { rootMargin: '100px' });
+
+  for (const { chartId } of pendingCharts) {
+    const canvas = document.getElementById(chartId);
+    const card = canvas?.closest('.indicator-card');
+    if (card) observer.observe(card);
+  }
 }
 
 // ====== REGIONS ======
@@ -508,12 +590,14 @@ function renderFallbackCard(indicator) {
 }
 
 async function openMethodCard(indicator) {
+  _lastFocusedBeforeModal = document.activeElement;
   const modal = document.getElementById('modalBackdrop');
   const content = document.getElementById('modalContent');
   content.innerHTML = '<p>Načítám metodickou kartu…</p>';
   modal.classList.remove('hidden');
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-label', indicator.name);
 
   let card;
   try {
@@ -530,12 +614,14 @@ async function openMethodCard(indicator) {
     content.insertAdjacentHTML('beforeend', renderModalContent(card, indicator));
     const csvBtn = document.getElementById('btnCsvExport');
     if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+    trapFocus(modal);
     return;
   }
 
   content.innerHTML = renderModalContent(card, indicator);
   const csvBtn = document.getElementById('btnCsvExport');
   if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+  trapFocus(modal);
 }
 
 function closeModal() {
@@ -565,6 +651,30 @@ function toggleTheme() {
   applyTheme(current === 'dark' ? 'light' : 'dark');
 }
 
+// ====== FOCUS TRAP (modal) ======
+
+function trapFocus(modal) {
+  const focusable = modal.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  first.focus();
+  modal.addEventListener('keydown', function onKey(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    if (!modal.classList.contains('hidden')) return;
+    modal.removeEventListener('keydown', onKey);
+  });
+}
+
+let _lastFocusedBeforeModal = null;
+
 function wireUp() {
   // Audience switch
   document.querySelectorAll('.audience-switch button').forEach(btn => {
@@ -572,6 +682,7 @@ function wireUp() {
       document.querySelectorAll('.audience-switch button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.body.dataset.audience = btn.dataset.aud;
+      writeHash();
     });
   });
 
@@ -618,12 +729,23 @@ function wireUp() {
     }
   });
 
-  // Modal close
-  document.getElementById('modalClose').addEventListener('click', closeModal);
+  // Modal close — vrátí fokus na spouštěcí kartu
+  const closeModalAndFocus = () => {
+    closeModal();
+    if (_lastFocusedBeforeModal) { _lastFocusedBeforeModal.focus(); _lastFocusedBeforeModal = null; }
+  };
+  document.getElementById('modalClose').addEventListener('click', closeModalAndFocus);
   document.getElementById('modalBackdrop').addEventListener('click', (e) => {
-    if (e.target.id === 'modalBackdrop') closeModal();
+    if (e.target.id === 'modalBackdrop') closeModalAndFocus();
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModalAndFocus(); });
+
+  // Hashchange — back/forward navigation
+  window.addEventListener('hashchange', () => {
+    const state = readHash();
+    applyHash(state);
+    renderGrid();
+  });
 }
 
 // ====== INIT ======
@@ -631,6 +753,7 @@ function wireUp() {
 (async () => {
   if (typeof window === 'undefined') return; // skip in node test environment
   initTheme();
+  applyHash(readHash()); // Obnov stav z URL hash před wireUp
   wireUp();
   try {
     await loadData();
