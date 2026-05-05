@@ -3,7 +3,7 @@
 **Účel:** výchozí bod pro M-STR-2 (datový model `data/strategies.json`).
 **Stav:** verze 1.0 — květen 2026.
 **Pokrytí:** 50+ strategických dokumentů napříč 5 úrovněmi (národní, sektorové, instituce, EU, globální).
-**Postup ověření:** každý záznam má pole `verified_at`. Před publikací v dashboardu doporučeno re-verifikace přes WebFetch (URL může změnit, status revize plánovaný).
+**Stav verifikace:** záznamy v tomto markdown dokumentu **nemají** pole `verified_at` — jejich URL byly ověřeny v rámci jednorázové rešerše M-STR-1 (květen 2026). V M-STR-2 (převod do `data/strategies.json`) se každé položce doplní pole `verified_at` (ISO timestamp) a `verification_status` (`ok` / `needs_verification` / `broken`), aby cron-validátor mohl spustit periodickou re-verifikaci přes HTTP HEAD/GET.
 
 ---
 
@@ -195,14 +195,35 @@
 | `inst_nrc` | NRC | https://www.nrc.cz/ | Indikátory kvality péče (NRHOSP, NOR), bezpečnost pacientů |
 | `inst_ncez` | NCEZ | https://ncez.mzcr.cz/ | eHealth interoperabilita, standardy, EHDS implementace |
 | `inst_nivzd` | NIVZD | https://www.nivzd.cz/ | Reforma péče o duševní zdraví |
-| `inst_vzp` | VZP ČR | https://www.vzp.cz/ | Data o úhradách, čekací doby |
-| `inst_szp` | SZP ČR (Svaz zdrav. pojišťoven) | https://www.szpcr.cz/ | Data malých pojišťoven |
 | `inst_clk` | ČLK (Česká lékařská komora) | https://www.lkcr.cz/ | Profesní strategie, etika |
 | `inst_clnk` | ČLnK (Česká lékárnická komora) | https://www.lekarnici.cz/ | Lékárenství |
 | `inst_cas` | ČAS (Česká asociace sester) | https://www.cnna.cz/ | Sesterská profese |
 | `inst_cls_jep` | ČLS JEP | https://www.cls.cz/ | Doporučené postupy odborných společností |
 | `inst_kardio` | Česká kardiologická společnost | https://www.kardio-cz.cz/ | Národní kardiovaskulární plán partner |
 | `inst_kzp` | KZP (Kancelář zdravotního pojištění) | https://kancelarzp.cz/ | PUK — Portál ukazatelů kvality |
+
+### 3a · Zdravotní pojišťovny (specifická podsekce)
+
+V ČR působí **7 zdravotních pojišťoven** v systému veřejného zdravotního pojištění (zákon 48/1997 Sb.). VZP je dominantní (~60 % pojištěnců), 6 zaměstnaneckých pojišťoven je sdruženo ve Svazu zdravotních pojišťoven (SZP). Každá publikuje výroční zprávu, zdravotně-pojistný plán a vlastní strategie/koncepce. Pro projekt Zdravé Česko jsou pojišťovny klíčové, protože spravují K-dávky (data o úhradách) a jsou hlavním partnerem v dohodovacím řízení.
+
+| ID návrh | Pojišťovna | Kód | Pojištěnci (cca) | Web | Strategie / koncepce |
+|---|---|---|---|---|---|
+| `inst_vzp` | **VZP ČR** | 111 | ~6 mil. | https://www.vzp.cz/ | „Strategie VZP ČR" v přípravě (schválení do konce 2025): přechod od úhrady objemu péče k value-based care, prevence, digitalizace, AI/telemedicína |
+| `inst_zpmv` | ZP MV ČR (211) | 211 | ~1,4 mil. | https://www.zpmvcr.cz/ | Vlastní zdravotně-pojistný plán, programy prevence |
+| `inst_cpzp` | ČPZP — Česká průmyslová ZP | 205 | ~1,3 mil. | https://www.cpzp.cz/ | Zdravotně-pojistný plán, smluvní politika |
+| `inst_ozp` | OZP — Oborová ZP | 207 | ~785 tis. | https://www.ozp.cz/ | Zdravotně-pojistný plán, prevence |
+| `inst_vozp` | VoZP — Vojenská ZP | 201 | ~720 tis. | https://www.vozp.cz/ | Specializace na vojáky a rodiny |
+| `inst_rbp` | RBP — Revírní bratrská pokladna | 213 | ~470 tis. | https://www.rbp213.cz/ | Specializace MS region |
+| `inst_zps` | ZPŠ — Zaměstnanecká ZP Škoda | 209 | ~140 tis. | https://www.zpskoda.cz/ | Nejmenší, regionální |
+| `inst_szp` | **SZP ČR** (Svaz ZP) | — | sdružuje 6 zaměstnaneckých | https://szpcr.cz/ | Společný dohodovací zástupce v jednání s MZČR |
+
+**TL;DR (veřejnost):** V ČR si můžeš vybrat jednu ze 7 zdravotních pojišťoven; jednou ročně (do 31. března) můžeš změnit. Všechny musejí ze zákona uhradit stejnou základní péči — liší se v benefitech (preventivní programy, příspěvky), v rychlosti komunikace a v tom, s kterými lékaři mají smlouvu.
+
+**TL;DR (odborník):** 7 ZP v ČR, dominance VZP (~55–60 %). Smluvní politika diferenciovaná, K-dávky publikované jednotlivě. Ve dohodovacím řízení 2026 dohoda s MZČR jen ve 3 segmentech z 15 (zubaři, gynekologové, lékárny). Předpokládaný deficit 12,2 mld. Kč 2026.
+
+**TL;DR (politik):** ZP jsou veřejnoprávní instituce s monopolem na výběr pojistného, ale s konkurenčním tržním modelem v péči o klienty. Klíčový spor: VZP vs. SZP (rozdílná struktura pojištěnců, rozdílné zájmy). Stát má ve VZP přímý vliv (Správní rada 30 členů včetně 10 z Parlamentu).
+
+**linked_indicators (návrh):** `cekaci_doba_kycel` (VZP data), `vydaje_zdravotnictvi_hdp`, `platba_z_kapsy_pct`
 
 ---
 
