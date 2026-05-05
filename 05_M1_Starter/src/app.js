@@ -59,8 +59,7 @@ function applyHash(state) {
     document.querySelectorAll('.audience-switch button').forEach(b => {
       const isActive = b.dataset.aud === state.aud;
       b.classList.toggle('active', isActive);
-      b.setAttribute('aria-selected', String(isActive));
-      b.setAttribute('tabindex', isActive ? '0' : '-1');
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   }
 }
@@ -92,6 +91,12 @@ function debounce(fn, ms) {
 }
 
 // ====== DATA LOADING ======
+
+function chartAnimationOptions() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return reducedMotion ? { duration: 0 } : { duration: 500 };
+}
+
 
 function applyData(data, { stale = false, source = 'live' } = {}) {
   allIndicators = data.indicators || [];
@@ -216,6 +221,12 @@ function destroyAllCharts() {
   chartInstances.clear();
 }
 
+function getChartAnimation() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? { duration: 0 }
+    : undefined;
+}
+
 function renderGrid() {
   const grid = document.getElementById('indicatorGrid');
   destroyAllCharts();
@@ -310,6 +321,8 @@ function renderSparkline(ind, chartId) {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: { legend: { display: false }, tooltip: { displayColors: false } },
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#888' } },
@@ -431,6 +444,8 @@ function renderRegionDataset(ds) {
     options: {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: (c) => `${c.parsed.x.toFixed(c.parsed.x < 100 ? 1 : 0)} ${ds.unit}` } },
@@ -474,6 +489,8 @@ function renderRegionsLegacy(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
+      animation: getChartAnimation(),
       plugins: { legend: { display: false } },
       scales: { x: { min: Math.min(...sorted.map(r=>r.value))-1, max: Math.max(...sorted.map(r=>r.value))+1 },
                 y: { ticks: { font: { size: 11 } } } },
@@ -651,6 +668,7 @@ async function openMethodCard(indicator) {
   const content = document.getElementById('modalContent');
   content.innerHTML = '<p>Načítám metodickou kartu…</p>';
   modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden', 'false');
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
   modal.setAttribute('aria-label', indicator.name);
@@ -684,6 +702,7 @@ async function openMethodCard(indicator) {
 
 function closeModal() {
   document.getElementById('modalBackdrop').classList.add('hidden');
+  document.getElementById('modalBackdrop').setAttribute('aria-hidden', 'true');
   if (_modalChart) { _modalChart.destroy(); _modalChart = null; }
 }
 
@@ -866,6 +885,7 @@ function renderModalChart(indicator) {
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
+      animation: chartAnimationOptions(),
       plugins: {
         legend: { display: datasets.length > 1, position: 'top', labels: { font: { size: 11 }, boxWidth: 16 } },
         tooltip: { displayColors: true },
@@ -918,8 +938,7 @@ function trapFocus(modal) {
     } else {
       if (document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
-    if (!modal.classList.contains('hidden')) return;
-    modal.removeEventListener('keydown', onKey);
+    if (modal.classList.contains('hidden')) modal.removeEventListener('keydown', onKey);
   });
 }
 
@@ -931,11 +950,14 @@ function wireUp() {
     btn.setAttribute('role', 'tab');
     btn.addEventListener('click', () => {
       document.querySelectorAll('.audience-switch button').forEach(b => {
-        const isActive = b === btn;
-        b.classList.toggle('active', isActive);
-        b.setAttribute('aria-selected', String(isActive));
-        b.setAttribute('tabindex', isActive ? '0' : '-1');
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
       });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      document.querySelectorAll('.audience-switch button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
       document.body.dataset.audience = btn.dataset.aud;
       writeHash();
     });
