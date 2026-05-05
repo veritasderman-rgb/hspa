@@ -49,13 +49,54 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- KPI souhrnná sekce -->
+  <div class="hero-summary" id="heroSummary">
+    <div class="hero-header">
+      <div>
+        <h2>Přehled stavu zdravotního systému ČR</h2>
+        <p class="lead">Celkový obraz na základě <span id="heroTotal">0</span> monitorovaných indikátorů</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-export" id="btnExport" title="Stáhnout CSV">↓ Export CSV</button>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card good">
+        <div class="label">Dobré výsledky</div>
+        <div class="value" id="heroGood">0</div>
+        <div class="delta">indikátorů nad OECD průměrem</div>
+      </div>
+      <div class="summary-card warn">
+        <div class="label">Sledovat</div>
+        <div class="value" id="heroWarn">0</div>
+        <div class="delta">indikátorů v pásmu varování</div>
+      </div>
+      <div class="summary-card bad">
+        <div class="label">Vyžaduje pozornost</div>
+        <div class="value" id="heroBad">0</div>
+        <div class="delta">indikátorů pod OECD průměrem</div>
+      </div>
+      <div class="summary-card neutral">
+        <div class="label">Bez benchmarku</div>
+        <div class="value" id="heroNeutral">0</div>
+        <div class="delta">indikátorů bez srovnání</div>
+      </div>
+    </div>
+  </div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
-      <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="search-wrap">
+        <input type="search" id="searchInput" class="search-input" placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+      </div>
+      <span class="desc">Filtrujte výběrem oblasti výše nebo vyhledávejte</span>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="empty-state hidden" id="emptyState">
+      Žádné indikátory neodpovídají zadanému filtru.
+    </div>
   </section>
 
 </main>

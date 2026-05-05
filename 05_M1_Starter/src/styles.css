@@ -148,6 +148,55 @@ footer.bottom .disclaimer {
 .status.warn { background: #FFF8E7; color: var(--warn); border: 1px solid #F5D78E; }
 .hidden { display: none !important; }
 
+/* KPI hero summary */
+.hero-summary {
+  background: white; border-radius: 12px; padding: 24px 28px;
+  margin-bottom: 28px; border: 1px solid var(--border);
+}
+.hero-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+}
+.hero-header h2 { font-size: 20px; color: var(--primary-dark); margin-bottom: 4px; }
+.hero-header .lead { color: var(--muted); font-size: 13px; }
+.hero-actions { display: flex; gap: 8px; align-items: center; }
+.btn-export {
+  background: white; color: var(--primary); border: 1px solid var(--primary);
+  padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;
+  white-space: nowrap;
+}
+.btn-export:hover { background: var(--primary); color: white; }
+.summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+}
+.summary-card {
+  border-left: 4px solid var(--neutral); padding: 14px 16px;
+  background: var(--bg); border-radius: 8px;
+}
+.summary-card.good { border-left-color: var(--good); }
+.summary-card.warn { border-left-color: var(--warn); }
+.summary-card.bad { border-left-color: var(--bad); }
+.summary-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 700; }
+.summary-card .value { font-size: 32px; font-weight: 800; color: var(--text); margin: 4px 0 2px; }
+.summary-card.good .value { color: var(--good); }
+.summary-card.warn .value { color: var(--warn); }
+.summary-card.bad .value { color: var(--bad); }
+.summary-card .delta { font-size: 12px; color: var(--muted); }
+
+/* Search */
+.search-wrap { margin-left: auto; }
+.search-input {
+  border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px;
+  font-size: 13px; outline: none; width: 220px; color: var(--text); background: var(--bg);
+}
+.search-input:focus { border-color: var(--primary); background: white; }
+
+.empty-state {
+  text-align: center; padding: 48px 20px;
+  color: var(--muted); font-size: 14px; background: white;
+  border: 1px dashed var(--border); border-radius: 10px;
+}
+
 /* Modal pro metodické karty */
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.5);
@@ -168,10 +217,24 @@ footer.bottom .disclaimer {
 .modal .sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
 .modal dl { display: grid; grid-template-columns: 160px 1fr; gap: 8px 16px; font-size: 14px; }
 .modal dt { font-weight: 600; color: var(--text); }
-.modal dd { color: var(--muted); }
-.modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
+.modal dd { color: var(--muted); margin: 0; }
+.modal .data-source-box {
+  background: var(--bg); padding: 14px; border-radius: 8px;
+  margin-top: 18px; font-size: 13px;
+}
+.modal .data-source-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
+.modal .data-source-box dl { grid-template-columns: 120px 1fr; }
+.modal .signal-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.modal .signal-pill {
+  padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;
+}
+.modal .signal-pill.good { background: #E6F4E0; color: var(--good); }
+.modal .signal-pill.warn { background: #FFF3E0; color: var(--warn); }
+.modal .signal-pill.bad { background: #FFE6E6; color: var(--bad); }
 
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
   main { padding: 18px 16px 40px; }
+  .search-input { width: 160px; }
+  .section-title { flex-wrap: wrap; }
 }
