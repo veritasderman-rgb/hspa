@@ -12,8 +12,10 @@ export const CONFIG = {
   // ČSÚ · DataStat (Český statistický úřad)
   csu: {
     base: 'https://data.csu.gov.cz',
+    api_path: '/api/v1/data',
     docs: 'https://csu.gov.cz/zakladni-informace-pro-pouziti-api-datastatu',
     krok_db: 'https://csu.gov.cz/produkty/databaze-krok-otevrena-data',
+    user_agent: 'ZdraveCesko-HSPA/1.0 (kontakt@example.cz)',
   },
 
   // OECD · SDMX-JSON

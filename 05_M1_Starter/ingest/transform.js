@@ -1,19 +1,37 @@
-// Transform vrstva: harmonizace surových dat z fetcherů + výpočet finálních indikátorů.
-// V M1 pouze stub. Plná implementace v M5.
+// Transform vrstva (M5): harmonizace surových dat z fetcherů
+// + výpočet finálních hodnot/trendů/benchmarků/signálů.
+//
+// Vstup:
+//   indicators/*.json                 — metodické karty (zdroj pravdy o indikátorech)
+//   ingest/cache/csu_<id>.json        — observace z M3
+//   ingest/cache/oecd_<id>.json       — CZ + OECD agregát z M4
+//   ingest/cache/eurostat_<id>.json   — CZ + EU agregát z M4
+//   ingest/cache/oecd_benchmarks.json — souhrn benchmarků z M4
+//   ingest/cache/eurostat.json        — souhrn benchmarků z M4
+//
+// Pokud cache pro indikátor neexistuje, transform použije hodnoty
+// z aktuálního data/indicators.json jako fallback (seed values z M1).
+// Tím funguje i v dev prostředí bez síťového přístupu.
+//
+// Výstup:
+//   data/indicators.json — finální dataset pro frontend
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CONFIG } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+const CACHE_DIR = path.resolve(ROOT, CONFIG.cache.dir);
+
+// ====== Signal logika (M1) ======
 
 /**
- * Vypočte semafor (good/warn/bad) podle hodnoty a benchmarku.
- * @param {number} value — naše hodnota
- * @param {number} benchmark — referenční hodnota (typicky OECD průměr)
+ * @param {number} value
+ * @param {number} benchmark
  * @param {'higher_is_better'|'lower_is_better'|'context_dependent'} direction
- * @param {{good: number, warn: number}} thresholds — procenta
+ * @param {{good:number, warn:number}} thresholds — procenta
  * @returns {'good'|'warn'|'bad'|'neutral'}
  */
 export function computeSignal(value, benchmark, direction, thresholds) {
@@ -26,43 +44,230 @@ export function computeSignal(value, benchmark, direction, thresholds) {
   return 'warn';
 }
 
-/**
- * Načte všechny metodické karty z indicators/.
- */
+// ====== Načítání ======
+
 export function loadMethodCards() {
   const dir = path.join(ROOT, 'indicators');
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
   return files.map(f => {
-    const content = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
-    content._method_card_path = `indicators/${f}`;
-    return content;
+    const card = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    card._method_card_path = `indicators/${f}`;
+    return card;
   });
 }
 
+export function loadSeedIndicators() {
+  const file = path.join(ROOT, 'data', 'indicators.json');
+  if (!fs.existsSync(file)) return new Map();
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  return new Map((data.indicators ?? []).map(i => [i.id, i]));
+}
+
+function readCacheFile(name) {
+  const file = path.join(CACHE_DIR, name);
+  if (!fs.existsSync(file)) return null;
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch { return null; }
+}
+
+// ====== Extraktory pro jednotlivé zdroje ======
+
 /**
- * Hlavní transform funkce. V M5 bude číst surová data z ingest/cache/
- * a produkovat data/indicators.json. V M1 je toto stub, který validuje
- * existující data/indicators.json a doplní signal pole, pokud chybí.
+ * Pro indikátor s primary type csu_datastat / csu_sha najde value a trend
+ * v ingest/cache/csu_<id>.json (z M3).
+ * Filtruje observace na celkovou ČR (region == null|'CZ0'|'CZE'|undefined, sex == 'T'|null).
  */
-export async function transform() {
-  console.log('[transform] M1 stub — TODO M5: harmonize raw fetcher outputs into data/indicators.json');
-  const cards = loadMethodCards();
-  console.log(`[transform] Loaded ${cards.length} method cards.`);
+export function extractFromCsu(id) {
+  const cache = readCacheFile(`csu_${id}.json`);
+  if (!cache?.observations?.length) return null;
+  const candidates = cache.observations.filter(o =>
+    o.value != null
+    && o.year != null
+    && (o.sex == null || o.sex === 'T' || o.sex === 'TOTAL')
+    && (o.region == null || ['CZ', 'CZ0', 'CZE'].includes(o.region))
+  );
+  if (!candidates.length) return null;
+  return buildValueTrend(candidates);
+}
 
-  // Validuj existující data/indicators.json
-  const dataPath = path.join(ROOT, 'data', 'indicators.json');
-  if (fs.existsSync(dataPath)) {
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    console.log(`[transform] Found ${data.indicators.length} indicators in data/indicators.json.`);
+/**
+ * Pro indikátor z OECD vezme již vypočítanou CZ sérii z oecd_<id>.json (M4).
+ */
+export function extractFromOecd(id) {
+  const cache = readCacheFile(`oecd_${id}.json`);
+  if (!cache) return null;
+  if (cache.cz?.value == null) return null;
+  return {
+    value: cache.cz.value,
+    year: cache.cz.year,
+    trend: cache.trend ?? [],
+  };
+}
 
-    // Sanity check: každý indikátor v dat musí mít odpovídající kartu
-    for (const ind of data.indicators) {
-      const card = cards.find(c => c.id === ind.id);
-      if (!card) console.warn(`[transform] WARN: indicator '${ind.id}' has no method card.`);
-    }
-  } else {
-    console.warn('[transform] data/indicators.json not found.');
+/**
+ * Pro indikátor z Eurostatu vezme CZ sérii z eurostat_<id>.json (M4).
+ */
+export function extractFromEurostat(id) {
+  const cache = readCacheFile(`eurostat_${id}.json`);
+  if (cache?.cz?.value == null) return null;
+  return {
+    value: cache.cz.value,
+    year: cache.cz.year,
+    trend: cache.trend ?? [],
+  };
+}
+
+function buildValueTrend(observations, years = 5) {
+  const sorted = [...observations].sort((a, b) => a.year - b.year);
+  const trend = sorted.slice(-years).map(o => ({ year: o.year, value: round(o.value, 2) }));
+  const latest = sorted[sorted.length - 1];
+  return { value: round(latest.value, 2), year: latest.year, trend };
+}
+
+function round(n, places) {
+  if (n == null || !Number.isFinite(n)) return n;
+  const f = Math.pow(10, places);
+  return Math.round(n * f) / f;
+}
+
+// ====== Benchmark extrakce ======
+
+/**
+ * Najde benchmark pro indikátor:
+ *   1. oecd_benchmarks.json[id].oecd.value (M4)
+ *   2. eurostat.json[id].eu.value (M4) jako EU benchmark
+ *   3. fallback ze seed
+ */
+export function extractBenchmark(id, oecdSummary, eurostatSummary, seed) {
+  const out = {};
+  const oecd = oecdSummary?.benchmarks?.[id]?.oecd?.value;
+  if (oecd != null && Number.isFinite(oecd)) out.oecd = round(oecd, 2);
+
+  const eu = eurostatSummary?.benchmarks?.[id]?.eu?.value;
+  if (eu != null && Number.isFinite(eu)) out.eu = round(eu, 2);
+
+  // Doplň ze seed, co chybí
+  if (out.oecd == null && seed?.benchmark?.oecd != null) out.oecd = seed.benchmark.oecd;
+  if (out.eu == null && seed?.benchmark?.eu != null) out.eu = seed.benchmark.eu;
+  return out;
+}
+
+// ====== Sestavení indikátoru ======
+
+const SOURCE_TYPE_TO_LABEL = {
+  csu_datastat: { name: 'ČSÚ · DataStat', url: 'https://csu.gov.cz/' },
+  csu_sha: { name: 'ČSÚ · SHA', url: 'https://csu.gov.cz/' },
+  eurostat_jsonstat: { name: 'Eurostat', url: 'https://ec.europa.eu/eurostat' },
+  oecd: { name: 'OECD Health Statistics', url: 'https://stats.oecd.org/' },
+  uzis_nrzp: { name: 'ÚZIS · NRZP', url: 'https://www.uzis.cz/' },
+  nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
+  ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
+  eea: { name: 'EEA', url: 'https://www.eea.europa.eu/' },
+};
+
+/**
+ * Sestaví entry pro data/indicators.json z metodické karty.
+ * @returns {object} entry odpovídající datovému kontraktu
+ */
+export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}) {
+  const primaryType = card?.data_source?.primary?.type;
+
+  let extracted = null;
+  let actualSourceType = primaryType;
+  if (primaryType === 'csu_datastat' || primaryType === 'csu_sha') {
+    extracted = extractFromCsu(card.id);
+  } else if (primaryType === 'eurostat_jsonstat') {
+    extracted = extractFromEurostat(card.id);
+  } else if (primaryType === 'oecd') {
+    extracted = extractFromOecd(card.id);
   }
+
+  // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
+  if (!extracted && card?.data_source?.fallback?.type === 'oecd') {
+    extracted = extractFromOecd(card.id);
+    if (extracted) actualSourceType = 'oecd';
+  }
+
+  // Posledni fallback: seed (M1 hodnoty)
+  const value = extracted?.value ?? seed?.value ?? null;
+  const year = extracted?.year ?? seed?.year ?? null;
+  const trend = extracted?.trend?.length ? extracted.trend : (seed?.trend ?? []);
+
+  const benchmark = extractBenchmark(card.id, oecdSummary, eurostatSummary, seed);
+
+  const refValue = benchmark.oecd ?? benchmark.eu ?? null;
+  const signal = computeSignal(value, refValue, card.direction, card.signal_thresholds);
+
+  const sourceLabel = SOURCE_TYPE_TO_LABEL[actualSourceType] ?? { name: actualSourceType ?? 'unknown', url: '' };
+  const sourceUsed = extracted ? 'live' : 'seed';
+  const cacheFileForSource = {
+    csu_datastat: `csu_${card.id}.json`,
+    csu_sha: `csu_${card.id}.json`,
+    eurostat_jsonstat: `eurostat_${card.id}.json`,
+    oecd: `oecd_${card.id}.json`,
+  }[actualSourceType];
+  const fetchedAt = extracted
+    ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()
+    : (seed?.source?.fetched_at ?? new Date().toISOString());
+
+  return {
+    id: card.id,
+    name: card.name,
+    area: card.area,
+    domain: card.domain,
+    subdomain: card.subdomain,
+    value,
+    unit: card.unit,
+    year,
+    trend,
+    benchmark,
+    signal,
+    source: {
+      name: sourceLabel.name,
+      url: sourceLabel.url,
+      fetched_at: fetchedAt,
+      origin: sourceUsed,
+    },
+    method_card_url: card._method_card_path ?? `indicators/${card.id}.json`,
+  };
+}
+
+// ====== Hlavní transform ======
+
+export async function transform({ outFile = path.join(ROOT, 'data', 'indicators.json') } = {}) {
+  const cards = loadMethodCards();
+  const seed = loadSeedIndicators();
+  const oecdSummary = readCacheFile('oecd_benchmarks.json');
+  const eurostatSummary = readCacheFile('eurostat.json');
+
+  const indicators = cards.map(card =>
+    buildIndicator(card, { seed: seed.get(card.id), oecdSummary, eurostatSummary })
+  );
+
+  // Validace — každý indikátor musí mít minimum povinných polí
+  const errors = [];
+  for (const ind of indicators) {
+    for (const f of ['id', 'name', 'area', 'value', 'unit', 'signal']) {
+      if (ind[f] == null) errors.push(`${ind.id}: chybí pole '${f}'`);
+    }
+  }
+  if (errors.length) {
+    console.error('[transform] validation errors:');
+    errors.forEach(e => console.error('  -', e));
+    throw new Error(`transform: ${errors.length} validation error(s)`);
+  }
+
+  const out = {
+    version: '1.0',
+    generated_at: new Date().toISOString(),
+    indicators,
+  };
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
+  fs.writeFileSync(outFile, JSON.stringify(out, null, 2) + '\n');
+
+  const live = indicators.filter(i => i.source?.origin === 'live').length;
+  console.log(`[transform] wrote ${indicators.length} indicators (${live} from live cache, ${indicators.length - live} from seed)`);
+  return out;
 }
 
 // Entry point pro `npm run transform`
