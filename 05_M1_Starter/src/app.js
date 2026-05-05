@@ -33,6 +33,7 @@ function writeHash() {
   if (activeArea && activeArea !== 'all') p.set('area', activeArea);
   if (activeSearch) p.set('q', activeSearch);
   if (activeSort && activeSort !== 'default') p.set('sort', activeSort);
+  if (activeDomain) p.set('domain', activeDomain);
   const aud = document.body.dataset.audience;
   if (aud && aud !== 'public') p.set('aud', aud);
   const s = p.toString();
@@ -56,7 +57,10 @@ function applyHash(state) {
     const sortSel = document.getElementById('sortSelect');
     if (sortSel) sortSel.value = activeSort;
   }
-  if (state.aud && VALID_AUDIENCES.includes(state.aud)) {
+  if (state.domain) {
+    activeDomain = state.domain;
+  }
+  if (state.aud) {
     document.body.dataset.audience = state.aud;
     document.querySelectorAll('.audience-switch button').forEach(b => {
       const isActive = b.dataset.aud === state.aud;
@@ -335,7 +339,6 @@ function renderSparkline(ind, chartId) {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      animation: chartAnimationOptions(),
       animation: getChartAnimation(),
       plugins: { legend: { display: false }, tooltip: { displayColors: false } },
       scales: {
@@ -458,7 +461,6 @@ function renderRegionDataset(ds) {
     options: {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
-      animation: chartAnimationOptions(),
       animation: getChartAnimation(),
       plugins: {
         legend: { display: false },
@@ -503,7 +505,6 @@ function renderRegionsLegacy(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      animation: chartAnimationOptions(),
       animation: getChartAnimation(),
       plugins: { legend: { display: false } },
       scales: { x: { min: Math.min(...sorted.map(r=>r.value))-1, max: Math.max(...sorted.map(r=>r.value))+1 },
@@ -583,7 +584,7 @@ function renderSourceObj(o) {
 function renderModalContent(card, indicator) {
   const hasChart = Array.isArray(indicator.trend) && indicator.trend.length >= 2;
   return `
-    <h2>${card.name}</h2>
+    <h2 id="modalTitle">${card.name}</h2>
     <div class="sub">${card.area} · ${card.domain}${card.subdomain ? ' · ' + card.subdomain : ''}</div>
     <div class="modal-summary">
       <span class="signal-pill ${indicator.signal}">${indicator.signal}</span>
@@ -704,6 +705,7 @@ async function openMethodCard(indicator) {
     if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
     renderModalChart(indicator);
     renderModalCrossLinks(indicator.id);
+    trapFocus(modal);
     return;
   }
 
@@ -712,6 +714,7 @@ async function openMethodCard(indicator) {
   if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
   renderModalChart(indicator);
   renderModalCrossLinks(indicator.id);
+  trapFocus(modal);
 }
 
 function closeModal() {
@@ -962,7 +965,16 @@ function wireUp() {
   // Audience switch
   document.querySelectorAll('.audience-switch button').forEach(btn => {
     btn.setAttribute('role', 'tab');
-    btn.addEventListener('click', () => setAudience(btn.dataset.aud));
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.audience-switch button').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      document.body.dataset.audience = btn.dataset.aud;
+      writeHash();
+    });
   });
 
   // Area filter
