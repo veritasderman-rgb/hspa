@@ -1,0 +1,30 @@
+{
+  "id": "ockovani_deti_mmr",
+  "name": "Očkování dětí MMR (2. dávka)",
+  "area": "Procesy",
+  "domain": "Prevence",
+  "subdomain": "Imunizace",
+  "definition": "Pokrytí druhou dávkou vakcíny MMR (spalničky, příušnice, zarděnky) u dětí ve věku 5–6 let (před nástupem do školy).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_admin",
+      "note": "MZČR – přehled proočkovanosti dle věkových kohort. Data vykazována krajskými hygienickými stanicemi."
+    },
+    "fallback": {
+      "type": "who_unicef",
+      "note": "WHO/UNICEF Immunization Coverage estimates"
+    }
+  },
+  "benchmark_source": {
+    "type": "who",
+    "code": "MCV2",
+    "dataset": "WHO Global Health Observatory"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["MZČR", "KHS", "SZÚ"],
+  "method_notes": "Cíl WHO pro eliminaci spalniček je 95 % pokrytí 2. dávkou. ČR překračuje průměr OECD díky povinnému očkování.",
+  "limitations": "Pokrytí klesá po zavedení výjimek. Regionální heterogenita – zejm. komunity odmítající očkování."
+}

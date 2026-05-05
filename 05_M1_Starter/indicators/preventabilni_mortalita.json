@@ -1,0 +1,31 @@
+{
+  "id": "preventabilni_mortalita",
+  "name": "Preventabilní mortalita",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Preventabilní a léčitelné příčiny",
+  "definition": "Věkově standardizovaná míra předčasné preventabilní mortality (0–74 let) na 100 000 obyvatel. Zahrnuje příčiny, jimž lze předejít zdravotní politikou a životním stylem.",
+  "unit": "/ 100 000",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "code": "hlth_cd_ynrt",
+      "note": "Eurostat – Avoidable mortality statistics (preventable causes)"
+    },
+    "fallback": {
+      "type": "uzis_nzis",
+      "note": "Příčiny smrti z NZIS, standardizace přes ČSÚ"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_cd_ynrt",
+    "dataset": "Eurostat health statistics"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["Eurostat", "ÚZIS", "ČSÚ"],
+  "method_notes": "Definice preventabilní mortality dle Eurostat / OECD metodiky. Standardizace na evropskou standardní populaci (ESP2013).",
+  "limitations": "Závisí na kvalitě kódování příčin smrti. Dvouletý lag dat z Eurostatu."
+}

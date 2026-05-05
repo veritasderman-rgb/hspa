@@ -1,0 +1,30 @@
+{
+  "id": "hospitalizace_acsc",
+  "name": "Preventabilní hospitalizace (ACSC)",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Primární péče",
+  "definition": "Věkově standardizovaná míra hospitalizací z důvodu ambulantně řešitelných stavů (Ambulatory Care Sensitive Conditions – ACSC) na 100 000 obyvatel. Zahrnuje DM, astma, CHOPN, srdečního selhání a další.",
+  "unit": "/ 100 000",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhosp",
+      "note": "Národní registr hospitalizovaných (NRHOSP), ÚZIS"
+    },
+    "fallback": {
+      "type": "oecd_hcqi",
+      "note": "OECD Health Care Quality Indicators – ACSC module"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HOSACSCOP",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "NRC", "OECD"],
+  "method_notes": "Proxy ukazatel výkonnosti primární péče. Vysoká hodnota naznačuje nedostatečnou péči v ambulantním sektoru.",
+  "limitations": "Ovlivněno věkovou strukturou, mírou hospitalizační kultury a dostupností ambulantní péče v regionech."
+}

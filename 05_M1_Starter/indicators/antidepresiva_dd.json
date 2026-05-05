@@ -1,0 +1,30 @@
+{
+  "id": "antidepresiva_dd",
+  "name": "Preskripce antidepresiv",
+  "area": "Struktury",
+  "domain": "Farmakoterapie",
+  "subdomain": "Psychofarmaka",
+  "definition": "Roční spotřeba antidepresiv (ATC N06A) vyjádřená v definovaných denních dávkách (DDD) na 1 000 obyvatel za den. Zahrnuje léčiva vykázaná v ambulantním sektoru.",
+  "unit": "DDD / 1 000 / den",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "sukl",
+      "note": "SÚKL – Spotřeba léčiv. Databáze ambulantní preskripce dostupná ročně."
+    },
+    "fallback": {
+      "type": "oecd_pharma",
+      "note": "OECD Pharmaceutical Data (OECD.Stat) – antidepressants"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ANTIDEPR",
+    "dataset": "OECD Pharma"
+  },
+  "signal_thresholds": { "good": 10.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["SÚKL", "OECD"],
+  "method_notes": "Rostoucí preskripce odráží jak nárůst duševních onemocnění, tak lepší diagnostiku a dostupnost léčby. Kontextový ukazatel – nelze hodnotit jako 'dobré' nebo 'špatné' izolovaně.",
+  "limitations": "Neodráží hospitalizační spotřebu. DDD je farmakologická definice, která nemusí odpovídat klinicky podávaným dávkám."
+}

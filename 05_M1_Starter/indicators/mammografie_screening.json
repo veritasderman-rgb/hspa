@@ -1,0 +1,31 @@
+{
+  "id": "mammografie_screening",
+  "name": "Pokrytí mammografickým screeningem (50–69)",
+  "area": "Procesy",
+  "domain": "Prevence",
+  "subdomain": "Screeningové programy",
+  "definition": "Podíl žen ve věku 50–69 let, které absolvovaly mammografické vyšetření v rámci národního screeningového programu rakoviny prsu za posledních 24 měsíců.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_admin",
+      "note": "MZČR / pojišťovny – administrativní data o vykázaných mammografiích. Koordinátor: Referenční centrum mammárního screeningu."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_ps_scre",
+      "note": "Eurostat – Cancer screening statistics"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MAMMOGSCRN",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["MZČR", "ÚZIS", "pojišťovny"],
+  "method_notes": "Screening probíhá každé 2 roky od 45 let (ČR od 2023). Výsledky zahrnuty v OECD HCQI.",
+  "limitations": "Pokrytí zahrnuje pouze organizovaný screening, ne příležitostné mammografie. Může nadhodnocovat skutečné pokrytí cílové populace."
+}

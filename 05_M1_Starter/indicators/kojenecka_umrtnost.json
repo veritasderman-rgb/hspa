@@ -1,0 +1,33 @@
+{
+  "id": "kojenecka_umrtnost",
+  "name": "Kojenecká úmrtnost",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Perinatální zdraví",
+  "definition": "Počet zemřelých dětí do 1 roku věku na 1 000 živě narozených ve sledovaném roce.",
+  "unit": "/ 1 000 živě narozených",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/...",
+      "dataset": "DEM_KOJEN",
+      "note": "Zemřelí kojenci, ČSÚ – roční statistika přirozené měny"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "MATIMORTR",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "MATIMORTR",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ČSÚ", "ÚZIS"],
+  "method_notes": "Standardní definice WHO. ČR patří dlouhodobě k nejlepším zemím OECD v tomto ukazateli.",
+  "limitations": "Malé absolutní počty způsobují statistickou nestabilitu v krajských srovnáních. Nezachycuje perinatální morbiditu."
+}

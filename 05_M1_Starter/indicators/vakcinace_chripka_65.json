@@ -1,0 +1,30 @@
+{
+  "id": "vakcinace_chripka_65",
+  "name": "Vakcinace proti chřipce (65+)",
+  "area": "Procesy",
+  "domain": "Prevence",
+  "subdomain": "Imunizace",
+  "definition": "Podíl osob ve věku 65 a více let, kteří byli očkováni proti sezónní chřipce v posledním roce.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_admin",
+      "note": "Administrativní data pojišťoven (VZP, SZP) o vykázaných vakcinacích. ÚZIS agreguje."
+    },
+    "fallback": {
+      "type": "ehis",
+      "note": "EHIS modul preventivní péče – self-reported"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "INFLUVACOLD",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "ÚZIS", "pojišťovny"],
+  "method_notes": "Cíl WHO pro sezónní vakcinaci seniorů je 75 %. ČR je pod průměrem OECD. Stimulace v podobě úhrad pojišťoven od 2023.",
+  "limitations": "Administrativní data zahrnují jen pojištěnce s vykázanou vakcinací; neformální vakcinace (v zahraničí, bez vykazování) nejsou zachyceny."
+}

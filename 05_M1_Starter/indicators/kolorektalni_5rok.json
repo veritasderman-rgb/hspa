@@ -1,0 +1,31 @@
+{
+  "id": "kolorektalni_5rok",
+  "name": "5leté přežití kolorektálního karcinomu",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Onkologická péče",
+  "definition": "Relativní 5leté přežití pacientů s kolorektálním karcinomem (C18–C20) diagnostikovaným v daném období. Počítáno jako pravděpodobnost přežití 5 let u onkologicky nemocných vs. srovnatelná obecná populace.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "svod",
+      "note": "Systém pro vizualizaci onkologických dat (SVOD), NOR – Národní onkologický registr, ÚZIS"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "COLRECTAL5YR",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "COLRECTAL5YR",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "NOR", "OECD"],
+  "method_notes": "Relativní přežití eliminuje vliv obecné mortality. Data zpracovávána s 3–4letým lagem kvůli sledovacímu horizontu.",
+  "limitations": "Lead-time bias u screeningem zachycených nádorů. Vliv imunosupresivu a biologické léčby na srovnatelnost."
+}

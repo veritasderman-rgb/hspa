@@ -1,0 +1,31 @@
+{
+  "id": "nenaplnene_potreby",
+  "name": "Nenaplněné potřeby zdravotní péče",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Rovný přístup",
+  "definition": "Podíl osob (16+), které uvedly, že potřebovaly lékařské vyšetření nebo ošetření, ale nemohly jej využít – z důvodu nákladů, čekací doby nebo vzdálenosti.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_eusilc",
+      "code": "hlth_silc_08",
+      "note": "Eurostat – EU Statistics on Income and Living Conditions (EU-SILC)"
+    },
+    "fallback": {
+      "type": "ehis",
+      "note": "EHIS moduly o přístupu ke zdravotní péči"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_silc_08",
+    "dataset": "EU-SILC"
+  },
+  "signal_thresholds": { "good": 20.0, "warn": 30.0 },
+  "frequency": "yearly",
+  "stewards": ["Eurostat", "ČSÚ"],
+  "method_notes": "Subjektivní ukazatel; respondenti mohou mít různé standardy pro definici 'potřeby'. ČR vykazuje hodnoty výrazně pod průměrem EU.",
+  "limitations": "Sebeselectivní bias – osoby bez péče nemusejí vědět, co potřebují. Nevykazuje důvody nenaplnění odděleně."
+}

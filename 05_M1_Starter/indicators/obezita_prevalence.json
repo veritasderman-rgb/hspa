@@ -1,0 +1,30 @@
+{
+  "id": "obezita_prevalence",
+  "name": "Prevalence obezity (BMI ≥ 30)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky",
+  "definition": "Podíl dospělé populace (18+) s indexem tělesné hmotnosti (BMI) ≥ 30 kg/m². Hodnoty z měřeného šetření EHES.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ehes",
+      "note": "European Health Examination Survey (EHES), SZÚ – měřené hodnoty výšky a váhy"
+    },
+    "fallback": {
+      "type": "ehis",
+      "note": "European Health Interview Survey – self-reported data (nižší přesnost)"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "OBESITAT",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "5 let (EHES cyklus)",
+  "stewards": ["SZÚ", "OECD"],
+  "method_notes": "Preferovány měřené hodnoty před self-reported. Trend interpolován mezi EHES vlnami.",
+  "limitations": "Pětileté cykly EHES neumožňují roční sledování. Sebepokytí EHIS systematicky podhodnocuje obezitu."
+}

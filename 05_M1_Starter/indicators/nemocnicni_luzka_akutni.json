@@ -1,0 +1,31 @@
+{
+  "id": "nemocnicni_luzka_akutni",
+  "name": "Nemocniční lůžka akutní péče / 1 000",
+  "area": "Struktury",
+  "domain": "Fyzická infrastruktura",
+  "subdomain": "Lůžková kapacita",
+  "definition": "Počet nemocničních lůžek akutní péče (acute care beds) na 1 000 obyvatel. Nezahrnuje lůžka dlouhodobé péče, LDN a psychiatrická.",
+  "unit": "/ 1 000",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "note": "Národní registr poskytovatelů zdravotních služeb (NRPZS), ÚZIS – kapacity lůžek dle druhu péče"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "HOSPBED",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HOSPBED",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZČR"],
+  "method_notes": "ČR má nadprůměrné lůžkové kapacity v kontextu OECD. Vysoký počet lůžek sám o sobě neznamená vyšší výkonnost – záleží na využití a délce pobytu.",
+  "limitations": "Kontextově závislý ukazatel: vysoký počet lůžek může odrážet nadkapacitu nebo naopak vysokou potřebu. Nepřímý zástupce za efektivitu."
+}

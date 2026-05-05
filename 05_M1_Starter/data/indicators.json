@@ -1,7 +1,7 @@
 {
-  "version": "1.0",
-  "generated_at": "2026-05-04T06:00:00Z",
-  "_note": "M1 starter dataset. 10 vzorových indikátorů s hodnotami inspirovanými OECD Health at a Glance 2025 a NZIS. V M5 budou hodnoty počítány z živých zdrojů.",
+  "version": "1.1",
+  "generated_at": "2026-05-05T08:00:00Z",
+  "_note": "M1 dataset – 25 vzorových indikátorů pokrývající všechny 4 oblasti HSPA. Hodnoty inspirovány OECD Health at a Glance 2025 a NZIS. Živá API v M5.",
   "indicators": [
     {
       "id": "nadeje_doziti_total",
@@ -24,7 +24,7 @@
       "source": {
         "name": "ČSÚ · DataStat",
         "url": "https://csu.gov.cz/zemreli-nadeje-doziti-priciny-smrti",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
       "method_card_url": "indicators/nadeje_doziti_total.json"
     },
@@ -49,159 +49,109 @@
       "source": {
         "name": "Eurostat · HLY (EU-SILC)",
         "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
       "method_card_url": "indicators/nadeje_doziti_zdravi_65.json"
     },
     {
-      "id": "mortalita_30d_ami",
-      "name": "30denní úmrtnost po IM (AMI)",
-      "area": "Výstupy",
-      "domain": "Kvalita péče",
-      "subdomain": "Klinická efektivnost",
-      "value": 5.2,
-      "unit": "%",
+      "id": "kojenecka_umrtnost",
+      "name": "Kojenecká úmrtnost",
+      "area": "Výsledky",
+      "domain": "Zdravotní stav",
+      "subdomain": "Perinatální zdraví",
+      "value": 2.5,
+      "unit": "/ 1 000 živě nar.",
       "year": 2024,
       "trend": [
-        { "year": 2020, "value": 6.1 },
-        { "year": 2021, "value": 5.8 },
-        { "year": 2022, "value": 5.5 },
-        { "year": 2023, "value": 5.3 },
-        { "year": 2024, "value": 5.2 }
+        { "year": 2020, "value": 2.7 },
+        { "year": 2021, "value": 2.6 },
+        { "year": 2022, "value": 2.5 },
+        { "year": 2023, "value": 2.5 },
+        { "year": 2024, "value": 2.5 }
       ],
-      "benchmark": { "oecd": 6.5, "eu": 6.7 },
+      "benchmark": { "oecd": 4.1, "eu": 3.5 },
       "signal": "good",
       "source": {
-        "name": "NRC · NRHOSP",
-        "url": "https://www.nrc.cz/",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "name": "ČSÚ · NZIS",
+        "url": "https://csu.gov.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
-      "method_card_url": "indicators/mortalita_30d_ami.json"
+      "method_card_url": "indicators/kojenecka_umrtnost.json"
     },
     {
-      "id": "mortalita_30d_cmp",
-      "name": "30denní úmrtnost po cévní mozkové příhodě",
-      "area": "Výstupy",
-      "domain": "Kvalita péče",
-      "subdomain": "Klinická efektivnost",
-      "value": 11.2,
-      "unit": "%",
-      "year": 2024,
+      "id": "preventabilni_mortalita",
+      "name": "Preventabilní mortalita",
+      "area": "Výsledky",
+      "domain": "Zdravotní stav",
+      "subdomain": "Preventabilní a léčitelné příčiny",
+      "value": 148,
+      "unit": "/ 100 000",
+      "year": 2023,
       "trend": [
-        { "year": 2020, "value": 13.8 },
-        { "year": 2021, "value": 12.9 },
-        { "year": 2022, "value": 12.0 },
-        { "year": 2023, "value": 11.5 },
-        { "year": 2024, "value": 11.2 }
+        { "year": 2019, "value": 165 },
+        { "year": 2020, "value": 161 },
+        { "year": 2021, "value": 155 },
+        { "year": 2022, "value": 151 },
+        { "year": 2023, "value": 148 }
       ],
-      "benchmark": { "oecd": 7.7, "eu": 8.5 },
+      "benchmark": { "oecd": 127, "eu": 133 },
       "signal": "bad",
       "source": {
-        "name": "NRC · NRHOSP",
-        "url": "https://www.nrc.cz/",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "name": "Eurostat · Avoidable mortality",
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_ynrt/default/table",
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
-      "method_card_url": "indicators/mortalita_30d_cmp.json"
+      "method_card_url": "indicators/preventabilni_mortalita.json"
     },
     {
-      "id": "spokojenost_pece",
-      "name": "Spokojenost s dostupností péče",
-      "area": "Výstupy",
-      "domain": "Dostupnost péče",
-      "subdomain": "Subjektivní spokojenost",
-      "value": 75,
+      "id": "obezita_prevalence",
+      "name": "Prevalence obezity (BMI ≥ 30)",
+      "area": "Výsledky",
+      "domain": "Zdravotní rizika",
+      "subdomain": "Rizikové zvyky",
+      "value": 23.1,
       "unit": "%",
       "year": 2024,
       "trend": [
-        { "year": 2020, "value": 72 },
-        { "year": 2021, "value": 73 },
-        { "year": 2022, "value": 74 },
-        { "year": 2023, "value": 75 },
-        { "year": 2024, "value": 75 }
+        { "year": 2020, "value": 21.5 },
+        { "year": 2021, "value": 22.0 },
+        { "year": 2022, "value": 22.4 },
+        { "year": 2023, "value": 22.8 },
+        { "year": 2024, "value": 23.1 }
       ],
-      "benchmark": { "oecd": 64, "eu": 67 },
-      "signal": "good",
+      "benchmark": { "oecd": 19.9, "eu": 17.3 },
+      "signal": "bad",
       "source": {
-        "name": "OECD Health at a Glance",
+        "name": "EHES · SZÚ",
+        "url": "https://szu.gov.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/obezita_prevalence.json"
+    },
+    {
+      "id": "alkohol_spotreba",
+      "name": "Spotřeba alkoholu",
+      "area": "Výsledky",
+      "domain": "Zdravotní rizika",
+      "subdomain": "Rizikové zvyky",
+      "value": 11.9,
+      "unit": "l / obyvatel / rok",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 12.4 },
+        { "year": 2021, "value": 12.2 },
+        { "year": 2022, "value": 12.0 },
+        { "year": 2023, "value": 11.9 },
+        { "year": 2024, "value": 11.9 }
+      ],
+      "benchmark": { "oecd": 8.7, "eu": 9.3 },
+      "signal": "bad",
+      "source": {
+        "name": "OECD Health · WHO GISAH",
         "url": "https://www.oecd.org/health/health-at-a-glance/",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
-      "method_card_url": "indicators/spokojenost_pece.json"
-    },
-    {
-      "id": "lekari_per_1000",
-      "name": "Praktikující lékaři / 1 000 obyvatel",
-      "area": "Struktury",
-      "domain": "Pracovní síla",
-      "subdomain": "Současné kapacity",
-      "value": 4.2,
-      "unit": "/ 1 000",
-      "year": 2024,
-      "trend": [
-        { "year": 2020, "value": 4.0 },
-        { "year": 2021, "value": 4.1 },
-        { "year": 2022, "value": 4.1 },
-        { "year": 2023, "value": 4.2 },
-        { "year": 2024, "value": 4.2 }
-      ],
-      "benchmark": { "oecd": 3.9, "eu": 4.0 },
-      "signal": "good",
-      "source": {
-        "name": "ÚZIS · NRZP",
-        "url": "https://www.uzis.cz/",
-        "fetched_at": "2026-05-04T06:00:00Z"
-      },
-      "method_card_url": "indicators/lekari_per_1000.json"
-    },
-    {
-      "id": "sestry_per_1000",
-      "name": "Praktikující sestry / 1 000 obyvatel",
-      "area": "Struktury",
-      "domain": "Pracovní síla",
-      "subdomain": "Současné kapacity",
-      "value": 9.0,
-      "unit": "/ 1 000",
-      "year": 2024,
-      "trend": [
-        { "year": 2020, "value": 9.2 },
-        { "year": 2021, "value": 9.1 },
-        { "year": 2022, "value": 9.0 },
-        { "year": 2023, "value": 9.0 },
-        { "year": 2024, "value": 9.0 }
-      ],
-      "benchmark": { "oecd": 9.2, "eu": 8.5 },
-      "signal": "warn",
-      "source": {
-        "name": "ÚZIS · NRZP",
-        "url": "https://www.uzis.cz/",
-        "fetched_at": "2026-05-04T06:00:00Z"
-      },
-      "method_card_url": "indicators/sestry_per_1000.json"
-    },
-    {
-      "id": "vydaje_zdravotnictvi_hdp",
-      "name": "Výdaje na zdravotnictví / HDP",
-      "area": "Výstupy",
-      "domain": "Finanční stabilita",
-      "subdomain": "Fiskální udržitelnost",
-      "value": 8.5,
-      "unit": "%",
-      "year": 2024,
-      "trend": [
-        { "year": 2020, "value": 9.2 },
-        { "year": 2021, "value": 8.9 },
-        { "year": 2022, "value": 8.7 },
-        { "year": 2023, "value": 8.5 },
-        { "year": 2024, "value": 8.5 }
-      ],
-      "benchmark": { "oecd": 9.3, "eu": 10.4 },
-      "signal": "warn",
-      "source": {
-        "name": "OECD SHA · ČSÚ",
-        "url": "https://www.oecd.org/health/health-data.htm",
-        "fetched_at": "2026-05-04T06:00:00Z"
-      },
-      "method_card_url": "indicators/vydaje_zdravotnictvi_hdp.json"
+      "method_card_url": "indicators/alkohol_spotreba.json"
     },
     {
       "id": "pm25_expozice",
@@ -224,7 +174,7 @@
       "source": {
         "name": "EEA · ČHMÚ",
         "url": "https://www.eea.europa.eu/data-and-maps/dashboards/air-quality-statistics",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
       "method_card_url": "indicators/pm25_expozice.json"
     },
@@ -249,9 +199,434 @@
       "source": {
         "name": "EHIS · SZÚ",
         "url": "https://szu.gov.cz/",
-        "fetched_at": "2026-05-04T06:00:00Z"
+        "fetched_at": "2026-05-05T08:00:00Z"
       },
       "method_card_url": "indicators/kuractvi_denni.json"
+    },
+    {
+      "id": "mortalita_30d_ami",
+      "name": "30denní úmrtnost po IM (AMI)",
+      "area": "Výstupy",
+      "domain": "Kvalita péče",
+      "subdomain": "Klinická efektivnost",
+      "value": 5.2,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 6.1 },
+        { "year": 2021, "value": 5.8 },
+        { "year": 2022, "value": 5.5 },
+        { "year": 2023, "value": 5.3 },
+        { "year": 2024, "value": 5.2 }
+      ],
+      "benchmark": { "oecd": 6.5, "eu": 6.7 },
+      "signal": "good",
+      "source": {
+        "name": "NRC · NRHOSP",
+        "url": "https://www.nrc.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/mortalita_30d_ami.json"
+    },
+    {
+      "id": "mortalita_30d_cmp",
+      "name": "30denní úmrtnost po CMP",
+      "area": "Výstupy",
+      "domain": "Kvalita péče",
+      "subdomain": "Klinická efektivnost",
+      "value": 11.2,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 13.8 },
+        { "year": 2021, "value": 12.9 },
+        { "year": 2022, "value": 12.0 },
+        { "year": 2023, "value": 11.5 },
+        { "year": 2024, "value": 11.2 }
+      ],
+      "benchmark": { "oecd": 7.7, "eu": 8.5 },
+      "signal": "bad",
+      "source": {
+        "name": "NRC · NRHOSP",
+        "url": "https://www.nrc.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/mortalita_30d_cmp.json"
+    },
+    {
+      "id": "spokojenost_pece",
+      "name": "Spokojenost s dostupností péče",
+      "area": "Výstupy",
+      "domain": "Dostupnost péče",
+      "subdomain": "Subjektivní spokojenost",
+      "value": 75,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 72 },
+        { "year": 2021, "value": 73 },
+        { "year": 2022, "value": 74 },
+        { "year": 2023, "value": 75 },
+        { "year": 2024, "value": 75 }
+      ],
+      "benchmark": { "oecd": 64, "eu": 67 },
+      "signal": "good",
+      "source": {
+        "name": "OECD Health at a Glance",
+        "url": "https://www.oecd.org/health/health-at-a-glance/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/spokojenost_pece.json"
+    },
+    {
+      "id": "vydaje_zdravotnictvi_hdp",
+      "name": "Výdaje na zdravotnictví / HDP",
+      "area": "Výstupy",
+      "domain": "Finanční stabilita",
+      "subdomain": "Fiskální udržitelnost",
+      "value": 8.5,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 9.2 },
+        { "year": 2021, "value": 8.9 },
+        { "year": 2022, "value": 8.7 },
+        { "year": 2023, "value": 8.5 },
+        { "year": 2024, "value": 8.5 }
+      ],
+      "benchmark": { "oecd": 9.3, "eu": 10.4 },
+      "signal": "warn",
+      "source": {
+        "name": "OECD SHA · ČSÚ",
+        "url": "https://www.oecd.org/health/health-data.htm",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/vydaje_zdravotnictvi_hdp.json"
+    },
+    {
+      "id": "nenaplnene_potreby",
+      "name": "Nenaplněné potřeby zdravotní péče",
+      "area": "Výstupy",
+      "domain": "Dostupnost péče",
+      "subdomain": "Rovný přístup",
+      "value": 1.4,
+      "unit": "%",
+      "year": 2023,
+      "trend": [
+        { "year": 2019, "value": 1.7 },
+        { "year": 2020, "value": 1.6 },
+        { "year": 2021, "value": 1.5 },
+        { "year": 2022, "value": 1.4 },
+        { "year": 2023, "value": 1.4 }
+      ],
+      "benchmark": { "eu": 2.1 },
+      "signal": "good",
+      "source": {
+        "name": "Eurostat · EU-SILC",
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_08/default/table",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/nenaplnene_potreby.json"
+    },
+    {
+      "id": "hospitalizace_acsc",
+      "name": "Preventabilní hospitalizace (ACSC)",
+      "area": "Výstupy",
+      "domain": "Kvalita péče",
+      "subdomain": "Primární péče",
+      "value": 285,
+      "unit": "/ 100 000",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 310 },
+        { "year": 2021, "value": 305 },
+        { "year": 2022, "value": 295 },
+        { "year": 2023, "value": 288 },
+        { "year": 2024, "value": 285 }
+      ],
+      "benchmark": { "oecd": 215, "eu": 230 },
+      "signal": "bad",
+      "source": {
+        "name": "OECD HCQI · NRC",
+        "url": "https://www.oecd.org/health/health-care-quality/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/hospitalizace_acsc.json"
+    },
+    {
+      "id": "kolorektalni_5rok",
+      "name": "5leté přežití kolorektálního karcinomu",
+      "area": "Výstupy",
+      "domain": "Kvalita péče",
+      "subdomain": "Onkologická péče",
+      "value": 62.0,
+      "unit": "%",
+      "year": 2023,
+      "trend": [
+        { "year": 2019, "value": 59.5 },
+        { "year": 2020, "value": 60.1 },
+        { "year": 2021, "value": 60.8 },
+        { "year": 2022, "value": 61.5 },
+        { "year": 2023, "value": 62.0 }
+      ],
+      "benchmark": { "oecd": 64.0, "eu": 63.2 },
+      "signal": "warn",
+      "source": {
+        "name": "SVOD · NOR · OECD",
+        "url": "https://www.svod.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/kolorektalni_5rok.json"
+    },
+    {
+      "id": "vydaje_hlava_usd",
+      "name": "Výdaje na zdravotnictví / hlavu",
+      "area": "Výstupy",
+      "domain": "Finanční stabilita",
+      "subdomain": "Fiskální udržitelnost",
+      "value": 3280,
+      "unit": "USD PPP",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 2950 },
+        { "year": 2021, "value": 3050 },
+        { "year": 2022, "value": 3120 },
+        { "year": 2023, "value": 3210 },
+        { "year": 2024, "value": 3280 }
+      ],
+      "benchmark": { "oecd": 4986, "eu": 4502 },
+      "signal": "bad",
+      "source": {
+        "name": "OECD SHA · ČSÚ",
+        "url": "https://www.oecd.org/health/health-data.htm",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/vydaje_hlava_usd.json"
+    },
+    {
+      "id": "vakcinace_chripka_65",
+      "name": "Vakcinace proti chřipce (65+)",
+      "area": "Procesy",
+      "domain": "Prevence",
+      "subdomain": "Imunizace",
+      "value": 45.2,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 42.5 },
+        { "year": 2021, "value": 43.1 },
+        { "year": 2022, "value": 44.0 },
+        { "year": 2023, "value": 44.7 },
+        { "year": 2024, "value": 45.2 }
+      ],
+      "benchmark": { "oecd": 58.0, "eu": 52.4 },
+      "signal": "bad",
+      "source": {
+        "name": "EHIS · SZÚ · pojišťovny",
+        "url": "https://szu.gov.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/vakcinace_chripka_65.json"
+    },
+    {
+      "id": "ockovani_deti_mmr",
+      "name": "Očkování dětí MMR (2. dávka)",
+      "area": "Procesy",
+      "domain": "Prevence",
+      "subdomain": "Imunizace",
+      "value": 96.2,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 97.1 },
+        { "year": 2021, "value": 96.8 },
+        { "year": 2022, "value": 96.5 },
+        { "year": 2023, "value": 96.3 },
+        { "year": 2024, "value": 96.2 }
+      ],
+      "benchmark": { "oecd": 92.5, "eu": 93.0 },
+      "signal": "good",
+      "source": {
+        "name": "ÚZIS · MZČR",
+        "url": "https://www.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/ockovani_deti_mmr.json"
+    },
+    {
+      "id": "mammografie_screening",
+      "name": "Pokrytí mammografickým screeningem (50–69)",
+      "area": "Procesy",
+      "domain": "Prevence",
+      "subdomain": "Screeningové programy",
+      "value": 68.0,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 63.5 },
+        { "year": 2021, "value": 65.0 },
+        { "year": 2022, "value": 66.2 },
+        { "year": 2023, "value": 67.1 },
+        { "year": 2024, "value": 68.0 }
+      ],
+      "benchmark": { "oecd": 65.0, "eu": 68.5 },
+      "signal": "good",
+      "source": {
+        "name": "SVOD · ÚZIS",
+        "url": "https://www.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/mammografie_screening.json"
+    },
+    {
+      "id": "konzultace_praktik_rocne",
+      "name": "Konzultace u praktického lékaře / osobu / rok",
+      "area": "Procesy",
+      "domain": "Primární péče",
+      "subdomain": "Využití péče",
+      "value": 11.2,
+      "unit": "/ osobu / rok",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 10.5 },
+        { "year": 2021, "value": 10.7 },
+        { "year": 2022, "value": 11.0 },
+        { "year": 2023, "value": 11.1 },
+        { "year": 2024, "value": 11.2 }
+      ],
+      "benchmark": { "oecd": 6.7, "eu": 7.5 },
+      "signal": "neutral",
+      "source": {
+        "name": "ÚZIS · NZIS výkazy",
+        "url": "https://www.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/konzultace_praktik_rocne.json"
+    },
+    {
+      "id": "cekaci_doby_planovane",
+      "name": "Čekací doby na plánovaný výkon",
+      "area": "Procesy",
+      "domain": "Včasnost péče",
+      "subdomain": "Čekací doby",
+      "value": 52,
+      "unit": "dní (medián)",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 68 },
+        { "year": 2021, "value": 63 },
+        { "year": 2022, "value": 58 },
+        { "year": 2023, "value": 54 },
+        { "year": 2024, "value": 52 }
+      ],
+      "benchmark": { "oecd": 40, "eu": 44 },
+      "signal": "bad",
+      "source": {
+        "name": "VZP · SZP · MZČR",
+        "url": "https://www.mzcr.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/cekaci_doby_planovane.json"
+    },
+    {
+      "id": "lekari_per_1000",
+      "name": "Praktikující lékaři / 1 000 obyvatel",
+      "area": "Struktury",
+      "domain": "Pracovní síla",
+      "subdomain": "Současné kapacity",
+      "value": 4.2,
+      "unit": "/ 1 000",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 4.0 },
+        { "year": 2021, "value": 4.1 },
+        { "year": 2022, "value": 4.1 },
+        { "year": 2023, "value": 4.2 },
+        { "year": 2024, "value": 4.2 }
+      ],
+      "benchmark": { "oecd": 3.9, "eu": 4.0 },
+      "signal": "good",
+      "source": {
+        "name": "ÚZIS · NRZP",
+        "url": "https://www.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/lekari_per_1000.json"
+    },
+    {
+      "id": "sestry_per_1000",
+      "name": "Praktikující sestry / 1 000 obyvatel",
+      "area": "Struktury",
+      "domain": "Pracovní síla",
+      "subdomain": "Současné kapacity",
+      "value": 9.0,
+      "unit": "/ 1 000",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 9.2 },
+        { "year": 2021, "value": 9.1 },
+        { "year": 2022, "value": 9.0 },
+        { "year": 2023, "value": 9.0 },
+        { "year": 2024, "value": 9.0 }
+      ],
+      "benchmark": { "oecd": 9.2, "eu": 8.5 },
+      "signal": "warn",
+      "source": {
+        "name": "ÚZIS · NRZP",
+        "url": "https://www.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/sestry_per_1000.json"
+    },
+    {
+      "id": "nemocnicni_luzka_akutni",
+      "name": "Nemocniční lůžka akutní péče / 1 000",
+      "area": "Struktury",
+      "domain": "Fyzická infrastruktura",
+      "subdomain": "Lůžková kapacita",
+      "value": 4.2,
+      "unit": "/ 1 000",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 4.5 },
+        { "year": 2021, "value": 4.4 },
+        { "year": 2022, "value": 4.3 },
+        { "year": 2023, "value": 4.2 },
+        { "year": 2024, "value": 4.2 }
+      ],
+      "benchmark": { "oecd": 3.5, "eu": 3.8 },
+      "signal": "neutral",
+      "source": {
+        "name": "ÚZIS · NRPZS",
+        "url": "https://nrpzs.uzis.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/nemocnicni_luzka_akutni.json"
+    },
+    {
+      "id": "antidepresiva_dd",
+      "name": "Preskripce antidepresiv",
+      "area": "Struktury",
+      "domain": "Farmakoterapie",
+      "subdomain": "Psychofarmaka",
+      "value": 89,
+      "unit": "DDD / 1 000 / den",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 78 },
+        { "year": 2021, "value": 82 },
+        { "year": 2022, "value": 85 },
+        { "year": 2023, "value": 87 },
+        { "year": 2024, "value": 89 }
+      ],
+      "benchmark": { "oecd": 95, "eu": 88 },
+      "signal": "neutral",
+      "source": {
+        "name": "SÚKL · OECD Pharma",
+        "url": "https://www.sukl.cz/",
+        "fetched_at": "2026-05-05T08:00:00Z"
+      },
+      "method_card_url": "indicators/antidepresiva_dd.json"
     }
   ]
 }

@@ -1,0 +1,31 @@
+{
+  "id": "alkohol_spotreba",
+  "name": "Spotřeba alkoholu",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky",
+  "definition": "Průměrná roční spotřeba čistého lihu (etanolu) na obyvatele staršího 15 let v litrech. Zahrnuje zaznamenanou i odhadnutou nezaznamenanou spotřebu.",
+  "unit": "l / obyvatel / rok",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "who_gisah",
+      "note": "WHO Global Information System on Alcohol and Health (GISAH)"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "ALCCONSUM",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "ALCCONSUM",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["WHO", "OECD", "SZÚ"],
+  "method_notes": "ČR patří dlouhodobě mezi světové špičky ve spotřebě alkoholu. Odhad nezaznamenané spotřeby tvoří cca 20 % celkové hodnoty.",
+  "limitations": "Turistický turismus a přeshraniční nákupy mohou zkreslovat výsledky. Nezachycuje vzorce konzumace (binge drinking)."
+}

@@ -1,0 +1,30 @@
+{
+  "id": "cekaci_doby_planovane",
+  "name": "Čekací doby na plánovaný výkon",
+  "area": "Procesy",
+  "domain": "Včasnost péče",
+  "subdomain": "Čekací doby",
+  "definition": "Medián čekací doby (ve dnech) od odeslání pacientem praktickým lékařem do provedení plánovaného elektivního výkonu (katarakta, endoprotéza kyčle, koronární bypass).",
+  "unit": "dní (medián)",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_admin",
+      "note": "MZČR – centrální evidence čekacích dob nemocnic (§ 46 zák. 372/2011 Sb.)"
+    },
+    "fallback": {
+      "type": "oecd_hcqi",
+      "note": "OECD Waiting Times module"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITCATAR",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 10.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["MZČR", "OECD"],
+  "method_notes": "Průměr ze tří sledovaných výkonů. Povinné zveřejňování čekacích dob od 2013 – zlepšení srovnatelnosti. Absolutní hodnota závisí na výběru výkonů.",
+  "limitations": "Nemocnice vykazují data různě. Soukromý sektor může zkracovat doby, ale data jsou méně dostupná."
+}

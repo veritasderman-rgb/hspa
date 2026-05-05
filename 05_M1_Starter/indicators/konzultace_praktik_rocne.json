@@ -1,0 +1,31 @@
+{
+  "id": "konzultace_praktik_rocne",
+  "name": "Konzultace u praktického lékaře / osobu / rok",
+  "area": "Procesy",
+  "domain": "Primární péče",
+  "subdomain": "Využití péče",
+  "definition": "Průměrný počet návštěv u praktického lékaře (všeobecné nebo dětské medicíny) na jednoho obyvatele za rok. Zahrnuje fyzické i telemedicínské konzultace.",
+  "unit": "/ osobu / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "note": "ÚZIS – výkazy ambulantní péče praktických lékařů (A1, A2)"
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "DOCTCONS",
+      "dataset": "HEALTH_STAT"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DOCTCONS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "OECD"],
+  "method_notes": "ČR má jednu z nejvyšších frekvencí konzultací v OECD. Může odrážet nižší roli sestry v primární péči nebo nedostatečný gatekeeper systém.",
+  "limitations": "Definice 'konzultace' se mezinárodně liší. Telefonické / telemedicínské konzultace nejsou v historických datech konzistentně zachyceny."
+}

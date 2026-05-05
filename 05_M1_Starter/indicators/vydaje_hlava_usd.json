@@ -1,0 +1,31 @@
+{
+  "id": "vydaje_hlava_usd",
+  "name": "Výdaje na zdravotnictví / hlavu",
+  "area": "Výstupy",
+  "domain": "Finanční stabilita",
+  "subdomain": "Fiskální udržitelnost",
+  "definition": "Celkové výdaje na zdravotní péči na jednoho obyvatele, vyjádřené v USD přepočtených paritou kupní síly (PPP). Zahrnuje veřejné i soukromé výdaje.",
+  "unit": "USD PPP",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_sha",
+      "code": "HLTEXPPC",
+      "note": "OECD System of Health Accounts (SHA) – per capita expenditure"
+    },
+    "fallback": {
+      "type": "csu",
+      "note": "ČSÚ – Satelitní účet zdravotnictví"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HLTEXPPC",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 20.0 },
+  "frequency": "yearly",
+  "stewards": ["OECD", "ČSÚ", "MZČR"],
+  "method_notes": "PPP korekce umožňuje mezinárodní srovnání. ČR vynakládá výrazně méně než průměr OECD, ačkoli je to z části dáno nižší cenovou úrovní.",
+  "limitations": "PPP zachycuje cenové rozdíly, nikoli vstupy v naturálním vyjádření. Nezohledňuje efektivitu výdajů."
+}

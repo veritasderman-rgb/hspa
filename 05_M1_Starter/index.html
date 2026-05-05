@@ -49,13 +49,43 @@
     <strong>Pohled tvůrce politik.</strong> Indikátory navázané na strategické cíle Zdraví 2030 a Strategický rámec do 2035.
   </div>
 
+  <!-- Souhrnný panel signálů -->
+  <div class="summary-bar" id="summaryBar" aria-label="Přehled hodnocení indikátorů"></div>
+
   <section class="section">
     <div class="section-title">
       <h3 id="gridTitle">Všechny indikátory</h3>
       <span class="badge" id="gridBadge">0 indikátorů</span>
       <span class="desc">Filtrujte výběrem oblasti v navigaci výše</span>
+      <div class="search-wrap">
+        <input type="search" id="searchInput" class="search-input"
+               placeholder="Hledat indikátor…" aria-label="Hledat indikátor">
+      </div>
     </div>
     <div class="card-grid" id="indicatorGrid"></div>
+    <div class="no-results hidden" id="noResults">Žádné výsledky pro zadaný filtr.</div>
+  </section>
+
+  <!-- Regionální srovnání -->
+  <section class="section region-section" id="regionSection">
+    <div class="section-title">
+      <h3>Regionální srovnání</h3>
+      <span class="badge" id="regionBadge">14 krajů</span>
+      <span class="desc" id="regionDesc">Naděje dožití (muži, 2024)</span>
+    </div>
+    <div class="region-table-wrap">
+      <table class="region-table" id="regionTable" aria-label="Regionální srovnání indikátoru">
+        <thead>
+          <tr>
+            <th>Kraj</th>
+            <th class="num">Hodnota</th>
+            <th class="num">Lékaři / 1 000</th>
+            <th>vs. ČR průměr</th>
+          </tr>
+        </thead>
+        <tbody id="regionTbody"></tbody>
+      </table>
+    </div>
   </section>
 
 </main>
@@ -87,8 +117,8 @@
 
 <!-- Modal pro metodické karty -->
 <div class="modal-backdrop hidden" id="modalBackdrop">
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Zavřít">×</button>
     <div id="modalContent"></div>
   </div>
 </div>
