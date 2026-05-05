@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CONFIG } from './config.js';
+import { getPopulation } from './lib/population.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -117,6 +118,113 @@ export function extractFromEurostat(id) {
   };
 }
 
+// ====== ÚZIS NZIS extraktory ======
+
+/**
+ * Z NRZP cache (records z `uzis_nzis_pracovnici.json`) spočítá počet
+ * pracovníků dané role na 1 000 obyvatel ČR.
+ *
+ * Defenzivní: NRZP CSV může mít různé tvary. Funkce zkouší normalizovat
+ * sloupce a hledat hodnoty pasující na role 'lekari' / 'sestry'.
+ *
+ * @param {string} role — 'lekari' | 'sestry'
+ * @returns {{ value:number, year:number, trend:Array<{year,value}> } | null}
+ */
+export function extractFromNrzp(role) {
+  const cache = readCacheFile('uzis_nrzp_pracovnici.json');
+  if (!cache?.records?.length) return null;
+
+  const ROLE_TOKENS = {
+    lekari: ['lékař', 'lekar', 'meddoct', 'physician', 'doctor'],
+    sestry: ['sestra', 'sestry', 'nurs'],
+  };
+  const tokens = ROLE_TOKENS[role] ?? [];
+
+  const matchesRole = (row) => {
+    const blob = Object.values(row).join(' ').toLowerCase();
+    return tokens.some(t => blob.includes(t));
+  };
+
+  // Najdi sloupec s rokem a počtem
+  const cols = cache.columns ?? Object.keys(cache.records[0] ?? {});
+  const yearCol = cols.find(c => /rok|year/i.test(c));
+  const countCol = cols.find(c => /pocet|počet|count|n/i.test(c));
+  const krajCol = cols.find(c => /kraj|nuts|uzemi/i.test(c));
+
+  if (!yearCol || !countCol) return null;
+
+  // Agregace: pro každý rok suma pracovníků dané role v ČR (přes všechny kraje)
+  const byYear = {};
+  for (const row of cache.records) {
+    if (!matchesRole(row)) continue;
+    const y = parseInt(row[yearCol], 10);
+    const n = Number(row[countCol]);
+    if (!Number.isFinite(y) || !Number.isFinite(n)) continue;
+    byYear[y] = (byYear[y] ?? 0) + n;
+  }
+
+  const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
+  if (!years.length) return null;
+
+  const population = getPopulation('CZ') || 10_900_000;
+  const trend = years.slice(-5).map(y => ({
+    year: y,
+    value: round((byYear[y] / population) * 1000, 2),
+  }));
+  const latest = trend[trend.length - 1];
+  return { value: latest.value, year: latest.year, trend };
+}
+
+/**
+ * Krajský rozpad pro NRZP role (lékaři/sestry per 1000 obyvatel).
+ * Vrátí { country_avg, regions: [{code, name, value}] }.
+ */
+export function extractNrzpRegions(role) {
+  const cache = readCacheFile('uzis_nrzp_pracovnici.json');
+  if (!cache?.records?.length) return null;
+
+  const ROLE_TOKENS = {
+    lekari: ['lékař', 'lekar', 'meddoct', 'physician'],
+    sestry: ['sestra', 'sestry', 'nurs'],
+  };
+  const tokens = ROLE_TOKENS[role] ?? [];
+  const matchesRole = (row) => tokens.some(t => Object.values(row).join(' ').toLowerCase().includes(t));
+
+  const cols = cache.columns ?? Object.keys(cache.records[0] ?? {});
+  const yearCol = cols.find(c => /rok|year/i.test(c));
+  const krajCol = cols.find(c => /kraj|nuts|uzemi/i.test(c));
+  const countCol = cols.find(c => /pocet|počet|count/i.test(c));
+  if (!yearCol || !krajCol || !countCol) return null;
+
+  // Najdi nejnovější rok
+  const years = [...new Set(cache.records.map(r => parseInt(r[yearCol], 10)).filter(Number.isFinite))];
+  if (!years.length) return null;
+  const latestYear = Math.max(...years);
+
+  const byKraj = {};
+  for (const row of cache.records) {
+    if (!matchesRole(row)) continue;
+    if (parseInt(row[yearCol], 10) !== latestYear) continue;
+    const code = String(row[krajCol]).trim();
+    const n = Number(row[countCol]);
+    if (!Number.isFinite(n)) continue;
+    byKraj[code] = (byKraj[code] ?? 0) + n;
+  }
+
+  const regions = [];
+  let totalPop = 0;
+  let totalCount = 0;
+  for (const [code, count] of Object.entries(byKraj)) {
+    const pop = getPopulation(code);
+    if (!pop) continue;
+    regions.push({ code, value: round((count / pop) * 1000, 2) });
+    totalPop += pop;
+    totalCount += count;
+  }
+  const country_avg = totalPop ? round((totalCount / totalPop) * 1000, 2) : null;
+  return { country_avg, regions, year: latestYear };
+}
+
 function buildValueTrend(observations, years = 5) {
   const sorted = [...observations].sort((a, b) => a.year - b.year);
   const trend = sorted.slice(-years).map(o => ({ year: o.year, value: round(o.value, 2) }));
@@ -182,6 +290,11 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     extracted = extractFromEurostat(card.id);
   } else if (primaryType === 'oecd') {
     extracted = extractFromOecd(card.id);
+  } else if (primaryType === 'uzis_nrzp') {
+    // Lékaři vs. sestry odlišíme podle id indikátoru
+    const role = card.id.startsWith('lekari') ? 'lekari'
+      : card.id.startsWith('sestry') ? 'sestry' : null;
+    if (role) extracted = extractFromNrzp(role);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -207,6 +320,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     csu_sha: `csu_${card.id}.json`,
     eurostat_jsonstat: `eurostat_${card.id}.json`,
     oecd: `oecd_${card.id}.json`,
+    uzis_nrzp: 'uzis_nrzp_pracovnici.json',
   }[actualSourceType];
   const fetchedAt = extracted
     ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()

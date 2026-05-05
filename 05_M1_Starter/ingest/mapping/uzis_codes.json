@@ -1,0 +1,31 @@
+{
+  "_doc": "Mapování klíčů → ÚZIS NZIS datasetů. Pro každý: ckan_dataset (stabilní ID v CKAN katalogu data.mzcr.cz/opendata.mzcr.cz) a primary_url (přímá distribuce — optimalizace, fetcher na ni padá zpět při změně URL přes CKAN resolver).",
+  "datasets": {
+    "nrh_dlouhodoba_rada": {
+      "name": "NRH — hospitalizační případy dlouhodobá časová řada 1994+",
+      "ckan_dataset": "hospitalizacni-pripady-dlouhodoba-casova-rada-otevrena-data",
+      "primary_url": "https://data.mzcr.cz/data/distribuce/469/Otevrena-data-NR-05-01-hospitalizacni-pripady-dlouhodoba-casova-rada.csv.gz",
+      "format": "csv.gz",
+      "expected_columns": ["rok", "pohlavi", "vekova_kategorie", "kraj_bydliste", "diagnoza_3", "druh_prijeti", "operace", "umrti", "pocet"],
+      "frequency": "yearly"
+    },
+    "nrzp_pracovnici": {
+      "name": "NRZP — Pracovníci ve zdravotnictví",
+      "ckan_dataset": "narodni-registr-zdravotnickych-pracovniku",
+      "primary_url": null,
+      "format": "csv",
+      "expected_columns": ["rok", "kraj", "kategorie", "pocet"],
+      "frequency": "yearly",
+      "note": "primary_url se vyřeší přes CKAN při prvním běhu."
+    },
+    "nor_incidence": {
+      "name": "NOR — incidence onkologických onemocnění",
+      "ckan_dataset": "narodni-onkologicky-registr",
+      "primary_url": null,
+      "format": "csv",
+      "expected_columns": ["rok", "diagnoza", "pohlavi", "vekova_kategorie", "incidence"],
+      "frequency": "yearly",
+      "note": "Konkrétní CKAN id potřeba ověřit při M-NZIS-5 přes searchDatasets('NOR onkologie')."
+    }
+  }
+}

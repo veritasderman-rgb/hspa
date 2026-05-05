@@ -11,6 +11,8 @@ import {
   loadMethodCards,
   buildIndicator,
   extractBenchmark,
+  extractFromNrzp,
+  extractNrzpRegions,
   transform,
 } from '../ingest/transform.js';
 import { cachePath, ensureCacheDir, writeCache } from '../ingest/lib/cache.js';
@@ -251,6 +253,80 @@ test('buildIndicator: fallback z primary nrc_nrhosp na OECD označí source jako
     assert.equal(out.source.origin, 'live');
   } finally {
     fs.unlinkSync(cachePath('oecd_nrc_test.json'));
+  }
+});
+
+// ===== M-NZIS-3: extractFromNrzp =====
+
+test('extractFromNrzp: lékaři/1000 obyvatel s fixture cache', () => {
+  writeCache('uzis_nrzp_pracovnici.json', {
+    columns: ['rok', 'kraj', 'kategorie', 'pocet'],
+    records: [
+      { rok: '2023', kraj: 'CZ010', kategorie: 'Lékař', pocet: '7000' },
+      { rok: '2023', kraj: 'CZ020', kategorie: 'Lékař', pocet: '5500' },
+      { rok: '2024', kraj: 'CZ010', kategorie: 'Lékař', pocet: '7200' },
+      { rok: '2024', kraj: 'CZ020', kategorie: 'Lékař', pocet: '5700' },
+      { rok: '2024', kraj: 'CZ010', kategorie: 'Sestra', pocet: '12000' },
+    ],
+  });
+  try {
+    const out = extractFromNrzp('lekari');
+    assert.ok(out);
+    assert.equal(out.year, 2024);
+    // (7200 + 5700) / 10_900_000 * 1000 = 1.18
+    assert.ok(out.value > 1 && out.value < 2);
+    assert.equal(out.trend.length, 2);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrzp_pracovnici.json'));
+  }
+});
+
+test('extractFromNrzp: sestry filtrace funguje', () => {
+  writeCache('uzis_nrzp_pracovnici.json', {
+    columns: ['rok', 'kraj', 'kategorie', 'pocet'],
+    records: [
+      { rok: '2024', kraj: 'CZ010', kategorie: 'Lékař', pocet: '7000' },
+      { rok: '2024', kraj: 'CZ010', kategorie: 'Sestra všeobecná', pocet: '12000' },
+    ],
+  });
+  try {
+    const out = extractFromNrzp('sestry');
+    assert.ok(out);
+    assert.equal(out.year, 2024);
+    // 12000 / 10_900_000 * 1000 ≈ 1.10
+    assert.ok(out.value > 1 && out.value < 1.5);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrzp_pracovnici.json'));
+  }
+});
+
+test('extractFromNrzp: bez cache vrátí null (transform pak fallback na seed)', () => {
+  if (fs.existsSync(cachePath('uzis_nrzp_pracovnici.json'))) {
+    fs.unlinkSync(cachePath('uzis_nrzp_pracovnici.json'));
+  }
+  assert.equal(extractFromNrzp('lekari'), null);
+});
+
+test('extractNrzpRegions: krajský rozpad pro nejnovější rok', () => {
+  writeCache('uzis_nrzp_pracovnici.json', {
+    columns: ['rok', 'kraj', 'kategorie', 'pocet'],
+    records: [
+      { rok: '2024', kraj: 'CZ010', kategorie: 'Lékař', pocet: '7200' },
+      { rok: '2024', kraj: 'CZ020', kategorie: 'Lékař', pocet: '5700' },
+      { rok: '2023', kraj: 'CZ010', kategorie: 'Lékař', pocet: '7000' }, // starý rok – ignorovat
+    ],
+  });
+  try {
+    const out = extractNrzpRegions('lekari');
+    assert.ok(out);
+    assert.equal(out.year, 2024);
+    assert.equal(out.regions.length, 2);
+    const praha = out.regions.find(r => r.code === 'CZ010');
+    // 7200 / 1_380_000 * 1000 ≈ 5.22
+    assert.ok(praha.value > 5 && praha.value < 5.5);
+    assert.ok(out.country_avg > 0);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrzp_pracovnici.json'));
   }
 });
 
