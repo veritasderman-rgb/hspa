@@ -120,6 +120,173 @@ export function extractFromEurostat(id) {
 
 // ====== ÚZIS NZIS extraktory ======
 
+let _nrhExtractsCache = null;
+function loadNrhExtracts() {
+  if (_nrhExtractsCache) return _nrhExtractsCache;
+  const file = path.join(ROOT, 'ingest', 'mapping', 'uzis_indicator_extracts.json');
+  if (!fs.existsSync(file)) return {};
+  _nrhExtractsCache = JSON.parse(fs.readFileSync(file, 'utf8')).extracts ?? {};
+  return _nrhExtractsCache;
+}
+
+/** Vrátí true, pokud kód MKN-10 (např. "I21") odpovídá filteru z mapping. */
+export function matchesMkn10(code, query) {
+  if (code == null) return false;
+  const c = String(code).toUpperCase().trim();
+  if (Array.isArray(query.mkn10_prefix) && query.mkn10_prefix.length) {
+    return query.mkn10_prefix.some(p => c.startsWith(String(p).toUpperCase()));
+  }
+  if (query.mkn10_prefix_range) {
+    const { from, to } = query.mkn10_prefix_range;
+    return c >= String(from).toUpperCase() && c <= String(to).toUpperCase() + 'ZZ';
+  }
+  return true; // bez filtru
+}
+
+/**
+ * Defenzivní mapování sloupců NRH řádku — různé exporty mohou mít
+ * mírně odlišné názvy (rok / Rok / ROK, pohlavi / Pohlavi, …).
+ */
+function nrhRow(row) {
+  const lower = {};
+  for (const [k, v] of Object.entries(row)) lower[k.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '_')] = v;
+  return {
+    rok: parseInt(lower.rok ?? lower.year, 10),
+    pohlavi: lower.pohlavi ?? lower.sex,
+    vekova_kategorie: lower.vekova_kategorie ?? lower.vek ?? lower.age,
+    kraj: lower.kraj_bydliste ?? lower.kraj ?? lower.uzemi ?? lower.region,
+    diagnoza: lower.diagnoza_3 ?? lower.diagnoza ?? lower.diag ?? lower.mkn10,
+    druh_prijeti: lower.druh_prijeti ?? lower.admission,
+    operace: lower.operace ?? lower.operation,
+    umrti: parseInt(lower.umrti ?? lower.deaths ?? '0', 10),
+    pocet: parseInt(lower.pocet ?? lower.count ?? lower.n ?? '0', 10),
+  };
+}
+
+/**
+ * Z NRH cache spočítá metric podle query.
+ * @param {string} indicatorId — id v uzis_indicator_extracts.json
+ * @returns {{ value:number, year:number, trend:Array<{year,value}> } | null}
+ */
+export function extractFromNrh(indicatorId) {
+  const extracts = loadNrhExtracts();
+  const query = extracts[indicatorId];
+  if (!query) return null;
+
+  const cache = readCacheFile(`uzis_${query.dataset}.json`);
+  if (!cache?.records?.length) return null;
+
+  // Agregace per rok (národní): { year → { deaths, hospitalizations } }
+  const byYear = {};
+  for (const raw of cache.records) {
+    const r = nrhRow(raw);
+    if (!Number.isFinite(r.rok)) continue;
+    if (!matchesMkn10(r.diagnoza, query)) continue;
+    if (Array.isArray(query.age_filter) && query.age_filter.length && !query.age_filter.includes(String(r.vekova_kategorie))) continue;
+    if (Array.isArray(query.sex_filter) && query.sex_filter.length && !query.sex_filter.includes(String(r.pohlavi))) continue;
+
+    const bucket = byYear[r.rok] ??= { deaths: 0, hospitalizations: 0 };
+    bucket.deaths += r.umrti || 0;
+    bucket.hospitalizations += r.pocet || 0;
+  }
+
+  const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
+  if (!years.length) return null;
+
+  const computeMetric = (b) => {
+    if (query.metric === 'in_hospital_mortality_pct') {
+      return b.hospitalizations > 0 ? round((b.deaths / b.hospitalizations) * 100, 2) : null;
+    }
+    if (query.metric === 'in_hospital_deaths_per_100k') {
+      const pop = getPopulation('CZ') || 10_900_000;
+      return round((b.deaths / pop) * 100_000, 1);
+    }
+    if (query.metric === 'hospitalizations_per_100k') {
+      const pop = getPopulation('CZ') || 10_900_000;
+      return round((b.hospitalizations / pop) * 100_000, 1);
+    }
+    return null;
+  };
+
+  const trend = years.slice(-5).map(y => ({ year: y, value: computeMetric(byYear[y]) })).filter(t => t.value != null);
+  if (!trend.length) return null;
+  const latest = trend[trend.length - 1];
+  return { value: latest.value, year: latest.year, trend };
+}
+
+/**
+ * Krajský rozpad pro NRH-based indikátor.
+ * @param {string} indicatorId
+ * @returns {{ year:number, country_avg:number, regions:Array<{code,value}> } | null}
+ */
+export function extractNrhRegions(indicatorId) {
+  const extracts = loadNrhExtracts();
+  const query = extracts[indicatorId];
+  if (!query?.by_region) return null;
+
+  const cache = readCacheFile(`uzis_${query.dataset}.json`);
+  if (!cache?.records?.length) return null;
+
+  // Najdi nejnovější rok
+  let maxYear = -Infinity;
+  for (const raw of cache.records) {
+    const r = nrhRow(raw);
+    if (Number.isFinite(r.rok) && r.rok > maxYear) maxYear = r.rok;
+  }
+  if (!Number.isFinite(maxYear)) return null;
+
+  const byKraj = {};
+  let totalDeaths = 0, totalHosp = 0;
+  for (const raw of cache.records) {
+    const r = nrhRow(raw);
+    if (r.rok !== maxYear) continue;
+    if (!matchesMkn10(r.diagnoza, query)) continue;
+    if (!r.kraj) continue;
+
+    const code = String(r.kraj).trim();
+    const b = byKraj[code] ??= { deaths: 0, hospitalizations: 0 };
+    b.deaths += r.umrti || 0;
+    b.hospitalizations += r.pocet || 0;
+    totalDeaths += r.umrti || 0;
+    totalHosp += r.pocet || 0;
+  }
+
+  const computeForRegion = (b, regionCode) => {
+    if (query.metric === 'in_hospital_mortality_pct') {
+      return b.hospitalizations > 0 ? round((b.deaths / b.hospitalizations) * 100, 2) : null;
+    }
+    if (query.metric === 'in_hospital_deaths_per_100k') {
+      const pop = getPopulation(regionCode);
+      return pop ? round((b.deaths / pop) * 100_000, 1) : null;
+    }
+    if (query.metric === 'hospitalizations_per_100k') {
+      const pop = getPopulation(regionCode);
+      return pop ? round((b.hospitalizations / pop) * 100_000, 1) : null;
+    }
+    return null;
+  };
+
+  const regions = [];
+  for (const [code, b] of Object.entries(byKraj)) {
+    const v = computeForRegion(b, code);
+    if (v != null) regions.push({ code, value: v });
+  }
+
+  let country_avg = null;
+  if (query.metric === 'in_hospital_mortality_pct') {
+    country_avg = totalHosp > 0 ? round((totalDeaths / totalHosp) * 100, 2) : null;
+  } else if (query.metric === 'in_hospital_deaths_per_100k') {
+    const pop = getPopulation('CZ');
+    country_avg = pop ? round((totalDeaths / pop) * 100_000, 1) : null;
+  } else if (query.metric === 'hospitalizations_per_100k') {
+    const pop = getPopulation('CZ');
+    country_avg = pop ? round((totalHosp / pop) * 100_000, 1) : null;
+  }
+
+  return { year: maxYear, country_avg, regions };
+}
+
+
 /**
  * Z NRZP cache (records z `uzis_nzis_pracovnici.json`) spočítá počet
  * pracovníků dané role na 1 000 obyvatel ČR.
@@ -269,6 +436,7 @@ const SOURCE_TYPE_TO_LABEL = {
   oecd: { name: 'OECD Health Statistics', url: 'https://stats.oecd.org/' },
   uzis_nrzp: { name: 'ÚZIS · NRZP', url: 'https://www.uzis.cz/' },
   uzis_nzis: { name: 'ÚZIS · NZIS', url: 'https://www.uzis.cz/' },
+  uzis_nrh: { name: 'ÚZIS · NRH', url: 'https://www.uzis.cz/' },
   nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
@@ -295,6 +463,13 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     const role = card.id.startsWith('lekari') ? 'lekari'
       : card.id.startsWith('sestry') ? 'sestry' : null;
     if (role) extracted = extractFromNrzp(role);
+  } else if (primaryType === 'uzis_nrh' || primaryType === 'nrc_nrhosp') {
+    // NRH dlouhodobá řada — pokud je indikátor v uzis_indicator_extracts.json
+    const fromNrh = extractFromNrh(card.id);
+    if (fromNrh) {
+      extracted = fromNrh;
+      actualSourceType = 'uzis_nrh';
+    }
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -321,6 +496,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     eurostat_jsonstat: `eurostat_${card.id}.json`,
     oecd: `oecd_${card.id}.json`,
     uzis_nrzp: 'uzis_nrzp_pracovnici.json',
+    uzis_nrh: 'uzis_nrh_dlouhodoba_rada.json',
   }[actualSourceType];
   const fetchedAt = extracted
     ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()
@@ -350,7 +526,10 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
 
 // ====== Hlavní transform ======
 
-export async function transform({ outFile = path.join(ROOT, 'data', 'indicators.json') } = {}) {
+export async function transform({
+  outFile = path.join(ROOT, 'data', 'indicators.json'),
+  regionsFile = path.join(ROOT, 'data', 'regions.json'),
+} = {}) {
   const cards = loadMethodCards();
   const seed = loadSeedIndicators();
   const oecdSummary = readCacheFile('oecd_benchmarks.json');
@@ -383,7 +562,78 @@ export async function transform({ outFile = path.join(ROOT, 'data', 'indicators.
 
   const live = indicators.filter(i => i.source?.origin === 'live').length;
   console.log(`[transform] wrote ${indicators.length} indicators (${live} from live cache, ${indicators.length - live} from seed)`);
+
+  // Aktualizuj regions.json o NRH datasety (pokud máme cache)
+  await updateRegionsFromNrh(regionsFile, indicators);
+
   return out;
+}
+
+/**
+ * Doplní data/regions.json o per-indikátor krajský rozpad pro NRH-based
+ * indikátory (mortalita_inhosp_ami, mortalita_inhosp_cmp, mortalita_kardiovaskularni,
+ * hospitalizace_na_100k). Zachovává existující datasety v souboru — jen přidává
+ * nebo aktualizuje ty, pro které máme aktuální NRH cache.
+ */
+async function updateRegionsFromNrh(regionsFile, indicators) {
+  if (!readCacheFile('uzis_nrh_dlouhodoba_rada.json')) return; // bez cache nic neměníme
+  const extracts = loadNrhExtracts();
+  const updates = [];
+
+  for (const [id, query] of Object.entries(extracts)) {
+    if (!query.by_region) continue;
+    const r = extractNrhRegions(id);
+    if (!r || !r.regions.length) continue;
+    const card = indicators.find(i => i.id === id);
+    if (!card) continue;
+
+    // Doplnit jména krajů z populace (CZ010 → Praha, ...)
+    const regionsWithNames = r.regions.map(reg => ({
+      code: reg.code,
+      name: getRegionName(reg.code),
+      value: reg.value,
+    })).filter(reg => reg.name);
+
+    updates.push({
+      id,
+      name: card.name,
+      unit: card.unit,
+      year: r.year,
+      country_avg: r.country_avg,
+      direction: card.direction ?? 'context_dependent',
+      regions: regionsWithNames,
+    });
+  }
+
+  if (!updates.length) return;
+
+  // Načti existující regions.json a merge
+  let existing = { version: '2.0', generated_at: new Date().toISOString(), datasets: [] };
+  if (fs.existsSync(regionsFile)) {
+    try { existing = JSON.parse(fs.readFileSync(regionsFile, 'utf8')); }
+    catch { /* corrupt file → přepíšeme */ }
+  }
+  if (!Array.isArray(existing.datasets)) existing.datasets = [];
+
+  for (const upd of updates) {
+    const existingIdx = existing.datasets.findIndex(d => d.id === upd.id);
+    if (existingIdx >= 0) existing.datasets[existingIdx] = upd;
+    else existing.datasets.push(upd);
+  }
+  existing.generated_at = new Date().toISOString();
+  fs.writeFileSync(regionsFile, JSON.stringify(existing, null, 2) + '\n');
+  console.log(`[transform] regions.json: aktualizováno ${updates.length} NRH dataset(ů)`);
+}
+
+function getRegionName(code) {
+  // Tabulka kódů krajů — duplicita s lib/population.js, ale zde jen pro názvy
+  const names = {
+    CZ010: 'Praha', CZ020: 'Středočeský', CZ031: 'Jihočeský', CZ032: 'Plzeňský',
+    CZ041: 'Karlovarský', CZ042: 'Ústecký', CZ051: 'Liberecký', CZ052: 'Královéhradecký',
+    CZ053: 'Pardubický', CZ063: 'Vysočina', CZ064: 'Jihomoravský', CZ071: 'Olomoucký',
+    CZ072: 'Zlínský', CZ080: 'Moravskoslezský',
+  };
+  return names[code] ?? null;
 }
 
 // Entry point pro `npm run transform`

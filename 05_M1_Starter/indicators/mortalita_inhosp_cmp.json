@@ -1,0 +1,32 @@
+{
+  "id": "mortalita_inhosp_cmp",
+  "name": "In-hospital úmrtnost po cévní mozkové příhodě",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Klinická efektivnost",
+  "definition": "Podíl úmrtí během hospitalizace pro CMP (MKN-10 I60–I64) z celkového počtu hospitalizací pro tuto diagnózu. Proxy pro 30denní mortalitu.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrh",
+      "dataset": "nrh_dlouhodoba_rada",
+      "mkn10_prefix": ["I60", "I61", "I62", "I63", "I64"],
+      "note": "Filtrace MKN-10 I60–I64 (subarachnoidální, intracerebrální, jiná netraumatická intrakraniální krvácení, mozkové infarkty, CMP nespecifikovaná)."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "STR30DAYS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "STR30DAYS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "NRC"],
+  "method_notes": "POZOR — metodicky je in-hospital mortalita mírně nižší než 30denní. OECD HCQI publikuje 30d mortalitu jako benchmark, neporovnávat 1:1. Přesná 30d mortalita vyžaduje propojení NRH × LPZ.",
+  "limitations": "Zahrnuje pouze hospitalizované pacienty. Pacienti zemřelí mimo nemocnici nejsou v jmenovateli."
+}
