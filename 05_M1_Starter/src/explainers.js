@@ -2,7 +2,7 @@
 // Načítá data/explainers.json + strategies.json (pro cross-link)
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
-import { audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
@@ -260,6 +260,7 @@ async function init() {
   if (typeof window === 'undefined') return;
 
   renderModuleNav('explainers');
+  renderMastheadDate();
 
   try {
     const [explsRes, stratsRes] = await Promise.all([

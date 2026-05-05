@@ -11,6 +11,18 @@ export function audienceText(obj) {
 }
 
 /**
+ * Vyplní datum do hlavičky (masthead-strip) v editorial stylu.
+ * Příklad: "Pondělí 5. května 2026"
+ */
+export function renderMastheadDate(el = document.getElementById('mastheadDate')) {
+  if (!el) return;
+  const d = new Date();
+  const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+  const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+  el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/**
  * Render společné navigační lišty mezi moduly. Volá se z každé stránky,
  * automaticky zvýrazní aktivní záložku podle window.location.pathname.
  */

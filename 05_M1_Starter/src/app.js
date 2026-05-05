@@ -117,6 +117,15 @@ function loadFromLocalStorage() {
   } catch { return null; }
 }
 
+function renderMastheadDateLocal() {
+  const el = document.getElementById('mastheadDate');
+  if (!el) return;
+  const d = new Date();
+  const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+  const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+  el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 async function loadData(bustCache = false) {
   const url = bustCache ? `${DATA_URL}?t=${Date.now()}` : DATA_URL;
   try {
@@ -998,6 +1007,7 @@ function wireUp() {
   const hashState = readHash();
   applyHash(hashState);
   wireUp();
+  renderMastheadDateLocal();
   try {
     await loadData();
     renderGrid();
