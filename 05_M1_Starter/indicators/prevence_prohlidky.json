@@ -1,0 +1,31 @@
+{
+  "id": "prevence_prohlidky",
+  "name": "Pokrytí preventivními prohlídkami",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Primární prevence",
+  "definition": "Podíl dospělých (18+), kteří absolvovali preventivní prohlídku u praktického lékaře v posledních 2 letech.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrls",
+      "endpoint": "https://www.uzis.cz/index.php?pg=statisticke-analyzy",
+      "dataset": "NRLS_PREVENTIVNI"
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.uzis.cz/res/f/008368/nrls2024.xlsx"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PREVENTIVECARE",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "MZ ČR", "SZP ČR"],
+  "method_notes": "Počítáno z dat NRLS. Zahrnuje preventivní prohlídky u VPL. Standardizováno na věkovou strukturu populace ČR.",
+  "limitations": "Nezahrnuje preventivní péči u specialistů. Podreportování u osob bez registrace u praktického lékaře."
+}

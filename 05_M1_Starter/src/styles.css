@@ -76,8 +76,22 @@ body[data-audience="public"] .audience-banner.public,
 body[data-audience="prof"] .audience-banner.prof,
 body[data-audience="policy"] .audience-banner.policy { display: block; }
 
+.scorecard {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  background: white; border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 20px; margin-bottom: 20px;
+}
+.sc-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+.sc-item strong { font-size: 20px; font-weight: 700; color: var(--text); }
+.sc-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.sc-item.good .sc-dot { background: var(--good); }
+.sc-item.warn .sc-dot { background: var(--warn); }
+.sc-item.bad .sc-dot { background: var(--bad); }
+.sc-item.neutral .sc-dot { background: var(--neutral); }
+.sc-legend { margin-left: auto; font-size: 12px; color: var(--muted); font-style: italic; }
+
 .section-title {
-  display: flex; align-items: baseline; gap: 12px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border);
 }
 .section-title h3 { font-size: 20px; color: var(--primary-dark); }
@@ -85,7 +99,19 @@ body[data-audience="policy"] .audience-banner.policy { display: block; }
   background: var(--primary); color: white; font-size: 11px;
   padding: 3px 10px; border-radius: 10px; font-weight: 600;
 }
-.section-title .desc { color: var(--muted); font-size: 13px; margin-left: auto; }
+
+.search-wrap { margin-left: auto; }
+.search-wrap input {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px; color: var(--text);
+  outline: none; width: 220px; background: var(--bg);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-wrap input:focus {
+  border-color: var(--primary); background: white;
+  box-shadow: 0 0 0 3px rgba(11,83,148,0.12);
+}
+.search-wrap input::placeholder { color: var(--muted); }
 
 .card-grid {
   display: grid;
@@ -129,6 +155,20 @@ body[data-audience="policy"] .audience-banner.policy { display: block; }
 .indicator-card .source { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
 .indicator-card .source a { color: var(--primary); text-decoration: none; }
 
+.trend-arrow { font-size: 18px; font-weight: 700; margin-left: 6px; line-height: 1; }
+.trend-arrow.up { color: var(--good); }
+.trend-arrow.down { color: var(--bad); }
+.trend-arrow.flat { color: var(--muted); }
+
+.indicator-card:focus-visible {
+  outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 10px;
+}
+
+.no-results {
+  grid-column: 1 / -1; padding: 48px 20px;
+  text-align: center; color: var(--muted); font-size: 15px;
+}
+
 footer.bottom {
   background: var(--primary-dark); color: white; padding: 28px 32px; margin-top: 40px;
 }
@@ -170,6 +210,12 @@ footer.bottom .disclaimer {
 .modal dt { font-weight: 600; color: var(--text); }
 .modal dd { color: var(--muted); }
 .modal pre { background: var(--bg); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }
+.ds-heading { margin-top: 18px; font-size: 14px; color: var(--primary-dark); margin-bottom: 8px; }
+.ds-section { background: var(--bg); padding: 12px 16px; border-radius: 6px; font-size: 13px; line-height: 1.6; }
+.ds-section p { margin-bottom: 6px; }
+.ds-section p:last-child { margin-bottom: 0; }
+.ds-section a { color: var(--primary); text-decoration: none; }
+.ds-section a:hover { text-decoration: underline; }
 
 @media (max-width: 768px) {
   header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }

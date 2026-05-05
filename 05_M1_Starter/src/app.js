@@ -6,6 +6,7 @@ const DATA_URL = 'data/indicators.json';
 
 let allIndicators = [];
 let activeArea = 'all';
+let searchTerm = '';
 
 // ====== UTIL ======
 
@@ -28,6 +29,22 @@ function clearStatus() {
   document.getElementById('status').classList.add('hidden');
 }
 
+function trendDir(trend) {
+  if (!Array.isArray(trend) || trend.length < 2) return '';
+  const first = trend[0].value;
+  const last = trend[trend.length - 1].value;
+  const pct = ((last - first) / Math.abs(first)) * 100;
+  if (pct > 2) return '<span class="trend-arrow up" title="Rostoucí trend">↗</span>';
+  if (pct < -2) return '<span class="trend-arrow down" title="Klesající trend">↘</span>';
+  return '<span class="trend-arrow flat" title="Stabilní trend">→</span>';
+}
+
+function pluralInd(n) {
+  if (n === 1) return 'indikátor';
+  if (n < 5) return 'indikátory';
+  return 'indikátorů';
+}
+
 // ====== DATA LOADING ======
 
 async function loadData(bustCache = false) {
@@ -47,25 +64,60 @@ async function loadData(bustCache = false) {
   }
 }
 
+// ====== SCORECARD ======
+
+function renderScorecard(indicators) {
+  const c = { good: 0, warn: 0, bad: 0, neutral: 0 };
+  for (const ind of indicators) c[ind.signal] = (c[ind.signal] || 0) + 1;
+  const neutral = c.neutral ? `<div class="sc-item neutral"><span class="sc-dot"></span><strong>${c.neutral}</strong> neutrální</div>` : '';
+  document.getElementById('scorecard').innerHTML = `
+    <div class="sc-item good"><span class="sc-dot"></span><strong>${c.good}</strong> dobrých</div>
+    <div class="sc-item warn"><span class="sc-dot"></span><strong>${c.warn}</strong> sledovat</div>
+    <div class="sc-item bad"><span class="sc-dot"></span><strong>${c.bad}</strong> problém</div>
+    ${neutral}
+    <div class="sc-legend">Hodnocení vůči OECD/EU průměru</div>
+  `;
+}
+
 // ====== RENDERING ======
 
 function renderGrid(area = 'all') {
   const grid = document.getElementById('indicatorGrid');
   grid.innerHTML = '';
-  const filtered = area === 'all'
+
+  const areaFiltered = area === 'all'
     ? allIndicators
     : allIndicators.filter(i => i.area === area);
 
+  renderScorecard(areaFiltered);
+
+  const q = searchTerm.toLowerCase();
+  const filtered = q
+    ? areaFiltered.filter(i =>
+        i.name.toLowerCase().includes(q) ||
+        i.domain.toLowerCase().includes(q) ||
+        (i.subdomain || '').toLowerCase().includes(q)
+      )
+    : areaFiltered;
+
   document.getElementById('gridBadge').textContent =
-    `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
+    `${filtered.length} ${pluralInd(filtered.length)}`;
   document.getElementById('gridTitle').textContent =
     area === 'all' ? 'Všechny indikátory' : `Oblast: ${area}`;
 
+  if (filtered.length === 0) {
+    grid.innerHTML = '<p class="no-results">Žádné indikátory neodpovídají hledání.</p>';
+    return;
+  }
+
   const charts = [];
-  filtered.forEach((ind, i) => {
+  filtered.forEach((ind) => {
     const card = document.createElement('div');
     card.className = 'indicator-card';
     card.dataset.indicatorId = ind.id;
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${ind.name}: ${ind.value} ${ind.unit}. Klikněte pro metodickou kartu.`);
 
     const chartId = `chart-${ind.id}`;
     const benchmark = ind.benchmark?.oecd ?? ind.benchmark?.eu ?? null;
@@ -82,12 +134,20 @@ function renderGrid(area = 'all') {
       <div class="value-row">
         <span class="big-value">${ind.value}</span>
         <span class="unit">${ind.unit}</span>
+        ${trendDir(ind.trend)}
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
       <div class="source">Zdroj: ${ind.source.name}</div>
     `;
+
     card.addEventListener('click', () => openMethodCard(ind));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openMethodCard(ind);
+      }
+    });
     grid.appendChild(card);
 
     if (Array.isArray(ind.trend) && ind.trend.length) {
@@ -130,6 +190,26 @@ function renderGrid(area = 'all') {
 
 // ====== METODICKÁ KARTA (modal) ======
 
+function renderDataSource(ds) {
+  if (!ds) return '<em>Zdroj dat není uveden.</em>';
+  const rows = [];
+  if (ds.primary) {
+    const p = ds.primary;
+    let s = `<strong>Primární:</strong> ${p.type || ''}`;
+    if (p.dataset) s += ` / ${p.dataset}`;
+    const href = p.endpoint?.startsWith('http') ? p.endpoint : p.url?.startsWith('http') ? p.url : null;
+    if (href) s += ` · <a href="${href}" target="_blank" rel="noopener">odkaz</a>`;
+    rows.push(s);
+  }
+  if (ds.fallback) {
+    const f = ds.fallback;
+    let s = `<strong>Záloha:</strong> ${f.type || ''}`;
+    if (f.url?.startsWith('http')) s += ` · <a href="${f.url}" target="_blank" rel="noopener">odkaz</a>`;
+    rows.push(s);
+  }
+  return rows.map(r => `<p>${r}</p>`).join('');
+}
+
 async function openMethodCard(indicator) {
   const modal = document.getElementById('modalBackdrop');
   const content = document.getElementById('modalContent');
@@ -154,8 +234,8 @@ async function openMethodCard(indicator) {
         <dt>Metodika</dt><dd>${card.method_notes}</dd>
         <dt>Omezení</dt><dd>${card.limitations}</dd>
       </dl>
-      <h3 style="margin-top:18px; font-size:14px;">Zdroje dat</h3>
-      <pre>${JSON.stringify(card.data_source, null, 2)}</pre>
+      <h3 class="ds-heading">Zdroje dat</h3>
+      <div class="ds-section">${renderDataSource(card.data_source)}</div>
     `;
   } catch (err) {
     content.innerHTML = `<p>Nepodařilo se načíst metodickou kartu: ${err.message}</p>`;
@@ -186,6 +266,12 @@ function wireUp() {
       activeArea = btn.dataset.area;
       renderGrid(activeArea);
     });
+  });
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchTerm = e.target.value.trim();
+    renderGrid(activeArea);
   });
 
   // Reload button

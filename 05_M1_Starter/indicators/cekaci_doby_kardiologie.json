@@ -1,0 +1,31 @@
+{
+  "id": "cekaci_doby_kardiologie",
+  "name": "Střední čekací doba na kardiologické vyšetření",
+  "area": "Procesy",
+  "domain": "Přístup k péči",
+  "subdomain": "Čekací doby",
+  "definition": "Medián čekací doby v kalendářních dnech od doporučení praktickým lékařem do ambulantního kardiologického vyšetření.",
+  "unit": "dnů",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_cakacky",
+      "endpoint": "https://www.mzcr.cz/kategorie/cakaci-doby/",
+      "dataset": "CAKACI_DOBY_AMB_KARD"
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.mzcr.cz/kategorie/cakaci-doby/"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "WAITINGTIMES_SPECIALIST",
+    "dataset": "HEALTH_CARE_QUALITY"
+  },
+  "signal_thresholds": { "good": 20.0, "warn": 40.0 },
+  "frequency": "quarterly",
+  "stewards": ["MZ ČR", "MZČR – Oddělení kvality péče"],
+  "method_notes": "Medián ze všech ambulantních kardiologických pracovišť v ČR s alespoň 100 výkony ročně. Data sbírána čtvrtletně, zde uveden roční průměr.",
+  "limitations": "Pokrývá pouze smluvní pracoviště zdravotních pojišťoven. Metodika sběru dat není plně harmonizována mezi zařízeními. Sezónně neupraveno."
+}
