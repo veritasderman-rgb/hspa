@@ -4,6 +4,7 @@
 
 import { wireAudienceSwitch, getAudience, audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
+import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
 const CATEGORY_LABELS = {
   money: { label: '💰 Peníze', desc: 'Kdo platí, kdo rozhoduje, jak vznikne cena' },
@@ -156,6 +157,20 @@ function renderDetail(id) {
             </li>
           `).join('')}
         </ol>
+        ${audience === 'policy' ? `
+          <details class="gantt-details" open>
+            <summary>📅 Vizualizace Gantt</summary>
+            ${renderGantt(e.process.steps)}
+          </details>
+        ` : ''}
+      </section>
+    ` : ''}
+
+    ${audience === 'policy' && e.id === 'cz_drg' ? `
+      <section class="detail-section drg-calc-section">
+        <h3>🧮 DRG kalkulátor (interaktivní)</h3>
+        <p class="section-note">Vyzkoušej, jak vstupy ovlivňují odhad úhrady. Ilustrativní hodnoty.</p>
+        ${renderDrgCalculator()}
       </section>
     ` : ''}
 
@@ -216,6 +231,11 @@ function renderDetail(id) {
       ${e.verification_status ? `<span class="verification-badge ${e.verification_status}">${escapeHtml(e.verification_status)}</span>` : ''}
     </footer>
   `;
+
+  // Wire-up dynamic widgets (DRG kalkulátor)
+  if (audience === 'policy' && e.id === 'cz_drg') {
+    wireDrgCalculator();
+  }
 }
 
 function audienceLabel(a) {

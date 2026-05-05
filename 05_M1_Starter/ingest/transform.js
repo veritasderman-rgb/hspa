@@ -286,6 +286,65 @@ export function extractNrhRegions(indicatorId) {
   return { year: maxYear, country_avg, regions };
 }
 
+/**
+ * Z NOR cache spočítá incidenci onkologického onemocnění (per 100k).
+ * Filtr: MKN-10 prefix (z metodické karty), volitelně sex.
+ *
+ * @param {string} indicatorId — id v indicators/<id>.json
+ * @returns {{ value:number, year:number, trend:Array<{year,value}> } | null}
+ */
+export function extractFromNor(indicatorId) {
+  const cardFile = path.join(ROOT, 'indicators', `${indicatorId}.json`);
+  if (!fs.existsSync(cardFile)) return null;
+  const card = JSON.parse(fs.readFileSync(cardFile, 'utf8'));
+  const primary = card?.data_source?.primary;
+  if (primary?.type !== 'uzis_nor') return null;
+
+  const cache = readCacheFile('uzis_nor_incidence.json');
+  if (!cache?.records?.length) return null;
+
+  const mkn10Prefixes = primary.mkn10_prefix ?? [];
+  const sexFilter = primary.filter?.sex;
+
+  const matchesMkn = (code) => {
+    const c = String(code ?? '').toUpperCase();
+    return mkn10Prefixes.length === 0 || mkn10Prefixes.some(p => c.startsWith(String(p).toUpperCase()));
+  };
+
+  // Defenzivní mapování sloupců
+  const cols = cache.columns ?? Object.keys(cache.records[0] ?? {});
+  const yearCol = cols.find(c => /^(rok|year|cas)$/i.test(c));
+  const diagCol = cols.find(c => /^(diagnoza|diagnóza|diag|mkn|mkn10)$/i.test(c));
+  const sexCol = cols.find(c => /^(pohlavi|pohlaví|sex|gender)$/i.test(c));
+  const incCol = cols.find(c => /^(incidence|hodnota|value|count|n|pocet|počet)$/i.test(c));
+  if (!yearCol || !diagCol || !incCol) return null;
+
+  const byYear = {};
+  for (const row of cache.records) {
+    if (!matchesMkn(row[diagCol])) continue;
+    if (sexFilter && sexCol && String(row[sexCol]).toUpperCase() !== String(sexFilter).toUpperCase()) continue;
+    const y = parseInt(row[yearCol], 10);
+    const v = Number(row[incCol]);
+    if (!Number.isFinite(y) || !Number.isFinite(v)) continue;
+    byYear[y] = (byYear[y] ?? 0) + v;
+  }
+
+  const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
+  if (!years.length) return null;
+
+  // Pokud hodnota není už per 100k (heuristika: > 1000 znamená absolutní), přepočítej
+  const pop = sexFilter === 'F' ? Math.round((getPopulation('CZ') ?? 10_900_000) * 0.51) : (getPopulation('CZ') ?? 10_900_000);
+
+  const trend = years.slice(-5).map(y => {
+    const raw = byYear[y];
+    // Pokud je incidence už nějaká rozumná hodnota (< 500), předpokládáme že je už per 100k.
+    // Jinak (absolutní počet) přepočítej.
+    const value = raw < 500 ? raw : (raw / pop) * 100_000;
+    return { year: y, value: round(value, 1) };
+  });
+  const latest = trend[trend.length - 1];
+  return { value: latest.value, year: latest.year, trend };
+}
 
 /**
  * Z NRZP cache (records z `uzis_nzis_pracovnici.json`) spočítá počet
@@ -437,6 +496,7 @@ const SOURCE_TYPE_TO_LABEL = {
   uzis_nrzp: { name: 'ÚZIS · NRZP', url: 'https://www.uzis.cz/' },
   uzis_nzis: { name: 'ÚZIS · NZIS', url: 'https://www.uzis.cz/' },
   uzis_nrh: { name: 'ÚZIS · NRH', url: 'https://www.uzis.cz/' },
+  uzis_nor: { name: 'ÚZIS · NOR', url: 'https://www.uzis.cz/' },
   nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
@@ -470,6 +530,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
       extracted = fromNrh;
       actualSourceType = 'uzis_nrh';
     }
+  } else if (primaryType === 'uzis_nor') {
+    extracted = extractFromNor(card.id);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -497,6 +559,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     oecd: `oecd_${card.id}.json`,
     uzis_nrzp: 'uzis_nrzp_pracovnici.json',
     uzis_nrh: 'uzis_nrh_dlouhodoba_rada.json',
+    uzis_nor: 'uzis_nor_incidence.json',
   }[actualSourceType];
   const fetchedAt = extracted
     ? (cacheFileForSource && readCacheFile(cacheFileForSource)?.fetched_at) ?? new Date().toISOString()
