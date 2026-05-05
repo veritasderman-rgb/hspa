@@ -351,6 +351,58 @@ footer.bottom .disclaimer {
 .ds-table th { color: var(--muted); font-weight: 500; width: 110px; }
 .ds-note { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; }
 
+/* Domain filter chips (pod oblastní navigací) */
+.domain-filter {
+  background: #F8FAFC; border-bottom: 1px solid var(--border);
+  padding: 8px 32px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.domain-chip {
+  background: white; border: 1px solid var(--border); border-radius: 20px;
+  padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--muted);
+  white-space: nowrap; transition: background 0.1s, color 0.1s;
+}
+.domain-chip:hover { border-color: var(--primary); color: var(--primary); }
+.domain-chip.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
+[data-theme="dark"] .domain-filter { background: #101825; border-color: var(--border); }
+[data-theme="dark"] .domain-chip { background: #1A2535; color: var(--muted); border-color: var(--border); }
+[data-theme="dark"] .domain-chip.active { background: var(--primary); color: white; }
+
+/* Panel nejkritičtějších indikátorů */
+.top-critical {
+  background: #FFF0F0; border: 1px solid #FFCDD2; border-left: 4px solid var(--bad);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 22px;
+}
+.top-critical-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  font-size: 13px; font-weight: 700; color: var(--bad); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.top-critical-list { display: flex; flex-direction: column; gap: 6px; }
+.top-critical-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+  background: white; border-radius: 8px; cursor: pointer; font-size: 13px;
+  transition: box-shadow 0.15s; border: 1px solid transparent;
+}
+.top-critical-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-color: #FFCDD2; }
+.top-critical-name { flex: 1; font-weight: 500; color: var(--text); }
+.top-critical-value { color: var(--bad); font-weight: 700; font-size: 12px; white-space: nowrap; }
+.top-critical-oecd { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.top-critical-gap { font-size: 11px; color: var(--bad); font-weight: 600; background: #FCE8E6; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+[data-theme="dark"] .top-critical { background: #2A0A0A; border-color: #5A1A1A; }
+[data-theme="dark"] .top-critical-item { background: #1A2535; }
+[data-theme="dark"] .top-critical-name { color: var(--text); }
+
+/* Benchmark gauge (miniaturní porovnávací pruh v kartách) */
+.bm-gauge { margin-bottom: 10px; }
+.bm-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.bm-key { font-size: 10px; font-weight: 700; color: var(--muted); width: 30px; flex-shrink: 0; text-align: right; }
+.bm-track { flex: 1; height: 7px; background: var(--bg); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+.bm-fill { height: 100%; border-radius: 4px; min-width: 2px; }
+.bm-val { font-size: 10px; color: var(--text); width: 38px; text-align: left; flex-shrink: 0; padding-left: 2px; }
+[data-theme="dark"] .bm-track { background: #0F1923; }
+
+/* Graf trendu v modálním okně */
+.modal-chart-wrap { height: 200px; margin: 4px 0 20px; }
+
 .indicator-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 
 @media (max-width: 768px) {
@@ -405,6 +457,7 @@ footer.bottom .disclaimer {
   .topbar-actions,
   .audience-switch,
   .dimnav,
+  .domain-filter,
   .section-actions,
   .btn-export,
   .btn-reload,

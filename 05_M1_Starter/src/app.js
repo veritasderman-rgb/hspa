@@ -13,8 +13,10 @@ let allIndicators = [];
 let activeArea = 'all';
 let activeSearch = '';
 let activeSort = 'default';
+let activeDomain = '';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 let regionsChart = null;
+let _modalChart = null;
 
 // ====== URL HASH STATE ======
 
@@ -141,9 +143,10 @@ async function loadData(bustCache = false) {
 
 const SIGNAL_ORDER = { bad: 0, warn: 1, neutral: 2, good: 3 };
 
-export function filterAndSort(indicators, { area, search, sort }) {
+export function filterAndSort(indicators, { area, search, sort, domain }) {
   let xs = indicators;
   if (area && area !== 'all') xs = xs.filter(i => i.area === area);
+  if (domain) xs = xs.filter(i => i.domain === domain);
   if (search) {
     const q = search.toLowerCase();
     xs = xs.filter(i =>
@@ -214,7 +217,9 @@ function renderGrid() {
   const grid = document.getElementById('indicatorGrid');
   destroyAllCharts();
   grid.innerHTML = '';
-  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort });
+  renderDomainFilter();
+  renderTopCritical();
+  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain });
 
   const badge = `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridBadge').textContent = badge;
@@ -247,10 +252,7 @@ function renderGrid() {
     card.setAttribute('aria-label', `${ind.name}: ${ind.value} ${ind.unit}, signál ${ind.signal}`);
 
     const chartId = `chart-${ind.id}`;
-    const benchmark = ind.benchmark?.oecd ?? ind.benchmark?.eu ?? null;
-    const compareHTML = benchmark != null
-      ? `<div class="compare">vs. OECD průměr: <strong>${benchmark}${ind.unit ? ' ' + ind.unit : ''}</strong></div>`
-      : '';
+    const compareHTML = benchmarkBarHTML(ind);
 
     const arrow = trendArrow(ind);
     const arrowHTML = arrow.glyph === '→'
@@ -545,6 +547,7 @@ function renderSourceObj(o) {
 }
 
 function renderModalContent(card, indicator) {
+  const hasChart = Array.isArray(indicator.trend) && indicator.trend.length >= 2;
   return `
     <h2>${card.name}</h2>
     <div class="sub">${card.area} · ${card.domain}${card.subdomain ? ' · ' + card.subdomain : ''}</div>
@@ -554,6 +557,7 @@ function renderModalContent(card, indicator) {
       ${indicator.benchmark?.oecd != null ? `<span>OECD: <strong>${indicator.benchmark.oecd}</strong></span>` : ''}
       ${indicator.benchmark?.eu != null ? `<span>EU: <strong>${indicator.benchmark.eu}</strong></span>` : ''}
     </div>
+    ${hasChart ? '<div class="modal-chart-wrap"><canvas id="modalTrendCanvas"></canvas></div>' : ''}
     <dl>
       <dt>Definice</dt><dd>${card.definition ?? '—'}</dd>
       <dt>Jednotka</dt><dd>${card.unit ?? indicator.unit}</dd>
@@ -663,6 +667,7 @@ async function openMethodCard(indicator) {
     content.insertAdjacentHTML('beforeend', renderModalContent(card, indicator));
     const csvBtn = document.getElementById('btnCsvExport');
     if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+    renderModalChart(indicator);
     renderModalCrossLinks(indicator.id);
     return;
   }
@@ -670,11 +675,204 @@ async function openMethodCard(indicator) {
   content.innerHTML = renderModalContent(card, indicator);
   const csvBtn = document.getElementById('btnCsvExport');
   if (csvBtn) csvBtn.addEventListener('click', () => exportTrendCsv(indicator));
+  renderModalChart(indicator);
   renderModalCrossLinks(indicator.id);
 }
 
 function closeModal() {
   document.getElementById('modalBackdrop').classList.add('hidden');
+  if (_modalChart) { _modalChart.destroy(); _modalChart = null; }
+}
+
+// ====== BENCHMARK GAUGE (mini-pruh v kartách) ======
+
+function benchmarkBarHTML(ind) {
+  const czVal = ind.value;
+  const oecdVal = ind.benchmark?.oecd ?? null;
+  const euVal = ind.benchmark?.eu ?? null;
+  if (oecdVal == null && euVal == null) return '';
+
+  const refs = [czVal, oecdVal, euVal].filter(v => v != null);
+  const maxVal = Math.max(...refs);
+  if (maxVal === 0) return '';
+
+  const czPct = Math.min(100, Math.round(czVal / maxVal * 100));
+  const signalColor = ind.signal === 'good' ? '#38761D'
+    : ind.signal === 'warn' ? '#B45F06'
+    : ind.signal === 'bad' ? '#990000' : '#0B5394';
+
+  let rows = `
+    <div class="bm-row">
+      <span class="bm-key">ČR</span>
+      <div class="bm-track"><div class="bm-fill" style="width:${czPct}%;background:${signalColor}"></div></div>
+      <span class="bm-val">${czVal}</span>
+    </div>`;
+
+  if (oecdVal != null) {
+    const p = Math.min(100, Math.round(oecdVal / maxVal * 100));
+    rows += `
+    <div class="bm-row">
+      <span class="bm-key">OECD</span>
+      <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#4A90D9"></div></div>
+      <span class="bm-val">${oecdVal}</span>
+    </div>`;
+  }
+
+  if (euVal != null) {
+    const p = Math.min(100, Math.round(euVal / maxVal * 100));
+    rows += `
+    <div class="bm-row">
+      <span class="bm-key">EU</span>
+      <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#E69138"></div></div>
+      <span class="bm-val">${euVal}</span>
+    </div>`;
+  }
+
+  return `<div class="bm-gauge">${rows}</div>`;
+}
+
+// ====== DOMAIN FILTER ======
+
+function renderDomainFilter() {
+  const container = document.getElementById('domainFilter');
+  if (!container) return;
+
+  let base = allIndicators;
+  if (activeArea && activeArea !== 'all') base = base.filter(i => i.area === activeArea);
+
+  const domainCounts = new Map();
+  for (const ind of base) {
+    if (ind.domain) domainCounts.set(ind.domain, (domainCounts.get(ind.domain) || 0) + 1);
+  }
+
+  if (domainCounts.size <= 1) {
+    container.innerHTML = '';
+    container.classList.add('hidden');
+    return;
+  }
+
+  container.classList.remove('hidden');
+  container.innerHTML = '';
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'domain-chip' + (!activeDomain ? ' active' : '');
+  allBtn.textContent = `Vše (${base.length})`;
+  allBtn.addEventListener('click', () => { activeDomain = ''; renderGrid(); });
+  container.appendChild(allBtn);
+
+  const sorted = [...domainCounts.entries()].sort((a, b) => a[0].localeCompare(b[0], 'cs'));
+  for (const [domain, count] of sorted) {
+    const btn = document.createElement('button');
+    btn.className = 'domain-chip' + (activeDomain === domain ? ' active' : '');
+    btn.textContent = `${domain} (${count})`;
+    btn.dataset.domain = domain;
+    btn.addEventListener('click', () => { activeDomain = domain; renderGrid(); });
+    container.appendChild(btn);
+  }
+}
+
+// ====== TOP CRITICAL PANEL ======
+
+function renderTopCritical() {
+  const container = document.getElementById('topCritical');
+  if (!container) return;
+
+  const bad = allIndicators.filter(i => i.signal === 'bad');
+  if (!bad.length) { container.classList.add('hidden'); return; }
+
+  // Seřaď podle procentuálního odchýlení od OECD benchmarku
+  const scored = bad.map(ind => {
+    const oecd = ind.benchmark?.oecd;
+    const gap = oecd != null ? Math.abs((ind.value - oecd) / oecd * 100) : 0;
+    return { ind, gap };
+  }).sort((a, b) => b.gap - a.gap);
+
+  const top = scored.slice(0, 3);
+  container.classList.remove('hidden');
+
+  const items = top.map(({ ind, gap }) => {
+    const oecdVal = ind.benchmark?.oecd;
+    const gapStr = oecdVal != null ? `${gap.toFixed(0)} % od OECD` : '';
+    return `
+      <div class="top-critical-item" role="button" tabindex="0" data-id="${ind.id}"
+           aria-label="${escapeText(ind.name)}: ${ind.value} ${ind.unit}">
+        <span class="signal bad" title="Kritický"></span>
+        <span class="top-critical-name">${escapeText(ind.name)}</span>
+        <span class="top-critical-value">${ind.value} ${ind.unit}</span>
+        ${oecdVal != null ? `<span class="top-critical-oecd">OECD: ${oecdVal}</span>` : ''}
+        ${gapStr ? `<span class="top-critical-gap">${gapStr}</span>` : ''}
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="top-critical-header"><span class="top-critical-icon">⚠</span> Nejkritičtější oblasti</div>
+    <div class="top-critical-list">${items}</div>`;
+
+  container.querySelectorAll('.top-critical-item').forEach(el => {
+    const handler = () => {
+      const ind = allIndicators.find(i => i.id === el.dataset.id);
+      if (ind) openMethodCard(ind);
+    };
+    el.addEventListener('click', handler);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
+  });
+}
+
+// ====== MODAL TREND CHART ======
+
+function renderModalChart(indicator) {
+  const canvas = document.getElementById('modalTrendCanvas');
+  if (!canvas) return;
+  if (_modalChart) { _modalChart.destroy(); _modalChart = null; }
+
+  const trend = indicator.trend || [];
+  if (trend.length < 2) return;
+
+  const color = indicator.signal === 'good' ? '#38761D'
+    : indicator.signal === 'warn' ? '#B45F06'
+    : indicator.signal === 'bad' ? '#990000' : '#0B5394';
+
+  const labels = trend.map(t => t.year);
+  const datasets = [{
+    label: 'ČR',
+    data: trend.map(t => t.value),
+    borderColor: color, backgroundColor: color + '22',
+    fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5,
+  }];
+
+  if (indicator.benchmark?.oecd != null) {
+    datasets.push({
+      label: 'OECD průměr',
+      data: labels.map(() => indicator.benchmark.oecd),
+      borderColor: '#4A90D9', backgroundColor: 'transparent',
+      borderDash: [6, 3], borderWidth: 1.5, pointRadius: 0, fill: false,
+    });
+  }
+  if (indicator.benchmark?.eu != null) {
+    datasets.push({
+      label: 'EU průměr',
+      data: labels.map(() => indicator.benchmark.eu),
+      borderColor: '#E69138', backgroundColor: 'transparent',
+      borderDash: [3, 3], borderWidth: 1.5, pointRadius: 0, fill: false,
+    });
+  }
+
+  // eslint-disable-next-line no-undef
+  _modalChart = new Chart(canvas, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: datasets.length > 1, position: 'top', labels: { font: { size: 11 }, boxWidth: 16 } },
+        tooltip: { displayColors: true },
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#EDF2F7' }, ticks: { font: { size: 11 }, maxTicksLimit: 5 } },
+      },
+    },
+  });
 }
 
 // ====== INTERAKCE ======
@@ -741,6 +939,7 @@ function wireUp() {
       document.querySelectorAll('.dimnav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeArea = btn.dataset.area;
+      activeDomain = '';
       renderGrid();
     });
   });
