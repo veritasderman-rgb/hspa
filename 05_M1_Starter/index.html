@@ -33,10 +33,10 @@
     <button class="btn-reload" id="btnReload" title="Načíst nejnovější data">⟳ Načíst znovu</button>
     <button class="btn-theme" id="btnTheme" title="Přepnout světlý/tmavý režim" aria-label="Přepnout téma">🌙</button>
   </div>
-  <div class="audience-switch" role="tablist">
-    <button data-aud="public" class="active">Pro veřejnost</button>
-    <button data-aud="prof">Pro odborníky</button>
-    <button data-aud="policy">Pro tvůrce politik</button>
+  <div class="audience-switch" role="tablist" aria-label="Výběr publika">
+    <button data-aud="public" class="active" role="tab" aria-selected="true">Pro veřejnost</button>
+    <button data-aud="prof" role="tab" aria-selected="false">Pro odborníky</button>
+    <button data-aud="policy" role="tab" aria-selected="false">Pro tvůrce politik</button>
   </div>
 </header>
 
@@ -57,7 +57,7 @@
 
 <main id="content">
 
-  <div id="status" class="status hidden"></div>
+  <div id="status" class="status hidden" aria-live="polite"></div>
 
   <div class="audience-banner public">
     <strong>Vítejte.</strong> Tato stránka shrnuje, jak si české zdravotnictví stojí. Najdete zde klíčové ukazatele s trendem a srovnáním s OECD/EU průměrem.
@@ -146,9 +146,9 @@
 </footer>
 
 <!-- Modal pro metodické karty -->
-<div class="modal-backdrop hidden" id="modalBackdrop">
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modalClose">×</button>
+<div class="modal-backdrop hidden" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Zavřít detail">×</button>
     <div id="modalContent"></div>
   </div>
 </div>
