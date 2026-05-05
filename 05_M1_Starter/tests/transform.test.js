@@ -13,6 +13,9 @@ import {
   extractBenchmark,
   extractFromNrzp,
   extractNrzpRegions,
+  extractFromNrh,
+  extractNrhRegions,
+  matchesMkn10,
   transform,
 } from '../ingest/transform.js';
 import { cachePath, ensureCacheDir, writeCache } from '../ingest/lib/cache.js';
@@ -334,7 +337,8 @@ test('extractNrzpRegions: krajský rozpad pro nejnovější rok', () => {
 
 test('transform: vyrobí validní data/indicators.json se všemi poli', async () => {
   const tmpFile = path.join(ROOT, 'data', 'indicators.test.json');
-  const out = await transform({ outFile: tmpFile });
+  const tmpRegions = path.join(ROOT, 'data', 'regions.test.json');
+  const out = await transform({ outFile: tmpFile, regionsFile: tmpRegions });
   try {
     assert.ok(out.version);
     assert.ok(out.generated_at);
@@ -347,5 +351,104 @@ test('transform: vyrobí validní data/indicators.json se všemi poli', async ()
     }
   } finally {
     if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
+    if (fs.existsSync(tmpRegions)) fs.unlinkSync(tmpRegions);
   }
+});
+
+// ===== M-NZIS-2: matchesMkn10 + extractFromNrh + extractNrhRegions =====
+
+test('matchesMkn10: prefix match', () => {
+  assert.equal(matchesMkn10('I21', { mkn10_prefix: ['I21', 'I22'] }), true);
+  assert.equal(matchesMkn10('I22.0', { mkn10_prefix: ['I21', 'I22'] }), true);
+  assert.equal(matchesMkn10('J18', { mkn10_prefix: ['I21'] }), false);
+  assert.equal(matchesMkn10(null, { mkn10_prefix: ['I21'] }), false);
+});
+
+test('matchesMkn10: range match', () => {
+  assert.equal(matchesMkn10('I50', { mkn10_prefix_range: { from: 'I00', to: 'I99' } }), true);
+  assert.equal(matchesMkn10('I99', { mkn10_prefix_range: { from: 'I00', to: 'I99' } }), true);
+  assert.equal(matchesMkn10('J01', { mkn10_prefix_range: { from: 'I00', to: 'I99' } }), false);
+});
+
+test('matchesMkn10: bez query → vrátí true (žádný filter)', () => {
+  assert.equal(matchesMkn10('I21', {}), true);
+});
+
+test('extractFromNrh: in-hospital mortality % pro AIM (I21)', () => {
+  const fixture = {
+    columns: ['rok', 'pohlavi', 'vekova_kategorie', 'kraj_bydliste', 'diagnoza_3', 'druh_prijeti', 'operace', 'umrti', 'pocet'],
+    records: [
+      { rok: '2023', pohlavi: 'M', vekova_kategorie: '60-64', kraj_bydliste: 'CZ010', diagnoza_3: 'I21', druh_prijeti: '1', operace: '0', umrti: '40', pocet: '600' },
+      { rok: '2024', pohlavi: 'M', vekova_kategorie: '60-64', kraj_bydliste: 'CZ010', diagnoza_3: 'I21', druh_prijeti: '1', operace: '0', umrti: '35', pocet: '650' },
+      { rok: '2024', pohlavi: 'Z', vekova_kategorie: '60-64', kraj_bydliste: 'CZ020', diagnoza_3: 'I21', druh_prijeti: '1', operace: '0', umrti: '20', pocet: '350' },
+      { rok: '2024', pohlavi: 'M', vekova_kategorie: '60-64', kraj_bydliste: 'CZ010', diagnoza_3: 'J18', druh_prijeti: '1', operace: '0', umrti: '50', pocet: '200' }, // pneumonia – ignoruje
+    ],
+  };
+  writeCache('uzis_nrh_dlouhodoba_rada.json', fixture);
+  try {
+    const out = extractFromNrh('mortalita_inhosp_ami');
+    assert.ok(out, 'extract returned null');
+    assert.equal(out.year, 2024);
+    // 2024: úmrtí 35+20 = 55, hospitalizací 650+350 = 1000 → 5.5 %
+    assert.equal(out.value, 5.5);
+    assert.equal(out.trend.length, 2);
+    assert.equal(out.trend[0].value, 6.67); // 2023: 40/600 = 6.666...
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrh_dlouhodoba_rada.json'));
+  }
+});
+
+test('extractFromNrh: hospitalizations_per_100k', () => {
+  const fixture = {
+    columns: ['rok', 'pohlavi', 'vekova_kategorie', 'kraj_bydliste', 'diagnoza_3', 'druh_prijeti', 'operace', 'umrti', 'pocet'],
+    records: [
+      { rok: '2024', kraj_bydliste: 'CZ010', diagnoza_3: 'A00', umrti: '0', pocet: '500000' },
+      { rok: '2024', kraj_bydliste: 'CZ020', diagnoza_3: 'A00', umrti: '0', pocet: '500000' },
+    ],
+  };
+  writeCache('uzis_nrh_dlouhodoba_rada.json', fixture);
+  try {
+    const out = extractFromNrh('hospitalizace_na_100k');
+    assert.ok(out);
+    // 1_000_000 hospitalizací / 10_900_000 obyvatel * 100k ≈ 9174
+    assert.ok(out.value > 9000 && out.value < 9500, `got ${out.value}`);
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrh_dlouhodoba_rada.json'));
+  }
+});
+
+test('extractNrhRegions: krajský rozpad mortality pro AIM', () => {
+  const fixture = {
+    columns: ['rok', 'kraj_bydliste', 'diagnoza_3', 'umrti', 'pocet'],
+    records: [
+      { rok: '2024', kraj_bydliste: 'CZ010', diagnoza_3: 'I21', umrti: '40', pocet: '1000' },
+      { rok: '2024', kraj_bydliste: 'CZ020', diagnoza_3: 'I21', umrti: '60', pocet: '1000' },
+      { rok: '2023', kraj_bydliste: 'CZ010', diagnoza_3: 'I21', umrti: '50', pocet: '1000' }, // starý rok
+    ],
+  };
+  writeCache('uzis_nrh_dlouhodoba_rada.json', fixture);
+  try {
+    const out = extractNrhRegions('mortalita_inhosp_ami');
+    assert.ok(out);
+    assert.equal(out.year, 2024);
+    assert.equal(out.regions.length, 2);
+    const praha = out.regions.find(r => r.code === 'CZ010');
+    assert.equal(praha.value, 4); // 40/1000 * 100 = 4 %
+    const stred = out.regions.find(r => r.code === 'CZ020');
+    assert.equal(stred.value, 6);
+    assert.equal(out.country_avg, 5); // 100/2000 = 5 %
+  } finally {
+    fs.unlinkSync(cachePath('uzis_nrh_dlouhodoba_rada.json'));
+  }
+});
+
+test('extractFromNrh: bez cache vrátí null', () => {
+  if (fs.existsSync(cachePath('uzis_nrh_dlouhodoba_rada.json'))) {
+    fs.unlinkSync(cachePath('uzis_nrh_dlouhodoba_rada.json'));
+  }
+  assert.equal(extractFromNrh('mortalita_inhosp_ami'), null);
+});
+
+test('extractFromNrh: neznámé indicator id vrátí null', () => {
+  assert.equal(extractFromNrh('neexistujici_id'), null);
 });

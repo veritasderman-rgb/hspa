@@ -1,0 +1,32 @@
+{
+  "_doc": "Mapování indicator_id → konfigurace extrakce z NRH dlouhodobé časové řady. Sloupce NRH: rok, pohlavi, vekova_kategorie, kraj_bydliste, diagnoza_3, druh_prijeti, operace, umrti, pocet. Funkce extractFromNrh v transform.js přečte uzis_nrh_dlouhodoba_rada.json z cache, aplikuje filter (mkn10/age/sex/admission), spočte metric a volitelně rozpad po krajích.",
+  "extracts": {
+    "mortalita_inhosp_ami": {
+      "dataset": "nrh_dlouhodoba_rada",
+      "mkn10_prefix": ["I21", "I22"],
+      "metric": "in_hospital_mortality_pct",
+      "by_region": true,
+      "note": "In-hospital mortalita po hospitalizaci pro AIM (MKN-10 I21–I22). Skutečná 30denní mortalita vyžaduje propojení s LPZ (List o prohlídce zemřelého) — to NRH dlouhodobá řada nemá. Tato hodnota je proxy."
+    },
+    "mortalita_inhosp_cmp": {
+      "dataset": "nrh_dlouhodoba_rada",
+      "mkn10_prefix": ["I60", "I61", "I62", "I63", "I64"],
+      "metric": "in_hospital_mortality_pct",
+      "by_region": true,
+      "note": "In-hospital mortalita po hospitalizaci pro CMP (I60–I64). Proxy 30d mortality."
+    },
+    "mortalita_kardiovaskularni": {
+      "dataset": "nrh_dlouhodoba_rada",
+      "mkn10_prefix_range": { "from": "I00", "to": "I99" },
+      "metric": "in_hospital_deaths_per_100k",
+      "by_region": true,
+      "note": "In-hospital úmrtí na kardiovaskulární onemocnění (kapitola I MKN-10) na 100 000 obyvatel. Proxy národní mortality."
+    },
+    "hospitalizace_na_100k": {
+      "dataset": "nrh_dlouhodoba_rada",
+      "metric": "hospitalizations_per_100k",
+      "by_region": true,
+      "note": "Celkový počet hospitalizačních případů na 100 000 obyvatel."
+    }
+  }
+}

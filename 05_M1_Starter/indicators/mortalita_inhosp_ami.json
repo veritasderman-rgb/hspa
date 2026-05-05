@@ -1,0 +1,32 @@
+{
+  "id": "mortalita_inhosp_ami",
+  "name": "In-hospital úmrtnost po IM (AMI)",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Klinická efektivnost",
+  "definition": "Podíl úmrtí během hospitalizace pro akutní infarkt myokardu (MKN-10 I21–I22) z celkového počtu hospitalizací pro tuto diagnózu. Proxy pro 30denní mortalitu, kterou NRH dlouhodobá řada bez propojení s LPZ neobsahuje.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrh",
+      "dataset": "nrh_dlouhodoba_rada",
+      "mkn10_prefix": ["I21", "I22"],
+      "note": "Filtrace MKN-10 I21–I22 z NRH dlouhodobé časové řady ÚZIS. Jmenovatel = počet hospitalizací s touto diagnózou; čitatel = úmrtí během hospitalizace."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "AMI30DAYS"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "AMI30DAYS",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["ÚZIS", "NRC"],
+  "method_notes": "POZOR — metodicky je in-hospital mortalita mírně nižší než 30denní (úmrtí po propuštění zatím nezachycuje). OECD HCQI publikuje 30d mortalitu, lze použít jako benchmark, ale neporovnávat 1:1. Pro přesnou 30d mortalitu je potřeba propojení NRH × LPZ (List o prohlídce zemřelého) — to NRH dlouhodobá řada neumožňuje.",
+  "limitations": "Zahrnuje pouze hospitalizované pacienty. Pacienti zemřelí mimo nemocnici (přednemocniční úmrtí, úmrtí po propuštění) nejsou v jmenovateli."
+}
