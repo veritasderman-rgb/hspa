@@ -4,6 +4,7 @@
 
 import { wireAudienceSwitch, getAudience, audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
 import { buildIndex, loadLinks } from './strategy-links.js';
+import { renderTimeline, renderResponsibilityMatrix } from './strategy-policy-views.js';
 
 const LEVEL_LABELS = {
   national: 'Národní ČR',
@@ -49,6 +50,9 @@ function renderList() {
 
   document.getElementById('countBadge').textContent =
     `${filtered.length} strateg${filtered.length === 1 ? 'ie' : (filtered.length < 5 ? 'ie' : 'ií')}`;
+
+  // Audience „policy" — extra sekce nad gridem (timeline + responsibility matrix)
+  renderPolicyExtras(filtered);
 
   if (!filtered.length) {
     grid.innerHTML = '';
@@ -211,6 +215,33 @@ function renderDetail(id) {
 
 function audienceLabel(a) {
   return ({ public: 'pro veřejnost', expert: 'pro odborníka', policy: 'pro tvůrce politik' })[a] ?? a;
+}
+
+function renderPolicyExtras(filtered) {
+  const target = document.getElementById('policyExtras');
+  if (!target) return;
+  if (getAudience() !== 'policy' || filtered.length === 0) {
+    target.innerHTML = '';
+    target.classList.add('hidden');
+    return;
+  }
+  target.classList.remove('hidden');
+  target.innerHTML = `
+    <section class="policy-block">
+      <header class="policy-block-header">
+        <h3>📅 Časová osa strategií</h3>
+        <p class="section-note">Horizonty platnosti aktivních strategií. Klik na pruh otevře detail.</p>
+      </header>
+      ${renderTimeline(filtered)}
+    </section>
+    <section class="policy-block">
+      <header class="policy-block-header">
+        <h3>🏛️ Mapa zodpovědnosti</h3>
+        <p class="section-note">Kdo je vlastníkem/spolu-garantem které strategie. Top 16 institucí podle počtu strategií.</p>
+      </header>
+      ${renderResponsibilityMatrix(filtered)}
+    </section>
+  `;
 }
 
 function wireFilters() {
