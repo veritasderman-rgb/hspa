@@ -71,7 +71,7 @@ function renderList() {
     .map(level => {
       const items = byLevel[level];
       return `
-        <section class="level-block">
+        <section class="level-block" id="level-${escapeHtml(level)}">
           <h3 class="level-title">${escapeHtml(LEVEL_LABELS[level] ?? level)} <span class="badge">${items.length}</span></h3>
           <div class="strategy-cards">
             ${items.map(renderCard).join('')}
@@ -87,11 +87,25 @@ function renderCard(s) {
     ? `${s.horizon.from ?? '?'}–${s.horizon.to ?? '?'}`
     : '';
   const tldr = audienceText(s);
+
+  const acctStatus = s.accountability?.evaluation_status || 'missing';
+  const acctText = {
+    published: 'Vyhodnoceno',
+    pending: 'Čeká',
+    missing: 'Bez kontroly',
+  }[acctStatus] ?? 'Bez kontroly';
+  const acctTitle = {
+    published: 'Strategie má veřejný report o plnění',
+    pending: 'Vyhodnocení deklarováno, ale zatím nepublikováno',
+    missing: 'Není veřejně známý mechanismus vyhodnocení',
+  }[acctStatus] ?? 'Není veřejně známý mechanismus vyhodnocení';
+
   return `
     <a class="strategy-card" href="strategie.html?id=${encodeURIComponent(s.id)}">
       <div class="card-meta">
         <span class="status-pill ${status.cls}">${escapeHtml(status.label)}</span>
         ${horizon ? `<span class="card-horizon">${escapeHtml(horizon)}</span>` : ''}
+        <span class="acct-badge acct-${escapeHtml(acctStatus)}" title="${escapeHtml(acctTitle)}">${escapeHtml(acctText)}</span>
       </div>
       <h4>${escapeHtml(s.title)}</h4>
       ${s.subtitle ? `<div class="card-sub">${escapeHtml(s.subtitle)}</div>` : ''}
@@ -204,6 +218,53 @@ function renderDetail(id) {
         </p>
       </section>
     ` : ''}
+
+    ${(() => {
+      const acct = s.accountability;
+      if (!acct) return '';
+      const acctStatus = acct.evaluation_status || 'missing';
+      const acctText = { published: 'Vyhodnoceno', pending: 'Čeká', missing: 'Bez kontroly' }[acctStatus] ?? 'Bez kontroly';
+
+      const budgetVal = acct.budget?.amount_czk != null
+        ? `${acct.budget.amount_czk.toLocaleString('cs-CZ')} Kč${acct.budget.year_approved ? ` (schváleno ${acct.budget.year_approved})` : ''}`
+        : 'Veřejně neuvedeno';
+
+      const targetsVal = acct.target_indicators?.length
+        ? `${acct.target_indicators.length} kvantifikovaný${acct.target_indicators.length === 1 ? '' : (acct.target_indicators.length < 5 ? 'e' : 'ch')} cíl${acct.target_indicators.length === 1 ? '' : (acct.target_indicators.length < 5 ? 'e' : 'ů')}: ${acct.target_indicators.map(escapeHtml).join(', ')}`
+        : 'Cíle nejsou kvantifikovány';
+
+      const evalVal = acct.last_evaluation_url
+        ? `<a href="${escapeHtml(acct.last_evaluation_url)}" target="_blank" rel="noopener">Zobrazit hodnotící zprávu ↗</a>`
+        : 'Veřejné vyhodnocení chybí';
+
+      const respVal = acct.evaluation_responsible
+        ? escapeHtml(acct.evaluation_responsible)
+        : 'Není určeno';
+
+      return `
+        <section class="detail-section ed-accountability-detail">
+          <h3>Veřejná kontrola <span class="acct-badge acct-${escapeHtml(acctStatus)}">${escapeHtml(acctText)}</span></h3>
+          <dl class="acct-grid">
+            <div class="acct-row">
+              <dt>1. Kolik peněz jsme do toho dali?</dt>
+              <dd>${budgetVal}</dd>
+            </div>
+            <div class="acct-row">
+              <dt>2. Co se za to mělo zlepšit?</dt>
+              <dd>${targetsVal}</dd>
+            </div>
+            <div class="acct-row">
+              <dt>3. Co se reálně zlepšilo?</dt>
+              <dd>${evalVal}</dd>
+            </div>
+            <div class="acct-row">
+              <dt>4. Kdo je odpovědný za vyhodnocení?</dt>
+              <dd>${respVal}</dd>
+            </div>
+          </dl>
+        </section>
+      `;
+    })()}
 
     <footer class="detail-footer">
       <span>Ověřeno: ${escapeHtml(s.verified_at ?? '?')}</span>

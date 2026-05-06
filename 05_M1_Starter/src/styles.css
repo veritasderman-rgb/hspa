@@ -2027,3 +2027,135 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .cat-header-row { flex-wrap: wrap; }
   .cat-count { margin-left: 0; }
 }
+
+/* =================================================================
+   P3.8 + P3.9 · Strategie editorial: accountability + badges
+   ================================================================= */
+
+/* Accountability badge (inline pill on cards and detail header) */
+.acct-badge {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  white-space: nowrap;
+}
+.acct-published { color: var(--good); }
+.acct-pending { color: var(--warn); }
+.acct-missing { color: var(--red); }
+
+/* P3.9 · Sekce „Veřejná kontrola" na rozcestí */
+.ed-accountability {
+  background: var(--paper2);
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 32px 40px;
+  margin-bottom: 0;
+}
+.ed-accountability h3 {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+.ed-accountability p {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink-mut);
+  line-height: 1.6;
+  max-width: 820px;
+  margin-bottom: 20px;
+}
+.ed-acct-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  align-items: center;
+}
+.ed-acct-questions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  list-style: none;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+}
+.ed-acct-questions li {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px 20px 0;
+  border-right: 1px solid var(--rule2);
+}
+.ed-acct-questions li:last-child { border-right: none; }
+.acct-q-num {
+  font-family: var(--serif);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.acct-q-text {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* P3.9 · Accountability detail grid in strategy detail page */
+.ed-accountability-detail { margin-bottom: 28px; }
+.acct-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.acct-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+.acct-row dt {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-mut2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-top: 2px;
+}
+.acct-row dd {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.acct-row dd a {
+  color: var(--ink);
+  border-bottom: 1px dashed var(--rule2);
+  text-decoration: none;
+}
+.acct-row dd a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+@media (max-width: 768px) {
+  .ed-accountability { padding: 24px 16px; }
+  .ed-acct-questions { grid-template-columns: 1fr 1fr; }
+  .ed-acct-questions li { border-right: none; border-bottom: 1px solid var(--rule2); }
+  .ed-acct-questions li:nth-child(odd) { border-right: 1px solid var(--rule2); }
+  .ed-acct-questions li:nth-last-child(-n+2) { border-bottom: none; }
+  .acct-q-num { font-size: 36px; }
+  .acct-row { grid-template-columns: 1fr; gap: 4px; }
+}

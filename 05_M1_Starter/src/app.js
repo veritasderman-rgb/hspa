@@ -293,7 +293,7 @@ function renderEditorialHero() {
     const stories = [
       { ind: findInd('mortalita_inhosp_cmp'), headline: 'Nemocniční úmrtnost po cévní mozkové příhodě je výrazně vyšší než průměr OECD.', subline: 'Úmrtí během hospitalizace — měřítko kvality akutní péče. ČR a OECD používají mírně odlišnou metodiku, srovnání je orientační.' },
       { ind: findInd('screening_kolorektalni'), headline: 'Účast v populačním screeningu kolorekta je o třetinu nižší než v OECD.', subline: 'Stáří 50–74 let, dvouletý interval — klíčová prevence rakoviny tlustého střeva.' },
-      { ind: findInd('nadeje_doziti_zdravi_65'), headline: 'Senioři v ČR mají v průměru o 1,8 roku méně zdravých let než v zemích OECD.', subline: 'Healthy Life Years při dosažení 65 let — vyjadřuje kvalitu života ve stáří.' },
+      { ind: findInd('nadeje_doziti_zdravi_65'), headline: 'Senioři v ČR mají v průměru o 1,8 roku méně zdravých let než v zemích OECD.', subline: 'Léta prožitá ve zdraví (Healthy Life Years) při dosažení 65 let — vyjadřuje kvalitu života ve stáří.' },
     ].filter(function (s) { return s.ind; });
 
     const grid = document.getElementById('edStoriesGrid');
