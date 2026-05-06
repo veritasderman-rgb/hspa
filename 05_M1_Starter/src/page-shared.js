@@ -1,5 +1,4 @@
-// Sdílené komponenty napříč stránkami: navigační lišta mezi moduly
-// (Indikátory / Jak to funguje / Strategie).
+// Sdílené komponenty napříč stránkami: navigační lišta mezi moduly.
 
 /**
  * Vrátí TL;DR text indikátoru/strategie/explaineru.
@@ -20,6 +19,37 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
   const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
   el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+  renderHSPAScore();
+}
+
+/**
+ * Spočítá HSPA skóre z indikátorů.
+ * Verified + preliminary indikátory: good=100, warn=50, bad=0, neutral ignorováno.
+ * Illustrative indikátory ignorovány úplně.
+ */
+export function computeHSPAScore(indicators) {
+  const scoreable = indicators.filter(i =>
+    (i.verification_status === 'verified' || i.verification_status === 'preliminary') &&
+    i.signal && i.signal !== 'neutral'
+  );
+  if (scoreable.length === 0) return null;
+  const sum = scoreable.reduce((acc, i) => {
+    if (i.signal === 'good') return acc + 100;
+    if (i.signal === 'warn') return acc + 50;
+    return acc;
+  }, 0);
+  return Math.round(sum / scoreable.length);
+}
+
+/**
+ * Načte indikátory a zobrazí HSPA skóre do elementu #czScore.
+ */
+export function renderHSPAScore() {
+  fetch('data/indicators.json').then(r => r.json()).then(data => {
+    const score = computeHSPAScore(data.indicators);
+    const el = document.getElementById('czScore');
+    if (el && score != null) el.textContent = score;
+  }).catch(() => {});
 }
 
 /**
@@ -29,9 +59,11 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
 export function renderModuleNav(activeId) {
   const path = window.location.pathname;
   const tabs = [
-    { id: 'indicators', label: 'Indikátory', href: 'index.html', match: ['index.html', '/'] },
-    { id: 'explainers', label: 'Jak to funguje', href: 'jak-funguje.html', match: ['jak-funguje.html'] },
-    { id: 'strategies', label: 'Strategie', href: 'strategie.html', match: ['strategie.html'] },
+    { id: 'indicators',  label: 'Indikátory',              href: 'index.html',          match: ['index.html', '/'] },
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',       match: ['prevence.html'] },
+    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',      match: ['strategie.html'] },
+    { id: 'about',       label: 'O HSPA',                  href: 'index.html#heroDetails', match: [] },
   ];
 
   const container = document.getElementById('moduleNav');

@@ -55,11 +55,19 @@ header.topbar {
   color: var(--ink);
   padding: 14px 40px 8px;
   border-bottom: 1px solid var(--ink);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
   flex-wrap: wrap;
   box-shadow: none;
 }
-.brand { display: flex; align-items: baseline; gap: 14px; }
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex: 0 0 auto;
+}
 .brand-logo {
   display: none;
 }
@@ -104,7 +112,7 @@ header.topbar {
   font-weight: 600;
 }
 
-/* Masthead sub-strip — date + score banner pod hlavičkou */
+/* Masthead sub-strip — date left, score right */
 .masthead-strip {
   display: flex;
   justify-content: space-between;
@@ -118,7 +126,10 @@ header.topbar {
   background: var(--paper);
 }
 .masthead-strip .masthead-date { font-weight: 500; }
-.masthead-strip .masthead-score strong { color: var(--ink); font-weight: 600; }
+.masthead-strip .masthead-score strong {
+  color: var(--ink);
+  font-weight: 700;
+}
 .modal-actions { margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end; }
 .card-notice {
   background: var(--paper2); border-left: 3px solid var(--red);
@@ -610,23 +621,36 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* =================================================================
-   Module navigation (editorial inline nav, masthead-style)
+   Module navigation — inside topbar, top-right
    ================================================================= */
 .module-nav {
-  display: flex; gap: 22px; padding: 6px 40px;
-  background: var(--paper); border-bottom: 1px solid var(--rule);
-  position: sticky; top: 0; z-index: 50;
-  font-family: var(--sans);
+  display: flex;
+  gap: 22px;
+  background: transparent;
+  border-bottom: none;
+  padding: 0;
+  position: static;
   align-items: center;
+  font-family: var(--sans);
+  flex-wrap: wrap;
 }
 .module-tab {
-  padding: 8px 0; font-size: 11px; font-weight: 500;
-  color: var(--ink-mut); text-decoration: none;
-  border-bottom: 1px solid transparent; transition: all 0.12s;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-mut);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.12s;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .module-tab:hover { color: var(--ink); }
-.module-tab.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
+.module-tab.active {
+  color: var(--red);
+  border-bottom-color: var(--red);
+  font-weight: 600;
+}
 
 /* =================================================================
    Page intro (above grids)
@@ -874,8 +898,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* =================================================================
    Responsive
    ================================================================= */
+@media (max-width: 880px) {
+  header.topbar {
+    padding: 12px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .module-nav { gap: 14px; }
+  .module-tab { font-size: 11px; }
+  .masthead-strip { flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 20px; }
+}
 @media (max-width: 768px) {
-  .module-nav { padding: 0 16px; overflow-x: auto; }
   .filters-row { padding: 12px 16px; }
   .strategy-grid, .explainer-grid, .detail-view, .page-intro { padding-left: 16px; padding-right: 16px; }
   .strategy-cards, .explainer-cards { grid-template-columns: 1fr; }
