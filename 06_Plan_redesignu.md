@@ -180,6 +180,16 @@ Chybí (P0 problém s důvěryhodností). Obsah:
 
 V UI: primární název je laický, originální HSPA termín v menším písmu pod ním. V tooltipu vysvětlení obou.
 
+### P2.6 Prohodit pořadí v menu — Jak to funguje výš než Strategie ✅
+
+**Hotovo (PR z této iterace).** *Jak to funguje* je pro pochopení systému podstatnější než *Strategie* — uživatel se nejprve potřebuje zorientovat v mechanismech, teprve potom dává smysl číst, co se s nimi politicky plánuje. Pořadí menu je nyní:
+
+```
+Indikátory → Jak to funguje → Strategie
+```
+
+V dlouhodobém horizontu zvážit přesun *Strategie* z hlavní navigace do sub-položky pod *Proč to měříme* manifestem (kontext: strategie navazují na konkrétní indikátory, nemají vlastní samostatnou hodnotu bez vazby na data).
+
 ---
 
 ## P3 · Strategický redesign storytellingu
@@ -265,6 +275,83 @@ Každá analytická sekce by měla mít tuto strukturu:
 [VHLED]     Detailní data ukazují, že páka leží v B.
 [AKCE]      Reformní cyklus 2024 navrhuje C; sledovat lze přes indikátor D.
 ```
+
+### P3.8 Storytelling vrstva pro Strategie (paralela k *Jak to funguje*)
+
+Sekce *Strategie* dnes funguje jako rozcestí dokumentů, ale postrádá narativní vrstvu — nevysvětluje, **proč** strategie sledovat, **jak se vzájemně překrývají** a **jak rozeznat strategii od plácání do vody**. *Jak to funguje* tuto vrstvu už dostalo (editorial hero + 4-step flow + storytelling u kategorií) — *Strategie* si ji zaslouží stejně.
+
+**Editorial hero** (analogicky k *Jak to funguje*):
+- Kicker „Strategie zdravotnictví ČR"
+- Headline (návrh): *„Bez vyhodnocení je strategie jen plácání do vody. Sledujeme, kolik peněz, na co a s jakým výsledkem."*
+- Lead odstavec rámující úhel pohledu — strategie nejsou samoúčel, jsou to deklarované sliby, které musí podléhat kontrole
+
+**„Jak se strategie navzájem překrývají" — flow diagram (2×2 nebo timeline):**
+
+| # | Vrstva | Příklad | Kde se překrývá |
+|---|---|---|---|
+| 01 | Národní rámec ČR | Zdraví 2035, NPZ 2030, MZ koncepce | Definuje cíle, na které navazuje sektor a EU |
+| 02 | Sektorové programy | Národní onkologický plán, screening kolorekta, eHealth | Rozpracovává národní cíle do oblastí |
+| 03 | Evropská a globální | EU4Health, EHDS, OECD HSPA, WHO Roadmap | Nastavuje minimální standardy + financování |
+| 04 | Standardy a klasifikace | MKN-10, CZ-DRG, datové standardy ÚZIS | Technická vrstva, bez které ostatní neměří |
+
+Každá vrstva linkuje na svůj filtr v gridu (anchor `#level-national`, `#level-sector`, atd.).
+
+**Cat header storytelling** u každé úrovně (analogicky k explainer kategoriím):
+- Pull-quote `~350 znaků` na úroveň, vysvětlující její roli a kde leží její limity
+
+**Příklady storytellingu pro úrovně:**
+
+- **Národní rámec** *(Zdraví 2035, NPZ 2030)*: „Národní strategie definují směr na 10–15 let dopředu, ale často trpí slabou vymahatelností — nikdo není zodpovědný za to, jestli se cíle skutečně plní. Sledujeme nejen jejich existenci, ale i mezicíle, vyhodnocení a navazující rozpočet."
+- **Sektorové programy** *(screening, onkoplán, eHealth)*: „Sektorové strategie jsou tam, kde se reálně utrácí peníze. Národní onkologický plán získal v posledních letech miliardy korun — otázka je, kolik z toho dorazilo k pacientům a co se konkrétně zlepšilo."
+- **EU/globální** *(EU4Health, EHDS, OECD)*: „Evropské a globální strategie nastavují minimální standardy a často financování, kterému se ČR musí přizpůsobit. Slabá orientace v tomto rámci znamená, že ČR často přichází o granty nebo plní formality, které neměly být cílem."
+- **Standardy** *(MKN-10, CZ-DRG)*: „Technická vrstva, která nezní sexy, ale bez níž žádná z výše uvedených strategií nemá jak měřit svůj dopad. Změna jednoho standardu může přepočítat úhrady pro celý sektor."
+
+### P3.9 Sekce „Kontrola strategií = kontrola peněz"
+
+**Ústřední narativ:** *„Strategie bez vyhodnocení je jen plácání do vody."* Pro každou strategii musíme veřejně sledovat 4 otázky:
+
+1. **Kolik peněz jsme do toho dali?** (zdroj financování, schválený rozpočet, čerpání)
+2. **Co se za to mělo zlepšit?** (cílová hodnota indikátoru + cílový rok)
+3. **Co se reálně zlepšilo?** (aktuální hodnota indikátoru + trend)
+4. **Kdo je odpovědný za vyhodnocení?** (garant + frekvence reportingu)
+
+**Implementace na detailu strategie:**
+- Sekce „Veřejná kontrola" s 4 řádky odpovídajícími 4 otázkám výše
+- Pro každý řádek: hodnota nebo poctivé „**zatím nezveřejněno**" / „**čeká na vyhodnocení**" / „**indikátor není centrálně sledován**"
+- Tato pole musí být v `data/strategies.json` rozšířena (pole `accountability`):
+  ```json
+  "accountability": {
+    "budget": { "amount_czk": ..., "source": "...", "year_approved": ... },
+    "target_indicators": [{ "id": "...", "target_value": ..., "target_year": ... }],
+    "evaluation_responsible": "MZ ČR / oddělení strategie",
+    "evaluation_frequency": "ročně / 2× ročně",
+    "last_evaluation_url": "...",
+    "evaluation_status": "published | pending | missing"
+  }
+  ```
+
+**Přidat na úvodní stránku** (jako součást manifestu „Proč to měříme" nebo jako nový blok):
+- Krátká věta: *„Veřejné peníze si zaslouží veřejnou kontrolu. Z každé strategie sledujeme: kolik se schválilo, co se za to slíbilo, a kolik z toho se splnilo."*
+- Link na nový stack na stránce Strategie: „**Kontrola strategií**" (filtr/sekce ukazující všechny strategie s jejich `evaluation_status`)
+
+**Indikátor agregace (na hlavní stránce):**
+- *„Z 33 sledovaných strategií má 8 publikované vyhodnocení, 12 čeká na první report, 13 nemá centrální vyhodnocení."*
+- Klikací — vede na sekci „Strategie bez vyhodnocení" (nejdůležitější pro občanskou kontrolu)
+
+**Vyhodnocovací stav (badge na strategy card):**
+
+| Status | Význam | Vizuál |
+|---|---|---|
+| 📊 **Vyhodnoceno** | Aspoň jeden veřejný report o plnění je dostupný | Ink badge |
+| ⏳ **Čeká na vyhodnocení** | Strategie běží, vyhodnocení deklarováno, ale ještě nepublikováno | Warn badge |
+| ⚠️ **Bez veřejné kontroly** | Strategie existuje, ale není veřejně známý mechanismus vyhodnocení | Red badge |
+
+(Bez emoji — textové badges v editorial stylu, sjednocené s P2.3.)
+
+**Proč to dělat:**
+- Vrátí debatu o reformách k podstatě: skutečná páka není v psaní strategií, ale v jejich vymahatelnosti
+- Pro veřejnost vytvoří měřitelný způsob, jak hodnotit, jestli se zdravotnictví hýbe správným směrem
+- Pro novináře a politiky poskytne přesné body, na které se ptát
 
 ---
 
