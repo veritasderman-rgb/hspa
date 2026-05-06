@@ -1767,6 +1767,8 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 
 /* =================================================================
    Editorial manifest — „Proč to měříme" sekce na úvodní straně
+   Sdílí .ed-flow-grid + .ed-flow-step strukturu pro vizuální konzistenci
+   se sekcí „Jak to spolu souvisí" na jak-funguje.html.
    ================================================================= */
 .ed-manifest {
   padding: 0 0 36px;
@@ -1789,59 +1791,22 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   line-height: 1.6;
   color: var(--ink-mut);
   max-width: 760px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 .ed-manifest-lead strong {
   color: var(--ink);
   font-weight: 600;
 }
 
-.ed-manifest-principles {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid var(--ink);
+/* Principles — recykluje .ed-flow-step (article místo a, neutralizuje hover/cursor) */
+.ed-principle-step {
+  cursor: default;
 }
-.ed-principle {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  column-gap: 24px;
-  align-items: start;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--rule);
+.ed-principle-step:hover {
+  background: var(--paper);
 }
-.ed-principle:last-child {
-  border-bottom: 1px solid var(--ink);
-}
-.ed-principle-num {
-  font-family: var(--serif);
-  font-size: 44px;
-  font-weight: 700;
-  letter-spacing: -1.2px;
-  line-height: 0.9;
-  color: var(--red);
-}
-.ed-principle-body {
-  max-width: 760px;
-}
-.ed-principle-name {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  line-height: 1.2;
+.ed-principle-step:hover .ed-flow-num {
   color: var(--ink);
-  margin-bottom: 8px;
-}
-.ed-principle-desc {
-  font-family: var(--serif);
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--ink-mut);
-}
-.ed-principle-desc strong {
-  color: var(--ink);
-  font-weight: 600;
 }
 
 .ed-manifest-cta {
@@ -1869,10 +1834,6 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 @media (max-width: 880px) {
   .ed-manifest-headline { font-size: 32px; letter-spacing: -0.6px; }
   .ed-manifest-lead { font-size: 16px; }
-  .ed-principle { grid-template-columns: 56px 1fr; column-gap: 16px; }
-  .ed-principle-num { font-size: 32px; letter-spacing: -0.8px; }
-  .ed-principle-name { font-size: 18px; }
-  .ed-principle-desc { font-size: 14px; }
   .ed-manifest-cta { justify-content: flex-start; }
 }
 
