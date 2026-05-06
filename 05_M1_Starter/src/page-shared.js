@@ -75,10 +75,10 @@ export function renderModuleNav(activeId) {
   const tabs = [
     { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
-    { id: 'schema',      label: 'Schéma systému',          href: 'schema.html',             match: ['schema.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
     { id: 'themes',      label: 'Tematické linie',         href: 'tematicke-linie.html',    match: ['tematicke-linie.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'] },
+    { id: 'schema',      label: 'Schéma systému',          href: 'schema.html',             match: ['schema.html'] },
     { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
     { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];

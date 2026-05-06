@@ -103,6 +103,18 @@ function renderList() {
         </section>
       `;
     }).join('');
+
+  grid.innerHTML += `
+    <section class="cat-block schema-promo-block">
+      <a class="schema-promo-link" href="schema.html">
+        <div class="schema-promo-inner">
+          <div class="schema-promo-label">Vizuální přehled</div>
+          <h3 class="schema-promo-title">Schéma zdravotního systému ČR →</h3>
+          <p class="schema-promo-desc">Kdo jsou klíčoví aktéři, jak mezi nimi tečou peníze, regulace a data — interaktivní diagram s odkazem na relevantní explainéry.</p>
+        </div>
+      </a>
+    </section>
+  `;
 }
 
 function renderCard(e) {
