@@ -2,6 +2,8 @@
 // Načítá data z /data/indicators.json a renderuje karty + scorecard + regiony.
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
+import { renderFooter } from './page-shared.js';
+
 const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
@@ -466,7 +468,7 @@ function renderGrid() {
       illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
     }[effectiveVerif] || '';
     const verifBadge = effectiveVerif
-      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
       : '';
 
     card.innerHTML = `
@@ -1248,6 +1250,7 @@ function wireUp() {
   applyHash(hashState);
   wireUp();
   renderMastheadDateLocal();
+  renderFooter();
   try {
     await loadData();
   } catch (err) {

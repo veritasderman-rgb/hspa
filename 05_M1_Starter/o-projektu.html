@@ -137,16 +137,47 @@
         <li>Doplnění chybějících 64 indikátorů (postupně podle dostupnosti dat)</li>
         <li>Veřejný API endpoint pro otevřená data</li>
         <li>WCAG 2.2 AA accessibility audit</li>
-        <li>Nové explainéry: spoluúčast pacienta, HTA, pacientské organizace</li>
+        <li>Nové explainéry: regionální dostupnost, primární péče, prevence jako politika</li>
         <li>Sociální determinanty zdraví (příjmové nerovnosti, NUTS-3)</li>
       </ul>
+    </section>
+
+    <section class="ed-about-block" id="metodika">
+      <h3>Jak vzniká skóre</h3>
+      <p>
+        Souhrnné skóre českého zdravotnictví je průměr signálů ze všech ověřených a předběžných indikátorů
+        (ilustrativní indikátory se do skóre nepočítají). Každý indikátor dostane hodnotu:
+        <strong>dobrý = 100</strong>, <strong>ke sledování = 50</strong>, <strong>kritický = 0</strong>.
+        Indikátory bez benchmarku (signál „neutral") se nezapočítávají.
+      </p>
+      <p>
+        Příklad: 30 indikátorů „dobrý" + 20 „ke sledování" + 8 „kritický" = průměr
+        (30×100 + 20×50 + 8×0) / 58 = <strong>cca 69 / 100</strong>.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Governance a editorial policy</h3>
+      <p>
+        HSPA Monitor je osobní občanský projekt — autorem, provozovatelem a editorem je Josef Pavlovic.
+        Rozhodnutí o obsahu, výběru indikátorů a interpretacích jsou jeho vlastní a nejsou ovlivněna
+        zaměstnavatelem, VZP ani žádnou institucí.
+      </p>
+      <p>
+        Chyby v datech nebo sporné interpretace jsou opravovány průběžně po jejich nahlášení.
+        Opravy jsou zdokumentovány v <a href="https://github.com/veritasderman-rgb/hspa/commits/main" target="_blank" rel="noopener">historii commitů na GitHubu</a>.
+      </p>
     </section>
 
     <section class="ed-about-block">
       <h3>Kontakt</h3>
       <p>
         Web: <a href="https://hspa-cesko.cz">hspa-cesko.cz</a><br>
-        Zdrojový kód: <a href="https://github.com/veritasderman-rgb/hspa" target="_blank" rel="noopener">github.com/veritasderman-rgb/hspa</a>
+        Zdrojový kód: <a href="https://github.com/veritasderman-rgb/hspa" target="_blank" rel="noopener">github.com/veritasderman-rgb/hspa</a><br>
+        Chyby a návrhy: <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">GitHub Issues ↗</a>
+      </p>
+      <p class="footer-privacy">
+        Web nepoužívá sledovací cookies. Žádné osobní údaje návštěvníků nejsou zpracovávány.
       </p>
     </section>
 
@@ -154,10 +185,7 @@
 
 </main>
 
-<footer class="bottom">
-  <p>HSPA Monitor · Nezávislá implementace OECD HSPA rámce pro ČR · Data: ÚZIS, ČSÚ, OECD, Eurostat · Licence CC-BY 4.0</p>
-  <p>Není oficálním portálem MZČR · <a href="index.html">Zpět na dashboard</a></p>
-</footer>
+<footer class="bottom" id="siteFooter"></footer>
 
 <script type="module">
   import { renderModuleNav, renderMastheadDate } from './src/page-shared.js';

@@ -34,6 +34,44 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
   el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
   renderHSPAScore();
+  renderFooter();
+}
+
+/**
+ * Vyplní sdílenou patičku do elementu #siteFooter na každé stránce.
+ */
+export function renderFooter(el = document.getElementById('siteFooter')) {
+  if (!el) return;
+  el.innerHTML = `
+    <div class="row">
+      <div>
+        <h6>O projektu</h6>
+        <p>Občanská implementace OECD HSPA rámce pro ČR. Autor: Josef Pavlovic. Není oficálním portálem MZČR.</p>
+        <p><a href="o-projektu.html">Metodika, zdroje a disclaimer →</a></p>
+      </div>
+      <div>
+        <h6>Data a otevřenost</h6>
+        <p>
+          <a href="data/indicators.json">indicators.json</a> ·
+          <a href="data/regions.json">regions.json</a> ·
+          <a href="indicators/">Metodické karty</a><br>
+          Licence CC-BY 4.0 · Data: ÚZIS, ČSÚ, OECD, Eurostat
+        </p>
+        <p class="footer-privacy">Web nepoužívá sledovací cookies. Žádné osobní údaje nejsou zpracovávány.</p>
+      </div>
+      <div>
+        <h6>Zpětná vazba</h6>
+        <p>
+          <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu nebo navrhnout indikátor ↗</a><br>
+          <a href="https://github.com/veritasderman-rgb/hspa" target="_blank" rel="noopener">Zdrojový kód (GitHub) ↗</a>
+        </p>
+      </div>
+    </div>
+    <div class="disclaimer">
+      Josef Pavlovic · CC-BY 4.0 · Není oficálním portálem MZČR ani OECD ·
+      Citujte: Pavlovic, J. (2026). HSPA Monitor. hspa-cesko.cz
+    </div>
+  `;
 }
 
 /**
@@ -63,6 +101,8 @@ export function renderHSPAScore() {
     const score = computeHSPAScore(data.indicators);
     const el = document.getElementById('czScore');
     if (el && score != null) el.textContent = score;
+    const explainEl = document.getElementById('scoreExplainVal');
+    if (explainEl && score != null) explainEl.textContent = score;
   }).catch(() => {});
 }
 
