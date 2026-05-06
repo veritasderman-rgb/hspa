@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
 const REQUIRED = ['id', 'title', 'category', 'tldr_public', 'tldr_expert', 'tldr_policy'];
-const VALID_CATEGORIES = ['money', 'classification', 'actors', 'process'];
+const VALID_CATEGORIES = ['money', 'classification', 'actors', 'process', 'inspiration'];
 const VALID_VERIFICATION = ['ok', 'needs_verification', 'broken'];
 
 function validate() {

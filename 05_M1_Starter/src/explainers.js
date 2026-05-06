@@ -27,6 +27,11 @@ const CATEGORY_LABELS = {
     desc: 'Rozhodovací mechanismy a dokumentace',
     story: 'Z politického záměru se stane úhradový kód cestou přes několik institucí: parlament schválí zákon, ministerstvo vydá vyhlášku, dohodovací řízení dohodne tarify, pojišťovna upraví smlouvy s poskytovateli. Každý krok trvá měsíce a má vlastní logiku. Reforma „přes noc" je z tohoto pohledu málokdy realistická — ale strop pro reformu je vyšší, než se zdá.',
   },
+  inspiration: {
+    label: 'Inspirace ze světa',
+    desc: 'Konkrétní příklady, kde jiné země dělají věci lépe a co se z toho dá adaptovat',
+    story: 'HSPA filosofie říká: „Nejlepší v OECD jsou inspirace, ne soutěž." V této kategorii rozebíráme konkrétní mechanismy zemí, které v některém ukazateli vedou — kde se shoduje rozdíl s ČR a co konkrétně udělaly. Cílem není kopírovat, ale vidět, že lepší stav je možný a často není závislý na bohatství, ale na organizaci péče.',
+  },
 };
 
 let allExplainers = [];
@@ -71,7 +76,7 @@ function renderList() {
   const byCat = {};
   for (const e of filtered) (byCat[e.category] ??= []).push(e);
 
-  const order = ['money', 'classification', 'actors', 'process'];
+  const order = ['money', 'classification', 'actors', 'process', 'inspiration'];
   grid.innerHTML = order
     .filter(c => byCat[c]?.length)
     .map((cat, idx) => {

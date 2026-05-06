@@ -441,8 +441,22 @@ function renderGrid() {
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
       : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
 
+    const verifText = {
+      verified: 'Ověřeno',
+      preliminary: 'Předběžné',
+      illustrative: 'Ilustrativní',
+    }[ind.verification_status] || '';
+    const verifTitle = {
+      verified: 'Data z primárního zdroje, max. 12 měsíců staré',
+      preliminary: 'Data dostupná, metodika v revizi nebo zdroj není primární',
+      illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
+    }[ind.verification_status] || '';
+    const verifBadge = ind.verification_status
+      ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+      : '';
+
     card.innerHTML = `
-      <div class="area-tag">${ind.area} · ${ind.domain}</div>
+      <div class="area-tag">${ind.area} · ${ind.domain}${verifBadge}</div>
       <div class="top">
         <h4>${ind.name}</h4>
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
