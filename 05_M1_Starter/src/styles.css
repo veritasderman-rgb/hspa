@@ -2210,3 +2210,135 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .acct-q-num { font-size: 36px; }
   .acct-row { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* =================================================================
+   Prevention page (prevence.html)
+   Recykluje ed-hero, ed-flow, ed-stat — přidává jen prevention-grid
+   ================================================================= */
+.prevention-grid-section {
+  padding: 0 0 36px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.prevention-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.prevention-card {
+  display: block;
+  padding: 22px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s;
+}
+.prevention-card:nth-child(3n) { border-right: none; }
+.prevention-card:nth-child(n+7) { border-bottom: none; }
+.prevention-card:hover { background: var(--paper2); }
+
+.prevention-card-daily {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  margin-bottom: 10px;
+}
+.prevention-card-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.prevention-card-subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin-bottom: 14px;
+}
+.prevention-card-snippet {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.prevention-card-meta {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  letter-spacing: 0.02em;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+/* Detail page */
+.prevention-detail .ed-hero { padding-bottom: 22px; }
+.prevention-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 28px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.prevention-action {
+  padding: 22px;
+  border-right: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.prevention-action:last-child { border-right: none; }
+.prevention-action-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -0.8px;
+  margin-bottom: 8px;
+}
+.prevention-source-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.prevention-source-list li {
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0;
+  font-family: var(--serif);
+  font-size: 14px;
+}
+.prevention-source-list a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule2);
+  text-decoration: none;
+}
+.prevention-source-list a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+.prevention-caveat {
+  margin-top: 28px;
+  padding: 14px 18px;
+  background: var(--paper2);
+  border-left: 3px solid var(--warn);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+@media (max-width: 880px) {
+  .prevention-grid { grid-template-columns: 1fr; }
+  .prevention-card { border-right: none !important; border-bottom: 1px solid var(--rule) !important; }
+  .prevention-card:last-child { border-bottom: none !important; }
+  .prevention-actions { grid-template-columns: 1fr; }
+  .prevention-action { border-right: none; border-bottom: 1px solid var(--rule); }
+  .prevention-action:last-child { border-bottom: none; }
+}
