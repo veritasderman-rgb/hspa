@@ -50,9 +50,37 @@ Pokud `data/freshness.json#live_ratio < 0.5`, zobraz vrchní banner:
 
 ---
 
-## Etapa 2: Oprava endpointů (3–5 dní) — runbook
+## Etapa 2: Oprava endpointů (3–5 dní)
 
-Tady NIC neimplementuji bez prozkoumání aktuálních API — endpointy se mění a hádat URL by jen prodloužilo problém. Poznámky pro práci:
+### Status
+
+| Zdroj | Status | Indikátorů live |
+|---|---|---|
+| Eurostat | ✅ **opraveno** | 2/3 (nadeje_doziti_zdravi_65, unmet_need_medical) |
+| ČSÚ DataStat | ⚠️ čeká | 0 (HTTP 404 — runbook níže) |
+| OECD | ⚠️ čeká | 0 (legacy 404, new endpoint 422 — runbook níže) |
+| ÚZIS NRPZS | ❌ blokováno | 0 (timeout 8s+) |
+
+### 2.0 ✅ Eurostat — opraveno
+
+1. **`hlth_hlye` (nadeje_doziti_zdravi_65):** předchozí mapping `age=Y65, indic_he=F`. Eurostat dataset `hlth_hlye` ale **nemá dimenzi `age`** — věk je zakódován v `indic_he` (HLY_0=birth, HLY_50, HLY_65). Hodnota `F` byla zjevně připletená zkratka pro Female. **Oprava:** `indic_he=HLY_65`, `age` odstraněna.
+
+2. **`hlth_silc_08` (unmet_need_medical):** předchozí mapping `quant_inc=TOTAL, reason=TOOEXP_FAR_WAIT`. Dimenze se jmenuje **`quantile`** (ne `quant_inc`), kód je **`TOOEFW`** („Too expensive or too far or waiting list"). **Oprava:** obojí.
+
+**Smoke-test lokálně:**
+```
+[eurostat] done: 3/3 ok
+[transform] wrote 58 indicators (2 from live cache, 56 from seed)
+LIVE indicators: 2 / 58
+  · nadeje_doziti_zdravi_65 = 7.7 let · 2023 · Eurostat
+  · unmet_need_medical      = 0.3 %  · 2025 · Eurostat
+```
+
+Regresní test: `tests/eurostat-mapping.test.js` (5 testů) zachytí návrat starých kódů.
+
+> Pozn.: `nadeje_doziti_total` má `primary.type=csu_datastat` — transform na něj neaplikuje Eurostat data, i když jsou v cachi. Multi-source fallback je úkol etapy 3.
+
+### Runbook pro zbylé zdroje
 
 ### 2.1 ČSÚ DataStat (`csu.js`)
 
