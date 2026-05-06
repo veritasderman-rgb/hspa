@@ -1,5 +1,5 @@
 // Sdílené komponenty napříč stránkami: navigační lišta mezi moduly
-// (Indikátory / Strategie / Jak to funguje).
+// (Indikátory / Jak to funguje / Strategie).
 
 /**
  * Vrátí TL;DR text indikátoru/strategie/explaineru.
@@ -30,8 +30,8 @@ export function renderModuleNav(activeId) {
   const path = window.location.pathname;
   const tabs = [
     { id: 'indicators', label: 'Indikátory', href: 'index.html', match: ['index.html', '/'] },
-    { id: 'strategies', label: 'Strategie', href: 'strategie.html', match: ['strategie.html'] },
     { id: 'explainers', label: 'Jak to funguje', href: 'jak-funguje.html', match: ['jak-funguje.html'] },
+    { id: 'strategies', label: 'Strategie', href: 'strategie.html', match: ['strategie.html'] },
   ];
 
   const container = document.getElementById('moduleNav');
