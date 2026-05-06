@@ -83,6 +83,11 @@ function showError(html) {
 function renderDetail(ind, card, regionDataset) {
   const root = document.getElementById('detailRoot');
   document.title = `${ind.name} · HSPA Monitor`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    const oecd = ind.benchmark?.oecd != null ? ` OECD průměr: ${ind.benchmark.oecd} ${ind.unit}.` : '';
+    metaDesc.content = `${ind.name} — ${ind.domain}. Hodnota: ${ind.value} ${ind.unit} (${ind.year}).${oecd} HSPA Monitor.`;
+  }
 
   const benchmarkHTML = renderBenchmarks(ind);
   const yoy = computeYoy(ind);
@@ -100,7 +105,7 @@ function renderDetail(ind, card, regionDataset) {
     illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
   }[ind.verification_status] || '';
   const verifBadge = ind.verification_status
-    ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+    ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
     : '';
 
   root.innerHTML = `
@@ -189,6 +194,7 @@ function renderDetail(ind, card, regionDataset) {
       ${ind.source?.url ? `<a href="${escapeHtml(ind.source.url)}" target="_blank" rel="noopener">primární zdroj ↗</a>` : ''}
       ${ind.source?.fetched_at ? `<span>Aktualizace: ${escapeHtml(ind.source.fetched_at.slice(0,10))}</span>` : ''}
       ${ind.source?.origin ? `<span class="origin-tag origin-${escapeHtml(ind.source.origin)}">${escapeHtml(ind.source.origin)}</span>` : ''}
+      <a class="feedback-link" href="https://github.com/veritasderman-rgb/hspa/issues/new?title=Chyba+nebo+návrh:+${encodeURIComponent(ind.id)}" target="_blank" rel="noopener">Nahlásit chybu nebo návrh ↗</a>
     </footer>
   `;
 

@@ -150,6 +150,10 @@ function renderDetail(id) {
   list.classList.add('hidden');
   detail.classList.remove('hidden');
 
+  document.title = `${e.title} · Jak funguje · HSPA Monitor`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = `${e.title}${e.subtitle ? ' — ' + e.subtitle : ''}. ${audienceText(e).slice(0, 160)}`;
+
   const tldr = audienceText(e);
   const meta = CATEGORY_LABELS[e.category] ?? { label: e.category, desc: '' };
 

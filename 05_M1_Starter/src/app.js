@@ -466,7 +466,7 @@ function renderGrid() {
       illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
     }[effectiveVerif] || '';
     const verifBadge = effectiveVerif
-      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
       : '';
 
     card.innerHTML = `
