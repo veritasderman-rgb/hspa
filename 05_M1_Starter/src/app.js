@@ -1152,7 +1152,7 @@ function wireUp() {
   const emptyClear = document.getElementById('emptyStateClear');
   if (emptyClear) {
     emptyClear.addEventListener('click', () => {
-      activeSearch = ''; activeArea = 'all'; activeSort = 'default';
+      activeSearch = ''; activeArea = 'all'; activeSort = 'default'; activeDomain = '';
       const s = document.getElementById('searchBox'); if (s) s.value = '';
       const a = document.getElementById('areaFilter'); if (a) a.value = 'all';
       const so = document.getElementById('sortSelect'); if (so) so.value = 'default';
