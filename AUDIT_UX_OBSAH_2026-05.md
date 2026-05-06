@@ -108,7 +108,7 @@ Hodnocení používá tři priority:
 | 6.8 | P2 | **Žádný `<link rel="icon">`** — prohlížeč si vyžádá `/favicon.ico`, server vrátí 404. Drobnost, ale na každém page-loadu jeden zbytečný request. |
 | 6.9 | P3 | **Chart.js verze 4.4.0** je ze srpna 2023 — od té doby vyšlo 4.4.1, 4.4.2, 4.4.3 (security/perf opravy). Aktualizovat. |
 | 6.10 | P3 | **Mobile breakpointy nesouladné**: použity `768px`, `880px`, `900px`, `560px`, `640px`, `860px`, `480px`. Vytvořte 3–4 standardní breakpointy v CSS proměnných a používejte je důsledně. |
-| 6.11 | P3 | **2 selhávající testy** (`tests/csu.test.js`, `tests/uzis_nzis.test.js`). CLAUDE.md tvrdí „93 testů, vše musí projít" — reálně je jich teď **146 a 2 selhávají**. Buď je opravit, nebo aktualizovat CLAUDE.md, jinak CI/pre-deploy gate může pouštět vadný build. |
+| 6.11 | P3 | **Stale info v CLAUDE.md o počtu testů.** Soubor tvrdí „93 testů, vše musí projít" — reálná suite má 146+ testů a v CI je zelená. Aktualizujte CLAUDE.md, ať nový kontributor zbytečně neladí neexistující regresi. *(Pozn.: v původním auditu bylo uvedeno „2 selhávající testy" — šlo o falešné selhání v auditovacím prostředí bez nainstalovaného `node_modules` (chybějící `csv-parse`). Po `npm install` je suite zelená, nález byl opraven na základě review komentáře od Codex bota.)* |
 
 ---
 
@@ -132,7 +132,7 @@ Hodnocení používá tři priority:
 6. Přidat `og:image`, `og:url` na `index.html` + dočasně i na detail-page. *(P1)*
 7. Doplnit `<link rel="icon">` favicon + `apple-touch-icon`. *(P2)*
 8. Doplnit chybějící `meta name="description"` na `prevence.html`, `jak-funguje.html`, `strategie.html`. *(P2)*
-9. Opravit 2 selhávající testy (csu, uzis_nzis) nebo updatovat CLAUDE.md. *(P3)*
+9. Aktualizovat počet testů v CLAUDE.md (z „93" na reálný stav). *(P3)*
 
 ### Středně velké (1–2 dny)
 10. Refactor topbar — `<h1>` přesunout do hero, navbar dát do `<nav role="banner">`. *(P1 a11y)*
