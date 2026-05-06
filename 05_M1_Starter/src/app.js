@@ -2,6 +2,8 @@
 // Načítá data z /data/indicators.json a renderuje karty + scorecard + regiony.
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
+import { renderFooter } from './page-shared.js';
+
 const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
@@ -1248,6 +1250,7 @@ function wireUp() {
   applyHash(hashState);
   wireUp();
   renderMastheadDateLocal();
+  renderFooter();
   try {
     await loadData();
   } catch (err) {
