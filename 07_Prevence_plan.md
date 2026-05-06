@@ -101,7 +101,8 @@ Navrhovaný název v navigaci:
 
 Každá karta má mít stejný kontrakt:
 
-- `title`: Jídlo / Pohyb / Tabák a nikotin / Alkohol / Spánek a regenerace / Vztahy / Smysl a psychická odolnost / Děti a prostředí / Digitální zdraví
+- `id`: stabilní slug pro detail routing (`prevence.html?id=...`) a validátor (např. `jidlo`, `pohyb`, `tabak_nikotin`, `alkohol`, `vztahy_samota`, `smysl_zivota`, `deti_prostredi`, `digitalni_zdravi`, `screening_preventivni_pece`)
+- `title`: Jídlo / Pohyb / Tabák a nikotin / Alkohol / Vztahy a komunita / Smysl a psychická odolnost / Děti a prostředí / Digitální zdraví / Screeningy a prohlídky
 - `daily_choice`: jedna věta o každodenním rozhodnutí
 - `what_we_know`: 500 až 800 znaků evidence bez moralizování
 - `try_this_week`: 3 praktické kroky na týden
@@ -110,6 +111,8 @@ Každá karta má mít stejný kontrakt:
 - `system_levers`: co má dělat stát, škola, obec, pojišťovna, zaměstnavatel
 - `sources`: 2 až 5 primárních zdrojů
 - `caveat`: jasné vymezení, kdy má člověk řešit věc s lékařem nebo odborníkem
+
+**Spánek a regenerace** je důležité téma, ale pro MVP ho nenavrhujeme jako samostatnou kartu — jeho doporučení (digitální hygiena před spaním, pravidelný rytmus, vyhýbání se alkoholu pozdě večer) se přirozeně promítají do karet *Pohyb*, *Alkohol*, *Děti a prostředí* a *Digitální zdraví*. Po MVP ho lze povýšit na 10. kartu, jakmile budou dostupné indikátory `spanek_dospeli` / `spanek_adolescenti`.
 
 ### 3.3 MVP sada témat
 
