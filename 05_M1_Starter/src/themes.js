@@ -133,11 +133,11 @@ function renderExplainerCard(e) {
   </a>`;
 }
 
-function showDetail(id) {
+function showDetail(id, pushHistory = true) {
   const theme = allThemes.find(t => t.id === id);
   if (!theme) return;
 
-  history.pushState(null, '', `?id=${encodeURIComponent(id)}`);
+  if (pushHistory) history.pushState(null, '', `?id=${encodeURIComponent(id)}`);
   document.title = `${theme.title} · Tematické linie · Zdravé Česko`;
 
   const listView = document.getElementById('listView');
@@ -209,11 +209,7 @@ function showDetail(id) {
   `;
 
   document.getElementById('themeBackBtn')?.addEventListener('click', () => {
-    history.pushState(null, '', location.pathname);
-    document.title = 'Tematické linie · Zdravé Česko HSPA monitor';
-    detailView.classList.add('hidden');
-    detailView.innerHTML = '';
-    listView?.classList.remove('hidden');
+    history.back();
   });
 
   detailView.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -247,7 +243,7 @@ async function init() {
   const idParam = params.get('id');
   if (idParam && allThemes.find(t => t.id === idParam)) {
     renderList();
-    showDetail(idParam);
+    showDetail(idParam, false);
   } else {
     renderList();
   }
@@ -256,9 +252,10 @@ async function init() {
     const p = new URLSearchParams(location.search);
     const id = p.get('id');
     if (id) {
-      showDetail(id);
+      showDetail(id, false);
     } else {
       document.getElementById('detailView')?.classList.add('hidden');
+      document.getElementById('detailView').innerHTML = '';
       document.getElementById('listView')?.classList.remove('hidden');
       document.title = 'Tematické linie · Zdravé Česko HSPA monitor';
     }
