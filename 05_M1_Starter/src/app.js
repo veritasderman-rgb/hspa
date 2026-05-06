@@ -215,6 +215,157 @@ function updateScorecard(visible) {
   document.getElementById('scNeutral').textContent = counts.neutral;
 }
 
+// ====== EDITORIAL HERO STORY ======
+
+function fmt(value, unit = '') {
+  if (value == null) return '—';
+  const n = Number(value);
+  if (!Number.isFinite(n)) return String(value);
+  const formatted = (Math.round(n * 10) / 10).toLocaleString('cs-CZ');
+  return unit ? `${formatted} ${unit}` : formatted;
+}
+
+function gapText(value, oecd, direction) {
+  if (value == null || oecd == null) return '';
+  const diff = value - oecd;
+  const pct = oecd !== 0 ? Math.abs(diff / oecd) * 100 : 0;
+  const better = direction === 'higher_is_better' ? diff > 0 : diff < 0;
+  const sign = better ? 'lépe' : 'hůře';
+  return `${pct >= 10 ? Math.round(pct) : pct.toFixed(1)} % ${sign} než OECD`;
+}
+
+function renderEditorialHero() {
+  if (!allIndicators.length) return;
+
+  // Datum vlevo nahoře
+  const dateEl = document.getElementById('edHeroDate');
+  if (dateEl) {
+    const months = ['leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec'];
+    const d = new Date();
+    dateEl.textContent = `${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  const find = (id) => allIndicators.find(i => i.id === id);
+
+  // 4 hero stats — vybrané charakteristické indikátory napříč signály
+  const heroPicks = [
+    { ind: find('nadeje_doziti_total'), label: 'Naděje dožití při narození' },
+    { ind: find('nadeje_doziti_zdravi_65'), label: 'Roky života ve zdraví v 65 letech' },
+    { ind: find('mortalita_kardiovaskularni'), label: 'Úmrtnost na nemoci oběhové soustavy' },
+    { ind: find('lekari_per_1000'), label: 'Lékaři na 1 000 obyvatel' },
+  ].filter(p => p.ind);
+
+  const statsEl = document.getElementById('edHeroStats');
+  if (statsEl) {
+    statsEl.innerHTML = heroPicks.map(p => {
+      const benchOecd = p.ind.benchmark?.oecd != null ? `OECD ${fmt(p.ind.benchmark.oecd)}` : '';
+      const direction = p.ind.direction;
+      const gap = gapText(p.ind.value, p.ind.benchmark?.oecd, direction);
+      return `
+        <a class="ed-stat" href="indicator.html?id=${encodeURIComponent(p.ind.id)}">
+          <div class="ed-stat-num"><span class="signal-dot ${p.ind.signal}" aria-hidden="true"></span>${fmt(p.ind.value)}<span class="ed-stat-unit">${escapeHtml(p.ind.unit || '')}</span></div>
+          <div class="ed-stat-lbl">${escapeHtml(p.label)}</div>
+          <div class="ed-stat-meta">${escapeHtml(benchOecd)}${gap ? ` · ${escapeHtml(gap)}` : ''}</div>
+        </a>`;
+    }).join('');
+  }
+
+  // 3 story karty — narativní headline z dat
+  const stories = [
+    {
+      ind: find('mortalita_inhosp_cmp'),
+      headline: 'Úmrtnost po cévní mozkové příhodě je téměř o polovinu vyšší než průměr OECD.',
+      subline: '30denní hospitalizační úmrtnost po CMP — měřítko kvality akutní péče.',
+    },
+    {
+      ind: find('screening_kolorektalni'),
+      headline: 'Účast v populačním screeningu kolorekta je o třetinu nižší než v OECD.',
+      subline: 'Stáří 50–74 let, dvouletý interval — klíčová prevence rakoviny tlustého střeva.',
+    },
+    {
+      ind: find('nadeje_doziti_zdravi_65'),
+      headline: 'Senioři v ČR mají v průměru o 1,8 roku méně zdravých let než v zemích OECD.',
+      subline: 'Healthy Life Years při dosažení 65 let — vyjadřuje kvalitu života ve stáří.',
+    },
+  ].filter(s => s.ind);
+
+  const grid = document.getElementById('edStoriesGrid');
+  if (grid) {
+    grid.innerHTML = stories.map(s => {
+      const v = fmt(s.ind.value);
+      const benchOecd = s.ind.benchmark?.oecd != null ? `OECD ${fmt(s.ind.benchmark.oecd)} ${s.ind.unit ?? ''}`.trim() : '';
+      return `
+        <a class="ed-story" href="indicator.html?id=${encodeURIComponent(s.ind.id)}">
+          <div class="ed-story-area">${escapeHtml(s.ind.area)} · ${escapeHtml(s.ind.domain)}</div>
+          <h4 class="ed-story-headline">${escapeHtml(s.headline)}</h4>
+          <div class="ed-story-bignum">
+            <span class="signal-dot ${s.ind.signal}" aria-hidden="true"></span>
+            <span class="ed-story-num">${v}</span>
+            <span class="ed-story-unit">${escapeHtml(s.ind.unit || '')}</span>
+          </div>
+          <div class="ed-story-bench">${escapeHtml(benchOecd)}</div>
+          <div class="ed-story-sub">${escapeHtml(s.subline)}</div>
+        </a>`;
+    }).join('');
+  }
+
+  // 4 oblasti HSPA s dílčím skóre
+  const areaDescriptions = {
+    'Výsledky': 'Zdravotní stav populace — naděje dožití, úmrtnost, prevalence chronických nemocí.',
+    'Výstupy': 'Kvalita, dostupnost a finance — výstupy zdravotnického systému z pacientovy perspektivy.',
+    'Procesy': 'Klinické postupy a prevence — co systém aktivně dělá pro zdraví obyvatel.',
+    'Struktury': 'Lidské zdroje, kapacity a infrastruktura — vstupní podmínky systému.',
+  };
+
+  const byArea = {};
+  for (const ind of allIndicators) {
+    if (!byArea[ind.area]) byArea[ind.area] = { total: 0, good: 0, warn: 0, bad: 0, neutral: 0 };
+    byArea[ind.area].total++;
+    byArea[ind.area][ind.signal]++;
+  }
+
+  const areasGrid = document.getElementById('edAreasGrid');
+  if (areasGrid) {
+    const orderedAreas = ['Výsledky', 'Výstupy', 'Procesy', 'Struktury'];
+    areasGrid.innerHTML = orderedAreas.map((area, i) => {
+      const stats = byArea[area];
+      if (!stats) return '';
+      // Skóre: dobré = 1, ke sledování = 0.5, kritické = 0, bez benchmarku = ignorováno
+      const scoreable = stats.good + stats.warn + stats.bad;
+      const score = scoreable > 0
+        ? Math.round((stats.good * 100 + stats.warn * 50) / scoreable)
+        : null;
+      const num = String(i + 1).padStart(2, '0');
+      return `
+        <a class="ed-area" href="#indicatorsSection" data-area="${escapeHtml(area)}">
+          <div class="ed-area-num">${num}</div>
+          <div class="ed-area-name">${escapeHtml(area)}</div>
+          <div class="ed-area-desc">${escapeHtml(areaDescriptions[area] || '')}</div>
+          <div class="ed-area-score">${score != null ? `${score}<span class="ed-area-score-unit">/100</span>` : '—'}</div>
+          <div class="ed-area-meta">${stats.total} ukazatelů · ${stats.good} dobré · ${stats.bad} kritické</div>
+        </a>`;
+    }).join('');
+
+    areasGrid.querySelectorAll('.ed-area').forEach(el => {
+      el.addEventListener('click', (e) => {
+        const area = el.dataset.area;
+        if (!area) return;
+        e.preventDefault();
+        activeArea = area;
+        const sel = document.getElementById('areaFilter');
+        if (sel) sel.value = area;
+        renderGrid();
+        document.getElementById('indicatorsSection')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 // ====== RENDERING ======
 
 function destroyAllCharts() {
@@ -1013,6 +1164,7 @@ function wireUp() {
   renderMastheadDateLocal();
   try {
     await loadData();
+    renderEditorialHero();
     renderGrid();
     loadAndRenderRegions();
   } catch (err) {
