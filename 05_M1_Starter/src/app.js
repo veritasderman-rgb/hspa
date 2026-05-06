@@ -16,6 +16,13 @@ let activeSort = 'default';
 let activeDomain = '';
 let activeAudience = 'public';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
+
+const AREA_DESCRIPTIONS = {
+  'Výsledky': 'Žijeme déle — ale za průměrem OECD zaostáváme v kardiovaskulární úmrtnosti a zdravých letech života. Každý rok ztracený pod průměrem je měřitelný.',
+  'Výstupy': 'Péče je dostupná, ale nerovnoměrně. Finanční bariéry rostou, čekací doby se liší kraj od kraje a pacientská zkušenost chybí v datech.',
+  'Procesy': 'Screeningy zachytávají pozdě, proočkovanost klesá a primární péče koordinuje méně, než by mohla. Systém léčí dobře — ale mohl by víc předcházet.',
+  'Struktury': 'Lékaři stárnou, sestry odcházejí a regionální nerovnosti v kapacitách se prohlubují. Infrastruktura je moderní — lidské zdroje jsou výzva.',
+};
 let regionsChart = null;
 let _modalChart = null;
 
@@ -321,12 +328,7 @@ function renderEditorialHero() {
     }
 
     // 4 oblasti HSPA s dílčím skóre
-    const areaDescriptions = {
-      'Výsledky': 'Žijeme déle — ale za průměrem OECD zaostáváme v kardiovaskulární úmrtnosti a zdravých letech života. Každý rok ztracený pod průměrem je měřitelný.',
-      'Výstupy': 'Péče je dostupná, ale nerovnoměrně. Finanční bariéry rostou, čekací doby se liší kraj od kraje a pacientská zkušenost chybí v datech.',
-      'Procesy': 'Screeningy zachytávají pozdě, proočkovanost klesá a primární péče koordinuje méně, než by mohla. Systém léčí dobře — ale mohl by víc předcházet.',
-      'Struktury': 'Lékaři stárnou, sestry odcházejí a regionální nerovnosti v kapacitách se prohlubují. Infrastruktura je moderní — lidské zdroje jsou výzva.',
-    };
+    const areaDescriptions = AREA_DESCRIPTIONS;
 
     const byArea = {};
     for (let k = 0; k < allIndicators.length; k++) {
@@ -411,6 +413,12 @@ function renderGrid() {
   document.getElementById('gridBadge').textContent = badge;
   document.getElementById('gridTitle').textContent =
     activeArea === 'all' ? 'Všechny indikátory' : `Oblast: ${activeArea}`;
+  const areaDescEl = document.getElementById('gridAreaDesc');
+  if (areaDescEl) {
+    const desc = activeArea !== 'all' ? (AREA_DESCRIPTIONS[activeArea] || '') : '';
+    areaDescEl.textContent = desc;
+    areaDescEl.classList.toggle('hidden', !desc);
+  }
   document.getElementById('emptyState').classList.toggle('hidden', filtered.length > 0);
 
   // ARIA live region — oznamuje asistivním technologiím změnu počtu výsledků
