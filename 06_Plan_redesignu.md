@@ -353,6 +353,67 @@ Každá vrstva linkuje na svůj filtr v gridu (anchor `#level-national`, `#level
 - Pro veřejnost vytvoří měřitelný způsob, jak hodnotit, jestli se zdravotnictví hýbe správným směrem
 - Pro novináře a politiky poskytne přesné body, na které se ptát
 
+### P3.10 Vizuální update masthead — top-right menu
+
+**Aktuální stav:** Masthead-strip + module-nav jsou pod sebou ve dvou řádcích. Mobile je na výšku přívětivý, ale na desktopu vzniká hodně prázdného prostoru a navigace je daleko od HSPA wordmarku.
+
+**Nový vizuální cíl** (podle screenshotu z editorial designu):
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  HSPA monitor              Ukazatele · Jak funguje · Co s tím · …   │  ← horní lišta
+│  Pondělí 4. května 2026 · vydání #112      Skóre 64/100 · OECD 71  │  ← pod-lišta
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Změny:**
+- Wordmark `HSPA monitor` zůstává top-left, větší serif (28–32 px)
+- Pod ním datum + číslo vydání (Inter 11 px, ink-mut)
+- **Modul nav přesunout doprava** vedle wordmarku v hlavní liště (Inter 12 px, uppercase, červená pro aktivní položku)
+- **Skóre českého zdravotnictví** (např. „64 / 100") + OECD průměr ukázat na pravé straně sub-lišty
+- Breadcrumb pod sub-lištou (Ukazatele / Kvalita péče / Úmrtnost…) na detail page
+- Na mobilu: menu se zhruje pod wordmark (jak je teď)
+
+**Skóre 64/100:** Přidat agregátní výpočet z indikátorů (např. % `verified` + `preliminary` indikátorů s `signal !== 'bad'` × 100). Detail výpočtu specifikovat v `/o-projektu` stránce.
+
+### P3.11 Nová stránka „Prevence / Co s tím můžu dělat já"
+
+Detailní implementační plán v `07_Prevence_plan.md`. Stručné shrnutí:
+
+**Nová sekce v navigaci** — 3. položka v menu (mezi *Jak funguje* a *Strategie*):
+```
+Indikátory → Jak funguje zdravotnictví → Co s tím můžu dělat já → Strategie → O HSPA
+```
+
+**Cíl:** Doplnit občanskou vrstvu k systémovému dashboardu. Ne strašení, ne moralizování — praktická a dospělá komunikace o devíti oblastech, kde má jednotlivec reálnou páku:
+
+1. Jídlo · 2. Pohyb · 3. Tabák a nikotin · 4. Alkohol · 5. Vztahy a komunita · 6. Smysl života · 7. Děti a prostředí · 8. Digitální zdraví · 9. Screeningy a prohlídky
+
+**Hero headline:** *„Prevence není o tom bát se žít. Je to o tom, jak si přidat roky ve zdraví."*
+
+**Datový kontrakt** — `data/prevention.json` s 9 tématy, každé má:
+- `daily_choice` (jedna věta o každodenním rozhodnutí)
+- `what_we_know` (500–800 znaků evidence bez moralizování)
+- `try_this_week` (3 praktické kroky)
+- `hspa_indicators` (vazba na existující indikátory)
+- `strategies` (vazba na existující strategie)
+- `system_levers` (co má dělat stát/škola/obec/pojišťovna/zaměstnavatel)
+- `sources` (2–5 primárních zdrojů: WHO, CDC, NIH, OECD, MZČR, ÚZIS)
+- `caveat` (kdy řešit s lékařem)
+
+**Editorial pravidla:**
+- Bez studu a moralizování
+- Jasné rozlišení „co můžu udělat já" vs. „co musí změnit systém"
+- Praktické kroky proveditelné běžným člověkem
+
+Implementace v 6 fázích (viz `07_Prevence_plan.md`):
+1. Datový kontrakt — `data/prevention.json` (9 témat)
+2. Stránka — `prevence.html` + `src/prevence.js`
+3. Navigace — `page-shared.js` + statická menu
+4. CSS — recyklovat editorial komponenty (`ed-hero`, `ed-flow`, `ed-stat`)
+5. Validace — `validate-prevention.js` + testy
+6. Backlog nových indikátorů (`osamelost_dospeli`, `nadmerny_screen_time_deti`, `konzumace_ovoce_zelenina`, …)
+
 ---
 
 ## P4 · Růstové funkce (backlog)
