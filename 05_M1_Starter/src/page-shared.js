@@ -79,6 +79,7 @@ export function renderModuleNav(activeId) {
     { id: 'themes',      label: 'Tematické linie',         href: 'tematicke-linie.html',    match: ['tematicke-linie.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'] },
     { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
+    { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];
 
   const container = document.getElementById('moduleNav');
@@ -89,6 +90,46 @@ export function renderModuleNav(activeId) {
       : t.match.some(m => path.endsWith(m));
     return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}">${t.label}</a>`;
   }).join('');
+}
+
+let _glossaryTermsCache = null;
+
+/**
+ * Načte a cachuje termíny glosáře. Bezpečné pro opakované volání.
+ */
+export async function loadGlossaryTerms() {
+  if (_glossaryTermsCache) return _glossaryTermsCache;
+  try {
+    const data = await fetch('data/glossary.json').then(r => r.json());
+    _glossaryTermsCache = data.terms ?? [];
+  } catch {
+    _glossaryTermsCache = [];
+  }
+  return _glossaryTermsCache;
+}
+
+/**
+ * Wrappuje známé zkratky v HTML stringu do <abbr> s tooltip.
+ * Volat PŘED vložením do innerHTML. Bezpečné — operuje na escaped stringu.
+ * Příklad: wrapAcronyms('Hodnotí OECD data', glossaryTerms) → 'Hodnotí <abbr ...>OECD</abbr> data'
+ */
+export function wrapAcronyms(html, terms) {
+  if (!html || !terms || !terms.length) return html;
+  // Build one combined regex so each text segment is processed in a single pass —
+  // prevents later terms from matching inside <abbr> attributes just injected.
+  const escaped = terms.map(t => t.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const combined = new RegExp(`(?<![\\w\\-])(${escaped.join('|')})(?![\\w\\-])`, 'g');
+  const byKey = new Map(terms.map(t => [t.key, t]));
+  // Split into alternating text/tag segments; only replace inside text (even indices)
+  const parts = html.split(/(<[^>]*>)/);
+  for (let i = 0; i < parts.length; i += 2) {
+    parts[i] = parts[i].replace(combined, match => {
+      const t = byKey.get(match);
+      if (!t) return match;
+      return `<abbr class="glossary-abbr" data-def="${escapeHtml(t.short_def)}" title="${escapeHtml(t.full)}">${match}</abbr>`;
+    });
+  }
+  return parts.join('');
 }
 
 /**
