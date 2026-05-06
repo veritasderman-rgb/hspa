@@ -67,15 +67,37 @@ jobs:
         if: success()
         working-directory: ${{ github.workspace }}
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 05_M1_Starter/data/
           if git diff --cached --quiet; then
             echo "No data changes."
-          else
-            git commit -m "data: refresh $(date -u +%Y-%m-%d)"
-            git push
+            exit 0
           fi
+          git commit -m "data: refresh $(date -u +%Y-%m-%d)"
+
+          # Push s retry + rebase při race condition: pokud mezi
+          # checkoutem a pushem došel do main jiný commit (běžné, když
+          # cron běží paralelně s mergem PR), zkus rebasenout na nejnovější
+          # origin/main a push opakuj. Max 5 pokusů.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed (likely race with concurrent push). Rebasing on origin/main..."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "Rebase has conflicts — aborting and giving up."
+              git rebase --abort || true
+              exit 1
+            fi
+            # Krátká pauza, kdyby konkurenční push běžel ještě
+            sleep $((attempt * 2))
+          done
+          echo "Push failed after 5 attempts."
+          exit 1
 
       - name: Open or update freshness alert issue on failure
         if: failure() && github.event_name == 'schedule'
