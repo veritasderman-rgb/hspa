@@ -1777,9 +1777,11 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 .ed-stat-static:hover { padding-left: 0; color: var(--ink); }
 .ed-stat-static:hover .ed-stat-num { color: var(--ink); }
 
-/* Sekce „Jak to spolu souvisí" — 4 kroky/mechanismy */
+/* Sekce „Jak to spolu souvisí" — 4 kroky/mechanismy
+   Vizuální jazyk: velká serif čísla, výrazné odsazení, arrow chip jako
+   editorial subheading. Karty jsou klikatelné <a> s paper2 hover. */
 .ed-flow {
-  padding: 0 0 36px;
+  padding: 8px 0 36px;
   margin-bottom: 32px;
   border-bottom: 1px solid var(--rule);
 }
@@ -1789,71 +1791,105 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   line-height: 1.55;
   color: var(--ink-mut);
   max-width: 780px;
-  margin-bottom: 22px;
+  margin-bottom: 28px;
 }
 .ed-flow-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
 }
 .ed-flow-step {
-  display: flex;
-  flex-direction: column;
-  padding: 22px 22px 20px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: 22px;
+  row-gap: 0;
+  align-items: start;
+  padding: 28px 26px 24px;
   border-right: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
   text-decoration: none;
   color: var(--ink);
   transition: background 0.12s;
   cursor: pointer;
+  background: var(--paper);
 }
 .ed-flow-step:nth-child(2n) { border-right: none; }
 .ed-flow-step:nth-child(n+3) { border-bottom: none; }
 .ed-flow-step:hover { background: var(--paper2); }
 .ed-flow-step:hover .ed-flow-link { color: var(--red); border-bottom-color: var(--red); }
+.ed-flow-step:hover .ed-flow-num { color: var(--red); }
 
+/* Velké serif číslo přes 4 řádky vlevo */
 .ed-flow-num {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: var(--red);
-  margin-bottom: 10px;
-}
-.ed-flow-name {
+  grid-column: 1;
+  grid-row: 1 / span 4;
   font-family: var(--serif);
-  font-size: 24px;
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 0.9;
+  color: var(--ink);
+  align-self: start;
+  transition: color 0.12s;
+}
+
+/* Název mechanismu — velký headline */
+.ed-flow-name {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--serif);
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.4px;
+  line-height: 1.15;
   color: var(--ink);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
+
+/* Arrow chip — uppercase mono-feel s ink top rule */
 .ed-flow-arrow {
+  grid-column: 2;
+  grid-row: 2;
   font-family: var(--sans);
-  font-size: 11px;
-  color: var(--ink-mut2);
-  letter-spacing: 0.02em;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  border-top: 1px solid var(--rule2);
+  padding: 8px 0 0;
   margin-bottom: 14px;
-  font-style: italic;
 }
+
+/* Popis — Source Serif body */
 .ed-flow-desc {
+  grid-column: 2;
+  grid-row: 3;
   font-family: var(--serif);
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--ink-mut);
-  margin-bottom: 14px;
-  flex-grow: 1;
+  margin-bottom: 18px;
 }
+
+/* Odkaz na kategorii dole */
 .ed-flow-link {
+  grid-column: 2;
+  grid-row: 4;
   font-family: var(--sans);
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--ink);
-  border-bottom: 1px solid var(--rule2);
+  border-bottom: 1px solid var(--ink);
   padding-bottom: 1px;
-  align-self: flex-start;
-  font-weight: 500;
+  justify-self: start;
   transition: color 0.12s, border-color 0.12s;
 }
 
@@ -1893,9 +1929,20 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 
 @media (max-width: 880px) {
   .ed-flow-grid { grid-template-columns: 1fr; }
-  .ed-flow-step { border-right: none; border-bottom: 1px solid var(--rule); }
+  .ed-flow-step {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    grid-template-columns: 64px 1fr;
+    column-gap: 16px;
+    padding: 22px 0;
+  }
+  /* Přepsání desktop selectorů se stejnou specificitou v 1-col layoutu —
+     desktop měl :nth-child(n+3) odstraňující spodní border u karet 3 a 4. */
+  .ed-flow-step:nth-child(2n) { border-bottom: 1px solid var(--rule); }
+  .ed-flow-step:nth-child(n+3) { border-bottom: 1px solid var(--rule); }
   .ed-flow-step:last-child { border-bottom: none; }
-  .ed-flow-name { font-size: 20px; }
+  .ed-flow-num { font-size: 48px; letter-spacing: -1.4px; }
+  .ed-flow-name { font-size: 22px; }
   .ed-flow-desc { font-size: 14px; }
   .cat-header-row { flex-wrap: wrap; }
   .cat-count { margin-left: 0; }
