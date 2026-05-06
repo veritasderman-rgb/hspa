@@ -775,7 +775,7 @@ function renderModalContent(card, indicator) {
       ${card.method_notes ? `<dt>Metodika</dt><dd>${card.method_notes}</dd>` : ''}
       ${card.limitations ? `<dt>Omezení</dt><dd>${card.limitations}</dd>` : ''}
     </dl>
-    ${card.patient_story ? `<div class="patient-story"><div class="patient-story-label">Příběh za číslem</div><p>${card.patient_story.replace(/\n\n/g, '</p><p>').replace(/\n/g, ' ')}</p></div>` : ''}
+    ${card.patient_story ? `<div class="patient-story"><div class="patient-story-label">Příběh za číslem</div><p>${escapeHtmlInner(card.patient_story).replace(/\n\n/g, '</p><p>').replace(/\n/g, ' ')}</p></div>` : ''}
     ${card.data_source ? `<h3 class="ds-heading">Zdroje dat</h3>${renderDataSource(card.data_source)}` : ''}
     <div class="modal-cross-links" id="modalCrossLinks"></div>
     <div class="modal-actions">
