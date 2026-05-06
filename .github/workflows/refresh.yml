@@ -3,6 +3,10 @@ name: Refresh data
 # Spouští se každý den v 06:00 UTC. Provede ingest pipeline,
 # validuje výsledek a commitne změny v data/ (+ nový snapshot)
 # zpět do repa. Vercel se po pushi sám rebuildne.
+#
+# Po ingestu spustí verify:freshness, který fail-uje pokud
+# poměr indikátorů s `origin: live` klesne pod MIN_LIVE_RATIO.
+# Bez toho by tichý fallback na seed maskoval rozbité fetchery.
 
 on:
   schedule:
@@ -11,6 +15,14 @@ on:
 
 permissions:
   contents: write  # potřeba pro commit do data/
+  issues: write    # potřeba pro automatické otevření issue při selhání
+
+env:
+  # Práh pro verify:freshness — pokud méně indikátorů než tento podíl
+  # má origin=live, workflow failne a data se NEpushne.
+  # Aktuálně je 0.0, protože všechny fetchery selhávají; postupně zvedat.
+  # Cíl po opravě fetcherů: 0.5–0.8.
+  MIN_LIVE_RATIO: '0.0'
 
 jobs:
   refresh:
@@ -40,7 +52,19 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Verify data freshness
+        id: freshness
+        run: |
+          # Vždy vygeneruj report, gating zařídí --min-live-ratio.
+          npm run verify:freshness -- --min-live-ratio=${MIN_LIVE_RATIO} | tee /tmp/freshness.txt
+          {
+            echo 'report<<EOF'
+            cat /tmp/freshness.txt
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - name: Commit refreshed data (if changed)
+        if: success()
         working-directory: ${{ github.workspace }}
         run: |
           git config user.name "github-actions[bot]"
@@ -52,3 +76,49 @@ jobs:
             git commit -m "data: refresh $(date -u +%Y-%m-%d)"
             git push
           fi
+
+      - name: Open or update freshness alert issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Data refresh failure — fetchery selhávají';
+            const body = [
+              '**Automatický cron `refresh.yml` selhal při kontrole čerstvosti dat.**',
+              '',
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              `Datum: ${new Date().toISOString()}`,
+              '',
+              'Tichý fallback na seed byl zachycen `verify:freshness`. Data NEbyla pushnuta do `main`.',
+              '',
+              '## Co s tím',
+              '1. Otevřít run log a zjistit, který fetcher (ČSÚ/Eurostat/OECD/ÚZIS) selhává.',
+              '2. Pokud upstream API vrací 404/400, ověřit aktuální URL/dimenze v `PLAN_AUTOMATICKY_INGEST.md`.',
+              '3. Po opravě fetcheru spustit `workflow_dispatch` pro re-run.',
+              '',
+              '_Issue je automaticky aktualizován při dalším selhání._'
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'freshness-alert',
+            });
+
+            if (issues.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body: `Další selhání: ${new Date().toISOString()} · run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['freshness-alert', 'bug'],
+              });
+            }
