@@ -129,6 +129,13 @@ function renderDetail(ind, card, regionDataset) {
       </div>
     </section>
 
+    ${card?.patient_story ? `
+      <section class="ind-section ind-story-section">
+        <h3>Proč na tom záleží</h3>
+        <div class="ind-story">${formatNarrative(card.patient_story)}</div>
+      </section>
+    ` : ''}
+
     ${ind.trend?.length >= 2 ? `
       <section class="ind-section">
         <h3>Vývoj v čase</h3>
