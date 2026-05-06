@@ -1764,3 +1764,139 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .ed-area { border-right: none !important; border-bottom: 1px solid var(--rule); }
   .ed-area:last-child { border-bottom: none; }
 }
+
+/* =================================================================
+   Editorial — Jak funguje (statické hero stats + flow diagram)
+   ================================================================= */
+
+/* Static stat (bez href) — odlišení od klikatelných ed-stat */
+.ed-stat-static {
+  cursor: default;
+  pointer-events: none;
+}
+.ed-stat-static:hover { padding-left: 0; color: var(--ink); }
+.ed-stat-static:hover .ed-stat-num { color: var(--ink); }
+
+/* Sekce „Jak to spolu souvisí" — 4 kroky/mechanismy */
+.ed-flow {
+  padding: 0 0 36px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.ed-flow-lead {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  max-width: 780px;
+  margin-bottom: 22px;
+}
+.ed-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.ed-flow-step {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 20px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+.ed-flow-step:nth-child(2n) { border-right: none; }
+.ed-flow-step:nth-child(n+3) { border-bottom: none; }
+.ed-flow-step:hover { background: var(--paper2); }
+.ed-flow-step:hover .ed-flow-link { color: var(--red); border-bottom-color: var(--red); }
+
+.ed-flow-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--red);
+  margin-bottom: 10px;
+}
+.ed-flow-name {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.ed-flow-arrow {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.ed-flow-desc {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin-bottom: 14px;
+  flex-grow: 1;
+}
+.ed-flow-link {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule2);
+  padding-bottom: 1px;
+  align-self: flex-start;
+  font-weight: 500;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+/* Storytelling intro pro každou kategorii v gridu */
+.cat-header-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+.cat-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--red);
+}
+.cat-count {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  letter-spacing: 0.02em;
+  margin-left: auto;
+}
+.cat-story {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-top: 12px;
+  padding: 14px 18px;
+  background: var(--paper2);
+  border-left: 2px solid var(--ink);
+  max-width: 820px;
+}
+.cat-block { scroll-margin-top: 70px; }
+
+@media (max-width: 880px) {
+  .ed-flow-grid { grid-template-columns: 1fr; }
+  .ed-flow-step { border-right: none; border-bottom: 1px solid var(--rule); }
+  .ed-flow-step:last-child { border-bottom: none; }
+  .ed-flow-name { font-size: 20px; }
+  .ed-flow-desc { font-size: 14px; }
+  .cat-header-row { flex-wrap: wrap; }
+  .cat-count { margin-left: 0; }
+}

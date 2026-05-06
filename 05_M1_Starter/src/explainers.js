@@ -7,10 +7,26 @@ import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
 const CATEGORY_LABELS = {
-  money: { label: 'Financování', desc: 'Mechanismy úhrad, dohodovací řízení, klasifikace pro výpočet cen' },
-  classification: { label: 'Klasifikace', desc: 'Diagnostické a výkonové číselníky, mezinárodní standardy' },
-  actors: { label: 'Aktéři systému', desc: 'Pojišťovny, regulátoři, profesní organizace' },
-  process: { label: 'Procesy', desc: 'Rozhodovací mechanismy a dokumentace' },
+  money: {
+    label: 'Financování',
+    desc: 'Mechanismy úhrad, dohodovací řízení, klasifikace pro výpočet cen',
+    story: 'Cena hospitalizace v ČR nevzniká „na trhu". Vzniká výpočtem podle úhradové vyhlášky, klasifikace CZ-DRG a Seznamu zdravotních výkonů. Pokud se v médiích řeší „přefinancování" nebo „škrty", debata se vždy odehrává v jednom z těchto tří dokumentů. Když rozumíte mechanice, snadno odhalíte, který návrh na reformu má reálnou páku — a který je jen kosmetický.',
+  },
+  classification: {
+    label: 'Klasifikace',
+    desc: 'Diagnostické a výkonové číselníky, mezinárodní standardy',
+    story: 'Aby se péče dala financovat a měřit, musí být standardně popsaná. Mezinárodní klasifikace nemocí (MKN-10) přiřazuje diagnózám kódy, které pak protékají celým systémem — od záznamu v dokumentaci, přes vykázání pojišťovně, až po statistiky úmrtnosti, které jdou do OECD. Změna jednoho kódu může přepočítat úhradu nebo přesměrovat statistiku.',
+  },
+  actors: {
+    label: 'Aktéři systému',
+    desc: 'Pojišťovny, regulátoři, profesní organizace',
+    story: 'Když se ptáte „kdo to měl řešit?", odpověď v ČR často není jednoznačná. Stát (MZČR) nastavuje pravidla, kraje provozují své nemocnice, pojišťovny nakupují péči, profesní komory regulují kvalifikaci a SÚKL hlídá léky. Kompetence se překrývají. Kdo nese odpovědnost, když v Karlovarském kraji chybí pediatr? Tyto explainery mapují dělbu rolí mezi pěti hlavními aktéry.',
+  },
+  process: {
+    label: 'Procesy',
+    desc: 'Rozhodovací mechanismy a dokumentace',
+    story: 'Z politického záměru se stane úhradový kód cestou přes několik institucí: parlament schválí zákon, ministerstvo vydá vyhlášku, dohodovací řízení dohodne tarify, pojišťovna upraví smlouvy s poskytovateli. Každý krok trvá měsíce a má vlastní logiku. Reforma „přes noc" je z tohoto pohledu málokdy realistická — ale strop pro reformu je vyšší, než se zdá.',
+  },
 };
 
 let allExplainers = [];
@@ -58,14 +74,23 @@ function renderList() {
   const order = ['money', 'classification', 'actors', 'process'];
   grid.innerHTML = order
     .filter(c => byCat[c]?.length)
-    .map(cat => {
+    .map((cat, idx) => {
       const items = byCat[cat];
-      const meta = CATEGORY_LABELS[cat] ?? { label: cat, desc: '' };
+      const meta = CATEGORY_LABELS[cat] ?? { label: cat, desc: '', story: '' };
+      const num = String(idx + 1).padStart(2, '0');
+      const storyHtml = meta.story
+        ? `<p class="cat-story">${escapeHtml(meta.story)}</p>`
+        : '';
       return `
-        <section class="cat-block cat-${cat}">
+        <section class="cat-block cat-${cat}" id="cat-${cat}">
           <header class="cat-header">
-            <h3>${meta.label}</h3>
+            <div class="cat-header-row">
+              <span class="cat-num">${num}</span>
+              <h3>${meta.label}</h3>
+              <span class="cat-count">${items.length} ${items.length === 1 ? 'téma' : (items.length < 5 ? 'témata' : 'témat')}</span>
+            </div>
             <span class="cat-desc">${escapeHtml(meta.desc)}</span>
+            ${storyHtml}
           </header>
           <div class="explainer-cards">
             ${items.map(renderCard).join('')}
