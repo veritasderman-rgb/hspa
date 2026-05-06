@@ -1,7 +1,7 @@
 {
   "version": "1.1",
   "generated_at": "2026-05-05T15:30:00Z",
-  "_doc": "Vysvětlovací sekce — pojišťovny, úhradová vyhláška, CZ-DRG, MKN-10, SZV. Cílové publikum: lidé se zájmem o problematiku zdravotnictví v ČR. Odborný tón, kritická perspektiva, citace z primárních zdrojů. Schema dle PLAN_JAK_FUNGUJE_ZDRAVOTNICTVI.md sekce 5.",
+  "_doc": "Vysvětlovací sekce — pojišťovny, úhradová vyhláška, CZ-DRG, MKN-10, SZV, dostupnost péče, odpovědnost za péči. Cílové publikum: lidé se zájmem o problematiku zdravotnictví v ČR. Odborný tón, kritická perspektiva, citace z primárních zdrojů. Schema dle PLAN_JAK_FUNGUJE_ZDRAVOTNICTVI.md sekce 5.",
   "explainers": [
     {
       "id": "pojistovny",
@@ -245,6 +245,124 @@
         { "title": "VZP — SZV s bodovými hodnotami", "url": "https://www.vzp.cz/poskytovatele/informace-pro-praxi/vykazovani-a-uhrady/seznam-zdravotnich-vykonu-s-bodovymi-hodnotami" }
       ],
       "verified_at": "2026-05-05",
+      "verification_status": "ok"
+    },
+    {
+      "id": "dostupnost_pece",
+      "title": "Místní a časová dostupnost péče",
+      "subtitle": "Co garantuje zákon o zdravotních službách a Nařízení vlády č. 307/2012 Sb.",
+      "category": "process",
+      "tldr_public": "Pacient v ČR má zákonný nárok dostat zdravotní péči v rozumné dojezdové vzdálenosti a v rozumné lhůtě — ne kdykoli, kdekoli, ale podle parametrů, které stanoví Nařízení vlády č. 307/2012 Sb. Pro praktického lékaře je to 35 minut dojezdové doby z bydliště, pro většinu specializací 60 minut, pro vysoce specializovanou péči (kardiochirurgie, transplantace) 120 minut. Pro elektivní operace platí maximální čekací lhůty: výměna kyčle 52 týdnů, kataraktová operace 30 týdnů, koronární bypass 4 týdny. Zajištění této dostupnosti je smluvní povinnost zdravotní pojišťovny — pokud ji nedrží, pacient se může obrátit na MZČR nebo na soud.",
+      "tldr_expert": "Místní a časová dostupnost péče je v ČR upravena dvouvrstvou normou: zákon č. 372/2011 Sb. o zdravotních službách (§ 28) garantuje právo na péči „v náležité kvalitě a v rozumné době\", konkretizace probíhá v Nařízení vlády č. 307/2012 Sb. ve znění pozdějších předpisů. NV 307/2012 stanoví: (1) místní dostupnost — maximální dojezdová doba osobním automobilem v běžné dopravní situaci podle typu péče (PL: 35 min., většina specializací: 60 min., specializovaná lůžková: 90–120 min.); (2) časová dostupnost — maximální čekací lhůta na 36 specifických výkonů (TEP kyčle 52 týdnů, TEP kolene 50 týdnů, katarakta 30 týdnů, koronární bypass 4 týdny, koloskopie 4 týdny u alarmujících příznaků atd.). Závazek splnit dostupnost je smluvní — kontrolu provádí ZP a MZČR, sankce ukládá zákon. Sběr dat o plnění je formálně řešen, datová operacionalizace na ÚZIS straně je rozpracovaná.",
+      "tldr_policy": "Strukturální napětí: zákonná garance vs. faktická realita ve slabě obsazených regionech. NV 307/2012 explicitně neřeší primární péči s rozšířenou kompetencí, plánovanou reformu specializačního vzdělávání ani výjimky pro pediatrické čekací lhůty. Reformní volání: (1) digitalizace měření plnění (real-time monitoring čekacích lhůt v každé smluvní ambulanci přes propojení NRPZS s NRH); (2) rozšíření seznamu výkonů s maximální čekací lhůtou; (3) propojení s úhradovou vyhláškou — sankcionovat poskytovatele, kteří chronicky nesplňují, a bonifikovat ty, kteří plní v perifériích; (4) jasná procedurální cesta pro pacienta při nesplnění (systém arbitráže nezávislého na ZP).",
+      "key_facts": [
+        { "label": "Hlavní právní rámec", "value": "Zákon 372/2011 Sb. § 28 + Nařízení vlády 307/2012 Sb." },
+        { "label": "Maximální dojezd k PL (auto)", "value": "35 minut" },
+        { "label": "Maximální dojezd k specialistovi", "value": "60 minut" },
+        { "label": "Maximální čekací lhůta TEP kyčle", "value": "52 týdnů" },
+        { "label": "Maximální čekací lhůta katarakta", "value": "30 týdnů" },
+        { "label": "Počet výkonů s lhůtou", "value": "36 (přílohy NV 307/2012)" }
+      ],
+      "absurdity_examples": [
+        {
+          "title": "Garance 60 minut k specialistovi naráží na realitu Karlovarského a Ústeckého kraje",
+          "source": "Nařízení vlády 307/2012 Sb. + ÚZIS data o krajské hustotě lékařů",
+          "url": "https://www.zakonyprolidi.cz/cs/2012-307",
+          "context": "NV 307/2012 garantuje dojezd 60 minut osobním automobilem k většině specializací. V Karlovarském a Ústeckém kraji je hustota lékařů 3,4–3,5 / 1 000 oproti 5,2 v Praze. V některých specializacích (revmatologie, endokrinologie, dětská psychiatrie) jsou nejbližší ambulance reálně mimo 60-minutový rádius z některých obcí pohraničí. Pojistitel nemá legální smluvní povinnost pokrýt tento deficit — pokud v daném okrese není smluvní lékař dané specializace, pacient nemá nárok dovolat se péče v lhůtě."
+        },
+        {
+          "title": "52 týdnů na výměnu kyčle je horní strop, ne cíl",
+          "source": "Nařízení vlády 307/2012 Sb. + OECD HCQI data",
+          "url": "https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance_19991312",
+          "context": "Maximální čekací lhůta 52 týdnů (1 rok) na elektivní endoprotézu kyčle byla v NV 307/2012 nastavena jako kompromis mezi klinickou potřebou a kapacitou systému. V OECD je medián čekací doby 90–180 dní (Norsko, Nizozemsko, Finsko); ČR má průměr 196 dní (2024) s krajskými rozdíly od 18 do 42 týdnů. Limit 52 týdnů tak slouží spíše jako ochrana proti extrémně dlouhému čekání než jako standard kvality."
+        },
+        {
+          "title": "Vymáhání dostupnosti — slabé místo systému",
+          "source": "MZČR a Veřejný ochránce práv (KVOP)",
+          "url": "https://www.ochrance.cz/aktualne/zdravotni-pece-a-jeji-dostupnost",
+          "context": "Pokud poskytovatel nesplní zákonnou lhůtu, pacient má teoreticky nárok obrátit se na ZP, MZČR nebo soud. V praxi je vymáhání obtížné: pacient nese důkazní břemeno, řízení trvají měsíce a soud nemůže poskytovatele přinutit operovat dříve — může jen přiznat náhradu škody. Veřejný ochránce práv opakovaně doporučil zavést systémový mechanismus arbitráže pro rychlejší řešení."
+        },
+        {
+          "title": "Tělesně postižení a senioři: dojezdový čas bez zohlednění omezení",
+          "source": "Praxe pacientských organizací",
+          "context": "NV 307/2012 měří dojezdovou dobu „osobním automobilem v běžné dopravní situaci\". Pro pacienty bez auta, s omezenou mobilitou, nebo závislé na MHD/sanitce není ve vyhlášce diferenciace. Reálná dostupnost je tak pro nemobilního seniora v pohraničí významně horší než pro plně mobilního obyvatele Prahy s autem — i když oba „splňují\" právní normu."
+        }
+      ],
+      "linked_indicators": ["cekaci_doba_kycel", "cekaci_doby_specialist", "lekari_per_1000", "unmet_need_medical"],
+      "linked_strategies": ["uhradova_vyhlaska", "pojistovny", "inst_vzp"],
+      "documents": [
+        { "title": "Nařízení vlády 307/2012 Sb. — místní a časová dostupnost", "url": "https://www.zakonyprolidi.cz/cs/2012-307" },
+        { "title": "Zákon 372/2011 Sb. o zdravotních službách", "url": "https://www.zakonyprolidi.cz/cs/2011-372" },
+        { "title": "Zákon 48/1997 Sb. o veřejném zdravotním pojištění", "url": "https://www.zakonyprolidi.cz/cs/1997-48" },
+        { "title": "Veřejný ochránce práv — Dostupnost zdravotní péče", "url": "https://www.ochrance.cz/aktualne/zdravotni-pece-a-jeji-dostupnost" },
+        { "title": "OECD HCQI — Waiting times for elective surgery", "url": "https://www.oecd.org/health/waiting-times-for-health-services-242e3c8c-en.htm" }
+      ],
+      "verified_at": "2026-05-06",
+      "verification_status": "ok"
+    },
+    {
+      "id": "kdo_za_co_odpovida",
+      "title": "Kdo za co odpovídá v českém zdravotnictví",
+      "subtitle": "Mapa kompetencí MZČR, krajů, zdravotních pojišťoven, ÚZIS, SÚKL, SZÚ a profesních komor",
+      "category": "actors",
+      "tldr_public": "Za zdravotnictví v ČR neodpovídá jeden orgán — kompetence jsou rozdělené mezi sedm hlavních hráčů. Ministerstvo zdravotnictví (MZČR) tvoří legislativu a stanoví úhradovou vyhlášku. Zdravotní pojišťovny (VZP a 6 ZP sdružených v SZP) vybírají pojistné, smluvně nakupují péči a kontrolují její kvalitu. Kraje provozují krajské nemocnice a koordinují záchrannou službu (ZZS) na svém území. ÚZIS sbírá a publikuje data, SÚKL reguluje léky a SZÚ chrání veřejné zdraví. Profesní komory (ČLK, ČSK, ČLnK) udělují oprávnění k výkonu povolání. Pacient se v této struktuře orientuje jen obtížně — když něco nefunguje, často není jasné, na koho se obrátit.",
+      "tldr_expert": "Kompetenční rámec: (1) MZČR — legislativa (zákon 372/2011 Sb., 48/1997 Sb., 95/2004 Sb.), úhradová vyhláška, gesce nad fakultními nemocnicemi a IKEM/MOÚ, dohled nad nesplněním dostupnosti. (2) Kraje — zřizovatelé krajských a okresních nemocnic, koordinátoři Zdravotnické záchranné služby (zákon 374/2011 Sb.), odpovědnost za fyzickou síť ambulancí na svém území. (3) Zdravotní pojišťovny — výběr pojistného, smluvní vztahy s poskytovateli, kontrola fakturace a kvality (revize), revizní lékaři, řízení čekacích listin pro vybrané výkony. (4) ÚZIS — datový steward (NRPZS, NZIS, NRH, NOR, LPZ), provoz národních klinických registrů, klasifikace (CZ-DRG, MKN). (5) SÚKL — registrace a kategorizace léčiv, stanovení maximálních cen a výší a podmínek úhrad. (6) SZÚ — referenční laboratoře, ochrana před infekčními chorobami, NRC. (7) ČLK, ČSK, ČLnK — povinné komory pro výkon povolání lékaře/zubaře/lékárníka, etika, celoživotní vzdělávání, disciplinární řízení. (8) Krajské hygienické stanice — výkon státního zdravotního dozoru. (9) Veřejný ochránce práv — kontrola výkonu veřejné správy ve zdravotnictví.",
+      "tldr_policy": "Strukturální problém: kompetenční fragmentace bez koordinátora s mandátem rozhodovat napříč rezorty. Příklad — místní dostupnost: ZP má smluvní povinnost zajistit, kraj zřizuje nemocnice, MZČR vydává NV 307/2012, ÚZIS publikuje data. Když dojde k systémové bariéře (uzavřená pediatrická pohotovost, výpadek ZZS, deficit specialistů v okrese), žádný jednotlivý hráč nemá pravomoc systémovou nápravu nařídit. Reformní agenda: (1) Koordinační platforma Národní plán dostupnosti péče s pravomocí napříč MZČR/krajů/ZP; (2) Oddělení regulátorské funkce (kvalita) od plátcovské (úhrady) u ZP — analogicky britskému CQC nebo norskému Helsetilsynet; (3) Harmonizace datových toků — ZP, ÚZIS a kraje sbírají odlišné agregace stejných jevů; (4) Jasná eskalační procedura pro pacienta v případě nesplnění dostupnosti — dnes neexistuje.",
+      "key_facts": [
+        { "label": "Hlavní legislativa", "value": "Z. 372/2011, 48/1997, 374/2011, 95/2004, 220/1991" },
+        { "label": "Počet ZP", "value": "7 (VZP + 6 zaměstnaneckých)" },
+        { "label": "Počet krajů zřizujících nemocnice", "value": "13 (mimo Prahu — fakultní)" },
+        { "label": "Datový steward", "value": "ÚZIS (Ústav zdravotnických informací a statistiky)" },
+        { "label": "Léková regulace", "value": "SÚKL (Státní ústav pro kontrolu léčiv)" },
+        { "label": "Veřejné zdraví", "value": "SZÚ + KHS (14 krajských hygienických stanic)" }
+      ],
+      "absurdity_examples": [
+        {
+          "title": "Kdo nese odpovědnost za nedostatek pediatrů? Nikdo a všichni",
+          "source": "Praxe pacientských organizací + zápisy KSL ČLK",
+          "url": "https://www.lkcr.cz/",
+          "context": "Když v okrese chybí dětští praktici, je nejasné, kdo má řešit. ZP odpovídá: smluvíme každého, kdo splní podmínky vyhlášky. MZČR: legislativa je v pořádku, kapacitu fakult upravujeme. Kraj: zřizujeme nemocnici, ale ambulantní síť není naše kompetence. ČLK: vyškolíme komu chybí specializace, ale k výkonu praxe potřebuje smlouvu se ZP. Pacient končí v kruhu „obraťte se jinam\". Reformní volání po jediné odpovědné instanci (typ \"primary care commissioner\") naráží na rozdělení kompetencí v zákonné rovině."
+        },
+        {
+          "title": "ÚZIS publikuje, ZP sbírá, MZČR rozhoduje — různé čísla pro stejnou věc",
+          "source": "Praxe odborné veřejnosti + analýzy IZIP",
+          "context": "Hustotu lékařů publikuje ÚZIS (NRPZS), počty smluvních lékařů zveřejňují ZP individuálně, kapacity ambulancí v krajských atlasech zveřejňuje MZČR. Tři zdroje, tři odlišné metodiky (head count vs. úvazek vs. smlouva), tři odlišná čísla pro stejný kraj. Datová harmonizace by vyžadovala dohodu mezi gestory, která neexistuje."
+        },
+        {
+          "title": "Záchranná služba — krajská odpovědnost s národním výkonostním standardem",
+          "source": "Zákon 374/2011 Sb. o ZZS",
+          "url": "https://www.zakonyprolidi.cz/cs/2011-374",
+          "context": "ZZS je krajská služba (zákon 374/2011 Sb. § 4) financovaná z krajských rozpočtů a smluv se ZP. Národní výkonostní standard (dojezd do 20 minut na 95 % výjezdů) ukládá MZČR. V praxi mají kraje s velkými venkovskými oblastmi (Vysočina, Jihočeský) potíže standard plnit, protože pokrytí výjezdovou základnou každých 20 km vyžaduje vysokou personální i lůžkovou kapacitu. Sankci za nesplnění zákon nezakládá."
+        },
+        {
+          "title": "Profesní komory: regulátor i lobbista zároveň",
+          "source": "Zákon 220/1991 Sb. o ČLK",
+          "url": "https://www.zakonyprolidi.cz/cs/1991-220",
+          "context": "Česká lékařská komora (ČLK) má dvě role v napětí: jako profesní samospráva chrání profesní zájmy členů (vyjednává mzdové a smluvní podmínky), jako veřejnoprávní instituce vykonává disciplinární dohled (etické komise, řízení o pochybení). V některých zemích (UK, Nizozemsko) jsou tyto role formálně odděleny — regulátor nezávislý na profesní samosprávě."
+        },
+        {
+          "title": "Pacient nemá centrální kontaktní místo pro stížnosti",
+          "source": "Veřejný ochránce práv (KVOP) — souhrnné zprávy",
+          "url": "https://www.ochrance.cz/",
+          "context": "Pokud je pacient nespokojen s péčí, musí v různých případech jednat: s poskytovatelem (interní stížnostní procedura), s ČLK (etika lékaře), s krajským úřadem (kontrola poskytovatele dle zákona 372/2011 Sb. § 93), s ZP (smluvní vztahy), se SÚKL (lékový problém), nebo s VOP. Žádné jediné kontaktní místo neexistuje. Veřejný ochránce práv opakovaně doporučil zavedení centrálního systému, který by vstupní stížnost správně směroval."
+        }
+      ],
+      "linked_indicators": ["cekaci_doba_kycel", "lekari_per_1000", "sestry_per_1000", "unmet_need_medical", "spokojenost_informovani"],
+      "linked_strategies": ["pojistovny", "inst_vzp", "inst_szp", "uhradova_vyhlaska"],
+      "documents": [
+        { "title": "Zákon 372/2011 Sb. o zdravotních službách", "url": "https://www.zakonyprolidi.cz/cs/2011-372" },
+        { "title": "Zákon 48/1997 Sb. o veřejném zdravotním pojištění", "url": "https://www.zakonyprolidi.cz/cs/1997-48" },
+        { "title": "Zákon 374/2011 Sb. o zdravotnické záchranné službě", "url": "https://www.zakonyprolidi.cz/cs/2011-374" },
+        { "title": "Zákon 95/2004 Sb. o podmínkách získávání a uznávání odborné způsobilosti", "url": "https://www.zakonyprolidi.cz/cs/2004-95" },
+        { "title": "Zákon 220/1991 Sb. o ČLK, ČSK a ČLnK", "url": "https://www.zakonyprolidi.cz/cs/1991-220" },
+        { "title": "Zákon 258/2000 Sb. o ochraně veřejného zdraví", "url": "https://www.zakonyprolidi.cz/cs/2000-258" },
+        { "title": "MZČR — kompetence ministerstva", "url": "https://mzd.gov.cz/o-ministerstvu/" },
+        { "title": "ÚZIS — Ústav zdravotnických informací a statistiky", "url": "https://www.uzis.cz/" },
+        { "title": "SÚKL — Státní ústav pro kontrolu léčiv", "url": "https://www.sukl.cz/" },
+        { "title": "SZÚ — Státní zdravotní ústav", "url": "https://szu.cz/" },
+        { "title": "Veřejný ochránce práv — sekce zdravotnictví", "url": "https://www.ochrance.cz/" }
+      ],
+      "verified_at": "2026-05-06",
       "verification_status": "ok"
     }
   ]

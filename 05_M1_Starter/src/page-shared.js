@@ -17,7 +17,7 @@ export function audienceText(obj) {
 export function renderModuleNav(activeId) {
   const path = window.location.pathname;
   const tabs = [
-    { id: 'indicators', label: 'Indikátory', href: 'index.html', match: ['index.html', '/'] },
+    { id: 'indicators', label: 'Indikátory', href: 'index.html', match: ['index.html', '/', 'indikator.html'] },
     { id: 'strategies', label: 'Strategie', href: 'strategie.html', match: ['strategie.html'] },
     { id: 'explainers', label: 'Jak to funguje', href: 'jak-funguje.html', match: ['jak-funguje.html'] },
   ];

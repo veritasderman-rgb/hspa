@@ -1,0 +1,61 @@
+{
+  "id": "unmet_need_medical",
+  "name": "Nesplněná potřeba lékařské péče",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Bariéry v přístupu",
+  "definition": "Podíl populace 16+ let, která za posledních 12 měsíců potřebovala lékařské vyšetření nebo léčbu, ale nezískala ji kvůli ceně, vzdálenosti či čekací lhůtě. Eurostat EU-SILC; harmonizovaný indikátor napříč EU.",
+  "unit": "% populace 16+",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_silc_08",
+      "dataset": "hlth_silc_08",
+      "dimensions": { "geo": "CZ", "sex": "T", "age": "Y_GE16", "reason": "TOOEXP_FAR_WAIT", "quant_inc": "TOTAL", "unit": "PC" },
+      "note": "EU-SILC modul „self-reported unmet need for medical examination“. Souhrnný kód TOOEXP_FAR_WAIT agreguje tři klasické důvody nesplněné potřeby (cena, vzdálenost, čekací lhůta)."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/cache/metadata/en/hlth_silc_08_esmsip2.htm",
+      "note": "Metadata + alternativní stažení v CSV/TSV formátu."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_silc_08",
+    "dataset": "EU-SILC"
+  },
+  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "frequency": "yearly",
+  "stewards": ["Eurostat", "ČSÚ (EU-SILC kontaktní bod ČR)"],
+  "method_notes": "Self-reported indikátor — vychází z odpovědi respondenta v EU-SILC dotazníku. Standardizovaná definice EUROSTAT/ECHI #76. EU agregát EU27_2020. ČR má v EU dlouhodobě jednu z nejnižších hodnot, což ale neznamená, že problém neexistuje — měření má známé limity (recall bias, sub-skupinová heterogenita).",
+  "limitations": "Self-report — neměří objektivní dostupnost, ale subjektivní zkušenost. Souhrnný indikátor maskuje rozdíly mezi důvody (cena vs. čekání). Cílová populace 16+ vylučuje pediatrickou péči. Nejsou rozpadnuty data podle příjmových kvintilů na úrovni krajů.",
+  "importance": "<p>Nesplněná potřeba lékařské péče je v rámci OECD HSPA považována za <strong>klíčový proxy indikátor dostupnosti</strong> — operacionalizuje pojem „universal health coverage v praxi“. Pokud má pojištěnec teoretický nárok na péči, ale ve skutečnosti se k ní nedostane (kvůli ceně, vzdálenosti či čekání), výsledek systému je z jeho perspektivy stejný jako kdyby pojištění neexistovalo.</p><p>Indikátor přímo měří funkční výkon zákona <strong>372/2011 Sb.</strong> o zdravotních službách (§ 28 — právo pacienta na poskytnutí zdravotních služeb na náležité odborné úrovni a v rozumné lhůtě) a navazujícího <strong>Nařízení vlády č. 307/2012 Sb.</strong> o místní a časové dostupnosti, které stanoví maximální dojezdové vzdálenosti a maximální čekací doby pro plánovanou péči.</p>",
+  "factors": [
+    {
+      "label": "Čekací lhůty u plánovaných výkonů",
+      "description": "Dlouhé čekání na ortopedické operace (výměna kyčle, kolene), oční výkony (katarakta) a vybraná specializovaná vyšetření jsou v ČR nejčastějším důvodem nesplněné potřeby. Související indikátor <a href=\"indikator.html?id=cekaci_doba_kycel\">cekaci_doba_kycel</a>."
+    },
+    {
+      "label": "Geografická dostupnost specialistů",
+      "description": "Disproporční rozložení lékařských kapacit mezi kraji — Praha má víc než dvojnásobnou hustotu specialistů než Karlovarský/Ústecký kraj. Související: <a href=\"indikator.html?id=lekari_per_1000\">lekari_per_1000</a>."
+    },
+    {
+      "label": "Doplatky a platba z kapsy",
+      "description": "Zubní péče, optika, doplatky léků a vybrané screening výkony jsou v ČR významně hrazeny z kapsy — domácnosti s nízkým příjmem to vede k odkládání péče. Související: <a href=\"indikator.html?id=platba_z_kapsy_pct\">platba_z_kapsy_pct</a>."
+    },
+    {
+      "label": "Síť praktiků v periferiích",
+      "description": "Stárnoucí kohorta praktických lékařů a nepoměr mezi odchody do důchodu a noví absolventi je nejzřetelnější v menších obcích pohraničí. Plánovaná novela vyhlášky 92/2012 Sb. o personálním vybavení reaguje na lokální deficity."
+    },
+    {
+      "label": "Finanční gramotnost a uplatnění nároku",
+      "description": "Část pacientů nečerpá péči, na kterou má nárok, protože nezná systém doplatkových limitů (zákon 48/1997 Sb. § 16b — roční limit doplatků). Vzdělávací rozměr indikátoru."
+    },
+    {
+      "label": "Kapacita primární péče po reformě",
+      "description": "Otázka, do jaké míry je primární péče schopna vyřešit problém před odkladem na specialistu. Slabá síť praktiků s rozšířenými kompetencemi (point-of-care testy, EKG, ultrazvuk) tlačí pacienty do přetížených ambulancí specialistů."
+    }
+  ]
+}

@@ -281,9 +281,12 @@ function renderGrid() {
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
       <div class="source">Zdroj: ${ind.source.name}</div>
     `;
-    card.addEventListener('click', () => openMethodCard(ind));
+    const goToDetail = () => {
+      window.location.href = `indikator.html?id=${encodeURIComponent(ind.id)}`;
+    };
+    card.addEventListener('click', goToDetail);
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToDetail(); }
     });
     grid.appendChild(card);
 
@@ -834,8 +837,8 @@ function renderTopCritical() {
 
   container.querySelectorAll('.top-critical-item').forEach(el => {
     const handler = () => {
-      const ind = allIndicators.find(i => i.id === el.dataset.id);
-      if (ind) openMethodCard(ind);
+      const id = el.dataset.id;
+      if (id) window.location.href = `indikator.html?id=${encodeURIComponent(id)}`;
     };
     el.addEventListener('click', handler);
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
