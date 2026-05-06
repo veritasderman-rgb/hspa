@@ -1,0 +1,35 @@
+{
+  "id": "vakcinace_hpv_divky",
+  "name": "Proočkovanost dívek proti HPV (kohorta 13 let)",
+  "area": "Procesy",
+  "domain": "Prevence",
+  "subdomain": "Imunizace",
+  "definition": "Podíl dívek v kohortě 13 let, které absolvovaly kompletní očkovací schéma proti lidskému papilomaviru (HPV) hrazené z veřejného zdravotního pojištění podle § 30 odst. 2 písm. b) bod 7 zákona 48/1997 Sb.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_vaccinetracker",
+      "endpoint": "https://vaccinetracker.ecdc.europa.eu/data/HPV-vaccinations-coverage",
+      "dataset": "HPV_COVERAGE_FEMALE",
+      "dimensions": { "country": "CZ", "age": "13", "sex": "F", "doses": "complete_schedule" },
+      "note": "ECDC Vaccine Tracker agreguje národní reporting podle direktivy 2009/97/EC. Pro ČR podkladová data poskytuje SZÚ z registru Daktela přes pojišťovny."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.szu.cz/uploads/Epidemiologie/Ockovani/Prooockovanost_HPV_kraje.csv",
+      "note": "SZÚ veřejně publikuje krajský přehled proočkovanosti HPV jednou ročně k 31.12. Ke stažení i přes ÚZIS DataKnihovnu."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc",
+    "code": "HPV_COVERAGE_EU",
+    "dataset": "ECDC_VACCINE_TRACKER",
+    "note": "WHO European Region cíl: 90 % do roku 2030 (Global Strategy to Accelerate the Elimination of Cervical Cancer, 2020). EU průměr ECDC 2024: 53 %; nejvyšší Portugalsko 92 %, Španělsko 89 %, Norsko 88 %."
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["SZÚ", "ÚZIS", "MZČR", "ECDC"],
+  "method_notes": "Sleduje se kompletní schéma (2 dávky pro děti 11–14 let podle SPC vakcín Cervarix/Gardasil-9). Dvouvalentní vs. devítivalentní vakcína se neoddělují. Hrazené z v.z.p. od 1.4.2012 pro dívky 13–14 let, od 1.1.2018 i pro chlapce 13–14 let. Dolní věkový limit posunut na 11 let od 1.1.2024 (vyhláška 537/2006 Sb. v platném znění).",
+  "limitations": "Reportní cyklus má 6–12 měsíční zpoždění od kalendářního roku. Krajské hodnoty se mírně liší mezi reportingem SZÚ (kohortní metoda) a ÚZIS (registr Daktela). Indikátor se zpětně reviduje v rozmezí ±2 p.b."
+}

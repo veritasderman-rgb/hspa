@@ -128,6 +128,17 @@ function renderDetail(id) {
       <p>${escapeHtml(tldr)}</p>
     </section>
 
+    ${(e.long_form ?? []).length ? `
+      <section class="detail-section detail-longform">
+        ${e.long_form.map(sec => `
+          <article class="lf-section">
+            <h3 class="lf-heading">${escapeHtml(sec.heading)}</h3>
+            ${(sec.paragraphs ?? []).map(p => `<p class="lf-para">${escapeHtml(p)}</p>`).join('')}
+          </article>
+        `).join('')}
+      </section>
+    ` : ''}
+
     ${(e.key_facts ?? []).length ? `
       <section class="detail-section">
         <h3>Klíčová fakta</h3>

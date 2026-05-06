@@ -265,6 +265,7 @@ function renderGrid() {
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
       : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
 
+    const detailHref = `indikator.html?id=${encodeURIComponent(ind.id)}`;
     card.innerHTML = `
       <div class="area-tag">${ind.area} · ${ind.domain}</div>
       <div class="top">
@@ -279,11 +280,26 @@ function renderGrid() {
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
-      <div class="source">Zdroj: ${ind.source.name}</div>
+      <div class="card-bottom">
+        <span class="source">Zdroj: ${ind.source.name}</span>
+        <a class="card-detail-link" href="${detailHref}" aria-label="Otevřít detailní stránku indikátoru ${escapeText(ind.name)}">Detail →</a>
+      </div>
     `;
-    card.addEventListener('click', () => openMethodCard(ind));
+    // Klik kdekoli na kartě (mimo odkaz "Detail") otevře rychlý náhled v modálu.
+    // Klávesa Enter na kartě otevře plnou detailní stránku — preferovaná
+    // navigační varianta pro klávesnici.
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // odkaz na detail funguje samostatně
+      openMethodCard(ind);
+    });
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        window.location.href = detailHref;
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        openMethodCard(ind);
+      }
     });
     grid.appendChild(card);
 
@@ -580,6 +596,7 @@ function renderModalContent(card, indicator) {
     ${card.data_source ? `<h3 class="ds-heading">Zdroje dat</h3>${renderDataSource(card.data_source)}` : ''}
     <div class="modal-cross-links" id="modalCrossLinks"></div>
     <div class="modal-actions">
+      <a class="btn-detail" href="indikator.html?id=${encodeURIComponent(indicator.id)}">Otevřít plný detail (mapa, kontext, zdroje) →</a>
       <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
     </div>
   `;
