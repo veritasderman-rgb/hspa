@@ -115,14 +115,21 @@ export async function loadGlossaryTerms() {
  */
 export function wrapAcronyms(html, terms) {
   if (!html || !terms || !terms.length) return html;
-  for (const t of terms) {
-    const key = t.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp(`(?<![\\w\\-])${key}(?![\\w\\-])`, 'g');
-    html = html.replace(re,
-      `<abbr class="glossary-abbr" data-def="${escapeHtml(t.short_def)}" title="${escapeHtml(t.full)}">${t.key}</abbr>`
-    );
+  // Build one combined regex so each text segment is processed in a single pass —
+  // prevents later terms from matching inside <abbr> attributes just injected.
+  const escaped = terms.map(t => t.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const combined = new RegExp(`(?<![\\w\\-])(${escaped.join('|')})(?![\\w\\-])`, 'g');
+  const byKey = new Map(terms.map(t => [t.key, t]));
+  // Split into alternating text/tag segments; only replace inside text (even indices)
+  const parts = html.split(/(<[^>]*>)/);
+  for (let i = 0; i < parts.length; i += 2) {
+    parts[i] = parts[i].replace(combined, match => {
+      const t = byKey.get(match);
+      if (!t) return match;
+      return `<abbr class="glossary-abbr" data-def="${escapeHtml(t.short_def)}" title="${escapeHtml(t.full)}">${match}</abbr>`;
+    });
   }
-  return html;
+  return parts.join('');
 }
 
 /**

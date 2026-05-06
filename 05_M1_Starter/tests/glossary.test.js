@@ -68,3 +68,16 @@ test('wrapAcronyms: wrappuje více zkratek v jednom textu', () => {
   assert.ok(out.includes('>OECD<'), 'musí wrappovat OECD');
   assert.ok(out.includes('>WHO<'), 'musí wrappovat WHO');
 });
+
+test('wrapAcronyms: neinjektuje <abbr> do atributů (nested replacement bug)', () => {
+  // OECD definice obsahuje WHO — po wrappování OECD nesmí být WHO v data-def nahrazeno
+  const terms = [
+    { key: 'OECD', full: 'OECD full', short_def: 'Obsahuje WHO zmínku.', anchor: 'oecd' },
+    { key: 'WHO', full: 'WHO full', short_def: 'Světová org.', anchor: 'who' },
+  ];
+  const out = wrapAcronyms('Text s OECD.', terms);
+  // data-def atribut nesmí obsahovat <abbr>
+  const attrMatch = out.match(/data-def="([^"]*)"/);
+  assert.ok(attrMatch, 'musí mít data-def');
+  assert.ok(!attrMatch[1].includes('<abbr'), 'data-def nesmí obsahovat <abbr>');
+});
