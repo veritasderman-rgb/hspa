@@ -1,0 +1,30 @@
+{
+  "id": "pohybova_aktivita_dospeli",
+  "name": "Doporučená pohybová aktivita (15+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Tělesná aktivita",
+  "definition": "Podíl populace 15 a více let splňující doporučení WHO pro fyzickou aktivitu (≥ 150 minut středně intenzivní aerobní aktivity týdně, Eurostat EHIS).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_ehis_pe2e"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "SZÚ"
+  ],
+  "method_notes": "WHO doporučení 2020. Měřeno IPAQ-style dotazníkem v EHIS. ČR má nízkou prevalenci pravidelné aktivity ve srovnání se Skandinávií.",
+  "limitations": "Self-report — overestimuje skutečnou aktivitu o 30–60 % (akcelerometrické srovnání)."
+}

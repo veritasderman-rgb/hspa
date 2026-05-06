@@ -1,0 +1,30 @@
+{
+  "id": "infekce_nosokomialni",
+  "name": "Prevalence nemocničních infekcí",
+  "area": "Procesy",
+  "domain": "Bezpečnost péče",
+  "subdomain": "Infekce spojené s péčí",
+  "definition": "Podíl hospitalizovaných pacientů s minimálně jednou aktivní infekcí spojenou se zdravotní péčí v den point prevalence study (PPS) podle metodiky ECDC.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_amres",
+      "note": "PPS běží ve 4letých vlnách. Národní HAI Surveillance koordinuje SZÚ."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "ECDC PPS HAI&AMU. Vzorek pokrývá > 50 % akutních lůžek. ČR má dlouhodobě vyšší prevalenci než EU průměr — částečně reflektuje aktivnější surveillance.",
+  "limitations": "PPS = jednodenní snapshot, ne kontinuální. Citlivost na intenzitu surveillance (více aktivně sledujících nemocnic = vyšší zachycený podíl)."
+}
