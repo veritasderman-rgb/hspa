@@ -218,7 +218,7 @@ function renderDetail(id) {
         <h3>Související indikátory</h3>
         <div class="chip-row">
           ${e.linked_indicators.map(id =>
-            `<a class="chip" href="index.html?indicator=${encodeURIComponent(id)}">${escapeHtml(id)}</a>`
+            `<a class="chip" href="indicator.html?id=${encodeURIComponent(id)}">${escapeHtml(id)}</a>`
           ).join('')}
         </div>
       </section>
