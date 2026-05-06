@@ -1936,7 +1936,10 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
     column-gap: 16px;
     padding: 22px 0;
   }
+  /* Přepsání desktop selectorů se stejnou specificitou v 1-col layoutu —
+     desktop měl :nth-child(n+3) odstraňující spodní border u karet 3 a 4. */
   .ed-flow-step:nth-child(2n) { border-bottom: 1px solid var(--rule); }
+  .ed-flow-step:nth-child(n+3) { border-bottom: 1px solid var(--rule); }
   .ed-flow-step:last-child { border-bottom: none; }
   .ed-flow-num { font-size: 48px; letter-spacing: -1.4px; }
   .ed-flow-name { font-size: 22px; }
