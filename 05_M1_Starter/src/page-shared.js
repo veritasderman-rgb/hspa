@@ -73,11 +73,12 @@ export function renderHSPAScore() {
 export function renderModuleNav(activeId) {
   const path = window.location.pathname;
   const tabs = [
-    { id: 'indicators',  label: 'Indikátory',              href: 'index.html',          match: ['index.html', '/'] },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
-    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',       match: ['prevence.html'] },
-    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',      match: ['strategie.html'] },
-    { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',     match: ['o-projektu.html'] },
+    { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
+    { id: 'themes',      label: 'Tematické linie',         href: 'tematicke-linie.html',    match: ['tematicke-linie.html'] },
+    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'] },
+    { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
   ];
 
   const container = document.getElementById('moduleNav');
