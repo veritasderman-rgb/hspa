@@ -320,10 +320,10 @@ function renderEditorialHero() {
 
     // 4 oblasti HSPA s dílčím skóre
     const areaDescriptions = {
-      'Výsledky': 'Zdravotní stav populace — naděje dožití, úmrtnost, prevalence chronických nemocí.',
-      'Výstupy': 'Kvalita, dostupnost a finance — výstupy zdravotnického systému z pacientovy perspektivy.',
-      'Procesy': 'Klinické postupy a prevence — co systém aktivně dělá pro zdraví obyvatel.',
-      'Struktury': 'Lidské zdroje, kapacity a infrastruktura — vstupní podmínky systému.',
+      'Výsledky': 'Žijeme déle — ale za průměrem OECD zaostáváme v kardiovaskulární úmrtnosti a zdravých letech života. Každý rok ztracený pod průměrem je měřitelný.',
+      'Výstupy': 'Péče je dostupná, ale nerovnoměrně. Finanční bariéry rostou, čekací doby se liší kraj od kraje a pacientská zkušenost chybí v datech.',
+      'Procesy': 'Screeningy zachytávají pozdě, proočkovanost klesá a primární péče koordinuje méně, než by mohla. Systém léčí dobře — ale mohl by víc předcházet.',
+      'Struktury': 'Lékaři stárnou, sestry odcházejí a regionální nerovnosti v kapacitách se prohlubují. Infrastruktura je moderní — lidské zdroje jsou výzva.',
     };
 
     const byArea = {};
