@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O projektu – Zdravé Česko HSPA monitor</title>
+  <meta name="description" content="Informace o projektu Zdravé Česko: kdo stojí za dashboardem, metodika výběru indikátorů, frekvence aktualizace a kontakt.">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-audience="public">
+
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>Zdravé Česko · Hodnocení výkonnosti zdravotního systému ČR</small>
+    </h1>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100</span>
+</div>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="aboutHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">O projektu</div>
+      <h2 class="ed-hero-headline" id="aboutHeadline">Nezávislá občanská implementace OECD HSPA rámce pro Českou republiku.</h2>
+      <p class="ed-hero-lead">
+        Tento dashboard není součástí žádné státní instituce. Je to veřejná datová iniciativa, která agreguje data z ÚZIS, ČSÚ, OECD a Eurostatu a prezentuje je v podobě srozumitelné pro laické i odborné publikum.
+      </p>
+    </div>
+  </section>
+
+  <div class="ed-flow-grid" style="padding: 0 var(--content-pad) 48px; max-width: var(--max-w); margin: 0 auto;">
+
+    <section class="ed-about-block">
+      <h3>Co je HSPA rámec</h3>
+      <p>
+        <strong>Health System Performance Assessment</strong> (HSPA, hodnocení výkonnosti zdravotního systému) je metodický rámec pro systematické měření, jak zdravotnictví plní své cíle: zlepšuje zdravotní stav populace, je dostupné, kvalitní, bezpečné, finančně udržitelné a spravedlivě financované.
+      </p>
+      <p>
+        Národní HSPA rámec pro Českou republiku zpracovala v letech 2021–2023 <strong>zdravotnická divize OECD</strong> ve spolupráci s <strong>DG REFORM Evropské komise</strong>. Z české strany ho vedlo Ministerstvo zdravotnictví ČR. Rámec byl oficálně spuštěn 24. května 2023 v Praze.
+      </p>
+      <p>
+        Oficální rámec definuje <strong>122 indikátorů</strong> rozdělených do čtyř oblastí: Výsledky, Výstupy, Procesy a Struktury.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Proč jen 58 indikátorů</h3>
+      <p>
+        Z 122 indikátorů oficiálního OECD HSPA rámce tento dashboard prezentuje <strong>58 indikátorů</strong>, u nichž jsou aktuálně dostupná validní česká data z primárních veřejných zdrojů (ÚZIS, ČSÚ, OECD, Eurostat).
+      </p>
+      <p>
+        Zbývajících 64 indikátorů je metodicky definováno v rámci, ale jejich česká data buď nejsou centrálně agregována, nejsou pravidelně publikována v otevřeném formátu, nebo jsou dostupná pouze v nesrovnatelné metodice. Jejich postupné doplnění je součástí plánu projektu.
+      </p>
+      <p>
+        Indikátory, jejichž data pocházejí pouze z odhadů nebo sekundárních zdrojů, jsou označeny štítkem <strong>Ilustrativní</strong>. Indikátory prošlé částečnou verifikací nesou štítek <strong>Předběžné</strong>.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Kdo za projektem stojí</h3>
+      <p>
+        Dashboard je nezávislou občanskou iniciativou. Není oficálním portálem Ministerstva zdravotnictví ČR, OECD ani ÚZIS.
+      </p>
+      <p>
+        Data jsou agregována automatizovaným pipeline z veřejně dostupných datových zdrojů. Zdrojový kód projektu je dostupný na GitHubu. Veškerá data jsou agregovaná — žádné osobní údaje (PII) nejsou zpracovávány.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Frekvence aktualizace</h3>
+      <p>
+        Data jsou automaticky aktualizována každý den v 06:00 UTC prostřednictvím GitHub Actions. Pipeline stahuje data z primárních zdrojů, provádí transformaci a validaci, a pokud jsou data konzistentní, publikuje novou verzi dashboardu přes Vercel CDN.
+      </p>
+      <p>
+        Každý indikátor zobrazuje datum posledního stažení dat ze zdroje.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Datové zdroje</h3>
+      <ul class="ed-about-sources">
+        <li><strong>ÚZIS</strong> — Ústav zdravotnických informací a statistiky ČR (Národní registr hospitalizovaných, NRPZS)</li>
+        <li><strong>ČSÚ</strong> — Český statistický úřad (DataStat, demografické registry)</li>
+        <li><strong>OECD</strong> — Health Statistics, Health at a Glance, HCQO</li>
+        <li><strong>Eurostat</strong> — European Health Interview Survey (EHIS), HFA-DB</li>
+      </ul>
+      <p>
+        Všechny HTTP požadavky jsou identifikovány hlavičkou <code>User-Agent: ZdraveCesko-HSPA/1.0</code>. Cron pipeline běží maximálně jednou denně (rate limit zdrojů).
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Licence a citace</h3>
+      <p>
+        Data prezentovaná dashboardem pocházejí z veřejných zdrojů ÚZIS, ČSÚ, OECD a Eurostatu a jsou šířena v souladu s jejich licenčními podmínkami. Dashboard samotný je k dispozici pod licencí <strong>CC-BY 4.0</strong>.
+      </p>
+      <p>
+        Pro akademické citace doporučujeme: <em>Zdravé Česko (2026). HSPA Monitor — hodnocení výkonnosti zdravotního systému České republiky. Občanská implementace OECD HSPA rámce. Dostupné na: zdravecesko.cz</em>
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Disclaimer</h3>
+      <p>
+        Informace na tomto webu slouží k orientaci a podpoře veřejné debaty o zdravotní politice. Nenahrazují lékařské doporučení ani oficální statistické publikace primárních datových zdrojů. Pro medicínská rozhodnutí konzultujte lékaře.
+      </p>
+    </section>
+
+    <section class="ed-about-block">
+      <h3>Roadmap</h3>
+      <ul class="ed-about-sources">
+        <li>Doplnění chybějících 64 indikátorů (postupně podle dostupnosti dat)</li>
+        <li>Glosář zkratek s interaktivními tooltip definicemi</li>
+        <li>Stránka „Kde Česko vede" — úspěchy systému</li>
+        <li>Tematické linie (kardiovaskulární péče, screeningy, dostupnost)</li>
+        <li>Veřejný API endpoint pro otevřená data</li>
+        <li>WCAG 2.2 AA accessibility audit</li>
+      </ul>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="bottom">
+  <p>Občanská implementace OECD HSPA rámce pro ČR · Data: ÚZIS, ČSÚ, OECD, Eurostat · Licence CC-BY 4.0</p>
+  <p>Není oficálním portálem MZČR · <a href="index.html">Zpět na dashboard</a></p>
+</footer>
+
+<script type="module">
+  import { renderModuleNav, renderMastheadDate } from './src/page-shared.js';
+  renderModuleNav('about');
+  renderMastheadDate();
+</script>
+</body>
+</html>

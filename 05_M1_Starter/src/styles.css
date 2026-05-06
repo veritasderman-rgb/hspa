@@ -2342,3 +2342,164 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .prevention-action { border-right: none; border-bottom: 1px solid var(--rule); }
   .prevention-action:last-child { border-bottom: none; }
 }
+
+/* ===== SPRINT 2+3 ADDITIONS ===== */
+
+/* Skeleton loaders */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton-card {
+  height: 160px;
+  border: 1px solid var(--rule);
+  background: linear-gradient(90deg, var(--paper2) 25%, var(--paper) 50%, var(--paper2) 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-card { animation: none; background: var(--paper2); }
+}
+
+/* Audience switch */
+.masthead-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.audience-switch {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.aud-btn {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-mut);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.aud-btn:hover { color: var(--ink); border-color: var(--ink-mut); }
+.aud-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* Filter bar — visible by default */
+.filter-bar {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-top: none;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.filter-bar-main {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-bar .search-box { flex: 1 1 200px; min-width: 140px; }
+.filter-bar .sort-select { flex: 0 0 auto; }
+.filter-bar .btn-export { flex-shrink: 0; }
+
+/* HSPA abbr tooltip */
+.hspa-abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--ink-mut2);
+  cursor: help;
+}
+
+/* Hero HSPA one-liner */
+.ed-hero-hspa-line {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 6px 0 16px;
+}
+.ed-hero-hspa-line a { color: var(--red); text-decoration: none; }
+.ed-hero-hspa-line a:hover { text-decoration: underline; }
+
+/* Empty state with CTA */
+.empty-state-msg {
+  margin: 0 0 16px;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink-mut);
+}
+.empty-state-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.empty-state-btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 18px;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+}
+.empty-state-btn:hover { background: var(--red); border-color: var(--red); }
+.empty-state-btn-sec { background: transparent; color: var(--ink); }
+.empty-state-btn-sec:hover { background: var(--ink); color: var(--paper); }
+
+/* HSPA abbr in topbar doesn't underline on dark bg */
+.topbar .hspa-abbr { border-bottom-color: rgba(255,255,255,0.3); }
+
+@media (max-width: 640px) {
+  .audience-switch { margin-left: 0; }
+  .filter-bar-main { flex-direction: column; align-items: stretch; }
+  .filter-bar .sort-select, .filter-bar .btn-export { width: 100%; }
+}
+
+/* O projektu stránka */
+.ed-about-block {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ed-about-block:last-child { border-bottom: none; }
+.ed-about-block h3 {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mut);
+  margin: 0 0 12px;
+}
+.ed-about-block p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.ed-about-block p:last-child { margin-bottom: 0; }
+.ed-about-sources {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  padding-left: 20px;
+  margin: 0 0 10px;
+}
+.ed-about-sources li { margin-bottom: 4px; }
+.ed-about-block code {
+  font-family: monospace;
+  font-size: 13px;
+  background: var(--paper2);
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+}
