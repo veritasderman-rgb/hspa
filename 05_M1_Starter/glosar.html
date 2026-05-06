@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glosář zkratek · Zdravé Česko HSPA monitor</title>
+  <meta name="description" content="Vysvětlení zkratek a pojmů z oblasti zdravotnictví, statistiky a HSPA metodiky — OECD, ÚZIS, DRG, MKN a další.">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>Zdravé Česko · Hodnocení výkonnosti zdravotního systému ČR</small>
+    </h1>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="glossaryHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Glosář</div>
+      <h2 class="ed-hero-headline" id="glossaryHeroHeadline">Zkratky a pojmy bez záhadného hávu.</h2>
+      <p class="ed-hero-lead">
+        Zdravotnické statistiky jsou plné zkratek — OECD, ÚZIS, DRG, MKN, HSPA, HCQO. Každá z nich se skrývá za konkrétní institucí, metodikou nebo klasifikačním systémem. Tato stránka vysvětluje, co znamenají a proč na nich záleží.
+      </p>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Přehled glosáře">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num" id="glossaryCount">—</div>
+        <div class="ed-stat-lbl">Termínů v glosáři</div>
+        <div class="ed-stat-meta">Zkratky, instituce, metodiky</div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="section" style="padding-top: 8px;">
+    <div class="glossary-search-wrap">
+      <input type="search" id="glossarySearch" class="glossary-search"
+        placeholder="Hledat termín nebo zkratku…"
+        aria-label="Vyhledat termín v glosáři">
+    </div>
+    <nav class="glossary-alpha-nav" id="glossaryAlphaNav" aria-label="Přejít na písmeno"></nav>
+    <div class="glossary-list" id="glossaryList" aria-live="polite">
+      <p class="glossary-empty">Načítám…</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="bottom">
+  <p>Občanská implementace OECD HSPA rámce pro ČR · Data: ÚZIS, ČSÚ, OECD, Eurostat · Licence CC-BY 4.0</p>
+  <p>Není oficálním portálem MZČR · <a href="index.html">Zpět na dashboard</a></p>
+</footer>
+
+<script type="module" src="src/glosar.js"></script>
+<script type="module">
+  // Aktualizuj počet termínů v hero po načtení
+  fetch('data/glossary.json').then(r => r.json()).then(d => {
+    const el = document.getElementById('glossaryCount');
+    if (el) el.textContent = (d.terms ?? []).length;
+  }).catch(() => {});
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 // Načítá data/explainers.json + strategies.json (pro cross-link)
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
-import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
 
@@ -261,6 +261,13 @@ function renderDetail(id) {
   if (e.id === 'cz_drg') {
     wireDrgCalculator();
   }
+
+  // Wrap acronyms in the tldr paragraph after rendering
+  loadGlossaryTerms().then(terms => {
+    if (!terms.length) return;
+    const tldrEl = detail.querySelector('.detail-tldr p');
+    if (tldrEl) tldrEl.innerHTML = wrapAcronyms(escapeHtml(audienceText(e)), terms);
+  });
 }
 
 function wireFilters() {
