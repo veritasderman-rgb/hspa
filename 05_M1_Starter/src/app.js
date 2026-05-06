@@ -441,18 +441,20 @@ function renderGrid() {
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
       : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
 
+    const effectiveVerif = ind.verification_status ||
+      (ind.source && ind.source.origin === 'seed' ? 'preliminary' : null);
     const verifText = {
       verified: 'Ověřeno',
       preliminary: 'Předběžné',
       illustrative: 'Ilustrativní',
-    }[ind.verification_status] || '';
+    }[effectiveVerif] || '';
     const verifTitle = {
       verified: 'Data z primárního zdroje, max. 12 měsíců staré',
-      preliminary: 'Data dostupná, metodika v revizi nebo zdroj není primární',
+      preliminary: 'Data dostupná, neprošla plnou verifikací živého fetcheru',
       illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
-    }[ind.verification_status] || '';
-    const verifBadge = ind.verification_status
-      ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+    }[effectiveVerif] || '';
+    const verifBadge = effectiveVerif
+      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
       : '';
 
     card.innerHTML = `
