@@ -2,14 +2,14 @@
   "_doc": "Mapování HSPA indicator_id → Eurostat dataset + filtr. Eurostat slouží jako primární zdroj pro EU-SILC indikátory (HLY) a jako záložní pro EU benchmarky.",
   "indicators": {
     "nadeje_doziti_zdravi_65": {
+      "_doc": "Healthy life years at age 65. Eurostat hlth_hlye nemá samostatnou dimenzi 'age' — věk je zakódován v indic_he (HLY_0=birth, HLY_50, HLY_65). Předchozí mapping age=Y65, indic_he=F vrátil HTTP 400 (F není platný indic_he kód).",
       "dataset": "hlth_hlye",
       "country_dim": "geo",
       "cz_code": "CZ",
       "eu_code": "EU27_2020",
       "filter_extra": {
         "sex": "T",
-        "age": "Y65",
-        "indic_he": "F"
+        "indic_he": "HLY_65"
       }
     },
     "nadeje_doziti_total": {
@@ -23,6 +23,7 @@
       }
     },
     "unmet_need_medical": {
+      "_doc": "Unmet need for medical care. Předchozí mapping měl: (a) reason=TOOEXP_FAR_WAIT — neexistující kód, správně je TOOEFW (Too expensive or too far or waiting list), (b) quant_inc=TOTAL — nesprávný název dimenze, správně je 'quantile'. Obojí způsobovalo HTTP 400.",
       "dataset": "hlth_silc_08",
       "country_dim": "geo",
       "cz_code": "CZ",
@@ -30,8 +31,8 @@
       "filter_extra": {
         "sex": "T",
         "age": "Y_GE16",
-        "reason": "TOOEXP_FAR_WAIT",
-        "quant_inc": "TOTAL",
+        "reason": "TOOEFW",
+        "quantile": "TOTAL",
         "unit": "PC"
       }
     }
