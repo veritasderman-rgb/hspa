@@ -6,6 +6,7 @@ const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
+const LS_AUD_KEY = 'zdrave-cesko/audience';
 const STALE_HOURS = 26;
 
 let allIndicators = [];
@@ -13,6 +14,7 @@ let activeArea = 'all';
 let activeSearch = '';
 let activeSort = 'default';
 let activeDomain = '';
+let activeAudience = 'public';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 let regionsChart = null;
 let _modalChart = null;
@@ -1127,6 +1129,46 @@ function trapFocus(modal) {
 let _lastFocusedBeforeModal = null;
 
 function wireUp() {
+  // Audience switch
+  const audBtns = document.querySelectorAll('.aud-btn');
+  audBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const aud = btn.dataset.aud;
+      try { localStorage.setItem('zdrave-cesko/audience', aud); } catch {}
+      document.body.dataset.audience = aud;
+      audBtns.forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+  // Init audience from localStorage
+  try {
+    const stored = localStorage.getItem('zdrave-cesko/audience');
+    if (stored && ['public','expert','policy'].includes(stored)) {
+      document.body.dataset.audience = stored;
+      audBtns.forEach(b => b.classList.toggle('active', b.dataset.aud === stored));
+    }
+  } catch {}
+
+  // Empty state CTA
+  const emptyClear = document.getElementById('emptyStateClear');
+  if (emptyClear) {
+    emptyClear.addEventListener('click', () => {
+      activeSearch = ''; activeArea = 'all'; activeSort = 'default';
+      const s = document.getElementById('searchBox'); if (s) s.value = '';
+      const a = document.getElementById('areaFilter'); if (a) a.value = 'all';
+      const so = document.getElementById('sortSelect'); if (so) so.value = 'default';
+      renderGrid(); writeHash();
+    });
+  }
+  const emptyResults = document.getElementById('emptyStateResults');
+  if (emptyResults) {
+    emptyResults.addEventListener('click', () => {
+      activeArea = 'Výsledky'; activeSearch = '';
+      const a = document.getElementById('areaFilter'); if (a) a.value = 'Výsledky';
+      const s = document.getElementById('searchBox'); if (s) s.value = '';
+      renderGrid(); writeHash();
+    });
+  }
+
   // Area filter (dropdown <select>)
   const areaSel = document.getElementById('areaFilter');
   if (areaSel) {

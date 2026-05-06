@@ -63,19 +63,20 @@ test('filterExplainers: search across all 3 tldrs (public + expert + policy)', (
 });
 
 // ===== audienceText =====
+// audienceText nyní čte audience z localStorage (v Node.js prostředí vždy 'public')
 
-test('audienceText: vždy preferuje expert variantu', () => {
+test('audienceText: default (public) preferuje tldr_public, fallback na expert', () => {
   const obj = {
     tldr_public: 'public text',
     tldr_expert: 'expert text',
     tldr_policy: 'policy text',
   };
-  assert.equal(audienceText(obj), 'expert text');
+  assert.equal(audienceText(obj), 'public text');
 });
 
-test('audienceText: fallback expert → policy → public', () => {
-  assert.equal(audienceText({ tldr_policy: 'policy', tldr_public: 'public' }), 'policy');
-  assert.equal(audienceText({ tldr_public: 'public' }), 'public');
+test('audienceText: fallback public → expert', () => {
+  assert.equal(audienceText({ tldr_expert: 'expert', tldr_policy: 'policy' }), 'expert');
+  assert.equal(audienceText({ tldr_expert: 'expert' }), 'expert');
   assert.equal(audienceText({ tldr: 'legacy' }), 'legacy');
 });
 

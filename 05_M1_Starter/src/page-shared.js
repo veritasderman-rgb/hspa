@@ -1,12 +1,26 @@
 // Sdílené komponenty napříč stránkami: navigační lišta mezi moduly.
 
+const LS_AUDIENCE = 'zdrave-cesko/audience';
+
+export function getAudience() {
+  try { return localStorage.getItem(LS_AUDIENCE) || 'public'; } catch { return 'public'; }
+}
+
+export function setAudience(aud) {
+  try { localStorage.setItem(LS_AUDIENCE, aud); } catch {}
+  document.body.dataset.audience = aud;
+  document.querySelectorAll('.aud-btn').forEach(b => b.classList.toggle('active', b.dataset.aud === aud));
+}
+
 /**
- * Vrátí TL;DR text indikátoru/strategie/explaineru.
- * Vždy preferuje expert variantu (nejvíc obsahu pro publikum se zájmem
- * o problematiku); fallback přes public na bázi.
+ * Vrátí TL;DR text indikátoru/strategie/explaineru podle uložené audience preference.
+ * Fallback: public → expert.
  */
 export function audienceText(obj) {
-  return obj.tldr_expert ?? obj.tldr_policy ?? obj.tldr_public ?? obj.tldr ?? '';
+  const aud = getAudience();
+  if (aud === 'expert') return obj.tldr_expert ?? obj.tldr_public ?? obj.tldr ?? '';
+  if (aud === 'policy') return obj.tldr_policy ?? obj.tldr_expert ?? obj.tldr_public ?? obj.tldr ?? '';
+  return obj.tldr_public ?? obj.tldr_expert ?? obj.tldr ?? '';
 }
 
 /**
@@ -63,7 +77,7 @@ export function renderModuleNav(activeId) {
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',       match: ['prevence.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',      match: ['strategie.html'] },
-    { id: 'about',       label: 'O HSPA',                  href: 'index.html#heroDetails', match: [] },
+    { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',     match: ['o-projektu.html'] },
   ];
 
   const container = document.getElementById('moduleNav');
