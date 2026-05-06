@@ -2,7 +2,7 @@
 // Načítá data/strategies.json + data/explainers.json (pro tranzitivní cross-link)
 // a renderuje rozcestí (level filter, search) nebo detail (z URL ?id=...).
 
-import { audienceText, renderModuleNav, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 import { buildIndex, loadLinks } from './strategy-links.js';
 import { renderTimeline, renderResponsibilityMatrix } from './strategy-policy-views.js';
 
@@ -266,6 +266,7 @@ async function init() {
   if (typeof window === 'undefined') return;
 
   renderModuleNav('strategies');
+  renderMastheadDate();
 
   try {
     const [stratsRes, explsRes] = await Promise.all([

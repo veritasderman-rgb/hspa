@@ -117,6 +117,15 @@ function loadFromLocalStorage() {
   } catch { return null; }
 }
 
+function renderMastheadDateLocal() {
+  const el = document.getElementById('mastheadDate');
+  if (!el) return;
+  const d = new Date();
+  const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+  const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+  el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 async function loadData(bustCache = false) {
   const url = bustCache ? `${DATA_URL}?t=${Date.now()}` : DATA_URL;
   try {
@@ -279,16 +288,15 @@ function renderGrid() {
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
-      <div class="source">Zdroj: ${ind.source.name}</div>
+      <div class="source">Zdroj: ${ind.source.name}<a class="card-detail-link" href="indicator.html?id=${encodeURIComponent(ind.id)}" data-detail-link aria-label="Otevřít plný detail indikátoru s krajskou mapou">Detail →</a></div>
     `;
-    const detailUrl = `indikator.html?id=${encodeURIComponent(ind.id)}`;
     card.addEventListener('click', (e) => {
-      // Cmd/Ctrl-click → otevřít na nové kartě, normál click → navigovat
-      if (e.metaKey || e.ctrlKey) { window.open(detailUrl, '_blank'); return; }
-      window.location.href = detailUrl;
+      // Klik na „Detail →" odkaz následuje vlastní href; jiný klik otevře modal s metodickou kartou
+      if (e.target.closest('[data-detail-link]')) return;
+      openMethodCard(ind);
     });
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.href = detailUrl; }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
     });
     grid.appendChild(card);
 
@@ -749,11 +757,15 @@ function benchmarkBarHTML(ind) {
 
   if (bestVal != null) {
     const p = Math.min(100, Math.round(bestVal / maxVal * 100));
+    const bestCountry = ind.benchmark?.oecd_best_country ?? null;
+    const tooltip = bestCountry
+      ? `Nejlepší výkon v OECD: ${bestCountry} (${bestVal}${ind.unit ? ' ' + ind.unit : ''})`
+      : 'Nejlepší výkon v OECD';
     rows += `
-    <div class="bm-row bm-best">
-      <span class="bm-key" title="Nejlepší výkon v OECD">Top</span>
+    <div class="bm-row bm-best" title="${escapeText(tooltip)}">
+      <span class="bm-key">Top</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#16A34A"></div></div>
-      <span class="bm-val">${bestVal}</span>
+      <span class="bm-val">${bestVal}${bestCountry ? `<small class="bm-country"> · ${escapeText(bestCountry)}</small>` : ''}</span>
     </div>`;
   }
 
@@ -839,7 +851,7 @@ function renderTopCritical() {
 
   container.querySelectorAll('.top-critical-item').forEach(el => {
     const handler = () => {
-      window.location.href = `indikator.html?id=${encodeURIComponent(el.dataset.id)}`;
+      window.location.href = `indicator.html?id=${encodeURIComponent(el.dataset.id)}`;
     };
     el.addEventListener('click', handler);
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
@@ -998,6 +1010,7 @@ function wireUp() {
   const hashState = readHash();
   applyHash(hashState);
   wireUp();
+  renderMastheadDateLocal();
   try {
     await loadData();
     renderGrid();

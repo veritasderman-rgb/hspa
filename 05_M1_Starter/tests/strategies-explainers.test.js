@@ -58,10 +58,10 @@ test('strategies.json: related_strategies tvoří validní vnitřní cykly', () 
 
 // ===== data/explainers.json =====
 
-test('explainers.json: validní JSON, 7 záznamů, povinná pole', () => {
+test('explainers.json: validní JSON, 9 záznamů, povinná pole', () => {
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8'));
   assert.ok(Array.isArray(data.explainers));
-  assert.equal(data.explainers.length, 7);
+  assert.equal(data.explainers.length, 9);
 
   for (const e of data.explainers) {
     for (const f of ['id', 'title', 'category', 'tldr_public', 'tldr_expert', 'tldr_policy']) {

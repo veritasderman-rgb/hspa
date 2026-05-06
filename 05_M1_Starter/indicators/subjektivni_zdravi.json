@@ -1,0 +1,30 @@
+{
+  "id": "subjektivni_zdravi",
+  "name": "Subjektivní hodnocení zdraví (15+)",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Subjektivní zdraví",
+  "definition": "Podíl populace 15 a více let, která hodnotí svůj zdravotní stav jako \"dobrý\" nebo \"velmi dobrý\" (Eurostat hlth_silc_18, EU-SILC). Důležitý prediktor budoucí utilizace péče a mortality.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_silc_18"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "ČSÚ"
+  ],
+  "method_notes": "Otázka EU-SILC: \"Jak hodnotíte svůj zdravotní stav obecně?\" — Likertova škála 5 stupňů. Self-rated health. ČR má dlouhodobě jeden z nejnižších výsledků v EU navzdory objektivně vyšší naději dožití.",
+  "limitations": "Self-report — kulturní vlivy na vnímání zdraví (Češi jsou v sebehodnocení skeptičtější než např. Skandinávci)."
+}
