@@ -100,8 +100,10 @@ function applyData(data, { stale = false, source = 'live' } = {}) {
     ? `Offline kopie · ${fmtRelative(data.generated_at)}`
     : `Aktualizováno ${fmtRelative(data.generated_at)}`;
   const el = document.getElementById('lastUpdated');
-  el.textContent = label;
-  el.classList.toggle('stale', isStale);
+  if (el) {
+    el.textContent = label;
+    el.classList.toggle('stale', isStale);
+  }
 }
 
 function saveToLocalStorage(data) {
@@ -1198,16 +1200,16 @@ function wireUp() {
   if (btnCsv) btnCsv.addEventListener('click', exportVisibleCsv);
 
   // Reload button
-  document.getElementById('btnReload').addEventListener('click', async () => {
-    const btn = document.getElementById('btnReload');
-    btn.disabled = true;
-    btn.textContent = 'Načítám…';
+  const btnReload = document.getElementById('btnReload');
+  if (btnReload) btnReload.addEventListener('click', async () => {
+    btnReload.disabled = true;
+    btnReload.textContent = 'Načítám…';
     try {
       await loadData(true);
       renderGrid();
     } finally {
-      btn.disabled = false;
-      btn.textContent = '⟳ Načíst znovu';
+      btnReload.disabled = false;
+      btnReload.textContent = '⟳ Načíst znovu';
     }
   });
 
