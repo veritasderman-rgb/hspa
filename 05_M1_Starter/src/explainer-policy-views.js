@@ -200,7 +200,7 @@ export function renderDrgCalculator() {
     </form>
     <div class="drg-result" id="drgResult"></div>
     <p class="drg-disclaimer">
-      <strong>Ilustrativní kalkulace.</strong> Reálná úhrada vychází z plného CZ-DRG grouperu, který bere v úvahu desítky parametrů. Tato simulace ukazuje pouze řádový dopad komplikací a regionálního rozpětí base rate (~1.7×).
+      <strong>Ilustrativní kalkulace.</strong> Reálná úhrada vychází z plného CZ-DRG grouperu, který bere v úvahu desítky parametrů. Tato simulace ukazuje pouze řádový dopad komplikací a regionálního rozpětí základní sazby úhrady (~1,7×).
     </p>
   `;
 }
@@ -241,7 +241,7 @@ export function wireDrgCalculator() {
         <div><dt>Base RW (bez komplikací)</dt><dd>${out.baseRw.toFixed(2)}</dd></div>
         <div><dt>Násobitel závažnosti</dt><dd>×${out.sevMultiplier.toFixed(2)} (${escapeHtml(severityLabel(out.severity))})</dd></div>
         <div><dt>Finální RW</dt><dd><strong>${out.finalRw.toFixed(2)}</strong></dd></div>
-        <div><dt>Base rate kraje</dt><dd>${out.baseRate.toLocaleString('cs-CZ')} Kč (${escapeHtml(out.regionName)})</dd></div>
+        <div><dt>Základní sazba úhrady kraje</dt><dd>${out.baseRate.toLocaleString('cs-CZ')} Kč (${escapeHtml(out.regionName)})</dd></div>
         <div class="drg-final"><dt>Odhad úhrady</dt><dd><strong>${out.cost.toLocaleString('cs-CZ')} Kč</strong></dd></div>
       </div>
       ${out.severity !== 'none' ? `

@@ -89,11 +89,25 @@ function renderDetail(ind, card, regionDataset) {
 
   const subdomain = ind.subdomain ? ` · ${escapeHtml(ind.subdomain)}` : '';
 
+  const verifText = {
+    verified: 'Ověřeno',
+    preliminary: 'Předběžné',
+    illustrative: 'Ilustrativní',
+  }[ind.verification_status] || '';
+  const verifTitle = {
+    verified: 'Data z primárního zdroje, max. 12 měsíců staré',
+    preliminary: 'Data dostupná, metodika v revizi nebo zdroj není primární',
+    illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
+  }[ind.verification_status] || '';
+  const verifBadge = ind.verification_status
+    ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText}</span>`
+    : '';
+
   root.innerHTML = `
     <a class="back-link" href="index.html">← zpět na přehled indikátorů</a>
 
     <header class="ind-detail-header">
-      <div class="ind-detail-area">${escapeHtml(ind.area)} · ${escapeHtml(ind.domain)}${subdomain}</div>
+      <div class="ind-detail-area">${escapeHtml(ind.area)} · ${escapeHtml(ind.domain)}${subdomain}${verifBadge}</div>
       <h2>${escapeHtml(ind.name)}</h2>
       ${card?.definition ? `<p class="ind-detail-subtitle">${escapeHtml(card.definition)}</p>` : ''}
     </header>
