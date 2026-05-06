@@ -2708,3 +2708,235 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   margin: 0 0 10px;
 }
 .patient-story p:last-child { margin-bottom: 0; }
+
+/* === Tematické linie — list view === */
+.theme-list {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--content-pad) 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.theme-card {
+  display: grid;
+  grid-template-columns: 48px 1fr 32px;
+  gap: 0 24px;
+  align-items: start;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.1s;
+}
+.theme-card:first-child { border-top: 1px solid var(--rule); }
+.theme-card:hover { background: var(--paper2); }
+.theme-card-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  padding-top: 4px;
+}
+.theme-card-body { min-width: 0; }
+.theme-card-kicker {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-mut);
+  margin: 0 0 6px;
+}
+.theme-card-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+.theme-card:hover .theme-card-title { color: var(--red); }
+.theme-card-headline {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.theme-card-lead {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+.theme-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.theme-meta-item {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+  background: var(--paper2);
+  padding: 2px 8px;
+  border: 1px solid var(--rule);
+}
+.theme-meta-bad {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--paper);
+  background: #c0392b;
+  padding: 2px 8px;
+}
+.theme-meta-good {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--paper);
+  background: #27ae60;
+  padding: 2px 8px;
+}
+.theme-card-arrow {
+  font-size: 18px;
+  color: var(--ink-mut);
+  padding-top: 2px;
+  transition: transform 0.1s, color 0.1s;
+}
+.theme-card:hover .theme-card-arrow { color: var(--red); transform: translateX(4px); }
+
+/* === Tematické linie — detail view === */
+.theme-detail { display: block; }
+.theme-detail-header {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 16px var(--content-pad) 0;
+}
+.theme-back-btn {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mut);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.theme-back-btn:hover { color: var(--red); }
+.theme-detail-body {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 32px var(--content-pad) 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.theme-section {}
+.theme-section-title {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mut);
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+
+/* Indicator rows */
+.theme-ind-grid { display: flex; flex-direction: column; gap: 0; }
+.theme-ind-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 130px 130px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+}
+.theme-ind-row:hover { background: var(--paper2); }
+.theme-ind-name {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+}
+.theme-ind-value {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+}
+.theme-ind-year {
+  font-weight: 400;
+  color: var(--ink-mut);
+}
+.theme-ind-bench {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  text-align: right;
+}
+
+/* Strategy + explainer grids */
+.theme-strat-grid,
+.theme-expl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.theme-strat-card,
+.theme-expl-card {
+  padding: 16px;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.theme-strat-card:hover,
+.theme-expl-card:hover { border-color: var(--ink); }
+.theme-strat-title,
+.theme-expl-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.theme-strat-sub,
+.theme-expl-sub {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 0 0 6px;
+}
+.theme-strat-owner {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .theme-strat-grid,
+  .theme-expl-grid { grid-template-columns: repeat(2, 1fr); }
+  .theme-ind-row { grid-template-columns: 80px 1fr 110px; }
+  .theme-ind-bench { display: none; }
+}
+@media (max-width: 560px) {
+  .theme-card { grid-template-columns: 36px 1fr 24px; gap: 0 12px; }
+  .theme-strat-grid,
+  .theme-expl-grid { grid-template-columns: 1fr; }
+  .theme-ind-row { grid-template-columns: 70px 1fr; }
+  .theme-ind-value { display: none; }
+}
