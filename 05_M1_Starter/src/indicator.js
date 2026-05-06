@@ -82,7 +82,7 @@ function showError(html) {
 
 function renderDetail(ind, card, regionDataset) {
   const root = document.getElementById('detailRoot');
-  document.title = `${ind.name} · Zdravé Česko`;
+  document.title = `${ind.name} · HSPA Monitor`;
 
   const benchmarkHTML = renderBenchmarks(ind);
   const yoy = computeYoy(ind);
