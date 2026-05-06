@@ -1,0 +1,42 @@
+{
+  "id": "kojenecka_umrtnost",
+  "name": "Kojenecká úmrtnost",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Perinatální zdraví",
+  "definition": "Počet úmrtí dětí ve věku 0–11 měsíců (do 365 dní od narození) na 1 000 živě narozených v daném roce. Sčítá tři klinicky odlišné komponenty: časná novorozenecká úmrtnost (0.–6. den), pozdní novorozenecká (7.–28. den) a poneonatální (29. den–11. měsíc).",
+  "unit": "‰ živě narozených",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_minfind",
+      "dataset": "demo_minfind",
+      "filter": "geo=CZ&format=JSON",
+      "note": "Eurostat agreguje data z národních statistických úřadů (v ČR ČSÚ na základě hlášení matrik a ÚZIS)."
+    },
+    "fallback": {
+      "type": "oecd_sdmx",
+      "endpoint": "https://stats.oecd.org/SDMX-JSON/data/HEALTH_STAT/EVITINFY.CZE.YRS/all",
+      "note": "OECD HEALTH_STAT, kód EVITINFY (Infant mortality, total)."
+    },
+    "regional": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/",
+      "dataset": "DEM_OBYV_REG (kód 130141)",
+      "note": "ČSÚ publikuje krajský rozpad. Hodnoty na úrovni okresů jsou kvůli nízkému počtu událostí (v některých okresech < 5 úmrtí/rok) zatíženy vysokou statistickou nejistotou — z tohoto důvodu se ÚZIS i ČSÚ doporučují agregovat na úroveň krajů a tříletých klouzavých průměrů."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "EU27_2020",
+    "dataset": "demo_minfind"
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 15.0 },
+  "frequency": "yearly",
+  "stewards": ["ČSÚ", "ÚZIS", "Česká neonatologická společnost"],
+  "method_notes": "Standardní WHO definice. ČR vykazuje od roku 1995 metodicky shodně s WHO Live Birth Definition (jakýkoli plod ≥ 22 t.t. nebo ≥ 500 g s alespoň jedním známkou života). Tato kritéria jsou přísnější než v některých státech (např. Polsko historicky), což ČR v mezinárodním srovnání mírně zvýhodňuje směrem k vyšším hodnotám — přesto vychází velmi nízce.",
+  "limitations": "Nízká frekvence událostí (≈100 případů/rok v menších krajích) způsobuje, že krajské hodnoty kolísají rok od roku ±20–30 %. Pro hodnocení regionálních rozdílů se používají tříleté klouzavé průměry. Indikátor nezachycuje prenatální mortalitu (mrtvě rozenost), která je samostatnou komponentou perinatální statistiky.",
+  "determinants": "Kojenecká úmrtnost je kompozitní indikátor citlivý na **kvalitu perinatologické péče** (síť 12 perinatologických center intermediární a vyšší úrovně, koncentrace porodů ≤ 32. týdne v centrech), **prevalenci rizikových faktorů u matek** (kouření v graviditě, gestační diabetes, věk matky, IVF s vícečetnou graviditou), **socioekonomickou stratifikaci** (nejvyšší hodnoty dlouhodobě v Karlovarském a Ústeckém kraji s vyšším podílem sociálně vyloučených lokalit), **dostupnost prenatální péče** (počet návštěv těhotenské poradny, screening vrozených vad), **kvalitu primární péče o novorozence po propuštění** (síť praktických lékařů pro děti a dorost) a **vakcinaci proti pneumokoku, hexavakcíně a rotavirům** (snížení mortality z infekčních příčin v poneonatálním období). Strukturálním rizikem je narůstající vzdálenost k porodnici v některých periferních okresech (zánik porodnic v Sušici, Rumburku, Frýdlantu) — udržitelnost dosaženého výsledku závisí na zachování dostupnosti perinatální péče v rámci 30–60 minut transportu.",
+  "importance": "Kojenecká úmrtnost je **klasický signální indikátor zralosti zdravotního systému** — WHO ji řadí mezi tři základní ukazatele zdraví populace (vedle naděje dožití a mateřské úmrtnosti). Citlivě reaguje na kvalitu zdravotnictví v období, které je z hlediska zranitelnosti života nejkritičtější: 60–70 % všech úmrtí mezi 0. a 365. dnem připadá na první týden života, kde rozhoduje výhradně bezprostřední perinatologická péče. Česká republika dlouhodobě patří mezi 5 nejlepších států světa (vedle Japonska, Slovinska, Singapuru, Finska, Norska, Estonska) — výsledek systematické politiky koncentrace rizikových porodů do perinatologických center od poloviny 90. let (program Perinatologie, profesor Štembera). Hodnota slouží jako referenční bod při posuzování dalších systémových reforem: pokud by reorganizace nemocniční sítě (zánik porodnic) způsobila zhoršení indikátoru, je to silný signál k revizi. Souvisí s indikátory dostupnosti porodnické péče, vakcinace a se strategií Národního plánu pro zdravé těhotenství."
+}

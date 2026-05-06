@@ -580,6 +580,7 @@ function renderModalContent(card, indicator) {
     ${card.data_source ? `<h3 class="ds-heading">Zdroje dat</h3>${renderDataSource(card.data_source)}` : ''}
     <div class="modal-cross-links" id="modalCrossLinks"></div>
     <div class="modal-actions">
+      <a class="modal-detail-link" href="indicator.html?id=${encodeURIComponent(indicator.id)}">Detail s mapou krajů ↗</a>
       <button class="btn-csv" id="btnCsvExport" data-id="${indicator.id}">Stáhnout CSV (trend)</button>
     </div>
   `;
