@@ -55,11 +55,19 @@ header.topbar {
   color: var(--ink);
   padding: 14px 40px 8px;
   border-bottom: 1px solid var(--ink);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
   flex-wrap: wrap;
   box-shadow: none;
 }
-.brand { display: flex; align-items: baseline; gap: 14px; }
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex: 0 0 auto;
+}
 .brand-logo {
   display: none;
 }
@@ -104,7 +112,7 @@ header.topbar {
   font-weight: 600;
 }
 
-/* Masthead sub-strip — date + score banner pod hlavičkou */
+/* Masthead sub-strip — date left, score right */
 .masthead-strip {
   display: flex;
   justify-content: space-between;
@@ -118,7 +126,10 @@ header.topbar {
   background: var(--paper);
 }
 .masthead-strip .masthead-date { font-weight: 500; }
-.masthead-strip .masthead-score strong { color: var(--ink); font-weight: 600; }
+.masthead-strip .masthead-score strong {
+  color: var(--ink);
+  font-weight: 700;
+}
 .modal-actions { margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end; }
 .card-notice {
   background: var(--paper2); border-left: 3px solid var(--red);
@@ -610,23 +621,36 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* =================================================================
-   Module navigation (editorial inline nav, masthead-style)
+   Module navigation — inside topbar, top-right
    ================================================================= */
 .module-nav {
-  display: flex; gap: 22px; padding: 6px 40px;
-  background: var(--paper); border-bottom: 1px solid var(--rule);
-  position: sticky; top: 0; z-index: 50;
-  font-family: var(--sans);
+  display: flex;
+  gap: 22px;
+  background: transparent;
+  border-bottom: none;
+  padding: 0;
+  position: static;
   align-items: center;
+  font-family: var(--sans);
+  flex-wrap: wrap;
 }
 .module-tab {
-  padding: 8px 0; font-size: 11px; font-weight: 500;
-  color: var(--ink-mut); text-decoration: none;
-  border-bottom: 1px solid transparent; transition: all 0.12s;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-mut);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.12s;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .module-tab:hover { color: var(--ink); }
-.module-tab.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
+.module-tab.active {
+  color: var(--red);
+  border-bottom-color: var(--red);
+  font-weight: 600;
+}
 
 /* =================================================================
    Page intro (above grids)
@@ -874,8 +898,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* =================================================================
    Responsive
    ================================================================= */
+@media (max-width: 880px) {
+  header.topbar {
+    padding: 12px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .module-nav { gap: 14px; }
+  .module-tab { font-size: 11px; }
+  .masthead-strip { flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 20px; }
+}
 @media (max-width: 768px) {
-  .module-nav { padding: 0 16px; overflow-x: auto; }
   .filters-row { padding: 12px 16px; }
   .strategy-grid, .explainer-grid, .detail-view, .page-intro { padding-left: 16px; padding-right: 16px; }
   .strategy-cards, .explainer-cards { grid-template-columns: 1fr; }
@@ -2175,4 +2209,136 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .ed-acct-questions li:nth-last-child(-n+2) { border-bottom: none; }
   .acct-q-num { font-size: 36px; }
   .acct-row { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* =================================================================
+   Prevention page (prevence.html)
+   Recykluje ed-hero, ed-flow, ed-stat — přidává jen prevention-grid
+   ================================================================= */
+.prevention-grid-section {
+  padding: 0 0 36px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.prevention-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.prevention-card {
+  display: block;
+  padding: 22px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s;
+}
+.prevention-card:nth-child(3n) { border-right: none; }
+.prevention-card:nth-child(n+7) { border-bottom: none; }
+.prevention-card:hover { background: var(--paper2); }
+
+.prevention-card-daily {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  margin-bottom: 10px;
+}
+.prevention-card-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.prevention-card-subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin-bottom: 14px;
+}
+.prevention-card-snippet {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.prevention-card-meta {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  letter-spacing: 0.02em;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+/* Detail page */
+.prevention-detail .ed-hero { padding-bottom: 22px; }
+.prevention-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 28px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.prevention-action {
+  padding: 22px;
+  border-right: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.prevention-action:last-child { border-right: none; }
+.prevention-action-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -0.8px;
+  margin-bottom: 8px;
+}
+.prevention-source-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.prevention-source-list li {
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0;
+  font-family: var(--serif);
+  font-size: 14px;
+}
+.prevention-source-list a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule2);
+  text-decoration: none;
+}
+.prevention-source-list a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+.prevention-caveat {
+  margin-top: 28px;
+  padding: 14px 18px;
+  background: var(--paper2);
+  border-left: 3px solid var(--warn);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+@media (max-width: 880px) {
+  .prevention-grid { grid-template-columns: 1fr; }
+  .prevention-card { border-right: none !important; border-bottom: 1px solid var(--rule) !important; }
+  .prevention-card:last-child { border-bottom: none !important; }
+  .prevention-actions { grid-template-columns: 1fr; }
+  .prevention-action { border-right: none; border-bottom: 1px solid var(--rule); }
+  .prevention-action:last-child { border-bottom: none; }
 }
