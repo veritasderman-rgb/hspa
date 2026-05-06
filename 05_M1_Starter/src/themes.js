@@ -138,7 +138,7 @@ function showDetail(id, pushHistory = true) {
   if (!theme) return;
 
   if (pushHistory) history.pushState(null, '', `?id=${encodeURIComponent(id)}`);
-  document.title = `${theme.title} · Tematické linie · Zdravé Česko`;
+  document.title = `${theme.title} · Tematické linie · HSPA Monitor`;
 
   const listView = document.getElementById('listView');
   const detailView = document.getElementById('detailView');
@@ -257,7 +257,7 @@ async function init() {
       document.getElementById('detailView')?.classList.add('hidden');
       document.getElementById('detailView').innerHTML = '';
       document.getElementById('listView')?.classList.remove('hidden');
-      document.title = 'Tematické linie · Zdravé Česko HSPA monitor';
+      document.title = 'Tematické linie · HSPA Monitor';
     }
   });
 }

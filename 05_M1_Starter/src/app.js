@@ -1,4 +1,4 @@
-// Frontend logika dashboardu Zdravé Česko.
+// Frontend logika dashboardu HSPA Monitor.
 // Načítá data z /data/indicators.json a renderuje karty + scorecard + regiony.
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
