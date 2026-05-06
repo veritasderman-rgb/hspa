@@ -851,8 +851,7 @@ function renderTopCritical() {
 
   container.querySelectorAll('.top-critical-item').forEach(el => {
     const handler = () => {
-      const ind = allIndicators.find(i => i.id === el.dataset.id);
-      if (ind) openMethodCard(ind);
+      window.location.href = `indicator.html?id=${encodeURIComponent(el.dataset.id)}`;
     };
     el.addEventListener('click', handler);
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
