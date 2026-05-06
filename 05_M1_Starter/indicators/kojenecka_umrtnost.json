@@ -1,0 +1,43 @@
+{
+  "id": "kojenecka_umrtnost",
+  "name": "Kojenecká úmrtnost",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Děti",
+  "definition": "Počet dětí zemřelých do 1. roku života na 1 000 živě narozených v daném kalendářním roce. Tradiční ukazatel kvality perinatální a neonatální péče, dostupnosti prenatální péče a celkové vyspělosti zdravotního systému. Patří k základnímu jádru OECD HSPA Framework (kapitola Health Outcomes).",
+  "unit": "na 1 000 živě nar.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/v1/data",
+      "dataset": "DEM_KOJUMR",
+      "dimensions": { "uzemi": "CZ0", "vek": "kojenecký" },
+      "note": "Veřejné API ČSÚ — Demografická ročenka, sekce Kojenecká úmrtnost. Roční řada od 1950."
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "INFANTMRTRATIO",
+      "dataset": "HEALTH_STAT",
+      "note": "OECD Health Status — INFANTMRTRATIO, jednotka per 1000 live births."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "INFANTMRTRATIO",
+    "dataset": "HEALTH_STAT"
+  },
+  "signal_thresholds": { "good": 5, "warn": 15 },
+  "frequency": "yearly",
+  "stewards": ["ČSÚ", "ÚZIS", "MZ ČR"],
+  "method_notes": "Metodika WHO/OECD: počet úmrtí ve věku 0 dnů – 365 dnů ÷ počet živě narozených v témže roce × 1 000. Standardizace není nutná (čitatel i jmenovatel ze stejné kohorty). ČSÚ publikuje rozpad na časnou novorozeneckou (0–6 dnů), pozdní novorozeneckou (7–27 dnů) a postneonatální (28–364 dnů) úmrtnost. Krajský rozpad podle bydliště matky.",
+  "limitations": "Při velmi nízkých absolutních počtech (typicky <10 úmrtí/kraj/rok v menších regionech) je hodnota citlivá na náhodnou variabilitu — meziroční rozkmit ±1 promile není výjimkou. Pro stabilnější regionální srovnání ÚZIS doporučuje 3leté klouzavé průměry. Indikátor neměří kvalitu péče u přeživších dětí s těžkým postižením a nezohledňuje rozdíly v definici živě narozeného dítěte (ČR od 2012 sleduje WHO definici od 500 g, dříve od 1 000 g).",
+  "why_matters": "Kojenecká úmrtnost je tradičně považována za nejcitlivější souhrnný indikátor vyspělosti zdravotního systému. Spojuje výsledky prenatální péče, porodnické a neonatologické intenzivní péče, poporodního follow-up a sociálních determinant zdraví. Výrazné meziregionální rozdíly upozorňují na nerovnost v dostupnosti specializované péče (perinatologická centra) a na dopad sociálně-ekonomických faktorů. Česká republika dlouhodobě patří mezi 5 zemí OECD s nejnižší kojeneckou úmrtností — výsledek koncentrace rizikových porodů do 12 perinatologických center vyšší úrovně (Praha, Brno, Plzeň, Hradec Králové, Olomouc, Ostrava, České Budějovice, Ústí nad Labem, Liberec, Most, Zlín, Most-Aniva).",
+  "context_factors": [
+    "Dostupnost a koncentrace perinatologických center vyššího typu (Level III) — všechny porody pod 32. týden a/nebo s porodní hmotností pod 1 500 g jsou v ČR dle metodiky koncentrovány do 12 specializovaných pracovišť.",
+    "Pokrytí prenatální péče: ČR má od 2012 zákonem garantovaných 9–10 prenatálních vyšetření hrazených z v.z.p., screening prvního trimestru a UZ ve 20. týdnu. Vakcinace proti pertussi, chřipce a COVID-19 v těhotenství snižuje neonatální morbiditu.",
+    "Sociálně-ekonomické determinanty: vzdělání matky, příjem domácnosti, kouření v těhotenství, věk matky pod 18 nebo nad 40 let, BMI matky, etnicita (vyšší kojenecká úmrtnost u romských komunit v Ústeckém a Karlovarském kraji).",
+    "Kvalita kódování úmrtí: registr novorozenců a List o prohlídce zemřelého (LPZ); chybné přiřazení úmrtí k mateřskému kraji vs. kraji porodu může zkreslit krajské srovnání.",
+    "Výskyt vrozených vad: zhruba 30–40 % kojeneckých úmrtí v ČR je důsledkem vrozených vývojových vad. Dostupnost prenatální genetické diagnostiky a možnost ukončení těhotenství dle § 4 zákona 66/1986 Sb. ovlivňují výsledný počet."
+  ]
+}

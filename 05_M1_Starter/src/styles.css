@@ -787,3 +787,132 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Cross-link box v modalu indikátoru */
 .modal-cross-links { margin-top: 16px; }
 .modal-cross-links:empty { display: none; }
+
+/* =================================================================
+   Tile mapa krajů ČR (cz-map.js)
+   ================================================================= */
+.cz-map-wrap {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px; display: flex; flex-direction: column; gap: 12px;
+}
+.cz-map { width: 100%; height: auto; max-width: 520px; margin: 0 auto; display: block; }
+.cz-map-tile { transition: opacity 0.15s; }
+.cz-map-tile:hover { opacity: 0.88; }
+.cz-map-tile:focus { outline: none; }
+.cz-map-tile:focus-visible rect { stroke: var(--primary); stroke-width: 3; }
+.cz-map-tile.active rect { stroke-width: 3.5; }
+.cz-map-empty { color: var(--muted); font-size: 13px; padding: 24px; text-align: center; }
+
+.cz-map-legend {
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+  font-size: 12px; color: var(--muted);
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+.cz-map-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.cz-map-legend-item i {
+  display: inline-block; width: 14px; height: 14px; border-radius: 3px;
+  flex-shrink: 0;
+}
+.cz-map-note { margin-left: auto; font-style: italic; }
+
+/* =================================================================
+   Indicator detail page (indicator.html)
+   ================================================================= */
+.indicator-detail { padding: 24px 28px; max-width: 1200px; margin: 0 auto; }
+.indicator-detail .back-link { display: inline-block; margin-bottom: 16px; color: var(--primary-dark); text-decoration: none; font-size: 13px; }
+.indicator-detail .back-link:hover { text-decoration: underline; }
+
+.id-header {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 24px 28px; margin-bottom: 22px;
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start;
+}
+.id-header-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; font-size: 12px; }
+.id-header-meta .area-tag { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.id-header-meta .domain-tag { color: var(--muted); }
+.id-header h1 {
+  font-size: 28px; line-height: 1.25; color: var(--primary-dark); margin-bottom: 4px;
+}
+.id-header .id-sub { color: var(--muted); font-size: 14px; }
+.id-bigvalue {
+  text-align: right; min-width: 220px;
+}
+.id-bigvalue .id-value { font-size: 48px; font-weight: 700; color: var(--primary-dark); line-height: 1; }
+.id-bigvalue .id-unit { font-size: 14px; color: var(--muted); margin-left: 6px; }
+.id-bigvalue .id-year { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.id-bigvalue .signal-pill { margin-top: 8px; display: inline-block; }
+
+.id-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; margin-bottom: 22px;
+}
+.id-grid-block {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px 20px;
+}
+.id-grid-block h2 {
+  font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--muted); margin-bottom: 12px; font-weight: 600;
+}
+.id-trend-chart-wrap { height: 240px; }
+
+.id-benchmarks { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.id-benchmark-item {
+  background: var(--bg); border-radius: 6px; padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+.id-benchmark-item dt { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+.id-benchmark-item dd { font-size: 18px; font-weight: 700; color: var(--text); }
+
+/* Mapa + tabulka regionů side-by-side */
+.id-regions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px;
+}
+.id-region-detail-empty {
+  font-size: 13px; color: var(--muted); padding: 16px; text-align: center;
+  background: var(--bg); border-radius: 6px; border: 1px dashed var(--border);
+}
+.id-region-detail-card {
+  background: var(--bg); border-radius: 8px; padding: 14px 18px;
+  border-left: 3px solid var(--primary);
+}
+.id-region-detail-card h3 { font-size: 14px; color: var(--primary-dark); margin-bottom: 6px; }
+.id-region-detail-card .id-region-value { font-size: 24px; font-weight: 700; color: var(--text); }
+.id-region-detail-card .id-region-diff { font-size: 13px; margin-top: 6px; }
+.id-region-detail-card .id-region-diff.pos { color: var(--good); }
+.id-region-detail-card .id-region-diff.neg { color: var(--bad); }
+
+.id-section {
+  background: white; border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px 22px; margin-bottom: 18px;
+}
+.id-section h2 {
+  font-size: 16px; color: var(--primary-dark); margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.id-section p { font-size: 14px; line-height: 1.65; color: var(--text); margin-bottom: 10px; }
+.id-section ul { font-size: 14px; line-height: 1.65; padding-left: 22px; }
+.id-section li { margin-bottom: 6px; }
+.id-section .id-section-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 8px; }
+
+/* Citation/source list */
+.id-source-list { list-style: none; padding: 0; }
+.id-source-list li {
+  padding: 10px 14px; background: var(--bg); border-radius: 6px;
+  margin-bottom: 8px; font-size: 13px; border-left: 3px solid var(--primary);
+}
+.id-source-list a { color: var(--primary-dark); text-decoration: none; font-weight: 500; }
+.id-source-list a:hover { text-decoration: underline; }
+.id-source-meta { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+@media (max-width: 900px) {
+  .id-header { grid-template-columns: 1fr; }
+  .id-bigvalue { text-align: left; }
+  .id-grid, .id-regions { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .cz-map-tile { cursor: default !important; }
+  .cz-map-legend-note, .cz-map-note { display: none; }
+  .indicator-detail .back-link { display: none; }
+  .id-grid, .id-regions { grid-template-columns: 1fr 1fr; gap: 12px; }
+}
