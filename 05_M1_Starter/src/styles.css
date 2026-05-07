@@ -3975,3 +3975,236 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .timeline-card h4 { font-size: 19px; }
   .timeline-card p { font-size: 15px; }
 }
+
+/* Homepage — blok nejnovějších článků */
+.home-articles {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px var(--content-pad, 32px) 32px;
+  border-top: 1px solid var(--rule);
+}
+.home-articles-lead {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 0 0 24px;
+}
+.home-articles-all {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 12px;
+  white-space: nowrap;
+}
+.home-articles-all:hover { text-decoration: underline; }
+.home-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: home-art;
+}
+.home-article-card {
+  border-top: 2px solid var(--ink);
+  padding: 14px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.home-article-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+.home-article-link:hover .home-article-title { color: var(--red); }
+.home-article-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mut);
+}
+.home-article-num {
+  font-weight: 700;
+  color: var(--red);
+}
+.home-article-tag {
+  border: 1px solid var(--rule2);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.home-article-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ink);
+  transition: color 0.15s;
+}
+.home-article-perex {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-article-cta {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--red);
+  margin-top: auto;
+  padding-top: 6px;
+}
+@media (max-width: 880px) {
+  .home-articles-grid { grid-template-columns: 1fr; gap: 24px; }
+  .home-articles { padding: 40px 20px 24px; }
+}
+
+/* Související články — chip strip na konci každé Jak funguje kategorie */
+.cat-articles {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--rule);
+}
+.cat-articles-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 12px;
+}
+.cat-articles-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cat-article-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border: 1px solid var(--rule2);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper);
+  max-width: 360px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.cat-article-chip:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+.cat-article-chip-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+}
+.cat-article-chip-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+/* Časová osa — collapse pomocí <details>/<summary> */
+.timeline-pair-details {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--content-pad, 32px) 32px;
+}
+.timeline-pair-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0 16px;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color 0.15s;
+}
+.timeline-pair-summary::-webkit-details-marker { display: none; }
+.timeline-pair-summary:hover { border-bottom-color: var(--ink); }
+.timeline-pair-summary:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+.timeline-pair-summary-inner { flex: 1; }
+.timeline-pair-summary-inner > * { margin-top: 0; }
+.timeline-pair-summary-inner .ed-flow-lead { margin-bottom: 0; }
+.timeline-pair-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.timeline-pair-summary:hover .timeline-pair-toggle {
+  background: var(--ink);
+  color: var(--paper);
+}
+.timeline-pair-toggle-icon {
+  font-size: 14px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+.timeline-pair-details[open] .timeline-pair-toggle-icon {
+  transform: rotate(180deg);
+}
+.timeline-pair-details[open] .timeline-pair-toggle-text::before {
+  content: 'Sbalit ';
+}
+.timeline-pair-details[open] .timeline-pair-toggle-text {
+  font-size: 0;
+}
+.timeline-pair-details[open] .timeline-pair-toggle-text::before {
+  content: 'Sbalit časovou osu';
+  font-size: 13px;
+}
+.timeline-pair-details[open] .timeline-pair {
+  animation: timelineFadeIn 0.25s ease-out;
+}
+@keyframes timelineFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 720px) {
+  .timeline-pair-summary {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .timeline-pair-toggle { justify-content: center; }
+}
