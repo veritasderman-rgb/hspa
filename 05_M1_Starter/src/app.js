@@ -3,7 +3,9 @@
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 import './analytics.js';
-import { renderFooter } from './page-shared.js';
+import { renderFooter, renderModuleNav } from './page-shared.js';
+
+if (typeof window !== 'undefined') renderModuleNav('indicators');
 
 const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';

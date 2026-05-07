@@ -6,6 +6,7 @@ import './analytics.js';
 import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
+import { initSchema } from './schema.js';
 
 const CATEGORY_LABELS = {
   money: {
@@ -107,7 +108,7 @@ function renderList() {
 
   grid.innerHTML += `
     <section class="cat-block schema-promo-block">
-      <a class="schema-promo-link" href="schema.html">
+      <a class="schema-promo-link" href="#schema">
         <div class="schema-promo-inner">
           <div class="schema-promo-label">Vizuální přehled</div>
           <h3 class="schema-promo-title">Schéma zdravotního systému ČR →</h3>
@@ -315,6 +316,7 @@ async function init() {
 
   renderModuleNav('explainers');
   renderMastheadDate();
+  initSchema();
 
   try {
     const [explsRes, stratsRes] = await Promise.all([

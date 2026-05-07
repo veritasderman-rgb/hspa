@@ -3846,6 +3846,48 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   padding-top: 40px;
 }
 
+/* Dvousloupcová časová osa (Globální vlevo, Česká vpravo, zarovnané v 1960 — vznik ÚZIS) */
+.timeline-pair {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px var(--content-pad, 32px) 48px;
+}
+.timeline-pair-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 56px;
+  margin-top: 24px;
+}
+.timeline-pair-col h4 {
+  font-family: var(--serif);
+  font-size: 18px;
+  margin: 0 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.timeline-pair-col .timeline-col-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin-bottom: 16px;
+}
+.timeline-pair-col-cz {
+  /* Česká cesta začíná 1960 — vizuální offset proti globální (1948) */
+  margin-top: 96px;
+}
+@media (max-width: 720px) {
+  .timeline-pair-grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 16px;
+  }
+  .timeline-pair-col-cz { margin-top: 0; }
+  .timeline-pair-col + .timeline-pair-col {
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+  }
+}
+
 .timeline {
   list-style: none;
   padding: 0 0 0 24px;
