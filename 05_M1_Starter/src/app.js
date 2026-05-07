@@ -1273,4 +1273,54 @@ function wireUp() {
   try { renderEditorialHero(); } catch (err) { console.error('hero render failed:', err); }
   try { renderGrid(); } catch (err) { console.error('grid render failed:', err); }
   try { loadAndRenderRegions(); } catch (err) { console.error('regions render failed:', err); }
+  try { loadAndRenderHomeArticles(); } catch (err) { console.error('home articles failed:', err); }
 })();
+
+/**
+ * Načte data/articles.json a vyrenderuje 3 nejnovější (dle date desc, pak number desc)
+ * do bloku #homeArticlesGrid na hlavní stránce. Manifest vynechán — má své vlastní
+ * vizuální zvýraznění v sekci /clanky.html a do "nejnovějších" nepatří jako řadový text.
+ */
+async function loadAndRenderHomeArticles() {
+  const grid = document.getElementById('homeArticlesGrid');
+  if (!grid) return;
+  try {
+    const res = await fetch('data/articles.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const articles = (data.articles ?? [])
+      .filter(a => a.kind !== 'manifest')
+      .sort((a, b) => {
+        const da = new Date(a.date).getTime();
+        const db = new Date(b.date).getTime();
+        if (db !== da) return db - da;
+        return parseInt(b.number, 10) - parseInt(a.number, 10);
+      })
+      .slice(0, 3);
+
+    grid.innerHTML = articles.map(a => `
+      <li class="home-article-card">
+        <a class="home-article-link" href="${a.slug}">
+          <div class="home-article-meta">
+            <span class="home-article-num">${a.number}</span>
+            <span class="home-article-tag">${a.tag}</span>
+            <span class="home-article-date">${formatArticleDate(a.date)}</span>
+          </div>
+          <h4 class="home-article-title">${a.title}</h4>
+          <p class="home-article-perex">${a.perex}</p>
+          <span class="home-article-cta">Číst článek →</span>
+        </a>
+      </li>
+    `).join('');
+  } catch (err) {
+    console.error('home articles load failed:', err);
+    grid.innerHTML = '<li class="home-article-card"><p class="home-article-perex">Články se nepodařilo načíst.</p></li>';
+  }
+}
+
+function formatArticleDate(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+  return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+}

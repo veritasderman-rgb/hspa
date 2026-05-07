@@ -38,7 +38,24 @@ const CATEGORY_LABELS = {
 
 let allExplainers = [];
 let allStrategies = [];
+let allArticles = [];
 let linkIndex = null;
+
+/**
+ * Mapování tagů článků na explainer kategorie. Články, jejichž tag je v této mapě,
+ * se zobrazí jako chip-strip na konci příslušné category section v Jak funguje.
+ * Klinické tagy (Kardio, Onkologie, Mortalita, ...) zde záměrně nejsou — ty popisují
+ * zdravotní stav populace, ne mechaniku systému, a patří do Indikátorů jako cross-link.
+ */
+const ARTICLE_TAG_TO_CATEGORY = {
+  'Financování': 'money',
+  'Nemocniční péče': 'money',
+  'Pracovní síla': 'actors',
+  'Primární péče': 'actors',
+  'Dostupnost péče': 'actors',
+  'Bezpečnost péče': 'process',
+  'Digitalizace': 'process',
+};
 
 export function filterExplainers(items, { category, search }) {
   let xs = items;
@@ -88,6 +105,24 @@ function renderList() {
       const storyHtml = meta.story
         ? `<p class="cat-story">${escapeHtml(meta.story)}</p>`
         : '';
+      const relatedArticles = allArticles
+        .filter(a => ARTICLE_TAG_TO_CATEGORY[a.tag] === cat)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      const articlesHtml = relatedArticles.length
+        ? `<div class="cat-articles" aria-label="Související články">
+             <div class="cat-articles-label">Z článků k tématu</div>
+             <ul class="cat-articles-list">
+               ${relatedArticles.map(a => `
+                 <li>
+                   <a class="cat-article-chip" href="${escapeHtml(a.slug)}">
+                     <span class="cat-article-chip-tag">${escapeHtml(a.tag)}</span>
+                     <span class="cat-article-chip-title">${escapeHtml(a.title)}</span>
+                   </a>
+                 </li>
+               `).join('')}
+             </ul>
+           </div>`
+        : '';
       return `
         <section class="cat-block cat-${cat}" id="cat-${cat}">
           <header class="cat-header">
@@ -102,6 +137,7 @@ function renderList() {
           <div class="explainer-cards">
             ${items.map(renderCard).join('')}
           </div>
+          ${articlesHtml}
         </section>
       `;
     }).join('');
@@ -319,16 +355,19 @@ async function init() {
   initSchema();
 
   try {
-    const [explsRes, stratsRes] = await Promise.all([
+    const [explsRes, stratsRes, articlesRes] = await Promise.all([
       fetch('data/explainers.json'),
       fetch('data/strategies.json').catch(() => null),
+      fetch('data/articles.json').catch(() => null),
     ]);
     if (!explsRes.ok) throw new Error(`HTTP ${explsRes.status}`);
     const explsData = await explsRes.json();
     const stratsData = stratsRes?.ok ? await stratsRes.json() : { strategies: [] };
+    const articlesData = articlesRes?.ok ? await articlesRes.json() : { articles: [] };
 
     allExplainers = explsData.explainers ?? [];
     allStrategies = stratsData.strategies ?? [];
+    allArticles = (articlesData.articles ?? []).filter(a => a.kind !== 'manifest');
     linkIndex = buildIndex(allStrategies, allExplainers);
 
     wireFilters();
