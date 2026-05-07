@@ -4883,3 +4883,441 @@ body.mobile-nav-open .scroll-top-btn {
   .drg-scenarios th,
   .drg-scenarios td { padding: 10px 8px; }
 }
+
+/* SHA comparison — 3 small bar charts (HDP %, public %, OOP %) */
+.sha-comp-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.1fr;
+  gap: 28px;
+  margin: 8px 0 4px;
+}
+.sha-comp-card { display: flex; flex-direction: column; }
+.sha-comp-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+}
+.sha-comp-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+  margin: 2px 0 12px;
+}
+.sha-comp-bars {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sha-comp-bars li {
+  display: grid;
+  grid-template-columns: 86px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 0;
+  font-family: var(--sans);
+  font-size: 12px;
+}
+.sha-comp-lbl {
+  text-align: right;
+  color: var(--ink);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sha-comp-bar {
+  display: block;
+  height: 14px;
+  width: var(--w, 0%);
+  background: var(--ink);
+  min-width: 2px;
+}
+.sha-comp-bar-mut { background: #9a8f86; }
+.sha-comp-bar-cz { background: #a4262c; }
+.sha-comp-val {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sha-comp-cz .sha-comp-lbl,
+.sha-comp-cz .sha-comp-val { color: #a4262c; font-weight: 700; }
+.sha-comp-note {
+  font-family: var(--serif);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-mut);
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+}
+
+@media (max-width: 880px) {
+  .sha-comp-grid { grid-template-columns: 1fr; gap: 32px; }
+  .sha-comp-bars li { grid-template-columns: 100px 1fr 40px; }
+}
+
+/* Kapitace VPL — staircase chart se 4 kroky */
+.kapitace-stairs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  align-items: end;
+  margin: 8px 0 4px;
+  min-height: 240px;
+}
+.kapitace-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.kapitace-bar {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  height: 200px;
+  position: relative;
+  background: var(--paper2);
+  border-bottom: 2px solid var(--ink);
+}
+.kapitace-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  width: 100%;
+}
+.kapitace-bonus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--red);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  width: 100%;
+  border-top: 1px solid var(--paper);
+  position: relative;
+}
+.kapitace-bonus:hover::after {
+  content: attr(data-lbl);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -22px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2px 8px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 2;
+}
+.kapitace-lbl {
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--ink-mut);
+  margin: 8px 4px 4px;
+}
+.kapitace-tot {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.kapitace-step-max .kapitace-tot { color: var(--red); }
+
+@media (max-width: 720px) {
+  .kapitace-stairs {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+}
+
+/* Vakcinace gauge — horizontální track s WHO target a OECD markerem */
+.vakc-gauges {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 8px 0 4px;
+}
+.vakc-gauge { display: flex; flex-direction: column; }
+.vakc-gauge-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 30px;
+}
+.vakc-gauge-track {
+  position: relative;
+  height: 28px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  width: 100%;
+}
+.vakc-gauge-fill {
+  height: 100%;
+  background: var(--ink);
+}
+.vakc-gauge-fill-cz { background: #a4262c; }
+.vakc-gauge-fill-oecd {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: #6f6760;
+}
+.vakc-gauge-fill-oecd::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background: #6f6760;
+  transform: rotate(45deg);
+}
+.vakc-gauge-target {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--ink);
+}
+.vakc-gauge-target-lbl {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--sans);
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+.vakc-gauge-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--sans);
+  font-size: 13px;
+  margin-top: 8px;
+}
+.vakc-cz { color: #a4262c; font-weight: 700; }
+.vakc-gauge-mut { color: var(--ink-mut); }
+
+/* PYLL drivers — comparison table */
+.pyll-drivers {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14px;
+  margin: 8px 0 4px;
+}
+.pyll-drivers th,
+.pyll-drivers td {
+  padding: 12px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+}
+.pyll-drivers thead th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  border-bottom: 2px solid var(--ink);
+}
+.pyll-drivers thead th:first-child,
+.pyll-drivers tbody th { text-align: left; }
+.pyll-drivers tbody th {
+  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+}
+.pyll-drivers tbody tr:first-child {
+  background: var(--paper2);
+}
+.pyll-drivers tbody tr:first-child th { font-weight: 700; }
+.pyll-drivers .pyll-bad {
+  color: #a4262c;
+  font-weight: 700;
+}
+
+/* Cekani — country comparison table */
+.cekani-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14px;
+  margin: 8px 0 4px;
+}
+.cekani-table th,
+.cekani-table td {
+  padding: 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+.cekani-table thead th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  border-bottom: 2px solid var(--ink);
+}
+.cekani-table tbody th {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.cekani-row-cz {
+  background: rgba(164, 38, 44, 0.05);
+}
+.cekani-row-cz th { color: #a4262c; }
+.cekani-row-cz td:nth-child(2) {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a4262c;
+}
+.cekani-empty {
+  color: #a4262c;
+  font-style: italic;
+}
+.cekani-mut { color: var(--ink-mut); font-style: italic; }
+
+/* CMP funnel — 3 stage pathway */
+.cmp-funnel {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  counter-reset: cmp-funnel;
+}
+.cmp-stage {
+  position: relative;
+  padding: 18px 16px 50px;
+  background: var(--paper2);
+  border-top: 4px solid var(--ink);
+}
+.cmp-stage-bad { border-top-color: #a4262c; }
+.cmp-stage-good { border-top-color: #1a7a4a; }
+.cmp-stage-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-mut);
+  margin-bottom: 8px;
+}
+.cmp-stage-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.cmp-stage-desc {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.cmp-stage-tag {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid;
+}
+.cmp-stage-bad .cmp-stage-tag { color: #a4262c; border-color: #a4262c; }
+.cmp-stage-good .cmp-stage-tag { color: #1a7a4a; border-color: #1a7a4a; }
+.cmp-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 18px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+.cmp-result-lbl {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 6px;
+}
+.cmp-result-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--serif);
+}
+.cmp-result-cz { color: var(--ink); font-size: 16px; }
+.cmp-result-cz strong { font-size: 28px; color: #a4262c; margin-right: 4px; }
+.cmp-result-oecd { color: var(--ink-mut); font-size: 14px; }
+.cmp-result-gap {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: #a4262c;
+  background: rgba(164, 38, 44, 0.08);
+  padding: 4px 10px;
+}
+.cmp-result-context {
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+
+@media (max-width: 880px) {
+  .cmp-funnel { grid-template-columns: 1fr; }
+  .cmp-result { grid-template-columns: 1fr; }
+}
+
+/* RPP — dvoumístní timeline (CZ projektová vs. EU zákonná) */
+.rpp-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 8px 0 4px;
+}
+.rpp-timeline-h {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+@media (max-width: 720px) {
+  .rpp-timeline { grid-template-columns: 1fr; gap: 24px; }
+}
