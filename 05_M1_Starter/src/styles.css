@@ -4532,3 +4532,114 @@ body.mobile-nav-open .scroll-top-btn {
   .newsletter-form input[type="email"] { min-width: 0; width: 100%; }
   .newsletter-submit { width: 100%; }
 }
+
+/* Articles hero — 2-sloupcový layout (left = ed-hero-content, right = upcoming) */
+.articles-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+  column-gap: 56px;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--content-pad, 32px);
+  align-items: start;
+}
+.upcoming-articles {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+  padding: 24px 22px;
+  margin-top: 8px;
+  position: sticky;
+  top: 16px;
+}
+.upcoming-h {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin: 6px 0 16px;
+  color: var(--ink);
+}
+.upcoming-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: upcoming;
+}
+.upcoming-list li {
+  counter-increment: upcoming;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.upcoming-list li:last-child { border-bottom: none; }
+.upcoming-list li::before {
+  content: counter(upcoming, decimal-leading-zero);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.08em;
+}
+.upcoming-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+}
+.upcoming-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.upcoming-lead {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 16px 0 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule);
+}
+.upcoming-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 18px;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid var(--ink);
+  transition: background 0.15s, color 0.15s;
+}
+.upcoming-cta:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+.upcoming-cta-sub {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+@media (max-width: 880px) {
+  .articles-hero-grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 32px;
+  }
+  .upcoming-articles {
+    position: static;
+    margin-top: 0;
+  }
+}
