@@ -35,6 +35,43 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
   renderHSPAScore();
   renderFooter();
+  injectScrollToTop();
+}
+
+/**
+ * Injectuje fixed scroll-to-top tlačítko do <body>. Zviditelní se po
+ * rolování pod prahovou hodnotu (400px). Klik plynule scrolluje nahoru,
+ * respektuje prefers-reduced-motion. Idempotent — re-volání nevytvoří
+ * duplikát.
+ */
+export function injectScrollToTop() {
+  if (typeof window === 'undefined' || document.getElementById('scrollTopBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = 'scrollTopBtn';
+  btn.className = 'scroll-top-btn';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Zpět nahoru');
+  btn.innerHTML = '<span aria-hidden="true">↑</span>';
+  document.body.appendChild(btn);
+
+  const THRESHOLD = 400;
+  const updateVisible = () => {
+    const visible = window.scrollY > THRESHOLD
+      && !document.body.classList.contains('mobile-nav-open');
+    btn.classList.toggle('visible', visible);
+    btn.tabIndex = visible ? 0 : -1;
+    btn.setAttribute('aria-hidden', visible ? 'false' : 'true');
+  };
+  window.addEventListener('scroll', updateVisible, { passive: true });
+  // Také reagujeme na otevření/zavření mobilního drawer (toggle body class)
+  const observer = new MutationObserver(updateVisible);
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  updateVisible();
+
+  btn.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
 }
 
 /**
@@ -72,6 +109,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
       Citujte: Pavlovic, J. (2026). HSPA Monitor. hspa-cesko.cz
     </div>
   `;
+  injectScrollToTop();
 }
 
 /**

@@ -4364,3 +4364,54 @@ body.mobile-nav-open .mobile-nav-drawer { transform: translateX(0); }
 
 /* Lock scroll when drawer open */
 body.mobile-nav-open { overflow: hidden; }
+
+/* Scroll-to-top FAB — kulaté tlačítko vpravo dole, viditelné po scrollování */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s, background 0.15s;
+  z-index: 8500;
+}
+.scroll-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-top-btn:hover { background: var(--red); }
+.scroll-top-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+
+/* Když je otevřený mobilní drawer, schováme FAB aby nebyl nad backdrop */
+body.mobile-nav-open .scroll-top-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .scroll-top-btn {
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-top-btn { transition: opacity 0.1s; transform: none !important; }
+}
