@@ -89,28 +89,45 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </p>
 
         <!--
-          MailerLite formulář — account 2206303, form 186842930008294691.
-          Vlepený jako iframe MailerLite share preview URL — funguje i bez
-          Universal scriptu (Universal pattern vyžaduje, aby formulář byl
-          v MailerLite Forms typu „Embedded"; share URL renderuje formulář
-          přímo na CDN MailerLite).
+          MailerLite — account 2206303, form 186842930008294691.
+          Vlastní HTML formulář POSTuje přímo na MailerLite jsonp endpoint
+          (target="_blank" → MailerLite po submitu otevře vlastní confirm
+          stránku v novém okně). Žádný iframe, žádný external script —
+          obejdeme tím X-Frame-Options/CSP omezení i nutnost Universal.js.
+
+          Pokud tento POST nebude fungovat (form v MailerLite UI je třeba
+          nakonfigurovaný jako „Embedded" typ s povoleným externím POST),
+          stačí nahradit obsah <div id="newsletterMailerLite"> za HTML
+          z MailerLite Forms → daný formulář → Embed → Use HTML.
         -->
         <div class="newsletter-form-slot" id="newsletterMailerLite">
-          <iframe
-            class="newsletter-iframe"
-            src="https://preview.mailerlite.io/forms/2206303/186842930008294691/share"
-            title="Přihlášení k newsletteru HSPA Monitor"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"></iframe>
-          <noscript>
-            <p class="newsletter-status" data-tone="info">
-              <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">Otevřete formulář v novém okně ↗</a>
-            </p>
-          </noscript>
+          <form
+            class="newsletter-form"
+            action="https://assets.mailerlite.com/jsonp/2206303/forms/186842930008294691/subscribe"
+            method="post"
+            target="_blank"
+            id="newsletterForm">
+            <label for="nlEmail" class="sr-only">E-mail</label>
+            <input
+              type="email"
+              id="nlEmail"
+              name="fields[email]"
+              placeholder="vase@email.cz"
+              autocomplete="email"
+              required>
+            <input type="hidden" name="ml-submit" value="1">
+            <input type="hidden" name="anticsrf" value="true">
+            <button type="submit" class="newsletter-submit">Přihlásit se</button>
+          </form>
+          <label class="newsletter-consent">
+            <input type="checkbox" id="nlConsent" required>
+            <span>Souhlasím se zasíláním novinek a se zpracováním e-mailu výhradně pro tento účel.</span>
+          </label>
+          <p class="newsletter-status" id="newsletterStatus" role="status" aria-live="polite"></p>
         </div>
 
         <p class="newsletter-foot">
-          Provozováno přes MailerLite. Pokud iframe nezobrazuje formulář, můžete <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřít přihlašovací stránku přímo ↗</a>. Více v <a href="o-projektu.html">O projektu</a>.
+          Provozováno přes MailerLite. Po odeslání se v novém okně otevře potvrzení od MailerLite. Více v <a href="o-projektu.html">O projektu</a>.
         </p>
       </div>
     </aside>
@@ -145,6 +162,36 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
     </div>
   `;
   injectScrollToTop();
+  wireNewsletterForm();
+}
+
+/**
+ * Validuje GDPR consent před tím, než formulář odešle POST na MailerLite.
+ * Native HTML required atribut pokryje validaci e-mailu; my doplňujeme
+ * jen consent gating (browser by ho zablokoval taky, ale chceme přátelskou hlášku).
+ */
+function wireNewsletterForm() {
+  if (typeof window === 'undefined') return;
+  const form = document.getElementById('newsletterForm');
+  if (!form || form.dataset.wired === '1') return;
+  form.dataset.wired = '1';
+  const status = document.getElementById('newsletterStatus');
+  const consent = document.getElementById('nlConsent');
+  form.addEventListener('submit', e => {
+    if (consent && !consent.checked) {
+      e.preventDefault();
+      if (status) {
+        status.textContent = 'Pro přihlášení potřebujeme váš souhlas se zpracováním e-mailu.';
+        status.dataset.tone = 'error';
+      }
+      consent.focus();
+      return;
+    }
+    if (status) {
+      status.textContent = 'Otevíráme potvrzení od MailerLite v novém okně. Zkontrolujte prosím schránku — pošleme vám potvrzovací e-mail (double opt-in).';
+      status.dataset.tone = 'info';
+    }
+  });
 }
 
 /**
