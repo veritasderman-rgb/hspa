@@ -4533,7 +4533,12 @@ body.mobile-nav-open .scroll-top-btn {
   .newsletter-submit { width: 100%; }
 }
 
-/* Articles hero — 2-sloupcový layout (left = ed-hero-content, right = upcoming) */
+/* Articles hero — 2-sloupcový layout (left = ed-hero-content, right = upcoming).
+   Resetujeme parent .ed-hero grid (1.6fr 1fr), aby se náš vnořený grid
+   roztáhl na celou šířku místo toho, aby se vmáčkl do první kolony. */
+.articles-hero {
+  display: block;
+}
 .articles-hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
