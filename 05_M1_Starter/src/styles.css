@@ -588,16 +588,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .skip-link:focus { top: 0; }
 
-@media (max-width: 768px) {
-  header.topbar { flex-direction: column; gap: 14px; align-items: flex-start; }
-  main { padding: 18px 16px 40px; }
-  .scorecard { grid-template-columns: repeat(2, 1fr); }
-  .section-actions { width: 100%; flex-wrap: wrap; }
-  .search-box { min-width: 0; flex: 1; }
-  .regions-wrap { grid-template-columns: 1fr; }
-  .regions-chart-wrap { height: 360px; }
-}
-
 @media print {
   /* Skryj interaktivní prvky */
   .topbar-actions,
@@ -667,12 +657,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   flex-wrap: wrap;
 }
 .module-tab {
-  padding: 6px 0;
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 12px 4px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink-mut);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
+  border-bottom: 2px solid transparent;
   transition: all 0.12s;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -682,6 +675,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--red);
   border-bottom-color: var(--red);
   font-weight: 600;
+}
+@media (max-width: 720px) {
+  .module-nav {
+    gap: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    width: 100%;
+    padding-bottom: 4px;
+  }
+  .module-tab {
+    padding: 12px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
 }
 
 /* =================================================================
@@ -939,9 +949,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     align-items: flex-start;
     gap: 12px;
   }
-  .module-nav { gap: 14px; }
-  .module-tab { font-size: 11px; }
   .masthead-strip { flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 20px; }
+}
+@media (max-width: 480px) {
+  .brand h1 {
+    font-size: 22px;
+    letter-spacing: -0.3px;
+  }
+  .brand h1 small { font-size: 10px; }
+  header.topbar { padding: 10px 16px; }
+  .topbar-actions { width: 100%; flex-wrap: wrap; gap: 10px; }
+  .btn-csv, .btn-theme, .btn-reload, .aud-btn {
+    min-height: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 }
 @media (max-width: 768px) {
   .filters-row { padding: 12px 16px; }
