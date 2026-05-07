@@ -89,25 +89,24 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </p>
 
         <!--
-          MailerLite slot — nahraď obsahem z MailerLite (Forms → Embedded → Use HTML).
-          Stačí vyměnit obsah <div id="newsletterMailerLite"> za HTML/JS snippet
-          z MailerLite UI. CSS a okolní strukturu měnit netřeba.
+          MailerLite Universal embed — account 2206303, form 186842930008294691.
+          Universal script se injectuje jednou (viz injectMailerLiteScript níže).
+          Pokud by MailerLite konkrétní formulář vyžadoval jiný HTML snippet,
+          stačí nahradit obsah tohoto <div id="newsletterMailerLite"> za snippet
+          z MailerLite UI: Forms → daný formulář → Embed → Use HTML.
         -->
         <div class="newsletter-form-slot" id="newsletterMailerLite">
-          <form class="newsletter-form" id="newsletterMockForm" novalidate>
-            <label for="nlEmail" class="sr-only">E-mail</label>
-            <input type="email" id="nlEmail" name="email" placeholder="vase@email.cz" autocomplete="email" required>
-            <button type="submit" class="newsletter-submit">Přihlásit se</button>
-          </form>
-          <label class="newsletter-consent">
-            <input type="checkbox" id="nlConsent" name="consent" required>
-            <span>Souhlasím se zasíláním novinek a se zpracováním e-mailu výhradně pro tento účel.</span>
-          </label>
-          <p class="newsletter-status" id="newsletterStatus" role="status" aria-live="polite"></p>
+          <div class="ml-embedded" data-form="186842930008294691"></div>
+          <noscript>
+            <p class="newsletter-status" data-tone="info">
+              Pro přihlášení k newsletteru je potřeba JavaScript. Alternativně
+              <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřete formulář v novém okně ↗</a>.
+            </p>
+          </noscript>
         </div>
 
         <p class="newsletter-foot">
-          Brzy bude funkční. <a href="o-projektu.html">Jak nakládáme s daty →</a>
+          Pokud formulář není vidět, můžete <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřít přihlašovací stránku přímo ↗</a>. Více v <a href="o-projektu.html">O projektu</a>.
         </p>
       </div>
     </aside>
@@ -142,42 +141,22 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
     </div>
   `;
   injectScrollToTop();
-  wireMockNewsletterForm();
+  injectMailerLiteScript();
 }
 
 /**
- * Mock handler pro formulář, který běží do té doby, než se do
- * #newsletterMailerLite vlepí oficiální MailerLite embed snippet.
- * Po vlepení snippetu MailerLite tento mock formulář přepíše a tato
- * funkce tiše skončí (querySelector vrátí null).
+ * Injectuje MailerLite Universal tracker (account 2206303). Idempotent —
+ * jen jednou na celé session. Universal skript pak vykreslí všechny
+ * <div class="ml-embedded" data-form="..."> v DOMu.
+ *
+ * Pokud bude potřeba účet vyměnit, stačí změnit ml('account', ...) níže.
  */
-function wireMockNewsletterForm() {
-  if (typeof window === 'undefined') return;
-  const form = document.getElementById('newsletterMockForm');
-  if (!form || form.dataset.wired === '1') return;
-  form.dataset.wired = '1';
-  const status = document.getElementById('newsletterStatus');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = document.getElementById('nlEmail');
-    const consent = document.getElementById('nlConsent');
-    if (!email.value || !email.checkValidity()) {
-      status.textContent = 'Zadejte prosím platný e-mail.';
-      status.dataset.tone = 'error';
-      email.focus();
-      return;
-    }
-    if (!consent.checked) {
-      status.textContent = 'Pro přihlášení potřebujeme váš souhlas se zpracováním e-mailu.';
-      status.dataset.tone = 'error';
-      consent.focus();
-      return;
-    }
-    status.textContent = 'Newsletter zatím připravujeme — brzy bude přihlášení funkční. Děkujeme za zájem!';
-    status.dataset.tone = 'info';
-    form.reset();
-    consent.checked = false;
-  });
+function injectMailerLiteScript() {
+  if (typeof window === 'undefined' || window.ml || document.getElementById('mlUniversalLoader')) return;
+  const s = document.createElement('script');
+  s.id = 'mlUniversalLoader';
+  s.text = `(function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);},l=d.createElement(e),l.async=1,l.src=u,n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');ml('account', '2206303');`;
+  document.head.appendChild(s);
 }
 
 /**
