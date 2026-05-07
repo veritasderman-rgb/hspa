@@ -117,6 +117,7 @@ export function renderModuleNav(activeId) {
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html'] },
+    { id: 'timeline',    label: 'Časová osa',              href: 'historie-hspa.html',      match: ['historie-hspa.html'] },
     { id: 'themes',      label: 'Tematické linie',         href: 'tematicke-linie.html',    match: ['tematicke-linie.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'] },
     { id: 'schema',      label: 'Schéma systému',          href: 'schema.html',             match: ['schema.html'] },
