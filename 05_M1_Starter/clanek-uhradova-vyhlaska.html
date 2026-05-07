@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vzorec, který rozdělí stovky miliard. Jak funguje úhradová vyhláška · HSPA Monitor</title>
+<meta name="description" content="Úhradová vyhláška každoročně stanoví, kolik dostane každý lékař, nemocnice a lékárna z veřejného zdravotního pojištění. Vysvětlení mechaniky pro 2026 — hodnoty bodu, kapitace, DRG paušál — s pracovním příkladem hospitalizace.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vzorec, který rozdělí stovky miliard. Jak funguje úhradová vyhláška">
+<meta property="og:description" content="Hodnoty bodu, kapitace, DRG paušál, regulační koridory — co je úhradová vyhláška, jak se počítá, a proč na ní záleží víc, než si myslíte.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-05-07">
+<meta property="article:section" content="Financování">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Úhradová vyhláška · DRG · kapitace · hodnota bodu</span>
+      </div>
+      <h2 class="article-title">Vzorec, který rozdělí stovky miliard. Jak funguje úhradová vyhláška a proč na ní záleží víc, než si myslíte</h2>
+      <p class="article-deck">
+        Každý rok v listopadu nebo prosinci vychází ve Sbírce zákonů krátký dokument s 21 paragrafy a patnácti přílohami. Pro občana je neviditelný, pro každého lékaře, nemocnici, lékárnu a záchrannou službu v Česku je to nejdůležitější regulační text roku — úhradová vyhláška. Říká, kolik dostane každý poskytovatel péče z veřejného zdravotního pojištění, jak se mu úhrada počítá a co se stane, když udělá víc nebo méně práce, než se očekávalo. Pro 2026 je vyhláška návrhem MZČR z listopadu 2025; její mechaniky vysvětlujeme níže — od kapitační platby praktiků (60–76 Kč na pojištěnce a měsíc), přes hodnotu bodu na záchrance (1,32 Kč), až po vzorec paušálu pro akutní lůžkovou péči s konkrétním pracovním příkladem.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">7. května 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">16 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Veřejné zdravotní pojištění v Česku rozděluje stovky miliard korun ročně. To, kolik dostane který poskytovatel a podle jakého klíče, se nerozhoduje v tarifní tabulce typu „za apendektomii zaplatíme 28 000 Kč". Rozhoduje to soustava vzorců, které propojují minulý objem péče poskytovatele, klasifikaci konkrétní hospitalizace, hodnoty bodu pro daný segment a regulační koridory, které brání jak skokovým propadům, tak skokovým nárůstům úhrad. Tato soustava se každoročně přepisuje v jediném dokumentu — úhradové vyhlášce. Jeho čtení je zatěžkávací zkouška i pro lidi z oboru. Tento článek vysvětluje hlavní mechaniky tak, aby čtenář pochopil, čím vyhláška ovlivňuje, kdo ho léčí, jak rychle a v jaké kvalitě.
+      </p>
+
+      <h3>Co úhradová vyhláška vlastně je</h3>
+
+      <p>
+        Úhradová vyhláška je sekundární právní předpis, který Ministerstvo zdravotnictví vydává každoročně na základě zmocnění v <strong>§ 17 odst. 5 zákona č. 48/1997 Sb.</strong>, o veřejném zdravotním pojištění. Stanovuje pro nadcházející rok čtyři věci:
+      </p>
+
+      <ul>
+        <li><strong>hodnoty bodu</strong> v Kč pro jednotlivé segmenty péče (ambulance, záchranka, pohotovost, dialýza, lázně, jednodenní péče);</li>
+        <li><strong>výši úhrad</strong> hrazených služeb, často přes vzorce navázané na referenční rok (typicky dva roky před hodnoceným obdobím);</li>
+        <li><strong>výši záloh</strong>, které pojišťovny vyplácejí poskytovatelům v průběhu roku (finální vyúčtování probíhá až po skončení roku);</li>
+        <li><strong>regulační omezení</strong> — koridory, ve kterých se úhrada smí pohybovat, omezení vykazovaných výkonů, koeficienty za pozdě vykázanou péči.</li>
+      </ul>
+
+      <p>
+        Před samotným vydáním vyhlášky probíhá od jara do podzimu <strong>dohodovací řízení</strong> mezi zástupci sedmi zdravotních pojišťoven a profesními asociacemi poskytovatelů (LOK-SČL, ČLK, Asociace nemocnic ČR, SPL ČR, ČSK a další), upravené v <strong>§ 17 odst. 4</strong> téhož zákona. Pokud strany dosáhnou dohody pro některý segment, MZČR ji ve vyhlášce zpravidla převezme. Pokud dohoda nepadne, MZČR vyhlášku vydá <em>autoritativně</em>. V posledních letech bylo autoritativní vyhlášení spíše pravidlem než výjimkou — segmenty se nedohodnou skoro nikdy najednou, protože co je úspora pro jeden, je výpadek pro druhého.
+      </p>
+
+      <p>
+        Vyhláška pokrývá v §§ 4 až 20 dvacet hlavních segmentů péče: lůžkovou (akutní, následnou, dlouhodobou), ambulantní (specializovanou, praktiků, gynekologů, stomatologů, vyjmenovaných odborností 222 a 801–823, domácí péče), dialyzační péči, záchrannou službu, dopravu pacientů, lékařskou a zubní pohotovost, lázně, ozdravovny, lékárny a jednodenní péči. Pro každý segment je v textu odkaz na příslušnou přílohu (1 až 15), kde leží konkrétní vzorce a tabulky.
+      </p>
+
+      <h3>Co je „bod" a proč to není koruna</h3>
+
+      <p>
+        Aby vyhláška mohla rozumně regulovat ceny v zdravotnictví, potřebuje účetní jednotku, která zachytí klinickou náročnost výkonu nezávisle na jeho aktuální ceně. Tou jednotkou je <strong>bod</strong>. Každý zdravotnický výkon — od kontrolního měření tlaku přes laparoskopickou cholecystektomii po MRI mozku s kontrastem — má v <strong>Seznamu zdravotních výkonů (vyhláška č. 134/1998 Sb.)</strong> přiřazenou bodovou hodnotu, která reflektuje časovou náročnost lékaře, materiál, použité přístroje a režii. Tato hodnota se mění zřídka — Seznam výkonů se aktualizuje samostatně, pomalu, často po letech politického a odborného sporu.
+      </p>
+
+      <p>
+        <strong>Hodnota bodu v Kč</strong> se naopak mění každý rok — a právě v úhradové vyhlášce. Tím MZČR reguluje, kolik peněz reálně teče do toho kterého segmentu. Zvýšit hodnotu bodu o tři haléře v ambulantní péči znamená přesun stovek milionů korun ročně do jednoho segmentu. Pro rok 2026 jsou hodnoty bodu pohyblivé od <strong>0,77 Kč</strong> u příspěvkových lázní (výkon 09543, omezený třikrát za pobyt) přes <strong>1,14 Kč</strong> u lékařské pohotovostní služby až po <strong>1,47 Kč</strong> u záchranné služby (výkony přepravy) a u nepřetržité dopravy pacientů. To je 90% rozdíl mezi nejnižší a nejvyšší hodnotou bodu. Není to nahodilé — je to způsob, jak vyhláška systémově upřednostňuje (nebo potlačuje) určité druhy péče.
+      </p>
+
+      <p>
+        U lůžkové akutní péče už hodnota bodu není jedno číslo, ale součást složitějších vzorců — tam vstupuje <strong>klasifikace hospitalizovaných pacientů (CZ-DRG)</strong>, kterou pro 2026 publikoval Český statistický úřad ve sdělení č. 363/2025 Sb. CZ-DRG zařazuje každou hospitalizaci do jedné z přibližně tisíce <em>diagnosis-related groups</em> a přiřazuje jí <strong>relativní váhu</strong> (číslo bezrozměrně vyjadřující průměrnou náročnost případu vůči celostátnímu průměru). Vyhláška pak pracuje s <strong>case-mixem</strong> (CM) — součtem relativních vah všech případů poskytovatele — a se <strong>základní sazbou</strong> (ZS) v Kč, kterou se case-mix násobí. Ke vzorci se vrátíme v sekci o paušální úhradě.
+      </p>
+
+      <h3>Čtyři hlavní mechaniky úhrady</h3>
+
+      <p>
+        Vyhláška kombinuje čtyři logiky platby — každý segment používá jednu nebo dvě z nich. Pochopení těchto čtyř mechanik je klíč k pochopení celé vyhlášky.
+      </p>
+
+      <p>
+        <strong>Výkonová platba (fee-for-service).</strong> Nejprostší model — poskytovatel vykáže jednotlivé výkony, pojišťovna spočítá body × hodnota bodu × počet výkonů a uhradí. Používá ho záchranka, lékařská pohotovost, dialýza, část ambulantních specialistů, lékárny. Výhoda: motivace dělat víc péče. Nevýhoda: stejná motivace bez ohledu na to, jestli je víc péče zdravotně přínosné. Vyhláška proto u většiny ambulancí výkonovou platbu doplňuje regulačními koridory (viz dále).
+      </p>
+
+      <p>
+        <strong>Kombinovaná kapitačně-výkonová platba.</strong> Používají ji všeobecní praktici (VPL), praktici pro děti a dorost (PLDD) a gynekologové (odbornosti 603, 604). Skládá se ze dvou částí. <em>Kapitační složka</em> je pevná měsíční částka <strong>za každého registrovaného pojištěnce</strong> v ordinaci, bez ohledu na to, kolikrát byl ten měsíc ošetřen. Tím vyhláška platí praktika za to, že má pacienta vůbec v péči — za dispenzární odpovědnost. <em>Výkonová složka</em> se přidává za jednotlivé výkony, které praktik vykáže (typicky preventivní prohlídky, očkování, nemocenská). Cíl této kombinace: preferovat vztahový, dlouhodobý model péče u pacientů, kteří potřebují kontinuitu, a zároveň odměňovat aktivitu praktika.
+      </p>
+
+      <p>
+        <strong>Případový paušál (DRG).</strong> Pro každou hospitalizaci v akutní lůžkové péči pojišťovna spočítá relativní váhu podle CZ-DRG klasifikace a tuto váhu vynásobí <em>základní sazbou</em> v Kč. Sazba se pohybuje (pro 2026) podle typu nemocnice mezi 55 000 a 110 000 Kč. Cíl: férovější úhrada — komplikovaná hospitalizace s mnoha výkony dostane víc než jednodenní nekomplikovaný případ. Druhý cíl: motivovat nemocnice k efektivitě — pokud nemocnice hospitalizuje pacienta déle, než klasifikace předpokládá, paušál nedostane navíc. Případový paušál se v Česku používá od poloviny 10. let; pro 2026 vychází 9. revize klasifikace CZ-DRG.
+      </p>
+
+      <p>
+        <strong>Paušální úhrada (annual lump-sum).</strong> Pro většinu hospitalizací akutní lůžkové péče se nakonec nepoužívá čistý DRG, ale složitější <em>paušální úhrada</em>, která DRG kombinuje s referenční částkou z předchozího roku. Důvod: čistý DRG by každý rok znamenal nepředvídatelný propad nebo nárůst pro nemocnice, které mění strukturu pacientů; paušál tomu brání. Vzorec rozebíráme dál.
+      </p>
+
+      <h3>Hodnota bodu po segmentech (2026)</h3>
+
+      <p>
+        Pro orientaci — toto jsou hlavní hodnoty bodu a paušály pro 2026, které vyhláška stanovila přímo (bez navázání na vzorec):
+      </p>
+
+      <ul>
+        <li><strong>Záchranná služba — výjezd</strong>: hodnota bodu 1,32 Kč + fixní 1 550 Kč za výjezd vozu zdravotnické záchranné služby zahrnující příjem tísňové výzvy a výjezd posádky (§ 14).</li>
+        <li><strong>Záchranná služba — přeprava</strong>: 1,47 Kč; pro výkon č. 06714 (specializovaný transport) 1,34 Kč.</li>
+        <li><strong>Doprava pacientů — nepřetržitá služba</strong>: 1,47 Kč; <strong>doprava nikoli nepřetržitá</strong>: 1,21 Kč; přepravní výkon č. 69 (převoz mezi zařízeními): 1,34 Kč (§ 15).</li>
+        <li><strong>Lékařská pohotovostní služba</strong>: 1,14 Kč pro výkony, 1,26 Kč pro výkony přepravy (§ 16 odst. 1).</li>
+        <li><strong>Zubní pohotovostní služba</strong>: paušální složka 9 600 Kč × koeficient počtu pojištěnců v regionu, za jeden den služby ve dnech a v rozsahu vyhlášky o pohotovostních službách (§ 16 odst. 2).</li>
+        <li><strong>Komplexní lázeňská léčebně rehabilitační péče</strong>: 102 % smluvně sjednané úhrady za 1 den pobytu pro 2025 (§ 17 odst. 1) — meziroční nárůst 2 procentní body, mající kompenzovat inflaci.</li>
+        <li><strong>Ozdravovny</strong>: 1 310 Kč za den pobytu (§ 17 odst. 4) ve složkách ubytování + stravování + ozdravný program.</li>
+        <li><strong>Příspěvkové lázně — výkon 09543</strong>: 0,77 Kč, maximálně třikrát za pobyt (§ 17 odst. 3).</li>
+        <li><strong>Vybrané individuální výkony (09543, 09555–09557)</strong>: 1,12 Kč; výkony 09580 a 09581: 1,04 Kč; jednorázová úhrada 36 Kč za výkon 09990 a 32 Kč za výkon 09552 (§ 18, § 19).</li>
+        <li><strong>Převedení listinného receptu do elektronické podoby</strong>: 16 Kč za každý převedený recept, byl-li na něj reálně vydán léčivý přípravek (§ 19 odst. 2). Mírný stimul k digitalizaci preskripce.</li>
+      </ul>
+
+      <p>
+        Hodnoty bodu pro <strong>všeobecné praktické lékařství</strong>, <strong>specializovanou ambulantní péči</strong>, <strong>dialýzu</strong>, <strong>stomatologii</strong> a <strong>akutní lůžkovou péči</strong> nejsou v textu paragrafů, ale v přílohách č. 2, 3, 8, 11 a 1. K nejdůležitějším z nich se teď dostáváme.
+      </p>
+
+      <h3>Praktici: kapitace 60 až 76 Kč na pojištěnce a měsíc</h3>
+
+      <p>
+        Příloha č. 2 stanovuje pro VPL a PLDD <strong>základní kapitační sazbu</strong> ve čtyřech úrovních podle ordinačních hodin a struktury služeb na pracovišti:
+      </p>
+
+      <ul>
+        <li><strong>76 Kč/měsíc/pojištěnec</strong> — pracoviště s alespoň 30 ordinačními hodinami rozloženými do 5 pracovních dnů týdně, alespoň 1 den v týdnu otevřené do 18 hodin a alespoň 2 dny v týdnu umožňující objednání na pevně stanovenou hodinu;</li>
+        <li><strong>69 Kč/měsíc/pojištěnec</strong> — pracoviště s 25 ordinačními hodinami v 5 pracovních dnech a alespoň 1 dnem otevřeným do 18 hodin;</li>
+        <li><strong>60 Kč/měsíc/pojištěnec</strong> — pracoviště VPL, které nesplňuje podmínky 76 ani 69 Kč;</li>
+        <li><strong>66 Kč/měsíc/pojištěnec</strong> — pracoviště PLDD, které nesplňuje podmínky 76 ani 69 Kč.</li>
+      </ul>
+
+      <p>
+        K základní kapitaci se pak přidávají <strong>bonusy</strong>: +1 Kč za doloženou účast 50 % lékařů v celoživotním vzdělávání ČLK, +2 Kč za splnění proporce preventivních prohlídek (alespoň 30 % registrovaných ve věku 40–80 let u VPL, 40 % ve věku 6–19 let u PLDD), +5 Kč za splnění širších podmínek kvality podle bodů 4 a 5 přílohy 2, +1 Kč za zajišťování specializačního vzdělávání rezidentů. Maximum, na které se může praktik dostat, je tedy zhruba <strong>85 Kč na pojištěnce a měsíc</strong>, tj. zhruba 1 020 Kč ročně.
+      </p>
+
+      <p>
+        Počet registrovaných pojištěnců se navíc <strong>přepočítává podle věkových kategorií</strong> — kapitace za pojištěnce ve věku 65–74 let je vyšší než za pojištěnce ve věku 25–34 let, protože průměrná spotřeba péče u staršího pojištěnce je vyšší. Příloha 2 obsahuje tabulku indexů pro 18 věkových skupin. Tím vyhláška kompenzuje to, že praktik ve městě s mladou populací není v podobě kapitace „trestán" za to, že má v praxi více zdravých.
+      </p>
+
+      <p>
+        Pro občana je důležité, že <strong>kapitace je platba za registraci, ne za návštěvu</strong>. Praktik, kterého navštěvujete dvakrát ročně, dostane stejně jako praktik, kterého navštěvujete dvanáctkrát — pokud je výkonová složka konstantní. To je zdrojem některých kritik (motivace „mít pacienta v knize, ale nesetkávat se s ním"); zároveň je to ochrana před fragmentací péče (praktik, který ví, že má pacienta dlouhodobě, má motivaci dělat dispenzární kontroly).
+      </p>
+
+      <h3>Záchranka: bod, výjezdový bonus a kompletní vzorec</h3>
+
+      <p>
+        Záchranná služba je instrumentální příklad výkonové platby s pevnou hodnotou bodu. Vyhláška pro 2026 stanoví v § 14:
+      </p>
+
+      <p>
+        <em>Úhrada<sub>ZZS</sub> = (Body × 1,32 Kč) + (Body<sub>přeprava</sub> × 1,47 Kč) + (Body<sub>06714</sub> × 1,34 Kč) + (Počet výjezdů × 1 550 Kč)</em>
+      </p>
+
+      <p>
+        Konkrétně: standardní výjezd s vyšetřením a transportem do nemocnice — který se podle Seznamu výkonů skládá z výkonů typu „výjezd vozu RZP", „kardiopulmonální resuscitace", „transport pacienta v péči lékaře" atd. — má dohromady řekněme 1 800 bodů. Z toho 1 200 bodů jsou výkony s hodnotou 1,32 Kč (tj. 1 584 Kč), 600 bodů jsou výkony přepravy s hodnotou 1,47 Kč (tj. 882 Kč), a navíc fixní 1 550 Kč za výjezd. Celkem za jeden výjezd zhruba <strong>4 016 Kč</strong>. Toto číslo platí jen ilustrativně — skutečné body za konkrétní výjezd závisí na situaci. Cílem výjezdového bonusu (1 550 Kč v 2026, oproti nižším částkám v předchozích letech) je pokrýt fixní náklady služby, které neklesají s počtem výjezdů — náklady operačního střediska, údržbu vozidla, personální stálost.
+      </p>
+
+      <h3>Akutní lůžková péče: paušální úhrada a její vzorec</h3>
+
+      <p>
+        Tady už se vyhláška dostává do své nejtěžší části. Pro akutní lůžkovou péči stanoví příloha č. 1 více souběžných složek úhrady — <em>individuálně smluvní složku</em>, <em>paušální úhradu</em>, <em>úhradu vyčleněnou z paušálu</em>, <em>úhradu formou případového paušálu</em>, <em>úhradu za malý počet pojištěnců</em>, <em>ambulantní složku</em> a <em>ostatní úhrady</em>. Hlavní z nich, dotýkající se naprosté většiny hospitalizací mimo individuálně sjednané smlouvy, je paušální úhrada. Její vzorec vypadá na první pohled odstrašivě, ale dá se rozložit:
+      </p>
+
+      <p style="font-family: var(--mono, monospace); background: var(--paper2); padding: 16px; border-left: 3px solid var(--ink); font-size: 14px; line-height: 1.7;">
+        ÚHR<sub>PU,2026</sub> = min{ 1 ; CM<sub>red,2026</sub> / (0,98 × CM<sub>2024</sub>) } × IPU − EM<sub>2026</sub>
+      </p>
+
+      <p>
+        Vyhláška to píše s indexem <em>CZ-DRG, A</em> (skupiny vztažené k diagnóze v části A přílohy č. 10) — ten ponecháváme stranou pro stručnost. Co znamenají členy:
+      </p>
+
+      <ul>
+        <li><strong>CM<sub>2024</sub></strong> = case-mix poskytovatele v referenčním období 2024. Sčítá relativní váhy všech ukončených hospitalizací v 2024, vykázaných do 31. 3. 2025 a uznaných pojišťovnou do 31. 5. 2025, zařazených do skupin části A přílohy 10.</li>
+        <li><strong>CM<sub>red,2026</sub></strong> = case-mix v hodnoceném období 2026 (po případné redukci za případy ukončené předčasně přeložením, jak stanoví bod 1.1 přílohy).</li>
+        <li><strong>IPU</strong> = individuální paušální úhrada nemocnice — referenční částka <strong>PU<sub>drg,2024</sub></strong> z roku 2024 navýšená o 3 % (1,03×). Tj. <strong>IPU = PU<sub>drg,2024</sub> × 1,03</strong>.</li>
+        <li><strong>PU<sub>drg,2024</sub></strong> = referenční výše úhrady, která se počítá ze tří úrovní:
+          <ul>
+            <li>pro špičkové nemocnice referenční sítě s alespoň 8 statusy center vysoce specializované péče (kód i.): <strong>CM<sub>2024</sub> × 90 000 Kč</strong>;</li>
+            <li>pro nemocnice s traumatologickým centrem a alespoň 4 dalšími statusy (kód ii.): <strong>CM<sub>2024</sub> × 85 000 Kč</strong>;</li>
+            <li>pro ostatní nemocnice (kód iii.): individuální výpočet z minimální (55–65 tis.) a maximální (až 110 tis. Kč) základní sazby a referenční úhrady z 2024.</li>
+          </ul>
+        </li>
+        <li><strong>EM<sub>2026</sub></strong> = vyžádaná extramurální péče — část úhrady, kterou nemocnice „vyžádala" jiných poskytovatelů během hospitalizace pacienta (vzdálená laboratoř, externí RTG, konzilium specialisty mimo dům). Tato částka se z paušálu odečítá, protože byla zaplacena přímo poskytovateli, který službu reálně poskytl.</li>
+        <li><strong>min{ 1 ; CM<sub>red,2026</sub> / (0,98 × CM<sub>2024</sub>) }</strong> = <em>klíčový redukční koeficient</em>. Pokud nemocnice v 2026 vykáže case-mix alespoň 98 % toho, co v 2024, koeficient je 1 a paušál se nezredukuje. Pokud udělá méně, paušál se proporcionálně sníží — vyhláška pokutuje pokles produkce.</li>
+      </ul>
+
+      <p>
+        <strong>Pracovní příklad.</strong> Představme si fiktivní krajskou nemocnici. V 2024 ukončila 12 000 hospitalizací zařazených do paušálních skupin části A přílohy 10. Po vážení relativními vahami CZ-DRG má case-mix CM<sub>2024</sub> = 14 800. Dejme tomu, že podle struktury byla v kategorii iii. (běžná krajská nemocnice se 3 statusy specializované péče), s referenční individuální základní sazbou IZS<sub>2024</sub> = 78 000 Kč, max. ZS = 0,5 × 110 000 + 0,5 × 78 000 = <strong>94 000 Kč</strong>, min. ZS = 60 000 Kč (zajišťuje urgentní příjem mimo referenční síť). Předpokládejme, že po výpočtu PU<sub>drg,2024</sub> dle formule iii. dospěje k částce 1 250 mil. Kč. Tu vyhláška navýší koeficientem 1,03:
+      </p>
+
+      <p style="font-family: var(--mono, monospace); background: var(--paper2); padding: 16px; border-left: 3px solid var(--ink); font-size: 14px;">
+        IPU = 1 250 000 000 × 1,03 = <strong>1 287 500 000 Kč</strong>
+      </p>
+
+      <p>
+        Pokud nemocnice v 2026 udělá case-mix 14 800 (stejný jako 2024), redukční koeficient = min{ 1; 14 800 / (0,98 × 14 800) } = min{ 1; 1,0204 } = 1. Paušál bude přibližně rovný IPU mínus extramurální péče. Pokud udělá case-mix jen 13 800, koeficient = min{ 1; 13 800 / 14 504 } = 0,9514 — paušál klesne na cca 1 224 mil. Kč, tj. <strong>výpadek 63 mil. Kč</strong> vůči srovnatelnému roku. To je síla redukčního koeficientu — pokles produkce o 7 % se promítne plnou silou do úhrady. Pokud naopak nemocnice udělá case-mix 16 000, koeficient zůstane 1 (strop) — paušál se nezvýší, navzdory tomu, že nemocnice odvedla víc práce. Pro tu nadprodukci se v dalších bodech přílohy 1 spouští samostatný režim <em>úhrady formou případového paušálu</em> — tj. čistého DRG za případy nad rámec.
+      </p>
+
+      <h3>Regulační omezení — koridory a koeficienty</h3>
+
+      <p>
+        Redukční koeficient 0,98 v paušálním vzorci je jen jeden z mnoha regulačních prvků. Vyhláška obsahuje desítky podobných koridorů. Některé příklady:
+      </p>
+
+      <ul>
+        <li><strong>Pozdě vykázané služby</strong> — úhrada za služby vykázané po 31. 3. 2027 se násobí <strong>koeficientem 0,95</strong> (§ 2 odst. 4). Pokutuje opožděné vykazování, šetří pojišťovnám.</li>
+        <li><strong>Stop u nadprodukce</strong> — paušální úhrada se nemůže zvýšit nad referenční IPU, i kdyby nemocnice udělala podstatně víc práce. Pro nadprodukci se použije případový paušál se sníženou sazbou — vyhláška to nazývá „úhradou za péči pro malý počet pojištěnců" v bodu 6 přílohy 1.</li>
+        <li><strong>Individuálně sjednané úhrady</strong> — nemocnice a pojišťovna se mohou dohodnout na samostatné výši úhrady pro vybranou DRG bázi (typicky vysoce specializovaná péče, transplantace, nákladné onkologické léčby). Tyto úhrady se z paušálu vyjímají a hradí se zvlášť (bod 2 přílohy 1).</li>
+        <li><strong>Léčivé přípravky a zvlášť účtované materiály</strong> — léky uvedené v příloze č. 12 se hradí v ceně skutečné spotřeby, mimo paušál (bod 1.4 přílohy 1). Cíl: nemocnice nemá dvojí motivaci — racionálně používat léky podle indikace, ale ne čekat, až lék zaplatí z paušálu.</li>
+        <li><strong>Robotická operativa</strong> — pokud nemocnice vykáže jen materiál pro robotickou operativu bez patřičného DRG markeru, vyhláška jí nepřizná navýšení relativní váhy (bod 1.6 přílohy 1). Cíl: zabránit „papírovému" vykazování bez reálného robotického výkonu.</li>
+        <li><strong>Kapitační bonusy</strong> — VPL a PLDD dostanou bonusy na kapitaci jen po doložení podmínek (vzdělávání, prevence, akreditace školícího pracoviště). Bez doložení se kapitace nezvyšuje — vyhláška vynucuje aktivní jednání.</li>
+      </ul>
+
+      <p>
+        Tyto regulační omezení mají v souhrnu jeden cíl: stabilizovat úhrady v čase, brzdit umělé inflaci výkazů a šetřit prostor zdravotních pojišťoven, jejichž rozpočty jsou jako celek limitované. Nevýhoda téže logiky: pokud nemocnice z reálných důvodů zlepšila skladbu pacientů (např. přitáhla komplikovanější případy), paušál ji za to neodmění. Inovace, které mění strukturu péče skokově, narážejí na vzorec, který byl navržen pro plynulé přechody.
+      </p>
+
+      <h3>Co to dělá s motivacemi v systému</h3>
+
+      <p>
+        Úhradová vyhláška není neutrální technický dokument — určuje směr, kterým se zdravotnictví rok od roku posouvá. Několik trvalých efektů, které lze v české vyhlášce 2026 sledovat:
+      </p>
+
+      <p>
+        <strong>Centra vysoce specializované péče dostávají víc.</strong> Špičkové nemocnice v referenční síti s 8+ statusy mají referenční sazbu 90 000 Kč/CM oproti běžným 78–94 000 Kč. To je strukturální preference — vyhláška podporuje koncentraci komplexní péče v centrech, což je sjednocený cíl posledních let napříč evropskými systémy. Pro krajské a okresní nemocnice to ovšem znamená trvale nižší jednotkovou cenu péče i tehdy, když léčí stejné případy.
+      </p>
+
+      <p>
+        <strong>Praktici jsou tlačeni k otevřeným ordinacím a prevenci.</strong> Rozdíl mezi 76 a 60 Kč na pojištěnce a měsíc je třetina ceny — dělá se to konkrétními kritérii: alespoň 30 hodin v 5 dnech, alespoň 1 den do 18 hodin, alespoň 2 dny s objednáním na hodinu. To jsou opatření odpovídající dlouhodobé kritice nedostupnosti českých praktiků a nedělních zavřených ordinací.
+      </p>
+
+      <p>
+        <strong>Pohotovost je dlouhodobě podtlačovaná.</strong> Hodnota bodu 1,14 Kč v lékařské pohotovosti je mezi nejnižšími v celé vyhlášce — nižší než u záchranky, ambulancí i lůžkové péče. To, spolu s plošnou nižší hodnotou bodu při paušálním ošetřování pohotovosti v menších městech (zubní pohotovost má paušál 9 600 Kč/den × koeficient regionální populace), vede k tomu, že pohotovost je systémově neatraktivní pro provozovatele i pro lékaře. Důsledek: ruší se nebo se centralizují, a pacient v menším městě má bližší pohotovost možná jen v rámci urgentního příjmu krajské nemocnice.
+      </p>
+
+      <p>
+        <strong>Lázně a ozdravovny mají systémově nízkou hodnotu bodu (0,77 Kč).</strong> To je ještě výraznější efekt — vyhláška lázně udržuje, ale jejich rozpočet roste jen o inflaci (102 % předchozího roku). Lázně se v posledních letech stávají primárně samoplátcovou službou; veřejné pojištění do nich proudí menší podíl celkového obratu.
+      </p>
+
+      <p>
+        <strong>Digitalizace je odměňována drobně.</strong> 16 Kč za převedení listinného receptu do elektronické podoby je symbolický, ale vědomý stimul — navádí praktiky k eRecept logice. Skoro poprvé vyhláška obsahuje výslovně „digitalizační" položku.
+      </p>
+
+      <h3>Co je nového v roce 2026</h3>
+
+      <p>
+        Mezi předchozími lety a vyhláškou 2026 jsou tyto výraznější změny: nová verze klasifikace CZ-DRG (sdělení ČSÚ č. 363/2025 Sb.) — průběžně se mění relativní váhy mezi DRG bázemi. Inflační navýšení lázní +2 procentní body (z 100 na 102 % předchozího roku). Větší preference center vysoce specializované péče v referenční síti — 90 tisíc Kč/CM pro „top tier" nemocnice je oproti 2025 vyšší o jednotky procent. Koeficient 0,95 za pozdě vykázané služby zůstává; sankce za vykazování po 31. 3. 2027 zůstává tvrdá. Drobná navýšení kapitačních sazeb VPL a PLDD oproti 2025 (řádově 1–3 Kč), s nezměněnou strukturou bonusů.
+      </p>
+
+      <p>
+        Co vyhláška 2026 <em>neobsahuje</em>: zásadní restrukturalizaci žádného segmentu, žádnou novou platební logiku (bundled payment, value-based payment, P4P na úrovni systému). Vyhláška je v současnosti nástrojem inkrementálního ladění — ne strukturní reformy. Všechny zásadní změny, které by mohly platebně podpořit prevenci, integrovanou péči nebo evidence-based investice, jsou věcí změny zákona č. 48/1997 Sb., ne vyhlášky.
+      </p>
+
+      <h3>Co by občan měl vědět</h3>
+
+      <p>
+        Úhradová vyhláška není klinický dokument. Neříká, jak se má léčit pneumonie ani kdy se má provádět screening. Ale rozhoduje o tom, kolik peněz se v daném roce dostane do toho kterého segmentu. A peníze určují strukturu — kolik praktiků zůstane na vesnicích, kolik nemocnic udrží akutní lůžková oddělení, kolik hodin pohotovost vydrží otevřená v okrese, kolik inovací si nemocnice může dovolit.
+      </p>
+
+      <p>
+        Když si stěžujete, že váš praktik nemá hodiny do 18, nebo že nemocnice ve vašem městě zavřela porodnici, nebo že stomatologie účtuje doplatky, které dříve nebyly — odpověď začíná v této vyhlášce. Hodnoty bodu, kapitační sazby, regulační koeficienty a referenční sazby v ní nesou většinu odpovědi na otázku, proč některé péče přibývá a jiná mizí.
+      </p>
+
+      <p>
+        Vyhláška je veřejně dostupná. Ministerstvo zdravotnictví ji publikuje na svém webu před vstupem v platnost; finální verze vychází ve Sbírce zákonů. Připomínkové řízení probíhá na portálu ODok (eklep.vlada.cz). Občan ji v dohodovacím řízení nepřipomínkuje přímo — to je doménou pojišťoven, profesních asociací a SÚKL — ale může se s ní seznámit, dohledat hodnoty bodu pro „svůj" segment, porovnat s předchozími lety a zařadit do kontextu, když politici argumentují „dostupností péče".
+      </p>
+
+      <p>
+        A pro tvůrce politik je sdělení strukturní. Reforma, která chce skutečně změnit chování zdravotnického systému — preferovat prevenci, integrovat péči, posílit primární péči, zabezpečit pohotovost v menších městech, zafinancovat duševní zdraví — musí pracovat jak na úrovni zákona č. 48/1997 Sb., tak na úrovni úhradové vyhlášky. Bez ní zůstává reformní rétorika v deklaracích strategických rámců, a peněžní toky tečou pořád stejnými řečišti.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Klíčové hodnoty z úhradové vyhlášky 2026</h4>
+      <ul class="article-databox-list">
+        <li><strong>Hodnota bodu — záchranka (výjezd)</strong> — 1,32 Kč + 1 550 Kč fixní za výjezd (§ 14)</li>
+        <li><strong>Hodnota bodu — záchranka (přeprava)</strong> — 1,47 Kč (§ 14)</li>
+        <li><strong>Hodnota bodu — lékařská pohotovost</strong> — 1,14 Kč; přeprava 1,26 Kč (§ 16)</li>
+        <li><strong>Zubní pohotovost</strong> — paušál 9 600 Kč × koeficient regionální populace / den (§ 16)</li>
+        <li><strong>Lázně komplexní</strong> — 102 % úhrady 2025 / den pobytu (§ 17)</li>
+        <li><strong>Ozdravovny</strong> — 1 310 Kč / den pobytu (§ 17)</li>
+        <li><strong>Kapitace VPL — top kategorie</strong> — 76 Kč/měsíc/pojištěnec (Příloha 2)</li>
+        <li><strong>Kapitace VPL — bez prodloužených hodin</strong> — 60 Kč/měsíc/pojištěnec</li>
+        <li><strong>DRG — top centra (referenční síť, 8+ statusů)</strong> — 90 000 Kč × case-mix</li>
+        <li><strong>DRG — minimální základní sazba</strong> — 55 000 Kč (bez urgentního příjmu)</li>
+        <li><strong>DRG — maximální základní sazba</strong> — 110 000 Kč (referenční max)</li>
+        <li><strong>Redukční koeficient produkce (paušál)</strong> — min{1; CM<sub>2026</sub> / (0,98 × CM<sub>2024</sub>)}</li>
+        <li><strong>Inflační navýšení paušálu meziročně</strong> — 1,03 (3 %)</li>
+        <li><strong>Sankce za pozdě vykázanou péči</strong> — koeficient 0,95</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k údajům:</strong> Hodnoty pocházejí z návrhu úhradové vyhlášky pro rok 2026 publikovaného Ministerstvem zdravotnictví v listopadu 2025 (211stránkový dokument, 21 paragrafů, 15 příloh). Pracovní příklad krajské nemocnice je didaktický — skutečné hodnoty case-mixu, referenčních sazeb a IPU se u konkrétních poskytovatelů liší a vypočítávají individuálně podle bodů 1.1 až 8 přílohy 1. Pro analytické účely doporučujeme primární text vyhlášky a CZ-DRG klasifikaci ÚZIS pro přesné definice relativních vah.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Návrh úhradové vyhlášky 2026 (MZČR)</strong> — primární text, 211 stran. <a href="https://mzd.gov.cz/wp-content/uploads/2025/11/Uhradova_vyhlaska_2026.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Sbírka zákonů — vyhláška č. 134/1998 Sb.</strong> — Seznam zdravotních výkonů s bodovými hodnotami. <a href="https://www.zakonyprolidi.cz/cs/1998-134" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 17 a další paragrafy upravující úhrady. <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Sdělení ČSÚ č. 363/2025 Sb.</strong> — aktualizace Klasifikace hospitalizovaných pacientů CZ-DRG pro 2026.</li>
+          <li><strong>ÚZIS — DRG metodika a relativní váhy</strong> — operační podklad pro paušální úhradu. <a href="https://drg.uzis.cz/" target="_blank" rel="noopener">drg.uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Národní zdravotnický informační portál (NZIP)</strong> — výklad systému veřejného zdravotního pojištění pro pacienty. <a href="https://www.nzip.cz/" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>OECD — DRG-based hospital payment</strong> — komparativní metodika DRG plateb v OECD zemích. <a href="https://www.oecd.org/en/topics/health.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>Euro Observatory on Health Systems and Policies — Czechia HiT 2023</strong> — přehled fungování úhradových mechanismů v ČR. <a href="https://eurohealthobservatory.who.int/countries/czechia" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
+          <li><strong>Asociace nemocnic ČR / SVL ČLS JEP</strong> — odborné komentáře k dohodovacímu řízení a vyhlášce.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Policy inspirace</h5>
+        <ul class="article-sources-list">
+          <li><strong>Portál ODok / eKLEP</strong> — připomínkové řízení k vyhlášce. <a href="https://odok.cz/" target="_blank" rel="noopener">odok.cz ↗</a></li>
+          <li><strong>Strategický rámec Zdraví 2030 (MZČR)</strong> — širší politický kontext financování. <a href="https://www.mzcr.cz/" target="_blank" rel="noopener">mzcr.cz ↗</a></li>
+          <li><strong>NHS England — Payment system</strong> — britský protějšek úhradové vyhlášky (national tariff payment system). <a href="https://www.england.nhs.uk/pay-syst/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>Bundesgesundheitsministerium (Německo) — DRG-Krankenhausvergütung</strong> — německý systém DRG, jeden ze vzorů české klasifikace. <a href="https://www.bundesgesundheitsministerium.de/" target="_blank" rel="noopener">bundesgesundheitsministerium.de ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnoty bodu, kapitační sazby a referenční sazby pocházejí z návrhu úhradové vyhlášky pro 2026 publikovaného MZČR v listopadu 2025; finální znění vychází ve Sbírce zákonů. Pracovní příklad krajské nemocnice je didaktický a slouží k ilustraci vzorce — neodpovídá konkrétnímu poskytovateli a skutečné hodnoty case-mixu jednotlivých nemocnic se výrazně liší. Vzorec paušální úhrady je ve článku zjednodušený oproti plné formuli přílohy 1; pro přesný výpočet doporučujeme primární text vyhlášky.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
