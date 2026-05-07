@@ -116,6 +116,128 @@
 
     <div id="explainerGrid" class="explainer-grid"></div>
     <div class="empty-state hidden" id="emptyState">Žádné téma neodpovídá vašemu hledání.</div>
+
+    <section class="schema-section" id="schema" aria-labelledby="schemaHeadline">
+      <div class="ed-kicker">Schéma systému</div>
+      <h3 class="ed-areas-h" id="schemaHeadline">Kdo rozhoduje, kdo platí, kdo léčí.</h3>
+      <p class="ed-flow-lead">
+        Český zdravotní systém tvoří sedm klíčových aktérů propojených toky peněz, regulace a dat. Klikněte na uzel pro detail a odkaz na příslušný explainér.
+      </p>
+
+      <div class="schema-page-wrap">
+
+        <div class="schema-legend">
+          <span class="schema-legend-item"><span class="schema-dot schema-dot-regulator"></span>Regulátor</span>
+          <span class="schema-legend-item"><span class="schema-dot schema-dot-payer"></span>Platce</span>
+          <span class="schema-legend-item"><span class="schema-dot schema-dot-provider"></span>Poskytovatel</span>
+          <span class="schema-legend-item"><span class="schema-dot schema-dot-patient"></span>Pojištěnec</span>
+          <span class="schema-legend-item"><span class="schema-dot schema-dot-support"></span>Podpůrný aktér</span>
+        </div>
+
+        <div class="schema-legend schema-legend-arrows">
+          <span class="schema-legend-item"><span class="schema-line schema-line-money"></span>peníze</span>
+          <span class="schema-legend-item"><span class="schema-line schema-line-reg"></span>regulace</span>
+          <span class="schema-legend-item"><span class="schema-line schema-line-service"></span>péče / služba</span>
+          <span class="schema-legend-item"><span class="schema-line schema-line-data"></span>data</span>
+        </div>
+
+        <div class="schema-container">
+          <svg class="schema-svg" viewBox="0 0 760 470" aria-label="Schéma aktérů českého zdravotního systému" role="img">
+            <defs>
+              <marker id="arrow-money" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#1a7a4a"/>
+              </marker>
+              <marker id="arrow-reg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#0b4fa8"/>
+              </marker>
+              <marker id="arrow-service" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#b45f06"/>
+              </marker>
+              <marker id="arrow-data" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#5c4099"/>
+              </marker>
+            </defs>
+
+            <path class="schema-arrow schema-arrow-reg" d="M 310,62 C 200,62 148,150 148,216" marker-end="url(#arrow-reg)"/>
+            <text class="schema-arrow-lbl" x="214" y="128">legislativa</text>
+
+            <path class="schema-arrow schema-arrow-reg" d="M 452,62 C 562,62 614,150 614,216" marker-end="url(#arrow-reg)"/>
+            <text class="schema-arrow-lbl" x="556" y="122">regulace</text>
+
+            <path class="schema-arrow schema-arrow-money" d="M 222,240 L 540,240" marker-end="url(#arrow-money)"/>
+            <text class="schema-arrow-lbl" x="381" y="232">úhrady za péči</text>
+
+            <path class="schema-arrow schema-arrow-money" d="M 312,408 C 200,408 148,340 148,268" marker-end="url(#arrow-money)"/>
+            <text class="schema-arrow-lbl schema-arrow-lbl-left" x="148" y="360">pojistné</text>
+
+            <path class="schema-arrow schema-arrow-service" d="M 614,268 C 614,346 518,408 452,410" marker-end="url(#arrow-service)"/>
+            <text class="schema-arrow-lbl schema-arrow-lbl-right" x="622" y="352">zdravotní péče</text>
+
+            <path class="schema-arrow schema-arrow-reg" d="M 656,80 L 648,216" marker-end="url(#arrow-reg)"/>
+            <text class="schema-arrow-lbl schema-arrow-lbl-right" x="666" y="152">léčiva</text>
+
+            <path class="schema-arrow schema-arrow-data" d="M 682,258 C 710,310 706,370 674,390" marker-end="url(#arrow-data)"/>
+            <text class="schema-arrow-lbl schema-arrow-lbl-right" x="710" y="334">data</text>
+
+            <path class="schema-arrow schema-arrow-reg" d="M 146,390 C 300,430 460,340 540,264" marker-end="url(#arrow-reg)"/>
+            <text class="schema-arrow-lbl" x="318" y="426">zřizovatel</text>
+
+            <g class="schema-node schema-node-regulator" data-node="mzcr" tabindex="0" role="button" aria-label="Ministerstvo zdravotnictví ČR">
+              <rect x="310" y="36" width="142" height="52" rx="6"/>
+              <text class="schema-node-label" x="381" y="58">MZČR</text>
+              <text class="schema-node-sub" x="381" y="75">Ministerstvo zdravotnictví</text>
+            </g>
+
+            <g class="schema-node schema-node-payer" data-node="pojistovny" tabindex="0" role="button" aria-label="Zdravotní pojišťovny">
+              <rect x="78" y="216" width="142" height="52" rx="6"/>
+              <text class="schema-node-label" x="149" y="238">Pojišťovny</text>
+              <text class="schema-node-sub" x="149" y="255">VZP + 6 dalších</text>
+            </g>
+
+            <g class="schema-node schema-node-provider" data-node="poskytovatele" tabindex="0" role="button" aria-label="Poskytovatelé zdravotní péče">
+              <rect x="540" y="216" width="142" height="52" rx="6"/>
+              <text class="schema-node-label" x="611" y="238">Poskytovatelé</text>
+              <text class="schema-node-sub" x="611" y="255">nemocnice, lékaři</text>
+            </g>
+
+            <g class="schema-node schema-node-patient" data-node="pacienti" tabindex="0" role="button" aria-label="Pacienti a pojištěnci">
+              <rect x="310" y="386" width="142" height="52" rx="6"/>
+              <text class="schema-node-label" x="381" y="408">Pacienti</text>
+              <text class="schema-node-sub" x="381" y="425">pojištěnci / občané</text>
+            </g>
+
+            <g class="schema-node schema-node-support" data-node="sukl" tabindex="0" role="button" aria-label="Státní ústav pro kontrolu léčiv">
+              <rect x="606" y="36" width="112" height="44" rx="6"/>
+              <text class="schema-node-label" x="662" y="55">SÚKL</text>
+              <text class="schema-node-sub" x="662" y="71">kontrola léčiv</text>
+            </g>
+
+            <g class="schema-node schema-node-support" data-node="uzis" tabindex="0" role="button" aria-label="Ústav zdravotnických informací a statistiky">
+              <rect x="606" y="386" width="112" height="44" rx="6"/>
+              <text class="schema-node-label" x="662" y="405">ÚZIS</text>
+              <text class="schema-node-sub" x="662" y="421">zdravotní statistika</text>
+            </g>
+
+            <g class="schema-node schema-node-support" data-node="kraje" tabindex="0" role="button" aria-label="14 krajů České republiky">
+              <rect x="34" y="366" width="112" height="44" rx="6"/>
+              <text class="schema-node-label" x="90" y="385">Kraje</text>
+              <text class="schema-node-sub" x="90" y="401">14 krajů ČR</text>
+            </g>
+
+          </svg>
+
+          <div class="schema-panel" id="schemaPanel" aria-live="polite">
+            <p class="schema-hint">Klikněte na uzel nebo ho aktivujte klávesou Enter pro zobrazení detailu aktéra.</p>
+          </div>
+        </div>
+
+        <section class="schema-fallback" aria-label="Přehled aktérů systému">
+          <h4>Aktéři systému</h4>
+          <ul id="schemaFallbackList"></ul>
+        </section>
+
+      </div>
+    </section>
   </div>
 
   <article id="detailView" class="detail-view hidden"></article>
