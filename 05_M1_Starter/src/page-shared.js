@@ -89,24 +89,28 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </p>
 
         <!--
-          MailerLite Universal embed — account 2206303, form 186842930008294691.
-          Universal script se injectuje jednou (viz injectMailerLiteScript níže).
-          Pokud by MailerLite konkrétní formulář vyžadoval jiný HTML snippet,
-          stačí nahradit obsah tohoto <div id="newsletterMailerLite"> za snippet
-          z MailerLite UI: Forms → daný formulář → Embed → Use HTML.
+          MailerLite formulář — account 2206303, form 186842930008294691.
+          Vlepený jako iframe MailerLite share preview URL — funguje i bez
+          Universal scriptu (Universal pattern vyžaduje, aby formulář byl
+          v MailerLite Forms typu „Embedded"; share URL renderuje formulář
+          přímo na CDN MailerLite).
         -->
         <div class="newsletter-form-slot" id="newsletterMailerLite">
-          <div class="ml-embedded" data-form="186842930008294691"></div>
+          <iframe
+            class="newsletter-iframe"
+            src="https://preview.mailerlite.io/forms/2206303/186842930008294691/share"
+            title="Přihlášení k newsletteru HSPA Monitor"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
           <noscript>
             <p class="newsletter-status" data-tone="info">
-              Pro přihlášení k newsletteru je potřeba JavaScript. Alternativně
-              <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřete formulář v novém okně ↗</a>.
+              <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">Otevřete formulář v novém okně ↗</a>
             </p>
           </noscript>
         </div>
 
         <p class="newsletter-foot">
-          Pokud formulář není vidět, můžete <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřít přihlašovací stránku přímo ↗</a>. Více v <a href="o-projektu.html">O projektu</a>.
+          Provozováno přes MailerLite. Pokud iframe nezobrazuje formulář, můžete <a href="https://preview.mailerlite.io/forms/2206303/186842930008294691/share" target="_blank" rel="noopener">otevřít přihlašovací stránku přímo ↗</a>. Více v <a href="o-projektu.html">O projektu</a>.
         </p>
       </div>
     </aside>
@@ -141,22 +145,6 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
     </div>
   `;
   injectScrollToTop();
-  injectMailerLiteScript();
-}
-
-/**
- * Injectuje MailerLite Universal tracker (account 2206303). Idempotent —
- * jen jednou na celé session. Universal skript pak vykreslí všechny
- * <div class="ml-embedded" data-form="..."> v DOMu.
- *
- * Pokud bude potřeba účet vyměnit, stačí změnit ml('account', ...) níže.
- */
-function injectMailerLiteScript() {
-  if (typeof window === 'undefined' || window.ml || document.getElementById('mlUniversalLoader')) return;
-  const s = document.createElement('script');
-  s.id = 'mlUniversalLoader';
-  s.text = `(function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);},l=d.createElement(e),l.async=1,l.src=u,n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');ml('account', '2206303');`;
-  document.head.appendChild(s);
 }
 
 /**
