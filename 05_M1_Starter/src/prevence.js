@@ -2,6 +2,7 @@
 // Načítá data/prevention.json + indicators.json + strategies.json
 // a renderuje list karet témat nebo detail jednoho tématu (z URL ?id=...).
 
+import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 
 // Indikátory zobrazené v hero stats

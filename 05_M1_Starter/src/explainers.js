@@ -2,6 +2,7 @@
 // Načítá data/explainers.json + strategies.json (pro cross-link)
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
+import './analytics.js';
 import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';

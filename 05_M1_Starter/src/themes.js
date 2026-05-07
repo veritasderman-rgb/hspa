@@ -2,6 +2,7 @@
 // Načítá data/themes.json + indicators.json + strategies.json + explainers.json
 // a renderuje list karet témat nebo detail jednoho tématu (z URL ?id=...).
 
+import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 
 let allThemes = [];
