@@ -3,6 +3,7 @@
 // regionální mapu (tile-map 14 krajů ČR) + tabulku, narativní bloky
 // (determinanty, význam) z metodické karty a kompletní metodiku.
 
+import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 import { renderCzMap } from './cz-map.js';
 

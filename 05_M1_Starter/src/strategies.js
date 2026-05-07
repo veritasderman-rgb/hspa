@@ -2,6 +2,7 @@
 // Načítá data/strategies.json + data/explainers.json (pro tranzitivní cross-link)
 // a renderuje rozcestí (level filter, search) nebo detail (z URL ?id=...).
 
+import './analytics.js';
 import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 import { buildIndex, loadLinks } from './strategy-links.js';
 import { renderTimeline, renderResponsibilityMatrix } from './strategy-policy-views.js';

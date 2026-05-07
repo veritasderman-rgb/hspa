@@ -1,6 +1,7 @@
 // Frontend logika stránky glosar.html.
 // Načítá data/glossary.json a renderuje prohledávatelný seznam pojmů.
 
+import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 
 let allTerms = [];

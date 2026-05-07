@@ -2,6 +2,7 @@
 // Načítá data z /data/indicators.json a renderuje karty + scorecard + regiony.
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
+import './analytics.js';
 import { renderFooter } from './page-shared.js';
 
 const DATA_URL = 'data/indicators.json';
