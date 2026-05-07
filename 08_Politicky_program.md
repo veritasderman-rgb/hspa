@@ -1,273 +1,161 @@
 # Program pro moderní zdravotnictví
 
-> **Editorial poznámka.** Tento dokument je politický manifest pro volby do Poslanecké sněmovny 2025. Hlásí se k němu autor projektu HSPA Monitor (Josef Pavlovic). Tento text **není redakční analýza** ani oficiální stanovisko projektu. Je to autorův osobní postoj k reformě českého zdravotnictví. V projektu HSPA Monitor je archivován proto, že většina návrhů přímo navazuje na data, která dashboard sleduje, a proto, aby byl dohledatelný v jednom místě s daty, na kterých stojí.
+> **Editorial poznámka.** Tento dokument je politický manifest pro volby do Poslanecké sněmovny 2025. Hlásí se k němu autor projektu HSPA Monitor (Josef Pavlovic). Není to redakční analýza ani oficiální stanovisko projektu HSPA Monitor — je to autorův osobní postoj k reformě českého zdravotnictví, formulovaný v dlouhodobé spolupráci s kolegyněmi a kolegy z České pirátské strany (ČPS) a v diskusi s pacientskými organizacemi. V repu projektu HSPA Monitor je archivován proto, že většina návrhů přímo navazuje na data, která dashboard sleduje, a aby byl dohledatelný v jednom místě s těmito daty.
 
 ---
 
-V diskusi s pacientskými sdruženími jsme pro nadcházející volební období identifikovali následující témata, na která považujeme za potřebné se zaměřit. Každému z nich jsme se v minulých letech věnovali, v některých případech včetně přípravy pozměňovacích návrhů zákona.
+## Hodnoty, na kterých to celé stojí
 
-## Základní teze a hodnoty
+Na začátku je třeba říct, kdo je v zdravotnictví středobodem. Pojištěnec a pacient — ne ministerský úředník, ne lobbista, ne primář. Dostupnost, kvalita a úhrady péče se posuzují s ohledem na dopad na klienta systému. Úhradové mechanismy následují pohyb klienta a směřují ke službám podle kvality, ne podle historie smluvních vztahů. Práva pojištěnce jsou na prvním místě — od digitálního zdravotního záznamu přes objemové i kvalitativní ukazatele jednotlivých poskytovatelů a doplatky na léky až po reálnou dostupnost péče. Pojištěnec má právo volby pojišťovny, která mu garantuje dostupnost péče; dohled nad plněním této povinnosti vykonává Ministerstvo zdravotnictví jako garant ústavních práv pacienta.
 
-- **Klient zdravotního systému (pojištěnec, pacient) je středobodem** nastavení, organizace a financování systému. Dostupnost, kvalita a úhrady zdravotní péče musí být posuzovány s ohledem na dopad na klienta. Úhradové mechanismy následují pohyb klienta systémem zdravotní péče a jsou směřovány ke službám podle kvality.
-- **Elektronizace zdravotnictví má primárně přinášet snížení administrativy lékařů a poskytovatelů.** Eliminovat nutnost výpisů ze zdravotní dokumentace, umožnit sdílení dokumentace mezi lékaři. Dostupnost dat pro pacienty a stát má být vedlejším efektem, ne primárním záměrem. Snadná dostupnost zdravotních dat klientům přispěje k vyšší zdravotní gramotnosti a kontrole nad vlastním zdravím.
-- **Práva pojištěnce jsou na prvním místě.** Pojištěnec má právo získat všechny dostupné informace pro své rozhodování — od digitálních zdravotních záznamů přes informace o objemových a kvalitativních ukazatelích na úrovni poskytovatelů, doplatcích na léky až po reálnou dostupnost péče.
-- **Pojištěnec má právo volby zdravotní pojišťovny**, která pro něj zajišťuje a garantuje dostupnost péče. Zda se tak děje, monitoruje a vymáhá Ministerstvo zdravotnictví jako garant ústavních práv pacienta.
-- **Úhrady z veřejného zdravotního pojištění** od léků po výkony se stanovují na základě racionálního hodnocení nákladů a přínosů, které zajistí efektivní využití zdrojů a vytváří nepodkročitelný slib péče. Transparentní a přezkoumatelný proces umožňuje účast všech zúčastněných stran včetně pacientů.
-- **Systém veřejného zdravotního pojištění musí být dlouhodobě udržitelný** — z hlediska kvality péče i rovného přístupu. Financování z více zdrojů je předpokladem stability.
+Elektronizace zdravotnictví má primárně sloužit k tomu, aby lékaři a další poskytovatelé měli méně administrativy — výpisy z dokumentace, kterou si dnes ručně předávají, sdílení informací mezi pracovišti. Přístup pacientů a státu k datům je vedlejší efekt, ne primární záměr. Tam, kde se začne datovou infrastrukturou stavět dohled nad lékaři místo služba lékařům, elektronizace selže.
+
+Úhrady z veřejného zdravotního pojištění mají být výsledkem racionálního, transparentního a přezkoumatelného procesu hodnocení nákladů a přínosů, do kterého mají právo vstoupit i pacienti. Standard hrazené péče má být nepodkročitelný slib — to, co stát svým pojištěncům garantuje, ne to, co se případně vyjedná. A celý systém musí být dlouhodobě udržitelný, financovaný z více zdrojů. Bez vícezdrojového financování nelze rovný přístup ke kvalitní péči garantovat každému.
 
 ---
 
 ## 1. Za stejné peníze více muziky
 
-**Cíl.** Pomocí racionálního hodnocení nákladů a přínosů výkonů a technologií ve zdravotnictví získáme za stejný objem veřejných prostředků více užitku pro pacienty. Vytvoříme transparentní proces hodnocení, jehož výsledkem bude jasně definovaný standard hrazené péče financovaný ze základního fondu, a do rozhodování umožníme vstupovat pacientům. Definovaný standard bude dostupný každému pacientovi nehledě na volbu zdravotní pojišťovny.
+České zdravotnictví dnes platí prakticky vše, co jeho aktérům zákon ukládá platit, a velmi malou část toho podléhá systematickému hodnocení nákladů a přínosů. U léků aspoň existuje úhradové řízení přes SÚKL. U výkonů, technologií a organizačních modelů je situace mnohem méně formalizovaná — stejná diagnóza pak může v různých zařízeních znamenat různý postup, různé náklady a různé výsledky bez transparentního důvodu. Důsledkem je systém, který vydává hodně peněz, ale bez kontroly nad tím, jestli z nich plyne přiměřený užitek pro pacienty.
 
-**Návrh řešení.**
+Cílem reformy v této oblasti je institucionalizovat proces hodnocení s přesně definovanými pravidly, otevřeností pro pacienty a výstupem v podobě standardu péče. Standard je nepodkročitelný slib pacientům, který platí nehledě na pojišťovnu — pojišťovny pak soutěží formou nadstandardních služeb a úpravy pojistných plateb, ne tím, jestli pojištěnec dostane základní péči. Na definici standardu se podílejí odborné společnosti prostřednictvím doporučených postupů postavených na evidence-based medicine. Proces sám zabere déle než jedno volební období; odložit ho ale dál nelze.
 
-- Definice procesu a pravidel, která umožní vstup nových i přehodnocení stávajících intervencí a technologií. Nevylučujeme nutnost vzniku samostatné instituce, která bude proces zajišťovat.
-- Výsledkem procesu bude definice standardu — nepodkročitelný slib pacientům s ohledem na možnosti českého zdravotnictví. Obdobně dnes funguje u léků, kde indikační omezení úhrady představuje absolutní, soudně vymahatelný slib. Na definici standardu se budou podílet odborné společnosti prostřednictvím doporučených postupů postavených na EBM. Proces bude trvat déle než jedno volební období, ale je nutné jej započít.
-- Standardní péče bude hrazena ze základního fondu zdravotního pojištění každé pojišťovny a bude garantována každému pojištěnci. Pojišťovny budou moci soutěžit formou úhrady nadstandardních služeb a úpravy pojistných plateb.
-- Dohled nad poskytováním standardní péče má Ministerstvo zdravotnictví, kterému to již dnes ukládá zákon a má na to nástroje (především pokuty).
+Modely takového procesu jsou v Evropě dlouho zaběhlé. Britský NICE provádí systematická HTA hodnocení od roku 1999 a stanovuje kritéria úhrady pro NHS. Německý G-BA s technickou podporou IQWiG plní obdobnou roli; francouzská HAS hodnotí výkony i technologie s důrazem na klinickou přidanou hodnotu (SMR a ASMR); Skandinávie má SBU a obdobné instituce. Žádný z těchto systémů není dokonalý, ale všechny mají to, co Česku chybí — institucionalizovaný, přezkoumatelný proces s jasnými výstupy.
 
 ---
 
 ## 2. Možnost volby bez úplatků a kulichů
 
-**Cíl.** Umožnit poskytovat péči nad rámec standardu — buď přímou úhradou rozdílu u poskytovatele, nebo přes připojištění u zdravotní pojišťovny. Transparentní platba za nadstandard vytvoří další zdroj financování — předpoklad dlouhodobé finanční stability.
+Pacient, který chce péči nad rámec standardu, dnes naráží na šedou zónu. U nadstandardních materiálů, vyššího komfortu nebo nadstandardních pokojů existuje nejasný režim plateb, často řešený přes „sponzorské dary" nebo přímou hotovostní platbu mimo systém. Je to problém daňový, etický i právní současně — a ze strany pacienta nepředvídatelný, protože nikdo neví, na čem se ve které nemocnici dá dohodnout.
 
-**Návrh řešení.**
+Navrhujeme transformaci dnešního fondu prevence (který nemá pravidla pro využití) na fond rozšířené péče. Z něj může pojišťovna hradit služby nad rámec standardu — vzniká prostor pro skutečnou konkurenci pojišťoven. Přístup může být podmíněn připojištěním nebo dodržováním preventivních doporučení. Na fond rozšířené péče se nevztahuje pravidlo racionálního hodnocení přínosů a nákladů jako na fond základní; tam je to právě naopak. A pokud pojištěnec připojištění nemá a chce lepší péči přímo u poskytovatele, doplatí transparentně rozdíl mezi standardem a nadstandardem — bez nutnosti uplácet a obcházet zákon.
 
-- Vznikne **fond rozšířené péče** transformací dnešního fondu prevence (který už dnes nemá pravidla pro využití).
-- Pojišťovna z fondu rozšířené péče bude moci hradit služby nad rámec standardu — vytváří se prostor pro konkurenci pojišťoven. Přístup může být podmíněn připojištěním nebo dodržováním preventivních doporučení.
-- Na fond rozšířené péče se nebude vztahovat pravidlo racionálního hodnocení přínosů a nákladů jako na základní fond.
-- Pokud pojištěnec nebude mít připojištění a bude chtít lepší péči přímo u poskytovatele, může transparentně doplatit rozdíl mezi standardní a nadstandardní péčí — bez nutnosti uplácení a obcházení zákona formou „sponzorských darů".
+Inspiraci najdeme zejména v zemích s dvouvrstvými systémy. Nizozemsko od roku 2006 kombinuje povinné základní pojištění (basisverzekering) s dobrovolným připojištěním (aanvullende verzekering); Švýcarsko má povinnou pojistnou základnu plus rozsáhlý trh dobrovolných nadstandardů; Francie pracuje s doplňkovými pojištěními (mutuelles, assurances complémentaires), která pokrývají velkou část doplatků. Společným jmenovatelem všech tří modelů je jasná hranice mezi tím, co garantuje stát, a tím, co lze koupit jako extra — a tedy konec šedých zón.
 
 ---
 
 ## 3. Zdravotnictví ve službách pojištěnců
 
-**Cíl.** Pojištěnci si do správních a dozorčích orgánů budou volit své zástupce v přímé volbě a budou mít vliv a dohled na nakládání s prostředky. Zdravotní pojišťovny garantují tvorbu a smluvní udržování funkční sítě poskytovatelů. Úhradová vyhláška, která udržuje nerovnosti, bude buď zrušena, nebo ponechá pouze základní rámec, a postupně bude nahrazována moderními úhradovými mechanismy upřednostňujícími potřeby klientů.
+Správní rady zdravotních pojišťoven dnes nereflektují strukturu pojištěnců, jejichž peníze pojišťovna spravuje, ale strukturu ministerských úředníků a politiků. Pojištěnec do správy svého systému de facto nemluví. K tomu se přidává úhradová vyhláška, která centrálně plánuje platby způsobem dlouhodobě zvýhodňujícím některé poskytovatele oproti jiným — typicky fakultní nemocnice oproti krajským za stejný výkon.
 
-**Návrh řešení.**
+Změna stojí na třech věcech. Za prvé na přímé volbě zástupců pojištěnců do správních a dozorčích rad zaměstnaneckých a resortních pojišťoven; správní a dozorčí rada Všeobecné zdravotní pojišťovny by měla být volena poslanci bez zástupců ministerstev (ti dnes narušují poměr demokraticky zvolených stran), s posílenými pravomocemi dozorčí rady a se zachováním míst pro zástupce MZ, MF a MPSV v dozorčí radě. Ve správních a dozorčích radách nesmí zasedat zástupci poskytovatelů péče — to je elementární prevence konfliktu zájmu. Za druhé na nahrazení dnešní úhradové vyhlášky moderními úhradovými mechanismy, které postupně přejdou na funkční systém DRG (Diagnosis Related Groups). A za třetí na povinnosti pojišťoven zaznamenávat plnění nároku pojištěnců, aby čekací listy přestaly být vedeny netransparentně na straně poskytovatelů.
 
-- Správní a dozorčí rady zaměstnaneckých a resortních pojišťoven volí přímo pojištěnci. Správní a dozorčí rada VZP volena poslanci bez zástupců ministerstev (kteří dnes narušují poměr demokraticky zvolených stran). Posílení pravomocí dozorčí rady. V dozorčí radě VZP zachována místa zástupců MZ, MF a MPSV.
-- Zrušení úhradové vyhlášky (nebo její redukce na rámec) umožní moderní úhradové mechanismy, které povedou k lepší kontrole sítě poskytovatelů pojišťovnami a odstraní nerovnosti.
-- **Zavedení funkčního systému DRG bez dalšího zdržování.** Cílem DRG systému je spravedlivé platby za nemocniční diagnózy napříč poskytovateli a odstranění historické diskriminace mezi poskytovateli nemocniční péče. Fakultní nemocnice se mají soustředit na speciální péči, za kterou budou přiměřeně odměňovány.
-- Pojišťovny budou mít povinnost zaznamenávat údaje o plnění nároku pojištěnců. Cílem je odstranění waiting listů, které jsou dnes vedeny na straně poskytovatelů na hraně zákona, nebo přímo za ní.
-- Ve správních ani dozorčích radách nebudou moci zasedat zástupci poskytovatelů péče (konflikt zájmu).
+DRG je v Evropě dvacet let standardem. Německo zavedlo G-DRG postupně od let 2003–2004 a dnes je to jeden z nejvíc rozvinutých DRG systémů v Evropě. Francie spustila T2A (Tarification à l'activité) v období 2004–2008 a postupně rozšířila pokrytí na akutní lůžkovou péči. Skandinávské země používají sdílený NordDRG. Z hlediska demokratizace pojišťoven jsou inspirativní německé Krankenkassen volené samosprávně zástupci pojištěnců i zaměstnavatelů. Žádný z těchto modelů není přenositelný 1:1, ale všechny ukazují, že jak DRG, tak demokratičtější struktura pojišťoven jsou dlouhodobě vyzkoušené, ne experiment.
 
 ---
 
 ## 4. Transparence
 
-**Cíl.** Zveřejněním vypovídajících dat o kvalitě péče (s komentářem a anonymizovanými daty, aby si každý mohl ověřit originální data) a způsobech léčby se zlepší samotné zdravotnictví. Lékaři mohou hledat inspiraci v jiných nemocnicích. Měřením doby do léčby ovlivníte i rychlost, s jakou pacient léčbu dostane, a umožníte kvalifikovanou volbu.
+Data o českém zdravotnictví dnes vycházejí jako časově zpožděné PDF ročenky, které neumožňují ověření ani další práci s daty. Pacient před plánovaným zákrokem nemá srovnatelné informace o úspěšnosti, čekací době a kvalitě péče v jednotlivých zařízeních. Lékař při překládání pacienta často telefonuje nemocnice v okolí — protože nezná aktuální kapacity. Co by mělo být veřejnou infrastrukturou, je dnes řešeno improvizací.
 
-> **Co můžete změřit, můžete zlepšit. Co můžete změřit, můžete porovnat a najít nejvhodnější přístup.**
+Cílem reformy je publikovat anonymizovaná data o českém zdravotnictví na úrovni poskytovatele — s komentářem a v otevřeném formátu, aby každý mohl ověřit originál a pracovat s daty dál. Aktuální data, ne zpožděná o roky. Pacient před zákrokem dostane informaci o zařízeních, která jeho zákrok provádějí, s čekací dobou, kvalitativními ukazateli a vzdáleností; lékař vidí volné kapacity v reálném čase. Jako rámec hodnocení kvality použijeme HSPA (Health System Performance Assessment), který Česko přijalo v roce 2023 ve spolupráci s OECD, ale jehož implementace zatím nepostoupila.
 
-**Současný stav.** Data o českém zdravotnictví vycházejí jako časově zpožděné PDF ročenky, které neumožňují ověření ani další práci. Je nezbytné, aby všechny publikace o českém zdravotnictví (ÚZIS atd.) měly dostupnou datovou sadu v otevřeném formátu a aby se zveřejňovala aktuální data s minimálním zpožděním.
-
-**Návrh řešení.**
-
-- Inspirace z UK: pacient před chystaným zákrokem dostane od NHS informaci s seznamem zdravotnických zařízení (včetně webových odkazů), která zákrok provádějí v jeho okolí. Sám si vybere podle čekací doby, kvality, vzdálenosti.
-- Zavedeme **HSPA — Health System Performance Assessment** jako rámec pro hodnocení kvality péče.
+Modely fungují v zahraničí dlouhodobě. Britský NHS Digital a navazující nástroje („NHS — find a hospital") publikují výkonová data jednotlivých zařízení a jejich kvalitu. Americký CMS Hospital Compare srovnává nemocnice podle mortality, readmise a kvality péče. Skandinávské země mají dlouhou tradici otevřených klinických registrů — švédské Nationella kvalitetsregister jsou přes tři dekády staré a stále se rozšiřují. Co se měří, lze zlepšit; co se neměří, zůstává v anekdotě.
 
 ---
 
 ## 5. Dostupné léky běžné i moderní
 
-**Cíl.** Zlepšit dostupnost léčivých přípravků a informací o nich.
+Dostupnost léčiv v Česku má více vrstev nedostatků. Nejednotná dostupnost mezi lékárnami, neznalost doplatku předem, omezené pravomoci lékárníků, chybějící systematická politika pro orphan léky a chybějící robustní mechanismus pro výpadky. Pacient, který hledá lék podle nejnižšího doplatku, dnes obvolává nebo obíhá několik lékáren — informace, která má být na klik, je v praxi nákladně získávaná.
 
-**Návrh řešení.**
+Reforma spočívá v sadě opatření, která dostupnost srovnají do podoby, kterou pacient od moderního systému očekává. Kurýrní rozvoz léků s lékárnickou kontrolou před výdejem a bezplatnou dálkovou konzultací; rozšíření pravomocí lékárníků v prevenci, záchytu a očkování — vrátíme tak do profese lékárníka odbornost, ne jen obchod. Online srovnávač doplatků v reálném čase, vzdálené ověření dostupnosti léku ve vybrané lékárně, závazná objednávka. Stát (MZ a SÚKL) udržuje seznam základních léků s aktivním zajištěním dostupnosti při výpadcích — prodloužením registrace, zvýšením úhrady ve veřejném zájmu, mimořádným dovozem.
 
-- **Kurýrní rozvoz léků** jasně definovaným postupem chránícím zdraví pacienta. Před výdejem každý recept a dávkování zkontroluje lékárník, lék předá vyškolený kurýr a pacientovi je umožněna bezplatná dálková konzultace.
-- **Rozšíření pravomocí lékárníků** v oblasti prevence, záchytu onemocnění nebo očkování. Vrátíme do profese lékárníka odbornost, ne jen obchod.
-- **Online dostupný srovnávač doplatků** v reálném čase. Pacient ví, jaký doplatek ho čeká, bez obíhání lékáren.
-- **Vzdálené ověření dostupnosti léku** ve vybrané lékárně, závazná objednávka, kurýrní výdej.
-- **Seznam základních léků** s kontinuálně sledovanou dostupností. V případě nedostupnosti stát (MZ, SÚKL) aktivně zajišťuje dostupnost (prodloužení registrace, zvýšení úhrady ve veřejném zájmu, mimořádný dovoz).
-- **Nemocniční léčiva a očkovací látky** podléhají hodnocení nákladové efektivity a dopadu na rozpočet. U zaměnitelných přípravků úhrada do výše ekonomicky nejméně nákladné varianty.
-- **Úhradová soutěž** — zdravotní pojišťovny ji budou moci pořádat.
+Mezinárodní zkušenost s rozšířenou rolí lékárníka existuje řadu let. Britský NHS Community Pharmacy Contractual Framework dává komunitním lékárníkům pravomoc očkovat proti chřipce, poskytovat prevenci a poradenství; ve Spojených státech mají farmaceuti pravomoc očkovat od 90. let. Belgie zavedla medication review jako placenou službu lékárníka; Nizozemsko má kurýrní výdej jako standard. Pro orphan léky provozují systematické HTA hodnocení a oddělené úhradové fondy například Belgie a skotská SMC (Scottish Medicines Consortium). Princip je společný: lékárník je odborník v primárním kontaktu s pacientem, ne pokladní.
 
-### Orphan léky
-
-Počet orphan léčiv s rozvojem personalizované medicíny poroste. Personalizovaná léčba cílí na užší populaci pacientů a vede ke zvýšení nákladů. Pro orphan léky bude vybudován **nezávisle financovaný fond** a způsob hodnocení přínosu (širší než u běžných léčiv). Bez hodnocení nebude úhrada z veřejných zdrojů možná. Hranice ochoty platit se bude lišit podle počtu potenciálních pacientů. Celkový objem prostředků pro skupinu bude vždy limitován v souladu s udržitelností financování. Maximální výše nákladů na pacienta a rok hrazená z veřejných zdrojů bude určena. Rozdíl bude možné čerpat ze speciálních fondů, neveřejných zdrojů či sbírek.
+Otázka orphan léků si zaslouží samostatnou pozornost. S rozvojem personalizované medicíny počet orphan léčiv dále poroste a jejich úhrada bez vlastní metodiky a fondu by mohla narušit dostupnost léčby pro běžnou populaci. Navrhujeme nezávisle financovaný fond pro orphan léky a širší metodiku hodnocení (nad rámec standardního HTA), s povinností hodnocením projít. Maximální výše nákladů na pacienta a rok hrazená z veřejných zdrojů bude předem stanovena; rozdíl půjde z dalších fondů, nepojistných zdrojů či sbírek.
 
 ---
 
 ## 6. Zdravotně sociální pomezí
 
-**Cíl.** Funkční propojení zdravotního a sociálního systému — kontinuální zdravotně-sociální péče, která nebude neefektivně zneužívána a zároveň v některých segmentech podfinancovaná. Pacient čerpá zdravotní služby, jen pokud existuje medicínská potřeba, indikace a možnost léčby.
+Česká nemoc je administrativně rozdělena mezi dvě ministerstva — zdravotnictví a práce a sociálních věcí. Na zdravotně-sociálním pomezí, kterým prochází pacient po cévní mozkové příhodě, senior s demencí nebo terminálně nemocný v hospici, to znamená, že v nemocnici zůstává „na sociálním lůžku" déle, než je medicínsky nutné, protože se nedaří najít místo v zařízení sociálních služeb. Sociální systém zase nedoplácí výkony, léky a prostředky, které by oddálily generování nákladů ve zdravotním systému. Obě strany řeší jinou agendu, ale nikdo neoptimalizuje celek.
 
-**Návrh řešení.**
+Reforma propojuje oba systémy v rovině, ve které pacient ve skutečnosti žije. Zdravotním pojišťovnám umožňujeme hradit sociální služby, pokud sníží náklady ve zdravotnictví; sociální systém recipročně doplácí zdravotní výkony, pokud zamezí nebo oddálí generování nákladů v jeho oblasti. Posilujeme úhrady domácí péče místo neoblíbených LDN — pacient má mít maximální péči v domácím prostředí a ve své komunitě. Doplňujeme paliativní a hospicovou péči pro důstojný konec života. A přítomnost rodiny v nemocnici s pacientem se stane samozřejmostí a základním právem bez výjimek.
 
-- Zdravotní pojišťovny mohou hradit sociální služby, které sníží náklady u pacientů, kteří v péči zdravotního systému zůstávají déle, než je nutné. Sociální systém naopak doplácí výkony, léky a prostředky, které zamezí nebo oddálí generování nákladů v sociálním systému.
-- Posílení úhrad domácí péče, která by měla nahrazovat neoblíbené LDN. Pacient má mít maximální péči v domácím prostředí. Doplnění o úhrady paliativní a hospicové péče.
-- **Přítomnost rodiny v nemocnici s pacientem se stane samozřejmostí a základním právem bez výjimek.**
-- Analýzy dopadu z pohledu zdravotního i sociálního systému (celospolečenská perspektiva veřejných rozpočtů). Nemoc je zároveň zdravotní a sociální událostí.
-- Zveřejňování dat ze sociálního systému v rozsahu pojistných i nepojistných dávek na všech úrovních.
+V zahraničí jsou taková propojení dvacet let zaběhlá. Britský NHS Better Care Fund (od roku 2014) sdílí financování zdravotně-sociální péče napříč NHS a místními samosprávami. Nizozemská Wmo (Wet maatschappelijke ondersteuning, 2015) propojuje sociální podporu se zdravotnictvím v jednom režimu. Skandinávské země mají dlouhodobě integrovanou péči o seniory na úrovni krajů a obcí, kde zdravotní a sociální služby plánují společný rozpočet. Fenomén „sociální lůžko v nemocnici" v rozsahu, který známe z Česka, v žádné z těchto zemí neexistuje.
 
 ---
 
 ## 7. Světový klinický výzkum
 
-**Cíl.** Provádět v ČR klinický výzkum na světové úrovni — pro pacienty, vědce i společnost. Umožnit vědcům a inovativním firmám výzkum bez zbytečné byrokracie a s organizační i finanční podporou.
+V Česku probíhá řada klinických studií, ale podstatná část je iniciována a vlastněna nadnárodními farmaceutickými firmami. Akademický výzkum trpí nepřehledným financováním, byrokracií a slabou podporou v oblasti monitoringu a auditu studií. Pandemie covidu ukázala, že systém grantového financování není schopen reagovat agilně — sedm měsíců po vypuknutí pandemie nebyla v ČR vyhlášena jediná grantová soutěž reflektující koronavirus. Sekundárním problémem je odliv duševního vlastnictví a přidané hodnoty z ČR.
 
-**Návrh řešení.**
+Cílem reformy je nový program Agentury pro zdravotnický výzkum (AZV) zaměřený na akademické klinické studie, se zajištěním klinického auditu a monitoringu po vzoru evropského ECRIN. Doplňuje ho jednotný systém účelových mikrograntů pro biomedicínský výzkum pod správou MZČR — agilní nástroj, který dnes chybí. Klíčovou součástí je systém kontroly a vyhodnocování praktických dopadů: dnes prakticky neexistuje zpětná vazba mezi vědeckým výstupem a tím, co se reálně děje v ambulancích. A samozřejmostí je transparentní rozdělování financí, zveřejňované na webu v přehledné podobě.
 
-- **AZV — nový program pro akademické klinické studie** se zajištěním klinického auditu a monitoringu (inspirace v projektu ECRIN).
-- **Jednotný systém účelových mikrograntů** zaměřených na biomedicínský výzkum (pod správou MZČR).
-- **Systém kontroly a vyhodnocování praktických dopadů** klinického výzkumu.
-- **Zvýšení transparence rozdělování financí** — vše zveřejňováno na webových stránkách v přehledné podobě.
+ECRIN (European Clinical Research Infrastructures Network) je multinacionální infrastruktura, na které ČR může a měla by aktivně participovat. Britský NIHR (National Institute for Health and Care Research) je modelem propojení akademického zdravotního výzkumu se státním systémem; francouzské Centres de Recherche Cliniques jsou síťově propojené s univerzitními nemocnicemi; Skandinávie má dlouhodobě silné akademické HTA a registrový výzkum. Cílem není výzkum „farmu"; cílem je akademická kapacita, která zachová přidanou hodnotu v ČR.
 
 ---
 
 ## 8. Prevence jako standard
 
-**Současný stav.**
+Na preventivní programy české zdravotnictví dlouhodobě vydává malý zlomek celkových výdajů a růst v segmentu prevence je výrazně pomalejší než v segmentu léčebné péče. Při srovnání let 2017 a 2018 vzrostly výdaje na léčebnou péči o 14 procent, na preventivní péči pouze o 2,3. Zároveň primárními příčinami úmrtí v ČR jsou kardiovaskulární a nádorová onemocnění, jejichž významná část je preventabilní. V dashboardu HSPA Monitoru se to ukazuje napříč indikátory: kardiovaskulární mortalita 220 oproti 140 v OECD, incidence kolorektálního karcinomu 73,5 vs. 36,5, účast na kolorektálním screeningu 28 procent vs. 42, denní kuřáctví 22,6 procenta vs. 16, spotřeba alkoholu 14,4 vs. 8,9 litru čistého alkoholu na osobu starší patnácti let. Koncepce Zdraví 2030 má dobré cíle, ale chybí jí odbor a tým, který by ji důsledně realizoval.
 
-1. **Financování preventivní péče.** Na preventivní programy české zdravotnictví vydává přibližně 2 % z celkových výdajů. Při srovnání 2017/2018 výdaje na léčebnou péči vzrostly o 14 %, na preventivní péči pouze o 2,3 %. To je v přímém kontrastu s tím, že primárními příčinami úmrtí jsou kardiovaskulární a nádorová onemocnění, z nichž je významná část preventabilní.
-2. **Vzdělávání veřejnosti.** Ucelený program neexistuje. Většinu osvětových programů zajišťují neziskové organizace bez dostatečné podpory státu.
-3. **Realizace koncepce Zdraví 2030.** MZČR plán připravilo, ale nemá odbor či skupinu, která by se prevenci přímo věnovala. Finance nejsou rozdělovány transparentně.
+Reforma znamená navýšit financování prevence tak, aby růst odpovídal růstu výdajů v jiných segmentech. Funkční spolupráce s Ministerstvem školství na komplexním edukativním programu prostupujícím všemi stupni vzdělávání. Podpora neziskových organizací, které prevenci dlouhodobě dělají lépe než státní aparát. Hrazená dentální hygiena pro děti a mladistvé do 18 let — z dat Všeobecné zdravotní pojišťovny od roku 2008 systematicky narůstá počet ošetřených dětských kazů, přitom jde o téměř plně preventabilní onemocnění. Aktivní zvaní u všech populačních screeningů. Bonifikace praktických lékařů za měřitelně lepší výsledky u dispenzarizovaných pacientů. A elementární součást, na kterou se v Česku nesahá: prevence je o každodennosti, ne o tiskové konferenci.
 
-**Cíl.**
-
-- Navýšit finance do prevence tak, aby poměrově odpovídaly nárůstu výdajů v jiných segmentech.
-- Vytvořit funkční spolupráci s resortem školství, podporovat organizace věnující se prevenci.
-- Zajistit, aby koncepce Zdraví 2030 byla prioritou s jasně rozdělenými kompetencemi a měřitelnými cíli.
-
-**Konkrétní směry.**
-
-- Cíl: aktivní a hodnotně žijící populace v důchodovém věku s minimem chronických chorob.
-- Cíl: minimální nemocnost dětské a produktivní populace.
-- Cíl: lékařům se má vyplácet uzdravení, ne léčení.
-- Cíl: maximalizovat obranyschopnost a posílit imunitu každého občana.
-
-**Návrh řešení.**
-
-- **Předcházet příkladem** — ne tisková konference tří obézních manažerů na téma prevence diabetu, ale ministr/yně, kteří jdou pěšky, choděj po schodech, ukazují, co mají k obědu. Prevence je o každodennosti.
-- **Hrazená dentální hygiena dětem a mladistvým do 18 let.** Z dat VZP od r. 2008 systematicky narůstá počet ošetřených dětských kazů. Zubní kaz je téměř plně preventabilní.
-- **Podpora zdravého životního stylu** jako prevence obezity (a navazujících onemocnění) na úrovni praktických lékařů — kde lze měřit i úspěšnost.
-- **Komplexní edukativní program** ve spolupráci s MŠMT, prostupující všemi stupni vzdělávání.
-- **Podpora neziskovek**, které prevenci dělají dlouhodobě.
-
-**Konkrétní opatření k diskusi.**
-
-- Snížení výdajů zdravotních pojišťoven za léky ve prospěch výdajů na prevenci a zdravý životní styl (fyzioterapeuti, lázeňská péče, psychoterapie, nutriční specialisté).
-- Příspěvky ze zdravotního pojištění na aktivizační a socializační programy seniorů (vč. mezigenerace).
-- Daňové zvýhodnění zaměstnavatelů, kteří přispívají na preventivní programy.
-- Finanční příspěvky ze zdravotního pojištění na pohybové kroužky pro děti.
-- Zavedení paušální platby na pacienta. Pokud lékař zanedbá prevenci, část léčby z prostředků lékaře.
-- Znovu zavedení regulačního poplatku pro produktivní věk v rámci širšího balíčku finanční spoluúčasti.
-
-> **CBA poznámka.** Přestože u laické veřejnosti převládá názor, že prevence sníží výdaje na budoucí léčbu, ekonomické analýzy se spíše přiklánějí k mírnému navýšení nákladů. Získanými benefity jsou ale lepší zdravotní stav populace, vyšší informovanost obyvatelstva a další pozitivní externality (sociální aspekty, životní styl).
+Že to jde, ukazují konkrétní programy. Finsko realizovalo od roku 1972 v severní Karélii projekt komplexní intervence proti kardiovaskulární mortalitě — snížení obsahu soli a tuků v potravinách, podpora pohybu, kontrola tlaku — a během několika dekád snížilo úmrtnost na ischemickou chorobu srdeční u středního věku o desítky procent. WHO dodnes uvádí severní Karélii jako vzor populační intervence. WHO Best Buys definuje sadu cost-effective intervencí pro nepřenosná onemocnění, od zdanění tabáku a alkoholu přes snížení soli až k podpoře fyzické aktivity a screeningů. Skotsko v roce 2018 zavedlo minimální cenu za jednotku alkoholu; následné evaluace zaznamenaly pokles spotřeby ve skupině nejtěžších pijáků a snížení úmrtí spojených s alkoholem. Nordické země drží účast na populačních screeningech kolem sedmdesáti procent a více — Česko se 28 procenty má kam růst.
 
 ---
 
 ## 9. Reforma stomatologie
 
-Reforma stomatologie je klíčovou součástí naší vize. Cílem je zajistit kvalitní dentální péči dostupnou všem občanům ČR bez ohledu na finanční situaci.
+Český systém hrazené stomatologické péče dlouhodobě nereflektuje moderní materiály, postupy ani roli dentální hygieny v prevenci. Hrazené výplně jsou stále z amalgámu, přestože EU jeho používání postupně omezuje. Zubní kaz u dětí — z velké části preventabilní — od roku 2008 systematicky narůstá. Mladí zubaři opouštějí smluvní vztahy s pojišťovnami, protože sazby nepokrývají moderní materiály a postupy. V regionech mimo Prahu a Brno je kvalitní stomatologická péče dostupná stále hůř.
 
-**Čtyři pilíře.**
+Reforma stojí na čtyřech pilířích. Prvním je definice a plné hrazení základních stomatologických výkonů z veřejného pojištění — fotokompozitní výplně, extrakce, prevence, dětská stomatologie. Druhým je revize zákonných regulací; stomatologie potřebuje pružnost, ne rigidní zákonné pojištění každého typu výrobku. Třetím je revidování úhrad stomatologických výrobků s možností přesunu mimo přísné regulační rámce, aby se moderní materiály mohly dostat k pacientům rychleji. Čtvrtým je odstranění přísných indikací pro dentální hygienisty — větší autonomie hygienistů jako klíčových hráčů v prevenci. Bezplatná dentální hygiena pro děti a mladistvé do 18 let je zase samozřejmým doplňkem.
 
-1. **Definice a plné hrazení základních stomatologických výkonů** z veřejného zdravotního pojištění (fotokompozitní výplně, extrakce, prevence). Inspirace ve skandinávském modelu — důraz na prevenci a základní péči.
-2. **Revize zákonných regulací.** Zákony týkající se stomatologických výkonů by měly být pružnější a méně rigidní. Inspirace v německém modelu.
-3. **Revidování úhrad stomatologických výrobků** — zvážit jejich přesun mimo zákonné regulace pro flexibilitu v používání moderních technologií a materiálů.
-4. **Odstranění přísných indikací pro dentální hygienisty (DH)** — větší autonomie hygienistů jako klíčových hráčů v prevenci. Inspirace v USA.
-
-**Výsledek.** Zubaři mimo Prahu a Brno budou moci poskytovat kvalitní péči bez nutnosti spoléhat se pouze na klienty s vyššími příjmy. Zlepší se dostupnost v celé ČR a motivace zubařů k návratu do smluvního vztahu s pojišťovnami.
+Inspirace existují. Švédsko poskytuje bezplatnou stomatologickou péči pro děti a mladistvé až do 23 let; pro dospělé existuje státní subvence (tandvårdsstöd). Dánsko a Norsko mají podobné systémy s důrazem na prevenci v dětství. Německo vyžaduje každoroční preventivní prohlídku jako podmínku plné úhrady (tzv. Bonusheft). Ve Spojených státech mají Dental Hygienists v některých státech (Maine, Colorado, Oregon) pravomoc poskytovat širokou škálu preventivní péče samostatně, bez supervize zubaře. Společný jmenovatel: investice do prevence v dětství výrazně snižuje náklady na pozdější léčbu — a dostupnost se zvedne všude tam, kde nemusí být v každém okrese pět zubařů, ale stačí dva zubaři a tři dobře vyškolené dentální hygienistky.
 
 ---
 
 ## 10. Data a informace ve službách pacienta
 
-**Cíl.** Lepší distribuce kvalitní zdravotní péče. Pacient nemusí absolvovat zbytečné testy. Záchranná služba je schopna poskytnout kvalitnější první pomoc. Lékaři léčí místo vyplňování dalších papírů.
+Index eHealth adoption je v ČR podle dashboardu HSPA Monitoru 62 oproti 70 v průměru OECD. Konkrétní dopady toho, co toto číslo měří: pacient přesouvaný mezi pracovišti často nese papírovou dokumentaci nebo CD. Lékař při hledání lůžka pro pacienta volá nemocnice po telefonu. Pacient před plánovanou operací nemá srovnatelné informace o čekací době v různých zařízeních. Záchranná služba v terénu nemá k dispozici aktuální zdravotní záznam pacienta, kterého ošetřuje. Elektronizace, kterou Česko deklaruje dvacet let, je v praxi úspěšná spíš v jednotlivostech — eRecept — než jako koherentní infrastruktura.
 
-Zavedeme jednotné standardy elektronizace, které umožní sdílení dat mezi poskytovateli, lékařům umožní vidět kapacitu systému (lůžka pro pacienta se specifickou chorobou, čekací časy v jednotlivých částech republiky). Data budou sbírána z existujících reportů, ne z nových tabulek a hlášení. Samozřejmostí bude zveřejňování anonymizovaných dat o českém zdravotnictví.
+Reforma znamená jednotné standardy elektronizace, které umožní sdílení dat mezi poskytovateli. Lékař dostane přístup ke kapacitě systému (volná lůžka, čekací časy v krajích) a duplicity v reportingu se odstraní. Data se sbírají z existujících reportů, ne z nových tabulek a hlášení — to je klíčové, aby elektronizace neznamenala další administrativu. Anonymizovaná data o českém zdravotnictví zveřejňujeme systematicky. Pacient se přihlašuje přes existující eIdentitu (datové schránky, bankovní identita, elektronická občanka). Pacientovo soukromí zaručuje možnost omezit přístup ke svým datům jen na lékaře, kteří je potřebují pro léčbu.
 
-**Návrh řešení.**
+Realistické milníky stojí na tom, že to není projekt na jedno volební období: legislativní ukotvení standardů zhruba dva roky, aktualizace softwaru poskytovatelů pět let, zveřejňování anonymizovaných dat tři roky, pacientský portál dva roky, elektronické plánování kapacit dva roky.
 
-- Využití registrů garantovaných státem pro ověření platnosti údajů.
-- API nad systémem pro nové pacientské služby a aplikace.
-- Přihlašování přes **eIdentita** (datové schránky, bankovní identity, elektronická občanka).
-- Možnost pacienta omezit přístup ke svým datům jen na lékaře, kteří je potřebují pro léčbu.
-
-**User story.** Pacient s bolestí v koleni přijde k praktikovi. Praktik ho pošle k ortopedovi na předem stanovený čas — díky elektronickému systému přidělování kapacit vidí nejbližší volný termín v okrese. Pacient nemusí nosit papírovou dokumentaci, ortoped si ji vyžádá ve svém systému, pacient na telefonu potvrdí souhlas s přístupem (jako platba kartou na internetu). Po vyšetření ortoped diagnostikuje nutnost výměny kolenního kloubu a nabídne pacientovi nemocnice, které kloub mohou vyměnit. Pacient si volí podle vzdálenosti a čekací doby. Po operaci požádá portálem pacienta o lázeňskou léčbu, ortoped a praktik elektronicky ověří stav a poukaz se odešle.
-
-**Milníky.**
-
-- Legislativní ukotvení povinných standardů — **2 roky**
-- Aktualizace softwaru poskytovatelů — **5 let**
-- Zveřejňování anonymizovaných dat — **3 roky**
-- Pacientský portál — **2 roky**
-- Elektronické plánování kapacit — **2 roky**
+Zahraniční zkušenost ukazuje, že je to investice na patnáct až dvacet let, ale že má smysl ji začít. Estonsko od roku 2008 provozuje plnohodnotný národní eHealth systém — e-Prescription, e-Consultation, plné EHR s pacientskou kontrolou přístupu; pacient vidí, který lékař a kdy se na jeho data díval. Dánské sundhed.dk je národní zdravotní portál od roku 2003, propojený s primární péčí přes systém MedCom. Finská služba Kanta zahrnuje osobní zdravotní záznam, e-Prescription i archiv vyšetření. Žádný z těchto systémů nevznikl přes noc — všechny jsou dvacetiletá investice do standardizace, identity a interoperability. V Česku se debata vede stejně dlouho, ale rozhodující standardy stále chybí.
 
 ---
 
 ## 11. Vzdělání a podmínky personálu
 
-**Cíl.** Zlepšit personální kapacity českého zdravotnictví. Urychlit vstup vystudovaných lékařů do systému zkrácením a optimalizací postgraduálního vzdělávání. Zajistit důstojné postavení sester a NZP zavedením úzce specializovaných kompetenčních kurzů — vyšší kompetence se musí rovnat vyššímu finančnímu ohodnocení. Nesystematické paušální navyšování platu nesměřuje k cíli.
+České lékařstvo stárne, mladí absolventi specializaci dokončují později, než by potřebovali, a přesčasy se historicky nezapočítávaly do požadované klinické praxe pro atestaci. Sestry a další nelékařský zdravotnický personál odcházejí — do zahraničí, do jiných oborů, na poloviční úvazky. Plošné navyšování platu, které ministerstvo opakovaně použilo jako odpověď, na výplatní pásce uviděla část zdravotníků v polovičním rozsahu, než bylo deklarováno. Není to systémové řešení.
 
-**Návrh řešení.**
+Reforma vzdělávání lékařů má dvě úrovně. První jsou triviální administrativní úpravy: akreditace nemocnic v daném oboru by měla být jednoduše dohledatelná na webu MZ, ne v PDF. Druhou je obsah specializační přípravy — jasně stanovená délka, zapojení pregraduálních studentů do praktické výuky preferovaného oboru, placené stáže s adekvátní pracovní náplní, započítávání přesčasů do hodin pro atestaci, odpovědnost akreditovaných zařízení za hladký časový průběh osamostatnění svých školenců. Žádný z těchto kroků není revoluce — je to důsledné dotažení toho, co už je formálně rozpracováno.
 
-- **Minimalizace administrativy spojené s vyučováním lékařů.** Akreditace nemocnic v daném oboru by měla být snadno dohledatelná na webu MZ (ne v PDF).
-- **Zefektivnění specializační přípravy.** Jasně stanovit délku atestační přípravy, zapojit pregraduální studenty do praktické výuky preferovaného oboru, placené stáže s adekvátní pracovní náplní. Do povinných odpracovaných hodin pro atestaci započítat přesčasy.
-- **Akreditovaná zařízení odpovídají za hladký časový průběh osamostatnění svých školenců.**
-- **Sestry a NZP** — rozšíření kompetencí v návaznosti na vyšší finanční ohodnocení formou akreditovaných kompetenčních kurzů. Sestra jako vysoce kompetentní zdravotnický pracovník, ne sekretářka.
+U sester a NZP navrhujeme rozšíření kompetencí v návaznosti na vyšší finanční ohodnocení — formou akreditovaných kompetenčních kurzů, ne plošných nárůstů. Sestra jako vysoce kompetentní zdravotnický pracovník, ne sekretářka. Náklady jsou přiměřené: kompetenční kurzy přes IPVZ či lékařské fakulty kolem padesáti milionů korun ročně, odměny za rozšířené kompetence NZP zhruba osmset milionů ročně. To jsou částky, které se v rozpočtu zdravotnictví dají vyjednat.
 
-**Náklady.**
-
-- Kompetenční kurzy (IPVZ či LF, participace) — **50 milionů / rok**
-- Odměny za rozšířené kompetence NZP — **800 milionů / rok**
+V zahraničí jsou rozšířené role sester normálním standardem. Ve Spojených státech a Velké Británii jsou role Nurse Practitioner a Physician Assistant etablovány jako vzdělaní zdravotníci s pravomocí samostatné diagnostiky, předepisování a vedení chronických pacientů. Nizozemsko má specialistické sestry s předepisovací pravomocí v jasně definovaných oblastech. Skandinávie, zejména Finsko, má dlouhodobě silnou tradici nelékařských profesí s rozsáhlými kompetencemi. Vyšší kompetence sester není ohrožení lékařů — je to způsob, jak rozšířit kapacitu systému.
 
 ---
 
 ## 12. Práva pacientů
 
-V době koronavirové krize vyeskalovala situace okolo porušování práv některých skupin pacientů (umírajících, nezletilých, rodiček). Kritizovat zdravotníky v krizi nemusí být vhodný postup, ale ani v přetížené situaci nelze rezignovat na dodržování základních lidských práv. Porušování práv pacientů je dlouhodobý problém.
+V době koronavirové krize vyeskalovala situace okolo porušování práv některých skupin pacientů — umírajících, nezletilých dětí, rodiček. Specifická je oblast porodnictví: právo žen a otců u porodu, tedy zákonných zástupců novorozence, je v ČR systémově upozaďováno. V mnoha porodnicích je popírán pozitivní vliv přítomnosti osoby blízké na psychiku dítěte; separace novorozence od matky je prezentována jako neškodná. Český zákon o zdravotních službách i občanský zákoník přitom jasně stanoví, že oddělit dítě od pečující osoby lze pouze soudně a že pacient může dostat jen péči, se kterou vyslovil souhlas. Mnohé nemocnice tato základní pravidla porušují.
 
-Specifická je oblast porodnictví — právo žen a otců u porodu (zákonných zástupců novorozence) je v ČR upozaďováno a v mnoha porodnicích systémově popíráno. V mnoha porodnicích je popírán pozitivní vliv přítomnosti osoby blízké na psychiku dítěte. Separace novorozence od matky je prezentována jako neškodná, což přímo souvisí s přístupem k právům starších dětí v roli pacientů a k právům jejich rodičů.
+Reálná vymahatelnost práva pacienta je dnes mimo soud (v řádu let) prakticky nulová; nezávislý posudek je obtížné získat, protože znalecké posudky často píší kolegové z oboru. Reformu proto stavíme na zřízení institutu zdravotnického ombudsmana s pravomocí vyšetřovat stížnosti pacientů a vydávat doporučení. Akreditační komise (SAK a podobně) potřebují změnu — dnes fungují spíše jako soukromé firmy se zájmem certifikaci udělit a získat za to peníze, a reálně odmítají řešit nedodržení certifikace. Akreditace má klást důraz na respekt k právům pacientů, ne na přebujelou administrativu — protože dobrá myšlenka kvality a bezpečí byla v praxi zredukována na povinnost vyplnit mnohostránkové souhlasové formuláře. Pacientům to nedává nic, lékaře to štve a viní z toho akreditační proces.
 
-Náš systém stále žije ve víře, že za dítě jsou odpovědní zdravotníci, úředníci, učitelé. Krok vpřed znamená uvědomit si, že **za dítě jsou odpovědni primárně rodiče**. Z medicínského pohledu odpovídá za péči vždy lékař. Za život dítěte ale rodiče — a ti rozhodují, zda a jaká péče bude poskytnuta. Odejmout jim odpovědnost lze až při evidentním a prokazatelném porušování práv dítěte nebo ohrožení života.
-
-V tomto duchu hovoří zákon o zdravotních službách i občanský zákoník — oddělit dítě od pečující osoby lze pouze soudně. Pacient může dostat pouze péči, se kterou vyslovil souhlas a dobrovolně ji přijal. Mnohé nemocnice tato základní pravidla porušují.
-
-**Problémy.**
-
-- Nedodržování platné legislativy.
-- Reálná nevymahatelnost práva pacienta jinde než u soudu (v řádu let, znalecké posudky často píší kolegové z oboru, nezávislý posudek je prakticky nemožné získat).
-
-**Cíl.** Reálná vymahatelnost práva pacientů.
-
-**Návrh řešení.**
-
-- **Zřízení zdravotnického ombudsmana.**
-- **Změna fungování akreditačních komisí (SAK apod.)** — dnes fungují spíše jako soukromé firmy se zájmem certifikaci udělit a získat za to peníze. Reálně odmítají řešit nedodržení certifikace.
-- **Akreditace s důrazem na respekt k právům pacientů** namísto přebujelé administrativy. Dobrá myšlenka kvality a bezpečí byla v praxi zredukována na povinnost vyplnit mnohostránkové souhlasové formuláře — pacientům to nedává nic, lékaře to štve a viní z toho akreditační proces.
+V zahraničí jsou modely léty otestované. Skandinávie má etablovaný institut zdravotnického ombudsmana — patientombudsman ve Švédsku a Norsku — s pravomocí vyšetřovat stížnosti a vydávat doporučení. Velká Británie používá síť Healthwatch (od 2013) a Patient Advice and Liaison Service (PALS) uvnitř každé NHS organizace. Nizozemsko publikuje pravidelně patient experience surveys (CQ-index) na úrovni poskytovatele. Pravidla porodnictví — přítomnost otce, kontakt matky s novorozencem, respektování informovaného souhlasu — jsou v zemích jako Velká Británie, Skandinávie a Nizozemsko standardem podloženým doporučeními WHO a UNICEF (Baby-Friendly Hospital Initiative).
 
 ---
 
 ## 13. Dostupná péče o duševní zdraví
 
-**Cíl.** Zlepšit dostupnost péče o duševní zdraví. Téma trápí každého pátého člověka a po pandemii COVID čísla rostou alarmujícím způsobem. Důraz na prevenci, dostupnost a kvalitu péče.
+Sebevražednost v ČR je 12,5 na 100 000 obyvatel oproti 10,5 v průměru OECD. Spotřeba antidepresiv 84 DDD na tisíc obyvatel a den oproti 67 v OECD — léky se předepisují, systém péče ne. Reforma psychiatrické péče běží od roku 2013, vznikla síť Center duševního zdraví, ale jejich pokrytí je nerovnoměrné a personál malý — psycholog, psychiatr, sociální pracovník, peer konzultant a adiktolog v jednom týmu jsou stále vzácnost. Zákonná definice psychoterapeuta v ČR neexistuje, takže pojištění hradí psychoterapii nesystematicky a klienti, kteří na ni nemají z vlastních zdrojů, k ní nemají přístup.
 
-**Návrh řešení.**
+Reforma znamená rozšíření personálu Center duševního zdraví o sociální pracovníky, peer konzultanty, psychoterapeuty a adiktology — nejen psychology a psychiatry. Posílení školení, přizpůsobení platového ohodnocení a požadavků dostupnosti. Zákonem stanovenou definici psychoterapeuta zahrnující vystudované psychology i lidi s psychoterapeutickým výcvikem — ideálně samostatným zákonem o psychoterapii, který by upravil i metodu financování této služby pro občany, kteří na ni nemají z vlastních zdrojů. Posílení vzdělávání ohledně duševního zdraví ve všeobecné populaci ve spolupráci s Ministerstvem školství a pedagogickými fakultami; destigmatizace pomáhá rodinám i populaci jako celku. A důraz na lidská práva pacientů včetně dětských — v psychiatrické péči zvlášť.
 
-- **Rozšíření personálu Center duševního zdraví (CDZ)** o sociální pracovníky, peer konzultanty, psychoterapeuty a adiktology (ne jen psychology a psychiatry). Posílit školení, přizpůsobit platové ohodnocení a požadavky dostupnosti péče.
-- **Zákonem stanovená definice psychoterapeuta** — zahrnující vystudované psychology i lidi s psychoterapeutickým výcvikem. Definice metody financování pro občany, kteří na péči nemohou dosáhnout z vlastních zdrojů. Ideálně **zákon o psychoterapii**.
-- **Posílení vzdělávání ohledně duševního zdraví ve všeobecné populaci** — větší spolupráce s MŠMT a pedagogickými fakultami. Destigmatizace pomáhá rodinám i populaci.
-- **Důraz na lidská práva pacientů a jejich blízkých** v péči o duševní zdraví, včetně dětských pacientů.
+Mezinárodní zkušenost s funkčními modely je rozsáhlá. Velká Británie spustila v roce 2008 program Improving Access to Psychological Therapies, dnes přejmenovaný na NHS Talking Therapies — největší národní program psychoterapeutické péče v Evropě. Pacient s úzkostí nebo depresí získá strukturovanou psychoterapii (CBT a další metody) v rámci NHS bez doplatku, často přes self-referral. Evaluace publikované v Lancet Psychiatry a dalších časopisech ukazují klinicky významné výsledky a pozitivní cost-effectiveness. Belgie přijala v roce 2010 reformu Article 107 — přesun zdrojů z lůžkových psychiatrických zařízení do komunitní péče. Itálie má ikonický model deinstitucionalizace psychiatrie po Basagliově zákoně z roku 1978; ne všechny regiony fungují stejně dobře, ale celkový rámec se stal mezinárodním vzorem komunitního přístupu. Nizozemsko má etablovanou kategorii GZ-psycholog (Gezondheidszorgpsycholoog) s úhradou v rámci základního pojištění. Závěr je všude stejný: investice do dostupné psychoterapie a komunitních týmů má prokazatelnou populační návratnost.
 
 ---
 
-## Další témata k řešení
+## Závěr
 
-- **LSPP (lékařská služba první pomoci).** Třetí pilíř pohotovostní péče (ZZS, UPS) je překonán. Mluví se o povinnosti praktiků sloužit (politicky problematické) nebo o zrušení povinnosti. Návrh MZ — praktik součástí týmu nových urgentních příjmů. Lidé stejně vyhledají UPS v nemocnici. Praktici by se dali využít v odlehlejších částech regionu — místní a časová dostupnost.
-- **Centra vysoce specializované péče.** Od roku 2010 trend specializace (KOC, KCC, traumacentra, onkogynekologie, onkourologie, hematologie). Tradiční výkony v menších krajských nemocnicích jsou eliminovány — ztrácejí personál a konkurenceschopnost. MZ pod tlakem odborných společností často neznají praxi v terénu.
-- **Posílení regionálních pracovišť.** Lékaře po fakultě je obtížné dostat do krajů a okresů. Pokud by vzdělávací systém umožnil rychlejší atestaci, byla by možnost mladé lékaře a sestry do menších nemocnic získat (na dohodnutou dobu, např. 3 roky). Platí i pro ambulantní specialisty (stomatolog, gynekolog). Případně uznání diplomu ze zahraničí.
-- **Dostupnost péče v čase.** Ordinační hodiny jen dopoledne. Termíny CT/MRI nejsou (přístrojů je dost, termínů a popisujících lékařů ne). Přístroje by měly běžet i odpoledne (až 16 hodin denně). Elektronický systém objednávek pro lepší využitelnost kapacit.
-- **Zdanění potravin dle zdravotní závažnosti** — harm reduction.
-- **Omezit nadužívání péče** (LSPP vs. urgentní příjmy).
-- **Gatekeeping** — role praktického lékaře jako rozhraní mezi pacientem a specializovanou péčí.
-- **Stratifikace péče** — diferenciace podle závažnosti a rizika.
+Třináct oblastí výše není programová báze ani úplný seznam toho, co české zdravotnictví potřebuje. Je to soubor konkrétních věcí, které by český systém měly výrazně zlepšit a které mají v zahraničí vyzkoušené obdoby. Ne jedna země, ne jeden model — ale konvergence praxe, která ukazuje, kterým směrem reforma má jít.
+
+Hlásím se k těmto návrhům osobně. Nepracoval jsem na nich sám: vznikly v dlouhodobé spolupráci s kolegyněmi a kolegy z České pirátské strany a v diskusi s pacientskými organizacemi, které dělají expertní práci, na kterou stát často reaguje pomalostí, kterou si nemůžeme dovolit. Tento manifest publikuji v repu projektu HSPA Monitor proto, aby byl dohledatelný v jednom místě s daty, na kterých stojí — a aby mohl sloužit jako vstup do veřejné debaty o reformě, kterou Česko, jak data jasně ukazují, opravdu potřebuje.
 
 ---
 
-*Manifest publikován 2025 v rámci kandidatury do Poslanecké sněmovny. Archivován v repu projektu HSPA Monitor jako autorův politický postoj — ne jako oficiální stanovisko projektu.*
+*Manifest pro volby do Poslanecké sněmovny 2025. Archivován v repu projektu HSPA Monitor jako autorův politický postoj — ne jako oficiální stanovisko projektu.*
