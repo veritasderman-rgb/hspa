@@ -125,12 +125,92 @@ export function renderModuleNav(activeId) {
 
   const container = document.getElementById('moduleNav');
   if (!container) return;
-  container.innerHTML = tabs.map(t => {
+  const tabsHtml = tabs.map(t => {
     const active = activeId
       ? t.id === activeId
       : t.match.some(m => path.endsWith(m));
     return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}">${t.label}</a>`;
   }).join('');
+  container.innerHTML = tabsHtml;
+
+  injectMobileNav(tabsHtml);
+}
+
+/**
+ * Injectuje hamburger tlačítko do topbaru a slide-in drawer s navigací do <body>.
+ * Aktivní jen na mobilním viewportu (<720px) přes CSS. Idempotent — re-render
+ * neduplikuje markup, jen přepíše obsah drawer-listu.
+ */
+function injectMobileNav(tabsHtml) {
+  const topbar = document.querySelector('header.topbar');
+  if (!topbar) return;
+
+  let toggle = document.getElementById('mobileNavToggle');
+  if (!toggle) {
+    toggle = document.createElement('button');
+    toggle.id = 'mobileNavToggle';
+    toggle.className = 'mobile-nav-toggle';
+    toggle.setAttribute('type', 'button');
+    toggle.setAttribute('aria-label', 'Otevřít menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', 'mobileNavDrawer');
+    toggle.innerHTML = `
+      <span class="mobile-nav-toggle-bars" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>`;
+    topbar.appendChild(toggle);
+  }
+
+  let drawer = document.getElementById('mobileNavDrawer');
+  let backdrop = document.getElementById('mobileNavBackdrop');
+  if (!drawer) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'mobileNavBackdrop';
+    backdrop.className = 'mobile-nav-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(backdrop);
+
+    drawer = document.createElement('aside');
+    drawer.id = 'mobileNavDrawer';
+    drawer.className = 'mobile-nav-drawer';
+    drawer.setAttribute('aria-label', 'Hlavní menu');
+    drawer.setAttribute('aria-hidden', 'true');
+    drawer.innerHTML = `
+      <div class="mobile-nav-drawer-head">
+        <span class="mobile-nav-drawer-title">Menu</span>
+        <button type="button" class="mobile-nav-close" aria-label="Zavřít menu">×</button>
+      </div>
+      <nav class="mobile-nav-list" aria-label="Stránky"></nav>`;
+    document.body.appendChild(drawer);
+  }
+  drawer.querySelector('.mobile-nav-list').innerHTML = tabsHtml;
+
+  if (toggle.dataset.wired === '1') return;
+  toggle.dataset.wired = '1';
+
+  const open = () => {
+    document.body.classList.add('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    backdrop.setAttribute('aria-hidden', 'false');
+    const firstLink = drawer.querySelector('a, button');
+    firstLink?.focus();
+  };
+  const close = () => {
+    document.body.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.setAttribute('aria-hidden', 'true');
+    toggle.focus();
+  };
+  toggle.addEventListener('click', () => {
+    document.body.classList.contains('mobile-nav-open') ? close() : open();
+  });
+  drawer.querySelector('.mobile-nav-close').addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.body.classList.contains('mobile-nav-open')) close();
+  });
 }
 
 let _glossaryTermsCache = null;
