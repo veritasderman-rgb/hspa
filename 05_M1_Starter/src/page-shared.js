@@ -80,6 +80,38 @@ export function injectScrollToTop() {
 export function renderFooter(el = document.getElementById('siteFooter')) {
   if (!el) return;
   el.innerHTML = `
+    <aside class="newsletter-block" aria-labelledby="newsletterHead">
+      <div class="newsletter-inner">
+        <div class="ed-kicker">Newsletter</div>
+        <h3 class="newsletter-h" id="newsletterHead">Co se v dashboardu hýbe — bez spamu</h3>
+        <p class="newsletter-lead">
+          Krátký přehled, co je nového: které články vyšly, kde se data změnila, na čem se v projektu pracuje. Maximálně 1× měsíčně. Bez sledovacích pixelů, bez sdílení s třetími stranami.
+        </p>
+
+        <!--
+          MailerLite slot — nahraď obsahem z MailerLite (Forms → Embedded → Use HTML).
+          Stačí vyměnit obsah <div id="newsletterMailerLite"> za HTML/JS snippet
+          z MailerLite UI. CSS a okolní strukturu měnit netřeba.
+        -->
+        <div class="newsletter-form-slot" id="newsletterMailerLite">
+          <form class="newsletter-form" id="newsletterMockForm" novalidate>
+            <label for="nlEmail" class="sr-only">E-mail</label>
+            <input type="email" id="nlEmail" name="email" placeholder="vase@email.cz" autocomplete="email" required>
+            <button type="submit" class="newsletter-submit">Přihlásit se</button>
+          </form>
+          <label class="newsletter-consent">
+            <input type="checkbox" id="nlConsent" name="consent" required>
+            <span>Souhlasím se zasíláním novinek a se zpracováním e-mailu výhradně pro tento účel.</span>
+          </label>
+          <p class="newsletter-status" id="newsletterStatus" role="status" aria-live="polite"></p>
+        </div>
+
+        <p class="newsletter-foot">
+          Brzy bude funkční. <a href="o-projektu.html">Jak nakládáme s daty →</a>
+        </p>
+      </div>
+    </aside>
+
     <div class="row">
       <div>
         <h6>O projektu</h6>
@@ -110,6 +142,42 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
     </div>
   `;
   injectScrollToTop();
+  wireMockNewsletterForm();
+}
+
+/**
+ * Mock handler pro formulář, který běží do té doby, než se do
+ * #newsletterMailerLite vlepí oficiální MailerLite embed snippet.
+ * Po vlepení snippetu MailerLite tento mock formulář přepíše a tato
+ * funkce tiše skončí (querySelector vrátí null).
+ */
+function wireMockNewsletterForm() {
+  if (typeof window === 'undefined') return;
+  const form = document.getElementById('newsletterMockForm');
+  if (!form || form.dataset.wired === '1') return;
+  form.dataset.wired = '1';
+  const status = document.getElementById('newsletterStatus');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('nlEmail');
+    const consent = document.getElementById('nlConsent');
+    if (!email.value || !email.checkValidity()) {
+      status.textContent = 'Zadejte prosím platný e-mail.';
+      status.dataset.tone = 'error';
+      email.focus();
+      return;
+    }
+    if (!consent.checked) {
+      status.textContent = 'Pro přihlášení potřebujeme váš souhlas se zpracováním e-mailu.';
+      status.dataset.tone = 'error';
+      consent.focus();
+      return;
+    }
+    status.textContent = 'Newsletter zatím připravujeme — brzy bude přihlášení funkční. Děkujeme za zájem!';
+    status.dataset.tone = 'info';
+    form.reset();
+    consent.checked = false;
+  });
 }
 
 /**
