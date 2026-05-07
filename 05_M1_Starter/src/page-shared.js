@@ -56,9 +56,16 @@ export function injectScrollToTop() {
 
   const THRESHOLD = 400;
   const updateVisible = () => {
-    btn.classList.toggle('visible', window.scrollY > THRESHOLD);
+    const visible = window.scrollY > THRESHOLD
+      && !document.body.classList.contains('mobile-nav-open');
+    btn.classList.toggle('visible', visible);
+    btn.tabIndex = visible ? 0 : -1;
+    btn.setAttribute('aria-hidden', visible ? 'false' : 'true');
   };
   window.addEventListener('scroll', updateVisible, { passive: true });
+  // Také reagujeme na otevření/zavření mobilního drawer (toggle body class)
+  const observer = new MutationObserver(updateVisible);
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
   updateVisible();
 
   btn.addEventListener('click', () => {
