@@ -441,21 +441,33 @@ async function loadRelated(indicatorId) {
   const target = document.getElementById('indRelated');
   if (!target) return;
   try {
-    const [s, e] = await Promise.all([
+    const [s, e, a] = await Promise.all([
       fetch('data/strategies.json').then(r => r.ok ? r.json() : { strategies: [] }).catch(() => ({ strategies: [] })),
       fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
+      fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
     ]);
     const strategies = s.strategies ?? [];
     const explainers = e.explainers ?? [];
+    const articles = a.articles ?? [];
     const relatedStrategies = strategies.filter(s => (s.linked_indicators ?? []).includes(indicatorId));
     const relatedExplainers = explainers.filter(e => (e.linked_indicators ?? []).includes(indicatorId));
+    const relatedArticles = articles.filter(ar => (ar.linked_indicators ?? []).includes(indicatorId));
 
-    if (!relatedStrategies.length && !relatedExplainers.length) {
-      target.innerHTML = `<p class="ind-no-related">Pro tento indikátor zatím nejsou v naší databázi explicitně propojené strategie ani vysvětlení.</p>`;
+    if (!relatedStrategies.length && !relatedExplainers.length && !relatedArticles.length) {
+      target.innerHTML = `<p class="ind-no-related">Pro tento indikátor zatím nejsou v naší databázi explicitně propojené strategie, vysvětlení ani články.</p>`;
       return;
     }
 
     let html = '';
+    if (relatedArticles.length) {
+      html += `<h4 class="ind-related-heading">Články (${relatedArticles.length})</h4>`;
+      html += `<ul class="ind-related-list ind-related-articles">`;
+      html += relatedArticles.map(ar => `
+        <li><a href="${escapeHtml(ar.slug)}"><strong>${escapeHtml(ar.title)}</strong></a>
+        ${ar.perex ? `<span class="ind-related-sub">${escapeHtml(ar.perex)}</span>` : ''}</li>
+      `).join('');
+      html += `</ul>`;
+    }
     if (relatedStrategies.length) {
       html += `<h4 class="ind-related-heading">Strategie a politiky (${relatedStrategies.length})</h4>`;
       html += `<ul class="ind-related-list">`;
