@@ -801,13 +801,14 @@ let _crossLinksCache = null;
 async function loadCrossLinks() {
   if (_crossLinksCache) return _crossLinksCache;
   try {
-    const [s, e] = await Promise.all([
+    const [s, e, a] = await Promise.all([
       fetch('data/strategies.json').then(r => r.ok ? r.json() : { strategies: [] }).catch(() => ({ strategies: [] })),
       fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
+      fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
     ]);
-    _crossLinksCache = { strategies: s.strategies ?? [], explainers: e.explainers ?? [] };
+    _crossLinksCache = { strategies: s.strategies ?? [], explainers: e.explainers ?? [], articles: a.articles ?? [] };
   } catch {
-    _crossLinksCache = { strategies: [], explainers: [] };
+    _crossLinksCache = { strategies: [], explainers: [], articles: [] };
   }
   return _crossLinksCache;
 }
@@ -815,14 +816,22 @@ async function loadCrossLinks() {
 async function renderModalCrossLinks(indicatorId) {
   const target = document.getElementById('modalCrossLinks');
   if (!target) return;
-  const { strategies, explainers } = await loadCrossLinks();
+  const { strategies, explainers, articles } = await loadCrossLinks();
   const linkedStrategies = strategies.filter(s => (s.linked_indicators ?? []).includes(indicatorId));
   const linkedExplainers = explainers.filter(e => (e.linked_indicators ?? []).includes(indicatorId));
-  if (!linkedStrategies.length && !linkedExplainers.length) return;
+  const linkedArticles = articles.filter(ar => (ar.linked_indicators ?? []).includes(indicatorId));
+  if (!linkedStrategies.length && !linkedExplainers.length && !linkedArticles.length) return;
 
   let html = '';
+  if (linkedArticles.length) {
+    html += `<h3 class="ds-heading">Související články</h3><div class="chip-row">`;
+    html += linkedArticles.slice(0, 6).map(ar =>
+      `<a class="chip chip-article" href="${escapeText(ar.slug)}">${escapeText(ar.title)}</a>`
+    ).join('');
+    html += `</div>`;
+  }
   if (linkedStrategies.length) {
-    html += `<h3 class="ds-heading">Souvisí se strategiemi</h3><div class="chip-row">`;
+    html += `<h3 class="ds-heading"${linkedArticles.length ? ' style="margin-top:14px"' : ''}>Souvisí se strategiemi</h3><div class="chip-row">`;
     html += linkedStrategies.slice(0, 6).map(s =>
       `<a class="chip chip-strategy" href="strategie.html?id=${encodeURIComponent(s.id)}">${escapeText(s.title)}</a>`
     ).join('');

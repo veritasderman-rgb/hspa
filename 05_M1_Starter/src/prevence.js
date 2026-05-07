@@ -15,6 +15,7 @@ const HERO_INDICATOR_IDS = [
 let allThemes = [];
 let allIndicators = [];
 let allStrategies = [];
+let allArticles = [];
 let heroData = null;
 let flowSteps = [];
 
@@ -224,6 +225,27 @@ function renderDetail(id) {
         </section>
       ` : ''}
 
+      ${(() => {
+        const relatedArticles = allArticles.filter(ar => (ar.linked_prevention_themes ?? []).includes(theme.id));
+        if (!relatedArticles.length) return '';
+        const items = relatedArticles.map(ar => `
+          <li class="prev-article-item">
+            <a class="prev-article-link" href="${escapeHtml(ar.slug)}">
+              <span class="prev-article-tag">${escapeHtml(ar.tag ?? 'Článek')}</span>
+              <span class="prev-article-title">${escapeHtml(ar.title)}</span>
+              ${ar.perex ? `<span class="prev-article-perex">${escapeHtml(ar.perex)}</span>` : ''}
+            </a>
+          </li>
+        `).join('');
+        return `
+          <section class="detail-section">
+            <h3>Související články</h3>
+            <p class="section-note">Delší analytické texty z HSPA Monitoru, které se k tomuto tématu přímo vztahují:</p>
+            <ul class="prev-article-list">${items}</ul>
+          </section>
+        `;
+      })()}
+
       ${leversHtml ? `
         <section class="detail-section">
           <h3>Co může změnit systém</h3>
@@ -269,10 +291,11 @@ async function init() {
   renderMastheadDate();
 
   try {
-    const [prev, ind, str] = await Promise.all([
+    const [prev, ind, str, art] = await Promise.all([
       fetch('data/prevention.json').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
       fetch('data/indicators.json').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
       fetch('data/strategies.json').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
+      fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
     ]);
 
     heroData = prev.hero;
@@ -280,6 +303,7 @@ async function init() {
     allThemes = prev.themes ?? [];
     allIndicators = ind.indicators ?? [];
     allStrategies = str.strategies ?? [];
+    allArticles = art.articles ?? [];
 
     const id = new URLSearchParams(window.location.search).get('id');
     if (id) renderDetail(id);

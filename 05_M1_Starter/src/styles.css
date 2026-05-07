@@ -843,6 +843,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .chip:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .chip-strategy { color: var(--ink); border-color: var(--rule2); }
 .chip-explainer { color: var(--red); border-color: var(--red); }
+.chip-article { color: var(--paper); background: var(--red); border-color: var(--red); }
+.chip-article:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
 .docs-list { list-style: none; padding: 0; }
 .docs-list li {
@@ -1522,6 +1524,83 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 }
 .ind-no-related {
   font-family: var(--serif); font-style: italic; color: var(--ink-mut); padding: 8px 0;
+}
+
+/* Související články — speciální formát s perexem (uvnitř karty indikátoru) */
+.ind-related-articles {
+  display: block;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px;
+  border-top: 1px solid var(--rule);
+}
+.ind-related-articles li {
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 0;
+}
+.ind-related-articles li a {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  transition: padding-left 0.12s, color 0.12s;
+}
+.ind-related-articles li a:hover { padding-left: 6px; color: var(--red); }
+.ind-related-articles li strong {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+.ind-related-articles li .ind-related-sub {
+  display: block;
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin: 0;
+}
+
+/* Související články v sekci prevence (Co s tím můžu dělat já) */
+.prev-article-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  border-top: 1px solid var(--rule);
+}
+.prev-article-item { border-bottom: 1px solid var(--rule); }
+.prev-article-link {
+  display: block;
+  padding: 18px 0;
+  text-decoration: none;
+  color: var(--ink);
+  transition: padding-left 0.12s, color 0.12s;
+}
+.prev-article-link:hover { padding-left: 8px; color: var(--red); }
+.prev-article-tag {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.prev-article-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+.prev-article-perex {
+  display: block;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-mut);
 }
 
 .origin-tag {
