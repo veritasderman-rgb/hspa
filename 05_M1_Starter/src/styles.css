@@ -3752,3 +3752,67 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   .article-upcoming-list { grid-template-columns: 1fr; }
   .article-databox { padding: 20px; }
 }
+
+/* =========================================================
+   Manifest — vizuální odlišení od redakčních článků
+   ========================================================= */
+
+/* Listing — manifest item má sytější pozadí a žlutý prouek vlevo */
+.article-list-item-manifest .article-list-link {
+  background: var(--paper2);
+  border-left: 4px solid var(--warn);
+  padding-left: 18px;
+}
+.article-list-item-manifest .article-list-link:hover {
+  background: var(--red-soft);
+}
+.article-list-tag-manifest {
+  background: var(--warn);
+  color: var(--paper);
+  padding: 2px 8px;
+  letter-spacing: 0.06em !important;
+}
+
+/* Tag v hlavičce článku */
+.article-tag-manifest {
+  background: var(--warn);
+  color: var(--paper);
+  padding: 2px 10px;
+  letter-spacing: 0.08em !important;
+}
+
+/* Stránka manifestu — zachovává typografii, ale dává jí jiný tón */
+.article-page-manifest .article-title {
+  /* podtržení pro odlišení */
+}
+
+/* Editorial-note — výrazný box, který musí být na první pohled vidět */
+.editorial-note {
+  margin: 0 0 32px;
+  padding: 20px 24px;
+  background: var(--paper2);
+  border-left: 4px solid var(--warn);
+  font-family: var(--serif);
+}
+.editorial-note-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warn);
+  margin-bottom: 10px;
+}
+.editorial-note p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.editorial-note p strong { color: var(--ink); }
+.editorial-note p em { color: var(--ink-mut); font-style: italic; }
+
+@media (max-width: 720px) {
+  .editorial-note { padding: 16px 18px; }
+  .editorial-note p { font-size: 14px; }
+}
