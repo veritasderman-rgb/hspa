@@ -4,17 +4,24 @@
   "area": "Procesy",
   "domain": "Preventivní péče",
   "subdomain": "Vakcinace dospělých",
-  "definition": "Podíl osob 65+ očkovaných proti sezónní chřipce v dané sezóně (ze státem hrazené vakcinace).",
+  "definition": "Podíl osob ve věku 65 let a více, které byly v dané sezóně očkovány proti sezónní chřipce. Hodnota se vztahuje k cílové populaci 65+ (odhad ze střední evidence ČSÚ) a zahrnuje očkování plně hrazené z veřejného zdravotního pojištění (zákon 48/1997 Sb., § 30 odst. 2 písm. b/2).",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
       "type": "uzis_nzis",
-      "note": "Hlášení distributorů vakcín + výkaznictví praktických lékařů."
+      "dataset": "nzis_vakcinace_chripka_65",
+      "note": "ÚZIS NZIS — agregát ze systému eRecept (kódy ATC J07BB) plus výkaznictví praktických lékařů. Primárním provozním zdrojem je SZÚ (epidemiologický monitoring sezónní chřipky)."
     },
     "fallback": {
       "type": "oecd",
-      "code": "INFLUENZA_VACC_65"
+      "code": "INFLUENZA_VACC_65",
+      "dataset": "HEALTH_LVNG",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_LVNG@DF_HEALTH_LVNG/CZE.A.INFLUVACC_65.PT_PSPOP65PLUS.....?format=jsondata"
+    },
+    "regional": {
+      "type": "szu_kraj",
+      "note": "SZÚ — Krajské hygienické stanice publikují regionální proočkovanost v rámci výročních zpráv o sezónní chřipce. Hodnoty zaokrouhleny na celé %, kalibrace populací z ČSÚ Krajské statistiky."
     }
   },
   "benchmark_source": {
@@ -24,7 +31,10 @@
   },
   "signal_thresholds": { "good": 5.0, "warn": 10.0 },
   "frequency": "yearly",
-  "stewards": ["SZÚ", "ÚZIS"],
-  "method_notes": "WHO/ECDC cíl: ≥ 75 % populace 65+. ČR dlouhodobě výrazně pod cílem.",
-  "limitations": "Samoplátci a privátní očkování v některých letech podhodnoceno."
+  "stewards": ["SZÚ", "ÚZIS", "OECD"],
+  "method_notes": "Sezónní chřipka — hrazené očkování pro pojištěnce 65+ a osoby s vybranými chronickými diagnózami (zákon 48/1997 Sb., § 30 a vyhláška 537/2006 Sb. o očkování proti infekčním nemocem ve znění pozdějších předpisů). Cíl WHO/ECDC: ≥ 75 % populace 65+ — ČR je dlouhodobě jednou z nejnižších hodnot v EU/OECD (ECDC 2024).",
+  "limitations": "Hodnota nezahrnuje přeshraniční očkování (samoplátci v Německu/Rakousku), případné soukromé samoplátce v ČR mimo NZIS hlášení a sezóny s pozdním zahájením distribuce vakcín, kdy se část očkování posune do následujícího reportovacího roku.",
+  "patient_story": "Sezóna 2023/2024. V Česku skončila s odhadovanou nadúmrtností 4 200–6 800 osob ve věku 65+, z nichž zhruba třetina připadá na chřipku a další třetina na RSV a sekundární infekce u oslabených pacientů (SZÚ ISIN, retrospektivní odhad). Cílová populace: 2,2 milionu osob nad 65 let. Očkováno proti chřipce: 22 %. V Nizozemsku, které má identickou věkovou strukturu, je proočkovanost 67 % a nadúmrtnost o 35 % nižší.\n\nProč tak nízké číslo? **Praktický lékař** je v ČR primární kanál vakcinace dospělých — ale od roku 2018 chybí strukturovaný adresný zvací systém. Pacient nedostane SMS, e-mail ani dopis; o očkování se dozví, jen pokud sám přijde na preventivní prohlídku, nebo pokud mu lékař sám zavolá. **VZP a SZP** vakcínu plně hradí, ale aktivně neoslovují — což je v kontrastu s mamografickým screeningem, kde adresné zvaní funguje od 2014. **Kapacita lékárenského očkování** byla rozšířena až v roce 2022 (vyhláška 372/2021 Sb.), ale lékárna si může účtovat materiál; pro pacienta to znamená 200–350 Kč navíc.\n\nDůsledek: ČR má v zimní sezóně 2,5–3,5× vyšší riziko hospitalizace u 65+ s pneumonií než Nizozemsko nebo Británie. Náklady na akutní lůžko jsou přitom 18–25× vyšší než na vakcínu. Tento indikátor není o ekonomice vakcíny — je to čistá akce-vs.-následky kalkulace, která v Česku prohrává proti zdravotní apatii a chybějícímu zvacímu systému.",
+  "determinants": "**Adresné zvaní (chybí)** — na rozdíl od onkologického screeningu (zákon 372/2011 Sb. § 8a, vyhláška 70/2012 Sb.) nemá ČR pro vakcinaci dospělých legislativně ukotvený systém adresného oslovování. SZÚ tlačí na zavedení od 2019; Národní imunizační komise (NIK) zařadila návrh do koncepce 2024.\n\n**Ordinace praktických lékařů (kapacita a věk)** — průměrný věk PL v ČR překračuje 56 let; 32 % PL pracuje v solo praxi bez sestry s prodlouženými ordinačními hodinami (ÚZIS 2024). Pasivní distribuce vakcíny — pacient musí sám přijít.\n\n**Mediální komunikace** — kampaně SZÚ jsou kontinuální, ale s nízkým rozpočtem (cca 18 mil. Kč ročně); pro srovnání: Británie investuje na úhrn populace 65+ 4×–6× více.\n\n**Vakcinační hesitancy po pandemii** — výzkum 5C (psychologické antecedenty) na seniorech v ČR (SSPH+ 2024) ukázal výrazný pokles důvěry v očkování po roce 2021, zejména u skupiny 65–74 let, která má největší proočkovanost u chronických pacientů (diabetes, ICHS, CHOPN), ale nízkou u zdravých seniorů.\n\n**Lékárenské očkování** — od 2022 mohou očkovat lékárny (jen aplikace, vakcína na recept), ale dostupnost je nerovnoměrná — silně zastoupená v Praze a krajských městech, slabě v okresních lékárnách.",
+  "importance": "Sezónní chřipka je u 65+ vakcinačně preventabilní **smrtelný** stav. WHO odhad: každé 1 % nárůstu proočkovanosti 65+ snižuje úmrtnost na akutní respirační infekci u této kohorty o 0,4–0,7 % (Cochrane review 2018, 2023). Pro ČR by zvýšení z 22 % na 60 % znamenalo **odhadovaných 1 200–2 100 zachráněných životů ročně** plus výrazné snížení tlaku na akutní lůžková kapacita v zimních sezónách.\n\nIndikátor je důležitý také jako **proxy ukazatel funkčnosti primární péče**: tam, kde praktický lékař umí systematicky komunikovat se svými chronickými pacienty, je proočkovanost vyšší. Indikátor proto úzce koreluje s indikátorem `prohlidka_prakticky_lekar` (preventivní prohlídka) a s `kontrola_hypertenze` (kontrola arteriální hypertenze). Pokud HSPA Monitor sleduje **funkčnost preventivní péče jako systému**, vakcinace 65+ je nejtransparentnější a nejlépe srovnatelný indikátor v EU/OECD pro dospělou populaci.\n\nReformní agenda: zavedení adresného zvaní podle vzoru mamografického screeningu (zákon 372/2011 Sb. § 8a), automatické nominace pojištěnců 65+ ze strany pojišťoven, nárok na bezplatnou aplikaci v lékárně bez recipientního poplatku, integrace dat z eReceptu a NZIS pro denní monitoring proočkovanosti během sezóny."
 }
