@@ -4660,3 +4660,226 @@ body.mobile-nav-open .scroll-top-btn {
 @media (max-width: 720px) {
   .newsletter-iframe { min-height: 560px; }
 }
+
+/* Article figure — společný kontejner pro infografiky v článcích */
+.article-figure {
+  margin: 32px 0;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+  padding-top: 18px;
+}
+.article-figure-caption {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 14px;
+}
+.article-figure-source {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+}
+.article-bar-chart {
+  width: 100%;
+  height: auto;
+  max-width: 720px;
+  display: block;
+}
+
+/* Waffle chart — 10×10 grid se 100 buňkami, pct přes data-pct */
+.waffle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin: 8px 0 4px;
+}
+.waffle { text-align: left; }
+.waffle-100 {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 3px;
+  aspect-ratio: 1 / 1;
+  max-width: 200px;
+  margin-bottom: 12px;
+}
+.waffle-100 span {
+  background: var(--rule);
+  display: block;
+}
+.waffle-100 span.f { background: var(--red); }
+.waffle-stat {
+  font-family: var(--serif);
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--red);
+  margin-bottom: 4px;
+}
+.waffle-label {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+@media (max-width: 720px) {
+  .waffle-grid { grid-template-columns: 1fr; gap: 24px; }
+  .waffle-100 { max-width: 240px; margin: 0 auto 12px; }
+  .waffle { text-align: center; }
+}
+
+/* SHA donut chart — 3 conic-gradient donuts vedle sebe */
+.sha-donut-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin: 8px 0 4px;
+}
+.sha-donut-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+.sha-donut-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 14px;
+  text-align: center;
+}
+.sha-donut {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--seg, conic-gradient(var(--rule), var(--rule)));
+  position: relative;
+  margin: 0 auto 16px;
+}
+.sha-donut::before {
+  content: '';
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  background: var(--paper);
+}
+.sha-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--serif);
+  z-index: 1;
+}
+.sha-donut-center strong {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+.sha-donut-center span {
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--ink-mut);
+  margin-top: 4px;
+}
+.sha-donut-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.sha-donut-legend li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink);
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+.sha-donut-legend li:last-child { border-bottom: none; }
+.sha-donut-legend em {
+  font-style: normal;
+  font-weight: 600;
+  margin-left: auto;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sha-donut-legend .sw {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 880px) {
+  .sha-donut-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* DRG paušál scénáře — srovnávací tabulka v článku */
+.drg-scenarios {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 14px;
+  margin: 8px 0 4px;
+}
+.drg-scenarios th,
+.drg-scenarios td {
+  padding: 12px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+}
+.drg-scenarios thead th {
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  border-bottom: 2px solid var(--ink);
+}
+.drg-scenarios thead th:first-child,
+.drg-scenarios tbody th {
+  text-align: left;
+}
+.drg-scenarios tbody th {
+  font-weight: 600;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+}
+.drg-scenarios tbody tr.drg-bad td:last-child {
+  color: #a4262c;
+  font-weight: 700;
+}
+.drg-scenarios tbody tr.drg-cap td:nth-child(3),
+.drg-scenarios tbody tr.drg-cap td:nth-child(4) {
+  font-style: italic;
+  color: var(--ink-mut);
+}
+.drg-scenarios .drg-neutral { color: var(--ink-mut); }
+
+@media (max-width: 720px) {
+  .drg-scenarios { font-size: 13px; }
+  .drg-scenarios th,
+  .drg-scenarios td { padding: 10px 8px; }
+}
