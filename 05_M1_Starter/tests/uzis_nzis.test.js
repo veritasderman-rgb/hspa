@@ -12,11 +12,25 @@ import { resolveDistributionUrl, searchDatasets } from '../ingest/lib/ckan.js';
 import { gunzipBufferToString } from '../ingest/lib/gzip.js';
 import { cachePath, ensureCacheDir } from '../ingest/lib/cache.js';
 
+// Známé prefixy fixture cache souborů, které vlastní jiné test moduly
+// (NRZP / NOR / NRH / NRH-screening). Nesmíme je při cleanupu NZIS testů
+// mazat — node --test běží test soubory paralelně a smazání by ukradlo
+// fixture sourozencům uprostřed jejich try/finally bloku (viz CI flake
+// na PR #115, kde transform.test.js#extractFromNrzp ENOENT).
+const FOREIGN_UZIS_PREFIXES = [
+  'uzis_nrzp_',
+  'uzis_nor_',
+  'uzis_nrh_',
+  'uzis_nrhzs_screening',
+];
+
 function cleanNzisCache() {
   ensureCacheDir();
   const dir = cachePath('.');
   for (const f of fs.readdirSync(dir)) {
-    if (f.startsWith('uzis_') && (f.endsWith('.json') || f.endsWith('.raw.csv'))) {
+    if (!f.startsWith('uzis_')) continue;
+    if (FOREIGN_UZIS_PREFIXES.some(p => f.startsWith(p))) continue;
+    if (f.endsWith('.json') || f.endsWith('.raw.csv')) {
       fs.unlinkSync(cachePath(f));
     }
   }
