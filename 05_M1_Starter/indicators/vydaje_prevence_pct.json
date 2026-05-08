@@ -1,0 +1,39 @@
+{
+  "id": "vydaje_prevence_pct",
+  "name": "Výdaje na prevenci (% běžných výdajů na zdravotnictví)",
+  "area": "Struktury",
+  "domain": "Financování",
+  "subdomain": "Alokace prevence",
+  "definition": "Podíl běžných výdajů na zdravotnictví (current health expenditure, CHE) vynaložených na funkci HC.6 Preventivní péče (HC.6) dle klasifikace SHA 2011. Zahrnuje imunizaci a screeningové programy, poradenství v oblasti zdravého životního stylu, epidemiologický surveillance, ochranu veřejného zdraví, zdravotní výchovu a komunikaci a připravenost na mimořádné události.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "code": "EXP_HC",
+      "dataset": "DSD_SHA@DF_SHA",
+      "filter": "HC.6",
+      "url": "https://data-explorer.oecd.org/vis?df[ds]=DisseminateFinalDMZ&df[id]=DSD_SHA@DF_SHA&df[ag]=OECD.ELS.HD",
+      "note": "OECD SHA 2011 — funkce HC.6 Preventivní péče. Hodnota pro ČR i mezinárodní benchmark pochází ze stejného datasetu; fetch parametry: geo=CZE, function=HC.6, measure=SHA_CHE_PC (podíl CHE). Produkční ingest plánován v samostatném milníku."
+    },
+    "fallback": {
+      "type": "csu_sha",
+      "url": "https://csu.gov.cz/produkty/vydaje-na-zdravotni-peci",
+      "note": "ČSÚ publikuje národní SHA tabulku ročně (Výdaje na zdravotní péči v ČR); HC.6 řádek je součástí tabulky funkčního členění běžných výdajů. Srovnatelnost s OECD SHA zaručena harmonizovanou metodikou SHA 2011."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "EXP_HC",
+    "dataset": "DSD_SHA@DF_SHA",
+    "note": "OECD nevážený průměr zemí s dostupnými daty HC.6 za referenční rok. Hodnota 3,4 % za rok 2023 dle OECD Health at a Glance 2025."
+  },
+  "signal_thresholds": { "good": 5.0, "warn": 10.0 },
+  "frequency": "yearly",
+  "stewards": ["OECD", "ČSÚ", "ÚZIS"],
+  "patient_story": "Brno, 2024. Jana, 42 let, pracuje jako účetní. Nikdo ji nikdy systematicky neupozornil na screeningový program HPV, na preventivní prohlídky u praktika ani na program vyhledávání kolorektálního karcinomu. Nemá čas sám od sebe hledat, co jí pojišťovna hradí. Je pojištěna, ale system preventivní péče na ni skutečně nedosáhl.\n\nKaždá koruna investovaná do prevence se v průměru vrátí jako tři až sedm korun ušetřených na pozdější léčbě chronických nemocí, hospitalizacích a dlouhodobé péči. To je ekonomika, kterou ČR systematicky nevyužívá: se 2,7 % CHE na prevenci jsme 20 % pod průměrem OECD a téměř čtvrtinu pod průměrem EU. V absolutních číslech to znamená, že by bylo třeba přidat zhruba 7 miliard Kč ročně, aby ČR dosáhlo průměrné úrovně OECD.\n\nPodfinancování prevence se projevuje konkrétně: nízký záchyt kolorektálního karcinomu ve stádiu I–II, pozdní zahájení HPV vakcinace (teprve od 2023 systematicky rozšiřované na chlapce), slabá primárně-preventivní role praktických lékařů a dlouhodobě nadprůměrná kardiovaskulární mortalita středního věku. Tyto výsledky nejsou nevyhnutelné — jsou z velké části důsledkem toho, kde systém alokuje zdroje.",
+  "determinants": "Výše podílu výdajů na prevenci je v ČR určována průnikem několika systémových sil. Nejvýznamnějším faktorem je úhradová vyhláška MZ ČR (každoročně vydávaná dle § 17 zák. 48/1997 Sb.), která stanoví sazby za preventivní výkony hrazené z veřejného zdravotního pojištění — pokud jsou sazby nízké nebo výkony chybí v číselníku, poskytovatel nemá ekonomickou motivaci prevenci nabízet.\n\nStrukturu dále formují krajské hygienické stanice (KHS), které zajišťují protiepidemická opatření, epidemiologický dohled a vzdělávání v ochraně veřejného zdraví. Jejich financování z kapitoly MZ státního rozpočtu je dlouhodobě podhodnoceno, přičemž pandemie COVID-19 nárazově výdaje zvýšila (2020–2021), ale poté se vrátily na prepandemickou úroveň.\n\nKrajské programy prevence závislostí, duševního zdraví a sexuálně přenosných nemocí, hrazené z krajských rozpočtů, tvoří regionálně heterogenní složku celkových prevenčních výdajů. Strategie Zdraví 2030 (MZ ČR, 2020) si klade za cíl zvýšit podíl prevence, ale zatím nepřinesla strukturální změnu v alokaci úhradové vyhlášky. Komunitní programy primární prevence, pracovnělékařské prohlídky (hrazeny zaměstnavatelem, nikoli z CHE, a proto do SHA HC.6 nezahrnované) a vzdělávací kampaně MZČR jsou dalšími relevantními, avšak metodicky různě zachytitelnými složkami.",
+  "importance": "Výdaje na prevenci jsou v rámci OECD HSPA klasifikovány jako strukturální (vstupní) indikátor — měří, jak systém alokuje zdroje před tím, než nemoc vznikne. Je to proto leading indicator: nedostatečné prevenční výdaje se projeví v horších výsledkových indikátorech (mortalita, incidence, PYLL) s latencí 5–15 let, což politické rozhodování systematicky podceňuje.\n\nSHA HC.6 je zároveň mezinárodně nejlépe srovnatelnou měrou prevenční kapacity systému, protože metodika je harmonizovaná napříč zeměmi OECD a EU. Na rozdíl od výstupo-orientovaných indikátorů (např. pokrytí screeningem) zachycuje HC.6 celkový systémový záměr: kolik je stát a pojišťovny ochotni investovat do zdraví populace ještě před vznikem nemoci.\n\nPro stakeholdery v ČR má indikátor přímou politickou relevanci: úhradová vyhláška, zákon o veřejném zdravotním pojištění (48/1997 Sb.) a Strategie Zdraví 2030 jsou konkrétní páky, prostřednictvím nichž lze podíl HC.6 ovlivnit. Monitoring tohoto indikátoru tak propojuje makrofinanční obraz systému s konkrétními legislativními nástroji.",
+  "method_notes": "HC.6 Preventivní péče je v SHA 2011 členěna do šesti podkategorií: HC.6.1 Informace, vzdělávání a poradenství o zdraví (zdravotní výchova, kampaně, poradenství v ordinaci); HC.6.2 Imunizační programy (úhrada vakcín a aplikace); HC.6.3 Včasné odhalení nemoci (screeningové programy — mamografie, kolorektální, cervikální, diabetický); HC.6.4 Sledování zdravého stavu (preventivní prohlídky u praktika, závodní lékařství je výjimkou); HC.6.5 Epidemiologický surveillance (monitoring infekčních nemocí, KHS, ECDC reporting); HC.6.6 Připravenost na mimořádné události a katastrofy (kapacity krizové připravenosti zdravotnictví). Čitatel indikátoru jsou výdaje funkcí HC.6 (součet HC.6.1–6.6), jmenovatel jsou celkové běžné výdaje na zdravotnictví (current health expenditure, CHE = součet HC.1–HC.9 bez investic). Výsledkem je procentuální podíl. OECD počítá průměr jako nevážený průměr zemí s dostupnými daty.",
+  "limitations": "Mezinárodní srovnatelnost dat HC.6 může být ovlivněna rozdílnou praxí klasifikace: část výdajů na prevenci může být vykazována v rámci HC.1 (ambulantní kurativní péče) nebo HC.4 (pomocné zdravotní služby), pokud preventivní složka není odděleně účtována. Pracovnělékařské prohlídky hrazené zaměstnavatelem jsou v ČR zahrnvány do HC.6.4 jen částečně — metodika se napříč zeměmi liší, což zkresluje mezinárodní srovnání. Meziročně může dojít k posunu hodnoty v důsledku překlasifikace výdajů (nikoli skutečné politické změny), zejména po COVID-19 letech 2020–2021, kdy výdaje na HC.6.5 (epidemiologický surveillance) a HC.6.6 (připravenost) dramaticky vzrostly a poté poklesly. Data za poslední rok jsou zpravidla dostupná s dvouletým zpožděním (ČSÚ SHA report vychází 2 roky po referenčním roku)."
+}

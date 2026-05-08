@@ -67,8 +67,10 @@ async function init() {
 
 function findRegionDataset(regionsData, indicatorId) {
   const datasets = regionsData?.datasets ?? [];
-  // Priorita: explicitní linked_indicator_id, fallback id == indicatorId
-  return datasets.find(d => d.linked_indicator_id === indicatorId)
+  // Priorita: explicitní indicator_id (kanonické pojmenování v data/regions.json),
+  // fallback na starší linked_indicator_id, pak id == indicatorId.
+  return datasets.find(d => d.indicator_id === indicatorId)
+      ?? datasets.find(d => d.linked_indicator_id === indicatorId)
       ?? datasets.find(d => d.id === indicatorId)
       ?? null;
 }
@@ -449,7 +451,7 @@ async function loadRelated(indicatorId) {
     ]);
     const strategies = s.strategies ?? [];
     const explainers = e.explainers ?? [];
-    const articles = a.articles ?? [];
+    const articles = (a.articles ?? []).filter(ar => ar.published !== false);
     const relatedStrategies = strategies.filter(s => (s.linked_indicators ?? []).includes(indicatorId));
     const relatedExplainers = explainers.filter(e => (e.linked_indicators ?? []).includes(indicatorId));
     const relatedArticles = articles.filter(ar => (ar.linked_indicators ?? []).includes(indicatorId));

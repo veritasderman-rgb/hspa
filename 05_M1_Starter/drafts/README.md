@@ -1,24 +1,16 @@
-# `drafts/` — pracovní redakční rozpracované články
+# Drafts — pracovní obsah, není zveřejněn
 
-Tento adresář obsahuje **rozpracované draftové články**, které **nejsou součástí veřejné navigace** HSPA Monitoru.
+Tato složka obsahuje obsah, který je v redakční přípravě. **Není načítán frontendem** ani Vercelem do hlavního dashboardu. K publikaci je nutné:
 
-## Pravidla
+| Typ obsahu | Jak publikovat |
+|---|---|
+| `clanek-*.html` (článek) | (1) Přesunout do rootu `05_M1_Starter/` (sourozenec `index.html`), (2) přidat záznam do `data/articles.json`, (3) odebrat `<meta name="robots" content="noindex, nofollow">` z `<head>`. |
+| `explainer-*.json` | (1) Aktualizovat `verified_at` a `verification_status: "ok"`, (2) zkopírovat objekt (bez pole `_draft_note`) do `data/explainers.json` jako další položku v poli `explainers`, (3) propojit s odpovídajícími indikátory v `linked_indicators`. |
 
-- Soubor `drafts/clanek-*.html` se **nezobrazuje** v `clanky.html` ani v hlavním rozcestníku.
-- Není propojen v `data/articles.json` — `loadAndRenderHomeArticles()` v `src/app.js` o něm neví.
-- Vyhledávače nezindexují (každý draft má `<meta name="robots" content="noindex, nofollow">`).
-- CSS odkazuje relativně přes `../src/styles.css`, takže draft lze otevřít přímo souborovým prohlížečem nebo přes `npm run serve` na adrese `http://localhost:8080/drafts/clanek-...html`.
+## Aktuální drafty (8. 5. 2026)
 
-## Workflow zveřejnění
+### `clanek-porodnice-regiony.html`
+Odborný článek 4+ A4 o transformaci porodnické sítě v ČR — ekonomika malých porodnic, mezinárodní zkušenost s centralizací (NL, DK, UK), regionální gradient dostupnosti, právní rámec (vyhláška 99/2012, NV 307/2012, zákon 372/2011, novela 290/2025) a otevřená reformní debata. Vychází z aktuálních epizod 2023–2026 (Děčín, Rychnov nad Kněžnou, Prachatice).
 
-Když se draft připraví k publikaci:
-
-1. Přesun: `mv drafts/clanek-XYZ.html clanek-XYZ.html`
-2. V `<head>`: změnit `noindex, nofollow` → `index, follow`, opravit cestu k `src/styles.css`, doplnit `<script type="module" src="src/clanky.js"></script>` před `</body>`.
-3. Záznam do `data/articles.json` (id, slug, kind, title, perex, date, linked_indicators).
-4. Záznam do `clanky.html` jako `<li class="article-list-item">`.
-5. Validace: `npm test && npm run validate:all`.
-
-## Aktuální drafty
-
-- **`clanek-novela-290-2025-prava-pacientu.html`** — komplexní analýza novely zákona o zdravotních službách č. 290/2025 Sb. (účinnost od 1. 1. 2026). Připraveno k publikaci po ověření prováděcích vyhlášek 462/2025 Sb. a 432/2025 Sb.
+### `explainer-paliativni-pece-novela.json`
+Systémový explainer k senátní novele zákona 372/2011 Sb. (předložila senátorka Procházková, únor 2026), která zavádí subjektivní nárok pacienta na paliativní péči a institut KDPS (kontinuální hluboká paliativní sedace). Vysvětluje právní novinky, klinickou rovinu (vztah ke eutanazii), strukturální slabiny (chybějící financování, registr DNR, kapacity MSPT po krajích). Status k 8. 5. 2026: 1. čtení v Senátu.

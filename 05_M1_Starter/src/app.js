@@ -809,7 +809,11 @@ async function loadCrossLinks() {
       fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
       fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
     ]);
-    _crossLinksCache = { strategies: s.strategies ?? [], explainers: e.explainers ?? [], articles: a.articles ?? [] };
+    _crossLinksCache = {
+      strategies: s.strategies ?? [],
+      explainers: e.explainers ?? [],
+      articles: (a.articles ?? []).filter(ar => ar.published !== false),
+    };
   } catch {
     _crossLinksCache = { strategies: [], explainers: [], articles: [] };
   }
@@ -1290,6 +1294,7 @@ async function loadAndRenderHomeArticles() {
     const data = await res.json();
     const articles = (data.articles ?? [])
       .filter(a => a.kind !== 'manifest')
+      .filter(a => a.published !== false)
       .sort((a, b) => {
         const da = new Date(a.date).getTime();
         const db = new Date(b.date).getTime();
