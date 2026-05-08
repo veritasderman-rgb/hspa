@@ -44,6 +44,7 @@ export function renderCzMap(host, dataset, hooks = {}) {
   const heightPx = ROWS * (TILE_H + PAD);
   const byCode = new Map(dataset.regions.map(r => [r.code, r]));
   const betterHigher = dataset.direction !== 'lower_is_better';
+  const isContextDependent = dataset.direction === 'context_dependent';
   const avg = dataset.country_avg;
 
   // Spočti relativní deviation pro fill barvu
@@ -65,7 +66,7 @@ export function renderCzMap(host, dataset, hooks = {}) {
           <text x="${x + TILE_W/2}" y="${y + TILE_H/2 + 4}" text-anchor="middle" class="cz-tile-lbl">${t.lbl}</text>
         </g>`;
     }
-    const fill = pickColor(t.relPct, betterHigher);
+    const fill = isContextDependent ? pickColorNeutral(t.relPct) : pickColor(t.relPct, betterHigher);
     const valueText = formatValueShort(t.region.value);
     const titleText = `${t.region.name}: ${t.region.value} ${escapeXml(dataset.unit)} (${t.relPct >= 0 ? '+' : ''}${t.relPct.toFixed(1)} % od průměru ČR)`;
     return `
@@ -134,6 +135,20 @@ export function pickColor(relPct, betterHigher) {
   } else {
     return blend('#FCE8E6', '#990000', mag);
   }
+}
+
+/**
+ * Pro indikátory s direction = "context_dependent" — nehodnotíme above/below
+ * průměru jako lepší/horší, ale ukazujeme intenzitu odchylky modře (nad)
+ * a oranžově (pod) jako neutrální gradient.
+ * @param {number} relPct
+ */
+export function pickColorNeutral(relPct) {
+  const mag = Math.min(Math.abs(relPct) / 20, 1);
+  if (Math.abs(relPct) < 2) return '#E2E8F0';
+  return relPct > 0
+    ? blend('#E0E7FF', '#3B5BDB', mag)   // nad průměr — modrý gradient
+    : blend('#FFF4E6', '#D9480F', mag);  // pod průměr — oranžový gradient
 }
 
 function blend(hexA, hexB, t) {
