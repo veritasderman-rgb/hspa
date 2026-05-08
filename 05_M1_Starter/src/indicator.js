@@ -67,8 +67,10 @@ async function init() {
 
 function findRegionDataset(regionsData, indicatorId) {
   const datasets = regionsData?.datasets ?? [];
-  // Priorita: explicitní linked_indicator_id, fallback id == indicatorId
-  return datasets.find(d => d.linked_indicator_id === indicatorId)
+  // Priorita: explicitní indicator_id (kanonický klíč v regions.json v2),
+  // historicky linked_indicator_id, fallback id == indicatorId
+  return datasets.find(d => d.indicator_id === indicatorId)
+      ?? datasets.find(d => d.linked_indicator_id === indicatorId)
       ?? datasets.find(d => d.id === indicatorId)
       ?? null;
 }

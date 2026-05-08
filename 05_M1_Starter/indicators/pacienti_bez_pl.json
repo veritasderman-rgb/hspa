@@ -1,0 +1,45 @@
+{
+  "id": "pacienti_bez_pl",
+  "name": "Pojištěnci bez registrujícího praktického lékaře",
+  "area": "Struktury",
+  "domain": "Dostupnost",
+  "subdomain": "Primární péče",
+  "definition": "Podíl pojištěnců, kteří nemají v registru zdravotní pojišťovny aktivního registrujícího všeobecného praktického lékaře nebo praktického lékaře pro děti a dorost. Indikátor odráží funkční dostupnost gateway primární péče v souladu se zákonem 48/1997 Sb. § 11 a NV 307/2012 Sb. o místní a časové dostupnosti.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_press_release",
+      "note": "MZČR pravidelně publikuje agregovaná data o registrovanosti praktických lékařů na základě podkladů VZP a SZP ČR. Pro rok 2024 (zveřejněno 11/2024) bylo registrováno 95 % pojištěnců (10,35 mil. z 10,9 mil.); 5 % (cca 554 tis.) bez registrujícího PL.",
+      "url": "https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-predstavilo-aktualni-data-z-primarni-pece-a-kroky-na-podporu-jeji-dostupnosti/"
+    },
+    "fallback": {
+      "type": "vzp_publikace",
+      "note": "VZP každoročně publikuje krajský rozpad ve své Ročence pojištěnce. SZP ČR doplňuje agregát za 6 zaměstnaneckých pojišťoven."
+    },
+    "regional": {
+      "type": "syri_natur_uk",
+      "note": "Mapování dostupnosti primární péče: SYRI / Univerzita Karlova — Přírodovědecká fakulta, projekt 'Hodnocení a modelování dostupnosti primární zdravotní péče'. Identifikuje pohraniční oblasti (Karlovarský, Ústecký kraj) jako nejvíce ohrožené.",
+      "url": "https://www.natur.cuni.cz/geografie/demografie-a-geodemografie/veda-a-vyzkum/vybrane-projekty/hodnoceni-a-modelovani-dostupnosti-primarni-zdravotni-pece-jako-klicoveho-aspektu-zdravotni-pece-v-cr/souhrnna-studie.pdf"
+    }
+  },
+  "benchmark_source": {
+    "type": "cz_internal",
+    "note": "Indikátor není mezinárodně srovnatelný — koncept registrace u praktického lékaře (gatekeeping) má jen část OECD zemí (Nizozemsko, Dánsko, Velká Británie, Francie). Některé porovnatelné metriky: % obyvatel s registrovaným GP (NL: 99 %, DK: 98 %, UK: 94 %, FR: 89 %)."
+  },
+  "signal_thresholds": {
+    "good": 1.0,
+    "warn": 3.0
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "MZČR",
+    "VZP",
+    "SZP ČR"
+  ],
+  "patient_story": "Karlovarský kraj, jaro 2026. Paní Kratochvílová, 71 let, se po smrti svého dlouholetého praktického lékaře dva měsíce snaží najít nového. Volala devíti praxím v okruhu 25 kilometrů — všichni se omlouvají, že kapacitně nepřijímají. Praktický lékař v Sokolově, který by ji teoreticky vzal, má objednací lhůtu na první kontrolu 14 týdnů.\n\nNa papíře má paní Kratochvílová zákonný nárok podle § 11 zákona 48/1997 Sb. — pojišťovna jí má zajistit dostupnost praktického lékaře v rozumné dojezdové vzdálenosti (NV 307/2012 Sb. ji stanoví na 35 minut autem). V realitě zákonný nárok narazil na to, že **praktický lékař ji nemusí přijmout**, pokud má naplněný kmen registrovaných pacientů (cca 1 800 pojištěnců). Pojišťovna je povinna doložit alternativu — ale alternativa neexistuje, pokud jsou všichni praktici v okolí nasyceni.\n\nTo není ojedinělý případ. V roce 2024 nemělo registrujícího praktického lékaře přibližně 554 tisíc pojištěnců, tedy 5 % populace. V Karlovarském a Ústeckém kraji se podíl vyšplhal výš — pohraničí dlouhodobě bojuje s odchodem lékařů do Německa, kde výnos privátní praxe překračuje český průměr o 50–80 %.\n\nDostupnost gatekeeperu primární péče není detail. Pacient bez praktického lékaře přechází buď k urgentnímu příjmu (kde čeká několik hodin pro problém, který by praktik vyřešil za 15 minut), nebo přímo do ambulantní specializace (kde je rovněž přetížen systém). Indikátor 'pojištěnci bez PL' tak měří, kolik lidí v ČR funguje mimo gatekeeping model — a kolik ho funguje navzdory zákonnému nároku.",
+  "determinants": "**Demografie lékařské pracovní síly** — průměrný věk všeobecného praktického lékaře v ČR byl v 2023 přibližně 55,6 let; více než polovina (52,8 %) současných praktiků dosáhne důchodového věku do 10 let. Proudění absolventů (cca 280–310 ročně z lékařských fakult v praktickém směru) nestačí pokrýt odchody, které ročně dosahují 350–420 lékařů.\n\n**Geografická migrace v rámci ČR** — atraktivnost krajů pro mladé absolventy je asymetrická: Praha, Jihomoravský a Zlínský kraj přitahují nadproporcionálně, Karlovarský a Ústecký kraj naopak ztrácejí. SYRI (2024) ukazuje, že rozdíl v hustotě praktických lékařů mezi nejlepším a nejhorším okresem dosahuje až 2,5×.\n\n**Migrace do zahraničí** — odchod do Německa, Rakouska a Švýcarska zůstává významný; výnos privátní praxe v Německu přesahuje český průměr o 50–80 %. Bilaterální dohody o uznávání kvalifikací (zejména směrnice 2005/36/ES) usnadňují přechod.\n\n**Úhradové podmínky** — kapitační platba praktika (60–76 Kč/měsíc/pojištěnec v 2026) tvoří asi 75 % výnosu praxe; zbytek doplňují výkonové úhrady za preventivní prohlídky, ošetření chronických pacientů a bonusy. Reformní debata se točí kolem zvýšení kapitace a posílení role praktika v indikaci specializované péče (gatekeeping).\n\n**Vstupní kapacita lékařských fakult** — 8 LF v ČR otevírá ročně cca 1 600 míst (všechny směry); praktickým směrem prochází cca 18–22 % absolventů. Návrh ministerstva (2024–2025) na zvýšení vstupní kapacity LF o 15 % naráží na kapacitu klinických cvičení a personální možnosti fakult.\n\n**Konkurence kapacit ze strany ambulantní specializace** — atraktivita ambulantní specializace (zejména gastroenterologie, dermatologie, endokrinologie) odčerpává část absolventů, kteří by jinak směřovali do praktické medicíny.",
+  "importance": "Pojištěnec bez registrujícího praktického lékaře je **strukturální selhání základního principu gatekeepingu** — modelu, na kterém je postaven celý český systém zdravotního pojištění. Praktický lékař je zákonem (§ 11 zákona 48/1997 Sb.) určen jako primární kontaktní bod systému: koordinuje preventivní prohlídky, indikuje specializovanou péči, předepisuje chronickou medikaci a sleduje pacienta v rámci dispenzarizace.\n\nPokud praktický lékař v životě pojištěnce neexistuje, dochází ke **třem souběžným systémovým selháním**: (1) **prevence** — pojištěnec se nedostává na preventivní prohlídky a očkování (ČR má dlouhodobě nízkou účast v dospělé prevenci), (2) **kontinuita péče** — chronické onemocnění (diabetes, hypertenze, COPD) zůstává bez systematického follow-upu a (3) **alokace zdrojů** — pojištěnec přesouvá své kontakty do urgentní a specializované péče, kde je nákladový bod 4–8× vyšší.\n\nIndikátor je rovněž **rozhodujícím signálem nerovnosti** v dostupnosti péče napříč kraji. Rozdíl mezi Prahou (2 % bez registru) a Karlovarským krajem (8–9 %) odráží propast v základní dostupnosti, kterou žádný jiný HSPA indikátor takto přímočaře nezachycuje. V kontextu OECD HSPA rámce (doména 2 — Dostupnost) indikátor patří k **nejcitlivějším měřítkům faktického, nikoliv jen formálního přístupu k péči**.\n\nMezinárodně je indikátor srovnatelný v pásmu zemí s gatekeeping modelem (UK, NL, DK, FR). Česká hodnota 5 % se nachází mezi nejhorší (FR 11 %, kde však model funguje volněji — registrace u 'médecin traitant' je zákonný benefit, ne podmínka přístupu) a nejlepší (NL 1 %). Realistický cíl pro 2030: pokles pod 3 % se zaměřením na pohraniční regiony.",
+  "method_notes": "Hodnota je v současnosti odvozena z agregovaných tiskových výstupů MZČR a údajů VZP/SZP ČR. Produkční ingest by měl využít **K-dávky pojišťoven** (specifikace dat zaměstnaneckých registrů) — datový mostek mezi pojišťovnami a NZIS, kde lze identifikovat pojištěnce bez aktivního vztahu PL → pojištěnec v aktuálním roce. ÚZIS publikuje data o registrovanosti v Ročence NZIS s časovou prodlevou 12–18 měsíců.\n\nKrajský rozpad je modelován z (a) hustoty praktických lékařů v okrese (NRPZS), (b) demografického profilu okresu (ČSÚ) a (c) modelu dojezdové dostupnosti (SYRI 2024).",
+  "limitations": "Indikátor neodlišuje **strukturální nedostupnost** (pojištěnec se v okolí nemůže registrovat, protože všichni praktici mají naplněný kmen) od **dobrovolného nezaregistrování** (pojištěnec se vyhýbá registraci ze zdravotních, ekonomických nebo subjektivních důvodů). Mezinárodní srovnání je omezené jen na země s gatekeeping modelem. \n\nDále: registr u pojišťovny nezaručuje **funkční vztah** — část pojištěnců formálně registrovaných u PL ho nenavštívila déle než 5 let. Pro úplný obraz primární péče je třeba indikátor doplnit o ukazatel účasti v preventivní prohlídce (HSPA: prohlidka_prakticky_lekar)."
+}
