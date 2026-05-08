@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krajský pohled — interaktivní mapa · HSPA Monitor</title>
+<meta name="description" content="Interaktivní choroplethová mapa 14 krajů ČR. Vyberte indikátor a uvidíte, jak si jednotlivé kraje stojí v porovnání s celorepublikovým průměrem.">
+<link rel="stylesheet" href="src/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Krajský pohled</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="krajeHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Krajský pohled</div>
+      <h2 class="ed-hero-headline" id="krajeHeroHeadline">Jak si stojí jednotlivé kraje napříč ukazateli zdravotního systému</h2>
+      <p class="ed-hero-lead">
+        Vyberte ukazatel — mapa krajů ČR se obarví podle výkonnosti. Tmavší zelená znamená lepší výsledek, tmavší červená horší (orientace „kde lépe = nižší/vyšší" se přizpůsobí typu indikátoru). Pod mapou je seznam krajů s konkrétními hodnotami a odchylkou od průměru ČR.
+      </p>
+    </div>
+  </section>
+
+  <section class="kraje-section">
+    <div class="kraje-controls">
+      <label for="krajeSelect" class="kraje-label">Indikátor:</label>
+      <select id="krajeSelect" class="regions-select" aria-label="Vyberte indikátor"></select>
+      <span class="kraje-meta" id="krajeMeta"></span>
+    </div>
+
+    <div class="kraje-layout">
+      <div class="kraje-map-wrap" id="krajeMapWrap">
+        <div class="kraje-map" id="krajeMap" role="img" aria-label="Choropletní mapa krajů ČR"></div>
+        <p class="kraje-map-disclaimer">
+          Mapa je <strong>schematická</strong> — kraje jsou znázorněny jako přibližné obdélníky podle skutečné geografické polohy. Pro účely srovnání hodnot mezi kraji je tato vizualizace dostatečná. Přesná kartografie kraj. hranic je v plánu.
+        </p>
+      </div>
+
+      <aside class="kraje-side">
+        <h4 class="kraje-side-h">Žebříček krajů</h4>
+        <ol class="kraje-rank" id="krajeRank"></ol>
+      </aside>
+    </div>
+
+    <div class="kraje-foot">
+      <p class="kraje-foot-text" id="krajeFootText"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/kraje.js"></script>
+
+</body>
+</html>
