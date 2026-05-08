@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Výpadky léčiv: jak se z přechodné anomálie stala strukturální slabost lékové dostupnosti v ČR · HSPA Monitor (DRAFT)</title>
+<meta name="description" content="Počet aktivních výpadků léčiv hlášených SÚKL vzrostl od roku 2019 na čtyřnásobek — z přibližně 580 na více než 2 200 přípravků v roce 2026. Za nárůstem stojí globální koncentrace výroby účinných látek, ekonomická nevýhodnost generik a lokální slabiny: malý trh, reexport a poddimenzovaná strategická zásoba.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Výpadky léčiv: jak se z přechodné anomálie stala strukturální slabost lékové dostupnosti v ČR">
+<meta property="og:description" content="Počet aktivních výpadků léčiv hlášených SÚKL vzrostl od roku 2019 na čtyřnásobek. Za nárůstem stojí globální koncentrace výroby API, ekonomická nevýhodnost generik a lokální slabiny: malý trh, reexport a poddimenzovaná strategická zásoba.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Léková dostupnost">
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="../index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Článek (DRAFT — nezveřejněno)</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">DRAFT — neukládáno do articles.json, robots: noindex</span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="../clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková dostupnost</span>
+        <span class="article-tag article-tag-muted">Výpadky léčiv · SÚKL · EMA · Reforma 2026</span>
+      </div>
+      <h2 class="article-title">Výpadky léčiv: jak se z přechodné anomálie stala strukturální slabost lékové dostupnosti v ČR</h2>
+      <p class="article-deck">
+        Více než 2 200 léčivých přípravků je v Česku k jaru 2026 v aktivním výpadku — to znamená, že výrobce nebo distributor nahlásil SÚKL přerušení nebo ukončení dodávek bez plánovaného termínu obnovení. Ještě v roce 2019 to bylo přibližně 580 přípravků. Čtyřnásobný nárůst za sedm let neznamená, že farmaceutický průmysl přestal fungovat. Znamená to, že výpadek léčiv přestal být anomálií a stal se normou. Tato normalizace je strukturálním selháním, nikoli přechodnou poruchou zásobovacího řetězce.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft · květen 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">18 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Paní Marie je sedmdesátičtyřletá penzistka žijící v Brně-Slatině. Antidepresivum Citalon 20 mg bere osm let — od té doby, co přestala vycházet z bytu po smrti manžela. Citalon jí předepsala praktická lékařka, fungoval, na dávce se nikdy nemuselo nic měnit. V dubnu 2025 přišla Marie do lékárny s receptem a farmaceutka zavrtěla hlavou. Výpadek. Výrobce hlásí problém s účinnou látkou, dodávky přerušeny do konce roku. Náhrada existuje — Citalec 20 mg jiného výrobce — ale balení má jiný počet tablet, jiný příbalový leták, jiná barva. Marie si spletla dávkování. Praktická lékařka musela napsat nový recept, vysvětlit rozdíl, zavolat po třech týdnech a zjistit, jak se Marie cítí. Dvě návštěvy ordinace za situaci, kterou pacientka ani lékařka nezpůsobily a kterou systém měl za úkol předvídat.
+      </p>
+
+      <p>
+        Marie není výjimka. Je to ilustrace přibližně 2 200 příběhů, které SÚKL k jaru 2026 registruje jako aktivní výpadky léčivých přípravků na českém trhu. Tento text se zabývá otázkou, jak k takovému stavu došlo, proč se jedná o strukturální a nikoli přechodný problém, a co česká legislativa — a evropská regulace — v tento moment nabízí jako odpověď.
+      </p>
+
+      <h3>Co měříme: definice aktivního výpadku</h3>
+
+      <p>
+        SÚKL — Státní ústav pro kontrolu léčiv — provozuje v rámci svých otevřených dat soubor označovaný jako MR feed (Hlášení o uvedení/přerušení/ukončení/obnovení dodávek léčivého přípravku na trh). Jde o kumulativní CSV soubor dostupný na adrese <code>opendata.sukl.cz/soubory/MR/mr.zip</code>, jehož obsah pokrývá hlášení od 31. 12. 2007 a je aktualizován denně.
+      </p>
+
+      <p>
+        Každý řádek v souboru odpovídá jednomu hlášení. Klíčové sloupce jsou <code>KOD_SUKL</code> (identifikátor registrace léčivého přípravku), <code>TYP_OZNAMENI</code> s hodnotami U (uvedení na trh), P (přerušení dodávek), K (ukončení dodávek) a O (obnovení dodávek), dále <code>DATUM_HLASENI</code>, <code>TERMIN_OBNOVENI</code> a pole <code>POSLEDNI_PLATNE_HLASENI</code>, které SÚKL v dokumentaci MR_datove_rozhrani20230301.csv označuje jako doporučený deduplication anchor.
+      </p>
+
+      <p>
+        Výpočet aktivního výpadku není přímé čtení — feed je kumulativní, nikoli snapshotový. Algoritmus musí pro každý <code>KOD_SUKL</code> najít řádek s polem <code>POSLEDNI_PLATNE_HLASENI = ANO</code> (nebo, alternativně, řádek s nejvyšším <code>DATUM_HLASENI</code>) a posoudit, zda je posledním platným hlášením P nebo K bez termínu obnovení v budoucnosti. Pokud ano, přípravek se počítá jako aktivně nedostupný.
+      </p>
+
+      <p>
+        Je zásadní rozumět tomu, co indikátor měří a co neměří. Počet hlášených aktivních výpadků není totéž co počet léčivých přípravků, které si pacient nemůže koupit. Část výpadků pokrývají přípravky, pro něž existuje registrovaná náhrada se stejnou účinnou látkou a stejnou silou — v takovém případě může lékárna substituci realizovat okamžitě a pacient výpadek ani nezaznamená. Jiná část výpadků se týká přípravků, kde je daný LP jediným registrovaným přípravkem s konkrétní účinnou látkou na českém trhu — a tato skupina je klinicky kritická. Indikátor tedy slouží jako barometr systémové zátěže, nikoli jako přímý ukazatel počtu pacientů bez léku.
+      </p>
+
+      <p>
+        Dalším omezením je, že SÚKL feed nezachycuje tzv. tichý výpadek — situaci, kdy je léčivý přípravek de iure registrován a nahlášen jako dostupný, ale distributor jej fakticky nedodává v dostatečném objemu nebo jej reexportuje na trhy s vyšší marží. Tichý výpadek lékárník pozná teprve tehdy, když přestane být přípravek fyzicky dostupný v objednávkovém systému velkodistributora — a ten se do SÚKL feedu nepromítne vůbec.
+      </p>
+
+      <h3>Trend 2019–2026: čísla, která mluví za sebe</h3>
+
+      <p>
+        Datová řada indikátoru <code>vypadky_leciv_aktivni</code> zachycuje konzistentní nárůst. Přibližně 580 aktivních výpadků v roce 2019 představuje jakýsi předcovidový baseline — stav, kdy jsou výpadky sice přítomny, ale považovány za normální kolísání zásobovacího řetězce. V roce 2020 nastupuje první viditelný skok: pandemie COVID-19 způsobuje skokové zvýšení poptávky po analgetikách, antipyreticích a antirheticích a zároveň narušuje výrobní kapacity v Indii a Číně, kde je soustředěna výroba většiny účinných farmaceutických ingrediencí (API — Active Pharmaceutical Ingredients) pro evropský generický trh.
+      </p>
+
+      <p>
+        V roce 2022 přichází druhý strukturální zlom: válka na Ukrajině narušuje zásobovací řetězce pro celou řadu surovin, ale pro farmaceutický průmysl má specifický dopad prostřednictvím fermentačních surovin a pomocných látek, jejichž část pocházela z Ruska a Běloruska. Paralelně regulační orgány ve světě přísněji kontrolují výrobní zařízení v Asii — v roce 2022 americká FDA a Evropská léková agentura (EMA) vydaly bezprecedentní počet Import Alerts a GMP (Good Manufacturing Practice) varování pro indická výrobní zařízení, což vedlo k okamžitému přerušení certifikovaných dodávek pro řadu generik. EMA ve svém výroční zprávě za rok 2023 uvádí, že celkový počet hlášených výpadků v EU vzrostl v období 2018–2024 čtyřnásobně — trend, který přesně kopíruje česká data.
+      </p>
+
+      <p>
+        Roku 2026 indikátor dosahuje hodnoty přibližně 2 200 aktivních výpadků — hodnoty, která odpovídá signálu "bad" podle nastavené signální logiky HSPA dashboardu (threshold: good pod 600, warn 600–1500, bad nad 1500). Jde o přetrvávající stav, nikoli krizový peak, který by po odeznění příčiny klesl zpět.
+      </p>
+
+      <h3>Globální kontext: kde se léky vyrábějí a proč to vadí</h3>
+
+      <p>
+        Základ problému leží ve výrobní geografii. Výroba API — účinných farmaceutických ingrediencí — je od devadesátých let v globálním měřítku masivně koncentrována v Indii a Číně. Odhady WHO z roku 2023 hovoří o tom, že 60 až 80 procent API spotřebovaných v Evropě pochází z asijských výrobních lokalit. Pro některé terapeutické skupiny je závislost ještě vyšší: penicilinová API jsou z více než 90 procent vyráběna v čínských provozech, paracetamolové API přibližně ze 70 procent v Číně a Indii dohromady.
+      </p>
+
+      <p>
+        Tato geografická koncentrace je výsledkem čtyř dekád ekonomické rationalizace. Výroba API v Evropě a Severní Americe byla nákladnější v důsledku vyšších mezd, přísnějšího environmentálního dohledu a regulačních povinností. Při neexistenci strategické pobídky — státní záruky odbytu nebo regulované minimální ceny — nebylo pro evropské výrobce ekonomicky racionální udržovat plnou výrobní kapacitu, pokud asijská konkurence mohla dodat tutéž API za třetinovou cenu.
+      </p>
+
+      <p>
+        Druhým faktorem je ekonomická nevýhodnost starých generik. Léčivý přípravek, jehož patent vypršel před dvaceti lety, je na volně konkurenčním trhu tlačen k minimální ceně. V systémech s tvrdou referenční cenou (jako je Česko nebo Německo) může být marže generického výrobce natolik nízká, že provoz výrobní linky přestane být rentabilní v momentě, kdy ceny vstupních surovin — tedy API — stoupnou. Výrobce linku nezastaví ze dne na den: podá hlášení regulátorovi (v ČR SÚKL, na úrovni EU EMA) a přeruší nebo ukončí dodávky. Výpadek, který pacient registruje u přepážky lékárny, je tedy koncem dlouhého řetězce ekonomických rozhodnutí, v nichž regulace sehrála klíčovou roli.
+      </p>
+
+      <p>
+        Třetím faktorem je regulační zaostávání EU za USA. FDA umožňuje generickým přípravkům rychlejší vstup na trh prostřednictvím zjednodušeného procesu ANDA (Abbreviated New Drug Application). Schvalovací lhůty FDA pro generika jsou v průměru kratší než lhůty EMA pro srovnatelné centralizované registrace. Tento rozdíl má přímý dopad: při vzniku výpadku v EU je americký trh schopen rychleji sáhnout po alternativním dodavateli, protože generický alternativní dodavatel je pravděpodobněji již zaregistrován v USA. V EU musí alternativní dodavatel projít buď centralizovanou procedurou EMA nebo národní procedurou v každém z členských států — a to je v horizontu týdnů nebo měsíců nepřekonatelná administrativní překážka.
+      </p>
+
+      <p>
+        EU tyto slabiny rozpoznala. V březnu 2024 Evropská komise předložila návrh Critical Medicines Act (nařízení o kritických léčivých přípravcích), jehož cílem je diverzifikace výrobní základny, zavedení strategických zásob na úrovni členských států a harmonizace povinností hlášení výpadků. Schválení nařízení je plánováno na první pololetí 2026. Klíčové mechanismy zahrnují: povinnost výrobců oznamovat rizikové výpadky minimálně 12 měsíců předem (nikoli 2 měsíce, jak platí dnes), vytvoření seznamu kritických léčivých přípravků s přísnějšími zásobovacími požadavky a finanční pobídky pro výrobu API v Evropě.
+      </p>
+
+      <h3>České specifikum: malý trh, reexport a slabá strategická zásoba</h3>
+
+      <p>
+        K globálním tlakům se v Česku přidávají domácí faktory, které situaci zhoršují nad průměr srovnatelně velkých středoevropských trhů.
+      </p>
+
+      <p>
+        <strong>Malý trh.</strong> Česká republika tvoří přibližně 0,5 procenta evropského trhu léčivých přípravků. Globální výrobce, který musí alokovat omezené zásoby deficitní API, má ekonomický důvod upřednostnit trhy s vyšší marží nebo vyšším objemem — Německo, Francii, Velkou Británii. Česko je v takové alokační hierarchii systematicky nevýhodně postaveno. Tomuto efektu nelze čelit jednotlivou lékárnou ani distributorem — je to selhání, které vyžaduje regulatorní odpověď na úrovni státu nebo EU.
+      </p>
+
+      <p>
+        <strong>Reexport.</strong> Zákon 378/2007 Sb. o léčivech (§ 77) ukládá distributorům povinnost zajišťovat zásobování lékáren přiměřeně jejich potřebám. V praxi však distributor, který přijal dodávku deficitního přípravku, může část zásoby reexportovat do zemí EU s vyšší cenou přípravku — pokud není aktivní krizová výjimka. Reexport je legální obchodní praktika v rámci volného pohybu zboží na vnitřním trhu EU, ale v situaci výpadku jeho efekt zesiluje dostupnostní deficit pro české pacienty. Novela zákona 378/2007 Sb. z roku 2024 posílila hlásicí povinnosti distributorů a umožnila SÚKL v krizové situaci reexport omezit administrativním opatřením — ale tato pravomoc nebyla doposud využita v plném rozsahu a sankční mechanismus zůstává nevyjasněný.
+      </p>
+
+      <p>
+        <strong>Distribuční oligopol.</strong> Na českém velkoobchodním distribučním trhu dominují čtyři subjekty: Phoenix Lékárenský velkoobchod, Pharmos, Alliance Healthcare a Pharos. Tato koncentrace sama o sobě není problémem — je to přirozená ekonomika rozsahu. Problémem se stává v momentě, kdy výpadek přípravku nastane a distributor nemá zásobu, nebo zásobu má, ale má i zákazníky v jiných zemích EU, jimž ji může prodat výhodněji. Skutečná dostupnost přípravku pro českou lékárnu je pak výsledkem série interních alokačních rozhodnutí distributora, do nichž stát nemá transparentní přehled.
+      </p>
+
+      <p>
+        <strong>Emergency Stock.</strong> Zákon 378/2007 Sb. v platném znění po novele roku 2024 zavedl institut povinné strategické zásoby — Emergency Stock — pro vybrané esenciální léčivé přípravky. SÚKL spravuje a zveřejňuje seznam přípravků, pro něž mají výrobci a distributoři povinnost udržovat zásobu odpovídající minimálně 3 měsícům průměrné spotřeby. Aktuální seznam však čítá méně než 100 přípravků — zlomek z více než 2 200 aktivně nedostupných. Sněmovní tisk 612, jehož první čtení proběhlo v listopadu 2025, navrhuje rozšíření seznamu na 500 a více léčivých přípravků, zavedení finančních sankcí za porušení zásobovacích povinností a posílení reexportních omezení v krizových situacích. Text byl v době přípravy tohoto článku (květen 2026) ve druhém čtení ve sněmovním výboru pro zdravotnictví.
+      </p>
+
+      <h3>Klinický dopad: kdy je výpadek skutečně problém</h3>
+
+      <p>
+        Statistika aktivních výpadků je administrativní agregát. Pro pochopení klinického dopadu je nutné rozlišovat přípravky podle terapeutické nahraditelnosti a klinické závažnosti.
+      </p>
+
+      <p>
+        <strong>Nahraditelné výpadky</strong> postihují přípravky, pro něž existuje registrovaná alternativa se stejnou účinnou látkou, silou a lékovou formou. Výpadek paracetamolu 500 mg tbl je typickým příkladem: i při výpadku jednoho výrobce jsou na trhu desítky generických variant téhož přípravku, a lékárník může bez problémů substituovat. Pacient může zaznamenat odlišný obal, jiný výrobce, ale terapeutický efekt je shodný. Tyto výpadky tvoří pravděpodobně nadpoloviční část celkového počtu — přesný podíl SÚKL feed neudává, protože pole <code>NAHRAZUJICI_LP</code> je vyplněno jen u části záznamů.
+      </p>
+
+      <p>
+        <strong>Klinicky závažné výpadky</strong> postihují přípravky, kde neexistuje přímá alternativa nebo kde substituce vyžaduje lékařský zásah. Levothyroxin je modelovým příkladem: přípravky různých výrobců mají sice stejnou deklarovanou sílu, ale biologická dostupnost se mezi výrobci měřitelně liší — a u pacientů s onemocněním štítné žlázy může přechod na jiného výrobce vyvolat změnu hladin TSH vyžadující laboratorní kontrolu a úpravu dávkování. Jiným příkladem jsou lithiové soli v léčbě bipolární poruchy: úzký terapeutický index znamená, že přechod na generikum jiného výrobce, byť se stejnou deklarovanou silou, může vést k toxicitě nebo terapeutickému selhání. Výpadek v těchto skupinách = nutná lékařská intervence.
+      </p>
+
+      <p>
+        <strong>Top ATC třídy postižené výpadky</strong> podle analýz SÚKL a EMA konzistentně zahrnují tři oblasti: N (nervová soustava) — psychofarmaka, antikonvulziva, analgetika; C (kardiovaskulární systém) — antihypertenziva, statiny, antiagregancia; J (antiinfektiva pro systémové použití) — antibiotika, antivirotika. Právě kategorie N a J jsou z klinického hlediska nejznepokojivější: psychofarmaka pro chronicky nemocné, kde náhlá změna nebo přerušení terapie má přímý dopad na duševní zdraví, a antibiotika, kde výpadky spolupůsobí s tlakem na racionální preskripci — lékař sahá po dostupném, nikoli po ideálním antibiotiku.
+      </p>
+
+      <p>
+        Skutečný klinický zátěžový test výpadků přichází, když je přípravek jediným registrovaným léčivým přípravkem s danou účinnou látkou nebo kombinací v ČR. V takovém případě neexistuje žádná substituovatelná alternativa bez lékařské intervence, přepisu nebo importu ze zahraničí (§ 8 zákona 378/2007 Sb. — mimořádný dovoz). Mimořádný dovoz je administrativně náročný, zpravidla trvá týdny a je podmíněn individuálním souhlasem SÚKL a zdravotní pojišťovny. Pro pacienta s urgentní potřebou je to systém, který selhal.
+      </p>
+
+      <h3>Mezinárodní paralely: jak to dělají jinde</h3>
+
+      <p>
+        Problém výpadků léčiv není českým specifikem — trápí celou EU. Ale způsob, jakým různé státy budují regulatorní a zásobovací odolnost, se liší, a tyto rozdíly mají měřitelný dopad na dostupnost pro pacienty.
+      </p>
+
+      <p>
+        <strong>Dánsko</strong> provozuje prostřednictvím DKMA (Danish Medicines Agency) tzv. Beredskabslager — pohotovostní zásobu kritických léčivých přípravků financovanou ze státního rozpočtu. Seznam přípravků zahrnuje přibližně 300 položek a zásoba odpovídá minimálně 3 měsícům průměrné spotřeby. DKMA pravidelně aktualizuje seznam na základě hodnocení klinické závažnosti a tržní dostupnosti. Klíčovým prvkem dánského modelu je, že zásobu spravuje stát přímo — nikoli prostřednictvím povinnosti uložené distributorům, kteří ji mohou splnit formálně. Dánský model je finančně náročnější, ale transparentnější.
+      </p>
+
+      <p>
+        <strong>Francie</strong> přijala v roce 2022 Pharmaceutical Strategy (Stratégie nationale de lutte contre les pénuries de médicaments) a ANSM (Agence nationale de sécurité du médicament et des produits de santé) provozuje veřejně přístupný registr výpadků (ruptures de stock), který je napojen na distribuční a lékárenské informační systémy. Výrobci mají povinnost oznamovat hrozící výpadek minimálně 2 měsíce předem pro přípravky bez rizikové klasifikace a 6 měsíců předem pro přípravky na tzv. "liste des médicaments d'intérêt thérapeutique majeur" (MITM — seznam přibližně 3 000 přípravků s nejvyšší klinickou závažností). Za nesplnění oznamovací povinnosti hrozí sankce až 30 procent obratu. Francie má tak právě díky MITM listu daleko přesnější přehled o potenciálních výpadcích než Česko, kde je seznam Emergency Stock pod 100 položek.
+      </p>
+
+      <p>
+        <strong>Německo</strong> přijalo v roce 2023 zákon o dodávkách léčivých přípravků (Lieferengpassgesetz), který zavedl povinnost výrobců generik udržovat zásobu pro německý trh v délce 3 měsíců a zavázal ZI-Institut (Zentralinstitut für die kassenärztliche Versorgung) k pravidelnému hodnocení zásobovacích rizik. Německý přístup je pozoruhodný tím, že kombinuje zásobovací povinnost s cenovým opatřením: u přípravků zařazených na krizový seznam je možné dočasně pozastavit aplikaci referenčního cenovacího mechanismu tak, aby výrobci nebyli ekonomicky tlačeni k opuštění trhu. Toto propojení zásobovacích a cenových politik je v EU zatím výjimkou — a Německo za ně platí vyššími cenami generik pro pojišťovny, ale nižší závislostí na výpadcích.
+      </p>
+
+      <p>
+        <strong>Belgie</strong> ukládá prostřednictvím FAGG (Federaal Agentschap voor Geneesmiddelen en Gezondheidsproducten) distributor stock obligation — povinnost velkodistributorů udržovat zásobu vybraných přípravků pro belgický trh. FAGG pravidelně audituje sklady a může uložit pokutu při neplnění. Belgický mechanismus je porovnatelný s navrhovanou českou úpravou ve sněmovním tisku 612 — rozdíl je v tom, že v Belgii je systém funkční od roku 2019 a sankce byly již vyměřeny, zatímco v Česku je reforma stále v parlamentním procesu.
+      </p>
+
+      <p>
+        <strong>Portugalsko</strong> provozuje prostřednictvím INFARMED (Autoridade Nacional do Medicamento e Produtos de Saúde) Pharmacy Continuity Plan — systém, v němž jsou lékárny při registraci výpadku automaticky informovány o dostupných alternativách a jsou jim zprostředkovány náhradní dodávky z centrálního zásobovacího bodu. Plán snižuje dopad výpadku na pacienta tím, že přesouvá administrativní zátěž řešení z lékárníka a lékaře na regulátora.
+      </p>
+
+      <p>
+        <strong>EU Critical Medicines Act (březen 2024, plánované schválení 1H 2026)</strong> je pokusem harmonizovat fragmentované národní přístupy. Klíčové prvky návrhu zahrnují: (1) EU-level seznam kritických léčivých přípravků s povinnou zásobou na národní úrovni, (2) posílení EMA role v koordinaci EU-wide response při výpadcích, (3) finanční pobídky pro výrobu API v Evropě prostřednictvím fondů European Health Emergency preparedness and Response Authority (HERA), (4) harmonizaci oznamovacích povinností — minimálně 12 měsíců pro přípravky na kritickém seznamu. Pro Česko, jako malý trh bez silného průmyslového lobbování, je přijetí Critical Medicines Act klíčovým zahraničně-politickým zájmem: harmonizace na EU úrovni je jedinou cestou, jak vyrovnat nevýhodu malého trhu při alokaci deficitních zásob.
+      </p>
+
+      <h3>Reformní agenda 2026: co je na stole</h3>
+
+      <p>
+        Na domácí legislativní scéně je klíčovým dokumentem sněmovní tisk 612 — návrh novely zákona 378/2007 Sb. o léčivech. Text prošel prvním čtením v listopadu 2025 a v době přípravy tohoto článku je projednáván ve výboru pro zdravotnictví.
+      </p>
+
+      <p>
+        Novela navrhuje tři věcné změny. <strong>Za prvé:</strong> rozšíření seznamu Emergency Stock z méně než 100 na 500 a více léčivých přípravků. Kritéria zařazení zahrnují: klinická nezastupitelnost (přípravek bez dostupné alternativy nebo s úzkým terapeutickým indexem), historická četnost výpadků v databázi SÚKL a objem spotřeby. Rozšíření seznamu je podmínkou pro jakýkoli smysluplný zásobovací mechanismus — Emergency Stock o 100 položkách je symbolický nástroj.
+      </p>
+
+      <p>
+        <strong>Za druhé:</strong> zavedení sankcí za nehlášené přerušení dodávek. Platné znění § 77 zákona 378/2007 Sb. ukládá výrobci a distributorovi oznamovací povinnost, ale za nesplnění hrozí správní pokuta, jejíž výše a vymahatelnost jsou v praxi nedostatečné. Novela navrhuje zvýšení maximální výše pokuty a zavedení automatizovaného přestupkového řízení bez nutnosti individuální správní úvahy SÚKL.
+      </p>
+
+      <p>
+        <strong>Za třetí:</strong> posílení evidenčních povinností distributorů vůči SÚKL — konkrétně povinnost hlásit pohyb zásob deficitních přípravků v reálném čase, nikoli ex post. Tato úprava je technicky podmíněna napojením distribučních informačních systémů na centrální registr SÚKL — a to je implementační výzva, jejíž řešení bude vyžadovat prováděcí vyhlášku a přechodné období.
+      </p>
+
+      <p>
+        Souběžně Ministerstvo zdravotnictví diskutuje posílení dohledové role SÚKL, včetně pravomoci SÚKL nařídit distributorovi okamžité přesměrování zásoby deficitního přípravku na přednostně zásobované lékárny (nemocniční lékárny, dispensarizovaní pacienti). Tato pravomoc v zákoně zatím explicitně chybí — SÚKL ji může doporučit, ale ne nařídit.
+      </p>
+
+      <p>
+        Otázkou zůstává, zda se novela dostane do závěrečného čtení a k podpisu prezidenta v horizontu, který umožní účinnost do konce roku 2026. Sněmovna má plný legislativní kalendář a zdravotnická legislativa bývá politicky konfliktní, protože distribuční a výrobní sektor má silné lobbyistické zastoupení. Lékárenská sekce ČLnK (České lékárenská komora) podporuje rozšíření Emergency Stock a sankce za nehlášené výpadky, ale v otázce distribučních povinností se zájmy lékáren a velkodistributorů rozcházejí.
+      </p>
+
+      <h3>Co lze systémově ovlivnit a kde jsou meze</h3>
+
+      <p>
+        Výpadky léčiv mají dva zdroje — globální a lokální — a reformní nástroje musejí odpovídat jejich povaze. Záměna jednoho za druhý vede k iluzorním řešením.
+      </p>
+
+      <p>
+        <strong>Lokálně ovlivnitelné faktory</strong> zahrnují reexport, zásobovací povinnosti distributorů a transparentnost hlášení. Zde má česká legislativa přímý nástroj: zákon 378/2007 Sb. a prováděcí vyhlášky SÚKL. Sněmovní tisk 612 je správným krokem, byť zpožděným o přibližně tři až pět let v porovnání s Francií, Německem nebo Belgií. Posílení Emergency Stock na 500 přípravků, zavedení vymahatelných sankcí a real-time evidence distribučních toků jsou opatření, jejichž implementace je v kompetenci ministerstva zdravotnictví bez nutnosti souhlasu EU.
+      </p>
+
+      <p>
+        <strong>Globálně ovlivnitelné faktory</strong> — koncentrace API výroby v Asii, ekonomická nevýhodnost starých generik, regulační zaostávání EU — vyžadují řešení na úrovni EU. Critical Medicines Act je správný nástroj, ale jeho dopady se projeví v horizontu let, nikoli měsíců. Česko by mělo — v rámci přezkumu implementace a v pracovní skupině HERA — prosazovat, aby seznam kritických léčivých přípravků na úrovni EU byl dostatečně obsáhlý a zahrnoval i přípravky, jež jsou kritické pro malé trhy jako ČR, nikoli jen pro velké trhy, jejichž lobbistická váha v bruselském procesu je nesrovnatelně vyšší.
+      </p>
+
+      <p>
+        <strong>Faktory mimo dosah regulace</strong> zahrnují globální ekonomiku generického průmyslu a výrobní rozhodnutí privátních společností. Pokud je výroba levothyroxinu API pro daného výrobce ztrátová při aktuální referenční ceně v ČR, žádná regulace ho k výrobě nezavazuje — leda by stát prostřednictvím veřejné zakázky garantoval objem a cenu dostatečné k rentabilitě. Tento model — veřejná zakázka na kritická API nebo hotové přípravky — existuje v některých zemích, ale je politicky a ekonomicky náročný. Pro Česko, jehož trh má objem cca 80 miliard Kč ročně (z toho generika tvoří přibližně 40 procent), by vyžadoval koordinaci se sousedními státy nebo operování v rámci společného EU nákupního mechanismu.
+      </p>
+
+      <h3>Závěr: barometr, který ukazuje pod červenou čáru</h3>
+
+      <p>
+        Indikátor aktivních výpadků léčiv je v HSPA dashboardu záměrně zařazen do domény Procesy — Dostupnost — Léková dostupnost, nikoli do oblasti Výsledky. Výpadek sám o sobě neznamená zhoršení zdravotního stavu: to nastane teprve tehdy, když substituce selže, přepis se zdržuje nebo pacient přeruší léčbu. Indikátor měří zátěž systému na vstupu — a při hodnotě přes 2 200 aktivních výpadků je tato zátěž jednoznačně abnormální.
+      </p>
+
+      <p>
+        Za číslicí stojí konkrétní dynamika: 2 200 přípravků v aktivním výpadku neznamená 2 200 pacientů bez léku. Znamená to, že pro 2 200 přípravků musejí lékárníci, lékaři a pacienti každý den řešit substituci, přepis nebo vysvětlení. Část těchto řešení je snadná (paracetamol jiného výrobce). Část je klinicky riziková (levothyroxin, lithium, antiepileptika). Část je administrativně vyčerpávající (mimořádný dovoz). A část se neřeší vůbec — pacient přeruší léčbu, protože znovu obcházet ordinaci, pojišťovnu a lékárnu kvůli přípravku, který "přece existuje", je nad jeho síly.
+      </p>
+
+      <p>
+        Tato zátěž dopadá nerovnoměrně. Pacienti s polyfarmakem — zpravidla senioři s více chronickými onemocněními — jsou výpadkům exponováni opakovaně a každá substituce přináší riziko záměny. Lékaři v přetížené primární péči věnují části svého omezeného času administrativě, která nesouvisí s medicínou. Lékárníci přijímají stížnosti za situaci, kterou nemohli ovlivnit.
+      </p>
+
+      <p>
+        Reforma je na stole. Sněmovní tisk 612 rozšiřuje Emergency Stock, zavádí sankce a posiluje transparentnost. Critical Medicines Act přináší EU-level koordinaci. Tyto kroky jsou nutné — ale jejich dopad se projeví s přirozeným zpožděním legislativního a implementačního procesu. Indikátor <code>vypadky_leciv_aktivni</code> bude mezitím pokračovat v každodenním záznamu toho, kde systém selhává. A bude stát za to ho sledovat — protože 2 200 výpadků není přijatelná norma.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Datový klíč: HSPA indikátory</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru související s tématem článku</h4>
+      <ul class="article-databox-list">
+        <li><a href="../indicator.html?id=vypadky_leciv_aktivni"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — počet LP s aktivním hlášením P/K bez obnovení; ~2 200 v roce 2026 (signal: bad). Oblast: Procesy → Dostupnost → Léková dostupnost.</li>
+        <li><a href="../indicator.html?id=lekarny_per_100k"><strong>Lékárny / 100 000 obyvatel</strong></a> — hustota lékárenské sítě jako kontext dostupnosti výdeje léčiv; ČR ~26,7 (oblast: Struktury → Pracovní síla a kapacity).</li>
+        <li><a href="../indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik</strong></a> — DDD / 1 000 obyvatel / den; výpadky v kategorii J (antiinfektiva) přispívají k tlaku na nevhodnou preskripci dostupných alternativ.</li>
+        <li><a href="../indicator.html?id=pouzivani_antidepresiv"><strong>Užívání antidepresiv</strong></a> — DDD / 1 000 obyvatel / den; kategorie N (psychofarmaka) je dlouhodobě jednou z nejvíce postižených ATC skupin výpadky.</li>
+        <li><a href="../indicator.html?id=unmet_need_medical"><strong>Nenaplněná zdravotní potřeba</strong></a> — podíl populace, která si péči nebo léky odepřela; dostupnost léčiv je jedním z faktorů tohoto indikátoru.</li>
+        <li><a href="../indicator.html?id=vydaje_na_leciva"><strong>Výdaje na léčiva jako % HDP</strong></a> — strukturální kontext: nízká cena generik v ČR jako faktor ekonomické nevýhodnosti trhu pro výrobce.</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Legislativa, data a mezinárodní reference</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česká legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon 378/2007 Sb. o léčivech</strong> — základní právní rámec výroby, distribuce a vydávání léčivých přípravků v ČR; § 77 a násl. upravují zásobovací povinnosti výrobců a distributorů, Emergency Stock a reexportní omezení. Platné znění po novele roku 2024. <a href="https://www.zakonyprolidi.cz/cs/2007-378" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon 48/1997 Sb. o veřejném zdravotním pojištění</strong> — § 39b a násl. upravují podmínky hrazení léčivých přípravků; cenotvorba a referenční ceny jako faktor ekonomické rentability pro výrobce generik. <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Sněmovní tisk 612 (8. volební období, 1. čtení 11/2025)</strong> — návrh novely zákona 378/2007 Sb.: rozšíření Emergency Stock na 500+ LP, sankce za nehlášené přerušení dodávek, posílení reexportních omezení. Stav: projednávání v Podvýboru pro farmacii a vědu ve zdravotnictví. <a href="https://www.psp.cz/sqw/historie.sqw?o=8&T=612" target="_blank" rel="noopener">psp.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Otevřená data SÚKL</h5>
+        <ul class="article-sources-list">
+          <li><strong>SÚKL OpenData — MR feed (Hlášení o uvedení/přerušení/ukončení/obnovení dodávek)</strong> — kumulativní CSV soubor od 31. 12. 2007, denní aktualizace. Sloupce: KOD_SUKL, TYP_OZNAMENI (U/P/K/O), DATUM_HLASENI, TERMIN_OBNOVENI, POSLEDNI_PLATNE_HLASENI, DUVOD_PRERUSENI_UKONCENI. Licence CC-BY 4.0. <a href="https://opendata.sukl.cz" target="_blank" rel="noopener">opendata.sukl.cz ↗</a></li>
+          <li><strong>SÚKL datové rozhraní MR — dokumentace schématu (MR_datove_rozhrani20230301.csv)</strong> — technická specifikace polí MR feedu, popis deduplikační logiky POSLEDNI_PLATNE_HLASENI. <a href="https://opendata.sukl.cz/soubory/MR_datove_rozhrani20230301.csv" target="_blank" rel="noopener">opendata.sukl.cz ↗</a></li>
+          <li><strong>SÚKL pro média — Nedostupnost léčiv v ČR</strong> — měsíční mediální shrnutí počtu aktuálně nedostupných LP s grafickým přehledem; vhodné jako lidsky čitelný cross-check. <a href="https://sukl.gov.cz/media/sukl-pro-media/nedostupnost-leciv-v-cr/" target="_blank" rel="noopener">sukl.gov.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">EU a mezinárodní regulace</h5>
+        <ul class="article-sources-list">
+          <li><strong>EMA — Medicines Shortages Catalogue</strong> — katalog výpadků centrálně registrovaných léčivých přípravků v EU; poznámka: nezahrnuje národně registrované přípravky, přímé srovnání s národními registry je metodologicky omezené. <a href="https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/medicine-shortages-availability-issues" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
+          <li><strong>EMA — Annual Reports on Medicines Shortages in the EU (2019–2023)</strong> — eviduje 4× nárůst hlášených výpadků v EU v období 2018–2024; metodologie a trendy. <a href="https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/medicine-shortages-availability-issues" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
+          <li><strong>EU Critical Medicines Act — návrh nařízení Evropské komise (březen 2024)</strong> — harmonizace zásobovacích povinností, EU seznam kritických LP, pobídky pro výrobu API v Evropě, posilení role HERA. Plánované schválení 1H 2026. <a href="https://ec.europa.eu/health/medicinal-products/critical-medicines_en" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>WHO — Strategic Stockpiling of Essential Medicines and Health Commodities (2023)</strong> — rámec pro strategické zásoby; odhady 60–80 % závislosti evropské spotřeby API na asijských dodávkách. <a href="https://www.who.int/publications/i/item/strategic-stockpiling-essential-medicines" target="_blank" rel="noopener">who.int ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Národní regulatorní modely</h5>
+        <ul class="article-sources-list">
+          <li><strong>Dánsko — DKMA Beredskabslager (pohotovostní zásoba léčivých přípravků)</strong> — model státem spravované strategické zásoby přibližně 300 kritických LP. <a href="https://laegemiddelstyrelsen.dk/" target="_blank" rel="noopener">laegemiddelstyrelsen.dk ↗</a></li>
+          <li><strong>Francie — Stratégie nationale de lutte contre les pénuries de médicaments (2022)</strong>; ANSM — registr ruptures de stock a seznam médicaments d'intérêt thérapeutique majeur (MITM, ~3 000 přípravků) s oznamovací povinností 6 měsíců předem. <a href="https://www.ansm.sante.fr/disponibilite-des-produits-de-sante/medicaments/ruptures-de-stock-des-medicaments" target="_blank" rel="noopener">ansm.sante.fr ↗</a></li>
+          <li><strong>Německo — Lieferengpassgesetz (2023)</strong> — zákon o zásobovacích problémech léčivých přípravků; 3měsíční zásobovací povinnost pro generika, podmíněné cenové výjimky pro přípravky na krizovém seznamu. <a href="https://www.gesetze-im-internet.de/" target="_blank" rel="noopener">gesetze-im-internet.de ↗</a></li>
+          <li><strong>Belgie — FAGG Stock obligation (od roku 2019)</strong> — povinnost velkodistributorů udržovat zásobu vybraných přípravků pro belgický trh; FAGG audituje a ukládá pokuty. <a href="https://www.fagg.be/nl" target="_blank" rel="noopener">fagg.be ↗</a></li>
+          <li><strong>Portugalsko — INFARMED Pharmacy Continuity Plan</strong> — systém automatické notifikace lékáren o výpadcích a zprostředkování náhradních dodávek z centrálního bodu. <a href="https://www.infarmed.pt/" target="_blank" rel="noopener">infarmed.pt ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Číselné hodnoty počtu aktivních výpadků vycházejí z indikátoru <code>vypadky_leciv_aktivni</code> HSPA dashboardu, jehož zdrojem je SÚKL MR feed (opendata.sukl.cz). Hodnoty pro rok 2019 jsou seed estimate; hodnoty 2020–2026 odpovídají zpracovanému feedu k referenčnímu datu. Mezinárodní srovnání jsou orientační — definice "výpadku" se mezi státy liší. Legislativní reference odkazují na platné znění zákonů; stav sněmovního tisku 612 odpovídá informacím dostupným ke květnu 2026. Tento text je pracovní verzí (DRAFT) — určen k redakční diskusi, nikoli ke zveřejnění bez další revize.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="../clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="../src/clanky.js"></script>
+
+</body>
+</html>
