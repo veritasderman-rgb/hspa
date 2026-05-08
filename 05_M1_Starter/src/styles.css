@@ -2742,6 +2742,255 @@ ul.md-enum > li > strong:first-child {
   color: var(--ink);
 }
 
+/* =================================================================
+   Akční plán — týdenní startovací balíček (7 dní × 1 změna)
+   ================================================================= */
+.action-plan-section {
+  padding: 48px 40px;
+  margin: 24px 0 0;
+  background: var(--paper2);
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.action-plan-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+  max-width: 820px;
+  margin-bottom: 28px;
+}
+.action-plan-lead strong { color: var(--ink); }
+
+.action-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.action-day {
+  position: relative;
+  padding: 18px 16px 56px;
+  background: var(--paper);
+  border-right: 1px solid var(--rule2);
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+.action-day:last-child { border-right: none; }
+.action-day-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.action-day-num {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--ink);
+  line-height: 1;
+}
+.action-day-tag {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+  width: max-content;
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 1px;
+}
+.action-day-tag[data-theme="jidlo"] { color: #a05a08; border-bottom-color: #a05a08; }
+.action-day-tag[data-theme="pohyb"] { color: #2f6b1f; border-bottom-color: #2f6b1f; }
+.action-day-tag[data-theme="screening_preventivni_pece"] { color: #0b4fa8; border-bottom-color: #0b4fa8; }
+.action-day-tag[data-theme="alkohol"] { color: #b8361e; border-bottom-color: #b8361e; }
+.action-day-tag[data-theme="vztahy_samota"] { color: #5c4099; border-bottom-color: #5c4099; }
+.action-day-tag[data-theme="digitalni_zdravi"] { color: #1a7a4a; border-bottom-color: #1a7a4a; }
+.action-day-tag[data-theme="smysl_zivota"] { color: #b45f06; border-bottom-color: #b45f06; }
+
+.action-day-text {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  flex-grow: 1;
+}
+.action-day-link {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.action-day-link:hover { color: var(--ink); }
+
+.action-plan-foot {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 24px;
+  background: var(--paper);
+  border-left: 3px solid var(--ink);
+}
+.action-plan-foot-icon {
+  font-size: 28px;
+  color: var(--red);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.action-plan-foot-text {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.action-plan-foot-text strong { color: var(--ink); }
+.action-plan-foot-text em { color: var(--ink-mut); }
+
+/* =================================================================
+   Kontakty — sekce pro vyhledání pomoci
+   ================================================================= */
+.contacts-section {
+  padding: 48px 40px 56px;
+  margin-bottom: 0;
+}
+.contacts-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+  max-width: 820px;
+  margin-bottom: 32px;
+}
+
+.contacts-section-block { margin-bottom: 36px; }
+.contacts-section-block h4 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.contacts-section-note {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  max-width: 820px;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  background: var(--paper);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s, transform 0.12s;
+}
+.contact-card:hover {
+  background: var(--paper2);
+  transform: translateX(2px);
+}
+.contact-card-label {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.contact-card-tel {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  letter-spacing: 0.02em;
+}
+.contact-card-desc {
+  font-family: var(--serif);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin-top: 4px;
+}
+.contact-card-desc a { color: var(--red); text-decoration: none; }
+.contact-card-desc a:hover { text-decoration: underline; }
+
+/* Krizové karty — výrazná červená pro upozornění */
+.contact-card.contact-crisis {
+  border-left: 3px solid var(--red);
+}
+.contact-card.contact-crisis .contact-card-tel {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.contacts-disclaimer {
+  margin-top: 24px;
+  padding: 18px 22px;
+  background: var(--paper2);
+  border-left: 3px solid var(--ink);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.contacts-disclaimer strong { color: var(--ink); }
+.contacts-disclaimer a { color: var(--red); text-decoration: none; }
+.contacts-disclaimer a:hover { text-decoration: underline; }
+
+@media (max-width: 1024px) {
+  .action-week { grid-template-columns: repeat(4, 1fr); }
+  .action-day:nth-child(4n) { border-right: none; }
+  .action-day:nth-child(-n+4) { border-bottom: 1px solid var(--rule); }
+}
+@media (max-width: 720px) {
+  .action-plan-section,
+  .contacts-section { padding-left: 20px; padding-right: 20px; }
+  .action-week { grid-template-columns: 1fr 1fr; }
+  .action-day { border-right: 1px solid var(--rule2) !important; min-height: 180px; }
+  .action-day:nth-child(2n) { border-right: none !important; }
+  .contacts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .action-week { grid-template-columns: 1fr; }
+  .action-day { border-right: none !important; border-bottom: 1px solid var(--rule); min-height: auto; }
+  .action-day:last-child { border-bottom: none; }
+}
+
 @media (max-width: 880px) {
   .prevention-grid { grid-template-columns: 1fr; }
   .prevention-card { border-right: none !important; border-bottom: 1px solid var(--rule) !important; }
