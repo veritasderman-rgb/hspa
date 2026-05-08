@@ -234,6 +234,7 @@ export function renderModuleNav(activeId) {
   const path = window.location.pathname;
   const tabs = [
     { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
+    { id: 'hspa-prehled', label: 'HSPA přehled',           href: 'hspa-prehled.html',       match: ['hspa-prehled.html'] },
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html'] },
