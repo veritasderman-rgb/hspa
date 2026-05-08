@@ -411,10 +411,58 @@ export function renderInlineMarkdown(s) {
 }
 
 /**
+ * Detekuje paragraf s inline číslovanou/písmennou výčetkou typu
+ * "intro: (1) první ... (2) druhý ... (3) třetí" a převádí ji na proper
+ * <ol> seznam. Vrací { intro, items, isNum } nebo null.
+ *
+ * Bezpečnost: vyžaduje sekvenční markery (1,2,3 nebo a,b,c) bez přeskoků,
+ * minimálně 2 markery. Markery musí být odděleny whitespace nebo na začátku.
+ * Aby se nesplelo s odkazy typu "§3 odst. 1" (bez závorek), pracujeme jen
+ * se závorkovou notací (X).
+ */
+export function detectInlineEnumeration(text) {
+  if (!text || typeof text !== 'string') return null;
+  // Normalizace: data občas markují celý "(1) Topic" jako tučný span:
+  //   **(1) demografie** — text...   →   (1) **demografie** — text...
+  // To pomůže detektoru a zároveň zachová bold u topic.
+  text = text.replace(/\*\*\(([0-9a-z])\)\s+([^*]+?)\*\*/g, '($1) **$2**');
+  // Případy, kdy je tučný jen marker:  **(1)** text  → (1) text
+  text = text.replace(/\*\*\(([0-9a-z])\)\*\*/g, '($1)');
+
+  const markerRe = /(^|[\s])\(([0-9]|[a-z])\)\s/g;
+  const markers = [];
+  let m;
+  while ((m = markerRe.exec(text)) !== null) {
+    markers.push({ token: m[2], start: m.index + m[1].length, end: m.index + m[0].length });
+  }
+  if (markers.length < 2) return null;
+
+  const isNum = /^\d$/.test(markers[0].token);
+  for (let i = 0; i < markers.length; i++) {
+    const expected = isNum ? String(i + 1) : String.fromCharCode(97 + i);
+    if (markers[i].token !== expected) return null;
+  }
+
+  const intro = text.slice(0, markers[0].start).trim();
+  const items = [];
+  for (let i = 0; i < markers.length; i++) {
+    const start = markers[i].end;
+    const end = i + 1 < markers.length ? markers[i + 1].start : text.length;
+    let item = text.slice(start, end).trim();
+    item = item.replace(/[;,]\s*$/, '');
+    items.push(item);
+  }
+  return { intro, items, isNum };
+}
+
+/**
  * Vyrenderuje blokový markdown:
  *   - dvojitý newline → odstavec
  *   - řádky začínající `- ` nebo `* ` → <ul><li>
  *   - řádky začínající `1. ` (číslo + tečka) → <ol><li>
+ *   - paragrafy s inline výčetkou (1)…(2)…(3) nebo (a)…(b)… se převádí
+ *     na proper <ol class="md-enum"> s case-insensitive bold prefixem
+ *     u "Topic — rest" položek.
  * Inline markdown se aplikuje uvnitř.
  */
 export function renderBlockMarkdown(s) {
@@ -422,23 +470,55 @@ export function renderBlockMarkdown(s) {
   const text = String(s).replace(/\r\n/g, '\n');
   if (!text.trim()) return '';
 
-  // Pokud žádný blokový marker, vrátíme jednoduchý <p>
-  if (!/\n/.test(text) && !/^[\s]*[-*]\s/m.test(text) && !/^[\s]*\d+\.\s/m.test(text)) {
-    return `<p>${renderInlineMarkdown(text)}</p>`;
-  }
+  const blocks = /\n/.test(text) ? text.split(/\n{2,}/) : [text];
 
-  const blocks = text.split(/\n{2,}/);
   return blocks.map(block => {
     const lines = block.split('\n');
-    const ulMatch = lines.every(l => /^\s*[-*]\s+/.test(l));
-    const olMatch = lines.every(l => /^\s*\d+\.\s+/.test(l));
+    const ulMatch = lines.length > 0 && lines.every(l => /^\s*[-*]\s+/.test(l));
+    const olMatch = lines.length > 0 && lines.every(l => /^\s*\d+\.\s+/.test(l));
     if (ulMatch) {
       return `<ul>${lines.map(l => `<li>${renderInlineMarkdown(l.replace(/^\s*[-*]\s+/, ''))}</li>`).join('')}</ul>`;
     }
     if (olMatch) {
       return `<ol>${lines.map(l => `<li>${renderInlineMarkdown(l.replace(/^\s*\d+\.\s+/, ''))}</li>`).join('')}</ol>`;
     }
-    // Odstavec — řádky spojíme mezerou (markdown chování)
-    return `<p>${renderInlineMarkdown(lines.join(' '))}</p>`;
+    const joined = lines.join(' ');
+
+    // Inline výčetka: "intro: (1) … (2) … (3) …"
+    const enum_ = detectInlineEnumeration(joined);
+    if (enum_) {
+      const intro = enum_.intro
+        ? `<p>${renderInlineMarkdown(enum_.intro)}</p>`
+        : '';
+      const lis = enum_.items.map(item => {
+        const html = renderInlineMarkdown(item);
+        // Zvýrazni první "Topic —/–/-" prefix tučně, pokud už není
+        const boldedHtml = boldEnumPrefix(html);
+        return `<li>${boldedHtml}</li>`;
+      }).join('');
+      const tag = enum_.isNum ? 'ol' : 'ol';
+      const cls = enum_.isNum ? 'md-enum md-enum-num' : 'md-enum md-enum-alpha';
+      return `${intro}<${tag} class="${cls}"${enum_.isNum ? '' : ' style="list-style-type:lower-alpha"'}>${lis}</${tag}>`;
+    }
+
+    return `<p>${renderInlineMarkdown(joined)}</p>`;
   }).join('');
+}
+
+/**
+ * Pokud má položka tvar "Topic — rest" (em-dash, en-dash nebo hyphen),
+ * obalí Topic do <strong>. Pokud už <strong> obsahuje, ponechá beze změny.
+ * Vstup je už HTML escaped + markdown processed.
+ */
+function boldEnumPrefix(html) {
+  if (/^<strong>/i.test(html.trim())) return html;
+  // Hledáme první výskyt — nebo – nebo - (mezi mezerami) v rozumné vzdálenosti
+  const m = html.match(/^([^—–\-]{2,80})\s+([—–\-])\s+(.+)$/s);
+  if (!m) return html;
+  const topic = m[1].trim();
+  // Pokud topic obsahuje HTML značky (kromě inline jako <em>, <code>) — neformátujeme
+  if (/<\/?(p|ol|ul|li|br|div)/i.test(topic)) return html;
+  // První písmeno na velké
+  const cap = topic.charAt(0).toLocaleUpperCase('cs-CZ') + topic.slice(1);
+  return `<strong>${cap}</strong> ${m[2]} ${m[3]}`;
 }
