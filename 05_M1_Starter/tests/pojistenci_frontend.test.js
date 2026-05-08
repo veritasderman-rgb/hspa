@@ -8,8 +8,14 @@ import {
   KRAJ_CODE_BY_NAME,
   METRICS,
   ZP_COLORS,
+  RACE_METRICS,
   state,
   aggregateZpForCR,
+  aggregateCRMetric,
+  topOkresyForYear,
+  jumperOkresy,
+  getRaceValue,
+  fourGroupsForOkres,
 } from '../src/pojistenci.js';
 
 test('pojistenci frontend: KRAJ_NAME_BY_CODE má 14 krajů', () => {
@@ -111,5 +117,147 @@ test('pojistenci frontend: aggregateZpForCR() funguje na reálných datech (sou�
     assert.ok(vzp2025 > 50 && vzp2025 < 65, `VZP 2025 v ČR ~ ${vzp2025} %`);
   } finally {
     state.zpData = orig;
+  }
+});
+
+// ========== M3 testy: race chart + okres detail ==========
+
+test('pojistenci frontend M3: RACE_METRICS má 3 metriky se správnou strukturou', () => {
+  assert.deepEqual(Object.keys(RACE_METRICS).sort(), ['count_80plus', 'pct_65plus', 'pct_80plus'].sort());
+  for (const [key, m] of Object.entries(RACE_METRICS)) {
+    assert.ok(typeof m.label === 'string' && m.label.length > 0, `${key} label`);
+    assert.ok(typeof m.unit === 'string', `${key} unit`);
+    assert.ok(typeof m.isPercent === 'boolean', `${key} isPercent`);
+    assert.ok(typeof m.description === 'string', `${key} description`);
+  }
+  // count_80plus není procento; ostatní ano.
+  assert.equal(RACE_METRICS.count_80plus.isPercent, false);
+  assert.equal(RACE_METRICS.pct_80plus.isPercent, true);
+  assert.equal(RACE_METRICS.pct_65plus.isPercent, true);
+});
+
+test('pojistenci frontend M3: getRaceValue() — count_80plus = sum(80-84:M, 80-84:Z, 85+:M, 85+:Z)', async () => {
+  const fs = await import('node:fs/promises');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const okresData = JSON.parse(
+    await fs.readFile(path.join(__dirname, '..', 'data', 'pojistenci-d5-okres.json'), 'utf8')
+  );
+  const orig = state.okresData;
+  state.okresData = okresData;
+  try {
+    // Praha (CZ0100) v roce 2025 — ručně sčítáme.
+    const block = okresData.data['CZ0100']['2025'];
+    const expected =
+      (block.byAgeSex['80-84:M'] || 0) +
+      (block.byAgeSex['80-84:Z'] || 0) +
+      (block.byAgeSex['85+:M'] || 0) +
+      (block.byAgeSex['85+:Z'] || 0);
+    assert.equal(getRaceValue('CZ0100', 2025, 'count_80plus'), expected);
+    assert.ok(expected > 50000, `Praha 2025 80+ count = ${expected}, čekáno > 50k`);
+
+    // pct_80plus = stejný poměr jako z block.pct_80plus
+    assert.equal(getRaceValue('CZ0100', 2025, 'pct_80plus'), block.pct_80plus);
+    assert.equal(getRaceValue('CZ0100', 2025, 'pct_65plus'), block.pct_65plus);
+  } finally {
+    state.okresData = orig;
+  }
+});
+
+test('pojistenci frontend M3: topOkresyForYear() vrací 10 okresů seřazených sestupně', async () => {
+  const fs = await import('node:fs/promises');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const okresData = JSON.parse(
+    await fs.readFile(path.join(__dirname, '..', 'data', 'pojistenci-d5-okres.json'), 'utf8')
+  );
+  const orig = state.okresData;
+  state.okresData = okresData;
+  try {
+    const top = topOkresyForYear(2025, 'count_80plus');
+    assert.equal(top.length, 10);
+    // Sestupné pořadí.
+    for (let i = 1; i < top.length; i++) {
+      assert.ok(top[i].value <= top[i - 1].value, `pořadí porušeno na ${i}`);
+    }
+    // Praha musí být v top 10 podle absolutního počtu 80+.
+    const praha = top.find(o => o.code === 'CZ0100');
+    assert.ok(praha, 'Praha musí být v top 10 podle count_80plus 2025');
+    // Kraj atribut.
+    for (const o of top) {
+      assert.match(o.kraj, /^CZ\d{3}$/, `${o.code} kraj má neplatný formát ${o.kraj}`);
+    }
+  } finally {
+    state.okresData = orig;
+  }
+});
+
+test('pojistenci frontend M3: jumperOkresy() — 2010 vs aktuální rok', async () => {
+  const fs = await import('node:fs/promises');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const okresData = JSON.parse(
+    await fs.readFile(path.join(__dirname, '..', 'data', 'pojistenci-d5-okres.json'), 'utf8')
+  );
+  const orig = state.okresData;
+  state.okresData = okresData;
+  try {
+    // Pro 2010 → 2010 by množina měla být prázdná.
+    assert.equal(jumperOkresy(2010, 'count_80plus').size, 0);
+    // Pro 2010 → 2025 by měla obsahovat alespoň 0 (může být i prázdná, pokud je
+    // top 10 stabilní — nicméně Set musí existovat).
+    const jumpers25 = jumperOkresy(2025, 'count_80plus');
+    assert.ok(jumpers25 instanceof Set);
+  } finally {
+    state.okresData = orig;
+  }
+});
+
+test('pojistenci frontend M3: fourGroupsForOkres() rozdělí věk do 4 skupin', async () => {
+  const fs = await import('node:fs/promises');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const okresData = JSON.parse(
+    await fs.readFile(path.join(__dirname, '..', 'data', 'pojistenci-d5-okres.json'), 'utf8')
+  );
+  const orig = state.okresData;
+  state.okresData = okresData;
+  try {
+    const fg = fourGroupsForOkres('CZ0100', 2025);
+    assert.ok(fg);
+    assert.deepEqual(Object.keys(fg).sort(), ['0-14', '15-64', '65-79', '80+'].sort());
+    // Součet 4 skupin musí dát celkový total.
+    const total = fg['0-14'] + fg['15-64'] + fg['65-79'] + fg['80+'];
+    const block = okresData.data['CZ0100']['2025'];
+    assert.equal(total, block.total, `součet 4 skupin ${total} ≠ total ${block.total}`);
+  } finally {
+    state.okresData = orig;
+  }
+});
+
+test('pojistenci frontend M3: aggregateCRMetric(year, pct_65plus) je v rozumných mezích', async () => {
+  const fs = await import('node:fs/promises');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const krajData = JSON.parse(
+    await fs.readFile(path.join(__dirname, '..', 'data', 'pojistenci-d5-kraj.json'), 'utf8')
+  );
+  const origKraj = state.krajData;
+  state.krajData = krajData;
+  try {
+    const cr2010 = aggregateCRMetric(2010, 'pct_65plus');
+    const cr2025 = aggregateCRMetric(2025, 'pct_65plus');
+    // ČR je mezi nejmladší a nejstarší kraj — průměr cca 15–22 %.
+    assert.ok(cr2010 > 14 && cr2010 < 18, `ČR 2010 % 65+ = ${cr2010}, čekáno 14–18`);
+    assert.ok(cr2025 > 19 && cr2025 < 23, `ČR 2025 % 65+ = ${cr2025}, čekáno 19–23`);
+    // Stárnutí: 2025 > 2010.
+    assert.ok(cr2025 > cr2010, `ČR má stárnout: 2010 ${cr2010} → 2025 ${cr2025}`);
+  } finally {
+    state.krajData = origKraj;
   }
 });
