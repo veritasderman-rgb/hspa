@@ -308,3 +308,43 @@ test('Real data: každý indikátor má framework hspa | monitoring', () => {
   assert.ok(counts.hspa > 0, 'musí být alespoň 1 hspa indikátor');
   assert.ok(counts.monitoring > 0, 'musí být alespoň 1 monitoring indikátor');
 });
+
+// =================================================================
+// 6 HSPA dimenzí — každý indikátor má dimension matching dimensions.json
+// =================================================================
+
+test('Real data: každý indikátor má dimension z 6 HSPA dimenzí', () => {
+  const indData = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const dimsData = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'dimensions.json'), 'utf8'));
+  const validDims = new Set(dimsData.dimensions.map(d => d.id));
+  assert.equal(validDims.size, 6, 'musí být přesně 6 dimenzí');
+
+  const counts = {};
+  const missing = [];
+  const invalid = [];
+  for (const ind of indData.indicators) {
+    if (!ind.dimension) {
+      missing.push(ind.id);
+    } else if (!validDims.has(ind.dimension)) {
+      invalid.push(`${ind.id}=${ind.dimension}`);
+    } else {
+      counts[ind.dimension] = (counts[ind.dimension] || 0) + 1;
+    }
+  }
+  assert.equal(missing.length, 0, `bez dimenze: ${missing.join(', ')}`);
+  assert.equal(invalid.length, 0, `neplatná dimenze: ${invalid.join(', ')}`);
+  // Každá z 6 dimenzí musí mít aspoň 1 indikátor
+  for (const d of validDims) {
+    assert.ok((counts[d] || 0) > 0, `dimenze ${d} nemá žádný indikátor`);
+  }
+});
+
+test('dimensions.json: každá dimenze má povinná pole', () => {
+  const dimsData = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'dimensions.json'), 'utf8'));
+  for (const d of dimsData.dimensions) {
+    for (const f of ['id', 'label', 'short', 'color', 'description']) {
+      assert.ok(d[f], `dimenze ${d.id || '?'}: chybí pole ${f}`);
+    }
+    assert.match(d.color, /^#[0-9a-fA-F]{6}$/, `dimenze ${d.id}: neplatná barva ${d.color}`);
+  }
+});
