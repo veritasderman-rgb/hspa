@@ -7,21 +7,23 @@
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
 
+// Pozor: hodnoty MUSÍ přesně sedět s properties.name v data/cz-regions.geojson,
+// protože echarts map joinuje series.data na polygony podle name.
 const REGION_NAME_BY_CODE = {
   'CZ010': 'Praha',
-  'CZ020': 'Středočeský',
-  'CZ031': 'Jihočeský',
-  'CZ032': 'Plzeňský',
-  'CZ041': 'Karlovarský',
-  'CZ042': 'Ústecký',
-  'CZ051': 'Liberecký',
-  'CZ052': 'Královéhradecký',
-  'CZ053': 'Pardubický',
+  'CZ020': 'Středočeský kraj',
+  'CZ031': 'Jihočeský kraj',
+  'CZ032': 'Plzeňský kraj',
+  'CZ041': 'Karlovarský kraj',
+  'CZ042': 'Ústecký kraj',
+  'CZ051': 'Liberecký kraj',
+  'CZ052': 'Královéhradecký kraj',
+  'CZ053': 'Pardubický kraj',
   'CZ063': 'Vysočina',
-  'CZ064': 'Jihomoravský',
-  'CZ071': 'Olomoucký',
-  'CZ072': 'Zlínský',
-  'CZ080': 'Moravskoslezský',
+  'CZ064': 'Jihomoravský kraj',
+  'CZ071': 'Olomoucký kraj',
+  'CZ072': 'Zlínský kraj',
+  'CZ080': 'Moravskoslezský kraj',
 };
 
 let allDatasets = [];
