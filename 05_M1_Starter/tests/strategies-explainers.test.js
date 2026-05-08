@@ -159,3 +159,90 @@ test('Real data: každý explainer má aspoň 1 propojenou strategii nebo indik�
     assert.ok(linked.length > 0, `explainer ${e.id} nemá žádnou propojenou strategii`);
   }
 });
+
+// ===== Markdown rendering helpers (page-shared.js) =====
+
+import { renderInlineMarkdown, renderBlockMarkdown } from '../src/page-shared.js';
+
+test('renderInlineMarkdown: nahradí **bold** za <strong>', () => {
+  const out = renderInlineMarkdown('Toto je **tučně** zvýrazněné.');
+  assert.equal(out, 'Toto je <strong>tučně</strong> zvýrazněné.');
+});
+
+test('renderInlineMarkdown: escapuje HTML před aplikací markdownu (XSS-safe)', () => {
+  const out = renderInlineMarkdown('<script>alert(1)</script> **bold**');
+  assert.ok(!out.includes('<script>'));
+  assert.ok(out.includes('<strong>bold</strong>'));
+});
+
+test('renderInlineMarkdown: zachová obyčejný text beze změny', () => {
+  const out = renderInlineMarkdown('Plain text bez markdownu.');
+  assert.equal(out, 'Plain text bez markdownu.');
+});
+
+test('renderInlineMarkdown: podporuje `inline code`', () => {
+  const out = renderInlineMarkdown('Volá `fetch()` na endpoint.');
+  assert.ok(out.includes('<code>fetch()</code>'));
+});
+
+test('renderBlockMarkdown: jednořádkový text obalí do <p>', () => {
+  const out = renderBlockMarkdown('Jednoduchý odstavec.');
+  assert.equal(out, '<p>Jednoduchý odstavec.</p>');
+});
+
+test('renderBlockMarkdown: dvojitý newline rozdělí na odstavce', () => {
+  const out = renderBlockMarkdown('První.\n\nDruhý.');
+  assert.ok(out.includes('<p>První.</p>'));
+  assert.ok(out.includes('<p>Druhý.</p>'));
+});
+
+test('renderBlockMarkdown: seznam s "- " převede na <ul><li>', () => {
+  const out = renderBlockMarkdown('- první\n- druhý');
+  assert.ok(out.includes('<ul>'));
+  assert.ok(out.includes('<li>první</li>'));
+  assert.ok(out.includes('<li>druhý</li>'));
+});
+
+test('renderBlockMarkdown: bold uvnitř odstavce', () => {
+  const out = renderBlockMarkdown('Toto je **tučně**.');
+  assert.equal(out, '<p>Toto je <strong>tučně</strong>.</p>');
+});
+
+// ===== Link sanity v explainers.json =====
+
+test('explainers.json: žádný známý překlep v doménách (asociacenomocnic)', () => {
+  const raw = fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8');
+  assert.ok(!raw.includes('asociacenomocnic'),
+    'Doména "asociacenomocnic.cz" neexistuje — má být "asociacenemocnic.cz"');
+});
+
+test('explainers.json: žádné homepage-only odkazy v documents (mzd.gov.cz bez cesty)', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8'));
+  const bad = [];
+  for (const e of data.explainers) {
+    for (const d of (e.documents ?? [])) {
+      if (d.url === 'https://mzd.gov.cz' || d.url === 'https://mzd.gov.cz/') {
+        bad.push(`${e.id} → ${d.title}`);
+      }
+    }
+    for (const ex of (e.absurdity_examples ?? [])) {
+      if (ex.url === 'https://mzd.gov.cz' || ex.url === 'https://mzd.gov.cz/') {
+        bad.push(`${e.id} (abs) → ${ex.title}`);
+      }
+    }
+  }
+  assert.equal(bad.length, 0, `homepage-only mzd.gov.cz odkazy: ${bad.join(', ')}`);
+});
+
+test('explainers.json: všechny URL jsou validní absolutní (http(s))', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8'));
+  for (const e of data.explainers) {
+    const urls = [
+      ...(e.documents ?? []).map(d => d.url),
+      ...(e.absurdity_examples ?? []).map(x => x.url).filter(Boolean),
+    ];
+    for (const u of urls) {
+      assert.match(u, /^https?:\/\//, `${e.id}: neplatná URL "${u}"`);
+    }
+  }
+});
