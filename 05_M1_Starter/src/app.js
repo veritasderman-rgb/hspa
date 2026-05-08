@@ -15,12 +15,14 @@ const LS_AUD_KEY = 'zdrave-cesko/audience';
 const STALE_HOURS = 26;
 
 let allIndicators = [];
+let allDimensions = [];
 let activeArea = 'all';
 let activeSearch = '';
 let activeSort = 'default';
 let activeDomain = '';
 let activeAudience = 'public';
 let activeFramework = 'all';
+let activeDimension = 'all';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 
 const AREA_DESCRIPTIONS = {
@@ -143,10 +145,22 @@ function renderMastheadDateLocal() {
   el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+async function loadDimensions() {
+  if (allDimensions.length) return allDimensions;
+  try {
+    const r = await fetch('data/dimensions.json');
+    if (r.ok) {
+      const d = await r.json();
+      allDimensions = d.dimensions || [];
+    }
+  } catch {}
+  return allDimensions;
+}
+
 async function loadData(bustCache = false) {
   const url = bustCache ? `${DATA_URL}?t=${Date.now()}` : DATA_URL;
   try {
-    const res = await fetch(url);
+    const [res] = await Promise.all([fetch(url), loadDimensions()]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     applyData(data, { source: 'live' });
@@ -169,9 +183,10 @@ async function loadData(bustCache = false) {
 
 const SIGNAL_ORDER = { bad: 0, warn: 1, neutral: 2, good: 3 };
 
-export function filterAndSort(indicators, { area, search, sort, domain, framework }) {
+export function filterAndSort(indicators, { area, search, sort, domain, framework, dimension }) {
   let xs = indicators;
   if (framework && framework !== 'all') xs = xs.filter(i => (i.framework || 'hspa') === framework);
+  if (dimension && dimension !== 'all') xs = xs.filter(i => i.dimension === dimension);
   if (area && area !== 'all') xs = xs.filter(i => i.area === area);
   if (domain) xs = xs.filter(i => i.domain === domain);
   if (search) {
@@ -308,7 +323,13 @@ function renderEditorialHero() {
     }
 
     // ed-stories ("Tento týden v datech") a ed-areas (4 oblasti) byly přesunuty:
-    // ed-stories odstraněno, ed-areas → hspa-prehled.html. Homepage je čistší.
+    // ed-stories odstraněno, ed-areas → hspa-prehled.html.
+
+    // 6 HSPA dimenzí (ZDRAVÍ/DOSTUPNOST/KVALITA/BEZPEČNOST/EFEKTIVITA/SPRAVEDLNOST)
+    renderDimensionsIndex();
+
+    // 12 nejhůře hodnocených ukazatelů
+    renderWorstIndicators();
   } catch (err) {
     // Při selhání renderování hero (chybějící data, neočekávaná struktura)
     // necháme stránku fungovat dál (renderGrid + scorecard) a zalogujeme.
@@ -319,6 +340,104 @@ function renderEditorialHero() {
 function escapeHtml(s) {
   if (s == null) return '';
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ====== 6 HSPA DIMENSIONS — INDEX (homepage) ======
+
+function renderDimensionsIndex() {
+  const grid = document.getElementById('edDimsGrid');
+  if (!grid || !allDimensions.length) return;
+
+  const byDim = {};
+  for (const ind of allIndicators) {
+    const d = ind.dimension || 'other';
+    if (!byDim[d]) byDim[d] = { total: 0, good: 0, warn: 0, bad: 0, neutral: 0, items: [] };
+    byDim[d].total++;
+    byDim[d][ind.signal] = (byDim[d][ind.signal] || 0) + 1;
+    byDim[d].items.push(ind);
+  }
+
+  grid.innerHTML = allDimensions.map((d, i) => {
+    const stats = byDim[d.id] || { total: 0, good: 0, warn: 0, bad: 0 };
+    const scoreable = (stats.good || 0) + (stats.warn || 0) + (stats.bad || 0);
+    const score = scoreable > 0
+      ? Math.round((stats.good * 100 + stats.warn * 50) / scoreable)
+      : null;
+    const num = String(i + 1).padStart(2, '0');
+    const num100 = score != null ? `${score}<span class="ed-dim-score-unit">/100</span>` : '—';
+    const palette = `--dim-color: ${d.color}`;
+    return `
+      <a class="ed-dim" style="${palette}" href="#indicatorsSection" data-dim="${escapeHtmlInner(d.id)}" title="${escapeHtmlInner(d.description)}">
+        <div class="ed-dim-num">${num}</div>
+        <div class="ed-dim-name">${escapeHtmlInner(d.label)}</div>
+        <div class="ed-dim-score">${num100}</div>
+        <div class="ed-dim-meta">z 100 · ${stats.total} ukazatel${stats.total === 1 ? '' : (stats.total < 5 ? 'y' : 'ů')}</div>
+        <div class="ed-dim-bar"><span class="ed-dim-bar-fill" style="width: ${score || 0}%"></span></div>
+      </a>
+    `;
+  }).join('');
+
+  // Klik na dimension → scroll do indikátorů + nastav filtr
+  grid.querySelectorAll('.ed-dim').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const dimId = el.getAttribute('data-dim');
+      if (!dimId) return;
+      e.preventDefault();
+      activeDimension = dimId;
+      const sel = document.getElementById('dimensionFilter');
+      if (sel) sel.value = dimId;
+      renderGrid();
+      writeHash();
+      const section = document.getElementById('indicatorsSection');
+      section?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+// ====== 12 NEJHŮŘE HODNOCENÝCH ======
+
+function renderWorstIndicators() {
+  const list = document.getElementById('edWorstList');
+  if (!list) return;
+
+  const dimById = new Map(allDimensions.map(d => [d.id, d]));
+  // Vyfiltrovat 'bad' signál, prioritizovat verifikované, pak vzít 12
+  const worst = allIndicators
+    .filter(i => i.signal === 'bad')
+    .sort((a, b) => {
+      const va = (a.verification_status === 'verified') ? 0 : 1;
+      const vb = (b.verification_status === 'verified') ? 0 : 1;
+      if (va !== vb) return va - vb;
+      return (a.name || '').localeCompare(b.name || '', 'cs');
+    })
+    .slice(0, 12);
+
+  if (!worst.length) {
+    list.innerHTML = '<li class="ed-worst-empty">Žádný kritický indikátor (skvělé!).</li>';
+    return;
+  }
+
+  list.innerHTML = worst.map(ind => {
+    const dim = dimById.get(ind.dimension);
+    const dimColor = dim ? dim.color : '#1f1a14';
+    const dimShort = dim ? dim.short.toUpperCase() : '';
+    const benchOecd = ind.benchmark?.oecd != null
+      ? `OECD ${fmt(ind.benchmark.oecd)} ${ind.unit || ''}`.trim()
+      : '';
+    return `
+      <li class="ed-worst-row">
+        <a class="ed-worst-link-row" href="indicator.html?id=${encodeURIComponent(ind.id)}">
+          <div class="ed-worst-vals">
+            <span class="ed-worst-val">${escapeHtmlInner(fmt(ind.value))}</span>
+            <span class="ed-worst-unit">${escapeHtmlInner(ind.unit || '')}</span>
+            <span class="ed-worst-bench">${escapeHtmlInner(benchOecd)}</span>
+          </div>
+          <h4 class="ed-worst-name">${escapeHtmlInner(ind.name)}</h4>
+          <div class="ed-worst-tag" style="color: ${dimColor}; border-bottom-color: ${dimColor};">${escapeHtmlInner(dimShort)}</div>
+        </a>
+      </li>
+    `;
+  }).join('');
 }
 
 // ====== RENDERING ======
@@ -340,7 +459,7 @@ function renderGrid() {
   grid.innerHTML = '';
   renderDomainFilter();
   renderTopCritical();
-  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain, framework: activeFramework });
+  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain, framework: activeFramework, dimension: activeDimension });
 
   const badge = `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridBadge').textContent = badge;
@@ -406,8 +525,13 @@ function renderGrid() {
       ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec OECD HSPA">Monitoring</span>`
       : `<span class="fw-badge fw-hspa" title="Indikátor z OECD HSPA Framework for Czech Republic">HSPA</span>`;
 
+    const dim = allDimensions.find(d => d.id === ind.dimension);
+    const dimBadge = dim
+      ? `<span class="dim-badge" style="color:${dim.color};border-color:${dim.color}" title="HSPA dimenze: ${dim.label}">${escapeHtmlInner(dim.short)}</span>`
+      : '';
+
     card.innerHTML = `
-      <div class="area-tag">${ind.area} · ${ind.domain}${fwBadge}${verifBadge}</div>
+      <div class="area-tag">${ind.area} · ${ind.domain}${dimBadge}${fwBadge}${verifBadge}</div>
       <div class="top">
         <h4>${ind.name}</h4>
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
@@ -1128,6 +1252,16 @@ function wireUp() {
   if (fwSel) {
     fwSel.addEventListener('change', () => {
       activeFramework = fwSel.value;
+      renderGrid();
+      writeHash();
+    });
+  }
+
+  // Dimension filter (6 HSPA dimenzí)
+  const dimSel = document.getElementById('dimensionFilter');
+  if (dimSel) {
+    dimSel.addEventListener('change', () => {
+      activeDimension = dimSel.value;
       renderGrid();
       writeHash();
     });
