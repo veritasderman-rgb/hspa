@@ -208,6 +208,36 @@ test('renderBlockMarkdown: bold uvnitř odstavce', () => {
   assert.equal(out, '<p>Toto je <strong>tučně</strong>.</p>');
 });
 
+test('renderBlockMarkdown: detekuje inline (1)(2)(3) výčetku a převede na <ol>', () => {
+  const input = 'Tři proudy: (1) demografie — populace stárne; (2) inovace — léčba zdražuje; (3) prevence — málo investic.';
+  const out = renderBlockMarkdown(input);
+  assert.ok(out.includes('<p>Tři proudy:</p>'), 'intro paragraph');
+  assert.ok(out.includes('<ol class="md-enum md-enum-num">'), 'enum class');
+  assert.ok(out.includes('<strong>Demografie</strong>'), 'first item bolded');
+  assert.ok(out.includes('<strong>Inovace</strong>'), 'second item bolded');
+  assert.ok(out.includes('<strong>Prevence</strong>'), 'third item bolded');
+});
+
+test('renderBlockMarkdown: detekuje inline (a)(b) výčetku', () => {
+  const input = 'Volby: (a) zvýšit sazbu; (b) zúžit balík péče; (c) prevence.';
+  const out = renderBlockMarkdown(input);
+  assert.ok(out.includes('<ol'));
+  assert.ok(out.includes('lower-alpha'));
+});
+
+test('renderBlockMarkdown: NEpřevádí samostatné "(1)" v textu', () => {
+  const input = 'Pouze §3 odst. (1) zákona — žádný seznam.';
+  const out = renderBlockMarkdown(input);
+  assert.equal(out, '<p>Pouze §3 odst. (1) zákona — žádný seznam.</p>');
+});
+
+test('renderBlockMarkdown: nepřevádí (1)(3) bez (2) (chybějící mezičlánek)', () => {
+  const input = 'Markery: (1) první (3) třetí — chybí (2).';
+  const out = renderBlockMarkdown(input);
+  assert.ok(out.startsWith('<p>'));
+  assert.ok(!out.includes('<ol'));
+});
+
 // ===== Link sanity v explainers.json =====
 
 test('explainers.json: žádný známý překlep v doménách (asociacenomocnic)', () => {
@@ -232,6 +262,19 @@ test('explainers.json: žádné homepage-only odkazy v documents (mzd.gov.cz bez
     }
   }
   assert.equal(bad.length, 0, `homepage-only mzd.gov.cz odkazy: ${bad.join(', ')}`);
+});
+
+test('explainers.json: všechny linked_strategies referují existující strategie', () => {
+  const strats = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'strategies.json'), 'utf8')).strategies;
+  const expls = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8')).explainers;
+  const validIds = new Set(strats.map(s => s.id));
+  const orphans = [];
+  for (const e of expls) {
+    for (const sid of (e.linked_strategies ?? [])) {
+      if (!validIds.has(sid)) orphans.push(`${e.id} → ${sid}`);
+    }
+  }
+  assert.equal(orphans.length, 0, `osiřelé linked_strategies: ${orphans.join(', ')}`);
 });
 
 test('explainers.json: všechny URL jsou validní absolutní (http(s))', () => {
