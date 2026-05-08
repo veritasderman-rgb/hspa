@@ -194,9 +194,9 @@ test('extractFromNor: neznámý indicator id → null', () => {
   assert.equal(extractFromNor('neexistuje'), null);
 });
 
-test('Real data: data/indicators.json obsahuje 64 indikátorů', () => {
+test('Real data: data/indicators.json obsahuje 66 indikátorů', () => {
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
-  assert.equal(data.indicators.length, 64);
+  assert.equal(data.indicators.length, 66);
   const ids = new Set(data.indicators.map(i => i.id));
   assert.ok(ids.has('incidence_kolorektalni'));
   assert.ok(ids.has('incidence_prsu'));
@@ -205,6 +205,8 @@ test('Real data: data/indicators.json obsahuje 64 indikátorů', () => {
   assert.ok(ids.has('unmet_need_medical'));
   assert.ok(ids.has('stomatologove_per_1000'));
   assert.ok(ids.has('lekarny_per_100k'));
+  assert.ok(ids.has('spotreba_opioidu'));
+  assert.ok(ids.has('lpod_share_critical'));
 });
 
 // =================================================================
