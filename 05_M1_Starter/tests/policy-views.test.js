@@ -286,3 +286,25 @@ test('extractFromNrhzsScreening: sex_filter bez sex sloupce v cache → null (P2
     fs.unlinkSync(cachePath('uzis_nrhzs_screening_mamograf.json'));
   }
 });
+
+// =================================================================
+// HSPA framework klasifikace — každý indikátor musí mít framework
+// =================================================================
+
+test('Real data: každý indikátor má framework hspa | monitoring', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const missing = [];
+  const counts = { hspa: 0, monitoring: 0 };
+  for (const ind of data.indicators) {
+    if (!ind.framework) {
+      missing.push(ind.id);
+    } else if (!['hspa', 'monitoring'].includes(ind.framework)) {
+      missing.push(`${ind.id} (invalid: ${ind.framework})`);
+    } else {
+      counts[ind.framework]++;
+    }
+  }
+  assert.equal(missing.length, 0, `bez framework: ${missing.join(', ')}`);
+  assert.ok(counts.hspa > 0, 'musí být alespoň 1 hspa indikátor');
+  assert.ok(counts.monitoring > 0, 'musí být alespoň 1 monitoring indikátor');
+});

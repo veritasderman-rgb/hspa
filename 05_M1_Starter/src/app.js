@@ -20,6 +20,7 @@ let activeSearch = '';
 let activeSort = 'default';
 let activeDomain = '';
 let activeAudience = 'public';
+let activeFramework = 'all';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 
 const AREA_DESCRIPTIONS = {
@@ -168,8 +169,9 @@ async function loadData(bustCache = false) {
 
 const SIGNAL_ORDER = { bad: 0, warn: 1, neutral: 2, good: 3 };
 
-export function filterAndSort(indicators, { area, search, sort, domain }) {
+export function filterAndSort(indicators, { area, search, sort, domain, framework }) {
   let xs = indicators;
+  if (framework && framework !== 'all') xs = xs.filter(i => (i.framework || 'hspa') === framework);
   if (area && area !== 'all') xs = xs.filter(i => i.area === area);
   if (domain) xs = xs.filter(i => i.domain === domain);
   if (search) {
@@ -338,7 +340,7 @@ function renderGrid() {
   grid.innerHTML = '';
   renderDomainFilter();
   renderTopCritical();
-  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain });
+  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain, framework: activeFramework });
 
   const badge = `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridBadge').textContent = badge;
@@ -400,8 +402,12 @@ function renderGrid() {
       ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
       : '';
 
+    const fwBadge = ind.framework === 'monitoring'
+      ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec OECD HSPA">Monitoring</span>`
+      : `<span class="fw-badge fw-hspa" title="Indikátor z OECD HSPA Framework for Czech Republic">HSPA</span>`;
+
     card.innerHTML = `
-      <div class="area-tag">${ind.area} · ${ind.domain}${verifBadge}</div>
+      <div class="area-tag">${ind.area} · ${ind.domain}${fwBadge}${verifBadge}</div>
       <div class="top">
         <h4>${ind.name}</h4>
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
@@ -1112,6 +1118,16 @@ function wireUp() {
     areaSel.addEventListener('change', () => {
       activeArea = areaSel.value;
       activeDomain = '';
+      renderGrid();
+      writeHash();
+    });
+  }
+
+  // Framework filter (HSPA / Monitoring / All)
+  const fwSel = document.getElementById('frameworkFilter');
+  if (fwSel) {
+    fwSel.addEventListener('change', () => {
+      activeFramework = fwSel.value;
       renderGrid();
       writeHash();
     });

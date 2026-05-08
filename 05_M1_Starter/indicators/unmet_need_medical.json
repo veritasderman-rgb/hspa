@@ -12,7 +12,14 @@
       "type": "eurostat_jsonstat",
       "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_silc_08",
       "dataset": "hlth_silc_08",
-      "dimensions": { "geo": "CZ", "sex": "T", "age": "Y_GE16", "reason": "TOOEXP_FAR_WAIT", "quant_inc": "TOTAL", "unit": "PC" },
+      "dimensions": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "Y_GE16",
+        "reason": "TOOEXP_FAR_WAIT",
+        "quant_inc": "TOTAL",
+        "unit": "PC"
+      },
       "note": "EU-SILC modul „self-reported unmet need for medical examination“. Souhrnný kód TOOEXP_FAR_WAIT agreguje tři klasické důvody nesplněné potřeby (cena, vzdálenost, čekací lhůta)."
     },
     "fallback": {
@@ -26,9 +33,15 @@
     "code": "hlth_silc_08",
     "dataset": "EU-SILC"
   },
-  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "signal_thresholds": {
+    "good": 2.0,
+    "warn": 5.0
+  },
   "frequency": "yearly",
-  "stewards": ["Eurostat", "ČSÚ (EU-SILC kontaktní bod ČR)"],
+  "stewards": [
+    "Eurostat",
+    "ČSÚ (EU-SILC kontaktní bod ČR)"
+  ],
   "method_notes": "Self-reported indikátor — vychází z odpovědi respondenta v EU-SILC dotazníku. Standardizovaná definice EUROSTAT/ECHI #76. EU agregát EU27_2020. ČR má v EU dlouhodobě jednu z nejnižších hodnot, což ale neznamená, že problém neexistuje — měření má známé limity (recall bias, sub-skupinová heterogenita).",
   "limitations": "Self-report — neměří objektivní dostupnost, ale subjektivní zkušenost. Souhrnný indikátor maskuje rozdíly mezi důvody (cena vs. čekání). Cílová populace 16+ vylučuje pediatrickou péči. Nejsou rozpadnuty data podle příjmových kvintilů na úrovni krajů.",
   "importance": "<p>Nesplněná potřeba lékařské péče je v rámci OECD HSPA považována za <strong>klíčový proxy indikátor dostupnosti</strong> — operacionalizuje pojem „universal health coverage v praxi“. Pokud má pojištěnec teoretický nárok na péči, ale ve skutečnosti se k ní nedostane (kvůli ceně, vzdálenosti či čekání), výsledek systému je z jeho perspektivy stejný jako kdyby pojištění neexistovalo.</p><p>Indikátor přímo měří funkční výkon zákona <strong>372/2011 Sb.</strong> o zdravotních službách (§ 28 — právo pacienta na poskytnutí zdravotních služeb na náležité odborné úrovni a v rozumné lhůtě) a navazujícího <strong>Nařízení vlády č. 307/2012 Sb.</strong> o místní a časové dostupnosti, které stanoví maximální dojezdové vzdálenosti a maximální čekací doby pro plánovanou péči.</p>",
@@ -57,5 +70,6 @@
       "label": "Kapacita primární péče po reformě",
       "description": "Otázka, do jaké míry je primární péče schopna vyřešit problém před odkladem na specialistu. Slabá síť praktiků s rozšířenými kompetencemi (point-of-care testy, EKG, ultrazvuk) tlačí pacienty do přetížených ambulancí specialistů."
     }
-  ]
+  ],
+  "framework": "hspa"
 }
