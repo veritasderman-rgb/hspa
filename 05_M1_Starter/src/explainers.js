@@ -3,9 +3,9 @@
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
 import './analytics.js';
-import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms, renderInlineMarkdown, renderBlockMarkdown } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
-import { renderGantt, renderDrgCalculator, wireDrgCalculator } from './explainer-policy-views.js';
+import { renderGantt, renderDrgCalculator, wireDrgCalculator, renderExplainerVisuals } from './explainer-policy-views.js';
 import { initSchema } from './schema.js';
 
 const CATEGORY_LABELS = {
@@ -56,6 +56,20 @@ const ARTICLE_TAG_TO_CATEGORY = {
   'Bezpečnost péče': 'process',
   'Digitalizace': 'process',
 };
+
+/**
+ * Odstraní markdown markery (**, *, _, `) z textu — pro krátké preview, kde HTML
+ * formátování nepoužíváme. Zachovává obsah, jen uklízí značky.
+ */
+function stripMarkdown(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+    .replace(/__([^_\n]+?)__/g, '$1')
+    .replace(/(^|\s)\*([^*\n]+?)\*(?=$|[\s.,;:!?)\]])/g, '$1$2')
+    .replace(/(^|\s)_([^_\n]+?)_(?=$|[\s.,;:!?)\]])/g, '$1$2')
+    .replace(/`([^`]+?)`/g, '$1');
+}
 
 export function filterExplainers(items, { category, search }) {
   let xs = items;
@@ -156,7 +170,7 @@ function renderList() {
 }
 
 function renderCard(e) {
-  const tldr = audienceText(e);
+  const tldr = stripMarkdown(audienceText(e));
   const absurditiesCount = (e.absurdity_examples ?? []).length;
   return `
     <a class="explainer-card" href="jak-funguje.html?id=${encodeURIComponent(e.id)}">
@@ -190,7 +204,7 @@ function renderDetail(id) {
 
   document.title = `${e.title} · Jak funguje · HSPA Monitor`;
   const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.content = `${e.title}${e.subtitle ? ' — ' + e.subtitle : ''}. ${audienceText(e).slice(0, 160)}`;
+  if (metaDesc) metaDesc.content = `${e.title}${e.subtitle ? ' — ' + e.subtitle : ''}. ${stripMarkdown(audienceText(e)).slice(0, 160)}`;
 
   const tldr = audienceText(e);
   const meta = CATEGORY_LABELS[e.category] ?? { label: e.category, desc: '' };
@@ -209,7 +223,7 @@ function renderDetail(id) {
     </header>
 
     <section class="detail-tldr">
-      <p>${escapeHtml(tldr)}</p>
+      ${renderBlockMarkdown(tldr)}
     </section>
 
     ${(e.key_facts ?? []).length ? `
@@ -254,14 +268,16 @@ function renderDetail(id) {
       </section>
     ` : ''}
 
+    ${renderExplainerVisuals(e)}
+
     ${(e.absurdity_examples ?? []).length ? `
       <section class="detail-section absurdity-section">
         <h3>Citace z primárních zdrojů</h3>
         ${e.absurdity_examples.map(ex => `
           <article class="absurdity-card">
-            <h4>${escapeHtml(ex.title ?? 'Citace')}</h4>
-            ${ex.quote ? `<blockquote>${escapeHtml(ex.quote)}</blockquote>` : ''}
-            <p class="abs-context">${escapeHtml(ex.context ?? '')}</p>
+            <h4>${renderInlineMarkdown(ex.title ?? 'Citace')}</h4>
+            ${ex.quote ? `<blockquote>${renderInlineMarkdown(ex.quote)}</blockquote>` : ''}
+            <div class="abs-context">${renderBlockMarkdown(ex.context ?? '')}</div>
             <footer class="abs-source">
               ${ex.source ? `${escapeHtml(ex.source)}` : ''}
               ${ex.date ? ` · ${escapeHtml(ex.date)}` : ''}
@@ -316,11 +332,11 @@ function renderDetail(id) {
     wireDrgCalculator();
   }
 
-  // Wrap acronyms in the tldr paragraph after rendering
+  // Wrap acronyms in the tldr paragraphs after rendering
   loadGlossaryTerms().then(terms => {
     if (!terms.length) return;
-    const tldrEl = detail.querySelector('.detail-tldr p');
-    if (tldrEl) tldrEl.innerHTML = wrapAcronyms(escapeHtml(audienceText(e)), terms);
+    const tldrEl = detail.querySelector('.detail-tldr');
+    if (tldrEl) tldrEl.innerHTML = wrapAcronyms(renderBlockMarkdown(audienceText(e)), terms);
   });
 }
 

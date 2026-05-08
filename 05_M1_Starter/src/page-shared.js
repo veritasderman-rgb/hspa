@@ -385,3 +385,60 @@ export function escapeHtml(s) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+/**
+ * Vyrenderuje inline markdown z textu — nejprve escapuje HTML, pak nahradí:
+ *   - **bold** → <strong>bold</strong>
+ *   - *italic* / _italic_ → <em>italic</em>
+ *   - `code` → <code>code</code>
+ *   - jednoduché URL (http/https) → <a>...</a>
+ * Vrací HTML string připravený pro innerHTML.
+ *
+ * Pro odstavcový/seznamový markdown použijte renderBlockMarkdown.
+ */
+export function renderInlineMarkdown(s) {
+  if (s == null) return '';
+  let html = escapeHtml(String(s));
+  // Inline code
+  html = html.replace(/`([^`]+?)`/g, '<code>$1</code>');
+  // Bold (**text** or __text__) — non-greedy
+  html = html.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__([^_\n]+?)__/g, '<strong>$1</strong>');
+  // Italic (single * or _) — vyhne se případům s mezerami u hvězdiček (násobení apod.)
+  html = html.replace(/(^|[\s(\[])\*([^*\n]+?)\*(?=$|[\s.,;:!?)\]])/g, '$1<em>$2</em>');
+  html = html.replace(/(^|[\s(\[])_([^_\n]+?)_(?=$|[\s.,;:!?)\]])/g, '$1<em>$2</em>');
+  return html;
+}
+
+/**
+ * Vyrenderuje blokový markdown:
+ *   - dvojitý newline → odstavec
+ *   - řádky začínající `- ` nebo `* ` → <ul><li>
+ *   - řádky začínající `1. ` (číslo + tečka) → <ol><li>
+ * Inline markdown se aplikuje uvnitř.
+ */
+export function renderBlockMarkdown(s) {
+  if (s == null) return '';
+  const text = String(s).replace(/\r\n/g, '\n');
+  if (!text.trim()) return '';
+
+  // Pokud žádný blokový marker, vrátíme jednoduchý <p>
+  if (!/\n/.test(text) && !/^[\s]*[-*]\s/m.test(text) && !/^[\s]*\d+\.\s/m.test(text)) {
+    return `<p>${renderInlineMarkdown(text)}</p>`;
+  }
+
+  const blocks = text.split(/\n{2,}/);
+  return blocks.map(block => {
+    const lines = block.split('\n');
+    const ulMatch = lines.every(l => /^\s*[-*]\s+/.test(l));
+    const olMatch = lines.every(l => /^\s*\d+\.\s+/.test(l));
+    if (ulMatch) {
+      return `<ul>${lines.map(l => `<li>${renderInlineMarkdown(l.replace(/^\s*[-*]\s+/, ''))}</li>`).join('')}</ul>`;
+    }
+    if (olMatch) {
+      return `<ol>${lines.map(l => `<li>${renderInlineMarkdown(l.replace(/^\s*\d+\.\s+/, ''))}</li>`).join('')}</ol>`;
+    }
+    // Odstavec — řádky spojíme mezerou (markdown chování)
+    return `<p>${renderInlineMarkdown(lines.join(' '))}</p>`;
+  }).join('');
+}

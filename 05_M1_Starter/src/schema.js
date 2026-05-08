@@ -49,14 +49,19 @@ const NODES = {
     full: 'Státní ústav pro kontrolu léčiv',
     role: 'support',
     desc: 'Reguluje bezpečnost léčiv, zdravotnických prostředků a doplňků stravy na českém trhu. Rozhoduje o registraci léků a provádí HTA (hodnocení zdravotnických technologií) pro úhradová rozhodnutí o nových lécích. Klíčový aktér v debatě o přístupu k inovativním lékům.',
-    explainers: [],
+    explainers: [
+      { id: 'sukl', label: 'SÚKL — registrace, HTA, ceny léčiv' },
+      { id: 'hta', label: 'HTA — hodnocení zdravotnických technologií' },
+    ],
   },
   uzis: {
     label: 'ÚZIS',
     full: 'Ústav zdravotnických informací a statistiky ČR',
     role: 'support',
     desc: 'Sbírá, zpracovává a publikuje zdravotní statistiku za celý systém — od hospitalizací a ambulantních kontaktů po mzdy zdravotnických pracovníků a kapacity nemocnic. Data ÚZIS jsou primárním zdrojem většiny indikátorů v tomto dashboardu. Systematické otevírání dat ÚZIS umožňuje existenci portálů jako tento.',
-    explainers: [],
+    explainers: [
+      { id: 'nzis', label: 'NZIS — Národní zdravotnický informační systém' },
+    ],
   },
   kraje: {
     label: 'Kraje',
