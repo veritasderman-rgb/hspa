@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Když ransomware vyřadí nemocnici. Zákon 264/2025 Sb., NIS2 a stav kybernetické bezpečnosti českého zdravotnictví · HSPA Monitor (DRAFT)</title>
+<meta name="description" content="Zákon 264/2025 Sb. o kybernetické bezpečnosti účinný od 1. 11. 2025 přepisuje pravidla pro nemocnice, ZZS, distributory léčiv i pojišťovny. Přechodná lhůta pro zavedení opatření vyprší v polovině roku 2026 — přesně v okamžiku, kdy průměrné plnění pravidel českých nemocnic je odhadováno na třetinu požadavků. Analýza HSPA Monitoru.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Když ransomware vyřadí nemocnici. Zákon 264/2025 Sb. a stav kybernetické bezpečnosti českého zdravotnictví">
+<meta property="og:description" content="Zákon 264/2025 Sb. o kybernetické bezpečnosti, transpozice NIS2, vyhlášky 408/2025 a 409/2025 a otevřená otázka, kolik českých nemocnic stihne přechodnou lhůtu do listopadu 2026. Analýza HSPA Monitoru.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Legislativa">
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="../index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Článek (DRAFT — nezveřejněno)</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">DRAFT — neukládáno do articles.json, robots: noindex</span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="../clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa</span>
+        <span class="article-tag article-tag-muted">Zákon 264/2025 Sb. · NIS2 · Vyhláška 409/2025 · Kybernetická bezpečnost</span>
+      </div>
+      <h2 class="article-title">Když ransomware vyřadí nemocnici. Zákon 264/2025 Sb., NIS2 a stav kybernetické bezpečnosti českého zdravotnictví</h2>
+      <p class="article-deck">
+        13. března 2020, dvě hodiny ráno. Den po vyhlášení nouzového stavu kvůli koronaviru padá ve Fakultní nemocnici Brno všechen nemocniční IT. Onkologie odkládá zákroky, ICU pracuje s tužkou a papírem, dárci krve nemají odbavení. Za pár hodin je z útoku národní bezpečnostní událost. O šest let později — v listopadu 2025 — vstupuje v účinnost zákon 264/2025 Sb. o kybernetické bezpečnosti. Přechodná lhůta na zavedení povinných opatření končí pro většinu nemocnic v listopadu 2026. Průměrné plnění bezpečnostních pravidel se odhaduje na třetinu požadavků. To není soukromý problém IT oddělení. To je zdravotně systémový rizikový faktor.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft · květen 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">19 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Představte si rentgenologa Tomáše Hájka. V neděli 12. prosince 2019 odpoledne nastoupí do služby na CT na nemocnici v Benešově. Otevírá obraz pacienta po autonehodě. Obraz nenačítá. Restartuje stanici, otevírá pracovní list — pracovní list zmizel. Otevírá síťový disk, kde má referenční snímky pro porovnání — disk je zašifrovaný a v adresářích se zobrazí soubory s názvem „RyukReadMe.txt". Server PACS — Picture Archiving and Communication System, srdce každé moderní radiologie — neodpovídá. Kolega na příjmu volá: nefungují recepty, nefunguje vykazování pojišťovnám, nefunguje lůžkový systém. Sálovou plánovačku má sestra v ruce vytištěnou z pátečního exportu. Pacient po autonehodě potřebuje urgentní zhodnocení a Tomáš se rozhoduje udělat to bez digitálního nálezu — popis na papíře, snímek poslat do brněnského partnerského pracoviště mobilním telefonem přes WhatsApp. Tak vypadá nemocnice po ransomware útoku. Není to scéna z thrilleru. Je to neděle 12. prosince 2019, Benešov.
+      </p>
+
+      <p>
+        Pacient po autonehodě v té nedělní službě měl štěstí — péče byla poskytnuta včas, jen za cenu organizačního chaosu, který trval tři týdny. Benešovskou nemocnici útok stál podle pozdějších policejních podkladů přes 59 milionů korun na obnově systémů, ztracených vykázaných výkonech a externí krizové podpoře. Pachatel nebyl zjištěn. Vyšetřování středočeských kriminalistů bylo odloženo. O tři měsíce později, 13. března 2020, narazil obdobný útok — tentokrát vektor kryptovirus Defray, šířený phishingovým e-mailem — na Fakultní nemocnici Brno. Škoda přesáhla 150 milionů korun, obnova klíčových systémů trvala dva měsíce a podle ředitelství FN Brno některé interní subsystémy nebyly do plné funkčnosti vráceny ani po třech letech. Rok 2025 přinesl ransomware útok na Nemocnici Nymburk (1. července 2025), který vyřadil informační systémy do nouzového režimu. NÚKIB v ročence za rok 2024 evidoval v sektoru zdravotnictví necelé tři desítky nahlášených incidentů; podle nezveřejněných odhadů provozovatelů se k tomuto číslu připojuje řádově další stovky pokusů, které jsou odraženy perimetrem nebo nejsou vyhodnoceny jako významné. České nemocnice — provozující kritickou infrastrukturu pro 10,7 milionu obyvatel — žijí v prostředí trvalého nízkohladinového kybernetického napadání s občasnými explozemi, které vyhodí systém na týdny.
+      </p>
+
+      <p>
+        Tento článek je o tom, co s tímto stavem dělá zákon 264/2025 Sb. o kybernetické bezpečnosti, jeho prováděcí vyhlášky 408/2025 Sb. a 409/2025 Sb., a evropská směrnice (EU) 2022/2555 (NIS2), kterou český zákon transponuje. Není to text o IT. Je to text o systémové odolnosti zdravotnictví — tedy o jednom z méně viditelných, ale kritických rozměrů HSPA frameworku v dimenzi <em>Struktury → Informační systémy a infrastruktura</em>.
+      </p>
+
+      <h3>Systémový kontext: nemocnice jako kritická infrastruktura</h3>
+
+      <p>
+        Zdravotnictví je v rámci NIS2 (směrnice EU 2022/2555 o opatřeních k zajištění vysoké společné úrovně kybernetické bezpečnosti v Unii, ze 14. prosince 2022) zařazeno do tzv. <strong>highly critical sectors</strong> v příloze I — vedle energetiky, dopravy, bankovnictví, infrastruktury finančního trhu, vodohospodářství a digitální infrastruktury. NIS2 nahradila předchozí směrnici NIS1 (2016/1148), která zdravotnictví pokrývala jen na úrovni „nemocnic" a omezené množiny poskytovatelů — bez výrobců léčiv, distributorů, laboratoří a klinik. NIS2 rozsah radikálně rozšiřuje: regulovanými subjekty se stávají poskytovatelé zdravotní péče (definice odkazuje na článek 3 písm. g) směrnice 2011/24/EU o přeshraniční zdravotní péči), referenční laboratoře EU, výrobci léčiv (článek 1 bod 2 směrnice 2001/83/ES) a výrobci vybraných zdravotnických prostředků klasifikovaných jako kritické v případě veřejné zdravotní krize (nařízení EU 2022/123 o posílení role EMA).
+      </p>
+
+      <p>
+        Důvod tohoto rozšíření je empirický a tristní. ENISA — European Union Agency for Cybersecurity — ve své zprávě <em>Health Threat Landscape</em> (červenec 2023, datová báze 2021–2023) zaznamenala v sektoru zdravotnictví v EU 215 závažných kybernetických incidentů, z toho 54 % ransomware, 46 % datový únik a 25 % výpadek služby (kategorie nejsou disjunktní — jeden incident má často více dopadů). Přibližně 80 % incidentů s ransomware vyžadovalo částečnou nebo úplnou restauraci IT prostředí ze záloh; medián doby nedostupnosti klíčových systémů činil 14 dní. Mezi nejviditelnější celoevropské epizody patří útok WannaCry na britskou NHS v květnu 2017 (zasaženo 80 z 236 trustů, odložené operace, odhadovaná škoda 92 milionů GBP), útok na Université de Düsseldorf v září 2020 (úmrtí pacientky převezené do vzdálenější nemocnice — první případ, kdy vyšetřování zvažovalo trestněprávní kvalifikaci jako neúmyslné usmrcení v souvislosti s kyberútokem; vyšetřování bylo nakonec odloženo, ale precedent zůstal) a opakované útoky na italský regionální zdravotní systém ASL Roma 3 v letech 2021 a 2022.
+      </p>
+
+      <p>
+        Český kontext má svá specifika. Síť 156 lůžkových zařízení s akutní péčí (data NRPZS, ÚZIS 2025), z toho 20 fakultních a velkých specializovaných center pod přímým zřizovatelstvím ministerstva, zhruba 80 středně velkých zařízení v zřizování krajů a měst, a desítky menších soukromých a oblastních nemocnic. K tomu přibližně 4 800 ambulantních zdravotnických zařízení, čtrnáct krajských středisek zdravotnické záchranné služby, tři velkodistributoři léčiv (Phoenix, Pharmos, Alliance) a několik desítek laboratorních provozovatelů. Tato heterogenita znamená, že jeden zákon musí pracovat s dramaticky odlišnými kapacitami: zatímco Všeobecná fakultní nemocnice v Praze má vlastní oddělení informační bezpečnosti s několika desítkami specialistů, oblastní nemocnice v menším okrese typicky nemá ani plně vytíženého CISO a IT správa je outsourcována na regionálního dodavatele. Právě tento gradient je zdrojem rizika — průzkum českého poskytovatele bezpečnostních služeb ComSource zveřejněný v lednu 2026 (citovaný v publikaci Komora Plus) odhaduje, že průměrná nemocnice v ČR plní zhruba třetinu požadavků, jež nový zákon vyžaduje; 65 % opatření nefunguje správně nebo není zavedeno vůbec, 25 % vykazuje nedostatky a pouze 10 % je hodnoceno jako plně funkční. Mediální odhady hovoří až o tisíci pokusech o průnik do informačních systémů jedné nemocnice ročně; přibližně 12 nemocnic je dle některých zdrojů hodnoceno jako kriticky podzabezpečené s nízkou pravděpodobností úspěšné obrany proti cílenému útoku.
+      </p>
+
+      <h3>Zákon 264/2025 Sb. — co konkrétně mění</h3>
+
+      <p>
+        Zákon 264/2025 Sb. byl publikován ve Sbírce zákonů 6. září 2025 a nabyl účinnosti 1. listopadu 2025, čímž nahradil předchozí zákon 181/2014 Sb. o kybernetické bezpečnosti. Nejde o kosmetickou novelu — jde o novou normu psanou na zelené louce, jejímž primárním účelem je transponovat směrnici NIS2 a uvést český režim do souladu s evropským rámcem. Změny lze shrnout do pěti vrstev.
+      </p>
+
+      <p>
+        <strong>První vrstva: rozšíření okruhu povinných subjektů.</strong> Předchozí režim (zákon 181/2014 Sb.) pracoval s úzkým okruhem provozovatelů kritické informační infrastruktury (KII) a významných informačních systémů (VIS) — v praxi především několik desítek největších nemocnic, které byly určeny rozhodnutím NÚKIB. Nový režim zavádí kategorii <em>poskytovatel regulované služby</em> a počet povinných subjektů zvyšuje řádově. K 8. únoru 2026 ohlásilo regulovanou službu přes 4 800 organizací; do konce roku 2025 se ohlásily zhruba tři čtvrtiny očekávaného množství, zbylá čtvrtina pokračuje v ohlašování v průběhu roku 2026 (zdroj: aktualita NÚKIB z 11. 2. 2026). Mezi povinnými je nyní prakticky každá akutní nemocnice, větší ambulantní pracoviště, krajská ZZS, distributoři léčiv, laboratoře a vybraní výrobci zdravotnické techniky. Konkrétní příklad regulované služby v zákonné definici uvádí vyhláška 408/2025 Sb. v příloze pod položkou 18.2 — <em>poskytování zdravotnické záchranné služby</em>.
+      </p>
+
+      <p>
+        <strong>Druhá vrstva: dva režimy povinností.</strong> Zákon dělí povinné subjekty na <em>režim vyšších povinností</em> a <em>režim nižších povinností</em>. Vyšší režim zahrnuje subjekty, které jsou — z důvodu velikosti, počtu uživatelů, geografického rozsahu, dopadu na fungování odvětví nebo rizikovosti provozu — značně ekonomicky, společensky nebo bezpečnostně významné pro Českou republiku. Pro nemocnice to v praxi znamená všechny fakultní nemocnice, většinu krajských a oblastních nemocnic střední a větší velikosti a ZZS všech krajů. Nižší režim připadá na menší ambulantní zařízení a vybrané typy laboratoří. Bezpečnostní opatření jsou rozdílná: vyšší režim (vyhláška 409/2025 Sb. ze dne 26. září 2025, účinná od 1. listopadu 2025) pokrývá systém řízení bezpečnosti informací (ISMS) podle ISO/IEC 27001, řízení rizik, řízení dodavatelského řetězce, fyzickou bezpečnost, bezpečnost komunikačních sítí, kontrolu přístupu, řízení zranitelností a krizovou kontinuitu provozu; nižší režim (samostatná vyhláška) zavádí zjednodušený standard minimální kybernetické bezpečnosti s důrazem na řízení rizik, bezpečnost lidských zdrojů a řešení incidentů.
+      </p>
+
+      <p>
+        <strong>Třetí vrstva: lhůty.</strong> Zákon stanoví třístupňový časový rámec. (1) Ohlášení regulované služby — podle § 6 zákona 264/2025 Sb. — do 60 dnů od okamžiku, kdy se zákon na subjekt začne vztahovat. Pro subjekty splňující kritéria k 1. listopadu 2025 byla lhůta vypršela 31. prosince 2025. (2) Doplnění registračních údajů — 30 dnů po vydání rozhodnutí o registraci. (3) Zavedení bezpečnostních opatření — 1 rok od registrace. Pro subjekty registrované v prosinci 2025 znamená přechodná lhůta zavedení opatření vypršení v prosinci 2026; pro pozdější registrace se lhůta posouvá v ročním cyklu. Klíčový praktický důsledek: pro většinu českých nemocnic končí přechodná lhůta na zavedení plného souboru organizačních a technických bezpečnostních opatření v listopadu nebo prosinci 2026. To je jedenáct až třináct měsíců od dnešního dne. Z hodnocení ComSource (jedna třetina plnění) vyplývá, že naprostá většina povinných subjektů ze zdravotnictví má k tomuto termínu dvě třetiny opatření buď v rovině plánování, nebo zcela nezavedených.
+      </p>
+
+      <p>
+        <strong>Čtvrtá vrstva: hlášení incidentů.</strong> Klíčovou novinkou je systém povinného a strukturovaného hlášení kybernetických bezpečnostních incidentů. Povinný subjekt v režimu vyšších povinností musí podat <em>včasné upozornění</em> NÚKIB do 24 hodin od zjištění incidentu, jenž má významný dopad, doplnit ho úplným <em>oznámením incidentu</em> do 72 hodin a případně předložit <em>průběžnou zprávu</em> a <em>závěrečnou zprávu</em> do jednoho měsíce od oznámení. Tento režim přesně kopíruje strukturu NIS2 (článek 23 směrnice). Logika je dvojí: rychlá reakce krizové infrastruktury (NÚKIB sdílí informace s ostatními poskytovateli, aby zabránil řetězení podobných útoků) a evidenční podchycení rozsahu hrozeb (datová báze pro vyhodnocení trendů a tvorbu regulační politiky). Pro zdravotnictví je tato povinnost potenciálně transformativní: dosud byla velká část útoků v menších nemocnicích řešena „interně", bez oznámení regulátorovi a bez sdílení informace s ostatními zařízeními. Po listopadu 2026 bude oznámení — pro registrované subjekty — povinné, s přímými sankcemi za neplnění.
+      </p>
+
+      <p>
+        <strong>Pátá vrstva: sankce a vymáhání.</strong> Maximální výše pokuty činí podle zákona 264/2025 Sb. až 250 milionů Kč nebo 2 % čistého celosvětového ročního obratu subjektu (vyšší z obou hodnot). Pro velkou fakultní nemocnici s ročním obratem několika miliard korun je 2% strop teoreticky vyšší než absolutní limit; v praxi je ale očekáváno, že NÚKIB bude pokuty stanovovat výrazně pod stropem a že primárním nástrojem vymáhání budou nápravná opatření a odstraňování nedostatků. Klíčové ustanovení je odpovědnost statutárního orgánu: zákon explicitně ukládá vrcholovým orgánům povinnost dohlížet na kybernetickou bezpečnost a být v ní řádně proškoleny. To je strukturální posun — kybernetická bezpečnost přestává být doménou IT a stává se předmětem corporate governance, což odpovídá modelu NIS2 a Bezpečnostní rady státu doporučenému pro veškeré kritické infrastruktury.
+      </p>
+
+      <h3>Datový rámec: kde stojí české nemocnice ke květnu 2026</h3>
+
+      <p>
+        Empirická data o stavu kybernetické bezpečnosti českého zdravotnictví jsou bohužel fragmentovaná a z velké části privátní. Žádný systematický národní průzkum srovnatelný například s estonským <em>e-Tervise küberturvalisuse aruanne</em> nebo finským <em>THL Cybersecurity Maturity Assessment</em> v ČR pravidelně neprobíhá. To, co je veřejně k dispozici, lze rozdělit do tří kategorií.
+      </p>
+
+      <p>
+        <strong>Komerčně zveřejněné průzkumy.</strong> Společnost ComSource (citovaná Komorou Plus v lednu 2026) hodnotí stav implementace bezpečnostních opatření v českých nemocnicích jako 33% průměrné plnění; 65 % opatření buď nefunguje správně, nebo není zavedeno vůbec, 25 % vykazuje nedostatky, 10 % je plně funkčních. HealthCare Institute v projektu „Nejlepší nemocnice roku" hodnotí kybernetickou bezpečnost samostatnou kategorií od roku 2022 — ročenka 2023 identifikovala 12 nemocnic v kritickém pásmu zabezpečení s vysokou zranitelností proti cíleným útokům. Tyto údaje pocházejí ze sebe-deklarace nemocnic a z penetračních testů na vybraných organizacích, nikoli z plošného nezávislého auditu — výsledky je proto třeba číst s rezervou jako orientační, nikoli jako přesnou statistiku.
+      </p>
+
+      <p>
+        <strong>NÚKIB — agregovaná čísla incidentů.</strong> NÚKIB ve své výroční zprávě eviduje za rok 2024 v sektoru zdravotnictví necelé tři desítky nahlášených incidentů; část z nich byly prosté provozní výpadky (porucha hardwarového úložiště, výpadek konektivity, chyba aktualizace) bez aktivního útočníka. Cílených útoků s prokázaným cizím aktérem bylo v evidenci NÚKIB za rok 2024 v zdravotnictví méně než deset; všechny byly v rané fázi zachyceny a žádný neměl rozsah srovnatelný s útokem na FN Brno 2020. To ale platí pro rok 2024 — rok 2025 přinesl ransomware útok na Nemocnici Nymburk (1. července 2025) a několik menších útoků na ambulantní zařízení, jejichž souhrnná evidence ještě nebyla oficiálně zveřejněna. Po vstupu zákona 264/2025 Sb. v účinnost lze očekávat, že počet evidovaných incidentů v sektoru zdravotnictví v roce 2026 řádově vzroste — ne proto, že by hrozby vzrostly, ale proto, že povinnost hlásit dopadne na výrazně větší okruh subjektů než dosud.
+      </p>
+
+      <p>
+        <strong>HSPA datový stín.</strong> Kybernetická odolnost není v dosavadním HSPA frameworku WHO ani v indikátorové sadě OECD <em>Health at a Glance</em> samostatným ukazatelem. To je z hlediska metodiky překvapivé — odolnost informačních systémů nemocnic ovlivňuje kontinuitu péče, kvalitu klinického rozhodování a ochranu dat pacientů, což jsou všechno tradiční dimenze HSPA. Důvodem je obtížnost konstrukce indikátoru: kybernetická bezpečnost je z principu obtížně měřitelná, protože útočník přizpůsobuje techniku obraně a metriky se rychle stávají zastaralými. ENISA v rámci nového Akčního plánu (viz dále) připravuje na rok 2026–2027 sadu společných ukazatelů zdravotní kybernetické vyspělosti pro členské státy EU; HSPA Monitor ČR bude tyto ukazatele moci použít okamžitě po jejich publikaci. Do té doby pracuje Monitor s nepřímými signály — adopcí elektronického zdravotnictví <a href="../indicator.html?id=ehealth_adoption">ehealth_adoption</a>, frekvencí výpadků klíčových systémů a — pokud je k dispozici z NÚKIB — počtem evidovaných incidentů per 100 000 obsloužených pacientů ročně.
+      </p>
+
+      <h3>Legislativní a regulační rámec — kdo za co odpovídá</h3>
+
+      <p>
+        Kybernetická bezpečnost ve zdravotnictví leží na průniku tří jurisdikcí — kyberbezpečnostní (zákon 264/2025 Sb., NÚKIB), zdravotnické (zákon 372/2011 Sb., ministerstvo zdravotnictví, kraje, ÚZIS) a ochrany osobních údajů (nařízení (EU) 2016/679 — GDPR, Úřad pro ochranu osobních údajů). Žádná z těchto jurisdikcí není sama o sobě postačující a ve skutečnosti se v krizovém scénáři protínají v nepříjemně překrývajících se vrstvách kompetencí, které žádná novela dosud plně nesjednotila.
+      </p>
+
+      <p>
+        <strong>NÚKIB — Národní úřad pro kybernetickou a informační bezpečnost</strong> je primárním dozorovým orgánem podle zákona 264/2025 Sb. Přijímá registrace, vydává metodické pokyny (Portál NÚKIB), přijímá hlášení o incidentech, provádí kontroly a ukládá sankce. Současně je v rámci své role vůči zdravotnictví poskytovatelem podpory: provozuje vzdělávací programy, vydává metodické dokumenty (např. <em>Bezpečnostní standardy pro nemocnice 2024</em>) a v krizové situaci poskytuje podporu CSIRT (Computer Security Incident Response Team) prostřednictvím GovCERT.CZ.
+      </p>
+
+      <p>
+        <strong>Ministerstvo zdravotnictví ČR</strong> je gestorem zákonů o zdravotních službách (372/2011 Sb.), o veřejném zdravotním pojištění (48/1997 Sb.) a o elektronizaci zdravotnictví (325/2021 Sb.). Pro oblast kybernetické bezpečnosti zřídilo v roce 2017 <em>Národní centrum elektronického zdravotnictví (NCEZ)</em>, které je metodickým pracovištěm pro elektronizaci a — v omezené míře — i pro kybernetickou bezpečnost zdravotnických informačních systémů. NCEZ úzce spolupracuje s NÚKIB, ale primární gesce nad kybernetickou bezpečností nemocnic leží na NÚKIB. MZ ČR je odpovědné za to, aby zákonné povinnosti podle 264/2025 Sb. byly v jím zřízených fakultních nemocnicích plněny, a za to, aby cílový stav kybernetické bezpečnosti odpovídal Národní strategii elektronického zdravotnictví ČR 2025–2035.
+      </p>
+
+      <p>
+        <strong>Zřizovatel zařízení</strong> — kraj, město, ministerstvo, soukromý vlastník — nese věcnou odpovědnost za to, aby zdravotnické zařízení pod jeho zřizovatelstvím fungovalo bezpečně a kontinuálně. V případě fakultních nemocnic je to MZ ČR. V případě krajských nemocnic je to příslušný kraj — kraje jsou dle § 110 zákona 372/2011 Sb. zodpovědné za zajištění dostupnosti zdravotních služeb na svém území, a tato odpovědnost zahrnuje i zajištění toho, aby vlastní zařízení nebyla z provozu vyřazena kybernetickým útokem. V praxi krajské úřady — jako Asociace krajů ČR v souhrnu — od roku 2021 explicitně volaly po rozšíření regulace KII na menší nemocnice, protože samy nedisponují kapacitou uložit požadavky bezpečnosti zákonnou cestou; požadavek byl reflektován v rozšíření okruhu povinných subjektů v zákoně 264/2025 Sb.
+      </p>
+
+      <p>
+        <strong>Zdravotní pojišťovny</strong> jsou ve specifické pozici. Nejsou primárně provozovatelé péče (s výjimkou vlastních smluvních zařízení), ale jsou platiteli a mají smluvní vztah s každým poskytovatelem. Dohodovací řízení k úhradové vyhlášce — viz paralelní text HSPA Monitoru <a href="clanek-dohodovaci-rizeni-2027-data.html">Dohodovací řízení 2027</a> — by mohlo principem zavést P4P bonus za doloženou kybernetickou vyspělost (analogicky k britskému CQUIN — Commissioning for Quality and Innovation). V cyklu 2027 to však ještě není explicitně zahrnuto. V přechodné fázi pojišťovny působí spíše jako sekundární kontrolor — k 1. lednu 2027 mohou v rámci kontrolní činnosti ověřovat, zda smluvní partner splňuje povinnosti podle 264/2025 Sb., a v případě závažných nedostatků uplatňovat smluvní sankce.
+      </p>
+
+      <p>
+        <strong>Statutární orgán a ředitel zařízení</strong> — typicky generální nebo lékařský ředitel a člen představenstva nebo dozorčí rady — nese individuální odpovědnost za řízení rizik podle zákona 264/2025 Sb. V případě závažného porušení povinností lze postihnout nejen organizaci, ale také konkrétního statutáře. To je posun, který v ČR nemá v oblasti zdravotnictví precedent — dosud byla manažerská odpovědnost za kybernetickou bezpečnost spíše implicitní; po 264/2025 Sb. je explicitní a vymahatelná.
+      </p>
+
+      <h3>Mezinárodní srovnání — co dělají jinde</h3>
+
+      <p>
+        Evropský rámec NIS2 nastavuje minimum, které všechny členské státy transponují. Národní implementace se ale liší v rozsahu, přísnosti a v doprovodné podpoře.
+      </p>
+
+      <p>
+        <strong>Evropská unie — Akční plán pro kybernetickou bezpečnost nemocnic.</strong> Evropská komise zveřejnila 15. ledna 2025 <em>European action plan on the cybersecurity of hospitals and healthcare providers</em>. Plán je strukturován do čtyř pilířů: prevence, detekce a identifikace hrozeb, reakce na útoky a kybernetická deterrence. Klíčový operativní výstup — který spadá přímo do roku 2026 — je vznik <em>European Cybersecurity Support Centre for Hospitals and Healthcare Providers</em> v rámci ENISA. Centrum bude poskytovat tailored guidance, nástroje, služby a tréninky cílené specificky na zdravotnictví; bude provozovat <em>EU-wide early warning subscription service</em> s near-real-time výstrahami a sdílením indikátorů kompromitace mezi členskými státy. ENISA finální podobu Centra představila v září 2025; plný provoz je naplánován postupně v období 2026–2027. Pro české nemocnice to znamená, že — aniž by si to musely zařizovat samy — získají v roce 2026 přístup ke sdílené EU bezpečnostní infrastruktuře, výstrahám a metodikám. Otázkou je rychlost a kvalita českého implementačního napojení, které je v gesci NÚKIB a NCEZ.
+      </p>
+
+      <p>
+        <strong>Německo — Krankenhauszukunftsgesetz a § 75c SGB V.</strong> Německo zavedlo zákonnou povinnost nemocnic implementovat opatření podle aktuálního stavu techniky kybernetické bezpečnosti zákonem <em>Krankenhauszukunftsgesetz</em> (KHZG, 2020) a doplněním § 75c do páté knihy sociálního zákoníku (SGB V). Klíčový rys německé implementace je explicitní vazba na financování: nemocnice, které do 1. ledna 2022 neimplementovaly stav techniky, riskovaly snížení úhrad od pojišťoven (DRG úhrad) o 2 %. Tento finanční mechanismus byl účinnější než pouhá regulační hrozba pokuty, a proto je vážně zvažován i pro českou implementaci v rámci zmíněného úhradového cyklu 2028+. Hodnocení BSI (Bundesamt für Sicherheit in der Informationstechnik) z roku 2024 ukazuje, že 73 % německých nemocnic má implementován základní stav techniky podle § 75c, což je dramaticky lepší startovní pozice než české odhady jedné třetiny.
+      </p>
+
+      <p>
+        <strong>Francie — ANSSI a CaRE.</strong> Francouzský úřad pro kybernetickou bezpečnost (ANSSI — Agence nationale de la sécurité des systèmes d'information) provozuje od roku 2023 program <em>CaRE — Cybersécurité accélération et résilience des établissements</em> s rozpočtem 750 milionů eur na období 2023–2027. Program kombinuje povinnostní rámec (audity, povinné incident response plány, testovací cvičení) s investiční podporou (granty na implementaci SOC, EDR, segmentaci sítí, modernizaci PACS). Po útoku na Centre hospitalier sud francilien v Corbeil-Essonnes v srpnu 2022 (ransomware LockBit, požadované výkupné 10 milionů USD, dvouměsíční nedostupnost klíčových systémů) Francie významně zrychlila tempo investic. Český rozpočet na obdobnou systémovou podporu z resortu zdravotnictví je pro období 2026–2028 plánován v řádu desítek milionů Kč ročně z prostředků Národního plánu obnovy a Operačního programu Zdravotnictví — řádově desetinásobně méně proporčně k velikosti sektoru než ve Francii.
+      </p>
+
+      <p>
+        <strong>Velká Británie — NHS DSPT a CSOC.</strong> Britská NHS provozuje <em>Data Security and Protection Toolkit (DSPT)</em> jako povinný roční sebehodnotící nástroj pro všechny trusty a poskytovatele pečujících o NHS pacienty. Po útoku WannaCry v květnu 2017 NHS England zřídila <em>Cyber Security Operations Centre (CSOC)</em> jako 24/7 sdílené SOC pro celý sektor — nemocnice se mohou napojit a získat sdílený threat intelligence a incident response. Tento model — sdílené SOC pro celý sektor — je organizační vzor, který by mohl mít smysl i v ČR, kde řada menších nemocnic nemá kapacitu provozovat vlastní SOC. NCEZ a NÚKIB v roce 2024 zahájily přípravu studie proveditelnosti pro sektorové sdílené SOC v ČR; výsledek studie ještě nebyl publikován.
+      </p>
+
+      <p>
+        <strong>Estonsko — e-Tervis a X-Road.</strong> Estonské zdravotnictví je nejdigitálnější v Evropě — 99 % zdravotních záznamů je digitálních, eRecept, eAmbulance, eHealth Foundation. Tato úroveň digitalizace je doprovázena silnou kybernetickou architekturou — datová páteř X-Road s end-to-end šifrováním, decentralizovaná architektura bez jednoho monolitického cíle, povinný auditní log každého dotazu na pacientská data (každý pacient si může online ověřit, kdo a proč jeho záznam četl). Estonsko zažilo v roce 2007 sérii kybernetických útoků a od té doby buduje národní rezilienci jako prioritu. Pro ČR je estonský model spíše dlouhodobou inspirací pro architekturu nového ehealth, ne pro retrofitting do existující heterogenní krajiny — ale konkrétní řešení (auditní log přístupů k záznamům pacientů) jsou aplikovatelná i v současné ČR.
+      </p>
+
+      <h3>Praktické důsledky — co se musí stát do listopadu 2026</h3>
+
+      <p>
+        Pokud zákon 264/2025 Sb. má v sektoru zdravotnictví fungovat věcně, ne jen formálně, musí se v období květen 2026 — listopad 2026 stát několik věcí současně.
+      </p>
+
+      <p>
+        <strong>Provozní úroveň nemocnic.</strong> Každá registrovaná nemocnice v režimu vyšších povinností musí implementovat nebo dotáhnout do funkčního stavu sadu opatření podle vyhlášky 409/2025 Sb. — typicky: dokumentovaný systém řízení informační bezpečnosti, role bezpečnostního manažera (CISO) nebo manažera kybernetické bezpečnosti s definovanými kompetencemi a vazbou na statutární orgán, řízení rizik s pravidelným hodnocením, klasifikaci aktiv (zejména PACS, NIS, LIS, RIS, eRecept), segmentaci sítí (oddělení administrativní sítě, klinické sítě a IoMT — Internet of Medical Things), kontrolu privilegovaných účtů, multifaktorovou autentizaci pro vzdálené přístupy, správu zranitelností s definovanými cykly patchování, zálohování s testováním obnovitelnosti, plán kontinuity provozu (BCP) s scénáři pro výpadek nemocničního IT a pro útok ransomware, postupy hlášení incidentů a — to je možná nejnáročnější — pravidelné cvičení krizové reakce. To je pro průměrnou krajskou nemocnici implementační program v řádu 20–60 milionů Kč investic a 2–4 dodatečných úvazků odborného personálu po dobu nejméně dvou let. Pro malou oblastní nemocnici je to často nedosažitelné bez sdílené sektorové infrastruktury.
+      </p>
+
+      <p>
+        <strong>Sektorová úroveň.</strong> Pokud má český zdravotní systém zvládnout nepoměr mezi velikostí požadavků a kapacitou menších nemocnic, je nutné posílit sdílenou infrastrukturu. To zahrnuje sektorové SOC (možná v gesci NCEZ nebo formou koncesního partnerství), centralizovaný program penetračního testování pro registrované subjekty, sdílené metodiky a šablony bezpečnostních dokumentů, koordinovanou edukační platformu pro management i zdravotnický personál (sociální inženýrství zůstává nejčastějším počátečním vektorem útoků), a — nejdůležitěji — sdílený incident response tým, který v případě útoku poskytne rychlou expertní podporu na místě. Nic z toho dnes v ČR nefunguje v plné šíři; všechny součásti existují v zárodečné podobě v různých institucích (NÚKIB, NCEZ, soukromé bezpečnostní firmy), ale nikdo z nich nemá dnes mandát ani rozpočet poskytovat tuto podporu plošně.
+      </p>
+
+      <p>
+        <strong>Politická a rozpočtová úroveň.</strong> Kybernetická bezpečnost stojí peníze — na investice, provoz, audit a personál. Národní plán obnovy alokoval do oblasti kybernetické bezpečnosti zdravotnictví v komponentě 4.5 (Digitální transformace zdravotnictví) prostředky v řádu jednotek miliard Kč v období 2022–2026, ale podstatná část byla využita na základní infrastrukturní modernizaci, ne na specializovanou kybernetickou bezpečnost. Pro období 2026–2030 je nutné identifikovat nový rozpočtový kanál — buď v rámci Operačního programu Zdravotnictví 2021–2027, v navazujících evropských fondech, v úhradové vyhlášce (P4P bonus za doloženou bezpečnostní vyspělost), nebo přímo ve státním rozpočtu kapitoly MZ. Všechny tyto kanály mají své politické a metodické překážky a žádný z nich není v současnosti připraven k masivnímu nasazení. Bez tohoto dofinancování zákon 264/2025 Sb. zůstane formálním rámcem bez reálné implementační kapacity v menších nemocnicích.
+      </p>
+
+      <h3>Co zákon neřeší a co je třeba sledovat</h3>
+
+      <p>
+        Zákon 264/2025 Sb. je nutný, ne dostačující. Tři otevřené otázky, na které žádná vyhláška ještě neodpověděla:
+      </p>
+
+      <p>
+        <strong>Zranitelnost zdravotnických prostředků (medical devices).</strong> Moderní nemocnice provozuje stovky propojených zdravotnických prostředků — infuzní pumpy, monitory pacienta, zobrazovací zařízení, systémy pro aplikaci radioterapie. Mnoho z těchto zařízení běží na zastaralých operačních systémech (Windows XP, Windows 7), které výrobce již nepatchuje, a které není možné jednoduše migrovat bez certifikace MDR (nařízení EU 2017/745 o zdravotnických prostředcích). Zákon 264/2025 Sb. tuto vrstvu řeší pouze nepřímo přes obecné požadavky na řízení rizik a segmentaci sítí; konkrétní problém zastaralého firmware infuzní pumpy připojené do nemocniční sítě zůstává v systémové slepé skvrně. EU Cybersecurity Action Plan pro nemocnice (2025) tuto otázku adresuje jako prioritu, ale konkrétní regulační odpověď v rámci MDR teprve hledá.
+      </p>
+
+      <p>
+        <strong>Dodavatelský řetězec a softwarové závislosti (supply chain).</strong> NIS2 a zákon 264/2025 Sb. zavádějí povinnost řízení rizik dodavatelského řetězce — povinný subjekt musí znát své dodavatele, hodnotit jejich bezpečnost a zahrnout bezpečnostní požadavky do smluv. Pro nemocnice je tento požadavek prakticky obtížně realizovatelný — typická fakultní nemocnice používá desítky až stovky softwarových produktů od různých dodavatelů (NIS, LIS, RIS, PACS, ekonomický systém, kardiologický modul, intenzivní péče, laboratorní systémy), z nichž řada je vyvíjena malými firmami bez vlastní bezpečnostní zralosti. Zákon problém pojmenovává, ale nemá nástroj, jak vynutit zlepšení v dodavatelské části řetězce. ENISA na úrovni EU pracuje na dobrovolném schématu certifikace zdravotnických informačních systémů; česká implementace zatím čeká.
+      </p>
+
+      <p>
+        <strong>Lidský faktor a kultura bezpečnosti.</strong> Nejúčinnější obrana proti ransomware není firewall — je to nemocniční sestra, která nekliknla na podezřelý odkaz v e-mailu od „kolegy z MZ ČR". Útok na FN Brno 2020 byl zahájen otevřením e-mailové přílohy. Útok na Benešov 2019 měl podobný vstupní vektor. Vyhláška 409/2025 Sb. zahrnuje povinnost školení bezpečnosti pro zaměstnance, ale neurčuje konkrétní formu, frekvenci ani metriku úspěšnosti. Pravidelné simulace phishingu, behavioral metriky a kulturní změna, v níž je hlášení podezřelé situace odměněno místo trestáno, jsou klíčem — a žádný legislativní akt je nenahradí. Kultura bezpečnosti je věcí managementu, ne zákona; zákon ji může jen rámovat.
+      </p>
+
+      <h3>Závěr — listopad 2026 jako test reálné odolnosti</h3>
+
+      <p>
+        Listopad 2026 je termínem, do kterého musí české nemocnice — registrované jako poskytovatelé regulovaných služeb v režimu vyšších povinností — implementovat sadu bezpečnostních opatření podle zákona 264/2025 Sb. a vyhlášky 409/2025 Sb. Stávající empirické signály (komerční průzkumy, zpráva HCI, evidence NÚKIB, hodnocení Komory Plus) naznačují, že většina povinných subjektů dnes plní zhruba třetinu požadavků a že přechodná lhůta není v součtu kapacit a investic objektivně dosažitelná pro všechny.
+      </p>
+
+      <p>
+        To neznamená, že zákon je špatně napsán. Naopak — je v zásadě nutný a transponuje rámec, který je v Evropě konsensuální. Znamená to ale, že je nutné v období květen 2026 — listopad 2026 přijmout doprovodná opatření: sektorové SOC, sdílené metodiky, akcelerační rozpočtový kanál, a explicitní politické rozhodnutí o tom, jak NÚKIB bude přistupovat k subjektům, které lhůtu nestihnou. Pokud bude přístup čistě sankční, riskujeme paradox, v němž chceme zlepšit kybernetickou bezpečnost menších nemocnic tím, že je formálně potrestáme za to, že na ni nemají kapacitu. Pokud bude přístup čistě tolerantní, ztrácí zákon vymahatelnost. Mezi tím leží úzká cesta postupné implementace s jasnou prioritou (nejprve fakultní a krajské nemocnice, pak menší zařízení), s konkrétními metrikami pokroku a se sdílenou sektorovou podporou.
+      </p>
+
+      <p>
+        Pro HSPA Monitor je tento příběh ukázkou pomalého, infrastrukturního rozměru výkonnosti zdravotnictví, který se v žádných tradičních zdravotních ukazatelích — kojenecká úmrtnost, hospitalizace ACSC, naděje dožití, čekací doby — neobjeví, dokud nedojde k systémovému selhání. Nemocnice, která je dva měsíce v nouzovém režimu, vykazuje horší výsledky ve všech klinických ukazatelích po celou dobu výpadku — ale tento dopad je v současných HSPA datech neviditelný. Pokud se útok podaří odrazit, není v datech vůbec — ne proto, že se nestal, ale proto, že obrana fungovala. Měřit to je obtížné. Sledovat to je nutné.
+      </p>
+
+      <p class="article-conclusion">
+        Mezi 12. prosincem 2019 (Benešov), 13. březnem 2020 (FN Brno) a 1. červencem 2025 (Nymburk) leží šest let. Mezi 1. listopadem 2025 (účinnost zákona 264/2025 Sb.) a listopadem 2026 (přechodná lhůta pro většinu nemocnic) leží dvanáct měsíců. Otázka, zda v období 2026–2027 přijde další systémově významný útok na české zdravotnictví, není akademická. Statisticky je vysoce pravděpodobná. Otázka, jestli bude v té chvíli zákon 264/2025 Sb. už fungovat — nebo bude stále ve fázi implementace — záleží na tom, co se stane v příštích měsících. Sledujeme.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Datový klíč: HSPA indikátory</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru relevantní pro monitorování kybernetické odolnosti zdravotnictví</h4>
+      <ul class="article-databox-list">
+        <li><a href="../indicator.html?id=ehealth_adoption"><strong>Míra adopce e-zdravotnictví</strong></a> — penetrace elektronické zdravotní dokumentace, eReceptu a propojených systémů; nepřímý ukazatel velikosti útočné plochy a zároveň základ pro vytvoření národní kybernetické vyspělosti (oblast: Struktury → Informační systémy)</li>
+        <li><a href="../indicator.html?id=spokojenost_informovani"><strong>Spokojenost s informováním a komunikací</strong></a> — kybernetické incidenty, jejich transparentní hlášení a komunikace s pacienty patří do dimenze důvěry v systém; bez efektivní krizové komunikace dopadá útok na vnímanou kvalitu péče (oblast: Výsledky → Spokojenost)</li>
+        <li><a href="../indicator.html?id=cekaci_doby_specialist"><strong>Čekací doby ke specialistovi</strong></a> — výpadek IT v nemocnici typu FN Brno 2020 prodloužil interní zpracování pacientů o týdny; opakované systémové incidenty mají kumulativní dopad na čekací doby (oblast: Procesy → Přístup k péči)</li>
+        <li><a href="../indicator.html?id=mortalita_inhosp_ami"><strong>Nemocniční mortalita po AMI</strong></a> — útok jako Düsseldorf 2020 ukázal, že nedostupnost informačních systémů může mít přímý klinický dopad; sledování této metriky v nemocnicích po incidentech je validátor kontinuity péče (oblast: Výsledky → Klinická kvalita)</li>
+        <li><a href="../indicator.html?id=infekce_nosokomialni"><strong>Nosokomiální infekce</strong></a> — výpadek systémů detekce a sledování infekcí (LIS, NIS) zhoršuje schopnost nemocnice reagovat na nozokomiální nákazy; nepřímý dopad kybernetických útoků (oblast: Procesy → Bezpečnost péče)</li>
+        <li><a href="../indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví (% HDP)</strong></a> — implementace zákona 264/2025 Sb. představuje strukturální investiční náklad v řádu jednotek miliard Kč pro celý sektor; otázka pro úhradovou vyhlášku 2027–2028 (oblast: Struktury → Financování)</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Primární legislativa, dokumenty a mezinárodní reference</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární legislativa — česká</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 264/2025 Sb. o kybernetické bezpečnosti</strong> (publikováno 6. 9. 2025, účinnost 1. 11. 2025) — transpozice směrnice (EU) 2022/2555 (NIS2), nahrazení zákona 181/2014 Sb. <a href="https://www.zakonyprolidi.cz/cs/2025-264" target="_blank" rel="noopener">zakonyprolidi.cz/cs/2025-264 ↗</a></li>
+          <li><strong>Vyhláška č. 408/2025 Sb. o kritériích pro určení regulovaných služeb</strong> — definice okruhu povinných subjektů, vč. zdravotnictví (položka 18.2 — poskytování zdravotnické záchranné služby a další), kritéria pro režim vyšších a nižších povinností. <a href="https://www.zakonyprolidi.cz/cs/2025-408" target="_blank" rel="noopener">zakonyprolidi.cz/cs/2025-408 ↗</a></li>
+          <li><strong>Vyhláška č. 409/2025 Sb. o bezpečnostních opatřeních poskytovatele regulované služby v režimu vyšších povinností</strong> (ze dne 26. 9. 2025) — ISMS, řízení rizik, řízení dodavatelů, fyzická bezpečnost, bezpečnost komunikačních sítí, kontrola přístupu, řízení zranitelností, BCP. <a href="https://www.zakonyprolidi.cz/cs/2025-409" target="_blank" rel="noopener">zakonyprolidi.cz/cs/2025-409 ↗</a></li>
+          <li><strong>Zákon č. 372/2011 Sb. o zdravotních službách</strong> — § 110 odpovědnost krajů za dostupnost zdravotních služeb na území; nepřímá vazba na povinnost krajů zajistit kybernetickou odolnost vlastních zařízení. <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz/cs/2011-372 ↗</a></li>
+          <li><strong>Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví</strong> — rámec pro NCEZ, NKMDZS a centrální datové brány; viz <a href="../clanek-novela-elektronizace-2026.html">novela elektronizace 2026</a> v HSPA Monitoru. <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz/cs/2021-325 ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární dokumenty — NÚKIB, NCEZ, vládní</h5>
+        <ul class="article-sources-list">
+          <li><strong>NÚKIB — Aktualita: „Ohlášení podle nového zákona o kybernetické bezpečnosti provedlo přes 4800 organizací"</strong> (11. 2. 2026) — souhrnná data o registracích k 8. 2. 2026; informace o tempu plnění registrační povinnosti. <a href="https://nukib.gov.cz/cs/infoservis/aktuality/2372-ohlaseni-podle-noveho-zakona-o-kyberneticke-bezpecnosti-provedlo-pres-4800-organizaci/" target="_blank" rel="noopener">nukib.gov.cz ↗</a></li>
+          <li><strong>NÚKIB — Portál NÚKIB: Průvodce novým zákonem o kybernetické bezpečnosti</strong> — metodika sebeidentifikace, registrace a implementace bezpečnostních opatření. <a href="https://portal.nukib.gov.cz/pruvodce-novym-zakonem-o-kyberneticke-bezpecnosti" target="_blank" rel="noopener">portal.nukib.gov.cz ↗</a></li>
+          <li><strong>NÚKIB — Bezpečnejší zdravotnictví: Akční plán ke strategii kybernetické bezpečnosti ČR 2021–2025 a 2026–2030</strong> — vládní rámec investic do kybernetické bezpečnosti zdravotnictví. <a href="https://nukib.gov.cz/cs/infoservis/aktuality/1735-bezpecnejsi-zdravotnictvi-i-reseni-rizikovych-dodavatelu-vlada-schvalila-akcni-plan-ke-strategii-kyberneticke-bezpecnosti/" target="_blank" rel="noopener">nukib.gov.cz/akcni-plan ↗</a></li>
+          <li><strong>NCEZ — Národní centrum elektronického zdravotnictví: Kybernetická bezpečnost</strong> — metodické materiály MZ ČR pro nemocnice. <a href="https://ncez.mzcr.cz/cs/kyberneticka-bezpecnost/kyberneticka-bezpecnost" target="_blank" rel="noopener">ncez.mzcr.cz ↗</a></li>
+          <li><strong>MZ ČR — Národní strategie elektronického zdravotnictví ČR 2025–2035</strong> — strategický rámec digitální transformace, vč. kybernetické vrstvy. <a href="https://mzd.gov.cz/category/programy-a-strategie/narodni-strategie-elektronickeho-zdravotnictvi-cr-2025-2035/" target="_blank" rel="noopener">mzd.gov.cz/strategie ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">EU legislativa, ENISA a strategický rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Směrnice (EU) 2022/2555 ze dne 14. prosince 2022 (NIS2)</strong> o opatřeních k zajištění vysoké společné úrovně kybernetické bezpečnosti v Unii — příloha I (highly critical sectors), zdravotnictví. <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX%3A32022L2555" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>European Commission — European action plan on the cybersecurity of hospitals and healthcare providers</strong> (15. 1. 2025) — čtyři pilíře (prevence, detekce, reakce, deterrence) a rámec ENISA Support Centre 2026. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/digital-health-and-care/european-action-plan-cybersecurity-hospitals-and-healthcare-providers_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>ENISA — Health Threat Landscape 2023</strong> (červenec 2023) — analýza 215 závažných incidentů ve zdravotnictví EU 2021–2023, dopady ransomware, datový únik, výpadek služby. <a href="https://www.enisa.europa.eu/topics/cybersecurity-of-critical-sectors/health" target="_blank" rel="noopener">enisa.europa.eu/health ↗</a></li>
+          <li><strong>Nařízení (EU) 2017/745 o zdravotnických prostředcích (MDR)</strong> — kontextový rámec pro kybernetickou bezpečnost medical devices a IoMT. <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX%3A32017R0745" target="_blank" rel="noopener">eur-lex.europa.eu/MDR ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">České incidenty — referenční zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>Policie ČR — Středočeští kriminalisté ukončili vyšetřování ransomware útoku na benešovskou nemocnici</strong> (12. 2019, vyšetřování odloženo 2020) — virus Ryuk, škoda přes 59 mil. Kč. <a href="https://policie.gov.cz/clanek/stredocesti-kriminaliste-ukoncili-vysetrovani-ransomware-utoku-na-benesovskou-nemocnici.aspx" target="_blank" rel="noopener">policie.gov.cz ↗</a></li>
+          <li><strong>Aktuálně.cz — Kyberútok způsobil brněnské fakultní nemocnici škody v desítkách milionů korun</strong> (13. 3. 2020, vyšetřování 2021) — kryptovirus Defray, škoda 150 mil. Kč, dvouměsíční obnova. <a href="https://zpravy.aktualne.cz/domaci/kyberutok-zpusobil-brnenske-fakultni-nemocnici-skody-v-desit/r~2608ab6c808411ea9d470cc47ab5f122/" target="_blank" rel="noopener">aktualne.cz ↗</a></li>
+          <li><strong>Insmart.cz / ČT24 — Kybernetický útok na nemocnici Nymburk</strong> (1. 7. 2025) — výpadek systémů, nouzový režim. <a href="https://ct24.ceskatelevize.cz/clanek/regiony/nemocnici-v-nymburku-ochromil-kyberutok-pece-ohrozena-neni-362520" target="_blank" rel="noopener">ct24.ceskatelevize.cz ↗</a></li>
+          <li><strong>Komora Plus — České nemocnice nemají dostatečně zajištěnou kyberbezpečnost</strong> (26. 1. 2026) — citace průzkumu ComSource: 33% průměrné plnění; 65/25/10 rozpad funkčnosti opatření. <a href="https://komoraplus.cz/2026/01/26/ceske-nemocnice-nemaji-dostatecne-zajistenou-kyberbezpecnost-2/" target="_blank" rel="noopener">komoraplus.cz ↗</a></li>
+          <li><strong>HealthCare Institute — Nejlepší nemocnice roku: Kybernetická bezpečnost v roce 2023</strong> — dlouhodobá řada hodnocení kybernetické vyspělosti českých nemocnic. <a href="https://www.hc-institute.org/cz/projekty/nemocnice-ceske-republiky/kyberneticka-bezpecnost-v-roce-2023.html" target="_blank" rel="noopener">hc-institute.org ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>Německo — Krankenhauszukunftsgesetz (KHZG, 2020) a § 75c SGB V</strong> — povinný stav techniky kybernetické bezpečnosti pro nemocnice s finanční sankcí (snížení DRG úhrady o 2 %). <a href="https://www.bundesgesundheitsministerium.de/krankenhauszukunftsgesetz" target="_blank" rel="noopener">bundesgesundheitsministerium.de ↗</a></li>
+          <li><strong>Francie — ANSSI: Programme CaRE (Cybersécurité accélération et résilience des établissements)</strong> — 750 mil. EUR investic do kybernetické bezpečnosti zdravotnictví 2023–2027. <a href="https://cyber.gouv.fr/actualites/programme-care-cybersecurite-acceleration-et-resilience-des-etablissements" target="_blank" rel="noopener">cyber.gouv.fr/CaRE ↗</a></li>
+          <li><strong>Velká Británie — NHS Digital: Data Security and Protection Toolkit (DSPT)</strong> — povinný roční sebehodnotící nástroj pro NHS trusty po útoku WannaCry 2017. <a href="https://www.dsptoolkit.nhs.uk/" target="_blank" rel="noopener">dsptoolkit.nhs.uk ↗</a></li>
+          <li><strong>Estonsko — e-Tervis (eHealth Foundation) a X-Road</strong> — model decentralizované architektury s end-to-end šifrováním a auditním logem přístupů k pacientským záznamům. <a href="https://www.e-tervis.ee/en" target="_blank" rel="noopener">e-tervis.ee ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">HSPA framework a kybernetická odolnost</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD — Health at a Glance: Europe 2024</strong> — kapitola Digitalisation of Health Systems; HSPA framework v dimenzi Resilience. <a href="https://www.oecd.org/en/topics/health.html" target="_blank" rel="noopener">oecd.org/health ↗</a></li>
+          <li><strong>WHO — Health system resilience: Building back better and adapting to future challenges</strong> (2021) — koncepce systémové odolnosti vč. digitální infrastruktury. <a href="https://www.who.int/publications/i/item/9789240048751" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>Belgie — Healthy Belgium (Sciensano)</strong> — referenční model HSPA pro Českou republiku, dimenze Resilience a Digital Health. <a href="https://www.healthybelgium.be/" target="_blank" rel="noopener">healthybelgium.be ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k draftu:</strong> Tento text je pracovní verzí k redakční diskusi. Cituje platné nebo schválené znění zákonů a jejich novel ke květnu 2026; termíny účinnosti odpovídají veřejně dostupným informacím o legislativním procesu k datu zpracování. Empirické odhady stavu kybernetické bezpečnosti českých nemocnic vycházejí z komerčních průzkumů (ComSource, HealthCare Institute) a z agregovaných dat NÚKIB; nejde o výsledky systematického nezávislého auditu a je nutné je číst jako orientační. Před zveřejněním je nutné ověřit aktuální podobu prováděcích vyhlášek, finální čísla registrací podle 264/2025 Sb. a stav příprav sektorového SOC. Text není určen ke zveřejnění a není zaregistrován v <code>data/articles.json</code> ani propojen s navigací <code>clanky.html</code>.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="../clanky.html">← Všechny články</a>
+      <a class="article-nav-next" href="../clanek-novela-elektronizace-2026.html">Novela elektronizace zdravotnictví 2026 →</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="../src/clanky.js"></script>
+
+</body>
+</html>
