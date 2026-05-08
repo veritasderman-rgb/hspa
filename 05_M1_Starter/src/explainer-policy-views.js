@@ -296,24 +296,31 @@ function renderDeficitChart() {
     { year: '2028p', rezervy: 18.0, deficit: -12.5 },
   ];
   const max = 55;
+  // Cash-flow minimum: 1/12 z ročních výdajů cca 563 mld. Kč ≈ 47 mld. Kč
+  const cashFlowMin = 47;
+  const cashFlowPct = (cashFlowMin / max) * 100;
   return `
     <section class="detail-section">
       <h3>Vývoj rezerv pojišťoven a souhrnného deficitu</h3>
       <p class="section-note">Modelace projekce při zachování stávající mechaniky (sazby, valorizace, struktura péče). Zdroje: rozpočty pojišťoven 2026, MZ ČR, SZP. Hodnoty 2025–2028 jsou odhadem / projekcí.</p>
       <div class="ex-bars" role="img" aria-label="Sloupcový graf vývoje rezerv pojišťoven a deficitu">
-        ${data.map(d => `
+        ${data.map(d => {
+          const belowMin = d.rezervy < cashFlowMin;
+          return `
           <div class="ex-bar-row">
             <span class="ex-bar-label">${d.year}</span>
             <span class="ex-bar-track">
-              <span class="ex-bar-fill ex-bar-fill-pos" style="width: ${(d.rezervy / max) * 100}%">
+              <span class="ex-bar-threshold" style="left: ${cashFlowPct}%;" title="Cash-flow minimum ≈ ${cashFlowMin} mld. Kč" aria-hidden="true"></span>
+              <span class="ex-bar-fill ${belowMin ? 'ex-bar-fill-cz' : 'ex-bar-fill-pos'}" style="width: ${(d.rezervy / max) * 100}%">
                 <span class="ex-bar-value">${d.rezervy.toFixed(1)} mld. Kč</span>
               </span>
             </span>
             <span class="ex-bar-side ex-bar-side-neg">deficit ${d.deficit.toFixed(1)} mld.</span>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
-      <p class="ex-bar-foot">Při tempu projekce 2026–2028 vyčerpání rezerv mezi koncem 2028 a polovinou 2030 — bez systémového opatření (sazba, valorizace, struktura péče).</p>
+      <p class="ex-bar-foot"><strong>Cash-flow minimum ≈ 47 mld. Kč</strong> odpovídá 1/12 ročních výdajů (~563 mld. Kč) — provoznímu polštáři na cca jeden měsíc péče. Pod touto hranicí hrozí zpoždění plateb poskytovatelům. Aktuální rezervy jsou těsně nad ní; při tempu projekce 2026–2028 spadnou pod minimum kolem roku 2027.</p>
     </section>
   `;
 }
