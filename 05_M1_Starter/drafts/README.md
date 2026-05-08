@@ -9,6 +9,11 @@ Tato složka obsahuje obsah, který je v redakční přípravě. **Není načít
 
 ## Aktuální drafty (8. 5. 2026)
 
+### `clanek-kyberbezpecnost-zdravotnictvi.html` (nové, 8. 5. 2026)
+Odborný článek 4+ A4 o kybernetické bezpečnosti zdravotnictví v ČR — od českých incidentů (Benešov 2019, FN Brno 4/2020 během pandemie, Krajská zdravotní 2024, posun útočníků na dodavatele NIS 2024–2025) přes mezinárodní referenční případy (Düsseldorf 9/2020 — první vyšetřování nepřímého úmrtí v EU; HSE Irsko 5/2021 — Conti, &gt;100 mil. EUR škody, post-incidentní zpráva PwC; CHSF Corbeil-Essonnes 8/2022 — LockBit; Synnovis/NHS 6/2024 — Qilin, ~11 000 zrušených vyšetření; Change Healthcare 2/2024 — &gt;1,6 mld. USD) k transpozici NIS2 do nového zákona o kybernetické bezpečnosti. Klíčový mechanismus: rozšíření regulačního okruhu z ~6 KII subjektů na 200+ poskytovatelů zdravotní péče (osobní odpovědnost statutárů, hlášení incidentů 24h/72h, řízení dodavatelského řetězce, sankce do 10 mil. EUR / 2 % obratu). Český čtyřvrstvý právní rámec: zákon 181/2014 Sb., vyhláška NÚKIB 82/2018 Sb., § 69a–§ 69d zákona 372/2011 Sb. (zabezpečení zdravotnické dokumentace), zákon 110/2019 Sb. (GDPR), zákon 325/2021 Sb. o elektronizaci zdravotnictví. Specifické zranitelnosti zdravotnictví (legacy medical devices s Windows XP Embedded, vysoká hodnota dat na sekundárním trhu, nízká snesitelnost přerušení, identity sprawl 2 000–8 000 účtů na nemocnici). Praktický investiční horizont: 15–40 mil. Kč jednorázově + 5–15 mil. Kč ročně pro středně velkou krajskou nemocnici. Návrh nového kompozitního HSPA indikátoru `kyberbezpecnost_zdravotnictvi_pripravenost` (regulační pokrytí + institucionální zralost + incidenty/obnovitelnost). Linkováno na existující indikátory `ehealth_adoption`, `infekce_nosokomialni`, `bezpecnost_padu_nemocnice`, `dojezd_zzs`, `postele_akutni_per_1000`.
+
+
+
 ### `clanek-porodnice-regiony.html`
 Odborný článek 4+ A4 o transformaci porodnické sítě v ČR — ekonomika malých porodnic, mezinárodní zkušenost s centralizací (NL, DK, UK), regionální gradient dostupnosti, právní rámec (vyhláška 99/2012, NV 307/2012, zákon 372/2011, novela 290/2025) a otevřená reformní debata. Vychází z aktuálních epizod 2023–2026 (Děčín, Rychnov nad Kněžnou, Prachatice).
 
