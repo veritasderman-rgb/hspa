@@ -48,6 +48,8 @@ function writeHash() {
   if (activeSearch) p.set('q', activeSearch);
   if (activeSort && activeSort !== 'default') p.set('sort', activeSort);
   if (activeDomain) p.set('domain', activeDomain);
+  if (activeDimension && activeDimension !== 'all') p.set('dim', activeDimension);
+  if (activeFramework && activeFramework !== 'all') p.set('fw', activeFramework);
   const s = p.toString();
   history.replaceState(null, '', s ? '#' + s : location.pathname + location.search);
 }
@@ -57,6 +59,16 @@ function applyHash(state) {
     activeArea = state.area;
     const areaSel = document.getElementById('areaFilter');
     if (areaSel) areaSel.value = activeArea;
+  }
+  if (state.dim) {
+    activeDimension = state.dim;
+    const dimSel = document.getElementById('dimensionFilter');
+    if (dimSel) dimSel.value = activeDimension;
+  }
+  if (state.fw) {
+    activeFramework = state.fw;
+    const fwSel = document.getElementById('frameworkFilter');
+    if (fwSel) fwSel.value = activeFramework;
   }
   if (state.q) {
     activeSearch = state.q;
