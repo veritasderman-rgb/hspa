@@ -380,11 +380,20 @@ function wireRegionalSection(ds, ind) {
   // Legenda
   const legend = document.getElementById('czMapLegend');
   if (legend) {
-    legend.innerHTML = `
-      <span class="cml-item"><i class="cml-sw cml-good"></i> lepší než průměr ČR</span>
-      <span class="cml-item"><i class="cml-sw cml-bad"></i> horší než průměr ČR</span>
-      <span class="cml-item"><i class="cml-sw cml-mid"></i> ±2 % od průměru</span>
-    `;
+    if (ds.direction === 'context_dependent') {
+      legend.innerHTML = `
+        <span class="cml-item"><i class="cml-sw cml-ctx-above"></i> nad průměrem ČR</span>
+        <span class="cml-item"><i class="cml-sw cml-ctx-below"></i> pod průměrem ČR</span>
+        <span class="cml-item"><i class="cml-sw cml-mid"></i> ±2 % od průměru</span>
+        <span class="cml-item cml-ctx-note">Indikátor je kontextový — odchylka neznamená automaticky lepší/horší výkon.</span>
+      `;
+    } else {
+      legend.innerHTML = `
+        <span class="cml-item"><i class="cml-sw cml-good"></i> lepší než průměr ČR</span>
+        <span class="cml-item"><i class="cml-sw cml-bad"></i> horší než průměr ČR</span>
+        <span class="cml-item"><i class="cml-sw cml-mid"></i> ±2 % od průměru</span>
+      `;
+    }
   }
 
   // Tabulka

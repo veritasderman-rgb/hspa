@@ -13,6 +13,7 @@ import { fetchNrpzs } from './fetchers/uzis_nrpzs.js';
 import { fetchCsu } from './fetchers/csu.js';
 import { fetchOecd } from './fetchers/oecd.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
+import { fetchSukl } from './fetchers/sukl.js';
 import { transform } from './transform.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -28,6 +29,7 @@ async function run() {
     { name: 'ČSÚ DataStat', fn: fetchCsu },
     { name: 'OECD Health', fn: fetchOecd },
     { name: 'Eurostat', fn: fetchEurostat },
+    { name: 'SÚKL OpenData', fn: fetchSukl },
   ];
 
   for (const step of fetchers) {
