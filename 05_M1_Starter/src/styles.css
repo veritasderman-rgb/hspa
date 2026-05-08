@@ -6575,3 +6575,285 @@ body.mobile-nav-open .scroll-top-btn {
   }
   .topic-chip { flex-shrink: 0; }
 }
+
+/* ============================================================
+ * Pojištěnci — atlas struktury populace (pojistenci.html)
+ * ============================================================ */
+
+.pojistenci-section {
+  margin: 48px 0;
+  padding: 0 0 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.pojistenci-section:last-of-type { border-bottom: none; }
+
+.pojistenci-section-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 880px;
+  margin: 8px 0 24px;
+}
+
+/* Kontroly: dropdown + slider + autoplay */
+.pojistenci-map-controls,
+.pojistenci-pyramid-controls,
+.pojistenci-zp-controls,
+.pojistenci-race-controls,
+.pojistenci-okres-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 28px;
+  margin: 12px 0 24px;
+  padding: 16px 18px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+.pojistenci-control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pojistenci-time-controls {
+  flex: 1;
+  min-width: 280px;
+}
+
+.pojistenci-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.pojistenci-label strong {
+  display: inline-block;
+  min-width: 3em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.pojistenci-slider {
+  flex: 1;
+  min-width: 180px;
+  height: 32px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.pojistenci-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--rule);
+  border-radius: 2px;
+}
+.pojistenci-slider::-moz-range-track {
+  height: 4px;
+  background: var(--rule);
+  border-radius: 2px;
+}
+.pojistenci-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--red);
+  border-radius: 50%;
+  margin-top: -7px;
+  border: 2px solid var(--paper);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.pojistenci-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--paper);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.pojistenci-slider:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.pojistenci-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s;
+  min-height: 40px;
+}
+.pojistenci-play:hover { background: var(--red); border-color: var(--red); }
+.pojistenci-play:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.pojistenci-play.is-playing .pojistenci-play-icon::before { content: '⏸'; }
+.pojistenci-play.is-playing .pojistenci-play-label { display: none; }
+.pojistenci-play-icon { font-size: 14px; line-height: 1; }
+
+/* Mapy a grafy */
+.pojistenci-map-wrap,
+.pojistenci-pyramid-wrap,
+.pojistenci-zp-wrap,
+.pojistenci-race-wrap {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pojistenci-map { width: 100%; height: 540px; }
+.pojistenci-pyramid { width: 100%; height: 520px; }
+.pojistenci-zp-chart { width: 100%; height: 460px; }
+.pojistenci-race { width: 100%; height: 520px; }
+
+/* Drill-down grid */
+.pojistenci-okres-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+.pojistenci-okres-card {
+  padding: 18px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.pojistenci-okres-card-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 12px;
+}
+.pojistenci-okres-chart { width: 100%; height: 280px; }
+
+/* Datový rámec (zdroje) */
+.pojistenci-source-section {
+  background: var(--paper2);
+  padding: 32px 24px !important;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.pojistenci-source-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 16px;
+}
+.pojistenci-source-grid h4 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.pojistenci-source-grid p {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.pojistenci-source-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pojistenci-source-list li {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 4px 0;
+  color: var(--ink);
+}
+.pojistenci-source-list li::before { content: '· '; color: var(--ink-mut); }
+
+/* Skeleton placeholdery (M1) */
+.pojistenci-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  padding: 32px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  text-align: center;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--paper),
+    var(--paper) 8px,
+    var(--paper2) 8px,
+    var(--paper2) 16px
+  );
+}
+.pojistenci-placeholder strong {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+.pojistenci-fatal-error {
+  margin: 16px 0;
+  padding: 16px;
+  background: #fdecec;
+  border: 1px solid var(--bad);
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+}
+
+/* Reduced motion: vypnout animace mapy/race */
+@media (prefers-reduced-motion: reduce) {
+  .pojistenci-play { opacity: 0.6; }
+  .pojistenci-slider::-webkit-slider-thumb,
+  .pojistenci-slider::-moz-range-thumb { transition: none; }
+}
+
+/* Mobil */
+@media (max-width: 720px) {
+  .pojistenci-map-controls,
+  .pojistenci-pyramid-controls,
+  .pojistenci-zp-controls,
+  .pojistenci-race-controls,
+  .pojistenci-okres-controls {
+    padding: 12px 14px;
+    gap: 12px 16px;
+  }
+  .pojistenci-time-controls { flex-direction: column; align-items: stretch; }
+  .pojistenci-map { height: 380px; }
+  .pojistenci-pyramid { height: 440px; }
+  .pojistenci-zp-chart { height: 380px; }
+  .pojistenci-race { height: 440px; }
+  .pojistenci-okres-chart { height: 220px; }
+}

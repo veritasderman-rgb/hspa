@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pojištěnci — animovaný atlas struktury populace 2010–2025 · HSPA Monitor</title>
+<meta name="description" content="Animovaný dashboard struktury zdravotně pojištěné populace ČR 2010–2025: choropletní mapa stárnutí krajů, populační pyramida, tržní podíly 7 zdravotních pojišťoven a okresní detail. Zdroj: ÚZIS / Centrální registr pojištěnců (NZIP — datová podpora dohodovacího řízení 2027).">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pojištěnci — animovaný atlas struktury populace 2010–2025">
+<meta property="og:description" content="Animovaný dashboard struktury zdravotně pojištěné populace ČR 2010–2025 — mapa stárnutí, pyramida, tržní podíly ZP, okresní detail.">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Pojištěnci</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="pojistenciHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Atlas pojištěnců · 2010 → 2025</div>
+      <h2 class="ed-hero-headline" id="pojistenciHeroHeadline">Jak Česko stárne, kde se stěhuje a kdo ho pojišťuje — kraj po kraji, rok po roce</h2>
+      <p class="ed-hero-lead">
+        Centrální registr pojištěnců (CRP) eviduje strukturu zdravotně pojištěné populace ČR — věk, pohlaví, okres a zdravotní pojišťovnu — od roku 2010. Tento atlas zobrazuje 16 let dat ve čtyřech vzájemně propojených pohledech: animované choropletní mapě krajů, populační pyramidě, vývoji tržních podílů sedmi pojišťoven a v race-charta okresů s nejvyšším počtem seniorů 80+.
+      </p>
+      <p class="ed-hero-lead">
+        Data jsou primárním vstupem dohodovacího řízení k úhradové vyhlášce 2027 (Dimenze 5 — Struktura pojištěnců). Demografická distribuce přímo určuje rizikové skupiny, regionální nákladové trendy i ekonomickou udržitelnost segmentů péče. Atlas pomáhá si toto rozložení zhmotnit ve vizuálně srozumitelné podobě.
+      </p>
+    </div>
+  </section>
+
+  <!-- View 1: Animovaná choropletní mapa krajů (centrum dashboardu) -->
+  <section class="pojistenci-section" aria-labelledby="pojMapHead">
+    <div class="ed-kicker">Pohled 1 · Mapa krajů</div>
+    <h3 class="ed-areas-h" id="pojMapHead">Stárnutí krajů ČR v animaci</h3>
+    <p class="pojistenci-section-lead">
+      Vyberte metriku — mapa se obarví, slider rok ovlivní časový snímek. Tlačítko Přehrát animuje vývoj 2010 → 2025. Najetím myší na kraj uvidíte tooltip s konkrétními hodnotami.
+    </p>
+
+    <div class="pojistenci-map-controls">
+      <div class="pojistenci-control-group">
+        <label for="pojMetric" class="pojistenci-label">Metrika:</label>
+        <select id="pojMetric" class="regions-select" aria-label="Vyberte metriku">
+          <option value="pct_65plus">% obyvatel 65+ (stárnutí)</option>
+          <option value="pct_80plus">% obyvatel 80+ (závislostní špička)</option>
+          <option value="median_age">Medián věku</option>
+          <option value="dependency_old">Index ekonomické závislosti (65+ na 15–64)</option>
+          <option value="vzp_share">Tržní podíl VZP (%)</option>
+        </select>
+      </div>
+
+      <div class="pojistenci-control-group pojistenci-time-controls">
+        <label for="pojYear" class="pojistenci-label">Rok: <strong id="pojYearLabel">2025</strong></label>
+        <input type="range" id="pojYear" class="pojistenci-slider" min="2010" max="2025" step="1" value="2025" aria-label="Rok">
+        <button type="button" id="pojPlay" class="pojistenci-play" aria-label="Přehrát animaci let 2010 až 2025">
+          <span class="pojistenci-play-icon" aria-hidden="true">▶</span>
+          <span class="pojistenci-play-label">Přehrát</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="pojistenci-map-wrap">
+      <div class="pojistenci-map" id="pojMap" role="img" aria-label="Choropletní mapa krajů ČR podle vybrané metriky"></div>
+      <p class="kraje-map-disclaimer" id="pojMapDisclaimer">
+        Hranice krajů zjednodušené (Douglas-Peucker, eps ≈ 300 m), zdroj: <a href="https://github.com/siwekm/czech-geojson" target="_blank" rel="noopener">siwekm/czech-geojson</a> (CC0).
+        Data: ÚZIS · Centrální registr pojištěnců, dataset OIS 11.47 (NZIP, dohodovací řízení 2027).
+      </p>
+    </div>
+  </section>
+
+  <!-- View 2: Animovaná populační pyramida -->
+  <section class="pojistenci-section" aria-labelledby="pojPyramidHead">
+    <div class="ed-kicker">Pohled 2 · Populační pyramida</div>
+    <h3 class="ed-areas-h" id="pojPyramidHead">Pyramida pojištěnců po věkových skupinách</h3>
+    <p class="pojistenci-section-lead">
+      Vodorovná pyramida zobrazuje rozdělení mužů (vlevo) a žen (vpravo) ve 19 věkových kategoriích. Výběrem kraje a roku můžete sledovat, jak boomerská kohorta stoupá pyramidou nahoru a jak se mění poměr seniorů k pracujícímu věku.
+    </p>
+
+    <div class="pojistenci-pyramid-controls">
+      <div class="pojistenci-control-group">
+        <label for="pojPyramidKraj" class="pojistenci-label">Kraj:</label>
+        <select id="pojPyramidKraj" class="regions-select" aria-label="Vyberte kraj"></select>
+      </div>
+      <div class="pojistenci-control-group">
+        <label class="pojistenci-label">Sleduje slider Rok výše — <strong id="pojPyramidYearLabel">2025</strong></label>
+      </div>
+    </div>
+
+    <div class="pojistenci-pyramid-wrap">
+      <div class="pojistenci-pyramid" id="pojPyramid" role="img" aria-label="Populační pyramida vybraného kraje"></div>
+    </div>
+  </section>
+
+  <!-- View 3: Tržní podíly 7 zdravotních pojišťoven -->
+  <section class="pojistenci-section" aria-labelledby="pojZpHead">
+    <div class="ed-kicker">Pohled 3 · Trh zdravotních pojišťoven</div>
+    <h3 class="ed-areas-h" id="pojZpHead">Tržní podíly 7 zdravotních pojišťoven po krajích</h3>
+    <p class="pojistenci-section-lead">
+      Stacked area chart zobrazuje vývoj tržních podílů VZP, VoZP, ČPZP, OZP, ZPŠ, ZPMV a RBP v letech 2010–2025. VZP dlouhodobě ztrácí ve většině krajů, zatímco některé regionální pojišťovny (RBP v Moravskoslezském kraji, ČPZP v Olomouckém) získávají.
+    </p>
+
+    <div class="pojistenci-zp-controls">
+      <div class="pojistenci-control-group">
+        <label for="pojZpKraj" class="pojistenci-label">Kraj (nebo ČR):</label>
+        <select id="pojZpKraj" class="regions-select" aria-label="Vyberte kraj pro detail tržních podílů"></select>
+      </div>
+    </div>
+
+    <div class="pojistenci-zp-wrap">
+      <div class="pojistenci-zp-chart" id="pojZpChart" role="img" aria-label="Tržní podíly 7 zdravotních pojišťoven v čase"></div>
+    </div>
+  </section>
+
+  <!-- View 4: Bar-chart-race -->
+  <section class="pojistenci-section" aria-labelledby="pojRaceHead">
+    <div class="ed-kicker">Pohled 4 · Race chart</div>
+    <h3 class="ed-areas-h" id="pojRaceHead">Top 10 okresů: kdo má nejvíc seniorů 80+</h3>
+    <p class="pojistenci-section-lead">
+      Animovaný žebříček deseti okresů s největším počtem obyvatel ve věku 80 a více let. Tlačítko Přehrát animuje vývoj 2010 → 2025 (cca 0,5 s na rok). Žlutě zvýrazněné okresy v žebříčku za sledované období „odskočily".
+    </p>
+
+    <div class="pojistenci-race-controls">
+      <div class="pojistenci-control-group">
+        <label for="pojRaceMetric" class="pojistenci-label">Žebříček podle:</label>
+        <select id="pojRaceMetric" class="regions-select" aria-label="Vyberte metriku pro race chart">
+          <option value="count_80plus">Počet obyvatel 80+ (absolutní)</option>
+          <option value="pct_80plus">% obyvatel 80+ (relativní)</option>
+          <option value="pct_65plus">% obyvatel 65+ (širší stárnutí)</option>
+        </select>
+      </div>
+      <div class="pojistenci-control-group pojistenci-time-controls">
+        <label for="pojRaceYear" class="pojistenci-label">Rok: <strong id="pojRaceYearLabel">2025</strong></label>
+        <input type="range" id="pojRaceYear" class="pojistenci-slider" min="2010" max="2025" step="1" value="2025" aria-label="Rok pro race chart">
+        <button type="button" id="pojRacePlay" class="pojistenci-play" aria-label="Přehrát animaci žebříčku okresů">
+          <span class="pojistenci-play-icon" aria-hidden="true">▶</span>
+          <span class="pojistenci-play-label">Přehrát</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="pojistenci-race-wrap">
+      <div class="pojistenci-race" id="pojRace" role="img" aria-label="Race chart top 10 okresů podle vybrané metriky"></div>
+    </div>
+  </section>
+
+  <!-- View 5: Drill-down detail okresu -->
+  <section class="pojistenci-section" aria-labelledby="pojOkresHead">
+    <div class="ed-kicker">Pohled 5 · Detail okresu</div>
+    <h3 class="ed-areas-h" id="pojOkresHead">Drill-down: časová řada konkrétního okresu</h3>
+    <p class="pojistenci-section-lead">
+      Vyberte okres (LAU 1) a uvidíte tři propojené grafy: vývoj celkové populace, věkovou strukturu (multi-line po skupinách 0–14, 15–64, 65–79, 80+) a srovnání s krajem a ČR. To je úroveň, na níž se v dohodovacím řízení 2027 poprvé otevírá prostor pro regionálně diferencované úhrady.
+    </p>
+
+    <div class="pojistenci-okres-controls">
+      <div class="pojistenci-control-group">
+        <label for="pojOkres" class="pojistenci-label">Okres:</label>
+        <select id="pojOkres" class="regions-select" aria-label="Vyberte okres pro detailní pohled"></select>
+      </div>
+    </div>
+
+    <div class="pojistenci-okres-grid">
+      <div class="pojistenci-okres-card">
+        <h4 class="pojistenci-okres-card-h">Celková populace</h4>
+        <div class="pojistenci-okres-chart" id="pojOkresTotal" role="img" aria-label="Celková populace vybraného okresu v čase"></div>
+      </div>
+      <div class="pojistenci-okres-card">
+        <h4 class="pojistenci-okres-card-h">Věková struktura (4 skupiny)</h4>
+        <div class="pojistenci-okres-chart" id="pojOkresAge" role="img" aria-label="Věková struktura okresu v čase"></div>
+      </div>
+      <div class="pojistenci-okres-card">
+        <h4 class="pojistenci-okres-card-h">Srovnání % 65+ s krajem a ČR</h4>
+        <div class="pojistenci-okres-chart" id="pojOkresCompare" role="img" aria-label="Srovnání podílu 65+ okresu s krajem a ČR"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Datový rámec -->
+  <section class="pojistenci-section pojistenci-source-section" aria-labelledby="pojSourceHead">
+    <div class="ed-kicker">Datový rámec</div>
+    <h3 class="ed-areas-h" id="pojSourceHead">Odkud data jsou a co nejsou</h3>
+    <div class="pojistenci-source-grid">
+      <div>
+        <h4>Zdroj</h4>
+        <p>
+          ÚZIS · Centrální registr pojištěnců (CRP). Dataset <strong>OIS 11.47 — Struktura pojištěnců</strong> publikovaný na Národním zdravotním informačním portálu (NZIP) jako součást rekordní datové podpory dohodovacího řízení k úhradové vyhlášce 2027 (Dimenze 5 — Struktura pojištěnců a náklady zdravotních pojišťoven).
+        </p>
+        <p>
+          Pokrytí 2010–2025, granularita: rok × okres (LAU 1) × zdravotní pojišťovna (kód) × věková kategorie (19 skupin) × pohlaví (M/Z). Celkem ~279 tis. řádků.
+        </p>
+      </div>
+      <div>
+        <h4>Co data ukazují</h4>
+        <ul class="pojistenci-source-list">
+          <li>Stárnutí populace na úrovni krajů a okresů</li>
+          <li>Migraci (rozdíl příchozí a odchozí kohorty)</li>
+          <li>Tržní podíly 7 zdravotních pojišťoven (regionální konkurenci)</li>
+          <li>Klíčové demografické metriky: medián věku, podíly 65+/80+, indexy závislosti</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Co data neukazují</h4>
+        <ul class="pojistenci-source-list">
+          <li>Ekonomicky aktivní populaci (jen pojištěnce, tedy včetně dětí, studentů, seniorů, nezaměstnaných)</li>
+          <li>Demografické projekce po roce 2025 — atlas se zastavuje na realitě</li>
+          <li>Migraci uvnitř kraje (jen mezi-okresní rozdíly z agregátů)</li>
+          <li>Národnostní/sociální strukturu obyvatelstva</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Související články a stránky</h4>
+        <ul class="pojistenci-source-list">
+          <li><a href="kraje.html">Krajský pohled na HSPA indikátory →</a></li>
+          <li><a href="clanek-uhradova-vyhlaska.html">Mechanika úhradové vyhlášky →</a></li>
+          <li><a href="clanek-deficit-pojisteni-2026.html">Deficit veřejného zdravotního pojištění 2026 →</a></li>
+          <li><a href="https://www.nzip.cz/dohodovaci-rizeni" target="_blank" rel="noopener">NZIP · Dohodovací řízení 2027 ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pojistenci.js"></script>
+
+</body>
+</html>
