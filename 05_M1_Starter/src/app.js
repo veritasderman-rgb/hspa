@@ -54,18 +54,22 @@ function writeHash() {
   history.replaceState(null, '', s ? '#' + s : location.pathname + location.search);
 }
 
+const VALID_AREAS = new Set(['all', 'Výsledky', 'Výstupy', 'Procesy', 'Struktury']);
+const VALID_DIMENSIONS = new Set(['all', 'zdravi', 'dostupnost', 'kvalita', 'bezpecnost', 'efektivita', 'spravedlnost']);
+const VALID_FRAMEWORKS = new Set(['all', 'hspa', 'monitoring']);
+
 function applyHash(state) {
-  if (state.area) {
+  if (state.area && VALID_AREAS.has(state.area)) {
     activeArea = state.area;
     const areaSel = document.getElementById('areaFilter');
     if (areaSel) areaSel.value = activeArea;
   }
-  if (state.dim) {
+  if (state.dim && VALID_DIMENSIONS.has(state.dim)) {
     activeDimension = state.dim;
     const dimSel = document.getElementById('dimensionFilter');
     if (dimSel) dimSel.value = activeDimension;
   }
-  if (state.fw) {
+  if (state.fw && VALID_FRAMEWORKS.has(state.fw)) {
     activeFramework = state.fw;
     const fwSel = document.getElementById('frameworkFilter');
     if (fwSel) fwSel.value = activeFramework;
@@ -339,9 +343,6 @@ function renderEditorialHero() {
 
     // 6 HSPA dimenzí (ZDRAVÍ/DOSTUPNOST/KVALITA/BEZPEČNOST/EFEKTIVITA/SPRAVEDLNOST)
     renderDimensionsIndex();
-
-    // 12 nejhůře hodnocených ukazatelů
-    renderWorstIndicators();
   } catch (err) {
     // Při selhání renderování hero (chybějící data, neočekávaná struktura)
     // necháme stránku fungovat dál (renderGrid + scorecard) a zalogujeme.
@@ -407,50 +408,6 @@ function renderDimensionsIndex() {
 }
 
 // ====== 12 NEJHŮŘE HODNOCENÝCH ======
-
-function renderWorstIndicators() {
-  const list = document.getElementById('edWorstList');
-  if (!list) return;
-
-  const dimById = new Map(allDimensions.map(d => [d.id, d]));
-  // Vyfiltrovat 'bad' signál, prioritizovat verifikované, pak vzít 12
-  const worst = allIndicators
-    .filter(i => i.signal === 'bad')
-    .sort((a, b) => {
-      const va = (a.verification_status === 'verified') ? 0 : 1;
-      const vb = (b.verification_status === 'verified') ? 0 : 1;
-      if (va !== vb) return va - vb;
-      return (a.name || '').localeCompare(b.name || '', 'cs');
-    })
-    .slice(0, 12);
-
-  if (!worst.length) {
-    list.innerHTML = '<li class="ed-worst-empty">Žádný kritický indikátor (skvělé!).</li>';
-    return;
-  }
-
-  list.innerHTML = worst.map(ind => {
-    const dim = dimById.get(ind.dimension);
-    const dimColor = dim ? dim.color : '#1f1a14';
-    const dimShort = dim ? dim.short.toUpperCase() : '';
-    const benchOecd = ind.benchmark?.oecd != null
-      ? `OECD ${fmt(ind.benchmark.oecd)} ${ind.unit || ''}`.trim()
-      : '';
-    return `
-      <li class="ed-worst-row">
-        <a class="ed-worst-link-row" href="indicator.html?id=${encodeURIComponent(ind.id)}">
-          <div class="ed-worst-vals">
-            <span class="ed-worst-val">${escapeHtmlInner(fmt(ind.value))}</span>
-            <span class="ed-worst-unit">${escapeHtmlInner(ind.unit || '')}</span>
-            <span class="ed-worst-bench">${escapeHtmlInner(benchOecd)}</span>
-          </div>
-          <h4 class="ed-worst-name">${escapeHtmlInner(ind.name)}</h4>
-          <div class="ed-worst-tag" style="color: ${dimColor}; border-bottom-color: ${dimColor};">${escapeHtmlInner(dimShort)}</div>
-        </a>
-      </li>
-    `;
-  }).join('');
-}
 
 // ====== RENDERING ======
 
@@ -537,13 +494,8 @@ function renderGrid() {
       ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec OECD HSPA">Monitoring</span>`
       : `<span class="fw-badge fw-hspa" title="Indikátor z OECD HSPA Framework for Czech Republic">HSPA</span>`;
 
-    const dim = allDimensions.find(d => d.id === ind.dimension);
-    const dimBadge = dim
-      ? `<span class="dim-badge" style="color:${dim.color};border-color:${dim.color}" title="HSPA dimenze: ${dim.label}">${escapeHtmlInner(dim.short)}</span>`
-      : '';
-
     card.innerHTML = `
-      <div class="area-tag">${ind.area} · ${ind.domain}${dimBadge}${fwBadge}${verifBadge}</div>
+      <div class="area-tag">${ind.area} · ${ind.domain}${fwBadge}${verifBadge}</div>
       <div class="top">
         <h4>${ind.name}</h4>
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
