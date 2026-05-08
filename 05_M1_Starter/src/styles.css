@@ -1677,6 +1677,134 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 .fw-hspa { color: var(--ink); background: var(--paper2); }
 .fw-monitoring { color: var(--warn); background: rgba(160,90,8,0.06); }
 
+/* ================================================================
+   Krajský pohled — choropleth /kraje.html
+   ================================================================ */
+.kraje-section {
+  max-width: var(--max-w);
+  margin: 0 auto 64px;
+  padding: 0 var(--content-pad, 32px);
+}
+.kraje-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 0 18px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 24px;
+}
+.kraje-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-mut);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.kraje-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin-left: auto;
+}
+.kraje-meta-area {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kraje-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.kraje-map-wrap {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  padding: 16px;
+}
+.kraje-map {
+  width: 100%;
+  height: 480px;
+}
+.kraje-map-disclaimer {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  margin-top: 12px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.kraje-side-h {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.kraje-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.kraje-rank-row {
+  display: grid;
+  grid-template-columns: 30px 1fr auto auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.kraje-rank-row:last-child { border-bottom: none; }
+.kraje-rank-pos {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--ink-mut);
+}
+.kraje-rank-good .kraje-rank-pos { color: var(--good); }
+.kraje-rank-bad .kraje-rank-pos { color: var(--bad); }
+.kraje-rank-name { color: var(--ink); }
+.kraje-rank-val { font-weight: 600; color: var(--ink); }
+.kraje-rank-diff {
+  font-size: 11px;
+  color: var(--ink-mut);
+  min-width: 60px;
+  text-align: right;
+}
+
+.kraje-foot {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--paper2);
+  border-left: 3px solid var(--ink);
+}
+.kraje-foot-text {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-mut);
+}
+.kraje-foot-text a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+}
+.kraje-foot-text a:hover { text-decoration: underline; }
+
+@media (max-width: 880px) {
+  .kraje-layout { grid-template-columns: 1fr; }
+  .kraje-map { height: 400px; }
+}
+@media (max-width: 480px) {
+  .kraje-rank-row { grid-template-columns: 24px 1fr auto; }
+  .kraje-rank-diff { display: none; }
+}
+
 /* Detail link na indikátorové kartě */
 .card-detail-link {
   margin-left: auto;
