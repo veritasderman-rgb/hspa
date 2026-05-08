@@ -14,6 +14,7 @@ import { fetchCsu } from './fetchers/csu.js';
 import { fetchOecd } from './fetchers/oecd.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
 import { fetchSukl } from './fetchers/sukl.js';
+import { fetchSuklMr } from './fetchers/sukl_mr.js';
 import { transform } from './transform.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,6 +31,7 @@ async function run() {
     { name: 'OECD Health', fn: fetchOecd },
     { name: 'Eurostat', fn: fetchEurostat },
     { name: 'SÚKL OpenData', fn: fetchSukl },
+    { name: 'SÚKL OpenData (MR výpadky léčiv)', fn: fetchSuklMr },
   ];
 
   for (const step of fetchers) {

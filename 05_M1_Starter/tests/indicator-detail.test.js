@@ -56,3 +56,40 @@ test('explainers.json: dostupnost_pravni_ramec je odborný long-form explainer',
   assert.ok(expertText.length + sectionsText.length > 800,
     'dostupnost_pravni_ramec má být důkladný (≥ 800 znaků celkového odborného obsahu)');
 });
+
+test('vypadky_leciv_aktivni: existuje v indicators.json se správnými atributy', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const ind = data.indicators.find(i => i.id === 'vypadky_leciv_aktivni');
+  assert.ok(ind, 'indikátor vypadky_leciv_aktivni není v indicators.json');
+  assert.equal(ind.area, 'Procesy');
+  assert.equal(ind.domain, 'Dostupnost');
+  assert.equal(ind.direction, 'lower_is_better');
+  assert.ok(Array.isArray(ind.trend) && ind.trend.length >= 5,
+    'trend musí pokrývat alespoň 5 let pro odhad strukturálního růstu');
+  // Růstový trend — porovnej první a poslední hodnotu
+  const first = ind.trend[0].value;
+  const last = ind.trend[ind.trend.length - 1].value;
+  assert.ok(last > first * 2,
+    'seed trend by měl reflektovat min. 2× nárůst výpadků 2019→2026');
+});
+
+test('vypadky_leciv_aktivni: má metodickou kartu s dokumentem o §33b a SÚKL feed', () => {
+  const cardPath = path.join(ROOT, 'indicators', 'vypadky_leciv_aktivni.json');
+  assert.ok(fs.existsSync(cardPath), 'chybí metodická karta');
+  const card = JSON.parse(fs.readFileSync(cardPath, 'utf8'));
+  assert.equal(card.id, 'vypadky_leciv_aktivni');
+  assert.ok(card.data_source?.primary?.endpoint?.includes('opendata.sukl.cz'),
+    'primární endpoint musí být SÚKL OpenData');
+  assert.ok((card.method_notes ?? '').length > 200, 'method_notes má být věcný');
+  assert.ok((card.determinants ?? '').length > 200, 'determinants má vysvětlit příčiny');
+});
+
+test('explainers.json: lekova_dostupnost_vypadky je propojen s indikátorem vypadky_leciv_aktivni', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'explainers.json'), 'utf8'));
+  const e = data.explainers.find(x => x.id === 'lekova_dostupnost_vypadky');
+  assert.ok(e, 'chybí explainer lekova_dostupnost_vypadky');
+  assert.ok(e.linked_indicators?.includes('vypadky_leciv_aktivni'),
+    'explainer musí být propojen s indikátorem vypadky_leciv_aktivni');
+  assert.ok(e.tldr_expert?.length > 500, 'tldr_expert má být odborný a věcný');
+  assert.equal(e.category, 'process');
+});

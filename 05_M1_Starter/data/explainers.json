@@ -3002,6 +3002,82 @@
       ],
       "verified_at": "2026-05-08",
       "verification_status": "needs_verification"
+    },
+    {
+      "id": "lekova_dostupnost_vypadky",
+      "title": "Léková dostupnost a výpadky léčiv — anatomie strukturální slabosti",
+      "subtitle": "Hlášené výpadky léčiv se v ČR od roku 2019 ztrojnásobily. Kdo o nich rozhoduje, kdo je hlásí a co s nimi (ne)dokáže systém udělat?",
+      "category": "process",
+      "tldr_public": "Léčivé přípravky v ČR kontroluje Státní ústav pro kontrolu léčiv (SÚKL). Když výrobce nebo distributor přeruší dodávky léku na trh, musí to do 2 měsíců předem (nebo bezodkladně) ohlásit SÚKL — povinnost je v zákoně 378/2007 Sb. §33b. SÚKL hlášení zveřejňuje denně v otevřených datech (feed Hlášení o uvedení/přerušení/ukončení/obnovení dodávek). K květnu 2026 evidoval cca 2 200 aktivních výpadků oproti přibližně 580 v roce 2019 — čtyřnásobný nárůst za 7 let. Většina výpadků má registrovanou náhradu (jiný výrobce, jiná síla, jiné balení), ale 10–15 % postižených léčivých přípravků jsou v ČR jediné registrované s danou účinnou látkou — tehdy nemá pacient kam uhnout. Dopad: pacient přijde do lékárny s receptem a zjistí, že lék není; lékař ho musí přepsat, zkontrolovat interakce, vysvětlit změnu seniorům s polyfarmakem.",
+      "tldr_expert": "Hlášení podle §33b zákona 378/2007 Sb. eviduje SÚKL ve 4 kategoriích: U (uvedení), P (přerušení), K (ukončení), O (obnovení). Datový feed 'mr.zip' (https://opendata.sukl.cz/soubory/MR/mr.zip) je kumulativní od 31. 12. 2007, denní update, sloupce KOD_SUKL, NAZEV, ATC, TYP_OZNAMENI, DATUM_HLASENI, NAHRAZUJICI_LP, DUVOD_PRERUSENI_UKONCENI, TERMIN_OBNOVENI, POSLEDNI_PLATNE_HLASENI. Aktivní výpadek = poslední platné hlášení pro KOD_SUKL je P/K bez následného O a bez termínu obnovení v minulosti. Kontext novely 456/2025 Sb. (LPOD): nová klasifikace 'Léčivé přípravky s omezenou dostupností' s povinností oznamovat 6 měsíců předem a zákazem reexportu — implementace běží od 1. 6. 2026, dopad na agregovaný počet výpadků se projeví v Q3–Q4 2026. **Strukturální faktory**: (a) globální koncentrace výroby účinných látek (API) v Indii a Číně — odhady WHO 60–80 % evropské spotřeby závislé na asijských dodávkách; (b) ekonomická nerentabilita starých generik — výrobci je opouštějí; (c) malý český trh (~0,5 % evropské spotřeby) → nízká priorita v alokaci; (d) reexport ze 4 dominantních distributorů (Phoenix, Pharmos, Alliance Healthcare, Pharos) do zemí s vyšší marží. **EMA Medicines Shortages Catalogue** registruje na úrovni EU 4× nárůst hlášení 2018→2024.",
+      "tldr_policy": "Výpadky léčiv jsou strukturální slabost, která bez systémové reformy poroste i nadále. **Reformní agenda v ČR (2026)**: novela zákona 456/2025 Sb. (účinnost 1. 6. 2026) zavedla institut LPOD (Léčivé přípravky s omezenou dostupností) — viz samostatný explainer `lpod_lekovy_trh_2026`. Souběžně sněmovní tisk 612 (1. čtení 11/2025) navrhuje (a) rozšíření Emergency Stock z <100 na 500+ esenciálních LP, (b) sankce za nehlášené přerušení dodávek a opožděná hlášení (až 5 mil. Kč), (c) povinnost distributora prokázat reexport zákonné rezervy a (d) klauzuli umožňující SÚKL dočasně omezit reexport vybraných LP v krizových situacích. **Reformní agenda na úrovni EU**: Critical Medicines Act (návrh Evropské komise březen 2024, projednávání v Radě a EP 1H 2026) definuje seznam kritických léčiv s povinností členských států udržovat stockpile, koordinovaný přes EMA a HERA (Health Emergency Preparedness and Response Authority). **Co se neřeší**: regionální rozpad výpadků (DIS-13 distribuce po krajích by byl nový HSPA submilník), klinická kategorizace (klasifikace závažnosti), automatická náhrada generikem v lékárně bez nového receptu (legislativně nemožné — §32 odst. 1 zákona 48/1997 Sb. zachovává primát preskripční volby lékaře).",
+      "key_facts": [
+        { "label": "Aktivní výpadky 2026 (květen, MR feed)", "value": "cca 2 200 LP" },
+        { "label": "Aktivní výpadky 2019 (referenční stav)", "value": "cca 580 LP (4× nárůst za 7 let)" },
+        { "label": "Registrované LP v ČR (z toho na trhu)", "value": "65 238 (na trhu cca 9 063, SÚKL 2025)" },
+        { "label": "Hlášení podle zákona", "value": "§33b zákona 378/2007 Sb. — 2 měsíce před / bezodkladně" },
+        { "label": "Datový feed", "value": "MR.zip — denní update, kumulativně od 31. 12. 2007" },
+        { "label": "Emergency Stock — aktuální stav", "value": "<100 LP (zákon 378/2007 Sb. §77, novela 2024)" },
+        { "label": "Návrh rozšíření Emergency Stock (sn. tisk 612)", "value": "500+ LP, sankce 5 mil. Kč, omezení reexportu" },
+        { "label": "EU Critical Medicines Act", "value": "Návrh COM(2024)138, projednávání 1H 2026" }
+      ],
+      "absurdity_examples": [
+        {
+          "title": "Výpadek antidepresiva Citalon do konce roku — pacientka neví, co s sebou",
+          "source": "iROZHLAS — Úřad hlásí nedostupnost důležitých léčiv",
+          "url": "https://www.irozhlas.cz/zivotni-styl/zdravi/urad-hlasi-nedostupnost-dulezitych-leciv-nektere-nemaji-nahradu-a-budou-dostupne_2505190815_ntu",
+          "date": "2025-05",
+          "quote": "Některá léčiva nemají náhradu a budou k mání až koncem roku. Pacienti, kteří dlouhodobě užívají specifické přípravky, zůstávají v ohrožení.",
+          "context": "Jeden z mnoha symptomatických výpadků: SÚKL během jara 2025 evidoval simultánní přerušení dodávek vybraných antidepresiv ze skupiny SSRI (Citalon, Citalec) způsobené problémem s účinnou látkou na úrovni výrobce v Indii. Klinický dopad: ze ~150 000 pacientů v ČR užívajících citalopram bylo třeba většinu přepsat na alternativní SSRI nebo jiný přípravek. To znamenalo desetitisíce dodatečných návštěv praktických lékařů a psychiatrů a zvýšené riziko diskontinuace léčby u pacientů s afektivními poruchami."
+        }
+      ],
+      "linked_indicators": [
+        "vypadky_leciv_aktivni",
+        "lekarny_per_100k",
+        "spotreba_antibiotik",
+        "pouzivani_antidepresiv"
+      ],
+      "linked_strategies": [
+        "inst_vzp",
+        "inst_szp",
+        "oecd_health_at_a_glance"
+      ],
+      "documents": [
+        {
+          "title": "SÚKL OpenData — Hlášení o uvedení/přerušení/ukončení/obnovení dodávek",
+          "url": "https://opendata.sukl.cz/?q=katalog/hlaseni-o-uvedeni-preruseni-ukonceni-obnoveni-dodavek-leciveho-pripravku-na-trh"
+        },
+        {
+          "title": "SÚKL pro média — Nedostupnost léčiv v ČR",
+          "url": "https://sukl.gov.cz/media/sukl-pro-media/nedostupnost-leciv-v-cr/"
+        },
+        {
+          "title": "Zákon 378/2007 Sb. o léčivech — §33b hlášení o přerušení, §77 emergency stock",
+          "url": "https://www.zakonyprolidi.cz/cs/2007-378"
+        },
+        {
+          "title": "Sněmovní tisk 612 — Novela zákona o léčivech (rozšíření Emergency Stock)",
+          "url": "https://www.psp.cz/sqw/historie.sqw?o=9&t=612"
+        },
+        {
+          "title": "EMA — Medicines Shortages Catalogue",
+          "url": "https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/medicine-shortages-availability-issues"
+        },
+        {
+          "title": "Evropská komise — návrh Critical Medicines Act, COM(2024)138",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52024PC0138"
+        },
+        {
+          "title": "WHO — Strategic Stockpiling and Critical Medicines",
+          "url": "https://www.who.int/initiatives/critical-medicines"
+        },
+        {
+          "title": "Efektivní zdravotnictví — Graf měsíce: Výpadky léčiv v ČR",
+          "url": "https://www.efektivnizdravotnictvi.cz/post/graf-mesice-vypadky-leciv-v-cr"
+        }
+      ],
+      "verified_at": "2026-05-08",
+      "verification_status": "needs_verification"
     }
   ]
 }
