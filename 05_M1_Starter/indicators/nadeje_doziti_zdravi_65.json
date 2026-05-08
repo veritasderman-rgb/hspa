@@ -11,7 +11,11 @@
     "primary": {
       "type": "eurostat_jsonstat",
       "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_hlye",
-      "params": { "geo": "CZ", "age": "Y65", "sex": "T" }
+      "params": {
+        "geo": "CZ",
+        "age": "Y65",
+        "sex": "T"
+      }
     },
     "fallback": {
       "type": "csv",
@@ -20,11 +24,22 @@
   },
   "benchmark_source": {
     "type": "eurostat_jsonstat",
-    "params": { "geo": "EU27_2020", "age": "Y65", "sex": "T" }
+    "params": {
+      "geo": "EU27_2020",
+      "age": "Y65",
+      "sex": "T"
+    }
   },
-  "signal_thresholds": { "good": 2.0, "warn": 5.0 },
+  "signal_thresholds": {
+    "good": 2.0,
+    "warn": 5.0
+  },
   "frequency": "yearly",
-  "stewards": ["Eurostat", "ČSÚ"],
+  "stewards": [
+    "Eurostat",
+    "ČSÚ"
+  ],
   "method_notes": "EU-SILC modul mini-EHIS. Self-reported. Pro ČR omezená historická srovnatelnost (změna metody 2014).",
-  "limitations": "Self-report má jiné psychometrické vlastnosti než klinické měření."
+  "limitations": "Self-report má jiné psychometrické vlastnosti než klinické měření.",
+  "framework": "hspa"
 }
