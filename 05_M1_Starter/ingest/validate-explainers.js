@@ -10,7 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 
 const REQUIRED = ['id', 'title', 'category', 'tldr_public', 'tldr_expert', 'tldr_policy'];
 const VALID_CATEGORIES = ['money', 'classification', 'actors', 'process', 'inspiration'];
-const VALID_VERIFICATION = ['ok', 'needs_verification', 'broken', 'preliminary', 'verified', 'illustrative'];
+const VALID_VERIFICATION = ['ok', 'needs_verification', 'broken'];
 
 function validate() {
   const file = path.join(ROOT, 'data', 'explainers.json');
