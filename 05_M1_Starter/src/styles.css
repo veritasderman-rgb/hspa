@@ -5321,3 +5321,105 @@ body.mobile-nav-open .scroll-top-btn {
 @media (max-width: 720px) {
   .rpp-timeline { grid-template-columns: 1fr; gap: 24px; }
 }
+
+/* Topic filters — chips na clanky.html */
+.topic-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 28px;
+}
+.topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  min-height: 40px;
+}
+.topic-chip:hover {
+  border-color: var(--ink);
+  background: var(--paper2);
+}
+.topic-chip:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+}
+.topic-chip.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.topic-chip.active .topic-count {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--paper);
+}
+.topic-count {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--paper2);
+  color: var(--ink-mut);
+  padding: 2px 8px;
+  border-radius: 999px;
+  min-width: 22px;
+  text-align: center;
+}
+.article-list-loading {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink-mut);
+  padding: 24px 0;
+  text-align: center;
+}
+.article-list-empty {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  padding: 32px 16px;
+  margin: 16px 0;
+  text-align: center;
+  background: var(--paper2);
+  border: 1px dashed var(--rule);
+}
+
+/* Topic mini-chips inline na kartě článku */
+.article-list-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 4px;
+}
+.article-list-topic {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  background: var(--paper2);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+@media (max-width: 720px) {
+  .topic-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 4px 16px 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .topic-chip { flex-shrink: 0; }
+}
