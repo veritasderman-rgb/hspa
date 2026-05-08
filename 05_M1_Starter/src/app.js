@@ -305,82 +305,8 @@ function renderEditorialHero() {
       }).join('');
     }
 
-    // 3 story karty — narativní headline z dat
-    const stories = [
-      { ind: findInd('mortalita_inhosp_cmp'), headline: 'Nemocniční úmrtnost po cévní mozkové příhodě je výrazně vyšší než průměr OECD.', subline: 'Úmrtí během hospitalizace — měřítko kvality akutní péče. ČR a OECD používají mírně odlišnou metodiku, srovnání je orientační.' },
-      { ind: findInd('screening_kolorektalni'), headline: 'Účast v populačním screeningu kolorekta je o třetinu nižší než v OECD.', subline: 'Stáří 50–74 let, dvouletý interval — klíčová prevence rakoviny tlustého střeva.' },
-      { ind: findInd('nadeje_doziti_zdravi_65'), headline: 'Senioři v ČR mají v průměru o 1,8 roku méně zdravých let než v zemích OECD.', subline: 'Léta prožitá ve zdraví (Healthy Life Years) při dosažení 65 let — vyjadřuje kvalitu života ve stáří.' },
-    ].filter(function (s) { return s.ind; });
-
-    const grid = document.getElementById('edStoriesGrid');
-    if (grid && stories.length) {
-      grid.innerHTML = stories.map(function (s) {
-        const oecd = s.ind.benchmark && s.ind.benchmark.oecd;
-        const benchOecd = oecd != null ? ('OECD ' + fmt(oecd) + ' ' + (s.ind.unit || '')).trim() : '';
-        const url = 'indicator.html?id=' + encodeURIComponent(s.ind.id);
-        return '<a class="ed-story" href="' + url + '">'
-          + '<div class="ed-story-area">' + escapeHtmlInner(s.ind.area) + ' · ' + escapeHtmlInner(s.ind.domain) + '</div>'
-          + '<h4 class="ed-story-headline">' + escapeHtmlInner(s.headline) + '</h4>'
-          + '<div class="ed-story-bignum">'
-          +   '<span class="signal-dot ' + escapeHtmlInner(s.ind.signal || '') + '" aria-hidden="true"></span>'
-          +   '<span class="ed-story-num">' + escapeHtmlInner(fmt(s.ind.value)) + '</span>'
-          +   '<span class="ed-story-unit">' + escapeHtmlInner(s.ind.unit || '') + '</span>'
-          + '</div>'
-          + '<div class="ed-story-bench">' + escapeHtmlInner(benchOecd) + '</div>'
-          + '<div class="ed-story-sub">' + escapeHtmlInner(s.subline) + '</div>'
-          + '</a>';
-      }).join('');
-    }
-
-    // 4 oblasti HSPA s dílčím skóre
-    const areaDescriptions = AREA_DESCRIPTIONS;
-
-    const byArea = {};
-    for (let k = 0; k < allIndicators.length; k++) {
-      const ind = allIndicators[k];
-      if (!byArea[ind.area]) byArea[ind.area] = { total: 0, good: 0, warn: 0, bad: 0, neutral: 0 };
-      byArea[ind.area].total++;
-      byArea[ind.area][ind.signal] = (byArea[ind.area][ind.signal] || 0) + 1;
-    }
-
-    const areasGrid = document.getElementById('edAreasGrid');
-    if (areasGrid) {
-      const orderedAreas = ['Výsledky', 'Výstupy', 'Procesy', 'Struktury'];
-      areasGrid.innerHTML = orderedAreas.map(function (area, i) {
-        const stats = byArea[area];
-        if (!stats) return '';
-        const scoreable = stats.good + stats.warn + stats.bad;
-        const score = scoreable > 0 ? Math.round((stats.good * 100 + stats.warn * 50) / scoreable) : null;
-        const num = String(i + 1).padStart(2, '0');
-        const scoreHtml = score != null ? (score + '<span class="ed-area-score-unit">/100</span>') : '—';
-        return '<a class="ed-area" href="#indicatorsSection" data-area="' + escapeHtmlInner(area) + '">'
-          + '<div class="ed-area-num">' + num + '</div>'
-          + '<div class="ed-area-name">' + escapeHtmlInner(area) + '</div>'
-          + '<div class="ed-area-desc">' + escapeHtmlInner(areaDescriptions[area] || '') + '</div>'
-          + '<div class="ed-area-score">' + scoreHtml + '</div>'
-          + '<div class="ed-area-meta">' + stats.total + ' ukazatelů · ' + stats.good + ' dobré · ' + stats.bad + ' kritické</div>'
-          + '</a>';
-      }).join('');
-
-      const tiles = areasGrid.querySelectorAll('.ed-area');
-      for (let t = 0; t < tiles.length; t++) {
-        (function (el) {
-          el.addEventListener('click', function (e) {
-            const area = el.getAttribute('data-area');
-            if (!area) return;
-            e.preventDefault();
-            activeArea = area;
-            // Codex P2: vyčisti domain filter, jinak může cross-filter skrýt indikátory
-            activeDomain = '';
-            const sel = document.getElementById('areaFilter');
-            if (sel) sel.value = area;
-            renderGrid();
-            const section = document.getElementById('indicatorsSection');
-            if (section && section.scrollIntoView) section.scrollIntoView({ behavior: 'smooth' });
-          });
-        })(tiles[t]);
-      }
-    }
+    // ed-stories ("Tento týden v datech") a ed-areas (4 oblasti) byly přesunuty:
+    // ed-stories odstraněno, ed-areas → hspa-prehled.html. Homepage je čistší.
   } catch (err) {
     // Při selhání renderování hero (chybějící data, neočekávaná struktura)
     // necháme stránku fungovat dál (renderGrid + scorecard) a zalogujeme.
@@ -1159,25 +1085,6 @@ function trapFocus(modal) {
 let _lastFocusedBeforeModal = null;
 
 function wireUp() {
-  // Audience switch
-  const audBtns = document.querySelectorAll('.aud-btn');
-  audBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const aud = btn.dataset.aud;
-      try { localStorage.setItem('zdrave-cesko/audience', aud); } catch {}
-      document.body.dataset.audience = aud;
-      audBtns.forEach(b => b.classList.toggle('active', b === btn));
-    });
-  });
-  // Init audience from localStorage
-  try {
-    const stored = localStorage.getItem('zdrave-cesko/audience');
-    if (stored && ['public','expert','policy'].includes(stored)) {
-      document.body.dataset.audience = stored;
-      audBtns.forEach(b => b.classList.toggle('active', b.dataset.aud === stored));
-    }
-  } catch {}
-
   // Empty state CTA
   const emptyClear = document.getElementById('emptyStateClear');
   if (emptyClear) {
