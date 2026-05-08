@@ -367,7 +367,9 @@ async function init() {
 
     allExplainers = explsData.explainers ?? [];
     allStrategies = stratsData.strategies ?? [];
-    allArticles = (articlesData.articles ?? []).filter(a => a.kind !== 'manifest');
+    allArticles = (articlesData.articles ?? [])
+      .filter(a => a.kind !== 'manifest')
+      .filter(a => a.published !== false);
     linkIndex = buildIndex(allStrategies, allExplainers);
 
     wireFilters();

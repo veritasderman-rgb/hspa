@@ -304,7 +304,7 @@ async function init() {
     allThemes = prev.themes ?? [];
     allIndicators = ind.indicators ?? [];
     allStrategies = str.strategies ?? [];
-    allArticles = art.articles ?? [];
+    allArticles = (art.articles ?? []).filter(a => a.published !== false);
 
     const id = new URLSearchParams(window.location.search).get('id');
     if (id) renderDetail(id);
