@@ -194,9 +194,9 @@ test('extractFromNor: neznámý indicator id → null', () => {
   assert.equal(extractFromNor('neexistuje'), null);
 });
 
-test('Real data: data/indicators.json obsahuje 68 indikátorů', () => {
+test('Real data: data/indicators.json obsahuje 69 indikátorů', () => {
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
-  assert.equal(data.indicators.length, 68);
+  assert.equal(data.indicators.length, 69);
   const ids = new Set(data.indicators.map(i => i.id));
   assert.ok(ids.has('incidence_kolorektalni'));
   assert.ok(ids.has('incidence_prsu'));
