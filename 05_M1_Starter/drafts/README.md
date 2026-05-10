@@ -32,3 +32,6 @@ Odborný článek 4+ A4 o strukturálním nárůstu výpadků léčiv v ČR (4×
 
 ### `clanek-novela-zdravotnich-sluzeb-2026.html` (nové, 8. 5. 2026)
 Průřezový odborný článek 4+ A4 o komplexní novele zákona o zdravotních službách 2026 — paralelní balíček 4 novel projednaný Sněmovnou v Q1 2026: zákon 290/2025 Sb. (372/2011 Sb. — práva pacientů), novela 48/1997 Sb. (zahraniční péče bez limitu, fond prevence, moderní stomatologie), pokračování reformy LSP/UPS (zefektivnění zřizování pohotovostí), novela 325/2021 Sb. o elektronizaci (e-očkovací průkaz, e-Žádanky, centrální registr preventivních vyšetření). Kontext EU EHDS, antibyrokratická opatření, kritika v PSP. Linkováno na indikátory `ehealth_adoption`, `cekaci_doby_specialist`, `vydaje_zdravotnictvi_hdp`.
+
+### `clanek-legislativni-priority-2026-q2.html` (nové, 8. 5. 2026)
+Odborný průřezový draft (4+ A4) k aktuálním zdravotnickým legislativním prioritám v Q2 2026: implementace velké novely 48/1997 Sb. (289/2025 Sb.), návaznost na elektronizaci zdravotnictví (325/2021 Sb.), role krajů a pojišťoven v regionální dostupnosti péče a vazba na lékovou dostupnost a kyberbezpečnost. Článek je psán jako policy-analytický rámec pro propojení sněmovních procesů s HSPA indikátory a dalšími iteracemi portálu.
