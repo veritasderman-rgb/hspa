@@ -57,6 +57,12 @@ function injectAiDisclaimer() {
       </div>
     `;
     heroSection.parentNode.insertBefore(banner, heroSection.nextSibling);
+    // Codex P2 fix: pokud user dorazil přímo s #aiDisclaimerHub v URL,
+    // browser už hash vyřešil PŘED injectováním → musíme manuálně scrollnout.
+    if (location.hash === '#aiDisclaimerHub') {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      banner.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
     return;
   }
 
