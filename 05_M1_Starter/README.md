@@ -51,8 +51,8 @@ npm run ingest
 ├── indicators/                ← metodické karty (1 soubor = 1 indikátor)
 │   ├── nadeje_doziti_total.json
 │   ├── nadeje_doziti_zdravi_65.json
-│   ├── mortalita_30d_ami.json
-│   ├── mortalita_30d_cmp.json
+│   ├── mortalita_inhosp_ami.json
+│   ├── mortalita_inhosp_cmp.json
 │   ├── spokojenost_pece.json
 │   ├── lekari_per_1000.json
 │   ├── sestry_per_1000.json
