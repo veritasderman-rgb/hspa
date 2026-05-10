@@ -17,13 +17,18 @@ async function loadAndRenderQueue() {
   if (!list) return;
 
   let articles;
+  let quarantined = [];
   try {
     const r = await fetch('data/articles.json');
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
-    articles = (d.articles ?? [])
-      .filter(a => a.published === false)
+    const allUnpublished = (d.articles ?? []).filter(a => a.published === false);
+    // Karanténa: články označené `_review_note` (např. halucinace, vyžaduje
+    // lidskou revizi). Nejsou v hlavní frontě, zobrazují se v sekci níže.
+    articles = allUnpublished
+      .filter(a => !a._review_note)
       .sort((a, b) => (a.scheduled_for || '').localeCompare(b.scheduled_for || ''));
+    quarantined = allUnpublished.filter(a => a._review_note);
   } catch (err) {
     list.innerHTML = `<li class="article-list-loading">Nepodařilo se načíst data: ${escapeHtml(err.message)}</li>`;
     return;
@@ -66,6 +71,39 @@ async function loadAndRenderQueue() {
       </li>
     `;
   }).join('');
+
+  // Karanténa — články čekající na lidskou revizi (halucinace apod.)
+  renderQuarantined(quarantined);
+}
+
+function renderQuarantined(items) {
+  const section = document.getElementById('redakceQuarantine');
+  if (!section) return;
+  if (!items.length) {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+  const list = document.getElementById('redakceQuarantineList');
+  if (!list) return;
+  list.innerHTML = items.map(a => `
+    <li class="redakce-row redakce-row-quarantined">
+      <div class="redakce-row-head">
+        <span class="redakce-state redakce-state-quarantine">KARANTÉNA</span>
+        <span class="redakce-num">#${escapeHtml(a.number ?? '?')}</span>
+        <span class="redakce-tag">${escapeHtml(a.tag ?? 'Analýza')}</span>
+      </div>
+      <h4 class="redakce-title">
+        <a href="${escapeHtml(a.slug)}">${escapeHtml(a.title)}</a>
+      </h4>
+      ${a.perex ? `<p class="redakce-perex">${escapeHtml(a.perex)}</p>` : ''}
+      <p class="redakce-quarantine-note"><strong>Důvod karantény:</strong> ${escapeHtml(a._review_note)}</p>
+      <div class="redakce-row-foot">
+        <a class="redakce-cta" href="${escapeHtml(a.slug)}">Prohlédnout obsah →</a>
+        <span class="redakce-id">${escapeHtml(a.id)}</span>
+      </div>
+    </li>
+  `).join('');
 }
 
 function formatDate(iso) {
