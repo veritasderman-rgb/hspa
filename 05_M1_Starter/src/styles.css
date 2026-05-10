@@ -4242,6 +4242,152 @@ ul.md-enum > li > strong:first-child {
 }
 .article-breadcrumb a:hover { color: var(--red); }
 
+/* =================================================================
+   AI disclaimer — clanky.html (hub) + clanek-*.html (per-article)
+   ================================================================= */
+.ai-disclaimer {
+  font-family: var(--serif);
+}
+.ai-disclaimer-icon {
+  font-family: var(--sans);
+  font-size: 28px;
+  line-height: 1;
+  color: var(--red);
+  flex-shrink: 0;
+}
+.ai-disclaimer-icon-small {
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* Hub variant — prominentní karta na clanky.html */
+.ai-disclaimer-hub {
+  max-width: var(--max-w);
+  margin: 0 auto 32px;
+  padding: 24px 28px;
+  background: var(--paper2);
+  border: 1.5px solid var(--ink);
+  border-left: 6px solid var(--red);
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+.ai-disclaimer-h {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+.ai-disclaimer-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.ai-disclaimer-lead strong { color: var(--ink); }
+
+.ai-disclaimer-more {
+  margin-top: 8px;
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+}
+.ai-disclaimer-more > summary {
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  letter-spacing: 0.02em;
+  padding: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ai-disclaimer-more > summary::-webkit-details-marker { display: none; }
+.ai-disclaimer-more > summary::after {
+  content: '+';
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--red);
+  line-height: 1;
+}
+.ai-disclaimer-more[open] > summary::after { content: '−'; }
+.ai-disclaimer-more > summary:hover { color: var(--ink); }
+
+.ai-disclaimer-steps {
+  margin: 12px 0 4px 22px;
+  padding: 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.ai-disclaimer-steps li { margin-bottom: 8px; }
+.ai-disclaimer-steps strong { color: var(--ink); }
+
+.ai-disclaimer-foot {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.ai-disclaimer-foot strong { color: var(--ink); }
+.ai-disclaimer-foot em { color: var(--red); font-style: italic; font-weight: 600; }
+.ai-disclaimer-foot a {
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 1px;
+}
+.ai-disclaimer-foot a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* Per-article variant — kompaktní pásek pod breadcrumbem */
+.ai-disclaimer-article {
+  max-width: var(--article-max-w, 760px);
+  margin: -16px auto 28px;
+  padding: 12px 16px;
+  background: var(--paper2);
+  border-left: 3px solid var(--red);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ai-disclaimer-article strong { color: var(--ink); }
+.ai-disclaimer-article a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ai-disclaimer-article a:hover { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .ai-disclaimer-hub {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+  .ai-disclaimer-icon { display: none; }
+  .ai-disclaimer-h { font-size: 18px; }
+  .ai-disclaimer-lead { font-size: 14.5px; }
+  .ai-disclaimer-article { font-size: 12px; flex-direction: column; gap: 4px; }
+}
+
 .article-header {
   border-bottom: 1px solid var(--ink);
   padding-bottom: 28px;
