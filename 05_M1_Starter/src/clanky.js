@@ -5,7 +5,85 @@ import { renderModuleNav, renderMastheadDate } from './page-shared.js';
 renderModuleNav('articles');
 renderMastheadDate();
 populateWaffles();
+injectAiDisclaimer();
 loadAndRenderArticles();
+
+/**
+ * Vloží AI disclaimer banner do stránek sekce Články.
+ *
+ * Dva varianty:
+ * - 'hub' (clanky.html) → prominentní karta hned po hero sekci
+ * - 'article' (clanek-*.html) → kompaktní pásek hned pod breadcrumbem
+ *
+ * Idempotentní: nevytvoří duplikát.
+ */
+function injectAiDisclaimer() {
+  if (document.getElementById('aiDisclaimerHub') || document.getElementById('aiDisclaimerArticle')) return;
+
+  const isHub = !!document.getElementById('articleList');
+  const isArticle = !!document.querySelector('article.article-page');
+
+  if (isHub) {
+    const heroSection = document.querySelector('.articles-hero');
+    if (!heroSection) return;
+    const banner = document.createElement('aside');
+    banner.id = 'aiDisclaimerHub';
+    banner.className = 'ai-disclaimer ai-disclaimer-hub';
+    banner.setAttribute('role', 'note');
+    banner.setAttribute('aria-labelledby', 'aiDisclaimerHubH');
+    banner.innerHTML = `
+      <div class="ai-disclaimer-icon" aria-hidden="true">⏻</div>
+      <div class="ai-disclaimer-body">
+        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články nepsal člověk. Píše je Claude — a máme ho rádi.</h3>
+        <p class="ai-disclaimer-lead">
+          Většinu textů v této sekci nepsal autor projektu. Píše je <strong>Claude</strong> — model umělé inteligence od Anthropic — na základě rešerše českých a mezinárodních veřejných zdrojů. Každou noc se automaticky spustí bot, který projde aktuální data ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, propočítá souvislosti a připraví analytický článek, který si tady ráno přečtete.
+        </p>
+        <p class="ai-disclaimer-lead">
+          Autor projektu se rozhodl <strong>nechat AI psát a sledovat její postřehy</strong> jako příspěvek do české debaty o zdravotnictví. Ne proto, že by texty byly bezchybné — to ostatně nebývají ani ty od lidí — ale proto, že experiment „pustit AI na otevřená data a poslechnout si, co řekne" má svou hodnotu sám o sobě. Berte to jako rozhovor s velmi sečtělým, ale mírně přepracovaným kolegou, který občas zaváhá u čísel.
+        </p>
+        <details class="ai-disclaimer-more">
+          <summary>Jak konkrétně to funguje</summary>
+          <ol class="ai-disclaimer-steps">
+            <li><strong>Sběr dat</strong> — pipeline každý den v 06:00 UTC sosá čerstvá čísla z otevřených zdrojů (ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů).</li>
+            <li><strong>Rešerše</strong> — Claude dostane k dispozici aktuální datovou snapshot, metodické karty 67 indikátorů a textové podklady (zákony, vyhlášky, primární zdroje).</li>
+            <li><strong>Návrh článku</strong> — Claude napíše analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky.</li>
+            <li><strong>Lidská kontrola</strong> — autor projektu pasáže namátkově prochází a koriguje očividné nesrovnalosti. Není to však systematická redakční editace.</li>
+            <li><strong>Publikace</strong> — článek se objeví zde, opatřen disclaimerem.</li>
+          </ol>
+        </details>
+        <p class="ai-disclaimer-foot">
+          <strong>Chyby se stávají.</strong> Halucinace, zaměněné paragrafy, špatně přepsaná čísla — to vše se může stát. Pokud na něco narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste to přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
+        </p>
+      </div>
+    `;
+    heroSection.parentNode.insertBefore(banner, heroSection.nextSibling);
+    // Codex P2 fix: pokud user dorazil přímo s #aiDisclaimerHub v URL,
+    // browser už hash vyřešil PŘED injectováním → musíme manuálně scrollnout.
+    if (location.hash === '#aiDisclaimerHub') {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      banner.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+    return;
+  }
+
+  if (isArticle) {
+    const breadcrumb = document.querySelector('nav.article-breadcrumb');
+    if (!breadcrumb) return;
+    const banner = document.createElement('aside');
+    banner.id = 'aiDisclaimerArticle';
+    banner.className = 'ai-disclaimer ai-disclaimer-article';
+    banner.setAttribute('role', 'note');
+    banner.innerHTML = `
+      <span class="ai-disclaimer-icon-small" aria-hidden="true">⏻</span>
+      <span class="ai-disclaimer-text">
+        <strong>Píše Claude, ne člověk.</strong>
+        Tento článek napsal model umělé inteligence (Claude od Anthropic) na základě rešerše veřejných českých a mezinárodních zdrojů. Mohou se v něm objevit chyby — proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+      </span>
+    `;
+    breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);
+    return;
+  }
+}
 
 /**
  * Vyplní libovolný <div class="waffle-100" data-pct="N">…</div> v článku

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redakce — fronta nepublikovaných článků · HSPA Monitor</title>
+<meta name="description" content="Interní náhled na článková fronta — texty čekající na automatickou publikaci.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Redakční fronta (interní)</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <section class="ed-hero">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Interní · noindex</div>
+      <h2 class="ed-hero-headline">Redakční fronta — co čeká na publikaci</h2>
+      <p class="ed-hero-lead">
+        Tato stránka zobrazuje články, které <strong>Claude napsal</strong>, ale které ještě nejsou publikovány v sekci <a href="clanky.html">Články</a>. Každý má naplánovaný <strong>termín automatické publikace</strong> (cron běží denně v 06:00 ráno SEČ). Slouží autorovi projektu k revizi před vyjetím — můžete články pročíst, případně si poznamenat opravy předtím, než se objeví na webu.
+      </p>
+      <p class="ed-hero-lead">
+        Stránka má <code>noindex</code> meta tag, takže ji vyhledávače neindexují. Není ale autentizovaná — kdokoli, kdo zná URL <code>/redakce.html</code>, ji vidí. Pokud potřebujete přísnější ochranu, ukládejte poznámky bokem.
+      </p>
+    </div>
+  </section>
+
+  <section class="redakce-section">
+    <div class="ed-kicker">Naplánováno</div>
+    <h3 class="ed-areas-h" id="redakceQueueH">Fronta článků</h3>
+    <p class="redakce-meta" id="redakceMeta"></p>
+    <ol class="redakce-list" id="redakceList">
+      <li class="article-list-loading">Načítání fronty…</li>
+    </ol>
+    <p class="redakce-empty hidden" id="redakceEmpty">
+      Aktuálně nečekají žádné nepublikované články. <a href="clanky.html">Otevřít publikované články →</a>
+    </p>
+  </section>
+
+  <section class="redakce-section hidden" id="redakceQuarantine">
+    <div class="ed-kicker">V karanténě · vyžaduje lidskou revizi</div>
+    <h3 class="ed-areas-h">Články mimo automatickou publikaci</h3>
+    <p class="redakce-meta">Tyto články mají v <code>articles.json</code> pole <code>_review_note</code> — typicky kvůli identifikované halucinaci nebo věcné chybě. Cron je <strong>NEpublikuje automaticky</strong>; vyžadují lidský přepis nebo rozhodnutí, zda zveřejnit.</p>
+    <ol class="redakce-list" id="redakceQuarantineList"></ol>
+  </section>
+
+  <section class="redakce-section">
+    <div class="ed-kicker">Jak to funguje</div>
+    <h3 class="ed-areas-h">Mechanismus automatické publikace</h3>
+    <ol class="redakce-howto">
+      <li><strong>Claude píše</strong> — model dostane data + zadání tématu, napíše analytický článek + zaregistruje ho do <code>data/articles.json</code> s <code>published: false</code> a <code>scheduled_for: YYYY-MM-DD</code>.</li>
+      <li><strong>PR + merge</strong> — článek se mergne do <code>main</code> branch jako nepublikovaný.</li>
+      <li><strong>Cron 06:00</strong> — každý den ráno se spustí GitHub Actions workflow <code>publish-articles.yml</code>. Skript projde fronta a každý článek, jehož <code>scheduled_for</code> je dnes nebo dřív, přepne na <code>published: true</code>.</li>
+      <li><strong>Vercel rebuild</strong> — po commitu pushu cronem se Vercel automaticky rebuildne (typicky do 2 minut).</li>
+      <li><strong>Článek vychází</strong> — objeví se v <a href="clanky.html">/clanky.html</a> mezi publikovanými.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/redakce.js"></script>
+
+</body>
+</html>

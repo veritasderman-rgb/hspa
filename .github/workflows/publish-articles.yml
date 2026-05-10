@@ -1,0 +1,53 @@
+name: Publish scheduled articles
+
+# Spouští se každý den v 04:00 UTC (= 06:00 CEST / 05:00 CET v zimě).
+# Projde data/articles.json a všechny záznamy s published=false +
+# scheduled_for <= dnes nastaví na published=true. Pokud něco změnil,
+# commitne změnu zpět do main → Vercel se rebuildne.
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:  # umožní manuální spuštění z GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run publish-scheduled
+        run: node scripts/publish-scheduled.js | tee /tmp/publish-out.txt
+
+      - name: Configure git
+        run: |
+          git config user.name "hspa-publisher[bot]"
+          git config user.email "publisher@hspa-cesko.cz"
+
+      - name: Commit + push if changes
+        run: |
+          if git diff --quiet data/articles.json; then
+            echo "No changes to articles.json — nothing to commit."
+            exit 0
+          fi
+          # Extract published list for commit message
+          PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
+          DATE=$(date -u +%Y-%m-%d)
+          git add data/articles.json
+          git commit -m "chore(publish): zveřejněno $DATE
+
+          $PUBLISHED
+
+          Auto-publikováno cronem .github/workflows/publish-articles.yml" || exit 0
+          git push origin HEAD:main
