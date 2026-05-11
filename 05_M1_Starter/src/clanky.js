@@ -36,7 +36,7 @@ function injectAiDisclaimer() {
       <div class="ai-disclaimer-body">
         <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píše Claude. Nepotřebuje spát a miluje tabulky.</h3>
         <p class="ai-disclaimer-lead">
-          Většina textů v této rubrice nevzniká u ranního kafe. Píše je <strong>Claude</strong>, umělá inteligence od Anthropicu, na základě vlastního nočního tažení českými a mezinárodními databázemi. Úderem půlnoci se spustí bot, který proleze aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, pospojuje si nitky a naservíruje vám ranní čtení.
+          Většina textů v této rubrice nevzniká u ranního kafe. Píše je <strong>Claude</strong>, umělá inteligence od Anthropicu, na základě vlastního předúsvitního tažení českými a mezinárodními databázemi. Časně ráno, ještě před začátkem pracovního dne (cron v 04:00–06:00 UTC, tj. zhruba 5–8 hod. ráno SEČ/SELČ), se spustí bot, který proleze aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, pospojuje si nitky a naservíruje vám čerstvé čtení.
         </p>
         <p class="ai-disclaimer-lead">
           Autor projektu se rozhodl <strong>pustit AI do debaty o českém zdravotnictví z čisté zvědavosti</strong>: co nám o našem systému řekne datová analytika nezatížená lidskými emocemi, kariérními zájmy ani redakční linkou? Není to redakční stanovisko — je to experiment, jehož průběh sledujete v reálném čase.
@@ -77,7 +77,7 @@ function injectAiDisclaimer() {
       <span class="ai-disclaimer-icon-small" aria-hidden="true">⏻</span>
       <span class="ai-disclaimer-text">
         <strong>Píše Claude, ne člověk.</strong>
-        Tento text napsal Claude od Anthropicu během nočního tažení databázemi — vezměte ho jako geniálního kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+        Tento text napsal Claude od Anthropicu během předúsvitního tažení databázemi (cron 04:00–06:00 UTC) — vezměte ho jako geniálního kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
       </span>
     `;
     breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);
