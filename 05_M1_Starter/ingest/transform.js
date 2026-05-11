@@ -652,6 +652,10 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     area: card.area,
     domain: card.domain,
     subdomain: card.subdomain,
+    // HSPA klasifikace — propagována z metodické karty (preferováno) nebo ze seedu.
+    // Pole jsou povinná podle policy-views.test.js a frontendu.
+    framework: card.framework ?? seed?.framework ?? null,
+    dimension: card.dimension ?? seed?.dimension ?? null,
     value,
     unit: card.unit,
     year,
