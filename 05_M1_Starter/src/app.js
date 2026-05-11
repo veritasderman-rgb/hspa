@@ -627,6 +627,13 @@ function renderRegionDataset(ds) {
   document.getElementById('regionsBadge').textContent =
     `${ds.regions.length} krajů · průměr ČR ${ds.country_avg} ${ds.unit} (${ds.year})`;
 
+  // Teaser link na /kraje — předáme aktuální indikátor v hash, aby krajský
+  // pohled rovnou ukázal stejný datový řez, který uživatel sleduje zde.
+  const teaserCta = document.getElementById('regionsTeaserCta');
+  if (teaserCta && ds.indicator_id) {
+    teaserCta.href = `kraje.html#id=${encodeURIComponent(ds.indicator_id)}`;
+  }
+
   const header = document.getElementById('regionsTableValueHeader');
   if (header) header.textContent = `${ds.name} (${ds.unit})`;
 
