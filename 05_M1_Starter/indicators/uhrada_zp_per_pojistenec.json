@@ -1,0 +1,42 @@
+{
+  "id": "uhrada_zp_per_pojistenec",
+  "name": "Úhrada zdravotních pojišťoven na pojištěnce",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Výdaje veřejného zdravotního pojištění",
+  "definition": "Celková výše úhrad všech sedmi zdravotních pojišťoven (VZP, VoZP, ČPZP, OZP, ZP Škoda, ZPMV, RBP) za poskytnuté zdravotní služby v daném roce, vydělená počtem pojištěnců. Zahrnuje všechny segmenty péče (lůžková, ambulantní, léky, pomůcky, stomatologie, doprava, lázně). Neobsahuje samoplatbu pacientů ani připojištění.",
+  "unit": "Kč / pojištěnec / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "OIS-11-24",
+      "endpoint": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn",
+      "note": "Národní registr hrazených zdravotních služeb (NRHZS), datový souhrn k dohodovacímu řízení. Aktualizováno 1× ročně, periodicita ÚZIS."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HEALTH_STAT_HEALTHEXP",
+    "note": "Pro orientační srovnání. OECD měří total health expenditure per capita (veřejné + soukromé + OOP), tj. širší definici než jen ZP úhrada — přímé srovnání má omezenou výpovědní hodnotu."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR",
+    "zdravotní pojišťovny"
+  ],
+  "method_notes": "Výpočet: Σ úhrady všech 7 ZP / počet pojištěnců ČR (≈ 10,87 mil. 2023). V úhradách jsou zohledněny regulace a dohadné položky (po vyrovnání). 2024 hodnota je předběžná — finalizace dat probíhá k 31. 12. následujícího roku.",
+  "limitations": "Per capita ukazatel nezohledňuje strukturu pojištěnců (věk, chronické diagnózy, regionální nerovnosti). VZP má vyšší podíl seniorů → vyšší per-capita úhradu. Srovnání s OECD je orientační (různá metodika).",
+  "patient_story": "Češi v roce 2023 zaplatili přes veřejné zdravotní pojištění průměrně 42 200 Kč ročně na osobu — za hospitalizace, návštěvy u specialisty, léky na recept, pomůcky a rehabilitace. To je o desetinu více než v roce 2022 a růst tempa neustává: pololetí 2024 ukazuje již 46 500 Kč na osobu při dvanáctiměsíčním přepočtu. Pro porovnání: průměrná hrubá mzda v ČR 2024 je 46 800 Kč/měsíc, takže každý pracující měsíčně přispívá do systému zhruba 6 000 Kč na sociální i zdravotní pojištění. Otázka, na kterou české zdravotnictví bude muset odpovědět v příští dekádě, není zda peněz přibude — ale **jestli z nich získáme úměrně více zdraví**. ÚZIS predikuje, že náklady veřejného zdravotního pojištění mohou do roku 2040 dosáhnout 850 až 1 300 miliard Kč ročně.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}

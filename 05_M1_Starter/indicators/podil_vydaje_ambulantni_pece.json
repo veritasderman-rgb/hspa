@@ -1,0 +1,36 @@
+{
+  "id": "podil_vydaje_ambulantni_pece",
+  "name": "Podíl výdajů ZP na ambulantní péči",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Struktura úhrad podle segmentů",
+  "definition": "Podíl úhrad zdravotních pojišťoven směřujících do segmentu ambulantní péče (segment 1 dle Zdravotně pojistného plánu — praktici pro dospělé i pro děti, ambulantní specialisté, gynekologie, komplement: laboratoře, RTG, sonografie, domácí péče) z celkových úhrad ZP.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "OIS-11-24",
+      "endpoint": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HEALTH_PROC_AMBULATORY_SHARE",
+    "note": "OECD průměr výdajů na ambulantní péči (outpatient curative + day cases) ≈ 35–40 %. ČR je strukturálně níže (28 %)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Výpočet: úhrady segmentu 1 (ambulantní) / celkové úhrady všech 7 ZP × 100. Segment 1 obsahuje sub-segmenty 1.1–1.9 dle ZPP (praktici, specialisté, komplement, domácí péče, ZÚLP/ZÚM vykázané ambulancí).",
+  "limitations": "Stomatologie je vykazována zvlášť (segment 3). Jednodenní péče (chirurgie, gastro) je zde vykazována společně s ambulantní specializovanou — neoddělitelně.",
+  "patient_story": "Ambulantní péče — návštěvy u praktika, ambulantního specialisty, laboratorní vyšetření a domácí péče — pohltí 28 % úhrad zdravotních pojišťoven. Z evropského pohledu je to málo: západní zdravotnické systémy směřují do ambulantního sektoru 35–40 % výdajů. Tento rozdíl odráží jiné nastavení péče: v Česku se více řeší v nemocnicích, zatímco v Nizozemsku, Dánsku nebo Velké Británii větší díl chronických pacientů zůstává v péči praktiků a ambulantních specialistů. Posun ČR směrem k vyššímu podílu ambulantní péče je dlouhodobý strategický cíl — souvisí s návrhem reformy úhradové vyhlášky 2024 i s evropským trendem „shift to ambulatory care“.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}

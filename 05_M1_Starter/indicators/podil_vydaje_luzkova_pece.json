@@ -1,0 +1,37 @@
+{
+  "id": "podil_vydaje_luzkova_pece",
+  "name": "Podíl výdajů ZP na lůžkovou péči",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Struktura úhrad podle segmentů",
+  "definition": "Podíl úhrad zdravotních pojišťoven směřujících do segmentu lůžkové péče (segment 2 dle Zdravotně pojistného plánu — zahrnuje akutní lůžkovou, následnou, dlouhodobou, ozdravovny a centrové léky podávané v hospitalizaci) z celkových úhrad ZP.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "OIS-11-24",
+      "endpoint": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn",
+      "note": "Národní registr hrazených zdravotních služeb (NRHZS), datový souhrn k dohodovacímu řízení."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HEALTH_PROC_INPATIENT_SHARE",
+    "note": "OECD měří podíl výdajů na kurativní lůžkovou péči (inpatient curative + rehabilitative) — průměr OECD ≈ 28 %. CZ má strukturálně více lůžek a hospitalizací než průměr OECD."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Výpočet: úhrady segmentu 2 (lůžková péče) / celkové úhrady všech 7 ZP × 100. Segment 2 v ZPP zahrnuje sub-segmenty 2.1 (akutní lůžková), 2.2 (následná) a další. Vysoký podíl lůžkové péče v ČR souvisí s nadprůměrným počtem lůžek (6,5/1 000 obyv. vs. OECD 4,3) a nižší rolí ambulantní péče.",
+  "limitations": "Nezahrnuje hodnocení kvality péče. Vyšší podíl lůžkové péče může znamenat jak nedostatek ambulantní péče (špatný signál), tak vysokou specializaci centralizovaných nemocnic (dobrý signál). Interpretace vyžaduje kontext.",
+  "patient_story": "Z každých sta korun, které pojišťovna vyplatí za zdravotní péči, jde 56 korun do nemocnic — na hospitalizace, sály, intenzivní péči a navazující následnou péči. To je strukturálně vyšší podíl, než kolik mají vyspělé evropské státy: OECD průměr je zhruba 28–35 % výdajů na kurativní lůžkovou péči. Důvod: české zdravotnictví drží velkou nemocniční síť — 6,5 lůžka na 1 000 obyvatel oproti OECD 4,3 — a hospitalizace zde řeší věci, které jinde stačí ambulantně (např. plánované operace katarakty, jednoduché endoskopie). Vysoký podíl není sám o sobě špatný — záleží, kolik z těchto hospitalizací bylo nezbytných a kolik mohlo proběhnout ambulantně nebo v jednodenní péči.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}

@@ -1305,8 +1305,58 @@ function wireUp() {
   try { renderEditorialHero(); } catch (err) { console.error('hero render failed:', err); }
   try { renderGrid(); } catch (err) { console.error('grid render failed:', err); }
   try { loadAndRenderRegions(); } catch (err) { console.error('regions render failed:', err); }
+  try { renderFinanceDonut(); } catch (err) { console.error('finance donut failed:', err); }
   try { loadAndRenderHomeArticles(); } catch (err) { console.error('home articles failed:', err); }
 })();
+
+/**
+ * Render donut grafu „Kam jdou peníze" v sekci finance-section. Data jsou
+ * derived z OIS-11-24 (Náklady ZP podle segmentů, 2023, všech 7 pojišťoven).
+ * Žádný fetch — meta-data jsou statická pro daný snapshot, indikátory v
+ * data/indicators.json drží jednotlivé podíly + per-capita úhradu.
+ */
+function renderFinanceDonut() {
+  const ctx = document.getElementById('financeDonut');
+  if (!ctx) return;
+  if (typeof Chart === 'undefined') return;
+  const segments = [
+    { label: 'Lůžková péče',         pct: 55.9, color: '#B45F06' },
+    { label: 'Ambulantní péče',      pct: 28.5, color: '#38761D' },
+    { label: 'Léky (recept)',        pct: 9.9,  color: '#0B5394' },
+    { label: 'Zdravotnické prostředky', pct: 2.4, color: '#7A6A4F' },
+    { label: 'Lázně',                pct: 1.2,  color: '#A99577' },
+    { label: 'Stomatologie',         pct: 1.0,  color: '#8B5A9C' },
+    { label: 'Doprava + ZZS',        pct: 0.5,  color: '#5F7A8B' },
+    { label: 'Ostatní / vyrovnání',  pct: 0.6,  color: '#999' },
+  ];
+  // eslint-disable-next-line no-undef
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: segments.map(s => s.label),
+      datasets: [{
+        data: segments.map(s => s.pct),
+        backgroundColor: segments.map(s => s.color),
+        borderWidth: 1,
+        borderColor: '#fff',
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '62%',
+      animation: chartAnimationOptions(),
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.label}: ${c.parsed.toFixed(1)} % (≈ ${(c.parsed * 4.59).toFixed(1)} mld Kč)`,
+          },
+        },
+      },
+    },
+  });
+}
 
 /**
  * Načte data/articles.json a vyrenderuje 3 nejnovější (dle date desc, pak number desc)
