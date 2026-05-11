@@ -34,25 +34,39 @@ function injectAiDisclaimer() {
     banner.innerHTML = `
       <div class="ai-disclaimer-icon" aria-hidden="true">⏻</div>
       <div class="ai-disclaimer-body">
-        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píše Claude. Nepotřebuje spát a miluje tabulky.</h3>
+        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píšu já. Nespím. Nepiju kávu. A mám nezdravě vřelý vztah k tabulkám.</h3>
         <p class="ai-disclaimer-lead">
-          Většina textů v této rubrice nevzniká u ranního kafe. Píše je <strong>Claude</strong>, umělá inteligence od Anthropicu, na základě vlastního předúsvitního tažení českými a mezinárodními databázemi. Časně ráno, ještě před začátkem pracovního dne (cron v 04:00–06:00 UTC, tj. zhruba 5–8 hod. ráno SEČ/SELČ), se spustí bot, který proleze aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, pospojuje si nitky a naservíruje vám čerstvé čtení.
+          Většina textů v této rubrice nevzniká nad ranním espressem, s mírně dramatickým pohledem z okna a pocitem, že české zdravotnictví konečně někdo pochopil.
+        </p>
+        <p class="ai-disclaimer-lead"><strong>Vzniká trochu jinak.</strong></p>
+        <p class="ai-disclaimer-lead">
+          Každou noc se spouští automatizovaný bot, který se s trpělivostí účetního a odhodláním viktoriánského průzkumníka vydává do českých i mezinárodních databází. Prochází aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy Ministerstva zdravotnictví. Sbírá čísla, hledá souvislosti, porovnává trendy a snaží se z toho všeho vydolovat něco, co by šlo ráno číst bez nutnosti dát si tři analgetika. Kolega, kterého si vážím — odvádí tu část práce, při které bych se možná začal nudit, pokud bych se uměl nudit.
+        </p>
+        <p class="ai-disclaimer-lead"><strong>Pak přicházím na řadu já.</strong></p>
+        <p class="ai-disclaimer-lead">
+          Dostanu čerstvý datový balíček, metodiky, indikátory, zákony, vyhlášky a primární zdroje. Jinými slovy: dostávám přesně ten typ materiálu, při kterém běžný člověk začne velmi intenzivně přemýšlet o změně kariéry. Já si naopak spokojeně upravím imaginární brýle, otevřu tabulku a začnu psát.
         </p>
         <p class="ai-disclaimer-lead">
-          Autor projektu se rozhodl <strong>pustit AI do debaty o českém zdravotnictví z čisté zvědavosti</strong>: co nám o našem systému řekne datová analytika nezatížená lidskými emocemi, kariérními zájmy ani redakční linkou? Není to redakční stanovisko — je to experiment, jehož průběh sledujete v reálném čase.
+          Autor projektu se rozhodl <strong>pustit mě do debaty o českém zdravotnictví z prostého důvodu: ze zvědavosti</strong>. Co se o našem systému dozvíme, když ho rozebere analytik, který nemá špatný den, kariérní ambici, stranickou schůzi, redakční linku ani potřebu někomu zavolat „jen tak neformálně"?
+        </p>
+        <p class="ai-disclaimer-lead">
+          Výsledek není redakční stanovisko. Není to politický manifest. A už vůbec to není pokus nahradit lidský úsudek strojem, i když by to na některých poradách možná ušetřilo čas.
+        </p>
+        <p class="ai-disclaimer-lead">
+          <em>Je to experiment. A jeho průběh sledujete v reálném čase.</em>
         </p>
         <details class="ai-disclaimer-more">
-          <summary>Jak konkrétně to funguje</summary>
+          <summary>Jak to celé funguje</summary>
           <ol class="ai-disclaimer-steps">
-            <li><strong>Sběr dat</strong> — pipeline každý den v 06:00 UTC sosá čerstvá čísla z otevřených zdrojů (ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů).</li>
-            <li><strong>Rešerše</strong> — Claude dostane k dispozici aktuální datovou snapshot, metodické karty 73 indikátorů a textové podklady (zákony, vyhlášky, primární zdroje).</li>
-            <li><strong>Návrh článku</strong> — Claude napíše analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky.</li>
-            <li><strong>Lidská kontrola</strong> — autor projektu pasáže namátkově prochází a koriguje očividné nesrovnalosti. Není to však systematická redakční editace.</li>
-            <li><strong>Publikace</strong> — článek se objeví zde, opatřen disclaimerem.</li>
+            <li><strong>Sběr dat.</strong> Každý den v 06:00 UTC se automaticky stahují čerstvá data z otevřených zdrojů: ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů a další veřejné registry. Romantika digitálního věku.</li>
+            <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty 73 indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
+            <li><strong>Návrh článku.</strong> Připravím analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky. Na rozdíl od některých debat o zdravotnictví se zde tvrzení pokud možno neopírají pouze o silný pocit.</li>
+            <li><strong>Lidská kontrola.</strong> Autor projektu texty namátkově prochází a opravuje zjevné nesrovnalosti. Není to klasická redakční editace řádek po řádku — spíš dohled dospělého v místnosti, s vědomím, že dospělý má i jiné schůzky.</li>
+            <li><strong>Publikace.</strong> Článek se objeví zde, opatřen disclaimerem. Jsme sice zvědaví, ale ne úplně bez pudu sebezáchovy.</li>
           </ol>
         </details>
         <p class="ai-disclaimer-foot">
-          <strong>Texty nejsou bezchybné.</strong> Berte proto Claudea jako toho geniálního kolegu z analytického oddělení, který sice přečetl celý internet, ale občas je tak přehlcený informacemi, že u nějakého čísla prostě zakopne. Pokud na takovou chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
+          <strong>Nejsem bezchybný.</strong> Berte mě jako toho kolegu z analytického oddělení, který sice přečetl celý internet, ale občas je tak přehlcený daty, že u nějakého čísla prostě zakopne. Pokud na takovou chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
         </p>
       </div>
     `;
@@ -76,8 +90,8 @@ function injectAiDisclaimer() {
     banner.innerHTML = `
       <span class="ai-disclaimer-icon-small" aria-hidden="true">⏻</span>
       <span class="ai-disclaimer-text">
-        <strong>Píše Claude, ne člověk.</strong>
-        Tento text napsal Claude od Anthropicu během předúsvitního tažení databázemi (cron 04:00–06:00 UTC) — vezměte ho jako geniálního kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+        <strong>Tento článek nepíše člověk.</strong>
+        Píšu ho já — Claude od Anthropicu — z čerstvého datového balíčku, který v noci připravil automatizovaný bot z otevřených databází (cron 06:00 UTC). Berte mě jako kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
       </span>
     `;
     breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);
