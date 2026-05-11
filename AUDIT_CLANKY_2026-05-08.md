@@ -507,3 +507,36 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
 **Follow-up commit (Codex review PR #224, 2026-05-11):** doplněny 2 dílčí opravy podle review komentářů Codex bota:
   1. **Banner v hlavičce** — původní formulace „historické hodnoty platby státního pojištěnce 2023–2025 (2 085 / 2 127 / 2 188 Kč)" byla interně nekonzistentní: trojice hodnot 2 085 / 2 127 / 2 188 odpovídá rokům 2024 / 2025 / 2026, nikoliv 2023–2025. Banner přepsán na úplný čtyřletý ráz: „2023 / 2024 / 2025 / 2026 (1 900 / 2 085 / 2 127 / 2 188 Kč)".
   2. **Datum periody 723 Kč** — původní formulace „v listopadu 2013 ve výši 723 Kč/měsíc" byla v rozporu s historickou tabulkou VZP, podle které platilo 723 Kč v období 1. 1. 2010 – 31. 10. 2013 a 787 Kč naopak začalo platit od 1. 11. 2013. Opraveno na přesné datování: „723 Kč/měsíc v období 1. 1. 2010 – 31. 10. 2013" a „787 Kč od 1. 11. 2013".
+
+### 2026-05-11 · `clanek-kardiovaskularni-mortalita.html` — **flagged: centrální číslo článku se z primárního zdroje neověřuje**
+- **Status:** flagged · review-pending (republikace teprve po ručním schválení redakce a po rekonciliaci datového kontraktu HSPA)
+- **Reviewer:** claude-code-agent
+- **Co vyvolalo flag:** Centrální tvrzení článku — „celková kardiovaskulární mortalita 220 / 100 000 obyvatel, zatímco průměr OECD 140" — se v rámci auditu proti primárním zdrojům (OECD Health at a Glance 2025, kapitola *Mortality from circulatory diseases*; Eurostat `hlth_cd_asdr2`; Eurostat Statistics Explained *Cardiovascular diseases statistics*) v této řádové úrovni nepotvrdilo:
+  - **OECD Health at a Glance 2025** (data za rok 2023, ASR) reportuje pro Česko mortalitu na nemoci oběhové soustavy řádově **372 / 100 000**, nikoli 220.
+  - Hodnota **220 / 100 000 odpovídá podle OECD H@G 2025 spíše české úmrtnosti na zhoubné novotvary** (MKN-10 C00–D48), nikoli na choroby oběhové soustavy (I00–I99).
+  - **Eurostat Statistics Explained** pro EU 27 v roce 2022 uvádí ASR pro nemoci oběhové soustavy 336,4 / 100 000 (ESP 2013) — tj. zcela jiný řád než „OECD 140" uvedený v článku.
+  - Mezi OECD referenční populací a ESP 2013 jsou metodické rozdíly v absolutních hodnotách, ale ani jedna referenční populace dnes nedává pro Česko hodnotu blízkou 220 / 100 000 pro kardiovaskulární mortalitu.
+  - Stejná hodnota „220 / 100 000" je sdílena přes datový kontrakt `data/indicators.json` (id `mortalita_kardiovaskularni`, value 220, benchmark.oecd 140) a kaskádově se propisuje i do článků `clanek-akutni-infarkt.html` (řádek 72, 151) a `clanek-cmp-iktova-centra.html` (řádek 90, 137, 173). Tyto články jsou tímto auditem **také flaggovány k dalšímu prošetření**, a to v navazujících iteracích auditu.
+- **Co se v článku změnilo:**
+  - **Doplněn review-pending banner v hlavičce** s explicitní informací, že hodnota „220 / 100 000" se proti OECD H@G 2025 v této řádové úrovni neověřuje a že číslo „60 procent vyšší než OECD" v deku vyžaduje rekonciliaci datového kontraktu před republikací.
+  - **Opraven metodický popis standardizační referenční populace:** „přepočtená na evropský věkový standard EU-27" → upřesněno na *European Standard Population 2013* (ESP 2013), referenční populační rozložení Eurostatu pro řadu `hlth_cd_asdr2`, s explicitní poznámkou, že OECD používá vlastní referenční populaci a absolutní hodnoty proto nejsou mezi Eurostat a OECD zaměnitelné.
+  - **V databoxu k indikátoru `mortalita_kardiovaskularni`** doplněn inline štítek `flagged` a informace o neshodě s OECD H@G 2025.
+  - **Doplněn audit-disclaimer v zdrojové sekci** s konkrétní instrukcí: před republikací ručně rekonciliovat hodnotu indikátoru v `data/indicators.json` proti OECD H@G 2025, fixovat jeden zdroj a jednu referenční populaci.
+- **Zdrojové odkazy nahrazeny stabilními permalinky (8 nových primárních / metodických):**
+  - OECD Health at a Glance 2025 — kapitola *Mortality from circulatory diseases* (`oecd.org/.../mortality-from-circulatory-diseases_00d400e8.html`)
+  - OECD Health at a Glance 2025 — kapitola *Mortality following ischaemic stroke* (`oecd.org/.../mortality-following-ischaemic-stroke_30342166.html`)
+  - OECD *State of Cardiovascular Health in the EU* dashboard (`oecd.org/.../state-of-cardiovascular-health-in-the-eu.html`)
+  - Eurostat databrowser `HLTH_CD_ASDR2` (`ec.europa.eu/eurostat/databrowser/product/page/HLTH_CD_ASDR2`)
+  - Eurostat Statistics Explained — Cardiovascular diseases statistics
+  - ÚZIS / Zemřelí (přímý odkaz na registr LPZ namísto homepage)
+  - WHO GHO NCD theme (přímý odkaz na téma místo generického `/data/gho`)
+  - IHME GBD Compare visualization (přímý odkaz na vizualizační nástroj místo homepage)
+  - SCORE2 / SCORE2-OP — citace s DOI (`10.1093/eurheartj/ehab309`)
+  - ESC STEMI Guidelines 2023 (zdrojový dokument pro časové cíle door-to-balloon ≤ 90 min / total ischaemic time ≤ 120 min)
+  - Eurostat metodický dokument *Revision of the European Standard Population* (2013, KS-RA-13-028) — primární zdroj pro ESP 2013
+  - Cerebrovaskulární sekce ČNS — opraveno z `cmp.cz` (která je veřejná osvětová doména) na oficiální stránku sekce na `czech-neuro.cz`.
+- **Otevřené otázky pro ruční rozhodnutí redakce:**
+  1. **Rekonciliace datového kontraktu** — opravit `data/indicators.json` (id `mortalita_kardiovaskularni`) na hodnotu z OECD H@G 2025 (ČR ≈ 372 / 100 000, 2023) a aktualizovat benchmark.oecd / benchmark.eu odpovídajícím způsobem; alternativně přejít na Eurostat `hlth_cd_asdr2` (ESP 2013) — v každém případě fixovat jeden zdroj a jednu referenční populaci a tu uvádět v `definition` metodické karty.
+  2. **Přepsat dek článku** — formulace „o 60 procent vyšší" je závislá na konkrétních hodnotách, které se po rekonciliaci pravděpodobně změní. Mohou se buď opravit na hodnoty z H@G 2025 (cca 372 vs OECD průměr → relativní rozdíl bude jiný), nebo přepsat kvalitativně.
+  3. **Kaskádová revize** — po rekonciliaci hodnot v datovém kontraktu projít všechny tři články (kardiovaskularni-mortalita, akutni-infarkt, cmp-iktova-centra) a opravit shodně.
+- **Předtím / potom:** 1 centrální numerické tvrzení flaggováno (220 vs 140) · 1 metodická formulace opravena (EU-27 → ESP 2013) · 11 generických zdrojových URL nahrazeno stabilními permalinky · 1 review-pending banner v hlavičce přidán · 1 audit-disclaimer v zdrojové sekci přidán · 0 textových odstavců smazáno (článek argumentačně stojí na centrálním čísle, takže smazání bez rekonciliace by argument zlikvidovalo — proto flag, ne delete) · 0 nových vizuálů (nelze přidat, dokud není centrální číslo ověřeno).
