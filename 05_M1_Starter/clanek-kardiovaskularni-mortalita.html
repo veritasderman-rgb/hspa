@@ -54,6 +54,9 @@
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 12px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k revizi (11. května 2026):</strong> Status článku změněn na <em>flagged · review-pending</em>. Při auditu proti primárním zdrojům (OECD Health at a Glance 2025, Eurostat <code>hlth_cd_asdr2</code>) byla zjištěna podstatná nesrovnalost mezi hodnotou kardiovaskulární mortality uváděnou v dashboardu HSPA Monitoru (220 / 100 000) a hodnotou publikovanou v OECD Health at a Glance 2025 pro Česko za rok 2023 (372 / 100 000, věkově standardizováno). Hodnota 220 odpovídá podle OECD H@G 2025 spíše české úmrtnosti na zhoubné novotvary, nikoli na nemoci oběhové soustavy. Číslo „60 procent vyšší než OECD" v deku článku se proto v této chvíli z primárního zdroje ověřit nedaří a vyžaduje rekonciliaci datového kontraktu HSPA před republikací. Stejně tak byla opravena formulace „evropský věkový standard EU-27" — Eurostat standardizuje řadu <code>hlth_cd_asdr2</code> na <em>European Standard Population 2013</em> (ESP 2013), nikoli na věkové složení EU-27. Zdrojové odkazy byly nahrazeny stabilními permalinky. Republikace teprve po ručním schválení redakce a po ověření primárního čísla v datovém kontraktu.
+      </p>
     </header>
 
     <div class="article-body">
@@ -73,7 +76,7 @@
       </p>
 
       <p>
-        Tato akutní vrstva nese v statistice ostrou hranici. Indikátor `mortalita_inhosp_ami` z definice <strong>zahrnuje pouze pacienty, kteří se do nemocnice dostali</strong>. Pacient, který zemře doma nebo v sanitce, do jmenovatele nepatří. Indikátor `mortalita_kardiovaskularni` naopak zahrnuje <strong>všechna úmrtí na choroby oběhové soustavy</strong> (MKN-10 I00–I99) přepočtená na evropský věkový standard EU-27. Mezi těmi dvěma čísly se schovává všechno, co předchází vstupu do kardiocentra a všechno, co následuje po propuštění z něj.
+        Tato akutní vrstva nese v statistice ostrou hranici. Indikátor `mortalita_inhosp_ami` z definice <strong>zahrnuje pouze pacienty, kteří se do nemocnice dostali</strong>. Pacient, který zemře doma nebo v sanitce, do jmenovatele nepatří. Indikátor `mortalita_kardiovaskularni` naopak zahrnuje <strong>všechna úmrtí na choroby oběhové soustavy</strong> (MKN-10 I00–I99) přepočtená na <em>European Standard Population 2013</em> (ESP 2013) — referenční populační rozložení, které Eurostat zavedl revizí v roce 2013 a používá je v řadě <code>hlth_cd_asdr2</code>; pozn., OECD pro svou vlastní řadu používá vlastní referenční populaci, takže absolutní hodnoty mezi Eurostat a OECD nejsou přímo zaměnitelné. Mezi těmi dvěma čísly se schovává všechno, co předchází vstupu do kardiocentra a všechno, co následuje po propuštění z něj.
       </p>
 
       <h3>Tři vrstvy, kde Česko ztrácí</h3>
@@ -138,7 +141,7 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 220 / 100 000 vs. OECD 140 (MKN-10 I00–I99, EU-27 standard)</li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 220 / 100 000 vs. OECD 140 (MKN-10 I00–I99, ESP 2013) · <strong>flagged</strong>: hodnota neodpovídá OECD Health at a Glance 2025 (372 / 100 000 pro Česko v roce 2023), čeká na rekonciliaci datového kontraktu</li>
         <li><a href="indicator.html?id=mortalita_inhosp_ami"><strong>Nemocniční úmrtnost po akutním infarktu myokardu</strong></a> — 5,2 % vs. OECD 6,5 % (zahrnuje pouze hospitalizované)</li>
         <li><a href="indicator.html?id=mortalita_inhosp_cmp"><strong>Nemocniční úmrtnost po cévní mozkové příhodě</strong></a> — 11,2 % vs. OECD 7,7 % (zahrnuje pouze hospitalizované)</li>
         <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrolovaná hypertenze (TK &lt; 140/90)</strong></a> — 68 % vs. OECD 72 %</li>
@@ -158,23 +161,31 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health Statistics — Cardiovascular disease</strong> — primární zdroj pro mezinárodní srovnání mortality. <a href="https://www.oecd.org/en/topics/health-statistics-and-data.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>Eurostat — Causes of death (hlth_cd_aro)</strong> — věkově standardizovaná mortalita podle příčin. <a href="https://ec.europa.eu/eurostat/web/health" target="_blank" rel="noopener">eurostat ↗</a></li>
-          <li><strong>ÚZIS / List o prohlídce zemřelého (LPZ)</strong> — domácí registr příčin úmrtí, vstup do mortalitních statistik. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
-          <li><strong>WHO Global Health Observatory — NCD risk factors</strong> — globální monitoring rizikových faktorů. <a href="https://www.who.int/data/gho" target="_blank" rel="noopener">who.int ↗</a></li>
-          <li><strong>IHME / Global Burden of Disease</strong> — kvantifikace přínosu jednotlivých rizikových faktorů ke kardiovaskulární mortalitě. <a href="https://www.healthdata.org/" target="_blank" rel="noopener">healthdata.org ↗</a></li>
+          <li><strong>OECD Health at a Glance 2025 — Mortality from circulatory diseases</strong> — kapitola s mezinárodním srovnáním pro Česko a OECD průměr. <a href="https://www.oecd.org/en/publications/2025/11/health-at-a-glance-2025_a894f72e/full-report/mortality-from-circulatory-diseases_00d400e8.html" target="_blank" rel="noopener">oecd.org/health-at-a-glance-2025 ↗</a></li>
+          <li><strong>OECD Health at a Glance 2025 — Mortality following acute myocardial infarction &amp; ischaemic stroke</strong> — 30denní mortalita po AMI a CMP po přijetí. <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_8f9e3f98-en/full-report/mortality-following-ischaemic-stroke_30342166.html" target="_blank" rel="noopener">oecd.org/health-at-a-glance-2025 (stroke) ↗</a></li>
+          <li><strong>OECD State of Cardiovascular Health in the EU (2024)</strong> — tematická publikace včetně dashboardu. <a href="https://www.oecd.org/en/data/dashboards/state-of-cardiovascular-health-in-the-eu.html" target="_blank" rel="noopener">oecd.org/state-of-cardiovascular-health ↗</a></li>
+          <li><strong>Eurostat — Causes of death, standardised death rate by NUTS 2 region (<code>hlth_cd_asdr2</code>)</strong> — věkově standardizovaná mortalita na ESP 2013. <a href="https://ec.europa.eu/eurostat/databrowser/product/page/HLTH_CD_ASDR2" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
+          <li><strong>Eurostat Statistics Explained — Cardiovascular diseases statistics</strong> — výklad metodiky a aktuálních hodnot pro EU. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Cardiovascular_diseases_statistics" target="_blank" rel="noopener">eurostat statistics explained ↗</a></li>
+          <li><strong>ÚZIS / Zemřelí (List o prohlídce zemřelého, NZIS)</strong> — domácí registr příčin úmrtí, vstup do mortalitních statistik. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--demograficke-statistiky--zemreli" target="_blank" rel="noopener">uzis.cz / Zemřelí ↗</a></li>
+          <li><strong>WHO Global Health Observatory — Noncommunicable diseases &amp; risk factors</strong> — globální monitoring rizikových faktorů (BMI, glykémie, tlak, lipidy). <a href="https://www.who.int/data/gho/data/themes/noncommunicable-diseases" target="_blank" rel="noopener">who.int/gho/ncd ↗</a></li>
+          <li><strong>IHME GBD 2021 — Compare / Country profile (Czechia)</strong> — kvantifikace přínosu rizikových faktorů ke KV mortalitě. <a href="https://vizhub.healthdata.org/gbd-compare/" target="_blank" rel="noopener">vizhub.healthdata.org/gbd-compare ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
           <li><strong>Česká kardiologická společnost (ČKS)</strong> — odborná doporučení pro akutní i chronickou kardiologickou péči. <a href="https://www.kardio-cz.cz/" target="_blank" rel="noopener">kardio-cz.cz ↗</a></li>
-          <li><strong>Cerebrovaskulární sekce ČNS</strong> — odborný garant péče o pacienty s CMP. <a href="https://www.cmp.cz/" target="_blank" rel="noopener">cmp.cz ↗</a></li>
-          <li><strong>SCORE2 — European Society of Cardiology</strong> — aktualizovaný kalkulátor kardiovaskulárního rizika pro evropskou populaci. <a href="https://www.escardio.org/" target="_blank" rel="noopener">escardio.org ↗</a></li>
+          <li><strong>Cerebrovaskulární sekce České neurologické společnosti ČLS JEP</strong> — odborný garant péče o pacienty s CMP. <a href="https://www.czech-neuro.cz/sekce/cerebrovaskularni-sekce/" target="_blank" rel="noopener">czech-neuro.cz / Cerebrovaskulární sekce ↗</a></li>
+          <li><strong>SCORE2 a SCORE2-OP (Eur Heart J 2021; ESC)</strong> — aktualizovaný kalkulátor 10leté KV rizikové stratifikace pro evropskou populaci. <a href="https://academic.oup.com/eurheartj/article/42/25/2439/6297709" target="_blank" rel="noopener">SCORE2 (DOI 10.1093/eurheartj/ehab309) ↗</a></li>
+          <li><strong>2023 ESC Guidelines for the management of acute coronary syndromes (ACS)</strong> — referenční dokument pro časové cíle akutní léčby AMI včetně door-to-balloon ≤ 90 min a total ischaemic time ≤ 120 min; první ESC doporučení pokrývající celé spektrum ACS (STEMI + NSTE-ACS) v jednom dokumentu, publikováno v <em>European Heart Journal</em>. <a href="https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines/Acute-Coronary-Syndromes-ACS-Guidelines" target="_blank" rel="noopener">escardio.org / ACS Guidelines 2023 ↗</a></li>
+          <li><strong>Eurostat — Revision of the European Standard Population (2013, KS-RA-13-028)</strong> — metodický dokument k ESP 2013, který Eurostat používá pro <code>hlth_cd_asdr2</code>. <a href="https://ec.europa.eu/eurostat/documents/3859598/5926869/KS-RA-13-028-EN.PDF" target="_blank" rel="noopener">ESP 2013 (Eurostat KS-RA-13-028) ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
         <strong>Pozn. k „českému paradoxu":</strong> Kombinace nízké nemocniční mortality po AMI a vysoké celkové kardiovaskulární mortality je v Česku dlouhodobě dokumentovaný jev a opakovaně zmiňovaný v reportech ÚZIS i v OECD Health at a Glance. Není to český fenomén v tom smyslu, že by byl unikátní — podobné disproporce platí v některých dalších zemích střední a východní Evropy. Je to ale rozdíl, který je u nás zvlášť výrazný a u kterého jsou identifikované páky pro zlepšení.
+      </p>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k auditu zdrojů:</strong> Před republikací článku je nutné ručně rekonciliovat hodnotu indikátoru <code>mortalita_kardiovaskularni</code> v souboru <code>data/indicators.json</code> proti aktuálnímu OECD Health at a Glance 2025 (kapitola <em>Mortality from circulatory diseases</em>, data za rok 2023). OECD H@G 2025 uvádí pro Česko ASR cca 372 / 100 000 a pro průměr OECD jiný řád než 140; hodnota 220 / 100 000, kterou aktuálně dashboard zobrazuje, odpovídá podle OECD H@G 2025 spíše české úmrtnosti na zhoubné novotvary (MKN-10 C00–D48) než na choroby oběhové soustavy (I00–I99). Pozn., absolutní hodnoty se liší podle použité referenční populace (ESP 2013 vs. OECD reference) — proto je nutné fixovat jeden zdroj a jednu populaci.
       </p>
     </section>
 
