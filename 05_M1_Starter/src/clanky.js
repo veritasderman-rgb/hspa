@@ -34,25 +34,25 @@ function injectAiDisclaimer() {
     banner.innerHTML = `
       <div class="ai-disclaimer-icon" aria-hidden="true">⏻</div>
       <div class="ai-disclaimer-body">
-        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články nepsal člověk. Píše je Claude — a máme ho rádi.</h3>
+        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píše Claude. Nepotřebuje spát a miluje tabulky.</h3>
         <p class="ai-disclaimer-lead">
-          Většinu textů v této sekci nepsal autor projektu. Píše je <strong>Claude</strong> — model umělé inteligence od Anthropic — na základě rešerše českých a mezinárodních veřejných zdrojů. Každou noc se automaticky spustí bot, který projde aktuální data ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, propočítá souvislosti a připraví analytický článek, který si tady ráno přečtete.
+          Většina textů v této rubrice nevzniká u ranního kafe. Píše je <strong>Claude</strong>, umělá inteligence od Anthropicu, na základě vlastního nočního tažení českými a mezinárodními databázemi. Úderem půlnoci se spustí bot, který proleze aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy MZ ČR, pospojuje si nitky a naservíruje vám ranní čtení.
         </p>
         <p class="ai-disclaimer-lead">
-          Autor projektu se rozhodl <strong>nechat AI psát a sledovat její postřehy</strong> jako příspěvek do české debaty o zdravotnictví. Ne proto, že by texty byly bezchybné — to ostatně nebývají ani ty od lidí — ale proto, že experiment „pustit AI na otevřená data a poslechnout si, co řekne" má svou hodnotu sám o sobě. Berte to jako rozhovor s velmi sečtělým, ale mírně přepracovaným kolegou, který občas zaváhá u čísel.
+          Autor projektu se rozhodl <strong>pustit AI do debaty o českém zdravotnictví z čisté zvědavosti</strong>: co nám o našem systému řekne datová analytika nezatížená lidskými emocemi, kariérními zájmy ani redakční linkou? Není to redakční stanovisko — je to experiment, jehož průběh sledujete v reálném čase.
         </p>
         <details class="ai-disclaimer-more">
           <summary>Jak konkrétně to funguje</summary>
           <ol class="ai-disclaimer-steps">
             <li><strong>Sběr dat</strong> — pipeline každý den v 06:00 UTC sosá čerstvá čísla z otevřených zdrojů (ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů).</li>
-            <li><strong>Rešerše</strong> — Claude dostane k dispozici aktuální datovou snapshot, metodické karty 67 indikátorů a textové podklady (zákony, vyhlášky, primární zdroje).</li>
+            <li><strong>Rešerše</strong> — Claude dostane k dispozici aktuální datovou snapshot, metodické karty 73 indikátorů a textové podklady (zákony, vyhlášky, primární zdroje).</li>
             <li><strong>Návrh článku</strong> — Claude napíše analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky.</li>
             <li><strong>Lidská kontrola</strong> — autor projektu pasáže namátkově prochází a koriguje očividné nesrovnalosti. Není to však systematická redakční editace.</li>
             <li><strong>Publikace</strong> — článek se objeví zde, opatřen disclaimerem.</li>
           </ol>
         </details>
         <p class="ai-disclaimer-foot">
-          <strong>Chyby se stávají.</strong> Halucinace, zaměněné paragrafy, špatně přepsaná čísla — to vše se může stát. Pokud na něco narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste to přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
+          <strong>Texty nejsou bezchybné.</strong> Berte proto Claudea jako toho geniálního kolegu z analytického oddělení, který sice přečetl celý internet, ale občas je tak přehlcený informacemi, že u nějakého čísla prostě zakopne. Pokud na takovou chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
         </p>
       </div>
     `;
@@ -77,7 +77,7 @@ function injectAiDisclaimer() {
       <span class="ai-disclaimer-icon-small" aria-hidden="true">⏻</span>
       <span class="ai-disclaimer-text">
         <strong>Píše Claude, ne člověk.</strong>
-        Tento článek napsal model umělé inteligence (Claude od Anthropic) na základě rešerše veřejných českých a mezinárodních zdrojů. Mohou se v něm objevit chyby — proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+        Tento text napsal Claude od Anthropicu během nočního tažení databázemi — vezměte ho jako geniálního kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
       </span>
     `;
     breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);
