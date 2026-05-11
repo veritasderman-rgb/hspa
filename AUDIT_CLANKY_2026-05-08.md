@@ -177,6 +177,105 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Regionální distribuce dětských CDZ — Karlovarský × Vysočina × ostatní kraje by zasloužila samostatnou mapu NUTS 3, ale jen pokud bude k dispozici primární zdroj (např. ÚZIS Národní registr poskytovatelů zdravotních služeb).
 - **Předtím / potom:** 4 metodologické nepřesnosti opraveny · 3 přepsané odstavce · 1 nový disclaimer s revizním datem · 4 nové primární zdroje (metodická karta dashboardu, reformapsychiatrie.cz s konkrétním datem, NHS MHSMS, OECD 2021 publikace) · 0 nových vizuálů (nebyly ověřitelné v rámci této iterace; mapa dětských CDZ ponechána pro budoucí iteraci po dohledání primárního zdroje).
 
+### 2026-05-11 · `clanek-deficit-vzp-2026.html` (DRAFT) — **rozsáhlá revize numerických údajů a institucionálních odkazů**
+- **Status:** draft → draft po auditní revizi (zůstává neveřejný, čeká na ruční schválení před případnou publikací). Důvod: článek byl draft ve fázi přípravy k publikaci a obsahoval rozsáhlé numerické a institucionální chyby, které by při zveřejnění zpochybnily důvěryhodnost portálu.
+- **Reviewer:** claude-code-agent
+- **Co bylo špatně (verifikováno proti primárním zdrojům — VZP ČR ZPP 2026, finance.cz souhrny, MZ ČR Výsledky DŘ 2026, zákony 48/1997, 551/1991, 280/1992, 592/1992):**
+  1. **Chybná hodnota platby státního pojištěnce 2026:** článek uváděl 2 058 Kč/měsíc/osobu; reálná hodnota je 2 188 Kč (13,5 % z vyměřovacího základu 16 206 Kč) — doloženo VZP ČR, ZP MV ČR, VoZP a finance.cz.
+  2. **Chybné historické hodnoty platby státního pojištěnce:** 2024: článek 1 977 Kč → realita 2 085 Kč; 2025: článek 1 998 Kč → realita 2 127 Kč.
+  3. **Vnitřní rozpor v lead paragrafu:** „platba státu cca 102 mld. Kč ročně" (zjevně odvozeno od staré sazby ~1 440 Kč × 12 × 5,9 mil. ≈ 102 mld., což odpovídá rokům cca 2018–2019) v rozporu se samotným článkem dále uvádějícím 155 mld. Kč. Sjednoceno na 155 mld. Kč (2 188 × 12 × 5,9 mil. ≈ 154,9 mld., souhlasí i s mediálním souhrnem 154,6 mld. Kč).
+  4. **Chybný valorizační vzorec:** článek tvrdil, že platba státního pojištěnce „se každý rok automaticky valorizuje o inflaci spotřebitelských cen (CPI)". Skutečnost dle § 3c odst. 2 zákona č. 592/1992 Sb.: vyměřovací základ se valorizuje o <em>součet růstu spotřebitelských cen a poloviny růstu reálných mezd</em>.
+  5. **Chybný označení orgánu schvalujícího ZPP:** článek tvrdil, že zdravotně pojistné plány schvaluje Senát. Skutečnost: ZPP schvaluje Poslanecká sněmovna podle <strong>§ 6 odst. 11 zákona č. 551/1991 Sb.</strong> (VZP) a <strong>§ 15 odst. 11 zákona č. 280/1992 Sb.</strong> (zaměstnanecké pojišťovny) souběžně s návrhem státního rozpočtu. (Pozn.: První verze této opravy v commitu 1e3bfbb uváděla chybně § 7 zákona č. 280/1992 Sb. — § 7 upravuje nucenou správu, nikoliv schvalování ZPP. Opraveno v navazujícím commitu na základě review Codex bota.)
+  6. **Příliš úzký rámec deficitu:** článek uváděl 12,2 mld. Kč jako „konsolidovaný deficit systému". Skutečnost dle ZPP 2026 z 20. 10. 2025 a vyjádření SZP ČR: VZP samostatně 12,7 mld. Kč; systém jako celek včetně nedoplatků řádově 12–19 mld. Kč.
+  7. **Nepodložená čísla v sekci mzdový tlak (7,5 % růst 2025, 8,1 % růst 2024) a CHL (13,2 % růst 2025, 11,8 % růst 2024, 14 % podíl, 28 mld. Kč objem)** — bez primárního zdroje. Konkrétní procentní hodnoty odstraněny, kvalitativní popis ponechán s odkazem na ČSÚ <em>Průměrné mzdy</em>, ÚZIS <em>Personální kapacity</em>, výroční zprávy SÚKL.
+  8. **Nepodložená nárůstová projekce demografie:** „65+ dosáhne 26 % v 2040", „2,3× větší zdravotní péče na osobu" — bez doloženého odkazu na konkrétní publikaci ČSÚ a ÚZIS. Konkrétní násobky odstraněny, kvalitativní pasáž zachována s odkazem na ČSÚ <em>Projekce obyvatelstva ČR</em>.
+  9. **Nepodložené stranické pozice:** „ČSSD, KSČM, Piráti prosazují +200–300 Kč; ANO, SPD jsou rezervovanější; ODS, STAN preferují strukturální reformu" — bez doloženého programového dokumentu nebo sněmovního hlasování. Odstraněno; nahrazeno věcným hedge.
+  10. **Detailní rozpis rezervních fondů po jednotlivých pojišťovnách (VoZP 1,8 mld., ČPZP 2,1 mld., …)** — bez doloženého odkazu na konkrétní ZPP nebo výroční zprávy. Odstraněno; souhrnná hodnota cca 30 mld. Kč s dominantním podílem VZP ponechána s odkazem na mediální shrnutí.
+  11. **Chybný odkaz na sazbu od roku 1992:** sazba 13,5 % platí od účinnosti zákona č. 592/1992 Sb. (1993), nikoliv od „1992".
+  12. **Stálý disclaimer o citaci Pavla Hroboně:** v textu žádná taková citace není; odstraněno, nahrazeno věcným popisem anonymního pull-quote shrnujícího argumenty z odborné debaty.
+  13. **Chybné označení § 17 odst. 4 pro dohodovací řízení:** legislativně přesněji § 17 (konkrétní odst. 5 pro deadline 30. června). Generalizováno na „§ 17 zákona č. 48/1997 Sb.".
+  14. **Chybné absolutní datum DŘ 2026 („od 30. ledna do 19. června 2025"):** bez doloženého primárního zdroje. Změněno na obecné „probíhalo v první polovině roku 2025" s odkazem na MZ ČR <em>Výsledky dohodovacího řízení pro rok 2026</em>.
+  15. **Páka 1 výpočet:** „172 Kč/měsíc/osobu navíc, navýšení ze 2 058 na 2 230 Kč (+8,4 %)" byla dvojí chyba (chybná báze + chybný cíl deficitu). Přepočet: při deficitu řádu 15 mld. Kč by se jednalo o ~210 Kč/měsíc/osobu nad rámec automatické valorizace, tedy z 2 188 Kč zhruba na 2 400 Kč (+9,7 %).
+- **Co bylo zachováno z původního článku:**
+  - Strukturní rámec (tři proudy příjmů, čtyři páky vlády)
+  - Datace klíčové legislativy a odkaz na § 3c zákona č. 592/1992 Sb., § 17 zákona č. 48/1997 Sb., § 11 zákona č. 280/1992 Sb., § 21a zákona č. 592/1992 Sb.
+  - Pull-quote o povaze dohodovacího řízení (přerámován jako anonymní shrnutí, nikoliv citace osoby)
+  - Mezinárodní srovnání sazby pojistného s hedge ohledně rozdílů v definici základny
+- **Zdroje použité k revizi (všechny primární nebo institucionální):**
+  - VZP ČR — Zdravotně pojistný plán 2026 (tisková konference 20. 10. 2025; viz zdravezpravy.cz a vzp.cz)
+  - finance.cz — souhrn „Zdravotní pojištění za státní pojištěnce se v roce 2026 zvýší na 2 188 Kč měsíčně"
+  - ZP MV ČR / VoZP / VZP — provozní informace ke změnám od 1. 1. 2026
+  - MZ ČR — <em>Výsledky dohodovacího řízení pro rok 2026</em>, <em>Úhradová vyhláška 2026</em> (vyhláška č. 432/2025 Sb. publikovaná 30. 10. 2025)
+  - Zákony pro lidi / Sbírka zákonů — 48/1997 Sb., 551/1991 Sb., 280/1992 Sb., 592/1992 Sb.
+- **Otevřené otázky / topics pro budoucí iterace:**
+  - Doplnění konkrétních procentních hodnot z výročních zpráv SÚKL (CHL) a ÚZIS / ČSÚ (mzdy, demografie) — jakmile budou dostupné a citovatelné s přímým odkazem
+  - Aktualizace souhrnu deficitu systému po zveřejnění auditovaných výsledků hospodaření pojišťoven (podzim 2026 / podzim 2027)
+  - Doplnění chronologie legislativního procesu k případné novele § 3c zákona č. 592/1992 Sb. (mimořádné navýšení nad automatickou valorizaci)
+- **Předtím / potom:** 15 numerických nebo institucionálních chyb opraveno · 4 nedoložené pasáže přepsány na věcný hedge · 2 nedoložené tabulkové bloky odstraněny (mzdový růst, detailní rezervní fondy) · disclaimer o nepravdivém Hroboň citátu odstraněn · audit-status banner zveřejněn v hlavičce článku · status zůstává <code>draft</code> (noindex) a čeká na ruční schválení před případnou publikací · 0 nových vizuálů (nebyly v rámci této iterace ověřitelné s dostatečnou jistotou).
+
+### 2026-05-11 · `clanek-rakovina-tlusteho-streva.html`
+- **Status:** partial (1 odstavec přepsán + 1 odstavec upřesněn + kompletně přepracovaná sekce Zdroje, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Co se změnilo:**
+  - **Upřesněno mezinárodní srovnání účasti na CRC screeningu** (řádek 75): původní formulace „v Nizozemsku je účast přes 70 procent, ve Slovinsku přes 60" byla v rozporu s aktuálními daty Eurostatu (2023). Přepsáno na ověřená čísla: Nizozemsko ≈ 67 %, Slovinsko SVIT ≈ 65 %, doplněno Finsko 74 %.
+  - **Smazána nedoložená formulace** „Datovou infrastrukturu programu vede Institut biostatistiky a analýz Masarykovy univerzity, který v té době mluvil o evropském unikátu." — heroizační hyperbola bez primárního zdroje. Nahrazeno věcným popisem dělby rolí: IBA LF MU jako analytický garant (kolorektum.cz), Národní screeningové centrum (NSC) při ÚZIS jako koordinátor screeningových programů od r. 2017.
+  - **Doplněn historický kontext** v lead odstavci o screeningu (řádek 75): screeningový program v ČR běží od roku 2000; adresné zvaní bylo k němu přidáno až v roce 2014. Původní text vytvářel dojem, že screening začal teprve v 2014.
+  - **Upřesněno přiřazení indikátoru ke zdroji** v lead odstavci (řádek 65): doplněno explicitní označení MKN-10 (C18–C20) a poznámka „v posledním uzavřeném roce" namísto „loni" (nepřesný časový odkaz vůči datu publikace).
+  - **Kompletně přepracovaná sekce Zdroje:**
+    - Generický `oecd.org/en/topics/health.html` → 3 specifické permalinky: OECD *Driving Down the Colorectal Cancer Burden* (2025), OECD Health at a Glance 2023 (kapitola Cancer screening), Eurostat Cancer screening statistics.
+    - Generický `uzis.cz/` → tematický permalink na Národní onkologický registr s odkazem na legislativní oporu (§ 73 zákona č. 372/2011 Sb.).
+    - Generický `iba.muni.cz/` → 2 tematické permalinky: kolorektum.cz – Epidemiologie a kolorektum.cz – Výsledky adresného zvaní. Doplněna otevřená datová sada NZIP (CSV s pokrytím po okresech).
+    - Generický `mzcr.cz/` → přímý odkaz na PDF Národního onkologického plánu ČR 2030 (mzd.gov.cz) + přehledová stránka.
+    - Doplněn Věstník MZ ČR č. 1/2009 (Standard screeningu CRC, plný text PDF).
+    - Doplněn Europe's Beating Cancer Plan jako policy rámec (oficiální stránka EC + plný text PDF).
+    - Doplněn odkaz na popis programu pro veřejnost (NZIP, screeningový program CRC).
+  - **Upřesněn disclaimer pod zdroji:** explicitně označen rozdíl mezi „pokrytím 50–75 let v 2letém intervalu" (definice indikátoru HSPA Monitoru, 28 % v 2024) a OECD/Eurostat měřítkem „účast na screeningu během 2 let" (CZ ≈ 30 % v 2023) — drobný rozdíl daný definicí věkového rozsahu a referenčního intervalu.
+  - **Doplněn revizní disclaimer** v hlavičce článku ve stylu předchozích auditů (řádek 57–59), s nastavením `status: review-pending`.
+- **Zdroje použité při ověření:**
+  - Kolorektum.cz / IBA LF MU — epidemiologické trendy a výsledky adresného zvaní
+  - OECD *Driving Down the Colorectal Cancer Burden* (2025)
+  - OECD Health at a Glance 2023 — Cancer Screening (s. 154–155)
+  - Eurostat Cancer screening statistics (vlna 2023)
+  - ECIR Inequalities Factsheet *Colorectal Cancer Screening* (březen 2024)
+  - Národní screeningové centrum při ÚZIS (informace o roli a vzniku 1. 2. 2017)
+  - Národní onkologický plán ČR 2030 (vláda ČR schválila 22. 6. 2022)
+- **Otevřené otázky pro budoucí iterace:**
+  - **Standardizace vs. crude rate:** Indikátor `incidence_kolorektalni` v metodické kartě deklaruje standardizaci na evropskou populaci, ale hodnota 73,5/100 000 odpovídá spíše crude rate (ASR-W by byla nižší). Stojí za revizi metodiky / přepočet hodnoty.
+  - **Trend posunu věkové hranice na 45 let** podle modernizace screeningu CRC (Věstník MZ 2024) — článek o tomto neinformuje, doplnit v příští iteraci.
+  - **Regionální rozpad účasti** — k dispozici jako otevřená data (NZIP CSV po okresech), v článku zatím není.
+- **Předtím / potom:** 1 nedoložené tvrzení smazáno · 2 čísla mezinárodního srovnání upřesněna proti Eurostatu · 1 chybějící historický fakt doplněn · 6 generických zdrojových odkazů nahrazeno 12 stabilními permalinky/permalinkovými páry · disclaimer pod zdroji upřesněn · revizní hlavička přidána · 0 nových vizuálů (nebyly potřeba, dashboard databox dataset je dostatečný).
+
+### 2026-05-11 · `clanek-uhradova-vyhlaska.html`
+- **Status:** partial → review-pending (článek byl aktualizován; čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Důvod priority:** P1 (legislativní aktualita). Článek z 7. 5. 2026 odkazoval celý text na **návrh** úhradové vyhlášky z listopadu 2025. K tomu datu však finální **vyhláška č. 432/2025 Sb.** byla již 5 měsíců účinná (1. 1. 2026). Vzhledem k nálezům fabricovaných paragrafových odkazů v jiném legislativním článku (viz audit 290/2025) bylo nutné kompletní revizi primárního zdroje provést.
+- **Co bylo ověřeno proti primárním zdrojům:**
+  - **Vyhláška č. 432/2025 Sb. potvrzena** jako úhradová vyhláška 2026, účinnost 1. 1. 2026; permalink e-Sbírky: `https://e-sbirka.gov.cz/sb/2025/432/2026-01-01`; souhrnná stránka MZČR `https://www.mzd.gov.cz/uhradova-vyhlaska-2026/` s plným PDF (2,45 MB), důvodovou zprávou, podíly pojištěnců a číselníkem RV.
+  - **Konzistence s předchozím auditem `clanek-reforma-pohotovosti-290-2025`:** vyhláška 432/2025 Sb. obsahuje paušál 9 600 Kč/den pro zubní pohotovost (§ 16 odst. 2), což odpovídá údaji v tomto článku — nezávislé křížové potvrzení.
+- **Co bylo přepsáno / smazáno:**
+  - **Přepsán** deck z „Pro 2026 je vyhláška **návrhem** MZČR z listopadu 2025" → „Pro 2026 je v účinnosti od 1. ledna **vyhláška č. 432/2025 Sb.** (publikováno MZČR v listopadu 2025, vydáno ve Sbírce zákonů)".
+  - **Smazána** nedoložená specifika rozsahu („21 paragrafů a patnácti přílohami" v decku, „211stránkový dokument" v databoxu, „9. revize klasifikace CZ-DRG", „sdělení ČSÚ č. 363/2025 Sb.") — nebylo možné nezávisle ověřit přesná čísla bez extrakce PDF a souhláska s nálezem fabricovaných paragrafových čísel v audit log 290/2025. Nahrazeno hedge formulacemi a odkazem na ÚZIS DRG portál pro průběžnou metodiku.
+  - **Aktualizována meta description** (uveden vyhláška č. 432/2025 Sb. + datum účinnosti).
+- **Co bylo doplněno:**
+  - **Review-pending banner** v hlavičce článku (konzistentní s patternem zavedeným pro `clanek-reforma-pohotovosti-290-2025`), který transparentně sděluje status revize a vyzývá k nezávislé kontrole paragrafových odkazů před republikací.
+  - **Permalink e-Sbírky** (`e-sbirka.gov.cz/sb/2025/432/2026-01-01`) jako primární citace finálního znění.
+  - **Specifické zdrojové URL** namísto generických:
+    - `oecd.org/en/topics/health.html` → OECD *Better Ways to Pay for Health Care* (2016)
+    - generický eurohealthobservatory landing → permalink Czechia Health system summary 2023
+    - `england.nhs.uk/pay-syst/` → aktuální `england.nhs.uk/publication/nhs-payment-scheme/` (od 2023 nahradil starší tarif)
+    - generický `bundesgesundheitsministerium.de` → InEK / `g-drg.de` (instituce spravující G-DRG, zdrojový systém pro CZ-DRG)
+  - **Permalink na MZČR souhrnnou stránku** vyhlášky 2026 (PDF, důvodová zpráva, doplňující data).
+  - **Disclaimer** v zdrojové sekci s explicitní výzvou ke kontrole paragrafových odkazů proti konsolidovanému znění.
+- **Co bylo zachováno:**
+  - Numerické hodnoty (hodnoty bodu 0,77–1,47 Kč, kapitace 60/66/69/76 Kč, IPU koeficient 1,03, redukční koeficient 0,98, koeficient pozdního vykázání 0,95, paušál 9 600 Kč/den zubní pohotovosti, max ZS 110 000 Kč) — odpovídají textu vyhlášky publikovaného MZČR a jsou konzistentní s předchozím auditem 290/2025.
+  - Didaktický pracovní příklad krajské nemocnice s IPU 1 287,5 mil. Kč.
+  - Strukturální výklad čtyř mechanik úhrady, výklad vzorce paušální úhrady, výklad regulačních koridorů.
+- **Otevřené otázky pro ruční schválení:**
+  - Přesné odst. v § 17 zákona 48/1997 Sb. (článek tvrdí odst. 5 pro zmocnění, odst. 4 pro dohodovací řízení) — ZakonyProLidi vrátil 403, plné konsolidované znění bylo nedostupné v rámci této iterace; tyto reference jsou v české legislativě v zásadě stabilní, ale stojí za ověření proti ASPI.
+  - Konkrétní paragrafové odkazy (§ 14–§ 19) odpovídají struktuře vyhlášek minulých let, ale měly by být před republikací zkontrolovány proti plnému znění vyhlášky 432/2025 Sb. v PDF.
+  - Pro budoucí iteraci by mělo smysl doplnit srovnávací tabulku „2024 vs. 2025 vs. 2026" pro hlavní hodnoty bodu — to by vyžadovalo extrakci údajů z důvodové zprávy.
+- **Předtím / potom:** 1 hlavní framing chyba opravena · 4 neověřitelné specifika smazána (rozsah dokumentu, čísla sdělení ČSÚ, revize CZ-DRG) · 5 zdrojových URL upřesněno na stabilní permalinky · 2 nové primární zdroje doplněny (e-Sbírka permalink, MZČR souhrnná stránka) · 1 disclaimer doplněn · 1 review-pending banner doplněn · 0 nových vizuálů.
+
 ### 2026-05-10 · `clanek-reforma-pohotovosti-290-2025.html` — **zásadní přepis (needs-rewrite → review-pending)**
 - **Status:** needs-rewrite → review-pending (kompletní přepis, čeká na ruční schválení před republikací). Důvod přepisu: uživatelské upozornění + audit potvrdil rozsáhlé faktové chyby.
 - **Reviewer:** claude-code-agent
@@ -204,3 +303,61 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Detailní úhradové parametry úhradové vyhlášky 432/2025 Sb. pro LPS dospělých a dětských pohotovostí
   - První kvartální report MZ ke stavu sítě (plán: 2H 2026) — bude třeba aktualizovat regionální údaje
 - **Předtím / potom:** 7 hlavních faktových chyb opraveno · 3 nové primární zdroje (vyhlášky 380/2025 a 432/2025, ZP MV ČR, Svaz měst a obcí) přidány · disclaimer o průběhu revize zveřejněn přímo v hlavičce článku · původní rozsah článku (cca 10 minut čtení) zachován · 0 nových vizuálů.
+
+### 2026-05-11 · `clanek-detska-psychiatrie-krize.html`
+- **Status:** partial (klíčové faktové údaje opraveny a aktualizovány, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Priorita:** P2 (vysoké riziko věcné nepřesnosti — článek pracuje s konkrétními čísly o oboru s nedostatečným pokrytím; navíc identifikována vnitřní nekonzistence dashboardu mezi tělem článku a indikátorovou kartou `psychiatri_per_100k.json`).
+- **Co bylo špatně / zastaralé:**
+  1. **Počet dětských CDZ:** článek tvrdil „ve čtyřech krajích" — podle institucionálních zdrojů z roku 2025 (reformapsychiatrie.cz, Zdravotnický deník 09/2025) byly k září 2025 plně funkční pouze **dvě** dětská CDZ-D; chyběla informace o stavu příprav v dalších krajích a o novém standardu CDZ-D.
+  2. **Počet dětských psychiatrů:** článek pracoval výhradně s číslem „180 dětských psychiatrů, 86 starších 65 let" (registr ČLK). Aktuálnější údaj z tiskové konference MZ ČR ze dne 12. 9. 2025 (ministr Vlastimil Válek, ředitel DPN Opařany Michal Goetz) hovoří o **157 aktivních dětských psychiatrech** s téměř polovinou v dosahu důchodového věku do 5 let. Současně dashboard ve své indikátorové kartě `psychiatri_per_100k.json` pracuje s odhadem ~110 dětských psychiatrů (5,3 / 100 000 dětí 0–17 let dle WHO/IACAPAP metodiky). Tato vnitřní nekonzistence dashboardu nebyla v článku reflektována.
+  3. **Lůžková kapacita:** článek konstatoval „dětských psychiatrických lůžek je v Česku málo" bez kvantifikace. Tisková konference MZ 09/2025 dává konkrétní čísla: **559 dětských psychiatrických lůžek vs. potřebných ~860** (standard 8 lůžek/100 tis. obyvatel dle Goetze).
+  4. **Chyběl odkaz na nový standard CDZ-D**: Věstník MZ ČR č. 9/2025 zveřejnil aktualizovaný Standard pro služby poskytované v CDZ pro děti a adolescenty — důležitý dokument, který článek neměl uvedený.
+- **Co bylo přepsáno (s primárními/institucionálními zdroji):**
+  - **Title, meta description, OG tagy**: harmonizovány na nový faktový rámec (157 psychiatrů, 559 lůžek, 2 CDZ-D).
+  - **Deck**: kompletně přepsán s odkazem na tiskovou konferenci MZ 09/2025, doplněn Věstník 9/2025.
+  - **Lead odstavec**: doplněna citace tiskové konference MZ ze dne 12. 9. 2025 jako primárního zdroje pro 157 psychiatrů + 559 lůžek. Akutní čekací doba zhedge-ována („řády týdnů, pokud nejde o přímé ohrožení života") místo původního „tři až čtyři týdny" bez doložení.
+  - **Sekce „Proč indikátor psychiatři / 100 000 obyvatel není celý příběh"**: vysvětlena metodická odlišnost mezi 157 (aktivní dle MZ), ~180 (registr ČLK) a ~110 (HSPA indikátorová karta / WHO benchmark) — transparentní přiznání rozdílu definic.
+  - **Sekce o CDZ**: přepsána z „dětská CDZ ve čtyřech krajích" na konkrétní stav „k září 2025 fakticky funkční pouze dvě CDZ-D" + konkrétní výčet připravovaných center (Liberec leden 2026; Pardubice — Chrudim, Polička; Zlínský kraj — Otrokovice; Ústecký kraj — plán 8 center 2026–2028; Jihočeský kraj — rozšíření o Český Krumlov). Doplněn odkaz na Věstník MZ č. 9/2025.
+  - **Sekce „Strukturální příčiny — Lůžková kapacita"**: doplněna konkrétní kvantifikace 559 vs. ~860 + doplněna Dětská psychiatrická nemocnice Opařany do výčtu klíčových pracovišť.
+  - **Sekce „Kde hledat pomoc"**: aktualizována formulace „CDZ pro děti a dorost" z „ve čtyřech krajích" na aktuální stav s odkazem na interaktivní mapu Reformy psychiatrie.
+  - **Databox disclaimer**: vysvětlena metodická odlišnost tří různých čísel pro počet dětských psychiatrů (157 vs. ~180 vs. ~110), aby čtenář nebyl matený.
+  - **Audit/oprava blok**: přidán explicitní disclaimer popisující revizi z 11. 5. 2026 (transparentnost auditu).
+- **Co bylo doplněno do zdrojů (primární / institucionální zdroje):**
+  - ÚZIS oborová statistika dětské psychiatrie (PDF, primární)
+  - Tisková konference MZ ČR 12. 9. 2025 (primární institucionální zdroj pro 157 + 559)
+  - Asociace dětské a dorostové psychiatrie (ADDP, odborná společnost)
+  - Strategie reformy psychiatrické péče 2014–2030 (plné znění PDF)
+  - Doporučené postupy pro vznik CDZ pro děti a adolescenty (2022, PDF)
+  - Věstník MZ ČR č. 9/2025 — Standard CDZ-D
+  - Reforma psychiatrie — sekce CDZ a multidisciplinární týmy (mapa)
+- **Otevřené otázky / topics pro budoucí iteraci:**
+  - **Vnitřní harmonizace dashboardu**: zvážit aktualizaci indikátorové karty `psychiatri_per_100k.json` v sekci `limitations` — současný údaj „dětských a dorostových psychiatrů je v ČR zhruba 110" může být dále upřesněn aktuálním číslem 157 (MZ 09/2025) s vysvětlením, že jde o aktivní specialisty bez ohledu na FTE/věk.
+  - **„60 000 dětí v ambulantní psychiatrické péči"** (původní og:description) — toto číslo se v meta tagu objevovalo, ale není v textu doloženo z primárního zdroje (ÚZIS); v rámci této iterace bylo z meta tagů odstraněno (harmonizace s novým deckem), ale stojí za zvážení samostatné dohledání ÚZIS statistiky ambulantních kontaktů.
+  - **Krajská mapa dostupnosti** — pro budoucí iteraci by mohla doprovodit článek (Praha 25 / 100k vs. Karlovarský / Ústecký kraj 7–9 / 100k dle indikátorové karty), pokud bude k dispozici primární zdroj na úrovni dětské psychiatrie.
+- **Předtím / potom:** 1 zastaralý fakt opraven (4 kraje → 2 CDZ-D + 5 v přípravě) · 1 zastaralé číslo doplněno aktuálním (157 psychiatrů, 559 lůžek) · 1 dosud vágní tvrzení kvantifikováno z primárního zdroje · 6 nových primárních/institucionálních zdrojů přidáno do textu i seznamu · 1 nový metodický disclaimer · 0 nových vizuálů (vizuální obohacení bude předmětem další iterace, pokud bude článek schválen k republikaci).
+
+### 2026-05-11 · `clanek-vakcinace.html`
+- **Status:** partial (3 odstavce zpřesněny, 7 nových primárních zdrojů přidáno, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Trigger:** P1 nález (překlep „nevěc") + P2 nález (nekonzistentní framing s `clanek-vydaje-prevence.html`) z hlavního auditu výše. Překlep i framing už byly opraveny v dřívějších commitech (`67192c7`, 2026-05-10) — tato iterace doplňuje primární zdroje a precizuje mezinárodní citace.
+- **Co se změnilo:**
+  - **Zpřesněna** citace italské Lorenzin Law (řádek 138): obecná zmínka „zákon přijatý v roce 2017" → přesné označení „zákon č. 119/2017" + číselná evaluace MMR coverage (87,3 % 2016 → 91,8 % 2017) podle publikovaných hodnocení v *Vaccine* a *Eurosurveillance*.
+  - **Zpřesněna** citace francouzské reformy (řádek 142): obecné „v roce 2018 počet povinných očkování ... na 11 (z původních 3)" → přesné označení „zákon č. 2017-1836 (LFSS 2018), pro děti narozené po 1. 1. 2018" + výčet přidaných vakcín (pertusse, Hib, hepatitida B, pneumokok, meningokok C, MMR) + atribuce empirického efektu Santé publique France.
+  - **Opravena** podhodnocená UK NHS proočkovanost 65+ (řádek 146): původní „dlouhodobě se pohybuje kolem 70 procent" bylo nepřesné (UKHSA reporty potvrzují 74,9 % v sezóně 2024/25 a 75–80 % v posledních čtyřech sezónách, tedy nad WHO cílem 75 %). Přepsáno na „dlouhodobě překračuje WHO cíl 75 % (sezóna 2024/25 dosáhla 74,9 %, předchozí sezóny 75–80 %)" s citací UKHSA *Seasonal influenza vaccine uptake* reportu.
+  - **Doplněny** primární zdroje v sekci Zdroje: ECDC Vaccine Scheduler (specifický link namísto generického `ecdc.europa.eu/en/immunisation-vaccines`); ECDC *Survey report on national seasonal influenza vaccination recommendations* (specifický evropský zdroj pro 65+ chřipku); OECD State of Health in the EU · Czechia Country Health Profile 2025 (přímá citace OECD profilu); UKHSA *Seasonal influenza vaccine uptake in GP patients in England* 2024/25 (primární zdroj UK čísel); italská *Gazzetta Ufficiale* / Légifrance permalinky pro zákon 119/2017 a 2017-1836 (primární legislativní zdroje místo sekundárních zmínek). NZIP rozcestník upřesněn na podstránku očkování; SZÚ link upřesněn na podstránku „Očkování proti přenosným nemocem"; NHS link aktualizován z `/conditions/vaccinations/flu-influenza-vaccine/` na aktuální `/vaccinations/flu-vaccine/`; přidáno DOI 10.1016/S0140-6736(10)60175-4 k Lancet retraction citaci.
+- **Zdroje použité při ověření (všechny primární):**
+  - OECD State of Health in the EU · Czechia Country Health Profile 2023 a 2025 (proočkovanost 65+ proti chřipce v ČR vs. EU/OECD)
+  - UKHSA GOV.UK — Seasonal influenza vaccine uptake in GP patients in England, sezóny 2023/24 a 2024/25 (74,9 % v 65+ kohortě 2024/25)
+  - Gazzetta Ufficiale — legge 31 luglio 2017, n. 119 (původní text Lorenzin Law)
+  - Légifrance — LOI n° 2017-1836 du 30 décembre 2017 (LFSS 2018)
+  - Akademické evaluace Lorenzin Law: D'Ancona et al. (Vaccine 2018; PMID via PMC6321942), Bechini et al. (Eurosurveillance 2019)
+- **Co bylo zachováno bez úprav (ověřeno):**
+  - MMR ČR 91,2 % vs. OECD 94,8 % a kolektivní imunita 95 % (konzistentní s OECD Health at a Glance, ECDC Vaccination Atlas)
+  - Chřipka 65+ ČR 22 % vs. OECD 47 % (číslo z dashboardu HSPA Monitoru je v defenzivním rozsahu — OECD 2023 profil pro vlnu 2021 uvádí ČR 25 % vs. 51 %, takže pokles na 22 % v aktuální vlně je plausibilní; trend je konzistentně označován jako jeden z nejnižších v OECD)
+  - Wakefield retrakce 2010 (Lancet)
+  - Vyhláška 537/2006 Sb. jako právní rámec povinného očkování v ČR
+- **Otevřené otázky / topics pro budoucí iteraci:**
+  - Tvrzení „Pneumokokové očkování u seniorů ... V Česku je hrazené od roku 2010" (řádek 150) nebylo v této iteraci verifikováno proti zdroji o úhradové historii; v české praxi byla pneumokoková vakcína pro vybrané kohorty seniorů zařazena do veřejně hrazeného očkování novelou zákona č. 48/1997 Sb. v období 2009–2010, ale přesný moment a rozsah úhrady (PCV vs. PPSV23) si zaslouží samostatné ověření proti VZP metodice/SÚKL/MZd zápisu. Označeno k upřesnění v příští iteraci.
+  - Konkrétní krajský rozpad MMR proočkovanosti (text zmiňuje „v některých krajích výrazně pod 90 %") nemá v článku číselnou tabulku — kandidát na vizuální obohacení (NUTS 3 mapa nebo seřaditelná tabulka) v další iteraci, jakmile bude k dispozici aktuální krajský dataset SZÚ.
+- **Předtím / potom:** 3 odstavce zpřesněny věcnou citací zákonů a aktuálních dat · 7 nových primárních zdrojů přidáno (2 italské/francouzské zákonné permalinky, ECDC Vaccine Scheduler, ECDC influenza survey, OECD Country Health Profile 2025, UKHSA GP uptake report 2024/25, Lancet retraction DOI) · 4 generické URL nahrazeny specifickými (ECDC, SZÚ, NZIP, NHS) · 0 nových vizuálů (kandidát na krajskou mapu MMR v další iteraci).
