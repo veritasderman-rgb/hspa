@@ -675,7 +675,7 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - ÚZIS — Národní registr hospitalizovaných (NRH); metodická karta indikátoru `mortalita_inhosp_cmp` (interní datový kontrakt HSPA).
   - Eurostat — HLTH_CD_ASDR2 databrowser (cerebrovaskulární mortalita populace, ESP 2013).
   - RES-Q registry (qualityregistry.eu); SITS International; Riks-Stroke; Dansk Apopleksiregister (DAP, RKKP); SSNAP.
-  - Cerebrovaskulární sekce ČNS (czech-neuro.cz/sekce/cerebrovaskularni-sekce).
+  - Cerebrovaskulární sekce ČNS (czech-neuro.cz/sekce/sekce-cerebrovaskularni).
 - **Otevřené otázky pro ruční rozhodnutí redakce / kandidáti na další iteraci:**
   1. **Rekonciliace `mortalita_kardiovaskularni` v `data/indicators.json`** — společná otevřená otázka pro celý kaskádový cluster (kardiovaskularni-mortalita, akutni-infarkt, cmp-iktova-centra). Doporučení: opravit hodnotu na OECD H@G 2025 (~370–380 / 100 000 ČR, 2023) nebo přejít na Eurostat `hlth_cd_asdr2` (ESP 2013); v každém případě fixovat jeden zdroj a aktualizovat všechny tři články shodně.
   2. **Konkrétní český door-to-needle median 2024** — pokud Cerebrovaskulární sekce ČNS nebo RES-Q publikuje, dohledat a doplnit jako konkrétní český benchmark vůči Helsinki cíli pod 20 min.
