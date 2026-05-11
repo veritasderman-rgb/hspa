@@ -146,6 +146,37 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
 - **Otevřené otázky:** žádné kritické. Pro budoucí iteraci stojí za zvážení regionální mapa expozice (Moravskoslezský kraj × Praha × jih ČR) — ověřitelná z ČHMÚ.
 - **Předtím / potom:** 1 přestřelený faktový odhad opraven · 1 nedoložená formulace nahrazena věcnou s primárním zdrojem · 1 podhodnocení kvantifikace opraveno · 3 nové permalinky primárních zdrojů (EUR-Lex ELI, SFŽP, Zákony pro lidi) · 1 disclaimer upřesněn · 0 nových vizuálů.
 
+### 2026-05-11 · `clanek-detska-psychiatrie-krize.html`
+- **Status:** partial → review-pending (3 přepsané odstavce, 1 doplněný disclaimer, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Priorita:** P2 (vysoké riziko věcné nepřesnosti — konkrétní čísla bez metodologického ukotvení; v rámci P2.3 nálezu auditu byla dětská psychiatrie explicitně označena jako oblast s vágními formulacemi)
+- **Co bylo špatně (verifikováno proti metodické kartě indikátoru `psychiatri_per_100k`, webu reformapsychiatrie.cz a publikacím OECD):**
+  1. **Vnitřní rozpor s vlastním datovým kontraktem portálu:** Článek uváděl „kolem 180 dětských psychiatrů" jako prostý odhad ČPS ČLS JEP, ale metodická karta indikátoru `psychiatri_per_100k` (sekce `limitations`) uvádí „dětských a dorostových psychiatrů je v ČR zhruba 110" podle NRZP ÚZIS / OECD specialty kódu 305. Rozdíl 110 vs. 180 je metodologický (atestovaní a aktivně praktikující vs. head count včetně lékařů v rezidenčním programu a v důchodovém věku) a článek tuto distinkci nevysvětloval.
+  2. **Chybné datování Strategie reformy psychiatrické péče:** Článek tvrdil, že reforma „se formálně datuje od roku 2013, kdy MZ zahájilo přípravné práce, a od roku 2017, kdy byl vydán Strategický rámec reformy psychiatrické péče". Strategie reformy psychiatrické péče byla schválena MZ ČR **8. 10. 2013** (zdroj: reformapsychiatrie.cz, sekce „O reformě"); rok 2017 odpovídá startu pilotních CDZ z OP Zaměstnanost, ne vydání nového strategického dokumentu. Metodická karta indikátoru rovněž uvádí „reforma psychiatrické péče (od 2013)".
+  3. **Nepřesný zdroj pro NHS CAMHS čekací doby:** Tvrzení „v Británii jsou čekací doby na tier 3 péči v průměru přes 18 týdnů" bylo bez konkrétní citace. Doplněn odkaz na NHS England *Mental Health Services Monthly Statistics* (datové podsestavy CYP MH) a kontext NHS Long Term Plan s ambicí 4 týdnů od referrálu.
+  4. **Fabricovaný název publikace OECD:** Disclaimer uváděl odkaz na „OECD Mental Health Policy Report 2023" — pod tímto názvem OECD v roce 2023 žádnou publikaci nevydalo. Skutečné relevantní publikace OECD k duševnímu zdraví: *A New Benchmark for Mental Health Systems* (OECD 2021) a kapitola o duševním zdraví v *Health at a Glance 2023*. Disclaimer opraven na skutečné publikace.
+- **Co bylo přepsáno (3 odstavce + 1 disclaimer):**
+  - Sekce „Proč indikátor psychiatři / 100 000 obyvatel není celý příběh", odstavec o 180 psychiatrech — rozšířen o metodologickou distinkci 110 vs. 180 s explicitním propojením na metodickou kartu dashboardu (`indicator.html?id=psychiatri_per_100k`).
+  - Sekce „Reforma psychiatrické péče 2013 — kde jsme dnes", první odstavec — opraveno datum schválení Strategie 8. 10. 2013; rok 2017 přesněji zarámován jako start pilotních CDZ z OPZ.
+  - Sekce „Co dělá zahraničí", odstavec o CAMHS — doplněn konkrétní zdroj NHS England MHSMS a kontext NHS Long Term Plan target 4 týdny.
+  - Disclaimer pod zdroji — opraven název neexistující OECD publikace na *A New Benchmark for Mental Health Systems* (2021) a *Health at a Glance 2023*; doplněn samostatný revizní disclaimer s datem.
+- **Co bylo zachováno (s vědomím limitací):**
+  - Titulek „Sto osmdesát psychiatrů na milion dětí" jako rétorické vyjádření (~180 ku ~1,8 mil. dětí 0–18 = cca 100 / milion). Body článku nyní vysvětluje, že 180 je horní hranice metodologického rozmezí.
+  - Čekací doby 4–8 měsíců neakutní a 3–4 týdny akutní — článek od počátku explicitně přiznává, že nejde o registrová data ÚZIS, ale o opakované průzkumy ČPS ČLS JEP a neziskových organizací. Tento hedge zachován.
+  - Čtyři kraje s dětskými CDZ — konzistentní s metodickou kartou indikátoru (sekce `determinants`: „dětská CDZ jsou zatím k dispozici jen ve 4 krajích").
+- **Zdroje použité k revizi (všechny primární nebo institucionální):**
+  - Metodická karta indikátoru `psychiatri_per_100k` (interní datový kontrakt portálu, sekce `limitations`, `determinants`, `importance`)
+  - reformapsychiatrie.cz — sekce „O reformě" (datum schválení Strategie 8. 10. 2013)
+  - NHS England — *Mental Health Services Monthly Statistics*, datové podsestavy Children and Young People's Mental Health
+  - NHS Long Term Plan (cíl 4 týdny pro nové CYP MH služby)
+  - OECD — *A New Benchmark for Mental Health Systems* (2021); *Health at a Glance 2023* (kapitola o duševním zdraví)
+  - ÚZIS — Národní registr zdravotnických pracovníků (kódy specializované způsobilosti 305, 309, 306)
+- **Otevřené otázky / topics pro budoucí iterace:**
+  - Přesné rozdělení head count vs. atestovaní u dětských a dorostových psychiatrů — bylo by užitečné získat aktuální ÚZIS NRZP roční publikaci „Lékaři, zubní lékaři a farmaceuti" pro tabulku podle oboru a kraje (kód 305) a doplnit do metodické karty indikátoru i článku přesné číslo místo metodologického rozmezí.
+  - Kvantifikace odhadu „86 ze 180" v lead odstavci — toto konkrétní číslo (86) je v textu uváděno jako odhad ČPS ČLS JEP, ale chybí konkrétní zdrojový dokument; pro budoucí iteraci dohledat původní zdroj nebo nahradit kvalitativním vyjádřením („přibližně polovina ve věku 65+").
+  - Regionální distribuce dětských CDZ — Karlovarský × Vysočina × ostatní kraje by zasloužila samostatnou mapu NUTS 3, ale jen pokud bude k dispozici primární zdroj (např. ÚZIS Národní registr poskytovatelů zdravotních služeb).
+- **Předtím / potom:** 4 metodologické nepřesnosti opraveny · 3 přepsané odstavce · 1 nový disclaimer s revizním datem · 4 nové primární zdroje (metodická karta dashboardu, reformapsychiatrie.cz s konkrétním datem, NHS MHSMS, OECD 2021 publikace) · 0 nových vizuálů (nebyly ověřitelné v rámci této iterace; mapa dětských CDZ ponechána pro budoucí iteraci po dohledání primárního zdroje).
+
 ### 2026-05-10 · `clanek-reforma-pohotovosti-290-2025.html` — **zásadní přepis (needs-rewrite → review-pending)**
 - **Status:** needs-rewrite → review-pending (kompletní přepis, čeká na ruční schválení před republikací). Důvod přepisu: uživatelské upozornění + audit potvrdil rozsáhlé faktové chyby.
 - **Reviewer:** claude-code-agent
