@@ -245,6 +245,37 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - **Regionální rozpad účasti** — k dispozici jako otevřená data (NZIP CSV po okresech), v článku zatím není.
 - **Předtím / potom:** 1 nedoložené tvrzení smazáno · 2 čísla mezinárodního srovnání upřesněna proti Eurostatu · 1 chybějící historický fakt doplněn · 6 generických zdrojových odkazů nahrazeno 12 stabilními permalinky/permalinkovými páry · disclaimer pod zdroji upřesněn · revizní hlavička přidána · 0 nových vizuálů (nebyly potřeba, dashboard databox dataset je dostatečný).
 
+### 2026-05-11 · `clanek-uhradova-vyhlaska.html`
+- **Status:** partial → review-pending (článek byl aktualizován; čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Důvod priority:** P1 (legislativní aktualita). Článek z 7. 5. 2026 odkazoval celý text na **návrh** úhradové vyhlášky z listopadu 2025. K tomu datu však finální **vyhláška č. 432/2025 Sb.** byla již 5 měsíců účinná (1. 1. 2026). Vzhledem k nálezům fabricovaných paragrafových odkazů v jiném legislativním článku (viz audit 290/2025) bylo nutné kompletní revizi primárního zdroje provést.
+- **Co bylo ověřeno proti primárním zdrojům:**
+  - **Vyhláška č. 432/2025 Sb. potvrzena** jako úhradová vyhláška 2026, účinnost 1. 1. 2026; permalink e-Sbírky: `https://e-sbirka.gov.cz/sb/2025/432/2026-01-01`; souhrnná stránka MZČR `https://www.mzd.gov.cz/uhradova-vyhlaska-2026/` s plným PDF (2,45 MB), důvodovou zprávou, podíly pojištěnců a číselníkem RV.
+  - **Konzistence s předchozím auditem `clanek-reforma-pohotovosti-290-2025`:** vyhláška 432/2025 Sb. obsahuje paušál 9 600 Kč/den pro zubní pohotovost (§ 16 odst. 2), což odpovídá údaji v tomto článku — nezávislé křížové potvrzení.
+- **Co bylo přepsáno / smazáno:**
+  - **Přepsán** deck z „Pro 2026 je vyhláška **návrhem** MZČR z listopadu 2025" → „Pro 2026 je v účinnosti od 1. ledna **vyhláška č. 432/2025 Sb.** (publikováno MZČR v listopadu 2025, vydáno ve Sbírce zákonů)".
+  - **Smazána** nedoložená specifika rozsahu („21 paragrafů a patnácti přílohami" v decku, „211stránkový dokument" v databoxu, „9. revize klasifikace CZ-DRG", „sdělení ČSÚ č. 363/2025 Sb.") — nebylo možné nezávisle ověřit přesná čísla bez extrakce PDF a souhláska s nálezem fabricovaných paragrafových čísel v audit log 290/2025. Nahrazeno hedge formulacemi a odkazem na ÚZIS DRG portál pro průběžnou metodiku.
+  - **Aktualizována meta description** (uveden vyhláška č. 432/2025 Sb. + datum účinnosti).
+- **Co bylo doplněno:**
+  - **Review-pending banner** v hlavičce článku (konzistentní s patternem zavedeným pro `clanek-reforma-pohotovosti-290-2025`), který transparentně sděluje status revize a vyzývá k nezávislé kontrole paragrafových odkazů před republikací.
+  - **Permalink e-Sbírky** (`e-sbirka.gov.cz/sb/2025/432/2026-01-01`) jako primární citace finálního znění.
+  - **Specifické zdrojové URL** namísto generických:
+    - `oecd.org/en/topics/health.html` → OECD *Better Ways to Pay for Health Care* (2016)
+    - generický eurohealthobservatory landing → permalink Czechia Health system summary 2023
+    - `england.nhs.uk/pay-syst/` → aktuální `england.nhs.uk/publication/nhs-payment-scheme/` (od 2023 nahradil starší tarif)
+    - generický `bundesgesundheitsministerium.de` → InEK / `g-drg.de` (instituce spravující G-DRG, zdrojový systém pro CZ-DRG)
+  - **Permalink na MZČR souhrnnou stránku** vyhlášky 2026 (PDF, důvodová zpráva, doplňující data).
+  - **Disclaimer** v zdrojové sekci s explicitní výzvou ke kontrole paragrafových odkazů proti konsolidovanému znění.
+- **Co bylo zachováno:**
+  - Numerické hodnoty (hodnoty bodu 0,77–1,47 Kč, kapitace 60/66/69/76 Kč, IPU koeficient 1,03, redukční koeficient 0,98, koeficient pozdního vykázání 0,95, paušál 9 600 Kč/den zubní pohotovosti, max ZS 110 000 Kč) — odpovídají textu vyhlášky publikovaného MZČR a jsou konzistentní s předchozím auditem 290/2025.
+  - Didaktický pracovní příklad krajské nemocnice s IPU 1 287,5 mil. Kč.
+  - Strukturální výklad čtyř mechanik úhrady, výklad vzorce paušální úhrady, výklad regulačních koridorů.
+- **Otevřené otázky pro ruční schválení:**
+  - Přesné odst. v § 17 zákona 48/1997 Sb. (článek tvrdí odst. 5 pro zmocnění, odst. 4 pro dohodovací řízení) — ZakonyProLidi vrátil 403, plné konsolidované znění bylo nedostupné v rámci této iterace; tyto reference jsou v české legislativě v zásadě stabilní, ale stojí za ověření proti ASPI.
+  - Konkrétní paragrafové odkazy (§ 14–§ 19) odpovídají struktuře vyhlášek minulých let, ale měly by být před republikací zkontrolovány proti plnému znění vyhlášky 432/2025 Sb. v PDF.
+  - Pro budoucí iteraci by mělo smysl doplnit srovnávací tabulku „2024 vs. 2025 vs. 2026" pro hlavní hodnoty bodu — to by vyžadovalo extrakci údajů z důvodové zprávy.
+- **Předtím / potom:** 1 hlavní framing chyba opravena · 4 neověřitelné specifika smazána (rozsah dokumentu, čísla sdělení ČSÚ, revize CZ-DRG) · 5 zdrojových URL upřesněno na stabilní permalinky · 2 nové primární zdroje doplněny (e-Sbírka permalink, MZČR souhrnná stránka) · 1 disclaimer doplněn · 1 review-pending banner doplněn · 0 nových vizuálů.
+
 ### 2026-05-10 · `clanek-reforma-pohotovosti-290-2025.html` — **zásadní přepis (needs-rewrite → review-pending)**
 - **Status:** needs-rewrite → review-pending (kompletní přepis, čeká na ruční schválení před republikací). Důvod přepisu: uživatelské upozornění + audit potvrdil rozsáhlé faktové chyby.
 - **Reviewer:** claude-code-agent
