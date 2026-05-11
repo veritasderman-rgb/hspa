@@ -173,3 +173,28 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Detailní úhradové parametry úhradové vyhlášky 432/2025 Sb. pro LPS dospělých a dětských pohotovostí
   - První kvartální report MZ ke stavu sítě (plán: 2H 2026) — bude třeba aktualizovat regionální údaje
 - **Předtím / potom:** 7 hlavních faktových chyb opraveno · 3 nové primární zdroje (vyhlášky 380/2025 a 432/2025, ZP MV ČR, Svaz měst a obcí) přidány · disclaimer o průběhu revize zveřejněn přímo v hlavičce článku · původní rozsah článku (cca 10 minut čtení) zachován · 0 nových vizuálů.
+
+### 2026-05-11 · `clanek-vakcinace.html`
+- **Status:** partial (3 odstavce zpřesněny, 7 nových primárních zdrojů přidáno, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Trigger:** P1 nález (překlep „nevěc") + P2 nález (nekonzistentní framing s `clanek-vydaje-prevence.html`) z hlavního auditu výše. Překlep i framing už byly opraveny v dřívějších commitech (`67192c7`, 2026-05-10) — tato iterace doplňuje primární zdroje a precizuje mezinárodní citace.
+- **Co se změnilo:**
+  - **Zpřesněna** citace italské Lorenzin Law (řádek 138): obecná zmínka „zákon přijatý v roce 2017" → přesné označení „zákon č. 119/2017" + číselná evaluace MMR coverage (87,3 % 2016 → 91,8 % 2017) podle publikovaných hodnocení v *Vaccine* a *Eurosurveillance*.
+  - **Zpřesněna** citace francouzské reformy (řádek 142): obecné „v roce 2018 počet povinných očkování ... na 11 (z původních 3)" → přesné označení „zákon č. 2017-1836 (LFSS 2018), pro děti narozené po 1. 1. 2018" + výčet přidaných vakcín (pertusse, Hib, hepatitida B, pneumokok, meningokok C, MMR) + atribuce empirického efektu Santé publique France.
+  - **Opravena** podhodnocená UK NHS proočkovanost 65+ (řádek 146): původní „dlouhodobě se pohybuje kolem 70 procent" bylo nepřesné (UKHSA reporty potvrzují 74,9 % v sezóně 2024/25 a 75–80 % v posledních čtyřech sezónách, tedy nad WHO cílem 75 %). Přepsáno na „dlouhodobě překračuje WHO cíl 75 % (sezóna 2024/25 dosáhla 74,9 %, předchozí sezóny 75–80 %)" s citací UKHSA *Seasonal influenza vaccine uptake* reportu.
+  - **Doplněny** primární zdroje v sekci Zdroje: ECDC Vaccine Scheduler (specifický link namísto generického `ecdc.europa.eu/en/immunisation-vaccines`); ECDC *Survey report on national seasonal influenza vaccination recommendations* (specifický evropský zdroj pro 65+ chřipku); OECD State of Health in the EU · Czechia Country Health Profile 2025 (přímá citace OECD profilu); UKHSA *Seasonal influenza vaccine uptake in GP patients in England* 2024/25 (primární zdroj UK čísel); italská *Gazzetta Ufficiale* / Légifrance permalinky pro zákon 119/2017 a 2017-1836 (primární legislativní zdroje místo sekundárních zmínek). NZIP rozcestník upřesněn na podstránku očkování; SZÚ link upřesněn na podstránku „Očkování proti přenosným nemocem"; NHS link aktualizován z `/conditions/vaccinations/flu-influenza-vaccine/` na aktuální `/vaccinations/flu-vaccine/`; přidáno DOI 10.1016/S0140-6736(10)60175-4 k Lancet retraction citaci.
+- **Zdroje použité při ověření (všechny primární):**
+  - OECD State of Health in the EU · Czechia Country Health Profile 2023 a 2025 (proočkovanost 65+ proti chřipce v ČR vs. EU/OECD)
+  - UKHSA GOV.UK — Seasonal influenza vaccine uptake in GP patients in England, sezóny 2023/24 a 2024/25 (74,9 % v 65+ kohortě 2024/25)
+  - Gazzetta Ufficiale — legge 31 luglio 2017, n. 119 (původní text Lorenzin Law)
+  - Légifrance — LOI n° 2017-1836 du 30 décembre 2017 (LFSS 2018)
+  - Akademické evaluace Lorenzin Law: D'Ancona et al. (Vaccine 2018; PMID via PMC6321942), Bechini et al. (Eurosurveillance 2019)
+- **Co bylo zachováno bez úprav (ověřeno):**
+  - MMR ČR 91,2 % vs. OECD 94,8 % a kolektivní imunita 95 % (konzistentní s OECD Health at a Glance, ECDC Vaccination Atlas)
+  - Chřipka 65+ ČR 22 % vs. OECD 47 % (číslo z dashboardu HSPA Monitoru je v defenzivním rozsahu — OECD 2023 profil pro vlnu 2021 uvádí ČR 25 % vs. 51 %, takže pokles na 22 % v aktuální vlně je plausibilní; trend je konzistentně označován jako jeden z nejnižších v OECD)
+  - Wakefield retrakce 2010 (Lancet)
+  - Vyhláška 537/2006 Sb. jako právní rámec povinného očkování v ČR
+- **Otevřené otázky / topics pro budoucí iteraci:**
+  - Tvrzení „Pneumokokové očkování u seniorů ... V Česku je hrazené od roku 2010" (řádek 150) nebylo v této iteraci verifikováno proti zdroji o úhradové historii; v české praxi byla pneumokoková vakcína pro vybrané kohorty seniorů zařazena do veřejně hrazeného očkování novelou zákona č. 48/1997 Sb. v období 2009–2010, ale přesný moment a rozsah úhrady (PCV vs. PPSV23) si zaslouží samostatné ověření proti VZP metodice/SÚKL/MZd zápisu. Označeno k upřesnění v příští iteraci.
+  - Konkrétní krajský rozpad MMR proočkovanosti (text zmiňuje „v některých krajích výrazně pod 90 %") nemá v článku číselnou tabulku — kandidát na vizuální obohacení (NUTS 3 mapa nebo seřaditelná tabulka) v další iteraci, jakmile bude k dispozici aktuální krajský dataset SZÚ.
+- **Předtím / potom:** 3 odstavce zpřesněny věcnou citací zákonů a aktuálních dat · 7 nových primárních zdrojů přidáno (2 italské/francouzské zákonné permalinky, ECDC Vaccine Scheduler, ECDC influenza survey, OECD Country Health Profile 2025, UKHSA GP uptake report 2024/25, Lancet retraction DOI) · 4 generické URL nahrazeny specifickými (ECDC, SZÚ, NZIP, NHS) · 0 nových vizuálů (kandidát na krajskou mapu MMR v další iteraci).
