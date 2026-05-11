@@ -240,3 +240,36 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Detailní úhradové parametry úhradové vyhlášky 432/2025 Sb. pro LPS dospělých a dětských pohotovostí
   - První kvartální report MZ ke stavu sítě (plán: 2H 2026) — bude třeba aktualizovat regionální údaje
 - **Předtím / potom:** 7 hlavních faktových chyb opraveno · 3 nové primární zdroje (vyhlášky 380/2025 a 432/2025, ZP MV ČR, Svaz měst a obcí) přidány · disclaimer o průběhu revize zveřejněn přímo v hlavičce článku · původní rozsah článku (cca 10 minut čtení) zachován · 0 nových vizuálů.
+
+### 2026-05-11 · `clanek-detska-psychiatrie-krize.html`
+- **Status:** partial (klíčové faktové údaje opraveny a aktualizovány, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Priorita:** P2 (vysoké riziko věcné nepřesnosti — článek pracuje s konkrétními čísly o oboru s nedostatečným pokrytím; navíc identifikována vnitřní nekonzistence dashboardu mezi tělem článku a indikátorovou kartou `psychiatri_per_100k.json`).
+- **Co bylo špatně / zastaralé:**
+  1. **Počet dětských CDZ:** článek tvrdil „ve čtyřech krajích" — podle institucionálních zdrojů z roku 2025 (reformapsychiatrie.cz, Zdravotnický deník 09/2025) byly k září 2025 plně funkční pouze **dvě** dětská CDZ-D; chyběla informace o stavu příprav v dalších krajích a o novém standardu CDZ-D.
+  2. **Počet dětských psychiatrů:** článek pracoval výhradně s číslem „180 dětských psychiatrů, 86 starších 65 let" (registr ČLK). Aktuálnější údaj z tiskové konference MZ ČR ze dne 12. 9. 2025 (ministr Vlastimil Válek, ředitel DPN Opařany Michal Goetz) hovoří o **157 aktivních dětských psychiatrech** s téměř polovinou v dosahu důchodového věku do 5 let. Současně dashboard ve své indikátorové kartě `psychiatri_per_100k.json` pracuje s odhadem ~110 dětských psychiatrů (5,3 / 100 000 dětí 0–17 let dle WHO/IACAPAP metodiky). Tato vnitřní nekonzistence dashboardu nebyla v článku reflektována.
+  3. **Lůžková kapacita:** článek konstatoval „dětských psychiatrických lůžek je v Česku málo" bez kvantifikace. Tisková konference MZ 09/2025 dává konkrétní čísla: **559 dětských psychiatrických lůžek vs. potřebných ~860** (standard 8 lůžek/100 tis. obyvatel dle Goetze).
+  4. **Chyběl odkaz na nový standard CDZ-D**: Věstník MZ ČR č. 9/2025 zveřejnil aktualizovaný Standard pro služby poskytované v CDZ pro děti a adolescenty — důležitý dokument, který článek neměl uvedený.
+- **Co bylo přepsáno (s primárními/institucionálními zdroji):**
+  - **Title, meta description, OG tagy**: harmonizovány na nový faktový rámec (157 psychiatrů, 559 lůžek, 2 CDZ-D).
+  - **Deck**: kompletně přepsán s odkazem na tiskovou konferenci MZ 09/2025, doplněn Věstník 9/2025.
+  - **Lead odstavec**: doplněna citace tiskové konference MZ ze dne 12. 9. 2025 jako primárního zdroje pro 157 psychiatrů + 559 lůžek. Akutní čekací doba zhedge-ována („řády týdnů, pokud nejde o přímé ohrožení života") místo původního „tři až čtyři týdny" bez doložení.
+  - **Sekce „Proč indikátor psychiatři / 100 000 obyvatel není celý příběh"**: vysvětlena metodická odlišnost mezi 157 (aktivní dle MZ), ~180 (registr ČLK) a ~110 (HSPA indikátorová karta / WHO benchmark) — transparentní přiznání rozdílu definic.
+  - **Sekce o CDZ**: přepsána z „dětská CDZ ve čtyřech krajích" na konkrétní stav „k září 2025 fakticky funkční pouze dvě CDZ-D" + konkrétní výčet připravovaných center (Liberec leden 2026; Pardubice — Chrudim, Polička; Zlínský kraj — Otrokovice; Ústecký kraj — plán 8 center 2026–2028; Jihočeský kraj — rozšíření o Český Krumlov). Doplněn odkaz na Věstník MZ č. 9/2025.
+  - **Sekce „Strukturální příčiny — Lůžková kapacita"**: doplněna konkrétní kvantifikace 559 vs. ~860 + doplněna Dětská psychiatrická nemocnice Opařany do výčtu klíčových pracovišť.
+  - **Sekce „Kde hledat pomoc"**: aktualizována formulace „CDZ pro děti a dorost" z „ve čtyřech krajích" na aktuální stav s odkazem na interaktivní mapu Reformy psychiatrie.
+  - **Databox disclaimer**: vysvětlena metodická odlišnost tří různých čísel pro počet dětských psychiatrů (157 vs. ~180 vs. ~110), aby čtenář nebyl matený.
+  - **Audit/oprava blok**: přidán explicitní disclaimer popisující revizi z 11. 5. 2026 (transparentnost auditu).
+- **Co bylo doplněno do zdrojů (primární / institucionální zdroje):**
+  - ÚZIS oborová statistika dětské psychiatrie (PDF, primární)
+  - Tisková konference MZ ČR 12. 9. 2025 (primární institucionální zdroj pro 157 + 559)
+  - Asociace dětské a dorostové psychiatrie (ADDP, odborná společnost)
+  - Strategie reformy psychiatrické péče 2014–2030 (plné znění PDF)
+  - Doporučené postupy pro vznik CDZ pro děti a adolescenty (2022, PDF)
+  - Věstník MZ ČR č. 9/2025 — Standard CDZ-D
+  - Reforma psychiatrie — sekce CDZ a multidisciplinární týmy (mapa)
+- **Otevřené otázky / topics pro budoucí iteraci:**
+  - **Vnitřní harmonizace dashboardu**: zvážit aktualizaci indikátorové karty `psychiatri_per_100k.json` v sekci `limitations` — současný údaj „dětských a dorostových psychiatrů je v ČR zhruba 110" může být dále upřesněn aktuálním číslem 157 (MZ 09/2025) s vysvětlením, že jde o aktivní specialisty bez ohledu na FTE/věk.
+  - **„60 000 dětí v ambulantní psychiatrické péči"** (původní og:description) — toto číslo se v meta tagu objevovalo, ale není v textu doloženo z primárního zdroje (ÚZIS); v rámci této iterace bylo z meta tagů odstraněno (harmonizace s novým deckem), ale stojí za zvážení samostatné dohledání ÚZIS statistiky ambulantních kontaktů.
+  - **Krajská mapa dostupnosti** — pro budoucí iteraci by mohla doprovodit článek (Praha 25 / 100k vs. Karlovarský / Ústecký kraj 7–9 / 100k dle indikátorové karty), pokud bude k dispozici primární zdroj na úrovni dětské psychiatrie.
+- **Předtím / potom:** 1 zastaralý fakt opraven (4 kraje → 2 CDZ-D + 5 v přípravě) · 1 zastaralé číslo doplněno aktuálním (157 psychiatrů, 559 lůžek) · 1 dosud vágní tvrzení kvantifikováno z primárního zdroje · 6 nových primárních/institucionálních zdrojů přidáno do textu i seznamu · 1 nový metodický disclaimer · 0 nových vizuálů (vizuální obohacení bude předmětem další iterace, pokud bude článek schválen k republikaci).
