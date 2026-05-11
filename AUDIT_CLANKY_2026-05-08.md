@@ -177,6 +177,42 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Regionální distribuce dětských CDZ — Karlovarský × Vysočina × ostatní kraje by zasloužila samostatnou mapu NUTS 3, ale jen pokud bude k dispozici primární zdroj (např. ÚZIS Národní registr poskytovatelů zdravotních služeb).
 - **Předtím / potom:** 4 metodologické nepřesnosti opraveny · 3 přepsané odstavce · 1 nový disclaimer s revizním datem · 4 nové primární zdroje (metodická karta dashboardu, reformapsychiatrie.cz s konkrétním datem, NHS MHSMS, OECD 2021 publikace) · 0 nových vizuálů (nebyly ověřitelné v rámci této iterace; mapa dětských CDZ ponechána pro budoucí iteraci po dohledání primárního zdroje).
 
+### 2026-05-11 · `clanek-deficit-vzp-2026.html` (DRAFT) — **rozsáhlá revize numerických údajů a institucionálních odkazů**
+- **Status:** draft → draft po auditní revizi (zůstává neveřejný, čeká na ruční schválení před případnou publikací). Důvod: článek byl draft ve fázi přípravy k publikaci a obsahoval rozsáhlé numerické a institucionální chyby, které by při zveřejnění zpochybnily důvěryhodnost portálu.
+- **Reviewer:** claude-code-agent
+- **Co bylo špatně (verifikováno proti primárním zdrojům — VZP ČR ZPP 2026, finance.cz souhrny, MZ ČR Výsledky DŘ 2026, zákony 48/1997, 551/1991, 280/1992, 592/1992):**
+  1. **Chybná hodnota platby státního pojištěnce 2026:** článek uváděl 2 058 Kč/měsíc/osobu; reálná hodnota je 2 188 Kč (13,5 % z vyměřovacího základu 16 206 Kč) — doloženo VZP ČR, ZP MV ČR, VoZP a finance.cz.
+  2. **Chybné historické hodnoty platby státního pojištěnce:** 2024: článek 1 977 Kč → realita 2 085 Kč; 2025: článek 1 998 Kč → realita 2 127 Kč.
+  3. **Vnitřní rozpor v lead paragrafu:** „platba státu cca 102 mld. Kč ročně" (zjevně odvozeno od staré sazby ~1 440 Kč × 12 × 5,9 mil. ≈ 102 mld., což odpovídá rokům cca 2018–2019) v rozporu se samotným článkem dále uvádějícím 155 mld. Kč. Sjednoceno na 155 mld. Kč (2 188 × 12 × 5,9 mil. ≈ 154,9 mld., souhlasí i s mediálním souhrnem 154,6 mld. Kč).
+  4. **Chybný valorizační vzorec:** článek tvrdil, že platba státního pojištěnce „se každý rok automaticky valorizuje o inflaci spotřebitelských cen (CPI)". Skutečnost dle § 3c odst. 2 zákona č. 592/1992 Sb.: vyměřovací základ se valorizuje o <em>součet růstu spotřebitelských cen a poloviny růstu reálných mezd</em>.
+  5. **Chybný označení orgánu schvalujícího ZPP:** článek tvrdil, že zdravotně pojistné plány schvaluje Senát. Skutečnost: ZPP schvaluje Poslanecká sněmovna podle <strong>§ 6 odst. 11 zákona č. 551/1991 Sb.</strong> (VZP) a <strong>§ 15 odst. 11 zákona č. 280/1992 Sb.</strong> (zaměstnanecké pojišťovny) souběžně s návrhem státního rozpočtu. (Pozn.: První verze této opravy v commitu 1e3bfbb uváděla chybně § 7 zákona č. 280/1992 Sb. — § 7 upravuje nucenou správu, nikoliv schvalování ZPP. Opraveno v navazujícím commitu na základě review Codex bota.)
+  6. **Příliš úzký rámec deficitu:** článek uváděl 12,2 mld. Kč jako „konsolidovaný deficit systému". Skutečnost dle ZPP 2026 z 20. 10. 2025 a vyjádření SZP ČR: VZP samostatně 12,7 mld. Kč; systém jako celek včetně nedoplatků řádově 12–19 mld. Kč.
+  7. **Nepodložená čísla v sekci mzdový tlak (7,5 % růst 2025, 8,1 % růst 2024) a CHL (13,2 % růst 2025, 11,8 % růst 2024, 14 % podíl, 28 mld. Kč objem)** — bez primárního zdroje. Konkrétní procentní hodnoty odstraněny, kvalitativní popis ponechán s odkazem na ČSÚ <em>Průměrné mzdy</em>, ÚZIS <em>Personální kapacity</em>, výroční zprávy SÚKL.
+  8. **Nepodložená nárůstová projekce demografie:** „65+ dosáhne 26 % v 2040", „2,3× větší zdravotní péče na osobu" — bez doloženého odkazu na konkrétní publikaci ČSÚ a ÚZIS. Konkrétní násobky odstraněny, kvalitativní pasáž zachována s odkazem na ČSÚ <em>Projekce obyvatelstva ČR</em>.
+  9. **Nepodložené stranické pozice:** „ČSSD, KSČM, Piráti prosazují +200–300 Kč; ANO, SPD jsou rezervovanější; ODS, STAN preferují strukturální reformu" — bez doloženého programového dokumentu nebo sněmovního hlasování. Odstraněno; nahrazeno věcným hedge.
+  10. **Detailní rozpis rezervních fondů po jednotlivých pojišťovnách (VoZP 1,8 mld., ČPZP 2,1 mld., …)** — bez doloženého odkazu na konkrétní ZPP nebo výroční zprávy. Odstraněno; souhrnná hodnota cca 30 mld. Kč s dominantním podílem VZP ponechána s odkazem na mediální shrnutí.
+  11. **Chybný odkaz na sazbu od roku 1992:** sazba 13,5 % platí od účinnosti zákona č. 592/1992 Sb. (1993), nikoliv od „1992".
+  12. **Stálý disclaimer o citaci Pavla Hroboně:** v textu žádná taková citace není; odstraněno, nahrazeno věcným popisem anonymního pull-quote shrnujícího argumenty z odborné debaty.
+  13. **Chybné označení § 17 odst. 4 pro dohodovací řízení:** legislativně přesněji § 17 (konkrétní odst. 5 pro deadline 30. června). Generalizováno na „§ 17 zákona č. 48/1997 Sb.".
+  14. **Chybné absolutní datum DŘ 2026 („od 30. ledna do 19. června 2025"):** bez doloženého primárního zdroje. Změněno na obecné „probíhalo v první polovině roku 2025" s odkazem na MZ ČR <em>Výsledky dohodovacího řízení pro rok 2026</em>.
+  15. **Páka 1 výpočet:** „172 Kč/měsíc/osobu navíc, navýšení ze 2 058 na 2 230 Kč (+8,4 %)" byla dvojí chyba (chybná báze + chybný cíl deficitu). Přepočet: při deficitu řádu 15 mld. Kč by se jednalo o ~210 Kč/měsíc/osobu nad rámec automatické valorizace, tedy z 2 188 Kč zhruba na 2 400 Kč (+9,7 %).
+- **Co bylo zachováno z původního článku:**
+  - Strukturní rámec (tři proudy příjmů, čtyři páky vlády)
+  - Datace klíčové legislativy a odkaz na § 3c zákona č. 592/1992 Sb., § 17 zákona č. 48/1997 Sb., § 11 zákona č. 280/1992 Sb., § 21a zákona č. 592/1992 Sb.
+  - Pull-quote o povaze dohodovacího řízení (přerámován jako anonymní shrnutí, nikoliv citace osoby)
+  - Mezinárodní srovnání sazby pojistného s hedge ohledně rozdílů v definici základny
+- **Zdroje použité k revizi (všechny primární nebo institucionální):**
+  - VZP ČR — Zdravotně pojistný plán 2026 (tisková konference 20. 10. 2025; viz zdravezpravy.cz a vzp.cz)
+  - finance.cz — souhrn „Zdravotní pojištění za státní pojištěnce se v roce 2026 zvýší na 2 188 Kč měsíčně"
+  - ZP MV ČR / VoZP / VZP — provozní informace ke změnám od 1. 1. 2026
+  - MZ ČR — <em>Výsledky dohodovacího řízení pro rok 2026</em>, <em>Úhradová vyhláška 2026</em> (vyhláška č. 432/2025 Sb. publikovaná 30. 10. 2025)
+  - Zákony pro lidi / Sbírka zákonů — 48/1997 Sb., 551/1991 Sb., 280/1992 Sb., 592/1992 Sb.
+- **Otevřené otázky / topics pro budoucí iterace:**
+  - Doplnění konkrétních procentních hodnot z výročních zpráv SÚKL (CHL) a ÚZIS / ČSÚ (mzdy, demografie) — jakmile budou dostupné a citovatelné s přímým odkazem
+  - Aktualizace souhrnu deficitu systému po zveřejnění auditovaných výsledků hospodaření pojišťoven (podzim 2026 / podzim 2027)
+  - Doplnění chronologie legislativního procesu k případné novele § 3c zákona č. 592/1992 Sb. (mimořádné navýšení nad automatickou valorizaci)
+- **Předtím / potom:** 15 numerických nebo institucionálních chyb opraveno · 4 nedoložené pasáže přepsány na věcný hedge · 2 nedoložené tabulkové bloky odstraněny (mzdový růst, detailní rezervní fondy) · disclaimer o nepravdivém Hroboň citátu odstraněn · audit-status banner zveřejněn v hlavičce článku · status zůstává <code>draft</code> (noindex) a čeká na ruční schválení před případnou publikací · 0 nových vizuálů (nebyly v rámci této iterace ověřitelné s dostatečnou jistotou).
+
 ### 2026-05-10 · `clanek-reforma-pohotovosti-290-2025.html` — **zásadní přepis (needs-rewrite → review-pending)**
 - **Status:** needs-rewrite → review-pending (kompletní přepis, čeká na ruční schválení před republikací). Důvod přepisu: uživatelské upozornění + audit potvrdil rozsáhlé faktové chyby.
 - **Reviewer:** claude-code-agent
