@@ -478,6 +478,77 @@ footer.bottom .disclaimer {
 .regions-table .diff.pos { color: var(--good); }
 .regions-table .diff.neg { color: var(--red); }
 
+.regions-teaser {
+  margin-top: 24px;
+  padding: 22px 24px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px 22px;
+}
+.regions-teaser-eyebrow {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-mut2);
+  white-space: nowrap;
+}
+.regions-teaser-h {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.regions-teaser-text {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.regions-teaser-cta {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
+  padding: 10px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 120ms ease;
+}
+.regions-teaser-cta:hover,
+.regions-teaser-cta:focus { background: var(--red); color: var(--paper); }
+.regions-teaser-arrow { margin-left: 6px; }
+
+@media (max-width: 720px) {
+  .regions-teaser { grid-template-columns: 1fr; }
+  .regions-teaser-eyebrow,
+  .regions-teaser-h,
+  .regions-teaser-text,
+  .regions-teaser-cta { grid-column: 1; grid-row: auto; }
+  .regions-teaser-cta { justify-self: start; }
+}
+
 /* Modal: data source blocks + signal pill */
 .modal-summary { display: flex; gap: 14px; align-items: center; padding: 12px 14px; background: var(--paper2); border-radius: 0; margin-bottom: 20px; font-family: var(--sans); font-size: 12px; border-left: 2px solid var(--ink); }
 .signal-pill { padding: 2px 10px; border-radius: 0; font-family: var(--sans); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
