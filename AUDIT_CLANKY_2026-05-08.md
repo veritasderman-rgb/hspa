@@ -405,3 +405,56 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - **Krajský rozpad denního kuřáctví** — SZÚ NAUTA pravděpodobně publikuje krajskou stratifikaci, kandidát na vizuální obohacení (NUTS 3 mapa) v další iteraci.
   - **Trend graf 2003–2024** — SZÚ NAUTA má historickou řadu už od roku 2003. Kandidát na liniový graf s vyznačením kritických milníků (zákon č. 65/2017 Sb. o ochraně před tabákem; vstup do FCTC; daň. zvyšování).
 - **Předtím / potom:** 5 hlavních věcných/atribučních chyb opraveno · 4 pasáže přepsány · 12 stabilních permalinků doplněno do sekce Zdroje (2 generické URL nahrazeny 4 specifickými datovými zdroji + 4 institucionálními primárními + 4 policy primárními) · 1 vědecká citace doplněna o DOI a plné jméno autorů · 1 disclaimer v hlavičce + 1 disclaimer v databoxu upřesněn na SZÚ NAUTA · 0 nových vizuálů (kandidát na trend graf 2003–2024 a krajskou mapu v další iteraci, jakmile bude k dispozici primární datový extrakt SZÚ NAUTA).
+
+---
+
+### 2026-05-11 · `clanek-mamograf-rakovina-prsu.html`
+
+- **Priorita:** P2 (článek s konkrétními čísly — incidence, pokrytí screeningem, OECD srovnání; doposud bez auditní revize).
+- **Trigger:** systematický průchod neauditovaných článků; čísla v textu i institucionální odkazy neměly v původní verzi explicitní rok a primární URL, jeden institucionální odkaz byl chybný.
+- **Hlavní zjištění auditu:**
+  1. **Chybné institucionální zařazení Národního screeningového centra.** Článek uváděl, že NSC je „při Lékařské fakultě Masarykovy univerzity" a odkazoval na `nsc.muni.cz`. Skutečnost (ověřeno na <a href="https://www.uzis.cz/index.php?pg=centra--nsc">uzis.cz/centra-nsc</a> a <a href="https://nsc.uzis.cz/">nsc.uzis.cz</a>): NSC je **organizační složkou ÚZIS ČR**, metodicky spolupracuje s IBA LF MU. Správná URL je `nsc.uzis.cz`. Opraveno.
+  2. **Cílová věková skupina nejasně definovaná.** Článek uváděl jen „ženám od pětačtyřiceti let", což zakrývalo strukturu programu (adresné zvaní cílí na 45–69 let). Doplněno přesné rozmezí 45–69 a právní opora (§ 30 z. 48/1997 Sb. + vyhl. 70/2012 Sb.).
+  3. **Incidence 145/100 000 bez roku a bez metodického upřesnění.** Doplněn rok (NOR 2022: 7 918 případů, 144,5/100 000 hrubá míra dle ÚZIS, viz <a href="https://www.uzis.cz/index.php?pg=aktuality&aid=8466">uzis.cz/aktuality aid=8466</a>) a metodická poznámka, že hodnota v dashboardu je hrubá míra, kdežto OECD benchmark 90,7 je věkově standardizovaný (per Globocan 2022 je ASR ČR cca 80–85). Srovnání 145 vs. 90,7 v původním textu nebylo apples-to-apples — doplněn caveat v textu i v databoxu.
+  4. **„OECD průměr 68 %" jako benchmark účasti — částečně překonané číslo.** Hodnota 68 % zůstává v dashboardu jako legacy OECD benchmark; aktuální OECD State of Health in the EU – Czechia 2025 uvádí EU průměr 58 % v roce 2023 (programmatická data), Česko 60 %. Článek nyní cituje aktuální EU benchmark v textu a v databoxu, OECD legacy benchmark ponechán s explicitním zdrojem.
+  5. **Regionální nerovnost — nově doplněno.** Otevřená data NSC ÚZIS (PPS-01-01, 2022/2023) ukazují Karlovarský kraj 52,9 %, Vysočina 65,8 %. Rozdíl 13 p.b., relevantní pro odstavec o dostupnosti. Doplněno do textu + nový samostatný odstavec o regionální disparitě v sekci „Šedesát versus osmdesát".
+  6. **Studie MASAI — citace zpřesněna.** Doplněna kompletní citace (Lång K. et al., Lancet Oncology 2023, DOI 10.1016/S1470-2045(23)00298-X), kohorta (> 80 000 žen, 2021–2022), specifické výsledky (44 % redukce zátěže, 29 % vyšší detekce v interim analýze), permalink na finální výsledky v Lancetu 2025, vazba na EU AI Act (nař. 2024/1689) pro regulační rámec.
+- **Co bylo přepsáno:**
+  - Úvodní odstavec — doplněn rok (2022), zdroj (ÚZIS NOR), upřesnění „hrubá míra" a uvedení věkově standardizovaného srovnání podle Globocan 2022; cílová skupina explicitně 45–69 let.
+  - Odstavec o akreditované síti — Komise odborníků MZ ČR nahrazena odkazem na aktuální Doporučený standard MZ ČR (2024, plný permalink na mzd.gov.cz).
+  - Odstavec o adresném zvání — doplněn právní rámec (§ 30 z. 48/1997 Sb., vyhl. 70/2012 Sb.) a explicitní 45–69 namísto „od 45".
+  - Sekce „Šedesát versus sedmdesát pět" → přejmenováno na „Šedesát versus osmdesát" (přesněji odpovídá referenčním zemím Dánsko/Švédsko/Finsko ≥ 80 %); benchmarky zpřesněny proti OECD State of Health in EU Czechia 2025 a Eurostat 2023.
+  - Sekce „Důsledek v datech" — doplněn rok hodnot z dashboardu (2020 pro kolorektální 5letý survival), zdroj NOR pro stadium I-II (téměř 80 % v r. 2022); referenční rámec CONCORD-3 a EUROCARE-6 (přesnější verze).
+  - Sekce „Druhý důvod / dostupnost" — generický výčet krajů (Karlovarský/Pardubický/Olomoucký) podepřen konkrétními čísly NSC ÚZIS (Karlovarský 52,9 %, Vysočina 65,8 %); britská NHS Breast Screening Programme uvedena přesněji.
+  - Sekce „AI ve čtení mamografů" — viz bod 6 výše.
+  - Sekce „Co má vědět čtenářka" — opravena institucionální atribuce NSC (ÚZIS ČR + metodická spolupráce s IBA LF MU), správné URL `nsc.uzis.cz` + doplněn portál `mamo.cz` (provozuje IBA LF MU a NSC ÚZIS).
+- **Co bylo doplněno do sekce Zdroje (rozšíření z 6 generických odkazů na 17 stabilních permalinků v 5 kategoriích):**
+  - **Data — incidence a mortalita:** ÚZIS NOR statistika (aid=8466), Linkos/SVOD/IBA agregace, IARC Globocan 2022 Czechia factsheet (plný PDF link).
+  - **Data — pokrytí screeningem:** NZIP otevřená data PPS-01-01 (časové i krajské řezy), OECD State of Health in the EU – Czechia 2025 (plný PDF permalink), Eurostat Cancer screening statistics.
+  - **Metodika a institucionální rámec:** nsc.uzis.cz, uzis.cz/centra-nsc, mamo.cz, MZ ČR Doporučený standard 2024 (PDF), NZIP článek 1186, ECIBC.
+  - **Mezinárodní studie a AI:** Lancet Oncology MASAI 2023 (DOI), Lancet final MASAI 2025, OECD Health at a Glance 2023 Cancer screening.
+  - **Právní rámec:** § 30 z. 48/1997 Sb., vyhláška 70/2012 Sb., Věstník MZ ČR 11/2002.
+- **Review-pending banner** v sekci Zdroje, status nastaven na `review-pending` (konzistentní s patternem zavedeným pro `clanek-koureni.html`, `clanek-reforma-pohotovosti-290-2025.html`, `clanek-uhradova-vyhlaska.html`).
+- **Co bylo zachováno bez úprav (ověřeno):**
+  - Spuštění screeningu 2002 a adresné zvaní 2014 — konzistentní s tiskovou zprávou MZ ČR „Mamografický screening zachraňuje životy již 20 let".
+  - Hodnota účasti 60 % — konzistentní s OECD Country Health Profile 2025 (60 % v r. 2023) i s dashboardem HSPA Monitoru.
+  - Reformní debaty (rozšíření věkového rozpětí, risk-based screening, AI) — věcně odpovídají ECIBC doporučením a aktuální odborné diskuzi v ČR.
+- **Zdroje použité k revizi (všechny primární nebo institucionální):**
+  - ÚZIS — Aktualita 8466 „Den boje proti rakovině a statistiky ÚZIS ČR" (NOR data 2022)
+  - ÚZIS — stránka Národního screeningového centra (`uzis.cz/index.php?pg=centra--nsc`)
+  - NSC ÚZIS — `nsc.uzis.cz`
+  - NZIP — otevřená data PPS-01-01 (mamografie screening pokrytí cílové populace)
+  - OECD — State of Health in the EU. Czechia Country Health Profile 2025 (PDF)
+  - OECD — Health at a Glance 2023 (Cancer screening kapitola)
+  - IARC — Globocan 2022 Czechia factsheet (PDF)
+  - Eurostat — Cancer screening statistics (statistics-explained)
+  - MZ ČR — Doporučený standard pro poskytování screeningu karcinomu prsu (PDF, 2024)
+  - Lång K. et al. *Artificial intelligence-supported screen reading versus standard double reading in the MASAI trial.* Lancet Oncol 2023;24(8):936–944. DOI 10.1016/S1470-2045(23)00298-X
+  - Zákony pro lidi — z. 48/1997 Sb. § 30, vyhl. 70/2012 Sb.
+- **Otevřené otázky / topics pro budoucí iterace:**
+  - **Konzistence hrubá vs. věkově standardizovaná incidence v dashboardu.** Metodická karta `incidence_prsu.json` deklaruje „Standardizováno na evropskou ženskou populaci", ale hodnota 145/100 000 odpovídá hrubé míře z ÚZIS NOR za rok 2022 (144,5). Dva možné kroky: (a) přepočítat hodnotu na věkově standardizovanou (cca 80–85 dle Globocan 2022) a sjednotit s OECD 90,7, nebo (b) změnit popisek v metodické kartě na „hrubá míra na 100 000 žen". Kandidát na samostatnou iteraci na metodice indikátoru.
+  - **Dashboard benchmark OECD 68 % pro pokrytí screeningem.** Hodnota neodpovídá ani aktuálnímu EU průměru (58 %) ani srovnatelnému OECD průměru programmatických dat (kolem 55–60 %). Pravděpodobně staré číslo nebo survey-data benchmark. Pro budoucí iteraci ověřit zdroj a aktualizovat.
+  - **Vizuál: krajská mapa NUTS 3 pokrytí screeningu** — NSC ÚZIS publikuje plnou krajskou stratifikaci (PPS-01-01). Kandidát na choropleth mapu doprovázenou tabulkou (přístupnost) v některé z dalších iterací — všechna data již ověřena z primárního zdroje.
+  - **Vizuál: trend graf 2010–2024 pokrytí screeningu** — NSC ÚZIS má historickou řadu. Kandidát na liniový graf s vyznačením milníků (2014 adresné zvaní, 2020 propad COVID, 2023 návrat na předkovidovou úroveň).
+  - **Časová osa novely doporučení ECIBC pro věkové rozpětí 40–74** — pokud se v EU schválí rozšíření, dotklo by se to českého programu.
+- **Předtím / potom:** 6 hlavních věcných/atribučních chyb opraveno · 7 pasáží přepsáno · 17 stabilních permalinků doplněno do sekce Zdroje (6 původních generických nahrazeno 17 specifickými) · 1 DOI citace klinické studie doplněna · 1 nový odstavec o regionální disparitě · 1 metodická poznámka v databoxu · 1 review-pending banner · 0 nových vizuálů (kandidát na krajskou mapu a trend graf v další iteraci, jakmile bude k dispozici extrakt PPS-01-01).
