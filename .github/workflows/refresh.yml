@@ -32,9 +32,9 @@ jobs:
       run:
         working-directory: 05_M1_Starter
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
@@ -44,24 +44,50 @@ jobs:
         run: npm ci
 
       - name: Run ingest pipeline
-        run: npm run ingest
+        id: ingest
+        run: |
+          set -o pipefail
+          npm run ingest 2>&1 | tee /tmp/ingest.log
 
       - name: Validate data contract
-        run: npm run validate:data
+        id: validate
+        run: |
+          set -o pipefail
+          npm run validate:data 2>&1 | tee /tmp/validate.log
 
       - name: Run tests
-        run: npm test
+        id: tests
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee /tmp/tests.log
 
       - name: Verify data freshness
         id: freshness
         run: |
+          set -o pipefail
           # Vždy vygeneruj report, gating zařídí --min-live-ratio.
-          npm run verify:freshness -- --min-live-ratio=${MIN_LIVE_RATIO} | tee /tmp/freshness.txt
+          npm run verify:freshness -- --min-live-ratio=${MIN_LIVE_RATIO} 2>&1 | tee /tmp/freshness.txt
           {
             echo 'report<<EOF'
             cat /tmp/freshness.txt
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          echo "::group::Last 80 lines of ingest log"
+          tail -n 80 /tmp/ingest.log 2>/dev/null || echo "no ingest log"
+          echo "::endgroup::"
+          echo "::group::Last 80 lines of validate log"
+          tail -n 80 /tmp/validate.log 2>/dev/null || echo "no validate log"
+          echo "::endgroup::"
+          echo "::group::Last 80 lines of tests log"
+          tail -n 80 /tmp/tests.log 2>/dev/null || echo "no tests log"
+          echo "::endgroup::"
+          echo "::group::Last 80 lines of freshness log"
+          tail -n 80 /tmp/freshness.txt 2>/dev/null || echo "no freshness log"
+          echo "::endgroup::"
 
       - name: Commit refreshed data (if changed)
         if: success()

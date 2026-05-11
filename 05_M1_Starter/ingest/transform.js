@@ -684,17 +684,23 @@ export async function transform({
     buildIndicator(card, { seed: seed.get(card.id), oecdSummary, eurostatSummary })
   );
 
-  // Validace — každý indikátor musí mít minimum povinných polí
+  // Validace — každý indikátor musí mít minimum povinných polí.
   const errors = [];
   for (const ind of indicators) {
     for (const f of ['id', 'name', 'area', 'value', 'unit', 'signal']) {
-      if (ind[f] == null) errors.push(`${ind.id}: chybí pole '${f}'`);
+      if (ind[f] == null) {
+        errors.push(`${ind.id}: chybí pole '${f}' (origin=${ind?.source?.origin ?? 'unknown'})`);
+      }
     }
   }
   if (errors.length) {
-    console.error('[transform] validation errors:');
+    console.error('[transform] validation errors (' + errors.length + '):');
     errors.forEach(e => console.error('  -', e));
-    throw new Error(`transform: ${errors.length} validation error(s)`);
+    throw new Error(
+      `transform: ${errors.length} validation error(s) — viz výpis výše. ` +
+      `Zkontrolujte, zda všechny indikátory v indicators/*.json mají odpovídající seed ` +
+      `v data/indicators.json (pole id, name, area, value, unit, signal).`
+    );
   }
 
   const out = {
