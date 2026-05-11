@@ -213,6 +213,38 @@ Obsah je silný a argumentačně nadstandardní, ale největší prostor ke zlep
   - Doplnění chronologie legislativního procesu k případné novele § 3c zákona č. 592/1992 Sb. (mimořádné navýšení nad automatickou valorizaci)
 - **Předtím / potom:** 15 numerických nebo institucionálních chyb opraveno · 4 nedoložené pasáže přepsány na věcný hedge · 2 nedoložené tabulkové bloky odstraněny (mzdový růst, detailní rezervní fondy) · disclaimer o nepravdivém Hroboň citátu odstraněn · audit-status banner zveřejněn v hlavičce článku · status zůstává <code>draft</code> (noindex) a čeká na ruční schválení před případnou publikací · 0 nových vizuálů (nebyly v rámci této iterace ověřitelné s dostatečnou jistotou).
 
+### 2026-05-11 · `clanek-rakovina-tlusteho-streva.html`
+- **Status:** partial (1 odstavec přepsán + 1 odstavec upřesněn + kompletně přepracovaná sekce Zdroje, čeká na ruční schválení před republikací)
+- **Reviewer:** claude-code-agent
+- **Co se změnilo:**
+  - **Upřesněno mezinárodní srovnání účasti na CRC screeningu** (řádek 75): původní formulace „v Nizozemsku je účast přes 70 procent, ve Slovinsku přes 60" byla v rozporu s aktuálními daty Eurostatu (2023). Přepsáno na ověřená čísla: Nizozemsko ≈ 67 %, Slovinsko SVIT ≈ 65 %, doplněno Finsko 74 %.
+  - **Smazána nedoložená formulace** „Datovou infrastrukturu programu vede Institut biostatistiky a analýz Masarykovy univerzity, který v té době mluvil o evropském unikátu." — heroizační hyperbola bez primárního zdroje. Nahrazeno věcným popisem dělby rolí: IBA LF MU jako analytický garant (kolorektum.cz), Národní screeningové centrum (NSC) při ÚZIS jako koordinátor screeningových programů od r. 2017.
+  - **Doplněn historický kontext** v lead odstavci o screeningu (řádek 75): screeningový program v ČR běží od roku 2000; adresné zvaní bylo k němu přidáno až v roce 2014. Původní text vytvářel dojem, že screening začal teprve v 2014.
+  - **Upřesněno přiřazení indikátoru ke zdroji** v lead odstavci (řádek 65): doplněno explicitní označení MKN-10 (C18–C20) a poznámka „v posledním uzavřeném roce" namísto „loni" (nepřesný časový odkaz vůči datu publikace).
+  - **Kompletně přepracovaná sekce Zdroje:**
+    - Generický `oecd.org/en/topics/health.html` → 3 specifické permalinky: OECD *Driving Down the Colorectal Cancer Burden* (2025), OECD Health at a Glance 2023 (kapitola Cancer screening), Eurostat Cancer screening statistics.
+    - Generický `uzis.cz/` → tematický permalink na Národní onkologický registr s odkazem na legislativní oporu (§ 73 zákona č. 372/2011 Sb.).
+    - Generický `iba.muni.cz/` → 2 tematické permalinky: kolorektum.cz – Epidemiologie a kolorektum.cz – Výsledky adresného zvaní. Doplněna otevřená datová sada NZIP (CSV s pokrytím po okresech).
+    - Generický `mzcr.cz/` → přímý odkaz na PDF Národního onkologického plánu ČR 2030 (mzd.gov.cz) + přehledová stránka.
+    - Doplněn Věstník MZ ČR č. 1/2009 (Standard screeningu CRC, plný text PDF).
+    - Doplněn Europe's Beating Cancer Plan jako policy rámec (oficiální stránka EC + plný text PDF).
+    - Doplněn odkaz na popis programu pro veřejnost (NZIP, screeningový program CRC).
+  - **Upřesněn disclaimer pod zdroji:** explicitně označen rozdíl mezi „pokrytím 50–75 let v 2letém intervalu" (definice indikátoru HSPA Monitoru, 28 % v 2024) a OECD/Eurostat měřítkem „účast na screeningu během 2 let" (CZ ≈ 30 % v 2023) — drobný rozdíl daný definicí věkového rozsahu a referenčního intervalu.
+  - **Doplněn revizní disclaimer** v hlavičce článku ve stylu předchozích auditů (řádek 57–59), s nastavením `status: review-pending`.
+- **Zdroje použité při ověření:**
+  - Kolorektum.cz / IBA LF MU — epidemiologické trendy a výsledky adresného zvaní
+  - OECD *Driving Down the Colorectal Cancer Burden* (2025)
+  - OECD Health at a Glance 2023 — Cancer Screening (s. 154–155)
+  - Eurostat Cancer screening statistics (vlna 2023)
+  - ECIR Inequalities Factsheet *Colorectal Cancer Screening* (březen 2024)
+  - Národní screeningové centrum při ÚZIS (informace o roli a vzniku 1. 2. 2017)
+  - Národní onkologický plán ČR 2030 (vláda ČR schválila 22. 6. 2022)
+- **Otevřené otázky pro budoucí iterace:**
+  - **Standardizace vs. crude rate:** Indikátor `incidence_kolorektalni` v metodické kartě deklaruje standardizaci na evropskou populaci, ale hodnota 73,5/100 000 odpovídá spíše crude rate (ASR-W by byla nižší). Stojí za revizi metodiky / přepočet hodnoty.
+  - **Trend posunu věkové hranice na 45 let** podle modernizace screeningu CRC (Věstník MZ 2024) — článek o tomto neinformuje, doplnit v příští iteraci.
+  - **Regionální rozpad účasti** — k dispozici jako otevřená data (NZIP CSV po okresech), v článku zatím není.
+- **Předtím / potom:** 1 nedoložené tvrzení smazáno · 2 čísla mezinárodního srovnání upřesněna proti Eurostatu · 1 chybějící historický fakt doplněn · 6 generických zdrojových odkazů nahrazeno 12 stabilními permalinky/permalinkovými páry · disclaimer pod zdroji upřesněn · revizní hlavička přidána · 0 nových vizuálů (nebyly potřeba, dashboard databox dataset je dostatečný).
+
 ### 2026-05-10 · `clanek-reforma-pohotovosti-290-2025.html` — **zásadní přepis (needs-rewrite → review-pending)**
 - **Status:** needs-rewrite → review-pending (kompletní přepis, čeká na ruční schválení před republikací). Důvod přepisu: uživatelské upozornění + audit potvrdil rozsáhlé faktové chyby.
 - **Reviewer:** claude-code-agent
