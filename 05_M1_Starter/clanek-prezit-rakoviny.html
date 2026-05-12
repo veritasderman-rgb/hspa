@@ -12,6 +12,15 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Onkologie">
+<!--
+  audit:
+    last_reviewed: 2026-05-12
+    reviewer: claude-code-agent
+    status: review-pending
+    primary_sources_added: 5
+    visual_elements_added: 0
+    notes: "Ověřeno proti CONCORD-3 (Lancet, 31. 1. 2018), OECD H@G 2023, ÚZIS NOR, Věstník MZ 11/2002, NOPL ČR 2030. Opravena nepřesnost EUROCARE (koordinováno INT Milán + ISS Řím, ne jen ISS). Doplněno kohortové ukotvení a colon/rectum distinkce."
+-->
 <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -65,7 +74,7 @@
       <h3>Co vlastně měříme — a co dashboard ukazuje</h3>
 
       <p>
-        Indikátor pětiletého přežití v dashboardu HSPA Monitoru je metodicky vázaný konkrétně na kolorektální karcinom (MKN-10 C18–C20) a navazuje na referenční sérii OECD <em>CANCER_SURVIVAL_CRC</em>. Není to agregát napříč onkologickými diagnózami — pro takový agregát žádný populační indikátor s rutinní mezinárodní srovnatelností neexistuje. Co se tedy kryje pod číslem 56 procent, je pětiletá relativní míra přežití u pacientů, kteří byli v Česku v daném období diagnostikováni s nádorem tlustého střeva nebo konečníku.
+        Indikátor pětiletého přežití v dashboardu HSPA Monitoru je metodicky vázaný konkrétně na kolorektální karcinom (MKN-10 C18–C20) a navazuje na referenční sérii OECD <em>CANCER_SURVIVAL_CRC</em>. Není to agregát napříč onkologickými diagnózami — pro takový agregát žádný populační indikátor s rutinní mezinárodní srovnatelností neexistuje. Co se tedy kryje pod číslem 56 procent, je pětiletá relativní míra přežití u pacientů, kteří byli v Česku v období 2015–2019 diagnostikováni s nádorem tlustého střeva nebo konečníku, srovnaná s průměrem OECD pro stejnou diagnostickou skupinu. Pozn.: CONCORD-3 a OECD H@G typicky reportují <strong>colon (C18)</strong> a <strong>rectum (C19–C20)</strong> odděleně; agregovaná hodnota 56 % v dashboardu je vážený souhrn obou částí MKN-10 C18–C20 podle metodiky ÚZIS NOR.
       </p>
 
       <p>
@@ -79,7 +88,7 @@
       </p>
 
       <p>
-        <strong>CONCORD</strong> je studie koordinovaná London School of Hygiene &amp; Tropical Medicine. Třetí vlna (CONCORD-3, publikovaná v <em>Lancetu</em> v roce 2018) sleduje pacienty diagnostikované v letech 2000–2014 a pokrývá 71 zemí včetně Česka. Pro každou diagnózu uvádí čisté pětileté přežití zvlášť. <strong>EUROCARE</strong> je evropský pendant, který koordinuje italský Istituto Superiore di Sanità. A <strong>OECD Health at a Glance</strong> publikuje vybrané diagnózy ve dvouleté kadenci jako součást standardní porovnávací řady.
+        <strong>CONCORD</strong> je studie koordinovaná London School of Hygiene &amp; Tropical Medicine (co-PI prof. Claudia Allemani). Třetí vlna (CONCORD-3, Allemani C. et&nbsp;al., <em>Lancet</em>, 31.&nbsp;1.&nbsp;2018) analyzovala individuální záznamy 37,5 milionu pacientů diagnostikovaných v letech 2000–2014 s jedním z 18 nádorů, ze 322 populačních registrů v 71 zemích včetně Česka. Pro každou diagnózu uvádí čisté pětileté přežití (net survival) zvlášť, věkově standardizované. <strong>EUROCARE</strong> je evropský pendant koordinovaný dvěma italskými institucemi — Istituto Nazionale dei Tumori v Milánu a Istituto Superiore di Sanità v Římě; běží od roku 1989. A <strong>OECD Health at a Glance</strong> publikuje vybrané diagnózy v rámci pravidelné série (poslední ucelená data pro kolon/rektum jsou z H@G 2019, kohorta 2010–2014; H@G 2023 přebírá stejnou kohortu, novější CONCORD-4 zatím nepublikován).
       </p>
 
       <p>
@@ -93,7 +102,7 @@
       </p>
 
       <p>
-        U <strong>rakoviny prsu</strong> se Česko drží blízko evropského průměru — populační mamografický screening funguje od roku 2002 a větší podíl nádorů je zachycen v časném stadiu. Podobně relativně dobře si vede <strong>rakovina prostaty</strong>, kde je pětileté přežití mezinárodně vysoké a Česko se od evropské špičky liší jen okrajově.
+        U <strong>rakoviny prsu</strong> se Česko drží blízko evropského průměru — populační mamografický screening byl spuštěn v roce 2002 (Doporučený standard publikovaný ve Věstníku MZ ČR č. 11/2002; aktuální platné znění je ve Věstníku č. 5/2024) a větší podíl nádorů je díky němu zachycen v časném stadiu. Podobně relativně dobře si vede <strong>rakovina prostaty</strong>, kde je pětileté přežití mezinárodně vysoké a Česko se od evropské špičky liší jen okrajově.
       </p>
 
       <p>
@@ -133,13 +142,13 @@
       </p>
 
       <p>
-        Druhým úspěchem jsou populační registry. Národní onkologický registr existuje od roku 1976 a patří mezi nejstarší v Evropě. Datová infrastruktura, kterou provozuje ÚZIS s podporou Institutu biostatistiky a analýz Lékařské fakulty Masarykovy univerzity, umožňuje hodnocení výsledků léčby na úrovni jednotlivých center, diagnóz a stadií. Bez ní by reformní debata neměla čeho se chytit.
+        Druhým úspěchem jsou populační registry. Národní onkologický registr (NOR) byl založen v roce 1976 a navazuje na ještě starší evidenci zhoubných nádorů z roku 1951; patří mezi nejstarší kontinuálně provozované populační onkologické registry v Evropě. Datová infrastruktura, kterou provozuje ÚZIS s podporou Institutu biostatistiky a analýz Lékařské fakulty Masarykovy univerzity (IBA MUNI), umožňuje hodnocení výsledků léčby na úrovni jednotlivých center, diagnóz a stadií. Bez ní by reformní debata neměla čeho se chytit.
       </p>
 
       <h3>Reformní debaty, které mají smysl</h3>
 
       <p>
-        V odborné komunitě a v dokumentech typu Národní onkologický plán 2030 zaznívají tři priority s přímou vazbou na pětileté přežití.
+        V odborné komunitě a v dokumentech typu Národní onkologický plán ČR 2030 (schválen vládou 22. 6. 2022, akční plán implementace 2025–2027) zaznívají tři priority s přímou vazbou na pětileté přežití.
       </p>
 
       <p>
@@ -184,27 +193,35 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health at a Glance</strong> — pravidelný report obsahující mezinárodní srovnání pětiletého přežití. <a href="https://www.oecd.org/en/publications/health-at-a-glance_19991312.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>ÚZIS / Národní onkologický registr (NOR)</strong> — populační registr provozovaný od roku 1976. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>OECD Health at a Glance 2023</strong> — kapitola Cancer mortality / Cancer screening. <a href="https://www.oecd.org/en/publications/2023/11/health-at-a-glance-2023_e04f8239/full-report/cancer-mortality_80993a01.html" target="_blank" rel="noopener">oecd.org/health-at-a-glance-2023 ↗</a></li>
+          <li><strong>OECD EU Country Cancer Profile: Czech Republic 2023</strong> — pětileté přežití podle diagnóz pro CZ vs. EU. <a href="https://www.oecd.org/en/publications/2023/02/eu-country-cancer-profile-czech-republic-2023_42c64a42.html" target="_blank" rel="noopener">oecd.org/eu-country-cancer-profile-czech-republic-2023 ↗</a></li>
+          <li><strong>ÚZIS / Národní onkologický registr (NOR)</strong> — populační registr provozovaný od roku 1976. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-onkologicky-registr" target="_blank" rel="noopener">uzis.cz · NOR ↗</a></li>
+          <li><strong>SVOD.cz — Epidemiologie zhoubných nádorů v České republice</strong> — veřejný analytický portál nad daty NOR provozovaný IBA MUNI / ÚZIS. <a href="https://www.svod.cz/" target="_blank" rel="noopener">svod.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
-          <li><strong>CONCORD-3</strong> — Allemani C. et al.: <em>Global surveillance of trends in cancer survival 2000–14 (CONCORD-3): analysis of individual records for 37 513 025 patients diagnosed with one of 18 cancers from 322 population-based registries in 71 countries.</em> Lancet, 2018. <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(17)33326-3/fulltext" target="_blank" rel="noopener">Lancet ↗</a></li>
-          <li><strong>EUROCARE</strong> — projekt evropské surveillance přežití u onkologických pacientů. <a href="https://www.eurocare.it/" target="_blank" rel="noopener">eurocare.it ↗</a></li>
+          <li><strong>CONCORD-3</strong> — Allemani C. et al.: <em>Global surveillance of trends in cancer survival 2000–14 (CONCORD-3): analysis of individual records for 37 513 025 patients diagnosed with one of 18 cancers from 322 population-based registries in 71 countries.</em> Lancet 2018; 391(10125): 1023–1075 (publikováno 31. 1. 2018). DOI 10.1016/S0140-6736(17)33326-3. <a href="https://doi.org/10.1016/S0140-6736(17)33326-3" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(17)33326-3 ↗</a></li>
+          <li><strong>EUROCARE</strong> — projekt evropské surveillance přežití u onkologických pacientů, koordinovaný Istituto Nazionale dei Tumori (Milán) a Istituto Superiore di Sanità (Řím); aktivní od 1989, poslední vlna EUROCARE-6. <a href="https://www.eurocare.it/" target="_blank" rel="noopener">eurocare.it ↗</a></li>
           <li><strong>Institut biostatistiky a analýz LF MU (IBA MUNI)</strong> — datová infrastruktura onkologických registrů a screeningových programů. <a href="https://www.iba.muni.cz/" target="_blank" rel="noopener">iba.muni.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>Věstník MZ ČR — síť Komplexních onkologických center</strong> — aktuální seznam KOC vydává Ministerstvo zdravotnictví. <a href="https://www.mzcr.cz/vestnik/" target="_blank" rel="noopener">mzcr.cz/vestnik ↗</a></li>
-          <li><strong>Národní onkologický plán 2030</strong> — strategický rámec MZČR. <a href="https://www.mzcr.cz/" target="_blank" rel="noopener">mzcr.cz ↗</a></li>
+          <li><strong>Národní onkologický plán ČR 2030</strong> — schválen vládou 22. 6. 2022 (usnesení vlády č. 524/2022). PDF dokumentu: <a href="https://mzd.gov.cz/wp-content/uploads/2022/06/Narodni-onkologicky-plan-Ceske-republiky-2030.pdf" target="_blank" rel="noopener">mzd.gov.cz · NOPL 2030 PDF ↗</a></li>
+          <li><strong>Akční plán implementace Národního onkologického plánu 2025–2027</strong>. <a href="https://mzd.gov.cz/akcni-plan-implementace-narodniho-onkologickeho-planu-2025-2027/" target="_blank" rel="noopener">mzd.gov.cz · Akční plán ↗</a></li>
+          <li><strong>Doporučený standard pro poskytování screeningu karcinomu prsu (Věstník MZ ČR č. 5/2024)</strong> — aktuální platné znění Doporučeného standardu; navazuje na původní znění z Věstníku MZ ČR č. 11/2002, kterým byl v ČR v roce 2002 zaveden populační mamografický screening. PDF: <a href="https://mzd.gov.cz/wp-content/uploads/2024/05/Priloha-1-Doporuceny-standard-pro-poskytovani-screeningu-karcinomu-prsu-a-provadeni-diagnosticke-mamografie-v-Ceske-republice.pdf" target="_blank" rel="noopener">mzd.gov.cz · Doporučený standard 5/2024 PDF ↗</a></li>
+          <li><strong>Mamografický screening zachraňuje životy již 20 let</strong> — tisková zpráva MZ ČR k 20. výročí zavedení populačního screeningu v ČR (potvrzuje rok 2002 jako rok zavedení). <a href="https://mzd.gov.cz/tiskove-centrum-mz/mamograficky-screening-zachranuje-zivoty-jiz-20-let/" target="_blank" rel="noopener">mzd.gov.cz · 20 let mamografického screeningu ↗</a></li>
+          <li><strong>Komplexní onkologická centra (KOC)</strong> — aktuální síť KOC vydává MZ ČR ve Věstníku. <a href="https://mzd.gov.cz/vestnik-ministerstva-zdravotnictvi/" target="_blank" rel="noopener">mzd.gov.cz · Věstník ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k metodice:</strong> Indikátor 56 % vs. 62 % v dashboardu HSPA Monitoru je vázán konkrétně na kolorektální karcinom (MKN-10 C18–C20), nikoliv na agregát napříč onkologickými diagnózami. Mezinárodní srovnání pětiletého přežití je obecně metodicky náročné — hodnoty se liší podle toho, zda se počítá relativní nebo čisté přežití, pro jakou diagnózu, pro jakou kohortu pacientů a jaká věková standardizace je použita. Pro pohled na další diagnózy doporučujeme primární zdroje (CONCORD-3, EUROCARE, NOR / IBA MUNI).
+        <strong>Pozn. k metodice:</strong> Indikátor 56 % vs. 62 % v dashboardu HSPA Monitoru je vázán konkrétně na kolorektální karcinom (MKN-10 C18–C20), nikoliv na agregát napříč onkologickými diagnózami. Hodnota 56 % se vztahuje k pacientům diagnostikovaným v ČR v období 2015–2019 (datová publikace ÚZIS NOR 2020), srovnání s OECD vychází z kohorty 2010–2014 publikované v Health at a Glance 2019/2023 a CONCORD-3. CONCORD-3 a OECD H@G typicky reportují <em>colon</em> (C18) a <em>rectum</em> (C19–C20) odděleně; agregovaná hodnota v dashboardu je vážený souhrn. Mezinárodní srovnání pětiletého přežití je obecně metodicky náročné — hodnoty se liší podle toho, zda se počítá relativní nebo čisté přežití, pro jakou diagnózu, pro jakou kohortu pacientů a jaká věková standardizace je použita. Pro pohled na další diagnózy doporučujeme primární zdroje (CONCORD-3, EUROCARE, NOR / IBA MUNI / SVOD).
+      </p>
+      <p class="article-sources-disclaimer" style="margin-top:1rem;">
+        <strong>Auditní disclaimer (2026-05-12):</strong> Článek prošel revizí (status <code>published → review-pending</code>). Ověřeno proti primárním zdrojům: CONCORD-3 (Lancet, DOI 10.1016/S0140-6736(17)33326-3), OECD H@G 2023 a EU Country Cancer Profile 2023, ÚZIS NOR, Doporučený standard ve Věstníku MZ ČR č. 5/2024 navazující na původní znění z Věstníku 11/2002, tisková zpráva MZ ČR k 20 letům mamografického screeningu, NOPL ČR 2030. Drobné upřesnění: EUROCARE je koordinováno <em>dvěma</em> italskými institucemi (INT Milán + ISS Řím), nikoliv pouze ISS; v původním textu byla nepřesnost. Doplněna kohortová ukotvení a metodická distinkce colon vs. rectum. <em>Oprava po review Codex (PR #245):</em> citace Věstníku 11/2002 upřesněna — propojena s aktuálně platným zněním ve Věstníku 5/2024 (pdf, na který odkazuje sekce Zdroje), původní 11/2002 zachováno jako historická opora roku zavedení 2002; nepodložený měsíc „září" odstraněn (primární tisková zpráva MZ uvádí pouze rok 2002).
       </p>
     </section>
 
