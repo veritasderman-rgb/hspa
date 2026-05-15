@@ -4,23 +4,25 @@
   "area": "Výsledky",
   "domain": "Mortalita",
   "subdomain": "KVN",
-  "definition": "Počet zemřelých na choroby oběhové soustavy (MKN-10: I00–I99) na 100 000 obyvatel, přímo standardizováno na evropský standard EU-27.",
+  "definition": "Počet zemřelých na choroby oběhové soustavy (MKN-10: I00–I99) na 100 000 obyvatel, přímo věkově standardizováno na European Standard Population 2013 (ESP 2013), oba pohlaví, total ages.",
   "unit": "na 100 000 ob.",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "Registr příčin úmrtí (ÚZISaO)."
+      "type": "eurostat",
+      "code": "hlth_cd_asdr2",
+      "note": "Eurostat Standardised death rate by cause (ESP 2013). Aktuální vlna: 2023. ÚZIS NZIS Registr příčin úmrtí slouží jako podkladové národní data, ale pro mezinárodní srovnání s EU-27 držíme jednotně Eurostat."
     },
     "fallback": {
-      "type": "eurostat",
-      "code": "hlth_cd_asdr2"
+      "type": "uzis_nzis",
+      "note": "Registr příčin úmrtí (ÚZIS), vstup do mortalitních statistik."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "CVD_MORT",
-    "dataset": "HEALTH_STAT"
+    "type": "eurostat",
+    "code": "hlth_cd_asdr2",
+    "geo": "EU27_2020",
+    "note": "EU-27 průměr ze stejné Eurostat řady, aby české i benchmarkové číslo měly stejnou referenční populaci (ESP 2013). OECD H@G publikuje vlastní řadu na vlastní referenční populaci, absolutní hodnoty proto nejsou přímo zaměnitelné — viz audit clanek-kardiovaskularni-mortalita 2026-05-15."
   },
   "signal_thresholds": {
     "good": 5,
@@ -31,8 +33,8 @@
     "ÚZIS",
     "MZ ČR"
   ],
-  "method_notes": "Přímá standardizace na věkové složení EU-27. Srovnatelné s OECD Health at a Glance 2025.",
-  "limitations": "Kvalita kódování příčin úmrtí se liší mezi kraji. Poddiagnostikované nebo přenásobené diagnózy.",
+  "method_notes": "Přímá věková standardizace na ESP 2013. Srovnání s EU-27 je z téže Eurostat řady. OECD Health at a Glance používá vlastní OECD Standard Population, takže OECD absolutní hodnoty nejsou přímo srovnatelné s touto Eurostat řadou.",
+  "limitations": "Kvalita kódování příčin úmrtí se liší mezi kraji. Poddiagnostikované nebo přenásobené diagnózy. ICD-10 kapitola I00-I99 zahrnuje široké spektrum (ischemická choroba, cerebrovaskulární, hypertenzní, kardiomyopatie, srdeční selhání atd.) — pro vyšší rozlišení rozpadu viz hlth_cd_asdr2 podle podskupin (I20-I25, I60-I69 atd.).",
   "framework": "hspa",
   "dimension": "zdravi"
 }
