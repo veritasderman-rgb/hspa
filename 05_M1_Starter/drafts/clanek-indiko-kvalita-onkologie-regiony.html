@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INDIKO a indikátory kvality: co data o onkologii ukážou o regionálních rozdílech · HSPA Monitor (DRAFT)</title>
+<meta name="description" content="INDIKO v rámci NZIP má poprvé publikovat veřejně dostupné indikátory kvality péče dezagregované na region. Příklad onkologie: čas od diagnózy do zahájení léčby. Co to znamená pro veřejnou kontrolu kvality, jaké jsou limity (case-mix, coding) a mezinárodní paralely (NHS QOF, dánská onkologická Atlas, Eurostat ECIS).">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="INDIKO a indikátory kvality: co data o onkologii ukážou o regionálních rozdílech">
+<meta property="og:description" content="INDIKO v rámci NZIP má poprvé publikovat veřejně dostupné indikátory kvality péče dezagregované na region. Příklad: onkologie a čas do zahájení léčby.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Kvalita péče">
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="../index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Článek (DRAFT — nezveřejněno)</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">DRAFT — neukládáno do articles.json, robots: noindex</span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="../clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kvalita péče</span>
+        <span class="article-tag article-tag-muted">INDIKO · NZIP · Onkologie · Regionální dostupnost</span>
+      </div>
+      <h2 class="article-title">INDIKO a indikátory kvality. Co může otevřená data o onkologii ukázat o regionálních rozdílech</h2>
+      <p class="article-deck">
+        Pacient s podezřením na nádor plic v Brně, v Karlových Varech a v Trutnově by měl mít srovnatelnou šanci, že u něj léčba začne v rozumném čase. Že tato premisa neplatí, je veřejně známé. Co dosud chybělo, je systematicky publikovaný, dezagregovaný a strojově čitelný indikátor, který by tuto regionální nerovnost ukazoval. INDIKO — projekt, který v rámci Národního zdravotnického informačního portálu (NZIP) připravuje ÚZIS — má být ten kanál. První praktickou aplikací mají být indikátory kvality onkologické péče, v čele s časem od diagnózy do zahájení léčby. Článek vysvětluje, co INDIKO konkrétně publikuje, kde jsou metodologické limity a jakou mezinárodní paralelu lze pro orientaci použít.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft · květen 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Národní zdravotnický informační portál (NZIP), provozovaný ÚZIS, je už několik let veřejně přístupným rozhraním pro publikaci zdravotnických dat a metodických materiálů. Doposud sloužil zejména jako transparentní vstup k strukturálním datům: kapacitě sítě, počtům lůžek a pracovníků, koncepčním dokumentům, předpisové databázi. Co dosud na NZIP chybělo, byla systematicky vedená agenda indikátorů kvality péče — tedy číselných měřítek, která neukazují, kolik péče systém poskytl, ale jak dobře ji poskytl. Projekt INDIKO (zkratka pro indikátorovou koncovku NZIP) tuto mezeru začíná vyplňovat. V prvním kroku má pokrývat onkologickou agendu, kde existuje robustní datová báze v Národním onkologickém registru, a kde regionální rozdíly v dostupnosti a kvalitě péče jsou dlouhodobě dokumentované odbornou literaturou, ale dosud nebyly veřejně sledovatelné v podobě sledovaných ukazatelů.
+      </p>
+
+      <h3>Co je INDIKO: rozcestník indikátorů kvality v rámci NZIP</h3>
+
+      <p>
+        INDIKO není samostatný portál. Je to programová iniciativa v rámci NZIP, jejímž cílem je zveřejňovat indikátory kvality péče v podobě, která splňuje tři podmínky: musí být <em>strojově čitelná</em> (přístupná přes API ÚZIS, nikoli jen v podobě PDF reportů), <em>dezagregovaná</em> alespoň na úroveň kraje a v některých případech až na úroveň poskytovatele, a <em>aktualizovaná</em> alespoň ročně podle pevného harmonogramu. Tato kombinace tří vlastností je v české veřejné správě nová — některé indikátory kvality byly v minulosti publikovány samostatnými reporty (typicky zdravotními pojišťovnami nebo odbornými společnostmi), ale chyběla systematická agenda, kterou by stát garantoval a periodicky aktualizoval.
+      </p>
+
+      <p>
+        Programová vazba INDIKO na HSPA framework je explicitní. Health System Performance Assessment, který v ČR koncepčně sleduje ÚZIS ve spolupráci s OECD a WHO, vyžaduje sledování indikátorů ve čtyřech oblastech: výsledky (outcomes), výstupy (outputs), procesy a struktury. Většina dosud publikovaných českých indikátorů se týkala struktury a výstupů; relativně méně se sledovaly procesy a téměř neexistovala otevřená data o výsledcích. INDIKO směřuje k tomu, aby v každé ze čtyř oblastí postupně vznikla otevřená a periodicky aktualizovaná datová báze. Onkologie je výchozí oblastí, protože v ní český Národní onkologický registr poskytuje datovou základnu, která je ve srovnání s některými jinými klinickými oblastmi vyspělá: pokrytí evidence onkologických diagnóz je v ČR od konce 70. let prakticky úplné a registr poskytuje dlouhodobé časové řady o incidenci, stadiu při diagnostice, léčebné modalitě a přežití.
+      </p>
+
+      <p>
+        Kategorie indikátorů, které INDIKO plánuje postupně publikovat, lze rozčlenit do několika oblastí. Indikátory přístupu k péči (čas od diagnózy do zahájení léčby, čekací doby u vybraných výkonů). Indikátory procesu (podíl onkologických pacientů projednaných na multidisciplinárním týmu, podíl pacientů s diagnostickým vyšetřením podle relevantních doporučení). Indikátory výsledku (pětileté přežití podle diagnózy a stadia, jednoroční mortalita, podíl recidiv). Indikátory bezpečnosti (komplikační index, infekce po onkologické chirurgii). Indikátory pacientské zkušenosti (PROM — Patient-Reported Outcome Measures, kde se sbírá zkušenost pacientů s léčbou). Z tohoto výčtu je v rozpracované fázi nejvíce kategorie přístup k péči; další kategorie následují v různě posunutém časovém horizontu.
+      </p>
+
+      <h3>Příklad onkologie: čas od diagnózy do zahájení léčby</h3>
+
+      <p>
+        Indikátor „čas od stanovení onkologické diagnózy do zahájení léčby" je v mezinárodní praxi sledován jako jeden z primárních ukazatelů kvality onkologické sítě. Důvod je klinický: u většiny solidních nádorů existuje doporučené časové okno mezi diagnostikou a zahájením léčby, jehož překročení zhoršuje prognózu. Pro karcinom plic například doporučují mezinárodní guidelines (American College of Chest Physicians, European Society for Medical Oncology) zahájení léčby do 30 dnů od stanovení histopatologické diagnózy u nemalobuněčného karcinomu plic a do 14 dnů u malobuněčného karcinomu plic, ve kterém je rychlá progrese. U karcinomu prsu a kolorekta jsou doporučená okna 30 až 60 dnů, podle stadia a typu léčebné modality. Překročení těchto časových oken není automaticky chyba — některé situace vyžadují předléčebná vyšetření, jejichž provedení trvá několik týdnů — ale jeho systematické sledování indikuje, kde jsou v procesu úzká místa.
+      </p>
+
+      <p>
+        Co INDIKO konkrétně bude moci publikovat? Pro každý kraj, případně pro každého velkého onkologického poskytovatele, by měl být uveden medián a 90. percentil časového rozdílu mezi datem stanovení diagnózy (které je v Národním onkologickém registru evidované jako datum histopatologického ověření) a datem zahájení první léčebné modality (operace, chemoterapie, radioterapie, biologická léčba). Indikátor se počítá zvlášť pro vybrané diagnostické skupiny — typicky karcinom prsu, kolorekta, plic, prostaty a hrdla děložního, které tvoří většinu objemu onkologické péče v ČR. Publikace má být ročně, s dvanáctiměsíční retrospektivou (tj. v roce 2026 publikace dat za 2024, aby byl prostor pro úplnost evidence). Tato struktura — kraj × diagnóza × medián a 90. percentil × rok — je v evropské onkologické statistice obvyklá; pro ČR by byla novinkou v tom, že údaje budou veřejně dostupné v podobě, kterou si může otevřít každý občan, novinář nebo poslanec.
+      </p>
+
+      <p>
+        Co indikátor neukazuje, je neméně důležité. Neukazuje, proč jsou regionální rozdíly. Příčiny mohou být v dostupnosti diagnostických kapacit (počet PET-CT skenerů v kraji, čekací doby na biopsii), v organizaci onkologické sítě (zda kraj má funkční onkologické centrum s multidisciplinárním týmem), v složení pacientské populace (kraje s vyšším podílem komplexních případů budou mít zákonitě delší přípravu k léčbě), nebo v administraci (zda zařízení správně eviduje datum histopatologické diagnózy). INDIKO indikátor neidentifikuje příčinu — indikuje fenomén. To je analyticky důležité: indikátor sám o sobě nezakládá kauzální tvrzení o tom, „kdo selhal". Otevírá ale veřejnou debatu o tom, kde se vyšetřit příčinou stojí.
+      </p>
+
+      <h3>Proč regiony: nedostupnost není národní průměr</h3>
+
+      <p>
+        Národní průměr mediánu času od diagnózy do zahájení léčby karcinomu plic v ČR — pokud bude prezentován jako jedno číslo v ročence ÚZIS — bude pravděpodobně okolo 25 až 30 dnů. To je číslo, které z pohledu evropského srovnání není špatné a vede k závěru, že onkologická síť funguje uspokojivě. Tento závěr je ovšem pravděpodobně chybný. Onkologická péče v Česku není rovnoměrně rozprostřená. Šest komplexních onkologických center (Praha, Brno, Olomouc, Plzeň, Hradec Králové, Ostrava) má dostupnost diagnostických a terapeutických kapacit, která je v evropském kontextu nadprůměrná. Regiony bez komplexního onkologického centra v jejich přirozeném spádu — Karlovarský kraj, Pardubický kraj, Vysočinský kraj, části Středočeského kraje — jsou v zcela jiné situaci: pacient musí absolvovat dojezd k diagnostice i k léčbě, harmonizace dokumentace mezi spádovou nemocnicí a centrem zabere čas, multidisciplinární tým v centru jedná o pacientovi v rozumném intervalu.
+      </p>
+
+      <p>
+        Z toho plyne, že národní průměr v této oblasti je systémově zavádějící. Skutečná otázka kvality onkologické péče zní: jak dlouhý je čas do zahájení léčby v Karlovarském kraji ve srovnání s Jihomoravským? Pokud je medián v Brně 22 dnů a v Karlových Varech 38 dnů, je to nikoli marginální, ale velmi významný rozdíl, který se promítá do prognózy pacienta. INDIKO publikací této regionální dezagregace umožňuje občanskou, novinářskou i politickou kontrolu, která dnes není k dispozici v ověřitelné formě. Krajský zastupitel, který se ptá, proč v jeho kraji trvá zahájení onkologické léčby déle než v jiném, dnes nemá k odpovědi datový podklad. Po publikaci INDIKO indikátoru ho mít bude.
+      </p>
+
+      <aside class="article-evidence-box" style="margin: 28px 0; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--accent); border-radius: 4px;">
+        <h4 style="margin-top: 0; font-family: var(--sans); font-size: 16px;">Evidence box: co INDIKO plánuje publikovat — kategorie a stav</h4>
+        <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">Souhrnný přehled kategorií indikátorů kvality, které jsou v rámci INDIKO v různé fázi přípravy. Časování je orientační a podléhá změnám podle dostupnosti dat a metodologické připravenosti.</p>
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--rule);">
+              <th style="text-align: left; padding: 6px 4px;">Kategorie</th>
+              <th style="text-align: left; padding: 6px 4px;">Konkrétní indikátor</th>
+              <th style="text-align: left; padding: 6px 4px;">Stav přípravy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--rule-mut);">
+              <td style="padding: 6px 4px;">Přístup k péči</td>
+              <td style="padding: 6px 4px;">Čas od diagnózy do zahájení léčby (karcinom plic, prsu, kolorekta)</td>
+              <td style="padding: 6px 4px;">Pilotní fáze, plánovaná publikace 2026</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule-mut);">
+              <td style="padding: 6px 4px;">Proces</td>
+              <td style="padding: 6px 4px;">Podíl pacientů projednaných multidisciplinárním týmem</td>
+              <td style="padding: 6px 4px;">Metodika v přípravě</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule-mut);">
+              <td style="padding: 6px 4px;">Výsledek</td>
+              <td style="padding: 6px 4px;">Pětileté přežití podle diagnózy a stadia (regionálně)</td>
+              <td style="padding: 6px 4px;">Datová báze existuje (NOR), publikace 2026–2027</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rule-mut);">
+              <td style="padding: 6px 4px;">Bezpečnost</td>
+              <td style="padding: 6px 4px;">30denní mortalita po onkologické chirurgii</td>
+              <td style="padding: 6px 4px;">Datová báze v přípravě, časování nezveřejněno</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 4px;">Zkušenost pacienta</td>
+              <td style="padding: 6px 4px;">PROM — pacientské hodnocení léčby</td>
+              <td style="padding: 6px 4px;">Sběr neexistuje, dlouhodobý projekt</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin: 12px 0 0 0; font-size: 12px; color: var(--ink-mut);">Zdroj: prezentace prof. Duška pro VZ PS PČR 13. 5. 2026 a NZIP modul „Datové zpravodajství". <strong>Pozor:</strong> kategorie a časování jsou ohlášené, nikoli definitivní. Konkrétní podoba publikovaných indikátorů bude známa až po zveřejnění v NZIP. Před produkčním zařazením v HSPA Monitoru je nutná replikace ze zveřejněných INDIKO datasetů.</p>
+      </aside>
+
+      <h3>Mezinárodní paralely: NHS QOF, dánská onkologická Atlas, Eurostat CCC</h3>
+
+      <p>
+        Iniciativa publikovat indikátory kvality péče na regionální nebo poskytovatelské úrovni není v Evropě nová. Tři evropské paralely jsou pro pochopení českého kroku INDIKO užitečné.
+      </p>
+
+      <p>
+        <strong>Velká Británie — Quality and Outcomes Framework (QOF) a Cancer Outcomes and Services Dataset (COSD).</strong> Britský systém NHS používá od roku 2004 framework QOF, ve kterém je primární péče (general practice) odměňována podle kvalitativních indikátorů. Pro onkologickou péči existuje vedle QOF samostatný dataset COSD, který sleduje kvalitu onkologických služeb na úrovni NHS trustů (nemocnic) a publikuje výsledky přes NHS Digital. Klíčový rys britského modelu je publikační transparence: indikátory jsou veřejně dostupné, dezagregované na úrovni jednotlivého poskytovatele a aktualizované kvartálně. Veřejnost — pacienti, novináři, parlamentní výbory — má kontinuální přístup k údajům. Pro Česko je relevantní zejména princip, že kvalitativní indikátor je opravdu veřejný, nikoli pouze interní materiál ÚZIS.
+      </p>
+
+      <p>
+        <strong>Dánsko — onkologická Atlas a Dansk Cancer Database.</strong> Dánsko jako jedna z prvních evropských zemí vybudovalo komplexní onkologický registr, jehož data jsou systematicky publikována formou regionálních srovnání. Onkologická Atlas (Sundhedsdatastyrelsens kræftområde) ukazuje incidenci, mortalitu i kvalitativní ukazatele (čas do zahájení léčby, podíl pacientů s MDT konzultací, přežití) na úrovni dánských regionů. Pro Česko je dánský model nejbližší analogií toho, co INDIKO programově sleduje — protože jak český Národní onkologický registr, tak Dansk Cancer Database, vznikly v podobném časovém období jako národní rejstříky onkologických diagnóz, a metodologicky se v mnohém shodují. Rozdíl je v tom, že dánská publikace regionálních ukazatelů je institucionalizovaná již desetiletí, zatímco česká teprve začíná.
+      </p>
+
+      <p>
+        <strong>Eurostat — European Cancer Information System (ECIS).</strong> Na evropské úrovni provozuje European Network of Cancer Registries (ENCR) ve spolupráci s Joint Research Centre Evropské komise systém ECIS. ECIS sdružuje onkologické registry z většiny členských států EU a publikuje srovnatelné indikátory incidence, mortality a přežití na úrovni zemí, případně velkých regionů (NUTS-2). Český Národní onkologický registr je do ECIS plně integrován. Pro INDIKO je ECIS důležitý jako benchmarkový rámec: dezagregované české údaje budou moci být porovnávány s evropskými srovnatelnými daty. To je analyticky cenné — domácí debata o regionálních rozdílech získává kontext, ve kterém lze poznat, zda český vnitrostátní rozdíl je v evropském srovnání malý, středný, nebo extrémní.
+      </p>
+
+      <h3>Limity: case-mix, coding, nefakultní onkologie</h3>
+
+      <p>
+        Indikátory kvality jsou citlivé na metodologické úskalí. Tři jsou pro INDIKO zvláště relevantní.
+      </p>
+
+      <p>
+        <strong>Case-mix.</strong> Pacientská populace v různých regionech není identická. Region s vyšším podílem komplexních onkologických případů (vyšší stadia, vyšší komorbidita, vyšší věk) bude mít zákonitě jiné výsledky než region s populací mladší a s vyšším podílem brzké diagnostiky. Bez case-mix adjustace srovnání mezi regiony zkresluje a může vést k chybným závěrům. INDIKO bude muset publikovat indikátory buď v adjustované podobě (s metodikou statistické korekce), nebo doprovázené informací o struktuře pacientské populace, aby čtenář mohl kontextuálně interpretovat. Bez této doprovodné informace existuje riziko, že regiony s objektivně horší populační strukturou budou veřejně prezentovány jako „selhávající poskytovatelé", což není věcně oprávněné.
+      </p>
+
+      <p>
+        <strong>Coding a evidence.</strong> Časové údaje, na nichž indikátor stojí — datum diagnózy, datum zahájení léčby — vycházejí z administrativních záznamů. Mezi okamžikem, kdy klinik stanovuje diagnózu, a okamžikem, kdy je tato diagnóza zaznamenána v Národním onkologickém registru, je administrativní průtah několika týdnů až měsíců. Pokud je v některých regionech průtah systematicky delší (například z důvodu personální nedostatečnosti v evidenci), může to indikátor zkreslit směrem ke zdánlivému zlepšování v krajích, kde se data zpracovávají rychleji — a opačně. Stejně je důležité, jaký okamžik se v evidenci kóduje jako „datum zahájení léčby": zda je to první den ambulantního příjmu na onkologii, nebo první den podání chemoterapie, nebo datum operace. Metodologická transparence — explicitní definice datumových polí — je předpokladem srovnatelnosti.
+      </p>
+
+      <p>
+        <strong>Nefakultní onkologie.</strong> Část onkologické péče se v ČR poskytuje mimo komplexní onkologická centra — v menších nemocnicích, na regionálních onkologických pracovištích a v ambulantních centrech. Tato „nefakultní" onkologie je v Národním onkologickém registru evidována, ale její evidenční úplnost a kvalita je v některých subsegmentech nižší. Pokud INDIKO indikátor zahrne pouze pacienty léčené v komplexních centrech, podhodnotí pacientskou populaci v regionech bez vlastního centra (Karlovarský, Vysočinský, Pardubický kraj). Pokud zahrne všechny pacienty s onkologickou diagnózou, bude mít heterogenní datovou kvalitu. Metodologická volba mezi těmito alternativami má významný dopad na to, co se v indikátoru ukáže.
+      </p>
+
+      <h3>Závěr: indikátory kvality jako nástroj veřejné kontroly</h3>
+
+      <p>
+        INDIKO není reformou onkologické péče. Je publikační infrastrukturou. Kvalita péče se nezvýší tím, že se její indikátor publikuje na NZIP — zvýší se případně tím, jak na publikaci zareagují krajské politiky, profesní organizace, poskytovatelé a pojišťovny. V mezinárodní zkušenosti (zejména britské a dánské) je dokumentováno, že systematická publikace indikátorů kvality má nepřímý efekt na chování systému: poskytovatelé, kteří se vědí být sledovaní a srovnávaní, mají tendenci se chovat tak, aby v indikátoru obstáli. Tento efekt je užitečný — ale obsahuje také rizikové aspekty, typicky tzv. teaching to the test (poskytovatel optimalizuje práci podle toho, co se v indikátoru měří, na úkor toho, co se neměří) nebo gaming (záměrná manipulace s evidenčními procesy, aby výsledek vypadal lépe).
+      </p>
+
+      <p>
+        Pro pacienta v Karlovarském kraji, který čeká na zahájení léčby pro karcinom plic, je obtížně viditelné, zda v jeho regionu INDIKO indikátor publikuje medián 25 nebo 38 dnů. Pro krajského hejtmana, krajského radního pro zdravotnictví, ředitele krajských nemocnic a obsahy jednání krajské zastupitelské komise pro zdravotnictví ovšem tento indikátor v zveřejněné, dezagregované a periodické podobě představuje politicky závazný materiál. Ten, kdo dosud mohl říct, že „nemáme data o regionálních rozdílech", ji prostě říct přestane moci. To je z hlediska kvality veřejné debaty změna podstatná.
+      </p>
+
+      <p>
+        Otevřenou zůstává otázka, kdy a v jakém přesném rozsahu bude INDIKO produkční. Konkrétní časování zveřejnění onkologického dataset času do zahájení léčby je ohlášené, ale dosud nepublikované — což platí v okamžiku přípravy tohoto článku. Pro HSPA Monitor je INDIKO v každém případě signál, že česká statistická infrastruktura kvality péče se posouvá k evropskému standardu otevřenosti. Tempo a úplnost tohoto pohybu rozhoduje, zda se v konečné fázi dostane k tomu, co britský NHS, dánský Sundhedsdatastyrelsen a evropský ECIS publikují už desetiletí.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Datový klíč: HSPA indikátory</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru související s tématem článku</h4>
+      <ul class="article-databox-list">
+        <li><a href="../indicator.html?id=prezit_rakoviny_5let"><strong>Pětileté přežití onkologických pacientů</strong></a> — výsledkový indikátor v centru INDIKO onkologického modulu (oblast: Výsledky → Kvalita péče)</li>
+        <li><a href="../indicator.html?id=mortalita_onkologicka"><strong>Mortalita z onkologických příčin</strong></a> — populační indikátor, kontext pro hodnocení onkologické sítě (oblast: Výsledky → Zdravotní stav)</li>
+        <li><a href="../indicator.html?id=screening_kolorektalni"><strong>Účast na screeningu kolorektálního karcinomu</strong></a> — proces brzké diagnostiky, vstup do času zahájení léčby (oblast: Procesy → Prevence)</li>
+        <li><a href="../indicator.html?id=screening_mamograficky"><strong>Účast na mamografickém screeningu</strong></a> — proces brzké diagnostiky u karcinomu prsu (oblast: Procesy → Prevence)</li>
+        <li><a href="../indicator.html?id=screening_cervix"><strong>Účast na screeningu karcinomu hrdla děložního</strong></a> — proces brzké diagnostiky (oblast: Procesy → Prevence)</li>
+        <li><a href="../indicator.html?id=incidence_prsu"><strong>Incidence karcinomu prsu</strong></a> — epidemiologický kontext, vstup do plánování onkologické sítě (oblast: Výsledky → Zdravotní stav)</li>
+        <li><a href="../indicator.html?id=incidence_kolorektalni"><strong>Incidence kolorektálního karcinomu</strong></a> — epidemiologický kontext (oblast: Výsledky → Zdravotní stav)</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Legislativa, data a mezinárodní reference</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česká legislativa a metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon 372/2011 Sb. o zdravotních službách a podmínkách jejich poskytování</strong> — § 70–78 (Národní zdravotnické registry, vč. Národního onkologického registru). <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Národní onkologický program ČR</strong>, koncepční dokument MZ ČR a České onkologické společnosti ČLS JEP. <a href="https://www.mzcr.cz/narodni-onkologicky-program/" target="_blank" rel="noopener">mzcr.cz ↗</a></li>
+          <li><strong>NZIP — modul Datové zpravodajství a indikátory</strong>, rozcestník publikovaných datových výstupů NZIS. <a href="https://www.nzip.cz/modul/datove-zpravodajstvi" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ÚZIS — Národní onkologický registr (NOR)</strong>, oficiální stránka registru s metodikou a publikovanými ročními zprávami. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-onkologicky-registr" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>Strategický rámec Zdraví 2030</strong>, MZ ČR — kapitola o kvalitě péče a publikaci indikátorů. <a href="https://www.mzcr.cz/strategicky-ramec-zdravi-2030/" target="_blank" rel="noopener">mzcr.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní reference</h5>
+        <ul class="article-sources-list">
+          <li><strong>NHS England — Cancer Outcomes and Services Dataset (COSD)</strong>, dataset publikovaný přes NHS Digital, klinická data o všech pacientech s onkologickou diagnózou v Anglii. <a href="https://digital.nhs.uk/data-and-information/clinical-audits-and-registries/national-cancer-registration-and-analysis-service" target="_blank" rel="noopener">digital.nhs.uk ↗</a></li>
+          <li><strong>NHS England — Quality and Outcomes Framework (QOF)</strong>, framework kvalitativních indikátorů primární péče. <a href="https://www.england.nhs.uk/gp/investment/gp-contract/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>Dánsko — Sundhedsdatastyrelsen, kræftområde (Cancer Atlas)</strong>, dánská regionální publikace onkologických ukazatelů. <a href="https://sundhedsdatastyrelsen.dk/" target="_blank" rel="noopener">sundhedsdatastyrelsen.dk ↗</a></li>
+          <li><strong>European Cancer Information System (ECIS)</strong>, JRC Evropské komise a ENCR, srovnávací evropská onkologická data. <a href="https://ecis.jrc.ec.europa.eu/" target="_blank" rel="noopener">ecis.jrc.ec.europa.eu ↗</a></li>
+          <li><strong>European Society for Medical Oncology (ESMO) Clinical Practice Guidelines</strong>, doporučení pro časování zahájení léčby u jednotlivých diagnóz. <a href="https://www.esmo.org/guidelines" target="_blank" rel="noopener">esmo.org ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2023, Cancer Care chapter</strong>, mezinárodní srovnání ukazatelů kvality onkologické péče. <a href="https://www.oecd.org/health/health-at-a-glance/" target="_blank" rel="noopener">oecd.org/health ↗</a></li>
+          <li><strong>WHO Europe — Cancer Country Profiles</strong>, profily onkologické zátěže a kvality péče v zemích evropského regionu WHO. <a href="https://www.who.int/europe/health-topics/cancer" target="_blank" rel="noopener">who.int/europe ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související materiály v HSPA Monitoru</h5>
+        <ul class="article-sources-list">
+          <li><strong>Článek „Centralizace onkochirurgie 2026"</strong> — souvislost s organizací onkologické sítě, kterou INDIKO data mohou empiricky podpořit. <a href="../clanek-centralizace-onkochirurgie-2026.html">Centralizace onkochirurgie</a></li>
+          <li><strong>Článek „Onkologický koordinátor 2026"</strong> — proces péče v onkologii, který INDIKO procesní indikátory budou sledovat. <a href="../clanek-onkologicky-koordinator-2026.html">Onkologický koordinátor</a></li>
+          <li><strong>Explainer „Národní onkologický registr"</strong> — datová báze, ze které INDIKO indikátory vycházejí. <a href="../jak-funguje.html?id=narodni_onkologicky_registr">Jak to funguje · NOR</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Tento text je <strong>orientační</strong> — popisuje plánovanou publikační agendu INDIKO, jejíž konkrétní podoba (kategorie indikátorů, dezagregační úroveň, časování zveřejnění) je k datu přípravy článku <strong>ohlášena, ale ne zveřejněna v plné formě</strong>. Konkrétní informace o INDIKO datasetu „čas od diagnózy do zahájení léčby" pochází z prezentace prof. Duška pro Výbor pro zdravotnictví Poslanecké sněmovny PČR z 13. 5. 2026 (deck „Plánované změny v dohodovacím řízení"). <strong>Tyto údaje jsou předběžné</strong> a článek je nutno považovat za orientační dokud nebudou konkrétní INDIKO datasety publikovány na NZIP. Konkrétní rozsahy mediánů (25–30 dnů na národní úrovni, případné rozdíly mezi kraji) jsou ilustrativní odhady na základě dostupných parciálních dat ÚZIS a evropského srovnání; nejsou závaznými publikovanými hodnotami. Před produkčním zařazením indikátoru v HSPA Monitoru je nutná replikace ze zveřejněných INDIKO datasetů. Tento text je pracovní verzí (DRAFT) — určený k redakční diskusi, nikoli ke zveřejnění bez další revize.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="../clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="../src/clanky.js"></script>
+
+</body>
+</html>
