@@ -1,0 +1,41 @@
+{
+  "id": "obloznost_interna_standard_pct",
+  "name": "Využití akutních standardních lůžek vnitřního lékařství",
+  "area": "Procesy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Kapacita",
+  "definition": "Průměrné roční využití akutních standardních (neintenzivních) lůžek oboru vnitřní lékařství: poměr realizovaných ošetřovacích dnů k disponibilním (počet lůžek × 365). Sledováno celkově i v rozpadu podle typu poskytovatele: fakultní/centrální (FN), krajské, oblastní nemocnice.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "NRHZS · OIS-11-50 PALP komplexní výstup",
+      "endpoint": "https://www.nzip.cz/data/2714-palp-komplexni-vystup-datovy-souhrn",
+      "note": "Komplexní datový výstup PALP (poskytovatelé akutní lůžkové péče). Doplňující rozcestník: https://www.nzip.cz/data/2713-produkce-palp-sumarizace-datovy-souhrn."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.nzip.cz/data/2378-luzkovy-fond-akutni-nasledna-dlouhodoba-pece-datovy-souhrn"
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "OECD publikuje bed occupancy rate jen agregátně pro nemocnice; oborová desagregace (vnitřní lékařství) není mezinárodně srovnatelná."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR",
+    "zdravotní pojišťovny"
+  ],
+  "method_notes": "Hodnoty 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): celkem 66,1 %; FN/centra 68,7 %; krajské nemocnice 61,4 %; oblastní nemocnice 65,9 %. Pro klasifikaci reálných nákladů a kalkulaci základních sazeb je v prezentaci navržen cílový efektivní rozsah 75–95 % využití. Tento rozsah není mechanický benchmark pro každé pracoviště — odráží metodicky doporučenou efektivní obložnost pro standardní akutní lůžko v podmínkách dohodnutých standardů péče. Hodnoty jsou převzaty z deckového podkladu; pro publikaci je nutné replikovat z OIS-11-50.",
+  "limitations": "Indikátor nereflektuje strukturu pacientů (case-mix, ošetřovatelská náročnost). Pracoviště s vyšší proporcí polymorbidních seniorů a vyšší ošetřovatelskou kategorií 3–5 má při stejné obložnosti vyšší skutečnou pracovní zátěž. Sezonní variabilita (zimní RSV/chřipka) může roční průměr podhodnocovat. Definice 'standardního' lůžka vnitřního lékařství vyžaduje ověření v metodice NRHZS — některé jednotky následné péče integrované v interním oboru mohou být vykazovány samostatně.",
+  "framework": "hspa",
+  "dimension": "efektivita",
+  "verification_status": "review-pending"
+}

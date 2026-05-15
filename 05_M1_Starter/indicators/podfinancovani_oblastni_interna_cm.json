@@ -1,0 +1,37 @@
+{
+  "id": "podfinancovani_oblastni_interna_cm",
+  "name": "Rozdíl úhrady a nákladu u interny v oblastních nemocnicích",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Úhradová politika",
+  "definition": "Rozdíl mezi průměrnou úhradovou základní sazbou (ZS) zdravotní pojišťovny v 1. kole dohodovacího řízení a nákladovostí na 1 CM bod podle referenčních nemocnic (RN) — vyjádřeno pro obor vnitřní lékařství a typ poskytovatele 'oblastní nemocnice'. Negativní hodnota znamená, že úhrada za stejný DRG case-mix bod pokrývá nižší než modelovaný náklad.",
+  "unit": "Kč / CM bod",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "Kompozit: NRHZS · OIS-11-05 + OIS-11-39 + nákladovost DRG skupin",
+      "endpoint": "https://www.nzip.cz/data/2172-zakladni-sazby-poskytovatele-alp-datovy-souhrn",
+      "note": "Replikace vyžaduje kombinaci tří NZIP datasetů: základní sazby PALP (OIS-11-05, NZIP 2172), nákladovost DRG skupin podle referenčních nemocnic (NZIP 2383, https://www.nzip.cz/data/2383-nakladovost-drg-skupiny-datovy-souhrn) a data o referenční síti (OIS-11-39, NZIP 2385, https://www.nzip.cz/data/2385-referencni-sit-datovy-souhrn)."
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "Indikátor je z definice český a vázán na CZ-DRG metodiku — bez mezinárodního ekvivalentu."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS · DRG Restart",
+    "MZ ČR — odbor dohledu",
+    "Asociace českých a moravských nemocnic"
+  ],
+  "method_notes": "Hodnota 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): náklad / CM bod RN u interny = 74 788 Kč (oblastní nemocnice); průměrná úhradová ZS 1. kolo ZP u interny = 65 907 Kč (oblastní nemocnice); rozdíl −8 881 Kč / CM bod. Při průměrném ročním CM oblastní interní péče 180 498 bodů činí modelovaná ztráta ≈ −1,6 mld. Kč. Hodnota je modelační — replikuje se kompozitně ze tří NRHZS datasetů a referenčních nákladových dat. PŘED PUBLIKACÍ jako dashboard indikátor je nutné: (a) replikovat výpočet z OIS-11-05, NZIP 2383 a 2385; (b) ověřit, zda agregace 'náklad / CM bod RN' a 'průměrná ZS 1. kolo ZP' jsou metodicky porovnatelné (stejné DRG skupiny, stejné období, stejná definice CM); (c) získat metodický souhlas s publikací modelu.",
+  "limitations": "Indikátor je modelační, ne pozorovaná tržní cena. Hodnota podle prezentace agreguje různé regiony a různé pojišťovny do jednoho čísla — variabilita uvnitř kategorie 'oblastní nemocnice' je významná. Politicky citlivý: zveřejnění bez doprovodu Vorhaltepauschale-typové stabilizační platby (mezinárodně analogie KHVVG 2024 v Německu) může vyvolat nesprávnou debatu o plošném navýšení sazeb namísto strukturální reformy úhradové architektury.",
+  "framework": "hspa",
+  "dimension": "efektivita",
+  "verification_status": "review-pending"
+}
