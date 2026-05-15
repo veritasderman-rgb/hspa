@@ -4,14 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Odkud jdou peníze a kam mizí. Anatomie financování českého zdravotnictví · HSPA Monitor</title>
-<meta name="description" content="České zdravotnictví spotřebuje 8,5 % HDP — řádově stovky miliard korun ročně. SHA rámec OECD/Eurostat/WHO ukazuje peníze ve třech řezech: kdo platí, na co se utratí a kdo to dostává. Vysvětlení struktury, mezinárodní srovnání, slepé skvrny.">
+<meta name="description" content="České zdravotnictví spotřebovalo v roce 2023 zhruba 8,4 % HDP — 642 mld. Kč. SHA rámec OECD/Eurostat/WHO ukazuje peníze ve třech řezech: kdo platí, na co se utratí a kdo to dostává. Vysvětlení struktury, mezinárodní srovnání, slepé skvrny.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Odkud jdou peníze a kam mizí. Anatomie financování českého zdravotnictví">
-<meta property="og:description" content="SHA rámec ve třech osách — zdroje (HF), funkce (HC), poskytovatelé (HP). 8,5 % HDP, 14 % z kapsy, dominance veřejného pojištění. Co data ukazují a co v nich není.">
+<meta property="og:description" content="SHA rámec ve třech osách — zdroje (HF), funkce (HC), poskytovatelé (HP). 8,4 % HDP, 14,6 % z kapsy, dominance veřejného pojištění. Co data ukazují a co v nich není.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-08">
 <meta property="article:section" content="Financování">
+<!--
+  audit:
+    last_reviewed: 2026-05-15
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 0
+    primary_sources_added: 2
+    visual_elements_added: 1
+    notes: "Ověřeno proti primární publikaci ČSÚ Výsledky zdravotnických účtů v ČR v letech 2010–2023 (vydáno 2025) a Eurostat hlth_sha / OECD Health at a Glance: Europe 2024. Re-ukotveno z roku 2024 na rok 2023 — nejnovější strojově dohledatelná vlna ČSÚ; hodnota 2024 ponechána pouze jako explicitně označený odhad dashboardu. Opraveny věcné chyby: (1) EU průměr out-of-pocket z 19,5 % na ~14 % (Eurostat 2023) — ČR tedy není výrazně pod evropským průměrem, nýbrž zhruba na něm; pod průměrem je až vůči OECD (~19 %); (2) HF.1.1 vládní schémata z ~10 % na 11,9 %; HF.1.2 z ~75 % na 72,6 %; HF.3 z 14 % na 14,6 % — vše dle ČSÚ 2023; (3) opraven COVID vrchol HDP podílu z roku 2020 na rok 2021 (9,2 %); (4) mezinárodní srovnání HDP sjednoceno na referenční rok 2023 (Eurostat: EU 10,0 %, Německo 11,7 %, Francie 11,5 %, Rakousko 11,2 %) místo nekonzistentní směsi let; (5) v příkladu zemí s OOP > 30 % nahrazena Litva Lotyšskem dle Eurostatu 2023 (Bulharsko 35,5 %, Lotyšsko 35,1 %, Řecko 34,3 %). Aktualizovány oba figure (HF donut + srovnávací panel) a jejich figcaption/zdroje na referenční rok 2023. Doplněn caveat callout k metodice (referenční rok, current vs. total expenditure, OECD vs. Eurostat). Status published → review-pending. OTEVŘENÁ OTÁZKA: dashboard indikátor platba_z_kapsy_pct má benchmark.eu = 19,5, což je proti Eurostatu chybné (~14) — vyžaduje opravu v samostatné datové iteraci."
+-->
 <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -45,7 +55,7 @@
       </div>
       <h2 class="article-title">Odkud jdou peníze a kam mizí. Anatomie financování českého zdravotnictví</h2>
       <p class="article-deck">
-        České zdravotnictví spotřebovalo v roce 2024 zhruba 8,5 % HDP — řádově stovky miliard korun. To, kdo ty peníze pošle do systému, na co se utratí a kdo je nakonec inkasuje, popisuje jeden mezinárodní účetní rámec, který se v Česku publikuje od roku 2010 — System of Health Accounts. Pomocí jeho tří klasifikací — zdroje (HF), funkce (HC), poskytovatelé (HP) — lze odpovědět na otázky, na které úhradová vyhláška nestačí: kolik z celkového balíku peněz teče přes veřejné pojištění, kolik z kapsy pacienta, kolik na léky a kolik do prevence. Tento článek je průvodcem těmito třemi osami a tím, co z nich plyne pro debatu o reformě.
+        České zdravotnictví spotřebovalo v roce 2023 zhruba 8,4 % HDP — 642 miliard korun (ČSÚ, <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em>, vydáno 2025). To, kdo ty peníze pošle do systému, na co se utratí a kdo je nakonec inkasuje, popisuje jeden mezinárodní účetní rámec, který se v Česku publikuje pro časovou řadu od roku 2010 — System of Health Accounts. Pomocí jeho tří klasifikací — zdroje (HF), funkce (HC), poskytovatelé (HP) — lze odpovědět na otázky, na které úhradová vyhláška nestačí: kolik z celkového balíku peněz teče přes veřejné pojištění, kolik z kapsy pacienta, kolik na léky a kolik do prevence. Tento článek je průvodcem těmito třemi osami a tím, co z nich plyne pro debatu o reformě.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">8. května 2026</span>
@@ -81,11 +91,11 @@
       <h3>Kdo to platí — schémata financování (HF)</h3>
 
       <p>
-        V českém SHA má dominantní postavení <strong>HF.1.2 — povinné kontributivní zdravotní pojištění</strong>, tedy příjmy sedmi zdravotních pojišťoven z pojistného od zaměstnanců, OSVČ, samoplátců a státu (za státní pojištěnce — důchodce, děti, studenty, nezaměstnané). Tato kategorie tvoří v posledních letech zhruba <strong>tři čtvrtiny celkových výdajů na zdravotnictví</strong>. Druhou veřejnou kapsou je <strong>HF.1.1 — vládní schémata</strong> (státní rozpočet přes MZČR a další resorty, krajské rozpočty), která pokrývá specifické okruhy: hygienickou službu, ochranu veřejného zdraví, část kapitálových investic do nemocnic, vzdělávání zdravotníků, výzkum. Veřejné zdroje (HF.1.1 + HF.1.2) v ČR dohromady tvoří kolem <strong>85 %</strong> celku.
+        V českém SHA má dominantní postavení <strong>HF.1.2 — povinné kontributivní zdravotní pojištění</strong>, tedy příjmy sedmi zdravotních pojišťoven z pojistného od zaměstnanců, OSVČ, samoplátců a státu (za státní pojištěnce — důchodce, děti, studenty, nezaměstnané). Tato kategorie tvořila v roce 2023 <strong>72,6 % celkových výdajů na zdravotnictví</strong> (466,6 mld. Kč). Druhou veřejnou kapsou je <strong>HF.1.1 — vládní schémata</strong> (státní rozpočet přes MZČR a další resorty, krajské rozpočty), v roce 2023 <strong>11,9 %</strong> (76,1 mld. Kč); pokrývá specifické okruhy: hygienickou službu, ochranu veřejného zdraví, část kapitálových investic do nemocnic, vzdělávání zdravotníků, výzkum. Veřejné zdroje (HF.1.1 + HF.1.2) v ČR dohromady tvořily v roce 2023 <strong>84,5 %</strong> celku.
       </p>
 
       <p>
-        Soukromou stranu rozpočtu drží převážně <strong>HF.3 — přímé platby pacientů (out-of-pocket)</strong>. Český dashboard HSPA Monitoru ukazuje za rok 2024 hodnotu <strong>14 %</strong>, s mírně klesajícím trendem (15,2 % v 2020, 14,5 % v 2022). To je v evropském srovnání nízké číslo: OECD průměr je kolem <strong>20 %</strong>, EU kolem <strong>19,5 %</strong>; v Bulharsku, Litvě nebo Řecku přesahuje 30 %. Český signál je v tomto indikátoru <em>good</em> — finanční ochrana pacienta je z pohledu out-of-pocket relativně silná, zejména díky širokému veřejnému balíku, ochrannému limitu na doplatky a regulačním cenám léčiv. To neznamená, že se OOP nehromadí na nějaké skupině pacientů (zejména senioři s polypragmazií doplácejí na léky více než průměr) — agregátní průměr některé vnitřní nerovnosti maskuje.
+        Soukromou stranu rozpočtu drží převážně <strong>HF.3 — přímé platby pacientů (out-of-pocket)</strong>. Podle ČSÚ tvořily v roce 2023 <strong>14,6 %</strong> celkových výdajů (93,7 mld. Kč); dashboard HSPA Monitoru má pro rok 2024 odhad 14 %. V mezinárodním srovnání to <strong>není výrazně podprůměrné číslo, jak se někdy uvádí</strong> — průměr EU se podle Eurostatu (2023) pohybuje kolem <strong>14 %</strong>, takže ČR je zhruba na evropském průměru. Výrazněji pod průměrem je ČR až vůči OECD jako celku, kde out-of-pocket dosahuje téměř pětiny výdajů (kolem <strong>19 %</strong>). Skutečně vysoký podíl mají jen některé státy — podle Eurostatu 2023 přesahuje 30 % v Bulharsku (35,5 %), Lotyšsku (35,1 %) a Řecku (34,3 %). Dashboard HSPA Monitoru klasifikuje český signál jako <em>good</em>, protože poměřuje hodnotu vůči průměru OECD; finanční ochrana pacienta je z pohledu out-of-pocket relativně silná, zejména díky širokému veřejnému balíku, ochrannému limitu na doplatky a regulačním cenám léčiv. To neznamená, že se OOP nehromadí na nějaké skupině pacientů (zejména senioři s polypragmazií doplácejí na léky více než průměr) — agregátní průměr některé vnitřní nerovnosti maskuje.
       </p>
 
       <p>
@@ -122,23 +132,23 @@
 
       <figure class="article-figure" aria-labelledby="shaTriTitle">
         <figcaption class="article-figure-caption" id="shaTriTitle">
-          Tatáž koruna ve třech klasifikacích SHA — strukturní profil ČR (2024)
+          Tatáž koruna ve třech klasifikacích SHA — strukturní profil ČR (2023)
         </figcaption>
         <div class="sha-donut-grid">
 
           <div class="sha-donut-card">
             <h4 class="sha-donut-h">HF · Kdo platí</h4>
-            <div class="sha-donut" style="--seg: conic-gradient(var(--ink) 0% 75%, #a4262c 75% 89%, #6f6760 89% 99%, var(--rule2) 99% 100%);" aria-hidden="true">
+            <div class="sha-donut" style="--seg: conic-gradient(var(--ink) 0% 72.6%, #a4262c 72.6% 87.2%, #6f6760 87.2% 99.1%, var(--rule2) 99.1% 100%);" aria-hidden="true">
               <div class="sha-donut-center">
-                <strong>75 %</strong>
+                <strong>72,6 %</strong>
                 <span>veřejné<br>pojištění</span>
               </div>
             </div>
             <ul class="sha-donut-legend">
-              <li><span class="sw" style="background:var(--ink)"></span> HF.1.2 — povinné pojištění <em>~75 %</em></li>
-              <li><span class="sw" style="background:#a4262c"></span> HF.3 — z kapsy pacienta <em>14 %</em></li>
-              <li><span class="sw" style="background:#6f6760"></span> HF.1.1 — vládní schémata <em>~10 %</em></li>
-              <li><span class="sw" style="background:var(--rule2)"></span> HF.2 — soukromé pojištění <em>&lt; 1 %</em></li>
+              <li><span class="sw" style="background:var(--ink)"></span> HF.1.2 — povinné pojištění <em>72,6 %</em></li>
+              <li><span class="sw" style="background:#a4262c"></span> HF.3 — z kapsy pacienta <em>14,6 %</em></li>
+              <li><span class="sw" style="background:#6f6760"></span> HF.1.1 — vládní schémata <em>11,9 %</em></li>
+              <li><span class="sw" style="background:var(--rule2)"></span> HF.2 — soukromé pojištění <em>0,9 %</em></li>
             </ul>
           </div>
 
@@ -177,7 +187,7 @@
           </div>
 
         </div>
-        <p class="article-figure-source">Zdroj: dashboard HSPA Monitoru; ČSÚ <em>Výsledky zdravotnických účtů ČR</em>, OECD Health Statistics 2024. Procentuální podíly jsou řádové; jednotlivé roky se mírně liší.</p>
+        <p class="article-figure-source">Zdroj: ČSÚ, <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em> (vydáno 2025; staženo 15. 5. 2026). Podíly HF odpovídají referenčnímu roku 2023 přesně; podíly HC a HP jsou řádové (publikované strukturní profily ČSÚ) a v jednotlivých letech se mírně liší.</p>
       </figure>
 
       <h3>Mezinárodní srovnání — kde je Česko</h3>
@@ -187,20 +197,20 @@
       </p>
 
       <p>
-        Celkové výdaje na zdravotnictví jako podíl HDP: ČR <strong>8,5 %</strong>, OECD průměr <strong>9,3 %</strong>, EU průměr <strong>10,4 %</strong>. České číslo je dlouhodobě stabilní mezi 8 a 9 % (s jednorázovým výkyvem na 9,2 % v COVID roce 2020), což znamená, že zdravotnictví v ČR neroste rychleji než ekonomika jako celek. Vyšší výdaje než ČR mají kromě bohatých západoevropských zemí (Německo 12,7 %, Francie 11,9 %, Rakousko 11,4 %) i středoevropští sousedé Slovensko a Polsko, blízko leží Maďarsko. Nižší výdaje mají pobaltské státy a Balkán.
+        Celkové výdaje na zdravotnictví jako podíl HDP (referenční rok 2023): ČR <strong>8,4 %</strong> (ČSÚ), EU průměr <strong>10,0 %</strong> (Eurostat, current health expenditure), OECD průměr kolem <strong>9 %</strong> (OECD Health at a Glance). České číslo bylo v desetiletí 2010–2019 spíše kolem 7,4 %, během pandemie vystoupalo až na vrchol <strong>9,2 % v roce 2021</strong> a poté kleslo zpět — 8,5 % v roce 2022, 8,4 % v roce 2023. Zdravotnictví v ČR tedy neroste rychleji než ekonomika jako celek. Vyšší výdaje než ČR mají bohaté západoevropské státy — podle Eurostatu (2023) Německo 11,7 %, Francie 11,5 %, Rakousko 11,2 % — i část středoevropských sousedů. Nižší výdaje vykazují některé pobaltské státy a Balkán. (Pozn.: OECD ve svých srovnáních pracuje s mírně širší definicí výdajů než Eurostat, proto se údaje pro tytéž země mezi oběma zdroji o desetiny až jednotky procentního bodu liší.)
       </p>
 
       <p>
-        Veřejný podíl na výdajích: ČR kolem <strong>85 %</strong>, OECD průměr <strong>76 %</strong>. Český systém je v rámci OECD jeden z <em>nejvíce „zveřejněných"</em> — vedle severských, britského a slovenského. To má dva důsledky: (a) finanční ochrana pacienta před vlastními platbami je vysoká; (b) reformní páky jsou koncentrované do veřejné regulace (úhradová vyhláška, lékové úhrady, zákonný balík péče). Soukromý sektor v Česku není reálným tahounem inovace, protože reálný objem peněz pod jeho kontrolou je malý.
+        Veřejný podíl na výdajích: ČR <strong>84,5 %</strong> v roce 2023 (ČSÚ), OECD průměr kolem <strong>76 %</strong>. Český systém je v rámci OECD jeden z <em>nejvíce „zveřejněných"</em> — vedle severských, britského a slovenského; podle Country Health Profile (OECD/WHO) měla ČR v roce 2021 dokonce nejvyšší podíl veřejného financování v EU i v evropském regionu WHO. To má dva důsledky: (a) finanční ochrana pacienta před vlastními platbami je vysoká; (b) reformní páky jsou koncentrované do veřejné regulace (úhradová vyhláška, lékové úhrady, zákonný balík péče). Soukromý sektor v Česku není reálným tahounem inovace, protože reálný objem peněz pod jeho kontrolou je malý.
       </p>
 
       <p>
-        Out-of-pocket podíl: ČR <strong>14 %</strong>, OECD průměr <strong>20 %</strong>, EU <strong>19,5 %</strong>. České číslo se za posledních pět let mírně snížilo (z 15,2 % v 2020 na 14 % v 2024), což odráží zvyšování limitů na doplatky, regulaci cen léků a nárůst veřejného balíku. To je z pohledu HSPA pozitivní signál finanční ochrany pacienta. Pro úplnost je nicméně třeba dodat, že OOP měří průměr — distribuce uvnitř populace je nerovná. Zhruba 1–2 % českých domácností trpí <em>katastrofickými</em> zdravotními výdaji (definovanými WHO jako > 40 % nesubsisten­čního příjmu domácnosti); tvoří je převážně senioři s polypragmazií a osoby s chronickými neuropsychiatrickými diagnózami.
+        Out-of-pocket podíl: ČR <strong>14,6 %</strong> v roce 2023 (ČSÚ), EU průměr kolem <strong>14 %</strong> (Eurostat 2023), OECD průměr téměř pětina, kolem <strong>19 %</strong>. ČR je tedy zhruba na evropském průměru a znatelně pod průměrem OECD — ne ovšem mezi vůbec nejnižšími v EU, jak se někdy zjednodušuje. České číslo se v delším horizontu mírně snižuje, což odráží zvyšování limitů na doplatky, regulaci cen léků a nárůst veřejného balíku. Pro úplnost je nicméně třeba dodat, že OOP měří průměr — distribuce uvnitř populace je nerovná. Část českých domácností nese <em>katastrofické</em> zdravotní výdaje (WHO je definuje jako výdaje přesahující 40 % nesubsisten­čního příjmu domácnosti); jde převážně o seniory s polypragmazií a osoby s chronickými neuropsychiatrickými diagnózami. Přesné procento domácností v ČR pro daný rok je třeba dohledat v primárních datech WHO / EU-SILC — v tomto článku jej neuvádíme jako fixní hodnotu, dokud nebude ověřen z primárního zdroje.
       </p>
 
       <figure class="article-figure" aria-labelledby="shaCompTitle">
         <figcaption class="article-figure-caption" id="shaCompTitle">
-          Kde Česko stojí ve třech klíčových metrikách (2024)
+          Kde Česko stojí ve třech klíčových metrikách (referenční rok 2023)
         </figcaption>
         <div class="sha-comp-grid">
 
@@ -208,12 +218,12 @@
             <h4 class="sha-comp-h">Výdaje / HDP</h4>
             <div class="sha-comp-sub">% HDP, sestupně</div>
             <ul class="sha-comp-bars" data-max="13">
-              <li><span class="sha-comp-lbl">Německo</span><span class="sha-comp-bar" style="--w: 97.7%"></span><span class="sha-comp-val">12,7</span></li>
-              <li><span class="sha-comp-lbl">Francie</span><span class="sha-comp-bar" style="--w: 91.5%"></span><span class="sha-comp-val">11,9</span></li>
-              <li><span class="sha-comp-lbl">Rakousko</span><span class="sha-comp-bar" style="--w: 87.7%"></span><span class="sha-comp-val">11,4</span></li>
-              <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 80%"></span><span class="sha-comp-val">10,4</span></li>
-              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 71.5%"></span><span class="sha-comp-val">9,3</span></li>
-              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 65.4%"></span><span class="sha-comp-val">8,5</span></li>
+              <li><span class="sha-comp-lbl">Německo</span><span class="sha-comp-bar" style="--w: 90.0%"></span><span class="sha-comp-val">11,7</span></li>
+              <li><span class="sha-comp-lbl">Francie</span><span class="sha-comp-bar" style="--w: 88.5%"></span><span class="sha-comp-val">11,5</span></li>
+              <li><span class="sha-comp-lbl">Rakousko</span><span class="sha-comp-bar" style="--w: 86.2%"></span><span class="sha-comp-val">11,2</span></li>
+              <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 76.9%"></span><span class="sha-comp-val">10,0</span></li>
+              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 69.2%"></span><span class="sha-comp-val">~9,0</span></li>
+              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 64.6%"></span><span class="sha-comp-val">8,4</span></li>
             </ul>
           </div>
 
@@ -221,8 +231,8 @@
             <h4 class="sha-comp-h">Veřejný podíl</h4>
             <div class="sha-comp-sub">% celkových výdajů</div>
             <ul class="sha-comp-bars" data-max="100">
-              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 85%"></span><span class="sha-comp-val">85</span></li>
-              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 76%"></span><span class="sha-comp-val">76</span></li>
+              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 84.5%"></span><span class="sha-comp-val">84,5</span></li>
+              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 76%"></span><span class="sha-comp-val">~76</span></li>
             </ul>
             <p class="sha-comp-note">ČR je nadprůměr — silná finanční ochrana, ale reformní páky koncentrované do veřejné regulace.</p>
           </div>
@@ -230,17 +240,27 @@
           <div class="sha-comp-card">
             <h4 class="sha-comp-h">Z kapsy pacienta</h4>
             <div class="sha-comp-sub">% celkových výdajů, OOP</div>
-            <ul class="sha-comp-bars" data-max="25">
-              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 80%"></span><span class="sha-comp-val">20</span></li>
-              <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 78%"></span><span class="sha-comp-val">19,5</span></li>
-              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 56%"></span><span class="sha-comp-val">14</span></li>
+            <ul class="sha-comp-bars" data-max="20">
+              <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 95%"></span><span class="sha-comp-val">~19</span></li>
+              <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 73%"></span><span class="sha-comp-val">14,6</span></li>
+              <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 70%"></span><span class="sha-comp-val">~14</span></li>
             </ul>
-            <p class="sha-comp-note">ČR je v OECD jedno z nejnižších OOP — průměr však maskuje nerovné rozložení mezi seniory s polypragmazií.</p>
+            <p class="sha-comp-note">ČR je zhruba na úrovni průměru EU a pod průměrem OECD — ne mezi vůbec nejnižšími v EU. Agregát navíc maskuje nerovné rozložení mezi seniory s polypragmazií.</p>
           </div>
 
         </div>
-        <p class="article-figure-source">Zdroj: dashboard HSPA Monitoru, OECD Health Statistics 2024, Eurostat <code>hlth_sha</code>. Hodnoty Německa, Francie a Rakouska z OECD Health at a Glance.</p>
+        <p class="article-figure-source">Zdroj: ČR — ČSÚ <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em> (2025); EU a jednotlivé země — Eurostat <code>hlth_sha</code> (current health expenditure, referenční rok 2023); OECD průměr — OECD Health at a Glance. Staženo 15. 5. 2026. OECD pracuje s mírně širší definicí výdajů než Eurostat, proto je jeho průměr uveden jako řádový.</p>
       </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity dat">
+        <h4 class="article-callout-h">Jak číst čísla v tomto článku</h4>
+        <p>
+          Strukturní podíly pro ČR (HF kategorie, podíl HDP, out-of-pocket) odpovídají <strong>referenčnímu roku 2023</strong> — to je nejnovější vlna primární publikace ČSÚ <em>Výsledky zdravotnických účtů v ČR</em> (vydaná 2025; ČSÚ publikuje s odstupem zhruba půldruhého až dvou let). Hodnota pro rok 2024 (8,5 % HDP) existuje jen jako odhad dashboardu HSPA Monitoru, ne jako ověřené číslo z primárního zdroje.
+        </p>
+        <p>
+          Mezinárodní srovnání kombinuje dva zdroje s mírně odlišnou metodikou: <strong>Eurostat</strong> (<code>hlth_sha</code>, „current health expenditure") a <strong>OECD</strong> (Health at a Glance, širší definice včetně části kapitálových výdajů). Proto se údaj pro tutéž zemi mezi oběma zdroji liší o desetiny až jednotky procentního bodu. V tomto článku jsou hodnoty jednotlivých zemí sjednoceny na Eurostat 2023; průměr OECD je uváděn jako řádový.
+        </p>
+      </aside>
 
       <h3>Co v SHA chybí — slepé skvrny</h3>
 
@@ -267,15 +287,15 @@
       <h3>Co data znamenají pro reformu</h3>
 
       <p>
-        SHA samo o sobě nediktuje reformní směr. Ukazuje strukturu, ze které se reformní debata může opírat. Několik zjevných sdělení z české struktury 2024:
+        SHA samo o sobě nediktuje reformní směr. Ukazuje strukturu, ze které se reformní debata může opírat. Několik zjevných sdělení z české struktury 2023:
       </p>
 
       <p>
-        Růstový tlak na výdaje není v Česku v evropském srovnání mimořádný; výdaje rostou v podstatě s HDP a zůstávají stabilní okolo 8,5 %. Argument „české zdravotnictví je drahé a roste kontrolovaně" tedy v makro pohledu neplatí — pokud se objevuje napětí, je to napětí <em>uvnitř</em> systému (mezi segmenty, regiony, profesemi), ne jeho celková velikost.
+        Růstový tlak na výdaje není v Česku v evropském srovnání mimořádný; po pandemickém vrcholu (9,2 % HDP v roce 2021) se podíl vrátil dolů a v letech 2022–2023 se drží kolem 8,4–8,5 % HDP. Argument „české zdravotnictví je drahé a roste nekontrolovaně" tedy v makro pohledu neplatí — pokud se objevuje napětí, je to napětí <em>uvnitř</em> systému (mezi segmenty, regiony, profesemi), ne jeho celková velikost.
       </p>
 
       <p>
-        Veřejný podíl 85 % je vysoký a je <em>rozhodnutím</em>, ne nutností. Posílit soukromé schéma (HF.2.1) jako strukturní složku — ne jen kosmetickou nadstavbu — by vyžadovalo regulační rámec, který v ČR neexistuje (povinný balík, který připojištění doplňuje, ochrana před cherry-pickingem rizik). Reforma tímto směrem je v české debatě dlouhodobě zmiňovaná, ale konkrétní podobu nepřišla.
+        Veřejný podíl 84,5 % je vysoký a je <em>rozhodnutím</em>, ne nutností. Posílit soukromé schéma (HF.2.1) jako strukturní složku — ne jen kosmetickou nadstavbu — by vyžadovalo regulační rámec, který v ČR neexistuje (povinný balík, který připojištění doplňuje, ochrana před cherry-pickingem rizik). Reforma tímto směrem je v české debatě dlouhodobě zmiňovaná, ale konkrétní podobu nepřišla.
       </p>
 
       <p>
@@ -293,7 +313,7 @@
       <h3>Co by občan měl vědět</h3>
 
       <p>
-        SHA není dokument, který si občan ráno čte. Ale je to mapa peněz, která dává řád debatě. Když politik říká „zdravotnictví je drahé a neudržitelné", mapa říká: 8,5 % HDP, dvacet let stabilně. Když říká „pacient platí moc z kapsy", mapa říká: 14 %, nejnižší v OECD průměru. Když říká „chybí peníze na prevenci", mapa říká: ano, 2,5 %, pohyb směrem nahoru je strukturální rozhodnutí. Když říká „dlouhodobá péče se topí", mapa říká: její vážnost je rozdělená mezi dvě statistiky a integrace je technicky proveditelná.
+        SHA není dokument, který si občan ráno čte. Ale je to mapa peněz, která dává řád debatě. Když politik říká „zdravotnictví je drahé a neudržitelné", mapa říká: 8,4 % HDP v roce 2023, po pandemickém výkyvu zpět dolů. Když říká „pacient platí moc z kapsy", mapa říká: 14,6 %, zhruba na evropském průměru a pod průměrem OECD. Když říká „chybí peníze na prevenci", mapa říká: ano, kolem 2,5–3 %, pohyb směrem nahoru je strukturální rozhodnutí. Když říká „dlouhodobá péče se topí", mapa říká: její vážnost je rozdělená mezi dvě statistiky a integrace je technicky proveditelná.
       </p>
 
       <p>
@@ -308,14 +328,14 @@
 
     <aside class="article-databox" aria-label="Datový rámec článku">
       <div class="ed-kicker">Data v tomto článku</div>
-      <h4 class="article-databox-h">Klíčové struktury financování ČR (2024)</h4>
+      <h4 class="article-databox-h">Klíčové struktury financování ČR (referenční rok 2023, ČSÚ)</h4>
       <ul class="article-databox-list">
-        <li><strong>Celkové výdaje na zdravotnictví / HDP</strong> — ČR 8,5 % (OECD 9,3 %, EU 10,4 %)</li>
-        <li><strong>Trend ČR / HDP 2020–2024</strong> — 9,2 → 8,9 → 8,7 → 8,5 → 8,5 %</li>
-        <li><strong>HF.1.2 — povinné kontributivní zdravotní pojištění</strong> — ~75 % celkových výdajů</li>
-        <li><strong>HF.1.1 — vládní schémata (státní rozpočet, kraje)</strong> — ~10 %</li>
-        <li><strong>HF.3 — přímé platby pacientů</strong> — 14 % (OECD 20 %, EU 19,5 %)</li>
-        <li><strong>HF.2 — soukromé pojištění a benefity</strong> — pod 1 %</li>
+        <li><strong>Celkové výdaje na zdravotnictví</strong> — 642,0 mld. Kč (8,4 % HDP; EU 10,0 %, OECD ~9 %)</li>
+        <li><strong>Trend ČR / HDP 2020–2023</strong> — ~9,0 → 9,2 → 8,5 → 8,4 % (vrchol 2021)</li>
+        <li><strong>HF.1.2 — povinné kontributivní zdravotní pojištění</strong> — 72,6 % (466,6 mld. Kč)</li>
+        <li><strong>HF.1.1 — vládní schémata (státní rozpočet, kraje)</strong> — 11,9 % (76,1 mld. Kč)</li>
+        <li><strong>HF.3 — přímé platby pacientů</strong> — 14,6 % (93,7 mld. Kč; EU ~14 %, OECD ~19 %)</li>
+        <li><strong>HF.2 — soukromé pojištění a benefity</strong> — 0,9 %</li>
         <li><strong>HC.1 — léčebná péče (lůžková + ambulantní)</strong> — ~60 %</li>
         <li><strong>HC.5.1 — léky a zdravotnické zboží</strong> — 14–16 %</li>
         <li><strong>HC.3 — dlouhodobá péče (zdravotní část)</strong> — řádově 5 % (+ HC.R.1 v sociální statistice)</li>
@@ -326,7 +346,7 @@
         <li><strong>HP.5 — maloobchod (lékárny)</strong> — ~14 %</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k údajům:</strong> Hodnoty výdajů na zdravotnictví / HDP a out-of-pocket pocházejí z dashboardu HSPA Monitoru za rok 2024 (zdroje ČSÚ a OECD). Procentuální podíly HF/HC/HP kategorií jsou řádové a vycházejí ze zveřejněných ČSÚ <em>Výsledky zdravotnických účtů ČR</em> a OECD Health Statistics; konkrétní decimální hodnoty jednotlivých kategorií se v jednotlivých letech mírně liší. Odhad neformálních plateb (Eurobarometr 2017) a ekonomický ekvivalent neformální péče (Eurofound 2022) jsou ze samostatných šetření, ne z SHA. Pro analytické účely doporučujeme primární publikaci ČSÚ, OECD Health Statistics a Eurostat databázi <code>hlth_sha</code>.
+        <strong>Pozn. k údajům:</strong> Hodnoty pro ČR (celkové výdaje, podíl HDP, podíly HF) odpovídají referenčnímu roku 2023 podle primární publikace ČSÚ <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em> (vydáno 2025). Dashboard HSPA Monitoru pracuje navíc s odhadem pro rok 2024 (8,5 % HDP, 14 % OOP), který zde uvádíme jen jako explicitně označený odhad — primárně dohledatelná data končí rokem 2023. Mezinárodní průměry a hodnoty jednotlivých zemí jsou z Eurostat <code>hlth_sha</code> (current health expenditure, 2023) a OECD Health at a Glance; OECD pracuje s mírně širší definicí výdajů, proto je jeho průměr uváděn jako řádový. Podíly HC a HP jsou řádové strukturní profily ČSÚ; konkrétní decimální hodnoty se v jednotlivých letech mírně liší. Odhad neformálních plateb (Eurobarometr 2017) a ekonomický ekvivalent neformální péče (Eurofound 2022) jsou ze samostatných šetření, ne z SHA.
       </p>
     </aside>
 
@@ -336,9 +356,9 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>ČSÚ — Výsledky zdravotnických účtů ČR</strong> — primární publikace SHA pro Česko, ročně. <a href="https://www.czso.cz/csu/czso/vysledky-zdravotnickych-uctu-cr" target="_blank" rel="noopener">czso.cz ↗</a></li>
+          <li><strong>ČSÚ — Výsledky zdravotnických účtů v ČR v letech 2010–2023</strong> — primární publikace SHA pro Česko (vydáno 2025); zdroj všech hodnot ČR za referenční rok 2023 v tomto článku. <a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">csu.gov.cz ↗</a> · <a href="https://web.archive.org/web/2026*/https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">archiv ↗</a></li>
           <li><strong>OECD Health Statistics</strong> — mezinárodně srovnatelná SHA data, dataset HEALTH_EXP. <a href="https://www.oecd.org/en/topics/sub-issues/health-systems-and-financing.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>Eurostat — Health care expenditure (hlth_sha)</strong> — evropská databáze SHA. <a href="https://ec.europa.eu/eurostat/databrowser/explore/all/popul?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — Health care expenditure (hlth_sha11)</strong> — evropská databáze SHA; tabulky podle schémat financování (<code>hlth_sha11_hf</code>), funkcí (<code>hlth_sha11_hc</code>) a poskytovatelů (<code>hlth_sha11_hp</code>). <a href="https://ec.europa.eu/eurostat/databrowser/product/page/hlth_sha11_hf" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
           <li><strong>OECD Health at a Glance</strong> — výroční srovnávací report, sekce „Health expenditure and financing". <a href="https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance_19991312" target="_blank" rel="noopener">oecd-ilibrary.org ↗</a></li>
           <li><strong>SÚKL — léková statistika</strong> — primární zdroj pro detail HC.5.1. <a href="https://www.sukl.cz/" target="_blank" rel="noopener">sukl.cz ↗</a></li>
         </ul>
@@ -362,7 +382,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty výdajů na zdravotnictví jako % HDP a out-of-pocket podílu jsou z dashboardu HSPA Monitoru ke dni vydání článku (rok 2024, zdroje ČSÚ a OECD). Strukturní procenta podle HF, HC a HP klasifikací odpovídají dlouhodobému profilu české SHA statistiky publikované ČSÚ; konkrétní decimální hodnoty jednotlivých kategorií se v jednotlivých letech mírně liší. Odhad ekonomického ekvivalentu neformální péče (~1,5 % HDP) a frekvence neformálních plateb (5–7 % domácností) pochází ze samostatných šetření Eurofound 2022 a Eurobarometr 2017. Pro přesné aktuální podíly v daném referenčním roce doporučujeme primární publikaci ČSÚ <em>Výsledky zdravotnických účtů ČR</em>.
+        <strong>Pozn. k údajům:</strong> Hodnoty pro ČR (celkové výdaje 642,0 mld. Kč, podíl HDP 8,4 %, podíly HF a out-of-pocket 14,6 %) odpovídají referenčnímu roku 2023 podle primární publikace ČSÚ <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em> (vydáno 2025; staženo 15. 5. 2026). Odhad pro rok 2024, který používá dashboard HSPA Monitoru, je v článku uváděn výhradně jako explicitně označený odhad — primárně dohledatelná data končí rokem 2023. Mezinárodní hodnoty pocházejí z Eurostat <code>hlth_sha</code> (current health expenditure, 2023) a OECD Health at a Glance; obě metodiky se mírně liší, proto je průměr OECD uváděn jako řádový. Strukturní procenta HC a HP odpovídají dlouhodobému profilu české SHA statistiky a v jednotlivých letech se mírně liší. Odhad ekonomického ekvivalentu neformální péče (~1,5 % HDP) a frekvence neformálních plateb (5–7 % domácností) pochází ze samostatných šetření Eurofound 2022 a Eurobarometr 2017, ne z SHA.
       </p>
     </section>
 
