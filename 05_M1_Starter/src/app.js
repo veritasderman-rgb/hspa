@@ -325,15 +325,17 @@ function renderEditorialHero() {
     const statsEl = document.getElementById('edHeroStats');
     if (statsEl && heroPicks.length) {
       statsEl.innerHTML = heroPicks.map(function (p) {
-        const oecd = p.ind.benchmark && p.ind.benchmark.oecd;
-        const benchOecd = oecd != null ? 'OECD ' + fmt(oecd) : '';
-        const gap = gapText(p.ind.value, oecd, p.ind.direction);
+        const bench = p.ind.benchmark || {};
+        const benchVal = bench.oecd != null ? bench.oecd : bench.eu;
+        const benchLabel = bench.oecd != null ? 'OECD' : (bench.eu != null ? 'EU' : '');
+        const benchText = benchVal != null ? benchLabel + ' ' + fmt(benchVal) : '';
+        const gap = gapText(p.ind.value, benchVal, p.ind.direction);
         const unit = escapeHtmlInner(p.ind.unit || '');
         const url = 'indicator.html?id=' + encodeURIComponent(p.ind.id);
         return '<a class="ed-stat" href="' + url + '">'
           + '<div class="ed-stat-num"><span class="signal-dot ' + escapeHtmlInner(p.ind.signal || '') + '" aria-hidden="true"></span>' + escapeHtmlInner(fmt(p.ind.value)) + '<span class="ed-stat-unit">' + unit + '</span></div>'
           + '<div class="ed-stat-lbl">' + escapeHtmlInner(p.label) + '</div>'
-          + '<div class="ed-stat-meta">' + escapeHtmlInner(benchOecd) + (gap ? ' · ' + escapeHtmlInner(gap) : '') + '</div>'
+          + '<div class="ed-stat-meta">' + escapeHtmlInner(benchText) + (gap ? ' · ' + escapeHtmlInner(gap) : '') + '</div>'
           + '</a>';
       }).join('');
     }
@@ -1063,26 +1065,26 @@ function renderTopCritical() {
   const bad = allIndicators.filter(i => i.signal === 'bad');
   if (!bad.length) { container.classList.add('hidden'); return; }
 
-  // Seřaď podle procentuálního odchýlení od OECD benchmarku
+  // Seřaď podle procentuálního odchýlení od benchmarku (OECD primárně, EU fallback)
   const scored = bad.map(ind => {
-    const oecd = ind.benchmark?.oecd;
-    const gap = oecd != null ? Math.abs((ind.value - oecd) / oecd * 100) : 0;
-    return { ind, gap };
+    const bench = ind.benchmark?.oecd != null ? ind.benchmark.oecd : ind.benchmark?.eu;
+    const benchLabel = ind.benchmark?.oecd != null ? 'OECD' : (ind.benchmark?.eu != null ? 'EU' : null);
+    const gap = bench != null ? Math.abs((ind.value - bench) / bench * 100) : 0;
+    return { ind, gap, bench, benchLabel };
   }).sort((a, b) => b.gap - a.gap);
 
   const top = scored.slice(0, 3);
   container.classList.remove('hidden');
 
-  const items = top.map(({ ind, gap }) => {
-    const oecdVal = ind.benchmark?.oecd;
-    const gapStr = oecdVal != null ? `${gap.toFixed(0)} % od OECD` : '';
+  const items = top.map(({ ind, gap, bench, benchLabel }) => {
+    const gapStr = bench != null ? `${gap.toFixed(0)} % od ${benchLabel}` : '';
     return `
       <div class="top-critical-item" role="button" tabindex="0" data-id="${ind.id}"
            aria-label="${escapeText(ind.name)}: ${ind.value} ${ind.unit}">
         <span class="signal bad" title="Kritický"></span>
         <span class="top-critical-name">${escapeText(ind.name)}</span>
         <span class="top-critical-value">${ind.value} ${ind.unit}</span>
-        ${oecdVal != null ? `<span class="top-critical-oecd">OECD: ${oecdVal}</span>` : ''}
+        ${bench != null ? `<span class="top-critical-oecd">${benchLabel}: ${bench}</span>` : ''}
         ${gapStr ? `<span class="top-critical-gap">${gapStr}</span>` : ''}
       </div>`;
   }).join('');
