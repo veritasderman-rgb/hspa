@@ -1,0 +1,38 @@
+{
+  "id": "osetrovaci_dny_na_uvazek_sestry",
+  "name": "Ošetřovací dny na 1 úvazek sestry",
+  "area": "Procesy",
+  "domain": "Pracovní síla",
+  "subdomain": "Zátěž ošetřovatelského personálu",
+  "definition": "Počet ošetřovacích dnů (OD) odpracovaných ošetřovatelským personálem připadající na 1 úvazek registrované všeobecné sestry (PVZ — průměrný roční přepočtený stav) za rok. Vyjadřuje intenzitu ošetřovatelské zátěže pracoviště a — společně s podílem pacientů v kategoriích ošetřovatelské náročnosti 3–5 — slouží jako proxy pro nedostatek personálu a riziko vyhoření.",
+  "unit": "OD / úvazek / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "NRHZS · OIS-11-50 PALP komplexní výstup",
+      "endpoint": "https://www.nzip.cz/data/2714-palp-komplexni-vystup-datovy-souhrn",
+      "note": "Komplexní datový výstup PALP zahrnuje úvazky pracovníků (PVZ) a počet OD podle pracoviště a oboru."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "NURSE_STAFFING",
+    "note": "OECD publikuje nurse-to-patient ratio jako poměr (ne OD/úvazek), takže přímá srovnatelnost je omezená. Mezinárodní reference (RN4CAST, Aiken et al.) pracují s nurse-to-patient ratio na směně."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "Česká asociace sester",
+    "MZ ČR — odbor lidských zdrojů ve zdravotnictví"
+  ],
+  "method_notes": "Hodnoty 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): celostátní průměr napříč obory ≈ 406 OD / úvazek / rok; vnitřní lékařství podle grafu prezentace ≈ 575 OD / úvazek / rok. Indikátor je třeba interpretovat společně s podílem pacientů v ošetřovatelských kategoriích 3–5 (interna a geriatrie patří dlouhodobě k oborům s nejvyšší ošetřovatelskou náročností — celostátní průměr podílu HP s kat. 3–5 = 51,1 %). Vyšší hodnota OD/úvazek znamená vyšší intenzitu práce, ale interpretace závisí na ošetřovatelské náročnosti případů, organizaci směn a podpoře asistenčního personálu. Hodnoty jsou převzaty z deckového podkladu; pro publikaci je nutné replikovat z OIS-11-50.",
+  "limitations": "Mezioborové srovnání je metodicky složité: chirurgické obory mají nižší OD/úvazek, ale vyšší intenzitu peri/pooperační péče. Indikátor nepokrývá zdravotnické asistenty, ošetřovatele a sanitáře, kteří fakticky odbavují část ošetřovatelské péče. Roční průměr neukazuje sezónní špičky a noční směny, kde je zátěž nejvyšší.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "review-pending"
+}

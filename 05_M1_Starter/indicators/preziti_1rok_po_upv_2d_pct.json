@@ -1,0 +1,37 @@
+{
+  "id": "preziti_1rok_po_upv_2d_pct",
+  "name": "Přežití 1 rok po UPV delší než 2 dny",
+  "area": "Výsledky",
+  "domain": "Kvalita péče",
+  "subdomain": "Intenzivní péče",
+  "definition": "Podíl pacientů, kteří přežili alespoň 365 dní od dokončení epizody umělé plicní ventilace (UPV) trvající déle než 48 hodin, hospitalizovaných na pracovištích ARO nebo intenzivní péče. Klíčový dlouhodobý outcome indikátor kvality a smysluplnosti kritické péče.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "dataset": "NRHZS · NRIP — pilotní indikátory IP/anestezie 2010–2024",
+      "endpoint": "https://www.nzip.cz/data/2708-indikatory-intenzivni-pece-anesteziologie-2010-2024-analyticka-studie",
+      "note": "Analytická studie ÚZIS · pilotní přehled indikátorů intenzivní péče a anesteziologie 2010–2024."
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "Srovnatelný národní indikátor není v OECD ani v Eurostatu publikován; mezinárodní studie (např. Wunsch et al.) používají různé definice UPV trvání a věkové stratifikace."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS · NRIP",
+    "ČSARIM — Česká společnost anesteziologie, resuscitace a intenzivní medicíny",
+    "MZ ČR — NIKEZ"
+  ],
+  "method_notes": "Hodnoty převzaty z prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): dospělí 51,2 %; 65–74 let 48,5 %; 75–84 let 34,7 %; 85+ let 16,9 %. Indikátor silně závisí na case-mixu a věkové struktuře pracoviště — porovnání mezi pracovišti vyžaduje standardizaci nebo věkovou stratifikaci. Jde o pilotní indikátor v NIKEZ rámci; metodika výpočtu se může v dalších letech upřesňovat. Pro publikaci v dashboardu je nutné replikovat z primárního datasetu NZIP 2708.",
+  "limitations": "Indikátor je věkově silně variabilní (od ~17 % u 85+ k ~51 % u všech dospělých); interpretace bez věkové stratifikace zavádí. Krátkodobá in-hospital mortalita po UPV není totéž co 1-rok přežití. Selekční bias: pacienti na UPV >2 dny jsou již selekcí těch s těžkou klinickou prezentací. Indikátor doplňuje, nikoli nahrazuje, indikaci IP — vysoká úmrtnost u nejstarších není nutně známkou nekvalitní péče, ale upozornění na hraniční přínos prodloužené resuscitační péče u křehkých geriatrických pacientů.",
+  "framework": "hspa",
+  "dimension": "kvalita",
+  "verification_status": "review-pending"
+}

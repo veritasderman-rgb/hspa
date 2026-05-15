@@ -1,0 +1,37 @@
+{
+  "id": "podil_senioru_na_internich_hospitalizacich",
+  "name": "Podíl pacientů 65+ na interních hospitalizacích",
+  "area": "Výstupy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Geriatrická hospitalizace",
+  "definition": "Podíl hospitalizačních případů (HP) na lůžkách vnitřního lékařství, kde věk pacienta ke dni přijetí činí 65 let a více, na celkovém počtu interních hospitalizací v daném roce.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "NRHZS · NRHOSP — hospitalizace podle oboru a věku",
+      "endpoint": "https://www.nzip.cz/data/2713-produkce-palp-sumarizace-datovy-souhrn",
+      "note": "Sumarizace produkce základních oborů PALP. Doplňující rozcestník otevřená data: https://www.nzip.cz/data/2225-hospitalizacni-pripady-akutni-intezivni-pece-otevrena-data."
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "Mezinárodní srovnání by vyžadovalo harmonizovat definici oboru 'vnitřní lékařství' (general internal medicine) a věkové stratifikace v nemocničních registrech."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "Česká internistická společnost ČLS JEP",
+    "Česká geriatrická a gerontologická společnost"
+  ],
+  "method_notes": "Hodnota 2023 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): 72,2 % interních hospitalizací jsou pacienti 65+; v absolutních číslech 245 400 z celkových 339 722 hospitalizačních případů. Indikátor není 'čím méně, tím lépe' — odráží strukturní roli interního lékařství jako klíčového oboru komplexní akutní péče o polymorbidní seniory. Hodnoty jsou převzaty z deckového podkladu; pro publikaci je nutné replikovat z primárního datasetu NRHOSP/PALP.",
+  "limitations": "Vysoký podíl 65+ na interně neříká nic o kvalitě péče; informuje o typologii pacienta. Indikátor je třeba interpretovat společně s ALOS (průměrná délka hospitalizace, 2023 = 6,2 dne na interně) a s ošetřovatelskou náročností. Definice 'interní hospitalizace' zahrnuje obvykle obory: vnitřní lékařství všeobecné, kardiologie, gastroenterologie, pneumologie, nefrologie atd. — desagregace podle suboboru může odhalit, kde se geriatrické pacientstvo koncentruje nejvíce.",
+  "framework": "hspa",
+  "dimension": "dostupnost",
+  "verification_status": "review-pending"
+}

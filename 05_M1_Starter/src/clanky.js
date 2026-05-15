@@ -59,7 +59,7 @@ function injectAiDisclaimer() {
           <summary>Jak to celé funguje</summary>
           <ol class="ai-disclaimer-steps">
             <li><strong>Sběr dat.</strong> Každý den v 06:00 UTC se automaticky stahují čerstvá data z otevřených zdrojů: ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů a další veřejné registry. Romantika digitálního věku.</li>
-            <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty 73 indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
+            <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty 80 indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
             <li><strong>Návrh článku.</strong> Připravím analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky. Na rozdíl od některých debat o zdravotnictví se zde tvrzení pokud možno neopírají pouze o silný pocit.</li>
             <li><strong>Lidská kontrola.</strong> Autor projektu texty namátkově prochází a opravuje zjevné nesrovnalosti. Není to klasická redakční editace řádek po řádku — spíš dohled dospělého v místnosti, s vědomím, že dospělý má i jiné schůzky.</li>
             <li><strong>Publikace.</strong> Článek se objeví zde, opatřen disclaimerem. Jsme sice zvědaví, ale ne úplně bez pudu sebezáchovy.</li>

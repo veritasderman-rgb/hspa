@@ -1,0 +1,40 @@
+{
+  "id": "obloznost_intenzivni_pece_pct",
+  "name": "Využití lůžek intenzivní péče (ARO/JIP)",
+  "area": "Procesy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Intenzivní péče",
+  "definition": "Průměrné roční využití lůžkového fondu intenzivní péče: poměr realizovaných ošetřovacích dnů k disponibilním ošetřovacím dnům (počet lůžek × 365). Sledováno samostatně pro pracoviště ARO (anesteziologicko-resuscitační oddělení, převážně 3. úroveň IP) a JIP (jednotky intenzivní péče oborových klinik, 1. a 2. úroveň IP).",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "NRHZS · OIS-11-50 PALP",
+      "endpoint": "https://www.nzip.cz/data/2712-intenzivni-pece-hodnoceni-datovy-souhrn",
+      "note": "Datový souhrn hodnocení pracovišť intenzivní péče (NZIP/ÚZIS). Hodnocení 2024 zahrnuje 91 pracovišť ARO a 125 pracovišť JIP."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.nzip.cz/data/2226-osetrovaci-dny-akutni-intenzivni-pece-datovy-souhrn"
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "OECD nepublikuje srovnatelný indikátor využití ICU. Mezinárodní srovnání by vyžadovalo harmonizovat definici 'intenzivního lůžka' (ESICM Level 1/2/3) — proto bez OECD/EU benchmarku."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS · NRHZS / NRIP",
+    "MZ ČR — pracovní skupina pro intenzivní péči (NIKEZ)"
+  ],
+  "method_notes": "Hodnoty 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): ARO 65 %, JIP 61 %, agregát IP přibližně 62–65 %. Hodnoty jsou převzaty z deckového podkladu — pro publikaci je nutné replikovat z OIS-11-50 PALP a hodnocení IP datasetu (NZIP 2712). 100% využití není cílem: kritická péče vyžaduje pohotovostní rezervu pro špičky, hromadná neštěstí a pandemické scénáře. Efektivně řízené pracoviště má typicky 70–85 % průměrné obložnosti.",
+  "limitations": "Definice intenzivního lůžka v NRHZS se metodicky liší od OECD ICU (ESICM Level 2/3 standardně), proto přímá komparace s OECD číslem ~5–10 % lůžek nemocniční sítě je zavádějící. Hodnota agreguje různě komplexní pracoviště (multioborové JIP, oborové JIP, ARO) — interpretace vyžaduje desagregaci podle typu pracoviště a úrovně péče.",
+  "framework": "hspa",
+  "dimension": "efektivita",
+  "verification_status": "review-pending"
+}

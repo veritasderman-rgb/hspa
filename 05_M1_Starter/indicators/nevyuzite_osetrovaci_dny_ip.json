@@ -1,0 +1,41 @@
+{
+  "id": "nevyuzite_osetrovaci_dny_ip",
+  "name": "Nevyužité ošetřovací dny intenzivní péče",
+  "area": "Procesy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Intenzivní péče",
+  "definition": "Roční rozdíl mezi disponibilním (smluvně sjednaným nebo registrovaným) lůžkovým fondem intenzivní péče vyjádřeným v ošetřovacích dnech (lůžka × 365) a realizovaným počtem ošetřovacích dnů. Měří kapacitní rezervu intenzivní péče.",
+  "unit": "OD / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrhzs",
+      "dataset": "NRHZS · NRIP — hodnocení pracovišť IP",
+      "endpoint": "https://www.nzip.cz/data/2712-intenzivni-pece-hodnoceni-datovy-souhrn",
+      "note": "Hodnocení pracovišť intenzivní péče za rok 2024 (NZIP/ÚZIS): ARO 91 pracovišť, 821 IP lůžek; JIP 125 pracovišť, 4 906 IP lůžek."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://www.nzip.cz/data/2226-osetrovaci-dny-akutni-intenzivni-pece-datovy-souhrn"
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "Bez mezinárodního benchmarku — ukazatel je definován k lokálním smluvně sjednaným kapacitám, není srovnatelný napříč zeměmi."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 30
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS · NRIP",
+    "zdravotní pojišťovny",
+    "MZ ČR — NIKEZ"
+  ],
+  "method_notes": "Hodnoty 2024 podle prezentace prof. Duška (VZ PS PČR, 13. 5. 2026): ARO 104 883 nevyužitých OD, JIP 698 369 nevyužitých OD, celkem ≈ 803 252 OD. Hodnota je převzata z deckového podkladu; primární replikace nutná z OIS-11-50 + hodnocení IP datasetu (NZIP 2712). Indikátor není 'čím méně, tím lépe' v absolutním smyslu: kritická péče potřebuje rezervní kapacitu pro pandemie, hromadná neštěstí a sezonní špičky (RSV, chřipka). Optimum je strukturální (alokovat kapacitu tam, kde je realisticky využita) a koordinační (sdílení mezi pracovišti, dispečink IP), ne absolutní minimalizace.",
+  "limitations": "Sběr dat o registrovaných IP lůžkách v NRHZS nemusí být ve všech zařízeních konzistentní (nesoulad mezi smluvně sjednanými a fakticky vykazovanými IP lůžky). Část nevyužité kapacity oborových JIP je strukturní — lůžka jsou drženě pro nárazové výkyvy v daném oboru a jejich realokace by vyžadovala organizační reformu (multioborové JIP).",
+  "framework": "hspa",
+  "dimension": "efektivita",
+  "verification_status": "review-pending"
+}
