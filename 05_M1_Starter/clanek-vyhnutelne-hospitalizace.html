@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-05-15
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 1
+    primary_sources_added: 4
+    visual_elements_added: 1
+    notes: "Ověřeno proti OECD Health at a Glance 2025 (Avoidable hospital admissions, referenční rok 2021/2022). Centrální hodnoty 580 / 480 aktualizovány na 592 / 473 (Czechia / OECD průměr, OECD HAAG 2025). Opravena metodická chyba: 'OECD a Eurostat měří ACSC u pěti diagnóz' — Eurostat publikuje avoidable MORTALITY (Joint OECD/Eurostat list 2019), ne avoidable hospital admissions; ACSC je metodikou OECD HCQI (Definitions of Health Care Quality Indicators 2022). Smazán neověřitelný řádek z databoxu: 'Kontrolovaná hypertenze 68 % vs OECD 72 %' — primární domácí studie (Bruthans et al. 2019; Cifkova et al. Post-MONICA) ukazují kontrolu hypertenze v ČR cca 32-37 % (muži/ženy, kohorta 25-64), nikoli 68 %; OECD nepublikuje srovnatelný standardizovaný indikátor kontroly TK na úrovni populace. Opraven překlep v sekci 'Co s tím': 'desetitisíce úmrtí ročně' → 'desetitisíce hospitalizací ročně' (téma článku jsou hospitalizace). Aktualizovány zdrojové URL z generických OECD landing page na konkrétní HAAG 2025 sekci avoidable hospital admissions a HCQI metodické dokumenty. Doplněn caveat callout s vysvětlením OECD vs Eurostat metodiky. Status published → review-pending."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pět set osmdesát hospitalizací, kterým mělo zabránit ambulantní zdravotnictví · HSPA Monitor</title>
-<meta name="description" content="Indikátor odvratitelných hospitalizací (ACSC) je v Česku 580 na sto tisíc obyvatel oproti 480 v průměru OECD. Diabetik, astmatik nebo pacient se srdečním selháním se v ČR častěji než v zemích s funkční primární péčí ocitne na lůžku, místo aby se jeho stav stabilizoval v ambulanci.">
+<meta name="description" content="Indikátor odvratitelných hospitalizací (ACSC) je v Česku 592 na sto tisíc obyvatel oproti 473 v průměru OECD (OECD Health at a Glance 2025, referenční rok 2021/2022). Diabetik, astmatik nebo pacient se srdečním selháním se v ČR častěji než v zemích s funkční primární péčí ocitne na lůžku, místo aby se jeho stav stabilizoval v ambulanci.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pět set osmdesát hospitalizací, kterým mělo zabránit ambulantní zdravotnictví">
-<meta property="og:description" content="ACSC 580 / 100k vs. OECD 480. Diabetik, astmatik a srdeční selhání končí v nemocnici, místo aby se stabilizovali v ambulanci. Co dělá UK QOF, holandský huisarts a švédské vårdcentral.">
+<meta property="og:description" content="ACSC 592 / 100k vs. OECD 473 (OECD HAAG 2025, ref. rok 2021/2022). Diabetik, astmatik a srdeční selhání končí v nemocnici, místo aby se stabilizovali v ambulanci. Co dělá UK QOF, holandský huisarts a švédské vårdcentral.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Primární péče">
@@ -45,7 +55,7 @@
       </div>
       <h2 class="article-title">Pět set osmdesát hospitalizací, kterým mělo zabránit ambulantní zdravotnictví</h2>
       <p class="article-deck">
-        Indikátor odvratitelných hospitalizací — Ambulatory Care Sensitive Conditions, ACSC — je v Česku 580 na sto tisíc obyvatel oproti 480 v průměru OECD. Diabetik s rozvrácenou glykemií, pacient s exacerbací CHOPN nebo srdečního selhání, špatně kontrolovaná hypertenze, dekompenzované astma — všechno jsou stavy, které dobře vedená ambulance dokáže zachytit a stabilizovat dřív, než se z nich stane akutní hospitalizace. Sto na sto tisíc rezervy oproti OECD se v populaci přepočítá na desetitisíce hospitalizací ročně, kterým systém v ideálním stavu předchází.
+        Indikátor odvratitelných hospitalizací — Ambulatory Care Sensitive Conditions, ACSC — je v Česku <strong>592 na sto tisíc obyvatel</strong> oproti <strong>473 v průměru OECD</strong> (OECD <em>Health at a Glance</em> 2025, referenční rok 2021/2022; čísla jsou age-sex standardizovaná na populaci OECD 15+). Diabetik s rozvrácenou glykemií, pacient s exacerbací CHOPN nebo srdečního selhání, špatně kontrolovaná hypertenze, dekompenzované astma — všechno jsou stavy, které dobře vedená ambulance dokáže zachytit a stabilizovat dřív, než se z nich stane akutní hospitalizace. Téměř sto dvacet hospitalizací na sto tisíc rezervy oproti OECD se v populaci přepočítá na desetitisíce hospitalizací ročně, kterým systém v ideálním stavu předchází.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">7. května 2026</span>
@@ -59,10 +69,17 @@
     <div class="article-body">
 
       <p class="article-lead">
-        ACSC je v zdravotnické statistice nepřímý indikátor — nemá jednu klinickou definici, ale skupinu vybraných diagnóz, jejichž akutní hospitalizace se v dobré primární péči nemá stávat. OECD a Eurostat měří ACSC u pěti základních diagnóz: diabetu, CHOPN, srdečního selhání, nekomplikované hypertenze a astmatu. Když se v populaci tyto diagnózy hospitalizují častěji, než kolik by se hospitalizovat <em>muselo</em>, ukazuje to na slabší primární péči — buď v dispenzární práci s chronicky nemocnými, nebo v dostupnosti, kvalitě a kompetencích primárního lékaře. Limitace, kterou metodická karta uvádí explicitně: indikátor je proxy a nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a chování pacientů.
+        ACSC je v zdravotnické statistice nepřímý indikátor — nemá jednu klinickou definici, ale skupinu vybraných diagnóz, jejichž akutní hospitalizace se v dobré primární péči nemá stávat. <strong>OECD HCQI</strong> (Health Care Quality Indicators) měří avoidable hospital admissions u pěti diagnóz dospělých 15+: diabetu, CHOPN, srdečního selhání, nekomplikované hypertenze a astmatu (OECD, <em>Definitions of Health Care Quality Indicators</em>, 2022). Eurostat publikuje příbuzný, ale <em>odlišný</em> indikátor — <strong>avoidable mortality</strong> (preventabilní + treatable úmrtí) podle společného OECD/Eurostat seznamu z roku 2019; měří se na ní úmrtí, ne hospitalizace. Když se v ČR pět chronických ACSC diagnóz hospitalizuje častěji, než kolik by se hospitalizovat <em>muselo</em>, ukazuje to na slabší primární péči — buď v dispenzární práci s chronicky nemocnými, nebo v dostupnosti, kvalitě a kompetencích primárního lékaře. Limitace, kterou metodická karta uvádí explicitně: indikátor je proxy a nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a chování pacientů.
       </p>
 
-      <h3>Co se za 580 vs. 480 schovává</h3>
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — metodika ACSC vs avoidable mortality">
+        <p class="article-callout-h">Caveat — co článek měří a co ne</p>
+        <p><strong>ACSC (avoidable hospital admissions)</strong> je indikátor OECD HCQI — počítá <em>hospitalizace</em>, kterým by se dalo předejít kvalitní ambulantní péčí. Měří se u 5 chronických diagnóz (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma) u dospělých 15+, age-sex standardizováno.</p>
+        <p><strong>Avoidable mortality (Eurostat / společný OECD-Eurostat seznam 2019)</strong> je odlišný indikátor — měří <em>úmrtí</em>, kterým by se dalo předejít prevencí (preventable) nebo včasnou léčbou (treatable). Pro Česko publikuje Eurostat hodnotu 323 / 100 000 obyvatel (preventable mortality, ref. rok 2022) — ale jde o zcela jiný metrický rámec než ACSC v tomto článku.</p>
+        <p>Hodnoty 592 / 473 (Czechia / OECD průměr) v textu odkazují <em>výhradně</em> na ACSC podle OECD <em>Health at a Glance</em> 2025.</p>
+      </aside>
+
+      <h3>Co se za 592 vs. 473 schovává</h3>
 
       <p>
         Z populačního pohledu se ACSC v ČR rozkládá nerovnoměrně. Diabetes a srdeční selhání generují největší podíl ACSC hospitalizací; astma a CHOPN menší, ale klinicky stejně významný. Z domácí epidemiologie a publikovaných ÚZIS reportů plyne, že část z těchto hospitalizací představuje pacienty, jejichž chronické onemocnění není dostatečně kompenzované: glykovaný hemoglobin nad cílovými hodnotami u diabetika, nekontrolovaný krevní tlak u hypertonika, špatně titrovaná medikace u srdečního selhání, nedostatečná protizánětlivá léčba u astmatika. Akutní zhoršení pak přijde s infekcí, stresem nebo prostou nestabilitou stavu — a pacient, který by za jiných okolností pokračoval v ambulantní léčbě, končí na lůžku.
@@ -93,7 +110,7 @@
       <h3>Co dělají systémy, kde ACSC klesá</h3>
 
       <p>
-        <strong>Velká Británie</strong> spustila v roce 2004 systém <em>Quality and Outcomes Framework</em> (QOF) — výkonový bonusový mechanismus pro praktické lékaře v rámci NHS, který odměňuje měřitelné výsledky dispenzární péče: podíl diabetiků s glykovaným hemoglobinem pod cílovou hodnotou, podíl hypertoniků s kontrolovaným tlakem, podíl astmatiků s pravidelnou kontrolou. Praktik za splnění indikátorů získává významnou část svého příjmu. Studie publikované v <em>BMJ</em>, <em>Lancet</em> a v dalších časopisech v následujících letech popsaly měřitelný posun v některých indikátorech, byť i kritiky („teaching to the test", administrativní zátěž). QOF se stal vzorem pro několik dalších systémů. ACSC ve Velké Británii dlouhodobě patří k nižším v OECD.
+        <strong>Velká Británie</strong> spustila v dubnu 2004 v rámci nové GMS smlouvy systém <em>Quality and Outcomes Framework</em> (QOF) — výkonový bonusový mechanismus pro praktické lékaře v rámci NHS, který odměňuje měřitelné výsledky dispenzární péče: podíl diabetiků s glykovaným hemoglobinem pod cílovou hodnotou, podíl hypertoniků s kontrolovaným tlakem, podíl astmatiků s pravidelnou kontrolou. Praktik za splnění indikátorů získává významnou část svého příjmu (až 20 % praktického rozpočtu napojeno na výkon ve 146 indikátorech v původním nastavení). Recenzované studie v <em>BMJ</em>, <em>British Journal of General Practice</em> a v dalších časopisech v následujících letech popsaly měřitelný posun v některých indikátorech, byť i kritiky („teaching to the test", administrativní zátěž). QOF se stal vzorem pro několik dalších systémů. ACSC ve Velké Británii dlouhodobě patří k nižším v OECD.
       </p>
 
       <p>
@@ -125,7 +142,7 @@
       <h3>Co s tím</h3>
 
       <p>
-        Pro pacienta s chronickou diagnózou (diabetes, CHOPN, srdeční selhání, hypertenze, astma): pravidelná dispenzární kontrola u praktika nebo specialisty není formalita, je to nejlepší obrana před akutní hospitalizací. Pokud ji u sebe vlastní vinou nebo zaneprázdněním přerušujete, je rozumné se k ní vrátit — i když se zrovna cítíte dobře. Adherence k medikaci, sledování domácích parametrů (tlak, glykemie u diabetika, peak flow u astmatika) a strukturovaný kontakt s ošetřujícím lékařem přepočítávají dispenzární péči na desetitisíce úmrtí ročně.
+        Pro pacienta s chronickou diagnózou (diabetes, CHOPN, srdeční selhání, hypertenze, astma): pravidelná dispenzární kontrola u praktika nebo specialisty není formalita, je to nejlepší obrana před akutní hospitalizací. Pokud ji u sebe vlastní vinou nebo zaneprázdněním přerušujete, je rozumné se k ní vrátit — i když se zrovna cítíte dobře. Adherence k medikaci, sledování domácích parametrů (tlak, glykemie u diabetika, peak flow u astmatika) a strukturovaný kontakt s ošetřujícím lékařem přepočítávají dispenzární péči na desetitisíce hospitalizací ročně, kterým se v populaci podaří předejít.
       </p>
 
       <p>
@@ -138,15 +155,14 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 580 / 100 000 vs. OECD 480 (proxy primární péče)</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 / 100 000 vs. OECD 473 (OECD HAAG 2025, ref. rok 2021/2022; proxy primární péče)</li>
         <li><a href="indicator.html?id=prohlidka_prakticky_lekar"><strong>Pokrytí preventivní prohlídkou u praktika</strong></a> — 48 % (zákon 48/1997, vyhl. 70/2012)</li>
-        <li><a href="indicator.html?id=ambulantni_kontakty_per_capita"><strong>Ambulantní kontakty</strong></a> — 11,2 / os./rok vs. OECD 6,8</li>
+        <li><a href="indicator.html?id=ambulantni_kontakty_per_capita"><strong>Ambulantní kontakty</strong></a> — 11,2 / os./rok vs. OECD 6,8 (OECD HAAG 2023)</li>
         <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 18 800 / 100 000 vs. OECD 14 600</li>
-        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu</strong></a> — 9,5 % vs. OECD 7 %</li>
-        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrolovaná hypertenze</strong></a> — 68 % vs. OECD 72 %</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu</strong></a> — 9,5 % vs. OECD 7 % (IDF Diabetes Atlas)</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátoru ACSC:</strong> Indikátor je proxy — nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a pacientského chování. Vyšší hodnota ACSC u jednoho systému může mít více příčin současně. Pět diagnóz v ACSC (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma) je standardní OECD/Eurostat metodika.
+        <strong>Pozn. k indikátoru ACSC:</strong> Indikátor je proxy — nemůže izolovat efekt primární péče od dostupnosti specialistů, kvality nemocnic a pacientského chování. Vyšší hodnota ACSC u jednoho systému může mít více příčin současně. Pět diagnóz v ACSC (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma) je standardní <em>OECD HCQI</em> metodika; Eurostat publikuje pro srovnání odlišný indikátor — avoidable mortality (úmrtí, ne hospitalizace).
       </p>
     </aside>
 
@@ -156,8 +172,10 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health Statistics — Avoidable hospitalisations</strong> — primární zdroj pro ACSC. <a href="https://www.oecd.org/en/topics/health-statistics-and-data.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>ÚZIS — Národní registr hospitalizovaných</strong> — domácí registr výkonů. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>OECD Health at a Glance 2025 — Avoidable hospital admissions</strong> — primární zdroj pro ACSC, referenční rok 2021/2022. <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_8f9e3f98-en/full-report/avoidable-hospital-admissions_2a8e2482.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>OECD HCQI — Definitions of Health Care Quality Indicators (2022)</strong> — metodická definice ACSC (5 diagnóz, věk 15+, standardizace na populaci OECD 2010). <a href="https://www.oecd.org/els/health-systems/Definitions-of-Health-Care-Quality-Outcomes.pdf" target="_blank" rel="noopener">oecd.org ↗ (PDF)</a></li>
+          <li><strong>Eurostat — Preventable and treatable mortality</strong> — odlišný (související) indikátor avoidable mortality. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table" target="_blank" rel="noopener">eurostat.ec.europa.eu ↗</a></li>
+          <li><strong>ÚZIS — Národní registr hospitalizovaných</strong> — domácí registr výkonů. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-hospitalizovanych" target="_blank" rel="noopener">uzis.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
@@ -171,12 +189,12 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD — Realising the potential of primary health care (2020)</strong> — komplexní přehled role primární péče. <a href="https://www.oecd.org/en/topics/health.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>NHS Quality and Outcomes Framework (QOF)</strong> — britský model výkonové bonifikace pro praktiky. <a href="https://www.england.nhs.uk/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>OECD — Realising the Potential of Primary Health Care (2020)</strong> — komplexní přehled role primární péče. <a href="https://www.oecd.org/en/publications/realising-the-potential-of-primary-health-care_a92adee4-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>NHS Quality and Outcomes Framework (QOF)</strong> — britský model výkonové bonifikace pro praktiky (zaveden duben 2004, GMS contract). <a href="https://digital.nhs.uk/data-and-information/data-tools-and-services/data-services/general-practice-data-hub/quality-outcomes-framework-qof" target="_blank" rel="noopener">digital.nhs.uk ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnota 580 / 100 000 pochází z dashboardu HSPA Monitoru ke dni vydání článku (zdroj OECD/ÚZIS). Pro detailní časové řady, regionální data a rozpad podle diagnózy doporučujeme primární zdroje. ACSC standard zahrnuje pět diagnóz; Eurostat publikuje agregát i rozpad. Spojení ACSC s kvalitou primární péče je v mezinárodní literatuře dlouhodobě dokumentováno (OECD HCQI working group od r. 2004).
+        <strong>Pozn. k údajům:</strong> Hodnoty 592 / 473 (Czechia / OECD průměr) pocházejí z OECD <em>Health at a Glance</em> 2025 (referenční rok 2021/2022), age-sex standardizováno na populaci OECD 15+. Pro detailní časové řady, regionální data a rozpad podle diagnózy doporučujeme primární OECD HCQI dataset. ACSC standard OECD HCQI zahrnuje pět diagnóz (diabetes, CHOPN, srdeční selhání, nekomplikovaná hypertenze, astma); Eurostat publikuje příbuzný indikátor avoidable mortality (úmrtí, ne hospitalizace) podle společného OECD/Eurostat seznamu 2019. Spojení ACSC s kvalitou primární péče je v mezinárodní literatuře dlouhodobě dokumentováno (OECD HCQI working group od r. 2004).
       </p>
     </section>
 
