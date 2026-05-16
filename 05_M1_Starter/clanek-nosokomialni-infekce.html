@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-05-16
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 0
+    primary_sources_added: 7
+    visual_elements_added: 0
+    notes: "Kaskádová revize AMR / bezpečnostního clusteru dokončující audit AMR trojice (sourozenecké články clanek-spotreba-antibiotik.html — auditováno 2026-05-10; clanek-rezistence-antibiotik.html — auditováno 2026-05-16). Centrální oprava: databox v původní verzi mylně označoval indikátor 'rezistence_antibiotik_ecoli' jako 'Rezistence E. coli k 3GC' (třetí generace cefalosporinů), ačkoli metodická karta indikátoru (indicators/rezistence_antibiotik_ecoli.json, ověřeno) definuje indikátor jako 'Rezistence E. coli na fluorochinolony (ciprofloxacin)'. Sourozenecký článek clanek-rezistence-antibiotik.html používá správně FQ. Inkonzistence mezi dvěma články o AMR by čtenáře matla — opraveno na FQ s explicitní citací EARS-Net definice. Další ověření: (a) datum vzniku CDC NHSN 2005 — verifikováno proti cdc.gov/nhsn/about-nhsn/index.html (NHSN vznikl 2005 jako konsolidace předchozího NNIS systému z roku 1970). (b) Britský Modern Matron program — upřesněno z 'v 2000s' na 'v roce 2001 oznámen v Health Service Circular 2001/010, implementace do dubna 2002 v rámci NHS Plan 2000'. (c) Pokles MRSA bakteriémií v britském NHS 2007–2015 — kvantifikováno proti UKHSA Annual epidemiological commentary: pokles z 8,6 / 100 000 obyvatel ve FY 2007/08 na ~1,5 / 100 000 ve FY 2014/15 (~83% pokles). (d) C. difficile pokles — kvantifikováno na ~57 247 hlášených případů v roce 2007 (UKHSA peak) klesající k mid-2010s. (e) Generické URL (ecdc.europa.eu/en/healthcare-associated-infections, cdc.gov/nhsn, england.nhs.uk/patient-safety, szu.cz, uzis.cz, who.int/health-topics/patient-safety, snheh.cz) nahrazeny stabilními permalinky primárních zdrojů (ECDC PPS-HAI-AMR-acute-care-europe-2022-2023, CDC NHSN About, UKHSA Annual epidemiological commentary MRSA/CDI, NHS England Patient Safety Strategy 2019, WHO Global Patient Safety Action Plan 2021–2030, SZÚ NRL pro antibiotika). (f) Doplněn caveat v databoxu o tom, že centrální hodnoty 6,5 % (CZ HAI) vs OECD 5,5 % a pády 2,1 / 1000 vs OECD 1,8 mají origin: seed v dashboardu a v této session nebyly přímo verifikovány proti ECDC PPS-3 country summary 2022–2023 (Excel binary, WebFetch nedekódovatelný) ani proti OECD HAAG 2025 patient safety data (vyžaduje napojení na ingest pipeline). (g) Doplněn cross-link na sourozenecké články spotreba-antibiotik a rezistence-antibiotik (cluster konzistence). (h) Status published → review-pending pending ruční schválení redakce. Žádný nový datový vizuál (kandidát na navazující iteraci: trend HAI prevalence ČR PPS-1 2011/12 → PPS-2 2016/17 → PPS-3 2022/23 ze seed dat 5,9 → 6,1 → 6,5, vyžaduje verifikaci proti ECDC PPS country summary)."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Každý patnáctý hospitalizovaný má infekci, kterou si donesl z nemocnice. Co s tím dělá moderní bezpečnostní kultura · HSPA Monitor</title>
@@ -54,6 +64,9 @@
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
+      <p style="margin-top:14px;padding:14px 18px;background:#fff7e6;border-left:4px solid #f7b955;border-radius:6px;font-family:var(--sans);font-size:14px;color:#5b3700">
+        <strong>Status: review-pending po auditní revizi (2026-05-16).</strong> Kaskádová revize AMR / bezpečnostního clusteru dokončující audit AMR trojice (sourozenecké články <a href="clanek-spotreba-antibiotik.html">spotreba-antibiotik</a> a <a href="clanek-rezistence-antibiotik.html">rezistence-antibiotik</a>). Opravena centrální nekonzistence v databoxu: indikátor <code>rezistence_antibiotik_ecoli</code> byl mylně označen jako „k 3GC" (třetí generace cefalosporinů) — skutečná definice metodické karty je <strong>rezistence E. coli na fluorochinolony (ciprofloxacin)</strong> dle EARS-Net. Britský <em>Modern Matron</em> program upřesněn na rok 2001 (HSC 2001/010) s implementací do dubna 2002. Pokles MRSA bakteriémií v britském NHS kvantifikován proti UKHSA Annual epidemiological commentary (pokles z 8,6 / 100 000 ve FY 2007/08 na ~1,5 / 100 000 ve FY 2014/15, ~83 %). Generické URL (cdc.gov/nhsn, ecdc.europa.eu/en/healthcare-associated-infections, szu.cz, uzis.cz, who.int, england.nhs.uk/patient-safety) nahrazeny stabilními permalinky primárních zdrojů. Centrální hodnoty 6,5 % HAI (vs OECD 5,5 %) a 2,1 pády / 1 000 (vs OECD 1,8) mají v <code>data/indicators.json</code> <code>origin: seed</code> — vyžadují napojení na ECDC PPS country summary 2022–2023 a OECD HAAG patient safety data (otevřená otázka pro datovou iteraci). Článek čeká na ruční schválení před republikací.
+      </p>
     </header>
 
     <div class="article-body">
@@ -105,15 +118,15 @@
       <h3>Co dělají systémy s lepšími čísly</h3>
 
       <p>
-        <strong>Spojené státy</strong> spustily v roce 2005 systém <em>National Healthcare Safety Network</em> (NHSN) provozovaný CDC. Je to největší kontinuální surveillance HAI na světě; nemocnice hlásí výskyt CAUTI, CLABSI, VAP, SSI a C. difficile podle standardizovaných definic a CDC publikuje nemocniční bench­marky veřejně. Některé indikátory jsou navázány na úhrady — Medicare neuhradí dodatečné náklady spojené s preventabilní HAI. Tento finanční tlak v kombinaci s veřejným reportingem výrazně snížil výskyt vybraných HAI v amerických nemocnicích za poslední dvě dekády.
+        <strong>Spojené státy</strong> spustily v roce <a href="https://www.cdc.gov/nhsn/about-nhsn/index.html" target="_blank" rel="noopener">2005 systém <em>National Healthcare Safety Network</em> (NHSN)</a> provozovaný CDC jako konsolidaci předchozího <em>National Nosocomial Infections Surveillance System</em> (NNIS, fungující od roku 1970). Je to největší kontinuální surveillance HAI na světě; nemocnice hlásí výskyt CAUTI, CLABSI, VAP, SSI a C. difficile podle standardizovaných definic a CDC publikuje nemocniční bench­marky veřejně. Některé indikátory jsou navázány na úhrady ve dvou na sobě nezávislých CMS programech: (1) podle <a href="https://www.cms.gov/medicare/payment/prospective-payment-systems/acute-inpatient-pps/hospital-acquired-conditions" target="_blank" rel="noopener"><em>Hospital-Acquired Conditions (HAC) payment provision</em></a> (Deficit Reduction Act z roku 2005, účinnost od 1. října 2008) Medicare nehradí vyšší MS-DRG sazbu, pokud byla vybraná komplikace (např. CAUTI, CLABSI, určité SSI) získána během hospitalizace; (2) podle <a href="https://www.cms.gov/medicare/quality/value-based-programs/hospital-acquired-conditions" target="_blank" rel="noopener"><em>Hospital-Acquired Condition Reduction Program (HACRP)</em></a>, zavedeného sekcí 3008 zákona Affordable Care Act z roku 2010 s účinností od fiskálního roku 2015, CMS každoročně snižuje o 1 % všechny Medicare platby nemocnicím spadajícím do nejhoršího kvartilu výkonnostního skóre HAC. Tento kombinovaný finanční tlak spolu s veřejným reportingem výrazně snížil výskyt vybraných HAI v amerických nemocnicích za poslední dvě dekády.
       </p>
 
       <p>
-        <strong>ECDC</strong> v evropském kontextu organizuje pravidelné <em>Point Prevalence Surveys</em> v nemocnicích a v zařízeních dlouhodobé péče, doplněné kontinuální surveillance v rámci sítí <em>HAI-Net</em>. Česko se PPS účastní; data jsou publikována ve zprávách ECDC a slouží jako podklad mezinárodního srovnání.
+        <strong>ECDC</strong> v evropském kontextu organizuje pravidelné <a href="https://www.ecdc.europa.eu/en/publications-data/PPS-HAI-AMR-acute-care-europe-2022-2023" target="_blank" rel="noopener"><em>Point Prevalence Surveys</em></a> v nemocnicích (PPS-1 v letech 2011/12, PPS-2 v letech 2016/17, PPS-3 v letech 2022/23) a v zařízeních dlouhodobé péče, doplněné kontinuální surveillance v rámci sítí <em>HAI-Net</em>. Česko se PPS účastní; data jsou publikována ve zprávách ECDC a slouží jako podklad mezinárodního srovnání.
       </p>
 
       <p>
-        <strong>Velká Británie</strong> v 2000s zavedla program <em>Matron</em> — vrcholová ošetřovatelská role na úrovni oddělení, jejíž součástí je důsledná kontrola hygieny, dodržování protokolů a komunikace s rodinami. Kombinovaná intervence (hand hygiene compliance, izolační protokoly pro pacienty s MRSA a C. difficile, surveillance) vedla v britském NHS k výraznému poklesu výskytu MRSA bakteriémií a C. difficile infekcí v období 2007–2015. Britská zkušenost je dnes citována jako referenční model strukturované intervence proti HAI.
+        <strong>Velká Británie</strong> oznámila v roce 2001 v <a href="https://webarchive.nationalarchives.gov.uk/ukgwa/+/dh.gov.uk/en/publicationsandstatistics/lettersandcirculars/healthservicecirculars/dh_4003983" target="_blank" rel="noopener">Health Service Circular 2001/010</a> program <em>Modern Matron</em> — vrcholovou ošetřovatelskou roli na úrovni oddělení v rámci <a href="https://webarchive.nationalarchives.gov.uk/ukgwa/+/dh.gov.uk/en/publicationsandstatistics/publications/publicationspolicyandguidance/dh_4002960" target="_blank" rel="noopener">NHS Plan 2000</a>; všechny NHS trusty s lůžkovou péčí měly mít posty obsazeny do dubna 2002. Součástí role je důsledná kontrola hygieny, dodržování protokolů a komunikace s rodinami. Kombinovaná intervence (hand hygiene compliance, izolační protokoly pro pacienty s MRSA a C. difficile, surveillance) vedla v britském NHS k výraznému poklesu výskytu MRSA bakteriémií — podle <a href="https://www.gov.uk/government/statistics/mrsa-mssa-and-e-coli-bacteraemia-and-c-difficile-infection-annual-epidemiological-commentary" target="_blank" rel="noopener">UKHSA Annual epidemiological commentary</a> z 8,6 případů na 100 000 obyvatel ve fiskálním roce 2007/08 na přibližně 1,5 / 100 000 ve fiskálním roce 2014/15 (~83% pokles). Hlášené případy C. difficile poklesly z vrcholu ~57 247 v roce 2007 řádově o desítky procent do poloviny 2010s. Britská zkušenost je dnes citována jako referenční model strukturované intervence proti HAI.
       </p>
 
       <p>
@@ -162,14 +175,14 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % vs. OECD 5,5 % (ECDC PPS metodika)</li>
-        <li><a href="indicator.html?id=bezpecnost_padu_nemocnice"><strong>Pády pacientů v nemocnici</strong></a> — 2,1 / 1 000 hospitalizací vs. OECD 1,8</li>
-        <li><a href="indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik</strong></a> — 15 DDD/1000/den vs. OECD 17,5</li>
-        <li><a href="indicator.html?id=rezistence_antibiotik_ecoli"><strong>Rezistence E. coli k 3GC</strong></a> — 13,1 % vs. OECD 11,5 %</li>
+        <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % vs. OECD 5,5 % (ECDC PPS metodika, hodnota dashboard ke dni 2026-05-05)</li>
+        <li><a href="indicator.html?id=bezpecnost_padu_nemocnice"><strong>Pády pacientů s poraněním v nemocnici</strong></a> — 2,1 / 1 000 hospitalizací vs. OECD 1,8 (NRC NIMS / OECD HCQI)</li>
+        <li><a href="indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — 15 DDD/1000/den vs. OECD 17,5 (ATC J01, ECDC ESAC-Net metodika)</li>
+        <li><a href="indicator.html?id=rezistence_antibiotik_ecoli"><strong>Rezistence E. coli na fluorochinolony</strong></a> — 13,1 % vs. EU 12 % (invazivní izoláty, ciprofloxacin, EARS-Net)</li>
         <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací</strong></a> — 18 800 / 100 000 vs. OECD 14 600</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátorům:</strong> HAI se měří jednodenním snapshotem (PPS dle ECDC), což je citlivé na intenzitu surveillance — pracoviště s aktivnějším dohledem mohou paradoxně hlásit vyšší podíl. Pády závisejí na kultuře hlášení; pracoviště s nízkou kulturou hlášení mohou v dashboardu vypadat „lépe", aniž by skutečně byla bezpečnější.
+        <strong>Pozn. k indikátorům:</strong> HAI se měří jednodenním snapshotem (PPS dle ECDC), což je citlivé na intenzitu surveillance — pracoviště s aktivnějším dohledem mohou paradoxně hlásit vyšší podíl. Pády závisejí na kultuře hlášení; pracoviště s nízkou kulturou hlášení mohou v dashboardu vypadat „lépe", aniž by skutečně byla bezpečnější. Spotřeba antibiotik 15 DDD/1000/den je hodnota <strong>ambulantního</strong> sektoru (primární péče dle ATC J01) — nemocniční spotřeba je sledována samostatně. Indikátor rezistence E. coli mapuje <strong>fluorochinolony (ciprofloxacin)</strong>, nikoli třetí generaci cefalosporinů — pro klinickou interpretaci je rozdíl zásadní. Hodnoty 6,5 % HAI a 2,1 pádu / 1 000 mají v <code>data/indicators.json</code> <code>origin: seed</code> — v rámci redakčního auditu 2026-05-16 nebyly přímo verifikovány proti ECDC PPS-3 country summary 2022–2023 ani proti OECD HAAG 2025 patient safety data; obě hodnoty jsou kandidáti na datovou iteraci s napojením na primární ECDC / OECD výstup.
       </p>
     </aside>
 
@@ -177,29 +190,40 @@
       <div class="ed-kicker">Zdroje</div>
       <h4 class="article-sources-h">Kde si data sami ověříte</h4>
       <div class="sources-group">
-        <h5 class="sources-group-h">Data</h5>
+        <h5 class="sources-group-h">Data — primární</h5>
         <ul class="article-sources-list">
-          <li><strong>ECDC — Healthcare-associated infections</strong> — evropská surveillance HAI včetně PPS reports. <a href="https://www.ecdc.europa.eu/en/healthcare-associated-infections" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
-          <li><strong>CDC NHSN (USA)</strong> — National Healthcare Safety Network, americký surveillance system. <a href="https://www.cdc.gov/nhsn/" target="_blank" rel="noopener">cdc.gov/nhsn ↗</a></li>
-          <li><strong>SZÚ — nozokomiální nákazy</strong> — domácí surveillance. <a href="https://szu.cz/" target="_blank" rel="noopener">szu.cz ↗</a></li>
-          <li><strong>ÚZIS — registr hospitalizovaných</strong> — domácí registr výkonů a komplikací. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>ECDC — PPS HAI &amp; AMR v evropských akutních nemocnicích 2022–2023 (PPS-3)</strong> — evropská surveillance HAI včetně country summary sheets. <a href="https://www.ecdc.europa.eu/en/publications-data/PPS-HAI-AMR-acute-care-europe-2022-2023" target="_blank" rel="noopener">ecdc.europa.eu/PPS-HAI-AMR-2022-2023 ↗</a></li>
+          <li><strong>ECDC — Healthcare-associated infections in European hospitals (PPS infografika 2022–2023)</strong> — souhrnný přehled výsledků PPS-3. <a href="https://www.ecdc.europa.eu/en/publications-data/healthcare-associated-infections-european-hospitals-pps-survey-2022-2023" target="_blank" rel="noopener">ecdc.europa.eu/HAI-pps-2022-2023 ↗</a></li>
+          <li><strong>CDC — NHSN About</strong> — National Healthcare Safety Network, americký surveillance system (založen 2005). <a href="https://www.cdc.gov/nhsn/about-nhsn/index.html" target="_blank" rel="noopener">cdc.gov/nhsn/about ↗</a></li>
+          <li><strong>UKHSA — Annual epidemiological commentary: MRSA, MSSA, Gram-negative bacteraemia a C. difficile (do FY 2024/25)</strong> — kvantifikace britského poklesu MRSA bakteriémií a CDI. <a href="https://www.gov.uk/government/statistics/mrsa-mssa-and-e-coli-bacteraemia-and-c-difficile-infection-annual-epidemiological-commentary" target="_blank" rel="noopener">gov.uk/mrsa-cdi-commentary ↗</a></li>
+          <li><strong>SZÚ — NRL pro antibiotika</strong> — domácí HAI a AMR surveillance koordinovaná Národní referenční laboratoří pro antibiotika. <a href="https://szu.gov.cz/odborna-centra-a-pracoviste/centrum-epidemiologie-a-mikrobiologie/oddeleni-bakterialni-rezistence-na-antibiotika-a-sbirka-kultur/nrl-pro-antibiotika/" target="_blank" rel="noopener">szu.gov.cz/NRL-antibiotika ↗</a></li>
+          <li><strong>ÚZIS — Národní zdravotnický informační systém</strong> — domácí registr hospitalizací a výkonů. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat" target="_blank" rel="noopener">uzis.cz/registry ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
-        <h5 class="sources-group-h">Metodika</h5>
+        <h5 class="sources-group-h">Metodika a klinické rámce</h5>
         <ul class="article-sources-list">
-          <li><strong>WHO — Patient Safety</strong> — globální rámec pro bezpečnost péče. <a href="https://www.who.int/health-topics/patient-safety" target="_blank" rel="noopener">who.int ↗</a></li>
-          <li><strong>Společnost pro nemocniční epidemiologii a hygienu</strong> — odborná organizace ČLS JEP. <a href="https://www.snheh.cz/" target="_blank" rel="noopener">snheh.cz ↗</a></li>
+          <li><strong>WHO — Global Patient Safety Action Plan 2021–2030</strong> — globální strategický rámec pro bezpečnost péče přijatý 74. zasedáním WHA. <a href="https://www.who.int/teams/integrated-health-services/patient-safety/policy/global-patient-safety-action-plan" target="_blank" rel="noopener">who.int/global-patient-safety-action-plan ↗</a></li>
+          <li><strong>Cochrane systematic review — Davey et al. 2017 (221 studií)</strong> — primární evidence base pro intervence antibiotic stewardship v nemocnicích. <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003543.pub4/full" target="_blank" rel="noopener">cochranelibrary.com/cd003543.pub4 ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
-        <h5 class="sources-group-h">Policy inspirace</h5>
+        <h5 class="sources-group-h">Policy rámce</h5>
         <ul class="article-sources-list">
-          <li><strong>NHS England — Patient Safety</strong> — britský model bezpečnostní kultury a reportingu. <a href="https://www.england.nhs.uk/patient-safety/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>NHS Plan 2000 (DH, Velká Británie)</strong> — strategický dokument, ve kterém byl program Modern Matron poprvé navržen. <a href="https://webarchive.nationalarchives.gov.uk/ukgwa/+/dh.gov.uk/en/publicationsandstatistics/publications/publicationspolicyandguidance/dh_4002960" target="_blank" rel="noopener">nationalarchives.gov.uk/NHS-Plan-2000 ↗</a></li>
+          <li><strong>Health Service Circular 2001/010 — Implementing the NHS Plan: Modern Matrons</strong> — implementační dokument programu Modern Matron (povinné posty do dubna 2002). <a href="https://webarchive.nationalarchives.gov.uk/ukgwa/+/dh.gov.uk/en/publicationsandstatistics/lettersandcirculars/healthservicecirculars/dh_4003983" target="_blank" rel="noopener">nationalarchives.gov.uk/HSC-2001-010 ↗</a></li>
+          <li><strong>NHS England — Patient Safety Strategy</strong> — britský model bezpečnostní kultury a reportingu (Patient Safety Incident Response Framework, PSIRF). <a href="https://www.england.nhs.uk/patient-safety/patient-safety-strategy/" target="_blank" rel="noopener">england.nhs.uk/patient-safety-strategy ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související články HSPA Monitoru</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-spotreba-antibiotik.html"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — kontext ESAC-Net dat a české preskripce v primární péči.</li>
+          <li><a href="clanek-rezistence-antibiotik.html"><strong>Rezistence E. coli na fluorochinolony</strong></a> — EARS-Net surveillance a klinické důsledky AMR.</li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku. ECDC PPS reports jsou primární zdroj pro mezinárodní srovnání HAI v Evropě. „Pokles MRSA a C. difficile v britském NHS 2007–2015" je řádový popis dokumentovaného trendu; přesná data viz publikace v <em>Journal of Hospital Infection</em> a NHS England report y.
+        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku; centrální hodnoty 6,5 % HAI a 2,1 pádu / 1 000 mají v <code>data/indicators.json</code> <code>origin: seed</code> a v rámci redakčního auditu 2026-05-16 nebyly přímo verifikovány proti ECDC PPS-3 country summary 2022–2023 (Excel binary, mimo dosah redakčních nástrojů) ani proti OECD HAAG 2025 patient safety data — obě hodnoty jsou kandidáti na datovou iteraci s napojením na primární ECDC / OECD výstup. ECDC PPS reports jsou primární zdroj pro mezinárodní srovnání HAI v Evropě (PPS-1 2011/12, PPS-2 2016/17, PPS-3 2022/23). Pokles MRSA bakteriémií v britském NHS (z 8,6 na ~1,5 / 100 000 mezi FY 2007/08 a FY 2014/15) je kvantifikován proti UKHSA Annual epidemiological commentary; pokles C. difficile (peak ~57 247 případů v roce 2007) odpovídá témuž zdroji.
       </p>
     </section>
 
