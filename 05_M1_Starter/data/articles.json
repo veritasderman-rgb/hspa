@@ -512,8 +512,10 @@
       "number": "14",
       "tag": "Dostupnost péče",
       "date": "2026-05-07",
+      "published": false,
+      "_review_note": "Revizní audit 2026-05-16: opraveny 3 faktické chyby (§ 11 → § 28 odst. 3 z. 372/2011, vårdgaranti pouze SE, DK 2002 = 60 dní), aktualizovány NHS RTT detaily, doplněn caveat callout o absenci systematického monitorování čekacích dob v ČR (OECD CHP 2023). Čeká na ruční schválení před republikací — po kontrole nastavte published: true a odeberte toto pole.",
       "title": "Sto osmnáct dní na kyčel. Co plánovaná operace v Česku stojí, kromě peněz",
-      "perex": "Medián čekání na kyčel 118 dní vs. OECD 85. Co s tím dělají Skandinávie (vårdgaranti), Velká Británie (NHS RTT targets), Dánsko (frit sygehusvalg) a Nizozemsko a co Česko zatím nepoužilo.",
+      "perex": "Medián čekání na kyčel se v indikátoru HSPA Monitoru pohybuje kolem 118 dní (orientačně, ČR systematické monitorování nemá). Co s tím dělá Švédsko (vårdgaranti od 2005), Norsko (behandlingsfrist), Velká Británie (NHS RTT od 2012), Dánsko (udvidet frit sygehusvalg od 2002) a Nizozemsko — a co Česko zatím nepřijalo.",
       "linked_indicators": [
         "cekaci_doba_kycel",
         "cekaci_doby_specialist",
@@ -522,7 +524,16 @@
       "linked_prevention_themes": [],
       "topics": [
         "dostupnost"
-      ]
+      ],
+      "audit": {
+        "last_reviewed": "2026-05-16",
+        "reviewer": "claude-code-agent",
+        "status": "review-pending",
+        "unverified_claims_removed": 0,
+        "primary_sources_added": 4,
+        "visual_elements_added": 1,
+        "notes": "Ověřeno proti OECD Country Health Profile 2023 (Czechia), Nuffield Trust (NHS RTT), Helsedirektoratet, Sundhedsstyrelsen a zákonu č. 372/2011 Sb. Opraveny 3 faktické chyby: (1) odkaz na svobodnou volbu poskytovatele opraven z neexistujícího § 11 na § 28 odst. 3 písm. b) z. č. 372/2011 Sb. + doplněn § 46 z. 48/1997 Sb. pro povinnost ZP zajistit dostupnost; (2) rozdělen švédský vårdgaranti (od 1. 11. 2005) a norský behandlingsfrist / rett til valg av behandlingssted (přepracováno 2023) — termín vårdgaranti je výhradně švédský; (3) Dánsko 'udvidet frit sygehusvalg' upřesněno: 2002 = 60 dní (ne měsíc), 2007 zkráceno na 30 dní — práh byl zpřísněn, ne 'prodloužen'. NHS RTT aktualizováno: první porušení standardu prosinec 2015 (91,8 %), únor 2026 = 62,5 % (Nuffield Trust). Doplněn caveat callout 'Jak číst číslo 118 dní' transparentně přiznávající, že ČR nemá národní systematické monitorování čekacích dob (OECD CHP 2023) a že hodnota v dashboardu je v současné fázi vedena jako orientační odhad (origin: seed). Doplněn primární zdroj OECD CHP 2023 a Nuffield Trust. Tabulka srovnání politik přepracována — rozdělen Norsko/Švédsko a opraveny prahové hodnoty. Strukturální argument článku (3 faktory, 4 nástroje, doporučení) zachován — vychází z OECD policy reportu 2020 'Waiting Times for Health Services: Next in Line'. Status published → review-pending. OTEVŘENÁ OTÁZKA: dashboard indikátor cekaci_doba_kycel je v datovém kontraktu vedený jako origin: seed; doporučená oprava v navazující datové iteraci — buď napojit reálný VZP/SZP fetcher, nebo explicitně označit indikátor jako 'metodický odhad' v datovém schématu."
+      }
     },
     {
       "id": "ehealth",
