@@ -302,18 +302,34 @@ hodnota okamžitě bez animace.
 ```
 
 ### Data atributy
-- `data-value` — cílová numerická hodnota (povinné; bez tisícových oddělovačů)
+- `data-value` — cílová numerická hodnota (povinné pro animaci; bez tisícových oddělovačů)
 - `data-decimals` — počet desetinných míst (default 0)
-- `data-prefix`, `data-suffix` — text před/po (volitelné, např. `" Kč"`)
+- `data-prefix`, `data-suffix` — text před/po (volitelné, např. `" Kč"`, `"+"`, `"−"`)
 - `data-duration` — doba animace v ms (default 1200, clamp 200–5000)
 
 ### Modifikátory bloku
 - `av-counter-block-good`, `-warn`, `-bad`, `-neutral` — top border + barva čísla
 - (default = červená, varianta `-neutral` = inkoust)
 
+### ⚠️ Kdy NEpoužívat `data-value`
+
+Animace `Intl.NumberFormat('cs-CZ')` přepíše innerText na formátované číslo —
+což může zlikvidovat sémantiku původního obsahu. Pokud chceš zachovat plnou
+`.av-counter` typografii (velké červené serif číslo) bez animace, jen vynechej
+`data-value`. JS pak skip animaci, statický text zůstane.
+
+| Anti-pattern | Co se stane | Fix |
+|---|---|---|
+| `data-value="2027">1. 1. 2027` | "2 027" — ztratí se den a měsíc | vynechej data-value |
+| `data-value="1981">1981` | "1 981" — tisícový oddělovač u roku | vynechej data-value |
+| `data-value="15">12–19` | "15" — range se zhroutí na point | vynechej data-value |
+| `data-value="4" data-suffix="–8 měs.">4–8 měs.` | "4 –8 měs." během animace | vynechej data-value |
+| `data-value="6.4" data-suffix=" %">+6,4 %` | "6,4 %" — chybí znaménko | přidej `data-prefix="+"` |
+
 ### Kdy použít
-- 2–4 hero čísla na konci sekce („velký dopad“)
-- Inline zvýraznění klíčové hodnoty v odstavci
+- 2–4 hero čísla na konci sekce („velký dopad")
+- Inline zvýraznění klíčové **numerické** hodnoty v odstavci
+- Pro **kontextové text** (data, roky, ranges) jen styling bez `data-value`
 - **Ne** pro time-series — na to je `.av-timeline` nebo line chart
 
 ---
