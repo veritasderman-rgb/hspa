@@ -1,10 +1,12 @@
 // Bootstrap stránek sekce Články: úvodní listing i jednotlivé články.
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate } from './page-shared.js';
+import { enhanceArticleVisuals } from './article-visuals.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
 populateWaffles();
+enhanceArticleVisuals();
 injectAiDisclaimer();
 loadAndRenderArticles();
 
