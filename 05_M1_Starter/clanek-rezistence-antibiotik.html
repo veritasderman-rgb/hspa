@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-05-16
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 2
+    primary_sources_added: 8
+    visual_elements_added: 0
+    notes: "Kaskádová revize AMR clusteru navazující na audit sourozeneckého článku clanek-spotreba-antibiotik.html (2026-05-10) a clanek-nosokomialni-infekce.html (čeká na samostatný audit). Ověřeno proti ECDC EARS-Net Annual Epidemiological Report for 2024 a Country sheet 2024 Czechia (antibiotic.ecdc.europa.eu), Akčnímu plánu NAP ČR 2019–2022 (vláda ČR, usnesení č. 75/2019), historii NAP od usnesení vlády č. 595/2009, WHO Global Action Plan on AMR (rezoluce WHA68.7, květen 2015), WHO Ten threats to global health 2019 a Surviving Sepsis Campaign 2021 guidelines (Intensive Care Medicine, 2021). Klíčové opravy: (1) chybné datování českého NAP — článek tvrdil 'Česko má od roku 2018 nastavený plán', skutečnost: NAP samotný od 4. 5. 2009 (usnesení vlády č. 595), aktuální Akční plán NAP 2019–2022 schválen 28. 1. 2019 (usnesení vlády č. 75), AP NAP po 2022 zatím nebyl veřejně zveřejněn jako navazující dokument. (2) WHO Ten threats — explicitně datováno na rok 2019 (původní formulace nezmiňovala rok publikace seznamu). (3) Surviving Sepsis Campaign claim — kvalifikováno: SSC 2021 doporučuje 1 hodinu u septického šoku, ale recentní meta-analýzy (Br J Med 2024 systematic review na 190 896 pacientech) ukazují, že časový práh 3 hod je rovněž asociován s mortalitním benefitem; striktní 1-hour bundle je proto v současnosti revidován. (4) Komunitní rezistence > 20 % — vágní 'v evropských AMR reportech' nahrazeno explicitním přiznáním limitace s odkazem na ECDC AER 2024. (5) Lancet ID / CID studie o ASP — generická citace nahrazena odkazem na Cochrane review (Davey et al., 2017) jako primární evidence base. (6) Cross-article reference 'článek 22/25/26' nahrazeny slug odkazy na clanek-nosokomialni-infekce.html a clanek-spotreba-antibiotik.html. (7) Generické URL (szu.cz, ecdc.europa.eu/about, ema.europa.eu, mzcr.cz, england.nhs.uk, who.int/europe/initiatives/one-health) nahrazeny stabilními permalinky primárních zdrojů. (8) Doplněn caveat v databoxu o pojmu 'OECD průměr 11,5 %' — metodická karta indikátoru používá benchmark_source: eurostat (hlth_rs_resist), nikoliv OECD; pojem 'OECD 11,5' je zjednodušení a měl by být revidován v navazující datové iteraci. (9) Doplněn audit-status banner v hlavičce a interní cross-link na sourozenecký článek o spotřebě. (10) Hodnota 13,1 % v ČR a 11,5 % EU benchmark z dashboardu nebyla v této session přímo verifikována proti ECDC AER 2024 PDF (atlas.ecdc.europa.eu vrátil 503, AER 2024 PDF byl binární); origin v data/indicators.json zůstává 'seed' a vyžaduje napojení na primární EARS-Net výstup — out-of-scope této redakční iterace. Status published → review-pending."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Třináct procent rezistentní. Proč ciprofloxacin v Česku přestává spolehlivě fungovat · HSPA Monitor</title>
@@ -54,12 +64,15 @@
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
+      <p style="margin-top:14px;padding:14px 18px;background:#fff7e6;border-left:4px solid #f7b955;border-radius:6px;font-family:var(--sans);font-size:14px;color:#5b3700">
+        <strong>Status: review-pending po auditní revizi (2026-05-16).</strong> Kaskádová revize AMR clusteru navazující na audit sourozeneckého článku <a href="clanek-spotreba-antibiotik.html">spotreba-antibiotik</a> z 10. 5. 2026. Opraveno chybné datování českého <abbr title="Národní antibiotický program">NAP</abbr> („od roku 2018" → NAP samotný od <strong>4. 5. 2009</strong>, usnesení vlády č. 595; Akční plán NAP 2019–2022 schválen <strong>28. 1. 2019</strong>, usnesení vlády č. 75); WHO „Ten threats to global health" datováno na <strong>2019</strong>; kvalifikováno tvrzení o Surviving Sepsis Campaign 1-hour bundle (revize evidence v meta-analýzách 2024); generické odkazy nahrazeny stabilními permalinky primárních zdrojů (ECDC EARS-Net AER 2024, Country sheet Czechia 2024, SZÚ NAP, EMA AMEG, WHO Global Action Plan 2015, Cochrane review ASP 2017). Centrální hodnoty 13,1 % (ČR) a 11,5 % (EU benchmark, NE OECD) v dashboardu mají `origin: seed` — vyžadují napojení na primární EARS-Net výstup (otevřená otázka pro datovou iteraci). Článek čeká na ruční schválení před republikací.
+      </p>
     </header>
 
     <div class="article-body">
 
       <p class="article-lead">
-        Antimikrobiální rezistence je v moderní medicíně označována Světovou zdravotnickou organizací za jednu z deseti hlavních globálních hrozeb veřejnému zdraví. Bakterie, které se kdysi daly snadno léčit, dnes vyžadují širokospektrá nebo rezervní antibiotika; pacient s rezistentní infekcí má vyšší mortalitu, delší hospitalizaci a větší riziko komplikací. Česko v evropském srovnání AMR není v nejhorší pětici, ale ani v té nejlepší — a u jednoho z klíčových rezistenčních ukazatelů zaostává.
+        Antimikrobiální rezistence je v <a href="https://www.who.int/news-room/spotlight/ten-threats-to-global-health-in-2019" target="_blank" rel="noopener">seznamu WHO Ten threats to global health (2019)</a> uvedena jako jedna z deseti hlavních globálních hrozeb veřejnému zdraví a WHO ji v <a href="https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank" rel="noopener">aktuálních fact sheets</a> dlouhodobě označuje za jednu z hlavních priorit. Bakterie, které se kdysi daly snadno léčit, dnes vyžadují širokospektrá nebo rezervní antibiotika; pacient s rezistentní infekcí má vyšší mortalitu, delší hospitalizaci a větší riziko komplikací. Česko v evropském srovnání AMR není v nejhorší pětici, ale ani v té nejlepší — a u jednoho z klíčových rezistenčních ukazatelů zaostává.
       </p>
 
       <h3>Co indikátor přesně měří</h3>
@@ -69,7 +82,7 @@
       </p>
 
       <p>
-        Limitace, kterou metodická karta výslovně uvádí: indikátor zachycuje pouze invazivní izoláty, nezahrnuje ambulantní a komunitní vzorky, ve kterých je rezistence pravděpodobně ještě vyšší. České 13,1 procenta je tedy spodní odhad reálné populační rezistence E. coli k ciprofloxacinu. V některých českých studiích publikovaných v <em>Klinické mikrobiologii a infekčním lékařství</em> a v evropských AMR reportech se ukazuje, že rezistence E. coli k FQ v komunitních vzorcích přesahuje 20 procent.
+        Limitace, kterou metodická karta výslovně uvádí: indikátor zachycuje pouze invazivní izoláty, nezahrnuje ambulantní a komunitní vzorky, ve kterých je rezistence pravděpodobně ještě vyšší. České 13,1 procenta je tedy spodní odhad reálné populační rezistence E. coli k ciprofloxacinu. Některé regionální laboratorní studie indikují, že u komunitních (ambulantních) izolátů E. coli v ČR může být rezistence k fluorochinolonům vyšší než u izolátů invazivních, ale veřejně dostupný systematický populační odhad komunitní rezistence E. coli v ČR ve srovnatelné metodice s EARS-Net dosud neexistuje. Pro detailní ambulantní obraz odkazuje SZÚ na <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/" target="_blank" rel="noopener">data Národního antibiotického programu</a> a publikační aktivity Subkomise pro antibiotickou politiku ČLS JEP.
       </p>
 
       <p>
@@ -79,11 +92,11 @@
       <h3>Proč Česko zaostává v rezistenci, když má ambulantní spotřebu pod průměrem</h3>
 
       <p>
-        Paradox: indikátor spotřeby antibiotik v ambulantním sektoru ukazuje Česko v lepším světle (15 DDD/1000/den vs. OECD 17,5 — viz souběžný článek 26). Komunitní praktikové v ČR nejsou v evropském srovnání nadprůměrnými preskribenty antibiotik. Přesto je rezistence E. coli k FQ vyšší. Důvody jsou strukturální a leží v několika rovinách.
+        Paradox: indikátor spotřeby antibiotik v ambulantním sektoru ukazuje Česko v lepším světle (15 <abbr title="Defined Daily Dose — definovaná denní dávka, jednotka WHO/ECDC">DDD</abbr>/1000/den vs. OECD 17,5 — viz souběžný článek o <a href="clanek-spotreba-antibiotik.html">spotřebě antibiotik</a>). Komunitní praktikové v ČR nejsou v evropském srovnání nadprůměrnými preskribenty antibiotik. Přesto je rezistence E. coli k FQ vyšší. Důvody jsou strukturální a leží v několika rovinách.
       </p>
 
       <p>
-        <strong>Nemocniční spotřeba, která v ambulantním indikátoru chybí.</strong> Spotřeba antibiotik v nemocnicích je v ČR podle dat ECDC ESAC-Net na evropské úrovni nebo mírně nad ní; širokospektrá antibiotika včetně fluorochinolonů jsou v některých nemocnicích používána méně cíleně, než kolik by bylo v moderním stewardship programu obvyklé. Klinický farmakolog nebo infektolog s pravomocí kontrolovat preskripci širokospektrých ATB chybí v řadě českých nemocnic — tomu se věnoval samostatný článek o nosokomiálních infekcích (článek 22).
+        <strong>Nemocniční spotřeba, která v ambulantním indikátoru chybí.</strong> Spotřeba antibiotik v nemocnicích je v ČR podle dat <a href="https://www.ecdc.europa.eu/en/antimicrobial-consumption/database/quality-indicators" target="_blank" rel="noopener">ECDC ESAC-Net Quality Indicators</a> na evropské úrovni nebo mírně nad ní; širokospektrá antibiotika včetně fluorochinolonů jsou v některých nemocnicích používána méně cíleně, než kolik by bylo v moderním stewardship programu obvyklé. Klinický farmakolog nebo infektolog s pravomocí kontrolovat preskripci širokospektrých ATB chybí v řadě českých nemocnic — tomu se věnuje samostatný článek o <a href="clanek-nosokomialni-infekce.html">nosokomiálních infekcích</a>.
       </p>
 
       <p>
@@ -105,7 +118,7 @@
       </p>
 
       <p>
-        Pro pacienta s pyelonefritidou nebo s urosepsí je situace horší. U sepse se každá hodina čekání na účinnou léčbu spojuje s měřitelným nárůstem mortality (literatura Surviving Sepsis Campaign popisuje vztah „čas–dávka antibiotika–mortalita"). Když empirická léčba ciprofloxacinem nezabere, ztrácí se hodiny — a u seniora s urosepsí, která je v české populaci frekventní, se to v statistice projeví. Rezerva: u suspektní těžké infekce je dnes empirická volba ciprofloxacinu už vzácná; prvovolbou jsou cefalosporiny třetí generace (ceftriaxon, cefotaxim) nebo aminopeniciliny s inhibitory beta-laktamáz, doplněné hemokulturou pro úpravu léčby.
+        Pro pacienta s pyelonefritidou nebo s urosepsí je situace horší. <a href="https://link.springer.com/article/10.1007/s00134-021-06506-y" target="_blank" rel="noopener">Surviving Sepsis Campaign Guidelines 2021</a> doporučují podání účinného antibiotika u septického šoku do 1 hodiny od rozpoznání a u pravděpodobné sepse bez šoku do 3 hodin (recentní meta-analýzy z 2024 přitom naznačují, že rozdíl mezi 1 a 3 hodinami nemusí být klinicky zásadní, zatímco delší prodleva mortalitu jednoznačně zhoršuje). Když empirická léčba ciprofloxacinem nezabere, ztrácí se hodiny — a u seniora s urosepsí, která je v české populaci frekventní, se to ve statistice projeví. Rezerva: u suspektní těžké infekce je dnes empirická volba ciprofloxacinu už vzácná; prvovolbou jsou cefalosporiny třetí generace (ceftriaxon, cefotaxim) nebo aminopeniciliny s inhibitory beta-laktamáz, doplněné hemokulturou pro úpravu léčby.
       </p>
 
       <p>
@@ -123,11 +136,11 @@
       </p>
 
       <p>
-        <strong>Antibiotic stewardship programs (ASP) v každé nemocnici.</strong> Britská NHS, skandinávské zdravotní systémy a německé univerzitní nemocnice mají strukturovaný ASP s klinickým farmakologem nebo infektologem, který kontroluje preskripci širokospektrých ATB, vrací návrh úzkospektrého režimu, dohlíží na de-eskalaci po obdržení kultivace. Studie publikované v <em>Lancet Infectious Diseases</em> a <em>Clinical Infectious Diseases</em> dlouhodobě potvrzují, že strukturované ASP snižují rezistenci, mortalitu a náklady.
+        <strong>Antibiotic stewardship programs (ASP) v každé nemocnici.</strong> Britská NHS, skandinávské zdravotní systémy a německé univerzitní nemocnice mají strukturovaný ASP s klinickým farmakologem nebo infektologem, který kontroluje preskripci širokospektrých ATB, vrací návrh úzkospektrého režimu, dohlíží na de-eskalaci po obdržení kultivace. <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003543.pub4/full" target="_blank" rel="noopener">Cochrane systematické review (Davey et al., 2017)</a> shrnuje 221 studií a uzavírá, že intervence zlepšující preskripční chování u hospitalizovaných pacientů zkracují délku hospitalizace bez vlivu na úmrtnost a snižují výskyt vybraných typů infekcí; další longitudinální data z evropských a severoamerických programů ASP popisují pokles rezistence a nákladů, mechanismus přínosu na mortalitu samotnou je ale v literatuře průměrově slabší a oborově heterogenní.
       </p>
 
       <p>
-        <strong>One Health přístup.</strong> Skandinávské země a Nizozemsko mají dlouhodobě omezenou veterinární spotřebu antibiotik a důslednou veterinární kontrolu. <em>One Health</em> přístup propojuje humánní, veterinární a environmentální AMR surveillance — ECDC v Evropě tento rámec institucionalizuje od 2010s.
+        <strong>One Health přístup.</strong> Skandinávské země a Nizozemsko mají dlouhodobě omezenou veterinární spotřebu antibiotik a důslednou veterinární kontrolu. <em>One Health</em> přístup propojuje humánní, veterinární a environmentální AMR surveillance — v EU je formálně institucionalizován <a href="https://health.ec.europa.eu/antimicrobial-resistance/eu-action-antimicrobial-resistance_en" target="_blank" rel="noopener">Evropským One Health akčním plánem proti AMR (2017)</a>, na který navazuje doporučení Rady EU 2023/C 220/01.
       </p>
 
       <p>
@@ -141,7 +154,7 @@
       </p>
 
       <p>
-        <strong>Národní akční plán proti AMR (NAP AMR)</strong> — Česko má od roku 2018 nastavený plán s pravidelnými revizemi. Co plánu schází, je důslednější implementace na úrovni každé nemocnice (povinný ASP s personálním zajištěním) a ve veterinární medicíně (regulace kategorií „critically important" antibiotik).
+        <strong>Národní antibiotický program (NAP) a jeho Akční plán.</strong> Český NAP byl založen <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/" target="_blank" rel="noopener">usnesením vlády ČR č. 595 ze dne 4. května 2009</a>; navazující <a href="https://www.sukl.cz/akcni-plan-narodniho-antibiotickeho-programu-pro-roky-2019" target="_blank" rel="noopener">Akční plán NAP pro období 2019–2022</a> schválila vláda usnesením č. 75 ze dne 28. ledna 2019. Aktuálně veřejně dohledatelný formálně účinný navazující dokument pro období po roce 2022 nebyl v rámci této revize identifikován — to samo o sobě je signál, že programu chybí kontinuita strategického cyklu. Co programu obecně schází, je důslednější implementace na úrovni každé nemocnice (povinný ASP s personálním zajištěním) a ve veterinární medicíně (regulace kategorií „critically important" antibiotik podle <a href="https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/categorisation-antibiotics-used-animals-promote-responsible-use-protect-public-and-animal-health" target="_blank" rel="noopener">EMA AMEG kategorizace</a>).
       </p>
 
       <p>
@@ -163,7 +176,7 @@
       </p>
 
       <p>
-        Pro tvůrce politik je sdělení, že AMR není abstraktní hrozba ani věc příští dekády — je to klinická realita, která dnes ovlivňuje výsledky pacientů. Strukturovaný ASP v každé nemocnici, posílený NAP AMR, primary care guidelines a veřejné reportování rezistencí jsou nástroje, které v Skandinávii a Nizozemsku dlouhodobě fungují. Stojí čas a desítky milionů ročně. V dnešním rozpočtovém rámci jde o investici, jejíž návratnost se počítá v tisících životů, které by jinak skončily na karbapenemu — nebo s neúčinnou empirickou léčbou.
+        Pro tvůrce politik je sdělení, že AMR není abstraktní hrozba ani věc příští dekády — je to klinická realita, která dnes ovlivňuje výsledky pacientů. Strukturovaný ASP v každé nemocnici, navazující Akční plán NAP (po vypršení období 2019–2022), primary care guidelines a veřejné reportování rezistencí jsou nástroje, které ve Skandinávii a Nizozemsku dlouhodobě fungují. Stojí čas a desítky milionů ročně. V dnešním rozpočtovém rámci jde o investici, jejíž návratnost se počítá v tisících životů, které by jinak skončily na karbapenemu — nebo s neúčinnou empirickou léčbou. Souběžný článek o <a href="clanek-spotreba-antibiotik.html">spotřebě antibiotik</a> ukazuje, že česká komunitní vrstva preskripce je ve světovém srovnání tichý úspěch — rezistenční data ale připomínají, že úspěch v jedné vrstvě (komunita) sám nestačí, pokud zaostává druhá (nemocnice, veterina, historický dluh).
       </p>
 
     </div>
@@ -177,7 +190,7 @@
         <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % vs. OECD 5,5 %</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátoru:</strong> EARS-Net měří pouze invazivní izoláty (z hemokultury, mozkomíšního moku) — komunitní a ambulantní rezistence E. coli k fluorochinolonům je podle metodické karty pravděpodobně vyšší. Jednotka „% rezistence" odráží podíl izolátů, které nejsou citlivé k danému antibiotiku v laboratorním testu.
+        <strong>Pozn. k indikátoru:</strong> EARS-Net měří pouze invazivní izoláty (z hemokultury, mozkomíšního moku) — komunitní a ambulantní rezistence E. coli k fluorochinolonům je podle metodické karty pravděpodobně vyšší. Jednotka „% rezistence" odráží podíl izolátů, které nejsou citlivé k danému antibiotiku v laboratorním testu. Pojem „OECD 11,5 %" v databoxu reflektuje benchmark v dashboardu, ale metodická karta indikátoru jako <code>benchmark_source</code> deklaruje Eurostat <code>hlth_rs_resist</code> (EU/EEA), nikoliv OECD.Stat — viz disclaimer v sekci Zdroje.
       </p>
     </aside>
 
@@ -185,30 +198,35 @@
       <div class="ed-kicker">Zdroje</div>
       <h4 class="article-sources-h">Kde si data sami ověříte</h4>
       <div class="sources-group">
-        <h5 class="sources-group-h">Data</h5>
+        <h5 class="sources-group-h">Data — primární</h5>
         <ul class="article-sources-list">
-          <li><strong>ECDC — EARS-Net</strong> — evropská síť surveillance antimikrobiální rezistence. <a href="https://www.ecdc.europa.eu/en/about-us/networks/disease-networks-and-laboratory-networks/ears-net-about" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
-          <li><strong>SZÚ — Národní referenční laboratoř pro antibiotika</strong> — domácí surveillance AMR. <a href="https://szu.cz/" target="_blank" rel="noopener">szu.cz ↗</a></li>
+          <li><strong>ECDC — EARS-Net Annual Epidemiological Report for 2024</strong> — souhrnný výstup evropské surveillance AMR za poslední dostupný ročník. <a href="https://www.ecdc.europa.eu/en/publications-data/antimicrobial-resistance-eueea-ears-net-annual-epidemiological-report-2024" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — Country sheet 2024: Czechia</strong> — datový list k cílům AMR pro ČR a pokroku k jejich naplnění. <a href="https://antibiotic.ecdc.europa.eu/en/publications-data/country-sheet-2024-czechia" target="_blank" rel="noopener">antibiotic.ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — Surveillance Atlas of Infectious Diseases (EARS-Net)</strong> — interaktivní zdroj časových řad rezistence po zemích a po patogenech. <a href="https://atlas.ecdc.europa.eu/public/index.aspx" target="_blank" rel="noopener">atlas.ecdc.europa.eu ↗</a></li>
+          <li><strong>SZÚ — Národní antibiotický program</strong> — domácí surveillance AMR a národní koordinace. <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
-        <h5 class="sources-group-h">Metodika</h5>
+        <h5 class="sources-group-h">Metodika a klinické guidelines</h5>
         <ul class="article-sources-list">
-          <li><strong>EMA — Categorisation of antibiotics for use in animals</strong> — evropská kategorizace veterinárních antibiotik. <a href="https://www.ema.europa.eu/" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
+          <li><strong>EMA — Categorisation of antibiotics for use in animals (AMEG)</strong> — evropská kategorizace veterinárních antibiotik. <a href="https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/categorisation-antibiotics-used-animals-promote-responsible-use-protect-public-and-animal-health" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
+          <li><strong>Surviving Sepsis Campaign — Guidelines 2021</strong> — mezinárodní doporučení pro management sepse a septického šoku (Evans et al., <em>Intensive Care Medicine</em> 2021). <a href="https://link.springer.com/article/10.1007/s00134-021-06506-y" target="_blank" rel="noopener">link.springer.com ↗</a></li>
+          <li><strong>Cochrane — Interventions to improve antibiotic prescribing practices for hospital inpatients (Davey et al., 2017)</strong> — systematický review 221 studií ASP. <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003543.pub4/full" target="_blank" rel="noopener">cochranelibrary.com ↗</a></li>
           <li><strong>Společnost pro lékařskou mikrobiologii ČLS JEP</strong> — odborná organizace. <a href="https://www.splm.cz/" target="_blank" rel="noopener">splm.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
-        <h5 class="sources-group-h">Policy inspirace</h5>
+        <h5 class="sources-group-h">Policy rámce a inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>WHO Global Action Plan on AMR (2015)</strong> — globální rámec pro boj s rezistencí. <a href="https://www.who.int/publications/i/item/9789241509763" target="_blank" rel="noopener">who.int ↗</a></li>
-          <li><strong>Národní akční plán proti AMR (ČR)</strong> — strategický dokument MZ ČR. <a href="https://www.mzcr.cz/" target="_blank" rel="noopener">mzcr.cz ↗</a></li>
-          <li><strong>WHO — One Health</strong> — propojení humánní, veterinární a environmentální AMR surveillance. <a href="https://www.who.int/europe/initiatives/one-health" target="_blank" rel="noopener">who.int/europe ↗</a></li>
-          <li><strong>NHS England — Antimicrobial stewardship</strong> — britský model nemocničního ASP. <a href="https://www.england.nhs.uk/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>WHO Global Action Plan on AMR (2015)</strong> — globální rámec přijatý 68. Světovým zdravotnickým shromážděním (rezoluce WHA68.7). <a href="https://www.who.int/publications/i/item/9789241509763" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>WHO — Ten threats to global health in 2019</strong> — seznam, kde AMR figuruje mezi deseti hlavními globálními zdravotními hrozbami. <a href="https://www.who.int/news-room/spotlight/ten-threats-to-global-health-in-2019" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>Akční plán Národního antibiotického programu ČR pro období 2019–2022</strong> — strategický dokument schválený usnesením vlády č. 75 ze dne 28. 1. 2019. <a href="https://www.sukl.cz/akcni-plan-narodniho-antibiotickeho-programu-pro-roky-2019" target="_blank" rel="noopener">sukl.cz ↗</a></li>
+          <li><strong>European One Health Action Plan against AMR (2017) + Council Recommendation 2023/C 220/01</strong> — evropský strategický rámec One Health. <a href="https://health.ec.europa.eu/antimicrobial-resistance/eu-action-antimicrobial-resistance_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>NHS England — Antimicrobial stewardship resources</strong> — britský model nemocničního ASP. <a href="https://www.england.nhs.uk/medicines-2/medicines-advice-and-support/antimicrobial-resistance-amr/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnota 13,1 % je z dashboardu HSPA Monitoru ke dni vydání článku (zdroj EARS-Net / ECDC). Konkrétní mezinárodní srovnání (Skandinávie 5–8 %, středomořské země 25+ %) je řádový popis aktuálních EARS-Net dat — pro přesné hodnoty doporučujeme primární zdroje. „Importovaná rezistence" a kumulativní efekt veterinární spotřeby jsou strukturální popis; konkrétní kvantifikace závisí na konkrétní studii a regionu.
+        <strong>Pozn. k údajům:</strong> Hodnota 13,1 % je z dashboardu HSPA Monitoru ke dni vydání článku — zdroj v metodické kartě deklarován jako SZÚ / EARS-Net, benchmark_source v <code>indicators/rezistence_antibiotik_ecoli.json</code> je Eurostat (kód <code>hlth_rs_resist</code>), tedy uváděný benchmark „OECD 11,5 %" je <strong>zjednodušení</strong> a metodicky odráží spíše EU/EEA průměr — toto je otevřená otázka pro datovou iteraci. Konkrétní mezinárodní srovnání (Skandinávie 5–8 %, středomořské země 25+ %) je řádový popis aktuálních EARS-Net dat — pro přesné hodnoty doporučujeme primární datové sady ECDC Atlas a country sheets. „Importovaná rezistence" a kumulativní efekt veterinární spotřeby jsou strukturální popis; konkrétní kvantifikace závisí na konkrétní studii a regionu. Údaje o NHS, Skandinávii a Nizozemsku odkazujeme na institucionální zdroje, nikoliv na konkrétní pacientské studie.
       </p>
     </section>
 
