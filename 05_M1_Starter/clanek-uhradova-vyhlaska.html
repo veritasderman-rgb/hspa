@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  audit:
+    last_reviewed: 2026-05-15
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 0
+    primary_sources_added: 1
+    visual_elements_added: 0
+    notes: "Hloubková rekonciliace článku proti primárnímu zdroji — plný text vyhlášky č. 432/2025 Sb. (PDF MZČR Uhradova_vyhlaska_2026.pdf, 22. 10. 2025). Ověřeny všechny paragrafové reference a číselné hodnoty: § 14 ZZS (1,32 Kč výjezd, 1,47 Kč přeprava, 1,34 Kč výkon 06714, +1 550 Kč fixní); § 15 doprava (1,47 / 1,21 / 1,34 Kč); § 16 LPS (1,14 / 1,26 Kč) + zubní pohotovost paušál 9 600 Kč/den × koeficient KPP; § 17 lázně 102 % předchozího roku, výkon 09543 = 0,77 Kč (max. 3×), ozdravovny 1 310 Kč/den; § 18 výkony 09543 (1,12 Kč mimo lázně dle § 17 odst. 3), 09555–09557 (1,12 Kč), 09580/81 (1,04 Kč), 09990 (36 Kč); § 19 výkon 09552 (32 Kč), 16 Kč za převedení receptu; Příloha 1 IPU = PU_drg,2024 × 1,03; ZS_min 55/60/65 tis. Kč, ZS_max odvozeno z MAX 110 tis. Kč; tier i. 90 000 Kč/CM (referenční síť + 8 statusů VSP + alespoň jeden ze specifikovaných statusů); tier ii. 85 000 Kč/CM (traumatologie + 4 statusy); redukční koeficient min{1; CM_2026 / (0,98 × CM_2024)}; Příloha 2 kapitační sazby 76/69/66/60 Kč s identickými podmínkami v písmenech a–d, bonusy +1 ČŽV / +2 prevence (01021/02 nebo 02031/02) / +5 kvalita (body 4–5) / +1 rezident. Upraveno: 'publikováno MZČR v listopadu 2025' → 'vyhlášena ve Sbírce zákonů 30. 10. 2025 (vyhláška ze dne 22. 10. 2025)'. Doplněno explicitní upozornění na výjimku § 18 odst. 1 věta druhá pro lázně. Doplněn primární zdroj — přímý PDF link z MZČR — do sekce zdrojů a do disclaimeru. Banner aktualizován z 2026-05-11 na 2026-05-15. Pracovní příklad krajské nemocnice ponechán jako didaktický (article-databox-disclaimer to již deklaruje). Konzistentní s clanek-reforma-pohotovosti-290-2025.html (audit 2026-05-10) a clanek-novela-lps-pojistovny.html (audit 2026-05-15) v hodnotě 9 600 Kč/den pro stomatologickou pohotovost. Status: review-pending."
+-->
 <title>Vzorec, který rozdělí stovky miliard. Jak funguje úhradová vyhláška · HSPA Monitor</title>
 <meta name="description" content="Úhradová vyhláška každoročně stanoví, kolik dostane každý lékař, nemocnice a lékárna z veřejného zdravotního pojištění. Vysvětlení mechaniky pro 2026 (vyhláška č. 432/2025 Sb., účinnost od 1. 1. 2026) — hodnoty bodu, kapitace, DRG paušál — s pracovním příkladem hospitalizace.">
 <meta name="robots" content="index, follow">
@@ -11,6 +21,7 @@
 <meta property="og:description" content="Hodnoty bodu, kapitace, DRG paušál, regulační koridory — co je úhradová vyhláška, jak se počítá, a proč na ní záleží víc, než si myslíte.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
+<meta property="article:modified_time" content="2026-05-15">
 <meta property="article:section" content="Financování">
 <link rel="stylesheet" href="src/styles.css">
 </head>
@@ -39,8 +50,8 @@
     </nav>
 
     <aside class="article-review-banner" role="note" aria-label="Stav revize článku" style="margin:16px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--ink-mut);">
-      <strong style="display:block;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">Status: review-pending (audit 2026-05-11)</strong>
-      Článek byl revidován proti primárním zdrojům (MZČR, e-Sbírka). Hlavní úprava: framing přesunut z „návrhu" na finální <strong>vyhlášku č. 432/2025 Sb.</strong> (účinnost od 1. 1. 2026, <a href="https://e-sbirka.gov.cz/sb/2025/432/2026-01-01" target="_blank" rel="noopener">e-sbirka.gov.cz ↗</a>). Konkrétní paragrafové odkazy v textu (§ 14–§ 19, příloha 1, příloha 2) odrážejí pracovní výklad textu vyhlášky a měly by být před republikací nezávisle zkontrolovány proti konsolidovanému znění; číselné hodnoty (hodnoty bodu, kapitační sazby, IPU koeficienty) pocházejí z textu vyhlášky publikovaného MZČR a důvodové zprávy.
+      <strong style="display:block;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">Status: review-pending (audit 2026-05-15)</strong>
+      Článek byl hloubkově rekonciliován proti primárnímu zdroji — plnému textu <strong>vyhlášky č. 432/2025 Sb.</strong> (PDF MZČR, <a href="https://mzd.gov.cz/wp-content/uploads/2025/11/Uhradova_vyhlaska_2026.pdf" target="_blank" rel="noopener">Uhradova_vyhlaska_2026.pdf ↗</a>; vyhláška ze dne 22. 10. 2025, vyhlášena ve Sbírce zákonů 30. 10. 2025, účinnost od 1. 1. 2026; <a href="https://e-sbirka.gov.cz/sb/2025/432/2026-01-01" target="_blank" rel="noopener">e-sbirka.gov.cz ↗</a>). Všechny paragrafové reference (§ 14–§ 19) a číselné hodnoty (hodnoty bodu, kapitační sazby 76/69/66/60 Kč, IPU koeficient 1,03, redukce 0,98, ZS_min 55/60/65 tis. Kč, ZS_max odvozeno z MAX 110 tis. Kč, top tier 90 tis. Kč/CM) byly ověřeny v textu vyhlášky. Pracovní příklad krajské nemocnice je didaktický a slouží k ilustraci vzorce — neodpovídá konkrétnímu poskytovateli.
     </aside>
 
     <header class="article-header">
@@ -50,7 +61,7 @@
       </div>
       <h2 class="article-title">Vzorec, který rozdělí stovky miliard. Jak funguje úhradová vyhláška a proč na ní záleží víc, než si myslíte</h2>
       <p class="article-deck">
-        Každý rok na konci podzimu vychází ve Sbírce zákonů dokument s desítkami paragrafů a přílohami. Pro občana je neviditelný, pro každého lékaře, nemocnici, lékárnu a záchrannou službu v Česku je to nejdůležitější regulační text roku — úhradová vyhláška. Říká, kolik dostane každý poskytovatel péče z veřejného zdravotního pojištění, jak se mu úhrada počítá a co se stane, když udělá víc nebo méně práce, než se očekávalo. Pro 2026 je v účinnosti od 1. ledna <strong>vyhláška č. 432/2025 Sb.</strong> (publikováno MZČR v listopadu 2025, vydáno ve Sbírce zákonů); její mechaniky vysvětlujeme níže — od kapitační platby praktiků (60–76 Kč na pojištěnce a měsíc), přes hodnotu bodu na záchrance (1,32 Kč), až po vzorec paušálu pro akutní lůžkovou péči s konkrétním pracovním příkladem.
+        Každý rok na konci podzimu vychází ve Sbírce zákonů dokument s desítkami paragrafů a přílohami. Pro občana je neviditelný, pro každého lékaře, nemocnici, lékárnu a záchrannou službu v Česku je to nejdůležitější regulační text roku — úhradová vyhláška. Říká, kolik dostane každý poskytovatel péče z veřejného zdravotního pojištění, jak se mu úhrada počítá a co se stane, když udělá víc nebo méně práce, než se očekávalo. Pro 2026 je v účinnosti od 1. ledna <strong>vyhláška č. 432/2025 Sb.</strong> (vyhláška ze dne 22. 10. 2025, vyhlášena ve Sbírce zákonů 30. 10. 2025); její mechaniky vysvětlujeme níže — od kapitační platby praktiků (60–76 Kč na pojištěnce a měsíc), přes hodnotu bodu na záchrance (1,32 Kč), až po vzorec paušálu pro akutní lůžkovou péči s konkrétním pracovním příkladem.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">7. května 2026</span>
@@ -139,7 +150,7 @@
         <li><strong>Komplexní lázeňská léčebně rehabilitační péče</strong>: 102 % smluvně sjednané úhrady za 1 den pobytu pro 2025 (§ 17 odst. 1) — meziroční nárůst 2 procentní body, mající kompenzovat inflaci.</li>
         <li><strong>Ozdravovny</strong>: 1 310 Kč za den pobytu (§ 17 odst. 4) ve složkách ubytování + stravování + ozdravný program.</li>
         <li><strong>Příspěvkové lázně — výkon 09543</strong>: 0,77 Kč, maximálně třikrát za pobyt (§ 17 odst. 3).</li>
-        <li><strong>Vybrané individuální výkony (09543, 09555–09557)</strong>: 1,12 Kč; výkony 09580 a 09581: 1,04 Kč; jednorázová úhrada 36 Kč za výkon 09990 a 32 Kč za výkon 09552 (§ 18, § 19).</li>
+        <li><strong>Vybrané individuální výkony (09543 mimo lázně, 09555–09557)</strong>: 1,12 Kč; výkony 09580 a 09581: 1,04 Kč; jednorázová úhrada 36 Kč za výkon 09990 a 32 Kč za výkon 09552 (§ 18, § 19). <em>Pozn.: § 18 odst. 1 věta druhá výslovně vylučuje aplikaci sazby 1,12 Kč u poskytovatele lázeňské léčebně rehabilitační péče, kde se uplatní § 17 odst. 3 (0,77 Kč) — výkon 09543 má proto dvě rozdílné hodnoty bodu podle typu poskytovatele.</em></li>
         <li><strong>Převedení listinného receptu do elektronické podoby</strong>: 16 Kč za každý převedený recept, byl-li na něj reálně vydán léčivý přípravek (§ 19 odst. 2). Mírný stimul k digitalizaci preskripce.</li>
       </ul>
 
@@ -165,7 +176,7 @@
           <li class="sha-comp-cz"><span class="sha-comp-lbl">Lázně — výkon 09543</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 51%"></span><span class="sha-comp-val">0,77</span></li>
         </ul>
         <p class="article-figure-source">
-          Rozpětí 0,77 → 1,47 Kč = <strong>+91 % rozdíl</strong> mezi nejnižší a nejvyšší hodnotou bodu. Vyhláška systémově preferuje (záchranka) nebo potlačuje (lázně, pohotovost) určité druhy péče. Zdroj: vyhláška č. 432/2025 Sb. (úhradová vyhláška pro 2026), MZČR / e-Sbírka.
+          Rozpětí 0,77 → 1,47 Kč = <strong>+91 % rozdíl</strong> mezi nejnižší a nejvyšší hodnotou bodu. Vyhláška systémově preferuje (záchranka) nebo potlačuje (lázně, pohotovost) určité druhy péče. Zdroj: vyhláška č. 432/2025 Sb., § 14–§ 18 (ověřeno proti PDF MZČR Uhradova_vyhlaska_2026.pdf, audit 2026-05-15).
         </p>
       </figure>
 
@@ -219,7 +230,7 @@
           </div>
         </div>
         <p class="article-figure-source">
-          Rozdíl 60 → 76 Kč (+27 %) je přímá motivace k otevřeným ordinacím; +5 Kč za kvalitu, +2 Kč za splnění proporce preventivních prohlídek a +1 Kč za CŽV ČLK / rezidenta. ~ 1 020 Kč / pojištěnec / rok ve špičce. Zdroj: příloha 2 úhradové vyhlášky 2026.
+          Rozdíl 60 → 76 Kč (+27 %) je přímá motivace k otevřeným ordinacím; +5 Kč za kvalitu, +2 Kč za splnění proporce preventivních prohlídek a +1 Kč za CŽV ČLK / rezidenta. ~ 1 020 Kč / pojištěnec / rok ve špičce. Zdroj: vyhláška č. 432/2025 Sb., příloha č. 2, body 1–3 (ověřeno proti PDF MZČR, audit 2026-05-15).
         </p>
       </figure>
 
@@ -325,7 +336,7 @@
           </tbody>
         </table>
         <p class="article-figure-source">
-          Vzorec: ÚHR<sub>PU</sub> = min&#123; 1 ; CM<sub>2026</sub> / (0,98 × CM<sub>2024</sub>) &#125; × IPU − EM. Pokles produkce <strong>se promítne plnou silou</strong> do úhrady; nárůst nad referenci se zastaví na stropu (* nadprodukce řeší samostatný režim případového paušálu, viz bod 6 přílohy 1).
+          Vzorec: ÚHR<sub>PU</sub> = min&#123; 1 ; CM<sub>2026</sub> / (0,98 × CM<sub>2024</sub>) &#125; × IPU − EM, kde IPU = PU<sub>drg,2024</sub> × 1,03. Pokles produkce <strong>se promítne plnou silou</strong> do úhrady; nárůst nad referenci se zastaví na stropu (* nadprodukce řeší samostatný režim případového paušálu, viz bod 6 přílohy 1). Zdroj: vyhláška č. 432/2025 Sb., příloha č. 1, část A, bod 1.1–1.6 (ověřeno proti PDF MZČR, audit 2026-05-15).
         </p>
       </figure>
 
@@ -434,8 +445,9 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data — primární zdroj vyhlášky</h5>
         <ul class="article-sources-list">
-          <li><strong>Vyhláška č. 432/2025 Sb.</strong> (úhradová vyhláška pro 2026) — finální znění ve Sbírce zákonů, účinnost od 1. 1. 2026. <a href="https://e-sbirka.gov.cz/sb/2025/432/2026-01-01" target="_blank" rel="noopener">e-sbirka.gov.cz ↗</a></li>
-          <li><strong>Úhradová vyhláška 2026 — souhrnná stránka MZČR</strong> — plný text PDF, důvodová zpráva, podíly pojištěnců, číselník RV. <a href="https://www.mzd.gov.cz/uhradova-vyhlaska-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Vyhláška č. 432/2025 Sb.</strong> (úhradová vyhláška pro 2026) — finální znění ve Sbírce zákonů (vyhláška ze dne 22. 10. 2025, vyhlášena 30. 10. 2025, účinnost od 1. 1. 2026). <a href="https://e-sbirka.gov.cz/sb/2025/432/2026-01-01" target="_blank" rel="noopener">e-sbirka.gov.cz ↗</a></li>
+          <li><strong>Úhradová vyhláška 2026 — plný text PDF (MZČR)</strong> — primární zdroj použitý pro rekonciliaci tohoto článku; obsahuje § 1–§ 21 a přílohy č. 1–15. <a href="https://mzd.gov.cz/wp-content/uploads/2025/11/Uhradova_vyhlaska_2026.pdf" target="_blank" rel="noopener">mzd.gov.cz/Uhradova_vyhlaska_2026.pdf ↗</a></li>
+          <li><strong>Úhradová vyhláška 2026 — souhrnná stránka MZČR</strong> — důvodová zpráva, podíly pojištěnců (xlsx), číselník RV (xlsx). <a href="https://www.mzd.gov.cz/uhradova-vyhlaska-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
           <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 17 (zmocnění k úhradové vyhlášce, rámec dohodovacího řízení) a další ustanovení. <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
           <li><strong>Vyhláška č. 134/1998 Sb.</strong> — Seznam zdravotních výkonů s bodovými hodnotami. <a href="https://www.zakonyprolidi.cz/cs/1998-134" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
           <li><strong>ÚZIS — DRG metodika a relativní váhy</strong> — operační podklad pro paušální úhradu (verze klasifikace CZ-DRG pro 2026, relativní váhy). <a href="https://drg.uzis.cz/" target="_blank" rel="noopener">drg.uzis.cz ↗</a></li>
@@ -460,7 +472,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty bodu, kapitační sazby a referenční sazby pocházejí z vyhlášky č. 432/2025 Sb. publikované ve Sbírce zákonů (text MZČR z listopadu 2025, účinnost od 1. 1. 2026). Konkrétní paragrafové odkazy v textu článku (§ 14–§ 19, příloha 1, příloha 2) odrážejí pracovní výklad textu vyhlášky a měly by být před republikací nezávisle zkontrolovány proti konsolidovanému znění (e-Sbírka). Pracovní příklad krajské nemocnice je didaktický a slouží k ilustraci vzorce — neodpovídá konkrétnímu poskytovateli a skutečné hodnoty case-mixu jednotlivých nemocnic se výrazně liší. Vzorec paušální úhrady je ve článku zjednodušený oproti plné formuli přílohy 1; pro přesný výpočet doporučujeme primární text vyhlášky.
+        <strong>Pozn. k údajům:</strong> Hodnoty bodu, kapitační sazby a referenční sazby pocházejí z vyhlášky č. 432/2025 Sb. (vyhláška ze dne 22. 10. 2025, vyhlášena ve Sbírce zákonů 30. 10. 2025, účinnost od 1. 1. 2026). Paragrafové odkazy v textu článku (§ 14–§ 19, příloha 1, příloha 2) byly v auditu 2026-05-15 rekonciliovány s plným PDF textem vyhlášky publikovaným MZČR (link výše) a odpovídají literárnímu znění; pro nejaktuálnější konsolidované znění (například v případě budoucích derogací) doporučujeme primární zdroj e-Sbírka. Pracovní příklad krajské nemocnice je didaktický a slouží k ilustraci vzorce — neodpovídá konkrétnímu poskytovateli a skutečné hodnoty case-mixu jednotlivých nemocnic se výrazně liší. Vzorec paušální úhrady je ve článku zjednodušený oproti plné formuli přílohy 1; pro přesný výpočet (včetně bodů 1.1–8) doporučujeme primární text vyhlášky.
       </p>
     </section>
 
