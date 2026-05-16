@@ -8122,10 +8122,18 @@ body.mobile-nav-open .scroll-top-btn {
   gap: 12px;
 }
 
-/* Na širokém viewportu break-out do margin u 720px sloupce. */
+/* Na širokém viewportu break-out do margin u 720px sloupce.
+   Shift je clampován na dostupný gutter (s 24px safety), aby na úzkých
+   desktopech (1024–1099px) nevznikl horizontální scroll. Cílový shift
+   -180px se uplatní až tam, kde gutter ≥ ~200px (od ~1120px). */
 @media (min-width: 1024px) {
-  .av-aside { margin-right: -180px; }
-  .av-aside-left { margin-left: -180px; margin-right: 24px; }
+  .av-aside {
+    margin-right: max(-180px, calc(24px - (100vw - 720px) / 2));
+  }
+  .av-aside-left {
+    margin-left: max(-180px, calc(24px - (100vw - 720px) / 2));
+    margin-right: 24px;
+  }
 }
 
 /* Na mobilu vrátit do toku, plná šířka. */
