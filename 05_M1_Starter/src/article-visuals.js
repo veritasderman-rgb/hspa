@@ -119,6 +119,17 @@ function formatBarValue(v, unit) {
 //
 // Vždy obsahuje fallback text — pokud JS nezareaguje (no-JS, IntersectionObserver
 // chybí), zobrazí se finální hodnota napsaná v HTML.
+//
+// DŮLEŽITÉ — kdy NEpoužívat data-value:
+//   - Datumové stringy ("1. 1. 2027" → JS by přepsalo na "2 027" a ztratil
+//     by se den/měsíc).
+//   - Roky bez další jednotky ("1981", "2028") — animovaly by se jako "1 981".
+//     Pokud chceš zachovat plnou .av-counter typografii bez animace, jen
+//     vynechej data-value (parseCounterValue vrátí null a JS skip animation).
+//   - Rozsahy ("12–19", "4–8 měs.", "350–500") — JS by collapsoval na
+//     jedno číslo. Použij statický text bez data-value.
+//   - Hodnoty se znaménkem ("+6,4 %", "−110") — vždy doplnit data-prefix="+"
+//     nebo data-prefix="−" aby se znaménko nezdráhalo při animaci.
 
 function enhanceCounters(scope) {
   const els = scope.querySelectorAll('.av-counter:not([data-av-init])');
