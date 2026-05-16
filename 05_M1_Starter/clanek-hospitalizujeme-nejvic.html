@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-05-16
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 0
+    primary_sources_added: 5
+    visual_elements_added: 1
+    notes: "Kaskádová revize lůžkového clusteru navazující na audit clanek-vyhnutelne-hospitalizace.html (2026-05-15). Ověřeno proti OECD Health at a Glance 2025 (avoidable hospital admissions, hospital beds and occupancy chapters), Czechia Country Health Profile 2025 (OECD/European Observatory, září 2025), ČSÚ Healthcare 2024 (https://csu.gov.cz/healthcare) a interní metodické kartě indicators/luzka_jip_per_100k.json. Opraveny tři klíčové numerické nesrovnalosti: (1) ACSC 580/480 → 592/473 — sjednoceno se sourozeneckým auditem vyhnutelne-hospitalizace (OECD HAAG 2025, ref. rok 2021/2022, age-sex standardizováno); (2) Lůžka intenzivní péče 35/14 → caveat s rozlišením metodiky — interní metodická karta uvádí pro ČR ~40 ICU/100k (OECD standard ESICM) a Zdravotnický deník 03/2026 (Dušek/NRHZS) cca 40 ICU/100k (CZ) vs OECD průměr cca 17/100k; NRHZS 2024 reportuje širší IP definici (ARO 821 + JIP 4 906 = 5 727 lůžek, tj. cca 52/100k), která zahrnuje 1. úroveň oborových JIP nesplňujících ESICM 2./3. úroveň — proto 'dvojnásobek' formulace přepsána na metodicky korektní 'dvojnásobek až trojnásobek dle definice'; (3) ALOS 7 dní vs OECD 6,5 — doplněn explicitní caveat citující ČSÚ 2024 (ALOS akutní péče v ČR klesla z 6,6 dne v 2010 na 5,5 dne; ÚZIS NRH 2019 vykazuje 6,0 dne pro nemocnice exkl. následnou péči a 8,0 dne včetně), tj. 7 dní dashboardová hodnota není u OECD standardizované akutní péče a vyžaduje re-validaci proti aktuální vlně NRHZS. Doplněn caveat callout (komponenta .article-callout-caveat) za article-lead s vysvětlením metodických rozdílů ÚZIS NRH / OECD discharges / ESICM ICU vs NRHZS IP. Sekce Zdroje rozšířena z 6 generických položek na 11 stabilních primárních permalinků (OECD HAAG 2025 hospital activity, OECD HAAG 2025 hospital beds and occupancy, Czechia Country Health Profile 2025 PDF, OECD HCQI Definitions 2022, ÚZIS NRH registr permalink, ÚZIS Hospitalizovaní v nemocnicích ČR 2019, ČSÚ Healthcare landing page, Zdravotnický deník 03/2026 přebytek JIP, Eurostat hlth_co_disch2, NHS Digital QOF, NHS England Better Care Fund). Status published → review-pending. OTEVŘENÁ OTÁZKA pro datovou iteraci: indikátory luzka_jip_per_100k (value: 35), prumerna_delka_hospitalizace (value: 7) a hospitalizace_na_100k (value: 18 800) v dashboardu mají origin: seed a fetched_at 2026-05-04/05 — vyžadují napojení na NRHZS/NRH/OECD a re-publikaci do data/indicators.json (out-of-scope této iterace)."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Devatenáct tisíc hospitalizací na sto tisíc obyvatel. Proč Česko leží v nemocnicích nejvíc v OECD · HSPA Monitor</title>
-<meta name="description" content="Akutních hospitalizací je v Česku 18 800 na 100 000 obyvatel oproti 14 600 v průměru OECD. Akutních lůžek 4,1 na tisíc oproti 3,5; lůžek intenzivní péče dokonce 35 na 100 000 oproti 14. Česko je dlouhodobě jednou z nejvíc nemocnice-centric zemí v Evropě a ne každá hospitalizace je v dnešní medicíně nutná.">
+<meta name="description" content="Akutních hospitalizací je v Česku 18 800 na 100 000 obyvatel oproti 14 600 v průměru OECD. Akutních lůžek 4,1 na tisíc oproti 3,5; lůžek intenzivní péče cca 40 na 100 000 oproti cca 17 v průměru OECD (po standardizaci ESICM). Česko je dlouhodobě jednou z nejvíc nemocnice-centric zemí v Evropě a ne každá hospitalizace je v dnešní medicíně nutná.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Devatenáct tisíc hospitalizací na sto tisíc obyvatel. Proč Česko leží v nemocnicích nejvíc v OECD">
-<meta property="og:description" content="Hospitalizace 18 800 / 100k vs. OECD 14 600. Lůžka, JIP, délka pobytu — Česko nemocnice-centric. Co s tím dělají systémy s jednodenní chirurgií a stronger primární péčí.">
+<meta property="og:description" content="Hospitalizace 18 800 / 100k vs. OECD 14 600. Akutní lůžka 4,1 vs 3,5; ICU cca 40 vs 17 (ESICM standard) — viz caveat o metodice. Co s tím dělají systémy s jednodenní chirurgií a silnější primární péčí.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Nemocniční péče">
@@ -45,7 +55,7 @@
       </div>
       <h2 class="article-title">Devatenáct tisíc hospitalizací na sto tisíc obyvatel. Proč Česko leží v nemocnicích nejvíc v OECD</h2>
       <p class="article-deck">
-        Česko hospitalizuje 18 800 pacientů na sto tisíc obyvatel ročně, průměr OECD 14 600 — zhruba o čtvrtinu víc. Akutních lůžek máme 4,1 na tisíc obyvatel oproti 3,5 v průměru OECD; lůžek intenzivní péče dokonce 35 na 100 000 oproti 14. Průměrná délka hospitalizace 7 dní oproti 6,5 v OECD. Sedm různých čísel, ale jeden konzistentní obraz: české zdravotnictví je dlouhodobě <em>nemocnice-centric</em> a v evropském srovnání řeší v lůžkové péči víc, než by muselo.
+        Česko hospitalizuje 18 800 pacientů na sto tisíc obyvatel ročně, průměr OECD 14 600 — zhruba o čtvrtinu víc. Akutních lůžek máme 4,1 na tisíc obyvatel oproti 3,5 v průměru OECD; lůžek intenzivní péče cca 40 na 100 000 oproti zhruba 17 (po standardizaci ESICM, OECD <em>Health at a Glance</em> 2025). Šest různých čísel, ale jeden konzistentní obraz: české zdravotnictví je dlouhodobě <em>nemocnice-centric</em> a v evropském srovnání řeší v lůžkové péči víc, než by muselo. Některá centrální čísla mají metodické rozdíly mezi ÚZIS NRH a OECD discharges — viz <em>caveat</em> dál v textu.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">7. května 2026</span>
@@ -54,6 +64,9 @@
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
+      <p style="margin-top:14px;padding:14px 18px;background:#fff7e6;border-left:4px solid #f7b955;border-radius:6px;font-family:var(--sans);font-size:14px;color:#5b3700">
+        <strong>Status: review-pending po auditní revizi (2026-05-16).</strong> Kaskádová revize navazující na audit sourozeneckého článku <a href="clanek-vyhnutelne-hospitalizace.html">vyhnutelne-hospitalizace</a> ze 15. 5. 2026 (oprava ACSC 580/480 → 592/473 dle <em>OECD Health at a Glance</em> 2025). V tomto článku byly proti primárním zdrojům (OECD HAAG 2025 — kapitoly <em>Hospital activity</em> a <em>Hospital beds and occupancy</em>; <em>Czechia Country Health Profile 2025</em> [OECD/European Observatory, září 2025]; ČSÚ Healthcare data 2024; ÚZIS <em>Hospitalizovaní v nemocnicích ČR 2019</em>; interní metodická karta `indicators/luzka_jip_per_100k.json`) sladěny tyto hodnoty: ACSC 580/480 → 592/473 (OECD HAAG 2025, age-sex standardizováno, ref. rok 2021/2022); lůžka intenzivní péče 35/14 → cca 40/cca 17 s caveatem rozlišujícím ESICM ICU standard od širší NRHZS IP definice (ARO 821 + JIP 4 906 = 5 727 lůžek v ČR 2024, tj. cca 52/100k, zahrnuje i 1. úroveň oborových JIP); ALOS 7 dní vs OECD 6,5 caveatován proti ČSÚ 2024 (akutní péče v ČR 5,5 dne). Hodnota 18 800/100k z dashboardu má `origin: seed` a vyžaduje napojení na NRHZS — dokud k tomu nedojde, zůstává nejistá; ÚZIS NRH 2019 v primární publikaci uvádí 22 280/100k (všechna oddělení vč. následné péče) a 6,0 dne ALOS pro nemocniční péči. Článek čeká na ruční schválení před republikací.
+      </p>
     </header>
 
     <div class="article-body">
@@ -62,14 +75,22 @@
         Vysoká míra hospitalizací není sama o sobě špatná zpráva. Některé z těch hospitalizací byly v daném okamžiku medicínsky správné a pacientovi prospěly. Co je problém, je to, že v evropském srovnání část z nich představuje výkony, které sousední země zvládají ambulantně, jednodenně nebo v primární péči — bez týdenního pobytu na lůžku. Strukturálně to znamená, že lůžková kapacita zaměstnává personál a zdroje, které by jinde mohly posílit primární péči, prevenci a chronickou dispenzární práci.
       </p>
 
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — metodika srovnání ÚZIS NRH a OECD discharges">
+        <p class="article-callout-h">Caveat — co se srovnává a co ne</p>
+        <p><strong>Hospitalizace 18 800/100k (ČR) vs. 14 600/100k (OECD průměr).</strong> Levá hodnota pochází z dashboardu HSPA Monitoru (`origin: seed`); ÚZIS <em>Hospitalizovaní v nemocnicích ČR 2019</em> přitom v primární publikaci uvádí 22 280 hospitalizací na 100 000 obyvatel (všechna oddělení nemocnic včetně následné péče). OECD <em>discharges</em> (HAAG 2025) započítává <em>ukončené hospitalizační epizody</em> v akutní lůžkové péči, tj. užší definice. Hodnoty proto nejsou plně apples-to-apples; směrový rozdíl (Česko nad OECD průměrem) je doložený, absolutní hodnoty vyžadují re-validaci dashboardu proti aktuální vlně NRHZS.</p>
+        <p><strong>Lůžka intenzivní péče cca 40/100k (ČR) vs. cca 17/100k (OECD průměr).</strong> OECD HAAG 2025 / HCQI počítá ICU lůžka standardizovaně podle ESICM klasifikace (úrovně 2 a 3, tj. plnohodnotná intenzivní a resuscitační lůžka pro dospělé). Česká NRHZS publikace (ÚZIS / prezentace prof. Duška 13. 5. 2026) reportuje pro 2024 širší IP definici: 821 lůžek ARO + 4 906 lůžek JIP = 5 727 lůžek (cca 52/100k), která zahrnuje i 1. úroveň oborových JIP nesplňujících ESICM 2./3. úroveň. <em>Zdravotnický deník</em> (3/2026) cituje hodnotu cca 40 ICU/100k pro ČR po ESICM standardizaci. Dashboardová hodnota 35/100k není napojena na primární zdroj a vyžaduje aktualizaci v navazující datové iteraci.</p>
+        <p><strong>ALOS 7 dní (ČR) vs. 6,5 dne (OECD průměr).</strong> ČSÚ Healthcare 2024 i ÚZIS NRH (2019) shodně uvádějí pro akutní lůžkovou péči v ČR průměrnou ošetřovací dobu kolem 5,5–6,0 dne (5,5 dne 2024 dle ČSÚ; 6,0 dne 2019 v nemocnicích, 8,0 dne včetně oddělení následné péče dle NRH). Dashboardová hodnota 7 dní pravděpodobně agreguje akutní i následnou péči a neodpovídá OECD definici acute care ALOS. Rozdíl proti OECD průměru je tedy menší, než článek původně tvrdil; směrový závěr (ČR pomalejší propouštění než nejlepší DRG systémy) zůstává platný.</p>
+        <p><strong>Odvratitelné hospitalizace (ACSC) 592/473.</strong> Aktualizováno proti audit revisi sourozeneckého článku <a href="clanek-vyhnutelne-hospitalizace.html">vyhnutelne-hospitalizace</a> (15. 5. 2026); dříve 580/480. Zdroj: OECD <em>Health at a Glance</em> 2025, kapitola <em>Avoidable hospital admissions</em>, ref. rok 2021/2022, age-sex standardizováno. Eurostat publikuje příbuzný, ale odlišný indikátor — avoidable mortality (úmrtí, nikoli hospitalizace).</p>
+      </aside>
+
       <h3>Co měříme a co to znamená</h3>
 
       <p>
-        Indikátor `hospitalizace_na_100k` zachycuje akutní hospitalizace všech diagnóz (bez porodů) na 100 000 obyvatel za rok ze Národního registru hospitalizovaných. Limitace, kterou metodická karta uvádí: srovnání je ovlivněno definicí akutního lůžka, různým započítáváním denní chirurgie a místní preferencí ambulantní vs. lůžkové péče. Ne všechny rozdíly mezi zeměmi jsou tedy reálné medicínské rozdíly. Část je metodická.
+        Indikátor `hospitalizace_na_100k` zachycuje akutní hospitalizace všech diagnóz (bez porodů) na 100 000 obyvatel za rok ze Národního registru hospitalizovaných. Limitace, kterou metodická karta uvádí: srovnání je ovlivněno definicí akutního lůžka, různým započítáváním denní chirurgie a místní preferencí ambulantní vs. lůžkové péče. Ne všechny rozdíly mezi zeměmi jsou tedy reálné medicínské rozdíly. Část je metodická — viz <em>caveat</em> výše.
       </p>
 
       <p>
-        Sedm čísel ale jeden vzor potvrzuje. Akutních lůžek (4,1 vs. 3,5 na tisíc obyvatel), lůžek intenzivní péče (35 vs. 14 na sto tisíc — dokonce dvojnásobek), průměrné délky hospitalizace (7 vs. 6,5 dne) a samotné míry hospitalizací (18 800 vs. 14 600 / 100 000) jsou všechno ukazatele směřující ke stejnému závěru. Česko je strukturálně postavené na lůžkové péči víc než většina OECD. JIP indikátor je zvlášť výrazný; metodická karta sice upozorňuje, že definice JIP se v zemích liší (úrovně 1/2/3 podle ESICM klasifikace) a standardizace OECD běží teprve od 2020, ale i s touto výhradou je dvojnásobek vs. evropský průměr významný.
+        Šest čísel ale jeden vzor potvrzuje. Akutních lůžek (4,1 vs. 3,5 na tisíc obyvatel), lůžek intenzivní péče (cca 40 vs. cca 17 na 100 000 podle ESICM standardu — dvojnásobek až trojnásobek dle použité definice), průměrné délky hospitalizace (5,5–7 dní vs. 6,5 v průměru OECD) a samotné míry hospitalizací (18 800 vs. 14 600 / 100 000) jsou všechno ukazatele směřující ke stejnému závěru. Česko je strukturálně postavené na lůžkové péči víc než většina OECD. JIP indikátor je zvlášť výrazný; metodická karta `luzka_jip_per_100k.json` výslovně upozorňuje, že definice JIP se v zemích liší (úrovně 1/2/3 podle ESICM klasifikace) a standardizace OECD běží teprve od 2020 — i s touto výhradou je dvojnásobek až trojnásobek vs. evropský průměr významný strukturální fakt.
       </p>
 
       <p>
@@ -83,7 +104,7 @@
       </p>
 
       <p>
-        <strong>Hospitalizace pro stavy, které mají být řešeny ambulantně.</strong> ACSC indikátor (580 / 100 000 vs. OECD 480) tento jev kvantifikuje pro pět chronických diagnóz — diabetes, CHOPN, srdeční selhání, hypertenzi a astma. V Česku tyto pacienty častěji než ve srovnatelných zemích hospitalizujeme proto, že primární péče jejich stav nezvládla zachytit a stabilizovat dřív. Souvislost s článkem 19 této redakční řady je přímá: část hospitalizační rezervy proti OECD se schovává právě tam.
+        <strong>Hospitalizace pro stavy, které mají být řešeny ambulantně.</strong> ACSC indikátor (592 / 100 000 vs. OECD průměr 473 podle <em>OECD Health at a Glance</em> 2025, ref. rok 2021/2022, age-sex standardizováno) tento jev kvantifikuje pro pět chronických diagnóz — diabetes, CHOPN, srdeční selhání, nekomplikovanou hypertenzi a astma. V Česku tyto pacienty častěji než ve srovnatelných zemích hospitalizujeme proto, že primární péče jejich stav nezvládla zachytit a stabilizovat dřív. Souvislost se sourozeneckým článkem <a href="clanek-vyhnutelne-hospitalizace.html">vyhnutelne-hospitalizace</a> této redakční řady je přímá: část hospitalizační rezervy proti OECD se schovává právě tam.
       </p>
 
       <p>
@@ -119,7 +140,7 @@
       </p>
 
       <p>
-        <strong>Německé G-DRG</strong> mělo na ALOS významný efekt. Po zavedení DRG od 2003–2004 průměrná délka hospitalizace v Německu výrazně klesla, protože systém přestal odměňovat den pobytu a začal odměňovat výkon a diagnózu. Český systém DRG pilotně používá, ale plné nasazení s motivací zkrátit ALOS bez kompromisu kvality stále nemá. Sedm dní ALOS vs. 6,5 v OECD je drobný rozdíl, ale násobeno počtem hospitalizací znamená velký objem akutních lůžko-dnů.
+        <strong>Německé G-DRG</strong> mělo na ALOS významný efekt. Po zavedení DRG od 2003–2004 průměrná délka hospitalizace v Německu výrazně klesla, protože systém přestal odměňovat den pobytu a začal odměňovat výkon a diagnózu. Český systém DRG pilotně používá, ale plné nasazení s motivací zkrátit ALOS bez kompromisu kvality stále nemá. ČSÚ pro 2024 uvádí průměrnou ošetřovací dobu v české akutní lůžkové péči 5,5 dne (oproti 6,6 dne v 2010), tedy v segmentu akutní péče se ČR průměru OECD blíží; rozdíl proti dashboardové hodnotě 7 dní pramení z širší agregace včetně oddělení následné péče. I tak platí, že posun každého zbytečného lůžko-dne směrem k modernímu DRG režimu znamená v součtu napříč 1,8+ milionu hospitalizací významnou úsporu kapacit.
       </p>
 
       <h3>Co Česko realisticky může</h3>
@@ -160,14 +181,14 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 18 800 / 100 000 vs. OECD 14 600</li>
-        <li><a href="indicator.html?id=postele_akutni_per_1000"><strong>Akutní lůžka</strong></a> — 4,1 / 1 000 vs. OECD 3,5</li>
-        <li><a href="indicator.html?id=luzka_jip_per_100k"><strong>Lůžka intenzivní péče (JIP/ARO)</strong></a> — 35 / 100 000 vs. OECD 14</li>
-        <li><a href="indicator.html?id=prumerna_delka_hospitalizace"><strong>Průměrná délka hospitalizace (ALOS)</strong></a> — 7 dní vs. OECD 6,5</li>
-        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 580 / 100 000 vs. OECD 480</li>
+        <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 18 800 / 100 000 vs. OECD 14 600 (dashboard `origin: seed`, vyžaduje re-validaci proti NRHZS; ÚZIS NRH 2019 = 22 280/100k vč. následné péče)</li>
+        <li><a href="indicator.html?id=postele_akutni_per_1000"><strong>Akutní lůžka</strong></a> — 4,1 / 1 000 vs. OECD 3,5 (pro úplnost: OECD <em>Czechia Country Health Profile 2025</em> uvádí 6,4 lůžka / 1 000 vč. následných a psychiatrických — Česko cca 25 % nad EU průměrem)</li>
+        <li><a href="indicator.html?id=luzka_jip_per_100k"><strong>Lůžka intenzivní péče (JIP/ARO)</strong></a> — cca 40 / 100 000 vs. OECD cca 17 (ESICM standard); NRHZS 2024 = 5 727 IP lůžek (ARO 821 + JIP 4 906) ≈ 52/100k (širší definice vč. 1. úrovně oborových JIP) — viz <em>caveat</em> v článku</li>
+        <li><a href="indicator.html?id=prumerna_delka_hospitalizace"><strong>Průměrná délka hospitalizace (ALOS)</strong></a> — ČSÚ 2024 pro akutní péči = 5,5 dne (klesající trend z 6,6 dne v 2010); dashboardová hodnota 7 dní agreguje akutní i následnou péči a vyžaduje re-validaci</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 / 100 000 vs. OECD 473 (<em>OECD Health at a Glance</em> 2025, ref. rok 2021/2022, age-sex standardizováno) — sjednoceno s auditem sourozeneckého článku <a href="clanek-vyhnutelne-hospitalizace.html">vyhnutelne-hospitalizace</a> (15. 5. 2026)</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátorům:</strong> Srovnání hospitalizačních měr mezi zeměmi je metodicky náročné — definice akutního lůžka, započítávání denní chirurgie a definice „akutní hospitalizace" se liší. Indikátor JIP standardizuje OECD od roku 2020 (úrovně 1/2/3 dle ESICM klasifikace). ALOS je ovlivněna case-mixem; kratší hospitalizace nemusí vždy znamenat lepší výsledky pro pacienta.
+        <strong>Pozn. k indikátorům:</strong> Srovnání hospitalizačních měr mezi zeměmi je metodicky náročné — definice akutního lůžka, započítávání denní chirurgie a definice „akutní hospitalizace" se liší. Indikátor JIP standardizuje OECD od roku 2020 (úrovně 1/2/3 dle ESICM klasifikace); NRHZS sběr v ČR zahrnuje i 1. úroveň oborových JIP, které OECD do ICU nepočítá. ALOS je ovlivněna case-mixem i zahrnutými typy oddělení; kratší hospitalizace nemusí vždy znamenat lepší výsledky pro pacienta. Dashboardové hodnoty s `origin: seed` (luzka_jip_per_100k, prumerna_delka_hospitalizace, hospitalizace_na_100k) nejsou napojené na primární zdroj přes ingest pipeline a jsou kandidáty na re-validaci.
       </p>
     </aside>
 
@@ -175,29 +196,45 @@
       <div class="ed-kicker">Zdroje</div>
       <h4 class="article-sources-h">Kde si data sami ověříte</h4>
       <div class="sources-group">
-        <h5 class="sources-group-h">Data</h5>
+        <h5 class="sources-group-h">Data — mezinárodní srovnání</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health Statistics — Hospital activity</strong> — primární zdroj. <a href="https://www.oecd.org/en/topics/health-statistics-and-data.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>OECD — Health at a Glance: Europe</strong> — pravidelný report s mezinárodním srovnáním lůžkové péče (samostatná Europe série, ne obecná HaaG). <a href="https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance-europe_23054336-en" target="_blank" rel="noopener">oecd-ilibrary.org ↗</a></li>
-          <li><strong>ÚZIS — Národní registr hospitalizovaných (NRH)</strong> — domácí registr výkonů. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
-          <li><strong>NHS England — Day Case Surgery Performance</strong> — britská data o podílu jednodenní chirurgie. <a href="https://www.england.nhs.uk/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2025: Hospital activity</strong> (kapitola s discharges a ALOS). <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_8f9e3f98-en/full-report/hospital-activity_8d89d2a3.html" target="_blank" rel="noopener">oecd.org/health-at-a-glance-2025/hospital-activity ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2025: Hospital beds and occupancy</strong> (kapitola s počty lůžek, ICU a obsazeností). <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_8f9e3f98-en/full-report/hospital-beds-and-occupancy_152d839e.html" target="_blank" rel="noopener">oecd.org/health-at-a-glance-2025/hospital-beds ↗</a></li>
+          <li><strong>OECD &amp; European Observatory — State of Health in the EU: Czechia Country Health Profile 2025</strong> (září 2025; uvádí 6,4 nemocničních lůžek / 1 000, obsazenost 62 % v 2023, discharges 11 % pod pre-pandemic úrovní). <a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/12/country-health-profile-2025-country-notes_7e72146d/czechia_e16c6d2d/7d087e31-en.pdf" target="_blank" rel="noopener">oecd.org/czechia-country-profile-2025.pdf ↗</a></li>
+          <li><strong>Eurostat — Hospital discharges by diagnosis (hlth_co_disch2)</strong>, dataset permalink. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_co_disch2/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat/hlth_co_disch2 ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data — domácí (ÚZIS / ČSÚ / MZ)</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS — Národní registr hospitalizovaných (NRH/NRHZS)</strong>, registr a metodika. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-hospitalizovanych" target="_blank" rel="noopener">uzis.cz/narodni-registr-hospitalizovanych ↗</a></li>
+          <li><strong>ÚZIS — Hospitalizovaní v nemocnicích ČR (poslední veřejná publikace 2019; metodika a referenční tabulky)</strong>. <a href="https://www.uzis.cz/res/f/008357/hospit2019.pdf" target="_blank" rel="noopener">uzis.cz/hospit2019.pdf ↗</a></li>
+          <li><strong>ČSÚ — Healthcare (souhrnný portál; 2024: 160 akutních nemocnic, 49 199 lůžek, ALOS 5,5 dne; ~1,3 mil. hospitalizovaných pacientů)</strong>. <a href="https://csu.gov.cz/healthcare" target="_blank" rel="noopener">csu.gov.cz/healthcare ↗</a></li>
+          <li><strong>Zdravotnický deník</strong> — analýza kapacit JIP a hodnocení ICU vs. následných lůžek (3/2026; cituje 40 ICU/100k pro ČR vs OECD ~17, kritika nadbytečné struktury). <a href="https://www.zdravotnickydenik.cz/2026/03/prebytek-jip-nedostatek-naslednych-luzek/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
-          <li><strong>British Association of Day Surgery (BADS)</strong> — britská referenční organizace pro jednodenní chirurgii. <a href="https://daysurgeryuk.net/" target="_blank" rel="noopener">daysurgeryuk.net ↗</a></li>
-          <li><strong>ESICM — European Society of Intensive Care Medicine</strong> — klasifikace JIP úrovní. <a href="https://www.esicm.org/" target="_blank" rel="noopener">esicm.org ↗</a></li>
+          <li><strong>OECD — Health Care Quality Indicators: Definitions 2022</strong> (definice ACSC, avoidable admissions). <a href="https://www.oecd.org/els/health-systems/Definitions-of-Health-Care-Quality-Outcomes.pdf" target="_blank" rel="noopener">oecd.org/HCQI-Definitions.pdf ↗</a></li>
+          <li><strong>British Association of Day Surgery (BADS)</strong> — britská referenční organizace pro jednodenní chirurgii a seznam výkonů. <a href="https://daysurgeryuk.net/" target="_blank" rel="noopener">daysurgeryuk.net ↗</a></li>
+          <li><strong>ESICM — European Society of Intensive Care Medicine</strong> — klasifikace ICU úrovní 1/2/3. <a href="https://www.esicm.org/" target="_blank" rel="noopener">esicm.org ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>NHS Better Care Fund</strong> — britský model integrované zdravotně-sociální péče. <a href="https://www.england.nhs.uk/better-care-fund/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>NHS England — Better Care Fund</strong> — britský model integrované zdravotně-sociální péče. <a href="https://www.england.nhs.uk/better-care-fund/" target="_blank" rel="noopener">england.nhs.uk/better-care-fund ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížový audit</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-vyhnutelne-hospitalizace</strong> — audit ACSC indikátoru proti OECD HCQI a HAAG 2025 (15. 5. 2026); ACSC 580/480 aktualizováno na 592/473. Tento článek se s revidovanou hodnotou sjednocuje. <a href="clanek-vyhnutelne-hospitalizace.html">clanek-vyhnutelne-hospitalizace.html</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku. Mezinárodní srovnání lůžkové kapacity je metodicky náročné; trend uvnitř země je robustnější než absolutní hodnoty. „Vyšší rezerva JIP zvládla covidovou vlnu" je řádový popis, ne kvantitativní studie — pro detail viz reporty SZÚ a ÚZIS k pandemii covidu.
+        <strong>Pozn. k údajům:</strong> Mezinárodní srovnání lůžkové kapacity je metodicky náročné; trend uvnitř země je robustnější než absolutní hodnoty. Definice akutního lůžka, započítávání denní chirurgie a definice akutní hospitalizace se mezi zeměmi liší. „Vyšší rezerva JIP zvládla covidovou vlnu" je řádový popis, ne kvantitativní studie — pro detail viz reporty SZÚ a ÚZIS k pandemii covidu. Tři dashboardové indikátory (hospitalizace_na_100k, luzka_jip_per_100k, prumerna_delka_hospitalizace) mají v `data/indicators.json` `origin: seed` a vyžadují napojení na NRHZS / OECD přes ingest pipeline v navazující datové iteraci.
       </p>
     </section>
 
