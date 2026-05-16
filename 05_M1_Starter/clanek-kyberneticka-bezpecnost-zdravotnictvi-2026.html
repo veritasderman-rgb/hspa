@@ -95,9 +95,44 @@ audit:
         Důvod tohoto rozšíření je empirický a tristní. ENISA — European Union Agency for Cybersecurity — ve své zprávě <em>Health Threat Landscape</em> (publikováno červenec 2023, datová báze leden&nbsp;2021 — březen&nbsp;2023, EU a sousední země) zaznamenala v sektoru zdravotnictví <strong>215 veřejně hlášených kybernetických incidentů</strong>; ransomware byl s 54&nbsp;% nejčastější hrozbou, následovaný datově orientovanými hrozbami (~46&nbsp;%) a útoky cílenými na narušení provozu (kategorie se z metodiky ENISA částečně překrývají, protože jeden incident má často víc dopadů současně). Poskytovatelé zdravotní péče tvořili 53&nbsp;% obětí (z toho nemocnice 42&nbsp;%); 83&nbsp;% útoků mělo finanční motivaci a jen 27&nbsp;% organizací mělo dedikovaný program obrany proti ransomwaru. Mezi nejviditelnější celoevropské epizody patří útok WannaCry na britskou NHS v květnu 2017 (podle <em>National Audit Office Investigation: WannaCry Cyber Attack and the NHS</em>, říjen 2017, bylo zasaženo <strong>alespoň 81 z 236 NHS trustů v Anglii</strong> a dalších cca 600 GP praxí; 19&nbsp;000 zrušených návštěv; náklad ~£92&nbsp;mil. — z toho ~£20&nbsp;mil. ztracený výstup během útoku a ~£72&nbsp;mil. následná obnova IT); útok na <strong>Universitätsklinikum Düsseldorf</strong> (UKD) 10. září 2020 (pacientka s rupturou aorty byla pro nedostupnost IT převezena do vzdálenějšího Wuppertalu a zemřela; státní zastupitelství v Kolíně nad Rýnem zahájilo vyšetřování pro podezření z usmrcení z nedbalosti v souvislosti s kyberútokem — což byl precedens samotného vyšetřování — ale v listopadu 2020 došlo k závěru, že úmrtí <strong>nelze kauzálně přičítat</strong> ransomware útoku, protože pacientka by zemřela i bez prodlevy; viz Schneier on Security / IFSH); a opakované útoky na italský regionální zdravotní systém ASL Roma 3 v letech 2021 a 2022.
       </p>
 
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="215">215</span>
+          <span class="av-counter-label">incidentů ENISA 2021–2023</span>
+          <span class="av-counter-foot">54 % ransomware · 83 % finanční motivace</span>
+        </div>
+      </aside>
+
       <p>
         Český kontext má svá specifika. Síť 156 lůžkových zařízení s akutní péčí (data NRPZS, ÚZIS 2025), z toho 20 fakultních a velkých specializovaných center pod přímým zřizovatelstvím ministerstva, zhruba 80 středně velkých zařízení v zřizování krajů a měst, a desítky menších soukromých a oblastních nemocnic. K tomu přibližně 4 800 ambulantních zdravotnických zařízení, čtrnáct krajských středisek zdravotnické záchranné služby, tři velkodistributoři léčiv (Phoenix, Pharmos, Alliance) a několik desítek laboratorních provozovatelů. Tato heterogenita znamená, že jeden zákon musí pracovat s dramaticky odlišnými kapacitami: zatímco Všeobecná fakultní nemocnice v Praze má vlastní oddělení informační bezpečnosti s několika desítkami specialistů, oblastní nemocnice v menším okrese typicky nemá ani plně vytíženého CISO a IT správa je outsourcována na regionálního dodavatele. Právě tento gradient je zdrojem rizika — průzkum českého poskytovatele bezpečnostních služeb ComSource zveřejněný v lednu 2026 (citovaný v publikaci Komora Plus) odhaduje, že průměrná nemocnice v ČR plní zhruba třetinu požadavků, jež nový zákon vyžaduje; 65 % opatření nefunguje správně nebo není zavedeno vůbec, 25 % vykazuje nedostatky a pouze 10 % je hodnoceno jako plně funkční. Mediální odhady hovoří až o tisíci pokusech o průnik do informačních systémů jedné nemocnice ročně; přibližně 12 nemocnic je dle některých zdrojů hodnoceno jako kriticky podzabezpečené s nízkou pravděpodobností úspěšné obrany proti cílenému útoku.
       </p>
+
+      <div class="av-aside-clear"></div>
+
+      <figure class="av-figure" aria-labelledby="avCntComplianceH">
+        <figcaption class="av-figure-h" id="avCntComplianceH">Stav implementace bezpečnostních opatření v českých nemocnicích (ComSource 1/2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="10" data-suffix=" %">10 %</span>
+            <span class="av-counter-label">plně funkční opatření</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="25" data-suffix=" %">25 %</span>
+            <span class="av-counter-label">opatření s nedostatky</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="65" data-suffix=" %">65 %</span>
+            <span class="av-counter-label">nefunguje / nezavedeno</span>
+            <span class="av-counter-foot">12 měsíců do listopadu 2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="12">12</span>
+            <span class="av-counter-label">nemocnic v kritickém pásmu (HCI 2023)</span>
+            <span class="av-counter-foot">cílený útok s nízkou pravd. obrany</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ComSource (Komora Plus 1/2026), HealthCare Institute „Nejlepší nemocnice 2023". Sebe-deklarace + penetrační testy, ne plošný auditní průzkum — orientační hodnoty.</p>
+      </figure>
 
       <h3>Zákon 264/2025 Sb. — co konkrétně mění</h3>
 
@@ -317,9 +352,19 @@ audit:
         Pokud zákon 264/2025 Sb. má v sektoru zdravotnictví fungovat věcně, ne jen formálně, musí se v období květen 2026 — listopad 2026 stát několik věcí současně.
       </p>
 
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="60" data-suffix=" mil Kč">60 mil Kč</span>
+          <span class="av-counter-label">implementační program · krajská nemocnice</span>
+          <span class="av-counter-foot">+ 2–4 dodatečné úvazky · ≥ 2 roky</span>
+        </div>
+      </aside>
+
       <p>
         <strong>Provozní úroveň nemocnic.</strong> Každá registrovaná nemocnice v režimu vyšších povinností musí implementovat nebo dotáhnout do funkčního stavu sadu opatření podle vyhlášky 409/2025 Sb. — typicky: dokumentovaný systém řízení informační bezpečnosti, role bezpečnostního manažera (CISO) nebo manažera kybernetické bezpečnosti s definovanými kompetencemi a vazbou na statutární orgán, řízení rizik s pravidelným hodnocením, klasifikaci aktiv (zejména PACS, NIS, LIS, RIS, eRecept), segmentaci sítí (oddělení administrativní sítě, klinické sítě a IoMT — Internet of Medical Things), kontrolu privilegovaných účtů, multifaktorovou autentizaci pro vzdálené přístupy, správu zranitelností s definovanými cykly patchování, zálohování s testováním obnovitelnosti, plán kontinuity provozu (BCP) s scénáři pro výpadek nemocničního IT a pro útok ransomware, postupy hlášení incidentů a — to je možná nejnáročnější — pravidelné cvičení krizové reakce. To je pro průměrnou krajskou nemocnici implementační program v řádu 20–60 milionů Kč investic a 2–4 dodatečných úvazků odborného personálu po dobu nejméně dvou let. Pro malou oblastní nemocnici je to často nedosažitelné bez sdílené sektorové infrastruktury.
       </p>
+
+      <div class="av-aside-clear"></div>
 
       <p>
         <strong>Sektorová úroveň.</strong> Pokud má český zdravotní systém zvládnout nepoměr mezi velikostí požadavků a kapacitou menších nemocnic, je nutné posílit sdílenou infrastrukturu. To zahrnuje sektorové SOC (možná v gesci NCEZ nebo formou koncesního partnerství), centralizovaný program penetračního testování pro registrované subjekty, sdílené metodiky a šablony bezpečnostních dokumentů, koordinovanou edukační platformu pro management i zdravotnický personál (sociální inženýrství zůstává nejčastějším počátečním vektorem útoků), a — nejdůležitěji — sdílený incident response tým, který v případě útoku poskytne rychlou expertní podporu na místě. Nic z toho dnes v ČR nefunguje v plné šíři; všechny součásti existují v zárodečné podobě v různých institucích (NÚKIB, NCEZ, soukromé bezpečnostní firmy), ale nikdo z nich nemá dnes mandát ani rozpočet poskytovat tuto podporu plošně.
