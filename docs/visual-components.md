@@ -29,6 +29,45 @@ srovnávací bary, datovou tabulku, flow diagram a animovaný počet.
 </figure>
 ```
 
+### Rozšířené layouty
+
+`article-page` má `max-width: 720px` (čitelnost serif textu). Pro vizuály, které
+v 720 px sloupci tísní (data-table 4+ sloupců, flow 5+ kroků, dlouhá timeline),
+jsou k dispozici dva modifikátory:
+
+- **`.av-figure-wide`** — figura překročí 720 px sloupec a roztáhne se na
+  `min(1100px, calc(100vw - 48px))`, centrovaná do viewportu. Text zůstává
+  v 720 px sloupci. Na mobilu (< 720 px) padá zpět na 100 %.
+
+  ```html
+  <figure class="av-figure av-figure-wide">…</figure>
+  ```
+
+- **`.av-aside`** / **`.av-aside-left`** — wrapper kolem malého bloku
+  (typicky jednoho `.av-counter-block` nebo krátké `.av-bar-compare`-list),
+  který se floatuje vedle textu. Na viewportu ≥ 1024 px se posouvá záporným
+  marginem do prázdné plochy okolo článku (NYT/Guardian margin chart). Na
+  mobilu padá zpět do toku, plná šířka.
+
+  ```html
+  <aside class="av-aside">
+    <div class="av-counter-block av-counter-block-bad">
+      <span class="av-counter" data-value="500000">500 000</span>
+      <span class="av-counter-label">pacientů</span>
+    </div>
+  </aside>
+  <p>Text obtéká aside… (nezapomeň na <code>av-aside-clear</code>
+  před dalším h3, pokud aside neskončí přirozeně před nadpisem)</p>
+  <div class="av-aside-clear"></div>
+  ```
+
+Tipy:
+- `av-figure-wide` použij pro data-table, flow, timeline, široký bar-compare.
+- `av-aside` použij pro 1× counter blok nebo krátký bar (3–4 položky)
+  jako margin highlight vedle relevantního odstavce.
+- `av-counter-grid` (4 dlaždice) ponechej **bez** wide — počítá s plnou
+  šířkou článku.
+
 ---
 
 ## 1. `.av-timeline` — chronologie

@@ -8086,3 +8086,71 @@ body.mobile-nav-open .scroll-top-btn {
   .av-counter { transition: none; }
 }
 
+/* =================================================================
+   AV — rozšířené layouty (.av-figure-wide, .av-aside)
+   Article-page má max-width 720px (čitelnost serif textu). Tyto třídy
+   umožňují vizuálům překročit tento sloupec na desktopu, aniž by
+   narušovaly rytmus textu. Na mobilu padá zpět na 100 %.
+   ================================================================= */
+
+/* Full-bleed figura — break-out na 1100px (centrovaná do viewportu). */
+.av-figure-wide {
+  position: relative;
+  width: min(1100px, calc(100vw - 48px));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Floatovaný aside — vejde se vedle textu (counter, krátké bar). */
+.av-aside {
+  float: right;
+  clear: right;
+  width: 240px;
+  margin: 4px 0 18px 24px;
+}
+.av-aside-left {
+  float: left;
+  clear: left;
+  margin: 4px 24px 18px 0;
+}
+.av-aside .av-counter-block,
+.av-aside .av-counter-grid {
+  margin: 0;
+}
+.av-aside .av-counter-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* Na širokém viewportu break-out do margin u 720px sloupce.
+   Shift je clampován na dostupný gutter (s 24px safety), aby na úzkých
+   desktopech (1024–1099px) nevznikl horizontální scroll. Cílový shift
+   -180px se uplatní až tam, kde gutter ≥ ~200px (od ~1120px). */
+@media (min-width: 1024px) {
+  .av-aside {
+    margin-right: max(-180px, calc(24px - (100vw - 720px) / 2));
+  }
+  .av-aside-left {
+    margin-left: max(-180px, calc(24px - (100vw - 720px) / 2));
+    margin-right: 24px;
+  }
+}
+
+/* Na mobilu vrátit do toku, plná šířka. */
+@media (max-width: 720px) {
+  .av-figure-wide {
+    width: 100%;
+    margin-left: 0;
+    transform: none;
+  }
+  .av-aside,
+  .av-aside-left {
+    float: none;
+    width: 100%;
+    margin: 16px 0;
+  }
+}
+
+/* Clearfix po aside — zabrání overflow do dalšího h3. */
+.av-aside-clear { clear: both; }
+
