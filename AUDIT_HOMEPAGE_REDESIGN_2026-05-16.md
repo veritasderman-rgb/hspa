@@ -1,58 +1,58 @@
-# Audit homepage + nav redesign — 2026-05-16
-
-**Scope:** PR #285 (homepage swap 3↔4 + topnav cleanup), PR #286 (HSPA přehled „K čemu se HSPA dá použít"), PR #287 (visual inventory, mimo scope homepage auditu).
-
-**Reviewer:** independent subagent (general-purpose) spuštěný z konverzace 2026-05-16.
-
-**Metoda:** strukturovaný 4-sekční audit dle promptu definovaného v plánu redesignu.
+# AUDIT — Homepage redesign 2026-05-16
+**Rozsah:** PR #285, #286, #287 (commit 92d26a5, 7b8d464, cf3d392)
+**Auditor:** Claude Code (Opus 4.7) · pasivní review, žádné zásahy do kódu.
 
 ---
 
-## Sekce 1 — Strukturální integrita: ✅ PASS
+## 1 · STRUKTURÁLNÍ INTEGRITA · ✅ PASS
 
-- Validní HTML pro všechny 3 dotčené stránky (`index.html`, `hspa-prehled.html`, `tematicke-linie.html`): vyrovnané `<section>`, žádné duplicate `id`.
-- 0 výskytů `renderModuleNav('themes')` napříč repem — žádná stránka neaktivuje odebraný tab.
-- `src/themes.js:225` korektně volá `renderModuleNav('hspa-prehled')`.
-- Jediný odkaz na `tematicke-linie.html` z `hspa-prehled.html:64` (legitimní podstránka). Topnav v `src/page-shared.js` čistý.
-- Žádný odkaz JS render funkcí na DOM sekci přesunutou v homepage.
-- `npm test` → **252/252 PASS**. `npm run validate:data` → OK 80 indikátorů.
+**HTML.** `index.html`, `hspa-prehled.html`, `tematicke-linie.html` — vyrovnané `<section>` (po 14 / 14 / 2 párů), žádné duplicate `id` (ověřeno `grep -oP 'id="[^"]+"' | sort | uniq -d`), všechny `<h2>/<h3>` mají `aria-labelledby` cíl (např. `edHeroHeadline`, `edDimsHeadline`, `hspaUsecaseHead`, `hspaDimsHead`, `themesHeroHeadline`).
 
----
+**Top nav.** `grep -rn "'themes'" src/` vrací 0 výskytů jako `activeId`. V `page-shared.js` (řádky 235–246) tab `themes` v `tabs` array NEEXISTUJE — odebrán korektně. `src/themes.js:225` volá `renderModuleNav('hspa-prehled')` → správně aktivuje HSPA přehled tab. Mobile drawer (`injectMobileNav`) přebírá stejný `tabsHtml` → automaticky bez themes.
 
-## Sekce 2 — UX a vizuální konzistence: ⚠️ MINOR
+**Linkcheck.** `grep -rn 'href="tematicke-linie'` vrací 1 výskyt: `hspa-prehled.html:64` (legitimní CTA). Žádný odkaz z topnavu, žádné orphan reference.
 
-- **Tone of voice** nové sekce „K čemu se HSPA dá použít" je věcný, přístupný; akteři (politik / ředitel / analytik / pacient) přítomni; bez marketingového hyperbolu. Soulad s `clanek-financovani-segmenty-2026.html` a stávajícím `hspa-hero`.
-- **Druhý odstavec sekce** v původní verzi byl 75-slovní zeď (mikrocharakteristika 4 různých aktérů v jedné větě), pro mobilní čtení nepříjemná. **Doporučení: rozbít na 2 kratší odstavce.**
-- **Reading flow homepage** funguje — ed-hero (kontext) → home-articles (čerstvý obsah) → ed-narrative (4-step orientace) → ed-dims (technický framework grid) je logická posloupnost.
-- **Mobilní layout** OK — `.ed-narrative-grid` a `.ed-dims-grid` mají breakpoints na `<720px`. Žádný horizontal overflow.
-- **Třída `.hspa-usecase-section` nemá vlastní CSS pravidlo** (`grep -c .hspa-usecase 05_M1_Starter/src/styles.css` → 0) — sekce vizuálně splývá s navazující `.hspa-dims-section`, ztrácí se oddělení. **Doporučení: doplnit CSS rule s vlastním pozadím / borderem.**
-- Accessibility: tab order OK, lang dědí z `<html lang="cs">`, kontrast textových barev na ed-bg pasivně ≥ 4.5:1.
+**DOM safety.** `app.js:363` čte `#edDimsGrid`, `app.js:1369` čte `#homeArticlesGrid` — oba ID stále existují v `index.html` (řádky 117 a 60). Žádná render funkce nepředpokládá pořadí sourozenců — funguje s `getElementById`, ne s `:nth-child`.
+
+**Tests.** `npm test` → **252/252 pass · 994 ms.** `npm run validate:data` → OK (80 indicators). `npm run validate:all` selhává JEN na pre-existujícím explainer error (`nv_307_2012`: invalid verification_status 'preliminary') — **bez vztahu** k tomuto redesignu.
 
 ---
 
-## Sekce 3 — Sémantika navigace: ⚠️ MINOR
+## 2 · UX A VIZUÁLNÍ KONZISTENCE · ⚠️ MINOR
 
-- **Mentální model navigace** zachován — uživatel se na Tematické linie dostane z HSPA přehledu (CTA na konci sekce „K čemu se HSPA dá použít"). Po opening `tematicke-linie.html` se v topnavu aktivuje **HSPA přehled**, breadcrumb „← HSPA přehled" v hlavičce stránky.
-- **Breadcrumb** existuje a vede správně na `hspa-prehled.html`.
-- **CTA odkaz na Tematické linie** v původní verzi řešen jako inline-styled `<a>` v posledním odstavci sekce — riskuje přehlédnutí mezi rétorickými větami. **Doporučení: převést na samostatný `.ed-promo-card` pattern** (stejně jako CTA „Procházet všechny indikátory" v dolní části HSPA přehledu).
-- **SEO**: `tematicke-linie.html` nemá `<meta name="robots" content="noindex">` ani `<link rel="canonical">`. Google bude indexovat oba vstupy (HSPA přehled i Tematické linie) jako rovnocenné — ztrácí se právě vytvořená hierarchie. **Doporučení: přidat `canonical` na `hspa-prehled.html` nebo `noindex` na Tematické linie.**
+**Tone of voice (PR #286).** Tři odstavce „K čemu se HSPA dá použít" jsou přístupné, věcné, akteři přítomni (politik / ředitel nemocnice / analytik pojišťovny / pacient). Tón je v lince s `clanek-financovani-segmenty-2026.html` — žádná marketingová hyperbola („transformuje", „revoluce" chybí ✓). Druhý odstavec je ale **dlouhá souvětnatá zeď** (4 středníkem oddělené klauzule, ~75 slov) — funguje na desktopu, na mobilu vizuálně zdrží. Doporučení: rozbít na 2 odstavce nebo strukturovat jako bulletovaný seznam aktérů.
 
----
+**Reading flow homepage.** Nové pořadí `ed-hero → home-articles → ed-narrative → ed-dims` funguje: čtenář dostane (1) klíčový stav, (2) články jako vstup k hloubce, (3) 4-step interpretační rámec, (4) konkrétní šestkové měření. Articles **před** narrativem je odvážný editorial krok — predikuje, že čtenář raději přistoupí přes konkrétní příběh než abstrakt — psychologicky obhájitelné.
 
-## Sekce 4 — Regression tests: ✅ PASS
+**Mobile.** `.ed-narrative-grid` (`@media max-width: 560px → 1fr`) ✓. `.ed-dims-grid` (`@media max-width: 560px → 2fr`) ✓. CTA tlačítko na hspa-prehled.html:64 používá **inline styly** s `var(--accent)` — funguje, ale obchází design system (`.ed-promo-card` pattern už existuje pár řádků níže).
 
-- `npm test` → **252/252 PASS**.
-- `npm run validate:all` selhává pouze na pre-existujícím explainer `nv_307_2012` (mimo scope tohoto auditu, hlášeno už dříve).
+**A11y.** `.hspa-usecase-section` třída **nemá vlastní CSS pravidla** (`grep -c` → 0). Sekce dědí od parent kontextu — žádný padding ani border. Spoléhá na `<p class="hspa-dims-lead">` pro typografii. Kontrast OK, ale sekce vizuálně splývá s následující `hspa-dims-section`.
 
 ---
 
-## Doporučené micro-edits (seřazené podle priority)
+## 3 · SÉMANTIKA NAVIGACE · ⚠️ MINOR
 
-1. **Přidat `<link rel="canonical" href="https://hspa-cesko.cz/hspa-prehled.html">` na `tematicke-linie.html`** — odstraní SEO ambiguitu mezi paralelními vstupy.
-2. **Převést inline CTA v `hspa-prehled.html:64` na `.ed-promo-card`** — sjednocení s patternem v rámci stránky, lepší viditelnost.
-3. **Doplnit CSS pravidlo pro `.hspa-usecase-section`** v `src/styles.css` — visual separation od navazující sekce.
-4. **Rozbít dlouhý 75-slovní druhý odstavec** v sekci „K čemu se HSPA dá použít" na 2 kratší odstavce — lepší čtení na mobilu.
+**Mentální model.** Tematické linie jako podstránka HSPA přehledu je legitimní redakční rozhodnutí. Breadcrumb na `tematicke-linie.html:32–34` existuje a vede správně. CTA z `hspa-prehled.html:64` je **viditelné, ale řešené jako inline `<a>` s inline styly v posledním odstavci 3-odstavcového bloku** — riskuje se přehlédnutí. Lépe samostatná karta typu `.ed-promo-card` (existuje pár sekcí níže pro „Procházet indikátory" — stejný pattern by vyřešil i Tematické linie).
+
+**Breadcrumb.** ✓ existuje, ✓ správný target, ✓ správné šipky.
+
+**SEO.** `tematicke-linie.html` nemá `<meta name="robots">` (default = indexovat) ani `<link rel="canonical">`. Pokud má být sekundární vstup, doporučit redakci buď (a) přidat `<meta name="robots" content="noindex, follow">` nebo (b) `<link rel="canonical" href="https://.../hspa-prehled.html">`. Aktuálně Google bude indexovat OBĚ stránky jako rovnocenné — což oslabuje právě vytvořenou hierarchii.
 
 ---
 
-*Status*: micro-edits 1–4 aplikovány v PR navazujícím na tento audit. Plný subagent transkript není uložen — toto je redakční rekapitulace klíčových zjištění.
+## 4 · REGRESSION TESTS · ✅ PASS
+
+```
+npm test           → 252/252 pass
+npm run validate:data  → OK 80 indicators
+npm run validate:all   → FAIL (pre-existující explainer nv_307_2012, NESOUVISÍ)
+```
+
+---
+
+## DOPORUČENÉ MICRO-EDITS (priorita ↓)
+
+1. **[P1 · SEO]** `tematicke-linie.html` `<head>`: přidat `<meta name="robots" content="noindex, follow">` NEBO `<link rel="canonical" href="hspa-prehled.html">` — vyhnout se dvěma indexovaným vstupům do téhož obsahu.
+2. **[P2 · UX]** `hspa-prehled.html:63–66`: nahradit inline-styled `<a>` za samostatnou kartu pattern `.ed-promo-card` (viz ř. 186–194) — zviditelní CTA, sjednotí design system.
+3. **[P3 · CSS]** Přidat do `src/styles.css` blok `.hspa-usecase-section { padding: 40px; max-width: var(--max-w); margin: 0 auto; border-bottom: 1px solid var(--rule); }` (analogie `.hspa-dims-section`) — sekce má vlastní třídu bez pravidel, vizuálně splývá.
+4. **[P4 · OBSAH]** `hspa-prehled.html:57–58`: rozbít druhý odstavec na 2 (politik+ředitel | analytik+pacient) nebo `<ul>` se 4 aktéry — souvětí je na mobilu obtížně skenovatelné.
