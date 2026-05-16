@@ -12,6 +12,17 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="review-pending">
+<!--
+  audit:
+    last_reviewed: 2026-05-16
+    reviewer: claude-code-agent
+    status: review-pending
+    unverified_claims_removed: 0
+    primary_sources_added: 4
+    visual_elements_added: 1
+    notes: "Kaskádová revize navazující na nedávno auditované sourozenecké články clusteru Financování — clanek-financovani-sha.html (2026-05-15, re-ukotveno na ČSÚ 2023, Eurostat hlth_sha) a clanek-platba-z-kapsy.html (2026-05-15, OECD ~18 %, EU ~15 %). Ověřeno proti primárním zdrojům ČSÚ Výsledky zdravotnických účtů v ČR v letech 2010–2023 (vydáno 2025), Eurostat hlth_sha (current health expenditure, referenční rok 2023) a OECD Health at a Glance: Europe 2024. Opraveny věcné chyby: (1) databox 'OECD 20 %' pro out-of-pocket nahrazen '~18 %' v souladu s OECD Health at a Glance 2025 a sourozeneckou revizí platba-z-kapsy; (2) figure 'Výdaje na zdravotnictví — % HDP, sestupně (2024)' re-ukotven na Eurostat 2023 (Německo z 12,7 → 11,7; Francie z 11,9 → 11,5; Rakousko z 11,4 → 11,2; EU z 10,4 → 10,0; ČR sjednoceno na 8,4 % primární ČSÚ 2023 s explicitním označením 8,5 % jako dashboard odhadu 2024); (3) doplněn caveat callout k metodice (OECD vs. Eurostat, current vs. total expenditure, referenční rok); (4) doplněna časová řada ČR (pre-2019 ~7,4 %, COVID vrchol 9,2 % v 2021, 8,5 % 2022, 8,4 % 2023); (5) interní odkazy 'článek 19/20/21' a 'manifest autora' nahrazeny konkrétními anchor texty s href. Source URL pro OECD upřesněn na data-explorer permalink; SHA 2011 doplněn o WHO/EU/OECD permalink. Status published → review-pending, podléhá ručnímu schválení před republikací. OTEVŘENÁ OTÁZKA: dashboard hodnota vydaje_zdravotnictvi_hdp = 8,5 % (2024) je odhad bez primárního ČSÚ zdroje pro rok 2024 — vlna ČSÚ 2024 vyjde podle obvyklého ~18měsíčního prodlení až cca v polovině roku 2026. Pro budoucí iteraci: po publikaci ČSÚ 2024 sjednotit primární a dashboard hodnotu."
+-->
 <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -62,37 +73,47 @@
         Výdaje na zdravotnictví jako procento HDP jsou základní makroekonomický indikátor, kterým se obvykle začíná každá debata o financování. Sám o sobě ale nic neříká — vyšší výdaje neznamenají automaticky lepší výsledky, jak upozorňuje vlastní metodická karta indikátoru. Spojené státy utratí na zdravotnictví přes 17 procent HDP a v populační mortalitě patří mezi nejhorší v OECD. Některé skandinávské země utrácejí kolem 11 procent a vykazují špičkové výsledky. Podstatné je, co za peníze dostáváme — a v české debatě tato otázka opakovaně chybí.
       </p>
 
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na referenční rok a metodiku">
+        <h4 class="article-callout-h">Jak číst čísla v tomto článku</h4>
+        <p>
+          Hodnota <strong>8,5 % HDP</strong> v titulku a deku je <em>odhad dashboardu HSPA Monitoru pro rok 2024</em>; ČSÚ publikuje primární vlnu <em>Výsledky zdravotnických účtů v ČR</em> s odstupem cca 18 měsíců, takže nejnovější ověřená hodnota je <strong>8,4 % za rok 2023</strong> (publikováno 2025). Mezinárodní srovnání v níže uvedeném grafu je sjednoceno na <strong>Eurostat 2023</strong> (<code>hlth_sha</code>, current health expenditure); průměr OECD je uváděn jako řádový a vychází z širší definice OECD (current + capital), proto se údaje pro tutéž zemi mezi oběma zdroji liší o desetiny až jednotky procentního bodu.
+        </p>
+        <p>
+          Tato revize <strong>z 16. května 2026</strong> sjednocuje hodnoty s nedávno auditovanými sourozeneckými články clusteru Financování — <a href="clanek-financovani-sha.html">anatomií SHA</a> a <a href="clanek-platba-z-kapsy.html">přímými platbami pacientů</a>. Klíčové opravy: databox z „OECD 20 %" pro out-of-pocket na <strong>~18 %</strong> (OECD Health at a Glance 2025); země v srovnávacím grafu re-ukotveny na Eurostat 2023 (Německo 11,7 %, Francie 11,5 %, Rakousko 11,2 %, EU 10,0 %). Status: <em>review-pending</em>, podléhá ručnímu schválení před republikací.
+        </p>
+      </aside>
+
       <h3>Co se za 8,5 procenty schovává</h3>
 
       <p>
-        Indikátor `vydaje_zdravotnictvi_hdp` měří podle SHA 2011 metodiky všechny výdaje na zdravotnictví v dané zemi za rok — veřejné, soukromé i přímé pacientské — jako procento hrubého domácího produktu. České 8,5 procenta v evropském srovnání řadí ČR mezi země pod průměrem. Pro porovnání: <strong>Německo</strong> a <strong>Francie</strong> vydávají kolem 11–12 procent HDP, <strong>severské země</strong> 10–11 procent, <strong>Spojené království</strong> kolem 11. Vyšší absolutní hodnoty mají USA (přes 17 %), naopak nižší některé středomořské a východoevropské země.
+        Indikátor <code>vydaje_zdravotnictvi_hdp</code> měří podle SHA 2011 metodiky všechny výdaje na zdravotnictví v dané zemi za rok — veřejné, soukromé i přímé pacientské — jako procento hrubého domácího produktu. České číslo (<strong>8,4 % v roce 2023</strong> podle ČSÚ, 8,5 % jako dashboard odhad 2024) řadí ČR v evropském srovnání pod průměr. Pro porovnání (Eurostat <code>hlth_sha</code>, current health expenditure, referenční rok 2023): <strong>Německo 11,7 %</strong>, <strong>Francie 11,5 %</strong>, <strong>Rakousko 11,2 %</strong>; <strong>severské země</strong> v pásmu zhruba 10–11 %, <strong>Spojené království</strong> řádově 11 % (OECD, Eurostat UK od 2020 nezahrnuje). Vyšší absolutní hodnoty mají USA (kolem 17 % podle OECD), naopak nižší některé středomořské a východoevropské země.
       </p>
 
       <p>
-        Z pohledu udržitelnosti není 8,5 procenta v ČR drama; ani 11 procent v Německu není problém, pokud výdaje rostou ve vazbě na ekonomický růst. Co je problém, je <em>tempo růstu zdravotních výdajů</em> ve vztahu k HDP — pokud výdaje rostou rychleji než ekonomika, financování se postupně dostává pod tlak. Tento jev v ČR pozorujeme posledních deset let: výdaje na zdravotnictví rostou meziročně rychleji než HDP, což se projevuje v rostoucích pojistných příjmech, ale i ve strukturálních diskuzích o úhradové vyhlášce, zákonných limitech a nárocích pacientů.
+        Český podíl výdajů na HDP nebyl historicky tak vysoký jako dnes: v desetiletí 2010–2019 se pohyboval spíše kolem <strong>7,4 %</strong>, během pandemie vystoupal na vrchol <strong>9,2 % v roce 2021</strong> a poté klesl zpět — 8,5 % v 2022, 8,4 % v 2023 (ČSÚ <em>Výsledky zdravotnických účtů ČR</em>, vydáno 2025). Z pohledu udržitelnosti není 8,4–8,5 procenta v ČR drama; ani 11 procent v Německu není problém, pokud výdaje rostou ve vazbě na ekonomický růst. Co je problém, je <em>tempo růstu zdravotních výdajů</em> ve vztahu k HDP — pokud výdaje rostou rychleji než ekonomika, financování se postupně dostává pod tlak. Strukturální debaty o úhradové vyhlášce (viz <a href="clanek-uhradova-vyhlaska.html">vzorec, který rozdělí stovky miliard</a>), zákonných limitech a nárocích pacientů z tohoto tlaku přímo plynou.
       </p>
 
       <p>
-        Druhý indikátor — výdaje na léčiva 1,7 procenta HDP — je v ČR mírně nad průměrem OECD (1,5). Limitace metodické karty: srovnání je ovlivněno rozdíly v cenových politikách, doplňkových pojistných systémech a výši DPH na léky. Vyšší podíl léků na HDP v ČR je strukturálně daný několika faktory: relativně vysoká spotřeba léčiv na obyvatele (související s vysokou frekvencí ambulantních kontaktů, viz článek 20), vysoký podíl referenčních cen v stanovení úhrady, postupné zavádění drahých inovativních léků (orphan léky, biologika, CAR-T terapie u onkologických diagnóz, biologické léky pro autoimunitní onemocnění).
+        Druhý indikátor — výdaje na léčiva 1,7 procenta HDP — je v ČR mírně nad průměrem OECD (1,5). Limitace metodické karty: srovnání je ovlivněno rozdíly v cenových politikách, doplňkových pojistných systémech a výši DPH na léky. Vyšší podíl léků na HDP v ČR je strukturálně daný několika faktory: relativně vysoká spotřeba léčiv na obyvatele (související s vysokou frekvencí ambulantních kontaktů, viz <a href="clanek-ambulantni-kontakty.html">11,2 návštěvy lékaře ročně</a>), vysoký podíl referenčních cen v stanovení úhrady, postupné zavádění drahých inovativních léků (orphan léky, biologika, CAR-T terapie u onkologických diagnóz, biologické léky pro autoimunitní onemocnění).
       </p>
 
       <figure class="article-figure" aria-labelledby="vydajeBarTitle">
         <figcaption class="article-figure-caption" id="vydajeBarTitle">
-          Výdaje na zdravotnictví — % HDP, sestupně (2024)
+          Výdaje na zdravotnictví — % HDP, sestupně (referenční rok 2023)
         </figcaption>
         <ul class="sha-comp-bars" data-max="18">
-          <li><span class="sha-comp-lbl">USA</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 95%"></span><span class="sha-comp-val">17,0</span></li>
-          <li><span class="sha-comp-lbl">Německo</span><span class="sha-comp-bar" style="--w: 71%"></span><span class="sha-comp-val">12,7</span></li>
-          <li><span class="sha-comp-lbl">Francie</span><span class="sha-comp-bar" style="--w: 66%"></span><span class="sha-comp-val">11,9</span></li>
-          <li><span class="sha-comp-lbl">Rakousko</span><span class="sha-comp-bar" style="--w: 63%"></span><span class="sha-comp-val">11,4</span></li>
+          <li><span class="sha-comp-lbl">USA</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 92%"></span><span class="sha-comp-val">~16,5</span></li>
+          <li><span class="sha-comp-lbl">Německo</span><span class="sha-comp-bar" style="--w: 65%"></span><span class="sha-comp-val">11,7</span></li>
+          <li><span class="sha-comp-lbl">Francie</span><span class="sha-comp-bar" style="--w: 64%"></span><span class="sha-comp-val">11,5</span></li>
+          <li><span class="sha-comp-lbl">Rakousko</span><span class="sha-comp-bar" style="--w: 62%"></span><span class="sha-comp-val">11,2</span></li>
           <li><span class="sha-comp-lbl">UK</span><span class="sha-comp-bar" style="--w: 61%"></span><span class="sha-comp-val">~11</span></li>
           <li><span class="sha-comp-lbl">Skandinávie</span><span class="sha-comp-bar" style="--w: 58%"></span><span class="sha-comp-val">10–11</span></li>
-          <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 58%"></span><span class="sha-comp-val">10,4</span></li>
-          <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 52%"></span><span class="sha-comp-val">9,3</span></li>
-          <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 47%"></span><span class="sha-comp-val">8,5</span></li>
+          <li><span class="sha-comp-lbl">EU průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 56%"></span><span class="sha-comp-val">10,0</span></li>
+          <li><span class="sha-comp-lbl">OECD průměr</span><span class="sha-comp-bar sha-comp-bar-mut" style="--w: 51%"></span><span class="sha-comp-val">~9,2</span></li>
+          <li class="sha-comp-cz"><span class="sha-comp-lbl">Česko</span><span class="sha-comp-bar sha-comp-bar-cz" style="--w: 47%"></span><span class="sha-comp-val">8,4</span></li>
         </ul>
         <p class="article-figure-source">
-          ČR je <strong>0,8 p.b. pod OECD průměrem</strong> a 1,9 p.b. pod EU. Mezi sousedy: Slovensko a Polsko mají vyšší podíl, Maďarsko podobný. Hodnoty USA, Skandinávie a UK jsou řádové (rozsah). Zdroj: OECD Health Statistics 2024, Eurostat <code>hlth_sha</code>.
+          ČR je <strong>zhruba 1,6 p.b. pod průměrem EU</strong> a v pásmu středoevropských sousedů (Slovensko a Polsko mírně výš, Maďarsko podobně). Hodnoty USA, Skandinávie a UK jsou řádové (rozsah). Zdroj: ČR — ČSÚ <em>Výsledky zdravotnických účtů v ČR v letech 2010–2023</em> (2025); EU a jednotlivé evropské země — Eurostat <code>hlth_sha</code> (current health expenditure, referenční rok 2023); USA a OECD průměr — OECD Health Statistics / Health at a Glance (širší definice včetně části kapitálových výdajů, proto se údaje pro tutéž zemi mezi oběma zdroji o desetiny až jednotky procentního bodu liší). Staženo 16. 5. 2026.
         </p>
       </figure>
 
@@ -121,19 +142,19 @@
       </p>
 
       <p>
-        <strong>Lůžková péče místo ambulantní.</strong> Vysoká hospitalizační míra (článek 21), hospitalizace pro stavy, které mají být řešeny ambulantně (článek 19), nadprůměrná ALOS — to jsou všechno zdroje, ze kterých moderní systémy uvolňují kapacity. Posun části péče z lůžka do ambulantní vrstvy a do primární péče je v evropské zkušenosti efektivně překlopitelný; znamená méně nákladů na den péče při stejném (nebo lepším) klinickém výsledku.
+        <strong>Lůžková péče místo ambulantní.</strong> <a href="clanek-hospitalizujeme-nejvic.html">Vysoká hospitalizační míra</a>, <a href="clanek-vyhnutelne-hospitalizace.html">hospitalizace pro stavy, které mají být řešeny ambulantně</a>, nadprůměrná ALOS — to jsou všechno zdroje, ze kterých moderní systémy uvolňují kapacity. Posun části péče z lůžka do ambulantní vrstvy a do primární péče je v evropské zkušenosti efektivně překlopitelný; znamená méně nákladů na den péče při stejném (nebo lepším) klinickém výsledku.
       </p>
 
       <p>
-        <strong>Cenotvorba léčiv.</strong> Vyšší výdaje na léky v ČR (1,7 % HDP vs. 1,5 OECD) jsou kombinací vysoké spotřeby a cenových politik. Centralizovaná veřejná soutěž (po vzoru britského NHS, dánské Amgros nebo norského LIS), důsledné využívání generik a biosimilars (Česko má v některých skupinách stále nižší podíl biosimilars, než kolik je možné), strukturované HTA hodnocení nákladnosti a přínosu — to všechno jsou nástroje, kterými se daly snížit léčebné náklady při zachování klinické dostupnosti. Tomuto tématu se podrobně věnuje autorův manifest v kapitole o lécích a v samostatné připravované analýze cenové politiky.
+        <strong>Cenotvorba léčiv.</strong> Vyšší výdaje na léky v ČR (1,7 % HDP vs. 1,5 OECD) jsou kombinací vysoké spotřeby a cenových politik. Centralizovaná veřejná soutěž (po vzoru britského NHS, dánské Amgros nebo norského LIS), důsledné využívání generik a biosimilars (Česko má v některých skupinách stále nižší podíl biosimilars, než kolik je možné), strukturované HTA hodnocení nákladnosti a přínosu — to všechno jsou nástroje, kterými se daly snížit léčebné náklady při zachování klinické dostupnosti. Tomuto tématu se podrobně věnuje <a href="clanek-manifest-reforma-zdravotnictvi.html">manifest k reformě zdravotnictví</a> v kapitole o lécích.
       </p>
 
       <p>
-        <strong>Prevence místo léčby.</strong> Většina článků této řady o rizikových faktorech (alkohol, kouření, BMI, pohyb, znečištěné ovzduší) dokládá, že investice do prevence v evropské zkušenosti přepočítává na nižší náklady na léčbu pozdějších stavů. Český podíl výdajů na prevenci v rámci celkových zdravotních výdajů je dlouhodobě nižší než kolik by odpovídalo evropskému standardu — autorův manifest tuto rezervu pojmenovává jako jeden ze strukturálních problémů.
+        <strong>Prevence místo léčby.</strong> Většina článků této řady o rizikových faktorech (<a href="clanek-alkohol-spotreba.html">alkohol</a>, <a href="clanek-koureni.html">kouření</a>, <a href="clanek-bmi-obezita.html">BMI</a>, <a href="clanek-pohyb.html">pohyb</a>, <a href="clanek-pm25-spinavy-vzduch.html">znečištěné ovzduší</a>) dokládá, že investice do prevence v evropské zkušenosti přepočítává na nižší náklady na léčbu pozdějších stavů. Podíl výdajů na prevenci (kategorie HC.6 podle SHA) tvoří v ČR dlouhodobě jen okolo 2,5–3 % celkových zdravotních výdajů (viz <a href="clanek-financovani-sha.html">anatomie SHA</a>), což odpovídá zhruba průměru OECD, ale neumožňuje strukturní přesun od léčby k prevenci, který popisuje <a href="clanek-manifest-reforma-zdravotnictvi.html">manifest k reformě zdravotnictví</a>.
       </p>
 
       <p>
-        <strong>Administrativa a duplicity.</strong> Roztříštěnost úhradových mechanismů (kapitační platba, výkonová platba, DRG, zvláštní úhradové režimy pro vybrané segmenty), papírová dokumentace a duplicity v reportingu generují náklady, které moderní systémy s integrovaným IT řeší levněji. Plný DRG režim po vzoru německé G-DRG by tuto vrstvu zjednodušil — autor manifestu k tomu vyzývá v kapitole o reformě úhradové vyhlášky.
+        <strong>Administrativa a duplicity.</strong> Roztříštěnost úhradových mechanismů (kapitační platba, výkonová platba, DRG, zvláštní úhradové režimy pro vybrané segmenty), papírová dokumentace a duplicity v reportingu generují náklady, které moderní systémy s integrovaným IT řeší levněji. Plný DRG režim po vzoru německé G-DRG by tuto vrstvu zjednodušil — k tomu vyzývá <a href="clanek-manifest-reforma-zdravotnictvi.html">manifest k reformě zdravotnictví</a> v kapitole o reformě úhradové vyhlášky, a podrobně se mu věnuje samostatný článek o <a href="clanek-uhradova-vyhlaska.html">úhradové vyhlášce</a>.
       </p>
 
       <h3>Otázka, kterou si Česko musí položit</h3>
@@ -180,9 +201,9 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,5 % vs. OECD 9,3 % (SHA 2011)</li>
+        <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,4 % (ČSÚ 2023) / 8,5 % (dashboard odhad 2024) vs. OECD ~9,2 % a EU 10,0 % (Eurostat 2023). SHA 2011.</li>
         <li><a href="indicator.html?id=vydaje_leky_hdp"><strong>Výdaje na léčiva (% HDP)</strong></a> — 1,7 % vs. OECD 1,5 %</li>
-        <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby pacientů</strong></a> — 14 % vs. OECD 20 %</li>
+        <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby pacientů</strong></a> — 14,6 % (ČSÚ 2023) / 14 % (dashboard odhad 2024) vs. OECD ~18 % (Health at a Glance 2025) a EU ~14–15 % (Eurostat 2023)</li>
         <li><a href="indicator.html?id=multimorbidita_65plus"><strong>Multimorbidita 65+</strong></a> — 65 % vs. OECD 60 %</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
@@ -196,18 +217,19 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
-          <li><strong>OECD Health Statistics — Health expenditure</strong> — primární zdroj. <a href="https://www.oecd.org/en/topics/health-statistics-and-data.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
-          <li><strong>OECD Health at a Glance: Europe</strong> — pravidelný report s mezinárodním srovnáním (samostatná Europe série, ne obecná HaaG). <a href="https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance-europe_23054336-en" target="_blank" rel="noopener">oecd-ilibrary.org ↗</a></li>
-          <li><strong>ÚZIS — Národní zdravotní účty</strong> — domácí implementace SHA. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
-          <li><strong>ČSÚ — demografie a stárnutí populace</strong> — projekce věkové struktury. <a href="https://www.czso.cz/" target="_blank" rel="noopener">czso.cz ↗</a></li>
-          <li><strong>SÚKL — cenotvorba léčiv</strong> — informace o stanovení úhrad. <a href="https://www.sukl.cz/" target="_blank" rel="noopener">sukl.cz ↗</a></li>
+          <li><strong>ČSÚ — Výsledky zdravotnických účtů v ČR v letech 2010–2023</strong> — primární domácí zdroj pro výdaje na zdravotnictví podle SHA 2011, vydáno 2025. <a href="https://csu.gov.cz/produkty/vysledky-zdravotnickych-uctu-cr-1nrsbqtgw0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>Eurostat — Health care expenditure (<code>hlth_sha11_hf</code>, <code>hlth_sha11_hc</code>, <code>hlth_sha11_hp</code>)</strong> — datová sada SHA pro EU-27, referenční rok 2023. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>OECD Health Statistics — Health expenditure</strong> — širší definice (current + capital), interaktivní data explorer. <a href="https://data-explorer.oecd.org/?lc=en&fs[0]=Topic%2C0%7CHealth%23HEA%23&pg=0&snb=37" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>OECD Health at a Glance: Europe</strong> — pravidelný report s mezinárodním srovnáním (samostatná Europe série, poslední vydání 2024). <a href="https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance-europe_23054336-en" target="_blank" rel="noopener">oecd-ilibrary.org ↗</a></li>
+          <li><strong>ČSÚ — Projekce obyvatelstva ČR (2023–2100)</strong> — projekce věkové struktury pro odhad demografického tlaku. <a href="https://csu.gov.cz/projekce-obyvatelstva-ceske-republiky" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>SÚKL — Seznam hrazených léčivých přípravků</strong> — informace o stanovení úhrad léčiv. <a href="https://www.sukl.cz/sukl/seznam-cen-a-uhrad-lp-pzlu-k-1-5-2026" target="_blank" rel="noopener">sukl.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
-          <li><strong>System of Health Accounts (SHA 2011)</strong> — metodika OECD/Eurostat/WHO. <a href="https://www.oecd.org/en/topics/sub-issues/health-systems-and-financing.html" target="_blank" rel="noopener">oecd.org/sha ↗</a></li>
-          <li><strong>WHO European Observatory on Health Systems and Policies</strong> — komparativní analýzy financování. <a href="https://eurohealthobservatory.who.int/" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
+          <li><strong>System of Health Accounts (SHA 2011)</strong> — společná metodika OECD/Eurostat/WHO, plný text manuálu. <a href="https://www.oecd-ilibrary.org/social-issues-migration-health/a-system-of-health-accounts_9789264116016-en" target="_blank" rel="noopener">oecd-ilibrary.org (SHA 2011 manual) ↗</a></li>
+          <li><strong>WHO European Observatory on Health Systems and Policies — Health Systems in Transition: Czechia 2023</strong> — komparativní analýza financování. <a href="https://eurohealthobservatory.who.int/publications/i/czechia-health-system-review-2023" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
@@ -217,7 +239,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty z dashboardu HSPA Monitoru ke dni vydání článku. Mezinárodní srovnání (Německo 11–12 %, USA 17 % atd.) jsou řádové popisy aktuálních OECD dat; přesná procenta se mezi roky liší v jednotkách desetin. Pro detailní časové řady doporučujeme primární zdroje OECD a Eurostat. Konkrétní dopady demografické vlny na české výdaje viz prognózy ČSÚ a MFCR.
+        <strong>Pozn. k revizi:</strong> Článek byl 16. května 2026 redakčně revidován proti primárním zdrojům. Klíčové opravy: (1) databox „OECD 20 %" pro out-of-pocket nahrazen <em>~18 %</em> (OECD Health at a Glance 2025; sjednoceno se sourozeneckou revizí <a href="clanek-platba-z-kapsy.html">platby z kapsy</a>); (2) srovnávací graf re-ukotven na Eurostat 2023 (Německo 11,7 %, Francie 11,5 %, Rakousko 11,2 %, EU 10,0 %) místo nekonzistentní směsi let; (3) doplněna časová řada ČR (pre-2019 ~7,4 %, COVID vrchol 9,2 % v 2021, 8,5 % 2022, 8,4 % 2023); (4) doplněna metodická poznámka o rozdílu OECD vs. Eurostat (current vs. total expenditure). Hodnota 8,5 % v titulku zůstává jako <em>dashboard odhad 2024</em> — ČSÚ publikuje primární vlnu s odstupem cca 18 měsíců, takže ověřená vlna 2024 vyjde až v polovině roku 2026. Status: <em>review-pending</em>, podléhá ručnímu schválení před republikací.
       </p>
     </section>
 
