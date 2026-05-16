@@ -221,7 +221,8 @@ function showDetail(id, pushHistory = true) {
 // ─────────────────────────────────────────────
 
 async function init() {
-  renderModuleNav('themes');
+  // Tematické linie jsou nyní podstránka HSPA přehledu — aktivuj v topnavu HSPA přehled tab.
+  renderModuleNav('hspa-prehled');
   renderMastheadDate();
 
   try {
