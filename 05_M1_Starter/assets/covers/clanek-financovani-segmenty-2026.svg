@@ -2,144 +2,162 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Kam plyne 459 miliard. Co o struktuře českého zdravotnictví říkají dohodovací řízení">
   <defs>
     <style>
-      .root { font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif; }
-      .kicker { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; fill: #a05a08; }
-      .number { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.06em; fill: #5f574e; }
-      .title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #1f1a14; letter-spacing: -0.5px; }
-      .caption { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; fill: #5f574e; font-style: italic; }
-      .meta { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: #5f574e; }
-      .brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: #1f1a14; }
-      .brand em { font-style: italic; font-weight: 400; }
-      .viz-label { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 500; fill: #1f1a14; }
-      .viz-value { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: #1f1a14; font-variant-numeric: tabular-nums; }
-      .viz-sub { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; fill: #5f574e; letter-spacing: 0.04em; text-transform: uppercase; }
-      .viz-title { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; fill: #5f574e; }
+      .il-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; fill: #a05a08; }
+      .il-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #1f1a14; letter-spacing: -0.4px; }
+      .il-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 700; fill: #1f1a14; }
+      .il-date { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; fill: #5f574e; }
+      .il-caption { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; fill: #5f574e; font-style: italic; }
       
     @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
-      .accent-bar { transform-origin: 1150px 580px; animation: barGrow 1.2s cubic-bezier(.22,.61,.36,1) both; }
-      .title-underline { stroke-dasharray: 280; stroke-dashoffset: 280; animation: drawIn 0.8s ease-out 0.6s forwards; }
-      .pulse-dot { animation: pulse 3.4s ease-in-out 1.5s infinite; }
-      .viz-bar { transform-origin: left center; animation: barGrowX 1.1s cubic-bezier(.22,.61,.36,1) both; }
-      .viz-bar-1 { animation-delay: 0.4s; }
-      .viz-bar-2 { animation-delay: 0.6s; }
-      .viz-bar-3 { animation-delay: 0.8s; }
-      .viz-bar-4 { animation-delay: 1.0s; }
-      .viz-donut-segment { stroke-dasharray: var(--len) var(--circ); stroke-dashoffset: var(--len); animation: drawArc 1.2s ease-out 0.5s forwards; }
-      .viz-timeline-dot { transform-origin: center; animation: dotPop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
-      .viz-timeline-dot-1 { animation-delay: 0.5s; }
-      .viz-timeline-dot-2 { animation-delay: 0.75s; }
-      .viz-timeline-dot-3 { animation-delay: 1.0s; }
-      .viz-timeline-dot-4 { animation-delay: 1.25s; }
-      .viz-timeline-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawIn 1.2s ease-out 0.3s forwards; }
+      .illu-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: illuDrawIn 1.5s ease-out 0.3s forwards; }
+      .illu-line-1 { animation-delay: 0.5s; }
+      .illu-line-2 { animation-delay: 0.3s; }
+      .illu-gap { opacity: 0; animation: illuFade 0.8s ease-out 1.2s forwards; }
+      .illu-dot { transform-origin: center; animation: illuPop 0.4s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-dot-1 { animation-delay: 1.6s; }
+      .illu-dot-2 { animation-delay: 1.4s; }
+      .illu-gap-label { opacity: 0; animation: illuFade 0.6s ease-out 2.0s forwards; }
+      .illu-label-grp { opacity: 0; animation: illuFade 0.5s ease-out 1.8s forwards; }
+      .illu-coin { transform-origin: center; opacity: 0; animation: illuPop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-coin-0 { animation-delay: 0.3s; }
+      .illu-coin-1 { animation-delay: 0.36s; }
+      .illu-coin-2 { animation-delay: 0.42s; }
+      .illu-coin-3 { animation-delay: 0.48s; }
+      .illu-coin-4 { animation-delay: 0.54s; }
+      .illu-coin-5 { animation-delay: 0.6s; }
+      .illu-coin-6 { animation-delay: 0.6599999999999999s; }
+      .illu-coin-7 { animation-delay: 0.72s; }
+      .illu-coin-8 { animation-delay: 0.78s; }
+      .illu-coin-9 { animation-delay: 0.8400000000000001s; }
+      .illu-coin-10 { animation-delay: 0.8999999999999999s; }
+      .illu-coin-11 { animation-delay: 0.96s; }
+      .illu-coin-12 { animation-delay: 1.02s; }
+      .illu-coin-13 { animation-delay: 1.08s; }
+      .illu-coin-14 { animation-delay: 1.14s; }
+      .illu-coin-15 { animation-delay: 1.2s; }
+      .illu-check { stroke-dasharray: 300; stroke-dashoffset: 300; animation: illuDrawIn 0.8s ease-out 0.5s forwards; }
+      .illu-pulse-line { stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: illuDrawIn 1.8s ease-out 0.3s forwards; }
+      .illu-pulse-peak { transform-origin: center; animation: illuPop 0.4s ease-out 1.6s both, pulse 2s ease-in-out 2s infinite; }
+      .illu-net-line { stroke-dasharray: 200; stroke-dashoffset: 200; animation: illuDrawIn 0.6s ease-out forwards; }
+      .illu-net-line-0 { animation-delay: 0.4s; }
+      .illu-net-line-1 { animation-delay: 0.5s; }
+      .illu-net-line-2 { animation-delay: 0.6000000000000001s; }
+      .illu-net-line-3 { animation-delay: 0.7000000000000001s; }
+      .illu-net-line-4 { animation-delay: 0.8s; }
+      .illu-net-line-5 { animation-delay: 0.9s; }
+      .illu-net-node { transform-origin: center; opacity: 0; animation: illuPop 0.4s ease-out both; }
+      .illu-net-node-0 { animation-delay: 0.9s; }
+      .illu-net-node-1 { animation-delay: 0.98s; }
+      .illu-net-node-2 { animation-delay: 1.06s; }
+      .illu-net-node-3 { animation-delay: 1.1400000000000001s; }
+      .illu-net-node-4 { animation-delay: 1.22s; }
+      .illu-net-node-5 { animation-delay: 1.3s; }
+      .illu-net-hub { animation: illuPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.3s both; }
+      .illu-block { transform-origin: center; opacity: 0; animation: illuPop 0.45s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-block-0-0 { animation-delay: 0.4s; }
+      .illu-block-1-0 { animation-delay: 0.48000000000000004s; }
+      .illu-block-1-1 { animation-delay: 0.56s; }
+      .illu-block-2-0 { animation-delay: 0.64s; }
+      .illu-block-2-1 { animation-delay: 0.72s; }
+      .illu-block-2-2 { animation-delay: 0.8s; }
+      .illu-trend-line { stroke-dasharray: 800; stroke-dashoffset: 800; animation: illuDrawIn 1.4s ease-out 0.3s forwards; }
+      .illu-trend-arrow { stroke-dasharray: 60; stroke-dashoffset: 60; animation: illuDrawIn 0.4s ease-out 1.5s forwards; }
+      .illu-trend-dot { transform-origin: center; opacity: 0; animation: illuPop 0.35s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-trend-dot-1 { animation-delay: 0.6s; }
+      .illu-trend-dot-2 { animation-delay: 0.9s; }
+      .illu-trend-dot-3 { animation-delay: 1.2s; }
+      .illu-ring { transform-origin: center; opacity: 0; animation: illuFadeRing 0.6s ease-out both; }
+      .illu-ring-0 { animation-delay: 0.5s; }
+      .illu-ring-1 { animation-delay: 0.4s; }
+      .illu-ring-2 { animation-delay: 0.3s; }
+      .illu-ring-3 { animation-delay: 0.2s; }
+      .illu-ring-4 { animation-delay: 0.1s; }
+      .il-headline { animation: illuSlideIn 0.7s ease-out 0.5s both; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .accent-bar, .title-underline, .pulse-dot, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
-      .title-underline, .viz-timeline-line { stroke-dashoffset: 0; }
-      .viz-donut-segment { stroke-dashoffset: 0; }
+      .illu-line, .illu-gap, .illu-dot, .illu-gap-label, .illu-label-grp, .illu-coin, .illu-check, .illu-pulse-line, .illu-pulse-peak, .illu-net-line, .illu-net-node, .illu-net-hub, .illu-block, .illu-trend-line, .illu-trend-arrow, .illu-trend-dot, .illu-ring, .il-headline { animation: none !important; opacity: 1; }
+      .illu-line, .illu-check, .illu-pulse-line, .illu-net-line, .illu-trend-line, .illu-trend-arrow { stroke-dashoffset: 0; }
     }
-    @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-    @keyframes barGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    @keyframes drawIn { to { stroke-dashoffset: 0; } }
-    @keyframes drawArc { to { stroke-dashoffset: 0; } }
-    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
-    @keyframes dotPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes illuDrawIn { to { stroke-dashoffset: 0; } }
+    @keyframes illuFade { to { opacity: 1; } }
+    @keyframes illuFadeRing { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.85); } }
+    @keyframes illuPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes illuSlideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); opacity: 0.6; } }
   
     </style>
-    <pattern id="grain" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-      <circle cx="20" cy="30" r="0.6" fill="#1f1a14" opacity="0.06"/>
-      <circle cx="80" cy="70" r="0.5" fill="#1f1a14" opacity="0.05"/>
-      <circle cx="50" cy="100" r="0.7" fill="#1f1a14" opacity="0.07"/>
-      <circle cx="100" cy="20" r="0.4" fill="#1f1a14" opacity="0.04"/>
+    <pattern id="il-grain" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="40" r="0.7" fill="#1f1a14" opacity="0.05"/>
+      <circle cx="100" cy="90" r="0.6" fill="#1f1a14" opacity="0.04"/>
+      <circle cx="60" cy="130" r="0.8" fill="#1f1a14" opacity="0.06"/>
     </pattern>
   </defs>
 
-  <!-- Background -->
+  <!-- Cream background -->
   <rect width="1200" height="630" fill="#fbf8f1"/>
-  <rect width="1200" height="630" fill="url(#grain)"/>
+  <rect width="1200" height="630" fill="url(#il-grain)"/>
 
-  <!-- Top border (editorial rule) -->
-  <line x1="80" y1="60" x2="660" y2="60" stroke="#1f1a14" stroke-width="2"/>
+  <!-- Top thin rule -->
+  <line x1="80" y1="60" x2="1120" y2="60" stroke="#1f1a14" stroke-width="1.5"/>
 
-  <!-- Kicker row: tag + article number -->
-  <g class="root">
-    <text x="80" y="90" class="kicker">
+  <!-- Kicker (top-left) -->
+  <g>
+    <circle cx="62" cy="84" r="5" fill="#a05a08"/>
+    <text x="80" y="92" class="il-kicker">
       <tspan>Financování</tspan>
-      <tspan dx="14" fill="#5f574e" letter-spacing="0.12em" font-weight="500">#33</tspan>
+      <tspan dx="14" fill="#5f574e" letter-spacing="0.1em" font-weight="500">#33</tspan>
     </text>
-    <circle class="pulse-dot" cx="62" cy="84" r="5" fill="#a05a08"/>
   </g>
 
-  <!-- Headline -->
-  <g class="root">
-    <text class="title" x="80" y="160" font-size="36">
-      <tspan x="80" dy="0">Kam plyne 459</tspan><tspan x="80" dy="38">miliard. Co o</tspan><tspan x="80" dy="38">struktuře českého</tspan><tspan x="80" dy="38">zdravotnictví</tspan><tspan x="80" dy="38">říkají dohodovací</tspan><tspan x="80" dy="38">řízení</tspan>
+  <!-- ILUSTRACE (levá polovina) -->
+  <g class="illu illu-coins">
+    
+      <ellipse class="illu-coin illu-coin-0" cx="191.4" cy="404.1" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.6" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-1" cx="191.4" cy="388.26000000000005" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.65" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-2" cx="191.4" cy="372.42" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.7" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-3" cx="191.4" cy="356.58000000000004" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.75" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-4" cx="191.4" cy="340.74" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.8" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-5" cx="191.4" cy="324.90000000000003" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.85" stroke="#a05a08" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-6" cx="191.4" cy="309.06000000000006" rx="99" ry="31.68"
+               fill="#a05a08" fill-opacity="0.9" stroke="#a05a08" stroke-width="1.5"/>
+    
+      <ellipse class="illu-coin illu-coin-10" cx="468.6" cy="404.1" rx="99" ry="31.68"
+               fill="#1f1a14" fill-opacity="0.2" stroke="#1f1a14" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-11" cx="468.6" cy="388.26000000000005" rx="99" ry="31.68"
+               fill="#1f1a14" fill-opacity="0.225" stroke="#1f1a14" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-12" cx="468.6" cy="372.42" rx="99" ry="31.68"
+               fill="#1f1a14" fill-opacity="0.25" stroke="#1f1a14" stroke-width="1.5"/>
+      <ellipse class="illu-coin illu-coin-13" cx="468.6" cy="356.58000000000004" rx="99" ry="31.68"
+               fill="#1f1a14" fill-opacity="0.275" stroke="#1f1a14" stroke-width="1.5"/>
+    <!-- Symbol "Kč" on top coin -->
+    <text x="191.4" y="297.22" text-anchor="middle"
+          font-family="'Source Serif 4', Georgia, serif" font-size="20" font-weight="700"
+          fill="#fbf8f1">Kč</text>
+  </g>
+
+  <!-- Headline (pravá polovina) -->
+  <g class="il-headline">
+    <text class="il-title" x="680" y="215" font-size="30">
+      <tspan x="680" dy="0">Kam plyne 459</tspan><tspan x="680" dy="32">miliard. Co o</tspan><tspan x="680" dy="32">struktuře českého</tspan><tspan x="680" dy="32">zdravotnictví říkají</tspan><tspan x="680" dy="32">dohodovací řízení</tspan>
     </text>
-    <line class="title-underline"
-          x1="80" y1="372"
-          x2="280" y2="372"
+    <line x1="680" y1="371"
+          x2="780" y2="371"
           stroke="#a05a08" stroke-width="4" stroke-linecap="round"/>
-    <text x="80" y="416" class="caption">Kam plynulo 459 mld Kč veřejného zdravotního pojištění</text>
+    <text x="680" y="401" class="il-caption">Kam plynulo 459 mld Kč veřejného zdravotního pojištění</text>
   </g>
 
-  <!-- Data viz panel (volitelně) -->
-  <g><text x="670" y="144" class="viz-title">Struktura úhrad 2023</text><circle class="viz-donut-segment"
-              cx="836" cy="324" r="126.36"
-              fill="none" stroke="#a05a08" stroke-width="59.28"
-              stroke-dasharray="443.81430213710377 793.9432954152126"
-              stroke-dashoffset="0"
-              transform="rotate(-90 836 324)"
-              style="--len:443.81430213710377;--circ:793.9432954152126"/><circle class="viz-donut-segment"
-              cx="836" cy="324" r="126.36"
-              fill="none" stroke="#2f6b1f" stroke-width="59.28"
-              stroke-dasharray="226.27383919333556 793.9432954152126"
-              stroke-dashoffset="-443.81430213710377"
-              transform="rotate(-90 836 324)"
-              style="--len:226.27383919333556;--circ:793.9432954152126"/><circle class="viz-donut-segment"
-              cx="836" cy="324" r="126.36"
-              fill="none" stroke="#2c5a8a" stroke-width="59.28"
-              stroke-dasharray="78.60038624610604 793.9432954152126"
-              stroke-dashoffset="-670.0881413304393"
-              transform="rotate(-90 836 324)"
-              style="--len:78.60038624610604;--circ:793.9432954152126"/><circle class="viz-donut-segment"
-              cx="836" cy="324" r="126.36"
-              fill="none" stroke="#6b6357" stroke-width="59.28"
-              stroke-dasharray="45.254767838667114 793.9432954152126"
-              stroke-dashoffset="-748.6885275765453"
-              transform="rotate(-90 836 324)"
-              style="--len:45.254767838667114;--circ:793.9432954152126"/>
-    <text x="836" y="328" text-anchor="middle" class="viz-value" font-size="38">459</text>
-    <text x="836" y="352" text-anchor="middle" class="viz-sub">mld Kč</text>
-    <text x="836" y="302" text-anchor="middle" class="viz-sub">2023</text>
-  
-      <rect x="1014" y="272" width="10" height="10" rx="2" fill="#a05a08"/>
-      <text x="1030" y="280" class="viz-label">Lůžková péče</text>
-      <text x="1030" y="293" class="viz-sub">56 %</text>
-    
-      <rect x="1014" y="294" width="10" height="10" rx="2" fill="#2f6b1f"/>
-      <text x="1030" y="302" class="viz-label">Ambulantní péče</text>
-      <text x="1030" y="315" class="viz-sub">28 %</text>
-    
-      <rect x="1014" y="316" width="10" height="10" rx="2" fill="#2c5a8a"/>
-      <text x="1030" y="324" class="viz-label">Léky (recept)</text>
-      <text x="1030" y="337" class="viz-sub">10 %</text>
-    
-      <rect x="1014" y="338" width="10" height="10" rx="2" fill="#6b6357"/>
-      <text x="1030" y="346" class="viz-label">Ostatní</text>
-      <text x="1030" y="359" class="viz-sub">6 %</text>
-    </g>
-
-  <!-- Bottom: branding + date -->
-  <g class="root">
-    <line x1="80" y1="570" x2="1060" y2="570" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
-    <text x="80" y="598" class="brand">
+  <!-- Bottom: brand + date -->
+  <g>
+    <line x1="80" y1="570" x2="1120" y2="570" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
+    <text x="80" y="602" class="il-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
-    <text x="1060" y="598" text-anchor="end" class="meta">11. května 2026</text>
+    <text x="1120" y="602" text-anchor="end" class="il-date">11. května 2026</text>
   </g>
-
-  <!-- Right accent bar (animovaná) -->
-  <rect class="accent-bar"
-        x="1144" y="50"
-        width="12" height="530"
-        fill="#a05a08" rx="2"/>
 </svg>

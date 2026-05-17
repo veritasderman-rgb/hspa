@@ -22,17 +22,39 @@ export const ILLUSTRATIONS = {
   'arrow-trend': renderArrowTrend,
 };
 
-// Tag → default ilustrace fallback
+// Tag → default ilustrace fallback (přiřazení podle obsahové podstaty)
 export const TAG_ILLUSTRATIONS = {
-  'Financování': 'divergence-chart',
+  // Finance & politika
+  'Financování': 'coin-stack',
+  'Financování · prevence': 'coin-stack',
   'Politika': 'building-blocks',
   'Legislativa': 'building-blocks',
+  'Reforma': 'building-blocks',
+  'Reforma sítě poskytovatelů': 'building-blocks',
+  'Manifest': 'building-blocks',
+  // Klinika & péče
   'Klinika': 'pulse-wave',
+  'Procesy péče': 'pulse-wave',
+  'Primární péče': 'pulse-wave',
+  'Kardio': 'pulse-wave',
+  'Onkologie': 'arrow-trend',
+  'Vzácná onemocnění': 'circle-graph',
+  'Dlouhodobá péče': 'arrow-trend',
+  'Mortalita': 'arrow-trend',
+  // Prevence & bezpečnost
   'Prevence': 'shield-check',
-  'Stav populace': 'arrow-trend',
+  'Bezpečnost péče': 'shield-check',
+  'Bezpečnost preskripce': 'shield-check',
+  'Životní styl': 'shield-check',
+  // Duševní zdraví & populace
   'Duševní zdraví': 'pulse-wave',
+  'Stav populace': 'arrow-trend',
+  'Životní prostředí': 'circle-graph',
+  // Dostupnost & digitalizace
   'Dostupnost': 'network-dots',
+  'Dostupnost péče': 'network-dots',
   'Digitalizace': 'network-dots',
+  'Pracovní síla': 'building-blocks',
 };
 
 export function renderIllustration(type, opts) {

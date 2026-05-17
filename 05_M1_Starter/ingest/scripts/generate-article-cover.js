@@ -59,15 +59,37 @@ const SIGNAL_COLORS = {
 
 // Tag → dimension mapping pro výběr barvy
 const TAG_DIMENSIONS = {
+  // Finance & politika — teplé / červené
   'Financování': { color: '#a05a08', label: 'Financování' },
+  'Financování · prevence': { color: '#a05a08', label: 'Financování' },
   'Politika': { color: '#9c3450', label: 'Politika' },
   'Legislativa': { color: '#5f4a8c', label: 'Legislativa' },
+  'Reforma': { color: '#5f4a8c', label: 'Reforma' },
+  'Reforma sítě poskytovatelů': { color: '#5f4a8c', label: 'Reforma' },
+  'Manifest': { color: '#b8361e', label: 'Manifest' },
+  // Klinika — modrá / klinická paleta
   'Klinika': { color: '#2c5a8a', label: 'Klinika' },
+  'Procesy péče': { color: '#2c5a8a', label: 'Procesy péče' },
+  'Primární péče': { color: '#2c5a8a', label: 'Primární péče' },
+  'Kardio': { color: '#9c3450', label: 'Kardio' },
+  'Onkologie': { color: '#9c3450', label: 'Onkologie' },
+  'Vzácná onemocnění': { color: '#5f4a8c', label: 'Vzácná onemocnění' },
+  'Dlouhodobá péče': { color: '#a36728', label: 'Dlouhodobá péče' },
+  'Mortalita': { color: '#b8361e', label: 'Mortalita' },
+  // Prevence — zelená
   'Prevence': { color: '#2f6d4f', label: 'Prevence' },
+  'Bezpečnost péče': { color: '#2f6d4f', label: 'Bezpečnost péče' },
+  'Bezpečnost preskripce': { color: '#2f6d4f', label: 'Bezpečnost preskripce' },
+  'Životní styl': { color: '#2f6d4f', label: 'Životní styl' },
+  // Populace & prostředí
   'Stav populace': { color: '#2c7a87', label: 'Stav populace' },
   'Duševní zdraví': { color: '#5f4a8c', label: 'Duševní zdraví' },
+  'Životní prostředí': { color: '#2f6d4f', label: 'Životní prostředí' },
+  // Dostupnost & digitalizace
   'Dostupnost': { color: '#2c5a8a', label: 'Dostupnost' },
+  'Dostupnost péče': { color: '#2c5a8a', label: 'Dostupnost péče' },
   'Digitalizace': { color: '#2c5a8a', label: 'Digitalizace' },
+  'Pracovní síla': { color: '#a36728', label: 'Pracovní síla' },
 };
 
 const MONTHS_CS = ['ledna', 'února', 'března', 'dubna', 'května', 'června',
@@ -742,8 +764,8 @@ function renderIllustratedSvg(meta, { staticForPng = false } = {}) {
       .illu-dot-2 { animation-delay: 1.4s; }
       .illu-gap-label { opacity: 0; animation: illuFade 0.6s ease-out 2.0s forwards; }
       .illu-label-grp { opacity: 0; animation: illuFade 0.5s ease-out 1.8s forwards; }
-      .illu-coin { transform-origin: center; opacity: 0; animation: illuPop 0.4s cubic-bezier(.34,1.56,.64,1) both; }
-      ${Array.from({length: 14}, (_, i) => `.illu-coin-${i} { animation-delay: ${0.3 + i * 0.07}s; }`).join('\n      ')}
+      .illu-coin { transform-origin: center; opacity: 0; animation: illuPop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+      ${Array.from({length: 16}, (_, i) => `.illu-coin-${i} { animation-delay: ${0.3 + i * 0.06}s; }`).join('\n      ')}
       .illu-check { stroke-dasharray: 300; stroke-dashoffset: 300; animation: illuDrawIn 0.8s ease-out 0.5s forwards; }
       .illu-pulse-line { stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: illuDrawIn 1.8s ease-out 0.3s forwards; }
       .illu-pulse-peak { transform-origin: center; animation: illuPop 0.4s ease-out 1.6s both, pulse 2s ease-in-out 2s infinite; }
