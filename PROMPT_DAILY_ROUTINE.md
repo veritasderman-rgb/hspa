@@ -56,7 +56,7 @@ Co je **zakázáno**:
 | 8 | **Eurostat — hlth\_\* datasety** | ec.europa.eu/eurostat/web/health/database | Nová vlna SILC, HLY, mortalita |
 | 9 | **WHO Europe** | who.int/europe/news-room | Nové guidelines, Health Statistics |
 | 10 | **SÚKL — výpadky léčiv** | sukl.cz/farmaceuticky-trh/registr-vypadku-leciv | Nové výpadky, kritická léčiva |
-| 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw?o=9 | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
+| 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw (bez `?o=` — vždy aktuální volební období; archiv `o=9`, `o=10`…) | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
 | 12 | **Sbírka zákonů** | zakonyprolidi.cz/cs/aktualne | Nové normy v gesci MZ ČR |
 | 13 | **NÚKIB** | nukib.cz/cs/aktualni-informace | Bezpečnostní incidenty zdravotnictví, NIS2 implementace |
 | 14 | **Recenzovaná literatura ČR** | PubMed query: "Czech Republic" + healthcare keyword | Nové domácí studie |
@@ -297,7 +297,17 @@ Přidej nový záznam (na začátek pole `articles`):
 }
 ```
 
-**Pokud chceš publikovat hned** — vynech `"published": false`. Pokud chceš pouze připravit do queue — přidej `"published": false` a `"scheduled_for": "YYYY-MM-DD"`.
+**Nový článek vznikne vždy jako `"published": false`** — to je nepřekročitelné pravidlo manual-approval policy (vizte fáze 5 a sekci „Technické požadavky"). Frontend (`src/clanky.js`) filtruje `a.published !== false`, takže článek bez tohoto flagu jde rovnou do produkce. Proto **VŽDY** přidej:
+
+```json
+{
+  ...
+  "published": false,
+  "scheduled_for": "YYYY-MM-DD"
+}
+```
+
+Flag `"published": false` smí odebrat **výhradně redakce** ručně po schválení (viz fáze 5 / PR popis). Auto-publikaci agent nikdy nezpůsobí.
 
 ---
 
