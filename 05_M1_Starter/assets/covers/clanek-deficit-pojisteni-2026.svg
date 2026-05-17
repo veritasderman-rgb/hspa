@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Strukturální deficit zdravotního pojištění 2026. Proč se nůžky rozevírají a co je zastaví">
+  <defs>
+    <style>
+      .root { font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif; }
+      .kicker { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; fill: #a05a08; }
+      .number { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.06em; fill: #5f574e; }
+      .title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #1f1a14; letter-spacing: -0.5px; }
+      .meta { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: #5f574e; }
+      .brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: #1f1a14; }
+      .brand em { font-style: italic; font-weight: 400; }
+      
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .accent-bar { transform-origin: 1150px 580px; animation: barGrow 1.2s cubic-bezier(.22,.61,.36,1) both; }
+      .title-underline { stroke-dasharray: 280; stroke-dashoffset: 280; animation: drawIn 0.8s ease-out 0.6s forwards; }
+      .pulse-dot { animation: pulse 3.4s ease-in-out 1.5s infinite; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .accent-bar, .title-underline, .pulse-dot { animation: none !important; }
+      .title-underline { stroke-dashoffset: 0; }
+    }
+    @keyframes barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes drawIn { to { stroke-dashoffset: 0; } }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
+  
+    </style>
+    <pattern id="grain" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="30" r="0.6" fill="#1f1a14" opacity="0.06"/>
+      <circle cx="80" cy="70" r="0.5" fill="#1f1a14" opacity="0.05"/>
+      <circle cx="50" cy="100" r="0.7" fill="#1f1a14" opacity="0.07"/>
+      <circle cx="100" cy="20" r="0.4" fill="#1f1a14" opacity="0.04"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#fbf8f1"/>
+  <rect width="1200" height="630" fill="url(#grain)"/>
+
+  <!-- Top border (editorial rule) -->
+  <line x1="80" y1="60" x2="1060" y2="60" stroke="#1f1a14" stroke-width="2"/>
+
+  <!-- Kicker row: tag + article number -->
+  <g class="root">
+    <text x="80" y="90" class="kicker">
+      <tspan>Financování</tspan>
+      <tspan dx="14" fill="#5f574e" letter-spacing="0.12em" font-weight="500">#30</tspan>
+    </text>
+    <!-- Pulse dot vedle čísla, signální barva -->
+    <circle class="pulse-dot" cx="62" cy="84" r="5" fill="#a05a08"/>
+  </g>
+
+  <!-- Headline -->
+  <g class="root">
+    <text class="title" x="80" y="228" font-size="44">
+      <tspan x="80" dy="0">Strukturální deficit</tspan><tspan x="80" dy="47">zdravotního pojištění</tspan><tspan x="80" dy="47">2026. Proč se nůžky</tspan><tspan x="80" dy="47">rozevírají a co je</tspan><tspan x="80" dy="47">zastaví</tspan>
+    </text>
+    <!-- Underline pod posledním řádkem (draw-in animace) -->
+    <line class="title-underline"
+          x1="80" y1="438"
+          x2="360" y2="438"
+          stroke="#a05a08" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom: branding + date -->
+  <g class="root">
+    <line x1="80" y1="570" x2="1060" y2="570" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
+    <text x="80" y="598" class="brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="1060" y="598" text-anchor="end" class="meta">8. května 2026</text>
+  </g>
+
+  <!-- Right accent bar (animovaná) -->
+  <rect class="accent-bar"
+        x="1144" y="50"
+        width="12" height="530"
+        fill="#a05a08" rx="2"/>
+</svg>
