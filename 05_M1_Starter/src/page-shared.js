@@ -1,6 +1,7 @@
 // Sdílené komponenty napříč stránkami: navigační lišta mezi moduly.
 
 import { getSiteStats, applyDataStats } from './site-stats.js';
+import { initSiteSearch } from './search.js';
 
 const LS_AUDIENCE = 'zdrave-cesko/audience';
 
@@ -262,7 +263,18 @@ export function renderModuleNav(activeId) {
       : t.match.some(m => path.endsWith(m));
     return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}">${t.label}</a>`;
   }).join('');
-  container.innerHTML = tabsHtml;
+  const searchTriggerHtml = `<button type="button" class="site-search-trigger" id="siteSearchTrigger" aria-label="Otevřít vyhledávání"><span aria-hidden="true">⌕</span> Hledat <kbd>/</kbd></button>`;
+  container.innerHTML = tabsHtml + searchTriggerHtml;
+
+  // Aktivuj global keyboard shortcut (/, Cmd+K) a wire trigger
+  initSiteSearch();
+  const trigger = document.getElementById('siteSearchTrigger');
+  if (trigger) {
+    trigger.addEventListener('click', () => {
+      // Simulate '/' keypress to reuse same open logic
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+    });
+  }
 
   injectMobileNav(tabsHtml);
 }
