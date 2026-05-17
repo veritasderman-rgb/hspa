@@ -225,12 +225,6 @@ export function renderHSPAScore() {
     if (stats.score != null) {
       const el = document.getElementById('czScore');
       if (el) el.textContent = stats.score;
-      const explainEl = document.getElementById('scoreExplainVal');
-      if (explainEl) {
-        explainEl.textContent = stats.score;
-        explainEl.dataset.value = String(stats.score);
-        delete explainEl.dataset.avInit;
-      }
     }
     applyDataStats(stats);
   }).catch(() => {});
