@@ -76,27 +76,25 @@ const MONTHS_CS = ['ledna', 'února', 'března', 'dubna', 'května', 'června',
 //  Public API
 // =====================================================================
 
-export function generateCover(article, { writeFiles = true } = {}) {
+export function generateCover(article, { writeFiles = true, styleOverride = null, suffix = '' } = {}) {
   const meta = deriveMeta(article);
-  const svg = renderSvg(meta);
+  const style = styleOverride || meta.viz?.style || 'editorial';
+  const renderer = STYLE_RENDERERS[style] || renderSvg;
+  const svg = renderer(meta);
 
   if (!writeFiles) return { svg, meta };
 
   mkdirSync(COVERS_DIR, { recursive: true });
-  const baseName = article.slug.replace(/\.html$/, '');
+  const baseName = article.slug.replace(/\.html$/, '') + (suffix ? `-${suffix}` : '');
   const svgPath = resolve(COVERS_DIR, `${baseName}.svg`);
   const pngPath = resolve(COVERS_DIR, `${baseName}.png`);
 
   writeFileSync(svgPath, svg, 'utf8');
 
-  // PNG export — Resvg potřebuje SVG bez animací (statický snapshot)
-  // Vytvoříme variantu se statickým layoutem (final state animací)
-  const staticSvg = renderSvg(meta, { staticForPng: true });
+  const staticSvg = renderer(meta, { staticForPng: true });
   const resvg = new Resvg(staticSvg, {
     fitTo: { mode: 'width', value: 1200 },
     font: {
-      // Resvg neumí vzdálené fonty; spoléhá se na systémové
-      // Source Serif 4 / Inter musí být nainstalované, jinak fallback
       defaultFontFamily: 'serif',
       loadSystemFonts: true,
     },
@@ -300,6 +298,396 @@ function renderSvg(meta, { staticForPng = false } = {}) {
 }
 
 // =====================================================================
+//  STYLE renderery — alternativní celé layouty
+// =====================================================================
+
+const STYLE_RENDERERS = {
+  'editorial': renderSvg,     // původní NYT-typografický
+  'bold': renderBoldSvg,      // Time Magazine — velký color block + huge typo
+  'data-hero': renderDataHeroSvg, // FT/Bloomberg — viz dominuje, text vedle
+  'pull-quote': renderPullQuoteSvg, // Velký stat + dramatická typo
+};
+
+// Helper: ztmaví barvu o ~20 % pro dark variantu (bold style)
+function darken(hex, factor = 0.7) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const dr = Math.max(0, Math.round(r * factor));
+  const dg = Math.max(0, Math.round(g * factor));
+  const db = Math.max(0, Math.round(b * factor));
+  return `#${dr.toString(16).padStart(2, '0')}${dg.toString(16).padStart(2, '0')}${db.toString(16).padStart(2, '0')}`;
+}
+
+function extractHeroNumber(meta) {
+  // Z viz dat získej hlavní číslo pro hero number displays.
+  const v = meta.viz;
+  if (!v) return null;
+  if (v.type === 'big-number') return { number: v.number, unit: v.unit, label: v.label, sub: v.trend };
+  if (v.type === 'bar-compare' && v.rows?.length) {
+    const r = v.rows.find(x => x.highlight) || v.rows[0];
+    return { number: r.value, unit: v.unit, label: r.label, sub: r.sub };
+  }
+  if (v.type === 'donut' && v.center) return v.center;
+  if (v.type === 'timeline' && v.events?.length) {
+    const e = v.events.find(x => x.highlight) || v.events[v.events.length - 1];
+    return { number: e.year, label: e.label, sub: v.title };
+  }
+  return null;
+}
+
+// =====================================================================
+//  STYLE: BOLD MAGAZINE — Time/Economist
+// =====================================================================
+//
+// Top 58 % = dark color band, white serif headline + kicker
+// Bottom 42 % = cream, big stat number left + supporting label right
+// Brand row pinned bottom
+
+function renderBoldSvg(meta, { staticForPng = false } = {}) {
+  const bandH = Math.round(H * 0.58);
+  const darkAccent = darken(meta.accent, 0.75);
+  const onDark = '#fff5ea';
+
+  // Velikost titulku se zmenšuje s počtem řádků, aby se vešel do bandu pod kicker
+  const titleLines = wrapTitle(meta.title, 26);
+  const titleSize = titleLines.length <= 2 ? 76 : titleLines.length === 3 ? 60 : titleLines.length === 4 ? 50 : 40;
+  const lineHeight = Math.round(titleSize * 1.04);
+  // Top-anchored: titulek začíná hned pod kickerem
+  const titleY = PADDING_TOP + 88;
+
+  const heroNum = extractHeroNumber(meta);
+  const numberStr = heroNum ? formatNumber(heroNum.number) : '';
+  const numberSize = numberStr.length > 5 ? 110 : numberStr.length > 3 ? 140 : 180;
+
+  const animStyles = staticForPng ? '' : `
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .bold-band { animation: bandSlide 0.7s cubic-bezier(.22,.61,.36,1) both; }
+      .bold-headline { animation: fadeUp 0.8s ease-out 0.2s both; }
+      .bold-number { animation: numPop 0.7s cubic-bezier(.34,1.56,.64,1) 0.5s both; }
+      .bold-kicker-dot { animation: pulse 3.4s ease-in-out 1.5s infinite; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bold-band, .bold-headline, .bold-number, .bold-kicker-dot { animation: none !important; }
+    }
+    @keyframes bandSlide { from { transform: translateY(-${bandH}px); } to { transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes numPop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+  `;
+
+  const titleTspans = titleLines.map((line, i) =>
+    `<tspan x="${PADDING_X}" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(meta.title)}">
+  <defs>
+    <style>
+      .b-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: ${onDark}; }
+      .b-number-meta { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.08em; fill: ${onDark}; opacity: 0.7; }
+      .b-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${onDark}; letter-spacing: -0.8px; }
+      .b-bignum { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${INK}; letter-spacing: -4px; font-variant-numeric: tabular-nums; }
+      .b-bigunit { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: ${INK_MUT}; font-size: 32px; }
+      .b-biglabel { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 600; fill: ${INK}; line-height: 1.3; }
+      .b-bigsub { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; fill: ${INK_MUT}; }
+      .b-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: ${INK}; }
+      .b-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: ${INK_MUT}; }
+      ${animStyles}
+    </style>
+    <pattern id="band-grain" x="0" y="0" width="180" height="180" patternUnits="userSpaceOnUse">
+      <circle cx="40" cy="50" r="1" fill="${onDark}" opacity="0.07"/>
+      <circle cx="120" cy="110" r="0.8" fill="${onDark}" opacity="0.06"/>
+      <circle cx="80" cy="160" r="1.2" fill="${onDark}" opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <!-- Cream base -->
+  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+
+  <!-- Dark color band (top) -->
+  <g class="bold-band">
+    <rect width="${W}" height="${bandH}" fill="${darkAccent}"/>
+    <rect width="${W}" height="${bandH}" fill="url(#band-grain)"/>
+    <!-- Thin accent stripe at bottom of band, používá brighter accent -->
+    <rect y="${bandH - 6}" width="${W}" height="6" fill="${meta.accent}"/>
+  </g>
+
+  <!-- Kicker -->
+  <g class="bold-headline">
+    <circle class="bold-kicker-dot" cx="${PADDING_X - 18}" cy="${PADDING_TOP + 14}" r="6" fill="${meta.accent}"/>
+    <text x="${PADDING_X}" y="${PADDING_TOP + 22}" class="b-kicker">
+      <tspan>${escapeXml(meta.tag)}</tspan>
+      <tspan dx="14" opacity="0.6" letter-spacing="0.12em" font-weight="500">#${escapeXml(meta.number ?? '')}</tspan>
+    </text>
+  </g>
+
+  <!-- Headline -->
+  <g class="bold-headline">
+    <text class="b-title" x="${PADDING_X}" y="${titleY}" font-size="${titleSize}">
+      ${titleTspans}
+    </text>
+  </g>
+
+  <!-- Bottom cream area: big number + supporting -->
+  ${heroNum ? `
+  <g class="bold-number">
+    <text x="${PADDING_X}" y="${bandH + 130}" class="b-bignum" font-size="${numberSize}">
+      ${escapeXml(numberStr)}
+      <tspan class="b-bigunit" dx="14">${escapeXml(heroNum.unit || '')}</tspan>
+    </text>
+    <text x="${PADDING_X}" y="${bandH + 165}" class="b-biglabel">${escapeXml(heroNum.label || '')}</text>
+    ${heroNum.sub ? `<text x="${PADDING_X}" y="${bandH + 185}" class="b-bigsub">${escapeXml(heroNum.sub)}</text>` : ''}
+  </g>` : ''}
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <text x="${PADDING_X}" y="${H - 35}" class="b-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="${W - PADDING_X}" y="${H - 35}" text-anchor="end" class="b-date">${escapeXml(meta.date)}</text>
+  </g>
+</svg>
+`;
+}
+
+// =====================================================================
+//  STYLE: DATA HERO — FT/Bloomberg
+// =====================================================================
+//
+// Levá strana (60%) = velký data viz, vyplňuje celý prostor
+// Pravá strana (40%) = kicker, headline (menší), brand
+// Tmavý cream background, viz použije sytou paletu
+
+function renderDataHeroSvg(meta, { staticForPng = false } = {}) {
+  const splitX = Math.round(W * 0.58); // viz zabírá 58 % zleva
+  const vizPadding = 60;
+  const vizX = vizPadding;
+  const vizY = vizPadding + 30;
+  const vizW = splitX - vizPadding * 2;
+  const vizH = H - vizPadding * 2 - 60;
+
+  const titleX = splitX + 40;
+  const titleW = W - splitX - 80;
+
+  const titleLines = wrapTitle(meta.title, 18);
+  const titleSize = titleLines.length <= 3 ? 38 : titleLines.length === 4 ? 32 : 28;
+  const lineHeight = Math.round(titleSize * 1.1);
+  const titleBlockH = titleLines.length * lineHeight;
+  const titleY = Math.round((H - titleBlockH) / 2) - 20;
+
+  // Render velkou viz — zvětší se renderery s width/height parametrem
+  const heroViz = meta.viz && VIZ_RENDERERS[meta.viz.type]
+    ? VIZ_RENDERERS[meta.viz.type]({
+        data: meta.viz,
+        accent: meta.accent,
+        x: vizX,
+        y: vizY,
+        width: vizW,
+        height: vizH,
+        staticForPng,
+        large: true,
+      })
+    : '';
+
+  const animStyles = staticForPng ? '' : `
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .dh-headline { animation: fadeIn 0.7s ease-out 0.3s both; }
+      .dh-divider { transform-origin: top; animation: lineDown 0.8s ease-out both; }
+      .viz-bar { transform-origin: left center; animation: barGrowX 1.1s cubic-bezier(.22,.61,.36,1) both; }
+      .viz-bar-1 { animation-delay: 0.5s; }
+      .viz-bar-2 { animation-delay: 0.7s; }
+      .viz-donut-segment { stroke-dasharray: var(--len) var(--circ); stroke-dashoffset: var(--len); animation: drawArc 1.2s ease-out 0.5s forwards; }
+      .viz-timeline-dot { transform-origin: center; animation: dotPop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+      .viz-timeline-dot-1 { animation-delay: 0.5s; }
+      .viz-timeline-dot-2 { animation-delay: 0.75s; }
+      .viz-timeline-dot-3 { animation-delay: 1.0s; }
+      .viz-timeline-dot-4 { animation-delay: 1.25s; }
+      .viz-timeline-line { stroke-dasharray: 600; stroke-dashoffset: 600; animation: drawIn 1.2s ease-out 0.3s forwards; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dh-headline, .dh-divider, .viz-bar, .viz-donut-segment, .viz-timeline-dot, .viz-timeline-line { animation: none !important; }
+      .viz-donut-segment, .viz-timeline-line { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes lineDown { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes barGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes drawArc { to { stroke-dashoffset: 0; } }
+    @keyframes drawIn { to { stroke-dashoffset: 0; } }
+    @keyframes dotPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  `;
+
+  const titleTspans = titleLines.map((line, i) =>
+    `<tspan x="${titleX}" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(meta.title)}">
+  <defs>
+    <style>
+      .dh-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; fill: ${meta.accent}; }
+      .dh-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${INK}; letter-spacing: -0.3px; line-height: 1.1; }
+      .dh-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 700; fill: ${INK}; }
+      .dh-date { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; fill: ${INK_MUT}; }
+      .viz-title { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; fill: ${INK_MUT}; }
+      .viz-label { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 600; fill: ${INK}; }
+      .viz-value { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; font-weight: 700; fill: ${INK}; font-variant-numeric: tabular-nums; }
+      .viz-sub { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; fill: ${INK_MUT}; letter-spacing: 0.03em; }
+      ${animStyles}
+    </style>
+  </defs>
+
+  <!-- Cream background s subtle texturou na pravé straně -->
+  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+  <rect x="${splitX}" y="0" width="${W - splitX}" height="${H}" fill="${PAPER2}"/>
+
+  <!-- Vertical divider mezi viz a textem -->
+  <line class="dh-divider" x1="${splitX}" y1="${PADDING_TOP - 20}" x2="${splitX}" y2="${H - 40}" stroke="${INK}" stroke-width="2"/>
+
+  <!-- Top tag pill nad viz -->
+  <text x="${vizX}" y="${PADDING_TOP + 12}" class="dh-kicker">
+    <tspan>${escapeXml(meta.tag)}</tspan>
+    <tspan dx="14" fill="${INK_MUT}" letter-spacing="0.1em" font-weight="500">#${escapeXml(meta.number ?? '')}</tspan>
+  </text>
+
+  <!-- Veliká viz -->
+  ${heroViz}
+
+  <!-- Headline pravá strana -->
+  <g class="dh-headline">
+    <text class="dh-title" x="${titleX}" y="${titleY}" font-size="${titleSize}">
+      ${titleTspans}
+    </text>
+    <line x1="${titleX}" y1="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          x2="${titleX + 120}" y2="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          stroke="${meta.accent}" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom right: brand + date -->
+  <g>
+    <text x="${titleX}" y="${H - 50}" class="dh-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="${titleX}" y="${H - 28}" class="dh-date">${escapeXml(meta.date)}</text>
+  </g>
+</svg>
+`;
+}
+
+// =====================================================================
+//  STYLE: PULL QUOTE — Big Stat Drama
+// =====================================================================
+//
+// Velký stat number levá třetina (200pt+, signal color)
+// Headline pravá dvě třetiny, podporující data
+// Cream background s subtle tint nahoře (signál barva 8 % opacity)
+
+function renderPullQuoteSvg(meta, { staticForPng = false } = {}) {
+  const heroNum = extractHeroNumber(meta);
+  const numberStr = heroNum ? formatNumber(heroNum.number) : '?';
+  // Menší max velikost — aby se nepřekrýval s titulkem
+  const numberSize = numberStr.length > 6 ? 100 : numberStr.length > 4 ? 130 : 170;
+
+  // Levá kolona pro číslo: cca 45 % šířky
+  const leftColW = 460;
+  const titleX = leftColW + 80;
+  const titleW = W - titleX - PADDING_X;
+
+  // Titulek užší (víc řádků, ale menší font) — vejde se do pravé poloviny
+  const titleLines = wrapTitle(meta.title, 22);
+  const titleSize = titleLines.length <= 2 ? 48 : titleLines.length === 3 ? 40 : titleLines.length === 4 ? 34 : 28;
+  const lineHeight = Math.round(titleSize * 1.06);
+  // Vertical center pravé kolony
+  const titleBlockH = titleLines.length * lineHeight;
+  const titleY = Math.round((H - titleBlockH) / 2) - 20;
+
+  // Číslo vertically centered
+  const numberY = Math.round(H / 2) + Math.round(numberSize / 3);
+
+  const animStyles = staticForPng ? '' : `
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .pq-number { animation: numRise 0.9s cubic-bezier(.22,.61,.36,1) 0.2s both; }
+      .pq-quote { animation: fadeIn 0.6s ease-out both; }
+      .pq-title { animation: fadeUp 0.7s ease-out 0.5s both; }
+      .pq-tint { animation: tintGrow 1.0s ease-out both; transform-origin: top; }
+      .pq-accent { animation: drawIn 0.8s ease-out 0.8s forwards; stroke-dasharray: 200; stroke-dashoffset: 200; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pq-number, .pq-quote, .pq-title, .pq-tint, .pq-accent { animation: none !important; }
+      .pq-accent { stroke-dashoffset: 0; }
+    }
+    @keyframes numRise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes tintGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes drawIn { to { stroke-dashoffset: 0; } }
+  `;
+
+  const titleTspans = titleLines.map((line, i) =>
+    `<tspan x="${titleX}" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(meta.title)}">
+  <defs>
+    <style>
+      .pq-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: ${meta.accent}; }
+      .pq-numstr { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${meta.accent}; letter-spacing: -5px; font-variant-numeric: tabular-nums; }
+      .pq-unit { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: ${INK_MUT}; font-size: 36px; }
+      .pq-label { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; fill: ${INK}; font-size: 18px; }
+      .pq-sub { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; fill: ${INK_MUT}; }
+      .pq-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${INK}; letter-spacing: -0.5px; line-height: 1.06; }
+      .pq-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: ${INK}; }
+      .pq-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: ${INK_MUT}; }
+      .pq-quote-mark { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: ${meta.accent}; opacity: 0.18; font-size: 280px; line-height: 1; }
+      ${animStyles}
+    </style>
+  </defs>
+
+  <!-- Cream base + signal-tinted top stripe -->
+  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+  <rect class="pq-tint" width="${W}" height="160" fill="${meta.accent}" opacity="0.12"/>
+
+  <!-- Big quote mark behind number (decorative) -->
+  <text class="pq-quote pq-quote-mark" x="${PADDING_X - 20}" y="220">"</text>
+
+  <!-- Kicker -->
+  <text x="${PADDING_X}" y="${PADDING_TOP + 22}" class="pq-kicker">
+    <tspan>${escapeXml(meta.tag)}</tspan>
+    <tspan dx="14" fill="${INK_MUT}" letter-spacing="0.12em" font-weight="500">#${escapeXml(meta.number ?? '')}</tspan>
+  </text>
+
+  <!-- Velké číslo levá strana -->
+  <g class="pq-number">
+    <text x="${PADDING_X}" y="${numberY}" class="pq-numstr" font-size="${numberSize}">
+      ${escapeXml(numberStr)}
+      ${heroNum?.unit ? `<tspan class="pq-unit" dx="14">${escapeXml(heroNum.unit)}</tspan>` : ''}
+    </text>
+    <line class="pq-accent" x1="${PADDING_X}" y1="${numberY + 20}" x2="${PADDING_X + 180}" y2="${numberY + 20}" stroke="${meta.accent}" stroke-width="5" stroke-linecap="round"/>
+    ${heroNum?.label ? `<text x="${PADDING_X}" y="${numberY + 56}" class="pq-label">${escapeXml(heroNum.label)}</text>` : ''}
+    ${heroNum?.sub ? `<text x="${PADDING_X}" y="${numberY + 82}" class="pq-sub">${escapeXml(heroNum.sub)}</text>` : ''}
+  </g>
+
+  <!-- Headline pravá strana -->
+  <g class="pq-title">
+    <text class="pq-title" x="${titleX}" y="${titleY}" font-size="${titleSize}">
+      ${titleTspans}
+    </text>
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <line x1="${PADDING_X}" y1="${H - 60}" x2="${W - PADDING_X}" y2="${H - 60}" stroke="${RULE}" stroke-width="1"/>
+    <text x="${PADDING_X}" y="${H - 28}" class="pq-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="${W - PADDING_X}" y="${H - 28}" text-anchor="end" class="pq-date">${escapeXml(meta.date)}</text>
+  </g>
+</svg>
+`;
+}
+
+// =====================================================================
 //  Data viz renderery — vrací SVG fragmenty
 // =====================================================================
 
@@ -314,35 +702,41 @@ const VIZ_RENDERERS = {
  * Horizontální srovnávací bary. Použití pro 2–4 srovnávané hodnoty.
  * Data: { type: 'bar-compare', title?, rows: [{label, value, sub?, highlight?}], unit?, max? }
  */
-function renderBarCompareViz({ data, accent, x, y, width, height }) {
+function renderBarCompareViz({ data, accent, x, y, width, height, large = false }) {
   const rows = (data.rows || []).slice(0, 4);
   if (rows.length === 0) return '';
   const unit = data.unit || '';
   const max = data.max || Math.max(...rows.map(r => Math.abs(r.value)));
   const titleH = data.title ? 28 : 0;
-  const rowGap = 12;
-  const rowH = Math.floor((height - titleH - rowGap * (rows.length - 1)) / rows.length);
-  const labelW = 180;
+  const rowGap = 16;
+  // Max výška řádku — zabraňuje, aby se 2 řádky rozplácly přes celou výšku
+  const maxRowH = large ? 90 : 70;
+  const rowH = Math.min(maxRowH, Math.floor((height - titleH - rowGap * (rows.length - 1)) / rows.length));
+  // Vertical center bloku řádků pokud zbývá místo
+  const blockH = rows.length * rowH + (rows.length - 1) * rowGap;
+  const yOffset = Math.max(0, Math.floor((height - titleH - blockH) / 3));
+  const labelW = large ? 220 : 180;
   const barAreaX = x + labelW;
-  const barAreaW = width - labelW - 80;
+  const barAreaW = width - labelW - (large ? 110 : 80);
 
   const titleSvg = data.title
     ? `<text x="${x}" y="${y + 14}" class="viz-title">${escapeXml(data.title)}</text>`
     : '';
 
+  const barH = large ? 28 : 18;
   const rowsSvg = rows.map((r, i) => {
-    const ry = y + titleH + i * (rowH + rowGap);
+    const ry = y + titleH + yOffset + i * (rowH + rowGap);
     const barLen = Math.max(4, Math.round((Math.abs(r.value) / max) * barAreaW));
     const color = r.highlight ? accent : INK_MUT;
     const valueText = formatNumber(r.value) + (unit ? ' ' + unit : '');
     return `
-      <text x="${x}" y="${ry + rowH * 0.55}" class="viz-label">${escapeXml(r.label)}</text>
-      ${r.sub ? `<text x="${x}" y="${ry + rowH * 0.55 + 18}" class="viz-sub">${escapeXml(r.sub)}</text>` : ''}
+      <text x="${x}" y="${ry + rowH * 0.45}" class="viz-label">${escapeXml(r.label)}</text>
+      ${r.sub ? `<text x="${x}" y="${ry + rowH * 0.45 + 18}" class="viz-sub">${escapeXml(r.sub)}</text>` : ''}
       <rect class="viz-bar viz-bar-${i + 1}"
-            x="${barAreaX}" y="${ry + (rowH - 18) / 2}"
-            width="${barLen}" height="18"
+            x="${barAreaX}" y="${ry + (rowH - barH) / 2}"
+            width="${barLen}" height="${barH}"
             fill="${color}" rx="2" opacity="${r.highlight ? 1 : 0.55}"/>
-      <text x="${barAreaX + barLen + 10}" y="${ry + rowH * 0.55 + 4}" class="viz-value" fill="${r.highlight ? accent : INK}">${escapeXml(valueText)}</text>
+      <text x="${barAreaX + barLen + 12}" y="${ry + rowH * 0.5 + 8}" class="viz-value" fill="${r.highlight ? accent : INK}">${escapeXml(valueText)}</text>
     `;
   }).join('');
 
@@ -534,19 +928,30 @@ function loadArticles() {
   return data.articles ?? [];
 }
 
+function parseArgs() {
+  const args = process.argv.slice(2);
+  let target = null;
+  let style = null;
+  for (const a of args) {
+    if (a.startsWith('--style=')) style = a.slice('--style='.length);
+    else if (!target) target = a;
+  }
+  return { target, style };
+}
+
 function main() {
-  const arg = process.argv[2];
-  if (!arg) {
-    console.error('Usage: node ingest/scripts/generate-article-cover.js <slug|--all>');
+  const { target, style } = parseArgs();
+  if (!target) {
+    console.error('Usage: node ingest/scripts/generate-article-cover.js <slug|--all> [--style=editorial|bold|data-hero|pull-quote]');
     process.exit(1);
   }
   const articles = loadArticles();
 
-  if (arg === '--all') {
+  if (target === '--all') {
     let n = 0;
     for (const a of articles) {
       if (a.published === false) continue;
-      const { svgPath, pngPath } = generateCover(a);
+      const { svgPath, pngPath } = generateCover(a, { styleOverride: style });
       console.log(`✓ ${a.slug} → ${svgPath} + ${pngPath}`);
       n++;
     }
@@ -554,17 +959,17 @@ function main() {
     return;
   }
 
-  const slug = arg.endsWith('.html') ? arg : `${arg}.html`;
-  const article = articles.find(a => a.slug === slug || a.id === arg);
+  const slug = target.endsWith('.html') ? target : `${target}.html`;
+  const article = articles.find(a => a.slug === slug || a.id === target);
   if (!article) {
-    console.error(`Article not found: ${arg}`);
+    console.error(`Article not found: ${target}`);
     process.exit(1);
   }
-  const { svgPath, pngPath, meta } = generateCover(article);
-  console.log(`✓ Generated cover for "${article.title}"`);
+  const suffix = style && style !== 'editorial' ? style : '';
+  const { svgPath, pngPath, meta } = generateCover(article, { styleOverride: style, suffix });
+  console.log(`✓ Generated cover for "${article.title}" [style: ${style || meta.viz?.style || 'editorial'}]`);
   console.log(`  SVG: ${svgPath}`);
   console.log(`  PNG: ${pngPath}`);
-  console.log(`  Meta:`, meta);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

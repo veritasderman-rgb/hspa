@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Strukturální deficit zdravotního pojištění 2026. Proč se nůžky rozevírají a co je zastaví">
+  <defs>
+    <style>
+      .b-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: #fff5ea; }
+      .b-number-meta { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.08em; fill: #fff5ea; opacity: 0.7; }
+      .b-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #fff5ea; letter-spacing: -0.8px; }
+      .b-bignum { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #1f1a14; letter-spacing: -4px; font-variant-numeric: tabular-nums; }
+      .b-bigunit { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: #5f574e; font-size: 32px; }
+      .b-biglabel { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 600; fill: #1f1a14; line-height: 1.3; }
+      .b-bigsub { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; fill: #5f574e; }
+      .b-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: #1f1a14; }
+      .b-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: #5f574e; }
+      
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .bold-band { animation: bandSlide 0.7s cubic-bezier(.22,.61,.36,1) both; }
+      .bold-headline { animation: fadeUp 0.8s ease-out 0.2s both; }
+      .bold-number { animation: numPop 0.7s cubic-bezier(.34,1.56,.64,1) 0.5s both; }
+      .bold-kicker-dot { animation: pulse 3.4s ease-in-out 1.5s infinite; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bold-band, .bold-headline, .bold-number, .bold-kicker-dot { animation: none !important; }
+    }
+    @keyframes bandSlide { from { transform: translateY(-365px); } to { transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes numPop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+  
+    </style>
+    <pattern id="band-grain" x="0" y="0" width="180" height="180" patternUnits="userSpaceOnUse">
+      <circle cx="40" cy="50" r="1" fill="#fff5ea" opacity="0.07"/>
+      <circle cx="120" cy="110" r="0.8" fill="#fff5ea" opacity="0.06"/>
+      <circle cx="80" cy="160" r="1.2" fill="#fff5ea" opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <!-- Cream base -->
+  <rect width="1200" height="630" fill="#fbf8f1"/>
+
+  <!-- Dark color band (top) -->
+  <g class="bold-band">
+    <rect width="1200" height="365" fill="#784406"/>
+    <rect width="1200" height="365" fill="url(#band-grain)"/>
+    <!-- Thin accent stripe at bottom of band, používá brighter accent -->
+    <rect y="359" width="1200" height="6" fill="#a05a08"/>
+  </g>
+
+  <!-- Kicker -->
+  <g class="bold-headline">
+    <circle class="bold-kicker-dot" cx="62" cy="84" r="6" fill="#a05a08"/>
+    <text x="80" y="92" class="b-kicker">
+      <tspan>Financování</tspan>
+      <tspan dx="14" opacity="0.6" letter-spacing="0.12em" font-weight="500">#30</tspan>
+    </text>
+  </g>
+
+  <!-- Headline -->
+  <g class="bold-headline">
+    <text class="b-title" x="80" y="158" font-size="50">
+      <tspan x="80" dy="0">Strukturální deficit</tspan><tspan x="80" dy="52">zdravotního pojištění</tspan><tspan x="80" dy="52">2026. Proč se nůžky</tspan><tspan x="80" dy="52">rozevírají a co je zastaví</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom cream area: big number + supporting -->
+  
+  <g class="bold-number">
+    <text x="80" y="495" class="b-bignum" font-size="180">
+      6,4
+      <tspan class="b-bigunit" dx="14">%</tspan>
+    </text>
+    <text x="80" y="530" class="b-biglabel">Výdaje na péči</text>
+    <text x="80" y="550" class="b-bigsub">meziroční růst 2026</text>
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <text x="80" y="595" class="b-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="1120" y="595" text-anchor="end" class="b-date">8. května 2026</text>
+  </g>
+</svg>
