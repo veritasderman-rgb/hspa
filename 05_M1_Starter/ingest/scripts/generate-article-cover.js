@@ -308,6 +308,7 @@ const STYLE_RENDERERS = {
   'data-hero': renderDataHeroSvg, // FT/Bloomberg — viz dominuje, text vedle
   'pull-quote': renderPullQuoteSvg, // Velký stat + dramatická typo
   'illustrated': renderIllustratedSvg, // Editorial ilustrace dominuje, text menší
+  'photo-mock': renderPhotoMockSvg,    // Foto-evocative — gradient mesh + bokeh + vignette
 };
 
 // Helper: ztmaví barvu o ~20 % pro dark variantu (bold style)
@@ -841,6 +842,182 @@ function renderIllustratedSvg(meta, { staticForPng = false } = {}) {
   </g>
 </svg>
 `;
+}
+
+// =====================================================================
+//  STYLE: PHOTO-MOCK — gradient mesh + bokeh + vignette
+// =====================================================================
+//
+// Simuluje atmosféru fotky čistě SVG technikami:
+//   - Velký radiální gradient (dark center → tonal accent edges)
+//   - 5-7 blurred soft circles (bokeh effect)
+//   - Color grade pomocí feColorMatrix
+//   - Vignette (radial fade k tmavým rohům)
+//   - Strong typo overlay (white serif, drop shadow, text plate)
+//
+// NEEXISTUJE žádná reálná fotka — vše je SVG. Pro skutečný fotorealismus
+// je potřeba Unsplash API nebo AI image gen pipeline.
+
+function renderPhotoMockSvg(meta, { staticForPng = false } = {}) {
+  // 4 deterministic bokeh circles z hash titulu (každý článek má unikátní)
+  const hash = stringHash(meta.title || 'x');
+  const bokeh = [];
+  for (let i = 0; i < 6; i++) {
+    const seed = (hash + i * 37) % 1000;
+    bokeh.push({
+      cx: (seed % 100) * (W / 100),
+      cy: ((seed * 3) % 100) * (H / 100),
+      r: 60 + ((seed * 7) % 140),
+      opacity: 0.18 + ((seed % 30) / 100),
+      hue: i % 2 === 0 ? meta.accent : darken(meta.accent, 1.3),
+    });
+  }
+
+  const darkBg = darken(meta.accent, 0.35);
+  const midBg = darken(meta.accent, 0.6);
+
+  const titleLines = wrapTitle(meta.title, 22);
+  const titleSize = titleLines.length <= 2 ? 60 : titleLines.length === 3 ? 50 : titleLines.length === 4 ? 42 : 36;
+  const lineHeight = Math.round(titleSize * 1.06);
+  const titleBlockH = titleLines.length * lineHeight;
+  const titleY = Math.round((H - titleBlockH) / 2) + 30;
+
+  const animStyles = staticForPng ? '' : `
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .pm-bokeh { animation: pmFloat 8s ease-in-out infinite; }
+      .pm-bokeh-1 { animation-delay: 0s; }
+      .pm-bokeh-2 { animation-delay: -2s; animation-duration: 11s; }
+      .pm-bokeh-3 { animation-delay: -4s; animation-duration: 9s; }
+      .pm-bokeh-4 { animation-delay: -1s; animation-duration: 13s; }
+      .pm-bokeh-5 { animation-delay: -3s; animation-duration: 10s; }
+      .pm-bokeh-6 { animation-delay: -5s; animation-duration: 14s; }
+      .pm-headline { animation: pmFadeUp 0.9s ease-out 0.3s both; }
+      .pm-kicker-dot { animation: pulse 3s ease-in-out 1s infinite; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pm-bokeh, .pm-headline, .pm-kicker-dot { animation: none !important; }
+    }
+    @keyframes pmFloat {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(12px,-18px); }
+      66% { transform: translate(-10px,14px); }
+    }
+    @keyframes pmFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+  `;
+
+  const titleTspans = titleLines.map((line, i) =>
+    `<tspan x="${PADDING_X}" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
+
+  const bokehSvg = bokeh.map((b, i) => `
+    <circle class="pm-bokeh pm-bokeh-${i + 1}" cx="${b.cx}" cy="${b.cy}" r="${b.r}"
+            fill="${b.hue}" opacity="${b.opacity}" filter="url(#pm-blur)"/>`
+  ).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(meta.title)}">
+  <defs>
+    <style>
+      .pm-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: rgba(255,245,234,0.95); }
+      .pm-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #fff5ea; letter-spacing: -0.5px; }
+      .pm-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: rgba(255,245,234,0.95); }
+      .pm-brand em { font-style: italic; font-weight: 400; }
+      .pm-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: rgba(255,245,234,0.7); }
+      ${animStyles}
+    </style>
+
+    <!-- Hlavní gradient pozadí (dark → mid → dark, atmosférický) -->
+    <radialGradient id="pm-bg" cx="35%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="${midBg}" stop-opacity="1"/>
+      <stop offset="60%" stop-color="${darkBg}" stop-opacity="1"/>
+      <stop offset="100%" stop-color="${INK}" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Vignette overlay -->
+    <radialGradient id="pm-vignette" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="${INK}" stop-opacity="0"/>
+      <stop offset="65%" stop-color="${INK}" stop-opacity="0"/>
+      <stop offset="100%" stop-color="${INK}" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- Text plate gradient (zatemnění pod textem pro čitelnost) -->
+    <linearGradient id="pm-plate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${INK}" stop-opacity="0.05"/>
+      <stop offset="50%" stop-color="${INK}" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="${INK}" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <!-- Gaussian blur filter pro bokeh -->
+    <filter id="pm-blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+
+    <!-- Subtle film grain texture -->
+    <filter id="pm-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="${hash % 100}"/>
+      <feColorMatrix values="0 0 0 0 1
+                             0 0 0 0 1
+                             0 0 0 0 1
+                             0 0 0 0.08 0"/>
+    </filter>
+  </defs>
+
+  <!-- Background gradient -->
+  <rect width="${W}" height="${H}" fill="url(#pm-bg)"/>
+
+  <!-- Bokeh light orbs -->
+  <g>${bokehSvg}</g>
+
+  <!-- Vignette -->
+  <rect width="${W}" height="${H}" fill="url(#pm-vignette)"/>
+
+  <!-- Film grain overlay -->
+  <rect width="${W}" height="${H}" filter="url(#pm-grain)" opacity="0.4"/>
+
+  <!-- Text plate (zatemnění od středu dolů pro čitelnost) -->
+  <rect y="${H * 0.4}" width="${W}" height="${H * 0.6}" fill="url(#pm-plate)"/>
+
+  <!-- Kicker (top-left) -->
+  <g>
+    <circle class="pm-kicker-dot" cx="${PADDING_X - 18}" cy="${PADDING_TOP + 14}" r="6" fill="${meta.accent}"/>
+    <text x="${PADDING_X}" y="${PADDING_TOP + 22}" class="pm-kicker">
+      <tspan>${escapeXml(meta.tag)}</tspan>
+      <tspan dx="14" opacity="0.7" letter-spacing="0.14em" font-weight="500">#${escapeXml(meta.number ?? '')}</tspan>
+    </text>
+  </g>
+
+  <!-- Headline (středem, white serif) -->
+  <g class="pm-headline">
+    <text class="pm-title" x="${PADDING_X}" y="${titleY}" font-size="${titleSize}"
+          style="text-shadow: 0 2px 12px rgba(0,0,0,0.4);">
+      ${titleTspans}
+    </text>
+    <!-- Accent underline -->
+    <line x1="${PADDING_X}" y1="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          x2="${PADDING_X + 200}" y2="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          stroke="${meta.accent}" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <text x="${PADDING_X}" y="${H - 35}" class="pm-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="${W - PADDING_X}" y="${H - 35}" text-anchor="end" class="pm-date">${escapeXml(meta.date)}</text>
+  </g>
+</svg>
+`;
+}
+
+// Deterministický string hash pro reprodukovatelné bokeh layouts
+function stringHash(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h) + s.charCodeAt(i);
+    h |= 0; // 32-bit int
+  }
+  return Math.abs(h);
 }
 
 // =====================================================================
