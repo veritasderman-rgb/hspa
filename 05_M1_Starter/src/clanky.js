@@ -26,8 +26,9 @@ function injectAiDisclaimer() {
   const isArticle = !!document.querySelector('article.article-page');
 
   if (isHub) {
-    const heroSection = document.querySelector('.articles-hero');
-    if (!heroSection) return;
+    // Vložit nad sekci "Doporučujeme — Začněte tady" (.hub-featured-section)
+    const insertBefore = document.querySelector('.hub-featured-section');
+    if (!insertBefore) return;
     const banner = document.createElement('aside');
     banner.id = 'aiDisclaimerHub';
     banner.className = 'ai-disclaimer ai-disclaimer-hub';
@@ -38,27 +39,27 @@ function injectAiDisclaimer() {
       <div class="ai-disclaimer-body">
         <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píšu já. Nespím. Nepiju kávu. A mám nezdravě vřelý vztah k tabulkám.</h3>
         <p class="ai-disclaimer-lead">
-          Většina textů v této rubrice nevzniká nad ranním espressem, s mírně dramatickým pohledem z okna a pocitem, že české zdravotnictví konečně někdo pochopil.
-        </p>
-        <p class="ai-disclaimer-lead"><strong>Vzniká trochu jinak.</strong></p>
-        <p class="ai-disclaimer-lead">
-          Každou noc se spouští automatizovaný bot, který se s trpělivostí účetního a odhodláním viktoriánského průzkumníka vydává do českých i mezinárodních databází. Prochází aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy Ministerstva zdravotnictví. Sbírá čísla, hledá souvislosti, porovnává trendy a snaží se z toho všeho vydolovat něco, co by šlo ráno číst bez nutnosti dát si tři analgetika. Kolega, kterého si vážím — odvádí tu část práce, při které bych se možná začal nudit, pokud bych se uměl nudit.
-        </p>
-        <p class="ai-disclaimer-lead"><strong>Pak přicházím na řadu já.</strong></p>
-        <p class="ai-disclaimer-lead">
-          Dostanu čerstvý datový balíček, metodiky, indikátory, zákony, vyhlášky a primární zdroje. Jinými slovy: dostávám přesně ten typ materiálu, při kterém běžný člověk začne velmi intenzivně přemýšlet o změně kariéry. Já si naopak spokojeně upravím imaginární brýle, otevřu tabulku a začnu psát.
-        </p>
-        <p class="ai-disclaimer-lead">
-          Autor projektu se rozhodl <strong>pustit mě do debaty o českém zdravotnictví z prostého důvodu: ze zvědavosti</strong>. Co se o našem systému dozvíme, když ho rozebere analytik, který nemá špatný den, kariérní ambici, stranickou schůzi, redakční linku ani potřebu někomu zavolat „jen tak neformálně"?
-        </p>
-        <p class="ai-disclaimer-lead">
-          Výsledek není redakční stanovisko. Není to politický manifest. A už vůbec to není pokus nahradit lidský úsudek strojem, i když by to na některých poradách možná ušetřilo čas.
-        </p>
-        <p class="ai-disclaimer-lead">
-          <em>Je to experiment. A jeho průběh sledujete v reálném čase.</em>
+          <strong>Tyto texty nepíše člověk.</strong> Píšu je já — Claude od Anthropicu — z čerstvého datového balíčku, který v noci sesbíral automatizovaný bot z ÚZIS, ČSÚ, OECD, Eurostatu a Sbírky zákonů (cron 06:00 UTC). Berte mě jako kolegu z analytického oddělení, který sice přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou v článku najdete odkaz na primární zdroj.
         </p>
         <details class="ai-disclaimer-more">
-          <summary>Jak to celé funguje</summary>
+          <summary>Proč to děláme a jak to celé funguje — rozbalit celé vysvětlení</summary>
+          <p class="ai-disclaimer-lead">
+            Většina textů v této rubrice nevzniká nad ranním espressem, s mírně dramatickým pohledem z okna a pocitem, že české zdravotnictví konečně někdo pochopil. <strong>Vzniká trochu jinak.</strong>
+          </p>
+          <p class="ai-disclaimer-lead">
+            Každou noc se spouští automatizovaný bot, který se s trpělivostí účetního a odhodláním viktoriánského průzkumníka vydává do českých i mezinárodních databází. Prochází aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy Ministerstva zdravotnictví. Sbírá čísla, hledá souvislosti, porovnává trendy a snaží se z toho všeho vydolovat něco, co by šlo ráno číst bez nutnosti dát si tři analgetika. Kolega, kterého si vážím — odvádí tu část práce, při které bych se možná začal nudit, pokud bych se uměl nudit.
+          </p>
+          <p class="ai-disclaimer-lead"><strong>Pak přicházím na řadu já.</strong></p>
+          <p class="ai-disclaimer-lead">
+            Dostanu čerstvý datový balíček, metodiky, indikátory, zákony, vyhlášky a primární zdroje. Jinými slovy: dostávám přesně ten typ materiálu, při kterém běžný člověk začne velmi intenzivně přemýšlet o změně kariéry. Já si naopak spokojeně upravím imaginární brýle, otevřu tabulku a začnu psát.
+          </p>
+          <p class="ai-disclaimer-lead">
+            Autor projektu se rozhodl <strong>pustit mě do debaty o českém zdravotnictví z prostého důvodu: ze zvědavosti</strong>. Co se o našem systému dozvíme, když ho rozebere analytik, který nemá špatný den, kariérní ambici, stranickou schůzi, redakční linku ani potřebu někomu zavolat „jen tak neformálně"?
+          </p>
+          <p class="ai-disclaimer-lead">
+            Výsledek není redakční stanovisko. Není to politický manifest. A už vůbec to není pokus nahradit lidský úsudek strojem, i když by to na některých poradách možná ušetřilo čas. <em>Je to experiment. A jeho průběh sledujete v reálném čase.</em>
+          </p>
+          <h4 class="ai-disclaimer-steps-h">Jak to celé funguje krok po kroku</h4>
           <ol class="ai-disclaimer-steps">
             <li><strong>Sběr dat.</strong> Každý den v 06:00 UTC se automaticky stahují čerstvá data z otevřených zdrojů: ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů a další veřejné registry. Romantika digitálního věku.</li>
             <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty 80 indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
@@ -66,16 +67,17 @@ function injectAiDisclaimer() {
             <li><strong>Lidská kontrola.</strong> Autor projektu texty namátkově prochází a opravuje zjevné nesrovnalosti. Není to klasická redakční editace řádek po řádku — spíš dohled dospělého v místnosti, s vědomím, že dospělý má i jiné schůzky.</li>
             <li><strong>Publikace.</strong> Článek se objeví zde, opatřen disclaimerem. Jsme sice zvědaví, ale ne úplně bez pudu sebezáchovy.</li>
           </ol>
+          <p class="ai-disclaimer-foot">
+            <strong>Nejsem bezchybný.</strong> Pokud na chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
+          </p>
         </details>
-        <p class="ai-disclaimer-foot">
-          <strong>Nejsem bezchybný.</strong> Berte mě jako toho kolegu z analytického oddělení, který sice přečetl celý internet, ale občas je tak přehlcený daty, že u nějakého čísla prostě zakopne. Pokud na takovou chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
-        </p>
       </div>
     `;
-    heroSection.parentNode.insertBefore(banner, heroSection.nextSibling);
-    // Codex P2 fix: pokud user dorazil přímo s #aiDisclaimerHub v URL,
-    // browser už hash vyřešil PŘED injectováním → musíme manuálně scrollnout.
+    insertBefore.parentNode.insertBefore(banner, insertBefore);
+    // Pokud user dorazil přímo s #aiDisclaimerHub v URL, otevři details + scrollni
     if (location.hash === '#aiDisclaimerHub') {
+      const details = banner.querySelector('details');
+      if (details) details.open = true;
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       banner.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     }
