@@ -1,13 +1,17 @@
 // Bootstrap stránek sekce Články: úvodní listing i jednotlivé články.
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, loadGlossaryTerms } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
+import { enhanceArticleToc } from './article-toc.js';
+import { enhanceInlineGlossary } from './glossary-inline.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
 populateWaffles();
 enhanceArticleVisuals();
 injectAiDisclaimer();
+enhanceArticleToc(); // bezpečné: na hub stránce neudělá nic (chybí .article-page)
+loadGlossaryTerms().then(terms => enhanceInlineGlossary(terms)).catch(() => {});
 loadAndRenderArticles();
 
 /**
