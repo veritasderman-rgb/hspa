@@ -4,6 +4,7 @@
 
 import './analytics.js';
 import { renderFooter, renderModuleNav } from './page-shared.js';
+import { enhanceArticleVisuals } from './article-visuals.js';
 
 if (typeof window !== 'undefined') renderModuleNav('indicators');
 
@@ -257,11 +258,33 @@ export function trendArrow(ind) {
 function updateScorecard(visible) {
   const counts = { good: 0, warn: 0, bad: 0, neutral: 0 };
   for (const ind of visible) counts[ind.signal] = (counts[ind.signal] || 0) + 1;
-  document.getElementById('scTotal').textContent = visible.length;
-  document.getElementById('scGood').textContent = counts.good;
-  document.getElementById('scWarn').textContent = counts.warn;
-  document.getElementById('scBad').textContent = counts.bad;
-  document.getElementById('scNeutral').textContent = counts.neutral;
+  // Set jak textContent (fallback bez JS animace) tak data-value pro enhanceCounters.
+  // Stagger 80ms mezi dlaždicemi přes data-duration tweak.
+  setCounterEl('scTotal', visible.length, { duration: 1200 });
+  setCounterEl('scGood', counts.good, { duration: 900 });
+  setCounterEl('scWarn', counts.warn, { duration: 1000 });
+  setCounterEl('scBad', counts.bad, { duration: 1100 });
+  setCounterEl('scNeutral', counts.neutral, { duration: 800 });
+  // Re-enhance po každém updateScorecard (idempotentní díky data-av-init clear).
+  enhanceArticleVisuals();
+}
+
+/**
+ * Nastaví counter element: data-value pro animaci + textContent jako '0' (start anim).
+ * Vynutí re-enhancement vyčištěním data-av-init flagu.
+ */
+function setCounterEl(id, val, { duration = 1200, decimals = 0, prefix = '', suffix = '' } = {}) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('av-counter');
+  el.dataset.value = String(val);
+  el.dataset.duration = String(duration);
+  if (decimals) el.dataset.decimals = String(decimals);
+  if (prefix) el.dataset.prefix = prefix;
+  if (suffix) el.dataset.suffix = suffix;
+  delete el.dataset.avInit; // re-enhance
+  delete el.dataset.avTarget;
+  el.textContent = '0';
 }
 
 // ====== EDITORIAL HERO STORY ======
@@ -324,7 +347,7 @@ function renderEditorialHero() {
 
     const statsEl = document.getElementById('edHeroStats');
     if (statsEl && heroPicks.length) {
-      statsEl.innerHTML = heroPicks.map(function (p) {
+      statsEl.innerHTML = heroPicks.map(function (p, i) {
         const bench = p.ind.benchmark || {};
         const benchVal = bench.oecd != null ? bench.oecd : bench.eu;
         const benchLabel = bench.oecd != null ? 'OECD' : (bench.eu != null ? 'EU' : '');
@@ -332,12 +355,21 @@ function renderEditorialHero() {
         const gap = gapText(p.ind.value, benchVal, p.ind.direction);
         const unit = escapeHtmlInner(p.ind.unit || '');
         const url = 'indicator.html?id=' + encodeURIComponent(p.ind.id);
+        // Detekce desetinného počtu pro animaci (např. 7,7 → decimals=1; 79 → 0)
+        const num = Number(p.ind.value);
+        const decimals = Number.isFinite(num) && (num % 1 !== 0) ? 1 : 0;
+        const duration = 1000 + i * 150; // stagger 150ms mezi kartami
+        const counterAttrs = Number.isFinite(num)
+          ? 'class="av-counter" data-value="' + num + '" data-decimals="' + decimals + '" data-duration="' + duration + '"'
+          : '';
         return '<a class="ed-stat" href="' + url + '">'
-          + '<div class="ed-stat-num"><span class="signal-dot ' + escapeHtmlInner(p.ind.signal || '') + '" aria-hidden="true"></span>' + escapeHtmlInner(fmt(p.ind.value)) + '<span class="ed-stat-unit">' + unit + '</span></div>'
+          + '<div class="ed-stat-num"><span class="signal-dot ' + escapeHtmlInner(p.ind.signal || '') + '" aria-hidden="true"></span><span ' + counterAttrs + '>' + escapeHtmlInner(fmt(p.ind.value)) + '</span><span class="ed-stat-unit">' + unit + '</span></div>'
           + '<div class="ed-stat-lbl">' + escapeHtmlInner(p.label) + '</div>'
           + '<div class="ed-stat-meta">' + escapeHtmlInner(benchText) + (gap ? ' · ' + escapeHtmlInner(gap) : '') + '</div>'
           + '</a>';
       }).join('');
+      // Trigger animace pro nově vložené .av-counter
+      enhanceArticleVisuals();
     }
 
     // ed-stories ("Tento týden v datech") a ed-areas (4 oblasti) byly přesunuty:
@@ -379,18 +411,28 @@ function renderDimensionsIndex() {
       ? Math.round((stats.good * 100 + stats.warn * 50) / scoreable)
       : null;
     const num = String(i + 1).padStart(2, '0');
-    const num100 = score != null ? `${score}<span class="ed-dim-score-unit">/100</span>` : '—';
+    // Stagger animace: každá dimenze má delay 100ms; score se animuje 0→N
+    const duration = 1000 + i * 100;
+    const scoreHtml = score != null
+      ? `<span class="av-counter" data-value="${score}" data-duration="${duration}">0</span><span class="ed-dim-score-unit">/100</span>`
+      : '—';
     const palette = `--dim-color: ${d.color}`;
+    // Bar fill: render width:0, JS později nastaví target width při intersection
     return `
       <a class="ed-dim" style="${palette}" href="#indicatorsSection" data-dim="${escapeHtmlInner(d.id)}" title="${escapeHtmlInner(d.description)}">
         <div class="ed-dim-num">${num}</div>
         <div class="ed-dim-name">${escapeHtmlInner(d.label)}</div>
-        <div class="ed-dim-score">${num100}</div>
+        <div class="ed-dim-score">${scoreHtml}</div>
         <div class="ed-dim-meta">z 100 · ${stats.total} ukazatel${stats.total === 1 ? '' : (stats.total < 5 ? 'y' : 'ů')}</div>
-        <div class="ed-dim-bar"><span class="ed-dim-bar-fill" style="width: ${score || 0}%"></span></div>
+        <div class="ed-dim-bar"><span class="ed-dim-bar-fill ed-dim-bar-anim" style="width: 0%" data-target-width="${score || 0}"></span></div>
       </a>
     `;
   }).join('');
+
+  // Anim. bar fillu při intersection (jednoznačně oddělené od counter animace)
+  enhanceDimensionBars(grid);
+  // Anim. score countup
+  enhanceArticleVisuals();
 
   // Klik na dimension → scroll do indikátorů + nastav filtr
   grid.querySelectorAll('.ed-dim').forEach(el => {
@@ -407,6 +449,42 @@ function renderDimensionsIndex() {
       section?.scrollIntoView({ behavior: 'smooth' });
     });
   });
+}
+
+/**
+ * Animuje width bar fillu (.ed-dim-bar-anim) z 0% na data-target-width při
+ * vstupu do viewportu. Respektuje prefers-reduced-motion. Idempotent přes
+ * data-av-init flag (sdílený s enhanceCounters).
+ */
+function enhanceDimensionBars(scope) {
+  const bars = scope.querySelectorAll('.ed-dim-bar-anim:not([data-av-init])');
+  if (bars.length === 0) return;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+    bars.forEach(b => {
+      b.style.width = (b.dataset.targetWidth || '0') + '%';
+      b.dataset.avInit = '1';
+    });
+    return;
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.targetWidth, 10) || 0;
+      // Stagger podle indexu mezi sourozenci (visuální vlna zleva doprava)
+      const siblings = Array.from(el.closest('.ed-dims-grid').querySelectorAll('.ed-dim-bar-anim'));
+      const idx = siblings.indexOf(el);
+      const delay = idx * 80;
+      setTimeout(() => {
+        el.style.transition = 'width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        el.style.width = target + '%';
+      }, delay);
+      el.dataset.avInit = '1';
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => obs.observe(b));
 }
 
 // ====== 12 NEJHŮŘE HODNOCENÝCH ======
@@ -1309,7 +1387,47 @@ function wireUp() {
   try { loadAndRenderRegions(); } catch (err) { console.error('regions render failed:', err); }
   try { renderFinanceDonut(); } catch (err) { console.error('finance donut failed:', err); }
   try { loadAndRenderHomeArticles(); } catch (err) { console.error('home articles failed:', err); }
+  // Animace statických .av-counter elementů v index.html (hero skóre, donut center,
+  // finance tiles) + bar fillů ve finance tiles. Spuštěno po všech renderech aby
+  // se animace navázaly i na elementy přidané JS-em.
+  try { enhanceArticleVisuals(); } catch (err) { console.error('av enhance failed:', err); }
+  try { enhanceFinanceTileFills(document); } catch (err) { console.error('finance tile fill failed:', err); }
 })();
+
+/**
+ * Animuje width finance tile fill barů (.finance-tile-fill) z 0% na data-target-width
+ * při vstupu do viewportu. Respektuje prefers-reduced-motion.
+ */
+function enhanceFinanceTileFills(scope) {
+  const fills = scope.querySelectorAll('.finance-tile-fill:not([data-av-init])');
+  if (fills.length === 0) return;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+    fills.forEach(b => {
+      b.style.width = (b.dataset.targetWidth || '0') + '%';
+      b.dataset.avInit = '1';
+    });
+    return;
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseFloat(el.dataset.targetWidth) || 0;
+      // Stagger podle pozice v rámci .finance-tiles
+      const siblings = Array.from(el.closest('.finance-tiles').querySelectorAll('.finance-tile-fill'));
+      const idx = siblings.indexOf(el);
+      const delay = idx * 100;
+      setTimeout(() => {
+        el.style.transition = 'width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        el.style.width = target + '%';
+      }, delay);
+      el.dataset.avInit = '1';
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.3 });
+  fills.forEach(b => obs.observe(b));
+}
 
 /**
  * Render donut grafu „Kam jdou peníze" v sekci finance-section. Data jsou
