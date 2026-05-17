@@ -278,9 +278,34 @@ Vlož HTML komentář s audit YAML mezi `<head>` a `<meta charset>`:
 -->
 ```
 
-### Krok 3.4 — Aktualizace data/articles.json
+### Krok 3.4 — Aktualizace data/articles.json (a publikační fronta)
 
-Přidej nový záznam (na začátek pole `articles`):
+**Default chování: nový článek jde na konec publikační fronty.** Nikdy nepublikuj
+automaticky stejným dnem, kdy běží routine — fronta drží denní kadenci a redakce
+si ji udržuje předvídatelnou.
+
+Najdi `next_slot` jako maximum `scheduled_for` v `data/articles.json` přes všechny
+záznamy s `published: false` + 1 kalendářní den. Pokud žádný takový záznam
+neexistuje, použij dnešní datum + 1 den. (Snippet, který agent musí spustit
+před zápisem nového záznamu:)
+
+```bash
+python3 -c "
+import json, datetime
+d = json.load(open('05_M1_Starter/data/articles.json'))
+sched = [a['scheduled_for'] for a in d['articles']
+         if a.get('published') is False and a.get('scheduled_for')]
+if sched:
+    last = max(datetime.date.fromisoformat(s) for s in sched)
+    next_slot = (last + datetime.timedelta(days=1)).isoformat()
+else:
+    next_slot = (datetime.date.today() + datetime.timedelta(days=1)).isoformat()
+print('next publikační slot:', next_slot)
+"
+```
+
+Přidej nový záznam (na začátek pole `articles` — JSON pořadí je insertion-order,
+frontend stejně sortuje podle `date`):
 
 ```json
 {
@@ -288,7 +313,9 @@ Přidej nový záznam (na začátek pole `articles`):
   "slug": "clanek-{slug}.html",
   "number": "{N+1}",
   "tag": "{Sekce}",
-  "date": "YYYY-MM-DD",
+  "date": "{next_slot}",
+  "published": false,
+  "scheduled_for": "{next_slot}",
   "title": "{Headline}",
   "perex": "{Perex z deck}",
   "linked_indicators": ["id1", "id2"],
@@ -297,17 +324,26 @@ Přidej nový záznam (na začátek pole `articles`):
 }
 ```
 
-**Nový článek vznikne vždy jako `"published": false`** — to je nepřekročitelné pravidlo manual-approval policy (vizte fáze 5 a sekci „Technické požadavky"). Frontend (`src/clanky.js`) filtruje `a.published !== false`, takže článek bez tohoto flagu jde rovnou do produkce. Proto **VŽDY** přidej:
+**Konvence dat napříč souborem článku:**
 
-```json
-{
-  ...
-  "published": false,
-  "scheduled_for": "YYYY-MM-DD"
-}
-```
+| Datum kde | Hodnota | Co znamená |
+|---|---|---|
+| `data/articles.json` → `date` | `{next_slot}` | plánovaná publikace (= konec fronty) |
+| `data/articles.json` → `scheduled_for` | `{next_slot}` | totéž |
+| `<meta property="article:published_time">` v HTML | `{next_slot}` | SEO/OG plánovaná publikace |
+| `.article-meta-date` viditelný v hlavičce | `{next_slot}` slovy | např. „10. června 2026" |
+| audit YAML komentář `created_at:` | dnešní datum (kdy routine běžela) | nezávislé, kdy článek vznikl |
+| audit YAML komentář `last_reviewed:` | dnešní datum | nezávislé |
+| `discovery/discovery-YYYY-MM-DD.md` filename | dnešní datum | discovery report patří k dnešnímu běhu |
 
-Flag `"published": false` smí odebrat **výhradně redakce** ručně po schválení (viz fáze 5 / PR popis). Auto-publikaci agent nikdy nezpůsobí.
+**Výjimky, kdy nepoužít konec fronty:**
+
+- Vyloženě reaktivní článek (kauza, která vyžaduje okamžitou reakci) — pak musí
+  být v routing-{date}.md explicitně zdůvodněno a článek zařazen na **zítřek**
+  (ne dnešek — fronta i tehdy zůstává nedotčená do následujícího dne, aby
+  redakce stihla schválit).
+- `published: true` (okamžitá publikace) se v denní rutině **nepoužívá** vůbec.
+  Vše prochází `review-pending` přes ruční schválení redakce.
 
 ---
 
