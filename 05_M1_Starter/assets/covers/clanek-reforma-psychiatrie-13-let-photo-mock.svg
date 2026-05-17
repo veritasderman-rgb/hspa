@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Reforma psychiatrie po třinácti letech: co dotáhla a co padá s každou změnou vlády. Bilance Petra Winklera">
+  <defs>
+    <style>
+      .pm-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: rgba(255,245,234,0.95); }
+      .pm-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #fff5ea; letter-spacing: -0.5px; }
+      .pm-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: rgba(255,245,234,0.95); }
+      .pm-brand em { font-style: italic; font-weight: 400; }
+      .pm-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: rgba(255,245,234,0.7); }
+      
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .pm-bokeh { animation: pmFloat 8s ease-in-out infinite; }
+      .pm-bokeh-1 { animation-delay: 0s; }
+      .pm-bokeh-2 { animation-delay: -2s; animation-duration: 11s; }
+      .pm-bokeh-3 { animation-delay: -4s; animation-duration: 9s; }
+      .pm-bokeh-4 { animation-delay: -1s; animation-duration: 13s; }
+      .pm-bokeh-5 { animation-delay: -3s; animation-duration: 10s; }
+      .pm-bokeh-6 { animation-delay: -5s; animation-duration: 14s; }
+      .pm-headline { animation: pmFadeUp 0.9s ease-out 0.3s both; }
+      .pm-kicker-dot { animation: pulse 3s ease-in-out 1s infinite; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pm-bokeh, .pm-headline, .pm-kicker-dot { animation: none !important; }
+    }
+    @keyframes pmFloat {
+      0%,100% { transform: translate(0,0); }
+      33% { transform: translate(12px,-18px); }
+      66% { transform: translate(-10px,14px); }
+    }
+    @keyframes pmFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+  
+    </style>
+
+    <!-- Hlavní gradient pozadí (dark → mid → dark, atmosférický) -->
+    <radialGradient id="pm-bg" cx="35%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="#392c54" stop-opacity="1"/>
+      <stop offset="60%" stop-color="#211a31" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#1f1a14" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Vignette overlay -->
+    <radialGradient id="pm-vignette" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#1f1a14" stop-opacity="0"/>
+      <stop offset="65%" stop-color="#1f1a14" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#1f1a14" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- Text plate gradient (zatemnění pod textem pro čitelnost) -->
+    <linearGradient id="pm-plate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1f1a14" stop-opacity="0.05"/>
+      <stop offset="50%" stop-color="#1f1a14" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1f1a14" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <!-- Gaussian blur filter pro bokeh -->
+    <filter id="pm-blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+
+    <!-- Subtle film grain texture -->
+    <filter id="pm-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="92"/>
+      <feColorMatrix values="0 0 0 0 1
+                             0 0 0 0 1
+                             0 0 0 0 1
+                             0 0 0 0.08 0"/>
+    </filter>
+  </defs>
+
+  <!-- Background gradient -->
+  <rect width="1200" height="630" fill="url(#pm-bg)"/>
+
+  <!-- Bokeh light orbs -->
+  <g>
+    <circle class="pm-bokeh pm-bokeh-1" cx="1104" cy="478.8" r="144"
+            fill="#5f4a8c" opacity="0.3" filter="url(#pm-blur)"/>
+    <circle class="pm-bokeh pm-bokeh-2" cx="348" cy="548.1" r="123"
+            fill="#7c60b6" opacity="0.37" filter="url(#pm-blur)"/>
+    <circle class="pm-bokeh pm-bokeh-3" cx="792" cy="617.4" r="102"
+            fill="#5f4a8c" opacity="0.44" filter="url(#pm-blur)"/>
+    <circle class="pm-bokeh pm-bokeh-4" cx="36" cy="56.699999999999996" r="81"
+            fill="#7c60b6" opacity="0.21" filter="url(#pm-blur)"/>
+    <circle class="pm-bokeh pm-bokeh-5" cx="480" cy="126" r="60"
+            fill="#5f4a8c" opacity="0.28" filter="url(#pm-blur)"/>
+    <circle class="pm-bokeh pm-bokeh-6" cx="924" cy="195.29999999999998" r="179"
+            fill="#7c60b6" opacity="0.35" filter="url(#pm-blur)"/></g>
+
+  <!-- Vignette -->
+  <rect width="1200" height="630" fill="url(#pm-vignette)"/>
+
+  <!-- Film grain overlay -->
+  <rect width="1200" height="630" filter="url(#pm-grain)" opacity="0.4"/>
+
+  <!-- Text plate (zatemnění od středu dolů pro čitelnost) -->
+  <rect y="252" width="1200" height="378" fill="url(#pm-plate)"/>
+
+  <!-- Kicker (top-left) -->
+  <g>
+    <circle class="pm-kicker-dot" cx="62" cy="84" r="6" fill="#5f4a8c"/>
+    <text x="80" y="92" class="pm-kicker">
+      <tspan>Duševní zdraví</tspan>
+      <tspan dx="14" opacity="0.7" letter-spacing="0.14em" font-weight="500">#18</tspan>
+    </text>
+  </g>
+
+  <!-- Headline (středem, white serif) -->
+  <g class="pm-headline">
+    <text class="pm-title" x="80" y="250" font-size="36"
+          style="text-shadow: 0 2px 12px rgba(0,0,0,0.4);">
+      <tspan x="80" dy="0">Reforma psychiatrie po</tspan><tspan x="80" dy="38">třinácti letech: co</tspan><tspan x="80" dy="38">dotáhla a co padá s</tspan><tspan x="80" dy="38">každou změnou vlády.</tspan><tspan x="80" dy="38">Bilance Petra Winklera</tspan>
+    </text>
+    <!-- Accent underline -->
+    <line x1="80" y1="430"
+          x2="280" y2="430"
+          stroke="#5f4a8c" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <text x="80" y="595" class="pm-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="1120" y="595" text-anchor="end" class="pm-date">7. května 2026</text>
+  </g>
+</svg>
