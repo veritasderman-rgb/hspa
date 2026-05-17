@@ -128,12 +128,15 @@ async function loadAndRenderArticles() {
   const list = document.getElementById('articleList');
   if (!list) return;
 
-  let articles;
+  let articles, allEntries;
   try {
     const res = await fetch('data/articles.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    articles = (data.articles ?? [])
+    allEntries = (data.articles ?? []);
+    // Drafty (published === false) se v hubu nezobrazují ani nezapočítávají.
+    // Jakmile se článek publikuje (published-flag se odstraní), automaticky se zobrazí.
+    articles = allEntries
       .filter(a => a.published !== false)
       .sort((a, b) => {
         const da = new Date(a.date).getTime();
@@ -150,21 +153,62 @@ async function loadAndRenderArticles() {
     return;
   }
 
-  let activeTopic = 'all';
-  const empty = document.getElementById('articleListEmpty');
+  // === HUB komponenty (hero stats, featured, paths, matrix) ===
+  renderHubStats(articles, allEntries);
+  renderHubFeatured(articles);
+  renderHubPaths(articles);
+  renderHubMatrix(articles);
 
-  function render() {
-    const filtered = activeTopic === 'all'
+  // === Filtrovaný seznam s pagination + search ===
+  let activeTopic = 'all';
+  let searchQuery = '';
+  let pageSize = 12;
+  const empty = document.getElementById('articleListEmpty');
+  const controls = document.getElementById('hubListControls');
+  const moreBtn = document.getElementById('hubListMore');
+  const progressEl = document.getElementById('hubListProgress');
+
+  function applyFilters() {
+    let filtered = activeTopic === 'all'
       ? articles
       : articles.filter(a => Array.isArray(a.topics) && a.topics.includes(activeTopic));
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(a => {
+        const hay = `${a.title ?? ''} ${a.perex ?? ''} ${a.tag ?? ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    return filtered;
+  }
+
+  function render() {
+    const filtered = applyFilters();
 
     if (!filtered.length) {
       list.innerHTML = '';
       empty?.classList.remove('hidden');
+      controls?.classList.add('hidden');
       return;
     }
     empty?.classList.add('hidden');
-    list.innerHTML = filtered.map(renderItem).join('');
+
+    const visible = filtered.slice(0, pageSize);
+    list.innerHTML = visible.map(renderItem).join('');
+
+    // Pagination control
+    if (controls) {
+      if (filtered.length > pageSize) {
+        controls.classList.remove('hidden');
+        const remaining = filtered.length - pageSize;
+        const nextBatch = Math.min(12, remaining);
+        if (moreBtn) moreBtn.textContent = `Zobrazit dalších ${nextBatch} článků (${remaining} zbývá)`;
+        if (progressEl) progressEl.textContent = `${visible.length} / ${filtered.length}`;
+      } else {
+        controls.classList.add('hidden');
+        if (progressEl) progressEl.textContent = `${filtered.length} / ${filtered.length}`;
+      }
+    }
   }
 
   function renderItem(a) {
@@ -210,11 +254,47 @@ async function loadAndRenderArticles() {
   document.querySelectorAll('.topic-chip[data-topic]').forEach(btn => {
     btn.addEventListener('click', () => {
       activeTopic = btn.dataset.topic;
+      pageSize = 12; // reset pagination on filter change
       document.querySelectorAll('.topic-chip').forEach(b => b.classList.toggle('active', b === btn));
       render();
-      // Update URL hash for shareability
       const newHash = activeTopic === 'all' ? '' : `#topic=${encodeURIComponent(activeTopic)}`;
       history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+    });
+  });
+
+  // Wire "show more"
+  moreBtn?.addEventListener('click', () => {
+    pageSize += 12;
+    render();
+  });
+
+  // Wire search input
+  const searchInput = document.getElementById('hubSearch');
+  if (searchInput) {
+    let debounce;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => {
+        searchQuery = searchInput.value.trim();
+        pageSize = 12;
+        render();
+        // Scroll to list on first search keystroke
+        if (searchQuery && !searchInput.dataset.scrolled) {
+          searchInput.dataset.scrolled = '1';
+          document.querySelector('.article-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (!searchQuery) delete searchInput.dataset.scrolled;
+      }, 200);
+    });
+  }
+
+  // Wire matrix tile clicks → filter list
+  document.querySelectorAll('.hub-matrix-tile[data-topic]').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const topic = tile.dataset.topic;
+      const chip = document.querySelector(`.topic-chip[data-topic="${cssEscape(topic)}"]`);
+      if (chip) chip.click();
+      document.querySelector('.article-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
@@ -231,6 +311,200 @@ async function loadAndRenderArticles() {
 
   updateCounts();
   render();
+}
+
+// ============================================================================
+// HUB komponenty (hero stats, featured, curated paths, topic matrix)
+// ============================================================================
+
+/**
+ * Vyrenderuje animované corpus stats v hero sekci (publikované, v přípravě,
+ * odkazované indikátory, témata). Anim. počítadla zajistí enhanceArticleVisuals.
+ */
+function renderHubStats(published, allEntries) {
+  const stat = (id, val) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.dataset.value = String(val);
+    // Vynucení re-enhancement — counter mohl být enhanced s val=0 před fetchem.
+    delete el.dataset.avInit;
+    el.textContent = '0';
+  };
+  const unpublished = allEntries.filter(a => a.published === false).length;
+  const indicatorSet = new Set();
+  published.forEach(a => (a.linked_indicators ?? []).forEach(i => indicatorSet.add(i)));
+  const topicSet = new Set();
+  published.forEach(a => (a.topics ?? []).forEach(t => topicSet.add(t)));
+
+  stat('statPublished', published.length);
+  stat('statUpcoming', unpublished);
+  stat('statIndicators', indicatorSet.size);
+  stat('statTopics', topicSet.size);
+
+  // Re-enhance počítadla s aktuálními data-value (po vyčištění data-av-init)
+  enhanceArticleVisuals();
+}
+
+/**
+ * Vyrenderuje hero featured card (nejnovější článek) + 3 trending cards.
+ */
+function renderHubFeatured(articles) {
+  const featureEl = document.getElementById('hubFeature');
+  const trendingEl = document.getElementById('hubTrending');
+  if (!featureEl || !trendingEl) return;
+  if (!articles.length) {
+    featureEl.innerHTML = '<p class="hub-feature-loading">Žádné články k zobrazení.</p>';
+    trendingEl.innerHTML = '';
+    return;
+  }
+
+  const [feature, ...rest] = articles;
+  const trending = rest.slice(0, 3);
+
+  const featureTopics = (feature.topics ?? []).map(t =>
+    `<span class="hub-feature-topic">${TOPIC_LABELS[t] ?? esc(t)}</span>`
+  ).join('');
+
+  featureEl.innerHTML = `
+    <a href="${esc(feature.slug)}" class="hub-feature-link">
+      <div class="hub-feature-tag">${esc(feature.tag)} · nejnovější</div>
+      <h4 class="hub-feature-title">${esc(feature.title)}</h4>
+      <p class="hub-feature-perex">${esc(feature.perex ?? '')}</p>
+      <div class="hub-feature-foot">
+        <span class="hub-feature-date">${formatCzDate(feature.date)}</span>
+        ${featureTopics ? `<span class="hub-feature-topics">${featureTopics}</span>` : ''}
+        <span class="hub-feature-cta">Číst →</span>
+      </div>
+    </a>`;
+
+  trendingEl.innerHTML = trending.map(a => `
+    <a href="${esc(a.slug)}" class="hub-trending-card">
+      <span class="hub-trending-tag">${esc(a.tag)}</span>
+      <h5 class="hub-trending-title">${esc(a.title)}</h5>
+      <span class="hub-trending-date">${formatCzDate(a.date)}</span>
+    </a>`).join('');
+}
+
+/**
+ * Curated reading paths — manuálně sestavené tematické cesty.
+ * Každá cesta = label, perex, seznam slugs (filtrované proti dostupným článkům).
+ */
+const READING_PATHS = [
+  {
+    label: 'Reforma 2026',
+    color: 'good',
+    perex: 'Sada změn, které přišly s rokem 2026 — pohotovosti, novely zákonů, financování.',
+    slugs: [
+      'clanek-reforma-pohotovosti-290-2025.html',
+      'clanek-financovani-segmenty-2026.html',
+      'clanek-deficit-pojisteni-2026.html',
+      'clanek-uhradova-vyhlaska.html',
+      'clanek-novela-paliativni-pece.html',
+      'clanek-novela-elektronizace-2026.html',
+    ],
+  },
+  {
+    label: 'Onkologie v Česku',
+    color: 'bad',
+    perex: 'Od screeningu po centralizaci péče — kde český systém vede a kde zaostává.',
+    slugs: [
+      'clanek-rakovina-tlusteho-streva.html',
+      'clanek-mamograf-rakovina-prsu.html',
+      'clanek-cervix-hpv.html',
+      'clanek-screening-rakoviny-plic.html',
+      'clanek-prezit-rakoviny.html',
+      'clanek-onkologicky-koordinator-2026.html',
+    ],
+  },
+  {
+    label: 'Životní styl: kde Česko zaostává',
+    color: 'warn',
+    perex: 'Čtyři rizikové faktory, ve kterých jsme stabilně nad průměrem OECD.',
+    slugs: [
+      'clanek-alkohol-spotreba.html',
+      'clanek-koureni.html',
+      'clanek-bmi-obezita.html',
+      'clanek-pohyb.html',
+    ],
+  },
+  {
+    label: 'Nárok pojištěnce a vize reformy',
+    color: 'neutral',
+    perex: 'Trilogie o tom, co dnes nárokujete + autorský manifest reformy.',
+    slugs: [
+      'clanek-narok-pojistence-1-co-to-je.html',
+      'clanek-narok-pojistence-2-demograficky-tlak.html',
+      'clanek-narok-pojistence-3-co-s-tim.html',
+      'clanek-manifest-reforma-zdravotnictvi.html',
+    ],
+  },
+  {
+    label: 'Digitalizace zdravotnictví',
+    color: 'good',
+    perex: 'eHealth, EZKarta, EHDS, telemedicína — kde Česko stojí a kde EU tlačí.',
+    slugs: [
+      'clanek-ehealth.html',
+      'clanek-ezkarta-ehealth.html',
+      'clanek-ehds-evropsky-prostor-zdravotni-data.html',
+      'clanek-novela-elektronizace-2026.html',
+    ],
+  },
+];
+
+function renderHubPaths(articles) {
+  const wrap = document.getElementById('hubPaths');
+  if (!wrap) return;
+  const bySlug = new Map(articles.map(a => [a.slug, a]));
+
+  const html = READING_PATHS.map(path => {
+    const found = path.slugs.map(s => bySlug.get(s)).filter(Boolean);
+    if (!found.length) return '';
+    const items = found.map(a => `
+      <li class="hub-path-item">
+        <a href="${esc(a.slug)}">
+          <span class="hub-path-item-tag">${esc(a.tag)}</span>
+          <span class="hub-path-item-title">${esc(a.title)}</span>
+        </a>
+      </li>`).join('');
+    return `
+      <article class="hub-path-card hub-path-card-${esc(path.color)}">
+        <h4 class="hub-path-h">${esc(path.label)}</h4>
+        <p class="hub-path-perex">${esc(path.perex)}</p>
+        <ol class="hub-path-list">${items}</ol>
+        <span class="hub-path-count">${found.length} článků</span>
+      </article>`;
+  }).filter(Boolean).join('');
+
+  wrap.innerHTML = html || '<p class="hub-paths-loading">Žádné cesty zatím nelze sestavit.</p>';
+}
+
+/**
+ * Vyrenderuje matrix dlaždic — 8 témat s počtem článků.
+ * Velikost dlaždice (CSS class) reflektuje počet článků.
+ */
+function renderHubMatrix(articles) {
+  const wrap = document.getElementById('hubMatrix');
+  if (!wrap) return;
+  const topics = Object.keys(TOPIC_LABELS);
+  const counts = new Map(topics.map(t => [t, 0]));
+  articles.forEach(a => (a.topics ?? []).forEach(t => {
+    if (counts.has(t)) counts.set(t, counts.get(t) + 1);
+  }));
+  const max = Math.max(...counts.values(), 1);
+
+  const html = topics.map(t => {
+    const n = counts.get(t);
+    const ratio = n / max;
+    let sizeClass = 'hub-matrix-tile-s';
+    if (ratio >= 0.66) sizeClass = 'hub-matrix-tile-l';
+    else if (ratio >= 0.33) sizeClass = 'hub-matrix-tile-m';
+    return `
+      <button type="button" class="hub-matrix-tile ${sizeClass}" data-topic="${esc(t)}" aria-label="${esc(TOPIC_LABELS[t])} — ${n} článků">
+        <span class="hub-matrix-tile-label">${esc(TOPIC_LABELS[t])}</span>
+        <span class="hub-matrix-tile-count">${n}</span>
+      </button>`;
+  }).join('');
+  wrap.innerHTML = html;
 }
 
 const TOPIC_LABELS = {
