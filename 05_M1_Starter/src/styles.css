@@ -8575,3 +8575,131 @@ body.mobile-nav-open .scroll-top-btn {
   .hub-list-controls { flex-direction: column; align-items: stretch; }
   .hub-list-progress { text-align: center; }
 }
+
+/* ============================================================================
+ * HSPA-PREHLED — sekce mezer v datech (.hspa-gap-section)
+ * ============================================================================ */
+
+.hspa-gap-section {
+  padding: 32px 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 32px;
+}
+
+.hspa-gap-details {
+  margin: 24px 0 0;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 0;
+}
+.hspa-gap-summary {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 44px;
+  user-select: none;
+}
+.hspa-gap-summary::-webkit-details-marker { display: none; }
+.hspa-gap-summary::after {
+  content: '+';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--ink-mut);
+  line-height: 1;
+}
+.hspa-gap-details[open] > .hspa-gap-summary::after { content: '−'; }
+.hspa-gap-summary:hover { background: var(--bg); }
+
+.hspa-gap-details[open] > .hspa-gap-summary {
+  border-bottom: 1px solid var(--rule);
+}
+
+.hspa-gap-details > *:not(summary) {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.hspa-gap-details > *:last-child { padding-bottom: 20px; }
+
+.hspa-gap-h {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 20px 0 8px;
+}
+.hspa-gap-note {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 8px 0 12px;
+}
+
+.hspa-gap-table-wrap {
+  overflow-x: auto;
+  margin: 12px 0 20px;
+}
+.hspa-gap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.hspa-gap-table th,
+.hspa-gap-table td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.hspa-gap-table th {
+  font-weight: 600;
+  color: var(--ink-mut);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+.hspa-gap-table td.num,
+.hspa-gap-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  min-width: 100px;
+  position: relative;
+}
+.hspa-gap-bar {
+  display: inline-block;
+  height: 6px;
+  background: var(--ink-mut);
+  vertical-align: middle;
+  margin-right: 8px;
+  border-radius: 0;
+  max-width: 100px;
+}
+.hspa-gap-bar-good { background: #2a7a3a; }
+.hspa-gap-bar-warn { background: #b87a00; }
+.hspa-gap-bar-bad { background: #b03a3a; }
+.hspa-gap-pct {
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 38px;
+  display: inline-block;
+}
+
+.hspa-gap-list {
+  margin: 12px 0 20px;
+  padding-left: 22px;
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.hspa-gap-list li { margin-bottom: 8px; }
+.hspa-gap-list strong { color: var(--ink); }

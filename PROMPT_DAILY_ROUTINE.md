@@ -56,7 +56,7 @@ Co je **zakázáno**:
 | 8 | **Eurostat — hlth\_\* datasety** | ec.europa.eu/eurostat/web/health/database | Nová vlna SILC, HLY, mortalita |
 | 9 | **WHO Europe** | who.int/europe/news-room | Nové guidelines, Health Statistics |
 | 10 | **SÚKL — výpadky léčiv** | sukl.cz/farmaceuticky-trh/registr-vypadku-leciv | Nové výpadky, kritická léčiva |
-| 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw?o=9 | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
+| 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw (bez `?o=` — vždy aktuální volební období; archiv `o=9`, `o=10`…) | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
 | 12 | **Sbírka zákonů** | zakonyprolidi.cz/cs/aktualne | Nové normy v gesci MZ ČR |
 | 13 | **NÚKIB** | nukib.cz/cs/aktualni-informace | Bezpečnostní incidenty zdravotnictví, NIS2 implementace |
 | 14 | **Recenzovaná literatura ČR** | PubMed query: "Czech Republic" + healthcare keyword | Nové domácí studie |
