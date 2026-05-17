@@ -8703,3 +8703,76 @@ body.mobile-nav-open .scroll-top-btn {
 }
 .hspa-gap-list li { margin-bottom: 8px; }
 .hspa-gap-list strong { color: var(--ink); }
+
+/* ============================================================================
+ * HOME PAGE — animované počítadla a fill bary (úroveň B)
+ * ============================================================================ */
+
+/* Tabular nums pro všechna .av-counter — cifry netancují při tikání animace */
+.av-counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scorecard čísla — vrátí tabular-nums a zarovnání */
+.sc-num.av-counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero score (scoreExplainVal) — silný strong nedotčen, jen tabular */
+#scoreExplainVal.av-counter {
+  display: inline-block;
+  min-width: 1.4em;
+  text-align: right;
+}
+
+/* Hero stats — počítadla v ed-stat-num inheritují velikost */
+.ed-stat-num .av-counter {
+  font: inherit;
+  color: inherit;
+}
+
+/* Dimensions bar — smooth transition handle */
+.ed-dim-bar-fill.ed-dim-bar-anim {
+  display: block;
+  /* width set inline; transition aplikováno JS přes setTimeout */
+}
+
+/* Finance tile fill — full-width bar v pozadí tile, vykreslí % */
+.finance-tile {
+  overflow: hidden;
+}
+.finance-tile-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background: currentColor;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+.finance-tile-luzkova .finance-tile-fill { background: #B45F06; opacity: 0.6; }
+.finance-tile-ambul   .finance-tile-fill { background: #38761D; opacity: 0.6; }
+.finance-tile-leky    .finance-tile-fill { background: #0B5394; opacity: 0.6; }
+.finance-tile-other   .finance-tile-fill { background: #999;    opacity: 0.5; }
+/* Ostatní obsah tile nad fill barem */
+.finance-tile > *:not(.finance-tile-fill) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Finance center value tabular */
+.finance-chart-center-value .av-counter {
+  font: inherit;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Respekt prefers-reduced-motion na všechny home animace */
+@media (prefers-reduced-motion: reduce) {
+  .ed-dim-bar-fill.ed-dim-bar-anim,
+  .finance-tile-fill {
+    transition: none !important;
+  }
+}
