@@ -36,6 +36,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
+import { renderIllustration, TAG_ILLUSTRATIONS } from './cover-illustrations.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
@@ -306,6 +307,7 @@ const STYLE_RENDERERS = {
   'bold': renderBoldSvg,      // Time Magazine — velký color block + huge typo
   'data-hero': renderDataHeroSvg, // FT/Bloomberg — viz dominuje, text vedle
   'pull-quote': renderPullQuoteSvg, // Velký stat + dramatická typo
+  'illustrated': renderIllustratedSvg, // Editorial ilustrace dominuje, text menší
 };
 
 // Helper: ztmaví barvu o ~20 % pro dark variantu (bold style)
@@ -682,6 +684,160 @@ function renderPullQuoteSvg(meta, { staticForPng = false } = {}) {
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X}" y="${H - 28}" text-anchor="end" class="pq-date">${escapeXml(meta.date)}</text>
+  </g>
+</svg>
+`;
+}
+
+// =====================================================================
+//  STYLE: ILLUSTRATED — editorial ilustrace dominuje
+// =====================================================================
+//
+// Levá strana 55 % = velká programmaticky generovaná ilustrace
+// (z cover-illustrations.js, vybráno dle cover_viz.illustration nebo tagu)
+// Pravá strana = kicker + headline (40px) + accent underline + brand
+// Žádné data viz panely — ilustrace nahrazuje grafy
+
+function renderIllustratedSvg(meta, { staticForPng = false } = {}) {
+  // Vyber ilustraci z explicit pole nebo z tag-based fallback
+  const illustrationType = meta.viz?.illustration
+    || TAG_ILLUSTRATIONS[meta.tag]
+    || 'circle-graph';
+
+  const illuX = 30;
+  const illuY = 90;
+  const illuW = Math.round(W * 0.5);
+  const illuH = H - illuY - 90;
+
+  const textX = illuX + illuW + 50;
+  const textW = W - textX - PADDING_X;
+
+  const titleLines = wrapTitle(meta.title, 20);
+  const titleSize = titleLines.length <= 2 ? 50 : titleLines.length === 3 ? 42 : titleLines.length === 4 ? 36 : 30;
+  const lineHeight = Math.round(titleSize * 1.06);
+  const titleBlockH = titleLines.length * lineHeight;
+  const titleY = Math.round((H - titleBlockH) / 2) - 20;
+
+  // Předej accent + box dimensions
+  const illuSvg = renderIllustration(illustrationType, {
+    accent: meta.accent,
+    ink: INK,
+    paper: PAPER,
+    x: illuX,
+    y: illuY,
+    width: illuW,
+    height: illuH,
+    data: meta.viz?.illustrationData || {},
+  });
+
+  const animStyles = staticForPng ? '' : `
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .illu-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: illuDrawIn 1.5s ease-out 0.3s forwards; }
+      .illu-line-1 { animation-delay: 0.5s; }
+      .illu-line-2 { animation-delay: 0.3s; }
+      .illu-gap { opacity: 0; animation: illuFade 0.8s ease-out 1.2s forwards; }
+      .illu-dot { transform-origin: center; animation: illuPop 0.4s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-dot-1 { animation-delay: 1.6s; }
+      .illu-dot-2 { animation-delay: 1.4s; }
+      .illu-gap-label { opacity: 0; animation: illuFade 0.6s ease-out 2.0s forwards; }
+      .illu-label-grp { opacity: 0; animation: illuFade 0.5s ease-out 1.8s forwards; }
+      .illu-coin { transform-origin: center; opacity: 0; animation: illuPop 0.4s cubic-bezier(.34,1.56,.64,1) both; }
+      ${Array.from({length: 14}, (_, i) => `.illu-coin-${i} { animation-delay: ${0.3 + i * 0.07}s; }`).join('\n      ')}
+      .illu-check { stroke-dasharray: 300; stroke-dashoffset: 300; animation: illuDrawIn 0.8s ease-out 0.5s forwards; }
+      .illu-pulse-line { stroke-dasharray: 1500; stroke-dashoffset: 1500; animation: illuDrawIn 1.8s ease-out 0.3s forwards; }
+      .illu-pulse-peak { transform-origin: center; animation: illuPop 0.4s ease-out 1.6s both, pulse 2s ease-in-out 2s infinite; }
+      .illu-net-line { stroke-dasharray: 200; stroke-dashoffset: 200; animation: illuDrawIn 0.6s ease-out forwards; }
+      ${Array.from({length: 6}, (_, i) => `.illu-net-line-${i} { animation-delay: ${0.4 + i * 0.1}s; }`).join('\n      ')}
+      .illu-net-node { transform-origin: center; opacity: 0; animation: illuPop 0.4s ease-out both; }
+      ${Array.from({length: 6}, (_, i) => `.illu-net-node-${i} { animation-delay: ${0.9 + i * 0.08}s; }`).join('\n      ')}
+      .illu-net-hub { animation: illuPop 0.5s cubic-bezier(.34,1.56,.64,1) 0.3s both; }
+      .illu-block { transform-origin: center; opacity: 0; animation: illuPop 0.45s cubic-bezier(.34,1.56,.64,1) both; }
+      ${[[0,0],[1,0],[1,1],[2,0],[2,1],[2,2]].map(([r,i], idx) => `.illu-block-${r}-${i} { animation-delay: ${0.4 + idx * 0.08}s; }`).join('\n      ')}
+      .illu-trend-line { stroke-dasharray: 800; stroke-dashoffset: 800; animation: illuDrawIn 1.4s ease-out 0.3s forwards; }
+      .illu-trend-arrow { stroke-dasharray: 60; stroke-dashoffset: 60; animation: illuDrawIn 0.4s ease-out 1.5s forwards; }
+      .illu-trend-dot { transform-origin: center; opacity: 0; animation: illuPop 0.35s cubic-bezier(.34,1.56,.64,1) both; }
+      .illu-trend-dot-1 { animation-delay: 0.6s; }
+      .illu-trend-dot-2 { animation-delay: 0.9s; }
+      .illu-trend-dot-3 { animation-delay: 1.2s; }
+      .illu-ring { transform-origin: center; opacity: 0; animation: illuFadeRing 0.6s ease-out both; }
+      .illu-ring-0 { animation-delay: 0.5s; }
+      .illu-ring-1 { animation-delay: 0.4s; }
+      .illu-ring-2 { animation-delay: 0.3s; }
+      .illu-ring-3 { animation-delay: 0.2s; }
+      .illu-ring-4 { animation-delay: 0.1s; }
+      .il-headline { animation: illuSlideIn 0.7s ease-out 0.5s both; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .illu-line, .illu-gap, .illu-dot, .illu-gap-label, .illu-label-grp, .illu-coin, .illu-check, .illu-pulse-line, .illu-pulse-peak, .illu-net-line, .illu-net-node, .illu-net-hub, .illu-block, .illu-trend-line, .illu-trend-arrow, .illu-trend-dot, .illu-ring, .il-headline { animation: none !important; opacity: 1; }
+      .illu-line, .illu-check, .illu-pulse-line, .illu-net-line, .illu-trend-line, .illu-trend-arrow { stroke-dashoffset: 0; }
+    }
+    @keyframes illuDrawIn { to { stroke-dashoffset: 0; } }
+    @keyframes illuFade { to { opacity: 1; } }
+    @keyframes illuFadeRing { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.85); } }
+    @keyframes illuPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes illuSlideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); opacity: 0.6; } }
+  `;
+
+  const titleTspans = titleLines.map((line, i) =>
+    `<tspan x="${textX}" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(meta.title)}">
+  <defs>
+    <style>
+      .il-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; fill: ${meta.accent}; }
+      .il-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: ${INK}; letter-spacing: -0.4px; }
+      .il-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 700; fill: ${INK}; }
+      .il-date { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; fill: ${INK_MUT}; }
+      .il-caption { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; fill: ${INK_MUT}; font-style: italic; }
+      ${animStyles}
+    </style>
+    <pattern id="il-grain" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="40" r="0.7" fill="${INK}" opacity="0.05"/>
+      <circle cx="100" cy="90" r="0.6" fill="${INK}" opacity="0.04"/>
+      <circle cx="60" cy="130" r="0.8" fill="${INK}" opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <!-- Cream background -->
+  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+  <rect width="${W}" height="${H}" fill="url(#il-grain)"/>
+
+  <!-- Top thin rule -->
+  <line x1="${PADDING_X}" y1="${PADDING_TOP - 10}" x2="${W - PADDING_X}" y2="${PADDING_TOP - 10}" stroke="${INK}" stroke-width="1.5"/>
+
+  <!-- Kicker (top-left) -->
+  <g>
+    <circle cx="${PADDING_X - 18}" cy="${PADDING_TOP + 14}" r="5" fill="${meta.accent}"/>
+    <text x="${PADDING_X}" y="${PADDING_TOP + 22}" class="il-kicker">
+      <tspan>${escapeXml(meta.tag)}</tspan>
+      <tspan dx="14" fill="${INK_MUT}" letter-spacing="0.1em" font-weight="500">#${escapeXml(meta.number ?? '')}</tspan>
+    </text>
+  </g>
+
+  <!-- ILUSTRACE (levá polovina) -->
+  ${illuSvg}
+
+  <!-- Headline (pravá polovina) -->
+  <g class="il-headline">
+    <text class="il-title" x="${textX}" y="${titleY}" font-size="${titleSize}">
+      ${titleTspans}
+    </text>
+    <line x1="${textX}" y1="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          x2="${textX + 100}" y2="${titleY + (titleLines.length - 1) * lineHeight + 28}"
+          stroke="${meta.accent}" stroke-width="4" stroke-linecap="round"/>
+    ${meta.viz?.caption ? `<text x="${textX}" y="${titleY + (titleLines.length - 1) * lineHeight + 58}" class="il-caption">${escapeXml(meta.viz.caption)}</text>` : ''}
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <line x1="${PADDING_X}" y1="${H - 60}" x2="${W - PADDING_X}" y2="${H - 60}" stroke="${RULE}" stroke-width="1"/>
+    <text x="${PADDING_X}" y="${H - 28}" class="il-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="${W - PADDING_X}" y="${H - 28}" text-anchor="end" class="il-date">${escapeXml(meta.date)}</text>
   </g>
 </svg>
 `;
