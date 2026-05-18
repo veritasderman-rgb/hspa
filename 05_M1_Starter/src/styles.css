@@ -3439,6 +3439,47 @@ ul.md-enum > li > strong:first-child {
 }
 .aud-btn:hover { color: var(--ink); border-color: var(--ink-mut); }
 .aud-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.aud-btn:focus-visible { outline: 2px solid var(--accent, var(--red)); outline-offset: 2px; }
+
+/* =================================================================
+   Freshness banner — pod masthead-strip pokud data > 7 dní stará
+   nebo live_ratio < 30 %.
+   ================================================================= */
+.freshness-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.4;
+  border-bottom: 1px solid var(--rule);
+}
+.freshness-banner-stale { background: #fff4d6; color: #5a4400; border-bottom-color: #e6c87a; }
+.freshness-banner-warn { background: #eef4ff; color: #1a3c70; border-bottom-color: #b9cce6; }
+.freshness-banner-icon { font-size: 16px; flex: 0 0 auto; }
+.freshness-banner-text { flex: 1; }
+.freshness-banner-text a { color: inherit; text-decoration: underline; font-weight: 600; }
+.freshness-banner-close {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.freshness-banner-close:hover { opacity: 1; }
+.freshness-banner-close:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (max-width: 640px) {
+  .freshness-banner { padding: 10px 14px; font-size: 12px; gap: 8px; }
+  .freshness-banner-close { width: 24px; height: 24px; font-size: 14px; }
+}
 
 /* Filter bar — visible by default */
 .filter-bar {
