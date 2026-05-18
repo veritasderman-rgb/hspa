@@ -3,7 +3,7 @@
 // a renderuje list karet témat nebo detail jednoho tématu (z URL ?id=...).
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
 
 // Indikátory zobrazené v hero stats
 const HERO_INDICATOR_IDS = [
@@ -312,9 +312,7 @@ async function init() {
   } catch (err) {
     console.error('prevention load failed:', err);
     const listView = document.getElementById('listView');
-    if (listView) {
-      listView.innerHTML = `<p class="status error">Nepodařilo se načíst data: ${escapeHtml(err.message)}.</p>`;
-    }
+    if (listView) listView.innerHTML = renderErrorState('Nepodařilo se načíst data prevence.', err);
   }
 }
 

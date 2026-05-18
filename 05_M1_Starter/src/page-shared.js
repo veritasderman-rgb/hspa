@@ -470,6 +470,27 @@ export function wrapAcronyms(html, terms) {
 }
 
 /**
+ * Vrátí HTML pro error stav s „Zkusit znovu" tlačítkem (reload).
+ * Použít v catch handlerech místo statického `.status error` divu.
+ *
+ *   container.innerHTML = renderErrorState('Nepodařilo se načíst strategie.', err);
+ *
+ * B-12 z BACKLOGu — graceful degradation per async fetch.
+ */
+export function renderErrorState(message, error) {
+  const detail = error?.message ? escapeHtml(error.message) : '';
+  return `
+    <div class="empty-state" role="alert">
+      <p class="empty-state-msg">${escapeHtml(message)}</p>
+      ${detail ? `<p class="empty-state-detail"><code>${detail}</code></p>` : ''}
+      <div class="empty-state-actions">
+        <button class="empty-state-btn" type="button" onclick="window.location.reload()">Zkusit znovu</button>
+        <a class="empty-state-btn empty-state-btn-sec" href="o-projektu.html">Co dělat dál</a>
+      </div>
+    </div>`;
+}
+
+/**
  * Escape HTML pro injekci do innerHTML.
  */
 export function escapeHtml(s) {
