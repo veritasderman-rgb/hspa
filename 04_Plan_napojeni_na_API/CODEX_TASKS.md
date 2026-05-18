@@ -1,5 +1,17 @@
 # Zadání pro Codex — task briefingy pro Zdravé Česko
 
+> ⚠️ **ARCHIVED** (18. 5. 2026) — tento dokument je **nahrazený** sjednoceným prioritizovaným backlogem v [`BACKLOG.md`](../BACKLOG.md). Položky byly přemapovány:
+>
+> - Task A (Accessibility) → **B-03** v BACKLOG
+> - Task B (Performance) → **B-06**
+> - Task C (Anglická lokalizace) → **B-16**
+> - Task D (Mobile-first) → **B-02** (kombinováno s planUXDesign Sprint 1.1)
+> - Task E (UX audit Strategie) → **B-17**
+>
+> Detailní zadání každého tasku zde zůstává jako reference, ale **status a prioritizace se sledují v `BACKLOG.md`**.
+
+---
+
 **Účel:** připravená zadání pro [Codex agenta](https://chatgpt.com/codex) na konkrétní úlohy nad mergeed `main`. Každý task je **self-contained** — Codex ho zvládne bez přístupu k této konverzaci nebo plánovacím dokumentům.
 
 **Aktuální stav repa (květen 2026):**
