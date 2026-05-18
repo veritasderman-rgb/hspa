@@ -2444,6 +2444,115 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 .ed-stat-static:hover { padding-left: 0; color: var(--ink); }
 .ed-stat-static:hover .ed-stat-num { color: var(--ink); }
 
+/* =================================================================
+   P3.6 · Schéma „pák" — 3 pilíře (Prevence / Akutní / Následná)
+   držící strop „Délka života ve zdraví". Klikatelné SVG na jak-funguje.html.
+   ================================================================= */
+.leverage-section {
+  padding: 32px 0 40px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.leverage-lead {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  max-width: 720px;
+  margin: 12px 0 24px;
+}
+.leverage-figure {
+  margin: 0;
+  padding: 20px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+}
+.leverage-svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--sans);
+}
+/* Strop = HALE */
+.leverage-roof {
+  fill: var(--ink);
+  transition: fill 0.15s;
+}
+.leverage-roof-link:hover .leverage-roof { fill: var(--red, var(--accent, #c8102e)); }
+.leverage-roof-text {
+  fill: var(--paper);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+/* Pilíře */
+.leverage-pillar-bg {
+  fill: var(--paper);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  transition: fill 0.15s, stroke 0.15s;
+}
+.leverage-pillar a:hover .leverage-pillar-bg,
+.leverage-pillar a:focus .leverage-pillar-bg {
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.leverage-pillar a:focus { outline: none; }
+.leverage-pillar a:focus-visible .leverage-pillar-bg {
+  stroke: var(--red, var(--accent, #c8102e));
+  stroke-width: 2.5;
+}
+.leverage-pillar-h {
+  fill: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+}
+.leverage-pillar-sub {
+  fill: var(--ink-mut);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+}
+.leverage-pillar-list {
+  fill: var(--ink);
+  font-size: 12px;
+}
+.leverage-pillar-foot {
+  fill: var(--ink-mut);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+/* Barevné akcenty per pilíř (top border) */
+.leverage-pillar-prev .leverage-pillar-bg { border-top: 4px solid var(--good, #0a8a3a); }
+.leverage-pillar-acute .leverage-pillar-bg { border-top: 4px solid var(--warn, #d97706); }
+.leverage-pillar-follow .leverage-pillar-bg { border-top: 4px solid var(--info, #2563eb); }
+/* Podlaha */
+.leverage-floor {
+  fill: var(--ink-mut);
+}
+.leverage-floor-text {
+  fill: var(--paper);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.leverage-caption {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 16px 4px 0;
+}
+.leverage-caption a { color: var(--red, var(--accent, #c8102e)); }
+@media (max-width: 720px) {
+  .leverage-svg { font-size: 9px; }
+  .leverage-figure { padding: 12px; }
+}
+
 /* Sekce „Jak to spolu souvisí" — 4 kroky/mechanismy
    Vizuální jazyk: velká serif čísla, výrazné odsazení, arrow chip jako
    editorial subheading. Karty jsou klikatelné <a> s paper2 hover. */
