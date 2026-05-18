@@ -14,13 +14,14 @@ Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podk
 | `03_Prezentace/` | Stakeholder prezentace PPTX |
 | `04_Plan_napojeni_na_API/` | Plány a dokumentace milníků |
 | `05_M1_Starter/` | **Aktivní dashboard** — veškerý kód je zde |
+| `docs/` | Dokumentace pro vývojáře (site-architecture, visual-components, data-model) |
 
 ## Rychlý start
 
 ```bash
 cd 05_M1_Starter
 npm install
-npm test          # 93 testů, vše musí projít
+npm test          # ~260 testů, vše musí projít
 npm run serve     # http://localhost:8080
 ```
 
@@ -28,21 +29,73 @@ npm run serve     # http://localhost:8080
 
 ```
 05_M1_Starter/
-├── index.html              ← Vstupní bod, fetchuje data/indicators.json
-├── src/
-│   ├── app.js              ← Veškerá frontend logika (ES module)
-│   └── styles.css          ← CSS včetně dark mode, print, a11y
+├── index.html                  ← Homepage (hub matrix, dimensions, finance, podcasts)
+├── clanky.html                 ← Hub všech článků (matrix + filtry)
+├── clanek-*.html               ← 65 článků (long-form journalism)
+├── hspa-prehled.html           ← HSPA 4 oblasti × domény (přehled indikátorů)
+├── tematicke-linie.html        ← 8 tematických linií (linie = sada článků)
+├── kraje.html                  ← Regionální dashboard (mapa krajů + tabulky)
+├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
+├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
+├── prevence.html               ← Vakcinace + screeningy
+├── strategie.html              ← Národní strategické dokumenty
+├── o-projektu.html             ← O projektu, metodika
+├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
+├── redakce.html                ← Redakční tým a procesy
+├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
+├── 404.html
+│
+├── src/                        ← Frontend ES modules (25 souborů, ~18 000 LOC)
+│   ├── app.js                  ← Homepage (hub matrix, dimensions, podcasts, ticker)
+│   ├── page-shared.js          ← Sdílené komponenty (nav, header, scroll)
+│   ├── clanky.js               ← Hub článků + auto-bootstrap AV pro clanek-*.html
+│   ├── article-visuals.js      ← AV designsystem (timeline, bar, table, flow, counter)
+│   ├── article-toc.js          ← Table of Contents na stránkách clanek-*.html
+│   ├── glossary-inline.js      ← Inline rozbalovací definice termínů v textu
+│   ├── glosar.js               ← Stránka glosáře (vyhledávání, abeceda)
+│   ├── hspa-prehled.js         ← HSPA matrix renderer
+│   ├── kraje.js + cz-map.js    ← Mapa krajů + krajský dashboard
+│   ├── pojistenci.js           ← OIS 11-47 dashboard
+│   ├── prevence.js             ← Prevence dashboard
+│   ├── strategies.js           ← Strategie + explainery
+│   ├── explainers.js           ← Explainery (samostatné kontextové texty)
+│   ├── explainer-policy-views.js, strategy-policy-views.js, strategy-links.js
+│   ├── indicator.js            ← Detail indikátoru (?id=...)
+│   ├── search.js               ← Globální fulltextové vyhledávání
+│   ├── themes.js               ← Tematické linie
+│   ├── redakce.js              ← Stránka redakce
+│   ├── site-stats.js           ← Statistika hodnocení článků a pokrytí
+│   ├── analytics.js            ← Plausible loader
+│   ├── schema.js               ← JSON-LD structured data
+│   └── styles.css              ← Veškeré CSS (~9 400 LOC, dark mode, print, a11y)
+│
 ├── data/
-│   ├── indicators.json     ← Datový kontrakt (generovaný ingest pipeline)
-│   └── regions.json        ← Krajská data (multi-dataset, v2 formát)
-├── indicators/             ← Metodické karty (1 JSON = 1 indikátor, 40 souborů)
+│   ├── indicators.json         ← Datový kontrakt HSPA (80 indikátorů)
+│   ├── articles.json           ← Metadata 65 článků (audit, topics, linked_indicators)
+│   ├── glossary.json           ← 110 termínů (definice, odkazy)
+│   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
+│   ├── themes.json             ← 8 tematických linií (mentální zdraví, prevence, …)
+│   ├── strategies.json         ← Národní strategické dokumenty
+│   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
+│   ├── prevention.json         ← Vakcinace + screeningy
+│   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
+│   ├── pojistenci-d5-*.json    ← OIS 11-47 (ZP × kraj × okres)
+│   ├── freshness.json          ← Stav čerstvosti dat na indikátor
+│   ├── cz-regions.geojson      ← GeoJSON krajů
+│   └── snapshot-YYYY-MM-DD.json ← Denní snapshoty datového kontraktu
+│
+├── indicators/                 ← Metodické karty (1 JSON = 1 indikátor, 80 souborů)
 ├── ingest/
-│   ├── run.js              ← Orchestrátor (spouštěn GitHub Actions)
-│   ├── transform.js        ← Harmonizace + výpočet signálů
-│   ├── fetchers/           ← ÚZIS, ČSÚ, OECD, Eurostat fetchery
-│   ├── lib/                ← HTTP, cache, JSON-stat, SDMX, CSV parsery
-│   └── mapping/            ← Mapping tabulky (OECD kódy, ÚZIS kódy)
-└── tests/                  ← 93 testů (node:test)
+│   ├── run.js                  ← Orchestrátor (spouštěn GitHub Actions)
+│   ├── transform.js            ← Harmonizace + výpočet signálů
+│   ├── transform_pojistenci_d5.js
+│   ├── validate*.js            ← Validátory pro indikátory, strategie, explainery, prevenci
+│   ├── verify-freshness.js     ← Detekce zastaralých dat
+│   ├── fetchers/               ← ÚZIS, ČSÚ, OECD, Eurostat, SÚKL fetchery
+│   ├── lib/                    ← HTTP, cache, JSON-stat, SDMX, CSV parsery
+│   └── mapping/                ← Mapping tabulky (OECD kódy, ÚZIS kódy)
+├── scripts/                    ← Pomocné skripty (generování thumbnails ap.)
+└── tests/                      ← ~260 testů (node:test), pokrývá frontend, fetchery, transform
 ```
 
 ## Datový tok
@@ -52,14 +105,14 @@ GitHub Actions (denně 06:00 UTC)
   ↓ npm run ingest
 ingest/fetchers/* → ingest/cache/*
   ↓ npm run transform
-data/indicators.json + data/snapshot-YYYYMMDD.json
+data/indicators.json + data/snapshot-YYYY-MM-DD.json
   ↓ git commit + push
 Vercel auto-deploy → CDN → uživatel
 ```
 
 ## Datový kontrakt (`data/indicators.json`)
 
-Frontend čte **pouze** tento soubor — nezná ÚZIS, ČSÚ ani OECD.
+Frontend čte **pouze** tento soubor pro indikátorová data — nezná ÚZIS, ČSÚ ani OECD.
 
 ```json
 {
@@ -74,7 +127,7 @@ Frontend čte **pouze** tento soubor — nezná ÚZIS, ČSÚ ani OECD.
     "value": 79.9,
     "unit": "let",
     "year": 2024,
-    "trend": [{"year": 2022, "value": 79.5}, ...],
+    "trend": [{"year": 2022, "value": 79.5}],
     "benchmark": {"oecd": 81.1, "eu": 80.9},
     "signal": "warn",             // good | warn | bad | neutral
     "direction": "higher_is_better",
@@ -84,31 +137,34 @@ Frontend čte **pouze** tento soubor — nezná ÚZIS, ČSÚ ani OECD.
 }
 ```
 
+Detailní schémata všech `data/*.json` viz [`docs/data-model.md`](../docs/data-model.md).
+
 ## Klíčové příkazy
 
 ```bash
-npm test                  # Spustí všechny testy
-npm run validate:data     # Validuje schéma data/indicators.json
+npm test                  # Spustí všechny testy (~260)
+npm run validate:all      # Validuje indicators + strategies + explainers + prevention
+npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
 npm run serve             # Lokální HTTP server
 ```
 
-## Stav milníků
+## Stav (květen 2026)
 
-| Milník | Stav |
+Milníky M1–M11 (datový pipeline, frontend, deploy, CI gate) jsou kompletní.
+Aktuálně běží další vlny vývoje:
+
+| Vlna | Stav |
 |---|---|
-| M1 · Setup + datový kontrakt | ✅ |
-| M2 · ÚZIS NRPZS fetcher | ✅ |
-| M3 · ČSÚ DataStat fetcher | ✅ |
-| M4 · OECD/Eurostat fetchery | ✅ |
-| M5 · Transform vrstva | ✅ |
-| M6 · Orchestrátor + cron | ✅ |
-| M7 · Frontend interaktivita | ✅ |
-| M8 · Verifikace (93 testů) | ✅ |
-| M9 · Vercel setup | ✅ |
-| M10 · Auto-deploy hook | ✅ |
-| M11 · Pre-deploy gate | ✅ |
+| M1–M11 · ingest pipeline + frontend + deploy | ✅ historie |
+| Articles audit & metadata systém | ✅ probíhá kontinuálně |
+| Article Visuals designsystem (AV) | ✅ |
+| Homepage redesign (hub matrix, dimensions, podcasts) | ✅ |
+| Glossary inline rozbalování | ✅ |
+| Tematické linie (8 linií) | ✅ |
+| Krajský dashboard + OIS 11-47 pojištěnci | ✅ |
+| Animation system (count-up, bar fill, IntersectionObserver) | ✅ |
 
 ## Pravidla pro rozšiřování
 
@@ -124,6 +180,12 @@ npm run serve             # Lokální HTTP server
 3. Zaregistruj v `ingest/run.js`
 4. Napiš test do `tests/{source}.test.js`
 
+### Přidat nový článek
+1. Vytvoř `clanek-{slug}.html` podle vzoru existujících článků (article-page layout)
+2. Přidej záznam do `data/articles.json` (slug, title, audit-status, topics, linked_indicators)
+3. Použij Article Visuals komponenty (`.av-*`) — viz `docs/visual-components.md`
+4. Pro draft uveď `"published": false` v `articles.json`
+
 ## Signal logika
 
 ```javascript
@@ -135,6 +197,20 @@ computeSignal(value, benchmark, direction, thresholds)
 // bad:     adjusted diff < -warn %
 // neutral: chybí benchmark nebo direction = context_dependent
 ```
+
+## Audit metadata (článků)
+
+Každý článek má v `data/articles.json` `audit-status`:
+
+| Status | Význam |
+|---|---|
+| `verified` | obsah ověřen redakcí, čísla zkontrolována, zdroje doplněny |
+| `review-pending` | nový/upravený článek, čeká na ověření |
+| `partial` | částečně ověřeno (např. text OK, čísla čekají na update) |
+| `flagged` | nalezený problém (chybné číslo, zastaralý zdroj) → blocking |
+| `draft-flagged` | rozpracovaný draft s otevřenými problémy |
+
+Banner se zobrazuje v hlavičce článku, pokud status není `verified`.
 
 ## Deploy (Vercel)
 
@@ -151,8 +227,17 @@ computeSignal(value, benchmark, direction, thresholds)
 - Cron maximálně jednou denně (rate limit ÚZIS)
 - Žádné API klíče — vše veřejné zdroje
 
+## Další dokumentace
+
+- [`docs/site-architecture.md`](../docs/site-architecture.md) — sitemap, per-page popis, CSS namespace průvodce, JS moduly map
+- [`docs/visual-components.md`](../docs/visual-components.md) — AV designsystem + ostatní UI komponenty (hub matrix, scorecard, finance donut…)
+- [`docs/data-model.md`](../docs/data-model.md) — schémata všech JSON datasetů a jejich vztahy
+- [`PROMPT_DAILY_ROUTINE.md`](./PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta
+- [`BACKLOG.md`](./BACKLOG.md), [`STATUS_AUDIT_2026-05-18.md`](./STATUS_AUDIT_2026-05-18.md) — aktuální backlog a stav
+
 ## Soubory pro ignorování při hledání
 
 - `ingest/cache/` — gitignored raw odpovědi ze zdrojů
 - `node_modules/`
 - `*.lock`
+- `data/snapshot-*.json` — denní snapshoty (historie datového kontraktu)
