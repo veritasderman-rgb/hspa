@@ -279,6 +279,19 @@
 | Hub redesign (magazine+atlas+library) | — | PR #316 |
 | Home page animations level B | — | PR #322 |
 | NotebookLM podcast card | — | PR #332 |
+| Site architecture + visual components + data model docs | — | PR #335 |
+| Home article cards padding | — | PR #336 |
+| **P1.7 Audience switch UI** | planUXDesign Sprint 2 | PR #337 |
+| **B-29 Freshness banner** | OPERATIONAL | PR #337 |
+| **A11y skip-link na všech stránkách** | planUXDesign Sprint 1 | PR #338 |
+| **B-07/B-08 propojení 52 článků s site-stats** | planUXDesign Sprint 2 | PR #339 |
+| **B-15 Verification filter „Pouze ověřené"** | 06_Plan P2.3 | PR #340 |
+| **P2.3 Verification badge per indikátor** | 06_Plan P2.3 | hotové už dříve (`.verif-badge` v app.js) |
+| **B-13 Behind-the-scenes** | planUXDesign Sprint 3.4 | hotové už dříve (`#behind-the-scenes` v o-projektu.html) |
+| **B-05 Reading progress + TOC** | planUXDesign Sprint 1.3 | hotové už dříve (`src/article-toc.js`) |
+| **B-10 Site-wide search** | planUXDesign Sprint 3.1 | hotové už dříve (`src/search.js`, `/` shortcut) |
+| **B-11 Glossary inline tooltips** | 06_Plan P2.1 | hotové už dříve (`src/glossary-inline.js`) |
+| **P3.9 Strategie accountability** | 06_Plan P3.9 | hotové už dříve (data + UI ve všech 33 strategiích) |
 
 ---
 
@@ -286,11 +299,11 @@
 
 | Sprint | Položky | Effort | Status |
 |---|---|---|---|
-| **Sprint 0** | B-01 testing infra | 0.5 dne | TODO |
-| **Sprint 1** (a11y + critical UX) | B-02, B-03, B-04, B-05, B-06 | 7.5 dne | TODO |
-| **Sprint 2** (data consistency + structure) | B-07, B-08, B-09, B-14, B-15 | 5.5 dne | TODO |
-| **Sprint 3** (polish + discovery) | B-10, B-11, B-12, B-13, B-29 | 4.5 dne | TODO |
-| **Backlog Q3+** | B-16 až B-28 | 12+ dní | — |
+| **Sprint 0** | B-01 testing infra | 0.5 dne | TODO (vyžaduje rozhodnutí o snapshot strategy) |
+| **Sprint 1** (a11y + critical UX) | B-02, B-03, B-04, B-05 ✅, B-06 | 4.5 dne | ČÁST DONE (B-05, skip-link); B-02/B-03/B-04/B-06 TODO |
+| **Sprint 2** (data consistency + structure) | B-07 ✅, B-08 ✅, B-09, B-14 ✅, B-15 ✅ | 1.5 dne | VĚTŠINA DONE (PR #337, #339, #340); B-09 taxonomy TODO (UX rozhodnutí) |
+| **Sprint 3** (polish + discovery) | B-10 ✅, B-11 ✅, B-12, B-13 ✅, B-29 ✅ | 1 den | VĚTŠINA DONE (PR #337); B-12 empty states audit TODO |
+| **Backlog Q3+** | B-16 (i18n) až B-28 | 12+ dní | — |
 
 ---
 

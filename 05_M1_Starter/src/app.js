@@ -24,6 +24,7 @@ let activeSort = 'default';
 let activeDomain = '';
 let activeAudience = 'public';
 let activeFramework = 'all';
+let activeVerifiedOnly = false;
 let activeDimension = 'all';
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 
@@ -201,12 +202,20 @@ async function loadData(bustCache = false) {
 
 const SIGNAL_ORDER = { bad: 0, warn: 1, neutral: 2, good: 3 };
 
-export function filterAndSort(indicators, { area, search, sort, domain, framework, dimension }) {
+export function filterAndSort(indicators, { area, search, sort, domain, framework, dimension, verifiedOnly }) {
   let xs = indicators;
   if (framework && framework !== 'all') xs = xs.filter(i => (i.framework || 'hspa') === framework);
   if (dimension && dimension !== 'all') xs = xs.filter(i => i.dimension === dimension);
   if (area && area !== 'all') xs = xs.filter(i => i.area === area);
   if (domain) xs = xs.filter(i => i.domain === domain);
+  if (verifiedOnly) {
+    xs = xs.filter(i => {
+      const v = i.verification_status
+        || (i.source?.origin === 'live' ? 'verified'
+          : i.source?.origin === 'seed' ? 'preliminary' : null);
+      return v === 'verified';
+    });
+  }
   if (search) {
     const q = search.toLowerCase();
     xs = xs.filter(i =>
@@ -509,7 +518,7 @@ function renderGrid() {
   grid.innerHTML = '';
   renderDomainFilter();
   renderTopCritical();
-  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain, framework: activeFramework, dimension: activeDimension });
+  const filtered = filterAndSort(allIndicators, { area: activeArea, search: activeSearch, sort: activeSort, domain: activeDomain, framework: activeFramework, dimension: activeDimension, verifiedOnly: activeVerifiedOnly });
 
   const badge = `${filtered.length} indikátor${filtered.length === 1 ? '' : (filtered.length < 5 ? 'y' : 'ů')}`;
   document.getElementById('gridBadge').textContent = badge;
@@ -1316,6 +1325,15 @@ function wireUp() {
       activeDimension = dimSel.value;
       renderGrid();
       writeHash();
+    });
+  }
+
+  // Verified-only toggle — skryje preliminary/illustrative indikátory
+  const verifChk = document.getElementById('verifiedOnlyFilter');
+  if (verifChk) {
+    verifChk.addEventListener('change', () => {
+      activeVerifiedOnly = verifChk.checked;
+      renderGrid();
     });
   }
 
