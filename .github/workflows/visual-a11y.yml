@@ -5,17 +5,26 @@ name: Visual + a11y regression
 #  - vizuální regrese > 1 % pixelů (toHaveScreenshot maxDiffPixelRatio)
 #  - nová critical/serious axe violation
 #
-# Aktualizace baseline po vědomé změně:
-#   npm run test:e2e -- --update-snapshots
-#   git add tests/e2e/visual.spec.js-snapshots && git commit
+# AKTIVACE: tato workflow je opt-in (workflow_dispatch only) dokud vlastník
+# projektu jednorázově nevygeneruje baseline snapshots lokálně a necommituje
+# devDeps + package-lock.json:
+#
+#   cd 05_M1_Starter
+#   npm install --save-dev @playwright/test @axe-core/playwright
+#   npx playwright install --with-deps chromium
+#   npx playwright test --config=playwright.config.js --update-snapshots
+#   git add package.json package-lock.json tests/e2e/*-snapshots && git commit
+#
+# Po tomto kroku odkomentovat `pull_request:` trigger níže pro auto-spuštění
+# na každý PR.
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - '05_M1_Starter/**'
-      - '.github/workflows/visual-a11y.yml'
   workflow_dispatch:
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - '05_M1_Starter/**'
+  #     - '.github/workflows/visual-a11y.yml'
 
 jobs:
   e2e:
@@ -41,7 +50,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run visual + a11y tests
-        run: npm run test:e2e
+        run: npx playwright test --config=playwright.config.js
         env:
           CI: 'true'
 
