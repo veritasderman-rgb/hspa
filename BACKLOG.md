@@ -292,18 +292,38 @@
 | **B-10 Site-wide search** | planUXDesign Sprint 3.1 | hotové už dříve (`src/search.js`, `/` shortcut) |
 | **B-11 Glossary inline tooltips** | 06_Plan P2.1 | hotové už dříve (`src/glossary-inline.js`) |
 | **P3.9 Strategie accountability** | 06_Plan P3.9 | hotové už dříve (data + UI ve všech 33 strategiích) |
+| **B-01 Playwright + axe testing infra (scaffold)** | planUXDesign Sprint 0 | PR #341 — scaffold + workflow opt-in; baseline vyžaduje vlastníka jednorázově lokálně |
+| **B-09 Taxonomy unification — návrh** | planUXDesign Sprint 2.2 | PR #341 (`docs/taxonomy-decision.md`); implementace fází 1–3 vyžaduje schválení vlastníkem |
+| **P3.6 SVG schéma pák** | 06_Plan P3.6 | PR #342 (jak-funguje.html `.leverage-section`) |
+| **B-03 a11y — aria-current + masthead aria-hidden fix** | planUXDesign Sprint 1 | PR #343 |
 
 ---
 
-## Roadmap (3 sprinty, ~16 dní effort)
+## Roadmap (stav 2026-05-18 po PR #335–#343)
 
 | Sprint | Položky | Effort | Status |
 |---|---|---|---|
-| **Sprint 0** | B-01 testing infra | 0.5 dne | TODO (vyžaduje rozhodnutí o snapshot strategy) |
-| **Sprint 1** (a11y + critical UX) | B-02, B-03, B-04, B-05 ✅, B-06 | 4.5 dne | ČÁST DONE (B-05, skip-link); B-02/B-03/B-04/B-06 TODO |
-| **Sprint 2** (data consistency + structure) | B-07 ✅, B-08 ✅, B-09, B-14 ✅, B-15 ✅ | 1.5 dne | VĚTŠINA DONE (PR #337, #339, #340); B-09 taxonomy TODO (UX rozhodnutí) |
-| **Sprint 3** (polish + discovery) | B-10 ✅, B-11 ✅, B-12, B-13 ✅, B-29 ✅ | 1 den | VĚTŠINA DONE (PR #337); B-12 empty states audit TODO |
-| **Backlog Q3+** | B-16 (i18n) až B-28 | 12+ dní | — |
+| **Sprint 0** | B-01 testing infra | 0.5 dne | ✅ scaffold (PR #341); baseline owner-action |
+| **Sprint 1** (a11y + critical UX) | B-02, B-03 ✅, B-04, B-05 ✅, B-06 | 4.5 dne | ✅ B-03/B-05/skip-link; B-02 (Lighthouse mobile), B-04 (hero), B-06 (perf) vyžadují měření |
+| **Sprint 2** (data consistency + structure) | B-07 ✅, B-08 ✅, B-09 ⚠️, B-14, B-15 ✅ | 1.5 dne | ✅ B-07/B-08/B-15; B-09 návrh (PR #341) čeká schválení; B-14 audience switch sám DONE (PR #337) |
+| **Sprint 3** (polish + discovery) | B-10 ✅, B-11 ✅, B-12, B-13 ✅, B-29 ✅ | 1 den | ✅ B-10/B-11/B-13/B-29; B-12 audit nice-to-have (error messages už existují) |
+| **Backlog Q3+** | B-16 (i18n) až B-28 | 12+ dní | viz „Co zbývá" níže |
+
+## Co reálně zbývá k akci (po PR #335–#343)
+
+Položky vyžadují buď **measuring environment** (skutečný browser + Lighthouse + axe-core), nebo **schválení designových rozhodnutí** vlastníkem projektu. Jejich dokončení není doručitelné jako CLI scriptovaná změna.
+
+| Položka | Důvod, proč nedoručeno | Co je potřeba |
+|---|---|---|
+| **B-01** baseline snapshots | sandbox bez Chrome binaries | Vlastník jednorázově lokálně: `npx playwright install --with-deps chromium && npx playwright test --update-snapshots && git add tests/e2e/*-snapshots`; pak odkomentovat `pull_request` trigger v `.github/workflows/visual-a11y.yml` |
+| **B-02** mobile audit Lighthouse ≥90 | vyžaduje skutečný browser + síťový profile | Vlastník: spustit Lighthouse mobile na deployed preview, identifikovat konkrétní fail body, oprava per komponenta |
+| **B-03** plný WCAG scan (0 critical) | vyžaduje axe-core na live preview | Aktivovat workflow z PR #341, projít fail, opravit per stránka |
+| **B-04** hero simplify (above-fold 1 příběh) | designové rozhodnutí | Vlastník: definovat „hlavní příběh dne" (manuálně nebo auto-rotující). Pak implementovat single hero block. |
+| **B-06** Chart.js lazy + perf | Lighthouse baseline + plán | Chart.js už je per-page (jen 2 stránky), ECharts taky (2 stránky). Další perf práce vyžaduje konkrétní LCP/CLS měření. |
+| **B-09 implementace fází 1–3** | UX rozhodnutí | Vlastník: schválit `docs/taxonomy-decision.md` (PR #341), pak fáze 1 (`linked_dimensions` v `articles.json`) lze udělat batch skriptem |
+| **B-12** retry buttons u error states | nice-to-have | Empty/error messages už jsou. Retry button je dlouhodobá kosmetika. |
+| **B-16** EN i18n | dlouhý projekt | Vyžaduje rozhodnutí o URL pattern, translation flow, fallback strategy. Není scaffold doručitelný v 1 PR. |
+| **B-17 až B-28** | Q3+ backlog | Žádný nereaguje na okamžitý uživatelský feedback. Plánovaný delší rozvoj. |
 
 ---
 
