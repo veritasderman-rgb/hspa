@@ -27,7 +27,7 @@ async function init() {
 }
 
 /**
- * Cíl OECD HSPA Czech Framework — 12 domén × počet indikátorů
+ * Cíl českého rámce HSPA (OECD/MZ ČR 2023) — 12 domén × počet indikátorů
  * Zdroj: Příloha D PDF (OECD 2023). Celkem 122 (některé domény mají sub-rozpad
  * — zde používáme top-level domain counts; součet ~118, zaokrouhleno na 122
  * dle deklarovaného totalu rámce).

@@ -572,8 +572,8 @@ function renderGrid() {
       : '';
 
     const fwBadge = ind.framework === 'monitoring'
-      ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec OECD HSPA">Monitoring</span>`
-      : `<span class="fw-badge fw-hspa" title="Indikátor z OECD HSPA Framework for Czech Republic">HSPA</span>`;
+      ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec českého rámce HSPA">Monitoring</span>`
+      : `<span class="fw-badge fw-hspa" title="Indikátor z HSPA Framework for the Czech Republic (OECD/MZ ČR 2023)">HSPA</span>`;
 
     card.innerHTML = `
       <div class="area-tag">${ind.area} · ${ind.domain}${fwBadge}${verifBadge}</div>
