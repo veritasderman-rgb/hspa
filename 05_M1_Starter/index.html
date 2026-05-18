@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HSPA Monitor – Hodnocení výkonnosti zdravotního systému ČR</title>
-<meta name="description" content="Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA. 80 indikátorů (71 striktní HSPA + 9 doplňkový monitoring vč. financování) s trendem, regionálním rozpadem a srovnáním s OECD a EU.">
+<meta name="description" content="Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA. 80 indikátorů (71 striktní HSPA + 9 doplňkový monitoring vč. financování) s trendem, regionálním rozpadem a srovnáním s OECD a EU." data-stat-meta="totalIndicators">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="HSPA Monitor – Hodnocení výkonnosti zdravotního systému ČR">
@@ -30,7 +30,7 @@
 
 <div class="masthead-strip">
   <span class="masthead-date" id="mastheadDate"></span>
-  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">64</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore" data-stat="score">—</strong> / 100 · OECD průměr <strong id="oecdScore" data-stat="oecdScore">71</strong></span>
 </div>
 
 <main id="content">
@@ -41,11 +41,14 @@
     <div class="ed-hero-content">
       <div class="ed-kicker">Stav českého zdravotnictví · <span id="edHeroDate"></span></div>
       <h2 class="ed-hero-headline" id="edHeroHeadline">Češi se dožívají vyššího věku, ale zdravějších let mají méně než průměr OECD.</h2>
-      <p class="ed-hero-hspa-line">HSPA měří, jestli zdravotnictví zlepšuje zdraví, je dostupné, kvalitní a finančně udržitelné. <a href="o-projektu.html">O projektu →</a></p>
-      <p class="score-explain">Skóre <strong class="av-counter" id="scoreExplainVal" data-value="64" data-duration="1500">0</strong>/100 je průměr ze <strong>71 striktních HSPA</strong> indikátorů (+ 9 doplňkový monitoring) — dobrý=100, ke sledování=50, kritický=0. <a href="o-projektu.html#metodika">Jak skóre vzniká →</a></p>
       <p class="ed-hero-lead">
         České zdravotnictví má jedny z nejvyšších kapacit v OECD — lékařů, nemocničních lůžek, technologií. Přesto v ukazatelích zdravotního stavu populace dlouhodobě zaostáváme: vysoká úmrtnost na nemoci oběhové soustavy, slabá účast v populačních screeningech a klesající proočkovanost drží český systém pod průměrem OECD téměř ve všech klíčových výsledkových ukazatelích.
       </p>
+      <p class="ed-hero-hspa-line">HSPA měří, jestli zdravotnictví zlepšuje zdraví, je dostupné, kvalitní a finančně udržitelné. <a href="o-projektu.html">O projektu →</a></p>
+      <div class="ed-hero-cta-row">
+        <a class="ed-hero-cta ed-hero-cta-primary" href="#indicatorsSection">Prozkoumat dashboard ↓</a>
+        <a class="ed-hero-cta ed-hero-cta-secondary" href="clanky.html">Číst články →</a>
+      </div>
     </div>
     <aside class="ed-hero-stats" id="edHeroStats" aria-label="Klíčová čísla"></aside>
   </section>
@@ -67,7 +70,7 @@
       Smyslem HSPA rámce není kritizovat, ani sestavovat žebříčky. Smyslem je <strong>nastavit zrcadlo</strong> — ukázat, kde český systém funguje dobře, kde zaostává a kde leží páky pro zlepšení.
     </p>
     <p class="ed-manifest-lead ed-manifest-disclosure">
-      <strong>Pozn. k rozsahu:</strong> Oficiální český HSPA rámec OECD definuje <strong>122 indikátorů</strong>, z nichž je <strong>71 dostupných</strong> v tomto dashboardu (zbývající jsou metodicky definované, ale jejich doplnění závisí na zveřejnění dat). Mimo HSPA rámec dashboard sleduje navíc <strong>9 doplňkových monitoring indikátorů</strong> (lékárny, výpadky léčiv, opioidní spotřeba, struktura financování ZP po segmentech) — celkem tedy 80 indikátorů. Filtr „Striktní HSPA / Doplňkový monitoring" nahoře v sekci indikátorů toto rozdělení zviditelňuje.
+      <strong>Pozn. k rozsahu:</strong> Oficiální český HSPA rámec OECD definuje <strong data-stat="frameworkTotal">122</strong> indikátorů, z nichž je <strong data-stat="hspaCount">71</strong> dostupných v tomto dashboardu (zbývající jsou metodicky definované, ale jejich doplnění závisí na zveřejnění dat). Mimo HSPA rámec dashboard sleduje navíc <strong data-stat="monitoringCount">9</strong> doplňkových monitoring indikátorů (lékárny, výpadky léčiv, opioidní spotřeba, struktura financování ZP po segmentech) — celkem tedy <strong data-stat="totalIndicators">80</strong> indikátorů. Filtr „Striktní HSPA / Doplňkový monitoring" nahoře v sekci indikátorů toto rozdělení zviditelňuje.
     </p>
     <div class="ed-narrative-grid">
       <article class="ed-narrative-step">
@@ -105,7 +108,7 @@
         <h4 class="ed-narrative-title">Jak poznáme zlepšení</h4>
         <p class="ed-narrative-desc">Zlepšení ukazatele o jeden procentní bod ročně znamená za dekádu tisíce zachráněných životů. HSPA dashboard sleduje trendy: jestli se číslo hýbe správným směrem, i když pomalu — nebo stagnuje. Reformy nemusí být revoluce.</p>
         <div class="ed-narrative-links">
-          <a href="#indicatorsSection">Prohlédnout 80 indikátorů →</a>
+          <a href="#indicatorsSection">Prohlédnout <span data-stat="totalIndicators">80</span> indikátorů →</a>
         </div>
       </article>
     </div>

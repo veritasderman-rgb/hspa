@@ -8718,13 +8718,6 @@ body.mobile-nav-open .scroll-top-btn {
   font-variant-numeric: tabular-nums;
 }
 
-/* Hero score (scoreExplainVal) — silný strong nedotčen, jen tabular */
-#scoreExplainVal.av-counter {
-  display: inline-block;
-  min-width: 1.4em;
-  text-align: right;
-}
-
 /* Hero stats — počítadla v ed-stat-num inheritují velikost */
 .ed-stat-num .av-counter {
   font: inherit;
@@ -8777,89 +8770,650 @@ body.mobile-nav-open .scroll-top-btn {
   }
 }
 
-/* ============================================================================
- * PODCAST CARD (hspa-prehled.html + o-projektu.html) — NotebookLM audio link
- * ============================================================================ */
+/* =================================================================
+   UX VYLEPŠENÍ (planUXDesign.md) — Sprint 1 + 2 + 3
+   ================================================================= */
 
-.hspa-podcast-section {
-  padding: 28px 0;
-  margin: 16px 0;
+/* iOS text-size auto-zoom prevention */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-.hspa-podcast-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 20px;
-  padding: 24px 28px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  border-left: 4px solid var(--accent);
-}
-
-.hspa-podcast-icon {
+/* =================================================================
+   Sprint 1.2 — Hero CTA buttons
+   ================================================================= */
+.ed-hero-cta-row {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.ed-hero-cta {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  color: var(--accent);
-  padding-top: 4px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid var(--ink);
+  transition: background 0.15s ease, transform 0.1s ease;
 }
-
-.hspa-podcast-body {
-  min-width: 0;
+.ed-hero-cta-primary {
+  background: var(--ink);
+  color: var(--paper);
 }
-
-.hspa-podcast-h {
-  font-family: var(--serif);
-  font-size: clamp(20px, 2.2vw, 26px);
-  font-weight: 700;
-  margin: 6px 0 10px;
+.ed-hero-cta-primary:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+.ed-hero-cta-secondary {
+  background: transparent;
   color: var(--ink);
-  line-height: 1.25;
+}
+.ed-hero-cta-secondary:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.hspa-podcast-lead {
+/* =================================================================
+   Sprint 1.3 — Reading progress + TOC
+   ================================================================= */
+.article-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  pointer-events: none;
+  z-index: 200;
+}
+.article-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--red);
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.article-toc {
+  margin: 12px 0 24px;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+.article-toc-details {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper2);
+  padding: 4px 0;
+}
+.article-toc-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  list-style: none;
+  min-height: 44px;
+}
+.article-toc-summary::-webkit-details-marker {
+  display: none;
+}
+.article-toc-summary::after {
+  content: '▾';
+  font-size: 12px;
+  color: var(--ink-mut);
+  transition: transform 0.15s ease;
+}
+.article-toc-details[open] .article-toc-summary::after {
+  transform: rotate(180deg);
+}
+.article-toc-title {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 12px;
+}
+.article-toc-count {
+  margin-left: auto;
+  margin-right: 8px;
+  font-size: 12px;
+  color: var(--ink-mut);
+  font-weight: 400;
+}
+.article-toc-list {
+  list-style: decimal;
+  padding: 6px 14px 12px 32px;
+  margin: 0;
+  color: var(--ink);
+}
+.article-toc-list li {
+  margin: 6px 0;
+  padding-left: 4px;
+}
+.article-toc-list a {
+  color: var(--ink);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  padding-left: 8px;
+  margin-left: -10px;
+  display: inline-block;
+  line-height: 1.4;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  min-height: 28px;
+}
+.article-toc-list a:hover {
+  color: var(--red);
+}
+.article-toc-list a.active {
+  color: var(--red);
+  border-left-color: var(--red);
+  font-weight: 600;
+}
+
+/* Desktop: sticky TOC v levém sloupci */
+@media (min-width: 1100px) {
+  .article-page {
+    position: relative;
+  }
+  .article-page .article-toc {
+    position: sticky;
+    top: 84px;
+    float: left;
+    width: 220px;
+    margin: 0 32px 24px -240px;
+  }
+  .article-page .article-toc-details {
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 0;
+  }
+  .article-page .article-toc-summary {
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* =================================================================
+   Sprint 3.2 — Inline glossary tooltips (.gloss-term)
+   ================================================================= */
+.gloss-term {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--ink-mut2);
+  text-underline-offset: 3px;
+  cursor: help;
+  font-style: normal;
+}
+.gloss-term:hover,
+.gloss-term:focus {
+  text-decoration-color: var(--red);
+  color: var(--red);
+}
+
+/* =================================================================
+   Sprint 1.1 — Mobile responsive fixes
+   ================================================================= */
+
+/* Topic filter chips: horizontal scroll na mobilu místo wrap */
+@media (max-width: 600px) {
+  .topic-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 6px;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    /* Fade indikátor že je možné scrollovat */
+    mask-image: linear-gradient(to right, transparent, #000 16px, #000 calc(100% - 32px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 16px, #000 calc(100% - 32px), transparent);
+  }
+  .topic-filters .topic-chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    min-height: 44px;
+  }
+}
+
+/* Hub matrix grid: 4×2 na <600px (místo 8 sloupců) */
+@media (max-width: 600px) {
+  .hub-matrix-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px;
+  }
+  .hub-matrix-tile {
+    min-height: 88px;
+  }
+}
+
+/* Scorecard tiles: 2+2+1 stack na <500px */
+@media (max-width: 500px) {
+  .scorecard {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .scorecard .sc-tile {
+    min-height: 64px;
+  }
+  .scorecard .sc-total {
+    grid-column: span 2; /* první tile na celou šířku */
+  }
+}
+
+/* Finance tiles: 1 sloupec na <600px */
+@media (max-width: 600px) {
+  .finance-tiles {
+    grid-template-columns: 1fr;
+  }
+  .finance-tile {
+    min-height: 72px;
+  }
+}
+
+/* Hero CTA row: full-width tlačítka na úzkém viewportu */
+@media (max-width: 480px) {
+  .ed-hero-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ed-hero-cta {
+    width: 100%;
+  }
+}
+
+/* Touch targets — module-nav anchors min 44px */
+.module-nav a,
+.module-tab,
+.mobile-nav-list a,
+.btn-export,
+.empty-state-btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Mobile padding overrides — žádný horizontal scroll na <480px */
+@media (max-width: 480px) {
+  header.topbar {
+    padding: 12px 16px 6px;
+  }
+}
+
+/* =================================================================
+   Sprint 3.4 — Behind the scenes (o-projektu.html)
+   ================================================================= */
+.behind-stages {
+  list-style: none;
+  counter-reset: behind;
+  margin: 16px 0;
+  padding: 0;
+}
+.behind-stages > li {
+  counter-increment: behind;
+  position: relative;
+  padding: 14px 16px 14px 56px;
+  margin-bottom: 8px;
+  background: var(--paper2);
+  border-left: 3px solid var(--rule2);
+  border-radius: 4px;
   font-family: var(--serif);
   font-size: 15px;
   line-height: 1.55;
-  color: var(--ink-mut);
-  margin: 0 0 14px;
 }
-
-.hspa-podcast-cta {
+.behind-stages > li::before {
+  content: counter(behind);
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  width: 30px;
+  height: 30px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: var(--ink);
-  color: var(--bg);
+  justify-content: center;
   font-family: var(--sans);
   font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 0;
-  transition: background 0.15s;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
-
-.hspa-podcast-cta:hover {
-  background: var(--accent);
-}
-
-.hspa-podcast-note {
+.behind-stages > li strong:first-child {
   font-family: var(--sans);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--red);
+}
+.behind-stages > li code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  background: var(--paper);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+}
+
+/* =================================================================
+   Sprint 3.1 — Site-wide search overlay (/, Cmd+K)
+   ================================================================= */
+.site-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10vh;
+}
+.site-search-overlay[hidden] {
+  display: none;
+}
+.site-search-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(31,26,20,0.5);
+  cursor: pointer;
+}
+.site-search-modal {
+  position: relative;
+  width: min(640px, 92vw);
+  max-height: 70vh;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 0 24px 48px -8px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--sans);
+}
+.site-search-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.site-search-icon {
+  font-size: 20px;
   color: var(--ink-mut);
-  margin: 14px 0 0;
-  padding-top: 12px;
-  border-top: 1px dashed var(--rule);
+  line-height: 1;
+}
+.site-search-input {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 16px;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  min-width: 0;
+  min-height: 32px;
+  outline: none;
+}
+.site-search-esc {
+  font-family: var(--sans);
+  font-size: 11px;
+  padding: 3px 6px;
+  border: 1px solid var(--rule2);
+  border-radius: 4px;
+  color: var(--ink-mut);
+  background: var(--paper2);
+}
+.site-search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+.site-search-section {
+  padding: 4px 0 10px;
+}
+.site-search-section-h {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  font-weight: 600;
+  padding: 8px 14px 4px;
+}
+.site-search-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-search-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  min-height: 44px;
+}
+.site-search-item.active {
+  background: var(--paper2);
+  border-left-color: var(--red);
+}
+.site-search-item-type {
+  flex: 0 0 auto;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 3px;
+  color: var(--paper);
+  background: var(--ink);
+  margin-top: 2px;
+  min-width: 60px;
+  text-align: center;
+}
+.site-search-item-type.type-article { background: var(--ink); }
+.site-search-item-type.type-indicator { background: #2c5a8a; }
+.site-search-item-type.type-glossary { background: var(--ink-mut); }
+.site-search-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.site-search-item-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.site-search-item-sub {
+  font-size: 12px;
+  color: var(--ink-mut);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.site-search-item mark {
+  background: rgba(184,54,30,0.18);
+  color: inherit;
+  padding: 0 1px;
+}
+.site-search-empty {
+  padding: 24px 14px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-mut);
+}
+.site-search-foot {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding: 8px 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 11px;
+  color: var(--ink-mut);
+}
+.site-search-foot kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  margin-right: 3px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  border: 1px solid var(--rule2);
+  border-radius: 3px;
+  background: var(--paper2);
+  vertical-align: 1px;
+}
+
+/* Site-search trigger button in module-nav */
+.site-search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper2);
+  border: 1px solid var(--rule2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mut);
+  cursor: pointer;
+  min-height: 36px;
+  transition: border-color 0.15s ease;
+}
+.site-search-trigger:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.site-search-trigger kbd {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  padding: 1px 4px;
+  border: 1px solid var(--rule2);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink-mut);
 }
 
 @media (max-width: 600px) {
-  .hspa-podcast-card {
-    grid-template-columns: 1fr;
-    padding: 20px;
-    gap: 12px;
+  .site-search-overlay {
+    padding-top: 4vh;
   }
-  .hspa-podcast-icon { display: none; }
-  .hspa-podcast-cta { display: block; text-align: center; }
+  .site-search-modal {
+    width: 96vw;
+    max-height: 90vh;
+  }
+  .site-search-trigger {
+    display: none; /* na mobilu jen via keyboard nebo hamburger */
+  }
+}
+
+body.site-search-open {
+  overflow: hidden;
+}
+
+/* =================================================================
+   Article cover image — NYT-style hero illustration
+   ================================================================= */
+.article-cover {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  margin: 0 auto 28px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--paper2);
+  /* Subtle shadow pro depth */
+  box-shadow: 0 4px 12px -2px rgba(0,0,0,0.08);
+}
+
+/* Mobile — oříznout na čtvercový crop ukazující jen ilustraci (levá polovina);
+   text v pravé polovině duplikuje titulek pod coverem a je tam stejně nečitelný */
+@media (max-width: 600px) {
+  .article-cover {
+    aspect-ratio: 1 / 1;
+    max-height: 320px;
+    object-fit: cover;
+    object-position: left center;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-left: -16px;
+    margin-right: -16px;
+    width: calc(100% + 32px);
+    max-width: none;
+    margin-bottom: 20px;
+  }
+}
+
+/* Print — skrýt cover (šetří inkoust, neslouží obsahu) */
+@media print {
+  .article-cover {
+    display: none;
+  }
+}
+
+/* =================================================================
+   Sprint 3.3 — Error states for missing data
+   ================================================================= */
+.error-state {
+  padding: 20px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--bad);
+  background: var(--paper2);
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  margin: 12px 0;
+}
+.error-state strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--bad);
+}
+.error-state button {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 36px;
+}
+.error-state button:hover {
+  background: var(--red);
 }

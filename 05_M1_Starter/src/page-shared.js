@@ -1,5 +1,8 @@
 // Sdílené komponenty napříč stránkami: navigační lišta mezi moduly.
 
+import { getSiteStats, applyDataStats } from './site-stats.js';
+import { initSiteSearch } from './search.js';
+
 const LS_AUDIENCE = 'zdrave-cesko/audience';
 
 export function getAudience() {
@@ -195,34 +198,35 @@ function wireNewsletterForm() {
 }
 
 /**
- * Spočítá HSPA skóre z indikátorů.
+ * Spočítá HSPA skóre z indikátorů. Backward-compat re-export ze site-stats.
  * Verified + preliminary indikátory: good=100, warn=50, bad=0, neutral ignorováno.
  * Illustrative indikátory ignorovány úplně.
  */
-export function computeHSPAScore(indicators) {
-  const scoreable = indicators.filter(i =>
-    (i.verification_status === 'verified' || i.verification_status === 'preliminary') &&
-    i.signal && i.signal !== 'neutral'
-  );
-  if (scoreable.length === 0) return null;
-  const sum = scoreable.reduce((acc, i) => {
-    if (i.signal === 'good') return acc + 100;
-    if (i.signal === 'warn') return acc + 50;
-    return acc;
-  }, 0);
-  return Math.round(sum / scoreable.length);
-}
+export { computeScore as computeHSPAScore } from './site-stats.js';
 
 /**
- * Načte indikátory a zobrazí HSPA skóre do elementu #czScore.
+ * Načte indikátory a články, spočítá site-wide statistiky a aplikuje je do DOM:
+ *   - element #czScore dostane HSPA skóre
+ *   - všechny [data-stat="<klíč>"] dostanou hodnoty (totalIndicators, hspaCount,
+ *     monitoringCount, score, ...). Detaily viz src/site-stats.js.
  */
 export function renderHSPAScore() {
-  fetch('data/indicators.json').then(r => r.json()).then(data => {
-    const score = computeHSPAScore(data.indicators);
-    const el = document.getElementById('czScore');
-    if (el && score != null) el.textContent = score;
-    const explainEl = document.getElementById('scoreExplainVal');
-    if (explainEl && score != null) explainEl.textContent = score;
+  Promise.allSettled([
+    fetch('data/indicators.json').then(r => r.ok ? r.json() : null),
+    fetch('data/articles.json').then(r => r.ok ? r.json() : null),
+  ]).then(([indRes, artRes]) => {
+    const indData = indRes.status === 'fulfilled' ? indRes.value : null;
+    const artData = artRes.status === 'fulfilled' ? artRes.value : null;
+    if (!indData) return;
+    const stats = getSiteStats({
+      indicators: indData.indicators ?? [],
+      articles: artData?.articles ?? [],
+    });
+    if (stats.score != null) {
+      const el = document.getElementById('czScore');
+      if (el) el.textContent = stats.score;
+    }
+    applyDataStats(stats);
   }).catch(() => {});
 }
 
@@ -253,7 +257,18 @@ export function renderModuleNav(activeId) {
       : t.match.some(m => path.endsWith(m));
     return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}">${t.label}</a>`;
   }).join('');
-  container.innerHTML = tabsHtml;
+  const searchTriggerHtml = `<button type="button" class="site-search-trigger" id="siteSearchTrigger" aria-label="Otevřít vyhledávání"><span aria-hidden="true">⌕</span> Hledat <kbd>/</kbd></button>`;
+  container.innerHTML = tabsHtml + searchTriggerHtml;
+
+  // Aktivuj global keyboard shortcut (/, Cmd+K) a wire trigger
+  initSiteSearch();
+  const trigger = document.getElementById('siteSearchTrigger');
+  if (trigger) {
+    trigger.addEventListener('click', () => {
+      // Simulate '/' keypress to reuse same open logic
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+    });
+  }
 
   injectMobileNav(tabsHtml);
 }

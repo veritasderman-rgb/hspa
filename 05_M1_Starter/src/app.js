@@ -5,6 +5,7 @@
 import './analytics.js';
 import { renderFooter, renderModuleNav } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
+import { getSiteStats, applyDataStats } from './site-stats.js';
 
 if (typeof window !== 'undefined') renderModuleNav('indicators');
 
@@ -1380,6 +1381,16 @@ function wireUp() {
   } catch (err) {
     console.error('Initial load failed:', err);
   }
+  // Aplikuj site-wide [data-stat] elementy (skóre, počty indikátorů...) ještě
+  // před rendererm hero, aby čísla v textu byla okamžitě konzistentní.
+  try {
+    const articlesData = await fetch('data/articles.json').then(r => r.ok ? r.json() : null).catch(() => null);
+    const stats = getSiteStats({
+      indicators: allIndicators,
+      articles: articlesData?.articles ?? [],
+    });
+    applyDataStats(stats);
+  } catch (err) { console.error('site-stats apply failed:', err); }
   // Renderování — každá funkce má vlastní try/catch, takže selhání jedné
   // nezabrání renderování ostatních.
   try { renderEditorialHero(); } catch (err) { console.error('hero render failed:', err); }

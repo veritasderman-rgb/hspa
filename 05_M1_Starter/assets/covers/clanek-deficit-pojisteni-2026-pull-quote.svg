@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Strukturální deficit zdravotního pojištění 2026. Proč se nůžky rozevírají a co je zastaví">
+  <defs>
+    <style>
+      .pq-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; fill: #a05a08; }
+      .pq-numstr { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #a05a08; letter-spacing: -5px; font-variant-numeric: tabular-nums; }
+      .pq-unit { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: #5f574e; font-size: 36px; }
+      .pq-label { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; fill: #1f1a14; font-size: 18px; }
+      .pq-sub { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; fill: #5f574e; }
+      .pq-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; fill: #1f1a14; letter-spacing: -0.5px; line-height: 1.06; }
+      .pq-brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 700; fill: #1f1a14; }
+      .pq-date { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; fill: #5f574e; }
+      .pq-quote-mark { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; fill: #a05a08; opacity: 0.18; font-size: 280px; line-height: 1; }
+      
+    @media (max-width: 768px), (prefers-reduced-motion: no-preference) {
+      .pq-number { animation: numRise 0.9s cubic-bezier(.22,.61,.36,1) 0.2s both; }
+      .pq-quote { animation: fadeIn 0.6s ease-out both; }
+      .pq-title { animation: fadeUp 0.7s ease-out 0.5s both; }
+      .pq-tint { animation: tintGrow 1.0s ease-out both; transform-origin: top; }
+      .pq-accent { animation: drawIn 0.8s ease-out 0.8s forwards; stroke-dasharray: 200; stroke-dashoffset: 200; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pq-number, .pq-quote, .pq-title, .pq-tint, .pq-accent { animation: none !important; }
+      .pq-accent { stroke-dashoffset: 0; }
+    }
+    @keyframes numRise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes tintGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes drawIn { to { stroke-dashoffset: 0; } }
+  
+    </style>
+  </defs>
+
+  <!-- Cream base + signal-tinted top stripe -->
+  <rect width="1200" height="630" fill="#fbf8f1"/>
+  <rect class="pq-tint" width="1200" height="160" fill="#a05a08" opacity="0.12"/>
+
+  <!-- Big quote mark behind number (decorative) -->
+  <text class="pq-quote pq-quote-mark" x="60" y="220">"</text>
+
+  <!-- Kicker -->
+  <text x="80" y="92" class="pq-kicker">
+    <tspan>Financování</tspan>
+    <tspan dx="14" fill="#5f574e" letter-spacing="0.12em" font-weight="500">#30</tspan>
+  </text>
+
+  <!-- Velké číslo levá strana -->
+  <g class="pq-number">
+    <text x="80" y="372" class="pq-numstr" font-size="170">
+      6,4
+      <tspan class="pq-unit" dx="14">%</tspan>
+    </text>
+    <line class="pq-accent" x1="80" y1="392" x2="260" y2="392" stroke="#a05a08" stroke-width="5" stroke-linecap="round"/>
+    <text x="80" y="428" class="pq-label">Výdaje na péči</text>
+    <text x="80" y="454" class="pq-sub">meziroční růst 2026</text>
+  </g>
+
+  <!-- Headline pravá strana -->
+  <g class="pq-title">
+    <text class="pq-title" x="540" y="220" font-size="28">
+      <tspan x="540" dy="0">Strukturální deficit</tspan><tspan x="540" dy="30">zdravotního pojištění</tspan><tspan x="540" dy="30">2026. Proč se nůžky</tspan><tspan x="540" dy="30">rozevírají a co je</tspan><tspan x="540" dy="30">zastaví</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom: brand + date -->
+  <g>
+    <line x1="80" y1="570" x2="1120" y2="570" stroke="rgba(31,26,20,0.13)" stroke-width="1"/>
+    <text x="80" y="602" class="pq-brand">
+      <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
+    </text>
+    <text x="1120" y="602" text-anchor="end" class="pq-date">8. května 2026</text>
+  </g>
+</svg>
