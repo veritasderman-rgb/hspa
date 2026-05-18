@@ -39,6 +39,25 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   renderHSPAScore();
   renderFooter();
   injectScrollToTop();
+  injectSkipLink();
+}
+
+/**
+ * Injectuje skip-to-content link jako první element <body>.
+ * Vizuálně schovaný do focusu — keyboard navigátoři jím přeskočí topbar a navigaci.
+ * Cíl: existující #content, případně první <main>. Idempotent.
+ */
+export function injectSkipLink() {
+  if (typeof document === 'undefined') return;
+  if (document.querySelector('.skip-link')) return;
+  const target = document.getElementById('content') || document.querySelector('main');
+  if (!target) return;
+  if (!target.id) target.id = 'content';
+  const a = document.createElement('a');
+  a.className = 'skip-link';
+  a.href = `#${target.id}`;
+  a.textContent = 'Přeskočit na hlavní obsah';
+  document.body.insertBefore(a, document.body.firstChild);
 }
 
 /**
