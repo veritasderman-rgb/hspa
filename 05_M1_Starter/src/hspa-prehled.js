@@ -3,7 +3,7 @@
 // s dílčími skóre, popisem a počtem indikátorů.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
 
 async function init() {
   if (typeof window === 'undefined') return;
@@ -22,7 +22,7 @@ async function init() {
   } catch (err) {
     console.error('hspa-prehled load failed:', err);
     const grid = document.getElementById('hspaDimsGrid');
-    if (grid) grid.innerHTML = `<p class="status error">Nepodařilo se načíst data: ${escapeHtml(err.message)}.</p>`;
+    if (grid) grid.innerHTML = renderErrorState('Nepodařilo se načíst přehled HSPA.', err);
   }
 }
 

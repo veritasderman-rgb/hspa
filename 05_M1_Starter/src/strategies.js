@@ -3,7 +3,7 @@
 // a renderuje rozcestí (level filter, search) nebo detail (z URL ?id=...).
 
 import './analytics.js';
-import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
 import { buildIndex, loadLinks } from './strategy-links.js';
 import { renderTimeline, renderResponsibilityMatrix } from './strategy-policy-views.js';
 
@@ -349,8 +349,7 @@ async function init() {
     else renderList();
   } catch (err) {
     console.error('strategies load failed:', err);
-    document.getElementById('listView').innerHTML =
-      `<p class="status error">Nepodařilo se načíst data: ${escapeHtml(err.message)}.</p>`;
+    document.getElementById('listView').innerHTML = renderErrorState('Nepodařilo se načíst strategie.', err);
   }
 }
 
