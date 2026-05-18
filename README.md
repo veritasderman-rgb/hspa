@@ -1,47 +1,99 @@
-# Zdravé Česko — projekt HSPA pro Českou republiku
+# Zdravé Česko — HSPA Dashboard
 
-Komplexní projektový balíček pro implementaci veřejného portálu pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA, inspirovaný belgickým modelem **Healthy Belgium**.
+Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky **OECD HSPA**.
+Inspirováno belgickým modelem **Healthy Belgium**. Cíl: srozumitelně, datově podložené,
+v jednom místě.
 
-## Co je v balíčku
+🌐 **Produkce:** [zdrave-cesko.cz](https://zdrave-cesko.cz) (deploy via Vercel)
+📂 **Aktivní kód:** [`05_M1_Starter/`](05_M1_Starter/)
+📖 **Vývojářská dokumentace:** [`docs/`](docs/)
 
-### 01_Prototyp_Dashboard / index.html
-Interaktivní HTML prototyp veřejného portálu. Otevři přímo v prohlížeči.
+## Co projekt aktuálně obsahuje
 
-- **3 audience-vrstvy**: Pro veřejnost · Pro odborníky · Pro tvůrce politik
-- **8 sekcí**: Přehled, Výsledky, Výstupy, Procesy, Struktury, Tematické moduly, Regiony, Metodika
-- **41 indikátorů** s mock daty inspirovanými reálnými zdroji (OECD Health at a Glance 2025, NZIS, NRC)
-- Sparklines, srovnání s OECD průměrem, regionální tabulka, zdroje
-- Postaveno na Chart.js, čistý HTML/JS, žádné build kroky
-
-### 02_Strategicky_dokument / Zdrave_Cesko_Strategicky_plan.docx
-15-stránkový strategický plán pro stakeholdery (MZČR, ÚZIS, NRC, pojišťovny).
-
-Obsahuje 12 kapitol: manažerské shrnutí, vize, rámec HSPA (4 oblasti × 12 domén × 28 subdomén × 122 indikátorů), datové zdroje, architektura, governance, komunikační strategie, fázovaná roadmapa, rozpočet (~85 mil. Kč na 3 roky), rizika, KPIs, závěr a literatura.
-
-### 03_Prezentace / Zdrave_Cesko_Prezentace.pptx
-16slidová prezentace pro stakeholdery v palete Ocean Gradient.
-
-Slide-by-slide: Title → Problém → Inspirace Belgie → Co máme → Co chybí → Návrh → HSPA rámec → Tematické moduly → 8 čísel o ČR → Datové zdroje → Governance → Roadmapa → Rozpočet → Rizika → KPIs → Call to action.
-
-## Klíčové parametry projektu
-
-| Parametr | Hodnota |
+| | |
 |---|---|
-| Časový horizont | 36 měsíců (3 fáze) |
-| Rozpočet | ~85 mil. Kč |
-| MVP launch | Měsíc 12 (~33,5 mil. Kč) |
-| Indikátorů ve fázi 1 | 40 |
-| Indikátorů cílových | 120+ |
-| Tematických modulů | 6 (mentální zdraví, prevence, senioři, equity, závěr života, environmentální udržitelnost) |
+| 📊 **80 HSPA indikátorů** | Naděje dožití, mortality, screening, prevence, finance, lidské zdroje… Datový kontrakt v `data/indicators.json`, denní snapshoty. |
+| 📰 **65+ článků** | Long-form journalism k jednotlivým indikátorům a reformním tématům. Article Visuals designsystem (timeline, srovnání, flow, animované countery). |
+| 📚 **110 termínů glossary** | Inline rozbalovací definice v textu článků, samostatná stránka `glosar.html`. |
+| 🗺️ **Krajský dashboard** | 14 krajů × klíčové indikátory + OIS 11-47 (struktura pojištěnců dle ZP × kraj × okres). |
+| 🧭 **8 tematických linií** | Mentální zdraví, prevence, senioři, equity, dlouhodobá péče, finance, eHealth, kvalita. |
+| 🎯 **6 dimenzí kvality** | Přístupnost, efektivita, kvalita, equity, udržitelnost, bezpečnost. |
+| 🧪 **~260 testů** | Frontend smoke testy, ingest fetchery, transform logika, signal výpočty. |
+| 🤖 **Automatický ingest** | GitHub Actions cron 06:00 UTC → fetch ÚZIS/ČSÚ/OECD/Eurostat/SÚKL → transform → commit → Vercel rebuild. |
 
-## Hlavní opory v existujících zdrojích ČR
+### Stránky webu
 
-- **OECD HSPA Rámec pro ČR (2023)** — již vytvořený rámec se 122 indikátory
-- **NZIS** spravovaný ÚZIS (zákon 372/2011 Sb.) — 26 zdravotních registrů
-- **NZIP** — Národní zdravotnický informační portál jako platforma
-- **Strategický rámec rozvoje péče o zdraví v ČR do 2035** (MZČR 12/2025)
-- **Národní strategie eZdraví 2025–2035** — datová interoperabilita
-- **NRC indikátory kvality**, VZP/SZP datasety, SZÚ EHIS/EHES, ČSÚ, OECD/Eurostat
+| URL | Účel |
+|---|---|
+| `index.html` | Homepage — hub matrix, dimenze, finance, podcast, denní ticker |
+| `clanky.html` | Hub všech článků (matrix podle area + topic, filtry) |
+| `clanek-*.html` | 65 dlouhých článků (jeden HTML soubor = jeden článek) |
+| `hspa-prehled.html` | HSPA rámec — 4 oblasti × 12 domén × indikátory |
+| `tematicke-linie.html` | 8 tematických linií (každá agreguje články + indikátory) |
+| `kraje.html` | Mapa krajů + krajský dashboard |
+| `pojistenci.html` | OIS 11-47 (pojištěnci ZP × kraj × okres) |
+| `prevence.html` | Vakcinace + screeningy |
+| `strategie.html` | Národní strategické dokumenty + jejich analýza |
+| `glosar.html` | Glosář 110 odborných pojmů |
+| `o-projektu.html`, `jak-funguje.html`, `redakce.html` | Meta-stránky o projektu |
+| `indicator.html?id=…` | Detail jednoho indikátoru |
+
+Detailní popis každé stránky + JS moduly viz [`docs/site-architecture.md`](docs/site-architecture.md).
+
+## Rychlý start (vývoj)
+
+```bash
+cd 05_M1_Starter
+npm install
+npm test          # ~260 testů musí projít
+npm run serve     # http://localhost:8080
+```
+
+## Architektura ve zkratce
+
+```
+GitHub Actions cron (06:00 UTC)
+  ↓ npm run ingest
+ingest/fetchers/* (ÚZIS, ČSÚ, OECD, Eurostat, SÚKL)
+  ↓ npm run transform
+data/indicators.json + data/snapshot-YYYY-MM-DD.json
+  ↓ git commit + push
+Vercel auto-deploy → CDN → uživatel
+```
+
+Frontend je čistý ES Modules + vanilla DOM (žádný build krok, žádný framework).
+Data fetchuje výhradně z `data/*.json` — nezná původní zdroje.
+
+Plný popis viz [`05_M1_Starter/CLAUDE.md`](CLAUDE.md) (pro AI agenty i lidi).
+
+## Podkladové materiály v repozitáři
+
+| Adresář | Obsah |
+|---|---|
+| `01_Prototyp_Dashboard/` | Původní statický prototyp (zastaralý, jen pro historickou referenci) |
+| `02_Strategicky_dokument/` | 15stránkový strategický plán DOCX (vize, governance, rozpočet) |
+| `03_Prezentace/` | 16slidová stakeholder prezentace PPTX |
+| `04_Plan_napojeni_na_API/` | Plány milníků M1–M11 + Vercel deploy plán |
+| `05_M1_Starter/` | **Aktivní produkční kód** — vše vyvíjené tady |
+| `06_…`, `07_…`, `08_…` | Plán redesignu, plán prevence, politický program |
+| `docs/` | Vývojářská dokumentace (site-architecture, visual-components, data-model) |
+| `AUDIT_*.md`, `STATUS_*.md`, `VISUAL_INVENTORY_*.md` | Auditní záznamy a inventáře (k datu) |
+| `BACKLOG.md`, `planUXDesign.md`, `PROMPT_DAILY_ROUTINE.md` | Aktivní pracovní dokumenty |
+
+## Hlavní zdroje dat
+
+- **OECD HSPA Rámec pro ČR (2023)** — 122 indikátorů, struktura 4 × 12 × 28
+- **NZIS (ÚZIS)** — 26 zdravotních registrů, NRPZS pro lidské zdroje
+- **ČSÚ DataStat** — demografie, naděje dožití, populace
+- **OECD Health at a Glance / SDMX** — mezinárodní benchmarky
+- **Eurostat** — EU benchmarky (life expectancy, mortality, SHA)
+- **SÚKL** — léčiva, výpadky léčiv
+- **NRC** — indikátory kvality (nosokomiální infekce, mortalita po AMI/CMP)
+
+## Licence a kontakt
+
+Data jsou agregovaná, veřejně dostupná (žádné PII).
+Více v [`o-projektu.html`](05_M1_Starter/o-projektu.html) a [`redakce.html`](05_M1_Starter/redakce.html).
 
 ---
-*Verze 1.0 · květen 2026*
+*Verze 2.0 · produkce · květen 2026*
