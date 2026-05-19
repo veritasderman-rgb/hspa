@@ -117,12 +117,20 @@ for (const [id, story] of Object.entries(STORIES)) {
   const file = path.join(CARDS, `${id}.json`);
   if (!fs.existsSync(file)) { console.error('MISSING:', id); continue; }
   const card = JSON.parse(fs.readFileSync(file, 'utf8'));
-  // Tady ÚMYSLNĚ přepisujeme existující short patient_story na plnohodnotnou
+  // Tady ÚMYSLNĚ přepisujeme existující short patient_story na plnohodnotnou.
+  // Pozor: musíme zachovat VŠECHNA existující pole (zejména framework, dimension),
+  // jen vyměnit patient_story a vložit ho před framework. Codex review na PR #349
+  // ukázal bug v předchozí verzi, kdy `continue` při k==='framework' skipl jeho
+  // přidání do `out` → karta ztratila framework field. Nová logika: pokud
+  // narazíme na framework, vložíme PŘED ním patient_story a pak framework zachováme.
   const out = {};
   let inserted = false;
   for (const [k, v] of Object.entries(card)) {
-    if (k === 'framework' && !inserted) { out.patient_story = story.trim(); inserted = true; continue; }
-    if (k === 'patient_story') continue; // skip the old one
+    if (k === 'patient_story') continue; // nahradíme novým textem
+    if (k === 'framework' && !inserted) {
+      out.patient_story = story.trim();
+      inserted = true;
+    }
     out[k] = v;
   }
   if (!inserted) out.patient_story = story.trim();
