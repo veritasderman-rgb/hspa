@@ -73,7 +73,6 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   renderFooter();
   injectScrollToTop();
   injectAudienceSwitch();
-  injectFreshnessBanner();
 }
 
 /**
@@ -103,53 +102,6 @@ export function injectAudienceSwitch() {
     if (!btn) return;
     setAudience(btn.dataset.aud);
     sw.querySelectorAll('.aud-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.aud === btn.dataset.aud ? 'true' : 'false'));
-  });
-}
-
-/**
- * Načte data/freshness.json a injectuje stale-data banner pod masthead-strip
- * pokud current.date je starší než 7 dní. Banner lze zavřít (uloží do
- * sessionStorage). Idempotent.
- */
-export async function injectFreshnessBanner() {
-  if (typeof document === 'undefined' || typeof fetch === 'undefined') return;
-  if (document.getElementById('freshnessBanner')) return;
-  if (sessionStorage.getItem('zdrave-cesko/freshness-banner-dismissed') === '1') return;
-  let data;
-  try {
-    const r = await fetch('data/freshness.json', { cache: 'no-store' });
-    if (!r.ok) return;
-    data = await r.json();
-  } catch { return; }
-  const cur = data?.current;
-  if (!cur?.date) return;
-  const ageDays = Math.floor((Date.now() - new Date(cur.date).getTime()) / 86_400_000);
-  const liveRatio = cur.live_ratio ?? 0;
-  // Banner triggery: data > 7 dní stará NEBO live ratio < 30 %
-  const stale = ageDays > 7;
-  const lowLive = liveRatio < 0.30;
-  if (!stale && !lowLive) return;
-  const strip = document.querySelector('.masthead-strip');
-  if (!strip) return;
-  const banner = document.createElement('div');
-  banner.id = 'freshnessBanner';
-  banner.className = `freshness-banner${stale ? ' freshness-banner-stale' : ' freshness-banner-warn'}`;
-  banner.setAttribute('role', 'status');
-  const liveTxt = `${Math.round(liveRatio * 100)} %`;
-  banner.innerHTML = `
-    <span class="freshness-banner-icon" aria-hidden="true">${stale ? '⚠️' : 'ℹ️'}</span>
-    <span class="freshness-banner-text">
-      ${stale
-        ? `Data se naposledy aktualizovala před <strong>${ageDays} dny</strong> (${cur.date}). Některé hodnoty mohou být zastaralé.`
-        : `Z ${cur.total} indikátorů je aktuálně <strong>${liveTxt}</strong> z živých zdrojů, zbytek ze seedů. <a href="o-projektu.html#metodika">Jak vznikají data →</a>`
-      }
-    </span>
-    <button type="button" class="freshness-banner-close" aria-label="Zavřít upozornění">×</button>
-  `;
-  strip.insertAdjacentElement('afterend', banner);
-  banner.querySelector('.freshness-banner-close').addEventListener('click', () => {
-    sessionStorage.setItem('zdrave-cesko/freshness-banner-dismissed', '1');
-    banner.remove();
   });
 }
 
