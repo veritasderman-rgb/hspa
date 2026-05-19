@@ -1,0 +1,47 @@
+{
+  "id": "sex_unmet_need_pece",
+  "name": "Nesplněná potřeba odborné péče u sexuálních potíží",
+  "area": "Procesy",
+  "domain": "Přístupnost",
+  "subdomain": "Specializovaná péče",
+  "definition": "Podíl dospělých s celoživotní sexuální dysfunkcí, kteří NEvyhledali odbornou péči (lékaře, sexuologa, terapeuta). Operacionalizace dle CZECHSEX 2024: 1 minus (% těch, kteří vyhledali péči ze všech, kdo měli problém).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "academic_survey",
+      "endpoint": "https://www.intimitavcr.cz/",
+      "dataset": "CZECHSEX 2024 — Národní ústav duševního zdraví (NUDZ)",
+      "dimensions": {
+        "age_range": "18-75",
+        "country": "CZ",
+        "condition": "any_lifetime_sexual_dysfunction"
+      }
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Britský Natsal-3 a německý GeSiD používají odlišnou operacionalizaci „seeking help\". Přesný EU/OECD benchmark pro tento indikátor neexistuje. Komparativně Natsal-3 (UK) udává cca 24 % žen a 18 % mužů, kteří vyhledali pomoc u sexuálního problému.",
+    "value": null,
+    "url": "https://www.natsal.ac.uk/"
+  },
+  "signal_thresholds": {
+    "good": 5.0,
+    "warn": 20.0
+  },
+  "frequency": "decadal",
+  "stewards": [
+    "NUDZ (Národní ústav duševního zdraví)",
+    "Sekce sexuologie České lékařské společnosti JEP"
+  ],
+  "method_notes": "CZECHSEX 2024: 5 % žen a 4,6 % mužů s celoživotně přiznanou sexuální dysfunkcí vyhledalo odbornou péči. Unmet need tedy = 95 % žen, 95,4 % mužů. Hodnota je vysoká i v mezinárodním srovnání — Natsal-3 (UK) udává nižší unmet need (cca 76 % žen, 82 % mužů). Indikátor signalizuje strukturální problém: chybějící specializovaná centra mimo Prahu a Brno, absence sexuální medicíny v primární péči (na rozdíl od UK NHS QOF), kulturní bariéra a samoplatebnost.",
+  "limitations": "Self-report; nelze odlišit lidi, kteří nepotřebovali péči, od těch, kteří ji nedostali. Definice „odborné péče\" je široká (lékař, terapeut, online konzultace). Časovou řadu pro tento indikátor zatím nelze sestavit. Nereflektuje regionální dostupnost — pravděpodobně bude vyšší mimo Prahu a Brno.",
+  "patient_story": "Devadesát pět procent. Tolik žen v Česku, které mají sexuální problém, nikdy nešlo k lékaři. U mužů 95 procent. Ne proto, že by problém byl malý — 21 % žen a 16 % mužů má klinicky významnou dysfunkci se stresem. Důvod je v systému, ne v lidech.\n\nSexuální medicína v Česku je marginalizovaná disciplína. Primární péče se na sexuální anamnézu systémově neptá — chybí kapitační indikátor, který by ji odměňoval (UK NHS QOF má v sadě). Sexuologické ambulance jsou koncentrované v Praze a Brně; v Karlovarském nebo Libereckém kraji nemá pacient kam jít. A většina center účtuje samoplatebně — péče se tak stává privilegium s cenovkou.\n\nVe srovnání: britský Natsal-3 ukázal, že přibližně 24 % žen s problémem vyhledalo pomoc — pětkrát vyšší podíl než český. Část rozdílu vysvětluje strukturální dostupnost (GP každého pacienta zná jménem, sex medicine je v GP curriculum), část kulturní (otevřenost rozhovorů o sexu v jiných zemích Evropy).\n\nUnmet need 95 % není data point. Je to systémová mezera — a politicky nejmenší ze všech, na kterou se v Česku tlačí. Polovina toho, co měříme v HSPA, jsou indikátory v dimenzi „Přístupnost\". Tenhle je jedním z těch, kde se to ukazuje nejostřeji.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
