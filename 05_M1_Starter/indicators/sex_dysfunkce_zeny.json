@@ -1,0 +1,47 @@
+{
+  "id": "sex_dysfunkce_zeny",
+  "name": "Klinicky významná sexuální dysfunkce u žen",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Sexuální a reprodukční zdraví",
+  "definition": "Podíl dospělých žen (18-75 let), které v posledních 12 měsících vykazují nejméně jednu sexuální dysfunkci spojenou s klinicky významným osobním stresem (definice ICD-11). Zahrnuje sníženou sexuální touhu, potíže s orgasmem, potíže se vzrušením, bolest při styku.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "academic_survey",
+      "endpoint": "https://www.intimitavcr.cz/",
+      "dataset": "CZECHSEX 2024 — Národní ústav duševního zdraví (NUDZ)",
+      "dimensions": {
+        "sex": "F",
+        "age_range": "18-75",
+        "country": "CZ"
+      }
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena"
+    }
+  },
+  "benchmark_source": {
+    "type": "academic_survey",
+    "code": "GeSiD_2019_women_marked_distress",
+    "dataset": "German Health and Sexuality Survey (GeSiD), Briken et al. Dtsch Arztebl Int 2020",
+    "value": 17.5,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7829447/"
+  },
+  "signal_thresholds": {
+    "good": 2.0,
+    "warn": 5.0
+  },
+  "frequency": "decadal",
+  "stewards": [
+    "NUDZ (Národní ústav duševního zdraví)",
+    "Centrum pro sexuální zdraví a intervence"
+  ],
+  "method_notes": "CZECHSEX byl realizován v období listopad 2023 – březen 2024 na vzorku 6 669 respondentů (4 660 online + 2 009 osobních interview), reprezentativně podle pohlaví, věku, vzdělání a lokality. Financování: Grantová agentura ČR (21-31490S). Metoda CZECHSEX vychází ze standardních škál (mj. modifikovaný FSFI a vlastní operacionalizace ICD-11). Pro mezinárodní srovnání slouží německý GeSiD 2018-2019 (n=4 955), který používá obdobnou ICD-11 operacionalizaci „sexual dysfunction with marked distress\". Britský Natsal-3 (2010-2012, n=15 162) a francouzský CSF 2023 publikují srovnatelné podíly. Hodnoty NEjsou plně srovnatelné: každý průzkum používá vlastní operacionalizaci a věkovou škálu.",
+  "limitations": "Self-report metoda — citlivá k sociální desirabilitě, recall biasu a nominálnímu výkladu „klinicky významného stresu\". V ČR jde o první reprezentativní průzkum po 11 letech (předchozí Weiss-Zvěřina 2013 neaplikoval ICD-11). Časovou řadu pro tento indikátor zatím nelze sestavit, dokud nebude opakovaný sběr. Indikátor nereflektuje strukturální faktory (dostupnost specializované péče, kapacita center).",
+  "patient_story": "Praha, 2024. Více než jedna z pěti žen v České republice — celkem přes 1,1 milionu — má v posledních dvanácti měsících sexuální problém, který jí způsobuje skutečný osobní stres. Ne přechodný diskomfort, ale klinicky významnou potíž podle nové ICD-11 definice. Nejčastěji jde o sníženou sexuální touhu (45 % všech žen někdy v životě), potíže s orgasmem nebo se vzrušením.\n\nA přesto: jen pět procent z nich vyhledalo odbornou péči. Devadesát pět procent žen, které mají problém, ho s lékařkou ani gynekoložkou nikdy neotevřelo. Některé proto, že o tom nevěděly, že je to „problém\". Jiné proto, že neměly kam jít — sexuologických ambulancí mimo Prahu a Brno je v Česku doslova hrstka. Většina proto, že o sexu se s lékaři v Česku prostě nemluví.\n\nNěmecký GeSiD ukazuje podobnou prevalenci (17,5 %), ale Německo má hustší síť specializovaných center, certifikované kurzy pro praktiky a sexuální medicínu jako pravidelnou součást primární péče. Český systém ji nemá v guidelines vůbec.\n\nSexuální zdraví podle WHO není absence problému — je to well-being. A měřit ho je první podmínka, jak ho začít zlepšovat.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}

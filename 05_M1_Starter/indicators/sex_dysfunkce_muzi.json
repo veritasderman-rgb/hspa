@@ -1,0 +1,47 @@
+{
+  "id": "sex_dysfunkce_muzi",
+  "name": "Klinicky významná sexuální dysfunkce u mužů",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Sexuální a reprodukční zdraví",
+  "definition": "Podíl dospělých mužů (18-75 let), kteří v posledních 12 měsících vykazují nejméně jednu sexuální dysfunkci spojenou s klinicky významným osobním stresem (definice ICD-11). Zahrnuje sníženou sexuální touhu, erektilní dysfunkci, předčasnou či opožděnou ejakulaci.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "academic_survey",
+      "endpoint": "https://www.intimitavcr.cz/",
+      "dataset": "CZECHSEX 2024 — Národní ústav duševního zdraví (NUDZ)",
+      "dimensions": {
+        "sex": "M",
+        "age_range": "18-75",
+        "country": "CZ"
+      }
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.nudz.cz/media-pr/tiskove-zpravy/prvni-vysledky-pruzkumu-czechsex-frekvence-sexualnich-aktivit-cechu-klesa-seznamovani-se-vice-presouva-na-internet-vetsina-je-se-svym-sexualnim-zivotem-spokojena"
+    }
+  },
+  "benchmark_source": {
+    "type": "academic_survey",
+    "code": "GeSiD_2019_men_marked_distress",
+    "dataset": "German Health and Sexuality Survey (GeSiD), Briken et al. Dtsch Arztebl Int 2020",
+    "value": 13.3,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7829447/"
+  },
+  "signal_thresholds": {
+    "good": 2.0,
+    "warn": 5.0
+  },
+  "frequency": "decadal",
+  "stewards": [
+    "NUDZ (Národní ústav duševního zdraví)",
+    "Centrum pro sexuální zdraví a intervence"
+  ],
+  "method_notes": "CZECHSEX byl realizován v období listopad 2023 – březen 2024 (n=6 669, věk 18-75), GA ČR 21-31490S. Pro mezinárodní srovnání slouží GeSiD 2018-2019 s ICD-11 operacionalizací „sexual dysfunction with marked distress\" (13,3 % muži). Erektilní dysfunkce v posledních 12 měsících v ČR: 14 % (proti DE GeSiD 6,6 % — pozor na věkové škálování). Předčasná ejakulace (lifetime): 24,6 % v ČR. Hodnoty se zvyšují s věkem (erektilní dysfunkce: 6,6 % v 18-25 → 26,3 % v 66-75).",
+  "limitations": "Self-report metoda — limitovaná recall biasem a sociální desirabilitou (zejména u mužů, kteří v ČR systematicky méně reportují well-being témata). První ICD-11 reprezentativní data v ČR; nelze sestavit časovou řadu. Klinický stres je hraničně subjektivní kategorie — operacionalizace mezi CZECHSEX a GeSiD se v detailech liší.",
+  "patient_story": "Přes 600 tisíc mužů v Česku má za sebou v posledních dvanácti měsících sexuální problém, který je trápí. Erektilní dysfunkce zasahuje 14 % všech dospělých mužů — a podíl strmě roste s věkem: z 6,6 % v kategorii 18-25 let na 26,3 % u sedmdesátníků. Předčasná ejakulace bývá hlášena ve 24 % životů, opožděná ejakulace ve 23 %.\n\nA jen 4,6 % mužů s problémem jde k lékaři. To je vzorec, který se v různých zemích vrací: muži vyhledávají odbornou péči až ve chvíli, kdy problém začne ohrožovat partnerství nebo plodnost. Sexuální medicína v Česku je přitom velkou částí kryta soukromými ambulancemi se samoplatebním modelem — což z dostupnosti dělá vrstvu, kde finanční bariéra reálně rozhoduje, kdo péči získá.\n\nNěmecký GeSiD ukazuje 13,3 % mužů s klinicky významnou dysfunkcí. Česko se s 16,1 % drží nad evropským průměrem — ne dramaticky, ale konzistentně. Polské, italské a francouzské průzkumy mají obdobné rozpětí. Klinické vodítko: erektilní dysfunkce u muže pod 40 let je často prvním signálem kardiovaskulárního rizika. Většina českých praktiků se na ni neptá.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
