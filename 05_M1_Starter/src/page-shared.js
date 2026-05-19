@@ -5,6 +5,39 @@ import { initSiteSearch } from './search.js';
 
 const LS_AUDIENCE = 'zdrave-cesko/audience';
 
+/**
+ * Vrátí `true`, pokud má článek být veřejně viditelný v daný okamžik.
+ *
+ * Pravidlo „publish at 6:00":
+ *   - `published === false` → vždy false (draft)
+ *   - `date` (YYYY-MM-DD) v budoucnu → false (zatím nesmí ven)
+ *   - `date` dnes, ale teprve před 06:00 lokálního času → false (čeká na ranní release)
+ *   - `date` v minulosti nebo dnes po 06:00 → true
+ *
+ * Datum se interpretuje v lokálním čase (cs-CZ), 06:00 jako vyhlášený
+ * editorial deadline. Pokud `date` chybí, považujeme článek za publikovaný
+ * (zachovává zpětnou kompatibilitu se staršími záznamy).
+ *
+ * @param {Object} article - záznam z data/articles.json
+ * @param {Date} [now=new Date()] - lokální čas pro testy
+ * @returns {boolean}
+ */
+export function isArticleVisible(article, now = new Date()) {
+  if (!article || article.published === false) return false;
+  const ds = article.date || article.published_at || article.scheduled_for;
+  if (!ds) return true;
+  // Construct local 06:00 of the article's date
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(ds));
+  if (!m) return true; // neparsovatelné datum → publikováno (legacy fallback)
+  const release = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 6, 0, 0, 0);
+  return now.getTime() >= release.getTime();
+}
+
+/** Pomocný filter pro pole článků. */
+export function filterVisibleArticles(articles, now = new Date()) {
+  return (articles ?? []).filter(a => isArticleVisible(a, now));
+}
+
 export function getAudience() {
   try { return localStorage.getItem(LS_AUDIENCE) || 'public'; } catch { return 'public'; }
 }

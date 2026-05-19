@@ -3,7 +3,7 @@
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 import './analytics.js';
-import { renderFooter, renderModuleNav } from './page-shared.js';
+import { renderFooter, renderModuleNav, isArticleVisible } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { getSiteStats, applyDataStats } from './site-stats.js';
 
@@ -929,7 +929,7 @@ async function loadCrossLinks() {
     _crossLinksCache = {
       strategies: s.strategies ?? [],
       explainers: e.explainers ?? [],
-      articles: (a.articles ?? []).filter(ar => ar.published !== false),
+      articles: (a.articles ?? []).filter(ar => isArticleVisible(ar)),
     };
   } catch {
     _crossLinksCache = { strategies: [], explainers: [], articles: [] };
@@ -1521,7 +1521,7 @@ async function loadAndRenderHomeArticles() {
     const data = await res.json();
     const articles = (data.articles ?? [])
       .filter(a => a.kind !== 'manifest')
-      .filter(a => a.published !== false)
+      .filter(a => isArticleVisible(a))
       .sort((a, b) => {
         const da = new Date(a.date).getTime();
         const db = new Date(b.date).getTime();

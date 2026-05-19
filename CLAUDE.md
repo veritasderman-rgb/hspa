@@ -212,6 +212,55 @@ Každý článek má v `data/articles.json` `audit-status`:
 
 Banner se zobrazuje v hlavičce článku, pokud status není `verified`.
 
+## Publikační pravidla
+
+### Kdy se článek zobrazí v UI
+
+`isArticleVisible(article)` v `src/page-shared.js` rozhoduje o viditelnosti
+napříč všemi pohledy (hub `clanky.html`, homepage `index.html`, indicator
+detail, prevence, themes, search). Pravidla:
+
+1. **`published === false`** → vždy skrytý (draft jen pro redakci).
+2. **`date` (YYYY-MM-DD) v budoucnu** → skrytý (čeká na release den).
+3. **`date` dnes, ale teprve před 06:00 lokálního času** → skrytý (vychází v 6:00 ráno).
+4. **`date` v minulosti nebo dnes ≥ 06:00** → viditelný.
+
+Pravidlo „v 6:00 ráno" zajišťuje, že nově publikovaný článek se zobrazí
+najednou napříč všemi konzumenty (homepage hero, articles hub, related links
+na indikátoru) ve stejný okamžik — předvídatelně pro čtenáře, redakci
+i analytiku. Když cron pipeline ráno commitne nová data a Vercel rebuild
+proběhne před 06:00, čtenáři zaregistrují nové články přesně v 6:00.
+
+### Publikační hygiena — co NESMÍ být v publikovaném článku
+
+Validátor `ingest/validate-articles.js` (`npm run validate:articles`,
+součást `npm run validate:all`) kontroluje:
+
+1. **Audit-status ↔ published konzistence**: článek s `audit-status: draft`,
+   `flagged` nebo `draft-flagged` v HTML metadata MUSÍ mít `published: false`
+   v `articles.json`.
+2. **Redakční bannery v publikovaných článcích**:
+   - Inline `<p style="background:#fff7e6...">` s "Status:" → fail
+   - Texty obsahující „pracovní draft", „auditní revizi", „TODO/XXX/FIXME"
+     v `<header class="article-header">` → fail
+   - Legitimní markup `<aside class="article-review-banner">` je akceptován
+     (slouží jako čtenáři srozumitelná editorial poznámka).
+3. **Drafty mají varování** (ne fail), pokud zůstanou `published: false`.
+
+### Životní cyklus článku
+
+1. **Draft**: HTML soubor `clanek-{slug}.html` + `data/articles.json` záznam
+   s `published: false` a `audit-status: draft`. Viditelný jen v `redakce.html`.
+2. **Audit**: redakce přidá `<aside class="article-review-banner">` se shrnutím
+   změn (pokud je relevantní pro čtenáře). Detailní seznam změn pro interní
+   účely PATŘÍ DO `<!-- HTML komentáře -->`, NE do viditelného textu.
+3. **Schválení**: `audit-status` → `verified` (nebo `review-pending`/`partial`
+   pokud je redakce ochotna publikovat se zachovaným bannerem). `published: true`
+   se nastaví společně s konečným `date` (publikační den).
+4. **Release**: o 06:00 lokálního času v `date` se článek automaticky zobrazí
+   napříč webem. GitHub Actions cron 06:00 UTC + Vercel rebuild zajistí, že
+   `data/articles.json` je v ten okamžik aktuální.
+
 ## Deploy (Vercel)
 
 - **Root Directory:** `05_M1_Starter`

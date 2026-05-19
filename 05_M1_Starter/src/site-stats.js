@@ -87,7 +87,20 @@ export function getSiteStats({ indicators = [], articles = [] } = {}) {
   const score = computeScore(indicators);
   const hspaCount = indicators.filter(i => (i.framework ?? 'hspa') === 'hspa').length;
   const monitoringCount = indicators.filter(i => i.framework === 'monitoring').length;
-  const publishedArticles = articles.filter(a => a.published !== false);
+  // Drift-resilient publish filter: published !== false AND (no date OR
+  // date already past local 06:00). Duplikujeme logiku z page-shared.js
+  // isArticleVisible() kvůli vyhnutí se cirkulárnímu importu (page-shared
+  // sám importuje getSiteStats z tohoto souboru).
+  const now = Date.now();
+  const publishedArticles = articles.filter(a => {
+    if (!a || a.published === false) return false;
+    const ds = a.date || a.published_at || a.scheduled_for;
+    if (!ds) return true;
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(ds));
+    if (!m) return true;
+    const release = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 6, 0, 0, 0).getTime();
+    return now >= release;
+  });
   const indicatorSet = new Set();
   publishedArticles.forEach(a => (a.linked_indicators ?? []).forEach(i => indicatorSet.add(i)));
 

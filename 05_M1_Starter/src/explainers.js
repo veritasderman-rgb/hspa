@@ -3,7 +3,7 @@
 // a renderuje rozcestí podle kategorie nebo detail (z URL ?id=...).
 
 import './analytics.js';
-import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms, renderInlineMarkdown, renderBlockMarkdown } from './page-shared.js';
+import { audienceText, renderModuleNav, renderMastheadDate, escapeHtml, loadGlossaryTerms, wrapAcronyms, renderInlineMarkdown, renderBlockMarkdown, isArticleVisible } from './page-shared.js';
 import { buildIndex } from './strategy-links.js';
 import { renderGantt, renderDrgCalculator, wireDrgCalculator, renderExplainerVisuals } from './explainer-policy-views.js';
 import { initSchema } from './schema.js';
@@ -385,7 +385,7 @@ async function init() {
     allStrategies = stratsData.strategies ?? [];
     allArticles = (articlesData.articles ?? [])
       .filter(a => a.kind !== 'manifest')
-      .filter(a => a.published !== false);
+      .filter(a => isArticleVisible(a));
     linkIndex = buildIndex(allStrategies, allExplainers);
 
     wireFilters();
