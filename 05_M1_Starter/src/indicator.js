@@ -4,7 +4,7 @@
 // (determinanty, význam) z metodické karty a kompletní metodiku.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
 import { renderCzMap } from './cz-map.js';
 
 const DATA_URL = 'data/indicators.json';
@@ -460,7 +460,7 @@ async function loadRelated(indicatorId) {
     ]);
     const strategies = s.strategies ?? [];
     const explainers = e.explainers ?? [];
-    const articles = (a.articles ?? []).filter(ar => ar.published !== false);
+    const articles = (a.articles ?? []).filter(ar => isArticleVisible(ar));
     const relatedStrategies = strategies.filter(s => (s.linked_indicators ?? []).includes(indicatorId));
     const relatedExplainers = explainers.filter(e => (e.linked_indicators ?? []).includes(indicatorId));
     const relatedArticles = articles.filter(ar => (ar.linked_indicators ?? []).includes(indicatorId));

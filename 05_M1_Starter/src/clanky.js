@@ -1,6 +1,6 @@
 // Bootstrap stránek sekce Články: úvodní listing i jednotlivé články.
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, loadGlossaryTerms } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, loadGlossaryTerms, isArticleVisible } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
@@ -140,10 +140,11 @@ async function loadAndRenderArticles() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     allEntries = (data.articles ?? []);
-    // Drafty (published === false) se v hubu nezobrazují ani nezapočítávají.
-    // Jakmile se článek publikuje (published-flag se odstraní), automaticky se zobrazí.
+    // Drafty (published === false) ani plánované články (date dnes před 06:00
+    // lokálního času, nebo date v budoucnu) se v hubu nezobrazují. Detail viz
+    // isArticleVisible() v page-shared.js.
     articles = allEntries
-      .filter(a => a.published !== false)
+      .filter(a => isArticleVisible(a))
       .sort((a, b) => {
         const da = new Date(a.date).getTime();
         const db = new Date(b.date).getTime();

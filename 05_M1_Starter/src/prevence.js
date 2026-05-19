@@ -3,7 +3,7 @@
 // a renderuje list karet témat nebo detail jednoho tématu (z URL ?id=...).
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, isArticleVisible } from './page-shared.js';
 
 // Indikátory zobrazené v hero stats
 const HERO_INDICATOR_IDS = [
@@ -304,7 +304,7 @@ async function init() {
     allThemes = prev.themes ?? [];
     allIndicators = ind.indicators ?? [];
     allStrategies = str.strategies ?? [];
-    allArticles = (art.articles ?? []).filter(a => a.published !== false);
+    allArticles = (art.articles ?? []).filter(a => isArticleVisible(a));
 
     const id = new URLSearchParams(window.location.search).get('id');
     if (id) renderDetail(id);
