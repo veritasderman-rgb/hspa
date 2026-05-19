@@ -282,7 +282,7 @@
 | Site architecture + visual components + data model docs | — | PR #335 |
 | Home article cards padding | — | PR #336 |
 | **P1.7 Audience switch UI** | planUXDesign Sprint 2 | PR #337 |
-| **B-29 Freshness banner** | OPERATIONAL | PR #337 |
+| ~~B-29 Freshness banner~~ (frontend banner) | OPERATIONAL | PR #337 zavedl, PR #351 odstranil (UX feedback — banner s ratio 2 % působil rušivě). Backend freshness.json + verify:freshness ponechány. |
 | **A11y skip-link na všech stránkách** | planUXDesign Sprint 1 | PR #338 |
 | **B-07/B-08 propojení 52 článků s site-stats** | planUXDesign Sprint 2 | PR #339 |
 | **B-15 Verification filter „Pouze ověřené"** | 06_Plan P2.3 | PR #340 |
