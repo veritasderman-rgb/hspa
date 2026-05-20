@@ -15,6 +15,8 @@ import {
   TWEET_LIMIT,
   NETWORKS,
 } from '../social/generators/summary-generator.js';
+import { richText } from '../social/notion/schema.js';
+import { buildMakePayload } from '../social/publisher/webhook-publisher.js';
 
 test('isArticleVisible: published=false je vždy skrytý', () => {
   assert.equal(isArticleVisible({ published: false, date: '2020-01-01' }), false);
@@ -86,6 +88,28 @@ test('oversizedTweets: označí tweety přes 280 znaků', () => {
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /tweet 2\/2/);
   assert.match(warnings[0], new RegExp(`${TWEET_LIMIT + 20} znaků`));
+});
+
+test('richText: rozdělí text nad 2000 znaků na bloky', () => {
+  const r = richText('a'.repeat(4500));
+  assert.equal(r.length, 3);
+  assert.equal(r[0].text.content.length, 2000);
+  assert.equal(r[2].text.content.length, 500);
+});
+
+test('richText: prázdný vstup vrátí jeden prázdný blok', () => {
+  assert.deepEqual(richText(''), [{ text: { content: '' } }]);
+});
+
+test('buildMakePayload: poskládá posts podle sítí včetně vlákna X', () => {
+  const p = buildMakePayload('art-1', [
+    { network: 'facebook', text: 'fb', imageUrl: 'u1', articleUrl: 'a' },
+    { network: 'x', text: 'x1', imageUrl: null, articleUrl: 'a', thread: ['t1', 't2'] },
+  ]);
+  assert.equal(p.articleId, 'art-1');
+  assert.equal(p.posts.facebook.text, 'fb');
+  assert.deepEqual(p.posts.x.thread, ['t1', 't2']);
+  assert.equal(p.posts.facebook.thread, undefined);
 });
 
 test('NETWORKS: definuje právě 4 sítě s neprázdným zadáním', () => {

@@ -1,0 +1,62 @@
+{
+  "_comment": "Strukturní blueprint scénáře Make.com. NENÍ to přímo importovatelný export (ten je vázaný na verzi Make a konkrétní připojení účtů) — je to návod, podle kterého scénář v Make.com sestavíš. Postup viz social/docs/setup-social-accounts.md.",
+  "name": "HSPA — distribuce na sociální sítě",
+  "schedule": "immediately on webhook",
+  "trigger": {
+    "module": "Webhook · Custom webhook",
+    "note": "URL webhooku → GitHub Secret MAKE_WEBHOOK_URL. Přijímá payload z social/run-publish.js.",
+    "payloadShape": {
+      "articleId": "string",
+      "scheduleAt": "ISO datetime nebo null",
+      "posts": {
+        "facebook": { "text": "string", "imageUrl": "string|null", "articleUrl": "string|null" },
+        "instagram": { "text": "string", "imageUrl": "string|null", "articleUrl": "string|null" },
+        "linkedin": { "text": "string", "imageUrl": "string|null", "articleUrl": "string|null" },
+        "x": { "text": "string", "imageUrl": "string|null", "articleUrl": "string|null", "thread": ["string"] }
+      }
+    }
+  },
+  "flow": [
+    {
+      "step": 1,
+      "module": "Tools · Set variable / Custom function",
+      "action": "Ověř HMAC-SHA256 podpis z hlavičky X-HSPA-Signature proti tělu requestu a tajemství MAKE_WEBHOOK_SECRET. Při neshodě scénář zastav."
+    },
+    {
+      "step": 2,
+      "module": "Router",
+      "action": "Čtyři větve — Facebook, Instagram, LinkedIn, X. Každá čte odpovídající uzel z posts.*"
+    },
+    {
+      "step": "2a",
+      "branch": "Facebook",
+      "module": "Facebook Pages · Create a Post",
+      "map": { "message": "{{posts.facebook.text}}", "photo": "{{posts.facebook.imageUrl}}", "schedule": "{{scheduleAt}}" }
+    },
+    {
+      "step": "2b",
+      "branch": "Instagram",
+      "module": "Instagram for Business · Create a Photo Post",
+      "map": { "caption": "{{posts.instagram.text}}", "imageUrl": "{{posts.instagram.imageUrl}}" }
+    },
+    {
+      "step": "2c",
+      "branch": "LinkedIn",
+      "module": "LinkedIn · Create a Post (organization)",
+      "map": { "text": "{{posts.linkedin.text}}", "imageUrl": "{{posts.linkedin.imageUrl}}" }
+    },
+    {
+      "step": "2d",
+      "branch": "X",
+      "module": "X (Twitter) · Create a Post — případně řetěz pro vlákno",
+      "map": { "text": "{{posts.x.text}}", "media": "{{posts.x.imageUrl}}" },
+      "note": "Pokud posts.x.thread má >1 prvek, vytvoř vlákno (každý další tweet jako odpověď na předchozí)."
+    },
+    {
+      "step": 3,
+      "module": "Error handler",
+      "action": "U každé větve: při chybě zapiš řádek do Notion (Status=Failed, Chyba=zpráva). Volitelně notifikace na Slack."
+    }
+  ],
+  "operationsBudget": "~4 operace na článek (1 na síť) + HMAC + router; ~7 článků/týden ≈ pod 200 operací/měsíc — bezpečně v Core plánu (10 000 op/měs)."
+}

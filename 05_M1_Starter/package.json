@@ -26,10 +26,15 @@
     "verify:freshness": "node ingest/verify-freshness.js",
     "verify:freshness:report": "node ingest/verify-freshness.js --report-only",
     "social:detect": "node social/sources/article-detector.js",
-    "social:dry-run": "node social/dry-run.js"
+    "social:dry-run": "node social/dry-run.js",
+    "social:generate": "node social/run-generate.js",
+    "social:publish": "node social/run-publish.js",
+    "social:report": "node social/reporting/weekly-report.js",
+    "social:notion-setup": "node social/notion/setup-database.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.97.1",
+    "@notionhq/client": "^5.22.0",
     "csv-parse": "^5.5.6",
     "dotenv": "^16.4.5"
   },

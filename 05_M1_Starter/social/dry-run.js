@@ -1,4 +1,4 @@
-// Dry-run distribučního pipeline — detekce + generování shrnutí, zápis do
+// Dry-run distribučního pipeline — detekce + grafika + shrnutí, zápis do
 // social/out/. Nic neodesílá na sítě ani do Notionu.
 //
 // Použití:
@@ -6,16 +6,14 @@
 //   node social/dry-run.js --article-id=<id>     — konkrétní viditelný článek
 //   node social/dry-run.js --latest             — nejnovější viditelný článek
 //
-// Bez ANTHROPIC_API_KEY proběhne jen detekce (vypíše Article, negeneruje).
+// Grafika se generuje vždy. Shrnutí jen s ANTHROPIC_API_KEY.
 
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
+import { OUT_DIR, env } from './config.js';
 import { detectNewArticles, listVisibleArticles } from './sources/article-detector.js';
+import { generateImages } from './generators/image-generator.js';
 import { generateAllSummaries } from './generators/summary-generator.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = resolve(__dirname, 'out');
 
 function pickArticle(args) {
   const idArg = [...args].find(a => a.startsWith('--article-id='));
@@ -31,32 +29,32 @@ function pickArticle(args) {
     return all.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
   }
   const fresh = detectNewArticles();
-  if (!fresh.length) {
-    throw new Error('Žádné nové články (vs. state). Použij --latest nebo --article-id=<id>.');
-  }
+  if (!fresh.length) throw new Error('Žádné nové články (vs. state). Použij --latest nebo --article-id=<id>.');
   return fresh[0];
 }
 
 async function main() {
   const args = new Set(process.argv.slice(2));
   const article = pickArticle(args);
+  const dir = resolve(OUT_DIR, article.id);
+  mkdirSync(dir, { recursive: true });
 
   console.log(`Článek:  ${article.id}`);
   console.log(`Titulek: ${article.title}`);
   console.log(`URL:     ${article.url}`);
   console.log(`Data:    ${article.keyStats.length} keyStats · ${article.linkedIndicators.length} indikátorů · ${article.fullText.length} znaků textu\n`);
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.log('ANTHROPIC_API_KEY není nastaven — generování přeskočeno.');
+  generateImages(article, { outDir: dir });
+  console.log(`Grafika: 4 PNG (FB/IG/LI/X) → social/out/${article.id}/\n`);
+
+  if (!env.anthropicKey) {
+    console.log('ANTHROPIC_API_KEY není nastaven — generování shrnutí přeskočeno.');
     console.log('Nastav ho v .env.local nebo GitHub Secrets a spusť znovu.');
     return;
   }
 
-  console.log('Generuji 4 verze přes Anthropic API…\n');
+  console.log('Generuji 4 shrnutí přes Anthropic API…\n');
   const summaries = await generateAllSummaries(article);
-
-  const dir = resolve(OUT_DIR, article.id);
-  mkdirSync(dir, { recursive: true });
 
   let inTok = 0, cacheRead = 0, outTok = 0;
   for (const r of Object.values(summaries)) {

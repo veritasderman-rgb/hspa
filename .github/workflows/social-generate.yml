@@ -1,0 +1,53 @@
+name: Social · generování draftů
+
+# Týdně v neděli 18:00 CEST (= 16:00 UTC). Detekuje nové publikované
+# články, vygeneruje 4 shrnutí + 4 grafiky a zapíše drafty do Notion
+# fronty. Grafiku a stav commitne zpět do main.
+
+on:
+  schedule:
+    - cron: '0 16 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalace závislostí
+        run: npm ci
+
+      - name: Generovat drafty
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node social/run-generate.js
+
+      - name: Configure git
+        run: |
+          git config user.name "hspa-social[bot]"
+          git config user.email "social@hspa-cesko.cz"
+
+      - name: Commit grafiku a stav
+        run: |
+          git add social/state/last-run.json
+          [ -d assets/social ] && git add assets/social || true
+          if git diff --cached --quiet; then
+            echo "Žádné nové drafty — nic ke commitu."
+            exit 0
+          fi
+          git commit -m "chore(social): drafty $(date -u +%Y-%m-%d)"
+          git push origin HEAD:main
