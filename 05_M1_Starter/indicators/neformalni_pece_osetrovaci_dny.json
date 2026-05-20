@@ -1,0 +1,33 @@
+{
+  "id": "neformalni_pece_osetrovaci_dny",
+  "name": "Neformální péče o vážně nemocné (objem)",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Dlouhodobá péče (LTC)",
+  "definition": "Odhadovaný roční objem neformální péče — tedy péče poskytované rodinnými příslušníky a blízkými osobám s vážným onemocněním nebo sníženou soběstačností — vyjádřený v ošetřovacích dnech. Za rok 2024 ÚZIS odhaduje rozpětí 20 až 30 milionů ošetřovacích dnů; v dashboardu je uvedena střední hodnota tohoto rozpětí (25 mil.). Indikátor zachycuje skrytou kapacitu systému dlouhodobé péče, kterou formální statistiky lůžek a personálu nevidí.",
+  "unit": "mil. ošetřovacích dnů / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis",
+      "note": "ÚZIS ČR — odhad objemu neformální (rodinné) péče odvozený z datového mostu mezi Českou správou sociálního zabezpečení, Ministerstvem práce a sociálních věcí a Národním zdravotnickým informačním systémem (ÚZIS), budovaného v letech 2024–2025. Hodnotu pro rok 2024 (rozpětí 20–30 mil. ošetřovacích dnů) uvedl ředitel ÚZIS prof. Ladislav Dušek v rozhovoru pro Radiožurnál / iROZHLAS (květen 2026). Jde o seed odhad — produkční metodika a pravidelný výpočet jsou plánovány v samostatném milníku."
+    }
+  },
+  "benchmark_source": null,
+  "signal_thresholds": {
+    "good": 0,
+    "warn": 0
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR",
+    "MPSV",
+    "ČSSZ",
+    "MZ ČR"
+  ],
+  "method_notes": "Odhad vychází z propojení dávkových a registračních dat (příspěvek na péči podle zákona 108/2006 Sb., dávky nemocenského pojištění včetně dlouhodobého ošetřovného, registr poskytovatelů a Národní zdravotnický informační systém). Ošetřovací den je standardní jednotka — jeden den péče o jednu osobu. Rozpětí 20–30 mil. je široké záměrně: ředitel ÚZIS L. Dušek se za jeho šíři v rozhovoru výslovně omluvil, protože metodika kvantifikace neformální péče je teprve ve vývoji. Dashboard proto uvádí střední hodnotu 25 mil. a explicitně rozpětí.",
+  "limitations": "(1) Vysoká nejistota — rozpětí 20–30 mil. ošetřovacích dnů odpovídá relativní nejistotě přibližně ±20 %; jde o první systémový odhad, nikoli o ustálenou časovou řadu. (2) Neformální péči nelze pozorovat přímo — odhaduje se z administrativních dat (příspěvek na péči, dlouhodobé ošetřovné), která nepokrývají péči poskytovanou bez nároku na dávku. (3) Indikátor nerozlišuje intenzitu péče (hodiny denně) ani diagnózu příjemce. (4) Není k dispozici mezinárodní benchmark s touto definicí — proto signal=neutral a direction=context_dependent: růst objemu může znamenat jak stárnutí populace a nedostatek formální kapacity, tak fungující rodinnou solidaritu.",
+  "patient_story": "Neformální péče je v Česku největší a nejméně viditelnou částí systému dlouhodobé péče. Zatímco lůžka, sestry a pečovatele formální systém počítá, péči, kterou doma odvedou děti, partneři a sousedé vážně nemocných lidí, statistiky dlouho nezachycovaly.\n\nPodle odhadu ÚZIS představovala neformální péče v roce 2024 zhruba 20 až 30 milionů ošetřovacích dnů — v dashboardu je uvedena střední hodnota 25 mil. ošetřovacích dnů ročně (ÚZIS ČR, 2024, seed odhad). Číslo poprvé veřejně uvedl ředitel ÚZIS prof. Ladislav Dušek; vychází z datového mostu, který v letech 2024–2025 propojil data České správy sociálního zabezpečení, Ministerstva práce a sociálních věcí a Národního zdravotnického informačního systému.\n\nIndikátor je v HSPA dashboardu veden jako kontextový (signal neutral) — neexistuje k němu mezinárodní benchmark se srovnatelnou definicí a vyšší objem nelze jednoznačně číst jako dobrý či špatný. Velký objem neformální péče zároveň ukazuje na rodinnou solidaritu i na strukturální tlak: formální dlouhodobá péče (viz indikátor pracovniku LTC na 100 osob 65+) má omezenou kapacitu, a tak rodiny — převážně ženy v produktivním věku — nesou většinu zátěže. Datově podchycený objem neformální péče je proto vstupem pro plánování sociálně-zdravotního pomezí: bez něj nelze realisticky nastavit reformu dlouhodobé péče ani financování příspěvku na péči.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
