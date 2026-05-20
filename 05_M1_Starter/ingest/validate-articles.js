@@ -52,6 +52,18 @@ function findRedactionBanners(html) {
   return hits;
 }
 
+/**
+ * Detekuje <aside class="article-review-banner"> kdekoli v <main>.
+ * Tento banner je interní redakční / procesní poznámka (status revize,
+ * „vytvořeno daily routine", „čeká na ruční schválení") a NEPATŘÍ do
+ * publikovaného článku. V draftu je tolerován (draft je v UI skrytý).
+ */
+function findReviewBanner(html) {
+  const m = /<aside\s+class=["']article-review-banner["'][\s\S]*?<\/aside>/i.exec(html);
+  if (!m) return null;
+  return m[0].replace(/\s+/g, ' ').slice(0, 140);
+}
+
 function validate() {
   const articlesFile = path.join(ROOT, 'data', 'articles.json');
   if (!fs.existsSync(articlesFile)) {
@@ -93,6 +105,15 @@ function validate() {
     } else if (banners.length) {
       // Draft → jen varování, draft se nepublikuje (filter v UI)
       warnings.push(`${a.id}: ${banners.length} redakčních markerů v draftu (OK pokud zůstane published:false)`);
+    }
+
+    // <aside class="article-review-banner"> — interní procesní poznámka,
+    // nepatří do publikovaného článku (v draftu tolerováno).
+    const reviewBanner = findReviewBanner(html);
+    if (reviewBanner && a.published !== false) {
+      errors.push(`${a.id} (${a.slug}): <aside class="article-review-banner"> v publikovaném článku — interní redakční poznámka, odstraň před publikací: "${reviewBanner}"`);
+    } else if (reviewBanner) {
+      warnings.push(`${a.id}: article-review-banner v draftu (musí být odstraněn před publikací)`);
     }
   }
 
