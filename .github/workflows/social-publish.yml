@@ -1,0 +1,45 @@
+name: Social · publikace schválených
+
+# Týdně v pondělí 07:00 CEST (= 05:00 UTC). Přečte z Notion fronty
+# schválené příspěvky, odešle je na Make.com webhook a na závěr vypíše
+# týdenní souhrn do shrnutí běhu.
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalace závislostí
+        run: npm ci
+
+      - name: Publikovat schválené příspěvky
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          MAKE_WEBHOOK_SECRET: ${{ secrets.MAKE_WEBHOOK_SECRET }}
+        run: node social/run-publish.js
+
+      - name: Týdenní souhrn
+        if: always()
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node social/reporting/weekly-report.js >> "$GITHUB_STEP_SUMMARY"
