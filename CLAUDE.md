@@ -243,20 +243,25 @@ součást `npm run validate:all`) kontroluje:
    - Inline `<p style="background:#fff7e6...">` s "Status:" → fail
    - Texty obsahující „pracovní draft", „auditní revizi", „TODO/XXX/FIXME"
      v `<header class="article-header">` → fail
-   - Legitimní markup `<aside class="article-review-banner">` je akceptován
-     (slouží jako čtenáři srozumitelná editorial poznámka).
+   - `<aside class="article-review-banner">` v publikovaném článku → fail.
+     Tento banner je interní procesní poznámka (status revize, „vytvořeno
+     daily routine", „čeká na ruční schválení") a NEPATŘÍ do publikovaného
+     textu. V draftu je tolerován (jen varování) — musí být odstraněn před
+     publikací.
 3. **Drafty mají varování** (ne fail), pokud zůstanou `published: false`.
 
 ### Životní cyklus článku
 
 1. **Draft**: HTML soubor `clanek-{slug}.html` + `data/articles.json` záznam
    s `published: false` a `audit-status: draft`. Viditelný jen v `redakce.html`.
-2. **Audit**: redakce přidá `<aside class="article-review-banner">` se shrnutím
-   změn (pokud je relevantní pro čtenáře). Detailní seznam změn pro interní
-   účely PATŘÍ DO `<!-- HTML komentáře -->`, NE do viditelného textu.
+2. **Audit**: detailní seznam změn z auditní revize PATŘÍ DO
+   `<!-- HTML komentáře -->` (blok `audit:` v hlavičce souboru), NE do
+   viditelného textu. Žádné `<aside class="article-review-banner">`,
+   žádné inline „Status:" bannery — čtenář publikovaného článku nemá
+   vidět redakční proces.
 3. **Schválení**: `audit-status` → `verified` (nebo `review-pending`/`partial`
-   pokud je redakce ochotna publikovat se zachovaným bannerem). `published: true`
-   se nastaví společně s konečným `date` (publikační den).
+   pokud redakce publikuje s vědomím otevřených bodů — ale BEZ viditelného
+   banneru). `published: true` se nastaví společně s konečným `date`.
 4. **Release**: o 06:00 lokálního času v `date` se článek automaticky zobrazí
    napříč webem. GitHub Actions cron 06:00 UTC + Vercel rebuild zajistí, že
    `data/articles.json` je v ten okamžik aktuální.
