@@ -25,6 +25,17 @@ export const MODEL = process.env.SOCIAL_CLAUDE_MODEL || 'claude-sonnet-4-6';
 
 export const NETWORKS = { facebook, instagram, linkedin, x };
 
+// Tvrdý limit X (Twitter) na jeden tweet.
+export const TWEET_LIMIT = 280;
+
+/** Vrátí varování pro tweety přes limit (prázdné pole = vlákno je v pořádku). */
+export function oversizedTweets(thread) {
+  return thread
+    .map((t, i) => ({ i, len: t.length }))
+    .filter(t => t.len > TWEET_LIMIT)
+    .map(t => `tweet ${t.i + 1}/${thread.length} má ${t.len} znaků (limit ${TWEET_LIMIT})`);
+}
+
 /** Sestaví kontext článku — stabilní blok sdílený všemi 4 voláními (cachuje se). */
 export function buildArticleContext(article) {
   const lines = [
@@ -97,7 +108,12 @@ export async function generateSummary(article, networkKey, { client, model = MOD
 
   const text = extractText(message);
   const result = { network: networkKey, label: net.label, text, usage: message.usage };
-  if (networkKey === 'x') result.thread = splitThread(text);
+  if (networkKey === 'x') {
+    result.thread = splitThread(text);
+    // Tweety přes 280 znaků by selhaly při publikaci — označ je pro schvalovací krok.
+    const warnings = oversizedTweets(result.thread);
+    if (warnings.length) result.warnings = warnings;
+  }
   return result;
 }
 
@@ -131,6 +147,7 @@ if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import
     const summaries = await generateAllSummaries(article, { model: MODEL });
     for (const r of Object.values(summaries)) {
       console.log(`\n${'='.repeat(60)}\n${r.label}  (${r.text.length} znaků)\n${'='.repeat(60)}\n${r.text}`);
+      for (const w of r.warnings ?? []) console.log(`  ⚠ ${w}`);
     }
   } catch (err) {
     if (err instanceof Anthropic.APIError) {

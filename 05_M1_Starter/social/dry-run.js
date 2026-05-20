@@ -64,7 +64,9 @@ async function main() {
     inTok += r.usage?.input_tokens ?? 0;
     cacheRead += r.usage?.cache_read_input_tokens ?? 0;
     outTok += r.usage?.output_tokens ?? 0;
-    console.log(`${'─'.repeat(60)}\n${r.label}  (${r.text.length} znaků)\n${'─'.repeat(60)}\n${r.text}\n`);
+    console.log(`${'─'.repeat(60)}\n${r.label}  (${r.text.length} znaků)\n${'─'.repeat(60)}\n${r.text}`);
+    for (const w of r.warnings ?? []) console.log(`  ⚠ ${w}`);
+    console.log('');
   }
 
   writeFileSync(resolve(dir, 'meta.json'), JSON.stringify({

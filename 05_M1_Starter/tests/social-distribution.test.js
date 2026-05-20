@@ -11,6 +11,8 @@ import {
 import {
   buildArticleContext,
   splitThread,
+  oversizedTweets,
+  TWEET_LIMIT,
   NETWORKS,
 } from '../social/generators/summary-generator.js';
 
@@ -18,19 +20,21 @@ test('isArticleVisible: published=false je vždy skrytý', () => {
   assert.equal(isArticleVisible({ published: false, date: '2020-01-01' }), false);
 });
 
+// `now` se zadává jako absolutní okamžik (UTC, sufix Z), aby byl test
+// deterministický nezávisle na časové zóně hostu. Květen = CEST (UTC+2).
 test('isArticleVisible: datum v budoucnu je skryté', () => {
-  const now = new Date('2026-05-20T12:00:00');
-  assert.equal(isArticleVisible({ date: '2026-05-25' }, now), false);
+  assert.equal(isArticleVisible({ date: '2026-05-25' }, new Date('2026-05-20T10:00:00Z')), false);
 });
 
 test('isArticleVisible: datum v minulosti je viditelné', () => {
-  const now = new Date('2026-05-20T12:00:00');
-  assert.equal(isArticleVisible({ date: '2026-05-10' }, now), true);
+  assert.equal(isArticleVisible({ date: '2026-05-10' }, new Date('2026-05-20T10:00:00Z')), true);
 });
 
-test('isArticleVisible: dnešní datum se zobrazí až po 06:00', () => {
-  assert.equal(isArticleVisible({ date: '2026-05-20' }, new Date('2026-05-20T05:30:00')), false);
-  assert.equal(isArticleVisible({ date: '2026-05-20' }, new Date('2026-05-20T06:30:00')), true);
+test('isArticleVisible: dnešní datum se zobrazí až po 06:00 času Europe/Prague', () => {
+  // 03:30 UTC = 05:30 v Praze (CEST) → ještě skrytý
+  assert.equal(isArticleVisible({ date: '2026-05-20' }, new Date('2026-05-20T03:30:00Z')), false);
+  // 04:30 UTC = 06:30 v Praze (CEST) → viditelný
+  assert.equal(isArticleVisible({ date: '2026-05-20' }, new Date('2026-05-20T04:30:00Z')), true);
 });
 
 test('extractKeyStats: vytáhne av-counter + label + foot', () => {
@@ -74,6 +78,14 @@ test('buildArticleContext: obsahuje titulek, perex i klíčové statistiky', () 
   assert.match(ctx, /Testovací perex/);
   assert.match(ctx, /73 % — spokojenost/);
   assert.match(ctx, /Plný text článku/);
+});
+
+test('oversizedTweets: označí tweety přes 280 znaků', () => {
+  assert.deepEqual(oversizedTweets(['krátký tweet', 'taky krátký']), []);
+  const warnings = oversizedTweets(['ok', 'x'.repeat(TWEET_LIMIT + 20)]);
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /tweet 2\/2/);
+  assert.match(warnings[0], new RegExp(`${TWEET_LIMIT + 20} znaků`));
 });
 
 test('NETWORKS: definuje právě 4 sítě s neprázdným zadáním', () => {

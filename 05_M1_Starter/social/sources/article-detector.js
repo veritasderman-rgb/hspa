@@ -28,8 +28,23 @@ const SITE = 'https://skorezdravotnictvi.cz';
 // --- Viditelnost článku (port z src/page-shared.js isArticleVisible) -------
 
 /**
+ * Wall-clock složky [rok, měsíc, den, hodina] daného okamžiku v zóně
+ * Europe/Prague — nezávislé na časové zóně hostu. Detektor běží v GitHub
+ * Actions (UTC), ale pravidlo publikace je v 06:00 českého času.
+ */
+function pragueParts(date) {
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Prague', hour12: false,
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit',
+  });
+  const p = {};
+  for (const part of fmt.formatToParts(date)) p[part.type] = part.value;
+  return [Number(p.year), Number(p.month), Number(p.day), Number(p.hour) % 24];
+}
+
+/**
  * Článek je viditelný, pokud je published a jeho release okamžik
- * (06:00 lokálně v den `date`) už nastal.
+ * (06:00 v Europe/Prague v den `date`) už nastal.
  */
 export function isArticleVisible(article, now = new Date()) {
   if (!article || article.published === false) return false;
@@ -37,8 +52,12 @@ export function isArticleVisible(article, now = new Date()) {
   if (!ds) return true;
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(ds));
   if (!m) return true;
-  const release = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 6, 0, 0, 0);
-  return now.getTime() >= release.getTime();
+  const release = [Number(m[1]), Number(m[2]), Number(m[3]), 6];
+  const current = pragueParts(now);
+  for (let i = 0; i < 4; i++) {
+    if (current[i] !== release[i]) return current[i] > release[i];
+  }
+  return true; // přesně 06:00 → viditelný
 }
 
 // --- Extrakce dat z HTML článku -------------------------------------------
