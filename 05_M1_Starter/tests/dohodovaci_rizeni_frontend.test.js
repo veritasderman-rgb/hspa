@@ -86,15 +86,34 @@ test('dohodovaci-rizeni.json: OIS-11-16 má validní pyramidu', () => {
   assert.ok(totalM > 30000, 'součet mužů realistický');
 });
 
-test('dohodovaci-rizeni.json: ≥11 sad ready, dimenze 6 zpracována', () => {
+test('dohodovaci-rizeni.json: všechny sady zpracovány (ready/external, 0 stub)', () => {
+  const stub = data.datasets.filter((x) => x.status === 'stub');
+  assert.equal(stub.length, 0, `zbývající stub sady: ${stub.map((x) => x.ois_code).join(', ')}`);
   const ready = data.datasets.filter((x) => x.status === 'ready');
-  assert.ok(ready.length >= 11, `očekáváno ≥11 ready, je ${ready.length}`);
-  const d6ready = data.datasets.filter((x) => x.dimension === 'd6' && x.status === 'ready');
-  assert.ok(d6ready.length >= 5, `dimenze 6 má ${d6ready.length} ready (očekáváno ≥5)`);
-  for (const ds of d6ready) {
-    const hasViz = ds.series.length > 0 || (ds.ranked && ds.ranked.items.length > 0);
-    assert.ok(hasViz, `${ds.ois_code}: series nebo ranked`);
-    assert.ok(ds.role_in_negotiation && ds.what_it_says, `${ds.ois_code}: redakční text`);
+  assert.ok(ready.length >= 43, `očekáváno ≥43 ready, je ${ready.length}`);
+});
+
+test('dohodovaci-rizeni.json: každá ready sada má headline, viz i redakční text', () => {
+  for (const ds of data.datasets.filter((x) => x.status === 'ready')) {
+    assert.ok(ds.headline && ds.headline.value != null, `${ds.ois_code}: headline`);
+    const hasViz =
+      (ds.series && ds.series.length) ||
+      (ds.series_periods && ds.series_periods.length) ||
+      (ds.pyramid && ds.pyramid.age_bands) ||
+      (ds.ranked && ds.ranked.items && ds.ranked.items.length);
+    assert.ok(hasViz, `${ds.ois_code}: chybí vizualizační data`);
+    assert.ok(ds.role_in_negotiation, `${ds.ois_code}: role_in_negotiation`);
+    assert.ok(ds.what_it_says, `${ds.ois_code}: what_it_says`);
+  }
+});
+
+test('dohodovaci-rizeni.json: všechny dimenze 1–8 mají ready sady', () => {
+  for (const num of [1, 2, 3, 5, 6, 7, 8]) {
+    const dim = data.dimensions.find((d) => d.number === num);
+    const ready = dim.dataset_ids
+      .map((id) => data.datasets.find((x) => x.id === id))
+      .filter((x) => x && (x.status === 'ready' || x.status === 'external'));
+    assert.ok(ready.length === dim.dataset_ids.length, `dimenze ${num}: ${ready.length}/${dim.dataset_ids.length} zpracováno`);
   }
 });
 

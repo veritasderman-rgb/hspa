@@ -648,6 +648,416 @@ function transformOIS1150() {
   };
 }
 
+/* indexy sloupců, jejichž hlavička obsahuje všechna klíčová slova */
+function colsMatching(headerRow, keywords) {
+  const idx = [];
+  (headerRow || []).forEach((c, i) => {
+    const t = txt(c);
+    if (t && keywords.every((k) => t.includes(k))) idx.push(i);
+  });
+  return idx;
+}
+function sumCols(body, indices) {
+  let s = 0;
+  for (const r of body) {
+    if (!r) continue;
+    for (const i of indices) {
+      const v = num(r[i]);
+      if (v != null) s += v;
+    }
+  }
+  return s;
+}
+function findRowWith(rows, substr) {
+  return rows.findIndex((r) => r && r.some((c) => txt(c).includes(substr)));
+}
+const ZP_NAMES = {
+  111: 'VZP', 201: 'VoZP', 205: 'ČPZP', 207: 'OZP', 209: 'ZPŠ', 211: 'ZPMV', 213: 'RBP',
+};
+
+/* žebříček: součet rowTotal (všechny číselné buňky od fromCol) podle názvu */
+function rankedRowTotal(body, nameIdx, fromCol, topN = 12) {
+  const m = new Map();
+  let grand = 0;
+  for (const r of body) {
+    if (!r) continue;
+    const name = txt(r[nameIdx]);
+    if (!name) continue;
+    let t = 0;
+    for (let i = fromCol; i < r.length; i++) {
+      const v = num(r[i]);
+      if (v != null) t += v;
+    }
+    m.set(name, (m.get(name) || 0) + t);
+    grand += t;
+  }
+  const items = [...m.entries()]
+    .map(([name, value]) => ({ name, value: Math.round(value) }))
+    .sort((a, b) => b.value - a.value);
+  return { items: items.slice(0, topN), grand: Math.round(grand) };
+}
+
+/* ================= DIMENZE 1 — CENY A OBJEMY ================= */
+function transformOIS1106() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-06.xlsx'), 'Rok 2022-2024 ATC');
+  const h = findRowWith(rows, 'Počet pacientoměsíců 2024');
+  const hr = rows[h];
+  const body = rows.slice(h + 1).filter((r) => r && r[2] != null);
+  const series = [2022, 2023, 2024].map((y) => ({
+    year: y,
+    value: Math.round(sumCols(body, colsMatching(hr, ['pacientoměsíců', String(y)]))),
+  }));
+  return {
+    ois_code: 'OIS-11-06', source_file: 'OIS-11-06.xlsx', extracted_at: STAMP(),
+    method_note: 'Pacientoměsíce léčby centrovými léky, součet napříč ATC skupinami a zdravotními pojišťovnami.',
+    headline: { value: series[2].value, unit: 'pacientoměsíců', year: 2024, label: 'Léčba centrovými léky' },
+    series: [{ key: 'pm', label: 'Pacientoměsíce centrové léčby', unit: 'pacientoměsíce', points: series }],
+  };
+}
+function transformOIS1107() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-07.xlsx'), 'Genove_terapie');
+  const h = findRowWith(rows, 'Náklady na úrovni maximální stanovené ceny');
+  const hr = rows[h];
+  const totalRow = rows.slice(h + 1).find((r) => r && txt(r[0]).includes('Všechna ATC'));
+  if (!totalRow) throw new Error('11-07: souhrnný řádek nenalezen');
+  const series = [2022, 2023, 2024].map((y) => {
+    const idx = colsMatching(hr, ['Náklady', String(y)]);
+    let v = 0;
+    for (const i of idx) v += num(totalRow[i]) || 0;
+    return { year: y, value: round(v / 1e6, 1) };
+  });
+  return {
+    ois_code: 'OIS-11-07', source_file: 'OIS-11-07.xlsx', extracted_at: STAMP(),
+    method_note: 'Náklady na genové a personalizované kurativní terapie na úrovni maximální stanovené ceny, mil. Kč.',
+    headline: { value: series[2].value, unit: 'mil. Kč', year: 2024, label: 'Náklady na genové terapie' },
+    series: [{ key: 'nakl', label: 'Náklady na genové terapie', unit: 'mil. Kč', points: series }],
+  };
+}
+/* rozsah bloku [start,end) v řádku se štítky, jehož štítek obsahuje keyword */
+function findBlockRange(blockRow, keyword) {
+  const starts = [];
+  (blockRow || []).forEach((c, i) => {
+    if (i >= 2 && txt(c)) starts.push(i);
+  });
+  for (let k = 0; k < starts.length; k++) {
+    if (txt(blockRow[starts[k]]).toLowerCase().includes(keyword)) {
+      return [starts[k], k + 1 < starts.length ? starts[k + 1] : (blockRow.length || 999)];
+    }
+  }
+  return null;
+}
+
+/* OIS-11-08: PZT — zvlášť účtovaný materiál; úhrada = sloupec „celkem" 3. bloku */
+function transformOIS1108() {
+  const series = [];
+  const m = new Map();
+  for (const [sheet, year] of [['Rok 2023', 2023], ['Rok 2024', 2024]]) {
+    let rows;
+    try { rows = readSheet(path.join(CACHE, 'OIS-11-08.xlsx'), sheet); } catch { continue; }
+    const h = findHeaderRow(rows, { mustContain: ['Typ PZT'] });
+    const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+    series.push({ year, value: round(sumCol(body, 10) / 1e9, 1) });
+    if (year === 2024) for (const r of body) {
+      const n = txt(r[1]);
+      if (n) m.set(n, (m.get(n) || 0) + (num(r[10]) || 0));
+    }
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: round(v / 1e6, 1) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-08', source_file: 'OIS-11-08.xlsx', extracted_at: STAMP(),
+    method_note: 'Úhrada za prostředky zdravotnické techniky (zvlášť účtovaný materiál), mld. Kč.',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'mld. Kč', year: 2024, label: 'Úhrady za zdravotnický materiál' },
+    ranked: { label: 'Top 12 typů zdravotnického materiálu dle úhrad', unit: 'mil. Kč', items: items.slice(0, 12) },
+  };
+}
+
+/* OIS-11-10/11/35: léčiva a PZT — sečte blok „Úhrada od zdravotních pojišťoven" */
+function transformBlockUhrada(file, sheet, oisCode, label) {
+  const rows = readSheet(path.join(CACHE, file), sheet);
+  const blkIdx = findRowWith(rows, 'Úhrada');
+  if (blkIdx < 0) throw new Error(file + ': blok úhrad nenalezen');
+  const range = findBlockRange(rows[blkIdx], 'úhrada');
+  if (!range) throw new Error(file + ': rozsah úhrad nenalezen');
+  const body = rows.slice(blkIdx + 2).filter((r) => r && r[0] != null);
+  const idx = [];
+  for (let i = range[0]; i < range[1]; i++) idx.push(i);
+  const m = new Map();
+  let grand = 0;
+  for (const r of body) {
+    const name = txt(r[1]);
+    let t = 0;
+    for (const i of idx) {
+      const v = num(r[i]);
+      if (v != null) t += v;
+    }
+    if (name) m.set(name, (m.get(name) || 0) + t);
+    grand += t;
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: round(v / 1e6, 1) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: oisCode, source_file: file, extracted_at: STAMP(),
+    method_note: 'Úhrada zdravotních pojišťoven, součet napříč segmenty péče.',
+    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: 2024, label },
+    ranked: { label: 'Top 12 skupin dle úhrad zdravotních pojišťoven', unit: 'mil. Kč', items: items.slice(0, 12) },
+  };
+}
+function transformOIS1136() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-36.xlsx'), 'HVLP na recept');
+  const h = findHeaderRow(rows, { mustContain: ['Předepisující obor'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  const m = new Map();
+  let grand = 0;
+  for (const r of body) {
+    const obor = txt(r[2]);
+    const v = num(r[5]) || 0;
+    if (obor) m.set(obor, (m.get(obor) || 0) + v);
+    grand += v;
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: round(v / 1e6, 1) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-36', source_file: 'OIS-11-36.xlsx', extracted_at: STAMP(),
+    method_note: 'Úhrada zdravotních pojišťoven za léčiva na recept (HVLP) dle předepisujícího oboru, mil. Kč.',
+    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: 2024, label: 'Úhrady za léky na recept (HVLP)' },
+    ranked: { label: 'Top 12 předepisujících oborů dle úhrad za léky', unit: 'mil. Kč', items: items.slice(0, 12) },
+  };
+}
+function transformOIS1105() {
+  const series = [];
+  for (const [sheet, year] of [['VÝSTUP 2019', 2019], ['VÝSTUP 2022', 2022], ['VÝSTUP 2023', 2023], ['VÝSTUP 2024', 2024]]) {
+    let rows;
+    try { rows = readSheet(path.join(CACHE, file_v(sheet)), sheet); } catch { continue; }
+    const vals = [];
+    for (const r of rows) {
+      if (!r) continue;
+      for (let i = 4; i < r.length; i++) {
+        const v = num(r[i]);
+        if (v != null && v > 5000 && v < 300000) vals.push(v);
+      }
+    }
+    if (vals.length) series.push({ year, value: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) });
+  }
+  return {
+    ois_code: 'OIS-11-05', source_file: 'OIS-11-05.xlsx', extracted_at: STAMP(),
+    method_note: 'Průměr základních sazeb poskytovatelů akutní lůžkové péče napříč pojišťovnami.',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'Kč (průměrná sazba)', year: 2024, label: 'Základní sazba akutní lůžkové péče' },
+    series: [{ key: 'sazba', label: 'Průměrná základní sazba', unit: 'Kč', points: series }],
+  };
+}
+function file_v() { return 'OIS-11-05.xlsx'; }
+
+/* ================= DIMENZE 3 — NELŮŽKOVÁ PÉČE ================= */
+function transformOIS1118() {
+  const series = [];
+  let rankedItems = [];
+  for (const [sheet, year] of [['2023', 2023], ['2024', 2024]]) {
+    let rows;
+    try { rows = readSheet(path.join(CACHE, 'OIS-11-18.xlsx'), sheet); } catch { continue; }
+    const h = findHeaderRow(rows, { mustContain: ['Kód výkonu', 'Suma'] });
+    const body = rows.slice(h + 1).filter((r) => r && r[2] != null);
+    const kc = colsMatching(rows[h], ['Suma', 'Kč']);
+    series.push({ year, value: round(sumCols(body, kc) / 1e9, 1) });
+    if (year === 2024) {
+      const m = new Map();
+      for (const r of body) {
+        const obor = txt(r[1]);
+        const v = kc.reduce((s, i) => s + (num(r[i]) || 0), 0);
+        if (obor) m.set(obor, (m.get(obor) || 0) + v);
+      }
+      rankedItems = [...m.entries()].map(([name, v]) => ({ name, value: round(v / 1e6, 1) })).sort((a, b) => b.value - a.value).slice(0, 12);
+    }
+  }
+  return {
+    ois_code: 'OIS-11-18', source_file: 'OIS-11-18.xlsx', extracted_at: STAMP(),
+    method_note: 'Úhrada ambulantní péče (Suma Kč) dle oboru vykazujícího péči.',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'mld. Kč', year: 2024, label: 'Úhrady ambulantní péče' },
+    ranked: { label: 'Top 12 oborů ambulantní péče dle úhrad', unit: 'mil. Kč', items: rankedItems },
+  };
+}
+function transformOIS1119() {
+  const series = [];
+  for (const [sheet, year] of [['2023', 2023], ['2024', 2024]]) {
+    let rows;
+    try { rows = readSheet(path.join(CACHE, 'OIS-11-19.xlsx'), sheet); } catch { continue; }
+    const h = findHeaderRow(rows, { mustContain: ['IČO', 'receptů'] });
+    const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+    series.push({ year, value: Math.round(sumCols(body, colsMatching(rows[h], ['receptů']))) });
+  }
+  return {
+    ois_code: 'OIS-11-19', source_file: 'OIS-11-19.xlsx', extracted_at: STAMP(),
+    method_note: 'Počet vykázaných receptů v lékárnách a výdejnách.',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'receptů', year: 2024, label: 'Vykázané recepty v lékárnách' },
+    series: [{ key: 'recepty', label: 'Vykázané recepty', unit: 'recepty', points: series }],
+  };
+}
+function transformZatez(file, oisCode, label) {
+  const rows = readSheet(path.join(CACHE, file), 'Data');
+  const h = findHeaderRow(rows, { mustContain: ['PZS'] });
+  // 'PZS celkem' může být v hlavičkovém řádku nebo v podřádku
+  let pzsIdx = colsMatching(rows[h], ['PZS celkem']);
+  let dataStart = h + 1;
+  if (!pzsIdx.length && rows[h + 1]) {
+    pzsIdx = colsMatching(rows[h + 1], ['PZS celkem']);
+    dataStart = h + 2;
+  }
+  const body = rows.slice(dataStart).filter((r) => r && r[0] != null);
+  const m = new Map();
+  let grand = 0;
+  for (const r of body) {
+    const kraj = txt(r[1]);
+    const v = pzsIdx.reduce((s, i) => s + (num(r[i]) || 0), 0);
+    if (kraj) m.set(kraj, (m.get(kraj) || 0) + v);
+    grand += v;
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: Math.round(v) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: oisCode, source_file: file, extracted_at: STAMP(),
+    method_note: 'Počet poskytovatelů zdravotních služeb (PZS) dle kraje pracoviště.',
+    headline: { value: grand, unit: 'poskytovatelů', year: 2024, label },
+    ranked: { label: 'Počet poskytovatelů dle kraje', unit: 'poskytovatelé', items: items.slice(0, 14) },
+  };
+}
+function transformOIS1141() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-41.xlsx'), 'Data');
+  const h = findHeaderRow(rows, { mustContain: ['IČO', 'dokladu 37'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[0] != null);
+  const m = new Map();
+  let grand = 0;
+  for (const r of body) {
+    const kraj = txt(r[4]);
+    const v = num(r[6]) || 0;
+    if (kraj) m.set(kraj, (m.get(kraj) || 0) + v);
+    grand += v;
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: Math.round(v) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-41', source_file: 'OIS-11-41.xlsx', extracted_at: STAMP(),
+    method_note: 'Počet výjezdů zdravotnické záchranné služby (doklad 37, kódy 70/72/74/77).',
+    headline: { value: grand, unit: 'výjezdů ZZS', year: 2024, label: 'Výjezdy záchranné služby' },
+    ranked: { label: 'Výjezdy ZZS dle kraje', unit: 'výjezdy', items: items.slice(0, 14) },
+  };
+}
+
+/* ================= DIMENZE 5 — NÁKLADY ZP ================= */
+function transformOIS1124() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-24.xlsx'), 'Úhradová data – souhrn');
+  const h = findHeaderRow(rows, { mustContain: ['CPO', 'Úhrada'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  const byZp = new Map();
+  let grand = 0;
+  for (const r of body) {
+    if (txt(r[1]) !== '2023') continue;
+    const zp = ZP_NAMES[num(r[0])] || txt(r[0]);
+    const v = num(r[3]) || 0;
+    byZp.set(zp, (byZp.get(zp) || 0) + v);
+    grand += v;
+  }
+  const items = [...byZp.entries()].map(([name, v]) => ({ name, value: round(v / 1e9, 1) })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-24', source_file: 'OIS-11-24.xlsx', extracted_at: STAMP(),
+    method_note: 'Úhrady zdravotních pojišťoven dle segmentů péče za rok 2023, agregováno podle pojišťovny.',
+    headline: { value: round(grand / 1e9, 1), unit: 'mld. Kč', year: 2023, label: 'Úhrady zdravotních pojišťoven' },
+    ranked: { label: 'Úhrady péče dle zdravotní pojišťovny (2023)', unit: 'mld. Kč', items },
+  };
+}
+
+/* ================= DIMENZE 7 — KOMUNITNÍ PÉČE ================= */
+function transformOIS1130() {
+  const series = [];
+  for (const [sheet, year] of [['2023', 2023], ['2024', 2024]]) {
+    let rows;
+    try { rows = readSheet(path.join(CACHE, 'OIS-11-30.xlsx'), sheet); } catch { continue; }
+    const h = findRowWith(rows, 'Kontakty');
+    const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+    series.push({ year, value: Math.round(sumCols(body, colsMatching(rows[h], ['Kontakty']))) });
+  }
+  return {
+    ois_code: 'OIS-11-30', source_file: 'OIS-11-30.xlsx', extracted_at: STAMP(),
+    method_note: 'Počet kontaktů ošetřovatelské a rehabilitační péče (odbornosti 913 a 925).',
+    headline: { value: series[series.length - 1]?.value ?? null, unit: 'kontaktů', year: 2024, label: 'Kontakty ošetřovatelské péče' },
+    series: [{ key: 'kontakty', label: 'Kontakty ošetřovatelské péče', unit: 'kontakty', points: series }],
+  };
+}
+function transformOIS1131() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-31.xlsx'), 'Data');
+  const h = findHeaderRow(rows, { mustContain: ['IČO', 'Segment'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[0] != null);
+  const s24 = Math.round(sumCol(body, 10));
+  const s23 = Math.round(sumCol(body, 11));
+  return {
+    ois_code: 'OIS-11-31', source_file: 'OIS-11-31.xlsx', extracted_at: STAMP(),
+    method_note: 'Úhrady zdravotních pojišťoven v segmentech komunitní péče, mld. Kč.',
+    headline: { value: round(s24 / 1e9, 2), unit: 'mld. Kč', year: 2024, label: 'Úhrady komunitní péče' },
+    series: [{ key: 'uhrady', label: 'Úhrady komunitní péče', unit: 'mld. Kč',
+      points: [{ year: 2023, value: round(s23 / 1e9, 2) }, { year: 2024, value: round(s24 / 1e9, 2) }] }],
+  };
+}
+
+/* ================= DIMENZE 8 — JEDNODENNÍ PÉČE ================= */
+function transformOIS1132() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-32.xlsx'), 'List1');
+  const h = findHeaderRow(rows, { mustContain: ['Kód výkonu', 'Odbornost'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[8] != null);
+  const m = new Map();
+  for (const r of body) {
+    const odb = txt(r[7]) || 'neuvedeno';
+    m.set(odb, (m.get(odb) || 0) + 1);
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: v })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-32', source_file: 'OIS-11-32.xlsx', extracted_at: STAMP(),
+    method_note: 'Spektrum smluvně sjednané jednodenní péče — počet kombinací pracoviště × výkon dle odbornosti.',
+    headline: { value: body.length, unit: 'smluvních kombinací', year: 2024, label: 'Spektrum jednodenní péče' },
+    ranked: { label: 'Smluvní spektrum jednodenní péče dle odbornosti', unit: 'kombinací pracoviště × výkon', items: items.slice(0, 12) },
+  };
+}
+function transformOIS1133() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-33.xlsx'), 'List1');
+  const h = findHeaderRow(rows, { mustContain: ['Kód výkonu', 'Odbornost'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[7] != null);
+  const years = [2019, 2020, 2021, 2022, 2023, 2024];
+  const series = years.map((y, i) => ({ year: y, value: Math.round(sumCol(body, 10 + i * 2)) }));
+  return {
+    ois_code: 'OIS-11-33', source_file: 'OIS-11-33.xlsx', extracted_at: STAMP(),
+    method_note: 'Množství výkonů jednodenní péče na pracovištích s odborností jednodenní péče.',
+    headline: { value: series[5].value, unit: 'výkonů', year: 2024, label: 'Produkce jednodenní péče' },
+    series: [{ key: 'vykony', label: 'Množství výkonů jednodenní péče', unit: 'výkony', points: series }],
+  };
+}
+
+/* ================= REGISTRY ================= */
+function transformOIS0301() {
+  const rows = readSheet(path.join(CACHE, 'OIS-03-01.xlsx'), 'CVSP – datový souhrn');
+  const h = findHeaderRow(rows, { mustContain: ['IČO', 'Typ centra'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  const m = new Map();
+  for (const r of body) {
+    const typ = txt(r[10]) || 'neuvedeno';
+    m.set(typ, (m.get(typ) || 0) + 1);
+  }
+  const items = [...m.entries()].map(([name, v]) => ({ name, value: v })).sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-03-01', source_file: 'OIS-03-01.xlsx', extracted_at: STAMP(),
+    method_note: 'Centra vysoce specializované péče dle Věstníku MZ ČR — počet center podle typu.',
+    headline: { value: body.length, unit: 'center', year: 2024, label: 'Centra vysoce specializované péče' },
+    ranked: { label: 'Počet center vysoce specializované péče dle typu', unit: 'center', items: items.slice(0, 12) },
+  };
+}
+function transformNR02(file, oisCode, label, unit) {
+  const rows = readSheet(path.join(CACHE, file), 'Kraje');
+  const h = findHeaderRow(rows, { minCells: 10, mustContain: ['Kraj', 'Celkem'] });
+  const body = rows.slice(h + 1);
+  const total = body.find((r) => r && txt(r[0]) === 'ČR');
+  if (!total) throw new Error(file + ': ČR řádek nenalezen');
+  const muzi = AGE_BANDS.map((b, i) => ({ band: b, value: Math.round(num(total[22 + i]) || 0) }));
+  const zeny = AGE_BANDS.map((b, i) => ({ band: b, value: Math.round(num(total[35 + i]) || 0) }));
+  return {
+    ois_code: oisCode, source_file: file, extracted_at: STAMP(),
+    method_note: 'Zdravotničtí pracovníci se smluvním zajištěním z veřejného pojištění, ČR, dle věku a pohlaví.',
+    headline: { value: Math.round(num(total[5]) || 0), unit, year: 2024, label },
+    pyramid: { age_bands: AGE_BANDS, muzi, zeny },
+  };
+}
+
 function cacheHas(file) {
   return fs.existsSync(path.join(CACHE, file));
 }
@@ -679,6 +1089,28 @@ function main() {
     ['OIS-11-48.xlsx', () => transformOIS1148()],
     ['OIS-11-49.xlsx', () => transformOIS1149()],
     ['OIS-11-50.xlsx', () => transformOIS1150()],
+    ['OIS-11-05.xlsx', () => transformOIS1105()],
+    ['OIS-11-06.xlsx', () => transformOIS1106()],
+    ['OIS-11-07.xlsx', () => transformOIS1107()],
+    ['OIS-11-08.xlsx', () => transformOIS1108()],
+    ['OIS-11-10.xlsx', () => transformBlockUhrada('OIS-11-10.xlsx', 'Rok 2024', 'OIS-11-10', 'Úhrady za zdravotnické prostředky na poukaz')],
+    ['OIS-11-11.xlsx', () => transformBlockUhrada('OIS-11-11.xlsx', 'Celkem', 'OIS-11-11', 'Úhrady za hromadně vyráběné léky')],
+    ['OIS-11-35.xlsx', () => transformBlockUhrada('OIS-11-35.xlsx', 'Celkem', 'OIS-11-35', 'Úhrady za individuálně připravované léky')],
+    ['OIS-11-36.xlsx', () => transformOIS1136()],
+    ['OIS-11-18.xlsx', () => transformOIS1118()],
+    ['OIS-11-19.xlsx', () => transformOIS1119()],
+    ['OIS-11-20.xlsx', () => transformZatez('OIS-11-20.xlsx', 'OIS-11-20', 'Praktičtí lékaři pro dospělé')],
+    ['OIS-11-21.xlsx', () => transformZatez('OIS-11-21.xlsx', 'OIS-11-21', 'Praktičtí lékaři pro děti a dorost')],
+    ['OIS-11-42.xlsx', () => transformZatez('OIS-11-42.xlsx', 'OIS-11-42', 'Zubní lékaři')],
+    ['OIS-11-41.xlsx', () => transformOIS1141()],
+    ['OIS-11-24.xlsx', () => transformOIS1124()],
+    ['OIS-11-30.xlsx', () => transformOIS1130()],
+    ['OIS-11-31.xlsx', () => transformOIS1131()],
+    ['OIS-11-32.xlsx', () => transformOIS1132()],
+    ['OIS-11-33.xlsx', () => transformOIS1133()],
+    ['OIS-03-01.xlsx', () => transformOIS0301()],
+    ['NR-02-01.xlsx', () => transformNR02('NR-02-01.xlsx', 'NR-02-01', 'Úvazky zdravotnických pracovníků', 'úvazků')],
+    ['NR-02-02.xlsx', () => transformNR02('NR-02-02.xlsx', 'NR-02-02', 'Počty zdravotnických pracovníků', 'fyzických osob')],
   ];
   for (const [file, fn] of optional) {
     if (!cacheHas(file)) continue;
