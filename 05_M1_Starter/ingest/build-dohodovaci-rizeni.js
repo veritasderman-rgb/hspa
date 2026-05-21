@@ -138,6 +138,7 @@ function main() {
       series: [],
       series_periods: [],
       pyramid: null,
+      ranked: null,
       snapshot: null,
       international: null,
       visualization: defaultVisualization(d.time_series),
@@ -160,6 +161,7 @@ function main() {
         ds.series = ex.series || [];
         ds.series_periods = ex.series_periods || [];
         ds.pyramid = ex.pyramid || null;
+        ds.ranked = ex.ranked || null;
         ds.snapshot = ex.snapshot || null;
         ds.method_note = ex.method_note || '';
       }
