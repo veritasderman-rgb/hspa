@@ -199,6 +199,60 @@
         "rationale": "Které určené výkony se nejvíc dělají mimo centra — horizontální žebříček top 12."
       }
     },
+    "OIS-11-25": {
+      "role_in_negotiation": "Počty hospitalizačních případů akutní lůžkové péče jsou základním objemovým ukazatelem dohodovacího řízení — určují, kolik péče se v daném roce poskytlo a co je třeba uhradit.",
+      "what_it_says": "Akutní lůžková péče vykázala v roce 2024 přibližně 1,8 mil. hospitalizačních případů. Žebříček ukazuje nejčastější DRG skupiny podle počtu hospitalizací.",
+      "international": { "available": false, "note": "Počty případů dle CZ-DRG nejsou přímo srovnatelné s národními DRG systémy jiných zemí." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček odhalí nejobjemnější DRG skupiny.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček top 12 DRG.", "rationale": "Pořadí DRG dle objemu — horizontální žebříček." }
+    },
+    "OIS-11-28": {
+      "role_in_negotiation": "Lůžkový fond je kapacitní stránkou dohodovacího řízení — počet nasmlouvaných akutních a následných lůžek limituje objem péče, který lze uhradit.",
+      "what_it_says": "ČR má kolem 76,6 tis. nasmlouvaných lůžek. Data zachycují vývoj akutních a následných/dlouhodobých lůžek mezi roky 2023 a 2024.",
+      "international": { "available": true, "status": "pending", "comparator": "OECD — Hospital beds per 1 000 population", "note": "Srovnání hustoty lůžek s OECD a EU doplní samostatná rešeršní vlna." },
+      "visualization": { "data_cut": "national_timeseries_multi", "primary_chart": "line", "animation": { "pattern": "line-draw", "rationale": "Kreslení řad ukáže posun mezi akutními a následnými lůžky.", "controls": ["play"] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statická řada akutních a následných lůžek.", "rationale": "Dvě kapacitní řady v čase — line chart." }
+    },
+    "OIS-11-38": {
+      "role_in_negotiation": "Data o urgentních příjmech ukazují zátěž vstupní brány nemocniční péče — počet pacientů převzatých od záchranné služby je vstupem pro úhradu urgentní péče.",
+      "what_it_says": "Urgentní příjmy převzaly v roce 2024 přes 825 tis. pacientů od zdravotnické záchranné služby. Žebříček ukazuje nejvytíženější pracoviště.",
+      "international": { "available": false, "note": "Organizace urgentních příjmů a vykazování výkonů je národně specifická." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže koncentraci urgentní zátěže.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček top 12 pracovišť.", "rationale": "Vytíženost urgentních příjmů — horizontální žebříček." }
+    },
+    "OIS-11-39": {
+      "role_in_negotiation": "Referenční nemocnice tvoří síť, z jejíchž dat se počítají nákladové váhy DRG. Pokrytí referenční sítí určuje reprezentativnost celého úhradového modelu.",
+      "what_it_says": "Referenční nemocnice pokrývají 47,7 % hospitalizačních případů ČR — právě z těchto dat vznikají nákladové váhy DRG používané v úhradové vyhlášce.",
+      "international": { "available": false, "note": "Referenční síť je nástroj kalkulace českého CZ-DRG; přímý mezinárodní ekvivalent neexistuje." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže nejobjemnější DRG v referenční síti.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček top 12 DRG.", "rationale": "Objem DRG v referenční síti — horizontální žebříček." }
+    },
+    "OIS-11-45": {
+      "role_in_negotiation": "Data o centralizaci sledují, jak se hospitalizace soustředí do center vysoce specializované péče — vstup pro rozhodování o síti center a jejich úhradách.",
+      "what_it_says": "Sledování centralizace pokrývá přibližně 1,8 mil. hospitalizačních případů napříč typy center vysoce specializované péče (transplantační, traumatologická, onkologická a další).",
+      "international": { "available": false, "note": "Vymezení center vysoce specializované péče je dáno českou legislativou." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček odhalí nejobjemnější sledované DRG.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček top 12 DRG.", "rationale": "Objem sledovaných DRG — horizontální žebříček." }
+    },
+    "OIS-11-46": {
+      "role_in_negotiation": "Délka hospitalizace je ukazatelem efektivity lůžkové péče — kratší pobyty při stejném výsledku uvolňují kapacitu a snižují náklady, což je předmětem vyjednávání o úhradách.",
+      "what_it_says": "Průměrná délka hospitalizace je 6,5 dne. Rozložení ukazuje, že velká část případů končí do tří dnů, zatímco menšina dlouhých pobytů (14+ dní) váže neúměrně mnoho lůžkodnů.",
+      "international": { "available": true, "status": "pending", "comparator": "OECD — Average length of stay in hospitals", "note": "Srovnání průměrné délky hospitalizace s OECD a EU doplní samostatná rešeršní vlna." },
+      "visualization": { "data_cut": "distribution_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Naplnění pruhů ukáže koncentraci krátkých pobytů.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický sloupcový graf rozložení délky pobytu.", "rationale": "Rozložení délky pobytu do pásem — sloupcový graf v přirozeném pořadí pásem." }
+    },
+    "OIS-11-48": {
+      "role_in_negotiation": "Hodnocení pracovišť intenzivní péče porovnává nasmlouvané kapacity s reálnou produkcí — vstup pro úhrady nejnákladnějšího segmentu lůžkové péče.",
+      "what_it_says": "ČR má nasmlouváno přes 5,7 tis. lůžek intenzivní péče. Žebříček ukazuje obory s největšími intenzivními kapacitami.",
+      "international": { "available": false, "note": "Definice typů lůžek intenzivní péče je národně specifická (typy OD dle českého výkaznictví)." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže obory s největší intenzivní kapacitou.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček top 12 oborů.", "rationale": "Intenzivní kapacity dle oboru — horizontální žebříček." }
+    },
+    "OIS-11-49": {
+      "role_in_negotiation": "Sumarizace produkce základních oborů akutní lůžkové péče dává přehled o kapacitách resuscitační a intenzivní péče napříč kraji.",
+      "what_it_says": "Poskytovatelé akutní lůžkové péče mají nasmlouváno kolem 821 lůžek nejvyššího stupně resuscitační péče (ARO). Žebříček ukazuje rozložení mezi kraji.",
+      "international": { "available": false, "note": "Kategorie lůžek ARO je daná českým výkaznictvím." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže krajské rozdíly v kapacitě ARO.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček krajů.", "rationale": "Krajské rozložení lůžek ARO — horizontální žebříček." }
+    },
+    "OIS-11-50": {
+      "role_in_negotiation": "Komplexní datový výstup spojuje hospodaření, úhrady, personál a produkci poskytovatelů akutní lůžkové péče — je nejširším jednotným podkladem dohodovacího řízení.",
+      "what_it_says": "Celkové náklady poskytovatelů akutní lůžkové péče dosáhly v roce 2024 přibližně 299 mld. Kč. Žebříček ukazuje rozložení nákladů mezi kraji.",
+      "international": { "available": false, "note": "Hospodaření poskytovatelů dle výkazu E 6-02 je národní účetní výkaz bez přímého mezinárodního ekvivalentu." },
+      "visualization": { "data_cut": "ranked_snapshot", "primary_chart": "ranked_bars", "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže krajskou koncentraci nákladů akutní lůžkové péče.", "controls": [] }, "uses_3d": false, "engine": "chartjs", "fallback_2d": "Statický žebříček krajů dle nákladů.", "rationale": "Krajské rozložení nákladů — horizontální žebříček." }
+    },
     "OIS-11-47": {
       "role_in_negotiation": "Struktura pojistného kmene (věk, pohlaví, okres, pojišťovna) je primárním vstupem Dimenze 5 — určuje rizikové skupiny i regionální nákladové trendy.",
       "what_it_says": "Plně zpracováno jako interaktivní atlas: animovaná choropletní mapa stárnutí krajů, populační pyramida, tržní podíly 7 pojišťoven a race-chart okresů.",

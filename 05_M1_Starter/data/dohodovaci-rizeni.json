@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-21T15:22:50.535Z",
+  "generated_at": "2026-05-21T15:27:51.085Z",
   "_doc": "Frontend kontrakt stránky \"Dohodovací řízení — datová podpora\". Sady NEJSOU klasické HSPA indikátory — jde o provozní a ekonomická data dohodovacího řízení. Generováno ingest/build-dohodovaci-rizeni.js.",
   "source": "NZIP.cz – Datová podpora dohodovacího řízení",
   "publisher": "Ministerstvo zdravotnictví ČR + ÚZIS ČR",
@@ -13,7 +13,7 @@
       "datasets_total": 44,
       "dimensions": 8,
       "interactive_only": 7,
-      "ready": 11
+      "ready": 20
     }
   },
   "dimensions": [
@@ -1678,29 +1678,90 @@
         "nzip_page": "http://www.nzip.cz/data/2364-hospitalizacni-pripady-akutni-pece-icz-cz-drg-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-25-hospitalizacni-pripady-akutni-pece-icz-cz-drg-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Počty hospitalizačních případů akutní lůžkové péče jsou základním objemovým ukazatelem dohodovacího řízení — určují, kolik péče se v daném roce poskytlo a co je třeba uhradit.",
+      "what_it_says": "Akutní lůžková péče vykázala v roce 2024 přibližně 1,8 mil. hospitalizačních případů. Žebříček ukazuje nejčastější DRG skupiny podle počtu hospitalizací.",
+      "method_note": "Hospitalizační případy akutní lůžkové péče dle CZ-DRG, rok 2024 (NRHZS).",
+      "headline": {
+        "value": 1792276,
+        "unit": "hospitalizačních případů",
+        "year": 2024,
+        "label": "Akutní hospitalizace ČR"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 DRG skupin dle počtu hospitalizací",
+        "unit": "hospitalizačních případů",
+        "items": [
+          {
+            "name": "Novorozenci s hmotností 2500 a více g narození v daném zdravotnickém zařízení bez závažné diagnózy a s gestačním stářím od 37. týdne",
+            "value": 68973
+          },
+          {
+            "name": "Vaginální porod jediného dítěte bez závažné diagnózy",
+            "value": 53795
+          },
+          {
+            "name": "Malý operační výkon pro onemocnění ženské reprodukční soustavy",
+            "value": 36735
+          },
+          {
+            "name": "Jiná onemocnění páteře a bolest zad",
+            "value": 27860
+          },
+          {
+            "name": "Záněty plic u pacientů s CC=0-1",
+            "value": 26432
+          },
+          {
+            "name": "Složitá artroskopie",
+            "value": 23821
+          },
+          {
+            "name": "Implantace totální endoprotézy kolene",
+            "value": 21678
+          },
+          {
+            "name": "Akutní rehabilitace pro ostatní onemocnění - 7-12 rehabilitačních dnů",
+            "value": 18056
+          },
+          {
+            "name": "Odstranění žlučníku laparoskopicky pro jiné onemocnění mimo akutní zánět slinivky břišní u pacientů s CC=0",
+            "value": 17514
+          },
+          {
+            "name": "Implantace necementované totální endoprotézy kyčle",
+            "value": 16834
+          },
+          {
+            "name": "Jiné onemocnění trávicí soustavy u pacientů s CC=0",
+            "value": 15586
+          },
+          {
+            "name": "Záněty močových cest u pacientů ve věku 18 a více let s CC=0",
+            "value": 15216
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Počty případů dle CZ-DRG nejsou přímo srovnatelné s národními DRG systémy jiných zemí."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček odhalí nejobjemnější DRG skupiny.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček top 12 DRG.",
+        "rationale": "Pořadí DRG dle objemu — horizontální žebříček."
       },
       "regional": false
     },
@@ -1934,29 +1995,72 @@
         "nzip_page": "http://www.nzip.cz/data/2378-luzkovy-fond-akutni-nasledna-dlouhodoba-pece-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-28-luzkovy-fond-akutni-nasledna-dlouhodoba-pece-2026-02.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
-      "series": [],
+      "status": "ready",
+      "role_in_negotiation": "Lůžkový fond je kapacitní stránkou dohodovacího řízení — počet nasmlouvaných akutních a následných lůžek limituje objem péče, který lze uhradit.",
+      "what_it_says": "ČR má kolem 76,6 tis. nasmlouvaných lůžek. Data zachycují vývoj akutních a následných/dlouhodobých lůžek mezi roky 2023 a 2024.",
+      "method_note": "Součet nasmlouvaných lůžek akutní a následné/dlouhodobé péče, ČR (NRHZS).",
+      "headline": {
+        "value": 76587,
+        "unit": "lůžek",
+        "year": 2024,
+        "label": "Lůžkový fond ČR"
+      },
+      "series": [
+        {
+          "key": "akutni",
+          "label": "Akutní lůžka",
+          "unit": "lůžka",
+          "points": [
+            {
+              "year": 2023,
+              "value": 48025
+            },
+            {
+              "year": 2024,
+              "value": 48036
+            }
+          ]
+        },
+        {
+          "key": "nasledna",
+          "label": "Následná a dlouhodobá lůžka",
+          "unit": "lůžka",
+          "points": [
+            {
+              "year": 2023,
+              "value": 28347
+            },
+            {
+              "year": 2024,
+              "value": 28551
+            }
+          ]
+        }
+      ],
       "series_periods": [],
       "pyramid": null,
       "ranked": null,
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Hospital beds per 1 000 population",
+        "note": "Srovnání hustoty lůžek s OECD a EU doplní samostatná rešeršní vlna."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "national_timeseries_multi",
+        "primary_chart": "line",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
-          "controls": []
+          "pattern": "line-draw",
+          "rationale": "Kreslení řad ukáže posun mezi akutními a následnými lůžky.",
+          "controls": [
+            "play"
+          ]
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statická řada akutních a následných lůžek.",
+        "rationale": "Dvě kapacitní řady v čase — line chart."
       },
       "regional": false
     },
@@ -2361,29 +2465,90 @@
         "nzip_page": "http://www.nzip.cz/data/2384-urgentni-prijmy-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-38-urgentni-prijmy-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Data o urgentních příjmech ukazují zátěž vstupní brány nemocniční péče — počet pacientů převzatých od záchranné služby je vstupem pro úhradu urgentní péče.",
+      "what_it_says": "Urgentní příjmy převzaly v roce 2024 přes 825 tis. pacientů od zdravotnické záchranné služby. Žebříček ukazuje nejvytíženější pracoviště.",
+      "method_note": "Výkony 09564 (péče spojená s převzetím pacienta od ZZS) vykázané na urgentních příjmech, celé IČZ.",
+      "headline": {
+        "value": 825011,
+        "unit": "výkonů převzetí od ZZS",
+        "year": 2024,
+        "label": "Převzetí pacientů od ZZS"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 pracovišť dle převzetí pacientů od ZZS",
+        "unit": "výkonů",
+        "items": [
+          {
+            "name": "Nemocnice Pardubického kraje, a.s.",
+            "value": 33606
+          },
+          {
+            "name": "Fakultní nemocnice Bulovka",
+            "value": 31704
+          },
+          {
+            "name": "Fakultní nemocnice Plzeň",
+            "value": 27570
+          },
+          {
+            "name": "Nemocnice České Budějovice, a.s.",
+            "value": 22027
+          },
+          {
+            "name": "Fakultní nemocnice Královské Vinohrady",
+            "value": 21461
+          },
+          {
+            "name": "Fakultní Thomayerova nemocnice",
+            "value": 20616
+          },
+          {
+            "name": "Fakultní nemocnice v Motole",
+            "value": 19232
+          },
+          {
+            "name": "Krajská zdravotní, a.s.",
+            "value": 18289
+          },
+          {
+            "name": "Fakultní nemocnice Brno",
+            "value": 18161
+          },
+          {
+            "name": "Krajská nemocnice Liberec, a.s.",
+            "value": 17590
+          },
+          {
+            "name": "Fakultní nemocnice Olomouc",
+            "value": 15789
+          },
+          {
+            "name": "AGEL Středomoravská nemocniční a.s.",
+            "value": 15619
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Organizace urgentních příjmů a vykazování výkonů je národně specifická."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček ukáže koncentraci urgentní zátěže.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček top 12 pracovišť.",
+        "rationale": "Vytíženost urgentních příjmů — horizontální žebříček."
       },
       "regional": false
     },
@@ -2407,29 +2572,90 @@
         "nzip_page": "http://www.nzip.cz/data/2385-referencni-sit-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-39-referencni-sit-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Referenční nemocnice tvoří síť, z jejíchž dat se počítají nákladové váhy DRG. Pokrytí referenční sítí určuje reprezentativnost celého úhradového modelu.",
+      "what_it_says": "Referenční nemocnice pokrývají 47,7 % hospitalizačních případů ČR — právě z těchto dat vznikají nákladové váhy DRG používané v úhradové vyhlášce.",
+      "method_note": "Pokrytí hospitalizačních případů referenčními nemocnicemi (RN) jako podíl z celkového počtu HP ČR.",
+      "headline": {
+        "value": 47.7,
+        "unit": "% případů v referenční síti",
+        "year": 2024,
+        "label": "Pokrytí referenční sítí"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 DRG skupin dle počtu hospitalizací ČR",
+        "unit": "hospitalizačních případů",
+        "items": [
+          {
+            "name": "Novorozenci s hmotností 2500 a více g narození v daném zdravotnickém zařízení bez závažné diagnózy a s gestačním stářím od 37. týdne",
+            "value": 69514
+          },
+          {
+            "name": "Vaginální porod jediného dítěte bez závažné diagnózy",
+            "value": 54373
+          },
+          {
+            "name": "Malý operační výkon pro onemocnění ženské reprodukční soustavy",
+            "value": 37031
+          },
+          {
+            "name": "Jiná onemocnění páteře a bolest zad",
+            "value": 28088
+          },
+          {
+            "name": "Záněty plic u pacientů s CC=0-1",
+            "value": 26647
+          },
+          {
+            "name": "Složitá artroskopie",
+            "value": 24108
+          },
+          {
+            "name": "Implantace totální endoprotézy kolene",
+            "value": 21753
+          },
+          {
+            "name": "Akutní rehabilitace pro ostatní onemocnění - 7-12 rehabilitačních dnů",
+            "value": 18147
+          },
+          {
+            "name": "Odstranění žlučníku laparoskopicky pro jiné onemocnění mimo akutní zánět slinivky břišní u pacientů s CC=0",
+            "value": 17679
+          },
+          {
+            "name": "Implantace necementované totální endoprotézy kyčle",
+            "value": 16921
+          },
+          {
+            "name": "Jiné onemocnění trávicí soustavy u pacientů s CC=0",
+            "value": 15780
+          },
+          {
+            "name": "Záněty močových cest u pacientů ve věku 18 a více let s CC=0",
+            "value": 15306
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Referenční síť je nástroj kalkulace českého CZ-DRG; přímý mezinárodní ekvivalent neexistuje."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček ukáže nejobjemnější DRG v referenční síti.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček top 12 DRG.",
+        "rationale": "Objem DRG v referenční síti — horizontální žebříček."
       },
       "regional": false
     },
@@ -2644,29 +2870,90 @@
         "nzip_page": "http://www.nzip.cz/data/2659-centralizace-pece-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-45-centralizace-pece-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Data o centralizaci sledují, jak se hospitalizace soustředí do center vysoce specializované péče — vstup pro rozhodování o síti center a jejich úhradách.",
+      "what_it_says": "Sledování centralizace pokrývá přibližně 1,8 mil. hospitalizačních případů napříč typy center vysoce specializované péče (transplantační, traumatologická, onkologická a další).",
+      "method_note": "Hospitalizační případy ve skupinách sledovaných z hlediska centralizace do center vysoce specializované péče.",
+      "headline": {
+        "value": 1789575,
+        "unit": "hospitalizačních případů",
+        "year": 2024,
+        "label": "Případy sledované pro centralizaci"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 DRG skupin dle počtu hospitalizací",
+        "unit": "hospitalizačních případů",
+        "items": [
+          {
+            "name": "Novorozenci s hmotností 2500 a více g narození v daném zdravotnickém zařízení",
+            "value": 75079
+          },
+          {
+            "name": "Vaginální porod",
+            "value": 58713
+          },
+          {
+            "name": "Záněty plic",
+            "value": 41976
+          },
+          {
+            "name": "Malý operační výkon pro onemocnění ženské reprodukční soustavy",
+            "value": 36735
+          },
+          {
+            "name": "Operační artroskopie",
+            "value": 36371
+          },
+          {
+            "name": "Záněty močových cest",
+            "value": 33735
+          },
+          {
+            "name": "Srdeční selhání",
+            "value": 32528
+          },
+          {
+            "name": "Výkon pro endoprotézu kyčelního kloubu",
+            "value": 29623
+          },
+          {
+            "name": "Jiná onemocnění páteře a bolest zad",
+            "value": 27860
+          },
+          {
+            "name": "Invazivní diagnostika pro nemoc oběhové soustavy",
+            "value": 26927
+          },
+          {
+            "name": "Výkon pro endoprotézu kolenního kloubu",
+            "value": 23896
+          },
+          {
+            "name": "Porod císařským řezem",
+            "value": 21664
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Vymezení center vysoce specializované péče je dáno českou legislativou."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček odhalí nejobjemnější sledované DRG.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček top 12 DRG.",
+        "rationale": "Objem sledovaných DRG — horizontální žebříček."
       },
       "regional": false
     },
@@ -2689,29 +2976,76 @@
         "nzip_page": "http://www.nzip.cz/data/2614-kratkodobe-hospitalizace-drg-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datový-souhrn-OIS-11-46-kratkodobe-hospitalizace-drg-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Délka hospitalizace je ukazatelem efektivity lůžkové péče — kratší pobyty při stejném výsledku uvolňují kapacitu a snižují náklady, což je předmětem vyjednávání o úhradách.",
+      "what_it_says": "Průměrná délka hospitalizace je 6,5 dne. Rozložení ukazuje, že velká část případů končí do tří dnů, zatímco menšina dlouhých pobytů (14+ dní) váže neúměrně mnoho lůžkodnů.",
+      "method_note": "Rozložení hospitalizačních případů podle délky pobytu; průměrná délka (ALOS) vážená počtem případů.",
+      "headline": {
+        "value": 6.5,
+        "unit": "dní (průměrná délka)",
+        "year": 2024,
+        "label": "Průměrná délka hospitalizace"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Rozložení hospitalizací podle délky pobytu",
+        "unit": "hospitalizačních případů",
+        "items": [
+          {
+            "name": "1 den",
+            "value": 84542
+          },
+          {
+            "name": "2 dny",
+            "value": 269740
+          },
+          {
+            "name": "3 dny",
+            "value": 310450
+          },
+          {
+            "name": "4 dny",
+            "value": 248589
+          },
+          {
+            "name": "5 dní",
+            "value": 196212
+          },
+          {
+            "name": "6 dní",
+            "value": 127329
+          },
+          {
+            "name": "7–13 dní",
+            "value": 401818
+          },
+          {
+            "name": "14+ dní",
+            "value": 166535
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Average length of stay in hospitals",
+        "note": "Srovnání průměrné délky hospitalizace s OECD a EU doplní samostatná rešeršní vlna."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "distribution_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Naplnění pruhů ukáže koncentraci krátkých pobytů.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický sloupcový graf rozložení délky pobytu.",
+        "rationale": "Rozložení délky pobytu do pásem — sloupcový graf v přirozeném pořadí pásem."
       },
       "regional": false
     },
@@ -2788,29 +3122,90 @@
         "nzip_page": "http://www.nzip.cz/data/2712-intenzivni-pece-hodnoceni-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-48-intenzivni-pece-hodnoceni-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Hodnocení pracovišť intenzivní péče porovnává nasmlouvané kapacity s reálnou produkcí — vstup pro úhrady nejnákladnějšího segmentu lůžkové péče.",
+      "what_it_says": "ČR má nasmlouváno přes 5,7 tis. lůžek intenzivní péče. Žebříček ukazuje obory s největšími intenzivními kapacitami.",
+      "method_note": "Nasmlouvaná lůžka intenzivní péče dle oboru pracoviště, rok 2024.",
+      "headline": {
+        "value": 5727,
+        "unit": "intenzivních lůžek",
+        "year": 2024,
+        "label": "Nasmlouvaná lůžka intenzivní péče"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 oborů dle nasmlouvaných intenzivních lůžek",
+        "unit": "lůžka",
+        "items": [
+          {
+            "name": "chirurgie",
+            "value": 968
+          },
+          {
+            "name": "vnitřní lékařství",
+            "value": 930
+          },
+          {
+            "name": "anesteziologie a intenzivní medicína",
+            "value": 821
+          },
+          {
+            "name": "neonatologie",
+            "value": 497
+          },
+          {
+            "name": "dětské lékařství",
+            "value": 377
+          },
+          {
+            "name": "neurologie",
+            "value": 322
+          },
+          {
+            "name": "kardiologie",
+            "value": 303
+          },
+          {
+            "name": "kardiochirurgie",
+            "value": 255
+          },
+          {
+            "name": "gynekologie a porodnictví",
+            "value": 196
+          },
+          {
+            "name": "ortopedie a traumatologie pohybového ústrojí",
+            "value": 183
+          },
+          {
+            "name": "neurochirurgie",
+            "value": 138
+          },
+          {
+            "name": "hematologie a transfúzní lékařství",
+            "value": 136
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Definice typů lůžek intenzivní péče je národně specifická (typy OD dle českého výkaznictví)."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "line",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček ukáže obory s největší intenzivní kapacitou.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček top 12 oborů.",
+        "rationale": "Intenzivní kapacity dle oboru — horizontální žebříček."
       },
       "regional": false
     },
@@ -2833,29 +3228,90 @@
         "nzip_page": "http://www.nzip.cz/data/2713-produkce-palp-sumarizace-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-49-produkce-palp-sumarizace-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Sumarizace produkce základních oborů akutní lůžkové péče dává přehled o kapacitách resuscitační a intenzivní péče napříč kraji.",
+      "what_it_says": "Poskytovatelé akutní lůžkové péče mají nasmlouváno kolem 821 lůžek nejvyššího stupně resuscitační péče (ARO). Žebříček ukazuje rozložení mezi kraji.",
+      "method_note": "Nasmlouvaná lůžka intenzivní péče (ARO) poskytovatelů akutní lůžkové péče, rok 2024.",
+      "headline": {
+        "value": 821,
+        "unit": "lůžek ARO",
+        "year": 2024,
+        "label": "Lůžka resuscitační a intenzivní péče"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Top 12 krajů dle lůžek intenzivní péče",
+        "unit": "lůžka ARO",
+        "items": [
+          {
+            "name": "Hlavní město Praha",
+            "value": 156
+          },
+          {
+            "name": "Jihomoravský",
+            "value": 144
+          },
+          {
+            "name": "Moravskoslezský",
+            "value": 101
+          },
+          {
+            "name": "Středočeský",
+            "value": 80
+          },
+          {
+            "name": "Olomoucký",
+            "value": 46
+          },
+          {
+            "name": "Jihočeský",
+            "value": 45
+          },
+          {
+            "name": "Ústecký",
+            "value": 43
+          },
+          {
+            "name": "Královéhradecký",
+            "value": 35
+          },
+          {
+            "name": "Plzeňský",
+            "value": 32
+          },
+          {
+            "name": "Pardubický",
+            "value": 32
+          },
+          {
+            "name": "Zlínský",
+            "value": 32
+          },
+          {
+            "name": "Liberecký",
+            "value": 30
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Kategorie lůžek ARO je daná českým výkaznictvím."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček ukáže krajské rozdíly v kapacitě ARO.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček krajů.",
+        "rationale": "Krajské rozložení lůžek ARO — horizontální žebříček."
       },
       "regional": false
     },
@@ -2878,29 +3334,90 @@
         "nzip_page": "http://www.nzip.cz/data/2714-palp-komplexni-vystup-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-50-palp-komplexni-vystup-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
+      "status": "ready",
+      "role_in_negotiation": "Komplexní datový výstup spojuje hospodaření, úhrady, personál a produkci poskytovatelů akutní lůžkové péče — je nejširším jednotným podkladem dohodovacího řízení.",
+      "what_it_says": "Celkové náklady poskytovatelů akutní lůžkové péče dosáhly v roce 2024 přibližně 299 mld. Kč. Žebříček ukazuje rozložení nákladů mezi kraji.",
+      "method_note": "Celkové náklady poskytovatelů akutní lůžkové péče dle výkazu E 6-02, převedeno z tis. Kč na mld. Kč.",
+      "headline": {
+        "value": 299.4,
+        "unit": "mld. Kč",
+        "year": 2024,
+        "label": "Celkové náklady akutní lůžkové péče"
+      },
       "series": [],
       "series_periods": [],
       "pyramid": null,
-      "ranked": null,
+      "ranked": {
+        "label": "Náklady akutní lůžkové péče dle kraje",
+        "unit": "mld. Kč",
+        "items": [
+          {
+            "name": "HMP",
+            "value": 77.46
+          },
+          {
+            "name": "JHM",
+            "value": 39.14
+          },
+          {
+            "name": "MSK",
+            "value": 32.57
+          },
+          {
+            "name": "STC",
+            "value": 20.91
+          },
+          {
+            "name": "HKK",
+            "value": 17.01
+          },
+          {
+            "name": "PLK",
+            "value": 16.92
+          },
+          {
+            "name": "ULK",
+            "value": 16.59
+          },
+          {
+            "name": "OLK",
+            "value": 15.89
+          },
+          {
+            "name": "JHC",
+            "value": 15.16
+          },
+          {
+            "name": "VYS",
+            "value": 11.62
+          },
+          {
+            "name": "ZLK",
+            "value": 11.49
+          },
+          {
+            "name": "LBK",
+            "value": 11.02
+          }
+        ]
+      },
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Hospodaření poskytovatelů dle výkazu E 6-02 je národní účetní výkaz bez přímého mezinárodního ekvivalentu."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
-        "primary_chart": "bars",
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
+          "pattern": "bar-grow",
+          "rationale": "Žebříček ukáže krajskou koncentraci nákladů akutní lůžkové péče.",
           "controls": []
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statický žebříček krajů dle nákladů.",
+        "rationale": "Krajské rozložení nákladů — horizontální žebříček."
       },
       "regional": false
     },

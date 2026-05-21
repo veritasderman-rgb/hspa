@@ -442,6 +442,212 @@ function transformOIS1151() {
   };
 }
 
+/* generický žebříček: součet hodnoty (valIdx) podle názvu (nameIdx) */
+function rankedBy(body, nameIdx, valIdx, topN = 12) {
+  const m = new Map();
+  for (const r of body) {
+    if (!r) continue;
+    const name = txt(r[nameIdx]);
+    const v = num(r[valIdx]);
+    if (!name || v == null) continue;
+    m.set(name, (m.get(name) || 0) + v);
+  }
+  return [...m.entries()]
+    .map(([name, value]) => ({ name, value: Math.round(value) }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, topN);
+}
+
+function sumCol(body, idx) {
+  let s = 0;
+  for (const r of body) {
+    if (!r) continue;
+    const v = num(r[idx]);
+    if (v != null) s += v;
+  }
+  return s;
+}
+
+const STAMP = () => new Date().toISOString();
+
+/* ---- OIS-11-25: počty hospitalizačních případů akutní lůžkové péče ---- */
+function transformOIS1125() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-25.xlsx'), 'CZ-DRG 6.0');
+  const h = findHeaderRow(rows, { mustContain: ['IČZ', 'Počet HP'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[3] != null);
+  const totHP = sumCol(body, 5);
+  return {
+    ois_code: 'OIS-11-25',
+    source_file: 'OIS-11-25.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Hospitalizační případy akutní lůžkové péče dle CZ-DRG, rok 2024 (NRHZS).',
+    headline: { value: totHP, unit: 'hospitalizačních případů', year: 2024, label: 'Akutní hospitalizace ČR' },
+    ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací', unit: 'hospitalizačních případů', items: rankedBy(body, 4, 5) },
+  };
+}
+
+/* ---- OIS-11-28: lůžkový fond akutní, následné a dlouhodobé péče ---- */
+function transformOIS1128() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-28.xlsx'), 'Data');
+  const h = findHeaderRow(rows, { minCells: 10, mustContain: ['Rok', 'Kód odbornosti'] });
+  const body = rows.slice(h + 3).filter((r) => r && r[0] != null);
+  const byYear = new Map();
+  for (const r of body) {
+    const rok = num(r[0]);
+    if (!rok) continue;
+    if (!byYear.has(rok)) byYear.set(rok, { ak: 0, na: 0 });
+    const acc = byYear.get(rok);
+    acc.ak += num(r[12]) || 0; // Akutní celkem
+    acc.na += num(r[15]) || 0; // Následná a dlouhodobá celkem
+  }
+  const years = [...byYear.keys()].sort((a, b) => a - b);
+  const last = years[years.length - 1];
+  return {
+    ois_code: 'OIS-11-28',
+    source_file: 'OIS-11-28.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Součet nasmlouvaných lůžek akutní a následné/dlouhodobé péče, ČR (NRHZS).',
+    headline: {
+      value: Math.round((byYear.get(last).ak + byYear.get(last).na)),
+      unit: 'lůžek',
+      year: last,
+      label: 'Lůžkový fond ČR',
+    },
+    series: [
+      { key: 'akutni', label: 'Akutní lůžka', unit: 'lůžka', points: years.map((y) => ({ year: y, value: Math.round(byYear.get(y).ak) })) },
+      { key: 'nasledna', label: 'Následná a dlouhodobá lůžka', unit: 'lůžka', points: years.map((y) => ({ year: y, value: Math.round(byYear.get(y).na) })) },
+    ],
+  };
+}
+
+/* ---- OIS-11-38: data o urgentních příjmech ---- */
+function transformOIS1138() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-38.xlsx'), 'Data');
+  const h = findHeaderRow(rows, { mustContain: ['IČO', 'urgentního příjmu'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[3] != null);
+  return {
+    ois_code: 'OIS-11-38',
+    source_file: 'OIS-11-38.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Výkony 09564 (péče spojená s převzetím pacienta od ZZS) vykázané na urgentních příjmech, celé IČZ.',
+    headline: { value: Math.round(sumCol(body, 8)), unit: 'výkonů převzetí od ZZS', year: 2024, label: 'Převzetí pacientů od ZZS' },
+    ranked: { label: 'Top 12 pracovišť dle převzetí pacientů od ZZS', unit: 'výkonů', items: rankedBy(body, 3, 8) },
+  };
+}
+
+/* ---- OIS-11-39: data o referenční síti ---- */
+function transformOIS1139() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-39.xlsx'), 'Data o referenční síti');
+  const h = findHeaderRow(rows, { mustContain: ['Kód DRG'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  const hpCR = sumCol(body, 2);
+  const hpRN = sumCol(body, 3);
+  return {
+    ois_code: 'OIS-11-39',
+    source_file: 'OIS-11-39.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Pokrytí hospitalizačních případů referenčními nemocnicemi (RN) jako podíl z celkového počtu HP ČR.',
+    headline: { value: round((hpRN / hpCR) * 100, 1), unit: '% případů v referenční síti', year: 2024, label: 'Pokrytí referenční sítí' },
+    ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací ČR', unit: 'hospitalizačních případů', items: rankedBy(body, 1, 2) },
+  };
+}
+
+/* ---- OIS-11-45: data o centralizaci péče ---- */
+function transformOIS1145() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-45.xlsx'), 'Data o centralizaci péče');
+  const h = findHeaderRow(rows, { mustContain: ['Kód DRG'] });
+  const body = rows.slice(h + 2).filter((r) => r && r[0] != null);
+  return {
+    ois_code: 'OIS-11-45',
+    source_file: 'OIS-11-45.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Hospitalizační případy ve skupinách sledovaných z hlediska centralizace do center vysoce specializované péče.',
+    headline: { value: Math.round(sumCol(body, 2)), unit: 'hospitalizačních případů', year: 2024, label: 'Případy sledované pro centralizaci' },
+    ranked: { label: 'Top 12 DRG skupin dle počtu hospitalizací', unit: 'hospitalizačních případů', items: rankedBy(body, 1, 2) },
+  };
+}
+
+/* ---- OIS-11-46: délka hospitalizace (LOS) dle DRG ---- */
+function transformOIS1146() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-46.xlsx'), 'LOS dle DRG skupin');
+  const h = findHeaderRow(rows, { mustContain: ['DRG skupina', 'ALOS'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  const buckets = ['1 den', '2 dny', '3 dny', '4 dny', '5 dní', '6 dní', '7–13 dní', '14+ dní'];
+  const sums = buckets.map((_, i) => sumCol(body, 5 + i));
+  let alosW = 0;
+  let hpAll = 0;
+  for (const r of body) {
+    const alos = num(r[3]);
+    const hp = num(r[4]);
+    if (alos != null && hp != null) {
+      alosW += alos * hp;
+      hpAll += hp;
+    }
+  }
+  return {
+    ois_code: 'OIS-11-46',
+    source_file: 'OIS-11-46.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Rozložení hospitalizačních případů podle délky pobytu; průměrná délka (ALOS) vážená počtem případů.',
+    headline: { value: round(alosW / hpAll, 1), unit: 'dní (průměrná délka)', year: 2024, label: 'Průměrná délka hospitalizace' },
+    ranked: {
+      label: 'Rozložení hospitalizací podle délky pobytu',
+      unit: 'hospitalizačních případů',
+      items: buckets.map((b, i) => ({ name: b, value: Math.round(sums[i]) })),
+    },
+  };
+}
+
+/* ---- OIS-11-48: hodnocení pracovišť intenzivní péče ---- */
+function transformOIS1148() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-48.xlsx'), 'hodnocení');
+  const h = findHeaderRow(rows, { mustContain: ['IČZ', 'Obor'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null && num(r[20]) != null);
+  return {
+    ois_code: 'OIS-11-48',
+    source_file: 'OIS-11-48.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Nasmlouvaná lůžka intenzivní péče dle oboru pracoviště, rok 2024.',
+    headline: { value: Math.round(sumCol(body, 20)), unit: 'intenzivních lůžek', year: 2024, label: 'Nasmlouvaná lůžka intenzivní péče' },
+    ranked: { label: 'Top 12 oborů dle nasmlouvaných intenzivních lůžek', unit: 'lůžka', items: rankedBy(body, 4, 20) },
+  };
+}
+
+/* ---- OIS-11-49: sumarizace produkce akutní lůžkové péče ---- */
+function transformOIS1149() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-49.xlsx'), 'rok 2024');
+  const h = findHeaderRow(rows, { minCells: 8, mustContain: ['Kraj', 'IČO', 'Zřizovatel'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[3] != null);
+  return {
+    ois_code: 'OIS-11-49',
+    source_file: 'OIS-11-49.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Nasmlouvaná lůžka intenzivní péče (ARO) poskytovatelů akutní lůžkové péče, rok 2024.',
+    headline: { value: Math.round(sumCol(body, 10)), unit: 'lůžek ARO', year: 2024, label: 'Lůžka resuscitační a intenzivní péče' },
+    ranked: { label: 'Top 12 krajů dle lůžek intenzivní péče', unit: 'lůžka ARO', items: rankedBy(body, 1, 10) },
+  };
+}
+
+/* ---- OIS-11-50: komplexní výstup poskytovatelů akutní lůžkové péče ---- */
+function transformOIS1150() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-50.xlsx'), '2024');
+  const h = findHeaderRow(rows, { minCells: 8, mustContain: ['IČO', 'Kraj', 'Zřizovatel'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null && num(r[12]) != null);
+  const totNakladyTis = sumCol(body, 12);
+  return {
+    ois_code: 'OIS-11-50',
+    source_file: 'OIS-11-50.xlsx',
+    extracted_at: STAMP(),
+    method_note: 'Celkové náklady poskytovatelů akutní lůžkové péče dle výkazu E 6-02, převedeno z tis. Kč na mld. Kč.',
+    headline: { value: round(totNakladyTis / 1e6, 1), unit: 'mld. Kč', year: 2024, label: 'Celkové náklady akutní lůžkové péče' },
+    ranked: {
+      label: 'Náklady akutní lůžkové péče dle kraje',
+      unit: 'mld. Kč',
+      items: rankedBy(body, 4, 12).map((it) => ({ name: it.name, value: round(it.value / 1e6, 2) })),
+    },
+  };
+}
+
 function cacheHas(file) {
   return fs.existsSync(path.join(CACHE, file));
 }
@@ -464,6 +670,15 @@ function main() {
     ['OIS-11-40.xlsx', () => transformOIS1140()],
     ['OIS-11-37.xlsx', () => transformOIS1137()],
     ['OIS-11-51.xlsx', () => transformOIS1151()],
+    ['OIS-11-25.xlsx', () => transformOIS1125()],
+    ['OIS-11-28.xlsx', () => transformOIS1128()],
+    ['OIS-11-38.xlsx', () => transformOIS1138()],
+    ['OIS-11-39.xlsx', () => transformOIS1139()],
+    ['OIS-11-45.xlsx', () => transformOIS1145()],
+    ['OIS-11-46.xlsx', () => transformOIS1146()],
+    ['OIS-11-48.xlsx', () => transformOIS1148()],
+    ['OIS-11-49.xlsx', () => transformOIS1149()],
+    ['OIS-11-50.xlsx', () => transformOIS1150()],
   ];
   for (const [file, fn] of optional) {
     if (!cacheHas(file)) continue;
