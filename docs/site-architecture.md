@@ -13,7 +13,8 @@ zdrave-cesko.cz/
 ├── /hspa-prehled           hspa-prehled.html       (HSPA rámec přehled)
 ├── /tematicke-linie        tematicke-linie.html    (8 tematických linií)
 ├── /kraje                  kraje.html              (Krajský dashboard)
-├── /pojistenci             pojistenci.html         (OIS 11-47)
+├── /dohodovaci-rizeni      dohodovaci-rizeni.html  (Datová podpora dohod. řízení — 44 sad)
+├── /pojistenci             pojistenci.html         (OIS 11-47 — atlas, dětská stránka výše)
 ├── /prevence               prevence.html           (Vakcinace + screeningy)
 ├── /strategie              strategie.html          (Národní strategie)
 ├── /glosar                 glosar.html             (110 termínů)
@@ -85,6 +86,17 @@ zdrave-cesko.cz/
 | **Fetchuje** | `data/regions.json`, `data/indicators.json`, `data/cz-regions.geojson` |
 | **JS moduly** | `src/kraje.js` (vstup) + `src/cz-map.js` (mapa) → `page-shared` |
 | **CSS namespace** | `.kraje-*`, `.regions-*`, `.cz-map-*` |
+
+### `dohodovaci-rizeni.html` — Datová podpora dohodovacího řízení
+
+| | |
+|---|---|
+| **Účel** | Rozcestník 44 datových sad NZIP „Datová podpora dohodovacího řízení" (8 dimenzí + doplňkové registry). Bez `?id=` landing v editorial stylu homepage; s `?id={sada}` detail jedné sady. Sady NEJSOU klasické HSPA indikátory — jde o provozní/ekonomická data úhradové vyhlášky. |
+| **Cílový uživatel** | Účastník dohodovacího řízení, analytik, novinář pokrývající úhrady. |
+| **Fetchuje** | `data/dohodovaci-rizeni.json` |
+| **JS moduly** | `src/dohodovaci-rizeni.js` → `page-shared`, `analytics` |
+| **CSS namespace** | `.dr-*` (hero, dims-grid, dim-tile, card, detail, intl-table) |
+| **Data** | Generováno `ingest/build-dohodovaci-rizeni.js` z katalogu `ingest/mapping/nzip_dohodovaci_rizeni_catalog.json`. Vlna 0: 1 sada `ready` (SSS-04-02 přístroje), 1 `external` (OIS 11-47 → atlas), 42 `stub`. |
 
 ### `pojistenci.html` — OIS 11-47 (struktura pojištěnců)
 

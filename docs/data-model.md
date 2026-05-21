@@ -488,6 +488,58 @@ Kompletní kopie `indicators.json` v daný den. Slouží jako historický zázna
 
 ---
 
+## 15. `data/dohodovaci-rizeni.json` — datová podpora dohodovacího řízení
+
+Frontend kontrakt stránky `dohodovaci-rizeni.html`. **Sady nejsou HSPA
+indikátory** — jde o provozní a ekonomická data dohodovacího řízení (zdroj NZIP
+/ ÚZIS ČR). Samostatný namespace, mimo `indicators.json`.
+
+```jsonc
+{
+  "version": "1.0",
+  "generated_at": "...",
+  "negotiation_context": { "title": "...", "lead": "...", "negotiation_year": 2027,
+                           "summary": { "datasets_total": 44, "dimensions": 8, "interactive_only": 7 } },
+  "dimensions": [                          // 9 — osm dimenzí + doplňkové registry
+    { "id": "d2", "number": 2, "label": "Personální zabezpečení",
+      "color": "#0b5394", "description": "...", "dataset_ids": ["ois-11-12", "..."] }
+  ],
+  "datasets": [{
+    "id": "sss-04-02",                     // slug z OIS/NR/SSS kódu
+    "ois_code": "SSS-04-02",
+    "dimension": "d9",                     // FK → dimensions[].id
+    "title": "...",
+    "nzip_page": "https://www.nzip.cz/...",
+    "status": "ready",                     // ready | external | stub
+    "reference_period": "...", "cadence": "...", "editions": ["2025-01"],
+    "role_in_negotiation": "...", "what_it_says": "...",
+    "headline": { "value": 16.4, "unit": "...", "year": 2024, "label": "..." },
+    "series": [{ "key": "ct", "label": "...", "unit": "...",
+                 "points": [{ "year": 2006, "value": 13.0 }] }],
+    "international": { "available": true, "status": "pending", "comparator": "...",
+                       "cz": 0, "oecd": 0, "eu": 0, "unit": "...", "explanation": "..." },
+    "visualization": { "data_cut": "...", "primary_chart": "line",
+                       "animation": { "pattern": "...", "rationale": "...", "controls": [] },
+                       "uses_3d": false, "engine": "chartjs", "fallback_2d": "...", "rationale": "..." },
+    "source": { "name": "...", "publisher": "...", "nzip_page": "...", "latest_file": "..." }
+  }],
+  "interactive_only": [ { "page_id": "1909", "title": "...", "nzip_page": "..." } ]
+}
+```
+
+Generátor: `ingest/build-dohodovaci-rizeni.js` (vstup: katalog
+`ingest/mapping/nzip_dohodovaci_rizeni_catalog.json` + extrakty
+`ingest/nzip-extracts/`). Validátor: `npm run validate:dohodovaci-rizeni`.
+Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
+
+| Status | Význam |
+|---|---|
+| `ready` | plně zpracováno — má `series` + `headline` |
+| `external` | zpracováno na vlastní stránce (`external_page`), např. atlas pojištěnců |
+| `stub` | jen metadata + odkaz na NZIP; čeká na zpracování ve vlně dimenze |
+
+---
+
 ## Vztahy mezi datasety
 
 ```
