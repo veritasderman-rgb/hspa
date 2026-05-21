@@ -1,16 +1,17 @@
 // Builder pro data/dohodovaci-rizeni.json — frontend kontrakt stránky
 // "Dohodovací řízení — datová podpora".
 //
-// Vstup:
-//   ingest/mapping/nzip_dohodovaci_rizeni_catalog.json  (katalog 44 sad — crawl NZIP)
-//   ingest/nzip-extracts/sss-04-02-pristroje-vyvoj-cr.json  (hotová časová řada přístrojů)
+// Skládá tři vstupy:
+//   ingest/mapping/nzip_dohodovaci_rizeni_catalog.json  — katalog 44 sad (crawl NZIP)
+//   ingest/nzip-extracts/*.json                         — datové extrakty (transform)
+//   ingest/dohodovaci-rizeni-content.json               — redakční overlay (ručně psaný)
 //
-// Výstup:
-//   data/dohodovaci-rizeni.json
+// Výstup: data/dohodovaci-rizeni.json
 //
-// Vlna 0: většina sad je "stub" (jen metadata + odkaz na NZIP). Plně naplněná
-// je SSS-04-02 (přístroje) jako proof-of-concept; OIS 11-47 (pojištěnci) je
-// "external" — odkazuje na stávající interaktivní atlas pojistenci.html.
+// Stav sady:
+//   ready    — má datový extrakt (headline + series / pyramid / series_periods)
+//   external — zpracováno na vlastní stránce (atlas pojištěnců)
+//   stub     — jen metadata + odkaz na NZIP
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,7 +21,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STARTER = path.resolve(__dirname, '..');
 
 const CATALOG = path.join(__dirname, 'mapping', 'nzip_dohodovaci_rizeni_catalog.json');
-const PRISTROJE = path.join(__dirname, 'nzip-extracts', 'sss-04-02-pristroje-vyvoj-cr.json');
+const CONTENT = path.join(__dirname, 'dohodovaci-rizeni-content.json');
+const EXTRACTS = path.join(__dirname, 'nzip-extracts');
+const PRISTROJE = path.join(EXTRACTS, 'sss-04-02-pristroje-vyvoj-cr.json');
 const OUT = path.join(STARTER, 'data', 'dohodovaci-rizeni.json');
 
 const DIMENSIONS = [
@@ -46,8 +49,7 @@ const DIMENSIONS = [
 
 function dimIdFor(dimensionString) {
   const m = /^(\d)/.exec(dimensionString || '');
-  if (m) return 'd' + m[1];
-  return 'd9';
+  return m ? 'd' + m[1] : 'd9';
 }
 
 function datasetSlug(oisCode) {
@@ -76,77 +78,42 @@ function buildPristrojeSeries(extract) {
     { key: 'mamograf', match: 'mamografické', label: 'Mamografické RTG' },
   ];
   const perMillion = extract.pocet_na_milion_obyvatel || [];
-  const counts = extract.pocet_pristroju || [];
   const years = extract.years || [];
   const series = [];
   for (const w of want) {
-    const rowM = perMillion.find((r) => (r.druh || '').includes(w.match));
-    const rowC = counts.find((r) => (r.druh || '').includes(w.match));
-    if (!rowM) continue;
+    const row = perMillion.find((r) => (r.druh || '').includes(w.match));
+    if (!row) continue;
     series.push({
       key: w.key,
       label: w.label,
       unit: 'na milion obyvatel',
-      points: years
-        .map((y) => ({ year: y, value: rowM.values[y] }))
-        .filter((p) => p.value != null),
-      raw_counts: rowC
-        ? years.map((y) => ({ year: y, value: rowC.values[y] })).filter((p) => p.value != null)
-        : [],
+      points: years.map((y) => ({ year: y, value: row.values[y] })).filter((p) => p.value != null),
     });
   }
   return series;
 }
 
-function buildPristroje(catEntry, extract) {
+function buildPristrojeReady() {
+  const extract = JSON.parse(fs.readFileSync(PRISTROJE, 'utf8'));
   const series = buildPristrojeSeries(extract);
   const ct = series.find((s) => s.key === 'ct');
   const lastYear = (extract.years || []).slice(-1)[0];
-  const headline = ct
-    ? {
-        value: ct.points.slice(-1)[0]?.value ?? null,
-        unit: 'CT na milion obyvatel',
-        year: lastYear,
-        label: 'Hustota CT skenerů',
-      }
-    : null;
   return {
     status: 'ready',
-    role_in_negotiation:
-      'Přístrojové vybavení je strukturálním vstupem dohodovacího řízení — kapacita zobrazovacích a terapeutických přístrojů určuje dostupnost a strop produkce u řady segmentů péče.',
-    what_it_says:
-      'Počet sledovaných přístrojů v ČR dlouhodobě roste — u CT, MR i PET prakticky nepřetržitě od roku 2006. Časová řada na milion obyvatel umožňuje srovnání tempa vybavování s mezinárodním standardem.',
-    headline,
+    headline: ct
+      ? { value: ct.points.slice(-1)[0]?.value ?? null, unit: 'CT na milion obyvatel', year: lastYear, label: 'Hustota CT skenerů' }
+      : null,
     series,
-    international: {
-      available: true,
-      status: 'pending',
-      comparator: 'OECD — Medical technology (CT/MRI/PET scanners per million population)',
-      note: 'Mezinárodní srovnání s OECD se doplní ve Vlně 9 (doplňkové registry) po dohledání srovnatelných řad.',
-    },
-    visualization: {
-      data_cut: 'national_timeseries_multi',
-      primary_chart: 'line',
-      animation: {
-        pattern: 'line-draw',
-        rationale: 'Postupné kreslení řady zvýrazní nepřetržitý růst vybavenosti.',
-        controls: ['play'],
-      },
-      uses_3d: false,
-      engine: 'chartjs',
-      fallback_2d: 'Statická multi-line řada s posledním rokem zvýrazněným.',
-      rationale: 'Více typů přístrojů jako srovnatelné řady na milion obyvatel — line chart je nejčitelnější.',
-    },
   };
 }
 
 function main() {
   const catalog = JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
-  const extract = JSON.parse(fs.readFileSync(PRISTROJE, 'utf8'));
+  const contentOverlay = JSON.parse(fs.readFileSync(CONTENT, 'utf8')).content || {};
 
   const datasets = catalog.datasets.map((d) => {
     const dimId = dimIdFor(d.dimension);
-    const base = {
+    const ds = {
       id: datasetSlug(d.ois_code),
       ois_code: d.ois_code,
       dimension: dimId,
@@ -166,47 +133,48 @@ function main() {
       status: 'stub',
       role_in_negotiation: '',
       what_it_says: '',
+      method_note: '',
       headline: null,
       series: [],
+      series_periods: [],
+      pyramid: null,
+      snapshot: null,
       international: null,
       visualization: defaultVisualization(d.time_series),
       regional: false,
     };
 
+    // datový extrakt
     if (d.ois_code === 'SSS-04-02') {
-      return { ...base, ...buildPristroje(d, extract) };
+      Object.assign(ds, buildPristrojeReady());
+    } else if (d.ois_code === 'OIS-11-47') {
+      ds.status = 'external';
+      ds.external_page = 'pojistenci.html';
+      ds.headline = { value: 10.85, unit: 'mil. pojištěnců', year: 2025, label: 'Pojistný kmen ČR' };
+    } else {
+      const extFile = path.join(EXTRACTS, `${d.ois_code}.json`);
+      if (fs.existsSync(extFile)) {
+        const ex = JSON.parse(fs.readFileSync(extFile, 'utf8'));
+        ds.status = 'ready';
+        ds.headline = ex.headline || null;
+        ds.series = ex.series || [];
+        ds.series_periods = ex.series_periods || [];
+        ds.pyramid = ex.pyramid || null;
+        ds.snapshot = ex.snapshot || null;
+        ds.method_note = ex.method_note || '';
+      }
     }
-    if (d.ois_code === 'OIS-11-47') {
-      return {
-        ...base,
-        status: 'external',
-        external_page: 'pojistenci.html',
-        role_in_negotiation:
-          'Struktura pojistného kmene (věk, pohlaví, okres, pojišťovna) je primárním vstupem Dimenze 5 — určuje rizikové skupiny i regionální nákladové trendy.',
-        what_it_says:
-          'Plně zpracováno jako interaktivní atlas: animovaná choropletní mapa stárnutí krajů, populační pyramida, tržní podíly 7 pojišťoven a race-chart okresů.',
-        headline: {
-          value: 10.85,
-          unit: 'mil. pojištěnců',
-          year: 2025,
-          label: 'Pojistný kmen ČR',
-        },
-        visualization: {
-          data_cut: 'regional_timeseries',
-          primary_chart: 'choropleth',
-          animation: {
-            pattern: 'timelapse-choropleth',
-            rationale: 'Vývoj krajských rozdílů ve stárnutí je hlavní sdělení.',
-            controls: ['slider', 'play'],
-          },
-          uses_3d: false,
-          engine: 'echarts',
-          fallback_2d: 'Statická mapa za poslední rok.',
-          rationale: 'Hotový atlas — beze změny, přemontován jako detail této sekce.',
-        },
-      };
+
+    // redakční overlay
+    const c = contentOverlay[d.ois_code];
+    if (c) {
+      if (c.title) ds.title = c.title;
+      if (c.role_in_negotiation) ds.role_in_negotiation = c.role_in_negotiation;
+      if (c.what_it_says) ds.what_it_says = c.what_it_says;
+      if (c.international) ds.international = c.international;
+      if (c.visualization) ds.visualization = c.visualization;
     }
-    return base;
+    return ds;
   });
 
   const dims = DIMENSIONS.map((dim) => ({
@@ -218,7 +186,7 @@ function main() {
     version: '1.0',
     generated_at: new Date().toISOString(),
     _doc:
-      'Frontend kontrakt stránky "Dohodovací řízení — datová podpora". Sady NEJSOU klasické HSPA indikátory — jde o provozní a ekonomická data dohodovacího řízení. Generováno ingest/build-dohodovaci-rizeni.js z katalogu NZIP.',
+      'Frontend kontrakt stránky "Dohodovací řízení — datová podpora". Sady NEJSOU klasické HSPA indikátory — jde o provozní a ekonomická data dohodovacího řízení. Generováno ingest/build-dohodovaci-rizeni.js.',
     source: catalog.source,
     publisher: catalog.publisher,
     root_url: catalog.root_url,
@@ -231,6 +199,7 @@ function main() {
         datasets_total: datasets.length,
         dimensions: DIMENSIONS.filter((d) => d.number <= 8).length,
         interactive_only: (catalog.interactive_visualizations || []).length,
+        ready: datasets.filter((d) => d.status === 'ready').length,
       },
     },
     dimensions: dims,

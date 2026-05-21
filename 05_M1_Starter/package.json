@@ -15,7 +15,10 @@
     "ingest:eurostat": "node ingest/fetchers/eurostat.js",
     "transform": "node ingest/transform.js",
     "transform:pojistenci": "node ingest/transform_pojistenci_d5.js",
+    "fetch:dohodovaci-rizeni": "node ingest/fetchers/nzip_dohodovaci_rizeni.js",
+    "transform:dohodovaci-rizeni": "node ingest/transform_dohodovaci_rizeni.js",
     "build:dohodovaci-rizeni": "node ingest/build-dohodovaci-rizeni.js",
+    "data:dohodovaci-rizeni": "node ingest/fetchers/nzip_dohodovaci_rizeni.js && node ingest/transform_dohodovaci_rizeni.js && node ingest/build-dohodovaci-rizeni.js",
     "build:kolonoskopie": "node scripts/build-kolonoskopie.js",
     "serve": "npx http-server . -p 8080 -c-1",
     "test": "node --test tests/*.test.js",
@@ -39,7 +42,8 @@
     "@anthropic-ai/sdk": "^0.97.1",
     "@notionhq/client": "^5.22.0",
     "csv-parse": "^5.5.6",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
