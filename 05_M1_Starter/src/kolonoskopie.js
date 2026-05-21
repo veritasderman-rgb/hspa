@@ -5,11 +5,11 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
-import { renderCzMap } from './cz-map.js';
+import { REGION_NAME_BY_CODE, registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
 
 let DATA = null;
-const charts = {};            // canvasId → Chart instance
-const regionNameByCode = {};  // code → název kraje
+const charts = {};   // canvasId → Chart instance
+const maps = {};     // hostId → echarts instance
 
 // ─────────────────────────────────────────────
 // Paleta a popisky
@@ -42,7 +42,22 @@ function fmtNum(n, d = 1) {
   return (+n).toLocaleString('cs-CZ', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 function regionName(code) {
-  return regionNameByCode[code] || code;
+  return REGION_NAME_BY_CODE[code] || code;
+}
+
+// ─────────────────────────────────────────────
+// Mapy krajů (echarts choropleth — sdílené UX s krajským přehledem)
+// ─────────────────────────────────────────────
+
+function drawMap(hostId, dataset) {
+  const el = document.getElementById(hostId);
+  if (!el || typeof echarts === 'undefined') return;
+  let inst = maps[hostId];
+  if (!inst) {
+    inst = echarts.init(el);
+    maps[hostId] = inst;
+  }
+  inst.setOption(buildChoroplethOption(dataset), true);
 }
 
 // ─────────────────────────────────────────────
@@ -146,11 +161,11 @@ function setupTrendSection(cfg) {
     const regions = [];
     for (const code of Object.keys(ds.by_region)) {
       const row = ds.by_region[code].find(r => r.year === year);
-      if (row && regionNameByCode[code]) {
+      if (row && REGION_NAME_BY_CODE[code]) {
         regions.push({ code, name: regionName(code), value: row[valueKey] });
       }
     }
-    renderCzMap(document.getElementById(`${key}Map`), {
+    drawMap(`${key}Map`, {
       regions, country_avg: countryAvg, unit: cfg.isPercent ? '%' : (unit || ''),
       direction: mapDirection,
     });
@@ -424,11 +439,11 @@ function renderFollowup() {
     const regions = [];
     for (const code of Object.keys(fup.by_region)) {
       const row = fup.by_region[code].find(r => r.year === year);
-      if (row && regionNameByCode[code]) {
+      if (row && REGION_NAME_BY_CODE[code]) {
         regions.push({ code, name: regionName(code), value: row.compliance });
       }
     }
-    renderCzMap(document.getElementById('followupMap'), {
+    drawMap('followupMap', {
       regions, country_avg: natRow ? natRow.compliance : 0,
       unit: '%', direction: 'higher_is_better',
     });
@@ -555,13 +570,13 @@ function renderWaiting() {
     const countryAvg = avgForYear(w.national_quarterly, year);
     const regions = [];
     for (const code of Object.keys(w.by_region)) {
-      if (!regionNameByCode[code]) continue;
+      if (!REGION_NAME_BY_CODE[code]) continue;
       const avg = avgForYear(w.by_region[code], year);
       if (avg != null) {
         regions.push({ code, name: regionName(code), value: Math.round(avg) });
       }
     }
-    renderCzMap(document.getElementById('waitingMap'), {
+    drawMap('waitingMap', {
       regions, country_avg: countryAvg || 0, unit: 'dní', direction: 'lower_is_better',
     });
   }
@@ -610,11 +625,13 @@ async function init() {
   renderMastheadDate();
 
   try {
-    const res = await fetch('data/kolonoskopie.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const [res, geoRes] = await Promise.all([
+      fetch('data/kolonoskopie.json'),
+      fetch('data/cz-regions.geojson').catch(() => null),
+    ]);
+    if (!res.ok) throw new Error(`kolonoskopie.json HTTP ${res.status}`);
     DATA = await res.json();
-
-    for (const r of DATA.meta.regions) regionNameByCode[r.code] = r.name;
+    if (geoRes && geoRes.ok) registerCzMap(await geoRes.json());
 
     renderHero();
     renderPathway();
@@ -639,6 +656,10 @@ async function init() {
     renderFollowup();
     renderWaiting();
     renderMethod();
+
+    window.addEventListener('resize', () => {
+      for (const m of Object.values(maps)) m.resize();
+    });
   } catch (err) {
     console.error('kolonoskopie load failed:', err);
     const host = document.getElementById('krkError');

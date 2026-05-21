@@ -6,25 +6,9 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
-
-// Pozor: hodnoty MUSÍ přesně sedět s properties.name v data/cz-regions.geojson,
-// protože echarts map joinuje series.data na polygony podle name.
-const REGION_NAME_BY_CODE = {
-  'CZ010': 'Praha',
-  'CZ020': 'Středočeský kraj',
-  'CZ031': 'Jihočeský kraj',
-  'CZ032': 'Plzeňský kraj',
-  'CZ041': 'Karlovarský kraj',
-  'CZ042': 'Ústecký kraj',
-  'CZ051': 'Liberecký kraj',
-  'CZ052': 'Královéhradecký kraj',
-  'CZ053': 'Pardubický kraj',
-  'CZ063': 'Vysočina',
-  'CZ064': 'Jihomoravský kraj',
-  'CZ071': 'Olomoucký kraj',
-  'CZ072': 'Zlínský kraj',
-  'CZ080': 'Moravskoslezský kraj',
-};
+import {
+  REGION_NAME_BY_CODE, registerCzMap, buildChoroplethOption, formatVal,
+} from './cz-choropleth.js';
 
 let allDatasets = [];
 let allIndicators = [];
@@ -52,7 +36,7 @@ async function init() {
     allIndicators = indsRes.indicators || [];
 
     // Registrovat custom mapu v echarts
-    echarts.registerMap('cz-regions', geoRes);
+    registerCzMap(geoRes);
 
     // Init chart
     const mapEl = document.getElementById('krajeMap');
@@ -140,89 +124,13 @@ function selectDataset(indicatorId) {
 
 function renderChart(dataset) {
   if (!chart) return;
-  const direction = dataset.direction || 'higher_is_better';
-  const isContextDependent = direction === 'context_dependent';
-  const betterHigher = direction !== 'lower_is_better';
-
-  // Připravit data pro echarts: [{ name: regionName, value }]
-  const data = (dataset.regions || []).map(r => ({
-    name: REGION_NAME_BY_CODE[r.code] || r.name || r.code,
-    value: r.value,
-    code: r.code,
-  }));
-
-  const values = data.map(x => x.value).filter(v => Number.isFinite(v));
-  if (!values.length) return;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-
-  // Visual map color scheme: zelená→červená podle direction
-  // Pokud higher_is_better: max=zelená, min=červená
-  // Pokud lower_is_better:  min=zelená, max=červená
-  // Pokud context_dependent: modrá-šedá-oranžová neutrální
-  const inRange = isContextDependent
-    ? { color: ['#FFF4E6', '#E2E8F0', '#E0E7FF'] }
-    : betterHigher
-      ? { color: ['#FCE8E6', '#FFF7E0', '#E6F4EA', '#1F7A1F'] }
-      : { color: ['#1F7A1F', '#E6F4EA', '#FFF7E0', '#FCE8E6'] };
-
-  const option = {
-    backgroundColor: 'transparent',
-    tooltip: {
-      trigger: 'item',
-      formatter: function (params) {
-        const r = (dataset.regions || []).find(x => REGION_NAME_BY_CODE[x.code] === params.name);
-        if (!r) return params.name;
-        const avg = dataset.country_avg;
-        const diff = avg != null && avg !== 0 ? ((r.value - avg) / avg) * 100 : null;
-        const diffStr = diff != null ? `<br/>${diff >= 0 ? '+' : ''}${diff.toFixed(1)} % od průměru ČR` : '';
-        return `<strong>${escapeHtml(params.name)}</strong><br/>` +
-               `${formatVal(r.value)} ${escapeHtml(dataset.unit || '')}` +
-               diffStr;
-      },
-    },
-    visualMap: {
-      type: 'continuous',
-      min,
-      max,
-      left: 'left',
-      bottom: 12,
-      calculable: true,
-      inRange,
-      text: betterHigher ? ['lépe', 'hůře'] : ['hůře', 'lépe'],
-      textStyle: { fontSize: 11, fontFamily: 'Inter, system-ui, sans-serif' },
-      formatter: function (v) { return formatVal(v) + ' ' + (dataset.unit || ''); },
-    },
-    series: [{
-      name: dataset.name || dataset.indicator_id,
-      type: 'map',
-      map: 'cz-regions',
-      roam: false,
-      label: {
-        show: true,
-        formatter: function (params) {
-          const r = (dataset.regions || []).find(x => REGION_NAME_BY_CODE[x.code] === params.name);
-          if (!r) return '';
-          return formatValShort(r.value);
-        },
-        fontSize: 10,
-        fontFamily: 'Inter, system-ui, sans-serif',
-        fontWeight: 600,
-        color: '#1f1a14',
-      },
-      itemStyle: {
-        borderColor: '#1f1a14',
-        borderWidth: 0.8,
-      },
-      emphasis: {
-        itemStyle: { borderWidth: 2, borderColor: '#b8361e' },
-        label: { color: '#b8361e' },
-      },
-      data,
-    }],
-  };
-
-  chart.setOption(option, true);
+  chart.setOption(buildChoroplethOption({
+    regions: dataset.regions,
+    country_avg: dataset.country_avg,
+    unit: dataset.unit,
+    direction: dataset.direction,
+    name: dataset.name || dataset.indicator_id,
+  }), true);
 }
 
 function renderMeta(dataset) {
@@ -270,23 +178,6 @@ function renderFoot(dataset) {
   const sourceName = (dataset.source && dataset.source.name) || (ind && ind.source && ind.source.name) || '';
   const detailLink = ind ? ` · <a href="indicator.html?id=${encodeURIComponent(ind.id)}">Detail indikátoru →</a>` : '';
   el.innerHTML = `<strong>Průměr ČR:</strong> ${formatVal(dataset.country_avg)} ${escapeHtml(dataset.unit || '')} · <strong>Zdroj:</strong> ${escapeHtml(sourceName || '—')}${detailLink}`;
-}
-
-function formatVal(v) {
-  if (v == null) return '—';
-  const n = Number(v);
-  if (!Number.isFinite(n)) return String(v);
-  if (Math.abs(n) >= 100) return n.toFixed(0);
-  if (Math.abs(n) >= 10) return n.toFixed(1);
-  return n.toFixed(2);
-}
-
-function formatValShort(v) {
-  if (v == null) return '—';
-  const n = Number(v);
-  if (!Number.isFinite(n)) return String(v);
-  if (Math.abs(n) >= 100) return n.toFixed(0);
-  return n.toFixed(1);
 }
 
 if (typeof window !== 'undefined') init();
