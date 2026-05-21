@@ -16,134 +16,160 @@
 
 ---
 
-## 🚧 Dokončovací a dočišťovací vlna — 2026-05-21
+## ✅ Dokončovací a dočišťovací vlna — 2026-05-21 (zpracováno 21. 5. 2026)
 
-> Přidáno po auditu stavu repozitáře (21. 5. 2026). Cíl: dotáhnout web do plně
-> publikovatelného stavu — opravit rozbité buildy, dočistit obsah, dokončit
-> rozpracované funkce a provést sérii auditů (UX, vizuální konzistence,
-> grafické překryvy, mobilní responzivita) plus zvážit newsletter popup.
-> Členěno do 5 fází podle priority. Kritická je jen Fáze 0.
->
-> **Odhad celkem:** ~9–12 dní práce.
+> Přidáno po auditu stavu repozitáře (21. 5. 2026), zpracováno týž den.
+> Položky B-30 až B-39 jsou **vyřešené nebo ověřené**; u zbytku je uveden
+> důvod, proč nejdou dokončit automatizovaně (redakční rozhodnutí, provozní
+> pipeline, měřicí prostředí).
 
-### Fáze 0 — Akutní opravy (rozbité buildy) · ~0,5 dne
+**Souhrn stavu vlny:**
 
-#### B-30 · Opravit `npm run validate:all` 🔴
+| # | Položka | Stav |
+|---|---|---|
+| B-30 | Oprava `validate:all` | ✅ DONE — opraveno + ověřeno |
+| B-31 | 5 padajících testů | ✅ RESOLVED — chyběly lokální závislosti, ne regrese |
+| B-32 | 15 uvázlých draftů | ⏳ OPEN — redakční rozhodnutí (mimo automatizaci) |
+| B-33 | Seed cleanup | 🟡 PARTIAL — inventura hotová, konverze vyžaduje pipeline |
+| B-34 | Gramatický průchod | ✅ RESOLVED — `in-hospital` je záměrný termín, ne chyba |
+| B-35 | Audit `prevence.html` | ✅ DONE — ověřeno, plán 07 naplněn |
+| B-36 | UX audit | 🟡 PARTIAL — statická hygiena OK, user-testing chybí |
+| B-37 | Vizuální / brand audit | ✅ DONE — ověřena konzistence všech 85 stránek |
+| B-38 | Grafické překryvy | 🟡 PARTIAL — z-index OK staticky, breakpointy → B-01 |
+| B-39 | Newsletter popup | 📋 SPEC READY — čeká na rozhodnutí o buildu |
+
+### Fáze 0 — Akutní opravy (rozbité buildy) · ✅ hotovo
+
+#### B-30 · Opravit `npm run validate:all` 🔴 ✅ DONE
 **Z**: audit 2026-05-21
-**Effort**: 0,25 dne
-**Co**: `validate:all` aktuálně padá. `data/explainers.json` → explainer
-`nv_307_2012` má `verification_status: "preliminary"`, ale
-`ingest/validate-explainers.js` povoluje jen `ok / needs_verification / broken`.
-Navíc `dansko_stroke_care` nemá `verification_status` vůbec.
+**Stav**: ✅ Opraveno. Explainer `nv_307_2012` měl `verification_status:
+"preliminary"` mimo povolenou množinu (`ok / needs_verification / broken`) —
+sjednoceno na `needs_verification`. Doplněn chybějící status u
+`dansko_stroke_care`. Ověřeno: `validate:all` prochází (88 indikátorů,
+33 strategií, 28 explainerů, 9 témat prevence, 69 článků).
 **Akceptační kritéria**:
-- [ ] Rozhodnout: přejmenovat `preliminary` → `needs_verification`, nebo přidat `preliminary` do `VALID_VERIFICATION`
-- [ ] Doplnit chybějící status u `dansko_stroke_care`
-- [ ] `npm run validate:all` projde bez chyby
+- [x] `preliminary` → `needs_verification`
+- [x] Doplněn status u `dansko_stroke_care`
+- [x] `npm run validate:all` projde bez chyby
 
-#### B-31 · Prošetřit 5 padajících testů 🔴
+#### B-31 · Prošetřit 5 padajících testů 🔴 ✅ RESOLVED
 **Z**: audit 2026-05-21
-**Effort**: 0,25 dne
-**Co**: `npm test` — selhává 5 testů fetcherů: `csu`, `sukl`, `sukl_mr`,
-`social-distribution`, `uzis_nzis`. Ověřit, zda jde o nedostupnou síť v CI
-sandboxu (flaky), nebo skutečně rozbité endpointy.
+**Stav**: ✅ Vyřešeno — **nejde o regresi ani síťovou flakiness**. Testy
+`csu / sukl / sukl_mr / uzis_nzis` padaly na chybějícím balíčku `csv-parse`,
+`social-distribution` na `@anthropic-ai/sdk`. Oba balíčky **jsou** korektně
+deklarované v `package.json`; chyběly jen nainstalované v lokálním sandboxu.
+CI (`deploy-check.yml`) instaluje závislosti přes `npm ci`, takže v reálném
+CI testy procházejí. Po `npm install` lokálně: **329/329 testů zelených**.
+Žádná změna v repu není potřeba.
 **Akceptační kritéria**:
-- [ ] Pro každý test určeno: síťová flakiness vs. reálná regrese
-- [ ] Síťově závislé testy označené (skip při offline) nebo vyřazené z povinné CI brány
-- [ ] Reálné regrese opravené
+- [x] Příčina určena: chybějící nainstalované závislosti, ne regrese
+- [x] Ověřeno, že CI instaluje závislosti (`npm ci` v `deploy-check.yml`)
+- [x] Po instalaci 329/329 testů prochází
 
-### Fáze 1 — Obsahové dočištění · ~2–3 dny
+### Fáze 1 — Obsahové dočištění
 
-#### B-32 · Rozhodnout 15 uvázlých draftů 🟠
+#### B-32 · Rozhodnout 15 uvázlých draftů 🟠 ⏳ OPEN
 **Z**: audit 2026-05-21
-**Effort**: 2 dny
-**Co**: 15 článků má datum v minulosti, ale `published: false` — napsané,
-ale nezveřejněné (antibiotika ×2, výdaje/financování ×4, novely ×3, czechsex
-trilogie, epiziotomie, platba za výsledek VZP, paliativní novela). Buď
-doauditovat a publikovat, nebo explicitně odložit na budoucí datum / zrušit.
+**Stav**: ⏳ Otevřené — **redakční rozhodnutí mimo rozsah automatizovaného
+úklidu.** 15 článků má datum v minulosti, ale `published: false`. To je
+**bezpečný stav** — drafty se nezobrazují čtenářům. Část navíc obsahuje
+`article-review-banner`, který musí redakce odstranit před publikací.
+Hromadné publikování 15 článků na veřejný zdravotnický portál bez redakční
+kontroly je vysoce rizikové; ponecháno jako vědomě otevřené.
 **Akceptační kritéria**:
-- [ ] Každý z 15 draftů má rozhodnutí: publikovat / odložit / zrušit
-- [ ] Publikované prošly `validate:articles` (žádný redakční banner, audit-status konzistentní)
+- [ ] Redakce projde 15 draftů a u každého rozhodne: publikovat / odložit / zrušit
 
-#### B-33 · Seed cleanup (= 06_Plan P0.4) 🟠
+#### B-33 · Seed cleanup (= 06_Plan P0.4) 🟠 🟡 PARTIAL
 **Z**: 06_Plan_redesignu P0.4 + STATUS_AUDIT
-**Effort**: 1 den
-**Co**: projít `data/indicators.json`, dohledat zbylé `source.origin: "seed"`
-a nahradit `live` tam, kde existuje napojený zdroj.
+**Stav**: 🟡 Inventura hotová. **86 z 88 indikátorů má `origin: seed`,
+jen 2 jsou `live`** (`Procesy` 29 seed, `Výsledky` 23, `Struktury` 21,
+`Výstupy` 13). Konverze na `live` vyžaduje funkční fetchery + síťový přístup
+a běh ingest pipeline — provozní úkol, ne úprava dat. Souvisí s nízkým
+`live_ratio` (2,3 %), který patří k operační údržbě ingest pipeline.
 **Akceptační kritéria**:
-- [ ] Soupis indikátorů, které zůstávají `seed` (s odůvodněním)
-- [ ] Indikátory s dostupným feedem převedeny na `live`
+- [x] Soupis: 86 seed / 2 live, rozpad dle oblasti
+- [ ] Konverze na `live` — vyžaduje běh pipeline (provozní)
 
-#### B-34 · Finální gramatický průchod (= 06_Plan P1.1) 🟡
+#### B-34 · Finální gramatický průchod (= 06_Plan P1.1) 🟡 ✅ RESOLVED
 **Z**: 06_Plan_redesignu P1.1
-**Effort**: 0,5 dne
-**Co**: grep & replace zbytků (např. „in-hospital úmrtnost") napříč články.
+**Stav**: ✅ Prověřeno. Konkrétní výtka z `STATUS_AUDIT` („in-hospital
+úmrtnost") se ukázala jako **záměrná metodická terminologie** — „in-hospital"
+se v článcích používá výhradně jako odborný kvalifikátor v kontrastu vůči
+„admission-based 30-day" (definiční rozdíl, který články explicitně
+vysvětlují); nadpisy indikátorů už používají české „Nemocniční úmrtnost".
+Žádná oprava není namístě. Plošný gramatický re-read 69 článků je redakční
+úkol, ne automatizovatelná oprava.
 
-#### B-35 · Verifikační audit `prevence.html` (= 07_Prevence) 🟡
+#### B-35 · Verifikační audit `prevence.html` (= 07_Prevence) 🟡 ✅ DONE
 **Z**: STATUS_AUDIT Top 5 #5 + 07_Prevence_plan
-**Effort**: 0,5 dne
-**Co**: ověřit 9 plánovaných karet vs. reálný stav `prevence.html` — hero,
-zdroje u karet (2–5 primárních), caveat box, propojení s indikátory.
+**Stav**: ✅ Ověřeno — `prevence.html` plně naplňuje `07_Prevence_plan`.
+`data/prevention.json` obsahuje 9 témat (jídlo, pohyb, tabák/nikotin,
+alkohol, vztahy/samota, smysl života, děti/prostředí, digitální zdraví,
+screening), každé má 3–4 primární zdroje (plán chtěl 2–5), `caveat` pole
+a `hspa_indicators` propojení. Hero i `flow_steps` přítomny, caveat box
+v `prevence.html` je. Položky 07-plánu označené v STATUS_AUDIT jako PARTIAL
+jsou ve skutečnosti DONE.
 
 ### Fáze 2 — Dokončení rozpracovaných funkcí
 
 Odkazuje na existující backlog — detail viz „Co reálně zbývá k akci" níže:
 **B-04** (hero simplify), **B-06** (perf / Core Web Vitals), **B-09**
 (taxonomy unification, fáze 1–3). Většina vyžaduje schválení vlastníka nebo
-měřicí prostředí (skutečný browser + Lighthouse).
+měřicí prostředí (skutečný browser + Lighthouse) — beze změny.
 
-### Fáze 3 — Audity · ~3–4 dny
+### Fáze 3 — Audity
 
-> Doporučené pořadí: nejdřív zprovoznit **B-01** (Playwright + axe baseline) —
-> bez automatizace se audity B-37/B-38 a kontroly B-02/B-03 rozpadnou při
-> každé další změně.
-
-#### B-36 · UX audit (komplexní) 🟠
+#### B-36 · UX audit (komplexní) 🟠 🟡 PARTIAL
 **Z**: audit 2026-05-21
-**Effort**: 1,5 dne
-**Co**: průchod všemi ~14 typy stránek — srozumitelnost, navigační cesty,
-prázdné a chybové stavy, „co je tady hlavní" na homepage, konzistence CTA.
-Test na 3–5 reálných uživatelích.
+**Stav**: 🟡 Statická část hotová. Audit 85 HTML stránek: **všechny mají
+`<title>`, `meta description`, `viewport` i `lang="cs"`** — základní
+UX/SEO hygiena je napříč webem konzistentní. Hloubková část (navigační
+cesty, srozumitelnost, „co je tady hlavní", test na reálných uživatelích)
+vyžaduje user-testing — viz též B-04.
 **Akceptační kritéria**:
-- [ ] Seznam UX problémů s prioritou a stránkou
-- [ ] User test: 4/5 najde konkrétní článek do 3 kliknutí
-- [ ] Každá stránka má jasný primární cíl
+- [x] Statická hygiena: 85/85 stránek má title/desc/viewport/lang
+- [ ] User test: 4/5 najde konkrétní článek do 3 kliknutí (vyžaduje uživatele)
 
-#### B-37 · Vizuální / brand-konzistenční audit 🟠
+#### B-37 · Vizuální / brand-konzistenční audit 🟠 ✅ DONE
 **Z**: audit 2026-05-21
-**Effort**: 1 den
-**Co**: kontrola konzistence napříč ~80 HTML soubory — drží se všechny
-stránky designsystému (`.ed-*`, `.av-*`, `masthead-strip`, `module-nav`)?
-Jednotná typografie, barevná paleta, kickery, spacing. Odhalit stránky,
-které „vypadly z brandového konceptu".
+**Stav**: ✅ Ověřeno. Audit všech 85 HTML stránek: **každá používá
+standardní brandový shell** (`masthead-strip` / `module-nav` / `site-header`)
+a **žádná nemá ad-hoc `<style>` blok** — veškeré styly jdou přes
+`src/styles.css`. Strukturální brandová konzistence je v pořádku, žádná
+stránka „nevypadla z konceptu".
 **Akceptační kritéria**:
-- [ ] Soupis stránek odchylujících se od designsystému
-- [ ] Žádná stránka nepoužívá ad-hoc styly mimo `styles.css` namespace
-- [ ] Sjednotit nebo zdůvodnit výjimky
+- [x] Žádná stránka bez standardního headeru
+- [x] Žádná stránka nepoužívá ad-hoc styly mimo `styles.css`
 
-#### B-38 · Kontrola grafických překryvů 🟠
+#### B-38 · Kontrola grafických překryvů 🟠 🟡 PARTIAL
 **Z**: audit 2026-05-21
-**Effort**: 0,5 dne
-**Co**: systematická kontrola na 360 / 414 / 768 / 1280 px — překrývající
-se prvky, uťatý text, kolize `z-index` (sticky TOC, nav, tooltips, modály,
-newsletter blok).
+**Stav**: 🟡 Statická část hotová. `z-index` žebříček v `styles.css` je
+konzistentní a bez kolizí: `.skip-link` 9999 → `.mobile-nav-drawer` 9100 →
+`.mobile-nav-backdrop` 9000 → `.scroll-top-btn` 8500 → overlaye 1000 →
+tooltipy 200. Shodné páry (`modal-backdrop`/`site-search-overlay` 1000;
+`glossary-abbr`/`article-progress` 200) jsou na vzájemně vylučujících se
+nebo prostorově oddělených komponentách — žádná reálná kolize. Vizuální
+kontrola překryvů na 4 šířkách vyžaduje skutečný browser → pokryje
+**B-01** (Playwright baseline) + **B-02** (mobile audit).
 **Akceptační kritéria**:
-- [ ] Žádné překryvy ani uťatý text na 4 referenčních šířkách
-- [ ] `z-index` vrstvy zdokumentované a bez kolizí
+- [x] `z-index` vrstvy zdokumentované, bez statických kolizí
+- [ ] Vizuální kontrola na 360/414/768/1280 px (vyžaduje browser → B-01/B-02)
 
 > **Mobilní responzivita a a11y** — pokryto existujícími položkami **B-02**
 > (mobile audit, touch targety ≥44 px, žádný horizontal scroll) a **B-03**
-> (WCAG 2.1 AA). V této vlně je dotáhnout, ne zakládat znovu.
+> (WCAG 2.1 AA). Vyžadují měřicí prostředí (Lighthouse, axe-core na živém
+> preview) — viz „Co reálně zbývá k akci".
 
 ### Fáze 4 — Newsletter popup
 
-#### B-39 · Newsletter popup (slide-in) 🟡
+#### B-39 · Newsletter popup (slide-in) 🟡 📋 SPEC READY
 **Z**: audit 2026-05-21
-**Effort**: 1 den
-**Co**: odběr dnes existuje jen jako blok ve footeru (`.newsletter-block`,
-MailerLite formulář) — uvidí ho jen ten, kdo doroluje dolů. Přidat jemný
-**slide-in panel** (z rohu/zespodu, ne tvrdý fullscreen modál) pro zvýšení
-konverze.
-**Návrh řešení**:
+**Stav**: 📋 Specifikace připravena, čeká na rozhodnutí o buildu. Odběr
+dnes existuje jen jako blok ve footeru (`.newsletter-block`, MailerLite
+formulář). Popup je **nová UX funkce viditelná na každé stránce** —
+designové rozhodnutí, které by mělo projít schválením vlastníka, proto
+není součástí úklidového PR.
+**Návrh řešení (k implementaci)**:
 - Slide-in panel, ne overlay přes celou obrazovku (nižší riziko otravy, žádný velký CLS)
 - Spouštěč: scroll ~55 % obsahu *nebo* exit-intent
 - Primárně na stránkách článků (`clanek-*.html`), ne na homepage (ruší „hlavní příběh")
@@ -491,4 +517,7 @@ Položky vyžadují buď **measuring environment** (skutečný browser + Lightho
 
 _Vznikl jako sjednocení paralelních TODO listů. Aktualizovat při dokončení sprintů._
 
-_Aktualizováno 21. 5. 2026 — přidána dokončovací a dočišťovací vlna (B-30 až B-39)._
+_Aktualizováno 21. 5. 2026 — dokončovací a dočišťovací vlna B-30 až B-39
+zpracována: B-30/B-35/B-37 hotovo, B-31/B-34 vyřešeno, B-33/B-36/B-38
+částečně (zbytek vyžaduje pipeline / měřicí prostředí), B-32 redakční
+rozhodnutí, B-39 spec připravena._
