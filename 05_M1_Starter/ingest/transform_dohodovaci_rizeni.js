@@ -239,21 +239,170 @@ function round(v, d) {
   return Math.round(v * f) / f;
 }
 
+/* ================= DIMENZE 6 — LŮŽKOVÁ PÉČE ================= */
+
+/* ---- OIS-11-17: nákladová struktura poskytovatelů lůžkové péče ---- */
+function transformOIS1117() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-17.xlsx'), 'data');
+  const h = findHeaderRow(rows, { mustContain: ['Kód DRZAR', 'ROK'] });
+  const body = rows.slice(h + 1);
+  // 2 ROK, 4 spotřeba materiálu, 5 léky, 6 centrové léky, 12 osobní náklady
+  const cats = [
+    { col: 12, key: 'osobni', label: 'Osobní náklady' },
+    { col: 5, key: 'leky', label: 'Léky (bez centrových)' },
+    { col: 6, key: 'centrove', label: 'Centrové léky' },
+    { col: 4, key: 'material', label: 'Spotřeba materiálu' },
+  ];
+  const byYear = new Map();
+  for (const r of body) {
+    if (!r || r[2] == null) continue;
+    const rok = num(r[2]);
+    if (!rok) continue;
+    if (!byYear.has(rok)) byYear.set(rok, {});
+    const acc = byYear.get(rok);
+    for (const c of cats) {
+      const v = num(r[c.col]);
+      if (v != null) acc[c.col] = (acc[c.col] || 0) + v;
+    }
+  }
+  const years = [...byYear.keys()].sort((a, b) => a - b);
+  const series = cats.map((c) => ({
+    key: c.key,
+    label: c.label,
+    unit: 'mld. Kč',
+    points: years.map((y) => ({ year: y, value: round((byYear.get(y)[c.col] || 0) / 1e6, 2) })),
+  }));
+  const osobniLast = series[0].points.slice(-1)[0];
+  return {
+    ois_code: 'OIS-11-17',
+    source_file: 'OIS-11-17.xlsx',
+    extracted_at: new Date().toISOString(),
+    method_note:
+      'Součet nákladů všech poskytovatelů lůžkové péče dle ročních výkazů, hodnoty převedeny z tis. Kč na mld. Kč.',
+    headline: {
+      value: osobniLast?.value ?? null,
+      unit: 'mld. Kč',
+      year: osobniLast?.year ?? null,
+      label: 'Osobní náklady lůžkové péče',
+    },
+    series,
+  };
+}
+
+/* ---- OIS-11-27: produkce následné a dlouhodobé péče (ošetřovací dny) ---- */
+function transformOIS1127() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-27.xlsx'), 'ošetřovací dny');
+  const h = findHeaderRow(rows, { mustContain: ['PZS IČO', 'oš.dnů'] });
+  const body = rows.slice(h + 1);
+  const years = YEARS_19_24;
+  const byObor = new Map();
+  const totals = years.map(() => 0);
+  for (const r of body) {
+    if (!r || r[0] == null) continue;
+    const obor = txt(r[8]) || 'neuvedeno';
+    if (!byObor.has(obor)) byObor.set(obor, years.map(() => 0));
+    const acc = byObor.get(obor);
+    years.forEach((y, i) => {
+      const v = num(r[10 + i]);
+      if (v != null) {
+        acc[i] += v;
+        totals[i] += v;
+      }
+    });
+  }
+  const top = [...byObor.entries()].sort((a, b) => b[1][5] - a[1][5]).slice(0, 4);
+  const series = [
+    { key: 'celkem', label: 'Celkem ČR', unit: 'ošetřovací dny', points: years.map((y, i) => ({ year: y, value: totals[i] })) },
+    ...top.map(([obor, vals], i) => ({
+      key: 'obor' + i,
+      label: obor.charAt(0).toUpperCase() + obor.slice(1),
+      unit: 'ošetřovací dny',
+      points: years.map((y, j) => ({ year: y, value: vals[j] })),
+    })),
+  ];
+  return {
+    ois_code: 'OIS-11-27',
+    source_file: 'OIS-11-27.xlsx',
+    extracted_at: new Date().toISOString(),
+    method_note: 'Součet ošetřovacích dnů následné a dlouhodobé lůžkové péče za ČR a top 4 obory pracoviště.',
+    headline: {
+      value: totals[5],
+      unit: 'ošetřovacích dnů',
+      year: 2024,
+      label: 'Produkce následné a dlouhodobé péče',
+    },
+    series,
+  };
+}
+
+/* ---- OIS-11-40: produkce v lázních a ozdravovnách ---- */
+function transformOIS1140() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-40.xlsx'), 'data');
+  const h = findHeaderRow(rows, { mustContain: ['PZS IČO'] });
+  const body = rows.slice(h + 1);
+  const years = [2019, 2020, 2021, 2022];
+  const pat = years.map(() => 0);
+  const leceni = years.map(() => 0);
+  for (const r of body) {
+    if (!r || r[0] == null) continue;
+    const druh = txt(r[8]);
+    const nazev = txt(r[9]);
+    years.forEach((y, i) => {
+      const v = num(r[10 + i]) || 0;
+      if (druh === 'Unikátní pacienti') pat[i] += v;
+      if (nazev.includes('za léčení')) leceni[i] += v;
+    });
+  }
+  return {
+    ois_code: 'OIS-11-40',
+    source_file: 'OIS-11-40.xlsx',
+    extracted_at: new Date().toISOString(),
+    method_note: 'Unikátní pacienti a ošetřovací dny (položka „za léčení") lázeňské a ozdravné péče, ČR.',
+    headline: {
+      value: pat[3],
+      unit: 'unikátních pacientů',
+      year: 2022,
+      label: 'Pacienti lázeňské a ozdravné péče',
+    },
+    series: [
+      { key: 'pacienti', label: 'Unikátní pacienti', unit: 'osoby', points: years.map((y, i) => ({ year: y, value: pat[i] })) },
+      { key: 'leceni', label: 'Ošetřovací dny (léčení)', unit: 'dny', points: years.map((y, i) => ({ year: y, value: leceni[i] })) },
+    ],
+  };
+}
+
+function cacheHas(file) {
+  return fs.existsSync(path.join(CACHE, file));
+}
+
 function main() {
   fs.mkdirSync(OUT, { recursive: true });
-  const { weights, byKategorieYear } = readUvazky();
+  const extracts = [];
 
-  const extracts = [
-    transformOIS1112(weights),
-    transformOIS1113(byKategorieYear),
-    transformISPV('OIS-11-14.xlsx', 'OIS-11-14', 'mzda'),
-    transformISPV('OIS-11-15.xlsx', 'OIS-11-15', 'plat'),
-    transformOIS1116(),
+  // dimenze 2 — vyžaduje OIS-11-12 + OIS-11-13
+  if (cacheHas('OIS-11-12.xlsx') && cacheHas('OIS-11-13.xlsx')) {
+    const { weights, byKategorieYear } = readUvazky();
+    extracts.push(transformOIS1112(weights), transformOIS1113(byKategorieYear));
+  }
+  const optional = [
+    ['OIS-11-14.xlsx', () => transformISPV('OIS-11-14.xlsx', 'OIS-11-14', 'mzda')],
+    ['OIS-11-15.xlsx', () => transformISPV('OIS-11-15.xlsx', 'OIS-11-15', 'plat')],
+    ['OIS-11-16.xlsx', () => transformOIS1116()],
+    ['OIS-11-17.xlsx', () => transformOIS1117()],
+    ['OIS-11-27.xlsx', () => transformOIS1127()],
+    ['OIS-11-40.xlsx', () => transformOIS1140()],
   ];
+  for (const [file, fn] of optional) {
+    if (!cacheHas(file)) continue;
+    try {
+      extracts.push(fn());
+    } catch (err) {
+      console.error(`  ✗ ${file} — ${err.message}`);
+    }
+  }
 
   for (const ex of extracts) {
-    const file = path.join(OUT, `${ex.ois_code}.json`);
-    fs.writeFileSync(file, JSON.stringify(ex, null, 2) + '\n');
+    fs.writeFileSync(path.join(OUT, `${ex.ois_code}.json`), JSON.stringify(ex, null, 2) + '\n');
     const n = (ex.series || ex.series_periods || []).length;
     console.log(`  ✓ ${ex.ois_code} → headline ${ex.headline.value} ${ex.headline.unit}, ${n} řad`);
   }

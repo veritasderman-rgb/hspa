@@ -86,9 +86,15 @@ test('dohodovaci-rizeni.json: OIS-11-16 má validní pyramidu', () => {
   assert.ok(totalM > 30000, 'součet mužů realistický');
 });
 
-test('dohodovaci-rizeni.json: ≥6 sad ready', () => {
+test('dohodovaci-rizeni.json: ≥9 sad ready, dimenze 6 zpracována', () => {
   const ready = data.datasets.filter((x) => x.status === 'ready');
-  assert.ok(ready.length >= 6, `očekáváno ≥6 ready, je ${ready.length}`);
+  assert.ok(ready.length >= 9, `očekáváno ≥9 ready, je ${ready.length}`);
+  const d6ready = data.datasets.filter((x) => x.dimension === 'd6' && x.status === 'ready');
+  assert.ok(d6ready.length >= 3, `dimenze 6 má ${d6ready.length} ready (očekáváno ≥3)`);
+  for (const ds of d6ready) {
+    assert.ok(ds.series.length > 0, `${ds.ois_code}: series`);
+    assert.ok(ds.role_in_negotiation && ds.what_it_says, `${ds.ois_code}: redakční text`);
+  }
 });
 
 test('dohodovaci-rizeni: stránka a modul existují', () => {

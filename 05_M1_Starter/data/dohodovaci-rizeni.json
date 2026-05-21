@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-21T14:50:03.127Z",
+  "generated_at": "2026-05-21T15:17:22.645Z",
   "_doc": "Frontend kontrakt stránky \"Dohodovací řízení — datová podpora\". Sady NEJSOU klasické HSPA indikátory — jde o provozní a ekonomická data dohodovacího řízení. Generováno ingest/build-dohodovaci-rizeni.js.",
   "source": "NZIP.cz – Datová podpora dohodovacího řízení",
   "publisher": "Ministerstvo zdravotnictví ČR + ÚZIS ČR",
@@ -13,7 +13,7 @@
       "datasets_total": 44,
       "dimensions": 8,
       "interactive_only": 7,
-      "ready": 6
+      "ready": 9
     }
   },
   "dimensions": [
@@ -1254,28 +1254,165 @@
         "nzip_page": "http://www.nzip.cz/data/2376-luzkova-pece-nakladova-struktura-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-17-luzkova-pece-nakladova-struktura-2025-02.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
-      "series": [],
+      "status": "ready",
+      "role_in_negotiation": "Nákladová struktura lůžkové péče určuje, kam směřují peníze úhradové vyhlášky. Dohodovací řízení podle ní kalibruje navýšení úhrad — zvlášť u personálních nákladů a centrových léků, které rostou nejrychleji.",
+      "what_it_says": "Osobní náklady poskytovatelů lůžkové péče vzrostly ze 108 mld. Kč v roce 2019 na 167 mld. Kč v roce 2024 — o 56 %. Ještě rychleji rostou centrové léky (z 18 na 34 mld. Kč, +85 %). Tyto dvě položky táhnou tlak na výši úhrad.",
+      "method_note": "Součet nákladů všech poskytovatelů lůžkové péče dle ročních výkazů, hodnoty převedeny z tis. Kč na mld. Kč.",
+      "headline": {
+        "value": 167.41,
+        "unit": "mld. Kč",
+        "year": 2024,
+        "label": "Osobní náklady lůžkové péče"
+      },
+      "series": [
+        {
+          "key": "osobni",
+          "label": "Osobní náklady",
+          "unit": "mld. Kč",
+          "points": [
+            {
+              "year": 2019,
+              "value": 107.6
+            },
+            {
+              "year": 2020,
+              "value": 126.74
+            },
+            {
+              "year": 2021,
+              "value": 143.05
+            },
+            {
+              "year": 2022,
+              "value": 137.33
+            },
+            {
+              "year": 2023,
+              "value": 148.68
+            },
+            {
+              "year": 2024,
+              "value": 167.41
+            }
+          ]
+        },
+        {
+          "key": "leky",
+          "label": "Léky (bez centrových)",
+          "unit": "mld. Kč",
+          "points": [
+            {
+              "year": 2019,
+              "value": 10.75
+            },
+            {
+              "year": 2020,
+              "value": 11.94
+            },
+            {
+              "year": 2021,
+              "value": 16.2
+            },
+            {
+              "year": 2022,
+              "value": 16.13
+            },
+            {
+              "year": 2023,
+              "value": 13.27
+            },
+            {
+              "year": 2024,
+              "value": 14.7
+            }
+          ]
+        },
+        {
+          "key": "centrove",
+          "label": "Centrové léky",
+          "unit": "mld. Kč",
+          "points": [
+            {
+              "year": 2019,
+              "value": 18.43
+            },
+            {
+              "year": 2020,
+              "value": 20.54
+            },
+            {
+              "year": 2021,
+              "value": 23.58
+            },
+            {
+              "year": 2022,
+              "value": 26.78
+            },
+            {
+              "year": 2023,
+              "value": 31.83
+            },
+            {
+              "year": 2024,
+              "value": 34.02
+            }
+          ]
+        },
+        {
+          "key": "material",
+          "label": "Spotřeba materiálu",
+          "unit": "mld. Kč",
+          "points": [
+            {
+              "year": 2019,
+              "value": 58.15
+            },
+            {
+              "year": 2020,
+              "value": 64.33
+            },
+            {
+              "year": 2021,
+              "value": 73.81
+            },
+            {
+              "year": 2022,
+              "value": 78.2
+            },
+            {
+              "year": 2023,
+              "value": 83.39
+            },
+            {
+              "year": 2024,
+              "value": 89.37
+            }
+          ]
+        }
+      ],
       "series_periods": [],
       "pyramid": null,
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Health expenditure by function (inpatient curative care)",
+        "note": "Srovnání struktury nákladů lůžkové péče s OECD doplní samostatná rešeršní vlna."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
+        "data_cut": "national_timeseries_multi",
         "primary_chart": "line",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
-          "controls": []
+          "pattern": "line-draw",
+          "rationale": "Kreslení řad zvýrazní rozdílné tempo růstu nákladových položek.",
+          "controls": [
+            "play"
+          ]
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statická multi-line řada nákladových kategorií.",
+        "rationale": "Čtyři nákladové kategorie v mld. Kč jako srovnatelné řady — line chart ukáže, co roste nejrychleji."
       },
       "regional": false
     },
@@ -1565,28 +1702,194 @@
         "nzip_page": "http://www.nzip.cz/data/2377-poskytovatele-zdravotnich-sluzeb-nasledna-dlouhodoba-pece-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-27-produkce-poskytovatele-zdravotnich-sluzeb-nasledna-dlouhodoba-pece-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
-      "series": [],
+      "status": "ready",
+      "role_in_negotiation": "Produkce následné a dlouhodobé lůžkové péče (ošetřovací dny) je objemovým vstupem dohodovacího řízení pro segment léčeben dlouhodobě nemocných, ošetřovatelské a rehabilitační péče.",
+      "what_it_says": "Celková produkce následné a dlouhodobé péče se drží kolem 8,9 mil. ošetřovacích dnů ročně. Výrazně klesá psychiatrická lůžková péče (z 2,2 na 1,3 mil. dnů) — odraz reformy psychiatrické péče a přesunu k komunitním službám.",
+      "method_note": "Součet ošetřovacích dnů následné a dlouhodobé lůžkové péče za ČR a top 4 obory pracoviště.",
+      "headline": {
+        "value": 8895523,
+        "unit": "ošetřovacích dnů",
+        "year": 2024,
+        "label": "Produkce následné a dlouhodobé péče"
+      },
+      "series": [
+        {
+          "key": "celkem",
+          "label": "Celkem ČR",
+          "unit": "ošetřovací dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 9268159
+            },
+            {
+              "year": 2020,
+              "value": 8500960
+            },
+            {
+              "year": 2021,
+              "value": 7984063
+            },
+            {
+              "year": 2022,
+              "value": 8420373
+            },
+            {
+              "year": 2023,
+              "value": 8855932
+            },
+            {
+              "year": 2024,
+              "value": 8895523
+            }
+          ]
+        },
+        {
+          "key": "obor0",
+          "label": "Léčebna dlouhodobě nemocných",
+          "unit": "ošetřovací dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 3452980
+            },
+            {
+              "year": 2020,
+              "value": 3220152
+            },
+            {
+              "year": 2021,
+              "value": 2996735
+            },
+            {
+              "year": 2022,
+              "value": 3234520
+            },
+            {
+              "year": 2023,
+              "value": 3397323
+            },
+            {
+              "year": 2024,
+              "value": 3428608
+            }
+          ]
+        },
+        {
+          "key": "obor1",
+          "label": "Psychiatrie",
+          "unit": "ošetřovací dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 2190565
+            },
+            {
+              "year": 2020,
+              "value": 1994356
+            },
+            {
+              "year": 2021,
+              "value": 1847626
+            },
+            {
+              "year": 2022,
+              "value": 1815195
+            },
+            {
+              "year": 2023,
+              "value": 1701301
+            },
+            {
+              "year": 2024,
+              "value": 1316647
+            }
+          ]
+        },
+        {
+          "key": "obor2",
+          "label": "Ošetřovatelská péče",
+          "unit": "ošetřovací dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 1163261
+            },
+            {
+              "year": 2020,
+              "value": 1067305
+            },
+            {
+              "year": 2021,
+              "value": 989819
+            },
+            {
+              "year": 2022,
+              "value": 1082826
+            },
+            {
+              "year": 2023,
+              "value": 1198943
+            },
+            {
+              "year": 2024,
+              "value": 1212901
+            }
+          ]
+        },
+        {
+          "key": "obor3",
+          "label": "Rehabilitační a fyzikální medicína",
+          "unit": "ošetřovací dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 1045735
+            },
+            {
+              "year": 2020,
+              "value": 910556
+            },
+            {
+              "year": 2021,
+              "value": 923892
+            },
+            {
+              "year": 2022,
+              "value": 1032334
+            },
+            {
+              "year": 2023,
+              "value": 1121368
+            },
+            {
+              "year": 2024,
+              "value": 1156653
+            }
+          ]
+        }
+      ],
       "series_periods": [],
       "pyramid": null,
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Segment následné a dlouhodobé lůžkové péče je vymezen národní legislativou; přímý mezinárodní ekvivalent ošetřovacích dnů neexistuje."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
+        "data_cut": "national_timeseries_multi",
         "primary_chart": "line",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
-          "controls": []
+          "pattern": "line-draw",
+          "rationale": "Kreslení řad odhalí pokles psychiatrické lůžkové péče proti stabilním LDN.",
+          "controls": [
+            "play"
+          ]
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statická multi-line řada (ČR celkem + top obory).",
+        "rationale": "Celek a čtyři hlavní obory v čase — line chart srozumitelně nese rozcházející se trendy."
       },
       "regional": false
     },
@@ -2056,28 +2359,85 @@
         "nzip_page": "http://www.nzip.cz/data/2386-produkce-lazne-ozdravovny-datovy-souhrn",
         "latest_file": "https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-40-produkce-lazne-ozdravovny-2026-01.xlsx"
       },
-      "status": "stub",
-      "role_in_negotiation": "",
-      "what_it_says": "",
-      "method_note": "",
-      "headline": null,
-      "series": [],
+      "status": "ready",
+      "role_in_negotiation": "Produkce lázeňské a ozdravné péče vstupuje do dohodovacího řízení jako samostatný segment s vlastním úhradovým mechanismem.",
+      "what_it_says": "Lázeňskou a ozdravnou péči využilo v roce 2022 přes 109 tis. unikátních pacientů. Propad v letech 2020–2021 (na 84 tis.) odráží pandemická omezení, následované zotavením.",
+      "method_note": "Unikátní pacienti a ošetřovací dny (položka „za léčení\") lázeňské a ozdravné péče, ČR.",
+      "headline": {
+        "value": 109393,
+        "unit": "unikátních pacientů",
+        "year": 2022,
+        "label": "Pacienti lázeňské a ozdravné péče"
+      },
+      "series": [
+        {
+          "key": "pacienti",
+          "label": "Unikátní pacienti",
+          "unit": "osoby",
+          "points": [
+            {
+              "year": 2019,
+              "value": 117116
+            },
+            {
+              "year": 2020,
+              "value": 83620
+            },
+            {
+              "year": 2021,
+              "value": 84194
+            },
+            {
+              "year": 2022,
+              "value": 109393
+            }
+          ]
+        },
+        {
+          "key": "leceni",
+          "label": "Ošetřovací dny (léčení)",
+          "unit": "dny",
+          "points": [
+            {
+              "year": 2019,
+              "value": 2885667
+            },
+            {
+              "year": 2020,
+              "value": 2040381
+            },
+            {
+              "year": 2021,
+              "value": 2042000
+            },
+            {
+              "year": 2022,
+              "value": 2629473
+            }
+          ]
+        }
+      ],
       "series_periods": [],
       "pyramid": null,
       "snapshot": null,
-      "international": null,
+      "international": {
+        "available": false,
+        "note": "Lázeňská péče hrazená z veřejného pojištění je specifikem středoevropských systémů; přímé srovnání s OECD/EU není standardizováno."
+      },
       "visualization": {
-        "data_cut": "national_timeseries",
+        "data_cut": "national_timeseries_multi",
         "primary_chart": "line",
         "animation": {
-          "pattern": "none",
-          "rationale": "",
-          "controls": []
+          "pattern": "line-draw",
+          "rationale": "Kreslení řady ukáže pandemický propad a zotavení.",
+          "controls": [
+            "play"
+          ]
         },
         "uses_3d": false,
         "engine": "chartjs",
-        "fallback_2d": "",
-        "rationale": "Výchozí volba — bude upřesněna datovou a grafickou rozvahou ve vlně příslušné dimenze."
+        "fallback_2d": "Statická řada pacientů a ošetřovacích dnů.",
+        "rationale": "Dvě objemové řady (pacienti, ošetřovací dny) v čase — line chart."
       },
       "regional": false
     },
