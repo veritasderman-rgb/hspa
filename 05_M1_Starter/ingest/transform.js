@@ -574,6 +574,7 @@ const SOURCE_TYPE_TO_LABEL = {
   uzis_nrh: { name: 'ÚZIS · NRH', url: 'https://www.uzis.cz/' },
   uzis_nor: { name: 'ÚZIS · NOR', url: 'https://www.uzis.cz/' },
   uzis_nrhzs_screening: { name: 'ÚZIS · NRHZS (screening)', url: 'https://www.uzis.cz/' },
+  uzis_nrhzs_prevence: { name: 'ÚZIS · NRHZS — preventivní prohlídky', url: 'https://data.mzcr.cz/' },
   nrc_nrhosp: { name: 'NRC · NRHOSP', url: 'https://www.nrc.cz/' },
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
