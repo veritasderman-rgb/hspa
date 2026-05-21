@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-21T17:04:59.633Z",
+  "generated_at": "2026-05-21T17:38:26.678Z",
   "_doc": "Frontend kontrakt stránky \"Dohodovací řízení — datová podpora\". Sady NEJSOU klasické HSPA indikátory — jde o provozní a ekonomická data dohodovacího řízení. Generováno ingest/build-dohodovaci-rizeni.js.",
   "source": "NZIP.cz – Datová podpora dohodovacího řízení",
   "publisher": "Ministerstvo zdravotnictví ČR + ÚZIS ČR",
@@ -5609,10 +5609,10 @@
       ]
     },
     "forecast": {
-      "title": "Predikce: kam míří náklady lůžkové péče",
+      "title": "Predikce a citlivostní analýza nákladů lůžkové péče",
       "metric": "Osobní náklady lůžkové péče",
       "unit": "mld. Kč",
-      "scenario_note": "Scénář „při zachování současného tempa\" — extrapolace průměrného růstu 9,3 % ročně z let 2019–2024. Není to oficiální prognóza, ale ilustrace směru.",
+      "scenario_note": "Citlivostní analýza tří scénářů osobních nákladů lůžkové péče do roku 2030. Klíčová nejistota: podaří-li se přesunout péči do levnějších forem a stabilizovat personál. Predikce jsou extrapolace, nikoli oficiální prognózy — slouží k ohraničení možného vývoje.",
       "labels": [
         2019,
         2020,
@@ -5641,21 +5641,99 @@
         null,
         null
       ],
-      "projection": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        167.4,
-        182.9,
-        199.8,
-        218.3,
-        238.5,
-        260.6,
-        284.7
-      ],
-      "takeaway": "Bez zásahu by osobní náklady lůžkové péče vzrostly do roku 2030 o dalších 70 % — na zhruba 285 mld. Kč. Souběžně by se centrové léky zdvojnásobily. Protože objem péče ani počet pracovníků nerostou, jde čistě o růst jednotkové ceny."
+      "scenarios": {
+        "optimistic": {
+          "label": "Optimistický (+6 %/rok)",
+          "rate": "+6 %/rok",
+          "y2030": 237.5,
+          "assumption": "Přesun výkonů do jednodenní a komunitní péče, stabilizace počtu pracovníků, mírnější mzdový růst.",
+          "color": "#2f6b1f",
+          "values": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            167.4,
+            177.4,
+            188.1,
+            199.4,
+            211.3,
+            224,
+            237.5
+          ]
+        },
+        "base": {
+          "label": "Základní (+9,3 %/rok)",
+          "rate": "+9,3 %/rok",
+          "y2030": 284.7,
+          "assumption": "Pokračování průměrného tempa růstu pozorovaného v letech 2019–2024.",
+          "color": "#b8361e",
+          "values": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            167.4,
+            182.9,
+            199.8,
+            218.3,
+            238.5,
+            260.6,
+            284.7
+          ]
+        },
+        "risk": {
+          "label": "Rizikový (+12,5 %/rok)",
+          "rate": "+12,5 %/rok",
+          "y2030": 339.3,
+          "assumption": "Mzdová spirála, odchodová vlna personálu a tlak inovativní farmakoterapie zrychlují růst nákladů.",
+          "color": "#7a1f12",
+          "values": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            167.4,
+            188.3,
+            211.8,
+            238.3,
+            268.1,
+            301.6,
+            339.3
+          ]
+        }
+      },
+      "benchmark": {
+        "label": "Udržitelný strop (+5 %/rok)",
+        "rate": "+5 %/rok",
+        "y2030": 224.4,
+        "assumption": "Náklady nerostou rychleji než nominální ekonomika a příjmy veřejného pojištění.",
+        "color": "#6b6357",
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          167.4,
+          175.8,
+          184.6,
+          193.8,
+          203.5,
+          213.7,
+          224.4
+        ]
+      },
+      "gap_2030": {
+        "value": 60,
+        "unit": " mld. Kč",
+        "label": "Fiskální mezera v roce 2030",
+        "plain": "O tolik by základní scénář ročně převýšil udržitelnou trajektorii danou tempem ekonomiky — peníze, které by musely přijít navíc nad rámec růstu příjmů pojištění."
+      },
+      "takeaway": "Citlivostní analýza ohraničuje rok 2030 rozpětím 238–339 mld. Kč podle toho, zda se péči podaří přesunout do levnějších forem. I optimistický scénář (238 mld.) jen těsně dosáhne na udržitelný strop daný tempem ekonomiky. Základní scénář by znamenal fiskální mezeru kolem 60 mld. Kč ročně — to je skutečná cena nečinnosti."
     },
     "recommendations": [
       {

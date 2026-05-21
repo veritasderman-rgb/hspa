@@ -232,6 +232,35 @@ function renderAnalysis(root, data) {
     )
     .join('');
 
+  const fc = a.forecast;
+  const scRows = [fc.scenarios.optimistic, fc.scenarios.base, fc.scenarios.risk, fc.benchmark]
+    .map(
+      (s) => `<tr>
+        <td><span class="dr-sc-dot" style="background:${escapeHtml(s.color)}"></span>${escapeHtml(s.label.replace(/\s*\([^)]*\)\s*/, ''))}</td>
+        <td class="dr-sc-rate">${escapeHtml(s.rate)}</td>
+        <td class="dr-sc-y2030"><strong>${formatValue(s.y2030)}</strong> mld.</td>
+        <td class="dr-sc-assum">${escapeHtml(s.assumption)}</td>
+      </tr>`,
+    )
+    .join('');
+  const gapHtml = fc.gap_2030
+    ? `<div class="dr-gap-callout dr-reveal">
+        <div class="dr-bignum-value dr-gap-num" data-target="${fc.gap_2030.value}" data-prefix="~" data-suffix="${escapeHtml(fc.gap_2030.unit || '')}">0</div>
+        <div class="dr-gap-text"><strong>${escapeHtml(fc.gap_2030.label)}</strong><p>${escapeHtml(fc.gap_2030.plain)}</p></div>
+      </div>`
+    : '';
+  const forecastHtml = `
+      <section class="dr-analyza-sec"><h3>${escapeHtml(fc.title)}</h3>
+        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drForecast" aria-label="Graf citlivostní predikce nákladů"></canvas></div>
+        <p class="dr-analyza-note">${escapeHtml(fc.scenario_note)}</p>
+        <table class="dr-sc-table">
+          <thead><tr><th>Scénář</th><th>Tempo</th><th>Náklady 2030</th><th>Klíčový předpoklad</th></tr></thead>
+          <tbody>${scRows}</tbody>
+        </table>
+        ${gapHtml}
+        <p class="dr-analyza-takeaway">${escapeHtml(fc.takeaway)}</p>
+      </section>`;
+
   root.innerHTML = `
     <article class="dr-analyza">
       <a class="dr-back" href="dohodovaci-rizeni.html">← Datová podpora dohodovacího řízení</a>
@@ -259,11 +288,7 @@ function renderAnalysis(root, data) {
         <ul class="dr-timeline">${timelineHtml}</ul>
       </section>
 
-      <section class="dr-analyza-sec"><h3>${escapeHtml(a.forecast.title)}</h3>
-        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drForecast" aria-label="Graf predikce nákladů"></canvas></div>
-        <p class="dr-analyza-note">${escapeHtml(a.forecast.scenario_note)}</p>
-        <p class="dr-analyza-takeaway">${escapeHtml(a.forecast.takeaway)}</p>
-      </section>
+      ${forecastHtml}
 
       <section class="dr-analyza-sec"><h3>Doporučení</h3>
         <ol class="dr-rec-list">${recHtml}</ol>
@@ -309,22 +334,27 @@ function drawDonut(cs) {
 function drawForecast(fc) {
   const canvas = document.getElementById('drForecast');
   if (!canvas || typeof window.Chart === 'undefined') return;
+  const sc = fc.scenarios;
+  const datasets = [
+    { label: 'Skutečnost', data: fc.history, borderColor: '#0b5394', backgroundColor: 'transparent', borderWidth: 3, pointRadius: 3, tension: 0.2 },
+    { label: sc.risk.label, data: sc.risk.values, borderColor: sc.risk.color, backgroundColor: 'transparent', borderWidth: 1.5, borderDash: [3, 3], pointRadius: 0, tension: 0.2 },
+    { label: sc.optimistic.label, data: sc.optimistic.values, borderColor: sc.optimistic.color, backgroundColor: 'rgba(120,120,120,0.12)', borderWidth: 1.5, borderDash: [3, 3], pointRadius: 0, tension: 0.2, fill: '-1' },
+    { label: sc.base.label, data: sc.base.values, borderColor: sc.base.color, backgroundColor: 'transparent', borderWidth: 2.5, borderDash: [6, 4], pointRadius: 3, tension: 0.2 },
+    { label: fc.benchmark.label, data: fc.benchmark.values, borderColor: fc.benchmark.color, backgroundColor: 'transparent', borderWidth: 2, borderDash: [2, 2], pointRadius: 0, tension: 0.2 },
+  ];
   if (_chart) _chart.destroy();
   _chart = new window.Chart(canvas.getContext('2d'), {
     type: 'line',
-    data: {
-      labels: fc.labels,
-      datasets: [
-        { label: 'Skutečnost', data: fc.history, borderColor: '#0b5394', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 3, tension: 0.2 },
-        { label: 'Projekce (scénář)', data: fc.projection, borderColor: '#b8361e', backgroundColor: 'transparent', borderWidth: 2.5, borderDash: [6, 4], pointRadius: 3, tension: 0.2 },
-      ],
-    },
+    data: { labels: fc.labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: reduceMotion() ? false : { duration: 1100 },
       interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { position: 'bottom' } },
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: (c) => c.parsed.y == null ? null : `${c.dataset.label}: ${formatValue(c.parsed.y)} ${fc.unit}` } },
+      },
       scales: { y: { beginAtZero: true, title: { display: true, text: fc.unit } } },
     },
   });
