@@ -212,6 +212,11 @@ function transformOIS1116() {
   const sum60plus =
     muziBands.slice(7).reduce((a, b) => a + b.value, 0) +
     zenyBands.slice(7).reduce((a, b) => a + b.value, 0);
+  // věkové rozložení (obě pohlaví) — celkem a jen lékaři, pro personální predikci
+  const totalByBand = AGE_BANDS.map((_, i) => (num(total[22 + i]) || 0) + (num(total[35 + i]) || 0));
+  const lekariByBand = lekari
+    ? AGE_BANDS.map((_, i) => (num(lekari[22 + i]) || 0) + (num(lekari[35 + i]) || 0))
+    : null;
   return {
     ois_code: 'OIS-11-16',
     source_file: 'OIS-11-16.xlsx',
@@ -230,6 +235,7 @@ function transformOIS1116() {
       lekari_total: lekari ? num(lekari[5]) : null,
     },
     pyramid: { age_bands: AGE_BANDS, muzi: muziBands, zeny: zenyBands },
+    workforce_age: { age_bands: AGE_BANDS, total: totalByBand, lekari: lekariByBand },
   };
 }
 
