@@ -446,38 +446,25 @@
       "number": "22",
       "tag": "Mortalita",
       "date": "2026-05-07",
-      "title": "Tři tisíce osm set ztracených let. Co PYLL říká o předčasné úmrtnosti v Česku",
-      "perex": "PYLL 3 800 / 100k (<70 let) vs. OECD 3 300. Souhrnný indikátor — sčítá kardio, onko, vnější příčiny, alkohol/tabák. Severokarelský model, Vision Zero, populačně preventivní opatření napříč resorty.",
+      "title": "Úmrtí, kterým šlo předejít. Odvratitelná úmrtnost je v Česku o pětinu vyšší než v EU",
+      "perex": "Odvratitelná úmrtnost — předčasná úmrtí do 75 let, kterým lze předejít prevencí nebo léčbou — byla v Česku 2022 o 19 % vyšší než průměr EU: preventabilní 195 / 100k vs. 168, léčitelná 113 vs. 90. Co se za rozdílem skrývá a co s ním dělají systémy, které ho dotáhly níž.",
       "linked_indicators": [
-        "pyll_potencialne_ztracene_roky",
         "mortalita_preventabilni",
         "mortalita_kardiovaskularni",
-        "mortalita_onkologicka",
-        "sebevrazdy_per_100k",
-        "alkohol_spotreba",
-        "kuractvi_denni"
+        "mortalita_inhosp_ami"
       ],
       "linked_prevention_themes": [],
       "topics": [
         "populace"
       ],
       "audit": {
-        "last_reviewed": "2026-05-11",
+        "last_reviewed": "2026-05-21",
         "reviewer": "claude-code-agent",
         "status": "review-pending",
-        "unverified_claims_removed": 0,
-        "primary_sources_added": 10,
+        "unverified_claims_removed": 7,
+        "primary_sources_added": 6,
         "visual_elements_added": 0,
-        "cascade_flags": [
-          "mortalita_kardiovaskularni",
-          "mortalita_onkologicka",
-          "mortalita_preventabilni",
-          "sebevrazdy_per_100k",
-          "alkohol_spotreba",
-          "kuractvi_denni",
-          "pyll_potencialne_ztracene_roky"
-        ],
-        "notes": "Cascade flag z auditu clanek-kardiovaskularni-mortalita (2026-05-11) rozšířen: při kontrole proti OECD Health at a Glance 2025 a Country Health Profile 2025 (Czechia) se 7 z 7 centrálních hodnot v článku neověřuje proti aktuálním primárním zdrojům OECD: KV mortalita 220 vs. OECD H@G 2025 cca 372/100k (ČR, 2023, ASR); onkologická 180 vs. 219/100k; preventovatelná 155 vs. 142/100k (a OECD průměr je 145, ne 121 — ČR je pod průměrem, ne nad); sebevraždy 12,5 vs. 11 (a OECD průměr 11, parita); alkohol 14,4 l/os. vs. 11,2 (CHP 2025); kuřáctví 22,6 % vs. 15,9 % (CHP 2025); samotné PYLL 3 800/3 300 nebylo v rámci tohoto auditu samostatně přepočítáno proti OECD.Stat (OECD od 2023 v reportech upřednostňuje rámec avoidable / preventable / treatable mortality). Změny: review-pending banner v záhlaví, cascade-flagged inline tagy u všech 7 indikátorů v databoxu, audit-poznámka pod tabulkou „Co tvoří 500 PYLL rezervu“ s vysvětlením, že hodnoty Δ ČR vs. OECD se v této chvíli ze zdroje neověřují, 10 stabilních permalinků primárních zdrojů přidáno (OECD H@G 2025 full report + Czechia dashboard + Avoidable mortality + Main causes of mortality + PYLL indicator, CHP 2025 Czechia, Eurostat hlth_cd_asdr2, WHO HFA Gateway, IHME GBD Czechia profile, ÚZIS Zemřelí registr, ČSÚ Demografická ročenka, THL North Karelia, Trafikverket Vision Zero). Republikace teprve po ručním schválení redakce a po sjednocení datového kontraktu data/indicators.json s OECD H@G 2025. Otevřené otázky: (1) zda po rekonciliaci CV mortality 220→372 zachovat narativ článku (s 500 PYLL rezervou) nebo přepsat na nový poměr; (2) zda PYLL jako indikátor v dashboardu zachovat, nebo přejít na OECD framework avoidable/preventable/treatable; (3) jak řešit historický řez 2024 vs. aktuální 2023 (paradoxně aktuální zdroj je rok pozadu vůči HSPA dashboard)."
+        "notes": "Fallback audit 2026-05-21 (PROMPT_DAILY_ROUTINE.md): rekonciliace flagged článku proti primárnímu zdroji OECD/European Observatory Country Health Profile 2025: Czechia (plný PDF přečten). Předchozí verze stála na neověřitelné hodnotě PYLL 3 800/3 300 (OECD od PYLL v reportech ustoupila ve prospěch rámce odvratitelné úmrtnosti; PYLL měří 0-74, ne <70) a na 7 neověřených hodnotách v tabulce 'Co tvoří 500 PYLL rezervu'. Kvantitativní jádro přeneseno na ověřený rámec odvratitelné úmrtnosti: preventabilní ČR 195/100k vs EU 168 (+16 %), léčitelná ČR 113 vs EU 90 (+26 %), odvratitelná celkem +19 % (CHP 2025 Figure 9; Eurostat hlth_cd_apr; rok 2022). Trend preventabilní úmrtnosti z Eurostat hlth_cd_apr (2019-2023: 188,33 / 218,38 / 285,92 / 195,45 / 173,86). Opraven obrácený směr u kuřáctví (ČR 15,9 % je POD EU 18,5 %). Přepsán titulek, dek, hero, struktura odvratitelné úmrtnosti (tabulka), databox, zdroje; odstraněn viditelný article-audit-note aside. Kaskáda: data/indicators.json a indicators/mortalita_preventabilni.json rekonciliovány současně; clanek-cmp-iktova-centra.html zbaven zastaralého odkazu na otevřenou rekonciliaci KV mortality. Status flagged -> review-pending. Otevřená otázka: indikátor pyll_potencialne_ztracene_roky v datovém kontraktu zůstává neověřený (mimo rozsah denní routine — ingest/expanzní prompt)."
       }
     },
     {
