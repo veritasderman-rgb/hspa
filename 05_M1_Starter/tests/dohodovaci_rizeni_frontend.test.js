@@ -141,9 +141,32 @@ test('dohodovaci-rizeni.json: strategická analýza je kompletní', () => {
   }
   assert.ok(a.cost_structure.items.length >= 3, 'cost_structure items');
   assert.ok(a.timeline.events.length >= 4, 'timeline events');
-  assert.equal(a.forecast.labels.length, a.forecast.history.length, 'forecast history délka');
-  assert.equal(a.forecast.labels.length, a.forecast.projection.length, 'forecast projection délka');
   assert.ok(a.recommendations.length >= 3, 'recommendations');
+});
+
+test('dohodovaci-rizeni.json: citlivostní predikce má 3 scénáře + benchmark', () => {
+  const fc = data.strategic_analysis.forecast;
+  const n = fc.labels.length;
+  assert.equal(fc.history.length, n, 'history délka');
+  for (const key of ['optimistic', 'base', 'risk']) {
+    const s = fc.scenarios[key];
+    assert.ok(s && s.label && s.rate && s.assumption, `scénář ${key}: metadata`);
+    assert.equal(s.values.length, n, `scénář ${key}: délka values`);
+    assert.ok(typeof s.y2030 === 'number', `scénář ${key}: y2030`);
+  }
+  assert.equal(fc.benchmark.values.length, n, 'benchmark délka');
+  assert.ok(fc.gap_2030 && typeof fc.gap_2030.value === 'number', 'gap_2030');
+  // scénáře musí vycházet ze stejné hodnoty 2024 jako skutečnost
+  const i2024 = fc.labels.indexOf(2024);
+  assert.equal(fc.scenarios.base.values[i2024], fc.history[i2024], 'scénář navazuje na skutečnost 2024');
+  // pořadí: rizikový ≥ základní ≥ optimistický ≥ udržitelný v roce 2030
+  const i2030 = fc.labels.indexOf(2030);
+  assert.ok(
+    fc.scenarios.risk.values[i2030] > fc.scenarios.base.values[i2030] &&
+      fc.scenarios.base.values[i2030] > fc.scenarios.optimistic.values[i2030] &&
+      fc.scenarios.optimistic.values[i2030] >= fc.benchmark.values[i2030],
+    'scénáře 2030 ve správném pořadí',
+  );
 });
 
 test('dohodovaci-rizeni: stránka a modul existují', () => {
