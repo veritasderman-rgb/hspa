@@ -2,6 +2,7 @@
 
 import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
+import { initNewsletterPopup } from './newsletter-popup.js';
 
 const LS_AUDIENCE = 'zdrave-cesko/audience';
 
@@ -299,6 +300,7 @@ export function renderHSPAScore() {
  * automaticky zvýrazní aktivní záložku podle window.location.pathname.
  */
 export function renderModuleNav(activeId) {
+  initNewsletterPopup();
   const path = window.location.pathname;
   const tabs = [
     { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
