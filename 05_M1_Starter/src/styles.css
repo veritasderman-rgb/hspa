@@ -9661,3 +9661,376 @@ body.site-search-open {
   border: 0;
   display: block;
 }
+
+/* =================================================================
+   Kolonoskopie — kolorektální screening (kolonoskopie.html)
+   Namespace: .krk-*
+   ================================================================= */
+.krk-breadcrumb {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.krk-breadcrumb a { color: var(--red); text-decoration: none; }
+.krk-breadcrumb a:hover { text-decoration: underline; }
+.krk-breadcrumb span[aria-current] { color: var(--ink-mut2); }
+
+.krk-section {
+  padding: 34px 0;
+  border-top: 1px solid var(--rule);
+}
+.krk-pathway-section { border-top: none; }
+
+.krk-h {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  margin: 6px 0 10px;
+}
+.krk-h4 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 26px 0 12px;
+}
+.krk-section-lead {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+  max-width: 70ch;
+  margin-bottom: 18px;
+}
+.krk-muted { color: var(--ink-mut2); font-weight: 400; }
+
+/* -- Toolbar / přepínače -- */
+.krk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.krk-toggle {
+  display: inline-flex;
+  border: 1px solid var(--rule2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.krk-toggle button {
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--ink-mut);
+  border: none;
+  border-right: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.krk-toggle button:last-child { border-right: none; }
+.krk-toggle button:hover { color: var(--ink); background: var(--paper2); }
+.krk-toggle button.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.krk-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+}
+.krk-year-pick {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.krk-year-pick select {
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 5px 8px;
+  border: 1px solid var(--rule2);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 2px;
+}
+
+/* -- Grafy -- */
+.krk-chart-wrap {
+  position: relative;
+  height: 360px;
+  margin-bottom: 8px;
+}
+
+/* -- Geografický blok: mapa + tabulka -- */
+.krk-geo {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 32px;
+  margin-top: 24px;
+  align-items: start;
+}
+.krk-geo-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.krk-geo-head .krk-h4 { margin-top: 0; }
+.krk-map {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  margin-top: 6px;
+}
+
+/* -- Tabulky -- */
+.krk-table-scroll {
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+}
+.krk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 12.5px;
+}
+.krk-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  padding: 8px 10px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+.krk-table thead th:hover { background: #322a20; }
+.krk-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+.krk-table tbody tr:nth-child(even) { background: var(--paper2); }
+.krk-table tbody tr:hover { background: var(--red-soft); }
+.krk-table .krk-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* -- Hero statistiky (využívá .ed-stat) -- */
+
+/* -- Cesta pacienta (pathway) -- */
+.krk-pathway {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.krk-pw-branch {
+  border: 1px solid var(--rule2);
+  border-left: 4px solid var(--ink);
+  padding: 16px 18px;
+  background: var(--paper2);
+}
+.krk-pw-branch-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  margin-bottom: 12px;
+}
+.krk-pw-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+}
+.krk-pw-step {
+  flex: 1 1 180px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+}
+.krk-pw-step-end { border-left: 3px solid var(--red); }
+.krk-pw-num {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  line-height: 1;
+}
+.krk-pw-name {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 6px;
+}
+.krk-pw-note {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.krk-pw-arrow {
+  align-self: center;
+  font-size: 20px;
+  color: var(--red);
+  flex: 0 0 auto;
+}
+.krk-pw-foot {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  margin-top: 2px;
+}
+
+/* -- Funnel návaznosti -- */
+.krk-funnel {
+  border: 1px solid var(--rule2);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  background: var(--paper2);
+}
+.krk-funnel-head {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-mut);
+  margin-bottom: 12px;
+}
+.krk-funnel-row {
+  margin-bottom: 8px;
+}
+.krk-funnel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 200px;
+  min-height: 44px;
+  padding: 6px 14px;
+  color: #fff;
+  font-family: var(--sans);
+  transition: width 0.5s ease;
+}
+.krk-funnel-bar-loss {
+  background: repeating-linear-gradient(
+    45deg, var(--ink-mut), var(--ink-mut) 8px,
+    var(--ink-mut2) 8px, var(--ink-mut2) 16px);
+}
+.krk-funnel-label { font-size: 12.5px; font-weight: 600; }
+.krk-funnel-val { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.krk-funnel-note {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin-top: 12px;
+}
+
+/* -- Metodika / zdroje -- */
+.krk-method-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 8px;
+}
+.krk-method-text p {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--ink-mut);
+  margin-bottom: 12px;
+}
+.krk-method-text p.krk-muted { font-size: 13px; }
+.krk-source-list { list-style: none; }
+.krk-source-item {
+  border-top: 1px solid var(--rule);
+  padding: 10px 0;
+}
+.krk-source-item:last-child { border-bottom: 1px solid var(--rule); }
+.krk-source-item > a {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: none;
+  display: block;
+}
+.krk-source-item > a:hover { color: var(--red); }
+.krk-source-meta {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  display: block;
+  margin-top: 3px;
+}
+.krk-source-meta a { color: var(--red); text-decoration: none; }
+.krk-source-meta a:hover { text-decoration: underline; }
+.krk-generated {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut2);
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+/* -- Deep-dive CTA na stránce indikátoru -- */
+.ind-deepdive-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--ink);
+  background: var(--paper2);
+  padding: 16px 20px;
+  margin: 22px 0;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s;
+}
+.ind-deepdive-cta:hover { background: var(--red-soft); }
+.ind-deepdive-cta-icon { font-size: 24px; flex: 0 0 auto; }
+.ind-deepdive-cta-body { flex: 1 1 auto; }
+.ind-deepdive-cta-title {
+  display: block;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.ind-deepdive-cta-desc {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin-top: 3px;
+}
+.ind-deepdive-cta-arrow { font-size: 20px; color: var(--red); flex: 0 0 auto; }
+
+@media (max-width: 860px) {
+  .krk-geo { grid-template-columns: 1fr; gap: 24px; }
+  .krk-method-grid { grid-template-columns: 1fr; gap: 22px; }
+  .krk-h { font-size: 22px; }
+  .krk-chart-wrap { height: 300px; }
+}

@@ -137,6 +137,17 @@ function renderDetail(ind, card, regionDataset) {
       </div>
     </section>
 
+    ${ind.deep_dive ? `
+      <a class="ind-deepdive-cta" href="${escapeHtml(ind.deep_dive.url)}">
+        <span class="ind-deepdive-cta-icon" aria-hidden="true">⊞</span>
+        <span class="ind-deepdive-cta-body">
+          <span class="ind-deepdive-cta-title">${escapeHtml(ind.deep_dive.title)}</span>
+          <span class="ind-deepdive-cta-desc">${escapeHtml(ind.deep_dive.desc)}</span>
+        </span>
+        <span class="ind-deepdive-cta-arrow" aria-hidden="true">→</span>
+      </a>
+    ` : ''}
+
     ${card?.patient_story ? `
       <section class="ind-section ind-story-section">
         <h3>Proč na tom záleží</h3>
