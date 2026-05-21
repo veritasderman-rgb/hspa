@@ -2461,85 +2461,160 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   max-width: 720px;
   margin: 12px 0 24px;
 }
-.leverage-figure {
-  margin: 0;
-  padding: 20px;
-  background: var(--paper2);
-  border: 1px solid var(--rule);
-}
-.leverage-svg {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  font-family: var(--sans);
-}
-/* Strop = HALE */
+.leverage-figure { margin: 0; }
+
+/* Strop — společný výsledek (HALE) */
 .leverage-roof {
-  fill: var(--ink);
-  transition: fill 0.15s;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 15px 22px;
+  background: var(--ink);
+  text-decoration: none;
 }
-.leverage-roof-link:hover .leverage-roof { fill: var(--red, var(--accent, #c8102e)); }
-.leverage-roof-text {
-  fill: var(--paper);
-  font-size: 17px;
+.leverage-roof-label {
+  font-family: var(--sans);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(251, 248, 241, 0.55);
+  white-space: nowrap;
 }
-/* Pilíře */
-.leverage-pillar-bg {
-  fill: var(--paper);
-  stroke: var(--rule);
-  stroke-width: 1.5;
-  transition: fill 0.15s, stroke 0.15s;
+.leverage-roof-title {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--paper);
 }
-.leverage-pillar a:hover .leverage-pillar-bg,
-.leverage-pillar a:focus .leverage-pillar-bg {
-  fill: #fff;
-  stroke: var(--ink);
-  stroke-width: 2;
+.leverage-roof-arrow {
+  font-family: var(--sans);
+  font-size: 17px;
+  color: rgba(251, 248, 241, 0.6);
+  transition: color 0.12s, transform 0.12s;
 }
-.leverage-pillar a:focus { outline: none; }
-.leverage-pillar a:focus-visible .leverage-pillar-bg {
-  stroke: var(--red, var(--accent, #c8102e));
-  stroke-width: 2.5;
+.leverage-roof:hover .leverage-roof-arrow { color: var(--paper); transform: translateX(3px); }
+.leverage-roof:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+
+/* Tři pilíře */
+.leverage-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-left: 1px solid var(--rule);
+}
+.leverage-pillar {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 16px;
+  background: var(--paper);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  border-top: 3px solid var(--neutral);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s;
+}
+.leverage-pillar:hover { background: var(--paper2); }
+.leverage-pillar:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+.leverage-pillar-prev   { border-top-color: #2f6b1f; }
+.leverage-pillar-acute  { border-top-color: #a05a08; }
+.leverage-pillar-follow { border-top-color: #2c5a8a; }
+.leverage-pillar-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mut);
 }
 .leverage-pillar-h {
-  fill: var(--ink);
   font-family: var(--serif);
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin: 5px 0 0;
 }
 .leverage-pillar-sub {
-  fill: var(--ink-mut);
   font-family: var(--serif);
   font-style: italic;
-  font-size: 11px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-mut);
+  margin: 5px 0 12px;
 }
 .leverage-pillar-list {
-  fill: var(--ink);
-  font-size: 11px;
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.leverage-pillar-list li {
+  position: relative;
+  padding: 5px 0 5px 15px;
+  border-top: 1px solid var(--rule);
+}
+.leverage-pillar-list li:first-child { border-top: none; }
+.leverage-pillar-list li::before {
+  content: "\203A";
+  position: absolute;
+  left: 0;
+  color: var(--ink-mut2);
 }
 .leverage-pillar-foot {
-  fill: var(--ink-mut);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  margin-top: auto;
+  padding-top: 11px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: 4px;
 }
-/* Barevné akcenty per pilíř (top border) */
-.leverage-pillar-prev .leverage-pillar-bg { border-top: 4px solid var(--good, #0a8a3a); }
-.leverage-pillar-acute .leverage-pillar-bg { border-top: 4px solid var(--warn, #d97706); }
-.leverage-pillar-follow .leverage-pillar-bg { border-top: 4px solid var(--info, #2563eb); }
-/* Podlaha */
+.leverage-pillar-foot div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink);
+}
+.leverage-pillar-foot span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-mut);
+}
+
+/* Základ všech vrstev */
 .leverage-floor {
-  fill: var(--ink-mut);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 12px 22px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-top: none;
+}
+.leverage-floor-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-mut);
+  white-space: nowrap;
 }
 .leverage-floor-text {
-  fill: var(--paper);
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-mut);
+  letter-spacing: 0.03em;
 }
+
 .leverage-caption {
   font-family: var(--serif);
   font-size: 14px;
@@ -2547,10 +2622,12 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   color: var(--ink-mut);
   margin: 16px 4px 0;
 }
-.leverage-caption a { color: var(--red, var(--accent, #c8102e)); }
-@media (max-width: 720px) {
-  .leverage-svg { font-size: 9px; }
-  .leverage-figure { padding: 12px; }
+.leverage-caption a { color: var(--red); }
+
+@media (max-width: 640px) {
+  .leverage-pillars { grid-template-columns: 1fr; border-left: none; }
+  .leverage-pillar { border-right: none; }
+  .leverage-roof { flex-wrap: wrap; gap: 4px 14px; }
 }
 
 /* Sekce „Jak to spolu souvisí" — 4 kroky/mechanismy
