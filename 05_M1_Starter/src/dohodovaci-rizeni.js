@@ -30,8 +30,11 @@ async function init() {
       if (!r.ok) throw new Error('dohodovaci-rizeni.json HTTP ' + r.status);
       return r.json();
     });
-    const id = new URLSearchParams(window.location.search).get('id');
-    if (id) renderDetail(root, data, id);
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get('view');
+    const id = params.get('id');
+    if (view === 'analyza') renderAnalysis(root, data);
+    else if (id) renderDetail(root, data, id);
     else renderLanding(root, data);
   } catch (err) {
     console.error('dohodovaci-rizeni load failed:', err);
@@ -158,7 +161,228 @@ function renderLanding(root, data) {
       </section>`
     : '';
 
-  root.innerHTML = heroHtml + dimsGridHtml + sectionsHtml + interactiveHtml + provenanceHtml;
+  const analyzaCtaHtml = data.strategic_analysis
+    ? `<a class="dr-analyza-cta" href="dohodovaci-rizeni.html?view=analyza">
+        <div class="dr-analyza-cta-text">
+          <span class="ed-kicker">Strategická analýza</span>
+          <strong>${escapeHtml(data.strategic_analysis.title)}</strong>
+          <span class="dr-analyza-cta-sub">SWOT, predikce a velká čísla — co data říkají o směřování českého zdravotnictví</span>
+        </div>
+        <span class="dr-analyza-cta-arrow" aria-hidden="true">→</span>
+      </a>`
+    : '';
+
+  root.innerHTML =
+    heroHtml + analyzaCtaHtml + dimsGridHtml + sectionsHtml + interactiveHtml + provenanceHtml;
+}
+
+/* ======================= STRATEGICKÁ ANALÝZA ======================= */
+
+function renderAnalysis(root, data) {
+  const a = data.strategic_analysis;
+  if (!a) {
+    root.innerHTML = renderErrorState('Strategická analýza není k dispozici.');
+    return;
+  }
+  document.title = `${a.title} — Dohodovací řízení · HSPA Monitor`;
+
+  const numbersHtml = a.key_numbers
+    .map(
+      (n) => `
+      <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
+        <div class="dr-bignum-value" data-target="${n.value}" data-prefix="${escapeHtml(n.prefix || '')}" data-suffix="${escapeHtml(n.suffix || '')}">0</div>
+        <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
+        <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
+      </div>`,
+    )
+    .join('');
+
+  const swotOrder = [
+    ['strengths', 'Silné stránky'],
+    ['weaknesses', 'Slabé stránky'],
+    ['opportunities', 'Příležitosti'],
+    ['threats', 'Hrozby'],
+  ];
+  const swotHtml = swotOrder
+    .map(
+      ([key, label]) => `
+      <div class="dr-swot-quad dr-swot-${key}">
+        <div class="dr-swot-head"><span class="dr-swot-letter">${escapeHtml(label[0])}</span><h4>${label}</h4></div>
+        <ul>${(a.swot[key] || [])
+          .map((it) => `<li class="dr-reveal"><strong>${escapeHtml(it.title)}</strong> — ${escapeHtml(it.detail)}</li>`)
+          .join('')}</ul>
+      </div>`,
+    )
+    .join('');
+
+  const timelineHtml = (a.timeline.events || [])
+    .map(
+      (e) => `
+      <li class="dr-tl-item dr-reveal dr-tl-${escapeHtml(e.tone || 'neutral')}">
+        <span class="dr-tl-year">${e.year}</span>
+        <div class="dr-tl-body"><strong>${escapeHtml(e.title)}</strong><span>${escapeHtml(e.detail)}</span></div>
+      </li>`,
+    )
+    .join('');
+
+  const recHtml = (a.recommendations || [])
+    .map(
+      (r, i) =>
+        `<li class="dr-reveal"><span class="dr-rec-num">${i + 1}</span><div><strong>${escapeHtml(r.title)}</strong><p>${escapeHtml(r.detail)}</p></div></li>`,
+    )
+    .join('');
+
+  root.innerHTML = `
+    <article class="dr-analyza">
+      <a class="dr-back" href="dohodovaci-rizeni.html">← Datová podpora dohodovacího řízení</a>
+      <header class="dr-analyza-head">
+        <div class="ed-kicker">Strategická analýza</div>
+        <h2>${escapeHtml(a.title)}</h2>
+        <p class="dr-analyza-sub">${escapeHtml(a.subtitle)}</p>
+      </header>
+      <p class="dr-analyza-thesis">${escapeHtml(a.thesis)}</p>
+
+      <section class="dr-analyza-sec"><h3>Klíčová čísla</h3>
+        <div class="dr-bignum-grid">${numbersHtml}</div>
+      </section>
+
+      <section class="dr-analyza-sec"><h3>${escapeHtml(a.cost_structure.title)}</h3>
+        <p class="dr-analyza-note">${escapeHtml(a.cost_structure.note)}</p>
+        <div class="dr-donut-wrap"><canvas id="drDonut" aria-label="Koláčový graf struktury nákladů"></canvas></div>
+      </section>
+
+      <section class="dr-analyza-sec"><h3>SWOT analýza</h3>
+        <div class="dr-swot-grid">${swotHtml}</div>
+      </section>
+
+      <section class="dr-analyza-sec"><h3>${escapeHtml(a.timeline.title)}</h3>
+        <ul class="dr-timeline">${timelineHtml}</ul>
+      </section>
+
+      <section class="dr-analyza-sec"><h3>${escapeHtml(a.forecast.title)}</h3>
+        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drForecast" aria-label="Graf predikce nákladů"></canvas></div>
+        <p class="dr-analyza-note">${escapeHtml(a.forecast.scenario_note)}</p>
+        <p class="dr-analyza-takeaway">${escapeHtml(a.forecast.takeaway)}</p>
+      </section>
+
+      <section class="dr-analyza-sec"><h3>Doporučení</h3>
+        <ol class="dr-rec-list">${recHtml}</ol>
+      </section>
+
+      <p class="dr-method-note">${escapeHtml(a.methodology)}</p>
+    </article>`;
+
+  drawDonut(a.cost_structure);
+  drawForecast(a.forecast);
+  wireCounters();
+  wireReveal();
+}
+
+function drawDonut(cs) {
+  const canvas = document.getElementById('drDonut');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const paper = (getComputedStyle(document.documentElement).getPropertyValue('--paper') || '#fbf8f1').trim();
+  new window.Chart(canvas.getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: cs.items.map((i) => i.name),
+      datasets: [{
+        data: cs.items.map((i) => i.value),
+        backgroundColor: cs.items.map((i) => i.color),
+        borderColor: paper,
+        borderWidth: 2,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '58%',
+      animation: reduceMotion() ? false : { animateRotate: true, duration: 1000 },
+      plugins: {
+        legend: { position: 'right' },
+        tooltip: { callbacks: { label: (c) => `${c.label}: ${formatValue(c.parsed)} ${cs.unit}` } },
+      },
+    },
+  });
+}
+
+function drawForecast(fc) {
+  const canvas = document.getElementById('drForecast');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  if (_chart) _chart.destroy();
+  _chart = new window.Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: fc.labels,
+      datasets: [
+        { label: 'Skutečnost', data: fc.history, borderColor: '#0b5394', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 3, tension: 0.2 },
+        { label: 'Projekce (scénář)', data: fc.projection, borderColor: '#b8361e', backgroundColor: 'transparent', borderWidth: 2.5, borderDash: [6, 4], pointRadius: 3, tension: 0.2 },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 1100 },
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true, title: { display: true, text: fc.unit } } },
+    },
+  });
+}
+
+function animateCount(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const fmt = (v) => prefix + Math.round(v).toLocaleString('cs-CZ') + suffix;
+  if (reduceMotion()) {
+    el.textContent = fmt(target);
+    return;
+  }
+  const dur = 1100;
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / dur, 1);
+    el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = fmt(target);
+  }
+  requestAnimationFrame(step);
+}
+
+function wireCounters() {
+  const els = [...document.querySelectorAll('.dr-bignum-value')];
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(animateCount);
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        animateCount(e.target);
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.4 });
+  els.forEach((el) => io.observe(el));
+}
+
+function wireReveal() {
+  const els = [...document.querySelectorAll('.dr-reveal')];
+  if (reduceMotion() || !('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('dr-revealed'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('dr-revealed');
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.15 });
+  els.forEach((el) => io.observe(el));
 }
 
 function renderCard(ds) {

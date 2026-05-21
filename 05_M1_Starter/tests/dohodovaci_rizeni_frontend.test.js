@@ -128,6 +128,24 @@ test('dohodovaci-rizeni.json: DRG sady mají žebříček (ranked)', () => {
   }
 });
 
+test('dohodovaci-rizeni.json: strategická analýza je kompletní', () => {
+  const a = data.strategic_analysis;
+  assert.ok(a, 'strategic_analysis chybí');
+  assert.ok(a.title && a.thesis && a.methodology, 'chybí title/thesis/methodology');
+  assert.ok(Array.isArray(a.key_numbers) && a.key_numbers.length >= 3, 'key_numbers');
+  for (const n of a.key_numbers) {
+    assert.ok(typeof n.value === 'number' && n.label && n.plain, `key_number neúplné: ${n.label}`);
+  }
+  for (const q of ['strengths', 'weaknesses', 'opportunities', 'threats']) {
+    assert.ok(Array.isArray(a.swot[q]) && a.swot[q].length >= 3, `SWOT ${q} má málo položek`);
+  }
+  assert.ok(a.cost_structure.items.length >= 3, 'cost_structure items');
+  assert.ok(a.timeline.events.length >= 4, 'timeline events');
+  assert.equal(a.forecast.labels.length, a.forecast.history.length, 'forecast history délka');
+  assert.equal(a.forecast.labels.length, a.forecast.projection.length, 'forecast projection délka');
+  assert.ok(a.recommendations.length >= 3, 'recommendations');
+});
+
 test('dohodovaci-rizeni: stránka a modul existují', () => {
   assert.ok(fs.existsSync(path.join(ROOT, 'dohodovaci-rizeni.html')), 'dohodovaci-rizeni.html missing');
   assert.ok(fs.existsSync(path.join(ROOT, 'src', 'dohodovaci-rizeni.js')), 'src/dohodovaci-rizeni.js missing');

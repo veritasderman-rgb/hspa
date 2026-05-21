@@ -91,7 +91,7 @@ zdrave-cesko.cz/
 
 | | |
 |---|---|
-| **Účel** | Rozcestník 44 datových sad NZIP „Datová podpora dohodovacího řízení" (8 dimenzí + doplňkové registry). Bez `?id=` landing v editorial stylu homepage; s `?id={sada}` detail jedné sady. Sady NEJSOU klasické HSPA indikátory — jde o provozní/ekonomická data úhradové vyhlášky. |
+| **Účel** | Rozcestník 44 datových sad NZIP „Datová podpora dohodovacího řízení" (8 dimenzí + doplňkové registry). Bez parametru landing v editorial stylu homepage; `?id={sada}` detail jedné sady; `?view=analyza` strategická analýza (SWOT, predikce, animovaná velká čísla, koláč, časová osa). Sady NEJSOU klasické HSPA indikátory — jde o provozní/ekonomická data úhradové vyhlášky. |
 | **Cílový uživatel** | Účastník dohodovacího řízení, analytik, novinář pokrývající úhrady. |
 | **Fetchuje** | `data/dohodovaci-rizeni.json` |
 | **JS moduly** | `src/dohodovaci-rizeni.js` → `page-shared`, `analytics` |
