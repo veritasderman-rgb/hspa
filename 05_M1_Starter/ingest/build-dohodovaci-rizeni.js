@@ -22,6 +22,7 @@ const STARTER = path.resolve(__dirname, '..');
 
 const CATALOG = path.join(__dirname, 'mapping', 'nzip_dohodovaci_rizeni_catalog.json');
 const CONTENT = path.join(__dirname, 'dohodovaci-rizeni-content.json');
+const ANALYZA = path.join(__dirname, 'dohodovaci-rizeni-analyza.json');
 const EXTRACTS = path.join(__dirname, 'nzip-extracts');
 const PRISTROJE = path.join(EXTRACTS, 'sss-04-02-pristroje-vyvoj-cr.json');
 const OUT = path.join(STARTER, 'data', 'dohodovaci-rizeni.json');
@@ -206,6 +207,9 @@ function main() {
     },
     dimensions: dims,
     datasets,
+    strategic_analysis: fs.existsSync(ANALYZA)
+      ? JSON.parse(fs.readFileSync(ANALYZA, 'utf8')).strategic_analysis
+      : null,
     interactive_only: (catalog.interactive_visualizations || []).map((v) => ({
       page_id: v.page_id,
       title: v.title,
