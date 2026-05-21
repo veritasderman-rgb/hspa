@@ -178,6 +178,16 @@ function renderLanding(root, data) {
 
 /* ======================= STRATEGICKÁ ANALÝZA ======================= */
 
+// Velké animované číslo — hodnota zvlášť (animuje se), jednotka v menším spanu,
+// aby dlouhé hodnoty typu „~1 800/rok" nepřetékaly z boxu.
+function bignumValueHtml({ value, prefix = '', suffix = '', cls = '' }) {
+  const s = escapeHtml(suffix || '');
+  return `<div class="dr-bignum-value${cls ? ' ' + cls : ''}">`
+    + `<span class="dr-bignum-num" data-target="${value}" data-prefix="${escapeHtml(prefix || '')}">0</span>`
+    + (s ? `<span class="dr-bignum-unit">${s}</span>` : '')
+    + '</div>';
+}
+
 function renderAnalysis(root, data) {
   const a = data.strategic_analysis;
   if (!a) {
@@ -190,7 +200,7 @@ function renderAnalysis(root, data) {
     .map(
       (n) => `
       <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
-        <div class="dr-bignum-value" data-target="${n.value}" data-prefix="${escapeHtml(n.prefix || '')}" data-suffix="${escapeHtml(n.suffix || '')}">0</div>
+        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix })}
         <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
         <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
       </div>`,
@@ -245,7 +255,7 @@ function renderAnalysis(root, data) {
     .join('');
   const gapHtml = fc.gap_2030
     ? `<div class="dr-gap-callout dr-reveal">
-        <div class="dr-bignum-value dr-gap-num" data-target="${fc.gap_2030.value}" data-prefix="~" data-suffix="${escapeHtml(fc.gap_2030.unit || '')}">0</div>
+        ${bignumValueHtml({ value: fc.gap_2030.value, prefix: '~', suffix: fc.gap_2030.unit, cls: 'dr-gap-num' })}
         <div class="dr-gap-text"><strong>${escapeHtml(fc.gap_2030.label)}</strong><p>${escapeHtml(fc.gap_2030.plain)}</p></div>
       </div>`
     : '';
@@ -284,7 +294,7 @@ function renderAnalysis(root, data) {
     .map(
       (n) => `
       <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
-        <div class="dr-bignum-value" data-target="${n.value}" data-prefix="${escapeHtml(n.prefix || '')}" data-suffix="${escapeHtml(n.suffix || '')}">0</div>
+        ${bignumValueHtml({ value: n.value, prefix: n.prefix, suffix: n.suffix })}
         <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
         <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
       </div>`,
@@ -486,8 +496,7 @@ function drawRetirement(pc) {
 function animateCount(el) {
   const target = parseFloat(el.dataset.target);
   const prefix = el.dataset.prefix || '';
-  const suffix = el.dataset.suffix || '';
-  const fmt = (v) => prefix + Math.round(v).toLocaleString('cs-CZ') + suffix;
+  const fmt = (v) => prefix + Math.round(v).toLocaleString('cs-CZ');
   if (reduceMotion()) {
     el.textContent = fmt(target);
     return;
@@ -505,7 +514,7 @@ function animateCount(el) {
 }
 
 function wireCounters() {
-  const els = [...document.querySelectorAll('.dr-bignum-value')];
+  const els = [...document.querySelectorAll('.dr-bignum-num')];
   if (!('IntersectionObserver' in window)) {
     els.forEach(animateCount);
     return;
