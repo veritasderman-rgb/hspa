@@ -63,7 +63,7 @@ social/
 │   ├── prompts/                 system prompt + per-síť zadání
 │   └── image-generator.js       4 PNG přes resvg
 ├── notion/                      fronta (setup, writer, reader, schema)
-├── publisher/webhook-publisher.js  odeslání na Make.com (HMAC)
+├── publisher/webhook-publisher.js  odeslání na Make.com (API klíč)
 ├── reporting/weekly-report.js   týdenní souhrn
 ├── run-generate.js              orchestrátor — neděle
 ├── run-publish.js               orchestrátor — pondělí
