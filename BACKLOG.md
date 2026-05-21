@@ -36,7 +36,7 @@
 | B-36 | UX audit | 🟡 PARTIAL — statická hygiena OK, user-testing chybí |
 | B-37 | Vizuální / brand audit | ✅ DONE — ověřena konzistence všech 85 stránek |
 | B-38 | Grafické překryvy | 🟡 PARTIAL — z-index OK staticky, breakpointy → B-01 |
-| B-39 | Newsletter popup | 📋 SPEC READY — čeká na rozhodnutí o buildu |
+| B-39 | Newsletter popup | ✅ DONE — slide-in rohová karta, scroll 55 %, návrat po 30 dnech |
 
 ### Fáze 0 — Akutní opravy (rozbité buildy) · ✅ hotovo
 
@@ -162,24 +162,25 @@ kontrola překryvů na 4 šířkách vyžaduje skutečný browser → pokryje
 
 ### Fáze 4 — Newsletter popup
 
-#### B-39 · Newsletter popup (slide-in) 🟡 📋 SPEC READY
+#### B-39 · Newsletter popup (slide-in) 🟡 ✅ DONE
 **Z**: audit 2026-05-21
-**Stav**: 📋 Specifikace připravena, čeká na rozhodnutí o buildu. Odběr
-dnes existuje jen jako blok ve footeru (`.newsletter-block`, MailerLite
-formulář). Popup je **nová UX funkce viditelná na každé stránce** —
-designové rozhodnutí, které by mělo projít schválením vlastníka, proto
-není součástí úklidového PR.
-**Návrh řešení (k implementaci)**:
-- Slide-in panel, ne overlay přes celou obrazovku (nižší riziko otravy, žádný velký CLS)
-- Spouštěč: scroll ~55 % obsahu *nebo* exit-intent
-- Primárně na stránkách článků (`clanek-*.html`), ne na homepage (ruší „hlavní příběh")
-- Max. 1× na návštěvníka (`localStorage`), respektovat `prefers-reduced-motion`
-- Plně ovladatelné klávesnicí, zavíratelné Esc, focus trap
-- Reuse existující MailerLite formulář — žádná nová integrace
+**Stav**: ✅ Implementováno. Nový modul `src/newsletter-popup.js` —
+nenápadná rohová karta vpravo dole, vysune se po doscrollování 55 % stránky.
+Napojeno přes `renderModuleNav()` v `page-shared.js`, takže běží na všech
+stránkách. Reuse MailerLite endpointu z footeru. Stav v `localStorage`:
+po zavření se vrátí až za 30 dní, po přihlášení už nikdy. Esc zavírá,
+`prefers-reduced-motion` respektován, otevřený popup schová scroll-top FAB
+(kolize vpravo dole). Čistá funkce `shouldShowPopup()` pokrytá testy.
+**Parametry (rozhodnutí vlastníka 2026-05-21)**: spouštěč scroll 55 %,
+rohová karta vpravo dole, všechny stránky, návrat po 30 dnech.
 **Akceptační kritéria**:
-- [ ] Popup se zobrazí jednou za návštěvníka, dá se trvale zavřít
-- [ ] Žádné zhoršení CLS, a11y (klávesnice + screen reader) OK
-- [ ] A/B měření konverze vs. footer-only baseline
+- [x] Popup se zobrazí jednou za návštěvu, po zavření se vrátí až za 30 dní
+- [x] `position: fixed` → žádný CLS; Esc + klávesnice OK, `aria-label` region
+- [ ] A/B měření konverze vs. footer-only baseline (provozní, po nasazení)
+
+> **Pozn.**: vizuální kontrola v prohlížeči nebyla v sandboxu možná
+> (bez Playwrightu — viz B-01); ověřeno staticky + 6 unit testů logiky
+> zobrazení. Doporučeno proklikat na Vercel preview.
 
 ---
 
