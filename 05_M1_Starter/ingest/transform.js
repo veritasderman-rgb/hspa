@@ -670,6 +670,9 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
       origin: sourceUsed,
     },
     method_card_url: card._method_card_path ?? `indicators/${card.id}.json`,
+    ...(card.deep_dive ?? seed?.deep_dive
+      ? { deep_dive: card.deep_dive ?? seed.deep_dive }
+      : {}),
   };
 }
 

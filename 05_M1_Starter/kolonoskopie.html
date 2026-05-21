@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kolorektální screening — kolonoskopie · HSPA Monitor</title>
+<meta name="description" content="Kompletní vizualizace dat Národního programu screeningu karcinomu tlustého střeva a konečníku: pokrytí populace, TOKS testy, screeningové kolonoskopie, pozitivita, návaznost a čekací doby — kraje, okresy, věk i pohlaví, 2010–2024.">
+<link rel="stylesheet" href="src/styles.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+</head>
+<body data-audience="public">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Kolorektální screening</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content" class="krk-page">
+
+  <nav class="krk-breadcrumb" aria-label="Drobečková navigace">
+    <a href="index.html">Indikátory</a>
+    <span aria-hidden="true">›</span>
+    <a href="indicator.html?id=screening_kolorektalni">Pokrytí kolorektálním screeningem</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">Detailní data</span>
+  </nav>
+
+  <section class="ed-hero" aria-labelledby="krkHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Procesy · Preventivní péče · Onkologický screening</div>
+      <h2 class="ed-hero-headline" id="krkHeroHeadline">Kolorektální screening v datech: od testu na okultní krvácení po kolonoskopii</h2>
+      <p class="ed-hero-lead">
+        Karcinom tlustého střeva a konečníku patří k nejčastějším nádorům v Česku — a zároveň k nejlépe preventabilním. Národní screeningový program nabízí lidem od 50 let test na okultní krvácení do stolice (TOKS) a screeningovou kolonoskopii. Tato stránka vizualizuje <strong>všech šest otevřených datasetů</strong> programu (ÚZIS ČR / MZ ČR) do maximálního detailu — podle roku, kraje, okresu, věku i pohlaví.
+      </p>
+    </div>
+    <aside class="ed-hero-stats" id="krkHeroStats" aria-label="Klíčová čísla kolorektálního screeningu"></aside>
+  </section>
+
+  <section class="krk-section krk-pathway-section" aria-label="Jak screening funguje">
+    <div class="ed-kicker">Cesta pacienta screeningem</div>
+    <h3 class="krk-h">Dvě větve jednoho programu</h3>
+    <p class="krk-section-lead">
+      Program má dvě vstupní brány. Většina lidí začíná neinvazivním testem stolice (TOKS); při pozitivním nálezu následuje kolonoskopie. Lidé od 50 let si ale mohou rovnou zvolit primární screeningovou kolonoskopii. Čísla u každého kroku jsou za poslední uzavřený rok.
+    </p>
+    <div class="krk-pathway" id="krkPathway"></div>
+  </section>
+
+  <section class="krk-section" id="sec-coverage" aria-labelledby="h-coverage">
+    <div class="ed-kicker">Dataset PPS-02-01 · 2011–2024</div>
+    <h3 class="krk-h" id="h-coverage">Pokrytí cílové populace</h3>
+    <p class="krk-section-lead">
+      Podíl cílové populace (50 let a starší), který se v daném roce zúčastnil screeningu — testem TOKS nebo screeningovou kolonoskopií. Vyšší hodnota je lepší.
+    </p>
+    <div class="krk-toolbar">
+      <div class="krk-toggle" id="coverageDim" role="group" aria-label="Členění grafu pokrytí">
+        <button type="button" data-dim="total" class="is-active">Celkem</button>
+        <button type="button" data-dim="gender">Podle pohlaví</button>
+        <button type="button" data-dim="age">Podle věku</button>
+      </div>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="coverageChart" aria-label="Graf vývoje pokrytí cílové populace"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Pokrytí podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="coverageYear" aria-label="Rok pro mapu pokrytí"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="coverageMap" role="img" aria-label="Mapa pokrytí podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Okresy <span class="krk-muted" id="coverageDistrictYear"></span></h4>
+        <div class="krk-table-scroll" id="coverageDistrictTable"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="krk-section" id="sec-fobt" aria-labelledby="h-fobt">
+    <div class="ed-kicker">Dataset PPS-02-03 · 2010–2024</div>
+    <h3 class="krk-h" id="h-fobt">Počet provedených testů TOKS</h3>
+    <p class="krk-section-lead">
+      Absolutní počet testů na okultní krvácení do stolice provedených v rámci screeningu. Ukazuje objem nejčastější vstupní brány programu.
+    </p>
+    <div class="krk-toolbar">
+      <div class="krk-toggle" id="fobtDim" role="group" aria-label="Členění grafu TOKS">
+        <button type="button" data-dim="total" class="is-active">Celkem</button>
+        <button type="button" data-dim="gender">Podle pohlaví</button>
+        <button type="button" data-dim="age">Podle věku</button>
+      </div>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="fobtChart" aria-label="Graf počtu testů TOKS"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Počet TOKS podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="fobtYear" aria-label="Rok pro mapu TOKS"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="fobtMap" role="img" aria-label="Mapa počtu TOKS podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Okresy <span class="krk-muted" id="fobtDistrictYear"></span></h4>
+        <div class="krk-table-scroll" id="fobtDistrictTable"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="krk-section" id="sec-colonoscopy" aria-labelledby="h-colonoscopy">
+    <div class="ed-kicker">Dataset PPS-02-04 · 2010–2024</div>
+    <h3 class="krk-h" id="h-colonoscopy">Počet screeningových kolonoskopií</h3>
+    <p class="krk-section-lead">
+      Počet primárních screeningových kolonoskopií — druhé vstupní brány programu, kterou si může zvolit každý od 50 let bez předchozího testu TOKS.
+    </p>
+    <div class="krk-toolbar">
+      <div class="krk-toggle" id="colonoscopyDim" role="group" aria-label="Členění grafu kolonoskopií">
+        <button type="button" data-dim="total" class="is-active">Celkem</button>
+        <button type="button" data-dim="gender">Podle pohlaví</button>
+        <button type="button" data-dim="age">Podle věku</button>
+      </div>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="colonoscopyChart" aria-label="Graf počtu screeningových kolonoskopií"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Screeningové kolonoskopie podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="colonoscopyYear" aria-label="Rok pro mapu kolonoskopií"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="colonoscopyMap" role="img" aria-label="Mapa počtu kolonoskopií podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Okresy <span class="krk-muted" id="colonoscopyDistrictYear"></span></h4>
+        <div class="krk-table-scroll" id="colonoscopyDistrictTable"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="krk-section" id="sec-positivity" aria-labelledby="h-positivity">
+    <div class="ed-kicker">Dataset PPS-02-02 · 2011–2024</div>
+    <h3 class="krk-h" id="h-positivity">Podíl pozitivních výsledků TOKS</h3>
+    <p class="krk-section-lead">
+      Podíl testů TOKS s pozitivním nálezem. Pozitivní test sám o sobě neznamená nádor — je indikací k návazné kolonoskopii, která nález prověří.
+    </p>
+    <div class="krk-toolbar">
+      <div class="krk-toggle" id="positivityDim" role="group" aria-label="Členění grafu pozitivity">
+        <button type="button" data-dim="total" class="is-active">Celkem</button>
+        <button type="button" data-dim="gender">Podle pohlaví</button>
+        <button type="button" data-dim="age">Podle věku</button>
+      </div>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="positivityChart" aria-label="Graf podílu pozitivních TOKS"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Pozitivita podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="positivityYear" aria-label="Rok pro mapu pozitivity"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="positivityMap" role="img" aria-label="Mapa pozitivity podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Okresy <span class="krk-muted" id="positivityDistrictYear"></span></h4>
+        <div class="krk-table-scroll" id="positivityDistrictTable"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="krk-section" id="sec-followup" aria-labelledby="h-followup">
+    <div class="ed-kicker">Dataset PPS-02-05 · 2010–2024</div>
+    <h3 class="krk-h" id="h-followup">Návaznost: od pozitivního TOKS ke kolonoskopii</h3>
+    <p class="krk-section-lead">
+      Klíčový ukazatel kvality programu — jaký podíl lidí s pozitivním testem TOKS skutečně podstoupí návaznou kolonoskopii. Každý nedokončený krok znamená promarněnou šanci zachytit nádor včas.
+    </p>
+    <div class="krk-funnel" id="followupFunnel"></div>
+    <h4 class="krk-h4">Vývoj návaznosti (compliance) v čase</h4>
+    <div class="krk-toolbar">
+      <div class="krk-toggle" id="followupDim" role="group" aria-label="Členění grafu návaznosti">
+        <button type="button" data-dim="total" class="is-active">Celkem</button>
+        <button type="button" data-dim="gender">Podle pohlaví</button>
+        <button type="button" data-dim="age">Podle věku</button>
+      </div>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="followupChart" aria-label="Graf vývoje návaznosti"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Návaznost podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="followupYear" aria-label="Rok pro mapu návaznosti"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="followupMap" role="img" aria-label="Mapa návaznosti podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Kraje — návaznost a doba čekání <span class="krk-muted" id="followupRegionYear"></span></h4>
+        <div class="krk-table-scroll" id="followupRegionTable"></div>
+      </div>
+    </div>
+    <h4 class="krk-h4">Jak dlouho lidé čekají na návaznou kolonoskopii</h4>
+    <p class="krk-section-lead">
+      Rozdělení doby mezi pozitivním testem TOKS a provedením návazné kolonoskopie (v týdnech). Data zahrnují kolonoskopie provedené do 27 týdnů od pozitivního testu.
+    </p>
+    <div class="krk-toolbar">
+      <label class="krk-year-pick">Rok pozitivního TOKS:
+        <select id="histYear" aria-label="Rok pro histogram čekání"></select>
+      </label>
+      <span class="krk-meta" id="histStats"></span>
+    </div>
+    <div class="krk-chart-wrap"><canvas id="histChart" aria-label="Histogram doby čekání na kolonoskopii"></canvas></div>
+  </section>
+
+  <section class="krk-section" id="sec-waiting" aria-labelledby="h-waiting">
+    <div class="ed-kicker">Dataset PPS-02-07 · 2019–2024</div>
+    <h3 class="krk-h" id="h-waiting">Průměrná čekací doba na návaznou kolonoskopii</h3>
+    <p class="krk-section-lead">
+      Průměrná doba ve dnech mezi pozitivním testem TOKS a provedením návazné kolonoskopie, sledovaná čtvrtletně. Na rozdíl od histogramu výše se tento dataset váže k <strong>kraji zdravotnického zařízení</strong>, kde byla kolonoskopie provedena. Nižší hodnota je lepší.
+    </p>
+    <div class="krk-chart-wrap"><canvas id="waitingChart" aria-label="Graf čtvrtletní čekací doby"></canvas></div>
+    <div class="krk-geo">
+      <div class="krk-geo-map">
+        <div class="krk-geo-head">
+          <h4 class="krk-h4">Čekací doba podle krajů</h4>
+          <label class="krk-year-pick">Rok:
+            <select id="waitingYear" aria-label="Rok pro mapu čekací doby"></select>
+          </label>
+        </div>
+        <div class="krk-map" id="waitingMap" role="img" aria-label="Mapa čekací doby podle krajů"></div>
+      </div>
+      <div class="krk-geo-table">
+        <h4 class="krk-h4">Okresy <span class="krk-muted" id="waitingDistrictYear"></span></h4>
+        <div class="krk-table-scroll" id="waitingDistrictTable"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="krk-section krk-method" id="sec-method" aria-labelledby="h-method">
+    <div class="ed-kicker">Metodika a zdroje</div>
+    <h3 class="krk-h" id="h-method">O datech</h3>
+    <div class="krk-method-grid">
+      <div class="krk-method-text">
+        <p>
+          Všechna data pocházejí z <strong>Informačního systému screeningu karcinomu tlustého střeva a konečníku</strong>, který spravuje Ústav zdravotnických informací a statistiky ČR (ÚZIS) pod Ministerstvem zdravotnictví. Datasety jsou publikovány jako otevřená data v Národním katalogu otevřených dat.
+        </p>
+        <p class="krk-muted">
+          <strong>Pojmy:</strong> <em>TOKS</em> — test na okultní (skryté) krvácení do stolice, neinvazivní vstupní test screeningu. <em>Screeningová kolonoskopie</em> — endoskopické vyšetření tlustého střeva; může být primární (volba pacienta od 50 let) nebo návazná (po pozitivním TOKS). <em>Návaznost / compliance</em> — podíl lidí s pozitivním TOKS, kteří podstoupí kolonoskopii.
+        </p>
+        <p class="krk-muted">
+          Licence <strong>CC BY 4.0</strong>. Autoři datové sady: Hejcmanová K., Ambrožová M., Chloupková R., Ngo O., Májek O. (ÚZIS ČR). Geografické členění dle číselníku ČSÚ. Stránka neukládá žádné osobní údaje — všechna data jsou agregovaná.
+        </p>
+      </div>
+      <ul class="krk-source-list" id="krkSourceList"></ul>
+    </div>
+    <p class="krk-generated" id="krkGenerated"></p>
+  </section>
+
+  <div id="krkError"></div>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/kolonoskopie.js"></script>
+
+</body>
+</html>
