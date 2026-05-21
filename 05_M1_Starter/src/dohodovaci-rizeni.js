@@ -261,6 +261,50 @@ function renderAnalysis(root, data) {
         <p class="dr-analyza-takeaway">${escapeHtml(fc.takeaway)}</p>
       </section>`;
 
+  const cg = a.cost_growth;
+  const cgSegHtml = cg.segments
+    .map(
+      (s) => `<li class="dr-cg-seg dr-reveal">
+        <span class="dr-cg-val dr-cg-${escapeHtml(s.type)}">${s.cagr > 0 ? '+' : ''}${formatValue(s.cagr)} %</span>
+        <span class="dr-cg-text"><strong>${escapeHtml(s.label)}</strong> — ${escapeHtml(s.note)}</span>
+      </li>`,
+    )
+    .join('');
+  const costGrowthHtml = `
+      <section class="dr-analyza-sec"><h3>${escapeHtml(cg.title)}</h3>
+        <p class="dr-analyza-intro">${escapeHtml(cg.intro)}</p>
+        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drCagr" aria-label="Graf tempa růstu segmentů"></canvas></div>
+        <p class="dr-analyza-note">${escapeHtml(cg.note)}</p>
+        <ul class="dr-cg-list">${cgSegHtml}</ul>
+        <p class="dr-analyza-takeaway">${escapeHtml(cg.takeaway)}</p>
+      </section>`;
+
+  const wf = a.workforce;
+  const wfNumbersHtml = wf.key_numbers
+    .map(
+      (n) => `
+      <div class="dr-bignum dr-bignum-${escapeHtml(n.tone || 'neutral')}">
+        <div class="dr-bignum-value" data-target="${n.value}" data-prefix="${escapeHtml(n.prefix || '')}" data-suffix="${escapeHtml(n.suffix || '')}">0</div>
+        <div class="dr-bignum-label">${escapeHtml(n.label)}</div>
+        <div class="dr-bignum-plain">${escapeHtml(n.plain)}</div>
+      </div>`,
+    )
+    .join('');
+  const workforceHtml = `
+      <section class="dr-analyza-sec"><h3>${escapeHtml(wf.title)}</h3>
+        <p class="dr-analyza-intro">${escapeHtml(wf.intro)}</p>
+        <h4 class="dr-analyza-subh">Demografický obraz</h4>
+        <p class="dr-analyza-body">${escapeHtml(wf.demographic)}</p>
+        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drDocAge" aria-label="Graf věkové struktury lékařů"></canvas></div>
+        <p class="dr-analyza-note">${escapeHtml(wf.age_chart.note)}</p>
+        <h4 class="dr-analyza-subh">Odhad vývoje</h4>
+        <p class="dr-analyza-body">${escapeHtml(wf.estimate)}</p>
+        <div class="dr-chart-wrap dr-chart-tall"><canvas id="drRetire" aria-label="Graf odchodů lékařů do důchodu"></canvas></div>
+        <p class="dr-analyza-note">${escapeHtml(wf.projection_chart.note)}</p>
+        <div class="dr-bignum-grid">${wfNumbersHtml}</div>
+        <p class="dr-method-note">${escapeHtml(wf.methodology)}</p>
+      </section>`;
+
   root.innerHTML = `
     <article class="dr-analyza">
       <a class="dr-back" href="dohodovaci-rizeni.html">← Datová podpora dohodovacího řízení</a>
@@ -280,6 +324,8 @@ function renderAnalysis(root, data) {
         <div class="dr-donut-wrap"><canvas id="drDonut" aria-label="Koláčový graf struktury nákladů"></canvas></div>
       </section>
 
+      ${costGrowthHtml}
+
       <section class="dr-analyza-sec"><h3>SWOT analýza</h3>
         <div class="dr-swot-grid">${swotHtml}</div>
       </section>
@@ -290,6 +336,8 @@ function renderAnalysis(root, data) {
 
       ${forecastHtml}
 
+      ${workforceHtml}
+
       <section class="dr-analyza-sec"><h3>Doporučení</h3>
         <ol class="dr-rec-list">${recHtml}</ol>
       </section>
@@ -298,7 +346,10 @@ function renderAnalysis(root, data) {
     </article>`;
 
   drawDonut(a.cost_structure);
+  drawCagr(a.cost_growth);
   drawForecast(a.forecast);
+  drawAgeStructure(a.workforce.age_chart);
+  drawRetirement(a.workforce.projection_chart);
   wireCounters();
   wireReveal();
 }
@@ -356,6 +407,78 @@ function drawForecast(fc) {
         tooltip: { callbacks: { label: (c) => c.parsed.y == null ? null : `${c.dataset.label}: ${formatValue(c.parsed.y)} ${fc.unit}` } },
       },
       scales: { y: { beginAtZero: true, title: { display: true, text: fc.unit } } },
+    },
+  });
+}
+
+function drawCagr(cg) {
+  const canvas = document.getElementById('drCagr');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const segs = [...cg.segments].sort((a, b) => b.cagr - a.cagr);
+  const colors = segs.map((s) => (s.type === 'cost' ? '#b8361e' : s.cagr < 0 ? '#6b6357' : '#1f7a4d'));
+  new window.Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: segs.map((s) => s.label),
+      datasets: [{ label: 'Roční tempo růstu', data: segs.map((s) => s.cagr), backgroundColor: colors }],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 900 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => `${c.parsed.x > 0 ? '+' : ''}${c.parsed.x} %/rok` } },
+      },
+      scales: { x: { title: { display: true, text: '% ročně (CAGR 2019–2024)' } } },
+    },
+  });
+}
+
+function drawAgeStructure(ac) {
+  const canvas = document.getElementById('drDocAge');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const colors = ac.doctors.map((_, i) =>
+    i >= ac.retire_from_index ? '#b8361e' : i === ac.warn_index ? '#a05a08' : '#0b5394',
+  );
+  new window.Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: { labels: ac.age_bands, datasets: [{ label: ac.unit || 'lékařů', data: ac.doctors, backgroundColor: colors }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 900 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => `${c.parsed.y.toLocaleString('cs-CZ')} lékařů` } },
+      },
+      scales: { y: { beginAtZero: true, title: { display: true, text: 'počet lékařů' } } },
+    },
+  });
+}
+
+function drawRetirement(pc) {
+  const canvas = document.getElementById('drRetire');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  new window.Chart(canvas.getContext('2d'), {
+    data: {
+      labels: pc.labels,
+      datasets: [
+        { type: 'bar', label: 'Dosáhnou 65 let v daném roce', data: pc.per_year, backgroundColor: '#a05a08', yAxisID: 'y' },
+        { type: 'line', label: 'Kumulativně', data: pc.cumulative, borderColor: '#b8361e', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 3, tension: 0.2, yAxisID: 'y1' },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 1000 },
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: {
+        y: { beginAtZero: true, position: 'left', title: { display: true, text: 'za rok' } },
+        y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'kumulativně' }, grid: { drawOnChartArea: false } },
+      },
     },
   });
 }

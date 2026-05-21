@@ -144,6 +144,36 @@ test('dohodovaci-rizeni.json: strategická analýza je kompletní', () => {
   assert.ok(a.recommendations.length >= 3, 'recommendations');
 });
 
+test('dohodovaci-rizeni.json: personální predikce (odchodová vlna)', () => {
+  const wf = data.strategic_analysis.workforce;
+  assert.ok(wf && wf.intro && wf.demographic && wf.estimate, 'workforce: prozaické bloky');
+  const ac = wf.age_chart;
+  assert.equal(ac.age_bands.length, 12, 'age_chart pásma');
+  assert.equal(ac.doctors.length, 12, 'age_chart hodnoty');
+  assert.ok(ac.doctors.every((v) => typeof v === 'number'), 'age_chart čísla');
+  const pc = wf.projection_chart;
+  assert.equal(pc.labels.length, pc.per_year.length, 'projekce per_year délka');
+  assert.equal(pc.labels.length, pc.cumulative.length, 'projekce cumulative délka');
+  // kumulativní řada musí být neklesající
+  for (let i = 1; i < pc.cumulative.length; i++) {
+    assert.ok(pc.cumulative[i] >= pc.cumulative[i - 1], 'cumulative neklesá');
+  }
+  assert.ok(wf.key_numbers.length >= 3, 'workforce key_numbers');
+});
+
+test('dohodovaci-rizeni.json: rychlost růstu segmentů', () => {
+  const cg = data.strategic_analysis.cost_growth;
+  assert.ok(cg && cg.intro && cg.takeaway, 'cost_growth: prozaické bloky');
+  assert.ok(cg.segments.length >= 6, 'cost_growth segmentů');
+  for (const s of cg.segments) {
+    assert.ok(s.label && typeof s.cagr === 'number' && s.note, `segment neúplný: ${s.label}`);
+    assert.ok(['cost', 'volume'].includes(s.type), `segment ${s.label}: typ`);
+  }
+  // musí obsahovat nákladové i objemové segmenty
+  assert.ok(cg.segments.some((s) => s.type === 'cost'), 'aspoň 1 nákladový');
+  assert.ok(cg.segments.some((s) => s.type === 'volume'), 'aspoň 1 objemový');
+});
+
 test('dohodovaci-rizeni.json: citlivostní predikce má 3 scénáře + benchmark', () => {
   const fc = data.strategic_analysis.forecast;
   const n = fc.labels.length;
