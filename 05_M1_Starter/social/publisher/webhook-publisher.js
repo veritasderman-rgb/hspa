@@ -1,11 +1,10 @@
 // Publikace přes Make.com webhook.
 //
 // Make.com scénář (viz docs/make-scenario.json) přijme payload, projde
-// iterátorem 4 sítě a každou publikuje příslušným modulem. Payload je
-// podepsán HMAC-SHA256 (hlavička X-HSPA-Signature) — Make ho ověří proti
+// iterátorem 4 sítě a každou publikuje příslušným modulem. Požadavek je
+// autentizován API klíčem (hlavička x-make-apikey) — Make ho ověří proti
 // MAKE_WEBHOOK_SECRET.
 
-import { createHmac } from 'node:crypto';
 import { env } from '../config.js';
 
 /** Sestaví payload pro jeden článek ze schválených řádků fronty. */
@@ -32,7 +31,7 @@ export async function sendToMake(payload, { webhookUrl = env.makeWebhookUrl, sec
   const body = JSON.stringify(payload);
   const headers = { 'Content-Type': 'application/json' };
   if (secret) {
-    headers['X-HSPA-Signature'] = createHmac('sha256', secret).update(body).digest('hex');
+    headers['x-make-apikey'] = secret;
   }
 
   const res = await fetch(webhookUrl, { method: 'POST', headers, body });
