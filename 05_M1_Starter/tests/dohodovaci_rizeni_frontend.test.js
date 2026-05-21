@@ -60,6 +60,37 @@ test('dohodovaci-rizeni.json: ready sada SSS-04-02 má časovou řadu', () => {
   }
 });
 
+test('dohodovaci-rizeni.json: dimenze 2 — 5 sad ready s vizualizačními daty', () => {
+  const d2 = data.datasets.filter((x) => x.dimension === 'd2');
+  assert.equal(d2.length, 5, 'dimenze 2 má 5 sad');
+  for (const ds of d2) {
+    assert.equal(ds.status, 'ready', `${ds.ois_code} musí být ready`);
+    assert.ok(ds.headline?.value != null, `${ds.ois_code}: headline`);
+    assert.ok(ds.role_in_negotiation, `${ds.ois_code}: role_in_negotiation`);
+    assert.ok(ds.what_it_says, `${ds.ois_code}: what_it_says`);
+    const hasViz =
+      (ds.series && ds.series.length) ||
+      (ds.series_periods && ds.series_periods.length) ||
+      (ds.pyramid && ds.pyramid.age_bands);
+    assert.ok(hasViz, `${ds.ois_code}: musí mít series / series_periods / pyramid`);
+  }
+});
+
+test('dohodovaci-rizeni.json: OIS-11-16 má validní pyramidu', () => {
+  const p = data.datasets.find((x) => x.ois_code === 'OIS-11-16').pyramid;
+  assert.ok(p, 'pyramid chybí');
+  assert.equal(p.age_bands.length, 12, '12 věkových pásem');
+  assert.equal(p.muzi.length, 12, 'muži 12 pásem');
+  assert.equal(p.zeny.length, 12, 'ženy 12 pásem');
+  const totalM = p.muzi.reduce((a, b) => a + b.value, 0);
+  assert.ok(totalM > 30000, 'součet mužů realistický');
+});
+
+test('dohodovaci-rizeni.json: ≥6 sad ready', () => {
+  const ready = data.datasets.filter((x) => x.status === 'ready');
+  assert.ok(ready.length >= 6, `očekáváno ≥6 ready, je ${ready.length}`);
+});
+
 test('dohodovaci-rizeni: stránka a modul existují', () => {
   assert.ok(fs.existsSync(path.join(ROOT, 'dohodovaci-rizeni.html')), 'dohodovaci-rizeni.html missing');
   assert.ok(fs.existsSync(path.join(ROOT, 'src', 'dohodovaci-rizeni.js')), 'src/dohodovaci-rizeni.js missing');

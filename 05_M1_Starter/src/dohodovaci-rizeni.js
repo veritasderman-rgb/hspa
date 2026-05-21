@@ -192,11 +192,7 @@ function renderDetail(root, data, id) {
     ? `<div class="dr-detail-block"><h3>Co data říkají</h3><p>${escapeHtml(ds.what_it_says)}</p></div>`
     : '';
 
-  const chartHtml =
-    ds.status === 'ready' && Array.isArray(ds.series) && ds.series.length
-      ? `<div class="dr-detail-block"><h3>Časová řada</h3>
-           <div class="dr-chart-wrap"><canvas id="drChart" aria-label="Graf časové řady"></canvas></div></div>`
-      : '';
+  const vizHtml = renderViz(ds);
 
   const intlHtml = renderInternational(ds.international);
 
@@ -248,14 +244,137 @@ function renderDetail(root, data, id) {
       ${headline}
       ${roleHtml}
       ${saysHtml}
-      ${chartHtml}
+      ${vizHtml}
       ${intlHtml}
       ${externalHtml}
       ${stubHtml}
       ${sourceHtml}
     </article>`;
 
-  if (chartHtml) drawChart(ds);
+  wireViz(ds);
+}
+
+/* ---- vizualizace detailu: line / pyramida / tabulka období ---- */
+
+function renderViz(ds) {
+  if (ds.status !== 'ready') return '';
+  const note = ds.method_note
+    ? `<p class="dr-method-note">${escapeHtml(ds.method_note)}</p>`
+    : '';
+  if (Array.isArray(ds.series) && ds.series.length) {
+    return `<div class="dr-detail-block"><h3>Časová řada</h3>
+      <div class="dr-chart-wrap"><canvas id="drChart" aria-label="Graf časové řady"></canvas></div>${note}</div>`;
+  }
+  if (ds.pyramid) {
+    return `<div class="dr-detail-block"><h3>Věková pyramida pracovníků</h3>
+      <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChart" aria-label="Věková pyramida"></canvas></div>${note}</div>`;
+  }
+  if (Array.isArray(ds.series_periods) && ds.series_periods.length) {
+    return `<div class="dr-detail-block"><h3>Srovnání období</h3>
+      ${renderPeriodsTable(ds.series_periods)}${note}</div>`;
+  }
+  return '';
+}
+
+function wireViz(ds) {
+  if (ds.status !== 'ready') return;
+  if (Array.isArray(ds.series) && ds.series.length) drawLineChart(ds);
+  else if (ds.pyramid) drawPyramid(ds);
+}
+
+function renderPeriodsTable(groups) {
+  const periods = groups[0]?.points.map((p) => p.period) || [];
+  const head = periods.map((p) => `<th>${escapeHtml(p)}</th>`).join('');
+  const rows = groups
+    .map((g) => {
+      const cells = g.points
+        .map((p) => `<td><strong>${formatValue(p.value)}</strong></td>`)
+        .join('');
+      return `<tr><th class="dr-periods-rowhead">${escapeHtml(g.label)}</th>${cells}</tr>`;
+    })
+    .join('');
+  const unit = groups[0]?.unit ? ` <span class="dr-periods-unit">(${escapeHtml(groups[0].unit)})</span>` : '';
+  return `<table class="dr-periods-table"><thead><tr><th>Skupina${unit}</th>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function reduceMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function drawLineChart(ds) {
+  const canvas = document.getElementById('drChart');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const palette = ['#b8361e', '#0b5394', '#1f7a4d', '#a05a08', '#7c3a8d'];
+  const years = ds.series[0]?.points.map((p) => p.year) || [];
+  const datasets = ds.series.map((s, i) => ({
+    label: s.label,
+    data: s.points.map((p) => p.value),
+    borderColor: palette[i % palette.length],
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    pointRadius: 2,
+    tension: 0.25,
+  }));
+  if (_chart) _chart.destroy();
+  _chart = new window.Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: { labels: years, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 900 },
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true, title: { display: true, text: ds.series[0]?.unit || '' } } },
+    },
+  });
+}
+
+function drawPyramid(ds) {
+  const canvas = document.getElementById('drChart');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const p = ds.pyramid;
+  if (_chart) _chart.destroy();
+  _chart = new window.Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: p.age_bands,
+      datasets: [
+        {
+          label: 'Muži',
+          data: p.muzi.map((b) => -Math.abs(b.value)),
+          backgroundColor: '#0b5394',
+        },
+        {
+          label: 'Ženy',
+          data: p.zeny.map((b) => b.value),
+          backgroundColor: '#b8361e',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 800 },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: { callback: (v) => Math.abs(v).toLocaleString('cs-CZ') },
+          title: { display: true, text: 'Počet pracovníků' },
+        },
+        y: { stacked: true, title: { display: true, text: 'Věková kategorie' } },
+      },
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${Math.abs(ctx.parsed.x).toLocaleString('cs-CZ')}`,
+          },
+        },
+      },
+    },
+  });
 }
 
 function renderInternational(intl) {
@@ -284,38 +403,6 @@ function renderInternational(intl) {
     <table class="dr-intl-table">${rows}</table>
     ${intl.explanation ? `<p class="dr-intl-explain">${escapeHtml(intl.explanation)}</p>` : ''}
     ${intl.source?.name ? `<p class="dr-intl-src">Zdroj srovnání: ${escapeHtml(intl.source.name)}</p>` : ''}</div>`;
-}
-
-function drawChart(ds) {
-  const canvas = document.getElementById('drChart');
-  if (!canvas || typeof window.Chart === 'undefined') return;
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const palette = ['#b8361e', '#0b5394', '#1f7a4d', '#a05a08', '#7c3a8d'];
-  const years = ds.series[0]?.points.map((p) => p.year) || [];
-  const datasets = ds.series.map((s, i) => ({
-    label: s.label,
-    data: s.points.map((p) => p.value),
-    borderColor: palette[i % palette.length],
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    pointRadius: 2,
-    tension: 0.25,
-  }));
-  if (_chart) _chart.destroy();
-  _chart = new window.Chart(canvas.getContext('2d'), {
-    type: 'line',
-    data: { labels: years, datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: reduce ? false : { duration: 900 },
-      interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { position: 'bottom' } },
-      scales: {
-        y: { beginAtZero: true, title: { display: true, text: ds.series[0]?.unit || '' } },
-      },
-    },
-  });
 }
 
 /* ======================= POMOCNÉ ======================= */

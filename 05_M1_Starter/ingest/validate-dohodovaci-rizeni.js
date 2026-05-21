@@ -60,10 +60,14 @@ for (const ds of datasets) {
     errors.push(`${tag}: unknown dimension '${ds.dimension}'`);
   }
   if (ds.status === 'ready') {
-    if (!Array.isArray(ds.series) || ds.series.length === 0) {
-      errors.push(`${tag}: status 'ready' must have non-empty series`);
+    const hasSeries = Array.isArray(ds.series) && ds.series.length > 0;
+    const hasPeriods = Array.isArray(ds.series_periods) && ds.series_periods.length > 0;
+    const hasPyramid = ds.pyramid && Array.isArray(ds.pyramid.age_bands);
+    if (!hasSeries && !hasPeriods && !hasPyramid) {
+      errors.push(`${tag}: status 'ready' must have series, series_periods nebo pyramid`);
     }
     if (!ds.headline) errors.push(`${tag}: status 'ready' should have headline`);
+    if (!ds.role_in_negotiation) errors.push(`${tag}: status 'ready' should have role_in_negotiation`);
   }
   if (ds.status === 'external' && !ds.external_page) {
     errors.push(`${tag}: status 'external' must have external_page`);

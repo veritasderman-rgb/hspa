@@ -516,6 +516,12 @@ indikátory** — jde o provozní a ekonomická data dohodovacího řízení (zd
     "headline": { "value": 16.4, "unit": "...", "year": 2024, "label": "..." },
     "series": [{ "key": "ct", "label": "...", "unit": "...",
                  "points": [{ "year": 2006, "value": 13.0 }] }],
+    "series_periods": [{ "key": "...", "label": "...", "unit": "...",
+                 "points": [{ "period": "rok 2024", "value": 0 }] }],  // ISPV: srovnání období
+    "pyramid": { "age_bands": ["Do 29", "..."],                         // věk × pohlaví snapshot
+                 "muzi": [{ "band": "Do 29", "value": 0 }],
+                 "zeny": [{ "band": "Do 29", "value": 0 }] },
+    "method_note": "...",
     "international": { "available": true, "status": "pending", "comparator": "...",
                        "cz": 0, "oecd": 0, "eu": 0, "unit": "...", "explanation": "..." },
     "visualization": { "data_cut": "...", "primary_chart": "line",
@@ -527,9 +533,18 @@ indikátory** — jde o provozní a ekonomická data dohodovacího řízení (zd
 }
 ```
 
-Generátor: `ingest/build-dohodovaci-rizeni.js` (vstup: katalog
-`ingest/mapping/nzip_dohodovaci_rizeni_catalog.json` + extrakty
-`ingest/nzip-extracts/`). Validátor: `npm run validate:dohodovaci-rizeni`.
+Pipeline:
+
+```
+ingest/fetchers/nzip_dohodovaci_rizeni.js   stáhne XLSX → ingest/cache/dohodovaci-rizeni/
+ingest/transform_dohodovaci_rizeni.js       XLSX → ingest/nzip-extracts/{OIS}.json
+ingest/build-dohodovaci-rizeni.js           katalog + extrakty + overlay → data/dohodovaci-rizeni.json
+```
+
+Spuštění celé pipeline: `npm run data:dohodovaci-rizeni`. Redakční overlay
+(role, interpretace, mezinárodní srovnání, vizualizační rozvaha) je ručně psaný
+`ingest/dohodovaci-rizeni-content.json`. XLSX parsuje `ingest/lib/xlsx.js`
+(wrapper nad SheetJS). Validátor: `npm run validate:dohodovaci-rizeni`.
 Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 
 | Status | Význam |

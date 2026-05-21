@@ -1,0 +1,129 @@
+{
+  "_doc": "Redakční overlay pro data/dohodovaci-rizeni.json. Ručně psaný obsah (role v dohodovacím řízení, interpretace, mezinárodní srovnání, vizualizační rozvaha) klíčovaný kódem sady. Builder ho slučuje s katalogem a datovými extrakty.",
+  "content": {
+    "SSS-04-02": {
+      "role_in_negotiation": "Přístrojové vybavení je strukturálním vstupem dohodovacího řízení — kapacita zobrazovacích a terapeutických přístrojů určuje dostupnost a strop produkce u řady segmentů péče.",
+      "what_it_says": "Počet sledovaných přístrojů v ČR dlouhodobě roste — u CT, magnetické rezonance i PET prakticky nepřetržitě od roku 2006. Časová řada na milion obyvatel umožňuje srovnání tempa vybavování s mezinárodním standardem.",
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Medical technology (CT/MRI/PET scanners per million population)",
+        "note": "Mezinárodní srovnání s OECD se doplní v samostatné rešeršní vlně po dohledání srovnatelných řad."
+      },
+      "visualization": {
+        "data_cut": "national_timeseries_multi",
+        "primary_chart": "line",
+        "animation": { "pattern": "line-draw", "rationale": "Postupné kreslení řady zvýrazní nepřetržitý růst vybavenosti.", "controls": ["play"] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statická multi-line řada s posledním rokem zvýrazněným.",
+        "rationale": "Více typů přístrojů jako srovnatelné řady na milion obyvatel — line chart je nejčitelnější."
+      }
+    },
+    "OIS-11-12": {
+      "role_in_negotiation": "Vývoj platů a mezd je jádrem dohodovacího řízení — personální náklady tvoří největší jednotlivou položku úhrad. Mzdové indexace dohodnuté v segmentech přímo určují, o kolik musí úhradová vyhláška navýšit platby poskytovatelům.",
+      "what_it_says": "Vážený průměrný plat lékaře (platová sféra, napříč typy poskytovatelů) vzrostl z 86 110 Kč v roce 2019 na 126 722 Kč v roce 2024 — nárůst o 47 %. Sestry a porodní asistentky si polepšily z 46 263 na 61 738 Kč. Výrazný skok mezi roky 2023 a 2024 souvisí s dohodou o navýšení platů lékařů po sporu o přesčasovou práci na přelomu let 2023/2024.",
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD Health at a Glance — Remuneration of doctors (poměr odměny k průměrné mzdě v ekonomice)",
+        "note": "Dle OECD Health at a Glance 2023 brali čeští odborní lékaři v zaměstnaneckém poměru přibližně 2,6násobek průměrné mzdy v ekonomice (data 2021). Přesné srovnání s průměrem OECD a EU doplní samostatná rešeršní vlna."
+      },
+      "visualization": {
+        "data_cut": "national_timeseries_multi",
+        "primary_chart": "line",
+        "animation": { "pattern": "line-draw", "rationale": "Postupné kreslení řady ukáže tempo růstu a zlom 2023/2024.", "controls": ["play"] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statická multi-line řada (lékaři, sestry, farmaceuti) s posledním rokem zvýrazněným.",
+        "rationale": "Vážený národní průměr tří klíčových kategorií jako srovnatelné Kč řady — line chart srozumitelně nese tempo růstu."
+      }
+    },
+    "OIS-11-13": {
+      "role_in_negotiation": "Personální kapacity (přepočtené úvazky) určují strop produkce péče. Dohodovací řízení je porovnává s objemem nasmlouvané péče — kde kapacity nerostou, nelze udržitelně navyšovat ani úhradové objemy.",
+      "what_it_says": "Lékařské kapacity ČR mírně rostou — z 43 170 přepočtených úvazků v roce 2019 na 45 391 v roce 2024 (+5 %). Kapacity farmaceutů rostou rychleji, počet zubních lékařů naopak mírně klesá (7 631 → 7 358).",
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Doctors per 1 000 population",
+        "note": "Srovnání hustoty lékařů s OECD a EU se doplní v rešeršní vlně; pozor na rozdíl mezi přepočtenými úvazky (ČR výkaz) a fyzickými osobami (OECD)."
+      },
+      "visualization": {
+        "data_cut": "national_timeseries_multi",
+        "primary_chart": "line",
+        "animation": { "pattern": "line-draw", "rationale": "Plynulý vývoj kapacit — kreslení řady zdůrazní mírný, ale setrvalý růst.", "controls": ["play"] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statická multi-line řada kapacit.",
+        "rationale": "Přepočtené úvazky tří kategorií v čase — line chart."
+      }
+    },
+    "OIS-11-14": {
+      "role_in_negotiation": "ISPV je nezávislý kontrolní zdroj k výkazům ÚZIS — umožňuje účastníkům dohodovacího řízení ověřit, zda deklarovaný vývoj odměňování odpovídá realitě mzdové sféry.",
+      "what_it_says": "Medián hrubé mzdy lékařů specialistů v mzdové sféře dosáhl 91 163 Kč v roce 2024 a v 1. pololetí 2025 vzrostl na 99 472 Kč. Všeobecné sestry vykazují medián kolem 61 tis. Kč. Mzdová sféra zahrnuje i kratší úvazky, proto bývá medián nižší než v platové sféře.",
+      "international": {
+        "available": false,
+        "note": "ISPV je národní šetření struktury výdělků; přímý mezinárodní ekvivalent neexistuje. Slouží jako kontrolní zdroj, ne jako srovnávací ukazatel."
+      },
+      "visualization": {
+        "data_cut": "period_comparison",
+        "primary_chart": "periods_table",
+        "animation": { "pattern": "none", "rationale": "Jen tři referenční období — tabulka je přehlednější než animace.", "controls": [] },
+        "uses_3d": false,
+        "engine": "none",
+        "fallback_2d": "Tabulka mediánů dle CZ-ISCO skupin a období.",
+        "rationale": "Kontrolní data s malým počtem období — kompaktní tabulka je srozumitelnější než graf."
+      }
+    },
+    "OIS-11-15": {
+      "role_in_negotiation": "ISPV platová sféra je kontrolní protějšek výkazů ÚZIS pro příspěvkové organizace — ověřuje deklarovaný vývoj platů ve veřejném sektoru zdravotnictví.",
+      "what_it_says": "Medián hrubého platu lékařů specialistů v platové sféře činil 124 730 Kč v roce 2024 a dále rostl (126 098 Kč v 1. pololetí 2025). Medián platu všeobecných sester dosáhl 69 543 Kč. Platová sféra (příspěvkové organizace) vykazuje vyšší mediány než mzdová.",
+      "international": {
+        "available": false,
+        "note": "ISPV je národní šetření struktury výdělků; přímý mezinárodní ekvivalent neexistuje. Slouží jako kontrolní zdroj."
+      },
+      "visualization": {
+        "data_cut": "period_comparison",
+        "primary_chart": "periods_table",
+        "animation": { "pattern": "none", "rationale": "Jen tři referenční období — tabulka je přehlednější.", "controls": [] },
+        "uses_3d": false,
+        "engine": "none",
+        "fallback_2d": "Tabulka mediánů dle CZ-ISCO skupin a období.",
+        "rationale": "Kontrolní data s malým počtem období — kompaktní tabulka."
+      }
+    },
+    "OIS-11-16": {
+      "title": "Počty zdravotnických pracovníků — věk a pohlaví",
+      "role_in_negotiation": "Věková struktura zdravotníků je varovným ukazatelem udržitelnosti — vysoký podíl pracovníků nad 60 let signalizuje blížící se odchodovou vlnu, kterou musí dohodovací řízení zohlednit při plánování personálních kapacit a úhrad.",
+      "what_it_says": "Ve zdravotnictví ČR pracuje 224 985 fyzických osob se smluvním zajištěním z veřejného pojištění, z toho zhruba 80 % tvoří ženy. 18,4 % pracovníků je ve věku 60 a více let — generační obměna se stává klíčovým rizikem dostupnosti péče. Pyramida ukazuje rozložení podle věku a pohlaví.",
+      "international": {
+        "available": true,
+        "status": "pending",
+        "comparator": "OECD — Share of doctors aged 55 and over",
+        "note": "Podíl lékařů 55+ patří v ČR mezi vyšší v OECD; přesné srovnání doplní rešeršní vlna."
+      },
+      "visualization": {
+        "data_cut": "age_sex_snapshot",
+        "primary_chart": "pyramid",
+        "animation": { "pattern": "bar-grow", "rationale": "Postupné naplnění pruhů pyramidy upozorní na převahu vyšších věkových pásem.", "controls": [] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statická populační pyramida (muži vlevo, ženy vpravo).",
+        "rationale": "Rozložení věk × pohlaví je nejsrozumitelnější jako populační pyramida — stejný osvědčený vzor jako v atlasu pojištěnců."
+      }
+    },
+    "OIS-11-47": {
+      "role_in_negotiation": "Struktura pojistného kmene (věk, pohlaví, okres, pojišťovna) je primárním vstupem Dimenze 5 — určuje rizikové skupiny i regionální nákladové trendy.",
+      "what_it_says": "Plně zpracováno jako interaktivní atlas: animovaná choropletní mapa stárnutí krajů, populační pyramida, tržní podíly 7 pojišťoven a race-chart okresů.",
+      "visualization": {
+        "data_cut": "regional_timeseries",
+        "primary_chart": "choropleth",
+        "animation": { "pattern": "timelapse-choropleth", "rationale": "Vývoj krajských rozdílů ve stárnutí je hlavní sdělení.", "controls": ["slider", "play"] },
+        "uses_3d": false,
+        "engine": "echarts",
+        "fallback_2d": "Statická mapa za poslední rok.",
+        "rationale": "Hotový atlas — beze změny, přemontován jako detail této sekce."
+      }
+    }
+  }
+}
