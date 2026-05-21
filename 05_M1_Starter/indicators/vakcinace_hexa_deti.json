@@ -1,0 +1,49 @@
+{
+  "id": "vakcinace_hexa_deti",
+  "name": "Proočkovanost dětí — hexavalentní (DTP) vakcína",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Očkování dětí",
+  "definition": "Podíl dětí ve věku 12–23 měsíců, které dostaly tři dávky vakcíny proti záškrtu, tetanu a dávivému kašli (DTP3). V Česku se tato základní očkovací řada aplikuje hexavalentní vakcínou (záškrt, tetanus, dávivý kašel, dětská obrna, Haemophilus influenzae typu b a virová hepatitida B). Indikátor měří, jak spolehlivě systém zajišťuje povinné základní očkování v prvním roce a půl života dítěte.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "who_unicef_wuenic",
+      "endpoint": "https://api.worldbank.org/v2/country/CZE/indicator/SH.IMM.IDPT?format=json",
+      "dataset": "SH.IMM.IDPT — DPT immunization (% of children ages 12-23 months)",
+      "dimensions": "země (CZE), rok; roční odhad",
+      "note": "Mezinárodně srovnatelné odhady WHO/UNICEF (WUENIC — WHO and UNICEF Estimates of National Immunization Coverage), distribuované přes datové API Světové banky. WUENIC je referenční globální zdroj pro proočkovanost; odhad nejnovějšího roku je předběžný a může být revidován."
+    },
+    "fallback": {
+      "type": "uzis_szu",
+      "note": "Národní zdroj — administrativní kontrola proočkovanosti, kterou periodicky (zpravidla po dvou až třech letech) provádějí krajské hygienické stanice pod metodickým vedením SZÚ, a Národní zdravotnický informační systém (ÚZIS). Národní a WUENIC odhady se mohou mírně lišit metodikou (datum sběru, definice kohorty)."
+    }
+  },
+  "benchmark_source": {
+    "type": "world_bank_wuenic",
+    "code": "SH.IMM.IDPT",
+    "dataset": "World Bank / WHO-UNICEF WUENIC — agregáty Evropská unie (EUU) a členské státy OECD (OED)",
+    "value": 92.4,
+    "url": "https://data.worldbank.org/indicator/SH.IMM.IDPT"
+  },
+  "signal_thresholds": {
+    "good": 1,
+    "warn": 3
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ÚZIS ČR",
+    "MZ ČR",
+    "WHO",
+    "UNICEF"
+  ],
+  "method_notes": "Čitatel = děti 12–23 měsíců se třemi dávkami DTP-obsahující vakcíny; jmenovatel = populace dětí téže věkové kohorty. V ČR je základní řada aplikována hexavalentní vakcínou ve schématu 2+1 (vyhláška 537/2006 Sb., očkovací kalendář). WUENIC kombinuje administrativní hlášení a výsledky šetření a vyhlazuje je do mezinárodně srovnatelné roční řady. Práh kolektivní (stádní) imunity se u dávivého kašle a obrny běžně uvádí na úrovni 95 % — pod ní se zvyšuje riziko lokálních epidemií.",
+  "limitations": "(1) Odhad za poslední rok (2024) je předběžný a WUENIC ho v dalších kolech upřesňuje. (2) Národní administrativní kontrola proočkovanosti (KHS/SZÚ) měří kohortu k jinému datu a může dávat mírně odlišné hodnoty než WUENIC. (3) Indikátor nezachycuje krajskou ani lokální nerovnoměrnost — celostátní průměr nad prahem může skrývat okresy hluboko pod ním a naopak. (4) Třídávkové DTP3 nepokrývá pozdější přeočkování ani jiné vakcíny (MMR sleduje samostatný indikátor vakcinace_mmr_deti).",
+  "determinants": "**Pokles důvěry po pandemii COVID-19.** Proočkovanost základní řady byla v ČR dlouhodobě nad 96 % (2013–2020). Po roce 2020 nastal souvislý pokles — část rodičů odkládá nebo odmítá očkování pod vlivem dezinformací a obecné nedůvěry vůči institucím.\n\n**Povinné očkování a slabé vymáhání.** Základní očkování dětí je v ČR ze zákona povinné (zákon č. 258/2000 Sb. o ochraně veřejného zdraví). Sankce — pokuta v přestupkovém řízení a nepřijetí nedoočkovaného dítěte do mateřské školy — jsou ale uplatňovány nejednotně a slabě, takže reálný tlak na dodržení kalendáře klesá.\n\n**Role praktických lékařů pro děti a dorost.** Očkování zajišťují PLDD. Generační propast v tomto oboru a regionálně řídká síť znamenají, že v některých okresech je objednací doba a dostupnost dětského lékaře sama o sobě bariérou včasného očkování.\n\n**Komunikace rizika.** Záškrt, tetanus a dávivý kašel jsou v ČR díky desetiletím vysoké proočkovanosti vzácné — paradoxně proto je veřejnost vnímá jako neaktuální hrozbu. Připomínkové kampaně SZÚ a edukace v ordinacích nedokázaly tento posun v rizikovém vnímání zatím vyrovnat.",
+  "importance": "**Kolektivní imunita je veřejný statek.** Pokles DTP3 z 97 % (2020) na 86 % (2024) znamená, že přibližně jedno ze sedmi dětí nedostává včas základní povinné očkování. Pod prahem 95 % se zvyšuje riziko návratu dávivého kašle — onemocnění nebezpečného zejména pro novorozence, kteří jsou na ochranu okolní populace odkázáni.\n\n**Předstihový ukazatel.** Proočkovanost je procesní indikátor, který se promítne do výsledků (nemocnost, hospitalizace, úmrtí) se zpožděním. Pokles zachycený dnes předznamenává epidemiologické riziko příštích let — proto je důležité reagovat dříve, než se objeví epidemie.\n\n**Test funkčnosti systému.** Základní očkování je nejjednodušší, plně hrazený a zákonem vyžadovaný výkon primární péče. Pokud systém nezvládne udržet jeho pokrytí, je to varovný signál o stavu primární pediatrické péče, komunikace rizika i vymáhání práva.\n\n**Mezinárodní pozice.** Česko se z premianta (98 % v roce 2013) propadlo pod průměr EU (92 %) i OECD (92 %). Země s mandatorním očkováním se obvykle drží nad 95 % — český propad je proto strukturální selhání, ne objektivní nutnost.",
+  "patient_story": "Ordinace praktické lékařky pro děti a dorost, krajské město, středeční dopoledne. MUDr. Lenka Marešová má v kartotéce roční holčičku, která měla mít druhou dávku hexavalentní vakcíny už před třemi měsíci. Maminka termín dvakrát zrušila — „ještě si to chceme rozmyslet\". Lékařka takových rozhovorů vede čím dál víc.\n\nProočkovanost dětí základní hexavalentní (DTP) vakcínou v Česku klesla na 86 % (WHO/UNICEF WUENIC, 2024). Ještě v roce 2020 to bylo 97 %. Hodnota se propadla pod práh kolektivní imunity 95 % i pod průměr Evropské unie (92,4 %) a zemí OECD (91,8 %) — signál je bad. Trend je souvislý a klesající: 97 % (2018), 97 % (2020), 94 % (2021), 94 % (2022), 90 % (2023), 86 % (2024). Přibližně jedno ze sedmi dětí dnes nedostává včas základní povinné očkování.\n\nStrukturálně jde o souběh několika faktorů. Po pandemii COVID-19 vzrostla nedůvěra části rodičů vůči očkování i institucím. Základní očkování je sice ze zákona povinné (zákon č. 258/2000 Sb.), ale sankce — pokuta a nepřijetí nedoočkovaného dítěte do mateřské školy — se uplatňují slabě a nejednotně. Záškrt, tetanus a dávivý kašel jsou navíc díky desetiletím vysoké proočkovanosti vzácné, takže je veřejnost přestává vnímat jako reálnou hrozbu. A řídká síť dětských praktiků v některých okresech sama zpomaluje včasné očkování.\n\nPolitická páka je konkrétní. Ministerstvo zdravotnictví a SZÚ mohou posílit cílenou komunikaci rizika a podporu pediatrů v ordinacích, sjednotit a reálně vymáhat stávající pravidla (kontrola proočkovanosti při nástupu do MŠ), monitorovat proočkovanost na úrovni okresů a včas zasáhnout tam, kde klesá nejhlouběji. Cílem není nový zákon, ale obnovení důvěry a důslednost — vrátit základní očkování bezpečně nad 95 %, dokud je propad ještě zvratitelný.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
