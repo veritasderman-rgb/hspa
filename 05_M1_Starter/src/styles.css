@@ -10564,10 +10564,12 @@ body.site-search-open {
 .dr-bignum-good { border-top-color: var(--good); }
 .dr-bignum-warn { border-top-color: var(--warn); }
 .dr-bignum-bad { border-top-color: var(--red); }
-.dr-bignum-value { font-family: var(--serif); font-size: 46px; font-weight: 700; line-height: 1; color: var(--ink); }
-.dr-bignum-good .dr-bignum-value { color: var(--good); }
-.dr-bignum-warn .dr-bignum-value { color: var(--warn); }
-.dr-bignum-bad .dr-bignum-value { color: var(--red); }
+.dr-bignum-value { line-height: 1; overflow-wrap: anywhere; }
+.dr-bignum-num { font-family: var(--serif); font-size: 42px; font-weight: 700; line-height: 1; color: var(--ink); white-space: nowrap; }
+.dr-bignum-unit { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--ink-mut); white-space: nowrap; }
+.dr-bignum-good .dr-bignum-num { color: var(--good); }
+.dr-bignum-warn .dr-bignum-num { color: var(--warn); }
+.dr-bignum-bad .dr-bignum-num { color: var(--red); }
 .dr-bignum-label { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ink); margin-top: 8px; }
 .dr-bignum-plain { font-family: var(--serif); font-size: 13px; color: var(--ink-mut); margin-top: 6px; line-height: 1.45; }
 
@@ -10644,7 +10646,8 @@ body.site-search-open {
 @media (max-width: 680px) {
   .dr-swot-grid { grid-template-columns: 1fr; }
   .dr-analyza-head h2 { font-size: 30px; }
-  .dr-bignum-value { font-size: 38px; }
+  .dr-bignum-num { font-size: 34px; }
+  .dr-bignum-unit { font-size: 15px; }
   .dr-analyza-cta { flex-direction: column; align-items: flex-start; gap: 10px; }
   .dr-analyza-cta-arrow { margin-left: 0; }
 }
@@ -10693,14 +10696,9 @@ body.site-search-open {
   border-left: 4px solid var(--red);
   border-radius: 4px;
 }
-.dr-gap-num {
-  font-family: var(--serif);
-  font-size: 44px;
-  font-weight: 700;
-  color: var(--red);
-  line-height: 1;
-  white-space: nowrap;
-}
+.dr-gap-num { flex: 0 0 auto; }
+.dr-gap-num .dr-bignum-num { color: var(--red); }
+.dr-gap-num .dr-bignum-unit { color: var(--red); }
 .dr-gap-text strong { font-family: var(--serif); font-size: 16px; }
 .dr-gap-text p { font-family: var(--serif); font-size: 13px; color: var(--ink-mut); line-height: 1.5; margin-top: 3px; }
 @media (max-width: 560px) {
