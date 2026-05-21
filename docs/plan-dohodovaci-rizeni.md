@@ -6,7 +6,12 @@ zdroje a katalogu
 [`05_M1_Starter/ingest/mapping/nzip_dohodovaci_rizeni_catalog.json`](../05_M1_Starter/ingest/mapping/nzip_dohodovaci_rizeni_catalog.json)
 a analýzy [`nzip-dohodovaci-rizeni-katalog.md`](nzip-dohodovaci-rizeni-katalog.md).
 
-Status: **návrh k odsouhlasení.** Po schválení začíná Vlna 0.
+Status: **vyskladněno.** Plán byl odsouhlasen a realizován — všech 44 datových
+sad NZIP je zpracováno (43 `ready`, 1 `external`), stránka `dohodovaci-rizeni.html`
+je v provozu napříč dimenzemi 1–8 a doplňkovými registry. Mezinárodní srovnání
+je u sad bez dohledatelných sourced dat OECD označeno jako `pending` —
+přesné numerické srovnání čeká na samostatnou sourced rešeršní vlnu (webové
+stránky OECD blokují automatické stažení).
 
 ---
 

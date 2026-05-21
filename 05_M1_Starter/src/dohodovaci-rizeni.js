@@ -141,7 +141,24 @@ function renderLanding(root, data) {
       </div>
     </section>`;
 
-  root.innerHTML = heroHtml + dimsGridHtml + sectionsHtml + provenanceHtml;
+  const interactive = data.interactive_only || [];
+  const interactiveHtml = interactive.length
+    ? `<section class="dr-interactive" aria-labelledby="drIntHead">
+        <div class="ed-kicker">Jen interaktivně</div>
+        <h3 id="drIntHead">Vizualizace bez staženého souboru</h3>
+        <p class="dr-dim-section-desc">${interactive.length} pohledů, které ÚZIS publikuje pouze jako interaktivní dashboard na NZIP.</p>
+        <ul class="dr-interactive-list">
+          ${interactive
+            .map(
+              (v) =>
+                `<li><a href="${escapeHtml(v.nzip_page)}" target="_blank" rel="noopener">${escapeHtml(v.title)} ↗</a></li>`,
+            )
+            .join('')}
+        </ul>
+      </section>`
+    : '';
+
+  root.innerHTML = heroHtml + dimsGridHtml + sectionsHtml + interactiveHtml + provenanceHtml;
 }
 
 function renderCard(ds) {

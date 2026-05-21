@@ -10468,3 +10468,29 @@ body.site-search-open {
   .dr-source-dl { grid-template-columns: 1fr; gap: 2px 0; }
   .dr-source-dl dd { margin-bottom: 6px; }
 }
+
+/* Dohodovací řízení — interaktivní vizualizace + tisk */
+.dr-interactive { margin-bottom: 40px; border-top: 1px solid var(--rule); padding-top: 20px; }
+.dr-interactive-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 8px 28px;
+  margin-top: 12px;
+}
+.dr-interactive-list a {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  display: block;
+  padding: 6px 0;
+}
+.dr-interactive-list a:hover { color: var(--red); }
+@media print {
+  .dr-dim-tile, .dr-card { break-inside: avoid; }
+  .dr-chart-wrap { height: 260px; }
+  .dr-hero { grid-template-columns: 1fr; }
+}
