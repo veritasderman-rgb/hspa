@@ -269,6 +269,10 @@ function renderViz(ds) {
     return `<div class="dr-detail-block"><h3>Věková pyramida pracovníků</h3>
       <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChart" aria-label="Věková pyramida"></canvas></div>${note}</div>`;
   }
+  if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) {
+    return `<div class="dr-detail-block"><h3>${escapeHtml(ds.ranked.label || 'Žebříček')}</h3>
+      <div class="dr-chart-wrap dr-chart-tall"><canvas id="drChart" aria-label="Žebříčkový graf"></canvas></div>${note}</div>`;
+  }
   if (Array.isArray(ds.series_periods) && ds.series_periods.length) {
     return `<div class="dr-detail-block"><h3>Srovnání období</h3>
       ${renderPeriodsTable(ds.series_periods)}${note}</div>`;
@@ -280,6 +284,7 @@ function wireViz(ds) {
   if (ds.status !== 'ready') return;
   if (Array.isArray(ds.series) && ds.series.length) drawLineChart(ds);
   else if (ds.pyramid) drawPyramid(ds);
+  else if (ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length) drawRankedBars(ds);
 }
 
 function renderPeriodsTable(groups) {
@@ -403,6 +408,36 @@ function renderInternational(intl) {
     <table class="dr-intl-table">${rows}</table>
     ${intl.explanation ? `<p class="dr-intl-explain">${escapeHtml(intl.explanation)}</p>` : ''}
     ${intl.source?.name ? `<p class="dr-intl-src">Zdroj srovnání: ${escapeHtml(intl.source.name)}</p>` : ''}</div>`;
+}
+
+function drawRankedBars(ds) {
+  const canvas = document.getElementById('drChart');
+  if (!canvas || typeof window.Chart === 'undefined') return;
+  const items = ds.ranked.items;
+  if (_chart) _chart.destroy();
+  _chart = new window.Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: items.map((it) => it.name),
+      datasets: [
+        {
+          label: ds.ranked.unit || '',
+          data: items.map((it) => it.value),
+          backgroundColor: '#a05a08',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: reduceMotion() ? false : { duration: 800 },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, title: { display: true, text: ds.ranked.unit || '' } },
+      },
+    },
+  });
 }
 
 /* ======================= POMOCNÉ ======================= */

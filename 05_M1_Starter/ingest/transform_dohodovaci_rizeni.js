@@ -371,6 +371,77 @@ function transformOIS1140() {
   };
 }
 
+/* ---- OIS-11-37: nákladovost DRG skupin ---- */
+function transformOIS1137() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-37.xlsx'), 'Nákladovost DRG skupin');
+  const h = findHeaderRow(rows, { mustContain: ['Kód DRG'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  // 0 kód, 1 název, 2 HP ČR, 4 náklady na případ (průměr)
+  let totHP = 0;
+  const items = [];
+  for (const r of body) {
+    const hp = num(r[2]) || 0;
+    const avg = num(r[4]) || 0;
+    totHP += hp;
+    items.push({ name: txt(r[1]), value: Math.round((avg * hp) / 1e6) }); // mil. Kč
+  }
+  items.sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-37',
+    source_file: 'OIS-11-37.xlsx',
+    extracted_at: new Date().toISOString(),
+    method_note:
+      'Nákladová zátěž = průměrné náklady na hospitalizační případ × počet případů ČR (mil. Kč). Zdroj nákladů: referenční nemocnice.',
+    headline: {
+      value: totHP,
+      unit: 'hospitalizačních případů',
+      year: null,
+      label: 'Hospitalizační případy v DRG analýze',
+    },
+    ranked: {
+      label: 'Top 12 DRG skupin dle celkové nákladové zátěže',
+      unit: 'mil. Kč',
+      items: items.slice(0, 12),
+    },
+  };
+}
+
+/* ---- OIS-11-51: centralizace DRG skupin ---- */
+function transformOIS1151() {
+  const rows = readSheet(path.join(CACHE, 'OIS-11-51.xlsx'), 'Sheet1');
+  const h = findHeaderRow(rows, { mustContain: ['DRG skupina'] });
+  const body = rows.slice(h + 1).filter((r) => r && r[0] != null);
+  // 2 centralizace ano/ne, 4 HP celkem, 6 HP v CVSP, 8 HP mimo CVSP
+  let hpAno = 0;
+  let hpIn = 0;
+  const items = [];
+  for (const r of body) {
+    if (txt(r[2]).toLowerCase() !== 'ano') continue;
+    hpAno += num(r[4]) || 0;
+    hpIn += num(r[6]) || 0;
+    items.push({ name: txt(r[1]), value: num(r[8]) || 0 });
+  }
+  items.sort((a, b) => b.value - a.value);
+  return {
+    ois_code: 'OIS-11-51',
+    source_file: 'OIS-11-51.xlsx',
+    extracted_at: new Date().toISOString(),
+    method_note:
+      'Pouze DRG skupiny určené k centralizaci dle úhradové vyhlášky. Centralizace = podíl hospitalizačních případů v centrech vysoce specializované péče (CVSP).',
+    headline: {
+      value: round((hpIn / hpAno) * 100, 1),
+      unit: '% případů v centrech',
+      year: null,
+      label: 'Centralizace péče určené k soustředění',
+    },
+    ranked: {
+      label: 'Top 12 určených DRG dle počtu případů mimo centra',
+      unit: 'hospitalizačních případů',
+      items: items.slice(0, 12),
+    },
+  };
+}
+
 function cacheHas(file) {
   return fs.existsSync(path.join(CACHE, file));
 }
@@ -391,6 +462,8 @@ function main() {
     ['OIS-11-17.xlsx', () => transformOIS1117()],
     ['OIS-11-27.xlsx', () => transformOIS1127()],
     ['OIS-11-40.xlsx', () => transformOIS1140()],
+    ['OIS-11-37.xlsx', () => transformOIS1137()],
+    ['OIS-11-51.xlsx', () => transformOIS1151()],
   ];
   for (const [file, fn] of optional) {
     if (!cacheHas(file)) continue;

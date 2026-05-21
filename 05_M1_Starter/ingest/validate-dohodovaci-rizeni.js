@@ -63,8 +63,9 @@ for (const ds of datasets) {
     const hasSeries = Array.isArray(ds.series) && ds.series.length > 0;
     const hasPeriods = Array.isArray(ds.series_periods) && ds.series_periods.length > 0;
     const hasPyramid = ds.pyramid && Array.isArray(ds.pyramid.age_bands);
-    if (!hasSeries && !hasPeriods && !hasPyramid) {
-      errors.push(`${tag}: status 'ready' must have series, series_periods nebo pyramid`);
+    const hasRanked = ds.ranked && Array.isArray(ds.ranked.items) && ds.ranked.items.length > 0;
+    if (!hasSeries && !hasPeriods && !hasPyramid && !hasRanked) {
+      errors.push(`${tag}: status 'ready' must have series, series_periods, pyramid nebo ranked`);
     }
     if (!ds.headline) errors.push(`${tag}: status 'ready' should have headline`);
     if (!ds.role_in_negotiation) errors.push(`${tag}: status 'ready' should have role_in_negotiation`);

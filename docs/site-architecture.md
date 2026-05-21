@@ -96,7 +96,7 @@ zdrave-cesko.cz/
 | **Fetchuje** | `data/dohodovaci-rizeni.json` |
 | **JS moduly** | `src/dohodovaci-rizeni.js` → `page-shared`, `analytics` |
 | **CSS namespace** | `.dr-*` (hero, dims-grid, dim-tile, card, detail, intl-table) |
-| **Data** | Generováno `ingest/build-dohodovaci-rizeni.js` — slučuje katalog `ingest/mapping/nzip_dohodovaci_rizeni_catalog.json`, datové extrakty `ingest/nzip-extracts/*.json` (transform z XLSX) a redakční overlay `ingest/dohodovaci-rizeni-content.json`. Pipeline: `npm run data:dohodovaci-rizeni` (fetch → transform → build). Stav: 9 sad `ready` (přístroje, dimenze 2 — personální zabezpečení, dimenze 6 — lůžková péče: náklady, produkce následné péče, lázně), 1 `external` (OIS 11-47 → atlas), 34 `stub`. |
+| **Data** | Generováno `ingest/build-dohodovaci-rizeni.js` — slučuje katalog `ingest/mapping/nzip_dohodovaci_rizeni_catalog.json`, datové extrakty `ingest/nzip-extracts/*.json` (transform z XLSX) a redakční overlay `ingest/dohodovaci-rizeni-content.json`. Pipeline: `npm run data:dohodovaci-rizeni` (fetch → transform → build). Stav: 11 sad `ready` (přístroje, dimenze 2 — personální zabezpečení, dimenze 6 — lůžková péče: náklady, produkce, lázně, nákladovost DRG, centralizace), 1 `external` (OIS 11-47 → atlas), 32 `stub`. Typy vizualizace: line chart, věková pyramida, tabulka období, žebříčkový graf (ranked bars). |
 
 ### `pojistenci.html` — OIS 11-47 (struktura pojištěnců)
 

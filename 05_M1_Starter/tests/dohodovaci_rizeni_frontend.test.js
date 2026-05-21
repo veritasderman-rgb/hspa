@@ -86,14 +86,26 @@ test('dohodovaci-rizeni.json: OIS-11-16 má validní pyramidu', () => {
   assert.ok(totalM > 30000, 'součet mužů realistický');
 });
 
-test('dohodovaci-rizeni.json: ≥9 sad ready, dimenze 6 zpracována', () => {
+test('dohodovaci-rizeni.json: ≥11 sad ready, dimenze 6 zpracována', () => {
   const ready = data.datasets.filter((x) => x.status === 'ready');
-  assert.ok(ready.length >= 9, `očekáváno ≥9 ready, je ${ready.length}`);
+  assert.ok(ready.length >= 11, `očekáváno ≥11 ready, je ${ready.length}`);
   const d6ready = data.datasets.filter((x) => x.dimension === 'd6' && x.status === 'ready');
-  assert.ok(d6ready.length >= 3, `dimenze 6 má ${d6ready.length} ready (očekáváno ≥3)`);
+  assert.ok(d6ready.length >= 5, `dimenze 6 má ${d6ready.length} ready (očekáváno ≥5)`);
   for (const ds of d6ready) {
-    assert.ok(ds.series.length > 0, `${ds.ois_code}: series`);
+    const hasViz = ds.series.length > 0 || (ds.ranked && ds.ranked.items.length > 0);
+    assert.ok(hasViz, `${ds.ois_code}: series nebo ranked`);
     assert.ok(ds.role_in_negotiation && ds.what_it_says, `${ds.ois_code}: redakční text`);
+  }
+});
+
+test('dohodovaci-rizeni.json: DRG sady mají žebříček (ranked)', () => {
+  for (const ois of ['OIS-11-37', 'OIS-11-51']) {
+    const ds = data.datasets.find((x) => x.ois_code === ois);
+    assert.ok(ds.ranked && Array.isArray(ds.ranked.items), `${ois}: ranked chybí`);
+    assert.ok(ds.ranked.items.length >= 5, `${ois}: ranked má ${ds.ranked.items.length} položek`);
+    for (const it of ds.ranked.items) {
+      assert.ok(it.name && typeof it.value === 'number', `${ois}: ranked položka neúplná`);
+    }
   }
 });
 

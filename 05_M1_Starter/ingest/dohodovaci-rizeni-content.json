@@ -165,6 +165,40 @@
         "rationale": "Dvě objemové řady (pacienti, ošetřovací dny) v čase — line chart."
       }
     },
+    "OIS-11-37": {
+      "role_in_negotiation": "Nákladovost DRG skupin podle referenčních nemocnic je základem kalkulace úhrad akutní lůžkové péče — určuje relativní váhy (case-mix) jednotlivých skupin, a tím přerozdělení peněz mezi obory.",
+      "what_it_says": "DRG analýza pokrývá 1,8 mil. hospitalizačních případů ročně. Největší celkovou nákladovou zátěž nesou vysokoobjemové výkony — implantace endoprotéz kolene a kyčle a vaginální porody — nikoli nejdražší jednotlivé výkony.",
+      "international": {
+        "available": false,
+        "note": "Nákladové váhy DRG jsou kalkulovány národní metodikou (CZ-DRG) z dat českých referenčních nemocnic; přímé mezinárodní srovnání jednotlivých skupin není smysluplné."
+      },
+      "visualization": {
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
+        "animation": { "pattern": "bar-grow", "rationale": "Postupné naplnění pruhů zvýrazní pořadí nákladové zátěže.", "controls": [] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statický horizontální žebříček top 12 DRG skupin.",
+        "rationale": "Pořadí nákladové zátěže napříč stovkami DRG skupin — horizontální žebříček top 12 je nejčitelnější."
+      }
+    },
+    "OIS-11-51": {
+      "role_in_negotiation": "Centralizace vybraných výkonů do center vysoce specializované péče je nástrojem kvality i úhrad — dohodovací řízení sleduje, nakolik se péče určená k soustředění skutečně koncentruje.",
+      "what_it_says": "U DRG skupin určených úhradovou vyhláškou k centralizaci se 91,8 % případů odehrává v centrech vysoce specializované péče. Zbytek — tisíce případů ročně — probíhá mimo centra, nejvíce u angioplastik věnčitých tepen a onkogynekologie.",
+      "international": {
+        "available": false,
+        "note": "Vymezení center vysoce specializované péče a seznam centralizovaných výkonů je dáno českou úhradovou vyhláškou; přímý mezinárodní ekvivalent neexistuje."
+      },
+      "visualization": {
+        "data_cut": "ranked_snapshot",
+        "primary_chart": "ranked_bars",
+        "animation": { "pattern": "bar-grow", "rationale": "Žebříček ukáže, kde mimocentrová péče přetrvává nejvíc.", "controls": [] },
+        "uses_3d": false,
+        "engine": "chartjs",
+        "fallback_2d": "Statický horizontální žebříček top 12 DRG skupin dle případů mimo centra.",
+        "rationale": "Které určené výkony se nejvíc dělají mimo centra — horizontální žebříček top 12."
+      }
+    },
     "OIS-11-47": {
       "role_in_negotiation": "Struktura pojistného kmene (věk, pohlaví, okres, pojišťovna) je primárním vstupem Dimenze 5 — určuje rizikové skupiny i regionální nákladové trendy.",
       "what_it_says": "Plně zpracováno jako interaktivní atlas: animovaná choropletní mapa stárnutí krajů, populační pyramida, tržní podíly 7 pojišťoven a race-chart okresů.",
