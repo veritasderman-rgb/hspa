@@ -166,7 +166,10 @@ Metadata všech článků v sekci Články. Tělo článku není v JSON — je v
       "linked_prevention_themes": [],                // odkazy na prevention themes
       "topics": ["legislativa"],                     // 1+ topic (viz TOPIC_LABELS v clanky.js)
       "published": true,                             // false = jen v redakce.html
-      "audit-status": "verified"                     // verified | review-pending | partial | flagged | draft-flagged
+      "audit-status": "verified",                    // verified | review-pending | partial | flagged | draft-flagged
+      "scheduled_for": "2026-06-04",                 // volitelné — „ne dřív než": cron nepublikuje před tímto datem
+      "topical_until": "2026-06-01",                 // volitelné — do kdy je téma aktuální; bližší datum = dřív ven
+      "ready_since": "2026-05-22"                    // datum, kdy článek poprvé prošel review holdem (stamp cronu)
     }
   ]
 }

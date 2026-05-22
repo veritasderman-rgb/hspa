@@ -1,17 +1,30 @@
 #!/usr/bin/env node
-// Cron-driven publisher: každý den projde data/articles.json a publikuje
-// (nastaví published: true) články se scheduled_for <= dnes — ale POUZE ty,
-// které jsou skutečně připravené.
+// Cron-driven publisher: každý den vybere a publikuje NEJVÝŠE JEDEN článek
+// z fronty připravených článků v data/articles.json.
 //
-// Review hold — článek se NEpublikuje automaticky, pokud:
+// Výběrové pravidlo (každý běh projde VŠECHNY články včetně nově přidaných):
+//   1. Kandidát = článek s published:false, který je připravený (projde
+//      review hold, viz holdReason) a u kterého scheduled_for (pokud je
+//      vyplněno) už nastalo — scheduled_for funguje jako „ne dřív než".
+//   2. Mají-li někteří kandidáti pole topical_until (datum, do kdy je téma
+//      aktuální), vyhrává ten s NEJBLIŽŠÍM topical_until — aby šel ven dřív,
+//      než ztratí aktuálnost.
+//   3. Nemá-li žádný kandidát topical_until, vyhrává ten, který je
+//      NEJDÉLE PŘIPRAVEN — nejstarší ready_since.
+//   Rozhodování při shodě: ready_since → scheduled_for → slug.
+//
+// ready_since se orazítkuje automaticky: jakmile je článek poprvé připraven
+// (projde holdReason) a pole ještě nemá, publisher mu nastaví dnešní datum.
+//
+// Review hold — článek se NEpublikuje (a ani nestane kandidátem), pokud:
 //   (a) má v articles.json _review_note nebo audit.status v HOLD množině,
 //   (b) jeho HTML má <meta article:audit-status> v HOLD množině, NEBO
 //   (c) jeho HTML nese viditelné draft markery — „(DRAFT)" v <title>,
 //       „DRAFT" v masthead-score, „draft" v article-meta-date.
-// Body (b) a (c) jsou pojistka proti případu, kdy je v articles.json
-// záznam „čistý" (bez audit/_review_note), ale samotný článek je
-// rozpracovaný draft. Takové články musí publikovat člověk po ručním
-// schválení (nastavit published: true a vyčistit draft markery).
+// Takové články musí publikovat člověk po ručním schválení.
+//
+// Publikovaný článek dostane date = dnešek (zobrazí se s aktuálním datem
+// a uplatní se pravidlo viditelnosti v 06:00).
 //
 // Spouští se přes .github/workflows/publish-articles.yml každý den 04:00 UTC.
 
@@ -26,6 +39,8 @@ const ARTICLES = path.join(ROOT, 'data', 'articles.json');
 // Stavy, které cron NESMÍ auto-publikovat — vyžadují člověka.
 // (Publikovatelné bez zásahu jsou pouze 'verified' a 'partial'.)
 const HOLD_STATUSES = new Set(['draft', 'draft-flagged', 'flagged', 'review-pending', 'needs-rewrite']);
+
+const FAR_FUTURE = '9999-99-99';
 
 function todayUtc() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
@@ -69,51 +84,112 @@ export function holdReason(article, html) {
   return null;
 }
 
+/**
+ * Z fronty kandidátů vybere JEDEN článek k publikaci. Čistá funkce.
+ *
+ * Kandidáti = připravené články, u kterých scheduled_for už nastalo.
+ * Pravidlo: nejdřív aktuálnost (nejbližší topical_until), jinak nejdéle
+ * připravený (nejstarší ready_since).
+ *
+ * @param {Array<object>} candidates
+ * @returns {{ article: object, basis: 'topical'|'queue' } | null}
+ */
+export function pickArticleToPublish(candidates) {
+  if (!Array.isArray(candidates) || candidates.length === 0) return null;
+
+  const topical = candidates.filter(a => a.topical_until);
+  const basis = topical.length ? 'topical' : 'queue';
+  const pool = topical.length ? topical : candidates;
+  const key = (v) => String(v == null ? FAR_FUTURE : v);
+
+  const sorted = [...pool].sort((a, b) => {
+    if (basis === 'topical') {
+      const t = key(a.topical_until).localeCompare(key(b.topical_until));
+      if (t) return t;
+    }
+    const r = key(a.ready_since).localeCompare(key(b.ready_since));
+    if (r) return r;
+    const s = key(a.scheduled_for).localeCompare(key(b.scheduled_for));
+    if (s) return s;
+    return String(a.slug || '').localeCompare(String(b.slug || ''));
+  });
+
+  return { article: sorted[0], basis };
+}
+
 function main() {
   const data = JSON.parse(fs.readFileSync(ARTICLES, 'utf8'));
   const today = todayUtc();
-  const published = [];
-  const held = [];
+  let changed = false;
+
+  const candidates = [];   // připravené + scheduled_for už nastalo
+  const waiting = [];      // připravené, ale scheduled_for v budoucnu
+  const held = [];         // zadržené review holdem
 
   for (const a of data.articles) {
-    if (!(a.published === false && a.scheduled_for && a.scheduled_for <= today)) continue;
+    if (a.published !== false) continue;
 
     const file = a.slug ? path.join(ROOT, a.slug) : null;
     if (!file || !fs.existsSync(file)) {
-      held.push({ slug: a.slug, scheduled: a.scheduled_for, reason: 'HTML soubor nenalezen' });
+      held.push({ slug: a.slug, reason: 'HTML soubor nenalezen' });
       continue;
     }
 
     const reason = holdReason(a, fs.readFileSync(file, 'utf8'));
     if (reason) {
-      held.push({ slug: a.slug, scheduled: a.scheduled_for, reason });
+      held.push({ slug: a.slug, reason });
       continue;
     }
 
-    a.published = true;
-    // scheduled_for ponecháváme pro audit (kdy byl článek publikován).
-    published.push({ slug: a.slug, title: a.title, scheduled: a.scheduled_for });
+    // Článek je připravený → orazítkuj ready_since, pokud chybí.
+    if (!a.ready_since) {
+      a.ready_since = today;
+      changed = true;
+    }
+
+    // scheduled_for funguje jako „ne dřív než".
+    if (a.scheduled_for && a.scheduled_for > today) {
+      waiting.push(a);
+      continue;
+    }
+    candidates.push(a);
   }
+
+  const pick = pickArticleToPublish(candidates);
 
   if (held.length > 0) {
-    console.log(`[${today}] ${held.length} článek/ů zadrženo v review hold (nebudou auto-publikovány):`);
-    for (const h of held) {
-      console.log(`  · ${h.slug} (sched ${h.scheduled}, ${h.reason})`);
-    }
+    console.log(`[${today}] ${held.length} článek/ů zadrženo v review hold:`);
+    for (const h of held) console.log(`  · ${h.slug} (${h.reason})`);
+  }
+  if (waiting.length > 0) {
+    console.log(`[${today}] ${waiting.length} článek/ů čeká na scheduled_for:`);
+    for (const w of waiting) console.log(`  · ${w.slug} (scheduled_for ${w.scheduled_for})`);
   }
 
-  if (published.length === 0) {
-    console.log(`[${today}] Nic k publikaci.`);
+  if (!pick) {
+    if (changed) {
+      data.generated_at = new Date().toISOString();
+      fs.writeFileSync(ARTICLES, JSON.stringify(data, null, 2) + '\n');
+      console.log(`[${today}] Nic k publikaci — orazítkováno ready_since.`);
+    } else {
+      console.log(`[${today}] Nic k publikaci.`);
+    }
     process.exit(0);
   }
+
+  const { article: winner, basis } = pick;
+  winner.published = true;
+  winner.date = today; // článek se zveřejní s dnešním datem (pravidlo 06:00)
+  changed = true;
 
   data.generated_at = new Date().toISOString();
   fs.writeFileSync(ARTICLES, JSON.stringify(data, null, 2) + '\n');
 
-  console.log(`[${today}] Publikováno ${published.length} článek/ů:`);
-  for (const p of published) {
-    console.log(`  - ${p.slug} :: ${p.title} (sched ${p.scheduled})`);
-  }
+  const reasonText = basis === 'topical'
+    ? `nejaktuálnější (topical_until ${winner.topical_until})`
+    : `nejdéle připraven (ready_since ${winner.ready_since})`;
+  console.log(`[${today}] Publikováno 1 článek/ů (${candidates.length} kandidát/ů ve frontě):`);
+  console.log(`  - ${winner.slug} :: ${winner.title} — ${reasonText}`);
 }
 
 // main() jen při přímém spuštění — kvůli importu z testů.
