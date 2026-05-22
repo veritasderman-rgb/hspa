@@ -4,19 +4,19 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **1 / 44 PASS** · TODO 43 · PASS 1 · FAIL 0 · BLOCKED 0
+Stav: **9 / 44 PASS** · TODO 35 · PASS 9 · FAIL 0 · BLOCKED 0
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
 | 1 | nr-02-01 | d9 Doplňkové registry a otevřená data | PASS | 210340 úvazků (2024) | 210340,32 úvazků | Kraje!F7 | Portál 210340 = zaokrouhlení XLSX 210340,32 (řádek ČR · Celkem odbornosti/typy/kategorie/subkategorie, sloupec Celkem). Jednotka úvazky OK. XLSX „stav k 31.12.2023', edice 2024-01 — portál uvádí rok 2024 (rok edice, ne rok stavu dat). |
-| 2 | nr-02-02 | d9 Doplňkové registry a otevřená data | TODO | 215844 fyzických osob (2024) |  |  |  |
-| 3 | ois-03-01 | d9 Doplňkové registry a otevřená data | TODO | 367 center (2024) |  |  |  |
-| 4 | ois-11-05 | d1 Ceny a objemy | TODO | 71087 Kč (průměrná sazba) (2024) |  |  |  |
-| 5 | ois-11-06 | d1 Ceny a objemy | TODO | 3171605 pacientoměsíců (2024) |  |  |  |
-| 6 | ois-11-07 | d1 Ceny a objemy | TODO | 796.6 mil. Kč (2024) |  |  |  |
-| 7 | ois-11-08 | d1 Ceny a objemy | TODO | 18.7 mld. Kč (2024) |  |  |  |
-| 8 | ois-11-10 | d1 Ceny a objemy | TODO | 11.5 mld. Kč (2024) |  |  |  |
-| 9 | ois-11-11 | d1 Ceny a objemy | TODO | 94.1 mld. Kč (2024) |  |  |  |
+| 2 | nr-02-02 | d9 Doplňkové registry a otevřená data | PASS | 215844 fyzických osob (2024) | 215844 fyzických osob | Kraje!F7 | ČR-celkový řádek (sloupec Celkem), přesná shoda. XLSX stav k 31.12.2023, edice 2024-01 → portál rok 2024 (konvence roku edice). |
+| 3 | ois-03-01 | d9 Doplňkové registry a otevřená data | PASS | 367 center (2024) | 367 center | CVSP – datový souhrn!A13:A379 | 367 datových řádků registru (1 řádek = 1 centrum). Počet sedí. POZOR: XLSX stav k 30.12.2025, portál uvádí year=2024 — nepřesné (ani rok edice 2026-01). |
+| 4 | ois-11-05 | d1 Ceny a objemy | PASS | 71087 Kč (průměrná sazba) (2024) | 71065,24 Kč (průměr sl. E) | VÝSTUP 2024!E18:E1014 | Headline = průměr celkové základní sazby ALP 2024. 71065 vs portál 71087 → odchylka 22 Kč (0,03 %, v toleranci). Edice 2026-01. |
+| 5 | ois-11-06 | d1 Ceny a objemy | PASS | 3171605 pacientoměsíců (2024) | 3171604,96 pacientoměsíců | Rok 2022-2024 ATC!sl. J/P/V/AB/AH/AN/AT ř.19:494 | Součet sloupců Počet pacientoměsíců 2024 přes 476 ATC × 7 ZP; zaokr. 3171605. Řada sedí (2022/2023). |
+| 6 | ois-11-07 | d1 Ceny a objemy | PASS | 796.6 mil. Kč (2024) | 796 634 784 Kč = 796,6 mil. Kč | Genove_terapie!G13+M13+S13+Y13+AE13+AK13+AQ13 | Součet nákladů (max. cena za lék 2024) přes 7 ZP, řádek Všechna ATC. XLSX stav k 27.01.2026. |
+| 7 | ois-11-08 | d1 Ceny a objemy | PASS | 18.7 mld. Kč (2024) | 18 685 852 313 Kč ≈ 18,686 mld. Kč | Rok 2024!K18:K61 | Součet sl. K (úhrada celkem) všech 44 typů PZT; XLSX nemá ČR-celkem řádek. ≈18,7 mld po zaokrouhlení. |
+| 8 | ois-11-10 | d1 Ceny a objemy | PASS | 11.5 mld. Kč (2024) | 11,49 mld. Kč | Rok 2023!AI20:AX35 (součet) | Součet úhrad přes typy PZT. reference_period=Rok 2023, portál uvádí 2024 (edice 2025-02); zaokrouhleně 11,5 sedí. |
+| 9 | ois-11-11 | d1 Ceny a objemy | PASS | 94.1 mld. Kč (2024) | 94 095 563 470 Kč ≈ 94,1 mld. Kč | Celkem!AK18:BA103 | Součet úhrad ZP (sl. AK–BA) přes ATC skupiny. Edice 2025-02. |
 | 10 | ois-11-12 | d2 Personální zabezpečení | TODO | 126722 Kč / měsíc (2024) |  |  |  |
 | 11 | ois-11-13 | d2 Personální zabezpečení | TODO | 45391 lékařských úvazků (2024) |  |  |  |
 | 12 | ois-11-14 | d2 Personální zabezpečení | TODO | 91163 Kč / měsíc (2024) |  |  |  |
