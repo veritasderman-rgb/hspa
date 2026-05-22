@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **28 / 44 PASS** · TODO 13 · PASS 28 · FAIL 2 · BLOCKED 1
+Stav: **34 / 44 PASS** · TODO 6 · PASS 34 · FAIL 3 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -39,13 +39,13 @@ Stav: **28 / 44 PASS** · TODO 13 · PASS 28 · FAIL 2 · BLOCKED 1
 | 29 | ois-11-36 | d1 Ceny a objemy | PASS | 42.4 mld. Kč (2024) | 42 413 696 532 Kč ≈ 42,4 mld. Kč | HVLP na recept!F19:F4856 (součet) | Součet sl. Úhrada od ZP za vykázaná léčiva (HVLP na recept, 4838 řádků) = 42,4 mld. Rok 2024. |
 | 30 | ois-11-37 | d6 Lůžková péče | PASS | 1808472 hospitalizačních případů | 1808472 hospitalizačních případů | Nákladovost DRG skupin!C19:C1811 (součet) | Součet sl. Počet hospitalizačních případů ČR přes 1793 DRG skupin = 1808472, přesná shoda. Zprac. 19.02.2026, rok 2024. |
 | 31 | ois-11-38 | d6 Lůžková péče | PASS | 825011 výkonů převzetí od ZZS (2024) | 825011 výkonů | Data!I20:I194 (součet 175 IČZ) | Součet výkonů kódu 09564 (převzetí pacienta od ZZS) přes pracoviště = 825011, přesná shoda. Stav k 08.02.2026, rok 2024. |
-| 32 | ois-11-39 | d6 Lůžková péče | TODO | 47.7 % případů v referenční síti (2024) |  |  |  |
-| 33 | ois-11-40 | d6 Lůžková péče | TODO | 109393 unikátních pacientů (2022) |  |  |  |
-| 34 | ois-11-41 | d3 Produkce nelůžkové péče | TODO | 1055707 výjezdů ZZS (2024) |  |  |  |
-| 35 | ois-11-42 | d3 Produkce nelůžkové péče | TODO | 11736 poskytovatelů (2024) |  |  |  |
-| 36 | ois-11-45 | d6 Lůžková péče | TODO | 1789575 hospitalizačních případů (2024) |  |  |  |
-| 37 | ois-11-46 | d6 Lůžková péče | TODO | 6.5 dní (průměrná délka) (2024) |  |  |  |
-| 38 | ois-11-47 | d5 Struktura pojištěnců a náklady ZP | TODO | 10.85 mil. pojištěnců (2025) |  |  |  |
+| 32 | ois-11-39 | d6 Lůžková péče | PASS | 47.7 % případů v referenční síti (2024) | 47,71 % (862884/1808472) | Data o referenční síti!C19:E1769 (vážený podíl) | Vážený podíl pokrytí HP referenční sítí přes 1751 DRG = 47,71 % → zaokr. 47,7 %. Rok 2024, edice 2026-01. |
+| 33 | ois-11-40 | d6 Lůžková péče | PASS | 109393 unikátních pacientů (2022) | 109393 unikátních pacientů | data!N61:N2495 (součet, kód UOP) | Součet sl. Rok 2022 množství (Unikátní pacienti) přes PZS = 109393, přesná shoda. Zprac. 02.02.2026. |
+| 34 | ois-11-41 | d3 Produkce nelůžkové péče | PASS | 1055707 výjezdů ZZS (2024) | 1055707 výjezdů | Data!G20:G62 (součet 43 ZZS) | Součet sl. Počet výjezdů přes 43 poskytovatelů ZZS = 1055707, přesná shoda. Rok 2024, zprac. 23.02.2026. |
+| 35 | ois-11-42 | d3 Produkce nelůžkové péče | FAIL | 11736 poskytovatelů (2024) | 5868 poskytovatelů | Data!I107 (Celkový součet) | NESHODA: portál 11736 (součet 87 okresních řádků sl. I) 2× duplikuje PZS působící ve více okresech. Deduplikovaný řádek Celkový součet I107 = 5868. Stejná chyba jako ois-11-21, portál přesně 2× vyšší. |
+| 36 | ois-11-45 | d6 Lůžková péče | PASS | 1789575 hospitalizačních případů (2024) | 1789575 hospitalizačních případů | Data o centralizaci péče!C20:C712 (součet) | Součet sl. Celkový počet HP přes 693 DRG řádků = 1789575, přesná shoda. Rok 2024, CZ-DRG 6.0. |
+| 37 | ois-11-46 | d6 Lůžková péče | PASS | 6.5 dní (průměrná délka) (2024) | 6,46 dní (vážená ALOS) | LOS dle DRG skupin!D10:D1732 (vážený počtem HP) | Vážený průměr ALOS přes 1723 DRG = 6,461 → zaokr. 6,5 dne. XLSX bez ČR-celkem řádku. Rok 2024. |
+| 38 | ois-11-47 | d5 Struktura pojištěnců a náklady ZP | PASS | 10.85 mil. pojištěnců (2025) | 10 851 604 pojištěnců = 10,85 mil. | Data!sl. G (součet řádků Rok=2025) | ČR-celkový součet pojištěnců za 2025 = 10851604 → zaokr. 10,85 mil. Edice 2026-01. Sada je externí (interaktivní atlas). |
 | 39 | ois-11-48 | d6 Lůžková péče | TODO | 5727 intenzivních lůžek (2024) |  |  |  |
 | 40 | ois-11-49 | d6 Lůžková péče | TODO | 821 lůžek ARO (2024) |  |  |  |
 | 41 | ois-11-50 | d6 Lůžková péče | TODO | 299.4 mld. Kč (2024) |  |  |  |
