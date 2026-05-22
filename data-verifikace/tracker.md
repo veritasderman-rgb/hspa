@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **15 / 44 PASS** · TODO 27 · PASS 15 · FAIL 1 · BLOCKED 1
+Stav: **23 / 44 PASS** · TODO 19 · PASS 23 · FAIL 1 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -21,18 +21,18 @@ Stav: **15 / 44 PASS** · TODO 27 · PASS 15 · FAIL 1 · BLOCKED 1
 | 11 | ois-11-13 | d2 Personální zabezpečení | PASS | 45391 lékařských úvazků (2024) | 45391 přepočtených úvazků | data!sl. R (Rok 2024 počty úvazků), řádky kat. Lékaři | Součet úvazků kategorie Lékaři za 2024 = 45391, přesná shoda. XLSX nemá ČR-celkem řádek. Edice 2025-02, zprac. 31.10.2025. |
 | 12 | ois-11-14 | d2 Personální zabezpečení | PASS | 91163 Kč / měsíc (2024) | 91162,89 Kč/měs | Mzda_2024!C33 | Medián hrubé měsíční mzdy — lékaři specialisté (ISPV CZ-ISCO 2212), mzdová sféra 2024. Zaokr. 91163. |
 | 13 | ois-11-15 | d2 Personální zabezpečení | PASS | 124730 Kč / měsíc (2024) | 124730,37 Kč/měs | Plat_2024!C36 | Medián hrubého měsíčního platu — lékaři specialisté (ISPV 2212), platová sféra 2024. Zaokr. 124730. |
-| 14 | ois-11-16 | d2 Personální zabezpečení | TODO | 18.4 % pracovníků 60+ (2024) |  |  |  |
-| 15 | ois-11-17 | d6 Lůžková péče | TODO | 167.41 mld. Kč (2024) |  |  |  |
+| 14 | ois-11-16 | d2 Personální zabezpečení | PASS | 18.4 % pracovníků 60+ (2024) | 18,40 % (41386 z 224985) | Kraje!Q18:U18 / F18 | Podíl pracovníků 60+ (součet sl. Q–U = 41386) z celkem F18=224985 = 18,40 %, přesná shoda. XLSX stav k 31.12.2024, edice 2025-02. |
+| 15 | ois-11-17 | d6 Lůžková péče | PASS | 167.41 mld. Kč (2024) | 167,41 mld. Kč (167410 tis. Kč) | data!M20:M91 (součet Osobní náklady) | Součet osobních nákladů lůžkové péče přes typy poskytovatelů za 2024; XLSX v tis. Kč. Zdroj E(MZ)6-02, gen. 27.10.2025. Bez ČR-celkem řádku. |
 | 16 | ois-11-18 | d3 Produkce nelůžkové péče | PASS | 16.3 mld. Kč (2024) | 16,3048 mld. Kč (16 304 838 547 Kč) | 2024!G19:G24210 (součet Suma Kč) | Součet sl. Suma Kč listu 2024 (24192 řádků) = 16,3 mld po zaokrouhlení. XLSX bez ČR-celkem řádku. Zprac. 30.10.2025. |
 | 17 | ois-11-19 | d3 Produkce nelůžkové péče | PASS | 77181183 receptů (2024) | 77 181 183 receptů | 2024!I18:I4134 (součet) | Součet sl. Počet vykázaných receptů listu 2024 (4117 řádků) = 77181183, přesná shoda. Série 2023 též sedí. Zprac. 30.10.2025. |
 | 18 | ois-11-20 | d3 Produkce nelůžkové péče | PASS | 11176 poskytovatelů (2024) | 11176 poskytovatelů | Data!I21:I106 (součet) | Součet PZS celkem za 86 okresů = 11176 (krajský žebříček). Pozn.: I107=5588 je deduplikovaný unikátní počet PZS; portál správně používá okresní součet. |
 | 19 | ois-11-21 | d3 Produkce nelůžkové péče | FAIL | 4320 poskytovatelů (2024) | 2160 poskytovatelů | Data!H109 | NESHODA: portál 4320, XLSX CELKEM (sl. PZS celkem, H109) = 2160 — portál je přesně 2× vyšší (pravděpodobně dvojí započtení). Jednotka, rok 2024 i zdroj sedí. |
-| 20 | ois-11-24 | d5 Struktura pojištěnců a náklady ZP | TODO | 459 mld. Kč (2023) |  |  |  |
-| 21 | ois-11-25 | d6 Lůžková péče | TODO | 1792276 hospitalizačních případů (2024) |  |  |  |
-| 22 | ois-11-27 | d6 Lůžková péče | TODO | 8895523 ošetřovacích dnů (2024) |  |  |  |
-| 23 | ois-11-28 | d6 Lůžková péče | TODO | 76587 lůžek (2024) |  |  |  |
-| 24 | ois-11-30 | d7 Komunitní ošetřovatelská péče | TODO | 8048294 kontaktů (2024) |  |  |  |
-| 25 | ois-11-31 | d7 Komunitní ošetřovatelská péče | TODO | 12.68 mld. Kč (2024) |  |  |  |
+| 20 | ois-11-24 | d5 Struktura pojištěnců a náklady ZP | PASS | 459 mld. Kč (2023) | 459,025 mld. Kč | Úhradová data – souhrn!D223:D424 (součet) | Součet sl. Úhrada za rok 2023 přes 7 ZP a 34 segmentů = 459,0 mld. XLSX období 1.1.2023–30.6.2024, rok 2023 (edice 2026-01). |
+| 21 | ois-11-25 | d6 Lůžková péče | PASS | 1792276 hospitalizačních případů (2024) | 1792276 hospitalizačních případů | CZ-DRG 6.0!F20:F215789 (součet) | Součet sl. Počet HP za 2024 list CZ-DRG 6.0 = 1792276, přesná shoda. List CZ-DRG 2026 dává 1792044 (jiné zařazení) — portál odpovídá verzi 6.0. |
+| 22 | ois-11-27 | d6 Lůžková péče | PASS | 8895523 ošetřovacích dnů (2024) | 8 895 523 ošetřovacích dnů | ošetřovací dny!P16:P702 (součet) | Součet sl. Rok 2024 = 8895523, přesná shoda. Zprac. 24.02.2026, edice 2026-01. |
+| 23 | ois-11-28 | d6 Lůžková péče | PASS | 76587 lůžek (2024) | 76587 lůžek (akutní 48036 + následná 28551) | Data!M21:M2378 + P21:P2378 | Součet sl. Akutní Celkem + Následná Celkem za 2024 = 76587, přesná shoda. Řady 2023/2024 sedí. |
+| 24 | ois-11-30 | d7 Komunitní ošetřovatelská péče | PASS | 8048294 kontaktů (2024) | 8048294 kontaktů | 2024!E+L+S ř.18:289 (odb. 913+925+926) | Součet kontaktů odborností 913+925+926 list 2024 = 8048294, přesná shoda. Pozn.: method_note portálu uvádí jen 913+925, headline zahrnuje i 926 (paliativní) — nepřesnost v popisu metody, ne v čísle. |
+| 25 | ois-11-31 | d7 Komunitní ošetřovatelská péče | PASS | 12.68 mld. Kč (2024) | 12 684 545 987 Kč = 12,68 mld. Kč | Data!K20:K5901 (součet Úhrady 2024) | Součet úhrad 2024 přes 5881 řádků = 12,68 mld. Řada 2023 sedí. Zprac. 20.02.2026. |
 | 26 | ois-11-32 | d8 Jednodenní péče | TODO | 27987 smluvních kombinací (2024) |  |  |  |
 | 27 | ois-11-33 | d8 Jednodenní péče | TODO | 200115 výkonů (2024) |  |  |  |
 | 28 | ois-11-35 | d1 Ceny a objemy | TODO | 4.6 mld. Kč (2024) |  |  |  |
