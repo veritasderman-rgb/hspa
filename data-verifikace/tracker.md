@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **9 / 44 PASS** · TODO 35 · PASS 9 · FAIL 0 · BLOCKED 0
+Stav: **12 / 44 PASS** · TODO 32 · PASS 12 · FAIL 0 · BLOCKED 0
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -18,9 +18,9 @@ Stav: **9 / 44 PASS** · TODO 35 · PASS 9 · FAIL 0 · BLOCKED 0
 | 8 | ois-11-10 | d1 Ceny a objemy | PASS | 11.5 mld. Kč (2024) | 11,49 mld. Kč | Rok 2023!AI20:AX35 (součet) | Součet úhrad přes typy PZT. reference_period=Rok 2023, portál uvádí 2024 (edice 2025-02); zaokrouhleně 11,5 sedí. |
 | 9 | ois-11-11 | d1 Ceny a objemy | PASS | 94.1 mld. Kč (2024) | 94 095 563 470 Kč ≈ 94,1 mld. Kč | Celkem!AK18:BA103 | Součet úhrad ZP (sl. AK–BA) přes ATC skupiny. Edice 2025-02. |
 | 10 | ois-11-12 | d2 Personální zabezpečení | TODO | 126722 Kč / měsíc (2024) |  |  |  |
-| 11 | ois-11-13 | d2 Personální zabezpečení | TODO | 45391 lékařských úvazků (2024) |  |  |  |
-| 12 | ois-11-14 | d2 Personální zabezpečení | TODO | 91163 Kč / měsíc (2024) |  |  |  |
-| 13 | ois-11-15 | d2 Personální zabezpečení | TODO | 124730 Kč / měsíc (2024) |  |  |  |
+| 11 | ois-11-13 | d2 Personální zabezpečení | PASS | 45391 lékařských úvazků (2024) | 45391 přepočtených úvazků | data!sl. R (Rok 2024 počty úvazků), řádky kat. Lékaři | Součet úvazků kategorie Lékaři za 2024 = 45391, přesná shoda. XLSX nemá ČR-celkem řádek. Edice 2025-02, zprac. 31.10.2025. |
+| 12 | ois-11-14 | d2 Personální zabezpečení | PASS | 91163 Kč / měsíc (2024) | 91162,89 Kč/měs | Mzda_2024!C33 | Medián hrubé měsíční mzdy — lékaři specialisté (ISPV CZ-ISCO 2212), mzdová sféra 2024. Zaokr. 91163. |
+| 13 | ois-11-15 | d2 Personální zabezpečení | PASS | 124730 Kč / měsíc (2024) | 124730,37 Kč/měs | Plat_2024!C36 | Medián hrubého měsíčního platu — lékaři specialisté (ISPV 2212), platová sféra 2024. Zaokr. 124730. |
 | 14 | ois-11-16 | d2 Personální zabezpečení | TODO | 18.4 % pracovníků 60+ (2024) |  |  |  |
 | 15 | ois-11-17 | d6 Lůžková péče | TODO | 167.41 mld. Kč (2024) |  |  |  |
 | 16 | ois-11-18 | d3 Produkce nelůžkové péče | TODO | 16.3 mld. Kč (2024) |  |  |  |
