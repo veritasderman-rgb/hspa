@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **39 / 44 PASS** · TODO 1 · PASS 39 · FAIL 3 · BLOCKED 1
+Stav: **39 / 44 PASS** · TODO 0 · PASS 39 · FAIL 3 · BLOCKED 2
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -50,5 +50,5 @@ Stav: **39 / 44 PASS** · TODO 1 · PASS 39 · FAIL 3 · BLOCKED 1
 | 40 | ois-11-49 | d6 Lůžková péče | PASS | 821 lůžek ARO (2024) | 821 lůžek ARO | rok 2024!K204 (CELKEM) | ČR-celkový řádek CELKEM (sl. CELKEM LŮŽKA ARO) = 821, shoduje se i se součtem poskytovatelů. Rok 2024. |
 | 41 | ois-11-50 | d6 Lůžková péče | PASS | 299.4 mld. Kč (2024) | 299 376 961 tis. Kč = 299,4 mld. Kč | 2024!M189 (CELKEM) | Celkové náklady PALP, řádek CELKEM M189 = 299,4 mld. Zdroj sl. M = výkaz E 6-02. Rok 2024. |
 | 42 | ois-11-51 | d6 Lůžková péče | PASS | 91.8 % případů v centrech | 91,75 % (58501/63758 HP v CVSP) | Sheet1!E19:E1786,G19:G1786 (filtr Centralizace dle ÚV=ano) | Podíl HP v CVSP u 258 DRG skupin určených k centralizaci za 2024 = 91,75 % → zaokr. 91,8 %. Headline bez roku — XLSX rok 2024. |
-| 43 | pps-08-01 | d9 Doplňkové registry a otevřená data | TODO | 33.1 % účast u praktického lékaře (2023) |  |  |  |
+| 43 | pps-08-01 | d9 Doplňkové registry a otevřená data | BLOCKED | 33.1 % účast u praktického lékaře (2023) | PL 32,82 % / STOM 51,90 % (vlastní vzorek 32 MB, N=84684 řádků 2023) | bez buňky — derivovaný odhad ze 4,5 GB pacientských mikrodat | Portál 33,1 % je sám vzorkovaný odhad z otevřených dat ÚZIS (NRHZS), nemá zdrojovou buňku v XLSX. Nezávislý vzorek: PL 32,82 %, STOM 51,90 %. STOM ≈ portál (52,0 %); PL o 0,28 p.b. níže než portál (a celá řada portálu je konzistentně ~0,15–0,25 p.b. nad vlastním vzorkem). Rozdíl je v mezích vzorkovací/metodické variance, ale nelze exaktně ověřit: server data.mzcr.cz blokuje plný i hloubkový range přístup ke 4,5 GB souboru a portál nedokumentuje přesnou vzorkovací metodu (~1,3 mil. osob). Zdroj PPS-08-01, jednotka i rok 2023 sedí. |
 | 44 | sss-04-02 | d9 Doplňkové registry a otevřená data | PASS | 16.408 CT na milion obyvatel (2024) | 16,4077 → 16,408 CT na milion obyvatel | Vývoj_v_ČR!U27 | CT na milion obyvatel, list Vývoj_v_ČR ř.27 sl. U = 16,4077 → zaokr. 16,408. Ověřeno i poměrem 179 přístrojů / 10909500 obyv. k 31.12.2024. Edice 2025-01. |
