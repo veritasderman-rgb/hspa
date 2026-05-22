@@ -1,9 +1,11 @@
 name: Publish scheduled articles
 
 # Spouští se každý den v 04:00 UTC (= 06:00 CEST / 05:00 CET v zimě).
-# Projde data/articles.json a všechny záznamy s published=false +
-# scheduled_for <= dnes nastaví na published=true. Pokud něco změnil,
-# commitne změnu zpět do main → Vercel se rebuildne.
+# Vybere a publikuje NEJVÝŠE JEDEN článek z fronty data/articles.json —
+# nejaktuálnější (nejbližší topical_until), jinak nejdéle připravený
+# (nejstarší ready_since). scheduled_for funguje jako „ne dřív než".
+# Pokud něco změnil, commitne změnu zpět do main → Vercel se rebuildne.
+# Detaily výběrového pravidla viz scripts/publish-scheduled.js.
 
 on:
   schedule:

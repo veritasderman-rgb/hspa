@@ -266,6 +266,25 @@ součást `npm run validate:all`) kontroluje:
    napříč webem. GitHub Actions cron 06:00 UTC + Vercel rebuild zajistí, že
    `data/articles.json` je v ten okamžik aktuální.
 
+### Publikační fronta — výběr článku dne
+
+Cron `scripts/publish-scheduled.js` (`.github/workflows/publish-articles.yml`,
+04:00 UTC) publikuje **nejvýše jeden článek denně**. Každý běh projde všechny
+připravené články (včetně nově přidaných) a vybere jeden podle pravidla:
+
+1. **Aktuálnost má přednost** — má-li některý kandidát pole `topical_until`
+   (datum, do kdy je téma aktuální), vyhrává ten s **nejbližším** `topical_until`.
+   Pole nastav u článků vázaných na událost/termín (novela, akce, výročí).
+2. **Jinak nejdéle připravený** — vyhrává článek s nejstarším `ready_since`.
+   `ready_since` se orazítkuje automaticky v den, kdy článek poprvé projde
+   review holdem (stane se publikovatelným) — redakce ho needituje ručně.
+3. `scheduled_for` funguje jako **„ne dřív než"** — článek se nepublikuje
+   před tímto datem; prázdné pole = může jít ven hned.
+
+Publikovaný článek dostane `date` = den publikace (zobrazí se s aktuálním
+datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
+`ready_since` → `scheduled_for` → `slug`.
+
 ## Deploy (Vercel)
 
 - **Root Directory:** `05_M1_Starter`
