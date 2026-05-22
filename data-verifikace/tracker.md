@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **12 / 44 PASS** · TODO 32 · PASS 12 · FAIL 0 · BLOCKED 0
+Stav: **12 / 44 PASS** · TODO 31 · PASS 12 · FAIL 0 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -17,7 +17,7 @@ Stav: **12 / 44 PASS** · TODO 32 · PASS 12 · FAIL 0 · BLOCKED 0
 | 7 | ois-11-08 | d1 Ceny a objemy | PASS | 18.7 mld. Kč (2024) | 18 685 852 313 Kč ≈ 18,686 mld. Kč | Rok 2024!K18:K61 | Součet sl. K (úhrada celkem) všech 44 typů PZT; XLSX nemá ČR-celkem řádek. ≈18,7 mld po zaokrouhlení. |
 | 8 | ois-11-10 | d1 Ceny a objemy | PASS | 11.5 mld. Kč (2024) | 11,49 mld. Kč | Rok 2023!AI20:AX35 (součet) | Součet úhrad přes typy PZT. reference_period=Rok 2023, portál uvádí 2024 (edice 2025-02); zaokrouhleně 11,5 sedí. |
 | 9 | ois-11-11 | d1 Ceny a objemy | PASS | 94.1 mld. Kč (2024) | 94 095 563 470 Kč ≈ 94,1 mld. Kč | Celkem!AK18:BA103 | Součet úhrad ZP (sl. AK–BA) přes ATC skupiny. Edice 2025-02. |
-| 10 | ois-11-12 | d2 Personální zabezpečení | TODO | 126722 Kč / měsíc (2024) |  |  |  |
+| 10 | ois-11-12 | d2 Personální zabezpečení | BLOCKED | 126722 Kč / měsíc (2024) | bez ČR-celkové buňky; LÉKAŘ Plat 2024 rozsah 23850–161236 Kč | data!sl. L (Rok 2024 odměna), řádky LÉKAŘ/Plat — bez agregátu | Headline 126722 je vážený národní průměr přes přepočtené úvazky z OIS-11-13 (jiný dataset, není v tomto XLSX); XLSX má jen hodnoty po typu poskytovatele bez vah a bez agregátní buňky → přesnou buňku nelze jednoznačně určit. Zdroj OIS-11-12 a období 2024 sedí, hodnota řádově plausibilní. |
 | 11 | ois-11-13 | d2 Personální zabezpečení | PASS | 45391 lékařských úvazků (2024) | 45391 přepočtených úvazků | data!sl. R (Rok 2024 počty úvazků), řádky kat. Lékaři | Součet úvazků kategorie Lékaři za 2024 = 45391, přesná shoda. XLSX nemá ČR-celkem řádek. Edice 2025-02, zprac. 31.10.2025. |
 | 12 | ois-11-14 | d2 Personální zabezpečení | PASS | 91163 Kč / měsíc (2024) | 91162,89 Kč/měs | Mzda_2024!C33 | Medián hrubé měsíční mzdy — lékaři specialisté (ISPV CZ-ISCO 2212), mzdová sféra 2024. Zaokr. 91163. |
 | 13 | ois-11-15 | d2 Personální zabezpečení | PASS | 124730 Kč / měsíc (2024) | 124730,37 Kč/měs | Plat_2024!C36 | Medián hrubého měsíčního platu — lékaři specialisté (ISPV 2212), platová sféra 2024. Zaokr. 124730. |
