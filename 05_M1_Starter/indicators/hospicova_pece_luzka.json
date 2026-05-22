@@ -1,0 +1,51 @@
+{
+  "id": "hospicova_pece_luzka",
+  "name": "Lůžková hospicová kapacita",
+  "area": "Struktury",
+  "domain": "Dostupnost péče",
+  "subdomain": "Paliativní péče",
+  "definition": "Počet lůžek v lůžkových hospicích (samostatná specializovaná zařízení) na 100 000 obyvatel. Měří kapacitu specializované paliativní lůžkové péče — základního článku péče o nevyléčitelně nemocné na konci života. Zahrnuje výhradně registrovaná zařízení v Národním registru poskytovatelů zdravotních služeb (NRPZS) s odborností 928 (lůžkový hospic).",
+  "unit": "lůžek / 100 000 ob.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrpzs",
+      "endpoint": "https://nrpzs.uzis.cz",
+      "dataset": "NRPZS — filtr odbornost 928, typ péče lůžková",
+      "note": "Národní registr poskytovatelů zdravotních služeb (NRPZS) — registrovaná zařízení s odborností 928 (hospic) a povolením k poskytování lůžkové péče. Počty lůžek ze statistického výkazu A (výroční statistika ÚZIS). Kapacita přepočtena na 100 000 obyvatel dle ČSÚ střední stav populace."
+    },
+    "fallback": {
+      "type": "mzd_strategie",
+      "note": "MZD ČR: Strategie rozvoje paliativní péče v ČR 2025–2030 a výchozí analýza hospicové sítě (stav 2022–2023). Sekundárně: ČSPM — zprávy o stavu paliativní péče v ČR."
+    }
+  },
+  "benchmark_source": {
+    "type": "eapc",
+    "code": "PALLIATIVE_BEDS_PER_100K",
+    "dataset": "EAPC Atlas of Palliative Care in Europe 2023 a EAPC Delphi White Paper on Standards and Norms for Hospice and Palliative Care in Europe 2022",
+    "value": 8.0,
+    "url": "https://www.eapcnet.eu/eapc-groups/reference/atlas-of-palliative-care-in-europe"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 40
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS — NRPZS",
+    "Ministerstvo zdravotnictví ČR — odbor zdravotní péče",
+    "Česká společnost paliativní medicíny ČLS JEP (ČSPM)"
+  ],
+  "method_notes": "Indikátor počítá výhradně lůžka v samostatných lůžkových hospicích (odbornost 928 dle NRPZS). Nezahrnuje: (a) paliativní lůžka v rámci oddělení všeobecných nemocnic (Palliativstation), (b) lůžka v léčebnách dlouhodobě nemocných (LDN) používaná de facto pro paliativní péči, (c) mobilní hospicové týmy (MSPP). Mezinárodní srovnání je metodicky nejednotné — EAPC Atlas uvádí v záhlaví 'specialist palliative care in-patient units (IPU) beds', ale definice se po zemích liší: Německo zahrnuje Palliativstationen v nemocnicích, Belgie zahrnuje paliativní lůžka v geriatrii. Proto je benchmark interpretovat jako orientační. Thresholds (good=5, warn=40) reflektují skutečnost, že i nejsilnější paliativní systémy (UK, Belgie) se liší metodikou sčítání, a penalizují ČR spíše za systémový underinvestment než za metodický rozdíl.",
+  "limitations": "1. NRPZS nezveřejňuje historické řady lůžkové kapacity — trendy jsou rekonstruovány z výročních statistik ÚZIS a ze zpráv ČSPM. 2. Definice 'lůžkový hospic' se v čase mírně měnila (přechod na zákon 372/2011 Sb.). 3. Mobilní hospicové týmy (MSPP), domácí paliativní péče hrazená ZP a paliativní pokoje v nemocnicích jsou plnohodnotné formy paliativní péče, ale nejsou tímto indikátorem zachyceny. 4. EAPC Atlas není totožný s OECD Health Statistics — ČR není ve všech vydáních zahrnutím dostatečně srovnatelná.",
+  "determinants": [
+    "Úhradová politika ZP — tarif pro lůžkový hospic (historicky podfinancovaný)",
+    "Dostupnost paliativně vzdělaných lékařů a sester (kapacitní omezení)",
+    "Geografická distribuce — koncentrace hospiců v krajských městech",
+    "Komunitní a nezisková kapacita — většina hospiců provozovaná církvemi a NNO"
+  ],
+  "importance": "Paliativní péče je oblast, kde ČR systematicky zaostává za standardy EU/OECD. Lůžkový hospic je přímá alternativa k umírání v nemocnici — mezinárodní data ukazují, že pacienti a rodiny preferují hospicové umírání jako důstojnější a méně intervenční. Přitom náklady na lůžkový hospic jsou nižší než náklady na ekvivalentní dobu hospitalizace v akutní péči. Indikátor je přímou datovou oporou pro senátní novelu zákona 372/2011 Sb. a pro MZD Strategii paliativní péče 2025–2030.",
+  "patient_story": "Miroslav K., sedmdesát jedna let, pracoval celý život jako strojní technik v Havlíčkově Brodě. Diagnózu — karcinom pankreatu, stadium IV — mu řekl onkolog v únoru. Bylo jasné, že jde o terminální fázi. Syn začal hledat lůžkový hospic. Nejbližší od jejich domu byl ve vzdálenosti 85 kilometrů a čekací lhůta se odhadovala na tři až čtyři týdny. Miroslav strávil poslední tři týdny života v nemocnici na standardním interním oddělení — v místě, kde se umírání děje, ale kde není cílem.\n\nV České republice je k dispozici 5,0 lůžek lůžkového hospice na 100 000 obyvatel (ÚZIS/NRPZS, Strategie MZD 2025, rok 2023). EAPC benchmark pro Evropu je 8 lůžek na 100 000 (EAPC Delphi 2022), průměr EU je přibližně 7,4 — Česko je tedy zhruba o třetinu níže. Trend je ale výrazně rostoucí: z 3,2 lůžek v roce 2019 na dnešních 5,0 — za čtyři roky nárůst o 56 %. Ani to nestačí pokrýt poptávku: data MZD ukazují, že čekací doby na lůžkový hospic v populačně obsluhovaných krajích přesahují 4 týdny, což je v terminální diagnóze nezanedbatelná část zbývajícího času.\n\nStrukturálně stojí kapacitní mezera na čtyřech faktorech. Prvním je historické podfinancování: tarif zdravotních pojišťoven pro lůžkový hospic nepokrýval plné náklady, přičemž většina hospiců je provozována církvemi a neziskovými organizacemi se slabou kapitálovou základnou. Druhým je geografická distribuce: hospice jsou soustředěny v krajských a větších městech, venkovské okresy jsou obsluhovány mobilitou pacientů, nikoli blízkostí péče. Třetím je personální kapacita — paliativní medicína se v ČR etablovala jako specializace teprve nedávno (atestace od 2017), lékařů i sester se speciálním výcvikem je málo. Čtvrtým faktorem je historická kulttura umírání: v průzkumech uvádí 70–80 % Čechů, že by chtěli zemřít doma nebo v hospici, ale reálně umírá v nemocnici nebo LDN přes 70 % všech zemřelých.\n\nPolitické páky jsou konkrétní a věcně sdílené napříč politickým spektrem. MZD připravuje Akční plán paliativní péče 2025–2030 se záměrem rozšířit kapacitu na 8 lůžek na 100 000 do roku 2030 — to by znamenalo přibližně zdvojnásobit počet lůžek. Klíčové kroky: revize tarifu pro lůžkový hospic v úhradové vyhlášce (podfinancování je doloženo analýzami ZP), rozšíření specializace paliativní medicíny v postgraduálním vzdělávání, podpora mobilních hospiců (MSPP) jako alternativy ke lůžkové péči v oblastech bez hospice a definice práva pacienta na paliativní péči v zákoně (senátní novela, první čtení únor 2026). Indikátor hospicova_pece_luzka v HSPA Monitoru sleduje, zda systém tato závazky plní — měřitelně, rok po roku.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
