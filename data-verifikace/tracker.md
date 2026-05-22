@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **34 / 44 PASS** · TODO 6 · PASS 34 · FAIL 3 · BLOCKED 1
+Stav: **39 / 44 PASS** · TODO 1 · PASS 39 · FAIL 3 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -46,9 +46,9 @@ Stav: **34 / 44 PASS** · TODO 6 · PASS 34 · FAIL 3 · BLOCKED 1
 | 36 | ois-11-45 | d6 Lůžková péče | PASS | 1789575 hospitalizačních případů (2024) | 1789575 hospitalizačních případů | Data o centralizaci péče!C20:C712 (součet) | Součet sl. Celkový počet HP přes 693 DRG řádků = 1789575, přesná shoda. Rok 2024, CZ-DRG 6.0. |
 | 37 | ois-11-46 | d6 Lůžková péče | PASS | 6.5 dní (průměrná délka) (2024) | 6,46 dní (vážená ALOS) | LOS dle DRG skupin!D10:D1732 (vážený počtem HP) | Vážený průměr ALOS přes 1723 DRG = 6,461 → zaokr. 6,5 dne. XLSX bez ČR-celkem řádku. Rok 2024. |
 | 38 | ois-11-47 | d5 Struktura pojištěnců a náklady ZP | PASS | 10.85 mil. pojištěnců (2025) | 10 851 604 pojištěnců = 10,85 mil. | Data!sl. G (součet řádků Rok=2025) | ČR-celkový součet pojištěnců za 2025 = 10851604 → zaokr. 10,85 mil. Edice 2026-01. Sada je externí (interaktivní atlas). |
-| 39 | ois-11-48 | d6 Lůžková péče | TODO | 5727 intenzivních lůžek (2024) |  |  |  |
-| 40 | ois-11-49 | d6 Lůžková péče | TODO | 821 lůžek ARO (2024) |  |  |  |
-| 41 | ois-11-50 | d6 Lůžková péče | TODO | 299.4 mld. Kč (2024) |  |  |  |
-| 42 | ois-11-51 | d6 Lůžková péče | TODO | 91.8 % případů v centrech |  |  |  |
+| 39 | ois-11-48 | d6 Lůžková péče | PASS | 5727 intenzivních lůžek (2024) | 5727 nasmlouvaných lůžek | hodnocení!sl. U (součet 606 IČZ, Rok 2024) | Součet sl. Celkový počet nasmlouvaných lůžek 2024 přes pracoviště = 5727, přesná shoda. Stav 30.03.2026. |
+| 40 | ois-11-49 | d6 Lůžková péče | PASS | 821 lůžek ARO (2024) | 821 lůžek ARO | rok 2024!K204 (CELKEM) | ČR-celkový řádek CELKEM (sl. CELKEM LŮŽKA ARO) = 821, shoduje se i se součtem poskytovatelů. Rok 2024. |
+| 41 | ois-11-50 | d6 Lůžková péče | PASS | 299.4 mld. Kč (2024) | 299 376 961 tis. Kč = 299,4 mld. Kč | 2024!M189 (CELKEM) | Celkové náklady PALP, řádek CELKEM M189 = 299,4 mld. Zdroj sl. M = výkaz E 6-02. Rok 2024. |
+| 42 | ois-11-51 | d6 Lůžková péče | PASS | 91.8 % případů v centrech | 91,75 % (58501/63758 HP v CVSP) | Sheet1!E19:E1786,G19:G1786 (filtr Centralizace dle ÚV=ano) | Podíl HP v CVSP u 258 DRG skupin určených k centralizaci za 2024 = 91,75 % → zaokr. 91,8 %. Headline bez roku — XLSX rok 2024. |
 | 43 | pps-08-01 | d9 Doplňkové registry a otevřená data | TODO | 33.1 % účast u praktického lékaře (2023) |  |  |  |
-| 44 | sss-04-02 | d9 Doplňkové registry a otevřená data | TODO | 16.408 CT na milion obyvatel (2024) |  |  |  |
+| 44 | sss-04-02 | d9 Doplňkové registry a otevřená data | PASS | 16.408 CT na milion obyvatel (2024) | 16,4077 → 16,408 CT na milion obyvatel | Vývoj_v_ČR!U27 | CT na milion obyvatel, list Vývoj_v_ČR ř.27 sl. U = 16,4077 → zaokr. 16,408. Ověřeno i poměrem 179 přístrojů / 10909500 obyv. k 31.12.2024. Edice 2025-01. |
