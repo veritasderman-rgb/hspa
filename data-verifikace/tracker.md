@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **23 / 44 PASS** · TODO 19 · PASS 23 · FAIL 1 · BLOCKED 1
+Stav: **28 / 44 PASS** · TODO 13 · PASS 28 · FAIL 2 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -33,12 +33,12 @@ Stav: **23 / 44 PASS** · TODO 19 · PASS 23 · FAIL 1 · BLOCKED 1
 | 23 | ois-11-28 | d6 Lůžková péče | PASS | 76587 lůžek (2024) | 76587 lůžek (akutní 48036 + následná 28551) | Data!M21:M2378 + P21:P2378 | Součet sl. Akutní Celkem + Následná Celkem za 2024 = 76587, přesná shoda. Řady 2023/2024 sedí. |
 | 24 | ois-11-30 | d7 Komunitní ošetřovatelská péče | PASS | 8048294 kontaktů (2024) | 8048294 kontaktů | 2024!E+L+S ř.18:289 (odb. 913+925+926) | Součet kontaktů odborností 913+925+926 list 2024 = 8048294, přesná shoda. Pozn.: method_note portálu uvádí jen 913+925, headline zahrnuje i 926 (paliativní) — nepřesnost v popisu metody, ne v čísle. |
 | 25 | ois-11-31 | d7 Komunitní ošetřovatelská péče | PASS | 12.68 mld. Kč (2024) | 12 684 545 987 Kč = 12,68 mld. Kč | Data!K20:K5901 (součet Úhrady 2024) | Součet úhrad 2024 přes 5881 řádků = 12,68 mld. Řada 2023 sedí. Zprac. 20.02.2026. |
-| 26 | ois-11-32 | d8 Jednodenní péče | TODO | 27987 smluvních kombinací (2024) |  |  |  |
-| 27 | ois-11-33 | d8 Jednodenní péče | TODO | 200115 výkonů (2024) |  |  |  |
-| 28 | ois-11-35 | d1 Ceny a objemy | TODO | 4.6 mld. Kč (2024) |  |  |  |
-| 29 | ois-11-36 | d1 Ceny a objemy | TODO | 42.4 mld. Kč (2024) |  |  |  |
-| 30 | ois-11-37 | d6 Lůžková péče | TODO | 1808472 hospitalizačních případů |  |  |  |
-| 31 | ois-11-38 | d6 Lůžková péče | TODO | 825011 výkonů převzetí od ZZS (2024) |  |  |  |
+| 26 | ois-11-32 | d8 Jednodenní péče | PASS | 27987 smluvních kombinací (2024) | 27987 datových řádků | List1!A18:A28004 | Počet datových řádků (kombinace pracoviště×výkon, odb. J) = 27987, přesná shoda. Zprac. 30.10.2025, rok 2024. |
+| 27 | ois-11-33 | d8 Jednodenní péče | FAIL | 200115 výkonů (2024) | 400230 výkonů | List1!U18:U8453 (součet množství výkonů 2024) | NESHODA: portál 200115, XLSX součet = 400230 — portál je systematicky 2× nižší (ratio 2,0 pro všech 6 let řady 2019–2024). Jednotka i zdroj sedí, hodnota ne. |
+| 28 | ois-11-35 | d1 Ceny a objemy | PASS | 4.6 mld. Kč (2024) | 4 569 453 027 Kč ≈ 4,57 mld. Kč | Celkem!AG17:AU23 (součet Úhrada od ZP) | Součet úhrad od ZP napříč typy IVLP list Celkem = 4,569 mld → zaokr. 4,6 mld. Edice 2025-02, ref. rok 2024. |
+| 29 | ois-11-36 | d1 Ceny a objemy | PASS | 42.4 mld. Kč (2024) | 42 413 696 532 Kč ≈ 42,4 mld. Kč | HVLP na recept!F19:F4856 (součet) | Součet sl. Úhrada od ZP za vykázaná léčiva (HVLP na recept, 4838 řádků) = 42,4 mld. Rok 2024. |
+| 30 | ois-11-37 | d6 Lůžková péče | PASS | 1808472 hospitalizačních případů | 1808472 hospitalizačních případů | Nákladovost DRG skupin!C19:C1811 (součet) | Součet sl. Počet hospitalizačních případů ČR přes 1793 DRG skupin = 1808472, přesná shoda. Zprac. 19.02.2026, rok 2024. |
+| 31 | ois-11-38 | d6 Lůžková péče | PASS | 825011 výkonů převzetí od ZZS (2024) | 825011 výkonů | Data!I20:I194 (součet 175 IČZ) | Součet výkonů kódu 09564 (převzetí pacienta od ZZS) přes pracoviště = 825011, přesná shoda. Stav k 08.02.2026, rok 2024. |
 | 32 | ois-11-39 | d6 Lůžková péče | TODO | 47.7 % případů v referenční síti (2024) |  |  |  |
 | 33 | ois-11-40 | d6 Lůžková péče | TODO | 109393 unikátních pacientů (2022) |  |  |  |
 | 34 | ois-11-41 | d3 Produkce nelůžkové péče | TODO | 1055707 výjezdů ZZS (2024) |  |  |  |
