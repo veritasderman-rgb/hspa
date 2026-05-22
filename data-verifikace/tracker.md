@@ -4,7 +4,7 @@
 > (soubor není v repu — produkce je před repozitářem). Snapshot: `nzip-cache/portal-dohodovaci-rizeni.json`.
 > XLSX zdroj každé sady = `source.latest_file`, viz `nzip-mapovani.md`. Verifikace je READ-ONLY.
 
-Stav: **12 / 44 PASS** · TODO 31 · PASS 12 · FAIL 0 · BLOCKED 1
+Stav: **15 / 44 PASS** · TODO 27 · PASS 15 · FAIL 1 · BLOCKED 1
 
 | # | id | dimenze | status | hodnota_portal | hodnota_nzip | list+buňka | poznámka |
 |---|---|---|---|---|---|---|---|
@@ -23,10 +23,10 @@ Stav: **12 / 44 PASS** · TODO 31 · PASS 12 · FAIL 0 · BLOCKED 1
 | 13 | ois-11-15 | d2 Personální zabezpečení | PASS | 124730 Kč / měsíc (2024) | 124730,37 Kč/měs | Plat_2024!C36 | Medián hrubého měsíčního platu — lékaři specialisté (ISPV 2212), platová sféra 2024. Zaokr. 124730. |
 | 14 | ois-11-16 | d2 Personální zabezpečení | TODO | 18.4 % pracovníků 60+ (2024) |  |  |  |
 | 15 | ois-11-17 | d6 Lůžková péče | TODO | 167.41 mld. Kč (2024) |  |  |  |
-| 16 | ois-11-18 | d3 Produkce nelůžkové péče | TODO | 16.3 mld. Kč (2024) |  |  |  |
-| 17 | ois-11-19 | d3 Produkce nelůžkové péče | TODO | 77181183 receptů (2024) |  |  |  |
-| 18 | ois-11-20 | d3 Produkce nelůžkové péče | TODO | 11176 poskytovatelů (2024) |  |  |  |
-| 19 | ois-11-21 | d3 Produkce nelůžkové péče | TODO | 4320 poskytovatelů (2024) |  |  |  |
+| 16 | ois-11-18 | d3 Produkce nelůžkové péče | PASS | 16.3 mld. Kč (2024) | 16,3048 mld. Kč (16 304 838 547 Kč) | 2024!G19:G24210 (součet Suma Kč) | Součet sl. Suma Kč listu 2024 (24192 řádků) = 16,3 mld po zaokrouhlení. XLSX bez ČR-celkem řádku. Zprac. 30.10.2025. |
+| 17 | ois-11-19 | d3 Produkce nelůžkové péče | PASS | 77181183 receptů (2024) | 77 181 183 receptů | 2024!I18:I4134 (součet) | Součet sl. Počet vykázaných receptů listu 2024 (4117 řádků) = 77181183, přesná shoda. Série 2023 též sedí. Zprac. 30.10.2025. |
+| 18 | ois-11-20 | d3 Produkce nelůžkové péče | PASS | 11176 poskytovatelů (2024) | 11176 poskytovatelů | Data!I21:I106 (součet) | Součet PZS celkem za 86 okresů = 11176 (krajský žebříček). Pozn.: I107=5588 je deduplikovaný unikátní počet PZS; portál správně používá okresní součet. |
+| 19 | ois-11-21 | d3 Produkce nelůžkové péče | FAIL | 4320 poskytovatelů (2024) | 2160 poskytovatelů | Data!H109 | NESHODA: portál 4320, XLSX CELKEM (sl. PZS celkem, H109) = 2160 — portál je přesně 2× vyšší (pravděpodobně dvojí započtení). Jednotka, rok 2024 i zdroj sedí. |
 | 20 | ois-11-24 | d5 Struktura pojištěnců a náklady ZP | TODO | 459 mld. Kč (2023) |  |  |  |
 | 21 | ois-11-25 | d6 Lůžková péče | TODO | 1792276 hospitalizačních případů (2024) |  |  |  |
 | 22 | ois-11-27 | d6 Lůžková péče | TODO | 8895523 ošetřovacích dnů (2024) |  |  |  |
