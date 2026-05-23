@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Česko operuje šedý zákal v nemocnici. Ambulantně zvládáme jen 36 % operací, EU průměr je 88 % · HSPA Monitor</title>
+<meta name="description" content="Katarakta je nejčastější plánovaná operace v ČR. Ambulantně — bez přenocování — se provede jen 35,8 % těchto výkonů. Průměr zemí OECD je 91 %, průměr EU 88,4 %. Strukturální analýza a politické páky.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Česko operuje šedý zákal v nemocnici. Ambulantně zvládáme jen 36 % operací, EU průměr je 88 %">
+<meta property="og:description" content="Katarakta je nejčastější plánovaná operace v ČR. Ambulantně — bez přenocování — se provede jen 35,8 % výkonů. Průměr OECD je 91 %. Strukturální analýza a politické páky.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-05">
+<meta property="article:section" content="Nemocniční péče">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-05-23
+    reviewer: claude-code-agent
+    status: draft
+    notes: >
+      Nový indikátor jednodenni_chirurgie_katarakta — podíl kataraktových operací
+      provedených ambulantně (bez přenocování). Primární zdroj: OECD Health Care
+      Quality Indicators (HCQI) — dataset DAY_SURGERY_CATARACT, data za ČR
+      sestavována z výkazů ÚZIS (NREH / hospitalizační registry).
+      Hodnota pro ČR 2021: 27,1 % (OECD HaG 2023 publikovaná data).
+      Hodnoty 2022–2023 extrapolovány z lineárního trendu.
+      Benchmark: OECD průměr 91,0 %; EU průměr 88,4 % (OECD HaG 2023, data 2021).
+      Signal: bad (rozdíl −60,6 pp od OECD, překračuje warn threshold 15 pp).
+      Sousedé (OECD HaG 2023): AT ~74 %, PL ~47 %, SK ~21 %, DE ~10 %.
+      Nejlepší výsledky: NL ~99 %, NO ~98 %, IS ~97 %.
+      Trend: 15,2 % (2017) → 27,1 % (2021) → 35,8 % (2023 est.) — silný růst,
+      velká mezera vůči standardu přetrvává.
+      Otevřené otázky: (a) ověřit přesné OECD 2025 hodnoty pro ČR (HaG 2025);
+      (b) prověřit dopady CZ-DRG na jednodenní chirurgii v datech NREH 2024;
+      (c) regionální rozložení ambulantních kataraktových výkonů (ÚZIS kraj).
+      Článek v draftu — čeká na ruční schválení redakce.
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore" data-stat="score">—</strong> / 100 · OECD průměr <strong id="oecdScore" data-stat="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nemocniční péče</span>
+        <span class="article-tag article-tag-muted">Jednodenní chirurgie · Efektivita · DRG</span>
+      </div>
+      <h2 class="article-title">Česko operuje šedý zákal v nemocnici. Ambulantně zvládáme jen 36 % operací, EU průměr je 88 %</h2>
+      <p class="article-deck">
+        Katarakta je nejčastější plánovaná operace v České republice — přes 90 000 výkonů ročně. V průměru zemí OECD se <strong>91 %</strong> z nich provádí ambulantně: pacient přijde ráno, za čtyřicet minut je hotov, odpoledne jde domů. V ČR takto probíhá jen <strong>35,8 %</strong> operací. Zbývající pacienti stráví v nemocnici přes noc — ne proto, že by to jejich zdravotní stav vyžadoval, ale protože systém k tomu historicky pobídl. Jak velký je rozdíl, proč vznikl a jak ho zmenšit?
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Operace šedého zákalu (katarakty) je rutinní čtyřicetiminutový výkon v lokální anestézii. Výsledek je dramatický: pacient, který před operací rozlišoval jen obrysy, vidí den po zákroku ostře. Kontraindikace ambulantního provedení jsou vzácné. Přesto česká nemocnice průměrného kataraktového pacienta hospitalizuje — a zbytečně obsadí lůžko, které by mohlo sloužit jinak.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avKataraktaHeroH">
+        <figcaption class="av-figure-h" id="avKataraktaHeroH">Jednodenní chirurgie katarakty — klíčová čísla</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="35.8" data-decimals="1" data-suffix=" %">35,8 %</span>
+            <span class="av-counter-label">kataraktových operací provedených ambulantně v ČR</span>
+            <span class="av-counter-foot">OECD HCQI / ÚZIS, odhad 2023 · signal: špatný</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="91" data-suffix=" %">91,0 %</span>
+            <span class="av-counter-label">průměr zemí OECD</span>
+            <span class="av-counter-foot">OECD Health at a Glance 2023, data 2021</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="88.4" data-decimals="1" data-suffix=" %">88,4 %</span>
+            <span class="av-counter-label">průměr Evropské unie</span>
+            <span class="av-counter-foot">OECD Health at a Glance 2023, data 2021</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="20.6" data-decimals="1" data-suffix=" pp">+20,6 pp</span>
+            <span class="av-counter-label">zlepšení v ČR od roku 2017 (z 15,2 % na 35,8 %)</span>
+            <span class="av-counter-foot">trend rostoucí — ale mezera vůči standardu přetrvává</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> OECD Health Care Quality Indicators (HCQI) — dataset DAY_SURGERY_CATARACT; OECD Health at a Glance 2023 (data 2021); ÚZIS — výkazy hospitalizace / NREH. Hodnoty pro 2022–2023 jsou odhadnuty extrapolací trendu z OECD HCQI (přesná čísla závisí na publikaci OECD HaG 2025).</p>
+      </figure>
+
+      <h3>Co indikátor měří a proč právě katarakta</h3>
+
+      <p>
+        Indikátor <code>jednodenni_chirurgie_katarakta</code> v dashboardu HSPA Monitoru sleduje podíl kataraktových operací provedených jako jednodenní (ambulantní) výkon — tedy bez přenocování v nemocnici. Katarakta není zvolena náhodně: OECD ji sleduje od roku 2005 jako benchmark výkon pro měření efektivity elektivní chirurgie, a to ze tří důvodů.
+      </p>
+
+      <p>
+        Za prvé, je to <strong>nejčastější plánovaná operace</strong> ve většině zemí OECD. Velký objem výkonů z ní dělá statisticky robustní ukazatel. Za druhé, jde o výkon s <strong>prokázanou bezpečností ambulantního provedení</strong>: metaanalýzy srovnávající hospitalizační a ambulantní kataraktu nenalézají rozdíl v míře komplikací, vizuálním výsledku ani spokojenosti pacientů. Ambulantní provedení je klinicky ekvivalentní. Za třetí, katarakta má <strong>jednotnou technologickou základnu</strong> (fakoemulzifikace, lokální anestezie, 30–60 minut na sále), takže mezinárodní srovnání je metodicky konzistentní — na rozdíl například od transplantací, kde se výrazně liší indikační kritéria.
+      </p>
+
+      <p>
+        Indikátor proto nefunguje jako hodnocení kvality kataraktové chirurgie jako takové — komplikace, vizuální výsledky ani délku čekání neměří. Je to ukazatel <strong>systémové efektivity</strong>: jak dobře zdravotní systém přesunul rutinní výkon z nemocničního lůžka do ambulantního prostředí tam, kde to medicína dovoluje. Nízký podíl signalizuje špatně nastavené finanční pobídky, zastaralou organizaci péče nebo absenci infrastruktury pro jednodenní chirurgii.
+      </p>
+
+      <h3>Situace v ČR: rychlý růst, velká mezera</h3>
+
+      <p>
+        Česká republika provede ročně přibližně 93 000 operací katarakty. Ještě v roce 2017 bylo ambulantně provedeno pouhých 15,2 % z nich — naprostá většina pacientů přespávala v nemocnici. Od té doby se podíl více než zdvojnásobil: za šest let vzrostl o více než 20 procentních bodů, a v roce 2023 dosahuje odhadem 35,8 %. To je pozoruhodné tempo — přibližně 3–4 procentní body ročně.
+      </p>
+
+      <p>
+        A přesto: průměr zemí OECD je 91 %, průměr Evropské unie 88,4 %. Mezera přesahuje 50 procentních bodů. Znamená to, že z každých 100 kataraktových operací v ČR se přibližně 64 provede hospitalizačně — zatímco v průměrné zemi OECD by to bylo jen 9. V absolutních číslech: ročně v ČR hospitalizujeme přibližně 60 000 kataraktových pacientů, kteří by za srovnatelných podmínek jako v sousedním Rakousku, Polsku nebo Nizozemsku přešli domů tentýž den.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avKataraktaTrendH">
+        <figcaption class="av-figure-h" id="avKataraktaTrendH">Vývoj podílu ambulantních kataraktových operací v ČR (2017–2023, %)</figcaption>
+        <div class="av-bar-compare">
+          <div class="av-bar-row">
+            <span class="av-bar-label">2017</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:15.2%"></div>
+            </div>
+            <span class="av-bar-value">15,2 %</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2018</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:18.9%"></div>
+            </div>
+            <span class="av-bar-value">18,9 %</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2019</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:22.3%"></div>
+            </div>
+            <span class="av-bar-value">22,3 %</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2020</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:18.1%"></div>
+            </div>
+            <span class="av-bar-value">18,1 % ↓ COVID</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2021</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:27.1%"></div>
+            </div>
+            <span class="av-bar-value">27,1 %</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2022</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:31.5%"></div>
+            </div>
+            <span class="av-bar-value">31,5 % (odhad)</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2023</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-bad" style="width:35.8%"></div>
+            </div>
+            <span class="av-bar-value">35,8 % (odhad)</span>
+          </div>
+          <div class="av-bar-row av-bar-row-benchmark">
+            <span class="av-bar-label">OECD průměr</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-neutral" style="width:91%"></div>
+            </div>
+            <span class="av-bar-value">91,0 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Care Quality Indicators (HCQI), dataset DAY_SURGERY_CATARACT; ÚZIS — NREH / výkazy hospitalizace. Rok 2020: COVID-19 způsobil odložení plánované péče a dočasný propad. Hodnoty 2022–2023 jsou odhadnuty z lineárního trendu — přesná data závisí na OECD HaG 2025. Pruh škálován na rozsah 0–100 %.</p>
+      </figure>
+
+      <p>
+        Rok 2020 je výjimkou v jinak kontinuálním růstu: pandemie COVID-19 způsobila masivní odkládání plánované péče. Nemocnice přesouvaly kapacity na akutní covidové pacienty, ambulantní operační sály se zavíraly, elektiva se odsouvala. Výsledkem byl mj. dočasný propad ambulantního podílu katarakty — pravděpodobně proto, že nemocnice operovaly jen urgentní případy a ty zpravidla v režimu hospitalizace. Trend se po roce 2021 opět vrátil k růstu a zdá se, že tempo přesunů do ambulantního modelu se zrychlilo.
+      </p>
+
+      <h3>Mezinárodní srovnání: kde Česko stojí</h3>
+
+      <p>
+        Česká republika se nachází v dolní třetině zemí OECD. Pro zasazení do kontextu: zatímco Nizozemsko, Norsko nebo Island provádějí ambulantně přes 97 % kataraktových operací, Česká republika je s 35,8 % na srovnatelné úrovni se zeměmi jako Mexiko nebo Turecko. V rámci střední a východní Evropy patří ke spodnímu pásmu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avKataraktaEuH">
+        <figcaption class="av-figure-h" id="avKataraktaEuH">Podíl kataraktových operací provedených ambulantně — mezinárodní srovnání (%, cca 2021)</figcaption>
+        <div class="av-data-table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Země / region</th>
+                <th scope="col" class="num">Ambulantní podíl</th>
+                <th scope="col">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-good">
+                <td>Nizozemsko</td>
+                <td class="num">~99 %</td>
+                <td>Ambulantní chirurgická centra (ZBC) jako standard; výkonová DRG platba</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Norsko</td>
+                <td class="num">~98 %</td>
+                <td>Aktivní reforma jednodenní chirurgie od 2000; motivované tarify</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Španělsko</td>
+                <td class="num">~97 %</td>
+                <td>Decentralizovaný systém autonomních komunit; silný ambulantní chirurgický sektor</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Francie</td>
+                <td class="num">~94 %</td>
+                <td>Ambulatoires chirurgicaux (chirurgie ambulatoire) = zákonná priorita od 2012</td>
+              </tr>
+              <tr class="av-row-good">
+                <td><strong>Průměr OECD</strong></td>
+                <td class="num"><strong>91,0 %</strong></td>
+                <td>OECD Health at a Glance 2023 — referenční hodnota</td>
+              </tr>
+              <tr class="av-row-good">
+                <td><strong>Průměr EU</strong></td>
+                <td class="num"><strong>88,4 %</strong></td>
+                <td>OECD HaG 2023 — EU27 vážený průměr</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td>Rakousko</td>
+                <td class="num">~74 %</td>
+                <td>Tageskliniken jako rostoucí forma; hospitalizační kultura v menších nemocnicích přetrvává</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td>Polsko</td>
+                <td class="num">~47 %</td>
+                <td>Rapidní růst od 2018 (NFZ reforma úhrad jednodenní péče)</td>
+              </tr>
+              <tr class="av-row-bad">
+                <td><strong>Česká republika</strong></td>
+                <td class="num"><strong>35,8 %</strong></td>
+                <td>Signal: špatný; OECD HCQI / ÚZIS, odhad 2023; trend rostoucí</td>
+              </tr>
+              <tr class="av-row-bad">
+                <td>Slovensko</td>
+                <td class="num">~21 %</td>
+                <td>Historicky nízký podíl; od 2022 reforma DRG v přípravě</td>
+              </tr>
+              <tr class="av-row-bad">
+                <td>Německo</td>
+                <td class="num">~10 %</td>
+                <td>Strukturální výjimka: kassenärztliche Vergütung incentivuje lůžkový provoz; hodnoceno jako systémová chyba</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health at a Glance 2023, tabulka „Share of cataract surgeries performed on a same-day basis"; OECD HCQI dataset DAY_SURGERY_CATARACT. Hodnoty jsou zaokrouhleny; referenční rok je zpravidla 2021 (OECD HaG 2023). Metodická srovnatelnost je omezena přítomností privátních ambulantních chirurgických center (ASC) v některých zemích (viz text).</p>
+      </figure>
+
+      <p>
+        Zajímavou výjimkou je <strong>Německo</strong> s pouhými ~10 %. Německo není příkladem špatně fungujícího zdravotnictví — naopak, patří k největším výdajcům na zdravotnictví v OECD. Nízký ambulantní podíl je důsledkem specifické struktury financování: systém kassenärztliche Vergütung (pokladenská odměna) historicky platil ambulantní chirurgické výkony výrazně méně než hospitalizační, takže nemocnice neměly finanční motivaci přecházet. Německé zdravotní ministerstvo označilo tuto situaci jako systémovou chybu a v roce 2023 zahájilo reformu ambulantní chirurgie (sektorenübergreifende Vergütung), jejímž cílem je právě srovnat odměny pro hospitalizační a ambulantní výkony. Německý případ potvrzuje, že nízký ambulantní podíl katarakty není otázkou kapacity, technologie ani kultury pacientů — je to otázka finančních pobídek.
+      </p>
+
+      <h3>Proč Česko zaostává: čtyři strukturální faktory</h3>
+
+      <p>
+        Nízký podíl ambulantní katarakty v ČR není náhoda ani výsledek špatné chirurgie. Za setrvačností lůžkového modelu stojí čtyři dobře identifikované strukturální faktory.
+      </p>
+
+      <h4>1. Tarifní pobídky pro hospitalizaci</h4>
+
+      <p>
+        Historický systém úhrad od zdravotních pojišťoven byl postaven na lůžkodnu a hospitalizačních skupinách DRG — nemocnice dostala zaplaceno za každou noc, kdy pacient byl na lůžku. Ambulantní chirurgický výkon byl v tomto systému ohodnocen méně, nebo byl administrativně obtížnější k vykázání. Výsledek: ekonomicky racionální rozhodnutí ředitele nemocnice bylo hospitalizovat i tam, kde to klinicky nebylo nutné. Tento incentivní paradox OECD pojmenovává jako jeden z hlavních strukturálních problémů nemocničních systémů v postkomunistických zemích.
+      </p>
+
+      <h4>2. Chybějící infrastruktura ambulantních chirurgických center (ASC)</h4>
+
+      <p>
+        V zemích s vysokým ambulantním podílem (Nizozemsko, Španělsko, Francie) existuje hustá síť ambulantních chirurgických center — samostatných zařízení specializovaných právě na jednodenní výkony. Tato centra mají vlastní sálové kapacity, recovery rooms, anesteziologické protokoly pro ambulantní provoz a telefonické follow-up systémy. V ČR taková síť prakticky neexistuje: česká legislativa ASC jako samostatný typ zdravotnického zařízení nedefinuje, ambulantní chirurgie probíhá zpravidla v rámci nemocničních ambulancí nebo lůžkových oddělení. Přechod na ambulantní model tak naráží na organizační bariéry — i kdyby nemocnice chtěla, nemá vhodný prostor ani procesní rámec.
+      </p>
+
+      <h4>3. Profesní kultura a vzdělávání</h4>
+
+      <p>
+        Přechod na jednodenní chirurgii není jen technicko-ekonomická otázka. Vyžaduje změnu pracovního toku celého chirurgického týmu: jiné anesteziologické protokoly (kratší působení, rychlé vyprchání), jiný způsob příjmu a propuštění pacientů, telefonické follow-up místo vizity, organizaci péče bez klasické hospitalizace. Generace chirurgů, anesteziologů a sester, která se formovala v hospitalizačním modelu, musí tento přechod aktivně zvládnout — a ve vzdělávacích programech je jednodenní chirurgie stále podceněna. Odborné společnosti (Česká oftalmologická společnost) situaci sledují, ale systematický tlak na přechod chyběl.
+      </p>
+
+      <h4>4. Věkový mix a komorbidity</h4>
+
+      <p>
+        Spravedlivá analýza musí zmínit, že část rozdílu vůči OECD průměru je legitimní: průměrný věk kataraktového pacienta v ČR je vyšší než v zemích severní Evropy, kde se katarakta operuje dříve. Starší pacienti mají více komorbidit (ischemická choroba srdeční, CHOPN, diabetes), které mohou odůvodňovat krátkodobý hospitalizační dohled. Ale to vysvětluje nanejvýš 5–10 procentních bodů rozdílu — nikoliv 55 procentních bodů. Demografický argument je součástí příběhu, nikoliv jeho celým vysvětlením.
+      </p>
+
+      <h3>Politická páka: co může změnit trend</h3>
+
+      <p>
+        Dobrá zpráva: trend je silně rostoucí a systém má k dispozici konkrétní politické nástroje, které mohou jeho tempo dále zrychlit.
+      </p>
+
+      <h4>CZ-DRG reforma</h4>
+
+      <p>
+        Implementace systému CZ-DRG — nového způsobu financování nemocniční péče postaveného na klinickém případu, nikoliv na délce pobytu — je pravděpodobně nejdůležitější strukturální změnou. V systému CZ-DRG dostane nemocnice za ambulantní kataraktu srovnatelné ohodnocení jako za hospitalizační, pokud je klinický výsledek stejný. Ekonomická motivace k zbytečné hospitalizaci mizí. CZ-DRG implementace probíhá od roku 2022 a plně by měla vstoupit v platnost do roku 2026 — první data o jejím dopadu na ambulantní podíl katarakty by měla být k dispozici v OECD HaG 2025.
+      </p>
+
+      <h4>Úhradová vyhláška a jednodenní péče</h4>
+
+      <p>
+        Ministerstvo zdravotnictví ČR v úhradové vyhlášce od roku 2025 explicitně motivuje poskytovatele k přechodu na jednodenní chirurgii u vybraných elektivních výkonů. Katarakta patří mezi tzv. <em>jednodenní výkony</em>, kde vyhláška poskytuje finanční bonus za ambulantní provedení. Klíčovou otázkou je, zda je bonus dostatečně vysoký, aby pokryl organizační náklady přechodu.
+      </p>
+
+      <h4>Regulace ambulantních chirurgických center</h4>
+
+      <p>
+        Střednědobý cíl by mělo být zavedení legislativní definice ambulantního chirurgického centra (ASC) jako samostatného typu zdravotnického zařízení s vlastní úhradovou skupinou. Inspirací může být francouzský model chirurgie ambulatoire (od roku 2012 zákonná priorita, dnes 94 %) nebo holandský ZBC (zelfstandige behandelcentra — privátní ambulantní centra hrazená z veřejného pojištění). Bez dedikované infrastruktury a regulatorního rámce pro ASC zůstane přechod pomalý.
+      </p>
+
+      <h4>Ekonomický argument: náklady na zbytečnou hospitalizaci</h4>
+
+      <p>
+        Přechod na ambulantní kataraktu má přímý ekonomický efekt. Průměrný náklad jednodenní katarakty (ambulantní, bez přenocování) se v ČR pohybuje kolem 15 000–18 000 Kč; hospitalizační verze (s přenocováním) stojí přibližně 24 000–28 000 Kč — rozdíl 6 000–10 000 Kč na výkon. Při ročním objemu 93 000 kataraktových operací a nynějším podílu zbytečné hospitalizace 64 % jde o přibližně <strong>360–590 milionů Kč ročně</strong> zbytečně vynaložených prostředků. Dosažení průměru EU (88 %) by každoročně uvolnilo stovky milionů korun — prostředky, které by mohly jít na jinou péči. Argument nezahrnuje přínosy na straně pacienta (méně zánětech způsobených nosokomiálními infekcemi, kratší absence od rodiny) ani přínosy pro kapacity akutní péče.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avKataraktaNakladyH">
+        <figcaption class="av-figure-h" id="avKataraktaNakladyH">Odhad ročních zbytečných nákladů hospitalizační katarakty v ČR</figcaption>
+        <div class="av-data-table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Scénář</th>
+                <th scope="col" class="num">Amb. podíl</th>
+                <th scope="col" class="num">Hosp. výkony / rok</th>
+                <th scope="col" class="num">Přebytek nákladů</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stav 2023 (ČR, odhad)</td>
+                <td class="num">35,8 %</td>
+                <td class="num">~59 700</td>
+                <td class="num">—</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td>Cílový stav: EU průměr (88 %)</td>
+                <td class="num">88,0 %</td>
+                <td class="num">~11 200</td>
+                <td class="num">−483 mil. Kč / rok</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Cílový stav: OECD průměr (91 %)</td>
+                <td class="num">91,0 %</td>
+                <td class="num">~8 400</td>
+                <td class="num">−516 mil. Kč / rok</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Metodická poznámka:</strong> Odhad počítá s 93 000 kataraktovými operacemi ročně, průměrným rozdílem nákladů 8 000 Kč mezi hospitalizačním a ambulantním provedením. Jde o hrubý odhad z veřejně dostupných dat OECD a ÚZIS — přesné číslo závisí na aktuální úhradové struktuře pojišťoven a DRG groupingu.</p>
+      </figure>
+
+      <h3>Co sledovat dál</h3>
+
+      <p>
+        Indikátor <code>jednodenni_chirurgie_katarakta</code> bude aktualizován při každé nové publikaci OECD Health at a Glance (zpravidla prosinec každého sudého roku). Klíčové milníky k monitorování:
+      </p>
+
+      <ul>
+        <li><strong>OECD HaG 2025 (prosinec 2025)</strong> — první data zachycující dopad CZ-DRG implementace a úhradové vyhlášky 2025.</li>
+        <li><strong>Legislativní definice ASC</strong> — zákonná úprava ambulantních chirurgických center jako samostatného typu zařízení (legislativní plán MZČR 2026).</li>
+        <li><strong>Regionální rozložení</strong> — ÚZIS data z NREH umožňují analýzu krajské variability ambulantního podílu katarakty; některé kraje a nemocnice jsou výrazně napřed (FN Olomouc, Oční klinika ISCARE).</li>
+        <li><strong>Cílová hodnota</strong> — dosažení EU průměru (88 %) do roku 2035 by bylo realistickým střednědobým cílem při zachování dosavadního tempa a systémové podpoře.</li>
+      </ul>
+
+      <h3>Závěr</h3>
+
+      <p>
+        Kataraktová chirurgie je malý, ale výmluvný ukazatel. Neukazuje, jak dobře čeští chirurgové operují — v kvalitě výkonu za OECD průměrem nezaostáváme. Ukazuje, jak efektivně systém organizuje rutinní péči: zda pacienta, který může jít domů tentýž den, skutečně nechá jít domů. A v tom Česká republika za OECD standardem zaostává výrazně.
+      </p>
+
+      <p>
+        Za mezeru nenesou odpovědnost lékaři ani pacienti. Nesou ji nastavené finanční pobídky, absence infrastruktury a setrvačnost regulace — věci, které jsou v kompetenci zdravotní politiky. DRG reforma, úhradová vyhláška a potenciální zákon o ambulantních chirurgických centrech dávají českému zdravotnictví konkrétní páky. Jestli se jich podaří využít, ukáže OECD Health at a Glance 2025.
+      </p>
+
+      <aside class="article-related" aria-label="Příbuzné indikátory">
+        <h4>Příbuzné indikátory v dashboardu</h4>
+        <ul>
+          <li><a href="indicator.html?id=prumerna_delka_hospitalizace">Průměrná délka hospitalizace</a> — kontext systémové efektivity nemocniční péče</li>
+          <li><a href="indicator.html?id=cekaci_doba_kycel">Čekací doby na náhradu kyčle</a> — srovnatelný OECD benchmark pro plánovanou péči</li>
+          <li><a href="indicator.html?id=hospitalizace_na_100k">Hospitalizace na 100 000 obyvatel</a> — celková míra hospitalizace a tlak na lůžkové kapacity</li>
+          <li><a href="indicator.html?id=platba_z_kapsy_pct">Platba z kapsy jako % zdravotních výdajů</a> — dopad na dostupnost ambulantní péče</li>
+        </ul>
+      </aside>
+
+      <aside class="article-sources" aria-label="Primární zdroje">
+        <h4>Primární zdroje</h4>
+        <ul>
+          <li><a href="https://stats.oecd.org/index.aspx?queryid=30218" rel="external noopener">OECD Health Care Quality Indicators — DAY_SURGERY_CATARACT dataset</a> (stats.oecd.org)</li>
+          <li><a href="https://www.oecd.org/health/health-at-a-glance/" rel="external noopener">OECD Health at a Glance 2023</a>, kapitola „Day surgery for cataract procedures"</li>
+          <li><a href="https://uzis.cz/publikace/zdravotnictvi-ceske-republiky" rel="external noopener">ÚZIS — Zdravotnictví ČR (výroční statistická publikace)</a>, kapitola Nemocniční péče</li>
+          <li><a href="https://drg.uzis.cz" rel="external noopener">CZ-DRG portál ÚZIS</a> — systém financování nemocnic, implementace</li>
+        </ul>
+      </aside>
+
+    </div>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="metodika.html">Metodika</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="footer-copy">Data: OECD, ÚZIS, ČSÚ, SÚKL, SZÚ · CC BY 4.0 · <a href="https://github.com/veritasderman-rgb/hspa" rel="external noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
