@@ -1,0 +1,46 @@
+{
+  "id": "umrti_doma_nebo_hospici_pct",
+  "name": "Podíl zemřelých doma nebo v hospici",
+  "area": "Výstupy",
+  "domain": "Paliativní péče",
+  "subdomain": "Místo úmrtí",
+  "definition": "Podíl všech zemřelých, kteří zemřeli doma nebo v hospici (nikoliv v nemocnici, LDN nebo jiném lůžkovém zařízení). Čím vyšší hodnota, tím více lidí umírá v preferovaném prostředí.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_publication",
+      "endpoint": "https://uzis.cz/res/f/008302/umrti-2023.pdf",
+      "dataset": "Zemřelí — roční publikace ÚZIS",
+      "dimensions": {
+        "place_of_death": "doma + hospic",
+        "uzemi": "CZ"
+      }
+    },
+    "fallback": {
+      "type": "web_table",
+      "url": "https://uzis.cz/publikace/zemreli"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HOSP_DEATH",
+    "dataset": "HEALTH_STAT",
+    "value": 32.0,
+    "url": "https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance-2023_7a7afb35-en"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZČR"
+  ],
+  "method_notes": "Data z Listu o prohlídce zemřelého (LPZ). Kategorie: doma + v hospici (nezahrnuje LDN/domovy seniorů). Mezinárodní srovnání: OECD sleduje hospitalizační mortalitu jako inverzní ukazatel; home/hospice podíl odvozujeme jako 100 % − nemocniční morte. OECD průměr ~32 % (2021).",
+  "limitations": "Různé země definují 'hospic' odlišně; část zemřelých mimo nemocnici tvoří LDN/sociální zařízení, nikoliv domov. Trend ovlivněn COVID-19 vlnami (2020–2021 anomálie). Přání pacienta zemřít doma není vždy dokumentováno.",
+  "patient_story": "Hradec Králové, podzim 2024. Jana Nováková, 74 let, pokročilá rakovina plic. Onkolog jí sdělil, že kurativní léčba skončila. Co dál? V ideálním světě by dostala kontakt na mobilní paliativní tým — lékaře a zdravotní sestry, kteří by k ní chodili domů, řídili bolest, byli dostupní 24 hodin. Mohla by zemřít v posteli, ve svém domě, s rodinou kolem. Ve skutečnosti: v Hradeckém kraji jsou mobilní hospicové týmy, ale kapacita je omezená a pojišťovna péči od roku 2023 hradí jen v rámci pilotního projektu. Jana nakonec skončila v nemocnici — ne proto, že chtěla, ale proto, že jiná možnost nebyla dostupná.\n\nV Česku zemřelo v roce 2022 přibližně 26 % lidí doma nebo v hospici. Zbývajících 74 % zemřelo v nemocnicích, LDN nebo sociálních zařízeních. Průměr zemí OECD je přitom okolo 32 %. Skandinávské země a Nizozemsko dosahují 40–50 %. Trend v Česku je rostoucí — v roce 2018 to bylo jen 22 % — ale vzdálenost od OECD průměru přetrvává.\n\nProč je místo úmrtí politicky relevantní? Výzkumy konzistentně ukazují, že většina lidí si přeje zemřít doma, v komfortu a s blízkými. Hospitalizace na konci života je zároveň jedním z nejvyšších zdrojů nákladů zdravotního systému — poslední měsíc života je v průměru nejdražší měsíc v celém zdravotnickém příběhu pacienta. Investice do mobilní paliativní péče má proto dvojí návratnost: zlepšuje kvalitu umírání a snižuje neefektivní výdaje na akutní lůžkové kapacity.\n\nČesko má od roku 2023 historicky první úhradový kód pro mobilní hospicové týmy — pilotní projekt VZP a dalších pojišťoven. Je to zásadní strukturální změna. Ale piloty pokrývají jen část krajů a kapacity jsou nedostatečné. Cíl — dosáhnout OECD průměru 32 %, tedy o 6 procentních bodů víc než dnes — vyžaduje rozšíření mobilních týmů ze současných ~70 na odhadovaných 120–130 po celé republice, regionálně vyrovnané krytí a stabilní úhradu bez pilotního omezení.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
