@@ -306,6 +306,7 @@ export function renderModuleNav(activeId) {
     { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
     { id: 'hspa-prehled', label: 'HSPA přehled',           href: 'hspa-prehled.html',       match: ['hspa-prehled.html'] },
     { id: 'kraje',       label: 'Krajský pohled',          href: 'kraje.html',              match: ['kraje.html'] },
+    { id: 'financovani', label: 'Financování',             href: 'financovani.html',        match: ['financovani.html'] },
     { id: 'dohodovaci-rizeni', label: 'Dohodovací řízení', href: 'dohodovaci-rizeni.html', match: ['dohodovaci-rizeni.html', 'pojistenci.html'] },
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
