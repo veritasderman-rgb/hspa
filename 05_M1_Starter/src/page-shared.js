@@ -4,8 +4,6 @@ import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
 
-const LS_AUDIENCE = 'zdrave-cesko/audience';
-
 /**
  * Vrátí `true`, pokud má článek být veřejně viditelný v daný okamžik.
  *
@@ -39,24 +37,12 @@ export function filterVisibleArticles(articles, now = new Date()) {
   return (articles ?? []).filter(a => isArticleVisible(a, now));
 }
 
-export function getAudience() {
-  try { return localStorage.getItem(LS_AUDIENCE) || 'public'; } catch { return 'public'; }
-}
-
-export function setAudience(aud) {
-  try { localStorage.setItem(LS_AUDIENCE, aud); } catch {}
-  document.body.dataset.audience = aud;
-  document.querySelectorAll('.aud-btn').forEach(b => b.classList.toggle('active', b.dataset.aud === aud));
-}
-
 /**
- * Vrátí TL;DR text indikátoru/strategie/explaineru podle uložené audience preference.
- * Fallback: public → expert.
+ * Vrátí TL;DR text indikátoru/strategie/explaineru. Dříve respektoval
+ * persona switcher (Veřejnost/Odborník/Politik), který byl odstraněn —
+ * nyní vždy preferuje tldr_public s fallbackem na expert/tldr.
  */
 export function audienceText(obj) {
-  const aud = getAudience();
-  if (aud === 'expert') return obj.tldr_expert ?? obj.tldr_public ?? obj.tldr ?? '';
-  if (aud === 'policy') return obj.tldr_policy ?? obj.tldr_expert ?? obj.tldr_public ?? obj.tldr ?? '';
   return obj.tldr_public ?? obj.tldr_expert ?? obj.tldr ?? '';
 }
 
@@ -73,37 +59,6 @@ export function renderMastheadDate(el = document.getElementById('mastheadDate'))
   renderHSPAScore();
   renderFooter();
   injectScrollToTop();
-  injectAudienceSwitch();
-}
-
-/**
- * Injectuje audience switch (Veřejnost / Odborník / Politik) do masthead-strip.
- * Hodnota se ukládá do localStorage a propisuje do `<body data-audience>`,
- * což umožní CSS pravidlům i komponentám (audienceText) přepínat obsah.
- * Idempotent — re-volání nevytvoří duplikát.
- */
-export function injectAudienceSwitch() {
-  if (typeof document === 'undefined') return;
-  const strip = document.querySelector('.masthead-strip');
-  if (!strip || strip.querySelector('.audience-switch')) return;
-  const current = getAudience();
-  const sw = document.createElement('div');
-  sw.className = 'audience-switch';
-  sw.setAttribute('role', 'group');
-  sw.setAttribute('aria-label', 'Pohled podle publika');
-  sw.innerHTML = [
-    { id: 'public', label: 'Veřejnost', desc: 'Srozumitelně, bez žargonu' },
-    { id: 'expert', label: 'Odborník', desc: 'Metodika a primární zdroje' },
-    { id: 'policy', label: 'Politik', desc: 'Doporučení a páky' },
-  ].map(o => `<button type="button" class="aud-btn${o.id === current ? ' active' : ''}" data-aud="${o.id}" title="${o.desc}" aria-pressed="${o.id === current ? 'true' : 'false'}">${o.label}</button>`).join('');
-  strip.appendChild(sw);
-  setAudience(current); // synchronize body[data-audience]
-  sw.addEventListener('click', (e) => {
-    const btn = e.target.closest('.aud-btn');
-    if (!btn) return;
-    setAudience(btn.dataset.aud);
-    sw.querySelectorAll('.aud-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.aud === btn.dataset.aud ? 'true' : 'false'));
-  });
 }
 
 /**

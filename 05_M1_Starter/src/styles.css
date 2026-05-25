@@ -132,10 +132,6 @@ header.topbar {
   background: var(--paper);
 }
 .masthead-strip .masthead-date { font-weight: 500; }
-.masthead-strip .masthead-score strong {
-  color: var(--ink);
-  font-weight: 700;
-}
 .modal-actions { margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end; }
 .card-notice {
   background: var(--paper2); border-left: 3px solid var(--red);
@@ -830,7 +826,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media print {
   /* Skryj interaktivní prvky */
   .topbar-actions,
-  .audience-switch,
   .dimnav,
   .domain-filter,
   .section-actions,
@@ -1198,7 +1193,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .brand h1 small { font-size: 10px; }
   header.topbar { padding: 10px 16px; }
   .topbar-actions { width: 100%; flex-wrap: wrap; gap: 10px; }
-  .btn-csv, .btn-theme, .btn-reload, .aud-btn {
+  .btn-csv, .btn-theme, .btn-reload {
     min-height: 40px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -3605,28 +3600,6 @@ ul.md-enum > li > strong:first-child {
   gap: 16px;
   flex-wrap: wrap;
 }
-.audience-switch {
-  display: flex;
-  gap: 2px;
-  margin-left: auto;
-}
-.aud-btn {
-  font-family: var(--sans);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 3px 10px;
-  border: 1px solid var(--rule);
-  background: transparent;
-  color: var(--ink-mut);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.aud-btn:hover { color: var(--ink); border-color: var(--ink-mut); }
-.aud-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.aud-btn:focus-visible { outline: 2px solid var(--accent, var(--red)); outline-offset: 2px; }
-
 /* Verified-only toggle v filter-bar — skryje preliminary/illustrative indikátory */
 .filter-verif-toggle {
   display: inline-flex;
@@ -3732,7 +3705,6 @@ ul.md-enum > li > strong:first-child {
 .topbar .hspa-abbr { border-bottom-color: rgba(255,255,255,0.3); }
 
 @media (max-width: 640px) {
-  .audience-switch { margin-left: 0; }
   .filter-bar-main { flex-direction: column; align-items: stretch; }
   .filter-bar .sort-select, .filter-bar .btn-export { width: 100%; }
 }
