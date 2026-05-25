@@ -1,47 +1,53 @@
 // Frontend logika stránky financovani.html.
 // Zobrazuje: Sankey diagram finančních toků, časovou řadu výdajů ZP,
 // indikátory domény Financování a publikované články s tématem financovani.
+//
+// Data: data/financing.json (kontrakt generovaný ingest/transform_financing.js).
+// Při výpadku fetch padá zpět na FALLBACK konstanty na konci souboru.
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
+import { registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
 
-// ── Sankey data (ZPP 2023, SHA 2011 — statická MVP data) ─────────────────────
-// Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty 2023, clanek-platba-statu-statni-pojistenci.html
-// Hodnoty v mld Kč, zaokrouhleno; zdroje × výdaje jsou symetricky 459 mld.
-// Malé výdajové segmenty (prostředky 11, lázně/stomato 10, doprava/ZZS 4) jsou sloučeny do "Ostatní péče".
+let FINANCING = null;
 
-const SANKEY_FLOWS = [
-  { from: 'Zaměstnanci a zaměstnavatelé', to: 'Systém ZP', flow: 269 },
-  { from: 'Stát (státní pojištěnci)',     to: 'Systém ZP', flow: 155 },
-  { from: 'OSVČ',                         to: 'Systém ZP', flow: 25  },
-  { from: 'Ostatní plátci',               to: 'Systém ZP', flow: 10  },
-  { from: 'Systém ZP', to: 'Lůžková péče',    flow: 257 },
-  { from: 'Systém ZP', to: 'Ambulantní péče', flow: 131 },
-  { from: 'Systém ZP', to: 'Léky (recept)',   flow:  46 },
-  { from: 'Systém ZP', to: 'Ostatní péče',    flow:  25 },
-];
+async function loadFinancing() {
+  try {
+    const res = await fetch('data/financing.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    FINANCING = await res.json();
+  } catch (err) {
+    console.warn('financing.json fallback (offline mode):', err.message);
+    FINANCING = FALLBACK_FINANCING;
+  }
+  return FINANCING;
+}
+
+function pickSankey(year) {
+  const s = FINANCING?.sankey ?? {};
+  if (s[year]) return s[year];
+  const keys = Object.keys(s).sort();
+  return keys.length ? s[keys[keys.length - 1]] : null;
+}
+
+function fmtPct(n) {
+  return Number(n).toFixed(1).replace('.', ',');
+}
 
 function renderFinancingSankey() {
   const container = document.getElementById('fnSankey');
   if (!container) return;
-  populateFallbackTable();
+  const data = pickSankey('2023');
+  if (!data) return;
+  populateFallbackTable(data);
 
-  const W = 900, H = 480, TOP = 36, NW = 12, GAP = 8, TOTAL = 459;
-  const UH = 432; // H - TOP - 12
-  const SCALE = (UH - 3 * GAP) / TOTAL; // 408/459
+  const TOTAL = data.total_mld_kc ?? data.sources.reduce((a, x) => a + x.value_mld_kc, 0);
+  const W = 900, H = 480, TOP = 36, NW = 12, GAP = 8;
+  const UH = 432;
+  const SCALE = (UH - 3 * GAP) / TOTAL;
 
-  const sources = [
-    { label: 'Zaměstnanci a zaměstnavatelé', value: 269, color: '#4a6fa5' },
-    { label: 'Stát (státní pojištěnci)',      value: 155, color: '#7a6a9c' },
-    { label: 'OSVČ',                          value:  25, color: '#5a8a6a' },
-    { label: 'Ostatní plátci',                value:  10, color: '#8a8070' },
-  ];
-  const targets = [
-    { label: 'Lůžková péče',    value: 257, pct: '55,9', color: '#B45F06' },
-    { label: 'Ambulantní péče', value: 131, pct: '28,5', color: '#38761D' },
-    { label: 'Léky (recept)',   value:  46, pct: '10,0', color: '#0B5394' },
-    { label: 'Ostatní péče',    value:  25, pct: ' 5,4', color: '#7A7070' },
-  ];
+  const sources = data.sources.map(s => ({ label: s.label, value: s.value_mld_kc, color: s.color }));
+  const targets = data.targets.map(t => ({ label: t.label, value: t.value_mld_kc, pct: fmtPct(t.share_pct), color: t.color }));
 
   const SRC_X = 200, ZP_X = 440, TGT_X = 700;
 
@@ -93,8 +99,8 @@ function renderFinancingSankey() {
 
   // Column headers
   s += t(106, 20, 'middle', 10, '#6b6357', '600', 'Zdroje pojistného');
-  s += t(446, 14, 'middle', 10, '#6b6357', '600', 'Systém ZP');
-  s += t(446, 27, 'middle',  9, '#6b6357', null,  '7 pojišťoven · 459 mld Kč');
+  s += t(446, 14, 'middle', 10, '#6b6357', '600', data.hub?.label ?? 'Systém ZP');
+  s += t(446, 27, 'middle',  9, '#6b6357', null,  data.hub?.subtitle ?? `${TOTAL} mld Kč`);
   s += t(800, 20, 'middle', 10, '#6b6357', '600', 'Segmenty péče');
 
   // Link bands (drawn before nodes so nodes render on top)
@@ -109,7 +115,7 @@ function renderFinancingSankey() {
   for (const n of srcN) {
     s += `<rect x="${SRC_X}" y="${n.y}" width="${NW}" height="${n.h}" rx="2" fill="${n.color}"/>`;
   }
-  s += `<rect x="${ZP_X}" y="${zpY}" width="${NW}" height="${zpH}" rx="2" fill="#6b6357"/>`;
+  s += `<rect x="${ZP_X}" y="${zpY}" width="${NW}" height="${zpH}" rx="2" fill="${data.hub?.color ?? '#6b6357'}"/>`;
   for (const n of tgtN) {
     s += `<rect x="${TGT_X}" y="${n.y}" width="${NW}" height="${n.h}" rx="2" fill="${n.color}"/>`;
   }
@@ -142,41 +148,39 @@ function renderFinancingSankey() {
   container.innerHTML = s;
 }
 
-function populateFallbackTable() {
+function populateFallbackTable(sankeyData) {
   const tbody = document.getElementById('fnFallbackTbody');
   if (!tbody) return;
-  const TOTAL = 459;
-  const outputFlows = SANKEY_FLOWS.filter(d => d.from === 'Systém ZP');
-  tbody.innerHTML = outputFlows.map(d => `
+  const targets = sankeyData?.targets ?? [];
+  const total = sankeyData?.total_mld_kc ?? targets.reduce((a, x) => a + x.value_mld_kc, 0) ?? 1;
+  tbody.innerHTML = targets.map(d => `
     <tr>
-      <td>${escapeHtml(d.to)}</td>
-      <td class="av-num">${d.flow}</td>
-      <td class="av-num">${((d.flow / TOTAL) * 100).toFixed(1)}&nbsp;%</td>
+      <td>${escapeHtml(d.label)}</td>
+      <td class="av-num">${d.value_mld_kc}</td>
+      <td class="av-num">${((d.value_mld_kc / total) * 100).toFixed(1)}&nbsp;%</td>
     </tr>`).join('');
 }
 
-// ── Časová řada (ČSÚ SHA 2011 + ZPP, přibližné hodnoty) ─────────────────────
-
-const TREND_YEARS   = ['2018', '2019', '2020', '2021', '2022', '2023', '2024*'];
-const TREND_LUZKOVA = [  189,   203,   210,   224,   233,   257,   284 ];
-const TREND_AMBUL   = [   92,    98,   103,   111,   116,   131,   145 ];
-const TREND_LEKY    = [   34,    37,    38,    40,    42,    46,    51 ];
-const TREND_OSTATNI = [   29,    30,    29,    29,    25,    25,    27 ];
+// ── Časová řada (ČSÚ SHA 2011 + ZPP) ────────────────────────────────────────
 
 function renderFinancingTrend() {
   const ctx = document.getElementById('fnTrendChart');
   if (!ctx || typeof Chart === 'undefined') return;
+  const trend = FINANCING?.trend;
+  if (!trend?.years?.length) return;
+
+  const estimated = new Set(trend.estimated_years ?? []);
+  const labels = trend.years.map(y => estimated.has(y) ? `${y}*` : String(y));
+  const datasets = Object.entries(trend.segments).map(([, seg]) => ({
+    label: seg.label,
+    data: seg.values,
+    backgroundColor: seg.color,
+    stack: 's',
+  }));
+
   new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels: TREND_YEARS,
-      datasets: [
-        { label: 'Lůžková péče',            data: TREND_LUZKOVA, backgroundColor: '#B45F06', stack: 's' },
-        { label: 'Ambulantní péče',          data: TREND_AMBUL,   backgroundColor: '#38761D', stack: 's' },
-        { label: 'Léky (recept)',            data: TREND_LEKY,    backgroundColor: '#0B5394', stack: 's' },
-        { label: 'Zdravotnické prostředky, lázně, ostatní', data: TREND_OSTATNI, backgroundColor: '#999', stack: 's' },
-      ],
-    },
+    data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -335,10 +339,239 @@ async function init() {
   renderMastheadDate();
   initCounters();
 
+  await loadFinancing();
+
   try { renderFinancingSankey(); } catch (err) { console.error('sankey failed:', err); }
   try { renderFinancingTrend(); }  catch (err) { console.error('trend failed:', err);  }
 
-  await Promise.allSettled([loadIndicators(), loadArticles()]);
+  await Promise.allSettled([
+    loadIndicators(),
+    loadArticles(),
+    renderRegionMap(),
+    renderPayersComparison(),
+  ]);
+}
+
+// ── F5: Porovnání 7 ZP ──────────────────────────────────────────────────────
+
+const PAYER_LABELS = {
+  '111': 'VZP',  '201': 'VoZP', '205': 'ČPZP', '207': 'OZP',
+  '209': 'ZPŠ',  '211': 'ZPMV', '213': 'RBP',
+};
+
+const PAYER_SEGMENT_COLORS = {
+  luzkova:      '#B45F06',
+  ambulantni:   '#38761D',
+  stomatologie: '#A99577',
+  leky:         '#0B5394',
+  prostredky:   '#7A6A4F',
+  lazne:        '#C3A580',
+  doprava_zzs:  '#5F7A8B',
+  ostatni:      '#7A7070',
+};
+
+const PAYER_SEGMENT_LABELS = {
+  luzkova:      'Lůžková',
+  ambulantni:   'Ambulantní',
+  stomatologie: 'Stomatologie',
+  leky:         'Léky',
+  prostredky:   'ZP',
+  lazne:        'Lázně',
+  doprava_zzs:  'Doprava/ZZS',
+  ostatni:      'Ostatní',
+};
+
+async function loadPojistenciByZp(year) {
+  try {
+    const res = await fetch('data/pojistenci-d5-zp.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const totals = {};
+    const y = String(year);
+    for (const kraj of Object.keys(data.data ?? {})) {
+      const rec = data.data[kraj][y];
+      if (!rec?.counts) continue;
+      for (const [zp, n] of Object.entries(rec.counts)) {
+        totals[zp] = (totals[zp] || 0) + n;
+      }
+    }
+    return totals;
+  } catch (err) {
+    console.warn('pojistenci-d5-zp.json load failed:', err.message);
+    return null;
+  }
+}
+
+async function renderPayersComparison() {
+  const ctx = document.getElementById('fnPayersChart');
+  const tbody = document.getElementById('fnPayersTbody');
+  if (!ctx || typeof Chart === 'undefined') return;
+  if (!FINANCING?.by_payer) return;
+
+  const year = 2024;
+  const byPayer = FINANCING.by_payer;
+  const payerCodes = Object.keys(byPayer).filter(c => byPayer[c][year]).sort();
+  if (!payerCodes.length) return;
+
+  const pojistenci = await loadPojistenciByZp(year);
+
+  // Pro každou ZP spočti per-pojistence hodnotu per segment.
+  const segmentKeys = Object.keys(PAYER_SEGMENT_LABELS);
+  const labels = payerCodes.map(c => PAYER_LABELS[c] ?? c);
+  const datasets = segmentKeys.map(seg => ({
+    label: PAYER_SEGMENT_LABELS[seg],
+    data: payerCodes.map(c => {
+      const segments = byPayer[c][year].segments ?? {};
+      const tisKc = segments[seg] ?? 0;
+      const n = pojistenci?.[c] ?? 1;
+      return n > 0 ? (tisKc * 1000 / n) : 0;
+    }),
+    backgroundColor: PAYER_SEGMENT_COLORS[seg],
+    stack: 's',
+  }));
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true, grid: { color: 'rgba(31,26,20,0.06)' } },
+        y: {
+          stacked: true,
+          title: { display: true, text: 'Kč/pojištěnce/rok', font: { size: 11 }, color: '#6b6357' },
+          grid: { color: 'rgba(31,26,20,0.06)' },
+          ticks: {
+            callback: (v) => v.toLocaleString('cs-CZ'),
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString('cs-CZ')} Kč/poj.`,
+            footer: (items) => `Celkem: ${Math.round(items.reduce((s, i) => s + i.parsed.y, 0)).toLocaleString('cs-CZ')} Kč/poj.`,
+          },
+        },
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, boxWidth: 12, padding: 10 },
+        },
+      },
+    },
+  });
+
+  // Tabulka
+  if (tbody) {
+    const rows = payerCodes.map(c => {
+      const segments = byPayer[c][year].segments ?? {};
+      const totalTisKc = Object.values(segments).reduce((a, v) => a + v, 0);
+      const n = pojistenci?.[c] ?? null;
+      const perPoj = n ? Math.round(totalTisKc * 1000 / n) : null;
+      return { code: c, label: PAYER_LABELS[c] ?? c, total_mld: totalTisKc / 1e6, pojistenci: n, perPoj };
+    });
+    const avgPerPoj = rows.filter(r => r.perPoj).reduce((a, r) => a + r.perPoj * r.pojistenci, 0)
+      / rows.filter(r => r.perPoj).reduce((a, r) => a + r.pojistenci, 0);
+    tbody.innerHTML = rows.map(r => {
+      const diff = r.perPoj ? ((r.perPoj - avgPerPoj) / avgPerPoj * 100) : null;
+      const sign = diff != null && diff >= 0 ? '+' : '';
+      return `<tr>
+        <td>${escapeHtml(r.label)} (${escapeHtml(r.code)})</td>
+        <td class="av-num">${r.pojistenci ? r.pojistenci.toLocaleString('cs-CZ') : '—'}</td>
+        <td class="av-num">${r.total_mld.toFixed(1).replace('.', ',')}</td>
+        <td class="av-num">${r.perPoj ? r.perPoj.toLocaleString('cs-CZ') : '—'}</td>
+        <td class="av-num">${diff != null ? `${sign}${diff.toFixed(1)} %` : '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+// ── Choropleth krajů (F3a — proxy data) ─────────────────────────────────────
+
+async function renderRegionMap() {
+  const container = document.getElementById('fnRegionMap');
+  if (!container) return;
+  if (typeof echarts === 'undefined') {
+    console.warn('echarts not loaded — region map skipped');
+    return;
+  }
+  let geo, fin;
+  try {
+    [geo, fin] = await Promise.all([
+      fetch('data/cz-regions.geojson').then(r => r.json()),
+      fetch('data/financing-regions.json').then(r => r.json()),
+    ]);
+  } catch (err) {
+    console.error('region map fetch failed:', err);
+    return;
+  }
+  if (!registerCzMap(geo)) return;
+
+  const option = buildChoroplethOption({
+    regions: fin.regions,
+    country_avg: fin.country_avg,
+    unit: fin.unit,
+    direction: fin.direction ?? 'context_dependent',
+    name: 'Výdaje ZP na pojištěnce',
+  });
+  const chart = echarts.init(container);
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+
+  populateRegionTable(fin);
+}
+
+function populateRegionTable(fin) {
+  const tbody = document.getElementById('fnRegionTbody');
+  if (!tbody) return;
+  const sorted = [...fin.regions].sort((a, b) => b.value - a.value);
+  tbody.innerHTML = sorted.map(r => {
+    const diff = ((r.value - fin.country_avg) / fin.country_avg) * 100;
+    const sign = diff >= 0 ? '+' : '';
+    return `<tr>
+      <td>${escapeHtml(r.name)}</td>
+      <td class="av-num">${r.value.toLocaleString('cs-CZ')}</td>
+      <td class="av-num">${sign}${diff.toFixed(1)}&nbsp;%</td>
+      <td class="av-num">${r.pojistenci.toLocaleString('cs-CZ')}</td>
+    </tr>`;
+  }).join('');
 }
 
 if (typeof window !== 'undefined') init();
+
+// ── Fallback (offline / fetch failure) ──────────────────────────────────────
+// Drží stejné hodnoty jako default seed v ingest/transform_financing.js,
+// aby stránka fungovala i bez data/financing.json (např. file:// otevření).
+
+const FALLBACK_FINANCING = {
+  version: 'fallback',
+  sankey: {
+    '2023': {
+      total_mld_kc: 459,
+      hub: { id: 'zp', label: 'Systém ZP', subtitle: '7 pojišťoven · 459 mld Kč', color: '#6b6357' },
+      sources: [
+        { id: 'zamestnanci',    label: 'Zaměstnanci a zaměstnavatelé', value_mld_kc: 269, color: '#4a6fa5' },
+        { id: 'stat',           label: 'Stát (státní pojištěnci)',     value_mld_kc: 155, color: '#7a6a9c' },
+        { id: 'osvc',           label: 'OSVČ',                          value_mld_kc:  25, color: '#5a8a6a' },
+        { id: 'ostatni_platci', label: 'Ostatní plátci',                value_mld_kc:  10, color: '#8a8070' },
+      ],
+      targets: [
+        { id: 'luzkova',    label: 'Lůžková péče',    value_mld_kc: 257, share_pct: 55.9, color: '#B45F06' },
+        { id: 'ambulantni', label: 'Ambulantní péče', value_mld_kc: 131, share_pct: 28.5, color: '#38761D' },
+        { id: 'leky',       label: 'Léky (recept)',   value_mld_kc:  46, share_pct: 10.0, color: '#0B5394' },
+        { id: 'ostatni',    label: 'Ostatní péče',    value_mld_kc:  25, share_pct:  5.4, color: '#7A7070' },
+      ],
+    },
+  },
+  trend: {
+    years: [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+    estimated_years: [2024],
+    segments: {
+      luzkova:    { label: 'Lůžková péče',                                values: [189, 203, 210, 224, 233, 257, 284], color: '#B45F06' },
+      ambulantni: { label: 'Ambulantní péče',                             values: [ 92,  98, 103, 111, 116, 131, 145], color: '#38761D' },
+      leky:       { label: 'Léky (recept)',                               values: [ 34,  37,  38,  40,  42,  46,  51], color: '#0B5394' },
+      ostatni:    { label: 'Zdravotnické prostředky, lázně, ostatní',     values: [ 29,  30,  29,  29,  25,  25,  27], color: '#999999' },
+    },
+  },
+};

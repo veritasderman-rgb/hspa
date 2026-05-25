@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="src/styles.css">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
@@ -90,7 +91,37 @@
         </table>
       </details>
     </div>
-    <p class="fn-source-note">Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty SHA&nbsp;2011 (rok 2023), <a href="clanek-platba-statu-statni-pojistenci.html">platba státu za státní pojištěnce</a>. Data jsou zaokrouhlena.</p>
+    <p class="fn-source-note">Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty SHA&nbsp;2011 (rok 2023), <a href="clanek-platba-statu-statni-pojistenci.html">platba státu za státní pojištěnce</a>. Data jsou zaokrouhlena. Načteno z <code>data/financing.json</code>.</p>
+  </section>
+
+  <!-- ── Choropleth krajů ──────────────────────────────────────────────── -->
+  <section class="section fn-map-section" aria-labelledby="fnMapHeading">
+    <div class="section-title">
+      <h3 id="fnMapHeading">Výdaje pojišťoven na pojištěnce po krajích</h3>
+      <span class="desc">Kč/pojištěnce/rok · 14 krajů NUTS-3 · proxy z věkové struktury (F3a)</span>
+    </div>
+    <p class="fn-section-lead">
+      Skutečné krajské výdaje veřejného zdravotního pojištění nejsou v otevřených datech publikovány centrálně. Tato mapa zobrazuje <strong>aproximaci</strong> založenou na věkové struktuře pojištěnců — kraje s vyšším podílem seniorů mají vyšší očekávanou úhradu. Praha má dodatečný příplatek (+6&nbsp;%) za koncentraci specializovaných center. Reálná stratifikace NRHZS okres → kraj je naplánována v navazující iteraci (F3b).
+    </p>
+    <div class="fn-map-wrap">
+      <div id="fnRegionMap" style="width:100%;height:520px" aria-label="Mapa 14 krajů ČR s výdaji ZP na pojištěnce"></div>
+      <details class="fn-sankey-fallback">
+        <summary>Tabulková verze dat</summary>
+        <table class="av-data-table">
+          <caption>Výdaje ZP na pojištěnce podle kraje (proxy z věkové struktury)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Kraj</th>
+              <th class="av-num" scope="col">Kč/poj./rok</th>
+              <th class="av-num" scope="col">% od průměru</th>
+              <th class="av-num" scope="col">Pojištěnců</th>
+            </tr>
+          </thead>
+          <tbody id="fnRegionTbody"></tbody>
+        </table>
+      </details>
+    </div>
+    <p class="fn-source-note">Zdroj: data/financing.json (per_pojistence_kc 42&nbsp;226&nbsp;Kč), data/pojistenci-d5-kraj.json (věková struktura). Načteno z <code>data/financing-regions.json</code>. Aproximace, ne měřené hodnoty.</p>
   </section>
 
   <!-- ── Časová řada ────────────────────────────────────────────────────── -->
@@ -106,6 +137,40 @@
       <canvas id="fnTrendChart" aria-label="Sloupcový graf vývoje výdajů zdravotních pojišťoven 2018–2024 podle segmentu péče"></canvas>
     </div>
     <p class="fn-source-note">Zdroj: ZPP/výroční zprávy ZP; rok 2024 je odhad na základě tempa 1H 2024 (+10,7 %). Hodnoty jsou přibližné — přesná čísla publikuje ČSÚ ve Výsledcích zdravotnických účtů (kód 260005‑24). Stáří dat: ČSÚ SHA vydává vlnu N typicky v záříříjna roku N+2.</p>
+  </section>
+
+  <!-- ── Porovnání 7 ZP ────────────────────────────────────────────────── -->
+  <section class="section fn-payers-section" aria-labelledby="fnPayersHeading">
+    <div class="section-title">
+      <h3 id="fnPayersHeading">Porovnání 7 zdravotních pojišťoven</h3>
+      <span class="desc" id="fnPayersDesc">2024 · výdaje na pojištěnce dle segmentu péče</span>
+    </div>
+    <p class="fn-section-lead">
+      Sedm pojišťoven se liší velikostí (VZP má 57&nbsp;% pojištěnců), věkovou strukturou pojištěnců i regionálním rozložením. Po normalizaci na jednoho pojištěnce ale výdaje za léky, ZP a lůžkovou péči zůstávají v podobném pásmu díky <strong>přerozdělování pojistného přes PCG model</strong> (od&nbsp;1.&nbsp;1.&nbsp;2018). Odchylky odráží zejména věkovou strukturu pojištěnců a regionální koncentraci specializovaných center.
+    </p>
+    <aside class="fn-payers-caveat" role="note">
+      <strong>Pozor na srovnání:</strong> VZP je správce zvláštního účtu přerozdělování, takže její účetní toky zahrnují i přerozdělené prostředky. Migrace ukrajinských pojištěnců (24.&nbsp;2.&nbsp;2022) přidala VZP 365&nbsp;tis. pojištěnců — meziroční srovnání 2021/2023 brát opatrně.
+    </aside>
+    <div class="fn-payers-wrap">
+      <canvas id="fnPayersChart" aria-label="Sloupcový graf výdajů 7 ZP na pojištěnce dle segmentu péče"></canvas>
+      <details class="fn-sankey-fallback">
+        <summary>Tabulková verze dat</summary>
+        <table class="av-data-table">
+          <caption>Výdaje 7 ZP na pojištěnce 2024 (Kč/poj./rok)</caption>
+          <thead>
+            <tr>
+              <th scope="col">ZP (kód)</th>
+              <th class="av-num" scope="col">Pojištěnců</th>
+              <th class="av-num" scope="col">Celkem (mld Kč)</th>
+              <th class="av-num" scope="col">Kč/poj./rok</th>
+              <th class="av-num" scope="col">% od průměru</th>
+            </tr>
+          </thead>
+          <tbody id="fnPayersTbody"></tbody>
+        </table>
+      </details>
+    </div>
+    <p class="fn-source-note">Zdroj: <code>data/financing.json</code> (by_payer.{kod}.2024) × <code>data/pojistenci-d5-zp.json</code>. Data jsou ze ZPP 2024 (manuální seed, viz <code>ingest/manual/zpp/</code>). Načteno z <code>data/financing.json</code>.</p>
   </section>
 
   <!-- ── Indikátory ─────────────────────────────────────────────────────── -->
@@ -134,6 +199,12 @@
       <h3 id="fnRelatedHeading">Příbuzné sekce</h3>
     </div>
     <div class="fn-related-grid">
+      <a class="fn-related-card" href="financovani-poskytovatele.html">
+        <div class="fn-related-card-kicker">Drill-down · NRHZS</div>
+        <h4 class="fn-related-card-title">Poskytovatelé péče</h4>
+        <p class="fn-related-card-desc">Top poskytovatelé podle úhrad od ZP za léky a zdravotnické prostředky. Filtrovatelná tabulka, bar chart, odkazy do NRPZS.</p>
+        <span class="fn-related-card-arrow" aria-hidden="true">→</span>
+      </a>
       <a class="fn-related-card" href="dohodovaci-rizeni.html">
         <div class="fn-related-card-kicker">Datová podpora · ÚZIS</div>
         <h4 class="fn-related-card-title">Dohodovací řízení</h4>

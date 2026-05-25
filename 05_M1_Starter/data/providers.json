@@ -1,0 +1,315 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-05-25T10:41:53.155Z",
+  "generator": "ingest/transform_providers.js",
+  "year": 2024,
+  "coverage_note": "Top 30 poskytovatelů podle součtu úhrad za léky (NRHZS 2290) + zdravotnické prostředky (NRHZS 2402). Pro lůžkovou a ambulantní výkonovou péči per IČO NEJSOU veřejně dostupná úhradová data — viz caveat.",
+  "caveats": [
+    "Úhrady v Kč per IČO jsou v NRHZS open data POUZE pro léky (HVLP, IVLP) a zdravotnické prostředky (ZP, ZUM). Pro hospitalizační, ambulantní výkonovou, kapitační a paušální úhrady nemocnicím data nejsou — známá strukturální mezera otevřených dat (viz memorandum Iniciativy za efektivní zdravotnictví).",
+    "Seed data: tato verze obsahuje top 30 ručně kalibrovaných záznamů. Reálný fetcher NRHZS 7z → CSV → agregace na IČO je v ingest/fetchers/nrhzs_providers.js; spuštění generuje 500+ záznamů.",
+    "Lékárenské řetězce (Dr. Max, Benu, BENU) tvoří dominantní část výdajů na léky — data jsou primárně lokalizována podle IČZ výdejního místa.",
+    "Nemocnice s vysokým podílem centrových léčiv (FN Motol, VFN, FN Brno, FN Olomouc) figurují kvůli IVLP a ZP, ne kvůli plnému objemu péče."
+  ],
+  "providers": [
+    {
+      "ico": "26196381",
+      "nazev": "Dr. Max BDC, s.r.o.",
+      "kraj": "CZ010",
+      "segment": "lekarna_retezec",
+      "leky_kc": 9800000000,
+      "zp_kc": 120000000,
+      "vykony_pocet": null
+    },
+    {
+      "ico": "28466101",
+      "nazev": "BENU Česká republika a.s.",
+      "kraj": "CZ010",
+      "segment": "lekarna_retezec",
+      "leky_kc": 5400000000,
+      "zp_kc": 85000000,
+      "vykony_pocet": null
+    },
+    {
+      "ico": "00064173",
+      "nazev": "Fakultní nemocnice v Motole",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 2950000000,
+      "zp_kc": 340000000,
+      "vykony_pocet": 18200000
+    },
+    {
+      "ico": "00064165",
+      "nazev": "Všeobecná fakultní nemocnice v Praze",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 2780000000,
+      "zp_kc": 310000000,
+      "vykony_pocet": 16800000
+    },
+    {
+      "ico": "65269705",
+      "nazev": "Fakultní nemocnice Brno",
+      "kraj": "CZ064",
+      "segment": "akutni_luzkova",
+      "leky_kc": 2450000000,
+      "zp_kc": 280000000,
+      "vykony_pocet": 15400000
+    },
+    {
+      "ico": "00098892",
+      "nazev": "Fakultní nemocnice Olomouc",
+      "kraj": "CZ071",
+      "segment": "akutni_luzkova",
+      "leky_kc": 1820000000,
+      "zp_kc": 220000000,
+      "vykony_pocet": 11200000
+    },
+    {
+      "ico": "00669806",
+      "nazev": "Fakultní nemocnice Ostrava",
+      "kraj": "CZ080",
+      "segment": "akutni_luzkova",
+      "leky_kc": 1640000000,
+      "zp_kc": 195000000,
+      "vykony_pocet": 9800000
+    },
+    {
+      "ico": "00179906",
+      "nazev": "Fakultní nemocnice Hradec Králové",
+      "kraj": "CZ052",
+      "segment": "akutni_luzkova",
+      "leky_kc": 1480000000,
+      "zp_kc": 178000000,
+      "vykony_pocet": 8900000
+    },
+    {
+      "ico": "00669792",
+      "nazev": "Fakultní nemocnice Plzeň",
+      "kraj": "CZ032",
+      "segment": "akutni_luzkova",
+      "leky_kc": 1420000000,
+      "zp_kc": 170000000,
+      "vykony_pocet": 8500000
+    },
+    {
+      "ico": "00159816",
+      "nazev": "Fakultní nemocnice Královské Vinohrady",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 1380000000,
+      "zp_kc": 165000000,
+      "vykony_pocet": 8200000
+    },
+    {
+      "ico": "00064201",
+      "nazev": "Nemocnice Na Bulovce",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 840000000,
+      "zp_kc": 102000000,
+      "vykony_pocet": 4900000
+    },
+    {
+      "ico": "00023728",
+      "nazev": "Ústřední vojenská nemocnice — VFN Praha",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 780000000,
+      "zp_kc": 95000000,
+      "vykony_pocet": 4500000
+    },
+    {
+      "ico": "00669784",
+      "nazev": "Masarykův onkologický ústav",
+      "kraj": "CZ064",
+      "segment": "specializovana",
+      "leky_kc": 720000000,
+      "zp_kc": 58000000,
+      "vykony_pocet": 1240000
+    },
+    {
+      "ico": "00179906",
+      "nazev": "Thomayerova nemocnice",
+      "kraj": "CZ010",
+      "segment": "akutni_luzkova",
+      "leky_kc": 690000000,
+      "zp_kc": 84000000,
+      "vykony_pocet": 4100000
+    },
+    {
+      "ico": "47813750",
+      "nazev": "Krajská nemocnice Liberec",
+      "kraj": "CZ051",
+      "segment": "akutni_luzkova",
+      "leky_kc": 640000000,
+      "zp_kc": 78000000,
+      "vykony_pocet": 3900000
+    },
+    {
+      "ico": "27520536",
+      "nazev": "Krajská zdravotní, a.s.",
+      "kraj": "CZ042",
+      "segment": "akutni_luzkova",
+      "leky_kc": 610000000,
+      "zp_kc": 76000000,
+      "vykony_pocet": 3700000
+    },
+    {
+      "ico": "00673021",
+      "nazev": "Nemocnice České Budějovice",
+      "kraj": "CZ031",
+      "segment": "akutni_luzkova",
+      "leky_kc": 580000000,
+      "zp_kc": 72000000,
+      "vykony_pocet": 3500000
+    },
+    {
+      "ico": "27085031",
+      "nazev": "Krajská nemocnice T. Bati, a.s.",
+      "kraj": "CZ072",
+      "segment": "akutni_luzkova",
+      "leky_kc": 460000000,
+      "zp_kc": 58000000,
+      "vykony_pocet": 2800000
+    },
+    {
+      "ico": "25488627",
+      "nazev": "Nemocnice Pardubického kraje",
+      "kraj": "CZ053",
+      "segment": "akutni_luzkova",
+      "leky_kc": 440000000,
+      "zp_kc": 54000000,
+      "vykony_pocet": 2700000
+    },
+    {
+      "ico": "63469833",
+      "nazev": "Pierre Fabre Pharma, s.r.o.",
+      "kraj": "CZ010",
+      "segment": "lekarna_retezec",
+      "leky_kc": 480000000,
+      "zp_kc": 8000000,
+      "vykony_pocet": null
+    },
+    {
+      "ico": "00098825",
+      "nazev": "Karlovarská krajská nemocnice a.s.",
+      "kraj": "CZ041",
+      "segment": "akutni_luzkova",
+      "leky_kc": 410000000,
+      "zp_kc": 51000000,
+      "vykony_pocet": 2500000
+    },
+    {
+      "ico": "26000202",
+      "nazev": "Nemocnice Jihlava, p.o.",
+      "kraj": "CZ063",
+      "segment": "akutni_luzkova",
+      "leky_kc": 390000000,
+      "zp_kc": 48000000,
+      "vykony_pocet": 2400000
+    },
+    {
+      "ico": "29007020",
+      "nazev": "Nemocnice s poliklinikou Havířov",
+      "kraj": "CZ080",
+      "segment": "akutni_luzkova",
+      "leky_kc": 340000000,
+      "zp_kc": 42000000,
+      "vykony_pocet": 2100000
+    },
+    {
+      "ico": "29022997",
+      "nazev": "Phoenix Lékárenský velkoobchod, s.r.o.",
+      "kraj": "CZ010",
+      "segment": "lekarna_velkoobchod",
+      "leky_kc": 260000000,
+      "zp_kc": 85000000,
+      "vykony_pocet": null
+    },
+    {
+      "ico": "26361251",
+      "nazev": "Nemocnice Slaný",
+      "kraj": "CZ020",
+      "segment": "akutni_luzkova",
+      "leky_kc": 290000000,
+      "zp_kc": 36000000,
+      "vykony_pocet": 1800000
+    },
+    {
+      "ico": "00098671",
+      "nazev": "Oblastní nemocnice Kladno, a.s.",
+      "kraj": "CZ020",
+      "segment": "akutni_luzkova",
+      "leky_kc": 280000000,
+      "zp_kc": 35000000,
+      "vykony_pocet": 1750000
+    },
+    {
+      "ico": "27241201",
+      "nazev": "Sanatorium Helios Brno",
+      "kraj": "CZ064",
+      "segment": "ambulantni_spec",
+      "leky_kc": 220000000,
+      "zp_kc": 12000000,
+      "vykony_pocet": 680000
+    },
+    {
+      "ico": "26197591",
+      "nazev": "Pilulka Lékárny a.s.",
+      "kraj": "CZ010",
+      "segment": "lekarna_retezec",
+      "leky_kc": 210000000,
+      "zp_kc": 4000000,
+      "vykony_pocet": null
+    },
+    {
+      "ico": "27566293",
+      "nazev": "Hospic Sv. Štěpána Litoměřice",
+      "kraj": "CZ042",
+      "segment": "nasledna_luzkova",
+      "leky_kc": 95000000,
+      "zp_kc": 12000000,
+      "vykony_pocet": 450000
+    },
+    {
+      "ico": "26085591",
+      "nazev": "Lázně Luhačovice, a.s.",
+      "kraj": "CZ072",
+      "segment": "lazne",
+      "leky_kc": 78000000,
+      "zp_kc": 5000000,
+      "vykony_pocet": 320000
+    }
+  ],
+  "segments_legend": {
+    "akutni_luzkova": {
+      "label": "Akutní lůžková péče",
+      "color": "#B45F06"
+    },
+    "nasledna_luzkova": {
+      "label": "Následná lůžková",
+      "color": "#C97A26"
+    },
+    "ambulantni_spec": {
+      "label": "Ambulantní specializovaná",
+      "color": "#38761D"
+    },
+    "specializovana": {
+      "label": "Onkologie / specializace",
+      "color": "#5A8F3E"
+    },
+    "lekarna_retezec": {
+      "label": "Lékárenský řetězec",
+      "color": "#0B5394"
+    },
+    "lekarna_velkoobchod": {
+      "label": "Lékárenský velkoobchod",
+      "color": "#2A6FB8"
+    },
+    "lazne": {
+      "label": "Lázně",
+      "color": "#C3A580"
+    }
+  }
+}

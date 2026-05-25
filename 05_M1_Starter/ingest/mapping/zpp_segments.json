@@ -1,0 +1,90 @@
+{
+  "version": "1.0",
+  "comment": "Mapování ZPP segmentů (názvy z přílohy 9 vyhlášky 362/2010 Sb.) na 8 konsolidovaných vizuálních uzlů pro Sankey diagram a časovou řadu. Klíče v `aliases` jsou patterns, které parser hledá v ZPP tabulce 'Výdaje na zdravotní služby podle segmentů péče'. Cílové ID musí existovat v data/financing.json sankey.targets.",
+  "segments": {
+    "luzkova": {
+      "label": "Lůžková péče",
+      "color": "#B45F06",
+      "aliases": [
+        "Akutní lůžková péče",
+        "lůžková péče standardní",
+        "ÚHRADY POSKYTOVATELŮM AKUTNÍ LŮŽKOVÉ PÉČE",
+        "Následná lůžková péče",
+        "LDN",
+        "OLÚ"
+      ]
+    },
+    "ambulantni": {
+      "label": "Ambulantní péče",
+      "color": "#38761D",
+      "aliases": [
+        "Ambulantní specializovaná péče",
+        "Praktičtí lékaři pro dospělé",
+        "Praktičtí lékaři pro děti a dorost",
+        "Ambulantní gynekologie",
+        "Komplement",
+        "Domácí zdravotní péče"
+      ]
+    },
+    "stomatologie": {
+      "label": "Stomatologická péče",
+      "color": "#A99577",
+      "aliases": [
+        "Stomatologická péče",
+        "Zubní péče"
+      ]
+    },
+    "leky": {
+      "label": "Léky (recept)",
+      "color": "#0B5394",
+      "aliases": [
+        "Léčivé přípravky",
+        "Léky na recept",
+        "ÚHRADY ZA LÉČIVA NA POUKAZ",
+        "HVLP"
+      ]
+    },
+    "prostredky": {
+      "label": "Zdravotnické prostředky",
+      "color": "#7A6A4F",
+      "aliases": [
+        "Zdravotnické prostředky",
+        "Zdravotnické prostředky na poukaz",
+        "ÚHRADY ZA ZDRAVOTNICKÉ PROSTŘEDKY"
+      ]
+    },
+    "lazne": {
+      "label": "Lázně",
+      "color": "#C3A580",
+      "aliases": [
+        "Lázeňská léčebně rehabilitační péče",
+        "Lázeňská péče"
+      ]
+    },
+    "doprava_zzs": {
+      "label": "Doprava + ZZS",
+      "color": "#5F7A8B",
+      "aliases": [
+        "Zdravotnická záchranná služba",
+        "Zdravotnická dopravní služba",
+        "Přeprava"
+      ]
+    },
+    "ostatni": {
+      "label": "Ostatní péče",
+      "color": "#7A7070",
+      "aliases": [
+        "Klinicko-farmaceutická péče",
+        "Hemodialýza",
+        "Ostatní"
+      ]
+    }
+  },
+  "sankey_buckets": {
+    "comment": "Pro Sankey UI konsoliduje 8 segmentů na 4 vizuální uzly.",
+    "luzkova":    ["luzkova"],
+    "ambulantni": ["ambulantni", "stomatologie"],
+    "leky":       ["leky"],
+    "ostatni":    ["prostredky", "lazne", "doprava_zzs", "ostatni"]
+  }
+}
