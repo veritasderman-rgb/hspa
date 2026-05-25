@@ -54,8 +54,8 @@
       </div>
       <div class="ed-stat ed-stat-static">
         <div class="ed-stat-num"><span>+10,7</span><span class="ed-stat-unit">%</span></div>
-        <div class="ed-stat-lbl">Meziroční růst</div>
-        <div class="ed-stat-meta">1.&nbsp;pololetí 2024 vs.&nbsp;2023</div>
+        <div class="ed-stat-lbl">Meziroční růst <span class="fn-stat-estimate" title="odhad/predikce, ne finální údaj">*</span></div>
+        <div class="ed-stat-meta">1.&nbsp;pololetí 2024 vs.&nbsp;2023 · predikce</div>
       </div>
       <div class="ed-stat ed-stat-static">
         <div class="ed-stat-num"><span>8,4</span><span class="ed-stat-unit">% HDP</span></div>
@@ -64,6 +64,23 @@
       </div>
     </aside>
   </section>
+
+  <!-- ── Disclaimer (stáří dat + predikce) ──────────────────────────────── -->
+  <aside class="fn-disclaimer" role="note" aria-labelledby="fnDisclaimerHeading">
+    <h3 id="fnDisclaimerHeading" class="fn-disclaimer-title">Stáří dat, status a predikce — jak číst čísla na této stránce</h3>
+    <ul class="fn-disclaimer-list">
+      <li><strong>Sankey diagram</strong> ukazuje toky <strong>roku 2023</strong> (459 mld Kč, sedm ZP dohromady). Status: <em>finální</em> — sumarizace ze ZPP 2024 a výročních zpráv ZP, kalibrováno na ČSÚ Zdravotnické účty SHA 2011 (kód 260005‑24).</li>
+      <li><strong>Časová řada 2018–2024</strong>: hodnoty 2018–2023 jsou <strong>finální</strong>. Rok 2024 je označen hvězdičkou (<code>2024*</code>) — jde o <strong>odhad/predikci</strong> na základě tempa 1. pololetí 2024 (+10,7&nbsp;% vs. 2023), nikoliv schválené účetní závěrky. ČSÚ publikuje finální vlnu pro rok N typicky v září roku N+2 (data za 2024 budou v září 2026).</li>
+      <li><strong>Mapa krajů (Kč/pojištěnce)</strong>: jde o <strong>proxy aproximaci</strong> z věkové struktury pojištěnců (pct 65+, 80+) × národní průměr 42&nbsp;226 Kč/poj. Není to měřené čerpání — reálná stratifikace NRHZS okres→kraj je plánovaná fáze.</li>
+      <li><strong>Porovnání 7 ZP (2024)</strong>: hodnoty pochází z <strong>plánovaných</strong> ZPP 2024 (sněmovní tisky), nikoliv ze schválených výročních zpráv. ZPP je <em>plán</em> — skutečnost se může lišit o jednotky procent. Plánovaný rozpočet schvaluje Poslanecká sněmovna před začátkem roku; výroční zpráva se zveřejňuje s ročním zpožděním.</li>
+      <li><strong>Drill-down poskytovatelé (léky + ZP per IČO)</strong>: úhrady v Kč jsou v otevřených datech NRHZS pouze pro <strong>léky a zdravotnické prostředky</strong>. Pro lůžkovou a ambulantní výkonovou péči per IČO data <strong>nejsou veřejně dostupná</strong> — strukturální mezera otevřených dat.</li>
+    </ul>
+    <p class="fn-disclaimer-link">
+      Detailní metodiku a podkladová data ÚZIS pro úhradovou vyhlášku najdete v sekci
+      <a href="dohodovaci-rizeni.html?view=analyza"><strong>Dohodovací řízení &middot; Analýza</strong></a>
+      (44 datových souhrnů ÚZIS, 9 dimenzí: ceny, personál, produkce, náklady).
+    </p>
+  </aside>
 
   <!-- ── Sankey ────────────────────────────────────────────────────────────── -->
   <section class="section fn-sankey-section" aria-labelledby="fnSankeyHeading">
@@ -136,7 +153,7 @@
     <div class="fn-trend-wrap">
       <canvas id="fnTrendChart" aria-label="Sloupcový graf vývoje výdajů zdravotních pojišťoven 2018–2024 podle segmentu péče"></canvas>
     </div>
-    <p class="fn-source-note">Zdroj: ZPP/výroční zprávy ZP; rok 2024 je odhad na základě tempa 1H 2024 (+10,7 %). Hodnoty jsou přibližné — přesná čísla publikuje ČSÚ ve Výsledcích zdravotnických účtů (kód 260005‑24). Stáří dat: ČSÚ SHA vydává vlnu N typicky v záříříjna roku N+2.</p>
+    <p class="fn-source-note">Zdroj: ZPP/výroční zprávy ZP; <strong>rok 2024 je odhad/predikce</strong> na základě tempa 1H 2024 (+10,7 %), nikoliv finální účetní závěrka. ČSÚ publikuje finální vlnu pro rok N typicky v září roku N+2 (data 2024 budou v září 2026). Přesná podkladová čísla viz <a href="dohodovaci-rizeni.html?view=analyza">Dohodovací řízení — Analýza</a>.</p>
   </section>
 
   <!-- ── Porovnání 7 ZP ────────────────────────────────────────────────── -->
@@ -170,7 +187,7 @@
         </table>
       </details>
     </div>
-    <p class="fn-source-note">Zdroj: <code>data/financing.json</code> (by_payer.{kod}.2024) × <code>data/pojistenci-d5-zp.json</code>. Data jsou ze ZPP 2024 (manuální seed, viz <code>ingest/manual/zpp/</code>). Načteno z <code>data/financing.json</code>.</p>
+    <p class="fn-source-note">Zdroj: <code>data/financing.json</code> (by_payer.{kod}.2024) × <code>data/pojistenci-d5-zp.json</code>. Data jsou ze <strong>schválených ZPP pro rok 2024 (plán, ne skutečnost)</strong>; výroční zprávy se zveřejňují s ročním zpožděním. Stáří dat: rok 2024 = plán; finální skutečnost 2023 najdete v <a href="dohodovaci-rizeni.html?view=analyza">Dohodovací řízení — Analýza</a>.</p>
   </section>
 
   <!-- ── Indikátory ─────────────────────────────────────────────────────── -->
@@ -205,10 +222,10 @@
         <p class="fn-related-card-desc">Top poskytovatelé podle úhrad od ZP za léky a zdravotnické prostředky. Filtrovatelná tabulka, bar chart, odkazy do NRPZS.</p>
         <span class="fn-related-card-arrow" aria-hidden="true">→</span>
       </a>
-      <a class="fn-related-card" href="dohodovaci-rizeni.html">
-        <div class="fn-related-card-kicker">Datová podpora · ÚZIS</div>
-        <h4 class="fn-related-card-title">Dohodovací řízení</h4>
-        <p class="fn-related-card-desc">44 datových souhrnů o cenách, personálu, produkci a nákladech — podkladové materiály k úhradové vyhlášce.</p>
+      <a class="fn-related-card" href="dohodovaci-rizeni.html?view=analyza">
+        <div class="fn-related-card-kicker">Datová podpora · ÚZIS · Analýza</div>
+        <h4 class="fn-related-card-title">Dohodovací řízení — strategická analýza</h4>
+        <p class="fn-related-card-desc">44 datových souhrnů ve 9 dimenzích (ceny, personál, produkce, náklady) — podkladové materiály k úhradové vyhlášce a doporučení pro reformu financování.</p>
         <span class="fn-related-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="fn-related-card" href="pojistenci.html">
