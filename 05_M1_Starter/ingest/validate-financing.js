@@ -91,6 +91,36 @@ export function validateFinancing(data) {
     errors.push('metadata.caveats: očekáváno pole');
   }
 
+  // by_payer: per-ZP segmenty (volitelné, ale když je, musí být konzistentní)
+  if (data.by_payer && typeof data.by_payer === 'object') {
+    const VALID_PAYERS = ['111', '201', '205', '207', '209', '211', '213'];
+    for (const [payer, years] of Object.entries(data.by_payer)) {
+      if (!VALID_PAYERS.includes(payer)) {
+        errors.push(`by_payer.${payer}: neznámý kód ZP (povolené: ${VALID_PAYERS.join(', ')})`);
+      }
+      if (!years || typeof years !== 'object') {
+        errors.push(`by_payer.${payer}: očekáván objekt rok → segmenty`);
+        continue;
+      }
+      for (const [year, rec] of Object.entries(years)) {
+        if (!/^\d{4}$/.test(year)) {
+          errors.push(`by_payer.${payer}.${year}: rok musí být YYYY`);
+        }
+        if (!rec.segments || typeof rec.segments !== 'object') {
+          errors.push(`by_payer.${payer}.${year}: chybí segments`);
+          continue;
+        }
+        const total = Object.values(rec.segments).reduce((a, v) => a + (Number(v) || 0), 0);
+        if (rec.total_tis_kc != null) {
+          const diffPct = Math.abs(total - rec.total_tis_kc) / Math.max(rec.total_tis_kc, 1) * 100;
+          if (diffPct > TOLERANCE_PCT) {
+            errors.push(`by_payer.${payer}.${year}: Σ segments (${total}) ≠ total_tis_kc (${rec.total_tis_kc}), odchylka ${diffPct.toFixed(1)} %`);
+          }
+        }
+      }
+    }
+  }
+
   return errors;
 }
 

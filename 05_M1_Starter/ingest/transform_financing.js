@@ -18,6 +18,7 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT_FILE = path.join(ROOT, 'data', 'financing.json');
 const SEED_FILE = path.join(__dirname, 'data', 'seed_financing.json');
 const ZPP_CACHE_DIR = path.join(__dirname, 'cache', 'zpp');
+const ZPP_MANUAL_DIR = path.join(__dirname, 'manual', 'zpp');
 const SHA_CACHE_DIR = path.join(__dirname, 'cache', 'csu_sha');
 
 // Default seed — odpovídá hodnotám použitým v dosavadním frontend MVP.
@@ -79,27 +80,35 @@ export function loadSeed(seedPath = SEED_FILE) {
 }
 
 /**
- * Spojí seed se strukturovanými daty z ZPP cache (pokud existují).
- * Pro každý rok v cache nahradí seed sankey + trend skutečnou agregací.
+ * Spojí seed se strukturovanými daty ze ZPP cache + manual fallback.
+ * Pro každý {payer, year} v cache nahradí seed skutečnou agregací.
+ * Pokud existují obě varianty (cache i manual), cache vyhrává.
  */
-export function mergeZppCache(seed, zppDir = ZPP_CACHE_DIR) {
-  if (!fs.existsSync(zppDir)) return { ...seed, by_payer: null };
-  const files = fs.readdirSync(zppDir).filter(f => f.endsWith('.json'));
-  if (!files.length) return { ...seed, by_payer: null };
-
+export function mergeZppCache(seed, zppDir = ZPP_CACHE_DIR, manualDir = ZPP_MANUAL_DIR) {
   const by_payer = {};
-  for (const f of files) {
-    const match = f.match(/^(\d{3})-(\d{4})\.json$/);
-    if (!match) continue;
-    const [, zp, year] = match;
-    try {
-      const data = JSON.parse(fs.readFileSync(path.join(zppDir, f), 'utf8'));
-      by_payer[zp] = by_payer[zp] || {};
-      by_payer[zp][year] = data;
-    } catch (err) {
-      console.warn(`zpp cache ${f} skipped: ${err.message}`);
+
+  const loadFrom = (dir) => {
+    if (!fs.existsSync(dir)) return;
+    for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json'))) {
+      const match = f.match(/^(\d{3})-(\d{4})\.json$/);
+      if (!match) continue;
+      const [, zp, year] = match;
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+        by_payer[zp] = by_payer[zp] || {};
+        // cache > manual (parsed PDF má přednost)
+        if (!by_payer[zp][year] || data.origin === 'parsed') {
+          by_payer[zp][year] = data;
+        }
+      } catch (err) {
+        console.warn(`zpp ${dir}/${f} skipped: ${err.message}`);
+      }
     }
-  }
+  };
+
+  loadFrom(manualDir);  // first: manual (low priority)
+  loadFrom(zppDir);     // then: cache (high priority, overrides manual)
+
   return { ...seed, by_payer: Object.keys(by_payer).length ? by_payer : null };
 }
 
