@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financování zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Jak je financováno české zdravotnictví: tok peněz od plátců přes zdravotní pojišťovny k segmentům péče. Sankey diagram, časová řada 2018–2024, 8 klíčových indikátorů a analytické texty.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Financování zdravotnictví · HSPA Monitor">
+<meta property="og:description" content="459 mld Kč ročně: kdo platí, kam jdou peníze a kolik zbyde. Sankey diagram finančních toků veřejného zdravotního pojištění ČR.">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Financování zdravotnictví</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="fn-hero" aria-labelledby="fnHeroHeadline">
+    <div class="fn-hero-content">
+      <div class="ed-kicker">Financování zdravotnictví · Jak systém stojí a kam jdou peníze</div>
+      <h2 class="fn-hero-headline" id="fnHeroHeadline">459 miliard korun ročně. Kdo platí, kam jde a kolik zbyde.</h2>
+      <p class="fn-hero-lead">Veřejné zdravotní pojištění je z 96&nbsp;% jediným zdrojem financování českého zdravotnictví. Sedm pojišťoven přerozdělí každý rok stovky miliard — od zaměstnanců, státu a podnikatelů k nemocnicím, lékárnám a ambulancím. Tato stránka sleduje, jak tok peněz vypadá, kam směřuje a kde jsou zlomové body.</p>
+    </div>
+    <aside class="ed-hero-stats fn-hero-stats" aria-label="Klíčová čísla financování">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span class="av-counter" data-value="459" data-duration="1400">0</span>&nbsp;<span class="ed-stat-unit">mld&nbsp;Kč</span></div>
+        <div class="ed-stat-lbl">Úhrady ZP 2023</div>
+        <div class="ed-stat-meta">Všech 7 pojišťoven dohromady</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span class="av-counter" data-value="42226" data-duration="1600">0</span>&nbsp;<span class="ed-stat-unit">Kč</span></div>
+        <div class="ed-stat-lbl">Na pojištěnce ročně</div>
+        <div class="ed-stat-meta">Průměr 2023 · všechny ZP</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num">+10,7&nbsp;<span class="ed-stat-unit">%</span></div>
+        <div class="ed-stat-lbl">Meziroční růst</div>
+        <div class="ed-stat-meta">1.&nbsp;pololetí 2024 vs.&nbsp;2023</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num">8,4&nbsp;<span class="ed-stat-unit">% HDP</span></div>
+        <div class="ed-stat-lbl">Celkové výdaje na zdraví</div>
+        <div class="ed-stat-meta">ČSÚ SHA 2011 · 2023 · 642 mld Kč</div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ── Sankey ────────────────────────────────────────────────────────────── -->
+  <section class="section fn-sankey-section" aria-labelledby="fnSankeyHeading">
+    <div class="section-title">
+      <h3 id="fnSankeyHeading">Tok peněz ve zdravotnictví</h3>
+      <span class="desc">Zdroje → Systém ZP → Segmenty péče · 2023 · mld&nbsp;Kč</span>
+    </div>
+    <p class="fn-section-lead">
+      Jak putuje pojistné od plátců přes pojišťovny k jednotlivým segmentům péče. Největší tok — <strong>257 mld Kč</strong> — směřuje do nemocnic (lůžková péče), dalších <strong>131 mld</strong> do ambulancí. Stát jako plátce za státní pojištěnce (děti, důchodci, rodiče na MD, nezaměstnaní) vstupuje do systému 155&nbsp;miliardami ročně.
+    </p>
+    <div class="fn-sankey-wrap">
+      <div class="fn-sankey-col-labels" aria-hidden="true">
+        <span>Zdroje pojistného</span>
+        <span>Systém ZP</span>
+        <span>Segmenty péče</span>
+      </div>
+      <canvas id="fnSankey" aria-label="Sankey diagram finančních toků veřejného zdravotního pojištění ČR 2023" height="360"></canvas>
+      <details class="fn-sankey-fallback">
+        <summary>Tabulková verze dat</summary>
+        <table class="av-data-table">
+          <caption>Výdaje systému ZP podle segmentu péče, 2023</caption>
+          <thead>
+            <tr>
+              <th scope="col">Segment péče</th>
+              <th class="av-num" scope="col">Mld&nbsp;Kč</th>
+              <th class="av-num" scope="col">Podíl</th>
+            </tr>
+          </thead>
+          <tbody id="fnFallbackTbody"></tbody>
+        </table>
+      </details>
+    </div>
+    <p class="fn-source-note">Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty SHA&nbsp;2011 (rok 2023), <a href="clanek-platba-statu-statni-pojistenci.html">platba státu za státní pojištěnce</a>. Data jsou zaokrouhlena.</p>
+  </section>
+
+  <!-- ── Časová řada ────────────────────────────────────────────────────── -->
+  <section class="section fn-trend-section" aria-labelledby="fnTrendHeading">
+    <div class="section-title">
+      <h3 id="fnTrendHeading">Vývoj výdajů zdravotních pojišťoven</h3>
+      <span class="desc">2018–2024 · mld&nbsp;Kč · celkem 7 ZP · segmenty péče</span>
+    </div>
+    <p class="fn-section-lead">
+      Výdaje rostou výrazně rychleji než inflace. Mezi lety 2018 a 2023 vzrostly o <strong>+34&nbsp;%</strong>. Rok 2024 je prvním, kdy tempo přesáhlo 10&nbsp;% meziročně. Strukturální příčiny: stárnoucí populace, inovativní centrová léčiva, nárůst platby státu za státní pojištěnce.
+    </p>
+    <div class="fn-trend-wrap">
+      <canvas id="fnTrendChart" aria-label="Sloupcový graf vývoje výdajů zdravotních pojišťoven 2018–2024 podle segmentu péče"></canvas>
+    </div>
+    <p class="fn-source-note">Zdroj: ZPP/výroční zprávy ZP; rok 2024 je odhad na základě tempa 1H 2024 (+10,7 %). Hodnoty jsou přibližné — přesná čísla publikuje ČSÚ ve Výsledcích zdravotnických účtů (kód 260005‑24). Stáří dat: ČSÚ SHA vydává vlnu N typicky v záříříjna roku N+2.</p>
+  </section>
+
+  <!-- ── Indikátory ─────────────────────────────────────────────────────── -->
+  <section class="section fn-indicators-section" aria-labelledby="fnIndicatorsHeading">
+    <div class="section-title">
+      <h3 id="fnIndicatorsHeading">Indikátory financování</h3>
+      <span class="desc">Měřitelné ukazatele HSPA · doména: Financování zdravotnictví</span>
+    </div>
+    <ul class="fn-indicator-grid" id="fnIndicatorGrid" aria-label="Indikátory financování zdravotnictví"></ul>
+    <p class="fn-indicators-empty hidden" role="status">Indikátory se nepodařilo načíst.</p>
+  </section>
+
+  <!-- ── Články ─────────────────────────────────────────────────────────── -->
+  <section class="section fn-articles-section" aria-labelledby="fnArticlesHeading">
+    <div class="section-title">
+      <h3 id="fnArticlesHeading">Analytické texty</h3>
+      <span class="desc">Publikované články k tématu financování</span>
+    </div>
+    <ul class="home-articles-grid" id="fnArticleGrid" aria-label="Články o financování"></ul>
+    <a class="fn-articles-all" href="clanky.html">Všechny články →</a>
+  </section>
+
+  <!-- ── Příbuzné sekce ─────────────────────────────────────────────────── -->
+  <section class="section fn-related-section" aria-labelledby="fnRelatedHeading">
+    <div class="section-title">
+      <h3 id="fnRelatedHeading">Příbuzné sekce</h3>
+    </div>
+    <div class="fn-related-grid">
+      <a class="fn-related-card" href="dohodovaci-rizeni.html">
+        <div class="fn-related-card-kicker">Datová podpora · ÚZIS</div>
+        <h4 class="fn-related-card-title">Dohodovací řízení</h4>
+        <p class="fn-related-card-desc">44 datových souhrnů o cenách, personálu, produkci a nákladech — podkladové materiály k úhradové vyhlášce.</p>
+        <span class="fn-related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="fn-related-card" href="pojistenci.html">
+        <div class="fn-related-card-kicker">OIS 11-47 · ÚZIS</div>
+        <h4 class="fn-related-card-title">Pojištěnci a pojišťovny</h4>
+        <p class="fn-related-card-desc">Distribuce pojištěnců podle zdravotní pojišťovny, kraje a okresu — základ pro pochopení přerozdělování.</p>
+        <span class="fn-related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="fn-related-card" href="kraje.html">
+        <div class="fn-related-card-kicker">Regionální pohled</div>
+        <h4 class="fn-related-card-title">Krajský dashboard</h4>
+        <p class="fn-related-card-desc">Jak se liší výdaje, dostupnost a výsledky péče mezi 14 kraji — financování v geografickém kontextu.</p>
+        <span class="fn-related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="fn-related-card" href="hspa-prehled.html">
+        <div class="fn-related-card-kicker">HSPA rámec · OECD 2023</div>
+        <h4 class="fn-related-card-title">HSPA přehled indikátorů</h4>
+        <p class="fn-related-card-desc">Celý datový rámec: 80 indikátorů v 4 oblastech a 12 doménách včetně domény Struktury a financování.</p>
+        <span class="fn-related-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/financovani.js"></script>
+</body>
+</html>
