@@ -8,95 +8,138 @@ import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } fro
 // ── Sankey data (ZPP 2023, SHA 2011 — statická MVP data) ─────────────────────
 // Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty 2023, clanek-platba-statu-statni-pojistenci.html
 // Hodnoty v mld Kč, zaokrouhleno; zdroje × výdaje jsou symetricky 459 mld.
+// Malé výdajové segmenty (prostředky 11, lázně/stomato 10, doprava/ZZS 4) jsou sloučeny do "Ostatní péče".
 
 const SANKEY_FLOWS = [
-  // Zdroje → Systém ZP
   { from: 'Zaměstnanci a zaměstnavatelé', to: 'Systém ZP', flow: 269 },
   { from: 'Stát (státní pojištěnci)',     to: 'Systém ZP', flow: 155 },
   { from: 'OSVČ',                         to: 'Systém ZP', flow: 25  },
   { from: 'Ostatní plátci',               to: 'Systém ZP', flow: 10  },
-  // Systém ZP → Segmenty péče (dle NRHZS 2023; odpovídá donut na homepage)
-  { from: 'Systém ZP', to: 'Lůžková péče',              flow: 257 },
-  { from: 'Systém ZP', to: 'Ambulantní péče',           flow: 131 },
-  { from: 'Systém ZP', to: 'Léky (recept)',              flow: 46  },
-  { from: 'Systém ZP', to: 'Zdravotnické prostředky',   flow: 11  },
-  { from: 'Systém ZP', to: 'Lázně a stomatologie',      flow: 10  },
-  { from: 'Systém ZP', to: 'Doprava, ZZS, ostatní',     flow: 4   },
+  { from: 'Systém ZP', to: 'Lůžková péče',    flow: 257 },
+  { from: 'Systém ZP', to: 'Ambulantní péče', flow: 131 },
+  { from: 'Systém ZP', to: 'Léky (recept)',   flow:  46 },
+  { from: 'Systém ZP', to: 'Ostatní péče',    flow:  25 },
 ];
 
-const SANKEY_COLORS = {
-  'Zaměstnanci a zaměstnavatelé': '#4a6fa5',
-  'Stát (státní pojištěnci)':     '#7a6a9c',
-  'OSVČ':                          '#5a8a6a',
-  'Ostatní plátci':                '#8a8070',
-  'Systém ZP':                     '#6b6357',
-  'Lůžková péče':                  '#B45F06',
-  'Ambulantní péče':               '#38761D',
-  'Léky (recept)':                 '#0B5394',
-  'Zdravotnické prostředky':       '#7A6A4F',
-  'Lázně a stomatologie':          '#A99577',
-  'Doprava, ZZS, ostatní':         '#5F7A8B',
-};
-
 function renderFinancingSankey() {
-  const ctx = document.getElementById('fnSankey');
-  if (!ctx) return;
-
-  // Ověř, že Chart.js i chartjs-chart-sankey jsou načteny
-  if (typeof Chart === 'undefined') {
-    showSankeyFallback();
-    return;
-  }
-  let hasSankey = false;
-  try { Chart.registry.getController('sankey'); hasSankey = true; } catch { /* not registered */ }
-  if (!hasSankey) {
-    showSankeyFallback();
-    return;
-  }
-
-  // Naplň fallback tabulku vždy
+  const container = document.getElementById('fnSankey');
+  if (!container) return;
   populateFallbackTable();
 
-  new Chart(ctx, {
-    type: 'sankey',
-    data: {
-      datasets: [{
-        data: SANKEY_FLOWS,
-        colorFrom: (c) => SANKEY_COLORS[SANKEY_FLOWS[c.dataIndex]?.from] ?? '#aaa',
-        colorTo:   (c) => SANKEY_COLORS[SANKEY_FLOWS[c.dataIndex]?.to]   ?? '#aaa',
-        colorMode: 'gradient',
-        borderWidth: 0,
-        nodePadding: 12,
-        nodeWidth: 10,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (c) => {
-              const d = SANKEY_FLOWS[c.dataIndex];
-              if (d) return `${d.from} → ${d.to}: ${d.flow} mld Kč`;
-              return '';
-            },
-          },
-        },
-      },
-    },
+  const W = 900, H = 480, TOP = 36, NW = 12, GAP = 8, TOTAL = 459;
+  const UH = 432; // H - TOP - 12
+  const SCALE = (UH - 3 * GAP) / TOTAL; // 408/459
+
+  const sources = [
+    { label: 'Zaměstnanci a zaměstnavatelé', value: 269, color: '#4a6fa5' },
+    { label: 'Stát (státní pojištěnci)',      value: 155, color: '#7a6a9c' },
+    { label: 'OSVČ',                          value:  25, color: '#5a8a6a' },
+    { label: 'Ostatní plátci',                value:  10, color: '#8a8070' },
+  ];
+  const targets = [
+    { label: 'Lůžková péče',    value: 257, pct: '55,9', color: '#B45F06' },
+    { label: 'Ambulantní péče', value: 131, pct: '28,5', color: '#38761D' },
+    { label: 'Léky (recept)',   value:  46, pct: '10,0', color: '#0B5394' },
+    { label: 'Ostatní péče',    value:  25, pct: ' 5,4', color: '#7A7070' },
+  ];
+
+  const SRC_X = 200, ZP_X = 440, TGT_X = 700;
+
+  function placeNodes(nodes) {
+    let y = TOP;
+    return nodes.map((n, i) => {
+      const h = Math.round(n.value * SCALE);
+      const node = { ...n, y, h };
+      y += h + (i < nodes.length - 1 ? GAP : 0);
+      return node;
+    });
+  }
+
+  const srcN = placeNodes(sources);
+  const tgtN = placeNodes(targets);
+  const zpH = Math.round(TOTAL * SCALE); // 408
+  const zpY = TOP + Math.round((UH - zpH) / 2); // 48
+
+  let zpLeft = zpY, zpRight = zpY;
+  const srcLinks = srcN.map(n => {
+    const l = { sx: SRC_X + NW, sy: n.y, sh: n.h, zx: ZP_X, zy: zpLeft, color: n.color };
+    zpLeft += n.h;
+    return l;
   });
-}
+  const tgtLinks = tgtN.map(n => {
+    const l = { zx: ZP_X + NW, zy: zpRight, zh: n.h, tx: TGT_X, ty: n.y, color: n.color };
+    zpRight += n.h;
+    return l;
+  });
 
-function showSankeyFallback() {
-  const wrap = document.getElementById('fnSankey')?.closest('.fn-sankey-wrap');
-  if (!wrap) return;
-  const fallback = wrap.querySelector('.fn-sankey-fallback');
-  if (fallback) fallback.open = true;
-  const canvas = document.getElementById('fnSankey');
-  if (canvas) canvas.style.display = 'none';
-  populateFallbackTable();
+  const cpxS = Math.round((SRC_X + NW + ZP_X) / 2); // 326
+  const cpxT = Math.round((ZP_X + NW + TGT_X) / 2); // 576
+
+  function band(x1, y1, h1, cpx, x2, y2, h2) {
+    return `M${x1},${y1} C${cpx},${y1} ${cpx},${y2} ${x2},${y2} L${x2},${y2 + h2} C${cpx},${y2 + h2} ${cpx},${y1 + h1} ${x1},${y1 + h1}Z`;
+  }
+
+  function esc(v) {
+    return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function t(x, y, anchor, size, fill, weight, content) {
+    const fw = weight ? ` font-weight="${weight}"` : '';
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" fill="${fill}"${fw} font-family="Inter,sans-serif">${esc(content)}</text>`;
+  }
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" `
+        + `role="img" aria-hidden="true" style="width:100%;height:auto;display:block">`;
+
+  // Column headers
+  s += t(106, 20, 'middle', 10, '#6b6357', '600', 'Zdroje pojistného');
+  s += t(446, 14, 'middle', 10, '#6b6357', '600', 'Systém ZP');
+  s += t(446, 27, 'middle',  9, '#6b6357', null,  '7 pojišťoven · 459 mld Kč');
+  s += t(800, 20, 'middle', 10, '#6b6357', '600', 'Segmenty péče');
+
+  // Link bands (drawn before nodes so nodes render on top)
+  for (const l of srcLinks) {
+    s += `<path d="${band(l.sx, l.sy, l.sh, cpxS, l.zx, l.zy, l.sh)}" fill="${l.color}" opacity="0.22"/>`;
+  }
+  for (const l of tgtLinks) {
+    s += `<path d="${band(l.zx, l.zy, l.zh, cpxT, l.tx, l.ty, l.zh)}" fill="${l.color}" opacity="0.22"/>`;
+  }
+
+  // Node rects
+  for (const n of srcN) {
+    s += `<rect x="${SRC_X}" y="${n.y}" width="${NW}" height="${n.h}" rx="2" fill="${n.color}"/>`;
+  }
+  s += `<rect x="${ZP_X}" y="${zpY}" width="${NW}" height="${zpH}" rx="2" fill="#6b6357"/>`;
+  for (const n of tgtN) {
+    s += `<rect x="${TGT_X}" y="${n.y}" width="${NW}" height="${n.h}" rx="2" fill="${n.color}"/>`;
+  }
+
+  // Source labels (right-aligned, left of node)
+  const SLBL = SRC_X - 8; // 192
+  for (const n of srcN) {
+    const cy = n.y + n.h / 2;
+    if (n.h >= 30) {
+      s += t(SLBL, cy - 7, 'end', 11, '#1f1a14', null, n.label);
+      s += t(SLBL, cy + 7, 'end', 10, '#6b6357', null, `${n.value} mld Kč`);
+    } else {
+      s += t(SLBL, cy + 4, 'end', 10, '#1f1a14', null, `${n.label} · ${n.value} mld`);
+    }
+  }
+
+  // Target labels (left-aligned, right of node)
+  const TLBL = TGT_X + NW + 8; // 720
+  for (const n of tgtN) {
+    const cy = n.y + n.h / 2;
+    if (n.h >= 30) {
+      s += t(TLBL, cy - 7, 'start', 11, '#1f1a14', null, n.label);
+      s += t(TLBL, cy + 7, 'start', 10, '#6b6357', null, `${n.value} mld · ${n.pct} %`);
+    } else {
+      s += t(TLBL, cy + 4, 'start', 10, '#1f1a14', null, `${n.label} · ${n.value} mld`);
+    }
+  }
+
+  s += '</svg>';
+  container.innerHTML = s;
 }
 
 function populateFallbackTable() {
