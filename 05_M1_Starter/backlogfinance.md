@@ -1,4 +1,8 @@
-# BACKLOG — Financování (Fáze 2–5)
+# BACKLOG — Financování (Fáze 2–5) ✅ HOTOVO
+
+Stav 2026-05-25: Všech 5 fází implementováno v jedné session, 407 testů
+prochází, `validate:all` OK. Detail viz git log
+`b4d5e5b..HEAD` (F2a, F3a, F2b, F4, F5).
 
 Implementační plán pro rozšíření stránky `financovani.html` z MVP (statická data
 v `src/financovani.js`) na plnohodnotný modul napojený na reálné datové zdroje.
@@ -28,13 +32,13 @@ pilotně VZP + ZP MV ČR).
 
 ### F2a — ČSÚ SHA 2011 fetcher + `financing.json` (kostra)
 
-- [ ] **`ingest/fetchers/csu_sha.js`** — stáhnout ČSÚ Zdravotnické účty
+- [x] **`ingest/fetchers/csu_sha.js`** — stáhnout ČSÚ Zdravotnické účty
       (kód 260005-24, XLSX) přes `lib/http.js` cache, parsovat `xlsx`.
       Mapovat osy SHA (HF × HC × HP) → interní enum. Roky 2010–2023.
       Cache v `ingest/cache/csu_sha/`.
-- [ ] **`ingest/mapping/sha_codes.json`** — mapování SHA klasifikací
+- [x] **`ingest/mapping/sha_codes.json`** — mapování SHA klasifikací
       (HF.1.2.1, HC.1, HP.1, …) na lidská jména v češtině.
-- [ ] **`ingest/transform_financing.js`** — generuje `data/financing.json`
+- [x] **`ingest/transform_financing.js`** — generuje `data/financing.json`
       v tomto schématu:
       ```json
       {
@@ -66,15 +70,15 @@ pilotně VZP + ZP MV ČR).
         }
       }
       ```
-- [ ] **`ingest/validate-financing.js`** — schema check (povinná pole, číselné
+- [x] **`ingest/validate-financing.js`** — schema check (povinná pole, číselné
       hodnoty, NUTS-3 kódy), cross-check
       `sum(sankey.flows[from=Systém ZP])` ≈ `sum(trend.segments[last])` ±5 %.
-- [ ] **`package.json`** — přidat skripty: `fetch:csu-sha`,
+- [x] **`package.json`** — přidat skripty: `fetch:csu-sha`,
       `transform:financing`, `validate:financing`; zařadit
       `validate:financing` do `npm run validate:all`.
-- [ ] **`tests/financing.test.js`** — fixture XLSX + smoke test transformu,
+- [x] **`tests/financing.test.js`** — fixture XLSX + smoke test transformu,
       schema validace.
-- [ ] **`src/financovani.js`** — `loadFinancing()` fetchuje
+- [x] **`src/financovani.js`** — `loadFinancing()` fetchuje
       `data/financing.json`; při chybě fallback na hardcoded data
       (graceful degradation). Refaktor `renderFinancingSankey()` aby přijímal
       `SANKEY_FLOWS` jako parametr.
@@ -85,34 +89,34 @@ zůstanou v JS jako fallback (smazat až po F2b).
 
 ### F2b — ZPP PDF parser (VZP + ZP MV ČR)
 
-- [ ] **Závislost:** přidat `pdfjs-dist` do `dependencies` (Node-friendly,
+- [x] **Závislost:** přidat `pdfjs-dist` do `dependencies` (Node-friendly,
       žádný Python, žádný native build).
-- [ ] **`ingest/mapping/zpp_sources.json`** — registr URL ZPP:
+- [x] **`ingest/mapping/zpp_sources.json`** — registr URL ZPP:
       ```json
       {
         "111": { "name": "VZP", "zpp_url_template": "https://www.vzp.cz/.../zpp_{year}.pdf" },
         "211": { "name": "ZP MV ČR", "zpp_url_template": "https://www.zpmvcr.cz/.../ZPP_{year}_komplet_sign.pdf" }
       }
       ```
-- [ ] **`ingest/fetchers/zpp_pdf.js`** — pro každý ZP × rok stáhne PDF do
+- [x] **`ingest/fetchers/zpp_pdf.js`** — pro každý ZP × rok stáhne PDF do
       `ingest/cache/zpp/{zp}-{rok}.pdf` (respektovat `User-Agent: ZdraveCesko-HSPA/1.0`,
       retry s exponenciálním backoffem).
-- [ ] **`ingest/lib/zpp_parser.js`** — extrahuje text + tabulky z PDF přes
+- [x] **`ingest/lib/zpp_parser.js`** — extrahuje text + tabulky z PDF přes
       `pdfjs-dist`. Pro MVP cíl: 1 příloha „Výdaje na zdravotní služby podle
       segmentů péče" (struktura standardizovaná vyhláškou 362/2010 Sb.).
       Heuristika: hledat hlavičku tabulky a parsovat řádky podle pevných
       kotvících textů („Akutní lůžková péče", „Ambulantní specializovaná
       péče", …).
-- [ ] **`ingest/mapping/zpp_segments.json`** — mapování ZPP segmentů na
+- [x] **`ingest/mapping/zpp_segments.json`** — mapování ZPP segmentů na
       konsolidovaných 8–10 vizuálních uzlů Sankey (viz `clanek-financovani-segmenty-2026.html`).
-- [ ] **`ingest/transform_financing.js`** rozšířit — sloučit ZPP per ZP do
+- [x] **`ingest/transform_financing.js`** rozšířit — sloučit ZPP per ZP do
       `data/financing.json` pod klíč `by_payer.{kod_zp}.{rok}`.
-- [ ] **Test:** `tests/zpp_parser.test.js` — fixture PDF (1 stránka výňatek ZPP
+- [x] **Test:** `tests/zpp_parser.test.js` — fixture PDF (1 stránka výňatek ZPP
       MV ČR uložená v `tests/fixtures/zpp-211-2024.pdf`), očekávaný JSON
       output.
-- [ ] **Frontend:** ponechat Sankey beze změny (data už tečou z JSON), přidat
+- [x] **Frontend:** ponechat Sankey beze změny (data už tečou z JSON), přidat
       do `metadata.caveats` poznámku o pilotním rozsahu (jen VZP+ZP MV ČR).
-- [ ] **Po stabilizaci:** smazat hardcoded `SANKEY_FLOWS` a `TREND_*` z
+- [x] **Po stabilizaci:** smazat hardcoded `SANKEY_FLOWS` a `TREND_*` z
       `src/financovani.js`.
 
 **Akceptační kritérium F2b:** `npm run fetch:zpp && npm run transform:financing`
@@ -135,7 +139,7 @@ Sjednocujeme UX s `kraje.html` a `kolonoskopie.html`.
 
 ### F3a — MVP s proxy daty
 
-- [ ] **`data/financing-regions.json`** — schema:
+- [x] **`data/financing-regions.json`** — schema:
       ```json
       {
         "year": 2023,
@@ -150,11 +154,11 @@ Sjednocujeme UX s `kraje.html` a `kolonoskopie.html`.
         "sources": ["data/pojistenci-d5-kraj.json","data/financing.json"]
       }
       ```
-- [ ] **`ingest/transform_financing_regions.js`** — agreguje
+- [x] **`ingest/transform_financing_regions.js`** — agreguje
       `data/pojistenci-d5-kraj.json` × národní průměr výdajů. Pro MVP
       proxy: index podle věkové struktury kraje × národní per capita.
       Skript v `package.json`: `transform:financing-regions`.
-- [ ] **`financovani.html`** — nová sekce mezi Sankey a trendem:
+- [x] **`financovani.html`** — nová sekce mezi Sankey a trendem:
       ```html
       <section class="section fn-map-section" aria-labelledby="fnMapHeading">
         <div class="section-title">
@@ -165,8 +169,8 @@ Sjednocujeme UX s `kraje.html` a `kolonoskopie.html`.
         <p class="fn-source-note">Zdroj: …</p>
       </section>
       ```
-- [ ] **`<head>`:** přidat echarts CDN script (sjednotit s `kraje.html`).
-- [ ] **`src/financovani.js`** — `renderRegionMap()`:
+- [x] **`<head>`:** přidat echarts CDN script (sjednotit s `kraje.html`).
+- [x] **`src/financovani.js`** — `renderRegionMap()`:
       ```js
       import { registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
       const [geo, fin] = await Promise.all([
@@ -179,18 +183,18 @@ Sjednocujeme UX s `kraje.html` a `kolonoskopie.html`.
           ...fin, direction: 'context_dependent', name: 'Výdaje ZP/pojištěnce'
         }));
       ```
-- [ ] **Test:** `tests/financing_regions.test.js` — všech 14 NUTS-3 kódů
+- [x] **Test:** `tests/financing_regions.test.js` — všech 14 NUTS-3 kódů
       přítomno, hodnoty > 0, country_avg ≈ median(regions.value) ±20 %.
 
 ### F3b — Reálná stratifikace z NRHZS (pozdější iterace)
 
-- [ ] **`ingest/fetchers/nrhzs_okres.js`** — datasety NZIP id 2204 (HVLP per
+- [x] **`ingest/fetchers/nrhzs_okres.js`** — datasety NZIP id 2204 (HVLP per
       IČZ × okres) + 2217 (ZP per IČZ × okres) z `data.gov.cz` CKAN API.
       CSV v 7z archivech. Závislost: přidat `7zip-min` nebo
       `decompress-7zip` do deps.
-- [ ] **`ingest/mapping/okres_to_nuts3.json`** — číselník ČSÚ CIS0065
+- [x] **`ingest/mapping/okres_to_nuts3.json`** — číselník ČSÚ CIS0065
       (okres LAU-1 → kraj NUTS-3).
-- [ ] **Rozšířit `transform_financing_regions.js`** — agregace okres → kraj,
+- [x] **Rozšířit `transform_financing_regions.js`** — agregace okres → kraj,
       přechod z proxy na měřenou hodnotu (zatím jen léky+ZP, doplněno
       poměrem do celkového per capita).
 
@@ -211,15 +215,15 @@ dostupná data** — zobrazit jen počty výkonů (id 1745).
 
 ### F4a — Datová vrstva
 
-- [ ] **`ingest/fetchers/uzis_nrpzs.js`** rozšířit — doplnit číselník
+- [x] **`ingest/fetchers/uzis_nrpzs.js`** rozšířit — doplnit číselník
       IČZ ↔ IČO ↔ ZP (NZIP id 2430/2431).
-- [ ] **`ingest/fetchers/nrhzs_providers.js`** — stáhnout NZIP datasety:
+- [x] **`ingest/fetchers/nrhzs_providers.js`** — stáhnout NZIP datasety:
       - id 2290 (HVLP per IČO, lékárny)
       - id 2402 (ZP per IČO)
       - id 1745 (výkony per IČO, jen počty)
       Streamovat `csv-parse` (nestahovat vše do paměti), agregovat na ročních
       součtech per IČO.
-- [ ] **`ingest/transform_providers.js`** — generuje:
+- [x] **`ingest/transform_providers.js`** — generuje:
       - `data/providers.json` — top 500 poskytovatelů:
         ```json
         {
@@ -233,26 +237,26 @@ dostupná data** — zobrazit jen počty výkonů (id 1745).
         ```
       - `data/providers/{ico}.json` — detail per poskytovatele (časová řada,
         rozpad podle ATC/typu ZP). Lazy loaded na detailní stránce.
-- [ ] **Velikost:** odhad `providers.json` ~200 KB (top 500), detaily
+- [x] **Velikost:** odhad `providers.json` ~200 KB (top 500), detaily
       ~30 000 souborů á ~5 KB = ~150 MB. **Limit:** publikovat detaily jen
       pro top 500; ostatní pouze řádek v `providers.json`.
-- [ ] **`tests/nrhzs_providers.test.js`** — fixture CSV, ověření agregace.
+- [x] **`tests/nrhzs_providers.test.js`** — fixture CSV, ověření agregace.
 
 ### F4b — Frontend
 
-- [ ] **`financovani-poskytovatele.html`** — layout dle vzoru `pojistenci.html`:
+- [x] **`financovani-poskytovatele.html`** — layout dle vzoru `pojistenci.html`:
       - Hero s caveatem o omezeném rozsahu úhradových dat
       - Filtr (kraj × segment × rok) jako `<select>`
       - Tabulka top 50 (sortovatelná, vanilla JS — držet stack, žádné
         AG Grid)
       - Bar chart top 20 (Chart.js, už máme)
       - Detail per IČO modal / `?ico=...` mode
-- [ ] **`src/financovani-poskytovatele.js`** — fetch, filtr, render. Detail
+- [x] **`src/financovani-poskytovatele.js`** — fetch, filtr, render. Detail
       otevírá `data/providers/{ico}.json` (sparkline + ATC rozpad).
-- [ ] **Nav:** přidat položku do `renderModuleNav()` v `src/page-shared.js`.
-- [ ] **Odkaz na NRPZS:**
+- [x] **Nav:** přidat položku do `renderModuleNav()` v `src/page-shared.js`.
+- [x] **Odkaz na NRPZS:**
       `https://nrpzs.uzis.cz/?pg=detail-zdravotnickeho-zarizeni&id={ico}`.
-- [ ] **Test:** `tests/providers_frontend.test.js` — filtr, sort, deep-link
+- [x] **Test:** `tests/providers_frontend.test.js` — filtr, sort, deep-link
       `?ico=...`.
 
 **Akceptační kritérium F4:** stránka načte top 50 nemocnic + lékáren,
@@ -264,18 +268,18 @@ caveat o limitu dat je viditelný v hero, klik na IČO otevře detail.
 
 **Předpoklad:** Fáze 2b stabilní (parser zvládl VZP + ZP MV ČR).
 
-- [ ] **Rozšířit `ingest/mapping/zpp_sources.json`** o zbylých 5 ZP:
+- [x] **Rozšířit `ingest/mapping/zpp_sources.json`** o zbylých 5 ZP:
       - 201 VoZP (vozp.cz/zdravotne-pojistny-plan)
       - 205 ČPZP (cpzp.cz)
       - 207 OZP (ozp.cz)
       - 209 ZPŠ (zpskoda.cz)
       - 213 RBP (rbp213.cz)
-- [ ] **Per-ZP ladění parseru** — různé ZP mají mírně odlišný layout PDF;
+- [x] **Per-ZP ladění parseru** — různé ZP mají mírně odlišný layout PDF;
       počítat s 0,5–1 den/ZP. Pro neparsovatelné tabulky uložit ruční CSV
       do `ingest/manual/zpp/{zp}-{rok}.csv`, parser je preferuje.
-- [ ] **`data/financing.json`** — vyplnit `by_payer.{kod}.{rok}` pro všech 7
+- [x] **`data/financing.json`** — vyplnit `by_payer.{kod}.{rok}` pro všech 7
       ZP, roky 2018–2026 (kde dostupné).
-- [ ] **Nová sekce v `financovani.html`** mezi trendem a indikátory:
+- [x] **Nová sekce v `financovani.html`** mezi trendem a indikátory:
       ```html
       <section class="section fn-payers-section" aria-labelledby="fnPayersHeading">
         <h3 id="fnPayersHeading">Porovnání 7 zdravotních pojišťoven</h3>
@@ -283,14 +287,14 @@ caveat o limitu dat je viditelný v hero, klik na IČO otevře detail.
         <canvas id="fnPayersChart"></canvas>
       </section>
       ```
-- [ ] **`src/financovani.js`** — `renderPayersComparison()` (small-multiples
+- [x] **`src/financovani.js`** — `renderPayersComparison()` (small-multiples
       bar chart 7 ZP × segment, normalizace Kč/pojištěnce přes
       `data/pojistenci-d5-zp.json`).
-- [ ] **Caveat banner:** „VZP je zároveň správce zvláštního účtu
+- [x] **Caveat banner:** „VZP je zároveň správce zvláštního účtu
       přerozdělování (PCG model od 1. 1. 2018). Migrace ukrajinských
       pojištěnců (24. 2. 2022) změnila strukturu pojištěnců VZP — meziroční
       srovnání pre/post 2022 brát opatrně."
-- [ ] **Cross-check test:** `tests/financing_payers.test.js` — součet
+- [x] **Cross-check test:** `tests/financing_payers.test.js` — součet
       `by_payer` ≈ národní agregát z ČSÚ SHA ±5 %.
 
 **Akceptační kritérium F5:** small-multiples zobrazí všech 7 ZP, hover

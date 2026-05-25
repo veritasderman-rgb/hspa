@@ -139,6 +139,40 @@
     <p class="fn-source-note">Zdroj: ZPP/výroční zprávy ZP; rok 2024 je odhad na základě tempa 1H 2024 (+10,7 %). Hodnoty jsou přibližné — přesná čísla publikuje ČSÚ ve Výsledcích zdravotnických účtů (kód 260005‑24). Stáří dat: ČSÚ SHA vydává vlnu N typicky v záříříjna roku N+2.</p>
   </section>
 
+  <!-- ── Porovnání 7 ZP ────────────────────────────────────────────────── -->
+  <section class="section fn-payers-section" aria-labelledby="fnPayersHeading">
+    <div class="section-title">
+      <h3 id="fnPayersHeading">Porovnání 7 zdravotních pojišťoven</h3>
+      <span class="desc" id="fnPayersDesc">2024 · výdaje na pojištěnce dle segmentu péče</span>
+    </div>
+    <p class="fn-section-lead">
+      Sedm pojišťoven se liší velikostí (VZP má 57&nbsp;% pojištěnců), věkovou strukturou pojištěnců i regionálním rozložením. Po normalizaci na jednoho pojištěnce ale výdaje za léky, ZP a lůžkovou péči zůstávají v podobném pásmu díky <strong>přerozdělování pojistného přes PCG model</strong> (od&nbsp;1.&nbsp;1.&nbsp;2018). Odchylky odráží zejména věkovou strukturu pojištěnců a regionální koncentraci specializovaných center.
+    </p>
+    <aside class="fn-payers-caveat" role="note">
+      <strong>Pozor na srovnání:</strong> VZP je správce zvláštního účtu přerozdělování, takže její účetní toky zahrnují i přerozdělené prostředky. Migrace ukrajinských pojištěnců (24.&nbsp;2.&nbsp;2022) přidala VZP 365&nbsp;tis. pojištěnců — meziroční srovnání 2021/2023 brát opatrně.
+    </aside>
+    <div class="fn-payers-wrap">
+      <canvas id="fnPayersChart" aria-label="Sloupcový graf výdajů 7 ZP na pojištěnce dle segmentu péče"></canvas>
+      <details class="fn-sankey-fallback">
+        <summary>Tabulková verze dat</summary>
+        <table class="av-data-table">
+          <caption>Výdaje 7 ZP na pojištěnce 2024 (Kč/poj./rok)</caption>
+          <thead>
+            <tr>
+              <th scope="col">ZP (kód)</th>
+              <th class="av-num" scope="col">Pojištěnců</th>
+              <th class="av-num" scope="col">Celkem (mld Kč)</th>
+              <th class="av-num" scope="col">Kč/poj./rok</th>
+              <th class="av-num" scope="col">% od průměru</th>
+            </tr>
+          </thead>
+          <tbody id="fnPayersTbody"></tbody>
+        </table>
+      </details>
+    </div>
+    <p class="fn-source-note">Zdroj: <code>data/financing.json</code> (by_payer.{kod}.2024) × <code>data/pojistenci-d5-zp.json</code>. Data jsou ze ZPP 2024 (manuální seed, viz <code>ingest/manual/zpp/</code>). Načteno z <code>data/financing.json</code>.</p>
+  </section>
+
   <!-- ── Indikátory ─────────────────────────────────────────────────────── -->
   <section class="section fn-indicators-section" aria-labelledby="fnIndicatorsHeading">
     <div class="section-title">

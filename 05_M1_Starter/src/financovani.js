@@ -344,7 +344,147 @@ async function init() {
   try { renderFinancingSankey(); } catch (err) { console.error('sankey failed:', err); }
   try { renderFinancingTrend(); }  catch (err) { console.error('trend failed:', err);  }
 
-  await Promise.allSettled([loadIndicators(), loadArticles(), renderRegionMap()]);
+  await Promise.allSettled([
+    loadIndicators(),
+    loadArticles(),
+    renderRegionMap(),
+    renderPayersComparison(),
+  ]);
+}
+
+// ── F5: Porovnání 7 ZP ──────────────────────────────────────────────────────
+
+const PAYER_LABELS = {
+  '111': 'VZP',  '201': 'VoZP', '205': 'ČPZP', '207': 'OZP',
+  '209': 'ZPŠ',  '211': 'ZPMV', '213': 'RBP',
+};
+
+const PAYER_SEGMENT_COLORS = {
+  luzkova:      '#B45F06',
+  ambulantni:   '#38761D',
+  stomatologie: '#A99577',
+  leky:         '#0B5394',
+  prostredky:   '#7A6A4F',
+  lazne:        '#C3A580',
+  doprava_zzs:  '#5F7A8B',
+  ostatni:      '#7A7070',
+};
+
+const PAYER_SEGMENT_LABELS = {
+  luzkova:      'Lůžková',
+  ambulantni:   'Ambulantní',
+  stomatologie: 'Stomatologie',
+  leky:         'Léky',
+  prostredky:   'ZP',
+  lazne:        'Lázně',
+  doprava_zzs:  'Doprava/ZZS',
+  ostatni:      'Ostatní',
+};
+
+async function loadPojistenciByZp(year) {
+  try {
+    const res = await fetch('data/pojistenci-d5-zp.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const totals = {};
+    const y = String(year);
+    for (const kraj of Object.keys(data.data ?? {})) {
+      const rec = data.data[kraj][y];
+      if (!rec?.counts) continue;
+      for (const [zp, n] of Object.entries(rec.counts)) {
+        totals[zp] = (totals[zp] || 0) + n;
+      }
+    }
+    return totals;
+  } catch (err) {
+    console.warn('pojistenci-d5-zp.json load failed:', err.message);
+    return null;
+  }
+}
+
+async function renderPayersComparison() {
+  const ctx = document.getElementById('fnPayersChart');
+  const tbody = document.getElementById('fnPayersTbody');
+  if (!ctx || typeof Chart === 'undefined') return;
+  if (!FINANCING?.by_payer) return;
+
+  const year = 2024;
+  const byPayer = FINANCING.by_payer;
+  const payerCodes = Object.keys(byPayer).filter(c => byPayer[c][year]).sort();
+  if (!payerCodes.length) return;
+
+  const pojistenci = await loadPojistenciByZp(year);
+
+  // Pro každou ZP spočti per-pojistence hodnotu per segment.
+  const segmentKeys = Object.keys(PAYER_SEGMENT_LABELS);
+  const labels = payerCodes.map(c => PAYER_LABELS[c] ?? c);
+  const datasets = segmentKeys.map(seg => ({
+    label: PAYER_SEGMENT_LABELS[seg],
+    data: payerCodes.map(c => {
+      const segments = byPayer[c][year].segments ?? {};
+      const tisKc = segments[seg] ?? 0;
+      const n = pojistenci?.[c] ?? 1;
+      return n > 0 ? (tisKc * 1000 / n) : 0;
+    }),
+    backgroundColor: PAYER_SEGMENT_COLORS[seg],
+    stack: 's',
+  }));
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true, grid: { color: 'rgba(31,26,20,0.06)' } },
+        y: {
+          stacked: true,
+          title: { display: true, text: 'Kč/pojištěnce/rok', font: { size: 11 }, color: '#6b6357' },
+          grid: { color: 'rgba(31,26,20,0.06)' },
+          ticks: {
+            callback: (v) => v.toLocaleString('cs-CZ'),
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString('cs-CZ')} Kč/poj.`,
+            footer: (items) => `Celkem: ${Math.round(items.reduce((s, i) => s + i.parsed.y, 0)).toLocaleString('cs-CZ')} Kč/poj.`,
+          },
+        },
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, boxWidth: 12, padding: 10 },
+        },
+      },
+    },
+  });
+
+  // Tabulka
+  if (tbody) {
+    const rows = payerCodes.map(c => {
+      const segments = byPayer[c][year].segments ?? {};
+      const totalTisKc = Object.values(segments).reduce((a, v) => a + v, 0);
+      const n = pojistenci?.[c] ?? null;
+      const perPoj = n ? Math.round(totalTisKc * 1000 / n) : null;
+      return { code: c, label: PAYER_LABELS[c] ?? c, total_mld: totalTisKc / 1e6, pojistenci: n, perPoj };
+    });
+    const avgPerPoj = rows.filter(r => r.perPoj).reduce((a, r) => a + r.perPoj * r.pojistenci, 0)
+      / rows.filter(r => r.perPoj).reduce((a, r) => a + r.pojistenci, 0);
+    tbody.innerHTML = rows.map(r => {
+      const diff = r.perPoj ? ((r.perPoj - avgPerPoj) / avgPerPoj * 100) : null;
+      const sign = diff != null && diff >= 0 ? '+' : '';
+      return `<tr>
+        <td>${escapeHtml(r.label)} (${escapeHtml(r.code)})</td>
+        <td class="av-num">${r.pojistenci ? r.pojistenci.toLocaleString('cs-CZ') : '—'}</td>
+        <td class="av-num">${r.total_mld.toFixed(1).replace('.', ',')}</td>
+        <td class="av-num">${r.perPoj ? r.perPoj.toLocaleString('cs-CZ') : '—'}</td>
+        <td class="av-num">${diff != null ? `${sign}${diff.toFixed(1)} %` : '—'}</td>
+      </tr>`;
+    }).join('');
+  }
 }
 
 // ── Choropleth krajů (F3a — proxy data) ─────────────────────────────────────
