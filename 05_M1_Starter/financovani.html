@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="src/styles.css">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
@@ -91,6 +92,36 @@
       </details>
     </div>
     <p class="fn-source-note">Zdroj: ZPP 2024 (7 ZP), ČSÚ Zdravotnické účty SHA&nbsp;2011 (rok 2023), <a href="clanek-platba-statu-statni-pojistenci.html">platba státu za státní pojištěnce</a>. Data jsou zaokrouhlena. Načteno z <code>data/financing.json</code>.</p>
+  </section>
+
+  <!-- ── Choropleth krajů ──────────────────────────────────────────────── -->
+  <section class="section fn-map-section" aria-labelledby="fnMapHeading">
+    <div class="section-title">
+      <h3 id="fnMapHeading">Výdaje pojišťoven na pojištěnce po krajích</h3>
+      <span class="desc">Kč/pojištěnce/rok · 14 krajů NUTS-3 · proxy z věkové struktury (F3a)</span>
+    </div>
+    <p class="fn-section-lead">
+      Skutečné krajské výdaje veřejného zdravotního pojištění nejsou v otevřených datech publikovány centrálně. Tato mapa zobrazuje <strong>aproximaci</strong> založenou na věkové struktuře pojištěnců — kraje s vyšším podílem seniorů mají vyšší očekávanou úhradu. Praha má dodatečný příplatek (+6&nbsp;%) za koncentraci specializovaných center. Reálná stratifikace NRHZS okres → kraj je naplánována v navazující iteraci (F3b).
+    </p>
+    <div class="fn-map-wrap">
+      <div id="fnRegionMap" style="width:100%;height:520px" aria-label="Mapa 14 krajů ČR s výdaji ZP na pojištěnce"></div>
+      <details class="fn-sankey-fallback">
+        <summary>Tabulková verze dat</summary>
+        <table class="av-data-table">
+          <caption>Výdaje ZP na pojištěnce podle kraje (proxy z věkové struktury)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Kraj</th>
+              <th class="av-num" scope="col">Kč/poj./rok</th>
+              <th class="av-num" scope="col">% od průměru</th>
+              <th class="av-num" scope="col">Pojištěnců</th>
+            </tr>
+          </thead>
+          <tbody id="fnRegionTbody"></tbody>
+        </table>
+      </details>
+    </div>
+    <p class="fn-source-note">Zdroj: data/financing.json (per_pojistence_kc 42&nbsp;226&nbsp;Kč), data/pojistenci-d5-kraj.json (věková struktura). Načteno z <code>data/financing-regions.json</code>. Aproximace, ne měřené hodnoty.</p>
   </section>
 
   <!-- ── Časová řada ────────────────────────────────────────────────────── -->

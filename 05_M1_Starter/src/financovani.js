@@ -7,6 +7,7 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
+import { registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
 
 let FINANCING = null;
 
@@ -343,7 +344,58 @@ async function init() {
   try { renderFinancingSankey(); } catch (err) { console.error('sankey failed:', err); }
   try { renderFinancingTrend(); }  catch (err) { console.error('trend failed:', err);  }
 
-  await Promise.allSettled([loadIndicators(), loadArticles()]);
+  await Promise.allSettled([loadIndicators(), loadArticles(), renderRegionMap()]);
+}
+
+// ── Choropleth krajů (F3a — proxy data) ─────────────────────────────────────
+
+async function renderRegionMap() {
+  const container = document.getElementById('fnRegionMap');
+  if (!container) return;
+  if (typeof echarts === 'undefined') {
+    console.warn('echarts not loaded — region map skipped');
+    return;
+  }
+  let geo, fin;
+  try {
+    [geo, fin] = await Promise.all([
+      fetch('data/cz-regions.geojson').then(r => r.json()),
+      fetch('data/financing-regions.json').then(r => r.json()),
+    ]);
+  } catch (err) {
+    console.error('region map fetch failed:', err);
+    return;
+  }
+  if (!registerCzMap(geo)) return;
+
+  const option = buildChoroplethOption({
+    regions: fin.regions,
+    country_avg: fin.country_avg,
+    unit: fin.unit,
+    direction: fin.direction ?? 'context_dependent',
+    name: 'Výdaje ZP na pojištěnce',
+  });
+  const chart = echarts.init(container);
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+
+  populateRegionTable(fin);
+}
+
+function populateRegionTable(fin) {
+  const tbody = document.getElementById('fnRegionTbody');
+  if (!tbody) return;
+  const sorted = [...fin.regions].sort((a, b) => b.value - a.value);
+  tbody.innerHTML = sorted.map(r => {
+    const diff = ((r.value - fin.country_avg) / fin.country_avg) * 100;
+    const sign = diff >= 0 ? '+' : '';
+    return `<tr>
+      <td>${escapeHtml(r.name)}</td>
+      <td class="av-num">${r.value.toLocaleString('cs-CZ')}</td>
+      <td class="av-num">${sign}${diff.toFixed(1)}&nbsp;%</td>
+      <td class="av-num">${r.pojistenci.toLocaleString('cs-CZ')}</td>
+    </tr>`;
+  }).join('');
 }
 
 if (typeof window !== 'undefined') init();
