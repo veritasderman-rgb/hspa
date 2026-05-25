@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financování · Poskytovatelé · HSPA Monitor</title>
+<meta name="description" content="Top poskytovatelé zdravotní péče v ČR podle úhrad od zdravotních pojišťoven za léky a zdravotnické prostředky. Drill-down z národní úrovně k IČO. Zdroj: NRHZS, ÚZIS.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Financování · Poskytovatelé · HSPA Monitor">
+<meta property="og:description" content="Top poskytovatelé podle úhrad ZP za léky a zdravotnické prostředky. Omezení: pro hospitalizační a ambulantní výkonovou péči per IČO data nejsou veřejně.">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Financování · Poskytovatelé</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">Skóre českého zdravotnictví: <strong id="czScore">—</strong> / 100 · OECD průměr <strong id="oecdScore">71</strong></span>
+</div>
+
+<main id="content">
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="fn-hero" aria-labelledby="fnpHeroHeadline">
+    <div class="fn-hero-content">
+      <div class="ed-kicker">Financování · Drill-down na poskytovatele</div>
+      <h2 class="fn-hero-headline" id="fnpHeroHeadline">Top poskytovatelé: kdo dostává nejvíc za léky a zdravotnické prostředky</h2>
+      <p class="fn-hero-lead">
+        NRHZS (Národní registr hrazených zdravotních služeb) publikuje úhrady per IČO/IČZ pouze pro <strong>léčivé přípravky</strong> a <strong>zdravotnické prostředky</strong>. Pro hospitalizační, ambulantní výkonové a kapitační úhrady nemocnicím per poskytovatel data <strong>nejsou veřejně dostupná</strong> — strukturální mezera otevřených dat, kterou kritizuje Iniciativa za efektivní zdravotnictví. Tabulka níže ukazuje pouze segment, kde data jsou.
+      </p>
+      <p class="fn-hero-lead">
+        <a href="financovani.html">← Zpět na Financování</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Filtr ─────────────────────────────────────────────────────────── -->
+  <section class="section fnp-filter-section" aria-labelledby="fnpFilterHeading">
+    <div class="section-title">
+      <h3 id="fnpFilterHeading">Filtr poskytovatelů</h3>
+      <span class="desc" id="fnpYearLabel">rok —</span>
+    </div>
+    <div class="fnp-filter">
+      <label class="fnp-filter-field">
+        <span>Kraj</span>
+        <select id="fnpKraj"><option value="">— všechny —</option></select>
+      </label>
+      <label class="fnp-filter-field">
+        <span>Segment</span>
+        <select id="fnpSegment"><option value="">— všechny —</option></select>
+      </label>
+      <label class="fnp-filter-field">
+        <span>Hledej v názvu</span>
+        <input type="search" id="fnpSearch" placeholder="např. Motol, Dr. Max…">
+      </label>
+      <button class="fnp-filter-reset" id="fnpFilterReset" type="button">Vynulovat</button>
+    </div>
+  </section>
+
+  <!-- ── Top 20 bar chart ─────────────────────────────────────────────── -->
+  <section class="section fnp-chart-section" aria-labelledby="fnpChartHeading">
+    <div class="section-title">
+      <h3 id="fnpChartHeading">Top 20 podle úhrad za léky + zdravotnické prostředky</h3>
+      <span class="desc">v mld&nbsp;Kč · podle aktivního filtru</span>
+    </div>
+    <div class="fnp-chart-wrap">
+      <canvas id="fnpBarChart" aria-label="Horizontální bar chart top 20 poskytovatelů podle úhrad za léky a zdravotnické prostředky"></canvas>
+    </div>
+  </section>
+
+  <!-- ── Tabulka ─────────────────────────────────────────────────────── -->
+  <section class="section fnp-table-section" aria-labelledby="fnpTableHeading">
+    <div class="section-title">
+      <h3 id="fnpTableHeading">Tabulka poskytovatelů</h3>
+      <span class="desc" id="fnpTableCount">— záznamů</span>
+    </div>
+    <div class="fnp-table-wrap">
+      <table class="av-data-table fnp-table">
+        <caption>Úhrady ZP per IČO (NRHZS) — léky + zdravotnické prostředky</caption>
+        <thead>
+          <tr>
+            <th scope="col" data-sort="nazev">Poskytovatel</th>
+            <th scope="col" data-sort="kraj">Kraj</th>
+            <th scope="col" data-sort="segment">Segment</th>
+            <th class="av-num" scope="col" data-sort="leky_kc">Léky (mld Kč)</th>
+            <th class="av-num" scope="col" data-sort="zp_kc">ZP (mil Kč)</th>
+            <th class="av-num" scope="col" data-sort="celkem">Σ (mld Kč)</th>
+            <th scope="col">NRPZS</th>
+          </tr>
+        </thead>
+        <tbody id="fnpTbody"></tbody>
+      </table>
+    </div>
+    <p class="fn-source-note">Zdroj: NRHZS otevřená data (datasety NZIP 2290 HVLP per IČO, 2402 Zdravotnické prostředky per IČO) — seed snapshot 2024. Licence: CC&nbsp;BY&nbsp;4.0. Načteno z <code>data/providers.json</code>. Detail poskytovatele na <a href="https://nrpzs.uzis.cz/">nrpzs.uzis.cz</a>.</p>
+  </section>
+
+  <!-- ── Caveat ───────────────────────────────────────────────────────── -->
+  <section class="section fnp-caveat-section" aria-labelledby="fnpCaveatHeading">
+    <div class="section-title">
+      <h3 id="fnpCaveatHeading">Co tato data NEUKAZUJÍ</h3>
+    </div>
+    <ul class="fnp-caveat-list" id="fnpCaveatList"></ul>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/financovani-poskytovatele.js"></script>
+</body>
+</html>
