@@ -4,6 +4,7 @@ import { renderModuleNav, renderMastheadDate, loadGlossaryTerms, isArticleVisibl
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
+import { enhanceArticleRelated } from './article-related.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
@@ -13,6 +14,7 @@ injectAiDisclaimer();
 enhanceArticleToc(); // bezpečné: na hub stránce neudělá nic (chybí .article-page)
 loadGlossaryTerms().then(terms => enhanceInlineGlossary(terms)).catch(() => {});
 loadAndRenderArticles();
+enhanceArticleRelated(); // generuje "Příbuzné sekce" na clanek-*.html (idempotent)
 
 /**
  * Vloží AI disclaimer banner do stránek sekce Články.
