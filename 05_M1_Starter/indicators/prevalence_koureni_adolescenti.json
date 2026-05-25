@@ -1,0 +1,46 @@
+{
+  "id": "prevalence_koureni_adolescenti",
+  "name": "Kouření u dospívajících (15 let)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky u adolescentů",
+  "definition": "Podíl 15letých žáků a žákyň, kteří v posledních 30 dnech kouřili cigarety alespoň jednou týdně. Vychází z dotazníkového šetření HBSC (Health Behaviour in School-aged Children) prováděného každé čtyři roky ve spolupráci WHO a SZÚ. Indikátor měří iniciaci a pravidelnost kouření v klíčovém vývojovém věku a je odlišný od ukazatele denního kouření u dospělé populace.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_hbsc",
+      "url": "https://www.szu.cz/veda-a-vyzkum/hbsc-zdravotni-chovani-deti-skolniho-veku",
+      "note": "SZÚ — HBSC (Health Behaviour in School-aged Children). Mezinárodní longitudinální studie koordinovaná WHO; ČR participuje od roku 1994. Šetření probíhá každé 4 roky na reprezentativním vzorku žáků 5., 7. a 9. ročníku ZŠ a 1. ročníku SŠ. Indikátor kouření vychází z položky: 'Jak často kouříš cigarety?' — kategorie 'alespoň jednou týdně'."
+    },
+    "fallback": {
+      "type": "espad",
+      "url": "https://www.espad.org/report/home",
+      "note": "ESPAD (European School Survey Project on Alcohol and Other Drugs) — alternativní zdroj pro kouření 15–16letých, publikováno každé 4 roky (2019, 2023)."
+    }
+  },
+  "benchmark_source": {
+    "type": "hbsc_international",
+    "code": "HBSC_SMOKING_15",
+    "dataset": "WHO/HBSC International Report 2022 — Health Behaviour in School-aged Children",
+    "value": 11.5,
+    "url": "https://www.hbsc.org/publications/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "every_4_years",
+  "stewards": [
+    "SZÚ — Centrum podpory veřejného zdraví",
+    "MZČR",
+    "WHO/HBSC koordinační centrum (Bergen)"
+  ],
+  "method_notes": "Ukazatel je standardizován na věkovou skupinu 15 let napříč zeměmi WHO HBSC sítě. Odpovídá definici HBSC protokolu z roku 2021/22. Meziroční interpolace není vhodná — data existují jen pro 2010, 2014, 2018 a 2022. Pro signál se používá nejbližší dostupný rok (2022). Hodnoty jsou nepřímé — žáci sami reportují chování (self-report bias).",
+  "limitations": "1) Šetření je průřezové — nezachycuje kauzální vztahy. 2) Sebehodnocení (self-report) vede k pravděpodobné podregistraci skutečné prevalence. 3) Čtyřletá frekvence neumožňuje roční sledování trendů. 4) Indikátor zahrnuje cigarety; elektronické cigarety (vapování) jsou sledovány odděleně a v ČR 2022 vykazují výrazně vyšší prevalenci (HBSC 2022: ~36 % 15letých zkusilo vaping) — celková expozice nikotinu je proto podhodnocena.",
+  "determinants": "**Dostupnost a cena tabáku.** Reálná cena cigaret v ČR vzrostla díky spotřební dani, ale zůstává nižší než v Irsku, Velké Británii nebo Francii. Dostupnost cigaret pro nezletilé (prodej pod 18 let) je zákonně zakázána, ale monitoring dodržování je sporadický.\n\n**Reklamní a marketingové prostředí.** Ačkoliv je reklama na tabák v EU zakázána, elektronické cigarety (vapování) jsou intenzivně propagovány na sociálních sítích zaměřených na mládež — a v ČR jsou využívány jako vstupní brána ke kouření tabáku.\n\n**Školní a komunitní kontext.** Klima ve třídě, přítomnost kouřících rodičů a přátel jsou silnými prediktory kouření v adolescenci. ČR nemá celoplošný standardizovaný preventivní program ve školách; programy jsou nesystematické a jejich efektivita není systematicky evaluována.\n\n**Regulace elektronických cigaret.** Česká republika implementuje směrnici EU TPD2 (2014/40/EU), která omezuje nikotinovou koncentraci v e-cigaretách, ale nikoli jejich marketing na mládež. Nová EU TPD3 je v legislativním procesu.\n\n**Socioekonomická nerovnost.** Kouření u adolescentů je výrazně vyšší v rodinách s nižším socioekonomickým statusem — gradient je strmý a reprodukuje zdravotní nerovnosti do dalších generací.",
+  "importance": "Kouření zahájené v adolescenci má výrazně horší prognózu závislosti než kouření zahájené v dospělosti — mozek dospívajícího je biologicky vulnerabilnější k závislosti na nikotinu. 90 % celoživotních kuřáků začalo před 18. rokem věku. Každý ročník, který projde bez navyknutí na nikotin, snižuje celoživotní riziko CHOPN, rakoviny plic, KVN a předčasné smrti. Indikátor je proto jedním z nejsilnějších prediktivních ukazatelů budoucí zátěže nemocí celé populační kohorty.\n\nV česko-slovenském a středoevropském kontextu je adolescentní kouření systémovým problémem — ČR, SK, PL, HU mají historicky výrazně vyšší prevalenci než země severní a západní Evropy. To zároveň naznačuje, že politická intervence (zdanění, marketing, školní prevence) v těchto zemích nedosahovala síly srovnatelné se Skandinávií nebo Irskem.",
+  "patient_story": "Základní škola v Přerově, přestávka po sedmé vyučovací hodině. Natálka (15) stojí s partou za školou. Cigareta přišla poprvé před čtyřmi měsíci — zkusila to z nudy a protože všichni kouřili. Teď kouří každý den. Nejde jí o chuť — jde o rituál, o patřičnost ke skupině. Doma nekouří nikdo, škola preventivní programy nedělá, a prodej cigaret v trafice nikoho nezastavil. Natálka neví, že zahájení kouření před 18. rokem dramaticky zvyšuje riziko doživotní závislosti — mozek adolescenta je k nikotinu biologicky náchylnější než mozek dospělého.\n\nKouření u 15letých v ČR dosahuje 17,1 % (SZÚ — HBSC 2022, weekly smokers). OECD průměr srovnatelných zemí: 11,5 %, EU průměr: 12,8 % — Česká republika je o 49 % nad průměrem OECD. Signal: špatný. Trend sice klesá — 2010: 29,2 %, 2014: 25,1 %, 2018: 20,3 %, 2022: 17,1 % — ale pokles zpomaluje a sousední Slovensko (18,4 %), Polsko (15,0 %) i Maďarsko (20,2 %) sdílí stejný problém regionální kultury. Země s nejnižší adolescentní prevalencí jsou Norsko (4,8 %), Švédsko (5,3 %) a Finsko (6,1 %). Navíc HBSC 2022 přidalo data o elektronických cigaretách — v ČR je zkusilo 36 % 15letých, což zcela mění celkový obrázek nikotinové expozice mládeže.\n\nStrukturálně jsou za výsledkem tři systémové faktory. Za prvé nedostatečná školní prevence — ČR nemá celoplošný, standardizovaný a evaluovaný preventivní program pro školy; to co existuje, jsou nesystematické jednorázové aktivity bez prokázaného dopadu. Za druhé volný marketing e-cigaret zaměřený na mládež — EU TPD2 omezuje nikotinovou koncentraci, ale ne TikTok reklamu na příchutě jako bubblegum nebo watermelon. Za třetí cenová dostupnost — cigaret jsou v ČR levnější než v Irsku nebo Velké Británii, kde výrazné zdanění v kombinaci s komplexní politikou snížilo adolescentní kouření na 6–8 %.\n\nPolitická páka je jasná: dokončení implementace EU TPD3 (zákaz charakteristických příchutí, přísnější marketing e-cigaret); plošný školní preventivní program s evaluací výstupů (model finského JOKI); zvýšení spotřební daně zaměřené na věkovou skupinu (simulace WHO: +10 % ceny = −4 % adolescentní prevalence); digitální věk při nákupu tabákových produktů online. Kompetence leží na MZČR, Ministerstvu školství a Ministerstvu financí — musí kooperovat. Indikátor v HSPA dashboardu sleduje kouření 15letých jako klíčový výsledkový ukazatel účinnosti prevence závislostí u dospívající populace.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
