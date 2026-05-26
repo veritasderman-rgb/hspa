@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak definovat nárok pojištěnce. Co, kdy a kde má pacient skutečně dostat (4/4) · HSPA Monitor</title>
+<meta name="description" content="Čtvrtý díl série o nároku pojištěnce. Současný § 13 ZVZP definuje nárok kvalitativně — odpovídá zdravotnímu stavu, je bezpečný, evidence-based, účinný. Chybí ale operacionální vrstva: CO konkrétně, KDY (časová norma) a KDE (geografická norma). Jak by mohl zákonodárce nárok pojištěnce reálně operacionalizovat na konkrétních klinických scénářích — od infarktu přes podezření na rakovinu prsu po terminální paliativní péči. Inspirace NHS Cancer Waiting Times, norským Prioritetstid, dánskými pakkeforløb a holandskou Treekwet.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jak definovat nárok pojištěnce. Co, kdy a kde má pacient skutečně dostat (4/4)">
+<meta property="og:description" content="§ 13 ZVZP definuje nárok kvalitativně; chybí operacionální vrstva (CO + KDY + KDE). Konkrétní scénáře — infarkt, podezření na rakovinu prsu, deprese, endoprotéza kyčle, CMP, paliativní péče.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-05-29">
+<meta property="article:section" content="Nárok pojištěnce">
+<meta name="article:audit-status" content="review-pending">
+<!--
+  audit:
+    last_reviewed: 2026-05-26
+    reviewer: claude-code-agent
+    status: review-pending
+    primary_sources_added: 6
+    visual_elements_added: 1
+    notes: "Čtvrtý díl série o nároku pojištěnce — doplňuje rámcový popis (díl 1), demografický tlak (díl 2) a reformní směry (díl 3) o operacionální vrstvu. Klíčový redakční argument: současný § 13 ZVZP definuje nárok kvalitativně (evidence-based, safe, proportional, effective), ale chybí KVANTITATIVNÍ vrstva CO + KDY + KDE. Mezinárodní paralely: NHS Cancer Waiting Times (28-day faster diagnosis standard, 31/62/none day treatment standard); norský Prioritetstid (lov om pasient- og brukerrettigheter §2-2; Helsedirektoratet prioritetsveiledere); dánské pakkeforløb (Sundhedsstyrelsen, 30+ klinických cest); holandská Treeknormen (NZa, max čekací doba dle Wmo + Zvw). Konkrétní scénáře (AMI/akutní infarkt, podezření na rakovinu prsu, depresivní porucha, endoprotéza kyčle, CMP, terminální paliativní péče) jsou ilustrativní redakční konstrukty postavené na NV 307/2012 Sb. + NHS/norských/dánských analogiích — VYŽADUJÍ ověření proti aktuální české odborné praxi (ČOS, ČKS, ČNS, ČOSKF, Česká společnost paliativní medicíny) před plnou validací. Sjednoceno z hlediska Petr → Ladislav Dušek a § 16b limit doplatků (souběžné opravy v dílech 1 a 2 série). Status published → review-pending."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nárok pojištěnce</span>
+        <span class="article-tag article-tag-muted">Série 4/4 · Operacionalizace · NHS Cancer Waiting Times · Norský Prioritetstid · Dánské pakkeforløb · Treeknormen</span>
+      </div>
+      <h2 class="article-title">Jak definovat nárok pojištěnce. Co, kdy a kde má pacient skutečně dostat</h2>
+      <p class="article-deck">
+        Předchozí tři díly série popsaly nárok v ústavní rovině (díl 1), v demografickém tlaku (díl 2) a navrhly pět reformních směrů (díl 3). Tento čtvrtý díl řeší věc, kterou český systém zatím neumí: <em>operacionální definici nároku</em>. § 13 ZVZP říká, že hrazená péče musí odpovídat zdravotnímu stavu, být bezpečná, evidence-based a účinná. Ale ne, KDY ji pacient dostane (časová norma) a KDE (geografická norma). Jak by mohl zákonodárce nárok skutečně operacionalizovat — na konkrétních klinických scénářích od infarktu přes podezření na rakovinu prsu po terminální paliativní péči. Inspirace z NHS, Norska, Dánska a Nizozemska, a co z toho dává smysl pro Česko.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">29. května 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">16 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Pacientka, která si v sobotu večer nahmatá v prsu rezistenci, má v Česku formálně nárok na to, aby ji systém přivedl k diagnostice. Když ale zavolá svému praktikovi v pondělí ráno, dostane termín na konzultaci za dva týdny. Když projde a doktor ji odešle na mamografické vyšetření, termín v některých centrech je za další čtyři týdny. Když je nález pozorovaný, jde na biopsii — další tři týdny. Pak na MDT komisi — týden, pokud má štěstí. Od prvního nahmatání k zahájení léčby uplynulo dva a půl měsíce. Z mezinárodního benchmarku britského NHS „62 dnů od urgentního odeslání k zahájení léčby" je to o pětinu více; z dánského <em>pakkeforløb</em> standardu pro karcinom prsu (~25 dnů na diagnostiku, ~15 dnů od MDT k operaci) je to dvojnásobek. Pacientka přitom dostala vše, co jí § 13 ZVZP garantuje: péči odpovídající jejímu stavu, bezpečnou, evidence-based, účinnou. Co nedostala, je <em>časová norma</em>. A ta v českém právním řádu pro většinu situací neexistuje.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntNarok4H">
+        <figcaption class="av-figure-h" id="avCntNarok4H">Co chybí v definici nároku — tři dimenze (díl 4/4)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter">CO</span>
+            <span class="av-counter-label">věcný obsah nároku</span>
+            <span class="av-counter-foot">§ 13 ZVZP — definováno (čtyři kvalitativní podmínky)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter">KDY</span>
+            <span class="av-counter-label">časová norma realizace</span>
+            <span class="av-counter-foot">§ 46 + NV 307/2012 — fragmentárně</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">KDE</span>
+            <span class="av-counter-label">geografická a kapacitní norma</span>
+            <span class="av-counter-foot">NV 307/2012 dojezdy — nevymáháno</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter">4</span>
+            <span class="av-counter-label">zahraniční modely operacionalizace</span>
+            <span class="av-counter-foot">UK · NO · DK · NL — různé cesty</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon 48/1997 Sb. (§ 13, § 46), NV 307/2012 Sb., NHS England, Helsedirektoratet (NO), Sundhedsstyrelsen (DK), NZa (NL).</p>
+      </figure>
+
+      <h3>Co dnes nárok říká — a co neříká</h3>
+
+      <p>
+        Z prvního dílu série víme, že nárok pojištěnce je v rovině věcného obsahu definován v <strong>§ 13 zákona 48/1997 Sb.</strong> čtyřmi kumulativními podmínkami: péče musí odpovídat zdravotnímu stavu a účelu, být přiměřeně bezpečná, být v souladu s aktuálními poznatky lékařské vědy a existovat důkazy o její účinnosti. Tyto čtyři podmínky jsou věcně správné a koncepčně robustní — vznikly jako importovaná verze německého <em>Wirtschaftlichkeitsgebot</em> (§ 12 SGB V: <em>ausreichend, zweckmäßig und wirtschaftlich</em>) a jsou v zásadě ekvivalentní mezinárodním standardům HTA.
+      </p>
+
+      <p>
+        Co § 13 explicitně neříká — a v čem se český systém zásadně liší od pokročilých evropských analogií — jsou dvě dimenze: <em>časová norma</em> (KDY pacient péči dostane) a <em>geografická norma</em> (KDE). Bez nich je věcný obsah nároku jen polovinou pojmu. Pacient může v Česku formálně dostat „evidence-based, účinnou, bezpečnou" péči, ale klidně se k ní propracovává devět měsíců — protože časová lhůta dostupnosti je v zákoně formulována jen pro několik výjimečných situací (urgentní péče, vybrané plánované operace dle nařízení vlády 307/2012 Sb.).
+      </p>
+
+      <p>
+        Toto není teoretický problém. Druhý díl série na demografické projekci ÚZIS SZD (OIS-13-01) ukázal, že do roku 2050 vzroste počet pacientů s nejvyšším stupněm závislosti více než dvojnásobně. Tlak na časovou dostupnost půjde nahoru i tehdy, kdyby kapacita stagnovala — a ona neporoste úměrně. V kombinaci s reformními směry z dílu 3 (CZ-DRG, value-based care, LTC integrace) je operacionalizace nároku nutným institucionálním předpokladem, aby ostatní reformy byly měřitelné. Bez definice „CO + KDY + KDE" nelze hodnotit, jestli reforma nárok udržela, nebo ne.
+      </p>
+
+      <h3>Tři dimenze, ze kterých se nárok skládá</h3>
+
+      <p>
+        Pro účely operacionalizace navrhujeme nárok strukturovat ve třech dimenzích, jejichž průnik definuje, <em>co konkrétně pacientovi systém garantuje</em>.
+      </p>
+
+      <p>
+        <strong>CO — věcný obsah.</strong> Specifikace, jaká diagnostika a léčba je hrazena pro konkrétní klinický stav. V Česku dnes z velké části určuje seznam hrazených výkonů (vyhláška o seznamu výkonů), Sazebník zdravotních výkonů, kategorizace léčivých přípravků (SÚKL) a kategorizační strom zdravotnických prostředků. Tato vrstva je relativně dobře propracovaná — i když má své slepá místa (§ 16 jako vyrovnávací nástroj pro vzácná onemocnění a inovace).
+      </p>
+
+      <p>
+        <strong>KDY — časová norma.</strong> Specifikace, v jakém čase od události (první kontakt, podezření, diagnóza, indikace) musí systém realizovat jednotlivé kroky péče. Tato vrstva v Česku formálně existuje jen pro vybrané situace v nařízení vlády 307/2012 Sb. (např. čekací doba na totální endoprotézu kyčle nebo kolene maximálně 52 týdnů od indikace), pro akutní péči se používá obecná formulace „neprodleně". Pro většinu plánovaných výkonů, ambulantních specialistů a léčebných postupů žádná konkrétní časová norma neexistuje.
+      </p>
+
+      <p>
+        <strong>KDE — geografická a kapacitní norma.</strong> Specifikace, v jaké geografické dostupnosti (dojezdový čas, vzdálenost) musí být péče pro pacienta realizovatelná. Tato vrstva v Česku formálně existuje v § 6 nařízení vlády 307/2012 Sb. (praktický lékař do 35 minut, akutní lůžková péče do 45 minut základní, kardiochirurgie do 120 minut), ale její vymáhání je prakticky neexistující: pojišťovna, která dojezdovou normu poruší, nemá zákonem stanovenou sankci a fakticky nese odpovědnost difuzní (zřizovatelem nemocnice je kraj, regulátorem MZ, smluvní vztah pojišťovna–poskytovatel — bez jasného nositele odpovědnosti za <em>geografický nárok</em>).
+      </p>
+
+      <aside class="article-callout article-callout-info" style="margin: 22px 0; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--accent); border-radius: 4px;">
+        <p style="margin: 0 0 8px 0; font-family: var(--sans); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);">Klíčová teze čtvrtého dílu</p>
+        <p style="margin: 0; font-size: 15px; line-height: 1.55;">Nárok pojištěnce je <strong>průnik tří dimenzí: CO + KDY + KDE</strong>. České právo definuje první dimenzi (věcný obsah) relativně dobře, druhou (časovou) jen fragmentárně, třetí (geografickou) bez sankčního vymáhání. Operacionalizace všech tří dimenzí pro konkrétní klinické scénáře je institucionální krok, který chybí.</p>
+      </aside>
+
+      <h3>Šest klinických scénářů: jak by operacionalizovaný nárok mohl vypadat</h3>
+
+      <p>
+        Abstraktní debata o „třech dimenzích nároku" je užitečná pro analytický rámec, ale rozhoduje se na konkrétních scénářích. Pro každý ze šesti vybraných případů ukážeme: <em>co dnes existuje, co by mohlo být operacionalizováno a podle jaké mezinárodní inspirace</em>.
+      </p>
+
+      <h4>Scénář 1: Akutní infarkt myokardu (STEMI)</h4>
+
+      <p>
+        Pacient s bolestí na hrudi volá ZZS. Klinický cíl (mezinárodně, ESC 2023 ACS Guidelines): perkutánní koronární intervence (primární PCI) do 90 minut od prvního lékařského kontaktu (FMC-to-wire-crossing). Tato časová norma je v ČR fakticky dosažena — síť 22 kardiocenter pokrývá dojezdy do 60 minut pro většinu obyvatelstva, in-hospital mortalita po AMI je 5,2 % (HSPA dashboard) proti OECD průměru 6,5 %. Česko je v této oblasti evropská špička.
+      </p>
+
+      <p>
+        Co tu už nárok operacionalizovaný de facto je: <strong>CO</strong> — primární PCI, kardiologická centrová péče, antiagregační a antikoagulační terapie. <strong>KDY</strong> — neprodleně, FMC-to-wire ≤ 90 min (klinický standard ČKS, ne zákonný). <strong>KDE</strong> — síť 22 kardiocenter (Věstník MZ ČR), průměrný dojezd ZZS k pacientovi do 20 min, dojezd do PCI centra do 60 min pro většinu populace.
+      </p>
+
+      <p>
+        Co chybí: explicitní zákonná norma. Současný systém funguje díky odborné samosprávě (Česká kardiologická společnost, NRKI registr) a dlouhodobé politické kontinuitě, ne díky zakotvení v právu. Pokud by se odborný konsenzus narušil (politická tlaky, finanční tlak na restrukturalizaci sítě), formální právní ochrana neexistuje — jako třeba britský NHS <em>STEMI 90-minute door-to-balloon</em> standard, který je explicitně zakotven v <em>NHS Constitution</em> a vyžaduje veřejné reportování.
+      </p>
+
+      <h4>Scénář 2: Podezření na karcinom prsu (urgentní onkologická cesta)</h4>
+
+      <p>
+        Pacientka s palpovatelnou rezistencí v prsu se obrátí na praktického lékaře. Klinický cíl by měl být dvojí: rychlá triáž (rozlišit benigní vs. maligní podezření) a rychlé zahájení léčby u potvrzeného karcinomu. V Česku tento scénář dnes operacionalizován <em>není</em>.
+      </p>
+
+      <p>
+        Mezinárodně existují tři rozpracované modely. <strong>NHS England — Cancer Waiting Times</strong>: 28-day Faster Diagnosis Standard (od urgentního odeslání praktikem do potvrzení/vyloučení diagnózy maximálně 28 dní), 31-day Treatment Standard (od rozhodnutí léčit do první léčby maximálně 31 dní), 62-day Urgent Referral to Treatment Standard (od urgentního odeslání k zahájení léčby maximálně 62 dní). <strong>Dánské pakkeforløb</strong>: pro každou ze 30+ onkologických diagnóz konkrétní časová cesta v pracovních dnech (např. karcinom prsu: ≤14 dnů od odeslání k mamografii, ≤14 dnů na biopsii a histologii, ≤14 dnů od MDT k operaci). <strong>Norský Prioritetstid</strong>: kategorizace stavů podle závažnosti s konkrétní lhůtou pro zahájení péče (legislativně zakotveno v <em>pasient- og brukerrettighetsloven</em> § 2-2, prováděno přes <em>Helsedirektoratet</em> prioritetsveiledere).
+      </p>
+
+      <p>
+        Operacionalizovaný nárok by pro tento scénář v Česku mohl znít: <strong>CO</strong> — palpační vyšetření praktikem nebo gynekologem, mamografie ± UZ, biopsie, MDT v Komplexním onkologickém centru, indikace léčby. <strong>KDY</strong> — od podezření k mamografii ≤ 7 dní, k biopsii ≤ 14 dní, od potvrzeného nálezu k MDT a zahájení léčby ≤ 31 dní (analogicky NHS 28+31). <strong>KDE</strong> — mamografická pracoviště v každém okrese (NSC ÚZIS akreditace), KOC do 60 minut dojezdu od bydliště. Operacionalizace by se opřela o stávající síť 16 KOC + NSC akreditovaná mamografická pracoviště a o nový institut onkologického koordinátora (úhradová vyhláška 432/2025 Sb., účinná od 1. 1. 2026 — viz <a href="clanek-onkologicky-koordinator-2026.html">náš článek o onkologickém koordinátorovi</a>).
+      </p>
+
+      <h4>Scénář 3: Středně těžká depresivní porucha s indikací psychoterapie</h4>
+
+      <p>
+        Pacient s diagnostikovanou středně těžkou depresí má v ČR podle MKN-10 (F32.1) jasný klinický cíl: kombinace farmakoterapie a psychoterapie (dle českých doporučených postupů ČNS i mezinárodních ESCAP/WFSBP). V praxi pacient dostane recept na antidepresivum (rychle, do týdne od první konzultace), ale na ambulantního psychiatra čeká v některých regionech 3–6 měsíců, na klinického psychologa s hrazenou psychoterapií ještě déle.
+      </p>
+
+      <p>
+        Operacionalizovaný nárok by mohl znít: <strong>CO</strong> — vstupní psychiatrické vyšetření, farmakoterapie podle KDP ČNS, ≥ 10 hodin individuální psychoterapie hrazené z VZP (současný úhradový rámec) v indikovaných případech. <strong>KDY</strong> — vstupní psychiatrické vyšetření ≤ 30 dní od odeslání praktikem, zahájení psychoterapie ≤ 60 dní (analogicky NHS IAPT/NHS Talking Therapies: 75 % pacientů začínajících léčbu do 28 dnů, 95 % do 56 dnů). <strong>KDE</strong> — síť ambulantních psychiatrů a klinických psychologů s hrazenou kapacitou v každém okresu, Centra duševního zdraví (CDZ) v každém kraji (současný cíl Reformy psychiatrie z roku 2013, viz <a href="clanek-reforma-psychiatrie-13-let.html">náš článek</a>).
+      </p>
+
+      <p>
+        Praktická realita: kapacita ambulantních psychiatrů (HSPA dashboard <a href="indicator.html?id=psychiatri_per_100k"><em>psychiatři / 100 000</em></a>: 13 v ČR vs. OECD průměr 17,3), kapacita klinických psychologů a CDZ je dnes pod úrovní, kterou by operacionalizovaný nárok vyžadoval. Operacionalizace je tedy spojena s rozšířením kapacit — ne s pouhým zakotvením lhůt. Pokud by zákon zakotvil lhůty bez doplnění kapacit, vznikl by zde institucionální paradox: pojišťovny by porušovaly normy, aniž by měly nástroj, jak je naplnit.
+      </p>
+
+      <h4>Scénář 4: Endoprotéza kyčelního kloubu (plánovaná chirurgie)</h4>
+
+      <p>
+        Pacient s pokročilou osteoartrózou kyčelního kloubu má v Česku <em>jediný</em> scénář, kde nárok skutečně operacionálně existuje. Nařízení vlády č. 307/2012 Sb. (příloha 1) stanoví maximální časovou lhůtu na vyšetření, indikaci a samotnou totální endoprotézu kyčle 52 týdnů od provedení indikace.
+      </p>
+
+      <p>
+        HSPA Monitor sleduje plnění této normy přes indikátor <a href="indicator.html?id=cekaci_doba_kycel"><em>čekací doba na endoprotézu kyčle</em></a>. Reálné čekací doby v některých nemocnicích v roce 2026 přesahují 70 týdnů, v individuálních centrech až 100 týdnů — formální naplnění normy je pojišťovnami vykazováno průměrem za celou ČR, ale individuální pacient v konkrétním regionu může na péči čekat dvojnásobek normy. Operacionálně by tedy <em>nestačila jen norma</em>: musela by být doplněna sankčním mechanismem (např. pojišťovna by byla povinna při překročení lhůty kompenzovat pacientovi cestovní náklady k poskytovateli mimo region, nebo by se snižovala bonifikace pojišťovny v přerozdělovacím fondu).
+      </p>
+
+      <p>
+        Mezinárodní inspirace pro tento scénář: holandské <em>Treeknormen</em> (NZa, Nederlandse Zorgautoriteit) stanoví maximální čekací dobu pro plánované výkony (pro plánovanou chirurgii 5 týdnů od indikace v ambulanci k operaci), a pokud zdravotní pojišťovna normu poruší, je povinna pacientovi zorganizovat péči u jiného poskytovatele (i v jiném regionu), případně mu nahradit dodatečné cestovní náklady. Tato vymahatelnost je rozdíl, který v ČR pro § 6 NV 307/2012 Sb. zatím chybí.
+      </p>
+
+      <h4>Scénář 5: Pacient po cévní mozkové příhodě (akutní + následná péče)</h4>
+
+      <p>
+        Pacient s podezřením na CMP volá ZZS. Klinický cíl je dvojí: rychlá rekanalizace (intravenózní trombolýza ≤ 4,5 hodiny od začátku příznaků, mechanická trombektomie ≤ 6–24 hodin podle typu), a navazující rehabilitace v iktovém centru. V akutní vrstvě je Česko mezinárodně úspěšné — síť iktových center (Věstník MZ ČR) pokrývá dojezdy do 45 minut pro většinu populace, in-hospital mortalita po CMP 7,7 % (HSPA dashboard) zhruba odpovídá OECD průměru.
+      </p>
+
+      <p>
+        Co operacionalizovaný nárok dnes <em>nezachycuje</em>, je <em>navazující rehabilitační péče</em>. Pacient po stabilizaci v akutním centru má klinický cíl: časná rehabilitace (do 7 dnů od příhody), pokračování v rehabilitačním ústavu nebo na následných lůžkách, ambulantní rehabilitace v komunitě. Reálná čekací doba na lůžko rehabilitačního ústavu se v některých regionech pohybuje 4–8 týdnů, ambulantní rehabilitace v okrese může být nedostupná. Pacient tedy <em>dostane akutní péči podle nejlepších evropských standardů</em>, ale následnou rehabilitaci pouze fragmentárně. Tento rozpor je v evropském srovnání u CMP častý — Velká Británie ho operacionalizovala přes <em>SSNAP</em> (Sentinel Stroke National Audit Programme) s kvalitativním reportingem pro každé centrum a kvalitativním bonusem za navazující rehabilitaci.
+      </p>
+
+      <h4>Scénář 6: Pacient v terminálním stadiu — paliativní péče</h4>
+
+      <p>
+        Pacient s diagnostikovaným pokročilým nádorovým onemocněním nebo terminálním srdečním selháním má klinický cíl: kvalitní paliativní péče v prostředí, které si pacient volí (domov, hospic, nemocnice). V Česku existují tři typy paliativní kapacity: <em>specializovaná paliativní ambulantní péče</em>, <em>lůžková hospicová péče</em> (cca 600 lůžek pro 10,8 milionu obyvatel) a <em>mobilní specializovaná paliativní péče</em> (MSPP, hrazená od r. 2020 z VZP, postupně roste).
+      </p>
+
+      <p>
+        Operacionalizovaný nárok by mohl znít: <strong>CO</strong> — paliativní konzultace specialistou ≤ 14 dní od indikace ošetřujícím lékařem, dostupnost MSPP pro pacienta v domácím prostředí, garantovaná hospicová kapacita pro pacienty bez možnosti domácí péče. <strong>KDY</strong> — paliativní konzultace ≤ 14 dní, zahájení MSPP ≤ 7 dní od indikace, přijetí do lůžkového hospice ≤ 14 dní. <strong>KDE</strong> — MSPP v každém okrese, lůžkový hospic ve spádové oblasti ≤ 60 minut dojezdu (analogicky britská <em>End of Life Care Strategy</em>).
+      </p>
+
+      <p>
+        Reálná kapacita ČR k operacionalizaci je dnes podlimitní: 600 hospicových lůžek odpovídá WHO/EAPC doporučení pro minimum (přibližně 5 lůžek na 100 000 obyvatel = pro ČR cca 540), ale tzv. dostačující kapacita podle EAPC je 8–10 lůžek na 100 000 obyvatel — tedy 850–1 080. MSPP roste z nuly k zhruba polovině populace s indikací. Operacionalizace nároku v této oblasti by tedy znamenala konkrétní pětileté kapacitní cíle — viz <a href="clanek-hospicova-pece.html">náš dřívější článek o hospicové péči</a>.
+      </p>
+
+      <h3>Co mezinárodní zkušenost říká o operacionalizaci</h3>
+
+      <p>
+        Žádná z evropských zemí, které operacionalizovaný nárok pojištěnce zavedly, nevyřešila všechny tři dimenze najednou. Šly postupnou cestou — typicky nejprve onkologie (kde je politická legitimita nejvyšší), pak akutní péče (kde je medicínská evidence nejjasnější), pak plánovaná chirurgie a postupně další oblasti.
+      </p>
+
+      <p>
+        <strong>Velká Británie — NHS Cancer Waiting Times.</strong> Zavedeno postupně od 90. let, dnes obsahuje 9 časových standardů pro onkologii (28-day Faster Diagnosis, 31-day Treatment, 62-day Urgent Referral). Klíčová vlastnost: kvartální veřejné reportování každé NHS Trust + Care Quality Commission inspekce v případě dlouhodobého neplnění. Sankce mírnější (kapitační penalizace ne, ale veřejná inspekce + politický tlak), efekt měřitelný. Po desetiletí debaty o cílech jsou Cancer Waiting Times dnes politicky nezpochybňované — kterákoli vláda, která by chtěla čísla zhoršit, by zaplatila politickou cenu.
+      </p>
+
+      <p>
+        <strong>Dánsko — pakkeforløb.</strong> Zavedeno od roku 2008 jako reakce na zhoršující se 5leté přežití onkologických pacientů ve srovnání se severským sousedstvím. Sundhedsstyrelsen publikuje pro každou ze 30+ onkologických a 17+ kardiovaskulárních/neurologických diagnóz konkrétní časovou cestu („balíček" — pakkeforløb) v pracovních dnech, regiony jsou povinny tyto časové normy plnit. Klíčová vlastnost: cesta je standardizovaná napříč celým systémem, pacient ji může sledovat ve veřejně dostupné dokumentaci, regiony reportují plnění kvartálně.
+      </p>
+
+      <p>
+        <strong>Norsko — Prioritetstid.</strong> Zákon <em>Lov om pasient- og brukerrettigheter</em> (zákon o právech pacientů a uživatelů, naposled novelizován 2024) v § 2-2 stanoví, že pacient má nárok na <em>nezbytnou specializovanou péči</em>, kterou musí zdravotní region (RHF) zajistit ve lhůtě stanovené ošetřujícím lékařem (max do 365 dnů u méně urgentních stavů). Helsedirektoratet publikuje <em>prioritetsveiledere</em> — pro 33 specialistických oborů dokumenty, které definují kritéria pro získání nároku a doporučenou maximální čekací dobu pro konkrétní klinické stavy.
+      </p>
+
+      <p>
+        <strong>Nizozemsko — Treeknormen.</strong> NZa (Nederlandse Zorgautoriteit) stanoví maximální čekací doby pro ambulantní specialisty (4 týdny), plánované operace (5 týdnů od indikace v ambulanci k operaci) a diagnostiku (4 týdny). Pokud poskytovatel normu nesplní, je povinen pacienta předat jinému poskytovateli (i v jiném regionu), zdravotní pojišťovna nese odpovědnost za zajištění alternativní péče. Tato <em>sankční vymahatelnost</em> je největší rozdíl proti českému NV 307/2012 Sb.
+      </p>
+
+      <h3>Politické rozhodnutí: zákon, vyhláška nebo metodika?</h3>
+
+      <p>
+        Pro Česko stojí v politické rovině klíčová otázka: <em>v jakém právním formátu by měl operacionalizovaný nárok existovat?</em> Existují tři realistické cesty.
+      </p>
+
+      <p>
+        <strong>Cesta A — zákonem.</strong> Operacionalizace prostřednictvím novely zákona 48/1997 Sb. (rozšíření § 13 o operacionální vrstvu, nebo nový § 13a) a § 46 (zajištění dostupnosti). Politicky nejnáročnější — vyžaduje politický konsenzus, který v poslední dekádě nikdy nevznikl. Ale ústavně nejčistší: výhrada zákona, kterou stanoví Ústavní soud v Pl. ÚS 35/95 a Pl. ÚS 36/11, tuto cestu vyžaduje pro <em>rozsah nároku</em>. Časové a geografické dimenze ovšem podle dosavadní judikatury ÚS nepatří striktně do rámce „rozsahu" — je tu výkladový prostor pro nižší normu.
+      </p>
+
+      <p>
+        <strong>Cesta B — nařízením vlády.</strong> Rozšíření nařízení vlády 307/2012 Sb. (které dnes obsahuje obecné dojezdové a čekací normy) o konkrétní klinické scénáře — onkologie, kardiologie, paliativní péče, primární psychiatrie. Politicky průchodnější (vláda + odborné organizace, ne celý parlament), institucionálně realističtější. Limit: NV 307/2012 Sb. je dnes podzákonný předpis bez sankčního mechanismu — vyžadoval by současně zákonnou novelu, aby jeho porušení mělo důsledky pro pojišťovny.
+      </p>
+
+      <p>
+        <strong>Cesta C — metodikou MZ ČR a NIKEZ.</strong> Operacionalizace přes metodiky NIKEZ (<a href="strategie.html?id=nikez_zdravotnictvi">Národní institut kvality a excelence zdravotnictví</a>), Klinické doporučené postupy (KDP) a Věstník MZ ČR. Politicky nejprůchodnější (administrativní rozhodnutí MZ + odborná samospráva), institucionálně nejrychlejší. Limit: bez zákonné podpory nemá pacient soudně vymahatelný nárok, jen profesní doporučení. Tato cesta je analogická britskému přístupu (NHS Constitution + NICE pokyny — ne striktně právní vymahatelnost, ale silný politicko-administrativní tlak).
+      </p>
+
+      <p>
+        Pravděpodobně nejrealističtější je <em>kombinace všech tří cest</em>: zákonem zakotvit rámec (povinnost MZ ve spolupráci s odbornými společnostmi vydat operacionalizační metodiky pro definované klinické scénáře, sankční mechanismus pro pojišťovny), nařízením vlády stanovit obecné dojezdové a čekací parametry, a metodikou NIKEZ + KDP odborných společností konkretizovat klinické scénáře.
+      </p>
+
+      <h3>Co operacionalizovaný nárok NE-musí znamenat</h3>
+
+      <p>
+        V politické debatě se snadno objeví námitka, že operacionalizace = zvýšení nákladů. Tato námitka je částečně pravdivá, ale je důležité explicitně oddělit, co operacionalizace <em>nezahrnuje</em>.
+      </p>
+
+      <p>
+        <strong>Nezahrnuje rozšíření věcného obsahu nároku.</strong> Operacionalizace neříká, že pacient musí dostat <em>více péče</em>. Říká, že stávající nárok musí být realizován v určité kvalitě, čase a dostupnosti. Pokud současný systém čekací doby na endoprotézu kyčle průměrně 80 týdnů přepíše na zákonných 52, neznamená to, že má péče vzniknout odnikud — znamená to, že současná kapacita musí být přerozdělena tak, aby norma byla naplněna (nebo musí být doplněna). Často je řešením přerozdělení uvnitř krajů (ne investice).
+      </p>
+
+      <p>
+        <strong>Nezahrnuje individualizovanou personalizaci.</strong> Operacionalizace pracuje s typovými klinickými scénáři, ne s individuálním pacientem. Pacient se vzácnou kombinací diagnóz může mít zvláštní časový průběh — pro něj zůstává § 16 ZVZP jako individualizovaný bezpečnostní ventil (jak jsme popsali v prvním dílu série).
+      </p>
+
+      <p>
+        <strong>Nezahrnuje zrušení odborné autonomie.</strong> Operacionalizace nemůže nahradit klinické rozhodnutí lékaře. Operacionalizace stanovuje rámcové cíle, klinik rozhoduje o konkrétním postupu u konkrétního pacienta. Operacionalizovaná norma „mamografie do 7 dnů" neznamená, že každá pacientka s palpační nálezem MUSÍ mít mamografii do 7 dnů — znamená, že systém musí být schopen mamografii do 7 dnů poskytnout, pokud ji lékař indikuje.
+      </p>
+
+      <h3>Klíčová podmínka úspěchu: měřitelnost</h3>
+
+      <p>
+        Operacionalizovaný nárok dává smysl jen tehdy, když lze měřit jeho plnění. To znamená, že každý ze tří rozměrů (CO + KDY + KDE) musí mít definovaný měřitelný indikátor, který je veřejně reportovaný.
+      </p>
+
+      <p>
+        Pro CO existuje měřitelnost přes registr výkonů a léků (NRH, NOR, SÚKL data). Pro KDY je potřeba systematicky měřit čekací doby — to dnes pojišťovny dělají, ale neveřejně, agregovaně a bez konkrétní vazby na klinický scénář. Pro KDE jsou dostupné dojezdové analýzy ÚZIS, ale taktéž bez systematického veřejného reportingu. Operacionalizace nároku vyžaduje paralelně rozšíření HSPA Monitoru / INDIKO / NIKEZ reportingu o tyto dimenze, aby pacient mohl vidět, jestli jeho regionální systém normu plní, a aby pojišťovna měla veřejnou odpovědnost.
+      </p>
+
+      <p>
+        Pro HSPA Monitor to konkrétně znamená rozšíření datového kontraktu o tři nové oblasti indikátorů: <em>časová dostupnost</em> (čekací doby na konkrétní klinický scénář), <em>geografická dostupnost</em> (dojezdové analýzy s rozpadem na kraj/okres/ORP) a <em>kontinuita péče</em> (procento pacientů, kteří absolvovali kompletní klinickou cestu v normě). Bez těchto indikátorů zůstane operacionalizovaný nárok deklarací, ne měřitelnou skutečností.
+      </p>
+
+      <h3>Závěr celé série: od deklarace k operacionalizaci</h3>
+
+      <p>
+        Čtyřdílná série Nárok pojištěnce stojí na třech postupných pozorováních a jednom syntetickém závěru. <strong>První díl</strong> ukázal, že nárok pojištěnce je v ústavní a zákonné rovině jeden z nejštědřejších v Evropě — chráněn čl. 31 Listiny, vymezen § 11 a § 13 ZVZP, podepřen § 16 jako bezpečnostní pojistkou. <strong>Druhý díl</strong> ukázal, že demografická projekce 2024–2050 (zdvojnásobení populace s PnP III–IV ve věku 75+) staví systém před tlak, který právní rámec sám nezvládne. <strong>Třetí díl</strong> navrhl pět reformních směrů (kodifikace nadstandardů, reforma § 16 + HTA, restrukturalizace sítě, VBHC v CZ-DRG, integrace LTC), kterými lze nárok udržet.
+      </p>
+
+      <p>
+        Tento čtvrtý díl je institucionálním předpokladem všech tří předchozích. Bez <em>operacionalizace</em> nároku — bez definice „CO + KDY + KDE" pro konkrétní klinické scénáře — nelze měřit, jestli demografický tlak nárok rozpadl, ani jestli reformní směry nárok udržely. Ústavní deklarace v čl. 31 Listiny zůstane bez operacionalizace abstraktním slibem. Politické rozhodnutí, které před českým zdravotnictvím v příští dekádě stojí, není „udržíme nárok?", ale „dokážeme nárok pojmenovat tak konkrétně, aby ho šlo měřit, vymáhat a udržovat?".
+      </p>
+
+      <p>
+        Mezinárodní zkušenost (NHS Cancer Waiting Times, dánské pakkeforløb, norský Prioritetstid, holandské Treeknormen) ukazuje, že tato cesta je realistická. Není to revoluce — je to postupná institucionální práce, která trvá deset až dvacet let. Pokud chceme, aby pacientka s palpační rezistencí v prsu v roce 2035 nečekala dva a půl měsíce na zahájení léčby, musíme operacionalizovat nárok dnes. A musíme to udělat tak, aby každý pacient, lékař, manažer nemocnice a politik věděli, co konkrétně, kdy a kde systém garantuje. Ne jako proklamace v Listině, ale jako měřitelný závazek.
+      </p>
+
+      <p>
+        <strong>Konec série.</strong> Předchozí díly: <a href="clanek-narok-pojistence-1-co-to-je.html">1/4 — Co dnes skutečně máte nárok</a> · <a href="clanek-narok-pojistence-2-demograficky-tlak.html">2/4 — Demografický tlak</a> · <a href="clanek-narok-pojistence-3-co-s-tim.html">3/4 — Pět reformních směrů</a>.
+      </p>
+
+    </div>
+
+    <aside class="article-evidence-box" style="margin: 28px 0; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--accent); border-radius: 4px;">
+      <h4 style="margin-top: 0; font-family: var(--sans); font-size: 16px;">Šest klinických scénářů — operacionalizace v CO + KDY + KDE</h4>
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--rule);">
+            <th style="text-align: left; padding: 6px 4px;">Scénář</th>
+            <th style="text-align: left; padding: 6px 4px;">Současný stav v ČR</th>
+            <th style="text-align: left; padding: 6px 4px;">Mezinárodní paralela</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--rule-mut);">
+            <td style="padding: 6px 4px;"><strong>1. Akutní infarkt (STEMI)</strong></td>
+            <td style="padding: 6px 4px;">Operacionálně funkční (síť 22 kardiocenter, mortalita 5,2 %), ale bez zákonné normy</td>
+            <td style="padding: 6px 4px;">UK NHS STEMI 90-min · ESC Guidelines</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule-mut);">
+            <td style="padding: 6px 4px;"><strong>2. Podezření na karcinom prsu</strong></td>
+            <td style="padding: 6px 4px;">Bez časové normy; reálně 2–3 měsíce od podezření k léčbě</td>
+            <td style="padding: 6px 4px;">UK 28/31/62-day · DK pakkeforløb (~45 dní)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule-mut);">
+            <td style="padding: 6px 4px;"><strong>3. Středně těžká deprese</strong></td>
+            <td style="padding: 6px 4px;">Recept rychle; psychiatr/psychoterapie 3–6 měsíců</td>
+            <td style="padding: 6px 4px;">UK NHS Talking Therapies (28/56 dní)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule-mut);">
+            <td style="padding: 6px 4px;"><strong>4. Endoprotéza kyčle</strong></td>
+            <td style="padding: 6px 4px;">Norma 52 týdnů (NV 307/2012), reálně 70–100 týdnů, bez sankce</td>
+            <td style="padding: 6px 4px;">NL Treeknormen (5 týdnů + sankce)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--rule-mut);">
+            <td style="padding: 6px 4px;"><strong>5. Cévní mozková příhoda</strong></td>
+            <td style="padding: 6px 4px;">Akutní vrstva funkční; rehabilitace fragmentární</td>
+            <td style="padding: 6px 4px;">UK SSNAP + ESO Action Plan</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 4px;"><strong>6. Paliativní péče</strong></td>
+            <td style="padding: 6px 4px;">Hospic 600 lůžek (cca minimum WHO); MSPP rostou</td>
+            <td style="padding: 6px 4px;">UK End of Life Care Strategy · EAPC norma 8–10/100k</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin: 12px 0 0 0; font-size: 12px; color: var(--ink-mut);">Mezinárodní paralely jsou výběrové ilustrace, ne komplexní srovnání. Konkrétní české parametry vyžadují ověření proti aktuální odborné praxi (ČKS pro AMI, ČOS pro onkologii, ČNS pro psychiatrii, Česká společnost paliativní medicíny pro EOL).</p>
+    </aside>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Datový klíč: HSPA indikátory pro operacionalizaci</div>
+      <h4 class="article-databox-h">Indikátory, podle kterých lze měřit plnění operacionalizovaného nároku</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_inhosp_ami"><strong>In-hospital mortalita po AMI</strong></a> — proxy plnění akutního scénáře STEMI (operacionalizace de facto existuje).</li>
+        <li><a href="indicator.html?id=mortalita_inhosp_cmp"><strong>In-hospital mortalita po CMP</strong></a> — proxy plnění akutního scénáře iktové péče.</li>
+        <li><a href="indicator.html?id=cekaci_doba_kycel"><strong>Čekací doba na endoprotézu kyčle</strong></a> — jediný indikátor, kde existuje zákonná časová norma (NV 307/2012 — 52 týdnů).</li>
+        <li><a href="indicator.html?id=cekaci_doby_specialist"><strong>Čekací doby na ambulantní specialisty</strong></a> — agregátní časová dimenze realizace nároku.</li>
+        <li><a href="indicator.html?id=unmet_need_medical"><strong>Nenaplněná zdravotní potřeba</strong></a> — primární proxy faktické dostupnosti nároku.</li>
+        <li><a href="indicator.html?id=screening_mamograficky"><strong>Účast na mamografickém screeningu</strong></a> — kontext pro scénář podezření na karcinom prsu.</li>
+        <li><a href="indicator.html?id=hospicova_pece_luzka"><strong>Hospicová lůžka</strong></a> — kapacita pro scénář paliativní péče.</li>
+        <li><a href="indicator.html?id=psychiatri_per_100k"><strong>Psychiatři / 100 000 obyvatel</strong></a> — kapacita pro scénář středně těžké deprese.</li>
+        <li><a href="indicator.html?id=pouzivani_antidepresiv"><strong>Spotřeba antidepresiv</strong></a> — proxy nerovnováhy mezi farmakoterapií a psychoterapií.</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Tento čtvrtý díl uzavírá sérii o nároku pojištěnce. Pro celkový kontext doporučujeme přečíst všechny tři předchozí díly. Klíčový bod tohoto dílu — že operacionalizace nároku (CO + KDY + KDE) je institucionálním předpokladem všech reformních směrů popsaných ve třetím dílu — implikuje rozšíření HSPA Monitoru o nové indikátory časové a geografické dostupnosti. To je nejbližší krok, který tato série identifikuje jako redakční prioritu.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Legislativa, mezinárodní paralely a operacionalizační dokumenty</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český právní rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 48/1997 Sb.</strong> — § 11, § 13, § 16, § 17, § 46 (povinnost zajistit dostupnost). <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Nařízení vlády č. 307/2012 Sb.</strong> o místní a časové dostupnosti zdravotních služeb. <a href="https://www.zakonyprolidi.cz/cs/2012-307" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Pl. ÚS 35/95</strong> (10. 7. 1996) — výhrada zákona pro rozsah hrazené péče. <a href="https://nalus.usoud.cz/" target="_blank" rel="noopener">NALUS ↗</a></li>
+          <li><strong>Pl. ÚS 36/11</strong> (20. 6. 2013) — zákonný rámec pro standardy a nadstandardy. <a href="https://nalus.usoud.cz/" target="_blank" rel="noopener">NALUS ↗</a></li>
+          <li><strong>Listina základních práv a svobod</strong> — čl. 31 (právo na bezplatnou zdravotní péči), čl. 41 odst. 1 (vymahatelnost sociálních práv v mezích zákona). <a href="https://www.zakonyprolidi.cz/cs/1993-2" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní inspirace operacionalizace</h5>
+        <ul class="article-sources-list">
+          <li><strong>UK NHS England — Cancer Waiting Times</strong> (28-day Faster Diagnosis Standard, 31-day Treatment Standard, 62-day Urgent Referral Standard). <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/cancer-waiting-times/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>UK NHS Constitution</strong> — explicitní formalizace nároku pacienta. <a href="https://www.gov.uk/government/publications/the-nhs-constitution-for-england" target="_blank" rel="noopener">gov.uk ↗</a></li>
+          <li><strong>UK NHS Talking Therapies (IAPT)</strong> — operacionalizace přístupu k psychoterapii. <a href="https://www.england.nhs.uk/mental-health/adults/nhs-talking-therapies/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>Dánsko — Sundhedsstyrelsen pakkeforløb</strong> (klinické cesty pro onkologii, kardiologii, neurologii a další). <a href="https://www.sst.dk/da/Viden/Patientforloeb-og-pakkeforloeb" target="_blank" rel="noopener">sst.dk ↗</a></li>
+          <li><strong>Norsko — Pasient- og brukerrettighetsloven (LOV-1999-07-02-63), § 2-2</strong>. <a href="https://lovdata.no/dokument/NL/lov/1999-07-02-63" target="_blank" rel="noopener">lovdata.no ↗</a></li>
+          <li><strong>Norsko — Helsedirektoratet prioritetsveiledere</strong> (33 specializačních pokynů pro prioritizaci). <a href="https://www.helsedirektoratet.no/veiledere/prioriteringsveiledere" target="_blank" rel="noopener">helsedirektoratet.no ↗</a></li>
+          <li><strong>Nizozemsko — NZa Treeknormen</strong> (maximální čekací doby pro ambulantní, plánovanou a diagnostickou péči). <a href="https://www.nza.nl/onderwerpen/wachttijden" target="_blank" rel="noopener">nza.nl ↗</a></li>
+          <li><strong>UK SSNAP (Sentinel Stroke National Audit Programme)</strong> — kvalitativní reporting iktové péče. <a href="https://www.strokeaudit.org/" target="_blank" rel="noopener">strokeaudit.org ↗</a></li>
+          <li><strong>EAPC (European Association for Palliative Care) — Atlas of Palliative Care</strong>. <a href="https://www.eapcnet.eu/" target="_blank" rel="noopener">eapcnet.eu ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">České klinické a institucionální zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>NIKEZ — Národní institut kvality a excelence zdravotnictví</strong>. <a href="https://nikez.mzcr.cz/" target="_blank" rel="noopener">nikez.mzcr.cz ↗</a> · viz též <a href="strategie.html?id=nikez_zdravotnictvi">strategie HSPA Monitoru</a>.</li>
+          <li><strong>INDIKO — portál indikátorů kvality péče (FBMI ČVUT + ÚZIS + KZP)</strong>. <a href="https://indiko.cz/" target="_blank" rel="noopener">indiko.cz ↗</a></li>
+          <li><strong>Česká kardiologická společnost (ČKS) — doporučení pro management AMI</strong>. <a href="https://www.kardio-cz.cz/" target="_blank" rel="noopener">kardio-cz.cz ↗</a></li>
+          <li><strong>Česká onkologická společnost ČLS JEP</strong> + Národní onkologický program. <a href="https://www.linkos.cz/" target="_blank" rel="noopener">linkos.cz ↗</a></li>
+          <li><strong>Česká neurologická společnost — doporučené postupy pro CMP</strong>. <a href="https://www.czech-neuro.cz/" target="_blank" rel="noopener">czech-neuro.cz ↗</a></li>
+          <li><strong>Česká společnost paliativní medicíny ČLS JEP</strong>. <a href="https://www.paliativnimedicina.cz/" target="_blank" rel="noopener">paliativnimedicina.cz ↗</a></li>
+          <li><strong>Reforma psychiatrie ČR</strong> + Centra duševního zdraví (CDZ). <a href="https://www.reformapsychiatrie.cz/" target="_blank" rel="noopener">reformapsychiatrie.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Předchozí díly série a související články HSPA Monitoru</h5>
+        <ul class="article-sources-list">
+          <li><strong>Série Nárok pojištěnce:</strong> <a href="clanek-narok-pojistence-1-co-to-je.html">1/4 — Co dnes máte nárok</a> · <a href="clanek-narok-pojistence-2-demograficky-tlak.html">2/4 — Demografický tlak</a> · <a href="clanek-narok-pojistence-3-co-s-tim.html">3/4 — Reformní směry</a> · <strong>4/4 (tento článek)</strong>.</li>
+          <li><a href="clanek-onkologicky-koordinator-2026.html"><strong>Onkologický koordinátor 2026</strong></a> — institucionální podpora pro scénář 2 (karcinom prsu).</li>
+          <li><a href="clanek-reforma-psychiatrie-13-let.html"><strong>Reforma psychiatrie po 13 letech</strong></a> — institucionální kontext pro scénář 3 (deprese).</li>
+          <li><a href="clanek-cekaci-doby-kycel.html"><strong>Čekací doby na endoprotézu kyčle</strong></a> — empirická data pro scénář 4.</li>
+          <li><a href="clanek-cmp-iktova-centra.html"><strong>CMP a iktová centra</strong></a> — empirická data pro scénář 5.</li>
+          <li><a href="clanek-hospicova-pece.html"><strong>Hospicová péče</strong></a> — empirická data pro scénář 6.</li>
+          <li><a href="clanek-data-leci-cesko-2026.html"><strong>Data léčí Česko</strong></a> — institucionální rámec NIKEZ + ÚZIS + KZP, který operacionalizaci umožňuje.</li>
+          <li><a href="clanek-uhradova-vyhlaska.html"><strong>Úhradová vyhláška</strong></a> — finanční mechanika, do které operacionalizace vstupuje.</li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Tento čtvrtý díl je redakční syntéza, která propojuje ústavní rámec (díl 1), demografická data (díl 2) a reformní směry (díl 3) do operacionálního návrhu. Šest klinických scénářů jsou ilustrativní redakční konstrukty — konkrétní časové normy (např. 28/31/62 dní pro karcinom prsu) jsou převzaté z mezinárodních systémů a vyžadují validaci proti aktuální české odborné praxi (ČKS, ČOS, ČNS, Česká společnost paliativní medicíny). Politická diskuse o operacionalizaci nároku v ČR teprve začíná — text je proto stylizován jako redakční návrh, ne jako reportáž existujícího politického návrhu. Status: <em>review-pending</em>; po recenzi odborníků z výše citovaných odborných společností lze status povýšit na <em>verified</em>.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
