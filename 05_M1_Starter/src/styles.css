@@ -3592,6 +3592,104 @@ ul.md-enum > li > strong:first-child {
   .skeleton-card { animation: none; background: var(--paper2); }
 }
 
+/* ── Decision tree & flow SVG (článek 1/4 série Nárok pojištěnce) ──
+   Reusable SVG vizualizace s animacemi: rozhodovací stromy, dimenze nároku,
+   "nůžky" rostoucí poptávky vs klesající kapacity. Respektuje
+   prefers-reduced-motion. */
+.narok-svg-figure {
+  margin: 18px 0 22px;
+  padding: 16px 0 18px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.narok-svg-figure svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.narok-svg-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+  text-align: center;
+}
+.narok-svg-note {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 10px 18px 0;
+  line-height: 1.5;
+}
+
+/* SVG vnitřní styly — barevné kódování */
+.narok-svg-figure .nsv-node-bg { fill: var(--paper2); stroke: var(--ink); stroke-width: 1.5; }
+.narok-svg-figure .nsv-node-bg-good { fill: rgba(47,107,31,0.10); stroke: #2f6b1f; stroke-width: 1.5; }
+.narok-svg-figure .nsv-node-bg-warn { fill: rgba(160,90,8,0.10); stroke: #a05a08; stroke-width: 1.5; }
+.narok-svg-figure .nsv-node-bg-bad  { fill: rgba(184,54,30,0.10); stroke: #b8361e; stroke-width: 1.5; }
+.narok-svg-figure .nsv-line { stroke: var(--ink-mut); stroke-width: 1.5; fill: none; }
+.narok-svg-figure .nsv-line-yes { stroke: #2f6b1f; stroke-width: 2; fill: none; }
+.narok-svg-figure .nsv-line-no  { stroke: #b8361e; stroke-width: 2; stroke-dasharray: 6 4; fill: none; }
+.narok-svg-figure .nsv-text { font-family: var(--serif); font-size: 14px; fill: var(--ink); }
+.narok-svg-figure .nsv-text-sm { font-family: var(--sans); font-size: 11px; fill: var(--ink-mut); }
+.narok-svg-figure .nsv-text-lbl { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--ink-mut2); }
+.narok-svg-figure .nsv-text-yes { font-family: var(--sans); font-size: 10px; font-weight: 700; fill: #2f6b1f; }
+.narok-svg-figure .nsv-text-no  { font-family: var(--sans); font-size: 10px; font-weight: 700; fill: #b8361e; }
+
+/* Animace: draw-in pro linky, fade-in pro nody */
+.narok-svg-figure .nsv-anim-line {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: nsvDraw 1.6s cubic-bezier(.4,.0,.2,1) forwards;
+}
+.narok-svg-figure .nsv-anim-node {
+  opacity: 0;
+  animation: nsvFade 0.6s ease-out forwards;
+}
+.narok-svg-figure .nsv-anim-delay-1 { animation-delay: 0.2s; }
+.narok-svg-figure .nsv-anim-delay-2 { animation-delay: 0.5s; }
+.narok-svg-figure .nsv-anim-delay-3 { animation-delay: 0.8s; }
+.narok-svg-figure .nsv-anim-delay-4 { animation-delay: 1.1s; }
+.narok-svg-figure .nsv-anim-delay-5 { animation-delay: 1.4s; }
+.narok-svg-figure .nsv-anim-delay-6 { animation-delay: 1.7s; }
+.narok-svg-figure .nsv-anim-delay-7 { animation-delay: 2.0s; }
+.narok-svg-figure .nsv-anim-delay-8 { animation-delay: 2.3s; }
+.narok-svg-figure .nsv-anim-pulse {
+  transform-origin: center;
+  animation: nsvPulse 1.8s ease-in-out 2.5s infinite;
+}
+@keyframes nsvDraw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes nsvFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes nsvPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .narok-svg-figure .nsv-anim-line,
+  .narok-svg-figure .nsv-anim-node,
+  .narok-svg-figure .nsv-anim-pulse {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
+}
+
+/* Scissor chart — kapacita vs poptávka (článek 2) */
+.narok-scissor-cap { stroke: var(--ink-mut); stroke-width: 2.5; fill: none; }
+.narok-scissor-dem { stroke: #b8361e; stroke-width: 2.5; fill: none; }
+.narok-scissor-gap { fill: rgba(184,54,30,0.10); }
+
 /* Verified-only toggle v filter-bar — skryje preliminary/illustrative indikátory */
 .filter-verif-toggle {
   display: inline-flex;
