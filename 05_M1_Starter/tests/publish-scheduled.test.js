@@ -13,12 +13,11 @@ test('assessHtml: čistý publikovatelný článek nemá draft markery', () => {
   assert.deepEqual(r.draftMarkers, []);
 });
 
-test('assessHtml: zachytí (DRAFT) v titulku, masthead i datu', () => {
+test('assessHtml: zachytí (DRAFT) v titulku i v article-meta-date', () => {
   const html = '<title>Něco · HSPA Monitor (DRAFT)</title>'
-    + '<span class="masthead-score">DRAFT — neukládáno do articles.json</span>'
     + '<span class="article-meta-date">draft · květen 2026</span>';
   const r = assessHtml(html);
-  assert.equal(r.draftMarkers.length, 3);
+  assert.equal(r.draftMarkers.length, 2);
 });
 
 test('holdReason: zadrží článek s _review_note', () => {

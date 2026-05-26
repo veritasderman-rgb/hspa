@@ -52,20 +52,26 @@ test('filterExplainers: filtr podle kategorie', () => {
   assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { category: 'classification' }).length, 1);
 });
 
-test('filterExplainers: search across all 3 tldrs (public + expert + policy)', () => {
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'DRG' }).length, 1);
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'kódy' }).length, 1);
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'pojišťoven' }).length, 1);
-  // Regrese P2: policy-only term ("hybrid", "Variabilita", "Přechod") musí najít
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'hybrid' }).length, 1);
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'Variabilita' }).length, 1);
-  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'MKN-11' }).length, 1);
+test('filterExplainers: search prohledává jen fields, které UI renderuje (title/subtitle/tldr_public)', () => {
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'DRG' }).length, 1); // v title
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'kódy' }).length, 1); // v tldr_public
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'pojišťoven' }).length, 1); // v title
+});
+
+test('filterExplainers: NEPROHLEDÁVÁ tldr_expert/tldr_policy (UI je nerenderuje)', () => {
+  // Persona switcher byl odstraněn — audienceText() vrací pouze tldr_public.
+  // Search napříč tldr_expert/tldr_policy by produkoval phantom-match výsledky:
+  // uživatel klikne na kartu a v zobrazeném TL;DR hledaný termín nenajde.
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'hybrid' }).length, 0);     // jen v tldr_policy
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'Variabilita' }).length, 0); // jen v tldr_policy
+  assert.equal(filterExplainers(SAMPLE_EXPLAINERS, { search: 'MKN-11' }).length, 0);     // jen v tldr_policy
 });
 
 // ===== audienceText =====
-// audienceText nyní čte audience z localStorage (v Node.js prostředí vždy 'public')
+// audienceText je deterministická: vrací tldr_public s fallbackem na expert/tldr.
+// Persona switcher byl odstraněn, localStorage se nečte.
 
-test('audienceText: default (public) preferuje tldr_public, fallback na expert', () => {
+test('audienceText: preferuje tldr_public, fallback na expert', () => {
   const obj = {
     tldr_public: 'public text',
     tldr_expert: 'expert text',
@@ -74,7 +80,7 @@ test('audienceText: default (public) preferuje tldr_public, fallback na expert',
   assert.equal(audienceText(obj), 'public text');
 });
 
-test('audienceText: fallback public → expert', () => {
+test('audienceText: fallback public → expert → tldr', () => {
   assert.equal(audienceText({ tldr_expert: 'expert', tldr_policy: 'policy' }), 'expert');
   assert.equal(audienceText({ tldr_expert: 'expert' }), 'expert');
   assert.equal(audienceText({ tldr: 'legacy' }), 'legacy');
@@ -82,4 +88,9 @@ test('audienceText: fallback public → expert', () => {
 
 test('audienceText: pokud chybí vše, vrátí prázdný string', () => {
   assert.equal(audienceText({}), '');
+});
+
+test('audienceText: null / undefined input vrátí prázdný string (žádný TypeError)', () => {
+  assert.equal(audienceText(null), '');
+  assert.equal(audienceText(undefined), '');
 });

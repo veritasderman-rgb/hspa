@@ -13,8 +13,11 @@ const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
-const LS_AUD_KEY = 'zdrave-cesko/audience';
 const STALE_HOURS = 26;
+
+// Jednorázová migrace: persona switcher (Veřejnost/Odborník/Politik) byl
+// odstraněn — vyčistíme orphan localStorage key u vracejících se uživatelů.
+try { localStorage.removeItem('zdrave-cesko/audience'); } catch {}
 
 let allIndicators = [];
 let allDimensions = [];
@@ -22,7 +25,6 @@ let activeArea = 'all';
 let activeSearch = '';
 let activeSort = 'default';
 let activeDomain = '';
-let activeAudience = 'public';
 let activeFramework = 'all';
 let activeVerifiedOnly = false;
 let activeDimension = 'all';
