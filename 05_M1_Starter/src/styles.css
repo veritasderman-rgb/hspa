@@ -4545,7 +4545,10 @@ ul.md-enum > li > strong:first-child {
 }
 .article-list-item { border-bottom: 1px solid var(--rule); }
 .article-list-link {
-  display: block;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 28px;
+  align-items: start;
   padding: 28px 0;
   text-decoration: none;
   color: inherit;
@@ -4553,6 +4556,25 @@ ul.md-enum > li > strong:first-child {
 }
 .article-list-link:hover { padding-left: 8px; background: var(--red-soft); }
 .article-list-link:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+
+/* Cover obrázek — vlevo, 16:8.4 (matching og:image 1200×630) */
+.article-list-cover {
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--rule);
+  background: var(--paper2);
+  transition: border-color 0.14s ease;
+}
+.article-list-link:hover .article-list-cover { border-color: var(--ink); }
+
+.article-list-body { min-width: 0; }
+
+/* Když cover chybí (onerror skryl <img> + přidal třídu): collapse image column */
+.article-list-item-no-cover .article-list-link {
+  grid-template-columns: 1fr;
+}
 
 .article-list-meta {
   display: flex;
@@ -4584,7 +4606,6 @@ ul.md-enum > li > strong:first-child {
   letter-spacing: -0.6px;
   color: var(--ink);
   margin: 0 0 12px;
-  max-width: 760px;
 }
 .article-list-link:hover .article-list-title { color: var(--red); }
 
@@ -4593,8 +4614,19 @@ ul.md-enum > li > strong:first-child {
   font-size: 17px;
   line-height: 1.55;
   color: var(--ink-mut);
-  max-width: 720px;
   margin: 0 0 14px;
+}
+
+/* Responsive: na užších viewportech stack image nahoru, text dolů */
+@media (max-width: 720px) {
+  .article-list-link {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .article-list-cover {
+    max-width: 100%;
+  }
+  .article-list-title { font-size: 26px; }
 }
 .article-list-cta {
   display: inline-block;

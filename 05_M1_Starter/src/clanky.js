@@ -232,18 +232,27 @@ async function loadAndRenderArticles() {
     const topicChips = (a.topics ?? []).map(t =>
       `<span class="article-list-topic" data-topic="${esc(t)}">${TOPIC_LABELS[t] ?? esc(t)}</span>`
     ).join('');
+    const coverSrc = a.slug ? `assets/covers/${a.slug.replace(/\.html$/, '.png')}` : '';
+    // Cover obrázek: nahrazujeme `onerror` handlerem, který přidá rodičovskému
+    // <li> třídu `.article-list-item-no-cover` — CSS pak collapsne image kolonu.
+    const coverHtml = coverSrc
+      ? `<img class="article-list-cover" src="${esc(coverSrc)}" alt="" loading="lazy" decoding="async" onerror="this.closest('.article-list-item').classList.add('article-list-item-no-cover'); this.remove();">`
+      : '';
     return `
       <li class="${itemCls}">
         <a href="${esc(a.slug)}" class="article-list-link">
-          <div class="article-list-meta">
-            <span class="article-list-num">${esc(a.number)}</span>
-            <span class="${tagCls}">${esc(a.tag)}</span>
-            <span class="article-list-date">${formatCzDate(a.date)}</span>
+          ${coverHtml}
+          <div class="article-list-body">
+            <div class="article-list-meta">
+              <span class="article-list-num">${esc(a.number)}</span>
+              <span class="${tagCls}">${esc(a.tag)}</span>
+              <span class="article-list-date">${formatCzDate(a.date)}</span>
+            </div>
+            <h4 class="article-list-title">${esc(a.title)}</h4>
+            <p class="article-list-perex">${esc(a.perex ?? '')}</p>
+            ${topicChips ? `<div class="article-list-topics">${topicChips}</div>` : ''}
+            <span class="article-list-cta">${cta}</span>
           </div>
-          <h4 class="article-list-title">${esc(a.title)}</h4>
-          <p class="article-list-perex">${esc(a.perex ?? '')}</p>
-          ${topicChips ? `<div class="article-list-topics">${topicChips}</div>` : ''}
-          <span class="article-list-cta">${cta}</span>
         </a>
       </li>`;
   }
