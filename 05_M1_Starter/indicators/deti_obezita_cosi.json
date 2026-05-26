@@ -1,0 +1,49 @@
+{
+  "id": "deti_obezita_cosi",
+  "name": "Nadváha a obezita u dětí 6–9 let (WHO COSI)",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Dětské zdraví",
+  "definition": "Podíl dětí ve věku 6–9 let s nadváhou nebo obezitou podle WHO referenčních hodnot BMI pro věk a pohlaví. Nadváha = BMI ≥ 1 SD nad mediánem WHO growth reference (ekvivalent BMI 25 pro dospělé), obezita = BMI ≥ 2 SD. Metodika WHO Childhood Obesity Surveillance Initiative (COSI) — standardizovaná antropometrická měření prováděná vyškolenými pracovníky, nikoliv self-report.",
+  "unit": "% dětí 6–9 let s nadváhou nebo obezitou",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "who_cosi",
+      "note": "WHO COSI — Childhood Obesity Surveillance Initiative. ČR koordinátor: SZÚ (Státní zdravotní ústav). Data sbírána v 3–4letých vlnách (Round 1: 2008, Round 2: 2013, Round 3: 2016, Round 4: 2019). Round 5 (2022–2023) v procesu analýzy.",
+      "endpoint": "https://www.euro.who.int/en/health-topics/disease-prevention/nutrition/activities/who-european-childhood-obesity-surveillance-initiative-cosi"
+    },
+    "fallback": {
+      "type": "oecd_hbsc",
+      "note": "OECD Health Behaviour in School-aged Children (HBSC) — self-report dotazník, méně přesné než COSI antropometrická měření."
+    }
+  },
+  "benchmark_source": {
+    "type": "who_cosi",
+    "dataset": "WHO COSI Round 4 (2017–2019) — průměr zúčastněných evropských zemí (26 zemí WHO EURO regionu)",
+    "value": 29.8,
+    "url": "https://www.euro.who.int/en/health-topics/disease-prevention/nutrition/activities/who-european-childhood-obesity-surveillance-initiative-cosi/cosi-round-4-2017-2020"
+  },
+  "signal_thresholds": {
+    "good": 15,
+    "warn": 25
+  },
+  "frequency": "every_4_years",
+  "stewards": [
+    "SZÚ",
+    "MZČR"
+  ],
+  "method_notes": "WHO COSI používá přísnou standardizovanou metodiku: měření výšky a hmotnosti vyškolenými pracovníky dle WHO protokolu, nikoliv self-report rodičů ani dětí. Referenční hodnoty: WHO growth reference 2007 (de Onis et al.). Nadváha včetně obezity = BMI ≥ 1 SD (analogie BMI 25 pro 18leté). Obezita samostatně = BMI ≥ 2 SD (analogie BMI 30). Věková skupina 6–9 let je primárně sledovaná COSI; starší děti (10–17) jsou monitorovány HBSC průzkumem. ČR se účastní od Round 1 (2008). Poslední dostupná data: Round 4 (2019), publikovány WHO EURO v roce 2022.",
+  "limitations": "4letý cyklus — mezi vlnami nejsou aktuální data. Poslední dostupná data jsou z roku 2019 (před COVID-19). Uzávěry škol a omezení pohybu v letech 2020–2021 pravděpodobně zvýšily podíl dětí s nadváhou — Round 5 data (2022–2023) dosud nezveřejněna. COSI pokrývá jen věkovou skupinu 6–9 let; adolescenti 10–17 let jsou v ČR sledováni pouze HBSC (self-report).",
+  "determinants": [
+    "Dostupnost zdravé stravy — cena ovoce a zeleniny, kvalita školního stravování",
+    "Pohybová aktivita — počet hodin tělesné výchovy ve škole, přístup na hřiště po výuce",
+    "Reklamní tlak na nezdravé potraviny cílený na děti v digitálním prostředí",
+    "Socioekonomický status rodiny (obesity paradox — nadváha vyšší u dětí z nízkopříjmových rodin)",
+    "Délka spánku a screen time (≥ 2 h/den zvyšuje riziko nadváhy)"
+  ],
+  "importance": "Dětská obezita je silný prediktor obezity v dospělosti: 70–80 % dětí s obezitou zůstává obézních i jako dospělí (Simmonds et al., Obesity Reviews 2016). Nadváha v dětství zvyšuje celoživotní riziko diabetes 2. typu, kardiovaskulárních chorob a několika nádorů. Investice do primární prevence v dětském věku je ekonomicky efektivnější než léčba chronických onemocnění v dospělosti — WHO odhaduje návratnost 1 : 6 u školních nutričních programů.",
+  "patient_story": "Sedmiletý Tomáš sedí v čekárně pediatrické ambulance v Ostravě. Maminka ho přivedla kvůli ročnímu očkování. Lékařka ho pečlivě vyšetří — výška 127 cm, hmotnost 32 kg, BMI 19,8. Referenční hodnota WHO pro 7letého chlapce: 17,5 (1 SD). Tomáš má nadváhu, první stupeň. Maminka je překvapená. Syn jí přijde „normální\" — ve třídě vypadá jako ostatní. A má pravdu. Ve třídě je Tomáš jedním ze čtyřiadvaceti dětí a statisticky s ním sedí dalších pět až šest dětí s podobným BMI. Nadváha v prvním ročníku základní školy přestala být výjimkou.\n\nNadváha a obezita u dětí 6–9 let v České republice dosahuje 26,3 procenta (WHO COSI Round 4, 2019) — každé čtvrté dítě ve věkové skupině. Průměr zúčastněných evropských zemí WHO COSI je 29,8 procenta. Česká republika je tedy pod tímto průměrem — ale nelze to číst jako dobrý výsledek. Před čtyřmi dekádami byl podíl dětí s nadváhou přibližně 8–10 procent. V roce 2008 dosáhla ČR při prvním měření COSI 23,5 procenta. Za jedenáct let (2008–2019) vzrostl podíl o 2,8 procentního bodu — a trend byl přitom před každou vlnou průzkumu konzistentně vzestupný. WHO COSI Round 5 (data sbírána 2022–2023) pravděpodobně ukáže další skok, protože uzávěry škol a omezení pohybu v pandemii zasáhly dětský pohybový a nutriční vzorec nejvíce ze všech věkových skupin.\n\nPříčiny nejsou záhadou — jsou systémové. Školní jídelny vaří za normativ, který neumožňuje pravidelně podávat dostatečné množství čerstvé zeleniny a ovoce. Tělesná výchova ve školách je povinná dvě hodiny týdně — Finsko má čtyři, Německo tři. Přístup na školní hřiště po výuce brání pojišťovací a provozní restrikce. Cílená reklama na nezdravé potraviny v digitálním prostředí je prakticky neregulovaná: YouTube, TikTok a mobilní hry neomezují reklamní obsah sladkostí, slazených nápojů nebo fast foodu pro uživatele pod 18 let. A platí silný socioekonomický gradient — výzkum z ČR i zahraničí opakovaně ukazuje, že nadváha je nejčastější u dětí z rodin s nižšími příjmy, kde zdravá strava je relativně nákladnější a pohybové kroužky jsou finančně nedostupné.\n\nPolitická páka existuje a je konkrétní. Velká Británie zavedla v roce 2018 daň z nápojů s přidaným cukrem (sugar levy): za tři roky reformulovalo recepturu 50 procent výrobců nápojů a průměrný příjem cukru z nápojů u dětí klesl o 10 procent (Public Health England 2020). Mexiko, Francie a Irsko mají srovnatelné výsledky. EU od roku 2025 zakazuje reklamu na nezdravé potraviny v dětských pořadech v lineárním vysílání — ČR transponovala, digitální prostor (YouTube, hry) ale zůstává neregulován a EU pracuje na rozšíření v rámci Digital Services Act. Nutriční standardy pro školní stravování vydalo MZČR naposledy v roce 2015. Národní akční plán pro zdravou výživu a tělesnou aktivitu (NAPVA 2021–2025) existuje, ale bez závazných metrik a povinného reportingu. Každý rok, kdy čtvrté dítě přichází do první třídy s nadváhou, je dalším ročníkem, kdy primární prevence selhala.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
