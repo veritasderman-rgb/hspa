@@ -116,6 +116,16 @@
         <strong>Populace 85+.</strong> Nejcitlivější věkové pásmo z hlediska kapacity dlouhodobé péče. V roce 2021 zhruba <strong>203 tisíc</strong>; v roce 2040 už <strong>470 tisíc</strong> (více než dvojnásobek!); v roce 2050 přibližně <strong>510 tisíc</strong> (+151 %).
       </p>
 
+      <figure class="av-figure" aria-labelledby="popGrowthH">
+        <figcaption class="av-figure-h" id="popGrowthH">Relativní nárůst populačních pásem 2021 → 2050 (procentní změna)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="170" data-unit=" %">
+          <li class="av-bar-row" data-value="41" data-label="Populace 65+ (2,16 → 3,07 mil.)" data-note="primárně poválečné ročníky"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="84" data-label="Populace 75+ (865 → 1 591 tis.)" data-note="kritické pásmo pro hospitalizace"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="151" data-label="Populace 85+ (203 → 510 tis.)" data-note="kritické pásmo pro LTC"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: ČSÚ Projekce obyvatelstva ČR do 2070; ÚZIS SZD OIS-13-01 vydání 2025-01. Procentní nárůst je vůči roku 2021 (referenční bod ÚZIS).</p>
+      </figure>
+
       <p>
         Tato čísla samotná by problémem nebyla, kdyby zdravější starší populace měla nižší přímou náročnost péče. Druhá vrstva projekcí — <strong>polymorbidita a závislost</strong> — ukazuje, že to není tento případ. Pacient ve věku 80 let dnes typicky žije se třemi až pěti chronickými onemocněními souběžně (kardiovaskulární, diabetes, deprese, mírná demence, osteoartróza). Doba dožití roste rychleji než doba dožití ve zdraví, takže se prodlužuje životní fáze s vícečetnou chronickou nemocí. HSPA indikátor <a href="indicator.html?id=multimorbidita_65plus"><em>multimorbidita 65+</em></a> kvantifikuje tento posun.
       </p>
@@ -215,6 +225,63 @@
       <p>
         <strong>Plátci.</strong> Reálnou ekonomickou stranou problému je <em>závislostní poměr</em> (dependency ratio) — kolik osob aktivního věku připadá na jednoho seniora. V roce 2025 zhruba 3 osoby ve věku 20–64 let na 1 seniora 65+; v roce 2050 už jen 2 osoby. Bez reformy financování to znamená, že každý pracující bude přes pojistné a daně muset financovat výrazně vyšší objem péče než dnes.
       </p>
+
+      <figure class="narok-svg-figure" aria-labelledby="svgScissorH">
+        <figcaption class="narok-svg-h" id="svgScissorH">„Nůžky" 2025 → 2050: poptávka po péči roste, kapacita stagnuje (index 100 = 2025)</figcaption>
+        <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematické zobrazení rozevírajícího se rozdílu mezi rostoucí potřebou péče (PnP III-IV 75+ a 85+) a stagnující kapacitou (lékaři, sestry, plátci pojistného) v letech 2025 až 2050">
+          <!-- Axes -->
+          <line x1="80" y1="40" x2="80" y2="300" stroke="#5f574e" stroke-width="1.2"/>
+          <line x1="80" y1="300" x2="710" y2="300" stroke="#5f574e" stroke-width="1.2"/>
+
+          <!-- Y axis labels -->
+          <text class="nsv-text-lbl" x="75" y="46" text-anchor="end">220</text>
+          <text class="nsv-text-lbl" x="75" y="116" text-anchor="end">180</text>
+          <text class="nsv-text-lbl" x="75" y="186" text-anchor="end">140</text>
+          <text class="nsv-text-lbl" x="75" y="256" text-anchor="end">100</text>
+          <text class="nsv-text-lbl" x="75" y="306" text-anchor="end">70</text>
+
+          <!-- X axis labels -->
+          <text class="nsv-text-lbl" x="80" y="320" text-anchor="middle">2025</text>
+          <text class="nsv-text-lbl" x="220" y="320" text-anchor="middle">2030</text>
+          <text class="nsv-text-lbl" x="360" y="320" text-anchor="middle">2035</text>
+          <text class="nsv-text-lbl" x="500" y="320" text-anchor="middle">2040</text>
+          <text class="nsv-text-lbl" x="640" y="320" text-anchor="middle">2045</text>
+
+          <!-- Gap (area) -->
+          <path class="narok-scissor-gap nsv-anim-node nsv-anim-delay-5" d="M 80 250 L 220 220 L 360 178 L 500 140 L 640 100 L 710 90 L 710 252 L 640 254 L 500 256 L 360 258 L 220 260 L 80 260 Z"/>
+
+          <!-- Demand line (red, rising) -->
+          <path class="narok-scissor-dem nsv-anim-line nsv-anim-delay-1" d="M 80 250 L 220 220 L 360 178 L 500 140 L 640 100 L 710 90" stroke-dasharray="800" stroke-dashoffset="800" style="animation: nsvDraw 2s cubic-bezier(.4,.0,.2,1) 0.2s forwards;"/>
+          <!-- Capacity line (gray, flat-slight decline) -->
+          <path class="narok-scissor-cap nsv-anim-line nsv-anim-delay-1" d="M 80 260 L 220 260 L 360 258 L 500 256 L 640 254 L 710 252" stroke-dasharray="800" stroke-dashoffset="800" style="animation: nsvDraw 2s cubic-bezier(.4,.0,.2,1) 0.4s forwards;"/>
+
+          <!-- Demand label -->
+          <g class="nsv-anim-node nsv-anim-delay-6">
+            <rect x="540" y="55" width="180" height="36" rx="4" fill="rgba(184,54,30,0.10)" stroke="#b8361e" stroke-width="1"/>
+            <text x="555" y="72" font-family="var(--sans)" font-size="11" font-weight="700" fill="#b8361e">POPTÁVKA PO PÉČI</text>
+            <text x="555" y="85" font-family="var(--sans)" font-size="10" fill="#b8361e">PnP III-IV 75+ +109 %</text>
+          </g>
+
+          <!-- Capacity label -->
+          <g class="nsv-anim-node nsv-anim-delay-6">
+            <rect x="540" y="265" width="180" height="36" rx="4" fill="var(--paper2)" stroke="#5f574e" stroke-width="1"/>
+            <text x="555" y="282" font-family="var(--sans)" font-size="11" font-weight="700" fill="#5f574e">KAPACITA SYSTÉMU</text>
+            <text x="555" y="295" font-family="var(--sans)" font-size="10" fill="#5f574e">lékaři, sestry, plátci ~–3 %</text>
+          </g>
+
+          <!-- Gap annotation -->
+          <g class="nsv-anim-node nsv-anim-delay-7">
+            <line x1="395" y1="172" x2="395" y2="258" stroke="#b8361e" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="405" y="220" font-family="var(--sans)" font-size="12" font-weight="700" fill="#b8361e">Mezera</text>
+            <text x="405" y="234" font-family="var(--sans)" font-size="11" fill="#b8361e">poroste cca 4× rychleji,</text>
+            <text x="405" y="247" font-family="var(--sans)" font-size="11" fill="#b8361e">než dokáže reforma zacelit</text>
+          </g>
+
+          <!-- Title -->
+          <text x="80" y="25" font-family="var(--sans)" font-size="11" font-weight="700" letter-spacing="0.08em" text-transform="uppercase" fill="#5f574e">Index (2025 = 100)</text>
+        </svg>
+        <p class="narok-svg-note">Schematické znázornění. Křivka POPTÁVKA agreguje růst pacientů s PnP III–IV (75+ +109 %, 85+ +165 % do 2050) a multimorbidity 65+. Křivka KAPACITA agreguje hustotu lékařů, sester a relativní počet plátců pojistného (závislostní poměr 3:1 → 2:1). Bez reformy se mezera v polovině 30. let stává dominantní strukturální tlak.</p>
+      </figure>
 
       <h3>Sociálně-zdravotní pomezí: kde se nárok dnes nejvíc rozpadá</h3>
 
