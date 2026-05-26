@@ -58,7 +58,10 @@ export function assessHtml(html) {
   const draftMarkers = [];
   const title = /<title>([^<]*)<\/title>/i.exec(s);
   if (title && /\(DRAFT/i.test(title[1])) draftMarkers.push('"(DRAFT)" v <title>');
-  if (/<span class="masthead-score">\s*DRAFT/i.test(s)) draftMarkers.push('"DRAFT" v masthead-score');
+  // Pozn.: dříve se hledalo i `<span class="masthead-score">DRAFT` — masthead-score
+  // span byl ale odstraněn z všech publikovaných HTML, takže marker je
+  // strukturálně nedosažitelný. Zachováváme dva nezávislé markery (title +
+  // article-meta-date).
   if (/class="article-meta-date">\s*draft\b/i.test(s)) draftMarkers.push('"draft" v article-meta-date');
 
   return { htmlStatus, draftMarkers };

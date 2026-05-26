@@ -43,19 +43,24 @@ export function filterVisibleArticles(articles, now = new Date()) {
  * nyní vždy preferuje tldr_public s fallbackem na expert/tldr.
  */
 export function audienceText(obj) {
+  if (!obj) return '';
   return obj.tldr_public ?? obj.tldr_expert ?? obj.tldr ?? '';
 }
 
 /**
- * Vyplní datum do hlavičky (masthead-strip) v editorial stylu.
+ * Vyplní datum do hlavičky (masthead-strip) v editorial stylu,
+ * a zároveň proběhne render společných page-shared komponent
+ * (HSPA score, footer, scroll-to-top), které jsou na každé stránce
+ * povinné bez ohledu na to, zda masthead-date span existuje.
  * Příklad: "Pondělí 5. května 2026"
  */
 export function renderMastheadDate(el = document.getElementById('mastheadDate')) {
-  if (!el) return;
-  const d = new Date();
-  const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
-  const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
-  el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+  if (el) {
+    const d = new Date();
+    const days = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+    const months = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+    el.textContent = `${days[d.getDay()]} ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
   renderHSPAScore();
   renderFooter();
   injectScrollToTop();
@@ -225,10 +230,9 @@ function wireNewsletterForm() {
 export { computeScore as computeHSPAScore } from './site-stats.js';
 
 /**
- * Načte indikátory a články, spočítá site-wide statistiky a aplikuje je do DOM:
- *   - element #czScore dostane HSPA skóre
- *   - všechny [data-stat="<klíč>"] dostanou hodnoty (totalIndicators, hspaCount,
- *     monitoringCount, score, ...). Detaily viz src/site-stats.js.
+ * Načte indikátory a články, spočítá site-wide statistiky a aplikuje je do DOM
+ * — všechny [data-stat="<klíč>"] dostanou hodnoty (totalIndicators, hspaCount,
+ * monitoringCount, score, ...). Detaily viz src/site-stats.js.
  */
 export function renderHSPAScore() {
   Promise.allSettled([
@@ -242,10 +246,6 @@ export function renderHSPAScore() {
       indicators: indData.indicators ?? [],
       articles: artData?.articles ?? [],
     });
-    if (stats.score != null) {
-      const el = document.getElementById('czScore');
-      if (el) el.textContent = stats.score;
-    }
     applyDataStats(stats);
   }).catch(() => {});
 }

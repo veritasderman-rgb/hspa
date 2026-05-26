@@ -76,12 +76,14 @@ export function filterExplainers(items, { category, search }) {
   if (category && category !== 'all') xs = xs.filter(e => e.category === category);
   if (search) {
     const q = search.toLowerCase();
+    // Search only across fields that are actually rendered to the user.
+    // tldr_expert / tldr_policy were searched historically (persona switcher),
+    // but the UI only ever displays tldr_public — searching invisible text
+    // produced phantom hits with no matching content on the result card.
     xs = xs.filter(e =>
       (e.title || '').toLowerCase().includes(q)
       || (e.subtitle || '').toLowerCase().includes(q)
       || (e.tldr_public || '').toLowerCase().includes(q)
-      || (e.tldr_expert || '').toLowerCase().includes(q)
-      || (e.tldr_policy || '').toLowerCase().includes(q)
     );
   }
   return xs;
