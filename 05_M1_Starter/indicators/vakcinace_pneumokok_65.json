@@ -1,0 +1,53 @@
+{
+  "id": "vakcinace_pneumokok_65",
+  "name": "Vakcinace pneumokoků (65+)",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Vakcinace dospělých",
+  "definition": "Podíl osob ve věku 65 a více let, kteří obdrželi alespoň jednou vakcínu proti pneumokokové nemoci (polysacharidovou PPV23 nebo konjugovanou PCV15/PCV20). Pneumokoki (Streptococcus pneumoniae) jsou nejčastějším původcem komunitní pneumonie, bakteriální meningitidy a sepse u seniorů; invazivní pneumokoková nemoc (IPD) je u 65+ spojena s 15–25 % nemocniční smrtností.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://www.uzis.cz/index.php?pg=home--uzis-news",
+      "dataset": "NZIS — Aktuální data o proočkovanosti české populace (roční aktualizace; vakcinace dospělých 65+)",
+      "note": "Primární zdroj pro ČR: ÚZIS NZIS roční vakcinační report (distributor data + výkaznictví PL); doplněno Eurostat EHIS (vlna 2019, dataset hlth_ehis_pe9e) pro kohortní verifikaci. EHIS 2024 bude dostupné ~2025–2026."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_ehis_pe9e",
+      "note": "Eurostat EHIS — Vaccination against pneumococcal disease in last 12 months, population 65+. Vlny: 2014, 2019, ~2024."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PNEUMO_VACC_65",
+    "dataset": "OECD Health Statistics — Vaccination against pneumococcal disease in adults aged 65 and over (HEALTH_LVNG)",
+    "value": 50,
+    "url": "https://www.oecd-ilibrary.org/social-issues-migration-health/health-at-a-glance_19991312"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "SZÚ",
+    "MZ ČR"
+  ],
+  "method_notes": "WHO/ECDC doporučují vakcinaci pneumokoků u všech osob 65+ a u rizikových skupin mladších. V ČR je polysacharidová vakcína PPV23 (Pneumovax 23) i konjugovaná PCV20 (Apexxnar) registrována a hrazena pojišťovnami pro 65+. VZP vakcínu plně hradí od 2020, ostatní pojišťovny postupně od 2021–2023. Data ÚZIS zachycují vakcíny vykázané praktickými lékaři a distributory; samoplátci mimo systém mohou být mírně podhodnoceni. Mezinárodní benchmark (OECD HEALTH_LVNG) agreguje pro srovnatelné země data z národních registrů nebo EHIS.",
+  "limitations": "EHIS je průzkum sebereportování — nadhodnocení proočkovanosti je možné (respondenti si nemusí přesně pamatovat). ÚZIS výkaznictví naopak nezachytí soukromě nakoupené vakcíny. Mezinárodní srovnatelnost je omezena různou metodikou sběru dat (registry vs. průzkumy vs. distributor reports). Revizní pneumokoková dávka (přeočkování po 5–8 letech dle doporučení) není v indikátoru zachycena.",
+  "determinants": [
+    "Výše a šíře úhrady od zdravotních pojišťoven",
+    "Zařazení pneumokokové vakcíny do preventivní prohlídky dospělých (§ 29 zákona č. 48/1997 Sb.)",
+    "Systém aktivního zvaní (recall) nevakcinovaných seniorů",
+    "Povědomí seniorů i praktických lékařů o IPD riziku a hrazenosti vakcíny",
+    "Dostupnost vakcíny v lékárně (pharmacist-led vaccination) nebo u PL"
+  ],
+  "importance": "Pneumokoková vakcína je nákladově efektivní intervence s dobře prokázaným účinkem na snížení IPD, hospitalizací z důvodu pneumonie a mortality u 65+. Meta-analýza Cochrane (2013, aktualizace 2017) potvrzuje 64% účinnost PPV23 proti invazivní pneumokokové nemoci. Při 10× nižší proočkovanosti oproti OECD průměru ČR promarnuje preventabilní ochranu řádu tisíců hospitalizací ročně.",
+  "patient_story": "Ordinace praktického lékaře pro dospělé, Praha-Nusle, únorové ráno. Jana Marková, 73 let, přichází na pravidelnou kontrolu krevního tlaku. Hypertenze je dobře kompenzovaná, diabetu preventivní prohlídky i chřipkové očkování jsou v pořádku. Na konci konzultace se lékař zeptá: „Jste naočkovaná proti pneumokokům?” Jana neví, co to je. Lékař vysvětlí: Streptococcus pneumoniae je bakterie zodpovědná za každoroční vlny těžkých zápalů plic, meningitid a sepsí. U seniorů vede hospitalizace z důvodu invazivní pneumokokové nemoci v 15–25 % případů ke smrti. Vakcína je dostupná, pro Janu plně hrazená z jejího zdravotního pojištění. Přesto Jana — stejně jako přibližně 19 z každých 20 českých seniorů — nikdy naočkovaná nebyla. Lékař si uvědomí, že ji nikdy aktivně neoslovil. Nabídne termín. Jana souhlasí. Jenže tato scéna se neodehraje v 94,5 % ordinací — protože systém pacientku nezve a lékař nemá automatický připomínkový mechanismus.\n\nProočkovanost Čechů 65+ proti pneumokokům je 5,5 % (ÚZIS NZIS · Eurostat EHIS 2023). OECD průměr je 50 %, EU průměr 17 %. Česko je pod úrovní EU průměru třikrát a pod úrovní OECD průměru desetkrát — signal bad. Trend je pomalý: ze 4,1 % (EHIS 2019) na odhadovaných 5,5 % (2023) po rozšíření úhrady u pojišťoven — bez systémové intervence dynamika zůstává slabá. SZÚ surveillance invazivní pneumokokové nemoci (IPD) hlásí v ČR ročně přibližně 1 800–2 400 potvrzených případů, drtivá většina u dospělých 65+. Při délce hospitalizace průměrně 14 dní a smrtnosti 15–25 % v hospitalizovaných skupinách jde o preventabilní zátěž řádu stovek předčasných úmrtí ročně.\n\nČeská léková politika pneumokokové vakcinace má dvě vrstvy. První vrstva — dětský program — funguje: pneumokoková vakcína je pro děti v rámci povinného kalendáře hrazena od roku 2010, proočkovanost kojenců přesahuje 90 %. Druhá vrstva — seniorský program — teprve vzniká. VZP a většina ostatních pojišťoven vakcínu pro 65+ plně hradí od roku 2020–2023, ale bez systémového upomínání, bez kampaně a bez zařazení do preventivní prohlídky jako standard. Praktici vakcínu nabízejí reaktivně (pacient se zeptá), nikoli proaktivně (lékař zve). Výsledkem je, že 94,5 % Čechů 65+ není vakcinováno — a většina z nich o pneumokokové vakcíně nikdy neslyšela.\n\nTři konkrétní páky mohou situaci změnit bez nové legislativy. (1) Zařazení pneumokokové vakcíny jako standardního bodu preventivní prohlídky dospělých 65+ — vyhláška MZČR o preventivních prohlídkách, stávající rámec § 29 zákona č. 48/1997 Sb. — při každé prohlídce lékař automaticky zkontroluje vakcinační status a doporučí. (2) Systém aktivního zvaní: NRHZS data pojišťovnám umožňují identifikovat nevakcinované seniory a zaslat cílenou pozvánku — model, který VZP již používá pro mamografický screening. (3) Národní informační kampaň analogická k chřipkové kampani SZÚ, ale s jasným sdělením o hrazenosti a dostupnosti u PL. Británie dosáhla 70% proočkovanosti kombinací lékárenského očkování a GP-reminder systému. Indikátor v HSPA dashboardu sleduje proočkovanost 65+ jako klíčový ukazatel systematické preventivní ochrany seniorů.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
