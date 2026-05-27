@@ -26,11 +26,12 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   }
 
   // ── Google Analytics 4 — Consent Mode v2 ───────────────────────────────
-  // Výchozí souhlas je nastaven na „denied" JEŠTĚ PŘED načtením gtag.js.
-  // Dokud souhlas není udělen, GA běží v bezcookieovém režimu (cookieless
-  // pings) — neukládá cookies. GDPR-friendly kompromis bez cookie lišty.
-  // Pozdější souhlas lze udělit přes:
-  //   window.gtag('consent', 'update', { analytics_storage: 'granted' });
+  // Reklamní storage zůstává denied (žádný remarketing, ads, personalizace);
+  // analytics_storage je granted, protože GA4 měření návštěvnosti pro veřejný
+  // informační portál bez ads je obvyklý legitimní zájem. Žádné PII se neukládá.
+  // Pokud chceš plně cookieless režim, přepni `analytics_storage` na 'denied'
+  // — GA pak posílá jen modelované pings (v GA Admin se ale verifikace data
+  // hitů nezobrazí, jen v reportech s několikadenním zpožděním).
   if (!isLocal) {
     window.dataLayer = window.dataLayer || [];
     const gtag = function () { window.dataLayer.push(arguments); };
@@ -40,11 +41,13 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       ad_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',
-      analytics_storage: 'denied',
+      analytics_storage: 'granted',
     });
 
     gtag('js', new Date());
-    gtag('config', GA_MEASUREMENT_ID);
+    gtag('config', GA_MEASUREMENT_ID, {
+      anonymize_ip: true,
+    });
 
     const ga = document.createElement('script');
     ga.async = true;
