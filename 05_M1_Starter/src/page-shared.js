@@ -277,7 +277,10 @@ export function renderModuleNav(activeId) {
     const active = activeId
       ? t.id === activeId
       : t.match.some(m => path.endsWith(m));
-    return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''}>${t.label}</a>`;
+    // Editorial marker — diskrétní červený puntík před labelem
+    // signalizuje sekci „Články" jako redakční srdce portálu.
+    const editorial = t.id === 'articles' ? ' module-tab-editorial' : '';
+    return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}${editorial}"${active ? ' aria-current="page"' : ''}>${t.label}</a>`;
   }).join('');
   const searchTriggerHtml = `<button type="button" class="site-search-trigger" id="siteSearchTrigger" aria-label="Otevřít vyhledávání"><span aria-hidden="true">⌕</span> Hledat <kbd>/</kbd></button>`;
   container.innerHTML = tabsHtml + searchTriggerHtml;
