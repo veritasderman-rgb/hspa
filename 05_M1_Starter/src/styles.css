@@ -910,6 +910,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-bottom-color: var(--red);
   font-weight: 600;
 }
+/* Editorial marker — diskrétní červený puntík před „Články".
+   Signalizuje redakční srdce portálu bez kolize s .active state
+   (na aktivní stránce splyne s ostatní červení; mimo aktivní stav
+   funguje jako jemný indikátor). */
+.module-tab-editorial {
+  font-weight: 600;
+}
+.module-tab-editorial::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-right: 7px;
+  vertical-align: 2px;
+  flex-shrink: 0;
+}
 @media (max-width: 720px) {
   .module-nav {
     gap: 0;
@@ -6552,6 +6570,12 @@ body.mobile-nav-open .mobile-nav-drawer { transform: translateX(0); }
   border-bottom-color: var(--rule);
   border-left: 3px solid var(--red);
   padding-left: 17px;
+}
+.mobile-nav-list .module-tab-editorial::before {
+  width: 6px;
+  height: 6px;
+  margin-right: 9px;
+  vertical-align: 1px;
 }
 
 @media (max-width: 720px) {
