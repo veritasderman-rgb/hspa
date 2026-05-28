@@ -65,7 +65,7 @@ const KNOWN_INDICATORS = [
   {
     id: 'mortalita_30d_cmp',
     title_hint: '30denní mortalita pacientů s ischemickou CMP',
-    series_name: 'Celá ČR',
+    extraction: 'stripline',
     detail_url_candidates: [
       `${PUK_BASE}/30denni-mortalita-pacientu-s-ischemickou-cevni-mozkovou-prihodou-hospitalizovanych-v-cr/`,
     ],
@@ -86,12 +86,67 @@ const KNOWN_INDICATORS = [
       `${PUK_BASE}/mira-centralizace-pacientu-s-cmp/`,
     ],
   },
+  // Onkologická chirurgie — 5 diagnóz, hodnota přes stripLines national reference
   {
-    id: 'mortalita_30d_ami_indicator_card',
-    title_hint: 'AIM 30d karta ukazatele (alternativní URL)',
-    series_name: 'Celá ČR',
+    id: 'mortalita_90d_pankreas',
+    title_hint: '90denní mortalita resekce pankreatu',
+    extraction: 'stripline',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatele/neurologie/VUK_NEU_001_20.php`,
+      `${PUK_BASE}/90denni-mortalita-pacientu-po-resekcnim-vykonu-na-pankreatu/`,
+    ],
+  },
+  {
+    id: 'mortalita_90d_jicen',
+    title_hint: '90denní mortalita resekce jícnu',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-jicnu/`,
+    ],
+  },
+  {
+    id: 'mortalita_90d_plice',
+    title_hint: '90denní mortalita resekce plic',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-plic/`,
+    ],
+  },
+  // Rekta a kolorekt mají DVĚ varianty na stránce:
+  // chartContainer2024 (bez prefixu) = akutní (vyšší mortalita 13-23 %)
+  // chartContainer12024 (prefix '1') = elektivní (nižší mortalita 4-8 %)
+  {
+    id: 'mortalita_90d_rekta_elektiv',
+    title_hint: '90denní mortalita resekce rekta (elektivní)',
+    extraction: 'stripline',
+    stripline_variant: '1',
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-rekta/`,
+    ],
+  },
+  {
+    id: 'mortalita_90d_rekta_akutni',
+    title_hint: '90denní mortalita resekce rekta (akutní)',
+    extraction: 'stripline',
+    // stripline_variant: null → bere chartContainer{rok} (bez prefixu)
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-rekta/`,
+    ],
+  },
+  {
+    id: 'mortalita_90d_kolorekt_elektiv',
+    title_hint: '90denní mortalita resekce kolorekta (elektivní)',
+    extraction: 'stripline',
+    stripline_variant: '1',
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-tlusteho-streva/`,
+    ],
+  },
+  {
+    id: 'mortalita_90d_kolorekt_akutni',
+    title_hint: '90denní mortalita resekce kolorekta (akutní)',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-tlusteho-streva/`,
     ],
   },
 ];
@@ -101,6 +156,65 @@ const REGIONS = [
   'Ústecký', 'Liberecký', 'Královéhradecký', 'Pardubický',
   'Vysočina', 'Jihomoravský', 'Olomoucký', 'Zlínský', 'Moravskoslezský',
 ];
+
+/**
+ * Extrahuje CanvasJS axisY stripLines hodnoty (národní průměry vykreslené
+ * jako červené referenční čáry v sloupcových grafech PUK onko-chirurgie + CMP).
+ *
+ * Detekuje chart kontejnery typu `chartContainer2024`, `chartContainer52024`,
+ * `chartContainer12024` — různé prefixy pro varianty (elektivní/akutní/celkem).
+ *
+ * @param {string} html
+ * @returns {{stripLines: Array<{container: string, year: number|null, value: number}>, strategy: string}}
+ */
+export function extractStripLineValues(html) {
+  const re = /new CanvasJS\.Chart\("(chartContainer\w+)"[\s\S]{0,3000}?stripLines:\s*\[\s*\{\s*value:\s*(-?\d+\.?\d*)/g;
+  const lines = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const container = m[1];
+    const value = parseFloat(m[2]);
+    // Container jména obsahují rok — např. chartContainer2024, chartContainer52024 (5=akutní), chartContainer12024 (1=elektivní)
+    const yearMatch = container.match(/(\d{4})$/);
+    const year = yearMatch ? parseInt(yearMatch[1], 10) : null;
+    // Prefix před rokem identifikuje variantu (1=elektivní, 5=akutní u některých indikátorů)
+    const prefixMatch = container.match(/chartContainer(\d)(\d{4})$/);
+    const variant = prefixMatch ? prefixMatch[1] : null;
+    lines.push({ container, year, variant, value });
+  }
+  return { stripLines: lines, strategy: lines.length > 0 ? 'canvasjs-stripline' : 'none' };
+}
+
+/**
+ * Vybere nejnovější rok z stripLines pro konkrétní variantu (default = bez variantní rozpadu).
+ * @param {Array} stripLines
+ * @param {string|null} variant — '1' = elektivní, '5' = akutní; null = bez varianty
+ */
+export function pickLatestStripLine(stripLines, variant = null) {
+  // Hlavní pokus: filtrované podle požadované varianty + známý rok
+  const filtered = stripLines.filter(s => s.year !== null && s.variant === variant);
+  if (filtered.length > 0) {
+    filtered.sort((a, b) => b.year - a.year);
+    return filtered[0];
+  }
+  // Pokud uživatel nepožadoval konkrétní variantu (variant=null) a žádná není null,
+  // ale existuje JEDINÁ jiná varianta s ročními daty — použij ji (typicky pankreas:
+  // chartContainer52024, kde "5" je intrinsic chart-type prefix, ne semantic variant).
+  if (variant === null) {
+    const yearLines = stripLines.filter(s => s.year !== null);
+    const variants = [...new Set(yearLines.map(s => s.variant))];
+    if (variants.length === 1 && variants[0] !== null) {
+      const onlyVariant = yearLines.filter(s => s.variant === variants[0]);
+      onlyVariant.sort((a, b) => b.year - a.year);
+      return onlyVariant[0];
+    }
+  }
+  // Fallback: žádný rok vůbec → vezmi první (např. CMP page má jen chartContainer1)
+  if (variant === null && stripLines.length > 0 && stripLines.every(s => s.year === null)) {
+    return stripLines[0];
+  }
+  return null;
+}
 
 /**
  * Extrahuje CanvasJS data series z inline JavaScriptu.
@@ -326,6 +440,35 @@ export async function fetchPuk() {
     }
 
     try {
+      // 0) Pokud indikátor má extraction='stripline', použij stripLine strategy
+      //    (PUK onko-chirurgie + CMP používají axisY.stripLines pro národní průměr)
+      if (ind.extraction === 'stripline') {
+        const stripResult = extractStripLineValues(html);
+        const picked = pickLatestStripLine(stripResult.stripLines, ind.stripline_variant ?? null);
+        if (picked) {
+          result.value_national = picked.value;
+          result.unit = '%';
+          result.year = picked.year;
+          // Build trend pro skutečně použitou variantu (může se lišit od požadované,
+          // pokud byl uplatněn fallback v pickLatestStripLine — např. pankreas má
+          // všechny containers s prefixem '5', ale ind.stripline_variant=null).
+          const effectiveVariant = picked.variant;
+          const trend = stripResult.stripLines
+            .filter(s => s.year !== null && s.variant === effectiveVariant)
+            .sort((a, b) => a.year - b.year)
+            .map(s => ({ year: s.year, value: s.value }));
+          if (trend.length > 0) result.trend = trend;
+          result.status = 'ok';
+          logEntry.national_strategy = stripResult.strategy;
+          logEntry.stripline_variant = effectiveVariant;
+          logEntry.trend_count = trend.length;
+          console.log(`  PUK ${ind.id}: ok (stripline ${picked.value}%, year=${picked.year}, variant=${effectiveVariant ?? '—'}, trend=${trend.length} let)`);
+          log.push(logEntry);
+          indicators.push(result);
+          continue;
+        }
+      }
+
       // 1) Nejdřív zkusíme CanvasJS inline data (PUK preferovaný vzor)
       const canvasResult = extractCanvasJsSeries(html, ind.series_name);
       if (canvasResult.value !== null) {

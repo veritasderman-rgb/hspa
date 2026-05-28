@@ -10,6 +10,8 @@ import {
   extractNationalValue,
   extractRegionalBreakdown,
   extractCanvasJsSeries,
+  extractStripLineValues,
+  pickLatestStripLine,
 } from '../ingest/fetchers/puk.js';
 
 test('extractNationalValue — data-attr strategy', () => {
@@ -135,6 +137,53 @@ test('extractCanvasJsSeries — fraction values normalized × 100', () => {
   assert.equal(r.value, 6.79);
   assert.equal(r.year, 2022);
   assert.equal(r.strategy, 'canvasjs-fraction');
+});
+
+test('extractStripLineValues — parses national reference lines from CanvasJS', () => {
+  const html = `
+    var chart = new CanvasJS.Chart("chartContainer2024", {
+      axisY: { stripLines: [{ value: 5.24, color: "red" }] },
+      data: [{}]
+    });
+    var chart2 = new CanvasJS.Chart("chartContainer2023", {
+      axisY: { stripLines: [{ value: 8.05 }] }
+    });
+  `;
+  const r = extractStripLineValues(html);
+  assert.equal(r.stripLines.length, 2);
+  assert.equal(r.stripLines[0].value, 5.24);
+  assert.equal(r.stripLines[0].year, 2024);
+  assert.equal(r.stripLines[1].value, 8.05);
+  assert.equal(r.stripLines[1].year, 2023);
+  assert.equal(r.strategy, 'canvasjs-stripline');
+});
+
+test('extractStripLineValues — parses variant-prefixed containers (elektivní vs akutní)', () => {
+  const html = `
+    var c1 = new CanvasJS.Chart("chartContainer12024", {
+      axisY: { stripLines: [{ value: 4.37 }] }
+    });
+    var c2 = new CanvasJS.Chart("chartContainer52024", {
+      axisY: { stripLines: [{ value: 13.33 }] }
+    });
+  `;
+  const r = extractStripLineValues(html);
+  assert.equal(r.stripLines.length, 2);
+  assert.equal(r.stripLines[0].variant, '1');
+  assert.equal(r.stripLines[0].value, 4.37);
+  assert.equal(r.stripLines[1].variant, '5');
+  assert.equal(r.stripLines[1].value, 13.33);
+});
+
+test('pickLatestStripLine — picks newest year for given variant', () => {
+  const lines = [
+    { container: 'chartContainer12022', year: 2022, variant: '1', value: 5.28 },
+    { container: 'chartContainer12024', year: 2024, variant: '1', value: 4.37 },
+    { container: 'chartContainer52024', year: 2024, variant: '5', value: 13.33 },
+  ];
+  assert.equal(pickLatestStripLine(lines, '1').value, 4.37);
+  assert.equal(pickLatestStripLine(lines, '5').value, 13.33);
+  assert.equal(pickLatestStripLine(lines, null), null);
 });
 
 test('extractCanvasJsSeries — no match returns null safely', () => {
