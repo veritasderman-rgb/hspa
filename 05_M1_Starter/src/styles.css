@@ -11951,6 +11951,18 @@ body.site-search-open {
   padding-left: 28px;
   margin-left: 0;
 }
+/* Section-specific accent barvy — vizuálně rozlišují téma každé mega-sekce. */
+.cq-mega-acute { border-left-color: #b8361e; }  /* červená — akutní péče, ZZS, urgentní */
+.cq-mega-amr   { border-left-color: #a05a08; }  /* oranžová — antibiotická pandemie, warning */
+.cq-mega-onco  { border-left-color: #6b4ea0; }  /* fialová — onkologie, dlouhodobá péče */
+.cq-mega-kraje { border-left-color: #2f6b1f; }  /* zelená — krajský data view, prostorová orientace */
+
+/* Stejnou barvu dáme i pill tagu A/B/C uvnitř každé mega-sekce */
+.cq-mega-acute .cq-subsection-tag { color: #b8361e; border-color: #b8361e; }
+.cq-mega-amr   .cq-subsection-tag { color: #a05a08; border-color: #a05a08; }
+.cq-mega-onco  .cq-subsection-tag { color: #6b4ea0; border-color: #6b4ea0; }
+.cq-mega-kraje .cq-subsection-tag { color: #2f6b1f; border-color: #2f6b1f; }
+
 @media (max-width: 760px) {
   .cq-mega-section { padding-left: 18px; border-left-width: 3px; }
 }
@@ -12002,29 +12014,48 @@ body.site-search-open {
 .cq-bridge strong { color: var(--ink); font-style: normal; }
 .cq-bridge em { color: var(--ink); }
 
-/* Bridge mezi top-level sekcemi (mezi § I a § II atd.) */
+/* Bridge mezi top-level sekcemi (mezi § I a § II atd.) — editorial banner,
+   full-width, paper2 background, 2 horizontální čáry (border-top + border-bottom),
+   italic serif text uvnitř. */
 .cq-section-bridge {
+  margin: 48px 0 36px;
+  padding: 28px 24px;
+  background: var(--paper2);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
   text-align: center;
   font-family: var(--serif);
-  font-size: 18px;
-  line-height: 1.5;
+  font-size: 19px;
+  line-height: 1.6;
+  font-style: italic;
   color: var(--ink-mut);
-  margin: 32px auto 24px;
-  max-width: 720px;
-  padding: 0 24px;
+  letter-spacing: 0.005em;
   position: relative;
 }
-.cq-section-bridge::before,
-.cq-section-bridge::after {
-  content: "";
+/* Drobné svislé linky uvnitř banneru pro editorial flair */
+.cq-section-bridge::before {
+  content: "❦";
   display: block;
-  width: 40px;
-  height: 1px;
-  background: var(--ink-mut);
-  margin: 14px auto;
-  opacity: 0.5;
+  font-size: 16px;
+  color: var(--ink-mut2, #8b8278);
+  margin: 0 auto 14px;
+  font-style: normal;
+  opacity: 0.6;
 }
-.cq-section-bridge strong { color: var(--ink); }
+/* Vnitřní text */
+.cq-section-bridge strong {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 700;
+}
+.cq-section-bridge em {
+  color: var(--ink);
+  font-style: italic;
+  font-weight: 600;
+}
+@media (max-width: 720px) {
+  .cq-section-bridge { padding: 22px 18px; margin: 36px 0 28px; font-size: 17px; }
+}
 
 .cq-catalog-section {
   margin: 28px 0 0;
