@@ -15,7 +15,10 @@ import { fetchOecd } from './fetchers/oecd.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
 import { fetchSukl } from './fetchers/sukl.js';
 import { fetchSuklMr } from './fetchers/sukl_mr.js';
+import { fetchPuk } from './fetchers/puk.js';
+import { fetchIndiko } from './fetchers/indiko.js';
 import { transform } from './transform.js';
+import { transformClinicalQuality } from './transform_clinical_quality.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -32,6 +35,8 @@ async function run() {
     { name: 'Eurostat', fn: fetchEurostat },
     { name: 'SÚKL OpenData', fn: fetchSukl },
     { name: 'SÚKL OpenData (MR výpadky léčiv)', fn: fetchSuklMr },
+    { name: 'PUK (klinická kvalita)', fn: fetchPuk },
+    { name: 'INDIKO (cesta onko pacienta)', fn: fetchIndiko },
   ];
 
   for (const step of fetchers) {
@@ -52,6 +57,13 @@ async function run() {
   } catch (err) {
     console.error(`  FATAL: transform: ${err.message}`);
     process.exit(1);
+  }
+
+  // Clinical quality merge — neblokuje, scrapery jsou křehké; failure jen logujeme
+  try {
+    transformClinicalQuality();
+  } catch (err) {
+    console.warn(`  WARN: clinical-quality transform: ${err.message}`);
   }
 
   // Snapshot dat — slouží jako audit trail
