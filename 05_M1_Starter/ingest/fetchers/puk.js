@@ -37,63 +37,61 @@ const LOG_FILE = path.join(ROOT, 'data', 'clinical-scraping-log.json');
 
 /**
  * Známé indikátory PUK s URL k detail-kartě.
- * URL jsou orientační — skutečné URL paths se ověří při prvním běhu.
- * Pokud URL vrátí 404, fallback selektor (`SEARCH_INDEX_FOR_LINK`)
- * najde detail-kartu přes index PUK podle textu titulku.
+ * URL ověřeny proti živému PUK (2026-05-28) — WordPress paths.
+ * Některé hodnoty jsou v inline CanvasJS dataPoints, jiné v iframe na puk.kzp.cz.
  *
- * Stav (2026-05): URL jsou TENTATIVE — vyžadují manuální ověření při
- * prvním běhu proti živému PUK. Loguje se do scraping-log.json.
+ * Pokud URL vrátí 404, fetch_failed status se zaloguje a maintainer
+ * dohledá nový path v navigaci PUK.
  */
 const KNOWN_INDICATORS = [
   {
     id: 'pooperacni_sepse_psi13',
     title_hint: 'Pooperační sepse',
+    series_name: 'Všechny sledované operace',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/pooperacni-sepse`,
-      `${PUK_BASE}/ukazatel/PSI-13`,
-      `${PUK_BASE}/bezpecnost-pacientu/pooperacni-sepse`,
+      // Detail page → iframe → graph PHP s inline dataPoints
+      `https://puk.kzp.cz/vysledky/sepsegraf1.php`,
+      `${PUK_BASE}/pooperacni-sepse/`,
     ],
   },
   {
     id: 'mortalita_30d_ami',
-    title_hint: '30denní mortalita po AMI',
+    title_hint: '30denní mortalita pacientů s AIM hospitalizovaných v ČR',
+    series_name: 'Celá ČR',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/mortalita-ami`,
-      `${PUK_BASE}/ukazatel/30d-ami`,
-      `${PUK_BASE}/akutni-kardiologie/mortalita-ami`,
+      `${PUK_BASE}/30denni-mortalita-pacientu-s-aim-hospitalizovanych-v-cr/`,
     ],
   },
   {
     id: 'mortalita_30d_cmp',
-    title_hint: '30denní mortalita po CMP',
+    title_hint: '30denní mortalita pacientů s ischemickou CMP',
+    series_name: 'Celá ČR',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/mortalita-cmp`,
-      `${PUK_BASE}/ukazatel/30d-cmp`,
+      `${PUK_BASE}/30denni-mortalita-pacientu-s-ischemickou-cevni-mozkovou-prihodou-hospitalizovanych-v-cr/`,
     ],
   },
   {
     id: 'trombektomie_cmp',
     title_hint: 'Mechanická trombektomie',
+    series_name: 'Celá ČR',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/trombektomie`,
-      `${PUK_BASE}/ukazatel/mechanicka-trombektomie`,
+      `${PUK_BASE}/podil-hospitalizacnich-pripadu-s-uzitim-mechanicke-trombektomie/`,
     ],
   },
   {
-    id: 'atb_aware_ambulantni',
-    title_hint: 'AWaRe preskripce',
+    id: 'centralizace_cmp',
+    title_hint: 'Míra centralizace pacientů s CMP',
+    series_name: 'Celá ČR',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/aware-preskripce`,
-      `${PUK_BASE}/ukazatel/cz-aware`,
-      `${PUK_BASE}/antimikrobialni-rezistence/aware`,
+      `${PUK_BASE}/mira-centralizace-pacientu-s-cmp/`,
     ],
   },
   {
-    id: 'mortalita_90d_kolorekt',
-    title_hint: '90denní mortalita resekce kolorekta',
+    id: 'mortalita_30d_ami_indicator_card',
+    title_hint: 'AIM 30d karta ukazatele (alternativní URL)',
+    series_name: 'Celá ČR',
     detail_url_candidates: [
-      `${PUK_BASE}/ukazatel/resekce-kolorekta`,
-      `${PUK_BASE}/onkologicka-chirurgie/kolorekt`,
+      `${PUK_BASE}/ukazatele/neurologie/VUK_NEU_001_20.php`,
     ],
   },
 ];
@@ -103,6 +101,53 @@ const REGIONS = [
   'Ústecký', 'Liberecký', 'Královéhradecký', 'Pardubický',
   'Vysočina', 'Jihomoravský', 'Olomoucký', 'Zlínský', 'Moravskoslezský',
 ];
+
+/**
+ * Extrahuje CanvasJS data series z inline JavaScriptu.
+ * PUK používá CanvasJS Chart, dataPoints jsou inline v <script>.
+ *
+ * @param {string} html — celé HTML jako string (cheerio nestačí, je potřeba raw text)
+ * @param {string} [seriesName] — preferované jméno série (např. "Celá ČR")
+ * @returns {{value: number|null, year: number|null, trend: Array, series_name: string|null, strategy: string}}
+ */
+export function extractCanvasJsSeries(html, seriesName = null) {
+  // Match všechny série v JS: name: "..." ... dataPoints: [...]
+  const re = /name:\s*"([^"]+)"[^}]*?dataPoints:\s*\[([\s\S]*?)\]/g;
+  const series = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const name = m[1];
+    const data = m[2];
+    const points = [];
+    const ptRe = /x:\s*(\d+),\s*y:\s*(-?\d+\.?\d*)/g;
+    let pm;
+    while ((pm = ptRe.exec(data)) !== null) {
+      points.push({ year: parseInt(pm[1], 10), value: parseFloat(pm[2]) });
+    }
+    if (points.length > 0) series.push({ name, points });
+  }
+  if (series.length === 0) return { value: null, year: null, trend: [], series_name: null, strategy: 'canvasjs-none' };
+
+  // Vyber preferovanou sérii, jinak první
+  let picked = series.find(s => seriesName && s.name.includes(seriesName)) ?? series[0];
+
+  // Detekce, zda hodnoty jsou v desítkové formě (0.85) vs zlomku (0.0085) vs procentech (8.5)
+  // PUK varianty: některé grafy mají 0.07 jako 7%, jiné 7.04 přímo. Heuristika:
+  // pokud všechny hodnoty < 1.0, předpoklad fraction → ×100. Jinak ponechej.
+  const maxVal = Math.max(...picked.points.map(p => p.value));
+  const valuesArePercent = maxVal >= 1.0;
+  const normalize = v => valuesArePercent ? v : v * 100;
+
+  const trend = picked.points.map(p => ({ year: p.year, value: +normalize(p.value).toFixed(3) }));
+  const latest = trend[trend.length - 1];
+  return {
+    value: latest.value,
+    year: latest.year,
+    trend,
+    series_name: picked.name,
+    strategy: valuesArePercent ? 'canvasjs-percent' : 'canvasjs-fraction',
+  };
+}
 
 /**
  * Extrahuje národní hodnotu indikátoru z HTML PUK detail-karty.
@@ -281,6 +326,25 @@ export async function fetchPuk() {
     }
 
     try {
+      // 1) Nejdřív zkusíme CanvasJS inline data (PUK preferovaný vzor)
+      const canvasResult = extractCanvasJsSeries(html, ind.series_name);
+      if (canvasResult.value !== null) {
+        result.value_national = canvasResult.value;
+        result.unit = '%';
+        result.year = canvasResult.year;
+        result.trend = canvasResult.trend;
+        result.series_name = canvasResult.series_name;
+        result.status = 'ok';
+        logEntry.national_strategy = canvasResult.strategy;
+        logEntry.series_name = canvasResult.series_name;
+        logEntry.trend_count = canvasResult.trend.length;
+        console.log(`  PUK ${ind.id}: ok (national=${canvasResult.value}%, year=${canvasResult.year}, trend=${canvasResult.trend.length} points, series="${canvasResult.series_name}")`);
+        log.push(logEntry);
+        indicators.push(result);
+        continue;
+      }
+
+      // 2) Fallback: cheerio strategie pro HTML tabulky / data-attrs
       const $ = cheerio.load(html);
       const nat = extractNationalValue($);
       const reg = extractRegionalBreakdown($);
