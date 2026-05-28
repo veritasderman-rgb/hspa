@@ -30,15 +30,22 @@ function loadJson(p, fallback) {
 const PUK_ID_MAP = {
   'pooperacni_sepse_psi13': 'pooperacni_sepse_psi13',
   // PUK „30d AMI" metodika není identická s OECD H@G admission-based (45+, age-sex
-  // standardized) ani s ÚZIS NRH in-hospital. Mapujeme do samostatného záznamu,
-  // ne do mortalita_30d_ami_oecd (ten zachovává OECD hodnotu 5,2 % 2023).
+  // standardized) ani s ÚZIS NRH in-hospital. Mapujeme do samostatného záznamu.
   'mortalita_30d_ami': 'mortalita_30d_ami_puk',
-  'mortalita_30d_cmp': null,
+  'mortalita_30d_cmp': 'mortalita_30d_cmp_puk',
+  // Trombektomie + centralizace cmp z table-row strategie — ročník nesynchronizovaný
+  // přes tabulky, ponecháno jen v cache (nevkládat do clinical-quality bez ověření)
   'trombektomie_cmp': null,
   'centralizace_cmp': null,
   'atb_aware_ambulantni': 'atb_aware_ambulantni',
-  'mortalita_90d_kolorekt': null,
-  'mortalita_30d_ami_indicator_card': null,
+  // Onkologická chirurgie — 5 diagnóz, stripline strategy
+  'mortalita_90d_pankreas': 'mortalita_90d_pankreas',
+  'mortalita_90d_jicen': 'mortalita_90d_jicen',
+  'mortalita_90d_plice': 'mortalita_90d_plice',
+  'mortalita_90d_rekta_elektiv': 'mortalita_90d_rekta_elektiv',
+  'mortalita_90d_rekta_akutni': 'mortalita_90d_rekta_akutni',
+  'mortalita_90d_kolorekt_elektiv': 'mortalita_90d_kolorekt_elektiv',
+  'mortalita_90d_kolorekt_akutni': 'mortalita_90d_kolorekt_akutni',
 };
 
 export function transformClinicalQuality() {

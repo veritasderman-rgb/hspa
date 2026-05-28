@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-28T11:05:38.647Z",
+  "generated_at": "2026-05-28T11:24:20.905Z",
   "page": "kvalita-pece.html",
   "license_note": "Tento soubor agreguje hodnoty z PUK (KZP) a INDIKO (FBMI ČVUT) získané ručním záznamem (Fáze 1 plánu). Hodnoty jsou re-publikovány s atribucí. Strojový scraping a denní obnova (Fáze 4) budou doplněny v samostatném PR.",
   "source_attribution": {
@@ -58,7 +58,7 @@
         "note": "AHRQ publikuje národní reference PSI-13 (Quality Indicators Empirical Methods v2024, risk-adjusted rate per 1000 elektivních chirurgických propuštění). Konkrétní hodnoty se rok od roku liší a publikují se na AHRQ portálu — zde záměrně neuvádíme bez ověření aktuálního ročníku."
       },
       "scope_note": "PUK publikuje na úrovni poskytovatele s národním agregátem. Aktuální hodnotu otevřete na PUK.",
-      "last_scraped_at": "2026-05-28T11:02:24.895Z",
+      "last_scraped_at": "2026-05-28T11:23:36.883Z",
       "trend": [
         {
           "year": 2020,
@@ -145,7 +145,7 @@
       "unit": "%",
       "year": 2022,
       "note": "Hodnota se naplní automatickým scraperem PUK. Pro 2022 (poslední rok publikovaný PUK) vychází ~6,79 % vs ÚZIS in-hosp 5,5 % vs OECD 5,2 % — rozdíl odráží metodické rozdíly.",
-      "last_scraped_at": "2026-05-28T11:02:24.895Z",
+      "last_scraped_at": "2026-05-28T11:23:36.883Z",
       "trend": [
         {
           "year": 2018,
@@ -262,15 +262,323 @@
       "id": "chirurgie_onko_volume_outcome",
       "section": "onco_surgery",
       "name": "Komplexní onkologická chirurgie — volume × outcome",
-      "method": "PUK publikuje pro 4 diagnostické skupiny (resekce pankreatu, plic, jícnu, kolorekta) počet výkonů na pracoviště a 90denní pooperační mortalitu",
+      "method": "PUK publikuje pro 5 diagnostických skupin (resekce pankreatu, plic, jícnu, rekta, tlustého střeva) počet výkonů na pracoviště a 90denní standardizovanou pooperační mortalitu",
       "primary_source": "puk",
-      "source_url": "https://puk.kancelarzp.cz/",
+      "source_url": "https://puk.kancelarzp.cz/chirurgie/",
       "diagnoses": [
         "pankreas",
-        "plíce",
         "jícen",
-        "kolorekt."
+        "plíce",
+        "rekta (elektivní/akutní)",
+        "kolorekt. (elektivní/akutní)"
       ]
+    },
+    {
+      "id": "mortalita_90d_pankreas",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci pankreatu",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita (referenční čára v grafu rangeColumn za pracoviště)",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-pacientu-po-resekcnim-vykonu-na-pankreatu/",
+      "value_national": 5.24,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 8.55
+        },
+        {
+          "year": 2019,
+          "value": 7.76
+        },
+        {
+          "year": 2020,
+          "value": 7.55
+        },
+        {
+          "year": 2021,
+          "value": 6.93
+        },
+        {
+          "year": 2022,
+          "value": 7.18
+        },
+        {
+          "year": 2023,
+          "value": 8.05
+        },
+        {
+          "year": 2024,
+          "value": 5.24
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_jicen",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci jícnu",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-jicnu/",
+      "value_national": 3.18,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 10.06
+        },
+        {
+          "year": 2019,
+          "value": 8.74
+        },
+        {
+          "year": 2020,
+          "value": 6.92
+        },
+        {
+          "year": 2021,
+          "value": 8.88
+        },
+        {
+          "year": 2022,
+          "value": 9.2
+        },
+        {
+          "year": 2023,
+          "value": 9.32
+        },
+        {
+          "year": 2024,
+          "value": 3.18
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_plice",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci plic",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-plic/",
+      "value_national": 2.34,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 4.51
+        },
+        {
+          "year": 2019,
+          "value": 3.52
+        },
+        {
+          "year": 2020,
+          "value": 5.12
+        },
+        {
+          "year": 2021,
+          "value": 4.86
+        },
+        {
+          "year": 2022,
+          "value": 3.23
+        },
+        {
+          "year": 2023,
+          "value": 2.88
+        },
+        {
+          "year": 2024,
+          "value": 2.34
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_rekta_elektiv",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci rekta (elektivní výkony)",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita, plánované výkony",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-rekta/",
+      "value_national": 4.37,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 4.96
+        },
+        {
+          "year": 2019,
+          "value": 5.24
+        },
+        {
+          "year": 2020,
+          "value": 5.34
+        },
+        {
+          "year": 2021,
+          "value": 6.32
+        },
+        {
+          "year": 2022,
+          "value": 5.28
+        },
+        {
+          "year": 2023,
+          "value": 4.37
+        },
+        {
+          "year": 2024,
+          "value": 4.37
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_rekta_akutni",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci rekta (akutní výkony)",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita, urgentní/akutní výkony — výrazně vyšší mortalita než elektivní",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-rekta/",
+      "value_national": 13.33,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 20.7
+        },
+        {
+          "year": 2019,
+          "value": 16
+        },
+        {
+          "year": 2020,
+          "value": 16.71
+        },
+        {
+          "year": 2021,
+          "value": 18.1
+        },
+        {
+          "year": 2022,
+          "value": 15.93
+        },
+        {
+          "year": 2023,
+          "value": 13.06
+        },
+        {
+          "year": 2024,
+          "value": 13.33
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_kolorekt_elektiv",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci tlustého střeva (elektivní)",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita, plánované výkony",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-tlusteho-streva/",
+      "value_national": 6.14,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 7.41
+        },
+        {
+          "year": 2019,
+          "value": 7.32
+        },
+        {
+          "year": 2020,
+          "value": 8.19
+        },
+        {
+          "year": 2021,
+          "value": 7.42
+        },
+        {
+          "year": 2022,
+          "value": 7.86
+        },
+        {
+          "year": 2023,
+          "value": 7.74
+        },
+        {
+          "year": 2024,
+          "value": 6.14
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_90d_kolorekt_akutni",
+      "section": "onco_surgery",
+      "name": "90denní mortalita po resekci tlustého střeva (akutní)",
+      "method": "PUK · 90denní standardizovaná pooperační mortalita, urgentní/akutní výkony",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/90denni-mortalita-po-resekci-karcinomu-tlusteho-streva/",
+      "value_national": 18.21,
+      "unit": "%",
+      "year": 2024,
+      "trend": [
+        {
+          "year": 2018,
+          "value": 23.57
+        },
+        {
+          "year": 2019,
+          "value": 22.29
+        },
+        {
+          "year": 2020,
+          "value": 23.42
+        },
+        {
+          "year": 2021,
+          "value": 23.65
+        },
+        {
+          "year": 2022,
+          "value": 20.66
+        },
+        {
+          "year": 2023,
+          "value": 22.12
+        },
+        {
+          "year": 2024,
+          "value": 18.21
+        }
+      ],
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
+    },
+    {
+      "id": "mortalita_30d_cmp_puk",
+      "section": "stroke",
+      "name": "30denní mortalita pacientů s ischemickou CMP (PUK)",
+      "method": "PUK · 30denní standardizovaná mortalita po hospitalizaci pro ischemickou CMP, série za pracoviště (KCC + IC + ostatní)",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/30denni-mortalita-pacientu-s-ischemickou-cevni-mozkovou-prihodou-hospitalizovanych-v-cr/",
+      "value_national": 12.47,
+      "unit": "%",
+      "year": null,
+      "note": "PUK 30d ~12,47 % vs ÚZIS NRH in-hospital 11,2 % — PUK navíc započítává post-discharge úmrtí do 30 dnů.",
+      "last_scraped_at": "2026-05-28T11:23:36.883Z"
     },
     {
       "id": "cesta_onko_pacienta_indiko",
