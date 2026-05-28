@@ -20,16 +20,38 @@ const REGIONS = [
   'Vysočina', 'Jihomoravský', 'Olomoucký', 'Zlínský', 'Moravskoslezský',
 ];
 
+// 8 sloupců heatmapy — výběr klíčových PUK indikátorů s krajským rozpadem.
+// Vazba na konkrétní indicator.id v clinical-quality.json.
+// direction: 'lower_is_better' (mortality, fluorochinolony jako Watch) nebo
+//            'higher_is_better' (Access penicilíny, trombolýza).
 const HEATMAP_COLS = [
-  { short: 'Sepse',       full: 'Pooperační sepse',                    source: 'puk' },
-  { short: '30d AMI',     full: '30d mortalita AMI',                   source: 'puk' },
-  { short: '30d CMP',     full: '30d mortalita CMP',                   source: 'puk' },
-  { short: 'Trombekt.',   full: 'Trombektomie — % využití',            source: 'puk' },
-  { short: 'AWaRe',       full: 'AWaRe preskripce praktici',           source: 'puk' },
-  { short: '90d kolor.',  full: '90d mortalita resekce kolorekta',     source: 'puk' },
-  { short: 'MDT plíce',   full: '% MDT projednání karcinom plic',      source: 'indiko' },
-  { short: 'Diag. prsu',  full: 'Čas k diagnóze karcinom prsu',        source: 'indiko' },
+  { short: 'AWaRe CZ',      full: 'CZ-AWaRe Access podíl',                   indicator: 'aware_index_cz',                 direction: 'higher_is_better' },
+  { short: 'AWaRe WHO',     full: 'WHO-AWaRe Access podíl',                  indicator: 'aware_index_who',                direction: 'higher_is_better' },
+  { short: 'Makrolidy',     full: 'Podíl makrolidů z preskripce ATB',        indicator: 'preskripce_atb_makrolidy',       direction: 'lower_is_better' },
+  { short: 'Fluoroch.',     full: 'Podíl fluorochinolonů z preskripce ATB',  indicator: 'preskripce_atb_fluorochinolony', direction: 'lower_is_better' },
+  { short: 'Cefalospor.',   full: 'Podíl cefalosporinů z preskripce ATB',    indicator: 'preskripce_atb_cefalosporiny',   direction: 'lower_is_better' },
+  { short: 'Chráně. AMP',   full: 'Chráněné AMP / AMP (kvalita preskripce)', indicator: 'preskripce_atb_chrane_amp_z_amp', direction: 'higher_is_better' },
+  { short: 'Trombolýza',    full: 'Systémová trombolýza CMP (% využití)',    indicator: 'trombolyza_systemova_cmp',       direction: 'higher_is_better' },
+  { short: 'Trombekt.',     full: 'Mechanická trombektomie CMP (% využití)', indicator: 'trombektomie_cmp',               direction: 'higher_is_better' },
 ];
+
+/**
+ * Vypočítá status buňky (good/warn/bad) podle odchylky od národního průměru.
+ * @param {number} value
+ * @param {number} national
+ * @param {'higher_is_better'|'lower_is_better'} direction
+ * @returns {'good'|'warn'|'bad'}
+ */
+function regionStatus(value, national, direction) {
+  if (value == null || national == null) return 'neutral';
+  const diff = value - national;
+  const relDiff = diff / national;
+  const better = direction === 'higher_is_better' ? relDiff > 0.05 : relDiff < -0.05;
+  const worse = direction === 'higher_is_better' ? relDiff < -0.05 : relDiff > 0.05;
+  if (better) return 'good';
+  if (worse) return 'bad';
+  return 'warn';
+}
 
 async function init() {
   if (typeof window === 'undefined') return;
@@ -46,6 +68,7 @@ async function init() {
     renderSourceFooter(data);
     renderHeroChips(data);
     annotateGeneratedAt(data);
+    renderHeatmapData(data);
   } catch (err) {
     console.warn('clinical-quality.json failed to load:', err);
     const slot = document.getElementById('cqSourceFooter');
@@ -61,17 +84,65 @@ function renderHeatmapSkeleton() {
   // Header row: corner + 8 column labels
   cells.push('<div class="cq-heatmap-cell cq-heatmap-cell-col-label" aria-hidden="true"></div>');
   for (const col of HEATMAP_COLS) {
-    cells.push(`<div class="cq-heatmap-cell cq-heatmap-cell-col-label" title="${escapeHtml(col.full)}" aria-label="${escapeHtml(col.full)} — zdroj ${col.source.toUpperCase()}">${escapeHtml(col.short)}</div>`);
+    cells.push(`<div class="cq-heatmap-cell cq-heatmap-cell-col-label" title="${escapeHtml(col.full)}" aria-label="${escapeHtml(col.full)} — PUK">${escapeHtml(col.short)}</div>`);
   }
-  // 14 region rows × 8 cells "pending"
+  // 14 region rows × 8 cells "pending" (přepíše se renderHeatmapData)
   for (const region of REGIONS) {
     cells.push(`<div class="cq-heatmap-cell cq-heatmap-cell-row-label">${escapeHtml(region)}</div>`);
     for (let i = 0; i < HEATMAP_COLS.length; i++) {
-      cells.push('<div class="cq-heatmap-cell" data-status="pending" aria-label="Hodnota bude doplněna ve Fázi 4 (scraping PUK + INDIKO)">—</div>');
+      cells.push('<div class="cq-heatmap-cell" data-status="pending" aria-label="Načítám data…">—</div>');
     }
   }
 
   grid.innerHTML = cells.join('');
+}
+
+/**
+ * Naplní heatmap reálnými hodnotami z clinical-quality.json — by_region mapa
+ * + národní hodnota → status (good/warn/bad) podle direction.
+ */
+function renderHeatmapData(data) {
+  const grid = document.getElementById('cqHeatmapGrid');
+  if (!grid) return;
+  const inds = data.indicators ?? [];
+
+  // Map indicator.id → {value_national, by_region}
+  const byId = new Map(inds.map(i => [i.id, i]));
+
+  const cells = [];
+  // Header row
+  cells.push('<div class="cq-heatmap-cell cq-heatmap-cell-col-label" aria-hidden="true"></div>');
+  for (const col of HEATMAP_COLS) {
+    const ind = byId.get(col.indicator);
+    const nat = ind?.value_national;
+    const natLabel = nat != null ? `${formatNum(nat)} %` : '—';
+    cells.push(`<div class="cq-heatmap-cell cq-heatmap-cell-col-label" title="${escapeHtml(col.full)} · národní průměr ${natLabel}" aria-label="${escapeHtml(col.full)} — národní průměr ${natLabel}">${escapeHtml(col.short)}<br><small style="font-weight:400;color:var(--ink-mut);">⌀ ${natLabel}</small></div>`);
+  }
+
+  // Region rows
+  for (const region of REGIONS) {
+    cells.push(`<div class="cq-heatmap-cell cq-heatmap-cell-row-label">${escapeHtml(region)}</div>`);
+    for (const col of HEATMAP_COLS) {
+      const ind = byId.get(col.indicator);
+      const nat = ind?.value_national;
+      const byReg = ind?.by_region ?? {};
+      const val = byReg[region];
+      if (val == null) {
+        cells.push('<div class="cq-heatmap-cell" data-status="pending" aria-label="Chybí data">—</div>');
+        continue;
+      }
+      const status = regionStatus(val, nat, col.direction);
+      const dir = col.direction === 'higher_is_better' ? 'vyšší je lepší' : 'nižší je lepší';
+      cells.push(`<div class="cq-heatmap-cell" data-status="${status}" title="${escapeHtml(region)} · ${escapeHtml(col.full)}: ${formatNum(val)} % (národ ${formatNum(nat)} %, ${dir})" aria-label="${escapeHtml(region)} ${escapeHtml(col.full)}: ${formatNum(val)} %">${formatNum(val)}</div>`);
+    }
+  }
+
+  grid.innerHTML = cells.join('');
+}
+
+function formatNum(v) {
+  if (v == null || !Number.isFinite(v)) return '—';
+  return v.toFixed(v >= 10 ? 1 : 2).replace('.', ',');
 }
 
 function renderSourceFooter(data) {

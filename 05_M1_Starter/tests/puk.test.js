@@ -12,6 +12,7 @@ import {
   extractCanvasJsSeries,
   extractStripLineValues,
   pickLatestStripLine,
+  extractKrajYearMatrix,
 } from '../ingest/fetchers/puk.js';
 
 test('extractNationalValue — data-attr strategy', () => {
@@ -173,6 +174,36 @@ test('extractStripLineValues — parses variant-prefixed containers (elektivní 
   assert.equal(r.stripLines[0].value, 4.37);
   assert.equal(r.stripLines[1].variant, '5');
   assert.equal(r.stripLines[1].value, 13.33);
+});
+
+test('extractKrajYearMatrix — parses year header + per-kraj rows from PUK AWaRe-like pages', () => {
+  const regions = [
+    'Hlavní město Praha', 'Středočeský kraj', 'Jihočeský kraj', 'Plzeňský kraj',
+    'Karlovarský kraj', 'Ústecký kraj', 'Liberecký kraj', 'Královéhradecký kraj',
+    'Pardubický kraj', 'Kraj Vysočina', 'Jihomoravský kraj',
+    'Olomoucký kraj', 'Zlínský kraj', 'Moravskoslezský kraj',
+  ];
+  const yearHeaderHtml = `<table><tr><th></th><th>2022</th><th>2023</th><th>2024</th></tr></table>`;
+  const krajRowsHtml = regions.map((r, i) =>
+    `<table><tr><td>${r} ▼ ▲</td><td>${(20 + i).toFixed(1)}%</td><td>${(21 + i).toFixed(1)}%</td><td>${(22 + i).toFixed(1)}%</td></tr></table>`
+  ).join('');
+  const html = `<html><body>${yearHeaderHtml}${krajRowsHtml}</body></html>`;
+  const $ = cheerio.load(html);
+  const r = extractKrajYearMatrix($);
+  assert.equal(Object.keys(r.regions).length, 14);
+  assert.equal(r.latest_year, 2024);
+  assert.ok(r.national_latest > 22 && r.national_latest < 36);
+  assert.equal(r.strategy, 'kraj-year-matrix');
+  assert.equal(r.regions['Praha'][0].year, 2022);
+  assert.equal(r.regions['Praha'][2].value, 22);
+  assert.equal(r.regions['Vysočina'].length, 3);
+});
+
+test('extractKrajYearMatrix — empty body returns partial-or-empty', () => {
+  const $ = cheerio.load('<html><body><p>nic</p></body></html>');
+  const r = extractKrajYearMatrix($);
+  assert.equal(Object.keys(r.regions).length, 0);
+  assert.equal(r.strategy, 'partial-or-empty');
 });
 
 test('pickLatestStripLine — picks newest year for given variant', () => {

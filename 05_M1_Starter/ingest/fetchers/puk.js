@@ -149,6 +149,168 @@ const KNOWN_INDICATORS = [
       `${PUK_BASE}/90denni-mortalita-po-resekci-karcinomu-tlusteho-streva/`,
     ],
   },
+
+  // Další onko chirurgie + komplikace
+  {
+    id: 'mortalita_resekce_jater',
+    title_hint: 'Mortalita po resekci jater',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/mortalita-po-resekci-jater/`,
+    ],
+  },
+  {
+    id: 'komplikace_tonzily',
+    title_hint: 'Závažné komplikace po operaci na patrových tonzilách',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/zavazne-komplikace-po-operacnim-vykonu-na-patrovych-tonzilach/`,
+    ],
+  },
+
+  // Akutní CMP — další ukazatele
+  {
+    id: 'trombolyza_systemova_cmp',
+    title_hint: 'Podíl hospitalizačních případů se systémovou trombolýzou (CMP)',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-hospitalizacnich-pripadu-se-systemovou-trombolyzou/`,
+    ],
+  },
+  {
+    id: 'centralizace_primarni_cmp',
+    title_hint: 'Míra primární centralizace pacientů s CMP',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/mira-primarni-centralizace-pacientu-s-cmp/`,
+    ],
+  },
+  {
+    id: 'centralizace_sekundarni_cmp',
+    title_hint: 'Míra sekundární centralizace pacientů s CMP',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/mira-sekundarni-centralizace-pacientu-s-cmp/`,
+    ],
+  },
+  {
+    id: 'rehabilitace_cmp',
+    title_hint: 'Lůžková rehabilitační péče po CMP',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/luzkova-rehabilitacni-pece-u-pacientu-po-cmp/`,
+    ],
+  },
+
+  // Radioterapie
+  {
+    id: 'toxicita_radioterapie_prostata',
+    title_hint: 'Toxicita po radikální RT karcinomu prostaty',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/mira-vyskytu-gastrointestinalni-a-urogenitalni-toxicity-po-radikalni-radioterapii-ca-prostaty/`,
+    ],
+  },
+
+  // Adherence
+  {
+    id: 'adherence_statiny',
+    title_hint: 'Adherence pacientů léčených statiny',
+    extraction: 'stripline',
+    detail_url_candidates: [
+      `${PUK_BASE}/adherence-pacientu-lecenych-statiny/`,
+    ],
+  },
+
+  // CZ-AWaRe + WHO-AWaRe + 9 sub-indikátorů preskripce ATB (kraj × rok matice)
+  {
+    id: 'aware_index_cz',
+    title_hint: 'CZ AWaRe Index',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/cz-aware-index/`,
+    ],
+  },
+  {
+    id: 'aware_index_who',
+    title_hint: 'WHO AWaRe Index',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/who-aware-index/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_fluorochinolony',
+    title_hint: 'Podíl preskripce fluorochinolonů praktiky',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-fluorochinolonovych-antibiotik-z-celkove-preskripce-antibiotik-u-praktickych-lekaru/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_makrolidy',
+    title_hint: 'Podíl preskripce makrolidů',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-makrolidovych-antibiotik-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_cefalosporiny',
+    title_hint: 'Podíl preskripce cefalosporinů',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-cefalosporinovych-antibiotik-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_sulfonamidy',
+    title_hint: 'Podíl preskripce sulfonamidů a trimethoprimu',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-sulfonamidu-a-trimethoprimu-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_tetracykliny',
+    title_hint: 'Podíl preskripce tetracyklinů',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-ttc-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_uzkospektre_pnc',
+    title_hint: 'Podíl preskripce úzkospektrých penicilinů',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-pnc-z-uzkym-spektrem-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_chrane_amp_z_amp',
+    title_hint: 'Podíl chráněných aminopenicilinů z aminopenicilinů (praktici)',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-chranenych-aminopenicilinu-z-celkove-preskripce-aminopenicilinu-u-praktickych-lekaru/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_chrane_amp_z_atb',
+    title_hint: 'Podíl chráněných aminopenicilinů z všech ATB',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-chranene-amino-pnc-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
+  {
+    id: 'preskripce_atb_nechrane_amp',
+    title_hint: 'Podíl nechráněných aminopenicilinů z všech ATB',
+    extraction: 'kraj-year-matrix',
+    detail_url_candidates: [
+      `${PUK_BASE}/podil-preskripce-nechranenych-amino-pnc-z-celkove-preskripce-antibiotik/`,
+    ],
+  },
 ];
 
 const REGIONS = [
@@ -214,6 +376,97 @@ export function pickLatestStripLine(stripLines, variant = null) {
     return stripLines[0];
   }
   return null;
+}
+
+const REGION_PATTERNS = [
+  { canonical: 'Praha', patterns: ['Hlavní město Praha', 'Praha'] },
+  { canonical: 'Středočeský', patterns: ['Středočeský kraj', 'Středočeský'] },
+  { canonical: 'Jihočeský', patterns: ['Jihočeský kraj', 'Jihočeský'] },
+  { canonical: 'Plzeňský', patterns: ['Plzeňský kraj', 'Plzeňský'] },
+  { canonical: 'Karlovarský', patterns: ['Karlovarský kraj', 'Karlovarský'] },
+  { canonical: 'Ústecký', patterns: ['Ústecký kraj', 'Ústecký'] },
+  { canonical: 'Liberecký', patterns: ['Liberecký kraj', 'Liberecký'] },
+  { canonical: 'Královéhradecký', patterns: ['Královéhradecký kraj', 'Královéhradecký'] },
+  { canonical: 'Pardubický', patterns: ['Pardubický kraj', 'Pardubický'] },
+  { canonical: 'Vysočina', patterns: ['Kraj Vysočina', 'Vysočina'] },
+  { canonical: 'Jihomoravský', patterns: ['Jihomoravský kraj', 'Jihomoravský'] },
+  { canonical: 'Olomoucký', patterns: ['Olomoucký kraj', 'Olomoucký'] },
+  { canonical: 'Zlínský', patterns: ['Zlínský kraj', 'Zlínský'] },
+  { canonical: 'Moravskoslezský', patterns: ['Moravskoslezský kraj', 'Moravskoslezský'] },
+];
+
+/**
+ * Extrahuje kraj × rok matici hodnot z PUK tabulek typu AWaRe / ATB sub-indikátory.
+ *
+ * PUK stránky pro CZ-AWaRe Index a podíl preskripce {ATB skupina} mají strukturu:
+ *   <table>year header: 2018 2019 2020 ... 2024</table>
+ *   <table>Praha ▼▲ | 32.85% | 34.56% | ... | 33.88%</table>
+ *   <table>okres × year (vnořeno)</table>
+ *   ...
+ *
+ * @param {cheerio.CheerioAPI} $
+ * @returns {{regions: Record<string, {year: number, value: number}[]>, latest_year: number|null, national_latest: number|null, strategy: string}}
+ */
+export function extractKrajYearMatrix($) {
+  const regions = {};
+  let yearHeader = [];
+
+  // Iteruj všechny tabulky, najdi nejdřív year header
+  $('table').each((_, table) => {
+    const rows = $(table).find('tr').toArray();
+    for (const row of rows) {
+      const cells = $(row).find('th, td').toArray();
+      const texts = cells.map(c => $(c).text().trim());
+      // Year header: většinou prázdná první buňka + roky
+      const allYears = texts.length > 1 && texts.slice(1).every(t => /^20\d\d$/.test(t));
+      if (cells.length >= 3 && cells.length <= 12 && allYears) {
+        yearHeader = texts.slice(1).map(t => parseInt(t, 10));
+        continue; // pokračujeme dál — kraj rows jsou v jiných tabulkách
+      }
+      // Kraj row: první cell obsahuje název kraje, zbytek procenta
+      if (cells.length >= 4) {
+        const firstCellText = $(cells[0]).text().trim();
+        const region = REGION_PATTERNS.find(r =>
+          r.patterns.some(p => firstCellText.includes(p))
+        );
+        if (region && yearHeader.length > 0 && cells.length === yearHeader.length + 1) {
+          const values = texts.slice(1).map(t => {
+            const m = t.match(/(-?\d+[,.]?\d*)/);
+            return m ? parseFloat(m[1].replace(',', '.')) : null;
+          });
+          if (values.every(v => v !== null)) {
+            const series = yearHeader.map((y, i) => ({ year: y, value: values[i] }));
+            // Pokud už máme region, doplníme delší (lepší) sérii
+            if (!regions[region.canonical] || series.length > regions[region.canonical].length) {
+              regions[region.canonical] = series;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // National latest = průměr krajů za poslední rok (PUK na těchto stránkách národní průměr
+  // explicitně neuvádí — počítáme aritmetický průměr přes 14 krajů)
+  const regionCount = Object.keys(regions).length;
+  let latest_year = null;
+  let national_latest = null;
+  if (regionCount > 0 && yearHeader.length > 0) {
+    latest_year = yearHeader[yearHeader.length - 1];
+    const latestValues = Object.values(regions)
+      .map(series => series.find(s => s.year === latest_year)?.value)
+      .filter(v => v !== undefined);
+    if (latestValues.length > 0) {
+      national_latest = +(latestValues.reduce((a, b) => a + b, 0) / latestValues.length).toFixed(2);
+    }
+  }
+
+  return {
+    regions,
+    latest_year,
+    national_latest,
+    strategy: regionCount >= 8 ? 'kraj-year-matrix' : 'partial-or-empty',
+  };
 }
 
 /**
@@ -440,7 +693,47 @@ export async function fetchPuk() {
     }
 
     try {
-      // 0) Pokud indikátor má extraction='stripline', použij stripLine strategy
+      // 0a) extraction='kraj-year-matrix' — CZ-AWaRe + ATB sub-indikátory mají tabulky
+      //     14 krajů × 7 let. National = aritm. průměr přes kraje pro poslední rok.
+      if (ind.extraction === 'kraj-year-matrix') {
+        const $ = cheerio.load(html);
+        const matrixResult = extractKrajYearMatrix($);
+        if (matrixResult.national_latest !== null) {
+          result.value_national = matrixResult.national_latest;
+          result.unit = '%';
+          result.year = matrixResult.latest_year;
+          result.by_region = Object.fromEntries(
+            Object.entries(matrixResult.regions).map(([k, series]) => {
+              const latest = series.find(s => s.year === matrixResult.latest_year);
+              return [k, latest?.value ?? null];
+            })
+          );
+          // Build trend jako average across regions per year
+          if (Object.keys(matrixResult.regions).length > 0) {
+            const years = new Set();
+            Object.values(matrixResult.regions).forEach(series =>
+              series.forEach(s => years.add(s.year))
+            );
+            const trend = [...years].sort((a, b) => a - b).map(year => {
+              const vals = Object.values(matrixResult.regions)
+                .map(series => series.find(s => s.year === year)?.value)
+                .filter(v => v !== undefined);
+              return { year, value: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) };
+            });
+            result.trend = trend;
+          }
+          result.status = 'ok';
+          logEntry.national_strategy = matrixResult.strategy;
+          logEntry.regions_count = Object.keys(matrixResult.regions).length;
+          logEntry.trend_count = result.trend?.length ?? 0;
+          console.log(`  PUK ${ind.id}: ok (matrix ${matrixResult.national_latest}%, year=${matrixResult.latest_year}, regions=${Object.keys(matrixResult.regions).length}, trend=${result.trend?.length ?? 0} let)`);
+          log.push(logEntry);
+          indicators.push(result);
+          continue;
+        }
+      }
+
+      // 0b) Pokud indikátor má extraction='stripline', použij stripLine strategy
       //    (PUK onko-chirurgie + CMP používají axisY.stripLines pro národní průměr)
       if (ind.extraction === 'stripline') {
         const stripResult = extractStripLineValues(html);
