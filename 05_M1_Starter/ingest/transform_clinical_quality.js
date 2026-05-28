@@ -27,26 +27,38 @@ function loadJson(p, fallback) {
  * Mapping PUK fetcher IDs → clinical-quality.json indicator IDs.
  * Některé seedy mají stejné ID, jiné mírně odlišné.
  */
-const PUK_ID_MAP = {
-  'pooperacni_sepse_psi13': 'pooperacni_sepse_psi13',
+// Mapping PUK scraper ID → clinical-quality.json indicator ID.
+// Explicit override pro indikátory s odlišným cílovým ID (např. PUK metodika
+// se liší od OECD/ÚZIS, takže ukládáme do samostatného záznamu).
+// Pro ID nenalezené v této mapě se použije scraped.id přímo a entry se
+// AUTO-VYTVOŘÍ v clinical-quality.json (pro lazy onboarding nových indikátorů).
+const PUK_ID_MAP_EXPLICIT = {
   // PUK „30d AMI" metodika není identická s OECD H@G admission-based (45+, age-sex
   // standardized) ani s ÚZIS NRH in-hospital. Mapujeme do samostatného záznamu.
   'mortalita_30d_ami': 'mortalita_30d_ami_puk',
   'mortalita_30d_cmp': 'mortalita_30d_cmp_puk',
-  // Trombektomie + centralizace cmp z table-row strategie — ročník nesynchronizovaný
-  // přes tabulky, ponecháno jen v cache (nevkládat do clinical-quality bez ověření)
-  'trombektomie_cmp': null,
-  'centralizace_cmp': null,
+  // Trombektomie + centralizace přes table-row mají nejednoznačný ročník — ponechat
+  // jen v cache; entries v clinical-quality.json existují s vlastním auto-mapping ID
+  'trombektomie_cmp': 'trombektomie_cmp',
+  'centralizace_cmp': 'centralizace_cmp',
   'atb_aware_ambulantni': 'atb_aware_ambulantni',
-  // Onkologická chirurgie — 5 diagnóz, stripline strategy
-  'mortalita_90d_pankreas': 'mortalita_90d_pankreas',
-  'mortalita_90d_jicen': 'mortalita_90d_jicen',
-  'mortalita_90d_plice': 'mortalita_90d_plice',
-  'mortalita_90d_rekta_elektiv': 'mortalita_90d_rekta_elektiv',
-  'mortalita_90d_rekta_akutni': 'mortalita_90d_rekta_akutni',
-  'mortalita_90d_kolorekt_elektiv': 'mortalita_90d_kolorekt_elektiv',
-  'mortalita_90d_kolorekt_akutni': 'mortalita_90d_kolorekt_akutni',
 };
+
+function resolveTargetId(scrapedId) {
+  return PUK_ID_MAP_EXPLICIT[scrapedId] ?? scrapedId;
+}
+
+// Default metadata pro auto-vytvořené indikátory podle ID prefixu
+function inferSection(id) {
+  if (id.includes('sepse') || id.includes('psi')) return 'safety';
+  if (id.includes('ami') || id.includes('aim')) return 'acute_cardio';
+  if (id.includes('cmp') || id.includes('rehabilitace')) return 'stroke';
+  if (id.includes('aware') || id.includes('preskripce') || id.includes('atb')) return 'amr';
+  if (id.includes('90d') || id.includes('chirurg') || id.includes('resekce') || id.includes('tonzily') || id.includes('jater')) return 'onco_surgery';
+  if (id.includes('toxicita')) return 'onco_surgery';
+  if (id.includes('statiny') || id.includes('adherence')) return 'chronic_care';
+  return 'other';
+}
 
 export function transformClinicalQuality() {
   const target = loadJson(TARGET, null);
@@ -62,19 +74,29 @@ export function transformClinicalQuality() {
   let indikoUpdated = 0;
   let pukSkipped = 0;
 
-  // Merge PUK
+  // Merge PUK — explicit mapping nebo auto-create entry pro nové ID
+  let pukAutoCreated = 0;
   for (const scraped of puk.indicators ?? []) {
     if (scraped.status !== 'ok' || scraped.value_national == null) {
       pukSkipped++;
       continue;
     }
-    const targetId = PUK_ID_MAP[scraped.id];
-    if (!targetId) {
-      pukSkipped++;
-      continue;
+    const targetId = resolveTargetId(scraped.id);
+    let ind = target.indicators.find(i => i.id === targetId);
+    if (!ind) {
+      // Auto-create entry pro indikátor poprvé scrapnutý
+      ind = {
+        id: targetId,
+        section: inferSection(targetId),
+        name: scraped.title_hint ?? targetId,
+        method: 'PUK · automatický scraper (kvalita-pece scraper inferred)',
+        primary_source: 'puk',
+        source_url: scraped.source_url,
+        auto_created: true,
+      };
+      target.indicators.push(ind);
+      pukAutoCreated++;
     }
-    const ind = target.indicators.find(i => i.id === targetId);
-    if (!ind) continue;
     ind.value_national = scraped.value_national;
     if (scraped.unit) ind.unit = scraped.unit;
     if (scraped.year) ind.year = scraped.year;
@@ -85,6 +107,7 @@ export function transformClinicalQuality() {
     ind.source_url = scraped.source_url ?? ind.source_url;
     pukUpdated++;
   }
+  if (pukAutoCreated > 0) console.log(`  Auto-created ${pukAutoCreated} new indicator entries.`);
 
   // Merge INDIKO — uložíme do nového pole 'indiko_diagnoses' (na úrovni top-level)
   if ((indiko.diagnoses ?? []).some(d => d.status === 'ok' || d.status === 'parsed-partial')) {
