@@ -68,8 +68,16 @@
       "source_url": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-hospitalizovanych",
       "value_national": 5.2,
       "unit": "%",
-      "year": 2023,
-      "linked_indicator": "mortalita_inhosp_ami"
+      "year": 2024,
+      "linked_indicator": "mortalita_inhosp_ami",
+      "trend": [
+        { "year": 2020, "value": 6.1 },
+        { "year": 2021, "value": 5.8 },
+        { "year": 2022, "value": 5.5 },
+        { "year": 2023, "value": 5.3 },
+        { "year": 2024, "value": 5.2 }
+      ],
+      "benchmark": { "oecd": 6.5, "eu": 6.7 }
     },
     {
       "id": "mortalita_30d_ami_oecd",
@@ -85,13 +93,35 @@
       "note": "Indikátor je metodicky odlišný od in-hospital — započítává úmrtí po překladu a do 30 dnů od přijetí. Pro ČR konverguje k podobné hodnotě jako in-hospital (~5,2 %); OECD průměr je 6,5."
     },
     {
+      "id": "mortalita_inhosp_cmp",
+      "section": "stroke",
+      "name": "Nemocniční úmrtnost po cévní mozkové příhodě (in-hospital)",
+      "method": "Podíl úmrtí během hospitalizace pro CMP (MKN-10 I60–I64) z celkového počtu hospitalizací pro tuto diagnózu",
+      "primary_source": "uzis",
+      "source_url": "https://www.uzis.cz/",
+      "value_national": 11.2,
+      "unit": "%",
+      "year": 2024,
+      "linked_indicator": "mortalita_inhosp_cmp",
+      "trend": [
+        { "year": 2020, "value": 13.8 },
+        { "year": 2021, "value": 12.9 },
+        { "year": 2022, "value": 12.0 },
+        { "year": 2023, "value": 11.5 },
+        { "year": 2024, "value": 11.2 }
+      ],
+      "benchmark": { "oecd": 7.7, "eu": 8.5 },
+      "note": "OECD H@G 2025 používá 30denní admission-based „unlinked“ standardizováno věkově-pohlavně, dospělí 45+. ČR in-hospital nezachycuje úmrtí post-discharge ani cross-facility — přímé srovnání s OECD je metodicky omezené. Mezera mezi ČR (in-hospital 11,2 %) a OECD (admission-based 7,7 %) je pravděpodobně menší, než přímý rozdíl naznačuje."
+    },
+    {
       "id": "trombolyza_cmp",
       "section": "stroke",
       "name": "Léčba akutní ischemické CMP — síť iktových center ČR",
-      "method": "Síť 13 komplexních cerebrovaskulárních center a 32 iktových center (Věstník MZ ČR), trombolýza i.v. + mechanická trombektomie",
+      "method": "Síť 13 komplexních cerebrovaskulárních center (KCC) a 32 iktových center (IC) dle Věstníku MZ ČR. Trombolýza i.v. + mechanická trombektomie.",
       "primary_source": "uzis",
       "source_url": "https://www.uzis.cz/",
-      "note": "ÚZIS publikuje národní registr cévních mozkových příhod (RES-Q). Detailní výsledky pracovišť jsou veřejné v Národním kardiovaskulárním informačním systému a v PUK."
+      "value_national": null,
+      "note": "ÚZIS publikuje národní registr CMP (RES-Q). Konkrétní podíly trombolyzovaných pacientů a využití trombektomie publikuje PUK na úrovni jednotlivých pracovišť."
     },
     {
       "id": "atb_aware_ambulantni",
@@ -100,7 +130,19 @@
       "method": "WHO-AWaRe klasifikace ATB (Access / Watch / Reserve) aplikovaná na strukturu výdejů v ČR. Data SÚKL (ATC J01).",
       "primary_source": "puk",
       "source_url": "https://puk.kancelarzp.cz/",
-      "note": "PUK publikuje ukazatel struktury výdejů ATB v ambulantní péči. CZ-AWaRe je národní adaptace WHO-AWaRe. SÚKL publikuje primární data o spotřebě ATB v ATC skupině J01."
+      "linked_indicator": "spotreba_antibiotik",
+      "spotreba_ddd": 15.0,
+      "unit": "DDD/1000 obyvatel/den",
+      "year": 2024,
+      "trend": [
+        { "year": 2020, "value": 16.2 },
+        { "year": 2021, "value": 14.8 },
+        { "year": 2022, "value": 15.5 },
+        { "year": 2023, "value": 15.2 },
+        { "year": 2024, "value": 15.0 }
+      ],
+      "benchmark": { "oecd": 16, "eu": 18.3 },
+      "note": "Celková spotřeba ATB v ČR (SZÚ NRL pro antibiotika). PUK navíc publikuje strukturní podíl Access/Watch/Reserve preskripcí praktiků a ambulantních specialistů."
     },
     {
       "id": "chirurgie_onko_volume_outcome",

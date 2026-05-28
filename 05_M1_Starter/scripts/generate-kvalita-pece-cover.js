@@ -78,10 +78,10 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <!-- CMP -->
     <g transform="translate(236, 0)">
       <rect x="0" y="0" width="220" height="100" fill="${PAPER2}" stroke="${RULE}" stroke-width="1"/>
-      <rect x="0" y="0" width="220" height="3" fill="${INK}"/>
-      <text class="serif" x="16" y="46" font-size="38" font-weight="700" fill="${INK}">13 + 32</text>
-      <text class="sans" x="16" y="68" font-size="10.5" font-weight="700" letter-spacing="0.08em" fill="${INK_MUT}">KCC + IC SÍŤ · CMP</text>
-      <text class="sans" x="16" y="86" font-size="11" fill="${INK_MUT}">komplexní + iktová centra</text>
+      <rect x="0" y="0" width="220" height="3" fill="#a05a08"/>
+      <text class="serif" x="16" y="46" font-size="38" font-weight="700" fill="${INK}">11,2 %</text>
+      <text class="sans" x="16" y="68" font-size="10.5" font-weight="700" letter-spacing="0.08em" fill="${INK_MUT}">CMP IN-HOSP · ÚZIS 2024</text>
+      <text class="sans" x="16" y="86" font-size="11" fill="${INK_MUT}">trend −19 % za 5 let</text>
     </g>
     <!-- INDIKO -->
     <g transform="translate(472, 0)">
