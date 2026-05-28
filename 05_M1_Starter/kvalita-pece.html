@@ -52,40 +52,76 @@
 
 <main id="content">
 
-  <!-- ── HERO ───────────────────────────────────────────────────────── -->
-  <section class="hspa-hero" aria-labelledby="cqHeroH">
-    <div class="hspa-hero-content">
-      <div class="ed-kicker">Klinická kvalita péče · průvodce metodikou a zdroji</div>
-      <h2 class="hspa-hero-headline" id="cqHeroH">Co dnes o klinické kvalitě péče v Česku skutečně víme.</h2>
-      <div class="hspa-hero-lead">
-        <p>HSPA Monitor sleduje výkonnost systému v šesti dimenzích — kvalita je jedna z nich. Tato stránka shrnuje, kde a jak se klinická kvalita péče v Česku reálně měří: jaké indikátory zveřejňuje <strong>Portál ukazatelů kvality (PUK)</strong> Kanceláře zdravotního pojištění, jaké data publikuje <strong>INDIKO</strong> z FBMI ČVUT, a jak tato čísla zapadnou do mezinárodního rámce OECD a AHRQ.</p>
-        <p>Cílem stránky není duplikovat primární zdroje. Cílem je <em>orientace</em> — vysvětlit, co která metrika znamená, jak se počítá, co s ní jde a nejde porovnávat, a kam kliknout pro aktuální hodnoty.</p>
+  <!-- ── HERO (ed-hero pattern — jednotné se „Jak funguje") ────────── -->
+  <section class="ed-hero" aria-labelledby="cqHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Klinická kvalita péče v ČR</div>
+      <h2 class="ed-hero-headline" id="cqHeroHeadline">Česká klinická kvalita péče má 28 reálně měřených indikátorů. Většinu publikuje jeden portál — PUK Kanceláře zdravotního pojištění.</h2>
+      <p class="ed-hero-lead">
+        Pooperační sepse, mortalita po infarktu, mozková příhoda, antibiotická preskripce, onkologická chirurgie a INDIKO cesta pacienta. Pro každý ukazatel sledujeme: <strong>jak se měří</strong>, <strong>co znamená pro konkrétního pacienta</strong>, <strong>jak ovlivňuje rozhodnutí</strong> v ordinaci a na sále, a <strong>jak se hodnoty vyvíjejí v čase a napříč kraji</strong>.
+      </p>
+      <p class="ed-hero-lead">
+        Stránka je orientační — neduplikuje primární zdroje, vysvětluje je. Po kliknutí na zvýrazněný odborný termín v textu se otevře <strong>boční slovník</strong> s laickou definicí.
+      </p>
 
-        <div class="cq-source-chips" id="cqHeroChips" aria-label="Zdroje dat na této stránce" style="margin:14px 0 6px;">
-          <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK (KZP)</a>
-          <a class="cq-source-chip" data-source="indiko" href="https://indiko.cz/" target="_blank" rel="noopener">INDIKO (ČVUT)</a>
-          <a class="cq-source-chip" data-source="oecd" href="https://www.oecd.org/health/health-at-a-glance/" target="_blank" rel="noopener">OECD H@G 2025</a>
-          <a class="cq-source-chip" data-source="ahrq" href="https://qualityindicators.ahrq.gov/" target="_blank" rel="noopener">AHRQ (USA)</a>
-          <a class="cq-source-chip" data-source="uzis" href="https://www.uzis.cz/" target="_blank" rel="noopener">ÚZIS NRH</a>
-        </div>
-
-        <p class="hspa-hero-note" style="font-size:13.5px;line-height:1.55;color:var(--ink-mut);border-top:1px dashed var(--rule);padding-top:12px;margin-top:14px;">
-          <strong>Pozn. k akvizici dat:</strong> Žádný z primárních portálů (PUK, INDIKO) zatím <strong>nepublikuje strojově čitelný JSON/API endpoint</strong>. Konkrétní hodnoty na této stránce vycházejí buď z datového kontraktu HSPA Monitoru (ÚZIS NRH, SÚKL, OECD), nebo jsou označeny jako čekající na automatický scraping primárních portálů. Re-publikace agregovaných hodnot probíhá s atribucí — souhlas <strong>KZP</strong> (PUK) i <strong>FBMI ČVUT</strong> (INDIKO). Pro aktuální data vždy doporučujeme primární zdroj.
-        </p>
+      <div class="hero-more">
+        <details class="hero-detail">
+          <summary><span class="hero-detail-summary">Proč „in-hospital" mortalita neříká celou pravdu</span></summary>
+          <div class="hero-detail-body">
+            <p>Když Česko vykazuje 5,2% nemocniční úmrtnost po infarktu (in-hospital, ÚZIS NRH, MKN-10 I21–I22), znamená to, že 5,2 % pacientů přijatých s infarktem zemře <em>ještě před propuštěním</em>. OECD ale počítá 30denní case-fatality od přijetí — tedy i ty, kdo zemřou doma týden po propuštění. ČR 5,2 % vs OECD 6,5 % — obě metriky konvergují k tomu, že akutní vrstva péče funguje. Tato stránka záměrně rozlišuje, kdy jaký indikátor čteme a co s ním srovnáváme.</p>
+          </div>
+        </details>
+        <details class="hero-detail">
+          <summary><span class="hero-detail-summary">Akutní výkon vs elektivní = 3× horší prognóza</span></summary>
+          <div class="hero-detail-body">
+            <p>U onkologické chirurgie kolorekta vykazují akutní výkony (peritonitida z nediagnostikovaného nádoru) <strong>13,3 % až 18,2 % 90denní mortalitu</strong>, zatímco plánované jen 4,4 % až 6,1 %. Tento ukazatel je tvrdý argument pro populační screening (FOB test 50+, kolonoskopie 55+). Pan Karel (72), který nechodil na screening, má jako akutní pacient třikrát vyšší riziko úmrtí než paní Marta (65) s plánovanou diagnózou. Detail v § 5.</p>
+          </div>
+        </details>
+        <details class="hero-detail">
+          <summary><span class="hero-detail-summary">Antibiotická rezistence — „tichá pandemie"</span></summary>
+          <div class="hero-detail-body">
+            <p>WHO odhaduje, že antibiotická rezistence způsobí 10 milionů úmrtí ročně do 2050, pokud se nesníží zbytečná preskripce. ČR má CZ-AWaRe Index 37,1 % (2024) — pod WHO cílem 60 %. Vysoký podíl <strong>makrolidů (32,58 %)</strong> a <strong>cefalosporinů (11,65 %)</strong> v ambulanci je preskripční konzervatismus, ne klinická nutnost. Detail krajů × 7 let v § 4 a § 7 heatmap.</p>
+          </div>
+        </details>
+        <details class="hero-detail">
+          <summary><span class="hero-detail-summary">Akvizice dat — PUK ano, INDIKO ne</span></summary>
+          <div class="hero-detail-body">
+            <p>PUK publikuje detail-karty v HTML s inline CanvasJS daty — scraper běží denně, 28 indikátorů aktualizováno automaticky. INDIKO je Vue SPA + Shiny dashboards za autentizací — bez login credentials nebo headless browseru z této session neřešitelné. Souhlas k re-publikaci: <strong>KZP</strong> (PUK) ✓, <strong>FBMI ČVUT</strong> (INDIKO) ✓. Pro aktuální data vždy primární zdroj. Audit run: <time id="cqGeneratedAt" datetime="2026-05-28">28. května 2026</time>.</p>
+          </div>
+        </details>
       </div>
     </div>
-    <aside class="hspa-hero-side">
-      <div class="ed-kicker">Klíčové údaje</div>
-      <div class="hspa-hero-date">7 sekcí</div>
-      <div class="hspa-hero-date-sub">bezpečnost → akutní kardio → CMP → AMR → onkologie → kraje</div>
-      <dl class="hspa-hero-meta">
-        <div><dt>Primární zdroje</dt><dd>PUK (KZP) · INDIKO (ČVUT)</dd></div>
-        <div><dt>Mezinárodní benchmarky</dt><dd>OECD H@G 2025 · AHRQ · WHO AWaRe</dd></div>
-        <div><dt>Pokrytí krajů</dt><dd>14 (heatmap § 7)</dd></div>
-        <div><dt>Souhlas k re-publikaci</dt><dd>KZP ✓ · FBMI ČVUT ✓</dd></div>
-        <div><dt>Datová akvizice</dt><dd>scraping (cron 06:00 UTC)</dd></div>
-        <div><dt>Audit run</dt><dd><time id="cqGeneratedAt" datetime="2026-05-28">28. května 2026</time></dd></div>
-      </dl>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla stránky">
+      <a class="ed-stat" href="#cqSec5H">
+        <div class="ed-stat-num">28 <span class="ed-stat-unit">indikátorů</span></div>
+        <div class="ed-stat-lbl">Reálně scrapováno z PUK</div>
+        <div class="ed-stat-meta">+ 7 seed (ÚZIS, OECD, SZÚ) · cron 06:00 UTC</div>
+      </a>
+      <a class="ed-stat" href="#cqSec7H">
+        <div class="ed-stat-num">14 × 8</div>
+        <div class="ed-stat-lbl">Krajská heatmapa</div>
+        <div class="ed-stat-meta">AWaRe, ATB, trombolýza, trombektomie · 7 let trend</div>
+      </a>
+      <a class="ed-stat" href="#cqSec2H">
+        <div class="ed-stat-num">5,2 <span class="ed-stat-unit">%</span></div>
+        <div class="ed-stat-lbl">AMI mortalita ČR</div>
+        <div class="ed-stat-meta">OECD H@G 2025 · vs průměr OECD 6,5 % · top třetina</div>
+      </a>
+      <a class="ed-stat" href="#cqSec5H">
+        <div class="ed-stat-num">3× <span class="ed-stat-unit">vyšší</span></div>
+        <div class="ed-stat-lbl">Akutní vs elektivní výkon</div>
+        <div class="ed-stat-meta">Kolorekt akutní 18,21 % vs elektivní 6,14 %</div>
+      </a>
+      <a class="ed-stat" href="#cqSec4H">
+        <div class="ed-stat-num">37,1 <span class="ed-stat-unit">%</span></div>
+        <div class="ed-stat-lbl">CZ-AWaRe Access podíl</div>
+        <div class="ed-stat-meta">WHO cíl 60 % · ČR pod cílem · 11 sub-indikátorů</div>
+      </a>
+      <a class="ed-stat" href="#cqCatalogH">
+        <div class="ed-stat-num">35 <span class="ed-stat-unit">příběhů</span></div>
+        <div class="ed-stat-lbl">Pacientské scénáře</div>
+        <div class="ed-stat-meta">+ slovník 71 odborných pojmů (klik na termín)</div>
+      </a>
     </aside>
   </section>
 

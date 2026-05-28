@@ -11933,6 +11933,156 @@ body.site-search-open {
   .cq-catalog-item summary { padding-right: 32px; }
 }
 
+/* Glossary inline highlight v pacientském příběhu — klikací termín */
+.cq-gloss-term {
+  display: inline;
+  background: rgba(184, 54, 30, 0.07);
+  color: var(--ink);
+  border: 0;
+  border-bottom: 1px dashed rgba(184, 54, 30, 0.55);
+  padding: 0 2px;
+  margin: 0;
+  font: inherit;
+  cursor: help;
+  border-radius: 1px;
+  transition: background-color 0.12s, color 0.12s;
+}
+.cq-gloss-term:hover,
+.cq-gloss-term:focus-visible {
+  background: rgba(184, 54, 30, 0.18);
+  color: var(--red);
+  outline: none;
+  border-bottom-color: var(--red);
+}
+.cq-gloss-term::after {
+  content: " ⓘ";
+  font-size: 0.78em;
+  color: var(--red);
+  opacity: 0.7;
+  margin-left: 1px;
+}
+
+/* Slide-out drawer vpravo s vysvětlením */
+.cq-gloss-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 26, 20, 0.36);
+  z-index: 1500;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0s 0.22s linear;
+}
+.cq-gloss-backdrop-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.22s ease, visibility 0s linear;
+}
+.cq-gloss-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 420px;
+  max-width: 92vw;
+  background: var(--paper);
+  border-left: 1px solid var(--rule);
+  box-shadow: -8px 0 24px rgba(31, 26, 20, 0.14), -2px 0 6px rgba(31, 26, 20, 0.08);
+  z-index: 1600;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(.2, .8, .2, 1);
+}
+.cq-gloss-drawer-open { transform: translateX(0); }
+.cq-gloss-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 22px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper2);
+}
+.cq-gloss-drawer-head .ed-kicker { margin: 0; color: var(--ink-mut); }
+.cq-gloss-drawer-close {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink-mut);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+.cq-gloss-drawer-close:hover,
+.cq-gloss-drawer-close:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--ink);
+  outline: none;
+}
+.cq-gloss-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 22px 20px;
+}
+.cq-gloss-drawer-name {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin: 0 0 18px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 14px;
+}
+.cq-gloss-drawer-short {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.62;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.cq-gloss-drawer-context {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 16px 0 0;
+}
+.cq-gloss-drawer-foot {
+  padding: 14px 22px 22px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper2);
+}
+.cq-gloss-drawer-note {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 0;
+}
+.cq-gloss-drawer-note a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.cq-gloss-drawer-note a:hover { color: var(--red); }
+body.cq-gloss-drawer-locked { overflow: hidden; }
+
+@media (max-width: 480px) {
+  .cq-gloss-drawer { width: 100vw; max-width: 100vw; border-left: 0; }
+  .cq-gloss-drawer-head { padding: 16px 18px 12px; }
+  .cq-gloss-drawer-body { padding: 18px 18px 16px; }
+  .cq-gloss-drawer-name { font-size: 22px; }
+}
+
 /* Print rules — heatmap rozumně přechroupne */
 @media print {
   .cq-heatmap-wrap { overflow: visible; }
