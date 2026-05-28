@@ -284,7 +284,11 @@ export function renderModuleNav(activeId) {
       match: ['financovani.html'],
       children: [
         { id: 'dohodovaci-rizeni',        label: 'Dohodovací řízení',  href: 'dohodovaci-rizeni.html',        match: ['dohodovaci-rizeni.html'] },
-        { id: 'financovani-poskytovatele', label: 'Poskytovatelé péče', href: 'financovani-poskytovatele.html', match: ['financovani-poskytovatele.html'] },
+        // 'financovani-poskytovatele' — DOČASNĚ SKRYTO. Provider-level
+        // úhradová data jsou velmi citlivá; bez ověřených živých dat
+        // (NRHZS denní refresh + audit) je riziko zavádějících závěrů.
+        // Stránka /financovani-poskytovatele.html zatím existuje pro
+        // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
