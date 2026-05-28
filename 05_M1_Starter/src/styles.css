@@ -11798,6 +11798,234 @@ body.site-search-open {
 .cq-source-note { margin: 8px 0 0; font-style: italic; }
 
 /* Indicator catalog — rozklikávací pacientské příběhy (§ "Co každý indikátor znamená pro pacienta") */
+/* =============================================================
+   STORY HOOK — Vlastimil + Anežka kontrast (otvírák stránky)
+   ============================================================= */
+.cq-story-hook {
+  background: var(--paper2);
+  padding: 56px 24px 64px;
+  margin: 32px 0 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.cq-story-hook-inner { max-width: 1080px; margin: 0 auto; }
+.cq-story-hook-h {
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.6px;
+  color: var(--ink);
+  margin: 6px 0 30px;
+  max-width: 880px;
+}
+.cq-story-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 30px 0 26px;
+}
+.cq-story-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--ink-mut);
+  padding: 22px 24px 22px;
+  position: relative;
+}
+.cq-story-card-good { border-top-color: #2f6b1f; }
+.cq-story-card-bad { border-top-color: #b8361e; }
+.cq-story-card-kicker {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.cq-story-card-h {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 12px;
+  letter-spacing: -0.2px;
+}
+.cq-story-card p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.cq-story-card-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 0 0;
+  margin: 12px 0 0 !important;
+  border-top: 1px dashed var(--rule);
+}
+.cq-story-card-num {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -1px;
+}
+.cq-story-card-good .cq-story-card-num { color: #2f6b1f; }
+.cq-story-card-bad .cq-story-card-num { color: #b8361e; }
+.cq-story-card-statlbl {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+  font-weight: 500;
+}
+.cq-story-card-bench {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--ink-mut2, #8b8278);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+.cq-story-hook-lead {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 24px 0 18px;
+  max-width: 880px;
+}
+.cq-story-hook-lead strong {
+  color: var(--red);
+  font-weight: 700;
+}
+.cq-method-disclosure {
+  margin: 14px 0 0;
+  font-family: var(--sans);
+  font-size: 13.5px;
+}
+.cq-method-disclosure > summary {
+  cursor: pointer;
+  color: var(--ink-mut);
+  padding: 8px 0;
+  border-top: 1px dashed var(--rule);
+  list-style: none;
+}
+.cq-method-disclosure > summary::-webkit-details-marker { display: none; }
+.cq-method-disclosure > summary::before {
+  content: "▸ ";
+  display: inline-block;
+  margin-right: 4px;
+  font-size: 10px;
+  transition: transform 0.16s;
+}
+.cq-method-disclosure[open] > summary::before { content: "▾ "; }
+.cq-method-disclosure > summary:hover { color: var(--ink); }
+.cq-method-disclosure[open] > summary { color: var(--ink); font-weight: 600; }
+.cq-method-disclosure > div {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--ink-mut);
+  padding: 8px 0 0;
+  max-width: 760px;
+}
+.cq-method-disclosure > div p { margin: 0 0 12px; }
+@media (max-width: 760px) {
+  .cq-story-pair { grid-template-columns: 1fr; gap: 16px; }
+  .cq-story-hook { padding: 36px 18px 40px; }
+  .cq-story-hook-h { font-size: 28px; }
+  .cq-story-hook-lead { font-size: 17px; }
+  .cq-story-card-num { font-size: 36px; }
+}
+
+/* =============================================================
+   MEGA-SEKCE — § I Akutní péče, § III Onkologie
+   Sub-sekce uvnitř s tagem A/B/C a h4
+   ============================================================= */
+.cq-mega-section {
+  border-left: 4px solid var(--ink);
+  padding-left: 28px;
+  margin-left: 0;
+}
+@media (max-width: 760px) {
+  .cq-mega-section { padding-left: 18px; border-left-width: 3px; }
+}
+.cq-subsection {
+  padding: 26px 0 14px;
+  border-top: 1px solid var(--rule);
+  margin-top: 18px;
+}
+.cq-subsection:first-of-type { border-top: 0; padding-top: 8px; margin-top: 8px; }
+.cq-subsection-tag {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  padding: 4px 10px;
+  border: 1px solid var(--red);
+  border-radius: 999px;
+  margin-bottom: 12px;
+  background: var(--paper);
+}
+.cq-subsection-h {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin: 4px 0 14px;
+  max-width: 760px;
+}
+
+/* Bridge věta uvnitř mega-sekce (mezi sub-sekcemi) */
+.cq-bridge {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  font-style: italic;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper2);
+  padding: 14px 18px;
+  margin: 18px 0 18px;
+  max-width: 720px;
+}
+.cq-bridge strong { color: var(--ink); font-style: normal; }
+.cq-bridge em { color: var(--ink); }
+
+/* Bridge mezi top-level sekcemi (mezi § I a § II atd.) */
+.cq-section-bridge {
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 32px auto 24px;
+  max-width: 720px;
+  padding: 0 24px;
+  position: relative;
+}
+.cq-section-bridge::before,
+.cq-section-bridge::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--ink-mut);
+  margin: 14px auto;
+  opacity: 0.5;
+}
+.cq-section-bridge strong { color: var(--ink); }
+
 .cq-catalog-section {
   margin: 28px 0 0;
   padding: 22px 0 0;
