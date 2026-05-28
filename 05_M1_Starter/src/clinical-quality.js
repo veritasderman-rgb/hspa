@@ -183,8 +183,21 @@ function renderIndicatorCatalog(data, gloss) {
     grouped[sec].push(ind);
   }
 
-  // Preprocessing termů glosáře — seřazeno od nejdelších k nejkratším (kvůli překryvům)
-  const glossKeys = gloss ? Object.keys(gloss.terms ?? {}).sort((a, b) => b.length - a.length) : [];
+  // Preprocessing termů glosáře — každý dostane matchMode podle jeho povahy.
+  // Zkratky (UPPERCASE, <=4 znaky) → 'exact' (case-sensitive)
+  // Termíny obsahující číslice nebo speciální znaky (např. PSI-13, ATC) → 'exact'
+  // Slova → 'ci' (case-insensitive — match i na začátku věty)
+  const glossTerms = gloss ? Object.entries(gloss.terms ?? {}).map(([key, entry]) => {
+    const explicitMode = entry.matchMode;
+    let mode = explicitMode;
+    if (!mode) {
+      const isAllCapsShort = /^[A-ZÁ-Ž][A-Z0-9Á-Ž\-]{1,5}$/.test(key);
+      const containsDigit = /\d/.test(key);
+      const containsSpecial = /[\-§/.()]/.test(key) && key.length <= 8;
+      mode = (isAllCapsShort || containsDigit || containsSpecial) ? 'exact' : 'ci';
+    }
+    return { key, matchMode: mode };
+  }) : [];
 
   const sectionOrder = ['safety', 'acute_cardio', 'stroke', 'amr', 'onco_surgery', 'onco_path', 'chronic_care'];
   const sectionsHtml = sectionOrder
@@ -198,7 +211,7 @@ function renderIndicatorCatalog(data, gloss) {
         const yearLabel = ind.year ? `<span class="cq-catalog-year">${escapeHtml(String(ind.year))}</span>` : '';
         const sourceLabel = ind.primary_source ? `<span class="cq-catalog-source" data-source="${escapeHtml(ind.primary_source)}">${escapeHtml(ind.primary_source.toUpperCase())}</span>` : '';
         const link = ind.source_url ? `<a class="cq-catalog-link" href="${escapeHtml(ind.source_url)}" target="_blank" rel="noopener">primární zdroj ↗</a>` : '';
-        const storyHtml = highlightGlossaryTerms(ind.patient_story, glossKeys);
+        const storyHtml = highlightGlossaryTerms(ind.patient_story, glossTerms);
         return `
           <details class="cq-catalog-item">
             <summary>
@@ -229,33 +242,86 @@ function renderIndicatorCatalog(data, gloss) {
  * Jen první výskyt každého termínu se zvýrazní (žádný šum z opakování).
  * Word boundary matching (nezachytí "AMI" uvnitř "AMIno"). HTML-escape probíhá per-chunk.
  */
-function highlightGlossaryTerms(text, sortedKeys) {
-  if (!text) return '';
-  if (!sortedKeys || sortedKeys.length === 0) return escapeHtml(text);
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-  // Build single regex: word boundaries + alternation of all keys
-  // Některé klíče obsahují speciální znaky (mezery, pomlčky, čísla) — escapeRegex potřeba
-  const escaped = sortedKeys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-  // Bez \b protože některé termíny začínají číslem nebo mají speciální tvary
-  const pattern = new RegExp(`(${escaped.join('|')})`, 'gi');
+/**
+ * Najde v textu pacientského příběhu termíny z glosáře a obalí je do
+ * <button class="cq-gloss-term">. Klík otevře slide-out drawer.
+ *
+ * Klíčové vlastnosti:
+ *  - Word boundary respektující diakritiku — `(?<!\p{L})...(?!\p{L})` s `u` flagem.
+ *    Žádný false-positive jako "IC" uvnitř "penicilin" nebo "praktického".
+ *  - Per-term matchMode: 'exact' (case-sensitive — pro zkratky AMI/PCI/IC) nebo
+ *    'ci' (case-insensitive — pro slova „sepse", „trombolýza" na začátku věty).
+ *    Default 'ci' pro zpětnou kompatibilitu.
+ *  - Pouze první výskyt každého termínu — žádný šum z opakování.
+ *
+ * @param {string} text
+ * @param {Array<{key: string, matchMode: 'exact'|'ci'}>} terms
+ * @returns {string} HTML escaped + buttons
+ */
+function highlightGlossaryTerms(text, terms) {
+  if (!text) return '';
+  if (!terms || terms.length === 0) return escapeHtml(text);
+
+  // Seřaď klíče desc by length (longest first) — řeší překryvy jako "AMI" vs "AMI 30d"
+  const sorted = [...terms].sort((a, b) => b.key.length - a.key.length);
+  const exactKeys = sorted.filter(t => t.matchMode === 'exact').map(t => t.key);
+  const ciKeys = sorted.filter(t => t.matchMode !== 'exact').map(t => t.key);
+
+  // Build patterny s Unicode word-boundaries:
+  //   (?<![\p{L}\p{N}])   = před: NIC, nebo non-letter/non-digit
+  //   (?![\p{L}\p{N}])    = za: NIC, nebo non-letter/non-digit
+  // `u` flag potřebný pro \p{L}.
+  const buildPattern = (keys, flags) =>
+    keys.length === 0 ? null
+      : new RegExp(`(?<![\\p{L}\\p{N}])(${keys.map(escapeRegex).join('|')})(?![\\p{L}\\p{N}])`, flags);
+
+  const exactPattern = buildPattern(exactKeys, 'gu');
+  const ciPattern = buildPattern(ciKeys, 'giu');
+
+  // Najdi VŠECHNY matches z obou patternů, seřaď podle pozice
+  const findMatches = (pattern, mode) => {
+    if (!pattern) return [];
+    const out = [];
+    let m;
+    while ((m = pattern.exec(text)) !== null) {
+      out.push({ start: m.index, end: m.index + m[1].length, matched: m[1], mode });
+    }
+    return out;
+  };
+  const allMatches = [...findMatches(exactPattern, 'exact'), ...findMatches(ciPattern, 'ci')]
+    .sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
+
+  // Resolve překryvy (delší vyhrává) + first-occurrence rule
   const used = new Set();
-  const parts = [];
-  let lastIndex = 0;
-  let m;
-  while ((m = pattern.exec(text)) !== null) {
-    const matched = m[1];
-    const lower = matched.toLowerCase();
-    // Najdi původní klíč (preserve case)
-    const origKey = sortedKeys.find(k => k.toLowerCase() === lower);
-    if (!origKey || used.has(origKey)) continue;
-    used.add(origKey);
-    // Append text before match
-    parts.push(escapeHtml(text.slice(lastIndex, m.index)));
-    // Append the highlighted button
-    parts.push(`<button type="button" class="cq-gloss-term" data-term="${escapeHtml(origKey)}" aria-label="Vysvětlit: ${escapeHtml(origKey)}">${escapeHtml(matched)}</button>`);
-    lastIndex = m.index + matched.length;
+  const accepted = [];
+  let cursor = 0;
+  for (const m of allMatches) {
+    if (m.start < cursor) continue; // překryv — předchozí match už zabral pozici
+    // Najdi původní termín podle key (case-aware pro exact, case-insensitive pro ci)
+    const lower = m.matched.toLowerCase();
+    const origTerm = m.mode === 'exact'
+      ? terms.find(t => t.matchMode === 'exact' && t.key === m.matched)
+      : terms.find(t => t.matchMode !== 'exact' && t.key.toLowerCase() === lower);
+    if (!origTerm) continue;
+    if (used.has(origTerm.key)) continue;
+    used.add(origTerm.key);
+    accepted.push({ ...m, key: origTerm.key });
+    cursor = m.end;
   }
-  parts.push(escapeHtml(text.slice(lastIndex)));
+
+  // Build output
+  const parts = [];
+  let last = 0;
+  for (const a of accepted) {
+    parts.push(escapeHtml(text.slice(last, a.start)));
+    parts.push(`<button type="button" class="cq-gloss-term" data-term="${escapeHtml(a.key)}" aria-label="Vysvětlit: ${escapeHtml(a.key)}">${escapeHtml(a.matched)}</button>`);
+    last = a.end;
+  }
+  parts.push(escapeHtml(text.slice(last)));
   return parts.join('');
 }
 
