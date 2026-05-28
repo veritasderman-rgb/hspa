@@ -928,6 +928,97 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   vertical-align: 2px;
   flex-shrink: 0;
 }
+
+/* Submenu — desktop dropdown.
+   Wrapper drží relativní pozici pro absolutní pozicování submenu.
+   Dropdown viditelný na :hover, :focus-within nebo když má active child. */
+.module-tab-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.module-tab-has-submenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.module-tab-caret {
+  font-size: 9px;
+  line-height: 1;
+  color: var(--ink-mut);
+  transition: transform 0.16s ease;
+  margin-left: 1px;
+  margin-top: 1px;
+}
+.module-tab-wrap:hover .module-tab-caret,
+.module-tab-wrap:focus-within .module-tab-caret,
+.module-tab-has-submenu.active .module-tab-caret {
+  color: var(--ink);
+  transform: translateY(1px);
+}
+.module-submenu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: -10px;
+  min-width: 200px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: 0 4px 14px rgba(31,26,20,0.10), 0 1px 3px rgba(31,26,20,0.06);
+  padding: 6px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 100;
+  border-radius: 2px;
+}
+.module-tab-wrap:hover > .module-submenu,
+.module-tab-wrap:focus-within > .module-submenu {
+  display: flex;
+}
+/* Bridge — neviditelný gap mezi parent tabem a submenu, aby kurzor
+   mohl přejet z tab dolů do dropdownu, aniž by se zavřel. */
+.module-submenu::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+.module-tab-child {
+  min-height: 36px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mut);
+  border-bottom: 0;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.module-tab-child:hover {
+  background: var(--paper2);
+  color: var(--ink);
+}
+.module-tab-child.active {
+  color: var(--red);
+  background: rgba(184,54,30,0.05);
+  border-bottom: 0;
+  font-weight: 600;
+}
+.module-tab-child.active::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: var(--red);
+  margin-right: 8px;
+  margin-left: -10px;
+  vertical-align: -2px;
+}
+@media (max-width: 720px) {
+  /* Mobile: dropdown se nezobrazuje — drawer renderuje children inline */
+  .module-submenu { display: none !important; }
+  .module-tab-caret { display: none; }
+}
 @media (max-width: 720px) {
   .module-nav {
     gap: 0;
@@ -6576,6 +6667,29 @@ body.mobile-nav-open .mobile-nav-drawer { transform: translateX(0); }
   height: 6px;
   margin-right: 9px;
   vertical-align: 1px;
+}
+/* Mobile children — odsazené pod parent, žádný caret (drawer má dost prostoru) */
+.mobile-nav-list .module-tab-child {
+  padding-left: 38px;
+  font-size: 13.5px;
+  color: var(--ink-mut);
+  background: var(--paper2);
+  min-height: 48px;
+  font-weight: 500;
+}
+.mobile-nav-list .module-tab-child::before {
+  content: "›";
+  display: inline-block;
+  color: var(--ink-mut2, #888);
+  margin-right: 8px;
+  margin-left: -16px;
+  font-size: 14px;
+  line-height: 1;
+  vertical-align: -1px;
+}
+.mobile-nav-list .module-tab-child.active {
+  background: var(--paper);
+  color: var(--red);
 }
 
 @media (max-width: 720px) {
