@@ -13,6 +13,10 @@
     "ingest:csu": "node ingest/fetchers/csu.js",
     "ingest:oecd": "node ingest/fetchers/oecd.js",
     "ingest:eurostat": "node ingest/fetchers/eurostat.js",
+    "ingest:puk": "node ingest/fetchers/puk.js",
+    "ingest:indiko": "node ingest/fetchers/indiko.js",
+    "ingest:clinical-quality": "node ingest/fetchers/puk.js && node ingest/fetchers/indiko.js && node ingest/transform_clinical_quality.js",
+    "transform:clinical-quality": "node ingest/transform_clinical_quality.js",
     "transform": "node ingest/transform.js",
     "transform:pojistenci": "node ingest/transform_pojistenci_d5.js",
     "transform:financing": "node ingest/transform_financing.js",
@@ -49,6 +53,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.97.1",
     "@notionhq/client": "^5.22.0",
+    "cheerio": "^1.2.0",
     "csv-parse": "^5.5.6",
     "dotenv": "^16.4.5",
     "xlsx": "^0.18.5"
