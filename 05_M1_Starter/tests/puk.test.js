@@ -9,6 +9,7 @@ import * as cheerio from 'cheerio';
 import {
   extractNationalValue,
   extractRegionalBreakdown,
+  extractCanvasJsSeries,
 } from '../ingest/fetchers/puk.js';
 
 test('extractNationalValue — data-attr strategy', () => {
@@ -101,6 +102,45 @@ test('extractRegionalBreakdown — data-attr strategy', () => {
   assert.equal(r.strategy, 'data-attr');
   assert.equal(r.by_region['Praha'], 5.1);
   assert.equal(r.by_region['Karlovarský'], 8.1);
+});
+
+test('extractCanvasJsSeries — picks named series with percent values', () => {
+  const html = `
+    var chart = new CanvasJS.Chart("chartContainer", {
+      data: [
+        { name: "Celá ČR", type: "line", dataPoints: [
+          { x: 2018, y: 7.04 }, { x: 2019, y: 6.8 }, { x: 2020, y: 7.68 }
+        ]},
+        { name: "KKC", type: "line", dataPoints: [
+          { x: 2018, y: 7.43 }, { x: 2019, y: 6.79 }
+        ]},
+      ]
+    });
+  `;
+  const r = extractCanvasJsSeries(html, 'Celá ČR');
+  assert.equal(r.value, 7.68);
+  assert.equal(r.year, 2020);
+  assert.equal(r.trend.length, 3);
+  assert.equal(r.series_name, 'Celá ČR');
+  assert.equal(r.strategy, 'canvasjs-percent');
+});
+
+test('extractCanvasJsSeries — fraction values normalized × 100', () => {
+  const html = `
+    data: [{ name: "Celá ČR", dataPoints: [
+      { x: 2020, y: 0.0768 }, { x: 2021, y: 0.0771 }, { x: 2022, y: 0.0679 }
+    ]}]
+  `;
+  const r = extractCanvasJsSeries(html, 'Celá ČR');
+  assert.equal(r.value, 6.79);
+  assert.equal(r.year, 2022);
+  assert.equal(r.strategy, 'canvasjs-fraction');
+});
+
+test('extractCanvasJsSeries — no match returns null safely', () => {
+  const r = extractCanvasJsSeries('<html><body>no chart</body></html>', 'Cokoli');
+  assert.equal(r.value, null);
+  assert.equal(r.strategy, 'canvasjs-none');
 });
 
 test('extractRegionalBreakdown — partial returns empty without false positives', () => {

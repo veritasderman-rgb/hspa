@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-28T00:00:00Z",
+  "generated_at": "2026-05-28T11:05:38.647Z",
   "page": "kvalita-pece.html",
   "license_note": "Tento soubor agreguje hodnoty z PUK (KZP) a INDIKO (FBMI ČVUT) získané ručním záznamem (Fáze 1 plánu). Hodnoty jsou re-publikovány s atribucí. Strojový scraping a denní obnova (Fáze 4) budou doplněny v samostatném PR.",
   "source_attribution": {
@@ -48,16 +48,40 @@
       "name": "Pooperační sepse",
       "method": "AHRQ PSI-13 (Postoperative Sepsis Rate), risk-adjusted log. regrese, adjustace dle skupiny výkonů",
       "primary_source": "puk",
-      "source_url": "https://puk.kancelarzp.cz/",
-      "value_national": null,
-      "unit": "případů na 1 000 výkonů elektivních operací (PSI-13)",
-      "year": null,
+      "source_url": "https://puk.kzp.cz/vysledky/sepsegraf1.php",
+      "value_national": 0.85,
+      "unit": "%",
+      "year": 2024,
       "benchmark": {
         "name": "AHRQ U.S. PSI-13",
         "source_url": "https://qualityindicators.ahrq.gov/measures/psi_resources",
         "note": "AHRQ publikuje národní reference PSI-13 (Quality Indicators Empirical Methods v2024, risk-adjusted rate per 1000 elektivních chirurgických propuštění). Konkrétní hodnoty se rok od roku liší a publikují se na AHRQ portálu — zde záměrně neuvádíme bez ověření aktuálního ročníku."
       },
-      "scope_note": "PUK publikuje na úrovni poskytovatele s národním agregátem. Aktuální hodnotu otevřete na PUK."
+      "scope_note": "PUK publikuje na úrovni poskytovatele s národním agregátem. Aktuální hodnotu otevřete na PUK.",
+      "last_scraped_at": "2026-05-28T11:02:24.895Z",
+      "trend": [
+        {
+          "year": 2020,
+          "value": 1.05
+        },
+        {
+          "year": 2021,
+          "value": 1.31
+        },
+        {
+          "year": 2022,
+          "value": 0.95
+        },
+        {
+          "year": 2023,
+          "value": 0.92
+        },
+        {
+          "year": 2024,
+          "value": 0.85
+        }
+      ],
+      "series_name": "Všechny sledované operace"
     },
     {
       "id": "mortalita_inhosp_ami",
@@ -71,13 +95,31 @@
       "year": 2024,
       "linked_indicator": "mortalita_inhosp_ami",
       "trend": [
-        { "year": 2020, "value": 6.1 },
-        { "year": 2021, "value": 5.8 },
-        { "year": 2022, "value": 5.5 },
-        { "year": 2023, "value": 5.3 },
-        { "year": 2024, "value": 5.2 }
+        {
+          "year": 2020,
+          "value": 6.1
+        },
+        {
+          "year": 2021,
+          "value": 5.8
+        },
+        {
+          "year": 2022,
+          "value": 5.5
+        },
+        {
+          "year": 2023,
+          "value": 5.3
+        },
+        {
+          "year": 2024,
+          "value": 5.2
+        }
       ],
-      "benchmark": { "oecd": 6.5, "eu": 6.7 }
+      "benchmark": {
+        "oecd": 6.5,
+        "eu": 6.7
+      }
     },
     {
       "id": "mortalita_30d_ami_oecd",
@@ -93,6 +135,42 @@
       "note": "Indikátor je metodicky odlišný od in-hospital — započítává úmrtí po překladu a do 30 dnů od přijetí. Pro ČR konverguje k podobné hodnotě jako in-hospital (~5,2 %); OECD průměr je 6,5."
     },
     {
+      "id": "mortalita_30d_ami_puk",
+      "section": "acute_cardio",
+      "name": "30denní mortalita pacientů s AIM hospitalizovaných v ČR (PUK)",
+      "method": "PUK 30denní mortalita po hospitalizaci pro AIM, série „Celá ČR“. Metodicky podobné OECD admission-based, ale není věkově standardizováno na 45+ a pracuje s plnou kohortou.",
+      "primary_source": "puk",
+      "source_url": "https://puk.kancelarzp.cz/30denni-mortalita-pacientu-s-aim-hospitalizovanych-v-cr/",
+      "value_national": 6.79,
+      "unit": "%",
+      "year": 2022,
+      "note": "Hodnota se naplní automatickým scraperem PUK. Pro 2022 (poslední rok publikovaný PUK) vychází ~6,79 % vs ÚZIS in-hosp 5,5 % vs OECD 5,2 % — rozdíl odráží metodické rozdíly.",
+      "last_scraped_at": "2026-05-28T11:02:24.895Z",
+      "trend": [
+        {
+          "year": 2018,
+          "value": 7.04
+        },
+        {
+          "year": 2019,
+          "value": 6.8
+        },
+        {
+          "year": 2020,
+          "value": 7.68
+        },
+        {
+          "year": 2021,
+          "value": 7.71
+        },
+        {
+          "year": 2022,
+          "value": 6.79
+        }
+      ],
+      "series_name": "Celá ČR"
+    },
+    {
       "id": "mortalita_inhosp_cmp",
       "section": "stroke",
       "name": "Nemocniční úmrtnost po cévní mozkové příhodě (in-hospital)",
@@ -104,13 +182,31 @@
       "year": 2024,
       "linked_indicator": "mortalita_inhosp_cmp",
       "trend": [
-        { "year": 2020, "value": 13.8 },
-        { "year": 2021, "value": 12.9 },
-        { "year": 2022, "value": 12.0 },
-        { "year": 2023, "value": 11.5 },
-        { "year": 2024, "value": 11.2 }
+        {
+          "year": 2020,
+          "value": 13.8
+        },
+        {
+          "year": 2021,
+          "value": 12.9
+        },
+        {
+          "year": 2022,
+          "value": 12
+        },
+        {
+          "year": 2023,
+          "value": 11.5
+        },
+        {
+          "year": 2024,
+          "value": 11.2
+        }
       ],
-      "benchmark": { "oecd": 7.7, "eu": 8.5 },
+      "benchmark": {
+        "oecd": 7.7,
+        "eu": 8.5
+      },
       "note": "OECD H@G 2025 používá 30denní admission-based „unlinked“ standardizováno věkově-pohlavně, dospělí 45+. ČR in-hospital nezachycuje úmrtí post-discharge ani cross-facility — přímé srovnání s OECD je metodicky omezené. Mezera mezi ČR (in-hospital 11,2 %) a OECD (admission-based 7,7 %) je pravděpodobně menší, než přímý rozdíl naznačuje."
     },
     {
@@ -131,17 +227,35 @@
       "primary_source": "puk",
       "source_url": "https://puk.kancelarzp.cz/",
       "linked_indicator": "spotreba_antibiotik",
-      "spotreba_ddd": 15.0,
+      "spotreba_ddd": 15,
       "unit": "DDD/1000 obyvatel/den",
       "year": 2024,
       "trend": [
-        { "year": 2020, "value": 16.2 },
-        { "year": 2021, "value": 14.8 },
-        { "year": 2022, "value": 15.5 },
-        { "year": 2023, "value": 15.2 },
-        { "year": 2024, "value": 15.0 }
+        {
+          "year": 2020,
+          "value": 16.2
+        },
+        {
+          "year": 2021,
+          "value": 14.8
+        },
+        {
+          "year": 2022,
+          "value": 15.5
+        },
+        {
+          "year": 2023,
+          "value": 15.2
+        },
+        {
+          "year": 2024,
+          "value": 15
+        }
       ],
-      "benchmark": { "oecd": 16, "eu": 18.3 },
+      "benchmark": {
+        "oecd": 16,
+        "eu": 18.3
+      },
       "note": "Celková spotřeba ATB v ČR (SZÚ NRL pro antibiotika). PUK navíc publikuje strukturní podíl Access/Watch/Reserve preskripcí praktiků a ambulantních specialistů."
     },
     {
@@ -151,7 +265,12 @@
       "method": "PUK publikuje pro 4 diagnostické skupiny (resekce pankreatu, plic, jícnu, kolorekta) počet výkonů na pracoviště a 90denní pooperační mortalitu",
       "primary_source": "puk",
       "source_url": "https://puk.kancelarzp.cz/",
-      "diagnoses": ["pankreas", "plíce", "jícen", "kolorekt."]
+      "diagnoses": [
+        "pankreas",
+        "plíce",
+        "jícen",
+        "kolorekt."
+      ]
     },
     {
       "id": "cesta_onko_pacienta_indiko",
@@ -160,14 +279,29 @@
       "method": "INDIKO definuje fáze (podezření → diagnostika → MDT → léčba → follow-up) a měří mediánové časy a podíl pacientů projednaných multidisciplinární komisí",
       "primary_source": "indiko",
       "source_url": "https://indiko.cz/",
-      "diagnoses": ["karcinom plic", "karcinom prsu", "karcinom pankreatu"],
+      "diagnoses": [
+        "karcinom plic",
+        "karcinom prsu",
+        "karcinom pankreatu"
+      ],
       "note": "Linkováno na vysvětlení v explainers.json#indiko_portal."
     }
   ],
   "regions": [
-    "Praha", "Středočeský", "Jihočeský", "Plzeňský", "Karlovarský",
-    "Ústecký", "Liberecký", "Královéhradecký", "Pardubický",
-    "Vysočina", "Jihomoravský", "Olomoucký", "Zlínský", "Moravskoslezský"
+    "Praha",
+    "Středočeský",
+    "Jihočeský",
+    "Plzeňský",
+    "Karlovarský",
+    "Ústecký",
+    "Liberecký",
+    "Královéhradecký",
+    "Pardubický",
+    "Vysočina",
+    "Jihomoravský",
+    "Olomoucký",
+    "Zlínský",
+    "Moravskoslezský"
   ],
   "heatmap_planned": {
     "note": "Krajská heatmap (14 × N indikátorů) bude doplněna ve Fázi 4 plánu společně se scraperem PUK + INDIKO. Tato verze stránky prezentuje strukturu a metodiku — bez vyplněných hodnot, dokud nemáme atribuovatelný zdroj.",

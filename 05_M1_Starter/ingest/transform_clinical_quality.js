@@ -29,11 +29,16 @@ function loadJson(p, fallback) {
  */
 const PUK_ID_MAP = {
   'pooperacni_sepse_psi13': 'pooperacni_sepse_psi13',
-  'mortalita_30d_ami': 'mortalita_30d_ami_oecd',  // ČR data z PUK doplní hodnotu do OECD-aligned záznamu
-  'mortalita_30d_cmp': null,                       // zatím nepřítomno v seedu — bude přidáno
+  // PUK „30d AMI" metodika není identická s OECD H@G admission-based (45+, age-sex
+  // standardized) ani s ÚZIS NRH in-hospital. Mapujeme do samostatného záznamu,
+  // ne do mortalita_30d_ami_oecd (ten zachovává OECD hodnotu 5,2 % 2023).
+  'mortalita_30d_ami': 'mortalita_30d_ami_puk',
+  'mortalita_30d_cmp': null,
   'trombektomie_cmp': null,
+  'centralizace_cmp': null,
   'atb_aware_ambulantni': 'atb_aware_ambulantni',
   'mortalita_90d_kolorekt': null,
+  'mortalita_30d_ami_indicator_card': null,
 };
 
 export function transformClinicalQuality() {
@@ -66,7 +71,9 @@ export function transformClinicalQuality() {
     ind.value_national = scraped.value_national;
     if (scraped.unit) ind.unit = scraped.unit;
     if (scraped.year) ind.year = scraped.year;
-    if (Object.keys(scraped.by_region).length > 0) ind.by_region = scraped.by_region;
+    if (Array.isArray(scraped.trend) && scraped.trend.length > 0) ind.trend = scraped.trend;
+    if (scraped.series_name) ind.series_name = scraped.series_name;
+    if (scraped.by_region && Object.keys(scraped.by_region).length > 0) ind.by_region = scraped.by_region;
     ind.last_scraped_at = scraped.fetched_at;
     ind.source_url = scraped.source_url ?? ind.source_url;
     pukUpdated++;
