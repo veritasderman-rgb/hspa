@@ -69,6 +69,7 @@ async function init() {
     renderHeroChips(data);
     annotateGeneratedAt(data);
     renderHeatmapData(data);
+    renderIndicatorCatalog(data);
   } catch (err) {
     console.warn('clinical-quality.json failed to load:', err);
     const slot = document.getElementById('cqSourceFooter');
@@ -143,6 +144,74 @@ function renderHeatmapData(data) {
 function formatNum(v) {
   if (v == null || !Number.isFinite(v)) return '—';
   return v.toFixed(v >= 10 ? 1 : 2).replace('.', ',');
+}
+
+/**
+ * Vykreslí katalog indikátorů s rozklikávacími pacientskými příběhy.
+ * Každý indikátor s patient_story se zobrazí jako <details>.
+ * Seskupeno podle sekce: bezpečnost / akutní kardio / CMP / AMR / onko chirurgie / onko cesta.
+ */
+const SECTION_LABELS = {
+  safety: { kicker: 'Bezpečnost pacientů', title: 'Pooperační sepse & PSI rámec' },
+  acute_cardio: { kicker: 'Akutní kardiologická péče', title: 'Akutní infarkt myokardu' },
+  stroke: { kicker: 'Akutní cerebrovaskulární péče', title: 'Cévní mozková příhoda' },
+  amr: { kicker: 'Antimikrobiální rezistence', title: 'Antibiotická preskripce (AWaRe)' },
+  onco_surgery: { kicker: 'Komplexní onkologická chirurgie', title: 'Resekce karcinomu (5 diagnóz)' },
+  onco_path: { kicker: 'Cesta onkologického pacienta', title: 'INDIKO — fáze a koordinace' },
+  chronic_care: { kicker: 'Chronická péče', title: 'Adherence k dlouhodobé léčbě' },
+};
+
+function renderIndicatorCatalog(data) {
+  const slot = document.getElementById('cqIndicatorCatalog');
+  if (!slot) return;
+
+  const withStory = (data.indicators ?? []).filter(i => i.patient_story);
+  if (withStory.length === 0) {
+    slot.innerHTML = '';
+    return;
+  }
+
+  // Seskup podle sekce
+  const grouped = {};
+  for (const ind of withStory) {
+    const sec = ind.section ?? 'other';
+    if (!grouped[sec]) grouped[sec] = [];
+    grouped[sec].push(ind);
+  }
+
+  const sectionOrder = ['safety', 'acute_cardio', 'stroke', 'amr', 'onco_surgery', 'onco_path', 'chronic_care'];
+  const sectionsHtml = sectionOrder
+    .filter(sec => grouped[sec])
+    .map(sec => {
+      const label = SECTION_LABELS[sec] ?? { kicker: sec, title: sec };
+      const items = grouped[sec].map(ind => {
+        const val = ind.value_national;
+        const unit = ind.unit ?? '';
+        const valueLabel = val != null ? `<span class="cq-catalog-value">${formatNum(val)} ${escapeHtml(unit)}</span>` : '';
+        const yearLabel = ind.year ? `<span class="cq-catalog-year">${escapeHtml(String(ind.year))}</span>` : '';
+        const sourceLabel = ind.primary_source ? `<span class="cq-catalog-source" data-source="${escapeHtml(ind.primary_source)}">${escapeHtml(ind.primary_source.toUpperCase())}</span>` : '';
+        const link = ind.source_url ? `<a class="cq-catalog-link" href="${escapeHtml(ind.source_url)}" target="_blank" rel="noopener">primární zdroj ↗</a>` : '';
+        return `
+          <details class="cq-catalog-item">
+            <summary>
+              <span class="cq-catalog-name">${escapeHtml(ind.name)}</span>
+              <span class="cq-catalog-meta">${valueLabel}${yearLabel}${sourceLabel}</span>
+            </summary>
+            <div class="cq-catalog-body">
+              <p>${escapeHtml(ind.patient_story)}</p>
+              ${link ? `<p class="cq-catalog-link-row">${link}</p>` : ''}
+            </div>
+          </details>`;
+      }).join('');
+      return `
+        <div class="cq-catalog-section">
+          <div class="ed-kicker">${escapeHtml(label.kicker)}</div>
+          <h4 class="cq-catalog-section-h">${escapeHtml(label.title)}</h4>
+          <div class="cq-catalog-list">${items}</div>
+        </div>`;
+    }).join('');
+
+  slot.innerHTML = sectionsHtml;
 }
 
 function renderSourceFooter(data) {
