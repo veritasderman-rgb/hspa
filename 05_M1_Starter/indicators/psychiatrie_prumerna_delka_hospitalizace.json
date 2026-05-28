@@ -1,0 +1,53 @@
+{
+  "id": "psychiatrie_prumerna_delka_hospitalizace",
+  "name": "Průměrná délka psychiatrické hospitalizace",
+  "area": "Procesy",
+  "domain": "Duševní zdraví",
+  "subdomain": "Psychiatrická reforma",
+  "definition": "Průměrný počet dní strávených v psychiatrickém lůžkovém zařízení na jednu hospitalizaci (ALOS — Average Length of Stay). Zahrnuje psychiatrické nemocnice (dříve psychiatrické léčebny) i psychiatrická oddělení v nemocnicích všeobecné péče. Jmenovatel: počet propuštěných pacientů za rok. Čitatel: celkový počet lůžkodnů v psychiatrické lůžkové péči za rok.",
+  "unit": "dní",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_psychiatrie",
+      "endpoint": "https://uzis.cz/category/tematicke-rady/zdravotnicka-statistika/psychiatricka-pece",
+      "dataset": "Psychiatrická péče v ČR (roční ročenka)",
+      "note": "ÚZIS vydává každoročně statistickou ročenku 'Psychiatrická péče v ČR'. Indikátor vychází z tabulky průměrné ošetřovací doby (ALOS) podle typu psychiatrického zařízení. Data zahrnují psychiatrické nemocnice (PNN) i psychiatrická oddělení nemocnic (PON). Zdrojem jsou lůžková hlášení Národního registru hospitalizovaných (NRH, ÚZIS) pro MKN-10 kapitolu V (Poruchy duševní a poruchy chování, F00–F99).",
+      "dimensions": {
+        "diagnoza": "F00-F99 (MKN-10 kapitola V)",
+        "typ_zarizeni": "psychiatrické nemocnice + psychiatrická oddělení nemocnic",
+        "metrika": "průměrná ošetřovací doba (lůžkodny / propuštění)"
+      }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_co_hospit",
+      "dataset": "Hospital discharges and length of stay — mental and behavioural disorders (F)",
+      "note": "Eurostat Hospital Statistics — délka pobytu pro duševní poruchy (diagnózy F). Eurostat hlth_co_hospit obsahuje pro každý členský stát průměrnou délku hospitalizace pro diagnózní skupinu 'Mental and behavioural disorders'. Metodická kompatibilita s ÚZIS daty pro ČR je vysoká: obě používají MKN-10 F kapitolu a definují ALOS jako lůžkodny / propuštěné pacienty.",
+      "url": "https://ec.europa.eu/eurostat/web/main/data/database"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HOSP.PSYCH.ALOS",
+    "dataset": "HEALTH_HCQU",
+    "note": "OECD Health Statistics — Hospital Care and Quality Utilization (HEALTH_HCQU). Proměnná délky pobytu v psychiatrické péči; OECD vykázuje průměrnou délku pobytu v psychiatrických nemocnicích (psychiatric hospitals) a je srovnatelná s ÚZIS daty pro ČR. Hodnota OECD průměru pro referenční rok přibližně 19 dní."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "MZ ČR",
+    "Česká psychiatrická společnost ČLS JEP"
+  ],
+  "method_notes": "Indikátor měří průměrnou délku psychiatrické hospitalizace across všechny diagnózy F00–F99 a všechny typy psychiatrických lůžkových zařízení. Důležité: metodika OECD zpravidla nezahrnuje psychiatrická oddělení v nemocnicích všeobecné péče (pouze psychiatrické nemocnice), zatímco ÚZIS ročenka zahrnuje oboje. Přímé mezinárodní srovnání je proto mírně ovlivněno různými definicemi: ČR číslo zahrnuje i akutní psychiatrická oddělení (průměrná ALOS ~18 dní), která snižují celkový průměr. Při srovnání jen psychiatrických nemocnic (léčeben) by byl český průměr ještě vyšší (~60–80 dní). Trend sleduje kombinaci: akutní oddělení + psychiatrické nemocnice = průměr ~43 dní je konzervativní odhad, reálný průměr v psychiatrických nemocnicích je delší.",
+  "limitations": "1. **Heterogenita zařízení** — průměr za ČR mísí krátké pobyty v akutních psychiatrických odděleních (~18 dní) s dlouhými pobyty v psychiatrických nemocnicích (60–90 dní). Prostý průměr zakrývá bimodální distribuci. 2. **Mezinárodní komparabilita** — definice 'psychiatrické lůžkové péče' se liší: Francie zahrnuje velký podíl denní hospitalizace (psychiatrie de jour), Německo vykazuje i akutní oddělení v nemocnicích. 3. **Case-mix** — země s vyšším podílem závislostí (alkohol, drogy) nebo forenzní psychiatrie (soudní psychiatrie) vykazují delší ALOS strukturálně. 4. **Chybějící individuální data** — průměr neodhaluje distribuci: podíl velmi dlouhých pobytů (>180 dní) v ČR je znatelně vyšší než v OECD průměru.",
+  "determinants": "**Historický model péče** — Česká psychiatrie historicky vycházela z modelu velkých psychiatrických léčeben (Bohnice, Dobřany, Kroměříž, Jihlava, Šternberk), kde byl dlouhý pobyt normou. Kapacita těchto zařízení je dosud vysoká (~10 000 lůžek), i když klesá. Dostupná lůžka generují poptávku po hospitalizaci.\n\n**Nedostatečná komunitní alternativa** — v zemích s kratší ALOS (Francie, Nizozemsko) existuje hustá síť komunitní psychiatrie: denní stacionáře, terénní psychiatrické týmy (Assertive Community Treatment, ACT), krizová centra 24/7, chráněné bydlení. Tyto alternativy zkracují hospitalizaci tím, že pacient může být propuštěn dříve s intenzivní komunitní podporou. V ČR jsou CDZ (Centra duševního zdraví) teprve budovány — do roku 2024 existuje ~36 CDZ pro dospělé.\n\n**Úhradový systém** — systém úhrad v psychiatrii nezohledňuje délku pobytu stejně jako DRG v somatické medicíně. Paušální denní sazba pro psychiatrické lůžko nevytváří tlak na zkrácení hospitalizace srovnatelný s DRG systémem v akutní somatické péči.\n\n**Vícečetná diagnóza a sociální faktory** — část dlouhých pobytů odráží sociální hospitalizaci: pacient by mohl být propuštěn z klinického hlediska, ale chybí mu domov, rodina nebo komunitní podpora. V ČR je tato skupina odhadována na 15–20 % velmi dlouhých pobytů.\n\n**Reforma psychiatrické péče (2013–2030)** — probíhající reforma směřuje ke zkrácení hospitalizace zkrácením lůžkové kapacity a rozvojem komunitní péče. Plán: snížit počet psychiatrických lůžek z ~10 000 na ~7 500 a navýšit kapacitu CDZ na 100 center pro dospělé.",
+  "importance": "Průměrná délka psychiatrické hospitalizace je klíčovým ukazatelem míry deinstitucializace psychiatrické péče. Státy s kratší ALOS mají zpravidla rozvinutější komunitní psychiatrii — pacienti se léčí blíže svému životu, rodině a práci, s lepšími dlouhodobými výsledky pro sociální zapojení a kvalitu života.\n\nKratší hospitalizace není jen efektivnější (nižší náklady na lůžkový den ~4 000–8 000 Kč denně v psychiatrické nemocnici), ale i klinicky lepší: metaanalýzy (Thornicroft & Tansella, BMJ 2003; WHO Evidence for Action, 2001) ukazují, že komunitní péče dosahuje srovnatelných nebo lepších výsledků v léčbě psychóz i depresí při výrazně nižším dopadu na rodinný a pracovní život pacienta.\n\nPro ČR je indikátor přímým měřítkem pokroku Reformy psychiatrické péče. Cíl reformy je snížit podíl péče v psychiatrických nemocnicích a zvýšit podíl v komunitě. Dokud ALOS neklesá, reforma zásadně nepostupuje. Indikátor propojuje tři dimenze HSPA: **efektivita** (nižší náklady na episode), **přístupnost** (kratší hospitalizace = dříve zpět do komunity) a **zdravotní výsledky** (komunitní péče koreluje s nižší mírou recidivy a lepší kvalitou života).",
+  "patient_story": "Praha, čtvrtek. Tereza (47 let) nastupuje na psychiatrické oddělení s těžkou depresivní epizodou. Stav vyžaduje hospitalizaci — nemůže se o sebe postarat, myšlenky na sebepoškozování. Vstupní diagnóza F32.2. „Jak dlouho tu budu?\" ptá se sestry při příjmu. „Uvidíme, záleží na léčbě,\" zní odpověď. Standardní odpověď. V Česku je průměrný pobyt v psychiatrickém lůžkovém zařízení jedním z nejdelších v Evropě — a systém není nastaven na rychlý přechod do komunity.\n\nPrůměrná délka hospitalizace v psychiatrickém lůžkovém zařízení v ČR je 43 dní (ÚZIS, Psychiatrická péče v ČR, 2022). OECD průměr je 19 dní, EU průměr 21 dní. Signál: bad — ČR překračuje OECD průměr o 126 %. Trend je pomalý: 2018 bylo průměrných 48 dní, 2022 je 43 dní. Pětidenní pokles za čtyři roky nestačí tempu, které vyžaduje dokončení Reformy psychiatrické péče do roku 2030. Tereza stráví v nemocnici průměrných 43 dní — ve Francii nebo Nizozemsku by po dvou až třech týdnech přešla do denního stacionáře nebo ambulantní péče v komunitě.\n\nProč jsou psychiatrické pobyty v Česku tak dlouhé? Systém historicky spoléhá na lůžkovou péči — psychiatrické nemocnice mají velkou kapacitu a tradičně přijímají pacienty na delší pobyty. Alternativy v komunitě — denní stacionáře, centra duševního zdraví (CDZ), terénní týmy, krizové bydlení — jsou rozvíjeny teprve od roku 2013 v rámci Reformy psychiatrické péče. Do roku 2024 bylo zřízeno přibližně 36 CDZ pro dospělé; pokrytí není rovnoměrné a zejména v menších krajích chybějí komunitní alternativy k hospitalizaci. Výsledkem je, že pacient, který v Německu nebo Francii přešel by do ambulantní nebo denní péče po 10–15 dnech, zůstává v ČR hospitalizovaný, dokud není „kompletně stabilní\" — bez podpůrné sítě v komunitě.\n\nPolitická páka existuje a je konkrétní. Dokončení sítě CDZ (plán: 100 CDZ pro dospělé + dětská CDZ ve všech krajích do 2030), rozšíření hrazeného denního stacionáře jako alternativy k lůžkové péči, zavedení terénních terapeutických týmů (Assertive Community Treatment) a krizových center jako alternativy k hospitalizaci — to jsou opatření, která v zemích s kratší ALOS fungují. Pro MZČR: snížení psychiatrické ALOS z 43 na 25 dní do 2030 by znamenalo o přibližně 150 000 lůžkodnů méně ročně — finanční prostor pro reinvestici do komunitní péče a CDZ.",
+  "framework": "hspa",
+  "dimension": "efektivita"
+}
