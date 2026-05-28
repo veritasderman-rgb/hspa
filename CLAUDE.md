@@ -3,6 +3,31 @@
 Veřejný portál pro hodnocení výkonnosti zdravotního systému ČR podle metodiky OECD HSPA.
 Inspirováno belgickým modelem **Healthy Belgium**.
 
+---
+
+## 🚦 Rychlá orientace pro novou session
+
+**Než začneš úkol, přečti:**
+
+1. **[`docs/quickref.md`](docs/quickref.md)** — kde co je, klíčové příkazy, datový kontrakt, stavová matice
+2. **[`docs/decisions-log.md`](docs/decisions-log.md)** — co bylo odstraněno nebo opraveno (nevracet zpět!)
+3. **[`docs/traps.md`](docs/traps.md)** — známé pasti (JSON escaping, CSS pravidla, test failures)
+
+**Pro konkrétní úkol:**
+
+| Úkol | Otevři |
+|---|---|
+| Přidat indikátor / článek / strategii / explainer | [`docs/workflows.md`](docs/workflows.md) |
+| Editorial pravidla, audit lifecycle, sourcing | [`docs/conventions.md`](docs/conventions.md) |
+| Vizuální komponenty (`.av-*`, `.fn-*`, SVG patterns) | [`docs/visual-components.md`](docs/visual-components.md) |
+| JSON schémata všech datasetů | [`docs/data-model.md`](docs/data-model.md) |
+| Sitemap, per-page mapa JS modulů | [`docs/site-architecture.md`](docs/site-architecture.md) |
+| Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
+| Backlog, status auditu | [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md), [`05_M1_Starter/STATUS_AUDIT_*.md`](05_M1_Starter/) |
+| Denní rutina cronu | [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) |
+
+---
+
 ## Aktivní kód
 
 Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podkladové materiály:
@@ -21,9 +46,31 @@ Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podk
 ```bash
 cd 05_M1_Starter
 npm install
-npm test          # ~260 testů, vše musí projít
+npm test          # ~355 testů, 349+ musí projít (6 pre-existing failures z xlsx/csv-parse)
 npm run serve     # http://localhost:8080
 ```
+
+## Git workflow (standardní pro každou změnu)
+
+```bash
+# 1) Vždy z čerstvého remote main
+git checkout main && git pull origin main
+
+# 2) Branch s prefixem claude/
+git checkout -b claude/<descriptive-name>
+
+# 3) Implementace, validace
+npm run validate:all
+npm test
+
+# 4) Commit (česky, prefix feat/fix/docs/chore)
+git add -A && git commit -m "feat(scope): popis"
+
+# 5) Push + PR přes MCP github tools (NIKDY direct push do main)
+git push -u origin claude/<branch>
+```
+
+**PR konvence**: structured body (Souhrn, Změny, Verifikace, Test plan), end-of-body trailer `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
 
 ## Architektura
 
@@ -302,11 +349,28 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 
 ## Další dokumentace
 
-- [`docs/site-architecture.md`](../docs/site-architecture.md) — sitemap, per-page popis, CSS namespace průvodce, JS moduly map
-- [`docs/visual-components.md`](../docs/visual-components.md) — AV designsystem + ostatní UI komponenty (hub matrix, scorecard, finance donut…)
-- [`docs/data-model.md`](../docs/data-model.md) — schémata všech JSON datasetů a jejich vztahy
-- [`PROMPT_DAILY_ROUTINE.md`](./PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta
-- [`BACKLOG.md`](./BACKLOG.md), [`STATUS_AUDIT_2026-05-18.md`](./STATUS_AUDIT_2026-05-18.md) — aktuální backlog a stav
+### Helper docs (orientation, doporučeno přečíst v každé nové session)
+
+- [`docs/quickref.md`](docs/quickref.md) — cheatsheet: kde co je, příkazy, datový kontrakt, stavová matice
+- [`docs/workflows.md`](docs/workflows.md) — playbooky: nový indikátor, článek, strategie, explainer, menu, cover, fetcher
+- [`docs/conventions.md`](docs/conventions.md) — editorial + code konvence, audit lifecycle, sourcing, CSS namespacing
+- [`docs/decisions-log.md`](docs/decisions-log.md) — strategická rozhodnutí, odstranění a opravy (co nevracet zpět!)
+- [`docs/traps.md`](docs/traps.md) — známé pasti: JSON escaping, schema, test failures, recovery patterns
+
+### Deep reference (otevřít při konkrétní práci)
+
+- [`docs/site-architecture.md`](docs/site-architecture.md) — sitemap, per-page popis, JS moduly map
+- [`docs/visual-components.md`](docs/visual-components.md) — AV designsystem + UI komponenty (hub matrix, scorecard, finance donut…)
+- [`docs/data-model.md`](docs/data-model.md) — schémata všech JSON datasetů a jejich vztahy
+- [`docs/taxonomy-decision.md`](docs/taxonomy-decision.md) — taxonomie HSPA framework
+- [`docs/plan-dohodovaci-rizeni.md`](docs/plan-dohodovaci-rizeni.md), [`docs/nzip-dohodovaci-rizeni-katalog.md`](docs/nzip-dohodovaci-rizeni-katalog.md) — dohodovací řízení detail
+
+### Living docs (aktuální plány a backlog)
+
+- [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
+- [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md) — aktuální backlog
+- [`05_M1_Starter/STATUS_AUDIT_2026-05-18.md`](05_M1_Starter/STATUS_AUDIT_2026-05-18.md) — historický audit stavu
+- [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta
 
 ## Soubory pro ignorování při hledání
 
