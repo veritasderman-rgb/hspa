@@ -253,17 +253,40 @@ export function renderHSPAScore() {
 /**
  * Render společné navigační lišty mezi moduly. Volá se z každé stránky,
  * automaticky zvýrazní aktivní záložku podle window.location.pathname.
+ *
+ * Některé záložky mají `children: [...]` — generuje se dropdown submenu.
+ * Active state se propaguje: pokud je aktivní stránka child, parent se
+ * zvýrazní jako .active a získá class .module-tab-has-active-child.
+ *
+ * Dropdown je čistě CSS (hover + focus-within), žádný JS handler.
+ * Mobile drawer renderuje submenu inline (children jako siblings parent).
  */
 export function renderModuleNav(activeId) {
   initNewsletterPopup();
   const path = window.location.pathname;
   const tabs = [
-    { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
-    { id: 'hspa-prehled', label: 'HSPA přehled',           href: 'hspa-prehled.html',       match: ['hspa-prehled.html'] },
-    { id: 'kvalita-pece', label: 'Kvalita péče',           href: 'kvalita-pece.html',       match: ['kvalita-pece.html'] },
+    {
+      id: 'indicators',
+      label: 'Indikátory',
+      href: 'index.html',
+      match: ['index.html', '/'],
+      children: [
+        { id: 'hspa-prehled', label: 'HSPA přehled',   href: 'hspa-prehled.html', match: ['hspa-prehled.html'] },
+        { id: 'kvalita-pece', label: 'Kvalita péče',   href: 'kvalita-pece.html', match: ['kvalita-pece.html'] },
+        { id: 'pojistenci',   label: 'Atlas pojištěnců', href: 'pojistenci.html', match: ['pojistenci.html'] },
+      ],
+    },
     { id: 'kraje',       label: 'Krajský pohled',          href: 'kraje.html',              match: ['kraje.html'] },
-    { id: 'financovani', label: 'Financování',             href: 'financovani.html',        match: ['financovani.html'] },
-    { id: 'dohodovaci-rizeni', label: 'Dohodovací řízení', href: 'dohodovaci-rizeni.html', match: ['dohodovaci-rizeni.html', 'pojistenci.html'] },
+    {
+      id: 'financing',
+      label: 'Financování',
+      href: 'financovani.html',
+      match: ['financovani.html'],
+      children: [
+        { id: 'dohodovaci-rizeni',        label: 'Dohodovací řízení',  href: 'dohodovaci-rizeni.html',        match: ['dohodovaci-rizeni.html'] },
+        { id: 'financovani-poskytovatele', label: 'Poskytovatelé péče', href: 'financovani-poskytovatele.html', match: ['financovani-poskytovatele.html'] },
+      ],
+    },
     { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html'] },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html'] },
@@ -272,19 +295,17 @@ export function renderModuleNav(activeId) {
     { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];
 
+  const isActive = (t) => activeId ? t.id === activeId : t.match.some(m => path.endsWith(m));
+  const childActive = (t) => Array.isArray(t.children) && t.children.some(c => isActive(c));
+
   const container = document.getElementById('moduleNav');
   if (!container) return;
-  const tabsHtml = tabs.map(t => {
-    const active = activeId
-      ? t.id === activeId
-      : t.match.some(m => path.endsWith(m));
-    // Editorial marker — diskrétní červený puntík před labelem
-    // signalizuje sekci „Články" jako redakční srdce portálu.
-    const editorial = t.id === 'articles' ? ' module-tab-editorial' : '';
-    return `<a href="${t.href}" class="module-tab${active ? ' active' : ''}${editorial}"${active ? ' aria-current="page"' : ''}>${t.label}</a>`;
-  }).join('');
+
+  const desktopTabsHtml = tabs.map(t => renderDesktopTab(t, isActive, childActive)).join('');
+  const mobileTabsHtml = tabs.map(t => renderMobileTab(t, isActive)).join('');
+
   const searchTriggerHtml = `<button type="button" class="site-search-trigger" id="siteSearchTrigger" aria-label="Otevřít vyhledávání"><span aria-hidden="true">⌕</span> Hledat <kbd>/</kbd></button>`;
-  container.innerHTML = tabsHtml + searchTriggerHtml;
+  container.innerHTML = desktopTabsHtml + searchTriggerHtml;
 
   // Aktivuj global keyboard shortcut (/, Cmd+K) a wire trigger
   initSiteSearch();
@@ -296,7 +317,85 @@ export function renderModuleNav(activeId) {
     });
   }
 
-  injectMobileNav(tabsHtml);
+  wireSubmenuAria(container);
+
+  injectMobileNav(mobileTabsHtml);
+}
+
+/**
+ * Toggle aria-expanded na parent linkách s dropdownem podle hover/focus stavu.
+ * Dropdown sám je CSS-only — JS jen udržuje a11y atribut pro screen readery.
+ */
+function wireSubmenuAria(container) {
+  const wraps = container.querySelectorAll('.module-tab-wrap');
+  wraps.forEach(wrap => {
+    const trigger = wrap.querySelector('.module-tab-has-submenu');
+    if (!trigger) return;
+    const setExpanded = (v) => trigger.setAttribute('aria-expanded', String(v));
+    wrap.addEventListener('mouseenter', () => setExpanded(true));
+    wrap.addEventListener('mouseleave', () => setExpanded(false));
+    wrap.addEventListener('focusin', () => setExpanded(true));
+    wrap.addEventListener('focusout', (e) => {
+      // focusout firing před přesunem do submenu — zkontrolujeme, zda focus zůstal ve wrap
+      if (!wrap.contains(e.relatedTarget)) setExpanded(false);
+    });
+    // Esc zavře dropdown a vrátí focus na trigger
+    wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setExpanded(false);
+        trigger.focus();
+      }
+    });
+  });
+}
+
+/**
+ * Desktopová záložka — buď flat link, nebo wrapper s dropdownem.
+ */
+function renderDesktopTab(tab, isActive, childActive) {
+  const editorial = tab.id === 'articles' ? ' module-tab-editorial' : '';
+  const hasChildren = Array.isArray(tab.children) && tab.children.length > 0;
+
+  if (!hasChildren) {
+    const active = isActive(tab);
+    return `<a href="${tab.href}" class="module-tab${active ? ' active' : ''}${editorial}"${active ? ' aria-current="page"' : ''}>${tab.label}</a>`;
+  }
+
+  const selfActive = isActive(tab);
+  const subActive = childActive(tab);
+  const parentActive = selfActive || subActive;
+  const submenuId = `submenu-${tab.id}`;
+
+  const childrenHtml = tab.children.map(c => {
+    const active = isActive(c);
+    return `<a href="${c.href}" class="module-tab module-tab-child${active ? ' active' : ''}"${active ? ' aria-current="page"' : ''} role="menuitem">${c.label}</a>`;
+  }).join('');
+
+  return `<div class="module-tab-wrap${parentActive ? ' module-tab-wrap-active' : ''}">
+    <a href="${tab.href}" class="module-tab module-tab-has-submenu${parentActive ? ' active' : ''}"${selfActive ? ' aria-current="page"' : ''} aria-haspopup="menu" aria-expanded="false" aria-controls="${submenuId}">${tab.label}<span class="module-tab-caret" aria-hidden="true">▾</span></a>
+    <div class="module-submenu" id="${submenuId}" role="menu" aria-label="${tab.label}">${childrenHtml}</div>
+  </div>`;
+}
+
+/**
+ * Mobilní záložka — flat link nebo parent + odsazené children (žádný
+ * accordion-toggle, vždy expanded; mobil drawer má dost prostoru).
+ */
+function renderMobileTab(tab, isActive) {
+  const editorial = tab.id === 'articles' ? ' module-tab-editorial' : '';
+  const active = isActive(tab);
+  const parentHtml = `<a href="${tab.href}" class="module-tab${active ? ' active' : ''}${editorial}"${active ? ' aria-current="page"' : ''}>${tab.label}</a>`;
+
+  if (!Array.isArray(tab.children) || tab.children.length === 0) {
+    return parentHtml;
+  }
+
+  const childrenHtml = tab.children.map(c => {
+    const cActive = isActive(c);
+    return `<a href="${c.href}" class="module-tab module-tab-child${cActive ? ' active' : ''}"${cActive ? ' aria-current="page"' : ''}>${c.label}</a>`;
+  }).join('');
+
+  return parentHtml + childrenHtml;
 }
 
 /**
