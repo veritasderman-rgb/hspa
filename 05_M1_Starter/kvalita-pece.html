@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinická kvalita péče · jak se měří a kde to v Česku skutečně sledujeme — HSPA Monitor</title>
+<meta name="description" content="Pooperační sepse, mortalita po AMI a CMP, AWaRe preskripce antibiotik, komplexní onkologická chirurgie a cesta onkologického pacienta — sedm sekcí klinické kvality péče v Česku, s atribucí PUK (KZP), INDIKO (FBMI ČVUT), ÚZIS, OECD H@G 2025 a AHRQ.">
+<link rel="canonical" href="https://hspa-cesko.cz/kvalita-pece.html">
+<link rel="stylesheet" href="src/styles.css">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:site_name" content="HSPA Monitor">
+<meta property="og:title" content="Klinická kvalita péče — jak se v Česku měří">
+<meta property="og:description" content="Sedm sekcí klinické kvality péče: bezpečnost, akutní kardiologie, mozková příhoda, AMR, onkologická chirurgie, cesta onkologického pacienta, krajský pohled.">
+<meta property="og:url" content="https://hspa-cesko.cz/kvalita-pece.html">
+<meta property="og:image" content="assets/social/kvalita-pece.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Klinická kvalita péče — jak se v Česku měří">
+<meta name="twitter:description" content="Sedm sekcí klinické kvality péče s atribucí PUK, INDIKO, ÚZIS, OECD a AHRQ.">
+<meta name="twitter:image" content="assets/social/kvalita-pece.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Klinická kvalita péče v ČR",
+  "description": "Sedm sekcí klinické kvality péče: bezpečnost pacientů, akutní kardiologie, akutní mozková příhoda, antimikrobiální rezistence, komplexní onkologická chirurgie, cesta onkologického pacienta, krajský pohled.",
+  "inLanguage": "cs-CZ",
+  "isPartOf": { "@type": "WebSite", "name": "HSPA Monitor", "url": "https://hspa-cesko.cz/" },
+  "about": [
+    { "@type": "Thing", "name": "Portál ukazatelů kvality (PUK)", "url": "https://puk.kancelarzp.cz/" },
+    { "@type": "Thing", "name": "INDIKO — portál indikátorů kvality péče", "url": "https://indiko.cz/" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Klinická kvalita péče</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <!-- ── HERO ───────────────────────────────────────────────────────── -->
+  <section class="cq-hero" aria-labelledby="cqHeroH">
+    <div class="cq-hero-inner">
+      <div class="cq-hero-kicker">Klinická kvalita péče · průvodce metodikou a zdroji</div>
+      <h2 class="cq-hero-h" id="cqHeroH">Co dnes o klinické kvalitě péče v Česku skutečně víme</h2>
+      <p class="cq-hero-lead">
+        HSPA Monitor sleduje výkonnost systému v šesti dimenzích — kvalita je jedna z nich. Tato stránka shrnuje, kde a jak se klinická kvalita péče v Česku reálně měří: jaké indikátory zveřejňuje <strong>Portál ukazatelů kvality (PUK)</strong> Kanceláře zdravotního pojištění, jaké data publikuje <strong>INDIKO</strong> z FBMI ČVUT, a jak tato čísla zapadnou do mezinárodního rámce OECD a AHRQ.
+      </p>
+      <p class="cq-hero-lead">
+        Cílem stránky není duplikovat primární zdroje. Cílem je <em>orientace</em> — vysvětlit, co která metrika znamená, jak se počítá, co s ní jde a nejde porovnávat, a kam kliknout pro aktuální hodnoty.
+      </p>
+
+      <div class="cq-source-chips" id="cqHeroChips" aria-label="Zdroje dat na této stránce">
+        <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK (KZP)</a>
+        <a class="cq-source-chip" data-source="indiko" href="https://indiko.cz/" target="_blank" rel="noopener">INDIKO (ČVUT)</a>
+        <a class="cq-source-chip" data-source="oecd" href="https://www.oecd.org/health/health-at-a-glance/" target="_blank" rel="noopener">OECD H@G 2025</a>
+        <a class="cq-source-chip" data-source="ahrq" href="https://qualityindicators.ahrq.gov/" target="_blank" rel="noopener">AHRQ (USA)</a>
+        <a class="cq-source-chip" data-source="uzis" href="https://www.uzis.cz/" target="_blank" rel="noopener">ÚZIS NRH</a>
+      </div>
+
+      <div class="cq-hero-discl">
+        <strong>Poznámka k akvizici dat:</strong> Žádný z primárních portálů (PUK, INDIKO) zatím <strong>nepublikuje strojově čitelný JSON/API endpoint</strong>. Konkrétní hodnoty na této stránce jsou pro tuto verzi zadány <strong>ručně</strong> z veřejně dostupných detail-karet, případně označeny jako čekající na automatickou obnovu. Re-publikace agregovaných hodnot probíhá s atribucí — souhlas <strong>KZP</strong> (PUK) i <strong>FBMI ČVUT</strong> (INDIKO). Pro aktuální data vždy doporučujeme primární zdroj. Plán denního scrapingu je popsán v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/PLAN-KVALITA-PECE.md" target="_blank" rel="noopener">PLAN-KVALITA-PECE.md</a>, Fáze 4.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOSPITAL ≠ OUTCOME — preamble ──────────────────────────────── -->
+  <section class="section" style="padding-top:30px;">
+    <div class="section-title"><h3>Proč „in-hospital" mortalita neříká celou pravdu</h3></div>
+    <div class="hspa-dims-lead-wrap" style="max-width:760px;">
+      <p>
+        Když Česko vykazuje 5,2% nemocniční úmrtnost po akutním infarktu myokardu (in-hospital, ÚZIS NRH, MKN-10 I21–I22), znamená to, že 5,2 % pacientů přijatých s infarktem zemře <em>ještě před propuštěním</em>. Číslo se počítá z Národního registru hospitalizovaných ÚZIS. Vypadá to skvěle ve srovnání s OECD průměrem.
+      </p>
+      <p>
+        Ale OECD ve své publikaci <a href="https://www.oecd.org/health/health-at-a-glance/" target="_blank" rel="noopener">Health at a Glance 2025</a> používá <strong>jinou definici</strong>: <em>30denní case-fatality po AMI, admission-based, „unlinked"</em> — počítá úmrtí do 30 dnů od přijetí, ne jen do propuštění. Pro Česko vychází <strong>5,2 %</strong> (admission-based, 45+), pro průměr OECD <strong>6,5 %</strong>. OECD sama upozorňuje, že „unlinked" indikátor není přímo srovnatelný napříč zeměmi s rozdílnými systémy překladů mezi nemocnicemi.
+      </p>
+      <p>
+        Tato stránka záměrně rozlišuje, kdy jaký indikátor čteme a co s ním srovnáváme. Žádné jedno číslo neříká celou pravdu o kvalitě péče.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── § 1 — POOPERAČNÍ SEPSE (AHRQ PSI-13) ──────────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec1H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 1</span>
+      <h3 class="cq-section-h" id="cqSec1H">Pooperační sepse — bezpečnostní indikátor PSI-13</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK · ukazatel kvality</a>
+      <a class="cq-source-chip" data-source="ahrq" href="https://qualityindicators.ahrq.gov/measures/psi_resources" target="_blank" rel="noopener">AHRQ PSI-13 metodika</a>
+    </div>
+
+    <p class="cq-section-lead">
+      Pooperační sepse je infekční komplikace, která vzniká do 30 dnů od elektivního operačního výkonu. Patří mezi tzv. <em>Patient Safety Indicators</em> (PSI) — sadu, kterou pro hodnocení bezpečnosti pacientů publikuje americká AHRQ (Agency for Healthcare Research and Quality). Index pod číslem 13 je riziko-adjustovaný podíl pacientů, u kterých se sepse rozvine po elektivní operaci.
+    </p>
+    <p>
+      <strong>PUK</strong> publikuje pro českou síť poskytovatelů adaptaci PSI-13 — risk-adjusted log. regresí, s ohledem na skupinu výkonů. Hodnota se uvádí jako počet případů sepse na 1 000 elektivních výkonů, případně jako procentní podíl. Na PUK najdete jak národní agregát, tak rozpad podle poskytovatele.
+    </p>
+
+    <div class="cq-method-card">
+      <div class="cq-method-card-kicker">Jak PSI-13 číst</div>
+      <h4>Risk-adjusted, ne hrubá míra</h4>
+      <p>PSI-13 není „kolik procent pacientů dostalo sepsi". Je to riziko-adjustovaná hodnota, která zohledňuje typ výkonu a komorbidity. Nemocnice, která operuje složitější pacienty (vyšší věk, polymorbidita), by jinak v hrubém poměru vypadala hůř, ačkoli její péče je kvalitní.</p>
+      <p>Aktuální americkou referenční hodnotu PSI-13 a metodické detaily publikuje AHRQ v <a href="https://qualityindicators.ahrq.gov/measures/psi_resources" target="_blank" rel="noopener">Quality Indicators Empirical Methods</a> (verze 2024). Pro mezistátní srovnání s ČR je vždy nutné srovnat metodiku — PUK PSI-13 je adaptace, ne identický indikátor, a hodnoty publikované oběma portály se počítají na odlišných populacích.</p>
+    </div>
+
+    <p class="cq-note">
+      <strong>Aktuální hodnotu PSI-13 pro ČR a rozpad podle nemocnic najdete na portále PUK</strong> — <a href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">puk.kancelarzp.cz</a> (oddíl Bezpečnost pacientů). Tato stránka záměrně neuvádí konkrétní číslo, dokud nemáme automatický scraper (Fáze 4 plánu).
+    </p>
+  </section>
+
+  <!-- ── § 2 — AKUTNÍ INFARKT MYOKARDU (DUAL READING) ──────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec2H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 2</span>
+      <h3 class="cq-section-h" id="cqSec2H">Akutní kardiologická péče — infarkt myokardu</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="uzis" href="https://www.uzis.cz/" target="_blank" rel="noopener">ÚZIS NRH</a>
+      <a class="cq-source-chip" data-source="oecd" href="https://www.oecd.org/health/health-at-a-glance/" target="_blank" rel="noopener">OECD H@G 2025</a>
+    </div>
+
+    <p class="cq-section-lead">
+      Česko zachytilo akutní infarkt myokardu (AMI) jako jednu z nejúspěšnějších oblastí systému. Mortalita patří mezi nejnižší v OECD. Dva paralelní indikátory však ukazují různá čísla — protože se počítají jinak.
+    </p>
+
+    <div class="cq-dual-reading" role="group" aria-label="Dvě paralelní metriky pro akutní infarkt myokardu">
+      <div class="cq-dual-card cq-dual-card-good">
+        <div class="cq-dual-card-kicker">ÚZIS NRH · in-hospital</div>
+        <div class="cq-dual-card-value">5,2 %</div>
+        <div class="cq-dual-card-unit">úmrtí během hospitalizace · MKN-10 I21–I22 · dlouhodobá časová řada</div>
+        <p class="cq-dual-card-note">Národní registr hospitalizovaných ÚZIS. Není linkován s Listem o prohlídce zemřelého, takže nezahrnuje úmrtí po propuštění ani po překladu mezi nemocnicemi.</p>
+      </div>
+      <div class="cq-dual-card cq-dual-card-warn">
+        <div class="cq-dual-card-kicker">OECD H@G 2025 · 30d admission-based</div>
+        <div class="cq-dual-card-value">5,2 % <small style="font-size:60%;color:var(--ink-mut);">vs 6,5 % OECD</small></div>
+        <div class="cq-dual-card-unit">úmrtí do 30 dnů od přijetí · „unlinked" · standardizováno věk/pohlaví · 45+ · data 2023</div>
+        <p class="cq-dual-card-note">OECD upozorňuje, že „unlinked" indikátor není přímo srovnatelný napříč zeměmi s rozdílnými systémy překladů mezi nemocnicemi.</p>
+      </div>
+    </div>
+
+    <p>
+      Obě hodnoty pro Česko konvergují k podobnému závěru — kolem 5,2 % — ale měří mírně odlišnou skutečnost. <strong>Pro mezinárodní srovnání používáme OECD definici</strong> (5,2 % vs 6,5 % OECD průměr 2023). <strong>Pro sledování trendu uvnitř ČR a rozpadu po krajích používáme ÚZIS NRH in-hospital</strong> — protože má kratší zpoždění a dlouhodobou časovou řadu.
+    </p>
+
+    <p class="cq-note">
+      Detail metodiky a kontext (síť kardiocenter ČR, regulační vyhláška, kdo provádí PCI a kdy) najdete v článku <a href="clanek-akutni-infarkt.html">Pět celá dvě procenta. Co Česko v péči o akutní infarkt myokardu zvládlo a co se z toho dá replikovat</a>.
+    </p>
+  </section>
+
+  <!-- ── § 3 — AKUTNÍ MOZKOVÁ PŘÍHODA ────────────────────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec3H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 3</span>
+      <h3 class="cq-section-h" id="cqSec3H">Akutní mozková příhoda — síť iktových center</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK</a>
+      <a class="cq-source-chip" data-source="uzis" href="https://www.uzis.cz/" target="_blank" rel="noopener">ÚZIS · RES-Q</a>
+    </div>
+
+    <p class="cq-section-lead">
+      Cévní mozkovou příhodu (CMP) řeší v Česku <strong>třístupňová síť pracovišť</strong> definovaná Věstníkem MZ ČR: <strong>13 komplexních cerebrovaskulárních center</strong> (KCC) provádí mechanickou trombektomii, <strong>32 iktových center</strong> (IC) provádí trombolýzu i.v. a indikuje k trombektomii, zbytek nemocnic stabilizuje a transportuje. Síť se buduje od roku 2010 a Česko patří mezi evropské lídry v jejím pokrytí.
+    </p>
+
+    <figure class="narok-svg-figure" role="img" aria-label="Schematický proces akutní péče o pacienta s mozkovou příhodou — od přivolání ZZS po rehabilitaci">
+      <h4 class="narok-svg-h">Proces akutní péče o CMP — pět rozhodovacích kroků</h4>
+      <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <!-- Path connecting all nodes -->
+        <path class="nsv-line nsv-anim-line" d="M 80 110 H 220 M 300 110 H 380 M 460 110 H 540 M 620 110 H 700" />
+        <!-- Node 1 — ZZS -->
+        <g class="nsv-anim-node nsv-anim-delay-1">
+          <rect class="nsv-node-bg" x="20" y="80" width="120" height="60" rx="3"/>
+          <text class="nsv-text-lbl" x="80" y="68" text-anchor="middle">Krok 1</text>
+          <text class="nsv-text" x="80" y="105" text-anchor="middle" font-weight="600">ZZS</text>
+          <text class="nsv-text-sm" x="80" y="125" text-anchor="middle">FAST · indikace</text>
+        </g>
+        <!-- Node 2 — IC -->
+        <g class="nsv-anim-node nsv-anim-delay-2">
+          <rect class="nsv-node-bg" x="160" y="80" width="140" height="60" rx="3"/>
+          <text class="nsv-text-lbl" x="230" y="68" text-anchor="middle">Krok 2</text>
+          <text class="nsv-text" x="230" y="105" text-anchor="middle" font-weight="600">Iktové centrum</text>
+          <text class="nsv-text-sm" x="230" y="125" text-anchor="middle">CT · trombolýza i.v.</text>
+        </g>
+        <!-- Node 3 — KCC -->
+        <g class="nsv-anim-node nsv-anim-delay-3">
+          <rect class="nsv-node-bg" x="320" y="80" width="140" height="60" rx="3"/>
+          <text class="nsv-text-lbl" x="390" y="68" text-anchor="middle">Krok 3</text>
+          <text class="nsv-text" x="390" y="105" text-anchor="middle" font-weight="600">Komplexní cerebro</text>
+          <text class="nsv-text-sm" x="390" y="125" text-anchor="middle">trombektomie</text>
+        </g>
+        <!-- Node 4 — 30d outcome -->
+        <g class="nsv-anim-node nsv-anim-delay-4">
+          <rect class="nsv-node-bg" x="480" y="80" width="140" height="60" rx="3"/>
+          <text class="nsv-text-lbl" x="550" y="68" text-anchor="middle">Krok 4</text>
+          <text class="nsv-text" x="550" y="105" text-anchor="middle" font-weight="600">30d outcome</text>
+          <text class="nsv-text-sm" x="550" y="125" text-anchor="middle">mortalita · mRS</text>
+        </g>
+        <!-- Node 5 — Rehab -->
+        <g class="nsv-anim-node nsv-anim-delay-5">
+          <rect class="nsv-node-bg" x="640" y="80" width="120" height="60" rx="3"/>
+          <text class="nsv-text-lbl" x="700" y="68" text-anchor="middle">Krok 5</text>
+          <text class="nsv-text" x="700" y="105" text-anchor="middle" font-weight="600">Rehabilitace</text>
+          <text class="nsv-text-sm" x="700" y="125" text-anchor="middle">soběstačnost</text>
+        </g>
+        <!-- Arrowheads on lines (simple) -->
+        <g fill="var(--ink-mut)">
+          <polygon points="220,106 220,114 226,110" />
+          <polygon points="380,106 380,114 386,110" />
+          <polygon points="540,106 540,114 546,110" />
+          <polygon points="700,106 700,114 706,110" />
+        </g>
+      </svg>
+      <p class="narok-svg-note">Schematicky. KCC = Komplexní cerebrovaskulární centrum (13), IC = Iktové centrum (32). Síť je definována Věstníkem MZ ČR. mRS = modifikovaná Rankinova škála.</p>
+    </figure>
+
+    <p>
+      <strong>Klíčové indikátory kvality</strong>, které PUK pro pracoviště zveřejňuje, sledují tři rozměry: <em>30denní mortalitu po CMP</em>, <em>podíl trombolyzovaných pacientů</em> a <em>podíl pacientů, kteří byli transportováni z IC do KCC pro trombektomii</em>. Aktuální hodnoty a rozpad podle pracovišť najdete na <a href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK</a>.
+    </p>
+
+    <p class="cq-note">
+      Hlubší kontext sítě iktových center (kdy vznikla, jak vyhláška určuje spádové území, srovnání s evropskými systémy) najdete v článku <a href="clanek-cmp-iktova-centra.html">Iktová centra — jak Česko stavělo síť pro cévní mozkovou příhodu</a>.
+    </p>
+  </section>
+
+  <!-- ── § 4 — ANTIMIKROBIÁLNÍ REZISTENCE (AWaRe) ──────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec4H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 4</span>
+      <h3 class="cq-section-h" id="cqSec4H">Antibiotická preskripce v ambulantní péči — AWaRe</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK · CZ-AWaRe</a>
+      <span class="cq-source-chip" data-source="oecd">WHO AWaRe (rámec)</span>
+    </div>
+
+    <p class="cq-section-lead">
+      WHO v roce 2017 zavedla klasifikaci antibiotik <strong>AWaRe</strong> (Access · Watch · Reserve) jako nástroj racionalizace preskripce. Cílem WHO bylo, aby <strong>do roku 2023 alespoň 60 % všech systémově podávaných antibiotik patřilo do skupiny „Access"</strong> — antibiotik první linie s nízkým rizikem rezistence (např. amoxicilin, doxycyklin).
+    </p>
+    <p>
+      Česko využívá národní adaptaci pod názvem <strong>CZ-AWaRe</strong>. <strong>PUK</strong> publikuje ukazatel struktury výdejů ATB v ambulantní péči — kolik procent receptů praktiků a dalších ambulantních specialistů patří do skupiny Access vs Watch vs Reserve. Sledování probíhá rok od roku jako součást národní strategie boje proti antimikrobiální rezistenci (NAP-AMR).
+    </p>
+
+    <div class="cq-method-card">
+      <div class="cq-method-card-kicker">Tři kategorie AWaRe</div>
+      <h4>Jak AWaRe rozděluje antibiotika</h4>
+      <ul>
+        <li><strong>Access</strong> — první volba pro běžné infekce. Nízké riziko rezistence. WHO cíl ≥ 60 % spotřeby. Patří sem amoxicilin, kotrimoxazol, doxycyklin, gentamicin.</li>
+        <li><strong>Watch</strong> — širokospektrá ATB s vyšším potenciálem rozvoje rezistence. Vyžadují uvážlivou indikaci. Patří sem makrolidy, fluorochinolony, cefalosporiny III. generace.</li>
+        <li><strong>Reserve</strong> — „poslední záchrana" pro multirezistentní infekce. Vyhrazeno pro specializovanou indikaci. Linezolid, kolistin, ceftarolin.</li>
+      </ul>
+      <p>Indikátor sleduje <em>nejen objem spotřeby</em>, ale především <em>strukturu</em> — neboť pokles celkové spotřeby s nárůstem podílu Watch/Reserve je horší než stabilní spotřeba s vysokým podílem Access.</p>
+    </div>
+
+    <p class="cq-note">
+      Trend AWaRe v ČR za posledních 7 let (2017–2024) i mezinárodní srovnání s OECD průměrem najdete v PUK a v <a href="https://www.sukl.cz/" target="_blank" rel="noopener">datech SÚKL</a> (ATC skupina J01). Konkrétní hodnoty zde budou doplněny ve Fázi 4 plánu (scraper).
+    </p>
+  </section>
+
+  <!-- ── § 5 — KOMPLEXNÍ ONKOLOGICKÁ CHIRURGIE ──────────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec5H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 5</span>
+      <h3 class="cq-section-h" id="cqSec5H">Komplexní onkologická chirurgie — vztah objemu a výsledku</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK · 4 diagnózy</a>
+    </div>
+
+    <p class="cq-section-lead">
+      Jeden z nejrobustnějších klinických nálezů poslední dekády: u rozsáhlých onkologických resekcí (pankreas, plíce, jícen, kolorekt.) vykazují pracoviště s vyšším <em>objemem výkonů na rok</em> nižší <em>90denní pooperační mortalitu</em>. Vztah je dokumentován u všech čtyř diagnóz a podpírá argumentaci pro <strong>centralizaci komplexní onkologické chirurgie</strong> do menšího počtu specializovaných pracovišť.
+    </p>
+    <p>
+      <strong>PUK</strong> publikuje pro každé pracoviště <strong>počet výkonů na rok</strong> a <strong>90denní pooperační mortalitu</strong> pro čtyři diagnostické skupiny: resekce pankreatu, resekce plic, resekce jícnu, resekce kolorekta. Vizuální podoba „volume × outcome" scatter plotu je standardem mezinárodní literatury (NEJM, BMJ).
+    </p>
+
+    <div class="cq-method-card">
+      <div class="cq-method-card-kicker">Jak číst volume × outcome</div>
+      <h4>Co znamenají osy a body</h4>
+      <ul>
+        <li><strong>Osa X</strong> = počet výkonů za rok pro danou diagnózu na konkrétním pracovišti.</li>
+        <li><strong>Osa Y</strong> = 90denní pooperační mortalita (% pacientů zemřelých do 90 dnů od výkonu).</li>
+        <li><strong>Bod</strong> = jedno pracoviště. Velikost bodu odpovídá počtu výkonů.</li>
+        <li>Doložená empirická tendence: <em>vyšší objem → nižší mortalita</em>. Křivka klesá nelineárně — největší benefit existuje při přechodu od low-volume pracovišť k middle-volume.</li>
+      </ul>
+      <p>Limit: vztah je statisticky robustní, ale ne deterministický. Existují kvalitní low-volume pracoviště i průměrné high-volume. Pro nasměrování pacienta je třeba kombinovat indikátor s dalšími — komplexitou case-mixu, dostupností MDT, rehabilitační kapacitou.</p>
+    </div>
+
+    <p class="cq-note">
+      Aktuální „volume × outcome" graf pro každou ze 4 diagnóz a rozpad podle pracovišť najdete na <a href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK</a>. Strategický rámec centralizace popisuje článek <a href="clanek-centralizace-chirurgie-2027.html">Centralizace komplexní chirurgie 2027</a>.
+    </p>
+  </section>
+
+  <!-- ── § 6 — CESTA ONKOLOGICKÉHO PACIENTA (INDIKO) ────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec6H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 6</span>
+      <h3 class="cq-section-h" id="cqSec6H">Cesta onkologického pacienta — fáze, čas, koordinace</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="indiko" href="https://indiko.cz/" target="_blank" rel="noopener">INDIKO · 3 diagnózy</a>
+    </div>
+
+    <p class="cq-section-lead">
+      <strong>INDIKO</strong> je portál indikátorů kvality péče, který vznikl ve výzkumné skupině <em>CzechHTA</em> na FBMI ČVUT pod vedením Aleše Tichopáda, ve spolupráci s MZ ČR, ÚZIS a Kanceláří zdravotního pojištění. První vlna (říjen 2025) pokrývá tři onkologické diagnózy — <strong>karcinom plic, prsu a pankreatu</strong>. Místo agregátů (mortalita, přežití) sleduje <em>organizační kvalitu</em>: jak dlouho trvá cesta pacienta od podezření po zahájení léčby, jaké procento pacientů projde multidisciplinárním konsiliem (MDT), jaká je distribuce léčebných modalit.
+    </p>
+
+    <ol class="cq-phase-seq" aria-label="Pět fází cesty onkologického pacienta v rámci INDIKO">
+      <li class="cq-phase">
+        <span class="cq-phase-num">1</span>
+        <span class="cq-phase-h">Podezření</span>
+        <span class="cq-phase-d">praktik nebo screening · vstup do systému</span>
+      </li>
+      <li class="cq-phase">
+        <span class="cq-phase-num">2</span>
+        <span class="cq-phase-h">Diagnostika</span>
+        <span class="cq-phase-d">zobrazovací metody + biopsie · čas k diagnóze</span>
+      </li>
+      <li class="cq-phase">
+        <span class="cq-phase-num">3</span>
+        <span class="cq-phase-h">MDT</span>
+        <span class="cq-phase-d">projednání multidisciplinární komisí · indikátor INDIKO</span>
+      </li>
+      <li class="cq-phase">
+        <span class="cq-phase-num">4</span>
+        <span class="cq-phase-h">Léčba</span>
+        <span class="cq-phase-d">chirurgie / radioterapie / chemoterapie · modalita</span>
+      </li>
+      <li class="cq-phase">
+        <span class="cq-phase-num">5</span>
+        <span class="cq-phase-h">Follow-up</span>
+        <span class="cq-phase-d">dispenzář · monitorace relapsů</span>
+      </li>
+    </ol>
+    <p style="font-family:var(--sans);font-size:12px;color:var(--ink-mut);margin:0 0 14px;">Schéma fází definovaných INDIKO — bez konkrétních časových údajů. Mediánové dny pro každou ze 3 diagnóz (plíce, prsu, pankreatu) a podíl pacientů projednaných MDT publikuje INDIKO na <a href="https://indiko.cz/" target="_blank" rel="noopener">indiko.cz</a>. Konkrétní hodnoty budou v této stránce doplněny ve Fázi 4 plánu (automatický scraping).</p>
+
+    <p>
+      Z hlediska HSPA je <strong>cesta pacienta</strong> indikátor kvality, který doplňuje klasické agregáty mortality. Mortalita říká, co se nakonec stalo. Cesta pacienta říká, <em>jak rychle a koordinovaně</em> systém pracoval — což je proxy pro to, kde je v procesu zbytečné zdržení.
+    </p>
+
+    <p class="cq-note">
+      Detailní vysvětlení INDIKO (kdo ho buduje, jaká data používá, jak souvisí s NIKEZ a NOR) najdete v <a href="jak-funguje.html#indiko_portal">explaineru INDIKO — portál indikátorů kvality péče</a>.
+    </p>
+  </section>
+
+  <!-- ── § 7 — KRAJSKÁ HEATMAPA ───────────────────────────────────── -->
+  <section class="cq-section section" aria-labelledby="cqSec7H">
+    <div class="cq-section-head">
+      <span class="cq-section-num">§ 7</span>
+      <h3 class="cq-section-h" id="cqSec7H">Krajská heatmapa — 14 krajů × 8 indikátorů</h3>
+    </div>
+    <div class="cq-source-chips">
+      <a class="cq-source-chip" data-source="puk" href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">PUK</a>
+      <a class="cq-source-chip" data-source="indiko" href="https://indiko.cz/" target="_blank" rel="noopener">INDIKO</a>
+    </div>
+
+    <p class="cq-section-lead">
+      Heatmapa zobrazuje 8 klíčových klinických indikátorů napříč 14 kraji ČR. Barva buňky odpovídá odchylce od národní reference (zeleně = lepší, oranžově = horší, šedě = chybí data). Struktura je připravena — <strong>vyplnění hodnotami probíhá až po nasazení scraperu PUK + INDIKO</strong> (Fáze 4 plánu); do té doby jsou buňky označeny jako čekající.
+    </p>
+
+    <div class="cq-heatmap-wrap" role="region" aria-label="Krajská heatmapa klinických indikátorů">
+      <div class="cq-heatmap-grid" id="cqHeatmapGrid" role="table" aria-rowcount="15" aria-colcount="9">
+        <!-- Renderuje src/clinical-quality.js -->
+      </div>
+      <div class="cq-heatmap-legend">
+        <span><span class="cq-heatmap-legend-dot" style="background:rgba(47,107,31,0.4);"></span>lepší než národní průměr</span>
+        <span><span class="cq-heatmap-legend-dot" style="background:rgba(160,90,8,0.4);"></span>v pásmu odchylky</span>
+        <span><span class="cq-heatmap-legend-dot" style="background:rgba(184,54,30,0.4);"></span>horší než národní průměr</span>
+        <span><span class="cq-heatmap-legend-dot" style="background:repeating-linear-gradient(45deg,#fff,#fff 4px,#eee 4px,#eee 7px);border:1px solid #ddd;"></span>čeká na obnovu (Fáze 4)</span>
+      </div>
+    </div>
+
+    <p class="cq-note">
+      Pro krajský pohled na další (ne-klinické) HSPA indikátory — demografie, financování, dostupnost — viz <a href="kraje.html">Krajský pohled</a>. Pro pojištěnce v kraji × ZP × okres viz <a href="pojistenci.html">Atlas pojištěnců</a>.
+    </p>
+  </section>
+
+  <!-- ── ZÁVĚR ─────────────────────────────────────────────────────── -->
+  <section class="cq-closing">
+    <div class="cq-closing-inner">
+      <h3>Co dál: od orientace k živým datům</h3>
+      <p>
+        Tato stránka představuje <strong>orientační rámec</strong> klinické kvality péče v Česku — sedm sekcí, dva primární zdroje (PUK + INDIKO), tři mezinárodní benchmarky (OECD, AHRQ, WHO AWaRe). Cílem nebylo nahradit primární zdroje, ale ukázat <em>strukturu</em>, ve které je možné se v klinických ukazatelích orientovat: jaký indikátor co měří, jak se počítá, co s ním lze a nelze srovnávat.
+      </p>
+      <p>
+        <strong>Další fáze plánu</strong> (PLAN-KVALITA-PECE.md, Fáze 4) doplní automatický scraping PUK i INDIKO a denní obnovu hodnot. Aktualizace stránky bude zveřejněna v sekci „Čerstvost dat" jednotlivých indikátorů. Pro nejaktuálnější hodnoty dnes vždy doporučujeme primární zdroj — <a href="https://puk.kancelarzp.cz/" target="_blank" rel="noopener">puk.kancelarzp.cz</a> a <a href="https://indiko.cz/" target="_blank" rel="noopener">indiko.cz</a>.
+      </p>
+      <p style="font-size:13px;color:var(--ink-mut);">
+        Data zveřejněná na této stránce: <time id="cqGeneratedAt" datetime="2026-05-28">28. května 2026</time>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── ZDROJOVÁ ATRIBUCE (footer of body) ─────────────────────────── -->
+  <section class="section" id="cqSourceFooter" aria-label="Zdroje a licence">
+    <!-- Renderuje src/clinical-quality.js -->
+  </section>
+
+  <!-- ── PŘÍBUZNÉ SEKCE ─────────────────────────────────────────────── -->
+  <section class="section related-section" aria-labelledby="cqRelatedH">
+    <div class="section-title"><h3 id="cqRelatedH">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="hspa-prehled.html">
+        <div class="related-card-kicker">Šest dimenzí · čtyři oblasti</div>
+        <h4 class="related-card-title">HSPA přehled</h4>
+        <p class="related-card-desc">Klinická kvalita je jedna z šesti dimenzí HSPA rámce. Zde najdete kompletní matici 80 indikátorů.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="kraje.html">
+        <div class="related-card-kicker">14 krajů · interaktivní mapa</div>
+        <h4 class="related-card-title">Krajský pohled</h4>
+        <p class="related-card-desc">Demografie, financování a dostupnost péče v jednotlivých krajích — širší kontext pro klinické indikátory § 7.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="clanek-akutni-infarkt.html">
+        <div class="related-card-kicker">Long-form · 5,2 % AMI</div>
+        <h4 class="related-card-title">Akutní infarkt myokardu</h4>
+        <p class="related-card-desc">Detailní článek o tom, co Česko v péči o AMI zvládlo a jak vznikla síť kardiocenter.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="clanek-cmp-iktova-centra.html">
+        <div class="related-card-kicker">Long-form · 13 KCC · 32 IC</div>
+        <h4 class="related-card-title">Iktová centra ČR</h4>
+        <p class="related-card-desc">Jak se v Česku stavěla třístupňová síť pro péči o cévní mozkovou příhodu.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="jak-funguje.html#indiko_portal">
+        <div class="related-card-kicker">Explainer · CzechHTA</div>
+        <h4 class="related-card-title">INDIKO — portál kvality</h4>
+        <p class="related-card-desc">Kdo a jak buduje portál INDIKO, čím se liší od PUK a jak data spolu navazují.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="prevence.html">
+        <div class="related-card-kicker">Vakcinace · screeningy</div>
+        <h4 class="related-card-title">Co s tím můžu dělat já</h4>
+        <p class="related-card-desc">Z klinických indikátorů k preventivním krokům, které dělá pacient sám.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clinical-quality.js"></script>
+
+</body>
+</html>

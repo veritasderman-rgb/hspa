@@ -260,6 +260,7 @@ export function renderModuleNav(activeId) {
   const tabs = [
     { id: 'indicators',  label: 'Indikátory',              href: 'index.html',              match: ['index.html', '/'] },
     { id: 'hspa-prehled', label: 'HSPA přehled',           href: 'hspa-prehled.html',       match: ['hspa-prehled.html'] },
+    { id: 'kvalita-pece', label: 'Kvalita péče',           href: 'kvalita-pece.html',       match: ['kvalita-pece.html'] },
     { id: 'kraje',       label: 'Krajský pohled',          href: 'kraje.html',              match: ['kraje.html'] },
     { id: 'financovani', label: 'Financování',             href: 'financovani.html',        match: ['financovani.html'] },
     { id: 'dohodovaci-rizeni', label: 'Dohodovací řízení', href: 'dohodovaci-rizeni.html', match: ['dohodovaci-rizeni.html', 'pojistenci.html'] },
