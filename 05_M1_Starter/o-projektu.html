@@ -500,6 +500,32 @@
       </p>
     </section>
 
+    <section class="ed-about-block" id="soukromi-a-data">
+      <h3>Soukromí a data — co měříme a proč</h3>
+      <p>
+        Portál neuchovává <strong>žádné osobní údaje návštěvníků</strong> — žádná registrace, žádný profil, žádné sledování napříč weby. Anonymizovaná návštěvnost se měří pomocí dvou nástrojů:
+      </p>
+      <ul>
+        <li><strong>Vercel Web Analytics</strong> — bezcookieové měření návštěvnosti (počty stránek, geografie). Žádný script třetí strany, žádné sdílení s reklamními sítěmi.</li>
+        <li><strong>Google Analytics 4</strong> s nastaveným <em>Consent Mode v2</em> — pouze <code>analytics_storage</code> je povoleno (legitimní zájem pro veřejný informační portál bez reklamy), všechny reklamní storage (<code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code>) jsou <strong>denied</strong>. IP adresy jsou anonymizovány na úrovni GA4.</li>
+      </ul>
+      <p>
+        Co konkrétně měříme jako agregovanou interakci (žádný uživatel nemůže být identifikován):
+      </p>
+      <ul>
+        <li><strong>Které indikátory návštěvníci klíčí</strong> — abychom věděli, na čem dál pracovat (custom event <code>indicator_click</code>)</li>
+        <li><strong>Které odborné pojmy lidé otevírají v glosáři</strong> — kandidáti na lepší vysvětlení v textu (<code>glossary_term_open</code>)</li>
+        <li><strong>Které pacientské příběhy si lidé rozkliknou</strong> v Kvalitě péče (<code>patient_story_expand</code>)</li>
+        <li><strong>Kdo přechází k primárním zdrojům</strong> (PUK, ÚZIS, OECD, Eurostat) — abychom věděli, jestli odkazy fungují (<code>external_source_click</code>)</li>
+      </ul>
+      <p>
+        Tyto údaje jsou výhradně agregovaná čísla typu „za týden se otevřel termín MDT 412×". Žádné identifikační údaje, žádné cookies třetích stran, žádný remarketing. Pokud nesouhlasíš s anonymizovaným měřením, můžeš v prohlížeči zapnout Do Not Track / Global Privacy Control — respektujeme.
+      </p>
+      <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut);">
+        Implementace měření je open-source v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/src/analytics.js" target="_blank" rel="noopener"><code>src/analytics.js</code> ↗</a>. Plán rozšíření měření publikován v <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/PLAN-GA4-ROZSIRENI.md" target="_blank" rel="noopener"><code>PLAN-GA4-ROZSIRENI.md</code> ↗</a>.
+      </p>
+    </section>
+
     <section class="ed-about-block">
       <h3>Governance a editorial policy</h3>
       <p>
