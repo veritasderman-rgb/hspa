@@ -24,7 +24,8 @@ export function enhanceInlineGlossary(terms, root) {
   if (typeof document === 'undefined') return;
   if (!Array.isArray(terms) || terms.length === 0) return;
   const scope = root ?? document;
-  const body = scope.querySelector('.article-body');
+  // .article-body na clanek-*.html, .manifest-sub-prose na substránkách manifestu.
+  const body = scope.querySelector('.article-body, .manifest-sub-prose');
   if (!body) return;
   if (body.dataset.glossInlineInit === '1') return;
   body.dataset.glossInlineInit = '1';
