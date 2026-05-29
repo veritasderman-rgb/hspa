@@ -13056,10 +13056,202 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
   margin: 0;
 }
 
+/* --- V2: „Proč to záleží" 4-dílná struktura ------------------------------- */
+.manifest-sub-why {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 4px 0 18px;
+}
+.manifest-sub-why-item {
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink-mut);
+  padding: 14px 16px;
+  border-radius: 4px;
+}
+.manifest-sub-why-item-change { border-left-color: #2f6b1f; }
+.manifest-sub-why-item-risk { border-left-color: var(--red); }
+.manifest-sub-why-lbl {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-mut);
+  margin: 0 0 6px;
+}
+.manifest-sub-why-item-change .manifest-sub-why-lbl { color: #2f6b1f; }
+.manifest-sub-why-item-risk .manifest-sub-why-lbl { color: var(--red); }
+.manifest-sub-why-item p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* --- V2: Strukturovaná opatření (opatření × páka × termín) ---------------- */
+.manifest-sub-actions {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+.manifest-sub-action {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  background: var(--paper);
+  padding: 14px 16px;
+  margin: 0 0 10px;
+  border-radius: 4px;
+}
+.manifest-sub-action-main {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.manifest-sub-action-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+}
+.manifest-sub-action-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  background: var(--ink-mut);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: 1px;
+}
+.manifest-sub-action-time .manifest-sub-action-tag { background: var(--red); }
+
+/* --- V4: AV srovnávací bar ČR vs benchmark v data kartách ----------------- */
+.mdc-cmp {
+  margin: 8px 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mdc-cmp-row {
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: 6px;
+}
+.mdc-cmp-lbl {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-mut);
+}
+.mdc-cmp-track {
+  height: 7px;
+  background: rgba(31,26,20,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.mdc-cmp-fill {
+  display: block;
+  height: 100%;
+  background: var(--ink-mut);
+  border-radius: 4px;
+}
+.mdc-cmp-fill-cz { background: var(--red); }
+.mdc-cmp-num {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  color: var(--ink-mut);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- V3: Souvislosti (provázané odkazy) ----------------------------------- */
+.manifest-sub-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 28px;
+}
+.manifest-sub-links-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.manifest-sub-links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.manifest-sub-links-list li { margin: 0 0 7px; }
+.manifest-sub-links-list a {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.manifest-sub-links-list a:hover {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+
+/* --- V5: Co je sporné + Zdroje -------------------------------------------- */
+.manifest-sub-contested {
+  background: #fff8ee;
+  border: 1px solid #e8dcc0;
+  border-left: 3px solid #c89b3c;
+  padding: 16px 18px;
+  border-radius: 4px;
+}
+.manifest-sub-contested p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.manifest-sub-sources {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 28px;
+}
+.manifest-sub-sources li {
+  margin: 0 0 8px;
+  break-inside: avoid;
+}
+.manifest-sub-sources a {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--ink-mut);
+  text-decoration: none;
+}
+.manifest-sub-sources a:hover { color: var(--red); }
+
 @media (max-width: 600px) {
   .manifest-sub-title { font-size: 28px; }
   .manifest-sub-section-h { font-size: 22px; }
   .manifest-sub-timeline > li { grid-template-columns: 1fr; gap: 4px; }
+  .manifest-sub-why { grid-template-columns: 1fr; }
+  .manifest-sub-links { grid-template-columns: 1fr; }
+  .manifest-sub-sources { columns: 1; }
 }
 
 /* ============================================================
