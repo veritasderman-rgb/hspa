@@ -519,8 +519,12 @@ ${timelineHtml}
 function renderIndex() {
   const cardsHtml = PRIORITIES.map(p => {
     const fileName = `priorita-${String(p.num).padStart(2, '0')}-${p.slug}.html`;
+    // Absolutní URL — relativní `./X` se totiž s Vercel cleanUrls
+    // + trailingSlash:false ROZBÍJÍ. Index.html se servíruje pod /manifest
+    // (bez koncového /), browser pak relativní `./` parsuje jako root /,
+    // takže `./priorita-NN…` skončí na /priorita-NN (mimo /manifest/) → 404.
     return `
-        <a class="manifest-index-card" href="./${fileName}">
+        <a class="manifest-index-card" href="/manifest/${fileName}">
           <div class="manifest-index-num">Priorita ${p.num}</div>
           <div class="manifest-index-name">${p.name}</div>
           <div class="manifest-index-bench">${p.deck.replace(/<[^>]+>/g, '').slice(0, 110)}…</div>
