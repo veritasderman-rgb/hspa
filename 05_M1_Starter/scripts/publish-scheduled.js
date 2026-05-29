@@ -120,7 +120,30 @@ export function pickArticleToPublish(candidates) {
   return { article: sorted[0], basis };
 }
 
-function main() {
+/**
+ * Vygeneruje náhledovou grafiku (SVG + PNG) pro právě publikovaný článek a
+ * injektuje OG/Twitter meta tagy + <img class="article-cover"> do jeho HTML.
+ *
+ * Dynamický import — generátor závisí na @resvg/resvg-js; nechceme ho tahat
+ * při importu tohoto modulu z testů. Selhání coveru NESMÍ shodit publikaci:
+ * článek je už označen jako published a articles.json zapsán, cover je
+ * doplňková grafika, kterou lze kdykoli přegenerovat.
+ *
+ * @param {object} article  právě publikovaný článek (published:true, date=dnes)
+ */
+async function generateAndInjectCover(article) {
+  try {
+    const { generateCover } = await import('../ingest/scripts/generate-article-cover.js');
+    const { processArticle: injectCover } = await import('../ingest/scripts/inject-article-covers.js');
+    const { svgPath, pngPath } = generateCover(article, { writeFiles: true });
+    const r = injectCover(article);
+    console.log(`  ✓ náhledová grafika: ${path.basename(svgPath)} + ${path.basename(pngPath)} (HTML: ${r.status})`);
+  } catch (e) {
+    console.warn(`  ⚠ náhledovou grafiku se nepodařilo vygenerovat (${e.message}) — článek publikován bez ní, lze dogenerovat ručně.`);
+  }
+}
+
+async function main() {
   const data = JSON.parse(fs.readFileSync(ARTICLES, 'utf8'));
   const today = todayUtc();
   let changed = false;
@@ -193,9 +216,15 @@ function main() {
     : `nejdéle připraven (ready_since ${winner.ready_since})`;
   console.log(`[${today}] Publikováno 1 článek/ů (${candidates.length} kandidát/ů ve frontě):`);
   console.log(`  - ${winner.slug} :: ${winner.title} — ${reasonText}`);
+
+  // Náhledová grafika se generuje až teď — s aktuálním datem publikace.
+  await generateAndInjectCover(winner);
 }
 
 // main() jen při přímém spuštění — kvůli importu z testů.
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main();
+  main().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
 }

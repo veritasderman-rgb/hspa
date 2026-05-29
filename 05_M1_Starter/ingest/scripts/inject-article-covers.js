@@ -27,7 +27,7 @@ function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
 }
 
-function processArticle(article) {
+export function processArticle(article) {
   if (article.published === false) return { status: 'skip-draft' };
 
   const slug = article.slug;

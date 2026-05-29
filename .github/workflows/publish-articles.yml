@@ -18,7 +18,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: 05_M1_Starter
@@ -28,6 +28,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      # Nutné pro generování náhledové grafiky publikovaného článku
+      # (scripts/publish-scheduled.js → @resvg/resvg-js přes generate-article-cover.js).
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run publish-scheduled
         run: node scripts/publish-scheduled.js | tee /tmp/publish-out.txt
@@ -46,7 +53,10 @@ jobs:
           # Extract published list for commit message
           PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)
-          git add data/articles.json
+          # articles.json (vždy) + vygenerovaná náhledová grafika + HTML s injektovaným
+          # coverem (mění se jen při skutečné publikaci článku).
+          git add data/articles.json assets/covers
+          git add ./*.html
           git commit -m "chore(publish): zveřejněno $DATE
 
           $PUBLISHED
