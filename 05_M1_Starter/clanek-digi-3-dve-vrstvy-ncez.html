@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dvě vrstvy: staré ostrovy a nová centrální páteř NCEZ · HSPA Monitor</title>
+<meta name="description" content="České e-zdravotnictví není jeden monolit. Běží ve dvou vrstvách: starší samostatné služby (eRecept, eNeschopenka, registry) a nová centrální infrastruktura NCEZ spuštěná 1. 1. 2026. Vysvětlujeme, kdo co provozuje a platí — třetí díl série Digitální zdravotnictví srozumitelně.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dvě vrstvy: staré ostrovy a nová centrální páteř NCEZ">
+<meta property="og:description" content="Staré samostatné služby versus nová centrální páteř NCEZ od 1. 1. 2026. Kdo to provozuje, kdo platí a co je nejisté — díl 3 série Digitální zdravotnictví srozumitelně.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-05-29">
+<meta property="article:section" content="Digitalizace">
+<meta name="article:audit-status" content="partial">
+<!--
+  audit:
+    last_reviewed: 2026-05-29
+    reviewer: claude-code-agent
+    status: partial
+    notes: "Díl 3 série 'Digitální zdravotnictví srozumitelně'. Laický výklad dvou vrstev e-zdravotnictví. Ověřená fakta: eRecept centrální úložiště provozuje SÚKL dle § 81 zákona 378/2007 Sb. (povinný od 1. 1. 2018); eNeschopenka ČSSZ (povinná od 1. 1. 2020); NRPZS (registr poskytovatelů § 74–75) a NR-ZP (registr zdravotnických pracovníků § 77) provozuje ÚZIS dle zákona 372/2011 Sb.; NCPeH — správce MZ ČR, provozovatel Kraj Vysočina, brána do MyHealth@EU, data neukládá; nová centrální páteř dle zákona 325/2021 Sb. spuštěna 1. 1. 2026 (portál eZdraví, kmenové registry, eŽádanka, dočasné úložiště, sdílený/emergentní záznam). Kmenové registry původně plánovány 2023, zakázku zrušil ÚOHS — spuštěny 1. 1. 2026. eŽádanka dobrovolná, první typy K/Z/FT, laboratorní až 2. pololetí 2026, maže se 3 měsíce po péči. EZZ struktura dle European Patient Summary; SZZ = EZZ + výsledky prevence/screeningů. EZKarta ostrý provoz 03/2024, EZKarta 2.0 v 2026, funkce SZZ/notifikace/oprávnění od 1. 5. 2026. NCEZ odbor MZ ČR z Národního plánu obnovy, ~20 projektů, ~1 mld Kč ze 7 zakázek. RIZIKO udržitelnosti: financování z EU projektů končí v průběhu 2026, smlouvy klíčového týmu končily k 31. 12. 2025 — orientační, dle veřejných vyjádření. Status partial: hlavní fakta ověřena, část je plán/vývoj, čeká na redakční schválení."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag">Vysvětlujeme</span>
+        <span class="article-tag article-tag-muted">Série „Digitální zdravotnictví“ · díl 3 z 5</span>
+      </div>
+      <h2 class="article-title">Dvě vrstvy: staré ostrovy a nová centrální páteř (NCEZ)</h2>
+      <p class="article-deck">
+        České e-zdravotnictví není jeden velký monolit, který by někdo zapnul jedním vypínačem. Ve skutečnosti běží ve dvou vrstvách: starší samostatné služby, kde každou provozuje někdo jiný (SÚKL, ČSSZ, ÚZIS, Kraj Vysočina), a úplně nová centrální infrastruktura Ministerstva zdravotnictví, kterou pod značkou NCEZ stát spustil 1. ledna 2026. Ve třetím dílu si tu mapu rozkreslíme — kdo co provozuje, kdo to platí a kde je to nejvíc křehké.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">29. května 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">13 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Když uslyšíte „digitalizace zdravotnictví“, snadno si představíte jeden velký počítač někde v Praze, kam stát všechno naskládal. Realita je úplně jiná a o dost zajímavější. České e-zdravotnictví připomíná spíš město, které rostlo postupně. Nejdřív tu po desetiletí stály samostatné budovy — recept tady, neschopenka tamhle, registr lékařů o ulici dál — a každou z nich postavil a provozuje někdo jiný. Teprve nedávno, k 1. lednu 2026, stát natáhl přes celé město novou páteřní síť ulic a centrální náměstí, aby se ty budovy konečně daly propojit. Té nové vrstvě se říká <strong>NCEZ</strong> a v tomhle dílu vám obě patra ukážeme tak, abyste se v nich vyznali.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDigi3HeroH">
+        <figcaption class="av-figure-h" id="avDigi3HeroH">České e-zdravotnictví v číslech — dvě patra jednoho domu</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="4">4</span>
+            <span class="av-counter-label">staré samostatné služby (vrstva 1)</span>
+            <span class="av-counter-foot">eRecept, eNeschopenka, národní registry, přeshraniční NCPeH</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">1. 1. 2026</span>
+            <span class="av-counter-label">spuštěna centrální páteř NCEZ</span>
+            <span class="av-counter-foot">vrstva 2 podle zákona 325/2021 Sb.</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="3">3</span>
+            <span class="av-counter-label">kmenové registry nové vrstvy</span>
+            <span class="av-counter-foot">poskytovatelů, zdravotnických pracovníků, pacientů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="20">~20</span>
+            <span class="av-counter-label">centrálních projektů NCEZ</span>
+            <span class="av-counter-foot">orientačně ~1 mld. Kč ze 7 veřejných zakázek</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon č. 325/2021 Sb. o elektronizaci zdravotnictví, MZ ČR / NCEZ, ÚZIS, SÚKL, ČSSZ. Počty projektů a rozpočet jsou orientační a odpovídají veřejně dostupným údajům MZ.</p>
+      </figure>
+
+      <h3>Vrstva 1: staré, ale funkční ostrovy</h3>
+
+      <p>
+        Začněme přízemím. První vrstva jsou <strong>samostatné vertikální služby</strong> — každá vyřešila jeden konkrétní úkol a žila si dlouho svým vlastním životem. Říkáme jim „ostrovy“, protože vznikaly odděleně, každá má svého vlastního provozovatele a svůj vlastní zákon, o který se opírá. To není nadávka: většina z nich funguje roky spolehlivě a používá je denně skoro každý, kdo zajde k lékaři. Jen spolu donedávna pořádně „nemluvily“.
+      </p>
+
+      <p>
+        První ostrov je <strong>eRecept</strong> a na něj navázaný lékový záznam. Provozuje ho <strong>Státní ústav pro kontrolu léčiv (SÚKL)</strong>, který drží centrální úložiště elektronických receptů. Opírá se o § 81 zákona č. 378/2007 Sb. o léčivech a v plošně povinné podobě běží od 1. ledna 2018. Druhý ostrov, <strong>eNeschopenka</strong>, patří <strong>České správě sociálního zabezpečení (ČSSZ)</strong> a je povinný od 1. ledna 2020 — lékař neschopenku vystaví elektronicky a údaje doputují zaměstnavateli i ČSSZ samy.
+      </p>
+
+      <p>
+        Třetím ostrovem jsou <strong>národní registry</strong>, které vede <strong>Ústav zdravotnických informací a statistiky (ÚZIS)</strong> podle zákona č. 372/2011 Sb. o zdravotních službách. Patří sem zejména <em>NRPZS</em> — Národní registr poskytovatelů zdravotních služeb (§ 74–75), tedy seznam všech ordinací, nemocnic a lékáren, a <em>NR-ZP</em> — Národní registr zdravotnických pracovníků (§ 77), seznam lékařů, sester a dalších profesionálů s jejich oprávněními. Tyhle registry jsou jako telefonní seznam a živnostenský rejstřík dohromady: říkají, kdo ve zdravotnictví vůbec smí pracovat a které zařízení existuje.
+      </p>
+
+      <p>
+        Čtvrtý ostrov má nejexotičtější jméno: <strong>NCPeH</strong> (Národní kontaktní místo pro elektronické zdravotnictví). Jeho správcem je Ministerstvo zdravotnictví ČR, ale provozuje ho <strong>Kraj Vysočina</strong>. Je to brána do evropské sítě <strong>MyHealth@EU</strong> — díky ní si můžete v zahraniční lékárně nechat vydat lék na český recept. Důležitý detail: NCPeH sám žádná data o pacientech neukládá, jen je v reálném čase <em>přenáší</em> mezi Českem a ostatními státy. Je to spíš pošťák než archiv.
+      </p>
+
+      <p>
+        Společný rys celé první vrstvy: každý ostrov řeší jednu věc dobře, ale chybělo jim společné „centrum města“, přes které by se daly propojit a doplnit o nové služby. Přesně to měla vyřešit druhá vrstva.
+      </p>
+
+      <h3>Vrstva 2: nová centrální páteř NCEZ (od 1. 1. 2026)</h3>
+
+      <p>
+        Druhá vrstva je úplně jiný druh stavby. Zatímco ostrovy jsou „vertikální“ (každý jde shora dolů jedním tématem), nová páteř je <strong>horizontální infrastruktura</strong> — položí se napříč a má sloužit všem. Stojí na zákoně č. 325/2021 Sb. o elektronizaci zdravotnictví a stát ji spustil 1. ledna 2026. Skládá se z několika navzájem provázaných součástí.
+      </p>
+
+      <p>
+        Vstupní branou je <strong>portál eZdraví</strong> — jedno místo, kterým se ke službám nové vrstvy dostanete. Pod ním leží <strong>kmenové registry</strong>: tři základní seznamy, které mají držet jednoznačné a aktuální údaje o poskytovatelích, o zdravotnických pracovnících a o pacientech. Slouží jako „matrika“ celého systému — když se kdokoli na cokoli odkazuje, sahá právě sem pro ověřenou identitu. Spuštěny byly 1. ledna 2026, ovšem s několikaletým zpožděním: původně měly fungovat už v roce 2023, jenže příslušnou veřejnou zakázku zrušil Úřad pro ochranu hospodářské soutěže (ÚOHS) a projekt se musel rozběhnout znovu.
+      </p>
+
+      <p>
+        Další novinkou je <strong>eŽádanka</strong> — elektronická žádanka o vyšetření, tedy digitální obdoba papírku, se kterým vás lékař posílá na další vyšetření. V první fázi pokrývá tři typy: <em>K</em> (konziliární), <em>Z</em> (zobrazovací, například rentgen či CT) a <em>FT</em> (fyzioterapie). Laboratorní eŽádanky přibydou až ve druhém pololetí roku 2026. Důležité je, že eŽádanka je zatím <strong>dobrovolná</strong> — k tomu, co je v roce 2026 povinné a co ne, se vrátíme v příštím dílu.
+      </p>
+
+      <p>
+        Aby si poskytovatelé mohli takovou žádanku či jiný dokument předat, slouží <strong>dočasné úložiště</strong>. Není to žádný velký archiv — funguje spíš jako úschovna nebo poštovní přihrádka pro krátkodobé sdílení „zásilek“ mezi zařízeními. Data v něm dlouho neleží: eŽádanka se z dočasného úložiště automaticky maže tři měsíce po poskytnutí péče. A nakonec to nejdůležitější spojovací lepidlo: obě vrstvy — staré ostrovy i novou páteř — propojuje <strong>integrované datové rozhraní</strong>, ta bezpečná spojovací síť, o které jsme mluvili v prvním dílu. Bez něj by nová vrstva zůstala jen dalším izolovaným ostrovem.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDigi3TableH">
+        <figcaption class="av-figure-h" id="avDigi3TableH">Kdo co provozuje: mapa služeb obou vrstev</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Služba</th>
+                <th scope="col">Provozovatel</th>
+                <th scope="col">Od kdy běží</th>
+                <th scope="col">Co dělá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">eRecept + lékový záznam</th>
+                <td>SÚKL</td>
+                <td>2018</td>
+                <td>centrální úložiště el. receptů (§ 81 zák. 378/2007 Sb.)</td>
+              </tr>
+              <tr>
+                <th scope="row">eNeschopenka</th>
+                <td>ČSSZ</td>
+                <td>2020</td>
+                <td>el. neschopenka mezi lékařem, zaměstnavatelem a ČSSZ</td>
+              </tr>
+              <tr>
+                <th scope="row">NRPZS / NR-ZP</th>
+                <td>ÚZIS</td>
+                <td>dle zák. 372/2011 Sb.</td>
+                <td>národní registry poskytovatelů a zdravotnických pracovníků</td>
+              </tr>
+              <tr>
+                <th scope="row">NCPeH</th>
+                <td>Kraj Vysočina (správce MZ ČR)</td>
+                <td>v provozu</td>
+                <td>brána do EU sítě MyHealth@EU; data jen přenáší, neukládá</td>
+              </tr>
+              <tr>
+                <th scope="row">kmenové registry</th>
+                <td>MZ ČR / NCEZ</td>
+                <td>2026</td>
+                <td>tři základní „matriky“: poskytovatelé, pracovníci, pacienti</td>
+              </tr>
+              <tr>
+                <th scope="row">eŽádanka</th>
+                <td>MZ ČR / NCEZ</td>
+                <td>2026 (dobrovolná)</td>
+                <td>el. žádanka o vyšetření (typy K, Z, FT; lab. od 2. pol. 2026)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">sdílený / emergentní záznam</th>
+                <td>MZ ČR / NCEZ</td>
+                <td>2026</td>
+                <td>klíčové údaje pro akutní péči a sdílení výsledků prevence</td>
+              </tr>
+              <tr>
+                <th scope="row">dočasné úložiště</th>
+                <td>MZ ČR / NCEZ</td>
+                <td>2026</td>
+                <td>krátkodobá „úschovna“ pro sdílení zásilek mezi zařízeními</td>
+              </tr>
+              <tr>
+                <th scope="row">EZKarta</th>
+                <td>MZ ČR / ÚZIS</td>
+                <td>2024</td>
+                <td>mobilní aplikace pro občany — okno do systému</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zjednodušený přehled. Roky u nové vrstvy označují spuštění základní podoby služby; jednotlivé funkce nabíhají postupně v průběhu roku 2026.</p>
+      </figure>
+
+      <p>
+        Když si tu mapu položíme vedle sebe jako dvě patra jednoho domu, je vidět logika celku. Přízemí (staré ostrovy) zůstává a dál dělá svou práci. Patro (nová páteř NCEZ) přidává společné chodby, recepci a výtah, který všechno propojí. A schodištěm mezi patry je právě integrované datové rozhraní.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDigi3FlowH">
+        <figcaption class="av-figure-h" id="avDigi3FlowH">Dvě vrstvy spojené integrovaným datovým rozhraním</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vrstva 1 — samostatné ostrovy</h4>
+            <p class="av-flow-desc">Vertikální služby, každá svého provozovatele: <strong>eRecept</strong> (SÚKL), <strong>eNeschopenka</strong> (ČSSZ), národní registry (ÚZIS), přeshraniční <strong>NCPeH</strong> (Kraj Vysočina). Fungují roky, ale odděleně.</p>
+            <span class="av-flow-tag">Funkční základ</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Spojnice — integrované datové rozhraní</h4>
+            <p class="av-flow-desc">Bezpečná síť, přes kterou si patra předávají data teprve ve chvíli, kdy je to potřeba. Žádná velká společná databáze — jen řízené propojení. Tohle je <strong>integrované datové rozhraní</strong>.</p>
+            <span class="av-flow-tag">Lepidlo systému</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vrstva 2 — centrální páteř NCEZ</h4>
+            <p class="av-flow-desc">Horizontální infrastruktura od 1. 1. 2026: <strong>portál eZdraví</strong>, <strong>kmenové registry</strong>, <strong>eŽádanka</strong>, <strong>dočasné úložiště</strong>, sdílený a emergentní záznam. Slouží napříč všem.</p>
+            <span class="av-flow-tag">Nové centrum města</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Zjednodušené schéma. Zákon č. 325/2021 Sb. záměrně staví federovanou architekturu — data zůstávají u poskytovatelů a centrálně existuje jen propojovací rozhraní.</p>
+      </figure>
+
+      <h3>Co o vás uvidí záchranka: sdílený a emergentní záznam</h3>
+
+      <p>
+        Pro běžného člověka je z celé nové vrstvy nejdůležitější jedna věc: co se o něm dozví záchranář nebo lékař na pohotovosti, když je v bezvědomí nebo nemůže mluvit. Tady přicházejí dva pojmy, které se snadno pletou. <strong>Emergentní zdravotní záznam</strong> (EZZ) je krátký „nouzový profil“ pro akutní situace. <strong>Sdílený zdravotní záznam</strong> (SZZ) je o něco širší: zahrnuje emergentní záznam <em>plus</em> výsledky preventivních a screeningových vyšetření. Jednoduchá rovnice zní: SZZ = EZZ + výsledky prevence a screeningů.
+      </p>
+
+      <p>
+        Co konkrétně v emergentním záznamu najde záchranář? Pět věcí, které v krizi rozhodují:
+      </p>
+
+      <ul>
+        <li><strong>krevní skupinu</strong> — aby věděl, jakou krev lze bezpečně podat;</li>
+        <li><strong>závažné alergie</strong> — třeba na anestetika nebo antibiotika;</li>
+        <li><strong>nežádoucí účinky léčiv</strong>, které jste v minulosti zaznamenali;</li>
+        <li><strong>léky předepsané za posledních 12 měsíců</strong> — kvůli interakcím;</li>
+        <li><strong>kontakty pro urgentní situace</strong> — koho zavolat.</li>
+      </ul>
+
+      <p>
+        Struktura tohoto záznamu nevznikla na koleně — vychází z evropského standardu <em>European Patient Summary</em>, takže je v zásadě čitelná i pro zahraniční systémy. Autoritativní, tedy „oficiálně platnou“ podobu záznamu vede váš <strong>registrující (praktický) lékař</strong>; on je ten, kdo dohlíží, aby v něm byly správné a aktuální údaje. A protože jde o citlivá data, máte i tady poslední slovo: přes <strong>registr oprávnění</strong> můžete vyslovit nesouhlas se sdílením. Jen mějte na paměti, že tím můžete zkomplikovat akutní péči — záchranář pak ve vašem profilu prostě nic neuvidí, i kdyby to potřeboval.
+      </p>
+
+      <h3>EZKarta: vaše okno do systému</h3>
+
+      <p>
+        Zatímco záznamy a registry běží kdesi v pozadí, jediné, co většina lidí reálně uvidí a osahá, je mobilní aplikace <strong>EZKarta</strong>. V ostrém provozu je od března 2024 a slouží jako vaše okno do celého systému přímo v telefonu. Najdete v ní očkovací průkaz, přehled preventivních prohlídek a doporučených screeningů. Přihlašujete se přes státní identitu NIA — stejně jako třeba do Portálu občana.
+      </p>
+
+      <p>
+        V roce 2026 přichází <strong>EZKarta 2.0</strong> — nový design a přepracované vnitřnosti. Pozor, tahle změna vyžaduje, abyste si aplikaci znovu stáhli a znovu se přihlásili; staré přihlášení nemusí automaticky přejít. A hlavně: od 1. května 2026 do ní postupně přibývají nové funkce navázané na centrální vrstvu — náhled do <strong>sdíleného zdravotního záznamu</strong>, notifikace (upozornění na události ve vaší péči) a správa oprávnění, tedy ovládání toho, kdo smí vaše data vidět a sdílet. EZKarta se tím z pasivního očkovacího průkazu mění v aktivní ovládací panel.
+      </p>
+
+      <h3>Kdo to staví a platí — a co je nejisté</h3>
+
+      <p>
+        Za celou novou vrstvou stojí <strong>NCEZ</strong> — Národní centrum elektronického zdravotnictví. Není to samostatná firma ani agentura, ale <strong>odbor Ministerstva zdravotnictví ČR</strong>, který vznikl v rámci Národního plánu obnovy (tedy z evropských peněz na pokrizovou obnovu). NCEZ koordinuje zhruba dvacet centrálních projektů, spravuje technické standardy a stará se o certifikaci toho, co se na páteř smí napojit. Rozpočtově jde řádově o jednu miliardu korun rozdělenou do sedmi veřejných zakázek.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDigi3StavbaH">
+        <figcaption class="av-figure-h" id="avDigi3StavbaH">NCEZ v číslech — kdo staví centrální páteř</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="20">~20</span>
+            <span class="av-counter-label">koordinovaných projektů</span>
+            <span class="av-counter-foot">centrální služby a infrastruktura e-zdravotnictví</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="3">3</span>
+            <span class="av-counter-label">kmenové registry</span>
+            <span class="av-counter-foot">poskytovatelé, pracovníci, pacienti</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1">~1 mld. Kč</span>
+            <span class="av-counter-label">orientační rozpočet</span>
+            <span class="av-counter-foot">rozděleno do 7 veřejných zakázek</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR / NCEZ, Národní plán obnovy. Počty a částky jsou orientační dle veřejně dostupných údajů.</p>
+      </figure>
+
+      <p>
+        A teď ta nepříjemná část, kterou je férové neschovávat. Velkorysé financování z evropských projektů má svůj konec — peníze z Národního plánu obnovy v průběhu roku 2026 dobíhají. Zároveň pracovní smlouvy klíčového odborného týmu, který páteř postavil, končily k 31. prosinci 2025. Udržení zkušených lidí a zajištění dlouhodobého financování provozu je tak <strong>otevřená otázka</strong>: postavit infrastrukturu je jedna věc, ufinancovat a personálně udržet ji po vyčerpání evropských dotací věc druhá. Tohle riziko je dobré mít na paměti, až budete číst optimistické tiskové zprávy o tom, jak je všechno hotové.
+      </p>
+
+      <p>
+        Ať tak či onak, mapu už máte v hlavě: dvě patra, staré ostrovy a nová páteř, propojené integrovaným datovým rozhraním. Zbývá zodpovědět praktickou otázku, kterou si po lednu 2026 klade skoro každý lékař i pacient — co z toho všeho je vlastně <em>povinné</em> a co zůstává dobrovolné? Právě tomu se věnuje čtvrtý díl série, a hned na úvod vyvrátíme rozšířený mýtus, že „od ledna musí lékaři naráz úplně všechno“.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Přehled na jednom místě</div>
+      <h4 class="article-databox-h">Kdo co provozuje</h4>
+      <ul class="article-databox-list">
+        <li><strong>SÚKL</strong> — eRecept a lékový záznam (centrální úložiště dle § 81 zákona 378/2007 Sb.).</li>
+        <li><strong>ČSSZ</strong> — eNeschopenka (povinná od 2020).</li>
+        <li><strong>ÚZIS</strong> — národní registry NRPZS a NR-ZP (zákon 372/2011 Sb.).</li>
+        <li><strong>Kraj Vysočina</strong> — přeshraniční NCPeH, brána do MyHealth@EU (správce MZ ČR).</li>
+        <li><strong>MZ ČR / NCEZ</strong> — celá nová centrální páteř: portál eZdraví, kmenové registry, eŽádanka, dočasné úložiště, sdílený a emergentní záznam.</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Najedete-li v textu kurzorem na zvýrazněný odborný pojem, zobrazí se jeho krátká definice. Kompletní výklad najdete v <a href="glosar.html">glosáři</a>.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si to sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Provozovatelé jednotlivých služeb</h5>
+        <ul class="article-sources-list">
+          <li><strong>NCEZ — Národní centrum elektronického zdravotnictví</strong> — odbor MZ ČR koordinující centrální páteř e-zdravotnictví. <a href="https://ncez.mzcr.cz/" target="_blank" rel="noopener">ncez.mzcr.cz ↗</a></li>
+          <li><strong>eRecept — SÚKL</strong> — provozovatel centrálního úložiště elektronických receptů a lékového záznamu. <a href="https://www.epreskripce.gov.cz/" target="_blank" rel="noopener">epreskripce.gov.cz ↗</a></li>
+          <li><strong>eNeschopenka — ČSSZ</strong> — informace o elektronické neschopence pro pacienty, lékaře i zaměstnavatele. <a href="https://www.cssz.cz/web/cz/eneschopenka" target="_blank" rel="noopener">cssz.cz ↗</a></li>
+          <li><strong>NRPZS — ÚZIS</strong> — Národní registr poskytovatelů zdravotních služeb. <a href="https://nrpzs.uzis.cz/" target="_blank" rel="noopener">nrpzs.uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví</strong> — základní zákon nové centrální vrstvy (portál eZdraví, kmenové registry, eŽádanka, sdílený a emergentní záznam). <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 372/2011 Sb. o zdravotních službách</strong> — opora národních registrů ÚZIS (registr poskytovatelů § 74–75, registr zdravotnických pracovníků § 77). <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Část popisované nové vrstvy se v roce 2026 teprve rozbíhá — některé funkce (laboratorní eŽádanky, rozšíření EZKarty) jsou plánem a jejich termíny i podoba se mohou změnit. Počty projektů, rozpočet NCEZ a informace o udržitelnosti financování a personálu jsou orientační a odpovídají veřejně dostupným vyjádřením MZ ČR. Tento díl je výkladový a zjednodušující; přesné právní detaily najdete v uvedených zdrojích.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+      <a class="article-nav-next" href="clanek-digi-4-povinne-dobrovolne-2026.html">Díl 4: Co je povinné a co dobrovolné →</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>

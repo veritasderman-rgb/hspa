@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak to funguje pod kapotou: co je API a proč data zůstávají u lékaře · HSPA Monitor</title>
+<meta name="description" content="API je jen dohodnutá přepážka, přes kterou si dva počítače předají data podle pevných pravidel. A česká zdravotnická data nejsou v jednom velkém skladu — zůstávají u lékaře. Druhý díl série Digitální zdravotnictví srozumitelně vysvětluje API, interoperabilitu a digitální identitu na analogiích z běžného života.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jak to funguje pod kapotou: co je API a proč data zůstávají u lékaře">
+<meta property="og:description" content="API jako okénko na úřadě, interoperabilita jako společný jazyk a data, která zůstávají u lékaře. Digitální zdravotnictví srozumitelně — díl 2.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-05-29">
+<meta property="article:section" content="Digitalizace">
+<meta name="article:audit-status" content="partial">
+<!--
+  audit:
+    last_reviewed: 2026-05-29
+    reviewer: claude-code-agent
+    status: partial
+    notes: "Díl 2 série 'Digitální zdravotnictví srozumitelně'. Laický výklad pojmů API a interoperabilita. Ověřená fakta: ČR používá standard DASTA (Datový standard MZ ČR), který se má udržovat nejdéle do roku 2030 a postupně nahrazovat mezinárodním HL7 FHIR; pro přeshraniční přenos se používá HL7 CDA. eHealth Network (síť pro elektronické zdravotnictví dle směrnice 2011/24/EU) na zasedání 30. 3. 2023 doporučila HL7 FHIR jako základní standard pro nové případy užití (laboratorní výsledky, propouštěcí zprávy, snímky) s podporou 23 z 27 členských států. NCEZ buduje terminologický server (SNOMED CT, LOINC). ČR staví integrované datové rozhraní (federovaná architektura), ne centrální úložiště dokumentace; dočasné úložiště slouží jen ke krátkodobému sdílení zásilek do prvního vyzvednutí — vše dle zákona 325/2021 Sb. NIA (Národní identitní autorita) dle zákona 250/2017 Sb. o elektronické identifikaci, spravuje ji Digitální a informační agentura (DIA). Zákon o elektronizaci zavádí bezvýznamový identifikátor pacienta a identifikátor zdravotnického pracovníka místo rodného čísla. Žurnál činností a registr oprávnění dle zákona 325/2021 Sb. Status partial: technické principy a standardy ověřeny vůči veřejně dostupné dokumentaci NCEZ a HL7, výhledové roky orientační, čeká na redakční schválení."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag">Vysvětlujeme</span>
+        <span class="article-tag article-tag-muted">Série „Digitální zdravotnictví“ · díl 2 z 5</span>
+      </div>
+      <h2 class="article-title">Jak to funguje pod kapotou: co je API a proč data zůstávají u lékaře</h2>
+      <p class="article-deck">
+        Slovo „API“ zní jako něco pro programátory, ale princip zvládne pochopit každý za minutu: je to jen <em>dohodnutá přepážka</em>, přes kterou si dva počítače předají data podle pevných pravidel — bez ručního přepisování. A jedna důležitá novinka pro klidnější spaní: česká zdravotnická data nejsou v jednom obřím státním skladu. Zůstávají tam, kde vznikla — u vašeho lékaře, v nemocnici, v laboratoři. Ve druhém dílu série otevřeme kapotu a podíváme se, jak to celé drží pohromadě.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">29. května 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V prvním dílu jsme slíbili, že vám nikdy nebudeme předhazovat slova jako „API“ nebo „interoperabilita“ bez vysvětlení. Čas splnit slib. Tenhle díl je z celé pětidílné série technicky „nejhlubší“ — ale nebojte se: vše si ukážeme na okénku na úřadě, na společném jazyku a na tom, jak vás systém pozná, když u přepážky stojíte právě vy. Když dočtete, budete rozumět tomu, co se ve zdravotnictví děje „pod kapotou“, lépe než většina lidí, kteří o digitalizaci mluví v televizi.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDigi2HeroH">
+        <figcaption class="av-figure-h" id="avDigi2HeroH">Tři pojmy, čtyři čísla — co táhne digitální zdravotnictví</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="2023">2023</span>
+            <span class="av-counter-label">Evropa volí společný jazyk</span>
+            <span class="av-counter-foot">eHealth Network 30. 3. 2023 doporučila HL7 FHIR pro nové případy užití</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="23">23 z 27</span>
+            <span class="av-counter-label">států EU pro tu volbu</span>
+            <span class="av-counter-foot">většinová podpora členských zemí pro HL7 FHIR</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2030">2030</span>
+            <span class="av-counter-label">dokdy se udržuje český DASTA</span>
+            <span class="av-counter-foot">domácí standard se nejdéle do té doby nahrazuje mezinárodním</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">centrálních skladů dokumentace</span>
+            <span class="av-counter-foot">data zůstávají u poskytovatelů — federovaná architektura</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> eHealth Network (síť pro e-zdravotnictví dle směrnice 2011/24/EU), HL7 International, NCEZ / MZ ČR, zákon č. 325/2021 Sb. Roky přechodu na nový standard jsou orientační — záleží na konkrétní oblasti dat.</p>
+      </figure>
+
+      <h3>API jako okénko na úřadě</h3>
+
+      <p>
+        Představte si přepážku na úřadě. Přijdete, podáte vyplněný formulář s konkrétním požadavkem („potřebuji výpis z rejstříku“), úřednice ho vezme, zpracuje podle pevných pravidel a podá vám zpátky přesně to, co jste chtěli. Nemusíte vědět, co se děje vzadu v archivu — stačí, že přepážka má jasná pravidla: co se na ni dá podat, v jaké formě, a co dostanete nazpět. Přesně tohle je <strong>API</strong> (z anglického „application programming interface“, tedy rozhraní pro propojení programů): dohodnutá přepážka mezi dvěma počítačovými programy, přes kterou si automaticky předávají data podle předem domluvených pravidel.
+      </p>
+
+      <p>
+        Zkusme to na zdravotnickém příkladu. Program ve vaší ordinaci potřebuje vědět, jaké léky pacient bere. Místo aby lékař volal kolegům nebo luštil staré papíry, pošle jeho program přes API krátký, přesně naformulovaný dotaz centrální službě: „jaké platné předpisy má tenhle pacient?“. Služba podle pravidel ověří oprávnění, vyhledá údaje a pošle zpátky <em>strukturovanou odpověď</em> — tedy data uspořádaná tak, že je počítač hned chápe a umí zobrazit v přehledné tabulce. Žádné ruční přepisování, žádné luštění rukopisu.
+      </p>
+
+      <p>
+        Klíčové slovo je „strukturovaná“. Kdyby přepážka vracela odpověď jako volně psaný dopis, musel by si ho program znovu pracně „přečíst“ a hádat, kde je název léku a kde dávkování. API proto vrací data v pevném tvaru — jako kdyby úřednice místo věty vyplnila kolonky předtištěného formuláře, ve kterých je vždy jasné, co kam patří.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDigi2FlowH">
+        <figcaption class="av-figure-h" id="avDigi2FlowH">Jak putuje dotaz přes API — a proč se data jen „půjčí“</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">1 · Program lékaře pošle dotaz</h4>
+            <p class="av-flow-desc">Software v ordinaci zformuluje přesný dotaz — „jaké platné předpisy má tento pacient?“ — a odešle ho přes <strong>API</strong>, tedy dohodnutou přepážku, nikoli e-mailem nebo telefonem.</p>
+            <span class="av-flow-tag">Otázka podle pravidel</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">2 · Rozhraní zkontroluje pravidla</h4>
+            <p class="av-flow-desc">Přepážka ověří, že dotaz má správný tvar a že tazatel má oprávnění data vidět. Teprve pak ho pustí dál. Pravidla jsou pevná a stejná pro všechny.</p>
+            <span class="av-flow-tag">Kontrola formy i oprávnění</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">3 · Odpovídající systém vyhledá data</h4>
+            <p class="av-flow-desc">Dotaz dorazí do systému, kde data skutečně leží (úložiště receptů, registr). Ten je vyhledá — ale neposílá nikam svoji „celou složku“, jen odpověď na konkrétní otázku.</p>
+            <span class="av-flow-tag">Hledá jen to potřebné</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">4 · Strukturovaná odpověď se vrací zpět</h4>
+            <p class="av-flow-desc">Program lékaře dostane uspořádanou odpověď a zobrazí ji v ordinaci. Data se jen <strong>půjčila</strong> pro tento okamžik — nezkopírovala se natrvalo do žádného centrálního skladu.</p>
+            <span class="av-flow-tag">Data se nekopírují na hromadu</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Zjednodušené schéma. Skutečné API ošetřuje navíc zabezpečení, šifrování a zápis do auditní stopy — k tomu se dostaneme níže.</p>
+      </figure>
+
+      <p>
+        Všimněte si posledního kroku: data se <em>půjčila</em>, ne nasypala na hromadu. To je rozdíl, který odlišuje moderní zdravotnický systém od strašáka „jedné velké databáze“. Přepážka umožní položit otázku a dostat odpověď, aniž by si někdo musel pořizovat trvalou kopii všeho o všech.
+      </p>
+
+      <h3>Aby si systémy rozuměly: interoperabilita a společný jazyk</h3>
+
+      <p>
+        Přepážka sama o sobě nestačí. Představte si, že na ni přijde formulář vyplněný v jazyce, kterému úřednice nerozumí — přepážka tu je, ale dohoda vázne. U počítačů je to stejné: i když mají API, musí se shodnout na <em>formátu</em> dat, jinak si navzájem nerozumí. Schopnost různých systémů si vzájemně rozumět a smysluplně si předávat data se odborně jmenuje <strong>interoperabilita</strong>. Je to vlastně dohoda na společném jazyce.
+      </p>
+
+      <p>
+        Česko si dlouhá léta vystačilo s vlastním standardem zvaným <strong>DASTA</strong> (Datový standard Ministerstva zdravotnictví). Funguje dodnes a počítá se s tím, že se bude udržovat nejdéle do roku 2030 — postupně ho ale nahrazuje mezinárodní standard <strong>HL7 FHIR</strong>. Ten má jednu velkou výhodu: mluví jím čím dál víc systémů po celém světě, takže česká data zapadnou do evropského i globálního prostředí. Pro přeshraniční přenos dokumentů (například když se léčíte v jiné zemi EU) se používá ještě formát HL7 CDA, který umí zabalit celý dokument tak, aby mu rozuměl systém v cizině.
+      </p>
+
+      <p>
+        Není to jen česká úvaha. Evropská <em>eHealth Network</em> — síť, ve které spolupracují členské státy na elektronickém zdravotnictví — na svém zasedání 30. března 2023 doporučila HL7 FHIR jako základní standard pro nové případy užití: laboratorní výsledky, propouštěcí zprávy z nemocnice i lékařské snímky. Tuto volbu podpořilo 23 z 27 zemí Evropské unie. Když tedy ČR přechází na HL7 FHIR, jde stejným směrem jako většina Evropy.
+      </p>
+
+      <p>
+        Jenže společný jazyk není jen o gramatice — je i o slovníku. Když jeden systém napíše „rýma“, druhý „akutní rinitida“ a třetí jen číselný kód, musí existovat dohoda, že jde o totéž. Proto NCEZ buduje takzvaný <em>terminologický server</em> — sdílené odborné slovníky (mezinárodní číselníky SNOMED CT a LOINC), které zaručí, že stejná diagnóza nebo stejný laboratorní test znamenají napříč všemi systémy přesně jednu a tutéž věc.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDigi2TbH">
+        <figcaption class="av-figure-h" id="avDigi2TbH">Tři „jazyky“ zdravotnických dat — kdy se používá který</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Standard</th>
+                <th scope="col">K čemu slouží</th>
+                <th scope="col">Kde se používá</th>
+                <th scope="col">Výhled</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">DASTA</th>
+                <td>domácí formát pro výměnu zdravotnických dat (laboratoře, žádanky, zprávy)</td>
+                <td>tradičně po celé ČR mezi ordinacemi, laboratořemi a nemocnicemi</td>
+                <td>udržuje se nejdéle do roku 2030, pak ústup</td>
+              </tr>
+              <tr>
+                <th scope="row">HL7 FHIR</th>
+                <td>moderní mezinárodní standard pro nové výměny dat přes API</td>
+                <td>nově budované služby v ČR i nový společný základ v EU</td>
+                <td>nastupující hlavní standard</td>
+              </tr>
+              <tr>
+                <th scope="row">HL7 CDA</th>
+                <td>zabalení celého dokumentu (zpráva, souhrn) pro přenos</td>
+                <td>přeshraniční sdílení dokumentů mezi zeměmi EU</td>
+                <td>nadále pro přeshraniční dokumenty</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NCEZ / MZ ČR (DASTA, národní interoperabilita), HL7 International (FHIR R4, CDA), eHealth Network (doporučení z 30. 3. 2023). Zjednodušený přehled — každý standard má řadu verzí a variant.</p>
+      </figure>
+
+      <h3>Páteř, ne sklad: integrované datové rozhraní</h3>
+
+      <p>
+        Teď navážeme na to, co zaznělo už v prvním dílu — a vysvětlíme to do hloubky. Česko záměrně <strong>nestaví centrální úložiště zdravotnické dokumentace</strong>, tedy žádný jeden obří sklad, kde by ležely kompletní záznamy všech občanů. Místo toho buduje <strong>integrované datové rozhraní</strong>: bezpečnou spojovací páteř, přes kterou si jednotliví poskytovatelé předají data teprve ve chvíli, kdy je potřeba. Odborně se takové architektuře říká „federovaná“ — místo jedné hromady je to síť propojených ostrovů.
+      </p>
+
+      <p>
+        Vaše data tedy zůstávají tam, kde vznikla: u praktického lékaře, v nemocnici, v laboratoři. Když je některý oprávněný lékař potřebuje, položí přes API dotaz (vzpomeňte na přepážku z první sekce) a dostane odpověď. Existuje sice i <strong>dočasné úložiště</strong>, ale plní jen velmi omezenou roli: krátkodobě podrží „zásilku“ dat — třeba zprávu připravenou k vyzvednutí jiným lékařem — a jakmile si ji adresát poprvé vyzvedne, role tohoto úložiště končí. Není to trvalý archiv, spíš výdejní box na zásilku.
+      </p>
+
+      <p>
+        Proč zrovna takhle, a ne pohodlnější „všechno na jedno místo“? Hlavní důvod je bezpečnost. Jedna obří databáze by byla nejlákavějším možným cílem útoku a zároveň jediným <em>kritickým bodem selhání</em> — kdyby vypadla nebo ji někdo prolomil, ohrozí to úplně všechno naráz. Síť rozprostřených, oddělených ostrovů dat je proti tomu mnohem odolnější: výpadek jednoho místa neshodí celý systém a útočník nezíská jedním průnikem kompletní záznamy celé země. Méně pohodlí pro stavitele, mnohem víc bezpečí pro pacienta.
+      </p>
+
+      <h3>Jak systém pozná, že u přepážky stojíte vy: digitální identita</h3>
+
+      <p>
+        U úřední přepážky se prokazujete občankou. V digitálním světě potřebujete totéž — jistotu, že u přepážky stojí opravdu ten, kdo tvrdí, že tam stojí. K tomu slouží <strong>NIA</strong>, tedy Národní identitní autorita (zřízená zákonem č. 250/2017 Sb. o elektronické identifikaci, spravuje ji Digitální a informační agentura). Je to jednotné, státem zaručené přihlášení: jednou ověřenou identitou se dostanete do mnoha různých služeb. Prakticky ji znáte pod jmény jako bankovní identita, eObčanka nebo Mobilní klíč eGovernmentu — to všechno jsou způsoby, jak se přes NIA bezpečně přihlásit.
+      </p>
+
+      <p>
+        S identitou souvisí ještě jedna tichá, ale důležitá změna. Dřív se ve zdravotnictví všechno vázalo na rodné číslo — jenže rodné číslo prozrazuje datum narození i pohlaví a používá se napříč celým státem, takže není ideální z hlediska soukromí. Zákon o elektronizaci proto zavádí <strong>bezvýznamový identifikátor</strong> pacienta: nic neprozrazující číslo, které slouží jen k jednoznačnému určení osoby v systému e-zdravotnictví. Obdobně dostávají vlastní identifikátor i zdravotničtí pracovníci. „Bezvýznamový“ znamená přesně to — z čísla samotného nikdo nic nevyčte, je to jen klíč k záznamu.
+      </p>
+
+      <h3>Kdo se mi díval do dat: kontrola a stopa</h3>
+
+      <p>
+        Otevřenost systému by byla k ničemu, kdybyste neměli přehled, kdo k vašim datům přistupuje. Proto každé nahlédnutí zanechává stopu v <strong>žurnálu činností</strong> — auditní stopě, do které se zapisuje, kdo a kdy se vám do záznamů díval. Stejně jako vám banka ukáže seznam plateb, systém e-zdravotnictví umožní zpětně zobrazit seznam přístupů k vašim zdravotnickým datům. Pokud něco nesedí, je to dohledatelné.
+      </p>
+
+      <p>
+        Druhým nástrojem kontroly je <strong>registr oprávnění</strong>. V něm jsou uložené vaše souhlasy a nesouhlasy — tedy kdo smí vaše data sdílet a vidět. Sami tak držíte v ruce nastavení toho, komu se přepážka otevře. Spolu se žurnálem činností tvoří dvojici, která mění logiku celého systému: nejde o to, že někde leží vaše data a vy doufáte v nejlepší, ale o to, že o každém přístupu existuje záznam a vy nad sdílením máte kontrolu.
+      </p>
+
+      <p>
+        A tím se dostáváme k otázce, kterou jsme zatím obešli: kdo to všechno vlastně provozuje? Co jsou ty „staré“ samostatné služby jako eRecept a co je nová centrální páteř <strong>NCEZ</strong> spuštěná v roce 2026? Přesně o těchto dvou vrstvách systému — a o tom, kdo za kterou zodpovídá — je celý <a href="clanek-digi-3-dve-vrstvy-ncez.html">třetí díl série</a>. Teď už ale víte to hlavní: API je přepážka, interoperabilita je společný jazyk a vaše data zůstávají u lékaře.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Slovníček k druhému dílu</div>
+      <h4 class="article-databox-h">Pět pojmů, které teď umíte vysvětlit kamarádovi</h4>
+      <ul class="article-databox-list">
+        <li><strong>API</strong> — dohodnutá „přepážka“ mezi dvěma programy, přes kterou si automaticky předají data podle pevných pravidel.</li>
+        <li><strong>interoperabilita</strong> — schopnost různých systémů si vzájemně rozumět; dohoda na společném formátu a jazyku dat.</li>
+        <li><strong>HL7 FHIR / DASTA</strong> — mezinárodní (FHIR) a domácí (DASTA) standard formátu zdravotnických dat; ČR přechází z DASTA na FHIR.</li>
+        <li><strong>integrované datové rozhraní</strong> — bezpečná spojovací páteř místo jednoho velkého skladu; data zůstávají u poskytovatelů.</li>
+        <li><strong>NIA</strong> — Národní identitní autorita: jednotné státem zaručené přihlášení (bankovní identita, eObčanka, Mobilní klíč eGovernmentu).</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Najedete-li v textu kurzorem na zvýrazněný odborný pojem, zobrazí se jeho krátká definice. Kompletní výklad najdete v <a href="glosar.html">glosáři</a>.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si to sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Standardy a interoperabilita</h5>
+        <ul class="article-sources-list">
+          <li><strong>NCEZ — standardy a interoperabilita</strong> — Národní centrum elektronického zdravotnictví, informace o DASTA, FHIR, terminologickém serveru a integrovaném datovém rozhraní. <a href="https://ncez.mzcr.cz/" target="_blank" rel="noopener">ncez.mzcr.cz ↗</a></li>
+          <li><strong>HL7 FHIR (verze R4)</strong> — oficiální specifikace mezinárodního standardu pro výměnu zdravotnických dat. <a href="https://hl7.org/fhir/R4/" target="_blank" rel="noopener">hl7.org/fhir/R4 ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní rámec a digitální identita</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví</strong> — integrované datové rozhraní, dočasné úložiště, žurnál činností, registr oprávnění, bezvýznamový identifikátor. <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>NIA / Identita občana</strong> — jednotné přihlášení ke státním službám (bankovní identita, eObčanka, Mobilní klíč eGovernmentu). <a href="https://www.identitaobcana.cz/" target="_blank" rel="noopener">identitaobcana.cz ↗</a></li>
+          <li><strong>Digitální a informační agentura (DIA)</strong> — správce Národní identitní autority. <a href="https://dia.gov.cz/" target="_blank" rel="noopener">dia.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Tento díl je vysvětlující a zjednodušující — používá analogie, aby byly technické principy srozumitelné laikovi. Konkrétní technické detaily (verze standardů, harmonogram přechodu z DASTA na HL7 FHIR, rozsah povinného nasazení) se průběžně vyvíjejí; roky uvedené jako výhled berte jako orientační.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+      <a class="article-nav-next" href="clanek-digi-3-dve-vrstvy-ncez.html">Díl 3: Dvě vrstvy a kdo co provozuje →</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
