@@ -20,6 +20,49 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'manifest');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
+// Datový kontrakt — pro „Související data" karty na substránkách čteme reálné
+// hodnoty indikátorů, ať čísla nikdy nedrift­ují oproti zbytku portálu.
+const INDICATORS = (() => {
+  const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  return Object.fromEntries((raw.indicators ?? []).map(i => [i.id, i]));
+})();
+
+// České formátování čísla (desetinná čárka).
+const cz = (n) => (n === null || n === undefined) ? '' : String(n).replace('.', ',');
+
+// Vyrenderuje sekci „Související data HSPA Monitoru" z pole id indikátorů.
+// Hodnoty + benchmark tahá z data/indicators.json (single source of truth).
+function renderDataSection(ids) {
+  if (!Array.isArray(ids) || !ids.length) return '';
+  const cards = ids.map(id => {
+    const ind = INDICATORS[id];
+    if (!ind) { console.warn(`  ⚠ indikátor ${id} nenalezen — karta přeskočena`); return ''; }
+    const b = ind.benchmark ?? {};
+    const benchParts = [];
+    if (b.oecd !== undefined && b.oecd !== null) benchParts.push(`OECD ${cz(b.oecd)}`);
+    if (b.eu !== undefined && b.eu !== null) benchParts.push(`EU ${cz(b.eu)}`);
+    const bench = benchParts.length ? benchParts.join(' · ') : `Zdroj: ${ind.source?.name ?? '—'}`;
+    const unit = ind.unit ? ` ${ind.unit}` : '';
+    return `
+        <a class="manifest-data-card" href="../indicator.html?id=${id}" data-indicator-id="${id}" data-indicator-domain="manifest">
+          <div class="manifest-data-card-id">${id}</div>
+          <div class="manifest-data-card-value">${cz(ind.value)}${unit}</div>
+          <div class="manifest-data-card-name">${ind.name}</div>
+          <div class="manifest-data-card-bench">${bench} · ${ind.year}</div>
+        </a>`;
+  }).filter(Boolean).join('');
+  if (!cards) return '';
+  return `
+    <section class="manifest-sub-section">
+      <div class="manifest-sub-section-kicker">Související data</div>
+      <h3 class="manifest-sub-section-h">Co k tomu říká HSPA Monitor</h3>
+      <p>Tato priorita se opírá o měřitelné indikátory. Hodnoty jsou živé — kliknutím se dostanete na detail indikátoru s trendem a metodikou.</p>
+      <div class="manifest-priority-data-grid">${cards}
+      </div>
+    </section>
+`;
+}
+
 const PRIORITIES = [
   {
     num: 1, slug: 'za-stejne-penize-vice-muziky',
@@ -96,6 +139,7 @@ const PRIORITIES = [
   {
     num: 4, slug: 'transparence',
     name: 'Transparence',
+    indicators: ['ehealth_adoption', 'spokojenost_informovani'],
     deck: 'Data o českém zdravotnictví vycházejí jako roční PDF — zpoždění, žádné srovnání, neauditovatelné. Pacient před zákrokem nemá srovnatelné informace o úspěšnosti, čekací době a kvalitě péče v jednotlivých zařízeních.',
     why: 'Co se neměří, nelze zlepšit. ÚZIS publikuje ročenky 1–2 roky zpožděně, KZP publikuje PUK ale na úrovni jen vybraných indikátorů, MZČR vydává koncepce bez ověřitelných dat. Lékař volá nemocnice po telefonu protože nezná aktuální kapacity. Pacient před plánovaným zákrokem rozhoduje na anekdotách.',
     quote: 'Co se měří, lze zlepšit. Co se neměří, zůstává v anekdotě.',
@@ -120,6 +164,7 @@ const PRIORITIES = [
   {
     num: 5, slug: 'dostupne-leky',
     name: 'Dostupné léky běžné i moderní',
+    indicators: ['vypadky_leciv_aktivni'],
     deck: 'Dostupnost léčiv v Česku má více vrstev nedostatků: nejednotné lékárny, neznámý doplatek předem, omezené pravomoci lékárníků, chybějící systematická politika orphan léků a 2 200 aktivních výpadků (vs 580 v 2019).',
     why: 'Léková dostupnost se za 7 let proměnila z přechodné anomálie ve strukturální slabost. SÚKL eviduje denně rostoucí počet hlášení o přerušení dodávek. 10–15 % postižených LP nemá v ČR registrovanou náhradu. Strukturální příčiny: globální (koncentrace výroby APIs v Asii) i domácí (malý trh, reexport, slabý Emergency Stock).',
     quote: 'Léky nejsou luxusní zboží. Strukturální výpadky znamenají, že systém přestal fungovat — a pacienti to vědí.',
@@ -194,6 +239,7 @@ const PRIORITIES = [
   {
     num: 8, slug: 'prevence-jako-standard',
     name: 'Prevence jako standard',
+    indicators: ['mortalita_kardiovaskularni', 'screening_kolorektalni', 'incidence_kolorektalni', 'kuractvi_denni', 'alkohol_spotreba'],
     deck: 'KV mortalita ČR 463/100k vs EU-27 313. Účast na kolorektálním screeningu 28 % vs OECD 42 %. Denní kuřáci 16,4 % vs OECD 14,8 %. Výdaje na prevenci rostou pětkrát pomaleji než léčebná péče.',
     why: 'Česko je v primární prevenci pod evropským průměrem. Důsledek: vysoká kardiovaskulární mortalita, pozdě zachycené nádory (akutní resekce kolorekta má 3× vyšší 90d mortalitu než elektivní), předčasné úmrtí mužů v produktivním věku. Reforma znamená posun investic z léčby do prevence — politicky neviditelné, populačně transformativní.',
     quote: 'Investice do prevence je neviditelná. Léčba následků je viditelná. Politici raději financují léčbu — voliči vidí výsledek. Reforma musí být dlouhodobá vize, ne kvartální PR.',
@@ -248,6 +294,7 @@ const PRIORITIES = [
   {
     num: 10, slug: 'data-a-informace',
     name: 'Data a informace ve službách pacienta',
+    indicators: ['ehealth_adoption', 'spokojenost_informovani'],
     deck: 'Index eHealth adoption ČR 62/100 vs OECD 70. Pacient přesouvaný mezi pracovišti nese papírovou dokumentaci. Lékař telefonuje kvůli volnému lůžku. Záchranná služba nemá v terénu zdravotní záznam.',
     why: 'Elektronizace, kterou Česko deklaruje 20 let, je v praxi úspěšná spíš v jednotlivostech (eRecept) než jako koherentní infrastruktura. Estonsko od 2008 má plnohodnotný národní eHealth. Dánsko sundhed.dk od 2003. Finsko Kanta. Česko stále řeší standardy a interoperabilitu.',
     quote: 'Elektronizace zdravotnictví je infrastruktura. Ne projekt na jedno volební období — investice na 15–20 let.',
@@ -325,6 +372,7 @@ const PRIORITIES = [
   {
     num: 13, slug: 'dusevni-zdravi',
     name: 'Dostupná péče o duševní zdraví',
+    indicators: ['sebevrazdy_per_100k', 'pouzivani_antidepresiv'],
     deck: 'Sebevražednost ČR 12,5/100k vs OECD 11. Antidepresíva 84 DDD/1000/den vs OECD 67 — léky se předepisují, systém péče ne. Center duševního zdraví je málo, jejich pokrytí nerovnoměrné, personál malý.',
     why: 'Reforma psychiatrické péče běží od 2013, vznikla síť Center duševního zdraví, ale jejich pokrytí je nerovnoměrné. Psychoterapie není zákonem definovaná profese, takže pojištění hradí nesystematicky. Děti a mladiství mají nejhorší dostupnost.',
     quote: 'Antidepresíva nejsou náhrada za systém. Léky se v Česku předepisují víc než v OECD, ale dostupnost terapie zaostává.',
@@ -418,7 +466,7 @@ function renderPage(p) {
       <p>${p.why}</p>
       <blockquote class="manifest-sub-pullquote">${p.quote}</blockquote>
     </section>
-
+${renderDataSection(p.indicators)}
     <section class="manifest-sub-section">
       <div class="manifest-sub-section-kicker">Konkrétní opatření</div>
       <h3 class="manifest-sub-section-h">Co konkrétně udělat</h3>

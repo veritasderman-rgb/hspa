@@ -12660,9 +12660,10 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
 .manifest-why-card > summary:hover { background: var(--paper2); }
 .manifest-why-card[open] > summary:hover { background: var(--paper); }
 .manifest-why-icon {
-  font-size: 18px;
-  line-height: 1;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
+  color: var(--red);
 }
 .manifest-why-summary {
   flex: 1 1 auto;
@@ -13097,19 +13098,26 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
   margin: 0 0 18px;
   max-width: 64ch;
 }
-.manifest-deep-dive-cta {
+/* Scopnuto pod .manifest-deep-dive, aby přebilo .article-body a (specificita
+   0,2,0 > 0,1,1) — jinak link zdědí color:var(--ink) a text na tmavém
+   tlačítku zmizí (viditelný až při :hover). */
+.manifest-deep-dive .manifest-deep-dive-cta,
+.manifest-deep-dive .manifest-deep-dive-cta:visited {
   display: inline-block;
-  padding: 12px 22px;
-  background: #1a1a1a;
+  padding: 12px 24px;
+  background: var(--red);
   color: #fff;
   font-family: var(--font-ui, 'Inter', sans-serif);
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
   border-radius: 8px;
-  transition: background .15s ease, transform .15s ease;
+  box-shadow: 0 2px 6px rgba(184,54,30,.22);
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
 }
-.manifest-deep-dive-cta:hover {
-  background: #c89b3c;
+.manifest-deep-dive .manifest-deep-dive-cta:hover {
+  background: #962a16;
+  color: #fff;
   transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(184,54,30,.30);
 }

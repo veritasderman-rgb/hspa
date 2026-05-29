@@ -30,6 +30,10 @@ function injectAiDisclaimer() {
 
   const isHub = !!document.getElementById('articleList');
   const isArticle = !!document.querySelector('article.article-page');
+  // Manifest je politický text autorů (Pavlovic, Malíková, ČPS), ne text psaný
+  // Claudem — AI disclaimer „Tento článek nepíše člověk" sem nepatří.
+  const isManifest = !!document.querySelector('article.article-page-manifest');
+  if (isManifest) return;
 
   if (isHub) {
     // Vložit nad sekci "Doporučujeme — Začněte tady" (.hub-featured-section)
