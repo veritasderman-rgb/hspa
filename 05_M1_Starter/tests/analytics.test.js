@@ -29,7 +29,22 @@ function setupMockDom({ hostname = 'example.com', protocol = 'https:' } = {}) {
     location: { hostname, protocol, host: hostname, origin: `${protocol}//${hostname}`, pathname: '/test.html' },
     dataLayer,
     gtag(...args) { gtagCalls.push(args); dataLayer.push(args); },
+    addEventListener() {},
+    innerHeight: 800,
+    scrollY: 0,
   };
+  // requestAnimationFrame mock — sync
+  globalThis.requestAnimationFrame = (cb) => { cb(0); return 0; };
+  globalThis.setTimeout = (cb, ms) => { /* no-op for tests, prevent dwell timer */ return 0; };
+  globalThis.IntersectionObserver = class {
+    constructor() {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  documentMock.documentElement = { scrollHeight: 2000 };
+  documentMock.querySelectorAll = () => [];
+  documentMock.querySelector = () => null;
   globalThis.document = documentMock;
 
   return { listeners, gtagCalls, dataLayer };
@@ -131,6 +146,27 @@ test('trackEvent — volá window.gtag s eventem', async () => {
   assert.equal(eventCalls.length, 1);
   assert.equal(eventCalls[0][1], 'indicator_click');
   assert.equal(eventCalls[0][2].indicator_id, 'foo');
+  restoreDom();
+});
+
+test('Úroveň 2: SCROLL_THRESHOLDS jsou 25/50/75/100', async () => {
+  setupMockDom();
+  const mod = await import('../src/analytics.js?t=' + Date.now());
+  assert.deepEqual(mod.__test__.SCROLL_THRESHOLDS, [25, 50, 75, 100]);
+  restoreDom();
+});
+
+test('Úroveň 2: ARTICLE_READ_THRESHOLD je 80 %', async () => {
+  setupMockDom();
+  const mod = await import('../src/analytics.js?t=' + Date.now());
+  assert.equal(mod.__test__.ARTICLE_READ_THRESHOLD, 80);
+  restoreDom();
+});
+
+test('Úroveň 2: ARTICLE_DWELL_MS je 30 s (30000)', async () => {
+  setupMockDom();
+  const mod = await import('../src/analytics.js?t=' + Date.now());
+  assert.equal(mod.__test__.ARTICLE_DWELL_MS, 30_000);
   restoreDom();
 });
 
