@@ -12365,3 +12365,136 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
   .cq-section-h { font-size: 22px; }
   .cq-heatmap-grid { grid-template-columns: 110px repeat(8, minmax(48px, 1fr)); }
 }
+
+/* =================================================================
+   Analytics public dashboard — sekce "Co lidé na portálu čtou"
+   v o-projektu.html. Renderuje src/analytics-public.js.
+   ================================================================= */
+.analytics-public-wrap { margin: 18px 0 6px; }
+.apub-empty {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-mut);
+  background: var(--paper2);
+  padding: 18px 22px;
+  border-left: 3px solid var(--ink-mut);
+  border-radius: 2px;
+  margin: 0;
+  max-width: 720px;
+}
+.apub-empty a { color: var(--ink); }
+.apub-empty-small {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut2, #8b8278);
+  margin: 0;
+  padding: 8px 0;
+}
+.apub-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding: 0 0 12px;
+  border-bottom: 1px dashed var(--rule);
+}
+.apub-meta strong { color: var(--ink); }
+
+.apub-trend {
+  margin: 14px 0 22px;
+  padding: 12px 16px 10px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.apub-trend-caption {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 4px 0 0;
+}
+.apub-trend-caption strong { color: var(--ink); }
+
+.apub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin: 4px 0 0;
+}
+.apub-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 16px 18px 16px;
+  border-radius: 2px;
+  border-top: 3px solid var(--ink);
+}
+.apub-card-h {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.apub-card-desc {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+  letter-spacing: 0.01em;
+}
+
+.apub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: apub-rank;
+}
+.apub-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.apub-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.apub-rank {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-mut2, #8b8278);
+  text-align: right;
+}
+.apub-item {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.apub-link { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.apub-link:hover { color: var(--red); }
+.apub-sublabel {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--ink-mut);
+  margin-top: 2px;
+}
+.apub-value {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 480px) {
+  .apub-grid { grid-template-columns: 1fr; }
+  .apub-card { padding: 14px 14px 14px; }
+}

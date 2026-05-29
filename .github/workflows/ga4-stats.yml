@@ -1,0 +1,63 @@
+name: GA4 stats refresh
+
+# Denně v 06:15 UTC stáhne agregované statistiky z GA4 Data API
+# a commitne data/analytics-public.json zpět do repa. Vercel se
+# po pushi sám rebuildne — sekce "Co lidé na portálu čtou" v
+# o-projektu.html se aktualizuje.
+#
+# Setup (jednorázový):
+#   1. Vytvořit Service Account v Google Cloud Console
+#   2. Stáhnout JSON klíč → GitHub Secret GA_SERVICE_ACCOUNT_KEY
+#   3. V GA Admin → Account Access → přidat sa-email jako Viewer
+#   4. Property ID → GitHub Secret GA_PROPERTY_ID
+#
+# Pokud secrets nejsou nastaveny, script vrátí exit 0 bez změn —
+# workflow projde, žádný commit se neudělá. Tím se neblokujeme
+# v early-stage období před setup.
+
+on:
+  schedule:
+    - cron: '15 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install deps
+        working-directory: 05_M1_Starter
+        run: npm ci --no-audit --no-fund
+
+      - name: Fetch GA4 stats
+        working-directory: 05_M1_Starter
+        env:
+          GA_SERVICE_ACCOUNT_KEY: ${{ secrets.GA_SERVICE_ACCOUNT_KEY }}
+          GA_PROPERTY_ID: ${{ secrets.GA_PROPERTY_ID }}
+          GA_PERIOD_DAYS: '7'
+        run: node scripts/fetch-ga4-stats.js
+
+      - name: Commit changes
+        run: |
+          cd 05_M1_Starter
+          if git diff --quiet -- data/analytics-public.json; then
+            echo "No changes — script skipped or no new data."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/analytics-public.json
+            git commit -m "data: GA4 stats refresh ($(date -u +%Y-%m-%d))"
+            git push
+          fi

@@ -531,6 +531,16 @@
       </p>
     </section>
 
+    <section class="ed-about-block" id="co-lide-na-portalu-ctou">
+      <h3>Co lidé na portálu čtou</h3>
+      <p>
+        Otevřená meta-transparentnost: portál pravidelně publikuje, jak je sám čten. Data se denně aktualizují z Google Analytics 4 přes <a href="https://github.com/veritasderman-rgb/hspa/blob/main/.github/workflows/ga4-stats.yml" target="_blank" rel="noopener">GitHub Action cron</a> a ukládají do <a href="https://github.com/veritasderman-rgb/hspa/blob/main/05_M1_Starter/data/analytics-public.json" target="_blank" rel="noopener"><code>data/analytics-public.json</code> ↗</a>. Žádné osobní údaje — jen agregovaná čísla.
+      </p>
+      <div class="analytics-public-wrap" id="analyticsPublicSlot" aria-live="polite">
+        <p class="apub-empty-small">Načítám statistiky…</p>
+      </div>
+    </section>
+
     <section class="ed-about-block">
       <h3>Governance a editorial policy</h3>
       <p>
@@ -607,6 +617,7 @@
 
 <script type="module">
   import './src/analytics.js';
+  import './src/analytics-public.js';
   import { renderModuleNav, renderMastheadDate } from './src/page-shared.js';
   renderModuleNav('about');
   renderMastheadDate();
