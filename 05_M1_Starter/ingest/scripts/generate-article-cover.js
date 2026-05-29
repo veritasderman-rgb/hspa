@@ -89,6 +89,7 @@ const TAG_DIMENSIONS = {
   'Dostupnost': { color: '#2c5a8a', label: 'Dostupnost' },
   'Dostupnost péče': { color: '#2c5a8a', label: 'Dostupnost péče' },
   'Digitalizace': { color: '#2c5a8a', label: 'Digitalizace' },
+  'Digitalizace · série': { color: '#2c5a8a', label: 'Digitalizace' },
   'Pracovní síla': { color: '#a36728', label: 'Pracovní síla' },
 };
 
