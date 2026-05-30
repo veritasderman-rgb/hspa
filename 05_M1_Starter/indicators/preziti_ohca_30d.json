@@ -1,0 +1,47 @@
+{
+  "id": "preziti_ohca_30d",
+  "name": "Přežití po mimonemocniční zástavě srdce",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Záchrana akutních stavů",
+  "definition": "Podíl pacientů resuscitovaných zdravotnickou záchrannou službou (ZZS) po zástavě oběhu mimo nemocnici (OHCA — out-of-hospital cardiac arrest) z kardiální příčiny, kteří byli propuštěni živí z nemocnice. Jmenovatel = všechna OHCA s pokusem o resuscitaci ZZS; čitatel = propuštění z nemocnice (survival to discharge; proxy pro 30denní přežití v domácím reportingu).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "cra_register",
+      "endpoint": "https://www.resuscitace.cz/publikace/",
+      "note": "Česká resuscitační rada (ČRA) publikuje roční zprávy OHCA v ČR v Utstein-style formátu. Rok 2022 je poslední kompletní referenční rok s regionálním rozpadem. ČRA sbírá data od krajských ZZS prostřednictvím AZZS ČR."
+    },
+    "fallback": {
+      "type": "azzs",
+      "url": "https://www.azzs.cz/dokumenty/zdravotnicke-zachranne-sluzby-v-cr-v-cislech",
+      "note": "AZZS ČR publikuje v rámci 'ZZS v číslech' krajské agregáty výjezdů ZZS včetně OHCA a KPR statistik. Sekundární zdroj konzistentní s ČRA daty."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "OHCA_SURV",
+    "dataset": "HEALTH_STAT",
+    "value": 12.8,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance_19991312.html",
+    "note": "OECD Health at a Glance 2023 — 'Survival from out-of-hospital cardiac arrest'. Průměr za referenční rok 2021 pro reportující země (N=18). EU průměr 10,6 %."
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČRA (Česká resuscitační rada)",
+    "AZZS ČR",
+    "MZČR"
+  ],
+  "method_notes": "Indikátor sleduje přežití do propuštění z nemocnice (survival to discharge), nikoli přežití bez neurologické újmy (CPC 1–2). OECD 30denní přežití a domácí 'propuštění z nemocnice' nejsou definičně totožné — reálná mezera může být o 1–2 procentní body menší. Srovnatelnost mezi zeměmi je omezena rozdílnými registračními standardy (Utstein reportující vs. non-reportující systémy) a zahrnutím resuscitací bez srdeční příčiny. ČR sbírá data od roku 2018 prostřednictvím krajských ZZS — kvalita registrace je mezi kraji heterogenní.",
+  "limitations": "1. Nezahrnuje OHCA, u nichž záchranáři resuscitaci nezahájili (pronouncing dead on scene — jmenovatel jsou pouze 'attempted resuscitations', nikoli všechna OHCA). 2. Neurologický výsledek (Cerebral Performance Category, CPC 1–2) není v domácím registru standardně sledován na úrovni propuštění. 3. Meziroční srovnání zkresluje změna registračních protokolů a postupné zavádění automatizovaného sběru dat v krajích. 4. Hodnota roku 2020 je ovlivněna pandemií COVID-19 — zvýšená mortalita OHCA a zpožděné volání 155.",
+  "determinants": "**Laická resuscitace.** Podíl OHCA s bystander CPR je klíčovým prediktorem přežití — každá minuta bez srdeční masáže snižuje šanci na přežití o 7–10 %. V ČR je bystander CPR zahájena u méně než 30 % OHCA; v Norsku, Dánsku a Japonsku přesahuje 60–70 %. Rozšíření CPR vzdělání ve školách, firmách a v rámci preventivních prohlídek je prokazatelně efektivní intervence.\n\n**Hustota a dostupnost AED.** Automatické externí defibrilátory (AED) umožňují podání defibrilačního výboje dříve, než dorazí ZZS. Japonsko (~4 AED / 10 000 obyvatel) a skandinávské země (~2–3 AED / 10 000) mají výrazně vyšší hustotu než ČR (~0,8 AED / 10 000). Registr AZZS 'Kde je AED?' je dobrovolný a neúplný — chybí povinná registrace AED na veřejných místech.\n\n**Dojezdový čas ZZS.** Čas od kolapsu do první defibrilace je rozhodující. Dojezd ZZS (viz indikátor dojezd_zzs) k 94,2 % výjezdů do 20 minut splňuje zákonný standard, ale pro OHCA je kritická i první minuta — v níž laik s AED může nahradit ZZS. Pro přežití záleží na každé minutě: při 5 minutách bez KPR klesá šance na přežití ke 40 % výchozí hodnoty, při 10 minutách pod 10 %.\n\n**Kompetence ZZS posádek a vybavení.** Implementace aktuálních ERC guidelines (vydání 2021), mechanická KPR (LUCAS), ECMO-CPR u refraktérní OHCA v specializovaných centrech — tyto vrstvy zvyšují přežití v systémech s vysokým výkonem. V ČR je mechanická KPR zavedena ve větších ZZS, ale pokrytí a protokoly nejsou uniformní.\n\n**Telefonicky asistovaná CPR (T-CPR).** Instrukce operátora ZOS svědkovi k masáži před příjezdem ZZS — standardní praxe v ČR, ale míra úspěšného zahájení laické CPR na základě telefonické instrukce není národně auditována.",
+  "importance": "OHCA je třetí nejčastější příčina kardiovaskulární smrti v ČR (po akutním infarktu myokardu a cévní mozkové příhodě). Ročně se v Česku pokusí ZZS o resuscitaci přibližně 7 800 osob po OHCA. Při přežití 9,4 % přežije ~730 osob ročně — každé zvýšení o 1 procentní bod zachrání ~78 lidí. Při dosažení OECD průměru (12,8 %) by přežilo ~1 000 osob ročně, tedy o 270 více než dnes.\n\nIndikátor je klinicky citlivý: přijatelná zlepšení jsou dosažitelná za 3–5 let zaměřením na laické CPR vzdělání a AED dostupnost bez nutnosti budovat novou infrastrukturu. Slouží jako benchmark pro hodnocení programů ZZS a výkonnosti urgentní kardiologie.\n\nPro systémové reformy je indikátor relevantní v kontextu plánované revize zákona 374/2011 Sb. o zdravotnické záchranné službě (MZČR 2026–2027), která může zakotvit AED povinnosti pro veřejné prostory. Propojuje se s dojezdovým časem ZZS (dojezd_zzs) a nemocniční AMI mortalitou (mortalita_inhosp_ami) jako kontinuum kardiovaskulárního záchranného řetězce.",
+  "patient_story": "Ostrava, pátek večer. Jiří Novák (54), technik v hutním závodě, zkolabuje při závodě na kolech na cyklostezce podél Odry. Svědek situace volá 155. Dispečer ZZS MSK aktivuje nejbližší výjezdovou skupinu z Ostravy-Poruby. Za osm minut je posádka na místě — do akce ale zapojí svědka ihned: telefonicky ho instruuje k zahájení nepřímé srdeční masáže a přivolá dobrovolníka s automatickým defibrilátorem (AED) z nedaleké sportovní haly. Do příjezdu ZZS probíhá pět minut laická resuscitace.\n\nPřežití po mimonemocniční zástavě srdce v ČR je 9,4 % (ČRA/AZZS 2022, přežití do propuštění z nemocnice). OECD průměr za rok 2021 je 12,8 %, průměr EU 10,6 %. Signal: bad. Ročně se v Česku pokusí ZZS o resuscitaci přibližně 7 800 osob po OHCA — přežít a být propuštěn z nemocnice se podaří okolo 730 z nich. V roce 2020 hodnota klesla na 6,7 % — kombinace nárůstu OHCA a zpožděného volání 155 v době pandemie COVID-19. Od roku 2021 opět mírně stoupá.\n\nStrukturálně ČR ztrácí ve třech oblastech. Za prvé, podíl OHCA resuscitovaných laicky (bez ZZS) je pod 30 % — v zemích s vysokým přežitím (Norsko ~60 %, Dánsko ~65 %) laici resuscitují více než polovinu postižených a prodlužují 'resuscitovatelné okno'. Za druhé, hustota AED mimo nemocnice: Japonsko má ~4 AED / 10 000 obyvatel, ČR přibližně 0,8. Za třetí, registr AZZS 'Kde je AED?' existuje, ale pokrytí je dobrovolné a neúplné — chybí zákonná povinnost registrace AED na veřejných místech.\n\nPolitické páky jsou konkrétní. Zákon č. 65/2017 Sb. zavedl povinné školení první pomoci v autoškolách — ale ne ve firmách, školách ani v rámci preventivních prohlídek u praktika. Rozšíření povinného školení CPR a sítě AED na veřejných místech (nádraží, stadiony, nákupní centra) financované z pojišťovenských nebo obecních prostředků by mohlo statistiky přežití posunout k EU průměru do čtyř let. Kompetencí má MZČR (zákon o ZZS 374/2011 Sb.), metodika je připravena ČRA (Českou resuscitační radou), chybí finanční závazek.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
