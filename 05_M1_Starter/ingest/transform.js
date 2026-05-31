@@ -674,6 +674,14 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     ...(card.deep_dive ?? seed?.deep_dive
       ? { deep_dive: card.deep_dive ?? seed.deep_dive }
       : {}),
+    // Verifikační stav indikátoru (z metodické karty, fallback seed) — frontend
+    // (indicator.js) z něj renderuje odznak „ověřeno / předběžné / ilustrativní".
+    ...((card.verification_status ?? seed?.verification_status)
+      ? { verification_status: card.verification_status ?? seed.verification_status }
+      : {}),
+    ...((card.verified_at ?? seed?.verified_at)
+      ? { verified_at: card.verified_at ?? seed.verified_at }
+      : {}),
   };
 }
 
