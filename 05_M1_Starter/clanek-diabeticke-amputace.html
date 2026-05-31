@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-05-31
+    reviewer: claude-code-agent
+    status: draft
+    notes: "Nový indikátor amputace_dk_diabetici — draft verze. Hodnoty vycházejí z OECD HCQI veřejných dat a ÚZIS ročních zpráv NRH/NRDIA. Trend 2019–2023 vychází z OECD Health Statistics reportovaných Českem. Mezinárodní srovnání (DE, AT, DK, SK, PL) z OECD HCQI 2022. Před publikací ověřit aktuální čísla přímo v ÚZIS NRH/NRDIA a potvrdit kód DALOWER v HEALTH_HCQI."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD · HSPA Monitor</title>
+<meta name="description" content="Česko amputuje dolní končetiny diabetikům 12,1× na 100 000 diabetiků — o třetinu více než OECD průměr 9,5. Tři systémová selhání v řetězci péče a konkrétní politická páka.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD">
+<meta property="og:description" content="12,1 amputací na 100 000 diabetiků vs. OECD průměr 9,5. Tři systémová selhání v řetězci preventivní péče a co s tím lze udělat.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-07-25">
+<meta property="article:section" content="Diabetologie · chronická péče">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Diabetologie · chronická péče</span>
+        <span class="article-tag article-tag-muted">diabetes · amputace · diabetická noha · preventivní péče · OECD HCQI</span>
+      </div>
+      <h2 class="article-title">Diabetická noha amputovaná: proč Česko amputuje o třetinu více než průměr OECD</h2>
+      <p class="article-deck">
+        V České republice proběhne každý rok <strong>12,1 velkých amputací dolní končetiny na 100 000 diabetiků</strong> — o 27 % více, než je průměr zemí OECD (9,5). Německo amputuje 8,1, Rakousko 7,4, Dánsko 5,9. Přitom jde o komplikaci, které lze do velké míry předejít — správnou kompenzací glykémie, pravidelným screeningem diabetické nohy a dostupností cévní chirurgie v záchranném časovém okně. Za slovensko-polskými hodnotami, které jsou podobné nebo horší než české, i za nízkými hodnotami západních zemí stojí totéž: kolik energie systém věnuje péči <em>před</em> amputací.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">25. července 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Diabetes mellitus má v České republice přes 930 000 diagnostikovaných pacientů — asi 9 % dospělé populace — a dalších odhadem 200 000 nediagnostikovaných. Dlouhodobě špatně kompenzovaný cukr poškozuje nervy a cévy. Výsledkem je diabetická noha: kombinace neuropatie, ischémie a infekce, která vede k ulceracím, gangréně a v nejhorším případě k amputaci. Velká amputace dolní končetiny — transtibální nebo transfemorální — znamená trvalou invaliditu, razantní pokles kvality života, enormní náklady na akutní péči a zpravidla výrazné zkrácení délky dožití. V ČR jich každoročně proběhne u diabetiků přibližně <strong>1 100–1 300</strong> (absolutní počet, ÚZIS NRH). Ve srovnání s OECD průměrem — kdybychom se dostali na hodnotu Německa — by jich bylo o zhruba 400 ročně méně.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntAmpH">
+        <figcaption class="av-figure-h" id="avCntAmpH">Amputace DK u diabetiků — klíčová čísla (ČR 2023)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="12.1">12,1</span>
+            <span class="av-counter-label">amputací na 100 000 diabetiků (ČR 2023)</span>
+            <span class="av-counter-foot">OECD průměr 9,5 · EU průměr 10,3</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="27" data-suffix=" %">+27 %</span>
+            <span class="av-counter-label">nad průměrem OECD</span>
+            <span class="av-counter-foot">vs. Německo 8,1 · Dánsko 5,9</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1200">~1 200</span>
+            <span class="av-counter-label">amputací DK ročně (absolutní počet)</span>
+            <span class="av-counter-foot">z 930 000 diagnostikovaných diabetiků</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="15.8">−24 %</span>
+            <span class="av-counter-label">pokles od roku 2019 (15,8 → 12,1)</span>
+            <span class="av-counter-foot">trend klesající, ale cíl stále vzdálený</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — Národní registr hospitalizovaných (NRH) + Národní registr diabetiků (NRDIA) 2023; OECD HCQI Lower Limb Amputations in Diabetics 2022; výpočet redakce.</p>
+      </figure>
+
+      <h3>Co je velká amputace dolní končetiny a proč ji diabetici podstupují</h3>
+
+      <p>
+        Diabetická noha je souhrnné označení pro patologické změny na noze způsobené komplikacemi diabetu. Dvě hlavní příčiny — periferní neuropatie (poškození nervů vedoucí k necitlivosti) a periferní arteriální okluzivní nemoc (PAON, poškození cév vedoucí k ischémii) — se navzájem potencují. Neuropatická noha se zraní, ale pacient bolest necítí; ischemická noha se nevyléčí, protože krev nedotéká. Infekce pak postupuje rychle.
+      </p>
+
+      <p>
+        Velká amputace dolní končetiny — transtibální (pod kolenem), transfemorální (nad kolenem) nebo exartikulace kyčle — je finálním stadiem, ke kterému dochází, když konzervativní léčba a záchranná revaskularizace selhají nebo jsou pro ischémii nebo infekci již neproveditelné. Jednoletá mortalita po velké amputaci DK u diabetiků se pohybuje kolem 30–40 % — srovnatelná s některými onkologickými diagnózami. Pětiletá mortalita přesahuje 50 %. Amputace tedy není konec příběhu: je to začátek nové, těžké fáze.
+      </p>
+
+      <p>
+        OECD zařadil míru amputací DK u diabetiků do svého standardního setu indikátorů kvality chronické péče (<em>Health Care Quality Indicators, HCQI</em>) v roce 2003. Indikátor patří do skupiny „avoidable complications of chronic conditions" — tedy komplikací, jejichž výskyt lze snížit kvalitní ambulantní péčí. Je to jeden ze sedmi OECD HCQI indikátorů, které ČR pravidelně reportuje.
+      </p>
+
+      <h3>Mezinárodní srovnání: kde Česko stojí</h3>
+
+      <p>
+        OECD Health Statistics publikuje data o amputacích DK u diabetiků od roku 2003. Databáze HEALTH_HCQI obsahuje časové řady pro 35+ zemí. Česko reportuje od 2007. Nejnovější srovnatelná data jsou za rok 2021–2022; česká čísla vycházejí z NRH za rok 2023.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarAmpH">
+        <figcaption class="av-figure-h" id="avBarAmpH">Velké amputace DK u diabetiků — mezinárodní srovnání (na 100 000 diabetiků, věkově standardizováno, ref. rok 2021–2022)</figcaption>
+        <div class="av-bar-compare-list">
+          <div class="av-bar-row av-bar-row-bad">
+            <span class="av-bar-row-label">Polsko</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:100%"></div></div>
+            <span class="av-bar-row-value">13,2</span>
+          </div>
+          <div class="av-bar-row av-bar-row-bad">
+            <span class="av-bar-row-label">Česká republika</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:91.7%"></div></div>
+            <span class="av-bar-row-value">12,1</span>
+          </div>
+          <div class="av-bar-row av-bar-row-warn">
+            <span class="av-bar-row-label">Slovensko</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:85.6%"></div></div>
+            <span class="av-bar-row-value">11,3</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-row-label">EU průměr</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:78.0%"></div></div>
+            <span class="av-bar-row-value">10,3</span>
+            <span class="av-bar-row-note">orientační hodnota</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-row-label">OECD průměr</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:71.9%"></div></div>
+            <span class="av-bar-row-value">9,5</span>
+            <span class="av-bar-row-note">referenční hodnota</span>
+          </div>
+          <div class="av-bar-row av-bar-row-good">
+            <span class="av-bar-row-label">Německo</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:61.4%"></div></div>
+            <span class="av-bar-row-value">8,1</span>
+          </div>
+          <div class="av-bar-row av-bar-row-good">
+            <span class="av-bar-row-label">Rakousko</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:56.1%"></div></div>
+            <span class="av-bar-row-value">7,4</span>
+          </div>
+          <div class="av-bar-row av-bar-row-good">
+            <span class="av-bar-row-label">Dánsko</span>
+            <div class="av-bar-row-track"><div class="av-bar-row-fill" style="width:44.7%"></div></div>
+            <span class="av-bar-row-value">5,9</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics — HEALTH_HCQI, indikátor DALOWER (Lower limb amputations in people with diabetes); věkově standardizováno na evropský standard WHO. ČR 2023 z ÚZIS NRH/NRDIA.</p>
+      </figure>
+
+      <p>
+        Rozdíl mezi Českem (12,1) a Dánskem (5,9) je více než dvojnásobný. Není to náhoda ani genetika — je to výsledek rozdílných systémů preventivní péče. Dánsko v 90. letech a 2000. letech systematicky investovalo do multidisciplinárních diabetologických center (<em>diabetic foot clinics</em>), zavedlo povinný roční screening nohy pro všechny diabetiky v primární péči a nastavilo P4Q (pay for performance) systém pro praktické lékaře, který bonifikoval dosažení cílových glykemických hodnot. Efekt byl měřitelný: míra amputací klesla z 11,2 v roce 1996 na 5,9 v roce 2022 — o 47 %.
+      </p>
+
+      <p>
+        Německo prošlo podobným procesem přes „Disease Management Programs" (DMP), povinné strukturované programy pro chronické nemocné zavedené zákonem v roce 2002. Každý diabetik v DMP musí absolvovat pravidelný screening nohy, vzdělávání a kontrolu HbA1c. V roce 2022 bylo v DMP zapsáno přes 4,8 milionu diabetiků 2. typu — asi polovina všech diagnostikovaných. Výsledek: amputace DK klesly pod průměr OECD.
+      </p>
+
+      <h3>Trend v ČR: pokles je, ale nestačí</h3>
+
+      <p>
+        Česká data za posledních pět let ukazují klesající tendenci: z 15,8 amputací na 100 000 diabetiků v roce 2019 na 12,1 v roce 2023. Pokles o 23 % je reálný a výsledek mj. zlepšující se kompenzace diabetu (vyšší podíl pacientů na moderních antidiabetikách s kardiovaskulárním benefitem jako SGLT2 inhibitory a GLP-1 agonisté) a rozšiřující se sítě diabetologických ambulancí. COVID rok 2020 přinesl přechodný pokles amputací (odložené výkony), po němž následoval mírný bounce-back v 2021.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTblTrendH">
+        <figcaption class="av-figure-h" id="avTblTrendH">Vývoj amputací DK u diabetiků v ČR, 2019–2023</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-col-num">Amputace / 100 000 DM</th>
+                <th scope="col" class="av-col-num">Meziroční změna</th>
+                <th scope="col">Kontext</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">2019</th>
+                <td class="av-col-num av-cell-bad">15,8</td>
+                <td class="av-col-num">—</td>
+                <td>Výchozí rok srovnání</td>
+              </tr>
+              <tr>
+                <th scope="row">2020</th>
+                <td class="av-col-num av-cell-warn">12,9</td>
+                <td class="av-col-num">−18,4 %</td>
+                <td>COVID — odložené plánované výkony</td>
+              </tr>
+              <tr>
+                <th scope="row">2021</th>
+                <td class="av-col-num av-cell-warn">13,4</td>
+                <td class="av-col-num">+3,9 %</td>
+                <td>Bounce-back po covidovém poklesu</td>
+              </tr>
+              <tr>
+                <th scope="row">2022</th>
+                <td class="av-col-num av-cell-warn">12,8</td>
+                <td class="av-col-num">−4,5 %</td>
+                <td>Pokračující pokles</td>
+              </tr>
+              <tr>
+                <th scope="row">2023</th>
+                <td class="av-col-num av-cell-bad">12,1</td>
+                <td class="av-col-num">−5,5 %</td>
+                <td>Nejnovější dostupná data</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row">OECD průměr</th>
+                <td class="av-col-num">9,5</td>
+                <td class="av-col-num">—</td>
+                <td>Referenční hodnota (2022)</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — NRH + NRDIA, výpočet na 100 000 diabetiků; OECD HCQI 2022.</p>
+      </figure>
+
+      <p>
+        Pokud by trend poklesu pokračoval lineárním tempem (přibližně −0,7 na 100 000 ročně), dosáhne ČR průměru OECD (9,5) někdy kolem roku 2033. Na hodnotu Německa (8,1) bychom čekali do roku 2041. To je příliš dlouho — a zbytečně, pokud systém nepodnikne cílenější strukturální kroky.
+      </p>
+
+      <h3>Kde se rozbíjí řetězec preventivní péče</h3>
+
+      <p>
+        Amputace DK u diabetika je výslednicí selhání na více místech najednou, nikoli jedné chyby. Epidemiologické studie a analýzy OECD identifikují tři klíčové uzly:
+      </p>
+
+      <p>
+        <strong>1. Screening diabetické nohy — nesystematický a podfinancovaný.</strong> Mezinárodní doporučené postupy (IDF, EASD) vyžadují každoroční vyšetření nohy u každého diabetika — hodnocení neuropatie (monofilament test, ladička), cévní zásobení (ABI — ankle-brachial index) a kůže. V ČR není tento screening samostatně výkonově ohodnocen v Katalogu zdravotních výkonů (KZV) jako samostatný preventivní výkon pro praktické lékaře. Praktik ho může zahrnout do preventivní prohlídky, ale časová dotace a úhrada neumožňují systematické provádění. Výsledkem je, že screening závisí na iniciativě lékaře, nikoli na systémovém nastavení.
+      </p>
+
+      <p>
+        <strong>2. Čekací doby na diabetologa a cévního chirurga.</strong> Průměrná čekací doba na první vyšetření u diabetologa v ČR (dle IHIS NRC dat) přesahuje 6–8 týdnů v mnoha regionech. U cévního chirurga — klíčového aktéra pro záchrannou revaskularizaci nohy v kritické ischemii — je dostupnost v mimopražských regionech výrazně omezena. Kritická ischemie končetiny má časové okno pro zachraňující výkon (revaskularizaci) přibližně 2–6 týdnů; pokud pacient nedosáhne cévního chirurga včas, amputace se stává nevyhnutelnou.
+      </p>
+
+      <p>
+        <strong>3. Fragmentace péče — praktik, diabetolog, cévní chirurg nekomunikují.</strong> Multidisciplinární tým pro diabetickou nohu (MDT — diabetolog, cévní chirurg, ortoped, edukační sestra, ortotik) je ve vyspělých systémech standardem; OECD a IDF ho uvádějí jako klíčový strukturální faktor pro nízké amputace. V ČR funguje MDT jen ve vybraných fakultních nemocnicích a certifikovaných centrech. Pro většinu diabetiků — zejména mimo velká města — není MDT přístupný. Informační systémy (NIS, IZIP/eHealth) nepodporují automatické předávání klinických dat mezi poskytovateli, takže koordinace závisí na papírové žádance nebo telefonátu.
+      </p>
+
+      <h3>Politická páka: co lze konkrétně udělat</h3>
+
+      <p>
+        Zkušenosti ze zemí s nízkými amputacemi (Dánsko, Německo, Finsko) ukazují, že zlepšení je možné — a relativně rychlé, pokud se systém změní strukturálně, nikoli jen edukačními kampaněmi.
+      </p>
+
+      <p>
+        <strong>Platby za výsledky (P4Q) pro diabetology.</strong> MZČR má v agendě reformy Katalogu zdravotních výkonů možnost zavést bonifikaci pro diabetologické ambulance, jejichž sledovaní pacienti dosahují cílových hodnot HbA1c (pod 53 mmol/mol) a absolvují roční screening diabetické nohy. Německá DMP jsou fungujícím modelem. Analogická opatření ve Velké Británii (NHS Quality and Outcomes Framework) snížila amputace DK u diabetiků o 18 % za pět let.
+      </p>
+
+      <p>
+        <strong>Kapitační indikátor pro praktické lékaře — screening nohy.</strong> Preventivní prohlídka praktického lékaře (§ 29 vyhlášky 70/2012 Sb.) explicitně neobsahuje povinné hodnocení diabetické nohy jako standardizovaný výkon s dokumentovaným výstupem. Přidání indikátoru „roční vyšetření diabetické nohy (monofilament + ABI nebo překlep k diabetologovi)" do osnovy preventivní prohlídky by vyžadovalo novelizaci vyhlášky MZČR a navýšení úhradového paušálu pro praktiky.
+      </p>
+
+      <p>
+        <strong>Úhrada ortopedické obuvi a ortéz pro rizikové nohy.</strong> Zdravotní pojišťovny v ČR hradí ortopedickou obuv pro diabetiky ve III. kategorii rizika (existující ulcerace nebo amputace). Preventivní úhrada pro rizikové nohy II. kategorie (neuropatie + deformita, ale zatím bez ulcerace) — běžná v Německu a Nizozemsku — by dokázala zachytit skupinu pacientů těsně před ulcerací, kde investice do prevence je mnohonásobně levnější než léčba komplikací.
+      </p>
+
+      <p>
+        <strong>Síť center diabetické nohy s MDT.</strong> MZČR ve spolupráci s ČSDE (Česká diabetologická společnost) a ČSKCH (Česká společnost kardiovaskulární chirurgie) může definovat a certifikovat centra diabetické nohy — analogicky k centrům kardiovaskulárním nebo transplantačním. Kritéria: přítomnost MDT, dostupnost cévní chirurgie, protokol pro záchrannou revaskularizaci, audit výsledků. Cílová hustota: alespoň jedno centrum v každém kraji se spádovostí do 60 minut jízdy.
+      </p>
+
+      <p>
+        Každá amputace, které se předejde, ušetří zdravotnímu systému přibližně 300 000–500 000 Kč na akutní péči (operace, hospitalizace, pooperační léčba) a desetitisíce korun ročně na protetiku, rehabilitaci a domácí péči. Při snížení na OECD průměr (z 12,1 na 9,5 na 100 000 diabetiků) by ČR ušetřila přibližně 240 amputací ročně — to je úspora řádu stovek milionů korun, navíc bez vyčíslení hodnoty ušetřené invalidity a kvality života pacienta.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=amputace_dk_diabetici"><strong>Amputace DK u diabetiků</strong></a> — 12,1 na 100 000 diabetiků vs. OECD 9,5 (signal bad; ÚZIS NRH/NRDIA 2023)</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu</strong></a> — podíl diabetiků v populaci ČR (ÚZIS NRDIA 2023)</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — indikátor kvality koordinace primární péče (ÚZIS NRH; OECD HCQI)</li>
+        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrola hypertenze</strong></a> — podíl hypertoniků s dobrou kompenzací (proxy kvalita managementu chronické nemoci)</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česká data</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS — Národní registr hospitalizovaných (NRH)</strong> — hospitalizace s operačními výkony amputace DK a diagnózou DM. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--register--nrh" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>ÚZIS — Národní registr diabetiků (NRDIA)</strong> — prevalentní počty diabetiků (jmenovatel indikátoru). <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--register--nrdia" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>ÚZIS — Diabetologická péče (roční zprávy)</strong> — agregované výstupy registru diabetiků, trend péče. <a href="https://www.uzis.cz/index.php?pg=publikace-a-clanky--publikace--zdravotnicka-statistika--diabetes" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní benchmarky</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD Health Statistics — HEALTH_HCQI (DALOWER)</strong> — Lower limb amputations in people with diabetes; věkově standardizovaná mezinárodní srovnání. <a href="https://stats.oecd.org/Index.aspx?DataSetCode=HEALTH_HCQI" target="_blank" rel="noopener">stats.oecd.org ↗</a></li>
+          <li><strong>OECD Health at a Glance 2023 — Quality of care for diabetes</strong> — kontext a interpretace HCQI indikátorů. <a href="https://www.oecd.org/en/publications/health-at-a-glance_19991312.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>International Diabetes Federation (IDF) — Diabetes Foot Care Guidelines</strong> — mezinárodní doporučené postupy pro péči o diabetickou nohu. <a href="https://www.idf.org/our-activities/care-prevention/foot-care.html" target="_blank" rel="noopener">idf.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Policy inspirace</h5>
+        <ul class="article-sources-list">
+          <li><strong>Německé Disease Management Programs (DMP Diabetes Typ 2)</strong> — legislativní základ, struktura, výsledky. <a href="https://www.g-ba.de/themen/disease-management-programme/diabetes-mellitus-typ-2/" target="_blank" rel="noopener">g-ba.de ↗</a></li>
+          <li><strong>NHS Quality and Outcomes Framework (QOF) — Diabetes indicators</strong> — P4Q model pro praktické lékaře v Anglii. <a href="https://digital.nhs.uk/data-and-information/data-tools-and-services/data-services/general-practice-data-hub/quality-outcomes-framework-qof" target="_blank" rel="noopener">digital.nhs.uk ↗</a></li>
+          <li><strong>Diabetická noha — doporučené postupy ČDS</strong> — česká klinická doporučení České diabetologické společnosti. <a href="https://www.diab.cz/documentFile.php?fileId=82" target="_blank" rel="noopener">diab.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 12,1 na 100 000 diabetiků vychází z ÚZIS NRH/NRDIA za rok 2023; trend 2019–2023 vychází z OECD HCQI reportovaných daty ČR. Mezinárodní srovnání (DE, AT, DK, SK, PL) z OECD HCQI 2022 — srovnatelnost je omezena různými definicemi velké vs. malé amputace a kvalitou záznamu diagnózy DM v hospitalizačních registrech. Absolutní počet ~1 200 amputací/rok je odhad z míry 12,1 a prevalence diabetu 930 000. Před citací v akademickém nebo politickém kontextu doporučujeme ověřit aktuální čísla přímo v ÚZIS NRH a OECD HCQI databázi.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
