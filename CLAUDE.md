@@ -370,7 +370,8 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
 - [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md) — aktuální backlog
 - [`05_M1_Starter/STATUS_AUDIT_2026-05-18.md`](05_M1_Starter/STATUS_AUDIT_2026-05-18.md) — historický audit stavu
-- [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta
+- [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
+- [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`
 
 ## Soubory pro ignorování při hledání
 
