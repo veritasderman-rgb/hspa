@@ -171,7 +171,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         <p>
           <a href="data/indicators.json">indicators.json</a> ·
           <a href="data/regions.json">regions.json</a> ·
-          <a href="indicators/">Metodické karty</a><br>
+          <a href="hspa-prehled.html">Metodické karty</a><br>
           Licence CC-BY 4.0 · Data: ÚZIS, ČSÚ, OECD, Eurostat
         </p>
         <p class="footer-privacy">Web nepoužívá sledovací cookies. Žádné osobní údaje nejsou zpracovávány.</p>
