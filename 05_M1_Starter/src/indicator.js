@@ -107,7 +107,9 @@ function renderDetail(ind, card, regionDataset) {
     preliminary: 'Data dostupná, metodika v revizi nebo zdroj není primární',
     illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
   }[ind.verification_status] || '';
-  const verifBadge = ind.verification_status
+  // Pill renderujeme jen pro známé statusy (verifText neprázdný) — nepodporovaný
+  // status by jinak vykreslil prázdnou pill jen s ikonou.
+  const verifBadge = verifText
     ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
     : '';
 
