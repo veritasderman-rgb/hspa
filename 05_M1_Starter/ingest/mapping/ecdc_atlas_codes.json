@@ -1,47 +1,86 @@
 {
-  "_doc": "Mapping indikátorů na ECDC Surveillance Atlas AMR measures. measure_id zjistíš přes AtlasService/rest/GetIndicatorMeasuresForHealthTopicDatasetAndPopulation (parametr measurePopulation = Label populace, např. 'Escherichia coli|Fluoroquinolones'). Hledej measure s kódem *.R.PROPORTION (R – resistant isolates, percentage).",
+  "_doc": "Mapping indikátorů na ECDC Surveillance Atlas AMR measures. measure_id zjistíš přes AtlasService/rest/GetIndicatorMeasuresForHealthTopicDatasetAndPopulation (parametr measurePopulation = Label populace, např. 'Escherichia coli|Fluoroquinolones'). Hledej measure s kódem *.R.PROPORTION (R – resistant isolates, percentage). source_name/source_url jsou per-indikátor (AMR=EARS-Net, přenosné nemoci=příslušný Atlas dataset) — fetcher je zapíše do cache, transform je čte místo hardcoded labelu.",
   "indicators": {
     "rezistence_antibiotik_ecoli": {
       "measure_id": 1146416,
       "measure_code": "ESCCOL.FLUOROQUINOLONES.R.PROPORTION",
       "population_label": "Escherichia coli|Fluoroquinolones",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
     },
     "rezistence_mrsa": {
       "measure_id": 1146493,
       "measure_code": "STAAUR.MRSA.R.PROPORTION",
       "population_label": "Staphylococcus aureus|Meticillin (MRSA)",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
     },
     "rezistence_klebsiella_karbapenem": {
       "measure_id": 1146347,
       "measure_code": "KLEPNE.CARBAPENEMS.R.PROPORTION",
       "population_label": "Klebsiella pneumoniae|Carbapenems",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
     },
     "rezistence_vre": {
       "measure_id": 1146479,
       "measure_code": "ENCFAI.VANCOMYCIN.R.PROPORTION",
       "population_label": "Enterococcus faecium|Vancomycin",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
     },
     "rezistence_ecoli_3gc": {
       "measure_id": 1146423,
       "measure_code": "ESCCOL.3GCEPH.R.PROPORTION",
       "population_label": "Escherichia coli|Third-generation cephalosporins",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
     },
     "rezistence_pneumokok_penicilin": {
       "measure_id": 1146500,
       "measure_code": "STRPNE.PENICILLINS.R.PROPORTION",
       "population_label": "Streptococcus pneumoniae|Penicillins",
       "geo_code": "CZ",
-      "trend_years": 5
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas / EARS-Net",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4"
+    },
+    "tuberkuloza": {
+      "measure_id": 848806,
+      "measure_code": "TUBE.ALLCASES.RATE",
+      "population_label": "All cases",
+      "geo_code": "CZ",
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=419&HealthTopic=54"
+    },
+    "hepatitida_bc_chronicka": {
+      "measure_id": 920326,
+      "measure_code": "HEPBC.CHRONIC.RATE",
+      "population_label": "Chronic cases",
+      "geo_code": "CZ",
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=361&HealthTopic=26"
+    },
+    "spalnicky": {
+      "measure_id": 921767,
+      "measure_code": "MEASLES.ALLCASES.RATE",
+      "population_label": "All cases",
+      "geo_code": "CZ",
+      "trend_years": 5,
+      "source_name": "ECDC Surveillance Atlas",
+      "source_url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=421&HealthTopic=37"
     }
   }
 }

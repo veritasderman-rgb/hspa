@@ -126,6 +126,9 @@ export function extractFromEcdcAtlas(id) {
     value: cache.cz.value,
     year: cache.cz.year,
     trend: cache.trend ?? [],
+    // Per-indikátor zdroj (AMR=EARS-Net vs. přenosné nemoci=příslušný Atlas dataset)
+    // — fetcher ho zapsal do cache; transform ho použije místo hardcoded labelu.
+    source: cache.source ?? null,
   };
 }
 
@@ -657,7 +660,14 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
   const refValue = benchmark.oecd ?? benchmark.eu ?? null;
   const signal = computeSignal(value, refValue, card.direction, card.signal_thresholds);
 
-  const sourceLabel = SOURCE_TYPE_TO_LABEL[actualSourceType] ?? { name: actualSourceType ?? 'unknown', url: '' };
+  // Zdroj (name/url): preferuj per-indikátor zdroj z live extraktu (např. ECDC Atlas
+  // dataset specifický pro daný indikátor), pak seed (zachová ruční zdroj při seed
+  // fallbacku), nakonec obecný label podle typu zdroje.
+  const sourceLabel = extracted?.source
+    ? { name: extracted.source.name, url: extracted.source.url }
+    : (!extracted && seed?.source?.name
+        ? { name: seed.source.name, url: seed.source.url ?? '' }
+        : SOURCE_TYPE_TO_LABEL[actualSourceType] ?? { name: actualSourceType ?? 'unknown', url: '' });
   const sourceUsed = extracted ? 'live' : 'seed';
   const cacheFileForSource = {
     csu_datastat: `csu_${card.id}.json`,
