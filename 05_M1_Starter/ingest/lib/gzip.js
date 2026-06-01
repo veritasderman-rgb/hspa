@@ -27,6 +27,24 @@ export async function downloadAndGunzipToFile(url, destPath, opts = {}) {
 }
 
 /**
+ * Stáhne plain (negzipovaný) resource stream-em do souboru — pro velké CSV,
+ * které se nemají načítat do paměti (analogie downloadAndGunzipToFile bez gunzip).
+ * @param {string} url
+ * @param {string} destPath
+ * @param {{ headers?: Record<string,string>, fetchImpl?: typeof fetch }} [opts]
+ * @returns {Promise<{ bytes: number }>}
+ */
+export async function downloadToFile(url, destPath, opts = {}) {
+  const { headers = {}, fetchImpl = globalThis.fetch } = opts;
+  const res = await fetchImpl(url, { headers });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+  if (!res.body) throw new Error(`Empty body for ${url}`);
+  const out = fs.createWriteStream(destPath);
+  await pipeline(Readable.fromWeb(res.body), out);
+  return { bytes: fs.statSync(destPath).size };
+}
+
+/**
  * Pro malé soubory (testy) — gunzip Buffer → string.
  * @param {Buffer|Uint8Array} buf
  * @returns {Promise<string>}

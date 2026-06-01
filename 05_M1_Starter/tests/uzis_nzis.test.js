@@ -291,3 +291,22 @@ test('streamAggregateCsv: agreguje NRH-like data (rok+zdg, sum hosp + deaths)', 
     fs.unlinkSync(tmp);
   }
 });
+
+test('streamAggregateCsv: detekuje středník jako oddělovač', async () => {
+  const csv = ['rok;zdg;umrti;pocet_hosp', '2024;I63;1;25', '2024;I63;0;175'].join('\n');
+  const tmp = path.join(os.tmpdir(), `nrh_semi_${Date.now()}.csv`);
+  fs.writeFileSync(tmp, csv);
+  try {
+    const { records } = await streamAggregateCsv(tmp, {
+      group_by: ['rok', 'zdg'], count_col: 'pocet_hosp',
+      death_flag: { col: 'umrti', value: '1' }, rename: { zdg: 'diagnoza_3' },
+      count_as: 'pocet', deaths_as: 'umrti',
+    });
+    assert.equal(records.length, 1);
+    assert.equal(records[0].pocet, 200); // ne 0 → delimiter správně detekován
+    assert.equal(records[0].umrti, 25);
+    assert.equal(records[0].diagnoza_3, 'I63');
+  } finally {
+    fs.unlinkSync(tmp);
+  }
+});
