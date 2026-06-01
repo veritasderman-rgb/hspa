@@ -1,7 +1,18 @@
 # Plán: WCAG 2.2 AA · Nové explainéry · Sociální determinanty zdraví
 
 > Living dokument. Tři propojené pracovní proudy dodávané na branch
-> `claude/cool-dirac-IH8Yg` jako **jeden PR**. Stav: 📋 plán schválen, čeká na implementaci.
+> `claude/cool-dirac-IH8Yg` jako **jeden PR**. Stav: ✅ **A1 + B + C implementováno** (A2–A5 remediace = navazující backlog).
+
+## Stav implementace (2026-06-01)
+
+| Proud | Stav | Co dodáno |
+|---|---|---|
+| **A1** — a11y tooling + baseline | ✅ | `tests/a11y/axe-scan.mjs`, scripty `test:a11y` / `test:a11y:ci`, devDeps `playwright` + `@axe-core/playwright`, baseline `docs/a11y-baseline-2026-06.md` (37 porušení / 5 pravidel), `docs/accessibility.md`, hardening CSS (forced-colors, prefers-contrast, `scroll-padding-top` pro SC 2.4.11). |
+| **B** — 3 explainéry | ✅ | `regionalni_dostupnost`, `primarni_pece`, `prevence_jako_politika` v `data/explainers.json`; hero blok v `jak-funguje.html`; propojeno v `themes.json`. |
+| **C** — SDOH (plná varianta) | ✅ | 2 indikátory (`prijem_disponibilni`, `ohrozeni_chudobou`) — karty + seed; 2 NUTS-3 datasety v `regions.json`; registrace v `csu_datasets.js`; explainér `socialni_determinanty`; propojeno v `themes.json`. |
+| **A2–A5** — remediace + CI gate | ⏳ backlog | Prioritizace porušení v `docs/a11y-baseline-2026-06.md` + `docs/accessibility.md`. |
+
+**Verifikace:** `npm test` 498/498 ✓ · `npm run validate:all` ✓ · `npm run test:a11y` generuje baseline ✓.
 
 ## Rozhodnutí (potvrzeno zadáním)
 

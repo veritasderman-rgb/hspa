@@ -33,6 +33,8 @@
     "build:kolonoskopie": "node scripts/build-kolonoskopie.js",
     "serve": "npx http-server . -p 8080 -c-1",
     "test": "node --test tests/*.test.js",
+    "test:a11y": "node tests/a11y/axe-scan.mjs",
+    "test:a11y:ci": "node tests/a11y/axe-scan.mjs --ci",
     "validate:data": "node ingest/validate.js",
     "validate:strategies": "node ingest/validate-strategies.js",
     "validate:explainers": "node ingest/validate-explainers.js",
@@ -65,7 +67,9 @@
     "pdfjs-dist": "^4.10.38"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@resvg/resvg-js": "^2.6.2",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "playwright": "^1.60.0"
   }
 }
