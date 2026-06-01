@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_vre",
+  "name": "Rezistence E. faecium na vankomycin (VRE)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Enterococcus faecium rezistentních na vankomycin (VRE) v síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure ENCFAI.VANCOMYCIN.R.PROPORTION (R – resistant isolates, percentage), populace „Enterococcus faecium|Vancomycin\". Per-country % pro ČR ověřeno přes REST API AtlasService 2026-06-01: 2024 = 18.3 % (N=415)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA průměr 2024 jako % není v textové části AER 2024 jednoznačně oddělen od incidence; benchmark doplnit z ECDC Atlas EU agregátu v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Vankomycin-rezistentní enterokok (VRE) komplikuje léčbu invazivních enterokokových infekcí u imunokompromitovaných a hospitalizovaných pacientů.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}

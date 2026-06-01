@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_klebsiella_karbapenem",
+  "name": "Rezistence K. pneumoniae na karbapenemy (CRE)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Klebsiella pneumoniae rezistentních na karbapenemy (CRE) v síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure KLEPNE.CARBAPENEMS.R.PROPORTION (R – resistant isolates, percentage), populace „Klebsiella pneumoniae|Carbapenems\". Per-country % pro ČR ověřeno přes REST API AtlasService 2026-06-01: 2024 = 2.2 % (N=1437)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": 11.3,
+    "note": "EU/EEA populačně vážený průměr 11,3 % (ECDC EARS-Net AER 2024, Table 9b; country range 0,0–67,6 %)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Karbapenemy jsou antibiotika poslední rezervy. Karbapenem-rezistentní Klebsiella (CRE) je jednou z nejzávažnějších hrozeb AMR — léčebné možnosti jsou velmi omezené.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
