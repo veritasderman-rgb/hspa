@@ -1,0 +1,41 @@
+{
+  "id": "prijem_disponibilni",
+  "name": "Čistý disponibilní důchod domácností na obyvatele",
+  "area": "Struktury",
+  "domain": "Sociální determinanty zdraví",
+  "subdomain": "Příjmy domácností",
+  "framework": "hspa",
+  "dimension": "spravedlnost",
+  "definition": "Čistý disponibilní důchod domácností na obyvatele za rok (Kč) podle regionálních účtů ČSÚ. Vyjadřuje objem prostředků, které mají domácnosti v daném kraji k dispozici na spotřebu a úspory po zdanění a sociálních transferech. Slouží jako klíčový sociální determinant zdraví — gradient příjmu se promítá do rozdílů v naději dožití i preventabilní úmrtnosti mezi kraji.",
+  "unit": "Kč/obyv./rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/dotaz/v1",
+      "dataset": "REG-DISP-DUCHOD",
+      "dimensions": {
+        "uzemi": "KRAJ",
+        "ukazatel": "cisty_disponibilni_duchod_na_obyvatele"
+      }
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://csu.gov.cz/regionalni-ucty"
+    }
+  },
+  "benchmark_source": {
+    "type": "none",
+    "note": "Kontextový determinant — nemá normativní benchmark; sleduje se mezikrajový rozptyl a trend."
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ"
+  ],
+  "method_notes": "Zdroj: ČSÚ, regionální účty — čistý disponibilní důchod domácností (sektor S.14) přepočtený na obyvatele. Údaj na úrovni NUTS-3 (kraje) je robustní, protože vychází z regionálních účtů, nikoli z výběrového šetření EU-SILC. Hodnoty jsou v běžných cenách; pro mezikrajové srovnání životní úrovně je vhodné zohlednit regionální cenovou hladinu (Praha je nadhodnocená vyššími náklady na bydlení). Signál je nastaven jako neutral — indikátor je kontextový determinant, nikoli cíl kvality systému.",
+  "determinants": "Mezikrajové rozdíly v disponibilním důchodu odrážejí strukturu zaměstnanosti (podíl průmyslu vs. služeb a veřejného sektoru), míru nezaměstnanosti, vzdělanostní strukturu a věkové složení populace. Strukturálně postižené regiony (Ústecký, Karlovarský, Moravskoslezský) dlouhodobě vykazují nižší příjmy spojené s útlumem těžby a těžkého průmyslu; tyto kraje současně vykazují nejvyšší preventabilní úmrtnost a nejnižší naději dožití — ilustrace sociálního gradientu zdraví podle Dahlgrenova–Whiteheadova modelu."
+}

@@ -46,6 +46,34 @@ export const CSU_DATASETS = [
       filter: { sex: 'T' },
     },
   },
+  {
+    id: 'prijem_disponibilni',
+    name: 'Čistý disponibilní důchod domácností na obyvatele (regionální účty)',
+    primary: {
+      kind: 'datastat',
+      url: `${API}/REG01-DISP`,
+      query: { uzemi: 'CZ0' },
+    },
+    fallback: {
+      kind: 'csv',
+      url: 'https://csu.gov.cz/regionalni-ucty',
+      mapping: { year: 'rok', region: 'uzemi_kod', value: 'hodnota' },
+    },
+  },
+  {
+    id: 'ohrozeni_chudobou',
+    name: 'Míra ohrožení příjmovou chudobou (EU-SILC)',
+    primary: {
+      kind: 'datastat',
+      url: `${API}/SILC01-CHUD`,
+      query: { uzemi: 'CZ0' },
+    },
+    fallback: {
+      kind: 'csv',
+      url: 'https://csu.gov.cz/prijmy-a-zivotni-podminky-domacnosti',
+      mapping: { year: 'rok', region: 'uzemi_kod', value: 'hodnota' },
+    },
+  },
 ];
 
 export const CSU_INDICATOR_IDS = CSU_DATASETS.map(d => d.id);

@@ -13325,3 +13325,43 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
   transform: translateX(2px);
   box-shadow: 0 4px 12px rgba(184,54,30,.30);
 }
+
+/* =====================================================================
+   WCAG 2.2 AA hardening (Proud A) — čistě aditivní, aktivní jen ve
+   specifických režimech / pro scroll offset. Nemění výchozí vizuál.
+   ===================================================================== */
+
+/* SC 2.4.11 Focus Not Obscured (Minimum): zafokusovaný / odkazovaný prvek
+   se nesmí schovat pod lepící (sticky) horní lištu. scroll-padding posune
+   cíl scrollu o výšku lišty. Per-prvkové scroll-margin-top mají přednost. */
+html {
+  scroll-padding-top: var(--a11y-sticky-offset, 88px);
+}
+
+/* forced-colors (Windows High Contrast): zachovej viditelné ohraničení
+   a fokusový prstenec, když OS přebírá barvy. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+  a, button, [role="button"], summary {
+    forced-color-adjust: auto;
+  }
+  .skip-link:focus {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* SC 1.4.6 (vyšší kontrast na žádost uživatele): zesil fokus a podtrhni
+   odkazy v textových blocích (mitiguje link-in-text-block). */
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+  p a, li a, .article-body a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}

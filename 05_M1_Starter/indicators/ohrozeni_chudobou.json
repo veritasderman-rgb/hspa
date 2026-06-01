@@ -1,0 +1,43 @@
+{
+  "id": "ohrozeni_chudobou",
+  "name": "Míra ohrožení příjmovou chudobou",
+  "area": "Struktury",
+  "domain": "Sociální determinanty zdraví",
+  "subdomain": "Příjmová chudoba",
+  "framework": "hspa",
+  "dimension": "spravedlnost",
+  "definition": "Podíl osob (%) s ekvivalizovaným disponibilním příjmem pod hranicí 60 % národního mediánu (at-risk-of-poverty rate, EU-SILC). Míra ohrožení příjmovou chudobou je standardní evropský ukazatel relativní chudoby a klíčový sociální determinant zdraví — vyšší podíl chudobou ohrožených se promítá do horší dostupnosti péče, vyššího výskytu rizikových faktorů a nižší naděje dožití.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://data.csu.gov.cz/api/dotaz/v1",
+      "dataset": "SILC-CHUDOBA",
+      "dimensions": {
+        "uzemi": "KRAJ",
+        "ukazatel": "mira_ohrozeni_prijmovou_chudobou"
+      }
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://csu.gov.cz/prijmy-a-zivotni-podminky-domacnosti"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "ilc_li02",
+    "dataset": "EU-SILC"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "Eurostat"
+  ],
+  "method_notes": "Zdroj: ČSÚ — výběrové šetření Životní podmínky (EU-SILC). DŮLEŽITÝ DATOVÝ CAVEAT: na celostátní úrovni (NUTS-0) a NUTS-2 má EU-SILC robustní vzorek; krajský rozpad (NUTS-3) má širší interval spolehlivosti kvůli menšímu počtu respondentů na kraj, proto ČSÚ krajská čísla publikuje jako víceletý průměr. Krajské hodnoty v regions.json proto interpretovat jako orientační gradient, nikoli jako přesné bodové odhady. Česko dlouhodobě vykazuje nejnižší míru ohrožení příjmovou chudobou v EU (~10 % vs. ~16,5 % průměr EU).",
+  "determinants": "Ohrožení chudobou je koncentrované u domácností nezaměstnaných, neúplných rodin, seniorů žijících samostatně a osob s nízkým vzděláním. Regionálně kopíruje strukturálně postižené kraje (Ústecký, Karlovarský) s vyšší nezaměstnaností a podílem exekucí. Sociální gradient: vyšší ohrožení chudobou koreluje s vyšší prevalencí kouření, horší výživou, nižší účastí na screeningu a preventivních prohlídkách — chudoba se tak přenáší do zdravotních nerovností a zkrácené naděje dožití ve zdraví."
+}
