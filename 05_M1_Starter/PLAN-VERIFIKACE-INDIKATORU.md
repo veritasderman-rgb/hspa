@@ -122,12 +122,23 @@ doplnit explicit `verified` do karty (1 indikátor).
      `absolventi_lekarstvi_per_100k`, `jednodenni_chirurgie_katarakta`,
      `pracovnici_ltc_per_100_65plus`, `pyll_potencialne_ztracene_roky`.
    - **Příčina seed (zjištěno 2026-06-01):** `ingest/fetchers/oecd.js` volá
-     legacy `stats.oecd.org/SDMX-JSON` → **404 (endpoint zrušen)**. Nový
-     `sdmx.oecd.org/public/rest/data/{agency},{dataflow},{ver}/{key}?format=jsondata`
-     žije (vrací 422 na špatný klíč), ale vyžaduje přepsat fetcher na SDMX 2.1
-     REST + dohledat přesná dataflow ID pro každý indikátor. **Samostatný úkol**
-     (nehádat dataflow ID/hodnoty). `lekari_per_1000`/`sestry_per_1000` už NEJSOU
-     seed (mají ÚZIS NRZP zdroj).
+     legacy `stats.oecd.org/SDMX-JSON` → **404 (endpoint zrušen)**. `lekari_per_1000`/
+     `sestry_per_1000` už NEJSOU seed (mají ÚZIS NRZP zdroj).
+   - **Nový endpoint OVĚŘEN funkční (připraveno k provedení v samostatném PR):**
+     - Dataflows: `GET sdmx.oecd.org/public/rest/dataflow/OECD.ELS.HD/all/latest`
+       (Accept: `application/vnd.sdmx.structure+json;version=1.0`) → 85 health dataflows.
+     - Data: `GET sdmx.oecd.org/public/rest/data/OECD.ELS.HD,{DATAFLOW},1.0/all?startPeriod=2018&format=jsondata&dimensionAtObservation=AllDimensions`
+       vrací SDMX-JSON 2.0 (`data.structures[0].dimensions.observation` + `data.dataSets[0].observations` klíčované `:`-separovanými indexy). `/all` funguje; `c[REF_AREA]=CZE` filtr vracel prázdno.
+     - Relevantní dataflow ID: alkohol `DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC`,
+       obezita/BW `DF_HEALTH_LVNG_BW`, tabák `DF_HEALTH_LVNG_TC`, PYLL
+       `DSD_HEALTH_STAT@DF_PYLL`, vnímané zdraví `DF_PHS`, příčiny úmrtí `DF_COM`.
+     - **Nutný přepis** `oecd.js` (legacy `parseSdmxJson` ≠ nový SDMX-JSON 2.0 formát)
+       + nový mapping (dataflow + dimenze MEASURE/AGE/UNIT_MEASURE).
+   - **⚠️ Metodická past (NEHÁDAT, ověř per indikátor):** OECD `alkohol_spotreba`
+     pro CZE (15+, L_PS) = **11,2 L (2023)** — ale seed je **14,4 (2024)**. Velký
+     rozdíl (OECD recorded consumption vs národní/WHO odhad vč. neregistrované
+     spotřeby). Tj. swap NENÍ čistý — vyžaduje rozhodnutí o metodice + přepis
+     patient_story. Stejnou kontrolu udělej u každého OECD kandidáta.
 
 3. **Dávka C — ECDC rozšíření** 🟡 částečně
    - ✅ Integritní oprava `rezistence_antibiotik_ecoli` seed→live (viz §2).
