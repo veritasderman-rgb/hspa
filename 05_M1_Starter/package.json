@@ -35,6 +35,9 @@
     "test": "node --test tests/*.test.js",
     "test:a11y": "node tests/a11y/axe-scan.mjs",
     "test:a11y:ci": "node tests/a11y/axe-scan.mjs --ci",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "test:e2e:a11y": "playwright test tests/e2e/a11y.spec.js",
     "validate:data": "node ingest/validate.js",
     "validate:strategies": "node ingest/validate-strategies.js",
     "validate:explainers": "node ingest/validate-explainers.js",
@@ -68,6 +71,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@playwright/test": "^1.60.0",
     "@resvg/resvg-js": "^2.6.2",
     "http-server": "^14.1.1",
     "playwright": "^1.60.0"

@@ -492,6 +492,7 @@ function injectMobileNav(tabsHtml) {
     drawer.className = 'mobile-nav-drawer';
     drawer.setAttribute('aria-label', 'Hlavní menu');
     drawer.setAttribute('aria-hidden', 'true');
+    drawer.inert = true;
     drawer.innerHTML = `
       <div class="mobile-nav-drawer-head">
         <span class="mobile-nav-drawer-title">Menu</span>
@@ -509,6 +510,7 @@ function injectMobileNav(tabsHtml) {
     document.body.classList.add('mobile-nav-open');
     toggle.setAttribute('aria-expanded', 'true');
     drawer.setAttribute('aria-hidden', 'false');
+    drawer.inert = false;
     backdrop.setAttribute('aria-hidden', 'false');
     const firstLink = drawer.querySelector('a, button');
     firstLink?.focus();
@@ -517,6 +519,7 @@ function injectMobileNav(tabsHtml) {
     document.body.classList.remove('mobile-nav-open');
     toggle.setAttribute('aria-expanded', 'false');
     drawer.setAttribute('aria-hidden', 'true');
+    drawer.inert = true;
     backdrop.setAttribute('aria-hidden', 'true');
     toggle.focus();
   };

@@ -549,9 +549,10 @@ function renderGrid() {
     const card = document.createElement('div');
     card.className = 'indicator-card';
     card.dataset.indicatorId = ind.id;
-    card.tabIndex = 0;
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `${ind.name}: ${ind.value} ${ind.unit}, signál ${ind.signal}`);
+    // Pozn.: karta NENÍ role=button — obsahuje vlastní odkaz „Detail →" (jediný
+    // interaktivní prvek), takže by šlo o nested-interactive (WCAG 4.1.2). Klik
+    // myší na kartu otevírá modal jako progressive enhancement; klávesnice/AT
+    // používají odkaz na plný detail (nadmnožina metodické karty).
 
     const chartId = `chart-${ind.id}`;
     const compareHTML = benchmarkBarHTML(ind);
@@ -581,15 +582,13 @@ function renderGrid() {
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
-      <div class="source">Zdroj: ${ind.source.name}<a class="card-detail-link" href="indicator.html?id=${encodeURIComponent(ind.id)}" data-detail-link aria-label="Otevřít plný detail indikátoru s krajskou mapou">Detail →</a></div>
+      <div class="source">Zdroj: ${ind.source.name}<a class="card-detail-link" href="indicator.html?id=${encodeURIComponent(ind.id)}" data-detail-link aria-label="Otevřít plný detail indikátoru: ${ind.name}">Detail →</a></div>
     `;
     card.addEventListener('click', (e) => {
-      // Klik na „Detail →" odkaz následuje vlastní href; jiný klik otevře modal s metodickou kartou
+      // Klik na „Detail →" odkaz následuje vlastní href; jiný klik (myší) otevře
+      // modal s metodickou kartou jako progressive enhancement pro myš.
       if (e.target.closest('[data-detail-link]')) return;
       openMethodCard(ind);
-    });
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMethodCard(ind); }
     });
     grid.appendChild(card);
 

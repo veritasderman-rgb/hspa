@@ -51,18 +51,20 @@ Automatický sken nepokryje všechna AA kritéria verze 2.2. Tyto kontroluj ruč
 - **Skip-link**: `<a class="skip-link" href="#content">` jako první fokusovatelný prvek.
 - **Pohyb**: nové animace obal do `@media (prefers-reduced-motion: reduce)`.
 
-## Aktuální baseline (2026-06)
+## Stav remediace (2026-06)
 
-První automatický sken (`docs/a11y-baseline-2026-06.md`) napříč 15 stránkami
-nalezl 5 typů porušení. Prioritizovaný backlog remediace (Proud A2/A3):
+První sken našel **37 porušení / 5 pravidel**. Po remediaci (Proud A2/A3)
+zbývají **3 porušení** (−92 %). Aktuální stav viz `docs/a11y-baseline-2026-06.md`.
 
-| Pravidlo | Závažnost | Rozsah | Poznámka |
+| Pravidlo | Výchozí | Nyní | Co se udělalo |
 |---|---|---|---|
-| `color-contrast` | serious | ~960 prvků | Revize barevných tokenů; část může být na hraně poměru — vyžaduje design rozhodnutí. |
-| `nested-interactive` | serious | ~100 (index, jak-funguje) | Interaktivní prvek vnořený v interaktivním — refaktor markupu. |
-| `target-size` | serious | ~110 (index) | SC 2.5.8 — zvětšit klikací cíle / rozestupy. |
-| `aria-hidden-focus` | serious | 15 (všechny stránky) | Sdílený prvek s `aria-hidden`, který obsahuje fokusovatelný obsah — jeden zásah ve sdílené komponentě. |
-| `link-in-text-block` | serious | 14 | Odkazy odlišené jen barvou — doplnit podtržení. |
+| `aria-hidden-focus` | 15 | ✅ 0 | `#mobileNavDrawer` dostává `inert` při zavření (`page-shared.js`). |
+| `nested-interactive` | 102 | ✅ 0 | `.indicator-card` už není `role=button` — jediný interaktivní prvek je odkaz „Detail →" (`app.js`); SVG schéma `role=img`→`role=group` (`jak-funguje.html`). |
+| `target-size` (SC 2.5.8) | 110 | ✅ 0 | `.ed-narrative-links a` min-height 24 px (`styles.css`). |
+| `link-in-text-block` | 14 | ✅ 0 | Podtržení inline odkazů v textových blocích (`styles.css`). |
+| `color-contrast` | 963 | ⚠️ 3 | `--ink-mut2` ztmaven na alpha 0.64 (954 nodů); `.theme-meta-good` zeleň ztmavena. |
 
-Remediace těchto bodů je samostatný pracovní proud (A2/A3); tento commit dodává
-tooling, baseline a hardening (forced-colors / prefers-contrast / scroll-padding).
+**Zbývající 3 `color-contrast`** jsou brand/sémantické akcenty těsně pod prahem
+(dimenze „kvalita" `#a36728` ≈ 4,37:1; warn signál `#b45f06` ≈ 4,32:1; cíl 4,5:1).
+Jde o paletové barvy používané napříč webem — jejich úprava je **rozhodnutí
+vlastníka palety**, ne mechanický fix, proto je vědomě neměníme blind.

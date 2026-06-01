@@ -18,15 +18,25 @@ const PAGES = [
   { path: '/glosar.html',                 name: 'glossary' },
   { path: '/o-projektu.html',             name: 'about' },
   { path: '/jak-funguje.html',            name: 'how-it-works' },
-  { path: '/clanek-akutni-infarkt.html',  name: 'article-sample' },
+  // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
+  // Article Visuals používají JS count-up animace (requestAnimationFrame), které
+  // CSS `animation:none` nezastaví, takže snapshot padá na nedeterministický
+  // frame. Přístupnost článků pokrývá a11y.spec.js; layout dashboardových
+  // stránek (stabilní) pokrývají snapshoty výše.
 ];
 
 for (const { path, name } of PAGES) {
   test(`visual: ${name}`, async ({ page }) => {
     await page.goto(path, { waitUntil: 'networkidle' });
-    // Vypni animace + počkej na async fetch dokončení
+    // Vypni animace + počkej na async fetch dokončení a načtení fontů
     await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; }' });
-    await page.waitForTimeout(500);
-    await expect(page).toHaveScreenshot(`${name}.png`, { fullPage: true });
+    await page.evaluate(() => document.fonts && document.fonts.ready);
+    await page.waitForTimeout(600);
+    await expect(page).toHaveScreenshot(`${name}.png`, {
+      fullPage: true,
+      // <canvas> grafy (Chart.js sparklines, donuty) renderují nedeterministicky
+      // napříč prostředími — maskujeme je, aby diff nehlásil falešné regrese.
+      mask: [page.locator('canvas')],
+    });
   });
 }
