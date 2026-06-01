@@ -10,7 +10,8 @@
 
 ## 0. TL;DR (přečti první)
 
-- Na webu je **91 indikátorů „Ilustrativní"** (žluté), 8 „Předběžné", 30 „Ověřeno".
+- Stav (živý tracker §2): aktuálně **85 „Ilustrativní"** (žluté), 7 „Předběžné",
+  37 „Ověřeno" (výchozí bylo 91 / 8 / 30).
 - „Ilustrativní" = `source.origin: seed` bez explicitního `verification_status`.
 - **Cíl:** co nejvíc seed indikátorů přepnout na **„Ověřeno"** (= `origin: live`
   z funkčního fetcheru **+** `verification_status: "verified"` v metodické kartě).
@@ -45,13 +46,22 @@ už přenáší do `data/indicators.json` (pass-through je zapojený).
 
 ---
 
-## 2. Stav k 2026-06-01 (výchozí čísla)
+## 2. Stav (živý tracker)
 
 ```
 CELKEM indikátorů: 129
-origin:            seed 99 | live 30
-efektivní odznak:  illustrative 91 | preliminary 8 | verified 30
+
+výchozí (2026-06-01):  origin seed 99 | live 30   ·  illustrative 91 | preliminary 8 | verified 30
+po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | preliminary 7 | verified 37
 ```
+
+**Hotové dávky:**
+- ✅ **Dávka A — Eurostat (2026-06-01):** +7 verified —
+  `nadeje_doziti_total`, `nadeje_doziti_zdravi_65`, `unmet_need_medical`,
+  `subjektivni_zdravi`, `mortalita_kardiovaskularni`, `pohybova_aktivita_dospeli`,
+  `bmi_dospeli`. Opraven kód `hlth_silc_08` reason (TOOEFW→TXP_TFAR_WLIST), dataset
+  BMI bm1b→bm1e, doplněny 4 nové mapping záznamy. EHIS-indikátory (bmi, pohyb) mají
+  rok 2019 = poslední dostupná vlna EHIS.
 
 **Rozdělení 99 seed indikátorů podle zdroje** (= kde shánět živá data):
 
@@ -73,11 +83,11 @@ doplnit explicit `verified` do karty (1 indikátor).
 
 Řaď podle poměru hodnota/jistota. Začni nejjistějšími:
 
-1. **Dávka A — Eurostat (~7 indikátorů)** ✅ nejjistější
-   - Kandidáti (seed s Eurostat zdrojem): `bmi_dospeli`, `pohybova_aktivita_dospeli`,
-     `subjektivni_zdravi`, `mortalita_kardiovaskularni`, `nadeje_doziti_zdravi_65`
-     (už v mappingu — ověř proč seed), `unmet_need_medical` (už v mappingu),
-     `pyll_potencialne_ztracene_roky` (možná Eurostat hlth_cd_*).
+1. **Dávka A — Eurostat (~7 indikátorů)** ✅ HOTOVO 2026-06-01 (viz §2)
+   - Přepnuto: `bmi_dospeli`, `pohybova_aktivita_dospeli`, `subjektivni_zdravi`,
+     `mortalita_kardiovaskularni`, `nadeje_doziti_zdravi_65`, `unmet_need_medical`,
+     `nadeje_doziti_total`.
+   - Zbývá prověřit: `pyll_potencialne_ztracene_roky` (možná Eurostat hlth_cd_*).
    - Vzor: `ohrozeni_chudobou` (přepnuto na Eurostat `ilc_li02` v PR #467).
    - Postup: najdi dataset+filtry → přidej do `ingest/mapping/eurostat_codes.json`
      → ověř fetch živě → přepni kartu na `eurostat_jsonstat` + `verified`.

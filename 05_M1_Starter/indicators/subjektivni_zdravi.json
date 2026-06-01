@@ -10,11 +10,26 @@
   "data_source": {
     "primary": {
       "type": "eurostat_jsonstat",
-      "dataset": "hlth_silc_18"
+      "dataset": "hlth_silc_18",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "Y_GE16",
+        "levels": "VG_G",
+        "deg_urb": "TOTAL",
+        "unit": "PC"
+      },
+      "note": "Self-perceived health, podíl 16+ s odpovědí „velmi dobré\" nebo „dobré\" (levels=VG_G). Ověřeno živě 2026-06-01: CZ 67,0 % (2025), EU27 67,9 %."
     }
   },
   "benchmark_source": {
-    "type": "eurostat_jsonstat"
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_silc_18",
+    "params": {
+      "geo": "EU27_2020",
+      "levels": "VG_G"
+    },
+    "note": "EU-27 průměr ze stejné řady: 67,9 % (2025)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -27,7 +42,9 @@
   ],
   "method_notes": "Otázka EU-SILC: \"Jak hodnotíte svůj zdravotní stav obecně?\" — Likertova škála 5 stupňů. Self-rated health. ČR má dlouhodobě jeden z nejnižších výsledků v EU navzdory objektivně vyšší naději dožití.",
   "limitations": "Self-report — kulturní vlivy na vnímání zdraví (Češi jsou v sebehodnocení skeptičtější než např. Skandinávci).",
-  "patient_story": "EU SILC dotazník, jaro 2023, respondent paní (54), Ústecký kraj. „Jak byste celkově popsala svůj zdravotní stav?\" — Odpovědi: 1. velmi dobré, 2. dobré, 3. uspokojivé, 4. špatné, 5. velmi špatné. Odpověď: „spíš uspokojivé\". V Česku takových respondentů přes 40 % — pod průměrem OECD i EU.\n\nSubjektivní zdraví (% populace 16+, který uvedl „dobré\" nebo „velmi dobré\") v ČR je 60 % (Eurostat EU-SILC, 2023). OECD průměr 70 %, EU 68 % — Česko signal bad. Rozdíl 8–10 procentních bodů. Trend stabilní (2010: 58 %, 2023: 60 %). Mezi věkovými skupinami klesá strmě: 16–24 let 85 %, 65+ jen 35 %. Mezi kraji rozdíl 15 procentních bodů (Praha 67 % vs. Karlovarský 52 %).\n\nStrukturálně subjektivní zdraví reflektuje skutečný zdravotní stav (objektivní indikátory korelují), ale také kulturní a psychologické faktory. Češi mají tendenci k pesimističtějšímu hodnocení vlastního zdraví než severské nebo středomořské země — částečně historická norma, částečně reálná zátěž chronických nemocí. Faktor také hraje socioekonomická vrstva: nízkopříjmoví respondenti hodnotí zdraví hůř o 20 procentních bodů.\n\nSubjektivní zdraví je důležitý kompozitní indikátor, který doplňuje klinická data. Politicky: zlepšení v PYLL, kardiovaskulární mortalitě a HLY se promítne do subjektivního zdraví; investice do mentálního zdraví (zatím deficitní); programy „healthy ageing\"; redukce sociálních determinant (vzdělání, příjem). Indikátor v HSPA dashboardu sleduje subjektivní zdraví jako klíčový PROM (patient-reported outcome measure) parametr.",
+  "patient_story": "EU SILC dotazník, jaro 2023, respondent paní (54), Ústecký kraj. „Jak byste celkově popsala svůj zdravotní stav?\" — Odpovědi: 1. velmi dobré, 2. dobré, 3. uspokojivé, 4. špatné, 5. velmi špatné. Odpověď: „spíš uspokojivé\". V Česku takových respondentů zhruba třetina — Česko je prakticky na úrovni průměru EU.\n\nSubjektivní zdraví (% populace 16+, který uvedl „dobré\" nebo „velmi dobré\") v ČR je 67 % (Eurostat EU-SILC, hlth_silc_18, 2025). EU-27 průměr je 67,9 % — Česko je v podstatě na úrovni unijního průměru (signal warn). Trend je stabilní (2020: 63 %, 2025: 67 %). S věkem hodnocení vlastního zdraví klesá a nízkopříjmové vrstvy ho hodnotí výrazně hůř.\n\nStrukturálně subjektivní zdraví reflektuje skutečný zdravotní stav (objektivní indikátory korelují), ale také kulturní a psychologické faktory. Češi mají tendenci k pesimističtějšímu hodnocení vlastního zdraví než severské nebo středomořské země — částečně historická norma, částečně reálná zátěž chronických nemocí. Faktor také hraje socioekonomická vrstva: nízkopříjmoví respondenti hodnotí zdraví hůř o 20 procentních bodů.\n\nSubjektivní zdraví je důležitý kompozitní indikátor, který doplňuje klinická data. Politicky: zlepšení v PYLL, kardiovaskulární mortalitě a HLY se promítne do subjektivního zdraví; investice do mentálního zdraví (zatím deficitní); programy „healthy ageing\"; redukce sociálních determinant (vzdělání, příjem). Indikátor v HSPA dashboardu sleduje subjektivní zdraví jako klíčový PROM (patient-reported outcome measure) parametr.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
 }
