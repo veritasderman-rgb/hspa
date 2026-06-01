@@ -9,18 +9,27 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "szu_ehis",
-      "note": "Evropský výzkum zdraví (EHIS) – ČR, SZÚ Praha."
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "OBESITY"
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_ehis_bm1e",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "Y_GE18",
+        "bmi": "BMI_GE30",
+        "isced11": "TOTAL",
+        "unit": "PC"
+      },
+      "note": "Obezita (BMI ≥ 30), 18+, Eurostat hlth_ehis_bm1e. EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 19,8 % (2019), EU27 16,5 %."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "OBESITY",
-    "dataset": "HEALTH_STAT"
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_ehis_bm1e",
+    "params": {
+      "geo": "EU27_2020",
+      "bmi": "BMI_GE30"
+    },
+    "note": "EU-27 průměr ze stejné řady: 16,5 % (2019)."
   },
   "signal_thresholds": {
     "good": 3,
@@ -33,7 +42,9 @@
   ],
   "method_notes": "Self-reportovaná data v mezivlnách interpolována lineárně. EHIS probíhá každých ~5 let.",
   "limitations": "Self-reportovaná výška/váha podhodnocuje skutečnou obezitu o cca 2–4 %.",
-  "patient_story": "Praktický lékař, prohlídka 47letého pacienta. „BMI 32, obezita I. stupně. Krevní tlak hraniční, glykémie 6,2 mmol/l (prediabetes), cholesterol 6,3 mmol/l.\" Klasický metabolický syndrom. Pacient patří do 21 % české dospělé populace s BMI ≥ 30. Pro každého z nich je riziko KV onemocnění, diabetu typu 2 a onkologie významně zvýšené.\n\nPrevalence obezity (BMI ≥ 30) v dospělé populaci ČR je 20,8 % (SZÚ/EHIS, 2024). OECD průměr 19,4 %, EU 17,8 % — Česko je signal warn, nad oběma průměry. Trend výrazně rostoucí: 2008 — 17,4 %; 2024 — 20,8 % (+3,4 procentního bodu za 16 let). Mezi muži obezita 22 %, ženami 19,5 %. Mezi věkovými skupinami nejvyšší v 55–64 let (29 %), nejnižší v 18–24 (8 %).\n\nStrukturálně český obesogenic environment kombinuje vysokou spotřebu zpracovaných potravin, sladkých nápojů, alkoholu, nízkou pohybovou aktivitu (viz indikátor pohybova_aktivita_dospeli — 33 %). Sociální gradient je výrazný: nízkopříjmoví dospělí mají obezitu 28 %, vysokopříjmoví 14 %. Veřejné kampaně, daň z cukru, regulace marketingu junk food a strukturovaná pohybová politika v ČR chybí.\n\nObezita je v ČR podle SZÚ asociovaná s 8 % všech úmrtí (cesta přes diabetes, KV, onkologii, osteoartrózu). Politické páky: sugar tax (model UK Soft Drinks Industry Levy 2018 — pokles spotřeby o 21 % během 4 let); regulace marketingu junk food u dětí; nutri-skóre na obalech; investice do bariatrické chirurgie pro indikované; programy „healthy weight loss\" v primární péči (model Counterweight Plus UK). Indikátor v HSPA dashboardu sleduje obezitu jako klíčový determinant preventovatelné mortality.",
+  "patient_story": "Praktický lékař, prohlídka 47letého pacienta. „BMI 32, obezita I. stupně. Krevní tlak hraniční, glykémie 6,2 mmol/l (prediabetes), cholesterol 6,3 mmol/l.\" Klasický metabolický syndrom. Pacient patří do zhruba 20 % české dospělé populace s BMI ≥ 30. Pro každého z nich je riziko KV onemocnění, diabetu typu 2 a onkologie významně zvýšené.\n\nPrevalence obezity (BMI ≥ 30) v dospělé populaci ČR je 19,8 % (Eurostat EHIS, hlth_ehis_bm1e, 2019 — poslední dostupná vlna EHIS). EU‑27 průměr 16,5 % — Česko je signal bad, nad průměrem unie. Trend rostoucí: 2014 — 19,3 %; 2019 — 19,8 %. Obezita roste s věkem a je výrazně častější u nízkopříjmových skupin.\n\nStrukturálně český obesogenic environment kombinuje vysokou spotřebu zpracovaných potravin, sladkých nápojů, alkoholu, nízkou pohybovou aktivitu (viz indikátor pohybova_aktivita_dospeli — 25 %). Sociální gradient je výrazný: nízkopříjmoví dospělí mají obezitu 28 %, vysokopříjmoví 14 %. Veřejné kampaně, daň z cukru, regulace marketingu junk food a strukturovaná pohybová politika v ČR chybí.\n\nObezita je v ČR podle SZÚ asociovaná s 8 % všech úmrtí (cesta přes diabetes, KV, onkologii, osteoartrózu). Politické páky: sugar tax (model UK Soft Drinks Industry Levy 2018 — pokles spotřeby o 21 % během 4 let); regulace marketingu junk food u dětí; nutri-skóre na obalech; investice do bariatrické chirurgie pro indikované; programy „healthy weight loss\" v primární péči (model Counterweight Plus UK). Indikátor v HSPA dashboardu sleduje obezitu jako klíčový determinant preventovatelné mortality.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
 }

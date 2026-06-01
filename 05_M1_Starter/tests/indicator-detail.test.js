@@ -17,7 +17,9 @@ test('mortalita_kojenecka: existuje v indicators.json se správnými atributy', 
   assert.ok(ind, 'indikátor mortalita_kojenecka není v indicators.json');
   assert.equal(ind.area, 'Výsledky');
   assert.equal(ind.direction, 'lower_is_better');
-  assert.ok(ind.benchmark?.oecd != null);
+  // Detail page potřebuje benchmark (eu nebo oecd) — po verifikaci z Eurostatu
+  // (demo_minfind, 2026-06-01) je primární benchmark EU-27.
+  assert.ok(ind.benchmark?.eu != null || ind.benchmark?.oecd != null);
   assert.ok(Array.isArray(ind.trend) && ind.trend.length >= 2);
 });
 

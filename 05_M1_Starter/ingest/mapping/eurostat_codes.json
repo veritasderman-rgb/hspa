@@ -77,6 +77,55 @@
         "unit": "PC"
       }
     },
+    "mortalita_kojenecka": {
+      "_doc": "Infant mortality rate (demo_minfind, indic_de=INFMORRT) — úmrtí do 1 roku na 1000 živě narozených. Ověřeno živě 2026-06-01: CZ 2,3 (2024), EU27 3,5.",
+      "dataset": "demo_minfind",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "indic_de": "INFMORRT",
+        "unit": "RT"
+      }
+    },
+    "nadeje_doziti_zeny": {
+      "_doc": "Life expectancy at birth, women (demo_mlexpec, sex=F, age=Y_LT1). Ověřeno živě 2026-06-01: CZ 83,0 (2024), EU27 84,1.",
+      "dataset": "demo_mlexpec",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "F",
+        "age": "Y_LT1"
+      }
+    },
+    "sebevrazdy_per_100k": {
+      "_doc": "Standardised death rate, intentional self-harm / suicide (hlth_cd_asdr2, icd10=X60-X84_Y870 = X60–X84 + sekvely Y87.0, ESP 2013, unit=RT). Ověřeno živě 2026-06-01: CZ 11,6 (2023), EU27 10,4.",
+      "dataset": "hlth_cd_asdr2",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "TOTAL",
+        "icd10": "X60-X84_Y870",
+        "unit": "RT"
+      }
+    },
+    "obezita_prevalence": {
+      "_doc": "Obesity, BMI ≥ 30, population 18+ (hlth_ehis_bm1e, bmi=BMI_GE30, isced11=TOTAL). EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 19,8 % (2019), EU27 16,5 %.",
+      "dataset": "hlth_ehis_bm1e",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "Y_GE18",
+        "bmi": "BMI_GE30",
+        "isced11": "TOTAL",
+        "unit": "PC"
+      }
+    },
     "bmi_dospeli": {
       "_doc": "Overweight + obesity, BMI ≥ 25, population 18+ (hlth_ehis_bm1e, bmi=BMI_GE25, isced11=TOTAL). Dataset bm1b (dle staré karty) má jen dimenzi country-of-birth bez TOTAL — správný je bm1e (educational attainment, isced11=TOTAL). EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 60,0 % (2019), EU27 52,7 %.",
       "dataset": "hlth_ehis_bm1e",

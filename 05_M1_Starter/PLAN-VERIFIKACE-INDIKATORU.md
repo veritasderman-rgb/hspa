@@ -10,8 +10,8 @@
 
 ## 0. TL;DR (přečti první)
 
-- Stav (živý tracker §2): aktuálně **85 „Ilustrativní"** (žluté), 7 „Předběžné",
-  37 „Ověřeno" (výchozí bylo 91 / 8 / 30).
+- Stav (živý tracker §2): aktuálně **81 „Ilustrativní"** (žluté), 7 „Předběžné",
+  41 „Ověřeno" (výchozí bylo 91 / 8 / 30).
 - „Ilustrativní" = `source.origin: seed` bez explicitního `verification_status`.
 - **Cíl:** co nejvíc seed indikátorů přepnout na **„Ověřeno"** (= `origin: live`
   z funkčního fetcheru **+** `verification_status: "verified"` v metodické kartě).
@@ -53,6 +53,7 @@ CELKEM indikátorů: 129
 
 výchozí (2026-06-01):  origin seed 99 | live 30   ·  illustrative 91 | preliminary 8 | verified 30
 po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | preliminary 7 | verified 37
+po Dávce B (Eurostat): origin seed 89 | live 40   ·  illustrative 81 | preliminary 7 | verified 41
 ```
 
 **Hotové dávky:**
@@ -62,6 +63,15 @@ po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | prelimi
   `bmi_dospeli`. Opraven kód `hlth_silc_08` reason (TOOEFW→TXP_TFAR_WLIST), dataset
   BMI bm1b→bm1e, doplněny 4 nové mapping záznamy. EHIS-indikátory (bmi, pohyb) mají
   rok 2019 = poslední dostupná vlna EHIS.
+- ✅ **Dávka B — Eurostat rozšíření (2026-06-01):** +4 verified —
+  `mortalita_kojenecka` (demo_minfind), `nadeje_doziti_zeny` (demo_mlexpec sex=F),
+  `sebevrazdy_per_100k` (hlth_cd_asdr2 icd10=X60-X84_Y870, standardizovaná),
+  `obezita_prevalence` (hlth_ehis_bm1e BMI_GE30). Opraven `subjektivni_zdravi`
+  název/definice 15+→16+ (Codex P2). **Vědomě ponecháno seed:** `kuractvi_denni`
+  (karta má primárně SZÚ NAUTA, novější než EHIS 2019), `prevalence_diabetu`
+  (NDR registr úplnější než self-report EHIS), `vydaje_zdravotnictvi_hdp`
+  (Eurostat SHA nemá přímý %HDP unit). OECD-only (alkohol, spokojenost, LTC)
+  zůstává seed — OECD legacy SDMX endpoint mrtvý (404), nový vyžaduje přepis fetcheru.
 
 **Rozdělení 99 seed indikátorů podle zdroje** (= kde shánět živá data):
 
