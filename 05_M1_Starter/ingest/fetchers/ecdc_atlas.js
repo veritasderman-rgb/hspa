@@ -74,8 +74,8 @@ export async function fetchEcdcAtlasIndicator(indicatorId, mapping, opts = {}) {
     cz: { value: parsed.value, year: parsed.year, n: parsed.n },
     trend: parsed.trend,
     source: {
-      name: 'ECDC Surveillance Atlas / EARS-Net',
-      url: ATLAS_URL,
+      name: mapping.source_name ?? 'ECDC Surveillance Atlas',
+      url: mapping.source_url ?? ATLAS_URL,
       measure_id: mapping.measure_id,
       measure_code: mapping.measure_code ?? null,
     },
