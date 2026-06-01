@@ -9,24 +9,19 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "csu_datastat",
-      "endpoint": "https://data.csu.gov.cz/api/...",
-      "dataset": "DEM_NADEZE",
-      "dimensions": {
-        "sex": "T",
-        "uzemi": "CZ0",
-        "vek": "0"
-      }
+      "type": "eurostat_jsonstat",
+      "dataset": "demo_mlexpec",
+      "note": "Naděje dožití při narození, Eurostat demo_mlexpec (geo=CZ, sex=T, age=Y_LT1). Přepnuto z ČSÚ DataStat 2026-06-01: ČSÚ data.csu.gov.cz API kódy (DEM01-NADE) vrací 404, Eurostat dodává srovnatelnou hodnotu spolehlivě."
     },
     "fallback": {
-      "type": "csv",
-      "url": "https://csu.gov.cz/produkty/databaze-krok-otevrena-data"
+      "type": "csu_datastat",
+      "note": "ČSÚ DataStat — vyžaduje aktualizaci dataset kódů proti data.csu.gov.cz/api/katalog (samostatná iterace)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "EVIETOTLPOPYRSCSU",
-    "dataset": "HEALTH_STAT"
+    "type": "eurostat",
+    "code": "demo_mlexpec",
+    "note": "EU benchmark z téhož Eurostat datasetu (geo=EU27_2020): 81,5 roku (2024). Přepnuto z OECD 2026-06-01 spolu s primárním zdrojem, aby hodnota i benchmark pocházely ze stejné metodiky."
   },
   "signal_thresholds": {
     "good": 2,
@@ -34,12 +29,12 @@
   },
   "frequency": "yearly",
   "stewards": [
-    "ČSÚ",
-    "ÚZIS"
+    "Eurostat",
+    "ČSÚ"
   ],
-  "method_notes": "Standardizováno na evropskou populaci. Dostupné od 1991.",
+  "method_notes": "Standardizováno na evropskou populaci. Eurostat demo_mlexpec, dostupné od 1990.",
   "limitations": "Nezohledňuje rozdíly v kvalitě života, jen v délce. Vázáno na rok narození.",
-  "patient_story": "Praha, 2024. Novorozenec v ČR má před sebou statisticky 79,9 roku života. O tisíc kilometrů severozápadně, ve Švýcarsku, je to 83,4 roku. Rozdíl 3,5 roku zní abstraktně — ale za každým rokem stojí tisíce konkrétních příběhů a preventabilních úmrtí.\n\nČesko od roku 1991 prodloužilo naději dožití o více než 7 let. Mimořádný výsledek: kombinace lepší životosprávy, přístupu ke kardiovaskulárním lékům, centralizace akutní péče a poklesu průmyslového znečištění. Dohnali jsme velkou část ztráty z komunistické éry.\n\nAle pak přišel strop. V posledních 10 letech se zlepšování zpomalilo. Stárnutí populace je součástí příběhu — ale ne celé vysvětlení. Španělsko a Japonsko mají starší populaci a přesto živí déle a zdravěji.\n\nZa relativní stagnací stojí tři věci: vysoká kardiovaskulární mortalita ve středním věku (zejména u mužů), podfinancovaná primární prevence a kouření. Česko patří k zemím s nejvyšší spotřebou alkoholu v EU a průměrnou prevalencí kuřáctví. To nejsou osudy — jsou to volby, které zdravotní politika může ovlivnit.\n\nPolitické páky pro dosažení OECD úrovně (cca 81 let) jsou jasné, ale kumulativní: redukce kardiovaskulární mortality (přes kontrolu hypertenze a statinovou terapii), redukce kuřáctví (z 22,6 % na cílových 15 %), redukce alkoholu (z 14,4 l na cílových 10), zvýšení účasti v populačních screeningech (kolorektum, mamograf, cervix) a rozšíření prevence v primární péči. Bez kombinovaného úsilí stagnuje naděje dožití pod průměrem OECD i dlouhodobě.",
+  "patient_story": "Praha, 2024. Novorozenec v ČR má před sebou statisticky 80,1 roku života (Eurostat). O tisíc kilometrů severozápadně, ve Švýcarsku, je to přes 83 let. Rozdíl pár let zní abstraktně — ale za každým rokem stojí tisíce konkrétních příběhů a preventabilních úmrtí.\n\nČesko od roku 1991 prodloužilo naději dožití o více než 7 let. Mimořádný výsledek: kombinace lepší životosprávy, přístupu ke kardiovaskulárním lékům, centralizace akutní péče a poklesu průmyslového znečištění. Dohnali jsme velkou část ztráty z komunistické éry.\n\nAle pak přišel strop. V posledních 10 letech se zlepšování zpomalilo. Stárnutí populace je součástí příběhu — ale ne celé vysvětlení. Španělsko a Japonsko mají starší populaci a přesto živí déle a zdravěji.\n\nZa relativní stagnací stojí tři věci: vysoká kardiovaskulární mortalita ve středním věku (zejména u mužů), podfinancovaná primární prevence a kouření. Česko patří k zemím s nejvyšší spotřebou alkoholu v EU a průměrnou prevalencí kuřáctví. To nejsou osudy — jsou to volby, které zdravotní politika může ovlivnit.\n\nPolitické páky pro dosažení evropského průměru (EU27 cca 81,5 roku, 2024) jsou jasné, ale kumulativní: redukce kardiovaskulární mortality (přes kontrolu hypertenze a statinovou terapii), redukce kuřáctví (z 22,6 % na cílových 15 %), redukce alkoholu (z 14,4 l na cílových 10), zvýšení účasti v populačních screeningech (kolorektum, mamograf, cervix) a rozšíření prevence v primární péči. Bez kombinovaného úsilí zůstává naděje dožití pod průměrem EU i dlouhodobě.",
   "framework": "hspa",
   "dimension": "zdravi"
 }
