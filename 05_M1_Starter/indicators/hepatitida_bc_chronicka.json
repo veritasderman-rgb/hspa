@@ -1,0 +1,41 @@
+{
+  "id": "hepatitida_bc_chronicka",
+  "name": "Incidence chronické hepatitidy B a C",
+  "area": "Výsledky",
+  "domain": "Přenosné nemoci",
+  "subdomain": "Infekční nemoci",
+  "definition": "Počet nově hlášených chronických případů virové hepatitidy B a C na 100 000 obyvatel za rok (ECDC surveillance).",
+  "unit": "na 100 000 obyvatel",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas, measure HEPBC.CHRONIC.RATE (populace „Chronic cases\", dataset 361, healthtopic 26). ČR ověřeno přes REST API 2026-06-01: 2023 = 3.09/100k (N=335)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ — národní surveillance přenosných nemocí (EpiDat / hlášení ECDC)."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_atlas",
+    "code": "CURRENT",
+    "value": null,
+    "note": "EU/EEA agregát jako srovnatelná hodnota není přes Atlas REST API snadno dostupný; benchmark doplnit v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 30
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Chronická virová hepatitida B/C je hlavní příčinou jaterní cirhózy a hepatocelulárního karcinomu. Incidence odráží surveillance, testování rizikových skupin a očkovací pokrytí (HBV).",
+  "limitations": "Surveillance data podléhají rozdílům v hlášení mezi zeměmi; změny definice případu mohou ovlivnit trend.",
+  "framework": "monitoring",
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}

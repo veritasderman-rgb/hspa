@@ -1,0 +1,41 @@
+{
+  "id": "tuberkuloza",
+  "name": "Incidence tuberkulózy",
+  "area": "Výsledky",
+  "domain": "Přenosné nemoci",
+  "subdomain": "Infekční nemoci",
+  "definition": "Počet nově hlášených případů tuberkulózy na 100 000 obyvatel za rok (ECDC/WHO surveillance).",
+  "unit": "na 100 000 obyvatel",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas, measure TUBE.ALLCASES.RATE (populace „All cases\", dataset 419, healthtopic 54). ČR ověřeno přes REST API 2026-06-01: 2022 = 3.58/100k (N=384)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ — národní surveillance přenosných nemocí (EpiDat / hlášení ECDC)."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_atlas",
+    "code": "CURRENT",
+    "value": null,
+    "note": "EU/EEA agregát jako srovnatelná hodnota není přes Atlas REST API snadno dostupný; benchmark doplnit v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 30
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Tuberkulóza je sledovaný ukazatel veřejného zdraví. Nízká incidence odráží funkční surveillance, BCG politiku a socioekonomické podmínky. ČR patří mezi země s nízkou incidencí (<10/100k).",
+  "limitations": "Surveillance data podléhají rozdílům v hlášení mezi zeměmi; změny definice případu mohou ovlivnit trend.",
+  "framework": "monitoring",
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
