@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_pseudomonas_ceftazidim",
+  "name": "Rezistence Pseudomonas na ceftazidim",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Pseudomonas aeruginosa rezistentních na danou skupinu antibiotik v síti EARS-Net (ECDC).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure PSEAER.CAZ.R.PROPORTION, populace „Pseudomonas aeruginosa|Ceftazidime\". ČR ověřeno přes REST API 2026-06-01: 2024 = 16.0 % (N=711)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA agregát přes Atlas REST API není snadno dostupný; benchmark doplnit v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Ceftazidim je klíčové antipseudomonádové antibiotikum; rezistence omezuje empirickou léčbu.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}

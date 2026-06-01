@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_klebsiella_3gc",
+  "name": "Rezistence Klebsiella na cefalosporiny 3. generace",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Klebsiella pneumoniae rezistentních na danou skupinu antibiotik v síti EARS-Net (ECDC).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure KLEPNE.CEF.R.PROPORTION, populace „Klebsiella pneumoniae|Third-generation cephalosporins\". ČR ověřeno přes REST API 2026-06-01: 2024 = 44.1 % (N=1767)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA agregát přes Atlas REST API není snadno dostupný; benchmark doplnit v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Rezistence Klebsiella na 3GC (proxy ESBL) je vysoká a odráží nemocniční šíření.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
