@@ -70,6 +70,25 @@ export async function fetchNzisDataset(key, mapping, opts = {}) {
 
   if (!url) await tryCkan();
 
+  // 2a. Streamovaná agregace (velké datasety, které se nevejdou do paměti — NRH).
+  //     Stáhne gz na disk, streamově zagreguje na kompaktní records.
+  if (mapping.stream_aggregate && resolvedFormat === 'csv.gz') {
+    ensureCacheDir();
+    const rawPath = cachePath(`uzis_${key}.raw.csv`);
+    console.log(`  [nzis] ${key}: downloading ${url} (csv.gz, stream-aggregate)`);
+    await downloadAndGunzipToFile(url, rawPath, {
+      headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
+    });
+    const { records, columns } = await streamAggregateCsv(rawPath, mapping.stream_aggregate);
+    try { fs.unlinkSync(rawPath); } catch { /* ponech, není fatální */ }
+    writeCache(cacheJson, {
+      key, name: mapping.name, fetched_at: new Date().toISOString(), url,
+      resolved_via: resolvedVia, aggregated: true, rows: records.length, columns, records,
+    });
+    console.log(`  [nzis] ${key}: ${records.length} agregovaných řádků (stream)`);
+    return { source: resolvedVia, rows: records.length, columns };
+  }
+
   // 2. Download + parse
   let csvText;
   try {
@@ -127,6 +146,46 @@ export async function fetchNzisDataset(key, mapping, opts = {}) {
 
   console.log(`  [nzis] ${key}: ${records.length} řádků, ${columns.length} sloupců`);
   return { source: resolvedVia, rows: records.length, columns };
+}
+
+/**
+ * Streamovaná agregace velkého CSV (na disku) — pro datasety, které se nevejdou
+ * do paměti jako string (např. NRH dlouhodobá řada, ~300 MB rozbalená, 11 M řádků).
+ * Agreguje po klíči `group_by`, sčítá `count_col` (celkem) a podmnožinu, kde
+ * `death_flag.col == death_flag.value` (úmrtí). Vrací kompaktní records ve tvaru,
+ * který čeká extractFromNrh: { <rename...>, [count_as]: total, [deaths_as]: deaths }.
+ * @returns {Promise<{records: object[], columns: string[]}>}
+ */
+export async function streamAggregateCsv(filePath, cfg) {
+  const { createReadStream } = await import('node:fs');
+  const { parse } = await import('csv-parse');
+  const groupBy = cfg.group_by;
+  const acc = new Map();
+  const parser = createReadStream(filePath).pipe(parse({
+    columns: true, skip_empty_lines: true, relax_quotes: true, relax_column_count: true,
+  }));
+  for await (const row of parser) {
+    const keyParts = groupBy.map(c => row[c] ?? '');
+    const key = keyParts.join('');
+    let o = acc.get(key);
+    if (!o) { o = { key: keyParts, total: 0, deaths: 0 }; acc.set(key, o); }
+    const v = parseInt(row[cfg.count_col], 10) || 0;
+    o.total += v;
+    if (cfg.death_flag && String(row[cfg.death_flag.col]) === String(cfg.death_flag.value)) {
+      o.deaths += v;
+    }
+  }
+  const rename = cfg.rename ?? {};
+  const records = [];
+  for (const o of acc.values()) {
+    const rec = {};
+    groupBy.forEach((c, i) => { rec[rename[c] ?? c] = o.key[i]; });
+    rec[cfg.count_as ?? 'pocet'] = o.total;
+    if (cfg.death_flag) rec[cfg.deaths_as ?? 'umrti'] = o.deaths;
+    records.push(rec);
+  }
+  const columns = records.length ? Object.keys(records[0]) : [];
+  return { records, columns };
 }
 
 function detectDelimiter(text) {

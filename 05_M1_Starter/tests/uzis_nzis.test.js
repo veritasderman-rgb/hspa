@@ -7,7 +7,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { gzipSync } from 'node:zlib';
 
-import { fetchNzisDataset, fetchUzisNzis, loadUzisMapping } from '../ingest/fetchers/uzis_nzis.js';
+import { fetchNzisDataset, fetchUzisNzis, loadUzisMapping, streamAggregateCsv } from '../ingest/fetchers/uzis_nzis.js';
+import os from 'node:os';
+import path from 'node:path';
 import { resolveDistributionUrl, searchDatasets } from '../ingest/lib/ckan.js';
 import { gunzipBufferToString } from '../ingest/lib/gzip.js';
 import { cachePath, ensureCacheDir } from '../ingest/lib/cache.js';
@@ -255,4 +257,37 @@ test('fetchNzisDataset: chybějící expected_column nezpůsobí selhání (jen 
   const r = await fetchNzisDataset('warn_t', mapping, { fetchImpl, sleepImpl: async () => {} });
   assert.equal(r.rows, 1);
   assert.equal(r.columns.length, 2);
+});
+
+test('streamAggregateCsv: agreguje NRH-like data (rok+zdg, sum hosp + deaths)', async () => {
+  // Simuluje NRH řádky: jeden řádek = kombinace s flagem umrti (0/1) a pocet_hosp.
+  const csv = [
+    'rok,pohlavi,zdg,umrti,pocet_hosp',
+    '2024,1,I21,0,600',
+    '2024,1,I21,1,40',
+    '2024,2,I21,1,20',
+    '2024,1,J18,0,100',
+    '2023,1,I21,1,30',
+  ].join('\n');
+  const tmp = path.join(os.tmpdir(), `nrh_test_${Date.now()}.csv`);
+  fs.writeFileSync(tmp, csv);
+  try {
+    const { records, columns } = await streamAggregateCsv(tmp, {
+      group_by: ['rok', 'zdg'],
+      count_col: 'pocet_hosp',
+      death_flag: { col: 'umrti', value: '1' },
+      rename: { zdg: 'diagnoza_3' },
+      count_as: 'pocet',
+      deaths_as: 'umrti',
+    });
+    assert.deepEqual(columns, ['rok', 'diagnoza_3', 'pocet', 'umrti']);
+    const i21_2024 = records.find(r => r.rok === '2024' && r.diagnoza_3 === 'I21');
+    assert.equal(i21_2024.pocet, 660);  // 600+40+20
+    assert.equal(i21_2024.umrti, 60);   // 40+20 (jen umrti=1)
+    const j18 = records.find(r => r.diagnoza_3 === 'J18');
+    assert.equal(j18.pocet, 100);
+    assert.equal(j18.umrti, 0);
+  } finally {
+    fs.unlinkSync(tmp);
+  }
 });
