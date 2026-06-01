@@ -76,9 +76,22 @@ export async function fetchNzisDataset(key, mapping, opts = {}) {
     ensureCacheDir();
     const rawPath = cachePath(`uzis_${key}.raw.csv`);
     console.log(`  [nzis] ${key}: downloading ${url} (csv.gz, stream-aggregate)`);
-    await downloadAndGunzipToFile(url, rawPath, {
-      headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
-    });
+    try {
+      await downloadAndGunzipToFile(url, rawPath, {
+        headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
+      });
+    } catch (err) {
+      // Zachovej primary→CKAN fallback i pro streamovanou cestu (jako non-stream blok).
+      if (resolvedVia === 'primary') {
+        console.warn(`  [nzis] ${key}: primary failed (${err.message}), trying CKAN`);
+        await tryCkan();
+        await downloadAndGunzipToFile(url, rawPath, {
+          headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
+        });
+      } else {
+        throw err;
+      }
+    }
     const { records, columns } = await streamAggregateCsv(rawPath, mapping.stream_aggregate);
     try { fs.unlinkSync(rawPath); } catch { /* ponech, není fatální */ }
     writeCache(cacheJson, {
@@ -157,12 +170,22 @@ export async function fetchNzisDataset(key, mapping, opts = {}) {
  * @returns {Promise<{records: object[], columns: string[]}>}
  */
 export async function streamAggregateCsv(filePath, cfg) {
-  const { createReadStream } = await import('node:fs');
+  const { createReadStream, openSync, readSync, closeSync } = await import('node:fs');
   const { parse } = await import('csv-parse');
   const groupBy = cfg.group_by;
   const acc = new Map();
+  // Detekce oddělovače z hlavičky (ÚZIS publikuje ',' i ';') — bez ní by
+  // csv-parse (default ',') u ';'-CSV držel celou hlavičku jako jeden sloupec.
+  let delimiter = ',';
+  try {
+    const fd = openSync(filePath, 'r');
+    const buf = Buffer.alloc(8192);
+    const n = readSync(fd, buf, 0, 8192, 0);
+    closeSync(fd);
+    delimiter = detectDelimiter(buf.toString('utf8', 0, n));
+  } catch { /* default ',' */ }
   const parser = createReadStream(filePath).pipe(parse({
-    columns: true, skip_empty_lines: true, relax_quotes: true, relax_column_count: true,
+    columns: true, skip_empty_lines: true, relax_quotes: true, relax_column_count: true, delimiter,
   }));
   for await (const row of parser) {
     const keyParts = groupBy.map(c => row[c] ?? '');
