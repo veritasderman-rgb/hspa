@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { fetchNrpzs } from './fetchers/uzis_nrpzs.js';
+import { fetchUzisNzis } from './fetchers/uzis_nzis.js';
 import { fetchCsu } from './fetchers/csu.js';
 import { fetchOecd } from './fetchers/oecd.js';
 import { fetchOecdSdmx2 } from './fetchers/oecd_sdmx2.js';
@@ -32,6 +33,7 @@ async function run() {
 
   const fetchers = [
     { name: 'ÚZIS NRPZS', fn: fetchNrpzs },
+    { name: 'ÚZIS NZIS (otevřená data — screening ap.)', fn: fetchUzisNzis },
     { name: 'ČSÚ DataStat', fn: fetchCsu },
     { name: 'OECD Health', fn: fetchOecd },
     { name: 'OECD Health (SDMX 2.0 Data Explorer)', fn: fetchOecdSdmx2 },
