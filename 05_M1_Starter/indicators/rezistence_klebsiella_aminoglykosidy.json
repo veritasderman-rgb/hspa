@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_klebsiella_aminoglykosidy",
+  "name": "Rezistence Klebsiella na aminoglykosidy",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Klebsiella pneumoniae rezistentních na danou skupinu antibiotik v síti EARS-Net (ECDC).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure KLEPNE.AMINOGLYCOSIDES.R.PROPORTION, populace „Klebsiella pneumoniae|Aminoglycosides\". ČR ověřeno přes REST API 2026-06-01: 2024 = 35.0 % (N=1767)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA agregát přes Atlas REST API není snadno dostupný; benchmark doplnit v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Vysoká rezistence Klebsiella na aminoglykosidy odráží šíření multirezistentních kmenů.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
