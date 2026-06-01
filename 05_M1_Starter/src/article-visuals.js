@@ -34,6 +34,26 @@ export function enhanceArticleVisuals(root) {
   const scope = root ?? document;
   enhanceBarCompare(scope);
   enhanceCounters(scope);
+  enhanceScrollableTables(scope);
+}
+
+// =====================================================================
+//  .av-data-table-wrap — horizontálně posuvný kontejner tabulky
+// =====================================================================
+//
+// WCAG 2.1.1 / axe scrollable-region-focusable: kontejner s overflow-x:auto
+// musí být fokusovatelný klávesnicí, aby šel posouvat i bez myši/dotyku
+// (na úzkých viewportech tabulka přetéká). Doplníme tabindex + role/aria.
+function enhanceScrollableTables(scope) {
+  for (const wrap of scope.querySelectorAll('.av-data-table-wrap:not([data-av-scroll])')) {
+    wrap.dataset.avScroll = '1';
+    if (!wrap.hasAttribute('tabindex')) wrap.setAttribute('tabindex', '0');
+    if (!wrap.hasAttribute('role')) wrap.setAttribute('role', 'region');
+    if (!wrap.hasAttribute('aria-label')) {
+      const cap = wrap.querySelector('caption');
+      wrap.setAttribute('aria-label', cap?.textContent?.trim() || 'Posuvná tabulka s daty');
+    }
+  }
 }
 
 // =====================================================================
