@@ -10,8 +10,8 @@
 
 ## 0. TL;DR (přečti první)
 
-- Stav (živý tracker §2): aktuálně **81 „Ilustrativní"** (žluté), 7 „Předběžné",
-  41 „Ověřeno" (výchozí bylo 91 / 8 / 30).
+- Stav (živý tracker §2): aktuálně **80 „Ilustrativní"** (žluté), 7 „Předběžné",
+  42 „Ověřeno" (výchozí bylo 91 / 8 / 30).
 - „Ilustrativní" = `source.origin: seed` bez explicitního `verification_status`.
 - **Cíl:** co nejvíc seed indikátorů přepnout na **„Ověřeno"** (= `origin: live`
   z funkčního fetcheru **+** `verification_status: "verified"` v metodické kartě).
@@ -55,6 +55,7 @@ výchozí (2026-06-01):  origin seed 99 | live 30   ·  illustrative 91 | prelim
 po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | preliminary 7 | verified 37
 po Dávce B (Eurostat): origin seed 89 | live 40   ·  illustrative 81 | preliminary 7 | verified 41
 po integritní opravě:  origin seed 88 | live 41   ·  illustrative 81 | preliminary 7 | verified 41
+po Dávce C (OECD):     origin seed 87 | live 42   ·  illustrative 80 | preliminary 7 | verified 42
 ```
 
 > Integritní oprava (2026-06-01): `rezistence_antibiotik_ecoli` měl `verified`,
@@ -75,8 +76,21 @@ po integritní opravě:  origin seed 88 | live 41   ·  illustrative 81 | prelim
   název/definice 15+→16+ (Codex P2). **Vědomě ponecháno seed:** `kuractvi_denni`
   (karta má primárně SZÚ NAUTA, novější než EHIS 2019), `prevalence_diabetu`
   (NDR registr úplnější než self-report EHIS), `vydaje_zdravotnictvi_hdp`
-  (Eurostat SHA nemá přímý %HDP unit). OECD-only (alkohol, spokojenost, LTC)
-  zůstává seed — OECD legacy SDMX endpoint mrtvý (404), nový vyžaduje přepis fetcheru.
+  (Eurostat SHA nemá přímý %HDP unit).
+- ✅ **Dávka C — OECD SDMX 2.0 (2026-06-01):** +1 verified —
+  `absolventi_lekarstvi_per_100k` (16,4 / 100 000, 2023, OECD ⌀ 15,4;
+  DSD_HEALTH_REAC_EMP@DF_GRAD). **Postaven nový fetcher** `oecd_sdmx2.js`
+  na novém Data Explorer endpointu (legacy stats.oecd.org = 404) — reusable
+  pro další OECD indikátory. Pozn.: ověřená hodnota obrátila narativ (seed 13
+  „deficit/warn" → 16,4 „nadprůměr/good"; seed byl podhodnocený odhad).
+  **Vědomě NEpřevedeno** (NEHÁDAT, viz §3 bod 2): `pracovnici_ltc`
+  (dataflow vrací přes node/undici HTTP 500 i s Accept */* — cron běží na
+  node, takže by stejně selhal; funguje jen přes curl/HTTP2 → potřebuje
+  key-path query nebo jiný http klient), `alkohol_spotreba` (OECD 11,2 vs
+  seed 14,4 — recorded vs WHO/národní), `pyll` (<75 vs <70 cutoff),
+  `jednodenni_chirurgie_katarakta` (žádná CZE data), `vydaje_prevence_pct`
+  (DSD_SHA obří dataset, nutný přesný klíč), `spokojenost_pece` (Gallup
+  mimo strojní API). Klíč: OECD SDMX vrací 500 na Accept: application/json.
 
 **Rozdělení 99 seed indikátorů podle zdroje** (= kde shánět živá data):
 
