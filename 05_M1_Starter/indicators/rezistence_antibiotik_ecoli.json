@@ -10,11 +10,11 @@
   "data_source": {
     "primary": {
       "type": "szu",
-      "note": "EARS-Net (European Antimicrobial Resistance Surveillance Network) — ČR data ze SZÚ."
+      "note": "EARS-Net (European Antimicrobial Resistance Surveillance Network) — ČR data ze SZÚ (NRL pro antibiotika, https://szu.cz/). Per-country % pro E. coli/fluorochinolony NENÍ v textu AER 2024, je v ECDC Surveillance Atlas jako mapová data — vyžaduje napojení na Atlas datovou sadu pro verifikaci national hodnoty."
     },
     "fallback": {
-      "type": "eurostat",
-      "code": "hlth_rs_resist"
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas of Infectious Diseases (atlas.ecdc.europa.eu) — per-country AMR %. Dřívější fallback na Eurostat hlth_rs_resist byl odstraněn 2026-06-01: dataset je neplatný (API vrací 404 'not available for dissemination')."
     }
   },
   "benchmark_source": {
@@ -36,5 +36,7 @@
   "limitations": "Pouze invazivní izoláty — nezahrnuje ambulantní a komunitní izoláty, kde je rezistence vyšší.",
   "patient_story": "Mikrobiologická laboratoř, krajská nemocnice, výsledek hemokultury 68leté pacientky se sepsí. Escherichia coli, citlivost: rezistentní k ampicilinu, ko-trimoxazolu, ciprofloxacinu. Lékař volí carbapenem — širokospektré ATB poslední rezervy. Fluorochinolonová rezistence E. coli je v EU/EEA jednou z nejčastějších.\n\nEU/EEA populačně vážený průměr rezistence invazivní E. coli na fluorochinolony je 22,5 % (ECDC EARS-Net, AER 2024) s klesajícím trendem. Česká hodnota uvedená v dashboardu (13,1 %) má origin: seed a NEBYLA ověřena proti primárnímu EARS-Net výstupu — pro CEE zemi je vůči EU průměru 22,5 % nezvykle nízká a vyžaduje primární verifikaci (ECDC Surveillance Atlas / SZÚ EARS-Net národní uzel). Závažnější MDR (multi-drug resistant) E. coli s ESBL produkcí cca 7 % izolátů. Carbapenem-resistant Enterobacterales (CRE) zatím v ČR vzácné, ale stoupající.\n\nStrukturálně český problém s antimikrobiální rezistencí (AMR) kombinuje: relativně nízkou ambulantní spotřebu ATB (viz spotreba_antibiotik), ale vysokou nemocniční spotřebu; insuficientní antibiotic stewardship programy v menších nemocnicích; nedostatečnou izolaci pacientů s MDR; veterinární medicínu (90 % EU ATB spotřebovává zvířata — ČR má dobrý monitoring v gestci SVS).\n\nAMR je podle WHO „global health threat\" — predikce do 2050: 10 milionů úmrtí ročně globálně. ČR je v evropském středu — bez akcelerace stewardship hrozí zhoršení. Politické páky: dokončení Národního antibiotického programu (NAP) 2025–2030; antibiotic stewardship týmy v každé nemocnici (cíl 100 % nemocnic 200+ lůžek); investice do molekulární mikrobiologie (rychlé identifikace); redukce ATB ve veterinární medicíně (EU strategie „from farm to fork\"); osvěta veřejnosti. Indikátor v HSPA dashboardu sleduje rezistenci E. coli jako klíčový ukazatel AMR.",
   "framework": "hspa",
-  "dimension": "bezpecnost"
+  "dimension": "bezpecnost",
+  "verification_status": "review-pending",
+  "verified_at": null
 }
