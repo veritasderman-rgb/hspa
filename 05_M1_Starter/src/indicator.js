@@ -4,7 +4,7 @@
 // (determinanty, význam) z metodické karty a kompletní metodiku.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible, resolveVerificationStatus, verifBadgeHtml } from './page-shared.js';
 import { renderCzMap } from './cz-map.js';
 
 const DATA_URL = 'data/indicators.json';
@@ -97,21 +97,10 @@ function renderDetail(ind, card, regionDataset) {
 
   const subdomain = ind.subdomain ? ` · ${escapeHtml(ind.subdomain)}` : '';
 
-  const verifText = {
-    verified: 'Ověřeno',
-    preliminary: 'Předběžné',
-    illustrative: 'Ilustrativní',
-  }[ind.verification_status] || '';
-  const verifTitle = {
-    verified: 'Data z primárního zdroje, max. 12 měsíců staré',
-    preliminary: 'Data dostupná, metodika v revizi nebo zdroj není primární',
-    illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
-  }[ind.verification_status] || '';
-  // Pill renderujeme jen pro známé statusy (verifText neprázdný) — nepodporovaný
-  // status by jinak vykreslil prázdnou pill jen s ikonou.
-  const verifBadge = verifText
-    ? `<span class="verif-badge ${ind.verification_status === 'verified' ? 'verif-verified' : ind.verification_status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
-    : '';
+  // Verifikační odznak — jednotná logika sdílená s přehledem (page-shared.js):
+  // explicitní status z dat, jinak odvození z původu hodnoty (seed → ilustrativní,
+  // live → předběžné). Tím se odznak zobrazí i u indikátorů bez ručního statusu.
+  const verifBadge = verifBadgeHtml(ind);
 
   root.innerHTML = `
     <a class="back-link" href="index.html">← zpět na přehled indikátorů</a>
