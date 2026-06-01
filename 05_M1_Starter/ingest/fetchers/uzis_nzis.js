@@ -21,7 +21,7 @@ import { CONFIG } from '../config.js';
 import { fetchWithRetry } from '../lib/http.js';
 import { readCacheIfFresh, writeCache, cachePath, ensureCacheDir } from '../lib/cache.js';
 import { parseCsv } from '../lib/csv.js';
-import { downloadAndGunzipToFile, gunzipBufferToString } from '../lib/gzip.js';
+import { downloadAndGunzipToFile, downloadToFile, gunzipBufferToString } from '../lib/gzip.js';
 import { resolveDistributionUrl } from '../lib/ckan.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -71,23 +71,26 @@ export async function fetchNzisDataset(key, mapping, opts = {}) {
   if (!url) await tryCkan();
 
   // 2a. Streamovaná agregace (velké datasety, které se nevejdou do paměti — NRH).
-  //     Stáhne gz na disk, streamově zagreguje na kompaktní records.
-  if (mapping.stream_aggregate && resolvedFormat === 'csv.gz') {
+  //     Stáhne na disk (gz→gunzip / plain csv→stream), streamově zagreguje.
+  if (mapping.stream_aggregate) {
     ensureCacheDir();
     const rawPath = cachePath(`uzis_${key}.raw.csv`);
-    console.log(`  [nzis] ${key}: downloading ${url} (csv.gz, stream-aggregate)`);
+    // Closure čte resolvedFormat za běhu — po tryCkan (který může změnit formát
+    // z csv.gz na csv) retry použije správnou metodu (gunzip vs plain stream).
+    const downloadToDisk = async () => {
+      const o = { headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl };
+      if (resolvedFormat === 'csv.gz') await downloadAndGunzipToFile(url, rawPath, o);
+      else await downloadToFile(url, rawPath, o);
+    };
+    console.log(`  [nzis] ${key}: downloading ${url} (${resolvedFormat}, stream-aggregate)`);
     try {
-      await downloadAndGunzipToFile(url, rawPath, {
-        headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
-      });
+      await downloadToDisk();
     } catch (err) {
       // Zachovej primary→CKAN fallback i pro streamovanou cestu (jako non-stream blok).
       if (resolvedVia === 'primary') {
         console.warn(`  [nzis] ${key}: primary failed (${err.message}), trying CKAN`);
         await tryCkan();
-        await downloadAndGunzipToFile(url, rawPath, {
-          headers: { 'User-Agent': CONFIG.uzis.user_agent }, fetchImpl,
-        });
+        await downloadToDisk();
       } else {
         throw err;
       }
