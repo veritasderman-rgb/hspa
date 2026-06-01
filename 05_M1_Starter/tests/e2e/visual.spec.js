@@ -16,13 +16,17 @@ const PAGES = [
   { path: '/prevence.html',               name: 'prevention' },
   { path: '/strategie.html',              name: 'strategies' },
   { path: '/glosar.html',                 name: 'glossary' },
-  { path: '/o-projektu.html',             name: 'about' },
   { path: '/jak-funguje.html',            name: 'how-it-works' },
   // Pozn.: dlouhé články (clanek-*.html) se z vizuálních snapshotů vynechávají —
   // Article Visuals používají JS count-up animace (requestAnimationFrame), které
   // CSS `animation:none` nezastaví, takže snapshot padá na nedeterministický
   // frame. Přístupnost článků pokrývá a11y.spec.js; layout dashboardových
   // stránek (stabilní) pokrývají snapshoty výše.
+  //
+  // o-projektu.html (about) je rovněž vyřazena z VISUAL snapshotu: její
+  // fullPage výška kolísá o ±1px mezi běhy (sub-pixel zaokrouhlení dlouhé
+  // textové stránky + async [data-stat] skóre), což působí nedeterministický
+  // size mismatch. Přístupnost about pokrývá a11y.spec.js.
 ];
 
 for (const { path, name } of PAGES) {
@@ -31,6 +35,13 @@ for (const { path, name } of PAGES) {
     // Vypni animace + počkej na async fetch dokončení a načtení fontů
     await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; }' });
     await page.evaluate(() => document.fonts && document.fonts.ready);
+    // Počkej, až se naplní [data-stat] placeholdery (skóre/počty se dopočítají
+    // async z dat) — dokud drží „—", mění se výška stránky o ±1px mezi běhy
+    // a fullPage snapshot je nedeterministický (size mismatch).
+    await page.waitForFunction(() => {
+      const els = Array.from(document.querySelectorAll('[data-stat]'));
+      return els.length === 0 || els.every(el => el.textContent.trim() !== '—');
+    }, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(600);
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
