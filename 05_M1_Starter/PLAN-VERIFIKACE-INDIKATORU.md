@@ -54,7 +54,12 @@ CELKEM indikátorů: 129
 výchozí (2026-06-01):  origin seed 99 | live 30   ·  illustrative 91 | preliminary 8 | verified 30
 po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | preliminary 7 | verified 37
 po Dávce B (Eurostat): origin seed 89 | live 40   ·  illustrative 81 | preliminary 7 | verified 41
+po integritní opravě:  origin seed 88 | live 41   ·  illustrative 81 | preliminary 7 | verified 41
 ```
+
+> Integritní oprava (2026-06-01): `rezistence_antibiotik_ecoli` měl `verified`,
+> ale `origin: seed`. Živý ECDC Atlas fetch (ESCCOL.FLUOROQUINOLONES) potvrdil
+> shodnou hodnotu 19,2 % (2024) i celý trend → přepnuto na `origin: live`.
 
 **Hotové dávky:**
 - ✅ **Dávka A — Eurostat (2026-06-01):** +7 verified —
@@ -102,19 +107,36 @@ doplnit explicit `verified` do karty (1 indikátor).
    - Postup: najdi dataset+filtry → přidej do `ingest/mapping/eurostat_codes.json`
      → ověř fetch živě → přepni kartu na `eurostat_jsonstat` + `verified`.
 
-2. **Dávka B — OECD (~8 indikátorů)** 🟡
+   - ✅ **Dávka B — Eurostat rozšíření (HOTOVO 2026-06-01):** `mortalita_kojenecka`,
+     `nadeje_doziti_zeny`, `sebevrazdy_per_100k`, `obezita_prevalence` (viz §2).
+   - ⏭️ **Vyčerpáno — diskontinuované/nevhodné Eurostat řady (NEHÁDAT):**
+     `vydaje_zdravotnictvi_hdp` (hlth_sha11_hf nemá přímý %HDP unit),
+     CT/MRI/lůžka/délka hospitalizace (`hlth_rs_equip`, `hlth_rs_bds`,
+     `hlth_co_inpst` jsou „historical data", poslední 2020/2021 — frozen),
+     `pyll_potencialne_ztracene_roky` (Eurostat `hlth_cd_apll` → 404),
+     `kuractvi_denni`/`prevalence_diabetu` (EHIS 2019 by degradovalo recenci
+     proti SZÚ NAUTA / NDR registru, který karty drží jako primární).
+
+2. **OECD (~7 indikátorů)** 🔴 BLOKOVÁNO — fetcher potřebuje přepis
    - Kandidáti: `alkohol_spotreba`, `spokojenost_pece`, `vydaje_prevence_pct`,
      `absolventi_lekarstvi_per_100k`, `jednodenni_chirurgie_katarakta`,
-     `pracovnici_ltc_per_100_65plus`, `lekari_per_1000`, `sestry_per_1000`.
-   - `ingest/mapping/oecd_codes.json` už má 8 položek — zjisti, proč zůstaly seed
-     (fetcher selhává? špatné kódy?). OECD SDMX endpoint:
-     `https://sdmx.oecd.org/public/rest/data/...` — vyžaduje přesné dataflow ID.
-   - POZOR: OECD fetcher byl v sandboxu pomalý (timeout 50s). Spouštěj s delším
-     timeoutem nebo per-indikátor.
+     `pracovnici_ltc_per_100_65plus`, `pyll_potencialne_ztracene_roky`.
+   - **Příčina seed (zjištěno 2026-06-01):** `ingest/fetchers/oecd.js` volá
+     legacy `stats.oecd.org/SDMX-JSON` → **404 (endpoint zrušen)**. Nový
+     `sdmx.oecd.org/public/rest/data/{agency},{dataflow},{ver}/{key}?format=jsondata`
+     žije (vrací 422 na špatný klíč), ale vyžaduje přepsat fetcher na SDMX 2.1
+     REST + dohledat přesná dataflow ID pro každý indikátor. **Samostatný úkol**
+     (nehádat dataflow ID/hodnoty). `lekari_per_1000`/`sestry_per_1000` už NEJSOU
+     seed (mají ÚZIS NRZP zdroj).
 
-3. **Dávka C — rychlé výhry + ECDC rozšíření**
-   - `nadeje_doziti_total`: doplnit explicit `verified` (už je live).
-   - Zbylá ECDC témata (HIV, STI) — vzor ECDC Atlas, viz §5.
+3. **Dávka C — ECDC rozšíření** 🟡 částečně
+   - ✅ Integritní oprava `rezistence_antibiotik_ecoli` seed→live (viz §2).
+   - ⚠️ HIV/STI: ECDC Atlas má HealthTopic HIV (Id 28), dataset
+     `CURRENT.HIVAIDS.YEARLY` (Id 881), ale `measure_id` pro „nové diagnózy /100k"
+     se nepodařilo zjistit přes GET discovery (`GetIndicatorMeasuresFor…` vrací
+     `Measures: []`, ostatní list-endpointy 404). Web app Atlasu nejspíš volá
+     POST/jiný service — **dohledat přesné volání před přidáním** (nehádat
+     measure_id). Pak stačí přidat řádek do `ecdc_atlas_codes.json` (vzor §5).
 
 4. **Dávka D — ÚZIS (~45 indikátorů)** ⚠️ největší, nejnáročnější
    - ÚZIS fetchery (`uzis_nrpzs`, `uzis_nzis`…) jsou pomalé a jejich endpointy
