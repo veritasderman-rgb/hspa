@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { fetchNrpzs } from './fetchers/uzis_nrpzs.js';
 import { fetchCsu } from './fetchers/csu.js';
 import { fetchOecd } from './fetchers/oecd.js';
+import { fetchOecdSdmx2 } from './fetchers/oecd_sdmx2.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
 import { fetchSukl } from './fetchers/sukl.js';
 import { fetchSuklMr } from './fetchers/sukl_mr.js';
@@ -33,6 +34,7 @@ async function run() {
     { name: 'ÚZIS NRPZS', fn: fetchNrpzs },
     { name: 'ČSÚ DataStat', fn: fetchCsu },
     { name: 'OECD Health', fn: fetchOecd },
+    { name: 'OECD Health (SDMX 2.0 Data Explorer)', fn: fetchOecdSdmx2 },
     { name: 'Eurostat', fn: fetchEurostat },
     { name: 'SÚKL OpenData', fn: fetchSukl },
     { name: 'SÚKL OpenData (MR výpadky léčiv)', fn: fetchSuklMr },

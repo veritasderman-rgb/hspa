@@ -9,13 +9,21 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "oecd",
-      "note": "OECD Health Workforce — Medical graduates."
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_REAC_EMP@DF_GRAD",
+      "dims": {
+        "MEASURE": "HSG",
+        "UNIT_MEASURE": "10P5HB",
+        "HEALTH_PROF": "PHYS"
+      },
+      "note": "OECD Health Statistics — Health graduates (physicians), per 100 000 inhabitants. Nový SDMX 2.0 Data Explorer endpoint (legacy stats.oecd.org je 404). Ověřeno živě 2026-06-01: ČR 16,4 (2023), OECD ⌀ 15,4."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "MED_GRADUATES"
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_REAC_EMP@DF_GRAD",
+    "note": "OECD průměr (mean jednotlivých zemí za rok 2023): 15,4 / 100 000."
   },
   "signal_thresholds": {
     "good": 5,
@@ -27,9 +35,11 @@
     "MŠMT",
     "MZČR"
   ],
-  "method_notes": "Zahrnuje absolventy všeobecného lékařství i zubního lékařství. ČR roste pomalu — výrazná poptávka, ale kapacity LF jsou limitovány. Část absolventů migruje (do SK, DE, AT).",
+  "method_notes": "OECD měření HSG/PHYS = absolventi lékařství (lékaři), per 100 000 obyvatel; nezahrnuje zubní lékařství samostatně (to je v OECD jiný HEALTH_PROF). ČR má nadprůměrný počet absolventů, ale část migruje (DE/AT) a rozložení do oborů/regionů je nerovnoměrné.",
   "limitations": "Nezachycuje skutečný počet vstupů do praxe (rozdíl mezi absolventy a aprobovanými lékaři). Migrační saldo je sledováno samostatně.",
-  "patient_story": "Lékařská fakulta, červen, promoce. 350 nových lékařů vchází do bílých plášťů. V Česku ročně promuje cca 1 380 absolventů všeobecného lékařství — 13 na 100 000 obyvatel. To je signal warn — pod OECD průměrem 14 a pod EU průměrem 15. Pro doplnění odcházející kohorty (cca 1 500 lékařů ročně do důchodu) je to mírný deficit. Pro pokrytí demografického tlaku (stárnoucí populace) ještě výraznější.\n\nAbsolventi všeobecného lékařství na 100 000 obyvatel: ČR 13, OECD 14, EU 15 (OECD Health Statistics, 2023). Trend je pomalu rostoucí (2010: 11, 2024: 13), tempo nedostatečné. Kapacita lékařských fakult v ČR je v posledních 10 letech politicky zvyšována, ale narazí na kapacitní limity klinických stáží (nedostatek lůžek s mentorovým dohledem). Zahraniční studenti tvoří cca 25 % studentů LF — z nich většina po promoci odejde domů nebo do EU.\n\nStrukturálně český systém vyučí dostatek lékařů, ale obtížně je udrží v hrazené síti a v deficitních specializacích. Praktické lékařství, dětská psychiatrie, gerontopsychiatrie, infektologie, soudní lékařství — to jsou obory s chronicky neobsazenými rezidenčními místy. Rezidenční dotační program existuje, ale částky jsou nízké (do 50 000 Kč/měsíc). Migrace mladých lékařů do DE/AT je v některých regionech 25 % kohorty (Karlovarský, Liberecký kraj).\n\nAbsolventi lékařství jsou indikátor budoucí kapacity. Bez 14–15 absolventů/100k populace systém v 10leté projekci nemůže pokrýt poptávku. Politické páky: zvýšení kapacity LF (nárůst o 200 míst ročně do 2030); zvýšení rezidenčních dotací v deficitních specializacích (model Rakouska s vázanou službou); dotační program „lékař v okrese\" pro venkov (model Bavorska); rozšíření spolupráce s privátními poskytovateli na klinické stáže. Indikátor v HSPA dashboardu sleduje pipeline absolventů jako klíčový ukazatel udržitelnosti systému.",
+  "patient_story": "Lékařská fakulta, červen, promoce. Stovky nových lékařů vcházejí do bílých plášťů. V Česku ročně promuje přes 1 700 absolventů lékařství — 16,4 na 100 000 obyvatel. To je nad průměrem OECD (15,4) — signal good. Česko tedy lékaře vychovává nadprůměrně; skutečný problém není v počtu absolventů, ale v jejich udržení v hrazené síti a v rozložení do deficitních oborů a regionů.\n\nAbsolventi lékařství na 100 000 obyvatel: ČR 16,4, OECD ⌀ 15,4 (OECD Health Statistics, nový SDMX Data Explorer, 2023). Trend je stabilní (2018: 16,0; 2023: 16,4). Kapacita lékařských fakult v ČR je v posledních letech politicky zvyšována a naráží spíš na limity klinických stáží (lůžka s mentorovým dohledem) než na poptávku. Zahraniční studenti tvoří cca čtvrtinu studentů LF — většina z nich po promoci odchází domů nebo do EU.\n\nStrukturálně český systém vyučí dostatek lékařů, ale obtížně je udrží v hrazené síti a v deficitních specializacích. Praktické lékařství, dětská psychiatrie, gerontopsychiatrie, infektologie, soudní lékařství — to jsou obory s chronicky neobsazenými rezidenčními místy. Rezidenční dotační program existuje, ale částky jsou nízké. Migrace mladých lékařů do DE/AT je v některých regionech (Karlovarský, Liberecký kraj) výrazná.\n\nAbsolventi lékařství jsou indikátor budoucí kapacity. Nadprůměrný výstup absolventů sám o sobě udržitelnost nezajistí, pokud systém ztrácí lékaře migrací a nedokáže je nasměrovat do deficitních oborů a regionů. Politické páky: udržení absolventů v ČR (konkurenceschopné rezidenční podmínky, model Rakouska s vázanou službou); cílené dotace do deficitních specializací; program „lékař v okrese\" pro venkov (model Bavorska); rozšíření klinických stáží i k privátním poskytovatelům. Indikátor v HSPA dashboardu sleduje pipeline absolventů jako ukazatel udržitelnosti systému — s důrazem na retenci a distribuci, ne jen objem.",
   "framework": "hspa",
-  "dimension": "efektivita"
+  "dimension": "efektivita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
 }

@@ -145,6 +145,22 @@ export function extractFromEurostat(id) {
   };
 }
 
+/**
+ * Pro indikátor z nového OECD SDMX 2.0 endpointu vezme CZ sérii z
+ * oecd_sdmx2_<id>.json (fetcher ingest/fetchers/oecd_sdmx2.js).
+ */
+export function extractFromOecdSdmx2(id) {
+  const cache = readCacheFile(`oecd_sdmx2_${id}.json`);
+  if (cache?.cz?.value == null) return null;
+  return {
+    value: cache.cz.value,
+    year: cache.cz.year,
+    trend: cache.trend ?? [],
+    // Per-indikátor zdroj (dataflow) zapsaný fetcherem.
+    source: cache.source ?? null,
+  };
+}
+
 // ====== ÚZIS NZIS extraktory ======
 
 let _nrhExtractsCache = null;
@@ -583,6 +599,13 @@ export function extractBenchmark(id, oecdSummary, eurostatSummary, seed) {
   const eu = eurostatSummary?.benchmarks?.[id]?.eu?.value;
   if (eu != null && Number.isFinite(eu)) out.eu = round(eu, 2);
 
+  // OECD SDMX 2.0 fetcher zapisuje vypočtený OECD průměr přímo do cache indikátoru.
+  if (out.oecd == null) {
+    const sdmx2 = readCacheFile(`oecd_sdmx2_${id}.json`);
+    const o = sdmx2?.benchmark?.oecd;
+    if (o != null && Number.isFinite(o)) out.oecd = round(o, 2);
+  }
+
   // Doplň ze seed, co chybí
   if (out.oecd == null && seed?.benchmark?.oecd != null) out.oecd = seed.benchmark.oecd;
   if (out.eu == null && seed?.benchmark?.eu != null) out.eu = seed.benchmark.eu;
@@ -596,6 +619,7 @@ const SOURCE_TYPE_TO_LABEL = {
   csu_sha: { name: 'ČSÚ · SHA', url: 'https://csu.gov.cz/' },
   eurostat_jsonstat: { name: 'Eurostat', url: 'https://ec.europa.eu/eurostat' },
   oecd: { name: 'OECD Health Statistics', url: 'https://stats.oecd.org/' },
+  oecd_sdmx2: { name: 'OECD Health Statistics', url: 'https://data-explorer.oecd.org/' },
   uzis_nrzp: { name: 'ÚZIS · NRZP', url: 'https://www.uzis.cz/' },
   uzis_nzis: { name: 'ÚZIS · NZIS', url: 'https://www.uzis.cz/' },
   uzis_nrh: { name: 'ÚZIS · NRH', url: 'https://www.uzis.cz/' },
@@ -624,6 +648,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     extracted = extractFromEurostat(card.id);
   } else if (primaryType === 'oecd') {
     extracted = extractFromOecd(card.id);
+  } else if (primaryType === 'oecd_sdmx2') {
+    extracted = extractFromOecdSdmx2(card.id);
   } else if (primaryType === 'uzis_nrzp') {
     // Lékaři vs. sestry odlišíme podle id indikátoru
     const role = card.id.startsWith('lekari') ? 'lekari'
@@ -674,6 +700,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     csu_sha: `csu_${card.id}.json`,
     eurostat_jsonstat: `eurostat_${card.id}.json`,
     oecd: `oecd_${card.id}.json`,
+    oecd_sdmx2: `oecd_sdmx2_${card.id}.json`,
     uzis_nrzp: 'uzis_nrzp_pracovnici.json',
     uzis_nrh: 'uzis_nrh_dlouhodoba_rada.json',
     uzis_nor: 'uzis_nor_incidence.json',
