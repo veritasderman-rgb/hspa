@@ -1,0 +1,52 @@
+{
+  "id": "hiv_nove_diagnozy",
+  "name": "Nově diagnostikované případy HIV",
+  "area": "Výsledky",
+  "domain": "Přenosná onemocnění",
+  "subdomain": "HIV/AIDS",
+  "definition": "Počet nově diagnostikovaných případů infekce HIV u občanů České republiky a rezidentů (cizinců s dlouhodobým či trvalým pobytem) na 100 000 obyvatel za kalendářní rok. Zdrojem je povinné celoplošné hlášení Národní referenční laboratoře pro HIV/AIDS Státního zdravotního ústavu (NRL SZÚ). Ukrajinští uprchlíci jsou ve výkaznictví NRL evidováni samostatně a do hlavní národní hodnoty se nezapočítávají.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_surveillance",
+      "endpoint": "https://szu.gov.cz/tema/prevence/hiv-aids/",
+      "dataset": "NRL pro HIV/AIDS — měsíční a roční zprávy o výskytu a šíření HIV/AIDS v ČR (Centrum epidemiologie a mikrobiologie SZÚ)",
+      "dimensions": {
+        "country": "CZ",
+        "population": "obcane_a_rezidenti",
+        "transmission": ["MSM", "heterosexualni", "injekcni"],
+        "sex": ["M", "F"],
+        "region": "kraj"
+      }
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://szu.gov.cz/tiskove-zpravy/v-roce-2025-bylo-v-cr-zachyceno-293-novych-pripadu-hiv-zustavame-zemi-s-relativne-nizkou-urovni-infekce-v-ramci-sveta-i-evropy/"
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc",
+    "code": "HIV_newdiag_rate",
+    "dataset": "HIV/AIDS surveillance in Europe 2024 (2023 data) — ECDC/WHO Europe; míra nově diagnostikovaných případů na 100 000 obyvatel, EU/EEA agregát.",
+    "value": 5.3,
+    "url": "https://www.ecdc.europa.eu/en/publications-data/hiv-aids-surveillance-europe-2024-2023-data"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ — Národní referenční laboratoř pro HIV/AIDS",
+    "Národní program boje proti AIDS (MZ ČR)",
+    "ECDC"
+  ],
+  "method_notes": "Hodnota za rok 2025 (2,7 / 100 000) odpovídá 293 nově diagnostikovaným případům u občanů ČR a rezidentů (153 občanů + 140 rezidentů), zveřejněným NRL SZÚ 2. 2. 2026. Sexuální přenos tvořil 86,3 % případů, z toho muži mající sex s muži (MSM) 51,5 % (151 případů). 86 případů u ukrajinských uprchlíků je vykazováno zvlášť; po jejich započtení byla míra za rok 2024 cca 3,7 / 100 000. Signál: nastaven na 'warn' (varování) — ačkoli absolutní míra (2,7) je výrazně pod průměrem EU/EEA (5,3 / 100 000, ECDC 2023), jde o vědomé trendové vyhodnocení: počet skutečně nově nakažených roste od roku 2020 proti klesajícímu evropskému trendu (EU/EEA −15,9 % oproti roku 2014), Česko patří mezi menšinu zemí s nárůstem, podíl pozdního záchytu je vysoký a PrEP (preexpoziční profylaxe) nemá veřejnou úhradu. Statický výpočet signálu z benchmarku by jinak vrátil 'good'.",
+  "limitations": "(1) Metodická srovnatelnost: SZÚ vykazuje národní hodnotu jako občany + rezidenty, ECDC počítá míru nově diagnostikovaných ze všech hlášení v zemi — proto se míry ČR mezi zdroji liší (NRL 2,7 vs. ECDC ~3,8 / 100 000 za 2023). (2) Nově diagnostikovaný případ není totéž co nově nakažený — část záchytů je opožděná (pozdní záchyt s nízkým CD4), takže ukazatel je směsí incidence a kvality/dostupnosti testování. (3) Vykazování uprchlíků zvlášť komplikuje meziroční srovnání po roce 2022. (4) Indikátor neměří prevalenci (cca 5 100 kumulativně hlášených od 1985) ani počet osob na PrEP. (5) Regionální koncentrace (Praha ~32 %) zkresluje krajské míry.",
+  "determinants": "**Dostupnost a normalizace testování** — záchyt závisí na šíři testovacích programů (komunitní testování, samotesty, depistáž u rizikových skupin). Nižší testování maskuje skutečnou incidenci a zvyšuje podíl pozdního záchytu.\n\n**Preexpoziční profylaxe (PrEP)** — vysoce účinný nástroj prevence u MSM a dalších rizikových skupin. V ČR je PrEP dostupná od roku 2017, ale bez plné úhrady z veřejného zdravotního pojištění (samoplátce ~600–1 100 Kč/měsíc); od března 2025 jen částečná dotace pro MSM do 26 let. To omezuje pokrytí oproti zemím, kde je PrEP hrazená (Francie, Německo, Velká Británie).\n\n**Migrace a integrace** — rostoucí podíl rezidentů a uprchlíků v záchytu odráží jak vyšší prevalenci v zemích původu, tak (pozitivně) lepší kontakt cizinců se zdravotním systémem. Vyžaduje cílené prevenční a testovací programy v jazykově dostupné formě.\n\n**Stigma a osvěta** — přetrvávající stigma snižuje ochotu testovat se a sdílet status, oddaluje záchyt a léčbu. Národní program boje proti AIDS dlouhodobě bojuje s omezeným rozpočtem na prevenci.\n\n**Léčba jako prevence (U=U)** — včasné nasazení antiretrovirové léčby vede k nedetekovatelné virové náloži (Undetectable = Untransmittable), čímž se přerušuje přenos. Pozdní záchyt tento efekt oslabuje.",
+  "importance": "HIV je jediný indikátor sledování přenosných onemocnění, který HSPA Monitor dosud nepokrýval — přitom jde o oblast, kde ČR drží relativně dobrou výchozí pozici (nízká absolutní míra), kterou ale začíná ztrácet. Ukazatel je citlivým barometrem účinnosti primární prevence a dostupnosti testování: na rozdíl od většiny zemí EU/EEA, kde počty klesají, v Česku skutečně nově nakažených od roku 2020 přibývá. Indikátor má přímou politickou páku — úhrada PrEP, financování komunitního testování a osvěty Národního programu boje proti AIDS — a propojuje dimenzi zdraví (výsledek) s dimenzí dostupnosti (přístup k prevenci a testování). Pro plánování je předstihovým signálem pro náklady na celoživotní antiretrovirovou léčbu: každý nezachycený přenos znamená desetiletí léčby v řádu statisíců korun ročně. Indikátor zároveň testuje schopnost systému využívat nákladově efektivní prevenci (PrEP, U=U) místo dražší pozdní léčby.",
+  "patient_story": "Tomáš, 29, grafik z Prahy, si o PrEP zjistil všechno na internetu — věděl, že tabletka denně by ho před HIV ochránila s účinností přes 95 %. Pak narazil na cenu: pojišťovna mu na ni nepřispěje, měsíčně by platil kolem osmi set korun ze svého. Odložil to „na příště\". O půl roku později seděl na infekční ambulanci s pozitivním testem. Patří mezi 151 mužů majících sex s muži, kteří v roce 2025 v Česku dostali diagnózu HIV.\n\nV roce 2025 bylo v ČR nově diagnostikováno 293 případů HIV u občanů a rezidentů — míra 2,7 na 100 000 obyvatel. To je hluboko pod průměrem EU/EEA (5,3 na 100 000, ECDC 2023). Jenže zatímco Evropa od roku 2014 klesla o téměř 16 %, Česko jde opačným směrem: skutečně nově nakažených od roku 2020 přibývá a Česko se řadí mezi menšinu zemí s rostoucím trendem. Sexuální přenos tvoří 86 % případů, polovinu z nich tvoří MSM. Signál je proto nastaven na varování — ne kvůli absolutní úrovni, ale kvůli směru, kterým se ubíráme.\n\nStrukturálně za tím stojí tři věci. Za prvé, PrEP — nejúčinnější dostupný preventivní nástroj pro rizikové skupiny — nemá v Česku veřejnou úhradu; od března 2025 existuje jen částečná dotace pro MSM do 26 let, jinak je to samoplátecká záležitost. Za druhé, vysoký podíl pozdního záchytu: řada lidí se dozví diagnózu až s rozvinutým poškozením imunity, kdy už mohli virus dál šířit. Za třetí, podfinancovaná osvěta a testování — Národní program boje proti AIDS dlouhodobě hospodaří s omezeným rozpočtem a stigma stále brání lidem se testovat.\n\nPolitická páka je nezvykle konkrétní a levná. Plná úhrada PrEP z veřejného pojištění pro definované rizikové skupiny (model Francie či Německa), rozšíření hrazeného a komunitního testování včetně samotestů, a posílení rozpočtu Národního programu boje proti AIDS. Kompetenci má MZ ČR a zdravotní pojišťovny ve spolupráci se SÚKL (kategorizace léčiva) — rozhodnutí o úhradě PrEP je v jejich rukou. Princip „léčba jako prevence\" (U=U) i prevence PrEP jsou přitom levnější než desetiletí antiretrovirové léčby u každého nezachyceného přenosu. Tomáš by dnes platil za léčbu, kterou hradí systém — místo prevence, na kterou si měl platit sám.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
