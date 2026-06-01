@@ -45,6 +45,15 @@ export function computeSignal(value, benchmark, direction, thresholds) {
   return 'warn';
 }
 
+// Mapuje libovolný verifikační status na hodnotu, kterou frontend (indicator.js)
+// umí vykreslit. Neznámé/rozpracované statusy (review-pending, needs_verification…)
+// → 'preliminary'; prázdné → null (žádný odznak).
+export function normalizeVerificationStatus(status) {
+  if (!status) return null;
+  if (['verified', 'preliminary', 'illustrative'].includes(status)) return status;
+  return 'preliminary';
+}
+
 // ====== Načítání ======
 
 export function loadMethodCards() {
@@ -673,6 +682,17 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     method_card_url: card._method_card_path ?? `indicators/${card.id}.json`,
     ...(card.deep_dive ?? seed?.deep_dive
       ? { deep_dive: card.deep_dive ?? seed.deep_dive }
+      : {}),
+    // Verifikační stav indikátoru (z metodické karty, fallback seed) — frontend
+    // (indicator.js) z něj renderuje odznak „ověřeno / předběžné / ilustrativní".
+    // Frontend mapuje jen verified|preliminary|illustrative; jakýkoli jiný status
+    // (např. review-pending z rozpracovaných karet) normalizujeme na 'preliminary',
+    // aby se nikdy nevykreslila prázdná pill.
+    ...(normalizeVerificationStatus(card.verification_status ?? seed?.verification_status)
+      ? { verification_status: normalizeVerificationStatus(card.verification_status ?? seed?.verification_status) }
+      : {}),
+    ...((card.verified_at ?? seed?.verified_at)
+      ? { verified_at: card.verified_at ?? seed.verified_at }
       : {}),
   };
 }
