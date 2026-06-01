@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_ecoli_3gc",
+  "name": "Rezistence E. coli na cefalosporiny 3. generace (ESBL)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Escherichia coli rezistentních na cefalosporiny 3. generace (proxy ESBL produkce) v síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure ESCCOL.3GCEPH.R.PROPORTION (R – resistant isolates, percentage), populace „Escherichia coli|Third-generation cephalosporins\". Per-country % pro ČR ověřeno přes REST API AtlasService 2026-06-01: 2024 = 15.8 % (N=4269)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": 16.0,
+    "note": "EU/EEA populačně vážený průměr 16,0 % (ECDC EARS-Net AER 2024, Table 9b; country range 6,8–38,7 %)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Rezistence na cefalosporiny 3. generace je proxy pro produkci širokospektrých beta-laktamáz (ESBL). Je to klíčový cíl EU AMR redukce (incidence 3GC-rezistentní E. coli BSI je v EU AMR target).",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
