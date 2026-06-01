@@ -115,6 +115,21 @@ export function extractFromOecd(id) {
 }
 
 /**
+ * ECDC Surveillance Atlas (AMR) — z ingest/cache/ecdc_atlas_{id}.json (fetcher
+ * ingest/fetchers/ecdc_atlas.js). Per-country % rezistence pro ČR + časová řada.
+ */
+export function extractFromEcdcAtlas(id) {
+  const cache = readCacheFile(`ecdc_atlas_${id}.json`);
+  if (!cache) return null;
+  if (cache.cz?.value == null) return null;
+  return {
+    value: cache.cz.value,
+    year: cache.cz.year,
+    trend: cache.trend ?? [],
+  };
+}
+
+/**
  * Pro indikátor z Eurostatu vezme CZ sérii z eurostat_<id>.json (M4).
  */
 export function extractFromEurostat(id) {
@@ -588,6 +603,7 @@ const SOURCE_TYPE_TO_LABEL = {
   ehis_szu: { name: 'EHIS · SZÚ', url: 'https://szu.gov.cz/' },
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
   eea: { name: 'EEA', url: 'https://www.eea.europa.eu/' },
+  ecdc_atlas: { name: 'ECDC Surveillance Atlas / EARS-Net', url: 'https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4' },
 };
 
 /**
@@ -621,6 +637,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     extracted = extractFromNor(card.id);
   } else if (primaryType === 'uzis_nrhzs_screening') {
     extracted = extractFromNrhzsScreening(card.id);
+  } else if (primaryType === 'ecdc_atlas') {
+    extracted = extractFromEcdcAtlas(card.id);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
