@@ -6,7 +6,7 @@
   --paper2: #f3eee2;
   --ink: #1f1a14;
   --ink-mut: rgba(31,26,20,0.66);
-  --ink-mut2: rgba(31,26,20,0.5);
+  --ink-mut2: rgba(31,26,20,0.64);
   --rule: rgba(31,26,20,0.13);
   --rule2: rgba(31,26,20,0.27);
   --red: #b8361e;
@@ -4017,7 +4017,7 @@ ul.md-enum > li > strong:first-child {
 .ed-narrative-links {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 .ed-narrative-links a {
   font-family: var(--sans);
@@ -4027,6 +4027,10 @@ ul.md-enum > li > strong:first-child {
   letter-spacing: 0.05em;
   color: var(--red);
   text-decoration: none;
+  /* WCAG 2.2 SC 2.5.8 Target Size (Min): klikací cíl ≥ 24 px na výšku. */
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
 }
 .ed-narrative-links a:hover { text-decoration: underline; }
 
@@ -4243,7 +4247,7 @@ ul.md-enum > li > strong:first-child {
   font-size: 11px;
   font-weight: 700;
   color: var(--paper);
-  background: #27ae60;
+  background: #177940;
   padding: 2px 8px;
 }
 .theme-card-arrow {
@@ -13336,6 +13340,19 @@ body.cq-gloss-drawer-locked { overflow: hidden; }
    cíl scrollu o výšku lišty. Per-prvkové scroll-margin-top mají přednost. */
 html {
   scroll-padding-top: var(--a11y-sticky-offset, 88px);
+}
+
+/* SC 1.4.1 / link-in-text-block: inline odkazy uvnitř běžného textu nesmí být
+   odlišené jen barvou — doplň podtržení tam, kde odkaz sousedí s textem. */
+.ed-hero-hspa-line a,
+.contacts-disclaimer a,
+.source-note a,
+.ed-narrative p a,
+.hspa-dims-lead a,
+.hspa-timeline-body p a,
+.article-sources-list a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* forced-colors (Windows High Contrast): zachovej viditelné ohraničení

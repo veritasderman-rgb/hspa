@@ -23,9 +23,12 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
 
+  // Všechny projekty běží na chromiu (CI instaluje pouze chromium). Mobilní /
+  // tabletový rozměr se simuluje šířkou viewportu (spouští responzivní CSS
+  // breakpointy); DPR=1 drží snapshoty stabilní napříč prostředími.
   projects: [
-    { name: 'mobile',  use: { ...devices['iPhone 13'], viewport: { width: 375, height: 812 } } },
-    { name: 'tablet',  use: { ...devices['iPad (gen 9)'], viewport: { width: 768, height: 1024 } } },
+    { name: 'mobile',  use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true } },
+    { name: 'tablet',  use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 } } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
   ],
 

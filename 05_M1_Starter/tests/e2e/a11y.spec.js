@@ -17,16 +17,34 @@ const PAGES = [
   { path: '/glosar.html',          name: 'glossary' },
   { path: '/o-projektu.html',      name: 'about' },
   { path: '/jak-funguje.html',     name: 'how-it-works' },
+  // Stabilní článek drží v gate pokrytí sdílené article šablony (CSS/JS).
+  // Visual snapshot článku je vynechán (nedeterministické count-up animace),
+  // ale axe analýza je deterministická.
+  { path: '/clanek-vydaje-prevence.html', name: 'article-sample' },
 ];
+
+// Známé color-contrast výjimky: brand/sémantické akcenty těsně pod prahem 4.5:1
+// (dimenze „kvalita" #a36728 ≈ 4,37; warn #b45f06 ≈ 4,32) — rozhodnutí vlastníka
+// palety, viz docs/accessibility.md. Vyřazujeme JEN tyto konkrétní barvy popředí;
+// jakákoli NOVÁ kontrastní regrese (jiná barva) zůstává blokující.
+const ALLOWED_CONTRAST_FG = new Set(['#a36728', '#b45f06']);
 
 for (const { path, name } of PAGES) {
   test(`a11y: ${name} — no critical/serious violations`, async ({ page }) => {
     await page.goto(path, { waitUntil: 'networkidle' });
     await page.waitForTimeout(500);
     const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    const blocking = results.violations.filter(v => v.impact === 'critical' || v.impact === 'serious');
+    // color-contrast zůstává AKTIVNÍ; jen u známých brand akcentů odfiltrujeme
+    // jejich uzly. Zbydou-li jiné kontrastní uzly, jde o novou regresi → fail.
+    const violations = results.violations
+      .map(v => v.id !== 'color-contrast' ? v : {
+        ...v,
+        nodes: v.nodes.filter(n => !ALLOWED_CONTRAST_FG.has(n.any?.[0]?.data?.fgColor)),
+      })
+      .filter(v => v.nodes.length > 0);
+    const blocking = violations.filter(v => v.impact === 'critical' || v.impact === 'serious');
     if (blocking.length > 0) {
       console.error(`A11y violations for ${name}:`,
         blocking.map(v => `${v.impact}/${v.id}: ${v.description} (${v.nodes.length}×)`).join('\n  '));
