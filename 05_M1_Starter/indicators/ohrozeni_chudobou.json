@@ -11,23 +11,19 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "csu_datastat",
-      "endpoint": "https://data.csu.gov.cz/api/dotaz/v1",
-      "dataset": "SILC-CHUDOBA",
-      "dimensions": {
-        "uzemi": "KRAJ",
-        "ukazatel": "mira_ohrozeni_prijmovou_chudobou"
-      }
+      "type": "eurostat_jsonstat",
+      "dataset": "ilc_li02",
+      "note": "Míra ohrožení příjmovou chudobou (60 % mediánu), Eurostat ilc_li02 / indic_il=LI_R_MD60. Přepnuto z ČSÚ DataStat 2026-06-01: ČSÚ POST dotaz API vrací 400/500; Eurostat dodává tutéž EU-SILC metriku (ČR data ČSÚ reportuje Eurostatu)."
     },
     "fallback": {
-      "type": "csv",
-      "url": "https://csu.gov.cz/prijmy-a-zivotni-podminky-domacnosti"
+      "type": "csu_datastat",
+      "note": "ČSÚ SILC01A, ukazatel 9382 (Míra příjmové chudoby v %) — vyžaduje doladění POST /api/dotaz/v1/data/sady/SILC01A/vlastni payloadu."
     }
   },
   "benchmark_source": {
     "type": "eurostat",
     "code": "ilc_li02",
-    "dataset": "EU-SILC"
+    "note": "EU27 benchmark z téhož datasetu (geo=EU27_2020)."
   },
   "signal_thresholds": {
     "good": 2,
