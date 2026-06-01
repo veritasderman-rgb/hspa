@@ -9,15 +9,32 @@
       "expected_columns": [
         "rok",
         "pohlavi",
-        "vekova_kategorie",
-        "kraj_bydliste",
-        "diagnoza_3",
+        "vek_kat",
+        "kraj_pacient",
+        "zdg",
         "druh_prijeti",
         "operace",
         "umrti",
-        "pocet"
+        "pocet_hosp"
       ],
-      "frequency": "yearly"
+      "frequency": "yearly",
+      "stream_aggregate": {
+        "group_by": [
+          "rok",
+          "zdg"
+        ],
+        "count_col": "pocet_hosp",
+        "death_flag": {
+          "col": "umrti",
+          "value": "1"
+        },
+        "rename": {
+          "zdg": "diagnoza_3"
+        },
+        "count_as": "pocet",
+        "deaths_as": "umrti"
+      },
+      "note": "Velký dataset (~11 M řádků, 300 MB rozbalený) — fetch používá stream_aggregate (group by rok+zdg, sum pocet_hosp jako pocet, sum kde umrti=1 jako umrti). Výstup kompatibilní s extractFromNrh."
     },
     "nrzp_pracovnici": {
       "name": "NRZP — Pracovníci ve zdravotnictví",
