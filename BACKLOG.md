@@ -18,6 +18,7 @@
 | **Verifikační odznak indikátorů** | `transform.js` nepřenášel `verification_status` z metodické karty → odznak v UI byl mrtvý. Doplněn pass-through (14 indikátorů). |
 | **Footer 404 „Metodické karty"** | Odkaz mířil na adresář `indicators/` (bez indexu). Přesměrováno na `hspa-prehled.html`. |
 | **Noční údržbová rutina** | Přidán `scripts/nightly-scan.js` + `PROMPT_NIGHTLY_ROUTINE.md` (sweep korpusu). |
+| **Verifikační odznak indikátorů (INDIKO-VERIFY)** | Jednotný helper `resolveVerificationStatus`/`verifBadgeHtml` v `page-shared.js`; odznak se zobrazí na všech indikátorech (odvození z `origin`), sjednoceny 3 rozcházející se logiky v `indicator.js`+`app.js`. Bez změny dat. 6 testů. |
 
 ---
 
@@ -36,9 +37,13 @@
 
 ## 🟠 P1 — důležité otevřené
 
-### INDIKO-VERIFY-DATA · Verifikační stav pro zbývajících 84 indikátorů
-**Stav:** 🟡 · UI odznak funguje, 14 indikátorů má `review-pending`, ale **84 seed indikátorů nemá `verification_status`** → odznak skrytý.
-**Plán:** doplnit do metodických karet (`indicators/*.json`) `verification_status` (seed → `illustrative`, ověřené → `verified`), nebo default-by-origin v `transform.js` (`origin: seed` → `illustrative`). Propojit s DATA-LIVE (živé hodnoty → `preliminary`/`verified`).
+### ~~INDIKO-VERIFY-DATA · Verifikační odznak indikátorů~~ ✅ HOTOVO (2026-06-01)
+**Vyřešeno:** odznak se odvozuje z `origin` přímo ve frontendu (sdílený helper
+`resolveVerificationStatus` v `page-shared.js`): `seed` → ilustrativní, `live` →
+předběžné, explicitní `verified` → ověřeno. Zobrazí se na všech indikátorech;
+sjednoceny dříve rozcházející se logiky v `indicator.js` a `app.js`. Bez změny dat.
+**Navazuje:** až poběží DATA-LIVE, živé+ověřené hodnoty dostanou explicitní
+`verified` v metodické kartě (helper ho upřednostní před odvozením z origin).
 
 ### EXPLAINER-VERIFY · Doověřit 20 z 31 explainerů
 **Stav:** 🟡 / ⛔ · 31 explainerů má `documents`, ale jen **11 `verification_status: ok`**, 20× `needs_verification`.
@@ -62,12 +67,14 @@
 | ID | Položka | Stav | Plán / blocker |
 |---|---|---|---|
 | GA4-BACKEND | Sběr GA4 statistik | 🟡/⛔ | Frontend eventy (Level 1) + `ga4-stats.yml` hotové, ale žádná `data/ga4-stats.json`. Plán: nastavit GA4 service-account secret, zapnout výstup workflow, zobrazit v `site-stats.js`. **Blocker: credentials.** |
-| STRAT-STORY | Storytelling vrstva strategií (4-vrstvý flow Národní·Sektorové·EU·Standardy) | 🟡 | `strategie.html` existuje; doplnit flow diagram. |
-| IND-STORY | Mini-příběh komponenta u indikátorů | 🟡 | Články příběhy mají, indikátory ne. |
-| PREV-PERSONA | Personalizace prevence (životní fáze: mladá rodina / 40+ / 65+) | 🟡 | `prevence.html` existuje; přidat filtr. |
-| NARRATIVE-TPL | 4-krokový narrative jako šablona na všechny analytické sekce | 🟡 | Existuje v hero (`.ed-narrative`), zobecnit. |
-| SVG-PAKY | Interaktivní SVG schéma „pák" (klikací sloup-střecha-páky) | ❌ | Net-new vizualizace. |
-| DARK-MODE | Tmavý režim | 🟡 | CSS proměnné připravené, chybí přepínač + persistence. |
+| STRAT-STORY | Storytelling vrstva strategií (4-vrstvý flow Národní·Sektorové·EU·Standardy) | 🟡 / 👁️ | `strategie.html` existuje; doplnit flow diagram. **Blocker: vizuální verifikace** (net-new UI). |
+| IND-STORY | Mini-příběh komponenta u indikátorů | 🟡 / 👁️ | Články příběhy mají, indikátory ne. **Blocker: vizuální verifikace.** |
+| PREV-PERSONA | Personalizace prevence (životní fáze: mladá rodina / 40+ / 65+) | 🟡 / 👁️ | `prevence.html` existuje; přidat filtr. **Blocker: vizuální verifikace.** |
+| NARRATIVE-TPL | 4-krokový narrative jako šablona na všechny analytické sekce | 🟡 / 👁️ | Existuje v hero (`.ed-narrative`), zobecnit. **Blocker: vizuální verifikace.** |
+| SVG-PAKY | Interaktivní SVG schéma „pák" (klikací sloup-střecha-páky) | ❌ / 👁️ | Net-new vizualizace. **Blocker: vizuální verifikace.** |
+| DARK-MODE | Tmavý režim | 🟡 / 👁️ | Web je důsledně na CSS proměnných (602× `--ink`…), ALE **~190 hardcoded hex + 59 rgba v CSS + 25 inline barev v HTML** by v dark režimu „prosvítilo". Pořádné řešení = projít stovky míst + **vizuální verifikace v prohlížeči** (v sandboxu není headless browser). Nedělat naslepo. |
+
+> **👁️ Blocker „vizuální verifikace":** tyto položky jsou net-new UI/UX, jejichž kvalitu nelze potvrdit bez běžícího prohlížeče (sandbox nemá headless Chrome/Playwright). Dělat je naslepo by riskovalo rozbití layoutu — vědomě odloženo, dokud nebude k dispozici prohlížeč nebo lidská vizuální kontrola na Vercel preview.
 
 ## 🔵 P3 — vize
 - **PROMs/PREMs roadmap** — sběr pacientských outcomes (zmíněno jako gap na `hspa-prehled.html`).

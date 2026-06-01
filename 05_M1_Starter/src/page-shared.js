@@ -48,6 +48,57 @@ export function audienceText(obj) {
 }
 
 /**
+ * Jednotné odvození verifikačního stavu indikátoru pro odznak — sdílené napříč
+ * detailem indikátoru (indicator.js) i přehledem (app.js), aby byl stav
+ * konzistentní (dříve měl každý pohled vlastní, rozcházející se logiku).
+ *
+ * Priorita: explicitní `verification_status` z dat (metodická karta) → odvození
+ * z původu hodnoty. `verified` je vyhrazen pro hodnoty s explicitním `verified`
+ * (redakčně ověřené z primárního zdroje); samotný `origin: live` znamená
+ * „předběžné" (z fetcheru, metodika neprošla verifikací), `origin: seed`
+ * znamená „ilustrativní" (modelová hodnota M1). Neznámé/rozpracované statusy
+ * (review-pending, needs_verification) → 'preliminary', aby se nikdy
+ * nevykreslila prázdná pill.
+ *
+ * @param {{verification_status?: string, source?: {origin?: string}}} ind
+ * @returns {'verified'|'preliminary'|'illustrative'|null}
+ */
+export function resolveVerificationStatus(ind) {
+  const explicit = ind?.verification_status;
+  if (explicit === 'verified' || explicit === 'preliminary' || explicit === 'illustrative') {
+    return explicit;
+  }
+  if (explicit) return 'preliminary';
+  const origin = ind?.source?.origin;
+  if (origin === 'seed') return 'illustrative';
+  if (origin === 'live') return 'preliminary';
+  return null;
+}
+
+export const VERIF_TEXT = {
+  verified: 'Ověřeno',
+  preliminary: 'Předběžné',
+  illustrative: 'Ilustrativní',
+};
+export const VERIF_TITLE = {
+  verified: 'Data z primárního zdroje, redakčně ověřená',
+  preliminary: 'Data dostupná, metodika v revizi nebo zdroj neprošel plnou verifikací',
+  illustrative: 'Modelová/ukázková hodnota (seed) — nepoužívat pro citace, čeká na napojení živého zdroje',
+};
+
+/**
+ * Sestaví HTML odznaku verifikace, nebo prázdný řetězec, pokud stav není znám.
+ * @param {{verification_status?: string, source?: {origin?: string}}} ind
+ */
+export function verifBadgeHtml(ind) {
+  const status = resolveVerificationStatus(ind);
+  if (!status) return '';
+  const cls = status === 'verified' ? 'verif-verified'
+    : status === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative';
+  return `<span class="verif-badge ${cls}" title="${VERIF_TITLE[status]}">${VERIF_TEXT[status]} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`;
+}
+
+/**
  * Vyplní datum do hlavičky (masthead-strip) v editorial stylu,
  * a zároveň proběhne render společných page-shared komponent
  * (HSPA score, footer, scroll-to-top), které jsou na každé stránce

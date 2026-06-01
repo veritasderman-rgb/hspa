@@ -3,7 +3,7 @@
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 import './analytics.js';
-import { renderFooter, renderModuleNav, isArticleVisible } from './page-shared.js';
+import { renderFooter, renderModuleNav, isArticleVisible, resolveVerificationStatus, verifBadgeHtml } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { getSiteStats, applyDataStats } from './site-stats.js';
 
@@ -211,12 +211,7 @@ export function filterAndSort(indicators, { area, search, sort, domain, framewor
   if (area && area !== 'all') xs = xs.filter(i => i.area === area);
   if (domain) xs = xs.filter(i => i.domain === domain);
   if (verifiedOnly) {
-    xs = xs.filter(i => {
-      const v = i.verification_status
-        || (i.source?.origin === 'live' ? 'verified'
-          : i.source?.origin === 'seed' ? 'preliminary' : null);
-      return v === 'verified';
-    });
+    xs = xs.filter(i => resolveVerificationStatus(i) === 'verified');
   }
   if (search) {
     const q = search.toLowerCase();
@@ -566,21 +561,7 @@ function renderGrid() {
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
       : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
 
-    const effectiveVerif = ind.verification_status ||
-      (ind.source && ind.source.origin === 'seed' ? 'preliminary' : null);
-    const verifText = {
-      verified: 'Ověřeno',
-      preliminary: 'Předběžné',
-      illustrative: 'Ilustrativní',
-    }[effectiveVerif] || '';
-    const verifTitle = {
-      verified: 'Data z primárního zdroje, max. 12 měsíců staré',
-      preliminary: 'Data dostupná, neprošla plnou verifikací živého fetcheru',
-      illustrative: 'Hodnota pochází z odhadu — nepoužívat pro citace',
-    }[effectiveVerif] || '';
-    const verifBadge = effectiveVerif
-      ? `<span class="verif-badge ${effectiveVerif === 'verified' ? 'verif-verified' : effectiveVerif === 'preliminary' ? 'verif-preliminary' : 'verif-illustrative'}" title="${verifTitle}">${verifText} <span class="verif-hint" aria-hidden="true">ⓘ</span></span>`
-      : '';
+    const verifBadge = verifBadgeHtml(ind);
 
     const fwBadge = ind.framework === 'monitoring'
       ? `<span class="fw-badge fw-monitoring" title="Doplňkový monitoring nad rámec českého rámce HSPA">Monitoring</span>`
