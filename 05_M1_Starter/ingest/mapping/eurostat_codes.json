@@ -23,7 +23,7 @@
       }
     },
     "unmet_need_medical": {
-      "_doc": "Unmet need for medical care. Předchozí mapping měl: (a) reason=TOOEXP_FAR_WAIT — neexistující kód, správně je TOOEFW (Too expensive or too far or waiting list), (b) quant_inc=TOTAL — nesprávný název dimenze, správně je 'quantile'. Obojí způsobovalo HTTP 400.",
+      "_doc": "Unmet need for medical care (hlth_silc_08). Souhrnný kód důvodu je TXP_TFAR_WLIST (Too expensive or too far to travel or waiting list) — kódy TOOEXP_FAR_WAIT i TOOEFW vrací 400/prázdno (neexistují v číselníku 'reason'). Dimenze kvantilu se jmenuje 'quantile' (quant_inc je chybné). Ověřeno živě 2026-06-01: CZ 0,3 % (2025), EU27 2,4 %.",
       "dataset": "hlth_silc_08",
       "country_dim": "geo",
       "cz_code": "CZ",
@@ -31,8 +31,112 @@
       "filter_extra": {
         "sex": "T",
         "age": "Y_GE16",
-        "reason": "TOOEFW",
+        "reason": "TXP_TFAR_WLIST",
         "quantile": "TOTAL",
+        "unit": "PC"
+      }
+    },
+    "subjektivni_zdravi": {
+      "_doc": "Self-perceived health (hlth_silc_18). Podíl populace 16+ hodnotící zdraví jako 'velmi dobré' nebo 'dobré' — souhrnný kód levels=VG_G. deg_urb=TOTAL (bez rozlišení urbanizace). Ověřeno živě 2026-06-01: CZ 67,0 % (2025), EU27 67,9 %.",
+      "dataset": "hlth_silc_18",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "Y_GE16",
+        "levels": "VG_G",
+        "deg_urb": "TOTAL",
+        "unit": "PC"
+      }
+    },
+    "mortalita_kardiovaskularni": {
+      "_doc": "Standardised death rate, diseases of the circulatory system (hlth_cd_asdr2, icd10=I, ESP 2013, unit=RT). Ověřeno živě 2026-06-01: CZ 463,75 (2023), EU27 312,95.",
+      "dataset": "hlth_cd_asdr2",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "TOTAL",
+        "icd10": "I",
+        "unit": "RT"
+      }
+    },
+    "pohybova_aktivita_dospeli": {
+      "_doc": "Physical activity meeting WHO recommendation (hlth_ehis_pe2e, duration=MN_GE150 = ≥150 min/týden, isced11=TOTAL). EHIS je triannuální, poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 25,1 % (2019), EU27 32,7 %.",
+      "dataset": "hlth_ehis_pe2e",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "TOTAL",
+        "duration": "MN_GE150",
+        "isced11": "TOTAL",
+        "unit": "PC"
+      }
+    },
+    "mortalita_kojenecka": {
+      "_doc": "Infant mortality rate (demo_minfind, indic_de=INFMORRT) — úmrtí do 1 roku na 1000 živě narozených. Ověřeno živě 2026-06-01: CZ 2,3 (2024), EU27 3,5.",
+      "dataset": "demo_minfind",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "indic_de": "INFMORRT",
+        "unit": "RT"
+      }
+    },
+    "nadeje_doziti_zeny": {
+      "_doc": "Life expectancy at birth, women (demo_mlexpec, sex=F, age=Y_LT1). Ověřeno živě 2026-06-01: CZ 83,0 (2024), EU27 84,1.",
+      "dataset": "demo_mlexpec",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "F",
+        "age": "Y_LT1"
+      }
+    },
+    "sebevrazdy_per_100k": {
+      "_doc": "Standardised death rate, intentional self-harm / suicide (hlth_cd_asdr2, icd10=X60-X84_Y870 = X60–X84 + sekvely Y87.0, ESP 2013, unit=RT). Ověřeno živě 2026-06-01: CZ 11,6 (2023), EU27 10,4.",
+      "dataset": "hlth_cd_asdr2",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "TOTAL",
+        "icd10": "X60-X84_Y870",
+        "unit": "RT"
+      }
+    },
+    "obezita_prevalence": {
+      "_doc": "Obesity, BMI ≥ 30, population 18+ (hlth_ehis_bm1e, bmi=BMI_GE30, isced11=TOTAL). EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 19,8 % (2019), EU27 16,5 %.",
+      "dataset": "hlth_ehis_bm1e",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "Y_GE18",
+        "bmi": "BMI_GE30",
+        "isced11": "TOTAL",
+        "unit": "PC"
+      }
+    },
+    "bmi_dospeli": {
+      "_doc": "Overweight + obesity, BMI ≥ 25, population 18+ (hlth_ehis_bm1e, bmi=BMI_GE25, isced11=TOTAL). Dataset bm1b (dle staré karty) má jen dimenzi country-of-birth bez TOTAL — správný je bm1e (educational attainment, isced11=TOTAL). EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 60,0 % (2019), EU27 52,7 %.",
+      "dataset": "hlth_ehis_bm1e",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "Y_GE18",
+        "bmi": "BMI_GE25",
+        "isced11": "TOTAL",
         "unit": "PC"
       }
     },

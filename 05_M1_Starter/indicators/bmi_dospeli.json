@@ -10,11 +10,30 @@
   "data_source": {
     "primary": {
       "type": "eurostat_jsonstat",
-      "dataset": "hlth_ehis_bm1b"
+      "dataset": "hlth_ehis_bm1e",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "Y_GE18",
+        "bmi": "BMI_GE25",
+        "isced11": "TOTAL",
+        "unit": "PC"
+      },
+      "note": "Podíl 18+ s BMI ≥ 25 (nadváha + obezita), Eurostat hlth_ehis_bm1e (dříve karta uváděla bm1b, který nemá populační TOTAL — bm1e má isced11=TOTAL). EHIS poslední vlna 2019. Ověřeno živě 2026-06-01: CZ 60,0 % (2019), EU27 52,7 %."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_bm1e/default/table"
     }
   },
   "benchmark_source": {
-    "type": "eurostat_jsonstat"
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_ehis_bm1e",
+    "params": {
+      "geo": "EU27_2020",
+      "bmi": "BMI_GE25"
+    },
+    "note": "EU-27 průměr ze stejné řady: 52,7 % (2019)."
   },
   "signal_thresholds": {
     "good": 3,
@@ -27,7 +46,9 @@
   ],
   "method_notes": "BMI = váha [kg] / výška² [m²]. Self-report (EHIS) — zpravidla podhodnocuje obezitu o 3–5 procentních bodů oproti měřeným datům (EHES).",
   "limitations": "BMI nerozlišuje svalovou a tukovou hmotu — sportovci falešně klasifikováni jako nadváha.",
-  "patient_story": "Plzeň, ordinace praktického lékaře, preventivní prohlídka 52leté ženy. „BMI 28, obvod pasu 96 cm. Paní Krásná, jste v pásmu nadváhy, blížíte se obezitě.\" Pacientka přikyvuje, ale ví, že přesně tohle slyšela před pěti lety i před deseti. Mezi prohlídkami se její váha zvedla o 4 kg. To není výjimka — to je modal trajektorie české středního věku.\n\n60 % dospělých Čechů má BMI ≥ 25 (nadváha nebo obezita). OECD průměr je 55 %, EU 53 % (data 2023 dle SZÚ/EHIS). Z toho samotná obezita (BMI ≥ 30) dosahuje 21 % — pětina dospělých. U mužů je nadváha rozšířenější (66 %) než u žen (54 %). Trend je trvale rostoucí: v roce 2008 mělo nadváhu 50 % dospělých, dnes 60 %. Pohybová aktivita je v ČR rovněž pod průměrem — jen 38 % dospělých splňuje WHO doporučení 150 minut středně intenzivní aktivity týdně.\n\nStrukturálně český obesogenic environment kombinuje vysokou spotřebu zpracovaných potravin, sladkých nápojů a alkoholu (viz alkohol_spotreba) se sedavým životním stylem a marketingem rychloobčerstvení v dětských kategoriích. Daň z cukru, sodíku ani trans-tuků v Česku není. Etikety nutriční hodnoty v restauracích nepovinné. Programy bariatrické chirurgie pojišťovna hradí omezeně, požadovaný BMI ≥ 40 (nebo ≥ 35 s komplikací). Veřejné kampaně typu „5 porcí ovoce\" jsou marginální. Žádný plán „Strategie obezity 2030\" v ČR neexistuje, na rozdíl od UK National Obesity Strategy.\n\nObezita je v ČR podle SZÚ asociovaná s 13 % všech úmrtí — cesta přes diabetes typu 2, KV onemocnění, onkologii (kolorektum, prsní žláza, ledviny) a osteoartrózu. Ekonomický náklad pro veřejné zdravotní pojištění odhaduje OECD na 4 % celkových výdajů na zdravotní péči — v ČR by to bylo cca 18 mld. Kč ročně. Politické nástroje (sugar tax dle UK modelu, zákaz reklamy junk food u dětí, povinné nutri-skóre na obalech) jsou veřejně diskutované, implementace váznou. Indikátor v HSPA dashboardu sleduje BMI jako klíčový determinant české preventabilní mortality.",
+  "patient_story": "Plzeň, ordinace praktického lékaře, preventivní prohlídka 52leté ženy. „BMI 28, obvod pasu 96 cm. Paní Krásná, jste v pásmu nadváhy, blížíte se obezitě.\" Pacientka přikyvuje, ale ví, že přesně tohle slyšela před pěti lety i před deseti. Mezi prohlídkami se její váha zvedla o 4 kg. To není výjimka — to je modal trajektorie české středního věku.\n\n60 % dospělých Čechů (18+) má BMI ≥ 25 (nadváha nebo obezita). EU-27 průměr je 52,7 % (Eurostat EHIS, hlth_ehis_bm1e, 2019 — poslední dostupná vlna EHIS). Z toho samotná obezita (BMI ≥ 30) dosahuje 20 % — pětina dospělých. U mužů je nadváha rozšířenější (70 %) než u žen (51 %). Trend je rostoucí: v roce 2014 mělo nadváhu 57 % dospělých, v roce 2019 už 60 %. Pohybová aktivita je v ČR rovněž pod průměrem — jen 25 % dospělých splňuje WHO doporučení 150 minut středně intenzivní aktivity týdně.\n\nStrukturálně český obesogenic environment kombinuje vysokou spotřebu zpracovaných potravin, sladkých nápojů a alkoholu (viz alkohol_spotreba) se sedavým životním stylem a marketingem rychloobčerstvení v dětských kategoriích. Daň z cukru, sodíku ani trans-tuků v Česku není. Etikety nutriční hodnoty v restauracích nepovinné. Programy bariatrické chirurgie pojišťovna hradí omezeně, požadovaný BMI ≥ 40 (nebo ≥ 35 s komplikací). Veřejné kampaně typu „5 porcí ovoce\" jsou marginální. Žádný plán „Strategie obezity 2030\" v ČR neexistuje, na rozdíl od UK National Obesity Strategy.\n\nObezita je v ČR podle SZÚ asociovaná s 13 % všech úmrtí — cesta přes diabetes typu 2, KV onemocnění, onkologii (kolorektum, prsní žláza, ledviny) a osteoartrózu. Ekonomický náklad pro veřejné zdravotní pojištění odhaduje OECD na 4 % celkových výdajů na zdravotní péči — v ČR by to bylo cca 18 mld. Kč ročně. Politické nástroje (sugar tax dle UK modelu, zákaz reklamy junk food u dětí, povinné nutri-skóre na obalech) jsou veřejně diskutované, implementace váznou. Indikátor v HSPA dashboardu sleduje BMI jako klíčový determinant české preventabilní mortality.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
 }

@@ -4,23 +4,31 @@
   "area": "Výsledky",
   "domain": "Duševní zdraví",
   "subdomain": "Sebevražednost",
-  "definition": "Věkově standardizovaná míra sebevražd (MKN-10: X60–X84) na 100 000 obyvatel, standardizace na EU-27.",
+  "definition": "Věkově standardizovaná míra sebevražd (MKN-10: X60–X84 + sekvely Y87.0) na 100 000 obyvatel, standardizace na EU-27.",
   "unit": "na 100 000 ob.",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "csu",
-      "note": "Statistika přirozené měny – příčiny úmrtí."
-    },
-    "fallback": {
-      "type": "eurostat",
-      "code": "hlth_cd_asdr2"
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_cd_asdr2",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "TOTAL",
+        "icd10": "X60-X84_Y870",
+        "unit": "RT"
+      },
+      "note": "Standardised death rate, intentional self-harm (X60–X84 + Y87.0), ESP 2013, Eurostat hlth_cd_asdr2. Ověřeno živě 2026-06-01: CZ 11,6 (2023), EU27 10,4."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "SUICIDE",
-    "dataset": "HEALTH_STAT"
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_cd_asdr2",
+    "params": {
+      "geo": "EU27_2020",
+      "icd10": "X60-X84_Y870"
+    },
+    "note": "EU-27 průměr ze stejné standardizované řady: 10,4 (2023)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -34,7 +42,9 @@
   ],
   "method_notes": "Sebevraždy jsou chronicky podregistrované — skutečné číslo může být o 10–20 % vyšší.",
   "limitations": "Stigma a kódovací praktiky vedou k podregistraci. Nehody nezjasněného úmyslu se nezapočítávají.",
-  "patient_story": "Hradec Králové, krizová linka 116 123, neděle ve 23:40. „Volám, protože už nevím, jak dál. Ztratil jsem práci, manželka mě opustila, nemám kam jít. Lék mi v pondělí nedá psychiatr — je tam pětiměsíční pořadník.\" Tahle replika není konstruovaná — je to typická situace, kterou linky uvádějí v anualizovaných reportech. V Česku přes 1 200 lidí ročně sebevraždu dokoná. Linka vstupuje jako poslední záchytná vrstva v systému, kde primární psychiatrická péče má mnohaměsíční čekací doby.\n\nStandardizovaná míra sebevražd v ČR je 12,5 na 100 000 obyvatel ročně (ČSÚ, 2024). OECD průměr je 10,5, EU 11,2. Česko stojí cca o 19 % nad OECD průměrem. Mužská mortalita (21,5) je 4,3× vyšší než ženská (5,0). Nejvyšší věkové skupiny (75+) mají hodnoty přes 30/100 000 — sebevražda jako důsledek osamělosti, somatického onemocnění a depresivní poruchy. Trend dlouhodobě stagnuje: 2010 — 13,7; 2024 — 12,5. Pokles je pomalejší než v Nizozemsku, Norsku nebo Finsku, které dlouhodobě investují do prevence.\n\nStrukturálně český systém péče o duševní zdraví trpí dvěma chronickými problémy: nedostatečnou kapacitou (3 psychiatři na 10 000 obyvatel vs. OECD 5,8) a nedokončenou Reformou psychiatrické péče (probíhá od 2013 — Centra duševního zdraví jsou rozšířena jen v některých krajích, kapacita lůžkové péče v psychiatrických nemocnicích klesá rychleji, než roste komunitní péče). Krizová pomoc je zajištěna NNO — Linka bezpečí, Linka první psychické pomoci, Modrá linka — financování smíšené, nestabilní. Telefonická a online intervence pokrývá jen zlomek poptávky.\n\nSebevražda je v Česku nejčastější příčinou úmrtí mužů v kategorii 25–44 let — víc než dopravní nehody nebo onkologie. Politické páky jsou jasné: dokončení Reformy psychiatrické péče (kapacita Center duševního zdraví v každém okrese), regulace dostupnosti smrtících látek (paracetamol balení, pesticidy), školní programy mentálního zdraví (UK MindEd model), pravidelný populační screening depresivních symptomů u 65+. Indikátor v HSPA dashboardu sleduje sebevraždy jako klíčový ukazatel efektivity systému duševního zdraví — který je v ČR mezi nejvíce zaostávajícími.",
+  "patient_story": "Hradec Králové, krizová linka 116 123, neděle ve 23:40. „Volám, protože už nevím, jak dál. Ztratil jsem práci, manželka mě opustila, nemám kam jít. Lék mi v pondělí nedá psychiatr — je tam pětiměsíční pořadník.\" Tahle replika není konstruovaná — je to typická situace, kterou linky uvádějí v anualizovaných reportech. V Česku přes 1 200 lidí ročně sebevraždu dokoná. Linka vstupuje jako poslední záchytná vrstva v systému, kde primární psychiatrická péče má mnohaměsíční čekací doby.\n\nStandardizovaná míra sebevražd v ČR je 11,6 na 100 000 obyvatel ročně (Eurostat hlth_cd_asdr2, ESP 2013, 2023). EU‑27 průměr je 10,4 — Česko stojí cca o 12 % nad průměrem unie. Mužská mortalita je zhruba 4× vyšší než ženská. Nejvyšší věkové skupiny (75+) mají hodnoty výrazně nad průměrem — sebevražda jako důsledek osamělosti, somatického onemocnění a depresivní poruchy. Trend dlouhodobě mírně klesá: 2010 — 13,7; 2023 — 11,6. Pokles je pomalejší než v Nizozemsku, Norsku nebo Finsku, které dlouhodobě investují do prevence.\n\nStrukturálně český systém péče o duševní zdraví trpí dvěma chronickými problémy: nedostatečnou kapacitou (3 psychiatři na 10 000 obyvatel vs. OECD 5,8) a nedokončenou Reformou psychiatrické péče (probíhá od 2013 — Centra duševního zdraví jsou rozšířena jen v některých krajích, kapacita lůžkové péče v psychiatrických nemocnicích klesá rychleji, než roste komunitní péče). Krizová pomoc je zajištěna NNO — Linka bezpečí, Linka první psychické pomoci, Modrá linka — financování smíšené, nestabilní. Telefonická a online intervence pokrývá jen zlomek poptávky.\n\nSebevražda je v Česku nejčastější příčinou úmrtí mužů v kategorii 25–44 let — víc než dopravní nehody nebo onkologie. Politické páky jsou jasné: dokončení Reformy psychiatrické péče (kapacita Center duševního zdraví v každém okrese), regulace dostupnosti smrtících látek (paracetamol balení, pesticidy), školní programy mentálního zdraví (UK MindEd model), pravidelný populační screening depresivních symptomů u 65+. Indikátor v HSPA dashboardu sleduje sebevraždy jako klíčový ukazatel efektivity systému duševního zdraví — který je v ČR mezi nejvíce zaostávajícími.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
 }

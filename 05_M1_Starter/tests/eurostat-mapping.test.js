@@ -1,7 +1,8 @@
 // Tests for ingest/mapping/eurostat_codes.json — validates that filter dimensions
 // match Eurostat schema. Prevents regression of the May 2026 bug where:
 //   - hlth_hlye used age=Y65, indic_he=F (both invalid → HTTP 400)
-//   - hlth_silc_08 used quant_inc=TOTAL (wrong dim name) and reason=TOOEXP_FAR_WAIT (wrong code)
+//   - hlth_silc_08 used quant_inc=TOTAL (wrong dim name) and reason=TOOEXP_FAR_WAIT/TOOEFW
+//     (neither exists in the live 'reason' code list; correct summary code is TXP_TFAR_WLIST)
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -36,9 +37,12 @@ test('hlth_silc_08: quantile dimension (not quant_inc)', () => {
   assert.equal(m.filter_extra.quantile, 'TOTAL');
 });
 
-test('hlth_silc_08: reason uses valid code (TOOEFW, not TOOEXP_FAR_WAIT)', () => {
+test('hlth_silc_08: reason uses valid code (TXP_TFAR_WLIST)', () => {
   const m = MAPPING.indicators.unmet_need_medical;
-  const valid = ['TOOEXP', 'TOOFAR', 'TOOEFW', 'NOTIME', 'NO_UNMET', 'WAIT', 'OTH'];
+  // Skutečné kódy dimenze 'reason' v živém datasetu hlth_silc_08 (ověřeno 2026-06-01):
+  // TXP, TFAR, TXP_TFAR_WLIST, NTIME, NUMT_ND, NOKNOW, WAITING, FEAR, HOPING, OTH.
+  // Souhrnný kód „too expensive / too far / waiting list" je TXP_TFAR_WLIST.
+  const valid = ['TXP', 'TFAR', 'TXP_TFAR_WLIST', 'NTIME', 'NUMT_ND', 'NOKNOW', 'WAITING', 'FEAR', 'HOPING', 'OTH'];
   assert.ok(valid.includes(m.filter_extra.reason),
     `reason=${m.filter_extra.reason} not in Eurostat schema (${valid.join('|')})`);
 });
