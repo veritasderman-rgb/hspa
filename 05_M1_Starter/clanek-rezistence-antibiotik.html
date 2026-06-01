@@ -3,26 +3,27 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-05-16
+    last_reviewed: 2026-06-01
     reviewer: claude-code-agent
-    status: review-pending
+    status: flagged
     unverified_claims_removed: 2
     primary_sources_added: 8
     visual_elements_added: 0
+    finding_2026-06-01: "AUDIT-FLAG (fallback routine, žádný nový discovery trigger). (1) HYGIENA: odstraněn reader-viditelný redakční banner 'Status: review-pending' z publikovaného článku (3 blocking errors ve validate-articles.js). (2) ZÁSADNÍ FAKTICKÁ CHYBA: centrální benchmark 'OECD 11,5 %' je metodicky chybný. Primárně ověřeno proti ECDC EARS-Net AER 2024 (plný PDF stažen + pdftotext): EU/EEA populačně vážený průměr rezistence invazivní E. coli na fluorochinolony = 22,5 % (2024), klesající trend — NE 11,5 %. 'OECD 11,5 %' je import z jiné metodiky (OECD Health at a Glance) → porušuje pravidlo o míchání metodik. Pozn.: hodnota 15,71 v AER Table 1 je incidence/100k, ne % rezistence. Česká hodnota 13,1 % (i trend 14,5→13,1) má origin: seed a nebyla primárně ověřena. → article-status FLAGGED + published:false; benchmark indikátoru opraven na 22,5 % (EARS-Net), signal warn→neutral; meta na noindex; perex/databox opraven; přidán flagged caveat. ČEKÁ NA REDAKCI: primární verifikace české hodnoty (ECDC Atlas/SZÚ), re-thesis (po opravě benchmarku se mění vyznění), napojení indikátoru na živý EARS-Net (seed→live). Discovery+routing: discovery/discovery-2026-06-01.md, routing-2026-06-01.md."
     notes: "Kaskádová revize AMR clusteru navazující na audit sourozeneckého článku clanek-spotreba-antibiotik.html (2026-05-10) a clanek-nosokomialni-infekce.html (čeká na samostatný audit). Ověřeno proti ECDC EARS-Net Annual Epidemiological Report for 2024 a Country sheet 2024 Czechia (antibiotic.ecdc.europa.eu), Akčnímu plánu NAP ČR 2019–2022 (vláda ČR, usnesení č. 75/2019), historii NAP od usnesení vlády č. 595/2009, WHO Global Action Plan on AMR (rezoluce WHA68.7, květen 2015), WHO Ten threats to global health 2019 a Surviving Sepsis Campaign 2021 guidelines (Intensive Care Medicine, 2021). Klíčové opravy: (1) chybné datování českého NAP — článek tvrdil 'Česko má od roku 2018 nastavený plán', skutečnost: NAP samotný od 4. 5. 2009 (usnesení vlády č. 595), aktuální Akční plán NAP 2019–2022 schválen 28. 1. 2019 (usnesení vlády č. 75), AP NAP po 2022 zatím nebyl veřejně zveřejněn jako navazující dokument. (2) WHO Ten threats — explicitně datováno na rok 2019 (původní formulace nezmiňovala rok publikace seznamu). (3) Surviving Sepsis Campaign claim — kvalifikováno: SSC 2021 doporučuje 1 hodinu u septického šoku, ale recentní meta-analýzy (Br J Med 2024 systematic review na 190 896 pacientech) ukazují, že časový práh 3 hod je rovněž asociován s mortalitním benefitem; striktní 1-hour bundle je proto v současnosti revidován. (4) Komunitní rezistence > 20 % — vágní 'v evropských AMR reportech' nahrazeno explicitním přiznáním limitace s odkazem na ECDC AER 2024. (5) Lancet ID / CID studie o ASP — generická citace nahrazena odkazem na Cochrane review (Davey et al., 2017) jako primární evidence base. (6) Cross-article reference 'článek 22/25/26' nahrazeny slug odkazy na clanek-nosokomialni-infekce.html a clanek-spotreba-antibiotik.html. (7) Generické URL (szu.cz, ecdc.europa.eu/about, ema.europa.eu, mzcr.cz, england.nhs.uk, who.int/europe/initiatives/one-health) nahrazeny stabilními permalinky primárních zdrojů. (8) Doplněn caveat v databoxu o pojmu 'OECD průměr 11,5 %' — metodická karta indikátoru používá benchmark_source: eurostat (hlth_rs_resist), nikoliv OECD; pojem 'OECD 11,5' je zjednodušení a měl by být revidován v navazující datové iteraci. (9) Doplněn audit-status banner v hlavičce a interní cross-link na sourozenecký článek o spotřebě. (10) Hodnota 13,1 % v ČR a 11,5 % EU benchmark z dashboardu nebyla v této session přímo verifikována proti ECDC AER 2024 PDF (atlas.ecdc.europa.eu vrátil 503, AER 2024 PDF byl binární); origin v data/indicators.json zůstává 'seed' a vyžaduje napojení na primární EARS-Net výstup — out-of-scope této redakční iterace. Status published → review-pending."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Třináct procent rezistentní. Proč ciprofloxacin v Česku přestává spolehlivě fungovat · HSPA Monitor</title>
-<meta name="description" content="Rezistence Escherichia coli na fluorochinolony (ciprofloxacin) je u invazivních izolátů v Česku 13,1 procenta oproti 11,5 v průměru OECD. Antimikrobiální rezistence není abstraktní téma — pro pacienta s urosepsí znamená rozdíl mezi ATB volby a léčbou rezervními antibiotiky.">
-<meta name="robots" content="index, follow">
+<meta name="description" content="Rezistence invazivní Escherichia coli na fluorochinolony (ciprofloxacin) je v EU/EEA podle ECDC EARS-Net (AER 2024) v průměru 22,5 % s klesajícím trendem. Antimikrobiální rezistence není abstraktní téma — pro pacienta s urosepsí znamená rozdíl mezi ATB volby a léčbou rezervními antibiotiky.">
+<meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Třináct procent rezistentní. Proč ciprofloxacin v Česku přestává spolehlivě fungovat">
-<meta property="og:description" content="E. coli rezistence k FQ 13,1 % vs. OECD 11,5. Co to znamená klinicky a co s AMR dělají systémy s nízkou rezistencí.">
+<meta property="og:title" content="Rezistence E. coli na fluorochinolony: co znamená pro pacienta a co s AMR dělají systémy s nízkou rezistencí">
+<meta property="og:description" content="EU/EEA průměr rezistence E. coli na fluorochinolony je 22,5 % (ECDC EARS-Net 2024). Co to znamená klinicky a co s AMR dělají systémy s nízkou rezistencí.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Bezpečnost péče">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="flagged">
 <link rel="stylesheet" href="src/styles.css">
 
   <meta property="og:image" content="assets/covers/clanek-rezistence-antibiotik.png" data-cover-injected="1">
@@ -63,7 +64,7 @@
       </div>
       <h2 class="article-title">Třináct procent rezistentní. Proč ciprofloxacin v Česku přestává spolehlivě fungovat</h2>
       <p class="article-deck">
-        Podle dat sítě EARS-Net je v Česku 13,1 procenta invazivních izolátů Escherichia coli rezistentních na fluorochinolony (ciprofloxacin), průměr OECD 11,5. Antimikrobiální rezistence (AMR) není abstraktní hrozba na horizontu příští dekády — je to klinická realita, která pacienta s urosepsí, pyelonefritidou nebo bakteriální sepsí nutí přejít na rezervní antibiotika a zvyšuje mu riziko úmrtí.
+        Podle dat sítě EARS-Net (ECDC, AER 2024) je rezistence invazivních izolátů Escherichia coli na fluorochinolony (ciprofloxacin) v EU/EEA v průměru 22,5 procenta, s klesajícím trendem. Antimikrobiální rezistence (AMR) není abstraktní hrozba na horizontu příští dekády — je to klinická realita, která pacienta s urosepsí, pyelonefritidou nebo bakteriální sepsí nutí přejít na rezervní antibiotika a zvyšuje mu riziko úmrtí.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">31. května 2026</span>
@@ -75,6 +76,10 @@
     </header>
 
     <div class="article-body">
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Redakční upozornění (status: flagged, 1. 6. 2026).</strong> Tento článek byl při nezávislém auditu stažen z produkce k přepracování. Původní centrální srovnání „13,1 % (ČR) vs. 11,5 % (OECD)" je metodicky chybné: skutečný populačně vážený průměr EU/EEA pro rezistenci invazivní <em>E. coli</em> na fluorochinolony je podle <a href="https://www.ecdc.europa.eu/sites/default/files/documents/antimicrobial-resistance-eu-annual-epidemiological-report-2024.pdf" target="_blank" rel="noopener">ECDC EARS-Net AER 2024</a> <strong>22,5 %</strong> (klesající trend), nikoliv 11,5 %; hodnota „11,5 % OECD" pocházela z jiné metodiky (OECD Health at a Glance). Česká hodnota 13,1 % v dashboardu má status <code>seed</code> a čeká na primární ověření proti EARS-Net (ECDC Surveillance Atlas / SZÚ). Do dokončení verifikace ponechte text v dolní části jako pracovní podklad — konkrétní česká čísla v něm nejsou potvrzená.
+      </div>
 
       <p class="article-lead">
         Antimikrobiální rezistence je v <a href="https://www.who.int/news-room/spotlight/ten-threats-to-global-health-in-2019" target="_blank" rel="noopener">seznamu WHO Ten threats to global health (2019)</a> uvedena jako jedna z deseti hlavních globálních hrozeb veřejnému zdraví a WHO ji v <a href="https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank" rel="noopener">aktuálních fact sheets</a> dlouhodobě označuje za jednu z hlavních priorit. Bakterie, které se kdysi daly snadno léčit, dnes vyžadují širokospektrá nebo rezervní antibiotika; pacient s rezistentní infekcí má vyšší mortalitu, delší hospitalizaci a větší riziko komplikací. Česko v evropském srovnání AMR není v nejhorší pětici, ale ani v té nejlepší — a u jednoho z klíčových rezistenčních ukazatelů zaostává.
@@ -217,12 +222,12 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=rezistence_antibiotik_ecoli"><strong>Rezistence E. coli na fluorochinolony</strong></a> — 13,1 % vs. OECD 11,5 % (EARS-Net invazivní izoláty)</li>
+        <li><a href="indicator.html?id=rezistence_antibiotik_ecoli"><strong>Rezistence E. coli na fluorochinolony</strong></a> — EU/EEA průměr 22,5 % (ECDC EARS-Net AER 2024, invazivní izoláty); česká hodnota v dashboardu má status <code>seed</code> a čeká na primární verifikaci</li>
         <li><a href="indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — 15 DDD/1000/den vs. OECD 17,5</li>
         <li><a href="indicator.html?id=infekce_nosokomialni"><strong>Prevalence nemocničních infekcí</strong></a> — 6,5 % vs. OECD 5,5 %</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k indikátoru:</strong> EARS-Net měří pouze invazivní izoláty (z hemokultury, mozkomíšního moku) — komunitní a ambulantní rezistence E. coli k fluorochinolonům je podle metodické karty pravděpodobně vyšší. Jednotka „% rezistence" odráží podíl izolátů, které nejsou citlivé k danému antibiotiku v laboratorním testu. Pojem „OECD 11,5 %" v databoxu reflektuje benchmark v dashboardu, ale metodická karta indikátoru jako <code>benchmark_source</code> deklaruje Eurostat <code>hlth_rs_resist</code> (EU/EEA), nikoliv OECD.Stat — viz disclaimer v sekci Zdroje.
+        <strong>Pozn. k indikátoru:</strong> EARS-Net měří pouze invazivní izoláty (z hemokultury, mozkomíšního moku) — komunitní a ambulantní rezistence E. coli k fluorochinolonům je podle metodické karty pravděpodobně vyšší. Jednotka „% rezistence" odráží podíl izolátů, které nejsou citlivé k danému antibiotiku v laboratorním testu. Benchmark v dashboardu byl 1. 6. 2026 opraven na primárně ověřený EU/EEA populačně vážený průměr <strong>22,5 %</strong> (ECDC EARS-Net AER 2024); dřívější údaj „OECD 11,5 %" byl chybný import z jiné metodiky (OECD Health at a Glance) a byl odstraněn. Česká hodnota v dashboardu má status <code>seed</code> a čeká na primární verifikaci.
       </p>
     </aside>
 
@@ -258,7 +263,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnota 13,1 % je z dashboardu HSPA Monitoru ke dni vydání článku — zdroj v metodické kartě deklarován jako SZÚ / EARS-Net, benchmark_source v <code>indicators/rezistence_antibiotik_ecoli.json</code> je Eurostat (kód <code>hlth_rs_resist</code>), tedy uváděný benchmark „OECD 11,5 %" je <strong>zjednodušení</strong> a metodicky odráží spíše EU/EEA průměr — toto je otevřená otázka pro datovou iteraci. Konkrétní mezinárodní srovnání (Skandinávie 5–8 %, středomořské země 25+ %) je řádový popis aktuálních EARS-Net dat — pro přesné hodnoty doporučujeme primární datové sady ECDC Atlas a country sheets. „Importovaná rezistence" a kumulativní efekt veterinární spotřeby jsou strukturální popis; konkrétní kvantifikace závisí na konkrétní studii a regionu. Údaje o NHS, Skandinávii a Nizozemsku odkazujeme na institucionální zdroje, nikoliv na konkrétní pacientské studie.
+        <strong>Pozn. k údajům:</strong> Benchmark byl 1. 6. 2026 při nezávislém auditu opraven na primárně ověřenou hodnotu: EU/EEA populačně vážený průměr rezistence invazivní E. coli na fluorochinolony je podle ECDC EARS-Net (AER 2024) <strong>22,5 %</strong> s klesajícím trendem — dřívější benchmark „OECD 11,5 %" byl chybný (jiná metodika, OECD Health at a Glance) a byl odstraněn. Česká hodnota 13,1 % v dashboardu má status <code>seed</code> (<code>benchmark_source</code> v metodické kartě nyní deklaruje ECDC EARS-Net AER 2024; dřívější odkaz na Eurostat <code>hlth_rs_resist</code> je neplatný) a čeká na primární verifikaci proti EARS-Net výstupu (ECDC Surveillance Atlas / SZÚ). Konkrétní mezinárodní srovnání (Skandinávie 5–8 %, středomořské země 25+ %) je řádový popis aktuálních EARS-Net dat — pro přesné hodnoty doporučujeme primární datové sady ECDC Atlas a country sheets. „Importovaná rezistence" a kumulativní efekt veterinární spotřeby jsou strukturální popis; konkrétní kvantifikace závisí na konkrétní studii a regionu. Údaje o NHS, Skandinávii a Nizozemsku odkazujeme na institucionální zdroje, nikoliv na konkrétní pacientské studie.
       </p>
     </section>
 
