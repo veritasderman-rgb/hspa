@@ -9,18 +9,13 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "csu_datastat",
-      "endpoint": "https://data.csu.gov.cz/api/...",
-      "dataset": "DEM_NADEZE",
-      "dimensions": {
-        "sex": "T",
-        "uzemi": "CZ0",
-        "vek": "0"
-      }
+      "type": "eurostat_jsonstat",
+      "dataset": "demo_mlexpec",
+      "note": "Naděje dožití při narození, Eurostat demo_mlexpec (geo=CZ, sex=T, age=Y_LT1). Přepnuto z ČSÚ DataStat 2026-06-01: ČSÚ data.csu.gov.cz API kódy (DEM01-NADE) vrací 404, Eurostat dodává srovnatelnou hodnotu spolehlivě."
     },
     "fallback": {
-      "type": "csv",
-      "url": "https://csu.gov.cz/produkty/databaze-krok-otevrena-data"
+      "type": "csu_datastat",
+      "note": "ČSÚ DataStat — vyžaduje aktualizaci dataset kódů proti data.csu.gov.cz/api/katalog (samostatná iterace)."
     }
   },
   "benchmark_source": {
