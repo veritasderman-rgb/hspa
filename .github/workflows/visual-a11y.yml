@@ -9,14 +9,21 @@ name: Visual + a11y regression
 # (@playwright/test, @axe-core/playwright, playwright) jsou commitnuté, takže
 # workflow běží automaticky na každý PR měnící frontend.
 #
-# Po vědomé vizuální změně přegeneruj baseline:
-#   cd 05_M1_Starter
-#   npm ci && npx playwright install --with-deps chromium
-#   npm run test:e2e:update
-#   git add tests/e2e/visual.spec.js-snapshots && git commit
+# DŮLEŽITÉ — baseline MUSÍ vzniknout v CI prostředí:
+#   Playwright fullPage snapshoty jsou citlivé na font rendering, který se mezi
+#   prostředími (lokální kontejner vs. GitHub ubuntu runner) liší i o stovky
+#   pixelů na výšku dlouhých stránek. Baseline vygenerovaný lokálně proto v CI
+#   NEPROJDE. Po vědomé vizuální změně přegeneruj baseline přímo v CI:
+#     Actions → "Visual + a11y regression" → Run workflow → update_baseline: true
+#   Job snapshoty vygeneruje na runneru a commitne je do zvolené větve.
 
 on:
   workflow_dispatch:
+    inputs:
+      update_baseline:
+        description: 'Přegenerovat visual baseline na runneru a commitnout'
+        type: boolean
+        default: false
   pull_request:
     branches: [main]
     paths:
@@ -27,6 +34,8 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: 05_M1_Starter
@@ -46,7 +55,30 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      # Ruční režim: přegeneruj baseline na runneru a commitni ho. Snapshoty
+      # vzniklé v tomto prostředí jsou jediné, které pak v CI projdou.
+      - name: Update baseline (manual)
+        if: github.event_name == 'workflow_dispatch' && inputs.update_baseline
+        run: npx playwright test tests/e2e/visual.spec.js --config=playwright.config.js --update-snapshots
+        env:
+          CI: 'true'
+
+      - name: Commit updated baseline
+        if: github.event_name == 'workflow_dispatch' && inputs.update_baseline
+        run: |
+          if git diff --quiet tests/e2e/visual.spec.js-snapshots; then
+            echo "Baseline beze změny — nic ke commitu."
+            exit 0
+          fi
+          git config user.name "hspa-ci[bot]"
+          git config user.email "ci@hspa-cesko.cz"
+          git add tests/e2e/visual.spec.js-snapshots
+          git commit -m "test(e2e): přegenerování visual baseline na CI runneru [skip ci]"
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      # Normální režim (PR i ruční bez update): spusť testy proti baselinu.
       - name: Run visual + a11y tests
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.update_baseline) }}
         run: npx playwright test --config=playwright.config.js
         env:
           CI: 'true'
