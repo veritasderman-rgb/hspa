@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_pneumokok_penicilin",
+  "name": "Rezistence S. pneumoniae na penicilin",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Streptococcus pneumoniae se sníženou citlivostí na penicilin (penicillin non-wild-type) v síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure STRPNE.PENICILLINS.R.PROPORTION (R – resistant isolates, percentage), populace „Streptococcus pneumoniae|Penicillins\". Per-country % pro ČR ověřeno přes REST API AtlasService 2026-06-01: 2024 = 6.0 % (N=487)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA průměr 2024 jako % není v textové části AER 2024 jednoznačně oddělen od incidence; benchmark doplnit z ECDC Atlas EU agregátu v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Pneumokok je častou příčinou pneumonie, meningitidy a sepse. Snížená citlivost na penicilin ovlivňuje volbu empirické léčby invazivních pneumokokových onemocnění.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}

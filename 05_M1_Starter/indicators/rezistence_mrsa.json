@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_mrsa",
+  "name": "Rezistence S. aureus na meticilin (MRSA)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Staphylococcus aureus rezistentních na meticilin (MRSA) v síti EARS-Net.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR), measure STAAUR.MRSA.R.PROPORTION (R – resistant isolates, percentage), populace „Staphylococcus aureus|Meticillin (MRSA)\". Per-country % pro ČR ověřeno přes REST API AtlasService 2026-06-01: 2024 = 9.3 % (N=2301)."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": null,
+    "note": "EU/EEA průměr 2024 jako % není v textové části AER 2024 dostupný (uvádí se incidence 4,48/100k); benchmark doplnit z ECDC Atlas EU agregátu v navazující iteraci."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "MRSA je klíčový ukazatel nemocniční hygieny a antibiotic stewardship. Vysoký podíl MRSA komplikuje léčbu sepse a chirurgických infekcí.",
+  "limitations": "Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní/ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-01"
+}
