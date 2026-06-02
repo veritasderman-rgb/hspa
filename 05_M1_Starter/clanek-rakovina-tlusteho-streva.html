@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-06-02
+    reviewer: claude-code-agent
+    status: flagged
+    notes: "Fallback-audit 2026-06-02 (daily routine). FLAGGED + staženo z produkce (published:false). Centrální teze článku (titulek/perex/hero/lead) 'výskyt kolorektálního karcinomu je v ČR dvojnásobný oproti průměru OECD' stojí na metodicky neplatném srovnání: hrubá (crude) míra ČR 73,5/100 000 (NOR) vs věkově standardizovaný (ASR) průměr OECD 36,5. Primárně ověřeno (EU Country Cancer Profile 2025, Czechia, JRC/OECD): na srovnatelném ASR základě je ČR u mužů 94 ≈ EU27 93 a u žen 53 vs EU 58 — tj. PŘIBLIŽNĚ NA EVROPSKÉM PRŮMĚRU, nikoliv dvojnásobně nad ním. Indikátor incidence_kolorektalni byl neutralizován (signal bad→neutral). Re-thesis článku (přerámování na 'screening + přežití', ne na surovou incidenci) ponechán redakci — viz GitHub issue."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tichá epidemie. Proč Česko prohrává souboj s rakovinou tlustého střeva · HSPA Monitor</title>
@@ -12,7 +19,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Onkologie">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="flagged">
 <link rel="stylesheet" href="src/styles.css">
 
   <meta property="og:image" content="assets/covers/clanek-rakovina-tlusteho-streva.png" data-cover-injected="1">
@@ -80,8 +87,8 @@
           </div>
           <div class="av-counter-block av-counter-block-good">
             <span class="av-counter" data-value="36.5" data-decimals="1">36,5</span>
-            <span class="av-counter-label">průměr OECD</span>
-            <span class="av-counter-foot">2× nižší než ČR</span>
+            <span class="av-counter-label">průměr OECD (věk. std.)</span>
+            <span class="av-counter-foot">⚠ jiná metodika než ČR — viz upozornění</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
             <span class="av-counter" data-value="28" data-suffix=" %">28 %</span>
@@ -96,6 +103,13 @@
         </div>
         <p class="av-figure-note"><strong>Zdroje:</strong> Národní onkologický registr ÚZIS; HSPA Monitor dashboard; Eurostat 2023 (programmatická data).</p>
       </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — srovnání 73,5 vs 36,5 není metodicky platné" style="margin:18px 0;padding:14px 18px;border-left:3px solid #b91c1c;background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:#b91c1c;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">⚠ Redakční upozornění — článek v revizi</p>
+        <p style="margin:0 0 6px 0;">Srovnání „<strong>73,5 vs 36,5 = dvojnásobek</strong>" porovnává <strong>hrubou (crude) míru ČR</strong> s <strong>věkově standardizovaným (ASR) průměrem OECD</strong> — to je metodicky neplatné (crude je kvůli stárnoucí populaci systematicky vyšší).</p>
+        <p style="margin:0 0 6px 0;">Na srovnatelném věkově standardizovaném základě (<strong>EU Country Cancer Profile 2025</strong>, JRC/OECD) je kolorektální incidence v ČR u mužů <strong>94 ≈ EU27 93</strong> a u žen <strong>53 vs EU 58</strong> — tedy přibližně <em>na evropském průměru</em>, nikoliv dvojnásobně nad ním.</p>
+        <p style="margin:0;">Centrální teze tohoto článku je proto v revizi. Faktum zůstává relevantní (ČR měla historicky vysokou incidenci a nízkou účast ve screeningu), ale rámec „dvojnásobek OECD" neobstojí. Indikátor v dashboardu byl neutralizován.</p>
+      </aside>
 
       <h3>Diagnóza, kterou známe od devadesátek</h3>
 
@@ -170,7 +184,7 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=incidence_kolorektalni"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 vs. OECD 36,5</li>
+        <li><a href="indicator.html?id=incidence_kolorektalni"><strong>Incidence kolorektálního karcinomu</strong></a> — hrubá míra ČR 73,5 / 100 000 (NOR); věkově standardizovaně (srovnatelně) je ČR <strong>na úrovni EU</strong> (muži 94 ≈ EU 93, ženy 53 vs EU 58 — EU CCP 2025), ne dvojnásobně nad OECD. Viz redakční upozornění výše.</li>
         <li><a href="indicator.html?id=screening_kolorektalni"><strong>Účast na kolorektálním screeningu</strong></a> — 28 % vs. OECD 42 %</li>
         <li><a href="indicator.html?id=prezit_rakoviny_5let"><strong>Pětileté přežití po diagnóze kolorektálního karcinomu</strong></a> — 56 % vs. OECD 62 %</li>
         <li><a href="indicator.html?id=mortalita_onkologicka"><strong>Onkologická mortalita</strong></a> — 180 / 100 000 vs. OECD 163</li>
@@ -214,7 +228,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnoty incidence (73,5 / 100 000) a pětiletého přežití (56 %) v článku vycházejí z dashboardu HSPA Monitoru (poslední uzavřený rok dle indikátoru: 2023, resp. 2020). Definice „pokrytí 50–75 let TOKS nebo koloskopií v doporučeném intervalu" (28 % v r. 2024) může mírně lišit od údaje OECD/Eurostat o účasti na screeningu během 2 let (CZ ≈ 30 % v r. 2023) kvůli rozdílné věkové struktuře a referenčnímu intervalu. Pro analytické účely doporučujeme vždy ověřit aktuální čísla u zdroje (kolorektum.cz, ÚZIS NOR, OECD Health at a Glance, Eurostat).
+        <strong>Pozn. k revizi (2. června 2026):</strong> Článek je FLAGGED a stažen z produkce. Jeho centrální srovnání „dvojnásobek OECD" porovnává hrubou míru ČR (73,5/100 000) s věkově standardizovaným průměrem OECD (36,5) — metodicky neplatné. Primárně ověřeno (EU Country Cancer Profile 2025, JRC/OECD): na ASR základě je ČR kolorektální incidence přibližně na úrovni EU (muži 94 ≈ 93, ženy 53 vs 58). Re-thesis ponechán redakci. <strong>Pozn. k údajům:</strong> Hodnoty incidence (73,5 / 100 000) a pětiletého přežití (56 %) v článku vycházejí z dashboardu HSPA Monitoru (poslední uzavřený rok dle indikátoru: 2023, resp. 2020). Definice „pokrytí 50–75 let TOKS nebo koloskopií v doporučeném intervalu" (28 % v r. 2024) může mírně lišit od údaje OECD/Eurostat o účasti na screeningu během 2 let (CZ ≈ 30 % v r. 2023) kvůli rozdílné věkové struktuře a referenčnímu intervalu. Pro analytické účely doporučujeme vždy ověřit aktuální čísla u zdroje (kolorektum.cz, ÚZIS NOR, OECD Health at a Glance, Eurostat).
       </p>
     </section>
 
