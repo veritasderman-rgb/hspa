@@ -13383,65 +13383,59 @@ html {
   }
 }
 
-/* ===== Cesta pacienta systémem (.cp-*) ===== */
+/* ===== Cesta pacienta systémem (.cp-*) — staví na .av-flow / .av-timeline / .chip ===== */
 .cp-app { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--content-pad) 4rem; }
 .cp-loading, .cp-error { font-family: var(--sans); color: var(--ink-mut); padding: 2rem 0; }
-.cp-section-h { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); margin: 2.5rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--rule); }
+.cp-section { margin-top: 2.5rem; }
+.cp-section-h { font-family: var(--serif); font-size: 22px; color: var(--ink); margin: 0 0 4px; }
+.cp-section-lead { font-family: var(--serif); font-size: 14px; color: var(--ink-mut); margin: 0 0 14px; max-width: 70ch; }
+.cp-icon { width: 1.1em; height: 1.1em; display: inline-block; vertical-align: -0.16em; }
 
-/* Univerzální páteř */
-.cp-spine { list-style: none; display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem; margin: 0; padding: 0; }
-.cp-spine-node { flex: 1 1 0; min-width: 150px; display: flex; flex-direction: column; gap: .2rem; padding: .9rem 1rem; background: var(--paper2); border: 1px solid var(--rule); border-top: 3px solid var(--red); border-radius: 8px; }
-.cp-spine-icon { font-size: 1.5rem; }
-.cp-spine-label { font-family: var(--sans); font-weight: 700; color: var(--ink); }
-.cp-spine-hspa { font-family: var(--sans); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--red); }
-.cp-spine-desc { font-family: var(--sans); font-size: .82rem; color: var(--ink-mut); line-height: 1.35; }
-.cp-spine-arrow { display: flex; align-items: center; color: var(--ink-mut2); font-size: 1.3rem; }
+/* Páteř — rozšiřuje .av-flow */
+.cp-flow-step { border-top-color: var(--red); }
+.cp-flow-icon { color: var(--red); display: inline-flex; margin-bottom: 8px; }
+.cp-flow-icon .cp-icon { width: 26px; height: 26px; }
 
 /* Přepínač diagnóz */
-.cp-picker { display: flex; flex-wrap: wrap; gap: .5rem; }
-.cp-chip { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .9rem; font-family: var(--sans); font-size: .9rem; color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 999px; cursor: pointer; transition: background .15s, border-color .15s; }
+.cp-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.cp-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; font-family: var(--sans); font-size: 13px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule2); border-radius: 999px; cursor: pointer; transition: all 0.12s; }
 .cp-chip:hover { border-color: var(--red); }
-.cp-chip-active { background: var(--red); border-color: var(--red); color: #fff; }
-.cp-chip-icon { font-size: 1.05rem; }
+.cp-chip-active { background: var(--red); border-color: var(--red); color: var(--paper); }
+.cp-chip-icon { display: inline-flex; }
+.cp-chip-icon .cp-icon { width: 17px; height: 17px; }
 
 /* Detail diagnózy */
 .cp-disease { margin-top: 2rem; }
-.cp-disease-head { display: flex; align-items: center; gap: .9rem; margin-bottom: .5rem; }
-.cp-disease-icon { font-size: 2rem; }
-.cp-disease-tag { font-family: var(--sans); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--red); }
-.cp-disease-name { font-family: var(--serif); font-size: 1.7rem; color: var(--ink); margin: 0; }
-.cp-disease-summary { font-family: var(--sans); color: var(--ink-mut); line-height: 1.5; max-width: 70ch; }
-.cp-ind-links { font-family: var(--sans); font-size: .82rem; margin: .4rem 0 0; }
-.cp-ind-lead { color: var(--ink-mut); }
-.cp-ind-link { display: inline-block; margin: .15rem .3rem .15rem 0; padding: .1rem .5rem; background: var(--paper2); border: 1px solid var(--rule); border-radius: 4px; font-size: .78rem; }
+.cp-disease-head { display: flex; align-items: center; gap: 14px; padding-bottom: 12px; border-bottom: 2px solid var(--rule); margin-bottom: 14px; }
+.cp-disease-icon { flex: 0 0 auto; width: 46px; height: 46px; display: grid; place-items: center; color: var(--red); border: 1.5px solid var(--rule2); border-radius: 50%; }
+.cp-disease-icon .cp-icon { width: 26px; height: 26px; }
+.cp-disease-tag { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--red); }
+.cp-disease-name { font-family: var(--serif); font-size: 26px; color: var(--ink); margin: 2px 0 0; line-height: 1.15; }
+.cp-disease-summary { font-family: var(--serif); font-size: 15px; color: var(--ink-mut); line-height: 1.55; max-width: 72ch; }
+.cp-ind-links { margin: 12px 0 4px; }
+.cp-ind-lead { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-mut); }
 
-/* Fáze jako timeline */
-.cp-phases { list-style: none; margin: 1.5rem 0 0; padding: 0; border-left: 2px solid var(--rule); }
-.cp-phase { position: relative; padding: 0 0 1.4rem 1.5rem; }
-.cp-phase-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
-.cp-phase-icon { position: absolute; left: -1.05rem; width: 2rem; height: 2rem; display: grid; place-items: center; background: var(--paper); border: 2px solid var(--red); border-radius: 50%; font-size: 1rem; }
-.cp-phase-titles { margin-left: 1.2rem; }
-.cp-phase-label { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); margin: 0; }
-.cp-phase-hspa { font-family: var(--sans); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--red); }
-.cp-phase-list { font-family: var(--sans); color: var(--ink); line-height: 1.5; margin: .3rem 0 0; padding-left: 1.2rem; }
-.cp-phase-list li { margin: .25rem 0; }
+/* Fáze diagnózy — rozšiřuje .av-timeline */
+.cp-phases { margin-top: 18px; }
+.cp-phase-icon { color: var(--red); margin-right: 6px; }
+.cp-phase-hspa { display: block; font-family: var(--sans); font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-mut2); margin: -2px 0 6px; }
+.cp-phase-list { font-family: var(--serif); font-size: 14.5px; color: var(--ink); line-height: 1.5; margin: 0; padding-left: 18px; }
+.cp-phase-list li { margin: 4px 0; }
 
-/* Kredity autorů */
-.cp-credits { margin-top: 1.5rem; padding: 1.1rem 1.3rem; background: var(--paper2); border: 1px solid var(--rule); border-left: 3px solid var(--red); border-radius: 8px; }
-.cp-credits-h { font-family: var(--sans); font-size: .95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin: 0 0 .6rem; }
-.cp-credit-row { display: flex; gap: .6rem; font-family: var(--sans); font-size: .85rem; margin: .25rem 0; flex-wrap: wrap; }
-.cp-credit-k { flex: 0 0 9.5rem; color: var(--red); font-weight: 600; }
+/* Kredity */
+.cp-credits { margin-top: 22px; padding: 16px 18px; background: var(--paper2); border-left: 3px solid var(--red); }
+.cp-credits-h { font-family: var(--sans); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin: 0 0 10px; }
+.cp-credit-row { display: flex; gap: 12px; font-family: var(--sans); font-size: 13px; margin: 4px 0; flex-wrap: wrap; }
+.cp-credit-k { flex: 0 0 150px; color: var(--ink-mut); font-weight: 600; }
 .cp-credit-v { flex: 1 1 14rem; color: var(--ink); }
-.cp-credits-note { font-family: var(--sans); font-size: .78rem; color: var(--ink-mut); margin: .7rem 0 0; line-height: 1.4; }
+.cp-credits-note { font-family: var(--sans); font-size: 12px; color: var(--ink-mut); margin: 10px 0 0; line-height: 1.45; }
 
 /* Obecná doporučení + zdroj */
-.cp-obecna-list { font-family: var(--sans); color: var(--ink); line-height: 1.6; columns: 2; column-gap: 2rem; max-width: 60ch; }
-.cp-source-note { font-family: var(--sans); font-size: .85rem; color: var(--ink-mut); line-height: 1.5; max-width: 75ch; }
-.cp-source-links { font-family: var(--sans); font-size: .85rem; margin-top: .4rem; }
+.cp-obecna-list { font-family: var(--serif); font-size: 14.5px; color: var(--ink); line-height: 1.6; columns: 2; column-gap: 2.5rem; max-width: 62ch; }
+.cp-source-note { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); line-height: 1.5; max-width: 76ch; }
+.cp-source-links { font-family: var(--sans); font-size: 13px; margin-top: 6px; }
 
-@media (max-width: 720px) {
-  .cp-spine { flex-direction: column; }
-  .cp-spine-arrow { transform: rotate(90deg); align-self: center; }
+@media (max-width: 700px) {
   .cp-obecna-list { columns: 1; }
   .cp-credit-k { flex-basis: 100%; }
 }

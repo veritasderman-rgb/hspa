@@ -1,11 +1,10 @@
 // Frontend logika stránky cesta-pacienta.html.
-// Načítá data/cesta-pacienta.json a renderuje:
-//   1) univerzální páteř cesty (fáze) jako horizontální stepper
-//   2) přepínač diagnóz (chips)
-//   3) detail zvolené diagnózy — fáze jako vertikální timeline + kredity autorů
+// Načítá data/cesta-pacienta.json a renderuje cestu pacienta systémem
+// pomocí zavedených komponent designsystému (.av-flow, .av-timeline, .chip).
 //
-// Obsah je HSPA adaptací infografik série „Cesta pacienta" (Hlas pacientů +
-// LINKOS / ČOS ČLS JEP). Původní autoři a garanti jsou uvedeni u každé diagnózy.
+// Grafika: profesionální inline SVG ikony (line, currentColor) — žádné emoji.
+// Obsah je HSPA adaptací série „Cesta pacienta" (Hlas pacientů + LINKOS /
+// ČOS ČLS JEP); původní autoři a garanti jsou uvedeni u každé diagnózy.
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, renderFooter, injectScrollToTop, escapeHtml } from './page-shared.js';
@@ -14,38 +13,61 @@ const DATA_URL = 'data/cesta-pacienta.json';
 
 function esc(s) { return escapeHtml(String(s ?? '')); }
 
+// --- SVG ikon-set (24×24, stroke currentColor) -------------------------
+const SVG = (body, cls = 'cp-icon') =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true" focusable="false">${body}</svg>`;
+
+const PHASE_ICONS = {
+  prevence: SVG('<path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>'),
+  priznaky: SVG('<path d="M12 4l9 15H3l9-15z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="16.6" x2="12" y2="16.7"/>'),
+  diagnostika: SVG('<circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.6" y2="15.6"/>'),
+  lecba: SVG('<rect x="4" y="4" width="16" height="16" rx="3.5"/><line x1="12" y1="8.5" x2="12" y2="15.5"/><line x1="8.5" y1="12" x2="15.5" y2="12"/>'),
+  sledovani: SVG('<path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9"/><path d="M20 4.5V9h-4.5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 15"/><path d="M4 19.5V15h4.5"/>'),
+};
+
+const DISEASE_ICONS = {
+  prs: SVG('<circle cx="12" cy="13.5" r="7"/><circle cx="12" cy="13.5" r="1.6"/>'),
+  kolorektum: SVG('<path d="M7 4v5a4 4 0 0 0 4 4 3 3 0 0 1 0 6H6"/><path d="M7 4h3"/>'),
+  'delozni-hrdlo': SVG('<path d="M7.5 4c0 2.6 1.5 3.4-1 6.5M16.5 4c0 2.6-1.5 3.4 1 6.5"/><path d="M6.5 10.5a5.5 5.5 0 0 0 11 0"/><line x1="12" y1="16" x2="12" y2="20.5"/>'),
+  'delozni-sliznice': SVG('<path d="M7.5 4.5c0 2.5 1.4 3.3-1 6.2M16.5 4.5c0 2.5-1.4 3.3 1 6.2"/><path d="M6.5 10.5a5.5 5.5 0 0 0 11 0z"/><line x1="12" y1="16" x2="12" y2="20.5"/>'),
+  prostata: SVG('<circle cx="12" cy="14" r="5.5"/><path d="M12 8.5V4"/><path d="M9.5 4h5"/>'),
+  lymfom: SVG('<circle cx="7.5" cy="8" r="2.6"/><circle cx="16" cy="9" r="2.6"/><circle cx="11.5" cy="16" r="2.6"/><line x1="9.4" y1="9.6" x2="13.6" y2="14.4"/><line x1="14.2" y1="11" x2="12.7" y2="14"/>'),
+  oko: SVG('<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>'),
+};
+
+function phaseIcon(id) { return PHASE_ICONS[id] || ''; }
+function diseaseIcon(id) { return DISEASE_ICONS[id] || PHASE_ICONS.diagnostika; }
+
+// --- render bloky -------------------------------------------------------
 function getInitialDiseaseId(diseases) {
-  const params = new URLSearchParams(window.location.search);
-  const q = params.get('d');
-  if (q && diseases.some(d => d.id === q)) return q;
-  return diseases[0]?.id;
+  const q = new URLSearchParams(window.location.search).get('d');
+  return (q && diseases.some(d => d.id === q)) ? q : diseases[0]?.id;
 }
 
 function renderSpine(phases) {
-  const nodes = phases.map((p, i) => `
-    <li class="cp-spine-node">
-      <span class="cp-spine-icon" aria-hidden="true">${esc(p.icon)}</span>
-      <span class="cp-spine-label">${esc(p.label)}</span>
-      <span class="cp-spine-hspa">${esc(p.hspa)}</span>
-      <span class="cp-spine-desc">${esc(p.desc)}</span>
-    </li>${i < phases.length - 1 ? '<li class="cp-spine-arrow" aria-hidden="true">→</li>' : ''}
-  `).join('');
+  const steps = phases.map(p => `
+    <li class="av-flow-step cp-flow-step">
+      <span class="cp-flow-icon">${phaseIcon(p.id)}</span>
+      <span class="av-flow-num"></span>
+      <h3 class="av-flow-title">${esc(p.label)}</h3>
+      <p class="av-flow-desc">${esc(p.desc)}</p>
+      <span class="av-flow-tag">${esc(p.hspa)}</span>
+    </li>`).join('');
   return `
-    <section class="cp-spine-section" aria-labelledby="cpSpineH">
+    <section class="cp-section" aria-labelledby="cpSpineH">
       <h3 class="cp-section-h" id="cpSpineH">Univerzální páteř cesty</h3>
-      <ol class="cp-spine">${nodes}</ol>
+      <p class="cp-section-lead">U většiny onkologických diagnóz je posloupnost stejná. U konkrétní diagnózy se liší jednotlivé kroky uvnitř fází.</p>
+      <ol class="av-flow cp-spine">${steps}</ol>
     </section>`;
 }
 
 function renderPicker(diseases, activeId) {
   const chips = diseases.map(d => `
-    <button type="button" class="cp-chip${d.id === activeId ? ' cp-chip-active' : ''}"
-            data-disease="${esc(d.id)}" aria-pressed="${d.id === activeId ? 'true' : 'false'}">
-      <span class="cp-chip-icon" aria-hidden="true">${esc(d.icon)}</span>
-      <span class="cp-chip-label">${esc(d.short)}</span>
+    <button type="button" class="cp-chip${d.id === activeId ? ' cp-chip-active' : ''}" data-disease="${esc(d.id)}" aria-pressed="${d.id === activeId}">
+      <span class="cp-chip-icon">${diseaseIcon(d.id)}</span>${esc(d.short)}
     </button>`).join('');
   return `
-    <section class="cp-picker-section" aria-labelledby="cpPickerH">
+    <section class="cp-section" aria-labelledby="cpPickerH">
       <h3 class="cp-section-h" id="cpPickerH">Vyberte diagnózu</h3>
       <div class="cp-picker" role="group" aria-label="Výběr diagnózy">${chips}</div>
     </section>`;
@@ -53,8 +75,8 @@ function renderPicker(diseases, activeId) {
 
 function indicatorLinks(ids) {
   if (!Array.isArray(ids) || !ids.length) return '';
-  const links = ids.map(id => `<a class="cp-ind-link" href="indicator.html?id=${esc(id)}">${esc(id)}</a>`).join('');
-  return `<p class="cp-ind-links"><span class="cp-ind-lead">Související indikátory:</span> ${links}</p>`;
+  const links = ids.map(id => `<a class="chip chip-strategy" href="indicator.html?id=${esc(id)}">${esc(id)}</a>`).join('');
+  return `<p class="cp-ind-links"><span class="cp-ind-lead">Související indikátory:</span></p><div class="chip-row">${links}</div>`;
 }
 
 function renderPhases(disease, phases) {
@@ -63,14 +85,9 @@ function renderPhases(disease, phases) {
     if (!items.length) return '';
     const lis = items.map(t => `<li>${esc(t)}</li>`).join('');
     return `
-      <li class="cp-phase">
-        <div class="cp-phase-head">
-          <span class="cp-phase-icon" aria-hidden="true">${esc(p.icon)}</span>
-          <div class="cp-phase-titles">
-            <h4 class="cp-phase-label">${esc(p.label)}</h4>
-            <span class="cp-phase-hspa">${esc(p.hspa)}</span>
-          </div>
-        </div>
+      <li class="av-timeline-item av-timeline-item-done cp-phase">
+        <span class="av-timeline-date"><span class="cp-phase-icon">${phaseIcon(p.id)}</span>${esc(p.label)}</span>
+        <span class="cp-phase-hspa">${esc(p.hspa)}</span>
         <ul class="cp-phase-list">${lis}</ul>
       </li>`;
   }).join('');
@@ -78,16 +95,16 @@ function renderPhases(disease, phases) {
 
 function renderCredits(disease) {
   const a = disease.authors || {};
-  const block = (title, arr) => arr && arr.length
-    ? `<div class="cp-credit-row"><span class="cp-credit-k">${esc(title)}</span><span class="cp-credit-v">${arr.map(esc).join(' · ')}</span></div>` : '';
+  const row = (k, arr) => arr && arr.length
+    ? `<div class="cp-credit-row"><span class="cp-credit-k">${esc(k)}</span><span class="cp-credit-v">${arr.map(esc).join(' · ')}</span></div>` : '';
   const links = (a.odkazy || []).map(l => `<a href="${esc(l.url)}" rel="noreferrer">${esc(l.label)}</a>`).join(' · ');
   const orig = a.original_pdf
     ? `<div class="cp-credit-row"><span class="cp-credit-k">Originál</span><span class="cp-credit-v"><a href="${esc(a.original_pdf)}" rel="noreferrer">Cesta pacienta — PDF</a></span></div>` : '';
   return `
     <aside class="cp-credits" aria-label="Zdroj a autoři">
       <h4 class="cp-credits-h">Zdroj a autoři</h4>
-      ${block('Pacientská organizace', a.organizace)}
-      ${block('Odborní garanti', a.garanti)}
+      ${row('Pacientská organizace', a.organizace)}
+      ${row('Odborní garanti', a.garanti)}
       ${links ? `<div class="cp-credit-row"><span class="cp-credit-k">Odkazy</span><span class="cp-credit-v">${links}</span></div>` : ''}
       ${orig}
       <p class="cp-credits-note">HSPA adaptace infografiky ze série „Cesta pacienta" (Hlas pacientů · LINKOS / ČOS ČLS JEP). Tato stránka originál nenahrazuje.</p>
@@ -98,7 +115,7 @@ function renderDisease(disease, phases) {
   return `
     <article class="cp-disease" aria-labelledby="cpDisH">
       <header class="cp-disease-head">
-        <span class="cp-disease-icon" aria-hidden="true">${esc(disease.icon)}</span>
+        <span class="cp-disease-icon">${diseaseIcon(disease.id)}</span>
         <div>
           <div class="cp-disease-tag">${esc(disease.tag)}</div>
           <h3 class="cp-disease-name" id="cpDisH">${esc(disease.name)}</h3>
@@ -106,7 +123,7 @@ function renderDisease(disease, phases) {
       </header>
       <p class="cp-disease-summary">${esc(disease.summary)}</p>
       ${indicatorLinks(disease.linked_indicators)}
-      <ol class="cp-phases">${renderPhases(disease, phases)}</ol>
+      <ol class="av-timeline cp-phases">${renderPhases(disease, phases)}</ol>
       ${renderCredits(disease)}
     </article>`;
 }
@@ -115,7 +132,7 @@ function renderObecna(o) {
   if (!o || !Array.isArray(o.items)) return '';
   const lis = o.items.map(t => `<li>${esc(t)}</li>`).join('');
   return `
-    <section class="cp-obecna" aria-labelledby="cpObecnaH">
+    <section class="cp-section cp-obecna" aria-labelledby="cpObecnaH">
       <h3 class="cp-section-h" id="cpObecnaH">${esc(o.title)}</h3>
       <ul class="cp-obecna-list">${lis}</ul>
       ${o.source ? `<p class="cp-source-note">${esc(o.source)}</p>` : ''}
@@ -125,7 +142,7 @@ function renderObecna(o) {
 function renderSourceFooter(data) {
   const links = (data.source_links || []).map(l => `<a href="${esc(l.url)}" rel="noreferrer">${esc(l.label)}</a>`).join(' · ');
   return `
-    <section class="cp-source" aria-labelledby="cpSourceH">
+    <section class="cp-section cp-source" aria-labelledby="cpSourceH">
       <h3 class="cp-section-h" id="cpSourceH">O této stránce</h3>
       <p class="cp-source-note">${esc(data.source_note)}</p>
       ${links ? `<p class="cp-source-links">${links}</p>` : ''}
@@ -139,7 +156,7 @@ function selectDisease(data, id) {
   document.querySelectorAll('.cp-chip').forEach(btn => {
     const active = btn.dataset.disease === disease.id;
     btn.classList.toggle('cp-chip-active', active);
-    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.setAttribute('aria-pressed', String(active));
   });
   const params = new URLSearchParams(window.location.search);
   params.set('d', disease.id);
@@ -173,11 +190,9 @@ async function init() {
     ${renderObecna(data.obecna_doporuceni)}
     ${renderSourceFooter(data)}
   `;
-
   app.querySelectorAll('.cp-chip').forEach(btn => {
     btn.addEventListener('click', () => selectDisease(data, btn.dataset.disease));
   });
-
   selectDisease(data, activeId);
 }
 
