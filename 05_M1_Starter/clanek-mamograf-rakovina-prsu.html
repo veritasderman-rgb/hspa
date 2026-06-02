@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<!--
+  audit:
+    last_reviewed: 2026-06-02
+    reviewer: claude-code-agent
+    status: review-pending
+    primary_sources_count: 6
+    notes: "Fallback-audit 2026-06-02 (daily routine). Primárně ověřeno proti EU Country Cancer Profile 2025 (Czechia, JRC/OECD): věkově standardizovaná incidence karcinomu prsu ČR 133/100 000 vs EU27 148 (ČR o ~10 % POD průměrem), celková ASR onko-incidence ČR 565 vs EU 572. Opraven dashboard indikátor incidence_prsu (crude 145 vs ASR benchmark 90,7 → ASR 133 vs EU 148, signal bad→neutral, direction→context_dependent) a databox/metodická poznámka článku. Crude vs ASR caveat callout doplněn. Status review-pending — čeká na ruční schválení redakce."
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Šedesát procent. Proč český mamograf naráží na pomyslný strop · HSPA Monitor</title>
@@ -97,6 +105,13 @@
         <p class="av-figure-note"><strong>Zdroje:</strong> Národní onkologický registr ÚZIS (2022); Národní screeningové centrum ÚZIS (2023); WHO European Programme of Work 2020–2025.</p>
       </figure>
 
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — hrubá vs věkově standardizovaná incidence" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Caveat — proč číslo 144,5 nesrovnávat s evropským průměrem</p>
+        <p style="margin:0 0 6px 0;"><strong>Hrubá (crude) míra 144,5/100 000</strong> (NOR 2022) počítá všechny případy na celou ženskou populaci. Je kvůli stárnutí populace systematicky vyšší a NENÍ mezinárodně srovnatelná.</p>
+        <p style="margin:0 0 6px 0;"><strong>Věkově standardizovaná míra (ASR)</strong> přepočítá výskyt na společnou věkovou strukturu. Na tomto srovnatelném základě je ČR <strong>133/100 000 vs. průměr EU27 148</strong> (2022, EU Country Cancer Profile, JRC/OECD) — tedy o ~10 % <em>pod</em> evropským průměrem.</p>
+        <p style="margin:0;">Rozdíl 144,5 vs 133 není chyba — jsou to dva různě konstruované ukazatele. Pro srovnání ČR vs Evropa platí věkově standardizovaná hodnota. Surová incidence proto v dashboardu HSPA Monitoru nemá „špatný" signál — je to epidemiologický kontext, ne výkonový ukazatel systému (tím jsou účast ve screeningu a přežití).</p>
+      </aside>
+
       <h3>Program, který si dlouho stoupal nahoru</h3>
 
       <p>
@@ -173,11 +188,11 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=incidence_prsu"><strong>Incidence rakoviny prsu</strong></a> — 145 / 100 000 žen (ČR, hrubá míra dle dashboardu 2023) vs. OECD průměr 90,7. Pozn.: srovnání není věkově plně harmonizováno — věkově standardizovaná incidence ČR podle Globocan 2022 je nižší (cca 80–85/100 000).</li>
+        <li><a href="indicator.html?id=incidence_prsu"><strong>Incidence rakoviny prsu</strong></a> — věkově standardizovaně (srovnatelně) <strong>133 / 100 000 žen v ČR vs. 148 v EU27</strong> (2022, EU Country Cancer Profile 2025) — tedy zhruba o 10 % <em>pod</em> evropským průměrem, nikoliv nad ním. Hrubá (crude) míra z NOR je 144,5/100 000 (2022), ta je ale kvůli věkové struktuře systematicky vyšší a není mezinárodně srovnatelná.</li>
         <li><a href="indicator.html?id=screening_mamograficky"><strong>Účast na mamografickém screeningu (45–69)</strong></a> — 60 % (ČR 2023/2024, NSC ÚZIS) vs. OECD benchmark 68 % v dashboardu. Pro kontext: EU průměr 58 % v r. 2023 (OECD State of Health in the EU – Czechia 2025).</li>
         <li><a href="indicator.html?id=mortalita_onkologicka"><strong>Onkologická mortalita</strong></a> — 180 / 100 000 vs. OECD 163 (hodnota z dashboardu HSPA Monitoru).</li>
       </ul>
-      <p class="article-databox-caveat"><strong>Metodická poznámka:</strong> hodnoty incidence z ÚZIS NOR pro rok 2022 — 7 918 nových případů, 144,5/100 000 žen (hrubá míra), 30,9/100 000 úmrtí. Mezinárodní srovnání by mělo být věkově standardizováno; v textu uváděný benchmark OECD 90,7 je věkově standardizovaný.</p>
+      <p class="article-databox-caveat"><strong>Metodická poznámka (crude vs. věkově standardizovaná míra):</strong> Hrubá incidence z ÚZIS NOR pro rok 2022 byla 7 918 nových případů, tj. 144,5/100 000 žen. Tato <em>crude</em> míra je kvůli stárnoucí populaci systematicky vyšší a NENÍ srovnatelná s věkově standardizovanými (ASR) mezinárodními průměry. Na srovnatelném ASR základě (European Standard Population, EU Country Cancer Profile 2025) je incidence v ČR 133/100 000 žen vs. EU27 148 — ČR je o ~10 % pod evropským průměrem. GLOBOCAN 2022 používá jinou standardní populaci (ASR-World) a uvádí ČR cca 80–85/100 000. Indikátor v dashboardu byl proto sjednocen na ASR základ (133 vs EU 148) se signálem <em>neutral</em> (incidence je context-dependent metrika).</p>
     </aside>
 
     <section class="article-sources">
@@ -226,7 +241,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k revizi (11. května 2026):</strong> Článek byl revidován proti primárním zdrojům (ÚZIS NOR, NSC ÚZIS otevřená data, OECD Country Health Profile Czechia 2025, GLOBOCAN 2022, Lancet Oncology 2023). Opraveno: institucionální zařazení NSC (ÚZIS ČR, ne LF MU) a jeho URL (<code>nsc.uzis.cz</code>), cílová věková skupina (45–69 let s adresným zváním), zdroj a rok hodnoty incidence (NOR 2022 — 7 918 případů, 144,5/100 000 hrubá míra). Doplněno: regionální rozpad pokrytí (Karlovarský 52,9 % vs. Vysočina 65,8 %), EU benchmark dle OECD State of Health 2025 (58 % v r. 2023), DOI a kohorta studie MASAI, věkově standardizovaná srovnatelnost incidencí. <em>Status: <strong>review-pending</strong></em> — před republikací podléhá ručnímu schválení.
+        <strong>Pozn. k revizi (2. června 2026):</strong> Datový audit proti primárnímu zdroji <strong>EU Country Cancer Profile 2025 (Czechia, JRC/OECD)</strong>. Opraveno klíčové metodické pochybení dashboardu: indikátor incidence rakoviny prsu porovnával <em>hrubou</em> míru ČR (145/100 000) s <em>věkově standardizovaným</em> průměrem OECD (90,7) a vykazoval signál „bad / dramaticky nad průměrem". Na srovnatelném věkově standardizovaném základě je ČR <strong>133/100 000 vs. EU27 148 — o ~10 % POD evropským průměrem</strong>; indikátor sjednocen na ASR základ (133 vs EU 148), signál neutral (context-dependent), databox a metodická poznámka opraveny. <em>(Předchozí revize 11. 5. 2026: institucionální zařazení NSC, cílová věková skupina, regionální rozpad pokrytí, MASAI DOI.)</em> <em>Status: <strong>review-pending</strong></em> — před republikací podléhá ručnímu schválení.
       </p>
     </section>
 
