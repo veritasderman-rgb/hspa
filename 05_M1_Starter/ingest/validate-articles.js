@@ -73,6 +73,13 @@ function validate() {
   const data = JSON.parse(fs.readFileSync(articlesFile, 'utf8'));
   const articles = data.articles ?? [];
 
+  // Rubriky (páteř sekce Články) — každý publikovaný článek musí mít platné `rubric`.
+  const rubricsFile = path.join(ROOT, 'data', 'rubrics.json');
+  let validRubrics = null;
+  if (fs.existsSync(rubricsFile)) {
+    validRubrics = new Set(JSON.parse(fs.readFileSync(rubricsFile, 'utf8')).rubrics.map(r => r.id));
+  }
+
   const errors = [];
   const warnings = [];
 
@@ -80,6 +87,19 @@ function validate() {
     if (!a.slug) {
       errors.push(`${a.id || '?'}: missing slug`);
       continue;
+    }
+
+    // Kontrola rubriky (jen pro publikované — drafty smí rubric doplnit později)
+    if (validRubrics) {
+      if (!a.rubric) {
+        if (a.published !== false) {
+          errors.push(`${a.id} (${a.slug}): chybí pole "rubric" (publikovaný článek musí mít rubriku)`);
+        } else {
+          warnings.push(`${a.id}: draft bez rubriky (doplň před publikací)`);
+        }
+      } else if (!validRubrics.has(a.rubric)) {
+        errors.push(`${a.id} (${a.slug}): rubric="${a.rubric}" není v data/rubrics.json`);
+      }
     }
     const file = path.join(ROOT, a.slug);
     if (!fs.existsSync(file)) {
