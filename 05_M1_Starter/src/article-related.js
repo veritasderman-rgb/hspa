@@ -102,11 +102,27 @@ function findIndicator(indicatorId, indicatorsData) {
   return indicatorsData.indicators.find(i => i.id === indicatorId) || null;
 }
 
-function buildCards(article, articlesData, themesData, strategiesData, indicatorsData) {
+function findRubric(rubricId, rubricsData) {
+  if (!Array.isArray(rubricsData?.rubrics)) return null;
+  return rubricsData.rubrics.find(r => r.id === rubricId) || null;
+}
+
+function buildCards(article, articlesData, themesData, strategiesData, indicatorsData, rubricsData) {
   const cards = [];
   const linkedIndicators = article.linked_indicators || [];
   const linkedPrevention = article.linked_prevention_themes || [];
   const topics = article.topics || [];
+
+  // 0) Rubrika článku — landing s ostatními texty stejné rubriky
+  const rubric = findRubric(article.rubric, rubricsData);
+  if (rubric) {
+    cards.push({
+      href: `rubrika.html?id=${encodeURIComponent(rubric.id)}`,
+      kicker: `Rubrika · ${rubric.label}`,
+      title: rubric.headline,
+      desc: rubric.lead,
+    });
+  }
 
   // 1) Hlavní indikátor — detail
   if (linkedIndicators.length > 0) {
@@ -219,11 +235,12 @@ export async function enhanceArticleRelated() {
 
   const slug = detectArticleSlug();
 
-  const [articlesData, themesData, strategiesData, indicatorsData] = await Promise.all([
+  const [articlesData, themesData, strategiesData, indicatorsData, rubricsData] = await Promise.all([
     loadJson('data/articles.json'),
     loadJson('data/themes.json'),
     loadJson('data/strategies.json'),
-    loadJson('data/indicators.json')
+    loadJson('data/indicators.json'),
+    loadJson('data/rubrics.json')
   ]);
 
   const articlesList = articlesData?.articles || [];
@@ -231,7 +248,7 @@ export async function enhanceArticleRelated() {
 
   let cards;
   if (article) {
-    cards = buildCards(article, articlesData, themesData, strategiesData, indicatorsData);
+    cards = buildCards(article, articlesData, themesData, strategiesData, indicatorsData, rubricsData);
   } else {
     cards = HUB_FALLBACK_CARDS;
   }
