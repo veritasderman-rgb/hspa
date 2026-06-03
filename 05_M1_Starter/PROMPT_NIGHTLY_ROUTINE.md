@@ -68,8 +68,10 @@ PR zůstal recenzovatelný:
 - **Review (obsah)**: max **3–5 článků za noc** — vyber podle dopadu (legislativa
   s účinností, která nastala > nová vlna dat > drobnost). Zbytek nech ve frontě
   na další noc (report se generuje denně).
-- Přeskoč články auditované < 14 dní (pole `audit.last_reviewed` v HTML komentáři),
-  pokud skener neukazuje nový `date-passed`/`topical-expired`.
+- Články auditované < 14 dní (pole `audit.last_reviewed` v HTML komentáři) už
+  **skener přeskakuje sám** u `check-sources` — v reportu se objeví jen poznámka
+  „check-sources přeskočeno". `date-passed`/`topical-expired` se ale ukazují dál
+  (nové časové signály). Plný worklist vč. recentně auditovaných: `--no-skip-reviewed`.
 
 ---
 

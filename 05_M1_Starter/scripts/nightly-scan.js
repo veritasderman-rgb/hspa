@@ -23,10 +23,16 @@
 //   - reports/nightly-audit-RRRR-MM-DD.json (strojový worklist pro agenta)
 //   - stdout: krátké shrnutí
 //
+// Respektování auditu: článek s `audit.last_reviewed` mladším než
+// REVIEW_SKIP_DAYS (14 dní) se ve `check-sources` PŘESKOČÍ (sladěno s triážním
+// pravidlem v PROMPT_NIGHTLY_ROUTINE.md — „přeskoč články auditované < 14 dní").
+// `date-passed` a `topical-expired` se NEpřeskakují (nové časové signály).
+//
 // Použití:
 //   node scripts/nightly-scan.js              # plný sken, zapíše report
 //   node scripts/nightly-scan.js --stdout     # jen vypíše, nezapisuje soubory
 //   node scripts/nightly-scan.js --slug=clanek-foo.html   # jen jeden článek
+//   node scripts/nightly-scan.js --no-skip-reviewed       # vč. recentně auditovaných
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
@@ -41,6 +47,10 @@ const REPORTS_DIR = resolve(ROOT, 'reports');
 const STALE_MONTHS = 12;        // publikováno dávno → připomenout revizi
 const MAX_DATE_HITS = 6;        // strop zmínek dat na článek (proti šumu)
 const MAX_EXT_LINKS = 12;       // strop externích odkazů na článek
+const REVIEW_SKIP_DAYS = 14;    // článek auditovaný < 14 dní → přeskoč check-sources
+                                // (sladěno s triážním pravidlem PROMPT_NIGHTLY_ROUTINE.md;
+                                // date-passed/topical-expired se NEpřeskakují — to jsou
+                                // nové časové signály, které review nemohla znát)
 
 // Domény, jejichž odkazy mají při kontrole přednost (legislativa, EU, regulátor).
 const PRIORITY_LINK_HINTS = [
@@ -147,7 +157,21 @@ function monthsSince(iso, today) {
   return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
 }
 
-function scanArticle(article, today) {
+function daysBetween(isoA, isoB) {
+  const a = new Date(isoA), b = new Date(isoB);
+  if (isNaN(a) || isNaN(b)) return null;
+  return Math.round((b - a) / 86_400_000);
+}
+
+// Vytáhne audit.last_reviewed (YYYY-MM-DD) z HTML komentáře v hlavičce článku.
+export function parseLastReviewed(html) {
+  const m = html.match(/last_reviewed:\s*["']?(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : null;
+}
+
+export { daysBetween, REVIEW_SKIP_DAYS, scanArticle };
+
+function scanArticle(article, today, { skipReviewed = true } = {}) {
   const slug = article.slug;
   const htmlPath = resolve(ROOT, slug);
   const flags = [];
@@ -178,6 +202,14 @@ function scanArticle(article, today) {
     const html = readFileSync(htmlPath, 'utf8');
     const text = stripTags(html);
 
+    // Recentně auditovaný článek (< REVIEW_SKIP_DAYS) → check-sources se přeskočí.
+    // date-passed/topical-expired ale surfují dál (nové časové signály).
+    const lastReviewed = parseLastReviewed(html);
+    const daysSinceReview = lastReviewed ? daysBetween(lastReviewed, today) : null;
+    const recentlyReviewed = daysSinceReview != null && daysSinceReview >= 0
+      && daysSinceReview < REVIEW_SKIP_DAYS;
+    if (lastReviewed) item.last_reviewed = lastReviewed;
+
     const passed = findPassedDates(text, today, article.date);
     for (const p of passed) {
       flags.push({ type: 'date-passed', severity: 'review', date: p.date,
@@ -190,9 +222,14 @@ function scanArticle(article, today) {
       item.ext_links = links;
       const prio = links.filter(l => l.priority);
       if (prio.length) {
-        flags.push({ type: 'check-sources', severity: 'review',
-          note: `${prio.length} prioritních (legislativa/EU/regulátor) odkazů ke kontrole na posun.`,
-          links: prio.map(l => l.url) });
+        if (skipReviewed && recentlyReviewed) {
+          // Zaznamenej (pro report), ale neflaguj — auditováno < 14 dní.
+          item.check_sources_skipped = { count: prio.length, last_reviewed: lastReviewed };
+        } else {
+          flags.push({ type: 'check-sources', severity: 'review',
+            note: `${prio.length} prioritních (legislativa/EU/regulátor) odkazů ke kontrole na posun.`,
+            links: prio.map(l => l.url) });
+        }
       }
     }
   } else {
@@ -231,6 +268,13 @@ function buildReport(items, today) {
     lines.push(`| \`${t}\` | ${n} | ${TYPE_ACTION[t] || ''} |`);
   }
   lines.push('');
+
+  const skipped = items.filter(i => i.check_sources_skipped);
+  if (skipped.length) {
+    lines.push(`> ℹ️ \`check-sources\` přeskočeno u **${skipped.length}** článků auditovaných ` +
+               `< ${REVIEW_SKIP_DAYS} dní (\`last_reviewed\`). Plný worklist: \`--no-skip-reviewed\`.`);
+    lines.push('');
+  }
 
   // Auto-fixovatelné napřed
   const autoFix = withFlags.filter(i => i.flags.some(f => f.severity === 'auto-fix'));
@@ -286,18 +330,22 @@ function flagSeverity(type) {
 function main() {
   const args = process.argv.slice(2);
   const stdoutOnly = args.includes('--stdout');
+  // Defaultně přeskakuj check-sources u recentně auditovaných (< 14 dní).
+  // --no-skip-reviewed vynutí úplný worklist (vč. recentně auditovaných).
+  const skipReviewed = !args.includes('--no-skip-reviewed');
   const slugArg = (args.find(a => a.startsWith('--slug=')) || '').split('=')[1];
 
   const today = todayUtc();
   let articles = loadArticles().filter(a => a.published === true);
   if (slugArg) articles = articles.filter(a => a.slug === slugArg || a.id === slugArg);
 
-  const items = articles.map(a => scanArticle(a, today));
+  const items = articles.map(a => scanArticle(a, today, { skipReviewed }));
   const report = buildReport(items, today);
 
   const withFlags = items.filter(i => i.flags.length);
   const counts = { 'auto-fix': 0, review: 0, low: 0 };
   for (const i of withFlags) for (const f of i.flags) counts[f.severity] = (counts[f.severity] || 0) + 1;
+  const skippedCS = items.filter(i => i.check_sources_skipped).length;
 
   if (!stdoutOnly) {
     mkdirSync(REPORTS_DIR, { recursive: true });
@@ -309,7 +357,13 @@ function main() {
   } else {
     console.log(report);
   }
-  console.log(`Skenováno ${items.length} článků | flagů: auto-fix ${counts['auto-fix']}, review ${counts.review}, low ${counts.low}`);
+  const skipNote = skipReviewed && skippedCS
+    ? ` | check-sources přeskočeno (auditováno <${REVIEW_SKIP_DAYS} d): ${skippedCS}`
+    : '';
+  console.log(`Skenováno ${items.length} článků | flagů: auto-fix ${counts['auto-fix']}, review ${counts.review}, low ${counts.low}${skipNote}`);
 }
 
-main();
+// Spusť jen při přímém spuštění (node scripts/nightly-scan.js), ne při importu z testu.
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  main();
+}
