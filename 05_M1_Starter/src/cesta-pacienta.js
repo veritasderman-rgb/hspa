@@ -45,15 +45,16 @@ function getInitialDiseaseId(diseases) {
 }
 
 function renderSpine(phases) {
-  const steps = phases.map(p => {
+  const stops = phases.map((p, i) => {
     const isPrev = p.id === 'prevence';
     return `
-    <li class="av-flow-step cp-flow-step${isPrev ? ' cp-flow-step-prevence' : ''}">
-      <span class="cp-flow-icon">${phaseIcon(p.id)}</span>
-      <span class="av-flow-num"></span>
-      <h3 class="av-flow-title">${esc(p.label)}${isPrev ? ' <span class="cp-prev-badge">začíná u vás</span>' : ''}</h3>
-      <p class="av-flow-desc">${esc(p.desc)}</p>
-      <span class="av-flow-tag">${esc(p.hspa)}</span>
+    <li class="cp-metro-stop${isPrev ? ' cp-metro-stop-prevence' : ''}">
+      <span class="cp-metro-num">Krok ${String(i + 1).padStart(2, '0')}</span>
+      <span class="cp-metro-node">${phaseIcon(p.id)}</span>
+      <span class="cp-metro-label">${esc(p.label)}</span>
+      ${isPrev ? '<span class="cp-prev-badge">začíná u vás</span>' : ''}
+      <span class="cp-metro-hspa">${esc(p.hspa)}</span>
+      <span class="cp-metro-desc">${esc(p.desc)}</span>
       ${isPrev ? '<a class="cp-prev-link" href="prevence.html">Co s tím můžu dělat já →</a>' : ''}
     </li>`;
   }).join('');
@@ -61,7 +62,7 @@ function renderSpine(phases) {
     <section class="cp-section" aria-labelledby="cpSpineH">
       <h3 class="cp-section-h" id="cpSpineH">Univerzální páteř cesty</h3>
       <p class="cp-section-lead">U většiny onkologických diagnóz je posloupnost stejná. U konkrétní diagnózy se liší jednotlivé kroky uvnitř fází.</p>
-      <ol class="av-flow cp-spine">${steps}</ol>
+      <ol class="cp-metro">${stops}</ol>
     </section>`;
 }
 
