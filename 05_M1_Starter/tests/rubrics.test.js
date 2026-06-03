@@ -50,3 +50,20 @@ test('articles.json: každá rubrika má aspoň jeden článek (žádná prázdn
     assert.ok(used.has(r.id), `rubrika ${r.id} nemá žádný publikovaný článek`);
   }
 });
+
+// F4: po normalizaci jsou všechny topics z kanonické sady (= 8 rubrik)
+test('articles.json: topics jsou kanonické (sjednocené s rubrikami)', () => {
+  for (const a of articles) {
+    for (const t of a.topics ?? []) {
+      assert.ok(validIds.has(t), `${a.slug}: nekanonický topic "${t}"`);
+    }
+  }
+});
+
+// Rubrika článku by měla být i mezi jeho topics (konzistence zobrazení chipů)
+test('articles.json: rubrika článku je obsažena v jeho topics', () => {
+  for (const a of articles.filter(x => x.published !== false)) {
+    assert.ok((a.topics ?? []).includes(a.rubric),
+      `${a.slug}: rubric "${a.rubric}" chybí v topics [${(a.topics || []).join(', ')}]`);
+  }
+});

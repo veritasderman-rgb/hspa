@@ -54,16 +54,21 @@ Zvolený směr (po konzultaci): **B (tematické rubriky jako páteř) + horní p
 - `pinned_essential` — seed 6 evergreen napříč rubrikami (redakce doladí).
 - Regenerován e2e visual baseline `articles-hub` (3 viewporty).
 
-### F3 — detail rubriky + provázání
-- Stránka rubriky (buď `clanky.html?rubric=...`, nebo rozšířit
-  `tematicke-linie.html`): hlavička rubriky + chronologický seznam jejích
-  článků + odkaz na související indikátory/strategie.
-- Provázat hub ↔ rubrika ↔ článek (breadcrumb / „další v rubrice").
+### F3 — detail rubriky + provázání ✅
+- `rubrika.html` + `src/rubrika.js` — samostatná stránka rubriky
+  (`?id=<rubric>`): barevná hlavička (kicker/headline/lead) + chronologický
+  seznam všech jejích publikovaných článků + breadcrumb zpět.
+- Hub karty rubrik odkazují na `rubrika.html?id=…` (místo in-page filtru).
+- `src/article-related.js` — na stránkách článků přibyla karta „Rubrika · …"
+  vedoucí na landing rubriky (hub ↔ rubrika ↔ článek).
+- `src/page-shared.js` — `rubrika.html` zařazena pod nav tab Články.
 
-### F4 — úklid taxonomie + testy
-- Sjednotit long-tail `topics` (singletony, nejednotná diakritika) do
-  kanonické sady (oddělená migrace; rubriky tím nejsou ohrožené).
-- Doladit e2e baseline, doplnit testy.
+### F4 — úklid taxonomie + testy ✅
+- `scripts/normalize-topics.js` — sjednotil `topics` do kanonické sady 8 tagů
+  (long-tail singletony a diakritika přes `TOPIC_NORMALIZE`); každý článek má
+  mezi topics i svou rubriku.
+- `tests/rubrics.test.js` — kanonické topics + rubrika ∈ topics.
+- Regenerován e2e visual baseline `articles-hub` (změna chipů v archivu).
 
 ---
 

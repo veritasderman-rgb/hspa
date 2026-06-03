@@ -325,13 +325,8 @@ async function loadAndRenderArticles() {
     });
   }
 
-  // Wire rubric card link → filter archiv na rubriku + scroll
-  document.querySelectorAll('.hub-rubric-more[data-rubric]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      selectRubric(link.dataset.rubric, { scroll: true });
-    });
-  });
+  // Pozn.: karty rubrik odkazují na rubrika.html?id=… (samostatná stránka, F3);
+  // in-page filtr archivu řídí chipy (selectRubric) a hash #rubric=… níže.
 
   // Read initial rubric from URL hash (#rubric=... ; #topic=... jako legacy alias)
   const hashMatch = window.location.hash.match(/(?:rubric|topic)=([^&]+)/);
@@ -486,7 +481,7 @@ function renderHubRubrics(articles, rubrics) {
         <h4 class="hub-rubric-h">${esc(r.headline)}</h4>
         <p class="hub-rubric-lead">${esc(r.lead)}</p>
         <ul class="hub-rubric-list">${latest}</ul>
-        <a class="hub-rubric-more" href="#rubric=${esc(r.id)}" data-rubric="${esc(r.id)}">
+        <a class="hub-rubric-more" href="rubrika.html?id=${esc(r.id)}">
           Všech ${items.length} článků v rubrice ${esc(r.label)} →
         </a>
       </article>`;
