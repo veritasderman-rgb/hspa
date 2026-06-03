@@ -388,8 +388,12 @@ function renderHubLatest(articles) {
     return;
   }
 
+  const stripEl = document.getElementById('hubLatestStrip');
+  const clip = (s, n) => (s && s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : (s ?? ''));
+
   const [feature, ...rest] = articles;
-  const trending = rest.slice(0, 6);
+  const trending = rest.slice(0, 4);   // vyplní výšku hero sloupce
+  const strip = rest.slice(4, 8);      // spodní 4sloupcový pruh
 
   const featureTopics = (feature.topics ?? []).map(t =>
     `<span class="hub-feature-topic">${TOPIC_LABELS[t] ?? esc(t)}</span>`
@@ -413,6 +417,16 @@ function renderHubLatest(articles) {
       <h5 class="hub-trending-title">${esc(a.title)}</h5>
       <span class="hub-trending-date">${formatCzDate(a.date)}</span>
     </a>`).join('');
+
+  if (stripEl) {
+    stripEl.innerHTML = strip.map(a => `
+      <a href="${esc(a.slug)}" class="hub-latest-card">
+        <span class="hub-latest-card-tag">${esc(a.tag)}</span>
+        <h5 class="hub-latest-card-title">${esc(a.title)}</h5>
+        <p class="hub-latest-card-perex">${esc(clip(a.perex, 110))}</p>
+        <span class="hub-latest-card-date">${formatCzDate(a.date)}</span>
+      </a>`).join('');
+  }
 }
 
 /**
