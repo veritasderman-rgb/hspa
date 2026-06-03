@@ -41,15 +41,18 @@ Zvolený směr (po konzultaci): **B (tematické rubriky jako páteř) + horní p
 - `tests/rubrics.test.js` — invarianty rubrik a pokrytí.
 - **Bez UI změny.**
 
-### F2 — hub UI (Poslední zprávy + Kontext + Rubriky)
-- `src/clanky.js`: `renderLatestNews(7)`, `renderEssentials()`,
-  `renderHubRubrics()` (dynamický grouping podle `rubric`; nahradí hardcoded
-  `READING_PATHS` a dnešní matrix).
-- `clanky.html`: markup nových sekcí.
-- `src/styles.css`: `.hub-latest-*`, `.hub-essentials-*`, `.hub-rubric-*`
-  (CSS namespacing dle conventions; 8 barevných tokenů z `rubrics.json`).
-- `pinned_essential` doplnit redakčně (~5–6 evergreen článků).
-- Regenerovat e2e visual baseline `articles-hub`.
+### F2 — hub UI (Poslední zprávy + Kontext + Rubriky) ✅
+- `src/clanky.js`: `renderHubLatest()` (hero + 6 = 7 nejnovějších),
+  `renderHubEssentials()` (články s `pinned_essential`), `renderHubRubrics()`
+  (dynamický grouping podle `rubric`). Odstraněn hardcoded `READING_PATHS`
+  i topic matrix; archiv filtruje podle `rubric` (chipy `data-rubric`,
+  hash `#rubric=`, legacy `#topic=` jako alias).
+- `clanky.html`: tři přepsané sekce (Poslední zprávy / Kontext / Rubriky)
+  + rubrikové chipy v archivu.
+- `src/styles.css`: `.hub-essential-*`, `.hub-rubric-*` + 8 barevných tokenů
+  zarovnaných s `color` v `rubrics.json`.
+- `pinned_essential` — seed 6 evergreen napříč rubrikami (redakce doladí).
+- Regenerován e2e visual baseline `articles-hub` (3 viewporty).
 
 ### F3 — detail rubriky + provázání
 - Stránka rubriky (buď `clanky.html?rubric=...`, nebo rozšířit
