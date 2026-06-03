@@ -45,19 +45,53 @@ function getInitialDiseaseId(diseases) {
 }
 
 function renderSpine(phases) {
-  const steps = phases.map(p => `
-    <li class="av-flow-step cp-flow-step">
+  const steps = phases.map(p => {
+    const isPrev = p.id === 'prevence';
+    return `
+    <li class="av-flow-step cp-flow-step${isPrev ? ' cp-flow-step-prevence' : ''}">
       <span class="cp-flow-icon">${phaseIcon(p.id)}</span>
       <span class="av-flow-num"></span>
-      <h3 class="av-flow-title">${esc(p.label)}</h3>
+      <h3 class="av-flow-title">${esc(p.label)}${isPrev ? ' <span class="cp-prev-badge">začíná u vás</span>' : ''}</h3>
       <p class="av-flow-desc">${esc(p.desc)}</p>
       <span class="av-flow-tag">${esc(p.hspa)}</span>
-    </li>`).join('');
+      ${isPrev ? '<a class="cp-prev-link" href="prevence.html">Co s tím můžu dělat já →</a>' : ''}
+    </li>`;
+  }).join('');
   return `
     <section class="cp-section" aria-labelledby="cpSpineH">
       <h3 class="cp-section-h" id="cpSpineH">Univerzální páteř cesty</h3>
       <p class="cp-section-lead">U většiny onkologických diagnóz je posloupnost stejná. U konkrétní diagnózy se liší jednotlivé kroky uvnitř fází.</p>
       <ol class="av-flow cp-spine">${steps}</ol>
+    </section>`;
+}
+
+function renderPreventionCTA() {
+  return `
+    <section class="cp-prevent-cta" aria-labelledby="cpPreventH">
+      <div class="cp-prevent-cta-body">
+        <h3 class="cp-prevent-cta-h" id="cpPreventH">Nejúčinnější část cesty je z velké části ve vašich rukou</h3>
+        <p class="cp-prevent-cta-text">Většina kroků níže patří lékařům a systému. Ale <strong>prevence a včasný záchyt</strong> — zdravý životní styl, očkování a hlavně účast ve screeningu — rozhodují o tom, jestli se na pozdější fáze cesty vůbec dostanete.</p>
+      </div>
+      <a class="cp-prevent-cta-btn" href="prevence.html">Co s tím můžu dělat já →</a>
+    </section>`;
+}
+
+function renderRelated() {
+  const cards = [
+    { href: 'prevence.html', kicker: 'Prevence v praxi', title: 'Co s tím můžu dělat já', desc: 'Konkrétní kroky — životní styl, očkování, screening. Kde máte reálnou páku a týdenní startovací balíček.' },
+    { href: 'hspa-prehled.html', kicker: '80 indikátorů systému', title: 'HSPA přehled', desc: 'Screening, vakcinace a výsledky onkologické péče v datovém rámci HSPA.' },
+    { href: 'strategie.html', kicker: 'Národní cíle 2030/2035', title: 'Strategie', desc: 'Co stát plánuje pro screening, včasný záchyt a snížení rizikových faktorů.' },
+  ].map(c => `
+    <a class="related-card" href="${c.href}">
+      <div class="related-card-kicker">${esc(c.kicker)}</div>
+      <h4 class="related-card-title">${esc(c.title)}</h4>
+      <p class="related-card-desc">${esc(c.desc)}</p>
+      <span class="related-card-arrow" aria-hidden="true">→</span>
+    </a>`).join('');
+  return `
+    <section class="section related-section cp-section" aria-labelledby="cpRelH">
+      <div class="section-title"><h3 id="cpRelH">Příbuzné sekce</h3></div>
+      <div class="related-grid">${cards}</div>
     </section>`;
 }
 
@@ -84,11 +118,14 @@ function renderPhases(disease, phases) {
     const items = (disease.phases && disease.phases[p.id]) || [];
     if (!items.length) return '';
     const lis = items.map(t => `<li>${esc(t)}</li>`).join('');
+    const isPrev = p.id === 'prevence';
+    const prevCta = isPrev ? '<p class="cp-phase-cta"><a href="prevence.html">Co můžete udělat vy → Co s tím můžu dělat já</a></p>' : '';
     return `
-      <li class="av-timeline-item av-timeline-item-done cp-phase">
+      <li class="av-timeline-item ${isPrev ? 'av-timeline-item-now' : 'av-timeline-item-done'} cp-phase">
         <span class="av-timeline-date"><span class="cp-phase-icon">${phaseIcon(p.id)}</span>${esc(p.label)}</span>
         <span class="cp-phase-hspa">${esc(p.hspa)}</span>
         <ul class="cp-phase-list">${lis}</ul>
+        ${prevCta}
       </li>`;
   }).join('');
 }
@@ -135,6 +172,7 @@ function renderObecna(o) {
     <section class="cp-section cp-obecna" aria-labelledby="cpObecnaH">
       <h3 class="cp-section-h" id="cpObecnaH">${esc(o.title)}</h3>
       <ul class="cp-obecna-list">${lis}</ul>
+      <p class="cp-obecna-cta"><a href="prevence.html">Podrobný plán prevence, týdenní startovací balíček a kontakty → Co s tím můžu dělat já</a></p>
       ${o.source ? `<p class="cp-source-note">${esc(o.source)}</p>` : ''}
     </section>`;
 }
@@ -185,9 +223,11 @@ async function init() {
   const activeId = getInitialDiseaseId(data.diseases);
   app.innerHTML = `
     ${renderSpine(data.phases)}
+    ${renderPreventionCTA()}
     ${renderPicker(data.diseases, activeId)}
     <div id="cpDiseaseDetail"></div>
     ${renderObecna(data.obecna_doporuceni)}
+    ${renderRelated()}
     ${renderSourceFooter(data)}
   `;
   app.querySelectorAll('.cp-chip').forEach(btn => {
