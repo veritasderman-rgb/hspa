@@ -8925,7 +8925,9 @@ body.nl-popup-open .scroll-top-btn {
   padding: 0;
 }
 .hub-feature-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 28px;
   text-decoration: none;
   color: inherit;
@@ -8961,6 +8963,8 @@ body.nl-popup-open .scroll-top-btn {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 16px;
   font-family: var(--sans);
   font-size: 12px;
   color: var(--ink-mut);
@@ -8989,15 +8993,24 @@ body.nl-popup-open .scroll-top-btn {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
 .hub-trending-card {
-  display: block;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: center;
   padding: 16px;
   background: var(--bg);
   border: 1px solid var(--rule);
   text-decoration: none;
   color: inherit;
   transition: border-color 0.15s, background 0.15s;
+}
+@media (max-width: 900px) {
+  /* mobil: hero a karty pod sebou — karty zpět na přirozenou výšku */
+  .hub-trending { height: auto; }
+  .hub-trending-card { flex: 0 0 auto; }
 }
 .hub-trending-card:hover {
   border-color: var(--accent);
@@ -9025,6 +9038,59 @@ body.nl-popup-open .scroll-top-btn {
   font-family: var(--sans);
   font-size: 11px;
   color: var(--ink-mut);
+}
+
+/* ----- POSLEDNÍ ZPRÁVY: spodní pruh (4 sloupce) ----- */
+.hub-latest-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 900px) { .hub-latest-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .hub-latest-strip { grid-template-columns: 1fr; } }
+.hub-latest-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+.hub-latest-card:hover { border-color: var(--accent); }
+.hub-latest-card { border-top: 3px solid var(--accent); padding: 16px; }
+.hub-latest-card-tag {
+  font-family: var(--sans);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.hub-latest-card-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  margin: 0 0 8px;
+}
+.hub-latest-card-perex {
+  font-family: var(--serif);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 0 0 12px;
+}
+.hub-latest-card-date {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+  margin: auto 0 0;
 }
 
 /* ----- CURATED PATHS ----- */
@@ -9177,6 +9243,10 @@ body.nl-popup-open .scroll-top-btn {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin-top: 16px;
+}
+/* Desktop: 3 sloupce → 6 evergreen karet vyplní 2 plné řady bez prázdných míst */
+@media (min-width: 980px) {
+  .hub-essentials-grid { grid-template-columns: repeat(3, 1fr); }
 }
 .hub-essential-card {
   display: flex;
