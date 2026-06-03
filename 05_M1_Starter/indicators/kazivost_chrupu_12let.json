@@ -1,0 +1,58 @@
+{
+  "id": "kazivost_chrupu_12let",
+  "name": "Kazivost chrupu dvanáctiletých dětí (index KPE)",
+  "area": "Výsledky",
+  "domain": "Zdravotní stav",
+  "subdomain": "Orální zdraví dětí",
+  "definition": "Průměrný index KPE (kaz–plomba–extrakce; mezinárodně DMFT) ve stálém chrupu dvanáctiletých dětí — tedy průměrný počet zubů postižených zubním kazem (K), ošetřených výplní (P) nebo pro kaz vytržených (E) na jedno dítě. Věk 12 let je celosvětově standardizovaný referenční věk WHO pro sledování orálního zdraví dětských populací, protože v té době je již prořezána většina stálých zubů.",
+  "unit": "zubů (KPE)",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_publication",
+      "endpoint": "https://www.uzis.cz/sites/default/files/knihovna/oralzdr2003.pdf",
+      "dataset": "ÚZIS ČR — Analýza orálního zdraví vybraných věkových skupin obyvatel ČR (epidemiologické šetření, věk 12 let)",
+      "dimensions": {
+        "age": "12",
+        "uzemi": "CZ",
+        "metric": "mean_DMFT_KPE"
+      }
+    },
+    "fallback": {
+      "type": "who_database",
+      "url": "https://www.who.int/teams/noncommunicable-diseases/global-status-report-on-oral-health-2022"
+    }
+  },
+  "benchmark_source": {
+    "type": "who",
+    "code": "DMFT12",
+    "dataset": "WHO Global Oral Health Status Report / Oral Health Country Profiles — mean DMFT ve věku 12 let. Průměr evropského regionu WHO se pohybuje kolem 1,6. Nejlepší v EU je Německo s hodnotou 0,5 (národní šetření DAJ/DMS 2016; 78,8 % dětí zcela bez kazu). Z okolních zemí: Slovensko 1,4 (2021), Polsko 2,4 (2019), Rakousko přibližně 0,7–1,0 (poslední národní šetření). Hodnota benchmarku 1,6 reprezentuje průměr evropského regionu WHO.",
+    "value": 1.6,
+    "url": "https://www.who.int/publications/i/item/9789240061484"
+  },
+  "signal_thresholds": {
+    "good": 8,
+    "warn": 25
+  },
+  "frequency": "decadal",
+  "stewards": [
+    "ÚZIS ČR",
+    "Státní zdravotní ústav (SZÚ)",
+    "Česká stomatologická komora",
+    "MZČR"
+  ],
+  "method_notes": "Nejnovější reprezentativní národní epidemiologické šetření orálního zdraví dvanáctiletých dětí v ČR pochází z roku 2003 (ÚZIS, n = 5 832 dětí: průměr 2,96 KPE, 24,2 % dětí s intaktním chrupem). Novější srovnatelná národní hodnota (přibližně 1,9 KPE, rok 2013) vychází z mezinárodní komparativní literatury opřené o WHO Global Oral Health Data Bank. Indikátor je proto veden jako monitoring s frekvencí decadal — Česko nemá zavedený pravidelný národní monitoring kazivosti dětského chrupu, což je samo o sobě systémová mezera. Trend je dlouhodobě klesající (z hodnot nad 3,0 v 90. letech k 1,9). Mezinárodní benchmark čerpá z WHO Oral Health Country Profiles.",
+  "limitations": "Časová řada není homogenní — kombinuje národní epidemiologická šetření z různých let (1994–2013) s odlišnou metodikou výběru a kalibrace examinátorů; hodnoty proto berte jako orientační (origin: seed). Nejnovější srovnatelný národní údaj je z roku 2013, novější reprezentativní celostátní šetření chybí. KPE/DMFT nezachycuje časné kazy (počínající léze ICDAS 1–2) ani nerovnosti uvnitř populace (značná část kazů se koncentruje u menšiny dětí — tzv. Significant Caries Index). Mezi zeměmi se liší prahy diagnostiky kazu (kavitovaný vs. nekavitovaný), což srovnání zatěžuje. Regionální rozdíly v ČR jsou výrazné (nižší kazivost v Praze, vyšší v Karlovarském, Jihočeském a Zlínském kraji).",
+  "determinants": [
+    "Konzumace volných cukrů (slazené nápoje, svačiny) u dětí",
+    "Expozice fluoridům (zubní pasty, lokální fluoridace, absence fluoridace vody)",
+    "Dostupnost a využití preventivní stomatologické péče u dětí",
+    "Socioekonomický status rodiny a vzdělání rodičů",
+    "Absence plošných školních preventivních programů (pečetění fisur, fluoridové laky)",
+    "Nedostatek dětských a pedostomatologů, regionální zubní pustiny"
+  ],
+  "importance": "Zubní kaz je nejrozšířenější chronické onemocnění dětského věku a zároveň téměř zcela preventabilní. Neléčený kaz působí bolest, narušuje spánek, jídlo i školní docházku a v krajních případech vede k hospitalizaci a celkové anestezii kvůli sanaci chrupu. Kazivost dětského chrupu je citlivým ukazatelem účinnosti primární prevence a spravedlnosti v přístupu k péči — rozdíl mezi Českem a Německem (0,5) ukazuje, že nejde o danost, ale o výsledek systémových politik.",
+  "patient_story": "Sokolov, ordinace dětské zubní lékařky, pondělní ráno. Osmiletý Dominik sedí v křesle a maminka drží papír s objednávkou, na kterou čekali sedm měsíců — nejbližší zubařka, která bere nové dětské pacienty, ordinuje o dva okresy dál. Dominik má tři kazy v dočasných i prvních stálých molárech. Není to nedbalost rodičů: v jeho okrese dlouho nebyl dětský zubař, který by měl volnou kapacitu, a na pečetění fisur nebo fluoridový lak ve škole nikdo nečeká, protože plošný školní program neexistuje. Dominikův chrup je přesně ten případ, který se schová do celostátního průměru.\n\nA ten průměr je u dvanáctiletých dětí přibližně 1,9 zubu postiženého kazem, výplní nebo extrakcí (index KPE). Signál je oranžový (warn): číslo dlouhodobě klesá — z hodnot nad 3,0 v devadesátých letech přes 2,96 v roce 2003 k 1,9 — ale stále zaostává za evropskou špičkou. Německé dvanáctileté děti mají v průměru jen 0,5 kazu a téměř 79 procent z nich nemá kaz vůbec; Rakousko a Slovensko jsou rovněž nízko (kolem 1,0 až 1,4). Český průměr je nad průměrem evropského regionu WHO (zhruba 1,6) a za nejlepšími zaostává čtyř- až téměř čtyřnásobně.\n\nProč ten rozdíl? Není genetický. Země s nejnižší kazivostí mají tři věci, které Česku chybí v plošném měřítku: systematickou expozici fluoridům, školní preventivní programy (pečetění fisur, fluoridové laky přímo ve třídách) a dostupného dětského zubaře v každém regionu. V Česku se k tomu přidává spotřeba volných cukrů u dětí, sociální nerovnost (většina kazů se koncentruje u menšiny dětí ze znevýhodněných rodin) a — neméně důležité — fakt, že stát kazivost dětského chrupu vůbec pravidelně neměří. Poslední velké národní šetření je z roku 2003, novější srovnatelný údaj je z roku 2013. Nemáme tedy ani spolehlivý obraz toho, jak na tom děti dnes skutečně jsou.\n\nPolitická páka je konkrétní a leží převážně na straně státu, plátce a krajů. Za prvé: zavést a financovat plošné školní preventivní programy (pečetění stálých molárů, fluoridové laky) cílené zejména do regionů a škol s vyšším rizikem — kompetence MZČR, krajů a zdravotních pojišťoven. Za druhé: posílit dostupnost dětské stomatologie přes úhradovou a smluvní politiku a rezidenční místa v pedostomatologii, aby v žádném okrese nebyla „zubní pustina“. Za třetí: obnovit pravidelný národní monitoring orálního zdraví dětí (ÚZIS/SZÚ), protože co se neměří, to se neřídí. Pro Dominika ze Sokolova by každý z těch kroků znamenal rozdíl mezi třemi kazy a žádným.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
