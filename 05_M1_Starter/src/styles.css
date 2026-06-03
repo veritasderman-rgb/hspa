@@ -13458,3 +13458,72 @@ html {
   .cp-credit-k { flex-basis: 100%; }
   .cp-prevent-cta-btn { flex-basis: 100%; text-align: center; }
 }
+
+/* ===== Cesta pacienta — páteř jako „metro-linka" ===== */
+.cp-metro {
+  list-style: none; margin: 22px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  position: relative;
+}
+/* spojnice (track) ve výšce středu uzlů */
+.cp-metro::before {
+  content: ''; position: absolute; top: 53px; left: 10%; right: 10%;
+  height: 3px; background: var(--rule2); z-index: 0;
+}
+/* první (zelený) úsek — prevence → příznaky */
+.cp-metro::after {
+  content: ''; position: absolute; top: 53px; left: 10%; width: 20%;
+  height: 3px; background: var(--good); z-index: 0;
+}
+.cp-metro-stop {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 0 10px;
+}
+.cp-metro-num {
+  height: 16px; line-height: 16px; margin-bottom: 10px;
+  font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mut);
+}
+.cp-metro-node {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--paper); border: 3px solid var(--ink);
+  display: grid; place-items: center; color: var(--ink);
+}
+.cp-metro-node .cp-icon { width: 27px; height: 27px; }
+.cp-metro-stop-prevence .cp-metro-node { border-color: var(--good); color: var(--good); }
+.cp-metro-label {
+  font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--ink);
+  margin-top: 12px;
+}
+.cp-metro-stop .cp-prev-badge { margin: 4px 0 0; }
+.cp-metro-hspa {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--red);
+  margin-top: 5px;
+}
+.cp-metro-stop-prevence .cp-metro-hspa { color: var(--good); }
+.cp-metro-desc {
+  font-family: var(--serif); font-size: 13px; line-height: 1.45; color: var(--ink-mut);
+  margin-top: 6px; max-width: 22ch;
+}
+.cp-metro-stop .cp-prev-link { margin-top: 8px; }
+
+@media (max-width: 760px) {
+  /* svislá varianta — uzly pod sebou, linka vlevo */
+  .cp-metro { grid-template-columns: 1fr; }
+  .cp-metro::before { top: 30px; bottom: 30px; left: 28px; right: auto; width: 3px; height: auto; }
+  .cp-metro::after { top: 30px; left: 28px; width: 3px; height: 70px; }
+  .cp-metro-stop {
+    flex-direction: row; align-items: flex-start; text-align: left;
+    gap: 16px; padding: 0 0 22px 0;
+  }
+  .cp-metro-num { position: absolute; left: 0; top: -2px; transform: translateY(0); height: auto; margin: 0; display: none; }
+  .cp-metro-node { flex: 0 0 auto; }
+  .cp-metro-label, .cp-metro-hspa, .cp-metro-desc { margin-top: 0; }
+  .cp-metro-label { margin-bottom: 2px; }
+  .cp-metro-desc { max-width: none; }
+  .cp-metro-stop > :not(.cp-metro-node) { align-self: center; }
+  .cp-metro-stop { display: grid; grid-template-columns: 56px 1fr; row-gap: 2px; column-gap: 16px; }
+  .cp-metro-node { grid-row: 1 / span 5; }
+}
