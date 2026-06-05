@@ -475,8 +475,11 @@ Postup dle `docs/workflows.md` → „Nový článek":
 
 Ověřeno z primárních/spolehlivých zdrojů. **Všech 9 dílů (1–9) přepnuto na
 `audit-status: verified`** (díly 1–2 zůstávají `published:true`; díly 3–9
-`published:false`, `scheduled_for: 2026-06-30` = připraveny, cron je vydá max
-1/den od 30. 6.).
+`published:false` s **rozfázovaným `scheduled_for`** v zamýšleném pořadí série
+(díl 3 = 2026-06-30, dál ~11denní rozestup dle cadence z rozhodnutí #8: 4=07-11,
+5=07-22, 6=08-02, 7=08-13, 8=08-24, 9=09-04). Cron vydá max 1/den a díky
+rozfázovaným datům **drží pořadí 3→4→5→6→7→8→9** (jinak by tie-break podle `slug`
+vydal díl 5 první — Codex P2 #530).
 
 | Položka | Verdikt | Zdroj |
 |---|---|---|
