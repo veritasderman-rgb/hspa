@@ -1,0 +1,55 @@
+{
+  "id": "spotreba_antibiotik_veterina",
+  "name": "Spotřeba antibiotik ve veterinární medicíně",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "Veterinární spotřeba (One Health)",
+  "definition": "Roční prodej antimikrobik (antibiotik) určených pro hospodářská zvířata v České republice, vztažený na biomasu zvířat metodikou PCU (Population Correction Unit) a vyjádřený v mg účinné látky na PCU (mg/PCU). PCU je odhad celkové živé hmotnosti populace hospodářských zvířat, která mohla být v daném roce léčena; umožňuje srovnání mezi lety i mezi zeměmi nezávisle na velikosti chovů. Indikátor sleduje intenzitu používání antibiotik v živočišné produkci jako klíčový determinant antimikrobiální rezistence (AMR) v rámci konceptu One Health — vysoká spotřeba ve zvířatech zvyšuje riziko vzniku a šíření rezistentních bakterií, které se mohou přenášet na člověka potravním řetězcem, prostředím i přímým kontaktem. Liší se od indikátoru spotreba_antibiotik (humánní ambulantní preskripce v DDD/1000/den) i od indikátorů fenotypové rezistence u lidských patogenů (rezistence_*).",
+  "unit": "mg/PCU",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uskvbl_report",
+      "endpoint": "https://www.uskvbl.cz/cs/farmakovigilance/spotreba-antibiotik",
+      "dataset": "ÚSKVBL — Spotřeba antimikrobik ve veterinární medicíně v ČR (roční zprávy)",
+      "note": "Ústav pro státní kontrolu veterinárních biopreparátů a léčiv (ÚSKVBL) sbírá data o prodeji veterinárních antimikrobik od distributorů a výrobců a každoročně publikuje národní zprávu o spotřebě. Data ČR jsou dále reportována do evropského systému (ESVAC 2009–2023, od roku 2023 nástupnický ESUAvet při EMA), kde se přepočítávají na PCU po odečtení perorálních forem pro neprodukční zvířata. Komunikaci k veřejnosti zajišťuje Státní veterinární správa (SVS) a Ministerstvo zemědělství (eAGRI).",
+      "dimensions": {
+        "uzemi": "ČR celkem",
+        "populace": "hospodářská (produkční) zvířata",
+        "metrika": "mg účinné látky / PCU",
+        "kategorie": "celková spotřeba antimikrobik; samostatně sledovány kriticky důležité třídy (fluorochinolony, cefalosporiny 3./4. generace, kolistin)"
+      }
+    },
+    "fallback": {
+      "type": "ema_esuavet",
+      "url": "https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/european-sales-use-antimicrobials-veterinary-medicine-esuavet-annual-surveillance-reports",
+      "note": "European Sales and Use of Antimicrobials for Veterinary Medicine (ESUAvet, dříve ESVAC) — Evropská agentura pro léčivé přípravky (EMA) publikuje roční přehledy prodeje veterinárních antimikrobik v mg/PCU pro 31 evropských zemí včetně ČR a sousedních států, plus agregovaný evropský průměr. Slouží jako mezinárodní benchmark a křížová kontrola národních hodnot."
+    }
+  },
+  "benchmark_source": {
+    "type": "ema_esuavet",
+    "code": "ESUAVET_SALES_MG_PCU_EU",
+    "dataset": "ESUAvet / ESVAC — agregovaný prodej veterinárních antimikrobik v EU/EHP (mg/PCU)",
+    "value": 88.5,
+    "url": "https://www.ema.europa.eu/en/documents/report/european-sales-use-antimicrobials-veterinary-medicine-annual-surveillance-report-2023_en.pdf",
+    "note": "Agregovaný prodej za EU/EHP činil v roce 2023 podle první zprávy ESUAvet 88,5 mg/PCU (dříve uváděný evropský průměr ~84 mg/PCU za starší roky ESVAC). Referenční rok 2018 měl evropský agregát 118,3 mg/PCU; cíl Evropské zelené dohody (strategie Farm to Fork) je snížit prodej veterinárních antimikrobik v EU do roku 2030 o 50 %, tedy na 59,2 mg/PCU. Česká hodnota (56,3 mg/PCU v roce 2023) je trvale pod evropským průměrem a již pod cílovou hodnotou 59,2 mg/PCU pro rok 2030; národním cílem podle společné zemědělské politiky je dosáhnout přibližně 50 mg/PCU."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚSKVBL (Ústav pro státní kontrolu veterinárních biopreparátů a léčiv)",
+    "Státní veterinární správa (SVS)",
+    "Ministerstvo zemědělství ČR (eAGRI, společná zemědělská politika)",
+    "EMA — ESUAvet (mezinárodní reporting a benchmark)"
+  ],
+  "method_notes": "Hodnota je celkový prodej veterinárních antimikrobik dělený PCU (biomasou produkčních zvířat) a vyjádřený v mg/PCU. Za rok 2023 vykázalo ÚSKVBL 56,3 mg/PCU — meziroční nárůst o 4,6 % po dvou letech poklesu (minimum 50,0 mg/PCU v roce 2021, 56,2 mg/PCU v roce 2020). Dlouhodobý trend je výrazně klesající: v tonáži klesl prodej z 95,5 t (2008) na zhruba 30 t (2024), tedy o cca 70 %; za poslední dekádu klesla spotřeba v mg/PCU přibližně o 40 %. Časová řada v mg/PCU je orientační (origin: seed) — ÚSKVBL i EMA mezi jednotlivými vintage zpráv přepočítávají denominátor PCU (aktualizace stavů a živých hmotností zvířat), takže hodnoty napříč staršími a novějšími zprávami nejsou plně srovnatelné. Benchmark 88,5 mg/PCU je agregát EU/EHP za rok 2023 (ESUAvet); signál good odráží, že česká hodnota je zhruba o třetinu pod evropským průměrem a zároveň pod cílovou hodnotou EU pro rok 2030 (59,2 mg/PCU). Nárůst v roce 2023 je důvodem ke sledování, nikoli ke změně signálu.",
+  "limitations": "1. **Prodej ≠ skutečné podání** — metrika měří prodej/distribuci, ne přímou expozici konkrétních zvířat; nezachycuje, ve kterém chovu a jak byla antibiotika použita. 2. **PCU jako denominátor** — vztahuje spotřebu k odhadnuté biomase produkčních zvířat; struktura českého chovu (vysoký podíl skotu a drůbeže) ovlivňuje srovnatelnost se zeměmi s odlišnou skladbou. 3. **Přepočty mezi vintage** — ÚSKVBL/EMA periodicky revidují PCU, takže meziroční srovnání starších a novějších hodnot je orientační. 4. **Celkový agregát skrývá kriticky důležité třídy** — pro AMR jsou nejrizikovější fluorochinolony, cefalosporiny 3./4. generace a kolistin; celkové mg/PCU jejich vývoj samostatně neukazuje. 5. **One Health vazba je nepřímá** — nižší spotřeba u zvířat snižuje riziko AMR pro člověka, ale humánní rezistence (sledovaná indikátory rezistence_*) je výsledkem více faktorů včetně humánní preskripce.",
+  "determinants": "**Evropská legislativa.** Nařízení (EU) 2019/6 o veterinárních léčivých přípravcích (účinné od ledna 2022) zakázalo rutinní profylaktické podávání antibiotik celým skupinám zvířat a podávání antibiotik ke kompenzaci špatných chovných podmínek; kriticky důležitá antibiotika pro humánní medicínu jsou pro veterinární použití omezena. To je nejsilnější systémová páka snižující spotřebu.\n\n**Národní antibiotická politika a dozor.** ÚSKVBL a SVS dlouhodobě prosazují uvážlivé používání antibiotik, monitoring spotřeby a kontrolu předepisování; ČR patří mezi země s nízkou spotřebou už před vstupem nařízení 2019/6 v platnost.\n\n**Struktura a zdraví chovů.** Spotřeba antibiotik klesá s lepším zoohygienickým managementem, biosecurity, vakcinací a chovem odolnějších linií zvířat. Tlak trhu a maloobchodu (požadavky na produkci „bez rutinních antibiotik\") působí stejným směrem.\n\n**Cíle EU a SZP.** Strategie Farm to Fork (Zelená dohoda) stanovila cíl snížit prodej veterinárních antimikrobik v EU do roku 2030 o 50 % proti roku 2018; národní strategický plán společné zemědělské politiky ČR cílí na další pokles a udržení hodnoty kolem 50 mg/PCU.",
+  "importance": "Antimikrobiální rezistence je jednou z největších tichých hrozeb pro zdraví — podle odhadů s ní v Evropě každoročně souvisí desítky tisíc úmrtí. Používání antibiotik u zvířat je s lidskou rezistencí propojené konceptem One Health: čím víc antibiotik se ve velkochovech používá, tím větší je selekční tlak na vznik rezistentních bakterií, které se mohou na člověka přenést potravinami, vodou, prostředím i přímým kontaktem. Sledování veterinární spotřeby je proto integrální součástí hodnocení toho, jak dobře systém chrání účinnost antibiotik jako sdíleného zdroje.\n\nPro výkonnost zdravotního systému (HSPA) je tento ukazatel zařazen jako determinant v dimenzi bezpečnosti: doplňuje humánní indikátory (spotreba_antibiotik, rezistence_mrsa, rezistence_ecoli_3gc a další) o druhou polovinu rovnice. Česko zde patří k evropským premiantům — a právě proto je indikátor cenný: ukazuje funkční politiku, jejíž výsledky je třeba udržet, a zároveň poskytuje kontext k tomu, proč i při nízké veterinární spotřebě může humánní rezistence růst (těžiště problému je pak na humánní straně preskripce).",
+  "patient_story": "Jihomoravský venkov, podzimní ráno. Veterinář Pavel dorazí na rodinnou farmu k stádu telat, z nichž několik kašle. Před patnácti lety by sáhl po antibiotiku skoro automaticky a často preventivně pro celou skupinu. Dnes je postup jiný: odebere vzorky, zváží, jestli jde o bakteriální nákazu, a antibiotikum nasadí cíleně jen tam, kde je nutné. Tuhle změnu nevynutila jen jeho svědomitost — stojí za ní evropské nařízení 2019/6, které od roku 2022 zakázalo rutinní plošnou profylaxi, a roky práce ÚSKVBL a Státní veterinární správy na uvážlivém používání antibiotik. Pavlovo rozhodnutí u jednoho stáda je drobný díl velkého součtu, který se měří v celé zemi.\n\nTen součet vyšel za rok 2023 na 56,3 miligramu účinné látky na jednotku biomasy zvířat (mg/PCU). Signál je good: česká spotřeba je zhruba o třetinu nižší než evropský průměr (88,5 mg/PCU) a je už pod cílovou hodnotou, kterou si EU stanovila až pro rok 2030 (59,2 mg/PCU). Dlouhodobý trend je přitom působivý — v tonáži klesl prodej veterinárních antibiotik z 95,5 tuny v roce 2008 na zhruba 30 tun, tedy o nějakých 70 %; v intenzitě na PCU spadl za dekádu o zhruba 40 %, z přibližně 90 na dnešních 56,3. Po dvou letech poklesu (minimum 50,0 v roce 2021) ale rok 2023 přinesl mírný nárůst o 4,6 %, který stojí za sledování.\n\nProč je Česko v něčem premiant? Část odpovědi je legislativa: nařízení 2019/6 odřízlo nejhorší praxi plošného preventivního podávání a omezilo veterinární použití antibiotik kriticky důležitých pro člověka. Část je národní antibiotická politika — ČR měla nízkou spotřebu už dřív, díky dozoru ÚSKVBL, lepšímu managementu chovů, biosecurity a vakcinaci. A část je tržní tlak: chovatelé i obchodní řetězce dnes vědí, že „bez rutinních antibiotik\" je konkurenční výhoda. Důležité je, že tohle je jen polovina rovnice One Health: zatímco u zvířat patří Česko ke špičce, u lidí je rezistence řady patogenů (MRSA, E. coli produkující ESBL) horší — těžiště humánního problému leží v ordinacích a nemocnicích, ne v chlévě.\n\nPolitická páka je tu hlavně o tom úspěch udržet a nezakolísat. Kompetenci mají ÚSKVBL (dozor a monitoring spotřeby), Státní veterinární správa a Ministerstvo zemědělství (národní strategický plán společné zemědělské politiky cílí na udržení hodnoty kolem 50 mg/PCU). Konkrétně to znamená: pokračovat v důsledné kontrole předepisování, sledovat samostatně kriticky důležité třídy (fluorochinolony, cefalosporiny 3./4. generace, kolistin), podporovat zoohygienu a vakcinaci jako náhradu za antibiotika a nepřipustit, aby se nárůst z roku 2023 stal trendem. Pro Pavla a jeho telata to znamená jediné — že cílené, uvážlivé používání antibiotik zůstane normou, a ne výjimkou.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost"
+}
