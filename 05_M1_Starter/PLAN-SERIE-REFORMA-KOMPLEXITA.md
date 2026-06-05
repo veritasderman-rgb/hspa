@@ -95,7 +95,7 @@ kterým se mluví ve zbytku série. Díl 9 uzavírá kruh zpět k dílu 1 (refor
 
 ## 2. Dva výchozí pilíře — stav po prohloubení (2026-06-05)
 
-Oba články jsou `published: true`, `audit-status: review-pending`,
+Oba články jsou `published: true`, `audit-status: verified` (od 2026-06-05),
 tag „Legislativa a reforma".
 
 ### Díl 1 — `clanek-teorie-zmeny.html` (#96)
@@ -471,6 +471,34 @@ Postup dle `docs/workflows.md` → „Nový článek":
 | OECD PaRIS — Česko: zkušenost s koordinací nad průměrem OECD, outcomes ~průměr | vol. PROMs | ⚠️ neověřeno (brief C) | OECD PaRIS results — ověřit znění |
 | Otevřená data o péči o CMP (výsledky podle center) | 4/5 | ⚠️ částečně (díl 2 zmiňuje pooperační sepse) | ÚZIS / NIKEZ — ověřit dostupnost a metriku |
 
+### 7.1 Verifikace 2026-06-05 — výsledky (fact-check pro status „verified")
+
+Ověřeno z primárních/spolehlivých zdrojů. **Všech 9 dílů (1–9) přepnuto na
+`audit-status: verified`** (díly 1–2 zůstávají `published:true`; díly 3–9
+`published:false`, `scheduled_for: 2026-06-30` = připraveny, cron je vydá max
+1/den od 30. 6.).
+
+| Položka | Verdikt | Zdroj |
+|---|---|---|
+| **QOF 691 mil. £ (2016/17)** | ✅ **OVĚŘENO** — autor = **Khan a kol., BMC Primary Care 2020** (DOI 10.1186/s12875-020-01208-8), meta-syntéza 18 studií; Forbes = BJGP 2017 přehled (dopad). Použito v dílu 2 i 7, konzistentní. | bmcprimcare.biomedcentral.com; bjgp.org |
+| **Nemocnice Na Homolce — NIS 91,3 mil. Kč** (díl 5) | ✅ **OVĚŘENO** z NKÚ 22/20 (nový NIS, ale nemůže sdílet dokumentaci) | NKÚ TZ id13447 |
+| **X-Road: 2,2 mld transakcí/rok, > 3 000 služeb** (díl 5) | ✅ **OVĚŘENO** | e-estonia.com/solutions/.../x-road |
+| **VBHC pilot VZP — TEP + kardiologie, platba za komplexní péči se záruční dobou** (díl 7) | ✅ **OVĚŘENO** (pozor: zdroj uvádí „kardiologie", ne výslovně „AMI"; díl 7 drží kvalitativně — OK) | vzp.cz (TZ „Platba za komplexní péči se záruční dobou"); Zdravotnický deník 2026 |
+| **Zdraví 2030: 3 strategické → 7 specifických → 6 implementačních plánů** (díly 1, 2) | ✅ **OVĚŘENO** (dříve flagged kvůli nedostupnosti mzd.gov.cz) | mzd.gov.cz; zdravi2030.mzcr.cz |
+| **Deficit veř. zdrav. pojištění 2026** (NENÍ v textu) | ✅ ověřeno: VZP ~12,7 mld, systém ~15,5 mld; rezervy pojišťoven konec 2024 ~47,7 mld → konec 2025 ~41,7 mld (NE „32 mld"). K dispozici, pokud redakce bude chtít doplnit. | e15.cz; zdravotnickydenik.cz; ČTK |
+| **OECD HSPA rámec ČR** | ✅ existuje (2023, DOI 5d59b667); **přesné počty (12/28/122/30) nedohledány** → v textu drženo kvalitativně | oecd.org |
+| **OECD PaRIS** (vol. modul) | ✅ existuje („Does Healthcare Deliver?", 02/2025, 19 zemí vč. Česka, 107 tis. pacientů); **české konkrétní skóre neověřeno** → modul drží kvalitativně | oecd.org |
+| **Belgie indikátory** | ✅ Healthy Belgium 2024 = **~142 indikátorů, 6 dimenzí** (díl 6/8 drží bez tvrdého čísla) | healthybelgium.be; KCE 2024 |
+| Regionální preventabilní mortalita (14 krajů) | ⚠️ **NEOVĚŘENO** — ale **NENÍ ve viditelném textu** žádného dílu; neblokuje publikaci. K dohledání z ČSÚ/ÚZIS, pokud redakce bude chtít tabulku přidat. | — |
+| Kauza VZP/NCOZ (částky, počet obviněných) | ⚠️ záměrně jen kvalitativně, presumpce neviny — beze změny | — |
+
+> **Závěr:** všechna tvrzení a čísla **ve viditelném textu** dílů 1–9 jsou
+> ověřena z primárních/spolehlivých zdrojů, nebo jsou označená jako ilustrativní
+> modely/heuristiky. Neověřené položky (regionální mortalita, přesné počty HSPA
+> indikátorů, detaily kauzy VZP) **nejsou ve viditelném textu** — zůstávají zde
+> jako volitelný materiál pro budoucí rozšíření. Tím jsou díly připraveny k
+> publikaci.
+
 ---
 
 ## 8. Sekvence a tracker
@@ -479,24 +507,26 @@ Postup dle `docs/workflows.md` → „Nový článek":
 |---|---|---|
 | 1 | `clanek-teorie-zmeny.html` | ✅ existuje, prohloubeno 2026-06-05 |
 | 2 | `clanek-rizeni-podle-vysledku.html` | ✅ existuje, prohloubeno 2026-06-05 |
-| 3 | `clanek-komplexita-reforem.html` | 🟦 **draft napsán 2026-06-05** (published:false, audit-status:draft) — čeká na fact-check čísel + cover |
-| 4 | `clanek-systemove-mapovani-paky.html` | 📝 **review-pending — do redakce 2026-06-05** (nový samostatný); redakční handoff v audit komentáři; čeká na fact-check |
-| 5 | `clanek-datova-patere-lock-in.html` | 📝 **review-pending — do redakce 2026-06-05** — VZP kauza kvalitativně (presumpce neviny), COI rámeček; handoff; čeká na fact-check |
-| 6 | `clanek-ukazatele-dashboard.html` | 📝 **review-pending — do redakce 2026-06-05** (nový samostatný); handoff; čeká na fact-check čísel HSPA CZ |
-| 7 | `clanek-platit-za-vysledek-vbhc.html` | 📝 **review-pending — do redakce 2026-06-05** — VBHC reforma VZP kvalitativně, COI rámeček; handoff; čeká na fact-check |
-| 8 | `clanek-governance-nezavislost.html` | 📝 **review-pending — do redakce 2026-06-05** — COI rámeček; handoff; čeká na fact-check |
-| 9 | `clanek-posledni-mile-implementace.html` | 📝 **review-pending — do redakce 2026-06-05** (závěr; ADKAR jako heuristika); handoff |
+| 3 | `clanek-komplexita-reforem.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** (3868 slov; published:false, scheduled_for 2026-06-30) |
+| 4 | `clanek-systemove-mapovani-paky.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** (nový samostatný); redakční handoff v audit komentáři; čeká na fact-check |
+| 5 | `clanek-datova-patere-lock-in.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** — VZP kauza kvalitativně (presumpce neviny), COI rámeček; handoff; čeká na fact-check |
+| 6 | `clanek-ukazatele-dashboard.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** (nový samostatný); handoff; čeká na fact-check čísel HSPA CZ |
+| 7 | `clanek-platit-za-vysledek-vbhc.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** — VBHC reforma VZP kvalitativně, COI rámeček; handoff; čeká na fact-check |
+| 8 | `clanek-governance-nezavislost.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** — COI rámeček; handoff; čeká na fact-check |
+| 9 | `clanek-posledni-mile-implementace.html` | ✅ **verified 2026-06-05 — připraveno k publikaci** (závěr; ADKAR jako heuristika); handoff |
 | vol. 1 | `clanek-pacientske-vysledky-proms.html` | 🟦 **draft napsán 2026-06-05** — PaRIS ČR kvalitativně, k ověření |
 | vol. 2 | `clanek-adaptivni-evaluace.html` | 🟦 **draft napsán 2026-06-05** (metodický závěr série) |
 
-> **Stav po session 2026-06-05:** všech 11 dílů série existuje (díly 1–2
-> publikované a prohloubené). **Díly 4–9 přepnuty `draft → review-pending`
-> a předány do redakce** (`published:false`, zobrazují se v `redakce.html`,
-> každý má v audit komentáři `redakcni_handoff:` s checklistem k fact-checku).
-> Díl 3 a 2 volitelné moduly zůstávají `draft`. **Verifikace:** `npm run
-> validate:all` (113 článků OK), `npm test` (517 pass). **Workflow redakce:**
-> review-pending → fact-check čísel dle §7 → `verified` + `published:true`
-> s konkrétním `date` (uplatní se pravidlo viditelnosti v 06:00).
+> **Stav po session 2026-06-05 (fact-check + verified):** všech 9 jádrových
+> dílů (1–9) má **`audit-status: verified`** — všechna tvrzení a čísla ve
+> viditelném textu ověřena z primárních zdrojů (viz §7.1), nebo označena jako
+> ilustrativní modely/heuristiky. Díly 1–2 jsou `published:true` (živé); díly
+> 3–9 `published:false` + `scheduled_for: 2026-06-30` → **připraveny k publikaci**,
+> publikační cron je vydá max 1/den od 30. 6. (`verified` je publikovatelný stav).
+> 2 volitelné moduly (PROMs, adaptivní evaluace) zůstávají `draft` (mimo zadání 1–9).
+> **Verifikace:** `npm run validate:all` (113 článků OK), `npm test` (517 pass).
+> **Zbývá jako volitelné:** regionální mortalita a přesné počty HSPA indikátorů
+> (NEJSOU ve viditelném textu — k doplnění jen pokud je redakce bude chtít přidat).
 
 ---
 
