@@ -480,13 +480,21 @@ Postup dle `docs/workflows.md` → „Nový článek":
 | 1 | `clanek-teorie-zmeny.html` | ✅ existuje, prohloubeno 2026-06-05 |
 | 2 | `clanek-rizeni-podle-vysledku.html` | ✅ existuje, prohloubeno 2026-06-05 |
 | 3 | `clanek-komplexita-reforem.html` | 🟦 **draft napsán 2026-06-05** (published:false, audit-status:draft) — čeká na fact-check čísel + cover |
-| 4 | `clanek-systemove-mapovani-paky.html` | ⬜ k napsání (nový samostatný) |
-| 5 | `clanek-datova-patere-lock-in.html` | ⬜ k napsání |
-| 6 | `clanek-ukazatele-dashboard.html` | ⬜ k napsání (nový samostatný) |
-| 7 | `clanek-platit-za-vysledek-vbhc.html` | ⬜ k napsání |
-| 8 | `clanek-governance-nezavislost.html` | ⬜ k napsání |
-| 9 | `clanek-posledni-mile-implementace.html` | ⬜ k napsání |
-| vol. | PROMs/PREMs · adaptivní evaluace | ⬜ druhá vlna |
+| 4 | `clanek-systemove-mapovani-paky.html` | 🟦 **draft napsán 2026-06-05** (nový samostatný) — čeká na fact-check + cover ✅ |
+| 5 | `clanek-datova-patere-lock-in.html` | 🟦 **draft napsán 2026-06-05** — VZP kauza kvalitativně (presumpce neviny), COI rámeček; čeká na fact-check |
+| 6 | `clanek-ukazatele-dashboard.html` | 🟦 **draft napsán 2026-06-05** (nový samostatný) — čeká na fact-check čísel HSPA CZ |
+| 7 | `clanek-platit-za-vysledek-vbhc.html` | 🟦 **draft napsán 2026-06-05** — VBHC reforma VZP kvalitativně, COI rámeček; čeká na fact-check |
+| 8 | `clanek-governance-nezavislost.html` | 🟦 **draft napsán 2026-06-05** — COI rámeček; čeká na fact-check |
+| 9 | `clanek-posledni-mile-implementace.html` | 🟦 **draft napsán 2026-06-05** (závěr; ADKAR jako heuristika) |
+| vol. 1 | `clanek-pacientske-vysledky-proms.html` | 🟦 **draft napsán 2026-06-05** — PaRIS ČR kvalitativně, k ověření |
+| vol. 2 | `clanek-adaptivni-evaluace.html` | 🟦 **draft napsán 2026-06-05** (metodický závěr série) |
+
+> **Stav po session 2026-06-05 (díly 4–9 + 2 volitelné):** všech 11 dílů série
+> existuje (díly 1–2 publikované a prohloubené; díly 3–9 + 2 volitelné jako
+> drafty `published:false`/`audit-status:draft`). **Verifikace:** `npm run
+> validate:all` (113 článků OK, indikátory/strategie/explainery/prevence OK),
+> `npm test` (517 pass). **Zbývá před publikací:** fact-check čísel dle §7,
+> redakční schválení (přepnutí draft→review-pending/verified + published:true).
 
 ---
 

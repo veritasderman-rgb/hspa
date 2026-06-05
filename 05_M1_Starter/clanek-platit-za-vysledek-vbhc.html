@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak platit za výsledek bez gamingu: incentivy a value-based healthcare · HSPA Monitor</title>
+<meta name="description" content="Česko platí za objem, ne za výsledek. Value-based healthcare slibuje opak — hodnotu jako výsledky dělené náklady. Proč je to lákavé, proč anglické QOF varuje před naivním pay-for-performance a jak navrhnout incentivy, které neobejde Goodhartův zákon.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jak platit za výsledek bez gamingu: incentivy a value-based healthcare">
+<meta property="og:description" content="Value-based healthcare slibuje platit za hodnotu, ne za objem. Proč QOF varuje před naivním P4P a jak navrhnout incentivy odolné Goodhartovu zákonu.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-05">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-05
+    reviewer: claude-code-agent
+    status: draft
+    primary_sources_added: 7
+    visual_elements_added: 3
+    notes: "DRAFT — published:false. Série, díl 7/9. Téma: value-based healthcare, hodnota (Porter NEJM 2010), ICHOM outcome sety, QOF jako varování, Goodhart/Campbell, kritika VBHC, český kontext (úhradová vyhláška, DŘ, DRG). Navazuje na díl 2 (měření) a díl 3 (Goodhart). Zdroje (stabilní): Porter NEJM 2010 (DOI 10.1056/NEJMp1011024); Porter & Teisberg 2006; ICHOM; QOF — Forbes BMC Primary Care 2020 + BJGP 2017 přehled; kritika VBHC — Groenewoud BMC HSR 2019, Lewis Future Healthcare J 2022. POZOR — Duškovova VBHC reforma VZP (pilot AMI+TEP 09/2026), mortalita AMI ~5,2 %/CMP ~9,9 %: zmíněno jen KVALITATIVNĚ, BEZ neověřených čísel — viz §7 PLAN. Úhradová vyhláška/DŘ/DRG Restart obecně. KONFLIKT ZÁJMŮ VZP: rámeček (rozhodnutí #6). OTEVŘENÉ BODY: (1) fact-check VBHC pilotu + čísel mortality; (2) cover; (3) prolink."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Řízení systému · Incentivy</span>
+      </div>
+      <h2 class="article-title">Jak platit za výsledek bez gamingu: incentivy a value-based healthcare</h2>
+      <p class="article-deck">
+        Peníze jsou nejcitlivější páka systému — a Česko jimi dnes odměňuje <strong>objem</strong>, ne výsledek. Value-based healthcare slibuje opak: platit za <em>hodnotu</em>, tedy za výsledky vztažené k nákladům. Je to lákavá myšlenka. Ale anglické QOF, největší experiment s platbou za výkon na světě, ukazuje, jak snadno se z dobré pobídky stane drahá metrika bez dopadu na zdraví. Tenhle díl je o tom, jak navrhnout incentivy, které neobejde Goodhartův zákon.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V <a href="clanek-komplexita-reforem.html">díle o komplexitě</a> jsme řekli, že přechod od placení za objem k placení za výsledek není zásah do parametru, ale do <em>cíle systému</em> — jedné z nejsilnějších pák. Proto je tak těžký a proto si zaslouží vlastní díl. A v <a href="clanek-rizeni-podle-vysledku.html">díle o měření</a> jsme potkali Goodhartův zákon: jakmile se z měřítka stane terč, přestane být dobrým měřítkem. Incentivy jsou místo, kde tenhle zákon udeří nejtvrději — protože za metrikou jsou peníze.
+      </p>
+
+      <h3>Co je „hodnota": Porterova rovnice</h3>
+
+      <p>
+        Pojem value-based healthcare zpopularizoval ekonom Michael Porter. Jeho definice je jednoduchá až provokativně: <strong>hodnota = zdravotní výsledky / náklady</strong> na jejich dosažení. Důležité jsou tři posuny, které z té rovnice plynou. Za prvé: hodnota se měří <em>výsledkem pro pacienta</em>, ne objemem výkonů. Za druhé: měří se na úrovni <em>celé epizody péče</em> (celý cyklus léčby diagnózy), ne jednotlivého úkonu. Za třetí: ve jmenovateli jsou <em>celkové</em> náklady cyklu, ne cena dílčího výkonu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avValueH">
+        <figcaption class="av-figure-h" id="avValueH">Hodnota = výsledky / náklady — co to mění v praxi</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Otázka</th>
+                <th scope="col">Logika „za objem"</th>
+                <th scope="col">Logika „za hodnotu"</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Co se platí</th>
+                <td>Jednotlivý výkon</td>
+                <td class="av-cell-good">Celá epizoda péče o diagnózu</td>
+              </tr>
+              <tr>
+                <th scope="row">Co je úspěch</th>
+                <td>Počet provedených výkonů</td>
+                <td class="av-cell-good">Výsledek pro pacienta (PROMs, komplikace)</td>
+              </tr>
+              <tr>
+                <th scope="row">Kde se měří náklad</th>
+                <td>Cena výkonu</td>
+                <td class="av-cell-good">Náklad celého cyklu léčby</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Volně podle M. Porter, <em>What Is Value in Health Care?</em> (NEJM, 2010). Standardizované sady výsledků pro jednotlivé diagnózy vyvíjí mezinárodní konsorcium ICHOM.</p>
+      </figure>
+
+      <h3>Varování z Anglie: QOF</h3>
+
+      <p>
+        Než se nadchneme, je třeba projít varovným příběhem. Anglický <em>Quality and Outcomes Framework</em> byl největším světovým experimentem s platbou za výkon v primární péči — lékaři dostávali peníze za plnění ukazatelů kvality. Po letech evidence je bilance střízlivá: schéma stálo stovky milionů liber ročně, ale přineslo jen mírná zlepšení u sledovaných procesů a <strong>žádný jasný dopad na mortalitu</strong>; navíc se doložil <em>gaming</em> — praxe „vylepšovaly" čísla vyřazováním rizikových pacientů (exception reporting). QOF tedy koupil hlavně lepší <em>dokumentaci</em>, ne nutně lepší zdraví. Detailní rozbor jsme přinesli v <a href="clanek-rizeni-podle-vysledku.html">díle o měření</a>.
+      </p>
+
+      <p>
+        Poučení nezní „neplaťte za výsledek". Zní: <strong>naivní pay-for-performance navázaný na jednu metriku je past.</strong> Goodhart a Campbell platí dvojnásob, když je v sázce úhrada.
+      </p>
+
+      <h3>Každý způsob platby si vybírá svou daň</h3>
+
+      <p>
+        Neexistuje neutrální mechanismus úhrady — každý posílá aktérům nějaký signál a každý se dá nějak obejít. Reformátor si musí vybrat, <em>které</em> riziko je ochoten nést.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPayH">
+        <figcaption class="av-figure-h" id="avPayH">Typy plateb: co motivují a čím se obcházejí</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Mechanismus</th>
+                <th scope="col">Co motivuje</th>
+                <th scope="col">Hlavní riziko</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Za výkon (fee-for-service)</th>
+                <td>Dělat hodně</td>
+                <td class="av-cell-bad">Nadprodukce, objem bez hodnoty</td>
+              </tr>
+              <tr>
+                <th scope="row">Kapitace</th>
+                <td>Šetřit</td>
+                <td class="av-cell-warn">Podléčení, výběr lehčích pacientů</td>
+              </tr>
+              <tr>
+                <th scope="row">DRG (za případ)</th>
+                <td>Efektivní hospitalizace</td>
+                <td class="av-cell-warn">Upcoding, předčasné propouštění</td>
+              </tr>
+              <tr>
+                <th scope="row">P4P (za ukazatel)</th>
+                <td>Plnit metriku</td>
+                <td class="av-cell-bad">Gaming, teaching to the test</td>
+              </tr>
+              <tr>
+                <th scope="row">Balíček (bundled)</th>
+                <td>Optimalizovat celý cyklus</td>
+                <td class="av-cell-warn">Výběr pacientů, podhodnocení rizika</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Žádný řádek není „správný" — každý kupuje jiné chování a platí jinou daní. Proto se v praxi kombinují a doplňují balancing metrikami (viz <a href="clanek-ukazatele-dashboard.html">díl o dashboardu</a>).</p>
+      </figure>
+
+      <h3>I value-based healthcare má své kritiky</h3>
+
+      <p>
+        Poctivost vyžaduje přiznat, že VBHC není všelék. Systematické přehledy upozorňují, že „hodnota" se těžko operacionalizuje (co přesně je výsledek a za jak dlouho?), že měření outcomes je nákladné a že <strong>tvrdé evidence o systémovém dopadu</strong> plateb za výsledek je zatím málo. Jak shrnul jeden přehled v <em>Future Healthcare Journal</em>: důkazů, že platby vázané na výsledek skutečně fungují, je málo. To není argument proti — je to argument pro <em>opatrnost</em>, pilotování a měření před plošným zavedením.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak nezbabrat platbu za výsledek" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Pět pojistek proti gamingu</p>
+        <p style="margin:0 0 6px 0;"><strong>Měřit dřív, než platit.</strong> Nejprve mít spolehlivá data o výsledku (datová páteř — <a href="clanek-datova-patere-lock-in.html">díl 5</a>), pak teprve na ně vázat peníze.</p>
+        <p style="margin:0 0 6px 0;"><strong>Balík ukazatelů, ne jeden.</strong> Výsledek + balancing + equity, aby se nedal obejít jeden.</p>
+        <p style="margin:0 0 6px 0;"><strong>Risk adjustment.</strong> Očistit o závažnost, jinak vyrobíte cream-skimming.</p>
+        <p style="margin:0 0 6px 0;"><strong>Malé kroky, pilotně.</strong> Jedna diagnóza, vyhodnotit, pak škálovat — ne plošně přes noc.</p>
+        <p style="margin:0;"><strong>Sdílení rizika, ne přenos.</strong> Cílem je lepší zdraví, ne přesun finančního rizika na poskytovatele.</p>
+      </aside>
+
+      <h3>Český kontext: od objemu k hodnotě</h3>
+
+      <p>
+        Česko je dnes pevně v logice objemu: dohodovací řízení a úhradová vyhláška řídí primárně bodové hodnoty a množství hrazené péče; i bonusy „za kvalitu" bývají vázané na vstupy (vybavení pracoviště), ne na výsledek u pacienta. Zároveň ale roste infrastruktura, která by posun umožnila — projekt DRG Restart zpřesňuje nákladovou stránku a na Portálu ukazatelů kvality se objevují první outcome indikátory. Objevují se i první <em>záměry</em> pilotovat platby vázané na výsledek u konkrétních diagnóz.
+      </p>
+
+      <p>
+        Tady je na místě opatrnost, ne nadšení: jak ukazuje QOF i „překladatelský problém" zahraničních reforem, změna pobídky sama o sobě nezmění chování, pokud chybí datová páteř, propojené registry a provozní modely, které výsledek umožní sledovat. Bez nich hrozí, že se z reformy stane jen přenos finančního rizika na poskytovatele — administrativní cvičení, které pacientovi nepomůže. Proto v této sérii <a href="clanek-datova-patere-lock-in.html">díl o datech</a> a <a href="clanek-ukazatele-dashboard.html">díl o dashboardu</a> stojí <em>před</em> tímto: bez nich nelze platit za výsledek bez gamingu.
+      </p>
+
+      <aside class="article-callout" aria-label="Zveřejnění konfliktu zájmů" style="margin:18px 0;padding:12px 16px;border-left:3px solid var(--rule);background:var(--paper);font-family:var(--sans);font-size:12.5px;line-height:1.5;color:var(--ink-mut);">
+        <strong>Zveřejnění zájmu:</strong> Autor podkladů k této sérii je členem Správní rady Všeobecné zdravotní pojišťovny. Pasáže o úhradách a pobídkách jsou psány jako obecný systémový a metodický výklad; konkrétní reformní záměry plátců uvádíme zdrženlivě a bez hodnocení do doby jejich ověření z primárních zdrojů.
+      </aside>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Souvislosti</div>
+      <h4 class="article-databox-h">Kam tento díl patří v sérii</h4>
+      <ul class="article-databox-list">
+        <li><a href="clanek-rizeni-podle-vysledku.html"><strong>Řízení podle výsledků</strong></a> — Goodhart, QOF a temná strana měření</li>
+        <li><a href="clanek-datova-patere-lock-in.html"><strong>Datová páteř</strong></a> — bez dat nelze platit za výsledek</li>
+        <li><a href="clanek-ukazatele-dashboard.html"><strong>Ukazatele a dashboard</strong></a> — balancing a equity metriky jako pojistka</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Tabulky typů plateb jsou ilustrativní výklad principů. Konkrétní české reformní záměry a čísla projdou před publikací ověřením z primárních zdrojů.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Value-based healthcare</h5>
+        <ul class="article-sources-list">
+          <li><strong>Michael Porter — What Is Value in Health Care? (NEJM, 2010)</strong> — hodnota = výsledky / náklady. <a href="https://doi.org/10.1056/NEJMp1011024" target="_blank" rel="noopener">doi.org/10.1056/NEJMp1011024 ↗</a></li>
+          <li><strong>Porter &amp; Teisberg — Redefining Health Care (2006)</strong> — konkurence o hodnotu.</li>
+          <li><strong>ICHOM — standardizované sady výsledků</strong> — co měřit u jednotlivých diagnóz. <a href="https://www.ichom.org/" target="_blank" rel="noopener">ichom.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Varování a kritika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Forbes a kol. — NHS QOF (BMC Primary Care, 2020)</strong> a <strong>systematický přehled (BJGP, 2017)</strong> — náklady vs. omezený dopad, gaming. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5647921/" target="_blank" rel="noopener">přehled ↗</a></li>
+          <li><strong>Lewis — Value-based healthcare: is it the way forward? (Future Healthcare Journal, 2022)</strong> — málo evidence o dopadu plateb za výsledek. <a href="https://doi.org/10.7861/fhj.2021-0245" target="_blank" rel="noopener">doi.org/10.7861/fhj.2021-0245 ↗</a></li>
+          <li><strong>Groenewoud a kol. — etická úskalí VBHC (BMC Health Services Research, 2019)</strong>. <a href="https://doi.org/10.1186/s12913-019-4081-6" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — dohodovací řízení a úhradová vyhláška</strong>. <a href="https://mzd.gov.cz/category/agendy-ministerstva/zdravotni-pojisteni/dohodovaci-rizeni/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>ÚZIS — DRG Restart</strong> — nákladová a klasifikační základna. <a href="https://drg.uzis.cz/" target="_blank" rel="noopener">drg.uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn.:</strong> Tento díl je rozpracovaný draft. QOF evidence uvádíme jako rozpětí přes systematický přehled, ne jednotlivou studii; konkrétní české reformní záměry a čísla projdou před publikací ověřením z primárních zdrojů.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>

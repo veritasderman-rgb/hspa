@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacientské výsledky a zkušenost: PROMs a PREMs jako „missing middle“ · HSPA Monitor</title>
+<meta name="description" content="Hodnocení výkonnosti často měří systém víc než pacienta. PROMs (výsledky hlášené pacientem) a PREMs (zkušenost hlášená pacientem) tu mezeru zaplňují — jak je sbírat, interpretovat a proměnit v řízení.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pacientské výsledky a zkušenost: PROMs a PREMs">
+<meta property="og:description" content="Hodnocení výkonnosti měří systém víc než pacienta. PROMs a PREMs tu mezeru zaplňují — jak je sbírat, interpretovat a proměnit v řízení.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-05">
+<meta property="article:section" content="Legislativa a reforma">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-05
+    reviewer: claude-code-agent
+    status: draft
+    primary_sources_added: 4
+    visual_elements_added: 2
+    notes: "DRAFT — published:false. Série, VOLITELNÝ modul 1 (druhá vlna). Téma: PROMs/PREMs, proč HSPA měří systém víc než pacienta, sběr a interpretace, jak je proměnit v řízení. Navazuje na díl 6 (dashboard) a díl 2 (měření). Zdroje (stabilní): OECD PaRIS (Patient-Reported Indicator Survey); ICHOM; Belgie people-centred (Healthy Belgium). POZOR: PaRIS výsledky pro ČR (koordinace nad průměrem OECD, outcomes ~průměr) zmíněny KVALITATIVNĚ, k ověření §7 PLAN. OTEVŘENÉ BODY: (1) fact-check PaRIS čísel pro ČR; (2) cover."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">Řízení systému · Pacient · Volitelný modul</span>
+      </div>
+      <h2 class="article-title">Pacientské výsledky a zkušenost: PROMs a PREMs jako „missing middle"</h2>
+      <p class="article-deck">
+        Hodnocení výkonnosti zdravotního systému umí spočítat lůžka, výkony i mortalitu — ale jen výjimečně se ptá toho, kvůli komu celý systém existuje: <strong>pacienta</strong>. Jestli se mu uleví, jestli zase zvládá běžný den, jestli mu někdo rozuměl. Tahle mezera má jméno a má i nástroje: <em>PROMs</em> (výsledky hlášené pacientem) a <em>PREMs</em> (zkušenost hlášená pacientem). Tento volitelný modul série ukazuje, jak je dostat do řízení.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V <a href="clanek-ukazatele-dashboard.html">díle o dashboardu</a> jsme mezi čtyřmi typy ukazatelů jmenovali i výsledkové. Většina tradičních „výsledků" ve zdravotnictví jsou ale data, která systém sbírá <em>o</em> pacientovi (mortalita, readmise) — ne to, co pacient <em>sám</em> hlásí o svém stavu a zkušenosti. Právě tahle druhá vrstva je „missing middle": chybějící most mezi klinickým výsledkem a tím, co změna znamená pro život člověka.
+      </p>
+
+      <h3>PROMs a PREMs: dva různé pohledy pacienta</h3>
+
+      <p>
+        Pojmy se pletou, ale měří různé věci. <strong>PROMs</strong> (patient-reported outcome measures) se ptají na <em>výsledek</em>: bolest, hybnost, fyzické i duševní zdraví, schopnost zvládat běžný den — typicky před zákrokem a po něm, aby se viděl rozdíl. <strong>PREMs</strong> (patient-reported experience measures) se ptají na <em>zkušenost s péčí</em>: byl jsem zapojen do rozhodování, rozuměl jsem informacím, byla péče koordinovaná, důvěřoval jsem. PROMs měří, jestli léčba zabrala; PREMs, jaké to bylo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPromPremH">
+        <figcaption class="av-figure-h" id="avPromPremH">PROMs vs. PREMs — na co se ptají</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">PROMs — výsledek</th>
+                <th scope="col">PREMs — zkušenost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Otázka</th>
+                <td>Jak se mi reálně daří?</td>
+                <td>Jaká byla péče o mě?</td>
+              </tr>
+              <tr>
+                <th scope="row">Příklad</th>
+                <td>Bolest, hybnost, kvalita života, duševní zdraví</td>
+                <td>Zapojení do rozhodování, srozumitelnost, koordinace, důvěra</td>
+              </tr>
+              <tr>
+                <th scope="row">Kdy se ptát</th>
+                <td>Před a po (vidět rozdíl)</td>
+                <td>Po kontaktu s péčí</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Standardizované sady PROMs pro jednotlivé diagnózy vyvíjí konsorcium ICHOM; mezinárodní srovnání zkušenosti a výsledků v primární péči přináší šetření OECD PaRIS.</p>
+      </figure>
+
+      <h3>Proč to systém většinou nesbírá — a proč by měl</h3>
+
+      <p>
+        Důvod, proč PROMs a PREMs v hodnocení chybí, je prozaický: hůř se sbírají. Vyžadují oslovit pacienta, opakovaně, srozumitelně a tak, aby vzorek nebyl zkreslený (kdo neodpoví, bývá systematicky jiný než kdo odpoví). Je to dražší a pomalejší než vytáhnout data z registru. Jenže bez nich měříme systém, ne jeho smysl. <a href="clanek-platit-za-vysledek-vbhc.html">Porterova „hodnota"</a> má v čitateli právě tohle — výsledek pro pacienta. Bez PROMs je value-based healthcare slepé.
+      </p>
+
+      <h3>Jak je proměnit v řízení</h3>
+
+      <p>
+        Sbírat PROMs/PREMs „do šuplíku" je plýtvání. Hodnotu mají, až když se vrátí — buď klinikovi (jako zpětná vazba ke zlepšení, švédská lekce z <a href="clanek-rizeni-podle-vysledku.html">dílu o měření</a>), nebo na dashboard jako rovnocenný ukazatel vedle klinických. Tři praktická pravidla: ptát se na <em>málo, ale validovaně</em> (ověřené dotazníky, ne improvizace); hlídat <em>výběrové zkreslení</em> (kdo neodpověděl); a interpretovat je <em>s kontextem</em>, ne jako tvrdé skóre k žebříčkování.
+      </p>
+
+      <aside class="article-callout" aria-label="Checklist pro praxi" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--accent, var(--ink));background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">PROMs/PREMs do řízení — pět pravidel</p>
+        <ol style="margin:0;padding-left:20px;">
+          <li>Použij <strong>validované</strong> dotazníky (ICHOM, mezinárodní standardy), ne vlastní.</li>
+          <li>Ptej se <strong>před i po</strong>, ať vidíš rozdíl, ne jen stav.</li>
+          <li>Hlídej, <strong>kdo neodpověděl</strong> — neodpověď bývá signál.</li>
+          <li>Vracej data <strong>klinikovi</strong>, nejen nahoru do reportu.</li>
+          <li>Zařaď je na dashboard jako <strong>rovnocenný</strong> ukazatel, ne přívěšek.</li>
+        </ol>
+      </aside>
+
+      <h3>Český kontext</h3>
+
+      <p>
+        Česko se mezinárodního měření pacientské zkušenosti účastní — šetření OECD <strong>PaRIS</strong> srovnává zkušenost a výsledky pacientů s chronickými nemocemi v primární péči napříč zeměmi. Předběžné mezinárodní srovnání naznačuje, že Česko si v některých rozměrech zkušenosti a koordinace nevede špatně, zatímco u výsledků se pohybuje kolem průměru — ale konkrétní hodnoty je třeba před jakýmkoli silným tvrzením ověřit z primárního zdroje (OECD), protože jde o nová a citlivá data. Belgie přidává inspiraci na straně reportingu: people-centred care je samostatným rozměrem jejího veřejného HSPA. Pro český HSPA je tu jasná příležitost — doplnit do rámce vrstvu, která dnes nejvíc chybí: hlas pacienta.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Souvislosti</div>
+      <h4 class="article-databox-h">Kam tento modul patří v sérii</h4>
+      <ul class="article-databox-list">
+        <li><a href="clanek-ukazatele-dashboard.html"><strong>Ukazatele a dashboard</strong></a> — PROMs/PREMs jako rovnocenný typ ukazatele</li>
+        <li><a href="clanek-platit-za-vysledek-vbhc.html"><strong>Platit za výsledek</strong></a> — bez PROMs je „hodnota" slepá</li>
+        <li><a href="clanek-rizeni-podle-vysledku.html"><strong>Řízení podle výsledků</strong></a> — data zpět ke klinikovi</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Tento volitelný modul je rozpracovaný draft. Konkrétní výsledky PaRIS pro ČR projdou před publikací ověřením z primárních zdrojů (OECD).
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">PROMs/PREMs a mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD PaRIS — Patient-Reported Indicator Survey</strong> — mezinárodní srovnání zkušenosti a výsledků pacientů. <a href="https://www.oecd.org/en/about/programmes/paris.html" target="_blank" rel="noopener">oecd.org/paris ↗</a></li>
+          <li><strong>ICHOM — standardizované sady výsledků</strong> — co měřit u jednotlivých diagnóz. <a href="https://www.ichom.org/" target="_blank" rel="noopener">ichom.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">People-centred reporting</h5>
+        <ul class="article-sources-list">
+          <li><strong>Healthy Belgium — people-centred care</strong> — pacientský rozměr veřejného HSPA. <a href="https://www.healthybelgium.be/" target="_blank" rel="noopener">healthybelgium.be ↗</a></li>
+          <li><strong>OECD — Rethinking HSPA (2024)</strong> — people-centredness jako dimenze. <a href="https://www.oecd.org/en/publications/rethinking-health-system-performance-assessment_107182c8-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn.:</strong> Tento modul je rozpracovaný draft. Výsledky PaRIS pro ČR uvádíme zdrženlivě a projdou před publikací ověřením z primárních zdrojů.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
