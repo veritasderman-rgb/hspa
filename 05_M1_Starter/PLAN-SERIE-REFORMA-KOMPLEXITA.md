@@ -480,21 +480,23 @@ Postup dle `docs/workflows.md` → „Nový článek":
 | 1 | `clanek-teorie-zmeny.html` | ✅ existuje, prohloubeno 2026-06-05 |
 | 2 | `clanek-rizeni-podle-vysledku.html` | ✅ existuje, prohloubeno 2026-06-05 |
 | 3 | `clanek-komplexita-reforem.html` | 🟦 **draft napsán 2026-06-05** (published:false, audit-status:draft) — čeká na fact-check čísel + cover |
-| 4 | `clanek-systemove-mapovani-paky.html` | 🟦 **draft napsán 2026-06-05** (nový samostatný) — čeká na fact-check + cover ✅ |
-| 5 | `clanek-datova-patere-lock-in.html` | 🟦 **draft napsán 2026-06-05** — VZP kauza kvalitativně (presumpce neviny), COI rámeček; čeká na fact-check |
-| 6 | `clanek-ukazatele-dashboard.html` | 🟦 **draft napsán 2026-06-05** (nový samostatný) — čeká na fact-check čísel HSPA CZ |
-| 7 | `clanek-platit-za-vysledek-vbhc.html` | 🟦 **draft napsán 2026-06-05** — VBHC reforma VZP kvalitativně, COI rámeček; čeká na fact-check |
-| 8 | `clanek-governance-nezavislost.html` | 🟦 **draft napsán 2026-06-05** — COI rámeček; čeká na fact-check |
-| 9 | `clanek-posledni-mile-implementace.html` | 🟦 **draft napsán 2026-06-05** (závěr; ADKAR jako heuristika) |
+| 4 | `clanek-systemove-mapovani-paky.html` | 📝 **review-pending — do redakce 2026-06-05** (nový samostatný); redakční handoff v audit komentáři; čeká na fact-check |
+| 5 | `clanek-datova-patere-lock-in.html` | 📝 **review-pending — do redakce 2026-06-05** — VZP kauza kvalitativně (presumpce neviny), COI rámeček; handoff; čeká na fact-check |
+| 6 | `clanek-ukazatele-dashboard.html` | 📝 **review-pending — do redakce 2026-06-05** (nový samostatný); handoff; čeká na fact-check čísel HSPA CZ |
+| 7 | `clanek-platit-za-vysledek-vbhc.html` | 📝 **review-pending — do redakce 2026-06-05** — VBHC reforma VZP kvalitativně, COI rámeček; handoff; čeká na fact-check |
+| 8 | `clanek-governance-nezavislost.html` | 📝 **review-pending — do redakce 2026-06-05** — COI rámeček; handoff; čeká na fact-check |
+| 9 | `clanek-posledni-mile-implementace.html` | 📝 **review-pending — do redakce 2026-06-05** (závěr; ADKAR jako heuristika); handoff |
 | vol. 1 | `clanek-pacientske-vysledky-proms.html` | 🟦 **draft napsán 2026-06-05** — PaRIS ČR kvalitativně, k ověření |
 | vol. 2 | `clanek-adaptivni-evaluace.html` | 🟦 **draft napsán 2026-06-05** (metodický závěr série) |
 
-> **Stav po session 2026-06-05 (díly 4–9 + 2 volitelné):** všech 11 dílů série
-> existuje (díly 1–2 publikované a prohloubené; díly 3–9 + 2 volitelné jako
-> drafty `published:false`/`audit-status:draft`). **Verifikace:** `npm run
-> validate:all` (113 článků OK, indikátory/strategie/explainery/prevence OK),
-> `npm test` (517 pass). **Zbývá před publikací:** fact-check čísel dle §7,
-> redakční schválení (přepnutí draft→review-pending/verified + published:true).
+> **Stav po session 2026-06-05:** všech 11 dílů série existuje (díly 1–2
+> publikované a prohloubené). **Díly 4–9 přepnuty `draft → review-pending`
+> a předány do redakce** (`published:false`, zobrazují se v `redakce.html`,
+> každý má v audit komentáři `redakcni_handoff:` s checklistem k fact-checku).
+> Díl 3 a 2 volitelné moduly zůstávají `draft`. **Verifikace:** `npm run
+> validate:all` (113 článků OK), `npm test` (517 pass). **Workflow redakce:**
+> review-pending → fact-check čísel dle §7 → `verified` + `published:true`
+> s konkrétním `date` (uplatní se pravidlo viditelnosti v 06:00).
 
 ---
 
