@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Než nakreslíte první šipku: teorie změny a logický model ve zdravotní politice · HSPA Monitor</title>
+<meta name="description" content="Teorie změny (theory of change) vysvětluje, PROČ má reforma fungovat — ne jen co se udělá. WHO vydala v roce 2024 návod, jak ji postavit na důkazech v šesti krocích. Čím se liší od logického modelu a logframe, jaké má pasti a proč chybí českým strategiím jako Zdraví 2030.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Než nakreslíte první šipku: teorie změny ve zdravotní politice">
+<meta property="og:description" content="Teorie změny vysvětluje, PROČ má reforma fungovat. WHO 2024 dává šestikrokový návod postavený na důkazech. Čím se liší od logického modelu a proč chybí Zdraví 2030.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-05">
+<meta property="article:section" content="Legislativa a reforma">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-05
+    reviewer: claude-code-agent
+    status: draft
+    unverified_claims_removed: 0
+    primary_sources_added: 6
+    visual_elements_added: 4
+    notes: "DRAFT — pracovní verze, published:false. Téma: theory of change / logický model ve zdravotní politice. Sesterský článek k 'Řízení podle výsledků' (clanek-rizeni-podle-vysledku.html) — ToC = naplánuj logiku (krok 1-2 výsledkové smyčky), RBM = změř výsledek. Hlavní zdroj: WHO 'How to develop an evidence-informed theory of change for health: WHO technical guidance' (2024, ISBN 9789240097063) — definice ToC jako systematického + vizuálního znázornění, jak má intervence dosáhnout výsledků; šest kroků: (1) definuj problém, (2) definuj očekávané výsledky, (3) definuj intervence, (4) popiš mechanismy změny + postav model, (5) validuj, (6) reviduj. Použití ToC: design, implementace, M&E, transparentnost, přenos/škálování politik, strategické plány. Rozlišení ToC vs logic model vs logframe a pasti doloženy: Eval Academy, SSIR 'Six Theory of Change Pitfalls to Avoid', tools4dev, CERE Ole Miss. Klíčová tvrzení: logic model = CO (sekvence aktivity→výstupy→výsledky), ToC = PROČ (mechanismy + explicitní domněnky/assumptions), logframe = matice s indikátory pro evaluaci. Pasti: záměna aktivit za výsledky; 'mysleli jsme, že máme jasno' (netestované domněnky); nakreslit logframe první a ToC zpětně dolepit; předpoklad linearity a konstantního prostředí. Worked example pro ČR: screening → účast → časnější záchyt → nižší mortalita, s vyznačenými domněnkami (ilustrativní, ne citace WHO). OTEVŘENÉ BODY PŘED PUBLIKACÍ: (1) ověřit šest kroků a terminologii přímo z plného PDF WHO guide (iris.who.int bitstream); (2) doložit/zmírnit tvrzení, že Zdraví 2030 nemá explicitní evidence-informed ToC — projít implementační plány a analytickou studii; (3) zvážit konkrétní český příklad reformy s/bez ToC (reforma psychiatrie); (4) rubric=legislativa k potvrzení. Tón: edukativní + konstruktivně-návrhový. Cover: zatím bez obálky."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">Řízení systému · Metodika</span>
+      </div>
+      <h2 class="article-title">Než nakreslíte první šipku: teorie změny a logický model ve zdravotní politice</h2>
+      <p class="article-deck">
+        Skoro každá zdravotní reforma má cíl a seznam opatření. Málokterá má napsáno, <strong>proč</strong> by ta opatření měla k cíli vést a <strong>jaké předpoklady</strong> přitom musí platit. Přesně tu mezeru vyplňuje <em>teorie změny</em> (theory of change) — a Světová zdravotnická organizace k ní v roce 2024 vydala návod, jak ji postavit na důkazech. Tohle je vysvětlení, čím se liší od logického modelu a logframe, jak vzniká v šesti krocích, jaké má pasti — a proč ji české strategie typu Zdraví 2030 většinou postrádají.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">13 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V <a href="clanek-rizeni-podle-vysledku.html">předchozím článku o řízení podle výsledků</a> jsme tvrdili, že české zdravotnictví měří hlavně vstupy a výstupy, ne výsledky. Měření je ale až druhá půlka problému. Ta první je <em>logika</em>: ještě než začnete cokoli měřit, musíte umět říct, <strong>proč věříte, že konkrétní opatření povede k zamýšlenému výsledku</strong> — a co se musí stát po cestě, aby to vyšlo. Tomuhle myšlenkovému základu se říká teorie změny. Bez ní je každá reforma sázka naslepo: když vyjde, nevíte přesně proč; když nevyjde, nevíte, který krok selhal.
+      </p>
+
+      <p>
+        Není to akademická hříčka. WHO vydala v roce 2024 samostatnou technickou příručku <em>How to develop an evidence-informed theory of change for health</em> — celý dokument o tom, jak ve zdravotnictví takovou logiku poctivě postavit a podepřít důkazy. Důvod je prostý: ve zdraví jsou příčinné řetězce dlouhé a plné domněnek, a když se nevysloví nahlas, schovají se a později zákeřně selžou.
+      </p>
+
+      <h3>Tři nástroje, které se pletou: logický model, logframe a teorie změny</h3>
+
+      <p>
+        V plánovacích dokumentech narazíte na tři příbuzné pojmy, které se často zaměňují. Rozdíl mezi nimi je přitom zásadní — a vysvětluje, proč „máme strategii" neznamená „máme teorii změny".
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTocCompareH">
+        <figcaption class="av-figure-h" id="avTocCompareH">Logický model vs. logframe vs. teorie změny — co který nástroj dělá</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Nástroj</th>
+                <th scope="col">Odpovídá na otázku</th>
+                <th scope="col">Hlavní použití</th>
+                <th scope="col">Domněnky a mechanismy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Logický model</th>
+                <td><strong>Co</strong> se stane (sekvence vstupy → aktivity → výstupy → výsledky)</td>
+                <td>Plánování, přehledná vizualizace</td>
+                <td class="av-cell-warn">Často chybí nebo jen na okraji</td>
+              </tr>
+              <tr>
+                <th scope="row">Logframe (logický rámec)</th>
+                <td><strong>Co a jak se měří</strong> (matice s indikátory a riziky)</td>
+                <td>Monitoring, evaluace, reporting</td>
+                <td class="av-cell-warn">Rizika ano, mechanismy ne</td>
+              </tr>
+              <tr>
+                <th scope="row">Teorie změny</th>
+                <td><strong>Proč a jak</strong> změna nastane (kauzální mechanismy)</td>
+                <td>Návrh a promyšlení intervence</td>
+                <td class="av-cell-good">Jádro nástroje — explicitně</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Eval Academy; tools4dev; Center for Research Evaluation (Ole Miss). Plné odkazy v sekci Zdroje.</p>
+      </figure>
+
+      <p>
+        Nejjednodušší způsob, jak si rozdíl zapamatovat: <strong>logický model je popisně správný, ale kauzálně mlčí.</strong> Řádek „rekvalifikace → zaměstnanost" nebo „adresné zvaní → vyšší účast na screeningu" je pravdivý jako schéma, ale neříká <em>proč</em> by ta šipka měla platit ani <em>co</em> musí být splněno, aby platila. Teorie změny tu šipku rozbalí: pojmenuje mechanismus („lidé na osobní pozvánku reagují víc než na plošnou kampaň") a hlavně <strong>domněnky</strong> („pozvánka se k adresátovi dostane", „kapacita vyšetření stačí", „pozitivní záchyt vede k léčbě"). Logframe pak tyhle kroky převede na měřitelné indikátory pro evaluaci. Potřebujete všechny tři — ale teorie změny je ta, která se nejčastěji přeskakuje.
+      </p>
+
+      <h3>Šest kroků WHO: jak postavit teorii změny na důkazech</h3>
+
+      <p>
+        Příručka WHO definuje teorii změny jako <em>„systematické a vizuální znázornění toho, jak má program nebo intervence dosáhnout zamýšlených výsledků"</em> a nabízí pro její tvorbu šestikrokový postup. Důraz je na slově <strong>evidence-informed</strong>: každý článek řetězce má být podepřený důkazem, ne jen přesvědčením.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTocStepsH">
+        <figcaption class="av-figure-h" id="avTocStepsH">Šest kroků tvorby teorie změny (WHO, 2024)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">1. Definuj problém</h4>
+            <p class="av-flow-desc">Co přesně řešíme a koho se to týká — podepřené daty o rozsahu a příčinách, ne dojmem.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">2. Definuj očekávané výsledky</h4>
+            <p class="av-flow-desc">Jaká změna má nastat — konkrétní výsledky (outcomes), ne aktivity.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">3. Definuj intervence</h4>
+            <p class="av-flow-desc">Která opatření zvolíme — s ohledem na to, co podle důkazů funguje.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">4. Popiš mechanismy + postav model</h4>
+            <p class="av-flow-desc">Jak a proč intervence vede k výsledku — kauzální řetězec a jeho <strong>domněnky</strong>, vizuálně.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">5. Validuj</h4>
+            <p class="av-flow-desc">Ověř model proti důkazům a odborníkům — drží předpoklady? Nechybí krok?</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">6. Reviduj</h4>
+            <p class="av-flow-desc">Teorie změny je živý dokument — když se prostředí nebo data změní, přepiš ji.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO, <em>How to develop an evidence-informed theory of change for health</em> (2024). Pořadí a názvy kroků před publikací ověřit z plného textu.</p>
+      </figure>
+
+      <p>
+        Příručka zároveň připomíná, k čemu všemu teorie změny slouží: nejen k <em>návrhu</em> a plánování intervence, ale i k její <em>implementaci</em>, k <em>monitoringu a evaluaci</em>, k <em>transparentnosti</em> vůči veřejnosti, k <em>přenosu a škálování</em> osvědčených politik a jako základ <em>institucionálních strategických plánů</em>. Jinými slovy: dobře napsaná teorie změny není dokument do šuplíku, ale páteř, na kterou se navěsí všechno ostatní — včetně indikátorů, kterými se pak měří výkonnost.
+      </p>
+
+      <h3>Jak vypadá teorie změny v praxi: jeden český příklad</h3>
+
+      <p>
+        Vezměme téma, které tento web sleduje napříč indikátory — <a href="prevence.html">screening nádorů</a>. „Zvýšíme účast na mamografickém screeningu" je cíl. Logický model by k němu přidal sloupce aktivit a výstupů. Teprve teorie změny ale vytáhne na světlo řetězec <em>mechanismů</em> a u každého kroku tu nevyslovenou <strong>domněnku</strong>, na které všechno stojí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTocExampleH">
+        <figcaption class="av-figure-h" id="avTocExampleH">Teorie změny: adresné zvaní na screening (ilustrativní řetězec s domněnkami)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Adresné zvaní</h4>
+            <p class="av-flow-desc">Pojišťovna pošle jmenovitou pozvánku.<br><strong>Domněnka:</strong> dorazí ke správné osobě a ta ji zaregistruje.</p>
+            <span class="av-flow-tag">Mechanismus: osobní oslovení</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vyšší účast</h4>
+            <p class="av-flow-desc">Víc lidí přijde na vyšetření.<br><strong>Domněnka:</strong> existuje volná kapacita a dostupnost (vzdálenost, čekání).</p>
+            <span class="av-flow-tag">Mechanismus: snížení bariér</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Časnější záchyt</h4>
+            <p class="av-flow-desc">Nemoc se odhalí v dřívějším stadiu.<br><strong>Domněnka:</strong> test má dostatečnou citlivost a pozitivní nález vede k došetření.</p>
+            <span class="av-flow-tag">Mechanismus: včasná detekce</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Nižší mortalita</h4>
+            <p class="av-flow-desc">Méně úmrtí na danou diagnózu.<br><strong>Domněnka:</strong> časná léčba je účinnější a pacient ji absolvuje.</p>
+            <span class="av-flow-tag">Výsledek</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Ilustrativní teorie změny redakce HSPA Monitoru — ukazuje princip, není oficiální model. Každá „domněnka" je místo, kde řetězec může prasknout a kde se vyplatí mít důkaz i indikátor.</p>
+      </figure>
+
+      <p>
+        Síla téhle formy je v tom, co se stane, <em>když cíl nepřijde</em>. Když mortalita neklesne, teorie změny umožní diagnózu: prasklo to už u pozvánky (nedorazila), u účasti (chyběla kapacita), u záchytu (test nebo došetření), nebo až u léčby? Bez explicitního řetězce zůstane jen frustrující „nefungovalo to" bez vědění proč. A přesně to je rozdíl mezi reformou, ze které se dá učit, a reformou, která jen zmizí v dalším volebním cyklu.
+      </p>
+
+      <h3>Pět pastí, do kterých se snadno spadne</h3>
+
+      <p>
+        Teorie změny není kouzlo — má svoje typické způsoby, jak selhat. Většina z nich se týká toho, že se dělá formálně, ne poctivě.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Časté pasti teorie změny" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Čeho se vyvarovat</p>
+        <p style="margin:0 0 6px 0;"><strong>Záměna aktivit za výsledky.</strong> Nejčastější chyba: „uspořádali jsme kampaň" se vydává za výsledek. Výsledek je změna ve zdraví, ne provedená aktivita.</p>
+        <p style="margin:0 0 6px 0;"><strong>„Máme jasno."</strong> Předstírání jistoty místo přiznání domněnek. Učící se organizace své předpoklady vypisuje a průběžně testuje, jestli platí.</p>
+        <p style="margin:0 0 6px 0;"><strong>Obrácené pořadí.</strong> Nakreslit nejdřív logframe (protože ho chce nadřízený nebo donor) a teorii změny k němu zpětně dolepit tak, aby seděla do už hotových políček.</p>
+        <p style="margin:0 0 6px 0;"><strong>Netestované domněnky.</strong> Domněnka bez indikátoru je slepé místo — zabudujte do plánu způsob, jak ověřit, že drží.</p>
+        <p style="margin:0;"><strong>Předpoklad linearity a stálého prostředí.</strong> Reálné systémy nejsou přímky a okolí se mění. Proto je krok 6 (revize) součástí metody, ne selháním.</p>
+      </aside>
+
+      <h3>Proč to českým strategiím chybí — a kam to patří</h3>
+
+      <p>
+        České zdravotnické strategie nejsou bez logiky. <strong>Zdraví 2030</strong> má vizi, specifické cíle i šest implementačních plánů s opatřeními. Co v nich ale většinou nenajdete, je explicitní, důkazy testovaný <em>kauzální model s vyjmenovanými domněnkami</em>: proč konkrétně mají zvolená opatření vést k „zlepšení zdraví všech skupin obyvatel" a co se musí po cestě stát. Dokument tak vypadá spíš jako logický model či seznam záměrů než jako teorie změny — a důsledek je praktický: když se cíl nepodaří, chybí mapa, podle které by se dalo poznat, který předpoklad neplatil.
+      </p>
+
+      <p>
+        Tady se kruh s <a href="clanek-rizeni-podle-vysledku.html">řízením podle výsledků</a> uzavírá. Teorie změny a měření výsledků jsou dvě půlky téhož. Teorie změny je <strong>plán logiky</strong> — patří na úplný začátek, ke stanovení cílů a mechanismů. Měření výsledků (a celá „výsledková smyčka", kterou jsme popsali minule) je <strong>kontrola reality</strong> — ověřuje, jestli logika v praxi drží. Bez teorie změny měříte čísla bez příběhu; bez měření máte příběh bez kontroly. Dohromady tvoří řiditelný systém.
+      </p>
+
+      <p>
+        Pro tvůrce české zdravotní politiky z toho plyne docela konkrétní doporučení: u každé větší reformy si vedle cíle a opatření napsat i teorii změny podle logiky, kterou WHO shrnula — pojmenovat mechanismy, vypsat domněnky, podepřít je důkazy, nechat je oponovat a počítat s tím, že se model bude revidovat. Je to pár stránek práce navíc na začátku. Ušetří roky tápání na konci.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, na kterých se princip ukazuje</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=screening_mamograficky"><strong>Mamografický screening — pokrytí</strong></a> — vstupní článek řetězce v ilustrativní teorii změny</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — výsledek, ke kterému řetězec míří</li>
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — finální dopad, na nějž působí mnoho příčin (problém atribuce)</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Řetězec „screening → účast → záchyt → mortalita" v tomto článku je ilustrativní teorie změny redakce HSPA Monitoru, která demonstruje princip — není oficiálním modelem žádné instituce.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Hlavní zdroj</h5>
+        <ul class="article-sources-list">
+          <li><strong>WHO — How to develop an evidence-informed theory of change for health (2024)</strong> — technická příručka, šest kroků, evidence-informed přístup. <a href="https://www.who.int/publications/i/item/9789240097063" target="_blank" rel="noopener">who.int ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Rozdíly nástrojů</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eval Academy — Theory of Change, Logframes, Results Frameworks, Logic Models</strong> — kdy použít co. <a href="https://www.evalacademy.com/articles/differences-between-theory-of-change-log-frames-results-frameworks-and-logic-models-what-are-they-and-when-to-use-them" target="_blank" rel="noopener">evalacademy.com ↗</a></li>
+          <li><strong>Center for Research Evaluation (Ole Miss) — Logic Models vs Theories of Change</strong> — mechanismy a domněnky. <a href="https://cere.olemiss.edu/logic-models-vs-theories-of-change/" target="_blank" rel="noopener">cere.olemiss.edu ↗</a></li>
+          <li><strong>tools4dev — Theory of Change vs Logical Framework</strong> — praktický rozdíl. <a href="https://tools4dev.org/resources/theory-of-change-vs-logical-framework-whats-the-difference-in-practice/" target="_blank" rel="noopener">tools4dev.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Pasti</h5>
+        <ul class="article-sources-list">
+          <li><strong>Stanford Social Innovation Review — Six Theory of Change Pitfalls to Avoid</strong> — typické chyby a jak jim předejít. <a href="https://ssir.org/articles/entry/six_theory_of_change_pitfalls_to_avoid" target="_blank" rel="noopener">ssir.org ↗</a></li>
+          <li><strong>Logic models for the evaluation of complex public health interventions</strong> — poznatky z praxe (PMC). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12102880/" target="_blank" rel="noopener">ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zdraví 2030 — Strategický rámec rozvoje péče o zdraví v ČR do roku 2030</strong> — vize, cíle, implementační plány. <a href="https://mzd.gov.cz/category/programy-a-strategie/zdravi-2030/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Související: Řízení podle výsledků ve veřejném zdraví</strong> — sesterský článek o měření výsledků a „výsledkové smyčce". <a href="clanek-rizeni-podle-vysledku.html">HSPA Monitor →</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k draftu:</strong> Pracovní verze. Před publikací ověřit šest kroků a terminologii přímo z plného textu WHO příručky a doložit/zmírnit tvrzení o absenci explicitní teorie změny ve Zdraví 2030 (projít implementační plány a analytickou studii).
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
