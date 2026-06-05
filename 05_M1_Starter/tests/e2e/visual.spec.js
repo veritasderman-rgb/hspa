@@ -44,10 +44,16 @@ for (const { path, name } of PAGES) {
     }, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(600);
     await expect(page).toHaveScreenshot(`${name}.png`, {
-      fullPage: true,
-      // <canvas> grafy (Chart.js sparklines, donuty) renderují nedeterministicky
-      // napříč prostředími — maskujeme je, aby diff nehlásil falešné regrese.
-      mask: [page.locator('canvas')],
+      // Viewport-only snapshot (ne fullPage): výška snímku je dána viewportem,
+      // takže přidání/odebrání obsahu na stránce (nový článek v hubu, delší
+      // homepage, data refresh) už NEzpůsobí size-mismatch fail. Zachytává
+      // regrese layoutu/CSS „nad ohybem"; přístupnost celé stránky pokrývá
+      // a11y.spec.js. Robustní vůči obsahovému driftu — viz docs/traps.md.
+      fullPage: false,
+      // <canvas> grafy (Chart.js sparklines, donuty) renderují nedeterministicky;
+      // .masthead-date se mění každý den — obojí maskujeme, aby diff nehlásil
+      // falešné regrese.
+      mask: [page.locator('canvas'), page.locator('.masthead-date')],
     });
   });
 }
