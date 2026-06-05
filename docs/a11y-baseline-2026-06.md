@@ -1,4 +1,4 @@
-# WCAG 2.2 AA — axe-core baseline (2026-06-01)
+# WCAG 2.2 AA — axe-core baseline (2026-06-05)
 
 Automatický sken (`npm run test:a11y`) · tagy: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa · 15 stránek.
 
