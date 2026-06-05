@@ -19,11 +19,29 @@
 
 ---
 
+## ROZHODNUTÍ REDAKCE (uzamčeno 2026-06-05)
+
+Odpovědi na otevřené otázky (§9). Tato rozhodnutí jsou závazná pro psaní dílů:
+
+1. **Pořadí = varianta A** (ToC → RBM → komplexita; díly 1–2 zůstávají, komplexita = díl 3).
+2. **Dekompozice:** systémové mapování i dashboard **jako samostatné díly**;
+   **díl o datech/lock-inu i díl o poslední míli z varianty A zachovat**. ⇒
+   **série naroste na 9 jádrových dílů** (+ 2 volitelné = 11 celkem).
+3. **Volitelné moduly (PROMs/PREMs, adaptivní evaluace): ANO** — druhá vlna.
+4. **Rozcestník:** stávající tematická linie „Platíme za objem" (`platby_za_objem`).
+5. **Slugy/tagy:** potvrzeny (dva nové díly viz §8).
+6. **Konflikt zájmů VZP: ANO** — jednotný rámeček v dílech, které se VZP dotýkají.
+7. **Matematický aparát (brief B): ZAŘADIT** jako volitelné ilustrativní boxy.
+8. **Rozsah/tempo:** potvrzeno (2 000–3 800 slov/díl, ~1 díl / 10–12 dní).
+9. **Fact-check:** odloženo do některé z dalších iterací (registr §7 zůstává platný).
+
+---
+
 ## 0. TL;DR (přečti první)
 
-- **Doporučená struktura: 7 dílů.** Dva stávající články (teorie změny, řízení
-  podle výsledků) jsou pilíře 1–2; nově se přidává **díl 3 jako jádro** (komplexita,
-  chaos, policy window) a díly 4–7 (data, incentivy, governance, implementace).
+- **Struktura: 9 jádrových dílů** (+ 2 volitelné, druhá vlna). Dva stávající
+  články (teorie změny, řízení podle výsledků) jsou pilíře 1–2; **díl 3 = jádro**
+  (komplexita, chaos, policy window) **— NAPSÁN jako draft**; zbývají díly 4–9.
 - **Jádrová teze celé série:** *komplexní adaptivní systémy se nereformují
   postupným tlačením „shora", ale měněním zpětných vazeb, pravidel a cílů —
   a skoková reforma typicky přichází až s vnějším šokem (peníze, krize,
@@ -42,21 +60,36 @@
 
 ---
 
-## 1. Jádrová teze a oblouk série
+## 1. Jádrová teze a oblouk série (9 dílů — uzamčeno)
 
 **Logika oblouku:** *Jak myslet změnu (1) → jak ji měřit (2) → proč to systém
-vzdoruje (3, jádro) → co musí být splněno, aby šlo řídit: data (4), incentivy
-(5), governance (6), implementace (7).*
+vzdoruje (3, jádro) → jak systém zmapovat a najít páky (4) → co musí být
+splněno, aby šlo řídit: data (5), dashboard (6), incentivy (7), governance (8),
+poslední míle (9).*
 
-| Blok | Díly | Otázka |
+| # | Díl | Blok |
 |---|---|---|
-| „Jak na to" | 1–2 | Jak navrhnout změnu a jak poznat, že zabrala |
-| „Proč to nejde" | 3 | Proč systém reformám vzdoruje (jádro, vlajková loď) |
-| „Co s tím konkrétně" | 4–7 | Data, incentivy, governance, poslední míle |
+| 1 | Teorie změny *(existuje, prohloubeno)* | Jak na to |
+| 2 | Řízení podle výsledků *(existuje, prohloubeno)* | Jak na to |
+| 3 | Proč se systémy nereformují samy — komplexita, chaos, policy window *(jádro; draft napsán)* | Proč to nejde |
+| 4 | Systémové mapování a páky změny *(nový samostatný)* | Co s tím |
+| 5 | Datová páteř, interoperabilita a past dodavatele | Co s tím |
+| 6 | Ukazatele a dashboard *(nový samostatný)* | Co s tím |
+| 7 | Jak platit za výsledek bez gamingu — incentivy, VBHC | Co s tím |
+| 8 | Kdo drží smyčku — governance, nezávislost měřičů, review cadence | Co s tím |
+| 9 | Poslední míle — implementace, street-level bureaucracy *(závěr)* | Co s tím |
+| + | *vol.* Pacientské výsledky (PROMs/PREMs) · *vol.* Adaptivní evaluace | Druhá vlna |
 
 Díl 3 zavádí slovník (zpětná vazba, lock-in, atraktor, páka, policy window),
-kterým se mluví ve zbytku série. Díl 7 uzavírá kruh zpět k dílu 1 (reforma je
+kterým se mluví ve zbytku série. Díl 9 uzavírá kruh zpět k dílu 1 (reforma je
 živý ToC, který se na poslední míli reviduje, ne jen „zavádí").
+
+> **Pozn. k číslování:** oproti původnímu 7dílnému návrhu (§3 obsahuje karty
+> dílů 3–7 v starším číslování) se vložily dva nové díly (systémové mapování,
+> dashboard). Mapování per-díl karet §3 ↔ nové číslování: díl 3 = komplexita;
+> „díl 4 (A) data/lock-in" → **díl 5**; „díl 5 (A) incentivy/VBHC" → **díl 7**;
+> „díl 6 (A) governance" → **díl 8**; „díl 7 (A) poslední míle" → **díl 9**.
+> Nové díly 4 (mapování) a 6 (dashboard) viz §4b.2.
 
 ---
 
@@ -442,15 +475,18 @@ Postup dle `docs/workflows.md` → „Nový článek":
 
 ## 8. Sekvence a tracker
 
-| Díl | Soubor | Stav | Pořadí publ. |
-|---|---|---|---|
-| 1 | `clanek-teorie-zmeny.html` | ✅ existuje, prohloubeno 2026-06-05 | 1 |
-| 2 | `clanek-rizeni-podle-vysledku.html` | ✅ existuje, prohloubeno 2026-06-05 | 2 |
-| 3 | `clanek-komplexita-reforem.html` | ⬜ k napsání (vlajková loď) | 3 |
-| 4 | `clanek-datova-patere-lock-in.html` | ⬜ k napsání | 4 |
-| 5 | `clanek-platit-za-vysledek-vbhc.html` | ⬜ k napsání | 5 |
-| 6 | `clanek-governance-nezavislost.html` | ⬜ k napsání | 6 |
-| 7 | `clanek-posledni-mile-implementace.html` | ⬜ k napsání | 7 |
+| Díl | Soubor | Stav |
+|---|---|---|
+| 1 | `clanek-teorie-zmeny.html` | ✅ existuje, prohloubeno 2026-06-05 |
+| 2 | `clanek-rizeni-podle-vysledku.html` | ✅ existuje, prohloubeno 2026-06-05 |
+| 3 | `clanek-komplexita-reforem.html` | 🟦 **draft napsán 2026-06-05** (published:false, audit-status:draft) — čeká na fact-check čísel + cover |
+| 4 | `clanek-systemove-mapovani-paky.html` | ⬜ k napsání (nový samostatný) |
+| 5 | `clanek-datova-patere-lock-in.html` | ⬜ k napsání |
+| 6 | `clanek-ukazatele-dashboard.html` | ⬜ k napsání (nový samostatný) |
+| 7 | `clanek-platit-za-vysledek-vbhc.html` | ⬜ k napsání |
+| 8 | `clanek-governance-nezavislost.html` | ⬜ k napsání |
+| 9 | `clanek-posledni-mile-implementace.html` | ⬜ k napsání |
+| vol. | PROMs/PREMs · adaptivní evaluace | ⬜ druhá vlna |
 
 ---
 

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proč se systémy nereformují samy: komplexita, chaos a okno příležitosti · HSPA Monitor</title>
+<meta name="description" content="Zdravotnictví není stroj, který stačí seřídit — je to komplexní adaptivní systém se zpětnými vazbami, zpožděním a vlastní setrvačností. Proč postupné reformy narážejí na odpor, proč skoková změna přichází až s vnějším šokem a kde leží páky, které opravdu mění chování.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proč se systémy nereformují samy: komplexita, chaos a okno příležitosti">
+<meta property="og:description" content="Zdravotnictví je komplexní adaptivní systém. Proč reformy narážejí na odpor, proč skoková změna přichází s vnějším šokem a kde leží páky, které mění chování.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-05">
+<meta property="article:section" content="Legislativa a reforma">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-05
+    reviewer: claude-code-agent
+    status: draft
+    primary_sources_added: 8
+    visual_elements_added: 4
+    notes: "DRAFT — published:false. Série 'Jak (ne)reformovat komplexní systém', díl 3/9 (JÁDRO/vlajková loď). Téma: komplexní adaptivní systémy, teorie chaosu light, atraktory/path dependence, punctuated equilibrium, Kingdonovo policy window, Meadowsové páky změny. Zdroje (stabilní akademické): Plsek & Greenhalgh BMJ 2001 (DOI 10.1136/bmj.323.7313.625) — 'relationships between parts...', 'minimum specifications'; Meadows Leverage Points 1999 / Thinking in Systems 2008; Kingdon 1984 (tři proudy); Baumgartner & Jones 1993 (punctuated equilibrium, institutional friction); Pierson APSR 2000 (increasing returns); Snowden & Boone HBR 2007 (Cynefin); Sterman (system dynamics). Heuristiky (Meadows 12 pák, Cynefin) označeny jako myšlenkové nástroje, ne validované zákony (pravidlo C2). Matematický box (fázový přechod, brief B) zařazen jako VOLITELNÝ ilustrativní/metaforický, NE empirický (rozhodnutí redakce #7). České fakty použity jen OVĚŘENÉ: NKÚ KA 22/20 (159 mil Kč, 6 let eŽádanka — ověřeno v dílu 2), přepis Zdraví 2030 kvůli COVIDu (aktualizace 13.7.2020), vznik pojišťoven 1992-93, poplatky 2008. POZOR — NEVERIFIKOVANÁ česká specifika ZÁMĚRNĚ vynechána z viditelného textu (lůžková péče ~56 % výdajů, deficit pojišťoven 12-19 mld 2026, REACT-EU 18,6 mld) — viz §7 PLAN-SERIE-REFORMA-KOMPLEXITA.md, doplnit po fact-checku. OTEVŘENÉ BODY PŘED PUBLIKACÍ: (1) fact-check refresh českých čísel; (2) zvážit doplnění ověřeného čísla podílu lůžkové péče jako ilustrace atraktoru; (3) cover; (4) prolinkovat na díl 4 (systémové mapování) až vznikne. Konflikt zájmů VZP: díl 3 se VZP přímo nedotýká, rámeček COI patří do dílů 4/5/6."
+-->
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">Řízení systému · Komplexita</span>
+      </div>
+      <h2 class="article-title">Proč se systémy nereformují samy: komplexita, chaos a okno příležitosti</h2>
+      <p class="article-deck">
+        Většina reformních plánů zachází se zdravotnictvím jako se strojem: když přidáte palivo a utáhnete správný šroub, zařízení pojede líp. Jenže zdravotnictví není stroj — je to <strong>komplexní adaptivní systém</strong> tisíců autonomních aktérů, kteří na každý zásah reagují po svém, se zpožděním a často proti záměru reformy. Tohle je vysvětlení, proč systém postupnému tlaku „shora" vzdoruje, proč skoková změna přichází obvykle až s vnějším šokem — a kde v něm leží páky, které chování opravdu mění.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">15 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V <a href="clanek-teorie-zmeny.html">prvním díle</a> jsme stavěli logiku změny a v <a href="clanek-rizeni-podle-vysledku.html">druhém</a> jsme ji učili měřit. Oba texty mlčky předpokládaly cosi optimistického: že když dobře navrhneme opatření a poctivě změříme výsledek, systém se pohne tím směrem, kterým ho tlačíme. Praxe je ale tvrdohlavější. Reformy se schválí a nestane se nic; peníze přitečou a výsledek se nezmění; opatření zabere jinde a jinak, než mělo. Tenhle díl je o tom <em>proč</em> — a je to intelektuální páteř celé série. Bez něj vypadají selhání reforem jako řada náhod nebo selhání jednotlivců. Ve skutečnosti mají společnou příčinu: <strong>zdravotnictví je komplexní systém, a komplexní systémy se chovají jinak než stroje.</strong>
+      </p>
+
+      <h3>Složité není totéž co komplexní</h3>
+
+      <p>
+        Klíčové rozlišení, na kterém všechno stojí, je rozdíl mezi <em>složitým</em> (complicated) a <em>komplexním</em> (complex). Dopravní letadlo je nesmírně složité — má miliony součástek — ale je <strong>predikovatelné</strong>: stejný vstup dá stejný výstup, a kdo má dost času a expertizy, rozebere ho a zase složí. Provoz na rušné křižovatce je oproti tomu jednoduchý na popis, ale <strong>komplexní</strong> v chování: skládá se z aktérů, kteří se rozhodují sami, reagují jeden na druhého a vytvářejí vzorce, které nikdo nenaplánoval. Letadlo se dá <em>seřídit</em>. Křižovatka se dá nanejvýš <em>ovlivnit</em>.
+      </p>
+
+      <p>
+        Tahle distinkce se v manažerské praxi často mapuje na čtyři režimy (rámec, který zpopularizovali Snowden a Boone) — a každý z nich vyžaduje jiný typ zásahu. Zacházet s komplexním problémem nástroji vhodnými pro „složitý" je nejčastější příčina toho, proč reforma selže: na živý, reagující systém se aplikuje detailní plán, jako by šlo o motor.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCynefinH">
+        <figcaption class="av-figure-h" id="avCynefinH">Čtyři režimy problémů — a proč na zdravotnictví nestačí „dobrý plán"</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jednoduchý</h4>
+            <p class="av-flow-desc">Příčina a následek jsou zřejmé. Existuje osvědčený postup.<br><em>Např. proplacení standardního výkonu podle sazebníku.</em></p>
+            <span class="av-flow-tag">Postupuj podle pravidla</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Složitý</h4>
+            <p class="av-flow-desc">Vazby existují, ale je třeba expertiza, aby se odhalily.<br><em>Např. návrh úhradového modelu pro jednu diagnózu.</em></p>
+            <span class="av-flow-tag">Zavolej experta</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Komplexní</h4>
+            <p class="av-flow-desc">Vazby se ukážou až zpětně; aktéři reagují a mění systém za pochodu.<br><em>Např. reforma primární péče nebo koordinace mezi zdravotní a sociální oblastí.</em></p>
+            <span class="av-flow-tag">Zkoušej, sleduj, uč se</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Chaotický</h4>
+            <p class="av-flow-desc">Souvislosti zmizí, je třeba nejdřív stabilizovat.<br><em>Např. první týdny pandemie.</em></p>
+            <span class="av-flow-tag">Jednej, pak přemýšlej</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Zjednodušený výklad rámce Cynefin (Snowden &amp; Boone, 2007). Jde o myšlenkový nástroj, ne o přesný zákon — pomáhá poznat, kdy „dobrý detailní plán" je správná odpověď a kdy past.</p>
+      </figure>
+
+      <h3>Zdravotnictví jako komplexní adaptivní systém</h3>
+
+      <p>
+        Že zdravotnictví patří do třetí kolonky, není metafora — je to popis. Plsek a Greenhalgh to ve vlivné sérii v <em>British Medical Journal</em> už v roce 2001 shrnuli tak, že ve zdravotní péči jsou <em>„vztahy mezi částmi důležitější než části samotné"</em> a že systém tvoří <strong>autonomní agenti</strong>: lékaři, sestry, pacienti, pojišťovny, kraje, dodavatelé IT. Každý z nich má vlastní cíle, vlastní pravidla a vlastní svobodu rozhodování. Z jejich interakcí vzniká chování celku — tzv. <em>emergence</em> — které se nedá odvodit z chování jednotlivce a které nikdo neřídí shora.
+      </p>
+
+      <p>
+        Z toho plyne nepříjemná, ale osvobozující věc: v komplexním systému <strong>detailní plán „shora" zpravidla selhává</strong>, protože nedokáže předvídat, jak na něj autonomní aktéři zareagují. Plsek s Greenhalghem proti tomu postavili pojem <em>minimum specifications</em> — myšlenku, že jasně daný směr a několik mála pevných pravidel uvolní víc užitečné tvořivosti než stostránkový předpis, který se aktéři stejně naučí obcházet. Reformovat komplexní systém tedy neznamená napsat dokonalou instrukci. Znamená to změnit <em>pravidla hry a zpětné vazby</em>, ve kterých se aktéři pohybují — a počítat s tím, že výsledek vás překvapí.
+      </p>
+
+      <h3>Zpětné vazby a zpoždění: proč se systém „houpe"</h3>
+
+      <p>
+        Druhá vlastnost komplexních systémů, kterou reformátoři podceňují, je <strong>zpoždění</strong>. Donella Meadows, zakladatelka moderního systémového myšlení, to ilustrovala na obyčejné sprše s pomalým bojlerem: otočíte kohoutkem, voda je studená, přidáte horkou — a protože se teplá voda dostaví se zpožděním, najednou se opaříte, ucuknete, je zima, a oscilace pokračuje. Ne proto, že byste nevěděli, co chcete. Ale proto, že systém reaguje <em>se zpožděním</em>, a vy reagujete na zastaralou informaci.
+      </p>
+
+      <p>
+        Zdravotnictví je takových smyček plné a zpoždění se v něm počítají na roky. To má dva praktické důsledky. Za prvé: tvrdé výsledky (naděje dožití, mortalita) se hýbou tak pomalu, že řídit se jen jimi znamená řídit podle zpětného zrcátka — proto série v <a href="clanek-rizeni-podle-vysledku.html">díle o měření</a> trvá na rychlejších „lead" signálech a balancing metrikách. Za druhé: zásah do jedné části systému se vrátí jinde a jindy, než čekáte — a často jako problém, který vypadá nesouvisle s původním rozhodnutím.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avLoopH">
+        <figcaption class="av-figure-h" id="avLoopH">Ilustrace zpětné vazby se zpožděním: jak dobře míněný zásah rozhoupe systém</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Navýšení úhrad</h4>
+            <p class="av-flow-desc">Aby se zkrátily čekací doby, přidá se do segmentu více peněz na výkon.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Více výkonů</h4>
+            <p class="av-flow-desc">Aktéři racionálně reagují na pobídku — objem péče roste rychleji než rozpočet.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vyčerpání rozpočtu</h4>
+            <p class="av-flow-desc">Se zpožděním se ukáže, že prostředky došly. Přichází tlak na úspory.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Restrikce → a zpět</h4>
+            <p class="av-flow-desc">Zavedou se škrty a regulace; čekací doby znovu narostou — a tlak na další navýšení začíná nanovo.</p>
+            <span class="av-flow-tag">Oscilace</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Ilustrativní smyčka redakce HSPA Monitoru — ukazuje princip oscilace ze zpoždění, není modelem konkrétního opatření. Konkrétní česká čísla budou doplněna po ověření z primárních zdrojů.</p>
+      </figure>
+
+      <h3>Páky změny: na čem se plýtvá pozorností</h3>
+
+      <p>
+        Pokud detailní plány selhávají a peníze se rozhoupou ve smyčce, kde tedy reforma zabírá? Meadows nabídla slavný (a záměrně provokativní) žebříček <em>míst, kde lze do systému zasáhnout</em> — od nejslabších k nejsilnějším. Dole jsou <strong>parametry</strong>: sazby, čísla, výše rozpočtu. Nahoře jsou <strong>zpětné vazby, pravidla, cíle systému</strong> a úplně nejvýš <strong>paradigma</strong> — sdílené přesvědčení o tom, k čemu systém vůbec je. Pointa, kvůli které žebříček vznikl, je nepříjemná: politická i veřejná pozornost se valnou většinou upírá na parametry („přidejme miliardu", „zvedněme sazbu"), tedy na tu <em>nejslabší</em> páku — zatímco skutečnou změnu chování přinášejí až pravidla a cíle, na které se dostane nejméně.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLeverageH">
+        <figcaption class="av-figure-h" id="avLeverageH">Páky změny od nejslabší k nejsilnější (podle D. Meadows)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Páka</th>
+                <th scope="col">Co to je ve zdravotnictví</th>
+                <th scope="col">Síla</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Parametry</th>
+                <td>Výše úhrad, sazby, rozpočet, počet lůžek</td>
+                <td class="av-cell-bad">Nejslabší — málokdy mění chování</td>
+              </tr>
+              <tr>
+                <th scope="row">Zpětné vazby</th>
+                <td>Jestli se výsledek vrací k tomu, kdo rozhoduje (měření, reporting s následkem)</td>
+                <td class="av-cell-warn">Střední</td>
+              </tr>
+              <tr>
+                <th scope="row">Pravidla</th>
+                <td>Úhradové mechanismy, zákony, kdo smí co vykázat</td>
+                <td class="av-cell-good">Silná</td>
+              </tr>
+              <tr>
+                <th scope="row">Cíle systému</th>
+                <td>Za co je systém vlastně placen — objem, nebo výsledek?</td>
+                <td class="av-cell-good">Velmi silná</td>
+              </tr>
+              <tr>
+                <th scope="row">Paradigma</th>
+                <td>Sdílené přesvědčení „k čemu zdravotnictví je"</td>
+                <td class="av-cell-good">Nejsilnější</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Volně podle Donelly Meadows, <em>Leverage Points</em> (1999). Žebříček je heuristika — myšlenkový nástroj, ne empiricky validovaný zákon (sama autorka ho označila za „work in progress").</p>
+      </figure>
+
+      <p>
+        Tady se série propojuje: přechod od placení <em>za objem</em> k placení <em>za výsledek</em>, kterému se věnuje pozdější díl o incentivách, není zásah do parametru — je to zásah do <strong>cíle systému</strong>, tedy do jedné z nejsilnějších pák. Proto je tak těžký a proto na něj „další miliarda" nestačí.
+      </p>
+
+      <h3>Atraktory a path dependence: proč systém ulpívá</h3>
+
+      <p>
+        Komplexní systémy mají sklon usadit se ve stabilních stavech — <em>atraktorech</em> — a do nich se vracet, i když jsou z celkového hlediska nevýhodné. Politolog Paul Pierson tomu v politické vědě říká <strong>path dependence</strong> a vysvětluje ji mechanismem <em>rostoucích výnosů</em> (increasing returns): jakmile se systém jednou vydá nějakou cestou, každý další krok po ní je levnější a snazší než přechod na jinou — i kdyby ta jiná byla objektivně lepší. Investice, dovednosti, smlouvy, zvyky a očekávání se nabalují kolem zvolené trajektorie a postupně ji zamykají.
+      </p>
+
+      <p>
+        Učebnicovým příkladem je <strong>technologický a institucionální lock-in</strong> ve veřejném IT: jakmile se jednou koupí konkrétní systém, náklady na přechod jinam (přeškolení, migrace dat, autorská práva ke kódu) rostou tak, že se zadavatel stává rukojmím první volby. Tomu se podrobně věnuje pozdější díl o datové páteři. Pro tuto chvíli stačí pointa: path dependence vysvětluje, proč se systém nedokáže odpoutat od jednou nastoupené cesty <em>i tehdy, když všichni souhlasí, že by měl</em>. Setrvačnost není hloupost aktérů — je to vlastnost systému.
+      </p>
+
+      <h3>Punctuated equilibrium: proč změna přichází ve skocích</h3>
+
+      <p>
+        Když je systém tak houževnatý, jak se vůbec kdy změní? Politologové Baumgartner a Jones popsali vzorec, který platí napříč oblastmi politiky: <strong>dlouhá období stability přerušená vzácnými skokovými změnami</strong> (punctuated equilibrium). Systém většinu času drží institucionální tření (institutional friction) — setrvačnost pravidel, zájmů a rutin. Pak přijde nárazem velká změna a po ní se systém opět usadí. Reformy se tedy nedějí plynule; dějí se ve skocích, mezi kterými je dlouho zdánlivý klid.
+      </p>
+
+      <p>
+        Co ten skok spustí? John Kingdon nabídl odpověď, která se stala klasikou: <strong>okno příležitosti</strong> (policy window). Podle něj v politice běží paralelně tři proudy — <em>problém</em> (něco se uzná za naléhavé), <em>řešení</em> (existuje promyšlený návrh) a <em>politika</em> (je vůle a koalice to prosadit). Reforma se neuskuteční, když má někdo dobrý nápad. Uskuteční se ve vzácném okamžiku, kdy se všechny tři proudy <strong>protnou</strong> — a okno se zase rychle zavře. Velmi často je tím, co tři proudy srazí dohromady, vnější šok: fiskální tlak, krize, pandemie.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTimelineH">
+        <figcaption class="av-figure-h" id="avTimelineH">České zdravotnictví ve skocích: stabilita přerušená vnějšími tlaky</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">1992–93</h4>
+            <p class="av-flow-desc">Vznik systému veřejného zdravotního pojištění a zdravotních pojišťoven — skoková institucionální změna po roce 1989.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">2008</h4>
+            <p class="av-flow-desc">Zavedení regulačních poplatků — politicky vynucená změna pravidel, později z velké části zrušená (oscilace).</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">2020</h4>
+            <p class="av-flow-desc">Pandemie covid-19 jako vnější šok: strategie Zdraví 2030 byla ještě v roce 2020 aktualizována (posílení veřejného zdraví a digitalizace).</p>
+            <span class="av-flow-tag">Šok otevřel okno</span>
+          </li>
+        </ol>
+        <p class="av-figure-note">Ověřené milníky (vznik pojišťoven 1992–93; regulační poplatky 2008; aktualizace Zdraví 2030 v roce 2020). Ilustruje princip punctuated equilibrium — ne vyčerpávající přehled reforem.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Volitelný výklad — reforma jako fázový přechod" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
+        <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Pro zvídavé — reforma jako fázový přechod</p>
+        <p style="margin:0 0 6px 0;">Fyzikální metafora vystihuje, proč šok funguje. Představte si systém jako kuličku v krajině s několika prohlubněmi (atraktory). Současný neefektivní stav je hluboká prohlubeň: kulička v ní leží, protože okolní „kopečky" (náklady na změnu, zájmy, zvyky) jsou příliš vysoké, než aby ji běžné postrčení dostalo ven.</p>
+        <p style="margin:0;">Vnější tlak — třeba fiskální krize — celou krajinu <em>nakloní</em>: sníží bariéru a kulička může přeskočit do jiné prohlubně. Náhodné otřesy (pandemie) pak rozhodnou, kdy přesně k přeskoku dojde. <strong>Je to ilustrativní model, ne výpočet:</strong> ukazuje logiku „proč až šok", nedokazuje konkrétní čísla.</p>
+      </aside>
+
+      <h3>Co z toho plyne pro českou reformu</h3>
+
+      <p>
+        Tři praktické závěry, které tvoří most do zbytku série. <strong>Za prvé:</strong> „další miliarda do systému" je zásah do parametru — nejslabší páky. Sama o sobě reformu nedělá, často jen nakrmí existující smyčku a zvýší objem, ne výsledek. Skutečná páka leží v pravidlech a cílech: za co systém platí.
+      </p>
+
+      <p>
+        <strong>Za druhé:</strong> vnější šok je doložitelně to, co otevírá okno. Že byla strategie Zdraví 2030 už v roce 2020 přepracována kvůli pandemii, je české punctuated equilibrium jako z učebnice — covid sehnal dohromady proud problému, řešení i politické vůle, který by se jinak míjel roky. Pro reformátora z toho plyne nečekané doporučení: mít <em>řešení připravené v šuplíku</em>, aby ve chvíli, kdy se okno otevře, bylo co protlačit. Okna se neotevírají na objednávku a nezůstávají otevřená dlouho.
+      </p>
+
+      <p>
+        <strong>Za třetí:</strong> bez politického proudu okno nezůstane otevřené ani u dávno známého problému. Elektronizace zdravotnictví je toho smutným důkazem — problém i řešení jsou na stole roky, a přesto, jak doložil <a href="clanek-rizeni-podle-vysledku.html">Nejvyšší kontrolní úřad v kontrolní akci 22/20</a>, klíčové projekty nabraly šestileté zpoždění a 159 milionů korun vynaložených na prověřované cíle k jejich splnění nevedlo. Chyběl třetí proud. Tady se zároveň ukazuje path dependence: čím déle systém zůstává v staré trajektorii, tím dražší je z ní vystoupit.
+      </p>
+
+      <p>
+        Komplexitu nelze „vyřešit" — dá se s ní jen pracovat poučeněji. Nepsat dokonalé plány, ale měnit pravidla, zpětné vazby a cíle; počítat se zpožděním a oscilací; připravit řešení na chvíli, kdy se otevře okno; a vědět, že setrvačnost není selhání lidí, ale vlastnost systému. Jak takový systém prakticky <em>zmapovat</em> a najít v něm konkrétní páky, ukáže následující díl série o systémovém mapování.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Souvislosti</div>
+      <h4 class="article-databox-h">Kde se princip na tomto webu projevuje</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=ehealth_adoption"><strong>Elektronizace zdravotnictví</strong></a> — učebnicový případ path dependence a okna, které se bez politického proudu nezavřelo včas</li>
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — výsledek s tak dlouhým zpožděním, že se podle něj nedá řídit „v reálném čase"</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Smyčka „úhrady → výkony → vyčerpání → restrikce" a model „reformy jako fázového přechodu" jsou ilustrativní výklady principů redakce HSPA Monitoru — demonstrují logiku, nejsou modelem konkrétní politiky žádné instituce. Konkrétní česká čísla budou doplněna po ověření z primárních zdrojů.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Komplexní adaptivní systémy</h5>
+        <ul class="article-sources-list">
+          <li><strong>Plsek &amp; Greenhalgh — The challenge of complexity in health care (BMJ, 2001)</strong> — zdravotnictví jako CAS; „minimum specifications". <a href="https://doi.org/10.1136/bmj.323.7313.625" target="_blank" rel="noopener">doi.org/10.1136/bmj.323.7313.625 ↗</a></li>
+          <li><strong>Snowden &amp; Boone — A Leader's Framework for Decision Making (Harvard Business Review, 2007)</strong> — rámec Cynefin (simple/complicated/complex/chaotic). <a href="https://hbr.org/2007/11/a-leaders-framework-for-decision-making" target="_blank" rel="noopener">hbr.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Systémová dynamika a páky</h5>
+        <ul class="article-sources-list">
+          <li><strong>Donella Meadows — Leverage Points: Places to Intervene in a System (1999)</strong> — žebříček pák, sprcha se zpožděním. <a href="https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/" target="_blank" rel="noopener">donellameadows.org ↗</a></li>
+          <li><strong>Donella Meadows — Thinking in Systems (2008)</strong> — zpětné vazby, zpoždění, atraktory.</li>
+          <li><strong>John Sterman — Business Dynamics / „Learning in and about complex systems"</strong> — proč je učení v komplexních systémech pomalé.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Politická ekonomie změny</h5>
+        <ul class="article-sources-list">
+          <li><strong>John Kingdon — Agendas, Alternatives, and Public Policies (1984)</strong> — tři proudy a okno příležitosti.</li>
+          <li><strong>Baumgartner &amp; Jones — Agendas and Instability in American Politics (1993)</strong> — punctuated equilibrium, institucionální tření.</li>
+          <li><strong>Paul Pierson — Increasing Returns, Path Dependence, and the Study of Politics (APSR, 2000)</strong> — proč se systém zamyká do trajektorie. <a href="https://doi.org/10.2307/2586011" target="_blank" rel="noopener">doi.org/10.2307/2586011 ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>NKÚ — kontrolní akce 22/20 (Národní strategie elektronického zdravotnictví, 2019–2022)</strong> — zpoždění a vynaložené prostředky bez splnění cílů. <a href="https://www.nku.cz/assets/kon-zavery/k22020.pdf" target="_blank" rel="noopener">kontrolní závěr (PDF) ↗</a></li>
+          <li><strong>Zdraví 2030 — Strategický rámec rozvoje péče o zdraví v ČR do roku 2030</strong> — aktualizace v roce 2020. <a href="https://mzd.gov.cz/category/programy-a-strategie/zdravi-2030/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn.:</strong> Rámce komplexity, systémové dynamiky a politické ekonomie (Meadows, Cynefin) jsou myšlenkové nástroje, ne empiricky validované zákony — text je tak i používá. Tento díl je rozpracovaný draft; česká čísla projdou před publikací ověřením z primárních zdrojů.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
