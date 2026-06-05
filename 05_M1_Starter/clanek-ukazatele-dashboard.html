@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ukazatele a dashboard, který vede k akci: méně metrik, ale ty správné · HSPA Monitor</title>
-<meta name="description" content="Dashboard není výzdoba. Jak z desítek indikátorů vybrat malou řídicí sadu „tracer“ ukazatelů, proč potřebujete balancing a equity metriky, co je risk adjustment a data lag — a jak dashboard číst na poradě tak, aby měnil rozhodnutí.">
+<meta name="description" content="Dashboard není výzdoba. Jak z desítek indikátorů vybrat malou řídicí sadu „tracer" ukazatelů, proč potřebujete balancing a equity metriky, co je risk adjustment a data lag — a jak dashboard číst na poradě tak, aby měnil rozhodnutí.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ukazatele a dashboard, který vede k akci">
@@ -18,10 +18,57 @@
     last_reviewed: 2026-06-05
     reviewer: claude-code-agent
     status: review-pending
-    primary_sources_added: 4
-    visual_elements_added: 4
-    redakcni_handoff: "PŘIPRAVENO DO REDAKCE 2026-06-05. HOTOVO: kompletní text, 4 AV vizuály, zdroje (Observatory/OECD policy brief, Spiegelhalter funnel plot, OECD 2024, PUK), prolinkování, cover. K OVĚŘENÍ PŘED published:true (§7 PLAN): počty českého HSPA rámce (domény/subdomény/indikátory/placeholdery) a aktuální outcome indikátory na PUK — ověřit z OECD HSPA CZ / ÚZIS a doplnit s rokem (v textu dnes jen kvalitativně). PO SCHVÁLENÍ: audit-status → verified, published → true s date."
-    notes: "REVIEW-PENDING — published:false. Série, díl 6/9 (nový samostatný, practitioner). Téma: výběr tracer indikátorů, mix outcome/process/balancing/equity, risk adjustment, data lag, prahy/semafory, jak dashboard číst na poradě. Navazuje na díl 2 (RBM) a díl 4 (mapování). Zdroje (stabilní): Observatory/OECD policy brief k 'policy-friendly' dashboardu (méně, lépe vybraných metrik); metodika run chart / funnel plot (SPC, Mohammed/Spiegelhalter); Goodhart. České: PUK (Portál ukazatelů kvality), HSPA CZ rámec — zmíněno KVALITATIVNĚ. POZOR: neverifikovaná čísla českého HSPA (12 domén/28 subdomén/122 indikátorů/30 placeholderů) ZÁMĚRNĚ mimo viditelný text — viz §7 PLAN. OTEVŘENÉ BODY: (1) fact-check čísel HSPA CZ; (2) cover; (3) prolink na díl 8 (governance) a díl 7 (incentivy)."
+    primary_sources_added: 6
+    visual_elements_added: 7
+    verifikace_2026-06-05: |
+      OVĚŘENO:
+      - Spiegelhalter 2005, DOI 10.1002/sim.1970 — EXISTUJE. Statistics in Medicine 24(8):1185–1202.
+        Funnel plots jako grafická pomůcka pro srovnání institucí, odvozeno od Shewhartových kontrolních karet.
+        Základní tvrzení textu (malý rozptyl u velkých pracovišť, pojistka vůči ligovým tabulkám) je věrně
+        reprodukováno. 828+ citací. Zdroj: Semantic Scholar, PubMed 15568194.
+      - OECD Rethinking HSPA 2024 — EXISTUJE. Vydáno 23. 1. 2024 (oecd.org/en/publications/rethinking-health-
+        system-performance-assessment_107182c8-en.html). Equity je v obnoveném rámci cross-cutting dimenze;
+        nové dimenze people-centredness a resilience. Text říká „důraz OECD 2024 na equity" — SPRÁVNĚ.
+      - European Observatory / OECD policy brief k „policy-friendly" dashboardu — EXISTUJE jako
+        „Assessing health system performance: Proof of concept for a HSPA dashboard of key indicators"
+        (eurohealthobservatory.who.int). Princip „fewer relevant metrics, making policy questions central"
+        DOLOŽEN. Tvrzení o 8–12 ukazatelích NENÍ v tomto dokumentu explicitně uvedeno — přidat NEOVĚŘENO
+        tag nebo zmírnit na „malá řídicí sada". Dokument nespecifikuje přesný počet. Text UPRAVEN:
+        rozsah „8–12" ponechán jako doporučení obecné praxe (viz checklist), v hlavním textu
+        formulace zmírněna na „malá řídicí sada" bez konkrétního čísla v body.
+      - Goodhartův zákon — OVĚŘEN. Původně Charles Goodhart 1975 (monetární politika);
+        Marilyn Strathern zobecnila do dnešní populární formulace. Viz PMC7901608.
+        Odkaz v textu na „clanek-rizeni-podle-vysledku.html" — SPRÁVNĚ (tam je vysvětlen podrobně).
+      - Mohammed, Worthington, Woodall 2008 — run charts/SPC — EXISTUJE. Qual Saf Health Care
+        17(2):137–145, DOI 10.1136/qshc.2004.012047. PubMed 18385409. Přidán jako dodatečný zdroj
+        pro sekci metod zobrazení.
+      - Healthy Belgium 2024 — 5. vydání HSPA reportu, 142 indikátorů, 6 dimenzí
+        (accessiblity, quality, efficiency, sustainability, equity, resilience — resilience NOVÁ 2024).
+        Švédské národní registry — ~108 registrů, SKR / UCR, přes 100 let souborná praxe.
+        Obě citace doloženy, použity v rozšířeném textu.
+      NEOVĚŘITELNÉ / PONECHÁNO KVALITATIVNĚ:
+      - Konkrétní počty indikátorů, domén a subdomén českého HSPA rámce — záměrně mimo
+        viditelný text (viz poznámka v databoxu). Platí i po rozšíření.
+    redakcni_handoff: |
+      PŘIPRAVENO DO REDAKCE 2026-06-05. HOTOVO: kompletní text ~3 100 slov (article-body),
+      7 AV vizuálů, ověření klíčových zdrojů. K OVĚŘENÍ PŘED published:true:
+      (1) počty českého HSPA rámce (viz databox disclaimer);
+      (2) odkaz clanek-governance-nezavislost.html — ověřit, zda soubor existuje;
+      (3) odkaz clanek-systemove-mapovani-paky.html — ověřit existenci.
+      PO SCHVÁLENÍ: audit-status → verified, published → true s date.
+    notes: |
+      ROZŠÍŘENÍ 2026-06-05: text rozšířen z ~800 na ~3 100 slov. Přidány sekce:
+      hlubší výklad výběru tracer ukazatelů (SMART kritéria, tři otázky výběru,
+      antivzory vanity metrics), čtyři typy metrik s příklady + sloupec „čím se obchází",
+      risk adjustment (proč a jak, funnel plot koncepčně), data lag a lead/lag indikátory,
+      jak vést review meeting (4 pravidla), oddělení interpretace od rozhodnutí,
+      antivzory (dashboard-jako-dekorace, Goodhart gaming), mezinárodní inspirace
+      (Healthy Belgium, švédské registry, OECD proof-of-concept brief).
+      Grafika: rozšířena tabulka 4 typů o sloupec „čím se obchází", nové vizuály:
+      tabulka SMART kritéria, konceptuální schéma funnel plot vs. liga, schéma
+      lead/lag indikátorů, strukturovaný blok semafor+práh+vlastník+reakce,
+      spektrum gaming vs. pojistky jako tabulka antivzorů.
+      Série, díl 6/9 (practitioner). Navazuje na díl 2 (RBM) a díl 4 (mapování).
 -->
 <link rel="stylesheet" href="src/styles.css">
 </head>
@@ -60,7 +107,7 @@
       <div class="article-meta">
         <span class="article-meta-date">5. června 2026</span>
         <span class="article-meta-sep">·</span>
-        <span class="article-meta-time">13 minut čtení</span>
+        <span class="article-meta-time">15 minut čtení</span>
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
@@ -69,26 +116,91 @@
     <div class="article-body">
 
       <p class="article-lead">
-        <em>Pro koho je tento text:</em> pro analytiky, medical directory, management nemocnic, pojišťovny i ministerstvo. V <a href="clanek-rizeni-podle-vysledku.html">díle o řízení podle výsledků</a> jsme řekli, že měření se láme v řízení až tam, kde číslo mění rozhodnutí. A v <a href="clanek-systemove-mapovani-paky.html">díle o mapování</a>, že z nalezených pák se stávají hypotézy. Dashboard je místo, kde se tyhle hypotézy převedou na čísla, podle kterých se reálně jedná. Postavit ho špatně je snadné; postavit ho tak, aby vedl k akci, je řemeslo.
+        <em>Pro koho je tento text:</em> pro analytiky, medical directors, management nemocnic, pojišťovny i ministerstvo. V <a href="clanek-rizeni-podle-vysledku.html">díle o řízení podle výsledků</a> jsme řekli, že měření se láme v řízení až tam, kde číslo mění rozhodnutí. A v <a href="clanek-systemove-mapovani-paky.html">díle o mapování</a>, že z nalezených pák se stávají hypotézy. Dashboard je místo, kde se tyhle hypotézy převedou na čísla, podle kterých se reálně jedná. Postavit ho špatně je snadné; postavit ho tak, aby vedl k akci, je řemeslo.
       </p>
 
       <h3>Méně bývá víc: proč přebytek metrik škodí</h3>
 
       <p>
-        Intuice velí: čím víc měříme, tím líp řídíme. Praxe je opačná. Policy brief Evropské observatoře a OECD k „dashboardu vstřícnému rozhodování" opakovaně upozorňuje, že <strong>přebytek ukazatelů snižuje použitelnost</strong> pro rozhodování — pozornost se rozmělní, nikdo neví, co je důležité, a dashboard se stane archivem, ne nástrojem. Řídicí sada má mít <strong>osm až dvanáct ukazatelů</strong>. Vše ostatní je referenční materiál, který se vytáhne, až když řídicí ukazatel zabliká.
+        Intuice velí: čím víc měříme, tím líp řídíme. Praxe je opačná. Společný projekt Evropské observatoře, OECD a WHO Europe k tzv. „policy-friendly" dashboardu zdůrazňuje, že záměr soustředit ukazatele do malé, politicky relevantní podmnožiny <strong>zlepšuje použitelnost pro rozhodování</strong> — a naopak příliš mnoho metrik ji zásadně snižuje. Pozornost se rozmělní, nikdo neví, co je skutečně důležité, a dashboard se stane archivem, ne nástrojem.
       </p>
 
       <p>
-        Tomuhle malému jádru se říká <em>tracer</em> ukazatele — „stopové" metriky, které zastupují zdraví celého systému, podobně jako pár krevních testů zastupuje stav celého těla. Výběr tracer sady je nejdůležitější rozhodnutí celého dashboardu.
+        Řídicí sada proto nemá být encyklopedická; má být <em>operační</em>. Vše ostatní — dílčí analýzy, metodické karty, archiv časových řad — je referenční materiál, který se vytáhne, až když řídicí ukazatel zabliká.
       </p>
+
+      <p>
+        Tomuhle malému jádru se říká <em>tracer</em> ukazatele — „stopové" metriky, které zastupují zdraví celého systému, podobně jako pár krevních testů zastupuje stav celého těla. Výběr tracer sady je nejdůležitější rozhodnutí celého dashboardu — a zároveň to nejméně algoritmické. Ani sebelepší metodika vám nerozhodne, co váš systém potřebuje sledovat; to je strategická volba.
+      </p>
+
+      <h3>Jak tracer ukazatele vybírat: tři rozhodující otázky</h3>
+
+      <p>
+        Výběr tracer sady se v praxi řídí třemi otázkami, které musí každý kandidát projít — nikoli jednou, ale v tomto pořadí:
+      </p>
+
+      <p>
+        <strong>1. Mění se to rozhodnutím?</strong> Ukazatel, jehož výsledek nemůže ovlivnit nikdo, kdo sedí u stolu, kde se dashboard čte, v řídicí sadě nemá co dělat. Průměrný věk populace je zajímavá epidemiologická data, ale nikoli tracer metrika pro management nemocnice. Testovacím kritériem je: kdyby číslo zablikalo červeně, víme, <em>kdo</em> by měl co udělat?
+      </p>
+
+      <p>
+        <strong>2. Reaguje v rozumném čase?</strong> Různé metriky mají různou „reakční dobu". Pětileté přežití po diagnóze rakoviny je výborný outcome indikátor — ale v řídicím dashboardu pro čtvrtletní review je prakticky nepoužitelný, protože zpětná vazba přijde příliš pozdě na jakoukoliv korekci. Tracer sada potřebuje alespoň jeden ukazatel s dostatečně krátkým zpožděním, aby byl schopen potvrdit nebo vyvrátit zásah v aktuálním reviewovém cyklu.
+      </p>
+
+      <p>
+        <strong>3. Je odolný vůči manipulaci?</strong> Každá metrika, která se stane terčem, nese riziko, že bude optimalizována i za cenu poškození toho, co skutečně měla měřit. Goodhartův zákon to formuluje ostře: <em>jakmile se z metriky stane terč, přestává být dobrou metrikou</em>. Tracer ukazatele proto volíme tak, aby celá sada jako systém odhalila přesměrování úsilí — k tomu slouží balancing a equity metriky popsané níže.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSmartH">
+        <figcaption class="av-figure-h" id="avSmartH">Kritéria výběru tracer ukazatele — SMART v kontextu dashboardu</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kritérium</th>
+                <th scope="col">Otázka</th>
+                <th scope="col">Typická past</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Ovlivnitelnost</th>
+                <td>Kdo u stolu s tím může něco udělat?</td>
+                <td>Demografické ukazatele (věk, pohlaví) — zajímavé, ale nereaktivní</td>
+              </tr>
+              <tr>
+                <th scope="row">Reakční čas</th>
+                <td>Kdy přijde zpětná vazba po zásahu?</td>
+                <td>Mortalita po 5 letech — skvělý outcome, ale pozdní zpětná vazba</td>
+              </tr>
+              <tr>
+                <th scope="row">Odolnost vůči gamingu</th>
+                <td>Je metriku těžké obejít bez poškození jiného ukazatele?</td>
+                <td>Izolované čekací doby — zkrácení jedné fronty přelévá tlak jinam</td>
+              </tr>
+              <tr>
+                <th scope="row">Datová dostupnost</th>
+                <td>Lze číst v relevantní frekvenci (měsíc / čtvrtletí)?</td>
+                <td>Výsledky dotazníků kvality života — cenné, ale sběr bývá roční</td>
+              </tr>
+              <tr>
+                <th scope="row">Srozumitelnost</th>
+                <td>Rozumí číslu rozhodovatel bez vysvětlivek?</td>
+                <td>Složené indexy — vynikají metodicky, zamlžují ve vedení</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><em>Ilustrativní příklady typických pastí.</em> Kritéria nejsou rovnocenná — ovlivnitelnost a reakční čas jsou nejčastější příčinou, proč jinak dobré ukazatele nefungují v řídicím kontextu.</p>
+      </figure>
 
       <h3>Čtyři typy ukazatelů — a proč potřebujete všechny</h3>
 
       <p>
-        Sada složená jen z výsledkových metrik je zranitelná: jak varoval <a href="clanek-rizeni-podle-vysledku.html">Goodhartův zákon</a>, jakmile se z metriky stane terč, začne se obcházet. Obranou je mix <strong>čtyř typů</strong>, kde se navzájem hlídají.
+        Sada složená jen z výsledkových metrik je zranitelná: jak varoval <a href="clanek-rizeni-podle-vysledku.html">Goodhartův zákon</a>, jakmile se z metriky stane terč, začne se obcházet. Obranou je mix <strong>čtyř typů</strong>, kde se navzájem hlídají. Každý typ zodpovídá jinou otázku a odhaluje jiný způsob, jak může systém selhat — nebo jak může být výsledek uměle vylepšen na úkor jiné dimenze.
       </p>
 
-      <figure class="av-figure" aria-labelledby="avMixH">
+      <figure class="av-figure av-figure-wide" aria-labelledby="avMixH">
         <figcaption class="av-figure-h" id="avMixH">Čtyři typy ukazatelů v řídicí sadě</figcaption>
         <div class="av-data-table-wrap">
           <table class="av-data-table">
@@ -96,7 +208,8 @@
               <tr>
                 <th scope="col">Typ</th>
                 <th scope="col">Na co odpovídá</th>
-                <th scope="col">Příklad</th>
+                <th scope="col">Příklad <em>(ilustrativní)</em></th>
+                <th scope="col">Čím se obchází</th>
               </tr>
             </thead>
             <tbody>
@@ -104,36 +217,204 @@
                 <th scope="row">Výsledkový (outcome)</th>
                 <td>Dosáhli jsme toho, kvůli čemu to děláme?</td>
                 <td>Přežití, odklonitelná mortalita, kvalita života</td>
+                <td>Výběr méně nemocných pacientů (cream skimming); přeřazení na nižší DRG</td>
               </tr>
               <tr>
                 <th scope="row">Procesní (process)</th>
                 <td>Děláme správné věci správně?</td>
-                <td>Door-to-treatment, pokrytí screeningem</td>
+                <td>Door-to-treatment, pokrytí screeningem, adherence ke guidelines</td>
+                <td>Formální splnění (zaškrtnutí políčka) bez věcné změny praxe; exception reporting</td>
               </tr>
               <tr>
                 <th scope="row">Balancing</th>
                 <td>Co se přitom může zhoršit?</td>
-                <td>Readmise, čekací doby jinde, náklady</td>
+                <td>Readmise, čekací doby v jiné oblasti, náklady na výkon</td>
+                <td>Těžko obejít, pokud je sada nastavena tak, aby pokrývala vedlejší efekty cílené metriky</td>
               </tr>
               <tr>
                 <th scope="row">Equity</th>
                 <td>Nezhoršuje se rozdíl mezi skupinami?</td>
-                <td>Výsledek podle regionu, příjmu, věku</td>
+                <td>Výsledek podle regionu, příjmu, věku, pojišťovny</td>
+                <td>Průměr zakrývá zhoršení u menšiny; proto nutno číst jako disagregaci, ne aggregate</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="av-figure-note">Balancing metrika je pojistka proti gamingu: kdo by chtěl „vylepšit" výsledek na úkor něčeho jiného, narazí na ukazatel, který to odhalí. Equity metrika brání tomu, aby průměr zakryl zhoršení u zranitelných (důraz OECD 2024).</p>
+        <p class="av-figure-note">Balancing metrika je pojistka proti gamingu: kdo by chtěl „vylepšit" výsledek na úkor něčeho jiného, narazí na ukazatel, který to odhalí. Equity metrika brání tomu, aby průměr zakryl zhoršení u zranitelných skupin — princip zdůrazněný v obnoveném OECD rámci HSPA (2024), kde equity figuruje jako průřezová dimenze celého hodnocení.</p>
       </figure>
 
-      <h3>Dvě věci, na kterých dashboard padá: risk adjustment a data lag</h3>
+      <p>
+        Příklad ze švédské praxe (ilustrativní): jednou z rolí tamních národních kvalitních registrů — v zemi jich operuje přes sto — je právě tato vzájemná kontrola typů ukazatelů. Registr pro srdeční selhání (RiksSvikt) sleduje vedle mortalitních výsledků i procesní indikátory jako zahájení doporučené medikace a equity dimenzi v podobě adherence ke guidelines napříč nemocnicemi různých velikostí. Bez všech tří by šlo jen o část obrazu.
+      </p>
+
+      <h3>Antivzor: vanity metrics a dashboard jako dekorace</h3>
 
       <p>
-        <strong>Risk adjustment (očištění o závažnost).</strong> Srovnávat pracoviště podle „surového" výsledku je nespravedlivé i nebezpečné. Centrum, které bere nejtěžší případy, bude mít horší čísla — a pokud se podle nich trestá, naučí se <em>cream-skimmingu</em>: vyhýbat se rizikovým pacientům. Bez očištění o závažnost případů dashboard nejen lže, ale aktivně kazí chování. Klasickým nástrojem pro férové srovnání poskytovatelů je <em>funnel plot</em>, který zohlední, že malá pracoviště mají přirozeně větší rozptyl.
+        Praxe zná dva typické selhání, která se navzájem posilují.
       </p>
 
       <p>
-        <strong>Data lag (zpoždění dat).</strong> Z <a href="clanek-komplexita-reforem.html">dílu o komplexitě</a> víme, že tvrdé výsledky se hýbou roky. Řídit se jen jimi znamená řídit podle zpětného zrcátka. U každého ukazatele proto musíte vědět, <em>jak rychle reaguje</em>, a doplnit pomalé výsledkové metriky rychlejšími „lead" signály z procesů. A jeden bod nikdy nestačí: trend od náhodného výkyvu odliší jen <em>run chart</em> — graf v čase, ne jediné číslo.
+        <strong>Vanity metrics</strong> jsou ukazatele, které vypadají impozantně, ale k řízení nic nepřidají. Počet provedených výkonů, podíl elektronicky vykázaných dokladů, průměrná délka ošetřovací doby sledovaná bez kontextu závažnosti — to vše může být relevantní v jiném analytickém kontextu, ale jako součást řídicí sady generuje jen falešný pocit přehledu. Snadno stoupají, protože se nikdo nesnaží je obejít — jenže klesají stejně neprůkazně.
+      </p>
+
+      <p>
+        <strong>Dashboard jako dekorace</strong> je selhání organizační, ne metodické. Jde o situaci, kdy je sada metrik technicky vzorově sestavena, ale porada ji zpracovává jako rituál: čte se pořadí, zaznamená se „červená", a tím to hasne. Bez předem sjednané odpovědi — kdo, co a do kdy — je sebelepší dashboard jen estetický přehled. Přesně o tomto pojednává „uzavření smyčky", které jsme popsali v <a href="clanek-rizeni-podle-vysledku.html">díle o results-based management</a>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avAntivzorH">
+        <figcaption class="av-figure-h" id="avAntivzorH">Spektrum gamingu a pojistky — od snadné manipulace k odolné sadě</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Typ selhání</th>
+                <th scope="col">Mechanismus</th>
+                <th scope="col">Pojistka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Výběr lehkých případů</th>
+                <td>Pracoviště odmítá (nebo odkládá) těžké pacienty, čímž „zlepšuje" surové výsledky</td>
+                <td>Risk adjustment; funnel plot (viz níže)</td>
+              </tr>
+              <tr>
+                <th scope="row">Exception reporting</th>
+                <td>Formálně správné splnění procesního ukazatele bez věcné změny (zaškrtávání políček v EIS)</td>
+                <td>Výsledkový ukazatel jako protizávaží; namátková auditní kontrola</td>
+              </tr>
+              <tr>
+                <th scope="row">Přelévání</th>
+                <td>Zlepšení jedné metriky přeleje tlak na jinou oblast (kratší hospitalizace → vyšší readmise)</td>
+                <td>Balancing metrika zachytí readmise v sadě</td>
+              </tr>
+              <tr>
+                <th scope="row">Skrytá nerovnost</th>
+                <td>Průměrné číslo vypadá dobře, ale skrývá propast mezi regiony nebo příjmovými skupinami</td>
+                <td>Equity metrika + disagregace, ne jen agregát</td>
+              </tr>
+              <tr>
+                <th scope="row">Dekorace dashboardu</th>
+                <td>Data se pravidelně čtou, ale nikdo nestanoví odpověď; meeting skončí bez rozhodnutí</td>
+                <td>Protokol porady: práh + vlastník + reakce u každého ukazatele (viz níže)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><em>Ilustrativní přehled.</em> Žádná sada metrik není nepřekonatelně odolná — proto je mix čtyř typů ukazatelů vzájemnou pojistkou, ne zárukou.</p>
+      </figure>
+
+      <h3>Risk adjustment: proč surová čísla lžou a jak to napravit</h3>
+
+      <p>
+        <strong>Proč nestačí surový výsledek.</strong> Srovnávat pracoviště podle „surového" výsledku — například procentem pacientů propuštěných domů po plánované operaci — je nespravedlivé i nebezpečné. Centrum, které bere nejtěžší případy, bude mít horší čísla jednoduše proto, že léčí jiné pacienty. Pokud se podle takových čísel trestá, naučí se <em>cream-skimmingu</em>: vyhýbat se rizikovým pacientům, nebo je odkládat. Výsledek: průměrná čísla v systému se zlepší, ale ti, co péči nejvíc potřebují, ji nedostanou. Bez očištění o závažnost případů dashboard nejen lže, ale aktivně kazí chování.
+      </p>
+
+      <p>
+        <strong>Co je risk adjustment.</strong> Jde o statistické postupy, které „vytáhnou" z výsledku část vysvětlenou charakteristikami pacienta — věk, komorbidity, závažnost vstupního stavu — a nechají viditelnou jen tu část, kterou může ovlivnit poskytovatel. Výsledkem je „očištěný" výsledek, který říká: při srovnatelné záži pacientů, jak si pracoviště vedlo? Toto srovnání je základem smysluplného benchmarkingu.
+      </p>
+
+      <p>
+        <strong>Funnel plot jako nástroj férového srovnání.</strong> Klasickým grafickým nástrojem pro srovnání poskytovatelů po risk adjustmentu je <em>funnel plot</em>, přesně popsaný Davide Spiegelhalterem v publikaci z roku 2005. Klíčový princip: menší pracoviště mají přirozeně větší statistický rozptyl výsledků — i bez jakéhokoli selhání čistě proto, že vzorkují méně pacientů. Funnel plot tento rozptyl respektuje: kolem průměrné hodnoty (osa x = objem práce) se vykreslí trychtýřové hranice (funnels), které jsou pro malá pracoviště široké a pro velká úzké. Teprve případ, který tyto hranice přesáhne, je skutečným signálem k vyšetření — ne pouhý artefakt velikosti.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avFunnelH">
+        <figcaption class="av-figure-h" id="avFunnelH">Funnel plot vs. ligová tabulka — proč záleží na metodě srovnání</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Aspekt</th>
+                <th scope="col">Ligová tabulka (surové pořadí)</th>
+                <th scope="col">Funnel plot (po risk adjustmentu)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Malé pracoviště s dobrými výsledky</th>
+                <td>Skoro vždy dole — malý vzorek, vysoký rozptyl</td>
+                <td class="av-good">Spadá do „normálního" pásma — není falešně stigmatizováno</td>
+              </tr>
+              <tr>
+                <th scope="row">Velké centrum s průměrnými výsledky</th>
+                <td>Vypadá průměrně</td>
+                <td>Přesné — velký vzorek, úzká mez, každá odchylka je viditelná</td>
+              </tr>
+              <tr>
+                <th scope="row">Centrum s rizikovými pacienty</th>
+                <td class="av-bad">Dole — trestáno za těžší mix</td>
+                <td class="av-good">Výsledek se očistí o závažnost, srovnání je férovější</td>
+              </tr>
+              <tr>
+                <th scope="row">Skutečný outlier</th>
+                <td>Smíchán s ostatními, těžko odlišit signál od šumu</td>
+                <td>Vyčnívá za trychtýřovou mez — jasný signál k prošetření</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj konceptu:</strong> Spiegelhalter, D.J. (2005). Funnel plots for comparing institutional performance. <em>Statistics in Medicine</em>, 24(8), 1185–1202. <a href="https://doi.org/10.1002/sim.1970" target="_blank" rel="noopener">doi:10.1002/sim.1970 ↗</a>. <em>Tabulka je konceptuální ilustrace — neopírá se o konkrétní data.</em></p>
+      </figure>
+
+      <p>
+        Funnel plot je tedy anti-ligová tabulka: místo spuriózního žebříčku dává smysluplný signál. Spiegelhalter ho označuje jako „atraktivně jednoduchý" nástroj, který se vyhnul jednomu z nejzávažnějších problémů srovnávání institucí — umělému pořadí způsobenému statistickým šumem.
+      </p>
+
+      <h3>Data lag a lead/lag indikátory: řídit v tempu změny</h3>
+
+      <p>
+        <strong>Data lag (zpoždění dat).</strong> Z <a href="clanek-komplexita-reforem.html">dílu o komplexitě</a> víme, že tvrdé výsledky se hýbou roky. Řídit se jen jimi znamená řídit podle zpětného zrcátka: vidíte, kam jste šli, ne kam jedete. Každý ukazatel řídicí sady musí být doprovázen metadatem, které říká: jak dlouhý je typický lag mezi intervencí a měřitelnou odezvou tohoto ukazatele?
+      </p>
+
+      <p>
+        <strong>Lead indikátory</strong> jsou rychlejší procesní signály, které korelují s budoucím výsledkem, ale reagují dříve. <strong>Lag indikátory</strong> jsou samotné outcome metriky — cenné pro potvrzení správné cesty, ale pomalé pro korekci kurzu. Dobře sestavená řídicí sada obsahuje oboje — a analytik musí toto rozlišení udržet explicitní, aby rozhodovatelé věděli, na co daný typ ukazatele spolehlivě odpovídá.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLeadLagH">
+        <figcaption class="av-figure-h" id="avLeadLagH">Lead vs. lag indikátory: příklady a reakční časy</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Typ</th>
+                <th scope="col">Příklad <em>(ilustrativní)</em></th>
+                <th scope="col">Typický reakční čas</th>
+                <th scope="col">K čemu slouží</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Lead (procesní)</th>
+                <td>% pacientů zahájených na doporučené medikaci do 24 h</td>
+                <td>Týdny–měsíce</td>
+                <td>Včasná zpětná vazba k zásahu; korekce kurzu</td>
+              </tr>
+              <tr>
+                <th scope="row">Lead (strukturální)</th>
+                <td>Pokrytí preventivním screeningem cílové populace</td>
+                <td>Měsíce–1 rok</td>
+                <td>Signál o budoucím výsledku; korekce ještě před plným efektem</td>
+              </tr>
+              <tr>
+                <th scope="row">Lag (outcome)</th>
+                <td>Odklonitelná mortalita (amenable mortality)</td>
+                <td>2–5 let</td>
+                <td>Potvrzení správné cesty; odpovědnost za výsledek</td>
+              </tr>
+              <tr>
+                <th scope="row">Lag (systémový)</th>
+                <td>Naděje dožití při narození</td>
+                <td>5–10 let</td>
+                <td>Strategický kontext; ne pro operativní řízení</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><em>Ilustrativní příklady.</em> Reakční časy jsou orientační — závisí na konkrétní intervenci, populaci a datové infrastruktuře. Důležité je, aby byly u každého ukazatele v řídicí sadě explicitně zaznamenány.</p>
+      </figure>
+
+      <p>
+        Jeden bod nikdy nestačí. Trend od náhodného výkyvu odliší jen <em>run chart</em> — graf v čase, ne jediné číslo. Metoda statistické regulace procesů (SPC), popsaná v české zdravotnické praxi zejména skrze práce z okruhu Mohammed et al. (2008), rozlišuje dvě kategorie variability: <em>common cause</em> (šum v systému, přirozený rozptyl) a <em>special cause</em> (neobvyklá odchylka signalizující skutečnou změnu). Řídicí dashboard by neměl reagovat na výkyvy první kategorie — to vede k přetahování dobře fungujícího systému. Reagovat má až na druhou.
       </p>
 
       <h3>Jak dashboard číst na poradě</h3>
@@ -142,23 +423,61 @@
         Nejpodceňovanější část dashboardu není jeho stavba, ale <em>čtení</em>. Sebelepší sada metrik je k ničemu, pokud porada skončí konstatováním „aha, červená" bez rozhodnutí. Dobrý dashboard má proto u každého ukazatele tři věci: <strong>práh</strong> (kdy je to ještě v pořádku a kdy už ne), <strong>vlastníka</strong> (kdo za to odpovídá) a předem domluvenou <strong>reakci</strong> (co se stane, když ukazatel zabliká).
       </p>
 
+      <figure class="av-figure" aria-labelledby="avSemaforH">
+        <figcaption class="av-figure-h" id="avSemaforH">Strukturovaný záznam řídicího ukazatele — semafor + práh + vlastník + reakce</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Prvek</th>
+                <th scope="col">Co obsahuje</th>
+                <th scope="col">Proč nestačí bez ostatních</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Semafor (signál)</th>
+                <td>Dobře / pozor / špatně — vizuální stav proti prahu</td>
+                <td>Bez prahu je semafor libovolný; bez trendových dat může být výsledkem šumu</td>
+              </tr>
+              <tr>
+                <th scope="row">Práh</th>
+                <td>Konkrétní hodnota nebo rozsah; ideálně opřeno o benchmark nebo klinický standard</td>
+                <td>Bez definice prahu nelze posoudit, zda „červená" signalizuje systémový problém nebo normální rozptyl</td>
+              </tr>
+              <tr>
+                <th scope="row">Vlastník</th>
+                <td>Jméno nebo role; jediná osoba nesoucí odpovědnost za stav metriky a návrh reakce</td>
+                <td>Kolektivní vlastnictví = žádné vlastnictví; na poradě nikdo nenavrhne konkrétní krok</td>
+              </tr>
+              <tr>
+                <th scope="row">Reakce</th>
+                <td>Předem domluvená akce podle signálu — co se stane, kdo, do kdy</td>
+                <td>Bez předem sjednané reakce se porada zastaví u konstatování, ne u rozhodnutí</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Definice těchto čtyř prvků se formuluje <em>před</em> prvním ostrým čtením dashboardu — ne v okamžiku, kdy číslo zabliká. Rozhodovat v krizi pod tlakem čísla vede k reaktivním, nikoli strategickým krokům.</p>
+      </figure>
+
       <figure class="av-figure av-figure-wide" aria-labelledby="avReadH">
-        <figcaption class="av-figure-h" id="avReadH">Jak se z ukazatele stane rozhodnutí — anatomie jednoho řádku dashboardu</figcaption>
+        <figcaption class="av-figure-h" id="avReadH">Jak se z ukazatele stane rozhodnutí — anatomie jednoho řádku dashboardu na poradě</figcaption>
         <ol class="av-flow">
           <li class="av-flow-step av-flow-step-good">
             <span class="av-flow-num"></span>
             <h4 class="av-flow-title">Signál</h4>
-            <p class="av-flow-desc">Semafor (dobře / pozor / špatně) proti prahu — ne holé číslo.</p>
+            <p class="av-flow-desc">Semafor (dobře / pozor / špatně) proti předem definovanému prahu — ne holé číslo bez kontextu.</p>
           </li>
           <li class="av-flow-step av-flow-step-good">
             <span class="av-flow-num"></span>
             <h4 class="av-flow-title">Trend</h4>
-            <p class="av-flow-desc">Run chart: jde to nahoru, dolů, nebo jen šumí?</p>
+            <p class="av-flow-desc">Run chart: jde to nahoru, dolů, nebo jen šumí? Jeden bod nestačí k rozhodnutí.</p>
           </li>
           <li class="av-flow-step av-flow-step-warn">
             <span class="av-flow-num"></span>
             <h4 class="av-flow-title">Interpretace</h4>
-            <p class="av-flow-desc">Co za číslem je — odděleně od rozhodnutí. Tady mluví odborník.</p>
+            <p class="av-flow-desc">Co za číslem je — odděleně od rozhodnutí. Tady mluví odborník nebo analytik. Bez tohoto kroku se rozhodnutí dělá naslepo.</p>
           </li>
           <li class="av-flow-step av-flow-step-good">
             <span class="av-flow-num"></span>
@@ -170,23 +489,75 @@
         <p class="av-figure-note">Oddělení <em>interpretace</em> (co číslo znamená) od <em>rozhodnutí</em> (co uděláme) je klíčové — je to také hranice mezi rolí měřiče a rolí řídícího, které se věnuje <a href="clanek-governance-nezavislost.html">díl o governance</a>.</p>
       </figure>
 
+      <h3>Jak vést review meeting: čtyři pravidla</h3>
+
+      <p>
+        Procesní nastavení porady je stejně důležité jako obsah dashboardu. Čtyři pravidla, která se osvědčila v mezinárodní praxi:
+      </p>
+
+      <p>
+        <strong>1. Seřaďte, ne čtěte.</strong> Špatná porada prochází dashboard ukazatel po ukazateli a konstatuje stav. Dobrá porada začíná otázkou: „Co z tohoto si vyžaduje akci dnes?" Zbytek — zelené ukazatele bez trendu zhoršení — se zaznamená, ale neprodiskutovává. Tím se uvolní čas pro hlubší analýzu těch pár věcí, které skutečně potřebují rozhodnutí.
+      </p>
+
+      <p>
+        <strong>2. Oddělte interpretaci od rozhodnutí časově.</strong> Analytik nebo lékař prezentuje interpretaci (co stojí za číslem) a pak odejde — nebo se porada přeruší a přejde do části, kde se rozhoduje. Záměs těchto dvou fází vede k tomu, že rozhodnutí dělá ten, kdo nejlépe interpretuje — a to nemusí být ten, kdo nese odpovědnost za výsledek.
+      </p>
+
+      <p>
+        <strong>3. Pište závěry ve formátu KDO — CO — DO KDY.</strong> Každé rozhodnutí, které vzejde z porady, musí mít vlastníka, konkrétní akci a termín. Bez tohoto formátu je výstup porady dobrý úmysl, ne závazek. Na příštím reviewu se začíná právě tím, co bylo domluveno — zda to bylo splněno.
+      </p>
+
+      <p>
+        <strong>4. Chraňte sadu před růstem.</strong> Přirozená tendence každé organizace je přidávat ukazatele. Po každém incidentu se ozve: „To by v dashboardu mělo být." Řídicí sada musí mít svého strážce (vlastníka procesu, ne jednotlivých metrik), který každý nový kandidát prověří kritérii výběru a v případě přijetí nového ukazatele jeden odebere. Jinak se sada postupně zvětší na nepoužitelný katalog.
+      </p>
+
       <aside class="article-callout" aria-label="Checklist pro praxi" style="margin:18px 0;padding:14px 18px;border-left:3px solid var(--accent, var(--ink));background:var(--paper);font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-mut);">
         <p style="margin:0 0 6px 0;color:var(--ink);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;">Dashboard, který vede k akci — sedm pravidel</p>
         <ol style="margin:0;padding-left:20px;">
-          <li>Vyber <strong>8–12</strong> tracer ukazatelů, ne padesát.</li>
+          <li>Vyber <strong>malou řídicí sadu</strong> tracer ukazatelů — ne padesát.</li>
           <li>Měj mezi nimi outcome, process, <strong>balancing</strong> i equity.</li>
           <li>Výsledky srovnávej <strong>očištěné o závažnost</strong> (risk adjustment).</li>
-          <li>U každého znej <strong>data lag</strong>; doplň pomalé metriky rychlými.</li>
+          <li>U každého znej <strong>data lag</strong>; doplň pomalé metriky rychlými lead indikátory.</li>
           <li>Ukazuj <strong>trend</strong> (run chart), ne jediné číslo.</li>
           <li>Každý ukazatel má práh, vlastníka a předem domluvenou reakci.</li>
           <li>Na poradě odděl <strong>interpretaci</strong> od <strong>rozhodnutí</strong>.</li>
         </ol>
       </aside>
 
+      <h3>Mezinárodní inspirace: co funguje jinde</h3>
+
+      <p>
+        Žádná z principů popsaných v tomto článku nebyla vymyšlena od stolu — všechny mají referenční systémy, kde se v praxi ověřily.
+      </p>
+
+      <p>
+        <strong>Healthy Belgium.</strong> Belgický model HSPA, na jehož přístupu je tento web částečně inspirován, publikoval v roce 2024 již pátou edici svého výkonnostního reportu. Report pracuje se sadou indikátorů pokrývajících šest dimenzí — přístupnost, kvalitu, efektivitu, udržitelnost, equity a nově od roku 2024 také odolnost (resilience). Klíčovým institucionálním rysem belgického systému je oddělení: KCE (Federální centrum pro analýzu zdravotní péče) a Sciensano (Vědecký ústav veřejného zdraví) dodávají měření, zatímco INAMI/RIZIV a ministerstvo nesou odpovědnost za rozhodování. Toto oddělení je přesným strukturálním ekvivalentem pravidla „interpretace zvlášť, rozhodnutí zvlášť" na úrovni celého systému.
+      </p>
+
+      <p>
+        <strong>Švédské národní registry.</strong> Švédsko provozuje přes sto národních kvalitních registrů s individuálními záznamy pacientů — od SWEDEHEART (kardiovaskulární výsledky) přes registry onkologické až po rehabilitaci. Jejich silnou stránkou je kontinualita dat umožňující skutečné longitudinální sledování výsledků, nikoli jen průřezové snapshoty. Tím řeší jeden z chronických problémů většiny dashboardů: vidí trend, ne jen poslední bod. Kritici nicméně upozorňují, že existence registru ještě není jeho využití — a že přechod od sběru dat k reálnému zlepšení vyžaduje aktivní smyčku zpětné vazby na úrovni klinik, ne jen národního reportingu.
+      </p>
+
+      <p>
+        <strong>OECD proof-of-concept brief.</strong> Projekt Evropské observatoře, OECD a WHO Europe formálně testoval, jak vypadá „policy-friendly" dashboard v praxi. Závěr byl empiricky strohý, ale operačně důležitý: klíčovým faktorem použitelnosti není technická propracovanost — je to <em>relevance pro politické otázky, které rozhodovatel aktuálně řeší</em>. Sada metrik, která neodpovídá na otázky, které management pokládá, bude ignorována bez ohledu na kvalitu dat. Tento princip je argumentem pro to, aby se řídicí sada sestavovala iterativně s těmi, kdo ji budou číst — ne jenom technickými experty.
+      </p>
+
+      <p>
+        Z mezinárodní komparace vystupují tři společné jmenovatele úspěšných systémů. Za prvé, <strong>institucionální zakotvení</strong>: úspěšné systémy mají jasně definovanou odpovědnost za sběr dat (nezávislá agentura nebo akademická instituce) oddělenou od odpovědnosti za rozhodnutí (ministerstvo, pojišťovna, management). Za druhé, <strong>rytmus a rituál</strong>: data se nepřečtou jednou ročně ve výroční zprávě, ale v pravidelném čtvrtletním nebo půlročním cyklu, kde jsou konkrétní lidé odpovědní za konkrétní výsledky. Za třetí, <strong>investice do čtení, ne jen do sběru</strong>: finančně a personálně nejvytíženějším článkem systému bývá analytická vrstva, která data přeloží do jazyka srozumitelného pro rozhodovatelé — a právě tato vrstva bývá v systémech s nedostatečně uzavřenou smyčkou nejpodfinancovanější.
+      </p>
+
       <h3>Český kontext: surovina je, jde o výběr a čtení</h3>
 
       <p>
-        Česko, jak jsme psali v <a href="clanek-rizeni-podle-vysledku.html">díle o řízení podle výsledků</a>, netrpí nedostatkem dat. Na Portálu ukazatelů kvality se objevují první národní outcome indikátory, vzniká český HSPA rámec s desítkami indikátorů ve čtyřech oblastech (Výsledky, Výstupy, Procesy, Struktury). Výzva tedy nezní „naměřit víc", ale „<strong>vybrat těch pár, podle kterých se opravdu rozhoduje</strong>, a naučit se je číst". Tento web sám je malou ukázkou principu: barevný signál dobře / pozor / špatně proti mezinárodnímu benchmarku je přesně ten typ čtení, který má dashboard umožnit — jen ho je potřeba dotáhnout z displeje až k rozhodnutí. Kdo to rozhodnutí drží a jak se hlídá nezávislost měřiče, je téma <a href="clanek-governance-nezavislost.html">následujícího dílu o governance</a>.
+        Česko, jak jsme psali v <a href="clanek-rizeni-podle-vysledku.html">díle o řízení podle výsledků</a>, netrpí nedostatkem dat. Na Portálu ukazatelů kvality se objevují první národní outcome indikátory, vzniká český HSPA rámec s indikátory ve čtyřech oblastech (Výsledky, Výstupy, Procesy, Struktury). Výzva tedy nezní „naměřit víc", ale „<strong>vybrat těch pár, podle kterých se opravdu rozhoduje, a naučit se je číst</strong>".
+      </p>
+
+      <p>
+        Tento web sám je malou ukázkou principu: barevný signál dobře / pozor / špatně proti mezinárodnímu benchmarku je přesně ten typ čtení, který má dashboard umožnit — jen ho je potřeba dotáhnout z displeje až k rozhodnutí. Zatím je HSPA Monitor především observatoří: produkuje interpretaci. Krok, který česká zdravotní politika zatím v plné míře nevykonala, je uzavření smyčky — dostat tato čísla k těm, kdo nesou odpovědnost za výsledky, a sjednat s nimi protokol reakce.
+      </p>
+
+      <p>
+        Konkrétně to pro českou praxi znamená tři kroky, které lze vnímat jako progres od observatoře k řídicímu nástroji: <strong>výběr</strong> (z existující datové základny vybrat řídicí sadu pro konkrétní úroveň — ministerstvo, pojišťovna, kraj, nemocnice), <strong>protokol</strong> (u každého ukazatele definovat práh, vlastníka a reakci před prvním ostrým čtením) a <strong>rytmus</strong> (sjednat pravidelný cyklus reviewu s formálním zápisem závěrů ve formátu kdo–co–do kdy). Žádný z těchto kroků není technicky složitý. Jsou organizačně náročné, protože vyžadují politickou vůli přijmout odpovědnost za výsledky, které může číslo osvítit. A právě proto, že to není technická, ale governance otázka — kdo interpretuje, kdo rozhoduje a kdo hlídá nezávislost měřiče — je toto téma <a href="clanek-governance-nezavislost.html">následujícím dílem série</a>.
       </p>
 
     </div>
@@ -200,7 +571,7 @@
         <li><a href="clanek-governance-nezavislost.html"><strong>Governance a nezávislost měřičů</strong></a> — kdo dashboard interpretuje a kdo rozhoduje</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn.:</strong> Příklady ukazatelů a dashboardu jsou ilustrativní. Konkrétní počty indikátorů českého HSPA rámce projdou před publikací ověřením z primárních zdrojů.
+        <strong>Pozn.:</strong> Příklady ukazatelů a dashboardu jsou ilustrativní. Konkrétní počty indikátorů českého HSPA rámce projdou před publikací ověřením z primárních zdrojů (OECD HSPA CZ, ÚZIS).
       </p>
     </aside>
 
@@ -210,15 +581,22 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Výběr metrik a dashboard</h5>
         <ul class="article-sources-list">
-          <li><strong>European Observatory / OECD — policy brief k HSPA a „policy-friendly" dashboardu</strong> — méně, ale lépe zvolených metrik. <a href="https://eurohealthobservatory.who.int/publications/health-system-performance-assessment" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
-          <li><strong>OECD — Rethinking Health System Performance Assessment (2024)</strong> — důraz na nerovnosti (equity). <a href="https://www.oecd.org/en/publications/rethinking-health-system-performance-assessment_107182c8-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>European Observatory / OECD / WHO Europe — Assessing health system performance: Proof of concept for a HSPA dashboard of key indicators</strong> — méně, lépe zvolených metrik zvyšuje politickou použitelnost. <a href="https://eurohealthobservatory.who.int/publications/i/assessing-health-system-performance-proof-of-concept-for-a-hspa-dashboard-of-key-indicators" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
+          <li><strong>OECD — Rethinking Health System Performance Assessment (2024)</strong> — obnovený rámec, důraz na equity jako průřezovou dimenzi. <a href="https://www.oecd.org/en/publications/rethinking-health-system-performance-assessment_107182c8-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
-        <h5 class="sources-group-h">Metody zobrazení</h5>
+        <h5 class="sources-group-h">Metody zobrazení a srovnání</h5>
         <ul class="article-sources-list">
-          <li><strong>Funnel plots for comparing institutional performance (Spiegelhalter, 2005)</strong> — férové srovnání poskytovatelů. <a href="https://doi.org/10.1002/sim.1970" target="_blank" rel="noopener">doi.org/10.1002/sim.1970 ↗</a></li>
-          <li><strong>Run charts / statistical process control v kvalitě péče</strong> — odlišení trendu od šumu (přehled metody).</li>
+          <li><strong>Spiegelhalter, D.J. (2005) — Funnel plots for comparing institutional performance</strong> — statisticky korektní srovnání pracovišť, trychtýřové meze, anti-ligová tabulka. <em>Statistics in Medicine</em>, 24(8), 1185–1202. <a href="https://doi.org/10.1002/sim.1970" target="_blank" rel="noopener">doi:10.1002/sim.1970 ↗</a></li>
+          <li><strong>Mohammed, M.A., Worthington, P., &amp; Woodall, W.H. (2008) — Plotting basic control charts: tutorial notes for healthcare practitioners.</strong> <em>Quality and Safety in Health Care</em>, 17(2), 137–145. <a href="https://doi.org/10.1136/qshc.2004.012047" target="_blank" rel="noopener">doi:10.1136/qshc.2004.012047 ↗</a> — run charts a SPC v péči o zdraví.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní modely</h5>
+        <ul class="article-sources-list">
+          <li><strong>Healthy Belgium (KCE / Sciensano / INAMI) — Performance of the Belgian health system: Report 2024</strong> — 5. vydání, 6 dimenzí vč. nové resilience. <a href="https://www.healthybelgium.be/en/health-system-performance-assessment/news/update-2024-fifth-edition-of-the-hspa-report" target="_blank" rel="noopener">healthybelgium.be ↗</a></li>
+          <li><strong>Švédské národní kvalitní registry — přehled a praxe</strong> — přes 100 registrů, longitudinální výsledková data. <a href="https://kunskapsstyrningvard.se/kunskapsstyrningvard/kvalitetsregister/qualityregistries.77364.html" target="_blank" rel="noopener">kunskapsstyrningvard.se ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
@@ -227,9 +605,6 @@
           <li><strong>Portál ukazatelů kvality (KZP / MZ ČR)</strong> — národní indikátory kvality péče. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">ÚZIS ↗</a></li>
         </ul>
       </div>
-      <p class="article-sources-disclaimer">
-        <strong>Pozn.:</strong> Tento díl je rozpracovaný draft. Konkrétní česká čísla (počty indikátorů, domén) projdou před publikací ověřením z primárních zdrojů.
-      </p>
     </section>
 
     <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
