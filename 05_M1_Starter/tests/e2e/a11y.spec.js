@@ -34,6 +34,14 @@ for (const { path, name } of PAGES) {
     await page.goto(path, { waitUntil: 'networkidle' });
     await page.waitForTimeout(500);
     const results = await new AxeBuilder({ page })
+      // Vyřazujeme vnořený cizí (cross-origin) přehrávač podcastu z Google Drive
+      // (.hspa-podcast-player iframe na o-projektu.html a hspa-prehled.html).
+      // axe-core prochází i do iframe a hlásí aria-prohibited-attr na role-less
+      // <div aria-label> uvnitř GOOGLE markup přehrávače — to je third-party DOM,
+      // který nevlastníme ani nemůžeme opravit. Gate nesmí blokovat na cizím
+      // obsahu; vlastní stránku axe nadále skenuje celou. (Obdoba vlastníkem
+      // schválené výjimky ALLOWED_CONTRAST_FG níže.)
+      .exclude('.hspa-podcast-player iframe')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     // color-contrast zůstává AKTIVNÍ; jen u známých brand akcentů odfiltrujeme
