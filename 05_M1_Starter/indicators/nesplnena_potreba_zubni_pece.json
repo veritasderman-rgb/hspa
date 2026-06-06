@@ -1,0 +1,57 @@
+{
+  "id": "nesplnena_potreba_zubni_pece",
+  "name": "Nesplněná potřeba zubní péče",
+  "area": "Výstupy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Bariéry v přístupu",
+  "definition": "Podíl populace 16+ let, která za posledních 12 měsíců potřebovala zubní vyšetření nebo ošetření, ale nezískala je kvůli ceně, vzdálenosti či čekací lhůtě (souhrnný důvod „příliš drahé / příliš daleko / čekací listina“). Eurostat EU-SILC; harmonizovaný indikátor napříč EU, dentální obdoba ukazatele nesplněné potřeby lékařské péče (unmet_need_medical).",
+  "unit": "% populace 16+",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_silc_09",
+      "dataset": "hlth_silc_09",
+      "dimensions": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "Y_GE16",
+        "reason": "TXP_TFAR_WLIST",
+        "unit": "PC",
+        "quantile": "TOTAL"
+      },
+      "note": "EU-SILC modul „self-reported unmet need for dental examination“. Souhrnný kód reason=TXP_TFAR_WLIST (cena/vzdálenost/čekací lhůta). Dataset hlth_silc_09 navíc rozpadá hodnoty podle příjmových kvintilů (dimenze „quantile“: TOTAL, QU1–QU5), což u zubní péče odhaluje výrazný příjmový gradient. Ověřeno živě z Eurostat API 2026-06-06: CZ 1,3 % (2024, TOTAL), EU27 3,3 %; QU1 (nejnižší příjmy) 2,5 %, QU5 (nejvyšší) 0,5 %."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_09/default/table?lang=en",
+      "note": "Eurostat Data Browser — interaktivní tabulka a stažení v CSV/TSV/JSON. Metadata: https://ec.europa.eu/eurostat/cache/metadata/en/hlth_silc_01_esms.htm"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_silc_09",
+    "dataset": "EU-SILC",
+    "value": 3.3,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_09/default/table?lang=en",
+    "note": "Benchmark = průměr EU27 (EU27_2020) pro tentýž souhrnný důvod (TXP_TFAR_WLIST) a populaci 16+ v roce 2024: 3,3 %. Pro porovnatelnost je benchmark počítán ze stejného datasetu a stejné kategorie důvodů jako česká hodnota. Eurostatová tisková zpráva z 29. 8. 2025 uvádí vyšší souhrnnou hodnotu (6,3 % „kvůli ceně, vzdálenosti nebo čekání“) pro širší agregát; pro konzistenci s českou hodnotou používáme apples-to-apples kód TXP_TFAR_WLIST = 3,3 %."
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "ČSÚ (EU-SILC kontaktní bod ČR)",
+    "Ministerstvo zdravotnictví ČR (rozsah hrazené stomatologické péče dle zákona 48/1997 Sb.)",
+    "Česká stomatologická komora (síť smluvních poskytovatelů)"
+  ],
+  "method_notes": "Self-reported indikátor z dotazníku EU-SILC: respondent uvádí, zda v posledních 12 měsících potřeboval, ale nedostal zubní péči, a z jakého důvodu. Standardizovaná definice EUROSTAT/ECHI. Souhrnný kód reason=TXP_TFAR_WLIST (cena + vzdálenost + čekací lhůta) je oficiální složený důvod používaný i pro SDG indikátor dostupnosti. Česká hodnota 1,3 % (2024) je výrazně pod průměrem EU27 (3,3 %) → signal good. Trend ale od pandemického minima 2021 (0,6 %) zhruba zdvojnásobil (2022: 0,8 %; 2023: 1,1 %; 2024: 1,3 %). Klíčový rozdíl oproti lékařské péči: u zubní péče je v ČR výrazný příjmový gradient — nejnižší příjmový kvintil (QU1) vykázal v roce 2024 hodnotu 2,5 %, nejvyšší (QU5) jen 0,5 % (poměr 5:1). Mezi sousedy 2024: Německo 0,4 %, Rakousko 1,1 %, Polsko 1,3 %, Slovensko 1,4 %.",
+  "limitations": "Self-report — měří subjektivní zkušenost, ne objektivní dostupnost; podhodnocuje odkládání péče, které pacient nevnímá jako „potřebu“ (adaptace na zhoršený chrup, rezignace). Souhrnný kód maskuje, zda převažuje cena nebo čekání (u zubní péče v ČR dominuje cena/doplatek). Cílová populace 16+ vylučuje pediatrickou stomatologii, kde je obraz odlišný. Příjmové kvintily jsou definovány na úrovni státu, nikoli krajů — regionální nedostupnost smluvních zubařů se v celostátním průměru ztrácí. Malé absolutní hodnoty znamenají vyšší výběrovou chybu u podskupin (kvintilové hodnoty meziročně kolísají).",
+  "importance": "<p>Nesplněná potřeba zubní péče je v rámci OECD HSPA standardní <strong>indikátor spravedlnosti v přístupu</strong>. Na rozdíl od lékařské péče, kde má český systém velkoryse definovaný hrazený balík, je <strong>stomatologie tím segmentem, kde se nejvíce projevuje platba z kapsy</strong> — nadstandardní materiály, korunky, implantáty a estetické výkony hradí pacient sám, takže přístup je přímo navázaný na příjem domácnosti.</p><p>Indikátor proto měří funkční výkon § 13 a přílohy zákona <strong>48/1997 Sb.</strong> o veřejném zdravotním pojištění (rozsah hrazené stomatologické péče) a dostupnost smluvní sítě podle <strong>Nařízení vlády č. 307/2012 Sb.</strong> o místní a časové dostupnosti. Zatímco u lékařské péče je česká hodnota nesplněné potřeby téměř nulová, u zubní péče se otevírá pětinásobný rozdíl mezi nejchudšími a nejbohatšími — což je přesně ten typ nerovnosti, který formálně univerzální systém nemá produkovat.</p>",
+  "determinants": "**Platba z kapsy a doplatky.** Stomatologie je v ČR segmentem s nejvyšším podílem přímých plateb pacienta. Hrazený standard pokrývá základní výkony jednoduchým materiálem; cokoli nad rámec (estetické výplně, korunky, můstky, implantáty) doplácí pacient. Pro nízkopříjmovou domácnost se tak i potřebné ošetření stává odložitelným výdajem — odtud pětinásobný příjmový gradient (QU1 2,5 % vs. QU5 0,5 %).\n\n**Smluvní síť a regionální nedostupnost.** Roste počet zubařů, kteří neuzavírají smlouvy se zdravotními pojišťovnami a pracují čistě samoplatebně, a počet praxí, které nepřijímají nové pacienty. V pohraničí a venkovských okresech (Karlovarský, Ústecký kraj) je sehnání smluvního zubaře reálná bariéra — pacient buď dojíždí, nebo platí.\n\n**Stárnutí stomatologické pracovní síly.** Významná část zubařů je v důchodovém věku a generační obměna nestačí pokrýt odchody, zejména mimo velká města. Bez registrujícího zubaře se preventivní i akutní péče odkládá.\n\n**Úhradová vyhláška a hodnota bodu.** Výše úhrady stomatologických výkonů z veřejného pojištění (úhradová vyhláška MZ ČR) dlouhodobě zaostává za reálnými náklady, což motivuje praxe k přechodu na samoplatební režim a oslabuje smluvní síť — strukturální páka na straně plátce a státu.\n\n**Zdravotní gramotnost a prevence.** Nízká účast na preventivních prohlídkách u části populace vede k tomu, že problém eskaluje do nákladného ošetření, které už pacient nezvládne zaplatit — preventivní gradient se přetavuje v gradient nesplněné potřeby.",
+  "patient_story": "Kraslice, Karlovarský kraj, únorové ráno. Paní Věra (61) má prasklou stoličku a několik týdnů to řeší vlažným čajem a ibuprofenem. Její dlouholetý zubař loni odešel do důchodu a praxi nikdo nepřevzal; nejbližší smluvní stomatolog, který bere nové pacienty, ordinuje o okres dál a má objednací lhůtu na měsíce. Soukromá ordinace ve městě by ji vzala hned — ošetření ale začíná na čtyřech tisících, a to je víc, než kolik jí po zaplacení nájmu zbude. Věra tedy čeká. Když se v dotazníku EU-SILC zeptají, zda v posledních dvanácti měsících potřebovala zubní péči a nedostala ji, zaškrtne „ano“ — a stane se jedním z těch 1,3 procenta Čechů, kteří totéž odpoví.\n\nČesko vykázalo v roce 2024 nesplněnou potřebu zubní péče 1,3 % populace 16+ (Eurostat EU-SILC). Signál je good: průměr EU27 je 3,3 %, takže formálně patří ČR k zemím s dobrou dostupností — lepší než Slovensko (1,4 %) i Polsko (1,3 %), srovnatelné s Rakouskem (1,1 %), za Německem (0,4 %). Jenže dvě věci se v té dobré známce ztrácejí. Za prvé trend: po pandemickém minimu 2021 (0,6 %) hodnota stoupla na 0,8 % (2022), 1,1 % (2023) a 1,3 % (2024) — za tři roky se zhruba zdvojnásobila. Za druhé — a to je podstatnější — příjmový gradient: v nejnižším příjmovém kvintilu byla nesplněná potřeba 2,5 %, v nejvyšším jen 0,5 %. Pětinásobný rozdíl, výrazně širší než u běžné lékařské péče.\n\nProč zrovna zuby? Protože stomatologie je v Česku tím segmentem, kde se nejvíc platí z kapsy. Hrazený standard pokrývá základ jednoduchým materiálem; korunky, můstky, implantáty a estetické výplně doplácí pacient. Pro domácnost paní Věry je i „potřebné“ ošetření odložitelný výdaj — a odtud ten příjmový rozdíl. K tomu se přidává řídnoucí smluvní síť: roste počet zubařů, kteří nemají smlouvu s pojišťovnou nebo neberou nové pacienty, stomatologická pracovní síla stárne a v pohraničních okresech je sehnat registrujícího zubaře reálná bariéra. Úhrada výkonů z veřejného pojištění přitom dlouhodobě zaostává za náklady, což praxe tlačí do samoplatebního režimu a smluvní síť dál oslabuje.\n\nPolitická páka leží převážně na straně státu a plátce a je konkrétní. Narovnání úhrady stomatologických výkonů v úhradové vyhlášce tak, aby smluvní praxe byla udržitelná (kompetence MZ ČR a zdravotních pojišťoven), je krok, který nejvíc brzdí odliv zubařů ze smluvní sítě. K tomu patří revize rozsahu hrazené péče v zákoně 48/1997 Sb. směrem k plně hrazenému funkčnímu standardu u nízkopříjmových skupin, cílená podpora vzniku praxí v okresech bez pokrytí (dotační a stipendijní programy, kompetence MZ a krajů) a důsledné vymáhání dostupnostních standardů podle nařízení 307/2012 Sb. Cílem není zlepšit už tak dobré celostátní číslo — cílem je zavřít tu pětinásobnou mezeru, aby paní Věra z Kraslic nemusela rozhodovat mezi nájmem a stoličkou.",
+  "framework": "hspa",
+  "dimension": "spravedlnost"
+}
