@@ -67,12 +67,10 @@
           AI-vygenerovaný podcast (Google NotebookLM) — „Konec řízení českého zdravotnictví naslepo" — shrnuje, co je rámec HSPA, proč vznikl a jak ho používáme. Mluvená alternativa k odbornému textu na této stránce.
         </p>
         <div class="hspa-podcast-player">
-          <iframe
-            src="https://drive.google.com/file/d/1Sc90X5emh6kCX5rB1VGcmMDAe15Ml5jW/preview"
-            allow="autoplay"
-            title="Podcast: Konec řízení českého zdravotnictví naslepo"
-            loading="lazy"
-          ></iframe>
+          <button type="button" class="hspa-podcast-facade" data-podcast-src="https://drive.google.com/file/d/1Sc90X5emh6kCX5rB1VGcmMDAe15Ml5jW/preview" aria-label="Přehrát podcast přímo zde: Konec řízení českého zdravotnictví naslepo">
+            <span class="hspa-podcast-facade-play" aria-hidden="true">▶</span>
+            <span class="hspa-podcast-facade-label">Přehrát podcast přímo zde</span>
+          </button>
         </div>
         <a class="hspa-podcast-cta" href="https://drive.google.com/file/d/1Sc90X5emh6kCX5rB1VGcmMDAe15Ml5jW/view" target="_blank" rel="noopener">
           Otevřít v novém okně ↗
@@ -339,6 +337,26 @@
 
 <footer class="bottom" id="siteFooter"></footer>
 
+<script>
+/* Podcast facade: Google Drive iframe se načte až na kliknutí (privacy/perf +
+   nezanáší do DOM nepřístupný third-party markup, který axe nemůže opravit). */
+(function () {
+  function loadPodcast(btn) {
+    var src = btn.getAttribute('data-podcast-src');
+    if (!src) return;
+    var f = document.createElement('iframe');
+    f.src = src;
+    f.title = 'Podcast: Konec řízení českého zdravotnictví naslepo';
+    f.setAttribute('allow', 'autoplay');
+    f.style.cssText = 'width:100%;height:80px;border:0;display:block;';
+    btn.parentNode.replaceChild(f, btn);
+  }
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.hspa-podcast-facade');
+    if (btn) loadPodcast(btn);
+  });
+})();
+</script>
 <script type="module" src="src/hspa-prehled.js"></script>
 
 </body>
