@@ -1,0 +1,55 @@
+{
+  "id": "mortalita_lecitelna",
+  "name": "Léčitelná mortalita",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Léčitelná mortalita",
+  "definition": "Standardizovaná míra předčasných úmrtí (do 75 let) na příčiny, kterým by bylo možné předejít včasnou a účinnou zdravotní péčí — diagnostikou a léčbou. Tzv. amenable (treatable) mortality podle společné metodiky Eurostat/OECD; na 100 000 obyvatel. Spolu s preventovatelnou mortalitou tvoří odvratitelnou (avoidable) úmrtnost. Zatímco preventovatelná mortalita měří sílu primární prevence a veřejného zdraví, léčitelná mortalita je proxy kvality a účinnosti samotného léčebného systému — měří, zda systém pacienta, který už onemocněl, dokáže včas a správně léčit.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_apr",
+      "dataset": "hlth_cd_apr",
+      "dimensions": {
+        "geo": "CZ",
+        "sex": "T",
+        "mortalit": "TRT",
+        "unit": "RT"
+      },
+      "note": "Eurostat řada hlth_cd_apr (avoidable mortality), dimenze mortalit=TRT (treatable). Standardizovaná míra (unit=RT) na evropskou standardní populaci (ESP), předčasná úmrtí do 75 let. Ověřeno živě z Eurostat API 2026-06-07: CZ 107,19 (2023), EU27_2020 86,81. Národním zdrojem prvotních dat o příčinách úmrtí je ČSÚ (List o prohlídce zemřelého), který je harmonizován do Eurostatu."
+    },
+    "fallback": {
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table?lang=en",
+      "note": "Eurostat Data Browser — interaktivní tabulka a stažení v CSV/TSV/JSON. Metadata a seznam diagnóz: https://ec.europa.eu/eurostat/cache/metadata/en/hlth_cdeath_esms.htm. Sekundárně OECD/European Observatory, State of Health in the EU — Country Health Profile: Czechia."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_cd_apr",
+    "dataset": "Eurostat (mortalit=TRT, geo=EU27_2020)",
+    "value": 86.8,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table?lang=en",
+    "note": "Benchmark = průměr EU27 (EU27_2020) z téže řady hlth_cd_apr, dimenze treatable (TRT), standardizovaná míra, rok 2023: 86,8 na 100 000 ob. Apples-to-apples: česká i benchmarková hodnota pocházejí ze stejného datasetu, stejné definice diagnóz, stejné standardní populace a stejného roku. Sousedé 2023: Německo 83,3, Rakousko 68,5, Polsko 132,7, Slovensko 161,1."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "ÚZIS",
+    "Eurostat",
+    "MZ ČR"
+  ],
+  "method_notes": "Definice dle společného seznamu odvratitelných příčin úmrtí Eurostat/OECD (2019, revize 2023). Léčitelná (amenable/treatable) úmrtnost zahrnuje příčiny, u nichž by včasná a kvalitní léčba mohla zabránit smrti — např. ischemická choroba srdeční (část), cévní mozkové příhody, kolorektální karcinom, karcinom prsu, leukémie u dětí, zápal plic, apendicitida, komplikace porodu, léčitelné infekce. Hodnota i benchmark vycházejí z Eurostat hlth_cd_apr (mortalit=TRT, unit=RT, sex=T), standardizováno na ESP, premature do 75 let. Česká hodnota 107,2 (2023) je o zhruba 24 % nad průměrem EU27 (86,8) → signal bad, přestože dlouhodobě výrazně klesá (147,7 v roce 2011 → 107,2 v roce 2023, tj. −27 %). Pandemie covidu-19 trend dočasně zhoršila (2020: 122,9; 2021: 125,9), poté se zlepšování obnovilo. Mezi středoevropskými sousedy je ČR lepší než Polsko (132,7) a Slovensko (161,1), ale za Německem (83,3) a Rakouskem (68,5).",
+  "limitations": "Závisí na kvalitě kódování příčin úmrtí v Listu o prohlídce zemřelého a na aktuálnosti seznamu diagnóz. Hranice mezi „léčitelnou\" a „preventovatelnou\" příčinou je u některých diagnóz (zejm. ischemická choroba srdeční) dělena fixním podílem, což je metodická konvence, ne biologická hranice. Indikátor neměří, kde v řetězci péče selhání nastalo (pozdní záchyt, nedostupnost, chyba léčby), pouze výsledek. Mezistátní srovnání může zkreslovat odlišná praxe v určování základní příčiny úmrtí.",
+  "importance": "<p>Léčitelná (amenable) mortalita je v rámci OECD HSPA <strong>vlajkovým výsledkovým ukazatelem kvality a účinnosti léčebné péče</strong>. Na rozdíl od většiny procesních ukazatelů (kolik vyšetření, kolik lůžek) měří to, na čem nakonec záleží: zda systém pacienta, který už onemocněl, dokáže <strong>včas a správně vyléčit a zabránit jeho předčasné smrti</strong>.</p><p>Společně s <a href=\"indicator.html?id=mortalita_preventabilni\">preventovatelnou mortalitou</a> rozkládá celkovou odvratitelnou úmrtnost na dvě jasně oddělené složky: preventovatelná měří sílu prevence a veřejného zdraví <em>před</em> vznikem nemoci, léčitelná měří kvalitu zdravotnictví <em>po</em> jejím vzniku. Právě tento rozklad umožňuje politice cílit — vysoká léčitelná úmrtnost ukazuje na mezery v dostupnosti, organizaci a kvalitě akutní a specializované péče (časná diagnostika onkologických onemocnění, centralizace, dojezdové časy, návaznost péče), nikoli na chování pacientů.</p>",
+  "determinants": "**Včasnost a organizace akutní péče.** Velkou část léčitelných úmrtí tvoří kardiovaskulární příhody (infarkt, cévní mozková příhoda), kde o výsledku rozhoduje dojezd, dostupnost katetrizačních a iktových center a návaznost péče. Česko zde za posledních 15 let výrazně postoupilo (síť kardiocenter a iktových center), což táhne celkovou hodnotu dolů.\n\n**Onkologický záchyt a léčba.** Kolorektální karcinom, karcinom prsu a další léčitelné nádory závisí na časnosti záchytu (screening) a na centralizaci a kvalitě onkologické léčby. Pozdní stadia v době diagnózy zvyšují léčitelnou úmrtnost — propojení s ukazateli screeningu a přežití rakoviny je přímé.\n\n**Dostupnost a regionální nerovnosti.** Tam, kde pacient naráží na delší dojezd, čekání nebo slabší síť specializované péče, roste riziko, že léčitelné onemocnění skončí smrtí. Krajské rozdíly v léčitelné úmrtnosti kopírují rozdíly v dostupnosti a sociálně-ekonomickém složení.\n\n**Sociálně-ekonomické determinanty a komorbidity.** Vyšší výskyt rizikových faktorů a komorbidit (kouření, alkohol, diabetes, hypertenze) zhoršuje výchozí stav pacienta a snižuje šanci na úspěšnou léčbu i u technicky dostupné péče — proto léčitelná a preventovatelná úmrtnost spolu korelují.\n\n**Kvalita kódování a dat.** Hodnota indikátoru je citlivá na praxi vyplňování Listu o prohlídce zemřelého a určování základní příčiny úmrtí; zlepšení kvality dat samo o sobě může hodnotu posunout.",
+  "patient_story": "Šumperk, listopadové pondělí, ráno. Paní Jarmile (68) se den předtím zvedl tlak a začalo ji bolet na hrudi, ale „nechtěla otravovat\" a počkala do rána. Když dcera ráno přijela, byla už zmatená a špatně mluvila — cévní mozková příhoda. Sanitka, dojezd, iktové centrum o kus dál. Kdyby přijela o čtyři hodiny dřív, v okně pro trombolýzu, vypadal by konec jinak. Cévní mozková příhoda patří mezi diagnózy, kterým by včasná a účinná léčba dokázala zabránit smrti — patří tedy do toho, co OECD a Eurostat nazývají léčitelnou (amenable) úmrtností. Jarmila se po dvou týdnech stala jedním z čísel v této statistice.\n\nLéčitelná mortalita byla v ČR v roce 2023 na úrovni 107,2 úmrtí na 100 000 obyvatel mladších 75 let (Eurostat, řada hlth_cd_apr, treatable). Průměr EU27 činil 86,8 — Česko je tedy zhruba o 24 % nad průměrem unie, což odpovídá signálu bad. Dobrá zpráva je v trendu: z 147,7 v roce 2011 hodnota klesla na 107,2 v roce 2023, tedy o více než čtvrtinu; pandemie covidu-19 ji dočasně vyhnala nahoru (122,9 v roce 2020, 125,9 v roce 2021), pak se zlepšování obnovilo. Mezi sousedy je Česko lepší než Polsko (132,7) a Slovensko (161,1), ale výrazně za Německem (83,3) a Rakouskem (68,5).\n\nLéčitelná úmrtnost je samostatná složka odvratitelné úmrtnosti a měří něco jiného než preventovatelná mortalita, kterou dashboard sleduje vedle ní. Preventovatelná měří, jestli systém dokáže zabránit vzniku nemoci (tabák, alkohol, screening, vakcinace). Léčitelná měří, co se stane potom — jestli systém pacienta, který už onemocněl, dokáže včas a kvalitně vyléčit. Strukturálně za českou hodnotou stojí pokrok v akutní kardiologické a iktové péči (síť center táhne číslo dolů), ale i přetrvávající mezery: pozdní onkologický záchyt, regionální rozdíly v dostupnosti specializované péče a vyšší zátěž komorbiditami. Mezera 24 procent k EU znamená řádově tisíce úmrtí ročně, kterým srovnatelně vybavený systém na Západě dokáže zabránit.\n\nLéčitelná mortalita je jeden z nejsilnějších souhrnných ukazatelů kvality léčebného systému — a politické páky jsou konkrétní. Patří sem další centralizace komplexní a onkologické péče do center s dostatečným objemem výkonů, dotažení sítě a dojezdových časů akutní péče (kardio, ikty, traumata) i v okrajových regionech, zrychlení onkologického záchytu (návaznost screening → diagnóza → zahájení léčby) a měření výsledků péče na úrovni poskytovatelů. Kompetence leží na Ministerstvu zdravotnictví (síť center, úhradové nástroje), zdravotních pojišťovnách (smluvní politika a platba za výsledek) a krajích (dostupnost). Dotažení na evropský průměr (86,8) je realistický a měřitelný cíl — a každý krok k němu se počítá v zachráněných životech.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
