@@ -16,10 +16,10 @@
 
 import { isArticleVisible } from './page-shared.js';
 
-const SERIES_TITLE = 'Jak (ne)reformovat komplexní systém';
+export const SERIES_TITLE = 'Jak (ne)reformovat komplexní systém';
 const SERIES_HUB = 'clanky.html';
 
-const SERIES = [
+export const SERIES = [
   { n: 1, slug: 'clanek-teorie-zmeny.html',               short: 'Teorie změny a logický model' },
   { n: 2, slug: 'clanek-rizeni-podle-vysledku.html',      short: 'Řízení podle výsledků' },
   { n: 3, slug: 'clanek-komplexita-reforem.html',         short: 'Komplexita, chaos a okno příležitosti' },

@@ -5,7 +5,7 @@ import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
-import { enhanceSeriesNav } from './series-nav.js';
+import { enhanceSeriesNav, SERIES, SERIES_TITLE } from './series-nav.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
@@ -179,6 +179,7 @@ async function loadAndRenderArticles() {
   // === HUB komponenty (hero stats, poslední zprávy, kontext, rubriky) ===
   renderHubStats(articles, allEntries);
   renderHubLatest(articles);
+  renderHubSeries(articles);
   renderHubEssentials(articles, rubrics);
   renderHubRubrics(articles, rubrics);
 
@@ -436,6 +437,40 @@ function renderHubLatest(articles) {
  * pinned_essential: true v articles.json). Pořadí podle data (nejnovější
  * první). Když redakce žádný nevybere, sekce se skryje.
  */
+/**
+ * Rozcestník 9dílné série „Jak (ne)reformovat komplexní systém". Registr dílů
+ * (pořadí, slug, název) je sdílený se sériovou navigací v článcích
+ * (src/series-nav.js) — jediný zdroj pravdy. Respektuje viditelnost: díl, který
+ * není v `articles` (= isArticleVisible=false), se vykreslí jako neaktivní
+ * „připravujeme". Sekce se skryje, dokud není viditelný ani jeden díl.
+ */
+function renderHubSeries(articles) {
+  const section = document.querySelector('.hub-series-section');
+  const wrap = document.getElementById('hubSeries');
+  if (!wrap) return;
+
+  const visible = new Set(articles.map(a => a.slug));
+  if (!SERIES.some(d => visible.has(d.slug))) {
+    if (section) section.classList.add('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+  if (section) section.classList.remove('hidden');
+
+  wrap.innerHTML = SERIES.map(d => {
+    if (visible.has(d.slug)) {
+      return `<li><a href="${esc(d.slug)}" class="hub-series-card">
+        <span class="hub-series-num">${d.n}</span>
+        <span class="hub-series-card-title">${esc(d.short)}</span>
+      </a></li>`;
+    }
+    return `<li><span class="hub-series-card hub-series-card-soon" aria-disabled="true">
+      <span class="hub-series-num">${d.n}</span>
+      <span class="hub-series-card-title">${esc(d.short)}<span class="hub-series-soon">připravujeme</span></span>
+    </span></li>`;
+  }).join('');
+}
+
 function renderHubEssentials(articles, rubrics) {
   const section = document.querySelector('.hub-essentials-section');
   const wrap = document.getElementById('hubEssentials');
