@@ -1,0 +1,53 @@
+{
+  "id": "umrtnost_predavkovani_drogy",
+  "name": "Úmrtnost na předávkování drogami",
+  "area": "Výsledky",
+  "domain": "Duševní zdraví",
+  "subdomain": "Závislosti a předávkování",
+  "definition": "Míra úmrtí způsobených přímým předávkováním (smrtelná intoxikace) nelegálními drogami a těkavými látkami, vyjádřená na milion obyvatel ve věku 15–64 let. Tzv. drug-induced deaths (drogová úmrtí) podle indikátoru EUDA/EMCDDA — měří akutní, bezprostřední smrtelný dopad užívání návykových látek, na rozdíl od nepřímých úmrtí pod vlivem drog (nehody, sebevraždy, nemoci). Je to výsledkový ukazatel, který odráží jak rizikovost domácí drogové scény (jaké látky se užívají), tak sílu a dostupnost služeb snižování rizik (harm reduction) a léčby závislostí.",
+  "unit": "na milion obyv. 15–64",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "narodni_monitorovaci_stredisko",
+      "endpoint": "https://www.drogy-info.cz/publikace/vyrocni-zpravy/",
+      "dataset": "Národní monitorovací středisko pro drogy a závislosti (NMS, Úřad vlády ČR) — Zpráva o nelegálních drogách v ČR / Souhrnná zpráva o závislostech",
+      "dimensions": {
+        "geo": "CZ",
+        "age": "15-64",
+        "metric": "smrtelna_predavkovani_nelegalni_drogy_a_tekave_latky"
+      },
+      "note": "Národní zdroj počtu smrtelných předávkování (přímá drogová úmrtí) je NMS na základě dat Speciálního registru zemřelých (Soudnělékařský registr) a Obecného registru zemřelých (ÚZIS). Počet přímých smrtelných předávkování nelegálními drogami a těkavými látkami: 2020 = 58, 2021 = 54, 2022 = 53, 2023 = 71 (celkem vč. psychoaktivních léků 2023 = 75). Míra na milion obyv. 15–64 je dopočtena z těchto počtů a populace 15–64 (ČSÚ, cca 6,66 mil. v 2020/2021 a 6,87 mil. v 2023). Mezinárodně srovnatelná je standardizovaná míra EUDA."
+    },
+    "fallback": {
+      "type": "euda",
+      "url": "https://www.euda.europa.eu/publications/european-drug-report/2024/drug-induced-deaths_en",
+      "note": "European Union Drugs Agency (EUDA, dříve EMCDDA), European Drug Report — Drug-induced deaths, statistická příloha (annex tables, tabulka Drug-induced deaths). Mezinárodně srovnatelná age-standardizovaná míra na milion obyv. 15–64. Sekundárně ÚZIS (Národní registr zemřelých, drogová úmrtí)."
+    }
+  },
+  "benchmark_source": {
+    "type": "euda",
+    "code": "drug_induced_deaths_rate",
+    "dataset": "EUDA / European Drug Report (mortalita způsobená předávkováním, na milion obyv. 15–64, EU průměr)",
+    "value": 22.5,
+    "url": "https://www.euda.europa.eu/publications/european-drug-report/2024/drug-induced-deaths_en",
+    "note": "Benchmark = odhad průměrné míry úmrtí na předávkování v EU: 22,5 na milion obyv. 15–64 za rok 2022 (European Drug Report 2024); předběžný odhad za rok 2023 činí 24,7. Česko patří podle EUDA dlouhodobě k zemím s nejnižší mírou úmrtí na předávkování v celé EU (rozpětí napříč zeměmi je cca 2 až 135 na milion). Srovnání je orientační: ČR i EU měří přímá předávkování, ale národní a EUDA-standardizovaná selekce příčin se mírně liší; kvalitativní závěr (ČR hluboko pod průměrem EU) je napříč metodami robustní."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Národní monitorovací středisko pro drogy a závislosti (Úřad vlády ČR)",
+    "ÚZIS",
+    "EUDA"
+  ],
+  "method_notes": "Indikátor sleduje přímá smrtelná předávkování (drug-induced deaths) — akutní intoxikace s bezprostředním smrtelným následkem. Národní data poskytuje NMS ze dvou zdrojů: Speciálního (soudnělékařského) registru a Obecného registru zemřelých (ÚZIS); obě metody dávají v ČR nízká čísla, soudnělékařská selekce je užší. Hodnota a časová řada v dashboardu vychází z počtů přímých předávkování nelegálními drogami a těkavými látkami (NMS): 2020 = 58, 2021 = 54, 2022 = 53, 2023 = 71; po přepočtu na populaci 15–64 (ČSÚ) to odpovídá 8,7 / 8,1 / 7,7 / 10,3 na milion. Benchmark je odhad EU 22,5 na milion 15–64 (2022, EUDA). Česko je dlouhodobě jednou ze zemí s vůbec nejnižší mírou úmrtí na předávkování v EU — klíčovým důvodem je struktura domácí drogové scény (dominance metamfetaminu/pervitinu nad opioidy, jejichž předávkování bývá smrtelnější) a hustá síť služeb snižování rizik. Mírný nárůst v roce 2023 je třeba sledovat — souvisí mj. s rizikem příchodu vysoce účinných syntetických opioidů (fentanyly, nitazeny).",
+  "limitations": "Absolutní počty jsou nízké (desítky případů ročně), takže meziroční míra kolísá a jednotlivý rok nelze přeceňovat. Národní (NMS) a EUDA-standardizovaná selekce příčin se mírně liší, takže přesná míra na milion závisí na metodě; přepočet na populaci 15–64 je orientační. Indikátor zachycuje pouze přímá předávkování, nikoli přibližně 130–150 ročních nepřímých úmrtí pod vlivem drog (nehody, sebevraždy, nemoci) ani úmrtí spojená s alkoholem či tabákem, která jsou řádově vyšší. Nízká hodnota neznamená nízkou prevalenci užívání — ČR má naopak vysoký výskyt užívání pervitinu; znamená nízkou smrtelnost domácí scény a účinnou harm reduction.",
+  "importance": "<p>Úmrtnost na předávkování je <strong>nejtvrdší výsledkový ukazatel drogové politiky</strong>: počítá mrtvé, ne intervence. Na rozdíl od údajů o prevalenci užívání nebo počtu klientů služeb měří to, na čem nakonec záleží — kolik lidí na užívání návykových látek bezprostředně zemře. Je proto vlajkovým indikátorem v evropském monitoringu (EUDA) i v rámci OECD HSPA pro oblast duševního zdraví a závislostí.</p><p>Česká hodnota vypráví neobvyklý příběh: zatímco ve většině ukazatelů kvality péče se ČR pohybuje uprostřed nebo pod evropským průměrem, v úmrtnosti na předávkování patří mezi <strong>nejlepší v celé EU</strong>. Je to vzácný případ, kdy konkrétní česká politika — desítky let budovaná síť nízkoprahových a terénních služeb snižování rizik — měřitelně zachraňuje životy a má smysl ji chránit. Indikátor zároveň slouží jako včasný varovný systém: jakýkoli nástup vysoce účinných syntetických opioidů na domácí trh by se v něm projevil mezi prvními.</p>",
+  "determinants": "**Struktura drogové scény.** Klíčový determinant. Česká scéna je historicky dominována metamfetaminem (pervitinem) a injekční aplikací, nikoli heroinem a opioidy jako v západní a severní Evropě. Předávkování stimulanty bývá méně často bezprostředně smrtelné než předávkování opioidy, které tlumí dýchání. Proto má ČR i při vysoké prevalenci užívání nízkou úmrtnost.\n\n**Služby snižování rizik (harm reduction).** Hustá a dlouhodobě financovaná síť kontaktních center, terénních programů, výměny injekčního materiálu a distribuce naloxonu snižuje riziko smrtelné intoxikace i přenosu infekcí. ČR patří v EU k zemím s nejrozvinutější harm-reduction infrastrukturou v poměru k velikosti scény.\n\n**Dostupnost substituční a adiktologické léčby.** Opioidová substituční léčba (metadon, buprenorfin) a návazná adiktologická péče snižují rizikové vzorce užívání. Dostupnost je ale regionálně nerovná a kapacitně omezená.\n\n**Příchod syntetických opioidů.** Hlavní budoucí riziko. Nástup fentanylů a nitazenů na evropský trh (zkušenost USA, Pobaltí) by mohl českou nízkou hodnotu rychle zvrátit; mírný nárůst v roce 2023 je signál k ostražitosti.\n\n**Kvalita registrace a toxikologie.** Hodnota závisí na praxi soudnělékařské pitvy a toxikologického vyšetření a na propojení Speciálního a Obecného registru zemřelých.",
+  "patient_story": "Brno, podvečer, dodávka terénního programu zaparkovaná u nádraží. Lucie (29), adiktoložka v terénu, podává muži v kapuci čistý injekční set a malou lahvičku s naloxonem — protijedem, který dokáže zvrátit předávkování opioidem dřív, než přijede sanitka. „Vezmi si dvě, jednu nech kámošovi,\" říká. Tahle scéna se v Česku odehraje tisíckrát týdně a je hlavním důvodem, proč česká statistika úmrtí na předávkování vypadá tak, jak vypadá. Muž, kterému Lucie set podává, se s vysokou pravděpodobností nestane jedním z čísel, která tvoří národní bilanci smrtelných předávkování.\n\nÚmrtnost na předávkování drogami byla v ČR v roce 2023 na úrovni 10,3 úmrtí na milion obyvatel ve věku 15–64 let — v absolutních číslech 71 přímých smrtelných předávkování nelegálními drogami a těkavými látkami (75 včetně psychoaktivních léků). Průměr Evropské unie přitom EUDA odhaduje na 22,5 na milion (2022), tedy více než dvojnásobek; česká hodnota patří dlouhodobě k vůbec nejnižším v celé EU, kde se míra napříč zeměmi pohybuje od 2 až po 135 na milion. Trend je nízký a stabilní (8,7 v roce 2020, 8,1 v 2021, 7,7 v 2022), v roce 2023 ale mírně vzrostl na 10,3 — drobné varování, které stojí za sledování. Signál je good, ale křehký.\n\nZa tím nízkým číslem nestojí náhoda ani to, že by se v Česku užívalo málo. Naopak — ČR má jeden z nejvyšších výskytů užívání pervitinu v Evropě. Rozhodující jsou dvě věci. Za prvé struktura scény: dominuje metamfetamin a injekční stimulanty, jejichž předávkování je méně často bezprostředně smrtelné než předávkování opioidy, které tlumí dýchání. Za druhé desítky let budovaná síť služeb snižování rizik — kontaktní centra, terénní programy, výměna injekčního materiálu, distribuce naloxonu a substituční léčba. Právě tahle infrastruktura, financovaná z velké části přes Radu vlády pro koordinaci politiky v oblasti závislostí, drží smrtelnost domácí drogové scény nízko.\n\nPolitická páka je tu nezvykle konkrétní a jde oběma směry. Pozitivně: udržet a stabilně financovat harm-reduction a adiktologickou síť (která opakovaně čelí napjatým rozpočtům a dotačním nejistotám), rozšířit dostupnost naloxonu a opioidové substituce i mimo velká města a posílit včasný monitoring nových látek na trhu. Negativně, jako hrozba: pokud do Česka pronikne vlna vysoce účinných syntetických opioidů (fentanyly, nitazeny), může se dnešní evropsky nejlepší hodnota velmi rychle zhoršit — jak ukázaly USA i Pobaltí. Kompetence drží Úřad vlády (národní koordinátor a Rada vlády pro závislosti), Ministerstvo zdravotnictví (síť adiktologické péče a úhrady) a kraje (financování a dostupnost terénních služeb). Česká nízká úmrtnost na předávkování je jedním z mála míst, kde se osvědčená domácí politika dá doslova počítat v zachráněných životech — a kde hlavním úkolem není dohánět Evropu, ale neztratit náskok.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
