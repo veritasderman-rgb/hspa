@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSPA Kompas — grafický prvek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf8f1; --paper2:#f3eee2; --ink:#1f1a14; --red:#b8361e;
+    --rule:rgba(31,26,20,.13); --rule2:rgba(31,26,20,.27); --mut:rgba(31,26,20,.62);
+    --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+    --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+       line-height:1.5;-webkit-font-smoothing:antialiased;padding:48px 24px 96px}
+  .wrap{max-width:880px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+          color:var(--mut);display:flex;align-items:center;gap:10px}
+  .kicker::after{content:"";flex:1;height:1px;background:var(--rule2)}
+  h1{font-size:clamp(40px,8vw,72px);line-height:1.02;font-weight:700;letter-spacing:-.01em;margin:.28em 0 .12em}
+  .dek{font-size:18px;color:var(--mut);max-width:60ch;margin:0 0 8px}
+  h2{font-size:13px;font-family:var(--mono);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+     margin:0 0 20px;padding-bottom:10px;border-bottom:1px solid var(--rule2)}
+  section{margin-top:64px}
+  .cap{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--mut);text-transform:uppercase;margin-top:12px}
+
+  .heroRow{display:flex;flex-wrap:wrap;gap:24px}
+  .card{background:var(--paper);border:1px solid var(--rule2);padding:32px;display:flex;
+        flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .card.fill{flex:1;min-width:240px}
+  .card.dark{background:var(--ink);border-color:var(--ink)}
+  .card.dark .cap{color:rgba(251,248,241,.6)}
+
+  .legend{display:flex;flex-direction:column;gap:14px;flex:1;min-width:240px;justify-content:center}
+  .leg{display:flex;gap:12px;align-items:flex-start}
+  .leg b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+         color:var(--red);min-width:96px;padding-top:2px}
+  .leg span{font-size:15px;color:var(--ink)}
+
+  .scale{display:flex;align-items:flex-end;gap:36px;flex-wrap:wrap;
+         background:var(--paper);border:1px solid var(--rule2);padding:36px 32px}
+  .unit{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .unit svg{display:block}
+
+  .patternPanel{position:relative;border:1px solid var(--rule2);overflow:hidden;background:var(--paper)}
+  .patternPanel svg.bg{display:block;width:100%;height:200px}
+  .floatCard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+             background:var(--paper);border:1px solid var(--rule2);padding:18px 26px;
+             font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+
+  .tokens{display:flex;flex-wrap:wrap;gap:12px}
+  .tok{display:flex;align-items:center;gap:10px;border:1px solid var(--rule2);padding:8px 12px;font-family:var(--mono);font-size:12px}
+  .sw{width:22px;height:22px;border:1px solid var(--rule2)}
+  ul.use{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+  ul.use li{display:flex;gap:14px;font-size:15px;align-items:baseline}
+  ul.use b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);min-width:120px}
+  code{font-family:var(--mono);font-size:.86em;background:var(--paper2);padding:1px 5px;border:1px solid var(--rule)}
+  .foot{margin-top:72px;padding-top:18px;border-top:1px solid var(--rule2);
+        font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--mut);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kicker">HSPA Monitor · stálý grafický prvek</p>
+  <h1>HSPA&nbsp;Kompas</h1>
+  <p class="dek">Editorialní datový symbol pro hspa-cesko.cz. Přístroj orientace, ne medicínská ikona — kruhová stupnice měří, střelka ukazuje směr, index drží benchmark.</p>
+
+  <!-- THE MARK + LEGEND -->
+  <section>
+    <h2>Značka</h2>
+    <div class="heroRow">
+      <div class="card fill">
+        <svg viewBox="0 0 100 100" width="172" height="172" fill="none" aria-label="HSPA kompas mono">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="0.9"/>
+          <circle cx="50" cy="50" r="33" stroke="#1F1A14" stroke-width="0.6" stroke-opacity="0.45"/>
+          <g stroke="#1F1A14" stroke-linecap="round">
+            <g stroke-width="1.1">
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+            </g>
+            <g stroke-width="0.7" stroke-opacity="0.5">
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(30 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(60 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(120 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(150 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(210 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(240 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(300 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(330 50 50)"/>
+            </g>
+          </g>
+          <polygon points="46,8 54,8 50,16" fill="#1F1A14"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1F1A14" stroke-width="0.9" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#1F1A14"/>
+          <circle cx="50" cy="50" r="3" fill="#FBF8F1" stroke="#1F1A14" stroke-width="0.9"/>
+        </svg>
+        <div class="cap">monochrom · 180 px</div>
+      </div>
+      <div class="card fill">
+        <svg viewBox="0 0 100 100" width="172" height="172" fill="none" aria-label="HSPA kompas červený akcent">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="0.9"/>
+          <circle cx="50" cy="50" r="33" stroke="#1F1A14" stroke-width="0.6" stroke-opacity="0.45"/>
+          <g stroke="#1F1A14" stroke-linecap="round">
+            <g stroke-width="1.1">
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+            </g>
+            <g stroke-width="0.7" stroke-opacity="0.5">
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(30 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(60 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(120 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(150 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(210 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(240 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(300 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(330 50 50)"/>
+            </g>
+          </g>
+          <polygon points="46,8 54,8 50,16" fill="#1F1A14"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1F1A14" stroke-width="0.9" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#B8361E"/>
+          <circle cx="50" cy="50" r="3" fill="#FBF8F1" stroke="#1F1A14" stroke-width="0.9"/>
+        </svg>
+        <div class="cap">červený akcent · 180 px</div>
+      </div>
+    </div>
+
+    <div class="heroRow" style="margin-top:24px">
+      <div class="legend">
+        <div class="leg"><b>Stupnice</b><span>Graduovaný kruh = měření a benchmark. „Monitor" jako přístroj.</span></div>
+        <div class="leg"><b>Index ▲</b><span>Vyplněný hrot nahoře = pravý sever / cílová hodnota (OECD, EU).</span></div>
+        <div class="leg"><b>Střelka</b><span>Plná polovina míří vzhůru-vpravo = vektor zlepšení, „správný směr".</span></div>
+        <div class="leg"><b>Mezera</b><span>Úhel mezi indexem a střelkou = výkonnostní mezera, kterou HSPA čte.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIZE SCALE -->
+  <section>
+    <h2>Škálování</h2>
+    <div class="scale">
+      <div class="unit">
+        <svg viewBox="0 0 100 100" width="16" height="16" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="7.5"/>
+          <polygon points="46,9 54,9 50,17" fill="#1F1A14"/>
+          <polygon points="34,77.73 56.93,54 43.07,46" stroke="#1F1A14" stroke-width="6" stroke-linejoin="round"/>
+          <polygon points="66,22.27 56.93,54 43.07,46" fill="#1F1A14"/>
+        </svg>
+        <div class="cap">16</div>
+      </div>
+      <div class="unit">
+        <svg viewBox="0 0 100 100" width="32" height="32" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="3"/>
+          <g stroke="#1F1A14" stroke-width="2.6" stroke-linecap="round">
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+          </g>
+          <polygon points="45,8 55,8 50,16.5" fill="#1F1A14"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1F1A14" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#1F1A14"/>
+          <circle cx="50" cy="50" r="3.4" fill="#FBF8F1" stroke="#1F1A14" stroke-width="2.6"/>
+        </svg>
+        <div class="cap">32</div>
+      </div>
+      <div class="unit">
+        <svg viewBox="0 0 100 100" width="48" height="48" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="3"/>
+          <g stroke="#1F1A14" stroke-width="2.6" stroke-linecap="round">
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+            <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+          </g>
+          <polygon points="45,8 55,8 50,16.5" fill="#1F1A14"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1F1A14" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#1F1A14"/>
+          <circle cx="50" cy="50" r="3.4" fill="#FBF8F1" stroke="#1F1A14" stroke-width="2.6"/>
+        </svg>
+        <div class="cap">48</div>
+      </div>
+      <div class="unit">
+        <svg viewBox="0 0 100 100" width="120" height="120" fill="none">
+          <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="0.9"/>
+          <circle cx="50" cy="50" r="33" stroke="#1F1A14" stroke-width="0.6" stroke-opacity="0.45"/>
+          <g stroke="#1F1A14" stroke-linecap="round">
+            <g stroke-width="1.1">
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+            </g>
+            <g stroke-width="0.7" stroke-opacity="0.5">
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(30 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(60 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(120 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(150 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(210 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(240 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(300 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(330 50 50)"/>
+            </g>
+          </g>
+          <polygon points="46,8 54,8 50,16" fill="#1F1A14"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1F1A14" stroke-width="0.9" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#1F1A14"/>
+          <circle cx="50" cy="50" r="3" fill="#FBF8F1" stroke="#1F1A14" stroke-width="0.9"/>
+        </svg>
+        <div class="cap">120</div>
+      </div>
+    </div>
+    <p class="cap">Tah a hustota stupnice jsou laděné pro každou velikost — mikro drží jen kruh, střelku a index; hero přidává plnou stupnici.</p>
+  </section>
+
+  <!-- REVERSE + RED MICRO -->
+  <section>
+    <h2>Inverze &amp; favicon</h2>
+    <div class="heroRow">
+      <div class="card dark fill">
+        <svg viewBox="0 0 100 100" width="120" height="120" fill="none" aria-label="HSPA kompas inverzní">
+          <circle cx="50" cy="50" r="44" stroke="#FBF8F1" stroke-width="0.9"/>
+          <circle cx="50" cy="50" r="33" stroke="#FBF8F1" stroke-width="0.6" stroke-opacity="0.45"/>
+          <g stroke="#FBF8F1" stroke-linecap="round">
+            <g stroke-width="1.1">
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+            </g>
+            <g stroke-width="0.7" stroke-opacity="0.5">
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(30 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(60 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(120 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(150 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(210 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(240 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(300 50 50)"/>
+              <line x1="50" y1="6" x2="50" y2="10" transform="rotate(330 50 50)"/>
+            </g>
+          </g>
+          <polygon points="46,8 54,8 50,16" fill="#FBF8F1"/>
+          <polygon points="33,79.44 55.2,53 44.8,47" stroke="#FBF8F1" stroke-width="0.9" stroke-linejoin="round"/>
+          <polygon points="67,20.56 55.2,53 44.8,47" fill="#B8361E"/>
+          <circle cx="50" cy="50" r="3" fill="#1F1A14" stroke="#FBF8F1" stroke-width="0.9"/>
+        </svg>
+        <div class="cap">knockout na ink + akcent</div>
+      </div>
+      <div class="card fill">
+        <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:14px;color:var(--ink)">
+          <svg viewBox="0 0 100 100" width="16" height="16" fill="none">
+            <circle cx="50" cy="50" r="44" stroke="#1F1A14" stroke-width="7.5"/>
+            <polygon points="46,9 54,9 50,17" fill="#1F1A14"/>
+            <polygon points="34,77.73 56.93,54 43.07,46" stroke="#1F1A14" stroke-width="6" stroke-linejoin="round"/>
+            <polygon points="66,22.27 56.93,54 43.07,46" fill="#B8361E"/>
+          </svg>
+          hspa-cesko.cz
+        </div>
+        <div class="cap">16 px v liště prohlížeče</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATTERN -->
+  <section>
+    <h2>Pattern · pozadí</h2>
+    <div class="patternPanel">
+      <svg class="bg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hspaTile" width="64" height="64" patternUnits="userSpaceOnUse">
+            <g opacity="0.12" fill="none" stroke="#1F1A14">
+              <circle cx="32" cy="32" r="10" stroke-width="0.9"/>
+              <polygon points="27.75,39.36 33.645,32.95 30.355,31.05" stroke-width="0.9" stroke-linejoin="round"/>
+              <polygon points="36.25,24.64 33.645,32.95 30.355,31.05" fill="#1F1A14" stroke="none"/>
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="#fbf8f1"/>
+        <rect width="100%" height="100%" fill="url(#hspaTile)"/>
+      </svg>
+      <div class="floatCard">orientované pole · 64px dlaždice</div>
+    </div>
+    <p class="cap">Bezešvá dlaždice. Použít jako <code>background-image</code> s <code>background-repeat:repeat</code>; sytost se ladí přes <code>background-size</code>.</p>
+  </section>
+
+  <!-- TOKENS + USAGE -->
+  <section>
+    <h2>Tokeny &amp; nasazení</h2>
+    <div class="tokens">
+      <div class="tok"><span class="sw" style="background:#fbf8f1"></span>paper #FBF8F1</div>
+      <div class="tok"><span class="sw" style="background:#1f1a14"></span>ink #1F1A14</div>
+      <div class="tok"><span class="sw" style="background:#b8361e"></span>red #B8361E</div>
+      <div class="tok"><span class="sw" style="background:rgba(31,26,20,.27)"></span>rule rgba(31,26,20,.27)</div>
+    </div>
+    <ul class="use" style="margin-top:24px">
+      <li><b>Témata</b><span>Pro tmavá pozadí prohoď <code>#1F1A14</code> → <code>#FBF8F1</code> (viz inverze). Pivot drží barvu pozadí.</span></li>
+      <li><b>React / inline</b><span>Nahraď ink za <code>currentColor</code> a dědí barvu textu; akcent ponech <code>#B8361E</code> nebo <code>var(--red)</code>.</span></li>
+      <li><b>Pravidlo akcentu</b><span>Červená patří <em>jen</em> hrotu střelky (= aktuální směr systému). Index a stupnice zůstávají inkoustové.</span></li>
+      <li><b>Bez klišé</b><span>Žádný kříž, srdce, EKG ani stock-medical. Identita stojí na přístroji orientace.</span></li>
+    </ul>
+  </section>
+
+  <p class="foot">HSPA Kompas · Source Serif 4 · paper / ink / red · hspa-cesko.cz</p>
+
+</div>
+</body>
+</html>
