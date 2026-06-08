@@ -5509,6 +5509,155 @@ ul.md-enum > li > strong:first-child {
   padding-bottom: 28px;
   margin-bottom: 36px;
 }
+
+/* === Sériová navigace (série „Jak (ne)reformovat komplexní systém") === */
+.series-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: -8px 0 36px;
+  padding: 14px 18px;
+  background: var(--paper2);
+  border: 1px solid var(--rule2);
+  border-radius: 4px;
+}
+.series-strip-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--ink);
+  min-width: 0;
+}
+.series-strip-kicker {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.series-strip-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.series-strip-label:hover .series-strip-title { opacity: 0.78; }
+.series-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.series-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--rule2);
+  border-radius: 50%;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--paper);
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+a.series-pill:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.series-pill-current {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+  cursor: default;
+}
+
+.series-prevnext {
+  margin: 44px 0 8px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink);
+}
+.series-prevnext-hub {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+.series-prevnext-kicker {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.series-prevnext-all {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mut);
+}
+.series-prevnext-hub:hover .series-prevnext-all { color: var(--red); }
+.series-nav-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.series-nav-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--rule2);
+  border-radius: 4px;
+  text-decoration: none;
+  background: var(--paper);
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.series-nav-card-next { text-align: right; align-items: flex-end; }
+.series-nav-card:hover { border-color: var(--ink); background: var(--paper2); }
+.series-nav-card-empty {
+  border: 1px dashed var(--rule);
+  background: transparent;
+  pointer-events: none;
+}
+.series-nav-dir {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.series-nav-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+  font-variant-numeric: tabular-nums;
+}
+.series-nav-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+@media (max-width: 560px) {
+  .series-strip { gap: 12px; }
+  .series-nav-cards { grid-template-columns: 1fr; }
+  .series-nav-card-next { text-align: left; align-items: flex-start; }
+}
 .article-tags {
   display: flex;
   gap: 12px;

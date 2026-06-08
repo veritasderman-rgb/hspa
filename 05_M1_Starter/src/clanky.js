@@ -5,6 +5,7 @@ import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
+import { enhanceSeriesNav } from './series-nav.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
@@ -14,6 +15,7 @@ injectAiDisclaimer();
 enhanceArticleToc(); // bezpečné: na hub stránce neudělá nic (chybí .article-page)
 loadGlossaryTerms().then(terms => enhanceInlineGlossary(terms)).catch(() => {});
 loadAndRenderArticles();
+enhanceSeriesNav();  // číslovaná navigace série na dílech (idempotent, jinak no-op)
 enhanceArticleRelated(); // generuje "Příbuzné sekce" na clanek-*.html (idempotent)
 
 /**
