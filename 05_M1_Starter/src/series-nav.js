@@ -38,8 +38,13 @@ function escapeHtml(str) {
 }
 
 function detectArticleSlug() {
-  const path = (location.pathname || '').split('/').filter(Boolean).pop() || '';
-  if (path.startsWith('clanek-') && path.endsWith('.html')) return path;
+  // Vercel servíruje s cleanUrls:true → live cesta je „/clanek-foo" bez .html;
+  // lokálně (http-server) je „/clanek-foo.html". Normalizuj na tvar se .html,
+  // ať odpovídá slugům v articles.json / registru SERIES.
+  const last = (location.pathname || '').split('/').filter(Boolean).pop() || '';
+  if (last.startsWith('clanek-')) {
+    return last.endsWith('.html') ? last : `${last}.html`;
+  }
   const ds = document.body?.dataset?.articleSlug;
   if (ds) return ds;
   return null;

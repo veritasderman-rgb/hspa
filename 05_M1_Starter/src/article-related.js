@@ -43,9 +43,13 @@ function escapeHtml(str) {
 }
 
 function detectArticleSlug() {
-  // file path: /clanek-foo.html → 'clanek-foo.html'
-  const path = (location.pathname || '').split('/').filter(Boolean).pop() || '';
-  if (path.startsWith('clanek-') && path.endsWith('.html')) return path;
+  // file path: /clanek-foo.html → 'clanek-foo.html'.
+  // Vercel cleanUrls:true servíruje live bez .html (/clanek-foo) — normalizuj
+  // na tvar se .html, ať odpovídá slugům v articles.json.
+  const last = (location.pathname || '').split('/').filter(Boolean).pop() || '';
+  if (last.startsWith('clanek-')) {
+    return last.endsWith('.html') ? last : `${last}.html`;
+  }
   // fallback: <body data-article-slug>
   const ds = document.body?.dataset?.articleSlug;
   if (ds) return ds;
