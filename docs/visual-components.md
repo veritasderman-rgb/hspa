@@ -11,6 +11,61 @@ Pro per-page popis stránek (kde se komponenty používají) viz [`site-architec
 
 ---
 
+# 0. Brand mark — HSPA Kompas
+
+Stálý grafický prvek webu. **Přístroj orientace, ne medicínská ikona** — kruhová
+stupnice měří, střelka ukazuje směr, index drží benchmark. Žádný kříž, srdce, EKG
+ani stock-medical.
+
+### Význam
+| Prvek | Co znamená |
+|---|---|
+| **Stupnice** (graduovaný kruh) | měření a benchmark — „monitor" jako přístroj |
+| **Index ▲** (vyplněný hrot nahoře) | pravý sever / cílová hodnota (OECD, EU) |
+| **Střelka** (plná polovina vzhůru-vpravo) | vektor zlepšení, „správný směr" |
+| **Mezera** (úhel index↔střelka) | výkonnostní mezera, kterou HSPA čte |
+
+### Pravidla použití (závazná)
+1. **Červená patří JEN hrotu střelky** (`var(--red)` `#B8361E` = aktuální směr
+   systému). Stupnice, index a kruh zůstávají inkoustové (`var(--ink)`).
+2. **Škálování podle velikosti** — ≤16 px jen kruh + střelka + index (favicon);
+   32–48 px přidá hlavní rysky; ≥120 px plná stupnice s minoritními ryskami (hero).
+3. **Inverze na tmavém pozadí**: ink `#1F1A14` → paper `#FBF8F1`; pivot drží barvu
+   pozadí. V inline použití dědí ink přes `currentColor`, akcent zůstává `--red`.
+
+### Kanonické assety — `05_M1_Starter/assets/brand/`
+| Soubor | Použití |
+|---|---|
+| `compass-mark.svg` (48, červený hrot) | primární značka |
+| `compass-mono.svg` (48, plně inkoust) | tam, kde se akcent nehodí |
+| `compass-hero.svg` (180, plná stupnice) | hero / velké plochy |
+| `compass-pattern.svg` (64 dlaždice) | bezešvá textura pozadí |
+| `favicon.svg` + `favicon-32.png` + `apple-touch-icon.png` | favicony |
+| `og-default.svg` / `og-default.png` (1200×630) | default social-share náhled stránek bez vlastního coveru |
+
+PNG varianty generuje `node scripts/generate-brand-assets.js` z kanonických SVG.
+Designový list (specimen) k prvku: [`hspa-compass-specimen.html`](../hspa-compass-specimen.html) v rootu repa.
+
+### Kam se prvek propisuje — a proč ho NEŘEŠÍŠ ručně
+- **Hlavička (logo)** — `renderBrandMark()` v `src/page-shared.js` injektuje SVG
+  kompas vlevo od wordmarku „HSPA monitor" na **každé** stránce (volá se z
+  `renderModuleNav`, který běží všude). Markup `.brand` v HTML needituješ.
+  CSS: `.brand-logo` / `.brand-compass` v `styles.css`.
+- **Favicon / apple-touch** — `renderBrandMark()` injektuje `<link rel="icon">`
+  do `<head>`, pokud ho stránka už nemá staticky. Cesty jsou root-absolutní
+  (`/assets/brand/…`), aby fungovaly i z `/manifest/`.
+- **Cover obrázky článků** — `brandCompass()` v
+  `ingest/scripts/generate-article-cover.js` přidává glyf vedle wordmarku do
+  patičky coveru ve **všech 6 stylech**. Nový/regenerovaný cover ho má automaticky.
+- **Default OG** — `og-default.png` je nastavený staticky v `index.html` a v
+  generátoru manifest stránek; pro nové statické stránky doplň stejné `og:image`.
+- **Hero explainer** — sekce „Náš symbol" na `o-projektu.html` (`.brand-symbol-*`)
+  s legendou a jemnou animací střelky (`prefers-reduced-motion`-aware).
+- **Pattern textura** — opt-in utilita `.brand-pattern-bg` (jemné kompasové pole
+  na pozadí; použito na homepage `.ed-hero`).
+
+---
+
 # 1. Article Visuals (`.av-*`)
 
 Designsystem pěti vizuálních komponent pro články v `05_M1_Starter/clanek-*.html`.

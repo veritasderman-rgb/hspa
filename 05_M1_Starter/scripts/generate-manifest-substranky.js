@@ -817,7 +817,14 @@ function renderPage(p) {
 <meta property="og:locale" content="cs_CZ">
 <meta property="og:title" content="Priorita ${p.num} · ${esc(p.name)} — Manifest reformy zdravotnictví">
 <meta property="og:description" content="${esc(descr.slice(0, 200))}">
+<meta property="og:image" content="/assets/brand/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/brand/og-default.png">
 <link rel="canonical" href="https://hspa-cesko.cz/manifest/${fileName}">
+<link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body>
@@ -929,7 +936,17 @@ function renderIndex() {
 <title>Manifest · 13 priorit reformy českého zdravotnictví — HSPA Monitor</title>
 <meta name="description" content="Index všech 13 priorit politického manifestu reformy českého zdravotnictví. Detailní rozbor každé priority — proč to záleží, konkrétní opatření, mezinárodní inspirace, harmonogram.">
 <meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Manifest · 13 priorit reformy českého zdravotnictví — HSPA Monitor">
+<meta property="og:image" content="/assets/brand/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/brand/og-default.png">
 <link rel="canonical" href="https://hspa-cesko.cz/manifest/index.html">
+<link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
 <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body>

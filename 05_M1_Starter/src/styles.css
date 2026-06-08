@@ -64,13 +64,26 @@ header.topbar {
 }
 .brand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 14px;
   flex: 0 0 auto;
 }
+/* Brandový prvek „HSPA Kompas" — injektuje se přes page-shared.js
+   (renderBrandMark) vlevo od wordmarku. Inkoust dědí barvu textu,
+   červený hrot = aktuální směr systému (viz docs/visual-components.md). */
 .brand-logo {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: var(--ink);
 }
+.brand-compass svg {
+  display: block;
+  width: 34px;
+  height: 34px;
+}
+.brand-compass .bc-needle { fill: var(--red); }
+.brand-compass .bc-pivot { fill: var(--paper); }
 .brand h1 {
   font-family: var(--serif);
   font-size: 28px;
@@ -98,10 +111,92 @@ header.topbar {
 }
 
 .brand-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   text-decoration: none;
   color: inherit;
 }
 .brand-link:hover h1 { opacity: 0.8; }
+.brand-link:hover .brand-compass { opacity: 0.8; }
+
+/* === Brand symbol explainer (o-projektu „Náš symbol") === */
+.brand-symbol-section {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1120px;
+  margin: 8px auto 0;
+  padding: 28px 24px;
+  flex-wrap: wrap;
+}
+.brand-symbol-mark {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-symbol-mark svg { display: block; }
+.brand-symbol-body { flex: 1; min-width: 280px; }
+.brand-symbol-legend {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  gap: 12px;
+}
+.brand-symbol-legend li {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.brand-symbol-legend b {
+  flex: 0 0 92px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.brand-symbol-legend span { color: var(--ink-mut); }
+/* Střelka se při zobrazení jemně ustálí na sever — respektuje reduced-motion */
+.brand-symbol-needle {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .brand-symbol-needle {
+    animation: brandNeedleSettle 1.6s cubic-bezier(.22,.61,.36,1) both;
+  }
+}
+@keyframes brandNeedleSettle {
+  0%   { transform: rotate(-26deg); opacity: 0; }
+  60%  { transform: rotate(6deg);   opacity: 1; }
+  100% { transform: rotate(0deg);   opacity: 1; }
+}
+
+/* Jemná kompasová textura na pozadí (opt-in utilita). Sytost přes opacitu
+   pseudo-prvku, ať neovlivní čitelnost obsahu. */
+.brand-pattern-bg { position: relative; isolation: isolate; }
+.brand-pattern-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url('/assets/brand/compass-pattern.svg');
+  background-repeat: repeat;
+  background-size: 64px 64px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .brand-symbol-section { gap: 24px; padding: 20px 16px; }
+  .brand-symbol-mark svg { width: 132px; height: 132px; }
+}
 
 .topbar-actions { display: flex; align-items: center; gap: 14px; }
 .last-updated {
@@ -1299,6 +1394,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     letter-spacing: -0.3px;
   }
   .brand h1 small { font-size: 10px; }
+  .brand-compass svg { width: 28px; height: 28px; }
   header.topbar { padding: 10px 16px; }
   .topbar-actions { width: 100%; flex-wrap: wrap; gap: 10px; }
   .btn-csv, .btn-theme, .btn-reload {

@@ -88,6 +88,11 @@ node ingest/scripts/inject-article-covers.js <slug>
 `scripts/publish-scheduled.js`. `missing-cover` u publikovaného článku je tedy
 spíš výjimka — dořeš ji.)
 
+> **Brand mark „HSPA Kompas":** generátor coveru přidává kompasový glyf do
+> patičky automaticky (všech 6 stylů). Regenerovaný cover ho má vždy — neřeš
+> ho ručně. Logo a favicon v hlavičce injektuje `page-shared.js` na všech
+> stránkách. Pravidla a varianty viz `docs/visual-components.md` §0.
+
 ### 2.2 Další mechanické opravy
 - **Rozbité interní odkazy** (`href="clanek-*.html"` na neexistující soubor) → oprav
   na správný slug, nebo odkaz odstraň.
