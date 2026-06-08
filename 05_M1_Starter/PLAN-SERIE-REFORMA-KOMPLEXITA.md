@@ -1,5 +1,12 @@
 # Plán: Série „Jak (ne)reformovat komplexní systém"
 
+> **STAV 2026-06-08 — SÉRIE KOMPLETNÍ A VENKU.** Všech 9 jádrových dílů je
+> publikováno (díly 5 „datová páteř / lock-in" a 7 „VBHC" dopublikovány
+> 2026-06-08). Díly jsou prolinkované číslovanou **sériovou navigací**
+> (`src/series-nav.js` — pásek 1–9 pod hlavičkou + prev/další na konci; pořadí
+> a registr slugů drží přímo ten modul, edituje se na jednom místě).
+> Registr čísel níže je nadále zdroj pravdy pro číslování „díl N/9".
+>
 > **Účel dokumentu:** samostatný vstupní bod pro psaní nové edukativní série
 > článků HSPA Monitoru o tom, *proč* se komplexní systémy (zejména
 > zdravotnictví) tak houževnatě brání reformám a *jak* je reformovat poctivě.

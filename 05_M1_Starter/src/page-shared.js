@@ -312,8 +312,74 @@ export function renderHSPAScore() {
  * Dropdown je čistě CSS (hover + focus-within), žádný JS handler.
  * Mobile drawer renderuje submenu inline (children jako siblings parent).
  */
+/**
+ * Inline SVG značky „HSPA Kompas" pro hlavičku. Inkoustové části dědí barvu
+ * textu (`currentColor` = --ink, na tmavém pozadí --paper přes inverzi),
+ * červený hrot střelky drží `var(--red)` (= aktuální směr systému, viz
+ * docs/visual-components.md „Brand mark"). Stupnice je redukovaná na hlavní
+ * rysky — pravidlo škálování pro velikosti 32–48 px.
+ */
+const BRAND_COMPASS_SVG = `<svg viewBox="0 0 100 100" width="34" height="34" fill="none" aria-hidden="true" focusable="false">
+  <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="3"/>
+  <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+    <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+    <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+    <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+  </g>
+  <polygon points="45,8 55,8 50,16.5" fill="currentColor"/>
+  <polygon points="33,79.44 55.2,53 44.8,47" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+  <polygon class="bc-needle" points="67,20.56 55.2,53 44.8,47"/>
+  <circle class="bc-pivot" cx="50" cy="50" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+</svg>`;
+
+/**
+ * Injectuje brandový prvek do každé stránky — idempotentně, bez nutnosti
+ * editovat inline `.brand` markup ve 130+ HTML souborech:
+ *   1. favicon / apple-touch-icon do <head> (kanonické assety v assets/brand/)
+ *   2. SVG kompas vlevo od wordmarku „HSPA monitor" v hlavičce
+ *
+ * Volá se z renderModuleNav(), který běží na každé stránce. Cesty k assetům
+ * jsou root-absolutní (`/assets/...`), aby fungovaly i z podsložky /manifest/.
+ */
+export function renderBrandMark() {
+  if (typeof document === 'undefined') return;
+
+  // 1) Favicon — jen pokud stránka vlastní <link rel="icon"> nedeklaruje
+  const head = document.head;
+  if (head && !head.querySelector('link[rel="icon"]')) {
+    const links = [
+      { rel: 'icon', type: 'image/svg+xml', href: '/assets/brand/favicon.svg' },
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/assets/brand/favicon-32.png' },
+      { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/brand/apple-touch-icon.png' },
+    ];
+    for (const l of links) {
+      const el = document.createElement('link');
+      el.rel = l.rel;
+      if (l.type) el.type = l.type;
+      if (l.sizes) el.setAttribute('sizes', l.sizes);
+      el.href = l.href;
+      head.appendChild(el);
+    }
+  }
+
+  // 2) Kompas v hlavičce — vlevo od wordmarku, idempotentně
+  const brand = document.querySelector('.topbar .brand');
+  if (brand && !brand.querySelector('.brand-compass')) {
+    const slot = document.createElement('span');
+    slot.className = 'brand-logo brand-compass';
+    slot.setAttribute('aria-hidden', 'true');
+    slot.innerHTML = BRAND_COMPASS_SVG;
+    // Pokud je wordmark zabalený v odkazu na index, vlož kompas dovnitř
+    // odkazu (klikací logo); jinak na začátek .brand.
+    const link = brand.querySelector('a.brand-link');
+    if (link) link.insertBefore(slot, link.firstChild);
+    else brand.insertBefore(slot, brand.firstChild);
+  }
+}
+
 export function renderModuleNav(activeId) {
   initNewsletterPopup();
+  renderBrandMark();
   const path = window.location.pathname;
   const tabs = [
     {

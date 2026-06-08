@@ -212,6 +212,22 @@ Aktuálně běží další vlny vývoje:
 | Tematické linie (8 linií) | ✅ |
 | Krajský dashboard + OIS 11-47 pojištěnci | ✅ |
 | Animation system (count-up, bar fill, IntersectionObserver) | ✅ |
+| Brand mark „HSPA Kompas" (logo, favicon, cover, pattern) | ✅ |
+
+## Brand — HSPA Kompas
+
+Stálý grafický prvek webu (přístroj orientace: stupnice měří, střelka ukazuje
+směr, červený hrot = aktuální směr systému). **Propisuje se automaticky — při
+tvorbě nové stránky/článku/coveru ho neřešíš ručně:**
+
+- **Logo + favicon** injektuje `renderBrandMark()` v `src/page-shared.js` na každé
+  stránce (přes `renderModuleNav`). Markup `.brand` v HTML needituješ.
+- **Cover obrázky** dostávají kompas z `brandCompass()` v
+  `ingest/scripts/generate-article-cover.js` (všech 6 stylů) — nový cover ho má sám.
+- **Kanonické assety**: `05_M1_Starter/assets/brand/` (PNG generuje
+  `node scripts/generate-brand-assets.js`).
+- **Pravidla a varianty**: [`docs/visual-components.md`](docs/visual-components.md) §0.
+  Závazné pravidlo: červená patří JEN hrotu střelky, zbytek je inkoust.
 
 ## Pravidla pro rozšiřování
 

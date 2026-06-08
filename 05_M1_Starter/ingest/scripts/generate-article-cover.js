@@ -50,12 +50,42 @@ const INK = '#1f1a14';
 const INK_MUT = '#5f574e';
 const RULE = 'rgba(31,26,20,0.13)';
 
+const RED = '#b8361e';
+
 const SIGNAL_COLORS = {
   good: '#2f6b1f',
   warn: '#a05a08',
   bad: '#b8361e',
   neutral: '#6b6357',
 };
+
+/**
+ * Brandový glyf „HSPA Kompas" pro patičku coveru — vykreslí se vlevo od
+ * wordmarku „HSPA monitor". Inkoust = barva textu, červený hrot střelky =
+ * aktuální směr systému (jednotné brand pravidlo, viz docs/visual-components.md).
+ *
+ * @param {number} x       levý okraj glyfu (px v 1200×630 plátně)
+ * @param {number} baseline y účaří wordmarku (px) — glyf se opticky vystředí
+ * @param {number} size    velikost glyfu (px)
+ */
+function brandCompass(x, baseline, size, { ink = INK, red = RED, paper = PAPER } = {}) {
+  const s = size / 100;
+  const top = baseline - size * 0.72;        // optické vystředění na cap-height wordmarku
+  const swRing = (1.3 / s).toFixed(2);
+  const swLine = (1.15 / s).toFixed(2);
+  return `<g transform="translate(${x} ${top.toFixed(1)}) scale(${s.toFixed(4)})" fill="none">
+    <circle cx="50" cy="50" r="44" stroke="${ink}" stroke-width="${swRing}"/>
+    <g stroke="${ink}" stroke-width="${swLine}" stroke-linecap="round">
+      <line x1="50" y1="6" x2="50" y2="13" transform="rotate(90 50 50)"/>
+      <line x1="50" y1="6" x2="50" y2="13" transform="rotate(180 50 50)"/>
+      <line x1="50" y1="6" x2="50" y2="13" transform="rotate(270 50 50)"/>
+    </g>
+    <polygon points="45,8 55,8 50,16.5" fill="${ink}"/>
+    <polygon points="33,79.44 55.2,53 44.8,47" stroke="${ink}" stroke-width="${swLine}" stroke-linejoin="round"/>
+    <polygon points="67,20.56 55.2,53 44.8,47" fill="${red}"/>
+    <circle cx="50" cy="50" r="3.4" fill="${paper}" stroke="${ink}" stroke-width="${swLine}"/>
+  </g>`;
+}
 
 // Tag → dimension mapping pro výběr barvy
 const TAG_DIMENSIONS = {
@@ -306,7 +336,8 @@ function renderSvg(meta, { staticForPng = false } = {}) {
   <!-- Bottom: branding + date -->
   <g class="root">
     <line x1="${PADDING_X}" y1="${H - PADDING_BOTTOM + 10}" x2="${W - PADDING_X - 60}" y2="${H - PADDING_BOTTOM + 10}" stroke="${RULE}" stroke-width="1"/>
-    <text x="${PADDING_X}" y="${H - PADDING_BOTTOM + 38}" class="brand">
+    ${brandCompass(PADDING_X, H - PADDING_BOTTOM + 38, 28)}
+    <text x="${PADDING_X + 38}" y="${H - PADDING_BOTTOM + 38}" class="brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X - 60}" y="${H - PADDING_BOTTOM + 38}" text-anchor="end" class="meta">${escapeXml(meta.date)}</text>
@@ -468,7 +499,8 @@ function renderBoldSvg(meta, { staticForPng = false } = {}) {
 
   <!-- Bottom: brand + date -->
   <g>
-    <text x="${PADDING_X}" y="${H - 35}" class="b-brand">
+    ${brandCompass(PADDING_X, H - 35, 28)}
+    <text x="${PADDING_X + 38}" y="${H - 35}" class="b-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X}" y="${H - 35}" text-anchor="end" class="b-date">${escapeXml(meta.date)}</text>
@@ -591,7 +623,8 @@ function renderDataHeroSvg(meta, { staticForPng = false } = {}) {
 
   <!-- Bottom right: brand + date -->
   <g>
-    <text x="${titleX}" y="${H - 50}" class="dh-brand">
+    ${brandCompass(titleX, H - 50, 26)}
+    <text x="${titleX + 36}" y="${H - 50}" class="dh-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${titleX}" y="${H - 28}" class="dh-date">${escapeXml(meta.date)}</text>
@@ -704,7 +737,8 @@ function renderPullQuoteSvg(meta, { staticForPng = false } = {}) {
   <!-- Bottom: brand + date -->
   <g>
     <line x1="${PADDING_X}" y1="${H - 60}" x2="${W - PADDING_X}" y2="${H - 60}" stroke="${RULE}" stroke-width="1"/>
-    <text x="${PADDING_X}" y="${H - 28}" class="pq-brand">
+    ${brandCompass(PADDING_X, H - 28, 28)}
+    <text x="${PADDING_X + 38}" y="${H - 28}" class="pq-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X}" y="${H - 28}" text-anchor="end" class="pq-date">${escapeXml(meta.date)}</text>
@@ -858,7 +892,8 @@ function renderIllustratedSvg(meta, { staticForPng = false } = {}) {
   <!-- Bottom: brand + date -->
   <g>
     <line x1="${PADDING_X}" y1="${H - 60}" x2="${W - PADDING_X}" y2="${H - 60}" stroke="${RULE}" stroke-width="1"/>
-    <text x="${PADDING_X}" y="${H - 28}" class="il-brand">
+    ${brandCompass(PADDING_X, H - 28, 28)}
+    <text x="${PADDING_X + 38}" y="${H - 28}" class="il-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X}" y="${H - 28}" text-anchor="end" class="il-date">${escapeXml(meta.date)}</text>
@@ -1024,7 +1059,8 @@ function renderPhotoMockSvg(meta, { staticForPng = false } = {}) {
 
   <!-- Bottom: brand + date -->
   <g>
-    <text x="${PADDING_X}" y="${H - 35}" class="pm-brand">
+    ${brandCompass(PADDING_X, H - 35, 28, { ink: '#fff5ea', paper: INK })}
+    <text x="${PADDING_X + 38}" y="${H - 35}" class="pm-brand">
       <tspan font-weight="700">HSPA</tspan> <tspan font-style="italic" font-weight="400">monitor</tspan>
     </text>
     <text x="${W - PADDING_X}" y="${H - 35}" text-anchor="end" class="pm-date">${escapeXml(meta.date)}</text>
