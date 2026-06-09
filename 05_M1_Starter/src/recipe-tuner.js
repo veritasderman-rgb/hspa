@@ -1,12 +1,14 @@
 /**
- * recipe-tuner.js — interaktivní prvek „Vylaď školní oběd“.
+ * recipe-tuner.js — interaktivní prvek „Sestav školní jídelníček“.
  *
  * Načte data/skolni-strava.json (statický export z repozitáře jidelny — nový
  * spotřební koš dle vyhlášky 310/2025 Sb.) a vykreslí do elementu
- * [data-recipe-tuner] nástroj, kde si čtenář vybere recept, uvidí jeho profil
- * proti cílovým hodnotám nového koše a může „vyladit“ pár pák reformy
- * (zelenina, celozrnné, luštěniny, přidaný cukr, smažení vs. pečení) a sledovat,
- * jak roste skóre principů Zdravé jídelny.
+ * [data-recipe-tuner] nástroj, ve kterém čtenář skládá jídelníček z více obědů.
+ *
+ * METODICKY: spotřební koš je MĚSÍČNÍ PRŮMĚR — neplatí na jednotlivý pokrm.
+ * Proto se koš porovnává jako průměrná porce na oběd přes celý sestavený
+ * jídelníček (cíl: 20 školních dní / měsíc) a navíc se kontrolují pravidla
+ * pestrosti (ryby ≥ 2×, bezmasé ≥ 4×, sladké ≤ 2× za 20 dní).
  *
  * Data jsou ilustrativní (gramáže receptů pro věk 7–10 let), neslouží jako
  * oficiální jídelníček. Žije pouze na stránce článku, kde je element přítomen.
@@ -15,151 +17,167 @@
 const DATA_URL = 'data/skolni-strava.json';
 const BASKET_GROUPS = ['maso', 'ryby', 'mleko', 'tuky', 'cukry', 'zelenina_ovoce', 'brambory', 'celozrnne', 'lusteniny'];
 
+// Vyvážený ukázkový měsíc (20 obědů) — splňuje pravidla pestrosti.
+const SAMPLE_MONTH = [
+  'kure-zelenina-testoviny', 'losos-peceny', 'lusteniny-chili', 'veprove-gulas', 'spagety-bolognese-veg',
+  'kure-paprika', 'treska-smetanova', 'cockovy-dhal', 'hovezi-stroganoff', 'bramborak-peceny',
+  'kure-bylinkove', 'losos-peceny', 'zeleninove-rizoto', 'veprove-pecene', 'spagety-bolognese-veg',
+  'kure-zelenina-testoviny', 'kralik-peceny', 'lusteniny-chili', 'hovezi-svickova', 'tvarohove-knedliky',
+];
+
 function esc(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
+function fmt(n) {
+  return Math.round(n).toLocaleString('cs-CZ');
+}
 
-export function groupTotals(recipe, state) {
+/** Skupinové součty jednoho receptu (s globální záměnou bílé přílohy za celozrnnou). */
+export function recipeGroupTotals(recipe, state = {}) {
   const t = {};
   for (const g of BASKET_GROUPS) t[g] = 0;
   t.ostatni = 0;
   for (const ing of recipe.ingredients) {
     let group = ing.group;
-    let grams = ing.grams;
-    if (state.swapWhole && ing.swappable) group = 'celozrnne'; // bílou přílohu počítáme jako celozrnnou
-    if (group in t) t[group] += grams;
+    if (state.swapWhole && ing.swappable) group = 'celozrnne';
+    if (group in t) t[group] += ing.grams;
   }
-  if (state.addLegumes) t.lusteniny += 20;
-  t.zelenina_ovoce += state.vegAdd;
-  t.cukry += state.sugarAdd;
   return t;
 }
 
-export function principles(recipe, totals, state) {
-  return {
-    vegetables: totals.zelenina_ovoce >= 120,
-    wholegrain: totals.celozrnne >= 15,
-    legumes: totals.lusteniny >= 8,
-    lowSugar: totals.cukry <= 5,
-    notFried: !state.fried,
-    goodFats: true, // recepty v exportu neobsahují palmový/kokosový tuk
-  };
+/** Průměrná porce na oběd přes celý jídelníček (koš je průměr, ne jeden pokrm). */
+export function planAverages(plan, byId, state = {}) {
+  const avg = {};
+  for (const g of BASKET_GROUPS) avg[g] = 0;
+  avg.ostatni = 0;
+  if (!plan.length) return avg;
+  for (const id of plan) {
+    const r = byId[id];
+    if (!r) continue;
+    const t = recipeGroupTotals(r, state);
+    for (const g of Object.keys(avg)) avg[g] += t[g];
+  }
+  for (const g of Object.keys(avg)) avg[g] = avg[g] / plan.length;
+  return avg;
 }
 
-function fmt(n) {
-  return Math.round(n).toLocaleString('cs-CZ');
+/** Počty pro pravidla pestrosti přes celý jídelníček. */
+export function pestrostCounts(plan, byId) {
+  const byCategory = {};
+  let sweet = 0, withCelozrnne = 0, withLusteniny = 0;
+  for (const id of plan) {
+    const r = byId[id];
+    if (!r) continue;
+    byCategory[r.category] = (byCategory[r.category] || 0) + 1;
+    if (r.isSweet) sweet += 1;
+    const t = recipeGroupTotals(r, {});
+    if (t.celozrnne > 0) withCelozrnne += 1;
+    if (t.lusteniny > 0) withLusteniny += 1;
+  }
+  return { byCategory, sweet, withCelozrnne, withLusteniny, total: plan.length };
 }
 
 export function initRecipeTuner(root, data) {
   const ages = data.ageCategories;
   const groupMeta = Object.fromEntries(data.foodGroups.map((g) => [g.key, g]));
-  const principleMeta = data.reformPrinciples;
+  const byId = Object.fromEntries(data.recipes.map((r) => [r.id, r]));
+  const targetDays = data.planTargetDays || 20;
+  const rules = data.frequencyRules || [];
 
-  const state = {
-    recipeId: data.recipes[0].id,
-    age: '7-10',
-    vegAdd: 0,
-    sugarAdd: 0,
-    swapWhole: false,
-    addLegumes: false,
-    fried: false,
-  };
+  const state = { age: '7-10', swapWhole: false, plan: [] };
 
-  // ---- statická kostra ----
   root.innerHTML = `
     <div class="rt">
       <div class="rt-controls">
-        <label class="rt-field">
-          <span class="rt-field-label">Recept</span>
-          <select class="rt-select" data-rt="recipe">
-            ${data.recipes.map((r) => `<option value="${r.id}">${esc(r.name)} · ${esc(data.categoryLabels[r.category] || r.category)}</option>`).join('')}
-          </select>
-        </label>
         <label class="rt-field">
           <span class="rt-field-label">Věková kategorie</span>
           <select class="rt-select" data-rt="age">
             ${ages.map((a) => `<option value="${a.key}"${a.key === state.age ? ' selected' : ''}>${esc(a.label)}</option>`).join('')}
           </select>
         </label>
+        <label class="rt-toggle rt-toggle-inline">
+          <input type="checkbox" data-rt="swap">
+          <span>Bílé přílohy → celozrnné (v celém jídelníčku)</span>
+        </label>
       </div>
+
+      <section class="rt-panel">
+        <div class="rt-panel-head">
+          <h4 class="rt-panel-h">Tvůj jídelníček <span class="rt-count" data-rt="count">0 / ${targetDays} obědů</span></h4>
+          <div class="rt-quick">
+            <button type="button" class="rt-reset" data-rt="sample">Naplnit ukázkový měsíc</button>
+            <button type="button" class="rt-reset" data-rt="clear">Vyprázdnit</button>
+          </div>
+        </div>
+        <div class="rt-plan" data-rt="plan"></div>
+      </section>
 
       <div class="rt-score" data-rt="score" aria-live="polite"></div>
 
       <div class="rt-grid">
         <section class="rt-panel">
-          <h4 class="rt-panel-h">Principy reformy v tomto obědě</h4>
-          <ul class="rt-principles" data-rt="principles"></ul>
-          <div class="rt-meta" data-rt="meta"></div>
+          <h4 class="rt-panel-h">Průměrná porce na oběd vs. spotřební koš</h4>
+          <div class="rt-bars" data-rt="bars"></div>
+          <p class="rt-foot">Spotřební koš je <strong>měsíční průměr</strong> — hodnotí se jídelníček, ne jeden pokrm. Pruh ukazuje průměr na oběd přes všechny obědy v jídelníčku; svislá ryska je cílová porce koše pro zvolený věk.</p>
         </section>
 
         <section class="rt-panel">
-          <h4 class="rt-panel-h">Profil porce vs. nový spotřební koš</h4>
-          <div class="rt-bars" data-rt="bars"></div>
-          <p class="rt-foot">Cílová hodnota je porce oběda nového koše pro zvolený věk; pruh ukazuje hmotnost skupiny v obědě. Koš je měsíční průměr — jeden oběd se od cíle liší, smysl dává skladba napříč týdnem.</p>
+          <h4 class="rt-panel-h">Pravidla pestrosti (na ${targetDays} dní)</h4>
+          <ul class="rt-principles" data-rt="pestrost"></ul>
         </section>
       </div>
 
       <section class="rt-panel rt-tune">
-        <h4 class="rt-panel-h">Vylaď oběd</h4>
-        <div class="rt-tune-grid">
-          <label class="rt-slider">
-            <span>Přidat zeleninu / ovoce <strong data-rt="vegVal">0 g</strong></span>
-            <input type="range" min="0" max="150" step="10" value="0" data-rt="veg">
-          </label>
-          <label class="rt-slider">
-            <span>Přidaný cukr (oslazení) <strong data-rt="sugarVal">0 g</strong></span>
-            <input type="range" min="0" max="30" step="5" value="0" data-rt="sugar">
-          </label>
-          <label class="rt-toggle">
-            <input type="checkbox" data-rt="swap">
-            <span>Bílou přílohu nahradit celozrnnou</span>
-          </label>
-          <label class="rt-toggle">
-            <input type="checkbox" data-rt="legumes">
-            <span>Přidat porci luštěnin (+20 g)</span>
-          </label>
-          <label class="rt-toggle">
-            <input type="checkbox" data-rt="fried">
-            <span>Připravit smažením místo pečení</span>
-          </label>
-          <button type="button" class="rt-reset" data-rt="reset">Vrátit recept do původního stavu</button>
-        </div>
+        <h4 class="rt-panel-h">Vyber obědy do jídelníčku</h4>
+        <div class="rt-palette" data-rt="palette"></div>
       </section>
 
-      <p class="rt-source">Data: nový spotřební koš dle vyhlášky 310/2025 Sb. (repozitář školních jídelen). Ilustrativní, neoficiální jídelníček.</p>
+      <p class="rt-source">Data: nový spotřební koš a pravidla pestrosti dle vyhlášky 310/2025 Sb. (repozitář školních jídelen). Ilustrativní, neoficiální jídelníček.</p>
     </div>
   `;
 
   const $ = (sel) => root.querySelector(`[data-rt="${sel}"]`);
 
-  function recipe() {
-    return data.recipes.find((r) => r.id === state.recipeId);
+  function renderPalette() {
+    const cats = {};
+    for (const r of data.recipes) (cats[r.category] = cats[r.category] || []).push(r);
+    let html = '';
+    for (const [cat, list] of Object.entries(cats)) {
+      html += `<div class="rt-pal-group"><span class="rt-pal-cat">${esc(data.categoryLabels[cat] || cat)}</span>`;
+      html += list.map((r) => `<button type="button" class="rt-pal-item" data-add="${r.id}">${esc(r.name)} <span class="rt-pal-plus">+</span></button>`).join('');
+      html += `</div>`;
+    }
+    $('palette').innerHTML = html;
+    $('palette').querySelectorAll('[data-add]').forEach((b) => {
+      b.addEventListener('click', () => { state.plan.push(b.dataset.add); render(); });
+    });
   }
 
-  function renderScore(score) {
-    const el = $('score');
-    const cls = score >= 5 ? 'good' : score >= 3 ? 'warn' : 'bad';
-    el.className = `rt-score rt-score-${cls}`;
-    el.innerHTML = `<span class="rt-score-num">${score}/6</span><span class="rt-score-label">principů Zdravé jídelny splněno</span>`;
+  function renderPlan() {
+    const el = $('plan');
+    if (!state.plan.length) {
+      el.innerHTML = `<p class="rt-plan-empty">Zatím prázdno — přidej obědy z výběru níže, nebo klikni na „Naplnit ukázkový měsíc“.</p>`;
+    } else {
+      el.innerHTML = state.plan.map((id, i) => {
+        const r = byId[id];
+        return `<span class="rt-chip">${esc(r ? r.name : id)}<button type="button" class="rt-chip-x" data-del="${i}" aria-label="Odebrat">×</button></span>`;
+      }).join('');
+      el.querySelectorAll('[data-del]').forEach((b) => {
+        b.addEventListener('click', () => { state.plan.splice(+b.dataset.del, 1); render(); });
+      });
+    }
+    $('count').textContent = `${state.plan.length} / ${targetDays} obědů`;
   }
 
-  function renderPrinciples(p) {
-    $('principles').innerHTML = principleMeta.map((pm) => {
-      const ok = p[pm.key];
-      return `<li class="rt-principle rt-principle-${ok ? 'on' : 'off'}">
-        <span class="rt-principle-mark" aria-hidden="true">${ok ? '✓' : '○'}</span>
-        <span class="rt-principle-text"><strong>${esc(pm.label)}</strong><span>${esc(pm.desc)}</span></span>
-      </li>`;
-    }).join('');
-  }
-
-  function renderBars(totals) {
+  function renderBars() {
     const targets = data.basketLunchTargets;
     const tol = data.tolerances;
+    const avg = planAverages(state.plan, byId, state);
+    let inRange = 0;
     let html = '';
     for (const g of BASKET_GROUPS) {
       const target = targets[g][state.age];
-      const value = totals[g];
+      const value = avg[g];
       const min = target * (tol[g].min / 100);
       const max = tol[g].max == null ? null : target * (tol[g].max / 100);
       const scaleMax = Math.max(target * 1.4, value * 1.1, 1);
@@ -168,73 +186,77 @@ export function initRecipeTuner(root, data) {
       let status = 'ok';
       if (value < min) status = 'low';
       else if (max != null && value > max) status = 'high';
+      if (state.plan.length && status === 'ok') inRange += 1;
       const reform = groupMeta[g].reform;
       let tone = 'ok';
-      if (status === 'low' && reform === 'up') tone = 'warn';
+      if (!state.plan.length) tone = 'off';
       else if (status === 'high' && reform === 'down') tone = 'bad';
-      else if (status === 'high') tone = 'warn';
-      else if (status === 'low') tone = 'warn';
+      else if (status !== 'ok') tone = 'warn';
       const isNew = groupMeta[g].isNew ? '<span class="rt-bar-new">nové</span>' : '';
       html += `<div class="rt-bar rt-bar-${tone}">
-        <div class="rt-bar-head"><span class="rt-bar-label">${esc(groupMeta[g].label)}${isNew}</span><span class="rt-bar-val">${fmt(value)} g <span class="rt-bar-target">/ cíl ${fmt(target)} g</span></span></div>
+        <div class="rt-bar-head"><span class="rt-bar-label">${esc(groupMeta[g].label)}${isNew}</span><span class="rt-bar-val">⌀ ${fmt(value)} g <span class="rt-bar-target">/ cíl ${fmt(target)} g</span></span></div>
         <div class="rt-bar-track"><span class="rt-bar-fill" style="width:${pct}%"></span><span class="rt-bar-tick" style="left:${targetPct}%"></span></div>
       </div>`;
     }
-    // off-basket refined side
-    if (totals.ostatni > 0) {
-      const scaleMax = Math.max(80, totals.ostatni * 1.1);
-      const pct = Math.min(100, (totals.ostatni / scaleMax) * 100);
-      html += `<div class="rt-bar rt-bar-off">
-        <div class="rt-bar-head"><span class="rt-bar-label">${esc(groupMeta.ostatni.label)}</span><span class="rt-bar-val">${fmt(totals.ostatni)} g</span></div>
-        <div class="rt-bar-track"><span class="rt-bar-fill" style="width:${pct}%"></span></div>
-      </div>`;
-    }
     $('bars').innerHTML = html;
+    return inRange;
   }
 
-  function renderMeta(r) {
-    const norm = data.financialNormativeLunch[state.age];
-    const allergs = (r.allergens || []).map((a) => esc(data.allergens[a] || a)).join(', ') || 'žádné z 14 hlavních';
-    const tags = [];
-    if (r.isSweet) tags.push('<span class="rt-tag rt-tag-warn">sladké jídlo — max 2× měsíčně</span>');
-    if (state.fried) tags.push('<span class="rt-tag rt-tag-bad">smažené — max 2× měsíčně</span>');
-    $('meta').innerHTML = `
-      <div class="rt-meta-row"><span>Polévka</span><strong>${esc(r.soup)}</strong></div>
-      <div class="rt-meta-row"><span>Odhad ceny surovin</span><strong>${fmt(r.cost)} Kč <span class="rt-bar-target">(normativ oběda ${fmt(norm.min)}–${fmt(norm.max)} Kč)</span></strong></div>
-      <div class="rt-meta-row"><span>Alergeny</span><strong>${allergs}</strong></div>
-      ${tags.length ? `<div class="rt-tags">${tags.join('')}</div>` : ''}
-    `;
+  function renderPestrost() {
+    const c = pestrostCounts(state.plan, byId);
+    let met = 0, evaluable = 0;
+    const items = rules.map((rule) => {
+      const count = c.byCategory[rule.category] || (rule.category === 'sladke_jidlo' ? c.sweet : 0);
+      let ok = true, evaluated = true;
+      if (rule.min != null) { ok = count >= rule.min; }
+      if (rule.max != null) { ok = ok && count <= rule.max; }
+      // min-pravidlo bez naplněného jídelníčku bereme jako „zatím nehotové“
+      if (rule.min != null && state.plan.length < targetDays && count < rule.min) evaluated = false;
+      if (evaluated) { evaluable++; if (ok) met++; }
+      const cls = !state.plan.length ? 'off' : (ok ? 'on' : (evaluated ? 'off-bad' : 'progress'));
+      return `<li class="rt-principle rt-principle-${ok && state.plan.length ? 'on' : 'off'}">
+        <span class="rt-principle-mark" aria-hidden="true">${state.plan.length && ok ? '✓' : '○'}</span>
+        <span class="rt-principle-text"><strong>${esc(rule.label)} — ${count}×</strong><span>${esc(rule.note)}</span></span>
+      </li>`;
+    });
+    // celozrnné a luštěniny v jídelníčku
+    items.push(`<li class="rt-principle rt-principle-${c.withCelozrnne ? 'on' : 'off'}">
+      <span class="rt-principle-mark" aria-hidden="true">${c.withCelozrnne ? '✓' : '○'}</span>
+      <span class="rt-principle-text"><strong>Celozrnné v ${c.withCelozrnne} z ${c.total} obědů</strong><span>nová skupina koše — čím častěji, tím lépe</span></span>
+    </li>`);
+    items.push(`<li class="rt-principle rt-principle-${c.withLusteniny ? 'on' : 'off'}">
+      <span class="rt-principle-mark" aria-hidden="true">${c.withLusteniny ? '✓' : '○'}</span>
+      <span class="rt-principle-text"><strong>Luštěniny v ${c.withLusteniny} z ${c.total} obědů</strong><span>rostlinná bílkovina</span></span>
+    </li>`);
+    $('pestrost').innerHTML = items.join('');
+    return { met, evaluable };
+  }
+
+  function renderScore(inRange, pest) {
+    const el = $('score');
+    if (!state.plan.length) {
+      el.className = 'rt-score rt-score-neutral';
+      el.innerHTML = `<span class="rt-score-label">Sestav jídelníček a sleduj, jak průměr sedí na koš a jestli platí pravidla pestrosti.</span>`;
+      return;
+    }
+    const cls = inRange >= 7 ? 'good' : inRange >= 4 ? 'warn' : 'bad';
+    el.className = `rt-score rt-score-${cls}`;
+    el.innerHTML = `<span class="rt-score-num">${inRange}/9</span><span class="rt-score-label">skupin koše má průměr v normě · pestrost ${pest.met}/${pest.evaluable} pravidel</span>`;
   }
 
   function render() {
-    const r = recipe();
-    const totals = groupTotals(r, state);
-    const p = principles(r, totals, state);
-    const score = Object.values(p).filter(Boolean).length;
-    renderScore(score);
-    renderPrinciples(p);
-    renderBars(totals);
-    renderMeta(r);
-    $('vegVal').textContent = `+${state.vegAdd} g`;
-    $('sugarVal').textContent = `+${state.sugarAdd} g`;
+    renderPlan();
+    const inRange = renderBars();
+    const pest = renderPestrost();
+    renderScore(inRange, pest);
   }
 
-  function resetTuning() {
-    state.vegAdd = 0; state.sugarAdd = 0; state.swapWhole = false; state.addLegumes = false; state.fried = false;
-    $('veg').value = '0'; $('sugar').value = '0';
-    $('swap').checked = false; $('legumes').checked = false; $('fried').checked = false;
-  }
-
-  // ---- události ----
-  $('recipe').addEventListener('change', (e) => { state.recipeId = e.target.value; resetTuning(); render(); });
   $('age').addEventListener('change', (e) => { state.age = e.target.value; render(); });
-  $('veg').addEventListener('input', (e) => { state.vegAdd = +e.target.value; render(); });
-  $('sugar').addEventListener('input', (e) => { state.sugarAdd = +e.target.value; render(); });
   $('swap').addEventListener('change', (e) => { state.swapWhole = e.target.checked; render(); });
-  $('legumes').addEventListener('change', (e) => { state.addLegumes = e.target.checked; render(); });
-  $('fried').addEventListener('change', (e) => { state.fried = e.target.checked; render(); });
-  $('reset').addEventListener('click', () => { resetTuning(); render(); });
+  $('sample').addEventListener('click', () => { state.plan = [...SAMPLE_MONTH]; render(); });
+  $('clear').addEventListener('click', () => { state.plan = []; render(); });
 
+  renderPalette();
   render();
 }
 
