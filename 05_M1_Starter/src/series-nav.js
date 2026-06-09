@@ -40,11 +40,12 @@ const REFORM_SERIES = {
 const EPIDEMIOLOGIE_SERIES = {
   title: 'Epidemiologie: věda, která počítá s nákazou',
   hub: 'clanky.html',
-  lead: 'vědeckého seriálu o tom, proč epidemiologii a očkování věřit — s principy k vyzkoušení na simulátoru nedovarenytapir.cz, ve třech dílech',
+  lead: 'vědeckého seriálu o tom, proč epidemiologii a očkování věřit — s principy k vyzkoušení na simulátoru nedovarenytapir.cz, ve čtyřech dílech',
   parts: [
     { n: 1, slug: 'clanek-epidemiologie-1-proc-verit-cislum.html',  short: 'Proč věřit číslům: od mapy cholery k reprodukčnímu číslu' },
     { n: 2, slug: 'clanek-epidemiologie-2-ockovani-dukaz.html',     short: 'Očkování: nejlépe doložená intervence v dějinách medicíny' },
     { n: 3, slug: 'clanek-epidemiologie-3-modely-rozhodovani.html', short: 'Modely, trasování a krizové rozhodování' },
+    { n: 4, slug: 'clanek-epidemiologie-4-nedovera-dezinformace.html', short: 'Jak porazit nedůvěru: váhání s očkováním a dezinformace' },
   ],
 };
 
