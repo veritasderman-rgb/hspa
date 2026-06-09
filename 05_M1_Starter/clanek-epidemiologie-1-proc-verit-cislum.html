@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proč věřit číslům: od mapy cholery k reprodukčnímu číslu · HSPA Monitor</title>
+<meta name="description" content="První díl seriálu o epidemiologii: proč je věda o šíření nemocí empiricky podložená, co je reprodukční číslo R₀ a jak se z pumpy na Broad Street stala metoda. Se simulátorem k vyzkoušení na nedovarenytapir.cz.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proč věřit číslům: od mapy cholery k reprodukčnímu číslu">
+<meta property="og:description" content="Díl 1/3 seriálu o epidemiologii — proč je věda o šíření nemocí empiricky podložená, co je R₀ a jak vznikla metoda. Principy si vyzkoušíte na nedovarenytapir.cz.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:image" content="assets/covers/clanek-epidemiologie-1-proc-verit-cislum.svg">
+<meta property="article:published_time" content="2026-06-09">
+<meta property="article:section" content="Veřejné zdraví">
+<!--
+  audit:
+    last_reviewed: 2026-06-09
+    reviewer: claude-code-agent
+    status: verified
+    created_at: 2026-06-09
+    creation_phase: serie-epidemiologie-dil-1
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "Díl 1/3 vědeckého seriálu o epidemiologii. Empirické tvrzení doložena primární literaturou z PubMedu (uvedeny DOI v sekci Zdroje): reprodukční číslo a herd-immunity threshold spalniček R0 10-20, HIT 90-95 % (Kinoshita & Nishiura 2017, Vaccine, DOI 10.1016/j.vaccine.2017.05.011); R0 a herd-immunity threshold viru hepatitidy A 2,2-5,0 / 55-80 % (Yang et al. 2024, Clin Infect Dis, DOI 10.1093/cid/ciad552); historie a metodika oboru (Kayser & Ramzan 2021, Hum Vaccin Immunother, DOI 10.1080/21645515.2021.1977057). Indikátory z dashboardu (ověřené hodnoty): preventovatelná mortalita 195/100k (2022, EU 168), léčitelná mortalita 107,2/100k (2023, EU 86,8), naděje dožití 80,1 let (2024, EU 81,5), incidence spalniček 0,9/100k (2023). Cross-linky na interaktivní simulátor nedovarenytapir.cz: #/sandbox (R0), #/hra/oyster-bay (historické pátrání po zdroji nákazy), #/prirucka (příručka epidemiologa, úroveň Vysoká škola / lékařská fakulta). John Snow / pumpa Broad Street 1854 uvedena jako historický kontext (klasický příběh oboru). Publikováno jako díl 1, díly 2 a 3 ve frontě (published:false, ready)."
+-->
+<meta name="article:audit-status" content="verified">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-article-slug="clanek-epidemiologie-1-proc-verit-cislum.html">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-epidemiologie-1-proc-verit-cislum.svg" alt="" width="1200" height="630" loading="eager" decoding="async">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">Seriál o epidemiologii · díl 1/3 · metoda a reprodukční číslo</span>
+      </div>
+      <h2 class="article-title">Proč věřit číslům: od mapy cholery k reprodukčnímu číslu</h2>
+      <p class="article-deck">
+        Epidemiologie zní jako věda o nudných tabulkách. Ve skutečnosti je to nejstarší detektivní obor medicíny — a jeden z nejlépe empiricky podložených. V prvním díle ukazujeme, jak se z odmontované kliky vodní pumpy stala metoda, proč má každá nákaza své vlastní číslo a jak poznáme, že za nemocí stojí příčina, a ne náhoda. A protože nejlíp se to chápe, když si to člověk osahá, na sesterském webu <strong>nedovarenytapir.cz</strong> si každý princip rovnou vyzkoušíte.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">9. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">15 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V srpnu 1854 zabíjela londýnskou čtvrť Soho cholera. Za deset dní zemřelo přes pět set lidí v okruhu několika ulic. Převládající teorie té doby tvrdila, že za to může „miasma“ — zkažený vzduch. Lékař John Snow tomu nevěřil. Místo dohadů vzal plán čtvrti a do něj zakreslil každé úmrtí. Tečky se sevřely kolem jediného bodu: veřejné vodní pumpy na Broad Street. Snow přesvědčil radní, aby z pumpy odmontovali kliku. Epidemie opadla. Nešlo o důkaz v dnešním slova smyslu — nákazu odhalili i další okolnosti — ale zrodil se způsob uvažování: <strong>sbírej data, hledej vzorec, otestuj příčinu zásahem do reality.</strong> Tomu se dnes říká epidemiologie a stojí na ní moderní veřejné zdraví.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEpiHeroH">
+        <figcaption class="av-figure-h" id="avEpiHeroH">Epidemiologie v číslech — proč na ní záleží</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1854">1854</span>
+            <span class="av-counter-label">rok, kdy John Snow zmapoval cholerovou epidemii v Soho</span>
+            <span class="av-counter-foot">zrod terénní epidemiologie</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="18">18</span>
+            <span class="av-counter-label">až tolik lidí nakazí jeden nemocný spalničkami (R₀)</span>
+            <span class="av-counter-foot">jedna z nejnakažlivějších nemocí vůbec</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="195">195</span>
+            <span class="av-counter-label">preventovatelných úmrtí na 100 000 obyvatel v ČR</span>
+            <span class="av-counter-foot">EU průměr 168 — Česko nad ním</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="1980">1980</span>
+            <span class="av-counter-label">rok, kdy svět vymýtil pravé neštovice</span>
+            <span class="av-counter-foot">první nemoc poražená vakcinací nadobro</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> R₀ spalniček dle Kinoshita &amp; Nishiura (2017), Vaccine; preventovatelná mortalita ČR z dashboardu HSPA Monitoru (Eurostat/OECD, 2022); eradikace pravých neštovic dle Kayser &amp; Ramzan (2021). Plné citace s DOI v sekci Zdroje.</p>
+      </figure>
+
+      <h3>Co je epidemiologie a proč není věc názoru</h3>
+
+      <p>
+        Epidemiologie je věda o tom, jak se nemoci rozdělují v populaci a proč. Neptá se „proč onemocněl tenhle konkrétní člověk“, ale „proč onemocnělo zrovna těchto tisíc lidí a ne jiných tisíc“. To je zásadní posun: zatímco klinická medicína léčí jednotlivce, epidemiologie pracuje s celými skupinami a hledá <strong>příčiny, které jsou vidět teprve v počtech</strong>. Že kuřáci dostávají rakovinu plic mnohonásobně častěji než nekuřáci, na jednom pacientovi nepoznáte. Na statisících ano — a právě tak to britští epidemiologové v 50. letech prokázali.
+      </p>
+
+      <p>
+        Důležité je, že to není obor postavený na názorech ani na autoritě. Stojí na <strong>pozorování, které lze zopakovat, a na předpovědích, které buď vyjdou, nebo ne</strong>. Když Snow tvrdil, že za choleru může voda, byla to testovatelná hypotéza: zavři pumpu a uvidíš. Když dnes epidemiolog řekne, že proočkovanost pod určitou hranicí vrátí spalničky, je to také předpověď — a bohužel se v Evropě opakovaně potvrzuje. Síla oboru je v tom, že se mýlí nahlas a měřitelně, takže se dá průběžně opravovat. To je přesně to, co dělá vědu vědou.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEpiTimelineH">
+        <figcaption class="av-figure-h" id="avEpiTimelineH">Jak se z příběhů stala metoda — milníky epidemiologie</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1854</time>
+            <h4 class="av-timeline-title">Pumpa na Broad Street</h4>
+            <p class="av-timeline-desc">John Snow zmapuje cholerová úmrtí v Londýně a spojí je se zdrojem vody. Vzniká myšlenka: nemoc má dohledatelnou příčinu v prostředí.</p>
+            <span class="av-timeline-tag">terénní pátrání</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1950–54</time>
+            <h4 class="av-timeline-title">Kouření a rakovina plic</h4>
+            <p class="av-timeline-desc">Doll a Hill kohortovou studií lékařů prokážou souvislost kouření a karcinomu plic. Epidemiologie poprvé mění chování celých společností.</p>
+            <span class="av-timeline-tag">kohortová studie</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1948–dnes</time>
+            <h4 class="av-timeline-title">Framinghamská studie srdce</h4>
+            <p class="av-timeline-desc">Dlouhodobé sledování celého města přináší pojem „rizikový faktor“ — vysoký tlak, cholesterol, kouření. Základ dnešní prevence infarktů.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1980</time>
+            <h4 class="av-timeline-title">Vymýcení pravých neštovic</h4>
+            <p class="av-timeline-desc">Cílená vakcinace a vyhledávání ohnisek (ring vaccination) zlikvidují nemoc, která po staletí zabíjela. Důkaz, že teorie funguje v praxi.</p>
+            <span class="av-timeline-tag">globální úspěch</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">2020–dnes</time>
+            <h4 class="av-timeline-title">Matematické modely v reálném čase</h4>
+            <p class="av-timeline-desc">Pandemie covidu-19 ukáže, že modely přenosu řídí rozhodování vlád — a otevře debatu o tom, jak čísla správně číst. O tom je třetí díl seriálu.</p>
+            <span class="av-timeline-tag">Teď</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> historický přehled vývoje oboru a vakcinace dle Kayser &amp; Ramzan (2021), Hum Vaccin Immunother (DOI v sekci Zdroje); Framinghamská a Dollova–Hillova studie jsou klasické milníky epidemiologie.</p>
+      </figure>
+
+      <h3>Reprodukční číslo: každá nákaza má svoje R₀</h3>
+
+      <p>
+        Nejdůležitější číslo celého oboru se značí <strong>R₀</strong> (čteme „er nula“) a říká jediné: <em>kolik dalších lidí v průměru nakazí jeden nemocný v populaci, která zatím nemá žádnou imunitu</em>. Když je R₀ větší než 1, nákaza se šíří a roste lavinovitě. Když je menší než 1, postupně vyhasne. Celá epidemiologie infekcí se točí kolem toho, jak tlačit tohle číslo pod jedničku — a očkování, izolace nebo roušky nedělají nic jiného, než že R₀ snižují.
+      </p>
+
+      <p>
+        R₀ není „vlastnost viru“ samo o sobě — záleží i na tom, jak často se lidé potkávají a jak dlouho jsou nakažliví. Přesto má každá nemoc svůj typický rozsah a ten rozhoduje o všem ostatním. Spalničky patří s R₀ kolem 12 až 18 k nejnakažlivějším nemocem, jaké známe; podle modelové studie japonské epidemie se základní reprodukční číslo spalniček pohybuje v rozmezí zhruba 10 až 20. Pro srovnání: u viru hepatitidy A vyšly v 16 amerických státech hodnoty R₀ od 2,2 do 5,0. Čím vyšší R₀, tím těžší je nemoc zastavit — a tím vyšší proočkovanost je potřeba, jak ukážeme ve druhém díle.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEpiR0H">
+        <figcaption class="av-figure-h" id="avEpiR0H">Kolik lidí nakazí jeden nemocný (základní reprodukční číslo R₀)</figcaption>
+        <ol class="av-bar-compare" data-max="18" data-unit="" data-decimals="0">
+          <li class="av-bar-row av-bar-row-bad" data-value="15" data-label="Spalničky" data-note="R₀ ≈ 12–18, mimořádně nakažlivé"></li>
+          <li class="av-bar-row" data-value="5" data-label="Pravé neštovice" data-note="R₀ ≈ 5–7 (před vymýcením)"></li>
+          <li class="av-bar-row" data-value="4" data-label="Hepatitida A" data-note="R₀ ≈ 2,2–5,0 dle prostředí"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="3" data-label="COVID-19 (původní)" data-note="R₀ ≈ 2,5–3,5"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="1.4" data-label="Sezónní chřipka" data-note="R₀ ≈ 1,3–1,5" data-display="~1,4"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> spalničky — Kinoshita &amp; Nishiura (2017), Vaccine; hepatitida A — Yang et al. (2024), Clin Infect Dis. Ostatní hodnoty jsou běžně uváděné učebnicové rozsahy (R₀ závisí i na kontaktech v populaci). Plné citace s DOI níže.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Vyzkoušejte si to na simulátoru">
+        <p class="article-callout-h">Vyzkoušejte si to — sandbox reprodukčního čísla</p>
+        <p>Chcete vidět, co dělá R₀ se skutečnou epidemií? Na simulátoru <strong>Nedovařený tapír</strong> otevřete režim <a href="https://nedovarenytapir.cz/#/sandbox" target="_blank" rel="noopener">Sandbox (parametrický SEIR model)</a>, posuňte R₀ z 1,2 na 3 a sledujte, jak se z mírné vlny stane prudká epidemie. Je to tentýž princip, na jakém staví výpočty epidemiologů — jen v interaktivní podobě.</p>
+      </aside>
+
+      <h3>Jak poznáme, že za nemocí je příčina, a ne náhoda</h3>
+
+      <p>
+        Nejčastější námitka proti epidemiologii zní: „korelace přece není kauzalita“. Je to oprávněné — a obor s tím počítá od základu. Aby epidemiolog mohl tvrdit, že něco <em>způsobuje</em> nemoc (a ne že to jen náhodou jde ruku v ruce), používá hierarchii metod, které postupně odřezávají náhodu a zkreslení. Čím výš v té hierarchii, tím silnější důkaz.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEpiEvidenceH">
+        <figcaption class="av-figure-h" id="avEpiEvidenceH">Od podezření k důkazu — jak roste síla zjištění</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Kazuistika a pozorování</h4>
+            <p class="av-flow-desc">Lékař si všimne neobvyklého shluku případů. Vzniká hypotéza — zatím slabý signál, snadno zmýlitelný náhodou.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Studie případů a kontrol</h4>
+            <p class="av-flow-desc">Porovnáme nemocné se zdravými a hledáme, čím se liší. Levné a rychlé, ale citlivé na zkreslení.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Kohortová studie</h4>
+            <p class="av-flow-desc">Sledujeme velkou skupinu lidí v čase a čekáme, kdo onemocní. Takto se prokázalo kouření i rizikové faktory infarktu.</p>
+            <span class="av-flow-tag">silný důkaz</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Randomizovaný experiment</h4>
+            <p class="av-flow-desc">Účastníky losem rozdělíme na dvě skupiny — náhoda eliminuje zkreslení. Zlatý standard, na němž se testují vakcíny i léky.</p>
+            <span class="av-flow-tag">zlatý standard</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Systematický přehled a metaanalýza</h4>
+            <p class="av-flow-desc">Spojíme všechny kvalitní studie dohromady. Nejvyšší dostupná úroveň důkazu — jediná studie se může mýlit, desítky najednou už těžko.</p>
+            <span class="av-flow-tag">nejvyšší úroveň</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> standardní hierarchie důkazů v epidemiologii a medicíně založené na důkazech (evidence-based medicine). Příklady studií viz citace v sekci Zdroje a v dílech 2 a 3 seriálu.</p>
+      </figure>
+
+      <p>
+        Klíčový vynález je <strong>randomizace</strong> — rozdělení účastníků do skupin losem. Tím se zajistí, že se obě skupiny liší jen v tom jednom, co testujeme (třeba zda dostaly vakcínu, nebo placebo), a všechno ostatní se vyrovná náhodou. Proto je randomizovaný experiment tak přesvědčivý: kdyby očkovaní onemocněli méně jen kvůli tomu, že jsou bohatší nebo zdravější, randomizace tenhle rozdíl smaže. A když se desítky takových studií shodnou, mluvíme o důkazu, jakému se v žádné jiné oblasti veřejné debaty nevyrovná skoro nic.
+      </p>
+
+      <h3>Detektivní práce: najdi nultého pacienta</h3>
+
+      <p>
+        Snowova metoda žije dodnes pod názvem <strong>výjezdová (terénní) epidemiologie</strong>. Když vypukne ohnisko nákazy — třeba salmonela ze svatební hostiny nebo nemocniční nákaza — epidemiolog dělá přesně to, co Snow: sestaví seznam nemocných, zjistí, co měli společného, nakreslí epidemickou křivku a hledá zdroj. Někdy je zdrojem jeden člověk, který sám nestůně, ale nakazí desítky dalších. Nejslavnějším případem je „tyfová Mary“, kuchařka z počátku 20. století, která jako bezpříznaková nosička roznesla břišní tyfus do řady domácností v Oyster Bay u New Yorku.
+      </p>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Vyzkoušejte si to na simulátoru">
+        <p class="article-callout-h">Vyzkoušejte si to — staňte se detektivem nákazy</p>
+        <p>Pátrání po zdroji nákazy si zahrajete přímo: ve hře <a href="https://nedovarenytapir.cz/#/hra/oyster-bay" target="_blank" rel="noopener">Záhada z Oyster Bay</a> dostanete dobové dokumenty a úkol najít, kdo a jak roznáší tyfus — rekonstrukce skutečného případu „tyfové Mary“. Naučíte se přitom dvě věci, na kterých stojí celý obor: že nákaza se dá přenášet i bez příznaků a že zdroj se hledá daty, ne dohady.</p>
+      </aside>
+
+      <h3>Co to znamená pro Česko</h3>
+
+      <p>
+        Epidemiologie není jen o infekcích — měří zdraví celé populace a umožňuje srovnání mezi zeměmi. HSPA Monitor proto sleduje ukazatele, které jsou samy o sobě epidemiologickými mírami. Dva z nich shrnují, kolik úmrtí by při dobře fungujícím systému vůbec nemuselo nastat: <strong>preventovatelná mortalita</strong> (úmrtí, jimž lze předejít prevencí a veřejným zdravím) a <strong>léčitelná mortalita</strong> (úmrtí, jimž lze předejít včasnou a kvalitní péčí). V obou je Česko nad evropským průměrem — tedy hůř.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEpiCzH">
+        <figcaption class="av-figure-h" id="avEpiCzH">Odvratitelná úmrtnost v ČR — kde nás čísla usvědčují (na 100 000 ob.)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel</th>
+                <th scope="col" class="av-num">Česko</th>
+                <th scope="col" class="av-num">EU</th>
+                <th scope="col">Co znamená</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Preventovatelná mortalita</th>
+                <td class="av-num av-bad">195</td>
+                <td class="av-num">168</td>
+                <td>úmrtí, jimž lze předejít prevencí (2022)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Léčitelná mortalita</th>
+                <td class="av-num av-bad">107,2</td>
+                <td class="av-num">86,8</td>
+                <td>úmrtí, jimž lze předejít včasnou péčí (2023)</td>
+              </tr>
+              <tr>
+                <th scope="row">Naděje dožití</th>
+                <td class="av-num av-bad">80,1</td>
+                <td class="av-num av-good">81,5</td>
+                <td>roky života při narození (2024), nižší je horší</td>
+              </tr>
+              <tr>
+                <th scope="row">Incidence spalniček</th>
+                <td class="av-num">0,9</td>
+                <td class="av-num">—</td>
+                <td>případů na 100 000 ob. (2023); citlivý indikátor proočkovanosti</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> dashboard HSPA Monitoru — indikátory <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a>, <a href="indicator.html?id=mortalita_lecitelna">léčitelná mortalita</a>, <a href="indicator.html?id=nadeje_doziti_total">naděje dožití</a>, <a href="indicator.html?id=spalnicky">incidence spalniček</a> (Eurostat/OECD, roky uvedeny v závorkách).</p>
+      </figure>
+
+      <p>
+        Tahle čísla nejsou osud — jsou zadáním. Ukazují, kde český systém ztrácí roky života, které jinde v Evropě umějí zachránit. A protože jde o ukazatele s jasnou metodikou, dají se sledovat rok co rok a poznat, jestli se politika trefuje, nebo míjí. Přesně k tomu epidemiologie je: dělá z mlhavého pocitu „zdravotnictví je v krizi“ měřitelnou, ověřitelnou a porovnatelnou informaci.
+      </p>
+
+      <h3>Chcete jít víc do hloubky?</h3>
+
+      <p>
+        Tenhle seriál vysvětluje principy pro širokou veřejnost. Pokud vás zajímá matematika za nimi — soustavy rovnic kompartmentových modelů, výpočet R₀ pomocí next-generation matice nebo odvození prahu kolektivní imunity — sesterský web Nedovařený tapír má i <strong>verzi pro vysokou školu</strong>.
+      </p>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Příručka epidemiologa">
+        <p class="article-callout-h">Příručka epidemiologa — vysokoškolská úroveň</p>
+        <p>Otevřete <a href="https://nedovarenytapir.cz/#/prirucka" target="_blank" rel="noopener">příručku epidemiologa</a> a zvolte úroveň <strong>Vysoká škola (lékařská fakulta)</strong>. Najdete tam do hloubky probrané kompartmentové modely, parametry přenosu a — co je důležité — ověřené odkazy na odbornou literaturu s DOI. Je to přesně ten typ podloženosti, o kterém je celý tento seriál: tvrzení, která si můžete dohledat až k původnímu článku.</p>
+      </aside>
+
+      <p>
+        V <strong>druhém díle</strong> se podíváme na nejlépe doloženou intervenci v dějinách medicíny — očkování. Ukážeme, proč funguje, kolik životů prokazatelně zachránilo, kde se vzal mýtus o autismu (a jak ho 657 tisíc dětí vyvrátilo) a proč česká proočkovanost spalniček klesla pod bezpečnou hranici. Ve <strong>třetím</strong> pak na to, jak se z těchto principů staví modely, které řídí rozhodování vlád v krizi.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory a pojmy, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><strong><a href="indicator.html?id=mortalita_preventabilni">Preventovatelná mortalita</a></strong> — ČR 195 vs EU 168 na 100 000 ob. (2022)</li>
+        <li><strong><a href="indicator.html?id=mortalita_lecitelna">Léčitelná mortalita</a></strong> — ČR 107,2 vs EU 86,8 na 100 000 ob. (2023)</li>
+        <li><strong><a href="indicator.html?id=nadeje_doziti_total">Naděje dožití při narození</a></strong> — ČR 80,1 vs EU 81,5 let (2024)</li>
+        <li><strong><a href="indicator.html?id=spalnicky">Incidence spalniček</a></strong> — ČR 0,9 na 100 000 ob. (2023); citlivý ukazatel proočkovanosti</li>
+        <li><strong>R₀ (základní reprodukční číslo)</strong> — spalničky ≈ 12–18, hepatitida A ≈ 2,2–5,0</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Hodnoty indikátorů pocházejí z dashboardu HSPA Monitoru (zdroj Eurostat/OECD, rok uveden u každé hodnoty). Hodnoty R₀ jsou odborné odhady — u spalniček a hepatitidy A doložené primární literaturou (viz Zdroje), ostatní jsou běžně uváděné učebnicové rozsahy. R₀ závisí i na kontaktech v populaci, není to neměnná „vlastnost viru“.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Kinoshita R, Nishiura H. Assessing age-dependent susceptibility to measles in Japan. Vaccine, 2017.</strong> — modelová studie odvozuje základní reprodukční číslo spalniček v rozmezí ≈ 10–20 a práh kolektivní imunity 90–95 %. <a href="https://doi.org/10.1016/j.vaccine.2017.05.011" target="_blank" rel="noopener">doi.org/10.1016/j.vaccine.2017.05.011 ↗</a></li>
+          <li><strong>Yang J, et al. Determining Herd Immunity Thresholds for Hepatitis A Virus Transmission. Clin Infect Dis, 2024.</strong> — odhady R₀ viru hepatitidy A 2,2–5,0 a odpovídající prahy kolektivní imunity 55–80 % v 16 amerických státech. <a href="https://doi.org/10.1093/cid/ciad552" target="_blank" rel="noopener">doi.org/10.1093/cid/ciad552 ↗</a></li>
+          <li><strong>Kayser V, Ramzan I. Vaccines and vaccination: history and emerging issues. Hum Vaccin Immunother, 2021.</strong> — přehled historie oboru a vakcinace, včetně vymýcení pravých neštovic (1980). <a href="https://doi.org/10.1080/21645515.2021.1977057" target="_blank" rel="noopener">doi.org/10.1080/21645515.2021.1977057 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Vyzkoušejte si principy — interaktivní simulátor</h5>
+        <ul class="article-sources-list">
+          <li><strong>Nedovařený tapír — Sandbox (parametrický SEIR model)</strong> — nastavte R₀ a sledujte tvar epidemie. <a href="https://nedovarenytapir.cz/#/sandbox" target="_blank" rel="noopener">nedovarenytapir.cz/#/sandbox ↗</a></li>
+          <li><strong>Nedovařený tapír — Záhada z Oyster Bay</strong> — pátrání po zdroji nákazy (tyfová Mary). <a href="https://nedovarenytapir.cz/#/hra/oyster-bay" target="_blank" rel="noopener">nedovarenytapir.cz/#/hra/oyster-bay ↗</a></li>
+          <li><strong>Nedovařený tapír — Příručka epidemiologa (úroveň Vysoká škola / lékařská fakulta)</strong> — kompartmentové modely a parametry přenosu s odkazy na literaturu. <a href="https://nedovarenytapir.cz/#/prirucka" target="_blank" rel="noopener">nedovarenytapir.cz/#/prirucka ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSPA Monitor — indikátory odvratitelné úmrtnosti a proočkovanosti</strong> — hodnoty pro ČR i benchmarky. <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a>, <a href="indicator.html?id=mortalita_lecitelna">léčitelná mortalita</a>, <a href="indicator.html?id=spalnicky">incidence spalniček</a>.</li>
+          <li><strong>Eurostat / OECD — Avoidable mortality, Causes of death</strong> — harmonizovaná evropská data, ze kterých indikátory vycházejí. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k hodnotám:</strong> Indikátorové hodnoty (ČR i EU) vycházejí z dashboardu HSPA Monitoru, který je čerpá z Eurostatu a OECD; rok je uveden u každé hodnoty. Příběh pumpy na Broad Street (1854) a „tyfové Mary“ jsou doložené historické případy uváděné v učebnicích epidemiologie. Simulátor Nedovařený tapír je edukační nástroj — slouží k pochopení principů, ne k predikci reálných epidemií.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

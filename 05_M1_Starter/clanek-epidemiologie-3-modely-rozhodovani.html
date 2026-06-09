@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modely, trasování a krizové rozhodování: jak čísla řídí politiku · HSPA Monitor</title>
+<meta name="description" content="Třetí díl seriálu o epidemiologii: jak fungují kompartmentové modely (SEIR), proč protiepidemická opatření snižují reprodukční číslo o 40–90 %, co umí trasování kontaktů a jak očkování proti covidu odvrátilo 14–20 milionů úmrtí. Krizové rozhodování si vyzkoušíte na nedovarenytapir.cz.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modely, trasování a krizové rozhodování: jak čísla řídí politiku">
+<meta property="og:description" content="Díl 3/3 seriálu o epidemiologii — SEIR modely, opatření snižující R o 40–90 %, trasování a 14–20 milionů životů zachráněných očkováním proti covidu. Krizové rozhodování si vyzkoušíte na nedovarenytapir.cz.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:image" content="assets/covers/clanek-epidemiologie-3-modely-rozhodovani.svg">
+<meta property="article:published_time" content="2026-06-11">
+<meta property="article:section" content="Veřejné zdraví">
+<!--
+  audit:
+    last_reviewed: 2026-06-09
+    reviewer: claude-code-agent
+    status: verified
+    created_at: 2026-06-09
+    creation_phase: serie-epidemiologie-dil-3
+    primary_sources_count: 5
+    visual_elements_count: 5
+    notes: "Díl 3/3 vědeckého seriálu o epidemiologii. Empirická tvrzení doložena primární literaturou z PubMedu (DOI v sekci Zdroje): protiepidemická opatření (NPI) v 11 evropských zemích stlačila R pod 1 (Flaxman et al. 2020, Nature, DOI 10.1038/s41586-020-2405-7); NPI snižují přenos covidu-19 o 40-90 % (Faherty et al. 2024, Front Public Health, DOI 10.3389/fpubh.2024.1426992); očkování proti covidu odvrátilo 14,4 mil. (dle hlášených úmrtí) až 19,8 mil. (dle nadúmrtí) úmrtí za první rok (Watson et al. 2022, Lancet Infect Dis, DOI 10.1016/S1473-3099(22)00320-6); preventivní léčba u kontaktů (trasování) účinná z 49 % v metaanalýze 439 644 účastníků (Martinez et al. 2024, Lancet Respir Med, DOI 10.1016/S2213-2600(24)00083-3); R0/herd immunity (Kinoshita & Nishiura 2017, DOI 10.1016/j.vaccine.2017.05.011). Indikátory z dashboardu: mortalita_preventabilni 195/100k (2022, EU 168), vakcinace_mmr_deti 83,7 % (2022), spalnicky 0,9/100k (2023), infekce_nosokomialni 6,5 % (2023). Cross-linky: nedovarenytapir.cz #/hra/krizovy-stab (krizové rozhodování, NPI, kompromisy), #/hra/osacka (trasování kontaktů), #/sandbox (SEIR/Re), #/prirucka (úroveň Vysoká škola / lékařská fakulta: SEIR rovnice, next-generation matice). Zdůrazněn edukační charakter simulátoru (není predikční nástroj). Díl ve frontě k publikaci (published:false, ready, scheduled_for 2026-06-11)."
+-->
+<meta name="article:audit-status" content="verified">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body data-article-slug="clanek-epidemiologie-3-modely-rozhodovani.html">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-epidemiologie-3-modely-rozhodovani.svg" alt="" width="1200" height="630" loading="eager" decoding="async">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">Seriál o epidemiologii · díl 3/3 · modely a krizové rozhodování</span>
+      </div>
+      <h2 class="article-title">Modely, trasování a krizové rozhodování: jak čísla řídí politiku</h2>
+      <p class="article-deck">
+        V prvním díle jsme poznali reprodukční číslo, ve druhém kolektivní imunitu. Teď je spojíme do nástroje, který během pandemie covidu-19 řídil rozhodování vlád: matematický model přenosu. Ukážeme, jak funguje, proč protiepidemická opatření prokazatelně snižují šíření o 40 až 90 %, co dokáže trasování kontaktů a proč i ten nejlepší model je jen tak dobrý, jak dobře umíme číst jeho nejistotu. A roli krizového epidemiologa si na <strong>nedovarenytapir.cz</strong> vyzkoušíte na vlastní kůži — se všemi nepříjemnými kompromisy.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">11. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">17 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Na jaře 2020 se rozhodovalo o životech milionů lidí podle grafů, kterým většina veřejnosti nerozuměla. Vlády zavíraly školy, ekonomiky i hranice na základě modelů přenosu — soustav rovnic, které předpovídaly, kolik lidí onemocní, pokud se nic neudělá. Byl to největší experiment v dějinách aplikované epidemiologie a zároveň lekce o tom, jak se čísla čtou a jak se zneužívají. Tenhle závěrečný díl seriálu otevírá černou skříňku: ukazuje, co model umí, co neumí — a proč obojí potřebujete vědět, abyste mu rozuměli.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avModHeroH">
+        <figcaption class="av-figure-h" id="avModHeroH">Modely a opatření v číslech — co dokázala spočítat věda</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="40" data-suffix="–90 %">40–90 %</span>
+            <span class="av-counter-label">o tolik protiepidemická opatření snižují přenos covidu-19</span>
+            <span class="av-counter-foot">přehled 61 studií, 2024</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="19.8" data-decimals="1" data-suffix=" mil.">19,8 mil.</span>
+            <span class="av-counter-label">úmrtí odvráceno očkováním proti covidu za 1. rok</span>
+            <span class="av-counter-foot">dle nadúmrtí; 14,4 mil. dle hlášených úmrtí</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1">1</span>
+            <span class="av-counter-label">hranice reprodukčního čísla, o kterou se vše hraje</span>
+            <span class="av-counter-foot">R > 1 roste, R < 1 vyhasíná</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="49" data-suffix=" %">49 %</span>
+            <span class="av-counter-label">účinnost preventivní léčby u trasovaných kontaktů (TBC)</span>
+            <span class="av-counter-foot">metaanalýza 439 644 účastníků</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NPI 40–90 % — Faherty et al. (2024); očkování proti covidu — Watson et al. (2022); trasování/preventivní léčba — Martinez et al. (2024). Plné citace s DOI v sekci Zdroje.</p>
+      </figure>
+
+      <h3>Kompartmentový model: jak se „nasimuluje“ epidemie</h3>
+
+      <p>
+        Základní nástroj epidemiologie infekcí se jmenuje <strong>SEIR</strong> podle čtyř skupin (kompartmentů), do kterých rozdělí celou populaci: <strong>S</strong>usceptible (vnímaví, mohou onemocnět), <strong>E</strong>xposed (nakažení, ještě ne nakažliví), <strong>I</strong>nfectious (nakažliví) a <strong>R</strong>ecovered (uzdravení a imunní). Model pak pomocí rovnic počítá, jak lidé den po dni přetékají z jedné skupiny do druhé. Rychlost přetékání ze S do E řídí — jak jinak — reprodukční číslo a počet kontaktů. Je to stejný princip jako u Snowovy mapy, jen místo teček na papíře jsou to proměnné v čase.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avModSeirH">
+        <figcaption class="av-figure-h" id="avModSeirH">Model SEIR — kudy populace „přetéká“ během epidemie</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">S — vnímaví</h4>
+            <p class="av-flow-desc">Lidé, kteří nemoc ještě neprodělali ani nejsou očkovaní. Na začátku epidemie skoro celá populace.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">E — nakažení (inkubace)</h4>
+            <p class="av-flow-desc">Už mají virus, ale ještě nenakazí ostatní. Délka tohoto stavu (inkubační doba) určuje, jak rychle se vlna rozjede.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">I — nakažliví</h4>
+            <p class="av-flow-desc">Šíří nákazu dál. Kolik dalších nakazí, určuje reprodukční číslo. Tady se rozhoduje, jestli epidemie poroste, nebo opadne.</p>
+            <span class="av-flow-tag">klíčový kompartment</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">R — uzdravení (imunní)</h4>
+            <p class="av-flow-desc">Prodělali nemoc nebo jsou očkovaní. Ubývají z hry — a čím víc jich je, tím hůř se virus šíří. Tady vzniká kolektivní imunita.</p>
+            <span class="av-flow-tag">kolektivní imunita</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> standardní kompartmentový model SEIR; přesné rovnice a odvození reprodukčního čísla z next-generation matice viz příručka epidemiologa (úroveň Vysoká škola) odkazovaná níže.</p>
+      </figure>
+
+      <p>
+        Klíčový je rozdíl mezi R₀ z prvního dílu a tzv. <strong>efektivním reprodukčním číslem R(t)</strong>. R₀ platí pro populaci bez imunity na začátku. Jakmile část lidí onemocní nebo se naočkuje a jakmile zavedeme opatření, skutečné šíření klesá — a měříme ho právě R(t). Celá pandemická politika se dá shrnout do jediné věty: <strong>dostat R(t) pod jedničku a udržet ho tam co nejmenším nákladem.</strong>
+      </p>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Vyzkoušejte si to na simulátoru">
+        <p class="article-callout-h">Vyzkoušejte si to — postavte si vlastní epidemii</p>
+        <p>V režimu <a href="https://nedovarenytapir.cz/#/sandbox" target="_blank" rel="noopener">Sandbox</a> na simulátoru Nedovařený tapír si poskládáte vlastní SEIR model: nastavíte inkubační dobu, dobu nakažlivosti a reprodukční číslo a hned vidíte tvar epidemické křivky. Sledujte, jak se mění vrchol vlny a kdy R(t) protne jedničku — tedy okamžik, po kterém epidemie začíná opadat.</p>
+      </aside>
+
+      <h3>Fungují opatření? Důkaz z celé Evropy</h3>
+
+      <p>
+        Nejčastější spor pandemie zněl: měla protiepidemická opatření (tzv. NPI — non-pharmaceutical interventions) vůbec smysl? Epidemiologie na to odpověděla daty. Studie publikovaná v <em>Nature</em> analyzovala 11 evropských zemí v první vlně roku 2020 a dospěla k závěru, že zavedená opatření — především lockdowny — stlačila reprodukční číslo <strong>pod jedničku</strong> ve všech sledovaných zemích a získala kontrolu nad epidemií. Pozdější přehled 61 studií ze čtyř zemí to upřesnil: jednotlivá mírná opatření snižovala efektivní reprodukční číslo zhruba o <strong>10–50 %</strong>, zatímco komplexní lockdowny o <strong>40–90 %</strong>, často kolem 70–80 %.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avModNpiH">
+        <figcaption class="av-figure-h" id="avModNpiH">O kolik opatření snižují efektivní reprodukční číslo (orientační rozsahy)</figcaption>
+        <ol class="av-bar-compare" data-max="90" data-unit=" %" data-decimals="0">
+          <li class="av-bar-row av-bar-row-bad" data-value="80" data-label="Komplexní lockdown" data-note="kombinace opatření; 40–90 %, často 70–80 %"></li>
+          <li class="av-bar-row" data-value="40" data-label="Zavření škol + omezení akcí" data-note="střední účinek"></li>
+          <li class="av-bar-row" data-value="25" data-label="Roušky / respirátory" data-note="jedno mírné opatření"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="15" data-label="Doporučení odstupu" data-note="10–50 % u jednotlivých mírných opatření"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Faherty et al. (2024), Front Public Health (rozpětí účinnosti dle síly opatření); Flaxman et al. (2020), Nature (lockdowny stlačily R pod 1 v 11 zemích). Hodnoty jsou orientační rozsahy z přehledu studií, ne jediné „pravé“ číslo. DOI níže.</p>
+      </figure>
+
+      <p>
+        Důležité je číst to správně: opatření nejsou kouzlo, ale ani placebo. Mají měřitelný účinek, který se liší podle jejich síly a podle toho, jak se dodržují. A mají cenu — ekonomickou, sociální i na lidské důvěře. Epidemiologie umí spočítat ten první sloupec (o kolik klesne R), ale rozhodnutí, jestli ta cena stojí za to, je politické. Právě tohle napětí dělá z krizového rozhodování tak těžkou disciplínu.
+      </p>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Vyzkoušejte si to na simulátoru">
+        <p class="article-callout-h">Vyzkoušejte si to — sedněte si do krizového štábu</p>
+        <p>Ve hře <a href="https://nedovarenytapir.cz/#/hra/krizovy-stab" target="_blank" rel="noopener">Krizový štáb</a> řídíte zemi během epidemie: vybíráte z desítek opatření, sledujete reprodukční číslo, kapacitu nemocnic — a zároveň politický a ekonomický účet. Zjistíte, že každé opatření, které srazí R, něco stojí, a že lidé ho po čase přestávají dodržovat. Je to ten nejhmatatelnější způsob, jak pochopit, proč „prostě to zavřít“ nebo „prostě otevřít“ nikdy nebyla snadná volba.</p>
+      </aside>
+
+      <h3>Trasování kontaktů: cílit místo plošně</h3>
+
+      <p>
+        Když je plošný lockdown drahý, nabízí se chirurgická alternativa: najít nakažené a jejich kontakty dřív, než stihnou nakazit další. To je <strong>trasování kontaktů</strong> — přímý potomek Snowovy detektivní práce. Jeho síla je v cílenosti: místo aby se omezovali všichni, izolují se jen ti, kdo nákazu skutečně mohou šířit. Že to funguje, ukazuje například rozsáhlá metaanalýza tuberkulózy: preventivní léčba podaná trasovaným kontaktům snížila riziko onemocnění o <strong>49 %</strong> napříč 439 644 účastníky 32 studií, u kontaktů s prokázanou infekcí ještě výrazněji.
+      </p>
+
+      <p>
+        Trasování má ale své limity: funguje jen, dokud je případů málo a dokud je systém stíhá dohledat. Jakmile počty explodují, kapacita trasovačů se vyčerpá — a tehdy nezbývá než sáhnout po plošnějších opatřeních. Modely pomáhají poznat přesně ten zlom, kdy trasování přestává stačit. To je další příklad toho, jak čísla přímo řídí volbu nástroje.
+      </p>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Vyzkoušejte si to na simulátoru">
+        <p class="article-callout-h">Vyzkoušejte si to — trasování na telefonu</p>
+        <p>Ve hře <a href="https://nedovarenytapir.cz/#/hra/osacka" target="_blank" rel="noopener">Ósacká horečka</a> dostanete omezený rozpočet a desítky kontaktů — a musíte vytelefonovat, kdo koho nakazil, najít „nultého pacienta“ a odhalit superpřenašečské události. Narazíte přitom na skutečný problém trasování: nikdy nemáte dost zdrojů na to, abyste prověřili každého, takže musíte sázet na ty nejpravděpodobnější.</p>
+      </aside>
+
+      <h3>Když dorazila vakcína: 14 až 20 milionů životů</h3>
+
+      <p>
+        Modely posloužily i k tomu, aby se zpětně spočítalo, co očkování proti covidu skutečně přineslo. Studie v <em>Lancet Infectious Diseases</em> odhadla, že jen za <strong>první rok</strong> očkování (prosinec 2020 – prosinec 2021) odvrátilo ve 185 zemích <strong>14,4 milionu</strong> úmrtí podle oficiálně hlášených covidových úmrtí, a až <strong>19,8 milionu</strong>, pokud se počítá s nadúmrtností (která lépe zachycuje skutečný rozsah pandemie). To je v prvním roce globální snížení počtu úmrtí o zhruba 63 %. Studie zároveň upozornila, že nerovný přístup k vakcínám v chudších zemích tento přínos výrazně omezil — což je samo o sobě epidemiologické zjištění s politickými důsledky.
+      </p>
+
+      <h3>Proč i nejlepší model může klamat</h3>
+
+      <p>
+        Tady je nutná upřímnost, kterou poctivá epidemiologie nikdy nevynechává: <strong>model není věštba</strong>. Je to nástroj „co kdyby“, který říká, co by se stalo za určitých předpokladů. Když se předpoklady změní — třeba proto, že lidé na základě varování změní chování — předpověď se nenaplní. To ale neznamená, že model selhal; znamená to, že posloužil. Tahle past (model varuje, lidé zareagují, varování se „nenaplní“, model je obviněn z chyby) provázela celou pandemii.
+      </p>
+
+      <p>
+        Proto se výstup modelu nikdy nečte jako jedno číslo, ale jako <strong>rozpětí s mírou nejistoty</strong> — intervaly spolehlivosti, scénáře, pásma. A proto platí zlaté pravidlo: model je dobrý sluha při rozhodování, ale špatný pán, pokud se z něj udělá jistota, kterou nikdy neslibuje. I edukační simulátor, na který v tomto seriálu odkazujeme, to říká na rovinu — slouží k pochopení principů, ne k predikci konkrétní reálné epidemie.
+      </p>
+
+      <h3>Co to znamená pro Česko</h3>
+
+      <p>
+        Modely nejsou jen pro pandemie. Tytéž principy se uplatní u běžných ukazatelů, které HSPA Monitor sleduje. <a href="indicator.html?id=infekce_nosokomialni">Prevalence nemocničních infekcí</a> je v Česku 6,5 % (2023) — nad průměrem OECD i EU; jde o přenos v uzavřeném prostředí, kde trasování a hygienická opatření rozhodují stejně jako u jakékoli jiné nákazy. Pokles <a href="indicator.html?id=vakcinace_mmr_deti">proočkovanosti MMR</a> na 83,7 % je z modelového pohledu tikající bomba, protože u spalniček stačí málo, aby R(t) vyskočilo nad jedničku — a <a href="indicator.html?id=spalnicky">incidence spalniček</a> je teploměr, který to změří. A <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a> (195 vs 168 v EU) je v podstatě souhrn všech těch nepřijatých opatření a nevyužité prevence dohromady.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avModCzH">
+        <figcaption class="av-figure-h" id="avModCzH">Kde se principy modelů potkávají s českými daty</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Indikátor</th>
+                <th scope="col" class="av-num">ČR</th>
+                <th scope="col">Co o tom říká model přenosu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Proočkovanost MMR (děti)</th>
+                <td class="av-num av-bad">83,7 %</td>
+                <td>pod prahem kolektivní imunity → R(t) spalniček snadno přes 1</td>
+              </tr>
+              <tr>
+                <th scope="row">Incidence spalniček</th>
+                <td class="av-num">0,9 / 100k</td>
+                <td>citlivý teploměr, který trhání kolektivní imunity okamžitě měří</td>
+              </tr>
+              <tr>
+                <th scope="row">Nemocniční infekce</th>
+                <td class="av-num av-bad">6,5 %</td>
+                <td>přenos v uzavřeném prostředí — doména trasování a hygieny</td>
+              </tr>
+              <tr>
+                <th scope="row">Preventovatelná mortalita</th>
+                <td class="av-num av-bad">195 / 100k</td>
+                <td>souhrn nevyužité prevence; EU průměr 168</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> dashboard HSPA Monitoru — <a href="indicator.html?id=vakcinace_mmr_deti">MMR</a>, <a href="indicator.html?id=spalnicky">spalničky</a>, <a href="indicator.html?id=infekce_nosokomialni">nemocniční infekce</a>, <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a> (roky v textu). Zdroj dat OECD/Eurostat/ECDC.</p>
+      </figure>
+
+      <h3>Chcete jít víc do hloubky?</h3>
+
+      <aside class="article-callout article-callout-tryout" aria-label="Příručka epidemiologa">
+        <p class="article-callout-h">Příručka epidemiologa — vysokoškolská úroveň</p>
+        <p>Tohle byl výklad principů pro veřejnost. Matematika za nimi — soustava diferenciálních rovnic modelu SEIR, výpočet R₀ pomocí <em>next-generation matice</em>, kalibrace a validace modelů — je k mání v <a href="https://nedovarenytapir.cz/#/prirucka" target="_blank" rel="noopener">příručce epidemiologa</a> v úrovni <strong>Vysoká škola (lékařská fakulta)</strong>. Každá kapitola má ověřené odkazy na recenzovanou literaturu s DOI, takže si můžete dohledat původní práce — od Diekmannovy next-generation matice po studie účinnosti trasování. Je to logické pokračování tohoto seriálu pro každého, kdo chce vidět i rovnice.</p>
+      </aside>
+
+      <p>
+        Tím se seriál uzavírá. Začali jsme u odmontované kliky vodní pumpy v roce 1854 a skončili u modelů, které řídí rozhodování celých států. Pojítkem je jediná myšlenka, kterou stojí za to si odnést: <strong>o zdraví populace se dá uvažovat přesně, ověřitelně a s pokorou k nejistotě.</strong> Epidemiologie není ideologie ani věc názoru — je to nejlépe doložená cesta, jak z mlhy dohadů udělat čísla, na kterých se dá stavět. A pokud vás zlákala natolik, že si chcete sami zkusit, jak se taková čísla rodí, víte, kde hledat: <a href="https://nedovarenytapir.cz" target="_blank" rel="noopener">nedovarenytapir.cz</a>.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Čísla a indikátory, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><strong>Opatření (NPI)</strong> — snižují přenos covidu-19 o 40–90 % (lockdown), 10–50 % (mírná opatření)</li>
+        <li><strong>Lockdowny v Evropě</strong> — stlačily R pod 1 v 11 zemích (Nature, 2020)</li>
+        <li><strong>Očkování proti covidu</strong> — 14,4 mil. (hlášená úmrtí) až 19,8 mil. (nadúmrtí) odvrácených úmrtí za 1. rok</li>
+        <li><strong>Trasování / preventivní léčba</strong> — účinnost 49 % v metaanalýze 439 644 účastníků (TBC)</li>
+        <li><strong><a href="indicator.html?id=vakcinace_mmr_deti">MMR děti</a></strong> — ČR 83,7 % (2022); pod prahem kolektivní imunity</li>
+        <li><strong><a href="indicator.html?id=spalnicky">Incidence spalniček</a></strong> — ČR 0,9 na 100 000 ob. (2023)</li>
+        <li><strong><a href="indicator.html?id=infekce_nosokomialni">Nemocniční infekce</a></strong> — ČR 6,5 % (2023)</li>
+        <li><strong><a href="indicator.html?id=mortalita_preventabilni">Preventovatelná mortalita</a></strong> — ČR 195 vs EU 168 na 100 000 ob. (2022)</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Účinnosti opatření i odhady odvrácených úmrtí jsou modelové výsledky s intervaly nejistoty — uvádíme rozpětí, ne jediné „pravé“ číslo. Indikátorové hodnoty pocházejí z dashboardu HSPA Monitoru (zdroj OECD/Eurostat/ECDC, rok u každé hodnoty). Model přenosu je nástroj „co kdyby“, nikoli věštba; jeho hodnota je v tom, že umožní porovnat scénáře, ne předpovědět budoucnost s jistotou.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Flaxman S, et al. Estimating the effects of non-pharmaceutical interventions on COVID-19 in Europe. Nature, 2020.</strong> — opatření (zejména lockdowny) stlačila reprodukční číslo pod 1 v 11 evropských zemích. <a href="https://doi.org/10.1038/s41586-020-2405-7" target="_blank" rel="noopener">doi.org/10.1038/s41586-020-2405-7 ↗</a></li>
+          <li><strong>Faherty LJ, et al. Effects of non-pharmaceutical interventions on COVID-19 transmission. Front Public Health, 2024.</strong> — přehled 61 studií: NPI snižují přenos o 40–90 %. <a href="https://doi.org/10.3389/fpubh.2024.1426992" target="_blank" rel="noopener">doi.org/10.3389/fpubh.2024.1426992 ↗</a></li>
+          <li><strong>Watson OJ, et al. Global impact of the first year of COVID-19 vaccination: a mathematical modelling study. Lancet Infect Dis, 2022.</strong> — 14,4 mil. (hlášená úmrtí) až 19,8 mil. (nadúmrtí) odvrácených úmrtí. <a href="https://doi.org/10.1016/S1473-3099(22)00320-6" target="_blank" rel="noopener">doi.org/10.1016/S1473-3099(22)00320-6 ↗</a></li>
+          <li><strong>Martinez L, et al. Effectiveness of preventive treatment among different age groups and M. tuberculosis infection status. Lancet Respir Med, 2024.</strong> — preventivní léčba trasovaných kontaktů účinná z 49 % (439 644 účastníků). <a href="https://doi.org/10.1016/S2213-2600(24)00083-3" target="_blank" rel="noopener">doi.org/10.1016/S2213-2600(24)00083-3 ↗</a></li>
+          <li><strong>Kinoshita R, Nishiura H. Assessing age-dependent susceptibility to measles in Japan. Vaccine, 2017.</strong> — reprodukční číslo a práh kolektivní imunity spalniček. <a href="https://doi.org/10.1016/j.vaccine.2017.05.011" target="_blank" rel="noopener">doi.org/10.1016/j.vaccine.2017.05.011 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Vyzkoušejte si principy — interaktivní simulátor</h5>
+        <ul class="article-sources-list">
+          <li><strong>Nedovařený tapír — Krizový štáb</strong> — krizové rozhodování s reálnými kompromisy (zdraví × ekonomika × důvěra). <a href="https://nedovarenytapir.cz/#/hra/krizovy-stab" target="_blank" rel="noopener">nedovarenytapir.cz/#/hra/krizovy-stab ↗</a></li>
+          <li><strong>Nedovařený tapír — Ósacká horečka</strong> — trasování kontaktů a hledání zdroje nákazy. <a href="https://nedovarenytapir.cz/#/hra/osacka" target="_blank" rel="noopener">nedovarenytapir.cz/#/hra/osacka ↗</a></li>
+          <li><strong>Nedovařený tapír — Sandbox (SEIR)</strong> — postavte si vlastní model a sledujte R(t). <a href="https://nedovarenytapir.cz/#/sandbox" target="_blank" rel="noopener">nedovarenytapir.cz/#/sandbox ↗</a></li>
+          <li><strong>Nedovařený tapír — Příručka epidemiologa (úroveň Vysoká škola / lékařská fakulta)</strong> — rovnice SEIR, next-generation matice, kalibrace modelů s odkazy na literaturu. <a href="https://nedovarenytapir.cz/#/prirucka" target="_blank" rel="noopener">nedovarenytapir.cz/#/prirucka ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSPA Monitor — indikátory přenosu a prevence</strong> — <a href="indicator.html?id=infekce_nosokomialni">nemocniční infekce</a>, <a href="indicator.html?id=spalnicky">spalničky</a>, <a href="indicator.html?id=vakcinace_mmr_deti">MMR</a>, <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a>.</li>
+          <li><strong>ECDC / OECD — Antimicrobial resistance &amp; HAI, Health at a Glance</strong> — harmonizovaná evropská data o nemocničních infekcích a přenosu. <a href="https://www.ecdc.europa.eu/en" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k hodnotám:</strong> Modelové odhady (účinnost opatření, odvrácená úmrtí) jsou převzaty z citovaných recenzovaných studií včetně jejich intervalů nejistoty. Indikátorové hodnoty pocházejí z dashboardu HSPA Monitoru (OECD, Eurostat, ECDC); rok je uveden v textu. Simulátor Nedovařený tapír je edukační nástroj sloužící k pochopení principů — jeho výstupy nejsou predikcí reálné epidemie ani doporučením pro reálná rozhodnutí.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

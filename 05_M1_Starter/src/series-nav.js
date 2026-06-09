@@ -16,20 +16,44 @@
 
 import { isArticleVisible } from './page-shared.js';
 
-export const SERIES_TITLE = 'Jak (ne)reformovat komplexní systém';
-const SERIES_HUB = 'clanky.html';
+// Registr sérií. Každá série = { title, hub, lead, parts:[{n,slug,short}] }.
+// `lead` je dovětek za názvem v úvodní větě navigace („… — <lead>:").
+// Přidání nové série = přidat objekt do SERIES_REGISTRY; in-article navigace
+// ji propíše automaticky do všech jejích dílů (detekce podle slugu).
+const REFORM_SERIES = {
+  title: 'Jak (ne)reformovat komplexní systém',
+  hub: 'clanky.html',
+  lead: 'detailního průvodce reformou zdravotního systému v devíti dílech',
+  parts: [
+    { n: 1, slug: 'clanek-teorie-zmeny.html',               short: 'Teorie změny a logický model' },
+    { n: 2, slug: 'clanek-rizeni-podle-vysledku.html',      short: 'Řízení podle výsledků' },
+    { n: 3, slug: 'clanek-komplexita-reforem.html',         short: 'Komplexita, chaos a okno příležitosti' },
+    { n: 4, slug: 'clanek-systemove-mapovani-paky.html',    short: 'Systémové mapování a páky změny' },
+    { n: 5, slug: 'clanek-datova-patere-lock-in.html',      short: 'Datová páteř, interoperabilita a lock-in' },
+    { n: 6, slug: 'clanek-ukazatele-dashboard.html',        short: 'Ukazatele a dashboard, který vede k akci' },
+    { n: 7, slug: 'clanek-platit-za-vysledek-vbhc.html',    short: 'Platit za výsledek (value-based healthcare)' },
+    { n: 8, slug: 'clanek-governance-nezavislost.html',     short: 'Governance a nezávislost měřičů' },
+    { n: 9, slug: 'clanek-posledni-mile-implementace.html', short: 'Poslední míle: implementace reforem' },
+  ],
+};
 
-export const SERIES = [
-  { n: 1, slug: 'clanek-teorie-zmeny.html',               short: 'Teorie změny a logický model' },
-  { n: 2, slug: 'clanek-rizeni-podle-vysledku.html',      short: 'Řízení podle výsledků' },
-  { n: 3, slug: 'clanek-komplexita-reforem.html',         short: 'Komplexita, chaos a okno příležitosti' },
-  { n: 4, slug: 'clanek-systemove-mapovani-paky.html',    short: 'Systémové mapování a páky změny' },
-  { n: 5, slug: 'clanek-datova-patere-lock-in.html',      short: 'Datová páteř, interoperabilita a lock-in' },
-  { n: 6, slug: 'clanek-ukazatele-dashboard.html',        short: 'Ukazatele a dashboard, který vede k akci' },
-  { n: 7, slug: 'clanek-platit-za-vysledek-vbhc.html',    short: 'Platit za výsledek (value-based healthcare)' },
-  { n: 8, slug: 'clanek-governance-nezavislost.html',     short: 'Governance a nezávislost měřičů' },
-  { n: 9, slug: 'clanek-posledni-mile-implementace.html', short: 'Poslední míle: implementace reforem' },
-];
+const EPIDEMIOLOGIE_SERIES = {
+  title: 'Epidemiologie: věda, která počítá s nákazou',
+  hub: 'clanky.html',
+  lead: 'vědeckého seriálu o tom, proč epidemiologii a očkování věřit — s principy k vyzkoušení na simulátoru nedovarenytapir.cz, ve třech dílech',
+  parts: [
+    { n: 1, slug: 'clanek-epidemiologie-1-proc-verit-cislum.html',  short: 'Proč věřit číslům: od mapy cholery k reprodukčnímu číslu' },
+    { n: 2, slug: 'clanek-epidemiologie-2-ockovani-dukaz.html',     short: 'Očkování: nejlépe doložená intervence v dějinách medicíny' },
+    { n: 3, slug: 'clanek-epidemiologie-3-modely-rozhodovani.html', short: 'Modely, trasování a krizové rozhodování' },
+  ],
+};
+
+export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES];
+
+// Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
+// sérii přes tyto dva exporty — necháváme je ukazovat na ni.
+export const SERIES = REFORM_SERIES.parts;
+export const SERIES_TITLE = REFORM_SERIES.title;
 
 function escapeHtml(str) {
   return String(str ?? '').replace(/[&<>"']/g, c => ({
@@ -55,8 +79,8 @@ function detectArticleSlug() {
  * červenou tečkou „jste zde", publikované díly jsou odkazy, nepublikované
  * jako neaktivní „připravujeme". Stejný seznam se používá nahoře i dole.
  */
-function buildSeriesList(idx, isVisible) {
-  const items = SERIES.map((d, i) => {
+function buildSeriesList(series, idx, isVisible) {
+  const items = series.parts.map((d, i) => {
     const isCurrent = i === idx;
     const title = escapeHtml(d.short);
     let body;
@@ -76,11 +100,11 @@ function buildSeriesList(idx, isVisible) {
   const nav = document.createElement('nav');
   nav.className = 'series-toc';
   nav.dataset.seriesRendered = '1';
-  nav.setAttribute('aria-label', `Série: ${SERIES_TITLE}`);
+  nav.setAttribute('aria-label', `Série: ${series.title}`);
   nav.innerHTML =
-    `<p class="series-toc-intro">Tento text je <strong>${SERIES[idx].n}. díl</strong> série ` +
-    `<a class="series-toc-series-link" href="${SERIES_HUB}">„${escapeHtml(SERIES_TITLE)}"</a> — ` +
-    `detailního průvodce reformou zdravotního systému v devíti dílech:</p>` +
+    `<p class="series-toc-intro">Tento text je <strong>${series.parts[idx].n}. díl</strong> série ` +
+    `<a class="series-toc-series-link" href="${series.hub}">„${escapeHtml(series.title)}"</a> — ` +
+    `${escapeHtml(series.lead)}:</p>` +
     `<ol class="series-toc-list">${items}</ol>`;
   return nav;
 }
@@ -116,8 +140,13 @@ export async function enhanceSeriesNav() {
 
   const slug = detectArticleSlug();
   if (!slug) return;
-  const idx = SERIES.findIndex(d => d.slug === slug);
-  if (idx === -1) return; // článek není součástí série
+  // Najdi sérii, do které článek patří (napříč registrem), a index dílu v ní.
+  let series = null, idx = -1;
+  for (const s of SERIES_REGISTRY) {
+    const i = s.parts.findIndex(d => d.slug === slug);
+    if (i !== -1) { series = s; idx = i; break; }
+  }
+  if (!series) return; // článek není součástí žádné série
 
   const isVisible = await buildVisibilityPredicate(slug);
   // Re-check idempotence po await (ochrana proti souběžnému volání)
@@ -125,10 +154,10 @@ export async function enhanceSeriesNav() {
 
   // Nahoře: hned za hlavičkou článku (pod čarou pod perexem/meta)
   const header = articleEl.querySelector('header.article-header');
-  if (header) header.insertAdjacentElement('afterend', buildSeriesList(idx, isVisible));
+  if (header) header.insertAdjacentElement('afterend', buildSeriesList(series, idx, isVisible));
 
   // Dole: na konci článku — stejný seznam
-  const bottom = buildSeriesList(idx, isVisible);
+  const bottom = buildSeriesList(series, idx, isVisible);
   bottom.classList.add('series-toc-bottom');
   articleEl.appendChild(bottom);
 }
