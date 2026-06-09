@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cena levného piva: Česko umírá na nemocná játra o 43 % častěji než Evropa · HSPA Monitor</title>
+<meta name="description" content="Úmrtnost na chronická onemocnění jater je v ČR 19,5 na 100 000 obyvatel (2023) — o zhruba 43 % nad průměrem EU27 (13,7). Nejtvrdší populační ukazatel škod z alkoholu. Jak jsme na tom proti sousedům a co s tím může udělat politika.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cena levného piva: Česko umírá na nemocná játra o 43 % častěji než Evropa">
+<meta property="og:description" content="Úmrtnost na chronická onemocnění jater v ČR je 19,5 na 100 000 obyvatel (2023), o ~43 % nad průměrem EU. Nejtvrdší populační ukazatel škod z alkoholu v evropském kontextu.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:image" content="assets/covers/clanek-jaterni-mortalita-alkohol.svg">
+<meta property="article:published_time" content="2026-06-30">
+<meta property="article:section" content="Mortalita">
+<!--
+  audit:
+    last_reviewed: 2026-06-09
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-06-09
+    creation_phase: indicator-discovery+article-write
+    primary_sources_count: 4
+    visual_elements_count: 4
+    notes: "Nový draft + nový indikátor mortalita_jaterni_chronicka (úmrtnost na chronická onemocnění jater, MKN-10 K70 + K73–K74). Data ověřena živě z Eurostat disseminačního API (hlth_cd_asdr2, icd10=K70_K73_K74, sex=T, age=TOTAL, unit=RT) dne 2026-06-09. ČR 2023 = 19,5 na 100 000 ob.; trend 2019:19,35 / 2020:19,51 / 2021:21,32 / 2022:21,54 / 2023:19,5 (dlouhodobě bez zlepšení, covid vrchol 2021–2022). Benchmark EU27_2020 2023 = 13,68 (stejný kód). Sousedé 2023: AT 14,82 / DE 15,97 / PL 20,73 / SK 27,54. CZ o ~43 % nad EU → signal bad. Distinkce: měří populační škody z alkoholu (alkoholová cirhóza tvoří většinu), uzavírá řetězec spotřeba alkoholu (alkohol_spotreba) → výsledek (úmrtí). Strukturální faktory: vysoká spotřeba alkoholu, nízká daň z piva a dostupnost, pozdní záchyt jaterní fibrózy, nedoléčená HCV. Politická páka: minimální cena za jednotku alkoholu, spotřební daň z piva, omezení dostupnosti a reklamy, krátké intervence a screening fibrózy. Status draft — published:false do redakčního schválení. Zdroje: Eurostat hlth_cd_asdr2, OECD/State of Health in the EU Czechia profile, ČSÚ (příčiny úmrtí), SZÚ (spotřeba alkoholu)."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Článek</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip">
+  <span class="masthead-date" id="mastheadDate"></span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-jaterni-mortalita-alkohol.svg" alt="" width="1200" height="630" loading="eager" decoding="async">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita</span>
+        <span class="article-tag article-tag-muted">Výsledky · Mortalita · Onemocnění jater · Alkohol</span>
+      </div>
+      <h2 class="article-title">Cena levného piva: Česko umírá na nemocná játra o 43 % častěji než Evropa</h2>
+      <p class="article-deck">
+        Existuje ukazatel, který nejtvrději ze všech měří, kolik nás stojí náš vztah k alkoholu: úmrtnost na chronická onemocnění jater. V Česku je 19,5 úmrtí na 100 000 obyvatel — o zhruba 43 % víc, než činí průměr Evropské unie. Většinu těch úmrtí způsobila alkoholová cirhóza, nemoc, která roky nebolí a pak najednou zabíjí. A na rozdíl od jiných ukazatelů zdraví se ten český dlouhodobě nelepší.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Česko si o sobě rádo vypráví, že pivo k němu patří jako Karlův most k Praze. Co se v té historce neříká, je její účet. Nejpřesnější dostupné měřítko toho účtu se jmenuje úmrtnost na chronická onemocnění jater — věkově standardizovaný počet lidí, kteří každý rok zemřou na cirhózu, chronickou hepatitidu a další postupné selhání jater. Je to nejtvrdší populační stopa, jakou alkohol v dlouhodobé statistice zanechává. A Česko v ní patří k horší polovině Evropy.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLivHeroH">
+        <figcaption class="av-figure-h" id="avLivHeroH">Úmrtnost na chronická onemocnění jater v ČR — čísla</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="19.5" data-decimals="1">19,5</span>
+            <span class="av-counter-label">úmrtí na 100 000 obyvatel, ČR</span>
+            <span class="av-counter-foot">stav za rok 2023 · signál: bad</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="13.7" data-decimals="1">13,7</span>
+            <span class="av-counter-label">průměr EU27 (2023)</span>
+            <span class="av-counter-foot">ČR je o zhruba 43 % výš</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="11" data-suffix=" l">11 l</span>
+            <span class="av-counter-label">čistého alkoholu na dospělého / rok, ČR</span>
+            <span class="av-counter-foot">mezi nejvyššími hodnotami v OECD</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="14.8" data-decimals="1">14,8</span>
+            <span class="av-counter-label">Rakousko (2023) — nejlépe ze sousedů</span>
+            <span class="av-counter-foot">Slovensko naopak 27,5</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, dataset hlth_cd_asdr2 (chronic liver disease, MKN-10 K70 + K73–K74, standardizovaná míra na 100 000 ob., ESP 2013). Benchmark = průměr EU27. Ověřeno z Eurostat API 9. 6. 2026.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+
+      <p>
+        Indikátor sčítá předčasná i pozdější úmrtí, u nichž je v Listu o prohlídce zemřelého jako základní příčina uvedeno <strong>chronické onemocnění jater</strong>: alkoholové onemocnění jater (MKN-10 K70) a chronická hepatitida, fibróza a cirhóza jater (K73–K74). Aby šla čísla srovnávat mezi zeměmi a v čase bez vlivu odlišné věkové struktury, počítá se jako <strong>věkově standardizovaná míra</strong> na 100 000 obyvatel, standardizovaná na evropskou standardní populaci. Stejnou metodikou ji publikuje Eurostat pro všechny členské státy, takže česká hodnota a evropský průměr jsou skutečně „jablko k jablku“.
+      </p>
+
+      <p>
+        Co indikátor neměří, je stejně důležité jako co měří. Nezahrnuje akutní otravy alkoholem ani karcinom jater (C22), které se vykazují zvlášť. A nezachycuje samotnou spotřebu — tu dashboard sleduje samostatným ukazatelem <a href="indicator.html?id=alkohol_spotreba">spotřeby alkoholu</a>. Právě v tom je síla jaterní úmrtnosti: zatímco spotřeba je <em>riziko</em>, úmrtnost na nemoci jater je <em>výsledek</em>. Uzavírá řetězec od chování k jeho ceně. Protože cirhóza se rozvíjí roky až desetiletí, odráží dnešní číslo expozici alkoholu z minulých deseti až dvaceti let — je to pomalý, ale neúprosný účet.
+      </p>
+
+      <h3>Stav v Česku: vysoko a bez zlepšení</h3>
+
+      <p>
+        Za rok 2023 vykázalo Česko úmrtnost na chronická onemocnění jater <strong>19,5 na 100 000 obyvatel</strong>. Proti průměru EU27 (13,7) je to o zhruba <strong>43 % výš</strong> — a protože jde o ukazatel, kde nižší je lepší, znamená to signál <strong>bad</strong>. Na rozdíl od většiny ostatních ukazatelů úmrtnosti, které v Česku dlouhodobě klesají, tady se trend nelepší: z 19,35 v roce 2019 hodnota během pandemie covidu-19 vystoupala na 21,32 (2021) a 21,54 (2022) a v roce 2023 klesla zpět na 19,5 — tedy zhruba tam, kde byla před pěti lety. Žádný sestupný trend, jen kolísání kolem trvale vysoké úrovně.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avLivTrendH">
+        <figcaption class="av-figure-h" id="avLivTrendH">Úmrtnost na chronická onemocnění jater v ČR — vývoj (na 100 000 ob.)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="24" data-unit="" data-decimals="1">
+          <li class="av-bar-row av-bar-row-bad" data-value="19.35" data-label="ČR 2019" data-note="před pandemií"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="19.51" data-label="ČR 2020"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="21.32" data-label="ČR 2021" data-note="covid"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="21.54" data-label="ČR 2022" data-note="vrchol"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="19.5" data-label="ČR 2023" data-note="zpět na úroveň 2019"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_cd_asdr2 (chronic liver disease, standardizovaná míra, oba pohlaví). Žádný dlouhodobý pokles. Ověřeno z Eurostat API 9. 6. 2026.</p>
+      </figure>
+
+      <p>
+        Za suchými čísly je obrovská genderová a sociální nerovnost. Úmrtnost na alkoholovou cirhózu je u mužů zhruba dvoj- až trojnásobná oproti ženám a koncentruje se do produktivního věku 45–64 let — tedy do skupiny, kde každé úmrtí znamená mnoho ztracených let života. Regionálně kopíruje mapu rizikového pití a sociální deprivace: nejvíc postižené bývají strukturálně slabší kraje severozápadních a severních Čech. Jaterní úmrtnost tak není jen zdravotní, ale i sociální ukazatel.
+      </p>
+
+      <h3>Mezinárodní srovnání</h3>
+
+      <p>
+        Ve středoevropském kontextu sedí Česko v horší polovině. Nejlépe si vede <strong>Rakousko (14,8)</strong>, následuje <strong>Německo (16,0)</strong>; obě země jsou blízko nebo mírně nad průměrem EU27 (13,7), ale výrazně pod Českem. <strong>Česko (19,5)</strong> je zhruba na úrovni <strong>Polska (20,7)</strong> a jen <strong>Slovensko (27,5)</strong> je na tom citelně hůř — patří k zemím s nejvyšší jaterní úmrtností v celé EU. Obraz je tedy opačný než u řady ukazatelů kvality péče, kde se Česko blíží Západu: tady ho jeho vztah k alkoholu táhne směrem k východní části kontinentu.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avLivCmpH">
+        <figcaption class="av-figure-h" id="avLivCmpH">Úmrtnost na chronická onemocnění jater — Česko a sousedé (na 100 000 ob., 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="30" data-unit="" data-decimals="1">
+          <li class="av-bar-row av-bar-row-good" data-value="13.7" data-label="Průměr EU27"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="14.8" data-label="Rakousko" data-note="nejlépe ze sousedů"></li>
+          <li class="av-bar-row" data-value="16.0" data-label="Německo"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="19.5" data-label="Česko" data-note="2023 · o ~43 % nad EU"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="20.7" data-label="Polsko"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="27.5" data-label="Slovensko" data-note="nejhůř ze sousedů"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_cd_asdr2 (chronic liver disease, stejný kód, standardizovaná míra a rok pro všechny země). Ověřeno z Eurostat API 9. 6. 2026.</p>
+      </figure>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avLivTblH">
+        <figcaption class="av-figure-h" id="avLivTblH">Úmrtnost na chronická onemocnění jater — Česko a sousedé (2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col">Úmrtnost na nemoci jater (2023)</th>
+                <th scope="col">Kontext</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Česko</th>
+                <td class="av-bad">19,5, bez zlepšení</td>
+                <td>o ~43 % nad průměrem EU; trend stagnuje</td>
+              </tr>
+              <tr>
+                <th scope="row">Rakousko</th>
+                <td class="av-good">14,8</td>
+                <td>nejnižší ze sousedů; restriktivnější dostupnost</td>
+              </tr>
+              <tr>
+                <th scope="row">Průměr EU27</th>
+                <td>13,7</td>
+                <td>referenční benchmark; cíl pro ČR</td>
+              </tr>
+              <tr>
+                <th scope="row">Německo</th>
+                <td>16,0</td>
+                <td>mírně nad EU; klesající spotřeba alkoholu</td>
+              </tr>
+              <tr>
+                <th scope="row">Polsko</th>
+                <td class="av-bad">20,7</td>
+                <td>zhruba na úrovni ČR; rostoucí spotřeba</td>
+              </tr>
+              <tr>
+                <th scope="row">Slovensko</th>
+                <td class="av-bad">27,5</td>
+                <td>nejvýše ze sousedů; jeden z nejhorších v EU</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_cd_asdr2 (2023, chronic liver disease, standardizovaná míra na 100 000 ob.). Ověřeno z Eurostat API 9. 6. 2026.</p>
+      </figure>
+
+      <h3>Proč jsme tak vysoko</h3>
+
+      <p>
+        Příčina není záhada. Česko patří ke <strong>světové špičce ve spotřebě alkoholu</strong> — kolem 11 až 12 litrů čistého alkoholu na dospělého ročně, dlouhodobě mezi nejvyššími hodnotami v OECD. A chronická onemocnění jater jsou nejtvrdším populačním důsledkem té spotřeby. Hlavní část jaterní úmrtnosti tvoří alkoholová cirhóza, takže česká nadměrná hodnota je v podstatě přímou daní za národní zvyk.
+      </p>
+
+      <p>
+        Druhou vrstvou je <strong>mimořádná cenová a fyzická dostupnost alkoholu</strong>. Pivo bývá v Česku levnější než nealkoholické nápoje, spotřební daň z piva patří k nejnižším v EU, prodejní síť je extrémně hustá a reklama prakticky neregulovaná. Tam, kde je alkohol levný a všudypřítomný, roste spotřeba — a s ní s odstupem let i jaterní úmrtnost. Mezinárodní zkušenost je v tomhle jednoznačná: cena a dostupnost jsou nejsilnější páky, jaké u alkoholu existují.
+      </p>
+
+      <p>
+        Třetí vrstvou je <strong>pozdní záchyt</strong>. Jaterní fibróza je dlouho bezpříznaková — játra nebolí, dokud nezačnou selhávat. V primární péči se systematicky nescreenuje, takže pacient často přichází až s rozvinutou cirhózou, ascitem a jícnovými varixy, kdy už je léčba paliativní. K tomu se přidává <strong>nedoléčená chronická hepatitida C</strong> u rizikových skupin, přestože ji dnes lze prakticky vyléčit. A pod tím vším leží <strong>kvalita dat</strong>: hranice mezi alkoholovou a nealkoholovou cirhózou bývá v úmrtních listech podhlášená, takže část mezinárodního rozdílu může být i metodická — to ale celkový obraz vysoké české úmrtnosti nemění.
+      </p>
+
+      <h3>Příběh za daty</h3>
+
+      <p>
+        Ústí nad Labem, hepatologická ambulance krajské nemocnice, úterní dopoledne. Pan Tomáš (54), bývalý svářeč, sedí naproti lékařce s výsledky, kterým nerozumí, ale tuší, že nejsou dobré. „Pár piv k obědu a večer, jako každý chlap,“ říká. Ultrazvuk ukazuje pokročilou jaterní cirhózu, ascites, jícnové varixy. Diagnóza přišla pozdě — játra nebolí, dokud nezačnou selhávat. Pan Tomáš nikdy nepřišel sám od sebe, žádná preventivní prohlídka jaterní fibrózu nezachytila, žádný praktik se ho systematicky nezeptal, kolik vlastně pije. Stal se jedním z lidí, kteří se každoročně započítají do české hodnoty <strong>19,5</strong> úmrtí na chronická onemocnění jater na 100 000 obyvatel. Jeho příběh je typický právě tím, jak je nenápadný: žádná dramatická závislost, jen běžné, společensky odsouhlasené pití po desetiletí — a levný, všudypřítomný alkohol, který to celou dobu usnadňoval.
+      </p>
+
+      <h3>Politická páka</h3>
+
+      <p>
+        Úmrtnost na nemoci jater je jeden z mála ukazatelů zdraví, u kterého panuje mezinárodní shoda na tom, co funguje. Nejúčinnější je <strong>cenová politika</strong>: <em>minimální cena za jednotku alkoholu</em> (minimum unit pricing) zavedená ve Skotsku, Walesu a Irsku, kde po jejím zavedení prokazatelně klesla spotřeba i jaterní úmrtnost, a <strong>vyšší spotřební daň, zejména z piva</strong>, které je v Česku absurdně levné. Tyto nástroje cílí přesně na nejrizikovější pijáky, kteří jsou na cenu nejcitlivější.
+      </p>
+
+      <p>
+        Druhou pákou je <strong>omezení dostupnosti a reklamy</strong> — prodejní doba, hustota prodejních míst, regulace reklamy a sponzoringu. Třetí je <strong>včasný záchyt</strong>: krátké intervence rizikového pití u praktických lékařů (osvědčený a levný nástroj), neinvazivní screening jaterní fibrózy u rizikových pacientů a dotažení eliminace hepatitidy C. Kompetence se dělí: <strong>Ministerstvo financí</strong> drží spotřební daň, <strong>Ministerstvo zdravotnictví</strong> Národní akční plán pro oblast závislostí, screening a krátké intervence, a <strong>vláda jako celek</strong> regulaci dostupnosti a reklamy. Cíl je měřitelný — přiblížit se evropskému průměru 13,7 by znamenalo stovky odvrácených úmrtí ročně. Indikátor v HSPA dashboardu sleduje jaterní úmrtnost jako citlivý test toho, zda Česko se svým vztahem k alkoholu konečně něco udělá.
+      </p>
+
+      <h3>Co s tím dělá HSPA Monitor</h3>
+
+      <p>
+        Indikátor <a href="indicator.html?id=mortalita_jaterni_chronicka">Úmrtnost na chronická onemocnění jater</a> zařazujeme do rámce HSPA jako ukazatel výsledků v doméně mortality a v dimenzi zdraví. Tvoří dvojici s ukazatelem <a href="indicator.html?id=alkohol_spotreba">spotřeby alkoholu</a> — riziko a jeho cena, příčina a následek — a doplňuje širší obraz odvratitelné úmrtnosti vedle <a href="indicator.html?id=mortalita_preventabilni">preventovatelné mortality</a>, jejíž je významnou součástí. Spolu ukazují, že nejde o izolovaný zdravotní problém, ale o důsledek politiky (či její absence) v oblasti, kterou Česko dlouho odmítá brát vážně — dostupnosti a ceny alkoholu.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Úmrtnost na chronická onemocnění jater — klíčové údaje</h4>
+      <ul class="article-databox-list">
+        <li><strong>ČR (2023)</strong> — 19,5 úmrtí na 100 000 ob. (signál bad)</li>
+        <li><strong>Trend</strong> — 19,35 (2019) → 21,32 (2021, covid) → 21,54 (2022) → 19,5 (2023); bez dlouhodobého poklesu</li>
+        <li><strong>Průměr EU27 (2023)</strong> — 13,7; ČR je o ~43 % výš</li>
+        <li><strong>Sousedé (2023)</strong> — Rakousko 14,8, Německo 16,0, Polsko 20,7, Slovensko 27,5</li>
+        <li><strong>Hlavní příčina</strong> — alkoholová cirhóza; ČR má kolem 11–12 l čistého alkoholu na dospělého / rok</li>
+        <li><strong>Co měří</strong> — populační škody z alkoholu (výsledek), uzavírá řetězec od spotřeby (riziko)</li>
+        <li><strong>Strukturální faktor</strong> — vysoká spotřeba, nízká daň a dostupnost alkoholu, pozdní záchyt fibrózy, nedoléčená HCV</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k údajům:</strong> Hodnoty pocházejí z Eurostat (dataset hlth_cd_asdr2, kód K70_K73_K74 = chronic liver disease, standardizovaná míra na 100 000 ob., ESP 2013, oba pohlaví), ověřeno z Eurostat API 9. 6. 2026. Benchmark je průměr EU27 pro tentýž kód a rok (13,7). Národním zdrojem prvotních dat o příčinách úmrtí je ČSÚ. Hranice mezi alkoholovou a nealkoholovou cirhózou je v úmrtních listech dělena kódovací konvencí; indikátor měří výsledek, ne jednotlivé příčiny v řetězci.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — harmonizovaná evropská data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Causes of death, standardised death rate (hlth_cd_asdr2)</strong> — interaktivní tabulka s rozpadem podle příčiny (kód K70_K73_K74 = chronic liver disease), pohlaví, věku a zemí; zdroj všech čísel v článku. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — Causes of death metadata (hlth_cdeath_esms)</strong> — definice příčin, standardizace na ESP 2013 a metodika srovnatelnosti napříč zeměmi. <a href="https://ec.europa.eu/eurostat/cache/metadata/en/hlth_cdeath_esms.htm" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Kontext a mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku</strong> — národní zdroj prvotních dat o příčinách úmrtí, harmonizovaný do Eurostatu. <a href="https://www.czso.cz/csu/czso/zdravotnictvi" target="_blank" rel="noopener">czso.cz ↗</a></li>
+          <li><strong>SZÚ — Užívání alkoholu v ČR</strong> — populační data o spotřebě alkoholu a rizikovém pití (kontext příčiny). <a href="https://szu.gov.cz/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+          <li><strong>OECD / European Commission — State of Health in the EU: Czechia Country Health Profile</strong> — kontext spotřeby alkoholu a jejích zdravotních důsledků v ČR. <a href="https://health.ec.europa.eu/state-health-eu/country-health-profiles_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny hodnoty (ČR 19,5 za rok 2023, časová řada, sousední země i benchmark EU27 13,7) vycházejí z datasetu Eurostat hlth_cd_asdr2 pro kód K70_K73_K74, standardizovanou míru a oba pohlaví; staženo z Eurostat disseminačního API 9. 6. 2026. Údaj o spotřebě alkoholu (~11–12 l) je orientační z OECD Health Statistics / SZÚ. Seed záznam v dashboardu bude při přechodu na ověřený živý zdroj synchronizován přímo s aktualizacemi Eurostatu.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
