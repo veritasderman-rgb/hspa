@@ -1,0 +1,62 @@
+{
+  "id": "mortalita_jaterni_chronicka",
+  "name": "Úmrtnost na chronická onemocnění jater",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Onemocnění jater",
+  "definition": "Věkově standardizovaná míra úmrtí na chronická onemocnění jater (MKN-10: K70 alkoholové onemocnění jater + K73–K74 chronická hepatitida, fibróza a cirhóza jater) na 100 000 obyvatel; standardizace na evropskou standardní populaci (ESP 2013). Velkou část tvoří alkoholová jaterní cirhóza — indikátor je proto úzce navázaný na spotřebu alkoholu.",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_cd_asdr2",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "TOTAL",
+        "icd10": "K70_K73_K74",
+        "unit": "RT"
+      },
+      "note": "Standardised death rate, chronic liver disease (K70 + K73–K74), ESP 2013, Eurostat hlth_cd_asdr2. Ověřeno živě z Eurostat disseminačního API 2026-06-09: CZ 19,5 (2023), EU27 13,68. Trend CZ: 2019:19,35 / 2020:19,51 / 2021:21,32 / 2022:21,54 / 2023:19,5. Sousedé 2023: AT 14,82 / DE 15,97 / PL 20,73 / SK 27,54."
+    },
+    "fallback": {
+      "type": "national",
+      "source": "ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku",
+      "note": "Národní zdroj prvotních dat o příčinách úmrtí (List o prohlídce zemřelého), harmonizovaný do Eurostatu."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_cd_asdr2",
+    "code": "K70_K73_K74",
+    "value": 13.68,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table?lang=en",
+    "note": "EU-27 průměr ze stejné standardizované řady (chronic liver disease, RT, ESP 2013): 13,68 (2023). ČR je o ~43 % výš."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "ÚZIS",
+    "Eurostat"
+  ],
+  "method_notes": "Chronická onemocnění jater (alkoholová i nealkoholová cirhóza, chronická hepatitida) jsou citlivým ukazatelem dlouhodobé konzumace alkoholu na populační úrovni — odráží expozici z minulých 10–20 let. Standardizace na ESP 2013 umožňuje srovnání napříč zeměmi a v čase bez vlivu odlišné věkové struktury.",
+  "limitations": "Kódovací praxe základní příčiny úmrtí v Listu o prohlídce zemřelého se mezi zeměmi liší (rozdíl mezi alkoholovou a nealkoholovou cirhózou bývá podhlášený); část mezinárodního rozdílu může být metodická. Indikátor nezahrnuje akutní otravy alkoholem ani úmrtí na karcinom jater (C22), která se vykazují samostatně. Časový odstup mezi expozicí a úmrtím znamená, že změny v alkoholové politice se v číslech projeví s několikaletým zpožděním.",
+  "determinants": [
+    "Spotřeba alkoholu na obyvatele (ČR dlouhodobě mezi nejvyššími v OECD)",
+    "Cenová a fyzická dostupnost alkoholu (nízké zdanění piva, hustá maloobchodní síť)",
+    "Záchyt a léčba chronických virových hepatitid B a C",
+    "Včasná diagnostika a dispenzarizace jaterní fibrózy v primární péči",
+    "Sociálně-ekonomické determinanty a regionální rozdíly v rizikovém pití"
+  ],
+  "importance": "Úmrtnost na chronická onemocnění jater je nejtvrdší dostupný populační ukazatel škod z alkoholu — uzavírá řetězec od rizikového faktoru (spotřeba alkoholu) k výsledku (předčasná úmrtí). Pro Česko, které patří ke světové špičce ve spotřebě alkoholu, jde o citlivý test účinnosti (či absence) alkoholové politiky.",
+  "patient_story": "Ústí nad Labem, hepatologická ambulance krajské nemocnice, úterní dopoledne. Pan Tomáš (54), bývalý svářeč, sedí naproti lékařce s výsledky, kterým nerozumí, ale tuší, že nejsou dobré. „Pár piv k obědu a večer, jako každý chlap,\" říká. Ultrazvuk ukazuje pokročilou jaterní cirhózu, ascites, jícnové varixy. Diagnóza přišla pozdě — játra nebolí, dokud nezačnou selhávat. Pan Tomáš je jedním z lidí, kteří se každoročně započítají do české hodnoty 19,5 úmrtí na chronická onemocnění jater na 100 000 obyvatel. Většinu z nich, jako u něj, způsobil alkohol — droga tak běžná a levná, že ji málokdo považuje za nebezpečnou.\n\nVěkově standardizovaná úmrtnost na chronická onemocnění jater (alkoholová a další cirhóza, chronická hepatitida) je v ČR 19,5 na 100 000 obyvatel ročně (Eurostat hlth_cd_asdr2, ESP 2013, 2023). Průměr EU‑27 je 13,68 — Česko je o zhruba 43 % nad unijním průměrem a signál je proto bad. Trend je navíc znepokojivý: z 19,35 v roce 2019 stoupl během pandemie na 21,54 v roce 2022, než v roce 2023 klesl zpět na 19,5 — dlouhodobě bez zlepšení. Ve středoevropském srovnání je Česko (19,5) hůř než Rakousko (14,8) i Německo (16,0), zhruba na úrovni Polska (20,7) a lépe než Slovensko (27,5).\n\nStrukturálně je příčina jednoznačná: Česko patří ke světové špičce ve spotřebě alkoholu (kolem 11–12 litrů čistého alkoholu na dospělého ročně) a chronická onemocnění jater jsou jejím nejtvrdším populačním důsledkem. Alkohol je tu mimořádně levný a dostupný — pivo je často levnější než nealkoholické nápoje, daň z piva patří k nejnižším v EU, prodejní síť je hustá a reklama prakticky neregulovaná. K tomu se přidává pozdní záchyt: jaterní fibróza je dlouho bezpříznaková a v primární péči se systematicky nescreenuje, takže pacient přichází až s rozvinutou cirhózou, kdy už je léčba paliativní. Roli hraje i nedoléčená chronická hepatitida C u rizikových skupin.\n\nPolitické páky jsou přitom dobře známé a doložené ze zahraničí. Nejúčinnější je cenová politika — minimální cena za jednotku alkoholu (zavedeno ve Skotsku, Irsku, Walesu s prokazatelným poklesem jaterní úmrtnosti) a vyšší spotřební daň, zejména z piva. Druhou pákou je omezení dostupnosti a reklamy (prodejní doba, hustota prodejních míst, zákaz reklamy). Třetí je včasný záchyt — krátké intervence rizikového pití u praktických lékařů, neinvazivní screening jaterní fibrózy u rizikových pacientů a dořešení eliminace hepatitidy C. Kompetence drží především Ministerstvo financí (daně), Ministerstvo zdravotnictví (Národní akční plán pro oblast závislostí, screening) a vláda jako celek (regulace dostupnosti). Indikátor v HSPA dashboardu sleduje úmrtnost na chronická onemocnění jater jako citlivý test toho, zda Česko se svou alkoholovou epidemií něco dělá — zatím odpověď zní, že málo.",
+  "framework": "hspa",
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-09"
+}
