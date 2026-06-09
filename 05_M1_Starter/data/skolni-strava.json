@@ -1,0 +1,327 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-06-09T12:00:00Z",
+  "_doc": "Datový export pro interaktivní prvek „Vylaď školní oběd“ (src/recipe-tuner.js v článku clanek-obezita-jidelny-reforma.html). Zdroj dat: repozitář veritasderman-rgb/jidelny — nový spotřební koš dle vyhlášky 310/2025 Sb. (data/new-basket.ts, restrictions.ts, financial-normatives.ts, generator/recipes-db.ts). Gramáže receptů jsou čistá hmotnost na 1 porci pro referenční věkovou kategorii 7–10 let. Tento soubor je statický snímek; při změně dat v repu jidelny je třeba jej obnovit ručně. Hodnoty slouží k ilustraci principů reformy, nejde o oficiální jídelníček.",
+  "source": {
+    "name": "Repozitář jidelny — nový spotřební koš (vyhláška 310/2025 Sb.)",
+    "legal_basis": "Vyhláška č. 310/2025 Sb., kterou se mění vyhláška č. 107/2005 Sb., o školním stravování",
+    "note": "Účinnost přísné fáze (povinný nový koš) odložena na 1. 9. 2027; do té doby přechodné období."
+  },
+  "ageCategories": [
+    { "key": "2-3", "label": "2–3 roky (MŠ)" },
+    { "key": "4-6", "label": "4–6 let (MŠ)" },
+    { "key": "7-10", "label": "7–10 let (1. stupeň ZŠ)", "reference": true },
+    { "key": "11-14", "label": "11–14 let (2. stupeň ZŠ)" },
+    { "key": "15+", "label": "15+ (SŠ)" }
+  ],
+  "foodGroups": [
+    { "key": "maso", "label": "Maso", "reform": "neutral" },
+    { "key": "ryby", "label": "Ryby, korýši, měkkýši", "reform": "up" },
+    { "key": "mleko", "label": "Mléčné výrobky a mléko", "reform": "neutral" },
+    { "key": "tuky", "label": "Volné tuky", "reform": "down" },
+    { "key": "cukry", "label": "Volné cukry", "reform": "down" },
+    { "key": "zelenina_ovoce", "label": "Zelenina a ovoce", "reform": "up" },
+    { "key": "brambory", "label": "Brambory a hlízy", "reform": "neutral" },
+    { "key": "celozrnne", "label": "Celozrnné obiloviny", "reform": "up", "isNew": true },
+    { "key": "lusteniny", "label": "Luštěniny", "reform": "up" },
+    { "key": "ostatni", "label": "Ostatní (rafinovaná příloha)", "reform": "down", "offBasket": true }
+  ],
+  "basketLunchTargets": {
+    "maso":           { "2-3": 26, "4-6": 39, "7-10": 46,  "11-14": 52,  "15+": 65 },
+    "ryby":           { "2-3": 6,  "4-6": 9,  "7-10": 11,  "11-14": 13,  "15+": 16 },
+    "mleko":          { "2-3": 44, "4-6": 67, "7-10": 78,  "11-14": 89,  "15+": 111 },
+    "tuky":           { "2-3": 7,  "4-6": 10, "7-10": 12,  "11-14": 13,  "15+": 17 },
+    "cukry":          { "2-3": 6,  "4-6": 8,  "7-10": 10,  "11-14": 11,  "15+": 14 },
+    "zelenina_ovoce": { "2-3": 94, "4-6": 140,"7-10": 162, "11-14": 187, "15+": 233 },
+    "brambory":       { "2-3": 53, "4-6": 79, "7-10": 92,  "11-14": 106, "15+": 132 },
+    "celozrnne":      { "2-3": 11, "4-6": 14, "7-10": 17,  "11-14": 20,  "15+": 25 },
+    "lusteniny":      { "2-3": 7,  "4-6": 9,  "7-10": 11,  "11-14": 13,  "15+": 15 }
+  },
+  "tolerances": {
+    "maso":           { "min": 75, "max": 125 },
+    "ryby":           { "min": 75, "max": null },
+    "mleko":          { "min": 75, "max": 125 },
+    "tuky":           { "min": 75, "max": 100 },
+    "cukry":          { "min": 0,  "max": 100 },
+    "zelenina_ovoce": { "min": 75, "max": null },
+    "brambory":       { "min": 75, "max": 125 },
+    "celozrnne":      { "min": 75, "max": null },
+    "lusteniny":      { "min": 75, "max": null }
+  },
+  "flexibleMinSumLunch": { "2-3": 29, "4-6": 44, "7-10": 51, "11-14": 58, "15+": 73 },
+  "financialNormativeLunch": {
+    "2-3":  { "min": 15, "max": 32 },
+    "4-6":  { "min": 17, "max": 36 },
+    "7-10": { "min": 20, "max": 47 },
+    "11-14":{ "min": 23, "max": 50 },
+    "15+":  { "min": 24, "max": 54 }
+  },
+  "reformPrinciples": [
+    { "key": "vegetables", "label": "Zelenina a ovoce", "desc": "Alespoň ~120 g v obědě (75 % cílové porce koše).", "icon": "leaf" },
+    { "key": "wholegrain", "label": "Celozrnné obiloviny", "desc": "Nová povinná skupina koše — alespoň ~15 g v obědě.", "icon": "grain" },
+    { "key": "legumes", "label": "Luštěniny", "desc": "Rostlinná bílkovina — alespoň jedna porce (~8 g a více).", "icon": "bean" },
+    { "key": "lowSugar", "label": "Bez přidaného cukru", "desc": "Volné cukry do ~5 g; sladidla a slazené nápoje koš zakazuje.", "icon": "sugar" },
+    { "key": "notFried", "label": "Nesmažené", "desc": "Pečení a dušení místo smažení (smažené max 2× měsíčně).", "icon": "pan" },
+    { "key": "goodFats", "label": "Rostlinné tuky", "desc": "Olej a kvalitní tuky; palmový a kokosový tuk koš zakazuje.", "icon": "oil" }
+  ],
+  "limits": {
+    "salt": "Polévky i hlavní jídla: nejvýše 20 g soli na 10 porcí; nakupované doplňky max 1 g soli / 100 g.",
+    "sugar": "Přidané cukry nejvýše 10 % energie; zakázána sladidla i slazené nápoje (včetně 100% džusů).",
+    "fat": "Nasycené tuky < 10 % energie, poměr rostlinné:živočišné ≥ 2:1; zakázán palmový, palmojádrový a kokosový tuk.",
+    "bannedHighlights": [
+      "Instantní polévky, bujóny a dehydratované směsi",
+      "Sladidla a slazené nápoje (limonády, sirupy, džusy včetně 100%)",
+      "Palmový, palmojádrový a kokosový tuk",
+      "Koření s obsahem soli nad 10 g / 100 g"
+    ],
+    "allowedBeverages": ["Pitná voda", "Neslazené čaje (bylinný, ovocný, zelený)", "Mléko bez přidaného cukru"]
+  },
+  "allergens": {
+    "1": "Lepek (obiloviny)", "2": "Korýši", "3": "Vejce", "4": "Ryby", "5": "Arašídy",
+    "6": "Sója", "7": "Mléko", "8": "Skořápkové plody", "9": "Celer", "10": "Hořčice",
+    "11": "Sezam", "12": "Oxid siřičitý a siřičitany", "13": "Vlčí bob (lupina)", "14": "Měkkýši"
+  },
+  "categoryLabels": {
+    "drubez": "Drůbež", "ryba": "Ryba", "veprove": "Vepřové", "hovezi": "Hovězí",
+    "kralik": "Králík", "bezmase_zeleninove": "Bezmasé / zeleninové", "sladke_jidlo": "Sladké jídlo"
+  },
+  "recipes": [
+    {
+      "id": "kure-paprika", "name": "Kuřecí prsa na paprice s rýží natural", "category": "drubez",
+      "soup": "Rajská polévka s celozrnnou těstovinou", "allergens": [7], "isSweet": false, "isFried": false, "cost": 32,
+      "ingredients": [
+        { "name": "Rajčata", "grams": 40, "group": "zelenina_ovoce" },
+        { "name": "Mrkev", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Celozrnná těstovina (do polévky)", "grams": 8, "group": "celozrnne" },
+        { "name": "Kuřecí prsa", "grams": 80, "group": "maso" },
+        { "name": "Paprika červená", "grams": 20, "group": "zelenina_ovoce" },
+        { "name": "Smetana", "grams": 15, "group": "mleko" },
+        { "name": "Olivový olej", "grams": 5, "group": "tuky" },
+        { "name": "Rýže natural (loupaná)", "grams": 60, "group": "ostatni", "swappable": true },
+        { "name": "Okurkový salát", "grams": 40, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "kure-bylinkove", "name": "Pečené kuře s bramborovým pyré", "category": "drubez",
+      "soup": "Zeleninová polévka", "allergens": [7], "isSweet": false, "isFried": false, "cost": 30,
+      "ingredients": [
+        { "name": "Mrkev", "grams": 55, "group": "zelenina_ovoce" },
+        { "name": "Petržel", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celer", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Kuřecí stehno", "grams": 85, "group": "maso" },
+        { "name": "Brambory", "grams": 115, "group": "brambory" },
+        { "name": "Mléko", "grams": 20, "group": "mleko" },
+        { "name": "Máslo", "grams": 3, "group": "tuky" },
+        { "name": "Olivový olej (do polévky)", "grams": 2, "group": "tuky" }
+      ]
+    },
+    {
+      "id": "kure-zelenina-testoviny", "name": "Kuřecí nudličky se zeleninou a celozrnnými těstovinami", "category": "drubez",
+      "soup": "Hrachová polévka", "allergens": [1], "isSweet": false, "isFried": false, "cost": 28,
+      "ingredients": [
+        { "name": "Hrách sušený", "grams": 15, "group": "lusteniny" },
+        { "name": "Mrkev", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 5, "group": "zelenina_ovoce" },
+        { "name": "Kuřecí prsa", "grams": 75, "group": "maso" },
+        { "name": "Cuketa", "grams": 20, "group": "zelenina_ovoce" },
+        { "name": "Paprika", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Celozrnné těstoviny", "grams": 55, "group": "celozrnne" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Rajčatový salát", "grams": 35, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "losos-peceny", "name": "Pečený losos s brokolicí a bramborovými dílky", "category": "ryba",
+      "soup": "Česneková polévka s bramborem", "allergens": [4], "isSweet": false, "isFried": false, "cost": 42,
+      "ingredients": [
+        { "name": "Česnek", "grams": 5, "group": "zelenina_ovoce" },
+        { "name": "Losos filet", "grams": 70, "group": "ryby" },
+        { "name": "Brambory", "grams": 110, "group": "brambory" },
+        { "name": "Brokolice", "grams": 30, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Zelený salát", "grams": 30, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "treska-smetanova", "name": "Treska na smetaně s rýží", "category": "ryba",
+      "soup": "Brokolicová krémová polévka", "allergens": [4, 7], "isSweet": false, "isFried": false, "cost": 38,
+      "ingredients": [
+        { "name": "Brokolice", "grams": 25, "group": "zelenina_ovoce" },
+        { "name": "Brambory (do polévky)", "grams": 10, "group": "brambory" },
+        { "name": "Treska filet", "grams": 70, "group": "ryby" },
+        { "name": "Smetana", "grams": 28, "group": "mleko" },
+        { "name": "Cibule", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Rýže bílá", "grams": 55, "group": "ostatni", "swappable": true },
+        { "name": "Olivový olej", "grams": 3, "group": "tuky" },
+        { "name": "Zelný salát coleslaw", "grams": 45, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "veprove-pecene", "name": "Vepřová pečeně s bramborovým knedlíkem a zelím", "category": "veprove",
+      "soup": "Hovězí vývar s celozrnnými nudlemi", "allergens": [1, 3], "isSweet": false, "isFried": false, "cost": 30,
+      "ingredients": [
+        { "name": "Mrkev (do vývaru)", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Celozrnné nudle (do vývaru)", "grams": 8, "group": "celozrnne" },
+        { "name": "Vepřové maso", "grams": 80, "group": "maso" },
+        { "name": "Bramborový knedlík", "grams": 80, "group": "brambory" },
+        { "name": "Dušené zelí", "grams": 40, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 3, "group": "tuky" }
+      ]
+    },
+    {
+      "id": "veprove-gulas", "name": "Vepřový guláš s celozrnným chlebem", "category": "veprove",
+      "soup": "Zeleninová polévka", "allergens": [1], "isSweet": false, "isFried": false, "cost": 28,
+      "ingredients": [
+        { "name": "Mrkev", "grams": 25, "group": "zelenina_ovoce" },
+        { "name": "Petržel", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celer", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Vepřové maso", "grams": 75, "group": "maso" },
+        { "name": "Cibule", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Paprika", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnný chléb", "grams": 40, "group": "celozrnne" },
+        { "name": "Olivový olej", "grams": 5, "group": "tuky" },
+        { "name": "Kvašená zelenina", "grams": 30, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "hovezi-svickova", "name": "Svíčková na smetaně s houskovým knedlíkem", "category": "hovezi",
+      "soup": "Česneková polévka s bramborem", "allergens": [1, 3, 7, 9], "isSweet": false, "isFried": false, "cost": 38,
+      "ingredients": [
+        { "name": "Česnek", "grams": 5, "group": "zelenina_ovoce" },
+        { "name": "Brambory (do polévky)", "grams": 20, "group": "brambory" },
+        { "name": "Hovězí svíčková", "grams": 75, "group": "maso" },
+        { "name": "Mrkev", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Celer", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Smetana", "grams": 15, "group": "mleko" },
+        { "name": "Houskový knedlík (bílý)", "grams": 70, "group": "ostatni", "swappable": true },
+        { "name": "Olivový olej", "grams": 3, "group": "tuky" },
+        { "name": "Brusinková omáčka", "grams": 10, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "hovezi-stroganoff", "name": "Hovězí Stroganoff s rýží natural", "category": "hovezi",
+      "soup": "Rajská polévka s celozrnnou těstovinou", "allergens": [7], "isSweet": false, "isFried": false, "cost": 36,
+      "ingredients": [
+        { "name": "Rajčata", "grams": 40, "group": "zelenina_ovoce" },
+        { "name": "Mrkev", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnná těstovina (do polévky)", "grams": 8, "group": "celozrnne" },
+        { "name": "Hovězí maso", "grams": 75, "group": "maso" },
+        { "name": "Houby", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Smetana", "grams": 12, "group": "mleko" },
+        { "name": "Rýže natural", "grams": 55, "group": "ostatni", "swappable": true },
+        { "name": "Olivový olej", "grams": 5, "group": "tuky" },
+        { "name": "Sterilovaná okurka", "grams": 25, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "kralik-peceny", "name": "Pečený králík s bramborami a zeleninou", "category": "kralik",
+      "soup": "Kulajda", "allergens": [3, 7], "isSweet": false, "isFried": false, "cost": 40,
+      "ingredients": [
+        { "name": "Brambory (do polévky)", "grams": 20, "group": "brambory" },
+        { "name": "Houby", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Kopr", "grams": 2, "group": "zelenina_ovoce" },
+        { "name": "Smetana", "grams": 10, "group": "mleko" },
+        { "name": "Králičí maso", "grams": 80, "group": "maso" },
+        { "name": "Brambory", "grams": 90, "group": "brambory" },
+        { "name": "Mrkev", "grams": 20, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 4, "group": "tuky" },
+        { "name": "Salát z červené řepy", "grams": 30, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "lusteniny-chili", "name": "Fazolové chili s celozrnnou rýží", "category": "bezmase_zeleninove",
+      "soup": "Dýňová krémová polévka", "allergens": [7], "isSweet": false, "isFried": false, "cost": 22,
+      "ingredients": [
+        { "name": "Dýně hokaido", "grams": 30, "group": "zelenina_ovoce" },
+        { "name": "Brambory (do polévky)", "grams": 10, "group": "brambory" },
+        { "name": "Fazole červené", "grams": 40, "group": "lusteniny" },
+        { "name": "Rajčata", "grams": 30, "group": "zelenina_ovoce" },
+        { "name": "Paprika", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Kukuřice", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnná rýže", "grams": 55, "group": "celozrnne" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Přírodní jogurt", "grams": 30, "group": "mleko" }
+      ]
+    },
+    {
+      "id": "zeleninove-rizoto", "name": "Zeleninové rizoto s parmazánem", "category": "bezmase_zeleninove",
+      "soup": "Čočková polévka", "allergens": [7], "isSweet": false, "isFried": false, "cost": 24,
+      "ingredients": [
+        { "name": "Čočka červená", "grams": 15, "group": "lusteniny" },
+        { "name": "Mrkev", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Rajčata", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Rýže bílá", "grams": 55, "group": "ostatni", "swappable": true },
+        { "name": "Cuketa", "grams": 25, "group": "zelenina_ovoce" },
+        { "name": "Hrášek", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Parmazán", "grams": 10, "group": "mleko" },
+        { "name": "Cibule", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Salát z cherry rajčat", "grams": 35, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "cockovy-dhal", "name": "Čočkový dhal s celozrnným naanem", "category": "bezmase_zeleninove",
+      "soup": "Minestrone", "allergens": [1, 7], "isSweet": false, "isFried": false, "cost": 20,
+      "ingredients": [
+        { "name": "Fazole (do polévky)", "grams": 10, "group": "lusteniny" },
+        { "name": "Rajčata", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Cuketa", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnná těstovina (do polévky)", "grams": 5, "group": "celozrnne" },
+        { "name": "Čočka červená", "grams": 40, "group": "lusteniny" },
+        { "name": "Rajčata", "grams": 20, "group": "zelenina_ovoce" },
+        { "name": "Špenát", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnný naan", "grams": 40, "group": "celozrnne" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Jogurt s mátou", "grams": 25, "group": "mleko" }
+      ]
+    },
+    {
+      "id": "bramborak-peceny", "name": "Pečené bramboráky se zeleninovým salátem", "category": "bezmase_zeleninove",
+      "soup": "Hrachová polévka", "allergens": [1, 3], "isSweet": false, "isFried": false, "cost": 18,
+      "ingredients": [
+        { "name": "Hrách sušený", "grams": 15, "group": "lusteniny" },
+        { "name": "Mrkev", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 5, "group": "zelenina_ovoce" },
+        { "name": "Brambory", "grams": 100, "group": "brambory" },
+        { "name": "Celozrnná mouka", "grams": 10, "group": "celozrnne" },
+        { "name": "Česnek", "grams": 3, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 4, "group": "tuky" },
+        { "name": "Míchaný salát (ledový, rajče, okurka)", "grams": 50, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "spagety-bolognese-veg", "name": "Celozrnné špagety s čočkovou boloňskou", "category": "bezmase_zeleninove",
+      "soup": "Rajská polévka s celozrnnou těstovinou", "allergens": [1, 7], "isSweet": false, "isFried": false, "cost": 22,
+      "ingredients": [
+        { "name": "Rajčata", "grams": 40, "group": "zelenina_ovoce" },
+        { "name": "Mrkev", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celozrnná těstovina (do polévky)", "grams": 8, "group": "celozrnne" },
+        { "name": "Celozrnné špagety", "grams": 55, "group": "celozrnne" },
+        { "name": "Čočka zelená", "grams": 25, "group": "lusteniny" },
+        { "name": "Rajčata", "grams": 30, "group": "zelenina_ovoce" },
+        { "name": "Mrkev", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Cibule", "grams": 13, "group": "zelenina_ovoce" },
+        { "name": "Olivový olej", "grams": 6, "group": "tuky" },
+        { "name": "Parmazán", "grams": 5, "group": "mleko" },
+        { "name": "Zelený salát", "grams": 20, "group": "zelenina_ovoce" }
+      ]
+    },
+    {
+      "id": "tvarohove-knedliky", "name": "Tvarohové knedlíky s ovocem (sladké jídlo)", "category": "sladke_jidlo",
+      "soup": "Zeleninová polévka", "allergens": [1, 3, 7], "isSweet": true, "isFried": false, "cost": 26,
+      "ingredients": [
+        { "name": "Mrkev", "grams": 15, "group": "zelenina_ovoce" },
+        { "name": "Petržel", "grams": 10, "group": "zelenina_ovoce" },
+        { "name": "Celer", "grams": 8, "group": "zelenina_ovoce" },
+        { "name": "Tvaroh", "grams": 50, "group": "mleko" },
+        { "name": "Celozrnná mouka", "grams": 25, "group": "celozrnne" },
+        { "name": "Jahody / borůvky", "grams": 40, "group": "zelenina_ovoce" },
+        { "name": "Máslo", "grams": 3, "group": "tuky" }
+      ]
+    }
+  ]
+}
