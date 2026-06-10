@@ -39,6 +39,9 @@ jobs:
       - name: Run publish-scheduled
         run: node scripts/publish-scheduled.js | tee /tmp/publish-out.txt
 
+      - name: Regenerate RSS feed
+        run: npm run generate:feed
+
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -50,6 +53,7 @@ jobs:
             echo "No changes to articles.json — nothing to commit."
             exit 0
           fi
+          git add feed.xml
           # Extract published list for commit message
           PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)

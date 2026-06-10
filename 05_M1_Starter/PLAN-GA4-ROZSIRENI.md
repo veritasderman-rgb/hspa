@@ -1,6 +1,6 @@
 # Plán: Rozšíření Google Analytics 4 měření na HSPA Monitoru
 
-**Stav:** ready for review.
+**Stav:** ✅ IMPLEMENTOVÁNO (úrovně 1–3: custom eventy + engagement v src/analytics.js, public mini-dashboard scripts/fetch-ga4-stats.js + src/analytics-public.js + ga4-stats.yml). Ověřeno 2026-06-10. Zbývá jen ruční krok v GA Admin: Enhanced measurement → vše ON (uživatel).
 **Datum:** 2026-05-29.
 **Branch:** `claude/plan-ga4-rozsireni`.
 **Cíl:** ze základního page_view trackingu posunout HSPA Monitor k bohatému přehledu, jaký obsah a jaké interakce na portálu skutečně fungují.

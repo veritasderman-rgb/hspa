@@ -362,6 +362,16 @@ export function renderBrandMark() {
     }
   }
 
+  // 1b) RSS feed discovery — aby čtečky a agregátory feed našly automaticky.
+  if (head && !head.querySelector('link[rel="alternate"][type="application/rss+xml"]')) {
+    const rss = document.createElement('link');
+    rss.rel = 'alternate';
+    rss.type = 'application/rss+xml';
+    rss.title = 'HSPA Monitor — články';
+    rss.href = '/feed.xml';
+    head.appendChild(rss);
+  }
+
   // 2) Kompas v hlavičce — vlevo od wordmarku, idempotentně
   const brand = document.querySelector('.topbar .brand');
   if (brand && !brand.querySelector('.brand-compass')) {
