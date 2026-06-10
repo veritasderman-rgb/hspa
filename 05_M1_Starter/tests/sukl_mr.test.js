@@ -78,11 +78,22 @@ test('aggregateMr: termín obnovení v minulosti = výpadek se uzavřel', () => 
     { kod_sukl: '0003', nazev: 'C', atc: 'J01CA04', typ: 'K', datum_hlaseni: '2026-04-01', termin_obnoveni: '', nahrazujici_lp: '0099' },
   ];
   const agg = aggregateMr(rows, new Date('2026-05-01T00:00:00Z'));
-  assert.equal(agg.active_disruptions, 2);
-  assert.equal(agg.active_with_substitute_pct, 50, '1 ze 2 má náhradu');
+  assert.equal(agg.active_disruptions, 1, 'aktivní jen B (P s budoucím termínem); K se nepočítá');
+  assert.equal(agg.discontinued_total, 1, 'K se eviduje zvlášť jako trvalé ukončení');
 });
 
-test('aggregateMr: 30denní okno spočítá nová hlášení P/K i obnovení O', () => {
+test('aggregateMr: K (ukončení) není aktivní výpadek — kumulativní stock se nezapočítá', () => {
+  const rows = [
+    { kod_sukl: '0001', nazev: 'STARY LP', atc: 'A02BC01', typ: 'K', datum_hlaseni: '2010-01-01', termin_obnoveni: '', nahrazujici_lp: '' },
+    { kod_sukl: '0002', nazev: 'VYPADEK', atc: 'N02BE01', typ: 'P', datum_hlaseni: '2026-04-01', termin_obnoveni: '', nahrazujici_lp: '0099' },
+  ];
+  const agg = aggregateMr(rows, new Date('2026-05-01T00:00:00Z'));
+  assert.equal(agg.active_disruptions, 1);
+  assert.equal(agg.discontinued_total, 1);
+  assert.equal(agg.active_with_substitute_pct, 100);
+});
+
+test('aggregateMr: 30denní okno spočítá nová přerušení P i obnovení O', () => {
   const now = new Date('2026-05-01T00:00:00Z');
   const rows = [
     { kod_sukl: '0001', nazev: 'A', atc: 'C', typ: 'P', datum_hlaseni: '2026-04-15', termin_obnoveni: '', nahrazujici_lp: '' },
@@ -91,7 +102,7 @@ test('aggregateMr: 30denní okno spočítá nová hlášení P/K i obnovení O',
     { kod_sukl: '0004', nazev: 'D', atc: 'C', typ: 'P', datum_hlaseni: '2025-01-01', termin_obnoveni: '', nahrazujici_lp: '' }, // mimo okno
   ];
   const agg = aggregateMr(rows, now);
-  assert.equal(agg.new_disruptions_30d, 2);
+  assert.equal(agg.new_disruptions_30d, 1, 'jen P; K je trvalé ukončení');
   assert.equal(agg.resolutions_30d, 1);
 });
 
@@ -104,7 +115,7 @@ test('aggregateMr: top ATC seskupuje podle 1. písmena', () => {
   ];
   const agg = aggregateMr(rows, new Date('2026-05-01T00:00:00Z'));
   assert.equal(agg.top_atc_groups[0].atc, 'N');
-  assert.equal(agg.top_atc_groups[0].count, 3);
+  assert.equal(agg.top_atc_groups[0].count, 2, 'K řádek se do ATC výpadků nepočítá');
   assert.equal(agg.top_atc_groups[0].label, ATC_GROUPS.N);
 });
 
@@ -167,7 +178,22 @@ test('fetchSuklMr: úspěšný flow vrací aggregated', async () => {
 
   assert.ok(result.aggregated, 'aggregated should be present');
   assert.equal(result.aggregated.total_unique_lp, 3);
-  assert.equal(result.aggregated.active_disruptions, 2, 'P + K aktivní, O nikoli');
+  assert.equal(result.aggregated.active_disruptions, 1, 'jen P aktivní; K trvalé ukončení, O nikoli');
+});
+
+test('parseMrCsv: normalizuje slovní TYP_OZNAMENI a česká data (reálný formát feedu)', () => {
+  const csv = [
+    '"POSLEDNI_PLATNE_HLASENI";"KOD_SUKL";"NAZEV";"ATC";"TYP_OZNAMENI";"DATUM_HLASENI";"TERMIN_OBNOVENI"',
+    '"ANO";"0000009";"ACYLCOFFIN";"N02BA51";"preruseni";"22.03.2026";"01.12.2026"',
+    '"ANO";"0000010";"STARY";"A01AB03";"ukonceni";"05.01.2020";""',
+    '"ANO";"0000011";"NOVY";"C09AA01";"zahajeni";"01.02.2026";""',
+  ].join('\n');
+  const out = parseMrCsv(csv);
+  assert.equal(out[0].typ, 'P');
+  assert.equal(out[0].datum_hlaseni, '2026-03-22');
+  assert.equal(out[0].termin_obnoveni, '2026-12-01');
+  assert.equal(out[1].typ, 'K');
+  assert.equal(out[2].typ, 'U');
 });
 
 test('fetchSuklMr: při selhání všech endpointů vrátí null bez throw', async () => {
@@ -183,4 +209,22 @@ test('fetchSuklMr: při selhání všech endpointů vrátí null bez throw', asy
   });
   assert.equal(result.aggregated, null);
   assert.ok(result.error, 'error message expected');
+});
+
+test('yearEndTrend: rekonstrukce aktivních přerušení k 31.12. z kumulativního feedu', async () => {
+  const { yearEndTrend } = await import('../ingest/fetchers/sukl_mr.js');
+  const rows = [
+    // přerušen 2023, obnoven 2025 → aktivní jen na konci 2023 a 2024
+    { kod_sukl: '01', typ: 'P', datum_hlaseni: '2023-05-01', termin_obnoveni: '' },
+    { kod_sukl: '01', typ: 'O', datum_hlaseni: '2025-02-01', termin_obnoveni: '' },
+    // přerušen 2024 dosud
+    { kod_sukl: '02', typ: 'P', datum_hlaseni: '2024-08-01', termin_obnoveni: '' },
+  ];
+  const t = yearEndTrend(rows, 2022, 2025);
+  assert.deepEqual(t, [
+    { year: 2022, value: 0 },
+    { year: 2023, value: 1 },
+    { year: 2024, value: 2 },
+    { year: 2025, value: 1 },
+  ]);
 });

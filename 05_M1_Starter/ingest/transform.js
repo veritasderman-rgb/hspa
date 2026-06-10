@@ -133,6 +133,37 @@ export function extractFromEcdcAtlas(id) {
 }
 
 /**
+ * SÚKL OpenData — lékárny (sukl_lekarny_aggregated.json) a výpadky léčiv
+ * (sukl_mr_aggregated.json). Mapuje indicator id → agregát fetcheru.
+ */
+export function extractFromSukl(id) {
+  if (id === 'lekarny_per_100k') {
+    const cache = readCacheFile('sukl_lekarny_aggregated.json');
+    if (cache?.country_avg_per_100k == null) return null;
+    const year = Number((cache.generated_at ?? '').slice(0, 4)) || new Date().getFullYear();
+    return {
+      value: cache.country_avg_per_100k,
+      year,
+      trend: [],
+      source: { name: 'SÚKL · Open data — seznam lékáren', url: 'https://opendata.sukl.cz/?q=katalog/seznam-lekaren' },
+    };
+  }
+  if (id === 'vypadky_leciv_aktivni') {
+    const cache = readCacheFile('sukl_mr_aggregated.json');
+    if (cache?.active_disruptions == null) return null;
+    const year = Number((cache.generated_at ?? '').slice(0, 4)) || new Date().getFullYear();
+    return {
+      value: cache.active_disruptions,
+      year,
+      // Historický trend rekonstruovaný z kumulativního feedu (yearEndTrend).
+      trend: cache.trend ?? [],
+      source: { name: 'SÚKL · Open data — hlášení o dodávkách LP (MR feed)', url: 'https://opendata.sukl.cz/?q=katalog/hlaseni-o-uvedeni-preruseni-ukonceni-obnoveni-dodavek-leciveho-pripravku-na-trh' },
+    };
+  }
+  return null;
+}
+
+/**
  * Pro indikátor z Eurostatu vezme CZ sérii z eurostat_<id>.json (M4).
  */
 export function extractFromEurostat(id) {
@@ -631,6 +662,7 @@ const SOURCE_TYPE_TO_LABEL = {
   szu_amres: { name: 'SZÚ · NRL pro antibiotika', url: 'https://szu.gov.cz/' },
   eea: { name: 'EEA', url: 'https://www.eea.europa.eu/' },
   ecdc_atlas: { name: 'ECDC Surveillance Atlas / EARS-Net', url: 'https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4' },
+  sukl_opendata: { name: 'SÚKL · Open data', url: 'https://opendata.sukl.cz/' },
 };
 
 /**
@@ -668,6 +700,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     extracted = extractFromNrhzsScreening(card.id);
   } else if (primaryType === 'ecdc_atlas') {
     extracted = extractFromEcdcAtlas(card.id);
+  } else if (primaryType === 'sukl_opendata') {
+    extracted = extractFromSukl(card.id);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -704,6 +738,9 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     uzis_nrzp: 'uzis_nrzp_pracovnici.json',
     uzis_nrh: 'uzis_nrh_dlouhodoba_rada.json',
     uzis_nor: 'uzis_nor_incidence.json',
+    sukl_opendata: card.id === 'lekarny_per_100k'
+      ? 'sukl_lekarny_aggregated.json'
+      : card.id === 'vypadky_leciv_aktivni' ? 'sukl_mr_aggregated.json' : null,
     uzis_nrhzs_screening: card?.data_source?.primary?.dataset
       ? `uzis_${card.data_source.primary.dataset}.json` : null,
   }[actualSourceType];

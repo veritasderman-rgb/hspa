@@ -26,7 +26,7 @@ function sleep(ms) {
  * @param {{
  *   headers?: Record<string,string>,
  *   timeoutMs?: number,
- *   parse?: 'json'|'text',
+ *   parse?: 'json'|'text'|'buffer',
  *   fetchImpl?: typeof fetch,
  *   sleepImpl?: (ms:number)=>Promise<void>,
  * }} [options]
@@ -45,7 +45,7 @@ export async function fetchWithRetry(url, options = {}) {
   const maxAttempts = CONFIG.retry.max_attempts;
   const mergedHeaders = {
     'User-Agent': CONFIG.uzis.user_agent,
-    'Accept': parse === 'json' ? 'application/json' : 'text/plain,*/*',
+    'Accept': parse === 'json' ? 'application/json' : parse === 'buffer' ? '*/*' : 'text/plain,*/*',
     ...headers,
   };
 
@@ -63,6 +63,7 @@ export async function fetchWithRetry(url, options = {}) {
       await appendAudit({ url, status: res.status, attempt, elapsedMs });
 
       if (res.ok) {
+        if (parse === 'buffer') return Buffer.from(await res.arrayBuffer());
         return parse === 'json' ? await res.json() : await res.text();
       }
 
