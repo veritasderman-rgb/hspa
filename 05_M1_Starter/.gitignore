@@ -1,5 +1,9 @@
 node_modules/
-ingest/cache/
+ingest/cache/*
+# Výjimka: NZIP předpočítané výsledky (malý JSON, NE 185MB CSV) — fetcher
+# neběží v denním cronu (timeout), takže cache musí být v repu, jinak transform
+# degraduje indikátory zpět na seed (Codex #570). Obnova: npm run ingest:nzip.
+!ingest/cache/nzip_*.json
 .env
 .env.local
 .DS_Store
