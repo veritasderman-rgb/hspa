@@ -1,7 +1,10 @@
 # Plán překopání: kvalita-pece.html (v2)
 
-**Stav:** ready to implement po schválení.
-**Datum:** 2026-05-28.
+**Stav:** ✅ IMPLEMENTOVÁNO (ověřeno 2026-06-10). Všech 5 bodů hotovo:
+A1 grid layout (ed-hero/cq-split), A2 animované count-up (av-counter ×12),
+A3 glossary word-boundary fix + test (tests/clinical-quality-glossary.test.js,
+10/10), A4 otvírák „Vlastimil a Anežka", A5 narativní linie (akutní vs chronická).
+**Datum:** 2026-05-28 (plán), 2026-06-10 (ověření hotovo).
 **Branch:** `claude/plan-kvalita-pece-uxv2`.
 **Cíl:** opravit UX/grafické problémy nahlášené uživatelem a posunout stránku z metodického katalogu k editorial-grade narativu.
 
