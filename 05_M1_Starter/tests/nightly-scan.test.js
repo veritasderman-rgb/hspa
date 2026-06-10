@@ -85,3 +85,15 @@ test('findIndicatorDrift: bez čísel v okolí neflaguje (jen odkaz bez citace)'
   const html = '<a href="indicator.html?id=foo_ind">detail indikátoru</a> bez čísel okolo.';
   assert.equal(findIndicatorDrift(html, byId).length, 0);
 });
+
+test('findIndicatorDrift: jednociferná varianta nematchne uvnitř letopočtu (boundary)', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([['pad_ind', { id: 'pad_ind', value: 2.1, unit: '/1000', year: 2024 }]]);
+  // okno obsahuje rok 2026 (obsahuje číslici 2), ale NE hodnotu 2,1 → musí flagovat
+  const html = '<p>V roce 2026 bylo pádů 3,4 na 1 000 hospitalizací — <a href="indicator.html?id=pad_ind">detail</a></p>';
+  const drifts = findIndicatorDrift(html, byId);
+  assert.equal(drifts.length, 1, 'stará citace 3,4 ≠ aktuální 2,1; rok 2026 nesmí maskovat drift');
+  // a naopak: správná citace 2,1 nesmí flagovat
+  const ok = '<p>Pádů je 2,1 na 1 000 hospitalizací (2024) — <a href="indicator.html?id=pad_ind">detail</a></p>';
+  assert.equal(findIndicatorDrift(ok, byId).length, 0);
+});

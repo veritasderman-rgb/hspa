@@ -139,7 +139,13 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
     // citace čísla v okně? (číslo s desetinnou čárkou, nebo ≥2 cifry vedle sebe)
     if (!/\d+,\d+|\d{2,}/.test(window)) continue;
     const variants = valueVariants(ind.value);
-    if (variants.some(v => window.includes(v))) continue;
+    // Boundary matching: varianta nesmí být podřetězcem jiného čísla
+    // (jednociferné „2" by jinak matchlo uvnitř roku „2026" → falešná shoda).
+    const matchesVariant = variants.some(v => {
+      const escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`(?<![\\d,.])${escaped}(?![\\d,.])`).test(window);
+    });
+    if (matchesVariant) continue;
     drifts.push({
       id,
       current: `${ind.value} ${ind.unit ?? ''} (${ind.year ?? '?'})`.trim(),
