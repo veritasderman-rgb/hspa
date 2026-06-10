@@ -328,3 +328,16 @@ výjimka — stabilní cesta.)
 otevřít data.mzcr.cz v prohlížeči, najít datovou sadu, zkopírovat URL distribuce
 (CSV/CSV.GZ) do `primary_url` v `uzis_codes.json` + napsat extractor (každý ÚZIS
 export má jinou strukturu sloupců). Bez ID **NEHÁDAT** — nechat seed.
+
+### NZIP indikátory degradují na seed bez commitnuté cache (Codex #570)
+
+**Trap**: NZIP fetcher (`nzip_opendata`) neběží v denním cronu (185 MB mikrodata →
+timeout). Pokud cache `ingest/cache/nzip_*.json` NENÍ v repu, `extractFromNzip`
+vrátí při cronu null, `buildIndicator` fallbackne na seed a přepíše `origin: live`
+→ `seed`. Příští `npm run transform` v cronu tak degraduje nově ověřené NZIP
+indikátory zpět na ilustrativní.
+
+**Řešení**: Předpočítané NZIP cache (malý JSON s `cz`+`trend`, NE 185 MB CSV) jsou
+**vyjmuty z .gitignore** (`ingest/cache/*` + `!ingest/cache/nzip_*.json`) a
+commitnuty. Transform je v cronu čte → indikátory zůstávají live. Roční obnova
+hodnot: `npm run ingest:nzip` (přepíše cache novými daty), pak commit.
