@@ -1,8 +1,8 @@
 name: Social · publikace schválených
 
 # Týdně v pondělí 07:00 CEST (= 05:00 UTC). Přečte z Notion fronty
-# schválené příspěvky, odešle je na Make.com webhook a na závěr vypíše
-# týdenní souhrn do shrnutí běhu.
+# schválené příspěvky, vloží je přímo do Buffer fronty (per kanál) a na závěr
+# vypíše týdenní souhrn do shrnutí běhu.
 
 on:
   schedule:
@@ -33,8 +33,11 @@ jobs:
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-          MAKE_WEBHOOK_SECRET: ${{ secrets.MAKE_WEBHOOK_SECRET }}
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_PROFILE_FACEBOOK: ${{ secrets.BUFFER_PROFILE_FACEBOOK }}
+          BUFFER_PROFILE_INSTAGRAM: ${{ secrets.BUFFER_PROFILE_INSTAGRAM }}
+          BUFFER_PROFILE_LINKEDIN: ${{ secrets.BUFFER_PROFILE_LINKEDIN }}
+          BUFFER_PROFILE_X: ${{ secrets.BUFFER_PROFILE_X }}
         run: node social/run-publish.js
 
       - name: Týdenní souhrn
