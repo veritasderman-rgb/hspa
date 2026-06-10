@@ -134,6 +134,35 @@ test('publishArticleToBuffer: přeskočí kanál bez profile_id', async () => {
   assert.deepEqual(out.skipped.map(s => s.network), ['x']);
 });
 
+test('publishArticleToBuffer: X vlákno → samostatné updaty, obrázek u prvního, odkaz u posledního', async () => {
+  const calls = [];
+  const fakeFetch = async (url, o) => { calls.push(new URLSearchParams(o.body)); return { ok: true, async text() { return '{"updates":[{"id":"u"}]}'; } }; };
+  const rows = [{ network: 'x', text: 't1\n---\nt2', imageUrl: 'img.png', articleUrl: 'https://e/a' }];
+  const out = await publishArticleToBuffer(rows, { site: 'https://s', profiles: { x: 'p1' }, opts: { token: 't', fetchImpl: fakeFetch } });
+  assert.equal(out.sent[0].ids.length, 2);
+  assert.equal(calls[0].get('text'), 't1');
+  assert.equal(calls[0].get('media[photo]'), 'https://s/img.png'); // obrázek jen první
+  assert.equal(calls[1].get('media[photo]'), null);
+  assert.equal(calls[0].get('media[link]'), null);                 // odkaz jen poslední
+  assert.equal(calls[1].get('media[link]'), 'https://e/a');
+});
+
+test('publishArticleToBuffer: selhání jednoho kanálu neshodí už odeslaný (P1)', async () => {
+  let n = 0;
+  const fakeFetch = async () => {
+    n += 1;
+    if (n === 2) return { ok: false, status: 422, async text() { return 'bad media'; } };
+    return { ok: true, async text() { return '{"updates":[{"id":"u1"}]}'; } };
+  };
+  const rows = [
+    { network: 'facebook', text: 'fb', imageUrl: null, articleUrl: 'a' },
+    { network: 'instagram', text: 'ig', imageUrl: 'x', articleUrl: 'a' },
+  ];
+  const out = await publishArticleToBuffer(rows, { site: 'https://s', profiles: { facebook: 'p1', instagram: 'p2' }, opts: { token: 't', fetchImpl: fakeFetch } });
+  assert.deepEqual(out.sent.map(s => s.network), ['facebook']);   // FB zůstává sent
+  assert.deepEqual(out.failed.map(f => f.network), ['instagram']); // jen IG failed
+});
+
 test('NETWORKS: definuje právě 4 sítě s neprázdným zadáním', () => {
   assert.deepEqual(Object.keys(NETWORKS).sort(), ['facebook', 'instagram', 'linkedin', 'x']);
   for (const net of Object.values(NETWORKS)) {

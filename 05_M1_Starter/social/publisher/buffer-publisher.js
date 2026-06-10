@@ -16,6 +16,7 @@
 // pomocným skriptem `node social/publisher/buffer-list-profiles.js`.
 
 import { env } from '../config.js';
+import { splitThread } from '../generators/summary-generator.js';
 
 const DEFAULT_BASE = 'https://api.bufferapp.com/1';
 
@@ -79,10 +80,17 @@ export async function createBufferUpdate(
 
 /**
  * Publikuje schválené řádky jednoho článku do Bufferu (každá síť do svého profilu).
- * Vrací { sent: [{network,id}], skipped: [{network,reason}] }.
+ * Chyby se zachytávají per řádek — jeden neúspěšný kanál neshodí ostatní, které
+ * už Buffer přijal.
+ *
+ * X vlákna (text oddělený „---") se posílají jako samostatné Buffer updaty
+ * v pořadí (Buffer je publikuje jako sled příspěvků na X).
+ *
+ * @returns {{ sent:[{network,ids}], failed:[{network,error}], skipped:[{network,reason}] }}
  */
 export async function publishArticleToBuffer(rows, { scheduleAt = null, site, profiles = bufferProfileMap(), opts = {} } = {}) {
   const sent = [];
+  const failed = [];
   const skipped = [];
   for (const row of rows) {
     const profileId = profiles[row.network];
@@ -90,15 +98,24 @@ export async function publishArticleToBuffer(rows, { scheduleAt = null, site, pr
       skipped.push({ network: row.network, reason: 'kanál nemá nakonfigurovaný BUFFER_PROFILE_…' });
       continue;
     }
-    const r = await createBufferUpdate({
-      profileId,
-      text: row.text,
-      imageUrl: row.imageUrl,
-      articleUrl: row.articleUrl,
-      scheduledAt: scheduleAt,
-      site,
-    }, opts);
-    sent.push({ network: row.network, id: r.id });
+    const segments = row.network === 'x' ? splitThread(row.text) : [row.text];
+    try {
+      const ids = [];
+      for (const [i, text] of segments.entries()) {
+        const r = await createBufferUpdate({
+          profileId,
+          text,
+          imageUrl: i === 0 ? row.imageUrl : null,            // obrázek jen u prvního tweetu
+          articleUrl: i === segments.length - 1 ? row.articleUrl : null, // odkaz až v posledním
+          scheduledAt: scheduleAt,
+          site,
+        }, opts);
+        ids.push(r.id);
+      }
+      sent.push({ network: row.network, ids });
+    } catch (err) {
+      failed.push({ network: row.network, error: err.message });
+    }
   }
-  return { sent, skipped };
+  return { sent, failed, skipped };
 }
