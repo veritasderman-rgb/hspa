@@ -15,6 +15,12 @@ node -e "import('./ingest/fetchers/nzip_opendata.js').then(m=>m.discoverCsvUrl(N
 # 4) ověř hodnotu, přepni kartu na verified, zapiš do data/indicators.json
 ```
 
+> **Pozn. k cronu (Codex #569):** NZIP fetcher NENÍ registrován v hlavní
+> denní pipeline (`npm run ingest` / refresh.yml, 15min limit) — mikrodatové
+> sady by způsobily timeout. Spouští se odděleně přes `npm run ingest:nzip`.
+> Až přibudou rychlé **agregátové** indikátory, lze je registrovat selektivně
+> (např. samostatný workflow s delším limitem nebo jen agregát-only podmnožina).
+
 **Agregační režimy** (`mode` v mappingu):
 - `microdata_ratio` — 1 řádek = 1 osoba/případ; podíl řádků kde `flag_col==flag_value` za rok. ⚠️ soubory 100–300 MB, **pomalé** (cron timeout) — předpočítat ad-hoc nebo nahradit agregátem.
 - `aggregate_ratio` — `num_col` / `denom_col` za rok (×100).
