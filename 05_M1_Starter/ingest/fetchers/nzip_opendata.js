@@ -49,11 +49,23 @@ export async function discoverCsvUrl(nzipId, slug = '', opts = {}) {
   const { fetchImpl } = opts;
   const url = `${NZIP_DETAIL}/${nzipId}${slug ? '-' + slug : ''}`;
   const html = await fetchWithRetry(url, { fetchImpl, parse: 'text' });
-  const m = html.match(/https:\/\/data\.mzcr\.cz\/data\/distribuce\/(\d+)\/([^"'\s]+\.csv)/i);
-  if (!m) throw new Error(`NZIP ${nzipId}: CSV distribuce nenalezena na ${url}`);
-  const csvUrl = m[0];
-  const metaUrl = `https://data.mzcr.cz/data/schemata/${m[1]}/${m[2]}-metadata.json`;
-  return { csvUrl, metaUrl, distId: Number(m[1]) };
+  // ÚZIS distribuuje otevřená data na DVOU hostech:
+  //   - data.mzcr.cz/data/distribuce/{distId}/{soubor}.csv (+ /schemata/ pro metadata)
+  //   - datanzis.uzis.gov.cz/data/{registr}/{kod}/{soubor}.csv (+ .csv-metadata.json vedle)
+  // Zkusíme oba; metadata URL se liší podle hostu.
+  const mz = html.match(/https:\/\/data\.mzcr\.cz\/data\/distribuce\/(\d+)\/([^"'\s]+\.csv)/i);
+  if (mz) {
+    return {
+      csvUrl: mz[0],
+      metaUrl: `https://data.mzcr.cz/data/schemata/${mz[1]}/${mz[2]}-metadata.json`,
+      distId: Number(mz[1]),
+    };
+  }
+  const nz = html.match(/https:\/\/datanzis\.uzis\.gov\.cz\/data\/[^"'\s]+\.csv/i);
+  if (nz) {
+    return { csvUrl: nz[0], metaUrl: `${nz[0]}-metadata.json`, distId: null };
+  }
+  throw new Error(`NZIP ${nzipId}: CSV distribuce nenalezena na ${url}`);
 }
 
 /** Najde index sloupce v hlavičce CSV (case-insensitive, trim). */

@@ -9,18 +9,19 @@
   "direction": "context_dependent",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "NRPZS + roční statistika zdravotnické infrastruktury ÚZIS."
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC",
+      "note": "OECD Health Statistics — Hospital beds by function, curative (acute) care (HEALTH_FUNCTION=HC1, CARE_TYPE=_T, per 1000 obyvatel). Za ČR z výkazů ÚZIS, harmonizováno OECD."
     },
     "fallback": {
-      "type": "oecd",
-      "code": "ACUTE_BEDS"
+      "type": "uzis_nzis",
+      "note": "ÚZIS lůžkový fond (SSS-05-01, datanzis.uzis.gov.cz) — STAN+JIP, mírně širší definice."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "ACUTE_BEDS",
-    "dataset": "HEALTH_REAC"
+    "dataset": "DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC",
+    "note": "Nevážený průměr členských zemí OECD (curative care beds, 2023)."
   },
   "signal_thresholds": {
     "good": 10,
@@ -33,7 +34,9 @@
   ],
   "method_notes": "ČR nadprůměrně nad OECD — trend snižování akutních lůžek je záměrný v kontextu DRG a ambulantní substituce.",
   "limitations": "Počet lůžek nezohledňuje obsazenost. Srovnání ovlivněno různými definicemi „akutního lůžka\" v zemích OECD.",
-  "patient_story": "Krajská nemocnice, statistika lůžkového fondu. Česko má 4,1 akutních lůžka na 1 000 obyvatel — nad OECD průměrem 3,5 a EU 3,7. Trvale široký lůžkový fond je historické dědictví socialistické organizace zdravotnictví — Česko dlouhodobě hospitalizuje víc a déle (viz hospitalizace_na_100k 18 800 / 100k vs. OECD 14 600).\n\nAkutní postele per 1 000 obyvatel v ČR jsou 4,1 (ÚZIS, 2024). OECD průměr 3,5, EU 3,7 — Česko nad oběma. Signal neutral (vysoká hodnota není automaticky špatná). Trend pomalu klesající (2010: 4,7; 2024: 4,1). Hodnota odráží stále vysokou hospitalizační intenzitu a relativně pomalou ambulantizaci péče.\n\nStrukturálně český systém má víc lůžek než aktuálně potřebuje pro akutní péči — ale uzavření je politicky a sociálně komplikované. Nadměrná kapacita generuje fixní personální a provozní náklady (energie, údržba, sestra-úvazek). V krizi (COVID 2020/2021) se ukázala jako rezerva. V normálním provozu je inefficient.\n\nAkutní lůžkový fond je investiční a personální zátěží. Politické páky: koncentrace lůžkové péče (model centralizace specializovaných výkonů — clanek-centralizace-chirurgie-2027); konverze nevyužitých akutních lůžek na LDN, paliativní, rehabilitační; rozšíření jednodenní chirurgie a ambulantizace; reforma okresních nemocnic (clanek-okresni-nemocnice-personalni-krize). Indikátor v HSPA dashboardu sleduje akutní lůžka jako kontextový ukazatel kapacity lůžkové péče. Politicky stojí za zmínku, že některé okresní nemocnice s nízkou obložností by mohly své akutní lůžka konvertovat na LDN, paliativní nebo rehabilitační — kapacitně poptávané segmenty. Investiční podpora konverzí (přes Modernizační fond EU) je jednou z politických pák bez nutnosti likvidovat zdravotní zařízení.",
+  "patient_story": "Krajská nemocnice, statistika lůžkového fondu. Česko má 4,0 lůžka akutní (kurativní) péče na 1 000 obyvatel — nad průměrem členských zemí OECD (3,5). Trvale široký lůžkový fond je historické dědictví socialistické organizace zdravotnictví: Česko dlouhodobě hospitalizuje víc a déle (viz hospitalizace_na_100k).\n\nLůžka kurativní (akutní) péče na 1 000 obyvatel jsou v ČR 4,0 (OECD Health Statistics, harmonizovaná definice curative care beds, 2023). Průměr členů OECD je 3,5. Signal neutral (vysoká hodnota není automaticky špatná — jde o kontextový ukazatel kapacity). Trend mírně klesající (2018: 4,1 → 2023: 4,0). Pro úplnost: OECD Country Health Profile uvádí i širší metriku všech nemocničních lůžek (~6,4/1000 vč. následných a psychiatrických), kde je ČR ~25 % nad EU.\n\nStrukturálně má český systém víc lůžek, než aktuálně potřebuje pro akutní péči — uzavření je ale politicky a sociálně komplikované. Nadměrná kapacita generuje fixní personální a provozní náklady; v krizi (COVID 2020/2021) se ukázala jako rezerva, v běžném provozu je neefektivní.\n\nPolitické páky: koncentrace lůžkové péče (centralizace specializovaných výkonů), konverze nevyužitých akutních lůžek na LDN/paliativní/rehabilitační (segmenty s rostoucí poptávkou), rozšíření jednodenní chirurgie a ambulantizace, reforma okresních nemocnic. Investiční podpora konverzí (Modernizační fond EU) je páka bez nutnosti rušit zařízení. Indikátor v HSPA dashboardu sleduje akutní lůžka jako kontextový ukazatel kapacity.",
   "framework": "hspa",
-  "dimension": "efektivita"
+  "dimension": "efektivita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }
