@@ -80,8 +80,14 @@ export async function aggregateCsvStream(csvUrl, mapping, opts = {}) {
   let idx = {};
   // rok -> { num, denom }
   const byYear = {};
+  // coverage režim (2letý interval per osoba): rok -> Set(id osob s prohlídkou),
+  // rok -> Set(id přítomných osob). Po dočtení složíme okno.
+  const had = {};
+  const present = {};
   const yearCol = mapping.year_col ?? 'rok';
   const mode = mapping.mode;
+  const minAge = mapping.min_age != null ? Number(mapping.min_age) : null;
+  const window = mapping.coverage_window ?? 2;
 
   for await (const line of rl) {
     if (!line) continue;
@@ -95,6 +101,8 @@ export async function aggregateCsvStream(csvUrl, mapping, opts = {}) {
         denom: mapping.denom_col ? colIndex(header, mapping.denom_col) : -1,
         value: mapping.value_col ? colIndex(header, mapping.value_col) : -1,
         filter: mapping.filter_col ? colIndex(header, mapping.filter_col) : -1,
+        id: mapping.id_col ? colIndex(header, mapping.id_col) : -1,
+        age: mapping.age_col ? colIndex(header, mapping.age_col) : -1,
       };
       continue;
     }
@@ -102,6 +110,18 @@ export async function aggregateCsvStream(csvUrl, mapping, opts = {}) {
     if (!Number.isFinite(y) || y < 1990 || y > 2100) continue;
     if (mapping.filter_col && idx.filter >= 0) {
       if (String(parts[idx.filter]).trim() !== String(mapping.filter_value).trim()) continue;
+    }
+    if (minAge != null && idx.age >= 0) {
+      const age = parseInt(parts[idx.age], 10);
+      if (!Number.isFinite(age) || age < minAge) continue;
+    }
+    if (mode === 'microdata_coverage') {
+      const pid = parts[idx.id];
+      (present[y] ??= new Set()).add(pid);
+      if (String(parts[idx.flag]).trim() === String(mapping.flag_value).trim()) {
+        (had[y] ??= new Set()).add(pid);
+      }
+      continue;
     }
     const b = byYear[y] ??= { num: 0, denom: 0 };
     if (mode === 'microdata_ratio') {
@@ -114,6 +134,27 @@ export async function aggregateCsvStream(csvUrl, mapping, opts = {}) {
       b.num += toNum(parts[idx.value]);
       b.denom = 1;
     }
+  }
+
+  // microdata_coverage: pokrytí roku Y = osoba měla prohlídku v Y..Y-(window-1).
+  if (mode === 'microdata_coverage') {
+    const ys = Object.keys(present).map(Number).sort((a, b) => a - b);
+    if (!ys.length) throw new Error('NZIP coverage: žádná data');
+    const trendYears = mapping.trend_years ?? 6;
+    const trend = [];
+    for (const y of ys) {
+      const denom = present[y];
+      if (!denom?.size) continue;
+      let covered = 0;
+      for (const pid of denom) {
+        let ok = false;
+        for (let w = 0; w < window; w++) { if (had[y - w]?.has(pid)) { ok = true; break; } }
+        if (ok) covered++;
+      }
+      trend.push({ year: y, value: round((covered / denom.size) * 100, mapping.decimals ?? 1) });
+    }
+    const slice = trend.slice(-trendYears);
+    return { trend: slice, cz: { value: slice[slice.length - 1].value, year: slice[slice.length - 1].year } };
   }
 
   const years = Object.keys(byYear).map(Number).sort((a, b) => a - b);
@@ -139,9 +180,14 @@ function round(n, d) {
   const f = 10 ** d;
   return Math.round(n * f) / f;
 }
-// Jednoduchý CSV splitter — data.mzcr.cz nepoužívá uvozovky v číselných agregátech.
+// CSV splitter pro data.mzcr.cz: prosté dělení podle oddělovače + ořez
+// obalujících uvozovek (některé sady kvotují hlavičku i textová pole, např.
+// "rok","CZ010"). Číselné agregáty bez uvozovek projdou beze změny.
 function splitCsvLine(line, delim) {
-  return line.split(delim);
+  return line.split(delim).map(s => {
+    const t = s.trim();
+    return t.length >= 2 && t[0] === '"' && t[t.length - 1] === '"' ? t.slice(1, -1) : t;
+  });
 }
 
 export async function fetchNzipIndicator(indicatorId, mapping, opts = {}) {

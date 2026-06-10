@@ -9,11 +9,11 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nrhzs_prevence",
+      "type": "nzip_opendata",
+      "nzip_id": 1781,
       "dataset": "PPS-08-01",
-      "url": "https://data.mzcr.cz/data/distribuce/380/Otevrena-data-PPS-08-01-Preventivni-prohlidky-2024-01-1.csv",
-      "metadata_url": "https://data.mzcr.cz/data/schemata/380/Otevrena-data-PPS-08-01-Preventivni-prohlidky-2024-01-1.csv-metadata.json",
-      "note": "NRHZS — pacientská mikrodata preventivních prohlídek (PPS-08-01). Indikátor agreguje podíl pojištěnců 18+ s vykázanou preventivní prohlídkou u praktického lékaře v daném nebo předchozím roce (doporučený 2letý interval)."
+      "url": "https://www.nzip.cz/data/1781-preventivni-prohlidky-prakticti-lekari-stomatologove-otevrena-data",
+      "note": "NZIP otevřená data PPS-08-01 (data.mzcr.cz/distribuce/380), mikrodata 1 osoba/rok. Indikátor = 2leté pokrytí osob 18+ (microdata_coverage, okno 2 roky per id_pacient, věkový filtr ≥18) podle definice doporučeného 2letého intervalu. Soubor ~185 MB → fetch ročně. Ověřeno 2026-06-10: 52,6 % (2023) ≈ dřívější seed 53,7 %."
     }
   },
   "benchmark_source": {
@@ -32,5 +32,7 @@
   "limitations": "Indikátor zachycuje účast, nikoli kvalitu prohlídky (rozsah vyšetření, doporučená doplňková péče). Kontext: ČR má vysokou registrovanost u praktického lékaře, ale nízkou aktivní účast v prevenci.",
   "patient_story": "Praktický lékař, čtvrteční odpoledne, paní Nováková (47) přichází na preventivní prohlídku (nárok jednou za 2 roky). „Měřím vám tlak, krevní obraz, glykémie, cholesterol, vyšetřím vás. Doporučím mamograf, kolonoskopii doporučí gastrolog.\" Pacientka odchází s několika doporučeními. Tahle scéna se v Česku odehraje u 54 % dospělých ve dvouletém cyklu — o málo víc než polovina.\n\nPokrytí preventivní prohlídkou u praktického lékaře v ČR je 54 % dospělé populace ve dvouletém intervalu (ÚZIS, NRHZS — preventivní prohlídky, 2023). Mezinárodně srovnatelný indikátor chybí (různé systémy primární péče). Trend mírně roste (2019: 51 %, 2023: 54 %), s propadem v pandemickém roce 2020 (48 %). Rozdíly mezi věkovými skupinami jsou menší, než se čeká: 18–34 let 53 %, 35–54 let 50 % (nejnižší — produktivní věk prohlídku odkládá), 55–74 let 58 %, 75+ 54 %. Mezi pohlavími: ženy 55 %, muži 52 %.\n\nStrukturálně český systém má povinnou preventivní prohlídku zakotvenou v zákoně 48/1997 Sb. (jednou za 2 roky, dospělí 18+, hrazená pojišťovnou), s definovaným obsahem (anamnéza, fyzikální vyšetření, krevní obraz, biochemie, prevenční doporučení). Praktici prohlídku vykazují, ale aktivně nevolají pacienty. Pojišťovny vědí, kdo dlouho nebyl, ale adresné pozvánky posílají jen sporadicky.\n\nPreventivní prohlídka je vstupní brána ke všem dalším screeningům a včasné diagnostice chronických nemocí. Politické páky: adresné pozvánky pojišťovny (SMS, mail, push notifikace v eHealth aplikaci); kapitační platba praktikovi za skutečně provedenou prohlídku (ne jen za registraci pacienta); večerní a sobotní termíny pro pracující; rozšířený obsah prohlídky o screeningové testy (HbA1c, OGTT, lipidogram, FOBT, popř. PSA). Indikátor v HSPA dashboardu sleduje účast v preventivní prohlídce jako klíčový ukazatel přístupnosti primární péče.",
   "framework": "hspa",
-  "dimension": "dostupnost"
+  "dimension": "dostupnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }

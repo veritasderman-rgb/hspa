@@ -9,11 +9,11 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nrhzs_prevence",
+      "type": "nzip_opendata",
+      "nzip_id": 1781,
       "dataset": "PPS-08-01",
-      "url": "https://data.mzcr.cz/data/distribuce/380/Otevrena-data-PPS-08-01-Preventivni-prohlidky-2024-01-1.csv",
-      "metadata_url": "https://data.mzcr.cz/data/schemata/380/Otevrena-data-PPS-08-01-Preventivni-prohlidky-2024-01-1.csv-metadata.json",
-      "note": "NRHZS — pacientská mikrodata preventivních prohlídek (PPS-08-01). Indikátor agreguje roční podíl osob s vykázanou preventivní prohlídkou u zubního lékaře (sloupec preventivni_prohlidka_stomatolog)."
+      "url": "https://www.nzip.cz/data/1781-preventivni-prohlidky-prakticti-lekari-stomatologove-otevrena-data",
+      "note": "NZIP otevřená data PPS-08-01 (data.mzcr.cz/distribuce/380), mikrodata 1 osoba/rok. Indikátor = roční podíl osob s vykázanou preventivní prohlídkou u stomatologa (microdata_ratio). Soubor ~185 MB → fetch ročně (npm run ingest:nzip), NE v denním cronu. Ověřeno 2026-06-10: 52,1 % (2023) ≈ dřívější seed odhad 51,9 % (shoda potvrzuje reprezentativnost vzorku NZIS)."
     }
   },
   "benchmark_source": {
@@ -33,5 +33,7 @@
   "limitations": "Indikátor zachycuje účast, nikoli rozsah či kvalitu prohlídky. Nezahrnuje stomatologickou péči poskytnutou mimo systém veřejného zdravotního pojištění (přímé platby), takže může účast mírně podhodnocovat. Mezikrajské rozdíly v dostupnosti zubních lékařů nejsou v souhrnné hodnotě zohledněny.",
   "patient_story": "Zubní ordinace, pondělní ráno. Pan Dvořák (62) byl naposledy na preventivní prohlídce před třemi lety — přišel teď, protože ho rozbolel zub. „Kdybyste chodil pravidelně, dalo se to zachytit dřív,\" říká zubař. Preventivní prohlídku u stomatologa, na kterou má každý dospělý nárok dvakrát ročně, v daném roce absolvuje jen zhruba polovina populace.\n\nÚčast na preventivní prohlídce u stomatologa v ČR je 51,9 % populace ročně (ÚZIS, NRHZS — preventivní prohlídky, 2023). Trend mírně klesá — z 57,7 % v roce 2010 na necelých 52 % dnes, s výrazným propadem v pandemickém roce 2020 (51,8 %), který se dosud nezotavil. Nejvyšší účast mají děti do 18 let (58,7 %), nejnižší senioři nad 75 let (36,7 %) — právě věková skupina s vysokou potřebou stomatologické péče. Ženy chodí častěji než muži (55,1 % vs. 48,5 %).\n\nStrukturálně má ČR preventivní stomatologickou prohlídku zakotvenou v zákoně 48/1997 Sb. (dospělí 2× ročně, děti a dorost 2× ročně, plně hrazená pojišťovnou). Limitujícím faktorem je dostupnost — v řadě okresů ubývá zubních lékařů registrujících nové pacienty a roste podíl ordinací mimo systém veřejného pojištění. Pacient bez registrujícího zubaře typicky vypadne i z prevence a vrací se až s akutním problémem.\n\nPravidelná stomatologická prevence zachytí zubní kaz, parodontózu i slizniční léze v léčitelném stadiu a je levnější než následná akutní a protetická péče. Politické páky: adresné pozvánky pojišťovny pro pacienty, kteří dlouho nebyli; podpora zubní péče v pobytových zařízeních pro seniory; motivační nástroje pro registraci nových pacientů v podstavených okresech; školní stomatologické programy pro udržení vysoké účasti dětí. Indikátor v HSPA dashboardu sleduje účast v preventivní stomatologické prohlídce jako ukazatel přístupnosti a využívání primární zubní péče.",
   "framework": "hspa",
-  "dimension": "dostupnost"
+  "dimension": "dostupnost",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }
