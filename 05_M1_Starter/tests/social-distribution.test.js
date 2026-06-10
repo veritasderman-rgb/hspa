@@ -16,7 +16,7 @@ import {
   NETWORKS,
 } from '../social/generators/summary-generator.js';
 import { richText } from '../social/notion/schema.js';
-import { buildMakePayload } from '../social/publisher/webhook-publisher.js';
+import { bufferProfileMap, publishArticleToBuffer, createBufferUpdate } from '../social/publisher/buffer-publisher.js';
 
 test('isArticleVisible: published=false je vždy skrytý', () => {
   assert.equal(isArticleVisible({ published: false, date: '2020-01-01' }), false);
@@ -101,15 +101,37 @@ test('richText: prázdný vstup vrátí jeden prázdný blok', () => {
   assert.deepEqual(richText(''), [{ text: { content: '' } }]);
 });
 
-test('buildMakePayload: poskládá posts podle sítí včetně vlákna X', () => {
-  const p = buildMakePayload('art-1', [
-    { network: 'facebook', text: 'fb', imageUrl: 'u1', articleUrl: 'a' },
-    { network: 'x', text: 'x1', imageUrl: null, articleUrl: 'a', thread: ['t1', 't2'] },
-  ]);
-  assert.equal(p.articleId, 'art-1');
-  assert.equal(p.posts.facebook.text, 'fb');
-  assert.deepEqual(p.posts.x.thread, ['t1', 't2']);
-  assert.equal(p.posts.facebook.thread, undefined);
+test('bufferProfileMap: mapuje jen nakonfigurované kanály', () => {
+  const m = bufferProfileMap({ bufferProfileFacebook: 'fb1', bufferProfileInstagram: 'ig1' });
+  assert.deepEqual(m, { facebook: 'fb1', instagram: 'ig1' });
+  assert.deepEqual(bufferProfileMap({}), {});
+});
+
+test('createBufferUpdate: pošle text, profile a absolutní obrázek do fronty', async () => {
+  let captured;
+  const fakeFetch = async (url, opts) => { captured = { url, body: opts.body }; return { ok: true, async text() { return JSON.stringify({ updates: [{ id: 'u9' }] }); } }; };
+  const r = await createBufferUpdate(
+    { profileId: 'p1', text: 'ahoj', imageUrl: 'assets/social/x.png', articleUrl: 'https://e/a', site: 'https://skorezdravotnictvi.cz' },
+    { token: 't', fetchImpl: fakeFetch },
+  );
+  assert.equal(r.id, 'u9');
+  assert.match(captured.url, /\/updates\/create\.json$/);
+  const params = new URLSearchParams(captured.body);
+  assert.equal(params.get('profile_ids[]'), 'p1');
+  assert.equal(params.get('text'), 'ahoj');
+  assert.equal(params.get('media[photo]'), 'https://skorezdravotnictvi.cz/assets/social/x.png');
+  assert.equal(params.get('media[link]'), 'https://e/a');
+});
+
+test('publishArticleToBuffer: přeskočí kanál bez profile_id', async () => {
+  const fakeFetch = async () => ({ ok: true, async text() { return '{"updates":[{"id":"u1"}]}'; } });
+  const rows = [
+    { network: 'facebook', text: 'fb', imageUrl: null, articleUrl: 'a' },
+    { network: 'x', text: 'x1', imageUrl: null, articleUrl: 'a' },
+  ];
+  const out = await publishArticleToBuffer(rows, { site: 'https://s', profiles: { facebook: 'p1' }, opts: { token: 't', fetchImpl: fakeFetch } });
+  assert.deepEqual(out.sent.map(s => s.network), ['facebook']);
+  assert.deepEqual(out.skipped.map(s => s.network), ['x']);
 });
 
 test('NETWORKS: definuje právě 4 sítě s neprázdným zadáním', () => {

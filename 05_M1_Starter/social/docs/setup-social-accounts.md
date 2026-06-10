@@ -7,12 +7,12 @@ Checklist Fáze 0. Bez těchto kroků systém běží jen v režimu dry-run
 
 | Síť | Co zřídit | Poznámka |
 |---|---|---|
-| **Facebook** | Facebook **Page** (ne osobní profil) | Make.com publikuje přes Facebook Pages API |
+| **Facebook** | Facebook **Page** (ne osobní profil) | Buffer publikuje přes připojený kanál |
 | **Instagram** | **Business** účet propojený s FB Page | IG Graph API vyžaduje Business účet + propojení |
 | **LinkedIn** | **Company Page** | Doporučeno firemní, ne osobní profil |
-| **X** | Účet (stačí běžný) | Publikace přes Make.com modul X |
+| **X** | Účet (stačí běžný) | Buffer kanál (volitelně) |
 
-Všechny 4 musí být při stavbě scénáře připojené v Make.com (autorizace OAuth).
+Všechny kanály musí být připojené v Bufferu (Buffer → Channels, autorizace OAuth).
 
 ## 2. Notion
 
@@ -26,13 +26,13 @@ Všechny 4 musí být při stavbě scénáře připojené v Make.com (autorizace
    ```
 6. Vypsané `NOTION_DATABASE_ID` → GitHub Secret.
 
-## 3. Make.com
+## 3. Buffer
 
-1. Účet na [make.com](https://make.com) — plán **Core** (10 000 operací/měs).
-2. Nový scénář podle `social/docs/make-scenario.json` — Webhook → HMAC ověření → Router (4 sítě) → Error handler.
+1. Účet na [buffer.com](https://buffer.com) a připojené kanály (FB Page, IG, příp. LinkedIn/X).
+2. Buffer **Access Token** (Buffer → Settings/Developers → Access Token).
 3. Připoj účty FB / IG / LinkedIn / X.
-4. Zkopíruj URL webhooku → GitHub Secret `MAKE_WEBHOOK_URL`.
-5. Zvol tajemství pro HMAC → GitHub Secret `MAKE_WEBHOOK_SECRET` (stejné nastav v ověřovacím kroku scénáře).
+4. Zjisti `profile_id` kanálů: `BUFFER_ACCESS_TOKEN=… node social/publisher/buffer-list-profiles.js`.
+5. Vlož token a profile_id do GitHub Secrets (viz tabulka níže).
 
 ## 4. GitHub Secrets
 
@@ -43,8 +43,11 @@ V `Settings → Secrets and variables → Actions`:
 | `ANTHROPIC_API_KEY` | console.anthropic.com |
 | `NOTION_API_KEY` | Notion integrace (krok 2) |
 | `NOTION_DATABASE_ID` | výstup setup-database.js (krok 2) |
-| `MAKE_WEBHOOK_URL` | Make.com webhook (krok 3) |
-| `MAKE_WEBHOOK_SECRET` | zvolené tajemství (krok 3) |
+| `BUFFER_ACCESS_TOKEN` | Buffer access token (krok 3) |
+| `BUFFER_PROFILE_FACEBOOK` | profile_id FB stránky (krok 4) |
+| `BUFFER_PROFILE_INSTAGRAM` | profile_id IG účtu (krok 4) |
+| `BUFFER_PROFILE_LINKEDIN` | (volitelně) profile_id LinkedIn |
+| `BUFFER_PROFILE_X` | (volitelně) profile_id X |
 
 ## 5. Ověření
 

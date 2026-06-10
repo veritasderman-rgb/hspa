@@ -1,7 +1,7 @@
 # Distribuční systém pro sociální sítě
 
 Autonomní systém: detekce nově publikovaných článků → generování shrnutí
-a grafiky → schválení v Notionu → publikace přes Make.com na Facebook,
+a grafiky → schválení v Notionu → publikace přímo do Bufferu na Facebook,
 Instagram, LinkedIn a X.
 
 ## Tok dat
@@ -23,7 +23,7 @@ data/articles.json + clanek-*.html
   notion/queue-reader.js ──► schválené řádky
         │
         ▼
-  publisher/webhook-publisher.js ──► Make.com ──► FB / IG / LinkedIn / X
+  publisher/buffer-publisher.js ──► Buffer fronta ──► FB / IG / LinkedIn / X
 ```
 
 ## Orchestrace (GitHub Actions)
@@ -47,7 +47,7 @@ npm run social:report             # týdenní souhrn
 ## Konfigurace (env / GitHub Secrets)
 
 `ANTHROPIC_API_KEY`, `NOTION_API_KEY`, `NOTION_DATABASE_ID`,
-`MAKE_WEBHOOK_URL`, `MAKE_WEBHOOK_SECRET`. Volitelně `SOCIAL_CLAUDE_MODEL`
+`BUFFER_ACCESS_TOKEN` a `BUFFER_PROFILE_FACEBOOK` / `_INSTAGRAM` / `_LINKEDIN` / `_X`. Volitelně `SOCIAL_CLAUDE_MODEL`
 (výchozí `claude-sonnet-4-6`). Lokálně přes `.env.local`.
 
 Setup účtů a služeb krok za krokem: [`docs/setup-social-accounts.md`](docs/setup-social-accounts.md).
@@ -63,12 +63,13 @@ social/
 │   ├── prompts/                 system prompt + per-síť zadání
 │   └── image-generator.js       4 PNG přes resvg
 ├── notion/                      fronta (setup, writer, reader, schema)
-├── publisher/webhook-publisher.js  odeslání na Make.com (API klíč)
+├── publisher/buffer-publisher.js  vložení do Buffer fronty (access token)
+├── publisher/buffer-list-profiles.js  pomocník: výpis profile_id kanálů
 ├── reporting/weekly-report.js   týdenní souhrn
 ├── run-generate.js              orchestrátor — neděle
 ├── run-publish.js               orchestrátor — pondělí
 ├── dry-run.js                   lokální test
 ├── assets/fonts/                Source Serif 4 + Inter (render grafiky)
-├── docs/                        make-scenario.json, setup-social-accounts.md
+├── docs/                        setup-social-accounts.md
 └── state/last-run.json          stav posledního běhu
 ```

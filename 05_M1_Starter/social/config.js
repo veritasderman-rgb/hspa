@@ -61,6 +61,11 @@ export const env = {
   anthropicKey: process.env.ANTHROPIC_API_KEY || '',
   notionKey: process.env.NOTION_API_KEY || '',
   notionDatabaseId: process.env.NOTION_DATABASE_ID || '',
-  makeWebhookUrl: process.env.MAKE_WEBHOOK_URL || '',
-  makeWebhookSecret: process.env.MAKE_WEBHOOK_SECRET || '',
+  // Buffer — přímá publikace do fronty kanálů (FB/IG/LinkedIn/X).
+  bufferAccessToken: process.env.BUFFER_ACCESS_TOKEN || '',
+  bufferApiBase: process.env.BUFFER_API_BASE || '',
+  bufferProfileFacebook: process.env.BUFFER_PROFILE_FACEBOOK || '',
+  bufferProfileInstagram: process.env.BUFFER_PROFILE_INSTAGRAM || '',
+  bufferProfileLinkedin: process.env.BUFFER_PROFILE_LINKEDIN || '',
+  bufferProfileX: process.env.BUFFER_PROFILE_X || '',
 };
