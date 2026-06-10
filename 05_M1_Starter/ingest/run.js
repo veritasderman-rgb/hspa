@@ -17,6 +17,7 @@ import { fetchOecdSdmx2 } from './fetchers/oecd_sdmx2.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
 import { fetchSukl } from './fetchers/sukl.js';
 import { fetchSuklMr } from './fetchers/sukl_mr.js';
+import { fetchNzipOpendata } from './fetchers/nzip_opendata.js';
 import { fetchPuk } from './fetchers/puk.js';
 import { fetchIndiko } from './fetchers/indiko.js';
 import { fetchEcdcAtlas } from './fetchers/ecdc_atlas.js';
@@ -40,6 +41,7 @@ async function run() {
     { name: 'Eurostat', fn: fetchEurostat },
     { name: 'SÚKL OpenData', fn: fetchSukl },
     { name: 'SÚKL OpenData (MR výpadky léčiv)', fn: fetchSuklMr },
+    { name: 'NZIP / ÚZIS otevřená data (data.mzcr.cz)', fn: fetchNzipOpendata },
     { name: 'PUK (klinická kvalita)', fn: fetchPuk },
     { name: 'INDIKO (cesta onko pacienta)', fn: fetchIndiko },
     { name: 'ECDC Surveillance Atlas (AMR)', fn: fetchEcdcAtlas },
