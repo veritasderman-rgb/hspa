@@ -30,6 +30,61 @@ node -e "import('./ingest/fetchers/nzip_opendata.js').then(m=>m.discoverCsvUrl(N
 (jmenovatel, jednotka, věková kohorta, vzorek vs. populace). **Nehádat** —
 před přepnutím ověřit definici proti metadatům `…csv-metadata.json`.
 
+## Plán dávek — pořadí přidávání (2026-06-10)
+
+Pořadí = **HSPA priorita × proveditelnost × metodická jistota**. Všech 12 seed
+kandidátů je v HSPA kontraktu, takže o pořadí rozhoduje proveditelnost (ověřeno
+živým průzkumem sad 2026-06-10). Každá dávka = 1 PR; po každé aktualizovat
+`PLAN-VERIFIKACE-INDIKATORU.md` §2 a tabulku níže.
+
+### Dávka 1 — Preventivní prohlídky (NZIP 1781) · 2 indikátory · DOPORUČENO ZAČÍT
+- `ucast_preventivni_prohlidky_stomatolog` — **nejjistější**: roční podíl 52,1 %
+  (2023) ≈ seed 51,9 % → shoda potvrzuje reprezentativnost; metodika jasná
+  (roční nárok). Akce: předpočítat ad-hoc z mikrodat, zapsat live+verified.
+- `prohlidka_prakticky_lekar` — 2letý interval 60,8 % (2023) vs seed 53,7 %;
+  **rozhodnout jmenovatel** (evidovaní pojištěnci vs. populace 18+) proti metadatům.
+- Pozn.: soubor 185 MB (mikrodata) → fetch ročně/ad-hoc, NE v denním cronu.
+- Proč první: 2 HSPA **procesní** indikátory naráz, hodnota ověřená, jeden zcela jistý.
+
+### Dávka 2 — Onkologické přežití (NZIP 1772) · 1 indikátor
+- `prezit_rakoviny_5let` — jádrový HSPA **výsledkový** indikátor. Sada funguje
+  (130 MB mikrodata, sloupce `preziti`, `stadium`, `doba_sledovani`, `rok_dg`).
+  Metodicky náročné (5leté relativní/čisté přežití z diagnostických kohort) →
+  spočítat ad-hoc, ověřit proti NOR/SVOD publikaci. Vysoká hodnota.
+
+### Dávka 3 — Vakcinace (NZIP 2291 HPV + hledat „pokrytí" sady)
+- `vakcinace_hpv` — sada HPV malá (2 MB, agregát rok/věk/okres/`pocet`), ale
+  obsahuje **jen čitatel** (počet vakcinací), chybí cílová populace. Akce: najít
+  „…-pokryti-populace" variantu nebo doplnit jmenovatel z ČSÚ demografie.
+- Sem patří i prověření dalších vakcinačních sad (1701 z VZP) pro `vakcinace_*`.
+
+### Dávka 4 — Mortalita (NZIP 2355 úmrtí MKN-10) · podklad
+- Funguje (1,3 MB, agregát rok/věk/pohlaví/MKN-kapitola/`pocet_zemrelych`), ale
+  jsou to **surové počty** → pro HSPA standardizované míry slabší než Eurostat
+  (existující `mortalita_*` už mají Eurostat live). Využití: hrubé míry, NOVÉ
+  indikátory (např. úmrtnost dle kapitol), nebo cross-check. Nižší priorita.
+
+### Dávka 5 — Bezpečnost pacienta (NZIP 1754 pády) · BLOKOVÁNO metodikou
+- `bezpecnost_padu_nemocnice` — sada malá (55 KB, agregát rok/kategorie PZS/NU),
+  ale `NU_relativni_pocet` má **nejasnou jednotku** (rozsah 5–135 napříč typy PZS
+  ≠ kontrakt „2,1 / 1 000 hosp.") a metadata endpoint (schema 360) vrací HTML.
+  Akce: dohledat definici jednotky jinde před přepnutím; jinak nechat seed.
+
+### Zablokované / vyžaduje práci na discovery (nižší priorita)
+- `prevalence_diabetu` (1768/dist 362) — distribuce vrací HTML chybu (rozbité na mzcr).
+- `nizka_porodna_hmotnost_pct` (2515/dist 466) — totéž (HTML chyba).
+- `hospicova_pece_luzka` (1823 NRPZS), totální endoprotézy (2656), rodičky souhrn
+  (2591), lůžkový fond (1778) — detail nemá přímý CSV odkaz (víc distribucí /
+  jiná struktura) → rozšířit `discoverCsvUrl` o víc kandidátů.
+- `cezarsky_rez_pct` (1622) — 48 MB mikrodata, kódy `zpusob_porodu` bez číselníku.
+- `prumerna_delka_hospitalizace` (1751) — hospitalizační mikrodata, velký soubor.
+
+### Průřez: co NEpřepínat z NZIP
+- `hiv_nove_diagnozy` — ECDC Atlas je primárnější/mezinárodně srovnatelný zdroj.
+- Screeningy (mamograf/cervix/kolorektum) — už verified přes `uzis_nrhzs_screening`.
+
+---
+
 ## Prioritní fronta — seed indikátory s nalezenou NZIP sadou
 
 Řazeno: HSPA seed indikátory mají přednost. `A`=agregát (rychlý fetch), `M`=mikrodata (velký soubor).
