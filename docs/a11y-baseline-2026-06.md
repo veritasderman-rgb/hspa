@@ -1,18 +1,18 @@
-# WCAG 2.2 AA — axe-core baseline (2026-06-05)
+# WCAG 2.2 AA — axe-core baseline (2026-06-10)
 
 Automatický sken (`npm run test:a11y`) · tagy: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa · 15 stránek.
 
-**Celkem porušení pravidel: 3** (napříč stránkami; stejné pravidlo se může opakovat).
+**Celkem porušení pravidel: 0** (napříč stránkami; stejné pravidlo se může opakovat).
 
 | Stránka | Porušení | Stav |
 |---|---|---|
-| `index.html` | 1 | ⚠️ 1 |
+| `index.html` | 0 | ✅ čisté |
 | `clanky.html` | 0 | ✅ čisté |
-| `hspa-prehled.html` | 1 | ⚠️ 1 |
+| `hspa-prehled.html` | 0 | ✅ čisté |
 | `tematicke-linie.html` | 0 | ✅ čisté |
 | `kraje.html` | 0 | ✅ čisté |
 | `pojistenci.html` | 0 | ✅ čisté |
-| `prevence.html` | 1 | ⚠️ 1 |
+| `prevence.html` | 0 | ✅ čisté |
 | `strategie.html` | 0 | ✅ čisté |
 | `glosar.html` | 0 | ✅ čisté |
 | `jak-funguje.html` | 0 | ✅ čisté |
@@ -22,12 +22,7 @@ Automatický sken (`npm run test:a11y`) · tagy: wcag2a, wcag2aa, wcag21a, wcag2
 | `clanek-vydaje-prevence.html` | 0 | ✅ čisté |
 | `404.html` | 0 | ✅ čisté |
 
-## Porušená pravidla (agregováno)
-
-### `color-contrast` — serious
-Elements must meet minimum color contrast ratio thresholds  
-Dokumentace: https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright  
-Výskyt: 3 prvků na stránkách: `index.html`, `hspa-prehled.html`, `prevence.html`
+Žádná porušení nenalezena. 🎉
 
 ---
 
