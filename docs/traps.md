@@ -311,3 +311,20 @@ lékáren je `/soubory/SOD{YYYYMMDD}/LEKARNY{YYYYMMDD}.zip` a datum nelze odvodi
 **Řešení**: `discoverLekarnyUrl()` čte odkaz z katalogové stránky. Pro nové SÚKL
 datové sady vždy discovery z katalogu, nikdy hádání URL. (MR feed `mr.zip` je
 výjimka — stabilní cesta.)
+
+### ÚZIS data.mzcr.cz: katalog (CKAN API i web) je mrtvý, fungují jen přímé distribuce (2026-06-10)
+
+**Trap**: Pro zlivnění nových ÚZIS indikátorů je potřeba znát distribuční URL
+(`https://data.mzcr.cz/data/distribuce/{ID}/...csv[.gz]`). Discovery selhává:
+- `data.mzcr.cz/api/3/action/package_search|package_list` → **404**
+- `opendata.mzcr.cz/api/3/action/package_show?id=...` → **HTML** (ne JSON; portál migroval)
+- `data.mzcr.cz/dataset?q=...` a `/sitemap.xml` → **404**
+- NKOD2 SPARQL (`data.gov.cz/sparql`) → dotazy na ÚZIS/NRHZS vrací **prázdný** result
+
+**Co funguje**: přímé distribuce s pevně známým číselným ID (ověřeno: kolorektál
+`/62/`, mamograf `/263/`, NRH `/469/`). Těch 6 už je v `ingest/mapping/uzis_codes.json`.
+
+**Řešení pro nový ÚZIS indikátor**: distribution ID nelze dohledat strojově —
+otevřít data.mzcr.cz v prohlížeči, najít datovou sadu, zkopírovat URL distribuce
+(CSV/CSV.GZ) do `primary_url` v `uzis_codes.json` + napsat extractor (každý ÚZIS
+export má jinou strukturu sloupců). Bez ID **NEHÁDAT** — nechat seed.
