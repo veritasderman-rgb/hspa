@@ -33,7 +33,7 @@
     "data:dohodovaci-rizeni": "node ingest/fetchers/nzip_dohodovaci_rizeni.js && node ingest/transform_dohodovaci_rizeni.js && node ingest/build-dohodovaci-rizeni.js",
     "build:kolonoskopie": "node scripts/build-kolonoskopie.js",
     "serve": "npx http-server . -p 8080 -c-1",
-    "test": "node --test tests/*.test.js",
+    "test": "HSPA_CACHE_DIR=$(mktemp -d /tmp/hspa-test-cache.XXXXXX) node --test tests/*.test.js",
     "test:a11y": "node tests/a11y/axe-scan.mjs",
     "test:a11y:ci": "node tests/a11y/axe-scan.mjs --ci",
     "test:e2e": "playwright test",

@@ -33,7 +33,9 @@ export const CONFIG = {
 
   // Cache & retry chování
   cache: {
-    dir: 'ingest/cache',
+    // HSPA_CACHE_DIR: override pro testy — unit testy fetcherů volají writeCache
+    // a bez izolace by přepisovaly reálné agregáty (viz docs/traps.md).
+    dir: process.env.HSPA_CACHE_DIR ?? 'ingest/cache',
     ttl_hours: 24,
   },
   retry: {
