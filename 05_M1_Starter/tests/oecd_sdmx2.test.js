@@ -64,3 +64,34 @@ test('buildOecdSdmx2Url: nový sdmx.oecd.org endpoint s jsondata', () => {
   assert.match(url, /dimensionAtObservation=AllDimensions/);
   assert.match(url, /startPeriod=2018/);
 });
+
+test('parseOecdSdmx2: pole v dims = součet přes vyjmenované členy (DAY+HBOUT)', () => {
+  const fx = {
+    data: {
+      structures: [{
+        dimensions: {
+          observation: [
+            { id: 'REF_AREA', values: [{ id: 'CZE' }, { id: 'AUT' }] },
+            { id: 'MODE_PROVISION', values: [{ id: 'DAY' }, { id: 'HBOUT' }, { id: 'HBEDT' }] },
+            { id: 'TIME_PERIOD', values: [{ id: '2022' }] },
+          ],
+        },
+      }],
+      dataSets: [{ observations: {
+        '0:0:0': [10.5],   // CZE DAY
+        '0:1:0': [88.2],   // CZE HBOUT
+        '0:2:0': [1.3],    // CZE HBEDT (nesmí se započítat)
+        '1:0:0': [50],     // AUT DAY
+        '1:1:0': [30],     // AUT HBOUT
+      } }],
+    },
+  };
+  const r = parseOecdSdmx2(fx, { dims: { MODE_PROVISION: ['DAY', 'HBOUT'] } });
+  assert.equal(r.cz.value, 98.7);
+  assert.equal(r.cz.year, 2022);
+});
+
+test('buildOecdSdmx2Url: mapping.key zúží dotaz místo /all', () => {
+  const url = buildOecdSdmx2Url({ dataflow: 'DSD_SHA@DF_SHA', key: '.A.....HC6.....' }, { startPeriod: 2015 });
+  assert.match(url, /DSD_SHA@DF_SHA,1\.0\/\.A\.\.\.\.\.HC6\.\.\.\.\.\?/);
+});

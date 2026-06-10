@@ -9,22 +9,26 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HCQO@DF_CC",
+      "note": "OECD Health Care Quality — Cancer care, pětileté čisté přežití karcinomu prsu (CONCORD-3, diagnostická kohorta 2010–2014, publikováno jako referenční rok 2014). Dimenze: MEASURE=CCBRNTSR, SEX=F, AGE=Y_GE15, hodnota OBS (observed). Novější mezinárodně srovnatelná vlna zatím nebyla publikována."
+    },
+    "fallback": {
       "type": "uzis_nor",
       "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-onkologicky-registr",
       "dataset": "Národní onkologický registr (NOR) — přežití přes propojení s daty plátců",
-      "dimensions": ["diagnóza (C50)", "kohorta diagnózy", "stadium", "věk"]
-    },
-    "fallback": {
-      "type": "oecd",
-      "code": "CANCER_SURVIVAL_BREAST"
+      "dimensions": [
+        "diagnóza (C50)",
+        "kohorta diagnózy",
+        "stadium",
+        "věk"
+      ]
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "CANCER_SURVIVAL_BREAST",
-    "dataset": "OECD Health at a Glance 2023 / EU Country Cancer Profile (CONCORD-3, kohorta 2010–14)",
-    "value": 86,
-    "url": "https://www.oecd.org/en/publications/2023/02/eu-country-cancer-profile-czech-republic-2023_42c64a42.html"
+    "dataset": "DSD_HCQO@DF_CC",
+    "note": "Nevážený průměr členských zemí OECD (CONCORD-3, 2014): 84,3; n=34."
   },
   "signal_thresholds": {
     "good": 3,
@@ -46,7 +50,9 @@
     "regionální a vzdělanostní nerovnosti v účasti na screeningu"
   ],
   "importance": "Karcinom prsu je nejčastější zhoubný nádor u žen v ČR (≈ 7 700 nových případů ročně). Pětileté přežití je shrnujícím výstupním ukazatelem celého řetězce péče — od prevence a screeningu přes diagnostiku po léčbu a sledování. Na rozdíl od incidence a mortality přímo měří, jak dobře systém pacientky léčí.",
-  "patient_story": "Mamodiagnostické centrum v krajské nemocnici, pondělní mamografický screening. Pětapadesátiletá učitelka z menšího města přišla na pravidelný snímek po pozvánce od pojišťovny. Radioložka zachytí drobné ložisko 9 mm, stadium I. Za tři týdny je po záchovné operaci a má naplánovanou radioterapii. Pro takto časně zachycený nádor se pětileté přežití blíží 100 %. Právě tyto ženy zvyšují celostátní průměr.\n\nPětileté přežití po diagnóze karcinomu prsu je v Česku 81 % (čisté přežití, kohorta 2010–14; ÚZIS NOR a EU Country Cancer Profile podle metodiky CONCORD-3). Průměr OECD je 86 %, čisté přežití EU24 je 83 % — Česko je signal warn, mírně pod nejlepší praxí. Trend je ale jednoznačně rostoucí: 74 % (kohorta 2000–04) → 78 % (2005–09) → 81 % (2010–14), přičemž národní data NOR pro kohortu 2015–19 hlásí další zlepšení o 4 procentní body. Rozdíl 5 procentních bodů vůči OECD se promítá do stovek úmrtí ročně, kterým by včasnější záchyt mohl předejít.\n\nStrukturálně český systém léčí časně zachycené nádory na evropské úrovni — záchovná chirurgie, radioterapie i moderní onkologika jsou koncentrovány v komplexních onkologických centrech (KOC), kde se léčí kolem 71 % onkologických pacientů. Zbývající mezera vůči OECD je dána hlavně podílem pozdě diagnostikovaných nádorů: účast v mamografickém screeningu je sice nad průměrem EU (60 % vs. 56 %), ale s velkými regionálními a vzdělanostními rozdíly — ženy s nižším vzděláním chodí na screening výrazně méně a jejich nádory se častěji zachytí v pokročilém stadiu. Pětileté přežití je tak z velké části zrcadlem rovnosti v přístupu k prevenci.\n\nPolitická páka je konkrétní a v rukou MZ ČR a plátců. Mamografický screening běží od roku 2002, od roku 2014 s adresnými zvacími dopisy; jeho účinnost lze dále zvýšit cílením na podléčené skupiny (samoodběrové pozvánky, mobilní mamografy, navigace pacientek). Národní onkologický plán ČR 2030 a jeho akční plán 2025–2027 stanovují cíle pro screeningovou účast a centralizaci péče. Úhradová vyhláška a Věstník MZ ČR (síť KOC a doporučený standard screeningu prsu) jsou nástroje, kterými lze přežití přímo ovlivnit. Indikátor v HSPA dashboardu sleduje pětileté přežití karcinomu prsu jako klíčový výstupní ukazatel kvality onkologické péče a rovnosti v přístupu k prevenci.",
+  "patient_story": "Mamodiagnostické centrum v krajské nemocnici, pondělní mamografický screening. Pětapadesátiletá učitelka z menšího města přišla na pravidelný snímek po pozvánce od pojišťovny. Radioložka zachytí drobné ložisko 9 mm, stadium I. Za tři týdny je po záchovné operaci a má naplánovanou radioterapii. Pro takto časně zachycený nádor se pětileté přežití blíží 100 %. Právě tyto ženy zvyšují celostátní průměr.\n\nPětileté přežití po diagnóze karcinomu prsu je v Česku 81,4 % (čisté přežití, kohorta 2010–14; ÚZIS NOR a EU Country Cancer Profile podle metodiky CONCORD-3). Průměr OECD je 86 %, čisté přežití EU24 je 83 % — Česko je signal warn, mírně pod nejlepší praxí. Trend je ale jednoznačně rostoucí: 74 % (kohorta 2000–04) → 78 % (2005–09) → 81,4 % (2010–14), přičemž národní data NOR pro kohortu 2015–19 hlásí další zlepšení o 4 procentní body. Rozdíl 5 procentních bodů vůči OECD se promítá do stovek úmrtí ročně, kterým by včasnější záchyt mohl předejít.\n\nStrukturálně český systém léčí časně zachycené nádory na evropské úrovni — záchovná chirurgie, radioterapie i moderní onkologika jsou koncentrovány v komplexních onkologických centrech (KOC), kde se léčí kolem 71 % onkologických pacientů. Zbývající mezera vůči OECD je dána hlavně podílem pozdě diagnostikovaných nádorů: účast v mamografickém screeningu je sice nad průměrem EU (60 % vs. 56 %), ale s velkými regionálními a vzdělanostními rozdíly — ženy s nižším vzděláním chodí na screening výrazně méně a jejich nádory se častěji zachytí v pokročilém stadiu. Pětileté přežití je tak z velké části zrcadlem rovnosti v přístupu k prevenci.\n\nPolitická páka je konkrétní a v rukou MZ ČR a plátců. Mamografický screening běží od roku 2002, od roku 2014 s adresnými zvacími dopisy; jeho účinnost lze dále zvýšit cílením na podléčené skupiny (samoodběrové pozvánky, mobilní mamografy, navigace pacientek). Národní onkologický plán ČR 2030 a jeho akční plán 2025–2027 stanovují cíle pro screeningovou účast a centralizaci péče. Úhradová vyhláška a Věstník MZ ČR (síť KOC a doporučený standard screeningu prsu) jsou nástroje, kterými lze přežití přímo ovlivnit. Indikátor v HSPA dashboardu sleduje pětileté přežití karcinomu prsu jako klíčový výstupní ukazatel kvality onkologické péče a rovnosti v přístupu k prevenci.",
   "framework": "hspa",
-  "dimension": "kvalita"
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }

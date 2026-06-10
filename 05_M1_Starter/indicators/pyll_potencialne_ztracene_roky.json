@@ -4,18 +4,20 @@
   "area": "Výsledky",
   "domain": "Mortalita",
   "subdomain": "Odvratitelná úmrtnost",
-  "definition": "Roky života ztracené úmrtím před 70. rokem věku, vážené předpokládanou délkou života. Souhrnný indikátor předčasné úmrtnosti (na 100 000 obyvatel mladších 70 let).",
-  "unit": "/ 100 000 (<70 let)",
+  "definition": "Roky života ztracené úmrtím před 75. rokem věku, vážené předpokládanou délkou života. Souhrnný indikátor předčasné úmrtnosti (na 100 000 obyvatel mladších 75 let).",
+  "unit": "/ 100 000 (<75 let)",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "oecd",
-      "note": "OECD HEALTH_STAT, agregát z národních úmrtních dat."
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HEALTH_STAT@DF_PYLL",
+      "note": "OECD Health Statistics, SDMX-JSON 2.0 (sdmx.oecd.org Data Explorer). Dimenze: MEASURE=PYLL, UNIT=Y_10P5PS, AGE=Y75 (cutoff <75 let), SEX=_T, DEATH_CAUSE=_T. Agregát z národních úmrtních dat (ČSÚ)."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "PYLL"
+    "code": "PYLL",
+    "note": "Nevážený průměr členských zemí OECD reportujících poslední rok ČR (2023: 4 614; n=14)."
   },
   "signal_thresholds": {
     "good": 5,
@@ -26,9 +28,11 @@
     "OECD",
     "ČSÚ"
   ],
-  "method_notes": "Výpočet: pro každé úmrtí pod 70 let se přičte (70 − věk úmrtí). Suma na 100 000 referenční populace. Excess COVID-19 v 2020-2021 odrazil v krátkodobém zhoršení.",
-  "limitations": "Hranice 70 let je konvence — některé zdroje používají 75 let. Nezohledňuje kvalitu života, jen délku.",
-  "patient_story": "Ústí nad Labem, smuteční síň, pohřeb 52letého muže po náhlém infarktu. Statisticky by se dožil 75–80 let. Rozdíl 23–28 let je v PYLL terminologii „potencionálně ztracený rok života\" — sčítají se tisíce takových případů ročně do souhrnné metriky preventovatelné mortality.\n\nPYLL (Potential Years of Life Lost před 70. rokem) v ČR je 3 800 / 100 000 obyvatel (OECD Health at a Glance 2024, ref. rok 2023). OECD průměr 3 300, EU 3 100 — Česko signal bad. Rozdíl 500–700 let znamená cca 50 000 dodatečných ztracených let života ročně. Trend pomalu klesá (2010: 4 500; 2024: 3 800), tempo nedostatečné. Hlavní příčiny: KV onemocnění (32 %), onkologie (28 %), externí příčiny (11 %), respirační (8 %), digestivní (6 %).\n\nStrukturálně PYLL kombinuje všechny faktory předčasné úmrtí: rizikové chování (tabák, alkohol, obezita), kvalitu primární prevence, dostupnost a kvalitu akutní péče, chronickou léčbu. Česko má v PYLL silnou složku KV mortality (viz indikátor mortalita_kardiovaskularni 463,75/100 000) a relativně vysokou onkologickou mortalitu.\n\nPYLL je jeden z klíčových kompozitních ukazatelů funkčnosti zdravotního systému jako celku. Politicky se PYLL zlepšuje přes kombinaci primární prevence (Priority 1 indikátory), screeningu (Priority 1) a kvality péče (Priority 2). Cíl: dosáhnout úrovně OECD průměru (3 300) do roku 2035 — to znamená redukci PYLL o 13 % za dekádu. Indikátor v HSPA dashboardu sleduje PYLL jako klíčový souhrnný ukazatel preventovatelné mortality.",
+  "method_notes": "Výpočet: pro každé úmrtí pod 75 let se přičte (75 − věk úmrtí). Suma na 100 000 referenční populace. OECD publikuje řadu s cutoffem 75 let (AGE=Y75) — starší publikace a národní zdroje někdy používají cutoff 70 let, hodnoty NEJSOU přímo srovnatelné. Excess mortalita COVID-19 je vidět jako vrchol 2021 (5 800 / 100 000).",
+  "limitations": "Hranice 75 let je konvence OECD — zdroje s cutoffem 70 let dávají výrazně nižší absolutní hodnoty (řada před 2026-06 na tomto dashboardu používala <70). Nezohledňuje kvalitu života, jen délku.",
+  "patient_story": "Ústí nad Labem, smuteční síň, pohřeb 52letého muže po náhlém infarktu. Statisticky měl před sebou ještě přes dvacet let života. V terminologii PYLL je každý takový rok „potenciálně ztracený rok života\" — a tisíce takových případů ročně se sčítají do souhrnné metriky předčasné úmrtnosti.\n\nPYLL (Potential Years of Life Lost před 75. rokem) v ČR činí 4 564 let na 100 000 obyvatel (OECD Health Statistics, rok 2023). Průměr zemí OECD reportujících rok 2023 je 4 614 — Česko se po letech doháněcího trendu dostalo těsně pod průměr. Řada ukazuje i covidový šrám: 2018: 4 972 → 2019: 4 870 → 2020: 5 048 → 2021: 5 800 (vrchol pandemie) → 2022: 4 859 → 2023: 4 564.\n\nStrukturálně PYLL kombinuje všechny faktory předčasných úmrtí: rizikové chování (tabák, alkohol, obezita), kvalitu primární prevence, dostupnost a kvalitu akutní péče i chronickou léčbu. V Česku je tradičně nejsilnější složkou kardiovaskulární mortalita (viz indikátor mortalita_kardiovaskularni) a onkologická úmrtnost.\n\nPYLL je jeden z klíčových kompozitních ukazatelů funkčnosti zdravotního systému jako celku. Zlepšuje se kombinací primární prevence, screeningu a kvality akutní péče. Indikátor v HSPA dashboardu sleduje PYLL jako klíčový souhrnný ukazatel předčasné úmrtnosti.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }

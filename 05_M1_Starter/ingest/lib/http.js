@@ -86,3 +86,66 @@ export async function fetchWithRetry(url, options = {}) {
     ? lastError
     : new HttpError(`Network failure for ${url}: ${lastError?.message ?? 'unknown'}`, { url, attempts: maxAttempts });
 }
+
+/**
+ * GET přes HTTP/2 (node:http2). Některé servery (OECD sdmx.oecd.org) vracejí
+ * na velké odpovědi přes HTTP/1.1 (undici/fetch) chybu 500, zatímco přes
+ * HTTP/2 (curl) fungují — tohle je ekvivalent `curl --http2`.
+ *
+ * @param {string} url
+ * @param {{ headers?: Record<string,string>, timeoutMs?: number, parse?: 'json'|'text' }} [options]
+ * @returns {Promise<any>}
+ */
+export async function fetchHttp2(url, options = {}) {
+  const { headers = {}, timeoutMs = 120_000, parse = 'json' } = options;
+  const { connect, constants } = await import('node:http2');
+  const zlib = await import('node:zlib');
+  const u = new URL(url);
+
+  return new Promise((resolve, reject) => {
+    const client = connect(u.origin);
+    const timer = setTimeout(() => {
+      client.close();
+      reject(new HttpError(`HTTP/2 timeout for ${url}`, { url }));
+    }, timeoutMs);
+    client.on('error', err => { clearTimeout(timer); reject(err); });
+
+    const req = client.request({
+      [constants.HTTP2_HEADER_METHOD]: 'GET',
+      [constants.HTTP2_HEADER_PATH]: u.pathname + u.search,
+      'user-agent': CONFIG.uzis.user_agent,
+      accept: '*/*',
+      ...headers,
+    });
+
+    let status = 0;
+    let encoding = '';
+    const chunks = [];
+    req.on('response', h => {
+      status = Number(h[constants.HTTP2_HEADER_STATUS]);
+      encoding = h['content-encoding'] ?? '';
+    });
+    req.on('data', c => chunks.push(c));
+    req.on('error', err => { clearTimeout(timer); client.close(); reject(err); });
+    req.on('end', async () => {
+      clearTimeout(timer);
+      client.close();
+      await appendAudit({ url, status, attempt: 1, transport: 'http2' });
+      if (status < 200 || status >= 300) {
+        reject(new HttpError(`HTTP ${status} for ${url} (http2)`, { status, url, attempts: 1 }));
+        return;
+      }
+      let buf = Buffer.concat(chunks);
+      try {
+        if (encoding === 'gzip') buf = zlib.gunzipSync(buf);
+        else if (encoding === 'deflate') buf = zlib.inflateSync(buf);
+        else if (encoding === 'br') buf = zlib.brotliDecompressSync(buf);
+        const text = buf.toString('utf8');
+        resolve(parse === 'json' ? JSON.parse(text) : text);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    req.end();
+  });
+}
