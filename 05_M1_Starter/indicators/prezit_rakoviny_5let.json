@@ -4,18 +4,24 @@
   "area": "Výstupy",
   "domain": "Kvalita péče",
   "subdomain": "Onkologická péče",
-  "definition": "Pětiletá relativní míra přežití u pacientů s diagnostikovaným kolorektálním karcinomem (MKN-10 C18–C20). Klíčový indikátor kvality onkologické péče.",
+  "definition": "Pětileté čisté (relativní) přežití pacientů s kolorektálním karcinomem dle metodiky CONCORD-3 (diagnostická kohorta 2010–2014). Ověřená hodnota odpovídá karcinomu tlustého střeva (colon, MKN-10 C18); karcinom konečníku (rektum, C19–C20) má dle stejného zdroje samostatné přežití 52,3 %. Klíčový indikátor kvality onkologické péče (reflektuje včasnost záchytu i kvalitu léčby).",
   "unit": "%",
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HCQO@DF_CC",
+      "note": "OECD Health Care Quality — Cancer care, pětileté čisté přežití karcinomu tlustého střeva (colon, CCCLNTSR), CONCORD-3 kohorta 2010–2014 (publikováno jako rok 2014). Dimenze SEX=_T, AGE=Y_GE15, hodnota OBS. Za ČR sestaveno z Národního onkologického registru (NOR/ÚZIS) v rámci CONCORD."
+    },
+    "fallback": {
       "type": "uzis_nor",
-      "note": "NOR + sledování přežití přes propojení s LPZ."
+      "note": "NOR (ÚZIS) — národní detail (incidence, stadia, observed přežití po krajích)."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "CANCER_SURVIVAL_CRC"
+    "dataset": "DSD_HCQO@DF_CC",
+    "note": "Nevážený průměr členských zemí OECD (CONCORD-3, 2014, colon): 61,2; n≈33."
   },
   "signal_thresholds": {
     "good": 3,
@@ -26,9 +32,11 @@
     "ÚZIS · NOR",
     "OECD"
   ],
-  "method_notes": "Relativní 5leté přežití (CONCORD metodologie). Reflektuje fázi záchytu (čím dříve, tím vyšší přežití) i kvalitu léčby. ČR má historicky pod-průměrné výsledky kvůli pozdní diagnóze.",
+  "method_notes": "Pětileté ČISTÉ přežití (CONCORD-3) — koriguje na úmrtnost obecné populace (life tables), proto je srovnatelné mezi zeměmi (na rozdíl od pozorovaného/observed přežití). Zdroj OECD Health Care Quality (data z NOR ÚZIS v rámci CONCORD programu). Jediná dostupná mezinárodně srovnatelná vlna je kohorta 2010–2014. Reflektuje fázi záchytu (čím dříve, tím vyšší přežití) i kvalitu léčby; ČR má historicky podprůměrné výsledky kvůli pozdní diagnóze.",
   "limitations": "Časové zpoždění 5+ let v reportingu (data 2020 = pacienti diagnostikovaní 2015–2019). Lead-time bias při srovnávání zemí s různým screening.",
   "patient_story": "Onkologické centrum, follow-up po 5 letech od diagnózy. Pacientka po karcinomu prsu stadia II, kompletní remise, doporučení každoroční kontroly. Pětileté přežití je v onkologii standardní milník — pacient, který jím projde, má vysokou pravděpodobnost vyléčení. V Česku tímto milníkem projde 56 % všech onkologických pacientů.\n\nPětileté přežití u všech onkologických diagnóz v ČR je 56 % (CONCORD-3 + ÚZIS NOR, 2020 — nejnovější dostupné). OECD průměr 62 %, EU 60 % — Česko signal bad. Rozdíl 4–6 procentních bodů znamená cca 2 000 dalších úmrtí ročně. Specificky: karcinom prsu 87 % (srovnatelné s OECD), kolorektum 58 % (pod OECD 62 %), plíce 14 % (srovnatelné, ale s rezervou), prostata 92 % (srovnatelné).\n\nStrukturálně český onkologický systém má dobrou léčbu u časně diagnostikovaných případů (chirurgie, radioterapie, moderní onkologika v KOC), ale slabší výsledky u pozdě diagnostikovaných (rozdíl s OECD je hlavně ve fázi diagnózy, ne v kvalitě léčby). Hlavní mezerou je screening (viz Priority 1), prevence rizikových faktorů a včasný záchyt symptomů (čekání na vyšetření = pozdější diagnóza).\n\nPětileté přežití je klíčový kompozitní indikátor funkčnosti onkologického systému. Politické páky: zvýšení screeningové účasti (kolorektum z 28 na 65 %, mamograf 60 → 75 %, cervix 52 → 70 %); rozšíření screeningu rakoviny plic (LDCT u rizikových); Národní onkologický program 2025–2035 s konkrétními termíny; zkrácení čekacích dob na onkologické vyšetření (cíl: dle ESMO guidelines do 14 dní od podezření). Indikátor v HSPA dashboardu sleduje pětileté přežití jako klíčový ukazatel kvality onkologické péče.",
   "framework": "hspa",
-  "dimension": "kvalita"
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }
