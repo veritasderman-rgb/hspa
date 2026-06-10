@@ -4,18 +4,24 @@
   "area": "Struktury",
   "domain": "Nemocniční infrastruktura",
   "subdomain": "Intenzivní péče",
-  "definition": "Počet lůžek intenzivní péče (JIP, ARO) pro dospělé na 100 000 obyvatel. Klíčový indikátor odolnosti zdravotnictví v krizových situacích (pandemie, hromadné neštěstí).",
+  "definition": "Počet lůžek akutní intenzivní péče pro dospělé (adult ICU) na 100 000 obyvatel dle harmonizované definice OECD. Klíčový indikátor odolnosti zdravotnictví v krizových situacích (pandemie, hromadná neštěstí).",
   "unit": "/ 100 000 obyvatel",
   "direction": "context_dependent",
   "data_source": {
     "primary": {
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_ICU",
+      "note": "OECD Health Statistics — ICU beds, adult intensive care (MEASURE=HBU_ICU_A, per 100 000, STATISTICAL_OPERATION=MEAN). POZOR na definici: ÚZIS reportuje širší IP kategorii (ARO+JIP ~52/100k vč. 1. úrovně oborových JIP), ESICM úzká definice (úrovně 2-3) ~40/100k; OECD adult ICU je mezi nimi. Dřívější seed 35/100k nebyl napojen na primární zdroj."
+    },
+    "fallback": {
       "type": "uzis_nzis",
-      "note": "NRIP — Národní registr intenzivní péče."
+      "note": "ÚZIS lůžkový fond (SSS-05-01) — JIP sloupec (širší IP definice)."
     }
   },
   "benchmark_source": {
     "type": "oecd",
-    "code": "ICU_BEDS"
+    "dataset": "DSD_HEALTH_REAC_HOSP@DF_BEDS_ICU",
+    "note": "Nevážený průměr členských zemí OECD (adult ICU, 2023). Standardizace ICU běží od 2020, srovnatelnost omezená rozdílnými národními definicemi."
   },
   "signal_thresholds": {
     "good": 5,
@@ -30,5 +36,7 @@
   "limitations": "Definice JIP se v zemích liší (úroveň 1/2/3 dle ESICM klasifikace). Standardizace OECD probíhá od 2020. NRHZS sběr dat o IP lůžkách v ČR může být zatížený nesouladem mezi smluvně sjednanými a fakticky vykazovanými lůžky — koncepční materiál pro restrukturalizaci IP (4/2026, ohlášeno ve Věstníku MZ) má tuto definici sjednotit.",
   "patient_story": "Praha-Motol, kardio-JIP, 12 monitorovaných lůžek, sestra na 2 pacienty. ČR má 35 JIP lůžek na 100 000 obyvatel — výrazně nad OECD (14) a EU (13). Vysoká hodnota odráží specifickou českou koncepci „intenzivní péče\" zahrnující široce JIP, ARO, monitorované jednotky.\n\nHustota JIP lůžek v ČR je 35 na 100 000 obyvatel (ÚZIS, 2024). OECD průměr 14, EU 13 — Česko je 2,5× nad oběma. Signal neutral (vysoká hodnota odráží metodologii sběru). ČR započítává všechna intenzivní lůžka napříč obory (kardio, neuro, chirurgie, pediatrie, neonatologie, ARO), zatímco některé země OECD úžeji jen mechanicky ventilovaná lůžka. Po metodické harmonizaci by hodnota byla cca 18–20.\n\nStrukturálně český systém má rozsáhlou síť intenzivní medicíny — to se osvědčilo v COVID pandemii, kdy ČR měla velký bufer kapacity. ARO a JIP jsou v každé krajské nemocnici, ve fakultkách v každém oboru. To je investiční dědictví a personální nákladnost (sestra-pacient 1:2 nebo 1:1).\n\nVysoká JIP kapacita je pozitivní pro krizovou připravenost, ale vyžaduje stálé personální obsazení (ARO sestra je vysoce kvalifikovaná, nedostatková). Politické páky: harmonizace metodiky reportingu (OECD srovnatelnost); rozšíření „step-down units\" (mezi JIP a standardním oddělením); zlepšení personálního obsazení (sestra/lůžko); telemedicínská konzultace pro periferní ARO/JIP. Indikátor v HSPA dashboardu sleduje JIP lůžka jako kontextový ukazatel intenzivní kapacity.",
   "framework": "hspa",
-  "dimension": "efektivita"
+  "dimension": "efektivita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }
