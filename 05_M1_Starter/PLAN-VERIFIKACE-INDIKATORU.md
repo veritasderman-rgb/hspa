@@ -72,6 +72,17 @@ po Dávce E (SÚKL+Eurostat): origin seed 81 | live 49 · illustrative ~72 | ver
   z přehrání kumulativního feedu), `mortalita_onkologicka` (Eurostat hlth_cd_asdr2, 250,4 / 100k
   ESP 2013; seed 180 byl neověřitelný).
 
+**Blokované zdroje (ověřeno 2026-06-10, NEhádat hodnoty):**
+- **ÚZIS / data.gov.cz** — CKAN API `data.gov.cz/api/3/action/*` vrací **404**
+  (národní katalog přešel na NKOD2; funguje jen SPARQL endpoint + datové sady
+  v `.7z`). `nrhzs_providers.js` postavený na starém CKAN API by selhal.
+  ~34 ÚZIS seed indikátorů (NZIS 16, NRHZS 10, NRZP 4, NRH 2) zůstává seed —
+  zlivnění vyžaduje přepis na NKOD2 SPARQL + 7z dekompresi (samostatná dávka).
+- **ECDC HIV** (`hiv_nove_diagnozy`) — health topic Id 28/75, dataset
+  `CURRENT.HIVAIDS.YEARLY` (Id 881) potvrzeny, ale measure-discovery endpointy
+  (`GetMeasuresForDataset`, `GetIndicators`…) vrací **404** — web app Atlasu volá
+  measure list přes POST/jiný service. Bez `measure_id` nelze přidat (nehádat).
+
 **Otevřený drift k revizi (NEsladěno — riziko):** screeningové citace v
 `clanek-centrum-onkologicke-prevence-mou-2026.html` (mamograf 60 %, cervix 52,3 %,
 kolorektál 28 %) neodpovídají aktuálním verified indikátorům (54,5 / 65,7 / 31,1 %).

@@ -201,18 +201,67 @@ function renderDetail(ind, card, regionDataset) {
       ${ind.verified_at ? `<span>Ověřeno proti primárnímu zdroji: ${escapeHtml(ind.verified_at)}</span>` : ''}
       ${ind.source?.origin ? `<span class="origin-tag origin-${escapeHtml(ind.source.origin)}">${escapeHtml(ind.source.origin)}</span>` : ''}
       <a class="feedback-link" href="https://github.com/veritasderman-rgb/hspa/issues/new?title=Chyba+nebo+návrh:+${encodeURIComponent(ind.id)}" target="_blank" rel="noopener">Nahlásit chybu nebo návrh ↗</a>
+      <button type="button" class="embed-share-btn" data-embed-id="${escapeHtml(ind.id)}">Vložit kartu na web ↗</button>
     </footer>
+    <div class="embed-share-panel" id="embedSharePanel" hidden>
+      <p>Zkopírujte kód a vložte do svého webu (responzivní iframe):</p>
+      <textarea readonly id="embedSnippet" rows="3" aria-label="HTML kód pro vložení"></textarea>
+      <button type="button" class="embed-copy-btn" id="embedCopyBtn">Kopírovat</button>
+      <iframe class="embed-preview" id="embedPreview" title="Náhled vložené karty" loading="lazy"></iframe>
+    </div>
   `;
 
   if (ind.trend?.length >= 2) {
     renderTrendChart(ind);
   }
 
+  wireEmbedShare(ind.id);
+
   if (regionDataset) {
     wireRegionalSection(regionDataset, ind);
   }
 
   loadRelated(ind.id);
+}
+
+/**
+ * Obsluha tlačítka „Vložit kartu na web" — sestaví iframe snippet,
+ * naplní náhled a zařídí kopírování do schránky.
+ */
+function wireEmbedShare(id) {
+  const btn = document.querySelector('.embed-share-btn');
+  const panel = document.getElementById('embedSharePanel');
+  if (!btn || !panel) return;
+  const embedUrl = `${location.origin}/embed.html?id=${encodeURIComponent(id)}`;
+  const snippet = `<iframe src="${embedUrl}" width="380" height="220" style="border:0;max-width:100%" loading="lazy" title="HSPA Monitor — ${escapeHtml(id)}"></iframe>`;
+
+  btn.addEventListener('click', () => {
+    const willShow = panel.hidden;
+    panel.hidden = !willShow;
+    if (willShow) {
+      const ta = document.getElementById('embedSnippet');
+      const preview = document.getElementById('embedPreview');
+      if (ta) ta.value = snippet;
+      if (preview && !preview.src) {
+        preview.src = embedUrl;
+        preview.width = 380;
+        preview.height = 220;
+      }
+    }
+  });
+
+  const copyBtn = document.getElementById('embedCopyBtn');
+  copyBtn?.addEventListener('click', async () => {
+    const ta = document.getElementById('embedSnippet');
+    if (!ta) return;
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      copyBtn.textContent = 'Zkopírováno ✓';
+      setTimeout(() => { copyBtn.textContent = 'Kopírovat'; }, 2000);
+    } catch {
+      ta.select();
+    }
+  });
 }
 
 function renderBenchmarks(ind) {
