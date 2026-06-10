@@ -30,6 +30,7 @@
 // fetcheru, nikoli SÚKL.
 
 import { fetchWithRetry } from '../lib/http.js';
+import { unzipEntry } from './sukl.js';
 import { readCacheIfFresh, writeCache } from '../lib/cache.js';
 import { parseCsv } from '../lib/csv.js';
 
@@ -69,22 +70,41 @@ export const ATC_GROUPS = {
  *   posledni_platne: string,
  * }>}
  */
+// SÚKL používá v TYP_OZNAMENI slovní hodnoty; normalizace na písmenné kódy.
+const TYP_MAP = {
+  ZAHAJENI: 'U', UVEDENI: 'U',
+  PRERUSENI: 'P',
+  UKONCENI: 'K',
+  OBNOVENI: 'O',
+};
+
+/** Datum SÚKL (DD.MM.YYYY) → ISO (YYYY-MM-DD); ISO projde beze změny. */
+export function toIsoFromCz(d) {
+  const s = (d ?? '').trim();
+  const m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  return m ? `${m[3]}-${m[2]}-${m[1]}` : s;
+}
+
 export function parseMrCsv(csvText) {
   const rows = parseCsv(csvText, { delimiter: ';' });
   return rows
-    .map(r => ({
-      kod_sukl: (r.KOD_SUKL ?? r.kod_sukl ?? '').trim(),
-      nazev: (r.NAZEV ?? r.nazev ?? '').trim(),
-      doplnek: (r.DOPLNEK ?? r.doplnek ?? '').trim(),
-      atc: (r.ATC ?? r.atc ?? '').trim().toUpperCase(),
-      typ: (r.TYP_OZNAMENI ?? r.typ_oznameni ?? '').trim().toUpperCase(),
-      platnost_od: (r.PLATNOST_OD ?? r.platnost_od ?? '').trim(),
-      datum_hlaseni: (r.DATUM_HLASENI ?? r.datum_hlaseni ?? '').trim(),
-      nahrazujici_lp: (r.NAHRAZUJICI_LP ?? r.nahrazujici_lp ?? '').trim(),
-      duvod: (r.DUVOD_PRERUSENI_UKONCENI ?? r.duvod_preruseni_ukonceni ?? '').trim(),
-      termin_obnoveni: (r.TERMIN_OBNOVENI ?? r.termin_obnoveni ?? '').trim(),
-      posledni_platne: (r.POSLEDNI_PLATNE_HLASENI ?? r.posledni_platne_hlaseni ?? '').trim(),
-    }))
+    .map(r => {
+      const typRaw = (r.TYP_OZNAMENI ?? r.typ_oznameni ?? '').trim().toUpperCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '');
+      return {
+        kod_sukl: (r.KOD_SUKL ?? r.kod_sukl ?? '').trim(),
+        nazev: (r.NAZEV ?? r.nazev ?? '').trim(),
+        doplnek: (r.DOPLNEK ?? r.doplnek ?? '').trim(),
+        atc: (r.ATC ?? r.atc ?? '').trim().toUpperCase(),
+        typ: TYP_MAP[typRaw] ?? typRaw,
+        platnost_od: toIsoFromCz(r.PLATNOST_OD ?? r.platnost_od),
+        datum_hlaseni: toIsoFromCz(r.DATUM_HLASENI ?? r.datum_hlaseni),
+        nahrazujici_lp: (r.NAHRAZUJICI_LP ?? r.nahrazujici_lp ?? '').trim(),
+        duvod: (r.DUVOD_PRERUSENI_UKONCENI ?? r.duvod_preruseni_ukonceni ?? '').trim(),
+        termin_obnoveni: toIsoFromCz(r.TERMIN_OBNOVENI ?? r.termin_obnoveni),
+        posledni_platne: (r.POSLEDNI_PLATNE_HLASENI ?? r.posledni_platne_hlaseni ?? '').trim(),
+      };
+    })
     .filter(r => r.kod_sukl);
 }
 
@@ -93,7 +113,11 @@ export function parseMrCsv(csvText) {
  *
  * Pravidla:
  *   - "Aktivní výpadek" = poslední platné hlášení pro KOD_SUKL je P (přerušení)
- *     nebo K (ukončení), a (a) TERMIN_OBNOVENI je prázdný nebo (b) > now.
+ *     a (a) TERMIN_OBNOVENI je prázdný nebo (b) > now.
+ *   - K (ukončení) se NEpočítá jako aktivní výpadek: jde o trvalé stažení
+ *     z trhu, které se ve feedu kumuluje od 2007 (12 000+ LP) — započtení by
+ *     metriku nafouklo o přípravky, které dávno nejsou „ve výpadku", ale
+ *     prostě se přestaly dodávat. Drží se zvlášť v discontinued_total.
  *   - Deduplikace: pokud má LP více řádků, bere se ten s nejvyšším DATUM_HLASENI
  *     (ISO datum yyyy-mm-dd se string-řazením srovná správně).
  *
@@ -126,11 +150,13 @@ export function aggregateMr(rows, now = new Date()) {
 
   let active = 0;
   let activeWithSubstitute = 0;
+  let discontinuedTotal = 0;
   const atcCounter = new Map();
   const sample = [];
 
   for (const r of latest.values()) {
-    if (r.typ === 'P' || r.typ === 'K') {
+    if (r.typ === 'K') discontinuedTotal++;
+    if (r.typ === 'P') {
       const stillActive = !r.termin_obnoveni || r.termin_obnoveni > isoNow;
       if (stillActive) {
         active++;
@@ -159,7 +185,7 @@ export function aggregateMr(rows, now = new Date()) {
   let res30 = 0;
   for (const r of rows) {
     if (!r.datum_hlaseni || r.datum_hlaseni < iso30dAgo) continue;
-    if (r.typ === 'P' || r.typ === 'K') new30++;
+    if (r.typ === 'P') new30++;
     else if (r.typ === 'O') res30++;
   }
 
@@ -171,6 +197,7 @@ export function aggregateMr(rows, now = new Date()) {
 
   return {
     total_unique_lp: totalUnique,
+    discontinued_total: discontinuedTotal,
     active_disruptions: active,
     active_share_pct: totalUnique > 0 ? +(active / totalUnique * 100).toFixed(2) : 0,
     new_disruptions_30d: new30,
@@ -186,6 +213,35 @@ function toIsoDate(d) {
 }
 
 /**
+ * Rekonstruuje historický trend aktivních přerušení z kumulativního feedu:
+ * pro 31. 12. každého roku přehraje hlášení do toho dne a spočítá aktivní P.
+ * (Feed je kumulativní od 2007, takže jde o věrnou rekonstrukci, ne odhad.)
+ *
+ * @param {Array} rows      výstup parseMrCsv
+ * @param {number} fromYear první rok trendu
+ * @param {number} toYear   poslední UZAVŘENÝ rok trendu
+ * @returns {Array<{year:number, value:number}>}
+ */
+export function yearEndTrend(rows, fromYear, toYear) {
+  const trend = [];
+  for (let y = fromYear; y <= toYear; y++) {
+    const ref = `${y}-12-31`;
+    const latest = new Map();
+    for (const r of rows) {
+      if (!r.datum_hlaseni || r.datum_hlaseni > ref) continue;
+      const prev = latest.get(r.kod_sukl);
+      if (!prev || r.datum_hlaseni > prev.datum_hlaseni) latest.set(r.kod_sukl, r);
+    }
+    let active = 0;
+    for (const r of latest.values()) {
+      if (r.typ === 'P' && (!r.termin_obnoveni || r.termin_obnoveni > ref)) active++;
+    }
+    trend.push({ year: y, value: active });
+  }
+  return trend;
+}
+
+/**
  * Hlavní vstupní bod fetcheru.
  *
  * @param {{ force?: boolean, fetchImpl?: typeof fetch, endpoint?: string }} [opts]
@@ -197,28 +253,22 @@ export async function fetchSuklMr(opts = {}) {
   let fromCache = raw != null;
 
   if (!raw) {
-    // SÚKL distribuuje feed jako ZIP, ale pro robustnost nejprve zkusíme přímou
-    // CSV variantu (kterou poskytuje pro některá svá data). Pokud selže, fall
-    // back na ZIP — extrakce zatím není implementována, viz issue v sukl.js
-    // pro obecnou ZIP infrastrukturu.
-    const candidates = endpoint ? [endpoint] : [
-      'https://opendata.sukl.cz/soubory/MR/mr.csv',
-    ];
-    let lastErr;
-    for (const url of candidates) {
-      try {
-        console.log(`  [sukl-mr] trying ${url}`);
+    // SÚKL distribuuje feed jako denně aktualizovaný ZIP (mr.zip) — extrakce
+    // přes sdílený unzipEntry (viz sukl.js).
+    const url = endpoint ?? 'https://opendata.sukl.cz/soubory/MR/mr.zip';
+    try {
+      console.log(`  [sukl-mr] stahuji ${url}`);
+      if (url.endsWith('.zip')) {
+        const buf = await fetchWithRetry(url, { fetchImpl, parse: 'buffer' });
+        raw = unzipEntry(buf, /mr_hlaseni\.csv$/i);
+      } else {
         raw = await fetchWithRetry(url, { fetchImpl, parse: 'text' });
-        writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), csv: raw });
-        break;
-      } catch (err) {
-        lastErr = err;
-        console.warn(`  [sukl-mr] ${url} failed: ${err.message}`);
       }
-    }
-    if (!raw) {
+      writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), csv: raw });
+    } catch (err) {
+      console.warn(`  [sukl-mr] ${url} failed: ${err.message}`);
       console.warn(`  [sukl-mr] all endpoints failed; agregát se nezmění`);
-      return { fromCache: false, aggregated: null, error: lastErr?.message };
+      return { fromCache: false, aggregated: null, error: err.message };
     }
   } else {
     console.log('  [sukl-mr] using fresh cache');
@@ -227,6 +277,8 @@ export async function fetchSuklMr(opts = {}) {
 
   const rows = parseMrCsv(raw);
   const aggregated = aggregateMr(rows);
+  const nowYear = new Date().getFullYear();
+  aggregated.trend = yearEndTrend(rows, nowYear - 7, nowYear - 1);
   writeCache(AGG_CACHE, {
     generated_at: new Date().toISOString(),
     source: 'https://opendata.sukl.cz/?q=katalog/hlaseni-o-uvedeni-preruseni-ukonceni-obnoveni-dodavek-leciveho-pripravku-na-trh',

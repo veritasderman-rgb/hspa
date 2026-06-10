@@ -21,6 +21,7 @@
 // nezavedli další npm dependency (csv-parse máme, ale zip ne). Pokud
 // SÚKL formát změní (například přejde na JSON), stačí upravit parseLekarnyCsv.
 
+import zlib from 'node:zlib';
 import { CONFIG } from '../config.js';
 import { fetchWithRetry } from '../lib/http.js';
 import { readCacheIfFresh, writeCache } from '../lib/cache.js';
@@ -174,22 +175,22 @@ export async function fetchSukl(opts = {}) {
   let fromCache = raw != null;
 
   if (!raw) {
-    const candidates = endpoint ? [endpoint] : buildCandidateUrls();
     let lastErr;
-    for (const url of candidates) {
-      try {
-        console.log(`  [sukl] trying ${url}`);
-        // Pozn.: ZIP se v této verzi neumí extrahovat bez další lib;
-        // proto zkoušíme čistý CSV endpoint (datové rozhraní), pokud
-        // SÚKL takový poskytne. Pro produkční ingest doporučujeme
-        // přidat `unzipper` či nativní extrakci.
+    try {
+      // 1) zjisti aktuální URL ZIPu z katalogové stránky (SÚKL soubor měsíčně
+      //    přesouvá: /soubory/SOD{YYYYMMDD}/LEKARNY{YYYYMMDD}.zip — nehádat datum)
+      const url = endpoint ?? await discoverLekarnyUrl(fetchImpl);
+      console.log(`  [sukl] stahuji ${url}`);
+      if (url.endsWith('.zip')) {
+        const buf = await fetchWithRetry(url, { fetchImpl, parse: 'buffer' });
+        raw = unzipEntry(buf, /lekarny_seznam\.csv$/i);
+      } else {
         raw = await fetchWithRetry(url, { fetchImpl, parse: 'text' });
-        writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), csv: raw });
-        break;
-      } catch (err) {
-        lastErr = err;
-        console.warn(`  [sukl] ${url} failed: ${err.message}`);
       }
+      writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), csv: raw });
+    } catch (err) {
+      lastErr = err;
+      console.warn(`  [sukl] fetch failed: ${err.message}`);
     }
     if (!raw) {
       console.warn(`  [sukl] all endpoints failed; agregát se nezmění`);
@@ -212,20 +213,67 @@ export async function fetchSukl(opts = {}) {
   return { fromCache, aggregated };
 }
 
-/** Sestaví seznam pravděpodobných URL (aktuální + 2 předchozí měsíce). */
-function buildCandidateUrls() {
-  const urls = [];
-  const now = new Date();
-  for (let monthsBack = 0; monthsBack < 3; monthsBack++) {
-    const d = new Date(now.getFullYear(), now.getMonth() - monthsBack, 1);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    // SÚKL používá různé dny v měsíci; zkusíme typické (01, 15, 27).
-    for (const dd of ['01', '15', '27']) {
-      urls.push(`https://opendata.sukl.cz/soubory/LEKARNY${yyyy}${mm}${dd}.csv`);
+const CATALOG_URL = 'https://opendata.sukl.cz/?q=katalog/seznam-lekaren';
+
+/**
+ * Zjistí aktuální URL ZIPu se seznamem lékáren z katalogové stránky SÚKL.
+ * (URL obsahuje datum publikace, např. /soubory/SOD20260527/LEKARNY20260527.zip,
+ * takže ho nelze spolehlivě odvodit — čte se přímo odkaz z HTML.)
+ */
+export async function discoverLekarnyUrl(fetchImpl) {
+  const html = await fetchWithRetry(CATALOG_URL, { fetchImpl, parse: 'text' });
+  const m = html.match(/href="(https?:\/\/opendata\.sukl\.cz\/soubory\/[^"]*LEKARNY[^"]*\.(?:zip|csv))"/i);
+  if (!m) throw new Error(`SÚKL katalog: odkaz na LEKARNY soubor nenalezen (${CATALOG_URL})`);
+  return m[1];
+}
+
+/**
+ * Minimalistická extrakce jednoho souboru ze ZIP archivu (bez další závislosti).
+ * Projde local file headers (PK\x03\x04), najde entry dle regexu a rozbalí
+ * (deflate / store). SÚKL CSV je ve Windows-1250 → dekóduje TextDecoderem.
+ *
+ * @param {Buffer} buf       celý ZIP
+ * @param {RegExp} nameRe    který entry rozbalit (např. /lekarny_seznam\.csv$/i)
+ * @returns {string} obsah souboru jako text
+ */
+export function unzipEntry(buf, nameRe) {
+  let off = 0;
+  while (off + 30 <= buf.length) {
+    if (buf.readUInt32LE(off) !== 0x04034b50) break; // konec local headers
+    const method = buf.readUInt16LE(off + 8);
+    const flags = buf.readUInt16LE(off + 6);
+    let compSize = buf.readUInt32LE(off + 18);
+    const nameLen = buf.readUInt16LE(off + 26);
+    const extraLen = buf.readUInt16LE(off + 28);
+    const name = buf.toString('utf8', off + 30, off + 30 + nameLen);
+    let dataStart = off + 30 + nameLen + extraLen;
+
+    // data descriptor (bit 3): velikosti jsou až ZA daty — dohledej z central directory
+    if (flags & 0x8 && compSize === 0) {
+      compSize = readSizeFromCentralDirectory(buf, name);
     }
+    if (nameRe.test(name)) {
+      const data = buf.subarray(dataStart, dataStart + compSize);
+      const out = method === 8 ? zlib.inflateRawSync(data) : data;
+      return new TextDecoder('windows-1250').decode(out);
+    }
+    off = dataStart + compSize;
   }
-  return urls;
+  throw new Error(`ZIP: entry ${nameRe} nenalezen`);
+}
+
+function readSizeFromCentralDirectory(buf, entryName) {
+  // central directory header signature PK\x01\x02
+  let off = buf.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02]));
+  while (off >= 0 && off + 46 <= buf.length) {
+    const nameLen = buf.readUInt16LE(off + 28);
+    const extraLen = buf.readUInt16LE(off + 30);
+    const commentLen = buf.readUInt16LE(off + 32);
+    const name = buf.toString('utf8', off + 46, off + 46 + nameLen);
+    if (name === entryName) return buf.readUInt32LE(off + 20);
+    off = buf.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02]), off + 46 + nameLen + extraLen + commentLen);
+  }
+  throw new Error(`ZIP: central directory záznam pro ${entryName} nenalezen`);
 }
 
 // Střední stav obyvatel po krajích, ČSÚ 2024 (Demografická ročenka).

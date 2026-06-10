@@ -67,12 +67,13 @@ test('vypadky_leciv_aktivni: existuje v indicators.json se správnými atributy'
   assert.equal(ind.domain, 'Dostupnost');
   assert.equal(ind.direction, 'lower_is_better');
   assert.ok(Array.isArray(ind.trend) && ind.trend.length >= 5,
-    'trend musí pokrývat alespoň 5 let pro odhad strukturálního růstu');
-  // Růstový trend — porovnej první a poslední hodnotu
-  const first = ind.trend[0].value;
+    'trend musí pokrývat alespoň 5 let (rekonstrukce z kumulativního SÚKL feedu)');
+  // Trend je rekonstruovaný přehráním feedu k 31.12. — hodnoty jsou kladné
+  // a poslední roky ukazují růst proti covidovému minimu 2020–2021.
+  assert.ok(ind.trend.every(t => t.value > 0), 'všechny roky trendu mají kladný počet');
   const last = ind.trend[ind.trend.length - 1].value;
-  assert.ok(last > first * 2,
-    'seed trend by měl reflektovat min. 2× nárůst výpadků 2019→2026');
+  const min = Math.min(...ind.trend.map(t => t.value));
+  assert.ok(last > min, 'poslední rok je nad minimem řady (růst od 2021)');
 });
 
 test('vypadky_leciv_aktivni: má metodickou kartu s dokumentem o §33b a SÚKL feed', () => {

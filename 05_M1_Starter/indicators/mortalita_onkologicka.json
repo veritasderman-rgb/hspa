@@ -9,18 +9,20 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "nrc",
-      "note": "Národní onkologický registr (NOR), ÚZIS."
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_cd_asdr2",
+      "note": "Eurostat — standardizovaná míra úmrtnosti (ESP 2013), zhoubné novotvary C00–C97 (icd10=C), na 100 000 obyvatel. Primární data ČSÚ (List o prohlídce zemřelého) předávaná Eurostatu."
     },
     "fallback": {
-      "type": "eurostat",
-      "code": "hlth_cd_asdr2"
+      "type": "nrc",
+      "note": "Národní onkologický registr (NOR), ÚZIS — národní detail (incidence, stadia, přežití)."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "CANC_MORT",
-    "dataset": "HEALTH_STAT"
+    "type": "eurostat",
+    "dataset": "hlth_cd_asdr2",
+    "code": "EU27_2020",
+    "note": "EU27 standardizovaná míra ze stejného datasetu (2023: 233,1)."
   },
   "signal_thresholds": {
     "good": 3,
@@ -32,9 +34,11 @@
     "ÚZIS",
     "MZ ČR"
   ],
-  "method_notes": "Primárně z NOR doplněno certifikáty o příčinách úmrtí ČSÚ.",
-  "limitations": "Latence 2–3 roky pro konečná data. Zahrnuje i novotvary in situ u některých registrací.",
-  "patient_story": "Oddělení onkologie krajské nemocnice, ranní vizita, 64letá pacientka po pokročilém karcinomu plic, paliativní vrstva péče. Pacientka byla diagnostikována ve stadiu IIIB — pozdě. Pětileté přežití u stadia IIIB je cca 30 %, u stadia I 70 %. Mezera mezi nimi je z velké části o tom, kdy se diagnóza udělá — což je problém českého screeningu a prevence.\n\nStandardizovaná onkologická mortalita v ČR je 180 na 100 000 obyvatel (ÚZIS, 2024). OECD průměr 163, EU 165 — Česko signal bad. Trend pomalu klesá (2010: 200; 2024: 180), tempo nedostatečné vzhledem k dynamice ostatních OECD zemí. Nejčastější příčiny: plíce (cca 5 500 úmrtí/rok), kolorektum (3 500), prsní žláza (1 600), prostata (1 400), slinivka (2 200).\n\nStrukturálně český systém má rozvinutou síť onkologických center (KOC — Komplexní onkologická centra, 13 v ČR), kvalitní diagnostiku a chirurgii, dostupnost moderních léčiv (s časovým posunem oproti DE/FR). Mezery jsou: (1) screeningové účasti (viz indikátory screening_*), (2) primární prevence (kouření, alkohol, obezita), (3) onkologické vědomí a včasné vyhledání péče, (4) regionální dostupnost rehabilitace a paliativní péče.\n\nOnkologická mortalita je druhá nejčastější příčina úmrtí v ČR (po KV). Politické páky: dokončení screeningových programů (cíl 65–75 % účast), Národní onkologický program 2025–2035, posílení role onkologického koordinátora (viz clanek-onkologicky-koordinator-2026), rozšíření screenu rakoviny plic (LDCT u 50+ kuřáků, model NLST). Indikátor v HSPA dashboardu sleduje onkologickou mortalitu jako klíčový ukazatel funkčnosti onkologického systému jako celku.",
+  "method_notes": "Standardizovaná míra úmrtnosti na evropskou standardní populaci ESP 2013 (Eurostat hlth_cd_asdr2). POZOR: hodnoty nejsou srovnatelné se staršími řadami standardizovanými na ESP 1976 ani s hrubou mírou — ESP 2013 dává výrazně vyšší čísla (více váhy starším ročníkům). Národní kontext doplňuje NOR (ÚZIS).",
+  "limitations": "Latence 1–2 roky pro konečná data. Standardizace ESP 2013 — nesrovnávat s řadami na jiné standardní populace.",
+  "patient_story": "Oddělení onkologie krajské nemocnice, ranní vizita, 64letá pacientka po pokročilém karcinomu plic, paliativní vrstva péče. Pacientka byla diagnostikována ve stadiu IIIB — pozdě. Mezera v přežití mezi časnými a pozdními stadii je z velké části o tom, kdy se diagnóza udělá — což je problém českého screeningu a prevence.\n\nStandardizovaná onkologická mortalita v ČR je 250,4 na 100 000 obyvatel (Eurostat, ESP 2013, rok 2023). Průměr EU27 je 233,1 — Česko zůstává nad evropským průměrem. Trend ale klesá: 2016: 277,0 → 2019: 272,4 → 2021: 257,0 → 2023: 250,4. Pokles táhne lepší záchyt (screeningové programy), centralizace léčby do komplexních onkologických center i moderní onkologika.\n\nRozdíl ~17 bodů proti EU znamená v populaci ČR řádově tisíce úmrtí ročně navíc. Hlavní rezervy: účast ve screeningových programech (kolorektum, prs, děložní hrdlo, nově plíce), časná diagnostika a rovnost v přístupu k péči mezi kraji.\n\nIndikátor v HSPA dashboardu sleduje onkologickou mortalitu jako klíčový výsledkový ukazatel; doplňují ho indikátory přežití (prezit_karcinom_prsu_5let) a screeningové účasti.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-06-10"
 }
