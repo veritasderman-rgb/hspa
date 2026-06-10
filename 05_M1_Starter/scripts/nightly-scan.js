@@ -41,6 +41,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
+const INDICATORS_JSON = resolve(ROOT, 'data/indicators.json');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
 const REPORTS_DIR = resolve(ROOT, 'reports');
 
@@ -73,6 +74,85 @@ function todayUtc() {
 
 function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
+}
+
+let _indicatorsCache = null;
+function loadIndicatorsById() {
+  if (_indicatorsCache) return _indicatorsCache;
+  const list = JSON.parse(readFileSync(INDICATORS_JSON, 'utf8')).indicators ?? [];
+  _indicatorsCache = new Map(list.map(i => [i.id, i]));
+  return _indicatorsCache;
+}
+
+/**
+ * Varianty zápisu hodnoty indikátoru, jak se může objevit v textu článku:
+ * desetinná čárka, zaokrouhlení (2 des. → 1 des. → celé číslo), mezera
+ * jako oddělovač tisíců. Např. 4564.4 → ['4564,4', '4 564,4', '4564', '4 564'].
+ */
+export function valueVariants(value) {
+  if (value == null || !Number.isFinite(Number(value))) return [];
+  const v = Number(value);
+  const out = new Set();
+  for (const d of [2, 1, 0]) {
+    const fixed = v.toFixed(d).replace('.', ',').replace(/,?0+$/, m => m.includes(',') ? '' : m);
+    const plain = v.toFixed(d).replace('.', ',');
+    for (const s0 of [fixed, plain]) {
+      if (!s0) continue;
+      out.add(s0);
+      // tisícový oddělovač (mezera i nezlomitelná mezera)
+      const [int, dec] = s0.split(',');
+      if (int.length > 3) {
+        const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        out.add(dec ? `${grouped},${dec}` : grouped);
+        out.add((dec ? `${grouped},${dec}` : grouped).replace(/ /g, '\u00a0'));
+      }
+    }
+  }
+  return [...out];
+}
+
+/**
+ * Drift-check: pro každý odkaz indicator.html?id=X v článku zkontroluje,
+ * zda se v okolním textu (±220 znaků) vyskytuje AKTUÁLNÍ hodnota indikátoru.
+ * Flaguje jen případy, kdy okno obsahuje číslo (citaci), ale žádná varianta
+ * aktuální hodnoty nesedí — tj. pravděpodobně citace zastaralé hodnoty.
+ */
+export function findIndicatorDrift(htmlRaw, indicatorsById) {
+  // Odstraň bloky, kde čísla nejsou citace hodnot indikátoru, ale popisky/roky
+  // u cross-link karet: „Příbuzné sekce" (article-related) a „Primární zdroje"
+  // (article-sources). Drift se má hlásit jen z těla článku.
+  const html = htmlRaw
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-related[^"]*"[\s\S]*?<\/\1>/gi, '')
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '');
+  const drifts = [];
+  const re = /indicator\.html\?id=([a-z0-9_]+)/g;
+  const seen = new Set();
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const id = m[1];
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const ind = indicatorsById.get(id);
+    if (!ind || ind.value == null) continue;
+    const start = Math.max(0, m.index - 60);
+    const window = stripTags(html.slice(start, m.index + 220 + id.length));
+    // citace čísla v okně? (číslo s desetinnou čárkou, nebo ≥2 cifry vedle sebe)
+    if (!/\d+,\d+|\d{2,}/.test(window)) continue;
+    const variants = valueVariants(ind.value);
+    // Boundary matching: varianta nesmí být podřetězcem jiného čísla
+    // (jednociferné „2" by jinak matchlo uvnitř roku „2026" → falešná shoda).
+    const matchesVariant = variants.some(v => {
+      const escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`(?<![\\d,.])${escaped}(?![\\d,.])`).test(window);
+    });
+    if (matchesVariant) continue;
+    drifts.push({
+      id,
+      current: `${ind.value} ${ind.unit ?? ''} (${ind.year ?? '?'})`.trim(),
+      context: window.replace(/\s+/g, ' ').trim().slice(0, 180),
+    });
+  }
+  return drifts;
 }
 
 // Odstraní HTML tagy a vrátí čistý text (pro extrakci vět a dat).
@@ -217,6 +297,16 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
         context: p.context });
     }
 
+    // 6b) indicator-drift — citovaná čísla u odkazů na indikátory vs. aktuální
+    //     hodnota datového kontraktu (zachytí články, které po verifikaci
+    //     indikátoru zůstaly se starou hodnotou).
+    const drifts = findIndicatorDrift(html, loadIndicatorsById());
+    for (const d of drifts) {
+      flags.push({ type: 'indicator-drift', severity: 'review', indicator: d.id,
+        note: `Okolí odkazu na indikátor ${d.id} cituje číslo, které neodpovídá aktuální hodnotě ${d.current} — ověř a aktualizuj citaci.`,
+        context: d.context });
+    }
+
     const links = findExternalLinks(html);
     if (links.length) {
       item.ext_links = links;
@@ -260,6 +350,7 @@ function buildReport(items, today) {
     'topical-expired': 'Revize: aktualizovat na „po události“',
     'date-passed': 'Revize: ověřit budoucí vs. minulý čas u data',
     'check-sources': 'Revize: zkontrolovat zdrojové odkazy (WebFetch)',
+    'indicator-drift': 'Revize: citace neodpovídá aktuální hodnotě indikátoru',
     'year-past': 'Nízká: ověřit zmínku roku',
     'stale-date': 'Nízká: zvážit revizi starého článku',
     'no-html': 'Revize: chybí HTML soubor',

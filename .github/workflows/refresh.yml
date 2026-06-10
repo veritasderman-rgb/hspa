@@ -49,6 +49,9 @@ jobs:
           set -o pipefail
           npm run ingest 2>&1 | tee /tmp/ingest.log
 
+      - name: Generate RSS feed
+        run: npm run generate:feed
+
       - name: Validate data contract
         id: validate
         run: |
@@ -96,7 +99,7 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 05_M1_Starter/data/
+          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0

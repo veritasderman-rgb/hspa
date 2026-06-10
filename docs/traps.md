@@ -266,3 +266,48 @@ Pravděpodobně:
 3. Nepodporovaný ES2024 feature v starším Node runtime (Vercel default je Node 20)
 
 Otevři `https://vercel.com/{team}/{project}` → Deployments → konkrétní build → Runtime Logs.
+
+---
+
+## Ingest / fetcher traps (doplněno 2026-06-10)
+
+### Unit testy fetcherů přepisují reálnou ingest/cache
+
+**Trap**: Testy `fetchSukl*` (a obecně fetcherů volajících `writeCache`) zapisují
+do skutečné `ingest/cache/` — po `npm test` jsou agregáty (např.
+`sukl_mr_aggregated.json`) přepsané miniaturními testovacími daty. Pokud po
+testech spustíš transform nebo cílený zápis do `data/indicators.json` z cache,
+zapíšeš testovací hodnoty (stalo se: `vypadky_leciv_aktivni` → 1).
+
+**Řešení**: Po `npm test` VŽDY znovu spusť živé fetchery před jakýmkoli čtením
+cache; hodnoty do datového kontraktu zapisuj jen z čerstvě fetchnuté cache.
+(Dlouhodobý fix: testy přesměrovat do temp dir — zatím neimplementováno.)
+
+### data.gov.cz CKAN API je mrtvé (404)
+
+**Trap**: `nrhzs_providers.js` a postupy stavěné na
+`data.gov.cz/api/3/action/package_search` dostanou 404 — národní katalog přešel
+na NKOD2 (funguje jen SPARQL endpoint `data.gov.cz/sparql`). Stejně tak
+`data.mzcr.cz/api/3/...` neexistuje.
+
+**Řešení**: Nové ÚZIS/NKOD integrace stavět na SPARQL dotazech do NKOD2; datové
+sady NRHZS jsou 7z archivy (potřeba dekomprese, `unzipEntry` v `sukl.js` umí jen ZIP).
+
+### OECD sdmx.oecd.org: HTTP 500 na velké odpovědi přes HTTP/1.1
+
+**Trap**: Velké dataflows (PYLL, SURG_PROC, SHA…) vrací přes node fetch/undici
+HTTP 500; přes HTTP/2 (curl) fungují. Malé datasety projdou — záludné při
+testování „funguje mi to".
+
+**Řešení**: `oecd_sdmx2.js` má fallback `fetchHttp2` (lib/http.js) — při 5xx
+automaticky přepne transport. U obřích datasetů (DSD_SHA) navíc použij
+`key`-path filtr v mappingu, ne `/all`.
+
+### SÚKL přesouvá soubory do datovaných adresářů
+
+**Trap**: URL typu `/soubory/LEKARNY{datum}.csv` neexistují — aktuální seznam
+lékáren je `/soubory/SOD{YYYYMMDD}/LEKARNY{YYYYMMDD}.zip` a datum nelze odvodit.
+
+**Řešení**: `discoverLekarnyUrl()` čte odkaz z katalogové stránky. Pro nové SÚKL
+datové sady vždy discovery z katalogu, nikdy hádání URL. (MR feed `mr.zip` je
+výjimka — stabilní cesta.)

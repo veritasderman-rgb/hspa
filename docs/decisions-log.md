@@ -6,6 +6,31 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-06-10 — Korekce katarakty: 35,8 % → 98,7 % (signal flip bad→good)
+
+- **PR**: #566
+- **Co**: Indikátor `jednodenni_chirurgie_katarakta` a publikovaný článek tvrdily, že ČR provádí ambulantně jen 35,8 % kataraktových operací. Ověření primárního OECD dataflow `DSD_HEALTH_PROC@DF_SURG_PROC` ukázalo opak: **98,7 %** výkonů bez přenocování (2022; 143 173 výkonů, jen 1 841 s hospitalizací), OECD ⌀ 94,5 %.
+- **Proč**: Stará řada počítala jen nemocniční day cases a míjela ambulantní oční centra, kde se v ČR provádí většina kataraktové chirurgie.
+- **Důsledek**: **NEVRACET** hodnoty ~35 % ani narativ „Česko zaostává v ambulantní kataraktě" — je vyvrácený primárními daty. Článek je přepsán jako korekční analýza; otevřená otázka zní „proč se ambulantní model neprosadil u dalších výkonů".
+
+---
+
+## 2026-06-10 — OECD benchmark jen z členských zemí
+
+- **PR**: #566
+- **Co**: `oecd_sdmx2.js` počítá „OECD průměr" výhradně z 38 členských zemí (konstanta `OECD_MEMBERS`); dataflows obsahují i partnerské země (BGR, ROU, HRV, PER…), které průměr zkreslovaly.
+- **Důsledek**: Nový OECD benchmark vždy přes tento fetcher (members-only). Nepřidávat benchmarky počítané ze všech REF_AREA.
+
+---
+
+## 2026-06-10 — Výpadky léčiv: aktivní = jen přerušení (P), ne ukončení (K)
+
+- **PR**: #566
+- **Co**: `vypadky_leciv_aktivni` počítá jen aktivní **přerušení** dodávek (1 378 k 10. 6. 2026). Trvalá **ukončení** (K) se od 2007 kumulují (12 700+ LP) a nejsou „výpadek", ale stažení z trhu — drží se zvlášť (`discontinued_total`). Historický trend se rekonstruuje přehráním kumulativního feedu k 31. 12. (`yearEndTrend`).
+- **Důsledek**: Nezahrnovat K do aktivních výpadků (nafouklo by metriku o řád). Seed hodnota 2 210 byla neověřitelná — nevracet.
+
+---
+
 ## 2026-05-27 — Plán Kvalita péče (PUK + INDIKO)
 
 - **PR**: #418 (`docs(plan): plán implementace „Kvalita péče"`)
