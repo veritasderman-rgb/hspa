@@ -117,7 +117,13 @@ export function valueVariants(value) {
  * Flaguje jen případy, kdy okno obsahuje číslo (citaci), ale žádná varianta
  * aktuální hodnoty nesedí — tj. pravděpodobně citace zastaralé hodnoty.
  */
-export function findIndicatorDrift(html, indicatorsById) {
+export function findIndicatorDrift(htmlRaw, indicatorsById) {
+  // Odstraň bloky, kde čísla nejsou citace hodnot indikátoru, ale popisky/roky
+  // u cross-link karet: „Příbuzné sekce" (article-related) a „Primární zdroje"
+  // (article-sources). Drift se má hlásit jen z těla článku.
+  const html = htmlRaw
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-related[^"]*"[\s\S]*?<\/\1>/gi, '')
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '');
   const drifts = [];
   const re = /indicator\.html\?id=([a-z0-9_]+)/g;
   const seen = new Set();

@@ -56,7 +56,28 @@ po Dávce A (Eurostat): origin seed 93 | live 36   ·  illustrative 85 | prelimi
 po Dávce B (Eurostat): origin seed 89 | live 40   ·  illustrative 81 | preliminary 7 | verified 41
 po integritní opravě:  origin seed 88 | live 41   ·  illustrative 81 | preliminary 7 | verified 41
 po Dávce C (OECD):     origin seed 87 | live 42   ·  illustrative 80 | preliminary 7 | verified 42
+po Dávce D (OECD SDMX2): origin seed 84 | live 46  ·  illustrative ~74 | verified ~52
+po Dávce E (SÚKL+Eurostat): origin seed 81 | live 49 · illustrative ~72 | verified ~58
 ```
+
+**Dávky D–E (2026-06-10, session „tender-edison"):**
+- ✅ **Dávka D — OECD SDMX 2.0 (+5 verified, 1 origin fix):** `pyll_potencialne_ztracene_roky`
+  (4564,4 / <75), `pracovnici_ltc_per_100_65plus` (2,1; OECD ⌀ 5,7), `vydaje_prevence_pct`
+  (2,74 %; OECD ⌀ 3,2), `prezit_karcinom_prsu_5let` (81,4 %; CONCORD-3), a **korekce**
+  `jednodenni_chirurgie_katarakta` (35,8 % → 98,7 %, signal bad→good — stará metrika
+  nezachycovala ambulantní oční centra; článek přepsán). `absolventi_lekarstvi` seed→live.
+  Fetcher rozšířen: key-path filtr, součtové dimenze, HTTP/2 fallback, benchmark jen z členů OECD.
+- ✅ **Dávka E — SÚKL + Eurostat (+3 verified):** `lekarny_per_100k` (24,97; ZIP discovery +
+  nativní unzip), `vypadky_leciv_aktivni` (1 378 aktivních přerušení + historický trend
+  z přehrání kumulativního feedu), `mortalita_onkologicka` (Eurostat hlth_cd_asdr2, 250,4 / 100k
+  ESP 2013; seed 180 byl neověřitelný).
+
+**Otevřený drift k revizi (NEsladěno — riziko):** screeningové citace v
+`clanek-centrum-onkologicke-prevence-mou-2026.html` (mamograf 60 %, cervix 52,3 %,
+kolorektál 28 %) neodpovídají aktuálním verified indikátorům (54,5 / 65,7 / 31,1 %).
+Rozdíl u cervixu je velký → pravděpodobně jiná kohorta/záběr, ne prostá zastaralost.
+Vyžaduje ověření definice screening_* indikátorů proti ÚZIS NSC před sladěním článku.
+Zachyceno nočním skenerem (`indicator-drift`).
 
 > Integritní oprava (2026-06-01): `rezistence_antibiotik_ecoli` měl `verified`,
 > ale `origin: seed`. Živý ECDC Atlas fetch (ESCCOL.FLUOROQUINOLONES) potvrdil
