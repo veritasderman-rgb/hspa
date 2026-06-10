@@ -164,6 +164,21 @@ export function extractFromSukl(id) {
 }
 
 /**
+ * NZIP / ÚZIS otevřená data — z nzip_<id>.json (fetcher nzip_opendata.js).
+ * Vrací CZ sérii vypočtenou streamovou agregací CSV z data.mzcr.cz.
+ */
+export function extractFromNzip(id) {
+  const cache = readCacheFile(`nzip_${id}.json`);
+  if (cache?.cz?.value == null) return null;
+  return {
+    value: cache.cz.value,
+    year: cache.cz.year,
+    trend: cache.trend ?? [],
+    source: cache.source ?? null,
+  };
+}
+
+/**
  * Pro indikátor z Eurostatu vezme CZ sérii z eurostat_<id>.json (M4).
  */
 export function extractFromEurostat(id) {
@@ -663,6 +678,7 @@ const SOURCE_TYPE_TO_LABEL = {
   eea: { name: 'EEA', url: 'https://www.eea.europa.eu/' },
   ecdc_atlas: { name: 'ECDC Surveillance Atlas / EARS-Net', url: 'https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4' },
   sukl_opendata: { name: 'SÚKL · Open data', url: 'https://opendata.sukl.cz/' },
+  nzip_opendata: { name: 'ÚZIS · NZIS (otevřená data NZIP)', url: 'https://www.nzip.cz/modul/datove-zpravodajstvi' },
 };
 
 /**
@@ -702,6 +718,8 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     extracted = extractFromEcdcAtlas(card.id);
   } else if (primaryType === 'sukl_opendata') {
     extracted = extractFromSukl(card.id);
+  } else if (primaryType === 'nzip_opendata') {
+    extracted = extractFromNzip(card.id);
   }
 
   // Fallback na OECD pokud máme jen benchmark (např. nrc_nrhosp s OECD proxy)
@@ -741,6 +759,7 @@ export function buildIndicator(card, { seed, oecdSummary, eurostatSummary } = {}
     sukl_opendata: card.id === 'lekarny_per_100k'
       ? 'sukl_lekarny_aggregated.json'
       : card.id === 'vypadky_leciv_aktivni' ? 'sukl_mr_aggregated.json' : null,
+    nzip_opendata: `nzip_${card.id}.json`,
     uzis_nrhzs_screening: card?.data_source?.primary?.dataset
       ? `uzis_${card.data_source.primary.dataset}.json` : null,
   }[actualSourceType];
