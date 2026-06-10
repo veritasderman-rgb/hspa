@@ -48,17 +48,28 @@ export async function runPublish() {
   for (const [articleId, articleRows] of byArticle) {
     const scheduleAt = articleRows.find(r => r.scheduledFor)?.scheduledFor ?? null;
     try {
-      const { sent, skipped } = await publishArticleToBuffer(articleRows, { scheduleAt, site: SITE, profiles });
-      // Na Scheduled posuneme jen řádky, které se reálně do Bufferu dostaly.
+      const { sent, failed: rowFailed, skipped } = await publishArticleToBuffer(articleRows, { scheduleAt, site: SITE, profiles });
+      // Posun stavu PER ŘÁDEK — kanál, který Buffer přijal, nikdy neoznačíme
+      // jako Failed (i když jiný kanál téhož článku selhal).
       const sentNetworks = new Set(sent.map(s => s.network));
+      const errByNetwork = new Map([
+        ...rowFailed.map(f => [f.network, f.error]),
+        ...skipped.map(s => [s.network, `přeskočeno: ${s.reason}`]),
+      ]);
       for (const row of articleRows) {
         if (sentNetworks.has(row.network)) await markScheduled(notion, row.pageId, scheduleAt);
-        else await markFailed(notion, row.pageId, 'Buffer: kanál bez profile_id (přeskočeno)');
+        else await markFailed(notion, row.pageId, errByNetwork.get(row.network) ?? 'Buffer: nepublikováno');
       }
-      scheduled.push(articleId);
-      const skipNote = skipped.length ? ` (přeskočeno: ${skipped.map(s => s.network).join(', ')})` : '';
-      console.log(`  ✓ ${articleId} → Buffer (${sent.length} kanálů)${skipNote}`);
+      if (sent.length) scheduled.push(articleId);
+      if (rowFailed.length) failed.push({ id: articleId, networks: rowFailed.map(f => f.network) });
+      const note = [
+        sent.length ? `${sent.length} ✓` : null,
+        rowFailed.length ? `${rowFailed.length} ✗` : null,
+        skipped.length ? `${skipped.length} přeskočeno` : null,
+      ].filter(Boolean).join(', ');
+      console.log(`  ${articleId} → Buffer (${note})`);
     } catch (err) {
+      // Neočekávaná chyba mimo per-řádek logiku — fail celý článek.
       for (const row of articleRows) await markFailed(notion, row.pageId, err.message);
       failed.push({ id: articleId, error: err.message });
       console.error(`  ✗ ${articleId}: ${err.message}`);
