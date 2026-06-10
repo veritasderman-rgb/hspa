@@ -198,6 +198,7 @@ function renderDetail(ind, card, regionDataset) {
       <span>Zdroj hodnoty: <strong>${escapeHtml(ind.source?.name ?? '?')}</strong></span>
       ${ind.source?.url ? `<a href="${escapeHtml(ind.source.url)}" target="_blank" rel="noopener">primární zdroj ↗</a>` : ''}
       ${ind.source?.fetched_at ? `<span>Aktualizace: ${escapeHtml(ind.source.fetched_at.slice(0,10))}</span>` : ''}
+      ${ind.verified_at ? `<span>Ověřeno proti primárnímu zdroji: ${escapeHtml(ind.verified_at)}</span>` : ''}
       ${ind.source?.origin ? `<span class="origin-tag origin-${escapeHtml(ind.source.origin)}">${escapeHtml(ind.source.origin)}</span>` : ''}
       <a class="feedback-link" href="https://github.com/veritasderman-rgb/hspa/issues/new?title=Chyba+nebo+návrh:+${encodeURIComponent(ind.id)}" target="_blank" rel="noopener">Nahlásit chybu nebo návrh ↗</a>
     </footer>
