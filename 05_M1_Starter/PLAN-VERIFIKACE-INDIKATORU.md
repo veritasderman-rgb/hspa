@@ -58,6 +58,7 @@ po integritní opravě:  origin seed 88 | live 41   ·  illustrative 81 | prelim
 po Dávce C (OECD):     origin seed 87 | live 42   ·  illustrative 80 | preliminary 7 | verified 42
 po Dávce D (OECD SDMX2): origin seed 84 | live 46  ·  illustrative ~74 | verified ~52
 po Dávce E (SÚKL+Eurostat): origin seed 81 | live 49 · illustrative ~72 | verified ~58
+po Dávce F (SÚKL fetcher fix + onko Eurostat): origin seed 83 | live 55 · illustrative 73 | preliminary 8 | verified 57
 ```
 
 **Dávky D–E (2026-06-10, session „tender-edison"):**
@@ -188,12 +189,19 @@ doplnit explicit `verified` do karty (1 indikátor).
 
 3. **Dávka C — ECDC rozšíření** 🟡 částečně
    - ✅ Integritní oprava `rezistence_antibiotik_ecoli` seed→live (viz §2).
-   - ⚠️ HIV/STI: ECDC Atlas má HealthTopic HIV (Id 28), dataset
-     `CURRENT.HIVAIDS.YEARLY` (Id 881), ale `measure_id` pro „nové diagnózy /100k"
-     se nepodařilo zjistit přes GET discovery (`GetIndicatorMeasuresFor…` vrací
-     `Measures: []`, ostatní list-endpointy 404). Web app Atlasu nejspíš volá
-     POST/jiný service — **dohledat přesné volání před přidáním** (nehádat
-     measure_id). Pak stačí přidat řádek do `ecdc_atlas_codes.json` (vzor §5).
+   - ⚠️ HIV/STI: ECDC Atlas má HealthTopic HIV, datasety `CURRENT.HIVAIDS.YEARLY`
+     (Id 881) a `2025.HIVAIDS.YEARLY` (Id 2048) — ověřeno 2026-06-10 přes
+     `GetDatasets` (funguje, BOM → dekóduj `utf-8-sig`). **Measure-discovery přes
+     GET stále 404** (ověřeny: `GetIndicators`, `GetIndicatorsForDataset`,
+     `GetMeasures`, `GetMeasuresForDataset`, `GetIndicatorMeasuresForDataset`,
+     `GetAtlasData` — všechny 404 HTML). Funkční je jen
+     `GetMeasureResultsForTimeUnitAndGeoRegion?measureId=...` (tj. potřebuješ už
+     znát measure_id). **Jediná cesta k measure_id**: otevřít atlas.ecdc.europa.eu
+     v prohlížeči, dataset HIV, v devtools Network zachytit XHR (měření „HIV new
+     diagnoses per 100 000") a z URL/payloadu vyčíst `measureId`. Pak přidat řádek
+     do `ecdc_atlas_codes.json` (vzor §5) a fetcher už funguje. **NEHÁDAT
+     measure_id.** Alternativa bez Atlasu: roční ECDC/WHO HIV surveillance report
+     (PDF) — jen ruční hodnota, ne live.
 
 4. **Dávka D — ÚZIS (~45 indikátorů)** ⚠️ největší, nejnáročnější
    - ÚZIS fetchery (`uzis_nrpzs`, `uzis_nzis`…) jsou pomalé a jejich endpointy
