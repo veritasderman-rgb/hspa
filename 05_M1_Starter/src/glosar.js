@@ -61,7 +61,10 @@ function renderList() {
 function renderAlphaNav() {
   const nav = document.getElementById('glossaryAlphaNav');
   if (!nav) return;
-  const letters = [...new Set(allTerms.map(t => t.key[0].toUpperCase()))].sort();
+  // České řazení: Č za C, Š za S, Ž za Z… — default .sort() (ASCII) háže
+  // diakritiku na konec abecední lišty.
+  const letters = [...new Set(allTerms.map(t => t.key[0].toUpperCase()))]
+    .sort((a, b) => a.localeCompare(b, 'cs'));
   nav.innerHTML = letters.map(l =>
     `<button class="glossary-alpha-btn" data-letter="${escapeHtml(l)}">${escapeHtml(l)}</button>`
   ).join('');

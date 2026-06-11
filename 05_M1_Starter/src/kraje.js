@@ -2,7 +2,8 @@
 // Načte data/regions.json (37 datasetů) + data/cz-regions.geojson (zjednodušené
 // polygony) a vykreslí choropleth s color scale podle vybraného indikátoru.
 //
-// echarts je naloadovaný globálně přes CDN <script> v kraje.html.
+// echarts je naloadovaný globálně přes <script> v kraje.html (self-hosted
+// assets/vendor/echarts.min.js — bez závislosti na externím CDN).
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
@@ -21,7 +22,7 @@ async function init() {
   renderMastheadDate();
 
   // echarts kreslí jen mapu — žebříček, selector a metadata fungují i bez ní.
-  // Při výpadku CDN tedy degradujeme jen mapové okno, ne celou stránku.
+  // Při výpadku knihovny tedy degradujeme jen mapové okno, ne celou stránku.
   const hasEcharts = typeof echarts !== 'undefined';
   if (!hasEcharts) {
     showError('Mapu se nepodařilo vykreslit (knihovna echarts není dostupná). Výběr indikátoru a žebříček krajů níže fungují normálně.');

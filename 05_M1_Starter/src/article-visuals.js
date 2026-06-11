@@ -45,6 +45,16 @@ export function enhanceArticleVisuals(root) {
 // musí být fokusovatelný klávesnicí, aby šel posouvat i bez myši/dotyku
 // (na úzkých viewportech tabulka přetéká). Doplníme tabindex + role/aria.
 function enhanceScrollableTables(scope) {
+  // Tabulky v textu článku bez scroll wrapperu (ex-compare, hly-compare…)
+  // na úzkém viewportu přetékají — obalíme je stejným posuvným kontejnerem,
+  // jaký mají .av-data-table.
+  for (const table of scope.querySelectorAll('.article-body table')) {
+    if (table.closest('.av-data-table-wrap')) continue;
+    const wrap = document.createElement('div');
+    wrap.className = 'av-data-table-wrap';
+    table.parentNode.insertBefore(wrap, table);
+    wrap.appendChild(table);
+  }
   for (const wrap of scope.querySelectorAll('.av-data-table-wrap:not([data-av-scroll])')) {
     wrap.dataset.avScroll = '1';
     if (!wrap.hasAttribute('tabindex')) wrap.setAttribute('tabindex', '0');

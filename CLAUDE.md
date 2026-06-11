@@ -115,7 +115,8 @@ git push -u origin claude/<branch>
 │   ├── site-stats.js           ← Statistika hodnocení článků a pokrytí
 │   ├── analytics.js            ← Plausible loader
 │   ├── schema.js               ← JSON-LD structured data
-│   └── styles.css              ← Veškeré CSS (~9 400 LOC, dark mode, print, a11y)
+│   └── styles.css              ← Veškeré CSS (~9 400 LOC, print, a11y; dark mode zatím není)
+│       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
 │   ├── indicators.json         ← Datový kontrakt HSPA (80 indikátorů)
@@ -191,6 +192,7 @@ Detailní schémata všech `data/*.json` viz [`docs/data-model.md`](../docs/data
 
 ```bash
 npm test                  # Spustí všechny testy (~260)
+npm run build:css         # Minifikace styles.css → styles.min.css (NUTNÉ po každé úpravě CSS — hlídá test)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)

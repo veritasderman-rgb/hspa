@@ -28,6 +28,11 @@ let activeDomain = '';
 let activeFramework = 'all';
 let activeVerifiedOnly = false;
 let activeDimension = 'all';
+// Progressive disclosure gridu: bez aktivního filtru ukazujeme jen prvních
+// N karet + tlačítko „Zobrazit vše" — homepage jinak měří ~19 000 px a
+// 139 karet najednou zhoršuje orientaci i initial render (UX audit §6).
+let gridExpanded = false;
+const GRID_PREVIEW_COUNT = 24;
 const chartInstances = new Map(); // id → Chart instance, kvůli destroy() proti memory leaku
 
 const AREA_DESCRIPTIONS = {
@@ -258,6 +263,20 @@ export function trendArrow(ind) {
     cls = isImprovement ? 'good' : 'bad';
   }
   return { glyph: positive ? '↑' : '↓', cls, pct };
+}
+
+/**
+ * Zobrazení meziroční změny: běžné hodnoty jako procenta, extrémy (>±200 %,
+ * např. epidemie černého kašle +2631 %) jako násobek — „27× více" je čitelné,
+ * „↑ 2631.5 %" vypadá jako chyba v datech.
+ */
+export function formatTrendPct(pct) {
+  const abs = Math.abs(pct);
+  if (abs >= 200) {
+    const factor = pct > 0 ? (pct / 100) + 1 : 1 / (1 + pct / 100);
+    return `${formatNumberCz(factor, { maxDecimals: 0 })}×`;
+  }
+  return `${formatNumberCz(abs, { minDecimals: 1, maxDecimals: 1 })} %`;
 }
 
 // ====== SCORECARD ======
@@ -539,13 +558,25 @@ function renderGrid() {
     liveRegion.className = 'sr-only';
     document.getElementById('content').prepend(liveRegion);
   }
-  liveRegion.textContent = `Zobrazeno ${badge}.`;
-
   writeHash();
   updateScorecard(filtered);
 
+  // Progressive disclosure: bez aktivního filtru jen preview + „Zobrazit vše".
+  // Jakýkoli filtr/hledání = uživatel něco hledá → ukázat všechny shody.
+  const hasActiveFilters = activeArea !== 'all' || activeSearch !== '' || activeDomain !== ''
+    || activeFramework !== 'all' || activeDimension !== 'all' || activeVerifiedOnly
+    || activeSort !== 'default';
+  const showAll = gridExpanded || hasActiveFilters || filtered.length <= GRID_PREVIEW_COUNT;
+  const shown = showAll ? filtered : filtered.slice(0, GRID_PREVIEW_COUNT);
+
+  liveRegion.textContent = showAll
+    ? `Zobrazeno ${badge}.`
+    : `Zobrazeno prvních ${shown.length} z ${filtered.length} indikátorů.`;
+
+  renderGridShowMore(showAll ? 0 : filtered.length - shown.length, filtered.length);
+
   const pendingCharts = [];
-  filtered.forEach((ind) => {
+  shown.forEach((ind) => {
     const card = document.createElement('div');
     card.className = 'indicator-card';
     card.dataset.indicatorId = ind.id;
@@ -560,7 +591,7 @@ function renderGrid() {
     const arrow = trendArrow(ind);
     const arrowHTML = arrow.glyph === '→'
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
-      : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${formatNumberCz(Math.abs(arrow.pct), { minDecimals: 1, maxDecimals: 1 })} %</span>`;
+      : `<span class="trend trend-${arrow.cls}" title="Meziroční změna: ${arrow.pct > 0 ? '+' : '−'}${formatNumberCz(Math.abs(arrow.pct), { minDecimals: 1, maxDecimals: 1 })} %">${arrow.glyph} ${formatTrendPct(arrow.pct)}</span>`;
 
     const verifBadge = verifBadgeHtml(ind);
 
@@ -575,7 +606,7 @@ function renderGrid() {
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
       </div>
       <div class="value-row">
-        <span class="big-value">${formatNumberCz(ind.value)}</span>
+        <span class="big-value av-counter" data-value="${Number(ind.value)}" data-decimals="${countDecimals(ind.value)}" data-duration="900">${formatNumberCz(ind.value)}</span>
         <span class="unit">${ind.unit}</span>
         ${arrowHTML}
         ${ind.year ? `<span class="year-badge">${ind.year}</span>` : ''}
@@ -596,6 +627,77 @@ function renderGrid() {
   });
 
   renderChartsBatch(pendingCharts);
+  enhanceBenchmarkBarFills(grid);
+}
+
+/** Počet desetinných míst hodnoty (pro av-counter animaci), max 3. */
+function countDecimals(v) {
+  const s = String(v);
+  const i = s.indexOf('.');
+  return i === -1 ? 0 : Math.min(3, s.length - i - 1);
+}
+
+/**
+ * Animace plnění benchmark barů (ČR/OECD/EU) při vstupu karty do viewportu —
+ * stagger 90 ms mezi řádky. Porovnání s benchmarkem je jádro sdělení karty,
+ * animace ho zvýrazní (UX audit C1). Reduced-motion: bary zůstávají statické.
+ */
+function enhanceBenchmarkBarFills(scope) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (typeof IntersectionObserver === 'undefined') return;
+  const cards = [...scope.querySelectorAll('.indicator-card:not([data-bm-anim])')]
+    .filter(c => c.querySelector('.bm-fill'));
+  if (!cards.length) return;
+  const io = new IntersectionObserver((entries, obs) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.querySelectorAll('.bm-fill').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 90}ms`;
+        el.style.width = el.dataset.w;
+      });
+      obs.unobserve(e.target);
+    }
+  }, { threshold: 0.3 });
+  for (const card of cards) {
+    card.dataset.bmAnim = '1';
+    card.querySelectorAll('.bm-fill').forEach(el => {
+      el.dataset.w = el.style.width;
+      el.style.width = '0%';
+    });
+    io.observe(card);
+  }
+}
+
+/**
+ * Tlačítko „Zobrazit všech N indikátorů" pod gridem (progressive disclosure).
+ * hiddenCount = 0 → tlačítko se odstraní (vše zobrazeno / aktivní filtr).
+ */
+function renderGridShowMore(hiddenCount, totalCount) {
+  let wrap = document.getElementById('gridShowMoreWrap');
+  if (!hiddenCount) {
+    wrap?.remove();
+    return;
+  }
+  const grid = document.getElementById('indicatorGrid');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.id = 'gridShowMoreWrap';
+    wrap.className = 'grid-show-more-wrap';
+    grid.insertAdjacentElement('afterend', wrap);
+  }
+  wrap.innerHTML = `
+    <button type="button" class="grid-show-more-btn" id="gridShowMoreBtn">
+      Zobrazit všech ${totalCount} indikátorů <span aria-hidden="true">↓</span>
+    </button>
+    <p class="grid-show-more-note">Zobrazeno prvních ${totalCount - hiddenCount} — vyhledávání a filtry prohledávají vždy všechny.</p>
+  `;
+  document.getElementById('gridShowMoreBtn').addEventListener('click', () => {
+    gridExpanded = true;
+    const focusIndex = totalCount - hiddenCount; // první nově přidaná karta
+    renderGrid();
+    const cards = document.querySelectorAll('#indicatorGrid .indicator-card');
+    cards[focusIndex]?.querySelector('[data-detail-link]')?.focus();
+  });
 }
 
 function renderSparkline(ind, chartId) {
@@ -935,13 +1037,25 @@ function renderModalContent(card, indicator) {
 
 // Cross-link cache pro modal
 let _crossLinksCache = null;
+// Single-flight cache: articles.json (246 KB) potřebují tři nezávislé renderery
+// (cross-links, site-stats, home articles) — fetch poletí jen jednou (UX audit §16).
+let _articlesPromise = null;
+function fetchArticlesOnce() {
+  if (!_articlesPromise) {
+    _articlesPromise = fetch('data/articles.json')
+      .then(r => r.ok ? r.json() : { articles: [] })
+      .catch(() => ({ articles: [] }));
+  }
+  return _articlesPromise;
+}
+
 async function loadCrossLinks() {
   if (_crossLinksCache) return _crossLinksCache;
   try {
     const [s, e, a] = await Promise.all([
       fetch('data/strategies.json').then(r => r.ok ? r.json() : { strategies: [] }).catch(() => ({ strategies: [] })),
       fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
-      fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
+      fetchArticlesOnce(),
     ]);
     _crossLinksCache = {
       strategies: s.strategies ?? [],
@@ -1419,7 +1533,7 @@ function wireUp() {
   // Aplikuj site-wide [data-stat] elementy (skóre, počty indikátorů...) ještě
   // před rendererm hero, aby čísla v textu byla okamžitě konzistentní.
   try {
-    const articlesData = await fetch('data/articles.json').then(r => r.ok ? r.json() : null).catch(() => null);
+    const articlesData = await fetchArticlesOnce();
     const stats = getSiteStats({
       indicators: allIndicators,
       articles: articlesData?.articles ?? [],
@@ -1438,7 +1552,59 @@ function wireUp() {
   // se animace navázaly i na elementy přidané JS-em.
   try { enhanceArticleVisuals(); } catch (err) { console.error('av enhance failed:', err); }
   try { enhanceFinanceTileFills(document); } catch (err) { console.error('finance tile fill failed:', err); }
+  try { initHomeSectionNav(); } catch (err) { console.error('section nav failed:', err); }
 })();
+
+/**
+ * Sticky mini-navigace sekcí homepage — objeví se po odscrollování hero
+ * a dává stránce dlouhé ~19 000 px mapu + rychlé skoky (UX audit §6).
+ * Scroll-spy přes IntersectionObserver zvýrazňuje aktuální sekci.
+ */
+function initHomeSectionNav() {
+  const hero = document.getElementById('edHero');
+  const main = document.getElementById('content');
+  if (!hero || !main || document.getElementById('homeSectionNav')) return;
+
+  const sections = [
+    ['homeArticles', 'Články'],
+    ['edDims', 'Dimenze'],
+    ['indicatorsSection', 'Indikátory'],
+    ['regionsSection', 'Kraje'],
+    ['financeSection', 'Finance'],
+  ].filter(([id]) => document.getElementById(id));
+  if (sections.length < 2) return;
+
+  const nav = document.createElement('nav');
+  nav.id = 'homeSectionNav';
+  nav.className = 'home-section-nav';
+  nav.setAttribute('aria-label', 'Sekce stránky');
+  nav.innerHTML = sections
+    .map(([id, label]) => `<a href="#${id}" data-section="${id}">${label}</a>`)
+    .join('');
+  main.parentNode.insertBefore(nav, main);
+
+  // Zobrazit až po opuštění hero — nahoře by jen duplikovala hlavní menu
+  if (typeof IntersectionObserver !== 'undefined') {
+    new IntersectionObserver((entries) => {
+      nav.classList.toggle('home-section-nav--visible', !entries[0].isIntersecting);
+    }, { rootMargin: '-60px 0px 0px 0px' }).observe(hero);
+
+    // Scroll-spy: aria-current na odkazu právě viditelné sekce
+    const links = new Map(sections.map(([id]) => [id, nav.querySelector(`[data-section="${id}"]`)]));
+    const spy = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a, id) => {
+          if (id === e.target.id) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      }
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(([id]) => spy.observe(document.getElementById(id)));
+  } else {
+    nav.classList.add('home-section-nav--visible');
+  }
+}
 
 /**
  * Animuje width finance tile fill barů (.finance-tile-fill) z 0% na data-target-width
@@ -1548,9 +1714,7 @@ async function loadAndRenderHomeArticles() {
   const grid = document.getElementById('homeArticlesGrid');
   if (!grid) return;
   try {
-    const res = await fetch('data/articles.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
+    const data = await fetchArticlesOnce();
     const articles = (data.articles ?? [])
       .filter(a => a.kind !== 'manifest')
       .filter(a => isArticleVisible(a))
