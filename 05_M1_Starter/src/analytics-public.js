@@ -121,7 +121,7 @@ function renderDashboard(data) {
   const indicatorsHtml = renderRanking(data.top_indicators ?? [], (item) => ({
     label: item.id,
     value: `${fmtNum(item.clicks)}×`,
-    href: `indicator.html?id=${encodeURIComponent(item.id)}`,
+    href: `indikator-${encodeURIComponent(item.id)}.html`,
   }));
 
   const articlesHtml = renderRanking(data.top_articles ?? [], (item) => ({

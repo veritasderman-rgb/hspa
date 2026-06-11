@@ -109,7 +109,7 @@ function renderList() {
 function renderIndicatorRow(ind) {
   if (!ind) return '';
   const benchOecd = ind.benchmark?.oecd != null ? `OECD: ${ind.benchmark.oecd} ${escapeHtml(ind.unit || '')}` : '';
-  return `<a class="theme-ind-row" href="indicator.html?id=${escapeHtml(ind.id)}">
+  return `<a class="theme-ind-row" href="indikator-${escapeHtml(ind.id)}.html">
     <div class="theme-ind-signal">${signalPill(ind.signal)}</div>
     <div class="theme-ind-name">${escapeHtml(ind.name)}</div>
     <div class="theme-ind-value">${fmtValue(ind.value, ind.unit)} <span class="theme-ind-year">(${ind.year ?? '?'})</span></div>

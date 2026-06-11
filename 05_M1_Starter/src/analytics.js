@@ -71,7 +71,9 @@ function extractIndicatorId(el) {
   if (el.dataset?.indicatorId) return el.dataset.indicatorId;
   const href = el.getAttribute?.('href') ?? '';
   if (!href) return null;
-  // /indicator.html?id=foo  nebo  indicator.html?id=foo
+  // Statická stránka indikator-{id}.html  nebo  interaktivní indicator.html?id={id}
+  const ms = href.match(/indikator-([a-zA-Z0-9_-]+)\.html/);
+  if (ms) return ms[1];
   const m = href.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   return m ? m[1] : null;
 }
@@ -101,9 +103,10 @@ function bindCustomEvents() {
       return;
     }
 
-    // 2) Indicator click — karta, related-card, link na indicator.html
+    // 2) Indicator click — karta, related-card, statická indikátorová stránka
+    //    (indikator-*.html) i odkaz na interaktivní indicator.html
     const indEl = target.closest(
-      '[data-indicator-id], a[href*="indicator.html"]'
+      '[data-indicator-id], a[href*="indikator-"], a[href*="indicator.html"]'
     );
     if (indEl) {
       const indicatorId = extractIndicatorId(indEl);

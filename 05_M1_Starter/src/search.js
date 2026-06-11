@@ -93,7 +93,7 @@ export function buildIndex({ articles = [], indicators = [], glossary = [] } = {
       type: 'indicator',
       label,
       sub,
-      url: `indicator.html?id=${encodeURIComponent(i.id)}`,
+      url: `indikator-${encodeURIComponent(i.id)}.html`,
       haystack: `${label} ${sub} ${i.area ?? ''} ${i.dimension ?? ''}`.toLowerCase(),
     });
   }

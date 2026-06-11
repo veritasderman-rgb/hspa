@@ -34,7 +34,7 @@ test('renderEmbedCard: obsahuje název, hodnotu, signal, benchmark, odkaz na det
   assert.match(html, /embed-signal-warn/);
   assert.match(html, /OECD ⌀ 81,1/);
   assert.match(html, /Ověřeno/);
-  assert.match(html, /indicator\.html\?id=foo/);
+  assert.match(html, /indikator-foo\.html/);
   assert.match(html, /target="_top"/);
 });
 
