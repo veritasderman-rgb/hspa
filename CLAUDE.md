@@ -98,6 +98,7 @@ git push -u origin claude/<branch>
 │   ├── clanky.js               ← Hub článků + auto-bootstrap AV pro clanek-*.html
 │   ├── article-visuals.js      ← AV designsystem (timeline, bar, table, flow, counter)
 │   ├── article-toc.js          ← Table of Contents na stránkách clanek-*.html
+│   ├── article-share.js        ← Sdílecí pásek pod článkem (nativní share + intenty, bez cookies)
 │   ├── glossary-inline.js      ← Inline rozbalovací definice termínů v textu
 │   ├── glosar.js               ← Stránka glosáře (vyhledávání, abeceda)
 │   ├── hspa-prehled.js         ← HSPA matrix renderer

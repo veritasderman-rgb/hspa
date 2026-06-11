@@ -5,6 +5,7 @@ import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
+import { enhanceArticleShare } from './article-share.js';
 import { enhanceSeriesNav, SERIES, SERIES_TITLE } from './series-nav.js';
 
 renderModuleNav('articles');
@@ -17,6 +18,7 @@ loadGlossaryTerms().then(terms => enhanceInlineGlossary(terms)).catch(() => {});
 loadAndRenderArticles();
 enhanceSeriesNav();  // číslovaná navigace série na dílech (idempotent, jinak no-op)
 enhanceArticleRelated(); // generuje "Příbuzné sekce" na clanek-*.html (idempotent)
+enhanceArticleShare();   // sdílecí pásek pod článkem (idempotent, na hubu no-op)
 
 /**
  * Vloží AI disclaimer banner do stránek sekce Články.
