@@ -418,6 +418,14 @@ export function renderBrandMark() {
     }
   }
 
+  // 1a) PWA manifest — jen pokud stránka vlastní <link rel="manifest"> nemá.
+  if (head && !head.querySelector('link[rel="manifest"]')) {
+    const mf = document.createElement('link');
+    mf.rel = 'manifest';
+    mf.href = '/site.webmanifest';
+    head.appendChild(mf);
+  }
+
   // 1b) RSS feed discovery — aby čtečky a agregátory feed našly automaticky.
   if (head && !head.querySelector('link[rel="alternate"][type="application/rss+xml"]')) {
     const rss = document.createElement('link');

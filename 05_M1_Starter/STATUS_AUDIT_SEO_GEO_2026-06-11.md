@@ -79,7 +79,7 @@ Legenda závažnosti: 🔴 kritické · 🟠 střední · 🟢 v pořádku / dro
 | 13 | Per-page `<title>` / `description` | ✅ kvalitní, unikátní | 🟢 |
 | 14 | OG / Twitter cards | ✅ kompletní | 🟢 |
 | 15 | Favicony (SVG+PNG+apple) | ✅ | 🟢 |
-| 16 | `manifest.json` (PWA) | ❌ chybí | 🟢 (low) |
+| 16 | `manifest.json` (PWA) | ❌ chybí → ✅ `site.webmanifest` + `<link rel=manifest>` (renderBrandMark) | 🟢 (low) |
 | 17 | `lang="cs"` / hreflang | ✅ správně (jednojazyčný web) | 🟢 |
 | 18 | 404 (`noindex`) | ✅ | 🟢 |
 | 19 | `vercel.json` (cleanUrls, hlavičky, cache) | ✅ | 🟢 |
@@ -125,9 +125,9 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
    sekční hero `ed-hero-headline`/`hspa-hero-headline`/`hub-hero-h`/`fn-hero-headline`,
    homepage hero). Transformace `scripts/promote-h1-headings.js` (idempotentní),
    drift-guard `tests/h1-headings.test.js`. JS-shell/utility stránky (indicator,
-   rubrika, dohodovaci-rizeni, 404, embed) si brand `<h1>` ponechávají (jediný
-   statický nadpis). *Pozn.: `dohodovaci-rizeni.html` by si zasloužil vlastní
-   statický titulkový `<h1>` — drobný follow-up.* Vizuální snapshot baseline se
+   rubrika, 404, embed) si brand `<h1>` ponechávají (jediný statický nadpis).
+   `dohodovaci-rizeni.html` ✅ dostal vlastní statický titulkový `<h1>`
+   (`fn-hero-headline`). Vizuální snapshot baseline se
    přegeneruje na CI.
 8. ✅ **Prerender homepage.** `scripts/prerender-homepage.js` (`npm run prerender:home`)
    zapéká 3 nejnovější články staticky do `#homeArticlesGrid` v `index.html`
