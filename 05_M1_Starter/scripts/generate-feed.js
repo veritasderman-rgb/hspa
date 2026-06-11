@@ -17,8 +17,11 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-// Kanonická doména webu (jediné místo pro změnu).
-export const SITE_BASE = 'https://hspa-cesko.cz';
+// Kanonická doména webu (jediné místo pro změnu). Web běží na hspa-cesko.cz
+// i skorezdravotnictvi.cz; kanonická (pro canonical/og:url/sitemap/feed) je
+// skorezdravotnictvi.cz — sjednoceno se SITE_URL v src/page-shared.js a se
+// sociálními účty (@SkoreZdravko).
+export const SITE_BASE = 'https://skorezdravotnictvi.cz';
 const FEED_TITLE = 'HSPA Monitor — Zdravé Česko';
 const FEED_DESC = 'Hodnocení výkonnosti českého zdravotnictví podle metodiky OECD HSPA — indikátory, analýzy, články.';
 const MAX_ITEMS = 30;

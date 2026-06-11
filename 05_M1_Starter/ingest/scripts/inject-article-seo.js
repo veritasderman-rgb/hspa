@@ -93,7 +93,9 @@ export function processArticle(article) {
   if (!existsSync(htmlPath)) return { status: 'skip-no-html', slug };
 
   let html = readFileSync(htmlPath, 'utf8');
-  if (!/class="article-page"/.test(html)) return { status: 'skip-no-article', slug };
+  // `article-page` jako class token — pokryje i varianty s víc třídami
+  // (např. class="article-page article-page-manifest").
+  if (!/class="[^"]*\barticle-page\b[^"]*"/.test(html)) return { status: 'skip-no-article', slug };
 
   const url = `${SITE_BASE}/${slug}`;
 
