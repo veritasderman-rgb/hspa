@@ -17,11 +17,18 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SITE_BASE } from '../../scripts/generate-feed.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
+
+/** Escape pro hodnotu HTML atributu (uvozovky a závorky). */
+function escAttr(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
 function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
@@ -41,14 +48,20 @@ export function processArticle(article) {
 
   let html = readFileSync(htmlPath, 'utf8');
 
-  // 1) Inject OG/Twitter meta tagy do <head>
+  // 1) Inject OG/Twitter meta tagy do <head>.
+  // og:image / twitter:image musí být ABSOLUTNÍ URL — relativní cesty některé
+  // social/AI scrapery nerozparsují. og:image:alt = titulek článku (přístupnost
+  // náhledu i image search), bez duplikace do alt="" samotného <img>.
+  const pngUrl = `${SITE_BASE}/${pngPath}`;
+  const altText = escAttr(article.title || '');
   const ogTags = `
-  <meta property="og:image" content="${pngPath}" data-cover-injected="1">
+  <meta property="og:image" content="${pngUrl}" data-cover-injected="1">
   <meta property="og:image:width" content="1200" data-cover-injected="1">
   <meta property="og:image:height" content="630" data-cover-injected="1">
   <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="${altText}" data-cover-injected="1">
   <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
-  <meta name="twitter:image" content="${pngPath}" data-cover-injected="1">`;
+  <meta name="twitter:image" content="${pngUrl}" data-cover-injected="1">`;
 
   // Remove previous injections (idempotent)
   html = html.replace(/\n\s*<meta[^>]*data-cover-injected="1"[^>]*>/g, '');
