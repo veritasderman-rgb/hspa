@@ -23,7 +23,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_BASE } from '../../scripts/generate-feed.js';
+import { SITE_BASE, canonicalPath } from '../../scripts/generate-feed.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
@@ -32,12 +32,14 @@ const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
 const PUBLISHER = {
   '@type': 'Organization',
   name: 'HSPA Monitor',
+  alternateName: 'Skóre zdravotnictví',
   url: `${SITE_BASE}/`,
   logo: {
     '@type': 'ImageObject',
     url: `${SITE_BASE}/assets/brand/og-default.png`,
   },
 };
+const AUTHOR = { '@type': 'Organization', name: 'HSPA Monitor', alternateName: 'Skóre zdravotnictví', url: `${SITE_BASE}/` };
 
 function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
@@ -47,7 +49,7 @@ function loadArticles() {
 export function buildArticleJsonLd(article) {
   const slug = article.slug;
   const base = slug.replace(/\.html$/, '');
-  const url = `${SITE_BASE}/${slug}`;
+  const url = `${SITE_BASE}/${base}`;
   const image = `${SITE_BASE}/assets/covers/${base}.png`;
   const datePublished = article.date;
   const dateModified = article.audit?.last_reviewed || article.date;
@@ -64,7 +66,7 @@ export function buildArticleJsonLd(article) {
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     datePublished,
     dateModified,
-    author: { '@type': 'Organization', name: 'HSPA Monitor', url: `${SITE_BASE}/` },
+    author: AUTHOR,
     publisher: PUBLISHER,
     isAccessibleForFree: true,
   };
@@ -74,7 +76,7 @@ export function buildArticleJsonLd(article) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_BASE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Články', item: `${SITE_BASE}/clanky.html` },
+      { '@type': 'ListItem', position: 2, name: 'Články', item: `${SITE_BASE}/clanky` },
       { '@type': 'ListItem', position: 3, name: article.title, item: url },
     ],
   };
@@ -97,7 +99,7 @@ export function processArticle(article) {
   // (např. class="article-page article-page-manifest").
   if (!/class="[^"]*\barticle-page\b[^"]*"/.test(html)) return { status: 'skip-no-article', slug };
 
-  const url = `${SITE_BASE}/${slug}`;
+  const url = `${SITE_BASE}/${slug.replace(/\.html$/, "")}`;
 
   // Idempotence — odstraň předchozí injektáž (meta/link i JSON-LD blok).
   html = html.replace(/\n\s*<(?:link|meta)[^>]*data-seo-injected="1"[^>]*>/g, '');

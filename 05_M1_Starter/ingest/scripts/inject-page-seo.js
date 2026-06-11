@@ -22,7 +22,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_BASE } from '../../scripts/generate-feed.js';
+import { SITE_BASE, canonicalPath } from '../../scripts/generate-feed.js';
 import { STATIC_PAGES } from '../../scripts/generate-sitemap.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +39,7 @@ const ORGANIZATION = {
   '@type': 'Organization',
   '@id': `${SITE_BASE}/#organization`,
   name: 'HSPA Monitor',
+  alternateName: 'Skóre zdravotnictví',
   url: `${SITE_BASE}/`,
   logo: {
     '@type': 'ImageObject',
@@ -72,7 +73,7 @@ export function processPage(loc) {
   if (!existsSync(file)) return { status: 'skip-no-html', loc };
 
   let html = readFileSync(file, 'utf8');
-  const url = `${SITE_BASE}${loc}`;
+  const url = `${SITE_BASE}${canonicalPath(loc)}`;
   const added = [];
 
   // Idempotence — odstraň dřívější injektáž.

@@ -6,7 +6,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITE_JSONLD } from '../ingest/scripts/inject-page-seo.js';
 import { STATIC_PAGES } from '../scripts/generate-sitemap.js';
-import { SITE_BASE } from '../scripts/generate-feed.js';
+import { SITE_BASE, canonicalPath } from '../scripts/generate-feed.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -36,7 +36,7 @@ test('každá sekční stránka má právě jeden self-canonical na kanonické d
     const canon = [...html.matchAll(/<link[^>]*rel=["']canonical["'][^>]*>/gi)];
     assert.equal(canon.length, 1, `${loc} má mít právě 1 canonical (má ${canon.length})`);
     const href = canon[0][0].match(/href=["']([^"']+)["']/)[1];
-    assert.equal(href, `${SITE_BASE}${loc}`, `${loc} canonical musí být self na ${SITE_BASE}`);
+    assert.equal(href, `${SITE_BASE}${canonicalPath(loc)}`, `${loc} canonical musí být self (clean) na ${SITE_BASE}`);
   }
 });
 

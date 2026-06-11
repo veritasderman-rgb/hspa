@@ -25,7 +25,7 @@ test('buildArticleJsonLd: NewsArticle s povinnými poli a absolutními URL', () 
   assert.ok(news, 'graf obsahuje NewsArticle');
   assert.equal(news.headline, article.title);
   assert.equal(news.description, article.perex);
-  assert.equal(news.url, `${SITE}/clanek-test.html`);
+  assert.equal(news.url, `${SITE}/clanek-test`);
   assert.deepEqual(news.image, [`${SITE}/assets/covers/clanek-test.png`]);
   assert.equal(news.datePublished, '2026-06-01');
   assert.equal(news.dateModified, '2026-06-09', 'dateModified z audit.last_reviewed');
@@ -40,8 +40,8 @@ test('buildArticleJsonLd: BreadcrumbList Domů → Články → titulek', () => 
   assert.ok(bc, 'graf obsahuje BreadcrumbList');
   assert.deepEqual(bc.itemListElement.map(i => i.position), [1, 2, 3]);
   assert.equal(bc.itemListElement[0].item, `${SITE}/`);
-  assert.equal(bc.itemListElement[1].item, `${SITE}/clanky.html`);
-  assert.equal(bc.itemListElement[2].item, `${SITE}/clanek-test.html`);
+  assert.equal(bc.itemListElement[1].item, `${SITE}/clanky`);
+  assert.equal(bc.itemListElement[2].item, `${SITE}/clanek-test`);
 });
 
 test('buildArticleJsonLd: dateModified spadne na date, když chybí audit', () => {

@@ -84,7 +84,7 @@ Legenda závažnosti: 🔴 kritické · 🟠 střední · 🟢 v pořádku / dro
 | 18 | 404 (`noindex`) | ✅ | 🟢 |
 | 19 | `vercel.json` (cleanUrls, hlavičky, cache) | ✅ | 🟢 |
 | 20 | RSS feed | ✅ existuje + linkovaný | 🟢 |
-| 21 | cleanUrls vs. `.html` v kanonických | ⚠️ kanonické míří na `.html`, který se 301 přesměruje | 🟠 |
+| 21 | cleanUrls vs. `.html` v kanonických | ⚠️ → ✅ canonical/og:url/JSON-LD/sitemap nově clean URL (`canonicalPath`); feed zůstává `.html` (RSS guid) | 🟠 |
 
 ---
 

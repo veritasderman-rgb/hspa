@@ -23,7 +23,7 @@ test('buildPage: verified indikátor je indexovatelný, má Dataset + canonical 
   assert.equal(slug, 'indikator-test_ind.html');
   assert.equal(indexable, true);
   assert.match(html, /<meta name="robots" content="index, follow">/);
-  assert.ok(html.includes(`<link rel="canonical" href="${SITE_BASE}/indikator-test_ind.html">`));
+  assert.ok(html.includes(`<link rel="canonical" href="${SITE_BASE}/indikator-test_ind">`));
   assert.match(html, /<h1>Testovací indikátor<\/h1>/);
   const m = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)<\/script>/);
   assert.ok(m, 'má JSON-LD');

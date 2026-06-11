@@ -14,7 +14,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_BASE, visibleArticles } from './generate-feed.js';
+import { SITE_BASE, visibleArticles, canonicalPath } from './generate-feed.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -84,14 +84,16 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
 }
 
 export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [] } = {}) {
+  // Pozn.: isIndexable() čte robots meta z HTML, proto mu předáváme `.html` loc;
+  // do sitemapy ale zapisujeme kanonickou (clean) URL přes canonicalPath().
   const staticEntries = STATIC_PAGES
     .filter(p => isIndexable(p.loc))
-    .map(p => urlEntry({ ...p, lastmod: today }));
+    .map(p => urlEntry({ ...p, loc: canonicalPath(p.loc), lastmod: today }));
   const articleEntries = visibleArticles(articles, today)
     .filter(a => isIndexable(`/${a.slug}`))
     .map(a =>
       urlEntry({
-        loc: `/${a.slug}`,
+        loc: canonicalPath(`/${a.slug}`),
         lastmod: a.date,
         changefreq: 'monthly',
         priority: '0.8',
@@ -101,7 +103,7 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
   // se vyřadí přes isIndexable, který čte robots meta z HTML.
   const indicatorEntries = indicatorPages
     .filter(loc => isIndexable(loc))
-    .map(loc => urlEntry({ loc, lastmod: today, changefreq: 'monthly', priority: '0.6' }));
+    .map(loc => urlEntry({ loc: canonicalPath(loc), lastmod: today, changefreq: 'monthly', priority: '0.6' }));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
