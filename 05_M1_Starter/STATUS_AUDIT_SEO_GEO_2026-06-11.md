@@ -1,7 +1,7 @@
 # SEO & GEO audit — HSPA Monitor
 
 **Datum:** 2026-06-11
-**Rozsah:** `05_M1_Starter/` (produkční web, doména `https://hspa-cesko.cz`)
+**Rozsah:** `05_M1_Starter/` (produkční web, doména `https://skorezdravotnictvi.cz`)
 **GEO = Generative Engine Optimization** — optimalizace pro AI odpovědní enginy
 (ChatGPT/OpenAI, Claude, Perplexity, Google AI Overviews), aby web našly,
 správně pochopily a **citovaly jako zdroj**.
@@ -38,7 +38,7 @@ k AI crawlerům. Nový soubor:
 - Explicitně **povoluje** GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, anthropic-ai,
   PerplexityBot, Google-Extended, Applebot-Extended, CCBot — protože obsah je veřejné
   dobro a chceme být citováni. (Blokace = přepsat blok na `Disallow: /`.)
-- `Sitemap: https://hspa-cesko.cz/sitemap.xml`.
+- `Sitemap: https://skorezdravotnictvi.cz/sitemap.xml`.
 
 ### 2. `sitemap.xml` + generátor (nově)
 Předtím **neexistoval** — vyhledávače i AI musely objevovat stránky jen přes odkazy.
@@ -140,9 +140,9 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
 ## Jak ověřit (po deployi)
 
 ```bash
-curl -s https://hspa-cesko.cz/robots.txt
-curl -s https://hspa-cesko.cz/sitemap.xml | head
-curl -s https://hspa-cesko.cz/llms.txt | head
+curl -s https://skorezdravotnictvi.cz/robots.txt
+curl -s https://skorezdravotnictvi.cz/sitemap.xml | head
+curl -s https://skorezdravotnictvi.cz/llms.txt | head
 ```
 
 - Google Search Console → odeslat `sitemap.xml`.

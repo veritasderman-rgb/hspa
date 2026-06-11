@@ -5,9 +5,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildArticleJsonLd } from '../ingest/scripts/inject-article-seo.js';
+import { SITE_BASE as SITE } from '../scripts/generate-feed.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const SITE = 'https://hspa-cesko.cz';
 
 const article = {
   slug: 'clanek-test.html',
