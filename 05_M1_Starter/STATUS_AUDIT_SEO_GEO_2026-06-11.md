@@ -90,31 +90,32 @@ Legenda závažnosti: 🔴 kritické · 🟠 střední · 🟢 v pořádku / dro
 
 ## Backlog — strukturální doporučení (prioritně)
 
-Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků), proto **nejsou**
-součástí tohoto PR — doporučuji je řešit samostatně po odsouhlasení směru.
+Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
+Řeší se postupně v navazujících PR.
 
 ### P1 — největší dopad na GEO
-1. **Article JSON-LD na každý článek (staticky v HTML).** `@type: Article`
-   (resp. `NewsArticle`) s `headline`, `description`, `datePublished`
-   (z `article:published_time`), `image` (absolutní URL obálky), `author`
-   (Organization „HSPA Monitor“ / redakce), `publisher`, `mainEntityOfPage`.
-   Nejlépe vygenerovat do HTML při publikaci (krok injektující cover už existuje
-   v `publish-scheduled.js` / `generate-article-cover.js`) — ne za běhu JS.
+1. ✅ **Article JSON-LD na každý článek (staticky v HTML)** — `NewsArticle`
+   (`headline`, `description`, `datePublished`, `dateModified`, `image` absolutně,
+   `author`/`publisher` = HSPA Monitor, `mainEntityOfPage`, `inLanguage`,
+   `articleSection`). Injektuje `ingest/scripts/inject-article-seo.js` (`npm run
+   seo:articles`) ze `data/articles.json`; napojeno na `publish-scheduled.js`.
 2. **Organization schema staticky.** Dnes ho injektuje `injectOrgSchema()` v
    `page-shared.js` za běhu → ne-JS AI crawler ho nevidí. Vložit identický blok
-   přímo do HTML hlaviček (nebo do build kroku).
-3. **`BreadcrumbList` JSON-LD na článcích.** Drobečková navigace v HTML už existuje
-   (`article-breadcrumb`) — doplnit strukturovaná data.
+   přímo do HTML hlaviček (nebo do build kroku). *(Pozn.: na článcích už je
+   `publisher: Organization` součástí Article JSON-LD; zbývají sekční stránky.)*
+3. ✅ **`BreadcrumbList` JSON-LD na článcích** — Domů → Články → titulek, součást
+   stejného `@graph` jako NewsArticle.
 
 ### P2 — kanonikalizace a sdílení
 4. **`<link rel="canonical">` na všechny indexovatelné stránky** (absolutní URL).
-   Dnes jen ~15/150. Sjednotit přitom s `cleanUrls` (#21): rozhodnout, zda kanonická
-   forma je `/x` nebo `/x.html`, a držet ji **konzistentně** v canonical, `og:url`,
-   sitemapě i feedu. (Pozn.: sitemap i feed dnes používají `.html` kvůli shodě se
-   stávajícími canonical tagy; pokud se přejde na clean URL, upravit obojí.)
-5. **`og:url` na všechny stránky** (absolutní).
-6. **`og:image` absolutní URL na článcích** (dnes `assets/covers/...` relativně →
-   některé scrapery/náhledy selžou; má být `https://hspa-cesko.cz/assets/covers/...`).
+   ✅ Hotovo na **článcích** (`inject-article-seo.js`). Zbývají sekční stránky
+   (~18) — řeší navazující PR. Sjednotit přitom s `cleanUrls` (#21): rozhodnout,
+   zda kanonická forma je `/x` nebo `/x.html`, a držet ji **konzistentně** v
+   canonical, `og:url`, sitemapě i feedu. (Pozn.: sitemap, feed i nové canonical
+   dnes používají `.html`.)
+5. **`og:url` na všechny stránky** (absolutní). ✅ Hotovo na článcích; zbývají sekční.
+6. ✅ **`og:image` absolutní URL na článcích** + nově `og:image:alt` = titulek
+   (`inject-article-covers.js`).
 
 ### P3 — struktura a renderování
 7. **`<h1>` = titulek článku.** Dnes je `<h1>` brand a titulek je `<h2>`. Pro SEO/GEO
@@ -129,8 +130,9 @@ součástí tohoto PR — doporučuji je řešit samostatně po odsouhlasení sm
    Zvážit statické stránky `/indikator/{id}.html` (nebo prerender) s vlastním
    `<title>`, popisem a `Dataset` JSON-LD — velký GEO potenciál (AI rády citují
    konkrétní čísla s URL).
-10. **Alt text obálek.** `alt=""` je pro čistě dekorativní obrázek validní, ale
-    obálky nesou téma — doplnit popisný alt (a11y + image search).
+10. ✅ **Alt text obálek.** Cover `<img>` zůstává `alt=""` (správně — obálka nese
+    titulek jako text hned vedle nadpisu, popisný alt by duplikoval). Místo toho
+    přidán `og:image:alt` = titulek (náhled/AI/image search bez a11y duplikace).
 11. **`Dataset` / `FAQPage` JSON-LD** tam, kde to dává smysl (datové stránky, FAQ).
 
 ---

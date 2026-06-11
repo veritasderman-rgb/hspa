@@ -135,9 +135,12 @@ async function generateAndInjectCover(article) {
   try {
     const { generateCover } = await import('../ingest/scripts/generate-article-cover.js');
     const { processArticle: injectCover } = await import('../ingest/scripts/inject-article-covers.js');
+    const { processArticle: injectSeo } = await import('../ingest/scripts/inject-article-seo.js');
     const { svgPath, pngPath } = generateCover(article, { writeFiles: true });
     const r = injectCover(article);
-    console.log(`  ✓ náhledová grafika: ${path.basename(svgPath)} + ${path.basename(pngPath)} (HTML: ${r.status})`);
+    // Strukturovaná data + canonical/og:url do <head> (statická, kvůli GEO).
+    const seo = injectSeo(article);
+    console.log(`  ✓ náhledová grafika: ${path.basename(svgPath)} + ${path.basename(pngPath)} (HTML: ${r.status}, SEO: ${seo.status})`);
   } catch (e) {
     console.warn(`  ⚠ náhledovou grafiku se nepodařilo vygenerovat (${e.message}) — článek publikován bez ní, lze dogenerovat ručně.`);
   }
