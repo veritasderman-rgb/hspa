@@ -14516,3 +14516,53 @@ html {
 }
 .embed-share-panel .embed-copy-btn { margin: 8px 0; }
 .embed-preview { display: block; border: 0; margin-top: 8px; max-width: 100%; }
+
+/* ── Statické per-indikátorové stránky (indikator-*.html) ──────────────────
+   Scoped pod .indicator-static, aby se nebily s .ind-* pravidly z indicator.js
+   (interaktivní detail), který sdílí část názvů tříd s jinou strukturou. */
+.indicator-static { max-width: 820px; }
+.indicator-static .ind-detail-kicker {
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-mut);
+  margin-bottom: 6px;
+}
+.indicator-static .ind-detail-header h1 {
+  font-family: var(--serif); font-size: 34px; line-height: 1.12;
+  letter-spacing: -0.4px; margin: 0 0 10px; color: var(--ink);
+}
+.indicator-static .ind-detail-status { font-family: var(--sans); font-size: 14px; color: var(--ink-mut); margin: 0 0 6px; }
+.indicator-static .ind-detail-sub { font-size: 17px; line-height: 1.55; color: var(--ink); margin: 0 0 4px; }
+.indicator-static .ind-hero {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 18px 28px;
+  border: 1px solid var(--line, rgba(31,26,20,0.14)); border-radius: 12px;
+  padding: 20px 22px; margin: 22px 0; background: var(--paper);
+}
+.indicator-static .ind-hero-value {
+  font-family: var(--serif); font-size: 46px; font-weight: 700; line-height: 1;
+  color: var(--ink); display: block;
+}
+.indicator-static .ind-hero-unit { font-family: var(--sans); font-size: 15px; font-weight: 400; color: var(--ink-mut); }
+.indicator-static .ind-hero-signal { font-family: var(--sans); font-size: 14px; color: var(--ink-mut); align-self: center; }
+.indicator-static .ind-benchmark-table { border-collapse: collapse; font-family: var(--sans); font-size: 14px; }
+.indicator-static .ind-benchmark-table caption { text-align: left; font-size: 12px; color: var(--ink-mut); margin-bottom: 4px; }
+.indicator-static .ind-benchmark-table th,
+.indicator-static .ind-benchmark-table td { text-align: left; padding: 3px 14px 3px 0; }
+.indicator-static .ind-benchmark-table th { font-weight: 600; color: var(--ink-mut); }
+.indicator-static .ind-section { margin: 26px 0; }
+.indicator-static .ind-section h2 {
+  font-family: var(--serif); font-size: 22px; letter-spacing: -0.2px;
+  margin: 0 0 10px; color: var(--ink);
+}
+.indicator-static .ind-section p { font-size: 16px; line-height: 1.65; margin: 0 0 12px; }
+.indicator-static .ind-meta-list { margin: 0; display: grid; gap: 10px; }
+.indicator-static .ind-meta-row { display: grid; grid-template-columns: 180px 1fr; gap: 4px 18px; padding-bottom: 10px; border-bottom: 1px solid var(--line, rgba(31,26,20,0.10)); }
+.indicator-static .ind-meta-row dt { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink-mut); }
+.indicator-static .ind-meta-row dd { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink); }
+.indicator-static .ind-source p { font-size: 15px; line-height: 1.55; margin: 0 0 4px; }
+.indicator-static .ind-source-meta { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); }
+.indicator-static .ind-interactive-cta { margin: 30px 0 8px; }
+@media (max-width: 600px) {
+  .indicator-static .ind-meta-row { grid-template-columns: 1fr; }
+  .indicator-static .ind-hero-value { font-size: 38px; }
+  .indicator-static .ind-detail-header h1 { font-size: 28px; }
+}
