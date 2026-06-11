@@ -21,6 +21,9 @@ const BRAND_DIR = resolve(__dirname, '..', 'assets', 'brand');
 const TARGETS = [
   { src: 'favicon.svg',    out: 'favicon-32.png',       width: 32 },
   { src: 'favicon.svg',    out: 'apple-touch-icon.png',  width: 180 },
+  // PWA installable ikony (Chromium/Android vyžadují square 192 a 512).
+  { src: 'favicon.svg',    out: 'icon-192.png',          width: 192 },
+  { src: 'favicon.svg',    out: 'icon-512.png',          width: 512 },
   { src: 'og-default.svg', out: 'og-default.png',        width: 1200 },
 ];
 
