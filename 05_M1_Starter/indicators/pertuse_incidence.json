@@ -1,0 +1,50 @@
+{
+  "id": "pertuse_incidence",
+  "name": "Incidence černého kašle (pertuse)",
+  "area": "Výsledky",
+  "domain": "Přenosné nemoci",
+  "subdomain": "Infekční nemoci",
+  "definition": "Počet hlášených onemocnění černým kašlem (Bordetella pertussis, dg. A37 dle MKN-10) na 100 000 obyvatel za kalendářní rok. Data pocházejí z povinného hlášení infekčních nemocí v Informačním systému infekčních nemocí (ISIN) provozovaném Státním zdravotním ústavem.",
+  "unit": "na 100 000 obyvatel",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "surveillance_registry",
+      "endpoint": "https://www.szu.cz/temata/vakciny/pertuse-davivy-kasel",
+      "dataset": "ISIN — Informační systém infekčních nemocí, surveillance dávivého (černého) kašle, SZÚ",
+      "dimensions": {
+        "country": "CZ",
+        "region": "kraj",
+        "age_group": "věkové skupiny",
+        "disease": "A37 — pertuse a parapertuse"
+      }
+    },
+    "fallback": {
+      "type": "surveillance_atlas",
+      "url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=35"
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc",
+    "code": "PERT",
+    "dataset": "ECDC Surveillance Atlas of Infectious Diseases — Pertussis, notification rate per 100 000 (EU/EEA aggregate). V roce 2024 zaznamenala EU/EEA rekordní návrat černého kašle; Česko patřilo mezi nejvíce zasažené země v přepočtu na obyvatele.",
+    "value": 50.0,
+    "url": "https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=35"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 50
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Státní zdravotní ústav (SZÚ) — Centrum epidemiologie a mikrobiologie",
+    "Krajské hygienické stanice / Krajské hygienické správy"
+  ],
+  "method_notes": "Hodnota 199,4 na 100 000 obyvatel za rok 2024 odpovídá více než 21 tisícům hlášených případů — nejvyšší incidenci černého kašle v Česku od 60. let 20. století. Trend ukazuje typický epidemiologický vzorec: nízká incidence v období protiepidemických opatření proti covid-19 (2021), pomalé znovuobjevení (2022–2023) a prudká epidemie 2024. Černý kašel má přirozenou periodicitu epidemií (cca 3–5 let) navrch na klesající kolektivní imunitě po přechodu na acelulární vakcínu (rychlejší slábnutí ochrany). Hodnoty surveillance se mohou při uzávěrce dat zpětně revidovat. Origin = seed: hodnota je orientačně zanesena pro vývojové prostředí, ostrá data tečou z ISIN/SZÚ a ECDC.",
+  "limitations": "Hlášená incidence podhodnocuje skutečný výskyt — lehké a atypické případy u dospívajících a dospělých často nejsou laboratorně potvrzeny ani nahlášeny. Změny v dostupnosti PCR diagnostiky a v ochotě testovat mění záchyt v čase i mezi kraji, což komplikuje mezinárodní srovnání (různé case definitions, různá intenzita testování). Roční hodnota je silně ovlivněna epidemickou periodicitou — jeden epidemický rok nereprezentuje běžnou úroveň.",
+  "determinants": "Slábnoucí postvakcinační imunita po přechodu z celobuněčné na acelulární vakcínu, časové mezery v přeočkování (booster v dospívání a dospělosti), nízká proočkovanost těhotných (mateřská protilátková ochrana novorozenců), epidemická periodicita a sezónnost, intenzita laboratorního testování.",
+  "importance": "Černý kašel je nejnebezpečnější pro kojence do zahájení očkování — právě oni mají nejvyšší riziko hospitalizace a úmrtí. Vysoká cirkulace v populaci přímo ohrožuje nejzranitelnější skupinu a je citlivým ukazatelem výkonnosti očkovacího programu, zejména přeočkování a mateřské vakcinace.",
+  "patient_story": "Novorozenec na JIP v jedné z fakultních nemocnic, šest týdnů starý, napojený na podporu dýchání. Záchvatovitý kašel mu bere dech rychleji, než stihne nabrat další. Je příliš malý na to, aby měl vlastní očkování — první dávku hexavalentní vakcíny dostává dítě až ve třetím měsíci. Jeho jediná ochrana měla přijít od matky, přes placentu. Nepřišla. Toto je tvář čísla, které v roce 2024 vystřelilo do výšky.\n\nV roce 2024 hlásily hygienické stanice více než jedenadvacet tisíc onemocnění černým kašlem — 199,4 případu na 100 000 obyvatel. To je nejvyšší incidence od 60. let minulého století a signál „bad\": zhruba čtyřnásobek průměru EU/EEA (kolem 50 na 100 000). Trend je dramatický — ještě v roce 2021, za protiepidemických opatření proti covidu, klesla incidence k nule, v letech 2022–2023 se nemoc pomalu vracela a v roce 2024 propukla naplno. Česko patřilo mezi nejhůře zasažené země Evropy v přepočtu na obyvatele.\n\nProč? Příčiny jsou strukturální, ne náhodné. Černý kašel má přirozenou periodicitu epidemií každé tři až pět let. Na ni se nabaluje slábnoucí kolektivní imunita: acelulární vakcína, na kterou Česko přešlo, chrání bezpečněji, ale ochrana po ní rychleji slábne než po staré celobuněčné. Dospívající a dospělí s odeznělou imunitou se stávají rezervoárem, který nákazu donese k nejmenším dětem. A klíčová vrstva ochrany — přeočkování těhotných, které předá protilátky novorozenci ještě před jeho vlastním očkováním — zůstává nedostatečně využitá.\n\nPolitická páka je přitom konkrétní a v rukou státu. Za prvé: aktivně propagovat a důsledně hradit očkování těhotných (dTpa ve třetím trimestru) — to je nejúčinnější ochrana kojenců v prvních týdnech života. Za druhé: hlídat včasnost přeočkování v dospívání a zvážit pravidelný booster dospělých, zejména u zdravotníků a osob v kontaktu s novorozenci. Za třetí: posílit surveillance a laboratorní záchyt, aby systém viděl nástup epidemie dřív. Kompetenci má ministerstvo zdravotnictví, SZÚ a Národní imunizační komise — a každý další epidemický rok bez těchto kroků znamená další novorozence na JIP.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
