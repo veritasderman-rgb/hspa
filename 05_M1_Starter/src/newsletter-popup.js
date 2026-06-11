@@ -4,6 +4,7 @@
 // návrat po 30 dnech, jedno zobrazení na návštěvu.
 
 const STORAGE_KEY = 'zdrave-cesko/nl-popup';
+const SESSION_KEY = 'zdrave-cesko/nl-popup-session';
 const DISMISS_DAYS = 30;
 const SCROLL_TRIGGER = 0.55;
 const MAILERLITE_ACTION =
@@ -30,15 +31,45 @@ function writeState(patch) {
  * Čistá funkce: má se popup zobrazit? Testovatelná bez DOM.
  *   - subscribed → nikdy znovu
  *   - dismissed před méně než 30 dny → ne
+ *   - už zobrazen v této návštěvě (session) → ne
  *   - jinak ano
  */
-export function shouldShowPopup(state = {}, now = Date.now()) {
+export function shouldShowPopup(state = {}, now = Date.now(), session = {}) {
+  if (session && session.shown) return false;
   if (state && state.subscribed) return false;
   if (state && typeof state.dismissedAt === 'number'
       && now - state.dismissedAt < DISMISS_DAYS * 86400000) {
     return false;
   }
   return true;
+}
+
+function readSession() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function markSessionShown() {
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ shown: true }));
+  } catch {
+    // sessionStorage nedostupné — popup se může na další stránce ukázat znovu
+  }
+}
+
+/**
+ * Je footer newsletter blok (aspoň částečně) ve viewportu? Když ano, popup
+ * nemá smysl — duplikoval by formulář, který už uživatel vidí.
+ */
+function footerNewsletterVisible() {
+  const block = document.querySelector('.newsletter-block');
+  if (!block) return false;
+  const r = block.getBoundingClientRect();
+  return r.top < window.innerHeight && r.bottom > 0;
 }
 
 /**
@@ -49,7 +80,7 @@ export function initNewsletterPopup() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   if (window.__nlPopupInit) return;
   window.__nlPopupInit = true;
-  if (!shouldShowPopup(readState())) return;
+  if (!shouldShowPopup(readState(), Date.now(), readSession())) return;
 
   let armed = true;
   const onScroll = () => {
@@ -59,6 +90,14 @@ export function initNewsletterPopup() {
     if (scrollable < 200) return; // příliš krátká stránka — netriggerovat
     const ratio = (window.scrollY || doc.scrollTop || 0) / scrollable;
     if (ratio >= SCROLL_TRIGGER) {
+      // Uživatel u patičky vidí stejný formulář inline — popup by ho jen
+      // překryl. Doscrolloval až sem, takže nabídku už zaregistroval; pro
+      // tuto stránku trigger zcela odzbrojíme.
+      if (footerNewsletterVisible()) {
+        armed = false;
+        window.removeEventListener('scroll', onScroll);
+        return;
+      }
       armed = false;
       window.removeEventListener('scroll', onScroll);
       showPopup();
@@ -96,14 +135,19 @@ function showPopup() {
 
   document.body.appendChild(wrap);
   document.body.classList.add('nl-popup-open');
+  markSessionShown(); // max 1 zobrazení na návštěvu (session)
   void wrap.offsetWidth; // vynutí reflow, aby slide-in transition spolehlivě naběhla
   wrap.classList.add('nl-popup--visible');
 
   let closed = false;
-  const close = (subscribed) => {
+  // persist=false → tiché skrytí bez zápisu dismissedAt (popup nezavřel
+  // uživatel, jen doscrolloval k footer formuláři — 30denní stopka by
+  // trestala bez jeho rozhodnutí).
+  const close = (subscribed, persist = true) => {
     if (closed) return;
     closed = true;
-    writeState(subscribed ? { subscribed: true } : { dismissedAt: Date.now() });
+    if (persist) writeState(subscribed ? { subscribed: true } : { dismissedAt: Date.now() });
+    footerObserver?.disconnect();
     wrap.classList.remove('nl-popup--visible');
     document.body.classList.remove('nl-popup-open');
     document.removeEventListener('keydown', onKey);
@@ -112,6 +156,17 @@ function showPopup() {
     wrap.addEventListener('transitionend', remove, { once: true });
     setTimeout(remove, 600); // fallback (prefers-reduced-motion: žádná transition)
   };
+
+  // Jakmile uživatel doscrolluje k footer newsletteru, popup se tiše uklidí —
+  // dva identické formuláře přes sebe jsou matoucí.
+  let footerObserver = null;
+  const footerBlock = document.querySelector('.newsletter-block');
+  if (footerBlock && typeof IntersectionObserver !== 'undefined') {
+    footerObserver = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) close(false, false);
+    }, { threshold: 0.2 });
+    footerObserver.observe(footerBlock);
+  }
 
   const onKey = (e) => { if (e.key === 'Escape') close(false); };
   document.addEventListener('keydown', onKey);

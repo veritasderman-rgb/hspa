@@ -40,17 +40,17 @@ export function formatVal(v) {
   if (v == null) return '—';
   const n = Number(v);
   if (!Number.isFinite(n)) return String(v);
-  if (Math.abs(n) >= 100) return n.toFixed(0);
-  if (Math.abs(n) >= 10) return n.toFixed(1);
-  return n.toFixed(2);
+  // České formátování: mezera mezi tisíci, desetinná čárka
+  const maxDecimals = Math.abs(n) >= 100 ? 0 : Math.abs(n) >= 10 ? 1 : 2;
+  return n.toLocaleString('cs-CZ', { maximumFractionDigits: maxDecimals });
 }
 
 export function formatValShort(v) {
   if (v == null) return '—';
   const n = Number(v);
   if (!Number.isFinite(n)) return String(v);
-  if (Math.abs(n) >= 100) return n.toFixed(0);
-  return n.toFixed(1);
+  const maxDecimals = Math.abs(n) >= 100 ? 0 : 1;
+  return n.toLocaleString('cs-CZ', { maximumFractionDigits: maxDecimals });
 }
 
 /**

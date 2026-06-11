@@ -4,7 +4,7 @@
 // (determinanty, význam) z metodické karty a kompletní metodiku.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible, resolveVerificationStatus, verifBadgeHtml } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible, resolveVerificationStatus, verifBadgeHtml, formatNumberCz } from './page-shared.js';
 import { renderCzMap } from './cz-map.js';
 
 const DATA_URL = 'data/indicators.json';
@@ -120,7 +120,7 @@ function renderDetail(ind, card, regionDataset) {
         <div class="ind-hero-meta">
           <span class="signal-pill ${ind.signal}">${SIGNAL_LABELS[ind.signal] ?? ind.signal}</span>
           ${ind.year ? `<span class="ind-hero-year">${ind.year}</span>` : ''}
-          ${yoy ? `<span class="ind-hero-yoy ${yoy.cls}">${yoy.glyph} ${Math.abs(yoy.pct).toFixed(1)} % YoY</span>` : ''}
+          ${yoy ? `<span class="ind-hero-yoy ${yoy.cls}">${yoy.glyph} ${formatNumberCz(Math.abs(yoy.pct), { minDecimals: 1, maxDecimals: 1 })} % YoY</span>` : ''}
         </div>
       </div>
       <div class="ind-hero-bench">
@@ -212,7 +212,14 @@ function renderDetail(ind, card, regionDataset) {
   `;
 
   if (ind.trend?.length >= 2) {
-    renderTrendChart(ind);
+    // Graf nesmí shodit zbytek detailu — selhání (chybějící CDN knihovna,
+    // chyba renderingu) degraduje na SVG fallback, data zůstávají viditelná.
+    try {
+      renderTrendChart(ind);
+    } catch (err) {
+      console.error('trend chart failed:', err);
+      renderTrendFallback(ind);
+    }
   }
 
   wireEmbedShare(ind.id);
@@ -291,9 +298,7 @@ function formatValue(v) {
   if (v == null) return '—';
   const n = Number(v);
   if (!Number.isFinite(n)) return String(v);
-  if (Math.abs(n) >= 100) return n.toFixed(0);
-  if (Math.abs(n) >= 10) return n.toFixed(1);
-  return n.toFixed(1);
+  return formatNumberCz(n, { maxDecimals: Math.abs(n) >= 100 ? 0 : 1 });
 }
 
 function computeYoy(ind) {
@@ -317,6 +322,10 @@ function computeYoy(ind) {
 function renderTrendChart(ind) {
   const canvas = document.getElementById('indTrendChart');
   if (!canvas) return;
+  if (typeof Chart === 'undefined') {
+    renderTrendFallback(ind);
+    return;
+  }
   const trend = ind.trend || [];
   const labels = trend.map(t => t.year);
   const color = ind.signal === 'good' ? '#38761D'
@@ -374,6 +383,48 @@ function renderTrendChart(ind) {
       },
     },
   });
+}
+
+/**
+ * Záložní vykreslení trendu bez Chart.js — inline SVG křivka + tabulka hodnot.
+ * Detail indikátoru musí zůstat informačně plnohodnotný i bez CDN knihovny.
+ */
+function renderTrendFallback(ind) {
+  const wrap = document.querySelector('.ind-trend-chart-wrap');
+  if (!wrap) return;
+  const trend = (ind.trend || []).filter(t => Number.isFinite(Number(t.value)));
+  if (trend.length < 2) return;
+
+  const color = ind.signal === 'good' ? '#38761D'
+    : ind.signal === 'warn' ? '#B45F06'
+    : ind.signal === 'bad' ? '#990000' : '#0B5394';
+  const W = 640, H = 200, PAD = 10;
+  const vals = trend.map(t => Number(t.value));
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = max - min || 1;
+  const pts = trend.map((t, i) => {
+    const x = PAD + (i / (trend.length - 1)) * (W - 2 * PAD);
+    const y = H - PAD - ((Number(t.value) - min) / span) * (H - 2 * PAD);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+
+  const rows = trend.map(t =>
+    `<tr><th scope="row">${escapeHtml(String(t.year))}</th><td>${formatValue(t.value)}</td></tr>`
+  ).join('');
+
+  wrap.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" class="ind-trend-svg-fallback" role="img"
+         aria-label="Vývoj hodnoty ${escapeHtml(String(trend[0].year))}–${escapeHtml(String(trend[trend.length - 1].year))}">
+      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5"
+                stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <table class="ind-trend-fallback-table">
+      <caption class="sr-only">Hodnoty indikátoru po letech</caption>
+      <thead><tr><th scope="col">Rok</th><th scope="col">${escapeHtml(ind.unit ?? 'Hodnota')}</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="ind-trend-fallback-note">Interaktivní graf se nepodařilo načíst — hodnoty výše jsou kompletní.</p>
+  `;
 }
 
 function renderRegionalSection(ds, ind) {

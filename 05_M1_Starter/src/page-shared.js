@@ -746,6 +746,26 @@ export function escapeHtml(s) {
 }
 
 /**
+ * Naformátuje číslo podle českých konvencí (mezera jako oddělovač tisíců,
+ * desetinná čárka) — sjednocuje zobrazení napříč kartami, benchmarky a tabulkami.
+ * Defaultně zachovává přesnost hodnoty (max 3 desetinná místa), nezaokrouhluje
+ * tedy „2.736" na „2,7". Pro pevný počet míst použij minDecimals/maxDecimals.
+ *
+ * @param {number|string|null} value
+ * @param {{minDecimals?:number, maxDecimals?:number}} [opts]
+ * @returns {string} např. 17989.8 → „17 989,8", 803252 → „803 252", null → „—"
+ */
+export function formatNumberCz(value, { minDecimals = 0, maxDecimals = 3 } = {}) {
+  if (value == null || value === '') return '—';
+  const n = Number(value);
+  if (!Number.isFinite(n)) return String(value);
+  return n.toLocaleString('cs-CZ', {
+    minimumFractionDigits: minDecimals,
+    maximumFractionDigits: Math.max(minDecimals, maxDecimals),
+  });
+}
+
+/**
  * Vyrenderuje inline markdown z textu — nejprve escapuje HTML, pak nahradí:
  *   - **bold** → <strong>bold</strong>
  *   - *italic* / _italic_ → <em>italic</em>

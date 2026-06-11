@@ -35,3 +35,19 @@ test('shouldShowPopup: subscribed má přednost před dismissedAt', () => {
     false,
   );
 });
+
+test('shouldShowPopup: už zobrazen v této session → nezobrazit znovu', () => {
+  assert.equal(shouldShowPopup({}, NOW, { shown: true }), false);
+});
+
+test('shouldShowPopup: session bez záznamu → zobrazit', () => {
+  assert.equal(shouldShowPopup({}, NOW, {}), true);
+  assert.equal(shouldShowPopup({}, NOW, undefined), true);
+});
+
+test('shouldShowPopup: session shown má přednost i před čistým stavem', () => {
+  assert.equal(
+    shouldShowPopup({ dismissedAt: NOW - 99 * DAY }, NOW, { shown: true }),
+    false,
+  );
+});
