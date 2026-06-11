@@ -42,7 +42,8 @@ export function isIndexablePage(loc) {
 // `rubrika.html`, `embed.html` a `404.html` se NEuvádějí — jsou to šablony
 // plněné query parametrem nebo neindexovatelné stránky.
 // priority: relativní důležitost; changefreq: orientační frekvence změny.
-const STATIC_PAGES = [
+// Exportováno — sdílené jako jediný zdroj pravdy se section-page SEO injektorem.
+export const STATIC_PAGES = [
   { loc: '/', priority: '1.0', changefreq: 'daily' },
   { loc: '/clanky.html', priority: '0.9', changefreq: 'daily' },
   { loc: '/hspa-prehled.html', priority: '0.9', changefreq: 'weekly' },
