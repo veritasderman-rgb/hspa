@@ -83,7 +83,7 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY, isIndexable = () => true } = {}) {
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [] } = {}) {
   const staticEntries = STATIC_PAGES
     .filter(p => isIndexable(p.loc))
     .map(p => urlEntry({ ...p, lastmod: today }));
@@ -97,12 +97,18 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
         priority: '0.8',
       })
     );
+  // Per-indikátorové stránky (indikator-{id}.html). Noindex (ilustrativní)
+  // se vyřadí přes isIndexable, který čte robots meta z HTML.
+  const indicatorEntries = indicatorPages
+    .filter(loc => isIndexable(loc))
+    .map(loc => urlEntry({ loc, lastmod: today, changefreq: 'monthly', priority: '0.6' }));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...staticEntries,
     ...articleEntries,
+    ...indicatorEntries,
     '</urlset>',
     '',
   ].join('\n');
@@ -111,7 +117,9 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
 function main() {
   const stdout = process.argv.includes('--stdout');
   const articles = JSON.parse(readFileSync(resolve(ROOT, 'data/articles.json'), 'utf8')).articles ?? [];
-  const xml = buildSitemap(articles, { isIndexable: isIndexablePage });
+  const indicators = JSON.parse(readFileSync(resolve(ROOT, 'data/indicators.json'), 'utf8')).indicators ?? [];
+  const indicatorPages = indicators.map(i => `/indikator-${i.id}.html`);
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages });
   if (stdout) {
     console.log(xml);
     return;
