@@ -1,0 +1,52 @@
+# robots.txt — HSPA Monitor (Zdravé Česko)
+# Veřejný portál s agregovanými daty o výkonnosti zdravotnictví ČR.
+# Obsah je veřejné dobro — vyhledávače i AI odpovědní enginy jsou vítány.
+
+User-agent: *
+Allow: /
+
+# Šablony plněné query parametrem nebo embedované widgety nemají vlastní obsah
+# k indexaci — necháme je mimo (kanonický obsah je na sekčních stránkách).
+# Bez koncové kotvy `$`, ať pravidlo pokryje i query varianty
+# (`/indicator.html?id=…`, `/rubrika.html?…`), kterými se na šablony odkazuje.
+Disallow: /embed.html
+Disallow: /indicator.html
+Disallow: /rubrika.html
+
+# AI / generativní odpovědní enginy (GEO) — explicitně povoleno, ať mohou
+# web citovat jako zdroj. Pokud byste chtěli některý zablokovat, přepište
+# příslušný blok na `Disallow: /`.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://hspa-cesko.cz/sitemap.xml
