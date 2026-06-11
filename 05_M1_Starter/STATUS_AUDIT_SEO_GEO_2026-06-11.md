@@ -17,7 +17,8 @@ důležitých hlavně pro GEO.
 
 **Hotovo v tomto PR (rychlé výhry):**
 - ✅ `robots.txt` (chyběl úplně) — vč. explicitního povolení AI crawlerů + odkaz na sitemap
-- ✅ `sitemap.xml` (chyběl úplně) — generátor `scripts/generate-sitemap.js`, 131 URL, napojený na cron
+- ✅ `sitemap.xml` (chyběl úplně) — generátor `scripts/generate-sitemap.js`, 119 URL, napojený na cron
+  (vylučuje stránky s `noindex` v HTML, ať sitemap neposílá protichůdný signál)
 - ✅ `llms.txt` (GEO standard) — kurátorovaná mapa webu pro AI enginy
 
 **Doporučeno k dořešení (strukturální, mimo tento PR):** viz sekce „Backlog“ níže —
@@ -32,7 +33,8 @@ Article JSON-LD, kanonické odkazy na všech stránkách, server-side Organizati
 Předtím **neexistoval**. Bez něj nebyl ani odkaz na sitemap, ani explicitní postoj
 k AI crawlerům. Nový soubor:
 - `Allow: /` pro všechny + `Disallow` na šablony bez vlastního obsahu
-  (`embed.html`, `indicator.html`, `rubrika.html`).
+  (`embed.html`, `indicator.html`, `rubrika.html`) — bez koncové kotvy `$`, ať pravidlo
+  pokryje i query varianty (`indicator.html?id=…`).
 - Explicitně **povoluje** GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, anthropic-ai,
   PerplexityBot, Google-Extended, Applebot-Extended, CCBot — protože obsah je veřejné
   dobro a chceme být citováni. (Blokace = přepsat blok na `Disallow: /`.)
@@ -43,8 +45,8 @@ Předtím **neexistoval** — vyhledávače i AI musely objevovat stránky jen p
 - `scripts/generate-sitemap.js` (zrcadlí pattern `generate-feed.js`, sdílí
   `SITE_BASE` a `visibleArticles()` → respektuje publikační pravidla:
   drafty a budoucí data se nelistují).
-- 18 kurátorovaných sekčních stránek (s `priority`/`changefreq`) + všechny viditelné
-  články z `data/articles.json` = **131 URL**.
+- 18 kurátorovaných sekčních stránek (s `priority`/`changefreq`) + viditelné
+  články z `data/articles.json`, **kromě těch s `noindex` v HTML** = **119 URL**.
 - npm skript `generate:sitemap`, test `tests/generate-sitemap.test.js` (5 assertů).
 - Napojeno na cron: `refresh.yml` (denně 06:00 UTC) i `publish-articles.yml`
   regenerují a commitují `sitemap.xml` vedle `feed.xml`.

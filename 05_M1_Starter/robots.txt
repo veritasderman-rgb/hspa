@@ -7,9 +7,11 @@ Allow: /
 
 # Šablony plněné query parametrem nebo embedované widgety nemají vlastní obsah
 # k indexaci — necháme je mimo (kanonický obsah je na sekčních stránkách).
+# Bez koncové kotvy `$`, ať pravidlo pokryje i query varianty
+# (`/indicator.html?id=…`, `/rubrika.html?…`), kterými se na šablony odkazuje.
 Disallow: /embed.html
-Disallow: /indicator.html$
-Disallow: /rubrika.html$
+Disallow: /indicator.html
+Disallow: /rubrika.html
 
 # AI / generativní odpovědní enginy (GEO) — explicitně povoleno, ať mohou
 # web citovat jako zdroj. Pokud byste chtěli některý zablokovat, přepište

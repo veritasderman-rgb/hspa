@@ -37,3 +37,11 @@ test('buildSitemap: validní XML escaping v loc', () => {
   const xml = buildSitemap(arts, { today: '2026-06-10' });
   assert.ok(!xml.includes('<loc>https://hspa-cesko.cz/clanek-a.html&'), 'žádný neescapovaný ampersand');
 });
+
+test('buildSitemap: noindex stránky se přes isIndexable vyřadí', () => {
+  // Simulujeme, že clanek-b má v HTML noindex → nesmí být v sitemapě.
+  const isIndexable = loc => loc !== '/clanek-b.html';
+  const xml = buildSitemap(arts, { today: '2026-06-10', isIndexable });
+  assert.ok(xml.includes(`${SITE_BASE}/clanek-a.html`), 'indexovatelný článek zůstává');
+  assert.ok(!xml.includes('clanek-b.html'), 'noindex článek vyřazen');
+});

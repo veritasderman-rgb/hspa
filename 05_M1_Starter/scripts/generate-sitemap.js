@@ -11,13 +11,32 @@
 //   node scripts/generate-sitemap.js --stdout   # jen vypíše
 //   npm run generate:sitemap
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITE_BASE, visibleArticles } from './generate-feed.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
+
+// Stránka může být publikovaná a viditelná na webu, ale přitom mít v HTML
+// `<meta name="robots" content="noindex…">` (typicky review-pending obsah, který
+// je zatím záměrně mimo index). Takovou stránku do sitemapy NEDÁVÁME — jinak
+// bychom posílali protichůdný signál ("submitted URL marked noindex").
+const NOINDEX_RE = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i;
+
+/** Mapuje URL cestu sitemapy na HTML soubor v repu (`/` → index.html). */
+function locToFile(loc) {
+  const rel = loc === '/' ? 'index.html' : loc.replace(/^\//, '');
+  return resolve(ROOT, rel);
+}
+
+/** true, pokud stránka nemá `noindex` (chybějící soubor bereme jako indexovatelný). */
+export function isIndexablePage(loc) {
+  const file = locToFile(loc);
+  if (!existsSync(file)) return true;
+  return !NOINDEX_RE.test(readFileSync(file, 'utf8'));
+}
 
 // Kurátorovaný seznam statických (sekčních) stránek. `indicator.html`,
 // `rubrika.html`, `embed.html` a `404.html` se NEuvádějí — jsou to šablony
@@ -63,16 +82,20 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY } = {}) {
-  const staticEntries = STATIC_PAGES.map(p => urlEntry({ ...p, lastmod: today }));
-  const articleEntries = visibleArticles(articles, today).map(a =>
-    urlEntry({
-      loc: `/${a.slug}`,
-      lastmod: a.date,
-      changefreq: 'monthly',
-      priority: '0.8',
-    })
-  );
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true } = {}) {
+  const staticEntries = STATIC_PAGES
+    .filter(p => isIndexable(p.loc))
+    .map(p => urlEntry({ ...p, lastmod: today }));
+  const articleEntries = visibleArticles(articles, today)
+    .filter(a => isIndexable(`/${a.slug}`))
+    .map(a =>
+      urlEntry({
+        loc: `/${a.slug}`,
+        lastmod: a.date,
+        changefreq: 'monthly',
+        priority: '0.8',
+      })
+    );
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -87,7 +110,7 @@ export function buildSitemap(articles, { today = TODAY } = {}) {
 function main() {
   const stdout = process.argv.includes('--stdout');
   const articles = JSON.parse(readFileSync(resolve(ROOT, 'data/articles.json'), 'utf8')).articles ?? [];
-  const xml = buildSitemap(articles);
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage });
   if (stdout) {
     console.log(xml);
     return;
