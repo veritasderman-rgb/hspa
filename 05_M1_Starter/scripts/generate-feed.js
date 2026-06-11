@@ -22,6 +22,15 @@ const ROOT = resolve(__dirname, '..');
 // skorezdravotnictvi.cz — sjednoceno se SITE_URL v src/page-shared.js a se
 // sociálními účty (@SkoreZdravko).
 export const SITE_BASE = 'https://skorezdravotnictvi.cz';
+
+/**
+ * Kanonická (clean) cesta — bez koncového `.html`. Vercel má `cleanUrls: true`,
+ * takže `/x.html` se 307/308 přesměruje na `/x`; kanonické signály (canonical,
+ * og:url, JSON-LD url, sitemap) proto míří na bezextenzní URL, kterou web
+ * skutečně servíruje bez redirectu. (feed.xml zůstává na `.html` kvůli
+ * stabilitě RSS guid.)
+ */
+export const canonicalPath = (p) => (p === '/' ? '/' : String(p).replace(/\.html$/, ''));
 const FEED_TITLE = 'HSPA Monitor — Zdravé Česko';
 const FEED_DESC = 'Hodnocení výkonnosti českého zdravotnictví podle metodiky OECD HSPA — indikátory, analýzy, články.';
 const MAX_ITEMS = 30;

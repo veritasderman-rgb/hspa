@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, unlinkSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_BASE } from './generate-feed.js';
+import { SITE_BASE, canonicalPath } from './generate-feed.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DRY = process.argv.includes('--dry');
@@ -97,15 +97,15 @@ function datasetJsonLd(ind, card, url, indexable) {
           unitText: ind.unit || undefined,
           measurementTechnique: ind.source?.name || undefined,
         },
-        creator: { '@type': 'Organization', name: 'HSPA Monitor', url: `${SITE_BASE}/` },
-        publisher: { '@type': 'Organization', name: 'HSPA Monitor', url: `${SITE_BASE}/` },
+        creator: { '@type': 'Organization', name: 'HSPA Monitor', alternateName: 'Skóre zdravotnictví', url: `${SITE_BASE}/` },
+        publisher: { '@type': 'Organization', name: 'HSPA Monitor', alternateName: 'Skóre zdravotnictví', url: `${SITE_BASE}/` },
         sourceOrganization: ind.source?.name ? { '@type': 'Organization', name: ind.source.name } : undefined,
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Domů', item: `${SITE_BASE}/` },
-          { '@type': 'ListItem', position: 2, name: 'HSPA přehled', item: `${SITE_BASE}/hspa-prehled.html` },
+          { '@type': 'ListItem', position: 2, name: 'HSPA přehled', item: `${SITE_BASE}/hspa-prehled` },
           { '@type': 'ListItem', position: 3, name: ind.name, item: url },
         ],
       },
@@ -116,7 +116,7 @@ function datasetJsonLd(ind, card, url, indexable) {
 
 export function buildPage(ind, card) {
   const slug = `${PAGE_PREFIX}${ind.id}.html`;
-  const url = `${SITE_BASE}/${slug}`;
+  const url = `${SITE_BASE}/${canonicalPath(slug)}`;
   const status = resolveStatus(ind);
   const indexable = status === 'verified' || status === 'preliminary';
   const def = card?.definition || '';

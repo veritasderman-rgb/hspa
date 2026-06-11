@@ -18,8 +18,8 @@ test('buildSitemap: validní urlset, statické stránky + viditelné články', 
   // Homepage jako absolutní URL
   assert.ok(xml.includes(`<loc>${SITE_BASE}/</loc>`));
   // Viditelný článek je uvnitř, draft i budoucí ven
-  assert.ok(xml.includes(`${SITE_BASE}/clanek-a.html`));
-  assert.ok(xml.includes(`${SITE_BASE}/clanek-b.html`));
+  assert.ok(xml.includes(`${SITE_BASE}/clanek-a`));
+  assert.ok(xml.includes(`${SITE_BASE}/clanek-b`));
   assert.ok(!xml.includes('clanek-draft'), 'draft nesmí být v sitemapě');
   assert.ok(!xml.includes('clanek-future'), 'budoucí článek nesmí být v sitemapě');
 });
@@ -30,7 +30,7 @@ test('buildSitemap: každý <url> má <loc>, lastmod článku = jeho datum', () 
   const locs = (xml.match(/<loc>/g) ?? []).length;
   assert.equal(urls, locs, 'počet <url> a <loc> musí sedět');
   // lastmod článku odpovídá datu publikace
-  assert.match(xml, new RegExp(`${SITE_BASE}/clanek-b\\.html</loc>\\s*<lastmod>2026-06-09</lastmod>`));
+  assert.match(xml, new RegExp(`${SITE_BASE}/clanek-b</loc>\\s*<lastmod>2026-06-09</lastmod>`));
 });
 
 test('buildSitemap: validní XML escaping v loc', () => {
@@ -42,6 +42,6 @@ test('buildSitemap: noindex stránky se přes isIndexable vyřadí', () => {
   // Simulujeme, že clanek-b má v HTML noindex → nesmí být v sitemapě.
   const isIndexable = loc => loc !== '/clanek-b.html';
   const xml = buildSitemap(arts, { today: '2026-06-10', isIndexable });
-  assert.ok(xml.includes(`${SITE_BASE}/clanek-a.html`), 'indexovatelný článek zůstává');
-  assert.ok(!xml.includes('clanek-b.html'), 'noindex článek vyřazen');
+  assert.ok(xml.includes(`${SITE_BASE}/clanek-a`), 'indexovatelný článek zůstává');
+  assert.ok(!xml.includes('clanek-b'), 'noindex článek vyřazen');
 });

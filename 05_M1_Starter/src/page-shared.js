@@ -44,6 +44,7 @@ export function injectOrgSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'HSPA Monitor',
+    alternateName: 'Skóre zdravotnictví',
     url: SITE_URL + '/',
     logo: SITE_URL + '/assets/brand/og-default.png',
     sameAs: SOCIAL_LINKS.map(s => s.url),
