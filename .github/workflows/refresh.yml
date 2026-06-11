@@ -52,6 +52,9 @@ jobs:
       - name: Generate RSS feed
         run: npm run generate:feed
 
+      - name: Generate indicator pages
+        run: npm run seo:indicators
+
       - name: Generate sitemap
         run: npm run generate:sitemap
 
@@ -102,7 +105,7 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml
+          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml 05_M1_Starter/indikator-*.html
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0

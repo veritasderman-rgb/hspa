@@ -132,15 +132,21 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
 8. **Statický obsah homepage** (nebo prerender). `#indicatorGrid`, `#homeArticlesGrid`
    a footer plní JS → ne-JS crawler vidí kostru. Zvážit server-side/build-time
    prerender alespoň seznamu článků a klíčových čísel.
-9. **Per-indikátor URL.** Všech ~139 indikátorů sdílí jedinou šablonu
-   `indicator.html?id=…` bez statického obsahu → nejsou samostatně indexovatelné.
-   Zvážit statické stránky `/indikator/{id}.html` (nebo prerender) s vlastním
-   `<title>`, popisem a `Dataset` JSON-LD — velký GEO potenciál (AI rády citují
-   konkrétní čísla s URL).
+9. ✅ **Per-indikátor URL.** Generátor `scripts/generate-indicator-pages.js`
+   (`npm run seo:indicators`) tvoří lehké statické `indikator-{id}.html` (plochá
+   struktura kvůli relativním cestám) se statickým obsahem (název=H1, hodnota,
+   rok, benchmark, definice, význam, metodika, zdroj) + odkazem na interaktivní
+   `indicator.html?id=…`. Ilustrativní (seed) indikátory dostávají `noindex` a
+   sitemap je vynechá. Napojeno na `refresh.yml` (regenerace při změně dat).
+   *Zbývá: přesměrovat interní odkazy z `indicator.html?id=` na statické stránky
+   (dnes jen přes sitemap) — samostatný nízkorizikový follow-up.*
 10. ✅ **Alt text obálek.** Cover `<img>` zůstává `alt=""` (správně — obálka nese
     titulek jako text hned vedle nadpisu, popisný alt by duplikoval). Místo toho
     přidán `og:image:alt` = titulek (náhled/AI/image search bez a11y duplikace).
-11. **`Dataset` / `FAQPage` JSON-LD** tam, kde to dává smysl (datové stránky, FAQ).
+11. ✅ **`Dataset` JSON-LD** na indexovatelných per-indikátorových stránkách
+    (`variableMeasured`, `temporalCoverage`, `spatialCoverage`, `creator`/`publisher`)
+    — velký GEO potenciál (AI citují konkrétní čísla s URL). `FAQPage` zatím
+    nevyužito (na webu není FAQ formát).
 
 ---
 
