@@ -51,6 +51,8 @@ okamžitá publikace), **zastav se a nahlas to** místo provedení.
 | `ORG` | `My Organization` (`5a06fbc0513d8d6f2373e6b9`) | ověř přes `get_account` |
 | `SITE` | `https://skorezdravotnictvi.cz` | doména článků i coverů |
 | `BRAND` | `HSPA Monitor` | název portálu v textech |
+| `COVER_FB_X` | `assets/covers/<slug>.png` (1200×630) | krajinný cover — nativní pro FB a X |
+| `COVER_IG` | `assets/social/ig/<slug>.png` (1080×1080) | čtvercová karta — nativní pro IG, generuje `scripts/generate-ig-cards.js` |
 
 **Kanály nehardcoduj** — zjišťuj je každý běh přes `list_channels` (mění se;
 historicky FB + IG, později místo Threads přibyl X). Referenční ID k dnešku:
@@ -107,19 +109,41 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 
 **Společné:**
 - CTA odkaz: `https://skorezdravotnictvi.cz/<slug>` (slug už obsahuje `.html`).
-- Cover jako `assets[0].image` s povinným `altText`
+- Grafika jako `assets[0].image` s povinným `altText`
   („Grafika článku … na portálu HSPA Monitor.").
+- **Síťově specifická grafika** (viz `COVER_FB_X` / `COVER_IG`):
+  - **FB a X** → krajinný cover `assets/covers/<slug>.png` (1200×630).
+  - **IG** → čtvercová karta `assets/social/ig/<slug>.png` (1080×1080).
 - Hashtagy 3–6: mix oborových (`#zdravotnictví #data #OECD #verejnezdravi`) a
   brandového `#zdravícesko`. Emoji střídmě (1–4, funkčně).
-- **Před použitím coveru ověř HTTP 200** (`curl -sI`/WebFetch). Když cover chybí:
+- **Před použitím grafiky ověř HTTP 200** (`curl -sIL`/WebFetch) na finální URL
+  na produkční doméně. Když grafika chybí:
   FB/X mohou jít bez obrázku (text-only), **IG kandidáta bez obrázku přeskoč**
   (IG obrázek vyžaduje).
 
 **Facebook** (`service: facebook`, `metadata.facebook.type: "post"`):
-- Hook v 1. řádku + 2–4 věty + 1 klíčové číslo + **klikací odkaz v textu** + cover.
+- Hook v 1. řádku + 2–4 věty + 1 klíčové číslo + **klikací odkaz v textu** +
+  krajinný cover.
 
 **Instagram** (`service: instagram`, `metadata.instagram: { type:"post", shouldShareToFeed:true }`):
-- Caption + cover. **Odkaz není klikací** → zakonči `🔗 odkaz v biu`. URL do textu nedávej.
+- Caption + **čtvercová karta** (`assets/social/ig/<slug>.png`). **Odkaz není
+  klikací** → zakonči `🔗 odkaz v biu`. URL do textu nedávej.
+- **Čtvercovou kartu netvoř ručně** — máš na to nástroj (idempotentní):
+  ```bash
+  npm install --no-save @resvg/resvg-js   # jen pokud chybí node_modules
+  node scripts/generate-ig-cards.js <slug>   # slug = název coveru bez .png
+  ```
+  Kicker + headline se odvodí automaticky z `data/articles.json`; volitelně lze
+  headline doladit v mapě `OVERRIDES` ve skriptu. Karta = cover vsazený do
+  brandového čtverce + úderný hák. **Reuse přednost:** existuje-li už
+  `assets/social/ig/<slug>.png` (200 na produkci), znovu ji negeneruj.
+- **Hosting (důležité):** Buffer si grafiku stáhne z veřejné URL až při
+  publikaci, takže URL musí být živá teď i za pár dní. Nově vygenerovanou kartu
+  proto **commitni + pushni** (deploy ji zpřístupní na `skorezdravotnictvi.cz`).
+  Dokud nová karta není na produkci živá (HTTP 200), pro **daný běh** u IG sáhni
+  po krajinném coveru (`assets/covers/<slug>.png`, ten je živý) a čtvercovou
+  kartu nasaď až v dalším běhu. Nikdy do Bufferu nedávej URL, která ještě
+  nevrací 200.
 
 **X / Twitter** (`service: twitter`):
 - **Max 280 znaků** (Free účet; pokud `get_channel` ukáže placený tier, limit
@@ -128,7 +152,8 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 
 ### Fáze 4 — Zařazení
 5. Vytvoř příspěvek `create_post` s `mode: addToQueue`,
-   `schedulingType: automatic`, správným `channelId`, textem a cover assetem.
+   `schedulingType: automatic`, správným `channelId`, textem a grafikou podle
+   sítě (FB/X krajinný cover, IG čtvercová karta).
    Zařazuj v pořadí priority (nejvyšší priorita → nejbližší volný slot).
 6. Po každém kanálu znovu zkontroluj, že `scheduledCount` nepřekročil `TARGET`.
 
@@ -145,16 +170,26 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 - Pokud byly všechny kanály plné: jen to konstatuj („fronty plné, nic
   nepřidáno").
 
-**Nic necommituj.** Stav drží Buffer; rutina do repa nezapisuje. (Pokud by
-historie Bufferu přestala stačit na cooldown, teprve pak zvaž lehký ledger
-`social/state/social-queue.json` — pro teď není potřeba.)
+**Stav fronty necommituj.** Stav drží Buffer; rutina do repa nezapisuje stav
+fronty ani ledger. (Pokud by historie Bufferu přestala stačit na cooldown,
+teprve pak zvaž lehký ledger `social/state/social-queue.json` — pro teď není
+potřeba.)
+
+**Výjimka — grafické assety.** Nově vygenerované čtvercové IG karty
+(`assets/social/ig/<slug>.png`) **commitni + pushni** (a založ PR). Nejsou to
+stav fronty, ale trvalé znovupoužitelné assety webu — durable hosting na
+`skorezdravotnictvi.cz` je podmínka, aby je Buffer mohl použít. Jednou
+vygenerovaná karta se v dalších bězích už netvoří (reuse).
 
 ---
 
 ## Předpoklady prostředí
 - Připojený **Buffer MCP** server (nástroje `mcp__Buffer__*`).
-- Síťový přístup na `skorezdravotnictvi.cz` (ověření coverů) a do repa
-  (`data/articles.json`, `assets/covers/`).
+- Síťový přístup na `skorezdravotnictvi.cz` (ověření grafiky) a do repa
+  (`data/articles.json`, `assets/covers/`, `assets/social/ig/`).
+- Node + `@resvg/resvg-js` pro generátor čtvercových IG karet
+  (`scripts/generate-ig-cards.js`; `npm install --no-save @resvg/resvg-js`,
+  pokud chybí `node_modules`).
 - Žádné API klíče ani placené přístupy nejsou potřeba.
 
 ## Jak to zapnout jako routine

@@ -5,10 +5,15 @@
 // IG má nativní poměr 1:1 — tento skript složí cover do brandového
 // čtvercového rámce s headline pruhem.
 //
-//   node scripts/generate-ig-cards.js                 # všechny v MANIFESTU
-//   node scripts/generate-ig-cards.js <slug> [<slug>] # vybrané slugy
+//   node scripts/generate-ig-cards.js <slug> [<slug>]  # vygeneruje vybrané slugy
+//   node scripts/generate-ig-cards.js                  # refresh všech už existujících karet
+//
+// Kicker + headline se odvozují AUTOMATICKY z data/articles.json (tag +
+// první věta titulku) — pro nový článek tedy NENÍ potřeba nic dopisovat.
+// Volitelně lze headline ručně doladit v mapě OVERRIDES níže.
 //
 // Vstup:  assets/covers/<slug>.png   (krajinný cover, musí existovat)
+//         data/articles.json         (zdroj kicker/headline)
 // Výstup: assets/social/ig/<slug>.png (1080×1080)
 
 import { Resvg } from '@resvg/resvg-js';
@@ -20,6 +25,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
 const OUT_DIR = resolve(ROOT, 'assets/social/ig');
+const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
 
 const PAPER = '#fbf8f1';
 const INK = '#1f1a14';
@@ -29,38 +35,51 @@ const RULE = 'rgba(31,26,20,0.13)';
 const W = 1080;
 const H = 1080;
 
-// Krátké, úderné headline + kicker pro každou kartu (číslo do popředí).
-// Headline je odvozen z perexu/titulku článku (žádná nová čísla z paměti).
-const MANIFEST = {
-  'clanek-react-eu-nku-kontrola-2026': {
-    kicker: 'Financování · kontrola',
-    headline: 'Spektrometr za 1,46 mil. Kč. A 21 měsíců v krabici.',
-  },
-  'clanek-centrum-onkologicke-prevence-mou-2026': {
-    kicker: 'Prevence · investice',
-    headline: 'Centrum prevence za 1,12 miliardy. Rozhodne ale účast.',
-  },
-  'clanek-klistova-encefalitida-proockovanost-2026': {
-    kicker: 'Prevence · vakcinace',
-    headline: 'Jen 17 % Čechů je chráněno proti klíšťové encefalitidě.',
-  },
-  'clanek-zaskrt-umrti-2026': {
-    kicker: 'Prevence · vakcinace',
-    headline: 'Druhé úmrtí na záškrt v Česku za 57 let.',
-  },
-  'clanek-ai-act-zdravotnictvi-srpen-2026': {
-    kicker: 'Digitalizace · regulace',
-    headline: '64 % nemocnic už používá AI. Od 2. 8. platí AI Act.',
-  },
-  'clanek-nikez-jak-funguje-2026': {
-    kicker: 'Kvalita péče',
-    headline: 'Kdo měří kvalitu péče? Od roku 2023 institut NIKEZ.',
-  },
-  'clanek-zubni-kaz-deti': {
-    kicker: 'Prevence · děti',
-    headline: 'České děti mají skoro 4× víc zubních kazů než německé.',
-  },
+// VOLITELNÉ ruční doladění headline/kicker pro vybrané slugy. Co tu není,
+// se odvodí automaticky z articles.json (viz deriveMeta). Editace NENÍ
+// nutná — slouží jen k vypilování háku, když automatický lead nestačí.
+const OVERRIDES = {
+  'clanek-react-eu-nku-kontrola-2026': { headline: 'Spektrometr za 1,46 mil. Kč. A 21 měsíců v krabici.' },
+  'clanek-centrum-onkologicke-prevence-mou-2026': { headline: 'Centrum prevence za 1,12 miliardy. Rozhodne ale účast.' },
+  'clanek-klistova-encefalitida-proockovanost-2026': { headline: 'Jen 17 % Čechů je chráněno proti klíšťové encefalitidě.' },
+  'clanek-zaskrt-umrti-2026': { headline: 'Druhé úmrtí na záškrt v Česku za 57 let.' },
+  'clanek-ai-act-zdravotnictvi-srpen-2026': { headline: '64 % nemocnic už používá AI. Od 2. 8. platí AI Act.' },
+  'clanek-nikez-jak-funguje-2026': { headline: 'Kdo měří kvalitu péče? Od roku 2023 institut NIKEZ.' },
+  'clanek-zubni-kaz-deti': { headline: 'České děti mají skoro 4× víc zubních kazů než německé.' },
 };
+
+let _articles = null;
+function loadArticles() {
+  if (_articles) return _articles;
+  const data = JSON.parse(readFileSync(ARTICLES_JSON, 'utf8'));
+  _articles = new Map();
+  for (const a of data.articles || []) {
+    const base = (a.slug || '').replace(/\.html$/, '');
+    if (base) _articles.set(base, a);
+  }
+  return _articles;
+}
+
+// První věta titulku jako úderný hák; když je velmi krátká, přibere druhou.
+function leadFromTitle(title) {
+  const parts = String(title).split(/(?<=[.?!:])\s+/).map((s) => s.trim()).filter(Boolean);
+  let lead = parts[0] || String(title);
+  if (/[:]$/.test(lead) && parts[1]) lead = parts[1];        // titulek typu "Téma: ..."
+  if (lead.length < 24 && parts[1]) lead = `${lead} ${parts[1]}`.trim();
+  // Drž se ≤ 3 řádků (~26 znaků/řádek) — delší lead radši zkrať s „…".
+  const MAX = 66;
+  if (lead.length > MAX) lead = `${lead.slice(0, MAX - 1).replace(/\s+\S*$/, '')}…`;
+  return lead;
+}
+
+// Sestaví { kicker, headline } pro slug: OVERRIDES > articles.json > fallback.
+function deriveMeta(slug) {
+  const ov = OVERRIDES[slug] || {};
+  const art = loadArticles().get(slug);
+  const kicker = ov.kicker || art?.tag || art?.rubric || 'HSPA Monitor';
+  const headline = ov.headline || (art ? leadFromTitle(art.title) : slug.replace(/^clanek-/, '').replace(/-/g, ' '));
+  return { kicker, headline };
+}
 
 function escapeXml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -144,14 +163,28 @@ function renderCard(slug, meta) {
   return out;
 }
 
-const args = process.argv.slice(2);
-const slugs = args.length ? args : Object.keys(MANIFEST);
-for (const slug of slugs) {
-  const meta = MANIFEST[slug];
-  if (!meta) {
-    console.error(`⚠️  Nemám headline v MANIFESTU pro: ${slug} — přeskakuji.`);
-    continue;
-  }
-  const out = renderCard(slug, meta);
-  console.log(`✓ ${out}`);
+// Bez argumentů: refresh všech už existujících karet (assets/social/ig/*.png).
+function existingCardSlugs() {
+  if (!existsSync(OUT_DIR)) return [];
+  return readdirSync(OUT_DIR)
+    .filter((f) => f.endsWith('.png'))
+    .map((f) => f.replace(/\.png$/, ''));
 }
+
+const args = process.argv.slice(2).map((s) => s.replace(/\.html$/, '').replace(/\.png$/, ''));
+const slugs = args.length ? args : existingCardSlugs();
+if (!slugs.length) {
+  console.error('Použití: node scripts/generate-ig-cards.js <slug> [<slug>…]  (slug = název coveru bez .png)');
+  process.exit(1);
+}
+let ok = 0;
+for (const slug of slugs) {
+  try {
+    const out = renderCard(slug, deriveMeta(slug));
+    console.log(`✓ ${out}`);
+    ok++;
+  } catch (err) {
+    console.error(`⚠️  ${slug}: ${err.message}`);
+  }
+}
+console.log(`\nHotovo: ${ok}/${slugs.length} karet.`);
