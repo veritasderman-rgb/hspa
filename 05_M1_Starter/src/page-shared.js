@@ -4,6 +4,57 @@ import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
 
+/** Kanonická doména webu (sjednoceno s handle sociálních sítí). */
+export const SITE_URL = 'https://skorezdravotnictvi.cz';
+
+/**
+ * Oficiální profily projektu na sociálních sítích. Jediný zdroj pravdy —
+ * používá se v patičce, na stránce „O projektu", v JSON-LD `sameAs`
+ * i ve sdílecím pásku pod články.
+ */
+export const SOCIAL_LINKS = [
+  { id: 'facebook', label: 'Facebook', handle: 'Skóre zdravotnictví Česko', url: 'https://www.facebook.com/profile.php?id=61590403735200' },
+  { id: 'x', label: 'X', handle: '@SkoreZdravko', url: 'https://x.com/SkoreZdravko' },
+  { id: 'instagram', label: 'Instagram', handle: '@skorezdravotnictvi', url: 'https://www.instagram.com/skorezdravotnictvi/' },
+];
+
+/** Inline SVG ikony sítí (monochrom, `currentColor`) — bez externích fontů/skriptů. */
+export const SOCIAL_ICONS = {
+  facebook: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.24 2H21.5l-7.1 8.12L22.9 22h-6.6l-5.17-6.77L5.2 22H1.94l7.6-8.69L1.5 2h6.77l4.67 6.18L18.24 2zm-1.16 18h1.8L7.02 3.9H5.1l11.98 16.1z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.43.36 1.06.41 2.23.06 1.27.07 1.65.07 4.81s-.01 3.54-.07 4.81c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.43.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.43-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.81s.01-3.54.07-4.81c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.43-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5.01-4.74.07-.9.04-1.38.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.33-.28.81-.32 1.71C3.21 9.18 3.2 9.53 3.2 12s.01 2.82.07 4.07c.04.9.19 1.38.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.33.13.81.28 1.71.32 1.24.06 1.6.07 4.74.07s3.5-.01 4.74-.07c.9-.04 1.38-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.33.28-.81.32-1.71.06-1.25.07-1.6.07-4.07s-.01-2.82-.07-4.07c-.04-.9-.19-1.38-.32-1.71a2.86 2.86 0 0 0-.69-1.06 2.86 2.86 0 0 0-1.06-.69c-.33-.13-.81-.28-1.71-.32C15.5 4.01 15.14 4 12 4zm0 3.05A4.95 4.95 0 1 0 12 17a4.95 4.95 0 0 0 0-9.95zm0 1.8a3.15 3.15 0 1 1 0 6.3 3.15 3.15 0 0 1 0-6.3zm5.15-.55a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>',
+};
+
+/** Vyrenderuje řadu odkazů na oficiální profily (sdílené patičkou i „O projektu"). */
+export function socialLinksHtml() {
+  return SOCIAL_LINKS.map(s =>
+    `<a class="social-link" href="${s.url}" target="_blank" rel="me noopener" aria-label="${s.label} — ${s.handle} (otevře se v novém okně)" title="${s.label}: ${s.handle}">${SOCIAL_ICONS[s.id] ?? ''}<span class="social-link-label">${s.label}</span></a>`
+  ).join('');
+}
+
+/**
+ * Vloží do <head> JSON-LD `Organization` se `sameAs` na oficiální profily.
+ * Říká vyhledávačům, že tyhle účty jsou naše. Idempotentní, běží na každé
+ * stránce (z renderModuleNav).
+ */
+export function injectOrgSchema() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('orgSchemaLd')) return;
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'HSPA Monitor',
+    url: SITE_URL + '/',
+    logo: SITE_URL + '/assets/brand/og-default.png',
+    sameAs: SOCIAL_LINKS.map(s => s.url),
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'orgSchemaLd';
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
+}
+
 /**
  * Vrátí `true`, pokud má článek být veřejně viditelný v daný okamžik.
  *
@@ -234,6 +285,11 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
           <a href="https://github.com/veritasderman-rgb/hspa" target="_blank" rel="noopener">Zdrojový kód (GitHub) ↗</a>
         </p>
       </div>
+      <div>
+        <h6>Sledujte nás</h6>
+        <p>Oficiální profily projektu — aktuální data a články:</p>
+        <div class="footer-social">${socialLinksHtml()}</div>
+      </div>
     </div>
     <div class="disclaimer">
       Josef Pavlovic · CC-BY 4.0 · Není oficálním portálem MZČR ani OECD ·
@@ -390,6 +446,7 @@ export function renderBrandMark() {
 export function renderModuleNav(activeId) {
   initNewsletterPopup();
   renderBrandMark();
+  injectOrgSchema();
   const path = window.location.pathname;
   const tabs = [
     {

@@ -672,6 +672,16 @@
     </div>
   </section>
 
+  <section class="about-social-section" aria-labelledby="aboutSocialH">
+    <div class="ed-kicker">Sociální sítě</div>
+    <h3 class="ed-areas-h" id="aboutSocialH">Sledujte nás</h3>
+    <p class="ed-hero-lead">
+      Aktuální data, nové články a kontext k dění ve zdravotnictví dáváme na tyto
+      <strong>oficiální profily projektu</strong>. Jiné účty pod naším jménem nejsou naše.
+    </p>
+    <div class="about-social-links" id="aboutSocial"></div>
+  </section>
+
 </main>
 
 <footer class="bottom" id="siteFooter"></footer>
@@ -700,9 +710,11 @@
 <script type="module">
   import './src/analytics.js';
   import './src/analytics-public.js';
-  import { renderModuleNav, renderMastheadDate } from './src/page-shared.js';
+  import { renderModuleNav, renderMastheadDate, socialLinksHtml } from './src/page-shared.js';
   renderModuleNav('about');
   renderMastheadDate();
+  const aboutSocial = document.getElementById('aboutSocial');
+  if (aboutSocial) aboutSocial.innerHTML = socialLinksHtml();
 </script>
 </body>
 </html>
