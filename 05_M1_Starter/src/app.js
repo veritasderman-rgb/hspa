@@ -3,7 +3,7 @@
 // Žádné inline data — jediný zdroj pravdy je JSON file.
 
 import './analytics.js';
-import { renderFooter, renderModuleNav, isArticleVisible, resolveVerificationStatus, verifBadgeHtml } from './page-shared.js';
+import { renderFooter, renderModuleNav, isArticleVisible, resolveVerificationStatus, verifBadgeHtml, formatNumberCz } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { getSiteStats, applyDataStats } from './site-stats.js';
 
@@ -560,7 +560,7 @@ function renderGrid() {
     const arrow = trendArrow(ind);
     const arrowHTML = arrow.glyph === '→'
       ? `<span class="trend trend-${arrow.cls}" title="Stabilní">→</span>`
-      : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${Math.abs(arrow.pct).toFixed(1)} %</span>`;
+      : `<span class="trend trend-${arrow.cls}" title="Meziroční změna">${arrow.glyph} ${formatNumberCz(Math.abs(arrow.pct), { minDecimals: 1, maxDecimals: 1 })} %</span>`;
 
     const verifBadge = verifBadgeHtml(ind);
 
@@ -575,7 +575,7 @@ function renderGrid() {
         <div class="signal ${ind.signal}" title="Hodnocení: ${ind.signal}"></div>
       </div>
       <div class="value-row">
-        <span class="big-value">${ind.value}</span>
+        <span class="big-value">${formatNumberCz(ind.value)}</span>
         <span class="unit">${ind.unit}</span>
         ${arrowHTML}
         ${ind.year ? `<span class="year-badge">${ind.year}</span>` : ''}
@@ -604,6 +604,10 @@ function renderSparkline(ind, chartId) {
   const color = ind.signal === 'good' ? '#38761D'
     : ind.signal === 'warn' ? '#B45F06'
     : ind.signal === 'bad' ? '#990000' : '#0B5394';
+  if (typeof Chart === 'undefined') {
+    renderSvgSparklineFallback(ind, ctx, color);
+    return;
+  }
   // eslint-disable-next-line no-undef
   const ch = new Chart(ctx, {
     type: 'line',
@@ -627,6 +631,37 @@ function renderSparkline(ind, chartId) {
     }
   });
   chartInstances.set(chartId, ch);
+}
+
+/**
+ * Záložní sparkline bez Chart.js — čisté inline SVG. Stránka musí zůstat
+ * informačně plnohodnotná, i když se CDN knihovna nenačte (firemní proxy,
+ * výpadek CDN, offline): trend jako polyline + roky v title tooltipu.
+ */
+function renderSvgSparklineFallback(ind, canvas, color) {
+  const trend = (ind.trend || []).filter(t => Number.isFinite(Number(t.value)));
+  if (trend.length < 2) return;
+  const W = 260, H = 60, PAD = 4;
+  const vals = trend.map(t => Number(t.value));
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = max - min || 1;
+  const pts = trend.map((t, i) => {
+    const x = PAD + (i / (trend.length - 1)) * (W - 2 * PAD);
+    const y = H - PAD - ((Number(t.value) - min) / span) * (H - 2 * PAD);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const first = trend[0], last = trend[trend.length - 1];
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'sparkline-svg-fallback');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', `Vývoj ${first.year}–${last.year}: ${formatNumberCz(first.value)} → ${formatNumberCz(last.value)}`);
+  svg.innerHTML = `
+    <title>Vývoj ${first.year}–${last.year}: ${formatNumberCz(first.value)} → ${formatNumberCz(last.value)}</title>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  `;
+  canvas.replaceWith(svg);
+  chartInstances.set(canvas.id, { destroy() { svg.remove(); } });
 }
 
 function renderChartsBatch(pendingCharts) {
@@ -697,7 +732,7 @@ function populateRegionSelector(datasets) {
 function renderRegionDataset(ds) {
   activeRegionDataset = ds;
   document.getElementById('regionsBadge').textContent =
-    `${ds.regions.length} krajů · průměr ČR ${ds.country_avg} ${ds.unit} (${ds.year})`;
+    `${ds.regions.length} krajů · průměr ČR ${formatNumberCz(ds.country_avg)} ${ds.unit} (${ds.year})`;
 
   // Teaser link na /kraje — předáme aktuální indikátor v hash, aby krajský
   // pohled rovnou ukázal stejný datový řez, který uživatel sleduje zde.
@@ -715,19 +750,19 @@ function renderRegionDataset(ds) {
   const sorted = [...ds.regions].sort((a, b) => betterHigher ? b.value - a.value : a.value - b.value);
 
   for (const r of sorted) {
-    const diff = (r.value - ds.country_avg).toFixed(1);
-    const diffCls = (betterHigher ? diff > 0 : diff < 0) ? 'pos' : diff == 0 ? '' : 'neg';
+    const diff = r.value - ds.country_avg;
+    const diffCls = (betterHigher ? diff > 0 : diff < 0) ? 'pos' : Math.abs(diff) < 0.05 ? '' : 'neg';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${r.name}</td>
-      <td>${r.value.toFixed(r.value < 100 ? 1 : 0)}</td>
-      <td class="diff ${diffCls}">${diff > 0 ? '+' : ''}${diff}</td>
+      <td>${formatNumberCz(r.value, { maxDecimals: r.value < 100 ? 1 : 0 })}</td>
+      <td class="diff ${diffCls}">${diff > 0 ? '+' : diff < 0 ? '−' : ''}${formatNumberCz(Math.abs(diff), { minDecimals: 1, maxDecimals: 1 })}</td>
     `;
     tbody.appendChild(tr);
   }
 
   const ctx = document.getElementById('regionsChart');
-  if (!ctx) return;
+  if (!ctx || typeof Chart === 'undefined') return;
   if (regionsChart) regionsChart.destroy();
   // eslint-disable-next-line no-undef
   regionsChart = new Chart(ctx, {
@@ -765,20 +800,20 @@ function renderRegionDataset(ds) {
 
 function renderRegionsLegacy(data) {
   document.getElementById('regionsBadge').textContent =
-    `${data.regions.length} krajů · průměr ČR ${data.country_avg} let`;
+    `${data.regions.length} krajů · průměr ČR ${formatNumberCz(data.country_avg)} let`;
   const tbody = document.querySelector('#regionsTable tbody');
   tbody.innerHTML = '';
   const sorted = [...data.regions].sort((a, b) => b.value - a.value);
   for (const r of sorted) {
-    const diff = (r.value - data.country_avg).toFixed(1);
+    const diff = r.value - data.country_avg;
     const diffCls = diff > 0 ? 'pos' : diff < 0 ? 'neg' : '';
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.name}</td><td>${r.value.toFixed(1)}</td>
-      <td class="diff ${diffCls}">${diff > 0 ? '+' : ''}${diff}</td>`;
+    tr.innerHTML = `<td>${r.name}</td><td>${formatNumberCz(r.value, { minDecimals: 1, maxDecimals: 1 })}</td>
+      <td class="diff ${diffCls}">${diff > 0 ? '+' : diff < 0 ? '−' : ''}${formatNumberCz(Math.abs(diff), { minDecimals: 1, maxDecimals: 1 })}</td>`;
     tbody.appendChild(tr);
   }
   const ctx = document.getElementById('regionsChart');
-  if (!ctx) return;
+  if (!ctx || typeof Chart === 'undefined') return;
   if (regionsChart) regionsChart.destroy();
   // eslint-disable-next-line no-undef
   regionsChart = new Chart(ctx, {
@@ -1046,7 +1081,7 @@ function benchmarkBarHTML(ind) {
     <div class="bm-row">
       <span class="bm-key">ČR</span>
       <div class="bm-track"><div class="bm-fill" style="width:${czPct}%;background:${signalColor}"></div></div>
-      <span class="bm-val">${czVal}</span>
+      <span class="bm-val">${formatNumberCz(czVal)}</span>
     </div>`;
 
   if (oecdVal != null) {
@@ -1055,7 +1090,7 @@ function benchmarkBarHTML(ind) {
     <div class="bm-row">
       <span class="bm-key" title="Průměr OECD">OECD</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#4A90D9"></div></div>
-      <span class="bm-val">${oecdVal}</span>
+      <span class="bm-val">${formatNumberCz(oecdVal)}</span>
     </div>`;
   }
 
@@ -1065,7 +1100,7 @@ function benchmarkBarHTML(ind) {
     <div class="bm-row">
       <span class="bm-key" title="Průměr EU">EU</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#E69138"></div></div>
-      <span class="bm-val">${euVal}</span>
+      <span class="bm-val">${formatNumberCz(euVal)}</span>
     </div>`;
   }
 
@@ -1073,13 +1108,13 @@ function benchmarkBarHTML(ind) {
     const p = Math.min(100, Math.round(bestVal / maxVal * 100));
     const bestCountry = ind.benchmark?.oecd_best_country ?? null;
     const tooltip = bestCountry
-      ? `Nejlepší výkon v OECD: ${bestCountry} (${bestVal}${ind.unit ? ' ' + ind.unit : ''})`
+      ? `Nejlepší výkon v OECD: ${bestCountry} (${formatNumberCz(bestVal)}${ind.unit ? ' ' + ind.unit : ''})`
       : 'Nejlepší výkon v OECD';
     rows += `
     <div class="bm-row bm-best" title="${escapeText(tooltip)}">
       <span class="bm-key">Top</span>
       <div class="bm-track"><div class="bm-fill" style="width:${p}%;background:#16A34A"></div></div>
-      <span class="bm-val">${bestVal}${bestCountry ? `<small class="bm-country"> · ${escapeText(bestCountry)}</small>` : ''}</span>
+      <span class="bm-val">${formatNumberCz(bestVal)}${bestCountry ? `<small class="bm-country"> · ${escapeText(bestCountry)}</small>` : ''}</span>
     </div>`;
   }
 
@@ -1449,7 +1484,6 @@ function enhanceFinanceTileFills(scope) {
 function renderFinanceDonut() {
   const ctx = document.getElementById('financeDonut');
   if (!ctx) return;
-  if (typeof Chart === 'undefined') return;
   const segments = [
     { label: 'Lůžková péče',         pct: 55.9, color: '#B45F06' },
     { label: 'Ambulantní péče',      pct: 28.5, color: '#38761D' },
@@ -1460,6 +1494,22 @@ function renderFinanceDonut() {
     { label: 'Doprava + ZZS',        pct: 0.5,  color: '#5F7A8B' },
     { label: 'Ostatní / vyrovnání',  pct: 0.6,  color: '#999' },
   ];
+  if (typeof Chart === 'undefined') {
+    // Fallback bez Chart.js: statický donut přes CSS conic-gradient —
+    // segmenty jsou stejně statická meta-data, jen bez tooltipů.
+    let acc = 0;
+    const stops = segments.map(s => {
+      const from = acc; acc += s.pct;
+      return `${s.color} ${from}% ${acc}%`;
+    });
+    const ring = document.createElement('div');
+    ring.className = 'finance-donut-fallback';
+    ring.setAttribute('role', 'img');
+    ring.setAttribute('aria-label', 'Rozdělení úhrad: ' + segments.map(s => `${s.label} ${formatNumberCz(s.pct, { minDecimals: 1, maxDecimals: 1 })} %`).join(', '));
+    ring.style.background = `conic-gradient(${stops.join(', ')})`;
+    ctx.replaceWith(ring);
+    return;
+  }
   // eslint-disable-next-line no-undef
   new Chart(ctx, {
     type: 'doughnut',

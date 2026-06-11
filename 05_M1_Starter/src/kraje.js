@@ -20,9 +20,11 @@ async function init() {
   renderModuleNav('kraje');
   renderMastheadDate();
 
-  if (typeof echarts === 'undefined') {
-    showError('Knihovna echarts se nepodařilo načíst (CDN). Zkuste obnovit stránku.');
-    return;
+  // echarts kreslí jen mapu — žebříček, selector a metadata fungují i bez ní.
+  // Při výpadku CDN tedy degradujeme jen mapové okno, ne celou stránku.
+  const hasEcharts = typeof echarts !== 'undefined';
+  if (!hasEcharts) {
+    showError('Mapu se nepodařilo vykreslit (knihovna echarts není dostupná). Výběr indikátoru a žebříček krajů níže fungují normálně.');
   }
 
   try {
@@ -35,14 +37,17 @@ async function init() {
     allDatasets = (regionsRes.datasets || []).filter(d => d.regions && d.regions.length);
     allIndicators = indsRes.indicators || [];
 
-    // Registrovat custom mapu v echarts
-    registerCzMap(geoRes);
+    if (hasEcharts) {
+      // Registrovat custom mapu v echarts
+      registerCzMap(geoRes);
 
-    // Init chart
-    const mapEl = document.getElementById('krajeMap');
-    if (!mapEl) return;
-    chart = echarts.init(mapEl);
-    window.addEventListener('resize', () => chart.resize());
+      // Init chart
+      const mapEl = document.getElementById('krajeMap');
+      if (mapEl) {
+        chart = echarts.init(mapEl);
+        window.addEventListener('resize', () => chart.resize());
+      }
+    }
 
     // Naplnit selector + vybrat default
     populateSelector();
@@ -165,7 +170,7 @@ function renderRanking(dataset) {
         <span class="kraje-rank-pos">${idx + 1}.</span>
         <span class="kraje-rank-name">${escapeHtml(REGION_NAME_BY_CODE[r.code] || r.name || r.code)}</span>
         <span class="kraje-rank-val">${formatVal(r.value)} ${escapeHtml(dataset.unit || '')}</span>
-        <span class="kraje-rank-diff">${diff != null ? `${diff >= 0 ? '+' : ''}${diff.toFixed(1)} %` : ''}</span>
+        <span class="kraje-rank-diff">${diff != null ? `${diff >= 0 ? '+' : '−'}${Math.abs(diff).toLocaleString('cs-CZ', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %` : ''}</span>
       </li>
     `;
   }).join('');
