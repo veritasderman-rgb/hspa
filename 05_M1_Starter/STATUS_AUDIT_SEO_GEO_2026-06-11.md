@@ -129,9 +129,13 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
    statický nadpis). *Pozn.: `dohodovaci-rizeni.html` by si zasloužil vlastní
    statický titulkový `<h1>` — drobný follow-up.* Vizuální snapshot baseline se
    přegeneruje na CI.
-8. **Statický obsah homepage** (nebo prerender). `#indicatorGrid`, `#homeArticlesGrid`
-   a footer plní JS → ne-JS crawler vidí kostru. Zvážit server-side/build-time
-   prerender alespoň seznamu článků a klíčových čísel.
+8. ✅ **Prerender homepage.** `scripts/prerender-homepage.js` (`npm run prerender:home`)
+   zapéká 3 nejnovější články staticky do `#homeArticlesGrid` v `index.html`
+   (markup zrcadlí `app.js`). app.js obsah při načtení přepíše (`innerHTML`),
+   takže pro uživatele beze změny a bez duplicity — crawler/AI navíc dostane
+   seznam článků bez JS. Napojeno na `refresh.yml` i `publish-articles.yml`.
+   *(Indicator grid se neprerenderuje — jednotlivé indikátory už mají vlastní
+   statické stránky z #9.)*
 9. ✅ **Per-indikátor URL.** Generátor `scripts/generate-indicator-pages.js`
    (`npm run seo:indicators`) tvoří lehké statické `indikator-{id}.html` (plochá
    struktura kvůli relativním cestám) se statickým obsahem (název=H1, hodnota,
