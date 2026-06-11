@@ -42,6 +42,9 @@ jobs:
       - name: Regenerate RSS feed
         run: npm run generate:feed
 
+      - name: Regenerate sitemap
+        run: npm run generate:sitemap
+
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -53,7 +56,7 @@ jobs:
             echo "No changes to articles.json — nothing to commit."
             exit 0
           fi
-          git add feed.xml
+          git add feed.xml sitemap.xml
           # Extract published list for commit message
           PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)
