@@ -99,21 +99,22 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
    `author`/`publisher` = HSPA Monitor, `mainEntityOfPage`, `inLanguage`,
    `articleSection`). Injektuje `ingest/scripts/inject-article-seo.js` (`npm run
    seo:articles`) ze `data/articles.json`; napojeno na `publish-scheduled.js`.
-2. **Organization schema staticky.** Dnes ho injektuje `injectOrgSchema()` v
-   `page-shared.js` za běhu → ne-JS AI crawler ho nevidí. Vložit identický blok
-   přímo do HTML hlaviček (nebo do build kroku). *(Pozn.: na článcích už je
-   `publisher: Organization` součástí Article JSON-LD; zbývají sekční stránky.)*
+2. ✅ **Organization schema staticky.** Na článcích je `publisher: Organization`
+   součástí NewsArticle. Na **sekčních stránkách** přidán statický `@graph`
+   `Organization` + `WebSite` (se `sameAs` na sociální profily) přes
+   `ingest/scripts/inject-page-seo.js` (`npm run seo:pages`). Runtime
+   `injectOrgSchema()` v `page-shared.js` zůstává jako doplněk pro ostatní pohledy.
 3. ✅ **`BreadcrumbList` JSON-LD na článcích** — Domů → Články → titulek, součást
    stejného `@graph` jako NewsArticle.
 
 ### P2 — kanonikalizace a sdílení
-4. **`<link rel="canonical">` na všechny indexovatelné stránky** (absolutní URL).
-   ✅ Hotovo na **článcích** (`inject-article-seo.js`). Zbývají sekční stránky
-   (~18) — řeší navazující PR. Sjednotit přitom s `cleanUrls` (#21): rozhodnout,
-   zda kanonická forma je `/x` nebo `/x.html`, a držet ji **konzistentně** v
-   canonical, `og:url`, sitemapě i feedu. (Pozn.: sitemap, feed i nové canonical
-   dnes používají `.html`.)
-5. **`og:url` na všechny stránky** (absolutní). ✅ Hotovo na článcích; zbývají sekční.
+4. ✅ **`<link rel="canonical">` na všechny indexovatelné stránky** (absolutní URL).
+   Hotovo na **článcích** (`inject-article-seo.js`) i **18 sekčních stránkách**
+   (`inject-page-seo.js`, self-canonical). Při tom opravena chybná pre-existing
+   canonical na `tematicke-linie.html` (mířila na `hspa-prehled.html` + starou
+   doménu) a normalizace `kvalita-pece.html` na kanonickou doménu. Zbývá sjednotit
+   s `cleanUrls` (#21): dnes všude `.html`.
+5. ✅ **`og:url` na všechny stránky** (absolutní). Hotovo na článcích i sekčních.
 6. ✅ **`og:image` absolutní URL na článcích** + nově `og:image:alt` = titulek
    (`inject-article-covers.js`).
 
