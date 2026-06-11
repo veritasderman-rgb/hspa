@@ -119,10 +119,16 @@ Tyto zásahy jsou invazivnější (dotýkají se šablon nebo 100+ článků).
    (`inject-article-covers.js`).
 
 ### P3 — struktura a renderování
-7. **`<h1>` = titulek článku.** Dnes je `<h1>` brand a titulek je `<h2>`. Pro SEO/GEO
-   by titulek článku měl být `<h1>` (brand dát jako `<p>`/`<span>` se `.brand`, nebo
-   `aria-label`). Pozor na CSS (`.brand h1` styling) a na homepage, kde je brand H1
-   legitimní.
+7. ✅ **`<h1>` = titulek stránky.** Brand „HSPA monitor" v topbaru přesunut z `<h1>`
+   na `<p class="brand-title">` (CSS `.brand h1` → `.brand .brand-title`, `margin:0`)
+   a titulek povýšen na `<h1>` na **146 obsahových stránkách** (články `article-title`,
+   sekční hero `ed-hero-headline`/`hspa-hero-headline`/`hub-hero-h`/`fn-hero-headline`,
+   homepage hero). Transformace `scripts/promote-h1-headings.js` (idempotentní),
+   drift-guard `tests/h1-headings.test.js`. JS-shell/utility stránky (indicator,
+   rubrika, dohodovaci-rizeni, 404, embed) si brand `<h1>` ponechávají (jediný
+   statický nadpis). *Pozn.: `dohodovaci-rizeni.html` by si zasloužil vlastní
+   statický titulkový `<h1>` — drobný follow-up.* Vizuální snapshot baseline se
+   přegeneruje na CI.
 8. **Statický obsah homepage** (nebo prerender). `#indicatorGrid`, `#homeArticlesGrid`
    a footer plní JS → ne-JS crawler vidí kostru. Zvážit server-side/build-time
    prerender alespoň seznamu článků a klíčových čísel.
