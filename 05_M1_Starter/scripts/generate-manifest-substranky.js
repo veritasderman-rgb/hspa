@@ -833,7 +833,7 @@ function renderPage(p) {
 <header class="topbar">
   <div class="brand">
     <a href="/index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment">HSPA</abbr> <em>monitor</em>
-      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Manifest · Priorita ${p.num}</small>
+      <small>skorezdravotnictvi.cz · Manifest · Priorita ${p.num}</small>
     </h1></a>
   </div>
   <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
@@ -955,7 +955,7 @@ function renderIndex() {
 <header class="topbar">
   <div class="brand">
     <a href="/index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment">HSPA</abbr> <em>monitor</em>
-      <small>hspa-cesko.cz · skorezdravotnictvi.cz · Manifest · 13 priorit</small>
+      <small>skorezdravotnictvi.cz · Manifest · 13 priorit</small>
     </h1></a>
   </div>
   <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>

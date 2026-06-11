@@ -44,7 +44,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- Brand: HSPA monitor -->
   <g transform="translate(64, 130)">
     <text class="serif" font-size="92" font-weight="700" fill="${INK}" letter-spacing="-2">HSPA <tspan font-style="italic" font-weight="400" fill="${RED}">monitor</tspan></text>
-    <text class="sans" x="0" y="34" font-size="14" fill="${INK_MUT2}" letter-spacing="0.08em">hspa-cesko.cz · skorezdravotnictvi.cz</text>
+    <text class="sans" x="0" y="34" font-size="14" fill="${INK_MUT2}" letter-spacing="0.08em">skorezdravotnictvi.cz</text>
   </g>
 
   <!-- Tagline -->
