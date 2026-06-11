@@ -264,12 +264,12 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
 
     <div class="row">
       <div>
-        <h6>O projektu</h6>
+        <h4 class="footer-col-h">O projektu</h4>
         <p>Občanská implementace OECD HSPA rámce pro ČR. Autor: Josef Pavlovic. Není oficálním portálem MZČR.</p>
         <p><a href="o-projektu.html">Metodika, zdroje a disclaimer →</a></p>
       </div>
       <div>
-        <h6>Data a otevřenost</h6>
+        <h4 class="footer-col-h">Data a otevřenost</h4>
         <p>
           <a href="data/indicators.json">indicators.json</a> ·
           <a href="data/regions.json">regions.json</a> ·
@@ -279,14 +279,14 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         <p class="footer-privacy">Web nepoužívá sledovací cookies. Žádné osobní údaje nejsou zpracovávány.</p>
       </div>
       <div>
-        <h6>Zpětná vazba</h6>
+        <h4 class="footer-col-h">Zpětná vazba</h4>
         <p>
           <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu nebo navrhnout indikátor ↗</a><br>
           <a href="https://github.com/veritasderman-rgb/hspa" target="_blank" rel="noopener">Zdrojový kód (GitHub) ↗</a>
         </p>
       </div>
       <div>
-        <h6>Sledujte nás</h6>
+        <h4 class="footer-col-h">Sledujte nás</h4>
         <p>Oficiální profily projektu — aktuální data a články:</p>
         <div class="footer-social">${socialLinksHtml()}</div>
       </div>
@@ -668,6 +668,23 @@ function injectMobileNav(tabsHtml) {
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && document.body.classList.contains('mobile-nav-open')) close();
+  });
+  // Focus trap: dokud je drawer otevřený, Tab cykluje uvnitř — fokus nesmí
+  // utéct do obsahu pod backdropem (WCAG 2.1.2 No Keyboard Trap naruby).
+  drawer.addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || !document.body.classList.contains('mobile-nav-open')) return;
+    const focusables = [...drawer.querySelectorAll('a[href], button, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => el.offsetParent !== null);
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 }
 

@@ -184,7 +184,7 @@ Cron 04:00 UTC promotuje 1 draft na publikovaný den; o 06:00 lokálního času 
 - Namespace prefixy povinné — viz [`quickref.md` § CSS namespace mapa](quickref.md#css-namespace-mapa).
 - Žádné inline styly v JS-renderovaných šablonách (kromě nutných transform/opacity pro animace).
 - `@media (prefers-reduced-motion: reduce)` musí být u každé animace.
-- Dark mode = `data-theme="dark"` na `<html>` (přepínač v `src/theme.js`).
+- Dark mode zatím neexistuje (žádný `prefers-color-scheme` blok ani přepínač) — pokud ho budeš přidávat, jde o vědomé designové rozhodnutí: postavit na CSS proměnných v `:root` a převést „paper" paletu na noční inkoust, ne čistou čerň.
 
 ### JS
 

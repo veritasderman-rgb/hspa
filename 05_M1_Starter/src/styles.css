@@ -314,6 +314,99 @@ main { padding: 28px 40px 60px; max-width: 1400px; margin: 0 auto; }
   gap: 0;
   border-top: 1px solid var(--rule);
 }
+
+/* View Transitions API — jemný crossfade mezi stránkami (progressive
+   enhancement; prohlížeče bez podpory ignorují, MPA navigace funguje dál).
+   Sedí k papírové estetice: žádné slidy, jen krátké prolnutí. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Sticky mini-navigace sekcí homepage — mapa dlouhé stránky (UX audit §6) */
+.home-section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  gap: 4px;
+  padding: 0 32px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  overflow-x: auto;
+  scrollbar-width: none;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.home-section-nav::-webkit-scrollbar { display: none; }
+.home-section-nav--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.home-section-nav a {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  text-decoration: none;
+  padding: 12px 14px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.home-section-nav a:hover { color: var(--ink); }
+.home-section-nav a[aria-current="true"] {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-section-nav { transition: opacity 0.1s; transform: none; }
+}
+@media (max-width: 720px) {
+  .home-section-nav { padding: 0 16px; }
+}
+
+/* Progressive disclosure gridu — „Zobrazit všech N indikátorů" */
+.grid-show-more-wrap {
+  text-align: center;
+  padding: 28px 0 8px;
+  border-top: 1px solid var(--rule);
+}
+.grid-show-more-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.grid-show-more-btn:hover { background: var(--red); }
+.grid-show-more-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+.grid-show-more-note {
+  margin: 10px 0 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+}
 .indicator-card {
   background: var(--paper);
   border: none;
@@ -398,12 +491,12 @@ footer.bottom .row {
   max-width: 1400px; margin: 0 auto;
   display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px;
 }
-footer.bottom h6 {
+footer.bottom .footer-col-h {
   font-family: var(--sans);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
   color: var(--ink);
   font-weight: 600;
 }
@@ -922,7 +1015,10 @@ a.finance-tile:focus {
 .bm-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .bm-key { font-family: var(--sans); font-size: 9px; font-weight: 600; color: var(--ink-mut2); width: 30px; flex-shrink: 0; text-align: right; text-transform: uppercase; letter-spacing: 0.06em; }
 .bm-track { flex: 1; height: 4px; background: var(--paper2); border-radius: 0; overflow: hidden; border: none; }
-.bm-fill { height: 100%; border-radius: 0; min-width: 2px; }
+.bm-fill { height: 100%; border-radius: 0; min-width: 2px; transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .bm-fill { transition: none; }
+}
 .bm-val { font-family: var(--sans); font-size: 10px; color: var(--ink); width: 44px; text-align: left; flex-shrink: 0; padding-left: 2px; }
 
 /* Graf trendu v modálním okně */
@@ -2315,6 +2411,8 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
   text-decoration: none;
   border-bottom: 1px solid var(--rule2);
   font-weight: 500;
+  /* „Detail →" se nesmí zlomit na dva řádky vedle dlouhého textu zdroje */
+  white-space: nowrap;
 }
 .card-detail-link:hover { color: var(--red); border-bottom-color: var(--red); }
 .indicator-card .source { display: flex; align-items: center; gap: 12px; }
@@ -4615,6 +4713,12 @@ ul.md-enum > li > strong:first-child {
   flex-wrap: wrap;
   gap: 6px;
   margin: 0 0 32px;
+  /* Lišta zůstává po ruce i při scrollu dlouhým seznamem 199 termínů */
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--paper);
+  padding: 10px 0;
 }
 .glossary-alpha-btn {
   font-family: var(--sans);

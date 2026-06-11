@@ -310,7 +310,7 @@ Definované v `:root` v `styles.css`. Hlavní:
 | `--sans` | UI font | `'Inter', system-ui, sans-serif` |
 | `--mono` | Kód, čísla | `'JetBrains Mono', monospace` |
 
-Dark mode přepíná hodnoty přes `[data-theme="dark"]` na `<html>`.
+Dark mode web zatím nemá — všechny stránky jsou ve světlé „paper" paletě (viz UX audit 2026-06-11, §11).
 
 ## Animace a interaktivita
 

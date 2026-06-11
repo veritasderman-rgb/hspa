@@ -20,6 +20,7 @@ const MAX_RESULTS_PER_SECTION = 6;
 
 let _index = null;
 let _overlay = null;
+let _lastFocus = null;
 let _activeIdx = 0;
 let _currentResults = [];
 
@@ -204,6 +205,7 @@ function ensureOverlay() {
   document.body.appendChild(_overlay);
 
   // Wire up
+  _overlay.addEventListener('keydown', trapOverlayTab);
   _overlay.querySelectorAll('[data-close]').forEach(el => {
     el.addEventListener('click', closeOverlay);
   });
@@ -221,6 +223,7 @@ function ensureOverlay() {
 async function openOverlay() {
   ensureOverlay();
   await loadIndex();
+  _lastFocus = document.activeElement;
   _overlay.hidden = false;
   document.body.classList.add('site-search-open');
   const input = _overlay.querySelector('#siteSearchInput');
@@ -233,6 +236,30 @@ function closeOverlay() {
   if (!_overlay) return;
   _overlay.hidden = true;
   document.body.classList.remove('site-search-open');
+  // Návrat fokusu na prvek, který overlay otevřel (WCAG 2.4.3 Focus Order)
+  if (_lastFocus && typeof _lastFocus.focus === 'function') _lastFocus.focus();
+  _lastFocus = null;
+}
+
+/**
+ * Focus trap: Tab/Shift+Tab cykluje uvnitř overlaye — fokus nesmí utéct
+ * do obsahu skrytého pod ním.
+ */
+function trapOverlayTab(e) {
+  if (e.key !== 'Tab' || !_overlay || _overlay.hidden) return;
+  const focusables = [..._overlay.querySelectorAll(
+    'input, button, a[href], [tabindex]:not([tabindex="-1"])'
+  )].filter(el => el.offsetParent !== null);
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
 }
 
 function renderResults(query) {
