@@ -55,6 +55,9 @@ jobs:
       - name: Generate indicator pages
         run: npm run seo:indicators
 
+      - name: Prerender homepage article list
+        run: npm run prerender:home
+
       - name: Generate sitemap
         run: npm run generate:sitemap
 
@@ -105,7 +108,7 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml
+          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml 05_M1_Starter/index.html
           # -A + quoted pathspec: git (ne shell) expanduje glob, takže se
           # zastageují i SMAZANÉ indikátorové stránky (odstraněný/přejmenovaný
           # indikátor) — jinak by stará stránka zůstala v repu i na webu.
