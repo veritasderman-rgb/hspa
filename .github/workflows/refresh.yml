@@ -105,7 +105,11 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml 05_M1_Starter/indikator-*.html
+          git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml
+          # -A + quoted pathspec: git (ne shell) expanduje glob, takže se
+          # zastageují i SMAZANÉ indikátorové stránky (odstraněný/přejmenovaný
+          # indikátor) — jinak by stará stránka zůstala v repu i na webu.
+          git add -A -- '05_M1_Starter/indikator-*.html'
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0
