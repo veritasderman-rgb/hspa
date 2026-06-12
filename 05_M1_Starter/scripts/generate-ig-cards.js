@@ -68,6 +68,14 @@ const MANIFEST = {
     kicker: 'Antibiotika · One Health',
     headline: 'Česko: o třetinu méně veterinárních antibiotik než EU.',
   },
+  'clanek-jednodenni-chirurgie-katarakta': {
+    kicker: 'Kvalita péče · data',
+    headline: 'Katarakta: 98,7 % operací bez přenocování.',
+  },
+  'clanek-epidemiologie-1-proc-verit-cislum': {
+    kicker: 'Veřejné zdraví · seriál',
+    headline: '1854: u londýnské pumpy se zrodila epidemiologie.',
+  },
 };
 
 function escapeXml(s) {
