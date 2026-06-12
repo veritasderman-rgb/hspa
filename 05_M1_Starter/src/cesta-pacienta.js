@@ -110,7 +110,7 @@ function renderPicker(diseases, activeId) {
 
 function indicatorLinks(ids) {
   if (!Array.isArray(ids) || !ids.length) return '';
-  const links = ids.map(id => `<a class="chip chip-strategy" href="indicator.html?id=${esc(id)}">${esc(id)}</a>`).join('');
+  const links = ids.map(id => `<a class="chip chip-strategy" href="indikator-${esc(id)}.html">${esc(id)}</a>`).join('');
   return `<p class="cp-ind-links"><span class="cp-ind-lead">Související indikátory:</span></p><div class="chip-row">${links}</div>`;
 }
 

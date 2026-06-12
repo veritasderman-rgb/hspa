@@ -380,7 +380,7 @@ function renderEditorialHero() {
         const benchText = benchVal != null ? benchLabel + ' ' + fmt(benchVal) : '';
         const gap = gapText(p.ind.value, benchVal, p.ind.direction);
         const unit = escapeHtmlInner(p.ind.unit || '');
-        const url = 'indicator.html?id=' + encodeURIComponent(p.ind.id);
+        const url = 'indikator-' + encodeURIComponent(p.ind.id) + '.html';
         // Detekce desetinného počtu pro animaci (např. 7,7 → decimals=1; 79 → 0)
         const num = Number(p.ind.value);
         const decimals = Number.isFinite(num) && (num % 1 !== 0) ? 1 : 0;
@@ -613,7 +613,7 @@ function renderGrid() {
       </div>
       ${compareHTML}
       <div class="chart-wrap"><canvas id="${chartId}"></canvas></div>
-      <div class="source">Zdroj: ${ind.source.name}<a class="card-detail-link" href="indicator.html?id=${encodeURIComponent(ind.id)}" data-detail-link aria-label="Otevřít plný detail indikátoru: ${ind.name}">Detail →</a></div>
+      <div class="source">Zdroj: ${ind.source.name}<a class="card-detail-link" href="indikator-${encodeURIComponent(ind.id)}.html" data-detail-link aria-label="Otevřít plný detail indikátoru: ${ind.name}">Detail →</a></div>
     `;
     card.addEventListener('click', (e) => {
       // Klik na „Detail →" odkaz následuje vlastní href; jiný klik (myší) otevře
@@ -1314,7 +1314,7 @@ function renderTopCritical() {
 
   container.querySelectorAll('.top-critical-item').forEach(el => {
     const handler = () => {
-      window.location.href = `indicator.html?id=${encodeURIComponent(el.dataset.id)}`;
+      window.location.href = `indikator-${encodeURIComponent(el.dataset.id)}.html`;
     };
     el.addEventListener('click', handler);
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });

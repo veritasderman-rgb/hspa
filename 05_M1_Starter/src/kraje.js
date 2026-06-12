@@ -182,7 +182,7 @@ function renderFoot(dataset) {
   if (!el) return;
   const ind = allIndicators.find(i => i.id === dataset.indicator_id);
   const sourceName = (dataset.source && dataset.source.name) || (ind && ind.source && ind.source.name) || '';
-  const detailLink = ind ? ` · <a href="indicator.html?id=${encodeURIComponent(ind.id)}">Detail indikátoru →</a>` : '';
+  const detailLink = ind ? ` · <a href="indikator-${encodeURIComponent(ind.id)}.html">Detail indikátoru →</a>` : '';
   el.innerHTML = `<strong>Průměr ČR:</strong> ${formatVal(dataset.country_avg)} ${escapeHtml(dataset.unit || '')} · <strong>Zdroj:</strong> ${escapeHtml(sourceName || '—')}${detailLink}`;
 }
 

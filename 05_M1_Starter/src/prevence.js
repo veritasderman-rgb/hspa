@@ -154,7 +154,7 @@ function renderDetail(id) {
     .map(iid => {
       const ind = findIndicator(iid);
       const label = ind ? ind.name : iid;
-      return `<a class="chip" href="indicator.html?id=${encodeURIComponent(iid)}">${escapeHtml(label)}</a>`;
+      return `<a class="chip" href="indikator-${encodeURIComponent(iid)}.html">${escapeHtml(label)}</a>`;
     })
     .join('');
 

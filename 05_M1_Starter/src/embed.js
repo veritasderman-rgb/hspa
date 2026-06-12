@@ -55,7 +55,7 @@ export function renderEmbedCard(ind) {
   const benchParts = [];
   if (benchmark.oecd != null) benchParts.push(`OECD ⌀ ${fmtNumber(benchmark.oecd)}`);
   if (benchmark.eu != null) benchParts.push(`EU ⌀ ${fmtNumber(benchmark.eu)}`);
-  const detailUrl = `${SITE_BASE}/indicator.html?id=${encodeURIComponent(ind.id)}`;
+  const detailUrl = `${SITE_BASE}/indikator-${encodeURIComponent(ind.id)}.html`;
 
   return `
     <article class="embed-card embed-signal-${escapeHtml(ind.signal ?? 'neutral')}">

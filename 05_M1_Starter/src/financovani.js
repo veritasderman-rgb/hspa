@@ -239,7 +239,7 @@ async function loadIndicators() {
         : '';
       return `
         <li class="fn-ind-card">
-          <a class="fn-ind-link" href="indicator.html?id=${escapeHtml(ind.id)}">
+          <a class="fn-ind-link" href="indikator-${escapeHtml(ind.id)}.html">
             <div class="fn-ind-meta">
               <span class="fn-ind-area">${escapeHtml(ind.area ?? '')}</span>
               <span class="fn-ind-signal fn-sig-${sig}">${SIGNAL_LABEL[sig] ?? '—'}</span>

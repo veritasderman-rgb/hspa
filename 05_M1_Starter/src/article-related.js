@@ -133,7 +133,7 @@ function buildCards(article, articlesData, themesData, strategiesData, indicator
     const ind = findIndicator(linkedIndicators[0], indicatorsData);
     if (ind) {
       cards.push({
-        href: `indicator.html?id=${encodeURIComponent(ind.id)}`,
+        href: `indikator-${encodeURIComponent(ind.id)}.html`,
         kicker: 'Detail indikátoru',
         title: ind.name,
         desc: `${ind.area ?? ''}${ind.domain ? ' · ' + ind.domain : ''} — časová řada, srovnání a metodická poznámka.`
