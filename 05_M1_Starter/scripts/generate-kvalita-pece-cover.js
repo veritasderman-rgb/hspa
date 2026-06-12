@@ -44,7 +44,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- Brand row -->
   <g transform="translate(64, 110)">
     <text class="serif" font-size="44" font-weight="700" fill="${INK}" letter-spacing="-0.8">HSPA <tspan font-style="italic" font-weight="400" fill="${RED}">monitor</tspan></text>
-    <text class="sans" x="0" y="22" font-size="13" fill="${INK_MUT2}" letter-spacing="0.08em">hspa-cesko.cz · skorezdravotnictvi.cz</text>
+    <text class="sans" x="0" y="22" font-size="13" fill="${INK_MUT2}" letter-spacing="0.08em">skorezdravotnictvi.cz</text>
   </g>
 
   <!-- Section badge -->
