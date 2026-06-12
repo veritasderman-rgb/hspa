@@ -60,6 +60,14 @@ const MANIFEST = {
     kicker: 'Prevence · děti',
     headline: 'České děti mají skoro 4× víc zubních kazů než německé.',
   },
+  'clanek-epidemiologie-2-ockovani-dukaz': {
+    kicker: 'Prevence · vakcinace',
+    headline: '154 milionů úmrtí odvrátilo očkování za 50 let.',
+  },
+  'clanek-veterinarni-antibiotika-one-health': {
+    kicker: 'Antibiotika · One Health',
+    headline: 'Česko: o třetinu méně veterinárních antibiotik než EU.',
+  },
 };
 
 function escapeXml(s) {
