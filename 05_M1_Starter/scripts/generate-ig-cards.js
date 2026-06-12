@@ -125,7 +125,10 @@ function buildStatCard({ kicker, signal, stat, statSuffix, claim, context, barPc
   const suffix = statSuffix
     ? `<tspan class="hero-suffix" dx="6" fill="${accent}">${escapeXml(statSuffix)}</tspan>` : '';
 
-  const claimLines = wrap(claim, 24).slice(0, 3);
+  const claimLines = wrap(claim, 24);
+  if (claimLines.length > 4) {
+    throw new Error(`Claim se nevejde (>4 řádky) pro „${stat}${statSuffix || ''}": ${claim} — zkrať copy v MANIFESTU.`);
+  }
   const claimStartY = numBaseline + 96;
   const claimLineH = 64;
   const claimSvg = claimLines
@@ -133,22 +136,25 @@ function buildStatCard({ kicker, signal, stat, statSuffix, claim, context, barPc
     .join('\n  ');
   let cursorY = claimStartY + (claimLines.length - 1) * claimLineH;
 
-  let extra = '';
+  // Pruh i pointa se mohou zobrazit současně (pruh → pak pointa pod ním).
+  const blocks = [];
   if (typeof barPct === 'number') {
-    const barY = cursorY + 62;
+    const barY = cursorY + 56;
     const barW = W - MARGIN * 2;
     const fillW = Math.max(8, Math.round(barW * Math.min(100, barPct) / 100));
-    extra = `
+    blocks.push(`
   <rect x="${MARGIN}" y="${barY}" width="${barW}" height="26" rx="13" fill="rgba(31,26,20,0.10)"/>
-  <rect x="${MARGIN}" y="${barY}" width="${fillW}" height="26" rx="13" fill="${accent}"/>`;
+  <rect x="${MARGIN}" y="${barY}" width="${fillW}" height="26" rx="13" fill="${accent}"/>`);
     cursorY = barY + 26;
-  } else if (context) {
-    const ctxLines = wrap(context, 40).slice(0, 2);
-    const ctxStartY = cursorY + 58;
-    extra = ctxLines
-      .map((l, i) => `<text class="context" x="${MARGIN}" y="${ctxStartY + i * 40}">${escapeXml(l)}</text>`)
-      .join('\n  ');
   }
+  if (context) {
+    const ctxLines = wrap(context, 40).slice(0, 2);
+    const ctxStartY = cursorY + 50;
+    blocks.push(ctxLines
+      .map((l, i) => `<text class="context" x="${MARGIN}" y="${ctxStartY + i * 40}">${escapeXml(l)}</text>`)
+      .join('\n  '));
+  }
+  const extra = blocks.join('\n  ');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(stat + (statSuffix || '') + ' — ' + claim)}">
