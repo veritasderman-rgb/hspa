@@ -1,0 +1,51 @@
+{
+  "id": "podil_generik_objem",
+  "name": "Podíl generik na trhu s léčivy (objem)",
+  "area": "Procesy",
+  "domain": "Léková politika",
+  "subdomain": "Generika a biosimilars",
+  "definition": "Podíl generických léčiv na celkovém objemu spotřebovaných léčiv (počet definovaných denních dávek, resp. balení) na trhu hrazeném z veřejného zdravotního pojištění, vyjádřený v procentech. Generikum je léčivý přípravek se stejnou účinnou látkou, silou a lékovou formou jako originální (referenční) přípravek, jehož patentová ochrana vypršela. Objemový podíl měří, jak často systém při existenci levnější rovnocenné alternativy sáhne po generiku místo originálu. Ukazatel nesleduje hodnotový (obratový) podíl — ten je vlivem nižších cen generik výrazně nižší a vypovídá o úsporách jinak (viz limitace).",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_health_statistics",
+      "endpoint": "https://www.oecd.org/en/data/datasets/oecd-health-statistics.html",
+      "dataset": "OECD Health Statistics — Pharmaceutical Market (Generic market share, volume). Český vstup zpracovává OECD z dat Státního ústavu pro kontrolu léčiv (SÚKL) a zdravotních pojišťoven. Souhrnně publikováno v OECD Health at a Glance 2025 (kapitola Generics and biosimilars).",
+      "dimensions": {
+        "country": "CZ",
+        "measure": "generic market share, % of volume",
+        "market": "reimbursed pharmaceutical market"
+      }
+    },
+    "fallback": {
+      "type": "sukl_csu",
+      "url": "https://www.sukl.cz/sukl/seznam-leciv-a-pzlu-hrazenych-ze-zdrav-pojisteni"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "HEALTH_PHMC",
+    "dataset": "OECD Health at a Glance 2025 — Generics and biosimilars. Generický objemový podíl: průměr OECD 56 %. Česko (62,8 %, data za rok 2023) je nad průměrem OECD; Německo dosahuje 84 %, OECD vede Velká Británie a Nizozemsko (kolem 80–85 %). Hodnotový podíl generik v ČR je naopak nízký (19,5 % obratu, 2023).",
+    "value": 56,
+    "url": "https://www.oecd.org/en/publications/2025/11/health-at-a-glance-2025_a894f72e/full-report/generics-and-biosimilars_e68f4e94.html"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Státní ústav pro kontrolu léčiv (SÚKL) — stanovení úhrad a referenčních skupin",
+    "Ministerstvo zdravotnictví ČR — léková politika, úhradová vyhláška",
+    "Zdravotní pojišťovny (VZP a SZP ČR) — preskripční data",
+    "OECD — Health Statistics, Pharmaceutical Market"
+  ],
+  "method_notes": "Hodnota 62,8 % (data za rok 2023, OECD Health at a Glance 2025) řadí Česko nad průměr OECD (56 %). Objemový podíl generik v ČR dlouhodobě mírně roste — mezi roky 2010 a 2023 přibylo zhruba 4,6 procentního bodu (z přibližně 58 % na 62,8 %), růst ale není plynulý. Klíčový je kontrast s hodnotovým (obratovým) podílem: ten ve stejném období klesl o 10,8 bodu na 19,5 % (2023), což znamená, že generika tvoří většinu spotřebovaných balení, ale jen pětinu peněz — typický a žádoucí obraz fungujícího generického trhu, kde levné generikum vytlačuje drahý originál. Trendové body mezi krajními roky jsou orientačně dopočítané; origin = seed: hodnota je zanesena pro vývojové prostředí, ostrá data tečou z OECD Health Statistics a SÚKL.",
+  "limitations": "Objemový podíl generik nelze zaměňovat za míru úspor — tu lépe vystihuje hodnotový (obratový) podíl a cenová hladina generik. Metodika OECD počítá podíl z trhu, pro který je generická alternativa vůbec dostupná (off-patent segment); definice se mezi zeměmi mírně liší (celý trh vs. jen ATC skupiny s generickou konkurencí), což komplikuje přesné mezinárodní srovnání. Ukazatel nezahrnuje biosimilars (napodobeniny biologických léčiv) — ty se sledují samostatně a v hodnotě budoucích úspor jsou stále důležitější. Český vstup do OECD je zpracován z dat SÚKL a pojišťoven, hodnoty se mohou při revizích zpětně upravit; trendové body mezi rokem 2010 a 2023 jsou orientačně dopočítané z krajních hodnot.",
+  "determinants": "Pravidla generické substituce v lékárně (lékárník smí vydat levnější rovnocenný přípravek), systém stanovení úhrad a referenčních skupin SÚKL (úhrada se odvíjí od nejlevnějšího přípravku ve skupině), preskripce podle účinné látky (mezinárodní nechráněný název) místo obchodního jména, doplatková politika a motivace pacienta volit plně hrazené generikum, rychlost vstupu generik po vypršení patentu, biosimilární politika u biologik.",
+  "importance": "Generická a biosimilární politika je jedním z mála nástrojů, které zvyšují efektivitu lékových výdajů, aniž by zhoršovaly dostupnost nebo kvalitu péče — pacient dostává stejnou účinnou látku za zlomek ceny. Uvolněné prostředky lze přesměrovat na nákladnou inovativní léčbu, jejíž podíl na lékovém rozpočtu trvale roste. V systému, kde výdaje na léky tvoří významnou a rostoucí část rozpočtu zdravotního pojištění, je generická a biosimilární substituce přímou pákou udržitelnosti: každé procento objemu přesunuté z drahého originálu na generikum nebo biosimilar šetří prostředky pro celý systém.",
+  "patient_story": "Hana stojí za tárou lékárny na sídlišti v Ostravě. Před ní pan Konečný, sedmdesát dva let, recept na lék proti vysokému tlaku, který bere léta. „Můžu vám nabídnout přípravek se stejnou účinnou látkou, je plně hrazený a nebudete za něj doplácet,\" říká Hana a sahá po generiku. Pan Konečný váhá — je to opravdu „to samé\"? Je. Stejná molekula, stejná síla, stejný účinek, jen bez ceny za značku a původní výzkum, který už dávno zaplatil někdo jiný. Tahle drobná scéna se v Česku odehraje milionkrát do roka a právě z ní se skládá jedno z mála čísel, kde si české zdravotnictví vede nadprůměrně.\n\nV roce 2023 tvořila generika 62,8 % objemu všech spotřebovaných léčiv na českém trhu. To je signál „good\": průměr zemí OECD je 56 %, Česko je tedy nad ním. Objemový podíl navíc dlouhodobě mírně roste — od roku 2010 přibylo zhruba 4,6 procentního bodu. Generikum tu zkrátka není exotika, ale standardní volba.\n\nA přesto se za tím dobrým číslem skrývá nevyužitý potenciál. Zatímco generika tvoří téměř dvě třetiny spotřebovaných balení, na penězích představují jen 19,5 % obratu — a tento hodnotový podíl od roku 2010 dokonce klesl o víc než deset bodů. Důvod je zčásti dobrý (generika jsou levná, takže za většinu balení utratíme málo), zčásti varovný: peníze se přesouvají k drahým biologickým a inovativním lékům, kde Česko zatím nevyužívá biosimilars — levnější napodobeniny biologik — tak důsledně jako u klasických generik. Tam, kde u generik systém šetří automaticky, u biologik nechává úspory na stole.\n\nPolitická páka je konkrétní a leží v rukou SÚKL, ministerstva zdravotnictví a pojišťoven. SÚKL nastavuje úhrady a referenční skupiny tak, že úhrada se odvíjí od nejlevnějšího rovnocenného přípravku — to je hlavní motor generické substituce. Druhou pákou je preskripce podle účinné látky (mezinárodního názvu) místo obchodní značky, kterou usnadňuje elektronický recept. Třetí, dnes nejdůležitější, je biosimilární politika: jasná pravidla pro zaměnitelnost a vstup biosimilars po vypršení patentu biologik. Pro pana Konečného to neznamená nic — dostane svůj lék tak jako tak. Pro systém to znamená miliardy, které se dají buď ušetřit, nebo nechat utéct.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}
