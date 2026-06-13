@@ -79,6 +79,12 @@ const MANIFEST = {
     kicker: 'Antibiotika · One Health',
     headline: 'Česko: o třetinu méně veterinárních antibiotik než EU.',
   },
+  'clanek-epidemiologie-3-modely-rozhodovani': {
+    kicker: 'Epidemiologie · díl 3/4', signal: 'good',
+    stat: '40–90', statSuffix: '%',
+    claim: 'o tolik snížila opatření přenos. Modely SEIR pak řídí rozhodnutí.',
+    context: 'I nejlepší model klame, když se z něj udělá jistota.',
+  },
 };
 
 function escapeXml(s) {
