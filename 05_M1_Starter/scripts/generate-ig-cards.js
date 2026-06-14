@@ -85,6 +85,17 @@ const MANIFEST = {
     claim: 'o tolik snížila opatření přenos. Modely SEIR pak řídí rozhodnutí.',
     context: 'I nejlepší model klame, když se z něj udělá jistota.',
   },
+  'clanek-pooperacni-sepse-2026': {
+    kicker: 'Kvalita · bezpečnost péče', signal: 'warn',
+    stat: '0,84', statSuffix: '%',
+    claim: 'případů končí pooperační sepsí — přes 5 000 ročně.',
+    context: 'Česko poprvé otevřelo národní data o této komplikaci.',
+  },
+  'clanek-dostupnost-radioterapie-2026': {
+    kicker: 'Dostupnost · onkologie',
+    headline: 'Jeden gama nůž, jedno protonové centrum na celé Česko.',
+    context: 'Stát chce srovnat přístup k nejdražší radioterapii.',
+  },
 };
 
 function escapeXml(s) {
