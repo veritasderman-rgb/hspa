@@ -1,0 +1,56 @@
+{
+  "id": "vydaje_dlouhodoba_pece_hdp",
+  "name": "Výdaje na dlouhodobou péči (% HDP)",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Dlouhodobá péče",
+  "definition": "Celkové výdaje na dlouhodobou péči (long-term care, LTC) vyjádřené jako podíl na hrubém domácím produktu. Zahrnuje dlouhodobou zdravotní péči (HC.3 dle metodiky System of Health Accounts — lůžková, denní, ambulantní a domácí ošetřovatelská péče o osoby se sníženou soběstačností) i s ní spojenou dlouhodobou sociální péči. Mezinárodně standardizovaný ukazatel publikovaný OECD (Health at a Glance) a Eurostatem; měří, jakou část svého bohatství stát vynakládá na péči o závislé seniory a osoby s postižením — jeden z klíčových ukazatelů připravenosti systému na stárnutí populace.",
+  "unit": "% HDP",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "national_health_accounts",
+      "endpoint": "https://csu.gov.cz/produkty/vysledky-zdravotnickych-uctu-cr-7luhzp32ax",
+      "dataset": "ČSÚ — Výsledky zdravotnických účtů ČR (System of Health Accounts), kapitola 3.2 „Výdaje na dlouhodobou péči“",
+      "dimensions": {
+        "country": "CZ",
+        "function": "HC.3 (dlouhodobá zdravotní péče) + dlouhodobá sociální péče",
+        "period": "roční"
+      }
+    },
+    "fallback": {
+      "type": "oecd_publication",
+      "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en/full-report/long-term-care-spending-and-unit-costs_cc989a20.html"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "LTC_GDP",
+    "dataset": "OECD Health at a Glance 2023 — Long-term care spending and unit costs. Výdaje na dlouhodobou péči jako % HDP, data 2021. Průměr OECD 1,8 %, rozpětí od 4,4 % (Nizozemsko) po 0,5 % a méně (Polsko, Lotyšsko, Řecko); USA 1,3 %, Německo 2,5 %, ČR 1,9 %.",
+    "value": 1.8,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en/full-report/long-term-care-spending-and-unit-costs_cc989a20.html"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "annual",
+  "stewards": [
+    "ČSÚ (Český statistický úřad) — zdravotnické účty",
+    "ÚZIS ČR (Národní zdravotnický informační systém)",
+    "Ministerstvo zdravotnictví ČR + Ministerstvo práce a sociálních věcí (sdílená gesce LTC)"
+  ],
+  "method_notes": "Headline hodnota (1,9 % HDP) odpovídá OECD Health at a Glance 2023 (data 2021), kde je ČR těsně nad průměrem OECD (1,8 %). Hodnota je v letech 2021–2023 stabilní kolem 1,9–2,0 % HDP. Český primární zdroj — ČSÚ zdravotnické účty — uvádí za rok 2023 celkové výdaje na dlouhodobou péči 143,9 mld. Kč (z toho dlouhodobá zdravotní péče 86,8 mld. a dlouhodobá sociální péče 57,1 mld.), tj. zhruba 2,0 % HDP. Vyjádření v % HDP je dopočteno z výdajů a běžných cen HDP. Trendové body mezi roky 2017–2023 jsou orientačně odvozené z OECD a ČSÚ řad (rostoucí trend z ~1,5 % v polovině 2010s na ~1,9 % po pandemii); před přepnutím indikátoru na „Ověřeno\" se nahradí přesnou roční řadou OECD Health Statistics.",
+  "limitations": "Hranice mezi dlouhodobou zdravotní a sociální péčí není v českých poměrech jednoznačná (sdílená gesce MZ ČR a MPSV); různé definice LTC mírně mění výslednou hodnotu. OECD-srovnatelná hodnota dle metodiky SHA (1,9 %, 2021) je o něco nižší než celkové výdaje ČSÚ včetně všech sociálních dávek (~2,0 %). Ukazatel měří objem prostředků, nikoli jejich efektivitu ani strukturu — proto direction = context_dependent (vyšší výdaj není automaticky „lepší\"). Skutečnou slabinu českého systému lépe popisuje doplňkový indikátor počtu pracovníků LTC na 100 seniorů (ČR 2,1 vs. OECD 5,7).",
+  "determinants": [
+    "Demografické stárnutí — počet osob 65+ (cca 2,2 mil., ~20 % populace) a rychlejší růst skupiny 80+",
+    "Sdílená a roztříštěná gesce mezi zdravotnictvím (MZ ČR, pojišťovny) a sociálními službami (MPSV, kraje)",
+    "Převaha institucionální lůžkové péče (>82 % výdajů LTC zdravotní) nad domácí a komunitní péčí",
+    "Vysoký podíl neformální rodinné péče (převážně ženy), která nahrazuje formální systém a v účtech se neobjevuje",
+    "Nedostatek pracovní síly v dlouhodobé péči a nízká valorizace příspěvku na péči"
+  ],
+  "importance": "Dlouhodobá péče je nejrychleji rostoucí výdajová položka stárnoucích systémů. ČR vydává na LTC zhruba průměrný podíl HDP, ale prostředky tečou dominantně do lůžkových institucí a systém je personálně poddimenzovaný — formální mezeru zaplňuje neformální rodinná péče. Bez reformy (zákon o dlouhodobé péči, posílení domácí a komunitní péče, koordinace zdravotně-sociálního pomezí) poroste tlak na rozpočty i rodiny rychleji, než stát stíhá reagovat.",
+  "patient_story": "Paní Věra (54) z Havlíčkova Brodu chodí každý druhý den po práci k matce — devětaosmdesátileté, po dvou pádech, s počínající demencí. Pere, vaří, podává léky, hlídá, aby maminka nezapomněla na sporáku hrnec. Místo v pobytovém zařízení s ošetřovatelskou péčí jí v kraji nabídli s čekací dobou přes rok; domácí ošetřovatelská služba přijíždí dvakrát týdně na čtyřicet minut. Zbytek dělá Věra — zadarmo, po nocích, na úkor vlastního zdraví. V žádné statistice její práce není.\n\nČesko vydává na dlouhodobou péči zhruba 1,9 % HDP — těsně nad průměrem OECD (1,8 %). Na první pohled tedy nejde o podfinancovaný segment: v absolutních číslech to byly v roce 2023 podle zdravotnických účtů ČSÚ bezmála 144 miliardy korun a výdaje za poslední dekádu zhruba zdvojnásobily. Signál je proto neutrální — peníze v systému zhruba jsou. Problém je v tom, kam tečou a kdo péči odvádí.\n\nVíce než čtyři pětiny výdajů na dlouhodobou zdravotní péči spolykají lůžková zařízení — léčebny dlouhodobě nemocných, domovy se zvláštním režimem, ošetřovatelská lůžka. Domácí a komunitní péče, kterou senioři chtějí a která bývá levnější, dostává jen zlomek. A hlavně: zatímco výdaj na úrovni HDP je průměrný, počet profesionálních pracovníků dlouhodobé péče je hluboko podprůměrný — 2,1 na 100 seniorů proti 5,7 v průměru OECD. Tu mezeru drží statisíce neviditelných pečujících jako Věra. Gesce je navíc rozdělená mezi ministerstvo zdravotnictví a ministerstvo práce, takže zdravotní a sociální stránka téže péče spadá pod dva různé rozpočty i dvoje pravidla.\n\nPolitická páka je jasně pojmenovaná a leží převážně na straně státu. Léta diskutovaný zákon o dlouhodobé péči by sjednotil zdravotně-sociální pomezí; valorizace a lepší cílení příspěvku na péči by uvolnily ruce rodinám; přesun těžiště od institucí k domácí a komunitní péči (po vzoru Nizozemska, které vydává 4,4 % HDP, ale s úplně jinou strukturou) by zvýšil hodnotu za peníze. Pro Věru a její matku by to znamenalo dostupné místo, předvídatelnou domácí službu a uznání, že péče o blízkého není soukromá záležitost jedné dcery, ale věc, na kterou má systém být připravený — protože seniorů 80+ bude každý rok přibývat.",
+  "framework": "hspa",
+  "dimension": "efektivita"
+}
