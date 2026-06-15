@@ -1,15 +1,21 @@
 #!/usr/bin/env node
 // generate-ig-cards.js
-// Generuje čtvercové (1080×1080) Instagram karty v „stat-hero" stylu:
-// obří číslo jako vizuální hrdina, signální barva, úderný claim, volitelný
-// proporční pruh. Cílem je thumb-stopping grafika nativní pro IG — NE vsazený
-// landscape web-cover (ten působil malý a nevýrazný).
+// Generuje sociální karty v „stat-hero" stylu pro Instagram a Facebook:
+// obří číslo jako vizuální hrdina na tmavém vysoce kontrastním pozadí, signální
+// barva, úderný claim. Cílem je thumb-stopping grafika nativní pro IG/FB —
+// scroll-stopper, ne vsazený landscape web-cover.
 //
-//   node scripts/generate-ig-cards.js                 # všechny v MANIFESTU
-//   node scripts/generate-ig-cards.js <slug> [<slug>] # vybrané slugy
-//   node scripts/generate-ig-cards.js --svg <slug>    # zapíše jen .svg náhled
+// Dva formáty:
+//   • square  1080×1080  → feed/post     → assets/social/ig/<slug>.png
+//   • story   1080×1920  → Stories/Reels → assets/social/ig-story/<slug>.png
+//     (9:16 s respektovanými IG safe-zónami — horní/dolní okraj zůstává volný
+//      pro overlay UI: profil nahoře, odpovědní lišta / akce Reels dole)
 //
-// Výstup: assets/social/ig/<slug>.png (1080×1080)
+//   node scripts/generate-ig-cards.js                      # všechny, oba formáty
+//   node scripts/generate-ig-cards.js <slug> [<slug>]      # vybrané slugy
+//   node scripts/generate-ig-cards.js --format story       # jen vertikální
+//   node scripts/generate-ig-cards.js --format square      # jen čtvercové
+//   node scripts/generate-ig-cards.js --svg <slug>         # zapíše jen .svg náhled
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
@@ -17,18 +23,50 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
-const OUT_DIR = resolve(ROOT, 'assets/social/ig');
 
-const W = 1080;
-const H = 1080;
-const MARGIN = 88;
+// Tmavá brand paleta laděná na maximální kontrast v IG/FB feedu i ve Stories.
+// Signální barvy jsou pro tmavé pozadí zesvětlené/sytější, aby „pálily".
+const BG = '#16110b';        // teplá takřka-čerň (inkoust)
+const PAPER = '#fbf8f1';     // hlavní text
+const MUTED = '#a99e8c';     // kicker, doména, sekundární
+const RULE = 'rgba(251,248,241,0.14)';
+const TRACK = 'rgba(251,248,241,0.12)';
+const SIGNAL = { bad: '#ff5a3c', warn: '#ffb53a', good: '#5fd083', neutral: PAPER };
 
-// Brand paleta + signální barvy (sjednoceno s design tokeny webu).
-const PAPER = '#fbf8f1';
-const INK = '#1f1a14';
-const SUBINK = '#5f574e';
-const RULE = 'rgba(31,26,20,0.14)';
-const SIGNAL = { bad: '#b8361e', warn: '#a05a08', good: '#2f6b1f', neutral: INK };
+// Geometrie obou formátů. Pozice jsou absolutní (Y baseline), aby šel layout
+// snadno doladit. Story má vědomě prázdné safe-zóny nahoře (~280 px) a dole
+// (~316 px) kvůli overlay UI Instagramu.
+const LAYOUTS = {
+  square: {
+    W: 1080, H: 1080, M: 96,
+    accentRuleY: 132, accentRuleW: 76,
+    kickerY: 178, kickerFont: 26,
+    heroBaseline: 500, heroSizes: { 2: 340, 3: 280, 4: 236, more: 196 },
+    claimGap: 104, claimFont: 56, claimLineH: 66, claimWrap: 22, claimMaxLines: 4,
+    barH: 28, barGap: 56,
+    ctxGap: 48, ctxFont: 30, ctxLineH: 40,
+    cta: null,
+    footerLineY: 980, footerTextY: 1028, brandFont: 31, domainFont: 26,
+    headFont: 66, headLineH: 78, headStartY: 430, headWrap: 22, headMaxLines: 4,
+  },
+  story: {
+    W: 1080, H: 1920, M: 96,
+    accentRuleY: 312, accentRuleW: 88,
+    kickerY: 360, kickerFont: 30,
+    heroBaseline: 880, heroSizes: { 2: 452, 3: 368, 4: 308, more: 248 },
+    claimGap: 122, claimFont: 62, claimLineH: 76, claimWrap: 20, claimMaxLines: 5,
+    barH: 32, barGap: 64,
+    ctxGap: 56, ctxFont: 34, ctxLineH: 46,
+    cta: { y: 1500, font: 30, text: 'Celý rozbor → odkaz v biu' },
+    footerLineY: 1556, footerTextY: 1604, brandFont: 34, domainFont: 28,
+    headFont: 88, headLineH: 102, headStartY: 700, headWrap: 18, headMaxLines: 5,
+  },
+};
+
+const OUT_DIRS = {
+  square: resolve(ROOT, 'assets/social/ig'),
+  story: resolve(ROOT, 'assets/social/ig-story'),
+};
 
 // Každá karta: buď „stat" režim (stat + claim), nebo „headline" režim.
 //   stat        — velké číslo (hrdina). statSuffix jen pro symboly (% ×).
@@ -126,122 +164,134 @@ function wrap(text, maxChars) {
   return lines;
 }
 
-function eyebrow(kicker) {
-  return `
-  <line x1="${MARGIN}" y1="124" x2="${MARGIN + 64}" y2="124" stroke="${INK}" stroke-width="4"/>
-  <text class="kicker" x="${MARGIN}" y="166">${escapeXml(kicker)}</text>`;
-}
-
-function footer() {
-  return `
-  <line x1="${MARGIN}" y1="982" x2="${W - MARGIN}" y2="982" stroke="${RULE}" stroke-width="1.5"/>
-  <text class="brand" x="${MARGIN}" y="1028">HSPA Monitor</text>
-  <text class="domain" x="${W - MARGIN}" y="1028" text-anchor="end">skorezdravotnictvi.cz</text>`;
-}
-
-function statSizeFor(stat) {
+function heroSizeFor(stat, sizes) {
   const n = String(stat).length;
-  if (n <= 2) return 300;
-  if (n === 3) return 244;
-  return 200;
+  if (n <= 2) return sizes[2];
+  if (n === 3) return sizes[3];
+  if (n === 4) return sizes[4];
+  return sizes.more;
 }
 
-function buildStatCard({ kicker, signal, stat, statSuffix, claim, context, barPct }) {
-  const accent = SIGNAL[signal] || INK;
-  const statFont = statSizeFor(stat);
-  const numBaseline = 470;
-  const suffix = statSuffix
-    ? `<tspan class="hero-suffix" dx="6" fill="${accent}">${escapeXml(statSuffix)}</tspan>` : '';
+function eyebrow(L, kicker, accent) {
+  return `
+  <rect x="${L.M}" y="${L.accentRuleY}" width="${L.accentRuleW}" height="10" rx="5" fill="${accent}"/>
+  <text class="kicker" x="${L.M}" y="${L.kickerY}">${escapeXml(kicker)}</text>`;
+}
 
-  const claimLines = wrap(claim, 24);
-  if (claimLines.length > 4) {
-    throw new Error(`Claim se nevejde (>4 řádky) pro „${stat}${statSuffix || ''}": ${claim} — zkrať copy v MANIFESTU.`);
+function footer(L) {
+  return `
+  <line x1="${L.M}" y1="${L.footerLineY}" x2="${L.W - L.M}" y2="${L.footerLineY}" stroke="${RULE}" stroke-width="1.5"/>
+  <text class="brand" x="${L.M}" y="${L.footerTextY}">HSPA Monitor</text>
+  <text class="domain" x="${L.W - L.M}" y="${L.footerTextY}" text-anchor="end">skorezdravotnictvi.cz</text>`;
+}
+
+function ctaBlock(L, accent) {
+  if (!L.cta) return '';
+  return `
+  <text class="cta" x="${L.M}" y="${L.cta.y}"><tspan fill="${PAPER}">${escapeXml(L.cta.text.replace(' → odkaz v biu', ''))}</tspan><tspan fill="${accent}"> → odkaz v biu</tspan></text>`;
+}
+
+function styleBlock(L, accent, statFont) {
+  return `
+    .kicker { font-family: 'Inter', system-ui, sans-serif; font-size: ${L.kickerFont}px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; fill: ${accent}; }
+    .hero { font-family: 'Inter', system-ui, sans-serif; font-size: ${statFont}px; font-weight: 800; letter-spacing: -4px; fill: ${accent}; }
+    .hero-suffix { font-size: ${Math.round(statFont * 0.42)}px; font-weight: 800; }
+    .claim { font-family: 'Source Serif 4', Georgia, serif; font-size: ${L.claimFont}px; font-weight: 700; letter-spacing: -0.4px; fill: ${PAPER}; }
+    .context { font-family: 'Inter', system-ui, sans-serif; font-size: ${L.ctxFont}px; font-weight: 600; fill: ${accent}; }
+    .head { font-family: 'Source Serif 4', Georgia, serif; font-size: ${L.headFont}px; font-weight: 700; letter-spacing: -0.6px; fill: ${PAPER}; }
+    .cta { font-family: 'Inter', system-ui, sans-serif; font-size: ${L.cta ? L.cta.font : 30}px; font-weight: 700; }
+    .brand { font-family: 'Source Serif 4', Georgia, serif; font-size: ${L.brandFont}px; font-weight: 700; fill: ${PAPER}; }
+    .domain { font-family: 'Inter', system-ui, sans-serif; font-size: ${L.domainFont}px; font-weight: 600; fill: ${MUTED}; }`;
+}
+
+function buildStatCard(meta, L) {
+  const { kicker, signal, stat, statSuffix, claim, context, barPct } = meta;
+  const accent = SIGNAL[signal] || PAPER;
+  const statFont = heroSizeFor(stat, L.heroSizes);
+  const suffix = statSuffix
+    ? `<tspan class="hero-suffix" dx="8" fill="${accent}">${escapeXml(statSuffix)}</tspan>` : '';
+
+  const claimLines = wrap(claim, L.claimWrap);
+  if (claimLines.length > L.claimMaxLines) {
+    throw new Error(`Claim se nevejde (>${L.claimMaxLines} řádky) pro „${stat}${statSuffix || ''}": ${claim} — zkrať copy v MANIFESTU.`);
   }
-  const claimStartY = numBaseline + 96;
-  const claimLineH = 64;
+  const claimStartY = L.heroBaseline + L.claimGap;
   const claimSvg = claimLines
-    .map((l, i) => `<text class="claim" x="${MARGIN}" y="${claimStartY + i * claimLineH}">${escapeXml(l)}</text>`)
+    .map((l, i) => `<text class="claim" x="${L.M}" y="${claimStartY + i * L.claimLineH}">${escapeXml(l)}</text>`)
     .join('\n  ');
-  let cursorY = claimStartY + (claimLines.length - 1) * claimLineH;
+  let cursorY = claimStartY + (claimLines.length - 1) * L.claimLineH;
 
   // Pruh i pointa se mohou zobrazit současně (pruh → pak pointa pod ním).
   const blocks = [];
   if (typeof barPct === 'number') {
-    const barY = cursorY + 56;
-    const barW = W - MARGIN * 2;
-    const fillW = Math.max(8, Math.round(barW * Math.min(100, barPct) / 100));
+    const barY = cursorY + L.barGap;
+    const barW = L.W - L.M * 2;
+    const fillW = Math.max(10, Math.round(barW * Math.min(100, barPct) / 100));
     blocks.push(`
-  <rect x="${MARGIN}" y="${barY}" width="${barW}" height="26" rx="13" fill="rgba(31,26,20,0.10)"/>
-  <rect x="${MARGIN}" y="${barY}" width="${fillW}" height="26" rx="13" fill="${accent}"/>`);
-    cursorY = barY + 26;
+  <rect x="${L.M}" y="${barY}" width="${barW}" height="${L.barH}" rx="${L.barH / 2}" fill="${TRACK}"/>
+  <rect x="${L.M}" y="${barY}" width="${fillW}" height="${L.barH}" rx="${L.barH / 2}" fill="${accent}"/>`);
+    cursorY = barY + L.barH;
   }
   if (context) {
     const ctxLines = wrap(context, 40).slice(0, 2);
-    const ctxStartY = cursorY + 50;
+    const ctxStartY = cursorY + L.ctxGap;
     blocks.push(ctxLines
-      .map((l, i) => `<text class="context" x="${MARGIN}" y="${ctxStartY + i * 40}">${escapeXml(l)}</text>`)
+      .map((l, i) => `<text class="context" x="${L.M}" y="${ctxStartY + i * L.ctxLineH}">${escapeXml(l)}</text>`)
       .join('\n  '));
   }
   const extra = blocks.join('\n  ');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(stat + (statSuffix || '') + ' — ' + claim)}">
-  <defs><style>
-    .kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 25px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; fill: ${SUBINK}; }
-    .hero { font-family: 'Inter', system-ui, sans-serif; font-size: ${statFont}px; font-weight: 800; letter-spacing: -3px; fill: ${accent}; }
-    .hero-suffix { font-size: ${Math.round(statFont * 0.42)}px; font-weight: 800; }
-    .claim { font-family: 'Source Serif 4', Georgia, serif; font-size: 54px; font-weight: 700; letter-spacing: -0.4px; fill: ${INK}; }
-    .context { font-family: 'Inter', system-ui, sans-serif; font-size: 30px; font-weight: 600; fill: ${accent}; }
-    .brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 700; fill: ${INK}; }
-    .domain { font-family: 'Inter', system-ui, sans-serif; font-size: 26px; font-weight: 600; fill: ${SUBINK}; }
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${L.W} ${L.H}" width="${L.W}" height="${L.H}" role="img" aria-label="${escapeXml(stat + (statSuffix || '') + ' — ' + claim)}">
+  <defs><style>${styleBlock(L, accent, statFont)}
   </style></defs>
-  <rect width="${W}" height="${H}" fill="${PAPER}"/>
-  ${eyebrow(kicker)}
-  <text class="hero" x="${MARGIN - 4}" y="${numBaseline}">${escapeXml(stat)}${suffix}</text>
+  <rect width="${L.W}" height="${L.H}" fill="${BG}"/>
+  ${eyebrow(L, kicker, accent)}
+  <text class="hero" x="${L.M - 4}" y="${L.heroBaseline}">${escapeXml(stat)}${suffix}</text>
   ${claimSvg}
   ${extra}
-  ${footer()}
+  ${ctaBlock(L, accent)}
+  ${footer(L)}
 </svg>`;
 }
 
-function buildHeadlineCard({ kicker, headline, context }) {
-  const lines = wrap(headline, 22).slice(0, 4);
-  const startY = 430;
-  const lineH = 78;
+function buildHeadlineCard(meta, L) {
+  const { kicker, signal, headline, context } = meta;
+  const accent = SIGNAL[signal] || PAPER;
+  const lines = wrap(headline, L.headWrap).slice(0, L.headMaxLines);
   const headSvg = lines
-    .map((l, i) => `<text class="head" x="${MARGIN}" y="${startY + i * lineH}">${escapeXml(l)}</text>`)
+    .map((l, i) => `<text class="head" x="${L.M}" y="${L.headStartY + i * L.headLineH}">${escapeXml(l)}</text>`)
     .join('\n  ');
-  const ctxY = startY + (lines.length - 1) * lineH + 70;
+  const ctxY = L.headStartY + (lines.length - 1) * L.headLineH + 72;
   const ctxSvg = context
-    ? `<text class="context" x="${MARGIN}" y="${ctxY}">${escapeXml(context)}</text>` : '';
+    ? `<text class="context" x="${L.M}" y="${ctxY}">${escapeXml(context)}</text>` : '';
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeXml(headline)}">
-  <defs><style>
-    .kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 25px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; fill: ${SUBINK}; }
-    .head { font-family: 'Source Serif 4', Georgia, serif; font-size: 66px; font-weight: 700; letter-spacing: -0.6px; fill: ${INK}; }
-    .context { font-family: 'Inter', system-ui, sans-serif; font-size: 30px; font-weight: 600; fill: ${SUBINK}; }
-    .brand { font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 700; fill: ${INK}; }
-    .domain { font-family: 'Inter', system-ui, sans-serif; font-size: 26px; font-weight: 600; fill: ${SUBINK}; }
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${L.W} ${L.H}" width="${L.W}" height="${L.H}" role="img" aria-label="${escapeXml(headline)}">
+  <defs><style>${styleBlock(L, accent, 200)}
   </style></defs>
-  <rect width="${W}" height="${H}" fill="${PAPER}"/>
-  ${eyebrow(kicker)}
+  <rect width="${L.W}" height="${L.H}" fill="${BG}"/>
+  ${eyebrow(L, kicker, accent)}
   ${headSvg}
   ${ctxSvg}
-  ${footer()}
+  ${ctaBlock(L, accent)}
+  ${footer(L)}
 </svg>`;
 }
 
-export function buildSvg(slug, meta) {
-  return meta.stat ? buildStatCard(meta) : buildHeadlineCard(meta);
+export function buildSvg(slug, meta, format = 'square') {
+  const L = LAYOUTS[format] || LAYOUTS.square;
+  return meta.stat ? buildStatCard(meta, L) : buildHeadlineCard(meta, L);
 }
 
-function renderCard(slug, meta) {
-  const svg = buildSvg(slug, meta);
+function renderCard(slug, meta, format) {
+  const svg = buildSvg(slug, meta, format);
+  const L = LAYOUTS[format];
+  const outDir = OUT_DIRS[format];
   // resvg je dostupný jen tam, kde jsou devDependencies (CI / lokál).
   return import('@resvg/resvg-js').then(({ Resvg }) => {
-    const png = new Resvg(svg, { fitTo: { mode: 'width', value: W } }).render().asPng();
-    if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
-    const out = resolve(OUT_DIR, `${slug}.png`);
+    const png = new Resvg(svg, { fitTo: { mode: 'width', value: L.W } }).render().asPng();
+    if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+    const out = resolve(outDir, `${slug}.png`);
     writeFileSync(out, png);
     return out;
   });
@@ -251,18 +301,31 @@ async function main() {
   let args = process.argv.slice(2);
   const svgOnly = args.includes('--svg');
   args = args.filter(a => a !== '--svg');
+
+  let formats = ['square', 'story'];
+  const fmtIdx = args.indexOf('--format');
+  if (fmtIdx !== -1) {
+    const val = args[fmtIdx + 1];
+    if (!LAYOUTS[val]) { console.error(`⚠️  Neznámý formát „${val}". Použij square|story.`); process.exit(1); }
+    formats = [val];
+    args.splice(fmtIdx, 2);
+  }
+
   const slugs = args.length ? args : Object.keys(MANIFEST);
   for (const slug of slugs) {
     const meta = MANIFEST[slug];
     if (!meta) { console.error(`⚠️  Nemám entry v MANIFESTU pro: ${slug} — přeskakuji.`); continue; }
-    if (svgOnly) {
-      const out = resolve(OUT_DIR, `${slug}.svg`);
-      if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
-      writeFileSync(out, buildSvg(slug, meta));
-      console.log(`✓ ${out}`);
-    } else {
-      const out = await renderCard(slug, meta);
-      console.log(`✓ ${out}`);
+    for (const format of formats) {
+      if (svgOnly) {
+        const outDir = OUT_DIRS[format];
+        if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+        const out = resolve(outDir, `${slug}.svg`);
+        writeFileSync(out, buildSvg(slug, meta, format));
+        console.log(`✓ ${out}`);
+      } else {
+        const out = await renderCard(slug, meta, format);
+        console.log(`✓ ${out}`);
+      }
     }
   }
 }

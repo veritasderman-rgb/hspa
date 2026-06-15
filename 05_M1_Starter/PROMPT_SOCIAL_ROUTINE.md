@@ -4,6 +4,10 @@
 > **10 připravených propagačních příspěvků** k aktuálnímu dění — vybraných
 > z aktuálních článků (a volitelně indikátorů) portálu HSPA Monitor.
 >
+> Navíc každý běh zařadí na **Facebook i Instagram po jednom vertikálním
+> příspěvku formátu Story/Reels** (9:16) — denní „svislý" slot s grafikou
+> nativní pro celoobrazovkové plochy. Viz [Fáze 3b](#fáze-3b--denní-vertikální-slot-storyreels).
+>
 > **Spouštění:** 1×/den jako Claude Code *routine* (naplánovaná session).
 > Doporučený čas: ráno (Europe/Prague), klidně před cron pipeline.
 >
@@ -46,11 +50,23 @@ okamžitá publikace), **zastav se a nahlas to** místo provedení.
 
 | Parametr | Hodnota | Pozn. |
 |---|---|---|
-| `TARGET_PER_CHANNEL` | `10` | cílový počet naplánovaných příspěvků na kanál |
+| `TARGET_PER_CHANNEL` | `10` | cílový počet naplánovaných **feed** příspěvků na kanál |
+| `VERTICAL_PER_DAY` | `1` | kolik vertikálních Story/Reels slotů zařadit za běh na FB a IG (každý zvlášť) |
 | `COOLDOWN_DAYS` | `30` | jak dlouho po posledním (scheduled/sent) příspěvku na daný článek ho na témž kanálu znovu nenabízet |
 | `ORG` | `My Organization` (`5a06fbc0513d8d6f2373e6b9`) | ověř přes `get_account` |
 | `SITE` | `https://skorezdravotnictvi.cz` | doména článků i coverů |
 | `BRAND` | `HSPA Monitor` | název portálu v textech |
+
+**Grafické assety (priorita coveru):** sociální karty „stat-hero" generuje
+`node scripts/generate-ig-cards.js` (manifest slugů přímo ve skriptu). Cesty:
+
+| Účel | Cesta | Rozměr | Použití |
+|---|---|---|---|
+| **Feed** (post) | `assets/social/ig/<slug>.png` | 1080×1080 | FB/IG feed — **preferuj před** landscape web-coverem |
+| **Story/Reels** | `assets/social/ig-story/<slug>.png` | 1080×1920 | denní vertikální slot (Fáze 3b) |
+| Fallback | `assets/covers/<slug>.png` | landscape | jen když „stat-hero" karta neexistuje (slug není v manifestu) |
+
+Live URL = `https://skorezdravotnictvi.cz/<cesta>`. Před použitím ověř HTTP 200.
 
 **Kanály nehardcoduj** — zjišťuj je každý běh přes `list_channels` (mění se;
 historicky FB + IG, později místo Threads přibyl X). Referenční ID k dnešku:
@@ -108,7 +124,9 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 **Společné:**
 - CTA odkaz: `https://skorezdravotnictvi.cz/<slug>` (slug už obsahuje `.html`).
 - Cover jako `assets[0].image` s povinným `altText`
-  („Grafika článku … na portálu HSPA Monitor.").
+  („Grafika článku … na portálu HSPA Monitor."). **Preferuj čtvercovou
+  „stat-hero" kartu** `assets/social/ig/<slug>.png` (1080×1080, thumb-stopping);
+  jen když pro slug neexistuje, použij landscape web-cover `assets/covers/<slug>.png`.
 - Hashtagy 3–6: mix oborových (`#zdravotnictví #data #OECD #verejnezdravi`) a
   brandového `#zdravícesko`. Emoji střídmě (1–4, funkčně).
 - **Před použitím coveru ověř HTTP 200** (`curl -sI`/WebFetch). Když cover chybí:
@@ -126,20 +144,53 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
   povol vyšší). Odkaz se počítá jako 23 znaků. Stručný hook + 1 číslo + odkaz +
   1–2 hashtagy + cover. Raději kratší než na hraně.
 
+### Fáze 3b — Denní vertikální slot (Story/Reels)
+Vedle feedu zařaď **na Facebook i Instagram po `VERTICAL_PER_DAY` (=1)
+vertikálním příspěvku** v celoobrazovkovém formátu 9:16. Cíl: jeden „svislý"
+kus obsahu denně, nativní pro Stories a Reels.
+
+**Výběr kandidáta** (per kanál, stejná pravidla viditelnosti #6 + cooldown jako feed):
+1. Z fondu kandidátů ber **jen články, které mají živou vertikální kartu**
+   `assets/social/ig-story/<slug>.png` (HTTP 200). Tyto karty existují pro slugy
+   v manifestu `scripts/generate-ig-cards.js`.
+2. Seřaď stejnou prioritou jako feed (Fáze 2: news hook → mladší → evergreen).
+3. Vyřaď slugy, které už mají vertikální příspěvek ve frontě / v cooldownu na
+   daném kanálu (klíč = vertikální cover URL `…/ig-story/<slug>.png`).
+4. **Když žádný vhodný kandidát není**, vertikální slot ten den vynech a nahlas
+   to („chybí vertikální karta — rozšiř manifest v generate-ig-cards.js").
+
+**Formát příspěvku — Story vs. Reel:**
+- **Story = výchozí.** Story snese statický obrázek, takže vertikální kartu
+  zařadíme rovnou jako Story:
+  - **Instagram:** `metadata.instagram = { type: "story", shouldShareToFeed: false }`,
+    + odkazová samolepka `metadata.instagram.link = "https://skorezdravotnictvi.cz/<slug>"`.
+  - **Facebook:** `metadata.facebook = { type: "story" }` (+ odkaz, pokud kanál podporuje).
+- **Reel** vyžaduje **video** asset — statická karta na Reel nestačí. Reel zařaď
+  **jen když pro slug existuje video** (`assets/social/reels/<slug>.mp4` nebo
+  jiný doložený zdroj); pak `type: "reel"` (+ `shouldShareToFeed: true` na IG).
+  Dokud video pipeline neexistuje, **denní vertikální slot jede jako Story** —
+  to je v pořádku, formát i rozměr jsou pro Stories i Reels stejné (9:16).
+- Asset: `assets[0].image` = `https://skorezdravotnictvi.cz/assets/social/ig-story/<slug>.png`
+  (ověř HTTP 200), `altText` = „Vertikální grafika článku … na portálu HSPA Monitor.".
+- **Text/caption:** ultra-stručně — hlavní fakt už nese grafika. IG: 1 věta háku +
+  `🔗 odkaz v biu` + 2–3 hashtagy. FB: 1–2 věty + klikací odkaz. Žádná stěna textu.
+- `mode: addToQueue`, `schedulingType: automatic` (jako feed — nikdy nepublikuj hned).
+
 ### Fáze 4 — Zařazení
 5. Vytvoř příspěvek `create_post` s `mode: addToQueue`,
    `schedulingType: automatic`, správným `channelId`, textem a cover assetem.
    Zařazuj v pořadí priority (nejvyšší priorita → nejbližší volný slot).
 6. Po každém kanálu znovu zkontroluj, že `scheduledCount` nepřekročil `TARGET`.
+   Vertikální Story/Reels sloty počítej zvlášť (nejsou součástí feed `TARGET`).
 
 ---
 
 ## Výstup (na konci běhu nahlas)
 
 - Tabulka **per kanál**: kolik bylo ve frontě → kolik přidáno → kolik teď
-  (cíl 10), + datum/čas nejbližšího a posledního naplánovaného slotu.
+  (cíl 10 feed + vertikální slot), + datum/čas nejbližšího a posledního slotu.
 - Seznam **přidaných** příspěvků (kanál · článek · proč vybrán: news hook /
-  mladý / evergreen).
+  mladý / evergreen) — feed i **vertikální Story/Reels** zvlášť označené.
 - **Přeskočení** s důvodem (už ve frontě, cooldown, chybí cover, IG bez obrázku,
   nedoložitelná čísla).
 - Pokud byly všechny kanály plné: jen to konstatuj („fronty plné, nic
@@ -150,6 +201,28 @@ historie Bufferu přestala stačit na cooldown, teprve pak zvaž lehký ledger
 `social/state/social-queue.json` — pro teď není potřeba.)
 
 ---
+
+## Plný restart fronty (on-demand, NE součást denního běhu)
+
+Někdy je potřeba **smazat aktuální frontu a postavit ji znovu** podle nových
+pravidel (např. po změně grafiky nebo zavedení vertikálního slotu). Tohle je
+**výslovná jednorázová akce na pokyn uživatele** — denní běh zůstává čistě
+aditivní (železné pravidlo #5). Postup:
+
+1. **Předpoklad: nové grafiky jsou živé.** Restart má smysl až když nové karty
+   (`assets/social/ig/*` a `assets/social/ig-story/*`) běží na produkci
+   (`skorezdravotnictvi.cz`) — tj. po merge PR a Vercel deploy. Jinak by Buffer
+   stahoval obrázky z URL, které vrací 404. Před mazáním ověř HTTP 200 na pár coverech.
+2. **Smaž jen `scheduled`** (nikdy `sent` — historie odeslaných zůstává).
+   Pro každý kanál `list_posts status:["scheduled"]`, a u každého ověř, že má
+   v `allowedActions` `deletePost`, pak `delete_post`. `delete_post` je
+   nevratný — maž po jednom a průběžně reportuj.
+3. **Postav frontu znovu** běžným postupem (Fáze 0–4): 10 feed příspěvků
+   s novými „stat-hero" kartami + denní vertikální Story/Reels slot na FB a IG.
+4. Nahlas: kolik smazáno per kanál → kolik znovu zařazeno → výsledný stav.
+
+> Bez výslovného pokynu uživatele tuhle sekci **nespouštěj**. Mazání cizí fronty
+> je destruktivní; běžná rutina jen doplňuje.
 
 ## Předpoklady prostředí
 - Připojený **Buffer MCP** server (nástroje `mcp__Buffer__*`).

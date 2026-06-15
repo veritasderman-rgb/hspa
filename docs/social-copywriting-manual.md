@@ -72,6 +72,22 @@ druhé nech do článku.
 
 Hák funguje napříč sítěmi — měň jen délku a CTA, ne sdělení.
 
+### Vertikální Story / Reels (9:16)
+
+Denní „svislý" slot na FB i IG (viz [`PROMPT_SOCIAL_ROUTINE.md`](../05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md)
+Fáze 3b). Tady **hlavní práci dělá grafika** — celoobrazovkové číslo a claim
+z karty `assets/social/ig-story/<slug>.png`. Text proto drž na minimu:
+
+- **Caption = 1 věta háku**, ne opis grafiky. Grafika říká „17 %", caption
+  přidá napětí („Nejnižší proočkovanost klíšťové encefalitidy a nejvíc případů
+  v EU. Náhoda to není.").
+- **CTA:** IG `🔗 odkaz v biu` (+ odkazová samolepka na článek). FB klikací odkaz.
+- **Hashtagy 2–3**, ať neruší. Emoji 0–2.
+- **Story snese statický obrázek; Reel potřebuje video** — dokud nemáme video,
+  jede vertikální slot jako Story (formát 9:16 je pro obojí stejný).
+- Grafiku generuje `npm run ig:cards` (manifest slugů ve skriptu) — čtvercová
+  feed karta i vertikální Story/Reels karta z jednoho schváleného headline.
+
 ---
 
 ## 5. Tón a značka
