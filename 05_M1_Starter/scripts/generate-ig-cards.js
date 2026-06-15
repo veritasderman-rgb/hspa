@@ -145,6 +145,16 @@ const MANIFEST = {
     headline: 'Jeden gama nůž, jedno protonové centrum na celé Česko.',
     context: 'Stát chce srovnat přístup k nejdražší radioterapii.',
   },
+  'clanek-financovani-sha': {
+    kicker: 'Financování · SHA', signal: 'neutral',
+    stat: '696,7', claim: 'miliardy Kč stálo zdravotnictví v 2024 (8,6 % HDP).',
+    context: 'Kdo platí, na co a komu — tři řezy rámce SHA.',
+  },
+  'clanek-rakovina-tlusteho-streva': {
+    kicker: 'Prevence · onkologie', signal: 'warn',
+    headline: 'Screening rakoviny střeva využívá jen necelá třetina oprávněných.',
+    context: 'Včasný záchyt léčí. Přežití u nás zaostává.',
+  },
 };
 
 function escapeXml(s) {
