@@ -1,0 +1,57 @@
+{
+  "id": "sebevrazdy_mladistvi_15_19",
+  "name": "Sebevraždy mladistvých (15–19 let)",
+  "area": "Výsledky",
+  "domain": "Duševní zdraví",
+  "subdomain": "Sebevražednost mladistvých",
+  "definition": "Hrubá míra úmrtí na úmyslné sebepoškození (sebevraždu, ICD-10 X60–X84) ve věkové skupině 15–19 let na 100 000 obyvatel téže věkové skupiny, obě pohlaví dohromady. Standardní harmonizovaná metrika Eurostatu (tps00202), zdrojem je národní statistika příčin úmrtí.",
+  "unit": "na 100 000 ob. (15–19 let)",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_datastat",
+      "endpoint": "https://csu.gov.cz/sebevrazdy_zaj",
+      "dataset": "ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku / Sebevraždy v ČR (úmyslné sebepoškození, dg. X60–X84, věková skupina 15–19)",
+      "dimensions": {
+        "age": "Y15-19",
+        "sex": "T",
+        "country": "CZ",
+        "icd10": "X60-X84"
+      }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/tps00202/default/table?lang=en"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "tps00202",
+    "dataset": "Eurostat — Suicide death rate by age group (úmyslné sebepoškození X60–X84), věková skupina 15–19, EU27_2020, hrubá míra na 100 000 ob., obě pohlaví",
+    "value": 4.17,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/tps00202/default/table?lang=en"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "annual",
+  "stewards": [
+    "ČSÚ (Český statistický úřad)",
+    "ÚZIS ČR (Národní registr zemřelých)",
+    "NÚDZ (Národní ústav duševního zdraví) — koordinace prevence sebevražd"
+  ],
+  "method_notes": "Hodnota za rok 2023: 6,96 úmrtí na 100 000 mladistvých 15–19 let (Eurostat tps00202, ČSÚ jako národní zdroj). EU27 ve stejném roce 4,17 — Česko je tedy zhruba o 67 % nad evropským průměrem a patří mezi země s nejvyšší adolescentní sebevražedností (srovnatelně s Polskem 7,17, nad Rakouskem 6,47 a Německem 4,48, výrazně nad Slovenskem 2,99). Trend je vzestupný: po propadu během covidového roku 2020 (4,98) míra znovu roste (2021: 6,06; 2022: 7,36; 2023: 6,96). Indikátor je věkově stratifikovaný a doplňuje — neduplikuje — celkovou standardizovanou míru sebevražd (indikátor sebevrazdy_per_100k), protože adolescentní sebevražednost má jiné determinanty (školní prostředí, sociální sítě, dostupnost dětské psychiatrie) a jinou politickou páku.",
+  "limitations": "Malá absolutní čísla (jednotky až nižší desítky úmrtí ročně v kohortě 15–19) způsobují meziroční rozkolísanost — interpretovat je třeba víceletý trend, ne jednotlivý rok. Sebevraždy mladistvých bývají podhodnocené (část je klasifikována jako úraz nebo událost nezjištěného úmyslu, ICD-10 Y10–Y34). Hrubá míra na úzké věkové pásmo není věkově standardizovaná, ale uvnitř pětiletého pásma je srovnatelnost vysoká. Eurostat data končí rokem 2023; celková míra sebevražd v ČR přitom v roce 2024 prudce vzrostla (14,3 na 100 tis.), což u mladistvých nutno sledovat.",
+  "determinants": [
+    "Dostupnost a kapacita dětské a dorostové psychiatrie a klinické psychologie (čekací doby v řádu měsíců, regionální díry)",
+    "Školní poradenská péče a dostupnost školních psychologů",
+    "Sociální sítě, kyberšikana a tlak na výkon",
+    "Rodinné prostředí, socioekonomická situace a zkušenost s adverzitou v dětství",
+    "Dostupnost a viditelnost krizových linek (Linka bezpečí 116 111)"
+  ],
+  "importance": "Sebevražda je v Česku druhou nejčastější příčinou úmrtí dospívajících (po úrazech) a u některých subkohort stojí za více než čtvrtinou všech úmrtí. Jde o úmrtí v zásadě preventabilní a o nejcitlivější výstupní ukazatel duševního zdraví mladé generace — proto patří do jádra hodnocení výkonnosti systému v dimenzi zdraví.",
+  "patient_story": "Adéla je třeťačka na gymnáziu v Ústeckém kraji. Půl roku po tom, co se začala v noci budit s tísní a přestala chodit s kamarádkami ven, ji výchovná poradkyně odeslala k dětskému psychiatrovi. Nejbližší volný termín byl za pět měsíců — v jiném okrese, hodinu cesty autobusem. Adéla měla štěstí: dočkala se. Pro řadu jejích vrstevníků ten příběh končí jinak.\n\nČísla to ukazují ostře. V roce 2023 připadlo na 100 000 českých mladistvých ve věku 15–19 let 6,96 úmrtí sebevraždou. Evropská sedmadvacítka má ve stejném roce 4,17 — Česko je tedy zhruba o dvě třetiny nad průměrem EU. Není to výkyv: po covidovém propadu v roce 2020 (4,98) míra znovu roste. V mezinárodním srovnání je Česko na úrovni Polska (7,17), nad Rakouskem (6,47) i Německem (4,48) a výrazně nad Slovenskem (2,99). Signál indikátoru je proto „bad\".\n\nProč je hodnota tak vysoká, neleží v dětech, ale v systému kolem nich. Dětských a dorostových psychiatrů je v Česku necelé dvě stovky a víc než polovina je v důchodovém věku; na nového pacienta se běžně čeká tři až osm měsíců a v některých krajích (Karlovarský, části Zlínského) není kam jít. Školních psychologů je málo a jejich úvazky nejsou systémově ukotvené. K tomu přistupují tlak sociálních sítí, kyberšikana a rostoucí výkonová úzkost. Záchytná síť, která má dospívajícího podržet dřív, než krize přejde v čin, je děravá — a kde chybí, rozhoduje náhoda.\n\nPolitická páka existuje a je konkrétní. Reforma péče o duševní zdraví počítá s centry duševního zdraví pro děti a dospělé a s multidisciplinárními týmy v regionech; dotační a rezidenční místa pro dětskou psychiatrii mohou doplnit generaci, která stárne; zákonné ukotvení a financování školních psychologů (cíl: dostupný školní psycholog na každé větší škole) přesouvá záchyt tam, kde mladí tráví čas. A trvalá podpora a viditelnost Linky bezpečí (116 111) drží krizovou pomoc na dosah telefonu. Gesci má Ministerstvo zdravotnictví společně s Ministerstvem školství — a měřitelným cílem je stlačit českou adolescentní sebevražednost k evropskému průměru.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
