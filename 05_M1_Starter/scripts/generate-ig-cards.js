@@ -79,6 +79,17 @@ const MANIFEST = {
     kicker: 'Antibiotika · One Health',
     headline: 'Česko: o třetinu méně veterinárních antibiotik než EU.',
   },
+  'clanek-epidemiologie-4-nedovera-dezinformace': {
+    kicker: 'Epidemiologie · díl 4/4', signal: 'good',
+    stat: '+6,8', statSuffix: '%',
+    claim: 'zvýšila proočkování jediná SMS připomínka. Důkaz z 690 tis. lidí.',
+    context: 'Ukázat data nestačí — rozhoduje důvěra.',
+  },
+  'clanek-centra-dusevniho-zdravi': {
+    kicker: 'Duševní zdraví · reforma', signal: 'warn',
+    stat: '40', claim: 'center duševního zdraví funguje. Reforma slíbila 100.',
+    context: 'Zhruba třetina cíle reformy.',
+  },
   'clanek-epidemiologie-3-modely-rozhodovani': {
     kicker: 'Epidemiologie · díl 3/4', signal: 'good',
     stat: '40–90', statSuffix: '%',
