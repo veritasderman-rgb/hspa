@@ -57,14 +57,23 @@ okamžitá publikace), **zastav se a nahlas to** místo provedení.
 | `SITE` | `https://skorezdravotnictvi.cz` | doména článků i coverů |
 | `BRAND` | `HSPA Monitor` | název portálu v textech |
 
-**Grafické assety (priorita coveru):** sociální karty „stat-hero" generuje
-`node scripts/generate-ig-cards.js` (manifest slugů přímo ve skriptu). Cesty:
+**Grafické assety — VŽDY tmavá „stat-hero" karta (závazné):** sociální karty
+generuje `node scripts/generate-ig-cards.js` (manifest slugů přímo ve skriptu).
+Tmavý stat-hero headline je **standard pro všechny sítě (FB / IG / X) i
+vertikální slot**. Světlý landscape web-cover (`assets/covers/`) se v sociálu
+**nepoužívá** — jako headline působí slabě. Cesty:
 
 | Účel | Cesta | Rozměr | Použití |
 |---|---|---|---|
-| **Feed** (post) | `assets/social/ig/<slug>.png` | 1080×1080 | FB/IG feed — **preferuj před** landscape web-coverem |
+| **Feed** (post) | `assets/social/ig/<slug>.png` | 1080×1080 | FB/IG/X feed — **povinné** |
 | **Story/Reels** | `assets/social/ig-story/<slug>.png` | 1080×1920 | denní vertikální slot (Fáze 3b) |
-| Fallback | `assets/covers/<slug>.png` | landscape | jen když „stat-hero" karta neexistuje (slug není v manifestu) |
+| Nouzový fallback | `assets/covers/<slug>.png` | landscape | jen výjimečně, když kartu opravdu nelze dogenerovat (FB/X text-only, IG přeskoč) |
+
+**Chybí-li článku stat-hero karta** (slug není v `MANIFEST`u
+`scripts/generate-ig-cards.js`): přidej ho do manifestu (stat + claim nebo
+headline — jen z **doložených** čísel článku), spusť `npm run ig:cards <slug>`,
+commitni PNG a nech nasadit na produkci. **Teprve pak** článek zařazuj do fronty.
+Landscape cover je až poslední záchrana, ne výchozí volba.
 
 Live URL = `https://skorezdravotnictvi.cz/<cesta>`. Před použitím ověř HTTP 200.
 
@@ -94,8 +103,11 @@ historicky FB + IG, později místo Threads přibyl X). Referenční ID k dnešk
 ### Fáze 1 — Kandidáti
 3. Načti `data/articles.json` (+ pro indikátorovou stopu volitelně
    `data/indicators.json` a `data/freshness.json`). Sestav fond kandidátů =
-   články splňující pravidlo #6, které **mají živý cover** (`assets/covers/<slug bez .html>.png`).
-   Slug v `articles.json` má příponu `.html`; cover = `slug.replace('.html','') + '.png'`.
+   články splňující pravidlo #6, které **mají živou stat-hero kartu**
+   (`assets/social/ig/<slug bez .html>.png`). Slug v `articles.json` má příponu
+   `.html`; karta = `slug.replace('.html','') + '.png'`. Když má článek jen
+   landscape cover a kartu ne, **nejdřív kartu dogeneruj** (viz Konfigurace běhu)
+   — do fronty patří tmavá karta, ne světlý cover.
 4. Z fondu pro daný kanál vyřaď vše, co je v `usedSlugs` (fronta + cooldown).
 
 ### Fáze 2 — Priorita (seřaď kandidáty)
@@ -123,10 +135,12 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 
 **Společné:**
 - CTA odkaz: `https://skorezdravotnictvi.cz/<slug>` (slug už obsahuje `.html`).
-- Cover jako `assets[0].image` s povinným `altText`
-  („Grafika článku … na portálu HSPA Monitor."). **Preferuj čtvercovou
-  „stat-hero" kartu** `assets/social/ig/<slug>.png` (1080×1080, thumb-stopping);
-  jen když pro slug neexistuje, použij landscape web-cover `assets/covers/<slug>.png`.
+- Grafika jako `assets[0].image` s povinným `altText`
+  („Čtvercová grafika článku … na portálu HSPA Monitor."). **Povinně čtvercová
+  „stat-hero" karta** `assets/social/ig/<slug>.png` (1080×1080, tmavá,
+  thumb-stopping). Landscape web-cover `assets/covers/<slug>.png` použij jen jako
+  nouzový fallback, když kartu opravdu nelze dogenerovat (a u IG pak kandidáta
+  raději přeskoč — světlý cover do feedu nepatří).
 - Hashtagy 3–6: mix oborových (`#zdravotnictví #data #OECD #verejnezdravi`) a
   brandového `#zdravícesko`. Emoji střídmě (1–4, funkčně).
 - **Před použitím coveru ověř HTTP 200** (`curl -sI`/WebFetch). Když cover chybí:
