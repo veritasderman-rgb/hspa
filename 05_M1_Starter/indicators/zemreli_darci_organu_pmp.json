@@ -1,0 +1,56 @@
+{
+  "id": "zemreli_darci_organu_pmp",
+  "name": "Zemřelí dárci orgánů (na milion obyvatel)",
+  "area": "Procesy",
+  "domain": "Vysoce specializovaná péče",
+  "subdomain": "Dárcovský program",
+  "definition": "Roční počet skutečných (realizovaných) zemřelých dárců orgánů — tj. zemřelých osob, u nichž byl odebrán alespoň jeden orgán k transplantaci — vztažený na milion obyvatel (DPMP, Deceased Donors Per Million Population). Mezinárodně standardizovaný ukazatel publikovaný v databázi IRODaT (International Registry in Organ Donation and Transplantation) a v Newsletter Transplant Rady Evropy. Měří dárcovskou kapacitu systému, tedy schopnost rozpoznat potenciálního dárce na lůžkách intenzivní péče, získat souhlas (resp. uplatnit zákonný předpokládaný souhlas) a realizovat odběr. Doplňuje — neduplikuje — indikátor transplantace_per_milion, který měří vlastní transplantační aktivitu; dárcovství je jeho nezbytným vstupem.",
+  "unit": "na mil. ob.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "kst_registr",
+      "endpoint": "https://kst.cz/statistiky/",
+      "dataset": "Koordinační středisko transplantací (KST) — Dárcovská aktivita v ČR / Dárci orgánů dle transplantačních center; Národní registr osob čekajících na transplantaci orgánů a Národní registr dárců orgánů (vedené ÚZIS ČR)",
+      "dimensions": {
+        "country": "CZ",
+        "donor_type": "deceased",
+        "metric": "actual_donors_pmp"
+      }
+    },
+    "fallback": {
+      "type": "irodat",
+      "url": "https://www.irodat.org/?p=database&c=CZ"
+    }
+  },
+  "benchmark_source": {
+    "type": "irodat",
+    "code": "DPMP",
+    "dataset": "IRODaT / Newsletter Transplant (Rada Evropy) — Actual Deceased Donors Per Million Population. Průměr EU činil v roce 2022 přibližně 20,9 zemřelého dárce na milion obyvatel (9 305 dárců). Špičkové hodnoty: Španělsko ~49–54, Portugalsko ~37; nízké hodnoty mezi sousedy ČR: Rakousko ~21, Polsko ~14, Slovensko a Německo ~12.",
+    "value": 20.9,
+    "url": "https://www.irodat.org/?p=database&c=CZ"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "annual",
+  "stewards": [
+    "KST (Koordinační středisko transplantací)",
+    "ÚZIS ČR (Národní registr dárců orgánů)",
+    "IRODaT / Rada Evropy (mezinárodní benchmark)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 34,3 zemřelého dárce na milion obyvatel (360 realizovaných zemřelých dárců, IRODaT/KST) — rekordní rok a třetí nejvyšší hodnota v Evropě po Španělsku a Portugalsku. Průměr EU přitom činí kolem 20,9 (2022), takže Česko je zhruba o dvě třetiny nad evropským průměrem; signál je proto „good\". Trend je dlouhodobě vzestupný: 2021: 25,1 → 2022: 28,3 → 2023: 28,5 → 2024: 34,3 (v roce 2025 mírný pokles na 32,2 / 341 dárců). Vysoké hodnoty jsou výsledkem zákona o předpokládaném souhlasu (opt-out), sítě nemocničních koordinátorů dárcovství a centrálního řízení přes KST. Indikátor patří do oblasti Procesy a dimenze dostupnost, protože dárcovská aktivita přímo určuje dostupnost život zachraňující transplantační péče.",
+  "limitations": "DPMP počítá skutečné (realizované) zemřelé dárce, nikoli jen potenciální nebo hlášené — metodika hlášení se mezi zeměmi mírně liší, byť IRODaT/Rada Evropy ji harmonizují. Hodnota nezahrnuje žijící dárce (zejména ledvin), kteří se vykazují samostatně. Meziroční výkyvy jsou částečně dané malými absolutními počty a organizačními faktory (počet úmrtí vhodných k odběru, kapacita odběrových týmů). Vysoké DPMP samo o sobě negarantuje krátké čekací listiny — záleží i na alokaci, kapacitě transplantačních center a poptávce.",
+  "determinants": [
+    "Zákon o předpokládaném souhlasu (opt-out) a vedení Národního registru osob nesouhlasících s posmrtným odběrem tkání a orgánů",
+    "Síť a financování nemocničních koordinátorů dárcovství na lůžkách intenzivní péče",
+    "Schopnost rozpoznat a nahlásit potenciálního dárce (detekce mozkové smrti, dárci po nevratné zástavě oběhu — DCD)",
+    "Centrální koordinace a logistika odběrů přes KST",
+    "Důvěra veřejnosti a komunikace s rodinami zemřelých"
+  ],
+  "importance": "Transplantace je u selhání životně důležitých orgánů jedinou definitivní léčbou a u řady pacientů rozdílem mezi životem a smrtí. Počet zemřelých dárců je hrdlem celého transplantačního programu: kolik se najde dárců, tolik orgánů lze transplantovat. Vysoká a rostoucí dárcovská aktivita je proto jedním z nejcitlivějších ukazatelů toho, jak dobře systém zvládá nejsložitější mezioborovou koordinaci — a Česko zde patří ke světové špičce.",
+  "patient_story": "Je půl třetí v noci na anesteziologicko-resuscitačním oddělení krajské nemocnice v Liberci. Koordinátorka dárcovství Markéta právě domluvila s rodinou pětapadesátiletého pana Václava, u kterého lékaři potvrdili nevratnou mozkovou smrt po rozsáhlém krvácení. Rodina se neptá, jestli, ale jak — vědí, že v Česku platí předpokládaný souhlas a že tatínek nikdy neřekl, že by byl proti. Během několika hodin odběrový tým z IKEM odveze ledviny, játra a srdce. Tři lidé na čekací listině, kteří ráno nevěděli, že se dočkají, dostanou nový začátek.\n\nScéna jako tato se v Česku odehrává mimořádně často — v evropském srovnání patříme ke špičce. V roce 2024 připadlo na milion obyvatel 34,3 zemřelého dárce orgánů (celkem 360 realizovaných dárců), což byla rekordní hodnota a třetí nejvyšší v Evropě hned po Španělsku a Portugalsku. Průměr Evropské unie je přitom kolem 20,9 — Česko je tedy zhruba o dvě třetiny nad evropským průměrem a signál indikátoru je „good\". Trend dlouhodobě roste: z 25,1 v roce 2021 přes 28,3 a 28,5 až na zmíněných 34,3 v roce 2024.\n\nProč je Česko tak dobré, neleží v náhodě, ale ve struktuře systému. Klíčový je zákon o předpokládaném souhlasu (opt-out): dárcem se po smrti stává každý, kdo se za života výslovně nezapsal do registru nesouhlasících. To samo o sobě nestačí — rozhoduje hustá síť nemocničních koordinátorů dárcovství, kteří na odděleních intenzivní péče včas rozpoznají potenciálního dárce, a centrální logistika Koordinačního střediska transplantací, které během hodin spojí dárce s nejvhodnějším příjemcem kdekoli v zemi. Tam, kde sousední Německo (kolem 12 na milion) spoléhá na aktivní souhlas a dárcovství vázne, česká kombinace opt-outu a profesionální koordinace vytrvale dodává orgány.\n\nPráce tím ale nekončí a politická páka je konkrétní. Udržet a posílit financování pozic nemocničních koordinátorů, rozšířit program dárcovství po nevratné zástavě oběhu (DCD), pečovat o důvěru veřejnosti transparentní komunikací a chránit funkční opt-out legislativu — to jsou nástroje, které drží Česko nahoře a jimiž se dá růst ještě posunout ke španělské úrovni kolem padesáti dárců na milion. Gesci má Ministerstvo zdravotnictví společně s KST a transplantačními centry. Tento indikátor sleduje právě to, co je vstupem celého programu: dokud bude dárců přibývat, bude přibývat i zachráněných životů.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
