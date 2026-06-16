@@ -109,6 +109,11 @@ const MANIFEST = {
     kicker: 'Prevence · děti', signal: 'bad',
     stat: '4', statSuffix: '×', claim: 'víc zubních kazů mají české děti než německé.',
   },
+  'clanek-epidemiologie-1-proc-verit-cislum': {
+    kicker: 'Epidemiologie · díl 1/4', signal: 'neutral',
+    stat: '1854', claim: 'Odmontovaná klika u londýnské pumpy. Tak se z dat zrodila epidemiologie.',
+    context: 'Proč věřit číslům — od mapy cholery k reprodukčnímu číslu.',
+  },
   'clanek-epidemiologie-2-ockovani-dukaz': {
     kicker: 'Prevence · vakcinace',
     headline: '154 milionů úmrtí odvrátilo očkování za 50 let.',
