@@ -1,0 +1,54 @@
+{
+  "id": "screening_plicni",
+  "name": "Časný záchyt karcinomu plic — pokrytí cílové populace",
+  "area": "Procesy",
+  "domain": "Preventivní péče",
+  "subdomain": "Onkologický screening",
+  "definition": "Podíl osob z odhadované cílové (vysoce rizikové) populace, které dosud absolvovaly vstupní nízkodávkové výpočetní tomografické vyšetření (LDCT) v rámci Populačního pilotního programu časného záchytu karcinomu plic. Cílovou populaci tvoří současní a bývalí kuřáci ve věku 55–74 let s kuřáckou anamnézou alespoň 20 balíčkoroků (pack-years); její velikost se odhaduje přibližně na 500 000 osob. Indikátor měří reálný dosah (uptake) screeningového programu — tedy zda se nový hrazený program skutečně dostává k lidem, pro které byl navržen, a nikoli jen zda technicky existuje.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nsc",
+      "endpoint": "https://nsc.uzis.cz/projekt/5-populacni-pilotni-program-casneho-zachytu-karcinomu-plic/",
+      "dataset": "Národní screeningové centrum (NSC) ÚZIS — monitoring Populačního pilotního programu časného záchytu karcinomu plic",
+      "note": "Program byl spuštěn 1. 1. 2022 podle Věstníku MZ ČR. Monitoring a evaluaci zajišťuje Národní screeningové centrum (samostatný odbor ÚZIS ČR). Čitatel = kumulativní počet provedených vstupních LDCT vyšetření; jmenovatel = odhadovaná velikost cílové vysoce rizikové populace (cca 500 000 osob z přibližně 2,6 milionu obyvatel ve věku 55–74 let, kteří splňují kuřácké kritérium).",
+      "dimensions": {
+        "vek": "55–74 let",
+        "kriterium": "≥ 20 balíčkoroků (current/former smoker)",
+        "metoda": "nízkodávkové CT (LDCT)",
+        "uzemi": "ČR celkem"
+      }
+    },
+    "fallback": {
+      "type": "narrative_only",
+      "url": "https://prevenceproplice.cz/cs/program/",
+      "note": "Oficiální informační portál programu (prevenceproplice.cz) a odborné přehledy České pneumologické a ftizeologické společnosti (ČPFS) a Lineckého registru screeningových programů. Pro rok 2024 NSC ÚZIS uvedlo, že od ledna 2022 do září 2024 bylo provedeno 13 274 vstupních LDCT vyšetření (89 % s negativním nálezem). Pokrytí cílové populace je dopočítáno (origin: seed) a je orientační — přesná administrativní statistika účasti se průběžně zpřesňuje."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Pro pokrytí populačního programu časného záchytu karcinomu plic neexistuje publikovaný OECD ani Eurostat benchmark — plicní screening na rozdíl od mamografického, cervikálního a kolorektálního zatím není standardním indikátorem OECD Health at a Glance, protože organizovaný plošný program má jen málo zemí. Nejbližším srovnáním je USA, kde se podle dat z roku 2022 screeningu podrobilo přibližně 16 % způsobilé rizikové populace (American Lung Association, „State of Lung Cancer\"); Nizozemsko přechází z národního pilotu (2020–2023) na plošný program a Polsko, Chorvatsko a další běží formou pilotů v rámci doporučení Rady EU z roku 2022 o rozšíření screeningu rakoviny na plíce. Český dosah (cca 2,7 % cílové populace za první tři roky) je proto srovnáván narativně, ne číselným benchmarkem.",
+    "value": null,
+    "url": "https://www.lung.org/research/state-of-lung-cancer"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Národní screeningové centrum ÚZIS (NSC)",
+    "Ministerstvo zdravotnictví ČR (Komise pro přípravu Programu časného záchytu karcinomu plic)",
+    "Česká pneumologická a ftizeologická společnost ČLS JEP (ČPFS)",
+    "zdravotní pojišťovny (smluvní akreditovaná CT centra)"
+  ],
+  "method_notes": "Hodnota je počítána jako kumulativní počet provedených vstupních LDCT vyšetření dělený odhadovanou velikostí cílové vysoce rizikové populace a vyjádřený v procentech. Pro období leden 2022 – září 2024 NSC ÚZIS vykázalo 13 274 vstupních LDCT; při odhadu cílové populace přibližně 500 000 osob to odpovídá pokrytí zhruba 2,7 %. Časová řada (kumulativní pokrytí 0,4 % v roce 2022, 1,3 % v roce 2023, 2,7 % v roce 2024) je rekonstruována z dostupných přehledů a je orientační (origin: seed) — meziroční rozpad počtu vyšetření NSC průběžně zpřesňuje. Signál je nastaven jako neutral: pro plicní screening zatím neexistuje publikovaný OECD/EU benchmark pokrytí, a hodnotit pilotní program třetím rokem proti normativnímu cíli by bylo předčasné. Nízká absolutní hodnota (pod 3 %) je nicméně sama o sobě signálem strukturální mezery — pro srovnání, USA dosahují u způsobilé populace přibližně 16 %.",
+  "limitations": "1. **Měkký jmenovatel** — velikost cílové vysoce rizikové populace je odhad (zdroje uvádějí přibližně 350–500 tisíc osob podle definice kuřáckého kritéria a horní věkové hranice); pokrytí v procentech je proto citlivé na zvolený jmenovatel. 2. **Kumulativní vs. roční metrika** — na rozdíl od mamografického screeningu (pokrytí za poslední 2 roky) jde u pilotního programu o kumulativní dosah od spuštění, což omezuje přímou srovnatelnost s ustálenými programy. 3. **Origin seed** — meziroční rozpad počtu vyšetření je rekonstruovaný; přesná administrativní statistika se zpřesňuje. 4. **Mezinárodní srovnatelnost** — plicní screening má organizovaný program jen v málu zemí, definice způsobilosti se liší (pack-years, věk), takže srovnání s USA či Nizozemskem je orientační. 5. **Změna kritérií** — úpravy způsobilosti (věk, balíčkoroky, přídatné rizikové faktory) mění velikost cílové populace i interpretaci pokrytí v čase.",
+  "determinants": "**Adresné pozvání.** Na rozdíl od kolorektálního, cervikálního a mamografického screeningu pojišťovny dosud systematicky nerozesílají individuální pozvánky způsobilým pojištěncům. Vstup do programu závisí na iniciativě pacienta nebo praktického lékaře — což je hlavní strukturální brzda dosahu.\n\n**Zapojení praktických lékařů.** Praktik je klíčovým vstupním bodem (gatekeeper). Podíl aktivně zapojených praktiků rostl z 23 % (konec 2022) přes 35 % (konec 2023) na 45 % (konec 2024) — více než polovina praktiků tedy program svým pacientům aktivně nenabízí. Chybí bonifikační podnět v úhradové vyhlášce.\n\n**Zdravotní gramotnost cílové skupiny.** Typickou cílovou skupinou jsou muži s nižším vzděláním a manuálními profesemi v průmyslových regionech, kteří ke zdravotnickým službám přicházejí nejméně a nejpozději; pasivně dostupný program je oslovuje nespolehlivě.\n\n**Síť akreditovaných center a tabakologie.** Dostupnost akreditovaných CT pracovišť je nerovnoměrná a síť tabakologických ambulancí (pro navazující odvykání) je historicky podfinancovaná a geograficky nevyvážená.\n\n**Strategický a legislativní rámec.** Doporučení Rady EU z roku 2022 (rozšíření screeningu rakoviny na plíce) a Evropský kodex boje proti rakovině vytvářejí cílový stav; úhradová politika a metodika MZ ČR určují tempo náběhu.",
+  "importance": "Karcinom plic je v Česku nejčastější onkologickou příčinou smrti u mužů a rychle dohání ztrátu i u žen; standardizovaná mortalita patří k nejvyšším v OECD. Rozhodující je stadium záchytu: ve stadiu IV se pětileté přežití pohybuje kolem pěti procent, ve stadiu I se blíží 70–80 procentům. Nízkodávkové CT u rizikových kuřáků dokáže tuto propast překlenout — velké randomizované studie (NLST 2011, NELSON 2020) prokázaly snížení plicní mortality o 20–24 procent. Z pohledu HSPA proto pokrytí programu spojuje dimenzi kvality (záchyt v léčitelném stadiu), dostupnosti (dostane se program k rizikové populaci?) a spravedlnosti (cílová skupina je sociálně znevýhodněná). Měření dosahu je přímým ukazatelem toho, zda nový hrazený program reálně mění výsledky, nebo zůstává na papíře — dokud je pokrytí pod 3 %, populační efekt na mortalitu je nutně zanedbatelný.",
+  "patient_story": "Most, podzimní čtvrtek. Václavovi je 63 let, dvacet let pracoval v chemičce a kouřil od učňáku — než před osmi lety přestal, nasbíral přes 40 balíčkoroků. Ke svému praktickému lékaři chodí jednou ročně na prevenci: tlak, odběr krve, pár otázek. O tom, že má jako bývalý těžký kuřák nárok na hrazené nízkodávkové CT plic, mu nikdo neřekl. Václav patří přesně do skupiny, pro kterou byl program v roce 2022 navržen — a přesto se k němu nedostal. Není to jeho selhání. Je to design systému, který čeká, až pacient přijde sám.\n\nČísla to ukazují bez příkras. Od ledna 2022 do září 2024 prošlo vstupním screeningovým CT 13 274 lidí. Z odhadovaných zhruba 500 000 osob v cílové rizikové populaci je to přibližně 2,7 procenta — necelé tři procenta za první tři roky programu. Signál je zatím neutrální: pro plicní screening neexistuje publikovaný OECD ani evropský benchmark pokrytí, protože organizovaný program má jen málo zemí. Tam, kde srovnání možné je, Česko propadá — v USA se screeningu podrobilo kolem 16 procent způsobilých. Trend míří správným směrem (kumulativně z 0,4 % v roce 2022 na 2,7 % v roce 2024), ale tempem, při kterém by dosažení populačně významného pokrytí trvalo dekády.\n\nProč to vázne, není záhada. Na rozdíl od screeningu střeva nebo prsu nechodí způsobilým lidem žádná adresná pozvánka — vstup závisí na iniciativě pacienta nebo praktika. A praktici se zapojují pomalu: koncem roku 2024 jich bylo aktivních 45 procent, většina tedy program svým rizikovým pacientům aktivně nenabízí, protože za to nemá v úhradě žádný podnět. K tomu se přidává nízká zdravotní gramotnost cílové skupiny — muži z průmyslových regionů s manuálními profesemi — a podfinancovaná síť tabakologických ambulancí, kam by měl screening navazovat.\n\nPolitická páka je konkrétní a leží převážně na straně plátce a státu. Zdravotní pojišťovny — především VZP — mají z dotazníků preventivních prohlídek identifikovatelné rizikové kuřáky a mohou jim, stejně jako u kolorektálního screeningu, posílat adresné pozvánky; právní rámec v zákoně o veřejném zdravotním pojištění existuje, chybí politické rozhodnutí. Druhým krokem je bonifikace praktiků za aktivní doporučení přímo v úhradové vyhlášce (kompetence MZ ČR). Třetím je propojení screeningového CT s odvykáním kouření v jednom kontaktu, na vzor britského Targeted Lung Health Check, cílené na Ústecko, Ostravsko a Karvinsko. Bez těchto kroků zůstane Václav z Mostu — a statisíce jemu podobných — mimo program, který by mu mohl zachránit život.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
