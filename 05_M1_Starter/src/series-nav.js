@@ -63,7 +63,20 @@ const NAPOJE_SERIES = {
   ],
 };
 
-export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES];
+const DIGI_SERIES = {
+  title: 'Digitální zdravotnictví srozumitelně',
+  hub: 'clanky.html',
+  lead: 'průvodce digitalizací českého zdravotnictví od papírku po EHDS, v pěti dílech',
+  parts: [
+    { n: 1, slug: 'clanek-digi-1-co-to-je.html',                short: 'Co to je: od papírku k datům' },
+    { n: 2, slug: 'clanek-digi-2-jak-funguje-api.html',         short: 'Jak to funguje: co je API a kde jsou data' },
+    { n: 3, slug: 'clanek-digi-3-dve-vrstvy-ncez.html',         short: 'Dvě vrstvy: staré ostrovy a páteř NCEZ' },
+    { n: 4, slug: 'clanek-digi-4-povinne-dobrovolne-2026.html', short: 'Co je v roce 2026 povinné a co dobrovolné' },
+    { n: 5, slug: 'clanek-digi-5-strategie-ehds-2030.html',     short: 'Kam to směřuje: strategie, EHDS a rok 2030' },
+  ],
+};
+
+export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES];
 
 // Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
 // sérii přes tyto dva exporty — necháváme je ukazovat na ni.
