@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <!--
   audit:
-    last_reviewed: 2026-05-18
+    last_reviewed: 2026-06-18
     reviewer: claude-code-agent
     status: review-pending
     created_at: 2026-05-07
     creation_phase: revise
-    primary_sources_count: 12
-    visual_elements_count: 1
-    notes: "Revize 2026-05-18 triggernutá MZ ČR tiskovou zprávou 'Přesnější screening, lepší výsledky' ze 7. 5. 2026 (mzd.gov.cz/tiskove-centrum-mz/presnejsi-screening-lepsi-vysledky-ministerstvo-chysta-cilenejsi-pristup-k-prevenci/). Provedeno: (1) doplněn audit YAML komentář, který v hlavičce dosud chyběl (předchozí audit z 2026-05-12 byl zachycen pouze v textové poznámce na konci článku); (2) přepracován odstavec 'Co Česko zatím nedotáhlo' — explicitní zmínka MZ ČR ohlášení přechodu na primární HPV testování (25–65 let, 1×/5 let, vložená cytologie v meziintervalu); přechod uveden jako 'připravovaný' bez data účinnosti a bez doloženého věstníku/vyhlášky; (3) přidán callout 'Co se chystá (status k 5/2026)' s kvalitativním popisem a primárním zdrojem; (4) doplněn MZ ČR TZ a Zdravotnický deník (M. Koubová) do sekce Zdroje; (5) uzavřena cascade-flag z předchozí revize: opravena metodická karta indicators/screening_cervix.json — method_notes nyní uvádí správný rok zavedení programu (2008, Věstník MZ ČR č. 7/2007), 'přechod od 2026' odstraněn, doplněn aktuální stav HPV ko-testování 35/45/55 a MZ ČR ohlášení 7. 5. 2026 jako 'připravované'. Otevřené otázky pro ruční schválení: (A) přesné parametry vyhlášky o screeningu cervixu, jakmile bude publikována (zatím neexistuje); (B) datum účinnosti přechodu na primární HPV (v TZ chybí)."
+    primary_sources_count: 13
+    visual_elements_count: 2
+    notes: "Revize 2026-05-18 triggernutá MZ ČR tiskovou zprávou 'Přesnější screening, lepší výsledky' ze 7. 5. 2026 (mzd.gov.cz/tiskove-centrum-mz/presnejsi-screening-lepsi-vysledky-ministerstvo-chysta-cilenejsi-pristup-k-prevenci/). Provedeno: (1) doplněn audit YAML komentář, který v hlavičce dosud chyběl (předchozí audit z 2026-05-12 byl zachycen pouze v textové poznámce na konci článku); (2) přepracován odstavec 'Co Česko zatím nedotáhlo' — explicitní zmínka MZ ČR ohlášení přechodu na primární HPV testování (25–65 let, 1×/5 let, vložená cytologie v meziintervalu); přechod uveden jako 'připravovaný' bez data účinnosti a bez doloženého věstníku/vyhlášky; (3) přidán callout 'Co se chystá (status k 5/2026)' s kvalitativním popisem a primárním zdrojem; (4) doplněn MZ ČR TZ a Zdravotnický deník (M. Koubová) do sekce Zdroje; (5) uzavřena cascade-flag z předchozí revize: opravena metodická karta indicators/screening_cervix.json — method_notes nyní uvádí správný rok zavedení programu (2008, Věstník MZ ČR č. 7/2007), 'přechod od 2026' odstraněn, doplněn aktuální stav HPV ko-testování 35/45/55 a MZ ČR ohlášení 7. 5. 2026 jako 'připravované'. Otevřené otázky pro ruční schválení: (A) přesné parametry vyhlášky o screeningu cervixu, jakmile bude publikována (zatím neexistuje); (B) datum účinnosti přechodu na primární HPV (v TZ chybí). Revize 2026-06-18: doplněna primární evidence Sasieni & Falcaro, Lancet 2026 (DOI 10.1016/S0140-6736(26)00918-9, PMID 42309117) — v Anglii nulová úmrtnost na cervikální karcinom u žen 20–24 očkovaných ve 12–13 letech (−100 %, 95% CI 84–100), ~199,6 odvrácených úmrtí do konce 2024; přidán nový counter-grid (avCervixUkH) a skupina recenzované literatury v sekci Zdroje; synchronně doplněn method_note do indicators/vakcinace_hpv.json. Pozn.: čísla v těle (CZ screening 52,3 % / HPV 65 %) zůstávají v původní NZIS metodice k datu vydání a mohou se lišit od aktuálních dashboardových hodnot (jiná kohorta / vintage) — neřešeno v této revizi."
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Karcinom, který umíme eliminovat. Co Česku v boji proti cervixu chybí · HSPA Monitor</title>
@@ -56,7 +56,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-cervix-hpv"
       },
       "datePublished": "2026-05-07",
-      "dateModified": "2026-06-10",
+      "dateModified": "2026-06-18",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -207,6 +207,32 @@
       </p>
 
       <p>
+        A v červnu 2026 přibyl zatím nejsilnější důkaz, že vakcinace nejen snižuje výskyt, ale <strong>zachraňuje životy</strong>. Analýza populačních dat o úmrtnosti v Anglii (Sasieni a Falcaro, <em>Lancet</em>, 2026) zjistila, že mezi ženami ve věku 20–24 let, které byly očkovány ve 12–13 letech s proočkovaností kolem 88–90 procent, <strong>v letech 2020–2024 nezemřela na cervikální karcinom ani jedna</strong> — oproti 23 úmrtím očekávaným podle historických trendů. To odpovídá <strong>stoprocentnímu poklesu úmrtnosti</strong> (95% interval spolehlivosti 84–100 %). Do konce roku 2024 podle autorů anglický program souvisí s přibližně <strong>200 odvrácenými úmrtími</strong> na rakovinu děložního čípku. Jde zatím o pozorovací, nikoli experimentální důkaz — ale o první národní data, která ukazují dopad HPV vakcinace přímo na úmrtnost, ne jen na výskyt nemoci. Přesně tohle je důvod, proč WHO i jednotlivé státy mluví o eliminaci jako o reálném cíli.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCervixUkH">
+        <figcaption class="av-figure-h" id="avCervixUkH">Anglie: HPV vakcinace a úmrtnost mladých žen na cervikální karcinom</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">úmrtí žen 20–24 let v letech 2020–2024 (očkovaných ve 12–13 letech)</span>
+            <span class="av-counter-foot">oproti 23 očekávaným podle historických trendů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="100" data-prefix="−" data-suffix=" %">−100 %</span>
+            <span class="av-counter-label">pokles úmrtnosti na cervikální karcinom v této skupině</span>
+            <span class="av-counter-foot">95% CI 84–100 % (pozorovací data)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="200" data-prefix="~">~200</span>
+            <span class="av-counter-label">odvrácených úmrtí v Anglii do konce roku 2024</span>
+            <span class="av-counter-foot">přičteno zavedení HPV vakcinace od roku 2008</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Sasieni P, Falcaro M. Cervical cancer mortality trends following HPV vaccination in England, 2001–24. <em>Lancet</em>, 2026 (dle databáze PubMed; DOI 10.1016/S0140-6736(26)00918-9). Pozorovací populační data; očekávaná úmrtí dopočtena z historických trendů.</p>
+      </figure>
+
+      <p>
         <strong>Nizozemsko a Finsko</strong> přešly v posledních letech od cytologického screeningu k <em>primárnímu HPV testování</em> — vyšetření, které detekuje samotnou virovou infekci, je citlivější než klasická cytologie a umožňuje delší interval mezi screeningy (zpravidla pět let místo tří). Randomizované studie v <em>Lancet Oncology</em> a <em>BMJ</em> (mj. POBASCAM Nizozemsko, NTCC Itálie, ARTISTIC Velká Británie) dokumentovaly vyšší citlivost primárního HPV testu pro detekci prekanceróz CIN3+ s přijatelnou specificitou; Cochrane review (Koliopoulos a kol., 2017) tyto závěry agreguje. Tato změna by v Česku byla logickým dalším krokem.
       </p>
 
@@ -260,6 +286,13 @@
     <section class="article-sources">
       <div class="ed-kicker">Zdroje</div>
       <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Sasieni P, Falcaro M. Cervical cancer mortality trends following HPV vaccination in England, 2001–24: an analysis of population-based mortality data. Lancet, 2026.</strong> — u žen 20–24 let očkovaných ve 12–13 letech (proočkovanost ~88–90 %) nulová úmrtnost na cervikální karcinom 2020–2024 vs. 23,1 očekávaných (−100 %, 95% CI 84–100); ~199,6 odvrácených úmrtí do konce 2024. Financováno Cancer Research UK. <a href="https://doi.org/10.1016/S0140-6736(26)00918-9" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(26)00918-9 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaného článku vychází z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Data</h5>
         <ul class="article-sources-list">
