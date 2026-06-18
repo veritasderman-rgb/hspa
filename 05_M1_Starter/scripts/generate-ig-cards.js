@@ -160,6 +160,38 @@ const MANIFEST = {
     headline: 'Screening rakoviny střeva využívá jen necelá třetina oprávněných.',
     context: 'Včasný záchyt léčí. Přežití u nás zaostává.',
   },
+  'clanek-darci-organu': {
+    kicker: 'Dárcovství orgánů', signal: 'good',
+    stat: '34,3', claim: 'zemřelých dárců na milion — třetí nejvíc v Evropě.',
+    context: 'Průměr EU je 20,9. Drží to opt-out a koordinátoři.',
+  },
+  'clanek-plicni-screening-ucast': {
+    kicker: 'Prevence · onkologie', signal: 'warn',
+    stat: '2,7', statSuffix: '%', barPct: 3,
+    claim: 'rizikových kuřáků prošlo screeningem plic za 3 roky.',
+    context: 'Program běží od roku 2022. Dosah zůstává nízký.',
+  },
+  'clanek-rezistence-antibiotik': {
+    kicker: 'Antibiotika · rezistence', signal: 'warn',
+    stat: '19', statSuffix: '%', barPct: 19,
+    claim: 'invazivní E. coli odolává ciprofloxacinu.',
+    context: 'Mírně pod průměrem EU (22,5 %), ale zase roste.',
+  },
+  'clanek-obezita-jidelny-reforma': {
+    kicker: 'Prevence · obezita', signal: 'bad',
+    stat: '6', statSuffix: '/10', claim: 'dospělých Čechů má nadváhu nebo obezitu.',
+    context: 'Každé čtvrté dítě 6–9 let taky. Páka je školní jídelna.',
+  },
+  'clanek-ncez-financovani-2027': {
+    kicker: 'Digitalizace · financování',
+    headline: 'Dotace na e-zdravotnictví dojdou. Provoz od 2027 platí stát.',
+    context: 'Část agendy přejde do FN Ostrava.',
+  },
+  'clanek-koureni-adolescenti': {
+    kicker: 'Prevence · mládež', signal: 'neutral',
+    headline: '14 % patnáctiletých kouří. Kolem evropského průměru.',
+    context: 'Posun je k nikotinu a e-cigaretám.',
+  },
 };
 
 function escapeXml(s) {
