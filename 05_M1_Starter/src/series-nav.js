@@ -76,7 +76,17 @@ const DIGI_SERIES = {
   ],
 };
 
-export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES];
+const AI_SERIES = {
+  title: 'AI ve zdravotnictví',
+  hub: 'clanky.html',
+  lead: 'průvodce umělou inteligencí v medicíně ve dvou dílech — co je prokázáno a co zatím jen slibováno',
+  parts: [
+    { n: 1, slug: 'clanek-ai-zdravotnictvi-1-vstricnost.html', short: 'Vstřícnost: přepis konzultací, zvaní na prevenci, srozumitelné zprávy' },
+    { n: 2, slug: 'clanek-ai-zdravotnictvi-2-lecba.html',      short: 'Diagnostika a výzkum: snímky, EKG a hon na nová antibiotika' },
+  ],
+};
+
+export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES, AI_SERIES];
 
 // Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
 // sérii přes tyto dva exporty — necháváme je ukazovat na ni.

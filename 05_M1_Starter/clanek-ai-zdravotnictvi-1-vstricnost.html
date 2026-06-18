@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lékař, který se vám zase dívá do očí: jak AI mění provoz medicíny · HSPA Monitor</title>
+<meta name="description" content="Nejviditelnější přínos umělé inteligence v medicíně dnes není diagnóza, ale vrácený čas. AI přepisuje konzultace, zve pacienty na prevenci a překládá nálezy do srozumitelné řeči. Díl 1/2 série o AI ve zdravotnictví: co je doloženo a kde číhá riziko halucinací.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lékař, který se vám zase dívá do očí: jak AI mění provoz medicíny">
+<meta property="og:description" content="Díl 1/2 série o AI ve zdravotnictví. Přepis konzultací, chytré zvaní na prevenci, srozumitelné zprávy a meze chatbotů — co je prokázáno a co zatím jen slibováno.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-18">
+<meta property="article:section" content="Digitalizace">
+<!--
+  audit:
+    last_reviewed: 2026-06-18
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-06-18
+    creation_phase: serie-ai-zdravotnictvi-dil-1
+    primary_sources_count: 9
+    visual_elements_count: 7
+    notes: "Díl 1/2 série AI ve zdravotnictví (Vrstva 1 — uživatelská vstřícnost: ambient scribes, recall/zvaní na prevenci, sumarizace a překlad nálezů, triáž/chatboti). DRAFT — published:false, audit-status review-pending (drží review hold, nepublikuje se automaticky cronem). Empirická tvrzení doložena primární literaturou (DOI v sekci Zdroje): ambient scribes — Kaiser/TPMG 2,58 mil. konzultací a ~15 791 h (NEJM Catalyst 2025, DOI 10.1056/CAT.25.0040); vyhoření 51,9%->38,8% OR 0,26 (JAMA Netw Open 2025, DOI 10.1001/jamanetworkopen.2025.34976); RCT Nabla -9,5% času, DAX nevýznamně (NEJM AI 2025, DOI 10.1056/aioa2501000); Whisper halucinace ~1%/~40% škodlivé (FAccT 2024, DOI 10.1145/3630106.3658996); ChatGPT-4 z přepisů 23,6 chyb/případ (JMIR 2024, DOI 10.2196/54419); no-show predikce + telefonát -10,3 p.b. (Health Care Manag Sci 2023, DOI 10.1007/s10729-022-09626-z); pediatrický no-show 83% záchyt (NPJ Digit Med 2022, DOI 10.1038/s41746-022-00594-w); zjednodušení radiologických zpráv (Acad Radiol 2026, DOI 10.1016/j.acra.2025.12.008); symptom checkery — Semigran BMJ 2015 (DOI 10.1136/bmj.h3480), Ada v ED (JMIR 2022, DOI 10.2196/38364), Babylon krach 9/2023 (Lancet 2018 review). ČR: eHealth adopce z dashboardu; MZ ČR národní průzkum 2/2026 (67,6% zařízení používá/testuje AI, radiologie 82,9%); VZP úhradová metodika 4/2026, pilot od 7/2026; eRecept povinný od 2018. Regulace odkázána na existující článek clanek-ai-act-zdravotnictvi-srpen-2026. Cross-linky: clanek-ai-act-zdravotnictvi-srpen-2026, clanek-digi-1-co-to-je, clanek-digi-2-jak-funguje-api. Díl 2 (clanek-ai-zdravotnictvi-2-lecba) zatím draft -> v textu zmíněn bez odkazu (rozcestník série řeší navigaci). TODO před publikací: redakční ověření čísel a aktuálnosti regulace/úhrad, vygenerovat cover, povýšit audit-status a published:true, prepnout robots na index."
+-->
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body data-article-slug="clanek-ai-zdravotnictvi-1-vstricnost.html">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-ai-zdravotnictvi-1-vstricnost.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag article-tag-muted">Série AI ve zdravotnictví · díl 1/2 · vstřícnost</span>
+      </div>
+      <h1 class="article-title">Lékař, který se vám zase dívá do očí: jak umělá inteligence mění provoz medicíny</h1>
+      <p class="article-deck">
+        Když se mluví o umělé inteligenci v medicíně, většina lidí si představí robota, který stanoví diagnózu. Realita roku 2026 je jiná a mnohem všednější: nejviditelnější přínos AI dnes není to, že by lékaře nahradila u pacienta, ale že mu vrací čas, který trávil u klávesnice. V prvním díle série se díváme na „neviditelnou“ vrstvu — AI, která přepisuje konzultace, zve pacienty na prevenci ve správnou chvíli a překládá odborné nálezy do lidštiny. Co z toho je opravdu doloženo daty, kde číhá riziko vymyšlených vět a proč Česko ještě nemá jak tyto nástroje zaplatit.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">18. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">22 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Představte si dvě návštěvy u lékaře. Při první se doktor během rozhovoru dívá do monitoru, klepe do klávesnice a otázky klade tak trochu přes rameno — protože ví, že každé slovo bude muset zapsat a že po vás čeká dalších dvacet pacientů a hodina papírování večer doma. Při druhé sedí naproti vám, dívá se vám do očí a poslouchá; rozhovor nahrává aplikace v telefonu, která z něj sama vytvoří koncept zprávy. Lékař ho po konzultaci jen zkontroluje a podepíše. Tohle není sci-fi ani příslib do budoucna. Je to nejrychleji se šířící způsob, jak dnes umělá inteligence vstupuje do medicíny — a paradoxně ten, o kterém se mluví nejmíň, protože nezní tak dramaticky jako „AI čte rentgeny“. Přitom právě tady jsou zatím nejpřesvědčivější data o tom, že AI něčemu reálně pomáhá.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi1HeroH">
+        <figcaption class="av-figure-h" id="avAi1HeroH">Vstřícná AI v číslech — co už je doloženo a kde je riziko</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="2.6" data-decimals="1" data-suffix=" mil.">2,6 mil.</span>
+            <span class="av-counter-label">konzultací zapsal AI „zapisovatel“ za rok v jediné americké síti</span>
+            <span class="av-counter-foot">Kaiser Permanente, 7 260 lékařů (2023–2024)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="38.8" data-decimals="1" data-suffix=" %">38,8 %</span>
+            <span class="av-counter-label">podíl lékařů s vyhořením po nasazení AI zápisu — z původních 51,9 %</span>
+            <span class="av-counter-foot">studie 6 systémů, JAMA Netw Open 2025</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="67.6" data-decimals="1" data-suffix=" %">67,6 %</span>
+            <span class="av-counter-label">českých zdravotnických zařízení už AI používá nebo testuje</span>
+            <span class="av-counter-foot">národní průzkum MZ ČR, únor 2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1" data-prefix="~" data-suffix=" %">~1 %</span>
+            <span class="av-counter-label">přepisů od jednoho rozšířeného nástroje obsahovalo zcela vymyšlené věty</span>
+            <span class="av-counter-foot">proto je kontrola lékařem nepřekročitelná</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> počet konzultací a vyhoření z recenzovaných studií (NEJM Catalyst 2025; JAMA Network Open 2025); adopce AI v ČR z národního průzkumu MZ ČR (2/2026); podíl vymyšlených vět z analýzy přepisového modelu (ACM FAccT 2024). Plné citace s DOI v sekci Zdroje.</p>
+      </figure>
+
+      <h3>Tři čtvrtiny lékařova dne nejsou u pacienta</h3>
+
+      <p>
+        Abychom pochopili, proč je „nudná“ administrativní AI tak zásadní, musíme se podívat, kde se v medicíně ztrácí čas. Řada studií z posledních let opakovaně ukazuje, že lékaři tráví dokumentací a administrativou zhruba stejně času jako přímou péčí o pacienta — a část z toho se přelévá do večerů a víkendů, do takzvané „práce v pyžamu“. Tahle neviditelná zátěž je jedním z hlavních motorů vyhoření, a vyhoření zase odchodů z profese, které si žádný systém — a Česko obzvlášť, vzhledem ke stárnoucím lékařům — nemůže dovolit. Administrativní AI neslibuje, že vyléčí nemoc. Slibuje něco přízemnějšího a v tuto chvíli cennějšího: že vrátí lékaři čas a duševní kapacitu, aby se mohl věnovat tomu, kvůli čemu šel do medicíny.
+      </p>
+
+      <p>
+        Tato „první vrstva“ AI má tři velké oblasti, kterými se v tomto díle postupně projdeme. Za prvé <strong>přepis a tvorbu dokumentace</strong> — AI, která poslouchá konzultaci a píše zprávu. Za druhé <strong>provoz a kontakt s pacientem</strong> — chytré zvaní na prevenci, předpovídání, kdo nepřijde, a překlad nálezů do srozumitelné řeči. A za třetí <strong>první kontakt a triáž</strong> — chatboty a „symptom checkery“, kde je naopak důkazů o přínosu nejméně a varování nejvíc. Společným jmenovatelem je, že nejde o stroj, který rozhoduje místo člověka, ale o nástroj, který připravuje podklad — a poslední slovo musí mít vždy zdravotník.
+      </p>
+
+      <h3>Zapisovatel, který poslouchá: ambient AI scribes</h3>
+
+      <p>
+        Nejdál ze všeho je technologie s nezáživným názvem <strong>ambient AI scribe</strong> — doslova „AI zapisovatel z prostředí“. Princip je jednoduchý: mikrofon (typicky aplikace v telefonu na stole) pasivně poslouchá rozhovor lékaře s pacientem. Řeč se přepíše na text a jazykový model z přepisu vytvoří strukturovaný klinický záznam — anamnézu, závěr, návrh dalšího postupu, někdy i návrh receptů a žádanek. Klíčový rozdíl proti diktování je v tom, že lékař nemluví do počítače, ale s pacientem. A klíčové bezpečnostní pravidlo zní: nástroj nestanovuje diagnózu ani léčbu, jen dokumentuje, a lékař koncept <strong>musí zkontrolovat a schválit</strong>.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi1FlowH">
+        <figcaption class="av-figure-h" id="avAi1FlowH">Jak funguje AI zapisovatel — krok za krokem</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Konzultace probíhá normálně</h4>
+            <p class="av-flow-desc">Aplikace na stole nahrává rozhovor. Pacient s nahráváním souhlasí; lékař se může plně věnovat naslouchání místo psaní.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Řeč se přepíše na text</h4>
+            <p class="av-flow-desc">Model pro rozpoznávání řeči převede mluvené slovo na přepis. Právě tady vzniká první riziko chyb a „přeslechů“.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jazykový model napíše koncept zprávy</h4>
+            <p class="av-flow-desc">Z přepisu vznikne strukturovaný záznam: subjektivní potíže, objektivní nález, závěr, plán. Vše ve formě konceptu, ne hotového dokumentu.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Lékař koncept kontroluje a opravuje</h4>
+            <p class="av-flow-desc">Nepřekročitelný krok. Lékař ověří fakta, doplní, co AI vynechala, a smaže, co si „domyslela“. Bez tohoto kroku není záznam validní.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Schválený záznam jde do dokumentace</h4>
+            <p class="av-flow-desc">Hotová zpráva se uloží do zdravotnického systému. Úspora není v tom, že by nikdo nečetl, ale že lékař edituje místo psaní od nuly.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Pozn.:</strong> zjednodušené schéma. Odpovědnost za obsah záznamu nese vždy lékař, ne software — to platí i právně.</p>
+      </figure>
+
+      <p>
+        Co o tom víme z dat? Nezvykle hodně, a to i z velmi velkých nasazení. Největší zveřejněná zkušenost pochází ze sítě Kaiser Permanente v Kalifornii: za zhruba rok používalo AI zapisovatele <strong>7 260 lékařů při více než 2,5 milionu konzultací</strong> a odhadovaná úspora času na dokumentaci dosáhla kolem <strong>15 800 hodin</strong>. Důležitější než hodiny jsou ale dopady na lidi: 84 procent lékařů uvedlo, že nástroj zlepšil jejich interakci s pacientem, a téměř polovina pacientů vnímala, že lékař tráví méně času „u obrazovky“. Studie napříč šesti zdravotnickými systémy publikovaná v <em>JAMA Network Open</em> v roce 2025 zjistila, že po měsíci používání kleslo vyhoření lékařů <strong>z 51,9 na 38,8 procenta</strong>. Další práce ze sítě Mass General Brigham popsala obdobně velký pokles.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="9.5" data-decimals="1" data-prefix="−" data-suffix=" %">−9,5 %</span>
+          <span class="av-counter-label">méně času v záznamu s jedním z nástrojů v randomizované studii</span>
+          <span class="av-counter-foot">u druhého nástroje se úspora času neprokázala</span>
+        </div>
+      </aside>
+
+      <p>
+        Tady je ale potřeba zabrzdit a oddělit prokázané od marketingového. Většina nadšených čísel pochází z pozorovacích projektů a dotazníků — ne z přísně kontrolovaných pokusů. A když přišel první velký <strong>randomizovaný</strong> test (UCLA Health, 238 lékařů ve čtrnácti oborech, zveřejněný v <em>NEJM AI</em> v roce 2025), výsledek byl střízlivější: jeden z nástrojů zkrátil čas strávený v záznamu o 9,5 procenta, zatímco druhý <strong>žádnou statisticky významnou úsporu času nepřinesl</strong>. Oba přitom zlepšily vnímanou zátěž a pohodu lékařů. Poučení je dvojí: prožitek (méně stresu, víc očního kontaktu) se zlepšuje docela spolehlivě, ale „uspoří vám to čas“ neplatí automaticky a závisí na konkrétním nástroji i způsobu nasazení.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <p>
+        A pak je tu riziko, které se nesmí podcenit: <strong>halucinace</strong>, tedy situace, kdy si AI sebejistě vymyslí něco, co nezaznělo. U přepisových modelů to není teorie. Akademická analýza jednoho velmi rozšířeného nástroje pro rozpoznávání řeči (publikovaná na konferenci ACM FAccT v roce 2024) zjistila, že zhruba <strong>jedno procento přepisů obsahovalo celé vymyšlené věty</strong> — a z nich asi 40 procent bylo potenciálně škodlivých, včetně vymyšlených léků či diagnóz, často vložených do míst, kde pacient jen mlčel. Jiná studie, která nechala obecný jazykový model vytvořit zprávy z nahrávek, napočítala v průměru <strong>23,6 chyby na jeden případ</strong> a 86 procent vynechání. To není důvod technologii zavrhnout — je to důvod, proč je kontrola lékařem absolutní podmínkou a proč regulátoři jako britská NHS od dubna 2025 vyžadují u těchto nástrojů formální posouzení bezpečnosti a ochrany dat.
+      </p>
+
+      <h3>Pozvánka, která přijde ve správnou chvíli</h3>
+
+      <p>
+        Druhá oblast vstřícné AI se točí kolem jednoduché otázky: jak dostat správného pacienta na správné vyšetření ve správný čas. Zní to banálně, ale je za tím obrovský populační potenciál. Screeningové programy — na rakovinu prsu, děložního čípku nebo tlustého střeva — fungují jen tehdy, když na ně lidé skutečně chodí. A neúčast na objednaných termínech (anglicky „no-show“) stojí systém peníze i kapacitu a prodlužuje čekání ostatním. Tady AI nedělá nic geniálního, jen dobře počítá pravděpodobnosti: které pozvané osobě hrozí, že nepřijde, a komu a kdy poslat pozvánku tak, aby zabrala.
+      </p>
+
+      <p>
+        Důkazy o predikci neúčasti jsou solidní. Modely strojového učení dokážou označit rizikové termíny překvapivě spolehlivě — jeden pediatrický model zachytil 83 procent budoucích neúčastí při méně než 17 procentech planých poplachů, jiné práce z telemedicíny i stomatologie hlásí přesnost (měřenou ukazatelem <abbr title="Area Under the Curve — plocha pod ROC křivkou; 1,0 = dokonalé rozlišení, 0,5 = náhoda">AUC</abbr>) kolem 0,72. Nejsilnějším prediktorem je napříč studiemi prostá věc: kolik termínů člověk zmeškal v minulosti. Co je důležitější — existuje i důkaz, že predikce <em>něco změní</em>: v chilské dětské nemocnici spojili předpověď rizika s cíleným telefonátem nejohroženějším rodinám a neúčast klesla o <strong>10,3 procentního bodu</strong> oproti kontrolní skupině.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi1RecallH">
+        <figcaption class="av-figure-h" id="avAi1RecallH">Chytré zvaní a predikce neúčasti — co ukazují studie</figcaption>
+        <ol class="av-bar-compare" data-max="100" data-unit="%" data-decimals="0">
+          <li class="av-bar-row av-bar-row-good" data-value="83" data-label="Záchyt budoucí neúčasti" data-note="pediatrický model, při <17 % planých poplachů"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="72" data-label="Přesnost predikce (AUC ~0,72)" data-note="telemedicína; AUC převedeno na % pro srovnání"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="10" data-label="Pokles neúčasti po zásahu" data-note="predikce + cílený telefonát vs. kontrola (p.b.)"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> NPJ Digital Medicine (2022) pro záchyt neúčasti; Telemedicine Reports (2025) pro AUC; Health Care Management Science (2023) pro pokles neúčasti po intervenci. AUC je technicky bezrozměrný ukazatel rozlišovací schopnosti; zde převeden na procenta jen pro vizuální srovnání.</p>
+      </figure>
+
+      <p>
+        U personalizovaného zvaní na prevenci jsou data zatím opatrnější. Randomizovaný experiment ukázal, že zpráva napsaná na míru (ať už AI, nebo formou chatbota) zvyšuje <em>záměr</em> jít na screening víc než neosobní expertní leták. Háček je v tom slově „záměr“: studie měřila ochotu, ne to, kolik lidí skutečně dorazilo — a mezi „chci jít“ a „šel jsem“ bývá velký rozdíl. Druhá výhrada je etická a stojí za to ji vyslovit nahlas: modely neúčasti silně váží socioekonomické znaky. Hrozí, že „rizikový pacient“ začne znamenat „chudší pacient“ — a systém, který má rovnat přístup k péči, by ho neměl nevědomky prohlubovat.
+      </p>
+
+      <h3>Zpráva, které pacient rozumí</h3>
+
+      <p>
+        Třetí velká oblast je práce s textem, kterou jazykové modely zvládají nejlépe: shrnovat, přepisovat a překládat. Konkrétně jde o tři věci. <strong>Sumarizaci</strong> — z dlouhé hospitalizace vytvořit koncept propouštěcí zprávy. <strong>Překlad do lidštiny</strong> — odborný nález plný zkratek převést do textu, kterému rozumí pacient bez medicínského vzdělání. A <strong>předvyplnění administrativy</strong> — třeba návrh kódování diagnóz (MKN-10), které je jinak zdlouhavé a chybové.
+      </p>
+
+      <p>
+        Důkazy jsou nadějné, ale s jednou velkou hvězdičkou. V kontrolované studii hodnotili zkušení lékaři koncepty propouštěcích dopisů a ty od jazykového modelu obstály v „poskytnutí informace“ lépe než dopisy mladých lékařů — a to bez halucinací. Přehled studií o zjednodušování nálezů zjistil, že AI dokáže srazit čtenářskou náročnost radiologické zprávy z úrovně vysoké školy zhruba na úroveň druhého stupně základní školy. A v onkologii našel jeden model při kontrole dokumentace 97,8 procenta záměrně vložených chyb, zatímco lékaři jen 47,8 procenta. To je obraz AI jako pečlivého korektora, který nikdy není unavený.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="42" data-suffix=" %">42 %</span>
+          <span class="av-counter-label">propouštěcích zpráv od AI v jedné studii z urgentu obsahovalo halucinaci</span>
+          <span class="av-counter-foot">jiný typ dokumentu, opačný výsledek — kvalita kolísá</span>
+        </div>
+      </aside>
+
+      <p>
+        Ta hvězdička ale není malá. Jiná studie, tentokrát na propouštěcích zprávách z urgentního příjmu, našla u jazykového modelu <strong>42 procent halucinací a 47 procent opomenutí</strong> klinicky důležité informace. Dva protichůdné výsledky u dvou typů dokumentů říkají totéž, co celá tato vrstva AI: kvalita silně závisí na úkolu, na datech i na tom, jak je nástroj zapojený — a bez kontroly člověkem je výstup nepoužitelný. Vstřícná AI je výborný pomocník a mizerný samostatný pracovník.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Chatbot u vchodu: triáž a její meze</h3>
+
+      <p>
+        Poslední oblast první vrstvy je zároveň ta, kde je nadšení největší a důkazy nejslabší: <strong>symptom checkery</strong>, tedy chatboti, kterým pacient popíše příznaky a oni poradí, co to může být a kam jít. Tady je třeba být obzvlášť opatrný, protože jde o jediné místo, kde AI mluví přímo s laikem bez lékaře mezi tím — a chyba má přímý dopad.
+      </p>
+
+      <p>
+        Přesnost těchto nástrojů je dlouhodobě nízká a moc se nelepší. Velký audit 23 symptom checkerů publikovaný v <em>BMJ</em> už v roce 2015 zjistil, že správnou diagnózu na prvním místě nabídly jen ve <strong>34 procentech</strong> a správnou míru naléhavosti (triáž) v 57 procentech případů. Novější testy to potvrzují: aplikace Ada měla v jedné studii na urgentním příjmu sice slušnou citlivost v první pětici návrhů, ale 14 procent jejích doporučení ohledně naléhavosti lékaři označili za <strong>nebezpečná</strong>. Obecný chatbot ChatGPT ve verzi 3.5 vykázal v jednom testu dokonce 41 procent nebezpečných triáží. A randomizovaná studie z berlínské Charité nenašla žádné zlepšení spokojenosti ani úzkosti pacientů, kteří před návštěvou použili symptom checker, oproti běžné péči.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi1SymptomH">
+        <figcaption class="av-figure-h" id="avAi1SymptomH">Symptom checkery: přesnost zůstává nízká (audit 23 nástrojů, %)</figcaption>
+        <ol class="av-bar-compare" data-max="100" data-unit="%" data-decimals="0">
+          <li class="av-bar-row av-bar-row-bad" data-value="34" data-label="Správná diagnóza na 1. místě" data-note="medián napříč 23 nástroji"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="57" data-label="Správná míra naléhavosti (triáž)" data-note="jen 33 % u stavů vhodných k samoléčbě"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="41" data-label="Nebezpečné triáže (ChatGPT-3.5)" data-note="jiný test, obecný chatbot — varovné číslo"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Semigran et al., BMJ (2015) pro diagnózu a triáž; test obecného chatbota pro podíl nebezpečných triáží. Hodnoty z různých studií, neslouží k přímému srovnání nástrojů, ale ilustrují trvale nízkou spolehlivost.</p>
+      </figure>
+
+      <p>
+        Jak nebezpečné to může být, ukázal pád firmy <strong>Babylon Health</strong> — kdysi vlajkové lodi britského „digitálního zdraví“. Babylon tvrdil, že jeho chatbot zvládá diagnostiku „lépe než lékař“ (81 procent správně proti 72 procentům u lékařů v jednom testu). Nezávislý rozbor v <em>The Lancet</em> z roku 2018 ale konstatoval, že pro takové tvrzení „není přesvědčivý důkaz“ a že systém může být v některých situacích „výrazně horší“. Firma přesto vyrostla na valuaci přes 4 miliardy dolarů — a v září 2023 skončila v likvidaci. Nejnebezpečnější přitom není, když chatbot pošle k lékaři zbytečně. Nebezpečné je falešné uklidnění, které někoho s vážným stavem odradí od péče, dokud není pozdě.
+      </p>
+
+      <h3>Co to znamená pro Česko</h3>
+
+      <p>
+        Jak na tom je s touto vrstvou AI Česko? Lépe, než by člověk čekal, a zároveň s jednou velkou dírou. Dobrá zpráva nejdřív: podle národního průzkumu ministerstva zdravotnictví z února 2026 už nějakou formu umělé inteligence používá nebo testuje <strong>67,6 procenta zdravotnických zařízení</strong>, v radiologii dokonce 82,9 procenta. Česko má navíc roky fungující digitální základ, na kterém se dá stavět — <strong>eRecept</strong> je povinný od roku 2018 a vystavují se přes něj desítky milionů receptů ročně, takže lékaři i pacienti jsou na elektronické nástroje zvyklí. Vzniká i institucionální zázemí: ministerstvo zřídilo Výbor pro umělou inteligenci ve zdravotnictví a AI počítá s národní strategií i s novou strategií elektronického zdravotnictví na léta 2025–2035.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="7" data-prefix="od /2026 → " data-suffix=".">od 7/2026</span>
+          <span class="av-counter-label">teprve tehdy spouští VZP pilot úhrady AI z veřejného pojištění</span>
+          <span class="av-counter-foot">do té doby žádná systémová úhrada neexistuje</span>
+        </div>
+      </aside>
+
+      <p>
+        A teď ta díra: <strong>peníze</strong>. K polovině roku 2026 v Česku neexistuje systémová úhrada umělé inteligence z veřejného zdravotního pojištění. Nemocnice, která chce AI nasadit, ji platí ze svého. Změna se rýsuje — VZP schválila na jaře 2026 metodiku dočasné úhrady a pilotní provoz má začít teprve od července 2026 — ale dokud nebude jasné, kdo a za co zaplatí, zůstane většina nasazení ve fázi pilotů a nadšení jednotlivců. To je důležitý kontext k tomu zářnému číslu 67,6 procenta: „používá nebo testuje“ není totéž co „má v rutinním, financovaném provozu“. Jak v Česku vzniká celá digitální páteř, na kterou se tyhle nástroje napojují, podrobně rozebírá naše série o digitalizaci — od <a href="clanek-digi-1-co-to-je.html">vysvětlení, co digitalizace zdravotnictví vlastně je</a>, až po <a href="clanek-digi-2-jak-funguje-api.html">to, jak spolu systémy mluví přes rozhraní API</a>.
+      </p>
+
+      <h3>Kde je háček — a proč „vrácený čas“ není málo</h3>
+
+      <p>
+        Když to shrneme, vstřícná AI má překvapivě pevné základy, ale i jasné meze, které platí napříč všemi jejími podobami. První mez je <strong>člověk ve smyčce</strong>: ať jde o zprávu, pozvánku, nebo triáž, výstup AI je vždy návrh, který musí někdo zkontrolovat. Druhá je <strong>halucinace</strong> — schopnost modelu sebejistě tvrdit nepravdu — kvůli které se nesmí žádný výstup pouštět dál naslepo. Třetí jsou <strong>data a soukromí</strong>: nahrávky konzultací a zdravotní záznamy patří mezi nejcitlivější osobní údaje vůbec a jejich zpracování přísně hlídá GDPR. A čtvrtá je <strong>regulace</strong>: Evropská unie řadí zdravotnickou AI mezi „vysoce rizikové“ systémy s tvrdými povinnostmi — čemu přesně musí výrobci i nemocnice dostát, jsme rozebrali v samostatném textu <a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">o tom, co přináší evropský AI Act do zdravotnictví</a>.
+      </p>
+
+      <p>
+        Přesto by byla chyba mávnout nad touhle vrstvou rukou jako nad „pouhou administrativou“. Většina velkých slibů o AI v medicíně — že nahradí radiology nebo objeví zázračné léky — je zatím buď nejistá, nebo daleko. Naproti tomu „lékař, který se vám zase dívá do očí“ je přínos skromný, ale doložený, levný na pochopení a okamžitě citelný pro pacienta i pro vyčerpaný systém. Není to revoluce z titulků. Je to ale možná to nejlepší, co umělá inteligence dnešní medicíně reálně nabízí.
+      </p>
+
+      <p>
+        V <strong>druhém díle</strong> série opustíme zázemí a vstoupíme přímo do diagnostiky a léčby: podíváme se, jak si AI vede při čtení mamografů a snímků sítnice, proč je jeden slavný systém na předpověď sepse odstrašujícím příkladem, a kam to dotáhl hon na nová antibiotika proti rezistentním bakteriím — od oceňovaného AlphaFoldu po molekuly, které zatím fungují jen u myší. Jinými slovy: kde AI opravdu léčí a kde zatím jen slibuje.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory a pojmy, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><strong><a href="indicator.html?id=ehealth_adoption">Elektronické zdravotnictví — míra adopce (eHealth index)</a></strong> — digitální základ, na který se AI nástroje napojují</li>
+        <li><strong><a href="indicator.html?id=screening_mamograficky">Pokrytí mamografickým screeningem (50–69)</a></strong> — chytré zvaní cílí na vyšší účast</li>
+        <li><strong><a href="indicator.html?id=screening_kolorektalni">Pokrytí kolorektálním screeningem (50–75)</a></strong> — recall systémy a predikce neúčasti</li>
+        <li><strong><a href="indicator.html?id=screening_cervix">Screening cervikálního karcinomu (20–64)</a></strong> — personalizované pozvánky zvyšují záměr účasti</li>
+        <li><strong>Ambient AI scribe</strong> — nástroj, který z nahrané konzultace vytvoří koncept zdravotnické dokumentace</li>
+        <li><strong>Halucinace AI</strong> — když model sebejistě vygeneruje informaci, která nezazněla a není pravdivá</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Hodnoty indikátorů pocházejí z dashboardu HSPA Monitoru (zdroj OECD, ÚZIS, MZ ČR; rok uveden u indikátoru). Čísla o přínosech a rizicích AI jsou výsledky konkrétních studií citovaných níže — popisují daný nástroj a populaci, ne univerzální pravdu o „umělé inteligenci“ jako takové.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed a konferenční)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Tu SP, et al. Ambient AI Scribes: Learnings after 1 Year and over 2.5 Million Uses. NEJM Catalyst, 2025.</strong> — nasazení u 7 260 lékařů, &gt; 2,5 mil. konzultací, ~15 791 ušetřených hodin; 84 % lepší interakce s pacientem. <a href="https://doi.org/10.1056/CAT.25.0040" target="_blank" rel="noopener">doi.org/10.1056/CAT.25.0040 ↗</a></li>
+          <li><strong>Olson K, et al. Use of Ambient AI Scribes to Reduce Administrative Burden and Professional Burnout. JAMA Network Open, 2025.</strong> — vyhoření z 51,9 % na 38,8 % (OR 0,26). <a href="https://doi.org/10.1001/jamanetworkopen.2025.34976" target="_blank" rel="noopener">doi.org/10.1001/jamanetworkopen.2025.34976 ↗</a></li>
+          <li><strong>Lukac PJ, et al. Ambient AI Scribes in Clinical Practice: A Randomized Trial. NEJM AI, 2025.</strong> — RCT (238 lékařů): jeden nástroj −9,5 % času v záznamu, druhý bez významné úspory. <a href="https://doi.org/10.1056/aioa2501000" target="_blank" rel="noopener">doi.org/10.1056/aioa2501000 ↗</a></li>
+          <li><strong>Koenecke A, et al. Careless Whisper: Speech-to-Text Hallucination Harms. ACM FAccT, 2024.</strong> — ~1 % přepisů s vymyšlenými větami, ~40 % z nich potenciálně škodlivých. <a href="https://doi.org/10.1145/3630106.3658996" target="_blank" rel="noopener">doi.org/10.1145/3630106.3658996 ↗</a></li>
+          <li><strong>Kernberg A, Gold JA, Mohan V. Using ChatGPT-4 to Create Structured Medical Notes From Audio Recordings. J Med Internet Res, 2024;26:e54419.</strong> — průměrně 23,6 chyby na případ, 86 % opomenutí. <a href="https://doi.org/10.2196/54419" target="_blank" rel="noopener">doi.org/10.2196/54419 ↗</a></li>
+          <li><strong>Dunstan J, et al. Predicting no-shows in a pediatric hospital in Chile using machine learning. Health Care Manag Sci, 2023.</strong> — predikce + cílený telefonát: neúčast −10,3 procentního bodu. <a href="https://doi.org/10.1007/s10729-022-09626-z" target="_blank" rel="noopener">doi.org/10.1007/s10729-022-09626-z ↗</a></li>
+          <li><strong>Liu D, et al. Machine learning approaches to predicting no-shows in pediatric medical appointment. NPJ Digit Med, 2022.</strong> — záchyt 83 % neúčastí při &lt; 17 % planých poplachů. <a href="https://doi.org/10.1038/s41746-022-00594-w" target="_blank" rel="noopener">doi.org/10.1038/s41746-022-00594-w ↗</a></li>
+          <li><strong>Semigran HL, et al. Evaluation of symptom checkers for self diagnosis and triage: audit study. BMJ, 2015;351:h3480.</strong> — správná diagnóza první ve 34 %, triáž v 57 %. <a href="https://doi.org/10.1136/bmj.h3480" target="_blank" rel="noopener">doi.org/10.1136/bmj.h3480 ↗</a></li>
+          <li><strong>Fraser H, Coiera E, Wong D. Safety of patient-facing digital symptom checkers. The Lancet, 2018.</strong> — k tvrzení Babylonu „lepší než lékař“ není přesvědčivý důkaz. <a href="https://doi.org/10.1016/S0140-6736(18)32819-8" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(18)32819-8 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA); konferenční práce (FAccT) z ACM Digital Library.</p>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data, regulace a kontext (ČR i svět)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo zdravotnictví ČR — Národní průzkum: umělá inteligence se stává běžnou součástí českého zdravotnictví (únor 2026)</strong> — 67,6 % zařízení AI používá/testuje, radiologie 82,9 %. <a href="https://mzd.gov.cz/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>VZP — úhradová metodika pro AI a pilotní provoz (od července 2026)</strong> — dočasná úhrada zdravotnické AI z veřejného pojištění. <a href="https://www.vzp.cz/" target="_blank" rel="noopener">vzp.cz ↗</a></li>
+          <li><strong>NHS England — Guidance on the use of AI-enabled ambient scribing products (duben 2025)</strong> — požadavek na posouzení bezpečnosti a ochrany dat. <a href="https://www.england.nhs.uk/long-read/guidance-on-the-use-of-ai-enabled-ambient-scribing-products-in-health-and-care-settings/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>HSPA Monitor — indikátory</strong> — <a href="indicator.html?id=ehealth_adoption">eHealth adopce</a>, <a href="indicator.html?id=screening_mamograficky">mamografický screening</a>, <a href="indicator.html?id=screening_kolorektalni">kolorektální screening</a>.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k hodnotám:</strong> Výsledky studií popisují konkrétní nástroj, prostředí a populaci, ne „umělou inteligenci“ obecně; čísla z různých studií neslouží k přímému srovnání produktů. Údaje o nasazení a úhradách v ČR vycházejí z oficiálních zdrojů (MZ ČR, VZP) aktuálních k červnu 2026 a mohou se rychle měnit. Tento text je osvětový — netýká se konkrétní diagnózy ani volby nástroje pro dané pracoviště.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

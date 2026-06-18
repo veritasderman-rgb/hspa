@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Od mamografu k antibiotikům z počítače: kde AI léčí a kde zatím jen slibuje · HSPA Monitor</title>
+<meta name="description" content="Umělá inteligence už prokazatelně pomáhá číst mamografy a snímky sítnice. V objevu nových antibiotik proti rezistentním bakteriím ale zatím slibuje víc, než dokázala: nadějné molekuly fungují jen u myší a žádný AI-navržený lék není schválen. Díl 2/2 série o AI ve zdravotnictví.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Od mamografu k antibiotikům z počítače: kde AI léčí a kde zatím jen slibuje">
+<meta property="og:description" content="Díl 2/2 série o AI ve zdravotnictví. Mamografie (studie MASAI), sítnice, EKG, odstrašující případ predikce sepse a hon na antibiotika proti rezistenci — co je prokázáno a co zatím jen myší experiment.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-18">
+<meta property="article:section" content="Digitalizace">
+<!--
+  audit:
+    last_reviewed: 2026-06-18
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-06-18
+    creation_phase: serie-ai-zdravotnictvi-dil-2
+    primary_sources_count: 11
+    visual_elements_count: 7
+    notes: "Díl 2/2 série AI ve zdravotnictví (Vrstva 2 — diagnostika, léčba, výzkum). DRAFT — published:false, audit-status review-pending (drží review hold). Empirická tvrzení doložena primární literaturou (DOI v sekci Zdroje): mamografie MASAI — bezpečnostní analýza (Lancet Oncol 2023, DOI 10.1016/S1470-2045(23)00298-X: detekce 6,1 vs 5,1/1000, čtecí zátěž -44,3%), plná kohorta (Lancet Digit Health 2025, DOI 10.1016/S2589-7500(24)00267-X: 6,4 vs 5,0/1000, poměr 1,29), primární cíl intervalové ca (Lancet 2026, DOI 10.1016/S0140-6736(25)02464-X: senzitivita 80,5% vs 73,8%, specificita 98,5%); diabetická retinopatie IDx-DR autonomní (npj Digit Med 2018, DOI 10.1038/s41746-018-0040-6: sens 87,2%, spec 90,7%); dataset shift (Nat Med 2024, DOI 10.1038/s41591-024-03113-4); automation bias (Radiology 2023, DOI 10.1148/radiol.222176); AI-EKG dysfunkce LK (Nat Med 2019, DOI 10.1038/s41591-018-0240-2: AUC 0,93) a fibrilace síní (Lancet 2019, DOI 10.1016/S0140-6736(19)31721-0: AUC 0,87); Epic Sepsis Model selhání (JAMA Intern Med 2021, DOI 10.1001/jamainternmed.2021.2626: AUC 0,63, nezachytil 67%); AMR 1,27 mil./4,95 mil. úmrtí 2019 (Lancet 2022, DOI 10.1016/S0140-6736(21)02724-0); AlphaFold (Nature 2021, DOI 10.1038/s41586-021-03819-2) + Nobel chemie 2024; halicin (Cell 2020, DOI 10.1016/j.cell.2020.01.021: >107 mil. molekul, in vitro+myši); abaucin (Nat Chem Biol 2023, DOI 10.1038/s41589-023-01349-8: jen myši); třída proti MRSA (Nature 2023, DOI 10.1038/s41586-023-06887-8: jen myši); rentosertib jen fáze 2. ČR indikátory ověřené z dashboardu: mamografický screening 54,5%; nemocniční úmrtnost po CMP 9,9%; rezistence Acinetobacter/karbapenemy 25,5%, MRSA 9,3%, Klebsiella CRE 2,2%; prevalence diabetu 9,5%; spotřeba ATB 15 DDD/1000/den. ČR nasazení: Carebot (RTG-AI, MDR IIa, dle MZ 16 030 snímků v 9 nemocnicích, 56 nově odhalených nádorů); Kardi AI (EKG); FN Motol AI-MRI. Cross-linky: clanek-spotreba-antibiotik, clanek-veterinarni-antibiotika-one-health, clanek-ai-act-zdravotnictvi-srpen-2026, clanek-ai-zdravotnictvi-1-vstricnost (díl 1). TODO před publikací: ověřit aktuálnost FDA počtu (~1 451) a ČR nasazení, vygenerovat cover, povýšit audit-status a published:true, prepnout robots na index."
+-->
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body data-article-slug="clanek-ai-zdravotnictvi-2-lecba.html">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-ai-zdravotnictvi-2-lecba.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag article-tag-muted">Série AI ve zdravotnictví · díl 2/2 · diagnostika a výzkum</span>
+      </div>
+      <h1 class="article-title">Od mamografu k antibiotikům z počítače: kde umělá inteligence léčí a kde zatím jen slibuje</h1>
+      <p class="article-deck">
+        Tady přichází ta část příběhu, kvůli které se o AI v medicíně píšou titulky — stroj, který čte snímky, předpovídá nemoc a hledá nové léky. Realita je ale rozdělená na dvě poloviny. V jedné má umělá inteligence solidní vysvědčení: u čtení mamografů dnes existuje velký randomizovaný důkaz, že pomáhá. V druhé jde zatím hlavně o slib: nadějná antibiotika z počítače fungují u myší, ale žádné z nich nedostal do těla jediný pacient a žádný lék navržený AI není schválen. Druhý díl série odděluje prokázané od příslibů — bez hype a bez podceňování.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">18. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">23 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V prvním díle jsme viděli umělou inteligenci jako tichého pomocníka, který lékaři vrací čas — přepisuje konzultace, zve pacienty na prevenci, píše srozumitelné zprávy. To je vrstva, kterou pacient skoro nevidí. Teď vstupujeme přímo do ordinace a laboratoře: k AI, která se dívá na váš rentgen, počítá riziko z vašeho EKG a hledá molekulu, jež by zabila bakterii odolnou vůči všem dnešním antibiotikům. Je to oblast s největšími sliby — a proto i s největším rozdílem mezi tím, co se píše, a tím, co je doloženo. Projdeme ji od nejpevnějších důkazů k nejvzdálenějším příslibům a u každého kroku si řekneme jednu věc: na jaké úrovni důkazu vlastně stojíme.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi2HeroH">
+        <figcaption class="av-figure-h" id="avAi2HeroH">Léčebná AI v číslech — od pevného důkazu k pouhému příslibu</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="29" data-prefix="+" data-suffix=" %">+29 %</span>
+            <span class="av-counter-label">více nádorů zachytilo AI-podpořené čtení mamografů v randomizovaném testu</span>
+            <span class="av-counter-foot">studie MASAI, Švédsko (Lancet 2025)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="44" data-prefix="−" data-suffix=" %">−44 %</span>
+            <span class="av-counter-label">o tolik nižší čtecí zátěž radiologů ve stejném testu</span>
+            <span class="av-counter-foot">jeden snímek navíc čte AI, ne druhý lékař</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1.27" data-decimals="2" data-suffix=" mil.">1,27 mil.</span>
+            <span class="av-counter-label">úmrtí ročně je přímo přičitatelných rezistenci na antibiotika</span>
+            <span class="av-counter-foot">2019; proto se hledají nové léky (Lancet 2022)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">léků navržených umělou inteligencí je zatím schváleno k léčbě</span>
+            <span class="av-counter-foot">nejdál postoupil jeden kandidát do fáze 2</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> mamografie z randomizované studie MASAI (Lancet, 2023–2026); úmrtí na rezistenci z globální analýzy (Lancet, 2022); stav schvalování AI léků z odborného tisku (2025). Plné citace s DOI v sekci Zdroje.</p>
+      </figure>
+
+      <h3>Čtení snímků: kde má AI nejlepší vysvědčení</h3>
+
+      <p>
+        Začněme tam, kde jsou důkazy nejpevnější — u obrazové diagnostiky. Umělá inteligence pro čtení snímků je hluboká neuronová síť natrénovaná na statisících obrázků (mamografů, rentgenů, snímků sítnice, digitalizovaných vzorků tkáně). Z obrazu počítá skóre rizika nebo vyznačuje podezřelá místa. Pracuje ve třech režimech: jako <strong>triáž</strong> (seřadí nálezy podle naléhavosti), jako <strong>druhé čtení</strong> (asistuje lékaři) a vzácně jako <strong>autonomní diagnóza</strong> (rozhodne sama). Že je radiologie pro AI doménou číslo jedna, ukazuje i regulační statistika: z více než 1 400 nástrojů s umělou inteligencí, které k závěru roku 2025 schválil americký úřad FDA, jsou zhruba <strong>tři čtvrtiny právě z radiologie</strong>.
+      </p>
+
+      <p>
+        Korunním důkazem celého oboru je švédská studie <strong>MASAI</strong> — vůbec první velký <strong>randomizovaný</strong> test AI v mamografickém screeningu, tedy zlatý standard, který obvykle u diagnostických nástrojů chybí. Zařadila přes sto tisíc žen a srovnávala obvyklé čtení dvěma radiology s postupem, kde jeden odečet provádí AI. Výsledky vycházely postupně a jsou pozoruhodně konzistentní: AI-podpořené čtení zachytilo na plné kohortě <strong>6,4 nádoru na tisíc žen oproti 5,0</strong> u standardního postupu (tedy zhruba o 29 procent víc), a to <strong>bez nárůstu falešně pozitivních nálezů</strong>. Klíčové je, že v hlavní analýze, zveřejněné na začátku roku 2026, AI nezhoršila to nejdůležitější — počet rakovin přehlédnutých mezi screeningy (tzv. intervalové karcinomy) — a přitom dosáhla vyšší citlivosti (80,5 procenta proti 73,8). A vedlejší přínos je provozně zásadní: <strong>čtecí zátěž radiologů klesla o 44 procent</strong>, protože druhý lidský odečet u většiny snímků nahradila AI.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi2MasaiH">
+        <figcaption class="av-figure-h" id="avAi2MasaiH">MASAI: AI-podpořené čtení vs. standardní dvojí čtení (záchyt nádorů na 1000 žen)</figcaption>
+        <ol class="av-bar-compare" data-max="7" data-unit="/1000" data-decimals="1">
+          <li class="av-bar-row av-bar-row-highlight" data-value="6.4" data-label="AI-podpořené čtení" data-note="senzitivita 80,5 %, bez nárůstu falešně pozitivních"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="5.0" data-label="Standardní dvojí čtení (2 radiologové)" data-note="senzitivita 73,8 %"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> studie MASAI — plná kohorta (Lancet Digital Health, 2025) a hlavní analýza intervalových karcinomů (Lancet, 2026). Vedle vyššího záchytu přinesla AI pokles čtecí zátěže radiologů o 44 %. Jde zatím o jeden region a jeden software — dopad na úmrtnost se teprve sleduje.</p>
+      </figure>
+
+      <p>
+        Mamografie ale není jediný úspěch. Jediným plně <strong>autonomním</strong> diagnostickým systémem, který kdy americký regulátor povolil — tedy takovým, který vydá výsledek bez lékaře — je nástroj na záchyt <strong>diabetické retinopatie</strong> (poškození sítnice u cukrovkářů) z fotografie oka. V registrační studii dosáhl citlivosti 87,2 a specificity 90,7 procenta a běží přímo v ordinacích praktiků, kde dřív pacient musel k očnímu specialistovi. V <strong>patologii</strong> zase první schválený systém zvýšil záchyt karcinomu prostaty ve vzorcích tkáně, u <strong>cévní mozkové příhody</strong> umí AI na CT během minut upozornit na uzávěr velké tepny a zrychlit cestu pacienta k zákroku, a u <strong>tuberkulózy</strong> Světová zdravotnická organizace už v roce 2021 podmíněně doporučila počítačové čtení rentgenů hrudníku jako alternativu k lidskému odečtu.
+      </p>
+
+      <h3>Asistent, ne soudce: rizika diagnostické AI</h3>
+
+      <p>
+        Tady je ale nutné zchladit nadšení dvěma střízlivými fakty. Za prvé: MASAI je <strong>výjimka, ne pravidlo</strong>. Drtivá většina diagnostických nástrojů s AI byla ověřena jen <strong>retrospektivně</strong> — tedy na starých, archivních datech, kde už se ví, jak to dopadlo. To je mnohem slabší důkaz než prospektivní test na živých pacientech, natož randomizovaná studie. Mezi „náš model měl na archivu 95procentní úspěšnost“ a „v reálném provozu to pacientům pomohlo“ je velká propast a marketingová čísla bývají z té první kategorie.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="67" data-suffix=" %">67 %</span>
+          <span class="av-counter-label">septických pacientů nezachytil rozšířený americký AI model v nezávislém testu</span>
+          <span class="av-counter-foot">Epic Sepsis Model, externí validace 2021</span>
+        </div>
+      </aside>
+
+      <p>
+        Za druhé: AI v diagnostice má své typické <strong>poruchy</strong>. Výkon modelu padá, jakmile narazí na data z jiného přístroje, jiné nemocnice nebo jiné populace, než na jakých se učil (odborně „dataset shift“) — síť skvělá v jedné nemocnici může být průměrná o ulici dál. A je tu zákeřnější riziko, <strong>automation bias</strong>: člověk má sklon přebírat odpověď stroje i tehdy, když je špatná. V kontrolovaném pokusu chybná rada AI prokazatelně zhoršila přesnost radiologů — a to na všech úrovních zkušenosti, od rezidentů po veterány. Právě proto je dnešní léčebná AI v drtivé většině případů <strong>asistent, ne soudce</strong>: nejlépe funguje jako druhý pár očí pod dohledem člověka, ne jako náhrada jeho úsudku.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Laboratoře a EKG: tichá výstraha — a odstrašující příklad</h3>
+
+      <p>
+        Mimo obraz se AI nejvíc osvědčila u dat, která jsou sama o sobě čísla nebo křivky — typicky EKG. Tým z americké Mayo Clinic ukázal, že neuronová síť dokáže z běžného elektrokardiogramu odhalit <strong>skrytou slabost srdce</strong> (sníženou funkci levé komory), kterou by lékař z křivky pouhým okem nevyčetl, s rozlišovací schopností (AUC) 0,93. Jiný jejich model předpoví z EKG natočeného v normálním rytmu zvýšené riziko <strong>fibrilace síní</strong>. To je AI v nejlepší roli: vytáhne z rutinního vyšetření signál, který by jinak zůstal skrytý.
+      </p>
+
+      <p>
+        Jenže stejná oblast dala medicíně i nejslavnější varování. <strong>Epic Sepsis Model</strong> — komerční nástroj na včasnou předpověď sepse (život ohrožující reakce na infekci) — byl nasazený ve stovkách amerických nemocnic, často s důvěrou v dodavatelem uváděnou přesnost. Když ho ale v roce 2021 nezávisle prověřili na téměř 28 tisících pacientů, výsledek byl tristní: rozlišovací schopnost jen <strong>AUC 0,63</strong> (málo nad náhodou), model <strong>nezachytil 67 procent skutečně septických pacientů</strong> a zároveň spustil planý poplach u 18 procent všech hospitalizovaných. Marketingové AUC 0,76–0,83 se v reálu nepotvrdilo. Je to učebnicový rozdíl mezi „číslem od výrobce“ a nezávislou validací — a důvod, proč by žádná nemocnice neměla AI nasazovat jen na základě brožury.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi2TableH">
+        <figcaption class="av-figure-h" id="avAi2TableH">Diagnostická a léčebná AI: čím je vlastně doložena</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Oblast</th>
+                <th scope="col">Co AI dělá</th>
+                <th scope="col">Úroveň důkazu</th>
+                <th scope="col">Příklad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Mamografie</th>
+                <td>druhé čtení screeningu</td>
+                <td>randomizovaná studie (nejvyšší)</td>
+                <td>MASAI (Švédsko)</td>
+              </tr>
+              <tr>
+                <th scope="row">Sítnice (cukrovka)</th>
+                <td>autonomní diagnóza</td>
+                <td>prospektivní studie + schválení FDA</td>
+                <td>IDx-DR</td>
+              </tr>
+              <tr>
+                <th scope="row">EKG</th>
+                <td>odhalí skrytou slabost srdce</td>
+                <td>velké kohorty</td>
+                <td>Mayo Clinic</td>
+              </tr>
+              <tr>
+                <th scope="row">Mrtvice (CT)</th>
+                <td>triáž, urychlení zákroku</td>
+                <td>většinou pozorovací</td>
+                <td>Viz.ai</td>
+              </tr>
+              <tr>
+                <th scope="row">Sepse</th>
+                <td>včasná výstraha</td>
+                <td>selhala v nezávislém testu</td>
+                <td>Epic Sepsis Model</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Čtení tabulky:</strong> „úroveň důkazu“ stoupá od pozorovacích dat (slabší) k randomizované studii (nejsilnější). Stejná technologie (AI) může mít v různých oblastech naprosto odlišnou kvalitu důkazu — proto nelze mluvit o „AI“ paušálně.</p>
+      </figure>
+
+      <h3>Hon na nová antibiotika: naděje, která zatím běhá po myších</h3>
+
+      <p>
+        Teď se dostáváme k nejvzrušující — a nejméně doložené — části. Svět zoufale potřebuje nová antibiotika. Bakterie odolné vůči stávajícím lékům způsobily v roce 2019 odhadem <strong>1,27 milionu úmrtí přímo</strong> a podílely se na dalších bezmála pěti milionech. Přitom desítky let nevznikla žádná zásadně nová třída antibiotik — vyvíjet je je drahé a pro farmaceutické firmy málo výnosné. A právě sem vkládá medicína velkou naději do umělé inteligence.
+      </p>
+
+      <p>
+        Jak to funguje? Model se naučí na tisících změřených molekul, které bakterie zabíjejí nebo nezabíjejí, a pak dokáže <strong>předpovědět účinek pro miliony dalších, netestovaných sloučenin</strong> — během dní, ne let. Lidé pak v laboratoři ověří jen malý vybraný zlomek. Příbuznou revolucí je <strong>AlphaFold</strong> od DeepMindu: program, který z pořadí aminokyselin předpoví trojrozměrný tvar bílkoviny — a tvar určuje funkci i to, kam může lék zapadnout. Jeho databáze dnes pokrývá přes 200 milionů struktur a v roce 2024 za něj jeho tvůrci dostali <strong>Nobelovu cenu za chemii</strong>. To je skutečný, oceněný vědecký nástroj, ne hype.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avAi2DrugH">
+        <figcaption class="av-figure-h" id="avAi2DrugH">Od 100 milionů molekul k antibiotiku — a proč to ještě není lék</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Model se učí na známých molekulách</h4>
+            <p class="av-flow-desc">Síť dostane tisíce sloučenin s informací, zda bakterii zabíjejí. Naučí se vzory, které lidské oko nevidí.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Proskenuje stovky milionů kandidátů</h4>
+            <p class="av-flow-desc">Antibiotikum halicin vzešlo z předpovědi přes 107 milionů molekul — to by žádná laboratoř ručně nestihla.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vybere hrstku nadějných látek</h4>
+            <p class="av-flow-desc">Z milionů zůstanou desítky kandidátů, které stojí za fyzické otestování v laboratoři.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Účinek v misce a u myší</h4>
+            <p class="av-flow-desc">Halicin, abaucin i nová třída proti MRSA zabíjejí bakterie in vitro a léčí infekce u myší. Tady končí dnešní důkazy.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Klinické testy na lidech — ZATÍM NE</h4>
+            <p class="av-flow-desc">Aby z molekuly byl lék, musí projít třemi fázemi testů na lidech. Žádné AI-objevené antibiotikum jimi zatím neprošlo.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Pozn.:</strong> mezi účinkem „u myši“ a schváleným lékem je propast, kterou překoná jen zlomek látek. Hype často mlčí o tom, že nadějná molekula je teprve na začátku cesty.</p>
+      </figure>
+
+      <p>
+        Konkrétní výsledky znějí jako z titulků — a jsou skutečné. <strong>Halicin</strong>, objevený na MIT díky předpovědi přes 107 milionů molekul, je strukturně nové antibiotikum účinné proti řadě bakterií. <strong>Abaucin</strong> cílí na <em>Acinetobacter baumannii</em>, jednu z nejobávanějších nemocničních bakterií. A v roce 2023 našla „vysvětlitelná“ neuronová síť úplně novou strukturní třídu látek proti zlatému stafylokoku odolnému na meticilin (MRSA). Všechny tři jsou reálné vědecké úspěchy. A u všech tří platí totéž zásadní „ale“: <strong>fungují zatím jen v laboratorní misce a u myší.</strong> Žádné z nich nedostal jediný člověk jako léčbu.
+      </p>
+
+      <h3>Proč zatím žádný „AI lék“ nekoupíte</h3>
+
+      <p>
+        Tady je potřeba být úplně přímý, protože právě v téhle oblasti je propast mezi sliby a realitou největší. K polovině roku 2026 <strong>není schválen žádný lék, který by navrhla umělá inteligence</strong> — ani jedno antibiotikum, ani nic jiného. Nejdál postoupila molekula proti plicní fibróze od firmy Insilico Medicine, a i ta je teprve ve <strong>druhé ze tří</strong> klinických fází. Některé hvězdy oboru přitom couvají: firma Exscientia, donedávna vlajková loď „AI návrhu léků“, v roce 2024 propouštěla, zúžila projekty a nakonec ji pohltil konkurent, který pak několik programů ukončil.
+      </p>
+
+      <p>
+        Neznamená to, že je AI v objevu léků slepá ulička — spíš že je na začátku dlouhé cesty. Vývoj léku trvá typicky deset let a stojí miliardy; i kdyby AI dramaticky zrychlila první kroky (a leccos naznačuje, že může), čekání na klinické důkazy zkrátit nedokáže — testy bezpečnosti a účinnosti na lidech prostě trvají. Rozumný postoj tedy zní: brát objev nových molekul jako reálný a vzrušující směr, ale každé tvrzení o „zázračném AI léku“ poměřovat jednoduchou otázkou — <em>v jaké je fázi testů na lidech?</em> Když je odpověď „zatím v žádné“, je to věda, ne ještě medicína.
+      </p>
+
+      <h3>Co to znamená pro Česko</h3>
+
+      <p>
+        Pro Česko má tahle vrstva dvě roviny — co se tu reálně používá a proč na výzkumu antibiotik záleží zrovna u nás. Začněme nasazením: v diagnostice už AI v českých nemocnicích není exotikou. Domácí systém <strong>Carebot</strong> na čtení rentgenů hrudníku má evropskou certifikaci zdravotnického prostředku a podle ministerstva zdravotnictví analyzoval přes <strong>16 tisíc snímků v devíti nemocnicích a pomohl odhalit 56 nových nádorů</strong>. Český <strong>Kardi AI</strong> hlídá srdeční rytmus z EKG, fakultní nemocnice Motol nasadila AI ke zrychlení vyšetření na magnetické rezonanci. To přesně odpovídá světovému vzorci, kde AI vede radiologie a kardiologie.
+      </p>
+
+      <p>
+        Druhá rovina je naléhavější, než se zdá. Hon na nová antibiotika není akademická hra ani pro Česko — a dashboard HSPA Monitoru to ukazuje černé na bílém. Rezistence bakterie <em>Acinetobacter</em> na karbapenemy, tedy na „záložní“ antibiotika posledních linií, dosahuje v ČR <strong>25,5 procenta</strong> — a je to přesně ten druh bakterie, na kterou míří AI-objevený abaucin. U zlatého stafylokoka je odolnost vůči meticilinu (MRSA) na 9,3 procenta, u klebsiely na karbapenemy zatím na nižších 2,2 procenta. Česko má přitom v mezinárodním srovnání rozumnou spotřebu antibiotik — jak v <a href="clanek-spotreba-antibiotik.html">humánní medicíně</a>, tak ve <a href="clanek-veterinarni-antibiotika-one-health.html">veterině</a> — což rezistenci brzdí. Ale i tak platí: každé nové antibiotikum, ať z laboratoře, nebo z počítače, se bude jednou počítat i tady.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="25.5" data-decimals="1" data-suffix=" %">25,5 %</span>
+          <span class="av-counter-label">rezistence Acinetobacter na karbapenemy v ČR — záložní antibiotika selhávají</span>
+          <span class="av-counter-foot">přesně tuto bakterii cílí AI-objevený abaucin (zatím u myší)</span>
+        </div>
+      </aside>
+
+      <p>
+        A nakonec peníze a pravidla, která platí pro obě roviny stejně jako pro vstřícnou AI z prvního dílu. Diagnostická AI je v Evropské unii „vysoce rizikový“ systém s tvrdými povinnostmi — co to znamená pro výrobce i nemocnice, rozebírá náš text <a href="clanek-ai-act-zdravotnictvi-srpen-2026.html">o evropském AI Actu ve zdravotnictví</a>. A jako u všeho v českém zdravotnictví nakonec rozhoduje úhrada: dokud nezačne pojišťovna AI platit (pilot VZP startuje teprve v polovině roku 2026), zůstane i ta nejlépe doložená diagnostika spíš v pilotech než v plošném provozu.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Tečka: prokázané, slibované, vymyšlené</h3>
+
+      <p>
+        Když celou sérii zúžíme do jediné myšlenky, zní takto: o umělé inteligenci v medicíně se nedá mluvit paušálně, protože pod jedním slovem se skrývají tři velmi rozdílné světy. Je tu AI <strong>prokázaná</strong> — tichý pomocník, který vrací lékaři čas, a druhé čtení mamografů, kde existuje randomizovaný důkaz. Je tu AI <strong>slibovaná</strong> — antibiotika z počítače a nové léky, které fungují u myší a čekají na první pacienty. A je tu AI, jejíž čísla jsou <strong>vymyšlená</strong> v doslovném smyslu — halucinace v přepisu i marketingová přesnost, která se v nezávislém testu rozplyne.
+      </p>
+
+      <p>
+        Dobrý zdravotní systém — a dobrý čtenář — pozná, ve kterém z těch tří světů se zrovna pohybuje. Nejde o to být nadšenec, ani skeptik. Jde o to u každého nového nástroje položit tři otázky: <em>Co přesně dělá? Na jaké úrovni důkazu to stojí? A kdo nese odpovědnost, když se splete?</em> Umělá inteligence medicínu nezachrání ze dne na den, ale na pár konkrétních místech jí už dnes prokazatelně pomáhá. Zbytek je práce — a u léků ještě roky testů. Kdo začal prvním dílem, ví, že ten nejjistější přínos je zatím překvapivě skromný: lékař, který se vám zase dívá do očí.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory a pojmy, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><strong><a href="indicator.html?id=screening_mamograficky">Pokrytí mamografickým screeningem (50–69)</a></strong> — ČR 54,5 %; oblast, kde má AI nejsilnější důkaz (MASAI)</li>
+        <li><strong><a href="indicator.html?id=rezistence_acinetobacter_karbapenem">Rezistence Acinetobacter na karbapenemy</a></strong> — ČR 25,5 %; bakterie, na niž cílí AI-objevený abaucin</li>
+        <li><strong><a href="indicator.html?id=rezistence_mrsa">Rezistence S. aureus na meticilin (MRSA)</a></strong> — ČR 9,3 %; cíl nové AI-objevené třídy antibiotik</li>
+        <li><strong><a href="indicator.html?id=spotreba_antibiotik">Spotřeba antibiotik (ambulantní sektor)</a></strong> — ČR 15 DDD/1000/den; nižší spotřeba brzdí rezistenci</li>
+        <li><strong><a href="indicator.html?id=mortalita_inhosp_cmp">Nemocniční úmrtnost po cévní mozkové příhodě</a></strong> — ČR 9,9 %; AI urychluje triáž CT u mrtvice</li>
+        <li><strong>AUC</strong> — míra rozlišovací schopnosti modelu: 1,0 = dokonalé, 0,5 = náhoda</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Hodnoty indikátorů pocházejí z dashboardu HSPA Monitoru (zdroj ECDC/SZÚ, OECD, ÚZIS; rok uveden u indikátoru). Výsledky studií o AI popisují konkrétní nástroj a populaci; antibiotika halicin, abaucin i třída proti MRSA jsou ve fázi laboratorních a myších experimentů, nikoli schválené léky.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Lång K, et al. AI-supported screen reading versus standard double reading in the MASAI trial: clinical safety analysis. Lancet Oncology, 2023;24(8):936–944.</strong> — detekce 6,1 vs 5,1/1000; čtecí zátěž −44,3 %. <a href="https://doi.org/10.1016/S1470-2045(23)00298-X" target="_blank" rel="noopener">doi.org/10.1016/S1470-2045(23)00298-X ↗</a></li>
+          <li><strong>Hernström V, et al. Screening performance of AI-supported mammography (MASAI), full cohort. Lancet Digital Health, 2025;7(3):e175–e183.</strong> — 6,4 vs 5,0/1000 (poměr 1,29). <a href="https://doi.org/10.1016/S2589-7500(24)00267-X" target="_blank" rel="noopener">doi.org/10.1016/S2589-7500(24)00267-X ↗</a></li>
+          <li><strong>Gommers J, et al. Interval cancer, sensitivity and specificity in the MASAI trial. Lancet, 2026;407(10527):505–514.</strong> — senzitivita 80,5 % vs 73,8 %, specificita 98,5 %. <a href="https://doi.org/10.1016/S0140-6736(25)02464-X" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(25)02464-X ↗</a></li>
+          <li><strong>Abràmoff MD, et al. Pivotal trial of an autonomous AI-based diagnostic system for diabetic retinopathy. npj Digital Medicine, 2018;1:39.</strong> — autonomní dg., senzitivita 87,2 %, specificita 90,7 %. <a href="https://doi.org/10.1038/s41746-018-0040-6" target="_blank" rel="noopener">doi.org/10.1038/s41746-018-0040-6 ↗</a></li>
+          <li><strong>Yang Y, et al. The limits of fair medical imaging AI in real-world generalization. Nature Medicine, 2024;30(10):2838–2848.</strong> — pokles výkonu při změně přístroje/populace (dataset shift). <a href="https://doi.org/10.1038/s41591-024-03113-4" target="_blank" rel="noopener">doi.org/10.1038/s41591-024-03113-4 ↗</a></li>
+          <li><strong>Dratsch T, et al. Automation Bias in Mammography: The Impact of AI Suggestions on Reader Performance. Radiology, 2023.</strong> — chybná rada AI zhoršila radiology na všech úrovních. <a href="https://doi.org/10.1148/radiol.222176" target="_blank" rel="noopener">doi.org/10.1148/radiol.222176 ↗</a></li>
+          <li><strong>Attia ZI, et al. Screening for cardiac contractile dysfunction using an AI-enabled ECG. Nature Medicine, 2019;25(1):70–74.</strong> — skrytá dysfunkce levé komory, AUC 0,93. <a href="https://doi.org/10.1038/s41591-018-0240-2" target="_blank" rel="noopener">doi.org/10.1038/s41591-018-0240-2 ↗</a></li>
+          <li><strong>Wong A, et al. External Validation of a Widely Implemented Proprietary Sepsis Prediction Model (Epic). JAMA Internal Medicine, 2021;181(8):1065–1070.</strong> — AUC 0,63, nezachytil 67 % septických. <a href="https://doi.org/10.1001/jamainternmed.2021.2626" target="_blank" rel="noopener">doi.org/10.1001/jamainternmed.2021.2626 ↗</a></li>
+          <li><strong>Antimicrobial Resistance Collaborators (Murray CJL, et al.). Global burden of bacterial antimicrobial resistance in 2019. The Lancet, 2022;399(10325):629–655.</strong> — 1,27 mil. úmrtí přímo přičitatelných rezistenci. <a href="https://doi.org/10.1016/S0140-6736(21)02724-0" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(21)02724-0 ↗</a></li>
+          <li><strong>Jumper J, et al. Highly accurate protein structure prediction with AlphaFold. Nature, 2021;596:583–589.</strong> — predikce struktury proteinů (Nobelova cena za chemii 2024). <a href="https://doi.org/10.1038/s41586-021-03819-2" target="_blank" rel="noopener">doi.org/10.1038/s41586-021-03819-2 ↗</a></li>
+          <li><strong>Stokes JM, et al. A Deep Learning Approach to Antibiotic Discovery (halicin). Cell, 2020;180(4):688–702.</strong> — předpověď přes 107 mil. molekul; účinek in vitro a u myší. <a href="https://doi.org/10.1016/j.cell.2020.01.021" target="_blank" rel="noopener">doi.org/10.1016/j.cell.2020.01.021 ↗</a></li>
+          <li><strong>Liu G, et al. Deep learning-guided discovery of an antibiotic targeting Acinetobacter baumannii (abaucin). Nature Chemical Biology, 2023;19(11):1342–1350.</strong> — účinek pouze u myší (preklinika). <a href="https://doi.org/10.1038/s41589-023-01349-8" target="_blank" rel="noopener">doi.org/10.1038/s41589-023-01349-8 ↗</a></li>
+          <li><strong>Wong F, et al. Discovery of a structural class of antibiotics with explainable deep learning (anti-MRSA). Nature, 2023;626:177–185.</strong> — nová třída proti MRSA, účinek u myší. <a href="https://doi.org/10.1038/s41586-023-06887-8" target="_blank" rel="noopener">doi.org/10.1038/s41586-023-06887-8 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data a kontext (ČR i svět)</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSPA Monitor — indikátory</strong> — <a href="indicator.html?id=screening_mamograficky">mamografický screening</a>, <a href="indicator.html?id=rezistence_acinetobacter_karbapenem">rezistence Acinetobacter</a>, <a href="indicator.html?id=rezistence_mrsa">MRSA</a>, <a href="indicator.html?id=spotreba_antibiotik">spotřeba antibiotik</a>.</li>
+          <li><strong>Ministerstvo zdravotnictví ČR — nasazení AI v nemocnicích (2025–2026)</strong> — Carebot: ~16 030 snímků v 9 nemocnicích, 56 nově odhalených nádorů; Kardi AI; FN Motol (AI-MRI). <a href="https://mzd.gov.cz/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>WHO — Use of computer-aided detection software for tuberculosis screening (2021)</strong> — podmíněné doporučení AI čtení RTG hrudníku. <a href="https://www.who.int/publications/i/item/9789240022676" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>FDA — Artificial Intelligence-Enabled Medical Devices</strong> — &gt; 1 400 schválených nástrojů, ~76 % radiologie. <a href="https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-enabled-medical-devices" target="_blank" rel="noopener">fda.gov ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k hodnotám:</strong> Výsledky studií popisují konkrétní nástroj a populaci, ne „umělou inteligenci“ obecně. Antibiotika halicin, abaucin a třída proti MRSA jsou ve fázi laboratorních a zvířecích experimentů — nejde o schválené léky. Údaje o nasazení a počtech (FDA, ČR) pocházejí z oficiálních zdrojů a odborných přehledů aktuálních k červnu 2026 a mohou se měnit. Tento text je osvětový — netýká se konkrétní diagnózy ani volby léčby.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
