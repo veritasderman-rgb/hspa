@@ -49,7 +49,21 @@ const EPIDEMIOLOGIE_SERIES = {
   ],
 };
 
-export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES];
+const NAPOJE_SERIES = {
+  title: 'Slazené nápoje, energeťáky a šťávy',
+  hub: 'clanky.html',
+  lead: 'průvodce nápoji a cukrem s důrazem na děti, v šesti dílech',
+  parts: [
+    { n: 1, slug: 'clanek-napoje-1-tekuty-cukr.html',    short: 'Tekutý cukr: proč na nápojích záleží víc než na zákusku' },
+    { n: 2, slug: 'clanek-napoje-2-mytus-stavy.html',     short: 'Mýtus zdravé šťávy: proč 100% džus není lepší než kola' },
+    { n: 3, slug: 'clanek-napoje-3-energetaky-deti.html', short: 'Energetické nápoje: co kofein a cukr dělají dětem' },
+    { n: 4, slug: 'clanek-napoje-4-alkohol-mytus.html',   short: 'Pivo, víno a mýtus zdravého alkoholu' },
+    { n: 5, slug: 'clanek-napoje-5-co-pit.html',          short: 'Co tedy pít: voda, čaj a (pro dospělé) káva' },
+    { n: 6, slug: 'clanek-napoje-6-dan-regulace.html',    short: 'Daň, etikety, automaty: co na slazené nápoje platí' },
+  ],
+};
+
+export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES];
 
 // Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
 // sérii přes tyto dva exporty — necháváme je ukazovat na ni.
