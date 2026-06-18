@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildArticleJsonLd } from '../ingest/scripts/inject-article-seo.js';
+import { buildArticleJsonLd, formatCzechDate, applyPublishDate } from '../ingest/scripts/inject-article-seo.js';
 import { SITE_BASE as SITE } from '../scripts/generate-feed.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -53,6 +53,29 @@ test('buildArticleJsonLd: dateModified spadne na date, když chybí audit', () =
 test('buildArticleJsonLd: výstup je serializovatelný do validního JSON', () => {
   const json = JSON.stringify(buildArticleJsonLd(article));
   assert.doesNotThrow(() => JSON.parse(json));
+});
+
+test('formatCzechDate: ISO datum → české dlouhé datum', () => {
+  assert.equal(formatCzechDate('2026-06-18'), '18. června 2026');
+  assert.equal(formatCzechDate('2026-01-01'), '1. ledna 2026');
+  assert.equal(formatCzechDate(''), null);
+  assert.equal(formatCzechDate('nesmysl'), null);
+});
+
+test('applyPublishDate: přepíše viditelné datum i article:published_time na den publikace', () => {
+  const html = [
+    '<meta property="article:published_time" content="2026-06-18">',
+    '<span class="article-meta-date">18. června 2026</span>',
+  ].join('\n');
+  const out = applyPublishDate(html, { date: '2026-06-25' });
+  assert.match(out, /content="2026-06-25"/, 'published_time přepsáno');
+  assert.match(out, /<span class="article-meta-date">25\. června 2026<\/span>/, 'viditelné datum přepsáno');
+});
+
+test('applyPublishDate: bez data nebo bez značek nechá HTML beze změny', () => {
+  const html = '<span class="article-meta-date">18. června 2026</span>';
+  assert.equal(applyPublishDate(html, {}), html, 'bez article.date beze změny');
+  assert.equal(applyPublishDate('<p>nic</p>', { date: '2026-06-25' }), '<p>nic</p>', 'bez značek beze změny');
 });
 
 // Smoke test: každý injektovaný JSON-LD v reálných clanek-*.html je platný JSON.

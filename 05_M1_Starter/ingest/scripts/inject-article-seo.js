@@ -87,6 +87,41 @@ export function buildArticleJsonLd(article) {
   };
 }
 
+/** Naformátuje ISO datum (YYYY-MM-DD) do české podoby „18. června 2026". */
+export function formatCzechDate(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
+  const d = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return null;
+  return new Intl.DateTimeFormat('cs-CZ', {
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+  }).format(d);
+}
+
+/**
+ * Sjednotí ve `html` viditelné datum vydání (`.article-meta-date`) a
+ * `<meta property="article:published_time">` s `article.date`. Ručně psané
+ * články mají datum napevno; při staged publikaci cronem (date = den
+ * zveřejnění) by jinak zestaralo a rozešlo se s hub/feed. Čistá, idempotentní
+ * funkce — pokud značky/datum chybí, vrátí HTML beze změny.
+ */
+export function applyPublishDate(html, article) {
+  let out = html;
+  if (article && article.date) {
+    out = out.replace(
+      /(<meta\s+property=["']article:published_time["']\s+content=["'])[^"']*(["'])/i,
+      `$1${article.date}$2`,
+    );
+    const cz = formatCzechDate(article.date);
+    if (cz) {
+      out = out.replace(
+        /(<span class="article-meta-date">)[^<]*(<\/span>)/,
+        `$1${cz}$2`,
+      );
+    }
+  }
+  return out;
+}
+
 export function processArticle(article) {
   if (article.published === false) return { status: 'skip-draft' };
 
@@ -114,6 +149,12 @@ ${jsonLd}
   </script>`;
 
   html = html.replace('</head>', `${block}\n</head>`);
+
+  // Sjednoť viditelné datum vydání a article:published_time se skutečným dnem
+  // publikace (article.date). Při staged publikaci cronem by napevno psané
+  // datum jinak zestaralo a rozešlo se s datem v hub/feed.
+  html = applyPublishDate(html, article);
+
   writeFileSync(htmlPath, html);
   return { status: 'updated', slug };
 }
