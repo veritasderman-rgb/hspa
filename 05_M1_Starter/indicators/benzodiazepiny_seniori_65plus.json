@@ -1,0 +1,55 @@
+{
+  "id": "benzodiazepiny_seniori_65plus",
+  "name": "Dlouhodobé užívání benzodiazepinů u seniorů (65+)",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Bezpečnost a vhodnost preskripce",
+  "definition": "Podíl osob ve věku 65 a více let, které pravidelně (dlouhodobě) užívají benzodiazepiny — skupinu léků s anxiolytickým a hypnotickým účinkem (např. alprazolam, diazepam, bromazepam, oxazepam). U seniorů je dlouhodobé užívání benzodiazepinů mezinárodně uznávaným negativním indikátorem kvality a bezpečnosti preskripce: léky jsou na seznamu potenciálně nevhodných léčiv pro starší pacienty (Beersova kritéria, STOPP/START), protože zvyšují riziko pádů a zlomenin, kognitivního útlumu až pseudodemence, dopravních nehod a vzniku závislosti. Doporučená délka léčby u seniorů by neměla přesáhnout 4 týdny (krizová indikace), v ČR i tak nemá přesáhnout 12 týdnů. Primárním zdrojem je výroční Zpráva o problematickém užívání psychoaktivních léků v ČR (Národní monitorovací středisko pro drogy a závislosti) a data o distribuci léčiv SÚKL (ATC skupiny N05BA, N05CD).",
+  "unit": "% osob 65+",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "national_monitoring_report",
+      "endpoint": "https://www.drogy-info.cz/publikace/zaostreno/",
+      "dataset": "Zpráva o problematickém užívání psychoaktivních léků v České republice — Národní monitorovací středisko pro drogy a závislosti (Úřad vlády ČR)",
+      "dimensions": {
+        "age_range": "65+",
+        "country": "CZ",
+        "drug_class": "benzodiazepiny (ATC N05BA, N05CD)",
+        "sex": "celkem / muži / ženy"
+      },
+      "note": "Národní monitorovací středisko pro drogy a závislosti publikuje výroční Zprávu o problematickém užívání psychoaktivních léků, která spojuje populační šetření (prevalence užívání) s daty o distribuci léčiv ze SÚKL (DDD). Frekvence aktualizace: ročně."
+    },
+    "fallback": {
+      "type": "sukl_consumption",
+      "url": "https://opendata.sukl.cz/?q=katalog/dodavky-distribuovanych-humannich-leu",
+      "note": "SÚKL — otevřená data o distribuci humánních léčivých přípravků (dodávky do lékáren). Umožňují sledovat spotřebu benzodiazepinů (ATC N05BA, N05CD) v DDD na 1000 obyvatel za den; věkové členění pro seniory se odvozuje z lékového záznamu NZIS."
+    }
+  },
+  "benchmark_source": {
+    "type": "peer_review_multinational",
+    "dataset": "Prevalence, country-specific prescribing patterns and determinants of benzodiazepine use in community-residing older adults in 7 European countries — BMC Geriatrics (2024); EU SHELTER study",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10921596/",
+    "value_eu_pooled": 14.9,
+    "note": "Sdružená prevalence užívání benzodiazepinů u komunitně žijících seniorů 65+ v sedmizemní evropské studii (n = 2 865, průměrný věk 73,2 let, sběr 2019–2020) činila 14,9 %. Velký rozptyl mezi zeměmi: nejvyšší Chorvatsko 35,5 %, Španělsko 33,5 %, Srbsko 31,3 %; naopak v dobře fungujících západoevropských systémech je prevalence násobně nižší — Německo a Velká Británie kolem 6 %. České číslo (~15 %) leží těsně nad evropským sdruženým průměrem a zhruba 2,5× nad úrovní Německa. OECD řadí dlouhodobou preskripci benzodiazepinů u seniorů mezi indikátory bezpečnosti preskripce (Health at a Glance), srovnatelnost konkrétních hodnot napříč zeměmi je ale omezená rozdíly v definici „dlouhodobého užívání“."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Národní monitorovací středisko pro drogy a závislosti (Úřad vlády ČR)",
+    "SÚKL",
+    "ÚZIS (lékový záznam NZIS)",
+    "Česká geriatrická a gerontologická společnost ČLS JEP",
+    "Česká společnost pro léčbu závislosti na tabáku a jiných návykových látkách"
+  ],
+  "method_notes": "Hodnota 15 % vyjadřuje podíl osob 65+, které benzodiazepiny užívají pravidelně/dlouhodobě (Zpráva o problematickém užívání psychoaktivních léků v ČR, Národní monitorovací středisko). Tento podíl je nejvyšší ze všech věkových skupin a u žen je užívání přibližně dvakrát častější než u mužů. Celková distribuce benzodiazepinů v ČR se odhaduje na ~45 milionů DDD ročně (~4,2 DDD na obyvatele staršího 15 let za rok); k nejčastěji distribuovaným patří alprazolam. Seed časová řada (2019–2024) je rekonstruovaná z po sobě jdoucích vydání národní zprávy a z trendu distribuce SÚKL (celková distribuovaná množství benzodiazepinů dlouhodobě mírně klesají, prevalence u seniorů zůstává setrvale vysoká); je ILUSTRATIVNÍ a bude nahrazena harmonizovanou řadou z lékového záznamu NZIS, jakmile bude veřejně dostupná ve věkovém členění. Signál „warn“ odráží, že česká úroveň je sice blízká evropskému sdruženému průměru (14,9 %), ale několikanásobně nad nejlépe fungujícími systémy (DE/UK ~6 %) a je v rozporu s doporučenou délkou léčby.",
+  "limitations": "(1) Prevalence „pravidelného/dlouhodobého“ užívání se mezi zdroji a zeměmi liší v definici (počet balení za rok, počet dní s pokrytím DDD, self-report) — mezinárodní srovnání je proto orientační. (2) Národní zpráva kombinuje populační šetření a distribuční data; přesné věkově členěné prevalence po jednotlivých letech zatím nejsou veřejně publikovány v jednotné řadě, proto je seed trend rekonstruovaný. (3) Indikátor nerozlišuje klinicky odůvodněné krátkodobé nasazení od rizikové chronické preskripce — část užívání u seniorů s těžkou úzkostnou poruchou může být indikovaná. (4) Z-hypnotika (zolpidem, zopiklon; ATC N05CF) jsou v ČR distribuována ve velkém objemu (~80 mil. dávek ročně) a nesou podobná rizika, ale do tohoto indikátoru nejsou započítána — interpretovat je vhodné společně.",
+  "determinants": "**Preskripční zvyklosti praktiků a ambulantních specialistů.** Benzodiazepiny se u seniorů často nasazují na nespavost a úzkost jako rychlé řešení a poté se opakovaně předepisují bez revize indikace. Chybí systematický deprescribing (řízené vysazování) a kontrola délky léčby.\n\n**Nedostatek dostupných alternativ.** Kognitivně-behaviorální terapie nespavosti (CBT-I) a psychoterapie úzkosti jsou v ČR pro seniory hůře dostupné než recept; ambulantní psychiatrie a psychologie mají dlouhé čekací doby a regionální bílá místa.\n\n**Pohlaví a věk.** Užívání je přibližně dvakrát častější u žen a stoupá s věkem — souvisí s vyšší prevalencí úzkostných poruch, nespavosti, osamělosti a polymorbidity ve vyšším věku.\n\n**Polypragmazie.** Senioři s pěti a více léky (v ČR přes polovina osob 65+) mají vyšší riziko, že mezi nimi bude i dlouhodobě užívaný benzodiazepin; rizika se sčítají v interakcích a v kumulativním útlumu CNS.\n\n**Slabé nástroje kontroly.** Lékový záznam (sdílený přehled preskripce v eReceptu) existuje, ale upozornění na dlouhodobé užívání rizikových léků u seniorů nejsou systémově vynucována ani vyhodnocována pojišťovnami jako indikátor kvality.",
+  "importance": "Dlouhodobé užívání benzodiazepinů u seniorů je učebnicový příklad toho, jak se z dobře míněné léčby stává systémové bezpečnostní riziko. Důvody jsou tři.\n\n**Za prvé: přímá újma na zdraví.** U starších lidí benzodiazepiny prokazatelně zvyšují riziko pádů a zlomenin krčku, kognitivního útlumu (pseudodemence), dopravních nehod a předávkování v kombinaci s opioidy nebo alkoholem. Pád seniora se zlomeninou často spustí kaskádu hospitalizace, ztráty soběstačnosti a nástupu do dlouhodobé péče.\n\n**Za druhé: měřitelnost a mezinárodní srovnatelnost.** Jde o jeden z mála indikátorů bezpečnosti preskripce, který se dá odvodit z rutinních dat (distribuce léčiv, lékový záznam) a porovnat se zahraničím. OECD ho sleduje v sadě Health at a Glance; rozdíl mezi Německem (~6 %) a Českem (~15 %) je tak velký, že nejde vysvětlit jen odlišnou nemocností.\n\n**Za třetí: jasná politická páka.** Na rozdíl od mnoha ukazatelů zde stačí nástroje, které už existují — preskripční doporučení SÚKL, upozornění v lékovém záznamu eReceptu, deprescribing programy v primární péči a dostupnější nefarmakologická léčba nespavosti a úzkosti. Pro pojišťovny je podíl seniorů na dlouhodobé benzodiazepinové léčbě ideálním kandidátem na indikátor kvality ambulantní péče.",
+  "patient_story": "Ústecký kraj, ordinace praktické lékařky, podzim 2025. Paní Věra (74) sem chodí pro recept na bromazepam už sedmým rokem. Začalo to po smrti manžela — „na spaní a na nervy“, na pár týdnů. Týdny se protáhly na roky; lék se stal samozřejmostí, kterou nikdo nezpochybňuje, protože „přece funguje“. Loni v zimě upadla v koupelně a zlomila si zápěstí. Že by mohl být spoluviníkem právě ten malý prášek na noc, ji nenapadlo — a nepadlo to ani při propouštění z nemocnice.\n\nVěra není výjimka. V Česku užívá benzodiazepiny pravidelně zhruba 15 procent lidí nad 65 let — nejvyšší podíl ze všech věkových skupin a u žen je užívání přibližně dvakrát častější než u mužů (Národní monitorovací středisko pro drogy a závislosti). Signál tohoto indikátoru je „warn“. V mezinárodním srovnání jde o vysoké číslo: sedmizemní evropská studie naměřila sdruženou prevalenci u seniorů 14,9 %, ale v dobře fungujících systémech, jako je Německo nebo Velká Británie, užívá benzodiazepiny jen kolem 6 % seniorů — tedy zhruba 2,5krát méně než v Česku. Celkem se v ČR ročně distribuuje kolem 45 milionů denních dávek benzodiazepinů.\n\nProč je české číslo tak vysoké, není dáno povahou českých seniorů, ale strukturou péče. Benzodiazepin je rychlé a levné řešení nespavosti a úzkosti; recept se vystaví za minutu, kdežto kognitivně-behaviorální terapie nespavosti nebo psychoterapie úzkosti mají dlouhé čekací doby a v mnoha okresech prakticky chybí. Jakmile se lék jednou nasadí, opakuje se bez revize indikace — chybí systematické řízené vysazování (deprescribing) a kontrola délky léčby, ačkoli ta by u seniorů neměla přesáhnout pár týdnů. K tomu se přidává polypragmazie: senior s pěti a více léky má větší šanci, že mezi nimi zůstane i dávno zapomenutý benzodiazepin.\n\nPolitická páka je přitom konkrétní a levná. Lékový záznam v eReceptu už dnes umí ukázat, kdo dlouhodobě užívá rizikový lék — stačí z toho udělat aktivní upozornění pro lékaře a indikátor kvality, který pojišťovny u praktiků sledují a odměňují. SÚKL a Česká geriatrická a gerontologická společnost mohou rozšířit deprescribing doporučení do primární péče a ministerstvo zpřístupnit nefarmakologickou léčbu nespavosti a úzkosti (CBT-I) jako hrazenou a dostupnou alternativu k receptu. Pro paní Věru by to znamenalo, že by se jí někdo po sedmi letech zeptal, jestli ten prášek na noc ještě opravdu potřebuje — a nabídl jí cestu, jak ho bezpečně vysadit dřív, než přijde druhý pád.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost"
+}
