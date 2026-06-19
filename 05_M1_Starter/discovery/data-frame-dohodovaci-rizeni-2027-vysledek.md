@@ -13,7 +13,9 @@
 
 ## Sekundární hodnoty
 - **3 segmenty bez dohody:** akutní lůžková péče, následná lůžková péče,
-  ambulantní specialisté. Zdroj: MZ TZ (souhrn) + nasezdravotnictvi.cz (konvergentně).
+  mimolůžková ambulantní specializovaná péče. Zdroj: VZP aktualita 9. 6. 2026
+  (PRIMÁRNÍ, verbatim) + MZ TZ (souhrn). [Codex PR #647: nahrazen zastaralý VZP
+  odkaz 2025/DŘ-2026 konkrétní 2027 aktualitou.]
 - **> 60 % nákladů systému** připadá na tyto 3 nedohodnuté segmenty.
   Zdroj: nasezdravotnictvi.cz (SEKUNDÁRNÍ — atribuovat, formulovat opatrně).
 - **Podmínka 25 → 21 mld:** *„z uzavřených dohod vypuštěna podmínka navýšení
