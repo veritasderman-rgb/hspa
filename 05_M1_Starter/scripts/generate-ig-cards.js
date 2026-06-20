@@ -192,6 +192,43 @@ const MANIFEST = {
     headline: '14 % patnáctiletých kouří. Kolem evropského průměru.',
     context: 'Posun je k nikotinu a e-cigaretám.',
   },
+  'clanek-cerny-kasel-2024-epidemie': {
+    kicker: 'Prevence · epidemie', signal: 'bad',
+    stat: '21', claim: 'tisíc případů černého kašle v 2024 — nejvíc od 60. let.',
+    context: '199,4 na 100 000 obyvatel, zhruba 4× průměr EU.',
+  },
+  'clanek-napoje-1-tekuty-cukr': {
+    kicker: 'Prevence · cukr · díl 1/6', signal: 'bad',
+    stat: '+25', statSuffix: '%',
+    claim: 'vyšší riziko cukrovky 2. typu za každou denní sklenici.',
+    context: 'Riziko nezmizí, ani když po nich člověk nepřibere.',
+  },
+  'clanek-napoje-2-mytus-stavy': {
+    kicker: 'Prevence · cukr · díl 2/6', signal: 'warn',
+    stat: '250', claim: 'ml „100%“ džusu má podobně cukru jako kola.',
+    context: 'WHO ho počítá mezi volné cukry úplně stejně.',
+  },
+  'clanek-napoje-3-energetaky-deti': {
+    kicker: 'Prevence · děti · díl 3/6', signal: 'bad',
+    headline: 'Jedna plechovka energeťáku překročí denní limit kofeinu pro dítě.',
+    context: 'Slazený nápoj plus velká dávka kofeinu.',
+  },
+  'clanek-napoje-4-alkohol-mytus': {
+    kicker: 'Prevence · alkohol · díl 4/6', signal: 'bad',
+    headline: 'Žádná dávka alkoholu není bez rizika (WHO 2023). J-křivka padla.',
+    context: 'Alkohol je karcinogen 1. třídy.',
+  },
+  'clanek-napoje-5-co-pit': {
+    kicker: 'Prevence · díl 5/6', signal: 'good',
+    headline: 'Co pít? Výchozím nápojem je voda. Levná a bez rizika.',
+    context: 'Výměna limonády za vodu snižuje riziko cukrovky.',
+  },
+  'clanek-napoje-6-dan-regulace': {
+    kicker: 'Politika · daň · díl 6/6', signal: 'neutral',
+    stat: '10', statSuffix: '%',
+    claim: 'daň ze slazených nápojů ≈ zhruba stejný pokles prodejů.',
+    context: 'Co na slazené nápoje funguje na úrovni politiky.',
+  },
 };
 
 function escapeXml(s) {
