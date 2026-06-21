@@ -12,16 +12,16 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Mortalita">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <!--
   audit:
-    last_reviewed: 2026-05-14
+    last_reviewed: 2026-06-21
     reviewer: claude-code-agent
-    status: review-pending
+    status: verified
     unverified_claims_removed: 1
     primary_sources_added: 3
     visual_elements_added: 1
-    notes: "Ověřeno proti primárním zdrojům: Eurostat hlth_hlye (Healthy life years, řez 2022–2023) a OECD/European Observatory — State of Health in the EU · Country Health Profile 2025: Czechia (finalizováno 9/2025). Centrální benchmark 'OECD 10,2' pro HLY 65+ se z žádného primárního zdroje neověřuje — HLY je metrika Eurostatu (EU-SILC) a žádný publikovaný 'průměr OECD' pro HLY 65+ v této úrovni neexistuje; nahrazeno ověřeným průměrem EU 9,4 (Eurostat, 2023, obě pohlaví). Rozdíl ČR vs. benchmark přepočítán z 2,5 na 1,7 roku v celém textu (dek, lead, nadpis, databox). Naděje dožití při narození aktualizována ze zastaralých 79,9 na 80,3 let (2024, Country Health Profile 2025); ženy z chybných 82,5 na 83,2 let (2024). Multimorbidita 65+ přepsána podle SHARE/Country Health Profile 2025 (53 % mužů, 52 % žen v ČR vs. 40/46 % EU) — hodnota 65 % v datovém kontraktu (multimorbidita_65plus) označena k rekonciliaci. Ordinální odkazy '(článek N)' nahrazeny anchor odkazy na konkrétní soubory. Doplněna srovnávací tabulka ČR vs. EU (HLY 65, naděje dožití při 65, naděje dožití při narození), review-pending banner, primární zdroje a stabilnější odkazy. Status published → review-pending."
+    notes: "Audit 2026-06-21 (nezávislá source-verification, fallback routine denní rutiny). VŠECHNA číselná tvrzení ověřena přímo proti Eurostat REST API datasetu hlth_hlye (2023, obě pohlaví): HLY 65+ ČR 7,7 / EU 9,4 / Švédsko 13,9 / Norsko 14,0 / Itálie 10,8 / Švýcarsko 10,6; naděje dožití při 65 ČR 18,8 / EU 20,2 — přesná shoda s textem i tabulkou. Naděje dožití při narození 80,3 (2024, −1,4 roku pod EU), ženy 83,2, gender gap ~6 let (EU 5,2), multimorbidita 65+ ('over half of Czechs 65+, above EU average, especially men') ověřeno proti State of Health in the EU · Country Health Profile 2025: Czechia (PDF, publ. 11.12.2025). OPRAVENO: (1) mrtvý odkaz na CHP 2025 (health.ec.europa.eu/state-health-eu/country-health-profiles/czechia_en vracel 404) nahrazen funkčním kanonickým landingem eurohealthobservatory.who.int/publications/m/czechia-country-health-profile-2025 (2 výskyty); (2) cover_viz v articles.json obsahoval neověřitelný benchmark 'OECD 10,2' pro HLY 65+ — HLY je metrika Eurostatu (EU-SILC), publikovaný průměr OECD pro HLY 65+ neexistuje; řada OECD odstraněna, cover regenerován. Předchozí audit (2026-05-14): OECD 10,2 nahrazen EU 9,4 v textu, naděje dožití aktualizována na rok 2024, multimorbidita podle SHARE/CHP 2025, rozdíl přepočítán na 1,7 roku. Follow-up (mimo rozsah článkového auditu): datový kontrakt nadeje_doziti_zdravi_65 stále nese value=8/2024 + benchmark OECD 10,2/EU 10,3 (origin=live) — nesoulad s ověřeným Eurostatem 7,7/2023; patří do opravy ingest pipeline. Status review-pending → verified."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -55,7 +55,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-nadeje-doziti-zdravi"
       },
       "datePublished": "2026-05-07",
-      "dateModified": "2026-05-14",
+      "dateModified": "2026-06-21",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -174,7 +174,7 @@
             <span class="av-counter-foot">subjektivní limit, ale srovnatelná v EU</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_hlye (2023), OECD/European Observatory Country Health Profile 2025: Czechia (audit článku 2026-05-14).</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_hlye (2023), OECD/European Observatory Country Health Profile 2025: Czechia (data ověřena proti Eurostatu 21.&nbsp;6.&nbsp;2026).</p>
       </figure>
 
       <h3>Co indikátor měří</h3>
@@ -202,7 +202,7 @@
           </tbody>
         </table>
         <p class="article-figure-source">
-          HLY 65+ a naděje dožití při 65 letech: obě pohlaví, rok 2023, <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en" target="_blank" rel="noopener">Eurostat <code>hlth_hlye</code></a> (staženo 14.&nbsp;5.&nbsp;2026). Naděje dožití při narození: rok 2024, <a href="https://health.ec.europa.eu/state-health-eu/country-health-profiles/czechia_en" target="_blank" rel="noopener">OECD/European Observatory — <em>Country Health Profile 2025: Czechia</em></a>. Rozdíl 1,7 roku ve zdravých letech je téměř výhradně „ztrátou kondice" — délkou života samotného Česko zaostává jen o 1,4 roku.
+          HLY 65+ a naděje dožití při 65 letech: obě pohlaví, rok 2023, <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en" target="_blank" rel="noopener">Eurostat <code>hlth_hlye</code></a> (ověřeno 21.&nbsp;6.&nbsp;2026: ČR 7,7 / EU 9,4 / Švédsko 13,9 / Norsko 14,0 / Itálie 10,8 / Švýcarsko 10,6). Naděje dožití při narození: rok 2024, <a href="https://eurohealthobservatory.who.int/publications/m/czechia-country-health-profile-2025" target="_blank" rel="noopener">OECD/European Observatory — <em>Country Health Profile 2025: Czechia</em></a>. Rozdíl 1,7 roku ve zdravých letech je téměř výhradně „ztrátou kondice" — délkou života samotného Česko zaostává jen o 1,4 roku.
         </p>
       </figure>
 
@@ -325,7 +325,7 @@
         <ul class="article-sources-list">
           <li><strong>Eurostat — Healthy life years by sex (<code>hlth_hlye</code>)</strong> — primární zdroj pro HLY 65+ i naději dožití při 65 letech (řez 2022–2023, obě pohlaví). <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
           <li><strong>Eurostat — Life expectancy by age and sex (<code>demo_mlexpec</code>)</strong> — naděje dožití při narození, ČR i průměr EU. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
-          <li><strong>OECD/European Observatory — State of Health in the EU · Country Health Profile 2025: Czechia</strong> — naděje dožití při narození 2024 (80,3 / ženy 83,2), HLY 65+ a multimorbidita 65+ (SHARE). <a href="https://health.ec.europa.eu/state-health-eu/country-health-profiles/czechia_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>OECD/European Observatory — State of Health in the EU · Country Health Profile 2025: Czechia</strong> — naděje dožití při narození 2024 (80,3 / ženy 83,2), HLY 65+ a multimorbidita 65+ (SHARE). <a href="https://eurohealthobservatory.who.int/publications/m/czechia-country-health-profile-2025" target="_blank" rel="noopener">eurohealthobservatory.who.int ↗</a></li>
           <li><strong>ČSÚ — Zemřelí, naděje dožití, příčiny smrti</strong> — domácí úmrtnostní tabulky a demografické projekce. <a href="https://csu.gov.cz/zemreli-nadeje-doziti-priciny-smrti" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
         </ul>
       </div>
@@ -344,7 +344,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> HLY 65+ pro ČR (7,7 roku) i průměr EU (9,4 roku) jsou hodnoty Eurostatu <code>hlth_hlye</code> za rok 2023 (obě pohlaví), ověřené 14.&nbsp;5.&nbsp;2026. <strong>Audit 2026-05-14:</strong> původní benchmark „průměr OECD 10,2" se z žádného primárního zdroje neověřuje — HLY je metrika Eurostatu (EU-SILC) a publikovaný „průměr OECD" pro HLY 65+ v této úrovni neexistuje; nahrazeno průměrem EU. Naděje dožití při narození aktualizována na rok 2024 podle <em>Country Health Profile 2025: Czechia</em>. Pro detailní časové řady a regionální rozdíly v ČR doporučujeme uvedené primární datasety.
+        <strong>Pozn. k údajům:</strong> HLY 65+ pro ČR (7,7 roku) i průměr EU (9,4 roku) jsou hodnoty Eurostatu <code>hlth_hlye</code> za rok 2023 (obě pohlaví), naposledy ověřené přímo proti Eurostat REST API 21.&nbsp;6.&nbsp;2026 (přesná shoda i pro Švédsko 13,9 / Norsko 14,0 / Itálie 10,8 / Švýcarsko 10,6). <strong>Audit:</strong> původní benchmark „průměr OECD 10,2" se z žádného primárního zdroje neověřuje — HLY je metrika Eurostatu (EU-SILC) a publikovaný „průměr OECD" pro HLY 65+ v této úrovni neexistuje; nahrazeno průměrem EU. Naděje dožití při narození aktualizována na rok 2024 podle <em>Country Health Profile 2025: Czechia</em>. Pro detailní časové řady a regionální rozdíly v ČR doporučujeme uvedené primární datasety.
       </p>
     </section>
 
