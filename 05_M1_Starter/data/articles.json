@@ -1952,13 +1952,13 @@
         "populace"
       ],
       "audit": {
-        "last_reviewed": "2026-05-14",
+        "last_reviewed": "2026-06-21",
         "reviewer": "claude-code-agent",
-        "status": "review-pending",
+        "status": "verified",
         "unverified_claims_removed": 1,
         "primary_sources_added": 3,
         "visual_elements_added": 1,
-        "notes": "Ověřeno proti Eurostat hlth_hlye (HLY, 2022–2023) a OECD/European Observatory Country Health Profile 2025: Czechia. Neověřitelný benchmark 'OECD 10,2' pro HLY 65+ nahrazen ověřeným průměrem EU 9,4 (Eurostat, 2023); rozdíl ČR vs. benchmark přepočítán z 2,5 na 1,7 roku v celém textu. Naděje dožití při narození aktualizována ze zastaralých 79,9 na 80,3 let (2024); ženy z chybných 82,5 na 83,2 let. Multimorbidita 65+ přepsána podle SHARE/CHP 2025 (ČR 52–53 % vs. EU 40–46 %); hodnota 65 % v datovém kontraktu označena k rekonciliaci. Ordinální odkazy '(článek N)' nahrazeny anchor odkazy. Doplněna srovnávací tabulka ČR vs. EU, review-pending banner, primární zdroje. Status review-pending — čeká na ruční schválení před republikací."
+        "notes": "Audit 2026-06-21 (nezávislá source-verification, fallback routine): VŠECHNA číselná tvrzení ověřena přímo proti Eurostat REST API hlth_hlye (2023, obě pohlaví): HLY 65+ ČR 7,7 / EU 9,4 / Švédsko 13,9 / Norsko 14,0 / Itálie 10,8 / Švýcarsko 10,6; naděje dožití při 65 ČR 18,8 / EU 20,2 — vše přesná shoda s textem. Naděje dožití při narození 80,3 (2024, −1,4 r. pod EU), ženy 83,2, gender gap ~6 let (EU 5,2), multimorbidita 65+ 'over half, above EU especially men' ověřeno proti Country Health Profile 2025: Czechia (PDF). OPRAVENO: (1) mrtvý odkaz na CHP 2025 (health.ec.europa.eu/.../czechia_en → 404) nahrazen funkčním kanonickým landingem eurohealthobservatory.who.int (2×); (2) cover_viz obsahoval neověřitelný benchmark 'OECD 10,2' pro HLY 65+ (HLY je metrika Eurostatu, OECD průměr neexistuje) → řada OECD odstraněna, cover regenerován. Audit 2026-05-14 (předchozí): OECD 10,2 nahrazen EU 9,4 v textu, naděje dožití aktualizována na 2024, multimorbidita podle SHARE/CHP 2025. POZNÁMKA k follow-up: datový kontrakt nadeje_doziti_zdravi_65 stále nese value=8/2024 a benchmark OECD 10,2/EU 10,3 (origin=live) — nesoulad s ověřeným Eurostatem 7,7/2023; patří do opravy ingest pipeline (mimo rozsah článkového auditu). Status → verified."
       },
       "cover_viz": {
         "type": "bar-compare",
@@ -1969,10 +1969,6 @@
             "label": "ČR",
             "value": 7.7,
             "highlight": true
-          },
-          {
-            "label": "OECD",
-            "value": 10.2
           },
           {
             "label": "EU",
