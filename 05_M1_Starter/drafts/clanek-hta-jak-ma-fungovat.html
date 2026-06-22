@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kdo hlídá, jestli se léčba vyplatí. Jak by mělo fungovat HTA — a kolik lidí by stálo · HSPA Monitor (DRAFT)</title>
+<meta name="description" content="Hodnocení zdravotnických technologií (HTA) rozhoduje, co a za kolik platí veřejné pojištění — a kdy něco přestat platit. Jak HTA funguje v zemích, které ho mají dobře zpracované, co všechno má dělat, jak by mělo fungovat v Česku a jakou personální náročnost čekat podle srovnatelných zemí.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kdo hlídá, jestli se léčba vyplatí. Jak by mělo fungovat HTA — a kolik lidí by stálo">
+<meta property="og:description" content="HTA rozhoduje, co a za kolik platí veřejné pojištění. Jak to dělají nejlepší systémy, co všechno má HTA dělat, jak by mělo fungovat v ČR a kolik lidí by stálo.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="HTA">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-22
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-06-22
+    source_brief: HTA-podklad-2026-06.md (vícezdrojová webová rešerše: INAHTA profily, výroční
+      zprávy agentur, NICE/IQWiG/EU Commission, OECD, SÚKL VZ 2024, IEZ 2025).
+    notes: "DRAFT odvozený z podkladové rešerše HTA-podklad-2026-06.md. Laické vysvětlení, jak by
+      HTA mělo fungovat, plný funkční rozsah a personální náročnost dle srovnatelných zemí.
+      Personální FTE odhady pro ČR jsou syntéza z per-capita benchmarků, NE oficiální cíl — v textu
+      explicitně označeno. PŘED PUBLIKACÍ: (1) přesun do rootu 05_M1_Starter/, (2) záznam do
+      data/articles.json (+ cover_viz, rubric, linked_indicators), (3) odebrat robots noindex,
+      (4) doplnit cover (assets/covers/), (5) redakční schválení čísel a tónu."
+-->
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="../index.html" class="brand-link"><h1><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek (DRAFT — nezveřejněno)</small>
+    </h1></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<div class="masthead-strip" aria-hidden="true">
+  <span class="masthead-date" id="mastheadDate"></span>
+  <span class="masthead-score">DRAFT — neukládáno do articles.json, robots: noindex</span>
+</div>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="../clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">HTA</span>
+        <span class="article-tag">Reforma</span>
+        <span class="article-tag article-tag-muted">SÚKL · NICE · IQWiG · QALY · personální náročnost</span>
+      </div>
+      <h1 class="article-title">Kdo hlídá, jestli se léčba vyplatí. Jak by mělo fungovat hodnocení zdravotnických technologií — a kolik lidí by stálo</h1>
+      <p class="article-deck">
+        Hodnocení zdravotnických technologií (HTA) je nenápadná, ale klíčová mašinerie zdravotního systému: rozhoduje, jaký lék, přístroj nebo výkon začne platit veřejné pojištění, za jakou cenu, pro koho — a kdy ho naopak přestat platit. Česko ho má pro léky (SÚKL na evropské úrovni), ale pro výkony, screening, vakcíny a organizační intervence nemá vůbec nic. Jak HTA funguje v zemích, které ho umí, co všechno by měl dělat český orgán, a jakou personální náročnost čekat podle srovnatelných zemí.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">22. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">16 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Každá koruna veřejného zdravotního pojištění, utracená za léčbu, která sotva funguje, je koruna, která se nedostala k léčbě, jež funguje dobře. Tomuhle se říká oportunitní náklad a je to nejlepší jednovětá obhajoba toho, proč vyspělé zdravotní systémy mají instituci, která věcně posuzuje, zda se nová technologie vyplatí, než ji začnou platit. Jmenuje se to <em>Health Technology Assessment</em> — hodnocení zdravotnických technologií, HTA. V Česku ho známe hlavně jako tichou agendu SÚKL u léků. Ve skutečnosti je to páteřní nástroj, jak za veřejné peníze nakupovat <em>zdraví</em> místo objemu — a Česko z něj zatím využívá jen zlomek.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntHtaFnH">
+        <figcaption class="av-figure-h" id="avCntHtaFnH">Český HTA v číslech — výchozí stav 2026</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="549">549</span>
+            <span class="av-counter-label">zaměstnanců SÚKL (2024)</span>
+            <span class="av-counter-foot">lékové HTA je jen jedna sekce uvnitř</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">HTA orgánů pro výkony a screening</span>
+            <span class="av-counter-foot">léky ano, zbytek systému ne</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1.2" data-decimals="1" data-suffix=" mil Kč">~1,2 mil Kč</span>
+            <span class="av-counter-label">práh ochoty platit / QALY</span>
+            <span class="av-counter-foot">pevná konvence, nekodifikovaná, bez modifikátorů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="140" data-suffix=" FTE">~140 FTE</span>
+            <span class="av-counter-label">odhad pro plnorozsahové HTA (ČR)</span>
+            <span class="av-counter-foot">centrální scénář; vzor Švédsko (TLV + SBU)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Výroční zpráva SÚKL 2024; benchmarky INAHTA a výroční zprávy agentur. FTE odhad je redakční syntéza z per-capita poměrů, ne oficiální cíl.</p>
+      </figure>
+
+      <h3>Co je HTA — spotřebitelský test a cenovka v jednom</h3>
+
+      <p>
+        Laicky řečeno je HTA pro zdravotní systém něco mezi nezávislým spotřebitelským testem a cenovkou. Než stát z veřejného pojištění začne platit nový lék, přístroj nebo výkon, někdo musí věcně odpovědět na řadu otázek: <em>Funguje to? Funguje to líp než to, co děláme dnes? O kolik líp? S jakou jistotou? A je ten přínos úměrný ceně — nebo bychom za stejné peníze koupili víc zdraví jinde?</em> Mezinárodně uznávaná definice (INAHTA / HTAi, převzatá WHO) mluví o <em>systematickém, multidisciplinárním procesu, který explicitními metodami určuje hodnotu zdravotnické technologie</em> — a tou hodnotou se nemyslí jen klinická účinnost a cena, ale i bezpečnost, etické, sociální a organizační dopady.
+      </p>
+
+      <p>
+        Důvodů, proč HTA existuje, je několik a všechny jsou velmi praktické. Rozpočet je konečný, takže každé rozhodnutí něco vytlačuje (ekonomové z Yorku to ukazují na příkladu: utratit deset milionů liber za lék přinášející 333 let zdravého života může jinde v systému zničit 773 takových let — čistá ztráta). U patentově chráněných léků je výrobce monopolista a HTA dává plátci tvrdý argument do cenového jednání. Drahé inovace — genové terapie za miliony na pacienta — se bez HTA a navazujících nástrojů nedají pustit dovnitř bez rozvrácení rozpočtu. A konečně: HTA umí fungovat i obráceně — pomáhá <em>přestat</em> platit to, co nepomáhá. OECD odhaduje, že zhruba pětina výdajů na zdravotnictví je plýtvání, z velké části právě málohodnotná péče.
+      </p>
+
+      <h3>Věda versus hodnoty: oddělení, které musí být vidět</h3>
+
+      <p>
+        Nejdůležitější věc, kterou nejlepší systémy dělají, je rozdělení procesu na dvě části, které se nesmějí míchat. <strong>Posouzení (assessment)</strong> je věcná, hodnotově neutrální věda: jak moc technologie funguje oproti dnešní léčbě a s jakou jistotou. <strong>Hodnocení a rozhodnutí (appraisal)</strong> je naopak hodnotový soud — zda a za kolik to platit — a dělá ho komise, kde vedle kliniků a ekonomů sedí i zástupce pacientů. Evropská unie postavila celý svůj nový systém přesně na tomto rozdělení: klinické <em>posouzení</em> se od roku 2025 dělá společně (Joint Clinical Assessment), zatímco <em>rozhodnutí</em> o ceně a úhradě zůstává národní. Pro Česko z toho plyne praktický úkol — umět si k evropskému klinickému posudku spolehlivě dodělat ekonomickou a národní nadstavbu. Veřejná metodika, jak se to má dít, ale zatím chybí; pojišťovny na to opakovaně upozorňují.
+      </p>
+
+      <h3>Jak to dělají země, které to umí</h3>
+
+      <p>
+        V Evropě existují dvě metodické školy. První pracuje s <strong>prahem nákladové efektivity</strong> — spočítá se cena za jeden přidaný rok života v plném zdraví (QALY) a porovná se s hranicí ochoty platit. Tak to dělají Velká Británie (NICE), Nizozemsko, Kanada nebo Švédsko. Druhá škola fixní práh za QALY <strong>vědomě odmítá</strong> a místo toho kategorizuje <em>přidanou hodnotu</em> nového léku oproti dnešní léčbě, na což pak naváže cenové jednání — to je cesta Německa (IQWiG/G-BA) a Francie (HAS). Společné mají obě školy jedno: komparátor, tedy poctivé srovnání s tím nejlepším, co se dnes běžně dělá, ne s placebem.
+      </p>
+
+      <p>
+        <strong>Británie (NICE)</strong> je globální referenční vzor — nejširší záběr (léky, prostředky, diagnostika, výkony, klinická doporučení), transparentní práh (od dubna 2026 zvýšený na 25–35 tisíc liber za QALY) a strukturovaná disinvestice. Od roku 2022 navíc váží přínos výš u závažných stavů přes <em>modifikátory závažnosti</em>. <strong>Německo (IQWiG + G-BA)</strong> je vzorem čisté governance: jeden orgán posuzuje, druhý rozhoduje. <strong>Švédsko</strong> staví rozhodování na zákonné etické platformě (lidská důstojnost, potřeba a solidarita, nákladová efektivita) a provozuje dvě tělesa — TLV pro závazná cenová a úhradová rozhodnutí a SBU pro nezávislé systematické přehledy včetně výkonů a veřejného zdraví. <strong>Nizozemsko</strong> má nejexplicitnější žebřík: čím závažnější nemoc, tím vyšší přijatelný práh (20, 50, nebo 80 tisíc eur za QALY). A <strong>Polsko (AOTMiT)</strong> je pro Česko koncepčně nejzajímavější — jedna agentura dělá HTA pro úhrady <em>a zároveň</em> nastavuje sazby, které pak platí národní pojišťovna poskytovatelům. Přesně ten most mezi hodnocením a tvorbou úhrad, který v ČR chybí.
+      </p>
+
+      <h3>Od signálu po vyřazení: jak hodnocení probíhá</h3>
+
+      <p>
+        Zralé HTA má ustálenou logiku — sled kroků od chvíle, kdy se o technologii poprvé doslechneme, až po její případné vyřazení:
+      </p>
+
+      <ol class="article-steps">
+        <li><strong>Časný dialog s vývojářem.</strong> Ještě před pivotními studiemi se vývojář zeptá regulátora i plátců, jaký důkaz budou chtít — aby nevyrobil „špatný" důkaz, který projde registrací, ale ne úhradou. V EU jde o tzv. Joint Scientific Consultation.</li>
+        <li><strong>Horizon scanning a výběr témat.</strong> Radar na přicházející technologie, aby se systém mohl připravit (rozpočet, kapacita), ne jen reagovat.</li>
+        <li><strong>Scoping (PICO).</strong> Přesná definice otázky: populace, intervence, komparátor, výsledky. Dnes nejtěžší krok — jeden lék generuje pro 27 zemí EU klidně deset i víc různých kombinací.</li>
+        <li><strong>Klinický assessment.</strong> Systematický přehled studií, hodnocení jistoty důkazu a <em>relativní</em> účinnosti vůči dnešnímu standardu.</li>
+        <li><strong>Ekonomická evaluace a dopad na rozpočet.</strong> Kolik stojí přidaný rok zdravého života (ICER za QALY) — a uneseme celkový roční účet pro všechny indikované?</li>
+        <li><strong>Appraisal — deliberace komise.</strong> Důkazy plus hodnoty plus nejistota; u stolu i pacient.</li>
+        <li><strong>Kategorizované doporučení.</strong> Ano / jen pro podskupinu / podmíněně se sběrem dat / jen ve výzkumu / ne.</li>
+        <li><strong>Vazba na cenu a úhradu.</strong> Zařazení do úhrad, cenové jednání, případně výsledkové smlouvy (managed entry agreements).</li>
+        <li><strong>Revize a disinvestice.</strong> Rozhodnutí nejsou navždy — nový důkaz, nový komparátor nebo expirace patentu vedou k přehodnocení; a to, co nefunguje, se vyřazuje.</li>
+      </ol>
+
+      <h3>Co všechno má HTA orgán dělat</h3>
+
+      <p>
+        Funkční „popis práce" zralého HTA tělesa je širší, než se zdá. Český orgán by ho nemusel zvládat od prvního dne, ale jako cílový stav by měl umět: <strong>vybírat témata</strong> (horizon scanning) a <strong>scopovat</strong> otázky; provádět <strong>klinické posouzení</strong> i <strong>ekonomickou evaluaci</strong> a <strong>analýzu dopadu na rozpočet</strong>; vést <strong>deliberativní komisi</strong> se zapojením pacientů a vydávat <strong>kategorizovaná doporučení</strong>; <strong>napojit výsledek na cenu a úhradu</strong> — a u výkonů i na sazebník a dohodovací řízení; <strong>publikovat metodiku a standardy</strong> (to, co dnes ČR nemá); spravovat <strong>výsledkové smlouvy</strong>; stavět na <strong>reálných datech a registrech</strong>; provádět <strong>disinvestici</strong> málohodnotné péče; <strong>periodicky přehodnocovat</strong>; zajistit <strong>odvolání a transparentnost</strong>; a <strong>spolupracovat mezinárodně</strong> (role hodnotitele v EU JCA, severský model společných hodnocení). Typická trajektorie zemí je: začít u léků a postupně rozšiřovat. Česko je dnes na stupni „léky plus prostředky na poukaz"; přirozený další krok jsou výkony a screening.
+      </p>
+
+      <h3>Personální náročnost: co čekat podle srovnatelných zemí</h3>
+
+      <p>
+        Tady je jádro praktické otázky „kolik by to stálo lidí". Pozor na čtení čísel: u velkých agentur (NICE, HAS, italská AIFA, norská DMP) totální počet zaměstnanců <em>nadhodnocuje</em> HTA-specifický personál, protože dělají i jiné věci (registrace léků, akreditace nemocnic, správa balíčku). Per-role rozpady (kolik ekonomů versus statistiků) žádná agentura nezveřejňuje — pracuje se proto se strukturou útvarů a per-capita poměry.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTbHtaStaffH">
+        <figcaption class="av-figure-h" id="avTbHtaStaffH">Personál vybraných HTA agentur a přepočet na milion obyvatel</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Agentura / země</th>
+                <th scope="col">Personál</th>
+                <th scope="col">FTE / mil. obyv.</th>
+                <th scope="col">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">NICE<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Velká Británie · ~68 M</span></th>
+                <td>~780 (2024/25)</td>
+                <td class="av-mut">~11</td>
+                <td>celý institut; HTA část headcount nezveřejňuje</td>
+              </tr>
+              <tr>
+                <th scope="row">IQWiG<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Německo · ~84 M</span></th>
+                <td>~314 (2025)</td>
+                <td class="av-mut">~3,7</td>
+                <td>jen posouzení; rozhoduje G-BA</td>
+              </tr>
+              <tr>
+                <th scope="row">TLV<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Švédsko · ~10,5 M</span></th>
+                <td>174 (151 FTE, 2024)</td>
+                <td class="av-good">~16,6</td>
+                <td>závazná cenová/úhradová rozhodnutí</td>
+              </tr>
+              <tr>
+                <th scope="row">SBU<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Švédsko · ~10,5 M</span></th>
+                <td>~108 + ~250 konzultantů</td>
+                <td class="av-good">~10,3</td>
+                <td>přehledy vč. výkonů a veřejného zdraví</td>
+              </tr>
+              <tr>
+                <th scope="row">KCE<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Belgie · ~11,8 M</span></th>
+                <td>~76 (66,7 FTE)</td>
+                <td>~5,7</td>
+                <td>znalostní institut; rozhoduje RIZIV</td>
+              </tr>
+              <tr>
+                <th scope="row">AOTMiT<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Polsko · ~36,5 M</span></th>
+                <td>~255 (2024)</td>
+                <td>~7,0</td>
+                <td class="av-good">HTA + tvorba úhrad v jedné agentuře</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">SÚKL<br><span style="font-weight:400;color:var(--ink-mut);font-size:12px;">Česko · ~10,9 M</span></th>
+                <td>549 (2024)</td>
+                <td class="av-bad">lékové HTA = 1 sekce</td>
+                <td class="av-bad">žádné HTA pro výkony/screening</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">Zdroj: výroční zprávy agentur a profily INAHTA (2023–2025); SÚKL VZ 2024. Per-capita u velkých agentur nadhodnocuje HTA-specifický personál.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <p>
+        Nejbližší srovnatelná země je <strong>Švédsko</strong> — 10,5 milionu obyvatel, téměř jako ČR (10,9 milionu). Provozuje dvě tělesa: TLV (174 lidí, cenová a úhradová rozhodnutí) a SBU (zhruba 108 stálých plus 250 externích konzultantů, systematické přehledy včetně výkonů a veřejného zdraví) — dohromady kolem 280 stálých FTE pro <em>plný</em> rozsah HTA. To je nejlepší „cílový obrázek". Dedikované HTA agentury se obecně pohybují v pásmu zhruba 6 až 17 FTE na milion obyvatel, což pro ČR dává řádově 65 až 185 lidí podle ambice.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="160" data-suffix=" FTE">~160 FTE</span>
+          <span class="av-counter-label">horní okraj centrálního scénáře pro plnorozsahové HTA</span>
+          <span class="av-counter-foot">rozpětí ~60–300 FTE podle ambice; ne oficiální cíl, syntéza z benchmarků</span>
+        </div>
+      </aside>
+
+      <p>
+        Pro <strong>plnorozsahové HTA</strong> (léky, prostředky, výkony, diagnostika, screening i veřejné zdraví) vychází realistický český cíl takto: <strong>štíhlý scénář ~60–80 FTE</strong> (zdvojnásobit dnešní lékové HTA a přidat malou jednotku pro výkony, opřít se o externí akademickou síť — model belgické KCE); <strong>centrální, doporučený scénář ~120–160 FTE</strong> (samostatná agentura nebo silně rozšířená sekce SÚKL plus nová jednotka pro výkony a screening, s vlastní zdravotní ekonomikou, biostatistikou a metodickým útvarem); a <strong>plný scénář ~250–300 FTE</strong> (švédská úroveň: závazná rozhodnutí o lécích i nezávislé HTA výkonů a veřejného zdraví, horizon scanning, registry, disinvestice). V centrálním scénáři by personál tvořilo zhruba 25–30 zdravotních ekonomů, 30–40 systematických hodnotitelů, 10–15 biostatistiků, interní medicínští poradci s velkou externí sítí, datoví analytici napojení na ÚZIS, pracovníci pro zapojení pacientů, právní útvar a sekretariát — plus hodnotící komise z částečných externích jmenovaných.
+      </p>
+
+      <p>
+        Dvě poctivá varování. Za prvé: <strong>žádný oficiální český FTE cíl pro HTA neexistuje</strong> — výše uvedené je odvozeno z per-capita benchmarků, ne z vládního dokumentu. Za druhé: kolující údaj o navýšení SÚKL „o 30–50 %" se v publikované studii Iniciativy pro efektivní zdravotnictví (IEZ) z roku 2025 <strong>nepodařilo dohledat</strong> — studie doporučuje posílit kapacitu SÚKL a jako benchmark uvádí švédskou TLV, ale bez konkrétního čísla.
+      </p>
+
+      <h3>Jak by HTA mělo fungovat v Česku</h3>
+
+      <p>
+        Česko nepotřebuje vymýšlet HTA od nuly — pro léky ho má a SÚKL je metodicky na evropské úrovni. Potřebuje tři kroky navíc, které z HTA udělají nástroj řízení <em>celého</em> systému, ne jen lékové police.
+      </p>
+
+      <p>
+        <strong>Za prvé kodifikovat pravidla hry.</strong> Práh ~1,2 milionu Kč za QALY dnes SÚKL používá jako <em>nepsanou</em> konvenci (vyhláška 376/2011 Sb. ji nestanoví) a <em>bez modifikátorů</em>. Mělo by být: zveřejněná metodika, transparentní práh a modifikátory závažnosti (jako v Británii, Nizozemsku, Norsku), aby těžké a vzácné diagnózy nenarážely na fixní hranici rychleji než jinde v Evropě. Mimochodem, sama hodnota „1,2 milionu" pochází z pravidla WHO o trojnásobku HDP — jenže jde o pevnou částku, která s růstem HDP dnes odpovídá spíš jeden a půl- až dvojnásobku, a od plošného používání toho pravidla se odklonila i samotná WHO.
+      </p>
+
+      <p>
+        <strong>Za druhé rozšířit HTA za hranice léků.</strong> Výkony, screening, vakcíny a organizační či digitální intervence dnes neprochází žádným strukturovaným hodnocením. Vzorem je švédská SBU, belgická KCE nebo britský NICE. <strong>Za třetí napojit HTA na rozhodování o penězích.</strong> Pro léky vazba na úhradu funguje; pro výkony chybí úplně — sazebník a dohodovací řízení (kolem 580 miliard Kč) běží na historických koeficientech a tlaku, ne na marginálním přínosu. Vzorem je polská AOTMiT, která HTA i tvorbu úhrad spojuje pod jednou střechou. K tomu dvě podpůrné podmínky: reálná data (registry s ÚZIS) jako palivo hodnocení a personál dotažený k per-capita úrovni srovnatelných zemí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTbHtaManifestH">
+        <figcaption class="av-figure-h" id="avTbHtaManifestH">Jak HTA zapadá do manifestu reformy</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Priorita manifestu</th>
+                <th scope="col">Role HTA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><a href="../manifest/priorita-01-za-stejne-penize-vice-muziky.html">1 · Za stejné peníze více muziky</a></th>
+                <td>HTA je motor „více muziky za peníze" — nakupuje zdraví, ne objem. HTA pro výkony udělá racionálním i value-based add-on k DRG.</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="../manifest/priorita-04-transparence.html">4 · Transparence</a></th>
+                <td>HTA rozhodnutí jsou veřejná, zdůvodněná a přezkoumatelná. Kodifikace prahu a metodiky = přímý transparenční zisk.</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="../manifest/priorita-05-dostupne-leky.html">5 · Dostupné léky</a></th>
+                <td>Priorita už volá po samostatné HTA metodice a fondu pro orphan léky. HTA (modifikátory, výsledkové smlouvy) je mechanismus, jak moderní a vzácné léky pustit dovnitř racionálně.</td>
+              </tr>
+              <tr>
+                <th scope="row"><a href="../manifest/priorita-10-data-a-informace.html">10 · Data a informace</a></th>
+                <td>HTA potřebuje reálná data a registry (ÚZIS). Datová priorita je předpoklad fungujícího HTA pro výkony i doplňkového důkazu k evropskému JCA.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <h3>Co je sporné</h3>
+
+      <p>
+        HTA není kouzelná hůlka a poctivost vyžaduje uvést i jeho limity. Prahy za QALY jsou politické parametry, ne přírodní konstanty, a v čase se mění. Disinvestice — vyřazování málohodnotné péče — zní logicky, ale v praxi je <em>těžší než zavádění</em>: méně než polovina disinvestičních iniciativ reálně sníží užívání cílené služby, protože odebrat zavedenou praxi naráží na odpor kliniků i pacientů víc než nezavést něco nového. Výsledkové smlouvy (managed entry agreements) mají velkou administrativní zátěž a slabé důkazy, že skutečně šetří nebo vyřeší klinickou nejistotu. A institucionálně je otevřená otázka, zda v ČR vznikne samostatná agentura, rozšíří se kompetence SÚKL, nebo se HTA pro výkony usadí v ÚZIS — debata, kterou Česko jednou odmítlo a která se teď vrací.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Kontext v číslech</div>
+      <h4 class="article-databox-h">HTA v Česku a u srovnatelných zemí</h4>
+      <ul class="article-databox-list">
+        <li><strong>549</strong> — zaměstnanců SÚKL (31. 12. 2024); lékové HTA vykonává jediná sekce</li>
+        <li><strong>0</strong> — orgánů hodnotících výkony, screening, vakcíny a organizační intervence strukturovaným HTA</li>
+        <li><strong>~ 1 200 000 Kč / QALY</strong> — pevná konvence prahu (historicky ~3× HDP/obyv., dnes ~1,5–1,9×; vyhláška ji nestanoví)</li>
+        <li><strong>~280 FTE</strong> — švédská kapacita (TLV + SBU) pro plný rozsah HTA při populaci ≈ ČR</li>
+        <li><strong>~120–160 FTE</strong> — odhad pro centrální scénář plnorozsahového českého HTA (redakční syntéza, ne oficiální cíl)</li>
+        <li><strong>~20 %</strong> — odhad OECD, jaká část výdajů na zdravotnictví je plýtvání (z velké části málohodnotná péče)</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. ke zdrojům:</strong> Personální čísla jsou z výročních zpráv agentur a profilů INAHTA (2023–2025); SÚKL = výroční zpráva 2024. Per-role rozpady agentury nezveřejňují. Český FTE odhad je redakční syntéza z per-capita poměrů, nikoli oficiální cíl — žádný oficiální český FTE cíl pro HTA neexistuje. Údaj „~20 % plýtvání" je headline odhad OECD a je nutně přibližný.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si to ověřit</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Definice a rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>INAHTA — definice HTA a profily agentur</strong>. <a href="https://www.inahta.org/" target="_blank" rel="noopener">inahta.org ↗</a></li>
+          <li><strong>WHO — Health technology assessment</strong>. <a href="https://www.who.int/health-topics/health-technology-assessment" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>European Commission — Joint Clinical Assessments (Nařízení EU 2021/2282)</strong>. <a href="https://health.ec.europa.eu/health-technology-assessment/implementation-regulation-health-technology-assessment/joint-clinical-assessments_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>OECD — Tackling Wasteful Spending on Health (2017)</strong>. <a href="https://www.oecd.org/en/publications/tackling-wasteful-spending-on-health_9789264266414-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Agentury (personál, metodika)</h5>
+        <ul class="article-sources-list">
+          <li><strong>NICE — process manual (PMG36) + Annual Report &amp; Accounts 2024/25</strong>. <a href="https://www.nice.org.uk/" target="_blank" rel="noopener">nice.org.uk ↗</a></li>
+          <li><strong>IQWiG — European HTA &amp; General Methods</strong>. <a href="https://www.iqwig.de/en/" target="_blank" rel="noopener">iqwig.de ↗</a></li>
+          <li><strong>TLV — Årsredovisning 2024 (174 zaměstnanců)</strong>. <a href="https://www.tlv.se/" target="_blank" rel="noopener">tlv.se ↗</a></li>
+          <li><strong>SBU — about / INAHTA profil (~108 + konzultanti)</strong>. <a href="https://www.sbu.se/en/about-sbu/" target="_blank" rel="noopener">sbu.se ↗</a></li>
+          <li><strong>KCE (Belgie) — INAHTA profil (66,7 FTE)</strong>. <a href="https://kce.fgov.be/" target="_blank" rel="noopener">kce.fgov.be ↗</a></li>
+          <li><strong>AOTMiT (Polsko) — HTA + taryfikacja</strong>. <a href="https://www.aotm.gov.pl/en/" target="_blank" rel="noopener">aotm.gov.pl ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>SÚKL — Výroční zpráva 2024 (549 zaměstnanců)</strong>. <a href="https://sukl.gov.cz/" target="_blank" rel="noopener">sukl.gov.cz ↗</a></li>
+          <li><strong>Iniciativa pro efektivní zdravotnictví (IEZ) — Léčiva: regulace versus potřeby pacientů (2025)</strong>. <a href="https://www.efektivnizdravotnictvi.cz/post/studie-2025-leciva-regulace-versus-potreby-pacientu" target="_blank" rel="noopener">efektivnizdravotnictvi.cz ↗</a></li>
+          <li><strong>Löblová (2017) — Who's afraid of institutionalizing HTA? (Health Economics, Policy and Law)</strong>. <a href="https://www.cambridge.org/core/journals/health-economics-policy-and-law" target="_blank" rel="noopener">cambridge.org ↗</a></li>
+          <li><strong>Související článek: Joint Clinical Assessment startuje (EU 2021/2282)</strong>. <a href="../clanek-hta-jca-eu-2026.html">clanek-hta-jca-eu-2026 →</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k draftu:</strong> Tento text je pracovní verze (DRAFT) odvozená z interní podkladové rešerše <em>HTA-podklad-2026-06.md</em>, určená k redakční diskusi, nikoli ke zveřejnění bez další revize. Personální FTE odhady pro ČR jsou redakční syntéza z per-capita benchmarků srovnatelných zemí — ne oficiální cíl; žádný oficiální český FTE cíl pro HTA neexistuje. Před publikací je třeba potvrdit čísla z výročních zpráv a doplnit cover.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="../clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="../src/clanky.js"></script>
+
+</body>
+</html>
