@@ -229,6 +229,24 @@ const MANIFEST = {
     claim: 'daň ze slazených nápojů ≈ zhruba stejný pokles prodejů.',
     context: 'Co na slazené nápoje funguje na úrovni politiky.',
   },
+  'clanek-dlouhodoba-pece-vydaje': {
+    kicker: 'Dlouhodobá péče · zdroje', signal: 'bad',
+    stat: '3', statSuffix: '×',
+    claim: 'méně profesionálních pečujících má Česko než průměr OECD.',
+    context: 'Peníze jsou průměrné (1,9 % HDP), ruce vzácné.',
+  },
+  'clanek-deti-obezita-cosi': {
+    kicker: 'Prevence · děti', signal: 'warn',
+    stat: '26,3', statSuffix: '%', barPct: 26,
+    claim: 'dětí 6–9 let má nadváhu nebo obezitu — každé čtvrté.',
+    context: 'Pod průměrem EU (29,8 %), ale trend jde špatným směrem.',
+  },
+  'clanek-sebevrazdy-mladistvi': {
+    kicker: 'Duševní zdraví · mladí', signal: 'bad',
+    stat: '6,96',
+    claim: 'sebevražd na 100 tis. náctiletých (15–19) — o dvě třetiny nad EU.',
+    context: 'Druhá nejčastější příčina úmrtí dospívajících. Trend roste.',
+  },
 };
 
 function escapeXml(s) {
