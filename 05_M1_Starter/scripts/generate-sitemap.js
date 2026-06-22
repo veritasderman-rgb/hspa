@@ -120,7 +120,13 @@ function main() {
   const stdout = process.argv.includes('--stdout');
   const articles = JSON.parse(readFileSync(resolve(ROOT, 'data/articles.json'), 'utf8')).articles ?? [];
   const indicators = JSON.parse(readFileSync(resolve(ROOT, 'data/indicators.json'), 'utf8')).indicators ?? [];
-  const indicatorPages = indicators.map(i => `/indikator-${i.id}.html`);
+  // Jen indikátory s reálně existující statickou stránkou. Indikátor může mít
+  // jen metodickou kartu (indicators/{id}.json) bez vygenerované HTML stránky —
+  // takový by jinak skončil v sitemapě jako 404 (isIndexable u chybějícího
+  // souboru vrací true, aby nevyřazoval kurátorované statické stránky).
+  const indicatorPages = indicators
+    .map(i => `/indikator-${i.id}.html`)
+    .filter(loc => existsSync(resolve(ROOT, loc.replace(/^\//, ''))));
   const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages });
   if (stdout) {
     console.log(xml);
