@@ -14,15 +14,15 @@
 <meta property="article:section" content="Prevence">
 <!--
   audit:
-    last_reviewed: 2026-05-14
+    last_reviewed: 2026-06-22
     reviewer: claude-code-agent
-    status: review-pending
-    unverified_claims_removed: 0
-    primary_sources_added: 2
-    visual_elements_added: 1
-    notes: "Ověřeno proti primárnímu zdroji ÚZIS — Aktuální data o proočkovanosti české populace (NZIS, aktualizace k 1. 9. 2025). Opraveny klíčové hodnoty: MMR u dětí do 2 let z neověřených 91,2 % na 83,7 % (kohorta narozených 2022); chřipka 65+ z 22 % na 24,5 % (sezóna 2024/2025); HPV z 65 % na 69,8 % (kohorta 13 let, rok očkování 2023). Itálie — proočkovanost MMR upravena z 87,3/91,8 % na 87,2/91,6 % dle Eurosurveillance (D'Ancona et al. 2018). Doplněn caveat callout k metodice ÚZIS a primární zdroj NZIS i Eurosurveillance do seznamu zdrojů. Upraven aktualizovaný gauge. Status published → review-pending."
+    status: verified
+    unverified_claims_removed: 1
+    primary_sources_added: 0
+    visual_elements_added: 0
+    notes: "2026-06-22 fallback-audit (denní rutina, source-verification). Nezávislá kontrola proti primárním zdrojům: Itálie MMR 24 měsíců 87,2 % (2016) → 91,6 % (2017) ověřeno přímo proti D'Ancona et al., Eurosurveillance 2018;23(22) — shoda. UK chřipka 65+ sezóna 2024/25 = 74,9 % ověřeno proti UKHSA (publ. 22. 5. 2025) — shoda. OECD/ECDC průměr chřipky 65+ ~47 % (medián 2024/25) — shoda. Itálie zákon 119/2017 (gazzettaufficiale.it) a Francie LFSS 2018 / zákon 2017-1836 (legifrance.gouv.fr) ověřeny HTTP 200 + obsah. zakonyprolidi 2006-537 a ÚZIS NZIS PDF HTTP 200. OECD HAG 2025 Czechia URL vrací 403 (anti-bot, ne link rot) — kanonická citace ponechána. Opravené nálezy: (1) hero counter-grid stále zobrazoval pre-auditní hodnoty '< 92 %' (MMR) a '22 %' (chřipka), které odporovaly ověřenému tělu článku — sjednoceno na 83,7 % a 24,5 %; mezera k WHO cíli přepočtena z 53 na 50,5 p.b. (2) JSON-LD 'description' nesl neověřené '91,2 % / OECD 94,8 / 22 %' (přesně hodnoty odstraněné auditem 2026-05-14) — sjednoceno s ověřeným perexem. (3) cover_viz v articles.json obsahoval neověřený benchmark MMR 'OECD 94,8 / EU 95,2' (cross-metodika ÚZIS vs WUENIC, bez doložení v textu) — nahrazen prahem WHO 95 %, cover regenerován. Tělo článku číselně beze změny — všechny claims potvrzeny. Status review-pending → verified."
 -->
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -44,7 +44,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-vakcinace#article",
       "headline": "Spalničky se vrací, chřipku ignorujeme. Co populační očkování v Česku ztratilo",
-      "description": "MMR u dvouletých 91,2 % vs. OECD 94,8 (pod prahem kolektivní imunity 95 %), chřipka 65+ 22 % vs. 47. Co dělá Itálie (Lorenzin law 2017), Francie (11 povinných očkování), Velká Británie (NHS chřipková kampaň) — a co Česko nedotahuje.",
+      "description": "MMR u dětí do 2 let 83,7 % (ÚZIS, kohorta 2022) — pod prahem kolektivní imunity 95 %; chřipka 65+ 24,5 % (sezóna 2024/2025) vs. cíl WHO 75 %. Co dělá Itálie (Lorenzin law 2017), Francie (11 povinných očkování), Velká Británie (NHS chřipková kampaň) — a co Česko nedotahuje.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-vakcinace.png"
@@ -55,7 +55,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-vakcinace"
       },
       "datePublished": "2026-05-07",
-      "dateModified": "2026-06-10",
+      "dateModified": "2026-06-22",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -154,14 +154,14 @@
         <figcaption class="av-figure-h" id="avCntVakcH">Proočkovanost v ČR — dvě bolesti, jeden společný jmenovatel</figcaption>
         <div class="av-counter-grid">
           <div class="av-counter-block av-counter-block-warn">
-            <span class="av-counter" data-value="92" data-prefix="<" data-suffix=" %">&lt; 92 %</span>
+            <span class="av-counter" data-value="83.7" data-decimals="1" data-suffix=" %">83,7 %</span>
             <span class="av-counter-label">MMR proočkovanost dvouletých dětí</span>
-            <span class="av-counter-foot">pod prahem kolektivní imunity WHO 95 %</span>
+            <span class="av-counter-foot">kohorta 2022 · pod prahem kolektivní imunity WHO 95 %</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="22" data-suffix=" %">22 %</span>
+            <span class="av-counter" data-value="24.5" data-decimals="1" data-suffix=" %">24,5 %</span>
             <span class="av-counter-label">chřipková vakcinace 65+ (ČR)</span>
-            <span class="av-counter-foot">OECD průměr 47 % · WHO cíl 75 %</span>
+            <span class="av-counter-foot">sezóna 2024/2025 · OECD průměr 47 % · WHO cíl 75 %</span>
           </div>
           <div class="av-counter-block av-counter-block-good">
             <span class="av-counter" data-value="95" data-suffix=" %">~95 %</span>
@@ -171,7 +171,7 @@
           <div class="av-counter-block av-counter-block-bad">
             <span class="av-counter" data-value="75" data-suffix=" %">75 %</span>
             <span class="av-counter-label">WHO cíl pro chřipku 65+</span>
-            <span class="av-counter-foot">ČR má 53 p.b. mezeru</span>
+            <span class="av-counter-foot">ČR má 50,5 p.b. mezeru</span>
           </div>
         </div>
         <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS Národní registr očkování, OECD <em>Health at a Glance 2025</em> (13. 11. 2025; ČR proočkovanost DTP 86 %), WHO Influenza Vaccine Strategy.</p>
