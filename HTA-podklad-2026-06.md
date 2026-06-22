@@ -41,8 +41,9 @@ on-site explainer `jak-funguje.html?id=hta`.
 
 4. **Česko má světově standardní HTA pro léky (SÚKL), ale nulové HTA pro výkony, screening,
    vakcíny a organizační intervence.** To je největší strukturální mezera. Navíc český práh
-   ochoty platit (~1,2 mil. Kč/QALY, „3× HDP") je **nekodifikovaný** a **bez modifikátorů**, a
-   opírá se o pravidlo (WHO 1–3× HDP), od kterého **se sama WHO distancovala**.
+   ochoty platit (~1,2 mil. Kč/QALY) je **pevná, nekodifikovaná konvence bez modifikátorů**,
+   kdysi odvozená zhruba jako 3× HDP/obyv.; s růstem HDP dnes odpovídá spíš ~1,5–1,9× HDP, a opírá
+   se tak o pravidlo (WHO 1–3× HDP/QALY), od kterého **se sama WHO distancovala**.
 
 5. **Jak by to mělo fungovat (laicky, navázáno na manifest):** (i) **kodifikovat metodiku a práh
    se severity modifikátory**; (ii) **rozšířit HTA za hranice léků** na výkony / screening /
@@ -200,8 +201,8 @@ přidávají předpoklady a nejistotu nad rámec klinických výsledků. Místo 
   **Důležité varování:** rozšířené pravidlo **„1–3× HDP na obyvatele za QALY/DALY" (WHO-CHOICE)
   WHO sama veřejně odmítla** jako vodítko pro národní rozhodování („nikdy nebylo zamýšleno k
   určování prahů"). Obor se posouvá k **prahům odvozeným z reálného oportunitního nákladu** (kolik
-  zdraví ve skutečnosti vytlačím). To je přímo relevantní pro ČR, jejíž ~1,2 mil. Kč/QALY je právě
-  „3× HDP" konvence.
+  zdraví ve skutečnosti vytlačím). To je přímo relevantní pro ČR: její ~1,2 mil. Kč/QALY je *pevná*
+  konvence kdysi odvozená z tohoto pásma (původně ~3× HDP/obyv., dnes s růstem HDP spíš ~1,5–1,9×).
 - **Modifikátory závažnosti / end-of-life.** Váží QALY víc u těžkých stavů (NICE ×1,2/×1,7; NL
   20–80 tis. €; Norsko absolute shortfall). Náhrada za „intuici", kterou dnes ČR řeší přes MEA.
 - **MCDA (multikriteriální analýza).** Strukturované rozhodování, když záleží na víc věcech naráz
@@ -396,9 +397,12 @@ organizační intervence):
   standardu. **Celkem 549 zaměstnanců (31. 12. 2024, ověřeno z výroční zprávy)**; lékové HTA je
   ovšem *jedna sekce* (Sekce cenové a úhradové regulace, SCAU) — per-sekci headcount ústav
   nezveřejňuje, takže „desítky hodnotitelů" je **odhad, ne ověřené číslo**.
-- Práh **~1,2 mil. Kč/QALY** (3× HDP, konvence WHO-CHOICE) — aplikovaný jednotně, **bez
-  modifikátorů**, a **nekodifikovaný** ve vyhlášce.
-- Od 1. 1. 2025 je SÚKL povinně zapojen do **EU JCA** (transpozice zákonem 289/2025 Sb.).
+- Práh **~1,2 mil. Kč/QALY** — *pevná* konvence (kdysi odvozená jako ~3× HDP/obyv. dle WHO-CHOICE;
+  s růstem HDP dnes spíš ~1,5–1,9×), aplikovaná jednotně, **bez modifikátorů** a **nekodifikovaná**
+  ve vyhlášce.
+- Od 12. 1. 2025 je SÚKL povinně zapojen do **EU JCA** na základě **přímo použitelného nařízení
+  (EU) 2021/2282** (nařízení nevyžaduje národní transpozici). Navazující národní implementaci
+  řeší zákon **289/2025 Sb.** (vyhlášen 8/2025, **účinný od 1. 1. 2026** s výjimkami).
 
 ### 6.2 Co chybí (strukturální mezery)
 
@@ -450,7 +454,7 @@ organizační intervence):
 
 ## Část 8 — Co je sporné a co opravit (poctivé poznámky)
 
-- **WHO „1–3× HDP/QALY".** WHO se od plošného používání **distancovala**; český práh na něm stojí.
+- **WHO „1–3× HDP/QALY".** WHO se od plošného používání **distancovala**; český práh (pevná ~1,2 mil. Kč/QALY) z něj historicky vychází, dnes odpovídá ~1,5–1,9× HDP.
   Při psaní veřejného textu to uvádět jako *konvenci, kterou obor opouští*, ne jako standard.
 - **Prahy nejsou konstanty.** £/QALY, NICE HST, kanadské ~50 tis. CAD apod. jsou *politické
   parametry*, mění se v čase — vždy uvádět s rokem.
@@ -464,6 +468,10 @@ organizační intervence):
     posílit kapacitu SÚKL (benchmark: švédská TLV), bez konkrétního čísla".
   - „IQWiG 200+ / NICE 300+" → ověřená čísla jsou **IQWiG ~314 (2025), NICE ~780 WTE celý institut**
     (HTA-specifická část CHTE headcount nezveřejňuje); upřesnit, že jde o celé instituty.
+  - „práh = 3× HDP ≈ 1,2 mil. Kč/QALY (2024)" → upřesnit: 1,2 mil. Kč je *pevná* konvence, která
+    s růstem HDP odpovídá dnes spíš **~1,5–1,9× HDP**, ne 3× (existující článek uvádí „trojnásobek").
+  - Časová osa JCA: SÚKL je do JCA vázán **přímo nařízením (EU) 2021/2282 (od 12. 1. 2025)**, ne
+    českým zákonem; **289/2025 Sb. je účinný až 1. 1. 2026** (s výjimkami) — nezaměňovat se startem JCA.
 
 ---
 
