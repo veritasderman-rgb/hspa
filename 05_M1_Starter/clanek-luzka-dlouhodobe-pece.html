@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Místo pro stáří se ztrácí. Lůžek dlouhodobé péče má Česko o čtvrtinu pod evropským průměrem · HSPA Monitor</title>
+<meta name="description" content="Česká republika má 35,3 lůžka pobytové dlouhodobé péče na 1 000 obyvatel 65+ — zhruba o čtvrtinu méně než srovnatelné evropské země a méně než Slovensko či Rakousko. Počet lůžek roste, ale pomaleji než populace seniorů, takže kapacita klesá. Strukturální analýza a politické páky na sociálně-zdravotním pomezí.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Místo pro stáří se ztrácí. Lůžek dlouhodobé péče má Česko o čtvrtinu pod evropským průměrem">
+<meta property="og:description" content="Česko má 35,3 lůžka pobytové dlouhodobé péče na 1 000 seniorů — o čtvrtinu pod srovnatelnými zeměmi a pod Slovenskem i Rakouskem. Kapacita ztrácí závod se stárnutím. Analýza a politické páky.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-06-22">
+<meta property="article:section" content="Dlouhodobá péče">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-06-22
+    reviewer: claude-code-agent
+    status: draft
+    notes: >
+      Nový indikátor luzka_dlouhodobe_pece_65plus — lůžka pobytové dlouhodobé péče
+      (Eurostat hlth_rs_bdsns, facility NRCBED = HP.2) přepočtená na 1 000 obyvatel 65+.
+      Primární zdroj: Eurostat REST API (hlth_rs_bdsns, ověřeno přímým dotazem 22. 6. 2026)
+      + Eurostat demo_pjanind (podíl 65+). CZ 2020 = 75 174 lůžek / 2,13 mil. 65+ = 35,3.
+      Trend (na 1 000 ob. 65+): 2014=37,6 · 2016=37,2 · 2018=36,0 · 2020=35,3 (klesá,
+      přestože absolutní počet lůžek roste — populace 65+ roste rychleji).
+      Benchmark: průměr 6 srovnatelných zemí na identické bázi HP.2 ≈ 46 (DE 54,3 · NL 70,5 ·
+      FR 48,0 · SK 46,8 · AT 46,0 · PL 10,7), vše ověřeno z Eurostatu (beds/100k × podíl 65+).
+      OECD příbuzná metrika „LTC beds in facilities and hospitals per 1000 65+“ ≈ 44, ale
+      zahrnuje i nemocniční LTC lůžka → není přímo srovnatelná, uvedeno jen narativně.
+      Signal: warn (diff ≈ -23 % od benchmarku 46; thresholds good=10/warn=25 → warn).
+      DRAFT — published:false. Před publikací: doplnit aktuálnější národní data MPSV
+      (Registr poskytovatelů sociálních služeb) + ÚZIS LDN; ověřit stav reformy DLP /
+      zákona o sociálně-zdravotním pomezí; vygenerovat cover; povýšit status a robots index.
+      Viz method_notes v indicators/luzka_dlouhodobe_pece_65plus.json.
+-->
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Dlouhodobá péče</span>
+        <span class="article-tag article-tag-muted">Stárnutí · Dostupnost · Sociálně-zdravotní pomezí</span>
+      </div>
+      <h1 class="article-title">Místo pro stáří se ztrácí. Lůžek dlouhodobé péče má Česko o čtvrtinu pod evropským průměrem</h1>
+      <p class="article-deck">
+        Česká republika má <strong>35,3 lůžka</strong> pobytové dlouhodobé péče na 1 000 obyvatel ve věku 65 a více let (Eurostat, 2020) — zhruba o čtvrtinu méně než srovnatelné evropské země a méně než Slovensko i Rakousko. Počet lůžek přitom roste. Jen pomaleji než populace seniorů — a tak se kapacita měřená na jednoho seniora rok za rokem ztenčuje. Odkud pochází tato mezera a kdo ji může uzavřít?
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">22. června 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Kde se člověk dožije konce, když už se o sebe nedokáže postarat a rodina jeho péči nezvládá, není věc osudu — je to výsledek systémových rozhodnutí: kolik pobytových míst stát a kraje provozují, jak jsou financovaná, kdo za jejich kapacitu odpovídá. V České republice tyto odpovědi vedou k číslu, které je měřitelně pod úrovní zemí, se kterými se obvykle srovnáváme — a které se navzdory rostoucímu počtu lůžek zhoršuje.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLtcHeroH">
+        <figcaption class="av-figure-h" id="avLtcHeroH">Kapacita pobytové dlouhodobé péče v ČR — klíčová čísla</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="35.3" data-decimals="1" data-suffix=" lůžek">35,3</span>
+            <span class="av-counter-label">lůžek pobytové dlouhodobé péče na 1 000 obyvatel 65+, ČR</span>
+            <span class="av-counter-foot">Eurostat hlth_rs_bdsns (HP.2), rok 2020 · signal: varování</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="46" data-suffix=" lůžek">46</span>
+            <span class="av-counter-label">průměr šesti srovnatelných evropských zemí</span>
+            <span class="av-counter-foot">DE, NL, FR, SK, AT, PL na identické bázi Eurostat HP.2</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2.7" data-decimals="1" data-prefix="−" data-suffix=" lůžka">−2,7 lůžka</span>
+            <span class="av-counter-label">pokles na 1 000 seniorů od roku 2014 (z 37,6 na 35,3)</span>
+            <span class="av-counter-foot">absolutní počet lůžek roste, populace 65+ roste rychleji</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="2.1" data-decimals="1" data-suffix=" / 100">2,1 / 100</span>
+            <span class="av-counter-label">pracovníků dlouhodobé péče na 100 seniorů — jedna z nejnižších v OECD</span>
+            <span class="av-counter-foot">lůžko bez personálu nefunguje (indikátor pracovnici_ltc)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Eurostat — Beds in nursing and residential care facilities (hlth_rs_bdsns, facility HP.2); Eurostat demo_pjanind (podíl 65+); OECD Health Statistics — Long-term care workers. Přepočet ČR 2020: 75 174 lůžek / 2,13 mil. obyvatel 65+ = 35,3 lůžka na 1 000 seniorů.</p>
+      </figure>
+
+      <h3>Co indikátor měří a co nezachycuje</h3>
+
+      <p>
+        Indikátor <code>luzka_dlouhodobe_pece_65plus</code> počítá lůžka v <strong>pobytových ošetřovatelských a rezidenčních zařízeních</strong> dlouhodobé péče — v české realitě jde zejména o domovy pro seniory, domovy se zvláštním režimem (pro lidi s demencí) a o lůžka následné a ošetřovatelské péče, hovorově „eldéenky“ (LDN). Mezinárodní statistika je řadí do kategorie HP.2 podle Systému zdravotnických účtů (System of Health Accounts), kterou harmonizuje Eurostat. Hodnotu vztahujeme na 1 000 obyvatel ve věku 65 a více let, protože právě tato skupina pobytovou dlouhodobou péči téměř výhradně využívá.
+      </p>
+
+      <p>
+        Indikátor záměrně neměří dvě věci. Za prvé <strong>terénní a ambulantní služby</strong> — pečovatelskou službu, odlehčovací služby, domácí ošetřovatelskou péči — které jsou plnohodnotnou (a politicky preferovanou) alternativou k pobytovým zařízením. Za druhé <strong>kvalitu a dostupnost</strong>: počet lůžek neříká nic o čekacích dobách, regionální rozmístění ani o tom, jak se v zařízeních pečuje. Lůžková kapacita je tedy ukazatel <em>strukturální připravenosti</em> — odpovídá na otázku, zda fyzicky existuje místo, ne na otázku, zda je dobré a včas dostupné.
+      </p>
+
+      <p>
+        Důležitá výhrada se týká směru. Moderní politika dlouhodobé péče v Evropě usiluje o <strong>deinstitucionalizaci</strong> — přesun péče z velkých ústavů do domácího a komunitního prostředí. „Více lůžek = lépe“ proto neplatí univerzálně. Platí ale tam, kde je institucionální kapacita nedostatečná a <em>není</em> nahrazena silnou terénní péčí — což je přesně případ Česka, které má slabé obojí. Proto čteme nízkou a klesající hodnotu jako varovný, nikoli neutrální signál.
+      </p>
+
+      <h3>Trend: lůžek přibývá, ale seniorů rychleji</h3>
+
+      <p>
+        Na první pohled je situace v pořádku: absolutní počet lůžek pobytové dlouhodobé péče v ČR roste — z přibližně 69 tisíc v roce 2014 na zhruba 75 tisíc v roce 2020. Jenže ve stejném období zrychlilo stárnutí populace. Podíl lidí starších 65 let stoupl ze 17,4 % na 19,9 % a počet seniorů se zvýšil o čtvrt milionu. Když lůžka přepočteme na seniory, výsledek je opačný než dojem z absolutních čísel: kapacita <strong>klesá</strong>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLtcTrendH">
+        <figcaption class="av-figure-h" id="avLtcTrendH">Vývoj kapacity pobytové dlouhodobé péče v ČR (lůžek / 1 000 obyvatel 65+)</figcaption>
+        <div class="av-bar-compare">
+          <div class="av-bar-row">
+            <span class="av-bar-label">2014</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-warn" style="width:65%"></div>
+            </div>
+            <span class="av-bar-value">37,6</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2016</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-warn" style="width:64%"></div>
+            </div>
+            <span class="av-bar-value">37,2</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2018</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-warn" style="width:62%"></div>
+            </div>
+            <span class="av-bar-value">36,0</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">2020</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-warn" style="width:61%"></div>
+            </div>
+            <span class="av-bar-value">35,3</span>
+          </div>
+          <div class="av-bar-row av-bar-row-benchmark">
+            <span class="av-bar-label">Průměr 6 zemí</span>
+            <div class="av-bar-track">
+              <div class="av-bar-fill av-bar-fill-neutral" style="width:79%"></div>
+            </div>
+            <span class="av-bar-value">46</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_rs_bdsns (lůžka HP.2) a demo_pjanind (podíl 65+), vlastní přepočet. Šířka pruhu škálována na pásmo 0–58 lůžek/1 000 seniorů. Benchmark = průměr DE, NL, FR, SK, AT, PL na identické bázi.</p>
+      </figure>
+
+      <p>
+        Pokles z 37,6 na 35,3 lůžka na tisíc seniorů za šest let vypadá mírně, ale jde proti demografickému přílivu, který bude v příští dekádě sílit. Generace silných poválečných ročníků vstupuje do věku, kdy poptávka po dlouhodobé péči prudce roste. Pokud kapacita poroste dosavadním tempem, mezera mezi potřebou a nabídkou se bude rozevírat — i bez jediného zrušeného lůžka.
+      </p>
+
+      <h3>Mezinárodní srovnání: pod Slovenskem i Rakouskem</h3>
+
+      <p>
+        Aby srovnání dávalo smysl, je nutné měřit všem zemím totéž. Proto vycházíme z jedné datové sady (Eurostat HP.2) a všude ji přepočítáváme na 1 000 obyvatel 65+. I tak platí, že definice pobytové dlouhodobé péče se mezi zeměmi liší (zahrnutí asistovaného bydlení, psychiatrické následné péče apod.), takže čísla jsou orientační. Pořadí je nicméně robustní.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLtcEuH">
+        <figcaption class="av-figure-h" id="avLtcEuH">Lůžka pobytové dlouhodobé péče — mezinárodní srovnání (lůžek / 1 000 obyvatel 65+, Eurostat HP.2, 2019/2020)</figcaption>
+        <div class="av-data-table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col" class="num">Lůžek / 1 000 ob. 65+</th>
+                <th scope="col">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-good">
+                <td>Nizozemsko</td>
+                <td class="num">70,5</td>
+                <td>Tradičně rozsáhlá institucionální i terénní síť; nyní deinstitucionalizuje z vysoké základny</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Německo</td>
+                <td class="num">54,3</td>
+                <td>Pflegeversicherung (povinné pojištění péče od 1995) financuje pobytová i terénní zařízení</td>
+              </tr>
+              <tr class="av-row-good">
+                <td>Francie</td>
+                <td class="num">48,0</td>
+                <td>Síť EHPAD; státní spolufinancování provozu i investic</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td>Slovensko</td>
+                <td class="num">46,8</td>
+                <td>Podobná východiska jako ČR, vyšší hustota pobytových zařízení sociálních služeb</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td>Rakousko</td>
+                <td class="num">46,0</td>
+                <td>Pflegegeld + krajské (zemské) financování pobytové péče</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td><strong>Průměr 6 zemí (benchmark)</strong></td>
+                <td class="num"><strong>≈ 46</strong></td>
+                <td>Referenční hodnota pro signál; identická báze HP.2</td>
+              </tr>
+              <tr class="av-row-warn">
+                <td><strong>Česká republika</strong></td>
+                <td class="num"><strong>35,3</strong></td>
+                <td>Signal: varování; pobytová zařízení (HP.2), 2020</td>
+              </tr>
+              <tr class="av-row-bad">
+                <td>Polsko</td>
+                <td class="num">10,7</td>
+                <td>Silná opora o rodinnou péči; institucionální kapacita nejnižší v regionu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_rs_bdsns (lůžka HP.2 na 100 000 obyvatel) přepočteno na 1 000 ob. 65+ pomocí Eurostat demo_pjanind. OECD vykazuje příbuznou metriku včetně lůžek dlouhodobé péče v nemocnicích (průměr OECD ≈ 44), která není přímo srovnatelná. Hodnoty zaokrouhleny.</p>
+      </figure>
+
+      <p>
+        Z tabulky plynou dvě věci. Za prvé: Česko není evropským extrémem — Polsko má kapacitu třetinovou a spoléhá silně na rodinnou péči. Za druhé, a to je zásadnější: Česko je pod úrovní svých nejbližších srovnatelných sousedů. Slovensko, se kterým sdílíme nedávnou historii i strukturu systému, má pobytových lůžek znatelně více. Rakousko, ekonomicky vyspělejší soused, rovněž. Mezera vůči Německu či Francii je ještě výraznější. Nejde tedy o nevyhnutelný osud postkomunistického systému — Slovensko i Polsko ukazují obě možné cesty.
+      </p>
+
+      <h3>Strukturální faktory: proč kapacita nestačí</h3>
+
+      <p>
+        Prvním a nejhlubším faktorem je <strong>roztříštěnost mezi resorty</strong>. Pobytová dlouhodobá péče v ČR leží na takzvaném sociálně-zdravotním pomezí. Domovy pro seniory a domovy se zvláštním režimem spadají pod Ministerstvo práce a sociálních věcí a registrují je kraje jako sociální služby. Lůžka následné a ošetřovatelské péče (LDN) spadají pod Ministerstvo zdravotnictví a financují je zdravotní pojišťovny. Klient je přitom v obou typech zařízení často nerozlišitelný — potřebuje ošetřovatelskou i sociální péči zároveň. Dvojí gesce, dvojí financování a dvojí evidence znamenají, že nikdo nemá celkovou odpovědnost za to, kolik lůžek systém potřebuje a kde mají vzniknout.
+      </p>
+
+      <p>
+        Druhým faktorem je <strong>demografický tlak</strong>. Stárnutí populace zrychluje a poptávka po dlouhodobé péči poroste nejméně do poloviny století. Kapacita, která stagnuje nebo roste pomalu, tak ztrácí závod s počtem seniorů — což přesně ukazuje klesající trend přepočteného indikátoru.
+      </p>
+
+      <p>
+        Třetím faktorem je <strong>investiční a provozní náročnost</strong>. Nový domov pro seniory stojí stovky milionů korun a v prvních letech bývá provozně ztrátový, než se ustálí personál a obsazenost. Zřizovateli jsou převážně kraje, obce a neziskové organizace s omezenými rozpočty; stavba nového zařízení soutěží s ostatními prioritami a návratnost je dlouhá.
+      </p>
+
+      <p>
+        Čtvrtým a možná nejtvrdším faktorem je <strong>personál</strong>. Lůžko bez pečovatelů a sester je jen nábytek. Česko má jednu z nejnižších kapacit formálních pracovníků dlouhodobé péče v OECD — 2,1 pracovníka na 100 osob starších 65 let, zatímco průměr OECD je více než dvojnásobný. Nedostatek personálu limituje obsazení i existujících lůžek a brzdí otevírání nových.
+      </p>
+
+      <p>
+        Pátým faktorem je <strong>nedotažená deinstitucionalizace</strong>. Deklarovaný strategický směr — posilovat terénní a komunitní služby místo ústavů — by dával smysl, kdyby terénní alternativa byla silná. V ČR ale chybí dostatečná pečovatelská a odlehčovací kapacita, takže omezování pobytových lůžek bez paralelního rozvoje domácí péče nevytváří úsporu, ale díru, do které propadají rodiny pečujících.
+      </p>
+
+      <h3>Politická páka: co konkrétně lze udělat a kdo má kompetenci</h3>
+
+      <p>
+        Na rozdíl od mnoha jiných indikátorů zde neexistuje jeden gestor — a právě to je jádro problému i řešení. Páky leží na pomezí dvou ministerstev, krajů a zdravotních pojišťoven a vyžadují koordinaci, kterou dosud nikdo nezajišťuje.
+      </p>
+
+      <p>
+        <strong>Reforma dlouhodobé péče a zákon o sociálně-zdravotním pomezí</strong> je nejprioritnější systémový krok. Jeho smyslem je sjednotit financování ošetřovatelské péče v pobytových zařízeních, vyjasnit, kdo platí co (MPSV za sociální složku, zdravotní pojišťovny za zdravotní), a zavést společné plánování kapacity. Bez tohoto rámce zůstane rozhodování o lůžkách roztříštěné a kapacita poroste náhodně podle vůle jednotlivých krajů a zřizovatelů.
+      </p>
+
+      <p>
+        <strong>Narovnání úhrady ošetřovatelské péče v zařízeních sociálních služeb</strong> z veřejného zdravotního pojištění (podle zákona o veřejném zdravotním pojištění) je konkrétní finanční páka. Pokud úhrada pokrývá reálné náklady zdravotní péče poskytované v domovech, sníží se jejich provozní ztráta a otevírání nových lůžek dává ekonomický smysl. Kompetence leží na MZ a zdravotních pojišťovnách.
+      </p>
+
+      <p>
+        <strong>Investiční podpora krajů a obcí</strong> — z národních programů i evropských fondů (IROP) — řeší kapitálovou bariéru vzniku nových zařízení. Zkušenost Německa (povinné pojištění péče Pflegeversicherung od roku 1995) i Rakouska (Pflegegeld a zemské financování) ukazuje, že stabilní a předvídatelný finanční rámec je podmínkou, bez níž kapacita neporoste.
+      </p>
+
+      <p>
+        <strong>Posílení terénních a odlehčovacích služeb</strong> je komplementární páka. Aby deinstitucionalizace fungovala, musí existovat silná pečovatelská služba, odlehčovací pobyty a domácí ošetřovatelská péče — aby pečující jako dcera v našem úvodním příběhu nezůstali sami. To je úkol pro MPSV a kraje.
+      </p>
+
+      <p>
+        <strong>Navýšení počtu pečovatelů a sester</strong> v dlouhodobé péči — přes vzdělávací kapacity, mzdové podmínky a uznávání kvalifikací — je podmínka, bez níž nová lůžka nebudou mít koho péči poskytovat. Bez personálu zůstanou i postavená lůžka zavřená.
+      </p>
+
+      <p>
+        Indikátor <code>luzka_dlouhodobe_pece_65plus</code> v dashboardu HSPA Monitoru bude sledovat, zda tyto kroky vedou k měřitelné změně — tedy zda se přepočtená kapacita přestane propadat a začne se blížit úrovni srovnatelných zemí. Příští roky ukážou, jestli reforma dlouhodobé péče zůstane na papíře, nebo se promítne do počtu míst pro lidi, kteří už doma zůstat nemohou.
+      </p>
+
+    </div>
+
+    <aside class="article-related" aria-label="Související indikátory a články">
+      <div class="ed-kicker">Související</div>
+      <ul class="article-related-list">
+        <li><a href="indicator.html?id=luzka_dlouhodobe_pece_65plus"><strong>Lůžka dlouhodobé péče v pobytových zařízeních</strong></a> — indikátor popsaný v tomto článku</li>
+        <li><a href="indicator.html?id=pracovnici_ltc_per_100_65plus"><strong>Pracovníci dlouhodobé péče na 100 seniorů</strong></a> — lidská kapacita, bez níž lůžko nefunguje</li>
+        <li><a href="indicator.html?id=vydaje_dlouhodoba_pece_hdp"><strong>Výdaje na dlouhodobou péči (% HDP)</strong></a> — finanční vstup do systému dlouhodobé péče</li>
+        <li><a href="indicator.html?id=hospicova_pece_luzka"><strong>Lůžková hospicová kapacita</strong></a> — komplementární kapacita na konci života</li>
+        <li><a href="indicator.html?id=multimorbidita_65plus"><strong>Multimorbidita 65+</strong></a> — zdravotní profil cílové skupiny dlouhodobé péče</li>
+      </ul>
+    </aside>
+
+    <aside class="article-sources" aria-label="Primární zdroje">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Primární data a odborné zdroje</h4>
+      <ul class="article-sources-list">
+        <li>
+          <strong>Eurostat — Beds in nursing and residential care facilities (hlth_rs_bdsns)</strong><br>
+          <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_bdsns/default/table" rel="noopener noreferrer" target="_blank">ec.europa.eu/eurostat — hlth_rs_bdsns</a> — lůžka v pobytových ošetřovatelských a rezidenčních zařízeních (kategorie HP.2), roční řada, srovnání zemí
+        </li>
+        <li>
+          <strong>Eurostat — Population structure indicators (demo_pjanind)</strong><br>
+          <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_pjanind/default/table" rel="noopener noreferrer" target="_blank">ec.europa.eu/eurostat — demo_pjanind</a> — podíl obyvatel 65+ (jmenovatel pro přepočet kapacity)
+        </li>
+        <li>
+          <strong>MPSV — Registr poskytovatelů sociálních služeb</strong><br>
+          <a href="https://www.mpsv.cz/web/cz/registr-poskytovatelu-sluzeb" rel="noopener noreferrer" target="_blank">mpsv.cz — registr poskytovatelů sociálních služeb</a> — domovy pro seniory a domovy se zvláštním režimem (národní primární zdroj)
+        </li>
+        <li>
+          <strong>ÚZIS — Národní registr poskytovatelů zdravotních služeb (NRPZS) a výroční statistika Zdravotnictví ČR</strong><br>
+          <a href="https://nrpzs.uzis.cz" rel="noopener noreferrer" target="_blank">nrpzs.uzis.cz</a> — lůžka následné a ošetřovatelské péče (LDN), lůžkový fond podle odborností
+        </li>
+        <li>
+          <strong>OECD — Health at a Glance: Long-term care settings</strong><br>
+          <a href="https://www.oecd.org/en/publications/2025/11/health-at-a-glance-2025_a894f72e/full-report/long-term-care-settings_9f4aa221.html" rel="noopener noreferrer" target="_blank">oecd.org — Long-term care settings</a> — mezinárodní kontext kapacity dlouhodobé péče (příbuzná metrika včetně nemocničních LTC lůžek)
+        </li>
+        <li>
+          <strong>OECD Health Statistics — Long-term care workers</strong><br>
+          <a href="https://data-explorer.oecd.org/" rel="noopener noreferrer" target="_blank">data-explorer.oecd.org — Long-term care resources</a> — personální kapacita dlouhodobé péče (komplementární indikátor)
+        </li>
+      </ul>
+    </aside>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="site-footer-legal">Data jsou agregovaná, bez osobních údajů. Zdrojová data: Eurostat, MPSV, ÚZIS, OECD. Licencováno CC BY 4.0.</p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
