@@ -12,6 +12,7 @@
     finding_2026-06-01: "AUDIT-FLAG (fallback routine, žádný nový discovery trigger). (1) HYGIENA: odstraněn reader-viditelný redakční banner 'Status: review-pending' z publikovaného článku (3 blocking errors ve validate-articles.js). (2) ZÁSADNÍ FAKTICKÁ CHYBA: centrální benchmark 'OECD 11,5 %' je metodicky chybný. Primárně ověřeno proti ECDC EARS-Net AER 2024 (plný PDF stažen + pdftotext): EU/EEA populačně vážený průměr rezistence invazivní E. coli na fluorochinolony = 22,5 % (2024), klesající trend — NE 11,5 %. 'OECD 11,5 %' je import z jiné metodiky (OECD Health at a Glance) → porušuje pravidlo o míchání metodik. Pozn.: hodnota 15,71 v AER Table 1 je incidence/100k, ne % rezistence. Česká hodnota 13,1 % (i trend 14,5→13,1) má origin: seed a nebyla primárně ověřena. → article-status FLAGGED + published:false; benchmark indikátoru opraven na 22,5 % (EARS-Net), signal warn→neutral; meta na noindex; perex/databox opraven; přidán flagged caveat. ČEKÁ NA REDAKCI: primární verifikace české hodnoty (ECDC Atlas/SZÚ), re-thesis (po opravě benchmarku se mění vyznění), napojení indikátoru na živý EARS-Net (seed→live). Discovery+routing: discovery/discovery-2026-06-01.md, routing-2026-06-01.md."
     finding_2026-06-01_verified: "VERIFIKACE DOKONČENA (datová iterace přes ECDC Surveillance Atlas REST API). Ověřena ČR hodnota: ESCCOL.FLUOROQUINOLONES.R.PROPORTION (measureId 1146416), geoCode CZ, AMR dataset 2024 = 19,2 % (N=4 268 izolátů), NE smyšlených 13,1 %. Řada 2001–2024 (vrchol 26–28 % 2008/2016, 17,2 % 2023, 19,2 % 2024). ČR mírně POD EU/EEA průměrem 22,5 % (good signal). Indikátor: 13,1→19,2, origin seed→live, verified. Článek: titulek/re-thesis/published→true, noindex odebráno."
     notes: "Kaskádová revize AMR clusteru navazující na audit sourozeneckého článku clanek-spotreba-antibiotik.html (2026-05-10) a clanek-nosokomialni-infekce.html (čeká na samostatný audit). Ověřeno proti ECDC EARS-Net Annual Epidemiological Report for 2024 a Country sheet 2024 Czechia (antibiotic.ecdc.europa.eu), Akčnímu plánu NAP ČR 2019–2022 (vláda ČR, usnesení č. 75/2019), historii NAP od usnesení vlády č. 595/2009, WHO Global Action Plan on AMR (rezoluce WHA68.7, květen 2015), WHO Ten threats to global health 2019 a Surviving Sepsis Campaign 2021 guidelines (Intensive Care Medicine, 2021). Klíčové opravy: (1) chybné datování českého NAP — článek tvrdil 'Česko má od roku 2018 nastavený plán', skutečnost: NAP samotný od 4. 5. 2009 (usnesení vlády č. 595), aktuální Akční plán NAP 2019–2022 schválen 28. 1. 2019 (usnesení vlády č. 75), AP NAP po 2022 zatím nebyl veřejně zveřejněn jako navazující dokument. (2) WHO Ten threats — explicitně datováno na rok 2019 (původní formulace nezmiňovala rok publikace seznamu). (3) Surviving Sepsis Campaign claim — kvalifikováno: SSC 2021 doporučuje 1 hodinu u septického šoku, ale recentní meta-analýzy (Br J Med 2024 systematic review na 190 896 pacientech) ukazují, že časový práh 3 hod je rovněž asociován s mortalitním benefitem; striktní 1-hour bundle je proto v současnosti revidován. (4) Komunitní rezistence > 20 % — vágní 'v evropských AMR reportech' nahrazeno explicitním přiznáním limitace s odkazem na ECDC AER 2024. (5) Lancet ID / CID studie o ASP — generická citace nahrazena odkazem na Cochrane review (Davey et al., 2017) jako primární evidence base. (6) Cross-article reference 'článek 22/25/26' nahrazeny slug odkazy na clanek-nosokomialni-infekce.html a clanek-spotreba-antibiotik.html. (7) Generické URL (szu.cz, ecdc.europa.eu/about, ema.europa.eu, mzcr.cz, england.nhs.uk, who.int/europe/initiatives/one-health) nahrazeny stabilními permalinky primárních zdrojů. (8) Doplněn caveat v databoxu o pojmu 'OECD průměr 11,5 %' — metodická karta indikátoru používá benchmark_source: eurostat (hlth_rs_resist), nikoliv OECD; pojem 'OECD 11,5' je zjednodušení a měl by být revidován v navazující datové iteraci. (9) Doplněn audit-status banner v hlavičce a interní cross-link na sourozenecký článek o spotřebě. (10) Hodnota 13,1 % v ČR a 11,5 % EU benchmark z dashboardu nebyla v této session přímo verifikována proti ECDC AER 2024 PDF (atlas.ecdc.europa.eu vrátil 503, AER 2024 PDF byl binární); origin v data/indicators.json zůstává 'seed' a vyžaduje napojení na primární EARS-Net výstup — out-of-scope této redakční iterace. Status published → review-pending."
+    finding_2026-06-22: "Doplnění (uživatelský požadavek) o globální výhled a governance AMR. (1) Nová sekce 'Globální výhled' + aside counter: GRAM forecast (GBD 2021 AMR Collaborators, Lancet 2024, DOI 10.1016/S0140-6736(24)01867-1) — 2050 1,91 mil. přímých / 8,22 mil. asociovaných úmrtí, +~70 % vs 2021, >39 mil. kumulativně 2025–2050, ~92 mil. odvratitelných lepší péčí. (2) Governance studie 161 zemí (Patel et al., Lancet Infect Dis 2025, DOI 10.1016/S1473-3099(25)00406-2): IPC + surveillance + stewardship nejsilněji korelují s nižší zátěží — doplněno do sekce 'Co dělají systémy'. (3) Nizozemský model SWAB/NethMap + EU pokyny pro uvážlivé používání antimikrobik (2017/C 212/01). Přidán nový zdrojový blok recenzované literatury; dateModified + audit.last_reviewed → 2026-06-22; reading time 9→12. audit-status zůstává verified (vše doloženo DOI/primárními zdroji)."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +58,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-rezistence-antibiotik"
       },
       "datePublished": "2026-06-01",
-      "dateModified": "2026-05-16",
+      "dateModified": "2026-06-22",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -140,7 +141,7 @@
       <div class="article-meta">
         <span class="article-meta-date">31. května 2026</span>
         <span class="article-meta-sep">·</span>
-        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-time">12 minut čtení</span>
         <span class="article-meta-sep">·</span>
         <span class="article-meta-author">redakce HSPA Monitoru</span>
       </div>
@@ -178,6 +179,22 @@
         </div>
         <p class="av-figure-note"><strong>Zdroj:</strong> WHO AMR fact sheets, ECDC EARS-Net + ESAC-Net 2022/2023.</p>
       </figure>
+
+      <h3>Globální výhled: hrozba, která poroste</h3>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="1.91" data-decimals="2" data-suffix=" mil.">1,91 mil.</span>
+          <span class="av-counter-label">úmrtí by mohla AMR přímo způsobit za samotný rok 2050</span>
+          <span class="av-counter-foot">+70 % oproti 2021; projekt GRAM, Lancet 2024</span>
+        </div>
+      </aside>
+
+      <p>
+        České číslo je zatím relativně příznivé, ale zapadá do globálního trendu, který jde špatným směrem. Dosud nejrozsáhlejší analýza projektu <strong>GRAM</strong> zveřejněná v <em>Lancet</em> v roce 2024 odhaduje, že v roce 2021 bylo s bakteriální rezistencí celosvětově spojeno 4,71 milionu úmrtí (z toho 1,14 milionu jí bylo přímo přičitatelných). Podle jejího referenčního scénáře by do roku <strong>2050</strong> mohla AMR přímo způsobit až <strong>1,91 milionu úmrtí ročně</strong> — zhruba o 70 procent víc než v roce 2021 — a celkem se mezi roky 2025 a 2050 podílet na více než 39 milionech úmrtí. V téže studii je ale i dobrá zpráva: lepší péče o těžké infekce a dostupnost vhodných antibiotik by ve stejném období mohly odvrátit kolem <strong>92 milionů</strong> úmrtí. Jinými slovy — kolik lidí AMR zabije, není osud, ale otázka toho, co se rozhodneme dělat. A protože rezistentní bakterie nerespektují hranice států ani oborů, je to úkol, který přesahuje jednu zemi.
+      </p>
+
+      <div class="av-aside-clear"></div>
 
       <h3>Co indikátor přesně měří</h3>
 
@@ -244,11 +261,19 @@
       </p>
 
       <p>
+        <strong>Nizozemský model: SWAB a NethMap.</strong> Konkrétním vzorem, jak racionální preskripci zorganizovat systémově, a ne nahodile, je Nizozemsko. Národní pracovní skupina <strong>SWAB</strong> (Stichting Werkgroep Antibioticabeleid) vydává odborná doporučení a každoroční přehled <strong>NethMap</strong> mapuje spotřebu antibiotik i rezistenci v celé zemi v jednom dokumentu. V nemocnicích pak spolupracují kliničtí mikrobiologové, infektologové a kliničtí farmaceuti přímo u lůžka — preskripce širokospektrých antibiotik tak není věcí náhody ani jednotlivce, ale strukturovaného procesu. Výsledkem je dlouhodobě jedna z nejnižších spotřeb antibiotik i rezistencí v Evropě.
+      </p>
+
+      <p>
         <strong>One Health přístup.</strong> Skandinávské země a Nizozemsko mají dlouhodobě omezenou veterinární spotřebu antibiotik a důslednou veterinární kontrolu. <em>One Health</em> přístup propojuje humánní, veterinární a environmentální AMR surveillance — v EU je formálně institucionalizován <a href="https://health.ec.europa.eu/antimicrobial-resistance/eu-action-antimicrobial-resistance_en" target="_blank" rel="noopener">Evropským One Health akčním plánem proti AMR (2017)</a>, na který navazuje doporučení Rady EU 2023/C 220/01.
       </p>
 
       <p>
         <strong>Vakcinace.</strong> Pneumokoková vakcinace u dětí (Prevenar) snížila výskyt invazivních pneumokokových onemocnění a tím i potřebu antibiotik. HPV vakcinace, MMR a další očkování omezují infekční zátěž populace. Vakcína je v této debatě tichý hrdina — méně infekcí znamená méně antibiotik a méně rezistence.
+      </p>
+
+      <p>
+        Že nejde jen o dojem z několika severských zemí, potvrzuje systematická analýza <em>Lancet Infectious Diseases</em> z roku 2025, která ohodnotila správu (governance) národních akčních plánů proti AMR ve <strong>161 zemích</strong>. Země s lepší správou těchto plánů měly prokazatelně nižší zátěž rezistence (korelace se zátěží úmrtí r ≈ −0,48; p &lt; 0,001) a vůbec nejsilněji s nižší zátěží souvisely tři oblasti: <strong>prevence a kontrola infekcí, surveillance spotřeby antibiotik a antibiotic stewardship</strong>. Nejlépe vyšlo Norsko, nejhůře nízkopříjmové země — governance AMR je tedy z velké části otázka investic a kapacit, a právě tyto tři oblasti mají největší návratnost. Evropským referenčním standardem pro národní politiky jsou přitom <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52017XC0701(01)" target="_blank" rel="noopener">Pokyny EU pro uvážlivé používání antimikrobik v humánním lékařství</a>, postavené na přístupu One Health a na antibiotic stewardship.
       </p>
 
       <h3>Co Česko realisticky může</h3>
@@ -311,6 +336,14 @@
         </ul>
       </div>
       <div class="sources-group">
+        <h5 class="sources-group-h">Globální zátěž a governance — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>GBD 2021 Antimicrobial Resistance Collaborators. Global burden of bacterial antimicrobial resistance 1990–2021: a systematic analysis with forecasts to 2050. The Lancet, 2024;404(10459):1199–1226.</strong> — projekt GRAM: do roku 2050 až 1,91 mil. přímých a 8,22 mil. asociovaných úmrtí ročně (+~70 % vs 2021), přes 39 mil. úmrtí kumulativně 2025–2050; lepší péče by mohla ~92 mil. odvrátit. <a href="https://doi.org/10.1016/S0140-6736(24)01867-1" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(24)01867-1 ↗</a></li>
+          <li><strong>Patel J, et al. Global policy responses to antimicrobial resistance, 2021–22: a systematic governance analysis of 161 countries and territories. The Lancet Infectious Diseases, 2025;26(1):55–66.</strong> — vyšší governance národních akčních plánů ↔ nižší zátěž AMR (úmrtí r=−0,48; p&lt;0,001); nejsilněji korelují prevence a kontrola infekcí, surveillance a stewardship. <a href="https://doi.org/10.1016/S1473-3099(25)00406-2" target="_blank" rel="noopener">doi.org/10.1016/S1473-3099(25)00406-2 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
+      <div class="sources-group">
         <h5 class="sources-group-h">Metodika a klinické guidelines</h5>
         <ul class="article-sources-list">
           <li><strong>EMA — Categorisation of antibiotics for use in animals (AMEG)</strong> — evropská kategorizace veterinárních antibiotik. <a href="https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/categorisation-antibiotics-used-animals-promote-responsible-use-protect-public-and-animal-health" target="_blank" rel="noopener">ema.europa.eu ↗</a></li>
@@ -327,6 +360,8 @@
           <li><strong>Akční plán Národního antibiotického programu ČR pro období 2019–2022</strong> — strategický dokument schválený usnesením vlády č. 75 ze dne 28. 1. 2019. <a href="https://www.sukl.cz/akcni-plan-narodniho-antibiotickeho-programu-pro-roky-2019" target="_blank" rel="noopener">sukl.cz ↗</a></li>
           <li><strong>European One Health Action Plan against AMR (2017) + Council Recommendation 2023/C 220/01</strong> — evropský strategický rámec One Health. <a href="https://health.ec.europa.eu/antimicrobial-resistance/eu-action-antimicrobial-resistance_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
           <li><strong>NHS England — Antimicrobial stewardship resources</strong> — britský model nemocničního ASP. <a href="https://www.england.nhs.uk/medicines-2/medicines-advice-and-support/antimicrobial-resistance-amr/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
+          <li><strong>Pokyny EU pro uvážlivé používání antimikrobik v humánním lékařství (2017/C 212/01)</strong> — evropský referenční standard pro národní politiky, postavený na One Health a antibiotic stewardship. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52017XC0701(01)" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>SWAB (Stichting Werkgroep Antibioticabeleid) + NethMap</strong> — nizozemská národní pracovní skupina a každoroční přehled spotřeby antibiotik a rezistence; vzorový model systémové antibiotické politiky. <a href="https://swab.nl/en/nethmap" target="_blank" rel="noopener">swab.nl ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
