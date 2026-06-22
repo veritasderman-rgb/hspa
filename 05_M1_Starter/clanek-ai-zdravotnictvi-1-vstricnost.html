@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lékař, který se vám zase dívá do očí: jak AI mění provoz medicíny · HSPA Monitor</title>
 <meta name="description" content="Nejviditelnější přínos umělé inteligence v medicíně dnes není diagnóza, ale vrácený čas. AI přepisuje konzultace, zve pacienty na prevenci a překládá nálezy do srozumitelné řeči. Díl 1/2 série o AI ve zdravotnictví: co je doloženo a kde číhá riziko halucinací.">
-<meta name="robots" content="noindex, follow">
+<meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lékař, který se vám zase dívá do očí: jak AI mění provoz medicíny">
 <meta property="og:description" content="Díl 1/2 série o AI ve zdravotnictví. Přepis konzultací, chytré zvaní na prevenci, srozumitelné zprávy a meze chatbotů — co je prokázáno a co zatím jen slibováno.">
 <meta property="og:locale" content="cs_CZ">
-<meta property="article:published_time" content="2026-06-18">
+<meta property="article:published_time" content="2026-06-22">
 <meta property="article:section" content="Digitalizace">
 <!--
   audit:
@@ -23,9 +23,85 @@
     visual_elements_count: 7
     notes: "Díl 1/2 série AI ve zdravotnictví (Vrstva 1 — uživatelská vstřícnost: ambient scribes, recall/zvaní na prevenci, sumarizace a překlad nálezů, triáž/chatboti). DRAFT — published:false, audit-status review-pending (drží review hold, nepublikuje se automaticky cronem). Empirická tvrzení doložena primární literaturou (DOI v sekci Zdroje): ambient scribes — Kaiser/TPMG 2,58 mil. konzultací a ~15 791 h (NEJM Catalyst 2025, DOI 10.1056/CAT.25.0040); vyhoření 51,9%->38,8% OR 0,26 (JAMA Netw Open 2025, DOI 10.1001/jamanetworkopen.2025.34976); RCT Nabla -9,5% času, DAX nevýznamně (NEJM AI 2025, DOI 10.1056/aioa2501000); Whisper halucinace ~1%/~40% škodlivé (FAccT 2024, DOI 10.1145/3630106.3658996); ChatGPT-4 z přepisů 23,6 chyb/případ (JMIR 2024, DOI 10.2196/54419); no-show predikce + telefonát -10,3 p.b. (Health Care Manag Sci 2023, DOI 10.1007/s10729-022-09626-z); pediatrický no-show 83% záchyt (NPJ Digit Med 2022, DOI 10.1038/s41746-022-00594-w); zjednodušení radiologických zpráv (Acad Radiol 2026, DOI 10.1016/j.acra.2025.12.008); symptom checkery — Semigran BMJ 2015 (DOI 10.1136/bmj.h3480), Ada v ED (JMIR 2022, DOI 10.2196/38364), Babylon krach 9/2023 (Lancet 2018 review). ČR: eHealth adopce z dashboardu; MZ ČR národní průzkum 2/2026 (67,6% zařízení používá/testuje AI, radiologie 82,9%); VZP úhradová metodika 4/2026, pilot od 7/2026; eRecept povinný od 2018. Regulace odkázána na existující článek clanek-ai-act-zdravotnictvi-srpen-2026. Cross-linky: clanek-ai-act-zdravotnictvi-srpen-2026, clanek-digi-1-co-to-je, clanek-digi-2-jak-funguje-api. Díl 2 (clanek-ai-zdravotnictvi-2-lecba) zatím draft -> v textu zmíněn bez odkazu (rozcestník série řeší navigaci). TODO před publikací: redakční ověření čísel a aktuálnosti regulace/úhrad, vygenerovat cover, povýšit audit-status a published:true, prepnout robots na index. Revize 2026-06-19: do sekce o symptom checkerech doplněn můstek rozlišující spotřebitelské symptom checkery (laik, nízká spolehlivost) od frontier „uvažovacích" modelů na strukturovaných lékařských případech (Science 2026) — ty řeší samostatná kapitola v dílu 2; reakce na hype-příspěvek o „nadlidském výkonu AI", aby série nepůsobila vnitřně rozporně."
 -->
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-ai-zdravotnictvi-1-vstricnost.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Lékař, který se vám zase dívá do očí: jak umělá inteligence mění provoz medicíny" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-ai-zdravotnictvi-1-vstricnost.png" data-cover-injected="1">
+
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost#article",
+      "headline": "Lékař, který se vám zase dívá do očí: jak umělá inteligence mění provoz medicíny",
+      "description": "Nejviditelnější přínos umělé inteligence v medicíně dnes není diagnóza, ale vrácený čas. AI přepisuje konzultace, zve pacienty na prevenci a překládá nálezy do srozumitelné řeči. Díl 1/2 série o AI ve zdravotnictví: co je doloženo a kde číhá riziko halucinací.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-ai-zdravotnictvi-1-vstricnost.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost"
+      },
+      "datePublished": "2026-06-22",
+      "dateModified": "2026-06-22",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Digitalizace · série"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Lékař, který se vám zase dívá do očí: jak umělá inteligence mění provoz medicíny",
+          "item": "https://skorezdravotnictvi.cz/clanek-ai-zdravotnictvi-1-vstricnost"
+        }
+      ]
+    }
+  ]
+}
+  </script>
 </head>
 <body data-article-slug="clanek-ai-zdravotnictvi-1-vstricnost.html">
 
@@ -61,7 +137,7 @@
         Když se mluví o umělé inteligenci v medicíně, většina lidí si představí robota, který stanoví diagnózu. Realita roku 2026 je jiná a mnohem všednější: nejviditelnější přínos AI dnes není to, že by lékaře nahradila u pacienta, ale že mu vrací čas, který trávil u klávesnice. V prvním díle série se díváme na „neviditelnou“ vrstvu — AI, která přepisuje konzultace, zve pacienty na prevenci ve správnou chvíli a překládá odborné nálezy do lidštiny. Co z toho je opravdu doloženo daty, kde číhá riziko vymyšlených vět a proč Česko ještě nemá jak tyto nástroje zaplatit.
       </p>
       <div class="article-meta">
-        <span class="article-meta-date">18. června 2026</span>
+        <span class="article-meta-date">22. června 2026</span>
         <span class="article-meta-sep">·</span>
         <span class="article-meta-time">22 minut čtení</span>
         <span class="article-meta-sep">·</span>
