@@ -1,0 +1,62 @@
+{
+  "id": "prezit_karcinom_plic_5let",
+  "name": "Pětileté přežití po diagnóze karcinomu plic",
+  "area": "Výstupy",
+  "domain": "Kvalita péče",
+  "subdomain": "Onkologická péče",
+  "definition": "Pětileté čisté (net) přežití pacientů s diagnostikovaným zhoubným novotvarem průdušnice, průdušek a plic (MKN-10 C33–C34), věkově standardizované podle metodiky CONCORD. Výstupní ukazatel kvality onkologické péče u nejsmrtelnějšího nádoru: shrnuje včasnost záchytu (podíl diagnóz v časném stadiu), dostupnost moderní léčby a organizaci péče. Na rozdíl od incidence a mortality měří přímo, jak dobře systém pacienty s rakovinou plic udrží naživu.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_sdmx2",
+      "dataflow": "OECD.ELS.HD,DSD_HCQO@DF_CC",
+      "note": "OECD Health Care Quality — Cancer care, pětileté čisté přežití karcinomu plic (CONCORD-3, diagnostická kohorta 2010–2014, publikováno jako referenční rok 2014). Dimenze: MEASURE=CCLUNTSR, SEX=_T (obě pohlaví), AGE=Y_GE15, hodnota OBS (observed), METHODOLOGY=AGE_STANDARD. Hodnota za ČR sestavena z Národního onkologického registru (NOR/ÚZIS) v rámci CONCORD. Novější mezinárodně srovnatelná vlna zatím nebyla publikována."
+    },
+    "fallback": {
+      "type": "uzis_nor",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-onkologicky-registr",
+      "dataset": "Národní onkologický registr (NOR) — přežití přes propojení s daty plátců",
+      "dimensions": [
+        "diagnóza (C33–C34)",
+        "kohorta diagnózy",
+        "stadium",
+        "pohlaví",
+        "věk"
+      ]
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "dataset": "DSD_HCQO@DF_CC",
+    "value": 17.1,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HCQO%40DF_CC",
+    "note": "Nevážený průměr členských zemí OECD (CONCORD-3, 2014, lung, SEX=_T, OBS): 17,1 %; n=34. Nevážený průměr zemí EU s dostupnými daty: 15,0 %; n=24. Sousední země: Německo 18,3 %, Rakousko 19,7 %, Polsko 14,4 %, Slovensko 11,2 %. Nejvyšší přežití světa: Japonsko 32,9 %, Korea 25,1 %; USA 21,2 %. Česko (10,6 %) je v mezinárodním srovnání blízko dna OECD — nižší hodnotu má z členských zemí jen Chile."
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS · NOR",
+    "OECD",
+    "European Cancer Inequalities Registry (EC/JRC)"
+  ],
+  "method_notes": "Hodnota 10,6 % je čisté pětileté přežití karcinomu plic (obě pohlaví, věkově standardizováno) pro pacienty diagnostikované v ČR v období 2010–14 (CONCORD-3, převzato OECD Health Care Quality). Trend (kohorty 2000–04, 2005–09, 2010–14) ukazuje pomalé, ale setrvalé zlepšování: 8,6 % → 9,8 % → 10,6 %. Přežití žen (14,1 % v kohortě 2014) je vyšší než mužů, celkový ukazatel je tažen dolů horší prognózou u mužů, kteří tvoří většinu nemocných. Benchmark 17,1 % odpovídá neváženému průměru OECD; čisté přežití zemí EU je 15,0 %.",
+  "limitations": "Čisté (net) a relativní přežití nejsou identické metody — hodnoty se mírně liší podle věkové standardizace, kohorty a registračního pokrytí. Mezinárodní kohorta CONCORD-3 končí rokem 2014; novější národní zlepšení (po roce 2015) zatím není v poslední srovnatelné mezinárodní vlně, takže reálná hodnota dnes je pravděpodobně vyšší než vykázaných 10,6 %. Přežití u rakoviny plic je silně závislé na zastoupení histologických typů (malobuněčný vs. nemalobuněčný karcinom) a na stadiu při diagnóze — mezinárodní srovnání proto odráží i rozdíly v záchytu, ne jen v účinnosti léčby.",
+  "determinants": [
+    "stadium při diagnóze (podíl záchytů ve stadiu I–II vs. III–IV)",
+    "pokrytí programu časného záchytu nízkodávkovým CT (indikátor screening_plicni)",
+    "prevalence kouření, zejména u mužů v průmyslových regionech (indikátor kuractvi_denni)",
+    "dostupnost moderní cílené a imunoonkologické léčby a její včasná indikace",
+    "centralizace léčby do komplexních onkologických center (KOC) a pneumoonkologických center",
+    "regionální a vzdělanostní nerovnosti v přístupu k diagnostice a léčbě"
+  ],
+  "importance": "Karcinom plic je nejčastější příčinou úmrtí na zhoubný novotvar v ČR — v roce 2022 na něj zemřelo 4 973 lidí, více než na kterýkoli jiný nádor. Ročně přibývá přibližně 6 800 nových případů. Pětileté přežití je shrnujícím výstupním ukazatelem celého řetězce péče: časný záchyt, přesná diagnostika, dostupnost moderní léčby a její organizace. Protože většina nádorů se dnes zachytí pozdě, je přežití nízké — a právě proto je tento indikátor citlivým měřítkem dopadu nově zaváděného plicního screeningu a kvality onkologické péče.",
+  "patient_story": "Pneumoonkologická ambulance fakultní nemocnice, úterní odpoledne. Šedesátiletý bývalý svářeč z Ostravska sedí naproti lékařce s výsledky CT: ložisko v pravé plíci, zvětšené mízní uzliny, stadium IIIB. Kašlal několik měsíců, ale na plíce to nesváděl — kuřácký kašel přece patří k řemeslu. Než přišel, nádor stihl prorůst. Pro pacienty zachycené v tomto stadiu se pětileté přežití pohybuje v nízkých desítkách procent a níž; kdyby stejný nádor odhalilo nízkodávkové CT o dva roky dřív ve stadiu I, šance na pětileté přežití by se blížila třem čtvrtinám. Jeho příběh je typický pro to, proč je český průměr tak nízký.\n\nPětileté čisté přežití po diagnóze karcinomu plic je v Česku 10,6 % (kohorta 2010–14; CONCORD-3 / OECD Health Care Quality, obě pohlaví, věkově standardizováno). Průměr OECD je 17,1 %, průměr zemí EU 15,0 % — Česko je signal bad, blízko dna mezinárodního žebříčku; z členských zemí OECD má nižší hodnotu jen Chile. Trend je sice rostoucí (8,6 % → 9,8 % → 10,6 % v kohortách 2000–04, 2005–09 a 2010–14), ale tempo zaostává za nejlepší praxí. Sousední Německo dosahuje 18,3 %, Rakousko 19,7 %, Polsko 14,4 %, Slovensko 11,2 %; špička světa — Japonsko — 32,9 %. Ročně v ČR na rakovinu plic zemře téměř 5 000 lidí, více než na kterýkoli jiný nádor.\n\nStrukturálně je nízké přežití dáno především pozdním záchytem: bez plošného screeningu přichází většina pacientů k lékaři až se symptomy, kdy je nádor ve stadiu III nebo IV. Rakovina plic přitom dlouho nebolí a je sociálně rozložená nerovně — nejvíc postihuje muže s nižším vzděláním a manuálními profesemi v průmyslových regionech (Ústecko, Ostravsko, Karvinsko), tedy skupinu, která ke zdravotnickým službám přichází nejméně a nejpozději. Moderní cílená a imunoonkologická léčba je v komplexních onkologických centrech dostupná, ale u pozdě zachyceného nádoru dokáže život spíše prodloužit než zachránit. Přežití je tak z velké části zrcadlem toho, jak včas systém nádor najde.\n\nPolitická páka je konkrétní a leží na MZ ČR, zdravotních pojišťovnách a Národním screeningovém centru. Hlavní pákou je rozjezd programu časného záchytu karcinomu plic nízkodávkovým CT (hrazený od roku 2022): adresné zvaní rizikových kuřáků po vzoru mamografického a kolorektálního screeningu, bonifikace praktiků za odeslání způsobilých pacientů v úhradové vyhlášce a propojení záchytu s odvykáním kouření. Doplňkově pak protikuřácká politika (zdanění tabáku, dostupnost tabakologie) a centralizace pneumoonkologické péče. Národní onkologický plán ČR 2030 a doporučení Rady EU z roku 2022 vytvářejí cílový rámec. Indikátor v HSPA dashboardu sleduje pětileté přežití karcinomu plic jako klíčový výstupní ukazatel kvality onkologické péče a včasnosti záchytu.",
+  "framework": "hspa",
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-06-23"
+}
