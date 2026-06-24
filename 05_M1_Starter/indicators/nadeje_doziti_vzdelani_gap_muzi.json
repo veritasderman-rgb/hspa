@@ -1,0 +1,51 @@
+{
+  "id": "nadeje_doziti_vzdelani_gap_muzi",
+  "name": "Rozdíl v naději dožití mužů podle vzdělání",
+  "area": "Výsledky",
+  "domain": "Sociální determinanty zdraví",
+  "subdomain": "Nerovnosti ve zdraví",
+  "definition": "Rozdíl (v letech) mezi nadějí dožití ve věku 25 let u mužů s nejvyšším (terciárním) a nejnižším (základním) dokončeným vzděláním. Hodnota 13 let znamená, že pětadvacetiletý muž s vysokoškolským diplomem má před sebou v průměru o 13 let delší život než jeho vrstevník se základním vzděláním, při zachování úmrtnostních poměrů daného období. Ukazatel měří sociální gradient úmrtnosti — jak silně se životní šance v Česku liší podle vzdělání, a tím i podle sociální vrstvy.",
+  "unit": "let",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mortality_tables_by_education",
+      "endpoint": "https://csu.gov.cz/obyvatelstvo",
+      "dataset": "ČSÚ — úmrtnostní tabulky podle nejvyššího dosaženého vzdělání (data navázaná na sčítání lidu a běžnou evidenci). Analyticky zpracováno: Hamplová, D. & Katrňák, T. (2018), Centrum pro studium demokracie a kultury — sociologická analýza naděje dožití podle vzdělání v ČR a Evropě.",
+      "dimensions": {
+        "country": "CZ",
+        "age": "25 let",
+        "sex": "muži",
+        "education": "ISCED 0-2 (základní) vs ISCED 5-8 (terciární)"
+      }
+    },
+    "fallback": {
+      "type": "eurostat_dataset",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpecedu/default/table"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_single_published_benchmark",
+    "dataset": "Eurostat (demo_mlexpecedu) nepublikuje pro Česko přímou řadu (ČSÚ do této sady nereportuje), proto neexistuje jediný oficiální EU/OECD benchmark pro českou hodnotu. Komparativně: v analýze 23 evropských zemí (Hamplová & Katrňák) byl český vzdělanostní rozdíl u mužů (cca 13 let ve věku 25) druhý nejvyšší — vyšší mělo jen Maďarsko (cca 14 let). Eurostat potvrzuje stejný vzorec u sousedů ve věku 30 let: Slovensko 14,8; Polsko 11,0; Maďarsko 10,7; Slovinsko 5,7 roku (2017). Země západní a severní Evropy se pohybují řádově kolem 7 let. Referenční hodnota 7 let v seedu reprezentuje typickou úroveň zemí s nízkou vzdělanostní nerovností.",
+    "value": 7,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpecedu/default/table"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 40
+  },
+  "frequency": "occasional",
+  "stewards": [
+    "Český statistický úřad (ČSÚ) — úmrtnostní tabulky",
+    "Sociologický ústav AV ČR (analýza zdravotních nerovností)",
+    "Eurostat — demo_mlexpecedu"
+  ],
+  "method_notes": "Hodnota 13 let (muži, věk 25, terciární vs základní vzdělání) pochází z komplexní analýzy Hamplové a Katrňáka (2018) nad daty ČSÚ a Eurostatu; v mezinárodním srovnání 23 zemí jde o druhý největší vzdělanostní rozdíl v naději dožití u mužů, hned za Maďarskem. U žen je rozdíl výrazně menší (kolem 5 let, 8. místo). Rozdíl se po roce 1989 rozevíral — vzdělanější skupiny získaly z prodlužování života víc než lidé se základním vzděláním. Trendové body (1999–2016) jsou orientační (origin = seed) a ilustrují doložený směr rozevírání; přesná souvislá oficiální roční řada podle vzdělání pro ČR neexistuje, hodnoty se zpřesní po napojení na úmrtnostní tabulky ČSÚ. Signál 'bad' odráží pozici na chvostu Evropy. Měří se period life expectancy, nikoli kohortní — jde o syntetický ukazatel úmrtnostních poměrů daného období.",
+  "limitations": "Neočištěný gradient — rozdíl zahrnuje vše, co s nižším vzděláním koreluje (rizikovější a fyzicky náročnější práce, kouření a alkohol, horší zdravotní gramotnost, pozdější kontakt se zdravotní péčí, koncentrace v deprivovaných regionech), nelze z něj izolovat „čistý“ vliv vzdělání. Vzdělanostní kategorie nejsou v čase stabilní — podíl mužů jen se základním vzděláním klesá, takže se mění i složení srovnávaných skupin. Period life expectancy předpokládá zachování současné úmrtnosti, nejde o predikci skutečné délky života konkrétního ročníku. Mezinárodní srovnání komplikují rozdílné věkové reference (věk 25 vs 30) a roky sběru.",
+  "determinants": "Struktura zaměstnání (fyzicky náročná a rizikovější manuální práce u mužů s nižším vzděláním), kumulace behaviorálních rizik (kouření, alkohol, nezdravá strava, nízká pohybová aktivita se silně váží na vzdělání), zdravotní gramotnost a pozdější vyhledání péče, regionální deprivace (Ústecký, Karlovarský, Moravskoslezský kraj), příjmová a bytová situace, chronický stres a horší přístup k prevenci. Vzdělání působí jako „kořenová“ determinanta, která předurčuje expozici většině ostatních rizik.",
+  "importance": "Sociální gradient úmrtnosti je jedním z nejtvrdších testů spravedlnosti zdravotního systému: ukazuje, že délka života v Česku není rozdána náhodně, ale systematicky podle sociální vrstvy. Třináctiletý rozdíl u mužů je obrovský — větší než dopad mnoha jednotlivých nemocí, na jejichž léčbu systém vynakládá miliardy. A na rozdíl od genetiky je z velké části předcházitelný: vzniká kumulací rizik, která veřejná politika umí ovlivnit. Indikátor proto patří mezi klíčové ukazatele dimenze spravedlnosti a měl by být referenčním bodem pro cílení prevence a regionální zdravotní politiky.",
+  "patient_story": "Josef je vyučený zámečník z Mostu. Dvaapadesát let, celý život u stroje, dvě směny, k tomu cigarety a pivo jako samozřejmá kulisa dne. K lékaři chodí, jen když „už to nejde\" — naposledy kvůli vysokému tlaku, který ignoroval roky. Jeho bývalý spolužák, který odešel na vysokou a dnes pracuje v kanceláři v Praze, má statisticky před sebou o víc než deset let života navíc. Ne proto, že by byl zdravější od narození. Ale proto, že jeho práce, návyky, prostředí i přístup k péči ho celý život táhly opačným směrem než Josefa.\n\nČísla to říkají bez obalu. Rozdíl v naději dožití mezi pětadvacetiletým mužem s vysokoškolským a se základním vzděláním je v Česku přibližně 13 let. Je to signál „bad\": v evropském srovnání 23 zemí jde o druhý největší vzdělanostní rozdíl u mužů — větší propast má jen Maďarsko (kolem 14 let). Země západní a severní Evropy se přitom běžně pohybují kolem 7 let. U žen je rozdíl menší, kolem pěti let, a po roce 1989 se nůžky navíc rozevíraly: z prodlužování života těžili vzdělanější rychleji než lidé se základním vzděláním.\n\nProč je propast tak velká? Vzdělání tu funguje jako kořenová příčina, pod kterou se schovává všechno ostatní. Muži s nižším vzděláním častěji pracují fyzicky náročně a rizikově, častěji kouří a pijí, mají horší zdravotní gramotnost a ke kontaktu s péčí se dostávají později a v horším stavu. K tomu se přidává regionální deprivace — Ústecko, Karlovarsko, Moravskoslezsko — kde se nižší vzdělání, chudoba i kratší život koncentrují na stejné mapě. Žádný z těchto faktorů sám propast nevytvoří; sečtené dávají třináct let.\n\nPolitická páka je v tom, že skoro nic z toho není osud. Stát ovládá daně a regulaci tabáku a alkoholu, jejichž zátěž dopadá nejvíc právě na nejníže vzdělané. Ovládá cílení prevence — screeningy a preventivní prohlídky lze aktivně nabízet tam, kde je záchyt nejhorší, místo aby je využívali hlavně ti, kdo je potřebují nejméně. Ovládá posílení primární a pracovní (závodní) péče v deprivovaných regionech a může vázat zdravotní politiku na politiku sociální a regionální. Kompetenci sdílí ministerstvo zdravotnictví, SZÚ, kraje a obce. Pro Josefa by to znamenalo rozdíl mezi systémem, který čeká, až přijde sám, a systémem, který za ním přijde dřív, než bude pozdě.",
+  "framework": "hspa",
+  "dimension": "spravedlnost"
+}
