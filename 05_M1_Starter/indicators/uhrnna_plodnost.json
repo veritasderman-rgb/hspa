@@ -1,0 +1,50 @@
+{
+  "id": "uhrnna_plodnost",
+  "name": "Úhrnná plodnost",
+  "area": "Struktury",
+  "domain": "Demografický kontext",
+  "subdomain": "Porodnost a plodnost",
+  "definition": "Úhrnná plodnost (total fertility rate, TFR) udává průměrný počet dětí, které by se narodily jedné ženě za předpokladu, že by po celé reprodukční období platily míry plodnosti daného kalendářního roku. V roce 2025 dosáhla v Česku hodnoty 1,28 dítěte na ženu — čtvrtý meziroční pokles v řadě a nejnižší úhrnná plodnost spojená s vůbec nejnižším absolutním počtem živě narozených (77,6 tis.) v historii statistického zjišťování od roku 1785. Hodnota tzv. záchovné plodnosti (prosté reprodukce populace bez migrace) je přibližně 2,1.",
+  "unit": "dětí na ženu",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "vital_statistics",
+      "endpoint": "https://csu.gov.cz/narozeni",
+      "dataset": "ČSÚ — Pohyb obyvatelstva (demografická statistika, běžná evidence narozených a obyvatelstva). Roční úhrnná plodnost a počet živě narozených; čtvrtletní rychlé informace pro průběžný rok.",
+      "dimensions": {
+        "country": "CZ",
+        "metric": "total fertility rate (úhrnná plodnost) + počet živě narozených",
+        "period": "kalendářní rok / čtvrtletí"
+      }
+    },
+    "fallback": {
+      "type": "eurostat_dataset",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/tps00199/default/table"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_dataset",
+    "code": "tps00199",
+    "dataset": "Eurostat — Total fertility rate. Průměr EU-27 dosáhl v roce 2024 hodnoty 1,34 dítěte na ženu (pokles z 1,38 v roce 2023, nejnižší úroveň od roku 2001). Pozor na rozdílný rok: česká hodnota 1,28 je za rok 2025, EU benchmark 1,34 je za rok 2024 (EU souhrn za 2025 zatím nepublikován). Ve stejném roce 2024 byla ČR (1,37) mírně NAD průměrem EU (1,34) — pokles porodnosti je celoevropský jev a Česko je uvnitř pelotonu, nově na jeho spodním okraji.",
+    "value": 1.34,
+    "year": 2024,
+    "url": "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20260306-1"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Český statistický úřad (ČSÚ) — Pohyb obyvatelstva / demografická statistika",
+    "Eurostat — Total fertility rate (tps00199)"
+  ],
+  "method_notes": "Úhrnná plodnost je transverzální (period) ukazatel — kombinuje plodnost žen různých generací v jednom roce a je citlivý na časování porodů (odklad i dohánění). Krátkodobý vrchol 1,83 v roce 2021 byl podle ČSÚ částečně artefaktem aktualizace početního stavu žen po sčítání lidu 2021; následný strmý pokles (2022 1,62; 2023 1,45; 2024 1,37; 2025 1,28) je proto třeba číst i v tomto světle, byť směr poklesu je jednoznačný a doložený absolutním propadem počtu narozených. Indikátor je demografický KONTEXT (vstupní veličina), nikoli ukazatel výkonnosti zdravotního systému — proto direction = context_dependent a signal = neutral. Jeho relevance pro HSPA je nepřímá, ale zásadní: méně narozených dnes znamená menší pracovní sílu a méně plátců veřejného zdravotního pojištění zítra, při současném růstu poptávky stárnoucí populace.",
+  "limitations": "TFR neměří konečnou (kohortní) plodnost skutečných generací žen — ta bývá vyšší než period TFR v obdobích odkládání porodů. Hodnota nevypovídá o příčinách (ekonomické, bytové, partnerské, hodnotové) ani o tom, kolik dětí si ženy nakonec přejí mít. Mezinárodní srovnání komplikuje rozdílný rok dostupnosti dat (ČR 2025 vs EU souhrn 2024). Hodnota je seed (origin: seed) převzatá z publikovaných ČSÚ a Eurostat výstupů a bude zpřesněna po napojení na živý ČSÚ/Eurostat dataset.",
+  "determinants": "Odklad rodičovství do vyššího věku (průměrný věk matky při prvním dítěti vzrostl na 29,2 roku), ekonomická a bytová nejistota, dostupnost bydlení, nejistota na trhu práce, partnerské a hodnotové změny, dopad pandemických a poté inflačních let. Regionálně nejnižší plodnost (pod 1,2) měly v roce 2025 Praha a Karlovarský kraj. Nejstrmější pokles nastal u žen 20–24 let (−38 %) a do 19 let (−34 %), tedy posun porodů do pozdějšího věku.",
+  "importance": "Porodnost je kořenová demografická vstupní veličina, která s desítky let trvajícím zpožděním určuje velikost pracovní síly ve zdravotnictví, počet plátců veřejného zdravotního pojištění i poptávku po pediatrické, porodnické a později geriatrické a dlouhodobé péči. Rok 2025 přinesl vůbec nejnižší počet živě narozených (77,6 tis.) za 240 let statistického zjišťování a přirozený úbytek −35,7 tis. — největší převahu zemřelých nad narozenými od roku 1919. Počet obyvatel rostl jen díky migraci. Pro udržitelnost financování a personálního zajištění zdravotního systému jde o jeden z nejdůležitějších kontextových ukazatelů, byť leží mimo přímou kontrolu resortu zdravotnictví.",
+  "patient_story": "V roce 2025 se v Česku narodilo 77,6 tisíce dětí — vůbec nejméně za 240 let, co se u nás vede statistika, tedy od roku 1785. Úhrnná plodnost klesla na 1,28 dítěte na ženu, počtvrté v řadě. Za pouhé čtyři roky tak porodnost spadla z 1,83 (2021) na 1,28 — o téměř třetinu. Zároveň zemřelo 113,3 tisíce lidí; přirozený úbytek −35,7 tisíce byl největší převahou úmrtí nad narozeními od roku 1919. Že počet obyvatel přesto mírně vzrostl, je výhradně zásluhou migrace (+42 tisíc).\n\nNa první pohled je to téma matrik a demografů, ne nemocnic. Jenže porodnost je vstup, který se zdravotnímu systému vrací se zpožděním a beze zbytku. Méně dětí dnes znamená za dvacet let méně sester, lékařů a plátců pojistného — právě ve chvíli, kdy nejsilnější poválečné ročníky vstoupí do věku nejvyšší spotřeby péče. Česko tak skládá dvě nůžky najednou: klesající základnu, která systém platí a obsluhuje, a rostoucí vrchol, který ho nejvíc potřebuje.\n\nKdyby plodnost roku 2025 přetrvala, zůstalo by podle ČSÚ bezdětných 38 procent žen. Nejde o český unikát — průměr EU klesl v roce 2024 také na rekordně nízkých 1,34 a v témže roce byla Česká republika (1,37) dokonce mírně nad ním. Příběh tedy není „Česko je nejhorší v Evropě\", ale „celá Evropa se propadá a Česko padá s ní, nově na spodním okraji\". Pro zdravotní systém je to kontext, který nezmění žádná úhradová vyhláška — ale který určí, kolik lidí bude za dvě dekády stát na obou stranách nemocničního lůžka.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
