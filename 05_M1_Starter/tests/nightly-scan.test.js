@@ -79,6 +79,23 @@ test('findIndicatorDrift: flaguje zastaralou citaci, mlčí u aktuální', async
   assert.equal(drifts[0].id, 'foo_ind');
 });
 
+test('findIndicatorDrift: ignoruje cross-link blok „Datový klíč" (article-databox)', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([['lekari_per_1000', { id: 'lekari_per_1000', value: 4.2, unit: '/1000', year: 2024 }]]);
+  // Databox: popisná věta s číslem v oblastním štítku / odkazu na zákon —
+  // NE citace hodnoty indikátoru → nesmí flagovat.
+  const databox = `
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=lekari_per_1000"><strong>Lékaři na 1 000 obyvatel</strong></a> — souhrnná hustota, propojení se zákonem 95/2004 Sb. (oblast: Struktury → Lidské zdroje)</li>
+      </ul>
+    </aside>`;
+  assert.equal(findIndicatorDrift(databox, byId).length, 0, 'databox je cross-link, ne citace');
+  // Tatáž zastaralá citace v těle článku (mimo databox) se ale flaguje dál.
+  const body = '<p>V krajích připadá průměrně 3,4 lékaře na 1 000 obyvatel — <a href="indicator.html?id=lekari_per_1000">detail</a>.</p>';
+  assert.equal(findIndicatorDrift(body, byId).length, 1, 'drift v těle článku zůstává');
+});
+
 test('findIndicatorDrift: bez čísel v okolí neflaguje (jen odkaz bez citace)', async () => {
   const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
   const byId = new Map([['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }]]);
