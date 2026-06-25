@@ -247,6 +247,47 @@ const MANIFEST = {
     claim: 'sebevražd na 100 tis. náctiletých (15–19) — o dvě třetiny nad EU.',
     context: 'Druhá nejčastější příčina úmrtí dospívajících. Trend roste.',
   },
+  'clanek-akutni-infarkt': {
+    kicker: 'Kvalita péče · kardio', signal: 'good',
+    stat: '5,2', statSuffix: '%',
+    claim: 'úmrtnost do 30 dní po infarktu v ČR — evropská špička.',
+    context: 'Průměr OECD 6,5 %. Kardiocentra drží celé Česko 24/7.',
+  },
+  'clanek-preventivni-prohlidka': {
+    kicker: 'Prevence · praktik', signal: 'warn',
+    stat: '48', statSuffix: '%', barPct: 48,
+    claim: 'dospělých jde na preventivní prohlídku v doporučených 2 letech.',
+    context: 'Druhá polovina ji vynechá — a každý na ni má nárok zdarma.',
+  },
+  'clanek-cmp-iktova-centra': {
+    kicker: 'Kvalita péče · neuro', signal: 'warn',
+    stat: '9,9', statSuffix: '%',
+    claim: 'nemocniční úmrtnost po cévní mozkové příhodě v ČR.',
+    context: 'Průměr OECD 7,7 %. Akutní léčbu máme, ztrácíme okolo ní.',
+  },
+  'clanek-hospitalizujeme-nejvic': {
+    kicker: 'Nemocniční péče · lůžka', signal: 'bad',
+    stat: '18', claim: 'tisíc hospitalizací na 100 tis. obyvatel — nejvíc v OECD.',
+    context: 'Průměr OECD 14 600. Nejvíc nemocnice-centric v Evropě.',
+  },
+  'clanek-mamograf-rakovina-prsu': {
+    kicker: 'Onkologie · screening', signal: 'warn',
+    stat: '60', statSuffix: '%', barPct: 60,
+    claim: 'žen 45–69 chodí na mamograf. Deset let se to nehýbe.',
+    context: 'Průměr OECD 68 %, cíl WHO ≥ 70 %.',
+  },
+  'clanek-cervix-hpv': {
+    kicker: 'Onkologie · HPV', signal: 'warn',
+    stat: '69,8', statSuffix: '%', barPct: 70,
+    claim: 'dívek je očkováno proti HPV (kohorta 13 let, 2023).',
+    context: 'OECD 75 %, EU 72 %, cíl WHO 90 % do 2030.',
+  },
+  'clanek-platba-z-kapsy': {
+    kicker: 'Financování · solidarita', signal: 'neutral',
+    stat: '14,6', statSuffix: '%',
+    claim: 'výdajů jde z kapsy pacientů (out-of-pocket), ČR 2023.',
+    context: 'Zhruba na průměru EU (~15 %), pod OECD (~18 %).',
+  },
 };
 
 function escapeXml(s) {
