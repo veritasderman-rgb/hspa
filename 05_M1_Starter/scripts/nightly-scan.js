@@ -119,11 +119,16 @@ export function valueVariants(value) {
  */
 export function findIndicatorDrift(htmlRaw, indicatorsById) {
   // Odstraň bloky, kde čísla nejsou citace hodnot indikátoru, ale popisky/roky
-  // u cross-link karet: „Příbuzné sekce" (article-related) a „Primární zdroje"
-  // (article-sources). Drift se má hlásit jen z těla článku.
+  // u cross-link karet: „Příbuzné sekce" (article-related), „Primární zdroje"
+  // (article-sources) a „Datový klíč: HSPA indikátory" (article-databox).
+  // Databox je seznam příbuzných indikátorů s popisnou větou a oblastním
+  // štítkem — čísla v něm (např. „140/90", „95/2004 Sb.", roky vakcinací
+  // „MMR (2022)") jsou popisky, ne citace hodnot. Drift se má hlásit jen
+  // z těla článku.
   const html = htmlRaw
     .replace(/<(aside|section)\b[^>]*class="[^"]*article-related[^"]*"[\s\S]*?<\/\1>/gi, '')
-    .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '');
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '')
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-databox[^"]*"[\s\S]*?<\/\1>/gi, '');
   const drifts = [];
   const re = /indicator\.html\?id=([a-z0-9_]+)/g;
   const seen = new Set();
