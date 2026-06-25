@@ -1,0 +1,54 @@
+{
+  "id": "zdravotni_gramotnost_omezena",
+  "name": "Omezená zdravotní gramotnost dospělých",
+  "area": "Struktury",
+  "domain": "Sociální determinanty zdraví",
+  "subdomain": "Zdravotní gramotnost",
+  "definition": "Podíl dospělých (18+), kteří mají omezenou obecnou zdravotní gramotnost — tedy součet kategorií „nedostatečná\" a „problematická\" na škále indexu obecné zdravotní gramotnosti HLS19 (M-POHL / WHO). Zdravotní gramotnost je schopnost najít, porozumět, posoudit a použít informace o zdraví při rozhodování o péči, prevenci a podpoře zdraví. Měřeno dotazníkem HLS19 (česká vlna HLS19-CZ, sběr SZÚ na konci roku 2020).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "population_survey",
+      "format": "survey_report",
+      "endpoint": "https://szu.gov.cz/publikace/zdravotni-gramotnost/",
+      "dataset": "HLS19-CZ — Šetření zdravotní gramotnosti dospělé populace ČR 2020 (Státní zdravotní ústav, M-POHL / WHO Action Network on Measuring Population and Organizational Health Literacy)",
+      "dimensions": {
+        "age_range": "18+",
+        "country": "CZ",
+        "instrument": "HLS19 (HLS-EU-Q47 / Q12)",
+        "breakdowns": "věk, pohlaví, vzdělání, příjem, ekonomická aktivita"
+      },
+      "note": "Index obecné zdravotní gramotnosti se dělí na 4 pásma: nedostatečná (0–25), problematická (>25–33), dostatečná (>33–42), excelentní (>42–50). „Omezená\" = nedostatečná + problematická. Pro ČR 2020: nedostatečná 13 %, problematická 34 % → omezená 47 %."
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.nzip.cz/clanek/226-zdravotni-gramotnost",
+      "note": "NZIP (ÚZIS/MZČR) shrnuje výsledky HLS-EU 2015 i HLS19 2020 pro ČR — vhodné jako lidsky čitelný cross-check."
+    }
+  },
+  "benchmark_source": {
+    "type": "m_pohl_hls19",
+    "code": "HLS19_GENERAL_HL_LIMITED",
+    "dataset": "HLS19 (2019–2021) M-POHL — mezinárodní zpráva, 17 zúčastněných zemí. Evropský průměr omezené obecné zdravotní gramotnosti ≈ 46 %, rozpětí napříč zeměmi cca 25–72 %. Česko se umístilo na 9. místě ze 17 zemí — přibližně na evropském průměru. Nejhorší velká země Německo (omezená HL ≈ 59 %); ze sousedů má vyšší podíl nedostatečné HL Slovensko (23 %) a Německo (24 %), nižší Rakousko (4 %) a Slovinsko (7 %) oproti ČR (13 %).",
+    "value": 46,
+    "url": "https://m-pohl.net/HLS19"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "approx_5y",
+  "stewards": [
+    "Státní zdravotní ústav (SZÚ) — Centrum podpory veřejného zdraví",
+    "M-POHL (WHO Action Network on Measuring Population and Organizational Health Literacy)",
+    "Ministerstvo zdravotnictví ČR — Zdraví 2030"
+  ],
+  "method_notes": "Indikátor vychází z mezinárodně standardizovaného nástroje HLS19, který v ČR realizoval SZÚ (sběr na konci roku 2020, reprezentativní vzorek dospělých 18+). Hodnota = podíl osob s omezenou (nedostatečnou + problematickou) obecnou zdravotní gramotností. Časová řada má dvě národní vlny: HLS-EU 2015 (omezená HL 59 %: nedostatečná 19 % + problematická 40 %) a HLS19 2020 (omezená HL 47 %). Pokles o 12 procentních bodů autoři zčásti připisují pandemii covid-19, která populaci přiměla aktivně vyhledávat informace o zdraví; výrazné zlepšení nastalo zejména u seniorů. Indikátor je strukturní determinanta — neměří kvalitu péče, ale schopnost populace se v systému orientovat, což ovlivňuje prevenci, adherenci, využití péče i nerovnosti.",
+  "limitations": "(1) Self-report — měří subjektivně vnímanou obtížnost, ne testovanou znalost. (2) Jen dvě srovnatelné národní vlny (2015, 2020), takže trend je orientační a citlivý na mimořádné vlivy (covid-19). (3) HLS19 a HLS-EU používají blízké, ale ne identické verze nástroje (Q47/Q12), proto je meziroční srovnání nutné brát jako řádové. (4) Mezinárodní srovnání je oslabeno rozdíly ve sběru a verzích dotazníku mezi zeměmi. (5) Krajský/okresní rozpad není standardně publikován — k dispozici jsou členění podle věku, vzdělání, příjmu a ekonomické aktivity.",
+  "determinants": "Omezená zdravotní gramotnost se silně koncentruje podle sociálního gradientu — vyšší je u lidí s nižším vzděláním, nižším příjmem, u seniorů a u osob s chronickým onemocněním. **Vstupní** determinanty jsou vzdělanostní a sociální (škola, rodinné zázemí, digitální dovednosti). **Systémové** determinanty leží na straně zdravotnictví: srozumitelnost komunikace lékařů, čitelnost příbalových letáků a webů institucí, navigovatelnost systému (kam jít, na co mám nárok), kvalita pacientského portálu a oficiálních informačních zdrojů (NZIP). Země s nižší omezenou HL (Rakousko, severní Evropa) investovaly do „health-literate\" organizací — standardů srozumitelné komunikace v nemocnicích a u praktiků. **Reformní rámec ČR**: Zdraví 2030 (Strategický rámec rozvoje péče o zdraví v ČR do roku 2030) má zvyšování zdravotní gramotnosti jako samostatný cíl; navazuje na Akční plán č. 12 „Rozvoj zdravotní gramotnosti\" (2015–2020).",
+  "importance": "Zdravotní gramotnost je v HSPA a OECD frameworku uznávaný systémový enabler — předurčuje, zda populace dokáže prevenci, screening a léčbu reálně využít. Nízká zdravotní gramotnost je opakovaně spojena s pozdějším záchytem nemocí, horší adherencí, vyšší utilizací akutní a nemocniční péče a horšími výsledky — a v ČR se navíc koncentruje u stejných skupin, které mají i kratší naději dožití a vyšší riziko chudoby. Indikátor proto patří do dimenze spravedlnosti: ukazuje, jak velká část dospělých je v nevýhodě už na vstupu do systému. Hodnota 47 % (2020) řadí Česko přibližně na evropský průměr (≈ 46 %), tedy 9. místo ze 17 zemí HLS19 — zlepšení oproti 59 % v roce 2015, ale stále téměř polovina dospělých má s orientací ve zdraví potíže. Signál je nastaven proti evropskému průměru (good ±2, warn ±5 %): aktuální hodnota je těsně nad průměrem → warn.",
+  "patient_story": "Paní Věra (68, Ústí nad Labem) dostane po hospitalizaci se srdcem propouštěcí zprávu a pět krabiček léků. Doma zjistí, že nerozumí, který lék je „na ředění krve\", co znamená „užívat à 12 hodin\" a proč má jeden vysadit před odběry. Zavolat lékaři se stydí. Není sama: podle šetření HLS19, které v Česku realizoval Státní zdravotní ústav, má 47 % dospělých omezenou zdravotní gramotnost — tedy potíže najít, pochopit, posoudit nebo použít informace o vlastním zdraví.\n\nČíslo 47 % staví Česko zhruba na evropský průměr (≈ 46 %), konkrétně na 9. místo ze 17 zemí evropského šetření HLS19. Signál je proto warn, ne bad — ale absolutní úroveň je vysoká: skoro každý druhý dospělý je v nevýhodě už na vstupu do systému. Trend je přitom pozitivní: v roce 2015 mělo omezenou gramotnost 59 % dospělých, do roku 2020 podíl klesl na 47 %. Část zlepšení autoři připisují pandemii covid-19, která lidi přiměla informace o zdraví aktivně vyhledávat, nejvíc se zlepšili senioři.\n\nProč je hodnota právě taková, vysvětluje sociální gradient. Omezená gramotnost se nerozkládá náhodně — koncentruje se u lidí s nižším vzděláním, nižším příjmem, u seniorů a chronicky nemocných, tedy přesně tam, kde už je kratší naděje dožití a vyšší riziko chudoby. Na straně systému ji zhoršuje nesrozumitelná komunikace: příbalové letáky, weby institucí, propouštěcí zprávy a neprůhledná navigace „kam jít a na co mám nárok\". Země, které jsou na tom lépe (Rakousko, severní Evropa), investovaly do tzv. zdravotně gramotných organizací — standardů srozumitelného mluvení a psaní v nemocnicích i u praktiků.\n\nPolitická páka existuje a je pojmenovaná. Strategický rámec Zdraví 2030 má zvyšování zdravotní gramotnosti jako samostatný cíl a navazuje na Akční plán č. 12 z let 2015–2020. Konkrétní kroky leží v rukou ministerstva zdravotnictví, SZÚ a poskytovatelů: srozumitelné propouštěcí zprávy a příbalové informace, kvalitní a důvěryhodný oficiální portál (NZIP), trénink komunikace pro lékaře a sestry a cílené programy pro skupiny s nejnižší gramotností. Pro paní Věru by to znamenalo jediné — odejít z nemocnice s návodem, kterému rozumí, a ne s pěti krabičkami a otazníkem.",
+  "framework": "monitoring",
+  "dimension": "spravedlnost"
+}
