@@ -21,7 +21,7 @@ slot 2026-07-03).
 | # | Zdroj | URL | Stav | Nález |
 |---|---|---|---|---|
 | 1 | **ÚZIS — aktuality** | uzis.cz/index.php?pg=aktuality | ✅ 200 | Nejnovější stále **15. 6.** (NRPATV číselník toxikologie — salbutamol + synt. kanabinoidy; registrová údržba). 10. 6. čestné členství (personální). **Žádná nová datová vlna od 24. 6.** |
-| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | **NOVÉ 24. 6.**: „Elektronizace zdravotnictví pokračuje…" — novela zákona o elektronizaci dokončila meziresortní řízení (eŽádanky povinné od 1. 7. 2027); systém centralizace lab. výsledků (282 laboratoří, > 405 mil. výsledků, 28 skupin vyšetření, data od 2020); veřejný přístup přes eZdraví + app EZKarta konec srpna 2026; vazba na EHDS. Viz „Posouzení triggeru" níže. |
+| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | **NOVÉ 24. 6.**: „Elektronizace zdravotnictví pokračuje…" — novela zákona o elektronizaci prošla vnitroresortním připomínkovým řízením (před meziresortním řízením a předložením vládě) (eŽádanky povinné od 1. 7. 2027); systém centralizace lab. výsledků (282 laboratoří, > 405 mil. výsledků, 28 skupin vyšetření, data od 2020); veřejný přístup přes eZdraví + app EZKarta konec srpna 2026; vazba na EHDS. Viz „Posouzení triggeru" níže. |
 | 3 | **ČSÚ — aktuality** | csu.gov.cz/aktuality | ✅ 200 | 24. 6. konjunkturální průzkumy; 23. 6. kriminalita 2025; 16. 6. Demografie 2/2026 (journal). **Žádná nová indikátorová/mortalitní/EHIS vlna** (výdaje na zdravotní péči 2024 = 11. 6., už zpracováno dříve). |
 | 4 | **SZÚ — aktuality** | szu.gov.cz/aktuality/ | ✅ 200 | Položky 18.–25. 6. jsou sezónní/sekundární mediální výstupy (vedra, klíšťata, repelenty, STI rozhovor, pitný režim). **Žádná nová primární surveillance vlna.** |
 | 5 | **OECD / Eurostat / WHO** | oecd.org, ec.europa.eu/eurostat | ✅ search | Nejnovější ucelená vlna = Health at a Glance 2025 (13. 11. 2025) + Country Health Profile Czechia 2025, oba v korpusu. **Žádná edice „2026", žádná nová `hlth_*` vlna s ČR-implikací.** |
@@ -32,8 +32,10 @@ slot 2026-07-03).
 ## Posouzení triggeru — MZ ČR eZdraví TZ z 24. 6. 2026
 
 Fetch oficiální TZ (mzd.gov.cz, primární kanál ministerstva) potvrdil:
-**novela zákona o elektronizaci zdravotnictví dokončila meziresortní připomínkové
-řízení**, povinné eŽádanky od **1. 7. 2027**, povinné vedení elektronické
+**novela zákona o elektronizaci zdravotnictví prošla vnitroresortním
+připomínkovým řízením** (TZ: „již prošla vnitroresortním připomínkovým řízením;
+po vypořádání meziresortního … bude předložen vládě"), povinné eŽádanky od
+**1. 7. 2027**, povinné vedení elektronické
 zdravotní dokumentace, registrované výměnné sítě, sdílený zdravotní záznam;
 systém centralizace laboratorních výsledků (**282 laboratoří, > 405 mil.
 výsledků, 28 skupin vyšetření, data od 2020**), veřejný přístup přes portál
@@ -44,8 +46,9 @@ eZdraví + app **EZKarta** konec srpna 2026; cíl = soulad s EHDS.
    včetně přímo `clanek-novela-elektronizace-2026` (zákon 236/2025 Sb.),
    `clanek-ezkarta-ehealth`, `clanek-ehds-evropsky-prostor-zdravotni-data`,
    `clanek-digi-1…5`, `clanek-ncez-financovani-2027`, `clanek-datova-patere-lock-in`.
-2. **Legislativní akt zatím neexistuje** — novela jen dokončila meziresortní
-   řízení; **není ve Sbírce, není sněmovní tisk, nemá č./rok Sb.** Psát nový
+2. **Legislativní akt zatím neexistuje** — novela jen prošla vnitroresortním
+   připomínkovým řízením (meziresortní řízení a předložení vládě teprve čekají);
+   **není ve Sbírce, není sněmovní tisk, nemá č./rok Sb.** Psát nový
    článek o neschváleném návrhu = porušení železného pravidla (legislativa
    vyžaduje č./rok Sb. nebo č. tisku).
 3. **Fronta drží 16 draftů** → 17. tenký článek = „zbytečná změna".
@@ -62,7 +65,7 @@ nikoliv jako nový článek.
 ## Nové legislativní normy / sněmovní tisky
 
 - Bez strojově ověřeného **schváleného** normativního aktu v gesci MZ ČR k 26. 6.
-  Novela elektronizace = teprve po meziresortním řízení (forward-looking, nikoli
+  Novela elektronizace = teprve po vnitroresortním řízení, před meziresortním řízením (forward-looking, nikoli
   platná norma).
 
 ## Aktualizace existujících dat / dění (vlna)
