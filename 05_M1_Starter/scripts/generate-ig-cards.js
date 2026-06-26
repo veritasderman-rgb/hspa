@@ -288,6 +288,36 @@ const MANIFEST = {
     claim: 'výdajů jde z kapsy pacientů (out-of-pocket), ČR 2023.',
     context: 'Zhruba na průměru EU (~15 %), pod OECD (~18 %).',
   },
+  'clanek-lecitelna-mortalita': {
+    kicker: 'Výsledky · kvalita léčby', signal: 'bad',
+    stat: '107,2',
+    claim: 'léčitelných úmrtí na 100 tis. obyvatel ročně (2023).',
+    context: 'O čtvrtinu nad EU27 (86,8). Měří, co umí vyléčit samotný systém.',
+  },
+  'clanek-generika-biosimilars-uspora': {
+    kicker: 'Financování · léky', signal: 'good',
+    stat: '62,8', statSuffix: '%', barPct: 63,
+    claim: 'objemu spotřebovaných léků tvoří generika — nad OECD (56 %).',
+    context: 'Na penězích ale jen 19,5 % a podíl od roku 2010 klesá.',
+  },
+  'clanek-gender-pay-gap-zdravotnictvi': {
+    kicker: 'Pracovní síla · odměňování', signal: 'bad',
+    stat: '24,9', statSuffix: '%', barPct: 25,
+    claim: 'o tolik míň vydělají ženy za hodinu než muži ve zdravotnictví a sociální péči.',
+    context: 'Pátá nejvyšší propast v EU/EEA — a od roku 2021 se znovu rozevírá.',
+  },
+  'clanek-medikalizace-verejneho-zdravi': {
+    kicker: 'Veřejné zdraví · koncept',
+    headline: 'Veřejné zdraví není ambulance. Když z prevence uděláme diagnózu, léčíme následky místo příčin.',
+  },
+  'clanek-ai-zdravotnictvi-1-vstricnost': {
+    kicker: 'Digitalizace · AI (1/2)',
+    headline: 'Největší přínos AI v medicíně dnes není diagnóza, ale vrácený čas lékaře.',
+  },
+  'clanek-ai-zdravotnictvi-2-lecba': {
+    kicker: 'Digitalizace · AI (2/2)',
+    headline: 'AI už čte mamografy na úrovni lékaře. V objevu antibiotik zatím slibuje víc, než dokázala.',
+  },
 };
 
 function escapeXml(s) {
