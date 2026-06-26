@@ -1,0 +1,57 @@
+{
+  "id": "katastroficke_vydaje_zdravi",
+  "name": "Katastrofické výdaje na zdraví (domácnosti)",
+  "area": "Výsledky",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Finanční ochrana",
+  "definition": "Podíl domácností, jejichž přímé platby za zdravotní péči (out-of-pocket) překračují 40 % jejich kapacity k platbě — tj. spotřeby domácnosti po odečtení standardní částky na základní potřeby (jídlo, bydlení, energie). Metodika WHO/Europe (Barcelonská kancelář), data z Šetření o rodinných účtech (ČSÚ). Liší se od indikátoru podílu OOP na celkových výdajích (platba_z_kapsy_pct): nesleduje makropodíl, ale počet domácností, které kvůli zdravotním platbám nemohou pokrýt základní potřeby.",
+  "unit": "% domácností",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "report",
+      "endpoint": "https://www.who.int/europe/publications/i/item/9789289062244",
+      "dataset": "WHO/Europe — Can people afford to pay for health care? New evidence on financial protection in Czechia (2025), na datech Šetření o rodinných účtech ČSÚ 2017–2023",
+      "dimensions": {
+        "country": "CZ",
+        "unit": "households",
+        "threshold": "OOP > 40 % capacity to pay",
+        "breakdown": "income_quintile"
+      }
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.who.int/europe/news/item/30-09-2025-who-europe-report-outlines-steps-to-protect-households-in-czechia-from-increasing-out-of-pocket-payments-for-health-care"
+    }
+  },
+  "benchmark_source": {
+    "type": "report",
+    "code": "uhcfp_4",
+    "dataset": "WHO/Europe Barcelona Office — medián 40 evropských zemí (Lancet Reg Health Eur 2024, „Monitoring progress towards universal health coverage in Europe\"). Stejná metodika (OOP > 40 % kapacity k platbě). Medián = 6 %, rozsah <1 % až 20 %; v nejchudší pětině je incidence zpravidla 2–4× vyšší než národní úroveň. Není to harmonizovaná řada Eurostatu, ale srovnatelný cross-country monitoring WHO.",
+    "value": 6,
+    "url": "https://www.thelancet.com/journals/lanepe/article/PIIS2666-7762(23)00245-4/fulltext"
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 10
+  },
+  "frequency": "biennial",
+  "stewards": [
+    "WHO Regional Office for Europe — Barcelona Office for Health Systems Financing",
+    "ČSÚ (Šetření o rodinných účtech)",
+    "MZ ČR (úhradová politika, ochranný limit doplatků)"
+  ],
+  "method_notes": "WHO/Europe report (zveřejněn 30. 9. 2025) uvádí, že v roce 2023 zažilo katastrofické zdravotní výdaje zhruba 6 % českých domácností (cca 600 000 lidí). V nejchudší pětině domácností to bylo 21 % (oproti 14 % v roce 2018) — tedy 3,5× národní úroveň, v souladu s pravidlem WHO „2–4× národní úroveň\" pro nejchudší kvintil. Hlavním tahounem v nejchudších domácnostech jsou doplatky na ambulantní léky; ve vyšších příjmových skupinách stomatologická péče následovaná léky. ČR (6 %) leží přesně na mediánu 40 sledovaných evropských zemí — nikoli pod EU, jak se někdy zjednodušuje. Signál „warn\": hodnota sice odpovídá evropskému mediánu, ale trajektorie roste a zátěž je silně regresivní (nejchudší pětina 21 %). Mezilehlé body časové řady pro všechny domácnosti (2018, 2021) jsou odvozené z dokumentované rostoucí trajektorie a z poměru k nejchudší pětině; ukotvený a primárně ověřený bod je rok 2023 (≈6 %).",
+  "limitations": "Otevřená tisková zpráva WHO/Europe uvádí jen headline pro rok 2023 (≈6 %) a hodnoty nejchudší pětiny (14 % → 21 %, 2018→2023); plná roční řada pro všechny domácnosti je ve full reportu (data Šetření o rodinných účtech ČSÚ 2017–2023). Mezilehlé národní body (2018 ≈ 4,5 %, 2021 ≈ 5,2 %) jsou orientační odhady z dokumentované trajektorie a poměru ke kvintilové incidenci, dokud nebude strojově dohledán plný report. Metodika WHO (kapacita k platbě) se liší od jednoduššího prahu 10 % příjmu, který dává nižší hodnoty. Šetření o rodinných účtech podchycuje malé domácnosti a nezachycuje neformální platby — skutečná zátěž může být vyšší.",
+  "determinants": [
+    "Vysoké doplatky na ambulantní léky (zejména přípravky bez generického substitutu)",
+    "Slabě hrazená stomatologická péče (moderní výplně, korunky, implantáty, hygiena)",
+    "Nastavení a valorizace ročního ochranného limitu doplatků (§ 16b z. 48/1997 Sb.)",
+    "Příjmová chudoba a polypragmazie u seniorů (kumulace doplatkových léků)",
+    "Absence stropů spoluúčasti pro nízkopříjmové domácnosti mimo ochranný limit léků"
+  ],
+  "importance": "Finanční ochrana je jedním z jádrových cílů hodnocení výkonnosti zdravotního systému (WHO/OECD HSPA) a UHC. Indikátor ukazuje, kolik domácností kvůli zdravotním platbám nemůže pokrýt jídlo, bydlení a energie — to, co makropodíl OOP (platba_z_kapsy_pct) neukáže. Rostoucí trend a koncentrace v nejchudší pětině jsou varováním o erozi solidarity, na kterou existuje konkrétní politická páka (doplatky, ochranný limit, stomatologie).",
+  "patient_story": "Paní Hedvika, jednasedmdesát let, žije sama v panelovém bytě na Bruntálsku. Vdovský důchod má pod patnáct tisíc. Bere léky na vysoký tlak, cukrovku, ředění krve a štítnou žlázu — pět krabiček měsíčně, z toho tři s doplatkem. Když k tomu na jaře přibyla zubní korunka za sedm tisíc, kterou pojišťovna nehradí, vyšla částka za zdraví na víc než dvě pětiny toho, co jí po zaplacení nájmu a energií zbyde. To je přesně práh, kterým WHO definuje katastrofický zdravotní výdaj. Paní Hedvika není výjimka — patří mezi 6 % českých domácností, zhruba 600 000 lidí, které takovou situaci zažily v roce 2023.\n\nNa první pohled to není špatné číslo. Šest procent je přesně medián čtyřiceti evropských zemí, které WHO sleduje stejnou metodikou — Česko leží uprostřed, ne na chvostu. Jenže průměr klame. V nejchudší pětině domácností, kam paní Hedvika patří, zažilo katastrofické výdaje 21 procent — tedy více než třikrát víc než celostátní úroveň, a oproti roku 2018, kdy to bylo 14 procent, výrazný nárůst. Zátěž se nerozkládá rovnoměrně; dopadá na ty, kdo mají nejméně.\n\nProč zrovna na ně? V nejchudších domácnostech táhnou katastrofické výdaje hlavně doplatky na ambulantní léky; ve středních příjmech pak zubní péče, kterou veřejné pojištění hradí jen na základní úrovni. Roční ochranný limit doplatků na léky (§ 16b zákona o veřejném zdravotním pojištění) sice existuje a seniory chrání, ale jeho výše nestačí držet krok s polypragmazií a inflací a stomatologie pod něj vůbec nespadá. Senioři s nízkým důchodem a několika chronickými diagnózami tak narážejí na strop rodinného rozpočtu dřív, než je systém zachytí.\n\nPáka je přitom konkrétní a leží na stole MZ ČR i pojišťoven. WHO/Europe doporučuje tři kroky: snížit nebo zacílit doplatky na léky pro nízkopříjmové (rozšířit výjimky), valorizovat a věkově odstupňovat ochranný limit a rozšířit hrazenou stomatologickou péči u dětí i dospělých. Žádný z nich nemění solidární charakter systému — jde o nastavení parametrů tak, aby chránil ty, kdo solidaritu nejvíc potřebují. Pro paní Hedviku by to znamenalo, že příští korunka nebo třetí doplatkový lék nebude volbou mezi zdravím a teplem v bytě.",
+  "framework": "hspa",
+  "dimension": "spravedlnost"
+}
