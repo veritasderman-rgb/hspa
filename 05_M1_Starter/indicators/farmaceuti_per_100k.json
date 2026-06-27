@@ -1,0 +1,49 @@
+{
+  "id": "farmaceuti_per_100k",
+  "name": "Praktikující farmaceuti / 100 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Současné kapacity",
+  "definition": "Počet praktikujících farmaceutů (lékárníků) na 100 000 obyvatel. Zahrnuje farmaceuty v aktivní praxi ve veřejných i nemocničních lékárnách (head count, resp. přepočtené úvazky dle metodiky). Odpovídá definici OECD/Eurostat „practising pharmacists\" (ISCO-08 2262).",
+  "unit": "/ 100 000",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "endpoint": "https://www.oecd.org/en/data/indicators/pharmacists.html",
+      "dataset": "OECD Health Statistics 2025 — Pharmacists (practising), density per 100 000",
+      "dimensions": {
+        "country": "CZE",
+        "measure": "practising_pharmacists",
+        "unit": "per_100000_population"
+      }
+    },
+    "fallback": {
+      "type": "eurostat",
+      "code": "hlth_rs_prs1",
+      "note": "Eurostat — Health personnel, isco08=OC2262 (pharmacists), unit=P_HTHAB (per hundred thousand inhabitants). Národní headcount lékárenského personálu publikuje ÚZIS v ročence „Lékárenská péče\" (výkaz A 080) a Národní registr zdravotnických pracovníků."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "PHARMACISTS_DENSITY",
+    "dataset": "OECD Health at a Glance 2025 — Czechia country note (practising pharmacists per 100 000)",
+    "value": 86,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-2025_15a55280-en/czechia_3f532d88-en.html"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS (NRZP, ročenka Lékárenská péče)",
+    "OECD Health Statistics",
+    "Eurostat"
+  ],
+  "method_notes": "Hodnota 76 / 100 000 (2023) pochází z OECD Health at a Glance 2025 (country note Czechia), kde je OECD průměr 86. Eurostat (hlth_rs_prs1, ISCO-08 2262) udává konzistentní rostoucí řadu: 66,7 (2010) → 70,6 (2015) → 73,0 (2019) → 73,1 (2020); bod 2023 ≈ 76 (OECD) navazuje na trajektorii. ČR je dlouhodobě pod OECD průměrem (86) i pod všemi čtyřmi sousedy: Rakousko 109, Polsko 92, Německo 84, Slovensko 80 (Eurostat, 2019–2021). Signál je nastaven na „warn\", nikoli „bad\": přístupnost lékárenské sítě je v ČR naopak vysoká (2 735 lékáren a OOVL, 2,37 lékárny na 10 000 obyvatel — viz lekarny_per_100k), takže deficit není v dostupnosti výdejny, ale v personální intenzitě a v podrozvinuté roli klinické farmacie. ÚZIS (Lékárenská péče 2021) vykázal 6 750 farmaceutů v přepočtených úvazcích v lékárnách (5 781 veřejné + 969 nemocniční).",
+  "limitations": "Definice se mírně liší podle zdroje. OECD/Eurostat „practising pharmacists\" zahrnují všechny farmaceuty v aktivní praxi (lékárny, nemocnice i část mimo výdejní provoz); ÚZIS výkaz A 080 počítá personál lékáren v přepočtených úvazcích, proto je národní headcount lékáren (≈ 6 750 FTE, 2021) nižší než implikovaný počet z OECD hustoty (≈ 8 000). Indikátor neukazuje regionální rozložení (Karlovarský a Liberecký kraj mají strukturálně nejméně personálu), generační skladbu ani podíl klinických farmaceutů u lůžka. Bod 2023 je z OECD; mezilehlé body řady jsou Eurostat — obě řady sledují tutéž definici a v překryvných letech se shodují v řádu desetin.",
+  "patient_story": "Karlovy Vary, sobotní dopoledne. Magistra Lenka Horáková (44) je ve veřejné lékárně sama — druhá farmaceutka je na mateřské a třetí místo se nedaří obsadit půl roku. Fronta u okénka, telefon zvoní, na stole čeká příprava individuálně připravovaného léku a pacient s sedmi krabičkami, kterému by ráda zkontrolovala interakce. Na klidnou konzultaci, kterou by v Rakousku či Německu farmaceut běžně poskytl, nezbývá čas. Karlovarský kraj má podle ÚZIS dlouhodobě nejnižší personální obsazení lékáren v zemi.\n\nČeská republika má 76 praktikujících farmaceutů na 100 000 obyvatel (OECD Health at a Glance 2025, 2023). To je pod průměrem OECD, který činí 86, a zároveň pod všemi čtyřmi sousedy: Rakousko má 109, Polsko 92, Německo 84 a Slovensko 80 (Eurostat). Hustota přitom dlouhodobě roste — z 66,7 v roce 2010 na dnešních 76 — ale tempo nestačí dohánět region. Paradox je v tom, že lékáren má Česko nadbytek: přes 2 700 výdejních míst, 2,37 lékárny na 10 000 obyvatel, jedna z nejhustších sítí v Evropě. Hodně malých lékáren, tence personálně obsazených.\n\nStrukturálně jde o důsledek modelu, který odměňuje výdej krabičky, ne odbornou práci farmaceuta. Úhrada lékárenské péče stojí na marži z obratu a na taxe laborum; klinická farmacie — kontrola polypragmazie u seniorů, deprescribing, konziliární služba u lůžka, očkování v lékárně — je v Česku buď nehrazená, nebo okrajová. Mladí absolventi farmacie proto často odcházejí do průmyslu, distribuce nebo do zahraničí; venkovské a pohraniční lékárny stárnou a shánějí personál marně. Výsledkem je síť, která dobře vydává, ale málo radí.\n\nPolitická páka je v rukou MZ ČR, zdravotních pojišťoven a SÚKL. Za prvé: zavést a uhradit klinicko-farmaceutické výkony (medikační review u polymorbidních seniorů, deprescribing), jak to dělá britský NHS i německý model „Medikationsanalyse\". Za druhé: umožnit a hradit očkování v lékárně, čímž se uvolní kapacita praktiků a zvýší atraktivita profese. Za třetí: cílená podpora personálu v deficitních krajích (Karlovarský, Liberecký, Ústecký) — rezidenční místa a příplatky obdobně jako u lékařů. Bez posílení role farmaceuta zůstane 76 na 100 000 jen statistikou, za kterou se skrývá nevyužitý odborník v první linii dostupnosti péče.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
