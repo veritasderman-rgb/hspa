@@ -50,11 +50,14 @@ export function extractObory(item) {
     item?.specializace,
     item?.oddeleni?.map?.(o => o?.obor ?? o?.specializace),
     item?.druh_pece,
-    item?.ZZ_obor_pece,   // open-data CSV: obor péče místa poskytování
+    // open-data CSV: ZZ_obor_pece bývá čárkou oddělený seznam více oborů
+    // (~15 % řádků, např. „Klinický psycholog, psychiatrie") → rozdělit,
+    // aby se počítaly jednotlivé obory, ne syntetický slepenec „A, B".
+    item?.ZZ_obor_pece?.split(','),
   ].filter(Boolean).flat();
 
   const list = candidates
-    .map(v => (typeof v === 'string' ? v : v?.nazev ?? v?.kod ?? null))
+    .map(v => (typeof v === 'string' ? v.trim() : v?.nazev ?? v?.kod ?? null))
     .filter(Boolean);
 
   return list.length ? Array.from(new Set(list.map(String))) : ['nezarazeno'];

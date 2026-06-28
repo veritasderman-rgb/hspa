@@ -63,6 +63,11 @@ test('extractKraj/extractObory: rozumí sloupcům open-data CSV (ZZ_*)', () => {
   const row = { ZZ_kraj_nazev: 'Středočeský kraj', ZZ_kraj_kod: 'CZ020', ZZ_obor_pece: 'chirurgie' };
   assert.deepEqual(extractKraj(row), { code: 'CZ020', name: 'Středočeský kraj' });
   assert.deepEqual(extractObory(row), ['chirurgie']);
+  // ZZ_obor_pece bývá čárkou oddělený seznam → rozdělit a otrimovat na jednotlivé obory
+  assert.deepEqual(
+    extractObory({ ZZ_obor_pece: 'Klinický psycholog, psychiatrie' }),
+    ['Klinický psycholog', 'psychiatrie'],
+  );
 });
 
 test('aggregateProviders: spočítá kraje, obory a pivot kraj×obor', () => {
