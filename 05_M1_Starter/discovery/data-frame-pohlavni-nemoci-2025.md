@@ -46,13 +46,13 @@ data 1994–2025, aktualizace 17. 2. 2026). Agregováno skriptem (sčítání
   nearly double" (publ. **21. 5. 2026**), EU/EEA **2024**:
   - chlamydie 213 443, kapavka 106 331, syfilis 45 577, LGV 3 490.
   - **vrozená syfilis 140 (z 78 v 2023, ze 14 zemí) — near-doubling**.
-  - Kapavka EU/EEA crude rate 2023 = **25,0/100 tis.** (+321 % 2014–2023).
+  - Kapavka EU/EEA crude rate **2024 = 26,9/100 tis.** (106 331 případů, 28 zemí, nejvyšší od 2009, +4,3 % vs 2023; ECDC Gonorrhoea AER for 2024). [2023 = 25,0/100 tis.]
   - Nejzasaženější: muži mající sex s muži (MSM); rostoucí syfilis u žen
     v reprodukčním věku → přímá vazba na vrozenou syfilis.
 - **Caveat:** národní registr ČR (povinné hlášení všech forem) vs ECDC EU/EEA
   notifikace; roky se liší (ČR 2025 vs ECDC 2024/2023). Srovnání kvalitativní
   (řádová úroveň + směr trendu), ne přesné pořadí. ČR kapavka 24,4/100 tis. (2025)
-  je řádově srovnatelná s EU/EEA 25,0/100 tis. (2023) — ČR není odlehlá.
+  je mírně pod EU/EEA 26,9/100 tis. (2024) — ČR není odlehlá.
 
 ## Interní křížové odkazy
 - Související články: `clanek-hiv-nove-diagnozy`, `clanek-czechsex-verejne-zdravi`,
