@@ -369,3 +369,17 @@ indikátorů přepnutých na „Ověřeno"** napříč několika PR. ÚZIS dávk
 zůstanou korektně „Ilustrativní" — to je v pořádku a má se to tak nechat.
 
 Po každé dávce aktualizuj čísla v §2 tohoto souboru (živý tracker postupu).
+
+---
+
+## 10. Backlog převzatý z issue #576 (noční sken 2026-06-11)
+
+Issues #576 a #603 uzavřeny — `indicator-drift` část vyřešena (onkologie
+reconciliována v PR #685; hospitalizace / LTC / psychiatři dotaženy dřívějšími
+nočními běhy). Zbylá **ne-driftová** práce z #576 přesunuta sem:
+
+- **check-sources (~52 odkazů)** — kontrola posunu primárních legislativních / EU
+  odkazů (zakonyprolidi.cz vrací 403, EUR-Lex, e-Sbírka, PSP/Senát) napříč ~30
+  články. Vyžaduje online ověření (WebFetch). Nízká priorita, po dávkách.
+- **seed→live** — 94 ze 154 indikátorů má stále `origin: seed`; drift-check u nich
+  nemá vypovídací hodnotu, dokud nejsou napojené (= hlavní náplň §2–§7 tohoto plánu).

@@ -30,12 +30,12 @@ function cleanCache() {
   }
 }
 
-function mockResponse({ status = 200, json } = {}) {
+function mockResponse({ status = 200, json, text } = {}) {
   return {
     ok: status >= 200 && status < 300,
     status,
     async json() { return json; },
-    async text() { return JSON.stringify(json); },
+    async text() { return text ?? JSON.stringify(json); },
   };
 }
 
@@ -57,6 +57,12 @@ test('extractObory: vrací unikátní seznam, fallback "nezarazeno"', () => {
   assert.deepEqual(extractObory({ oddeleni: [{ obor: 'Chirurgie' }, { obor: 'Chirurgie' }] }),
     ['Chirurgie']);
   assert.deepEqual(extractObory({}), ['nezarazeno']);
+});
+
+test('extractKraj/extractObory: rozumí sloupcům open-data CSV (ZZ_*)', () => {
+  const row = { ZZ_kraj_nazev: 'Středočeský kraj', ZZ_kraj_kod: 'CZ020', ZZ_obor_pece: 'chirurgie' };
+  assert.deepEqual(extractKraj(row), { code: 'CZ020', name: 'Středočeský kraj' });
+  assert.deepEqual(extractObory(row), ['chirurgie']);
 });
 
 test('aggregateProviders: spočítá kraje, obory a pivot kraj×obor', () => {
@@ -81,14 +87,15 @@ test('aggregateProviders: spočítá kraje, obory a pivot kraj×obor', () => {
 // ---------- Happy path ----------
 
 test('fetchNrpzs: happy path stáhne, agreguje a zapíše cache', async () => {
-  const items = [
-    { kraj_nazev: 'Praha', obory: ['Kardiologie'] },
-    { kraj_nazev: 'Brno', obory: ['Neurologie'] },
-  ];
+  const CSV = [
+    'ZZ_kraj_nazev,ZZ_kraj_kod,ZZ_obor_pece',
+    '"Praha","CZ010","Kardiologie"',
+    '"Brno","CZ064","Neurologie"',
+  ].join('\n') + '\n';
   let calls = 0;
   const fetchImpl = async (_url, _opts) => {
     calls++;
-    return mockResponse({ status: 200, json: items });
+    return mockResponse({ status: 200, text: CSV });
   };
 
   const result = await fetchNrpzs({ fetchImpl });
@@ -104,9 +111,9 @@ test('fetchNrpzs: happy path stáhne, agreguje a zapíše cache', async () => {
 });
 
 test('fetchNrpzs: druhé volání použije čerstvý cache, fetch se nezavolá', async () => {
-  const items = [{ kraj_nazev: 'Praha', obory: ['Kardiologie'] }];
+  const CSV = 'ZZ_kraj_nazev,ZZ_obor_pece\n"Praha","Kardiologie"\n';
   let calls = 0;
-  const fetchImpl = async () => { calls++; return mockResponse({ status: 200, json: items }); };
+  const fetchImpl = async () => { calls++; return mockResponse({ status: 200, text: CSV }); };
 
   await fetchNrpzs({ fetchImpl });
   const second = await fetchNrpzs({ fetchImpl });
@@ -115,9 +122,9 @@ test('fetchNrpzs: druhé volání použije čerstvý cache, fetch se nezavolá',
 });
 
 test('fetchNrpzs: force=true ignoruje cache a fetchne znovu', async () => {
-  const items = [{ kraj_nazev: 'Praha', obory: ['Kardiologie'] }];
+  const CSV = 'ZZ_kraj_nazev,ZZ_obor_pece\n"Praha","Kardiologie"\n';
   let calls = 0;
-  const fetchImpl = async () => { calls++; return mockResponse({ status: 200, json: items }); };
+  const fetchImpl = async () => { calls++; return mockResponse({ status: 200, text: CSV }); };
 
   await fetchNrpzs({ fetchImpl });
   await fetchNrpzs({ fetchImpl, force: true });
