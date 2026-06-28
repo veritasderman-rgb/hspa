@@ -1,0 +1,58 @@
+{
+  "id": "operace_zlomenina_kycle_48h",
+  "name": "Časná operace zlomeniny kyčle (do 2 dnů od přijetí)",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Včasnost akutní operační péče",
+  "definition": "Podíl pacientů ve věku 65+ přijatých do nemocnice pro zlomeninu proximálního femuru (zlomenina kyčle), u nichž byla operace zahájena do 2 kalendářních dnů od přijetí. Věkově a pohlavně standardizováno dle metodiky OECD Health Care Quality and Outcomes (Acute Care). Časná operace snižuje riziko komplikací z imobilizace (pneumonie, delirium, trombóza, dekubity) a roční mortalitu.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd",
+      "endpoint": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HCQO%40DF_AC",
+      "dataset": "OECD Health Care Quality and Outcomes — Acute Care (DSD_HCQO@DF_AC), MEASURE=IHWTHIPS (Hip-fracture surgery initiated within 2 days of hospital admission), UNIT=PT_SURG_HIPF, AGE=Y_GE65, SEX=_T",
+      "dimensions": {
+        "country": "CZE",
+        "measure": "IHWTHIPS",
+        "age": "Y_GE65",
+        "sex": "_T",
+        "unit": "PT_SURG_HIPF"
+      }
+    },
+    "fallback": {
+      "type": "uzis_nrhzs",
+      "note": "Podkladová data ČR jsou nemocniční hospitalizační záznamy ÚZIS (Národní registr hrazených zdravotních služeb / dříve NRHZS, MKN-10 S72.0–S72.2 zlomeniny krčku a horního konce femuru). OECD je harmonizuje, věkově/pohlavně standardizuje a publikuje jako mezinárodně srovnatelný HCQO indikátor. Národní řadu zveřejňuje ÚZIS v ročence Hospitalizovaní a v podkladech pro OECD."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "IHWTHIPS",
+    "dataset": "OECD Health Care Quality and Outcomes — Acute Care (DSD_HCQO@DF_AC). Průměr členských zemí OECD za rok 2021 = 80,1 % (n=21 zemí), průměr EU = 74,3 % (n=15). Špička: Island 98,7 %, Norsko 98,1 %, Nizozemsko 96,1 %, Dánsko 97,6 % (2019). Sousedé: Německo 93,8 %, Rakousko 91,4 % (2021). Polsko a Slovensko tento indikátor do OECD HCQO nevykazují. Nejníže: Portugalsko 46,5 %, Lotyšsko 47,5 %, Španělsko 57,1 %.",
+    "value": 80.1,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HCQO%40DF_AC"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS (NRHZS, ročenka Hospitalizovaní)",
+    "OECD Health Care Quality and Outcomes"
+  ],
+  "method_notes": "Hodnota 79,2 % (2021) je z OECD HCQO (Acute Care, MEASURE IHWTHIPS, sex _T, věk 65+), kam ČR vykazuje na základě nemocničních hospitalizačních záznamů ÚZIS. Časová řada ČR je dlouhodobě plochá: 2011 78,0 → 2017 77,9 → 2019 78,4 → 2020 79,4 → 2021 79,2 %. ČR leží těsně pod průměrem OECD (80,1 %) a nad průměrem EU (74,3 %) — pozor, průměr EU stahují dolů Portugalsko (46,5 %) a Lotyšsko (47,5 %). Relevantní srovnání je s bezprostředními sousedy s rozvinutými ortogeriatrickými fast-track protokoly: Německo 93,8 % a Rakousko 91,4 % (2021), tj. mezera ~14 procentních bodů. Patrný je i genderový rozdíl: muži 65+ jsou operováni včas méně často (2021: 77,7 %) než ženy (80,2 %), pravděpodobně kvůli vyšší komorbiditě a delší předoperační přípravě. Signál „warn“ (nikoli „bad“) odráží, že absolutní hodnota není katastrofická vůči OECD průměru, ale stagnace a velký odstup od sousedů jsou systémový problém.",
+  "limitations": "Indikátor měří organizační včasnost, ne výsledek (mortalitu/funkční zotavení). Část zpoždění je klinicky odůvodněná (stabilizace antikoagulace, dekompenzované komorbidity), což metodika OECD nedokáže plně oddělit od organizačního zpoždění. Měří 2 kalendářní dny od přijetí (ne od úrazu) — pacient, který se k přijetí dostane se zpožděním, není v intervalu zachycen. Polsko a Slovensko indikátor do OECD HCQO nevykazují, takže přímé srovnání se dvěma ze čtyř sousedů chybí. Poslední dostupný bod (2021) může být ovlivněn pandemickou reorganizací akutní operativy. Indikátor neukazuje krajské rozdíly v ČR — národní audit zlomenin kyčle, který by je odhalil, zatím neexistuje.",
+  "determinants": [
+    "Dostupnost operační kapacity o víkendech a večer (páteční/sobotní úraz vs. pondělní sál)",
+    "Ortogeriatrický ko-management (společné vedení ortopeda a geriatra) a fast-track protokoly",
+    "Rychlost interní a anesteziologické předoperační přípravy rizikového seniora",
+    "Management antikoagulace a anémie před výkonem",
+    "Existence národního auditu / registru zlomenin kyčle a veřejné srovnání nemocnic",
+    "Úhradová motivace navázaná na včasnost operace"
+  ],
+  "importance": "Zlomenina kyčle je nejčastější vážný úraz seniorů a modelový test akutní organizace systému. Operace do 48 hodin prokazatelně snižuje roční mortalitu, delirium, pneumonii a riziko trvalé ztráty soběstačnosti. Je to jeden z mála procesních ukazatelů kvality, který má jasnou politickou páku (organizace operativy, úhrada, audit) a přímou vazbu na soběstačnost a náklady dlouhodobé péče.",
+  "patient_story": "Jihlava, pátek večer, urgentní příjem krajské nemocnice. Paní Marie Dvořáková (83) upadla doma v koupelně — RTG za hodinu potvrdí zlomeninu krčku stehenní kosti. Indikace k operaci je jasná, jenže je pátek po osmé a jediný volný operační tým dobíhá akutní břišní příhodu. Marie tak stráví víkend na lůžku na lačno, s tahem na noze a narůstající bolestí; na sál se dostane až v pondělí ráno, šedesát hodin po přijetí. Každá taková hodina navíc zvyšuje riziko zápalu plic, deliria, dekubitů a trombózy — a u člověka po osmdesátce rozhoduje o tom, zda se vrátí domů, nebo skončí v dlouhodobé péči.\n\nMarie patří k té jedné pětině, která se na sál dostane pozdě. V Česku se do dvou kalendářních dnů od přijetí odoperuje 79,2 % pacientů 65+ se zlomeninou kyčle (OECD, 2021). Zní to slušně — leží to těsně pod průměrem OECD (80,1 %) a nad průměrem EU (74,3 %). Jenže průměr EU táhnou dolů Portugalsko a Lotyšsko (kolem 47 %). Skutečné srovnání je s nejbližšími sousedy: Německo operuje včas 93,8 % pacientů, Rakousko 91,4 %. Mezi Českem a sousedy zeje propast zhruba čtrnácti procentních bodů — a české číslo se deset let prakticky nehýbe (2017: 77,9 %; 2021: 79,2 %).\n\nProč Marie čeká do pondělí, není otázka chirurgické dovednosti — českou ortopedii umí krček operovat výborně. Je to otázka organizace. Včasná operace vyžaduje volnou operační kapacitu i o víkendech a večer, rychlou interní a anesteziologickou přípravu rizikového seniora a hlavně ortogeriatrický model: tým, kde ortoped a geriatr společně řídí přípravu tak, aby antikoagulace, anémie nebo dekompenzovaná srdeční vada operaci nezdržely o dny. Tam, kde to Německo a Rakousko zavedly plošně — fast-track protokoly, ko-management, garantované operační okno do 24–48 hodin — drží přes 90 %. Česko navíc nemá národní audit zlomenin kyčle, takže jednotlivé nemocnice ani nevědí, jak si stojí proti ostatním.\n\nPáka je organizační a leží na MZ ČR, zdravotních pojišťovnách a nemocnicích. Za prvé: zavést národní registr a audit zlomenin proximálního femuru podle britského modelu National Hip Fracture Database, který ve Velké Británii zvedl podíl včasných operací prostě tím, že každou nemocnici veřejně změřil a srovnal. Za druhé: navázat úhradu na včasnost — bonifikovat operaci do 48 hodin a financovat víkendovou operační kapacitu, aby páteční úraz neznamenal automaticky pondělní sál. Za třetí: rozšířit ortogeriatrické ko-management týmy do krajských a okresních nemocnic, ne jen do fakultních. Pro Marii by to znamenalo operaci v sobotu ráno místo v pondělí — a mnohem vyšší šanci, že půjde domů po svých, ne na ošetřovatelské lůžko.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
