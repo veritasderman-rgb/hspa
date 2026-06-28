@@ -1,6 +1,9 @@
 // ÚZIS · NRPZS fetcher (Národní registr poskytovatelů zdravotních služeb).
 //
-// Endpoint: https://nrpzs.uzis.cz/api/v1/mista-poskytovani
+// Zdroj: ÚZIS open-data CSV „NR-01-06 NRPZS — místa poskytování zdravotních služeb"
+//   https://datanzis.uzis.gov.cz/data/NR-01-NRPZS/NR-01-06/Otevrena-data-NR-01-06-nrpzs-mista-poskytovani-zdravotnich-sluzeb.csv
+//   (původní API https://nrpzs.uzis.cz/api/v1/mista-poskytovani je nespolehlivé — 503/timeout,
+//    v GitHub Actions „fetch failed"; open-data CSV je stabilní a měsíčně aktualizované).
 // Cíl: agregovat počet míst poskytování zdravotní péče podle kraje
 //      a typu specializace (oboru péče).
 //
@@ -19,6 +22,7 @@
 
 import { CONFIG } from '../config.js';
 import { fetchWithRetry } from '../lib/http.js';
+import { parseCsv } from '../lib/csv.js';
 import { readCacheIfFresh, writeCache } from '../lib/cache.js';
 
 const RAW_CACHE = 'nrpzs_raw.json';
@@ -30,8 +34,8 @@ const AGG_CACHE = 'nrpzs_aggregated.json';
  * @returns {{code: string|null, name: string|null}}
  */
 export function extractKraj(item) {
-  const code = item?.kraj_kod ?? item?.kodKraje ?? item?.kraj?.kod ?? item?.uzemi_kod ?? null;
-  const name = item?.kraj_nazev ?? item?.nazevKraje ?? item?.kraj?.nazev ?? item?.kraj ?? null;
+  const code = item?.kraj_kod ?? item?.kodKraje ?? item?.kraj?.kod ?? item?.uzemi_kod ?? item?.ZZ_kraj_kod ?? null;
+  const name = item?.kraj_nazev ?? item?.nazevKraje ?? item?.kraj?.nazev ?? item?.kraj ?? item?.ZZ_kraj_nazev ?? null;
   return { code: code != null ? String(code) : null, name: name != null ? String(name) : null };
 }
 
@@ -46,10 +50,14 @@ export function extractObory(item) {
     item?.specializace,
     item?.oddeleni?.map?.(o => o?.obor ?? o?.specializace),
     item?.druh_pece,
+    // open-data CSV: ZZ_obor_pece bývá čárkou oddělený seznam více oborů
+    // (~15 % řádků, např. „Klinický psycholog, psychiatrie") → rozdělit,
+    // aby se počítaly jednotlivé obory, ne syntetický slepenec „A, B".
+    item?.ZZ_obor_pece?.split(','),
   ].filter(Boolean).flat();
 
   const list = candidates
-    .map(v => (typeof v === 'string' ? v : v?.nazev ?? v?.kod ?? null))
+    .map(v => (typeof v === 'string' ? v.trim() : v?.nazev ?? v?.kod ?? null))
     .filter(Boolean);
 
   return list.length ? Array.from(new Set(list.map(String))) : ['nezarazeno'];
@@ -111,9 +119,10 @@ export async function fetchNrpzs(opts = {}) {
   let fromCache = raw != null;
 
   if (!raw) {
-    const url = `${CONFIG.uzis.nrpzs_base}/mista-poskytovani`;
+    const url = CONFIG.uzis.nrpzs_opendata_csv;
     console.log(`  [nrpzs] fetching ${url}`);
-    raw = await fetchWithRetry(url, { fetchImpl });
+    const csv = await fetchWithRetry(url, { parse: 'text', fetchImpl });
+    raw = parseCsv(csv);
     writeCache(RAW_CACHE, raw);
   } else {
     console.log('  [nrpzs] using fresh cache');
@@ -123,7 +132,7 @@ export async function fetchNrpzs(opts = {}) {
   const aggregated = aggregateProviders(items);
   writeCache(AGG_CACHE, {
     generated_at: new Date().toISOString(),
-    source: `${CONFIG.uzis.nrpzs_base}/mista-poskytovani`,
+    source: CONFIG.uzis.nrpzs_opendata_csv,
     ...aggregated,
   });
 

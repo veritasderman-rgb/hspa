@@ -2,9 +2,12 @@
 // Žádné secrets — používá se v open-source repu.
 
 export const CONFIG = {
-  // ÚZIS · NRPZS — REST API (OAS 2.0)
+  // ÚZIS · NRPZS — REST API (OAS 2.0) je nespolehlivé (503/timeout, „fetch failed"
+  // v GitHub Actions). Primárně čteme stabilní open-data CSV distribuci (gov.cz),
+  // kterou ÚZIS aktualizuje měsíčně; nrpzs_base/docs ponecháno jen pro referenci.
   uzis: {
     nrpzs_base: 'https://nrpzs.uzis.cz/api/v1',
+    nrpzs_opendata_csv: 'https://datanzis.uzis.gov.cz/data/NR-01-NRPZS/NR-01-06/Otevrena-data-NR-01-06-nrpzs-mista-poskytovani-zdravotnich-sluzeb.csv',
     docs: 'https://nrpzs.uzis.cz/api/doc',
     user_agent: 'ZdraveCesko-HSPA/1.0 (kontakt@example.cz)',
   },
