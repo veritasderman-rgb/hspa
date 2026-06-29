@@ -1,0 +1,53 @@
+{
+  "id": "vydaje_dusevni_zdravi_pct",
+  "name": "Podíl výdajů na péči o duševní zdraví na celkových výdajích na zdravotnictví",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Alokace na duševní zdraví",
+  "definition": "Podíl finančních prostředků vynaložených na péči o duševní zdraví (psychiatrickou péči) na celkových výdajích na zdravotnictví, vyjádřený v procentech. Indikátor měří, jakou prioritu systém přiznává duševnímu zdraví při rozdělování zdrojů. Český referenční výpočet vychází z nákladů na psychiatrickou péči hrazenou z veřejného zdravotního pojištění podle metodiky OECD System of Health Accounts (SHA): v roce 2015 to bylo 13,7 mld. Kč, tj. přibližně 4,08 % rozpočtu zdravotnictví (Národní akční plán pro duševní zdraví 2020–2030, Příloha č. 2). Ukazatel je odlišný od strukturálních a procesních indikátorů duševního zdraví, které dashboard již sleduje (centra duševního zdraví, počet psychiatrů, délka psychiatrické hospitalizace) — měří peníze, nikoli kapacitu nebo proces.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "mzcr_napdz",
+      "endpoint": "https://mzd.gov.cz/narodni-akcni-plan-pro-dusevni-zdravi-2020-2030/",
+      "dataset": "Národní akční plán pro duševní zdraví 2020–2030, Příloha č. 2 (Analytická část) — náklady na psychiatrickou péči z veřejného zdravotního pojištění dle metodiky OECD SHA 1.0",
+      "dimensions": {
+        "uzemi": "ČR",
+        "metrika": "% z celkových výdajů na zdravotnictví",
+        "zaklad": "psychiatrická péče z veřejného zdravotního pojištění (OECD SHA 1.0)"
+      }
+    },
+    "fallback": {
+      "type": "narrative_only",
+      "url": "https://www.reformapsychiatrie.cz/",
+      "note": "Vývoj v čase je rekonstruován z dokumentů reformy péče o duševní zdraví: Strategie reformy psychiatrické péče (2013, výchozí stav ~2,9 % rozpočtu / 0,26 % HDP), NAPDZ Příloha č. 2 (2015 = 4,08 %, OECD SHA 1.0) a vyjádření Národního ústavu duševního zdraví (2022, podíl přibližně 4 % i přes nominální růst úhrad VZP o 45 % mezi roky 2017–2022). Agregát je orientační (origin: seed) — viz method_notes a limitations."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd_hag_europe",
+    "code": "MENTAL_HEALTH_SPENDING_SHARE",
+    "dataset": "OECD Health at a Glance: Europe — odhad podílu výdajů na duševní zdraví na celkových výdajích na zdravotnictví. Země EU15 vydávají na duševní zdraví v průměru kolem 7 % (Francie ~13,9 %, Německo ~13,1 %, Švédsko ~10,0 %), zatímco země střední a východní Evropy kolem 3,3 % (Estonsko ~2,9 %, Bulharsko ~2,0 %). Benchmark.eu = 7 odráží průměrnou úroveň zemí EU15.",
+    "value": 7,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-europe_23056088.html",
+    "note": "Benchmark EU15 (~7 %) využívá širší definici výdajů na duševní zdraví než český referenční výpočet z veřejného zdravotního pojištění; na téže širší bázi se ČR pohybuje kolem 3,3–3,5 % (úroveň střední a východní Evropy), takže skutečný odstup od EU15 je při srovnatelné metodice ještě větší než z porovnání 4 % vs. 7 %. Cílem reformy je posun blíže k úrovni vyspělých zemí."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Ministerstvo zdravotnictví ČR (reforma péče o duševní zdraví, NAPDZ 2020–2030)",
+    "ÚZIS (datová a analytická základna péče o duševní zdraví)",
+    "zdravotní pojišťovny (úhrady psychiatrické péče)",
+    "Národní ústav duševního zdraví (NUDZ)"
+  ],
+  "method_notes": "Hodnota vyjadřuje podíl výdajů na psychiatrickou péči na celkových výdajích na zdravotnictví. Pevně doložený bod: rok 2015 = 4,08 % (náklady psychiatrické péče z veřejného zdravotního pojištění 13,7 mld. Kč podle metodiky OECD SHA 1.0, NAPDZ Příloha č. 2). Pro nejnovější období (2022) používáme zaokrouhlenou hodnotu přibližně 4,0 % na základě vyjádření NUDZ a dat VZP: úhrady psychiatrické péče sice mezi roky 2017 a 2022 vzrostly nominálně zhruba o 45 %, ale protože rostly i celkové výdaje na zdravotnictví, podíl zůstává přibližně stejný. Časová řada je orientační (origin: seed): výchozí bod 2013 (~2,9 %) pochází ze Strategie reformy psychiatrické péče a používá užší účetní základ, takže meziroční nárůst 2013→2015 zčásti odráží změnu metodiky účtování, nikoli jen reálný růst. Politicky relevantní fakt je, že od roku 2015 se podíl drží kolem 4 %, hluboko pod průměrem zemí EU15 (~7 %). Benchmark.eu = 7 (OECD Health at a Glance: Europe) využívá širší definici; na srovnatelné bázi se ČR pohybuje kolem 3,3–3,5 %.",
+  "limitations": "1. **Metodická nejednotnost** — český referenční výpočet (psychiatrická péče z veřejného zdravotního pojištění, OECD SHA 1.0) má užší základ než mezinárodní odhady OECD/EU, které zahrnují i ambulantní psychoterapii, léky a sociálně-zdravotní pomezí; přímé srovnání 4 % (ČR) vs. 7 % (EU15) proto podhodnocuje skutečný odstup. 2. **Orientační časová řada** — bod 2013 používá jiný účetní základ než bod 2015, takže nárůst 2013→2015 nelze celý interpretovat jako reálné navýšení. 3. **Hranice oboru** — část péče o duševní zdraví probíhá mimo psychiatrii (praktici, kliničtí psychologové hrazení i nehrazení, adiktologie, sociální služby) a do čísla se nemusí plně promítnout. 4. **Nominální vs. relativní růst** — objem peněz na psychiatrii roste, ale podíl stagnuje, protože roste i celek; indikátor proto měří prioritizaci, ne absolutní investici. 5. **Seed origin** — hodnota není napojena na automatický ingest; aktualizace probíhá ručně podle monitorovacích zpráv reformy.",
+  "determinants": "**Historické podfinancování a institucionální setrvačnost.** Český systém péče o duševní zdraví byl desítky let postaven na velkých psychiatrických nemocnicích (dříve léčebnách) s dlouhými hospitalizacemi. Většinu úhrad dodnes spotřebovává lůžková následná péče (podle dat VZP přes polovinu plateb za psychiatrii), zatímco komunitní a ambulantní složka, která je levnější a účinnější, zůstává podfinancovaná. Přesun peněz do komunity je jádrem reformy, ale naráží na setrvačnost lůžkového segmentu.\n\n**Úhradový mechanismus.** Výši a strukturu plateb za psychiatrickou péči určuje úhradová vyhláška a smlouvy zdravotních pojišťoven. Nová pracoviště (centra duševního zdraví, multidisciplinární týmy) potřebují stabilní úhradu; dokud je úhrada nastavená převážně na lůžkoden, peníze tečou tam, kam tekly vždy.\n\n**Stigma a nízká politická priorita.** Duševní nemoc nese stigma, pacienti jsou slabě organizovaná skupina a téma nemá silnou politickou lobby. To se promítá do toho, že navzdory vysoké zátěži nemocí (duševní poruchy způsobují podle DALY zhruba 15 % celkové zátěže, srovnatelně s onkologií) jde na duševní zdraví neúměrně malý podíl peněz.\n\n**Strategický rámec a evropské fondy.** Strategie reformy psychiatrické péče (2013), NAPDZ 2020–2030 a investice z evropských fondů (IROP, ~2 mld. Kč) vytvořily cílový stav a startovací kapitál. Dotace ale řeší vznik služeb, nikoli udržitelnost jejich provozu z běžných úhrad.",
+  "importance": "Duševní poruchy představují jednu z největších a nejrychleji rostoucích zátěží pro zdraví populace — podle ukazatele DALY způsobují přibližně 15 % celkové zátěže nemocí, srovnatelně s onkologickými onemocněními. Přesto jde v Česku na péči o duševní zdraví jen kolem 4 % výdajů na zdravotnictví, zatímco vyspělé země EU vydávají kolem 7 % i více. Tento nepoměr mezi zátěží a alokací zdrojů je jádrem celé reformy péče o duševní zdraví.\n\nZ pohledu výkonnosti zdravotního systému (HSPA) indikátor spojuje dimenzi **efektivity** (jsou zdroje rozdělené tam, kde je největší zdravotní zátěž a kde přinášejí největší užitek?) a **spravedlnosti** (má skupina lidí s duševním onemocněním srovnatelný nárok na zdroje jako lidé se somatickým onemocněním?). Podíl výdajů je nejtvrdším měřítkem toho, zda deklarovaná priorita „duševní zdraví“ má reálné finanční krytí, nebo zůstává jen v strategických dokumentech.\n\nIndikátor je úzce provázán se strukturálními ukazateli reformy, které dashboard sleduje — počtem center duševního zdraví (centra_dusevniho_zdravi_per_100k), hustotou psychiatrů (psychiatri_per_100k) a délkou psychiatrické hospitalizace (psychiatrie_prumerna_delka_hospitalizace). Bez navýšení a přesunu peněz do komunitní péče se tyto kapacitní ukazatele nemohou výrazně zlepšit.",
+  "patient_story": "Ústí nad Labem, čtvrteční odpoledne. Pavlovi (29) se po několika měsících úzkostí a nespavosti rozpadá schopnost chodit do práce. Praktická lékařka mu doporučí psychiatra, jenže nejbližší ambulance má objednací lhůtu tři měsíce a psychoterapie hrazená pojišťovnou je v kraji prakticky nedostupná. Pavel skončí buď na samoplatbě, kterou si nemůže dovolit, nebo — když se stav zhorší — na lůžku psychiatrické nemocnice. Ne proto, že by to bylo nejlepší řešení, ale proto, že právě tam systém peníze posílá.\n\nČesko dává na péči o duševní zdraví zhruba 4 % výdajů na zdravotnictví. V roce 2015 to bylo přesněji 4,08 % (13,7 miliardy korun z veřejného zdravotního pojištění, metodika OECD SHA), a od té doby se podíl drží kolem čtyř procent — přestože úhrady psychiatrie mezi roky 2017 a 2022 vzrostly nominálně zhruba o 45 %. Vyspělé země EU přitom vydávají na duševní zdraví v průměru kolem 7 %, Německo či Francie přes 13 %. Signál je bad: při srovnatelné metodice se Česko pohybuje na úrovni střední a východní Evropy (kolem 3,3–3,5 %), tedy hluboko pod průměrem EU15.\n\nProč tak málo? Většinu peněz na psychiatrii spotřebovává lůžková následná péče ve velkých nemocnicích — podle dat VZP přes polovinu úhrad. Komunitní a ambulantní péče, která je levnější a pro většinu pacientů účinnější, zůstává podfinancovaná, protože úhrada je historicky nastavená na lůžkoden. K tomu se přidává stigma a slabá politická síla pacientů: ačkoli duševní poruchy způsobují asi 15 % celkové zátěže nemocí (srovnatelně s rakovinou), peníze tomu neodpovídají.\n\nPolitická páka je konkrétní a leží na Ministerstvu zdravotnictví a zdravotních pojišťovnách. Klíčem je narovnat úhradovou vyhlášku tak, aby peníze následovaly pacienta do komunitní péče (centra duševního zdraví, multidisciplinární týmy, hrazená psychoterapie), a zároveň postupně navyšovat celkový podíl výdajů na duševní zdraví směrem k úrovni vyspělých zemí. Národní akční plán pro duševní zdraví 2020–2030 cílový stav pojmenovává — chybí dotáhnout financování tak, aby se Pavel z Ústí dostal k psychiatrovi a terapii včas a v místě, kde žije, a ne až na lůžku, kam ho systém pošle proto, že právě tam jsou peníze.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}
