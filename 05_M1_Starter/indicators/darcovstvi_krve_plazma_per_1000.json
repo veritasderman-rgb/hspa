@@ -1,0 +1,54 @@
+{
+  "id": "darcovstvi_krve_plazma_per_1000",
+  "name": "Dárcovství krve a plazmy — odběry na 1 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Materiální zdroje",
+  "subdomain": "Krevní zásoby a plazma",
+  "definition": "Roční počet odběrů plné krve a krevní plazmy (plazmaferéza) vztažený na 1 000 obyvatel. Měří dárcovskou kapacitu transfuzního systému — schopnost země zajistit si vlastní zásobu krve a plazmy pro výrobu krevních derivátů (imunoglobuliny, albumin, koagulační faktory) bez závislosti na dovozu. Zahrnuje bezplatné dárcovství plné krve i komerční (placené) odběry plazmy v plazmaferetických centrech. Jmenovatel je střední stav obyvatel (ČSÚ).",
+  "unit": "odběrů / 1 000 obyv.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrdd",
+      "format": "web_table",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-osob-trvale-vyloucenych-z-darcovstvi-krve--modul-darcu-krve-a-jejich-slozek",
+      "dataset": "Národní registr osob trvale vyloučených z dárcovství krve — Modul dárců krve a jejích složek (ÚZIS ČR); výkaz „Činnost zdravotnických zařízení v oboru transfuzní služby“",
+      "dimensions": {
+        "country": "CZ",
+        "type": "plná krev | plazmaferéza",
+        "year": "annual"
+      },
+      "note": "ÚZIS provozuje od roku 2024 (sdělení MZ č. 374/2024) modul dárců krve v rámci NRDD; agregované roční počty odběrů publikuje výkaz transfuzní služby. Komerční plazmaferetická centra reportují odběry plazmy samostatně."
+    },
+    "fallback": {
+      "type": "council_of_europe_edqm",
+      "url": "https://www.edqm.eu/en/reports-blood",
+      "note": "EDQM (Rada Evropy) sbírá roční data o odběru, zpracování a využití krve a krevních složek v členských státech — jediný harmonizovaný mezinárodní zdroj pro per-capita srovnání. SÚKL eviduje registrace a provoz plazmaferetických center v ČR."
+    }
+  },
+  "benchmark_source": {
+    "type": "council_of_europe_edqm",
+    "code": "donations_per_1000",
+    "dataset": "Srovnání odběrů na 1 000 obyvatel (plná krev + plazma), 2021: Česko 133 (nejvyšší v Evropě), Německo a Rakousko shodně 77 (druhá nejvyšší úroveň, rovněž země s placeným dárcovstvím plazmy), Dánsko přes 50. Hodnota 77 zde reprezentuje úroveň nejbližších evropských srovnatelných systémů; evropský medián celkových odběrů je výrazně nižší (WHO Europe udává rozpětí 6–67,6 odběru na 1 000 napříč regionem). Česko je tedy evropským maximem.",
+    "value": 77,
+    "url": "https://www.statista.com/chart/30195/number-of-blood-donations-per-capita-in-selected-european-countries/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr dárců — modul dárců krve)",
+    "SÚKL (registrace plazmaferetických center)",
+    "Společnost pro transfuzní lékařství ČLS JEP",
+    "MZ ČR"
+  ],
+  "method_notes": "Hodnota za rok 2021: 133 odběrů na 1 000 obyvatel (plná krev + plazma) — nejvyšší v Evropě podle dat shromážděných Radou Evropy / EDQM (srov. Statista, EUobserver 2024). Druhé v pořadí byly Německo a Rakousko shodně se 77, Dánsko přes 50. Vysoká česká hodnota je tažena boomem komerčního (placeného) odběru plazmy: dárce plazmy v ČR dostává cca 900 Kč (≈ 36 €) za odběr a smí darovat až jednou za 14 dní (≈ 24× ročně). ČR patří se Spolkovou republikou, Rakouskem a Maďarskem mezi čtyři země EU, které placené dárcovství plazmy povolují — tyto čtyři státy dohromady sbírají zhruba 50 % veškeré plazmy v EU. EU přitom 20–30 % plazmy pro výrobu léčiv dováží z USA. Časová řada je modelovaná z dlouhodobého trendu (růst odběrů plazmy převažuje nad poklesem dárců plné krve) a ukotvená publikovaným průřezem Rady Evropy za rok 2021; indikátor je proto veden jako seed/ilustrativní do napojení na živý výkaz ÚZIS. Počet dárců plné krve přitom dlouhodobě klesá (cca 233 tis. registrovaných; Společnost pro transfuzní lékařství doporučuje alespoň 300 tis.), zatímco plazmaferetických dárců přibývá (cca 120 tis., z toho ~76 tis. v komerčních centrech).",
+  "limitations": "Ukazatel mísí dvě odlišné aktivity s opačnou systémovou logikou: bezplatné dárcovství plné krve (solidaritní princip WHO/Rady Evropy — voluntary non-remunerated blood donation, VNRBD) a placené dárcovství plazmy (komerční, vázané na trh s krevními deriváty). Vyšší souhrnná hodnota proto neznamená automaticky „lepší“ systém — část čísla odráží komercializaci, ne občanskou solidaritu. Per-capita srovnání zkresluje rozdílná frekvence odběrů (plazmu lze darovat až 24× ročně, plnou krev jen 4–5×). Časová řada je modelovaná, ne přímo měřená živým výkazem. Indikátor nereflektuje soběstačnost ve výrobě krevních derivátů, jen objem odběrů.",
+  "determinants": "Českou pozici evropské jedničky určuje souběh tří faktorů. **První** je legislativa: zákon o specifických zdravotních službách (373/2011 Sb.) umožňuje finanční „kompenzaci“ za odběr plazmy, kterou většina zemí EU zakazuje — pouze čtyři státy (ČR, Německo, Rakousko, Maďarsko) placené dárcovství plazmy povolují. **Druhý** je trh: nadnárodní zpracovatelé plazmy (CSL, Takeda, Grifols, Octapharma) v ČR vybudovali hustou síť komerčních plazmaferetických center, protože regulační a nákladové prostředí je pro ně příznivé; centra cílí na města a univerzitní lokality a dárce přitahují odměnou a věrnostními programy. **Třetí** je poptávka: globální spotřeba imunoglobulinů a albuminu roste o jednotky procent ročně, EU je strukturálně podsběrná a 20–30 % plazmy dováží z USA — česká plazma má proto jisté odbytiště. Naopak bezplatné dárcovství plné krve, které stojí jen na občanské motivaci a náborové práci transfuzních oddělení nemocnic, dlouhodobě stagnuje až klesá.",
+  "importance": "Krev a plazma jsou strategická surovina, kterou nelze syntetizovat — bez dárců není transfuze, není operativa, není léčba hemofilie ani imunodeficiencí. Z pohledu HSPA framework (Struktury → Materiální zdroje) měří tento indikátor odolnost a soběstačnost zásobovacího řetězce, který je předpokladem akutní i plánované péče. Česká rekordní hodnota má dvojí čtení. Pozitivní: ČR si na rozdíl od většiny EU dokáže zajistit dostatek plazmy a je čistým vývozcem suroviny pro krevní deriváty — strategická výhoda v době, kdy EU řeší závislost na americké plazmě. Riziková: model stojí převážně na placeném komerčním sběru, který Rada Evropy i WHO z etických a bezpečnostních důvodů nepreferují (princip bezplatného dárcovství omezuje riziko nákazy u sociálně tísněných dárců), a souběžný pokles bezplatných dárců plné krve ohrožuje zásobu pro běžné transfuze. Indikátor proto patří mezi ty, kde nejde jen o „víc je líp“, ale o strukturu a udržitelnost dárcovské základny.",
+  "patient_story": "Ústí nad Labem, pondělní podvečer. Markovi je 34 let, pracuje ve skladu a každých čtrnáct dní zajde do komerčního plazmaferetického centra pár ulic od nádraží. Za hodinu na lehátku dostane devět set korun a body do věrnostního programu. „Je to slušný přivýdělek,“ říká. O dvě patra výš, na transfuzním oddělení krajské nemocnice, mezitím sestra řeší opačný problém: prvodárců plné krve ubývá a zásoba nulové negativní skupiny je na třech dnech. Dva světy dárcovství v jedné budově — jeden placený a rostoucí, druhý bezplatný a unavený.\n\nČesko je v dárcovství evropská jednička. Připadá u nás 133 odběrů krve a plazmy na 1 000 obyvatel ročně (2021, data Rady Evropy) — víc než kdekoli jinde na kontinentu. Druhé Německo a Rakousko mají shodně 77, Dánsko přes 50. Signál je proto „dobrý“: surovinu, ze které se vyrábějí imunoglobuliny, albumin a koagulační faktory, má Česko nadbytek a je jejím čistým vývozcem. Jenže to číslo je tažené hlavně plazmou: dárce smí plazmu darovat až čtyřiadvacetkrát ročně za odměnu, plnou krev jen čtyřikrát až pětkrát a zdarma. Registrovaných dárců plné krve je asi 233 tisíc a jejich počet klesá — odborná společnost přitom doporučuje aspoň 300 tisíc.\n\nProč zrovna Česko? Protože patří mezi čtyři země EU — vedle Německa, Rakouska a Maďarska — které placené dárcovství plazmy povolují; tato čtveřice sbírá zhruba polovinu veškeré plazmy v unii. Nadnárodní zpracovatelé (CSL, Takeda, Grifols) tu proto vybudovali hustou síť center, protože evropská poptávka po krevních derivátech roste a EU 20 až 30 procent plazmy dováží z USA. Rada Evropy a WHO ovšem dlouhodobě prosazují bezplatné dárcovství (VNRBD) — mimo jiné proto, že finanční pobídka může přitahovat sociálně tísněné dárce a zvyšovat bezpečnostní riziko. Rekordní české číslo tak skrývá napětí: komerční plazma roste, občanská solidarita u plné krve slábne.\n\nPáka je v rukou státu a plátců. Ministerstvo zdravotnictví a SÚKL nastavují pravidla pro plazmaferetická centra a v roce 2024 začala platit nová evropská regulace látek lidského původu (SoHO), která má sběr a bezpečnost sjednotit. Souběžně je třeba podržet bezplatné dárcovství plné krve: náborové kampaně, placené volno na odběr, oceňování dárců, lepší objednávkové systémy nemocnic. Cílem není čísla srážet, ale vyvážit je — udržet strategickou soběstačnost v plazmě a zároveň nedopustit, aby zásoba krve pro běžné transfuze stála na vyčerpané menšině. Pro Marka i pro sestru o patro výš by to znamenalo jediné: aby dárcovství zůstalo bezpečné a spolehlivé bez ohledu na to, jestli za ně někdo platí, nebo ne.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
