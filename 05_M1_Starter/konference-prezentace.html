@@ -119,12 +119,16 @@
   .nav-arrow.prev{left:2px}.nav-arrow.next{right:2px}
   @media print{
     html,body{overflow:visible;background:#fff;height:auto}
-    .stagewrap{position:static}
-    .stage{width:100%;height:56.25vw;box-shadow:none;page-break-after:always;break-after:page}
-    .slide{position:absolute;display:flex!important;opacity:1!important}
+    .stagewrap{position:static;display:block}
+    .stage{position:static;display:block;width:100%;height:auto;box-shadow:none;container-type:normal}
+    /* každý slide = vlastní stránka; sám je query-container, aby cqh/cqw fungovaly */
+    .slide{position:relative;inset:auto;display:flex!important;opacity:1!important;
+      width:100%;aspect-ratio:16/9;container-type:size;overflow:hidden;
+      page-break-after:always;break-after:page;break-inside:avoid}
+    [data-in]{opacity:1!important;transform:none!important}
     .progress,.counter,.hint,.nav-arrow{display:none!important}
   }
-  @page{size:landscape}
+  @page{size:landscape;margin:0}
 </style>
 </head>
 <body>
@@ -417,7 +421,7 @@
 
   /* ---------- BARS (animované, srovnání ČR vs cíl) ---------- */
   function bars(box,data){
-    box.innerHTML='';const W=900,rowH=66,H=data.length*rowH+20;
+    box.innerHTML='';box._anim=[];const W=900,rowH=66,H=data.length*rowH+20;
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
     const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';
     const max=100, x0=300, bw=W-x0-90;
@@ -438,7 +442,7 @@
 
   /* ---------- LINE chart (trend ČR vs benchmark) ---------- */
   function line(box,series,bench,benchLabel,unit){
-    box.innerHTML='';const W=560,H=360,pad={l:54,r:20,t:24,b:40};
+    box.innerHTML='';box._anim=[];const W=560,H=360,pad={l:54,r:20,t:24,b:40};
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
     const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';const grid=dark?'rgba(251,248,241,.18)':'rgba(31,26,20,.14)';
     const xs=series.map(p=>p.year), ys=series.map(p=>p.value).concat([bench]);
@@ -519,13 +523,16 @@
         elm.textContent=fmt(target*e,dec)+suf; if(p<1)requestAnimationFrame(step); else elm.textContent=fmt(target,dec)+suf;})(t0);
     });
   }
-  function onEnter(slide){
-    countUp(slide);
+  function chartsFor(slide,animate){
     if(slide.hasAttribute('data-gauge')){ gauge(document.getElementById('mainGauge')); updateGauge(); }
-    if(slide.hasAttribute('data-g2')){ const b=document.getElementById('gaugeA'); gauge(b); setTimeout(()=>setGauge(b,8,10.2,'higher_is_better'),60); }
-    if(slide.hasAttribute('data-bars')){ const b=document.getElementById('screenBars'); bars(b,SCREEN); (b._anim||[]).forEach(f=>setTimeout(f,180)); }
-    if(slide.hasAttribute('data-line')){ const b=document.getElementById('lineChart'); line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.'); (b._anim||[]).forEach(f=>setTimeout(f,200)); }
+    if(slide.hasAttribute('data-g2')){ const b=document.getElementById('gaugeA'); gauge(b); const set=()=>setGauge(b,8,10.2,'higher_is_better'); animate?setTimeout(set,60):set(); }
+    if(slide.hasAttribute('data-bars')){ const b=document.getElementById('screenBars'); bars(b,SCREEN); (b._anim||[]).forEach(f=>animate?setTimeout(f,180):f()); }
+    if(slide.hasAttribute('data-line')){ const b=document.getElementById('lineChart'); line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.'); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
   }
+  function onEnter(slide){ countUp(slide); chartsFor(slide,true); }
+  // Před tiskem/PDF: naplň čísla i grafy na VŠECH slidech (jinak by neprošlé slidy byly prázdné).
+  function finalizeNumbers(){ document.querySelectorAll('[data-count]').forEach(e=>{const t=parseFloat(e.dataset.count),d=parseInt(e.dataset.dec||'0'),s=e.dataset.suffix||'';e.textContent=fmt(t,d)+s;}); }
+  window.addEventListener('beforeprint',()=>{ finalizeNumbers(); slides.forEach(s=>chartsFor(s,false)); });
   function show(n){
     n=Math.max(0,Math.min(slides.length-1,n));
     slides[idx].classList.remove('active'); idx=n; slides[idx].classList.add('active');
