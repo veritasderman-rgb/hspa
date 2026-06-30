@@ -210,11 +210,13 @@
   };
 
   // Je nastaven funkční backend, který přihlášku doručí organizátorovi?
+  // POZN.: detekce i send() musí sdílet stejné podmínky, jinak může banner
+  // zmizet, aniž by se přihláška reálně odesílala.
   const placeholdery = /VAS-PROJEKT|VAS_PUBLISHABLE/;
-  const backendReady =
-    (CONFIG.mode === 'supabase' && !placeholdery.test(CONFIG.supabase.url + CONFIG.supabase.anonKey)) ||
-    (CONFIG.mode === 'http' && !!CONFIG.http.endpoint) ||
-    ((CONFIG.mode === 'mailto' || CONFIG.organizerEmail) && !!CONFIG.organizerEmail);
+  const supabaseConfigured = CONFIG.mode === 'supabase' && !placeholdery.test(CONFIG.supabase.url + CONFIG.supabase.anonKey);
+  const httpConfigured     = CONFIG.mode === 'http' && !!CONFIG.http.endpoint;
+  const emailConfigured    = !!CONFIG.organizerEmail;   // vyplněný e-mail organizátora → doručení přes mailto (nezávisle na mode)
+  const backendReady = supabaseConfigured || httpConfigured || emailConfigured;
   /* --- Supabase: jednorázové SQL pro vytvoření tabulky (insert-only) --------
      create table public.conference_registrations (
        id uuid primary key default gen_random_uuid(),
@@ -275,10 +277,8 @@
   }
 
   async function send(data){
-    if(CONFIG.mode === 'mailto' || (!backendReady && CONFIG.organizerEmail)){
-      if(CONFIG.organizerEmail){ sendViaMailto(data); return; }
-    }
-    if(CONFIG.mode === 'supabase'){
+    // Pořadí musí odpovídat detekci backendReady výše.
+    if(supabaseConfigured){
       const r = await fetch(CONFIG.supabase.url.replace(/\/$/,'')+'/rest/v1/'+CONFIG.supabase.table, {
         method:'POST',
         headers:{ 'Content-Type':'application/json', 'apikey':CONFIG.supabase.anonKey,
@@ -288,7 +288,7 @@
       if(!r.ok) throw new Error('supabase '+r.status);
       return;
     }
-    if(CONFIG.mode === 'http' && CONFIG.http.endpoint){
+    if(httpConfigured){
       const r = await fetch(CONFIG.http.endpoint, {
         method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
         body: JSON.stringify(data)
@@ -296,7 +296,8 @@
       if(!r.ok) throw new Error('http '+r.status);
       return;
     }
-    // mode 'local' (a fallback): ulož do prohlížeče
+    if(emailConfigured){ sendViaMailto(data); return; }
+    // náhledový fallback: ulož jen do prohlížeče (k organizátorovi se NEDOSTANE)
     const arr = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
     arr.push({ ...data, created_at:new Date().toISOString() });
     localStorage.setItem(STORE_KEY, JSON.stringify(arr));
