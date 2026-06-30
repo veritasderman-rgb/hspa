@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skóre 2026 — registrace (neveřejné) · HSPA Monitor</title>
+<meta name="description" content="Neveřejná registrace na konferenci Skóre 2026 — uvedení webu skorezdravotnictvi.cz.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="src/styles.min.css">
+<style>
+  .konf-hero{background:var(--ink,#1f1a14);color:var(--paper,#fbf8f1);padding:6vmin 6vw 5vmin;display:flex;gap:5vmin;align-items:center;flex-wrap:wrap}
+  .konf-hero .compass{width:120px;height:120px;flex:0 0 auto}
+  .konf-hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,6vw,4rem);line-height:1.02;margin:.4rem 0 0;letter-spacing:-.01em}
+  .konf-hero .konf-kicker{font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;font-weight:700;color:rgba(251,248,241,.7)}
+  .konf-hero .konf-meta{font-size:1.05rem;margin-top:1rem;color:rgba(251,248,241,.85);max-width:52ch;line-height:1.5}
+  .konf-hero .konf-red{color:#e8755e}
+  .konf-wrap{max-width:920px;margin:0 auto;padding:5vmin 6vw 8vmin}
+  .konf-agenda{margin:0 0 4vmin;border-top:1px solid var(--line,rgba(31,26,20,.16))}
+  .konf-agenda .r{display:grid;grid-template-columns:6.5rem 1fr;gap:1.2rem;padding:.7rem 0;border-bottom:1px solid var(--line,rgba(31,26,20,.16));font-size:.98rem}
+  .konf-agenda .r .t{color:var(--red,#b8361e);font-weight:700;font-variant-numeric:tabular-nums}
+  .konf-card{border:1px solid var(--line,rgba(31,26,20,.16));border-radius:10px;padding:clamp(1.4rem,4vw,2.6rem);background:#fff}
+  .konf-card h2{font-family:Georgia,serif;margin:0 0 .4rem;font-size:1.7rem}
+  .konf-card p.note{color:var(--muted,#6b6253);font-size:.95rem;margin:0 0 1.8rem;line-height:1.5}
+  .konf-form{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 1.4rem}
+  .konf-form .full{grid-column:1/-1}
+  .konf-form label{display:block;font-size:.85rem;font-weight:700;margin-bottom:.35rem}
+  .konf-form label .req{color:var(--red,#b8361e)}
+  .konf-form input,.konf-form select,.konf-form textarea{
+    width:100%;font:inherit;font-size:1rem;padding:.7rem .8rem;border:1px solid var(--line,rgba(31,26,20,.3));
+    border-radius:7px;background:var(--paper,#fbf8f1);color:var(--ink,#1f1a14)}
+  .konf-form input:focus,.konf-form select:focus,.konf-form textarea:focus{outline:2px solid var(--red,#b8361e);outline-offset:1px;border-color:transparent}
+  .konf-form textarea{min-height:90px;resize:vertical}
+  .konf-consent{display:flex;gap:.7rem;align-items:flex-start;font-size:.9rem;line-height:1.4}
+  .konf-consent input{width:auto;margin-top:.2rem;flex:0 0 auto}
+  .konf-submit{appearance:none;border:none;background:var(--red,#b8361e);color:#fff;font-weight:700;font-size:1.05rem;
+    padding:.9rem 2rem;border-radius:999px;cursor:pointer;transition:transform .1s,opacity .2s}
+  .konf-submit:hover{transform:translateY(-1px)}
+  .konf-submit:disabled{opacity:.5;cursor:wait}
+  .konf-err{color:var(--bad,#b8361e);font-size:.85rem;margin-top:.3rem;display:none}
+  .konf-err.show{display:block}
+  .field.invalid input,.field.invalid select{border-color:var(--bad,#b8361e);background:#fdf3f1}
+  .konf-status{margin-top:1.2rem;font-size:.95rem}
+  .konf-ok{display:none;text-align:center;padding:2rem 1rem}
+  .konf-ok.show{display:block}
+  .konf-ok .check{width:64px;height:64px;border-radius:50%;background:var(--good,#2f6b1f);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1rem}
+  .konf-ok h2{font-family:Georgia,serif;font-size:1.8rem;margin:.2rem 0}
+  .konf-admin{margin-top:3rem;font-size:.8rem;color:var(--muted,#6b6253)}
+  .konf-admin a{color:var(--muted,#6b6253);text-decoration:underline;cursor:pointer}
+  @media(max-width:640px){.konf-form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="konf-hero">
+  <svg class="compass" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+    <circle cx="50" cy="50" r="44" stroke="#fbf8f1" stroke-width="0.9"/>
+    <circle cx="50" cy="50" r="33" stroke="#fbf8f1" stroke-width="0.6" stroke-opacity="0.4"/>
+    <polygon points="46,8 54,8 50,16" fill="#fbf8f1"/>
+    <g><polygon points="33,79.44 55.2,53 44.8,47" stroke="#fbf8f1" stroke-width="0.9" stroke-linejoin="round"/>
+    <polygon points="67,20.56 55.2,53 44.8,47" fill="#b8361e"/></g>
+    <circle cx="50" cy="50" r="3" fill="#1f1a14" stroke="#fbf8f1" stroke-width="0.9"/>
+  </svg>
+  <div>
+    <div class="konf-kicker">Neveřejná pozvánka · Praha · září 2026</div>
+    <h1>Skóre 2026 — <span class="konf-red">první čtení</span></h1>
+    <p class="konf-meta">Den, kdy české zdravotnictví dostane veřejné skóre. Uvedení nezávislého portálu <strong>skorezdravotnictvi.cz</strong> podle rámce OECD HSPA. Půldenní konference pro odbornou a mediální veřejnost.</p>
+  </div>
+</header>
+
+<main class="konf-wrap" id="content">
+
+  <section aria-labelledby="agH">
+    <div class="ed-kicker" style="font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted,#6b6253);font-size:.78rem">Program v kostce</div>
+    <h2 id="agH" style="font-family:Georgia,serif;margin:.3rem 0 1.4rem">Dopoledne, jeden proud, hodně dat</h2>
+    <div class="konf-agenda">
+      <div class="r"><span class="t">9:00</span><span>Úvod — proč kompas, ne žebříček</span></div>
+      <div class="r"><span class="t">9:10</span><span>Keynote: proč se zdravotnictví měří (OECD HSPA)</span></div>
+      <div class="r"><span class="t">9:35</span><span>Vzor Healthy Belgium — portál, který změnil debatu</span></div>
+      <div class="r"><span class="t">9:55</span><span>Živé demo webu — ověřte si číslo na mobilu</span></div>
+      <div class="r"><span class="t">10:35</span><span>Co data říkají o ČR — tři příběhy</span></div>
+      <div class="r"><span class="t">11:05</span><span>Panel: komu skóre slouží? (stát × plátce × pacient × akademie)</span></div>
+      <div class="r"><span class="t">12:00</span><span>Raut a networking</span></div>
+    </div>
+  </section>
+
+  <section class="konf-card" aria-labelledby="formH">
+    <div id="formView">
+      <h2 id="formH">Registrace účasti</h2>
+      <p class="note">Vyplňte prosím přihlášku. Kapacita je omezená; potvrzení a přesné místo konání pošleme e-mailem. Registrace je nezávazná a údaje slouží výhradně k organizaci akce.</p>
+
+      <form class="konf-form" id="regForm" novalidate>
+        <div class="field full">
+          <label for="name">Jméno a příjmení <span class="req">*</span></label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+          <div class="konf-err" data-for="name">Vyplňte prosím jméno.</div>
+        </div>
+        <div class="field">
+          <label for="email">E-mail <span class="req">*</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+          <div class="konf-err" data-for="email">Zadejte platný e-mail.</div>
+        </div>
+        <div class="field">
+          <label for="phone">Telefon</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="org">Organizace <span class="req">*</span></label>
+          <input id="org" name="org" type="text" autocomplete="organization" required>
+          <div class="konf-err" data-for="org">Vyplňte prosím organizaci.</div>
+        </div>
+        <div class="field">
+          <label for="role">Pozice / funkce</label>
+          <input id="role" name="role" type="text" autocomplete="organization-title">
+        </div>
+        <div class="field">
+          <label for="segment">Za koho přicházíte <span class="req">*</span></label>
+          <select id="segment" name="segment" required>
+            <option value="">— vyberte —</option>
+            <option>Stát a regulace</option>
+            <option>Zdravotní pojišťovna (plátce)</option>
+            <option>Poskytovatel / odborná společnost</option>
+            <option>Akademie / think-tank</option>
+            <option>Pacientská organizace</option>
+            <option>Médium / novinář</option>
+            <option>Mezinárodní organizace</option>
+            <option>Filantropie / dárce</option>
+            <option>Jiné</option>
+          </select>
+          <div class="konf-err" data-for="segment">Vyberte prosím jednu možnost.</div>
+        </div>
+        <div class="field">
+          <label for="attendance">Forma účasti</label>
+          <select id="attendance" name="attendance">
+            <option value="Osobně">Osobně v Praze</option>
+            <option value="Online">Online (livestream)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="diet">Stravování</label>
+          <select id="diet" name="diet">
+            <option value="Bez omezení">Bez omezení</option>
+            <option value="Vegetariánské">Vegetariánské</option>
+            <option value="Veganské">Veganské</option>
+            <option value="Bezlepkové">Bezlepkové</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="note">Poznámka (téma, na které se nejvíc těšíte; dotaz do panelu…)</label>
+          <textarea id="note" name="note"></textarea>
+        </div>
+        <div class="field full">
+          <label class="konf-consent">
+            <input type="checkbox" id="consent" name="consent" required>
+            <span>Souhlasím se zpracováním uvedených údajů pro účely organizace konference Skóre 2026. Údaje nebudou předány třetím stranám. <span class="req">*</span></span>
+          </label>
+          <div class="konf-err" data-for="consent">Bez souhlasu nelze přihlášku odeslat.</div>
+        </div>
+        <div class="field full">
+          <button type="submit" class="konf-submit" id="submitBtn">Odeslat přihlášku</button>
+          <div class="konf-status" id="status" role="status" aria-live="polite"></div>
+        </div>
+      </form>
+    </div>
+
+    <div class="konf-ok" id="okView">
+      <div class="check" aria-hidden="true">✓</div>
+      <h2>Děkujeme, přihláška odešla.</h2>
+      <p class="note" style="max-width:46ch;margin:.6rem auto 0">Ozveme se e-mailem s potvrzením a přesným místem konání. Těšíme se na vás na prvním čtení skóre českého zdravotnictví.</p>
+    </div>
+
+    <div class="konf-admin">
+      <a id="exportLink" title="Pro organizátora — stáhne lokálně zachycené přihlášky jako CSV">Organizátor: export přihlášek (CSV)</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  /* =========================================================================
+     KONFIGURACE BACKENDU — přepnutí na ostré uložení je jediná změna zde.
+     -------------------------------------------------------------------------
+     mode: 'local'    → přihlášky se ukládají do prohlížeče (localStorage) a
+                        organizátor je stáhne přes odkaz „export CSV". Funkční
+                        hned, bez serveru. (výchozí — bezpečné)
+     mode: 'supabase' → INSERT do Supabase tabulky přes REST. Doplň url + anon
+                        klíč. SQL pro tabulku je v komentáři níže.
+     mode: 'http'     → POST JSON na libovolný endpoint (Formspree, vlastní fce).
+     ========================================================================= */
+  const CONFIG = {
+    mode: 'local',
+    supabase: {
+      url:   'https://VAS-PROJEKT.supabase.co',
+      anonKey: 'VAS_PUBLISHABLE_ANON_KLIC',
+      table: 'conference_registrations'
+    },
+    http: { endpoint: '' }   // např. 'https://formspree.io/f/xxxxxx'
+  };
+  /* --- Supabase: jednorázové SQL pro vytvoření tabulky (insert-only) --------
+     create table public.conference_registrations (
+       id uuid primary key default gen_random_uuid(),
+       created_at timestamptz default now(),
+       name text not null, email text not null, phone text,
+       org text not null, role text, segment text not null,
+       attendance text, diet text, note text
+     );
+     alter table public.conference_registrations enable row level security;
+     create policy "anon insert" on public.conference_registrations
+       for insert to anon with check (true);
+     -- čtení záměrně NEpovoleno anonu; přihlášky čte jen organizátor přes dashboard
+  --------------------------------------------------------------------------- */
+
+  const form = document.getElementById('regForm');
+  const btn  = document.getElementById('submitBtn');
+  const statusEl = document.getElementById('status');
+  const okView = document.getElementById('okView');
+  const formView = document.getElementById('formView');
+  const STORE_KEY = 'skore2026_registrace';
+
+  function setErr(name, show){
+    const f = form.querySelector('[name="'+name+'"]').closest('.field');
+    const e = form.querySelector('.konf-err[data-for="'+name+'"]');
+    if(f) f.classList.toggle('invalid', show);
+    if(e) e.classList.toggle('show', show);
+  }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function validate(data){
+    let ok = true;
+    ['name','org','segment'].forEach(k=>{ const bad=!data[k]; setErr(k,bad); if(bad) ok=false; });
+    const emailBad = !validEmail(data.email||''); setErr('email', emailBad); if(emailBad) ok=false;
+    const consentBad = !form.consent.checked; setErr('consent', consentBad); if(consentBad) ok=false;
+    return ok;
+  }
+
+  function collect(){
+    return {
+      name: form.name.value.trim(), email: form.email.value.trim(),
+      phone: form.phone.value.trim(), org: form.org.value.trim(),
+      role: form.role.value.trim(), segment: form.segment.value,
+      attendance: form.attendance.value, diet: form.diet.value,
+      note: form.note.value.trim()
+    };
+  }
+
+  async function send(data){
+    if(CONFIG.mode === 'supabase'){
+      const r = await fetch(CONFIG.supabase.url.replace(/\/$/,'')+'/rest/v1/'+CONFIG.supabase.table, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'apikey':CONFIG.supabase.anonKey,
+                  'Authorization':'Bearer '+CONFIG.supabase.anonKey, 'Prefer':'return=minimal' },
+        body: JSON.stringify(data)
+      });
+      if(!r.ok) throw new Error('supabase '+r.status);
+      return;
+    }
+    if(CONFIG.mode === 'http' && CONFIG.http.endpoint){
+      const r = await fetch(CONFIG.http.endpoint, {
+        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify(data)
+      });
+      if(!r.ok) throw new Error('http '+r.status);
+      return;
+    }
+    // mode 'local' (a fallback): ulož do prohlížeče
+    const arr = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    arr.push({ ...data, created_at:new Date().toISOString() });
+    localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+  }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const data = collect();
+    if(!validate(data)){ statusEl.textContent='Zkontrolujte prosím zvýrazněná pole.'; statusEl.style.color='var(--bad,#b8361e)'; return; }
+    btn.disabled = true; statusEl.textContent='Odesílám…'; statusEl.style.color='var(--muted,#6b6253)';
+    try{
+      await send(data);
+      formView.style.display='none'; okView.classList.add('show');
+      okView.scrollIntoView({behavior:'smooth', block:'center'});
+    }catch(err){
+      btn.disabled=false;
+      statusEl.textContent='Odeslání se nezdařilo. Zkuste to prosím znovu, nebo napište na e-mail uvedený v pozvánce.';
+      statusEl.style.color='var(--bad,#b8361e)';
+    }
+  });
+
+  // živé čištění chyb při psaní
+  form.addEventListener('input', e=>{
+    const n=e.target.name; if(n) setErr(n,false);
+  });
+
+  // Organizátor: export lokálně zachycených přihlášek do CSV
+  document.getElementById('exportLink').addEventListener('click', ()=>{
+    const arr = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    if(!arr.length){ alert('Zatím žádné lokálně uložené přihlášky.\n(Pokud běží režim supabase/http, přihlášky jsou na serveru.)'); return; }
+    const cols=['created_at','name','email','phone','org','role','segment','attendance','diet','note'];
+    const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+    const csv=[cols.join(',')].concat(arr.map(r=>cols.map(c=>esc(r[c])).join(','))).join('\r\n');
+    const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='skore2026-prihlasky.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body>
+</html>
