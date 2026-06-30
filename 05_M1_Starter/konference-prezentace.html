@@ -108,6 +108,9 @@
     background:transparent;color:var(--ink2);cursor:pointer;transition:all .15s;opacity:.55}
   .slide.dark .picker button{color:rgba(255,255,255,.8)}
   .picker button.on{opacity:1;background:var(--red);color:#fff;border-color:var(--red)}
+  .picker button.good.on{background:var(--good);border-color:var(--good)}
+  .picker .grp{flex-basis:100%;font-size:1.5cqh;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:1.2cqh 0 .2cqh}
+  .slide.dark .picker .grp{color:rgba(255,255,255,.55)}
   .hint-i{font-size:1.5cqh;color:var(--muted);margin-top:1.4cqh}
   .slide.dark .hint-i{color:rgba(255,255,255,.5)}
   /* chrome */
@@ -218,15 +221,24 @@
   <section class="slide" data-anim data-gauge>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Jedno číslo na úvod · vyberte ukazatel</div>
+        <div class="kicker" data-in>Vyberte ukazatel — ručička se přenastaví</div>
         <h2 data-in style="--i:1">Jak daleko je Česko od&nbsp;severu?</h2>
         <div class="picker" data-in style="--i:2" id="gaugePicker"></div>
         <p class="sub" id="gaugeDesc" data-in style="--i:3"></p>
-        <div class="hint-i" data-in style="--i:4">Klikněte na ukazatel — střelka kompasu se přenastaví. (← → mezi ukazateli)</div>
+        <div class="hint-i" data-in style="--i:4">Červená výchylka = kde zaostáváme. Zelená = kde už jsme nad světem.</div>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="mainGauge" style="width:92%;aspect-ratio:1.15"></div></div>
     </div>
     <div class="source" id="gaugeSrc"></div>
+  </section>
+
+  <!-- 7b · PROČ TYHLE UKAZATELE — argument páky -->
+  <section class="slide paper2" data-anim data-diverge>
+    <div class="kicker" data-in>Proč zrovna tyhle ukazatele</div>
+    <h2 data-in style="--i:1">Kompas neukazuje jen jak jsme na tom.<br>Ukazuje, <span class="red-em">kam napřít úsilí</span>.</h2>
+    <p class="sub" data-in style="--i:2;max-width:64ch">Největší páka je tam, kde se nejvíc lišíme od světa. Zlepšit o 1&nbsp;% ukazatel, kde zaostáváme, pomůže víc lidem než obrovské úsilí u ukazatele, který je už na světové úrovni. Nejdelší červené pruhy = největší příležitost; zelené ukazují, kde už excelujeme.</p>
+    <div class="chartwrap" data-in style="--i:3;height:42cqh;align-items:flex-start"><div id="divergeChart" style="width:100%;height:40cqh"></div></div>
+    <div class="source">Odchylka ČR od benchmarku (OECD/EU) v %. Vlevo červeně = pod světem, vpravo zeleně = nad světem.</div>
   </section>
 
   <!-- 8 · HEALTHY BELGIUM -->
@@ -477,13 +489,40 @@
     box.appendChild(s);
   }
 
+  /* ---------- DIVERGING bars (odchylka od benchmarku, červená vlevo / zelená vpravo) ---------- */
+  function diverging(box,items){
+    box.innerHTML='';box._anim=[];
+    const rows=items.map(it=>{let a=(it.cz-it.b)/it.b;if(it.dir==='lower_is_better')a=-a;return {label:it.label,adv:a};});
+    rows.sort((p,q)=>p.adv-q.adv); // nejvíc pod světem nahoře = největší páka
+    const W=900,rowH=Math.min(42,360/rows.length),H=rows.length*rowH+8;
+    const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
+    const cx=W*0.46,maxw=W*0.4,bh=rowH-12;
+    const max=Math.max(...rows.map(r=>Math.abs(r.adv)));
+    s.appendChild(el('line',{x1:cx,y1:0,x2:cx,y2:H,stroke:dark?'rgba(251,248,241,.3)':'rgba(31,26,20,.3)','stroke-width':1.5}));
+    rows.forEach((r,i)=>{
+      const y=6+i*rowH,w=Math.abs(r.adv)/max*maxw,pos=r.adv>=0,col=pos?'#2f6b1f':'#b8361e',x=pos?cx:cx-w;
+      const bar=el('rect',{x:cx,y:y,width:0,height:bh,rx:2,fill:col});s.appendChild(bar);
+      bar.style.transition='all .9s cubic-bezier(.2,.7,.2,1)';
+      box._anim.push(()=>{bar.setAttribute('width',w);bar.setAttribute('x',x);});
+      const lab=el('text',{x:pos?cx-8:cx+8,y:y+bh/2+5,'font-size':16,'font-weight':700,fill:ink,'text-anchor':pos?'end':'start'});lab.textContent=r.label;s.appendChild(lab);
+      const val=el('text',{x:pos?cx+w+8:cx-w-8,y:y+bh/2+5,'font-size':15,'font-weight':800,fill:col,'text-anchor':pos?'start':'end'});val.textContent=(pos?'+':'−')+Math.round(Math.abs(r.adv)*100)+' %';s.appendChild(val);
+    });
+    box.appendChild(s);
+  }
+
   /* ---------- DATA ---------- */
   const GAUGES=[
-    {k:'Alkohol', cz:14.4, b:8.9, dir:'lower_is_better', unit:'l/os./rok', src:'OECD Health Statistics, 2024', desc:'Spotřeba čistého alkoholu 14,4 l na osobu (15+) — o 62 % nad OECD. Patříme ke světové špičce.'},
-    {k:'Chřipka 65+', cz:24.5, b:47, dir:'higher_is_better', unit:'%', src:'ÚZIS / OECD, 2025', desc:'Proočkovanost seniorů proti chřipce 24,5 % — zhruba polovina průměru OECD (47 %).'},
-    {k:'Mamograf', cz:54.5, b:68, dir:'higher_is_better', unit:'%', src:'Screening ČR, 2024', desc:'Mamografický screening (50–69) pokrývá 54,5 % žen — cíl OECD je 68 %.'},
-    {k:'Zdravé roky 65+', cz:8, b:10.2, dir:'higher_is_better', unit:'let', src:'Eurostat / OECD, 2024', desc:'Roky života ve zdraví po 65 — Česko 8, OECD 10,2. Dožíváme se déle, ale v horší kondici.'},
-    {k:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better', unit:'dní', src:'OECD waiting times', desc:'Medián čekání na náhradu kyčle 118 dní vs. 85 v OECD — o třetinu déle.'}
+    // KDE ZAOSTÁVÁME — největší páka (ručička do červené)
+    {g:'bad', k:'Alkohol', cz:14.4, b:8.9, dir:'lower_is_better', unit:'l/os./rok', src:'OECD Health Statistics, 2024', desc:'Spotřeba čistého alkoholu 14,4 l na osobu (15+) — o 62 % nad OECD. Patříme ke světové špičce. Největší páka: i malé zlepšení zasáhne celou populaci.'},
+    {g:'bad', k:'Chřipka 65+', cz:24.5, b:47, dir:'higher_is_better', unit:'%', src:'ÚZIS / OECD, 2025', desc:'Proočkovanost seniorů proti chřipce 24,5 % — zhruba polovina průměru OECD (47 %). Dohnat svět je tu levné a rychlé.'},
+    {g:'bad', k:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better', unit:'dní', src:'OECD waiting times', desc:'Medián čekání na náhradu kyčle 118 dní vs. 85 v OECD — o třetinu déle.'},
+    {g:'bad', k:'Zdravé roky 65+', cz:8, b:10.2, dir:'higher_is_better', unit:'let', src:'Eurostat / OECD, 2024', desc:'Roky života ve zdraví po 65 — Česko 8, OECD 10,2. Dožíváme se déle, ale v horší kondici.'},
+    // KDE EXCELUJEME — ručička do zelené (tady tlačit dál = velké úsilí, malý zisk)
+    {g:'good', k:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better', unit:'/1000', src:'Eurostat, 2023', desc:'Kojenecká úmrtnost 2,3 na 1000 živě narozených — výrazně pod průměrem EU (3,5). Tady jsme světová špička.'},
+    {g:'good', k:'Úmrtí po infarktu', cz:4.57, b:6.5, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Nemocniční úmrtnost po akutním infarktu 4,57 % vs. 6,5 % v OECD. Akutní kardiologie patří k nejlepším.'},
+    {g:'good', k:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better', unit:'%', src:'OECD, 2023', desc:'75 % lidí je spokojeno s dostupností péče — nad OECD (64 %). Posouvat to výš stojí hodně úsilí za malý zisk.'},
+    {g:'good', k:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Pacienti platí z vlastní kapsy jen 13,6 % výdajů (OECD 18 %) — finanční dostupnost péče je nadprůměrná.'}
   ];
   const SCREEN=[
     {label:'Mamograf (50–69)', cz:54.5, target:68},
@@ -492,6 +531,17 @@
     {label:'Děti — hexavakcína', cz:86, target:92}
   ];
   const SUICIDE=[{year:2019,value:11.22},{year:2020,value:11.64},{year:2021,value:11.64},{year:2022,value:12.29},{year:2023,value:11.59}];
+  const DIVERGE=[
+    {label:'Spotřeba alkoholu', cz:14.4, b:8.9, dir:'lower_is_better'},
+    {label:'Očkování chřipka 65+', cz:24.5, b:47, dir:'higher_is_better'},
+    {label:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better'},
+    {label:'Odvratitelné hospitalizace', cz:592, b:473, dir:'lower_is_better'},
+    {label:'Zdravé roky po 65', cz:8, b:10.2, dir:'higher_is_better'},
+    {label:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better'},
+    {label:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better'},
+    {label:'Úmrtí po infarktu (nemocniční)', cz:4.57, b:6.5, dir:'lower_is_better'},
+    {label:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better'}
+  ];
 
   /* ---------- RENDER STATIC compasses ---------- */
   compassMark(document.getElementById('coverCompass'),{light:true});
@@ -504,9 +554,13 @@
   const gDesc=document.getElementById('gaugeDesc');
   const gSrc=document.getElementById('gaugeSrc');
   let gi=0;
-  GAUGES.forEach((g,i)=>{const b=document.createElement('button');b.textContent=g.k;b.onclick=()=>{gi=i;updateGauge();};picker.appendChild(b);});
+  let lastG=null; const gbtns=[];
+  GAUGES.forEach((g,i)=>{
+    if(g.g!==lastG){const lab=document.createElement('span');lab.className='grp';lab.textContent=g.g==='bad'?'Kde nejvíc zaostáváme — největší páka':'Kde excelujeme — ručička do zelené';picker.appendChild(lab);lastG=g.g;}
+    const b=document.createElement('button');b.textContent=g.k;b.className=g.g;b.onclick=()=>{gi=i;updateGauge();};picker.appendChild(b);gbtns[i]=b;
+  });
   function updateGauge(){
-    [...picker.children].forEach((b,i)=>b.classList.toggle('on',i===gi));
+    gbtns.forEach((b,i)=>b.classList.toggle('on',i===gi));
     const g=GAUGES[gi];
     setGauge(document.getElementById('mainGauge'),g.cz,g.b,g.dir);
     gDesc.textContent=g.desc; gSrc.textContent=g.src+' · skorezdravotnictvi.cz';
@@ -529,6 +583,7 @@
     if(slide.hasAttribute('data-g2')){ const b=document.getElementById('gaugeA'); gauge(b); const set=()=>setGauge(b,8,10.2,'higher_is_better'); animate?setTimeout(set,60):set(); }
     if(slide.hasAttribute('data-bars')){ const b=document.getElementById('screenBars'); bars(b,SCREEN); (b._anim||[]).forEach(f=>animate?setTimeout(f,180):f()); }
     if(slide.hasAttribute('data-line')){ const b=document.getElementById('lineChart'); line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.'); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
+    if(slide.hasAttribute('data-diverge')){ const b=document.getElementById('divergeChart'); diverging(b,DIVERGE); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
   }
   function onEnter(slide){ countUp(slide); chartsFor(slide,true); }
   // Před tiskem/PDF: naplň čísla i grafy na VŠECH slidech (jinak by neprošlé slidy byly prázdné).
