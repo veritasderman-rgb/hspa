@@ -9,6 +9,19 @@
 <link rel="stylesheet" href="src/styles.min.css">
 <style>
   :root{--paper:#fbf8f1;--ink:#1f1a14;--red:#b8361e;--muted:#6b6253;--line:rgba(31,26,20,.16);--good:#2f6b1f;--warn:#a05a08;--bad:#b8361e}
+  body{color:var(--ink)}
+  /* utility nav (cross-links) */
+  .pr-nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem 6vw;font-size:.85rem}
+  .pr-nav-brand{font-weight:800;letter-spacing:.04em;display:flex;align-items:center;gap:.5rem}
+  .pr-nav-brand svg{width:20px;height:20px}
+  .pr-nav-links{display:flex;gap:.4rem;flex-wrap:wrap}
+  .pr-nav-links a{color:var(--muted);text-decoration:none;font-weight:700;padding:.35rem .8rem;border-radius:999px;border:1px solid transparent}
+  .pr-nav-links a:hover{color:var(--ink);border-color:var(--line)}
+  .pr-nav-links a[aria-current=page]{color:var(--ink);border-color:var(--ink)}
+  .ic{width:1.15em;height:1.15em;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .embargo-tag{display:inline-block;background:var(--red);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.18em;
+    padding:.18rem .55rem;border-radius:4px;margin-right:.6rem;vertical-align:middle}
   .pr-hero{background:var(--ink);color:var(--paper);padding:5vmin 6vw;display:flex;gap:4vmin;align-items:center;flex-wrap:wrap}
   .pr-hero .compass{width:96px;height:96px;flex:0 0 auto}
   .pr-hero .k{font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;font-weight:800;color:rgba(251,248,241,.7)}
@@ -46,13 +59,28 @@
   @media print{
     .pr-hero{background:#fff;color:#000;border-bottom:2px solid #000}
     .pr-hero .k,.pr-hero h1{color:#000}
-    .pr-dl,.pr-btns,.chart-card .mini,.pr-embargo .noprint{display:none!important}
+    .pr-nav,.pr-dl,.pr-btns,.chart-card .mini,.pr-embargo .noprint{display:none!important}
     .btn{display:none}
     a[href]:after{content:""}
   }
 </style>
 </head>
 <body>
+
+<nav class="pr-nav" aria-label="Materiály konference">
+  <span class="pr-nav-brand">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="44" stroke="#1f1a14" stroke-width="2"/>
+      <polygon points="33,79.44 55.2,53 44.8,47" stroke="#1f1a14" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="67,20.56 55.2,53 44.8,47" fill="#b8361e"/>
+    </svg>HSPA Monitor
+  </span>
+  <span class="pr-nav-links">
+    <a href="konference.html">Registrace</a>
+    <a href="konference-prezentace.html">Prezentace</a>
+    <a href="tiskovazprava.html" aria-current="page">Tisková zpráva</a>
+  </span>
+</nav>
 
 <header class="pr-hero">
   <svg class="compass" viewBox="0 0 100 100" fill="none" aria-hidden="true">
@@ -69,7 +97,7 @@
   </div>
 </header>
 
-<div class="pr-embargo">⏳ EMBARGO do zahájení konference (Praha, září 2026). <span class="noprint">Do té doby prosím necitovat. · Datum a místo doplníme po potvrzení.</span></div>
+<div class="pr-embargo"><span class="embargo-tag">EMBARGO</span>do zahájení konference (Praha, září 2026). <span class="noprint">Do té doby prosím necitovat. · Datum a místo doplníme po potvrzení.</span></div>
 
 <main class="pr-wrap" id="content">
 
@@ -78,10 +106,18 @@
     <h2>Tiskový balíček ke stažení</h2>
     <p>Vše pro vaši redakci na jednom místě — tisková zpráva, fakta a čísla se zdroji, citační pravidla, logo a grafy. Balíček se sestaví přímo ve vašem prohlížeči, bez registrace.</p>
     <div class="pr-btns">
-      <button class="btn primary" id="dlZip">📦 Stáhnout celý balíček (ZIP)</button>
-      <button class="btn" id="dlPress">📄 Tisková zpráva (PDF — tisk)</button>
-      <button class="btn" id="dlCsv">📊 Fakta a čísla (CSV)</button>
-      <button class="btn" id="dlLogo">🧭 Logo / kompas (SVG)</button>
+      <button class="btn primary" id="dlZip">
+        <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v8.5"/><path d="m6.5 8 3.5 3.5L13.5 8"/><path d="M4 13.5V16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2.5"/></svg>
+        Stáhnout celý balíček (ZIP)</button>
+      <button class="btn" id="dlPress">
+        <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 2.5h6l3.5 3.5V17a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 5 17V3a.5.5 0 0 1 .5-.5Z"/><path d="M11 2.5V6.5h4"/><path d="M7.5 10.5h5M7.5 13h5"/></svg>
+        Tisková zpráva (PDF)</button>
+      <button class="btn" id="dlCsv">
+        <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 16.5h13"/><path d="M5.5 16.5V10M9 16.5V4.5M12.5 16.5v-4.5M16 16.5V8"/></svg>
+        Fakta a čísla (CSV)</button>
+      <button class="btn" id="dlLogo">
+        <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 13.5 2.5-5 4.5-2-2.5 5z" fill="currentColor" stroke="none"/></svg>
+        Logo / kompas (SVG)</button>
     </div>
   </section>
 
@@ -98,10 +134,10 @@
     <p>Portál je <strong>nestranný a otevřený</strong>: celý datový pipeline je veřejný, čísla pocházejí z ÚZIS, ČSÚ, OECD a Eurostatu a jsou denně aktualizována. Web je zdarma a všechna data lze citovat.</p>
 
     <blockquote class="pr-quote">„Nechceme říkat, kdo je vinen. Chceme, aby každá debata o zdravotnictví začínala u stejného čísla. Postavili jsme kompas — měří, srovnává s nejlepšími a ukazuje směr."
-      <cite>[Jméno], zakladatel projektu HSPA Monitor</cite></blockquote>
+      <cite>Bc. Josef Pavlovic, zakladatel projektu HSPA Monitor</cite></blockquote>
 
     <blockquote class="pr-quote">„Síla portálu je v tom, že čísla nestojí osamoceně — každé má benchmark a zdroj. To je rozdíl mezi dojmem a doložitelným faktem."
-      <cite>[Jméno], odborný garant metodiky</cite></blockquote>
+      <cite>MDDr. Ing. Bára Malíková, odborná garantka metodiky</cite></blockquote>
 
     <p>Portál bude veřejnosti představen na konferenci <strong>Skóre 2026 — první čtení</strong> v Praze za účasti zástupců státu, plátců, odborných společností, akademie a pacientských organizací.</p>
 
@@ -131,8 +167,14 @@
     <p>Zdroj uvádějte jako: <em>„HSPA Monitor / Skóre zdravotnictví (skorezdravotnictvi.cz), data: [původní zdroj], [rok]."</em> U jednotlivých indikátorů je vždy uveden primární zdroj (ÚZIS, ČSÚ, OECD, Eurostat) — citujte prosím i ten.</p>
 
     <div class="pr-foot">
-      <strong>Kontakt pro média:</strong> [jméno tiskového kontaktu] · [e-mail] · [telefon]<br>
-      Web: skorezdravotnictvi.cz · Tato stránka je neveřejný pracovní materiál pro novináře.
+      <strong>Kontakt pro média</strong><br>
+      Bc. Josef Pavlovic — zakladatel projektu<br>
+      <a href="mailto:josef@josefpavlovic.cz" style="color:var(--red);font-weight:700">josef@josefpavlovic.cz</a> · <a href="tel:+420607517967" style="color:var(--ink);font-weight:700;text-decoration:none">+420 607 517 967</a><br>
+      Odborná garantka metodiky: MDDr. Ing. Bára Malíková<br>
+      <span style="color:var(--muted)">Web: skorezdravotnictvi.cz · Tato stránka je neveřejný pracovní materiál pro novináře.</span>
+      <p class="noprint" style="margin-top:1.4rem"><a class="btn" href="konference-prezentace.html">
+        <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M8.5 7 13 10l-4.5 3z" fill="currentColor" stroke="none"/></svg>
+        Spustit prezentaci</a></p>
     </div>
   </article>
 
@@ -226,13 +268,17 @@ KLÍČOVÁ ZJIŠTĚNÍ
 
 CITÁTY
 „Nechceme říkat, kdo je vinen. Chceme, aby každá debata začínala u stejného
-čísla. Postavili jsme kompas." — [Jméno], zakladatel projektu
+čísla. Postavili jsme kompas." — Bc. Josef Pavlovic, zakladatel projektu
+
+„Síla portálu je v tom, že čísla nestojí osamoceně — každé má benchmark a zdroj."
+— MDDr. Ing. Bára Malíková, odborná garantka metodiky
 
 O PROJEKTU
 HSPA Monitor je nezávislá občanská implementace rámce HSPA (WHO 2000, OECD 2023)
 pro ČR. Není napojen na žádnou stranu, plátce ani poskytovatele.
 
-KONTAKT PRO MÉDIA: [jméno] · [e-mail] · [telefon] · skorezdravotnictvi.cz
+KONTAKT PRO MÉDIA
+Bc. Josef Pavlovic · josef@josefpavlovic.cz · +420 607 517 967 · skorezdravotnictvi.cz
 `;
   const citeTxt=`JAK CITOVAT — Skóre zdravotnictví / HSPA Monitor
 
@@ -254,7 +300,7 @@ Obsah:
 - graf-kompas.svg       HSPA kompas — vzdálenost od cíle
 
 Web: skorezdravotnictvi.cz
-Kontakt pro média: [jméno] · [e-mail]
+Kontakt pro média: Bc. Josef Pavlovic · josef@josefpavlovic.cz · +420 607 517 967
 `;
   function csvText(){
     const cols=['ukazatel','CR','benchmark','jednotka','rok','zdroj'];
