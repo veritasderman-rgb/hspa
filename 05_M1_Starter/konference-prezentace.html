@@ -322,17 +322,30 @@
     <div class="source">Screening programy ČR + proočkovanost, 2024–2025 · benchmark OECD</div>
   </section>
 
-  <!-- 13 · STORY C čekání trend (line chart) -->
-  <section class="slide" data-anim data-line>
+  <!-- 13 · STORY C čekání (gauge) -->
+  <section class="slide" data-anim data-g3>
     <div class="split">
       <div>
         <div class="kicker" data-in>Příběh C — čekání, na kterém záleží</div>
         <h2 data-in style="--i:1">118 vs. 85 dní<br>na novou kyčel.</h2>
-        <p class="sub" data-in style="--i:2">Na specialistu se čeká 28 dní, v OECD 18. A sebevražednost se roky drží nad evropským průměrem — křivka, která nechce klesnout.</p>
+        <p class="sub" data-in style="--i:2">A na specialistu se čeká 28 dní místo 18 jako v OECD. Každý den čekání s bolestí se počítá.</p>
+      </div>
+      <div class="chartwrap" data-in style="--i:3"><div id="gaugeC" style="width:88%;aspect-ratio:1.15"></div></div>
+    </div>
+    <div class="source">OECD Health Statistics — čekací doby</div>
+  </section>
+
+  <!-- 13b · SEBEVRAŽEDNOST (samostatný slide) -->
+  <section class="slide" data-anim data-line>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>Příběh C+ — duševní zdraví</div>
+        <h2 data-in style="--i:1">Sebevražednost roky <span class="red-em">neklesá</span>.</h2>
+        <p class="sub" data-in style="--i:2">Drží se nad evropským průměrem a síť center duševního zdraví teprve vzniká. Křivka, která by klesat měla — a nechce.</p>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="lineChart" style="width:100%;height:60cqh"></div></div>
     </div>
-    <div class="source">OECD Health Statistics — waiting times; ČSÚ — sebevražednost</div>
+    <div class="source">ČSÚ — standardizovaná míra sebevražednosti; benchmark EU</div>
   </section>
 
   <!-- 14 · PRESS WALL -->
@@ -347,6 +360,28 @@
       <div class="stat" data-in style="--i:6"><div class="n" data-count="14.4" data-dec="1">0</div><div class="d">litrů alkoholu na osobu ročně (OECD 8,9) — mezi nejvíc na světě</div></div>
     </div>
     <div class="source">Ke každému číslu najdete definici i zdroj na skorezdravotnictvi.cz</div>
+  </section>
+
+  <!-- 14b · NEJEN DATA — AI a přístup -->
+  <section class="slide paper2" data-anim>
+    <div class="kicker" data-in>Nejen čísla — i souvislosti</div>
+    <h2 data-in style="--i:1">Data jsou začátek.<br>Smysl dají, teprve když je <span class="red-em">poskládáme</span>.</h2>
+    <p class="lead" data-in style="--i:2;max-width:64ch">Sbírat čísla nestačí — zajímavé je, co si řeknou dohromady. Díky AI se nebojíme skládat je do delších zamyšlení a ptát se: jsou ta hodnocení vždycky správně? Přesně kvůli téhle otázce tu jsme.</p>
+    <p class="sub" data-in style="--i:3;max-width:64ch">AI je každým měsícem přesnější rádce — v medicíně to vidíme třeba na radiologii, kde už čte snímky po boku lékaře. A upřímně: tohle je práce jednoho člověka a AI, takže chyba se stát může. Nejlíp se na ni přijde tak, že věci zveřejníme a podívá se na ně co nejvíc lidí. Proto je u každého čísla napsáno, z čeho vychází — ať si to každý najde a srovná sám.</p>
+  </section>
+
+  <!-- 14c · SÉRIE ČLÁNKŮ -->
+  <section class="slide" data-anim>
+    <div class="kicker" data-in>Série článků — nad čím se zamyslet</div>
+    <h2 data-in style="--i:1">Pět linií, které spojují čísla do příběhu.</h2>
+    <ul class="clean src-grid" data-in style="--i:2">
+      <li><b>Žít déle ve zdraví</b> — proč nám přibývají roky, ale ne ve zdraví</li>
+      <li><b>Najít nemoc dřív</b> — co dokáže screening a proč ho nevyužíváme</li>
+      <li><b>Dostat péči včas</b> — čekací doby a dostupnost specialistů</li>
+      <li><b>Platíme za objem, ne za výsledek</b> — jak nastavit úhrady, aby motivovaly</li>
+      <li><b>Digitální zdravotnictví srozumitelně</b> — e-recept, registry a co je vlastně povinné</li>
+    </ul>
+    <p class="sub" data-in style="--i:3">A k tomu samostatná témata — třeba kde umělá inteligence v medicíně léčí a kde zatím jen slibuje.</p>
   </section>
 
   <!-- 15 · PANEL -->
@@ -606,6 +641,7 @@
   function chartsFor(slide,animate){
     if(slide.hasAttribute('data-gauge')){ gauge(document.getElementById('mainGauge')); updateGauge(); }
     if(slide.hasAttribute('data-g2')){ const b=document.getElementById('gaugeA'); gauge(b); const set=()=>setGauge(b,8,10.2,'higher_is_better'); animate?setTimeout(set,60):set(); }
+    if(slide.hasAttribute('data-g3')){ const b=document.getElementById('gaugeC'); gauge(b); const set=()=>setGauge(b,118,85,'lower_is_better'); animate?setTimeout(set,60):set(); }
     if(slide.hasAttribute('data-bars')){ const b=document.getElementById('screenBars'); bars(b,SCREEN); (b._anim||[]).forEach(f=>animate?setTimeout(f,180):f()); }
     if(slide.hasAttribute('data-line')){ const b=document.getElementById('lineChart'); line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.'); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
     if(slide.hasAttribute('data-diverge')){ const b=document.getElementById('divergeChart'); diverging(b,DIVERGE); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
