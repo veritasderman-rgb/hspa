@@ -22,8 +22,10 @@
   .stage{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);
     background:var(--paper);overflow:hidden;container-type:size;
     box-shadow:0 0 120px rgba(0,0,0,.6)}
-  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
-    padding:7cqh 7cqw;opacity:0;transition:opacity .4s ease}
+  /* jednotný vertikální rytmus: titulek/kicker startuje na stejné výšce napříč slidy */
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:flex-start;
+    padding:8.4cqh 8cqw 7.4cqh;opacity:0;transition:opacity .4s ease}
+  .slide.center{justify-content:center}
   .slide.active{display:flex;opacity:1}
   .slide.dark{background:var(--ink);color:var(--paper)}
   .slide.red{background:var(--red);color:#fff}
@@ -36,9 +38,9 @@
   .kicker::before{content:"";width:4.5cqw;height:2px;background:var(--red)}
   .slide.dark .kicker,.slide.red .kicker{color:rgba(255,255,255,.72)}
   .slide.red .kicker::before{background:#fff}
-  h1{font-family:var(--serif);font-weight:700;line-height:1;margin:0;font-size:9.6cqh;letter-spacing:-.012em}
-  h2{font-family:var(--serif);font-weight:700;line-height:1.04;margin:0;font-size:6.6cqh;letter-spacing:-.01em}
-  .lead{font-family:var(--serif);font-size:3.4cqh;line-height:1.36;max-width:30ch;margin-top:3cqh}
+  h1{font-family:var(--serif);font-weight:700;line-height:1;margin:0;font-size:9cqh;letter-spacing:-.012em}
+  h2{font-family:var(--serif);font-weight:700;line-height:1.04;margin:0;font-size:6cqh;letter-spacing:-.01em}
+  .lead{font-family:var(--serif);font-size:3.3cqh;line-height:1.38;max-width:40ch;margin-top:3cqh}
   .slide.dark .lead,.slide.red .lead{color:rgba(255,255,255,.93)}
   .sub{font-size:2.3cqh;color:var(--muted);margin-top:2.2cqh;max-width:54ch;line-height:1.5}
   .slide.dark .sub{color:rgba(255,255,255,.66)}
@@ -48,7 +50,7 @@
   .slide.active [data-in]{opacity:1;transform:none}
   .slide.active [data-in]{transition-delay:calc(var(--i,0)*90ms)}
   /* layout helpers */
-  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:6cqw;align-items:center;height:100%}
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:6cqw;align-items:center;flex:1 1 auto;min-height:0}
   .cover-grid{display:flex;align-items:center;gap:6cqw}
   .big{font-family:var(--serif);font-weight:700;font-size:22cqh;line-height:.86;letter-spacing:-.02em}
   .source{position:absolute;left:7cqw;bottom:3.4cqh;font-size:1.5cqh;color:var(--muted);letter-spacing:.02em}
@@ -69,8 +71,30 @@
   ul.clean li{font-size:2.5cqh;line-height:1.45;padding:1.7cqh 0;border-top:1px solid var(--line)}
   .slide.dark ul.clean li,.slide.red ul.clean li{border-color:rgba(255,255,255,.2)}
   ul.clean li b{font-family:var(--serif)}
-  .src-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 5cqw;max-width:none;margin-top:2cqh}
+  ul.clean.src-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 6cqw;max-width:none;margin-top:2.4cqh}
   .src-grid li{font-size:2cqh;padding:1.2cqh 0;line-height:1.35}
+  /* poděkování — credit row */
+  .credit-row{display:flex;flex-wrap:wrap;gap:1.4cqw;justify-content:center;margin-top:3.4cqh}
+  .credit-row span{font-family:var(--serif);font-size:2.7cqh;font-weight:700;padding:.9cqh 2.2cqw;border:1px solid rgba(255,255,255,.28);border-radius:999px}
+  .credit-row span.hl{background:var(--red);border-color:var(--red);color:#fff}
+  .kicker.c{justify-content:center}
+  /* pull-quote karta */
+  .pullquote{border-left:4px solid var(--red);padding:1cqh 0 1cqh 2.4cqw;font-family:var(--serif);font-size:4cqh;line-height:1.18}
+  .pullquote .src{font-family:var(--sans);font-size:1.8cqh;color:var(--muted);margin-top:1.6cqh;font-weight:700}
+  .slide.dark .pullquote .src,.slide.paper2 .pullquote .src{color:var(--muted)}
+  /* mock prohlížeč pro demo */
+  .browser{border:1px solid rgba(255,255,255,.25);border-radius:10px;overflow:hidden;width:100%;background:rgba(255,255,255,.04)}
+  .browser .bar{display:flex;align-items:center;gap:1cqw;padding:1.4cqh 1.6cqw;border-bottom:1px solid rgba(255,255,255,.18);font-size:1.6cqh;color:rgba(255,255,255,.7)}
+  .browser .bar i{width:1.5cqh;height:1.5cqh;border-radius:50%;background:rgba(255,255,255,.3)}
+  .browser .body{display:flex;align-items:center;justify-content:center;padding:5cqh 2cqw}
+  /* dvě tváře — červená vs zelená */
+  .twoface{display:grid;grid-template-columns:1fr 1fr;gap:6cqw;margin-top:4cqh}
+  .twoface .col-h{font-size:1.8cqh;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding-bottom:1.4cqh;border-bottom:2px solid currentColor;margin-bottom:1.4cqh}
+  .twoface .bad .col-h{color:var(--redbright)} .twoface .good .col-h{color:#7ab85f}
+  .twoface .row{display:flex;align-items:baseline;gap:1.6cqw;padding:1.5cqh 0;border-top:1px solid rgba(255,255,255,.14)}
+  .twoface .v{font-family:var(--serif);font-weight:700;font-size:5cqh;line-height:1;min-width:5.5ch}
+  .twoface .bad .v{color:var(--redbright)} .twoface .good .v{color:#7ab85f}
+  .twoface .t{font-size:1.9cqh;color:rgba(255,255,255,.82);line-height:1.32}
   .src-grid a{color:inherit;text-decoration:none;border-bottom:2px solid rgba(184,54,30,.55);transition:color .15s}
   .src-grid a:hover{color:var(--red)}
   .chiprow{display:flex;flex-wrap:wrap;gap:.9cqh 1cqw;align-items:center;margin-top:2.4cqh}
@@ -85,14 +109,14 @@
   .steps .s::before{content:counter(s,decimal-leading-zero);font-family:var(--serif);font-weight:700;font-size:3cqh;color:var(--red)}
   .slide.dark .steps .s::before{color:var(--redbright)}
   /* press wall */
-  .wall{display:grid;grid-template-columns:repeat(3,1fr);gap:4cqh 4cqw;margin-top:3.5cqh}
-  .stat .n{font-family:var(--serif);font-weight:700;font-size:8cqh;line-height:.85;color:var(--red)}
+  .wall{display:grid;grid-template-columns:repeat(3,1fr);gap:7cqh 4cqw;margin-top:6cqh}
+  .stat .n{font-family:var(--serif);font-weight:700;font-size:9.5cqh;line-height:.85;color:var(--red)}
   .slide.dark .stat .n{color:var(--redbright)}
   .stat .d{font-size:1.85cqh;margin-top:1cqh;line-height:1.32;max-width:26ch;color:var(--ink2)}
   .slide.dark .stat .d{color:rgba(255,255,255,.8)}
   /* HSPA matrix grid */
   .matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw;margin-top:3cqh}
-  .matrix .cell{border:1px solid var(--line);border-radius:8px;padding:2cqh 1.4cqw;min-height:20cqh;display:flex;flex-direction:column;gap:1cqh;background:rgba(255,255,255,.5)}
+  .matrix .cell{border:1px solid var(--line);border-radius:8px;padding:2.6cqh 1.6cqw;min-height:30cqh;display:flex;flex-direction:column;gap:1cqh;background:rgba(255,255,255,.5)}
   .matrix .cell h4{margin:0;font-family:var(--serif);font-size:2.4cqh}
   .matrix .cell .tag{font-size:1.4cqh;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--muted)}
   .matrix .dots{margin-top:auto;display:flex;gap:.6cqw;flex-wrap:wrap}
@@ -148,7 +172,7 @@
 <div class="stage" id="stage">
 
   <!-- 1 · COVER -->
-  <section class="slide active dark" data-anim>
+  <section class="slide active center dark" data-anim>
     <div class="cover-grid">
       <div id="coverCompass" style="width:30cqh;height:30cqh;flex:0 0 auto"></div>
       <div>
@@ -189,15 +213,18 @@
 
   <!-- 4 · PROBLEM -->
   <section class="slide" data-anim>
-    <div class="kicker" data-in>Proč to vzniklo</div>
-    <h2 data-in style="--i:1">Debata o zdravotnictví u nás stojí na dojmech.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
-    <p class="sub" data-in style="--i:2">Čísla jsou rozházená po ÚZIS, ČSÚ, OECD, Eurostatu i pojišťovnách — schovaná v PDF a často jen anglicky. My je dáváme na jedno místo, srozumitelně a vždycky s odkazem na zdroj.</p>
-    <div class="legend" data-in style="--i:3" aria-hidden="true"></div>
-    <ul class="clean" data-in style="--i:3">
-      <li><b>155 ukazatelů</b> ve čtyřech rovinách, jak systém funguje</li>
-      <li><b>U každého čísla</b> najdete srovnání se světem, vývoj v čase i přesnou definici</li>
-      <li><b>Všechno je veřejné</b> a můžete to citovat</li>
-    </ul>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>Proč to vzniklo</div>
+        <h2 data-in style="--i:1">Debata o zdravotnictví u nás stojí na dojmech.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
+        <p class="sub" data-in style="--i:2">Čísla jsou rozházená po ÚZIS, ČSÚ, OECD, Eurostatu i pojišťovnách — schovaná v PDF a často jen anglicky. My je dáváme na jedno místo, srozumitelně a vždycky s odkazem na zdroj.</p>
+      </div>
+      <ul class="clean" data-in style="--i:2">
+        <li><b>155 ukazatelů</b> ve čtyřech rovinách, jak systém funguje</li>
+        <li><b>U každého čísla</b> najdete srovnání se světem, vývoj v čase i přesnou definici</li>
+        <li><b>Všechno je veřejné</b> a můžete to citovat</li>
+      </ul>
+    </div>
   </section>
 
   <!-- 4b · ODKUD DATA -->
@@ -216,11 +243,19 @@
   </section>
 
   <!-- 4c · PODĚKOVÁNÍ -->
-  <section class="slide dark" data-anim>
-    <div class="kicker" data-in>Komu za to vděčíme</div>
-    <h2 data-in style="--i:1">Bez nich bychom neměli nic.</h2>
-    <p class="lead" data-in style="--i:2">Než se z čísla stane ukazatel, musí ho někdo nasbírat, ověřit a metodicky srovnat. Náš portál na téhle práci stojí — sám žádná data nevyrábí.</p>
-    <p class="sub" data-in style="--i:3">Díky patří <b style="color:var(--paper)">ÚZIS</b> i <b style="color:var(--paper)">Kanceláři zdravotního pojištění</b>. A především lékařům a sestrám, kteří si i v nabitém dni najdou čas data poctivě zadat. Bez nich bychom nevěděli, jak na tom jsme.</p>
+  <section class="slide center dark" data-anim>
+    <div style="max-width:82cqw;margin:0 auto;text-align:center">
+      <div class="kicker c" data-in>Komu za to vděčíme</div>
+      <h1 data-in style="--i:1;font-size:7.2cqh">Bez nich bychom neměli nic.</h1>
+      <p class="lead" data-in style="--i:2;max-width:60ch;margin:3.2cqh auto 0">Než se z čísla stane ukazatel, musí ho někdo nasbírat, ověřit a metodicky srovnat. Náš portál na téhle práci stojí — sám žádná data nevyrábí.</p>
+      <div class="credit-row" data-in style="--i:3">
+        <span>ÚZIS</span>
+        <span>Kancelář zdravotního pojištění</span>
+        <span class="hl">lékaři</span>
+        <span class="hl">sestry</span>
+      </div>
+      <p class="sub" data-in style="--i:4;max-width:64ch;margin:3.2cqh auto 0">A především lékařům a sestrám, kteří si i v nabitém dni najdou čas data poctivě zadat. Bez nich bychom nevěděli, jak na tom jsme.</p>
+    </div>
   </section>
 
   <!-- 5 · HSPA MATRIX -->
@@ -242,7 +277,7 @@
   </section>
 
   <!-- 6 · KEYNOTE -->
-  <section class="slide dark" data-anim>
+  <section class="slide center dark" data-anim>
     <div class="kicker" data-in>02 · Keynote — OECD HSPA</div>
     <h2 data-in style="--i:1">Systémy, které se měří veřejně,<br>se rychleji zlepšují.</h2>
     <p class="lead" data-in style="--i:2">Nejde o to, kolik do zdravotnictví nalijeme. Jde o to, co za ty peníze dostaneme.</p>
@@ -252,7 +287,7 @@
   <section class="slide" data-anim data-gauge>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Vyberte ukazatel — ručička se přenastaví</div>
+        <div class="kicker" data-in>Vyberte ukazatel</div>
         <h2 data-in style="--i:1">Jak daleko je Česko od&nbsp;severu?</h2>
         <div class="picker" data-in style="--i:2" id="gaugePicker"></div>
         <p class="sub" id="gaugeDesc" data-in style="--i:3"></p>
@@ -274,31 +309,43 @@
 
   <!-- 8 · HEALTHY BELGIUM -->
   <section class="slide paper2" data-anim>
-    <div class="kicker" data-in>03 · Vzor, který funguje</div>
-    <h2 data-in style="--i:1">Healthy Belgium:<br>portál, který změnil debatu.</h2>
-    <p class="sub" data-in style="--i:2">Belgie má veřejný portál stejného typu už od roku 2019. Dnes z něj čerpá vláda, novináři i univerzity. Není to žebříček jednou za rok, ale živý zdroj, na který se všichni odvolávají. Tudy chceme jít i u nás.</p>
-    <ul class="clean" data-in style="--i:3">
-      <li><b>Společná čísla</b>, od kterých se odpíchne každá debata o reformě</li>
-      <li><b>Pravidelná aktualizace</b> místo jednorázových studií</li>
-      <li><b>Nestrannost</b>, kterou drží metodika, ne názor</li>
-    </ul>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>03 · Vzor, který funguje</div>
+        <h2 data-in style="--i:1">Healthy Belgium:<br>portál, který změnil debatu.</h2>
+        <p class="sub" data-in style="--i:2">Belgie má veřejný portál stejného typu už od roku 2019. Dnes z něj čerpá vláda, novináři i univerzity. Není to žebříček jednou za rok, ale živý zdroj, na který se všichni odvolávají. Tudy chceme jít i u nás.</p>
+      </div>
+      <ul class="clean" data-in style="--i:2">
+        <li><b>Společná čísla</b>, od kterých se odpíchne každá debata o reformě</li>
+        <li><b>Pravidelná aktualizace</b> místo jednorázových studií</li>
+        <li><b>Nestrannost</b>, kterou drží metodika, ne názor</li>
+      </ul>
+    </div>
   </section>
 
   <!-- 9 · LIVE DEMO -->
   <section class="slide dark" data-anim>
-    <div class="kicker" data-in>04 · Živé demo — otevřete si to teď</div>
-    <h2 data-in style="--i:1">Vše, co uvidíte,<br>si ověříte za 30 sekund.</h2>
-    <div class="steps">
-      <div class="s" data-in style="--i:2">Titulní strana → přehled čtyř oblastí; barvy hned ukážou, kde je dobře a kde zle</div>
-      <div class="s" data-in style="--i:3">Detail ukazatele → hodnota, vývoj, srovnání s OECD/EU a odkaz na zdroj</div>
-      <div class="s" data-in style="--i:4">Kraje → mapa a rozdíly mezi regiony u jednoho čísla</div>
-      <div class="s" data-in style="--i:5">Článek → jak se z dat stává čtení, s vysvětlivkami a zdroji</div>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>04 · Živé demo — otevřete si to teď</div>
+        <h2 data-in style="--i:1">Vše, co uvidíte,<br>si ověříte za 30 sekund.</h2>
+        <div class="steps">
+          <div class="s" data-in style="--i:2">Titulní strana → přehled čtyř oblastí; barvy hned ukážou, kde je dobře a kde zle</div>
+          <div class="s" data-in style="--i:3">Detail ukazatele → hodnota, vývoj, srovnání s OECD/EU a odkaz na zdroj</div>
+          <div class="s" data-in style="--i:4">Kraje → mapa a rozdíly mezi regiony u jednoho čísla</div>
+          <div class="s" data-in style="--i:5">Článek → jak se z dat stává čtení, s vysvětlivkami a zdroji</div>
+        </div>
+      </div>
+      <div class="browser" data-in style="--i:3">
+        <div class="bar"><i></i><i></i><i></i><span style="margin-left:1cqw">skorezdravotnictvi.cz</span></div>
+        <div class="body"><div id="demoCompass" style="width:44%;aspect-ratio:1"></div></div>
+      </div>
     </div>
     <div class="source">Na plátně promítáme naživo, QR kód vede rovnou na web. Záloha nahraná pro jistotu.</div>
   </section>
 
   <!-- 10 · DATA STORIES intro -->
-  <section class="slide red" data-anim>
+  <section class="slide center red" data-anim>
     <div class="kicker" data-in>05 · Co data říkají o ČR</div>
     <h1 data-in style="--i:1">Tři příběhy,<br>které nejsou názor.</h1>
     <p class="lead" data-in style="--i:2">Délka vs. kvalita života · prevence, která se nedělá · čekání, na kterém záleží.</p>
@@ -354,6 +401,27 @@
     <div class="source">ČSÚ — standardizovaná míra sebevražednosti; benchmark EU</div>
   </section>
 
+  <!-- 13c · DVĚ TVÁŘE -->
+  <section class="slide dark" data-anim>
+    <div class="kicker" data-in>Dvě tváře českého zdravotnictví</div>
+    <h2 data-in style="--i:1">V něčem světová špička.<br>V něčem roky zpátky.</h2>
+    <div class="twoface">
+      <div class="bad" data-in style="--i:2">
+        <div class="col-h">Kde zaostáváme</div>
+        <div class="row"><span class="v">14,4</span><span class="t">litrů alkoholu na osobu ročně — nejvíc v OECD (8,9)</span></div>
+        <div class="row"><span class="v">24,5 %</span><span class="t">seniorů očkovaných proti chřipce — OECD 47 %</span></div>
+        <div class="row"><span class="v">118</span><span class="t">dní na novou kyčel — OECD 85</span></div>
+      </div>
+      <div class="good" data-in style="--i:3">
+        <div class="col-h">Kde naopak vedeme</div>
+        <div class="row"><span class="v">2,3</span><span class="t">kojenecká úmrtnost na 1000 — pod průměrem EU (3,5)</span></div>
+        <div class="row"><span class="v">4,6 %</span><span class="t">úmrtí po infarktu v nemocnici — OECD 6,5 %</span></div>
+        <div class="row"><span class="v">13,6 %</span><span class="t">platí pacienti z kapsy — OECD 18 %</span></div>
+      </div>
+    </div>
+    <div class="source">Skóre není ortel — ukazuje, kde zabrat a na čem stavět. Vše na skorezdravotnictvi.cz</div>
+  </section>
+
   <!-- 14 · PRESS WALL -->
   <section class="slide dark" data-anim>
     <div class="kicker" data-in>Pro novináře — šest čísel, která stojí za článek</div>
@@ -370,10 +438,17 @@
 
   <!-- 14b · NEJEN DATA — AI a přístup -->
   <section class="slide paper2" data-anim>
-    <div class="kicker" data-in>Nejen čísla — i souvislosti</div>
-    <h2 data-in style="--i:1">Data jsou začátek.<br>Smysl dají, teprve když je <span class="red-em">poskládáme</span>.</h2>
-    <p class="lead" data-in style="--i:2;max-width:64ch">Sbírat čísla nestačí — zajímavé je, co si řeknou dohromady. Díky AI se nebojíme skládat je do delších zamyšlení a ptát se: jsou ta hodnocení vždycky správně? Přesně kvůli téhle otázce tu jsme.</p>
-    <p class="sub" data-in style="--i:3;max-width:64ch">AI je každým měsícem přesnější rádce — v medicíně to vidíme třeba na radiologii, kde už čte snímky po boku lékaře. A upřímně: web staví z velké části jeden člověk s pomocí AI, takže chyba se stát může. Nejlíp se na ni přijde tak, že věci zveřejníme a podívá se na ně co nejvíc lidí. Proto je u každého čísla napsáno, z čeho vychází — ať si to každý najde a srovná sám.</p>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>Nejen čísla — i souvislosti</div>
+        <h2 data-in style="--i:1">Data jsou začátek.<br>Smysl dají, až když je <span class="red-em">poskládáme</span>.</h2>
+        <p class="sub" data-in style="--i:2">Sbírat čísla nestačí — zajímavé je, co si řeknou dohromady. Díky AI je skládáme do delších zamyšlení. A AI je každým měsícem přesnější rádce; v medicíně to vidíme třeba na radiologii, kde už čte snímky po boku lékaře.</p>
+      </div>
+      <div data-in style="--i:2">
+        <div class="pullquote">„Jsou ta hodnocení vždycky správně? Právě kvůli téhle otázce tu jsme."</div>
+        <p class="sub" style="margin-top:3.2cqh;max-width:42ch">Web staví z velké části jeden člověk s pomocí AI — chyba se stát může. Nejlíp se na ni přijde tak, že je všechno veřejné a u každého čísla je zdroj. Ať si to každý ověří a srovná sám.</p>
+      </div>
+    </div>
   </section>
 
   <!-- 14c · SÉRIE ČLÁNKŮ -->
@@ -403,18 +478,23 @@
 
   <!-- 15 · PANEL -->
   <section class="slide paper2" data-anim>
-    <div class="kicker" data-in>06 · Panel — komu skóre slouží?</div>
-    <h2 data-in style="--i:1">Stát × plátce × pacient × akademie.</h2>
-    <ul class="clean" data-in style="--i:2">
-      <li>Kde dnes při rozhodování nejvíc chybí <b>společná data</b>?</li>
-      <li>Když web ukáže, že Česko zaostává — <b>čí je to úkol</b> a kde začít?</li>
-      <li>Jak pohlídat, aby se z čísel nestal <b>bič místo kompasu</b>?</li>
-      <li>Co byste na webu rádi viděli <b>příští rok navíc</b>?</li>
-    </ul>
+    <div class="split">
+      <div>
+        <div class="kicker" data-in>06 · Panel — komu skóre slouží?</div>
+        <h2 data-in style="--i:1">Stát × plátce ×<br>pacient × akademie.</h2>
+        <p class="sub" data-in style="--i:2">Žádná strana nemá většinu hlasů. Sdílená fakta jsou předpoklad dohody, ne náhrada za ni.</p>
+      </div>
+      <ul class="clean" data-in style="--i:2">
+        <li>Kde dnes při rozhodování nejvíc chybí <b>společná data</b>?</li>
+        <li>Když web ukáže, že Česko zaostává — <b>čí je to úkol</b> a kde začít?</li>
+        <li>Jak pohlídat, aby se z čísel nestal <b>bič místo kompasu</b>?</li>
+        <li>Co byste na webu rádi viděli <b>příští rok navíc</b>?</li>
+      </ul>
+    </div>
   </section>
 
   <!-- 16 · ZÁVĚR -->
-  <section class="slide red" data-anim>
+  <section class="slide center red" data-anim>
     <div class="kicker" data-in>07 · Závěr a výzva</div>
     <h1 data-in style="--i:1">Web je veřejný statek.<br>Od dneška je váš.</h1>
     <ul class="clean" data-in style="--i:2">
@@ -426,7 +506,7 @@
   </section>
 
   <!-- 17 · CONTACT -->
-  <section class="slide dark" data-anim>
+  <section class="slide center dark" data-anim>
     <div class="cover-grid">
       <div id="endCompass" style="width:26cqh;height:26cqh;flex:0 0 auto"></div>
       <div>
@@ -625,6 +705,7 @@
   compassMark(document.getElementById('endCompass'),{light:true});
   compassMark(document.getElementById('introCompass'),{});
   compassMark(document.getElementById('legendCompass'),{});
+  compassMark(document.getElementById('demoCompass'),{light:true});
 
   /* ---------- INTERACTIVE GAUGE slide ---------- */
   const picker=document.getElementById('gaugePicker');
