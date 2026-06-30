@@ -46,6 +46,8 @@
   .konf-ok h2{font-family:Georgia,serif;font-size:1.8rem;margin:.2rem 0}
   .konf-admin{margin-top:3rem;font-size:.8rem;color:var(--muted,#6b6253)}
   .konf-admin a{color:var(--muted,#6b6253);text-decoration:underline;cursor:pointer}
+  .konf-preview{background:#fdf6e7;border:1px solid var(--warn,#a05a08);color:#6b4a07;border-radius:8px;padding:.8rem 1rem;font-size:.88rem;line-height:1.45;margin:0 0 1.6rem}
+  .konf-preview code{background:rgba(160,90,8,.12);padding:.05rem .35rem;border-radius:4px}
   @media(max-width:640px){.konf-form{grid-template-columns:1fr}}
 </style>
 </head>
@@ -87,6 +89,9 @@
     <div id="formView">
       <h2 id="formH">Registrace účasti</h2>
       <p class="note">Vyplňte prosím přihlášku. Kapacita je omezená; potvrzení a přesné místo konání pošleme e-mailem. Registrace je nezávazná a údaje slouží výhradně k organizaci akce.</p>
+      <div class="konf-preview" id="previewBanner" role="note" hidden>
+        ⚠️ <strong>Náhledový režim.</strong> Formulář zatím není napojen na server — přihlášky se k organizátorům nedostanou. Před ostrým spuštěním nastavte v souboru backend (<code>CONFIG.mode</code> = <code>mailto</code> / <code>supabase</code> / <code>http</code>).
+      </div>
 
       <form class="konf-form" id="regForm" novalidate>
         <div class="field full">
@@ -180,15 +185,22 @@
   /* =========================================================================
      KONFIGURACE BACKENDU — přepnutí na ostré uložení je jediná změna zde.
      -------------------------------------------------------------------------
-     mode: 'local'    → přihlášky se ukládají do prohlížeče (localStorage) a
-                        organizátor je stáhne přes odkaz „export CSV". Funkční
-                        hned, bez serveru. (výchozí — bezpečné)
+     mode: 'mailto'   → přihláška se odešle e-mailem organizátorovi (otevře se
+                        e-mailový klient s předvyplněnou zprávou). Doplň
+                        organizerEmail. Funkční bez serveru a přihláška se
+                        SKUTEČNĚ dostane k organizátorovi. (doporučený default)
      mode: 'supabase' → INSERT do Supabase tabulky přes REST. Doplň url + anon
                         klíč. SQL pro tabulku je v komentáři níže.
      mode: 'http'     → POST JSON na libovolný endpoint (Formspree, vlastní fce).
+     mode: 'local'    → JEN PRO NÁHLED/TEST. Přihlášky zůstanou v prohlížeči
+                        odesílatele (localStorage) a k organizátorovi se NEDOSTANOU.
+                        Stránka v tomto režimu zobrazí varovný banner.
+     POZN.: dokud není nastaven funkční backend (mailto/supabase/http), stránka
+     se chová jako náhled a nepředstírá, že přihláška dorazila organizátorům.
      ========================================================================= */
   const CONFIG = {
     mode: 'local',
+    organizerEmail: '',      // např. 'konference@skorezdravotnictvi.cz' → aktivuje režim mailto
     supabase: {
       url:   'https://VAS-PROJEKT.supabase.co',
       anonKey: 'VAS_PUBLISHABLE_ANON_KLIC',
@@ -196,6 +208,13 @@
     },
     http: { endpoint: '' }   // např. 'https://formspree.io/f/xxxxxx'
   };
+
+  // Je nastaven funkční backend, který přihlášku doručí organizátorovi?
+  const placeholdery = /VAS-PROJEKT|VAS_PUBLISHABLE/;
+  const backendReady =
+    (CONFIG.mode === 'supabase' && !placeholdery.test(CONFIG.supabase.url + CONFIG.supabase.anonKey)) ||
+    (CONFIG.mode === 'http' && !!CONFIG.http.endpoint) ||
+    ((CONFIG.mode === 'mailto' || CONFIG.organizerEmail) && !!CONFIG.organizerEmail);
   /* --- Supabase: jednorázové SQL pro vytvoření tabulky (insert-only) --------
      create table public.conference_registrations (
        id uuid primary key default gen_random_uuid(),
@@ -243,7 +262,22 @@
     };
   }
 
+  function sendViaMailto(data){
+    const to = CONFIG.organizerEmail;
+    const subject = 'Registrace Skóre 2026 — '+data.name+' ('+data.org+')';
+    const lines = [
+      'Jméno: '+data.name, 'E-mail: '+data.email, 'Telefon: '+data.phone,
+      'Organizace: '+data.org, 'Pozice: '+data.role, 'Segment: '+data.segment,
+      'Účast: '+data.attendance, 'Stravování: '+data.diet, 'Poznámka: '+data.note
+    ];
+    window.location.href = 'mailto:'+encodeURIComponent(to)+
+      '?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n'));
+  }
+
   async function send(data){
+    if(CONFIG.mode === 'mailto' || (!backendReady && CONFIG.organizerEmail)){
+      if(CONFIG.organizerEmail){ sendViaMailto(data); return; }
+    }
     if(CONFIG.mode === 'supabase'){
       const r = await fetch(CONFIG.supabase.url.replace(/\/$/,'')+'/rest/v1/'+CONFIG.supabase.table, {
         method:'POST',
@@ -275,6 +309,11 @@
     btn.disabled = true; statusEl.textContent='Odesílám…'; statusEl.style.color='var(--muted,#6b6253)';
     try{
       await send(data);
+      // V náhledovém režimu (bez funkčního backendu) nepředstírej doručení.
+      if(!backendReady){
+        okView.querySelector('h2').textContent = 'Přihláška zaznamenána (náhledový režim)';
+        okView.querySelector('p').textContent = 'Pozor: formulář zatím není napojen na server, takže tato přihláška se k organizátorům automaticky nedostala. Slouží k otestování. Po nastavení backendu bude doručení automatické.';
+      }
       formView.style.display='none'; okView.classList.add('show');
       okView.scrollIntoView({behavior:'smooth', block:'center'});
     }catch(err){
@@ -288,6 +327,11 @@
   form.addEventListener('input', e=>{
     const n=e.target.name; if(n) setErr(n,false);
   });
+
+  // Náhledový režim → zobraz varovný banner (přihlášky nedorazí organizátorům).
+  if(!backendReady){
+    const b=document.getElementById('previewBanner'); if(b) b.hidden=false;
+  }
 
   // Organizátor: export lokálně zachycených přihlášek do CSV
   document.getElementById('exportLink').addEventListener('click', ()=>{
