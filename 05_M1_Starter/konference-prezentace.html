@@ -69,6 +69,8 @@
   ul.clean li{font-size:2.5cqh;line-height:1.45;padding:1.7cqh 0;border-top:1px solid var(--line)}
   .slide.dark ul.clean li,.slide.red ul.clean li{border-color:rgba(255,255,255,.2)}
   ul.clean li b{font-family:var(--serif)}
+  .src-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 5cqw;max-width:none;margin-top:2cqh}
+  .src-grid li{font-size:2cqh;padding:1.2cqh 0;line-height:1.35}
   /* steps */
   .steps{margin-top:3cqh;max-width:54ch}
   .steps .s{counter-increment:s;display:grid;grid-template-columns:6cqh 1fr;gap:2cqw;align-items:baseline;padding:1.5cqh 0;font-size:2.3cqh;border-top:1px solid var(--line)}
@@ -146,10 +148,10 @@
       <div>
         <div class="kicker" data-in style="--i:0">Neveřejný náhled · Praha · září 2026</div>
         <h1 data-in style="--i:1">Skóre&nbsp;2026<br><span class="red-em" style="color:var(--redbright)">první čtení</span></h1>
-        <p class="lead" data-in style="--i:2">Den, kdy české zdravotnictví dostalo veřejné skóre.<br>Uvedení portálu <b>skorezdravotnictvi.cz</b>.</p>
+        <p class="lead" data-in style="--i:2">Poprvé si může každý otevřít, jak si české zdravotnictví stojí.<br>Spouštíme portál <b>skorezdravotnictvi.cz</b>.</p>
       </div>
     </div>
-    <div class="source">HSPA Monitor — nezávislá občanská implementace rámce OECD HSPA pro ČR</div>
+    <div class="source">HSPA Monitor — nezávislý projekt, který měří české zdravotnictví podle metodiky OECD</div>
   </section>
 
   <!-- 2 · ÚVOD kompas -->
@@ -158,7 +160,7 @@
       <div>
         <div class="kicker" data-in>01 · Úvod</div>
         <h1 data-in style="--i:1">Postavili jsme <span class="red-em">kompas</span>, ne žebříček.</h1>
-        <p class="sub" data-in style="--i:2">Nehodnotíme lékaře ani nemocnice. Měříme výkonnost systému, srovnáváme s nejlepšími a ukazujeme směr, kterým se zlepšovat.</p>
+        <p class="sub" data-in style="--i:2">Neznámkujeme lékaře ani nemocnice. Sledujeme, jak funguje celý systém, porovnáváme ho s nejlepšími zeměmi a ukazujeme, kde má zabrat.</p>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="introCompass" style="width:80%;aspect-ratio:1"></div></div>
     </div>
@@ -171,10 +173,10 @@
     <div class="split" style="grid-template-columns:.85fr 1.15fr;margin-top:1cqh">
       <div class="chartwrap" data-in style="--i:2"><div id="legendCompass" style="width:78%;aspect-ratio:1"></div></div>
       <ul class="clean" data-in style="--i:3">
-        <li><b>Stupnice</b> — graduovaný kruh = měření a srovnání s benchmarkem (OECD, EU).</li>
-        <li><b>Pravý sever ▲</b> — cílová hodnota: kde jsou nejlepší systémy.</li>
-        <li><b>Střelka</b> — kde je dnes Česko. Červený hrot = aktuální směr.</li>
-        <li><b>Mezera</b> — úhel mezi severem a střelkou = výkonnostní mezera, kterou HSPA čte.</li>
+        <li><b>Stupnice</b> — kruh se značkami, na kterém porovnáváme s nejlepšími zeměmi (OECD, EU).</li>
+        <li><b>Pravý sever ▲</b> — cíl: hodnota, které dosahují nejlepší systémy.</li>
+        <li><b>Střelka</b> — kde je dnes Česko. Červený hrot ukazuje, kam míříme.</li>
+        <li><b>Mezera</b> — úhel mezi severem a střelkou. Čím větší, tím dál jsme od cíle.</li>
       </ul>
     </div>
   </section>
@@ -182,20 +184,43 @@
   <!-- 4 · PROBLEM -->
   <section class="slide" data-anim>
     <div class="kicker" data-in>Proč to vzniklo</div>
-    <h2 data-in style="--i:1">O zdravotnictví se vede debata dojmy.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
-    <p class="sub" data-in style="--i:2">Data jsou roztroušená mezi ÚZIS, ČSÚ, OECD, Eurostat a pojišťovny — v PDF, v cizím jazyce. Skládáme je na jedno místo, srozumitelně a vždy s odkazem na zdroj.</p>
+    <h2 data-in style="--i:1">Debata o zdravotnictví u nás stojí na dojmech.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
+    <p class="sub" data-in style="--i:2">Čísla jsou rozházená po ÚZIS, ČSÚ, OECD, Eurostatu i pojišťovnách — schovaná v PDF a často jen anglicky. My je dáváme na jedno místo, srozumitelně a vždycky s odkazem na zdroj.</p>
     <div class="legend" data-in style="--i:3" aria-hidden="true"></div>
     <ul class="clean" data-in style="--i:3">
-      <li><b>155 indikátorů</b> ve čtyřech rovinách výkonnosti systému</li>
-      <li><b>Každé číslo</b> má benchmark, trend a metodickou kartu</li>
-      <li><b>Vše veřejné</b> a citovatelné — otevřený datový pipeline</li>
+      <li><b>155 ukazatelů</b> ve čtyřech rovinách, jak systém funguje</li>
+      <li><b>U každého čísla</b> najdete srovnání se světem, vývoj v čase i přesnou definici</li>
+      <li><b>Všechno je veřejné</b> a můžete to citovat</li>
     </ul>
+  </section>
+
+  <!-- 4b · ODKUD DATA -->
+  <section class="slide" data-anim>
+    <div class="kicker" data-in>Odkud čísla bereme</div>
+    <h2 data-in style="--i:1">Sami nesbíráme nic.<br>Skládáme dohromady to nejlepší, co už existuje.</h2>
+    <ul class="clean src-grid" data-in style="--i:2">
+      <li><b>ÚZIS ČR</b> — národní zdravotnické registry: výkony, kapacity nemocnic, personál, očkování</li>
+      <li><b>ČSÚ</b> — demografie, příčiny úmrtí, naděje dožití</li>
+      <li><b>OECD</b> — mezinárodní srovnání (Health at a Glance), benchmark se světem</li>
+      <li><b>Eurostat</b> — evropská čísla: screening, roky prožité ve zdraví</li>
+      <li><b>SÚKL</b> — léčiva a jejich dostupnost</li>
+      <li><b>Kancelář zdravotního pojištění</b> — úhrady a výkony od pojišťoven</li>
+    </ul>
+    <p class="sub" data-in style="--i:3">My je dáme na jedno místo, sjednotíme metodiku a porovnáme se světem — s průměrem OECD a EU.</p>
+  </section>
+
+  <!-- 4c · PODĚKOVÁNÍ -->
+  <section class="slide dark" data-anim>
+    <div class="kicker" data-in>Komu za to vděčíme</div>
+    <h2 data-in style="--i:1">Bez nich bychom neměli nic.</h2>
+    <p class="lead" data-in style="--i:2">Než se z čísla stane ukazatel, musí ho někdo nasbírat, ověřit a metodicky srovnat. Náš portál na téhle práci stojí — sám žádná data nevyrábí.</p>
+    <p class="sub" data-in style="--i:3">Díky patří <b style="color:var(--paper)">ÚZIS</b> i <b style="color:var(--paper)">Kanceláři zdravotního pojištění</b>. A především lékařům a sestrám, kteří si i v nabitém dni najdou čas data poctivě zadat. Bez nich bychom nevěděli, jak na tom jsme.</p>
   </section>
 
   <!-- 5 · HSPA MATRIX -->
   <section class="slide paper2" data-anim>
     <div class="kicker" data-in>Co web ukazuje</div>
-    <h2 data-in style="--i:1">Čtyři roviny výkonnosti — na jeden pohled.</h2>
+    <h2 data-in style="--i:1">Jak si stojíme ve čtyřech rovinách — na jeden pohled.</h2>
     <div class="matrix">
       <div class="cell" data-in style="--i:2"><span class="tag">Výsledky</span><h4>Zdravotní stav</h4><div class="dots"><i class="dot warn"></i><i class="dot bad"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot bad"></i></div></div>
       <div class="cell" data-in style="--i:3"><span class="tag">Výstupy</span><h4>Kvalita a bezpečí</h4><div class="dots"><i class="dot bad"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot warn"></i><i class="dot bad"></i></div></div>
@@ -214,7 +239,7 @@
   <section class="slide dark" data-anim>
     <div class="kicker" data-in>02 · Keynote — OECD HSPA</div>
     <h2 data-in style="--i:1">Systémy, které se měří veřejně,<br>se rychleji zlepšují.</h2>
-    <p class="lead" data-in style="--i:2">Od výdajů k výsledkům: kolik dáváme do zdravotnictví neříká, co za to dostáváme.</p>
+    <p class="lead" data-in style="--i:2">Nejde o to, kolik do zdravotnictví nalijeme. Jde o to, co za ty peníze dostaneme.</p>
   </section>
 
   <!-- 7 · GAUGE alkohol (interaktivní výběr) -->
@@ -225,7 +250,7 @@
         <h2 data-in style="--i:1">Jak daleko je Česko od&nbsp;severu?</h2>
         <div class="picker" data-in style="--i:2" id="gaugePicker"></div>
         <p class="sub" id="gaugeDesc" data-in style="--i:3"></p>
-        <div class="hint-i" data-in style="--i:4">Červená výchylka = kde zaostáváme. Zelená = kde už jsme nad světem.</div>
+        <div class="hint-i" data-in style="--i:4">Když ručička spadne do červené, tam zaostáváme. Do zelené, tam jsme nad světem.</div>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="mainGauge" style="width:92%;aspect-ratio:1.15"></div></div>
     </div>
@@ -235,21 +260,21 @@
   <!-- 7b · PROČ TYHLE UKAZATELE — argument páky -->
   <section class="slide paper2" data-anim data-diverge>
     <div class="kicker" data-in>Proč zrovna tyhle ukazatele</div>
-    <h2 data-in style="--i:1">Kompas neukazuje jen jak jsme na tom.<br>Ukazuje, <span class="red-em">kam napřít úsilí</span>.</h2>
-    <p class="sub" data-in style="--i:2;max-width:64ch">Největší páka je tam, kde se nejvíc lišíme od světa. Zlepšit o 1&nbsp;% ukazatel, kde zaostáváme, pomůže víc lidem než obrovské úsilí u ukazatele, který je už na světové úrovni. Nejdelší červené pruhy = největší příležitost; zelené ukazují, kde už excelujeme.</p>
+    <h2 data-in style="--i:1">Kompas neukazuje jen, jak jsme na tom.<br>Ukazuje, <span class="red-em">kam napřít síly</span>.</h2>
+    <p class="sub" data-in style="--i:2;max-width:64ch">Nejvíc se vyplatí zabrat tam, kde nejvíc zaostáváme. Posunout o procento ukazatel, ve kterém jsme pod světem, pomůže víc lidem než nadlidská snaha u něčeho, co už děláme nejlíp na světě. Nejdelší červené pruhy ukazují, kde je práce nejvíc vidět; zelené připomínají, co už zvládáme.</p>
     <div class="chartwrap" data-in style="--i:3;height:42cqh;align-items:flex-start"><div id="divergeChart" style="width:100%;height:40cqh"></div></div>
-    <div class="source">Odchylka ČR od benchmarku (OECD/EU) v %. Vlevo červeně = pod světem, vpravo zeleně = nad světem.</div>
+    <div class="source">O kolik procent se Česko liší od průměru OECD/EU. Vlevo červeně jsme pod ním, vpravo zeleně nad ním.</div>
   </section>
 
   <!-- 8 · HEALTHY BELGIUM -->
   <section class="slide paper2" data-anim>
     <div class="kicker" data-in>03 · Vzor, který funguje</div>
     <h2 data-in style="--i:1">Healthy Belgium:<br>portál, který změnil debatu.</h2>
-    <p class="sub" data-in style="--i:2">Belgie provozuje veřejný HSPA portál od roku 2019. Dnes z něj čerpá vláda, média i akademie — sdílená datová základna, ne žebříček jednou ročně. Jdeme stejnou cestou pro ČR.</p>
+    <p class="sub" data-in style="--i:2">Belgie má veřejný portál stejného typu už od roku 2019. Dnes z něj čerpá vláda, novináři i univerzity. Není to žebříček jednou za rok, ale živý zdroj, na který se všichni odvolávají. Tudy chceme jít i u nás.</p>
     <ul class="clean" data-in style="--i:3">
-      <li><b>Sdílená fakta</b> jako vstup do každé reformní debaty</li>
+      <li><b>Společná čísla</b>, od kterých se odpíchne každá debata o reformě</li>
       <li><b>Pravidelná aktualizace</b> místo jednorázových studií</li>
-      <li><b>Neutralita</b> chráněná metodikou, ne názorem</li>
+      <li><b>Nestrannost</b>, kterou drží metodika, ne názor</li>
     </ul>
   </section>
 
@@ -258,12 +283,12 @@
     <div class="kicker" data-in>04 · Živé demo — otevřete si to teď</div>
     <h2 data-in style="--i:1">Vše, co uvidíte,<br>si ověříte za 30 sekund.</h2>
     <div class="steps">
-      <div class="s" data-in style="--i:2">Homepage → hub matrix 4 oblastí; barvy signálů (dobře / pozor / špatně)</div>
-      <div class="s" data-in style="--i:3">Detail indikátoru → hodnota, trend, benchmark OECD/EU, zdroj a datum stažení</div>
-      <div class="s" data-in style="--i:4">Kraje → mapa a regionální nerovnosti na jednom čísle</div>
-      <div class="s" data-in style="--i:5">Článek → jak data vstupují do textu, glosář, odkazy na zdroje</div>
+      <div class="s" data-in style="--i:2">Titulní strana → přehled čtyř oblastí; barvy hned ukážou, kde je dobře a kde zle</div>
+      <div class="s" data-in style="--i:3">Detail ukazatele → hodnota, vývoj, srovnání s OECD/EU a odkaz na zdroj</div>
+      <div class="s" data-in style="--i:4">Kraje → mapa a rozdíly mezi regiony u jednoho čísla</div>
+      <div class="s" data-in style="--i:5">Článek → jak se z dat stává čtení, s vysvětlivkami a zdroji</div>
     </div>
-    <div class="source">QR a živá projekce na plátně · záložní záznam připraven</div>
+    <div class="source">Na plátně promítáme naživo, QR kód vede rovnou na web. Záloha nahraná pro jistotu.</div>
   </section>
 
   <!-- 10 · DATA STORIES intro -->
@@ -292,8 +317,8 @@
   <!-- 12 · STORY B screening (interaktivní sloupce) -->
   <section class="slide paper2" data-anim data-bars>
     <div class="kicker" data-in>Příběh B — prevence, která se nedělá</div>
-    <h2 data-in style="--i:1">Screening: necháváme levné roky života ležet.</h2>
-    <div class="chartwrap" data-in style="--i:2" style="height:62cqh;align-items:flex-start"><div id="screenBars" style="width:100%;height:56cqh"></div></div>
+    <h2 data-in style="--i:1">Na screeningu zbytečně ztrácíme levné roky života.</h2>
+    <div class="chartwrap" data-in style="--i:2;height:62cqh;align-items:flex-start"><div id="screenBars" style="width:100%;height:56cqh"></div></div>
     <div class="source">Screening programy ČR + proočkovanost, 2024–2025 · benchmark OECD</div>
   </section>
 
@@ -303,7 +328,7 @@
       <div>
         <div class="kicker" data-in>Příběh C — čekání, na kterém záleží</div>
         <h2 data-in style="--i:1">118 vs. 85 dní<br>na novou kyčel.</h2>
-        <p class="sub" data-in style="--i:2">A 28 dní na specialistu místo 18 v OECD. Sebevražednost dlouhodobě nad průměrem EU — křivka, která neklesá.</p>
+        <p class="sub" data-in style="--i:2">Na specialistu se čeká 28 dní, v OECD 18. A sebevražednost se roky drží nad evropským průměrem — křivka, která nechce klesnout.</p>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="lineChart" style="width:100%;height:60cqh"></div></div>
     </div>
@@ -312,16 +337,16 @@
 
   <!-- 14 · PRESS WALL -->
   <section class="slide dark" data-anim>
-    <div class="kicker" data-in>Pro redakce — šest čísel, o kterých stojí za to psát</div>
+    <div class="kicker" data-in>Pro novináře — šest čísel, která stojí za článek</div>
     <div class="wall">
-      <div class="stat" data-in style="--i:1"><div class="n" data-count="107.2" data-dec="0">0</div><div class="d">úmrtí/100 tis., kterým šlo zabránit léčbou — EU 87</div></div>
-      <div class="stat" data-in style="--i:2"><div class="n" data-count="592" data-dec="0">0</div><div class="d">odvratitelných hospitalizací/100 tis. — OECD 473</div></div>
+      <div class="stat" data-in style="--i:1"><div class="n" data-count="107.2" data-dec="0">0</div><div class="d">úmrtí na 100 tis., kterým mohla zabránit léčba (EU 87)</div></div>
+      <div class="stat" data-in style="--i:2"><div class="n" data-count="592" data-dec="0">0</div><div class="d">zbytečných hospitalizací na 100 tis. (OECD 473)</div></div>
       <div class="stat" data-in style="--i:3"><div class="n" data-count="60" data-dec="0" data-suffix=" %">0</div><div class="d">dospělých má nadváhu nebo obezitu</div></div>
-      <div class="stat" data-in style="--i:4"><div class="n" data-count="24.5" data-dec="1" data-suffix=" %">0</div><div class="d">seniorů 65+ očkovaných proti chřipce — OECD 47 %</div></div>
-      <div class="stat" data-in style="--i:5"><div class="n" data-count="0.37" data-dec="2">0</div><div class="d">centra duševního zdraví/100 tis. — síť teprve vzniká</div></div>
-      <div class="stat" data-in style="--i:6"><div class="n" data-count="14.4" data-dec="1">0</div><div class="d">litrů alkoholu na osobu/rok — OECD 8,9, světová špička</div></div>
+      <div class="stat" data-in style="--i:4"><div class="n" data-count="24.5" data-dec="1" data-suffix=" %">0</div><div class="d">seniorů nad 65 let je očkováno proti chřipce (OECD 47 %)</div></div>
+      <div class="stat" data-in style="--i:5"><div class="n" data-count="0.37" data-dec="2">0</div><div class="d">centra duševního zdraví na 100 tis. obyvatel — síť teprve vzniká</div></div>
+      <div class="stat" data-in style="--i:6"><div class="n" data-count="14.4" data-dec="1">0</div><div class="d">litrů alkoholu na osobu ročně (OECD 8,9) — mezi nejvíc na světě</div></div>
     </div>
-    <div class="source">Vše s metodickou kartou a odkazem na zdroj na skorezdravotnictvi.cz</div>
+    <div class="source">Ke každému číslu najdete definici i zdroj na skorezdravotnictvi.cz</div>
   </section>
 
   <!-- 15 · PANEL -->
@@ -329,10 +354,10 @@
     <div class="kicker" data-in>06 · Panel — komu skóre slouží?</div>
     <h2 data-in style="--i:1">Stát × plátce × pacient × akademie.</h2>
     <ul class="clean" data-in style="--i:2">
-      <li>Kde dnes při rozhodování chybí <b>sdílená data</b> nejvíc?</li>
-      <li>Když web ukáže, že ČR zaostává — <b>čí je to úkol</b> a kde začít?</li>
-      <li>Jak zabránit, aby se z indikátorů stal <b>bič místo kompasu</b>?</li>
-      <li>Co byste na webu chtěli <b>příští rok navíc</b>?</li>
+      <li>Kde dnes při rozhodování nejvíc chybí <b>společná data</b>?</li>
+      <li>Když web ukáže, že Česko zaostává — <b>čí je to úkol</b> a kde začít?</li>
+      <li>Jak pohlídat, aby se z čísel nestal <b>bič místo kompasu</b>?</li>
+      <li>Co byste na webu rádi viděli <b>příští rok navíc</b>?</li>
     </ul>
   </section>
 
@@ -341,11 +366,11 @@
     <div class="kicker" data-in>07 · Závěr a výzva</div>
     <h1 data-in style="--i:1">Web je veřejný statek.<br>Od dneška je váš.</h1>
     <ul class="clean" data-in style="--i:2">
-      <li><b>Novinář:</b> tiskový balíček, citační pravidla, RSS feed</li>
-      <li><b>Kraj / pojišťovna:</b> krajský a OIS dashboard pro vlastní reporting</li>
-      <li><b>Pacient:</b> glosář, články, srozumitelné srovnání</li>
+      <li><b>Novinářům:</b> tiskový balíček, pravidla citace, RSS</li>
+      <li><b>Krajům a pojišťovnám:</b> vlastní data pro reporty a srovnání</li>
+      <li><b>Pacientům:</b> vysvětlivky, články a srozumitelné srovnání</li>
     </ul>
-    <p class="lead" data-in style="--i:3" style="margin-top:2.4cqh">Najděte jedno číslo o svém kraji — a sdílejte ho.</p>
+    <p class="lead" data-in style="--i:3;margin-top:2.4cqh">Najděte jedno číslo o svém kraji — a sdílejte ho.</p>
   </section>
 
   <!-- 17 · CONTACT -->
@@ -356,8 +381,8 @@
         <div class="kicker" data-in>Děkujeme</div>
         <h2 data-in style="--i:1">skorezdravotnictvi.cz</h2>
         <p class="lead" data-in style="--i:2">Tiskový balíček, grafy ke stažení a „jak citovat" → <a href="tiskovazprava.html" style="color:var(--redbright);text-decoration:underline;text-underline-offset:3px">tiskovazprava.html</a></p>
-        <p class="sub" data-in style="--i:3">Kontakt: <b style="color:var(--paper)">Bc. Josef Pavlovic</b> · josef@josefpavlovic.cz · +420 607 517 967<br>Odborná garantka: MDDr. Ing. Bára Malíková</p>
-        <p class="sub" data-in style="--i:4;opacity:.7">HSPA Monitor — nezávislá občanská implementace rámce OECD HSPA pro ČR.</p>
+        <p class="sub" data-in style="--i:3">Kontakt: <b style="color:var(--paper)">Bc. Josef Pavlovic</b> · josef@josefpavlovic.cz · +420 607 517 967<br>Spoluautorka: MDDr. Ing. Bára Malíková</p>
+        <p class="sub" data-in style="--i:4;opacity:.7">HSPA Monitor — nezávislý projekt, který měří české zdravotnictví podle metodiky OECD.</p>
       </div>
     </div>
   </section>
@@ -514,15 +539,15 @@
   /* ---------- DATA ---------- */
   const GAUGES=[
     // KDE ZAOSTÁVÁME — největší páka (ručička do červené)
-    {g:'bad', k:'Alkohol', cz:14.4, b:8.9, dir:'lower_is_better', unit:'l/os./rok', src:'OECD Health Statistics, 2024', desc:'Spotřeba čistého alkoholu 14,4 l na osobu (15+) — o 62 % nad OECD. Patříme ke světové špičce. Největší páka: i malé zlepšení zasáhne celou populaci.'},
-    {g:'bad', k:'Chřipka 65+', cz:24.5, b:47, dir:'higher_is_better', unit:'%', src:'ÚZIS / OECD, 2025', desc:'Proočkovanost seniorů proti chřipce 24,5 % — zhruba polovina průměru OECD (47 %). Dohnat svět je tu levné a rychlé.'},
-    {g:'bad', k:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better', unit:'dní', src:'OECD waiting times', desc:'Medián čekání na náhradu kyčle 118 dní vs. 85 v OECD — o třetinu déle.'},
-    {g:'bad', k:'Zdravé roky 65+', cz:8, b:10.2, dir:'higher_is_better', unit:'let', src:'Eurostat / OECD, 2024', desc:'Roky života ve zdraví po 65 — Česko 8, OECD 10,2. Dožíváme se déle, ale v horší kondici.'},
+    {g:'bad', k:'Alkohol', cz:14.4, b:8.9, dir:'lower_is_better', unit:'l/os./rok', src:'OECD Health Statistics, 2024', desc:'Vypijeme 14,4 litru čistého alkoholu na hlavu ročně — o 62 % víc než průměr OECD. Patříme ke světové špičce a i malý posun by tu byl znát na celé zemi.'},
+    {g:'bad', k:'Chřipka 65+', cz:24.5, b:47, dir:'higher_is_better', unit:'%', src:'ÚZIS / OECD, 2025', desc:'Proti chřipce naočkujeme jen 24,5 % seniorů — zhruba polovinu toho co vyspělé země (47 %). Dohnat svět je tady levné a rychlé.'},
+    {g:'bad', k:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better', unit:'dní', src:'OECD waiting times', desc:'Na novou kyčel se u nás čeká 118 dní, v OECD 85 — o třetinu déle.'},
+    {g:'bad', k:'Zdravé roky 65+', cz:8, b:10.2, dir:'higher_is_better', unit:'let', src:'Eurostat / OECD, 2024', desc:'Po pětašedesátce máme před sebou v průměru 8 let ve zdraví, v OECD 10,2. Dožíváme se podobně dlouho, ale v horší kondici.'},
     // KDE EXCELUJEME — ručička do zelené (tady tlačit dál = velké úsilí, malý zisk)
-    {g:'good', k:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better', unit:'/1000', src:'Eurostat, 2023', desc:'Kojenecká úmrtnost 2,3 na 1000 živě narozených — výrazně pod průměrem EU (3,5). Tady jsme světová špička.'},
-    {g:'good', k:'Úmrtí po infarktu', cz:4.57, b:6.5, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Nemocniční úmrtnost po akutním infarktu 4,57 % vs. 6,5 % v OECD. Akutní kardiologie patří k nejlepším.'},
-    {g:'good', k:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better', unit:'%', src:'OECD, 2023', desc:'75 % lidí je spokojeno s dostupností péče — nad OECD (64 %). Posouvat to výš stojí hodně úsilí za malý zisk.'},
-    {g:'good', k:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Pacienti platí z vlastní kapsy jen 13,6 % výdajů (OECD 18 %) — finanční dostupnost péče je nadprůměrná.'}
+    {g:'good', k:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better', unit:'/1000', src:'Eurostat, 2023', desc:'Kojenecká úmrtnost 2,3 na tisíc narozených — výrazně pod průměrem EU (3,5). Tady patříme ke špičce.'},
+    {g:'good', k:'Úmrtí po infarktu', cz:4.57, b:6.5, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Po infarktu zemře v nemocnici 4,57 % pacientů, v OECD 6,5 %. Akutní kardiologie u nás patří k nejlepším na světě.'},
+    {g:'good', k:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better', unit:'%', src:'OECD, 2023', desc:'S dostupností péče je spokojeno 75 % lidí, v OECD 64 %. Posouvat to ještě výš už dá hodně práce za málo.'},
+    {g:'good', k:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Z vlastní kapsy zaplatí pacienti jen 13,6 % nákladů (OECD 18 %). Na peníze je u nás péče dobře dostupná.'}
   ];
   const SCREEN=[
     {label:'Mamograf (50–69)', cz:54.5, target:68},
@@ -556,7 +581,7 @@
   let gi=0;
   let lastG=null; const gbtns=[];
   GAUGES.forEach((g,i)=>{
-    if(g.g!==lastG){const lab=document.createElement('span');lab.className='grp';lab.textContent=g.g==='bad'?'Kde nejvíc zaostáváme — největší páka':'Kde excelujeme — ručička do zelené';picker.appendChild(lab);lastG=g.g;}
+    if(g.g!==lastG){const lab=document.createElement('span');lab.className='grp';lab.textContent=g.g==='bad'?'Kde nejvíc zaostáváme':'Kde naopak vedeme';picker.appendChild(lab);lastG=g.g;}
     const b=document.createElement('button');b.textContent=g.k;b.className=g.g;b.onclick=()=>{gi=i;updateGauge();};picker.appendChild(b);gbtns[i]=b;
   });
   function updateGauge(){
