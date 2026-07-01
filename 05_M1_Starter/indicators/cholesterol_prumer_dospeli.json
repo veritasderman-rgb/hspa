@@ -1,0 +1,41 @@
+{
+  "id": "cholesterol_prumer_dospeli",
+  "name": "Průměrný celkový cholesterol dospělých",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Kardiometabolická rizika",
+  "definition": "Průměrná hodnota celkového cholesterolu v krvi dospělé populace (mmol/l), agregovaná z laboratorních výsledků. Doporučená cílová hodnota celkového cholesterolu u zdravého dospělého je pod 5 mmol/l; klíčovým rizikovým parametrem je LDL-cholesterol (cíl pod 3 mmol/l u nízkorizikových, pod 1,4 mmol/l po infarktu).",
+  "unit": "mmol/l",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis_laborator",
+      "note": "ÚZIS ČR — Národní zdravotnický informační systém, agregace laboratorních výsledků. Podle ÚZIS byl datový sklad naplněn více než 405 miliony laboratorních výsledků z 282 laboratoří od roku 2020, což poprvé umožňuje mapovat hladiny cholesterolu až na úroveň obcí. Napojení na živý výkaz je plánováno v samostatném milníku; do té doby seed z veřejných agregátů."
+    },
+    "fallback": {
+      "type": "who_ncd_risc",
+      "note": "WHO / NCD Risk Factor Collaboration — mezinárodně srovnatelný odhad průměrného celkového cholesterolu dospělých, standardizovaný na věk."
+    }
+  },
+  "benchmark_source": {
+    "type": "who_ncd_risc",
+    "code": "mean_total_cholesterol",
+    "note": "EU/WHO referenční průměr celkového cholesterolu dospělých (věkově standardizováno). Doporučená cílová hodnota u zdravého jedince je pod 5 mmol/l (Evropská kardiologická společnost, České společnosti pro aterosklerózu a kardiologická)."
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR",
+    "WHO NCD-RisC"
+  ],
+  "method_notes": "Hodnota je agregát laboratorních měření celkového cholesterolu dospělé populace. NZIS umožňuje agregaci až na úroveň okresů a obcí, což odhaluje výrazný západo-východní gradient kardiovaskulárního rizika (nejhorší Karlovarsko, Ústecko, Moravskoslezsko). Pokles průměru v čase přičítají odborníci (Michal Vrablík, Aleš Linhart) rozšíření statinové léčby.",
+  "limitations": "Průměr celkového cholesterolu zakrývá rozložení rizika: klinicky rozhodující je LDL-cholesterol a celkové kardiovaskulární riziko, ne samotný průměr. Laboratorní data pokrývají jen osoby, kterým byl test proveden (selekční zkreslení směrem k nemocnějším). Regionální hodnoty jsou v této fázi seed (zaokrouhlené veřejné agregáty), nikoli produkční ingest z NZIS.",
+  "patient_story": "Vimperk, Dobříš, Moravský Krumlov — tři místa, kde mají lidé podle nových dat NZIS statisticky nejvyšší cholesterol v zemi. Naopak v Hlinsku, Novém Boru nebo Klatovech jsou na tom nejlépe. Poprvé v historii umí Česko díky 405 milionům laboratorních výsledků ukázat kardiovaskulární riziko až na úroveň obce — a mapa potvrzuje známý, ale nepříjemný vzorec: riziko roste od západu k východu a kopíruje sociální nerovnosti.\n\nZa čísly je ale i dobrá zpráva. Průměrný cholesterol v populaci dlouhodobě klesá a podle kardiologů za to může především léčba — statiny. Háček je jinde: podle odborníků dostává léčbu jen zhruba třetina pacientů, kteří by ji potřebovat měli. Přitom u diabetika snižuje kontrola cholesterolu riziko úmrtí zhruba o čtvrtinu a riziko kardiovaskulární příhody asi o třicet procent.\n\nPolitická páka je proto v záchytu a léčbě, ne v osvětě samotné: rozšířit preventivní prohlídky (chodí na ně jen 6 z 10 dospělých, a mezi 18. a 20. rokem odpadne 40 % lidí), zlepšit dispenzarizaci rizikových pacientů u praktiků a odstranit bariéry v předepisování moderní hypolipidemické léčby. Cílem není snížit jedno číslo na mapě, ale zavřít nůžky mezi tím, kdo léčbu potřebuje, a tím, kdo ji dostává.",
+  "framework": "hspa",
+  "dimension": "zdravi",
+  "verification_status": "illustrative",
+  "verified_at": null
+}
