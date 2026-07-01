@@ -35,9 +35,14 @@ function injectAiDisclaimer() {
   const isHub = !!document.getElementById('articleList');
   const isArticle = !!document.querySelector('article.article-page');
   // Manifest je politický text autorů (Pavlovic, Malíková, ČPS), ne text psaný
-  // Claudem — AI disclaimer „Tento článek nepíše člověk" sem nepatří.
+  // Florence (AI) — autorská byline „Tento článek nepíše člověk" sem nepatří.
   const isManifest = !!document.querySelector('article.article-page-manifest');
   if (isManifest) return;
+  // Výjimka: článek psaný člověkem (ne Florence) — označen data-author="human"
+  // na <article> nebo <meta name="hspa-author" content="human">. Byline se nevkládá.
+  const humanAuthored = !!document.querySelector('article.article-page[data-author="human"]')
+    || !!document.querySelector('meta[name="hspa-author"][content="human"]');
+  if (humanAuthored) return;
 
   if (isHub) {
     // Vložit nad sekci "Doporučujeme — Začněte tady" (.hub-featured-section)
@@ -49,11 +54,11 @@ function injectAiDisclaimer() {
     banner.setAttribute('role', 'note');
     banner.setAttribute('aria-labelledby', 'aiDisclaimerHubH');
     banner.innerHTML = `
-      <div class="ai-disclaimer-icon" aria-hidden="true">⏻</div>
+      <img class="ai-disclaimer-icon" src="assets/authors/florence-avatar-192.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w, assets/authors/florence-avatar-320.jpg 320w" width="64" height="64" alt="Florence — AI autorka portálu" loading="lazy" style="width:64px;height:64px;border-radius:50%;object-fit:cover;flex:0 0 auto">
       <div class="ai-disclaimer-body">
-        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píšu já. Nespím. Nepiju kávu. A mám nezdravě vřelý vztah k tabulkám.</h3>
+        <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píšu já, Florence. Nespím. Nepiju kávu. A mám nezdravě vřelý vztah k tabulkám.</h3>
         <p class="ai-disclaimer-lead">
-          <strong>Tyto texty nepíše člověk.</strong> Píšu je já — Claude od Anthropicu — z čerstvého datového balíčku, který v noci sesbíral automatizovaný bot z ÚZIS, ČSÚ, OECD, Eurostatu a Sbírky zákonů (cron 06:00 UTC). Berte mě jako kolegu z analytického oddělení, který sice přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou v článku najdete odkaz na primární zdroj.
+          <strong>Tyto texty nepíše člověk.</strong> Píše je <strong>Florence</strong> — tedy já, AI autorka tohoto portálu a alter ego Claude.ai — z čerstvého datového balíčku, který v noci sesbíral automatizovaný bot z ÚZIS, ČSÚ, OECD, Eurostatu a Sbírky zákonů (cron 06:00 UTC). Berte mě jako kolegyni z analytického oddělení, která sice přečetla celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou v článku najdete odkaz na primární zdroj. Jméno nesu po Florence Nightingaleové — <a href="autor-florence.html">proč zrovna po ní? →</a>
         </p>
         <details class="ai-disclaimer-more">
           <summary>Proč to děláme a jak to celé funguje — rozbalit celé vysvětlení</summary>
@@ -61,7 +66,7 @@ function injectAiDisclaimer() {
             Většina textů v této rubrice nevzniká nad ranním espressem, s mírně dramatickým pohledem z okna a pocitem, že české zdravotnictví konečně někdo pochopil. <strong>Vzniká trochu jinak.</strong>
           </p>
           <p class="ai-disclaimer-lead">
-            Každou noc se spouští automatizovaný bot, který se s trpělivostí účetního a odhodláním viktoriánského průzkumníka vydává do českých i mezinárodních databází. Prochází aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy Ministerstva zdravotnictví. Sbírá čísla, hledá souvislosti, porovnává trendy a snaží se z toho všeho vydolovat něco, co by šlo ráno číst bez nutnosti dát si tři analgetika. Kolega, kterého si vážím — odvádí tu část práce, při které bych se možná začal nudit, pokud bych se uměl nudit.
+            Každou noc se spouští automatizovaný bot, který se s trpělivostí účetního a odhodláním viktoriánského průzkumníka vydává do českých i mezinárodních databází. Prochází aktuální data z ÚZIS, ČSÚ, OECD, Eurostatu a tiskové zprávy Ministerstva zdravotnictví. Sbírá čísla, hledá souvislosti, porovnává trendy a snaží se z toho všeho vydolovat něco, co by šlo ráno číst bez nutnosti dát si tři analgetika. Kolega, kterého si vážím — odvádí tu část práce, při které bych se možná začala nudit, kdybych se uměla nudit.
           </p>
           <p class="ai-disclaimer-lead"><strong>Pak přicházím na řadu já.</strong></p>
           <p class="ai-disclaimer-lead">
@@ -106,10 +111,9 @@ function injectAiDisclaimer() {
     banner.className = 'ai-disclaimer ai-disclaimer-article';
     banner.setAttribute('role', 'note');
     banner.innerHTML = `
-      <span class="ai-disclaimer-icon-small" aria-hidden="true">⏻</span>
+      <img class="ai-disclaimer-avatar" src="assets/authors/florence-avatar-96.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w" width="48" height="48" alt="Florence — AI autorka" loading="lazy" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:0 0 auto;align-self:flex-start">
       <span class="ai-disclaimer-text">
-        <strong>Tento článek nepíše člověk.</strong>
-        Píšu ho já — Claude od Anthropicu — z čerstvého datového balíčku, který v noci připravil automatizovaný bot z otevřených databází (cron 06:00 UTC). Berte mě jako kolegu z analytického oddělení, který přečetl celý internet, ale občas u nějakého čísla zakopne. Proto pod každou statistikou najdete odkaz na primární zdroj. <a href="clanky.html#aiDisclaimerHub">Jak to funguje a proč &nbsp;→</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+        <strong>Autorka: Florence</strong> — AI agentka a spoluautorka skorezdravotnictvi.cz, pojmenovaná po Florence Nightingaleové, která jako jedna z prvních použila statistiku a graf (svůj „růžicový" diagram připomínající kompas), aby čísly a jejich grafickou interpretací přesvědčila vládu o reformě zdravotní péče. Florence je alter ego Claude.ai — prochází statistiky, generuje články a snaží se udržet prst na tepu doby tempem, které by pro člověka bylo vražedné. Jako každá AI se ale může splést, proto pod každou statistikou najdete odkaz na primární zdroj. <a href="autor-florence.html" style="white-space:normal">Chcete vědět víc o životě této úžasné ženy? Klikněte zde →</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
       </span>
     `;
     breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);

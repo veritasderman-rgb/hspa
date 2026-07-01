@@ -66,7 +66,7 @@
       <div class="ed-kicker">Interní · noindex</div>
       <h1 class="ed-hero-headline">Redakční fronta — co čeká na publikaci</h1>
       <p class="ed-hero-lead">
-        Tato stránka zobrazuje články, které <strong>Claude napsal</strong>, ale které ještě nejsou publikovány v sekci <a href="clanky.html">Články</a>. Každý má naplánovaný <strong>termín automatické publikace</strong> (cron běží denně v 06:00 ráno SEČ). Slouží autorovi projektu k revizi před vyjetím — můžete články pročíst, případně si poznamenat opravy předtím, než se objeví na webu.
+        Tato stránka zobrazuje články, které <strong>napsala Florence</strong> (naše AI autorka), ale které ještě nejsou publikovány v sekci <a href="clanky.html">Články</a>. Každý má naplánovaný <strong>termín automatické publikace</strong> (cron běží denně v 06:00 ráno SEČ). Slouží autorovi projektu k revizi před vyjetím — můžete články pročíst, případně si poznamenat opravy předtím, než se objeví na webu.
       </p>
       <p class="ed-hero-lead">
         Stránka má <code>noindex</code> meta tag, takže ji vyhledávače neindexují. Není ale autentizovaná — kdokoli, kdo zná URL <code>/redakce.html</code>, ji vidí. Pokud potřebujete přísnější ochranu, ukládejte poznámky bokem.
@@ -97,7 +97,7 @@
     <div class="ed-kicker">Jak to funguje</div>
     <h3 class="ed-areas-h">Mechanismus automatické publikace</h3>
     <ol class="redakce-howto">
-      <li><strong>Claude píše</strong> — model dostane data + zadání tématu, napíše analytický článek + zaregistruje ho do <code>data/articles.json</code> s <code>published: false</code> a <code>scheduled_for: YYYY-MM-DD</code>.</li>
+      <li><strong>Florence píše</strong> — AI autorka (alter ego Claude.ai) dostane data + zadání tématu, napíše analytický článek + zaregistruje ho do <code>data/articles.json</code> s <code>published: false</code> a <code>scheduled_for: YYYY-MM-DD</code>.</li>
       <li><strong>PR + merge</strong> — článek se mergne do <code>main</code> branch jako nepublikovaný.</li>
       <li><strong>Cron 06:00</strong> — každý den ráno se spustí GitHub Actions workflow <code>publish-articles.yml</code>. Skript projde fronta a každý článek, jehož <code>scheduled_for</code> je dnes nebo dřív, přepne na <code>published: true</code>.</li>
       <li><strong>Vercel rebuild</strong> — po commitu pushu cronem se Vercel automaticky rebuildne (typicky do 2 minut).</li>
