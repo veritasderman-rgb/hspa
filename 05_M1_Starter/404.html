@@ -9,11 +9,26 @@
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 <style>
-  .nf-florence{display:flex;gap:22px;align-items:flex-start;margin:6px 0 18px}
-  .nf-florence img{width:96px;height:96px;border-radius:50%;object-fit:cover;flex:0 0 auto;box-shadow:0 4px 16px rgba(31,26,20,.2)}
-  .nf-florence .nf-quote{margin:0;font-style:italic;color:var(--ink-mut,#6b6253);font-size:15px;line-height:1.55;align-self:center}
-  .nf-florence .nf-quote strong{font-style:normal;color:var(--ink,#1f1a14)}
-  @media(max-width:560px){.nf-florence{flex-direction:column;align-items:center;text-align:center}}
+  /* 404 — růžicový diagram + Florence */
+  .nf-joke{display:flex;gap:26px;align-items:center;margin:10px 0 20px}
+  .nf-joke .nf-rose{flex:0 0 auto;width:200px;height:200px}
+  .nf-joke .nf-quote{margin:0;font-style:italic;color:var(--ink-mut,#6b6253);font-size:15.5px;line-height:1.6}
+  .nf-joke .nf-quote strong{font-style:normal;color:var(--ink,#1f1a14)}
+  .nf-rose .nf-empty{fill:none;stroke:var(--red,#b8361e);stroke-width:1.4;stroke-dasharray:4 3}
+  .nf-rose .nf-wedge{stroke:var(--paper,#fbf8f1);stroke-width:1.2}
+  .nf-rose .nf-404{fill:var(--red,#b8361e);font:700 15px/1 Georgia,serif}
+  .nf-explain{margin:26px 0 4px;padding:22px 24px;background:var(--paper2,#f3ece0);border:1px solid var(--line,rgba(31,26,20,.14));border-radius:8px}
+  .nf-explain h3{font-family:var(--serif,Georgia);font-size:20px;margin:0 0 8px}
+  .nf-explain h3:not(:first-child){margin-top:22px}
+  .nf-explain p{font-size:15.5px;line-height:1.62;margin:0 0 10px;color:var(--ink,#1f1a14)}
+  .nf-explain .nf-who{display:flex;gap:18px;align-items:flex-start}
+  .nf-explain .nf-who img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:0 0 auto;box-shadow:0 3px 12px rgba(31,26,20,.18)}
+  .nf-explain a{color:var(--red,#b8361e)}
+  @media(max-width:560px){
+    .nf-joke{flex-direction:column;text-align:center}
+    .nf-joke .nf-rose{width:170px;height:170px}
+    .nf-explain .nf-who{flex-direction:column;align-items:center;text-align:center}
+  }
 </style>
 </head>
 <body>
@@ -36,15 +51,38 @@
 
   <section class="ed-hero ed-hero-focused" aria-labelledby="notFoundHead">
     <div class="ed-hero-content">
-      <div class="ed-kicker">404 · Florence tu svítí lampou, ale nic nenašla</div>
-      <h1 class="ed-hero-headline" id="notFoundHead">Prošla jsem každou tabulku. Tuhle stránku nikde nevidím.</h1>
-      <div class="nf-florence">
-        <img src="assets/authors/florence-avatar-192.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w" width="96" height="96" alt="Florence — AI autorka portálu" loading="lazy">
-        <p class="nf-quote">Jsem <strong>Florence</strong>, dáma s lampou i s datovým balíčkem. Prošla jsem portál řádek po řádku — a na téhle adrese nesvítí vůbec nic.</p>
+      <div class="ed-kicker">404 · Výsledek, který žádný graf nezachrání</div>
+      <h1 class="ed-hero-headline" id="notFoundHead">I data občas ukážou prázdno. Tahle stránka neexistuje.</h1>
+      <div class="nf-joke">
+        <svg class="nf-rose" viewBox="0 0 240 240" role="img" aria-label="Růžicový diagram Florence Nightingale s jedním prázdným výsekem, který představuje chybějící stránku 404">
+          <path class="nf-wedge" d="M120,120 L120.0,25.0 A95,95 0 0 1 187.2,52.8 Z" fill="#3f5a3a"/>
+          <path class="nf-wedge" d="M120,120 L175.2,64.8 A78,78 0 0 1 198.0,120.0 Z" fill="#4f6b47"/>
+          <path class="nf-wedge" d="M120,120 L188.0,120.0 A68,68 0 0 1 168.1,168.1 Z" fill="#6b6253"/>
+          <path class="nf-wedge" d="M120,120 L156.8,156.8 A52,52 0 0 1 120.0,172.0 Z" fill="#8a8072"/>
+          <path class="nf-wedge" d="M120,120 L120.0,206.0 A86,86 0 0 1 59.2,180.8 Z" fill="#3f5a3a"/>
+          <path class="nf-empty" d="M120,120 L52.1,187.9 A96,96 0 0 1 24.0,120.0 Z"/>
+          <path class="nf-wedge" d="M120,120 L62.0,120.0 A58,58 0 0 1 79.0,79.0 Z" fill="#8a8072"/>
+          <path class="nf-wedge" d="M120,120 L69.1,69.1 A72,72 0 0 1 120.0,48.0 Z" fill="#4f6b47"/>
+          <text class="nf-404" x="46" y="158" text-anchor="middle">404</text>
+        </svg>
+        <p class="nf-quote">Kdyby <strong>Florence</strong> tuhle adresu zanesla do svého růžicového diagramu, vyšel by jí přesně jeden výsek: <strong>nula</strong>. Žádný obsah, žádné číslo, žádný zdroj — jen ten prázdný, červeně orámovaný klín vlevo dole.</p>
       </div>
       <p class="ed-hero-supporting-lead">
-        Stránka, kterou jste otevřeli, v datech není. Možná se přejmenovala, možná ji někdo smazal, možná se do adresy vloudil překlep. Statisticky vzato je jedno z toho skoro jistě pravda. Posviťme si spolu, kam dál — na úvodní přehled, do článků, nebo mi rovnou nahlaste nefunkční odkaz.
+        Stránka, kterou jste otevřeli, na portálu není. Možná se přejmenovala, možná ji někdo smazal, možná se do adresy vloudil překlep. Ať tak či onak — data tu chybí. Pojďme najít stránku, která je skutečně má: úvodní přehled, články, nebo mi rovnou nahlaste nefunkční odkaz.
       </p>
+
+      <div class="nf-explain">
+        <h3>Co je to „růžicový" diagram?</h3>
+        <p>Vynalezla ho <strong>Florence Nightingale</strong> už v roce 1858. Každý výsek koláče stojí za jeden měsíc a čím je delší, tím víc vojáků v tom měsíci zemřelo — a co bylo klíčové, drtivou většinu z nich nezabila zranění, ale infekce z nehygienických nemocnic. Graf ukázal to, co se v dlouhých tabulkách ztrácelo: úmrtí šlo předejít. A přesvědčil britskou vládu o reformě péče slovy, na která by čísla sama nestačila.</p>
+        <p>Je to vlastně předchůdce našeho <strong>kompasu</strong> v logu — nástroj, který ukazuje, kam se dívat a kde je potřeba jednat. Tady jsme ho jen otočili proti sobě: prázdný výsek říká, že na téhle adrese žádná data nejsou.</p>
+
+        <h3>A kdo je Florence?</h3>
+        <div class="nf-who">
+          <img src="assets/authors/florence-avatar-192.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w" width="72" height="72" alt="Florence — AI autorka portálu" loading="lazy">
+          <p>Florence je <strong>AI autorka</strong> tohoto portálu a alter ego Claude.ai, pojmenovaná právě po Florence Nightingale. Prochází statistiky o českém zdravotnictví, hledá v nich souvislosti a píše z nich články, kterým jde rozumět i bez studia tabulek. Jako každá AI se ale může splést — proto je u každého čísla odkaz na primární zdroj. <a href="autor-florence.html">Víc o Florence →</a></p>
+        </div>
+      </div>
+
       <div class="ed-hero-cta-row">
         <a class="ed-hero-cta ed-hero-cta-primary" href="index.html">Úvodní přehled ↓</a>
         <a class="ed-hero-cta ed-hero-cta-secondary" href="clanky.html">Procházet články →</a>
