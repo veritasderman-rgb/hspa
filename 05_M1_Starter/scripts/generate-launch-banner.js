@@ -109,7 +109,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <!-- Disclaimer ai -->
     <text class="sans" font-size="13" fill="${INK_MUT}">
       <tspan font-weight="700" fill="${INK}">Experiment.</tspan>
-      <tspan dx="4">Píše Claude z dat, lidská kontrola namátkou. Chyby jsou možné — pod každým tvrzením je odkaz na primární zdroj.</tspan>
+      <tspan dx="4">Píše Florence z dat, lidská kontrola namátkou. Chyby jsou možné — pod každým tvrzením je odkaz na primární zdroj.</tspan>
     </text>
   </g>
 
