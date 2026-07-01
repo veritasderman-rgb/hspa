@@ -87,7 +87,7 @@ function injectAiDisclaimer() {
             <li><strong>Publikace.</strong> Článek se objeví zde, opatřen disclaimerem. Jsme sice zvědaví, ale ne úplně bez pudu sebezáchovy.</li>
           </ol>
           <p class="ai-disclaimer-foot">
-            <strong>Nejsem bezchybný.</strong> Pokud na chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
+            <strong>Nejsem bezchybná.</strong> Pokud na chybu narazíte, prosím <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">nahlaste ji přes GitHub Issues</a> nebo e-mailem. Opravujeme transparentně přes commit historii. <em>Důvěřujte, ale ověřujte.</em>
           </p>
         </details>
       </div>
