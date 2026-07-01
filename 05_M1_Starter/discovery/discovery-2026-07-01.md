@@ -8,8 +8,12 @@ ověření všech zdrojů!!!!"** 1. 7. 2026 je **středa**.
 
 Startovní stav: `npm run validate:all` zelené (156 indikátorů, 159 článků prošlo
 publikační hygienou). Publikační fronta drží **18 nepublikovaných draftů** —
-konec fronty sahá až na 2026-07-04. Poslední discovery report byl 2026-06-18
-(mezera 13 dní; mezitím běžel nightly/social flow a fronta se plnila).
+konec fronty sahá až na 2026-07-04. Poslední discovery report (aktivní složka
+`05_M1_Starter/discovery/`) = **2026-06-30** (WARM revize: `strategie_paliativni_2035`
+`proposed → active` po vládním schválení 29. 6.). **Mezera 1 den**, kontinuita
+zachována. (Pozn.: kořenová složka `discovery/` v repu je zastaralá kopie —
+poslední záznam 06-18; kanonická cesta denní rutiny je `05_M1_Starter/discovery/`,
+kam patří i tento report.)
 
 ## Procházené primární zdroje (stav fetch k 1. 7. 2026)
 
