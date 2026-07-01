@@ -988,9 +988,11 @@
   document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)dx<0?next():prev();x0=null;},{passive:true});
 
   /* ---------- start (podpora #N deep-linku) ---------- */
-  function fromHash(){const h=parseInt((location.hash||'').slice(1),10);return Number.isFinite(h)&&h>=1?Math.min(h,slides.length)-1:0;}
-  window.addEventListener('hashchange',()=>{const n=fromHash();if(n!==idx)show(n,false);});
-  show(fromHash(),false);
+  // Nenumerický hash (např. #stage ze skip-linku) není číslo slidu — ignoruje se.
+  function fromHash(){const raw=(location.hash||'').slice(1);if(!/^\d+$/.test(raw))return null;const h=parseInt(raw,10);return h>=1?Math.min(h,slides.length)-1:null;}
+  window.addEventListener('hashchange',()=>{const n=fromHash();if(n!==null&&n!==idx)show(n,false);});
+  const start=fromHash();
+  show(start===null?0:start,false);
 })();
 </script>
 </body>
