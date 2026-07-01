@@ -3,26 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skóre 2026 — prezentace · HSPA Monitor</title>
+<title>Skóre českého zdravotnictví 2026 — prezentace · HSPA Monitor</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Prezentační deck ke konferenci Skóre 2026 — uvedení webu skorezdravotnictvi.cz.">
+<meta name="description" content="Konferenční prezentace k uvedení portálu skorezdravotnictvi.cz — Praha, září 2026.">
 <style>
   :root{
     --paper:#fbf8f1; --paper2:#f3ece0; --ink:#1f1a14; --ink2:#3a332a;
     --red:#b8361e; --redbright:#e8755e;
-    --good:#2f6b1f; --warn:#a05a08; --bad:#b8361e;
+    --good:#2f6b1f; --good2:#3f5a3a; --good3:#4f6b47; --warn:#a05a08; --bad:#b8361e;
     --muted:#6b6253; --line:rgba(31,26,20,.16);
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
     --sans:"Helvetica Neue","Segoe UI",Arial,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;background:#15120d;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
-  /* Letterboxed 16:9 stage — vypadá stejně na každém projektoru */
+  /* skip-link (a11y) */
+  .skip{position:fixed;left:8px;top:-60px;z-index:60;background:var(--paper);color:var(--ink);padding:8px 14px;border-radius:6px;font-weight:700;text-decoration:none;transition:top .2s}
+  .skip:focus{top:8px}
+  /* Letterboxed 16:9 stage — vypadá stejně na každém plátně */
   .stagewrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
   .stage{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);
     background:var(--paper);overflow:hidden;container-type:size;
     box-shadow:0 0 120px rgba(0,0,0,.6)}
-  /* jednotný vertikální rytmus: titulek/kicker startuje na stejné výšce napříč slidy */
+  /* jednotný vertikální rytmus: kicker/titulek startuje na stejné výšce napříč slidy */
   .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:flex-start;
     padding:8.4cqh 8cqw 7.4cqh;opacity:0;transition:opacity .4s ease}
   .slide.center{justify-content:center}
@@ -30,142 +33,130 @@
   .slide.dark{background:var(--ink);color:var(--paper)}
   .slide.red{background:var(--red);color:#fff}
   .slide.paper2{background:var(--paper2)}
-  /* faint compass watermark */
-  .wm{position:absolute;right:-10cqw;bottom:-14cqh;width:46cqh;height:46cqh;opacity:.05;pointer-events:none}
-  .slide.dark .wm,.slide.red .wm{opacity:.09}
   /* typography */
   .kicker{font-size:1.7cqh;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:2.6cqh;display:flex;align-items:center;gap:1.4cqw}
-  .kicker::before{content:"";width:4.5cqw;height:2px;background:var(--red)}
-  .slide.dark .kicker,.slide.red .kicker{color:rgba(255,255,255,.72)}
+  .kicker::before{content:"";width:4.5cqw;height:2px;background:var(--red);flex:0 0 auto}
+  .slide.dark .kicker{color:rgba(255,255,255,.72)}
+  .slide.red .kicker{color:rgba(255,255,255,.85)}
   .slide.red .kicker::before{background:#fff}
   h1{font-family:var(--serif);font-weight:700;line-height:1;margin:0;font-size:9cqh;letter-spacing:-.012em}
   h2{font-family:var(--serif);font-weight:700;line-height:1.04;margin:0;font-size:6cqh;letter-spacing:-.01em}
-  .lead{font-family:var(--serif);font-size:3.3cqh;line-height:1.38;max-width:40ch;margin-top:3cqh}
+  .lead{font-family:var(--serif);font-size:3.3cqh;line-height:1.38;max-width:44ch;margin-top:3cqh}
   .slide.dark .lead,.slide.red .lead{color:rgba(255,255,255,.93)}
-  .sub{font-size:2.3cqh;color:var(--muted);margin-top:2.2cqh;max-width:54ch;line-height:1.5}
-  .slide.dark .sub{color:rgba(255,255,255,.66)}
+  .sub{font-size:2.3cqh;color:var(--muted);margin-top:2.2cqh;max-width:56ch;line-height:1.5}
+  .slide.dark .sub{color:rgba(255,255,255,.7)}
   .slide.red .sub{color:rgba(255,255,255,.9)}
   .red-em{color:var(--red)} .slide.dark .red-em{color:var(--redbright)}
   /* entrance motion */
   [data-in]{opacity:0;transform:translateY(2.4cqh);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
-  .slide.active [data-in]{opacity:1;transform:none}
-  .slide.active [data-in]{transition-delay:calc(var(--i,0)*90ms)}
+  .slide.active [data-in]{opacity:1;transform:none;transition-delay:calc(var(--i,0)*90ms)}
+  @media (prefers-reduced-motion:reduce){
+    [data-in]{opacity:1!important;transform:none!important;transition:none!important}
+    .slide{transition:none}
+  }
   /* layout helpers */
   .split{display:grid;grid-template-columns:1.05fr .95fr;gap:6cqw;align-items:center;flex:1 1 auto;min-height:0}
   .cover-grid{display:flex;align-items:center;gap:6cqw}
-  .big{font-family:var(--serif);font-weight:700;font-size:22cqh;line-height:.86;letter-spacing:-.02em}
-  .source{position:absolute;left:7cqw;bottom:3.4cqh;font-size:1.5cqh;color:var(--muted);letter-spacing:.02em}
-  .slide.dark .source,.slide.red .source{color:rgba(255,255,255,.55)}
-  .pageno{position:absolute;right:7cqw;bottom:3.4cqh;font-size:1.5cqh;color:var(--muted);font-variant-numeric:tabular-nums}
-  .slide.dark .pageno,.slide.red .pageno{color:rgba(255,255,255,.5)}
+  .source{position:absolute;left:8cqw;right:16cqw;bottom:3.4cqh;font-size:1.5cqh;color:var(--muted);letter-spacing:.02em;line-height:1.35}
+  .slide.dark .source{color:rgba(255,255,255,.6)}
+  .slide.red .source{color:rgba(255,255,255,.85)}
+  .pageno{position:absolute;right:8cqw;bottom:3.4cqh;font-size:1.5cqh;color:var(--muted);font-variant-numeric:tabular-nums}
   /* VS numbers */
   .vs{display:flex;gap:6cqw;align-items:flex-end}
   .vs .num{font-family:var(--serif);font-weight:700;font-size:15cqh;line-height:.86}
   .vs .lbl{font-size:2cqh;color:var(--muted);margin-top:1cqh;max-width:22ch;line-height:1.3}
-  .slide.dark .vs .lbl{color:rgba(255,255,255,.6)}
+  .slide.dark .vs .lbl{color:rgba(255,255,255,.7)}
   .col.cz .num{color:var(--red)} .slide.dark .col.cz .num{color:var(--redbright)}
   .col.bench .num{color:var(--muted);opacity:.85}
-  .delta{font-size:2.6cqh;font-weight:800;color:var(--red);margin-top:3cqh;letter-spacing:.01em}
-  .slide.dark .delta{color:var(--redbright)}
   /* lists */
-  ul.clean{list-style:none;padding:0;margin:3cqh 0 0;max-width:52ch}
-  ul.clean li{font-size:2.5cqh;line-height:1.45;padding:1.7cqh 0;border-top:1px solid var(--line)}
-  .slide.dark ul.clean li,.slide.red ul.clean li{border-color:rgba(255,255,255,.2)}
+  ul.clean{list-style:none;padding:0;margin:3cqh 0 0;max-width:54ch}
+  ul.clean li{font-size:2.4cqh;line-height:1.45;padding:1.7cqh 0;border-top:1px solid var(--line)}
+  .slide.dark ul.clean li,.slide.red ul.clean li{border-color:rgba(255,255,255,.22)}
   ul.clean li b{font-family:var(--serif)}
   ul.clean.src-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 6cqw;max-width:none;margin-top:2.4cqh}
   .src-grid li{font-size:2cqh;padding:1.2cqh 0;line-height:1.35}
+  .src-grid a{color:inherit;text-decoration:none;border-bottom:2px solid rgba(184,54,30,.55);transition:color .15s}
+  .src-grid a:hover{color:var(--red)}
+  /* checklist „co nese každé číslo" */
+  .check{list-style:none;padding:0;margin:2.6cqh 0 0}
+  .check li{font-size:2.15cqh;line-height:1.4;padding:1.35cqh 0 1.35cqh 3.2cqw;border-top:1px solid var(--line);position:relative}
+  .check li::before{content:"✓";position:absolute;left:0;top:1.2cqh;font-weight:800;color:var(--good);font-size:2.2cqh}
+  .check li b{font-family:var(--serif)}
+  /* umí / neumí */
+  .cando{display:grid;grid-template-columns:1fr 1fr;gap:6cqw;margin-top:3.4cqh;flex:1 1 auto;min-height:0;align-content:start}
+  .cando .col-h{font-size:1.9cqh;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding-bottom:1.4cqh;border-bottom:2px solid currentColor;margin-bottom:.6cqh}
+  .cando .can .col-h{color:var(--good)} .cando .cant .col-h{color:var(--red)}
+  .cando li{font-size:2.25cqh;line-height:1.42;padding:1.6cqh 0;border-top:1px solid var(--line);list-style:none}
+  .cando ul{margin:0;padding:0}
+  .cando li b{font-family:var(--serif)}
   /* poděkování — credit row */
   .credit-row{display:flex;flex-wrap:wrap;gap:1.4cqw;justify-content:center;margin-top:3.4cqh}
-  .credit-row span{font-family:var(--serif);font-size:2.7cqh;font-weight:700;padding:.9cqh 2.2cqw;border:1px solid rgba(255,255,255,.28);border-radius:999px}
+  .credit-row span{font-family:var(--serif);font-size:2.7cqh;font-weight:700;padding:.9cqh 2.2cqw;border:1px solid rgba(255,255,255,.32);border-radius:999px}
   .credit-row span.hl{background:var(--red);border-color:var(--red);color:#fff}
   .kicker.c{justify-content:center}
-  /* pull-quote karta */
-  .pullquote{border-left:4px solid var(--red);padding:1cqh 0 1cqh 2.4cqw;font-family:var(--serif);font-size:4cqh;line-height:1.18}
-  .pullquote .src{font-family:var(--sans);font-size:1.8cqh;color:var(--muted);margin-top:1.6cqh;font-weight:700}
-  .slide.dark .pullquote .src,.slide.paper2 .pullquote .src{color:var(--muted)}
   /* mock prohlížeč pro demo */
   .browser{border:1px solid rgba(255,255,255,.25);border-radius:10px;overflow:hidden;width:100%;background:rgba(255,255,255,.04)}
-  .browser .bar{display:flex;align-items:center;gap:1cqw;padding:1.4cqh 1.6cqw;border-bottom:1px solid rgba(255,255,255,.18);font-size:1.6cqh;color:rgba(255,255,255,.7)}
+  .browser .bar{display:flex;align-items:center;gap:1cqw;padding:1.4cqh 1.6cqw;border-bottom:1px solid rgba(255,255,255,.18);font-size:1.6cqh;color:rgba(255,255,255,.75)}
   .browser .bar i{width:1.5cqh;height:1.5cqh;border-radius:50%;background:rgba(255,255,255,.3)}
   .browser .body{display:flex;align-items:center;justify-content:center;padding:5cqh 2cqw}
-  /* dvě tváře — červená vs zelená */
-  .twoface{display:grid;grid-template-columns:1fr 1fr;gap:6cqw;margin-top:4cqh}
-  .twoface .col-h{font-size:1.8cqh;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding-bottom:1.4cqh;border-bottom:2px solid currentColor;margin-bottom:1.4cqh}
-  .twoface .bad .col-h{color:var(--redbright)} .twoface .good .col-h{color:#7ab85f}
-  .twoface .row{display:flex;align-items:baseline;gap:1.6cqw;padding:1.5cqh 0;border-top:1px solid rgba(255,255,255,.14)}
-  .twoface .v{font-family:var(--serif);font-weight:700;font-size:5cqh;line-height:1;min-width:5.5ch}
-  .twoface .bad .v{color:var(--redbright)} .twoface .good .v{color:#7ab85f}
-  .twoface .t{font-size:1.9cqh;color:rgba(255,255,255,.82);line-height:1.32}
   /* novinový grid článků */
   .news{display:grid;grid-template-columns:1fr 1fr;gap:2.6cqh 5cqw;margin-top:3.2cqh}
   .news a{display:block;text-decoration:none;color:inherit;border-top:2px solid var(--ink);padding-top:1.6cqh}
   .news .tag{font-size:1.4cqh;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--red);margin-bottom:.9cqh}
   .news .hl{font-family:var(--serif);font-size:3.1cqh;line-height:1.12;font-weight:700}
   .news a:hover .hl{color:var(--red)}
-  /* mini-staty (prevence účast) */
-  .ministat{border-top:1px solid var(--line);padding:1.6cqh 0;font-size:2.1cqh;line-height:1.3}
+  /* mini-staty */
+  .ministat{border-top:1px solid var(--line);padding:1.6cqh 0;font-size:2.05cqh;line-height:1.3}
+  .slide.dark .ministat{border-color:rgba(255,255,255,.22)}
   .ministat .v{font-family:var(--serif);font-weight:700;font-size:4.2cqh;color:var(--red);margin-right:1.2cqw}
+  .slide.dark .ministat .v{color:var(--redbright)}
   .ministat em{font-style:normal;color:var(--muted)}
-  .src-grid a{color:inherit;text-decoration:none;border-bottom:2px solid rgba(184,54,30,.55);transition:color .15s}
-  .src-grid a:hover{color:var(--red)}
+  .slide.dark .ministat em{color:rgba(255,255,255,.65)}
   .chiprow{display:flex;flex-wrap:wrap;gap:.9cqh 1cqw;align-items:center;margin-top:2.4cqh}
   .chiprow .chiplbl{font-size:1.5cqh;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:.4cqw}
   .chiprow a{font-size:1.7cqh;font-weight:700;padding:.7cqh 1.5cqw;border:1px solid var(--line);border-radius:999px;color:var(--ink2);text-decoration:none;transition:all .15s}
   .chiprow a:hover{background:var(--red);color:#fff;border-color:var(--red)}
-  /* Florence — AI autorka */
+  /* Florence — růžice */
   .fl-wrap{display:flex;flex-direction:column;align-items:center;gap:2.4cqh;text-align:center}
-  .fl-avatar{width:34cqh;height:34cqh;border-radius:50%;object-fit:cover;box-shadow:0 1.4cqh 4.4cqh rgba(31,26,20,.3)}
-  .fl-portrait{height:60cqh;width:auto;border-radius:1cqh;object-fit:cover;box-shadow:0 1.4cqh 4.4cqh rgba(31,26,20,.3)}
-  .fl-name{font-family:var(--serif);font-size:3.2cqh;font-weight:700}
-  .fl-cap{font-size:1.8cqh;color:var(--muted);line-height:1.35;max-width:30ch}
+  .fl-cap{font-size:1.8cqh;color:var(--muted);line-height:1.35;max-width:32ch}
   .fl-rose{width:32cqh;height:32cqh;display:block;margin:0 auto}
   .fl-rose .w{stroke:var(--paper2);stroke-width:1.1}
-  .fl-rose .empty{fill:none;stroke:var(--red);stroke-width:1.5;stroke-dasharray:4 3}
-  .fl-rose .n404{fill:var(--red);font:700 15px/1 var(--serif)}
   /* steps */
-  .steps{margin-top:3cqh;max-width:54ch}
-  .steps .s{counter-increment:s;display:grid;grid-template-columns:6cqh 1fr;gap:2cqw;align-items:baseline;padding:1.5cqh 0;font-size:2.3cqh;border-top:1px solid var(--line)}
-  .slide.dark .steps .s{border-color:rgba(255,255,255,.2)}
-  .steps{counter-reset:s}
+  .steps{margin-top:3cqh;max-width:56ch;counter-reset:s}
+  .steps .s{counter-increment:s;display:grid;grid-template-columns:6cqh 1fr;gap:2cqw;align-items:baseline;padding:1.5cqh 0;font-size:2.3cqh;border-top:1px solid var(--line);line-height:1.4}
+  .slide.dark .steps .s,.slide.red .steps .s{border-color:rgba(255,255,255,.25)}
   .steps .s::before{content:counter(s,decimal-leading-zero);font-family:var(--serif);font-weight:700;font-size:3cqh;color:var(--red)}
   .slide.dark .steps .s::before{color:var(--redbright)}
+  .slide.red .steps .s::before{color:#fff}
   /* press wall */
-  .wall{display:grid;grid-template-columns:repeat(3,1fr);gap:7cqh 4cqw;margin-top:6cqh}
+  .wall{display:grid;grid-template-columns:repeat(3,1fr);gap:7cqh 4cqw;margin-top:4cqh;flex:1 1 auto;align-content:center}
   .stat .n{font-family:var(--serif);font-weight:700;font-size:9.5cqh;line-height:.85;color:var(--red)}
   .slide.dark .stat .n{color:var(--redbright)}
   .stat .d{font-size:1.85cqh;margin-top:1cqh;line-height:1.32;max-width:26ch;color:var(--ink2)}
-  .slide.dark .stat .d{color:rgba(255,255,255,.8)}
-  /* HSPA matrix grid */
+  .slide.dark .stat .d{color:rgba(255,255,255,.82)}
+  /* HSPA matrix — 4 oblasti, u každé 1 konkrétní ukazatel */
   .matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4cqw;margin-top:3cqh}
-  .matrix .cell{border:1px solid var(--line);border-radius:8px;padding:2.6cqh 1.6cqw;min-height:30cqh;display:flex;flex-direction:column;gap:1cqh;background:rgba(255,255,255,.5)}
-  .matrix .cell h4{margin:0;font-family:var(--serif);font-size:2.4cqh}
+  .matrix .cell{border:1px solid var(--line);border-radius:8px;padding:3cqh 1.6cqw 2.6cqh;min-height:48cqh;display:flex;flex-direction:column;gap:1cqh;background:rgba(255,255,255,.5)}
+  .matrix .cell h4{margin:0 0 .6cqh;font-family:var(--serif);font-size:2.9cqh}
   .matrix .cell .tag{font-size:1.4cqh;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--muted)}
-  .matrix .dots{margin-top:auto;display:flex;gap:.6cqw;flex-wrap:wrap}
-  .dot{width:1.8cqh;height:1.8cqh;border-radius:50%}
-  .dot.good{background:var(--good)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)} .dot.neutral{background:#bcae97}
-  .legend{display:flex;gap:3cqw;margin-top:2.4cqh;font-size:1.8cqh;color:var(--muted)}
-  .legend span{display:flex;align-items:center;gap:.7cqw}
+  .matrix .iv{font-family:var(--serif);font-weight:700;font-size:6.6cqh;line-height:1;margin-top:auto}
+  .matrix .iv.up{color:var(--good)} .matrix .iv.down{color:var(--red)}
+  .matrix .in{font-size:1.9cqh;line-height:1.35;color:var(--ink2)}
+  .matrix .ib{font-size:1.75cqh;font-weight:700;line-height:1.3}
+  .matrix .ib.up{color:var(--good)} .matrix .ib.down{color:var(--red)}
+  .matrix .is{font-size:1.4cqh;color:var(--muted)}
+  .legend{display:flex;gap:3cqw;margin-top:2.2cqh;font-size:1.8cqh;color:var(--muted);flex-wrap:wrap}
   /* SVG chart frames */
-  .chartwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-  svg .axis{stroke:var(--line)} svg .grid{stroke:var(--line);stroke-dasharray:2 4}
+  .chartwrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;min-height:0}
   svg text{font-family:var(--sans)}
-  /* gauge labels */
-  .gauge-cap{text-align:center;margin-top:1.5cqh}
-  .gauge-cap .big2{font-family:var(--serif);font-weight:700;font-size:6cqh;color:var(--red);line-height:1}
-  .slide.dark .gauge-cap .big2{color:var(--redbright)}
-  .gauge-cap .small{font-size:1.9cqh;color:var(--muted);margin-top:.6cqh}
-  .slide.dark .gauge-cap .small{color:rgba(255,255,255,.6)}
-  /* interactive controls */
-  .picker{display:flex;gap:1cqw;flex-wrap:wrap;margin-top:2.4cqh}
+  /* gauge — interactive controls */
+  .picker{display:flex;gap:1cqw;flex-wrap:wrap;margin-top:2.2cqh}
   .picker button{font:inherit;font-size:1.8cqh;font-weight:700;padding:.8cqh 1.6cqw;border-radius:999px;border:1px solid currentColor;
-    background:transparent;color:var(--ink2);cursor:pointer;transition:all .15s;opacity:.55}
-  .slide.dark .picker button{color:rgba(255,255,255,.8)}
+    background:transparent;color:var(--ink2);cursor:pointer;transition:all .15s;opacity:.75}
   .picker button.on{opacity:1;background:var(--red);color:#fff;border-color:var(--red)}
   .picker button.good.on{background:var(--good);border-color:var(--good)}
-  .picker .grp{flex-basis:100%;font-size:1.5cqh;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:1.2cqh 0 .2cqh}
-  .slide.dark .picker .grp{color:rgba(255,255,255,.55)}
-  .hint-i{font-size:1.5cqh;color:var(--muted);margin-top:1.4cqh}
-  .slide.dark .hint-i{color:rgba(255,255,255,.5)}
+  .picker .grp{flex-basis:100%;font-size:1.5cqh;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:1.1cqh 0 .2cqh}
+  .hint-i{font-size:1.6cqh;color:var(--muted);margin-top:1.4cqh}
   /* chrome */
   .progress{position:fixed;left:0;top:0;height:4px;background:var(--red);width:0;z-index:40;transition:width .3s}
   .counter{position:fixed;right:14px;bottom:10px;font-size:12px;color:rgba(255,255,255,.6);z-index:40;font-variant-numeric:tabular-nums}
@@ -173,6 +164,17 @@
   .nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:40;border:none;background:transparent;color:rgba(255,255,255,.3);font-size:40px;cursor:pointer;padding:18px;line-height:1;transition:color .2s}
   .nav-arrow:hover{color:rgba(255,255,255,.85)}
   .nav-arrow.prev{left:2px}.nav-arrow.next{right:2px}
+  /* overview (klávesa O) */
+  .overview{position:fixed;inset:0;z-index:50;background:rgba(21,18,13,.96);overflow-y:auto;padding:4vh 5vw;display:none}
+  .overview.open{display:block}
+  .overview h3{color:var(--paper);font-family:var(--serif);font-size:22px;margin:0 0 18px}
+  .overview ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+  .overview button{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;padding:12px 14px;border-radius:8px;
+    border:1px solid rgba(251,248,241,.2);background:rgba(251,248,241,.06);color:var(--paper);cursor:pointer;transition:all .15s}
+  .overview button:hover,.overview button.cur{background:var(--paper);color:var(--ink)}
+  .overview button .no{font-family:var(--serif);font-weight:700;color:var(--redbright);min-width:2ch}
+  .overview button:hover .no,.overview button.cur .no{color:var(--red)}
+  .overview .ap{grid-column:1/-1;color:rgba(251,248,241,.5);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin-top:10px}
   @media print{
     html,body{overflow:visible;background:#fff;height:auto}
     .stagewrap{position:static;display:block}
@@ -182,344 +184,362 @@
       width:100%;aspect-ratio:16/9;container-type:size;overflow:hidden;
       page-break-after:always;break-after:page;break-inside:avoid}
     [data-in]{opacity:1!important;transform:none!important}
-    .progress,.counter,.hint,.nav-arrow{display:none!important}
+    .progress,.counter,.hint,.nav-arrow,.overview,.skip{display:none!important}
   }
   @page{size:landscape;margin:0}
 </style>
 </head>
 <body>
+<a class="skip" href="#stage">Přeskočit na obsah prezentace</a>
 <div class="progress" id="progress"></div>
 <div class="stagewrap">
 <div class="stage" id="stage">
 
-  <!-- 1 · COVER -->
-  <section class="slide active center dark" data-anim>
+  <!-- ============ KEYNOTE ============ -->
+
+  <!-- 1 · TITUL -->
+  <section class="slide active center dark" data-title="Titul">
     <div class="cover-grid">
-      <div id="coverCompass" style="width:30cqh;height:30cqh;flex:0 0 auto"></div>
+      <div id="coverCompass" style="width:30cqh;height:30cqh;flex:0 0 auto" aria-hidden="true"></div>
       <div>
-        <div class="kicker" data-in style="--i:0">Neveřejný náhled · Praha · září 2026</div>
-        <h1 data-in style="--i:1">Skóre&nbsp;2026<br><span class="red-em" style="color:var(--redbright)">první čtení</span></h1>
-        <p class="lead" data-in style="--i:2">Poprvé si může každý otevřít, jak si české zdravotnictví stojí.<br>Spouštíme portál <b>skorezdravotnictvi.cz</b>.</p>
+        <div class="kicker" data-in style="--i:0">Uvedení portálu · Praha · září 2026</div>
+        <h1 data-in style="--i:1">Skóre českého<br>zdravotnictví <span class="red-em" style="color:var(--redbright)">2026</span></h1>
+        <p class="lead" data-in style="--i:2">Poprvé si může každý otevřít, jak si české zdravotnictví vede — a každé číslo si ověřit u zdroje. Spouštíme <b>skorezdravotnictvi.cz</b>.</p>
       </div>
     </div>
-    <div class="source">HSPA Monitor — nezávislý projekt, který měří české zdravotnictví podle metodiky OECD</div>
+    <div class="source">HSPA Monitor — hodnocení výkonnosti zdravotního systému podle metodiky OECD HSPA</div>
   </section>
 
-  <!-- 2 · ÚVOD kompas -->
-  <section class="slide" data-anim>
+  <!-- 2 · KOMPAS, NE ŽEBŘÍČEK -->
+  <section class="slide" data-title="Kompas, ne žebříček">
     <div class="split">
       <div>
-        <div class="kicker" data-in>01 · Úvod</div>
-        <h1 data-in style="--i:1">Postavili jsme <span class="red-em">kompas</span>, ne žebříček.</h1>
-        <p class="sub" data-in style="--i:2">Neznámkujeme lékaře ani nemocnice. Sledujeme, jak funguje celý systém, porovnáváme ho s nejlepšími zeměmi a ukazujeme, kde má zabrat.</p>
+        <div class="kicker" data-in>Jedno sdělení</div>
+        <h1 data-in style="--i:1">Postavili jsme <span class="red-em">kompas</span>,<br>ne žebříček.</h1>
+        <p class="sub" data-in style="--i:2">Neznámkujeme lékaře ani nemocnice a nesestavujeme pořadí vítězů. Měříme celý systém, srovnáváme ho s Evropou a ukazujeme směr: kde je cíl, kde jsme dnes a jak velká je mezera.</p>
       </div>
-      <div class="chartwrap" data-in style="--i:2"><div id="introCompass" style="width:80%;aspect-ratio:1"></div></div>
+      <div class="chartwrap" data-in style="--i:2"><div id="introCompass" style="width:80%;aspect-ratio:1" aria-hidden="true"></div></div>
     </div>
   </section>
 
-  <!-- 3 · CO TO MĚŘÍ kompas legenda -->
-  <section class="slide paper2" data-anim>
-    <div class="kicker" data-in>Jak kompas čteme</div>
-    <h2 data-in style="--i:1">Stupnice měří. Sever je cíl. Mezera je úkol.</h2>
-    <div class="split" style="grid-template-columns:.85fr 1.15fr;margin-top:1cqh">
-      <div class="chartwrap" data-in style="--i:2"><div id="legendCompass" style="width:78%;aspect-ratio:1"></div></div>
-      <ul class="clean" data-in style="--i:3">
-        <li><b>Stupnice</b> — kruh se značkami, na kterém porovnáváme s nejlepšími zeměmi (OECD, EU).</li>
-        <li><b>Pravý sever ▲</b> — cíl: hodnota, které dosahují nejlepší systémy.</li>
-        <li><b>Střelka</b> — kde je dnes Česko. Červený hrot ukazuje, kam míříme.</li>
-        <li><b>Mezera</b> — úhel mezi severem a střelkou. Čím větší, tím dál jsme od cíle.</li>
+  <!-- 3 · JAK ČÍST KOMPAS -->
+  <section class="slide paper2" data-title="Jak číst kompas" data-anno>
+    <div class="kicker" data-in>Jak číst kompas</div>
+    <h2 data-in style="--i:1">Stupnice měří. Sever je cíl.<br>Mezera je úkol.</h2>
+    <div class="split" style="grid-template-columns:.9fr 1.1fr;margin-top:1cqh">
+      <ul class="clean" data-in style="--i:2">
+        <li><b>Cíl (sever ▲)</b> — hodnota, které dosahuje průměr EU: 10,3 roku ve zdraví po 65. narozeninách.</li>
+        <li><b>Česko dnes (střelka)</b> — 8,0 roku. Červený hrot ukazuje, kde právě jsme.</li>
+        <li><b>Mezera</b> — úhel mezi severem a střelkou: −2,3 roku, o 22 % pod průměrem EU.</li>
+        <li><b>Směr</b> — kam se číslo hýbe v čase: za pět let +0,5 roku, pomalu k severu.</li>
       </ul>
+      <div class="chartwrap" data-in style="--i:3"><div id="annoGauge" style="width:100%;height:56cqh"></div></div>
     </div>
+    <div class="source">Ukázkový ukazatel: naděje dožití ve zdraví v 65 letech · Eurostat, 2024 · benchmark: průměr EU</div>
   </section>
 
-  <!-- 4 · PROBLEM -->
-  <section class="slide" data-anim>
+  <!-- 4 · PROBLÉM -->
+  <section class="slide" data-title="Problém: chybí společné číslo">
     <div class="split">
       <div>
-        <div class="kicker" data-in>Proč to vzniklo</div>
-        <h2 data-in style="--i:1">Debata o zdravotnictví u nás stojí na dojmech.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
-        <p class="sub" data-in style="--i:2">Čísla jsou rozházená po ÚZIS, ČSÚ, OECD, Eurostatu i pojišťovnách — schovaná v PDF a často jen anglicky. My je dáváme na jedno místo, srozumitelně a vždycky s odkazem na zdroj.</p>
+        <div class="kicker" data-in>Proč portál vznikl</div>
+        <h2 data-in style="--i:1">Debata o zdravotnictví stojí na dojmech.<br>Chybí jí <span class="red-em">společné číslo</span>.</h2>
+        <p class="sub" data-in style="--i:2">Data přitom existují — jsou ale rozházená po ÚZIS, ČSÚ, Eurostatu, OECD a pojišťovnách, schovaná v PDF a často jen anglicky. Kdo si chce udělat názor, musí být napřed datový detektiv.</p>
       </div>
       <ul class="clean" data-in style="--i:2">
-        <li><b>155 ukazatelů</b> ve čtyřech rovinách, jak systém funguje</li>
-        <li><b>U každého čísla</b> najdete srovnání se světem, vývoj v čase i přesnou definici</li>
-        <li><b>Všechno je veřejné</b> a můžete to citovat</li>
+        <li><b>155+ ukazatelů</b> na jednom místě, ve čtyřech oblastech systému</li>
+        <li><b>U každého čísla</b> srovnání s Evropou, vývoj v čase a přesná definice</li>
+        <li><b>Vše veřejné a citovatelné</b> — s odkazem na primární zdroj</li>
       </ul>
     </div>
   </section>
 
-  <!-- 4b · ODKUD DATA -->
-  <section class="slide" data-anim>
-    <div class="kicker" data-in>Odkud čísla bereme</div>
-    <h2 data-in style="--i:1">Sami nesbíráme nic.<br>Skládáme dohromady to nejlepší, co už existuje.</h2>
-    <ul class="clean src-grid" data-in style="--i:2">
-      <li><b>ÚZIS ČR</b> — národní zdravotnické registry: výkony, kapacity nemocnic, personál, očkování</li>
-      <li><b>ČSÚ</b> — demografie, příčiny úmrtí, naděje dožití</li>
-      <li><b>OECD</b> — mezinárodní srovnání (Health at a Glance), benchmark se světem</li>
-      <li><b>Eurostat</b> — evropská čísla: screening, roky prožité ve zdraví</li>
-      <li><b>SÚKL</b> — léčiva a jejich dostupnost</li>
-      <li><b>Kancelář zdravotního pojištění</b> — úhrady a výkony od pojišťoven</li>
-    </ul>
-    <p class="sub" data-in style="--i:3">My je dáme na jedno místo, sjednotíme metodiku a porovnáme se světem — s průměrem OECD a EU.</p>
+  <!-- 5 · ODKUD DATA + JAK OVĚŘIT -->
+  <section class="slide" data-title="Odkud data pocházejí">
+    <div class="kicker" data-in>Odkud čísla bereme — a jak si je ověříte</div>
+    <h2 data-in style="--i:1">Data nesbíráme. Skládáme to nejlepší,<br>co existuje — a vše je ověřitelné u zdroje.</h2>
+    <div class="split" style="align-items:start;margin-top:2.6cqh">
+      <ul class="clean src-grid" data-in style="--i:2" style="margin-top:0">
+        <li><b>ÚZIS ČR</b> — národní zdravotnické registry: výkony, kapacity, personál, screeningy</li>
+        <li><b>ČSÚ</b> — demografie, zdravotnické účty, příčiny úmrtí</li>
+        <li><b>Eurostat</b> — evropská srovnání: naděje dožití, odvratitelná úmrtnost</li>
+        <li><b>OECD</b> — Health at a Glance, mezinárodní benchmark</li>
+        <li><b>SÚKL, SZÚ</b> — léčiva, infekce, očkování</li>
+        <li><b>Zdravotní pojišťovny</b> — úhrady, čekací doby</li>
+      </ul>
+      <div data-in style="--i:3">
+        <ul class="check">
+          <li><b>Definice</b> — co přesně ukazatel měří</li>
+          <li><b>Rok a zdroj</b> — s odkazem na primární data</li>
+          <li><b>Srovnávací skupina</b> — primárně průměr EU; kde evropská řada není, průměr OECD — a u čísla to vždy říkáme</li>
+          <li><b>Směr</b> — jestli je lepší vyšší, nebo nižší hodnota</li>
+          <li><b>Pravidla oprav</b> — najdete-li chybu, opravíme ji a opravu přiznáme</li>
+        </ul>
+      </div>
+    </div>
+    <div class="source">Tohle nese každé číslo na webu — důvěryhodnost stavíme dřív, než ukážeme první dramatické číslo.</div>
   </section>
 
-  <!-- 5 · HSPA MATRIX -->
-  <section class="slide paper2" data-anim>
+  <!-- 6 · ČTYŘI OBLASTI -->
+  <section class="slide paper2" data-title="Čtyři oblasti systému">
     <div class="kicker" data-in>Co web ukazuje</div>
-    <h2 data-in style="--i:1">Jak si stojíme ve čtyřech rovinách — na jeden pohled.</h2>
+    <h2 data-in style="--i:1">Čtyři oblasti systému — u každé jeden příklad.</h2>
     <div class="matrix">
-      <div class="cell" data-in style="--i:2"><span class="tag">Výsledky</span><h4>Zdravotní stav</h4><div class="dots"><i class="dot warn"></i><i class="dot bad"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot bad"></i></div></div>
-      <div class="cell" data-in style="--i:3"><span class="tag">Výstupy</span><h4>Kvalita a bezpečí</h4><div class="dots"><i class="dot bad"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot warn"></i><i class="dot bad"></i></div></div>
-      <div class="cell" data-in style="--i:4"><span class="tag">Procesy</span><h4>Přístup a prevence</h4><div class="dots"><i class="dot bad"></i><i class="dot bad"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot warn"></i></div></div>
-      <div class="cell" data-in style="--i:5"><span class="tag">Struktury</span><h4>Zdroje a personál</h4><div class="dots"><i class="dot good"></i><i class="dot warn"></i><i class="dot good"></i><i class="dot warn"></i><i class="dot neutral"></i></div></div>
+      <div class="cell" data-in style="--i:2">
+        <span class="tag">Struktury · 33 ukazatelů</span><h4>Zdroje a personál</h4>
+        <div class="in">Praktikující lékaři na 1 000 obyvatel</div>
+        <div class="iv up">4,2</div>
+        <div class="ib up">▲ nad průměrem EU (4,0)</div>
+        <div class="is">ÚZIS, 2024</div>
+      </div>
+      <div class="cell" data-in style="--i:3">
+        <span class="tag">Procesy · 63 ukazatelů</span><h4>Přístup a prevence</h4>
+        <div class="in">Účast žen 50–69 na mamografickém screeningu</div>
+        <div class="iv down">54,5&nbsp;%</div>
+        <div class="ib down">▼ pod průměrem EU (65 %)</div>
+        <div class="is">ÚZIS, 2024</div>
+      </div>
+      <div class="cell" data-in style="--i:4">
+        <span class="tag">Výstupy · 20 ukazatelů</span><h4>Kvalita a bezpečí péče</h4>
+        <div class="in">Nemocniční úmrtnost po infarktu myokardu</div>
+        <div class="iv up">4,6&nbsp;%</div>
+        <div class="ib up">▲ lepší než průměr EU (6,7 %)</div>
+        <div class="is">ÚZIS, 2024</div>
+      </div>
+      <div class="cell" data-in style="--i:5">
+        <span class="tag">Výsledky · 42 ukazatelů</span><h4>Zdravotní stav</h4>
+        <div class="in">Naděje dožití při narození</div>
+        <div class="iv down">80,1</div>
+        <div class="ib down">▼ pod průměrem EU (81,5 let)</div>
+        <div class="is">Eurostat, 2024</div>
+      </div>
     </div>
-    <div class="legend" data-in style="--i:6">
-      <span><i class="dot good"></i> nad benchmarkem</span>
-      <span><i class="dot warn"></i> kolem benchmarku</span>
-      <span><i class="dot bad"></i> pod benchmarkem</span>
-      <span><i class="dot neutral"></i> bez srovnání</span>
-    </div>
+    <div class="legend" data-in style="--i:6"><span>▲ lepší než průměr EU</span><span>▼ horší než průměr EU</span><span>· šipka říká „lepší/horší“, ne „vyšší/nižší“</span></div>
   </section>
 
-  <!-- 6 · KEYNOTE -->
-  <section class="slide center dark" data-anim>
-    <div class="kicker" data-in>02 · Keynote — OECD HSPA</div>
-    <h2 data-in style="--i:1">Systémy, které se měří veřejně,<br>se rychleji zlepšují.</h2>
-    <p class="lead" data-in style="--i:2">Nejde o to, kolik do zdravotnictví nalijeme. Jde o to, co za ty peníze dostaneme.</p>
+  <!-- 7 · PROČ VEŘEJNÉ MĚŘENÍ -->
+  <section class="slide center dark" data-title="Proč veřejné měření pomáhá">
+    <div class="kicker" data-in>Proč to dělat veřejně</div>
+    <h2 data-in style="--i:1">Veřejné měření nezaručí lepší zdravotnictví.<br>Zaručí <span class="red-em">lepší debatu</span> o něm.</h2>
+    <ul class="clean" data-in style="--i:2">
+      <li>Spor se přesune od faktů k řešením — o číslech se nehádáme, hádáme se, co s nimi.</li>
+      <li>Opakované měření ukáže, jestli změna zabrala — příští rok, ne za dekádu.</li>
+      <li>Veřejná metodika znamená veřejnou kontrolu — chybu může najít kdokoli.</li>
+    </ul>
   </section>
 
-  <!-- 7 · GAUGE alkohol (interaktivní výběr) -->
-  <section class="slide" data-anim data-gauge>
+  <!-- 8 · INTERAKTIVNÍ GAUGE -->
+  <section class="slide" data-title="Jak daleko je Česko od severu?" data-gauge>
     <div class="split">
       <div>
         <div class="kicker" data-in>Vyberte ukazatel</div>
         <h2 data-in style="--i:1">Jak daleko je Česko od&nbsp;severu?</h2>
-        <div class="picker" data-in style="--i:2" id="gaugePicker"></div>
+        <div class="picker" data-in style="--i:2" id="gaugePicker" role="group" aria-label="Výběr ukazatele"></div>
         <p class="sub" id="gaugeDesc" data-in style="--i:3"></p>
-        <div class="hint-i" data-in style="--i:4">Když ručička spadne do červené, tam zaostáváme. Do zelené, tam jsme nad světem.</div>
+        <div class="hint-i" data-in style="--i:4">Sever = průměr EU. Střelka v červené = pod průměrem, v zelené = nad ním.</div>
       </div>
       <div class="chartwrap" data-in style="--i:2"><div id="mainGauge" style="width:92%;aspect-ratio:1.15"></div></div>
     </div>
     <div class="source" id="gaugeSrc"></div>
   </section>
 
-  <!-- 7b · PROČ TYHLE UKAZATELE — argument páky -->
-  <section class="slide paper2" data-anim data-diverge>
-    <div class="kicker" data-in>Proč zrovna tyhle ukazatele</div>
-    <h2 data-in style="--i:1">Kompas neukazuje jen, jak jsme na tom.<br>Ukazuje, <span class="red-em">kam napřít síly</span>.</h2>
-    <p class="sub" data-in style="--i:2;max-width:64ch">Velká mezera není rozsudek ani automatická priorita — záleží i na počtu lidí, nákladech, proveditelnosti a nerovnostech. Je to signál, kde se vyplatí podívat se na příčiny, dopad a možná řešení dřív. Zelené výseky připomínají, co už zvládáme.</p>
-    <div class="chartwrap" data-in style="--i:3;height:42cqh;align-items:flex-start"><div id="divergeChart" style="width:100%;height:40cqh"></div></div>
-    <div class="source">O kolik procent se Česko liší od průměru OECD/EU. Vlevo červeně jsme pod ním, vpravo zeleně nad ním.</div>
+  <!-- 9 · CO KOMPAS UMÍ A NEUMÍ -->
+  <section class="slide paper2" data-title="Co kompas umí — a co neumí">
+    <div class="kicker" data-in>Poctivě o mezích</div>
+    <h2 data-in style="--i:1">Co kompas umí — a co neumí.</h2>
+    <div class="cando">
+      <div class="can" data-in style="--i:2">
+        <div class="col-h">Umí</div>
+        <ul>
+          <li><b>Změřit mezeru</b> vůči průměru EU — a sledovat, jestli se zavírá</li>
+          <li><b>Oddělit měření od dojmu</b> — každé číslo má definici, rok a zdroj</li>
+          <li><b>Ukázat, kde se ptát dřív</b> — na příčiny, dopad a možná řešení</li>
+        </ul>
+      </div>
+      <div class="cant" data-in style="--i:3">
+        <div class="col-h">Neumí</div>
+        <ul>
+          <li><b>Říct, kdo za mezeru může</b> — to je práce analytiků a reportérů</li>
+          <li><b>Nahradit klinické ani politické rozhodnutí</b> — je to podklad, ne verdikt</li>
+          <li><b>Seřadit priority sám</b> — velká mezera není rozsudek ani automatická priorita; záleží na počtu lidí, nákladech, proveditelnosti a nerovnostech</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <!-- 9 · LIVE DEMO -->
-  <section class="slide dark" data-anim>
+  <!-- 10 · ŽIVÉ DEMO -->
+  <section class="slide dark" data-title="Živé demo">
     <div class="split">
       <div>
-        <div class="kicker" data-in>04 · Živé demo — otevřete si to teď</div>
+        <div class="kicker" data-in>Živé demo — otevřete si to s námi</div>
         <h2 data-in style="--i:1">Vše, co uvidíte,<br>si ověříte za 30 sekund.</h2>
         <div class="steps">
-          <div class="s" data-in style="--i:2">Titulní strana → přehled čtyř oblastí; barvy hned ukážou, kde je dobře a kde zle</div>
-          <div class="s" data-in style="--i:3">Detail ukazatele → hodnota, vývoj, srovnání s OECD/EU a odkaz na zdroj</div>
-          <div class="s" data-in style="--i:4">Kraje → mapa a rozdíly mezi regiony u jednoho čísla</div>
-          <div class="s" data-in style="--i:5">Článek → jak se z dat stává čtení, s vysvětlivkami a zdroji</div>
+          <div class="s" data-in style="--i:2">Titulní strana → přehled čtyř oblastí na jeden pohled</div>
+          <div class="s" data-in style="--i:3">Detail ukazatele → hodnota, vývoj, srovnání s EU a odkaz na zdroj</div>
+          <div class="s" data-in style="--i:4">Kraje → tentýž ukazatel v regionálních rozdílech</div>
+          <div class="s" data-in style="--i:5">Článek → jak se z čísla stává čtení, se zdroji u každého tvrzení</div>
         </div>
       </div>
       <div class="browser" data-in style="--i:3">
         <div class="bar"><i></i><i></i><i></i><span style="margin-left:1cqw">skorezdravotnictvi.cz</span></div>
-        <div class="body"><div id="demoCompass" style="width:44%;aspect-ratio:1"></div></div>
+        <div class="body"><div id="demoCompass" style="width:44%;aspect-ratio:1" aria-hidden="true"></div></div>
       </div>
     </div>
     <div class="source">Trasa dema: přehled → detail ukazatele → kraj → článek.</div>
   </section>
 
-  <!-- 10 · DATA STORIES intro -->
-  <section class="slide center red" data-anim>
-    <div class="kicker" data-in>05 · Co data říkají o ČR</div>
+  <!-- 11 · TŘI PŘÍBĚHY intro -->
+  <section class="slide center red" data-title="Tři příběhy, které nejsou názor">
+    <div class="kicker" data-in>Co data říkají o Česku</div>
     <h1 data-in style="--i:1">Tři příběhy,<br>které nejsou názor.</h1>
-    <p class="lead" data-in style="--i:2">Délka vs. kvalita života · prevence, která se nedělá · čekání, na kterém záleží.</p>
-    <p class="sub" data-in style="--i:3">Tři ilustrativní příklady z více než 155 sledovaných ukazatelů — vybrané pro srozumitelnost, ne pro efekt.</p>
+    <p class="lead" data-in style="--i:2">Roky vs. roky ve zdraví · prevence a čekání · duševní zdraví.</p>
+    <p class="sub" data-in style="--i:3">Ilustrativní výběr z více než 155 sledovaných ukazatelů — vybraný pro srozumitelnost, ne pro efekt.</p>
   </section>
 
-  <!-- 11 · STORY A zdravé roky (gauge + číslo) -->
-  <section class="slide" data-anim data-g2>
+  <!-- 12 · PŘÍBĚH 1: ROKY VS. ROKY VE ZDRAVÍ -->
+  <section class="slide" data-title="Příběh 1: Roky vs. roky ve zdraví" data-g2>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Příběh A — délka vs. kvalita života</div>
-        <h2 data-in style="--i:1">Žijeme skoro stejně dlouho.<br>Ve zdraví ale <span class="red-em">o 2 roky méně</span>.</h2>
+        <div class="kicker" data-in>Příběh 1 — roky vs. roky ve zdraví</div>
+        <h2 data-in style="--i:1">Dožíváme se skoro průměru EU.<br>Ve zdraví ale žijeme <span class="red-em">o 2,3 roku méně</span>.</h2>
         <div class="vs" data-in style="--i:2;margin-top:3cqh">
-          <div class="col cz"><div class="num" data-count="8" data-dec="0">8</div><div class="lbl">ČR — roky ve zdraví po 65. narozeninách</div></div>
-          <div class="col bench"><div class="num" data-count="10.2" data-dec="1">10,2</div><div class="lbl">průměr OECD</div></div>
+          <div class="col cz"><div class="num" data-count="8" data-dec="1">8,0</div><div class="lbl">Česko — roky ve zdraví po 65. narozeninách</div></div>
+          <div class="col bench"><div class="num">10,3</div><div class="lbl">průměr EU</div></div>
         </div>
+        <p class="sub" data-in style="--i:3">Naděje dožití je 80,1 roku (EU 81,5) a po covidu zase roste. Roky prožité ve zdraví se ale zavírají mnohem pomaleji.</p>
       </div>
       <div class="chartwrap" data-in style="--i:3"><div id="gaugeA" style="width:88%;aspect-ratio:1.15"></div></div>
     </div>
-    <div class="source">Eurostat / OECD, 2024 — naděje dožití ve zdraví (65)</div>
+    <div class="source">Naděje dožití ve zdraví (65 let) a naděje dožití při narození · Eurostat, 2024 · benchmark: průměr EU · vyšší je lepší</div>
   </section>
 
-  <!-- 12 · STORY B screening (interaktivní sloupce) -->
-  <section class="slide paper2" data-anim data-bars>
-    <div class="kicker" data-in>Příběh B — prevence, která se nedělá</div>
-    <h2 data-in style="--i:1">Na screeningu zbytečně ztrácíme levné roky života.</h2>
-    <div class="chartwrap" data-in style="--i:2;height:62cqh;align-items:flex-start"><div id="screenBars" style="width:100%;height:56cqh"></div></div>
-    <div class="source">Screening programy ČR + proočkovanost, 2024–2025 · benchmark OECD</div>
+  <!-- 13 · PŘÍBĚH 2: PREVENCE A ČEKÁNÍ -->
+  <section class="slide paper2" data-title="Příběh 2: Prevence a čekání" data-bars>
+    <div class="kicker" data-in>Příběh 2 — prevence a čekání</div>
+    <h2 data-in style="--i:1">K prevenci se nedostáváme. A pak čekáme.</h2>
+    <div class="split" style="grid-template-columns:1.25fr .75fr;align-items:start;margin-top:2cqh">
+      <div class="chartwrap" data-in style="--i:2;height:52cqh;align-items:flex-start"><div id="screenBars" style="width:100%;height:50cqh"></div></div>
+      <div data-in style="--i:3">
+        <div class="ministat"><span class="v">118</span>dní na náhradu kyčle <em>· průměr EU 95 · VZP, 2024</em></div>
+        <div class="ministat"><span class="v">28</span>dní na specialistu (medián) <em>· průměr EU 22 · ÚZIS, 2024</em></div>
+        <p class="sub" style="margin-top:2.2cqh;max-width:32ch">Nemoc, kterou screening nenajde včas, se o pár let později potká s čekací listinou.</p>
+      </div>
+    </div>
+    <div class="source">Účast na screeningu a očkování · ÚZIS (NRHZS/NZIS), 2024–2025 · benchmark: průměr EU · vyšší je lepší; u čekacích dob nižší je lepší</div>
   </section>
 
-  <!-- 13 · STORY C čekání (gauge) -->
-  <section class="slide" data-anim data-g3>
+  <!-- 14 · PŘÍBĚH 3: DUŠEVNÍ ZDRAVÍ -->
+  <section class="slide" data-title="Příběh 3: Duševní zdraví" data-line>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Příběh C — čekání, na kterém záleží</div>
-        <h2 data-in style="--i:1">118 vs. 85 dní<br>na novou kyčel.</h2>
-        <p class="sub" data-in style="--i:2">A na specialistu se čeká 28 dní místo 18 jako v OECD. Každý den čekání s bolestí se počítá.</p>
+        <div class="kicker" data-in>Příběh 3 — duševní zdraví</div>
+        <h2 data-in style="--i:1">Nejmenší podíl peněz.<br>Nejdelší hospitalizace.</h2>
+        <div class="vs" data-in style="--i:2;margin-top:2.6cqh">
+          <div class="col cz"><div class="num" data-count="4" data-dec="0" data-suffix=" %">4 %</div><div class="lbl">výdajů na zdravotnictví jde na duševní zdraví (EU 7 % · MZ ČR, 2022)</div></div>
+        </div>
+        <div class="ministat" data-in style="--i:3"><span class="v">13</span>psychiatrů na 100 tis. obyvatel <em>· průměr EU 17,6 · ÚZIS, 2024</em></div>
+        <div class="ministat" data-in style="--i:4"><span class="v">43</span>dní průměrná psychiatrická hospitalizace <em>· průměr EU 21 · ÚZIS, 2022</em></div>
       </div>
-      <div class="chartwrap" data-in style="--i:3"><div id="gaugeC" style="width:88%;aspect-ratio:1.15"></div></div>
+      <div class="chartwrap" data-in style="--i:2"><div id="lineChart" style="width:100%;height:56cqh"></div></div>
     </div>
-    <div class="source">OECD Health Statistics — čekací doby</div>
+    <div class="source">Sebevraždy (standardizovaná míra) · Eurostat, 2019–2023 · benchmark: průměr EU · nižší je lepší</div>
   </section>
 
-  <!-- 13b · SEBEVRAŽEDNOST (samostatný slide) -->
-  <section class="slide" data-anim data-line>
-    <div class="split">
-      <div>
-        <div class="kicker" data-in>Příběh C+ — duševní zdraví</div>
-        <h2 data-in style="--i:1">Sebevražednost roky <span class="red-em">neklesá</span>.</h2>
-        <p class="sub" data-in style="--i:2">Drží se nad evropským průměrem a síť center duševního zdraví teprve vzniká. Křivka, která by klesat měla — a nechce.</p>
-      </div>
-      <div class="chartwrap" data-in style="--i:2"><div id="lineChart" style="width:100%;height:60cqh"></div></div>
-    </div>
-    <div class="source">ČSÚ — standardizovaná míra sebevražednosti; benchmark EU</div>
-  </section>
-
-  <!-- 13c · DVĚ TVÁŘE -->
-  <section class="slide dark" data-anim>
+  <!-- 15 · DVĚ TVÁŘE -->
+  <section class="slide dark" data-title="Dvě tváře českého zdravotnictví" data-diverge>
     <div class="kicker" data-in>Dvě tváře českého zdravotnictví</div>
-    <h2 data-in style="--i:1">V něčem světová špička.<br>V něčem roky zpátky.</h2>
-    <div class="twoface">
-      <div class="bad" data-in style="--i:2">
-        <div class="col-h">Kde zaostáváme</div>
-        <div class="row"><span class="v">14,4</span><span class="t">litrů alkoholu na osobu ročně — nejvíc v OECD (8,9)</span></div>
-        <div class="row"><span class="v">24,5 %</span><span class="t">seniorů očkovaných proti chřipce — OECD 47 %</span></div>
-        <div class="row"><span class="v">118</span><span class="t">dní na novou kyčel — OECD 85</span></div>
-      </div>
-      <div class="good" data-in style="--i:3">
-        <div class="col-h">Kde naopak vedeme</div>
-        <div class="row"><span class="v">2,3</span><span class="t">kojenecká úmrtnost na 1000 — pod průměrem EU (3,5)</span></div>
-        <div class="row"><span class="v">4,6 %</span><span class="t">úmrtí po infarktu v nemocnici — OECD 6,5 %</span></div>
-        <div class="row"><span class="v">13,6 %</span><span class="t">platí pacienti z kapsy — OECD 18 %</span></div>
-      </div>
-    </div>
-    <div class="source">Skóre není ortel — ukazuje, kde zabrat a na čem stavět. Vše na skorezdravotnictvi.cz</div>
+    <h2 data-in style="--i:1">V něčem světová špička. V něčem roky zpátky.</h2>
+    <div class="chartwrap" data-in style="--i:2;height:52cqh;align-items:flex-start;margin-top:2.4cqh"><div id="divergeChart" style="width:100%;height:50cqh"></div></div>
+    <div class="source">Odchylka od průměru EU v %, po zohlednění směru ukazatele (▲ vpravo = lepší než EU, ▼ vlevo = horší). Zdroje: Eurostat, ÚZIS, VZP, KST, ČSÚ · 2022–2025 · detail každého čísla na skorezdravotnictvi.cz</div>
   </section>
 
-  <!-- 15 · PANEL -->
-  <section class="slide paper2" data-anim>
+  <!-- 16 · PANEL -->
+  <section class="slide paper2" data-title="Panel">
     <div class="split">
       <div>
-        <div class="kicker" data-in>06 · Panel — komu skóre slouží?</div>
-        <h2 data-in style="--i:1">Stát × plátce ×<br>pacient × akademie.</h2>
-        <p class="sub" data-in style="--i:2">Žádná strana nemá většinu hlasů. Sdílená fakta jsou předpoklad dohody, ne náhrada za ni.</p>
+        <div class="kicker" data-in>Panel — komu skóre slouží?</div>
+        <h2 data-in style="--i:1">Stát × plátci ×<br>pacienti × akademie.</h2>
+        <p class="sub" data-in style="--i:2">Žádná strana nemá většinu hlasů. Sdílená fakta jsou předpoklad dohody, ne její náhrada.</p>
       </div>
       <ul class="clean" data-in style="--i:2">
         <li>Kde dnes při rozhodování nejvíc chybí <b>společná data</b>?</li>
-        <li>Když web ukáže, že Česko zaostává — <b>čí je to úkol</b> a kde začít?</li>
+        <li>Když kompas ukáže mezeru — <b>čí je to úkol</b> a kde začít?</li>
         <li>Jak pohlídat, aby se z čísel nestal <b>bič místo kompasu</b>?</li>
-        <li>Co byste na webu rádi viděli <b>příští rok navíc</b>?</li>
       </ul>
     </div>
   </section>
 
-  <!-- 16 · ZÁVĚR -->
-  <section class="slide center red" data-anim>
-    <div class="kicker" data-in>07 · Závěr a výzva</div>
-    <h1 data-in style="--i:1">Web je veřejný statek.<br>Od dneška je váš.</h1>
-    <ul class="clean" data-in style="--i:2">
-      <li><b>Novinářům:</b> tiskový balíček, pravidla citace, RSS</li>
-      <li><b>Krajům a pojišťovnám:</b> vlastní data pro reporty a srovnání</li>
-      <li><b>Pacientům:</b> vysvětlivky, články a srozumitelné srovnání</li>
-    </ul>
-    <p class="lead" data-in style="--i:3;margin-top:2.4cqh">Najděte jedno číslo o svém kraji — a sdílejte ho.</p>
-  </section>
-
-  <!-- 17 · CONTACT -->
-  <section class="slide center dark" data-anim>
-    <div class="cover-grid">
-      <div id="endCompass" style="width:26cqh;height:26cqh;flex:0 0 auto"></div>
+  <!-- 17 · FINÁLE: VÝZVA + KONTAKT -->
+  <section class="slide center red" data-title="Web je veřejný statek">
+    <div class="split" style="grid-template-columns:1.15fr .85fr">
       <div>
-        <div class="kicker" data-in>Děkujeme</div>
-        <h2 data-in style="--i:1">skorezdravotnictvi.cz</h2>
-        <p class="lead" data-in style="--i:2">Tiskový balíček, grafy ke stažení a „jak citovat" → <a href="tiskovazprava.html" style="color:var(--redbright);text-decoration:underline;text-underline-offset:3px">tiskovazprava.html</a></p>
-        <p class="sub" data-in style="--i:3">Kontakt: <b style="color:var(--paper)">Bc. Josef Pavlovic</b> · josef@josefpavlovic.cz · +420 607 517 967<br>Spoluautorka: MDDr. Ing. Bára Malíková</p>
-        <p class="sub" data-in style="--i:4;opacity:.7">HSPA Monitor — nezávislý projekt, který měří české zdravotnictví podle metodiky OECD.</p>
+        <div class="kicker" data-in>Závěr</div>
+        <h1 data-in style="--i:1">Web je veřejný statek.<br>Od dneška je váš.</h1>
+        <div class="steps" data-in style="--i:2">
+          <div class="s">Najděte jedno číslo, které se týká vás nebo vašeho tématu</div>
+          <div class="s">Ověřte si jeho zdroj — je jedno kliknutí od hodnoty</div>
+          <div class="s">Použijte ho v debatě — citace je vítaná, ne zpoplatněná</div>
+        </div>
+      </div>
+      <div data-in style="--i:3">
+        <h2 style="font-size:4.6cqh">skorezdravotnictvi.cz</h2>
+        <p class="sub" style="margin-top:2.4cqh">Tiskový balíček, grafy ke stažení a „jak citovat“:<br><a href="tiskovazprava.html" style="color:#fff;text-decoration:underline;text-underline-offset:3px">skorezdravotnictvi.cz/tiskovazprava</a></p>
+        <p class="sub" style="margin-top:2cqh"><b style="color:#fff">Bc. Josef Pavlovic</b> · josef@josefpavlovic.cz · +420 607 517 967<br>Spoluautorka: MDDr. Ing. Bára Malíková</p>
       </div>
     </div>
+    <div class="source">HSPA Monitor — nezávislý projekt, který měří české zdravotnictví podle metodiky OECD HSPA.</div>
   </section>
 
-  <!-- A0 · APPENDIX divider -->
-  <section class="slide center dark" data-anim>
+  <!-- ============ APPENDIX ============ -->
+
+  <!-- A0 · DIVIDER -->
+  <section class="slide center dark" data-title="Appendix" data-appendix>
     <div class="kicker c" data-in>Appendix</div>
     <h1 data-in style="--i:1">Co jsme nechali po ruce.</h1>
-    <p class="lead" data-in style="--i:2">Podrobnosti pro Q&amp;A, tisk a web: poděkování zdrojům, Healthy Belgium, jak píšeme (Florence), série a rubriky článků, čísla pro novináře, prevence a základy systému.</p>
+    <p class="lead" data-in style="--i:2">Zázemí pro Q&amp;A a tisk: poděkování zdrojům, Healthy Belgium, jak píšeme (Florence), sekce článků, série a rubriky, čísla pro novináře, prevence a základy systému.</p>
   </section>
 
-  <!-- 4c · PODĚKOVÁNÍ -->
-  <section class="slide center dark" data-anim>
+  <!-- A1 · PODĚKOVÁNÍ -->
+  <section class="slide center dark" data-title="Poděkování zdrojům" data-appendix>
     <div style="max-width:82cqw;margin:0 auto;text-align:center">
-      <div class="kicker c" data-in>Komu za to vděčíme</div>
+      <div class="kicker c" data-in>Komu za data vděčíme</div>
       <h1 data-in style="--i:1;font-size:7.2cqh">Bez nich bychom neměli nic.</h1>
-      <p class="lead" data-in style="--i:2;max-width:60ch;margin:3.2cqh auto 0">Než se z čísla stane ukazatel, musí ho někdo nasbírat, ověřit a metodicky srovnat. Náš portál na téhle práci stojí — sám žádná data nevyrábí.</p>
+      <p class="lead" data-in style="--i:2;max-width:60ch;margin:3.2cqh auto 0">Než se z čísla stane ukazatel, musí ho někdo nasbírat, ověřit a metodicky srovnat. Portál na téhle práci stojí — sám žádná data nevyrábí.</p>
       <div class="credit-row" data-in style="--i:3">
-        <span>ÚZIS</span>
-        <span>Kancelář zdravotního pojištění</span>
-        <span class="hl">lékaři</span>
-        <span class="hl">sestry</span>
+        <span>ÚZIS</span><span>ČSÚ</span><span>Eurostat</span><span>OECD</span><span>SZÚ</span><span>zdravotní pojišťovny</span>
+        <span class="hl">lékaři</span><span class="hl">sestry</span>
       </div>
-      <p class="sub" data-in style="--i:4;max-width:64ch;margin:3.2cqh auto 0">A především lékařům a sestrám, kteří si i v nabitém dni najdou čas data poctivě zadat. Bez nich bychom nevěděli, jak na tom jsme.</p>
+      <p class="sub" data-in style="--i:4;max-width:64ch;margin:3.2cqh auto 0">A především zdravotníkům, kteří si i v nabitém dni najdou čas data poctivě zadat. Bez nich bychom nevěděli, jak na tom jsme.</p>
     </div>
   </section>
 
-  <!-- 8 · HEALTHY BELGIUM -->
-  <section class="slide paper2" data-anim>
+  <!-- A2 · HEALTHY BELGIUM -->
+  <section class="slide paper2" data-title="Healthy Belgium" data-appendix>
     <div class="split">
       <div>
-        <div class="kicker" data-in>03 · Vzor, který funguje</div>
-        <h2 data-in style="--i:1">Healthy Belgium:<br>portál, který změnil debatu.</h2>
-        <p class="sub" data-in style="--i:2">Belgie má veřejný portál stejného typu už od roku 2019. Dnes z něj čerpá vláda, novináři i univerzity. Není to žebříček jednou za rok, ale živý zdroj, na který se všichni odvolávají. Tudy chceme jít i u nás.</p>
+        <div class="kicker" data-in>Vzor, od kterého se učíme</div>
+        <h2 data-in style="--i:1">Healthy Belgium:<br>stejný typ portálu, od roku 2019.</h2>
+        <p class="sub" data-in style="--i:2">Belgie provozuje veřejné HSPA hodnocení svého zdravotnictví na healthybelgium.be — spravují ho státní výzkumné instituce KCE a Sciensano a jeho reporty se citují v parlamentu i médiích. Nekopírujeme ho; přebíráme princip: jedna sada čísel, veřejná metodika, pravidelná aktualizace.</p>
       </div>
       <ul class="clean" data-in style="--i:2">
-        <li><b>Společná čísla</b>, od kterých se odpíchne každá debata o reformě</li>
+        <li><b>Společná čísla</b>, od kterých se odráží debata o reformách</li>
         <li><b>Pravidelná aktualizace</b> místo jednorázových studií</li>
-        <li><b>Nestrannost</b>, kterou drží metodika, ne názor</li>
+        <li><b>Nestrannost drží metodika</b>, ne názor provozovatele</li>
       </ul>
     </div>
   </section>
 
-  <!-- 14b · NEJEN DATA — AI a přístup -->
-  <section class="slide paper2" data-anim>
+  <!-- A3 · FLORENCE -->
+  <section class="slide paper2" data-title="Jak píšeme — Florence" data-appendix>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Nejen čísla — i souvislosti</div>
-        <h2 data-in style="--i:1">Data jsou začátek.<br>Smysl dají, až když je <span class="red-em">poskládáme</span>.</h2>
-        <p class="sub" data-in style="--i:2">Sbírat čísla nestačí — zajímavé je, co si řeknou dohromady. Díky AI je skládáme do delších zamyšlení a u každého tvrzení necháváme zdroj. Data nejsou rozhodnutí; jsou společný základ, na kterém se dá vést lepší debata.</p>
-      </div>
-      <div data-in style="--i:2">
-        <div class="pullquote">„Jsou ta hodnocení vždycky správně? Právě kvůli téhle otázce tu jsme."</div>
-        <p class="sub" style="margin-top:3.2cqh;max-width:42ch">Web staví z velké části jeden člověk s pomocí AI — chyba se stát může. Nejlíp se na ni přijde tak, že je všechno veřejné a u každého čísla je zdroj. Ať si to každý ověří a srovná sám.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- A1 · FLORENCE (appendix, sloučeno) -->
-  <section class="slide paper2" data-anim>
-    <div class="split">
-      <div>
-        <div class="kicker" data-in>Appendix · Kdo píše naše články</div>
-        <h2 data-in style="--i:1">Naše texty píše <span class="red-em">Florence</span> — transparentně označená AI.</h2>
-        <p class="sub" data-in style="--i:2">Florence je AI asistentka redakce a alter ego Claude.ai. Pomáhá převést ověřená data do srozumitelného textu — není zdrojem dat ani náhradou odborné odpovědnosti. U každého čísla proto zůstává odkaz na primární zdroj, ať si to čtenář ověří sám.</p>
-        <p class="sub" data-in style="--i:3">Jméno nese po <b>Florence Nightingale</b>, která v roce 1858 přesvědčila britskou vládu o reformě péče svým „růžicovým" diagramem. Její růžice je vlastně předchůdce našeho <span class="red-em">kompasu</span>. <a href="autor-florence.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Víc o Florence →</a></p>
+        <div class="kicker" data-in>Jak píšeme</div>
+        <h2 data-in style="--i:1">Texty píše <span class="red-em">Florence</span> —<br>transparentně označená AI.</h2>
+        <p class="sub" data-in style="--i:2">Florence je AI asistentka redakce. Pomáhá převést ověřená data do srozumitelného textu — není zdrojem dat ani náhradou odborné odpovědnosti. Každé číslo v jejích článcích proto nese odkaz na primární zdroj, ať si ho čtenář ověří sám.</p>
+        <p class="sub" data-in style="--i:3">Jméno nese po <b>Florence Nightingale</b>, která v roce 1858 přesvědčila britskou vládu o reformě péče „růžicovým“ diagramem — předchůdcem našeho <span class="red-em">kompasu</span>. <a href="autor-florence.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Víc o Florence →</a></p>
       </div>
       <div class="fl-wrap" data-in style="--i:2">
-        <svg class="fl-rose" viewBox="0 0 240 240" role="img" aria-label="Růžicový diagram Florence Nightingale z roku 1858 — předchůdce kompasu">
+        <svg class="fl-rose" viewBox="0 0 240 240" role="img" aria-label="Růžicový diagram Florence Nightingale z roku 1858 — výseče podle měsíců, nejdelší červená výseč označuje nejhorší měsíc">
           <path class="w" d="M120,120 L120.0,25.0 A95,95 0 0 1 187.2,52.8 Z" fill="#3f5a3a"/>
           <path class="w" d="M120,120 L175.2,64.8 A78,78 0 0 1 198.0,120.0 Z" fill="#4f6b47"/>
           <path class="w" d="M120,120 L188.0,120.0 A68,68 0 0 1 168.1,168.1 Z" fill="#6b6253"/>
@@ -529,13 +549,13 @@
           <path class="w" d="M120,120 L62.0,120.0 A58,58 0 0 1 79.0,79.0 Z" fill="#8a8072"/>
           <path class="w" d="M120,120 L69.1,69.1 A72,72 0 0 1 120.0,48.0 Z" fill="#3f5a3a"/>
         </svg>
-        <div class="fl-cap">Růžicový diagram, Florence Nightingale, 1858 — předchůdce kompasu v našem logu. Nejdelší (červený) výsek = nejhorší měsíc.</div>
+        <div class="fl-cap">Růžicový diagram, Florence Nightingale, 1858 — most k našemu kompasu. Nejdelší (červený) výsek = nejhorší měsíc.</div>
       </div>
     </div>
   </section>
 
-  <!-- 14b2 · SEKCE ČLÁNKŮ — nejzajímavější -->
-  <section class="slide" data-anim>
+  <!-- A4 · SEKCE ČLÁNKŮ -->
+  <section class="slide" data-title="Sekce článků" data-appendix>
     <div class="kicker" data-in>Sekce článků — čteme za vás</div>
     <h2 data-in style="--i:1">Od dat k příběhu. A pak do hloubky.</h2>
     <div class="news">
@@ -544,19 +564,19 @@
       <a href="clanek-generika-biosimilars-uspora.html" data-in style="--i:4"><div class="tag">Financování</div><div class="hl">Generika: kde Česko šetří — a kde nechává miliardy ležet</div></a>
       <a href="clanek-obezita-jidelny-reforma.html" data-in style="--i:5"><div class="tag">Veřejné zdraví</div><div class="hl">Obezita nás definuje. Rozhoduje talíř ve školní jídelně</div></a>
     </div>
-    <p class="sub" data-in style="--i:6">Desítky článků — od veder po umělou inteligenci. Hloubkové série jdou pod povrch a u každého čísla najdete zdroj, ať si to ověříte sami.</p>
+    <p class="sub" data-in style="--i:6">Přes 140 publikovaných článků — od veder po umělou inteligenci. U každého čísla v textu je zdroj, ať si ho ověříte sami.</p>
   </section>
 
-  <!-- 14c · SÉRIE ČLÁNKŮ -->
-  <section class="slide" data-anim>
-    <div class="kicker" data-in>Série článků — nad čím se zamyslet</div>
-    <h2 data-in style="--i:1">Linie a rubriky, které spojí čísla do příběhu.</h2>
+  <!-- A5 · SÉRIE A RUBRIKY -->
+  <section class="slide" data-title="Série a rubriky" data-appendix>
+    <div class="kicker" data-in>Série a rubriky</div>
+    <h2 data-in style="--i:1">Linie, které spojí čísla do příběhu.</h2>
     <ul class="clean src-grid" data-in style="--i:2">
-      <li><a href="tematicke-linie.html?id=zit_dele_ve_zdravi"><b>Žít déle ve zdraví</b></a> — proč nám přibývají roky, ale ne ve zdraví</li>
-      <li><a href="tematicke-linie.html?id=najit_nemoc_driv"><b>Najít nemoc dřív</b></a> — co dokáže screening a proč ho nevyužíváme</li>
+      <li><a href="tematicke-linie.html?id=zit_dele_ve_zdravi"><b>Žít déle ve zdraví</b></a> — proč přibývají roky, ale ne ve zdraví</li>
+      <li><a href="tematicke-linie.html?id=najit_nemoc_driv"><b>Najít nemoc dřív</b></a> — co umí screening a proč ho nevyužíváme</li>
       <li><a href="tematicke-linie.html?id=dostat_peci_vcas"><b>Dostat péči včas</b></a> — čekací doby a dostupnost specialistů</li>
       <li><a href="tematicke-linie.html?id=platby_za_objem"><b>Platíme za objem, ne za výsledek</b></a> — jak nastavit úhrady, aby motivovaly</li>
-      <li><a href="tematicke-linie.html?id=digitalni_zdravotnictvi"><b>Digitální zdravotnictví srozumitelně</b></a> — e-recept, registry a co je vlastně povinné</li>
+      <li><a href="tematicke-linie.html?id=digitalni_zdravotnictvi"><b>Digitální zdravotnictví srozumitelně</b></a> — e-recept, registry a co je povinné</li>
     </ul>
     <div class="chiprow" data-in style="--i:3">
       <span class="chiplbl">Rubriky:</span>
@@ -569,313 +589,408 @@
       <a href="clanky.html#rubric=dusevni-zdravi">Duševní zdraví</a>
       <a href="clanky.html#rubric=digitalizace">Digitalizace</a>
     </div>
-    <p class="sub" data-in style="--i:4">Klikněte na kteroukoli linii nebo rubriku — otevře se rovnou na webu. A k tomu samostatná témata, třeba kde umělá inteligence v medicíně léčí a kde zatím jen slibuje.</p>
   </section>
 
-  <!-- 14 · PRESS WALL -->
-  <section class="slide dark" data-anim>
-    <div class="kicker" data-in>Pro novináře — šest datových příběhů, které stojí za ověření</div>
+  <!-- A6 · ŠEST ČÍSEL PRO NOVINÁŘE -->
+  <section class="slide dark" data-title="Šest datových příběhů pro novináře" data-appendix>
+    <div class="kicker" data-in>Pro novináře — šest datových příběhů k ověření</div>
     <div class="wall">
-      <div class="stat" data-in style="--i:1"><div class="n" data-count="107.2" data-dec="0">107</div><div class="d">úmrtí na 100 tis., kterým mohla zabránit léčba (EU 87)</div></div>
-      <div class="stat" data-in style="--i:2"><div class="n" data-count="592" data-dec="0">592</div><div class="d">zbytečných hospitalizací na 100 tis. (OECD 473)</div></div>
-      <div class="stat" data-in style="--i:3"><div class="n" data-count="60" data-dec="0" data-suffix=" %">60 %</div><div class="d">dospělých má nadváhu nebo obezitu</div></div>
-      <div class="stat" data-in style="--i:4"><div class="n" data-count="24.5" data-dec="1" data-suffix=" %">24,5 %</div><div class="d">seniorů nad 65 let je očkováno proti chřipce (OECD 47 %)</div></div>
-      <div class="stat" data-in style="--i:5"><div class="n" data-count="0.37" data-dec="2">0,37</div><div class="d">centra duševního zdraví na 100 tis. obyvatel — síť teprve vzniká</div></div>
-      <div class="stat" data-in style="--i:6"><div class="n" data-count="14.4" data-dec="1">14,4</div><div class="d">litrů alkoholu na osobu ročně (OECD 8,9) — mezi nejvíc na světě</div></div>
+      <div class="stat" data-in style="--i:1"><div class="n" data-count="107" data-dec="0">107</div><div class="d">úmrtí na 100 tis., kterým mohla zabránit včasná léčba · EU 87 · Eurostat, 2023</div></div>
+      <div class="stat" data-in style="--i:2"><div class="n" data-count="592" data-dec="0">592</div><div class="d">odvratitelných hospitalizací na 100 tis. · EU 510 · ÚZIS, 2022</div></div>
+      <div class="stat" data-in style="--i:3"><div class="n" data-count="13" data-dec="0">13</div><div class="d">let rozdíl v naději dožití mužů podle vzdělání · EU 7 · ČSÚ, 2018</div></div>
+      <div class="stat" data-in style="--i:4"><div class="n" data-count="24.5" data-dec="1" data-suffix=" %">24,5 %</div><div class="d">seniorů 65+ očkovaných proti chřipce · EU 49 % · ÚZIS, 2025</div></div>
+      <div class="stat" data-in style="--i:5"><div class="n" data-count="0.37" data-dec="2">0,37</div><div class="d">center duševního zdraví na 100 tis. obyvatel · cíl reformy 1 · MZ ČR / NKÚ, 2024</div></div>
+      <div class="stat" data-in style="--i:6"><div class="n" data-count="14.4" data-dec="1">14,4</div><div class="d">litrů čistého alkoholu na osobu ročně · EU 10,1 · OECD, 2024</div></div>
     </div>
-    <div class="source">Ke každému číslu najdete definici i zdroj na skorezdravotnictvi.cz</div>
+    <div class="source">Ke každému číslu najdete definici, zdroj i vývoj v čase na skorezdravotnictvi.cz</div>
   </section>
 
-  <!-- 14d · PREVENCE + CO MŮŽU JÁ -->
-  <section class="slide paper2" data-anim>
+  <!-- A7 · PREVENCE PRO PACIENTY -->
+  <section class="slide paper2" data-title="Prevence pro pacienty" data-appendix>
     <div class="split">
       <div>
-        <div class="kicker" data-in>Prevence — a co zmůžu já</div>
-        <h2 data-in style="--i:1">Nejvíc let života si přidáte sami.</h2>
-        <p class="sub" data-in style="--i:2">„Prevence není o tom bát se žít — je o tom, jak si přidat roky ve zdraví." Web vede od jídla a pohybu až po screeningy, srozumitelně a bez strašení.</p>
-        <ul class="clean" data-in style="--i:2">
+        <div class="kicker" data-in>Prevence — co zmůžu já</div>
+        <h2 data-in style="--i:1">Nejvíc let ve zdraví si přidáte sami.</h2>
+        <p class="sub" data-in style="--i:2">Web vede od jídla a pohybu až po screeningy — srozumitelně a bez strašení. Tři kroky, které nic nestojí:</p>
+        <ul class="clean" data-in style="--i:3">
           <li>Zajít na <b>screening</b>, na který mám nárok — prsa, tlusté střevo, děložní hrdlo</li>
           <li>Nechat se <b>očkovat</b> — chřipka, HPV</li>
-          <li>Najít si <b>číslo o svém kraji</b> a sdílet ho</li>
+          <li>Najít si <b>číslo o svém kraji</b> a zeptat se na něj</li>
         </ul>
       </div>
       <div data-in style="--i:3">
-        <div class="ministat"><span class="v">54,5 %</span>žen chodí na mamograf <em>(cíl 68 %)</em></div>
-        <div class="ministat"><span class="v">31,1 %</span>na screening tlustého střeva <em>(cíl 42 %)</em></div>
-        <div class="ministat"><span class="v">24,5 %</span>seniorů na očkování proti chřipce <em>(OECD 47 %)</em></div>
-        <p class="sub" style="margin-top:2.4cqh;max-width:38ch">Každé pozvání, které nevyhodíte, jsou levné roky života navíc.</p>
+        <div class="ministat"><span class="v">54,5 %</span>žen 50–69 chodí na mamograf <em>· průměr EU 65 % · ÚZIS, 2024</em></div>
+        <div class="ministat"><span class="v">31,1 %</span>na screening tlustého střeva <em>· průměr EU 38 % · ÚZIS, 2024</em></div>
+        <div class="ministat"><span class="v">24,5 %</span>seniorů na očkování proti chřipce <em>· průměr EU 49 % · ÚZIS, 2025</em></div>
+        <p class="sub" style="margin-top:2.2cqh;max-width:38ch">Každé pozvání, které neskončí v koši, jsou levné roky života navíc.</p>
       </div>
     </div>
   </section>
 
-  <!-- 14e · ZÁKLADY SYSTÉMU -->
-  <section class="slide" data-anim>
+  <!-- A8 · ZÁKLADY SYSTÉMU -->
+  <section class="slide" data-title="Základy systému" data-appendix>
     <div class="kicker" data-in>Chcete tomu rozumět?</div>
     <h2 data-in style="--i:1">Jak funguje české zdravotnictví —<br>od úhrad po stížnosti.</h2>
-    <p class="sub" data-in style="--i:2">Nemusíte být expert. Vysvětlujeme základy srozumitelně: kdo co platí, na co máte nárok a kam se obrátit, když něco nefunguje.</p>
-    <div class="chiprow" data-in style="--i:3">
-      <span class="chiplbl">Základy:</span>
-      <a href="jak-funguje.html?id=pojistovny">Zdravotní pojišťovny</a>
-      <a href="jak-funguje.html?id=uhradova_vyhlaska">Úhradová vyhláška</a>
-      <a href="jak-funguje.html?id=spoluucast_pacienta">Spoluúčast pacienta</a>
-      <a href="jak-funguje.html?id=dostupnost_pravni_ramec">Kdo odpovídá za dostupnost</a>
-      <a href="jak-funguje.html?id=nemocnicni_ombudsman">Stížnost: nemocniční ombudsman</a>
-      <a href="jak-funguje.html?id=profesni_komory">Profesní komory</a>
+    <div class="split" style="align-items:start;margin-top:1cqh">
+      <div>
+        <p class="sub" data-in style="--i:2">Nemusíte být expert. Vysvětlujeme základy srozumitelně: kdo co platí, na co máte nárok a kam se obrátit, když něco nefunguje.</p>
+        <div class="chiprow" data-in style="--i:3">
+          <span class="chiplbl">Základy:</span>
+          <a href="jak-funguje.html?id=pojistovny">Zdravotní pojišťovny</a>
+          <a href="jak-funguje.html?id=uhradova_vyhlaska">Úhradová vyhláška</a>
+          <a href="jak-funguje.html?id=spoluucast_pacienta">Spoluúčast pacienta</a>
+          <a href="jak-funguje.html?id=dostupnost_pravni_ramec">Kdo odpovídá za dostupnost</a>
+          <a href="jak-funguje.html?id=nemocnicni_ombudsman">Stížnost: nemocniční ombudsman</a>
+          <a href="jak-funguje.html?id=profesni_komory">Profesní komory</a>
+        </div>
+      </div>
+      <div data-in style="--i:3">
+        <div class="ministat"><span class="v">8,6 %</span>HDP jde na zdravotnictví <em>· průměr EU 10,4 % · ČSÚ, 2024</em></div>
+        <div class="ministat"><span class="v">42 226</span>Kč ročně uhradí pojišťovny na pojištěnce <em>· ÚZIS, 2023</em></div>
+        <div class="ministat"><span class="v">13,6 %</span>výdajů platí pacienti z kapsy <em>· průměr EU 15 % · ČSÚ, 2024</em></div>
+      </div>
     </div>
   </section>
 
 </div>
 </div>
 
-<button class="nav-arrow prev" id="prev" aria-label="Předchozí">‹</button>
-<button class="nav-arrow next" id="next" aria-label="Další">›</button>
-<div class="counter" id="counter"></div>
+<button class="nav-arrow prev" id="prev" aria-label="Předchozí snímek">‹</button>
+<button class="nav-arrow next" id="next" aria-label="Další snímek">›</button>
+<div class="counter" id="counter" aria-live="polite"></div>
 <div class="hint">← → mezerník · F celá obrazovka · O přehled · Ctrl/⌘+P → PDF</div>
+<div class="overview" id="overview" role="dialog" aria-label="Přehled snímků"><h3>Přehled snímků <span style="opacity:.5;font-size:14px">(O nebo Esc zavře)</span></h3><ol id="ovList"></ol></div>
 
 <script>
 (function(){
   const NS='http://www.w3.org/2000/svg';
   const el=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
   const fmt=(v,d=0)=>v.toFixed(d).replace('.',',');
+  const REDUCED=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- KOMPAS / GAUGE ---------- */
-  // Půlkruhové měřidlo: „pravý sever" (nahoře) = benchmark. Střelka = pozice ČR.
-  // Odchylka v % od benchmarku (se zohledněním směru) → úhel od severu.
-  function compassMark(box, opts){ // dekorativní kompas (jako brand)
+  /* ---------- dekorativní kompas (brand mark) ---------- */
+  function compassMark(box,opts){
     box.innerHTML='';
-    const c = opts&&opts.light ? '#fbf8f1' : '#1f1a14';
-    const s=el('svg',{viewBox:'0 0 100 100',width:'100%',height:'100%'});
+    const c=opts&&opts.light?'#fbf8f1':'#1f1a14';
+    const s=el('svg',{viewBox:'0 0 100 100',width:'100%',height:'100%','aria-hidden':'true'});
     s.innerHTML=`
       <circle cx="50" cy="50" r="44" stroke="${c}" stroke-width="0.9" fill="none"/>
       <circle cx="50" cy="50" r="33" stroke="${c}" stroke-width="0.6" stroke-opacity="0.4" fill="none"/>
       <polygon points="46,8 54,8 50,16" fill="${c}"/>
-      <g class="needle" style="transform-origin:50px 50px"><polygon points="33,79.44 55.2,53 44.8,47" stroke="${c}" stroke-width="0.9" stroke-linejoin="round" fill="none"/>
+      <g style="transform-origin:50px 50px"><polygon points="33,79.44 55.2,53 44.8,47" stroke="${c}" stroke-width="0.9" stroke-linejoin="round" fill="none"/>
       <polygon points="67,20.56 55.2,53 44.8,47" fill="#b8361e"/></g>
       <circle cx="50" cy="50" r="3" fill="${opts&&opts.light?'#1f1a14':'#fbf8f1'}" stroke="${c}" stroke-width="0.9"/>`;
     box.appendChild(s);
-    return s;
   }
+
+  /* ---------- půlkruhový gauge: sever (nahoře) = benchmark, střelka = ČR ---------- */
+  function pt(cx,cy,angDeg,r){const a=(angDeg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  function arcPath(cx,cy,a0,a1,r){const[x0,y0]=pt(cx,cy,a0,r),[x1,y1]=pt(cx,cy,a1,r);const large=Math.abs(a1-a0)>180?1:0;const sweep=a1>a0?1:0;
+    return `M ${x0} ${y0} A ${r} ${r} 0 ${large} ${sweep} ${x1} ${y1}`;}
+  const devAngle=(cz,bench,dir)=>{let dev=(cz-bench)/bench;if(dir==='lower_is_better')dev=-dev;return Math.max(-1,Math.min(1,dev/0.4))*85;}; // ±40 % → ±85°
 
   function gauge(box){
     box.innerHTML='';
     const W=300,H=260,cx=150,cy=185,R=130;
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
-    const dark = box.closest('.dark');
-    const ink = dark? '#fbf8f1':'#1f1a14';
-    const muted = dark? 'rgba(251,248,241,.45)':'rgba(31,26,20,.4)';
-    // colored arc segments red->amber->green  (left=worse, right=better around top)
-    function pt(angDeg,r){const a=(angDeg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
-    function arc(a0,a1,r,col,w){const[x0,y0]=pt(a0,r),[x1,y1]=pt(a1,r);const large=Math.abs(a1-a0)>180?1:0;const sweep=a1>a0?1:0;
-      return el('path',{d:`M ${x0} ${y0} A ${r} ${r} 0 ${large} ${sweep} ${x1} ${y1}`,stroke:col,'stroke-width':w,fill:'none','stroke-linecap':'round'});}
-    // band from -90 (left) to +90 (right). worse on left.
-    s.appendChild(arc(-90,-30,R,'#b8361e',12));
-    s.appendChild(arc(-30,30,R,'#a05a08',12));
-    s.appendChild(arc(30,90,R,'#2f6b1f',12));
-    // ticks
-    for(let a=-90;a<=90;a+=15){const[x0,y0]=pt(a,R-10),[x1,y1]=pt(a,R+2);s.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:muted,'stroke-width':1.2}));}
-    // true north marker (top)
-    const north=el('polygon',{points:`${cx-5},${cy-R+16} ${cx+5},${cy-R+16} ${cx},${cy-R+6}`,fill:ink});
-    s.appendChild(north);
-    const ntxt=el('text',{x:cx,y:cy-R-4,'text-anchor':'middle','font-size':12,'font-weight':700,fill:ink});ntxt.textContent='SEVER = cíl';s.appendChild(ntxt);
-    // needle group
-    const ng=el('g',{class:'g-needle'});ng.style.transformOrigin=cx+'px '+cy+'px';ng.style.transition='transform 1s cubic-bezier(.2,.7,.2,1)';
+    const dark=box.closest('.dark');
+    const ink=dark?'#fbf8f1':'#1f1a14';
+    const muted=dark?'rgba(251,248,241,.45)':'rgba(31,26,20,.4)';
+    const arc=(a0,a1,col)=>el('path',{d:arcPath(cx,cy,a0,a1,R),stroke:col,'stroke-width':12,fill:'none','stroke-linecap':'round'});
+    s.appendChild(arc(-90,-30,'#b8361e'));
+    s.appendChild(arc(-30,30,'#a05a08'));
+    s.appendChild(arc(30,90,'#2f6b1f'));
+    for(let a=-90;a<=90;a+=15){const[x0,y0]=pt(cx,cy,a,R-10),[x1,y1]=pt(cx,cy,a,R+2);s.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:muted,'stroke-width':1.2}));}
+    s.appendChild(el('polygon',{points:`${cx-5},${cy-R+16} ${cx+5},${cy-R+16} ${cx},${cy-R+6}`,fill:ink}));
+    const ntxt=el('text',{x:cx,y:cy-R-4,'text-anchor':'middle','font-size':12,'font-weight':700,fill:ink});ntxt.textContent='SEVER = průměr EU';s.appendChild(ntxt);
+    const wl=el('text',{x:cx-R,y:cy+20,'text-anchor':'middle','font-size':12,'font-weight':700,fill:dark?'#e8755e':'#b8361e'});wl.textContent='▼ horší';s.appendChild(wl);
+    const bl=el('text',{x:cx+R,y:cy+20,'text-anchor':'middle','font-size':12,'font-weight':700,fill:dark?'#7ab85f':'#2f6b1f'});bl.textContent='lepší ▲';s.appendChild(bl);
+    const ng=el('g');ng.style.transformOrigin=cx+'px '+cy+'px';
+    if(!REDUCED)ng.style.transition='transform 1s cubic-bezier(.2,.7,.2,1)';
     ng.appendChild(el('line',{x1:cx,y1:cy,x2:cx,y2:cy-R+24,stroke:'#b8361e','stroke-width':4,'stroke-linecap':'round'}));
     ng.appendChild(el('circle',{cx:cx,cy:cy,r:6,fill:ink}));
     s.appendChild(ng);
     box.appendChild(s);
     box._ng=ng;
-    return s;
   }
-  function setGauge(box, cz, bench, dir){
-    if(!box._ng) gauge(box);
-    // deviation: positive = better than bench
-    let dev=(cz-bench)/bench; if(dir==='lower_is_better') dev=-dev;
-    let ang=Math.max(-1,Math.min(1,dev/0.4))*85; // ±40% → ±85°
-    box._ng.style.transform=`rotate(${ang}deg)`;
+  function setGauge(box,cz,bench,dir,aria){
+    if(!box._ng)gauge(box);
+    box._ng.style.transform=`rotate(${devAngle(cz,bench,dir)}deg)`;
+    if(aria){box.setAttribute('role','img');box.setAttribute('aria-label',aria);}
   }
 
-  /* ---------- BARS (animované, srovnání ČR vs cíl) ---------- */
-  function bars(box,data){
-    box.innerHTML='';box._anim=[];const W=900,rowH=66,H=data.length*rowH+20;
+  /* ---------- anotovaný gauge (slide „Jak číst kompas") ---------- */
+  function annoGauge(box){
+    box.innerHTML='';
+    const W=560,H=380,cx=280,cy=300,R=210;
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
-    const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';
-    const max=100, x0=300, bw=W-x0-90;
-    data.forEach((d,i)=>{
-      const y=18+i*rowH;
-      const lab=el('text',{x:0,y:y+22,'font-size':20,'font-weight':700,fill:ink});lab.textContent=d.label;s.appendChild(lab);
-      // target ghost
-      s.appendChild(el('rect',{x:x0,y:y,width:bw*d.target/max,height:26,rx:3,fill:'rgba(120,110,90,.28)'}));
-      // cz bar (animated)
-      const bar=el('rect',{x:x0,y:y,width:0,height:26,rx:3,fill:'#b8361e'});s.appendChild(bar);
-      box._anim=box._anim||[];box._anim.push(()=>{bar.setAttribute('width',bw*d.cz/max);});
-      bar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';
-      const v=el('text',{x:x0+bw*d.cz/max+8,y:y+20,'font-size':19,'font-weight':800,fill:'#b8361e'});v.textContent=fmt(d.cz,1)+' %';s.appendChild(v);
-      const t=el('text',{x:x0+bw*d.target/max,y:y-4,'font-size':13,fill:dark?'rgba(251,248,241,.6)':'#6b6253','text-anchor':'middle'});t.textContent='cíl '+d.target+' %';s.appendChild(t);
-    });
+    const ink='#1f1a14',muted='rgba(31,26,20,.45)';
+    const arc=(a0,a1,col)=>el('path',{d:arcPath(cx,cy,a0,a1,R),stroke:col,'stroke-width':16,fill:'none','stroke-linecap':'round'});
+    s.appendChild(arc(-90,-30,'#b8361e'));
+    s.appendChild(arc(-30,30,'#a05a08'));
+    s.appendChild(arc(30,90,'#2f6b1f'));
+    for(let a=-90;a<=90;a+=15){const[x0,y0]=pt(cx,cy,a,R-14),[x1,y1]=pt(cx,cy,a,R+2);s.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:muted,'stroke-width':1.4}));}
+    // CÍL — sever
+    s.appendChild(el('polygon',{points:`${cx-7},${cy-R+22} ${cx+7},${cy-R+22} ${cx},${cy-R+8}`,fill:ink}));
+    const t1=el('text',{x:cx,y:cy-R-26,'text-anchor':'middle','font-size':15,'font-weight':800,fill:ink});t1.textContent='CÍL (SEVER)';s.appendChild(t1);
+    const t1b=el('text',{x:cx,y:cy-R-8,'text-anchor':'middle','font-size':13,fill:muted});t1b.textContent='průměr EU · 10,3 roku';s.appendChild(t1b);
+    // MEZERA — oblouk mezi severem a střelkou
+    const ang=devAngle(8,10.3,'higher_is_better'); // ≈ −47°
+    s.appendChild(el('path',{d:arcPath(cx,cy,ang,0,R-38),stroke:ink,'stroke-width':2,fill:'none','stroke-dasharray':'5 5'}));
+    const[mx,my]=pt(cx,cy,ang/2,R-64);
+    const t3=el('text',{x:mx,y:my,'text-anchor':'middle','font-size':15,'font-weight':800,fill:'#b8361e'});t3.textContent='MEZERA';s.appendChild(t3);
+    const t3b=el('text',{x:mx,y:my+17,'text-anchor':'middle','font-size':13,fill:'#b8361e'});t3b.textContent='−2,3 roku (−22 %)';s.appendChild(t3b);
+    // STŘELKA — Česko dnes
+    const ng=el('g');ng.style.transformOrigin=cx+'px '+cy+'px';
+    ng.appendChild(el('line',{x1:cx,y1:cy,x2:cx,y2:cy-R+34,stroke:'#b8361e','stroke-width':5,'stroke-linecap':'round'}));
+    ng.appendChild(el('polygon',{points:`${cx-6},${cy-R+46} ${cx+6},${cy-R+46} ${cx},${cy-R+28}`,fill:'#b8361e'}));
+    ng.appendChild(el('circle',{cx:cx,cy:cy,r:7,fill:ink}));
+    ng.style.transform=`rotate(${ang}deg)`;
+    s.appendChild(ng);
+    const[nx,ny]=pt(cx,cy,ang,R+26);
+    const t2=el('text',{x:nx,y:ny,'text-anchor':'end','font-size':15,'font-weight':800,fill:ink});t2.textContent='ČESKO DNES';s.appendChild(t2);
+    const t2b=el('text',{x:nx,y:ny+17,'text-anchor':'end','font-size':13,fill:muted});t2b.textContent='8,0 roku';s.appendChild(t2b);
+    // SMĚR — malá šipka od střelky k severu; popisek pod pivotem, kde nic nepřekáží
+    const[sx,sy]=pt(cx,cy,ang+9,R-16);const[sx2,sy2]=pt(cx,cy,ang+20,R-16);
+    s.appendChild(el('path',{d:`M ${sx} ${sy} A ${R-16} ${R-16} 0 0 1 ${sx2} ${sy2}`,stroke:'#2f6b1f','stroke-width':3,fill:'none'}));
+    const[hx,hy]=pt(cx,cy,ang+22,R-16);
+    s.appendChild(el('circle',{cx:hx,cy:hy,r:4,fill:'#2f6b1f'}));
+    const t4=el('text',{x:cx,y:cy+40,'text-anchor':'middle','font-size':15,'font-weight':800,fill:'#2f6b1f'});t4.textContent='SMĚR (zelená šipka)';s.appendChild(t4);
+    const t4b=el('text',{x:cx,y:cy+58,'text-anchor':'middle','font-size':13,fill:'#2f6b1f'});t4b.textContent='+0,5 roku za 5 let — pomalu k severu';s.appendChild(t4b);
+    box.setAttribute('role','img');
+    box.setAttribute('aria-label','Kompas na příkladu: cíl je průměr EU 10,3 roku ve zdraví po 65. narozeninách, Česko je dnes na 8,0 roku, mezera je 2,3 roku a směr je mírně vzhůru — za pět let plus půl roku.');
     box.appendChild(s);
   }
 
-  /* ---------- LINE chart (trend ČR vs benchmark) ---------- */
-  function line(box,series,bench,benchLabel,unit){
-    box.innerHTML='';box._anim=[];const W=560,H=360,pad={l:54,r:20,t:24,b:40};
+  /* ---------- sloupce s referenční linkou benchmarku (screening) ---------- */
+  function bars(box,data){
+    box.innerHTML='';box._anim=[];
+    const W=900,rowH=84,H=data.length*rowH+16;
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
+    const ink='#1f1a14',muted='#6b6253';
+    const max=100,x0=272,bw=W-x0-118;
+    data.forEach((d,i)=>{
+      const y=30+i*rowH;
+      const lab=el('text',{x:0,y:y+22,'font-size':21,'font-weight':700,fill:ink});lab.textContent=d.label;s.appendChild(lab);
+      const yr=el('text',{x:0,y:y+44,'font-size':14,fill:muted});yr.textContent=d.year;s.appendChild(yr);
+      s.appendChild(el('rect',{x:x0,y:y,width:bw,height:30,rx:3,fill:'rgba(120,110,90,.14)'}));
+      const bar=el('rect',{x:x0,y:y,width:REDUCED?bw*d.cz/max:0,height:30,rx:3,fill:'#b8361e'});s.appendChild(bar);
+      if(!REDUCED){bar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';box._anim.push(()=>bar.setAttribute('width',bw*d.cz/max));}
+      // hodnota bíle uvnitř sloupce — nekříží se s referenční linkou benchmarku
+      const v=el('text',{x:x0+bw*d.cz/max-10,y:y+21,'font-size':19,'font-weight':800,fill:'#fff','text-anchor':'end'});v.textContent=fmt(d.cz,1)+' % ▼';s.appendChild(v);
+      // benchmark = referenční linka
+      const bx=x0+bw*d.eu/max;
+      s.appendChild(el('line',{x1:bx,y1:y-8,x2:bx,y2:y+38,stroke:ink,'stroke-width':2.5}));
+      const t=el('text',{x:bx,y:y-14,'font-size':14,'font-weight':700,fill:ink,'text-anchor':'middle'});t.textContent='EU ø '+fmt(d.eu,0)+' %';s.appendChild(t);
+    });
+    box.setAttribute('role','img');
+    box.setAttribute('aria-label','Účast na prevenci v Česku proti průměru EU: '+data.map(d=>`${d.label} ${fmt(d.cz,1)} % proti ${fmt(d.eu,0)} % v EU`).join('; ')+'. Ve všech programech je Česko pod průměrem EU.');
+    box.appendChild(s);
+  }
+
+  /* ---------- line chart s tooltipem (trend vs. benchmark) ---------- */
+  function line(box,series,bench,benchLabel,unit,aria,title){
+    box.innerHTML='';box._anim=[];
+    const W=560,H=372,pad={l:54,r:20,t:36,b:40};
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
     const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';const grid=dark?'rgba(251,248,241,.18)':'rgba(31,26,20,.14)';
-    const xs=series.map(p=>p.year), ys=series.map(p=>p.value).concat([bench]);
+    const mut=dark?'rgba(251,248,241,.6)':'#6b6253';
+    if(title){const th=el('text',{x:pad.l,y:14,'font-size':14,'font-weight':800,fill:ink});th.textContent=title;s.appendChild(th);}
+    const xs=series.map(p=>p.year),ys=series.map(p=>p.value).concat([bench]);
     const xmin=Math.min(...xs),xmax=Math.max(...xs);
     const ymin=Math.min(...ys)*0.96,ymax=Math.max(...ys)*1.04;
     const X=v=>pad.l+(v-xmin)/(xmax-xmin)*(W-pad.l-pad.r);
     const Y=v=>H-pad.b-(v-ymin)/(ymax-ymin)*(H-pad.t-pad.b);
-    // grid + y labels
     for(let k=0;k<=3;k++){const yv=ymin+(ymax-ymin)*k/3;const y=Y(yv);
       s.appendChild(el('line',{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:grid}));
-      const t=el('text',{x:pad.l-8,y:y+4,'font-size':12,fill:dark?'rgba(251,248,241,.55)':'#6b6253','text-anchor':'end'});t.textContent=fmt(yv,0);s.appendChild(t);}
-    // benchmark line
-    s.appendChild(el('line',{x1:pad.l,y1:Y(bench),x2:W-pad.r,y2:Y(bench),stroke:'#2f6b1f','stroke-width':2,'stroke-dasharray':'5 5'}));
-    const bl=el('text',{x:W-pad.r,y:Y(bench)-7,'font-size':13,'font-weight':700,fill:'#2f6b1f','text-anchor':'end'});bl.textContent=benchLabel;s.appendChild(bl);
-    // x labels
-    series.forEach(p=>{const t=el('text',{x:X(p.year),y:H-pad.b+22,'font-size':12,fill:dark?'rgba(251,248,241,.55)':'#6b6253','text-anchor':'middle'});t.textContent=p.year;s.appendChild(t);});
-    // path
+      const t=el('text',{x:pad.l-8,y:y+4,'font-size':12,fill:mut,'text-anchor':'end'});t.textContent=fmt(yv,1);s.appendChild(t);}
+    const gcol=dark?'#7ab85f':'#2f6b1f';
+    s.appendChild(el('line',{x1:pad.l,y1:Y(bench),x2:W-pad.r,y2:Y(bench),stroke:gcol,'stroke-width':2,'stroke-dasharray':'5 5'}));
+    const bl=el('text',{x:W-pad.r,y:Y(bench)-7,'font-size':13,'font-weight':700,fill:gcol,'text-anchor':'end'});bl.textContent=benchLabel;s.appendChild(bl);
+    series.forEach(p=>{const t=el('text',{x:X(p.year),y:H-pad.b+22,'font-size':12,fill:mut,'text-anchor':'middle'});t.textContent=p.year;s.appendChild(t);});
     const d=series.map((p,i)=>(i?'L':'M')+X(p.year)+' '+Y(p.value)).join(' ');
     const path=el('path',{d:d,fill:'none',stroke:'#b8361e','stroke-width':3.5,'stroke-linejoin':'round','stroke-linecap':'round'});
+    if(dark)path.setAttribute('stroke','#e8755e');
     s.appendChild(path);
-    const len=path.getTotalLength?280:0;
-    path.style.strokeDasharray=600;path.style.strokeDashoffset=600;path.style.transition='stroke-dashoffset 1.3s ease';
-    box._anim=[()=>{path.style.strokeDashoffset=0;}];
-    // dots + interactive tooltip
-    const tip=el('g',{opacity:0});const tr=el('rect',{x:0,y:0,width:96,height:30,rx:5,fill:ink});const tt=el('text',{x:0,y:0,'font-size':13,'font-weight':700,fill:dark?'#1f1a14':'#fbf8f1','text-anchor':'middle'});tip.appendChild(tr);tip.appendChild(tt);
-    series.forEach(p=>{const dot=el('circle',{cx:X(p.year),cy:Y(p.value),r:5,fill:'#b8361e',stroke:dark?'#1f1a14':'#fbf8f1','stroke-width':2,style:'cursor:pointer'});
-      dot.addEventListener('mouseenter',()=>{tip.setAttribute('opacity',1);tr.setAttribute('x',X(p.year)-48);tr.setAttribute('y',Y(p.value)-40);tt.setAttribute('x',X(p.year));tt.setAttribute('y',Y(p.value)-20);tt.textContent=p.year+': '+fmt(p.value,1)+' '+unit;});
+    if(!REDUCED){path.style.strokeDasharray=900;path.style.strokeDashoffset=900;path.style.transition='stroke-dashoffset 1.3s ease';box._anim.push(()=>{path.style.strokeDashoffset=0;});}
+    const tip=el('g',{opacity:0});const tr=el('rect',{x:0,y:0,width:110,height:30,rx:5,fill:ink});const tt=el('text',{x:0,y:0,'font-size':13,'font-weight':700,fill:dark?'#1f1a14':'#fbf8f1','text-anchor':'middle'});tip.appendChild(tr);tip.appendChild(tt);
+    series.forEach(p=>{const dot=el('circle',{cx:X(p.year),cy:Y(p.value),r:5,fill:dark?'#e8755e':'#b8361e',stroke:dark?'#1f1a14':'#fbf8f1','stroke-width':2,style:'cursor:pointer'});
+      dot.addEventListener('mouseenter',()=>{tip.setAttribute('opacity',1);tr.setAttribute('x',X(p.year)-55);tr.setAttribute('y',Y(p.value)-40);tt.setAttribute('x',X(p.year));tt.setAttribute('y',Y(p.value)-20);tt.textContent=p.year+': '+fmt(p.value,1)+' '+unit;});
       dot.addEventListener('mouseleave',()=>tip.setAttribute('opacity',0));
       s.appendChild(dot);});
     s.appendChild(tip);
+    box.setAttribute('role','img');
+    box.setAttribute('aria-label',aria);
     box.appendChild(s);
   }
 
-  /* ---------- DIVERGING bars (odchylka od benchmarku, červená vlevo / zelená vpravo) ---------- */
+  /* ---------- diverging bars (odchylka od EU, po zohlednění směru) ---------- */
   function diverging(box,items){
     box.innerHTML='';box._anim=[];
     const rows=items.map(it=>{let a=(it.cz-it.b)/it.b;if(it.dir==='lower_is_better')a=-a;return {label:it.label,adv:a};});
-    rows.sort((p,q)=>p.adv-q.adv); // nejvíc pod světem nahoře = největší páka
-    const W=900,rowH=Math.min(42,360/rows.length),H=rows.length*rowH+8;
+    rows.sort((p,q)=>p.adv-q.adv);
+    const W=900,rowH=Math.min(46,400/rows.length),H=rows.length*rowH+8;
     const dark=box.closest('.dark');const ink=dark?'#fbf8f1':'#1f1a14';
     const s=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',height:'100%'});
-    const cx=W*0.46,maxw=W*0.4,bh=rowH-12;
+    const cx=W*0.46,maxw=W*0.38,bh=rowH-13;
     const max=Math.max(...rows.map(r=>Math.abs(r.adv)));
-    s.appendChild(el('line',{x1:cx,y1:0,x2:cx,y2:H,stroke:dark?'rgba(251,248,241,.3)':'rgba(31,26,20,.3)','stroke-width':1.5}));
+    s.appendChild(el('line',{x1:cx,y1:0,x2:cx,y2:H,stroke:dark?'rgba(251,248,241,.35)':'rgba(31,26,20,.3)','stroke-width':1.5}));
+    const gcol=dark?'#7ab85f':'#2f6b1f',rcol=dark?'#e8755e':'#b8361e';
     rows.forEach((r,i)=>{
-      const y=6+i*rowH,w=Math.abs(r.adv)/max*maxw,pos=r.adv>=0,col=pos?'#2f6b1f':'#b8361e',x=pos?cx:cx-w;
-      const bar=el('rect',{x:cx,y:y,width:0,height:bh,rx:2,fill:col});s.appendChild(bar);
-      bar.style.transition='all .9s cubic-bezier(.2,.7,.2,1)';
-      box._anim.push(()=>{bar.setAttribute('width',w);bar.setAttribute('x',x);});
+      const y=6+i*rowH,w=Math.abs(r.adv)/max*maxw,pos=r.adv>=0,col=pos?gcol:rcol,x=pos?cx:cx-w;
+      const bar=el('rect',{x:REDUCED?x:cx,y:y,width:REDUCED?w:0,height:bh,rx:2,fill:col});s.appendChild(bar);
+      if(!REDUCED){bar.style.transition='all .9s cubic-bezier(.2,.7,.2,1)';box._anim.push(()=>{bar.setAttribute('width',w);bar.setAttribute('x',x);});}
       const lab=el('text',{x:pos?cx-8:cx+8,y:y+bh/2+5,'font-size':16,'font-weight':700,fill:ink,'text-anchor':pos?'end':'start'});lab.textContent=r.label;s.appendChild(lab);
-      const val=el('text',{x:pos?cx+w+8:cx-w-8,y:y+bh/2+5,'font-size':15,'font-weight':800,fill:col,'text-anchor':pos?'start':'end'});val.textContent=(pos?'+':'−')+Math.round(Math.abs(r.adv)*100)+' %';s.appendChild(val);
+      const val=el('text',{x:pos?cx+w+8:cx-w-8,y:y+bh/2+5,'font-size':15,'font-weight':800,fill:col,'text-anchor':pos?'start':'end'});
+      val.textContent=(pos?'▲ +':'▼ −')+Math.round(Math.abs(r.adv)*100)+' %';s.appendChild(val);
     });
+    box.setAttribute('role','img');
+    box.setAttribute('aria-label','Odchylky od průměru EU po zohlednění směru ukazatele: '+rows.map(r=>`${r.label} ${r.adv>=0?'o '+Math.round(r.adv*100)+' % lepší':'o '+Math.round(-r.adv*100)+' % horší'} než EU`).join('; ')+'.');
     box.appendChild(s);
   }
 
-  /* ---------- DATA ---------- */
+  /* ---------- DATA (hodnoty z data/indicators.json, benchmark = průměr EU) ---------- */
   const GAUGES=[
-    // KDE ZAOSTÁVÁME — největší páka (ručička do červené)
-    {g:'bad', k:'Alkohol', cz:14.4, b:8.9, dir:'lower_is_better', unit:'l/os./rok', src:'OECD Health Statistics, 2024', desc:'Vypijeme 14,4 litru čistého alkoholu na hlavu ročně — o 62 % víc než průměr OECD. Patříme ke světové špičce a i malý posun by tu byl znát na celé zemi.'},
-    {g:'bad', k:'Chřipka 65+', cz:24.5, b:47, dir:'higher_is_better', unit:'%', src:'ÚZIS / OECD, 2025', desc:'Proti chřipce naočkujeme jen 24,5 % seniorů — zhruba polovinu toho co vyspělé země (47 %). Dohnat svět je tady levné a rychlé.'},
-    {g:'bad', k:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better', unit:'dní', src:'OECD waiting times', desc:'Na novou kyčel se u nás čeká 118 dní, v OECD 85 — o třetinu déle.'},
-    {g:'bad', k:'Zdravé roky 65+', cz:8, b:10.2, dir:'higher_is_better', unit:'let', src:'Eurostat / OECD, 2024', desc:'Po pětašedesátce máme před sebou v průměru 8 let ve zdraví, v OECD 10,2. Dožíváme se podobně dlouho, ale v horší kondici.'},
-    // KDE EXCELUJEME — ručička do zelené (tady tlačit dál = velké úsilí, malý zisk)
-    {g:'good', k:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better', unit:'/1000', src:'Eurostat, 2023', desc:'Kojenecká úmrtnost 2,3 na tisíc narozených — výrazně pod průměrem EU (3,5). Tady patříme ke špičce.'},
-    {g:'good', k:'Úmrtí po infarktu', cz:4.57, b:6.5, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Po infarktu zemře v nemocnici 4,57 % pacientů, v OECD 6,5 %. Akutní kardiologie u nás patří k nejlepším na světě.'},
-    {g:'good', k:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better', unit:'%', src:'OECD, 2023', desc:'S dostupností péče je spokojeno 75 % lidí, v OECD 64 %. Posouvat to ještě výš už dá hodně práce za málo.'},
-    {g:'good', k:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better', unit:'%', src:'OECD, 2023', desc:'Z vlastní kapsy zaplatí pacienti jen 13,6 % nákladů (OECD 18 %). Na peníze je u nás péče dobře dostupná.'}
+    {g:'bad',k:'Alkohol',cz:14.4,b:10.1,dir:'lower_is_better',src:'OECD Health Statistics · 2024 · benchmark: průměr EU · nižší je lepší',
+     desc:'Vypijeme 14,4 litru čistého alkoholu na osobu ročně; průměr EU je 10,1. Jeden z největších rozdílů, které měříme.'},
+    {g:'bad',k:'Chřipka 65+',cz:24.5,b:49,dir:'higher_is_better',src:'ÚZIS · NZIS · 2025 · benchmark: průměr EU · vyšší je lepší',
+     desc:'Proti chřipce je očkováno 24,5 % seniorů; průměr EU je 49 %. Polovina evropské úrovně u jedné z nejlevnějších prevencí.'},
+    {g:'bad',k:'Zdravé roky 65+',cz:8,b:10.3,dir:'higher_is_better',src:'Eurostat · 2024 · benchmark: průměr EU · vyšší je lepší',
+     desc:'Po 65. narozeninách nás čeká v průměru 8 let ve zdraví; průměr EU je 10,3 roku.'},
+    {g:'bad',k:'Čekání na kyčel',cz:118,b:95,dir:'lower_is_better',src:'VZP ČR · 2024 · benchmark: průměr EU · nižší je lepší',
+     desc:'Na náhradu kyčelního kloubu se čeká 118 dní; průměr EU je 95. Každý den navíc je den s bolestí.'},
+    {g:'good',k:'Kojenecká úmrtnost',cz:2.3,b:3.5,dir:'lower_is_better',src:'Eurostat · 2024 · benchmark: průměr EU · nižší je lepší',
+     desc:'2,3 úmrtí na 1 000 živě narozených; průměr EU je 3,5. Dlouhodobě mezi nejlepšími výsledky na světě.'},
+    {g:'good',k:'Úmrtí po infarktu',cz:4.57,b:6.7,dir:'lower_is_better',src:'ÚZIS · NRH · 2024 · benchmark: průměr EU · nižší je lepší',
+     desc:'V nemocnici zemře po infarktu 4,6 % pacientů; průměr EU je 6,7 %. Akutní kardiologie patří ke špičce.'},
+    {g:'good',k:'Spokojenost s dostupností',cz:75,b:67,dir:'higher_is_better',src:'OECD Health Statistics · 2024 · benchmark: průměr EU · vyšší je lepší',
+     desc:'S dostupností péče je spokojeno 75 % lidí; průměr EU je 67 %.'},
+    {g:'good',k:'Přímé platby pacientů',cz:13.6,b:15,dir:'lower_is_better',src:'ČSÚ · zdravotnické účty · 2024 · benchmark: průměr EU · nižší je lepší',
+     desc:'Pacienti platí z kapsy 13,6 % výdajů na zdraví; průměr EU je 15 %. Finanční ochrana pacienta je u nás silná.'}
   ];
   const SCREEN=[
-    {label:'Mamograf (50–69)', cz:54.5, target:68},
-    {label:'Kolorektum (50–75)', cz:31.1, target:42},
-    {label:'Chřipka 65+', cz:24.5, target:47},
-    {label:'Děti — hexavakcína', cz:86, target:92}
+    {label:'Mamograf (ženy 50–69)',cz:54.5,eu:65,year:'ÚZIS, 2024'},
+    {label:'Tlusté střevo (50–75)',cz:31.1,eu:38,year:'ÚZIS, 2024'},
+    {label:'Chřipka (senioři 65+)',cz:24.5,eu:49,year:'ÚZIS, 2025'},
+    {label:'HPV (dívky, 13 let)',cz:69.8,eu:72,year:'ÚZIS, 2023'}
   ];
   const SUICIDE=[{year:2019,value:11.22},{year:2020,value:11.64},{year:2021,value:11.64},{year:2022,value:12.29},{year:2023,value:11.59}];
   const DIVERGE=[
-    {label:'Spotřeba alkoholu', cz:14.4, b:8.9, dir:'lower_is_better'},
-    {label:'Očkování chřipka 65+', cz:24.5, b:47, dir:'higher_is_better'},
-    {label:'Čekání na kyčel', cz:118, b:85, dir:'lower_is_better'},
-    {label:'Odvratitelné hospitalizace', cz:592, b:473, dir:'lower_is_better'},
-    {label:'Zdravé roky po 65', cz:8, b:10.2, dir:'higher_is_better'},
-    {label:'Přímé platby pacientů', cz:13.6, b:18, dir:'lower_is_better'},
-    {label:'Spokojenost s dostupností', cz:75, b:64, dir:'higher_is_better'},
-    {label:'Úmrtí po infarktu (nemocniční)', cz:4.57, b:6.5, dir:'lower_is_better'},
-    {label:'Kojenecká úmrtnost', cz:2.3, b:3.5, dir:'lower_is_better'}
+    {label:'Kardiovaskulární úmrtnost',cz:463.75,b:312.95,dir:'lower_is_better'},
+    {label:'Léčitelná úmrtnost',cz:107.2,b:86.8,dir:'lower_is_better'},
+    {label:'Čekání na kyčel',cz:118,b:95,dir:'lower_is_better'},
+    {label:'Zdravé roky po 65',cz:8,b:10.3,dir:'higher_is_better'},
+    {label:'Screening tlustého střeva',cz:31.1,b:38,dir:'higher_is_better'},
+    {label:'Přímé platby pacientů',cz:13.6,b:15,dir:'lower_is_better'},
+    {label:'Transplantace orgánů',cz:91,b:70,dir:'higher_is_better'},
+    {label:'Úmrtí po infarktu v nemocnici',cz:4.57,b:6.7,dir:'lower_is_better'},
+    {label:'Kojenecká úmrtnost',cz:2.3,b:3.5,dir:'lower_is_better'}
   ];
 
-  /* ---------- RENDER STATIC compasses ---------- */
+  /* ---------- statické kompasy ---------- */
   compassMark(document.getElementById('coverCompass'),{light:true});
-  compassMark(document.getElementById('endCompass'),{light:true});
   compassMark(document.getElementById('introCompass'),{});
-  compassMark(document.getElementById('legendCompass'),{});
   compassMark(document.getElementById('demoCompass'),{light:true});
 
-  /* ---------- INTERACTIVE GAUGE slide ---------- */
+  /* ---------- interaktivní gauge ---------- */
   const picker=document.getElementById('gaugePicker');
   const gDesc=document.getElementById('gaugeDesc');
   const gSrc=document.getElementById('gaugeSrc');
-  let gi=0;
-  let lastG=null; const gbtns=[];
+  let gi=0,lastG=null;const gbtns=[];
   GAUGES.forEach((g,i)=>{
-    if(g.g!==lastG){const lab=document.createElement('span');lab.className='grp';lab.textContent=g.g==='bad'?'Kde nejvíc zaostáváme':'Kde naopak vedeme';picker.appendChild(lab);lastG=g.g;}
-    const b=document.createElement('button');b.textContent=g.k;b.className=g.g;b.onclick=()=>{gi=i;updateGauge();};picker.appendChild(b);gbtns[i]=b;
+    if(g.g!==lastG){const lab=document.createElement('span');lab.className='grp';lab.textContent=g.g==='bad'?'Kde zaostáváme':'Kde vedeme';picker.appendChild(lab);lastG=g.g;}
+    const b=document.createElement('button');b.textContent=g.k;b.className=g.g;b.type='button';b.onclick=()=>{gi=i;updateGauge();};picker.appendChild(b);gbtns[i]=b;
   });
   function updateGauge(){
-    gbtns.forEach((b,i)=>b.classList.toggle('on',i===gi));
+    gbtns.forEach((b,i)=>{b.classList.toggle('on',i===gi);b.setAttribute('aria-pressed',i===gi);});
     const g=GAUGES[gi];
-    setGauge(document.getElementById('mainGauge'),g.cz,g.b,g.dir);
-    gDesc.textContent=g.desc; gSrc.textContent=g.src+' · skorezdravotnictvi.cz';
+    setGauge(document.getElementById('mainGauge'),g.cz,g.b,g.dir,
+      `Kompas: ${g.k} — Česko ${fmt(g.cz,g.cz%1?1:0)}, průměr EU ${fmt(g.b,g.b%1?1:0)}. ${g.desc}`);
+    gDesc.textContent=g.desc;gSrc.textContent=g.src;
   }
 
-  /* ---------- SLIDE ENGINE ---------- */
-  const slides=[...document.querySelectorAll('.slide')];
-  let idx=0;
-  const counter=document.getElementById('counter');const progress=document.getElementById('progress');
+  /* ---------- count-up (hodnoty jsou natvrdo v HTML; animace je jen nadstavba) ---------- */
   function countUp(slide){
+    if(REDUCED)return; // hodnoty už v HTML jsou finální
     slide.querySelectorAll('[data-count]').forEach(elm=>{
       const target=parseFloat(elm.dataset.count),dec=parseInt(elm.dataset.dec||'0'),suf=elm.dataset.suffix||'';
       const t0=performance.now(),dur=950;
       (function step(now){const p=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-p,3);
-        elm.textContent=fmt(target*e,dec)+suf; if(p<1)requestAnimationFrame(step); else elm.textContent=fmt(target,dec)+suf;})(t0);
+        elm.textContent=fmt(target*e,dec)+suf;if(p<1)requestAnimationFrame(step);else elm.textContent=fmt(target,dec)+suf;})(t0);
     });
   }
+  function finalizeNumbers(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseFloat(e.dataset.count),d=parseInt(e.dataset.dec||'0'),s=e.dataset.suffix||'';e.textContent=fmt(t,d)+s;});}
+
+  /* ---------- grafy per slide (id-based, nezávislé na pořadí) ---------- */
   function chartsFor(slide,animate){
-    if(slide.hasAttribute('data-gauge')){ gauge(document.getElementById('mainGauge')); updateGauge(); }
-    if(slide.hasAttribute('data-g2')){ const b=document.getElementById('gaugeA'); gauge(b); const set=()=>setGauge(b,8,10.2,'higher_is_better'); animate?setTimeout(set,60):set(); }
-    if(slide.hasAttribute('data-g3')){ const b=document.getElementById('gaugeC'); gauge(b); const set=()=>setGauge(b,118,85,'lower_is_better'); animate?setTimeout(set,60):set(); }
-    if(slide.hasAttribute('data-bars')){ const b=document.getElementById('screenBars'); bars(b,SCREEN); (b._anim||[]).forEach(f=>animate?setTimeout(f,180):f()); }
-    if(slide.hasAttribute('data-line')){ const b=document.getElementById('lineChart'); line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.'); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
-    if(slide.hasAttribute('data-diverge')){ const b=document.getElementById('divergeChart'); diverging(b,DIVERGE); (b._anim||[]).forEach(f=>animate?setTimeout(f,200):f()); }
+    const run=f=>{if(animate&&!REDUCED)setTimeout(f,180);else f();};
+    if(slide.hasAttribute('data-anno')){annoGauge(document.getElementById('annoGauge'));}
+    if(slide.hasAttribute('data-gauge')){gauge(document.getElementById('mainGauge'));updateGauge();}
+    if(slide.hasAttribute('data-g2')){const b=document.getElementById('gaugeA');gauge(b);
+      const set=()=>setGauge(b,8,10.3,'higher_is_better','Kompas: roky ve zdraví po 65. narozeninách — Česko 8,0 roku, průměr EU 10,3; střelka v červeném pásmu, 22 % pod průměrem EU.');
+      animate&&!REDUCED?setTimeout(set,60):set();}
+    if(slide.hasAttribute('data-bars')){const b=document.getElementById('screenBars');bars(b,SCREEN);(b._anim||[]).forEach(run);}
+    if(slide.hasAttribute('data-line')){const b=document.getElementById('lineChart');
+      line(b,SUICIDE,10.37,'průměr EU 10,4','/100 tis.','Vývoj standardizované míry sebevražd v Česku 2019 až 2023: hodnoty mezi 11,2 a 12,3 na 100 tisíc obyvatel, trvale nad průměrem EU 10,4. Nižší je lepší.','Sebevraždy na 100 tis. obyvatel — trvale nad průměrem EU');
+      (b._anim||[]).forEach(run);}
+    if(slide.hasAttribute('data-diverge')){const b=document.getElementById('divergeChart');diverging(b,DIVERGE);(b._anim||[]).forEach(run);}
   }
-  function onEnter(slide){ countUp(slide); chartsFor(slide,true); }
   // Před tiskem/PDF: naplň čísla i grafy na VŠECH slidech (jinak by neprošlé slidy byly prázdné).
-  function finalizeNumbers(){ document.querySelectorAll('[data-count]').forEach(e=>{const t=parseFloat(e.dataset.count),d=parseInt(e.dataset.dec||'0'),s=e.dataset.suffix||'';e.textContent=fmt(t,d)+s;}); }
-  window.addEventListener('beforeprint',()=>{ finalizeNumbers(); slides.forEach(s=>chartsFor(s,false)); });
-  function show(n){
+  window.addEventListener('beforeprint',()=>{finalizeNumbers();slides.forEach(s=>chartsFor(s,false));});
+
+  /* ---------- slide engine ---------- */
+  const slides=[...document.querySelectorAll('.slide')];
+  let idx=0;
+  const counter=document.getElementById('counter'),progress=document.getElementById('progress');
+  function show(n,push){
     n=Math.max(0,Math.min(slides.length-1,n));
-    slides[idx].classList.remove('active'); idx=n; slides[idx].classList.add('active');
+    slides[idx].classList.remove('active');idx=n;slides[idx].classList.add('active');
     counter.textContent=(idx+1)+' / '+slides.length;
     progress.style.width=(idx/(slides.length-1)*100)+'%';
-    onEnter(slides[idx]);
+    if(push!==false)history.replaceState(null,'','#'+(idx+1));
+    countUp(slides[idx]);chartsFor(slides[idx],true);
+    ovMark();
   }
-  function next(){show(idx+1)} function prev(){show(idx-1)}
-  document.getElementById('next').onclick=next; document.getElementById('prev').onclick=prev;
+  const next=()=>show(idx+1),prev=()=>show(idx-1);
+  document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
 
-  // overview mode (press 'O')
-  let overview=false;const stage=document.getElementById('stage');
+  /* ---------- overview (klávesa O) ---------- */
+  const overview=document.getElementById('overview'),ovList=document.getElementById('ovList');
+  let firstAp=true;
+  slides.forEach((s,i)=>{
+    if(s.hasAttribute('data-appendix')&&firstAp){const d=document.createElement('li');d.className='ap';d.textContent='Appendix';ovList.appendChild(d);firstAp=false;}
+    const li=document.createElement('li');
+    const b=document.createElement('button');b.type='button';
+    b.innerHTML='<span class="no">'+(i+1)+'</span><span>'+(s.dataset.title||'Snímek '+(i+1))+'</span>';
+    b.onclick=()=>{toggleOverview(false);show(i);};
+    li.appendChild(b);ovList.appendChild(li);
+  });
+  function ovMark(){[...ovList.querySelectorAll('button')].forEach((b,i)=>b.classList.toggle('cur',i===idx));}
+  function toggleOverview(force){
+    const open=force!==undefined?force:!overview.classList.contains('open');
+    overview.classList.toggle('open',open);
+    if(open){ovMark();const cur=ovList.querySelector('button.cur');if(cur)cur.focus();}
+  }
+
+  /* ---------- klávesnice + dotyk ---------- */
   document.addEventListener('keydown',e=>{
+    if(overview.classList.contains('open')&&(e.key==='Escape'||e.key==='o'||e.key==='O')){e.preventDefault();toggleOverview(false);return;}
+    if(overview.classList.contains('open'))return;
     if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next();}
     else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
-    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='Home'){e.preventDefault();show(0);}
+    else if(e.key==='End'){e.preventDefault();show(slides.length-1);}
     else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+    else if(e.key==='o'||e.key==='O'){toggleOverview();}
   });
-  // touch
-  let x0=null;document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+  let x0=null;
+  document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
   document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)dx<0?next():prev();x0=null;},{passive:true});
 
-  show(0);
+  /* ---------- start (podpora #N deep-linku) ---------- */
+  function fromHash(){const h=parseInt((location.hash||'').slice(1),10);return Number.isFinite(h)&&h>=1?Math.min(h,slides.length)-1:0;}
+  window.addEventListener('hashchange',()=>{const n=fromHash();if(n!==idx)show(n,false);});
+  show(fromHash(),false);
 })();
 </script>
 </body>
