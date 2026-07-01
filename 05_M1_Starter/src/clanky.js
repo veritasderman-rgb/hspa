@@ -54,7 +54,7 @@ function injectAiDisclaimer() {
     banner.setAttribute('role', 'note');
     banner.setAttribute('aria-labelledby', 'aiDisclaimerHubH');
     banner.innerHTML = `
-      <img class="ai-disclaimer-icon" src="assets/authors/florence-avatar-192.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w, assets/authors/florence-avatar-320.jpg 320w" width="72" height="72" alt="Florence — AI autorka portálu" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:0 0 auto">
+      <img class="ai-disclaimer-icon" src="assets/authors/florence-avatar-192.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w, assets/authors/florence-avatar-320.jpg 320w" width="64" height="64" alt="Florence — AI autorka portálu" loading="lazy" style="width:64px;height:64px;border-radius:50%;object-fit:cover;flex:0 0 auto">
       <div class="ai-disclaimer-body">
         <h3 class="ai-disclaimer-h" id="aiDisclaimerHubH">Tyto články píšu já, Florence. Nespím. Nepiju kávu. A mám nezdravě vřelý vztah k tabulkám.</h3>
         <p class="ai-disclaimer-lead">
@@ -113,7 +113,7 @@ function injectAiDisclaimer() {
     banner.innerHTML = `
       <img class="ai-disclaimer-avatar" src="assets/authors/florence-avatar-96.jpg" srcset="assets/authors/florence-avatar-96.jpg 96w, assets/authors/florence-avatar-192.jpg 192w" width="48" height="48" alt="Florence — AI autorka" loading="lazy" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:0 0 auto;align-self:flex-start">
       <span class="ai-disclaimer-text">
-        <strong>Autorka: Florence</strong> — AI agentka a spoluautorka skorezdravotnictvi.cz, pojmenovaná po Florence Nightingaleové, která jako jedna z prvních použila statistiku a graf (svůj „růžicový" diagram připomínající kompas), aby čísly a jejich grafickou interpretací přesvědčila vládu o reformě zdravotní péče. Florence je alter ego Claude.ai — prochází statistiky, generuje články a snaží se udržet prst na tepu doby tempem, které by pro člověka bylo vražedné. Jako každá AI se ale může splést, proto pod každou statistikou najdete odkaz na primární zdroj. <a href="autor-florence.html">Chcete vědět víc o životě této úžasné ženy? Klikněte zde →</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
+        <strong>Autorka: Florence</strong> — AI agentka a spoluautorka skorezdravotnictvi.cz, pojmenovaná po Florence Nightingaleové, která jako jedna z prvních použila statistiku a graf (svůj „růžicový" diagram připomínající kompas), aby čísly a jejich grafickou interpretací přesvědčila vládu o reformě zdravotní péče. Florence je alter ego Claude.ai — prochází statistiky, generuje články a snaží se udržet prst na tepu doby tempem, které by pro člověka bylo vražedné. Jako každá AI se ale může splést, proto pod každou statistikou najdete odkaz na primární zdroj. <a href="autor-florence.html" style="white-space:normal">Chcete vědět víc o životě této úžasné ženy? Klikněte zde →</a> · <a href="https://github.com/veritasderman-rgb/hspa/issues" target="_blank" rel="noopener">Nahlásit chybu ↗</a>
       </span>
     `;
     breadcrumb.parentNode.insertBefore(banner, breadcrumb.nextSibling);
