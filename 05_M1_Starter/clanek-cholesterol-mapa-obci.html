@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cholesterol podle místa, kde žijete. Přelomová data z laboratoří odhalují překvapení · HSPA Monitor</title>
+<meta name="description" content="ÚZIS poprvé zmapoval hladiny cholesterolu Čechů z otevřených laboratorních dat NZIS — až na úroveň obcí. Průměr klesl pod cílovou hodnotu 5,0 díky léčbě. A mapa překvapí: nekopíruje známý gradient kardiovaskulárního rizika.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cholesterol podle místa, kde žijete. Přelomová data z laboratoří odhalují překvapení">
+<meta property="og:description" content="Otevřená laboratorní data NZIS: průměrný cholesterol klesl pod 5,0 mmol/l díky léčbě. Mapa ale nekopíruje gradient kardiovaskulárního rizika — a to je klíč k pochopení, kde je problém.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-07-01">
+<meta property="article:section" content="Zdravotní rizika">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-07-01
+    reviewer: claude-code-agent
+    status: draft
+    primary_sources_added: 5
+    visual_elements_added: 4
+    notes: "DRAFT — published:false. Podnět: Seznam Zprávy (červen 2026). PŘEPRACOVÁNO na PRIMÁRNÍ DATA: indikátor i krajský rozpad nyní čerpají z otevřených dat ÚZIS — NZIS Open, OIS 15-01 'Laboratorní data' (https://www.nzip.cz/data/2780-laboratorni-data-datovy-souhrn), ne z novinového článku. Hodnoty spočteny populačně váženým průměrem přes ORP (skript scripts/extract-cholesterol-nzis.js, mezivýstup ingest/nzip-extracts/OIS-15-01-cholesterol.json). REÁLNÁ ČÍSLA: celkový cholesterol národní průměr 5,08 (2020) → 5,00 (2022) → 4,95 (2023/2024) → 4,92 (2025); LDL 3,18 → 2,98; podíl osob s celkovým cholesterolem >6,2 mmol/l 13,6 % → 12,0 %. Kraje 2025 (mmol/l): nejvyšší Liberecký 4,98, Jihočeský 4,97, Praha 4,96, Jihomoravský 4,96; nejnižší Vysočina 4,81, Zlínský 4,85, Moravskoslezský 4,87. ORP extrémy 2025 (N≥5000): nejvyšší Jilemnice 5,20, Mohelnice 5,17, Prachatice 5,17, Semily 5,16, Vimperk 5,16, Jeseník 5,16; nejnižší Broumov 4,67, Krnov 4,70, Hlučín 4,71, Hranice 4,72, Vizovice 4,73. KLÍČOVÁ KOREKCE oproti novinovému rámování: průměr NEKOPÍRUJE západo-východní gradient KV mortality — kraje s vysokou KV úmrtností (Karlovarsko, Moravskoslezsko) mají spíš nižší průměr, pravděpodobně vyšším záchytem/léčbou (LDL-cholesterol tam nejnižší). Odborné/kontextové údaje z podnětu (třetina léčených, prev. prohlídky 6/10, 98 % dětí, propad 40 % mezi 18–20, u diabetika −25 % úmrtí / −30 % KV příhody) ponechány. Odborníci: Michal Vrablík (Česká společnost pro aterosklerózu), Aleš Linhart, Petr Ošťádal (Česká kardiologická společnost), Ladislav Dušek (ÚZIS). PŘED PUBLIKACÍ: redakčně ověřit odborné/kontextové údaje (podíl léčených, prohlídky), doplnit cover, přepnout robots na index,follow a published:true."
+-->
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-cholesterol-mapa-obci">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Zdravotní rizika</span>
+        <span class="article-tag article-tag-muted">cholesterol · kardiovaskulární prevence · otevřená data</span>
+      </div>
+      <h1 class="article-title">Cholesterol podle místa, kde žijete. Přelomová data z laboratoří odhalují překvapení</h1>
+      <p class="article-deck">
+        Ústav zdravotnických informací poprvé propojil stovky milionů laboratorních výsledků a zveřejnil je jako otevřená data — až na úroveň obcí. Dobrá zpráva: průměrný cholesterol Čechů klesl pod cílovou hodnotu a zásluhu na tom má léčba. Překvapivá zpráva: mapa průměru nekopíruje známý gradient kardiovaskulárního rizika. A právě to prozrazuje, kde je skutečný problém.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">1. července 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Paní Jarmile je jedenašedesát a žije ve Vimperku. Do laboratoře přišla kvůli únavě a odešla s výsledkem, kterému nerozuměla: celkový cholesterol 6,8, LDL 4,5. Do loňska by to bylo jedno z milionů čísel, která mizí v laboratorních systémech. Letos je poprvé součástí něčeho většího: otevřených dat, ve kterých Ústav zdravotnických informací a statistiky (ÚZIS) shrnul přes čtyři sta milionů laboratorních výsledků a ukázal, jak jsou na tom s cholesterolem lidé v každé české obci. Vimperk přitom patří k místům s nejvyšším průměrem v zemi — jenže mapa jako celek říká něco úplně jiného, než by člověk čekal.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCholLeadH">
+        <figcaption class="av-figure-h" id="avCholLeadH">Cholesterol v Česku podle otevřených dat NZIS</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="405" data-suffix=" mil.">405 mil.</span>
+            <span class="av-counter-label">laboratorních výsledků v datovém skladu NZIS</span>
+            <span class="av-counter-foot">z 282 laboratoří, roky 2020–2025</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="4.92" data-decimals="2">4,92</span>
+            <span class="av-counter-label">průměrný celkový cholesterol dospělých 2025 (mmol/l)</span>
+            <span class="av-counter-foot">poprvé pod cílovou hodnotou 5,0; z 5,08 v roce 2020</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="33" data-suffix=" %">33 %</span>
+            <span class="av-counter-label">pacientů dostává léčbu, kterou potřebují</span>
+            <span class="av-counter-foot">zhruba jen třetina indikovaných</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="25" data-suffix=" %">25 %</span>
+            <span class="av-counter-label">o tolik klesne riziko úmrtí diabetika při kontrole cholesterolu</span>
+            <span class="av-counter-foot">a asi o 30 % riziko kardiovaskulární příhody</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> objem dat, průměrné hodnoty a krajský rozpad — ÚZIS ČR, NZIS Open, datová sada OIS 15-01 „Laboratorní data" (vlastní populačně vážený výpočet HSPA Monitoru přes ORP); podíl léčených a efekt léčby — Česká kardiologická společnost a Česká společnost pro aterosklerózu (podnětový článek Seznam Zpráv, červen 2026).</p>
+      </figure>
+
+      <h3>Co je vlastně nového: laboratoře jako otevřená data</h3>
+
+      <p>
+        Cholesterol umíme měřit desítky let. Novinka není v měření, ale v <strong>propojení a zpřístupnění</strong>. ÚZIS naplnil datový sklad Národního zdravotnického informačního systému více než <strong>405 miliony laboratorních výsledků z 282 laboratoří</strong> za roky 2020–2025 a poprvé je zveřejnil jako otevřená data agregovaná až na úroveň obcí s rozšířenou působností (ORP). Výsledkem je datová sada, ze které jde přečíst, kde mají lidé statisticky nejvyšší a nejnižší cholesterol — něco, co dosud existovalo jen jako hrubý celostátní průměr.
+      </p>
+
+      <p>
+        Podle těchto dat mají nejvyšší průměrný celkový cholesterol lidé v převážně venkovských a podhorských ORP — vede <strong>Jilemnice (5,20 mmol/l), Mohelnice, Prachatice, Semily, Vimperk a Jeseník</strong> (všechny kolem 5,16–5,17). Nejnižší průměr naopak najdeme v části severní a východní Moravy: <strong>Broumov (4,67), Krnov, Hlučín, Hranice a Vizovice</strong>. Ředitel ÚZIS Ladislav Dušek i kardiologové zdůrazňují, že jde o první nástroj, který dovede hladiny cholesterolu ukázat na tak jemné úrovni — a dělat cílenou prevenci tam, kde je jí potřeba.
+      </p>
+
+      <h3>Mapa průměru: plochá a překvapivá</h3>
+
+      <p>
+        Kdo čeká, že mapa cholesterolu bude kopírovat známý obraz „nemocného severozápadu a východu", bude zklamán — a to je ta nejzajímavější věc na celých datech. Když jednotlivé obce shrneme do krajů, rozdíly jsou <strong>malé</strong> (od 4,81 do 4,98 mmol/l) a <strong>nekopírují</strong> západo-východní gradient kardiovaskulární úmrtnosti. Kraje s tradičně nejvyšší kardiovaskulární mortalitou — Karlovarský, Ústecký, Moravskoslezský — mají průměrný cholesterol spíš <strong>podprůměrný</strong>. Nejvyšší je naopak v Libereckém, Jihočeském a v Praze.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCholKrajeH">
+        <figcaption class="av-figure-h" id="avCholKrajeH">Průměrný celkový cholesterol dospělých podle krajů, 2025 (mmol/l)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kraj</th>
+                <th scope="col" class="av-num">Průměr 2025 (mmol/l)</th>
+                <th scope="col">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Liberecký</th><td class="av-num">4,98</td><td>nejvyšší průměr</td></tr>
+              <tr><th scope="row">Jihočeský</th><td class="av-num">4,97</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Praha</th><td class="av-num">4,96</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Jihomoravský</th><td class="av-num">4,96</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Karlovarský</th><td class="av-num">4,94</td><td>vysoká KV mortalita, ale podprůměrný cholesterol</td></tr>
+              <tr><th scope="row">Středočeský</th><td class="av-num">4,93</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Olomoucký</th><td class="av-num">4,93</td><td>&nbsp;</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Celá ČR</th><td class="av-num">4,92</td><td>celostátní průměr 2025 (pod cílovou hodnotou 5,0)</td></tr>
+              <tr><th scope="row">Plzeňský</th><td class="av-num">4,92</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Pardubický</th><td class="av-num">4,92</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Ústecký</th><td class="av-num">4,90</td><td>vysoká KV mortalita, ale podprůměrný cholesterol</td></tr>
+              <tr><th scope="row">Královéhradecký</th><td class="av-num">4,90</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Moravskoslezský</th><td class="av-num">4,87</td><td>vysoká KV mortalita, přesto nízký průměr</td></tr>
+              <tr><th scope="row">Zlínský</th><td class="av-num">4,85</td><td>&nbsp;</td></tr>
+              <tr><th scope="row">Vysočina</th><td class="av-num">4,81</td><td>nejnižší průměr</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR, NZIS Open (OIS 15-01), vlastní populačně vážený výpočet HSPA Monitoru přes ORP. Interaktivní <strong>mapu krajů</strong> najdete u <a href="indicator.html?id=cholesterol_prumer_dospeli">indikátoru Průměrný cholesterol</a>. Pozn.: ÚZIS oficiální krajský průměr v této sadě sám nepublikuje.</p>
+      </figure>
+
+      <p>
+        Jak si tenhle paradox vysvětlit? Nejde o to, že by na Ostravsku nebo v Karlových Varech byli lidé zdravější. Pravděpodobnější vysvětlení je, že v regionech s vysokým kardiovaskulárním rizikem se rizikoví pacienti <strong>častěji testují a častěji léčí</strong> — a léčba jejich naměřený cholesterol stlačuje dolů. Nasvědčuje tomu i LDL-cholesterol (ten klinicky nejdůležitější): nejnižší průměrný LDL má právě Karlovarský (2,88) a Moravskoslezský kraj (2,93). Průměr na mapě tedy <strong>není mapou rizika</strong> — je spíš směsí toho, kolik lidí je nemocných a kolik z nich už bere léky.
+      </p>
+
+      <p>
+        Průměrný cholesterol je navíc jen hrubý ukazatel. Klinicky rozhodující je <strong>LDL-cholesterol</strong> a celkové kardiovaskulární riziko pacienta — a právě proto se cílové hodnoty liší člověk od člověka. Zdravému stačí LDL pod 3,0 mmol/l, ale diabetik nebo člověk po infarktu potřebuje jít mnohem níž.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCholTableH">
+        <figcaption class="av-figure-h" id="avCholTableH">Cílové hodnoty LDL-cholesterolu podle rizika pacienta</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Riziková skupina</th>
+                <th scope="col" class="av-num">Cíl LDL (mmol/l)</th>
+                <th scope="col">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Zdravý, nízké riziko</th>
+                <td class="av-num">&lt; 3,0</td>
+                <td>běžná populace bez dalších rizik</td>
+              </tr>
+              <tr>
+                <th scope="row">Střední riziko</th>
+                <td class="av-num">&lt; 2,5</td>
+                <td>více rizikových faktorů dohromady</td>
+              </tr>
+              <tr>
+                <th scope="row">Diabetes, obezita</th>
+                <td class="av-num">&lt; 1,8</td>
+                <td>vysoké riziko, přísnější cíl</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Po infarktu</th>
+                <td class="av-num">&lt; 1,4</td>
+                <td>velmi vysoké riziko</td>
+              </tr>
+              <tr>
+                <th scope="row">Opakované příhody</th>
+                <td class="av-num">&lt; 1,0</td>
+                <td>extrémní riziko, nejagresivnější léčba</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Orientační cílové hodnoty podle doporučení odborných společností (Česká společnost pro aterosklerózu, Česká kardiologická společnost, Evropská kardiologická společnost). Pro celkový cholesterol platí obecný cíl pod 5 mmol/l, pro HDL („hodný") nad 1,2 mmol/l. Konkrétní cíl vždy stanoví lékař.</p>
+      </figure>
+
+      <h3>Dobrá zpráva v datech: cholesterol klesá napříč republikou</h3>
+
+      <p>
+        Nejsilnější poselství časové řady není mapa, ale trend. <strong>Průměrný celkový cholesterol dospělých klesl z 5,08 mmol/l (2020) na 4,92 mmol/l (2025)</strong> — a poprvé se dostal pod doporučenou cílovou hodnotu 5,0. Ještě výmluvnější je LDL: průměr spadl z 3,18 na <strong>2,98 mmol/l</strong>, tedy právě pod hranici 3,0, kterou má jako cíl zdravý dospělý. Podíl lidí s výrazně zvýšeným celkovým cholesterolem (nad 6,2 mmol/l) klesl z 13,6 % na 12,0 %.
+      </p>
+
+      <p>
+        Podle kardiologů to není náhoda ani zásluha samotné životosprávy. „Léčba opravdu je zodpovědná za to, že v naší populaci cholesterol klesá," shrnuje místopředseda České kardiologické společnosti Aleš Linhart. Rozšíření statinů a moderní hypolipidemické léčby za poslední dvě dekády patří k nejúčinnějším a nejlevnějším intervencím, jaké medicína má. Efekt je měřitelný: u diabetika snižuje dobrá kontrola cholesterolu <strong>riziko úmrtí zhruba o čtvrtinu</strong> a riziko kardiovaskulární příhody asi o třicet procent. Předseda České společnosti pro aterosklerózu Michal Vrablík i předseda kardiologické společnosti Petr Ošťádal proto zdůrazňují, že cholesterol není abstraktní laboratorní číslo — je to přímo přeložitelný počet zachráněných životů.
+      </p>
+
+      <h3>Kde je díra: léčbu dostává jen třetina</h3>
+
+      <p>
+        A tady se příběh láme. Přestože léčba funguje a je dostupná, dostává ji podle odborníků <strong>jen zhruba třetina pacientů, kteří by ji potřebovat měli.</strong> Zbytek buď o svém riziku neví, nebo se k léčbě nikdy nedostane. Problém začíná už u záchytu: na preventivní prohlídky chodí jen <strong>šest z deseti dospělých</strong>, zatímco u dětí je účast 98 %. Zlom nastává na prahu dospělosti — mezi osmnáctým a dvacátým rokem, kdy člověk přechází od dětského lékaře k praktikovi, ze systému <strong>vypadne asi 40 % lidí</strong> a řadu let se pak neukáže nikde.
+      </p>
+
+      <p>
+        Cholesterol přitom nebolí. Člověk s hodnotou 6,8 jako paní Jarmila se cítí stejně jako člověk s 4,5 — až do dne, kdy přijde infarkt. Právě proto je záchyt tak zásadní: bez laboratorního testu a bez lékaře, který výsledek přeloží do rizika a léčby, zůstává vysoký cholesterol neviditelný. A právě proto je mapa průměru zrádná: v regionech, kde se hodně testuje a léčí, vypadá číslo lépe než ve zdánlivě klidnějších oblastech, kde riziko tiše roste bez povšimnutí.
+      </p>
+
+      <h3>Politická páka: záchyt a léčba, ne kázání o zelenině</h3>
+
+      <p>
+        Z dat plyne jasné zadání pro zdravotní politiku, a míří jinam, než kam obvykle míří veřejná debata o cholesterolu. Klíč není v dalších osvětových kampaních o zdravé stravě — průměr díky nim i léčbě už klesá. Klíč je <strong>zavřít nůžky mezi tím, kdo léčbu potřebuje, a tím, kdo ji dostává.</strong> To znamená tři konkrétní páky.
+      </p>
+
+      <p>
+        <strong>Za prvé, nevypustit mladé dospělé ze systému.</strong> Přechod od pediatra k praktikovi kolem dvacátého roku je největší dírou v záchytu. Automatické pozvání k registraci u praktika a k první „vstupní" prohlídce by tu díru výrazně zmenšilo. <strong>Za druhé, číst data správně.</strong> Nízký průměr v rizikovém regionu není důvod k oslavě — může znamenat, že se tam intenzivně léčí, ale i tak zbývá mnoho nezachycených. Cílený pohled patří na LDL a na podíl neléčených, ne na hrubý průměr. <strong>Za třetí, hladké předepisování moderní léčby.</strong> Pokud pacient rizikem patří k těm, kdo potřebují LDL pod 1,4 mmol/l, nesmí mu v cestě stát administrativní bariéry v úhradě účinnějších léků.
+      </p>
+
+      <p>
+        Otevřená data ÚZIS udělala z cholesterolu poprvé viditelný, místně ukotvený problém — a tím i řešitelný. Otázka pro příští roky nezní, jestli Češi jedí příliš tučně. Zní, jestli dokážeme přečíst mapu správně a najít a léčit ty dvě třetiny lidí, kterým dnes rizikové číslo v krvi tiše roste, aniž by o něm kdokoli věděl.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s tématem souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=cholesterol_prumer_dospeli"><strong>Průměrný celkový cholesterol dospělých</strong></a> — nový indikátor s krajskou mapou z otevřených dat NZIS: 4,92 mmol/l (2025), poprvé pod cílovou hodnotou 5,0, průměr klesá díky léčbě</li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Kardiovaskulární mortalita</strong></a> — hlavní dopad neléčeného cholesterolu; nejčastější příčina úmrtí v ČR</li>
+        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrola hypertenze</strong></a> — druhý pilíř kardiovaskulární prevence u praktika</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu</strong></a> — riziková skupina s nejpřísnějším cílem LDL</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k datům:</strong> Hodnoty pocházejí z otevřené datové sady ÚZIS <strong>NZIS Open, OIS 15-01 „Laboratorní data"</strong> (ISSN 2695-0340). Národní i krajský průměr je vlastní populačně vážený výpočet HSPA Monitoru z ORP-úrovně (skript <code>scripts/extract-cholesterol-nzis.js</code>) — ÚZIS oficiální krajský průměr v této sadě sám nepublikuje, proto jsou možné drobné metodické rozdíly. Údaje o podílu léčených a o preventivních prohlídkách pocházejí z vyjádření odborných společností a čekají na redakční doplnění primárního odkazu.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — otevřená data a statistika</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — NZIS Open, „Prošetřenost a hodnoty laboratorních parametrů v NZIS" (OIS 15-01).</strong> Otevřená datová sada s hodnotami celkového, LDL a HDL cholesterolu (a dalších parametrů) po ORP, věku, pohlaví a komorbiditách, roky 2020–2025. <a href="https://www.nzip.cz/data/2780-laboratorni-data-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ÚZIS ČR — Národní zdravotnický informační systém (NZIS).</strong> Datový sklad laboratorních výsledků (přes 405 mil. výsledků z 282 laboratoří). <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Odborný kontext a doporučení</h5>
+        <ul class="article-sources-list">
+          <li><strong>Česká společnost pro aterosklerózu.</strong> Doporučené postupy pro dyslipidémie a cílové hodnoty LDL. <a href="https://www.athero.cz/" target="_blank" rel="noopener">athero.cz ↗</a></li>
+          <li><strong>Česká kardiologická společnost.</strong> Odborná stanoviska ke kardiovaskulární prevenci a léčbě. <a href="https://www.kardio-cz.cz/" target="_blank" rel="noopener">kardio-cz.cz ↗</a></li>
+          <li><strong>Seznam Zprávy — „Život v Česku: přelomová data ukazují, jak jsou na tom lidé ve vaší obci s cholesterolem" (červen 2026).</strong> Podnětový článek, který na data NZIS upozornil (vyjádření M. Vrablíka, A. Linharta, P. Ošťádala, L. Duška). <a href="https://www.seznamzpravy.cz/" target="_blank" rel="noopener">seznamzpravy.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Tento text je osvětový a popisuje kardiovaskulární riziko na úrovni systému, nikoli individuální zdravotní radu. O vyšetření, cílové hodnotě a případné léčbě cholesterolu vždy rozhoduje ošetřující lékař na základě celkového rizika pacienta.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
