@@ -17,13 +17,33 @@
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/**
+ * Vytáhne surový Brevo klíč (xkeysib-…) z hodnoty env proměnné.
+ * MCP konektory a integrace klíč občas ukládají zabalený — jako JSON
+ * {"api_key":"xkeysib-…"} nebo tentýž JSON v base64. Bereme všechny tři
+ * formáty, aby špatně vložená hodnota nepůsobila tiché 401 od Breva.
+ */
+function normalizeApiKey(raw) {
+  let v = String(raw || '').trim();
+  for (let i = 0; i < 2 && v && !v.startsWith('xkeysib-'); i++) {
+    if (v.startsWith('{')) {
+      try { v = String(JSON.parse(v).api_key || '').trim(); continue; } catch { return ''; }
+    }
+    if (/^[A-Za-z0-9+/=]+$/.test(v)) {
+      try { v = Buffer.from(v, 'base64').toString('utf8').trim(); continue; } catch { return ''; }
+    }
+    break;
+  }
+  return v;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, message: 'Method Not Allowed' });
   }
 
-  const apiKey = process.env.BREVO_API_KEY;
+  const apiKey = normalizeApiKey(process.env.BREVO_API_KEY);
   if (!apiKey) {
     return res.status(503).json({
       ok: false,
