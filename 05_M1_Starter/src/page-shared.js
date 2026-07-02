@@ -3,6 +3,7 @@
 import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
+import { submitNewsletterSignup } from './newsletter-signup.js';
 
 /** Kanonická doména webu (sjednoceno s handle sociálních sítí). */
 export const SITE_URL = 'https://skorezdravotnictvi.cz';
@@ -220,34 +221,24 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </p>
 
         <!--
-          MailerLite — account 2206303, form 186842930008294691.
-          Vlastní HTML formulář POSTuje přímo na MailerLite jsonp endpoint
-          (target="_blank" → MailerLite po submitu otevře vlastní confirm
-          stránku v novém okně). Žádný iframe, žádný external script —
-          obejdeme tím X-Frame-Options/CSP omezení i nutnost Universal.js.
-
-          Pokud tento POST nebude fungovat (form v MailerLite UI je třeba
-          nakonfigurovaný jako „Embedded" typ s povoleným externím POST),
-          stačí nahradit obsah <div id="newsletterMailerLite"> za HTML
-          z MailerLite Forms → daný formulář → Embed → Use HTML.
+          Brevo — kontakt zakládá vlastní serverless endpoint /api/subscribe
+          (api/subscribe.js), který volá Brevo API s privátním klíčem
+          (BREVO_API_KEY v env Vercelu). Formulář POSTuje fetchem, výsledek
+          se ukazuje inline ve status řádku — žádné nové okno, žádný
+          externí script ani iframe.
         -->
-        <div class="newsletter-form-slot" id="newsletterMailerLite">
+        <div class="newsletter-form-slot" id="newsletterSignup">
           <form
             class="newsletter-form"
-            action="https://assets.mailerlite.com/jsonp/2206303/forms/186842930008294691/subscribe"
-            method="post"
-            target="_blank"
             id="newsletterForm">
             <label for="nlEmail" class="sr-only">E-mail</label>
             <input
               type="email"
               id="nlEmail"
-              name="fields[email]"
+              name="email"
               placeholder="vase@email.cz"
               autocomplete="email"
               required>
-            <input type="hidden" name="ml-submit" value="1">
-            <input type="hidden" name="anticsrf" value="true">
             <button type="submit" class="newsletter-submit">Přihlásit se</button>
           </form>
           <label class="newsletter-consent">
@@ -258,7 +249,7 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
         </div>
 
         <p class="newsletter-foot">
-          Provozováno přes MailerLite. Po odeslání se v novém okně otevře potvrzení od MailerLite. Více v <a href="o-projektu.html">O projektu</a>.
+          Rozesílku zajišťuje Brevo; e-mail použijeme jen pro newsletter. Více v <a href="o-projektu.html">O projektu</a>.
         </p>
       </div>
     </aside>
@@ -302,9 +293,9 @@ export function renderFooter(el = document.getElementById('siteFooter')) {
 }
 
 /**
- * Validuje GDPR consent před tím, než formulář odešle POST na MailerLite.
+ * Přihlášení k newsletteru: consent gate + fetch na /api/subscribe (Brevo).
  * Native HTML required atribut pokryje validaci e-mailu; my doplňujeme
- * jen consent gating (browser by ho zablokoval taky, ale chceme přátelskou hlášku).
+ * consent gating s přátelskou hláškou a inline výsledek bez nového okna.
  */
 function wireNewsletterForm() {
   if (typeof window === 'undefined') return;
@@ -313,9 +304,10 @@ function wireNewsletterForm() {
   form.dataset.wired = '1';
   const status = document.getElementById('newsletterStatus');
   const consent = document.getElementById('nlConsent');
-  form.addEventListener('submit', e => {
+  const submitBtn = form.querySelector('.newsletter-submit');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
     if (consent && !consent.checked) {
-      e.preventDefault();
       if (status) {
         status.textContent = 'Pro přihlášení potřebujeme váš souhlas se zpracováním e-mailu.';
         status.dataset.tone = 'error';
@@ -323,9 +315,22 @@ function wireNewsletterForm() {
       consent.focus();
       return;
     }
+    const email = form.querySelector('#nlEmail')?.value?.trim();
+    if (!email) return;
     if (status) {
-      status.textContent = 'Otevíráme potvrzení od MailerLite v novém okně. Zkontrolujte prosím schránku — pošleme vám potvrzovací e-mail (double opt-in).';
+      status.textContent = 'Přihlašujeme…';
       status.dataset.tone = 'info';
+    }
+    if (submitBtn) submitBtn.disabled = true;
+    const result = await submitNewsletterSignup(email, 'footer');
+    if (status) {
+      status.textContent = result.message;
+      status.dataset.tone = result.ok ? 'info' : 'error';
+    }
+    if (result.ok) {
+      form.reset();
+    } else if (submitBtn) {
+      submitBtn.disabled = false;
     }
   });
 }

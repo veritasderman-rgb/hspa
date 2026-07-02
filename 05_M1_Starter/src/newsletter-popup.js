@@ -1,14 +1,15 @@
 // Newsletter popup — nenápadná rohová karta vpravo dole, která se vysune
-// po doscrollování 55 % stránky. Reuse MailerLite endpointu z footeru.
+// po doscrollování 55 % stránky. Reuse Brevo endpointu z footeru
+// (/api/subscribe, viz newsletter-signup.js).
 // Návrh viz BACKLOG B-39: scroll trigger, rohová karta, všechny stránky,
 // návrat po 30 dnech, jedno zobrazení na návštěvu.
+
+import { submitNewsletterSignup } from './newsletter-signup.js';
 
 const STORAGE_KEY = 'zdrave-cesko/nl-popup';
 const SESSION_KEY = 'zdrave-cesko/nl-popup-session';
 const DISMISS_DAYS = 30;
 const SCROLL_TRIGGER = 0.55;
-const MAILERLITE_ACTION =
-  'https://assets.mailerlite.com/jsonp/2206303/forms/186842930008294691/subscribe';
 
 function readState() {
   try {
@@ -119,11 +120,9 @@ function showPopup() {
       <div class="ed-kicker">Newsletter</div>
       <p class="nl-popup-h">Co se v dashboardu hýbe — bez spamu</p>
       <p class="nl-popup-lead">Krátký přehled novinek: které články vyšly a kde se data změnila. Maximálně 1× měsíčně, bez sledovacích pixelů.</p>
-      <form class="nl-popup-form" action="${MAILERLITE_ACTION}" method="post" target="_blank">
+      <form class="nl-popup-form">
         <label for="nlPopupEmail" class="sr-only">E-mail</label>
-        <input type="email" id="nlPopupEmail" name="fields[email]" placeholder="vase@email.cz" autocomplete="email" required>
-        <input type="hidden" name="ml-submit" value="1">
-        <input type="hidden" name="anticsrf" value="true">
+        <input type="email" id="nlPopupEmail" name="email" placeholder="vase@email.cz" autocomplete="email" required>
         <button type="submit" class="nl-popup-submit">Přihlásit se</button>
       </form>
       <label class="nl-popup-consent">
@@ -175,19 +174,29 @@ function showPopup() {
   const form = wrap.querySelector('.nl-popup-form');
   const consent = wrap.querySelector('#nlPopupConsent');
   const status = wrap.querySelector('.nl-popup-status');
-  form.addEventListener('submit', (e) => {
+  const submitBtn = form.querySelector('.nl-popup-submit');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
     if (!consent.checked) {
-      e.preventDefault();
       status.textContent = 'Pro přihlášení potřebujeme váš souhlas se zpracováním e-mailu.';
       status.dataset.tone = 'error';
       consent.focus();
       return;
     }
-    // Souhlas OK — POST projde do nového okna (MailerLite double opt-in).
-    status.textContent = 'Hotovo — v novém okně potvrďte přihlášení. Děkujeme!';
+    const email = wrap.querySelector('#nlPopupEmail')?.value?.trim();
+    if (!email) return;
+    status.textContent = 'Přihlašujeme…';
     status.dataset.tone = 'info';
-    form.querySelector('.nl-popup-submit').disabled = true;
-    writeState({ subscribed: true });
-    setTimeout(() => close(true), 3500);
+    submitBtn.disabled = true;
+    const result = await submitNewsletterSignup(email, 'popup');
+    status.textContent = result.message;
+    status.dataset.tone = result.ok ? 'info' : 'error';
+    if (result.ok) {
+      // subscribed → popup se už nikdy neukáže; karta se po chvíli uklidí.
+      writeState({ subscribed: true });
+      setTimeout(() => close(true), 3000);
+    } else {
+      submitBtn.disabled = false; // chyba → nechat uživatele zkusit znovu
+    }
   });
 }
