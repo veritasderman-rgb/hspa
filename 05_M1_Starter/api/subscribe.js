@@ -29,8 +29,11 @@ function normalizeApiKey(raw) {
     if (v.startsWith('{')) {
       try { v = String(JSON.parse(v).api_key || '').trim(); continue; } catch { return ''; }
     }
-    if (/^[A-Za-z0-9+/=]+$/.test(v)) {
-      try { v = Buffer.from(v, 'base64').toString('utf8').trim(); continue; } catch { return ''; }
+    // GNU base64 láme výstup po 76 znacích — vložené newliny/mezery
+    // odstraníme dřív, než hodnotu prohlásíme za ne-base64.
+    const compact = v.replace(/\s+/g, '');
+    if (/^[A-Za-z0-9+/=]+$/.test(compact)) {
+      try { v = Buffer.from(compact, 'base64').toString('utf8').trim(); continue; } catch { return ''; }
     }
     break;
   }
