@@ -1,0 +1,56 @@
+{
+  "id": "plodnost_mladistvych_15_19",
+  "name": "Plodnost mladistvých (15–19 let)",
+  "area": "Výsledky",
+  "domain": "Reprodukční zdraví",
+  "subdomain": "Plodnost mladistvých",
+  "definition": "Míra plodnosti žen ve věku 15–19 let: počet živě narozených dětí matkám v tomto věku připadající na 1000 žen stejného věku za rok. Ukazatel reprodukčního zdraví a sociální spravedlnosti (SDG 3.7.2 „adolescent birth rate\"). Časné mateřství je silně vázáno na socioekonomické znevýhodnění a je spojeno s vyšším rizikem předčasného porodu, nízké porodní hmotnosti i horších vzdělávacích a ekonomických vyhlídek matky.",
+  "unit": "na 1000 žen 15–19",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "csu_demografie",
+      "dataset": "Pohyb obyvatelstva ČR / Narození — míry plodnosti podle věku matky",
+      "url": "https://csu.gov.cz/narozeni",
+      "dimensions": ["věk matky (5leté skupiny)", "kraj", "okres", "rok"],
+      "note": "ČSÚ ČR — demografická statistika (Pohyb obyvatelstva ČR, Demografická ročenka, Veřejná databáze VDB). Míra plodnosti žen 15–19 let se počítá jako počet živě narozených matkám 15–19 let dělený středním stavem žen 15–19 let, ×1000. Hodnota je harmonizovaná s Eurostat demo_frate (age Y15-19) — ČSÚ je národním zdrojem těchto dat pro Eurostat, národní čísla se proto shodují."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "dataset": "demo_frate — Fertility rates by age (age Y15-19, agedef COMPLET), geo CZ",
+      "url": "https://ec.europa.eu/eurostat/databrowser/product/view/demo_frate"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "demo_frate",
+    "dataset": "Fertility rates by age — age Y15-19, geo EU27_2020, rok 2024. Míra plodnosti žen 15–19 let v EU27 = 6,2 na 1000. Srovnatelní sousedé (2024): Německo 5,5, Rakousko 3,9, Polsko 4,8, Slovensko 24,0. Kontrast Slovensko/Rumunsko (24) vs. Rakousko (3,9) ukazuje, že jde primárně o ukazatel sociální spravedlnosti, ne biologie.",
+    "value": 6.2,
+    "url": "https://ec.europa.eu/eurostat/databrowser/product/view/demo_frate"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ ČR",
+    "Eurostat"
+  ],
+  "method_notes": "Zdroj ČSÚ (Pohyb obyvatelstva ČR), harmonizováno s Eurostat demo_frate. Národní míra plodnosti žen 15–19 let klesla z 10,8 na 1000 (2018) na 5,6 (2024) — během šesti let se téměř zpolovila a poprvé se dostala pod průměr EU27 (6,2). Pokles kopíruje širší trend odkládání mateřství i lepší dostupnost antikoncepce. Národní průměr ale zakrývá výrazné regionální a sociální rozdíly: podle regionální analýzy ČSÚ (data 2017) měl Ústecký kraj 24,7 a Karlovarský 18,5 dítěte na 1000 žen do 19 let, zatímco Praha jen 6,1 — čtyřnásobný rozdíl uvnitř jedné země. Nejvyšší plodnost mladistvých se dlouhodobě koncentruje v regionech se sociálně vyloučenými lokalitami.",
+  "limitations": "Ukazatel měří živě narozené, nikoli všechna těhotenství mladistvých (nezahrnuje interrupce ani samovolné potraty), a proto podhodnocuje celkovou míru časných těhotenství. Národní průměr silně stírá vnitrostátní nerovnosti — pro politiku spravedlnosti je relevantní až krajský/okresní rozpad. Aktuální krajské míry jsou nižší než hodnoty z roku 2017 uváděné výše (celostátní pokles), ale relativní pořadí krajů (Ústecko a Karlovarsko nahoře, Praha dole) je dlouhodobě stabilní.",
+  "determinants": [
+    "socioekonomický status a chudoba rodiny",
+    "nižší dokončené vzdělání matky",
+    "dostupnost a užívání moderní antikoncepce",
+    "kvalita a rozsah sexuální výchovy ve školách",
+    "koncentrace sociálně vyloučených lokalit v regionu",
+    "regionální dostupnost gynekologické a poradenské péče"
+  ],
+  "importance": "Časné mateřství je jedním z nejcitlivějších průřezových ukazatelů sociální spravedlnosti ve zdravotnictví: propojuje reprodukční zdraví, přístup k prevenci, vzdělávací systém a chudobu. Zatímco Česko v národním průměru dohnalo a předběhlo EU, čtyřnásobné regionální rozdíly ukazují, kde systém prevence a sociální podpory selhává. Sousední srovnání (Slovensko 24 vs. Rakousko 3,9 na 1000) dokládá, že výsledek je politicky ovlivnitelný, ne dán osudem.",
+  "patient_story": "Nikole je sedmnáct a bydlí na sídlišti v Chomutově, v kraji, který v žebříčku časného mateřství dlouhodobě vede. Na gynekologii ji doprovodila kamarádka; nejbližší volný termín u lékaře, který bere nové pacientky, byl za tři týdny a dvě autobusové zastávky daleko. O antikoncepci s ní ve škole nikdo doopravdy nemluvil — hodina sexuální výchovy se scvrkla na jedno video a rozpačité ticho. Nikola není číslo, ale zapadá do jednoho z nejsilnějších vzorců, které česká data ukazují: kde je chudoba a málo prevence, tam se rodí dětem děti.\n\nV národním souhrnu přitom Česko vypadá jako premiant. Míra plodnosti mladistvých klesla z 10,8 dítěte na 1000 dívek 15–19 let v roce 2018 na 5,6 v roce 2024 — za šest let skoro na polovinu. Poprvé jsme se dostali pod průměr Evropské unie (6,2) a přiblížili se Německu (5,5). Pod tímto uklidňujícím průměrem se ale skrývá rozdíl, který průměr schová: podle regionální analýzy ČSÚ připadalo v Ústeckém kraji na 1000 dívek do 19 let 24,7 narozených dětí a v Karlovarském 18,5, zatímco v Praze jen 6,1. Čtyřnásobek uvnitř jedné malé země.\n\nProč? Časné mateřství není náhoda ani biologie — je to mapa sociálního znevýhodnění. Nejvyšší hodnoty se rok co rok objevují v regionech s koncentrací sociálně vyloučených lokalit, s nižším vzděláním, vyšší nezaměstnaností a horší dostupností antikoncepce i gynekologické péče. Že jde o věc politiky a ne osudu, ukazuje jediný pohled za hranice: sousední Slovensko a Rumunsko mají míru kolem 24 na 1000, kdežto Rakousko jen 3,9. Stejná biologie, šestinásobně jiný výsledek.\n\nPáku má stát v rukou hned na několika místech: kvalitní a povinná sexuální výchova ve školách, bezplatná nebo dotovaná moderní antikoncepce pro nízkopříjmové skupiny (což řada zemí EU zavedla), terénní sociální práce ve vyloučených lokalitách a dostupnost gynekologa i v okresech, odkud dnes mladá žena jezdí desítky kilometrů. Národní číslo 5,6 je dobrá zpráva. Skutečným testem spravedlnosti ale je, jestli klesne i tam, kde je pořád čtyřnásobné — v Chomutově, ne jen v Praze.",
+  "framework": "monitoring",
+  "dimension": "spravedlnost",
+  "verification_status": "verified",
+  "verified_at": "2026-07-02"
+}
