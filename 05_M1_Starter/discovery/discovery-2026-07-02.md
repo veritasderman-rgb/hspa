@@ -18,7 +18,8 @@ kontinuita zachována.
 | # | Zdroj | URL | Stav | Nález |
 |---|---|---|---|---|
 | 1 | **ÚZIS — aktuality** | uzis.cz/index.php?pg=aktuality | ✅ 200 | Nejnovější položka stále **26. 6.** „Tuberkulóza v ČR v roce 2025". **Žádná nová položka v červenci.** Žádná nová vlna NRPZS/NOR/NRH/NRZP. |
-| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | Nejnovější TZ z přelomu měsíce (elektronizace 24. 6., dohodovací řízení 18. 6., +24 mld 14. 6.). **Žádná nová TZ v červenci** s tvrdým triggerem pro nový článek. |
+| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | TZ z přelomu měsíce (elektronizace 24. 6., dohodovací řízení 18. 6., +24 mld 14. 6.). **KOREKCE (Codex P2, re-scan):** k **1. 7. 2026** nabyl účinnosti **přesun agendy protidrogové a duševně-zdravotní politiky z Úřadu vlády na MZ ČR** (nová sekce duševního zdraví a závislostí; koordinátorka D. Protopopová). Ověřeno (efekt. datum + řada zdrojů). → relevantní k **publikovanému** `clanek-protidrogova-dusevni-politika-mz-2026.html`. |
+| 2b | **MZ ČR — Věstník** | mzd.gov.cz/vestnik/vestnik-8-2026/ | ✅ 200 | **KOREKCE (Codex P2, minul první sken): Věstník č. 8/2026 publikován 29. 6. 2026.** Obsah (ověřeno fetch): (1) **Standard akutní lůžkové dětské psychiatrické péče**; (2) **Centra vysoce specializované onkourologické péče 2026–2030 — výzva**; (3) metodický pokyn (nemoci z povolání / Kooperativa, koordinace EU soc. zabezpečení); (4) metodický pokyn k vyšetření sluchu u dospělých nad 50 let. Nové primární opatření MZ. |
 | 3 | **ČSÚ — aktuality** | csu.gov.cz/aktuality | ✅ 200 | Beze změny s dopadem na zdravotnictví (zdravotnické účty 2024 = 64 tis. Kč/os, Demografie 2/2026, Pohyb obyvatelstva 1Q — vše zpracováno). Žádná nová mortalitní/EHIS vlna. |
 | 4 | **SZÚ — aktuality** | szu.gov.cz/aktuality/ | ✅ 200 | **NOVÉ: varování před šířením svrabu (scabies)** — 30. 6. zprávy o úmrtích na komplikace (sepse/orgánové selhání), 1. 7. epidemiolog varuje před rychlým šířením. Dále klíšťata Hyalomma (29. 6.), vedra, letní GIT — sezónní/surveillance obsah. |
 | 5 | **OECD / Eurostat / WHO** | oecd.org, ec.europa.eu/eurostat, who.int | ✅ search | HAG 2025 + Country Health Profile Czechia 2025 (life exp. 80,3) stále nejnovější, v korpusu. Žádná nová `hlth_*` vlna s ČR-implikací. |
@@ -31,8 +32,14 @@ kontinuita zachována.
 
 ## Nové legislativní normy / sněmovní tisky / strategie
 
-- Bez strojově ověřeného nového normativního aktu v gesci MZ ČR k 2. 7. 2026.
-  Úhradová vyhláška 2027 = avizovaný termín „do konce října", zatím nevydána.
+- **KOREKCE po Codex P2 review (re-scan MZ):** první sken tuto sekci uzavřel jako
+  „bez nového normativního aktu" — to bylo **nepřesné**. Doplněno a ověřeno:
+  - **Věstník MZ ČR č. 8/2026** (publ. **29. 6. 2026**, mzd.gov.cz/vestnik/vestnik-8-2026/)
+    — nová primární opatření MZ, mj. **Standard akutní lůžkové dětské psychiatrické
+    péče** a **výzva Centra vysoce specializované onkourologické péče 2026–2030**.
+  - **Přesun agendy protidrogové + duševně-zdravotní politiky na MZ ČR** účinný
+    **1. 7. 2026** (kompetenční změna; nová sekce duševního zdraví a závislostí).
+- Úhradová vyhláška 2027 = avizovaný termín „do konce října", zatím nevydána.
 
 ## Aktuální dění / kauzy s implikací pro zdravotnictví
 
@@ -44,6 +51,16 @@ kontinuita zachována.
   úmrtním číslem, které neumím doložit z primárního zdroje, by porušilo železné
   pravidlo. → **WATCH pro příští běhy**: pokud SZÚ/ISIN vydá surveillance report se
   strojově ověřitelnou incidencí svrabu, přehodnotit na ARTICLE-WRITE.
+- **KOREKCE (Codex P2): přesun protidrogové/duševně-zdravotní agendy na MZ ČR
+  (účinnost 1. 7. 2026).** Portál to má **publikovaným** článkem
+  `clanek-protidrogova-dusevni-politika-mz-2026.html` (date 2026-05-20, review-pending),
+  který přesun popisoval jako **avizovaný/plánovaný** převážně z **primárně-sekundární**
+  atribuce. Nyní je přesun **účinný fakt** → **WARM revize**: upgradovat atribuci
+  data účinnosti na primární (kompetenční akt / usnesení vlády) a doplnit dopad
+  (odchod části expertů k 30. 6.). Revizi provede některý z příštích běhů (dnes
+  nezasahuji do publikovaného článku bez ověření primárního kompetenčního aktu).
+- **Věstník 8/2026 — Standard akutní lůžkové dětské psychiatrické péče** → WATCH pro
+  `clanek-reforma-psychiatrie-13-let.html` (možný datový/kontextový doplněk).
 - Ostatní čerstvé triggery (TBC 2025, PPN 2025, dohodovací řízení 2027, paliativní
   strategie 2035, dostupnost léčiv od praktiků) jsou **již pokryté** korpusem —
   draftem ve frontě nebo záznamem ve `strategies.json`.
@@ -91,7 +108,12 @@ v souladu se železným pravidlem. Žádná per-segmentová % růstu z paměti.
 - HOT (nový indikátor): žádné
 - HOT (aktuální dění → nový článek): **žádné doložitelné** — svrab je WATCH
   (chybí primárně strojově ověřitelná mortalita/incidence), fronta saturovaná
-- WARM (revize publikovaného článku): žádná zastaralá vlna nenalezena
+- **WARM (revize publikovaného článku) — DOPLNĚNO po Codex P2:**
+  `clanek-protidrogova-dusevni-politika-mz-2026.html` — přesun agendy na MZ ČR je od
+  **1. 7. 2026 účinný fakt** (dosud avizovaný); doporučena revize atribuce na primární
+  + doplnění dopadu. Provede příští běh po ověření primárního kompetenčního aktu.
+  WATCH: Věstník 8/2026 „Standard akutní lůžkové dětské psychiatrické péče" k
+  `clanek-reforma-psychiatrie-13-let.html`.
 - **PRIORITA: ověřovací pas — proveden, viz tabulka. Klíč: dohodovaci-rizeni-2027
   publikuje DNES a je ✅ verbatim ověřen z primární TZ MZ ČR.**
 - COLD: fallback audit nejstaršího článku nebyl nutný — čas i hodnota lépe využity
