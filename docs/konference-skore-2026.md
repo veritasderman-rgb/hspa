@@ -235,7 +235,7 @@ Tři krátké, ostře zaměřené příběhy. Každý: 1 graf, 1 srovnání, 1 o
   Novináři odejdou s hotovým materiálem.
 - **Každý host odchází s číslem:** „skóre karta" — jeden indikátor ČR vs. OECD s QR na web.
 - **Embargo + livestream:** přenos + záznam talků, ať dosah není jen 150 lidí v sále.
-- **Po akci:** e-mailová sekvence (MailerLite) + sociální vlna (Buffer) navázaná na záznamy.
+- **Po akci:** e-mailová sekvence (Brevo) + sociální vlna (Buffer) navázaná na záznamy.
 - **Riziko hlídat:** aby web nevyzněl jako kritika konkrétní vlády/pojišťovny. Pojistka =
   OECD/belgický rámec + vyvážený panel.
 
@@ -249,5 +249,5 @@ Tři krátké, ostře zaměřené příběhy. Každý: 1 graf, 1 srovnání, 1 o
 - [ ] Připravit tiskový balíček a „skóre karty"
 - [ ] Nahrát záložní video demo cesty (§5.4 pojistka)
 - [ ] Landing sekce / stránka `konference.html` na webu + registrace
-- [ ] E-mailová pozvánka (MailerLite) + sociální oznamovací vlna (Buffer)
+- [ ] E-mailová pozvánka (Brevo) + sociální oznamovací vlna (Buffer)
 - [ ] Po akci: publikovat záznamy talků + follow-up sekvence

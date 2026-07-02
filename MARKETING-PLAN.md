@@ -30,7 +30,7 @@ Hodinový rozpočet týdne (2 h):
 |---|---|---|---|---|
 | **LinkedIn** | 🥇 #1 | 1 post/týden | Hloubkové analýzy, citace v debate | MZ ČR, OECD, NGO, novináři, lékaři, akademici |
 | **X / Twitter** | 🥈 #2 | 2–3/týden | Krátké hooks, datové grafy, novinařské pozornosti | Novináři, policy wonks, twitter_health komunita |
-| **Newsletter** | 🥉 #3 | 1× měsíčně | Sumarizace, retention | Existující subscribers (MailerLite) |
+| **Newsletter** | 🥉 #3 | 1× měsíčně | Sumarizace, retention | Existující subscribers (Brevo) |
 | **Facebook** | ad-hoc | 1× za 2–3 týdny | Lokální komunita Mariánské Lázně, laická veřejnost | Občané s Karlovarským kontextem |
 | **Outreach (e-mail/DM)** | strategický | 1× měsíčně blitz | Direct citace v médiích, partnerství | 10–15 specifických lidí |
 | **Wikipedia** | jednorázový | jen jednou | Trvalá citace + SEO boost | Hledající na Wikipedii |
@@ -150,7 +150,7 @@ Plný rozbor s grafy a daty: hspa-cesko.cz/clanek-deficit-pojisteni-2026
 
 ## C) Newsletter — měsíční retention
 
-**Proč:** MailerLite již nakonfigurován. Newsletter má **vyšší ROI než kterýkoli social** — direct line k subscriberovi.
+**Proč:** Brevo již nakonfigurováno. Newsletter má **vyšší ROI než kterýkoli social** — direct line k subscriberovi.
 
 **Měsíční formát (1× měsíčně, 2–3 odstavce):**
 
@@ -332,7 +332,7 @@ Co s tím můžeme dělat? Diskuse otevřená, fakta jsou tam.
 **Kde měřit:**
 - Vercel Analytics (návštěvy)
 - LinkedIn / X / FB native analytics
-- MailerLite native (open rate, click rate)
+- Brevo native (open rate, click rate)
 - Google Alerts „hspa-cesko.cz" (citace)
 - GitHub repo insights (stars, traffic, referrers)
 

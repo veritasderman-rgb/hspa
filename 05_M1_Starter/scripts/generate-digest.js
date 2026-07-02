@@ -1,6 +1,6 @@
 // Generátor týdenního newsletter digestu — markdown DRAFT pro redakci.
 // NIC neodesílá: výstup je reports/digest-RRRR-MM-DD.md, který redakce
-// zkopíruje do MailerLite (formulář/kampaň už existuje, viz newsletter-popup.js).
+// zkopíruje do Breva (kampaň se zakládá v Brevu; signup viz newsletter-signup.js).
 //
 // Obsah digestu:
 //   1. Co se změnilo v datech — diff aktuálního data/indicators.json proti
@@ -90,7 +90,7 @@ export function buildDigest({ indicators, snapshot, snapshotDate, articles, toda
   const lines = [];
   lines.push(`# HSPA Monitor — týdenní digest (${today})`);
   lines.push('');
-  lines.push(`> DRAFT pro newsletter — zkopírovat do MailerLite po redakční kontrole.`);
+  lines.push(`> DRAFT pro newsletter — zkopírovat do Breva po redakční kontrole.`);
   lines.push('');
 
   // 1) Nové články
