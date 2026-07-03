@@ -1,0 +1,56 @@
+name: Newsletter · týdenní příprava
+
+# Každý čtvrtek 09:33 CEST (= 07:33 UTC; v zimě 08:33 CET). Vybere 3–4
+# dosud neposlané články + indikátor, Florence (Claude) napíše úvod
+# a anotace, kampaň se naplánuje v Brevu na pátek 11:00 Europe/Prague.
+# Evidence data/newsletter-log.json se commitne zpět do main — do pátku
+# 11:00 lze kampaň v Brevu zrušit nebo upravit.
+#
+# Secrets: ANTHROPIC_API_KEY (existuje — sdílený se social-generate),
+#          BREVO_API_KEY (surový xkeysib-… klíč).
+
+on:
+  schedule:
+    - cron: '33 7 * * 4'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalace závislostí
+        run: npm ci
+
+      - name: Připravit a naplánovat vydání
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        run: node scripts/newsletter-run.js
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit evidence vydání
+        run: |
+          git add data/newsletter-log.json
+          if git diff --cached --quiet; then
+            echo "Vydání přeskočeno nebo už naplánováno — nic ke commitu."
+            exit 0
+          fi
+          git commit -m "chore(newsletter): vydání $(date -u +%Y-%m-%d)"
+          git push origin HEAD:main
