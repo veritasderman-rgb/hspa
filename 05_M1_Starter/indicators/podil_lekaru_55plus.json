@@ -1,0 +1,54 @@
+{
+  "id": "podil_lekaru_55plus",
+  "name": "Podíl lékařů ve věku 55 a více let",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Věková struktura",
+  "definition": "Podíl aktivně praktikujících lékařů ve věku 55 a více let na celkovém počtu praktikujících lékařů (v %). Ukazatel měří demografické stárnutí lékařského stavu, tedy jak velká část lékařů se blíží důchodovému věku a bude v horizontu 5–15 let odcházet z profese. Je to strukturální indikátor budoucí personální udržitelnosti systému: vysoký podíl lékařů 55+ znamená, že bez odpovídající generační obměny (dostatek absolventů a atestovaných specialistů, kteří odcházející nahradí) hrozí propad dostupnosti péče. Věková hranice 55 let odpovídá metodice OECD/Eurostat, která umožňuje mezinárodní srovnání. Indikátor se liší od hustoty lékařů (lekari_per_1000), která měří aktuální stav počtu, i od počtu absolventů (absolventi_lekarstvi_per_100k), který měří příliv nových lékařů — teprve dohromady ukazují, zda příliv stačí pokrýt blížící se odliv.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_registr",
+      "endpoint": "https://uzis.cz/katalog/zdravotnicka-statistika/lekari-zubni-lekari-farmaceuti",
+      "dataset": "ÚZIS ČR — Národní registr zdravotnických pracovníků (NRZP) / publikační řada „Lékaři, zubní lékaři a farmaceuti\" a „Personální kapacity ve zdravotnictví\"",
+      "dimensions": {
+        "profese": "lékaři (bez zubních lékařů)",
+        "vek": "věkové skupiny, hranice 55+ a 60+",
+        "uzemi": "ČR celkem (dostupné i po krajích a odbornostech)",
+        "metrika": "podíl lékařů ve věku 55+ na všech praktikujících lékařích (%)"
+      },
+      "note": "ÚZIS eviduje věkovou strukturu lékařů v Národním registru zdravotnických pracovníků a publikuje ji v ročence „Lékaři, zubní lékaři a farmaceuti\" a ve zprávě „Personální kapacity ve zdravotnictví\". Tytéž údaje ČR reportuje do společného dotazníku OECD/Eurostat, ze kterého vychází mezinárodní benchmark (Health at a Glance). Věkové skupiny se v českých publikacích uvádějí i s hranicí 60+, kterou používá řada oborových analýz (např. praktičtí lékaři a pediatři)."
+    },
+    "fallback": {
+      "type": "oecd_eurostat",
+      "url": "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20250116-2",
+      "note": "OECD Health at a Glance: Europe 2024 a Eurostat (věková struktura lékařů, data za rok 2022) řadí Česko do skupiny 12 zemí EU s podílem lékařů 55+ nad 40 %. Přesná hodnota se mezi edicemi a metodikami mírně liší (zlom v časové řadě ČR); headline hodnota ~41 % je harmonizovaný odhad OECD/Eurostat za rok 2022."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd_health_at_glance",
+    "code": "doctors_aged_55_over",
+    "dataset": "OECD/Evropská komise — Health at a Glance: Europe 2024 (data 2022): průměr EU 35 % lékařů ve věku 55+; 12 zemí EU nad 40 %. Nejstarší: Itálie ~54 % a Bulharsko 54,5 %; Německo ~44 %, Polsko nad 40 %. Nejmladší sbory: Finsko 20,6 %, Nizozemsko 23,6 %. Eurostat (2023) uvádí, že přibližně třetina lékařů v EU je ve věku 55+.",
+    "value": 35,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-europe-2024_b3704e14-en.html"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr zdravotnických pracovníků; ročenka Lékaři, zubní lékaři a farmaceuti)",
+    "Ministerstvo zdravotnictví ČR (personální politika, rezidenční místa)",
+    "Česká lékařská komora (registr členů, věková struktura)",
+    "OECD / Eurostat (mezinárodní harmonizace, Health at a Glance)"
+  ],
+  "method_notes": "Hodnota vyjadřuje podíl praktikujících lékařů ve věku 55 a více let. Za rok 2022 činí headline hodnota ČR přibližně 41 % — OECD Health at a Glance: Europe 2024 řadí Česko mezi země s podílem nad 40 %, zatímco průměr EU je 35 %. Časová řada je orientační (origin: seed): bod 2013 (~33 %) je dopočten z věkové struktury ÚZIS za rok 2013 (kolem 20 % lékařů nad 60 let a zhruba čtvrtina ve skupině 50–59 let), bod 2019 (~38 %) odráží pokračující nárůst mezi editacemi Health at a Glance a bod 2022 (~41 %) vychází z OECD/Eurostat. Přesné meziroční hodnoty se mezi zdroji mírně liší kvůli zlomu v časové řadě ČR a rozdílné definici „praktikujícího\" lékaře. Signál warn: Česko je nad průměrem EU (35 %), ale zdaleka ne v nejhorší skupině (Itálie ~54 %, Bulharsko 54,5 %). Prahy: good při podílu více než 5 % pod benchmarkem, warn v pásmu do 20 % nad benchmarkem, bad při více než 20 % nad benchmarkem.",
+  "limitations": "1. **Zlom v časové řadě** — ČR má v datech OECD/Eurostat zlom v časové řadě, takže dlouhá souvislá řada podílu 55+ není plně srovnatelná; body časové řady jsou proto orientační. 2. **Definice „praktikujícího\" lékaře** — počty se liší podle toho, zda se počítají všichni registrovaní lékaři, nebo jen aktivně praktikující (přepočteno na úvazky); český NRZP a mezinárodní metodika se v tom mírně rozcházejí. 3. **Hranice 55 vs. 60 let** — mezinárodní benchmark používá hranici 55+, řada českých oborových analýz hranici 60+; obě nelze přímo zaměňovat. 4. **Celostátní průměr zakrývá obory a regiony** — u praktických lékařů, pediatrů či pohotovostní služby je podíl starších lékařů výrazně vyšší (u praktiků a pediatrů se blíží polovině nad 60 let), stejně jako v periferních okresech. 5. **Podíl ≠ nedostatek** — vysoký podíl 55+ sám o sobě neznamená okamžitý nedostatek lékařů, ale riziko budoucího propadu, pokud generační obměna nestačí.",
+  "determinants": "**Generační obměna a kapacita vzdělávání.** Klíčové je, zda počet nových absolventů lékařských fakult a čerstvě atestovaných specialistů stačí nahradit odcházející generaci. Česko dlouhodobě navyšuje kapacity lékařských fakult, efekt se ale projeví až s odstupem 6–11 let (studium plus specializační příprava).\n\n**Atraktivita oborů a regionů.** Stárnutí je nerovnoměrné — nejvíc postihuje všeobecné praktické lékařství, pediatrii a pohotovostní službu, tedy obory a místa (menší města, venkov), kam mladí lékaři nastupují nejméně. Roli hraje způsob úhrady (kapitace, ceny výkonů), administrativní zátěž i podmínky převzetí ordinace po odcházejícím lékaři.\n\n**Odchod do zahraničí a mezi obory.** Část mladých lékařů odchází do zahraničí nebo mimo přímou klinickou péči, což zužuje bázi, která má nahradit stárnoucí sbor.\n\n**Nástroje personální politiky.** Rezidenční místa (dotované specializační vzdělávání), stipendijní a náborové programy krajů a obcí a pravidla pro převod praxí ovlivňují, zda se odcházející lékaři podaří nahradit právě v ohrožených oborech a regionech.\n\n**Prodlužování profesní kariéry.** Řada lékařů pracuje i po dosažení důchodového věku; to krátkodobě tlumí dopad stárnutí, zároveň ale ukazuje, jak silně je systém na starších lékařích závislý.",
+  "importance": "Personální udržitelnost je jedním z nejtvrdších limitů dostupnosti zdravotní péče: sebelepší úhradový model ani síť pracovišť nefungují, pokud v nich nemá kdo pracovat. Podíl lékařů ve věku 55 a více let je předstihový (leading) ukazatel — ukazuje riziko dřív, než se projeví jako reálný nedostatek u pacienta. Když je vysoký a generační obměna nestačí, znamená to, že za 5–15 let část ordinací zůstane prázdná, objednací lhůty se prodlouží a spádové oblasti bez lékaře se rozšíří.\n\nZ pohledu HSPA jde o strukturální ukazatel pracovní síly, který se přímo dotýká dimenze dostupnosti (bude vůbec lékař?) a nepřímo kvality (kontinuita péče) a spravedlnosti (stárnutí dopadá nejvíc na venkov a periferní okresy). Mezinárodní srovnatelnost (metodika OECD/Eurostat) umožňuje zasadit český stav do evropského kontextu a poznat, zda jde o výjimku, nebo o sdílený evropský trend, na který ale jednotlivé země reagují různě rychle.\n\nIndikátor je úzce provázaný s hustotou lékařů (lekari_per_1000) a počtem absolventů (absolventi_lekarstvi_per_100k) — teprve společně odpovídají na otázku, zda příliv nových lékařů stačí pokrýt blížící se odliv té nejpočetnější, ale nejstarší generace.",
+  "patient_story": "Domažlicko, pondělní ráno. Paní Věra (72) sedí v čekárně svého praktického lékaře, kterého zná třicet let. Doktorovi je čerstvě sedmašedesát a nahlas přemýšlí, že za rok nebo dva ordinaci zavře — a nikdo ji po něm nepřevezme. Nejbližší praktik, který bere nové pacienty, je o dva okresy dál. Věra tak patří mezi tisíce lidí, jejichž dostupnost péče nezávisí na penězích ani na síti ordinací, ale na jediné křehké proměnné: jestli se najde mladší lékař, který nastoupí na místo toho odcházejícího.\n\nČesko mělo v roce 2022 zhruba 41 % lékařů ve věku 55 a více let. Signál je warn: průměr Evropské unie je 35 %, takže Česko je nad ním, ale ne v nejhorší skupině — v Itálii je to kolem 54 %, v Bulharsku 54,5 %, v sousedním Německu asi 44 %. Trend přitom míří vzhůru: z odhadovaných 33 % v roce 2013 přes zhruba 38 % v roce 2019 na 41 % v roce 2022. A celostátní průměr navíc zakrývá to nejpalčivější — mezi všeobecnými praktickými lékaři a dětskými praktiky se podíl lékařů nad 60 let blíží polovině.\n\nProč česká čísla rostou? Za stárnutím stojí několik strukturálních faktorů. Generační obměna dlouho nestačila — kapacity lékařských fakult se sice navyšují, ale efekt přijde až za 6 až 11 let, kolik trvá studium a atestace dohromady. Stárnutí je navíc nerovnoměrné: nejvíc postihuje obory a regiony, kam mladí lékaři nastupují nejméně — praktické lékařství, pediatrii a pohotovost v menších městech a na venkově. Část mladých lékařů odchází do zahraničí nebo mimo přímou klinickou péči a zužuje bázi, která má stárnoucí sbor nahradit. Systém se tak stále víc opírá o lékaře, kteří pracují i v důchodovém věku.\n\nPolitická páka leží převážně na straně státu a krajů a je konkrétní. Rezidenční místa (dotované specializační vzdělávání) cílená právě na ohrožené obory — všeobecné praktické lékařství a pediatrii — rozhodují o tom, kdo převezme ordinace po odcházející generaci. K tomu patří stipendijní a náborové programy krajů a obcí pro lékaře ochotné jít do periferních okresů, jednodušší pravidla pro převod praxí a úhradová politika, která učiní práci praktika atraktivní. Kompetenci má Ministerstvo zdravotnictví (rezidenční místa, síť oborů), kraje (náborové pobídky) a zdravotní pojišťovny (nastavení úhrad). Pro paní Věru z Domažlicka je sázka jasná: buď stát včas vychová a udrží nástupce jejího lékaře, nebo se i pro ni dostupná péče posune o dva okresy dál.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
