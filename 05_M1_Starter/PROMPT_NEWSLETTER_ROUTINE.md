@@ -6,6 +6,14 @@ Rutina pro AI agenta (Claude session s Brevo přístupem). Spouští se **každ�
 `data/newsletter-log.json` v repu. Mezi čtvrtkem a pátkem 11:00 je záměrné
 okno na lidskou kontrolu — kampaň lze v Brevu zrušit nebo upravit.
 
+> **Automatizace:** rutina běží i bez ruční session — GitHub Actions
+> `.github/workflows/newsletter-weekly.yml` (čtvrtek 07:33 UTC) spouští
+> `node scripts/newsletter-run.js`, což je tento runbook jako kód (výběr,
+> Florence přes API, builder, Brevo, log). Ruční spuštění: workflow_dispatch
+> v GitHubu, lokální test `node scripts/newsletter-run.js --offline`
+> (bez API) nebo `--dry-run` (bez zápisu do Breva/logu). Tento dokument
+> zůstává referencí pravidel a fallbackem pro interaktivní běh.
+
 ---
 
 ## Vstupy a nástroje
