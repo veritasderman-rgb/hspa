@@ -202,6 +202,30 @@ async function main() {
   const hero = picked[0];
   const indicator = pickIndicator(indicators, log, hero);
 
+  // Sekundární pojistka proti duplicitě: kampaň pro tenhle pátek už v Brevu
+  // existuje (typicky minulý běh naplánoval, ale nepodařilo se pushnout log)
+  // → jen doplníme log a končíme. Výběr článků je deterministický, takže
+  // picked odpovídá tomu, co minulý běh do kampaně dal.
+  const campaignName = `HSPA newsletter — ${fridayYmd} (pátek)`;
+  if (!OFFLINE && !DRY && process.env.BREVO_API_KEY) {
+    const existing = await brevo('/emailCampaigns?limit=50&excludeHtmlContent=true');
+    const dup = (existing.campaigns || []).find(c => c.name === campaignName);
+    if (dup) {
+      log.campaigns.push({
+        brevo_campaign_id: dup.id,
+        name: campaignName,
+        subject: dup.subject || null,
+        scheduled_for: scheduledAt,
+        articles: picked.map(a => a.slug),
+        featured_indicator: indicator ? indicator.id : null,
+        note: 'Doplněno zpětně — kampaň už v Brevu existovala (log se minule nepodařilo uložit).',
+      });
+      fs.writeFileSync(path.join(ROOT, 'data', 'newsletter-log.json'), JSON.stringify(log, null, 2) + '\n');
+      console.log(`Kampaň „${campaignName}" už v Brevu existuje (#${dup.id}) — log doplněn, nic nezakládám.`);
+      return;
+    }
+  }
+
   console.log(`Vydání ${fridayYmd} (odeslání ${scheduledAt}):`);
   picked.forEach((a, i) => console.log(`  ${i + 1}. ${a.slug}${archive && a.slug === archive.slug ? ' [Z archivu]' : ''}${i === 0 ? ' [hero]' : ''}`));
   console.log(`  indikátor: ${indicator ? indicator.id : '—'}`);
@@ -241,7 +265,7 @@ async function main() {
   const created = await brevo('/emailCampaigns', {
     method: 'POST',
     body: JSON.stringify({
-      name: `HSPA newsletter — ${fridayYmd} (pátek)`,
+      name: campaignName,
       subject: fl.subject,
       previewText: fl.previewText,
       sender: { name: 'HSPA Monitor · Skóre zdravotnictví', email: 'josef@josefpavlovic.cz' },
@@ -259,7 +283,7 @@ async function main() {
 
   log.campaigns.push({
     brevo_campaign_id: created.id,
-    name: `HSPA newsletter — ${fridayYmd} (pátek)`,
+    name: campaignName,
     subject: fl.subject,
     scheduled_for: scheduledAt,
     articles: picked.map(a => a.slug),

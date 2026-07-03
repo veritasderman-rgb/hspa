@@ -53,4 +53,14 @@ jobs:
             exit 0
           fi
           git commit -m "chore(newsletter): vydání $(date -u +%Y-%m-%d)"
-          git push origin HEAD:main
+          # Main se mezi checkoutem a pushem mohl pohnout (jiný workflow/merge).
+          # Log je idempotenční pojistka — bez něj by další běh vydání zdvojil,
+          # proto push opakujeme přes rebase. (Runner má navíc sekundární
+          # pojistku: před založením se ptá Breva na existující kampaň.)
+          for i in 1 2 3; do
+            git push origin HEAD:main && exit 0
+            echo "Push selhal (pokus $i/3) — rebase na aktuální main a retry."
+            git pull --rebase origin main
+          done
+          echo "::error::Push logu selhal i po 3 pokusech. Kampaň v Brevu JE naplánovaná — doplňte data/newsletter-log.json ručně, nebo další běh log doplní sám ze sekundární pojistky."
+          exit 1
