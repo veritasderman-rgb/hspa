@@ -20,7 +20,7 @@ clinical-quality — vše OK), `npm run verify:freshness` ✅ (live_ratio 0,377 
 | # | Zdroj | URL | Stav | Nález |
 |---|---|---|---|---|
 | 1 | **ÚZIS — aktuality** | uzis.cz/index.php?pg=aktuality | ✅ 200 | Nejnovější položka stále **26. 6.** „Tuberkulóza v ČR v roce 2025". **Žádná nová položka v červenci.** Žádná nová vlna NRPZS/NOR/NRH/NRZP. |
-| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | **NOVÉ (primární): TZ 1. 7. 2026** „Ministerstvo zdravotnictví převzalo agendu politiky v oblasti závislostí a duševního zdraví." → primární potvrzení kompetenčního přesunu (dosud avizovaného) k datu účinnosti 1. 7. Žádná nová TZ 2.–3. 7. |
+| 2 | **MZ ČR — tiskové zprávy** | mzd.gov.cz/tiskove-centrum/tiskove-zpravy/ | ✅ 200 | **NOVÉ (primární), 2 položky:** (a) **TZ 30. 6. 2026** „Více než 1 200 léků nově u praktického lékaře…" → novela vyhlášky o předepisování léčiv, zrušení preskripčního omezení „E" u >1 200 přípravků od 1. 7. (viz sekce Legislativa + HOT kandidát níže). (b) **TZ 1. 7. 2026** „Ministerstvo zdravotnictví převzalo agendu politiky v oblasti závislostí a duševního zdraví." → primární potvrzení kompetenčního přesunu (dosud avizovaného). Žádná nová TZ 2.–3. 7. |
 | 3 | **SZÚ — aktuality** | szu.gov.cz/aktuality/ | ✅ 200 | Svrab (scabies) — pokračující pokrytí (1. 7. Nova: „letos 4 úmrtí na komplikace"; 2. 7. Aktuálně: STI „nákaza ohrožující plodnost"). **STÁLE jen mediální citace, ŽÁDNÝ formální SZÚ surveillance bulletin se strojově ověřitelnou incidencí/mortalitou svrabu.** → svrab zůstává WATCH, ne HOT. |
 | 4 | **ČSÚ — aktuality** | csu.gov.cz/aktuality | ✅ 200 | Beze změny s dopadem na zdravotnictví. 2. 7. jen „Plánovaný výpadek DataStat" (technická notice); 1. 7. ICT mzdy, deficit vlády Q1, zaměstnanost 5/2026. Žádná nová mortalitní/EHIS/demografická vlna. |
 | 5 | **OECD / Eurostat / WHO** | oecd.org, ec.europa.eu/eurostat, who.int | ✅ search | HAG 2025 + Country Health Profile Czechia 2025 stále nejnovější, v korpusu. Žádná nová `hlth_*` vlna s ČR-implikací. ECDC/WHO TBC report 2026 (2024 data, publ. 23. 3. 2026) ověřen tento běh (viz níže). |
@@ -33,6 +33,23 @@ clinical-quality — vše OK), `npm run verify:freshness` ✅ (live_ratio 0,377 
 
 ## Nové legislativní normy / sněmovní tisky / strategie
 
+- **MZ ČR — TZ 30. 6. 2026** „Více než 1 200 léků nově u praktického lékaře.
+  Ministerstvo zdravotnictví usnadňuje pacientům přístup k léčbě." — **primární,
+  ověřeno WebFetch přímo z MZ** (mzd.gov.cz/tiskove-centrum-mz/vice-nez-1-200-leku-nove-u-praktickeho-lekare-…/
+  + doprovodná TZ „…zrušení preskripčního omezení…"). Fakta z primárního zdroje:
+  novela **vyhlášky o předepisování léčiv** zrušila u **více než 1 200 přípravků**
+  dosavadní preskripční omezení **„E"** (dosud jen ambulantní specialisté) →
+  od **1. 7. 2026** je smějí předepisovat i praktičtí lékaři (pro dospělé i PLDD).
+  Jde o **~1/8 všech hrazených léčiv v ambulantní péči**. Nový symbol **„F"**
+  zachovává specialistickou preskripci tam, kde je medicínsky nutná; lékový záznam
+  brání duplicitám a interakcím. Přínos: chronici, senioři, osoby s omezenou
+  mobilitou, regiony s hůře dostupnou specializovanou péčí; diagnózy neurologie,
+  respirační, diabetologie/metabolika, glaukom, vybrané KV/urologické/gynekologické.
+  **→ HOT kandidát na nový článek (viz Aktuální dění + Routing).** Mezera v korpusu
+  ověřena: žádný existující článek tuto reformu nepokrývá (repo-wide grep
+  „preskripčního omezení" / „1 200 lék" / „léků nově u praktiků" — jen tematicky
+  vzdálené polypragmazie/medication-review; `clanek-reforma-primarni-pece-2027`
+  řeší kapitaci/P4P, ne preskripční omezení „E").
 - **MZ ČR — TZ 1. 7. 2026** „Ministerstvo zdravotnictví převzalo agendu politiky
   v oblasti závislostí a duševního zdraví." — **primární** potvrzení kompetenčního
   přesunu protidrogové a duševně-zdravotní agendy z Úřadu vlády na MZ ČR
@@ -59,6 +76,16 @@ clinical-quality — vše OK), `npm run verify:freshness` ✅ (live_ratio 0,377 
   PPN; téma je **již pokryto draftem** `clanek-pohlavni-nemoci-2025` (fronta,
   scheduled_for 07-04).
 - Kompetenční přesun agendy závislostí/duševního zdraví na MZ — viz výše, WARM.
+- **Zrušení preskripčního omezení „E" u >1 200 léků (od 1. 7. 2026) — HOT kandidát
+  na nový článek.** Fresh primární policy change (novela vyhlášky o předepisování
+  léčiv), doložitelnost výborná (2 primární MZ TZ 30. 6. + vyhláška), dopadovost
+  vysoká (přístup k léčivům pro chroniky/seniory/regiony), **mezera v korpusu
+  ověřena** (žádný článek nepokrývá). Přirozený HSPA úhel: dostupnost a koordinace
+  primární péče (posílení role praktika, snížení „obíhání specialistů"). **DNES
+  nepíšu** (běh je verifikační pas vázaný na publikaci; fronta saturovaná, max
+  1 článek/den) — zařazeno jako HOT trigger pro **příští běh**. Alternativa: WARM
+  doplněk do `clanek-reforma-primarni-pece-2027.html` (rozšíření rozsahu praktika),
+  ale téma je samostatné a nese na vlastní článek.
 
 ## Ověřovací pas — imminentní publikace (KLÍČOVÝ VÝSTUP BĚHU)
 
@@ -125,9 +152,14 @@ ověřen. Zdrojové odkazy resolují. Doporučení: den-of re-verifikace ve běh
 ## Doporučení pro routing fáze
 
 - HOT (nový indikátor): žádné
-- HOT (aktuální dění → nový článek): **žádné doložitelné** — svrab je WATCH
-  (chybí primárně strojově ověřitelná mortalita/incidence), STI vlna už pokryta
-  draftem, fronta saturovaná (19 draftů)
+- **HOT (aktuální dění → nový článek): ZRUŠENÍ PRESKRIPČNÍHO OMEZENÍ „E" / >1 200
+  LÉKŮ U PRAKTIKŮ (od 1. 7. 2026).** Jediný doložitelný HOT trigger tohoto běhu —
+  primární MZ TZ 30. 6., mezera v korpusu ověřena. **Deferováno na příští běh**
+  (dnes verifikační pas + saturovaná fronta 19 draftů + max 1 článek/den). Toto je
+  oprava po Codex P2: MZ scan **není** „bez nového dění" — 30. 6. TZ o léčivech
+  byla v prvním zápisu opomenuta; nyní explicitně klasifikována jako HOT.
+- Ostatní: svrab je WATCH (chybí primárně strojově ověřitelná mortalita/incidence),
+  STI vlna už pokryta draftem `pohlavni-nemoci-2025`, fronta saturovaná (19 draftů)
 - **WARM (upgrade po dnešní discovery):** `clanek-protidrogova-dusevni-politika-mz-2026.html`
   — nyní existuje **primární TZ MZ ČR (1. 7.)** potvrzující kompetenční přesun.
   Revize atribuce (sekundární → primární TZ MZ) + doplnění dopadu patří
