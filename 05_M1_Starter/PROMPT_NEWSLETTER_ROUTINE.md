@@ -21,7 +21,10 @@ okno na lidskou kontrolu — kampaň lze v Brevu zrušit nebo upravit.
 
 ## Krok 0 — Prerekvizity
 
-1. Čerstvý main: `git checkout main && git pull origin main`, branch `claude/newsletter-YYYY-MM-DD`.
+1. Čerstvý main: `git checkout main && git pull origin main`, branch
+   `claude/newsletter-YYYY-MM-DD`, a **přejdi do `05_M1_Starter/`**
+   (`cd 05_M1_Starter`) — všechny cesty níže (`data/…`, `scripts/…`)
+   jsou relativní k tomuto adresáři.
 2. Ověř Brevo přístup (MCP `get_account`, nebo `curl -H "api-key: …" https://api.brevo.com/v3/account`).
 3. Spočítej datum **nejbližšího pátku** a `scheduledAt = YYYY-MM-DDT11:00:00+02:00` (v zimě `+01:00` — použij aktuální offset Europe/Prague!).
 
