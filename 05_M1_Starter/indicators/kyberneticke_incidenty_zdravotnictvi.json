@@ -1,0 +1,52 @@
+{
+  "id": "kyberneticke_incidenty_zdravotnictvi",
+  "name": "Kybernetické bezpečnostní incidenty ve zdravotnictví",
+  "area": "Struktury",
+  "domain": "Digitalizace zdravotnictví",
+  "subdomain": "Kybernetická bezpečnost",
+  "definition": "Počet kybernetických bezpečnostních incidentů ve zdravotnickém sektoru evidovaných Národním úřadem pro kybernetickou a informační bezpečnost (NÚKIB) za kalendářní rok. Incidentem se rozumí narušení bezpečnosti informací nebo služeb (ransomware, únik dat, DDoS, kompromitace systému, phishing s dopadem) u poskytovatelů zdravotních služeb, které bylo NÚKIB nahlášeno nebo jím evidováno. Indikátor měří kybernetickou odolnost zdravotnické infrastruktury — tedy míru, do jaké je digitalizované zdravotnictví vystaveno provozním výpadkům z kybernetických příčin. Liší se od indikátoru vyspělosti e-Health (ehealth_adoption, který měří zavádění digitálních služeb) — kyberincidenty měří stinnou stranu digitalizace: zranitelnost a její realizované dopady na provoz nemocnic.",
+  "unit": "incidentů / rok",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nukib_report",
+      "endpoint": "https://nukib.gov.cz/cs/infoservis/publikace/",
+      "dataset": "NÚKIB — Zpráva o stavu kybernetické bezpečnosti ČR (roční); evidované kybernetické bezpečnostní incidenty v členění podle sektoru — zdravotnictví",
+      "note": "NÚKIB každoročně vydává Zprávu o stavu kybernetické bezpečnosti ČR, která obsahuje počty evidovaných incidentů a jejich rozpad podle regulovaných sektorů, mezi něž patří i zdravotnictví. Sektorové počty pro zdravotnictví: 2020 = 17, 2021 = 26, 2022 = 29 incidentů. Celkový počet incidentů napříč všemi sektory vzrostl ze 146 (2022) na 262 (2023) a 268 (2024, dosud nejvyšší evidovaná hodnota). Doplňkovým zdrojem jsou měsíční přehledy NÚKIB a evidence povinných hlášení podle zákona o kybernetické bezpečnosti.",
+      "dimensions": {
+        "sektor": "zdravotnictví (poskytovatelé zdravotních služeb, regulované subjekty)",
+        "uzemi": "ČR celkem",
+        "metrika": "počet evidovaných kybernetických bezpečnostních incidentů za rok"
+      }
+    },
+    "fallback": {
+      "type": "narrative_only",
+      "url": "https://www.enisa.europa.eu/publications/health-threat-landscape",
+      "note": "Kontext k mezinárodnímu srovnání poskytuje ENISA (Health Threat Landscape) a Evropská komise: v roce 2023 bylo v členských státech EU nahlášeno 309 významných kybernetických incidentů ve zdravotnictví — více než v kterémkoli jiném kritickém sektoru. Absolutní počty jsou mezi zeměmi obtížně srovnatelné (liší se prahy a povinnost hlášení), proto je benchmark pojat narativně, ne jako číselná referenční hodnota."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Srovnatelný číselný benchmark počtu incidentů na zemi neexistuje — národní čísla závisejí na prahu hlášení, rozsahu regulace a metodice evidence. Kontext: Evropská komise vykázala pro rok 2023 celkem 309 významných kybernetických incidentů ve zdravotnictví napříč EU (nejvíce ze všech kritických sektorů); ENISA řadí zdravotnictví dlouhodobě mezi nejohroženější sektory a ransomware mezi jeho hlavní hrozby.",
+    "value": null,
+    "url": "https://www.enisa.europa.eu/publications/health-threat-landscape"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "NÚKIB (Národní úřad pro kybernetickou a informační bezpečnost)",
+    "Ministerstvo zdravotnictví ČR (Operační program Zdravotnictví, Národní plán obnovy)",
+    "poskytovatelé zdravotních služeb (regulované / povinné subjekty dle zák. č. 264/2025 Sb.)"
+  ],
+  "method_notes": "Hodnota je počet kybernetických bezpečnostních incidentů ve zdravotnickém sektoru evidovaných NÚKIB za daný rok. Časová řada 2020 = 17, 2021 = 26, 2022 = 29 pochází ze Zpráv o stavu kybernetické bezpečnosti ČR; jde o oficiální sektorové rozpady, nikoli o dopočet (origin: seed — přesné sektorové rozpady za 2023–2024 se v otevřených souhrnech dosud nekonsolidovaly, proto je jako referenční hodnota indikátoru uveden poslední jednoznačně potvrzený rok 2022). Signál je neutral: pro tento typ indikátoru neexistuje mezinárodně srovnatelný číselný benchmark (počet incidentů na zemi závisí na prahu a povinnosti hlášení), takže indikátor slouží jako kontextový monitoring rizika, ne jako pass/fail hodnocení. Vzestupný trend je nicméně jednoznačný a systémově významný.",
+  "limitations": "1. **Detekční a reportovací zkreslení** — rostoucí čísla částečně odrážejí lepší detekci a rozšiřování povinnosti hlášení (od účinnosti zák. č. 264/2025 Sb. přibudou nemocnice mezi povinné subjekty), ne jen více útoků; meziroční nárůst proto nelze číst čistě jako zhoršení bezpečnosti. 2. **Sektorová atribuce** — hranice „zdravotnického\" incidentu není ostrá (dodavatelé IT, laboratoře, pojišťovny); různé zprávy mohou počítat mírně odlišně. 3. **Neexistence číselného benchmarku** — absolutní počty mezi zeměmi nejsou srovnatelné, srovnání je proto narativní. 4. **Nezachycuje závažnost** — jeden ochromující ransomware (Benešov, FN Brno) a desítka drobných phishingů se v prostém počtu sčítají stejně; NÚKIB proto sleduje i závažnostní kategorie (počet velmi významných / významných incidentů). 5. **Podhlášenost** — část incidentů, zejména u menších poskytovatelů bez zákonné povinnosti hlásit, se do evidence nikdy nedostane.",
+  "determinants": "**Zastaralá a heterogenní IT infrastruktura.** Nemocnice provozují desítky let staré nemocniční informační systémy a přístrojovou techniku s neaktualizovatelným softwarem, které nelze snadno záplatovat; provoz 24/7 navíc nedává okno na údržbu a odstávky.\n\n**Podfinancování kybernetické bezpečnosti.** IT bezpečnost dlouhodobě soutěží o rozpočet s klinickými prioritami. Řada zařízení nemá dedikovaného bezpečnostního specialistu (CISO) ani prostředky na segmentaci sítě, zálohování odolné vůči ransomwaru a bezpečnostní monitoring.\n\n**Hodnota zdravotních dat a vydíratelnost provozu.** Zdravotní data mají na černém trhu vysokou cenu a nemocnice je pod extrémním tlakem obnovit provoz — což z nich dělá vděčný cíl vyděračského ransomwaru (útočník sází na to, že špitál radši zaplatí, než aby ohrozil pacienty).\n\n**Lidský faktor.** Vyhodnocení benešovského útoku ukázalo, že nejslabším místem je neznalost uživatelů sítě; phishing a podvodné e-maily zůstávají hlavní vstupní branou. Bez pravidelného školení personálu technická opatření nestačí.\n\n**Regulační rámec.** Směrnice EU NIS2 a její český transpoziční zákon č. 264/2025 Sb. (účinnost od 1. listopadu 2025) poprvé plošně zařazují nemocnice mezi regulované subjekty s povinností řídit rizika a hlásit incidenty — což je hlavní strukturální páka, ale zároveň důvod, proč evidovaná čísla dále porostou.",
+  "importance": "Digitalizace zdravotnictví (eRecept, elektronická dokumentace, centrální e-Health páteř) zvyšuje kvalitu a koordinaci péče — ale současně vytváří novou třídu systémového rizika: pokud padne IT, přestane fungovat nemocnice jako celek, nejen jeden přístroj. Kybernetická odolnost je proto rubovou stranou téže mince jako vyspělost e-Health.\n\nZ pohledu výkonnosti zdravotního systému (HSPA) indikátor patří do dimenze **bezpečnost**: kybernetický incident se přímo promítá do bezpečnosti pacienta (odložené operace, ztráta laboratorních výsledků, ruční vedení dokumentace, výpadek zobrazovacích metod). Zasahuje ale i **dostupnost** (ochromená nemocnice odmítá příjmy) a **efektivitu** (obnova po velkém útoku stojí desítky až stovky milionů korun a měsíce práce).\n\nMěření počtu incidentů je nejlepším dostupným ukazatelem toho, jak moc je digitalizované zdravotnictví vystaveno realizovanému riziku. Slouží jako kontextový monitoring — nemá číselný benchmark, ale jeho vzestupný trend a napojení na čerstvou legislativu (NIS2 / zák. č. 264/2025 Sb.) z něj dělají indikátor s jasnou politickou pákou.",
+  "patient_story": "Benešov, 11. prosince 2019, krátce po ránu. Panu Josefovi (68) měli na chirurgii středočeské nemocnice odoperovat kýlu. Místo toho sestra u lůžka zapisuje teplotu tužkou na papír — počítačová síť nemocnice je mrtvá. V noci ji zašifroval ruský vyděračský virus Ryuk. Přístroje nenaběhnou, laboratoř nevydá výsledky, plánované zákroky se ruší a zařízení se vrací o desítky let zpět k papírovým dekurzům; škoda nakonec přesáhne padesát milionů korun. O tři měsíce později, 13. března 2020 ve dvě hodiny ráno — den po vyhlášení nouzového stavu kvůli covidu — padá IT i ve Fakultní nemocnici Brno: onkologie odkládá zákroky, jednotka intenzivní péče pracuje s tužkou a papírem a škoda se vyšplhá na 150 milionů korun.\n\nTyto dva útoky nebyly výjimkou. NÚKIB eviduje ve zdravotnictví rostoucí počet kybernetických bezpečnostních incidentů: 17 v roce 2020, 26 v roce 2021 a 29 v roce 2022. Signál je kontextový (neutral) — pro počet incidentů na zemi neexistuje srovnatelný mezinárodní benchmark — ale trend je jednoznačně vzestupný. Zdravotnictví přitom patří v ČR i v celé EU mezi nejčastěji cílené kritické sektory: Evropská komise napočítala v roce 2023 v členských státech 309 významných kybernetických incidentů ve zdravotnictví, více než v kterémkoli jiném kritickém odvětví.\n\nProč právě nemocnice? Provozují zastaralé a špatně záplatovatelné systémy a přístroje, běží v režimu 24/7 bez okna na údržbu, chronicky podfinancovávají IT bezpečnost (řada zařízení nemá bezpečnostního specialistu) a jejich data i provoz mají pro vyděrače vysokou hodnotu. Nejslabším místem přitom bývá člověk — phishingový e-mail otevřený unaveným personálem. Část růstu čísel navíc odráží lepší detekci a rozšiřování povinnosti hlášení, ne jen více útoků; to je hlavní limit tohoto indikátoru.\n\nPolitická páka je konkrétní a čerstvá. Zákon č. 264/2025 Sb., český transpoziční předpis evropské směrnice NIS2, s účinností od 1. listopadu 2025 poprvé plošně zařazuje nemocnice mezi regulované (povinné) subjekty s povinností řídit kybernetická rizika a hlásit incidenty. Kompetenci a metodickou podporu drží NÚKIB; financování bezpečnostních opatření má krýt Operační program Zdravotnictví a Národní plán obnovy. Otevřenou otázkou zůstává, zda menší okresní nemocnice — přesně ty jako Benešov — stihnou v přechodné lhůtě zajistit lidi i peníze, aby příště nebyl pan Josef pacientem, jehož operaci odloží ne nemoc, ale vyděračský virus.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost"
+}
