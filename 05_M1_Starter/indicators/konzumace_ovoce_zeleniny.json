@@ -1,0 +1,66 @@
+{
+  "id": "konzumace_ovoce_zeleniny",
+  "name": "Konzumace ovoce a zeleniny (5+ porcí denně)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Výživa",
+  "definition": "Podíl populace 15 a více let, která uvádí, že denně zkonzumuje pět a více porcí ovoce a zeleniny (Eurostat EHIS, kategorie n_portion = GE5). Pět porcí denně odpovídá doporučení WHO i českým výživovým doporučením.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_ehis_fv3e",
+      "params": {
+        "geo": "CZ",
+        "sex": "T",
+        "age": "TOTAL",
+        "isced11": "TOTAL",
+        "n_portion": "GE5",
+        "unit": "PC"
+      },
+      "note": "Podíl 15+ konzumující 5+ porcí ovoce a zeleniny denně (n_portion=GE5). EHIS je triannuální, poslední vlna 2019. Ověřeno živě 2026-07-04 z Eurostat dissemination API: CZ 7,7 % (2019), EU27 12,4 %. Doplňková kategorie n_portion=0 (žádná porce denně): CZ 48,2 %, EU27 32,9 %."
+    },
+    "fallback": {
+      "type": "national_survey",
+      "dataset": "SZÚ — EHIS ČR (Systém monitorování zdravotního stavu populace)",
+      "note": "Národní výběr EHIS realizuje SZÚ; agregáty ovoce/zelenina publikuje ve zprávách EHIS ČR. Používá se, pokud Eurostat řadu nezveřejní."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_ehis_fv3e",
+    "code": "EU27_2020",
+    "value": 12.4,
+    "params": {
+      "geo": "EU27_2020",
+      "n_portion": "GE5"
+    },
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_fv3e/default/table",
+    "note": "EU-27 průměr ze stejné řady: 12,4 % (2019). Nejvyšší v EU: Irsko ~33 %, Nizozemsko ~30 %; nejnižší: Rumunsko ~2 %."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "SZÚ"
+  ],
+  "method_notes": "Měřeno standardizovaným dotazníkem EHIS napříč EU. Porce definována jako cca 80 g. Kategorie: 0 porcí / 1–4 porce / 5+ porcí denně. Ovocné a zeleninové šťávy a brambory se do porcí nezapočítávají. Metodika je harmonizovaná, mezinárodní srovnání je proto robustní.",
+  "limitations": "Self-report nadhodnocuje zdravé chování (social desirability bias). EHIS je triannuální — mezi vlnami (2014, 2019) není roční řada. Vlna 2019 je k datu poslední zveřejněná; vlna 2024/2025 zatím není v Eurostatu kompletní.",
+  "determinants": [
+    "cenová dostupnost čerstvé zeleniny vs. trvanlivé pečivo a uzeniny",
+    "vzdělání a příjem domácnosti (gradient ve prospěch VŠ)",
+    "podíl ultrazpracovaných potravin ve stravě",
+    "regionální dostupnost čerstvých potravin (potravinové pouště)",
+    "školní stravování a rané stravovací návyky"
+  ],
+  "importance": "Nízká spotřeba ovoce a zeleniny je podle GBD jedním z hlavních dietních rizikových faktorů předčasného úmrtí — přispívá ke kardiovaskulárním onemocněním, diabetu 2. typu a několika typům nádorů. Jde o ovlivnitelný determinant s jasnými politickými nástroji.",
+  "patient_story": "Marta Součková, 58 let, učitelka z Ústí nad Labem, si u pokladny supermarketu prohlíží svůj nákup: rohlíky, sýr, uzenina, dvě piva, jedno jablko na cestu. Zeleninu si dá „až přijde sezona\" — a stejně to zní většině lidí v řadě za ní. Doporučení pěti porcí ovoce a zeleniny denně zná; naplní ho jeden den v týdnu, možná dva. Není v tom výjimka, je v tom pravidlo.\n\nPodíl dospělých v Česku, kteří denně snědí doporučených pět a více porcí ovoce a zeleniny, je jen 7,7 % (Eurostat EHIS, hlth_ehis_fv3e, 2019 — poslední dostupná vlna). Je to pod evropským průměrem 12,4 % a od roku 2014, kdy hodnota činila 9,1 %, dál klesá — signál je proto bad. Ještě výmluvnější je odvrácená strana téže statistiky: 48,2 % Čechů nesní denně žádné ovoce ani zeleninu, zatímco průměr EU je 32,9 %. Irsko (33 %) a Nizozemsko (30 %) jsou na opačném konci Evropy než Česko.\n\nZa nízkou spotřebou nestojí jen individuální vůle. Čerstvá zelenina je v přepočtu na energii dražší než trvanlivé pečivo a uzeniny; cenová dostupnost je pro nízkopříjmové domácnosti reálnou bariérou. Slábne kultura každodenního vaření ze základních surovin, roste podíl ultrazpracovaných potravin a marketing sladkých a slaných svačin cílí i na děti. Rozdíl podle vzdělání je výrazný — lidé s vysokoškolským vzděláním dosahují na doporučení podstatně častěji. Roli hraje i regionální dostupnost čerstvých potravin a „potravinové pouště\" na okrajích měst a v odlehlých okresech.\n\nPolitických pák je několik a všechny mají doložený efekt. Rozšířit program Ovoce a zelenina do škol (EU School Fruit, Vegetables and Milk Scheme) a napojit ho na kvalitní školní stravování; reformovat spotřební koš školních jídelen směrem k více zelenině; použít daňové nástroje — nižší DPH na čerstvé ovoce a zeleninu, případně zdanění slazených nápojů, jak to už udělalo přes 50 zemí; regulovat marketing nezdravých potravin cílený na děti (model Velké Británie a Chile). Kompetenci sdílejí ministerstva zdravotnictví, zemědělství a školství — chybí ale jeden národní výživový akční plán s měřitelnými cíli. Indikátor v HSPA Monitoru sleduje výživu jako klíčový a ovlivnitelný determinant zdraví.",
+  "framework": "hspa",
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-07-04"
+}
