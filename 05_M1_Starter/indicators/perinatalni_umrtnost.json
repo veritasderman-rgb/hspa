@@ -1,0 +1,66 @@
+{
+  "id": "perinatalni_umrtnost",
+  "name": "Perinatální úmrtnost",
+  "area": "Výsledky",
+  "domain": "Kvalita péče",
+  "subdomain": "Perinatální péče",
+  "definition": "Perinatální úmrtnost je součet pozdní fetální úmrtnosti (mrtvě narození od 28. týdne / 1000 g) a časné novorozenecké úmrtnosti (úmrtí živě narozených do 7 dnů) na 1000 narozených (živě + mrtvě). Eurostat ji publikuje harmonizovaně pro všechny členské státy v datové sadě hlth_cd_aperrto (mortalit = PERI). Jde o klíčový mezinárodní ukazatel kvality porodnické a novorozenecké péče.",
+  "unit": "/ 1 000 narozených",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_cd_aperrto",
+      "params": {
+        "geo": "CZ",
+        "mortalit": "PERI",
+        "resid": "TOT_IN",
+        "unit": "RT"
+      },
+      "note": "Perinatální úmrtnost na 1000 narozených (mortalit=PERI = pozdní fetální LFOE + časná novorozenecká ENEO). Ověřeno živě 2026-07-06 z Eurostat dissemination API: CZ 5,9 (2020) → 5,3 (2021) → 5,3 (2022) → 4,8 (2023) → 4,8 (2024); EU27_2020 6,3 (2022) → 5,4 (2023). Doplňkově Eurostat pro CZ 2024: pozdní fetální (LFOE) 3,7 ‰, časná novorozenecká (ENEO) 1,1 ‰, novorozenecká (NEO) 1,5 ‰ vs. EU27 NEO 2,3 ‰ (2023)."
+    },
+    "fallback": {
+      "type": "national_registry",
+      "dataset": "ÚZIS ČR — Národní registr reprodukčního zdraví (NRRZ), publikace „Rodička a novorozenec\" + roční analytické studie perinatálních výsledků",
+      "note": "NRRZ udává perinatální úmrtnost podle české definice (mrtvorozenost od 22. týdne / 500 g): 2023 celkem 4,1 ‰ (mrtvorozenost 3,3 ‰, časná novorozenecká 0,8 ‰), 2024 celkem 4,4 ‰ (mrtvorozenost 3,4 ‰, časná novorozenecká 1,0 ‰). Rozdíl proti Eurostatu (4,8 ‰) plyne z odlišné definiční hranice životaschopnosti a denominátoru. Pro mezinárodní srovnání se používá harmonizovaná řada Eurostatu."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat",
+    "dataset": "hlth_cd_aperrto",
+    "code": "EU27_2020",
+    "value": 5.4,
+    "params": {
+      "geo": "EU27_2020",
+      "mortalit": "PERI"
+    },
+    "url": "https://ec.europa.eu/eurostat/databrowser/product/view/hlth_cd_aperrto",
+    "note": "Průměr EU-27 ze stejné řady: 6,3 (2022) → 5,4 (2023, poslední dostupný agregát; EU27 za 2024 zatím není kompletní). Sousedé (2023): Rakousko 5,5 · Polsko 5,3 · Slovensko 5,4 · Německo 6,2 (2022; hodnota DE za 2023 je v Eurostatu ovlivněná změnou vykazování). Česko je dlouhodobě pod průměrem EU i pod všemi sousedy."
+  },
+  "signal_thresholds": {
+    "good": 3,
+    "warn": 8
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "ÚZIS ČR (Národní registr reprodukčního zdraví)",
+    "ČSÚ"
+  ],
+  "method_notes": "Eurostat kompiluje perinatální úmrtnost z národní vitální statistiky (v ČR ČSÚ a ÚZIS/NRRZ). Perinatální úmrtnost = (mrtvě narození od 28. týdne + úmrtí živě narozených do 7 dnů) / (živě narození + mrtvě narození) × 1000. Národní registr reprodukčního zdraví (NRRZ) sbírá individuální perinatální data od roku 1991 se 100% pokrytím porodů a používá českou definici životaschopnosti (od 22. týdne / 500 g), proto jsou národní hodnoty číselně nižší než Eurostat. Roční řada je stabilní a metodika mezinárodně harmonizovaná (WHO/Euro-Peristat).",
+  "limitations": "Absolutní počty perinatálních úmrtí jsou malé (řádově stovky ročně), proto meziroční výkyvy o desetiny promile nemusí znamenat trend. Definice životaschopnosti se mezi zeměmi liší (22. vs. 24. vs. 28. týden) a ovlivňuje mezinárodní srovnatelnost — Eurostat proto pracuje s hranicí pozdní fetální úmrtnosti od 28. týdne / 1000 g. Agregát EU-27 zpravidla zaostává o rok za národními daty. Národní průměr skrývá rozdíly mezi perinatologickými centry a spádovými regiony.",
+  "determinants": [
+    "centralizace rizikových porodů do 12 perinatologických center a 12 intermediárních center",
+    "systém in-utero transportu (převoz těhotné před porodem, ne novorozence po porodu)",
+    "dostupnost a kvalita prenatální péče a screeningů (ultrazvuk, vrozené vady)",
+    "socioekonomický status a přístup k prenatální péči u sociálně vyloučených skupin",
+    "podíl vícečetných těhotenství a věk rodiček (odkládání mateřství)",
+    "kvalita novorozenecké intenzivní péče a personální zajištění neonatologie"
+  ],
+  "importance": "Perinatální úmrtnost je jedním z nejcitlivějších ukazatelů kvality zdravotního systému vůbec — shrnuje kvalitu prenatální, porodnické i novorozenecké péče do jednoho čísla a je mezinárodně srovnatelná. Česko patří dlouhodobě mezi nejlepší země světa, což je přímý důsledek konkrétní systémové politiky (centralizace rizikových porodů). Právě proto je důležité ho měřit: ukazuje nejen výsledek, ale i to, že cílená organizace péče funguje a je hodná ochrany.",
+  "patient_story": "Kateřina Dohnalová porodila ve 27. týdnu těhotenství — o třináct týdnů dřív, než měla. Když se v šestém měsíci objevily komplikace, sanitka ji nevezla do nejbližší okresní nemocnice, ale rovnou do perinatologického centra ve Fakultní nemocnici Ostrava. Její dcera Ela vážila při narození 940 gramů. Dnes, po deseti týdnech na novorozenecké jednotce intenzivní péče, jde domů. Že se Ela narodila právě tam, kde je tým a technika na extrémně nezralé novorozence, nebyla náhoda — byl to systém, který ji tam poslal ještě před porodem.\n\nPerinatální úmrtnost, tedy počet mrtvě narozených dětí od 28. týdne a úmrtí živě narozených do sedmi dnů na 1000 narozených, činí v Česku 4,8 (Eurostat, hlth_cd_aperrto, 2024). Je to pod průměrem Evropské unie (5,4 v roce 2023) i pod všemi sousedy — Rakouskem (5,5), Polskem (5,3) i Slovenskem (5,4). Ukazatel navíc dlouhodobě klesá: z 5,9 v roce 2020 na 4,8 v roce 2024. Signál je proto good — a Česko se řadí mezi absolutní světovou špičku v péči o novorozence.\n\nZa tímto číslem stojí konkrétní strukturální rozhodnutí, ne náhoda ani „česká genetika\". Od 90. let stát vybudoval síť dvanácti perinatologických center vysoce specializované péče a dvanácti center intermediární péče a zavedl systém in-utero transportu: hrozí-li předčasný porod, převáží se ještě těhotná žena do centra, kde je připravená neonatologická intenzivní péče — nikoli křehký novorozenec po porodu. Rizikové a předčasné porody se tak koncentrují tam, kde je nejvíce zkušeností a techniky. Národní registr reprodukčního zdraví přitom sleduje 100 % porodů, takže systém přesně ví, kde se daří a kde ne.\n\nDobrá čísla ale nejsou samozřejmost a existuje páka, jak je udržet i zlepšit. Časná novorozenecká úmrtnost mírně vzrostla (Eurostat 1,0 ‰ v roce 2023 na 1,1 ‰ v roce 2024) a mrtvorozenost dlouhodobě stagnuje kolem 3,3–3,4 ‰ — tedy neklesá tak jako novorozenecká složka. Kompetenci má především Ministerstvo zdravotnictví a plátci: udržet centralizaci rizikových porodů (a bránit tlaku na porody v malých neselektovaných porodnicích), personálně a finančně zajistit neonatologická centra, posílit prenatální screening a dostupnost prenatální péče u sociálně vyloučených skupin, kde je riziko mrtvorozenosti nejvyšší. Perinatální úmrtnost je ukazatel, kde Česko exceluje — a smyslem jeho měření je tuto výhodu neztratit.",
+  "framework": "hspa",
+  "dimension": "kvalita",
+  "verification_status": "verified",
+  "verified_at": "2026-07-06"
+}
