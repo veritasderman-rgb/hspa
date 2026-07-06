@@ -84,12 +84,30 @@ po Dávce F (SÚKL fetcher fix + onko Eurostat): origin seed 83 | live 55 · ill
   (`GetMeasuresForDataset`, `GetIndicators`…) vrací **404** — web app Atlasu volá
   measure list přes POST/jiný service. Bez `measure_id` nelze přidat (nehádat).
 
-**Otevřený drift k revizi (NEsladěno — riziko):** screeningové citace v
-`clanek-centrum-onkologicke-prevence-mou-2026.html` (mamograf 60 %, cervix 52,3 %,
-kolorektál 28 %) neodpovídají aktuálním verified indikátorům (54,5 / 65,7 / 31,1 %).
-Rozdíl u cervixu je velký → pravděpodobně jiná kohorta/záběr, ne prostá zastaralost.
-Vyžaduje ověření definice screening_* indikátorů proti ÚZIS NSC před sladěním článku.
-Zachyceno nočním skenerem (`indicator-drift`).
+**✅ Screening drift VYŘEŠEN (U3, 2026-07-06) — ale odhalen nesoulad definic karet:**
+článek `clanek-centrum-onkologicke-prevence-mou-2026.html` je sladěn s verified
+hodnotami (54,5 / 65,7 / 31,1 %) a hodnoty byly **ověřeny výpočtem přímo z otevřených
+dat ÚZIS NRHZS** (data.mzcr.cz: PPS-01-01 dist. 263, PPS-03-04 dist. 441,
+PPS-02-01 dist. 62; rok 2024 — agregace sedí na desetinu procenta). Klíčové zjištění:
+`extractFromNrhzsScreening()` v `ingest/transform.js` sčítá **všechny věkové skupiny
+souboru**, takže verified hodnoty měří pokrytí **celé cílové populace dle českého
+vymezení** (mamografie ženy 45+ až 85+, cervix ženy 15+, kolorektál 50+), NIKOLI
+kohorty deklarované v metodických kartách:
+
+| Indikátor | Definice karty | Co pipeline reálně počítá | Hodnota v kontraktu (2024) | Hodnota dle definice karty |
+|---|---|---|---|---|
+| `screening_mamograficky` | ženy 50–69, 24 měs. | ženy 45+ (celý soubor) | 54,5 % | 61,4 % (50–69) |
+| `screening_cervix` | ženy 20–64, 3 roky | ženy 15+ (celý soubor) | 65,7 % | 76,7 % (20–64) |
+| `screening_kolorektalni` | populace 50–75 | populace 50+ (celý soubor) | 31,1 % | 32,5 % (50–75) |
+
+Starší citace v článku (mamograf 60 %) tedy nebyla chyba, ale mezinárodní kohorta
+OECD 50–69 (2024: 61,4 %) — rozdíl metodiky, ne zastaralost. **TODO (samostatná
+dávka, ne U3):** sladit definice karet `screening_*` s výpočtem (upravit
+definition + name na „cílová populace 45+/–/50+"), NEBO přidat věkový filtr do
+`extractFromNrhzsScreening()` a počítat deklarované kohorty (pozor: změní se hodnoty
+v kontraktu i srovnatelnost s OECD benchmarkem). Do té doby platí: hodnoty jsou
+správné, jen popisky u nich nesmí tvrdit kohorty 50–69/20–64/50–75 (článek MOÚ
+opraven; ostatní články odkazující na `screening_*` prověřit při noční rutině).
 
 > Integritní oprava (2026-06-01): `rezistence_antibiotik_ecoli` měl `verified`,
 > ale `origin: seed`. Živý ECDC Atlas fetch (ESCCOL.FLUOROQUINOLONES) potvrdil
