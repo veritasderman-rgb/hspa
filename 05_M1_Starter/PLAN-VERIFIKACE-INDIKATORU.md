@@ -164,28 +164,38 @@ doplnit explicit `verified` do karty (1 indikátor).
      `kuractvi_denni`/`prevalence_diabetu` (EHIS 2019 by degradovalo recenci
      proti SZÚ NAUTA / NDR registru, který karty drží jako primární).
 
-2. **OECD (~7 indikátorů)** 🔴 BLOKOVÁNO — fetcher potřebuje přepis
-   - Kandidáti: `alkohol_spotreba`, `spokojenost_pece`, `vydaje_prevence_pct`,
-     `absolventi_lekarstvi_per_100k`, `jednodenni_chirurgie_katarakta`,
-     `pracovnici_ltc_per_100_65plus`, `pyll_potencialne_ztracene_roky`.
-   - **Příčina seed (zjištěno 2026-06-01):** `ingest/fetchers/oecd.js` volá
-     legacy `stats.oecd.org/SDMX-JSON` → **404 (endpoint zrušen)**. `lekari_per_1000`/
-     `sestry_per_1000` už NEJSOU seed (mají ÚZIS NRZP zdroj).
-   - **Nový endpoint OVĚŘEN funkční (připraveno k provedení v samostatném PR):**
-     - Dataflows: `GET sdmx.oecd.org/public/rest/dataflow/OECD.ELS.HD/all/latest`
-       (Accept: `application/vnd.sdmx.structure+json;version=1.0`) → 85 health dataflows.
-     - Data: `GET sdmx.oecd.org/public/rest/data/OECD.ELS.HD,{DATAFLOW},1.0/all?startPeriod=2018&format=jsondata&dimensionAtObservation=AllDimensions`
-       vrací SDMX-JSON 2.0 (`data.structures[0].dimensions.observation` + `data.dataSets[0].observations` klíčované `:`-separovanými indexy). `/all` funguje; `c[REF_AREA]=CZE` filtr vracel prázdno.
-     - Relevantní dataflow ID: alkohol `DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC`,
-       obezita/BW `DF_HEALTH_LVNG_BW`, tabák `DF_HEALTH_LVNG_TC`, PYLL
-       `DSD_HEALTH_STAT@DF_PYLL`, vnímané zdraví `DF_PHS`, příčiny úmrtí `DF_COM`.
-     - **Nutný přepis** `oecd.js` (legacy `parseSdmxJson` ≠ nový SDMX-JSON 2.0 formát)
-       + nový mapping (dataflow + dimenze MEASURE/AGE/UNIT_MEASURE).
-   - **⚠️ Metodická past (NEHÁDAT, ověř per indikátor):** OECD `alkohol_spotreba`
-     pro CZE (15+, L_PS) = **11,2 L (2023)** — ale seed je **14,4 (2024)**. Velký
-     rozdíl (OECD recorded consumption vs národní/WHO odhad vč. neregistrované
-     spotřeby). Tj. swap NENÍ čistý — vyžaduje rozhodnutí o metodice + přepis
-     patient_story. Stejnou kontrolu udělej u každého OECD kandidáta.
+2. **OECD** ✅ VYŘEŠENO — legacy fetcher retirován, konsolidace na `oecd_sdmx2.js` (U4, 2026-07-06)
+   - **Provedeno:** mrtvý `ingest/fetchers/oecd.js` (volal legacy `stats.oecd.org/SDMX-JSON`
+     → **404**) byl odstraněn spolu s osiřelým `ingest/mapping/oecd_codes.json`,
+     `tests/oecd.test.js` a npm skriptem `ingest:oecd`; z pipeline v `ingest/run.js`
+     zmizel krok „OECD Health". Jediná OECD cesta je nyní nový SDMX 2.0 fetcher
+     `oecd_sdmx2.js` na `sdmx.oecd.org` (benchmark JEN z 38 členů `OECD_MEMBERS`,
+     viz decisions-log #2). Všech 8 indikátorů staré `oecd_codes.json` už mělo jiný
+     primární zdroj (nadeje_doziti→Eurostat, mortalita AMI/CMP→ÚZIS NRH live;
+     lekari/sestry/psychiatri→ÚZIS NRZP, vydaje→ČSÚ SHA, kuractvi→EHIS/SZÚ seed),
+     takže „migrace" = konsolidace + odstranění, žádná OECD hodnota se neztratila.
+   - **Live+verified přes `oecd_sdmx2.js` (dávky C+D):** `absolventi_lekarstvi_per_100k`,
+     `pyll_potencialne_ztracene_roky`, `pracovnici_ltc_per_100_65plus`,
+     `vydaje_prevence_pct`, `prezit_karcinom_prsu_5let`, `jednodenni_chirurgie_katarakta`
+     (korekce 35,8 %→98,7 %), `prezit_rakoviny_5let`, `postele_akutni_per_1000`,
+     `luzka_jip_per_100k`.
+   - **⚠️ Vědomě NEzlivněné seed OECD kandidáty (U4 — necháno seed, doloženo):**
+     - `alkohol_spotreba` — **metodická past** (ověřeno živě 2026-07-06,
+       `DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC`, MEASURE=AC, 15+, L_PS): OECD **recorded
+       consumption** pro CZE = **11,2 l (2023) / 10,6 l (2024)**, ale karta drží
+       **národní odhad 14,4 l** vč. neregistrované spotřeby. Nesouměřitelné metriky —
+       swap by byl tichá záměna a rozbil by celý patient_story. Řešeno metodickou
+       poznámkou v kartě (`indicators/alkohol_spotreba.json` → `limitations`), hodnota
+       ponechána seed. OECD řadu lze v budoucnu přidat jen jako **samostatný benchmark
+       s explicitní poznámkou**, ne jako náhradu národního odhadu.
+     - `spokojenost_pece` — survey (Gallup World Poll / Eurobarometer, kompilace
+       v OECD Health at a Glance), **není strojově dostupný SDMX dataflow** v Data
+       Exploreru. Ponecháno seed/ilustrativní (korektní — one-off/survey zdroj bez API).
+   - **Historický kontext discovery (2026-06-01):** nový endpoint ověřen funkční —
+     `GET sdmx.oecd.org/public/rest/data/OECD.ELS.HD,{DATAFLOW},1.0/all?startPeriod=2018&format=jsondata&dimensionAtObservation=AllDimensions`
+     vrací SDMX-JSON 2.0 (`data.structures[0].dimensions.observation` +
+     `data.dataSets[0].observations` klíčované `:`-separovanými indexy). OECD SDMX
+     vrací 500 na `Accept: application/json` → fetcher forcuje `Accept: */*` + HTTP/2 fallback.
 
 3. **Dávka C — ECDC rozšíření** 🟡 částečně
    - ✅ Integritní oprava `rezistence_antibiotik_ecoli` seed→live (viz §2).

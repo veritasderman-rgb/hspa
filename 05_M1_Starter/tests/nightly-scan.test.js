@@ -71,8 +71,10 @@ test('findIndicatorDrift: flaguje zastaralou citaci, mlčí u aktuální', async
     ['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }],
     ['bar_ind', { id: 'bar_ind', value: 250.4, unit: '/100k', year: 2023 }],
   ]);
+  // Statická stránka indikator-{id}.html (foo) i fallback indicator.html?id= (bar) —
+  // drift-check musí detekovat obě formy odkazu.
   const html = `
-    <li><a href="indicator.html?id=foo_ind">Foo</a> — 35,8 % vs. OECD 91 %</li>
+    <li><a href="indikator-foo_ind.html">Foo</a> — 35,8 % vs. OECD 91 %</li>
     <li><a href="indicator.html?id=bar_ind">Bar</a> — 250,4 / 100 000 (2023)</li>`;
   const drifts = findIndicatorDrift(html, byId);
   assert.equal(drifts.length, 1);
@@ -87,19 +89,19 @@ test('findIndicatorDrift: ignoruje cross-link blok „Datový klíč" (article-d
   const databox = `
     <aside class="article-databox" aria-label="Datový rámec článku">
       <ul class="article-databox-list">
-        <li><a href="indicator.html?id=lekari_per_1000"><strong>Lékaři na 1 000 obyvatel</strong></a> — souhrnná hustota, propojení se zákonem 95/2004 Sb. (oblast: Struktury → Lidské zdroje)</li>
+        <li><a href="indikator-lekari_per_1000.html"><strong>Lékaři na 1 000 obyvatel</strong></a> — souhrnná hustota, propojení se zákonem 95/2004 Sb. (oblast: Struktury → Lidské zdroje)</li>
       </ul>
     </aside>`;
   assert.equal(findIndicatorDrift(databox, byId).length, 0, 'databox je cross-link, ne citace');
   // Tatáž zastaralá citace v těle článku (mimo databox) se ale flaguje dál.
-  const body = '<p>V krajích připadá průměrně 3,4 lékaře na 1 000 obyvatel — <a href="indicator.html?id=lekari_per_1000">detail</a>.</p>';
+  const body = '<p>V krajích připadá průměrně 3,4 lékaře na 1 000 obyvatel — <a href="indikator-lekari_per_1000.html">detail</a>.</p>';
   assert.equal(findIndicatorDrift(body, byId).length, 1, 'drift v těle článku zůstává');
 });
 
 test('findIndicatorDrift: bez čísel v okolí neflaguje (jen odkaz bez citace)', async () => {
   const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
   const byId = new Map([['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }]]);
-  const html = '<a href="indicator.html?id=foo_ind">detail indikátoru</a> bez čísel okolo.';
+  const html = '<a href="indikator-foo_ind.html">detail indikátoru</a> bez čísel okolo.';
   assert.equal(findIndicatorDrift(html, byId).length, 0);
 });
 
@@ -107,10 +109,10 @@ test('findIndicatorDrift: jednociferná varianta nematchne uvnitř letopočtu (b
   const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
   const byId = new Map([['pad_ind', { id: 'pad_ind', value: 2.1, unit: '/1000', year: 2024 }]]);
   // okno obsahuje rok 2026 (obsahuje číslici 2), ale NE hodnotu 2,1 → musí flagovat
-  const html = '<p>V roce 2026 bylo pádů 3,4 na 1 000 hospitalizací — <a href="indicator.html?id=pad_ind">detail</a></p>';
+  const html = '<p>V roce 2026 bylo pádů 3,4 na 1 000 hospitalizací — <a href="indikator-pad_ind.html">detail</a></p>';
   const drifts = findIndicatorDrift(html, byId);
   assert.equal(drifts.length, 1, 'stará citace 3,4 ≠ aktuální 2,1; rok 2026 nesmí maskovat drift');
   // a naopak: správná citace 2,1 nesmí flagovat
-  const ok = '<p>Pádů je 2,1 na 1 000 hospitalizací (2024) — <a href="indicator.html?id=pad_ind">detail</a></p>';
+  const ok = '<p>Pádů je 2,1 na 1 000 hospitalizací (2024) — <a href="indikator-pad_ind.html">detail</a></p>';
   assert.equal(findIndicatorDrift(ok, byId).length, 0);
 });

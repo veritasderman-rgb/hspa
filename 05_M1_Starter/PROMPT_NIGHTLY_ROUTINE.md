@@ -13,7 +13,9 @@ publikované články) a hledá tři věci:
    chudý na vizuální komponenty (AV) přesto, že má doložitelná čísla.
 3. **Co je potřeba vzít v potaz z odkazů** — zdrojové odkazy (zákony, EUR-Lex,
    sněmovní tisky, MZ/ÚZIS), u nichž článek avizoval budoucí posun; zkontroluj,
-   jestli k posunu došlo.
+   jestli k posunu došlo. Patří sem i **posun fáze ve VeKLEP** u sledovaných
+   novel (viz FÁZE 3.4) — legislativní radar i články, které na konkrétní návrh
+   odkazují, mají odrážet aktuální stav připomínkového/legislativního procesu.
 
 Běží **v noci**, po denní rutině i po ranním ingest/publish cronu. Cílem NENÍ
 psát nové články, ale **držet existující korpus aktuální a kompletní**.
@@ -27,8 +29,14 @@ psát nové články, ale **držet existující korpus aktuální a kompletní**
 
 Primární zdroje a zakázané praktiky platí stejně jako v denní rutině (ÚZIS, NZIP,
 MZ ČR, VZP, ČSÚ, SÚKL, NCEZ, OECD, Eurostat, WHO, EUR-Lex/ELI, Zákony pro lidi /
-e-Sbírka, PSP ČR, PubMed). Žádná čísla z paměti, žádné sekundární zdroje tam, kde
-existuje primární, žádné „studie ukazují" bez odkazu.
+e-Sbírka, PSP ČR, PubMed, Hlídač státu — VeKLEP/Registr smluv/ÚOHS přes MCP
+`hlidac_statu`). Žádná čísla z paměti, žádné sekundární zdroje tam, kde existuje
+primární, žádné „studie ukazují" bez odkazu.
+
+**Citační pravidla pro Hlídač státu** (platí i v noční rutině): vždy uveď odkaz
+na hlidacstatu.cz + datum dotazu; nespekuluj o motivech aktérů (jen ověřitelná
+fakta — kdo, co, kolik, kdy, jaký je stav); K-Index není obvinění — je to
+metrika rizikovosti smluvní praxe, u každé zmínky dopiš, co index měří.
 
 ---
 
@@ -137,6 +145,37 @@ Commit: `fix(clanky): noční revize {slug} — {co se aktualizovalo}`
   s: slug, co skener našel, odkazy ke kontrole, co je třeba ověřit.
 - Volitelně přidej do `audit:` komentáře poznámku „noční sken: ke kontrole {datum}".
 - **Nikdy** neměň číslo ani tvrzení na základě domněnky.
+
+### 3.4 VeKLEP — kontrola posunů fází u sledovaných novel
+
+Vedle standardních odkazů (3.1–3.3) projdi přes **MCP `hlidac_statu`**
+(`search_veklep_legislation`, případně dohledání konkrétního záznamu) fázi
+u každé zdravotnické novely, kterou portál sleduje:
+
+- Záznamy v **`data/legislativa.json`** (Legislativní radar, pokud dataset
+  existuje — viz U18) — u každého porovnej uloženou `fázi` s aktuálním stavem
+  ve VeKLEP.
+- Články, které explicitně odkazují na konkrétní návrh zákona/novely v
+  připomínkovém řízení (např. „návrh v současné době prochází připomínkovým
+  řízením") — ověř, zda mezitím nepostoupil (např. do vlády, do Sněmovny) nebo
+  nebyl stažen/zamítnut.
+
+**Když fáze postoupila:**
+- Legislativní radar: aktualizuj `stav`/`fáze` + odkaz VeKLEP v
+  `data/legislativa.json` (mechanická datová změna, ne přepis anotace —
+  tu ponech redakci, pokud se mění věcně).
+- Článek: postupuj jako 3.2 — aktualizuj formulaci na aktuální fázi,
+  `audit-status: review-pending`, dopiš do `audit:` komentáře zdroj + datum.
+- Vždy cituj **hlidacstatu.cz** (konkrétní VeKLEP záznam) jako zdroj posunu,
+  nikoli sekundární zprávu o něm.
+
+**Když je posun nejistý nebo VeKLEP záznam nedohledatelný:** flag + issue
+(postup 3.3), ne domněnka.
+
+**Platí i zde** (viz citační pravidla výše): nespekuluj o důvodech zpoždění
+nebo urychlení návrhu, a pokud se v souvislosti s legislativou zmiňuje K-Index
+předkladatele/dotčené instituce, nikdy ho nepodávej jako obvinění — jen jako
+metriku rizikovosti smluvní praxe s vysvětlením metodiky.
 
 ---
 

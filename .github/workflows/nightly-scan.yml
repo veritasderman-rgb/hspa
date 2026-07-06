@@ -1,0 +1,195 @@
+name: Nightly scan
+
+# Spouští se každý den v 02:00 UTC. Pustí deterministický (offline) noční
+# skener `scripts/nightly-scan.js` + report o čerstvosti dat
+# (`verify:freshness:report`). Oba výstupy se uloží do gitignorované složky
+# `reports/` a přiloží jako build artifact.
+#
+# Nic NEcommituje do main — skener sám nic needituje a nechodí na síť
+# (viz hlavička nightly-scan.js). Workflow jen reportuje.
+#
+# Pokud sken najde kategorii `indicator-drift` (citace čísla u odkazu na
+# indikátor neodpovídá aktuální hodnotě datového kontraktu) nebo mrtvé
+# vnitřní odkazy (`no-html` — publikovaný článek bez HTML souboru), založí
+# nebo aktualizuje GitHub issue se štítkem `nightly-scan-alert`.
+# Vzor: freshness-alert issue v refresh.yml.
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # umožní manuální spuštění z GitHub UI
+
+permissions:
+  contents: read   # jen čteme repo, nic necommitujeme
+  issues: write    # potřeba pro založení/aktualizaci alert issue
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compute report date (UTC)
+        id: date
+        run: echo "today=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Run nightly scan
+        id: scan
+        run: |
+          set -o pipefail
+          # Skener zapíše reports/nightly-audit-<today>.{md,json}.
+          # --no-skip-reviewed → úplný worklist (nechceme v CI zamlčet
+          # prioritní odkazy jen proto, že článek byl nedávno auditován).
+          npm run scan:nightly -- --no-skip-reviewed 2>&1 | tee /tmp/scan.log
+
+      - name: Run freshness report
+        run: |
+          set -o pipefail
+          mkdir -p reports
+          # Report-only režim: negatuje (exit 0), jen vypíše přehled origin/stale.
+          npm run verify:freshness:report 2>&1 \
+            | tee "reports/freshness-report-${{ steps.date.outputs.today }}.txt"
+
+      - name: Detect alertable findings
+        id: detect
+        env:
+          TODAY: ${{ steps.date.outputs.today }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const today = process.env.TODAY;
+          const out = process.env.GITHUB_OUTPUT;
+          const jsonPath = `reports/nightly-audit-${today}.json`;
+
+          let items = [];
+          try {
+            items = JSON.parse(fs.readFileSync(jsonPath, 'utf8')).items ?? [];
+          } catch (e) {
+            console.log(`Report ${jsonPath} nenalezen nebo nečitelný: ${e.message}`);
+          }
+
+          const drift = [];   // indicator-drift nálezy
+          const dead = [];    // no-html = mrtvý vnitřní odkaz (chybí HTML článku)
+          for (const it of items) {
+            for (const f of it.flags ?? []) {
+              if (f.type === 'indicator-drift') {
+                drift.push({ slug: it.slug, indicator: f.indicator, note: f.note });
+              } else if (f.type === 'no-html') {
+                dead.push({ slug: it.slug, note: f.note });
+              }
+            }
+          }
+
+          const alert = drift.length > 0 || dead.length > 0;
+
+          // Sestav markdown tělo issue (čte ho github-script krok).
+          const lines = [];
+          lines.push('**Noční sken `nightly-scan.yml` našel nálezy vyžadující revizi.**');
+          lines.push('');
+          lines.push(`Run: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`);
+          lines.push(`Datum (UTC): ${today}`);
+          lines.push('');
+          lines.push('Plný report je přiložený jako artifact `nightly-scan-reports` u tohoto runu.');
+          lines.push('');
+
+          if (drift.length) {
+            lines.push(`## 🔢 indicator-drift (${drift.length})`);
+            lines.push('');
+            lines.push('Citace čísla u odkazu na indikátor neodpovídá aktuální hodnotě datového kontraktu — ověř a aktualizuj citaci v článku.');
+            lines.push('');
+            for (const d of drift) {
+              lines.push(`- **${d.slug}** — indikátor \`${d.indicator}\`: ${d.note}`);
+            }
+            lines.push('');
+          }
+
+          if (dead.length) {
+            lines.push(`## 🔗 Mrtvé vnitřní odkazy — no-html (${dead.length})`);
+            lines.push('');
+            lines.push('Publikovaný článek nemá odpovídající HTML soubor (rozbitý vnitřní odkaz).');
+            lines.push('');
+            for (const d of dead) {
+              lines.push(`- **${d.slug}** — ${d.note}`);
+            }
+            lines.push('');
+          }
+
+          lines.push('## Co s tím');
+          lines.push('1. Otevřít přiložený report a projít nálezy.');
+          lines.push('2. `indicator-drift` → aktualizovat citaci hodnoty v článku podle `data/indicators.json`.');
+          lines.push('3. `no-html` → obnovit chybějící soubor `clanek-*.html` nebo srovnat `published`/`slug` v `data/articles.json`.');
+          lines.push('4. Skener sám nic needituje — akce je na redakci/agentovi (viz `PROMPT_NIGHTLY_ROUTINE.md`).');
+          lines.push('');
+          lines.push('_Issue je automaticky aktualizován při dalším nálezu; po vyřešení ho zavři ručně._');
+
+          fs.writeFileSync('reports/nightly-issue-body.md', lines.join('\n') + '\n');
+
+          fs.appendFileSync(out, `alert=${alert}\n`);
+          fs.appendFileSync(out, `drift_count=${drift.length}\n`);
+          fs.appendFileSync(out, `dead_count=${dead.length}\n`);
+
+          console.log(`indicator-drift: ${drift.length} | no-html: ${dead.length} | alert: ${alert}`);
+          NODE
+
+      - name: Upload reports artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-scan-reports
+          path: 05_M1_Starter/reports/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Open or update nightly-scan alert issue
+        if: steps.detect.outputs.alert == 'true' && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const title = '🌙 Noční sken — indicator-drift / mrtvé odkazy';
+            const body = fs.readFileSync('05_M1_Starter/reports/nightly-issue-body.md', 'utf8');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'nightly-scan-alert',
+            });
+
+            if (issues.length > 0) {
+              // Aktualizuj tělo existujícího issue aktuálním reportem
+              // a přidej komentář s odkazem na nový run.
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body,
+              });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body: `Další nález (${new Date().toISOString()}): drift ${{ steps.detect.outputs.drift_count }}, mrtvé odkazy ${{ steps.detect.outputs.dead_count }} · run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['nightly-scan-alert'],
+              });
+            }

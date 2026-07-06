@@ -24,7 +24,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | Sitemap, per-page mapa JS modulů | [`docs/site-architecture.md`](docs/site-architecture.md) |
 | Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
 | Backlog, status auditu | [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md), [`05_M1_Starter/STATUS_AUDIT_*.md`](05_M1_Starter/) |
-| Denní rutina cronu | [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) |
+| Denní rutina cronu | [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) |
 
 ---
 
@@ -46,7 +46,7 @@ Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podk
 ```bash
 cd 05_M1_Starter
 npm install
-npm test          # ~355 testů, 349+ musí projít (6 pre-existing failures z xlsx/csv-parse)
+npm test          # 595 testů, 0 failures
 npm run serve     # http://localhost:8080
 ```
 
@@ -386,11 +386,12 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 
 ### Living docs (aktuální plány a backlog)
 
+- [`05_M1_Starter/PLAN-PRACE.md`](05_M1_Starter/PLAN-PRACE.md) — kompletní audit kódu/backlogu/automatizací + sada úkolů U1–U30 pro další vývoj (vstupní bod pro novou session bez konkrétního zadání)
 - [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
 - [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md) — aktuální backlog
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
 - [`05_M1_Starter/STATUS_AUDIT_2026-05-18.md`](05_M1_Starter/STATUS_AUDIT_2026-05-18.md) — historický audit stavu
-- [`05_M1_Starter/PROMPT_DAILY_ROUTINE.md`](05_M1_Starter/PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
+- [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
 - [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`
 - [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md) — sociální rutina (1×/den): doplňuje frontu Bufferu na 10 postů/kanál podle aktuálnosti; Buffer = zdroj pravdy
 - [`05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md`](05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md) — týdenní newsletter (čtvrtek → pátek 11:00 přes Brevo): Florencin úvod + 3–4 neposlané články; evidence `data/newsletter-log.json`, builder `scripts/newsletter-build.js`

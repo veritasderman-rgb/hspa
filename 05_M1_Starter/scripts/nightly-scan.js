@@ -112,7 +112,8 @@ export function valueVariants(value) {
 }
 
 /**
- * Drift-check: pro každý odkaz indicator.html?id=X v článku zkontroluje,
+ * Drift-check: pro každý odkaz na indikátor v článku — statickou stránku
+ * indikator-{id}.html i fallback indicator.html?id={id} — zkontroluje,
  * zda se v okolním textu (±220 znaků) vyskytuje AKTUÁLNÍ hodnota indikátoru.
  * Flaguje jen případy, kdy okno obsahuje číslo (citaci), ale žádná varianta
  * aktuální hodnoty nesedí — tj. pravděpodobně citace zastaralé hodnoty.
@@ -130,11 +131,12 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
     .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '')
     .replace(/<(aside|section)\b[^>]*class="[^"]*article-databox[^"]*"[\s\S]*?<\/\1>/gi, '');
   const drifts = [];
-  const re = /indicator\.html\?id=([a-z0-9_]+)/g;
+  // Statická stránka indikator-{id}.html (preferovaná) i fallback indicator.html?id={id}.
+  const re = /indikator-([a-z0-9_]+)\.html|indicator\.html\?id=([a-z0-9_]+)/g;
   const seen = new Set();
   let m;
   while ((m = re.exec(html)) !== null) {
-    const id = m[1];
+    const id = m[1] || m[2];
     if (seen.has(id)) continue;
     seen.add(id);
     const ind = indicatorsById.get(id);

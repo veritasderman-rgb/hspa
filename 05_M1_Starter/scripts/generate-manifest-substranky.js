@@ -646,7 +646,7 @@ function renderDataSection(ids) {
     }
 
     return `
-        <a class="manifest-data-card" href="/indicator.html?id=${id}" data-indicator-id="${id}" data-indicator-domain="manifest">
+        <a class="manifest-data-card" href="/indikator-${id}.html" data-indicator-id="${id}" data-indicator-domain="manifest">
           <div class="manifest-data-card-id">${id}</div>
           <div class="manifest-data-card-value">${cz(ind.value)}${unit}</div>
           <div class="manifest-data-card-name">${esc(ind.name)}</div>${cmp}

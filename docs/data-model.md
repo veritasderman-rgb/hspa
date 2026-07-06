@@ -137,6 +137,42 @@ Detailní karta pro jeden indikátor. 1 JSON soubor = 1 indikátor. Linkováno z
 }
 ```
 
+### `source.origin` (seed/live) — proč je jen v kontraktu, ne v kartě
+
+Metodická karta **záměrně nemá** pole `origin`/`fetched_at`. Rozhodnutí (U11,
+2026-07): `origin` popisuje stav **konkrétního ingest běhu** — jestli poslední
+`npm run transform` získal hodnotu z živého fetcheru, nebo spadl zpět na seed
+(např. zdroj je dole, mapping chybí, sandbox bez síťového přístupu). To je
+vlastnost běhu pipeline, ne vlastnost metodiky indikátoru — proto žije jen
+v `data/indicators.json.indicators[].source.origin`, který transform
+přegeneruje při každém běhu. Kopírovat ho i do karty by vytvořilo dva zdroje
+pravdy, které se rozjedou (karta je commitovaná ručně, kontrakt se přepisuje
+cronem denně).
+
+Karta místo toho nese **editorial** pole `verification_status` (`verified` |
+`preliminary` | `illustrative` | ...) + `verified_at` — to je tvrzení redakce
+„metodiku a zdroj jsme ověřili", nezávislé na tom, jestli si dnešní cron běh
+vyzvedl live hodnotu. Transform tato pole přenáší pass-through do
+`data/indicators.json` (`ingest/transform.js`, `buildIndicator`).
+
+**Očekávaný vztah:** karta s `verification_status: "verified"` by měla
+odpovídat záznamu v kontraktu s `source.origin: "live"` — „ověřili jsme zdroj"
+dává smysl jen pro hodnotu, která z něj skutečně živě přišla. Pokud karta tvrdí
+`verified`, ale kontrakt má `origin: "seed"` (fetcher zrovna spadl na seed,
+nebo ověření proběhlo dřív než napojení fetcheru), jde o dočasnou nekonzistenci
+— ne chybu schématu, ale signál k dořešení (dodělat/opravit fetcher pro daný
+indikátor).
+
+Konzistenci hlídá `tests/verification-origin-consistency.test.js`:
+- projde všechny karty s `verification_status: "verified"` a ověří
+  `source.origin === "live"` v `data/indicators.json`,
+- **nové** nekonzistence (id mimo snapshot `KNOWN_SEED_VERIFIED_EXCEPTIONS`
+  v testu) test shodí,
+- existující výjimky (7 ke dni 2026-07-06 — viz seznam v testu) jsou dočasně
+  tolerované, aby test nerozbil CI na nekonzistencích, které čekají na
+  dokončení fetcherů. Jakmile se pro daný indikátor doplní live fetcher, id
+  ze seznamu výjimek odeber (test na to sám neupozorní).
+
 ---
 
 ## 3. `data/articles.json` — články (63 záznamů)

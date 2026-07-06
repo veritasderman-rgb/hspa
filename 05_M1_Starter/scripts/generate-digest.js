@@ -117,14 +117,14 @@ export function buildDigest({ indicators, snapshot, snapshotDate, articles, toda
   if (diff.newlyVerified.length) {
     lines.push(`### Nově ověřené indikátory (${diff.newlyVerified.length})`);
     for (const c of diff.newlyVerified) {
-      lines.push(`- **${c.name}** — ${fmt(c.value)} ${c.unit} (${c.year ?? '?'}) · [detail](${SITE_BASE}/indicator.html?id=${c.id})`);
+      lines.push(`- **${c.name}** — ${fmt(c.value)} ${c.unit} (${c.year ?? '?'}) · [detail](${SITE_BASE}/indikator-${c.id}.html)`);
     }
     lines.push('');
   }
   if (diff.signalChanges.length) {
     lines.push(`### Změny signálu (${diff.signalChanges.length})`);
     for (const c of diff.signalChanges) {
-      lines.push(`- **${c.name}**: ${c.from} → **${c.to}** · [detail](${SITE_BASE}/indicator.html?id=${c.id})`);
+      lines.push(`- **${c.name}**: ${c.from} → **${c.to}** · [detail](${SITE_BASE}/indikator-${c.id}.html)`);
     }
     lines.push('');
   }

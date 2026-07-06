@@ -25,6 +25,7 @@ Primární zdroje:
 - **Evropské/mezinárodní**: OECD (Health at a Glance, OECD.Stat, HCQI), Eurostat (hlth\_\* datasety), WHO (Mortality DB, Health Observatory, guidelines), IARC (Monographs), EU EUR-Lex (ELI permalink)
 - **Legislativa**: ASPI / Zákony pro lidi, PSP ČR (sněmovní tisky), Senát, eKLEP (meziresortní řízení), Sbírka zákonů, nalus.usoud.cz (judikatura ÚS)
 - **Recenzovaná literatura**: PubMed/MEDLINE (DOI), Cochrane Library
+- **Transparentnost/veřejné zakázky**: Hlídač státu (hlidacstatu.cz) přes MCP — VeKLEP (stav legislativy v přípravě), Registr smluv (`search_contracts`, `get_contract_detail`), rozhodnutí ÚOHS (`search_uohs_decisions`), K-Index smluvní praxe (`get_kindex_for_legal_entity`)
 
 Co je **zakázáno**:
 
@@ -33,6 +34,7 @@ Co je **zakázáno**:
 - Ponechávat tvrzení typu „studie ukazují", „odborníci se shodují", „je všeobecně známé" bez konkrétního odkazu
 - Generovat vizuální prvky (KPI karty, grafy, mapy) z hodnot, které nejsou v textu doložené
 - Tvořit dvojici „číslo vs benchmark", kde každé pochází z jiné metodiky (např. WHO total vs OECD recorded) bez explicitního methodology caveatu
+- **U zjištění z Hlídače státu**: citovat data bez odkazu na hlidacstatu.cz (vždy uveď zdroj + datum dotazu), spekulovat o motivech aktérů („zřejmě chtěli obejít…", „patrně jde o snahu…" — piš jen ověřitelná fakta, ne domněnky o úmyslu), interpretovat K-Index jako obvinění nebo důkaz korupce (je to metrika rizikovosti smluvní praxe — vysoké skóre = vyšší riziko dle zvolených indikátorů, ne rozsudek; vždy dopiš metodickou výhradu)
 
 **Nejistota je vždy lepší než falešná jistota.** Krátký, věcný, doložený článek překonává dlouhý, čtivý a nepřesný.
 
@@ -61,6 +63,35 @@ Co je **zakázáno**:
 | 13 | **NÚKIB** | nukib.cz/cs/aktualni-informace | Bezpečnostní incidenty zdravotnictví, NIS2 implementace |
 | 14 | **Recenzovaná literatura ČR** | PubMed query: "Czech Republic" + healthcare keyword | Nové domácí studie |
 
+### Hlídač státu — doplňkový discovery kanál (transparentnost, legislativa v přípravě)
+
+Vedle powerlistu výše projdi denně přes **MCP `hlidac_statu`** tři dotazy zaměřené
+na zdravotnictví. Tento kanál je doplňkový k powerlistu (ne náhrada) — cílí na
+věci, které powerlist nezachytí: legislativu **před** schválením a smluvní praxi
+veřejných zdravotnických institucí.
+
+| # | Nástroj | Filtr | Co hledat |
+|---|---|---|---|
+| a | `search_veklep_legislation` | zdravotnictví, MZ ČR jako předkladatel, posledních **7 dní** | Nový návrh zákona/novely v připomínkovém řízení, posun fáze u sledované normy |
+| b | `search_contracts` | kategorie `zdrav_*`, řazeno dle hodnoty/data; hledej **skrytou cenu** nebo hodnotu **těsně pod limitem ZZVZ** | Mimořádná zdravotnická smlouva (objem, dodavatel, instituce) |
+| c | `search_uohs_decisions` | zdravotnictví / nemocnice / VZP jako účastník řízení | Nové rozhodnutí ÚOHS (pokuta, zákaz plnění, přezkum zadávacího řízení) |
+
+**Citační pravidla pro tento kanál** (viz i sekci „Co je zakázáno" výše):
+
+1. Každý nález cituj s **odkazem na hlidacstatu.cz** (konkrétní stránka smlouvy /
+   subjektu / rozhodnutí) a datem, kdy jsi dotaz spustil.
+2. **Nespekuluj o motivech** — piš jen to, co je v datech: kdo, co, kolik, kdy,
+   jaká je kategorie/stav. Žádné „snaha obejít", „účelově rozdělená zakázka" bez
+   explicitního výroku ÚOHS nebo jiného primárního zdroje, který to tvrdí.
+3. **K-Index ≠ obvinění.** Pokud v nálezu figuruje K-Index instituce, vždy dopiš
+   jednou větou, co index měří (podíl smluv se skrytou cenou, blízkost limitu
+   ZZVZ, koncentrace dodavatelů) a že jde o metriku rizikovosti smluvní praxe,
+   ne o zjištění protiprávního jednání.
+4. Nález z tohoto kanálu je **kandidát** na článek dne (ARTICLE-WRITE, rubrika
+   „Peníze ve zdravotnictví" — viz U17/U19) nebo na aktualizaci legislativního
+   radaru (`data/legislativa.json`, **pokud dataset existuje** — viz U18; pokud
+   ještě neexistuje, veď VeKLEP nález jen jako řádek v discovery reportu níž).
+
 ### Výstup fáze 1 — Discovery report
 
 Vytvoř soubor `discovery/discovery-YYYY-MM-DD.md` s seznamem nálezů:
@@ -83,6 +114,11 @@ Vytvoř soubor `discovery/discovery-YYYY-MM-DD.md` s seznamem nálezů:
 ## Aktualizace existujících dat (vlna)
 - ÚZIS NRH 2024 (data za 2023) publikováno DD. MM.
 - Eurostat hlth_silc_08 — nová vlna 2024
+
+## Hlídač státu — VeKLEP / Registr smluv / ÚOHS (posledních 7 dní)
+- VeKLEP: [nový/posunutý návrh — název, předkladatel, fáze, odkaz hlidacstatu.cz] / (žádný nový)
+- Registr smluv: [instituce — předmět, hodnota, dodavatel, skrytá cena ano/ne, odkaz] / (žádná mimořádná)
+- ÚOHS: [instituce — předmět rozhodnutí, výsledek, odkaz] / (žádné nové)
 
 ## Doporučení pro routing fáze
 - HOT (nový indikátor): [seznam]
