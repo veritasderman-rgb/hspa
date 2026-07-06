@@ -9,12 +9,22 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "uzis_nzis",
-      "note": "Příčiny úmrtí, výpočet dle Eurostat seznamu preventovatelných příčin."
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_apr",
+      "dataset": "hlth_cd_apr",
+      "dimensions": {
+        "geo": "CZ",
+        "sex": "T",
+        "mortalit": "PRVT",
+        "icd10": "TOTAL",
+        "unit": "RT"
+      },
+      "note": "Eurostat řada hlth_cd_apr (avoidable mortality), dimenze mortalit=PRVT (preventable). Standardizovaná míra (unit=RT) na evropskou standardní populaci (ESP), předčasná úmrtí do 75 let na 100 000. Národním zdrojem prvotních dat o příčinách úmrtí (List o prohlídce zemřelého) je ČSÚ, harmonizovaný do Eurostatu. Ověřeno živě z Eurostat API 2026-07-06: CZ 173,86 (2023), EU27_2020 150,85."
     },
     "fallback": {
-      "type": "eurostat",
-      "code": "hlth_cd_apr"
+      "type": "csv",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table?lang=en",
+      "note": "Eurostat Data Browser — interaktivní tabulka a stažení v CSV/TSV/JSON."
     }
   },
   "benchmark_source": {
@@ -35,7 +45,9 @@
   ],
   "method_notes": "Definice dle Eurostat/OECD seznamu preventabilních (preventable) příčin úmrtí, premature mortality do 75 let. Primární zdroj hodnoty i benchmarku je Eurostat hlth_cd_apr (referenční populace ESP). Společně s léčitelnou (treatable/amenable) úmrtností tvoří odvratitelnou úmrtnost (avoidable mortality).",
   "limitations": "Závisí na aktuálnosti listiny diagnóz. Nerozlišuje příčiny na individuální vs. systémové.",
-  "patient_story": "Liberec, krajská nemocnice, oddělení interny, sobota večer, mladší muž (47) přivezen pro pokročilou jaterní cirhózu s krvácením do žaludku. Anamnéza: kouření, denní pití od 25 let, žádná preventivní prohlídka deset let. Pacient zemřel po 36 hodinách. To je „preventovatelné úmrtí\" v OECD klasifikaci — úmrtí v produktivním věku, kterému by bylo možné předejít primární prevencí nebo včasnou léčbou.\n\nPreventabilní mortalita byla v ČR 195 úmrtí na 100 000 obyvatel mladších 75 let (rok 2022; OECD/European Observatory, Country Health Profile 2025: Czechia — data Eurostat hlth_cd_apr). Průměr EU činil 168, Česko je tedy o 16 % nad průměrem unie. Hodnota dlouhodobě klesá: z 188 v roce 2019 ji pandemie covidu-19 vyhnala na 218 v roce 2020 a 286 v roce 2021, poté se vrátila na 195 v roce 2022 a podle předběžných dat Eurostatu na 174 v roce 2023. Preventabilní úmrtnost je jen jednou ze dvou složek odvratitelné úmrtnosti — druhou je léčitelná (treatable) úmrtnost, v ČR 113 vs. 90 v EU (2022).\n\nStrukturálně preventabilní mortalita kombinuje dvě věci: chování (tabák, alkohol, nezdravá strava, sedavost) a slabou primární prevenci (screening, kontrola hypertenze, vakcinace). Česko zaostává v obou. WHO definuje preventabilní úmrtí jako ta, kterým by „mohla zabránit účinná veřejnozdravotní intervence\". Z 30 nejčastějších diagnóz preventabilních úmrtí v ČR vede plíce, kardiovaskulární systém, alkoholová onemocnění jater, dopravní úrazy a sebevraždy. Léčba dostupná v Česku je technicky srovnatelná s OECD — mezera vzniká před vstupem do systému.\n\nPreventabilní mortalita je jeden z nejdůležitějších indikátorů funkčnosti zdravotního systému jako celku — měří, jestli systém pacienta vůbec zachytí, dřív než onemocnění vznikne. Politické páky kumulují všechno, co diskutujeme v ostatních článcích: tobacco control, alkoholová politika, screening, vakcinace, péče o duševní zdraví, kontrola hypertenze. Dotažení na evropský průměr (168) by znamenalo řádově tisíce zachráněných životů ročně. Indikátor v HSPA dashboardu je proxy efektivity celé preventivní vrstvy systému.",
+  "patient_story": "Liberec, krajská nemocnice, oddělení interny, sobota večer, mladší muž (47) přivezen pro pokročilou jaterní cirhózu s krvácením do žaludku. Anamnéza: kouření, denní pití od 25 let, žádná preventivní prohlídka deset let. Pacient zemřel po 36 hodinách. To je „preventovatelné úmrtí\" v OECD klasifikaci — úmrtí v produktivním věku, kterému by bylo možné předejít primární prevencí nebo včasnou léčbou.\n\nPreventabilní mortalita byla v ČR 174 úmrtí na 100 000 obyvatel mladších 75 let (rok 2023; Eurostat hlth_cd_apr, dimenze preventable). Průměr EU-27 činil 151, Česko je tedy o 15 % nad průměrem unie. Hodnota dlouhodobě klesá: z 188 v roce 2019 ji pandemie covidu-19 vyhnala na 218 v roce 2020 a 286 v roce 2021, poté se vrátila na 195 v roce 2022 a na 174 v roce 2023. Preventabilní úmrtnost je jen jednou ze dvou složek odvratitelné úmrtnosti — druhou je léčitelná (treatable) úmrtnost, v ČR 107 vs. 87 v EU (2023).\n\nStrukturálně preventabilní mortalita kombinuje dvě věci: chování (tabák, alkohol, nezdravá strava, sedavost) a slabou primární prevenci (screening, kontrola hypertenze, vakcinace). Česko zaostává v obou. WHO definuje preventabilní úmrtí jako ta, kterým by „mohla zabránit účinná veřejnozdravotní intervence\". Z 30 nejčastějších diagnóz preventabilních úmrtí v ČR vede plíce, kardiovaskulární systém, alkoholová onemocnění jater, dopravní úrazy a sebevraždy. Léčba dostupná v Česku je technicky srovnatelná s OECD — mezera vzniká před vstupem do systému.\n\nPreventabilní mortalita je jeden z nejdůležitějších indikátorů funkčnosti zdravotního systému jako celku — měří, jestli systém pacienta vůbec zachytí, dřív než onemocnění vznikne. Politické páky kumulují všechno, co diskutujeme v ostatních článcích: tobacco control, alkoholová politika, screening, vakcinace, péče o duševní zdraví, kontrola hypertenze. Dotažení na evropský průměr (168) by znamenalo řádově tisíce zachráněných životů ročně. Indikátor v HSPA dashboardu je proxy efektivity celé preventivní vrstvy systému.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-07-06"
 }

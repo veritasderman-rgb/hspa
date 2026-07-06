@@ -59,7 +59,13 @@ po Dávce C (OECD):     origin seed 87 | live 42   ·  illustrative 80 | prelimi
 po Dávce D (OECD SDMX2): origin seed 84 | live 46  ·  illustrative ~74 | verified ~52
 po Dávce E (SÚKL+Eurostat): origin seed 81 | live 49 · illustrative ~72 | verified ~58
 po Dávce F (SÚKL fetcher fix + onko Eurostat): origin seed 83 | live 55 · illustrative 73 | preliminary 8 | verified 57
+po Dávce G (Eurostat mortalita/zubní/potraty + OECD kyčel): origin seed 99 | live 64 · illustrative 82 | preliminary 8 | verified 73
 ```
+
+> Pozn.: mezi Dávkou F a G přibyly do datového kontraktu další indikátory (celkem
+> 163) a proběhla další verifikační práce mimo tento tracker — proto výchozí čísla
+> Dávky G (illustrative 87 → 82, verified 68 → 73) navazují na aktuální stav, ne
+> přímo na řádek Dávky F.
 
 **Dávky D–E (2026-06-10, session „tender-edison"):**
 - ✅ **Dávka D — OECD SDMX 2.0 (+5 verified, 1 origin fix):** `pyll_potencialne_ztracene_roky`
@@ -72,6 +78,39 @@ po Dávce F (SÚKL fetcher fix + onko Eurostat): origin seed 83 | live 55 · ill
   nativní unzip), `vypadky_leciv_aktivni` (1 378 aktivních přerušení + historický trend
   z přehrání kumulativního feedu), `mortalita_onkologicka` (Eurostat hlth_cd_asdr2, 250,4 / 100k
   ESP 2013; seed 180 byl neověřitelný).
+
+**Dávka G (2026-07-06, session „verify-batch-G" / U5) — +5 verified:**
+- ✅ **Eurostat (4):**
+  - `mortalita_lecitelna` — hlth_cd_apr, mortalit=TRT, icd10=TOTAL, unit=RT →
+    CZ **107,19** (2023), EU27 86,81 → signal bad. Karta už byla nachystaná
+    (primary=eurostat_jsonstat, patient_story 107,2/86,8) — dotažen jen switch.
+  - `mortalita_preventabilni` — táž řada, mortalit=PRVT → CZ **173,86** (2023),
+    EU27 150,85 → bad. Karta přepnuta uzis_nzis→eurostat_jsonstat; patient_story
+    sladěn (195/2022 → 174/2023, EU 151, léčitelná 107 vs 87).
+  - `nesplnena_potreba_zubni_pece` — hlth_silc_09, reason=TXP_TFAR_WLIST,
+    Y_GE16, quantile=TOTAL → CZ **1,0 %** (2025, nejnovější vlna), EU27 3,3 % →
+    good. Karta byla psaná na 2024=1,3; sladěna na 2025=1,0 (trend, kvintilový
+    gradient QU1 2,1 / QU5 0,3 = 7:1, sousedé 2025). Použit nejčerstvější rok,
+    protože fetcher bere latest → jinak by cron kartu rozešel s daty.
+  - `umela_preruseni_tehotenstvi` — demo_fabortind, ABORTRT, unit=RT →
+    CZ **4,9** (2024), context_dependent → neutral (Eurostat pro tento řez
+    nepublikuje EU agregát; srovnání se sousedy). Karta primary registry→
+    eurostat_jsonstat (ÚZIS NRRZ zůstává jako národní origin ve fallbacku/notě).
+- ✅ **OECD SDMX 2.0 (1):** `operace_zlomenina_kycle_48h` — DSD_HCQO@DF_AC,
+  MEASURE=IHWTHIPS (hip-fracture surgery ≤2 dny), AGE=Y_GE65, SEX=_T,
+  STATISTICAL_OPERATION=OBS → CZ **79,2 %** (2021), OECD ⌀ **80,1** (n členů,
+  shoduje se s benchmark_source karty) → warn. Karta primary oecd→oecd_sdmx2
+  (legacy oecd.js byl v U4 retirován).
+- Přidány mappingy: 4× `eurostat_codes.json`, 1× `oecd_sdmx2_codes.json`.
+  Testy: 5 nových v `tests/eurostat-mapping.test.js` + 2 v `tests/oecd_sdmx2.test.js`.
+- **Vědomě ponecháno seed (NEHÁDÁNO):** `gender_pay_gap_zdravotnictvi` — hodnota
+  CZ 24,9 % (2024) je z Eurostat earn_gr_gpgr2 NACE Q strojově ověřitelná, ALE
+  benchmark (medián členských států) Eurostat pro tento řez nepublikuje jako
+  agregát a standardní eurostat.js fetcher jej neumí spočítat (tahá jen CZ+eu_code).
+  Zlivnění vyžaduje rozšíření fetcheru o výpočet mediánu napříč státy — samostatná
+  dávka. `farmaceuti_per_100k` (Eurostat hlth_rs_prs1 „historical", frozen 2021 <
+  seed 2023). `podil_generik_objem` (OECD DF_GEN_MRKT — jiná agentura/klíč,
+  discovery neuzavřen).
 
 **Blokované zdroje (ověřeno 2026-06-10, NEhádat hodnoty):**
 - **ÚZIS / data.gov.cz** — CKAN API `data.gov.cz/api/3/action/*` vrací **404**
