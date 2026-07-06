@@ -5,17 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--
   audit:
-    last_reviewed: 2026-06-23
+    last_reviewed: 2026-07-06
     reviewer: claude-code-agent
-    status: review-pending
+    status: partial
     creation_phase: fallback-audit (denní rutina, source-verification)
     primary_sources_count: 19
     notes: "Fallback-audit nejstaršího needitovaného článku (chyběl audit blok). Nezávislá source-verification odhalila, že centrální KPI (in-hospital mortalita po CMP) byla zastaralá a metodicky neaktuální: článek uváděl 11,2 % (MKN-10 I60–I64, vč. hemoragických), ale indikátor mortalita_inhosp_cmp byl mezitím (a) zúžen na ischemickou CMP (MKN-10 I63) kvůli sladění s OECD ischemic benchmarkem a (b) aktualizován na vlnu NRH 2024 = 9,9 % (metodická karta verified 2026-06-01; cover_viz v articles.json už 9,9 nesl). Sjednoceno napříč souborem: titulek (Pětina víc → 9,9 % proti 7,7 v OECD), deck, og/twitter/JSON-LD, hero counter, funnel result + context, databox, metodické poznámky; gap +3,5 pp → +2,2 pp; MKN I60–I64 → I63. Reconcilovány i cross-ref hodnoty s verifikovanými sesterskými články: denní kuřáctví 22,6 → 16,4 % vs OECD 14,8 (clanek-koureni); spotřeba alkoholu v těle 11,2/9,8 → 14,4/8,9 (clanek-alkohol-spotreba, shoda s figure/databox); obezita 17/14,6 → 19,8/16,5 (Eurostat). OECD benchmark 7,7 % potvrzen z datového kontraktu (externí fetch OECD URL 403 anti-bot). DOI landmark studií (ECASS III, DAWN, DEFUSE-3, HERMES, Helsinki) ponechány. Otevřený bod mimo rozsah: AMI cross-ref 5,2 % odpovídá sesterskému clanek-akutni-infarkt (titulek), ale datový kontrakt mortalita_inhosp_ami = 4,57 % — ponecháno na 5,2 kvůli vnitřní konzistenci s odkazovaným článkem; clanek-akutni-infarkt potřebuje vlastní rekonciliaci. Status review-pending — headline-level změna čeká na ruční schválení redakce."
--->
+    update_2026-07-06: "U6 rychlý audit (doplnění audit-status do articles.json + link-check). Centrální čísla odpovídají datovému kontraktu (mortalita_inhosp_cmp 9,9 % vs. OECD 7,7 / EU 8,5, 2024). Link-check odhalil 2 mrtvé odkazy (HTTP 404): doi.org/10.1212/WNL.0b013e3182574d2c (DOI nenalezen — ověřit správnost citace landmark studie) a nzip.cz/clanek/188-cevni-mozkova-prihoda (stránka přesunuta). Dále 2 odkazy nedostupné ze sandboxu (qualityregistry.eu, strokeaudit.org — TLS/connection fail, může jít o blokaci proxy). Status review-pending → partial (známé otevřené body: mrtvé odkazy + neschválená headline změna z 2026-06-23). Opravu odkazů provede plný audit (U8)."
+    update_2026-07-06b: "U8 dávkový audit — vyřešeny 2 mrtvé odkazy z U6 link-checku: (1) DOI Meretoja Helsinki Stroke Model opraveno z 10.1212/WNL.0b013e3182574d2c (404) na správné 10.1212/WNL.0b013e31825d6011 (ověřeno přes PubMed, PMID 22622858, Neurology 2012;79(4):306–313); doplněn PMID odkaz. (2) NZIP CMP odkaz opraven z /clanek/188-cevni-mozkova-prihoda (404, ID přeindexováno) na /clanek/980-cevni-mozkova-prihoda-co-to-je (ověřeno vyhledáváním). Centrální čísla (mortalita_inhosp_cmp 9,9 % vs OECD 7,7 / EU 8,5; KV 463,75 vs EU-27 312,95; kuřáctví 16,4/14,8; alkohol 14,4/8,9; kontrola_hypertenze 68/72) znovu potvrzena vůči datovému kontraktu. Landmark DOI ECASS III / DAWN / DEFUSE-3 / HERMES ponechány (ověřeny v dřívějších revizích). Ponecháno partial — headline-level změna (11,2 → 9,9 %) i AMI cross-ref 5,2 % vs kontrakt 4,57 % čekají na schválení redakce."
 <title>Iktová centra fungují, výsledky horší. Úmrtnost po cévní mozkové příhodě 9,9 % proti 7,7 v OECD · HSPA Monitor</title>
 <meta name="description" content="Nemocniční mortalita po ischemické cévní mozkové příhodě je v Česku 9,9 procenta proti 7,7 v průměru OECD. Akutní léčbu (trombolýza, trombektomie) máme dobře organizovanou — co tedy stahuje výsledky dolů.">
 <meta name="robots" content="index, follow">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="partial">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Iktová centra fungují, výsledky horší. Úmrtnost po CMP 9,9 % proti 7,7 v OECD">
 <meta property="og:description" content="Nemocniční mortalita po ischemické CMP 9,9 % vs. OECD 7,7. Akutní léčba je dobrá — co tedy stahuje výsledky dolů.">
@@ -256,7 +257,7 @@
       <h3>Modely, které tyto vrstvy řeší</h3>
 
       <p>
-        Srovnatelné systémy v Evropě jsou často zaměřené přesně na to, kde Česko ztrácí. <strong>Helsinki Stroke Model</strong>, popsaný Meretojou a kolektivem v <em>Neurology</em> 2012 (doi <a href="https://doi.org/10.1212/WNL.0b013e3182574d2c" target="_blank" rel="noopener">10.1212/WNL.0b013e3182574d2c</a>), optimalizoval každý krok od telefonátu na záchrannou službu po podání trombolytika a dosáhl mediánového „door-to-needle" času pod 20 minut. Helsinki protokol — pre-notifikace záchranné služby cílové nemocnice, příjem pacienta přímo na CT s minulou anamnézou již načtenou v systému, podání trombolytika ještě před převozem na lůžko — se postupně replikuje napříč Evropou (Meretoja A et al., <em>Stroke</em> 2013, validace v Melbourne).
+        Srovnatelné systémy v Evropě jsou často zaměřené přesně na to, kde Česko ztrácí. <strong>Helsinki Stroke Model</strong>, popsaný Meretojou a kolektivem v <em>Neurology</em> 2012 (doi <a href="https://doi.org/10.1212/WNL.0b013e31825d6011" target="_blank" rel="noopener">10.1212/WNL.0b013e31825d6011</a>), optimalizoval každý krok od telefonátu na záchrannou službu po podání trombolytika a dosáhl mediánového „door-to-needle" času pod 20 minut. Helsinki protokol — pre-notifikace záchranné služby cílové nemocnice, příjem pacienta přímo na CT s minulou anamnézou již načtenou v systému, podání trombolytika ještě před převozem na lůžko — se postupně replikuje napříč Evropou (Meretoja A et al., <em>Stroke</em> 2013, validace v Melbourne).
       </p>
 
       <p>
@@ -314,7 +315,7 @@
           <li><strong>Nogueira RG et al.</strong> <em>Thrombectomy 6 to 24 hours after stroke with a mismatch between deficit and infarct.</em> N Engl J Med 2018;378:11–21. DAWN trial. DOI <a href="https://doi.org/10.1056/NEJMoa1706442" target="_blank" rel="noopener">10.1056/NEJMoa1706442</a> (PubMed <a href="https://pubmed.ncbi.nlm.nih.gov/29129157/" target="_blank" rel="noopener">PMID 29129157</a>).</li>
           <li><strong>Albers GW et al.</strong> <em>Thrombectomy for stroke at 6 to 16 hours with selection by perfusion imaging.</em> N Engl J Med 2018;378:708–718. DEFUSE-3 trial. DOI <a href="https://doi.org/10.1056/NEJMoa1713973" target="_blank" rel="noopener">10.1056/NEJMoa1713973</a> (PubMed <a href="https://pubmed.ncbi.nlm.nih.gov/29364767/" target="_blank" rel="noopener">PMID 29364767</a>).</li>
           <li><strong>Saver JL et al.</strong> <em>Time to treatment with endovascular thrombectomy and outcomes from ischemic stroke: a meta-analysis.</em> JAMA 2016;316(12):1279–1288. HERMES collaboration meta-analýza. DOI <a href="https://doi.org/10.1001/jama.2016.13647" target="_blank" rel="noopener">10.1001/jama.2016.13647</a>.</li>
-          <li><strong>Meretoja A et al.</strong> <em>Reducing in-hospital delay to 20 minutes in stroke thrombolysis.</em> Neurology 2012;79(4):306–313. Helsinki Stroke Model. DOI <a href="https://doi.org/10.1212/WNL.0b013e3182574d2c" target="_blank" rel="noopener">10.1212/WNL.0b013e3182574d2c</a>.</li>
+          <li><strong>Meretoja A et al.</strong> <em>Reducing in-hospital delay to 20 minutes in stroke thrombolysis.</em> Neurology 2012;79(4):306–313. Helsinki Stroke Model. DOI <a href="https://doi.org/10.1212/WNL.0b013e31825d6011" target="_blank" rel="noopener">10.1212/WNL.0b013e31825d6011</a> (PubMed <a href="https://pubmed.ncbi.nlm.nih.gov/22622858/" target="_blank" rel="noopener">PMID 22622858</a>).</li>
           <li><strong>ESO Guidelines on Intravenous Thrombolysis (2021)</strong> a <strong>Mechanical Thrombectomy (2019)</strong> — referenční evropská doporučení. <a href="https://eso-stroke.org/guidelines/" target="_blank" rel="noopener">eso-stroke.org/guidelines ↗</a></li>
         </ul>
       </div>
@@ -325,7 +326,7 @@
           <li><strong>Česká neurologická společnost (ČNS)</strong> — odborná doporučení a postupy pro péči o CMP. <a href="https://www.czech-neuro.cz/" target="_blank" rel="noopener">czech-neuro.cz ↗</a></li>
           <li><strong>cmp.cz</strong> — veřejně-edukační portál Cerebrovaskulární sekce ČNS o příznacích a péči o CMP. <a href="https://www.cmp.cz/" target="_blank" rel="noopener">cmp.cz ↗</a></li>
           <li><strong>European Stroke Organisation (ESO)</strong> — evropská doporučení pro léčbu CMP, vzdělávání. <a href="https://eso-stroke.org/" target="_blank" rel="noopener">eso-stroke.org ↗</a></li>
-          <li><strong>NZIP — cévní mozková příhoda</strong> — informace pro veřejnost o symptomech a péči. <a href="https://www.nzip.cz/clanek/188-cevni-mozkova-prihoda" target="_blank" rel="noopener">nzip.cz/cevni-mozkova-prihoda ↗</a></li>
+          <li><strong>NZIP — cévní mozková příhoda</strong> — informace pro veřejnost o symptomech a péči. <a href="https://www.nzip.cz/clanek/980-cevni-mozkova-prihoda-co-to-je" target="_blank" rel="noopener">nzip.cz/cevni-mozkova-prihoda ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
