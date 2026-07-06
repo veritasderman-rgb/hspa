@@ -1,9 +1,13 @@
 name: GA4 stats refresh
 
-# Denně v 06:15 UTC stáhne agregované statistiky z GA4 Data API
+# Denně v 06:45 UTC stáhne agregované statistiky z GA4 Data API
 # a commitne data/analytics-public.json zpět do repa. Vercel se
 # po pushi sám rebuildne — sekce "Co lidé na portálu čtou" v
 # o-projektu.html se aktualizuje.
+#
+# Cron posunut z 06:15 na 06:45 UTC, aby se minimalizoval souběh
+# s `refresh.yml` (06:00 UTC) — ten commituje do main, tady se
+# mohlo dřív porvat o stejný main HEAD (viz push retry níže).
 #
 # Setup (jednorázový):
 #   1. Vytvořit Service Account v Google Cloud Console
@@ -17,7 +21,7 @@ name: GA4 stats refresh
 
 on:
   schedule:
-    - cron: '15 6 * * *'
+    - cron: '45 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -51,13 +55,35 @@ jobs:
 
       - name: Commit changes
         run: |
+          set -e
           cd 05_M1_Starter
           if git diff --quiet -- data/analytics-public.json; then
             echo "No changes — script skipped or no new data."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/analytics-public.json
-            git commit -m "data: GA4 stats refresh ($(date -u +%Y-%m-%d))"
-            git push
+            exit 0
           fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/analytics-public.json
+          git commit -m "data: GA4 stats refresh ($(date -u +%Y-%m-%d))"
+
+          # Push s retry + rebase při race condition: pokud mezi
+          # checkoutem a pushem došel do main jiný commit (např. souběh
+          # s jiným cronem), zkus rebasenout na nejnovější origin/main
+          # a push opakuj. Max 5 pokusů (stejný pattern jako refresh.yml).
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "Push succeeded on attempt $attempt."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed (likely race with concurrent push). Rebasing on origin/main..."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "Rebase has conflicts — aborting and giving up."
+              git rebase --abort || true
+              exit 1
+            fi
+            # Krátká pauza, kdyby konkurenční push běžel ještě
+            sleep $((attempt * 2))
+          done
+          echo "Push failed after 5 attempts."
+          exit 1

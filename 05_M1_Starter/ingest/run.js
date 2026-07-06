@@ -12,7 +12,6 @@ import { fileURLToPath } from 'node:url';
 import { fetchNrpzs } from './fetchers/uzis_nrpzs.js';
 import { fetchUzisNzis } from './fetchers/uzis_nzis.js';
 import { fetchCsu } from './fetchers/csu.js';
-import { fetchOecd } from './fetchers/oecd.js';
 import { fetchOecdSdmx2 } from './fetchers/oecd_sdmx2.js';
 import { fetchEurostat } from './fetchers/eurostat.js';
 import { fetchSukl } from './fetchers/sukl.js';
@@ -22,9 +21,42 @@ import { fetchIndiko } from './fetchers/indiko.js';
 import { fetchEcdcAtlas } from './fetchers/ecdc_atlas.js';
 import { transform } from './transform.js';
 import { transformClinicalQuality } from './transform_clinical_quality.js';
+import { summarize } from './verify-freshness.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+
+/**
+ * Sestaví závěrečný souhrn běhu do stdout: pro každý fetcher ok/fail a
+ * agregovaný počet živých indikátorů (celkem + podle zdroje). Díky tomu je
+ * v logu workflow na první pohled vidět, který fetcher vypadl a kolik dat
+ * je reálně live (ne tichý fallback na seed).
+ *
+ * Čistá funkce (žádné I/O) — testovatelná bez spuštění pipeline.
+ * @param {{ fetchers: Array<{name:string}>, failures: Array<{name:string, error:string}>, summary: ReturnType<typeof summarize> }} params
+ * @returns {string}
+ */
+export function formatFetcherSummary({ fetchers, failures, summary }) {
+  const errorByName = new Map(failures.map(f => [f.name, f.error]));
+  const lines = [];
+  lines.push('=== Souhrn fetcherů ===');
+  for (const step of fetchers) {
+    if (errorByName.has(step.name)) {
+      lines.push(`  FAIL  ${step.name} — ${errorByName.get(step.name)}`);
+    } else {
+      lines.push(`  OK    ${step.name}`);
+    }
+  }
+  lines.push('');
+  const pct = (summary.live_ratio * 100).toFixed(1);
+  lines.push(`Živé indikátory: ${summary.live}/${summary.total} (${pct} %)`);
+  lines.push('Podle zdroje:');
+  for (const [name, s] of Object.entries(summary.by_source)) {
+    const ratio = s.total > 0 ? (s.live / s.total * 100).toFixed(0) : '0';
+    lines.push(`  ${String(`${s.live}/${s.total}`).padEnd(8)} live (${ratio} %)  ${name}`);
+  }
+  return lines.join('\n');
+}
 
 async function run() {
   console.log('=== Zdravé Česko · Ingest pipeline ===');
@@ -35,7 +67,6 @@ async function run() {
     { name: 'ÚZIS NRPZS', fn: fetchNrpzs },
     { name: 'ÚZIS NZIS (otevřená data — screening ap.)', fn: fetchUzisNzis },
     { name: 'ČSÚ DataStat', fn: fetchCsu },
-    { name: 'OECD Health', fn: fetchOecd },
     { name: 'OECD Health (SDMX 2.0 Data Explorer)', fn: fetchOecdSdmx2 },
     { name: 'Eurostat', fn: fetchEurostat },
     { name: 'SÚKL OpenData', fn: fetchSukl },
@@ -78,15 +109,19 @@ async function run() {
   fs.writeFileSync(snapshotPath, JSON.stringify(result, null, 2) + '\n');
   console.log(`  wrote ${snapshotName}`);
 
+  // Závěrečný per-fetcher souhrn + agregát živých indikátorů do stdout,
+  // ať je v logu workflow hned vidět, který fetcher vypadl a kolik dat je
+  // reálně live. Počítáme z transformem vyprodukovaného kontraktu.
+  const summary = summarize(result.indicators ?? []);
+  console.log('\n' + formatFetcherSummary({ fetchers, failures, summary }));
+
   const elapsed = ((Date.now() - started) / 1000).toFixed(1);
   console.log(`\n=== Done in ${elapsed}s · ${failures.length} fetcher(s) failed ===`);
-  if (failures.length) {
-    console.log('Failed fetchers:');
-    failures.forEach(f => console.log(`  - ${f.name}: ${f.error}`));
-  }
 }
 
-run().catch(err => {
-  console.error('FATAL:', err);
-  process.exit(1);
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  run().catch(err => {
+    console.error('FATAL:', err);
+    process.exit(1);
+  });
+}

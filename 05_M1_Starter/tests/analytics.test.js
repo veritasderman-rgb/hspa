@@ -66,7 +66,16 @@ test('extractIndicatorId — z data-indicator-id atributu', async () => {
   restoreDom();
 });
 
-test('extractIndicatorId — z href ?id=… (relative URL)', async () => {
+test('extractIndicatorId — ze statické stránky indikator-{id}.html', async () => {
+  setupMockDom();
+  const mod = await import('../src/analytics.js?t=' + Date.now());
+  const { extractIndicatorId } = mod.__test__;
+  const fakeEl = { dataset: {}, getAttribute: (k) => k === 'href' ? 'indikator-nadeje_doziti_total.html' : null };
+  assert.equal(extractIndicatorId(fakeEl), 'nadeje_doziti_total');
+  restoreDom();
+});
+
+test('extractIndicatorId — z href ?id=… (relative URL, fallback)', async () => {
   setupMockDom();
   const mod = await import('../src/analytics.js?t=' + Date.now());
   const { extractIndicatorId } = mod.__test__;

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nejdražší smlouvy fakultních nemocnic: kam mizí miliardy za léky · HSPA Monitor</title>
+<meta name="description" content="Co ukazuje Registr smluv o nákupech fakultních nemocnic? Nejdražší položky jsou centrové léky — genová terapie za 1,6 miliardy, léky na cystickou fibrózu za 788 milionů, onkologika za stovky milionů. Pilotní díl rubriky Peníze ve zdravotnictví na datech Hlídače státu.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nejdražší smlouvy fakultních nemocnic: kam mizí miliardy za léky">
+<meta property="og:description" content="Nejdražší smlouvy českých fakultních nemocnic jsou centrové léky — genové terapie, biologika a onkologika za stovky milionů až miliardy korun za kus. Data z Registru smluv (Hlídač státu).">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-07-06">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-07-06
+    reviewer: claude-code-agent
+    status: draft
+    primary_sources_added: 6
+    visual_elements_added: 4
+    notes: "DRAFT — published:false. Pilotní článek rubriky 'Peníze ve zdravotnictví' (úkol U17). ZDROJ DAT: Registr smluv přes Hlídač státu MCP (search_contracts, kategorie zdrav_*, order PriceDesc, from_date 2025-07-01; get_contract_detail). Licence dat: (c) Hlídač Státu z.ú., https://texty.hlidacstatu.cz/licence/. VŠECHNY ČÁSTKY OVĚŘENY V DETAILU SMLOUVY:
+      * FN Bulovka — PHOENIX, contract 36828389, 'Objednávka léků a ZM', hodnota 50 226 876 592,52 Kč: TATO ČÁSTKA JE DATOVÝ ARTEFAKT. Hlídač ji sám flaguje issue 'Neplatná cena' (rozdíl DPH nesedí sazbě). Detail (include_text=true) ukazuje běžnou měsíční lékárenskou objednávku ~29 položek v jednotkách balení (3 BAL, 1 KS...) — celkový součet je poškozený (chybný oddělovač tisíců: '44845425 529,04'). NENÍ to reálný nákup za 50 mld. Použito jako poučný lede o čtení registru, NE jako reálné číslo.
+      * FN Motol — Vertex (Kaftrio, ivakaftor/tezakaftor/elexakaftor), contract 36335481 (Dodatek č.1), 787 825 734,08 Kč: REÁLNÉ, bez issues. Cystická fibróza.
+      * FN Brno — Janssen-Cilag (ibrutinib), contract 36258557, 590 529 975,42 Kč: REÁLNÉ, bez issues. Hematoonkologie.
+      * FN Motol — Novartis (Zolgensma / onasemnogen abeparvovec), contract 35274193, 1 619 634 671,42 Kč: REÁLNÉ, bez issues. Genová terapie SMA.
+      * FN Hradec Králové — MSD (pembrolizumab), contract 34370553, 698 579 143,35 Kč: REÁLNÉ.
+      * FN Ostrava — Roche (ocrelizumab), contract 34243773, 664 355 969,20 Kč: REÁLNÉ.
+      * VFN Praha — Sanofi (avalglukosidáza alfa), contract 35190501, 594 369 709,56 Kč: REÁLNÉ.
+      * FN Hradec Králové — Janssen-Cilag (CAR-T ciltakabtagen autoleucel), contract 37972801, 576 803 914,21 Kč: REÁLNÉ.
+      Kontextové indikátory (data/indicators.json): podil_vydaje_leky 9,9 % (2023), vydaje_leky_hdp 1,7 % HDP (2024), vydaje_zdravotnictvi_hdp 8,6 % HDP (2024).
+      PŘED PUBLIKACÍ: doplnit rubric je financovani, ověřit aktuálnost čísel novým dotazem Hlídače, zvážit rozšíření o K-Index (U19), přepnout robots na index,follow + published:true + date, vygenerovat cover."
+-->
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-penize-zdravotnictvi-smlouvy-nemocnic">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">peníze ve zdravotnictví · léky · centrová léčba</span>
+      </div>
+      <h1 class="article-title">Nejdražší smlouvy fakultních nemocnic: kam mizí miliardy za léky</h1>
+      <p class="article-deck">
+        Registr smluv je veřejný a dá se v něm listovat jako v účtenkách státu. Prošli jsme nejdražší nákupy českých fakultních nemocnic za poslední rok — a našli jsme příběh, který stojí v jádru rostoucích výdajů na zdravotnictví: jedna genová terapie za 1,6 miliardy, léky na cystickou fibrózu za 788 milionů, onkologika za stovky milionů. Vítejte u prvního dílu rubriky <strong>Peníze ve zdravotnictví</strong>.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">6. července 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Když si v Registru smluv seřadíte nákupy fakultních nemocnic podle ceny, úplně nahoře vás čeká past. Objeví se tam smlouva Fakultní nemocnice Bulovka s velkoobchodem PHOENIX na „objednávku léků a ZM" za <strong>50,2 miliardy korun</strong> — číslo tak absurdně velké, že by samo o sobě spolklo desetinu ročního rozpočtu na celé české zdravotnictví. Je to skvělá ukázka, proč se registr musí umět číst. Protože ta smlouva žádnou padesátimiliardovou zakázka není. A cesta k tomu, co doopravdy je, ukazuje, kde se v českém zdravotnictví peníze skutečně točí.
+      </p>
+
+      <h3>Past hned na začátku: padesát miliard, které neexistují</h3>
+
+      <p>
+        Otevřeme detail té smlouvy. Hlídač státu, přes jehož data registrem procházíme, u ní sám svítí červeně: <strong>„Neplatná cena — rozdíl ceny s DPH a bez DPH neodpovídá žádné sazbě DPH."</strong> To je první varovná kontrolka. Druhá přijde, když si necháme vypsat obsah objednávky: je to <em>běžná měsíční lékárenská objednávka</em> — devětadvacet položek jako oční kapky Dicloabak, Sumatriptan proti migréně, Pradaxa nebo Lyrica, a to v jednotkách balení („3 BAL", „1 KS", „5 BAL"). Součet takové objednávky nemůže být padesát miliard. Ve výpisu je jasně vidět poškozený řádek celkové ceny s chybně vloženým oddělovačem tisíců („44845425 529,04"). Je to <strong>chyba ve vykazování</strong>, ne reálná zakázka.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTrapH">
+        <figcaption class="av-figure-h" id="avTrapH">Jak poznat, že rekordní číslo je artefakt</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Systém varuje</h4>
+            <p class="av-flow-desc">Hlídač u smlouvy sám hlásí „Neplatná cena" — rozdíl DPH nesedí žádné sazbě.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Obsah nesedí ceně</h4>
+            <p class="av-flow-desc">Objednávka je běžný lékárenský nákup v jednotkách balení, ne miliardová zakázka.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Poškozený součet</h4>
+            <p class="av-flow-desc">Řádek s celkovou cenou má rozházený oddělovač tisíců — typický exportní kaz.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Závěr</h4>
+            <p class="av-flow-desc">Rekordní částka se do žebříčku nezapočítává. Ověřujeme detail, ne jen tabulku.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Metodická poznámka:</strong> PHOENIX je lékárenský velkoobchod, přes který nemocnice objednává rutinní léky. Vysoké „součty" u takových průběžných objednávek bývají v registru artefakty vykazování. Proto v tomto přehledu pracujeme jen se smlouvami, které detailní kontrolou prošly.</p>
+      </figure>
+
+      <p>
+        Tohle není hnidopišství. Je to podstata poctivé datové žurnalistiky: <strong>než něco vytáhnete jako titulek, ověříte to v prvotním dokumentu.</strong> Registr smluv je mimořádně cenný nástroj transparentnosti — od roku 2016 do něj stát a jeho organizace musí zveřejňovat smlouvy nad 50 tisíc korun. Ale je to syrová databáze, do níž tisíce úřadů nahrávají data v různé kvalitě. Občas se v ní decimální tečka posune o řád vedle. Když tuhle jednu smlouvu odložíme stranou, teprve se objeví skutečný žebříček — a ten je mnohem výmluvnější než falešný rekord.
+      </p>
+
+      <h3>Skutečný vrchol: genová terapie za 1,6 miliardy za jednu smlouvu</h3>
+
+      <p>
+        Po očištění o artefakt sedí na špici nákupů fakultních nemocnic <strong>Fakultní nemocnice v Motole</strong> se smlouvou na přípravek <strong>Zolgensma</strong> (onasemnogen abeparvovec) od firmy Novartis za <strong>1,62 miliardy korun</strong>. Zolgensma je genová terapie spinální svalové atrofie (SMA) — dědičného onemocnění, které bez léčby v nejtěžší formě zabíjí kojence dřív, než se naučí sedět. Jde o jednorázovou aplikaci, která patří k nejdražším lékům světa: jedna dávka stojí v přepočtu kolem padesáti milionů korun. Smlouva pokrývá dodávky pro celé zázemí dětské SMA péče, která je v Motole centralizovaná.
+      </p>
+
+      <p>
+        A hned za ní následuje řada, která vypráví jeden a tentýž příběh. <strong>Léky na cystickou fibrózu</strong> (kombinace ivakaftor/tezakaftor/elexakaftor, obchodně Kaftrio) od Vertexu — jen dodatek jedné motolské smlouvy má hodnotu <strong>788 milionů korun</strong>. <strong>Ibrutinib</strong> na leukémii a lymfomy pro Fakultní nemocnici Brno za <strong>590 milionů</strong>. Imunoonkologický <strong>pembrolizumab</strong> pro Hradec Králové za <strong>699 milionů</strong>. Roztroušená skleróza (ocrelizumab) v Ostravě za <strong>664 milionů</strong>. Vzácná Pompeho nemoc (avalglukosidáza) ve Všeobecné fakultní nemocnici za <strong>594 milionů</strong>. A moderní buněčná terapie CAR-T proti krevním nádorům, opět Hradec Králové, za <strong>577 milionů</strong>.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTopH">
+        <figcaption class="av-figure-h" id="avTopH">Nejdražší ověřené smlouvy fakultních nemocnic na léčiva (2. pol. 2025 – 1. pol. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Nemocnice</th>
+                <th scope="col">Lék / účinná látka</th>
+                <th scope="col">Indikace</th>
+                <th scope="col" class="av-num">Hodnota (mil. Kč)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">FN Motol</th><td>Zolgensma (onasemnogen abeparvovec)</td><td>spinální svalová atrofie (genová terapie)</td><td class="av-num">1 620</td></tr>
+              <tr><th scope="row">FN Hradec Králové</th><td>pembrolizumab</td><td>imunoonkologie</td><td class="av-num">699</td></tr>
+              <tr><th scope="row">FN Ostrava</th><td>ocrelizumab</td><td>roztroušená skleróza</td><td class="av-num">664</td></tr>
+              <tr><th scope="row">VFN Praha</th><td>avalglukosidáza alfa</td><td>Pompeho nemoc (vzácná)</td><td class="av-num">594</td></tr>
+              <tr><th scope="row">FN Brno</th><td>ibrutinib</td><td>hematoonkologie</td><td class="av-num">591</td></tr>
+              <tr><th scope="row">FN Motol</th><td>Kaftrio (ivakaftor/tezakaftor/elexakaftor)*</td><td>cystická fibróza</td><td class="av-num">788</td></tr>
+              <tr><th scope="row">FN Hradec Králové</th><td>ciltakabtagen autoleucel (CAR-T)</td><td>mnohočetný myelom (buněčná terapie)</td><td class="av-num">577</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Registr smluv, výběr přes Hlídač státu (kategorie „Léčiva", řazeno podle ceny, smlouvy podepsané 2025–2026), každá položka ověřena v detailu smlouvy. * U Kaftria jde o hodnotu dodatku č. 1 k rámcové smlouvě. Hodnoty jsou celkové (s DPH), zaokrouhleno na miliony.</p>
+      </figure>
+
+      <p>
+        Všimněte si, co ta tabulka <em>nemá</em>. Nejsou v ní antibiotika, infuze ani obvazový materiál — tedy věci, které si laik pod „nákupy nemocnice" představí nejdřív. Nahoře jsou samé <strong>centrové léky</strong>: přípravky na vzácné nemoci, nádory a genetické poruchy, které se smějí podávat jen ve specializovaných centrech a jejichž jednotková cena jde do statisíců až milionů korun za pacienta. Právě ony dnes táhnou lékový účet českého zdravotnictví vzhůru.
+      </p>
+
+      <h3>Proč to takhle vypadá: anatomie centrové léčby</h3>
+
+      <p>
+        <strong>Centrová léčba</strong> je systém, kterým Česko (podobně jako celá Evropa) reguluje nejdražší léky. Přípravky s vysokou cenou a úzkou indikací — moderní onkologika, biologika, léčba vzácných onemocnění, genové a buněčné terapie — se nesmějí předepisovat volně. Podávají je jen smluvní <em>specializovaná centra</em>, typicky právě fakultní nemocnice, za předem dohodnutých podmínek se zdravotními pojišťovnami. Smyslem je soustředit drahou a odbornou péči tam, kde je na ni tým i zkušenost, a zároveň držet nad výdaji kontrolu.
+      </p>
+
+      <p>
+        Důsledek je ale jednoznačný: <strong>drtivá většina nejdražších lékových smluv v celé zemi se sbíhá do hrstky fakultních nemocnic.</strong> Když se v registru objeví miliardová položka za lék, je za ní skoro vždy centrum. A protože centrových léků rychle přibývá — genové terapie, CAR-T, nová onkologika schvalovaná každý rok — poroste i objem peněz, který těmito smlouvami protéká. Není to plýtvání; je to strukturální posun v tom, co medicína umí a co to stojí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCtxH">
+        <figcaption class="av-figure-h" id="avCtxH">Léky v celkovém obraze výdajů — kontext k jednotlivým smlouvám</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="9.9" data-decimals="1" data-suffix="&nbsp;%">9,9&nbsp;%</span>
+            <span class="av-counter-label">podíl výdajů zdravotních pojišťoven na léky</span>
+            <span class="av-counter-foot">z rozpočtu ZP jde na léčiva zhruba každá desátá koruna (2023)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1.7" data-decimals="1" data-suffix="&nbsp;%">1,7&nbsp;%</span>
+            <span class="av-counter-label">výdaje na léčiva jako podíl HDP</span>
+            <span class="av-counter-foot">Česko blízko průměru vyspělých zemí OECD (2024)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="8.6" data-decimals="1" data-suffix="&nbsp;%">8,6&nbsp;%</span>
+            <span class="av-counter-label">celkové výdaje na zdravotnictví / HDP</span>
+            <span class="av-counter-foot">rámec, do něhož se lékový účet vejde (2024)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> data/indicators.json (podil_vydaje_leky, vydaje_leky_hdp, vydaje_zdravotnictvi_hdp), zdroje ÚZIS / OECD / ČSÚ. Jednotlivé smlouvy z registru se skládají do těchto agregátů — centrové léky jsou jejich nejrychleji rostoucí složkou.</p>
+      </figure>
+
+      <p>
+        Jednotlivé smlouvy z registru a tyhle souhrnné podíly jsou dvě strany téže mince. Když si listujete miliardovými zakázkami na genové terapie, díváte se zblízka na to, proč se ukazatel podílu výdajů na léky nedaří stlačit dolů — a proč ho ani nelze jednoduše stlačit, aniž byste pacientům vzali léčbu, která reálně funguje. Registr smluv dává téhle statistice jména, indikace a konkrétní čísla.
+      </p>
+
+      <h3>Co z toho plyne pro čtenáře i pro systém</h3>
+
+      <p>
+        První poučení je metodické a platí pro každého, kdo do registru nahlédne: <strong>rekordní číslo ještě není příběh.</strong> Nejvyšší položka v žebříčku byla artefakt; skutečný vrchol se ukázal až po ověření. Registr je nástroj kontroly, ne automat na titulky — a přesně proto je tak cenný, když se používá poctivě.
+      </p>
+
+      <p>
+        Druhé poučení je věcné. České fakultní nemocnice nejsou jen léčebny; jsou to <strong>uzly, přes které protéká nejdražší farmakologie v zemi.</strong> Rozhodnutí, která tady padají — jaká centra vzniknou, které léky pojišťovny do center pustí a za jakou cenu je vysoutěží — patří k nejnákladnějším v celém zdravotnictví. A jsou veřejná. Díky registru si každý může ověřit, kolik konkrétní nemocnice zaplatila za konkrétní lék. To je forma kontroly, jakou má málokterý stát.
+      </p>
+
+      <p>
+        Rubrika <strong>Peníze ve zdravotnictví</strong> bude v příštích dílech pokračovat právě tady: u smluv těsně pod limitem veřejných zakázek, u nákupů zdravotnických přístrojů, u indexu rizikovosti smluvní praxe jednotlivých nemocnic. Cíl je stále stejný — ukázat na tvrdých datech, kam v českém zdravotnictví plynou peníze, a dát každému nástroj, jak si to ověřit sám.
+      </p>
+
+      <aside class="article-databox" aria-label="Datové shrnutí">
+        <div class="ed-kicker">Data v kostce</div>
+        <ul class="article-databox-list">
+          <li><strong>Nejdražší ověřená smlouva:</strong> FN Motol — Zolgensma (genová terapie SMA), 1,62 mld. Kč.</li>
+          <li><strong>Past registru:</strong> „50,2 mld." u FN Bulovka je datový artefakt (běžná lékárenská objednávka, Hlídač ji sám flaguje jako „Neplatnou cenu").</li>
+          <li><strong>Společný jmenovatel:</strong> vrchol žebříčku tvoří centrové léky — onkologika, biologika, léčba vzácných nemocí, genové a buněčné terapie.</li>
+          <li><strong>Kontext:</strong> léky = 9,9 % výdajů zdravotních pojišťoven (2023), 1,7 % HDP (2024); centrová složka roste nejrychleji.</li>
+        </ul>
+        <div class="article-related">
+          <h4 class="article-related-h">Související indikátory a články</h4>
+          <ul class="article-related-list">
+            <li><a href="indikator-podil_vydaje_leky.html"><strong>Podíl výdajů ZP na léky</strong></a> — souhrn, do něhož se jednotlivé smlouvy skládají</li>
+            <li><a href="indikator-vydaje_leky_hdp.html"><strong>Výdaje na léčiva (% HDP)</strong></a> — mezinárodně srovnatelný rámec</li>
+            <li><a href="clanek-generika-biosimilars-uspora.html"><strong>Generika a biosimilars</strong></a> — druhá strana lékového účtu: kde se dá šetřit</li>
+            <li><a href="clanek-financovani-sha.html"><strong>Anatomie financování</strong></a> — odkud jdou peníze a kam mizí</li>
+          </ul>
+        </div>
+        <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+          <strong>Pozn. k datům:</strong> Částky pocházejí z Registru smluv a byly vybrány a ověřeny přes datové rozhraní Hlídače státu (kategorie „Léčiva", smlouvy podepsané 2025–2026). Každá uvedená hodnota je zkontrolována v detailu příslušné smlouvy. Údaj o FN Bulovka je záměrně uveden jako příklad chyby ve vykazování, nikoli jako reálný nákup.
+        </p>
+      </aside>
+
+      <section class="article-sources">
+        <div class="ed-kicker">Zdroje</div>
+        <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+        <div class="sources-group">
+          <h5 class="sources-group-h">Primární — konkrétní smlouvy v registru (přes Hlídač státu)</h5>
+          <ul class="article-sources-list">
+            <li><strong>FN Motol — Novartis: Zolgensma (onasemnogen abeparvovec), 1,62 mld. Kč.</strong> Genová terapie SMA. <a href="https://www.hlidacstatu.cz/Detail/35274193" target="_blank" rel="noopener">hlidacstatu.cz/Detail/35274193 ↗</a></li>
+            <li><strong>FN Motol — Vertex: Kaftrio (dodatek č. 1), 787,8 mil. Kč.</strong> Cystická fibróza. <a href="https://www.hlidacstatu.cz/Detail/36335481" target="_blank" rel="noopener">hlidacstatu.cz/Detail/36335481 ↗</a></li>
+            <li><strong>FN Brno — Janssen-Cilag: ibrutinib, 590,5 mil. Kč.</strong> Hematoonkologie. <a href="https://www.hlidacstatu.cz/Detail/36258557" target="_blank" rel="noopener">hlidacstatu.cz/Detail/36258557 ↗</a></li>
+            <li><strong>FN Hradec Králové — MSD: pembrolizumab, 698,6 mil. Kč.</strong> Imunoonkologie. <a href="https://www.hlidacstatu.cz/Detail/34370553" target="_blank" rel="noopener">hlidacstatu.cz/Detail/34370553 ↗</a></li>
+            <li><strong>FN Ostrava — Roche: ocrelizumab, 664,4 mil. Kč.</strong> Roztroušená skleróza. <a href="https://www.hlidacstatu.cz/Detail/34243773" target="_blank" rel="noopener">hlidacstatu.cz/Detail/34243773 ↗</a></li>
+            <li><strong>FN Bulovka — PHOENIX: „objednávka léků" (příklad chyby ve vykazování).</strong> Hlídač u ní hlásí „Neplatnou cenu". <a href="https://www.hlidacstatu.cz/Detail/36828389" target="_blank" rel="noopener">hlidacstatu.cz/Detail/36828389 ↗</a></li>
+          </ul>
+        </div>
+        <div class="sources-group">
+          <h5 class="sources-group-h">Kontext, metodika a licence dat</h5>
+          <ul class="article-sources-list">
+            <li><strong>Registr smluv (smlouvy.gov.cz).</strong> Veřejný registr smluv státu a jeho organizací nad 50 tis. Kč (zákon č. 340/2015 Sb.). <a href="https://smlouvy.gov.cz/" target="_blank" rel="noopener">smlouvy.gov.cz ↗</a></li>
+            <li><strong>Hlídač státu.</strong> Datové rozhraní a vyhledávání nad Registrem smluv. Data použita v souladu s licencí Hlídače. <a href="https://texty.hlidacstatu.cz/licence/" target="_blank" rel="noopener">Podmínky použití / licence ↗</a></li>
+            <li><strong>Centrová léčba — SÚKL a zdravotní pojišťovny.</strong> Systém specializovaných center pro nejdražší léky. <a href="https://www.sukl.cz/" target="_blank" rel="noopener">sukl.cz ↗</a></li>
+          </ul>
+        </div>
+        <p class="article-sources-disclaimer">
+          <strong>Pozn. k údajům:</strong> Text je osvětový, popisuje výdaje a organizaci lékové péče na úrovni systému, nikoli individuální zdravotní radu. Data z Registru smluv jsou zpřístupněna přes Hlídač státu (© Hlídač Státu z.ú.); zdroj i licence jsou uvedeny výše. Uvedené částky jsou celkové hodnoty smluv, mohou zahrnovat průběžné či rámcové plnění a nemusí odpovídat skutečně vyčerpanému objemu.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>

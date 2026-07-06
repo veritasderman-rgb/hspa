@@ -17,6 +17,7 @@ zdrave-cesko.cz/
 ├── /pojistenci             pojistenci.html         (OIS 11-47 — atlas, dětská stránka výše)
 ├── /prevence               prevence.html           (Vakcinace + screeningy)
 ├── /strategie              strategie.html          (Národní strategie)
+├── /legislativa            legislativa.html        (Legislativní radar — VeKLEP)
 ├── /glosar                 glosar.html             (110 termínů)
 ├── /o-projektu             o-projektu.html         (O projektu)
 ├── /jak-funguje            jak-funguje.html        (Jak zdravotnictví funguje)
@@ -127,6 +128,16 @@ zdrave-cesko.cz/
 | **Fetchuje** | `data/strategies.json`, `data/explainers.json`, `data/articles.json` |
 | **JS moduly** | `src/strategies.js` → `strategy-policy-views`, `strategy-links`, `page-shared` |
 | **CSS namespace** | `.strategy-*`, `.timeline-*`, `.rm-*` (responsibility matrix), `.gantt-*` |
+
+### `legislativa.html` — Legislativní radar
+
+| | |
+|---|---|
+| **Účel** | Zdravotnická legislativa v přípravě (VeKLEP): tabulka návrhů zákonů/vyhlášek s fází legislativního procesu, anotací a propojením na indikátory + články. |
+| **Cílový uživatel** | Policy maker, novinář, odborná veřejnost sledující novely. |
+| **Fetchuje** | `data/legislativa.json`, `data/articles.json` |
+| **JS moduly** | `src/legislativa.js` → `page-shared` |
+| **CSS namespace** | `.leg-*` (tabulka, fáze pilly, zdrojová poznámka); reuse `.filters-row`, `.level-nav`, `.chip`, `.ed-hero*` |
 
 ### `glosar.html` — Glosář
 

@@ -128,7 +128,7 @@ test('E2E: indicator_click event vznikne po kliku na [data-indicator-id]', async
   const fakeCard = makeMockElement({
     tag: 'a',
     dataset: { indicatorId: 'mortalita_inhosp_ami', indicatorDomain: 'kvalita' },
-    attrs: { href: 'indicator.html?id=mortalita_inhosp_ami' },
+    attrs: { href: 'indikator-mortalita_inhosp_ami.html' },
   });
   document.dispatch('click', { target: fakeCard });
 

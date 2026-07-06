@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-07-06 — Legacy OECD fetcher (`oecd.js`) retirován, konsolidace na `oecd_sdmx2.js`
+
+- **PR**: U4 (`claude/web-audit-roadmap-kmnl5r`)
+- **Co**: Odstraněn `ingest/fetchers/oecd.js` (+ osiřelý `ingest/mapping/oecd_codes.json`, `tests/oecd.test.js`, npm skript `ingest:oecd`, krok „OECD Health" v `ingest/run.js`). Legacy fetcher volal zrušený endpoint `stats.oecd.org/SDMX-JSON` → **404 při každém běhu ingestu**. Jediná OECD cesta je nyní `oecd_sdmx2.js` (nový Data Explorer endpoint `sdmx.oecd.org`, SDMX-JSON 2.0, benchmark JEN z 38 členů `OECD_MEMBERS`).
+- **Proč**: Endpoint mrtvý, `oecd_sdmx2.js` je jeho hotová náhrada. Všech 8 indikátorů staré `oecd_codes.json` už mělo jiný primární zdroj (Eurostat / ÚZIS NRH+NRZP / ČSÚ SHA / EHIS-SZÚ), takže žádnou OECD hodnotu neztrácíme — jde o čistou konsolidaci.
+- **Důsledek**: **NEVRACET** `oecd.js`, `oecd_codes.json` ani `stats.oecd.org` do pipeline. Nový OECD indikátor = řádek do `ingest/mapping/oecd_sdmx2_codes.json` + karta `type: oecd_sdmx2`. `alkohol_spotreba` **ponecháno seed záměrně**: OECD recorded consumption 11,2 l (2023) je nesouměřitelné s národním odhadem 14,4 l (vč. neregistrované spotřeby) — swap by byl tichá záměna metriky; doloženo v `indicators/alkohol_spotreba.json` → `limitations`. `spokojenost_pece` je survey (Gallup/Eurobarometer) bez strojového SDMX dataflow → zůstává seed/ilustrativní. Pozn.: `ingest/lib/sdmx.js` + `tests/sdmx.test.js` (legacy SDMX-JSON parser) a `config.oecd.base` ponechány jako neškodný osamocený util — netahat je zpět do fetcheru.
+
+---
+
 ## 2026-06-10 — Korekce katarakty: 35,8 % → 98,7 % (signal flip bad→good)
 
 - **PR**: #566

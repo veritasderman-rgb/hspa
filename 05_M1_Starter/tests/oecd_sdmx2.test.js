@@ -95,3 +95,62 @@ test('buildOecdSdmx2Url: mapping.key zúží dotaz místo /all', () => {
   const url = buildOecdSdmx2Url({ dataflow: 'DSD_SHA@DF_SHA', key: '.A.....HC6.....' }, { startPeriod: 2015 });
   assert.match(url, /DSD_SHA@DF_SHA,1\.0\/\.A\.\.\.\.\.HC6\.\.\.\.\.\?/);
 });
+
+// --- Benchmark JEN ze 38 členských zemí OECD (decisions-log 2026-06-10 #2) ---
+// Dataflows sdmx.oecd.org obsahují i partnerské/kandidátské země (BGR, ROU, HRV,
+// PER…) a agregátní REF_AREA (OECD, EU27_2020). Ty NESMÍ vstupovat do „OECD
+// průměru", jinak benchmark zkreslují. Tento test hlídá members-only invariant
+// (po konsolidaci legacy oecd.js pod tento fetcher, U4).
+function membersFixture() {
+  // 5 členů (CZE + 4) → splní práh vals.length >= 5; 1 partner (BGR) a 1 agregát
+  // (OECD) musí být vyloučeny.
+  const rows = { CZE: 10, AUT: 20, DEU: 30, FRA: 40, ESP: 50, BGR: 1000, OECD: 999 };
+  const refAreas = Object.keys(rows);
+  const obs = {};
+  refAreas.forEach((ra, i) => { obs[`${i}:0`] = [rows[ra]]; });
+  return {
+    data: {
+      structures: [{
+        dimensions: {
+          observation: [
+            { id: 'REF_AREA', values: refAreas.map(id => ({ id })) },
+            { id: 'TIME_PERIOD', values: [{ id: '2023' }] },
+          ],
+        },
+      }],
+      dataSets: [{ observations: obs }],
+    },
+  };
+}
+
+test('parseOecdSdmx2: OECD průměr ignoruje partnerskou zemi (BGR) i agregát (OECD)', () => {
+  const r = parseOecdSdmx2(membersFixture());
+  assert.equal(r.cz.value, 10);
+  // průměr JEN z 5 členů (10+20+30+40+50)/5 = 30; BGR (1000) a agregát OECD (999)
+  // by ho vystřelily nahoru, kdyby se započítaly.
+  assert.equal(r.benchmark.oecd, 30);
+});
+
+test('parseOecdSdmx2: pod prahem 5 členů se benchmark nepočítá', () => {
+  // Jen 4 členské země → nedůvěryhodný průměr → benchmark prázdný.
+  const rows = { CZE: 10, AUT: 20, DEU: 30, FRA: 40 };
+  const refAreas = Object.keys(rows);
+  const obs = {};
+  refAreas.forEach((ra, i) => { obs[`${i}:0`] = [rows[ra]]; });
+  const fx = {
+    data: {
+      structures: [{
+        dimensions: {
+          observation: [
+            { id: 'REF_AREA', values: refAreas.map(id => ({ id })) },
+            { id: 'TIME_PERIOD', values: [{ id: '2023' }] },
+          ],
+        },
+      }],
+      dataSets: [{ observations: obs }],
+    },
+  };
+  const r = parseOecdSdmx2(fx);
+  assert.equal(r.cz.value, 10);
+  assert.equal(r.benchmark.oecd, undefined);
+});

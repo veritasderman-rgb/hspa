@@ -137,6 +137,42 @@ Detailní karta pro jeden indikátor. 1 JSON soubor = 1 indikátor. Linkováno z
 }
 ```
 
+### `source.origin` (seed/live) — proč je jen v kontraktu, ne v kartě
+
+Metodická karta **záměrně nemá** pole `origin`/`fetched_at`. Rozhodnutí (U11,
+2026-07): `origin` popisuje stav **konkrétního ingest běhu** — jestli poslední
+`npm run transform` získal hodnotu z živého fetcheru, nebo spadl zpět na seed
+(např. zdroj je dole, mapping chybí, sandbox bez síťového přístupu). To je
+vlastnost běhu pipeline, ne vlastnost metodiky indikátoru — proto žije jen
+v `data/indicators.json.indicators[].source.origin`, který transform
+přegeneruje při každém běhu. Kopírovat ho i do karty by vytvořilo dva zdroje
+pravdy, které se rozjedou (karta je commitovaná ručně, kontrakt se přepisuje
+cronem denně).
+
+Karta místo toho nese **editorial** pole `verification_status` (`verified` |
+`preliminary` | `illustrative` | ...) + `verified_at` — to je tvrzení redakce
+„metodiku a zdroj jsme ověřili", nezávislé na tom, jestli si dnešní cron běh
+vyzvedl live hodnotu. Transform tato pole přenáší pass-through do
+`data/indicators.json` (`ingest/transform.js`, `buildIndicator`).
+
+**Očekávaný vztah:** karta s `verification_status: "verified"` by měla
+odpovídat záznamu v kontraktu s `source.origin: "live"` — „ověřili jsme zdroj"
+dává smysl jen pro hodnotu, která z něj skutečně živě přišla. Pokud karta tvrdí
+`verified`, ale kontrakt má `origin: "seed"` (fetcher zrovna spadl na seed,
+nebo ověření proběhlo dřív než napojení fetcheru), jde o dočasnou nekonzistenci
+— ne chybu schématu, ale signál k dořešení (dodělat/opravit fetcher pro daný
+indikátor).
+
+Konzistenci hlídá `tests/verification-origin-consistency.test.js`:
+- projde všechny karty s `verification_status: "verified"` a ověří
+  `source.origin === "live"` v `data/indicators.json`,
+- **nové** nekonzistence (id mimo snapshot `KNOWN_SEED_VERIFIED_EXCEPTIONS`
+  v testu) test shodí,
+- existující výjimky (7 ke dni 2026-07-06 — viz seznam v testu) jsou dočasně
+  tolerované, aby test nerozbil CI na nekonzistencích, které čekají na
+  dokončení fetcherů. Jakmile se pro daný indikátor doplní live fetcher, id
+  ze seznamu výjimek odeber (test na to sám neupozorní).
+
 ---
 
 ## 3. `data/articles.json` — články (63 záznamů)
@@ -558,6 +594,61 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 
 ---
 
+## 16. `data/legislativa.json` — legislativní radar (VeKLEP)
+
+Přehled zdravotnické legislativy v přípravě (návrhy zákonů, vyhlášek a nařízení
+vlády). Zdroj: VeKLEP (Elektronická knihovna legislativního procesu, Úřad vlády
+ČR) přes API Hlídače státu (`search_veklep_legislation`). Záznamy jsou ručně
+kurátorované — výběr pokrývá legislativu s přímým dopadem na výkonnost
+zdravotního systému. Automatickou aktualizaci řeší úkol U20 (denní rutina).
+
+```jsonc
+{
+  "version": "1.0",
+  "generated_at": "2026-07-06T00:00:00Z",
+  "source": { "name": "...", "veklep_url": "...", "hlidac_url": "...", "note": "..." },
+  "items": [
+    {
+      "id": "novela-elektronizace-zdravotnictvi-2026",  // interní slug
+      "veklep_id": "ALBSDVLDLD32",                      // PID materiálu ve VeKLEP
+      "title": "Návrh zákona, kterým se mění zákon č. 325/2021 Sb., ...",
+      "title_short": "Novela zákona o elektronizaci zdravotnictví",
+      "type": "zakon",                                  // zakon | vyhlaska | narizeni_vlady
+      "submitter": "Ministerstvo zdravotnictví",        // předkladatel
+      "phase": "pripominky",                            // pripominky | vyporadani | vlada | parlament | dokonceno
+      "veklep_status": "2 - v připomínkovém řízení",    // stav materiálu ve VeKLEP (raw)
+      "veklep_url": "https://odok.cz/portal/veklep/material/ALBSDVLDLD32/",
+      "annotation": "...",                              // redakční anotace (co návrh mění a proč je důležitý)
+      "dates": {
+        "authorized": "2026-07-03",                     // datum autorizace ve VeKLEP
+        "last_change": "2026-07-03",                    // poslední změna materiálu
+        "comments_until": "2026-08-03"                  // termín připomínek (null pokud neběží)
+      },
+      "linked_indicators": ["ehealth_adoption"],        // FK → indicators.json#id
+      "linked_articles": ["novela-elektronizace-2026"], // FK → articles.json#id
+      "verified_at": "2026-07-06"                       // kdy redakce záznam naposledy ověřila proti VeKLEP
+    }
+  ]
+}
+```
+
+Fáze (`phase`) je redakční zjednodušení stavů VeKLEP pro filtr v UI:
+
+| Fáze | VeKLEP stavy | Význam |
+|---|---|---|
+| `pripominky` | `2` | v připomínkovém řízení — lze podávat připomínky |
+| `vyporadani` | `3`, `9PK` | připomínkové řízení ukončeno / projednáno pracovními komisemi LRV |
+| `vlada` | `8` | zařazeno na jednání vlády |
+| `parlament` | `CE`, `D` | zaevidováno / projednáváno v PSP |
+| `dokonceno` | `A`, `B`, `SZ` | zapracovány změny / signováno / odesláno do Sbírky |
+
+Validátor: `npm run validate:legislation` (`ingest/validate-legislation.js`) —
+ENUM `type`/`phase`, povinná pole, unikátní `id` + `veklep_id`, formát dat
+(YYYY-MM-DD), `veklep_url` na doméně odok.cz a FK na indikátory + články.
+Konzument: `legislativa.html` přes `src/legislativa.js` (tabulka + filtr fází).
+
+---
+
 ## Vztahy mezi datasety
 
 ```
@@ -607,6 +698,8 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 | `themes.strategy_ids[]` | `themes.json` | `strategies.json#id` |
 | `themes.explainer_ids[]` | `themes.json` | `explainers.json#id` |
 | `strategies.linked_indicators[]` | `strategies.json` | `indicators.json#id` |
+| `legislativa.items[].linked_indicators[]` | `legislativa.json` | `indicators.json#id` |
+| `legislativa.items[].linked_articles[]` | `legislativa.json` | `articles.json#id` |
 | `strategies.related_strategies[]` | `strategies.json` | `strategies.json#id` (self) |
 | `explainers.linked_indicators[]` | `explainers.json` | `indicators.json#id` |
 | `indicators.dimension` | `indicators.json` | `dimensions.json#id` |
@@ -623,7 +716,8 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 | `npm run validate:strategies` | `strategies.json` ENUM, FK, povinná pole |
 | `npm run validate:explainers` | `explainers.json` schéma |
 | `npm run validate:prevention` | `prevention.json` schéma |
-| `npm run validate:all` | spustí všechny 4 |
+| `npm run validate:legislation` | `legislativa.json` ENUM fází/typů, FK na indikátory + články |
+| `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
 
 Testy v `tests/`:

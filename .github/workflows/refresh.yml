@@ -20,9 +20,11 @@ permissions:
 env:
   # Práh pro verify:freshness — pokud méně indikátorů než tento podíl
   # má origin=live, workflow failne a data se NEpushne.
-  # Aktuálně je 0.0, protože všechny fetchery selhávají; postupně zvedat.
-  # Cíl po opravě fetcherů: 0.5–0.8.
-  MIN_LIVE_RATIO: '0.0'
+  # 59 z 11 fetcherů živě funguje (live_ratio ~0.364), takže gate je
+  # zapnutý na 0.3: zachytí regresi, kdy se část fetcherů rozbije a data
+  # tiše spadnou zpět na seed, ale nechá projít běžný stav.
+  # Cíl po dalších opravách fetcherů (PLAN-VERIFIKACE-INDIKATORU.md): 0.5–0.8.
+  MIN_LIVE_RATIO: '0.3'
 
 jobs:
   refresh:

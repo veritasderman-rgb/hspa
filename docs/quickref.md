@@ -37,7 +37,7 @@ npm install
 npm run serve                    # http://localhost:8080
 
 # Validace
-npm run validate:all             # všech 7 validátorů (indicators, strategies, explainers, prevention, articles, dohodovaci, financing)
+npm run validate:all             # všech 9 validátorů (indicators, strategies, explainers, prevention, articles, dohodovaci, legislation, financing, clinical-quality)
 
 # Testy
 npm test                         # ~355 testů (349 passing, 6 pre-existing failures z chybějících npm packages)

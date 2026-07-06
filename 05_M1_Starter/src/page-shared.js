@@ -497,7 +497,11 @@ export function renderModuleNav(activeId) {
     },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
-    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'] },
+    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
+      children: [
+        { id: 'legislativa', label: 'Legislativní radar', href: 'legislativa.html', match: ['legislativa.html'] },
+      ],
+    },
     { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
     { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];

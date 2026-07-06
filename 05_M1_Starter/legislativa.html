@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legislativní radar · HSPA Monitor</title>
+<meta name="description" content="Přehled zdravotnické legislativy v přípravě — návrhy zákonů, vyhlášek a nařízení vlády z VeKLEP. Fáze legislativního procesu, anotace a propojení na indikátory a články.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/legislativa" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/legislativa" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Legislativní radar</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <div id="listView">
+
+    <section class="ed-hero" aria-labelledby="legHeroHeadline">
+      <div class="ed-hero-content">
+        <div class="ed-kicker">Legislativní radar</div>
+        <h1 class="ed-hero-headline" id="legHeroHeadline">Zákony se nerodí ve Sněmovně. Rodí se v připomínkovém řízení.</h1>
+        <p class="ed-hero-lead">
+          Než návrh zákona nebo vyhlášky dorazí k poslancům, projde měsíce trvajícím procesem: připomínkové řízení, vypořádání připomínek, jednání vlády. Právě tam se rozhoduje o podobě předpisů, které pak určují, jak funguje české zdravotnictví — od úhrad péče přes pohotovosti až po elektronizaci.
+        </p>
+        <p class="ed-hero-lead">
+          Tento radar sleduje zdravotnickou legislativu v přípravě podle <strong>VeKLEP</strong> — veřejné elektronické knihovny legislativního procesu. U každého návrhu uvádíme fázi procesu, stručnou anotaci a propojení na indikátory a články, kterých se týká.
+        </p>
+      </div>
+      <aside class="ed-hero-stats" aria-label="Klíčová čísla legislativního radaru">
+        <div class="ed-stat ed-stat-static">
+          <div class="ed-stat-num"><span id="statTotal">—</span> <span class="ed-stat-unit">návrhů</span></div>
+          <div class="ed-stat-lbl">Sledovaných předpisů</div>
+          <div class="ed-stat-meta">Zákony, vyhlášky, nařízení vlády</div>
+        </div>
+        <div class="ed-stat ed-stat-static">
+          <div class="ed-stat-num"><span id="statInProgress">—</span> <span class="ed-stat-unit">v procesu</span></div>
+          <div class="ed-stat-lbl">Rozjednané návrhy</div>
+          <div class="ed-stat-meta">Připomínky → vláda → Parlament</div>
+        </div>
+        <div class="ed-stat ed-stat-static">
+          <div class="ed-stat-num"><span id="statComments">—</span> <span class="ed-stat-unit">otevřených</span></div>
+          <div class="ed-stat-lbl">V připomínkovém řízení</div>
+          <div class="ed-stat-meta">Teď je čas na připomínky</div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="filters-row">
+      <nav class="level-nav" aria-label="Filtr podle fáze legislativního procesu">
+        <button data-phase="all" class="active">Vše</button>
+        <button data-phase="pripominky">V připomínkách</button>
+        <button data-phase="vyporadani">Vypořádání</button>
+        <button data-phase="vlada">Na vládě</button>
+        <button data-phase="parlament">V Parlamentu</button>
+        <button data-phase="dokonceno">Dokončeno</button>
+      </nav>
+      <div class="filters-actions">
+        <input type="search" id="searchBox" class="search-box" placeholder="Hledat předpis…" aria-label="Vyhledat předpis">
+        <span class="badge" id="countBadge">0</span>
+      </div>
+    </div>
+
+    <div id="legTableWrap" class="leg-table-wrap"></div>
+    <div class="empty-state hidden" id="emptyState">Žádný návrh neodpovídá vašemu hledání.</div>
+
+    <section class="leg-source-note" aria-label="Zdroj dat">
+      <p>
+        Zdroj: <a href="https://odok.cz/portal/veklep/" target="_blank" rel="noopener">VeKLEP — Elektronická knihovna legislativního procesu</a> (Úřad vlády ČR),
+        data přes API <a href="https://www.hlidacstatu.cz/" target="_blank" rel="noopener">Hlídače státu</a>.
+        Výběr sledovaných předpisů je redakční — pokrývá legislativu s přímým dopadem na výkonnost zdravotního systému. Ruční aktualizace; poslední ověření viz datum u jednotlivých záznamů.
+      </p>
+    </section>
+  </div>
+
+  <!-- ── Příbuzné sekce ─────────────────────────────────────────────────── -->
+  <section class="section related-section" aria-labelledby="relatedHeading">
+    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="strategie.html">
+        <div class="related-card-kicker">Kam legislativa míří</div>
+        <h4 class="related-card-title">Strategie zdravotnictví</h4>
+        <p class="related-card-desc">Návrhy zákonů jsou nástroje — strategické dokumenty říkají, čeho jimi chce stát dosáhnout.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="hspa-prehled.html">
+        <div class="related-card-kicker">Měřítka dopadu</div>
+        <h4 class="related-card-title">HSPA přehled indikátorů</h4>
+        <p class="related-card-desc">Jestli nová legislativa funguje, poznáme na indikátorech — proto je radar propojuje.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="clanky.html">
+        <div class="related-card-kicker">Long-form journalism</div>
+        <h4 class="related-card-title">Hub článků</h4>
+        <p class="related-card-desc">Podrobné analýzy klíčových novel — od úhradové vyhlášky po elektronizaci.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="jak-funguje.html">
+        <div class="related-card-kicker">Aktéři a procesy</div>
+        <h4 class="related-card-title">Jak funguje zdravotnictví</h4>
+        <p class="related-card-desc">Kdo předpisy připomínkuje, kdo je schvaluje a proč to trvá — kontext legislativního procesu.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="glosar.html">
+        <div class="related-card-kicker">Co znamenají zkratky</div>
+        <h4 class="related-card-title">Glosář</h4>
+        <p class="related-card-desc">VeKLEP, EHDS, úhradová vyhláška — výkladový slovník pojmů legislativního procesu.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="financovani.html">
+        <div class="related-card-kicker">SHA 2010–2024 · sankey</div>
+        <h4 class="related-card-title">Financování zdravotnictví</h4>
+        <p class="related-card-desc">Úhradová vyhláška a platba za státní pojištěnce v kontextu celkových toků peněz.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/legislativa.js"></script>
+
+</body>
+</html>

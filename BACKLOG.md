@@ -55,10 +55,11 @@ sjednoceny dříve rozcházející se logiky v `indicator.js` a `app.js`. Bez zm
 - **8 nových klinických indikátorů** (obložnost IP, přežití na UPV…) — metodické karty už existují s `review-pending`, chybí datový sourcing a hodnoty.
 **Plán:** zpracovat přes denní rutinu (1 článek/den), indikátory napojit na PUK/ÚZIS data. **Blocker:** editorial + datový sourcing.
 
-### CLINICAL-V2 · Kvalita péče — V2 UX
-**Stav:** 🟡 · jádro (PUK+INDIKO, `kvalita-pece.html`, 35 indikátorů) hotové; chybí V2 z `PLAN-KVALITA-PECE-V2`:
-- story hook (postavy), 2-sloupcový grid, animované čítače (`av-counter` při scrollu), fix unicode word-boundary v klinickém glosáři.
-**Plán:** aplikovat existující `av-counter` animaci, 2-sloupcové CSS, napsat úvodní příběh; ověřit a opravit regex glosáře reprodukcí selhání.
+### ~~CLINICAL-V2 · Kvalita péče — V2 UX~~ ✅ HOTOVO (2026-06-10)
+**Vyřešeno:** všech 5 bodů z `PLAN-KVALITA-PECE-V2.md` implementováno a ověřeno:
+2-sloupcový grid (`ed-hero`/`cq-split`), animované čítače (`av-counter` ×12),
+oprava unicode word-boundary v klinickém glosáři (test `tests/clinical-quality-glossary.test.js`,
+10/10), úvodní příběh „Vlastimil a Anežka", narativní linie akutní vs. chronická péče.
 
 ---
 

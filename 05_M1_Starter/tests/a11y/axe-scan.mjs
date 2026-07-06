@@ -41,6 +41,7 @@ const PAGES = [
   'jak-funguje.html',
   'o-projektu.html',
   'redakce.html',
+  'indikator-nadeje_doziti_total.html',
   'indicator.html?id=nadeje_doziti_total',
   'clanek-vydaje-prevence.html',
   '404.html',

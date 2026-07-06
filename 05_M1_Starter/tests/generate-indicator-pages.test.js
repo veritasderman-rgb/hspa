@@ -25,6 +25,8 @@ test('buildPage: verified indikátor je indexovatelný, má Dataset + canonical 
   assert.match(html, /<meta name="robots" content="index, follow">/);
   assert.ok(html.includes(`<link rel="canonical" href="${SITE_BASE}/indikator-test_ind">`));
   assert.match(html, /<h1>Testovací indikátor<\/h1>/);
+  // Statická stránka odkazuje na interaktivní detail jako fallback (graf + mapa krajů).
+  assert.ok(html.includes('href="indicator.html?id=test_ind"'), 'CTA na interaktivní fallback zůstává');
   const m = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)<\/script>/);
   assert.ok(m, 'má JSON-LD');
   const ld = JSON.parse(m[1]);
