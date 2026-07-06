@@ -499,7 +499,8 @@ export function renderModuleNav(activeId) {
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [
-        { id: 'legislativa', label: 'Legislativní radar', href: 'legislativa.html', match: ['legislativa.html'] },
+        { id: 'strategie-cr',  label: 'Strategie českého zdravotnictví', href: 'strategie.html',   match: ['strategie.html'] },
+        { id: 'legislativa',   label: 'Legislativní radar',              href: 'legislativa.html', match: ['legislativa.html'] },
       ],
     },
     { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
