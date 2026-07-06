@@ -594,6 +594,61 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 
 ---
 
+## 16. `data/legislativa.json` — legislativní radar (VeKLEP)
+
+Přehled zdravotnické legislativy v přípravě (návrhy zákonů, vyhlášek a nařízení
+vlády). Zdroj: VeKLEP (Elektronická knihovna legislativního procesu, Úřad vlády
+ČR) přes API Hlídače státu (`search_veklep_legislation`). Záznamy jsou ručně
+kurátorované — výběr pokrývá legislativu s přímým dopadem na výkonnost
+zdravotního systému. Automatickou aktualizaci řeší úkol U20 (denní rutina).
+
+```jsonc
+{
+  "version": "1.0",
+  "generated_at": "2026-07-06T00:00:00Z",
+  "source": { "name": "...", "veklep_url": "...", "hlidac_url": "...", "note": "..." },
+  "items": [
+    {
+      "id": "novela-elektronizace-zdravotnictvi-2026",  // interní slug
+      "veklep_id": "ALBSDVLDLD32",                      // PID materiálu ve VeKLEP
+      "title": "Návrh zákona, kterým se mění zákon č. 325/2021 Sb., ...",
+      "title_short": "Novela zákona o elektronizaci zdravotnictví",
+      "type": "zakon",                                  // zakon | vyhlaska | narizeni_vlady
+      "submitter": "Ministerstvo zdravotnictví",        // předkladatel
+      "phase": "pripominky",                            // pripominky | vyporadani | vlada | parlament | dokonceno
+      "veklep_status": "2 - v připomínkovém řízení",    // stav materiálu ve VeKLEP (raw)
+      "veklep_url": "https://odok.cz/portal/veklep/material/ALBSDVLDLD32/",
+      "annotation": "...",                              // redakční anotace (co návrh mění a proč je důležitý)
+      "dates": {
+        "authorized": "2026-07-03",                     // datum autorizace ve VeKLEP
+        "last_change": "2026-07-03",                    // poslední změna materiálu
+        "comments_until": "2026-08-03"                  // termín připomínek (null pokud neběží)
+      },
+      "linked_indicators": ["ehealth_adoption"],        // FK → indicators.json#id
+      "linked_articles": ["novela-elektronizace-2026"], // FK → articles.json#id
+      "verified_at": "2026-07-06"                       // kdy redakce záznam naposledy ověřila proti VeKLEP
+    }
+  ]
+}
+```
+
+Fáze (`phase`) je redakční zjednodušení stavů VeKLEP pro filtr v UI:
+
+| Fáze | VeKLEP stavy | Význam |
+|---|---|---|
+| `pripominky` | `2` | v připomínkovém řízení — lze podávat připomínky |
+| `vyporadani` | `3`, `9PK` | připomínkové řízení ukončeno / projednáno pracovními komisemi LRV |
+| `vlada` | `8` | zařazeno na jednání vlády |
+| `parlament` | `CE`, `D` | zaevidováno / projednáváno v PSP |
+| `dokonceno` | `A`, `B`, `SZ` | zapracovány změny / signováno / odesláno do Sbírky |
+
+Validátor: `npm run validate:legislation` (`ingest/validate-legislation.js`) —
+ENUM `type`/`phase`, povinná pole, unikátní `id` + `veklep_id`, formát dat
+(YYYY-MM-DD), `veklep_url` na doméně odok.cz a FK na indikátory + články.
+Konzument: `legislativa.html` přes `src/legislativa.js` (tabulka + filtr fází).
+
+---
+
 ## Vztahy mezi datasety
 
 ```
@@ -643,6 +698,8 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 | `themes.strategy_ids[]` | `themes.json` | `strategies.json#id` |
 | `themes.explainer_ids[]` | `themes.json` | `explainers.json#id` |
 | `strategies.linked_indicators[]` | `strategies.json` | `indicators.json#id` |
+| `legislativa.items[].linked_indicators[]` | `legislativa.json` | `indicators.json#id` |
+| `legislativa.items[].linked_articles[]` | `legislativa.json` | `articles.json#id` |
 | `strategies.related_strategies[]` | `strategies.json` | `strategies.json#id` (self) |
 | `explainers.linked_indicators[]` | `explainers.json` | `indicators.json#id` |
 | `indicators.dimension` | `indicators.json` | `dimensions.json#id` |
@@ -659,7 +716,8 @@ Konzument: `dohodovaci-rizeni.html` přes `src/dohodovaci-rizeni.js`.
 | `npm run validate:strategies` | `strategies.json` ENUM, FK, povinná pole |
 | `npm run validate:explainers` | `explainers.json` schéma |
 | `npm run validate:prevention` | `prevention.json` schéma |
-| `npm run validate:all` | spustí všechny 4 |
+| `npm run validate:legislation` | `legislativa.json` ENUM fází/typů, FK na indikátory + články |
+| `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
 
 Testy v `tests/`:

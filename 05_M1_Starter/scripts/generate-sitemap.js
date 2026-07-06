@@ -52,6 +52,7 @@ export const STATIC_PAGES = [
   { loc: '/pojistenci.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/prevence.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/strategie.html', priority: '0.7', changefreq: 'weekly' },
+  { loc: '/legislativa.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/financovani.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/financovani-poskytovatele.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/dohodovaci-rizeni.html', priority: '0.6', changefreq: 'monthly' },
