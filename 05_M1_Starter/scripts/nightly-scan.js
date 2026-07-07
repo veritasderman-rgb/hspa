@@ -17,6 +17,11 @@
 //   5. stale-date        — publikováno před > STALE_MONTHS měsíci (nízká priorita)
 //   6. ext-links         — inventář externích odkazů (zdroje) ke kontrole agentem,
 //                          s prioritou pro legislativní/EU domény
+//   7. claims-drift      — tvrzení z registru data/claims.json (check=auto)
+//                          se odchyluje od aktuální hodnoty indikátoru přes toleranci
+//   8. claims-stale      — indikátor má novější rok než tvrzení; hodnota zatím
+//                          v toleranci (informativní)
+//   9. claims-missing    — publikovaný článek bez záznamu v registru tvrzení
 //
 // Výstup:
 //   - reports/nightly-audit-RRRR-MM-DD.md  (čitelný report)
@@ -42,6 +47,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
 const INDICATORS_JSON = resolve(ROOT, 'data/indicators.json');
+const CLAIMS_JSON = resolve(ROOT, 'data/claims.json');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
 const REPORTS_DIR = resolve(ROOT, 'reports');
 
@@ -74,6 +80,46 @@ function todayUtc() {
 
 function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
+}
+
+let _claimsCache = null;
+function loadClaimsByArticle() {
+  if (_claimsCache) return _claimsCache;
+  let list = [];
+  if (existsSync(CLAIMS_JSON)) {
+    list = JSON.parse(readFileSync(CLAIMS_JSON, 'utf8')).claims ?? [];
+  }
+  const map = new Map();
+  for (const c of list) {
+    if (!map.has(c.article)) map.set(c.article, []);
+    map.get(c.article).push(c);
+  }
+  _claimsCache = { map, total: list.length };
+  return _claimsCache;
+}
+
+/**
+ * Porovná tvrzení z registru (data/claims.json) s aktuální hodnotou indikátoru.
+ * Jen pro check=auto (tj. relation=exact — přímá citace hodnoty indikátoru).
+ *
+ * @returns {{status: 'ok'|'drift'|'stale', deviation_pct?: number}}
+ *   drift = relativní odchylka přes tolerance_pct (default 2 %)
+ *   stale = hodnota zatím v toleranci, ale indikátor má novější rok než as_of
+ */
+export function checkClaim(claim, indicator) {
+  if (claim.check !== 'auto' || !indicator || indicator.value == null) return { status: 'ok' };
+  const tol = claim.tolerance_pct ?? 2;
+  const cur = Number(indicator.value);
+  const val = Number(claim.value);
+  if (!Number.isFinite(cur) || !Number.isFinite(val)) return { status: 'ok' };
+  const devPct = cur === 0
+    ? (val === 0 ? 0 : Infinity)
+    : Math.abs(val - cur) / Math.abs(cur) * 100;
+  if (devPct > tol) return { status: 'drift', deviation_pct: devPct };
+  if (claim.as_of != null && indicator.year != null && indicator.year > claim.as_of && val !== cur) {
+    return { status: 'stale', deviation_pct: devPct };
+  }
+  return { status: 'ok', deviation_pct: devPct };
 }
 
 let _indicatorsCache = null;
@@ -314,6 +360,26 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
         context: d.context });
     }
 
+    // 6c) registr tvrzení (data/claims.json) — přesná kontrola citovaných hodnot
+    //     proti aktuálnímu datovému kontraktu (PLAN-CLAIMS.md).
+    const { map: claimsByArticle, total: claimsTotal } = loadClaimsByArticle();
+    const claims = claimsByArticle.get(slug) ?? [];
+    for (const c of claims) {
+      const ind = c.indicator_id ? loadIndicatorsById().get(c.indicator_id) : null;
+      const res = checkClaim(c, ind);
+      if (res.status === 'drift') {
+        flags.push({ type: 'claims-drift', severity: 'review', claim: c.id, indicator: c.indicator_id,
+          note: `Tvrzení „${c.quote.slice(0, 120)}…“ cituje ${c.value} ${c.unit}, aktuální hodnota indikátoru ${c.indicator_id} je ${ind.value} ${ind.unit ?? ''} (${ind.year ?? '?'}) — odchylka ${res.deviation_pct === Infinity ? '∞' : res.deviation_pct.toFixed(1)} %.` });
+      } else if (res.status === 'stale') {
+        flags.push({ type: 'claims-stale', severity: 'low', claim: c.id, indicator: c.indicator_id,
+          note: `Indikátor ${c.indicator_id} má novější rok (${ind.year}) než tvrzení (${c.as_of}); hodnota zatím v toleranci — zvaž aktualizaci na nový rok.` });
+      }
+    }
+    if (claimsTotal > 0 && claims.length === 0) {
+      flags.push({ type: 'claims-missing', severity: 'low',
+        note: 'Publikovaný článek nemá žádný záznam v registru tvrzení (data/claims.json) — doplň při příští revizi.' });
+    }
+
     const links = findExternalLinks(html);
     if (links.length) {
       item.ext_links = links;
@@ -358,6 +424,9 @@ function buildReport(items, today) {
     'date-passed': 'Revize: ověřit budoucí vs. minulý čas u data',
     'check-sources': 'Revize: zkontrolovat zdrojové odkazy (WebFetch)',
     'indicator-drift': 'Revize: citace neodpovídá aktuální hodnotě indikátoru',
+    'claims-drift': 'Revize: tvrzení z registru se rozešlo s hodnotou indikátoru',
+    'claims-stale': 'Nízká: indikátor má novější rok než tvrzení',
+    'claims-missing': 'Nízká: článek chybí v registru tvrzení',
     'year-past': 'Nízká: ověřit zmínku roku',
     'stale-date': 'Nízká: zvážit revizi starého článku',
     'no-html': 'Revize: chybí HTML soubor',
@@ -422,6 +491,7 @@ function flagSeverity(type) {
   return ({
     'missing-cover': 'auto-fix', 'topical-expired': 'review', 'date-passed': 'review',
     'check-sources': 'review', 'no-html': 'review', 'year-past': 'low', 'stale-date': 'low',
+    'indicator-drift': 'review', 'claims-drift': 'review', 'claims-stale': 'low', 'claims-missing': 'low',
   })[type] || 'review';
 }
 

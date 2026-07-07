@@ -714,6 +714,99 @@ v procesu / ve Sbírce / nezahájeno / po termínu, filtr podle stavu).
 
 ---
 
+## 17. `data/system-model.json` — kauzální model systému
+
+Interaktivní kauzální mapa na `model-systemu.html` (PLAN-SYSTEM-MODEL.md).
+Uzly = oblasti/páky systému ve 4 vrstvách HSPA, hrany = kauzální vazby
+s polaritou. Layout je kurátorovaný (pevné souřadnice), žádný algoritmus.
+
+### Schéma
+
+```jsonc
+{
+  "version": "1.0",
+  "generated_at": "<ISO8601>",
+  "nodes": [{
+    "id": "prevence_screeningy",       // unikátní, snake_case
+    "label": "Prevence a screeningy",  // krátký český label (SVG uzel)
+    "layer": "Procesy",                // Struktury | Procesy | Výstupy | Výsledky
+    "kind": "lever",                   // lever (páka) | flow (průtok) | outcome (výsledek)
+    "x": 350, "y": 260,                // střed uzlu ve viewBox 1000×768
+    "desc": "1–3 věty co uzel je",
+    "indicators": ["screening_kolorektalni"],   // FK → indicators.json#id
+    "articles": ["clanek-vydaje-prevence.html"],// FK → articles.json#slug
+    "explainers": []                   // FK → explainers.json#id (nepovinné)
+  }],
+  "edges": [{
+    "id": "prevence_to_mortalita",     // unikátní
+    "from": "prevence_screeningy",     // FK → nodes.id
+    "to": "odvratitelna_mortalita",    // FK → nodes.id (bez self-loops)
+    "polarity": "plus",                // plus = podporuje | minus = zatěžuje cíl
+    "mechanism": "1 věta jak vazba funguje",
+    "strength": "strong",              // strong | weak (vizuální tloušťka)
+    "articles": []                     // doklad vazby (nepovinné)
+  }]
+}
+```
+
+### Validace
+
+`npm run validate:system-model` (`ingest/validate-system-model.js`): enumy,
+FK na indikátory/články/explainery, unikátní id, bez self-loops, bez osiřelých
+uzlů, každý uzel má aspoň 1 indikátor nebo článek. Testy:
+`tests/system-model.test.js` (vč. BFS „každá páka dosáhne na výsledek").
+
+Konzument: `model-systemu.html` přes `src/system-model.js` (SVG graf, detail
+panel se živými hodnotami indikátorů, režim „Zatlačit na páku" = BFS downstream).
+
+---
+
+## 18. `data/claims.json` — registr kvantitativních tvrzení
+
+Strukturovaný registr podstatných čísel ze VŠECH článků (PLAN-CLAIMS.md).
+Nahrazuje ruční hlídání driftu: tvrzení s `check: "auto"` porovnává noční
+skener s aktuální hodnotou indikátoru (kategorie `claims-drift`/`claims-stale`
+v `scripts/nightly-scan.js`). Registr se mění jen commitem; skener je read-only.
+
+### Schéma
+
+```jsonc
+{
+  "version": "1.0",
+  "generated_at": "<ISO8601>",
+  "claims": [{
+    "id": "alkohol-spotreba--03",      // {article_id}--{NN}, unikátní
+    "article": "clanek-alkohol-spotreba.html",  // FK → articles.json#slug
+    "quote": "Češi vypijí 14,4 litru…",// DOSLOVNÝ úryvek textu (≤240 znaků);
+                                        // strojově ověřuje claims-verify-quotes.js
+    "metric": "spotřeba čistého alkoholu na osobu 15+ za rok",
+    "value": 14.4,                      // normalizované číslo (tečka)
+    "unit": "l/os./rok",
+    "as_of": 2024,                      // rok platnosti (nepovinné)
+    "location": "prose",                // prose | counter | databox | perex
+    "indicator_id": "alkohol_spotreba", // FK → indicators.json#id (nepovinné)
+    "relation": "exact",                // exact | derived | related | external
+    "check": "auto",                    // auto | manual | none
+    "tolerance_pct": 2,                 // default 2 (nepovinné)
+    "source_note": "OECD HAaG 2025"     // (nepovinné)
+  }]
+}
+```
+
+Invariant: `check: "auto"` ⇒ `relation: "exact"` ∧ `indicator_id` vyplněný —
+strojově se hlídají JEN přímé citace hodnoty indikátoru (stejná metrika,
+populace, jednotka). Metodická odchylka (recorded vs. total alkohol, pozvaní
+vs. cílová populace) = `related` + `manual` s vysvětlením v `metric`.
+
+### Validace
+
+`npm run validate:claims` = `ingest/validate-claims.js` (schéma, FK, invarianty)
++ `scripts/claims-verify-quotes.js` (každý quote je doslovně dohledatelný
+v článku). Testy: `tests/claims.test.js`. Drift-check: `checkClaim()` v
+`scripts/nightly-scan.js`.
+
+---
+
 ## Vztahy mezi datasety
 
 ```
@@ -773,6 +866,12 @@ v procesu / ve Sbírce / nezahájeno / po termínu, filtr podle stavu).
 | `regions.datasets[].indicator_id` | `regions.json` | `indicators.json#id` |
 | `regions.datasets[].regions[].code` | `regions.json` | `cz-regions.geojson#properties.code` |
 | `pojistenci.krajs[].code` | `pojistenci-d5-*.json` | `cz-regions.geojson#properties.code` |
+| `system_model.nodes[].indicators[]` | `system-model.json` | `indicators.json#id` |
+| `system_model.nodes[].articles[]` | `system-model.json` | `articles.json#slug` |
+| `system_model.nodes[].explainers[]` | `system-model.json` | `explainers.json#id` |
+| `system_model.edges[].from/to` | `system-model.json` | `system-model.json#nodes[].id` (self) |
+| `claims.claims[].article` | `claims.json` | `articles.json#slug` |
+| `claims.claims[].indicator_id` | `claims.json` | `indicators.json#id` |
 
 ## Validátory
 
@@ -783,6 +882,8 @@ v procesu / ve Sbírce / nezahájeno / po termínu, filtr podle stavu).
 | `npm run validate:explainers` | `explainers.json` schéma |
 | `npm run validate:prevention` | `prevention.json` schéma |
 | `npm run validate:legislation` | `legislativa.json` ENUM fází/typů (radar) + ENUM typů/stavů (plán), FK na indikátory + články + self-FK `radar_id` |
+| `npm run validate:system-model` | `system-model.json` enumy, FK, bez osiřelých uzlů/self-loops |
+| `npm run validate:claims` | `claims.json` schéma, FK, invarianty + quote-verifikace proti HTML |
 | `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
 
