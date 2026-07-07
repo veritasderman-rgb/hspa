@@ -9,19 +9,20 @@
   "direction": "context_dependent",
   "data_source": {
     "primary": {
-      "type": "registry",
-      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-reprodukcniho-zdravi--modul-potratu",
-      "dataset": "Národní registr reprodukčního zdraví (NRRZ) — modul Potraty (POT); roční publikace „Potraty“, ÚZIS ČR",
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_fabortind",
+      "dataset": "demo_fabortind",
       "dimensions": {
-        "sex": "F",
-        "age_range": "15-49",
-        "country": "CZ",
-        "abortion_type": "legally_induced"
-      }
+        "geo": "CZ",
+        "indic_de": "ABORTRT",
+        "unit": "RT"
+      },
+      "note": "Eurostat Abortion indicators, ABORTRT = legálně provedená umělá přerušení těhotenství na 1 000 žen 15–49. Národním zdrojem prvotních dat je ÚZIS ČR — Národní registr reprodukčního zdraví (modul Potraty), harmonizovaný do Eurostatu. Kontextový indikátor (context_dependent) → bez EU agregátu, srovnává se se sousedy. Ověřeno živě z Eurostat API 2026-07-06: CZ 4,9 (2024)."
     },
     "fallback": {
-      "type": "statistical_office",
-      "url": "https://csu.gov.cz/produkty/e-potraty"
+      "type": "registry",
+      "url": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-reprodukcniho-zdravi--modul-potratu",
+      "note": "ÚZIS ČR — NRRZ modul Potraty (POT), roční publikace „Potraty“; absolutní počty. Alternativně ČSÚ demografická statistika: https://csu.gov.cz/produkty/e-potraty"
     }
   },
   "benchmark_source": {
@@ -54,5 +55,7 @@
   "importance": "Míra umělých přerušení těhotenství je citlivým ukazatelem účinnosti preventivních služeb reprodukčního zdraví. Na rozdíl od zemí, kde se debata vede o restrikci, je v Česku legální rámec stabilní od roku 1986 — pohyb ukazatele proto odráží především to, jak dobře systém předchází nechtěným těhotenstvím prostřednictvím dostupné antikoncepce a osvěty. To z něj dělá měřitelnou zpětnou vazbu pro konkrétní politiku (úhrada antikoncepce, sexuální výchova), nikoli morální barometr.",
   "patient_story": "Kristýně je čtyřiadvacet, studuje v Ústí nad Labem a na začátku semestru počítá každou stokorunu. Hormonální antikoncepce, kterou jí gynekoložka doporučila, stojí kolem tří set korun měsíčně — a v Česku ji, na rozdíl od dvaadvaceti zemí EU, nehradí veřejné pojištění. Kristýna ji proto na pár měsíců vysadila. Její příběh je jednou z tisíců drobných rozhodnutí, která se nakonec sečtou do jednoho čísla ve statistice.\n\nTím číslem je 4,9. Tolik umělých přerušení těhotenství na 1 000 žen ve fertilním věku evidoval Eurostat pro Česko v roce 2024. Je to nejnižší hodnota v novodobé historii a dlouhodobě klesající trend — z 5,7 v roce 2020 přes 5,0 v roce 2023. ÚZIS ve stejné době napočítal v absolutních číslech kolem patnácti tisíc zákroků ročně; koncem osmdesátých let jich bylo přes sto třináct tisíc. Signál je proto veden jako neutrální: ukazatel nemá „správný“ směr. Sousední Slovensko má 3,6, Německo 4,9, Francie s plně hrazenou antikoncepcí 12,9 — a Polsko po faktickém zákazu hodnotu blízkou nule, což není úspěch prevence, ale zmizení legální péče.\n\nStrukturálně za českým poklesem stojí hlavně to, co Kristýna nemá: samozřejmý přístup k moderní antikoncepci. Antikoncepční atlas Evropy 2025 zařadil Česko na 36. místo ze 47 zemí — především kvůli tomu, že hormonální ani dlouhodobě účinná antikoncepce (nitroděložní tělíska, implantáty) se u nás neproplácí. Klesající počet interrupcí táhne spíš vyšší dostupnost antikoncepce na trhu a osvěta posledních třiceti let než cílená veřejná politika. Právě proto zůstává mezi mladými, studujícími a nízkopříjmovými ženami cenová bariéra, kterou trh sám nevyřeší.\n\nPolitická páka je konkrétní a leží na straně státu a plátců. Ministerstvo zdravotnictví připravuje novelu, která by umožnila hradit moderní antikoncepci alespoň vybraným skupinám — nezletilým a mladým ženám do určitého věku, jak to už dělá řada zemí EU. Druhou pákou je povinná, věcná sexuální výchova ve školách. Obě opatření míří na stejný cíl: aby počet umělých přerušení klesal proto, že ženám jako Kristýně systém umožní nechtěnému těhotenství předejít — ne proto, že by jim ztížil přístup k péči.",
   "framework": "monitoring",
-  "dimension": "spravedlnost"
+  "dimension": "spravedlnost",
+  "verification_status": "verified",
+  "verified_at": "2026-07-06"
 }

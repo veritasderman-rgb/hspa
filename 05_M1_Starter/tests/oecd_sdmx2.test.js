@@ -3,7 +3,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseOecdSdmx2, buildOecdSdmx2Url } from '../ingest/fetchers/oecd_sdmx2.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Minimální SDMX-JSON 2.0 message: dims REF_AREA × MEASURE × UNIT × HEALTH_PROF × TIME.
 // Klíč observace = ":"-separované indexy v pořadí dimenzí.
@@ -129,6 +134,47 @@ test('parseOecdSdmx2: OECD průměr ignoruje partnerskou zemi (BGR) i agregát (
   // průměr JEN z 5 členů (10+20+30+40+50)/5 = 30; BGR (1000) a agregát OECD (999)
   // by ho vystřelily nahoru, kdyby se započítaly.
   assert.equal(r.benchmark.oecd, 30);
+});
+
+// --- Dávka G (2026-07-06): hip-fracture surgery ≤2 dny (DSD_HCQO@DF_AC) ---
+
+test('mapping operace_zlomenina_kycle_48h: DF_AC, IHWTHIPS, věk 65+, OBS', () => {
+  const MAP = JSON.parse(fs.readFileSync(
+    path.join(__dirname, '..', 'ingest', 'mapping', 'oecd_sdmx2_codes.json'), 'utf8')).indicators;
+  const m = MAP.operace_zlomenina_kycle_48h;
+  assert.ok(m, 'mapping chybí');
+  assert.equal(m.dataflow, 'DSD_HCQO@DF_AC');
+  assert.equal(m.dims.MEASURE, 'IHWTHIPS');
+  assert.equal(m.dims.UNIT_MEASURE, 'PT_SURG_HIPF');
+  assert.equal(m.dims.AGE, 'Y_GE65');
+  assert.equal(m.dims.SEX, '_T');
+  assert.equal(m.dims.STATISTICAL_OPERATION, 'OBS');
+});
+
+test('parseOecdSdmx2: hip-fracture fixture (dims MEASURE/AGE/SEX/STAT_OP)', () => {
+  // Malý DF_AC-like fixture: dims REF_AREA × MEASURE × AGE × SEX × STATISTICAL_OPERATION × TIME.
+  const countries = ['CZE', 'AUT', 'DEU', 'FRA', 'ESP', 'ITA'];
+  const times = ['2020', '2021'];
+  const v2021 = { CZE: 79.2, AUT: 91.4, DEU: 93.8, FRA: 82, ESP: 57, ITA: 77 };
+  const v2020 = { CZE: 79.4 };
+  const obs = {};
+  countries.forEach((c, ci) => times.forEach((t, ti) => {
+    const map = t === '2021' ? v2021 : v2020;
+    if (map[c] != null) obs[`${ci}:0:0:0:0:${ti}`] = [map[c]];
+  }));
+  const fx = { data: { structures: [{ dimensions: { observation: [
+    { id: 'REF_AREA', values: countries.map(id => ({ id })) },
+    { id: 'MEASURE', values: [{ id: 'IHWTHIPS' }] },
+    { id: 'AGE', values: [{ id: 'Y_GE65' }] },
+    { id: 'SEX', values: [{ id: '_T' }] },
+    { id: 'STATISTICAL_OPERATION', values: [{ id: 'OBS' }] },
+    { id: 'TIME_PERIOD', values: times.map(id => ({ id })) },
+  ] } }], dataSets: [{ observations: obs }] } };
+  const r = parseOecdSdmx2(fx, { dims: { MEASURE: 'IHWTHIPS', AGE: 'Y_GE65', SEX: '_T', STATISTICAL_OPERATION: 'OBS' } });
+  assert.equal(r.cz.value, 79.2);
+  assert.equal(r.cz.year, 2021);
+  // průměr 6 členů (79.2+91.4+93.8+82+57+77)/6 = 80.066… → 80.1 (shoduje se s kartou)
+  assert.equal(r.benchmark.oecd, 80.1);
 });
 
 test('parseOecdSdmx2: pod prahem 5 členů se benchmark nepočítá', () => {

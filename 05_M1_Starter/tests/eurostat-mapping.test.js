@@ -54,3 +54,40 @@ test('all mappings have dataset, country_dim, cz_code', () => {
     assert.ok(m.cz_code, `${id}: missing cz_code`);
   }
 });
+
+// --- Dávka G (2026-07-06): treatable/preventable mortalita, zubní péče, potraty ---
+
+test('mortalita_lecitelna: hlth_cd_apr, mortalit=TRT, icd10=TOTAL', () => {
+  const m = MAPPING.indicators.mortalita_lecitelna;
+  assert.equal(m.dataset, 'hlth_cd_apr');
+  assert.equal(m.filter_extra.mortalit, 'TRT');
+  assert.equal(m.filter_extra.icd10, 'TOTAL');
+  assert.equal(m.filter_extra.unit, 'RT');
+  assert.equal(m.eu_code, 'EU27_2020');
+});
+
+test('mortalita_preventabilni: hlth_cd_apr, mortalit=PRVT (ne TRT)', () => {
+  const m = MAPPING.indicators.mortalita_preventabilni;
+  assert.equal(m.dataset, 'hlth_cd_apr');
+  assert.equal(m.filter_extra.mortalit, 'PRVT');
+  assert.equal(m.filter_extra.icd10, 'TOTAL');
+  assert.equal(m.filter_extra.unit, 'RT');
+});
+
+test('nesplnena_potreba_zubni_pece: hlth_silc_09, souhrnný reason TXP_TFAR_WLIST', () => {
+  const m = MAPPING.indicators.nesplnena_potreba_zubni_pece;
+  assert.equal(m.dataset, 'hlth_silc_09');
+  assert.equal(m.filter_extra.reason, 'TXP_TFAR_WLIST');
+  assert.equal(m.filter_extra.age, 'Y_GE16');
+  assert.equal(m.filter_extra.quantile, 'TOTAL');
+  assert.equal(m.filter_extra.unit, 'PC');
+});
+
+test('umela_preruseni_tehotenstvi: demo_fabortind, ABORTRT, bez eu_code (context_dependent)', () => {
+  const m = MAPPING.indicators.umela_preruseni_tehotenstvi;
+  assert.equal(m.dataset, 'demo_fabortind');
+  assert.equal(m.filter_extra.indic_de, 'ABORTRT');
+  assert.equal(m.filter_extra.unit, 'RT');
+  // Kontextový indikátor → žádný EU agregát (jinak by fetcher zbytečně tahal EU řadu).
+  assert.equal(m.eu_code, undefined);
+});

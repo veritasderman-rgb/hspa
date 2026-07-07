@@ -178,6 +178,56 @@
         "icd10": "K70_K73_K74",
         "unit": "RT"
       }
+    },
+    "mortalita_lecitelna": {
+      "_doc": "Treatable (léčitelná) mortalita — hlth_cd_apr, mortalit=TRT, icd10=TOTAL, ESP 2013, unit=RT, předčasná úmrtí do 75 let na 100 000. Národním zdrojem prvotních dat (List o prohlídce zemřelého) je ČSÚ, harmonizován do Eurostatu. Ověřeno živě 2026-07-06: CZ 107,19 (2023), EU27 86,81.",
+      "dataset": "hlth_cd_apr",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "mortalit": "TRT",
+        "icd10": "TOTAL",
+        "unit": "RT"
+      }
+    },
+    "mortalita_preventabilni": {
+      "_doc": "Preventable (preventabilní) mortalita — hlth_cd_apr, mortalit=PRVT, icd10=TOTAL, ESP 2013, unit=RT, předčasná úmrtí do 75 let na 100 000. Proxy síly primární prevence a veřejného zdraví. Ověřeno živě 2026-07-06: CZ 173,86 (2023), EU27 150,85.",
+      "dataset": "hlth_cd_apr",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "mortalit": "PRVT",
+        "icd10": "TOTAL",
+        "unit": "RT"
+      }
+    },
+    "nesplnena_potreba_zubni_pece": {
+      "_doc": "Self-reported unmet need for dental examination (hlth_silc_09), souhrnný důvod reason=TXP_TFAR_WLIST (příliš drahé / daleko / čekací listina), populace 16+, quantile=TOTAL, unit=PC. Ověřeno živě 2026-07-06: CZ 1,0 % (2025), EU27 3,3 %.",
+      "dataset": "hlth_silc_09",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "Y_GE16",
+        "reason": "TXP_TFAR_WLIST",
+        "quantile": "TOTAL",
+        "unit": "PC"
+      }
+    },
+    "umela_preruseni_tehotenstvi": {
+      "_doc": "Legally induced abortions per 1 000 women aged 15–49 (demo_fabortind, indic_de=ABORTRT, unit=RT). Národním zdrojem je ÚZIS NRRZ (modul Potraty), harmonizovaný do Eurostatu. Kontextový indikátor (context_dependent) → bez EU agregátu / benchmarku, srovnává se se sousedy. Ověřeno živě 2026-07-06: CZ 4,9 (2024).",
+      "dataset": "demo_fabortind",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "filter_extra": {
+        "indic_de": "ABORTRT",
+        "unit": "RT"
+      }
     }
   }
 }
