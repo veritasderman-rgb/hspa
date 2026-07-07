@@ -14958,3 +14958,115 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .msys-node rect, .msys-edge { transition: none; }
 }
+
+/* ── Legislativní radar: časová osa (pravý sloupec) · .leg-tl-* ─────────── */
+
+.leg-radar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.6fr) minmax(250px, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 0 clamp(18px, 4vw, 48px);
+}
+.leg-radar-layout .leg-table-wrap { padding: 0; }
+
+.leg-timeline {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper2);
+  padding: 18px 18px 14px;
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+.leg-tl-heading { font-family: var(--serif); font-size: 19px; margin-bottom: 4px; }
+.leg-tl-lead { font-size: 13px; color: var(--ink-mut); line-height: 1.45; margin-bottom: 14px; }
+
+.leg-tl-list {
+  list-style: none;
+  position: relative;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.leg-tl-list::before {
+  content: '';
+  position: absolute;
+  left: 4px; top: 4px; bottom: 4px;
+  width: 2px;
+  background: var(--rule2);
+  border-radius: 1px;
+}
+.leg-tl-event { position: relative; font-family: var(--sans); font-size: 12.5px; line-height: 1.4; }
+.leg-tl-dot {
+  position: absolute;
+  left: -16.5px; top: 3px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--neutral);
+  border: 2px solid var(--paper2);
+  box-sizing: content-box;
+}
+.leg-tl-done .leg-tl-dot { background: var(--ink-mut2); }
+.leg-tl-open .leg-tl-dot { background: var(--paper2); border: 2px solid var(--warn); }
+.leg-tl-upcoming .leg-tl-dot { background: var(--paper2); border: 2px solid var(--ink-mut2); }
+.leg-tl-overdue .leg-tl-dot { background: var(--bad); }
+.leg-tl-date { display: block; font-weight: 700; letter-spacing: 0.02em; }
+.leg-tl-open .leg-tl-date { color: var(--warn); }
+.leg-tl-overdue .leg-tl-date { color: var(--bad); }
+.leg-tl-label { display: block; color: var(--ink-mut); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.leg-tl-title { display: block; color: var(--ink); margin-top: 1px; }
+a.leg-tl-title { text-decoration: underline; text-underline-offset: 2px; }
+
+.leg-tl-today { position: relative; display: flex; align-items: center; gap: 8px; margin: 2px 0; }
+.leg-tl-today-line { flex: 1; height: 2px; background: var(--red); border-radius: 1px; }
+.leg-tl-today-lbl {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+  white-space: nowrap;
+}
+.leg-tl-today::before {
+  content: '';
+  position: absolute;
+  left: -16.5px; top: 50%;
+  transform: translateY(-50%);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid var(--paper2);
+  box-sizing: content-box;
+}
+
+.leg-tl-legend {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-mut);
+}
+.leg-tl-key { position: relative; padding-left: 13px; }
+.leg-tl-key::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--ink-mut2);
+}
+.leg-tl-key.leg-tl-open::before { background: var(--paper2); border: 2px solid var(--warn); width: 6px; height: 6px; }
+.leg-tl-key.leg-tl-upcoming::before { background: var(--paper2); border: 2px solid var(--ink-mut2); width: 6px; height: 6px; }
+.leg-tl-key.leg-tl-overdue::before { background: var(--bad); }
+
+@media (max-width: 900px) {
+  .leg-radar-layout { grid-template-columns: 1fr; }
+  .leg-timeline { position: static; max-height: none; }
+}
