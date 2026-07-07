@@ -497,6 +497,11 @@ function renderPlan() {
 
   mount.innerHTML = `
     <div class="leg-plan-head">
+      <div class="leg-part-divider" aria-hidden="true">
+        <span class="leg-part-num">1</span>
+        <span class="leg-part-tag">Sliby</span>
+        <span class="leg-part-line"></span>
+      </div>
       <div class="ed-kicker">Legislativní plán ministerstva</div>
       <h2 id="legPlanHeading">Co ministerstvo slíbilo připravit — a jak to plní</h2>
       <p class="leg-plan-lead">

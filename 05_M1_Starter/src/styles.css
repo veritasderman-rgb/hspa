@@ -15070,3 +15070,63 @@ a.leg-tl-title { text-decoration: underline; text-underline-offset: 2px; }
   .leg-radar-layout { grid-template-columns: 1fr; }
   .leg-timeline { position: static; max-height: none; }
 }
+
+/* ── Legislativa: kapitolové oddělovače Sliby/Realita · .leg-part-* ──────── */
+
+.leg-part-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 16px;
+}
+.leg-part-num {
+  flex: none;
+  width: 40px; height: 40px;
+  display: grid;
+  place-items: center;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--paper);
+}
+.leg-part-tag {
+  flex: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.leg-part-line {
+  flex: 1;
+  height: 3px;
+  background: var(--ink);
+  border-radius: 2px;
+  transform-origin: left center;
+  animation: legPartDraw 0.9s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+@keyframes legPartDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .leg-part-line { animation: none; transform: scaleX(1); }
+}
+
+/* Sekce plánu (Sliby) = vlastní podbarvený pás, radar zůstává na papíře */
+.leg-plan.section {
+  background: var(--paper2);
+  border-block: 1px solid var(--rule);
+  padding-top: 26px;
+  padding-bottom: 26px;
+  margin-bottom: 8px;
+}
+.leg-plan.section .leg-part-num,
+.leg-plan.section .leg-tl-dot { background: var(--paper2); }
+.leg-plan-head h2, .leg-radar-head h2 { font-size: 30px; }
+.leg-radar-head { margin-top: 44px; }
+@media (max-width: 720px) {
+  .leg-plan-head h2, .leg-radar-head h2 { font-size: 24px; }
+  .leg-part-num { width: 34px; height: 34px; font-size: 18px; }
+}
