@@ -6,8 +6,13 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { filterLegislation, sortLegislation, PHASE_LABELS, TYPE_LABELS, PHASE_ORDER } from '../src/legislativa.js';
-import { validateLegislation, VALID_PHASES, VALID_TYPES, REQUIRED } from '../ingest/validate-legislation.js';
+import {
+  filterLegislation, sortLegislation, PHASE_LABELS, TYPE_LABELS, PHASE_ORDER,
+  PLAN_TYPE_LABELS, PLAN_STAV_LABELS, PLAN_STAV_PROCES,
+  planTerminIndex, monthIndex, formatPlanTermin, isPlanItemOverdue,
+  computePlanStats, filterPlanItems, sortPlanItems,
+} from '../src/legislativa.js';
+import { validateLegislation, VALID_PHASES, VALID_TYPES, REQUIRED, VALID_PLAN_TYPES, VALID_PLAN_STAV } from '../ingest/validate-legislation.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -149,6 +154,153 @@ test('validateLegislation: chybějící version/generated_at/items', () => {
   assert.ok(errors.some(e => e.includes('items')));
 });
 
+// ===== validateLegislation: legislativní plán MZ (plan_meta + plan_items) =====
+
+function validPlanMeta(overrides = {}) {
+  return {
+    usneseni: 'č. 123/2026',
+    schvaleno: '2026-01-15',
+    zdroj_nazev: 'Plán legislativních prací vlády na rok 2026',
+    zdroj_url: 'https://vlada.gov.cz/plan-legislativnich-praci.pdf',
+    ...overrides,
+  };
+}
+
+function validPlanItem(overrides = {}) {
+  return {
+    id: 'novela-neco-2026',
+    nazev: 'Novela zákona o něčem',
+    popis: 'Plánovaná novela.',
+    typ: 'novela_zakona',
+    plan_termin: '2026-09',
+    ria: true,
+    stav: 'nezahajeno',
+    veklep_pid: null,
+    veklep_url: null,
+    radar_id: null,
+    plneni_poznamka: '',
+    zdroje: [{ nazev: 'Plán legislativních prací', url: 'https://vlada.gov.cz/plan.pdf' }],
+    ...overrides,
+  };
+}
+
+function planDataset(planItems, planMeta = validPlanMeta(), radarItems = [validItem()]) {
+  return { version: '1.0', generated_at: '2026-07-06T00:00:00Z', items: radarItems, plan_meta: planMeta, plan_items: planItems };
+}
+
+test('validatePlan: enumy pokrývají zadané hodnoty', () => {
+  assert.deepEqual([...VALID_PLAN_TYPES].sort(), ['narizeni_vlady', 'novela_narizeni', 'novela_vyhlasky', 'novela_zakona', 'ustavni_zakon', 'vecny_zamer', 'vyhlaska', 'zakon']);
+  assert.deepEqual([...VALID_PLAN_STAV].sort(), ['nezahajeno', 'parlament', 'pripominkove_rizeni', 'sbirka', 'stazeno', 'vlada']);
+});
+
+test('validatePlan: validní plán projde bez chyb', () => {
+  assert.deepEqual(validateLegislation(planDataset([validPlanItem()])), []);
+});
+
+test('validatePlan: dataset bez plánu (backward-compat) projde bez chyb', () => {
+  assert.deepEqual(validateLegislation(validDataset([validItem()])), []);
+});
+
+test('validatePlan: chybějící povinná pole položky', () => {
+  const item = validPlanItem();
+  delete item.nazev;
+  delete item.plan_termin;
+  const errors = validateLegislation(planDataset([item]));
+  assert.ok(errors.some(e => e.includes("missing required 'nazev'")));
+  assert.ok(errors.some(e => e.includes("missing required 'plan_termin'")));
+});
+
+test('validatePlan: chybějící povinná pole plan_meta', () => {
+  const meta = validPlanMeta();
+  delete meta.usneseni;
+  const errors = validateLegislation(planDataset([validPlanItem()], meta));
+  assert.ok(errors.some(e => e.includes("plan_meta: missing required 'usneseni'")));
+});
+
+test('validatePlan: plan_meta chybí, ale plan_items je přítomen', () => {
+  const data = { version: '1.0', generated_at: '2026-07-06T00:00:00Z', items: [validItem()], plan_items: [validPlanItem()] };
+  const errors = validateLegislation(data);
+  assert.ok(errors.some(e => e.includes('plan_meta chybí')));
+});
+
+test('validatePlan: nevalidní typ a stav', () => {
+  const errors = validateLegislation(planDataset([
+    validPlanItem({ typ: 'smernice' }),
+    validPlanItem({ id: 'p2', stav: 'snemovna' }),
+  ]));
+  assert.ok(errors.some(e => e.includes("invalid typ 'smernice'")));
+  assert.ok(errors.some(e => e.includes("invalid stav 'snemovna'")));
+});
+
+test('validatePlan: plan_termin musí být YYYY-MM (ne YYYY-MM-DD)', () => {
+  assert.ok(validateLegislation(planDataset([validPlanItem({ plan_termin: '2026-09-01' })])).some(e => e.includes('plan_termin')));
+  assert.ok(validateLegislation(planDataset([validPlanItem({ plan_termin: '2026-13' })])).some(e => e.includes('plan_termin')));
+  assert.deepEqual(validateLegislation(planDataset([validPlanItem({ plan_termin: '2026-12' })])), []);
+});
+
+test('validatePlan: schvaleno musí být YYYY-MM-DD', () => {
+  const errors = validateLegislation(planDataset([validPlanItem()], validPlanMeta({ schvaleno: '2026-01' })));
+  assert.ok(errors.some(e => e.includes('schvaleno')));
+});
+
+test('validatePlan: zdroj_url mimo vlada.gov.cz selže', () => {
+  const errors = validateLegislation(planDataset([validPlanItem()], validPlanMeta({ zdroj_url: 'https://example.com/plan.pdf' })));
+  assert.ok(errors.some(e => e.includes('zdroj_url')));
+});
+
+test('validatePlan: duplicitní id položky plánu', () => {
+  const errors = validateLegislation(planDataset([validPlanItem(), validPlanItem()]));
+  assert.ok(errors.some(e => e.includes('duplicate id')));
+});
+
+test('validatePlan: ria musí být boolean nebo null', () => {
+  assert.ok(validateLegislation(planDataset([validPlanItem({ ria: 'ano' })])).some(e => e.includes('ria')));
+  assert.deepEqual(validateLegislation(planDataset([validPlanItem({ ria: null })])), []);
+  assert.deepEqual(validateLegislation(planDataset([validPlanItem({ ria: false })])), []);
+});
+
+test('validatePlan: veklep_url povinné, když stav != nezahajeno', () => {
+  const errors = validateLegislation(planDataset([validPlanItem({ stav: 'pripominkove_rizeni', veklep_url: null })]));
+  assert.ok(errors.some(e => e.includes('veklep_url je povinné')));
+
+  const ok = validateLegislation(planDataset([validPlanItem({
+    stav: 'pripominkove_rizeni',
+    veklep_pid: 'ALBSDPLAN01',
+    veklep_url: 'https://odok.cz/portal/veklep/material/ALBSDPLAN01/',
+  })]));
+  assert.deepEqual(ok, []);
+});
+
+test('validatePlan: veklep_url musí mířit na odok.cz', () => {
+  const errors = validateLegislation(planDataset([validPlanItem({ stav: 'vlada', veklep_url: 'https://example.com/x' })]));
+  assert.ok(errors.some(e => e.includes('odok.cz')));
+});
+
+test('validatePlan: FK radar_id proti položkám radaru', () => {
+  const radar = [validItem({ id: 'radar-existuje', veklep_id: 'RADAR1' })];
+  const ok = validateLegislation(planDataset([validPlanItem({ radar_id: 'radar-existuje' })], validPlanMeta(), radar));
+  assert.deepEqual(ok, []);
+
+  const bad = validateLegislation(planDataset([validPlanItem({ radar_id: 'radar-neexistuje' })], validPlanMeta(), radar));
+  assert.ok(bad.some(e => e.includes("radar_id 'radar-neexistuje'")));
+});
+
+test('validatePlan: zdroje musí být pole objektů s nazev+url', () => {
+  assert.ok(validateLegislation(planDataset([validPlanItem({ zdroje: 'neco' })])).some(e => e.includes('zdroje must be array')));
+  assert.ok(validateLegislation(planDataset([validPlanItem({ zdroje: [{ nazev: 'X' }] })])).some(e => e.includes("chybí 'url'")));
+  assert.ok(validateLegislation(planDataset([validPlanItem({ zdroje: [{ nazev: 'X', url: 'ftp://x' }] })])).some(e => e.includes('http(s)')));
+});
+
+test('validatePlan: reálný dataset plánu MZ (usnesení č. 175) projde validátorem', () => {
+  const data = JSON.parse(readFileSync(resolve(ROOT, 'data', 'legislativa.json'), 'utf8'));
+  assert.ok(Array.isArray(data.plan_items) && data.plan_items.length >= 6,
+    `plan_items má mít aspoň 6 úkolů MZ z plánu legislativních prací (má ${data.plan_items?.length})`);
+  assert.equal(data.plan_meta.usneseni, 'č. 175');
+  assert.equal(data.plan_meta.schvaleno, '2026-03-23');
+  assert.ok(!data.plan_items.some(p => p.id === 'fixture-placeholder'), 'fixture-placeholder byl nahrazen reálnými daty');
+  assert.deepEqual(validateLegislation(data), []);
+});
+
 // ===== integrita reálného datasetu =====
 
 test('data/legislativa.json: parsuje se a projde validátorem včetně FK', () => {
@@ -177,4 +329,137 @@ test('legislativa.html: stránka odkazuje na src/legislativa.js a má právě je
   assert.ok(html.includes('src/legislativa.js'));
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.ok(/class="ed-hero-headline"/.test(html));
+});
+
+// ===== Sekce plánu: render-logika (mapování stavů, po termínu, filtry) =====
+
+test('legislativa.html: obsahuje mount sekce plánu (#legPlanMount)', () => {
+  const html = readFileSync(resolve(ROOT, 'legislativa.html'), 'utf8');
+  assert.ok(html.includes('id="legPlanMount"'));
+});
+
+test('PLAN_TYPE_LABELS pokrývá přesně VALID_PLAN_TYPES validátoru', () => {
+  assert.deepEqual(Object.keys(PLAN_TYPE_LABELS).sort(), [...VALID_PLAN_TYPES].sort());
+});
+
+test('PLAN_STAV_LABELS pokrývá přesně VALID_PLAN_STAV a mapuje badge třídu', () => {
+  assert.deepEqual(Object.keys(PLAN_STAV_LABELS).sort(), [...VALID_PLAN_STAV].sort());
+  for (const [stav, def] of Object.entries(PLAN_STAV_LABELS)) {
+    assert.ok(def.label, `${stav}: chybí label`);
+    assert.match(def.cls, /^leg-plan-badge-(good|warn|bad|neutral)$/, `${stav}: neplatná badge třída`);
+  }
+  // Signální sémantika: sbirka=good, stazeno=bad (červená jen pro staženo), procesní stavy=warn.
+  assert.equal(PLAN_STAV_LABELS.sbirka.cls, 'leg-plan-badge-good');
+  assert.equal(PLAN_STAV_LABELS.stazeno.cls, 'leg-plan-badge-bad');
+  assert.equal(PLAN_STAV_LABELS.pripominkove_rizeni.cls, 'leg-plan-badge-warn');
+  assert.equal(PLAN_STAV_LABELS.nezahajeno.cls, 'leg-plan-badge-neutral');
+});
+
+test('PLAN_STAV_PROCES = aktivně projednávané stavy', () => {
+  assert.deepEqual([...PLAN_STAV_PROCES].sort(), ['parlament', 'pripominkove_rizeni', 'vlada']);
+});
+
+test('planTerminIndex: parsuje YYYY-MM, odmítá nevalidní', () => {
+  assert.equal(planTerminIndex('2026-01'), 2026 * 12 + 0);
+  assert.equal(planTerminIndex('2026-12'), 2026 * 12 + 11);
+  assert.equal(planTerminIndex('2026-13'), null);
+  assert.equal(planTerminIndex('2026-00'), null);
+  assert.equal(planTerminIndex('2026-09-01'), null);
+  assert.equal(planTerminIndex(null), null);
+});
+
+test('monthIndex: měsíční index z Date (měsíc 0-based)', () => {
+  assert.equal(monthIndex(new Date('2026-07-15T00:00:00')), 2026 * 12 + 6);
+});
+
+test('formatPlanTermin: český měsíc + rok', () => {
+  assert.equal(formatPlanTermin('2026-06'), 'červen 2026');
+  assert.equal(formatPlanTermin('2027-01'), 'leden 2027');
+  assert.equal(formatPlanTermin('2026-12'), 'prosinec 2026');
+  assert.equal(formatPlanTermin('2026-13'), '2026-13'); // nevalidní měsíc → beze změny
+  assert.equal(formatPlanTermin(null), '—');
+});
+
+test('isPlanItemOverdue: po termínu = plán v minulosti A stav nezahajeno/pripominkove', () => {
+  const now = new Date('2026-07-15T00:00:00'); // aktuální měsíc 2026-07
+  // Plán v minulém měsíci, stav nezahajeno → po termínu
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-06', stav: 'nezahajeno' }, now), true);
+  // Plán v minulém měsíci, stav pripominkove_rizeni → po termínu
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-03', stav: 'pripominkove_rizeni' }, now), true);
+  // Aktuální měsíc → NENÍ po termínu (jen ostře menší)
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-07', stav: 'nezahajeno' }, now), false);
+  // Budoucí měsíc → není po termínu
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-12', stav: 'nezahajeno' }, now), false);
+  // Plán v minulosti, ale stav už postoupil (vlada) → není po termínu
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-01', stav: 'vlada' }, now), false);
+  assert.equal(isPlanItemOverdue({ plan_termin: '2026-01', stav: 'sbirka' }, now), false);
+  // Nevalidní termín → není po termínu
+  assert.equal(isPlanItemOverdue({ plan_termin: null, stav: 'nezahajeno' }, now), false);
+});
+
+const PLAN_SAMPLE = [
+  { id: 'p1', nazev: 'A', typ: 'novela_zakona', plan_termin: '2026-03', stav: 'nezahajeno' },       // po termínu
+  { id: 'p2', nazev: 'B', typ: 'zakon', plan_termin: '2026-05', stav: 'pripominkove_rizeni' },       // po termínu + proces
+  { id: 'p3', nazev: 'C', typ: 'vyhlaska', plan_termin: '2026-09', stav: 'vlada' },                  // proces, budoucí
+  { id: 'p4', nazev: 'D', typ: 'zakon', plan_termin: '2026-04', stav: 'sbirka' },                    // ve Sbírce
+  { id: 'p5', nazev: 'E', typ: 'novela_vyhlasky', plan_termin: '2026-12', stav: 'nezahajeno' },      // budoucí, nezahájeno
+];
+const PLAN_NOW = new Date('2026-07-15T00:00:00');
+
+test('computePlanStats: souhrnná počitadla', () => {
+  const s = computePlanStats(PLAN_SAMPLE, PLAN_NOW);
+  assert.equal(s.total, 5);
+  assert.equal(s.inProcess, 2);   // p2, p3
+  assert.equal(s.inSbirka, 1);    // p4
+  assert.equal(s.notStarted, 2);  // p1, p5
+  assert.equal(s.overdue, 2);     // p1, p2
+});
+
+test('computePlanStats: prázdný / nevalidní vstup', () => {
+  assert.deepEqual(computePlanStats([], PLAN_NOW), { total: 0, inProcess: 0, inSbirka: 0, notStarted: 0, overdue: 0 });
+  assert.equal(computePlanStats(undefined, PLAN_NOW).total, 0);
+});
+
+test('filterPlanItems: čipy Vše/V procesu/Nezahájeno/Po termínu/Ve Sbírce', () => {
+  assert.equal(filterPlanItems(PLAN_SAMPLE, 'all', PLAN_NOW).length, 5);
+  assert.deepEqual(filterPlanItems(PLAN_SAMPLE, 'proces', PLAN_NOW).map(x => x.id).sort(), ['p2', 'p3']);
+  assert.deepEqual(filterPlanItems(PLAN_SAMPLE, 'nezahajeno', PLAN_NOW).map(x => x.id).sort(), ['p1', 'p5']);
+  assert.deepEqual(filterPlanItems(PLAN_SAMPLE, 'poterminu', PLAN_NOW).map(x => x.id).sort(), ['p1', 'p2']);
+  assert.deepEqual(filterPlanItems(PLAN_SAMPLE, 'sbirka', PLAN_NOW).map(x => x.id).sort(), ['p4']);
+});
+
+test('filterPlanItems: neznámý filtr vrací vše, nemutuje vstup', () => {
+  const before = PLAN_SAMPLE.map(x => x.id);
+  assert.equal(filterPlanItems(PLAN_SAMPLE, 'xxx', PLAN_NOW).length, 5);
+  assert.deepEqual(PLAN_SAMPLE.map(x => x.id), before);
+});
+
+test('sortPlanItems: po termínu nahoře, pak podle termínu, nemutuje vstup', () => {
+  const sorted = sortPlanItems(PLAN_SAMPLE, PLAN_NOW);
+  // p1 (2026-03) a p2 (2026-05) jsou po termínu → první dva, uvnitř podle termínu
+  assert.deepEqual(sorted.slice(0, 2).map(x => x.id), ['p1', 'p2']);
+  // vstupní pole zůstává nezměněné
+  assert.deepEqual(PLAN_SAMPLE.map(x => x.id), ['p1', 'p2', 'p3', 'p4', 'p5']);
+});
+
+test('plan_items z reálného datasetu: stavy a typy mají UI labely, overdue odpovídá stavu k 2026-07', () => {
+  const data = JSON.parse(readFileSync(resolve(ROOT, 'data', 'legislativa.json'), 'utf8'));
+  const now = new Date('2026-07-07T12:00:00');
+  for (const item of data.plan_items) {
+    assert.ok(PLAN_STAV_LABELS[item.stav], `${item.id}: stav '${item.stav}' je v PLAN_STAV_LABELS`);
+    assert.ok(PLAN_TYPE_LABELS[item.typ], `${item.id}: typ '${item.typ}' je v PLAN_TYPE_LABELS`);
+  }
+  // Položky s termínem v budoucnu nejsou po termínu
+  const soho = data.plan_items.find(p => p.id === 'plan-zakon-latky-lidskeho-puvodu');
+  assert.ok(soho);
+  assert.equal(isPlanItemOverdue(soho, now), false);
+  // Pitná voda: plán duben 2026, ale stav 'vlada' už není overdue-eligible → ne po termínu
+  const voda = data.plan_items.find(p => p.id === 'plan-novela-ochrana-verejneho-zdravi-pitna-voda');
+  assert.ok(voda);
+  assert.equal(voda.stav, 'vlada');
+  assert.equal(isPlanItemOverdue(voda, now), false);
+  // EHDS: plán červen 2026, v červenci stále v připomínkovém řízení → po termínu
+  const ehds = data.plan_items.find(p => p.id === 'plan-adaptace-ehds');
+  assert.ok(ehds);
+  assert.equal(isPlanItemOverdue(ehds, now), true);
 });
