@@ -71,6 +71,18 @@ test('checkClaim: manual/none a chybějící indikátor se nekontrolují', () =>
   assert.equal(checkClaim({ check: 'auto', value: 500 }, null).status, 'ok');
 });
 
+test('checkClaim: historické tvrzení se porovnává proti trendovému bodu', () => {
+  const ind = { id: 'x', value: 100, year: 2024, trend: [{ year: 2019, value: 80 }, { year: 2024, value: 100 }] };
+  // správná citace historie (2019: 80) → ok, žádný falešný drift proti 100
+  assert.equal(checkClaim({ check: 'auto', value: 80, as_of: 2019 }, ind).status, 'ok');
+  // chybná citace historie → drift proti trendovému bodu
+  const res = checkClaim({ check: 'auto', value: 95, as_of: 2019 }, ind);
+  assert.equal(res.status, 'drift');
+  assert.ok(res.ref.includes('trend 2019'));
+  // rok bez trendového bodu → fallback na aktuální hodnotu
+  assert.equal(checkClaim({ check: 'auto', value: 100, as_of: 2021 }, ind).status, 'ok');
+});
+
 test('checkClaim: nulová hodnota indikátoru', () => {
   const zero = { id: 'z', value: 0, year: 2024 };
   assert.equal(checkClaim({ check: 'auto', value: 0 }, zero).status, 'ok');

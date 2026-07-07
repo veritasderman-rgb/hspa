@@ -109,12 +109,27 @@ function loadClaimsByArticle() {
 export function checkClaim(claim, indicator) {
   if (claim.check !== 'auto' || !indicator || indicator.value == null) return { status: 'ok' };
   const tol = claim.tolerance_pct ?? 2;
-  const cur = Number(indicator.value);
   const val = Number(claim.value);
-  if (!Number.isFinite(cur) || !Number.isFinite(val)) return { status: 'ok' };
-  const devPct = cur === 0
+  if (!Number.isFinite(val)) return { status: 'ok' };
+  const dev = (ref) => ref === 0
     ? (val === 0 ? 0 : Infinity)
-    : Math.abs(val - cur) / Math.abs(cur) * 100;
+    : Math.abs(val - ref) / Math.abs(ref) * 100;
+
+  // Historické tvrzení (as_of starší než aktuální rok indikátoru) se porovnává
+  // proti trendovému bodu daného roku — správná citace historie NENÍ drift.
+  if (claim.as_of != null && indicator.year != null && claim.as_of < indicator.year) {
+    const tp = (indicator.trend ?? []).find(t => t.year === claim.as_of);
+    if (tp != null && Number.isFinite(Number(tp.value))) {
+      const devH = dev(Number(tp.value));
+      return devH > tol
+        ? { status: 'drift', deviation_pct: devH, ref: `trend ${claim.as_of}: ${tp.value}` }
+        : { status: 'ok', deviation_pct: devH };
+    }
+  }
+
+  const cur = Number(indicator.value);
+  if (!Number.isFinite(cur)) return { status: 'ok' };
+  const devPct = dev(cur);
   if (devPct > tol) return { status: 'drift', deviation_pct: devPct };
   if (claim.as_of != null && indicator.year != null && indicator.year > claim.as_of && val !== cur) {
     return { status: 'stale', deviation_pct: devPct };
