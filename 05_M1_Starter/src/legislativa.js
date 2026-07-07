@@ -23,10 +23,127 @@ export const TYPE_LABELS = {
 // Pořadí fází v tabulce = postup legislativního procesu.
 export const PHASE_ORDER = ['pripominky', 'vyporadani', 'vlada', 'parlament', 'dokonceno'];
 
+// ── Legislativní plán MZ (plan_items / plan_meta) ──────────────────────────
+// Samostatná sekce nad radarem: plánované předpisy podle plánu legislativních
+// prací vlády a jejich plnění. Enumy typu/stavu drží krok s validátorem
+// (VALID_PLAN_TYPES / VALID_PLAN_STAV v ingest/validate-legislation.js).
+
+export const PLAN_TYPE_LABELS = {
+  ustavni_zakon: 'Ústavní zákon',
+  vecny_zamer: 'Věcný záměr zákona',
+  zakon: 'Návrh zákona',
+  novela_zakona: 'Novela zákona',
+  narizeni_vlady: 'Nařízení vlády',
+  novela_narizeni: 'Novela nařízení vlády',
+  vyhlaska: 'Vyhláška',
+  novela_vyhlasky: 'Novela vyhlášky',
+};
+
+// Barevná sémantika badge = signální paleta good/warn/bad/neutral (drží se
+// existujících signal tříd, červená JEN pro withdrawal/staženo). „proces"
+// příznak řídí, které stavy padají do souhrnného počitadla „v procesu".
+export const PLAN_STAV_LABELS = {
+  nezahajeno: { label: 'Nezahájeno', cls: 'leg-plan-badge-neutral', proces: false },
+  pripominkove_rizeni: { label: 'Připomínkové řízení', cls: 'leg-plan-badge-warn', proces: true },
+  vlada: { label: 'Na vládě', cls: 'leg-plan-badge-warn', proces: true },
+  parlament: { label: 'V Parlamentu', cls: 'leg-plan-badge-warn', proces: true },
+  sbirka: { label: 'Ve Sbírce zákonů', cls: 'leg-plan-badge-good', proces: false },
+  stazeno: { label: 'Staženo', cls: 'leg-plan-badge-bad', proces: false },
+};
+
+// Stavy, které se počítají jako „v procesu" (aktivně projednávané).
+export const PLAN_STAV_PROCES = Object.keys(PLAN_STAV_LABELS).filter(k => PLAN_STAV_LABELS[k].proces);
+
+// Stavy, u kterých má smysl mluvit o zpoždění proti plánu (ještě nedoběhly
+// do vlády / Parlamentu / Sbírky). Po termínu = plan_termin před aktuálním
+// měsícem A stav v této množině.
+export const PLAN_STAV_OVERDUE_ELIGIBLE = ['nezahajeno', 'pripominkove_rizeni'];
+
+const CZ_MONTHS = ['leden', 'únor', 'březen', 'duben', 'květen', 'červen',
+  'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec'];
+
+/** Převede "YYYY-MM" na měsíční index (rok*12 + měsíc, 0-based měsíc); null když nevalidní. */
+export function planTerminIndex(termin) {
+  const m = /^(\d{4})-(\d{2})$/.exec(String(termin ?? ''));
+  if (!m) return null;
+  const month = Number(m[2]);
+  if (month < 1 || month > 12) return null;
+  return Number(m[1]) * 12 + (month - 1);
+}
+
+/** Měsíční index aktuálního data (rok*12 + měsíc 0-based). */
+export function monthIndex(date) {
+  return date.getFullYear() * 12 + date.getMonth();
+}
+
+/** "2026-06" → "červen 2026"; neplatný vstup vrací původní řetězec / pomlčku. */
+export function formatPlanTermin(termin) {
+  const m = /^(\d{4})-(\d{2})$/.exec(String(termin ?? ''));
+  if (!m) return termin ? String(termin) : '—';
+  const month = Number(m[2]);
+  if (month < 1 || month > 12) return String(termin);
+  return `${CZ_MONTHS[month - 1]} ${m[1]}`;
+}
+
+/**
+ * Je položka po termínu vůči zadanému „teď"?
+ * Po termínu = plan_termin (měsíc) < aktuální měsíc A stav ∈ {nezahajeno, pripominkove_rizeni}.
+ * `now` je injektovatelné (Date) kvůli testovatelnosti — v prohlížeči new Date().
+ */
+export function isPlanItemOverdue(item, now = new Date()) {
+  if (!item || !PLAN_STAV_OVERDUE_ELIGIBLE.includes(item.stav)) return false;
+  const idx = planTerminIndex(item.plan_termin);
+  if (idx === null) return false;
+  return idx < monthIndex(now);
+}
+
+/** Souhrnné počty pro počitadla. */
+export function computePlanStats(items, now = new Date()) {
+  const xs = Array.isArray(items) ? items : [];
+  return {
+    total: xs.length,
+    inProcess: xs.filter(it => PLAN_STAV_PROCES.includes(it.stav)).length,
+    inSbirka: xs.filter(it => it.stav === 'sbirka').length,
+    notStarted: xs.filter(it => it.stav === 'nezahajeno').length,
+    overdue: xs.filter(it => isPlanItemOverdue(it, now)).length,
+  };
+}
+
+/** Filtr plánu podle čipu. `now` injektovatelné kvůli filtru „po termínu". */
+export function filterPlanItems(items, filter = 'all', now = new Date()) {
+  const xs = Array.isArray(items) ? items : [];
+  switch (filter) {
+    case 'proces': return xs.filter(it => PLAN_STAV_PROCES.includes(it.stav));
+    case 'nezahajeno': return xs.filter(it => it.stav === 'nezahajeno');
+    case 'poterminu': return xs.filter(it => isPlanItemOverdue(it, now));
+    case 'sbirka': return xs.filter(it => it.stav === 'sbirka');
+    case 'all':
+    default: return xs.slice();
+  }
+}
+
+/** Řazení plánu: po termínu nahoře, pak podle plánovaného termínu vzestupně, pak název. */
+export function sortPlanItems(items, now = new Date()) {
+  return [...(items ?? [])].sort((a, b) => {
+    const oa = isPlanItemOverdue(a, now) ? 0 : 1;
+    const ob = isPlanItemOverdue(b, now) ? 0 : 1;
+    if (oa !== ob) return oa - ob;
+    const ia = planTerminIndex(a.plan_termin) ?? Number.MAX_SAFE_INTEGER;
+    const ib = planTerminIndex(b.plan_termin) ?? Number.MAX_SAFE_INTEGER;
+    if (ia !== ib) return ia - ib;
+    return String(a.nazev ?? '').localeCompare(String(b.nazev ?? ''), 'cs');
+  });
+}
+
 let allItems = [];
 let articlesById = new Map();
 let activePhase = 'all';
 let activeSearch = '';
+
+// Stav sekce plánu.
+let planItems = [];
+let planMeta = null;
+let activePlanFilter = 'all';
 
 /** Filtr podle fáze + fulltext přes title/title_short/annotation/submitter. */
 export function filterLegislation(items, { phase, search } = {}) {
@@ -166,6 +283,150 @@ function wireFilters() {
   }
 }
 
+// ── Render sekce plánu ─────────────────────────────────────────────────────
+
+function renderPlanMetaLine() {
+  if (!planMeta) return '';
+  const parts = [];
+  if (planMeta.usneseni) parts.push(`Usnesení vlády ${escapeHtml(planMeta.usneseni)}`);
+  if (planMeta.schvaleno) parts.push(`schváleno ${escapeHtml(formatDate(planMeta.schvaleno))}`);
+  let src = '';
+  if (planMeta.zdroj_url && planMeta.zdroj_nazev) {
+    src = `<a href="${escapeHtml(planMeta.zdroj_url)}" target="_blank" rel="noopener">${escapeHtml(planMeta.zdroj_nazev)} ↗</a>`;
+  } else if (planMeta.zdroj_nazev) {
+    src = escapeHtml(planMeta.zdroj_nazev);
+  }
+  const meta = parts.join(' · ');
+  if (!meta && !src) return '';
+  return `<p class="leg-plan-meta">${meta}${meta && src ? ' · ' : ''}${src}</p>`;
+}
+
+function renderPlanRow(item, now) {
+  const stav = PLAN_STAV_LABELS[item.stav] ?? { label: item.stav, cls: 'leg-plan-badge-neutral' };
+  const overdue = isPlanItemOverdue(item, now);
+  const typeLabel = PLAN_TYPE_LABELS[item.typ] ?? item.typ;
+  const popis = item.popis
+    ? `<p class="leg-plan-popis">${escapeHtml(item.popis)}</p>`
+    : '';
+  const veklep = item.veklep_url
+    ? `<a href="${escapeHtml(item.veklep_url)}" target="_blank" rel="noopener" title="Materiál ve VeKLEP">VeKLEP ↗</a>`
+    : '<span class="leg-plan-noveklep">—</span>';
+  const overdueTag = overdue
+    ? '<span class="leg-plan-overdue-tag">Po termínu</span>'
+    : '';
+  const poznamka = item.plneni_poznamka
+    ? escapeHtml(item.plneni_poznamka)
+    : '<span class="leg-plan-noveklep">—</span>';
+  return `
+    <tr class="leg-plan-row${overdue ? ' leg-plan-row-overdue' : ''}">
+      <td class="leg-plan-cell-title">
+        <span class="leg-type">${escapeHtml(typeLabel)}</span>
+        <strong class="leg-title" title="${escapeHtml(item.nazev)}">${escapeHtml(item.nazev)}</strong>
+        ${popis}
+      </td>
+      <td class="leg-plan-cell-termin">${escapeHtml(formatPlanTermin(item.plan_termin))}${overdueTag}</td>
+      <td class="leg-plan-cell-stav">
+        <span class="leg-plan-badge ${stav.cls}">${escapeHtml(stav.label)}</span>
+      </td>
+      <td class="leg-plan-cell-veklep">${veklep}</td>
+      <td class="leg-plan-cell-note">${poznamka}</td>
+    </tr>
+  `;
+}
+
+function renderPlanTable() {
+  const wrap = document.getElementById('legPlanTableWrap');
+  const empty = document.getElementById('legPlanEmpty');
+  if (!wrap) return;
+  const now = new Date();
+  const filtered = sortPlanItems(filterPlanItems(planItems, activePlanFilter, now), now);
+
+  if (!filtered.length) {
+    wrap.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  if (empty) empty.classList.add('hidden');
+
+  wrap.innerHTML = `
+    <table class="leg-plan-table">
+      <thead>
+        <tr>
+          <th scope="col">Plánovaný předpis</th>
+          <th scope="col">Plán říkal</th>
+          <th scope="col">Stav</th>
+          <th scope="col">Materiál</th>
+          <th scope="col">Poznámka k plnění</th>
+        </tr>
+      </thead>
+      <tbody>${filtered.map(it => renderPlanRow(it, now)).join('')}</tbody>
+    </table>
+  `;
+}
+
+function wirePlanFilters() {
+  document.querySelectorAll('#legPlanFilters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#legPlanFilters button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePlanFilter = btn.dataset.planFilter;
+      renderPlanTable();
+    });
+  });
+}
+
+function renderPlan() {
+  const mount = document.getElementById('legPlanMount');
+  if (!mount) return;
+  // Graceful: bez položek plánu se sekce nevykreslí vůbec.
+  if (!planItems.length) {
+    mount.innerHTML = '';
+    mount.hidden = true;
+    return;
+  }
+  mount.hidden = false;
+
+  const now = new Date();
+  const s = computePlanStats(planItems, now);
+  const counter = (num, label, extra = '') =>
+    `<div class="leg-plan-stat${extra}"><span class="leg-plan-stat-num">${num}</span><span class="leg-plan-stat-lbl">${label}</span></div>`;
+
+  mount.innerHTML = `
+    <div class="leg-plan-head">
+      <div class="ed-kicker">Legislativní plán ministerstva</div>
+      <h2 id="legPlanHeading">Co ministerstvo slíbilo připravit — a jak to plní</h2>
+      <p class="leg-plan-lead">
+        Vláda každý rok schvaluje plán legislativních prací — seznam předpisů, které mají resorty
+        během roku předložit. Zde sledujeme zdravotnickou část plánu a porovnáváme, co plán říkal,
+        s tím, kde předpis reálně je.
+      </p>
+      ${renderPlanMetaLine()}
+    </div>
+
+    <div class="leg-plan-stats" role="group" aria-label="Souhrn plnění plánu">
+      ${counter(s.total, 'položek v plánu')}
+      ${counter(s.inProcess, 'v procesu')}
+      ${counter(s.inSbirka, 've Sbírce')}
+      ${counter(s.notStarted, 'nezahájeno')}
+      ${counter(s.overdue, 'po termínu', s.overdue > 0 ? ' leg-plan-stat-alert' : '')}
+    </div>
+
+    <nav class="leg-plan-filters level-nav" id="legPlanFilters" aria-label="Filtr plánu podle stavu">
+      <button data-plan-filter="all" class="active">Vše</button>
+      <button data-plan-filter="proces">V procesu</button>
+      <button data-plan-filter="nezahajeno">Nezahájeno</button>
+      <button data-plan-filter="poterminu">Po termínu</button>
+      <button data-plan-filter="sbirka">Ve Sbírce</button>
+    </nav>
+
+    <div id="legPlanTableWrap" class="leg-plan-table-wrap"></div>
+    <div class="empty-state hidden" id="legPlanEmpty">Žádná položka plánu neodpovídá filtru.</div>
+  `;
+
+  wirePlanFilters();
+  renderPlanTable();
+}
+
 async function init() {
   if (typeof window === 'undefined') return;
 
@@ -182,9 +443,12 @@ async function init() {
     const artsData = artsRes?.ok ? await artsRes.json() : { articles: [] };
 
     allItems = legData.items ?? [];
+    planItems = Array.isArray(legData.plan_items) ? legData.plan_items : [];
+    planMeta = legData.plan_meta ?? null;
     articlesById = new Map((artsData.articles ?? []).map(a => [a.id, a]));
 
     renderStats();
+    renderPlan();
     wireFilters();
     renderTable();
   } catch (err) {
