@@ -135,6 +135,64 @@ export function sortPlanItems(items, now = new Date()) {
   });
 }
 
+// ── Časová osa (pravý sloupec radaru) ──────────────────────────────────────
+// Chronologicky slévá dění z radaru (vstup do VeKLEP, termíny připomínek,
+// dokončení procesu) a sliby z plánu (plan_termin) do jedné osy s markerem
+// „dnes". Čistá funkce kvůli testovatelnosti.
+
+/**
+ * @returns pole událostí {date: 'YYYY-MM-DD', monthOnly, kind, status, label,
+ * title, href} seřazené vzestupně. status: done | open | upcoming | overdue.
+ */
+export function buildTimelineEvents(items, planItems, now = new Date()) {
+  const todayIso = now.toISOString().slice(0, 10);
+  const events = [];
+
+  for (const it of items ?? []) {
+    const title = it.title_short ?? it.title ?? it.id;
+    const href = it.veklep_url ?? null;
+    if (it.dates?.authorized) {
+      events.push({
+        date: it.dates.authorized, monthOnly: false, kind: 'veklep',
+        status: 'done', label: 'Vstup do VeKLEP', title, href,
+      });
+    }
+    if (it.dates?.comments_until) {
+      const past = it.dates.comments_until < todayIso;
+      events.push({
+        date: it.dates.comments_until, monthOnly: false, kind: 'pripominky',
+        status: past ? 'done' : 'open',
+        label: past ? 'Konec připomínkového řízení' : 'Připomínky do',
+        title, href,
+      });
+    }
+    if (it.phase === 'dokonceno' && it.dates?.last_change) {
+      events.push({
+        date: it.dates.last_change, monthOnly: false, kind: 'dokonceno',
+        status: 'done', label: 'Proces dokončen', title, href,
+      });
+    }
+  }
+
+  for (const it of planItems ?? []) {
+    const idx = planTerminIndex(it.plan_termin);
+    if (idx === null) continue;
+    const y = Math.floor(idx / 12);
+    const m = (idx % 12) + 1;
+    const date = `${y}-${String(m).padStart(2, '0')}-01`;
+    const overdue = isPlanItemOverdue(it, now);
+    const fulfilled = ['vlada', 'parlament', 'sbirka'].includes(it.stav);
+    events.push({
+      date, monthOnly: true, kind: 'slib',
+      status: overdue ? 'overdue' : (fulfilled || idx < monthIndex(now) ? 'done' : 'upcoming'),
+      label: overdue ? 'Slib plánu — po termínu' : (fulfilled ? 'Slib plánu — splněno/v procesu' : 'Slib plánu: předložení vládě'),
+      title: it.nazev ?? it.id, href: it.veklep_url ?? null,
+    });
+  }
+
+  return events.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title, 'cs'));
+}
+
 let allItems = [];
 let articlesById = new Map();
 let activePhase = 'all';
@@ -248,6 +306,52 @@ function renderTable() {
         ${filtered.map(renderRow).join('')}
       </tbody>
     </table>
+  `;
+}
+
+// ── Render časové osy ──────────────────────────────────────────────────────
+
+function formatTimelineDate(ev) {
+  if (ev.monthOnly) return formatPlanTermin(ev.date.slice(0, 7));
+  return formatDate(ev.date);
+}
+
+function renderTimeline() {
+  const host = document.getElementById('legTimeline');
+  if (!host) return;
+  const now = new Date();
+  const todayIso = now.toISOString().slice(0, 10);
+  const events = buildTimelineEvents(allItems, planItems, now);
+  if (!events.length) { host.hidden = true; return; }
+  host.hidden = false;
+
+  const item = ev => `
+    <li class="leg-tl-event leg-tl-${escapeHtml(ev.status)}">
+      <span class="leg-tl-dot" aria-hidden="true"></span>
+      <span class="leg-tl-date">${escapeHtml(formatTimelineDate(ev))}</span>
+      <span class="leg-tl-label">${escapeHtml(ev.label)}</span>
+      ${ev.href
+        ? `<a class="leg-tl-title" href="${escapeHtml(ev.href)}" target="_blank" rel="noopener">${escapeHtml(ev.title)}</a>`
+        : `<span class="leg-tl-title">${escapeHtml(ev.title)}</span>`}
+    </li>`;
+
+  const past = events.filter(e => e.date <= todayIso);
+  const future = events.filter(e => e.date > todayIso);
+
+  host.innerHTML = `
+    <h3 class="leg-tl-heading">Časová osa</h3>
+    <p class="leg-tl-lead">Postup prací a slibů v čase — co se stalo a jaké termíny běží.</p>
+    <ol class="leg-tl-list">
+      ${past.map(item).join('')}
+      <li class="leg-tl-today" aria-label="Dnešní datum"><span class="leg-tl-today-line"></span><span class="leg-tl-today-lbl">dnes · ${escapeHtml(formatDate(todayIso))}</span></li>
+      ${future.map(item).join('')}
+    </ol>
+    <p class="leg-tl-legend">
+      <span class="leg-tl-key leg-tl-done">proběhlo</span>
+      <span class="leg-tl-key leg-tl-open">běžící termín</span>
+      <span class="leg-tl-key leg-tl-upcoming">slib plánu</span>
+      <span class="leg-tl-key leg-tl-overdue">po termínu</span>
+    </p>
   `;
 }
 
@@ -393,6 +497,11 @@ function renderPlan() {
 
   mount.innerHTML = `
     <div class="leg-plan-head">
+      <div class="leg-part-divider" aria-hidden="true">
+        <span class="leg-part-num">1</span>
+        <span class="leg-part-tag">Sliby</span>
+        <span class="leg-part-line"></span>
+      </div>
       <div class="ed-kicker">Legislativní plán ministerstva</div>
       <h2 id="legPlanHeading">Co ministerstvo slíbilo připravit — a jak to plní</h2>
       <p class="leg-plan-lead">
@@ -451,6 +560,7 @@ async function init() {
     renderPlan();
     wireFilters();
     renderTable();
+    renderTimeline();
   } catch (err) {
     console.error('legislativa load failed:', err);
     document.getElementById('listView').innerHTML = renderErrorState('Nepodařilo se načíst legislativní radar.', err);
