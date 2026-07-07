@@ -782,7 +782,7 @@ v `scripts/nightly-scan.js`). Registr se mění jen commitem; skener je read-onl
     "metric": "spotřeba čistého alkoholu na osobu 15+ za rok",
     "value": 14.4,                      // normalizované číslo (tečka)
     "unit": "l/os./rok",
-    "as_of": 2024,                      // rok platnosti (nepovinné)
+    "as_of": 2024,                      // rok platnosti (POVINNÉ pro check=auto)
     "location": "prose",                // prose | counter | databox | perex
     "indicator_id": "alkohol_spotreba", // FK → indicators.json#id (nepovinné)
     "relation": "exact",                // exact | derived | related | external
@@ -793,7 +793,8 @@ v `scripts/nightly-scan.js`). Registr se mění jen commitem; skener je read-onl
 }
 ```
 
-Invariant: `check: "auto"` ⇒ `relation: "exact"` ∧ `indicator_id` vyplněný —
+Invariant: `check: "auto"` ⇒ `relation: "exact"` ∧ `indicator_id` ∧ `as_of`
+vyplněné (bez `as_of` by skener neuměl detekovat `claims-stale`) —
 strojově se hlídají JEN přímé citace hodnoty indikátoru (stejná metrika,
 populace, jednotka). Metodická odchylka (recorded vs. total alkohol, pozvaní
 vs. cílová populace) = `related` + `manual` s vysvětlením v `metric`.

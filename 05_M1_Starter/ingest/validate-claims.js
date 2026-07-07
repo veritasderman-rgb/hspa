@@ -75,6 +75,10 @@ function validate() {
     if (c.check === 'auto' && (c.relation !== 'exact' || !c.indicator_id)) {
       errors.push(`${tag}: check=auto vyžaduje relation=exact a indicator_id`);
     }
+    // Bez as_of nemůže skener detekovat claims-stale (novější rok indikátoru).
+    if (c.check === 'auto' && c.as_of == null) {
+      errors.push(`${tag}: check=auto vyžaduje as_of (rok, ke kterému citovaná hodnota platí)`);
+    }
     if (c.tolerance_pct != null && (typeof c.tolerance_pct !== 'number' || c.tolerance_pct < 0 || c.tolerance_pct > 50)) {
       errors.push(`${tag}: tolerance_pct mimo rozsah 0–50`);
     }

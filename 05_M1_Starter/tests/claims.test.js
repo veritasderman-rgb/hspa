@@ -42,6 +42,7 @@ test('claims: FK integrita a invarianty', () => {
     if (c.check === 'auto') {
       assert.equal(c.relation, 'exact', `claim ${c.id}: check=auto vyžaduje relation=exact`);
       assert.ok(c.indicator_id, `claim ${c.id}: check=auto bez indicator_id`);
+      assert.ok(Number.isInteger(c.as_of), `claim ${c.id}: check=auto bez as_of — claims-stale by nešel detekovat`);
     }
   }
 });
