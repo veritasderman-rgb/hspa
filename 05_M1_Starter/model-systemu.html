@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model systému — kauzální mapa českého zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Interaktivní kauzální mapa českého zdravotnictví: jak financování, personál, prevence a governance ovlivňují dostupnost, kvalitu a výsledky. Každý uzel podložený indikátory HSPA a články.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/model-systemu" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/model-systemu" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Model systému</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero msys-hero">
+    <p class="ed-kicker">MODEL SYSTÉMU · KAUZÁLNÍ MAPA</p>
+    <h1>Za co zatlačit, aby se české zdravotnictví pohnulo</h1>
+    <p class="ed-lead">
+      Zdravotnictví není seznam problémů, ale síť vazeb: peníze určují kapacity,
+      kapacity dostupnost, dostupnost výsledky — a výsledky zase peníze.
+      Tato mapa ukazuje, <strong>co s čím kauzálně souvisí</strong>. Každá oblast
+      je podložená indikátory HSPA dashboardu a články; žádná šipka tu není
+      jen proto, že „to dává smysl“.
+    </p>
+    <p class="msys-stats" id="msysStats" aria-live="polite"></p>
+    <details class="hero-detail">
+      <summary>Jak mapu číst</summary>
+      <p>Čtyři vodorovné pásy jsou čtyři vrstvy HSPA hodnocení: <strong>Struktury</strong>
+      (co do systému vkládáme — peníze, lidi, pravidla), <strong>Procesy</strong>
+      (co systém dělá — prevence, léčba, koordinace), <strong>Výstupy</strong>
+      (co z toho bezprostředně je — dostupnost, objem péče, ochrana před náklady)
+      a <strong>Výsledky</strong> (na čem nakonec záleží — zdraví, délka života,
+      spravedlnost, udržitelnost). Kauzalita teče shora dolů, občas i do strany.</p>
+      <p>Uzel s tečkou je <strong>páka</strong> — místo, kde může politika či
+      management reálně zatlačit. Vyberte páku a tlačítkem „Zatlačit na páku“
+      zvýrazněte všechno, co po směru vazeb ovlivňuje. Zelené šipky = vazba
+      cílovou oblast podporuje, oranžové = zatěžuje. Klik na uzel otevře popis,
+      živé hodnoty indikátorů a související články.</p>
+      <p>Model je zjednodušení: drží jen vazby doložitelné daty dashboardu nebo
+      publikovanými články. Není to simulátor — neříká „o kolik“, říká „kudy“.</p>
+    </details>
+  </section>
+
+  <section class="msys-section" aria-label="Interaktivní kauzální mapa">
+    <div class="msys-layout">
+      <div class="msys-graph-wrap" id="msysGraph"></div>
+      <aside class="msys-panel" id="msysPanel" aria-live="polite" aria-label="Detail vybrané oblasti"></aside>
+    </div>
+    <div class="msys-fallback">
+      <h2>Oblasti modelu (textový přehled)</h2>
+      <ul id="msysFallbackList" class="msys-fallback-list"></ul>
+    </div>
+  </section>
+
+  <section class="msys-section msys-context">
+    <h2>Odkud model vychází</h2>
+    <p>Mapa navazuje na sérii o reformách komplexních systémů — zejména
+    <a href="clanek-systemove-mapovani-paky.html">Systémové mapování a páky změny</a>,
+    <a href="clanek-teorie-zmeny.html">Teorii změny</a> a
+    <a href="clanek-rizeni-podle-vysledku.html">Řízení podle výsledků</a>.
+    Strukturu vrstev přebírá z metodiky <a href="o-projektu.html">HSPA</a>
+    (OECD/MZ ČR 2023), aktéry systému popisuje
+    <a href="jak-funguje.html#schema">schéma na stránce Jak funguje</a>
+    a konkrétní cestu jednotlivce <a href="cesta-pacienta.html">Cesta pacienta systémem</a>.</p>
+  </section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/system-model.js"></script>
+</body>
+</html>
