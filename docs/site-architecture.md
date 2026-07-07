@@ -133,11 +133,21 @@ zdrave-cesko.cz/
 
 | | |
 |---|---|
-| **Účel** | Zdravotnická legislativa v přípravě (VeKLEP): tabulka návrhů zákonů/vyhlášek s fází legislativního procesu, anotací a propojením na indikátory + články. |
+| **Účel** | Zdravotnická legislativa v přípravě (VeKLEP): tabulka návrhů zákonů/vyhlášek s fází legislativního procesu, anotací a propojením na indikátory + články. Nad tabulkou samostatná sekce „Legislativní plán ministerstva" — plnění plánu legislativních prací vlády (co MZ slíbilo předložit a v jakém termínu vs. reálný stav). |
 | **Cílový uživatel** | Policy maker, novinář, odborná veřejnost sledující novely. |
-| **Fetchuje** | `data/legislativa.json`, `data/articles.json` |
+| **Fetchuje** | `data/legislativa.json` (items + plan_meta/plan_items), `data/articles.json` |
 | **JS moduly** | `src/legislativa.js` → `page-shared` |
-| **CSS namespace** | `.leg-*` (tabulka, fáze pilly, zdrojová poznámka); reuse `.filters-row`, `.level-nav`, `.chip`, `.ed-hero*` |
+| **CSS namespace** | `.leg-*` (tabulka, fáze pilly, zdrojová poznámka), `.leg-plan-*` (sekce plnění plánu — počitadla, badge stavu, tabulka); reuse `.filters-row`, `.level-nav`, `.chip`, `.ed-hero*`, `.ed-kicker` |
+
+Sekce plnění plánu (`renderPlan()` v `src/legislativa.js`) se vykresluje jen
+pokud `legislativa.json` obsahuje `plan_items` (jinak se skryje celá).
+Zobrazuje metadata usnesení vlády (`plan_meta`), souhrnná počitadla (v procesu /
+ve Sbírce / nezahájeno / po termínu) a filtrovatelnou tabulku plánovaných
+předpisů se stavem, odkazem na materiál VeKLEP (pokud existuje) a redakční
+poznámkou k plnění (`plneni_poznamka`). Položka „po termínu" = plánovaný měsíc
+uplynul a stav je stále `nezahajeno`/`pripominkove_rizeni` (viz
+`isPlanItemOverdue()`). Kde se plánovaná položka propojí s konkrétním
+materiálem radaru, nese `radar_id` (FK na `legislativa.items[].id`).
 
 ### `glosar.html` — Glosář
 

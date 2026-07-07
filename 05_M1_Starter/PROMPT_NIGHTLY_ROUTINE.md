@@ -16,6 +16,8 @@ publikované články) a hledá tři věci:
    jestli k posunu došlo. Patří sem i **posun fáze ve VeKLEP** u sledovaných
    novel (viz FÁZE 3.4) — legislativní radar i články, které na konkrétní návrh
    odkazují, mají odrážet aktuální stav připomínkového/legislativního procesu.
+   Stejně tak patří i **údržba legislativního plánu MZ** (`plan_items`, viz
+   FÁZE 3.5) — plánované předpisy vůči skutečnému stavu ve VeKLEP.
 
 Běží **v noci**, po denní rutině i po ranním ingest/publish cronu. Cílem NENÍ
 psát nové články, ale **držet existující korpus aktuální a kompletní**.
@@ -176,6 +178,49 @@ u každé zdravotnické novely, kterou portál sleduje:
 nebo urychlení návrhu, a pokud se v souvislosti s legislativou zmiňuje K-Index
 předkladatele/dotčené instituce, nikdy ho nepodávej jako obvinění — jen jako
 metriku rizikovosti smluvní praxe s vysvětlením metodiky.
+
+### 3.5 Legislativní plán MZ — údržba `plan_items`
+
+Vedle radaru (`items`) obsahuje `data/legislativa.json` i sekci `plan_items`
+(Legislativní plán MZ podle plánu legislativních prací vlády — výhled, ne
+aktuální stav ve VeKLEP). Tuto sekci udržuj stejným způsobem:
+
+- Pro **každou položku `plan_items`** ověř přes MCP `hlidac_statu`
+  (`search_veklep_legislation`, u položek se známým `veklep_pid` přímo
+  dohledáním materiálu) aktuální stav ve VeKLEP.
+- **Když se stav posunul** (materiál nově přibyl ve VeKLEP, postoupil do další
+  fáze, byl zařazen na jednání vlády, doručen do Sněmovny, publikován ve
+  Sbírce, nebo naopak stažen), aktualizuj:
+  - `stav` — jen hodnotu z enumu `nezahajeno | pripominkove_rizeni | vlada |
+    parlament | sbirka | stazeno` (viz `ingest/validate-legislation.js`,
+    `VALID_PLAN_STAV`),
+  - `veklep_pid` a `veklep_url` (jakmile položka opustí `nezahajeno`, obojí je
+    povinné — hlídá validátor),
+  - `plneni_poznamka` — věcně přepiš/doplň (datum ověření, co se stalo, jak to
+    stojí vůči `plan_termin`; např. „ve VeKLEP od DD. MM., v připomínkovém
+    řízení do DD. MM." nebo „skluz cca N měsíců oproti plánu" jako čistě
+    datové srovnání, ne hodnocení výkonu).
+  - Pokud položka nově vstoupila do procesu a v radaru (`items`) k ní ještě
+    neexistuje záznam, založ jej (stejná pravidla jako 3.4) a dopiš `radar_id`
+    do `plan_items` položky, aby propojení fungovalo (viz `_plan_doc`).
+- **Položky se `stav: "nezahajeno"` a `plan_termin` v minulosti** (plánovaný
+  měsíc předložení vládě už uplynul, materiál ve VeKLEP stále není): nekontroluj
+  je každou noc znovu (nic nového nelze čekat každý den) — **zopakuj vyhledání
+  jednou za čas** (orientačně cca jednou týdně, nebo když se v korpusu objeví
+  nová zmínka o daném předpisu) a při té příležitosti aktualizuj datum ověření
+  v `plneni_poznamka`. Položky s `plan_termin` v budoucnu nekontroluj vůbec,
+  dokud termín nenastane.
+- **Když je VeKLEP záznam nedohledatelný nebo nejasný** → nech pole beze
+  změny, přidej jen datum poslední kontroly do `plneni_poznamka`; case pro
+  issue zakládej jen pokud jde o položku s `linked_articles`/`radar_id`, kde
+  nejasnost ovlivňuje publikovaný obsah (postup jako 3.3).
+- Po úpravě spusť `npm run validate:legislation` (součást `validate:all`).
+
+**Platí i zde železné pravidlo popisnosti**: `plneni_poznamka` je vždy jen
+**popis** — data, fáze, stavy, případně datové srovnání s `plan_termin`
+(„o N měsíců později/dříve, než plán předpokládal"). **Nikdy** hodnotící soud
+o kvalitě, tempu nebo důvodech (žádné „MZ plán neplní", „zbytečné zpoždění",
+„nedostatečná příprava" apod.) — jen ověřitelná fakta ke dni kontroly.
 
 ---
 

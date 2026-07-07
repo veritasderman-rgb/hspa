@@ -647,6 +647,71 @@ ENUM `type`/`phase`, povinná pole, unikátní `id` + `veklep_id`, formát dat
 (YYYY-MM-DD), `veklep_url` na doméně odok.cz a FK na indikátory + články.
 Konzument: `legislativa.html` přes `src/legislativa.js` (tabulka + filtr fází).
 
+### 16.1 `legislativa.json` — legislativní plán MZ (`plan_meta` + `plan_items`)
+
+Samostatná sekce v témže souboru, nad radarem (`items`). Zatímco `items`
+sleduje aktuální stav materiálů ve VeKLEP, `plan_meta`/`plan_items` sleduje
+**plnění plánu legislativních prací vlády** — co MZ slíbilo předložit a v jakém
+termínu, a jak to reálně plní. Sekce je volitelná (validuje se jen pokud je
+`plan_meta` nebo `plan_items` v souboru přítomné).
+
+```jsonc
+{
+  "_plan_doc": "...",                                 // redakční poznámka k plánu (zdroj, kdy ověřeno)
+  "plan_meta": {
+    "usneseni": "č. 175",                             // číslo usnesení vlády, kterým byl plán schválen
+    "schvaleno": "2026-03-23",                         // YYYY-MM-DD
+    "zdroj_nazev": "Plán legislativních prací vlády na zbývající část roku 2026 (příloha č. 1 k usnesení vlády ze dne 23. března 2026 č. 175)",
+    "zdroj_url": "https://vlada.gov.cz/..."            // musí mířit na https://(www.)vlada.gov.cz/
+  },
+  "plan_items": [
+    {
+      "id": "plan-novela-ochrana-verejneho-zdravi-pitna-voda",  // interní slug
+      "nazev": "Novela zákona o ochraně veřejného zdraví (výrobky v kontaktu s pitnou vodou)",
+      "popis": "...",                                  // redakční popis, co novela dělá a proč
+      "typ": "novela_zakona",                           // ustavni_zakon | vecny_zamer | zakon | novela_zakona |
+                                                         // narizeni_vlady | novela_narizeni | vyhlaska | novela_vyhlasky
+      "plan_termin": "2026-04",                         // YYYY-MM — termín předložení vládě podle plánu
+      "ria": false,                                     // boolean|null — podléhá RIA (hodnocení dopadů regulace)?
+      "stav": "vlada",                                  // nezahajeno | pripominkove_rizeni | vlada | parlament | sbirka | stazeno
+      "veklep_pid": "ALBSDRVH64TT",                      // PID materiálu ve VeKLEP (nepovinné, dokud stav = nezahajeno)
+      "veklep_url": "https://odok.cz/portal/veklep/material/ALBSDRVH64TT/",
+      "radar_id": "novela-ochrana-verejneho-zdravi-pitna-voda-2026",  // FK → legislativa.items[].id (nepovinné)
+      "plneni_poznamka": "Plán: předložení vládě duben 2026. ... — oproti plánu zhruba tříměsíční skluz.",
+      "zdroje": [                                       // pole { nazev, url } — http(s) URL
+        { "nazev": "Plán legislativních prací vlády ... (usnesení č. 175)", "url": "https://vlada.gov.cz/..." },
+        { "nazev": "VeKLEP — detail materiálu ALBSDRVH64TT", "url": "https://odok.cz/portal/veklep/material/ALBSDRVH64TT/" }
+      ]
+    }
+  ]
+}
+```
+
+Pravidla validátoru (`validatePlan()` v `ingest/validate-legislation.js`):
+
+- **Povinná pole `plan_meta`**: `usneseni`, `schvaleno`, `zdroj_nazev`, `zdroj_url`
+  (`schvaleno` ve formátu YYYY-MM-DD, `zdroj_url` na doméně vlada.gov.cz).
+- **Povinná pole `plan_items[]`**: `id`, `nazev`, `popis`, `typ`, `plan_termin`, `stav`.
+- **ENUM**: `typ` ∈ `VALID_PLAN_TYPES`, `stav` ∈ `VALID_PLAN_STAV`.
+- **`id` unikátní** napříč `plan_items`.
+- **`plan_termin`** formát YYYY-MM.
+- **`ria`** musí být boolean nebo `null`.
+- **`veklep_url` podmíněně povinné**: jakmile `stav !== 'nezahajeno'`, musí být
+  vyplněné (materiál už ve VeKLEP existuje); pokud vyplněné, musí mířit na
+  `https://odok.cz/portal/veklep/`.
+- **`radar_id`** (nepovinné) je FK — pokud vyplněné, musí odkazovat na existující
+  `id` v `legislativa.items[]` v témže souboru.
+- **`zdroje[]`** (nepovinné) — pole objektů `{ nazev, url }`, `url` musí být http(s).
+
+„Po termínu" (`isPlanItemOverdue()` v `src/legislativa.js`) = `plan_termin`
+(měsíc) je v minulosti **a** `stav` je stále `nezahajeno` nebo
+`pripominkove_rizeni` — položky, které už reálně dorazily na vládu/do Parlamentu/
+Sbírky, se „po termínu" neznačí bez ohledu na to, jak pozdě k tomu došlo.
+
+Konzument: `legislativa.html` přes `src/legislativa.js` — samostatná sekce
+„Legislativní plán ministerstva" nad tabulkou radaru (souhrnná počitadla:
+v procesu / ve Sbírce / nezahájeno / po termínu, filtr podle stavu).
+
 ---
 
 ## Vztahy mezi datasety
@@ -700,6 +765,7 @@ Konzument: `legislativa.html` přes `src/legislativa.js` (tabulka + filtr fází
 | `strategies.linked_indicators[]` | `strategies.json` | `indicators.json#id` |
 | `legislativa.items[].linked_indicators[]` | `legislativa.json` | `indicators.json#id` |
 | `legislativa.items[].linked_articles[]` | `legislativa.json` | `articles.json#id` |
+| `legislativa.plan_items[].radar_id` | `legislativa.json` | `legislativa.json#items[].id` (self) |
 | `strategies.related_strategies[]` | `strategies.json` | `strategies.json#id` (self) |
 | `explainers.linked_indicators[]` | `explainers.json` | `indicators.json#id` |
 | `indicators.dimension` | `indicators.json` | `dimensions.json#id` |
@@ -716,7 +782,7 @@ Konzument: `legislativa.html` přes `src/legislativa.js` (tabulka + filtr fází
 | `npm run validate:strategies` | `strategies.json` ENUM, FK, povinná pole |
 | `npm run validate:explainers` | `explainers.json` schéma |
 | `npm run validate:prevention` | `prevention.json` schéma |
-| `npm run validate:legislation` | `legislativa.json` ENUM fází/typů, FK na indikátory + články |
+| `npm run validate:legislation` | `legislativa.json` ENUM fází/typů (radar) + ENUM typů/stavů (plán), FK na indikátory + články + self-FK `radar_id` |
 | `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
 
