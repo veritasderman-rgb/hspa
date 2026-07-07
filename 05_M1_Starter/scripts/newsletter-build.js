@@ -22,7 +22,8 @@
 //       "title": "…",
 //       "annotation": "…",             // 1–3 věty; povolené <strong>, <em>
 //       "url": "https://skorezdravotnictvi.cz/clanek-….html",
-//       "badge": "Z archivu"           // volitelné — zelený proužek místo červeného
+//       "badge": "Z archivu",          // volitelné — zelený proužek místo červeného
+//       "cta": "Prohlédnout radar →"   // volitelné — text odkazu (default „Číst článek →")
 //     }
 //   ]
 // }
@@ -72,7 +73,7 @@ function heroCard(a) {
               <div style="${SERIF}font-size:21px;line-height:1.22;color:#1f1a14;font-weight:700;margin-bottom:8px;">${esc(a.title)}</div>
             </a>
             <p style="margin:0 0 12px;${SANS}font-size:14.5px;line-height:1.55;color:#3a332a;">${esc(a.annotation)}</p>
-            <a href="${a.url}" style="${SANS}font-size:14px;font-weight:700;color:#b8361e;text-decoration:underline;">Číst článek →</a>
+            <a href="${a.url}" style="${SANS}font-size:14px;font-weight:700;color:#b8361e;text-decoration:underline;">${esc(a.cta || 'Číst článek →')}</a>
           </td></tr>
         </table>
       </td></tr>`;
@@ -86,7 +87,7 @@ function listCard(a, last) {
           <div style="${SANS}font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#6b6253;margin-bottom:5px;">${badge}${esc(a.kicker)}</div>
           <a href="${a.url}" style="text-decoration:none;"><div style="${SERIF}font-size:18px;line-height:1.25;color:#1f1a14;font-weight:700;margin-bottom:5px;">${esc(a.title)}</div></a>
           <p style="margin:0 0 8px;${SANS}font-size:14px;line-height:1.5;color:#3a332a;">${esc(a.annotation)}</p>
-          <a href="${a.url}" style="${SANS}font-size:13.5px;font-weight:700;color:#b8361e;text-decoration:underline;">Číst článek →</a>
+          <a href="${a.url}" style="${SANS}font-size:13.5px;font-weight:700;color:#b8361e;text-decoration:underline;">${esc(a.cta || 'Číst článek →')}</a>
         </td></tr></table>`;
 }
 
