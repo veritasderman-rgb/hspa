@@ -14724,3 +14724,237 @@ html {
   .leg-plan-table-wrap { padding: 4px 16px 8px; }
   .leg-plan-head h2 { font-size: 22px; }
 }
+
+/* ============================================================
+   Model systému (model-systemu.html) · namespace .msys-*
+   Interaktivní kauzální mapa — SVG graf, detail panel, fallback.
+   Vrstvy přebírají role paletu schématu aktérů (.schema-*).
+   ============================================================ */
+
+.msys-hero .ed-lead { max-width: 760px; }
+.msys-stats {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-mut);
+  margin-top: 10px;
+}
+
+.msys-section { padding: 26px clamp(18px, 4vw, 48px) 10px; }
+.msys-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.msys-graph-wrap {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 10px;
+}
+.msys-svg { display: block; width: 100%; height: auto; }
+
+/* Vrstvy — pásy */
+.msys-band-rect { fill: var(--paper2); opacity: 0.55; }
+.msys-band-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: var(--ink-mut2);
+}
+
+/* Uzly — barvy dle vrstvy (paleta rolí schématu aktérů) */
+.msys-node { cursor: pointer; }
+.msys-node rect {
+  stroke: rgba(31,26,20,0.25);
+  stroke-width: 1;
+  transition: opacity 0.25s ease, stroke-width 0.15s ease;
+}
+.msys-node text {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  fill: #fff;
+  pointer-events: none;
+}
+.msys-node-struktury rect { fill: #1e293b; }
+.msys-node-procesy   rect { fill: #1e40af; }
+.msys-node-vystupy   rect { fill: #166534; }
+.msys-node-vysledky  rect { fill: #92400e; }
+.msys-lever-dot { fill: #fff; opacity: 0.9; }
+
+.msys-node:hover rect,
+.msys-node:focus-visible rect { stroke: var(--ink); stroke-width: 2; }
+.msys-node:focus-visible { outline: none; }
+.msys-node-active rect { stroke: var(--ink); stroke-width: 2.5; }
+
+/* Hrany */
+.msys-edge {
+  fill: none;
+  stroke: rgba(31,26,20,0.28);
+  stroke-width: 1.4;
+  transition: opacity 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+.msys-edge-strong { stroke-width: 2; }
+/* Hroty šipek nesou polaritu trvale (zelená podporuje / oranžová zatěžuje);
+   ztlumení řeší opacity celé path (markery ji dědí). */
+.msys-arrowhead-plus { fill: #1a7a4a; }
+.msys-arrowhead-minus { fill: #b45f06; }
+
+/* Zvýrazněný stav: vše ostatní ztlumit, aktivní hrany obarvit polaritou */
+.msys-dimmed .msys-edge { opacity: 0.14; }
+.msys-dimmed .msys-node rect { opacity: 0.3; }
+.msys-dimmed .msys-node text { opacity: 0.35; }
+.msys-dimmed .msys-node-active rect,
+.msys-dimmed .msys-node-active text,
+.msys-dimmed .msys-node-affected rect,
+.msys-dimmed .msys-node-affected text,
+.msys-dimmed .msys-node-neighbor rect,
+.msys-dimmed .msys-node-neighbor text { opacity: 1; }
+.msys-edge-hot { opacity: 1 !important; stroke-width: 2.6; }
+.msys-edge-hot.msys-edge-plus { stroke: #1a7a4a; }
+.msys-edge-hot.msys-edge-minus { stroke: #b45f06; }
+
+/* Detail panel */
+.msys-panel {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper2);
+  padding: 18px;
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+.msys-panel-empty p { color: var(--ink-mut); font-size: 14.5px; line-height: 1.55; }
+.msys-panel-empty p + p { margin-top: 10px; }
+.msys-panel-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.msys-panel-layer {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.msys-badge-struktury { background: #1e293b; }
+.msys-badge-procesy   { background: #1e40af; }
+.msys-badge-vystupy   { background: #166534; }
+.msys-badge-vysledky  { background: #92400e; }
+.msys-panel-kind { font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+.msys-panel-name { font-family: var(--serif); font-size: 21px; margin-bottom: 6px; }
+.msys-panel-desc { font-size: 14.5px; line-height: 1.55; color: var(--ink); }
+.msys-panel h4 {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 16px 0 7px;
+}
+
+.msys-lever-btn {
+  margin-top: 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 7px;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+.msys-lever-btn:hover { background: transparent; color: var(--ink); }
+.msys-lever-btn-on { background: transparent; color: var(--ink); }
+.msys-lever-summary { margin-top: 10px; font-size: 13.5px; line-height: 1.5; }
+.msys-lever-layer { margin-top: 5px; color: var(--ink-mut); }
+
+.msys-ind-list { display: flex; flex-direction: column; gap: 6px; }
+.msys-ind {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-family: var(--sans);
+  font-size: 13px;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 7px 9px;
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  background: var(--paper);
+}
+.msys-ind:hover { border-color: var(--rule2); }
+.msys-ind-signal { width: 8px; height: 8px; border-radius: 50%; flex: none; align-self: center; }
+.msys-signal-good { background: var(--good); }
+.msys-signal-warn { background: var(--warn); }
+.msys-signal-bad { background: var(--bad); }
+.msys-signal-neutral { background: var(--neutral); }
+.msys-ind-name { flex: 1; min-width: 0; }
+.msys-ind-value { font-weight: 600; white-space: nowrap; }
+.msys-ind-value small { font-weight: 400; color: var(--ink-mut); }
+
+.msys-panel-edges { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.msys-panel-edge { font-size: 13px; line-height: 1.45; }
+.msys-jump {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0;
+}
+.msys-edge-sign { font-weight: 700; margin: 0 3px; }
+.msys-panel-edge-plus .msys-edge-sign { color: #1a7a4a; }
+.msys-panel-edge-minus .msys-edge-sign { color: #b45f06; }
+.msys-edge-mech { color: var(--ink-mut); }
+
+.msys-panel-articles { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
+.msys-panel-articles a { color: var(--ink); }
+
+/* Fallback seznam — na desktopu skrytý, na mobilu nahrazuje graf */
+.msys-fallback { display: none; margin-top: 18px; }
+.msys-fallback h2 { font-family: var(--serif); font-size: 20px; margin-bottom: 10px; }
+.msys-fallback-list { list-style: none; }
+.msys-fallback-layer > h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 16px 0 8px;
+}
+.msys-fallback-layer > ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.msys-fallback-layer li { font-size: 14px; line-height: 1.5; }
+.msys-fallback-layer .msys-ind-list { margin-top: 7px; }
+
+.msys-context { padding-bottom: 40px; }
+.msys-context h2 { font-family: var(--serif); font-size: 22px; margin-bottom: 8px; }
+.msys-context p { max-width: 760px; font-size: 15px; line-height: 1.6; }
+
+@media (max-width: 860px) {
+  .msys-layout { grid-template-columns: 1fr; }
+  .msys-panel { position: static; max-height: none; }
+}
+@media (max-width: 720px) {
+  .msys-graph-wrap, .msys-panel { display: none; }
+  .msys-fallback { display: block; }
+  .msys-ind { display: block; }
+  .msys-ind-signal { display: inline-block; margin-right: 6px; }
+  .msys-ind-value { display: block; white-space: normal; margin-top: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .msys-node rect, .msys-edge { transition: none; }
+}
