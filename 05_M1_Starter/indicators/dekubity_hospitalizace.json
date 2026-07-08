@@ -1,0 +1,58 @@
+{
+  "id": "dekubity_hospitalizace",
+  "name": "Dekubity získané během hospitalizace",
+  "area": "Procesy",
+  "domain": "Bezpečnost péče",
+  "subdomain": "Ošetřovatelská bezpečnost",
+  "definition": "Prevalence dekubitů (proleženin) u hospitalizovaných pacientů zjištěná národním prevalenčním šetřením — podíl pacientů s alespoň jedním dekubitem v den šetření z celkového počtu hospitalizovaných. Dekubitus je lokální poškození kůže a podkoží nad kostním výběžkem vzniklé tlakem a střihem, typicky u imobilních pacientů; jeho vznik během hospitalizace je uznávaným ukazatelem kvality ošetřovatelské péče (nursing-sensitive indicator).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "nrc",
+      "endpoint": "https://kancelarzp.cz/sledovani-dekubitu/",
+      "dataset": "Národní prevalenční šetření dekubitů (ČAS ve spolupráci s NRC, pokračuje pod Kanceláří zdravotního pojištění)",
+      "dimensions": {
+        "country": "CZ",
+        "setting": "luzkova_zdravotni_pece",
+        "unit_of_analysis": "hospitalizovany_pacient"
+      },
+      "note": "Prevalenční šetření = jednorázový sběr v definovaný den napříč zapojenými poskytovateli. Poskytovatelé dostávají report s referenčními hodnotami. Dekubity jsou paralelně evidovány v Systému hlášení nežádoucích událostí (SHNU) a v Národním registru hospitalizovaných (NRHOSP)."
+    },
+    "fallback": {
+      "type": "nrhosp",
+      "note": "Národní registr hospitalizovaných (ÚZIS) — rutinní vykazování identifikuje jen ~1,2 % hospitalizovaných s dekubitem ročně, tj. výrazně méně než prevalenční šetření (podhlášení)."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Mezinárodní srovnání prevalence dekubitů není 1:1 — metodiky se liší (bodová vs. periodová prevalence, práh kategorie I–IV vs. II–IV, dekubity vzniklé v zařízení vs. přítomné při přijetí). Publikovaná evropská prevalence se pohybuje v širokém pásmu ~8,8–53,2 % podle metodiky. Nejblíže srovnatelné je Německo, kde národní prevalenční šetření (Charité) udává nemocniční prevalenci dekubitů kategorie II–IV kolem 5,5 % a nozokomiální (v zařízení vzniklou) prevalenci nad 3 %; ročně v německých nemocnicích vznikne odhadem ~65 000 dekubitů. Rakousko se účastní mezinárodního měření LPZ (Maastricht) se standardizovanou metodikou.",
+    "value": null,
+    "url": "https://www.thieme-connect.de/products/ejournals/pdf/10.1055/s-0043-122069.pdf"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "NRC / Kancelář zdravotního pojištění",
+    "Česká asociace sester (ČAS)",
+    "ÚZIS"
+  ],
+  "method_notes": "Hodnota vychází z národního prevalenčního šetření dekubitů (ČAS/NRC, dnes Kancelář zdravotního pojištění), které ÚZIS uvádí v pásmu ~2,8–5,1 % hospitalizovaných pacientů ročně. Pro dashboard je nastavena reprezentativní hodnota 4,3 % v tomto pásmu (rok 2023). Časová řada je orientační (origin: seed), sestavená v mezích vykazovaného pásma — přesné meziroční hodnoty vyžadují report NRC/KZP. Paralelní rutinní zdroj (NRHOSP) eviduje jen ~1,2 % pacientů s dekubitem, což je typický projev podhlášení. Klíčovým metodickým problémem je, že v ČR chybí jednotný národní standard monitorování a klinický doporučený postup prevence dekubitů — proto je i vlastní benchmarkování v čase nespolehlivé.",
+  "limitations": "Vykazovaná čísla vyjadřují počet evidovaných / v šetření zachycených případů, ne skutečný výskyt — reálná prevalence je pravděpodobně vyšší (podhlášení). Šetření zachycuje pacienty jen v zapojených zařízeních a v jeden den (bodová prevalence), takže neodhaduje incidenci ani délku hojení. Nerozlišuje spolehlivě dekubity vzniklé v zařízení od přítomných při přijetí. Mezinárodní srovnání je omezené odlišnou metodikou. Signál je nastaven jako neutral — bez srovnatelného benchmarku nelze hodnotu spolehlivě klasifikovat.",
+  "determinants": [
+    "Personální kapacita a zátěž ošetřovatelského personálu (počet ošetřovacích dní na úvazek sestry)",
+    "Dostupnost a používání antidekubitních pomůcek (matrace, polohovací pomůcky)",
+    "Systematické hodnocení rizika (škála Nortonové/Braden) a polohování imobilních pacientů",
+    "Podíl geriatrických a imobilních pacientů, multimorbidita, délka hospitalizace",
+    "Existence a dodržování ošetřovatelského standardu prevence dekubitů"
+  ],
+  "importance": "Dekubity jsou z velké části preventabilní nežádoucí událost a citlivý ukazatel kvality ošetřovatelské péče. Znamenají bolest a utrpení pacienta, riziko infekce a sepse, prodloužení hospitalizace a významné náklady. Spolu s pády tvoří dvojici klíčových ošetřovatelských bezpečnostních indikátorů.",
+  "patient_story": "Fakultní nemocnice, interní oddělení, jedenáctý den hospitalizace. Paní Věra (81) leží po cévní mozkové příhodě, sama se nepolohuje a většinu dne tráví na zádech. Na kříži se jí udělal začervenalý plak, který ošetřovatelka v přeplněné noční směně stihla přehodnotit až s odstupem — a to už byla kůže porušená. Dekubitus druhého stupně. Není to nedbalost jednoho člověka; je to výsledek toho, že na oddělení chybí čas, jednotný standard polohování a někdy i antidekubitní matrace. Přesně takový případ zachytí národní prevalenční šetření dekubitů, které v Česku najde dekubitus přibližně u 4,3 % hospitalizovaných pacientů.\n\nHodnota 4,3 % (rok 2023, národní prevalenční šetření NRC/KZP) leží ve vykazovaném pásmu 2,8–5,1 %. Signál je neutral — a to samo o sobě je výpověď: Česko nemá jednotnou metodiku, která by umožnila hodnotu spolehlivě porovnat v čase i se zahraničím. Paralelní rutinní registr (NRHOSP) přitom eviduje dekubitus jen u ~1,2 % pacientů, tedy zlomek toho, co najde cílené šetření. Ta mezera mezi 4,3 % a 1,2 % není rozdíl v péči, ale v měření — velká část dekubitů se do rutinních dat vůbec nedostane.\n\nStrukturálně stojí prevence dekubitů na ošetřovatelském personálu: na čase sestry pravidelně polohovat imobilního pacienta, hodnotit riziko škálou a mít po ruce správnou pomůcku. Když roste zátěž na jeden úvazek sestry a zkracuje se personální rezerva, prevence je první, co pod tlakem provozu odpadne — dekubity jsou proto úzce svázané s indikátorem ošetřovacích dní na úvazek sestry i s nedostatkem sester. Chybějící národní standard a klinický doporučený postup navíc znamenají, že každé oddělení postupuje trochu jinak a data nejsou srovnatelná.\n\nPolitická páka je konkrétní a leží na Ministerstvu zdravotnictví, ÚZIS/NRC a poskytovatelích. Za prvé zavést jednotný národní standard monitorování a klinický doporučený postup prevence dekubitů, aby se měřilo stejně (navazuje na Věstník MZ a program „Pozor na červenou“). Za druhé propojit rutinní vykazování (NRHOSP/SHNU) s prevenčním šetřením a zveřejňovat srovnání po poskytovatelích — transparentnost sama motivuje ke zlepšení. Za třetí posílit ošetřovatelské kapacity a dostupnost antidekubitních pomůcek přes úhradové mechanismy. HSPA Monitor sleduje dekubity jako doplňkový bezpečnostní indikátor po boku pádů — obojí ukazuje, jak dobře systém chrání nejzranitelnější, imobilní pacienty.",
+  "framework": "monitoring",
+  "dimension": "bezpecnost",
+  "verification_status": "review-pending"
+}
