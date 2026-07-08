@@ -46,7 +46,7 @@ Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podk
 ```bash
 cd 05_M1_Starter
 npm install
-npm test          # 595 testů, 0 failures
+npm test          # 672 testů, 0 failures
 npm run serve     # http://localhost:8080
 ```
 
@@ -88,6 +88,7 @@ git push -u origin claude/<branch>
 ├── strategie.html              ← Národní strategické dokumenty
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
+├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
 ├── redakce.html                ← Redakční tým a procesy
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
@@ -130,6 +131,8 @@ git push -u origin claude/<branch>
 │   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
 │   ├── pojistenci-d5-*.json    ← OIS 11-47 (ZP × kraj × okres)
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
+│   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
+│   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
 │   ├── cz-regions.geojson      ← GeoJSON krajů
 │   └── snapshot-YYYY-MM-DD.json ← Denní snapshoty datového kontraktu
 │
@@ -388,6 +391,8 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 
 - [`05_M1_Starter/PLAN-PRACE.md`](05_M1_Starter/PLAN-PRACE.md) — kompletní audit kódu/backlogu/automatizací + sada úkolů U1–U30 pro další vývoj (vstupní bod pro novou session bez konkrétního zadání)
 - [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
+- [`05_M1_Starter/PLAN-SYSTEM-MODEL.md`](05_M1_Starter/PLAN-SYSTEM-MODEL.md) — plán stránky Model systému (`model-systemu.html` + `data/system-model.json`): kauzální graf pák a vazeb
+- [`05_M1_Starter/PLAN-CLAIMS.md`](05_M1_Starter/PLAN-CLAIMS.md) — plán registru tvrzení (`data/claims.json`): samo-verifikující se korpus, automatická detekce driftu
 - [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md) — aktuální backlog
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
 - [`05_M1_Starter/STATUS_AUDIT_2026-05-18.md`](05_M1_Starter/STATUS_AUDIT_2026-05-18.md) — historický audit stavu

@@ -130,7 +130,15 @@ Article hub `clanky.html` se aktualizuje automaticky z `articles.json`. Doporuč
 - V `o-projektu.html` timeline, pokud je článek vázán na konkrétní událost
 - V `data/strategies.json` / `explainers.json` v `documents[]` pokud cituje strategii/explainer
 
-### 6. Validace
+### 6. Registr tvrzení (claims)
+
+Podstatná kvantitativní tvrzení z článku zapiš do `data/claims.json` (schéma viz [`data-model.md`](data-model.md) § 18): `quote` = DOSLOVNÝ úryvek z textu, vazba na indikátor (`indicator_id`). `check: "auto"` použij JEN pro přímé citace hodnoty indikátoru (`relation: "exact"` + povinné `as_of`); metodické odchylky = `related` + `manual`. Ověř:
+
+```bash
+npm run validate:claims  # schéma, FK, invarianty + quote dohledatelný v HTML
+```
+
+### 7. Validace
 
 ```bash
 npm run validate:all     # validate-articles.js (publikační hygiena)
