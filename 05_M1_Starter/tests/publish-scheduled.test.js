@@ -3,7 +3,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { assessHtml, holdReason, pickArticleToPublish } from '../scripts/publish-scheduled.js';
+import { assessHtml, holdReason, pickArticleToPublish, promoteStatusForPublish } from '../scripts/publish-scheduled.js';
 
 test('assessHtml: čistý publikovatelný článek nemá draft markery', () => {
   const html = '<title>Něco zajímavého · HSPA Monitor</title>'
@@ -24,12 +24,51 @@ test('holdReason: zadrží článek s _review_note', () => {
   assert.equal(holdReason({ _review_note: 'počkat na data' }, '<title>x</title>'), '_review_note');
 });
 
-test('holdReason: zadrží podle articles.json audit.status', () => {
-  assert.match(holdReason({ audit: { status: 'review-pending' } }, '<title>x</title>'), /review-pending/);
+test('holdReason: zadrží podle articles.json audit.status=flagged', () => {
+  assert.match(holdReason({ audit: { status: 'flagged' } }, '<title>x</title>'), /flagged/);
 });
 
-test('holdReason: zadrží podle HTML audit-status draft', () => {
-  assert.match(holdReason({}, '<meta name="article:audit-status" content="draft">'), /HTML audit-status=draft/);
+test('holdReason: draft je nově PUBLIKOVATELNÝ (fronta = připraveno)', () => {
+  // Politika „pustit i drafty": draft status sám o sobě nezadrží.
+  assert.equal(holdReason({}, '<meta name="article:audit-status" content="draft">'), null);
+  assert.equal(holdReason({ audit: { status: 'draft' } }, '<title>x</title>'), null);
+});
+
+test('holdReason: review-pending je publikovatelný', () => {
+  assert.equal(holdReason({ audit: { status: 'review-pending' } }, '<title>x</title>'), null);
+});
+
+test('holdReason: zadrží flagged / draft-flagged / needs-rewrite', () => {
+  for (const st of ['flagged', 'draft-flagged', 'needs-rewrite']) {
+    assert.match(holdReason({ audit: { status: st } }, '<title>x</title>'), new RegExp(st));
+  }
+});
+
+test('holdReason: zadrží draft s viditelným article-review-banner', () => {
+  const html = '<meta name="article:audit-status" content="draft">'
+    + '<main><aside class="article-review-banner">Status revize: čeká na schválení</aside></main>';
+  assert.match(holdReason({}, html), /article-review-banner/);
+});
+
+test('promoteStatusForPublish: draft → review-pending (json i nested audit)', () => {
+  const a = { 'audit-status': 'draft', audit: { status: 'draft' } };
+  assert.equal(promoteStatusForPublish(a), 'review-pending');
+  assert.equal(a['audit-status'], 'review-pending');
+  assert.equal(a.audit.status, 'review-pending');
+});
+
+test('promoteStatusForPublish: chybějící status → review-pending', () => {
+  const a = {};
+  assert.equal(promoteStatusForPublish(a), 'review-pending');
+  assert.equal(a['audit-status'], 'review-pending');
+});
+
+test('promoteStatusForPublish: verified/partial/review-pending se nemění', () => {
+  for (const st of ['verified', 'partial', 'review-pending']) {
+    const a = { 'audit-status': st };
+    assert.equal(promoteStatusForPublish(a), null);
+    assert.equal(a['audit-status'], st);
+  }
 });
 
 test('holdReason: zadrží mislabeled partial s (DRAFT) v titulku', () => {
