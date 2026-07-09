@@ -346,9 +346,25 @@ připravené články (včetně nově přidaných) a vybere jeden podle pravidla
    Pole nastav u článků vázaných na událost/termín (novela, akce, výročí).
 2. **Jinak nejdéle připravený** — vyhrává článek s nejstarším `ready_since`.
    `ready_since` se orazítkuje automaticky v den, kdy článek poprvé projde
-   review holdem (stane se publikovatelným) — redakce ho needituje ručně.
+   review holdem (stane se publikovatelným) — redakce ho needituje ručně. Seed
+   z `date` vzniku (v minulosti), jinak dnešek → nejstarší drafty jdou ven dřív.
 3. `scheduled_for` funguje jako **„ne dřív než"** — článek se nepublikuje
    před tímto datem; prázdné pole = může jít ven hned.
+
+**Co je „připravené" (politika fronty).** Fronta stojí na pravidle „co je
+připraveno, jde ven": běžný `draft` z denní/noční rutiny je obsahově hotový a
+cron ho **smí automaticky publikovat**. Zadrží se jen články se skutečným
+problémem — `audit-status` `flagged` / `draft-flagged` / `needs-rewrite`,
+`_review_note` v `articles.json`, nebo **viditelný blokátor** v HTML (`(DRAFT)`
+v `<title>`, `draft` v `article-meta-date`, `<aside class="article-review-banner">`).
+Publikovatelné statusy: `draft`, `review-pending`, `partial`, `verified`.
+
+**Povýšení při publikaci.** Vybraný `draft` se v okamžiku publikace automaticky
+povýší na `review-pending` (`promoteStatusForPublish`) — publikovaný článek tak
+**nikdy nenese status `draft`** (invariant validátoru `validate-articles.js`) a
+čtenář vidí férový banner „čeká na ověření". HTML se srovná na `robots: index,
+follow` (`applyPublishToHtml`). Redakce článek dodatečně povýší na `verified`
+plným auditem.
 
 Publikovaný článek dostane `date` = den publikace (zobrazí se s aktuálním
 datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
