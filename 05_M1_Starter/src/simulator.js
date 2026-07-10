@@ -6,7 +6,7 @@
 // Viz PLAN-SIMULATOR-PAK.md.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { simulateLever } from './levers-engine.js';
 
 let LEVERS = [];
@@ -241,6 +241,7 @@ function wire() {
 async function init() {
   renderModuleNav('explainers');
   renderMastheadDate();
+  renderRelatedTools('simulator');
 
   const host = document.getElementById('simLeversList');
   if (!host) return;

@@ -7,7 +7,7 @@
 // navíc režim „Zatlačit na páku" — deterministický BFS downstream.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 
 const LAYER_ORDER = ['Struktury', 'Procesy', 'Výstupy', 'Výsledky'];
 const LAYER_CLASS = {
@@ -365,6 +365,7 @@ function renderFallbackList() {
 async function init() {
   renderModuleNav('explainers');
   renderMastheadDate();
+  renderRelatedTools('model-systemu');
 
   const host = document.getElementById('msysGraph');
   if (!host) return;

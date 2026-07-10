@@ -5,7 +5,7 @@
 // Výpočet: src/kompas-engine.js (čistý, testovaný). Informace, NE lékařská rada.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, isArticleVisible } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, isArticleVisible, renderRelatedTools } from './page-shared.js';
 import { applicableChecks, regionStat } from './kompas-engine.js';
 
 let CHECKS = [];
@@ -145,6 +145,7 @@ function czPlural(n, one, few, many) {
 async function init() {
   renderModuleNav('prevention');
   renderMastheadDate();
+  renderRelatedTools('kompas');
 
   const host = document.getElementById('kompasResultsList');
   if (!host) return;
