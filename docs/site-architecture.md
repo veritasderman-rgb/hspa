@@ -18,6 +18,7 @@ zdrave-cesko.cz/
 ├── /prevence               prevence.html           (Vakcinace + screeningy)
 ├── /strategie              strategie.html          (Národní strategie)
 ├── /legislativa            legislativa.html        (Legislativní radar — VeKLEP)
+├── /barometr               barometr.html           (Barometr politických prohlášení)
 ├── /glosar                 glosar.html             (110 termínů)
 ├── /o-projektu             o-projektu.html         (O projektu)
 ├── /jak-funguje            jak-funguje.html        (Jak zdravotnictví funguje)
@@ -148,6 +149,16 @@ poznámkou k plnění (`plneni_poznamka`). Položka „po termínu" = plánovan�
 uplynul a stav je stále `nezahajeno`/`pripominkove_rizeni` (viz
 `isPlanItemOverdue()`). Kde se plánovaná položka propojí s konkrétním
 materiálem radaru, nese `radar_id` (FK na `legislativa.items[].id`).
+
+
+### `barometr.html` — Barometr politických prohlášení
+
+| | |
+|---|---|
+| **Účel** | Závazky vlády ve zdravotnictví (verbatim z programového prohlášení) převedené na měřitelné checkpointy s baseline z indikátorů a stavem plnění počítaným z dat; sekce Ověřovna — výroky politiků s verdikty doloženými čísly. Metodika viz `docs/metodika-barometr.md` (verbatim vs. interpretace, steel-man, právo na odpověď). |
+| **JS** | `src/barometr.js` |
+| **Fetchuje** | `data/barometr.json`, `data/indicators.json` (aktuální hodnoty živě), `data/souvislosti.json` |
+| **Údržba** | stavy závazků přepočítává noční rutina (§ 3.6), kandidáty výroků sbírá denní rutina |
 
 ### `glosar.html` — Glosář
 

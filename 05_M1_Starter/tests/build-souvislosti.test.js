@@ -173,3 +173,16 @@ test('vygenerovaný data/souvislosti.json je platný JSON s očekávanou struktu
   assert.ok(disk.indicators && typeof disk.indicators === 'object');
   assert.ok(disk.counts && typeof disk.counts.indicators_with_links === 'number');
 });
+
+test('claims z nepublikovaných článků neprosakují do souvislostí', () => {
+  const data = fixture();
+  data.claims.claims.push(
+    { id: 'c_draft', article: 'clanek-draft1.html', quote: 'tajný draft', value: 1, unit: '%', indicator_id: 'ind_a' },
+  );
+  const out = buildSouvislosti({ data, now: NOW });
+  const b = out.indicators.ind_a;
+  assert.ok(b, 'bucket ind_a existuje');
+  const ids = (b.claims || []).map(c => c.id);
+  assert.ok(ids.includes('c1'), 'claim z publikovaného článku je uvnitř');
+  assert.ok(!ids.includes('c_draft'), 'claim z draftu (published:false) NESMÍ prosáknout');
+});

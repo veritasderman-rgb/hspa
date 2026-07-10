@@ -91,6 +91,15 @@ veřejných zdravotnických institucí.
    „Peníze ve zdravotnictví" — viz U17/U19) nebo na aktualizaci legislativního
    radaru (`data/legislativa.json`, **pokud dataset existuje** — viz U18; pokud
    ještě neexistuje, veď VeKLEP nález jen jako řádek v discovery reportu níž).
+5. **Ověřovna Barometru** (`data/barometr.json`, sekce `statements`): pokud
+   discovery narazí na **konkrétní kvantitativní výrok politika o zdravotnictví**
+   (tiskovka MZ/vlády, rozhovor, sněmovní vystoupení), který lze konfrontovat
+   s indikátory dashboardu, zapiš ho do discovery reportu jako kandidáta
+   Ověřovny (verbatim znění + kdo/kdy/kde s URL). **Verdikt v denní rutině
+   NEVYNÁŠEJ** — vyžaduje plný postup `docs/metodika-barometr.md` (steel-man,
+   tolerance zaokrouhlení, data dostupná v době výroku); kandidát se zpracuje
+   samostatnou session nebo v noční rutině. Výroky bez čísel a bez vazby na
+   měřitelné indikátory do Ověřovny nepatří.
 
 ### Výstup fáze 1 — Discovery report
 

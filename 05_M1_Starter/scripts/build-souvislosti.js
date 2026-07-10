@@ -200,13 +200,16 @@ export function buildSouvislosti({ root = ROOT, now = new Date(), data } = {}) {
     }
   }
 
-  // --- (d) CLAIMS: přes indicator_id ---
+  // --- (d) CLAIMS: přes indicator_id (jen z viditelných článků) ---
   for (const c of claims) {
     if (!c.indicator_id) continue;
     const b = bucket(c.indicator_id);
     if (!b) continue;
-    // Dohledej článek claimu (pro FK integritu), ale claim vpustíme i bez něj.
+    // Dohledej článek claimu. Claims z nepublikovaných draftů se do sdílené
+    // vrstvy nedostanou — stejné pravidlo viditelnosti jako u článků výše,
+    // jinak by veřejný souvislosti.json prosakoval draft obsah a odkazy.
     const art = c.article ? articleByRef.get(c.article) : null;
+    if (art && art.published === false) continue;
     b.claims.push({
       id: c.id,
       article: c.article ?? null,
