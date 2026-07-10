@@ -6,20 +6,26 @@
 > Každý otevřený úkol má prompt ke zkopírování do Claude Code session.
 > Priority: 🔴 kritické · 🟠 důležité · 🟡 rozvoj · ⚪ vize.
 >
-> **📌 Stav k 2026-07-10 (PR #761):** HOTOVO — celý **Barometr** (BAR1–BAR12) ·
+> **📌 Stav k 2026-07-10 (PR #761/#764/#765):** HOTOVO — celý **Barometr** (BAR1–BAR12) ·
 > **F2** (2 flagged) · **F3** (skener) · **F5** (zdokumentováno, pipeline-blok) ·
 > **F6** (screening karty) · **F7** (výhled 2027–2029) · **F8** (docs+glosář) ·
-> **U24** (a11y WCAG 2.2) · **U27** (STRAT/IND-STORY existovaly, PREV-PERSONA
-> dostavěno) · **F1: link-audit 100 % CELÉHO publikovaného korpusu** (review-pending
+> **U24** (a11y WCAG 2.2) · **U27** (storytelling) · **U28** (dark mode, PR #765) ·
+> **U21** (manifest — hero/„Proč reforma"/countery/data cards už existují; autorský
+> politický text) · **SÚKL migrace** sukl.cz→sukl.gov.cz (PR #764) ·
+> **F1: link-audit 100 % CELÉHO publikovaného korpusu** (review-pending
 > i partial; 6 paralelních subagentů + ruční dohledávka; ~38 mrtvých odkazů opraveno,
 > gov/anti-bot false-positives podchyceny). **Kritický nález:** 3 publikované články
 > (cmp-iktova-centra, cekaci-doby-kycel, platba-za-vysledek-vzp) měly neuzavřený
 > `<!-- audit:` komentář → renderovaly se prázdné; opraveno. **verified 116 ·
 > review-pending 21 · partial 15**; všech 21 review-pending + 15 partial má F1 marker
 > a zůstává v daném stavu z doložených důvodů (seed indikátor → F4, nebo redakční bod).
-> ZBÝVÁ: **F4** (seed→live → noční ingest, sandbox zakazuje transform; odblokuje
-> většinu zbylých 21 review-pending) · **U22** (Dušek, blok na datový sourcing
-> PUK/ÚZIS) · **U21** manifest + **U28** dark mode (rozhodnutí vlastníka).
+> ZBÝVÁ: **F4** (seed→live) — **je proveditelné v session** (síť na Eurostat/OECD SDMX
+> funguje; sandbox zakazuje jen plný `transform` — hodnoty se ověřují cíleně přes
+> konkrétní fetcher a zapisují ručně, viz PLAN-VERIFIKACE-INDIKATORU.md). Dávka 2026-07-10:
+> `perinatalni_umrtnost` seed→live (Eurostat hlth_cd_aperrto, ověřeno 4,8/2024, přidán
+> mapping, F5 výjimka odebrána). **Nález:** 2 rozbité eurostat mappingy (`nadeje_doziti_zdravi_65`,
+> `ohrozeni_chudobou` → HTTP 400, drift API) k opravě v příští dávce. · **U22** (Duškův
+> brief) zůstává blok na ÚZIS/PUK sourcing (data.mzcr.cz CKAN mrtvý — ruční discovery).
 
 ---
 
@@ -294,12 +300,12 @@ přesně Barometr/články potřebují opakovaně (nespěchá, MCP stačí pro a
 
 | ID | Úkol | Rozsah | Stav |
 |---|---|---|---|
-| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | čeká na schválení vlastníka |
-| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | připraveno, dělit na 2+ sessions |
+| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` + 3 hero count-up cards + **Fáze D inline data cards u všech 7 priorit s indikátory** (P1/P2 doplněny 2026-07-10 dle Codex #766: P1 `platba_z_kapsy_pct`, P2 `spokojenost_informovani`; P4/5/8/10/13 už existovaly; P3/6/7/9/11/12 jsou kvalitativní bez indikátoru). `financovani_per_capita` (P1 návrh) v kontraktu neexistuje → nehádáno. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS) — text needitovat, data cards jsou neutrální HSPA vrstva. |
+| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | ⛔ blok: datový sourcing PUK/ÚZIS (síť/pipeline), dělit na 2+ sessions |
 | U23 | Série Reforma — zbytek: fact-check dílů před publikací (PROMs modul už vyšel) | S–M | připraveno |
-| U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | připraveno |
-| U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | připraveno, vizuální verifikace |
-| U28 | Dark mode (~190 hex + 59 rgba + 25 inline) | L | čeká na rozhodnutí vlastníka |
+| U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | ✅ hotovo (PR #761) |
+| U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | ✅ hotovo (PR #761) |
+| U28 | Dark mode (~190 hex + 59 rgba + 25 inline) | L | ✅ hotovo (PR #765) — tokenový přepínač světlý/tmavý + toggle (desktop i mobil) + kontrast sweep |
 | U29 | SVG interaktivní schéma pák | L | vize |
 | U30 | P3: PROMs roadmap, AI query, gamifikace krajů, resilience indikátory | L | vize |
 
