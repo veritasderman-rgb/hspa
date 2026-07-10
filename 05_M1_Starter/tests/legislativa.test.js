@@ -463,3 +463,33 @@ test('plan_items z reálného datasetu: stavy a typy mají UI labely, overdue od
   assert.ok(ehds);
   assert.equal(isPlanItemOverdue(ehds, now), true);
 });
+
+// ── F7: horizont (výhled 2027–2029) ──
+test('filterPlanByHorizont: rozdělí položky, chybějící horizont = 2026', async () => {
+  const { filterPlanByHorizont, itemHorizont } = await import('../src/legislativa.js');
+  const items = [
+    { id: 'a' },                                  // bez horizontu → 2026
+    { id: 'b', horizont: '2026' },
+    { id: 'c', horizont: 'vyhled-2027-2029' },
+  ];
+  assert.equal(itemHorizont(items[0]), '2026');
+  assert.deepEqual(filterPlanByHorizont(items, '2026').map(x => x.id), ['a', 'b']);
+  assert.deepEqual(filterPlanByHorizont(items, 'vyhled-2027-2029').map(x => x.id), ['c']);
+});
+
+test('data: plan_items mají validní horizont a výhledové položky existují', async () => {
+  const fs = await import('node:fs');
+  const url = await import('node:url');
+  const path = await import('node:path');
+  const root = path.dirname(url.fileURLToPath(import.meta.url));
+  const d = JSON.parse(fs.readFileSync(path.join(root, '..', 'data', 'legislativa.json'), 'utf8'));
+  const VALID = ['2026', 'vyhled-2027-2029'];
+  for (const it of d.plan_items) {
+    assert.ok(it.horizont == null || VALID.includes(it.horizont), `${it.id}: horizont`);
+  }
+  const vyhled = d.plan_items.filter(it => it.horizont === 'vyhled-2027-2029');
+  assert.ok(vyhled.length >= 4, 'aspoň 4 výhledové položky');
+  assert.ok(d.plan_vyhled_meta && /vlada\.gov\.cz/.test(d.plan_vyhled_meta.zdroj_url), 'plan_vyhled_meta se zdrojem');
+  // výhledové položky jsou nezahájené (budoucí horizont)
+  for (const it of vyhled) assert.equal(it.stav, 'nezahajeno', `${it.id} má být nezahajeno`);
+});

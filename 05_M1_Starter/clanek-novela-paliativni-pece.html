@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 <!--
 audit:
-  last_reviewed: 2026-05-16
+  last_reviewed: 2026-07-10
   reviewer: claude-code-agent
   status: review-pending
   priority: P1 (legislativní aktualita — senátní novela 372/2011 Sb. v projednávání; první čtení 11. 2. 2026, výborové projednávání + úprava textu v březnu 2026, kandidát k projednání na plénu Senátu jaro/léto 2026)
@@ -27,6 +27,7 @@ audit:
     update_2026-06-05 (dle issue #510): Doplněn aktualizační aside v těle článku — výbor Senátu pro zdravotnictví doporučil plénu novelu schválit ve znění pozměňovacích návrhů (4 pro, 0 proti, 2 zdrželi), plénum rozhodne během léta 2026, navržená účinnost 1. ledna 2029 (čas na ustavení etických komisí), procesní pojistka druhého nezávislého lékaře. Zdroj: Zdravotnický deník 6/2026 (verbatim „navrhovaná účinnost… je stanovena na 1. ledna 2029"). POZN.: issue #510 uvádělo účinnost 1. 1. 2028 — citovaný primární mediální zdroj však uvádí 2029; použito 2029. Primární zdroj senat.cz (číslo tisku, přesné usnesení) zůstává k ověření — v běžícím prostředí blokován. Audit-status ponechán verified (sourcing přes ZD 6/2026).
     update_2026-06-30 (konzistence se statusem Strategie): Vláda 29. 6. 2026 schválila Strategii rozvoje paliativní péče do 2035 (TZ MZ ČR, ověřeno přímým fetchem) — datový záznam strategie_paliativni_2035 v strategies.json přepnut proposed→active. Opraveny dvě viditelné poznámky ke zdrojům (databox + sekce Zdroje), které tvrdily, že „Strategie zatím není veřejně schválena / zveřejněna" — to je po 29. 6. nepřesné; nově: Strategii schválila vláda 29. 6. 2026, navazující implementační plány (dospělí + děti) se dokončují do 2027. Kapacitní čísla v článku nadále pocházejí z analytické části k 30. 4. 2025 (beze změny). Toto NEní senátní novela paliativní péče (samostatný legislativní proces, status v článku beze změny).
     nightly_scan 2026-07-06 (noční rutina, publikační hygiena): z viditelné poznámky pod článkem odstraněna věta o revizním procesu ("Text byl publikován 15. 5. 2026 a 16. 5. 2026 prošel auditní revizí; podrobnosti viz banner v záhlaví") — redakční proces + odkaz na neexistující banner nepatří do publikovaného textu (CLAUDE.md publikační hygiena). Zdrojové a datové caveaty (Senát, kapacitní data Strategie 2035, ČSPM odhady, schválení vlády 29. 6. 2026) zachovány. Beze změny čísel a tvrzení.
+    nightly_review 2026-07-10 (noční rutina, FÁZE 3 — kontrola aktuálnosti): doplněn dosud chybějící legislativní kontext — kromě zdravotního výboru (doporučil schválit 4:0:2) senátní SOCIÁLNÍ výbor (výbor pro sociální politiku) novelu na červnovém jednání ZAMÍTL (zdroj: Zdravotnický deník, 10. 6. 2026 — socialni-vybor-senat-paliativni-pece; publikováno 10. 6.). Aktualizační aside dosud uváděl jen kladné doporučení zdravotního výboru, což dávalo jednostranný obraz podpory výborů před hlasováním pléna. Ověřeno WebSearch + WebFetch (ZD 10. 6. 2026); primární zdroj senat.cz při zpracování nedostupný (HTTP 503) — konkrétní usnesení a poměr hlasů sociálního výboru zůstávají k ověření na senat.cz. Ověřeno též, že senátní novela zatím NEBYLA doručena do Poslanecké sněmovny (PSP tisky k zákonu 372/2011 neobsahují tuto předlohu — WebFetch psp.cz 2026-07-10); formulace „putuje do Sněmovny" upravena na „do Sněmovny zatím doručena nebyla". Beze změny čísel a stávajících tvrzení; přidán zdroj ZD (sociální výbor) do sekce Zdroje. audit-status verified → review-pending (čeká na ruční schválení). published zůstává true.
 -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="Paliativní péče míří do zákona. Co skutečně mění senátní novela a co (ne)může sama o sobě vyřešit">
@@ -34,7 +35,7 @@ audit:
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-01">
 <meta property="article:section" content="Legislativní iniciativa">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -67,7 +68,7 @@ audit:
         "@id": "https://skorezdravotnictvi.cz/clanek-novela-paliativni-pece"
       },
       "datePublished": "2026-06-01",
-      "dateModified": "2026-05-16",
+      "dateModified": "2026-07-10",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -161,9 +162,9 @@ audit:
 
       <aside class="article-callout" aria-label="Aktualizace k legislativnímu vývoji" style="margin:0 0 24px 0;padding:16px 18px;border:1px solid var(--ink);border-left:4px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:14px;line-height:1.6;">
         <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink);">Aktualizace · 5. června 2026</p>
-        <p style="margin:0 0 8px 0;">Výbor Senátu pro zdravotnictví na začátku června 2026 přijal usnesení, kterým <strong>doporučil plénu novelu schválit ve znění pozměňovacích návrhů</strong> (poměr hlasů 4 pro, nikdo proti, 2 se zdrželi). O osudu novely má <strong>plénum Senátu rozhodovat během léta 2026</strong>; pokud ji horní komora schválí, putuje do Sněmovny.</p>
+        <p style="margin:0 0 8px 0;">Výbor Senátu pro zdravotnictví na začátku června 2026 přijal usnesení, kterým <strong>doporučil plénu novelu schválit ve znění pozměňovacích návrhů</strong> (poměr hlasů 4 pro, nikdo proti, 2 se zdrželi). Postoje senátních výborů se ale rozešly: <strong>senátní sociální výbor</strong> (výbor pro sociální politiku) novelu na svém červnovém jednání <strong>zamítl</strong> (Zdravotnický deník, 10. 6. 2026). O osudu novely má <strong>plénum Senátu rozhodovat během léta 2026</strong>; do Poslanecké sněmovny předloha zatím doručena nebyla.</p>
         <p style="margin:0 0 8px 0;">Upravený text počítá s <strong>nabytím účinnosti od 1. ledna 2029</strong> — odklad má dát zařízením čas zejména na ustavení etických komisí. Novela zároveň zpřísňuje procesní pojistku: rozhodnutí o nezahájení nebo ukončení život udržující léčby či o kontinuální hluboké paliativní sedaci <strong>nesmí učinit ošetřující lékař sám</strong> — povinně se na něm musí podílet další nezávislý lékař mimo ošetřující tým; při sporu s pacientem nebo rodinou se věc eskaluje k širšímu posouzení a v krajním případě k soudu. Upravený text také přejmenoval klíčový pojem z původně zvažované „neadekvátní léčby" na přesnější „nepřiměřenou léčbu".</p>
-        <p style="margin:0;font-size:13px;color:var(--ink-mut);">Zdroj: Zdravotnický deník, 6/2026. Aktuální stav senátního tisku a přesné usnesení výboru doporučujeme ověřit přímo na webu Senátu PČR (senat.cz) — primární zdroj byl při zpracování nedostupný.</p>
+        <p style="margin:0;font-size:13px;color:var(--ink-mut);">Zdroj: Zdravotnický deník, 6/2026 (usnesení zdravotního výboru; zamítnutí sociálním výborem 10. 6. 2026). Aktuální stav senátního tisku a přesná usnesení výborů doporučujeme ověřit přímo na webu Senátu PČR (senat.cz) — primární zdroj byl při zpracování nedostupný.</p>
       </aside>
 
       <p class="article-lead">
@@ -405,6 +406,7 @@ audit:
           <li><strong>Senát PČR — poslední projednávané tisky</strong> — přehled aktuálního legislativního stavu senátní novely. <a href="https://www.senat.cz/dokumenty/posledni_projednavane_tisky.php" target="_blank" rel="noopener">senat.cz ↗</a></li>
           <li><strong>Zdravotnický deník — novela paliativní péče (3/2026)</strong> — zpravodajství o úpravě textu Procházkovou v březnu 2026. <a href="https://www.zdravotnickydenik.cz/2026/03/novela-o-paliativni-peci-senatorka-ji-upravila/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
           <li><strong>Zdravotnický deník — výbor doporučil novelu schválit (6/2026)</strong> — usnesení výboru pro zdravotnictví (4 : 0 : 2), projednání pléna „během léta", navržená účinnost 1. 1. 2029, procesní pojistka druhého nezávislého lékaře. <a href="https://www.zdravotnickydenik.cz/2026/06/konec-marneho-utrpeni-na-pristrojich-senatori-posunuli-dal-zakon-o-dustojne-smrti/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
+          <li><strong>Zdravotnický deník — sociální výbor Senátu novelu odmítl (10. 6. 2026)</strong> — výbor pro sociální politiku novelu na svém červnovém jednání zamítl; postoje senátních výborů se tak rozešly (zdravotní výbor doporučil schválit, sociální výbor zamítl) před rozhodnutím pléna. <a href="https://www.zdravotnickydenik.cz/2026/06/socialni-vybor-senat-paliativni-pece/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">

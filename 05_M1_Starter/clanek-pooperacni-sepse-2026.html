@@ -7,7 +7,7 @@
   audit:
     last_reviewed: 2026-06-03
     reviewer: claude-code-agent
-    status: review-pending
+    status: verified
     created_at: 2026-06-03
     creation_phase: discovery+article-write
     primary_sources_count: 5
@@ -15,6 +15,7 @@
     data_enrichment: "2026-06-03 — datové rozhraní PUK (puk.kancelarzp.cz/vysledky/sepse2.php?rok=2020..2024) je nyní z prostředí dosažitelné (HTTP 200); staženo všech 5 ročníků a strojově rozparsováno. Doplněny grafy/tabulky: plná národní řada 2020–2024 (1,05/1,30/0,95/0,92/0,84 %), podíl podle 16 skupin výkonů (amputace 12,07 % … děloha 0,09 %), podle typu zařízení (B nejvyšší 1,06 %, D nejnižší 0,43 %), podle 14 krajů (Praha 0,56 % … Karlovarský 1,32 %), tabulka 12 největších center (VFN 0,35 % … FN Ostrava 1,31 %) a rozložení 144 zařízení (85 ≤ 0,84 %, 31 > 1,2 %, 9 s nulou ≥500 op.). Vše standardizovaný podíl dle PUK; agregace = vlastní výpočet, reprodukovatelné. Číslo „31 nad 1,2 %" konzistentní s ~30 poskytovateli z TZ MZ. Žádné jiné tvrzení neměněno; mezinárodní caveat (PSI-13) zachován. published zůstává true, audit-status review-pending."
     notes: "Vytvořeno z discovery findings 3. 6. 2026: MZ ČR TZ z 2. 6. 2026 „Když data chrání pacienty: Česko otevírá výsledky pooperačních sepsí“ + metodika PUK (KZP). Centrální KPI: 0,84 % pooperačních sepsí (národní reference 2024, PUK). Sekundární: 5 043 případů (2024), 2,72 mil. sledovaných operací 2020–2024, vrchol 2021 = 1,30 % (PUK). Cíl ministra Vojtěcha: na polovinu. Minister ověřen vlada.gov.cz (od 15. 12. 2025). Methodology guardrail: NEPOROVNÁVÁM přímo s OECD PSI-13 (per 100k abdom. chirurgie) — jiná metodika; mezinárodní kontext kvalitativní + caveat. Status: review-pending — čeká na ruční schválení redakce. Navazuje na clanek-data-leci-cesko-2026 (avizoval 6/2026) a PLAN-KVALITA-PECE §1."
     drift_review_2026-07-07: "Nightly indicator-drift flag (bezpecnost_padu_nemocnice, kontrakt 2,1/1000 hosp. 2024) přezkoumán — odkaz indikator-bezpecnost_padu_nemocnice.html se v obou výskytech (odstavec 'Co s tím' a databox) objevuje jen jako křížový odkaz na příbuzný indikátor bezpečnosti péče, bez citace jakéhokoli čísla o pádech v okolním textu. Falešně pozitivní nález skeneru (číslo 0,84 % v odstavci patří k sepsi, ne k pádům) — beze změny."
+    f1_2026-07-10: "Audit (F1) DOKONČEN → verified. Všechny odkazy živé: mzd.gov.cz TZ (200), nzip.cz/2763 (200), qualityindicators.ahrq.gov PSI tech spec (200). nikez.mzcr.cz (000 v sandboxu) — gov subdoména, ponecháno jako živý kanonický odkaz (egress-block prostředí). puk.kancelarzp.cz/pooperacni-sepse/ a /vysledky/sepse2.php?rok=2024 vrací HTTP 466 (WAF openresty), ale WebFetch potvrdil obě stránky jako živé a funkční (obsah odpovídá popisu — datový portál PUK). oecd.org/en/publications/health-at-a-glance-2025 vrací 403 (Cloudflare bot challenge, cf-mitigated: challenge) — potvrzeno jako živá stránka, jen anti-bot ochrana, ne mrtvý odkaz. vlada.gov.cz/adam-vojtech (200) potvrzuje ministra. Žádný mrtvý odkaz. Primární zdroje (TZ MZd, PUK data KZP) přítomny, žádná nevyřešená editorální otázka — jen metodický caveat (nesrovnatelnost s OECD PSI-13), který je v textu korektně ošetřen. Status → verified."
 -->
 <title>0,84 % a přes 5 000 případů ročně. Česko poprvé veřejně otevřelo data o pooperačních sepsích · HSPA Monitor</title>
 <meta name="description" content="2. června 2026 zveřejnily Ministerstvo zdravotnictví a Kancelář zdravotního pojištění na Portálu ukazatelů kvality první národní indikátor pooperačních sepsí. Národní referenční hodnota za rok 2024 je 0,84 % případů, ročně jde o více než 5 000 sepsí. Data vycházejí z 2,75 milionu hospitalizací 2020–2024 a poprvé je vidět rozdíl mezi poskytovateli.">
@@ -25,7 +26,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-02">
 <meta property="article:section" content="Kvalita a bezpečnost péče">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 

@@ -111,6 +111,17 @@ po Dávce G (Eurostat mortalita/zubní/potraty + OECD kyčel): origin seed 99 | 
   dávka. `farmaceuti_per_100k` (Eurostat hlth_rs_prs1 „historical", frozen 2021 <
   seed 2023). `podil_generik_objem` (OECD DF_GEN_MRKT — jiná agentura/klíč,
   discovery neuzavřen).
+- **Vědomě ponecháno seed — čeká na scale-factor mechanismus (ověřeno živě 2026-07-10):**
+  `plodnost_mladistvych_15_19` — Eurostat `demo_frate` (age=Y15-19, unit=NR) vrací
+  míru **za ženu**: 2024 = **0,00563** (trend 2020–24: 0,00921 → 0,00799 → 0,0072 →
+  0,00614 → 0,00563). Seed je v jednotce **na 1000 žen** = 5,63 → sedí na seed 5,6.
+  Zlivnění NENÍ pouhý mapping: `extractFromEurostat()` bere `cache.cz.value` 1:1 bez
+  přepočtu jednotky, takže by zapsal 0,00563 místo 5,63. Vyžaduje přidat pole `scale`
+  do `eurostat_codes.json` + jeho aplikaci v `extractFromEurostat` (value + trend) a
+  na EU benchmark v `extractBenchmark` + přepnout `data_source.primary.type` karty na
+  `eurostat_jsonstat`. To je změna transform-core → samostatná dávka s unit testem
+  scale (nespouštět full transform v sandboxu — traps.md). Živě ověřená hodnota je
+  výše, takže příští session začíná od řešení, ne od discovery.
 
 **Blokované zdroje (ověřeno 2026-06-10, NEhádat hodnoty):**
 - **ÚZIS / data.gov.cz** — CKAN API `data.gov.cz/api/3/action/*` vrací **404**

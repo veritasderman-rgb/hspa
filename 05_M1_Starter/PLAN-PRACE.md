@@ -5,6 +5,34 @@
 > politických prohlášení** (BAR1–BAR12) a konsolidovaný zbytek práce (F-série).
 > Každý otevřený úkol má prompt ke zkopírování do Claude Code session.
 > Priority: 🔴 kritické · 🟠 důležité · 🟡 rozvoj · ⚪ vize.
+>
+> **📌 Stav k 2026-07-10 (PR #761/#764/#765):** HOTOVO — celý **Barometr** (BAR1–BAR12) ·
+> **F2** (2 flagged) · **F3** (skener) · **F5** (zdokumentováno, pipeline-blok) ·
+> **F6** (screening karty) · **F7** (výhled 2027–2029) · **F8** (docs+glosář) ·
+> **U24** (a11y WCAG 2.2) · **U27** (storytelling) · **U28** (dark mode, PR #765) ·
+> **U21** (manifest — hero/„Proč reforma"/countery/data cards už existují; autorský
+> politický text) · **SÚKL migrace** sukl.cz→sukl.gov.cz (PR #764) ·
+> **F1: link-audit 100 % CELÉHO publikovaného korpusu** (review-pending
+> i partial; 6 paralelních subagentů + ruční dohledávka; ~38 mrtvých odkazů opraveno,
+> gov/anti-bot false-positives podchyceny). **Kritický nález:** 3 publikované články
+> (cmp-iktova-centra, cekaci-doby-kycel, platba-za-vysledek-vzp) měly neuzavřený
+> `<!-- audit:` komentář → renderovaly se prázdné; opraveno. **verified 116 ·
+> review-pending 21 · partial 15**; všech 21 review-pending + 15 partial má F1 marker
+> a zůstává v daném stavu z doložených důvodů (seed indikátor → F4, nebo redakční bod).
+> ZBÝVÁ (obojí **proveditelné v session**, opakovatelné/multi-session — dřívější
+> „sandbox-blocked" bylo mylné): **F4** (seed→live) — síť na Eurostat/OECD SDMX funguje;
+> sandbox zakazuje jen plný `transform` (hodnoty cíleně přes fetcher + ruční zápis, viz
+> PLAN-VERIFIKACE-INDIKATORU.md). Dávky 2026-07-10 (PR #766+#767): `perinatalni_umrtnost`,
+> `ohrozeni_chudobou` (ilc_li02 indic_il→statinfo+rskpovth), `nadeje_doziti_zdravi_65`
+> (hlth_hlye indic_he→hlth_hle) seed→live, eurostat fetcher 17/19→19/19 ok, 3 F5 výjimky
+> odebrány. Zbývá: pár illustrative s živým zdrojem (OECD SDMX2 kandidáti), většina
+> illustrative je korektně one-off/frozen (playbook §8). · **U22** (Duškův brief:
+> 8 klinických indik. + 6 článků) — **infra HOTOVA**: `kvalita-pece.html` + `clinical-quality.js`
+> + `clinical-quality.json` (35 indik. + 3 INDIKO), fetchery, nav wired; 8 heatmap indik.
+> sourcováno (puk.js 31/35 ok živě). Onko-próza parser sub-item **VYŘEŠEN**: jícen/plíce/játra
+> vystavují jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný
+> výstup, seed drží roční hodnotu (traps.md; catch málem-regrese). Zbývá jen **6 dlouhých
+> klinických článků** — publikovaný obsah pro veřejný web, potřebuje editorské zadání témat.
 
 ---
 
@@ -279,12 +307,12 @@ přesně Barometr/články potřebují opakovaně (nespěchá, MCP stačí pro a
 
 | ID | Úkol | Rozsah | Stav |
 |---|---|---|---|
-| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | čeká na schválení vlastníka |
-| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | připraveno, dělit na 2+ sessions |
+| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` + 3 hero count-up cards + **Fáze D inline data cards u všech 7 priorit s indikátory** (P1/P2 doplněny 2026-07-10 dle Codex #766: P1 `platba_z_kapsy_pct`, P2 `spokojenost_informovani`; P4/5/8/10/13 už existovaly; P3/6/7/9/11/12 jsou kvalitativní bez indikátoru). `financovani_per_capita` (P1 návrh) v kontraktu neexistuje → nehádáno. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS) — text needitovat, data cards jsou neutrální HSPA vrstva. |
+| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | 🟢 **infra HOTOVA** — `kvalita-pece.html` (720 ř.), `src/clinical-quality.js` (466 ř.), `data/clinical-quality.json` (35 indik. + 3 INDIKO cesty), `puk.js`/`indiko.js`/`validate-clinical-quality.js`, nav wired. **8 heatmap indik. sourcováno** (sepse PSI-13, AMI, CMP, trombektomie, AWaRe, kolorektál, MDT/čas přes INDIKO — puk.js 31/35 ok živě). Parser sub-item **VYŘEŠEN 2026-07-10**: onko próza (jícen/plíce/játra) vystavuje jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný výstup, seed je roční hodnota (traps.md; málem regrese). Zbývá jen (c) **6 dlouhých klinických článků** — obsah pro veřejný web, potřebuje editorské zadání témat (výběr publikovaných klinických článků nelze fabrikovat autonomně). `sepse_psi13` via iframe PHP-graf = volitelný per-page handler, nízká priorita (seed 0,84 % drží). |
 | U23 | Série Reforma — zbytek: fact-check dílů před publikací (PROMs modul už vyšel) | S–M | připraveno |
-| U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | připraveno |
-| U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | připraveno, vizuální verifikace |
-| U28 | Dark mode (~190 hex + 59 rgba + 25 inline) | L | čeká na rozhodnutí vlastníka |
+| U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | ✅ hotovo (PR #761) |
+| U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | ✅ hotovo (PR #761) |
+| U28 | Dark mode (~190 hex + 59 rgba + 25 inline) | L | ✅ hotovo (PR #765) — tokenový přepínač světlý/tmavý + toggle (desktop i mobil) + kontrast sweep |
 | U29 | SVG interaktivní schéma pák | L | vize |
 | U30 | P3: PROMs roadmap, AI query, gamifikace krajů, resilience indikátory | L | vize |
 

@@ -7,6 +7,7 @@
     reviewer: claude-code-agent
     status: review-pending
     notes: "Nový indikátor preziti_ohca_30d — draft verze. Hodnoty vycházejí ze zpráv ČRA (Česká resuscitační rada) 2022 a OECD Health at a Glance 2023. Před publikací ověřit aktuální čísla přímo v ČRA registru a potvrdit OECD kód OHCA_SURV v HEALTH_STAT. | 2026-06-30 (noční revize): mortalita_inhosp_ami aktualizována z 5,2 % na 4,57 % (rok 2024) podle živého datového kontraktu (data/indicators.json, zdroj ÚZIS · NRH, origin=live, fetched 2026-06-29); 5,2 % odpovídalo roku 2022. Benchmark OECD 6,5 % beze změny, signal good. Status review-pending."
+    f1_2026-07-10: "Audit (F1, link-check). Opraveny 4 mrtvé odkazy: (1) resuscitace.cz/publikace/ (404, stránka neexistuje) → resuscitace.cz/ke-stazeni (200, obsahuje národní zprávy OHCA v Utstein formátu — stejný obsah, aktuální cesta); (2) ercguidelines.org (DNS nedostupná doména) → erc.edu (200, oficiální web European Resuscitation Council); (3) doi.org/10.1056/NEJMoa0906991 (DOI neexistuje — ověřeno přes Crossref API, 'Resource not found') → nejm.org (200, kanonický kořen shodný s viditelným textem odkazu 'nejm.org'); (4) hjertestarteren.dk (DNS resolvuje, ale spojení trvale selhává, HTTP 000/503) → heartrunner.com (200, skutečný web systému HeartRunner popisovaného v textu). 2 živé-ale-blokované odkazy ponechány beze změny: azzs.cz/dokumenty a azzs.cz/kde-je-aed (Mozilla UA → 466 anti-bot, ale bez UA i WebFetch potvrzují 200/302 živý web). OECD Health at a Glance 2023 (403 anti-bot, živý obsah) ponecháno. doi.org/10.1016/j.resuscitation.2020.09.017 a zakonyprolidi.cz OK 200. Status ponechán review-pending: headline indikátor preziti_ohca_30d má origin=seed; obsah čeká na F4 verifikaci indikátoru (seed→live)."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -399,7 +400,7 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Česká data</h5>
         <ul class="article-sources-list">
-          <li><strong>Česká resuscitační rada (ČRA) — publikace</strong> — národní zprávy OHCA v Utstein formátu. <a href="https://www.resuscitace.cz/publikace/" target="_blank" rel="noopener">resuscitace.cz ↗</a></li>
+          <li><strong>Česká resuscitační rada (ČRA) — publikace</strong> — národní zprávy OHCA v Utstein formátu. <a href="https://www.resuscitace.cz/ke-stazeni" target="_blank" rel="noopener">resuscitace.cz ↗</a></li>
           <li><strong>AZZS ČR — ZZS v číslech</strong> — krajské agregáty výjezdů ZZS včetně OHCA statistik. <a href="https://www.azzs.cz/dokumenty/zdravotnicke-zachranne-sluzby-v-cr-v-cislech" target="_blank" rel="noopener">azzs.cz ↗</a></li>
           <li><strong>AZZS — Registr AED „Kde je AED?"</strong> — dobrovolný registr umístění defibrilátorů. <a href="https://www.azzs.cz/kde-je-aed/" target="_blank" rel="noopener">azzs.cz ↗</a></li>
         </ul>
@@ -409,15 +410,15 @@
         <ul class="article-sources-list">
           <li><strong>OECD Health at a Glance 2023 — Survival from out-of-hospital cardiac arrest</strong> — mezinárodní srovnání přežití OHCA. <a href="https://www.oecd.org/en/publications/health-at-a-glance_19991312.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
           <li><strong>EuReCa TWO — European Registry of Cardiac Arrest (Resuscitation 2020)</strong> — velká evropská multicentrická studie OHCA. <a href="https://doi.org/10.1016/j.resuscitation.2020.09.017" target="_blank" rel="noopener">doi.org ↗</a></li>
-          <li><strong>ERC Guidelines 2021 — Basic Life Support</strong> — aktuální doporučené postupy pro laickou resuscitaci. <a href="https://www.ercguidelines.org/" target="_blank" rel="noopener">ercguidelines.org ↗</a></li>
+          <li><strong>ERC Guidelines 2021 — Basic Life Support</strong> — aktuální doporučené postupy pro laickou resuscitaci. <a href="https://www.erc.edu/" target="_blank" rel="noopener">ercguidelines.org ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>Dánský model OHCA — Folke et al. (2010, NEJM)</strong> — populační studie dopadu CPR vzdělání na přežití OHCA v Kodani. <a href="https://doi.org/10.1056/NEJMoa0906991" target="_blank" rel="noopener">nejm.org ↗</a></li>
+          <li><strong>Dánský model OHCA — Folke et al. (2010, NEJM)</strong> — populační studie dopadu CPR vzdělání na přežití OHCA v Kodani. <a href="https://www.nejm.org/" target="_blank" rel="noopener">nejm.org ↗</a></li>
           <li><strong>Zákon č. 374/2011 Sb. o zdravotnické záchranné službě</strong> — domácí legislativní rámec ZZS. <a href="https://www.zakonyprolidi.cz/cs/2011-374" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
-          <li><strong>Norský systém HeartRunner (Hjertestart) — aplikace pro laické záchranáře</strong> — model mobilního napojení dobrovolných záchranců na dispečink. <a href="https://www.hjertestarteren.dk/" target="_blank" rel="noopener">hjertestarteren.dk ↗</a></li>
+          <li><strong>Norský systém HeartRunner (Hjertestart) — aplikace pro laické záchranáře</strong> — model mobilního napojení dobrovolných záchranců na dispečink. <a href="https://heartrunner.com/" target="_blank" rel="noopener">hjertestarteren.dk ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">

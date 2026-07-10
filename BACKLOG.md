@@ -1,6 +1,10 @@
 # HSPA Monitor — Backlog
 
 > **Aktualizováno: 2026-05-31** na základě úplného auditu historických plánů vs. reálný stav kódu.
+> **⚠️ 2026-07-10: dokument je HISTORICKÝ.** Aktuální vstupní bod pro další vývoj je
+> [`05_M1_Starter/PLAN-PRACE.md`](05_M1_Starter/PLAN-PRACE.md) (v2) — velká část zdejších
+> položek byla vyřešena v PR #740–#761 (freshness gate, publikační fronta, Legislativní
+> radar + plán MZ, Barometr politických prohlášení, Souvislosti, audit článků).
 > Formát: každá otevřená položka má **stav, příčinu, konkrétní plán a blocker**, aby byla rovnou proveditelná.
 
 ## Legenda

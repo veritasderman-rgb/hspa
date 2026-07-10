@@ -2,14 +2,15 @@
   "_doc": "Mapování HSPA indicator_id → Eurostat dataset + filtr. Eurostat slouží jako primární zdroj pro EU-SILC indikátory (HLY) a jako záložní pro EU benchmarky.",
   "indicators": {
     "nadeje_doziti_zdravi_65": {
-      "_doc": "Healthy life years at age 65. Eurostat hlth_hlye nemá samostatnou dimenzi 'age' — věk je zakódován v indic_he (HLY_0=birth, HLY_50, HLY_65). Předchozí mapping age=Y65, indic_he=F vrátil HTTP 400 (F není platný indic_he kód).",
+      "_doc": "Healthy life years at 65. Eurostat hlth_hlye restrukturalizoval: dimenze indic_he→hlth_hle, kód HLY_65→HLY_Y65, nutný unit=YR. Ověřeno živě 2026-07-10: CZ 8,0 (2024), EU27 10,3.",
       "dataset": "hlth_hlye",
       "country_dim": "geo",
       "cz_code": "CZ",
       "eu_code": "EU27_2020",
       "filter_extra": {
         "sex": "T",
-        "indic_he": "HLY_65"
+        "hlth_hle": "HLY_Y65",
+        "unit": "YR"
       }
     },
     "nadeje_doziti_total": {
@@ -141,15 +142,16 @@
       }
     },
     "ohrozeni_chudobou": {
-      "_doc": "At-risk-of-poverty rate (ilc_li02, indic_il=LI_R_MD60 = 60% mediánu ekviv. příjmu). Přepnuto z ČSÚ DataStat 2026-06-01: ČSÚ data.csu.gov.cz POST API (vlastni výběr) vrací 400/500, Eurostat dodává tutéž SILC metriku spolehlivě. ČR i EU ze stejného datasetu.",
+      "_doc": "At-risk-of-poverty rate (ilc_li02). Eurostat restrukturalizoval: indic_il→statinfo+rskpovth. AROP = statinfo=MED_EI (60% mediánu) + rskpovth=B_60. Ověřeno živě 2026-07-10: CZ 9,6 % (2025). POZOR: MEAN_EI/B_60 dává 14,1 % (60% průměru, jiná metrika).",
       "dataset": "ilc_li02",
       "country_dim": "geo",
       "cz_code": "CZ",
       "eu_code": "EU27_2020",
       "filter_extra": {
+        "statinfo": "MED_EI",
+        "rskpovth": "B_60",
         "sex": "T",
         "age": "TOTAL",
-        "indic_il": "LI_R_MD60",
         "unit": "PC"
       }
     },
@@ -226,6 +228,18 @@
       "cz_code": "CZ",
       "filter_extra": {
         "indic_de": "ABORTRT",
+        "unit": "RT"
+      }
+    },
+    "perinatalni_umrtnost": {
+      "_doc": "Perinatální úmrtnost /1000 (mortalit=PERI). Ověřeno živě 2026-07-10: CZ 5,3 (2022) → 4,8 (2023) → 4,8 (2024); EU27 5,4 (2023).",
+      "dataset": "hlth_cd_aperrto",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "mortalit": "PERI",
+        "resid": "TOT_IN",
         "unit": "RT"
       }
     }

@@ -116,3 +116,76 @@ test('findIndicatorDrift: jednociferná varianta nematchne uvnitř letopočtu (b
   const ok = '<p>Pádů je 2,1 na 1 000 hospitalizací (2024) — <a href="indikator-pad_ind.html">detail</a></p>';
   assert.equal(findIndicatorDrift(ok, byId).length, 0);
 });
+
+// --- F3: ladění nočního skeneru (2 doložené vzory šumu, PLAN-PRACE.md) ---
+
+test('findIndicatorDrift vzor 1: atribuční „<a>Label</a> (RRRR)" neflaguje (zdrojová poznámka, ne citace)', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([
+    ['vakcinace_mmr_deti', { id: 'vakcinace_mmr_deti', value: 83.7, unit: '%', year: 2022 }],
+    ['vakcinace_chripka_65', { id: 'vakcinace_chripka_65', value: 24.5, unit: '%', year: 2025 }],
+  ]);
+  // Přesně vzor z drift-revize: "Zdroj: … — MMR (2022), chřipka 65+ (2025)."
+  // Label "chřipka 65+" nese vlastní číslo (65) — bez odstranění labelu by
+  // samo o sobě falešně "otevřelo" kontrolu, i když jde jen o název indikátoru.
+  const html = `<p class="av-figure-note"><strong>Zdroj:</strong> dashboard HSPA Monitoru —
+    <a href="indikator-vakcinace_mmr_deti.html">MMR</a> (2022),
+    <a href="indikator-vakcinace_chripka_65.html">chřipka 65+</a> (2025).
+    Zdroj dat OECD/SZÚ.</p>`;
+  assert.equal(findIndicatorDrift(html, byId).length, 0, 'atribuční rok+label se nemá brát jako citace');
+});
+
+test('findIndicatorDrift vzor 1: skutečná citace se stejným rokem v závorce dál flaguje', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }]]);
+  // Rok v závorce NENÍ bezprostředně za </a> (je tam ještě text s číslem) →
+  // musí se pořád vyhodnotit jako citace a zachytit drift (35,8 ≠ 98,7).
+  const html = '<p>Hodnota <a href="indikator-foo_ind.html">Foo</a> — ČR 35,8 % (2022) vs. OECD 91 %.</p>';
+  const drifts = findIndicatorDrift(html, byId);
+  assert.equal(drifts.length, 1, 'citace s hodnotou před rokem v závorce se nesmí ignorovat');
+});
+
+test('findIndicatorDrift vzor 2: položka „article-list-bullets" bez čísla s jednotkou neflaguje', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([
+    ['psychiatri_per_100k', { id: 'psychiatri_per_100k', value: 13, unit: '/ 100 000', year: 2024 }],
+  ]);
+  // Přesně vzor z clanek-czechsex-sexualni-nasili.html: položka jen odkazuje
+  // na téma ("kapacita systému"), label sám nese "100 000" z názvu indikátoru.
+  const html = `<ul class="article-list-bullets">
+      <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 000 obyvatel</strong></a> — kapacita systému</li>
+    </ul>`;
+  assert.equal(findIndicatorDrift(html, byId).length, 0, 'položka bez citace hodnoty se nemá flagovat');
+});
+
+test('findIndicatorDrift vzor 2: položka „article-list-bullets" SE skutečnou zastaralou citací dál flaguje', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }]]);
+  // Položka stejného typu seznamu, ale TENTOKRÁT s citovanou (zastaralou) hodnotou.
+  const html = `<ul class="article-list-bullets">
+      <li><a href="indikator-foo_ind.html"><strong>Foo indikátor</strong></a> — ČR 35,8 % vs. OECD 91 %</li>
+    </ul>`;
+  const drifts = findIndicatorDrift(html, byId);
+  assert.equal(drifts.length, 1, 'citovaná hodnota v položce seznamu se pořád musí ověřit');
+});
+
+test('findIndicatorDrift vzor 2: seznam BEZ třídy article-list-bullets se chová jako dřív (nechráněný)', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([['foo_ind', { id: 'foo_ind', value: 98.7, unit: '%', year: 2022 }]]);
+  // Obyčejná <li> bez obklopujícího <ul class="article-list-bullets"> — širší
+  // okno se použije jako dřív; citace za odkazem (mimo <li>) se pořád najde.
+  const html = '<li><a href="indikator-foo_ind.html">Foo</a> — 35,8 % vs. OECD 91 %</li>';
+  assert.equal(findIndicatorDrift(html, byId).length, 1);
+});
+
+test('findIndicatorDrift: přeťatý sousední odkaz na okraji okna nezanechá zbytek atributu jako falešné číslo', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([
+    ['bar_ind', { id: 'bar_ind', value: 5, unit: '%', year: 2024 }],
+  ]);
+  // Odkaz na JINÝ indikátor s "per_100k" v id těsně před zkoumaným odkazem —
+  // hranice okna (m.index - 60) by bez ochrany řízla doprostřed jeho href
+  // atributu a zanechala by "…per_100k.html">" jako text s číslicemi.
+  const html = '<p>Souvisí s hustotou <a href="indikator-nejaky_jiny_per_100k.html">psychiatrů</a> a spotřebou <a href="indikator-bar_ind.html">antidepresiv</a>; bez konkrétní hodnoty.</p>';
+  assert.equal(findIndicatorDrift(html, byId).length, 0, 'zbytek href sousedního odkazu se nesmí počítat jako citace');
+});

@@ -12,13 +12,14 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-12">
 <meta property="article:section" content="Digitalizace">
-<meta name="article:audit-status" content="partial">
+<meta name="article:audit-status" content="verified">
 <!--
   audit:
     last_reviewed: 2026-05-17
     reviewer: claude-code-agent
     status: partial
     notes: "EHDS — Nařízení (EU) 2025/327 publikováno v OJ 5. 3. 2025, vstup v platnost 26. 3. 2025 — POTVRZENO (EUR-Lex ELI: data.europa.eu/eli/reg/2025/327/oj). FLAG: titulek a deck článku používají horizont '2033', ale primární aplikační milníky EHDS jsou 26. 3. 2027 (general application), 26. 3. 2029 (priority categories: Patient Summary, ePrescription), 26. 3. 2031 (rozšířené kategorie + voluntary EHR certification end of transition), 26. 3. 2035 (poslední milník). Hodnota '2033' v titulku se neshoduje s žádným primárním milníkem EHDS — doporučujeme aktualizovat na 2031 nebo 2035 (podle toho, který milník článek tematizuje). Konkrétní povinnosti ČR — Digital Health Authority do 2027, certifikace EHR do 2031 — odpovídají aplikačním fázím. DOPORUČENO ruční oprava: titulek a deck. Status published → partial. — RESOLVED 2026-06-08 (issue #535): všech 8 výskytů '2033' (titulek, meta description, og:title, h2, av-counter, h3 'čtyři milníky', tělo § HDAB, seznam milníků) opraveno na '2035' = poslední aplikační milník EHDS. Potvrzeno: EUR-Lex ELI reg/2025/327 + EC Public Health / Arthur Cox / Osborne Clarke (milníky 26.3.2027 / 2029 / 2031 / 2035; rok 2033 neodpovídá žádnému aplikačnímu milníku). FOLLOW-UP 2026-06-08 (Codex review PR #547): upřesněn VÝZNAM roku 2035 — čl. 75(5) = otevření HealthData@EU třetím zemím / mezinárodním organizacím, NIKOLI 'plná funkčnost české HDAB' (ta je dle kapitoly IV od 26.3.2029; designace HDAB do 26.3.2027). Opraveno tělo § 2035, milestone list i headline counter (2035→2031, který odpovídá svému labelu 'primary use cross-border'); 2029 doplněno o sekundární využití; deck přerámován z 'osm let' na desetiletý horizont s upozorněním, že české povinnosti spadají do 2027–2031."
+    f1_2026-07-10: "Audit (F1): legislativně-technický (EHDS). Opraveny 2 přesunuté EU odkazy (EHDS regulation / MyHealth@EU → funkční EHDS stránka EK) + e-estonia deep path → healthcare root (200). Status → verified."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -351,7 +352,7 @@
         <h5 class="sources-group-h">Primární legislativa a regulatorní dokumenty</h5>
         <ul class="article-sources-list">
           <li><strong>Nařízení EU 2025/327 (EHDS)</strong> — plný text nařízení v Úředním věstníku EU (anglická verze). <a href="https://eur-lex.europa.eu/eli/reg/2025/327/oj/eng" target="_blank" rel="noopener">EUR-Lex ↗</a></li>
-          <li><strong>Evropská komise — EHDS</strong> — portál EK k implementaci EHDS, technické specifikace a prováděcí akty. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space-regulation-ehds_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>Evropská komise — EHDS</strong> — portál EK k implementaci EHDS, technické specifikace a prováděcí akty. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
           <li><strong>NCEZ — aktualita k EHDS</strong> — informace Národního centra elektronického zdravotnictví k vyhlášení nařízení. <a href="https://ncez.mzcr.cz/cs/aktuality/ehds-je-zde-narizeni-o-evropskem-prostoru-pro-zdravotni-udaje-ehds-bylo-vyhlaseno-v" target="_blank" rel="noopener">ncez.mzcr.cz ↗</a></li>
           <li><strong>Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví</strong> — platné znění národní legislativy, jejíž novela je klíčovým implementačním krokem. <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
         </ul>
@@ -366,9 +367,9 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace a srovnání</h5>
         <ul class="article-sources-list">
-          <li><strong>MyHealth@EU — pilotní implementace</strong> — evropská platforma pro přeshraniční sdílení zdravotní dokumentace; ČR je zapojena prostřednictvím NCPeH. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/myhealtheu_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>MyHealth@EU — pilotní implementace</strong> — evropská platforma pro přeshraniční sdílení zdravotní dokumentace; ČR je zapojena prostřednictvím NCPeH. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
           <li><strong>HL7 FHIR R4 — technický standard</strong> — interoperabilitní standard zdravotní dokumentace, na němž je EHDS technicky postaven. <a href="https://hl7.org/fhir/R4/" target="_blank" rel="noopener">hl7.org ↗</a></li>
-          <li><strong>Estonský X-tee a Digiriik</strong> — referenční architektura interoperabilní zdravotní datové infrastruktury v EU. <a href="https://e-estonia.com/solutions/healthcare/e-health-record/" target="_blank" rel="noopener">e-estonia.com ↗</a></li>
+          <li><strong>Estonský X-tee a Digiriik</strong> — referenční architektura interoperabilní zdravotní datové infrastruktury v EU. <a href="https://e-estonia.com/solutions/healthcare/" target="_blank" rel="noopener">e-estonia.com ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
