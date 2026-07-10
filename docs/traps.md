@@ -341,3 +341,25 @@ indikátory zpět na ilustrativní.
 **vyjmuty z .gitignore** (`ingest/cache/*` + `!ingest/cache/nzip_*.json`) a
 commitnuty. Transform je v cronu čte → indikátory zůstávají live. Roční obnova
 hodnot: `npm run ingest:nzip` (přepíše cache novými daty), pak commit.
+
+### PUK onko-chirurgie: „národní referenční hodnota" ≠ hodnota za aktuální rok (2026-07-10)
+
+**Trap**: Onko-chirurgické stránky PUK (`90denni-mortalita-po-resekci-karcinomu-jicnu`,
+`...-plic`, `mortalita-po-resekci-jater`) nemají hodnotu v CanvasJS stripLine, jen
+v próze. Text zní „**Národní referenční hodnota** 90denní standardizované mortality
+činí **za sledované období** 7,28 %". To je **víceletý referenční benchmark**, NE
+hodnota za aktuální rok. Skutečná hodnota roku je zmíněna zvlášť („V roce 2024 došlo
+k poklesu mortality (**3,18 %**)") a přesně ta už je v `clinical-quality.json` jako
+seed. Naivní parser na „národní referenční hodnota … činí … X %" tedy vytáhne
+**špatné číslo**:
+- jícen: referenční 7,28 % vs. skutečný rok 2024 = **3,18 %** (seed je správně)
+- plíce: referenční 2,80 % (období 2022–2024) vs. seed **2,34 %** (rok 2024)
+- játra: referenční „3,15 % (**30**denní), resp. 7,22 % (**90**denní)" — parser navíc
+  chytne 30d místo 90d; seed **5,19 %** (rok 2024)
+
+**Řešení**: NEscrapovat value_national z prózy těchto stránek. `parsed-no-value` je
+tady **správný** výstup — `transform_clinical_quality.js` ho přeskočí a zachová
+správnou seed hodnotu (aktuální rok). Případný referenční benchmark by patřil do
+samostatného pole (`reference_value`), ne do `value_national`. Ověřeno 2026-07-10:
+pokus přidat „strategy 5 (body-text-referencni)" do `extractNationalValue()` byl
+revertován, protože degradoval 3 správné seedy.
