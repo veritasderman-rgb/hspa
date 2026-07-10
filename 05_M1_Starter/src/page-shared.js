@@ -1006,3 +1006,42 @@ function boldEnumPrefix(html) {
   const cap = topic.charAt(0).toLocaleUpperCase('cs-CZ') + topic.slice(1);
   return `<strong>${cap}</strong> ${m[2]} ${m[3]}`;
 }
+
+/**
+ * Kanonický seznam interaktivních nástrojů webu — jediný zdroj pravdy pro
+ * prolinkování mezi nástroji navzájem (blok „Prozkoumejte dál" na každé
+ * nástrojové stránce) i pro homepage sekci.
+ */
+export const SITE_TOOLS = [
+  { id: 'simulator',     href: 'simulator.html',     label: 'Simulátor pák',
+    desc: 'Posuňte reformní páku a uvidíte modelový dopad na indikátory.', verb: 'Zkusit simulátor' },
+  { id: 'kompas',        href: 'kompas.html',        label: 'Osobní zdravotní kompas',
+    desc: 'Zadejte věk a kraj a zjistěte, co se v prevenci týká právě vás.', verb: 'Otevřít kompas' },
+  { id: 'barometr',      href: 'barometr.html',      label: 'Barometr politických prohlášení',
+    desc: 'Držíme politiky za slovo — sliby vlády vs. čísla, která měříme.', verb: 'Otevřít barometr' },
+  { id: 'model-systemu', href: 'model-systemu.html', label: 'Model systému',
+    desc: 'Interaktivní kauzální mapa: kudy se problém propisuje systémem.', verb: 'Prozkoumat model' },
+];
+
+/**
+ * Vyrenderuje blok „Prozkoumejte dál" — karty ostatních nástrojů (kromě
+ * aktivního) — do elementu #toolSiblings, je-li na stránce přítomen.
+ * Zajišťuje, že jsou nástroje provázané mezi sebou z jednoho zdroje pravdy.
+ * @param {string} activeId  id aktuálního nástroje (vyloučí se ze seznamu)
+ */
+export function renderRelatedTools(activeId, el = (typeof document !== 'undefined' ? document.getElementById('toolSiblings') : null)) {
+  if (!el) return;
+  const others = SITE_TOOLS.filter(t => t.id !== activeId);
+  if (!others.length) return;
+  el.innerHTML = `
+    <div class="ed-kicker">Prozkoumejte dál</div>
+    <h2 class="tool-siblings-h">Další interaktivní nástroje</h2>
+    <div class="tool-siblings-grid">
+      ${others.map(t => `
+        <a class="tool-sibling-card" href="${t.href}">
+          <span class="tool-sibling-title">${escapeHtml(t.label)}</span>
+          <span class="tool-sibling-desc">${escapeHtml(t.desc)}</span>
+          <span class="tool-sibling-cta">${escapeHtml(t.verb)} →</span>
+        </a>`).join('')}
+    </div>`;
+}
