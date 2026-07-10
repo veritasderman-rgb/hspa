@@ -114,7 +114,31 @@ function datasetJsonLd(ind, card, url, indexable) {
   return `<script type="application/ld+json">\n${JSON.stringify(ld, null, 2)}\n</script>`;
 }
 
-export function buildPage(ind, card) {
+/** Kompaktní statická sekce Souvislosti (plné zobrazení má interaktivní detail). */
+function souvislostiStatic(bucket) {
+  if (!bucket) return '';
+  const bits = [];
+  if (bucket.model?.node) {
+    bits.push(`<li>V kauzální mapě systému patří k páce <strong>${esc(bucket.model.node.label)}</strong> — <a href="model-systemu.html">mapa systému</a></li>`);
+  }
+  if (bucket.legislativa?.length) {
+    bits.push(`<li>${bucket.legislativa.length}× související legislativa v procesu — <a href="legislativa.html">Legislativní radar</a></li>`);
+  }
+  const nCom = bucket.barometr?.commitments?.length ?? 0;
+  const nSt = bucket.barometr?.statements?.length ?? 0;
+  if (nCom || nSt) {
+    const what = [nCom ? `${nCom}× závazek vlády` : null, nSt ? `${nSt}× výrok v Ověřovně` : null].filter(Boolean).join(', ');
+    bits.push(`<li>${what} — <a href="barometr.html">Barometr politických prohlášení</a></li>`);
+  }
+  if (!bits.length) return '';
+  return `
+    <section class="ind-section suv-section">
+      <h2>Souvislosti</h2>
+      <ul class="suv-list">${bits.join('')}</ul>
+    </section>`;
+}
+
+export function buildPage(ind, card, suvBucket) {
   const slug = `${PAGE_PREFIX}${ind.id}.html`;
   const url = `${SITE_BASE}/${canonicalPath(slug)}`;
   const status = resolveStatus(ind);
@@ -214,6 +238,8 @@ ${methodRows}
       ${src.fetched_at ? `<p class="ind-source-meta">Staženo: ${esc(String(src.fetched_at).slice(0, 10))}${ind.verified_at ? ` · ověřeno: ${esc(ind.verified_at)}` : ''} · původ: ${esc(src.origin || '—')}</p>` : ''}
     </section>
 
+    ${souvislostiStatic(suvBucket)}
+
     <p class="ind-interactive-cta">
       <a class="btn btn-primary" href="${interactiveUrl}">Interaktivní detail: graf trendu a krajská mapa →</a>
     </p>
@@ -241,13 +267,20 @@ function loadCard(ind) {
   try { return JSON.parse(readFileSync(p, 'utf8')); } catch { return null; }
 }
 
+function loadSouvislosti() {
+  const p = resolve(ROOT, 'data/souvislosti.json');
+  if (!existsSync(p)) return {};
+  try { return JSON.parse(readFileSync(p, 'utf8')).indicators ?? {}; } catch { return {}; }
+}
+
 function main() {
   const inds = JSON.parse(readFileSync(resolve(ROOT, 'data/indicators.json'), 'utf8')).indicators ?? [];
+  const suv = loadSouvislosti();
   const wantSlugs = new Set();
   let written = 0, indexable = 0;
   for (const ind of inds) {
     const card = loadCard(ind);
-    const { slug, html, indexable: idx } = buildPage(ind, card);
+    const { slug, html, indexable: idx } = buildPage(ind, card, suv[ind.id]);
     wantSlugs.add(slug);
     if (idx) indexable++;
     if (!DRY) writeFileSync(resolve(ROOT, slug), html);
