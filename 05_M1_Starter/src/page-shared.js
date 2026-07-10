@@ -5,6 +5,52 @@ import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
 import { submitNewsletterSignup } from './newsletter-signup.js';
 
+/* ── Dark mode: brzká inicializace tématu ───────────────────────────────
+   Nastaví data-theme z uložené volby co nejdřív (při načtení modulu), aby
+   uživatelé s ručně zvoleným tématem viděli minimum probliknutí. Uživatelé
+   bez volby dědí prefers-color-scheme přímo z CSS (bez JS, bez probliknutí). */
+export const THEME_KEY = 'hspa-theme';
+(function initThemeEarly() {
+  try {
+    const t = localStorage.getItem(THEME_KEY);
+    if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+  } catch (_) { /* private mode / no storage → dědí systémové téma */ }
+})();
+
+/** Aktuální efektivní téma ('dark' | 'light') podle data-theme nebo systému. */
+export function currentTheme() {
+  const explicit = document.documentElement.getAttribute('data-theme');
+  if (explicit === 'dark' || explicit === 'light') return explicit;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+const THEME_ICON = {
+  dark: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.03-.92-.1-1.36a5.5 5.5 0 0 1-7.54-7.54C12.92 3.03 12.46 3 12 3z"/></svg>',
+  light: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5v2m0 16v2M4.2 4.2l1.4 1.4m12.8 12.8 1.4 1.4M2 12h2m16 0h2M4.2 19.8l1.4-1.4M17.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>',
+};
+
+/** HTML přepínače tématu do nav lišty. */
+export function themeToggleHtml() {
+  const eff = currentTheme();
+  const next = eff === 'dark' ? 'light' : 'dark';
+  return `<button type="button" class="theme-toggle" id="themeToggle" aria-label="Přepnout na ${next === 'dark' ? 'tmavý' : 'světlý'} režim" aria-pressed="${eff === 'dark'}" title="Přepnout světlý/tmavý režim">${eff === 'dark' ? THEME_ICON.light : THEME_ICON.dark}</button>`;
+}
+
+/** Naváže přepínač tématu: přepne data-theme, uloží volbu, aktualizuje ikonu/aria. */
+export function wireThemeToggle() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (_) { /* ignore */ }
+    const nextNext = next === 'dark' ? 'light' : 'dark';
+    btn.setAttribute('aria-pressed', String(next === 'dark'));
+    btn.setAttribute('aria-label', `Přepnout na ${nextNext === 'dark' ? 'tmavý' : 'světlý'} režim`);
+    btn.innerHTML = next === 'dark' ? THEME_ICON.light : THEME_ICON.dark;
+  });
+}
+
 /** Kanonická doména webu (sjednoceno s handle sociálních sítí). */
 export const SITE_URL = 'https://skorezdravotnictvi.cz';
 
@@ -519,7 +565,7 @@ export function renderModuleNav(activeId) {
   const mobileTabsHtml = tabs.map(t => renderMobileTab(t, isActive)).join('');
 
   const searchTriggerHtml = `<button type="button" class="site-search-trigger" id="siteSearchTrigger" aria-label="Otevřít vyhledávání"><span aria-hidden="true">⌕</span> Hledat <kbd>/</kbd></button>`;
-  container.innerHTML = desktopTabsHtml + searchTriggerHtml;
+  container.innerHTML = desktopTabsHtml + searchTriggerHtml + themeToggleHtml();
 
   // Aktivuj global keyboard shortcut (/, Cmd+K) a wire trigger
   initSiteSearch();
@@ -532,6 +578,7 @@ export function renderModuleNav(activeId) {
   }
 
   wireSubmenuAria(container);
+  wireThemeToggle();
 
   injectMobileNav(mobileTabsHtml);
 }
