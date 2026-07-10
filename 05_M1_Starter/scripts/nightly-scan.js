@@ -172,25 +172,105 @@ export function valueVariants(value) {
   return [...out];
 }
 
+// Najde nejbližší obklopující <li>...</li>, POKUD leží uvnitř <ul>/<ol>
+// s třídou obsahující "article-list-bullets" (seznamy typu „Související
+// indikátory" — viz findIndicatorDrift pattern 2). Vrací null, když pozice
+// není uvnitř <li>, nebo obklopující seznam tuto třídu nemá (běžné seznamy
+// v těle článku se chovají jako dřív — širší okno bez omezení).
+function enclosingBulletListItem(html, idx) {
+  const liOpen = html.lastIndexOf('<li', idx);
+  if (liOpen === -1) return null;
+  const liOpenEnd = html.indexOf('>', liOpen);
+  if (liOpenEnd === -1 || liOpenEnd > idx) return null; // idx není uvnitř <li ...>
+  const liClose = html.indexOf('</li>', idx);
+  if (liClose === -1) return null;
+  const ulOpen = html.lastIndexOf('<ul', liOpen);
+  const olOpen = html.lastIndexOf('<ol', liOpen);
+  const listOpen = Math.max(ulOpen, olOpen);
+  if (listOpen === -1) return null;
+  const listOpenEnd = html.indexOf('>', listOpen);
+  if (listOpenEnd === -1) return null;
+  const listTag = html.slice(listOpen, listOpenEnd + 1);
+  if (!/class="[^"]*article-list-bullets[^"]*"/.test(listTag)) return null;
+  // ujisti se, že mezi otevřením seznamu a naší <li není jeho uzávěrka
+  // (tj. že jsme opravdu uvnitř TOHOTO seznamu, ne nějakého předchozího)
+  const closeUl = html.indexOf('</ul>', listOpen);
+  const closeOl = html.indexOf('</ol>', listOpen);
+  const nearestClose = [closeUl, closeOl].filter(x => x !== -1).sort((a, b) => a - b)[0];
+  if (nearestClose !== undefined && nearestClose < liOpen) return null;
+  return { start: liOpen, end: liClose + '</li>'.length };
+}
+
+// Najde rozsah <a ...>...</a>, jehož atribut href obsahuje pozici idx.
+// openEnd = pozice hned za otevírací „>" (začátek viditelného labelu odkazu).
+function currentAnchorSpan(html, idx) {
+  const aOpen = html.lastIndexOf('<a', idx);
+  if (aOpen === -1) return null;
+  const aOpenEnd = html.indexOf('>', aOpen);
+  if (aOpenEnd === -1 || aOpenEnd < idx) return null; // idx musí ležet uvnitř otevíracího tagu <a ...>
+  const aClose = html.indexOf('</a>', aOpenEnd);
+  if (aClose === -1) return null;
+  return { start: aOpen, end: aClose + 4, openEnd: aOpenEnd + 1 };
+}
+
+// Posune hranici okna tak, aby neřízla doprostřed HTML tagu. Bez tohoto by
+// zbytek přeťatého atributu (např. `…per_100k.html">`) přežil stripTags
+// (chybí mu odpovídající „<") a jeho číslice by falešně vypadaly jako
+// citovaná hodnota.
+function safeTagBoundary(html, idx, dir) {
+  if (dir === 'back') {
+    const lt = html.lastIndexOf('<', idx);
+    const gt = html.lastIndexOf('>', idx);
+    if (lt > gt) {
+      const tagEnd = html.indexOf('>', idx);
+      return tagEnd === -1 ? idx : tagEnd + 1;
+    }
+    return idx;
+  }
+  const lt = html.indexOf('<', idx);
+  const gt = html.indexOf('>', idx);
+  if (gt !== -1 && (lt === -1 || gt < lt)) {
+    const tagStart = html.lastIndexOf('<', idx);
+    return tagStart === -1 ? idx : tagStart;
+  }
+  return idx;
+}
+
 /**
  * Drift-check: pro každý odkaz na indikátor v článku — statickou stránku
  * indikator-{id}.html i fallback indicator.html?id={id} — zkontroluje,
  * zda se v okolním textu (±220 znaků) vyskytuje AKTUÁLNÍ hodnota indikátoru.
  * Flaguje jen případy, kdy okno obsahuje číslo (citaci), ale žádná varianta
  * aktuální hodnoty nesedí — tj. pravděpodobně citace zastaralé hodnoty.
+ *
+ * Dva doložené vzory šumu (drift-revize 2026-07-07, viz PLAN-PRACE.md F3):
+ *   1. Atribuční vzor „<a>Label</a> (RRRR)" — rok v závorce bezprostředně za
+ *      odkazem je zdrojová poznámka („Zdroj: … — MMR (2022), HPV (2023)…"),
+ *      ne citace hodnoty. Label i rok se odstraní společně — samotný label
+ *      často nese vlastní číslo z názvu indikátoru („chřipka 65+", „pneumokok
+ *      65+"), takže by bez odstranění labelu zůstal falešný digit-signál.
+ *   2. Seznamy „Související indikátory" (<ul class="article-list-bullets">)
+ *      — položka často jen odkazuje na téma bez citace hodnoty („kapacita
+ *      systému", „vazba na PTSD a depresi"). Okno se u těchto odkazů omezí
+ *      na obklopující <li> (jinak by digit ze SOUSEDNÍ položky — typicky
+ *      „na 100 000 obyvatel" v názvu jiného indikátoru — falešně spustil
+ *      kontrolu) a vlastní label aktuálního odkazu se z kontroly vyloučí
+ *      (label = název indikátoru, ne citace).
  */
 export function findIndicatorDrift(htmlRaw, indicatorsById) {
   // Odstraň bloky, kde čísla nejsou citace hodnot indikátoru, ale popisky/roky
   // u cross-link karet: „Příbuzné sekce" (article-related), „Primární zdroje"
   // (article-sources) a „Datový klíč: HSPA indikátory" (article-databox).
   // Databox je seznam příbuzných indikátorů s popisnou větou a oblastním
-  // štítkem — čísla v něm (např. „140/90", „95/2004 Sb.", roky vakcinací
-  // „MMR (2022)") jsou popisky, ne citace hodnot. Drift se má hlásit jen
-  // z těla článku.
+  // štítkem — čísla v něm (např. „140/90", „95/2004 Sb.") jsou popisky, ne
+  // citace hodnot. Drift se má hlásit jen z těla článku.
   const html = htmlRaw
     .replace(/<(aside|section)\b[^>]*class="[^"]*article-related[^"]*"[\s\S]*?<\/\1>/gi, '')
     .replace(/<(aside|section)\b[^>]*class="[^"]*article-sources[^"]*"[\s\S]*?<\/\1>/gi, '')
-    .replace(/<(aside|section)\b[^>]*class="[^"]*article-databox[^"]*"[\s\S]*?<\/\1>/gi, '');
+    .replace(/<(aside|section)\b[^>]*class="[^"]*article-databox[^"]*"[\s\S]*?<\/\1>/gi, '')
+    // Vzor 1: „<a href="indikator-…">Label</a> (RRRR)" — atribuce, ne citace.
+    .replace(/(<a[^>]*href="[^"]*indikator[^"]*"[^>]*>)[\s\S]*?(<\/a>)\s*\(\d{4}\)/g, '$1$2');
+
   const drifts = [];
   // Statická stránka indikator-{id}.html (preferovaná) i fallback indicator.html?id={id}.
   const re = /indikator-([a-z0-9_]+)\.html|indicator\.html\?id=([a-z0-9_]+)/g;
@@ -199,13 +279,45 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
   while ((m = re.exec(html)) !== null) {
     const id = m[1] || m[2];
     if (seen.has(id)) continue;
-    seen.add(id);
     const ind = indicatorsById.get(id);
-    if (!ind || ind.value == null) continue;
-    const start = Math.max(0, m.index - 60);
-    const window = stripTags(html.slice(start, m.index + 220 + id.length));
+    if (!ind || ind.value == null) { seen.add(id); continue; }
+
+    // Vzor 2: uvnitř seznamu "article-list-bullets" omez okno na <li>.
+    const li = enclosingBulletListItem(html, m.index);
+    let start = Math.max(0, m.index - 60);
+    let end = Math.min(html.length, m.index + 220 + id.length);
+    if (li) {
+      start = li.start;
+      end = li.end;
+    } else {
+      start = safeTagBoundary(html, start, 'back');
+      end = safeTagBoundary(html, end, 'forward');
+    }
+
+    let slice = html.slice(start, end);
+    if (li) {
+      // vyluč vlastní label aktuálního odkazu (název indikátoru, ne citace)
+      const anchor = currentAnchorSpan(html, m.index);
+      if (anchor) {
+        const relOpenEnd = anchor.openEnd - start;
+        const relClose = anchor.end - start;
+        if (relOpenEnd >= 0 && relClose <= slice.length) {
+          slice = slice.slice(0, relOpenEnd) + slice.slice(relClose);
+        }
+      }
+    }
+
+    const window = stripTags(slice);
     // citace čísla v okně? (číslo s desetinnou čárkou, nebo ≥2 cifry vedle sebe)
-    if (!/\d+,\d+|\d{2,}/.test(window)) continue;
+    if (!/\d+,\d+|\d{2,}/.test(window)) {
+      // Položka seznamu bez čísla → není co ověřovat u TOHOTO výskytu, ale
+      // stejný indikátor může být citován s hodnotou jinde v článku —
+      // nezaznamenávej jako „viděno" a zkus další výskyt.
+      if (li) continue;
+      seen.add(id);
+      continue;
+    }
+    seen.add(id);
     const variants = valueVariants(ind.value);
     // Boundary matching: varianta nesmí být podřetězcem jiného čísla
     // (jednociferné „2" by jinak matchlo uvnitř roku „2026" → falešná shoda).

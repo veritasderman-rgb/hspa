@@ -222,6 +222,31 @@ aktuální stav ve VeKLEP). Tuto sekci udržuj stejným způsobem:
 o kvalitě, tempu nebo důvodech (žádné „MZ plán neplní", „zbytečné zpoždění",
 „nedostatečná příprava" apod.) — jen ověřitelná fakta ke dni kontroly.
 
+### 3.6 Barometr — přepočet stavů závazků (`data/barometr.json`)
+
+Barometr politických prohlášení (`barometr.html`) žije z toho, že stavy
+závazků odpovídají aktuálním datům. Jednou za noc:
+
+- Pro **každý závazek** (`commitments[]`) s `linked_indicators` porovnej
+  baseline s aktuální hodnotou v `data/indicators.json` a **přepočítej `stav`
+  přesně podle rozhodovacího algoritmu v `docs/metodika-barometr.md` § 3**
+  (toleranční pásmo, pravidla pro roční data, pořadí pravidel). Metodika je
+  norma — neimprovizuj vlastní práh.
+- Závazky s `legislativa_ids` vyhodnoť podle legislativní větve metodiky
+  (posun fáze ve VeKLEP → `plni_se`, dokončeno → `splneno`, dlouhodobý klid
+  → `bez_pohybu` — lhůty viz metodika § 3.4).
+- **Při každé změně stavu**: aktualizuj `stav`, `stav_od`, přepiš `stav_duvod`
+  (věcně, s čísly a roky — popisnost jako u 3.5) a přidej záznam do
+  `historie[]` (datum, starý → nový stav, důvod). Změna stavu závazku je
+  **redakční událost** — zapiš ji do nočního reportu jako kandidáta na
+  článek/aktualizaci a social post.
+- Kandidáty Ověřovny z denních discovery reportů (výroky čekající na verdikt)
+  zpracuj plným postupem metodiky § 4 (steel-man, tolerance, data doby
+  výroku) a zapiš do `statements[]` — verdikt vždy s čísly a zdrojem.
+- Po úpravě spusť `npm run validate:barometr` (součást `validate:all`).
+- Platí železné pravidlo popisnosti i právo na odpověď (metodika § 6):
+  opravy dat jen přes `meta.changelog[]`.
+
 ---
 
 ## FÁZE 4 — Doplnění grafiky (volitelné, pokud zbývá kapacita)

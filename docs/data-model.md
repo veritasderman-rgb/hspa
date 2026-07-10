@@ -383,6 +383,8 @@ Validátor: `npm run validate:explainers`.
 
 ## 9. `data/prevention.json` — prevence
 
+> **PREV-PERSONA (U27):** každé téma má `life_phases` (pole z `mlada_rodina | dospeli_40 | seniori_65`) — pohání persona filtr na `prevence.html`. Editorská kategorizace dle obsahu tématu; univerzální životní styl = všechny fáze. Vynucuje `ingest/validate-prevention.js`.
+
 Struktura mimo „array záznamů" — má hero + flow + themes.
 
 ```jsonc
@@ -807,6 +809,67 @@ v článku). Testy: `tests/claims.test.js`. Drift-check: `checkClaim()` v
 `scripts/nightly-scan.js`.
 
 ---
+
+## 19. `data/barometr.json` — Barometr politických prohlášení
+
+Závazky vlády + výroky politiků konfrontované s indikátory. Normativní
+pravidla (enumy, rozhodovací algoritmy stavů a verdiktů) definuje
+[`docs/metodika-barometr.md`](metodika-barometr.md) — validátor
+`ingest/validate-barometr.js` je vynucuje.
+
+```json
+{
+  "meta": { "zdroj": {...}, "changelog": [] },
+  "commitments": [{
+    "id": "pp2026-primarni-pece",
+    "citace_verbatim": "…",              // doslovná citace z primárního zdroje
+    "zdroj": {"nazev": "…", "url": "…", "datum": "YYYY-MM-DD"},
+    "oblast": "…",
+    "interpretace": "…",                  // náš falzifikovatelný checkpoint (rozporovatelný)
+    "linked_indicators": [{"id": "…", "baseline_value": 0, "baseline_year": 2024, "direction_wanted": "up|down"}],
+    "legislativa_ids": ["…"],            // FK na data/legislativa.json (items i plan_items)
+    "stav": "nema_meritelny_obsah|ceka_na_data|plni_se|bez_pohybu|opacny_smer|splneno",
+    "stav_duvod": "…", "stav_od": "YYYY-MM-DD",
+    "historie": [{"datum": "…", "zmena": "…", "duvod": "…"}]
+  }],
+  "statements": [{
+    "id": "kdo-YYYY-MM-DD-slug",
+    "vyrok_verbatim": "…", "kdo": "…", "funkce": "…", "kdy": "YYYY-MM-DD",
+    "kde": {"nazev": "…", "url": "…"},
+    "verdikt": "sedi_s_daty|nesedi|zavadejici_kontext|neoveritelne",
+    "verdikt_zduvodneni": "…",            // povinně s čísly a zdrojem
+    "linked_indicators": ["…"], "zdroje": [{"nazev": "…", "url": "…"}]
+  }]
+}
+```
+
+Baseline je zamrazená k datu slibu (musí odpovídat bodu `trend` řady
+indikátoru). Stavy přepočítává noční rutina (PROMPT_NIGHTLY_ROUTINE § 3.6),
+kandidáty výroků sbírá denní rutina. Opravy jen přes `meta.changelog[]`.
+
+### Výhled 2027–2029 (`plan_vyhled_meta` + `horizont`)
+
+Sekce plánu drží i výhled legislativních prací na léta 2027–2029 (příloha č. 2
+téhož usnesení). Rozlišuje se polem `horizont` na položce `plan_items`:
+`'2026'` (chybějící = default) nebo `'vyhled-2027-2029'`. Metadata výhledového
+dokumentu jsou v `plan_vyhled_meta` (stejná struktura jako `plan_meta`). UI
+`legislativa.html` přepíná mezi horizonty segmentem „Plán 2026 / Výhled 2027–2029".
+
+## 20. `data/souvislosti.json` — znalostní graf (generovaný)
+
+**Negeneruj ručně** — vzniká build-time skriptem `scripts/build-souvislosti.js`
+(`npm run build:souvislosti`, součást refresh pipeline). Pro každý indikátor
+agreguje typované vazby napříč datasety:
+
+| Vazba | Zdroj |
+|---|---|
+| uzly/páky kauzálního modelu | `data/system-model.json` |
+| legislativa v běhu + plán MZ | `data/legislativa.json` |
+| články | `data/articles.json` (`linked_indicators`) |
+| kvantitativní tvrzení | `data/claims.json` |
+| závazky a výroky Barometru | `data/barometr.json` |
+
+Konzumuje `barometr.html` a blok „Souvislosti" na detailu indikátoru.
 
 ## Vztahy mezi datasety
 

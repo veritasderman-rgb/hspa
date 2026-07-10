@@ -15,10 +15,12 @@
 <meta name="article:audit-status" content="partial">
 <!--
   audit:
-    last_reviewed: 2026-05-17
+    last_reviewed: 2026-07-09
     reviewer: claude-code-agent
     status: partial
+    update_2026-07-09: "F1 dávkový audit — rekonciliace faktických čísel manifestu s datovým kontraktem (hodnotové a politické soudy dle pravidla neauditovány). Opraveno několik zastaralých seed hodnot proti aktuálnímu kontraktu: (1) hero counter mislabel — 22,6 % 'denních kuřáků, OECD 16 %' opraveno na 16,4 % denních (OECD 14,8 %), 22,6 % zaměňovalo kuřáky tabáku celkem (22,4 %) za denní; foot doplněn. (2) screening kolorekta 28 % → 31,1 % (kontrakt screening_kolorektalni, OECD 42 / EU 38, 2024) napříč hero counterem, data-cardem, prioritním seznamem i závěrečnou pasáží. (3) Databox indikátorů srovnán s kontraktem: kardiovaskulární mortalita 220/OECD 140 → 463,75 vs. EU-27 312,95 (Eurostat hlth_cd_asdr2); incidence kolorekta bez smyšleného benchmarku 'OECD 36,5' (kontrakt bez benchmarku); denní kuřáctví 22,6/16 → 16,4/14,8; sebevraždy 12,5/OECD 11 → 11,6 vs. EU 10,4 (kontrakt 11,59/10,37); platba z kapsy 14 → 13,6 %. (4) Data-cards platba (14 → 13,6 %) a sebevraždy (12,5 → 11,6, bench EU 10,4) srovnány; prioritní seznam 'sebevraždy ~13' → ~11,6. Hodnota kardiovaskulární mortality 463/313 v prioritním seznamu a cover_viz už byla správná. Zůstává partial — manifest je autorský politický text vyžadující per-claim ruční audit zbývajících věcných tvrzení (AWaRe 37,1 %, výpadky léčiv, mezinárodní programové odkazy); toto kolo srovnalo jen čísla přímo navázaná na indikátory dashboardu."
     notes: "Manifest — politicky laděný autorský text (Pavlovic, Malíková, Resortní tým ČPS pro zdravotnictví). PER POKYNY: hodnotové soudy a politické postoje se neauditují (autorský názor). Faktická tvrzení uvnitř (čísla, právní normy, citace OECD/WHO) by měla být auditována stejně jako v redakčních článcích. DOPORUČENO pro ruční audit: projít 13 oblastí a verifikovat všechna konkrétní čísla/odkazy v kontextu primárních zdrojů. Tam, kde manifest odkazuje na jiné HSPA články jako referenci, čerpá z jejich auditního stavu. Status published → partial — vyžaduje per-claim audit s explicitním oddělením názor/fakt."
+    f1_2026-07-10: "F1 link-audit: 14 externích odkazů zkontrolováno, žádný mrtvý. OECD HSPA Framework CZ (oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním, že jde o platnou, aktuální OECD publikaci; ponecháno beze změny. Ostatní odkazy (e-estonia.com, ecrin.org, GitHub, NHS England, g-ba.de, has-sante.fr, kanta.fi, nice.org.uk, sundhed.dk, who.int) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (per-claim ruční audit zbývajících věcných tvrzení manifestu, např. AWaRe 37,1 %, výpadky léčiv) trvá, odkazy s ním nesouvisí."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -182,9 +184,9 @@
           </p>
           <ul>
             <li><strong>Kardiovaskulární mortalita</strong> 463 / 100 000 v ČR vs EU-27 313 — 48 % rezerva v primární prevenci (Eurostat <code>hlth_cd_asdr2</code>). <a href="indikator-mortalita_kardiovaskularni.html">Indikátor →</a></li>
-            <li><strong>Screening kolorekta</strong> — účast 28 %, OECD průměr 42 %, Nordic ~70 % (OECD HCQI). Akutní resekce karcinomu rekta má 3× vyšší 90d mortalitu než plánovaná. <a href="indikator-screening_kolorektalni.html">Indikátor →</a></li>
+            <li><strong>Screening kolorekta</strong> — účast 31,1 %, OECD průměr 42 %, EU 38 %, Nordic ~70 % (OECD HCQI). Akutní resekce karcinomu rekta má 3× vyšší 90d mortalitu než plánovaná. <a href="indikator-screening_kolorektalni.html">Indikátor →</a></li>
             <li><strong>Antibiotická preskripce</strong> CZ-AWaRe Access podíl 37,1 % (PUK 2024) — pod WHO cílem 60 %. AMR způsobí dle WHO 10 mil úmrtí ročně do 2050. <a href="kvalita-pece.html#cqSec4H">Detail v Kvalitě péče →</a></li>
-            <li><strong>Duševní zdraví</strong> — sebevraždy ~13 / 100k vs EU 10 (Eurostat), antidepresíva rostou rychleji než síť psychiatrů. <a href="indikator-sebevrazdy_per_100k.html">Indikátor →</a></li>
+            <li><strong>Duševní zdraví</strong> — sebevraždy ~11,6 / 100k vs EU 10,4 (Eurostat, 2023), antidepresíva rostou rychleji než síť psychiatrů. <a href="indikator-sebevrazdy_per_100k.html">Indikátor →</a></li>
             <li><strong>Léková dostupnost</strong> — k 5/2026 ~2 200 aktivních výpadků léčiv (SÚKL §33b) vs ~580 v 2019. Strukturální slabost, ne přechodná anomálie. <a href="jak-funguje.html?id=lekova_dostupnost_vypadky">Explainer →</a></li>
           </ul>
           <p>To je pět dat. Manifest na ně odpovídá v 13 prioritách.</p>
@@ -247,12 +249,12 @@
         <figcaption class="av-figure-h" id="avCntManifestH">Klíčové rezervy českého zdravotnictví — proč reforma (data HSPA Monitoru)</figcaption>
         <div class="av-counter-grid">
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="22.6" data-decimals="1" data-suffix=" %">22,6 %</span>
+            <span class="av-counter" data-value="16.4" data-decimals="1" data-suffix=" %">16,4 %</span>
             <span class="av-counter-label">denních kuřáků v ČR</span>
-            <span class="av-counter-foot">OECD průměr 16 %</span>
+            <span class="av-counter-foot">OECD průměr 14,8 %; kuřáků tabáku celkem 22,4 %</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="28" data-suffix=" %">28 %</span>
+            <span class="av-counter" data-value="31.1" data-decimals="1" data-suffix=" %">31,1 %</span>
             <span class="av-counter-label">účast na kolorektálním screeningu</span>
             <span class="av-counter-foot">OECD průměr 42 %; Nordic ~70 %</span>
           </div>
@@ -387,7 +389,7 @@
           </a>
           <a class="manifest-data-card" href="indikator-platba_z_kapsy_pct.html">
             <div class="manifest-data-card-id">platba_z_kapsy_pct</div>
-            <div class="manifest-data-card-value">14 %</div>
+            <div class="manifest-data-card-value">13,6 %</div>
             <div class="manifest-data-card-name">Out-of-pocket podíl výdajů</div>
             <div class="manifest-data-card-bench">OECD 18 % · EU 15 % — Česko nižší, ale rozdíl roste u doplatků</div>
           </a>
@@ -441,7 +443,7 @@
       </p>
 
       <p>
-        Že to jde, ukazují konkrétní programy. Finsko realizovalo od roku 1972 v severní Karélii projekt komplexní intervence proti kardiovaskulární mortalitě — snížení obsahu soli a tuků v potravinách, podpora pohybu, kontrola tlaku — a během několika dekád snížilo úmrtnost na ischemickou chorobu srdeční u středního věku o desítky procent. WHO dodnes uvádí severní Karélii jako vzor populační intervence. WHO Best Buys definuje sadu cost-effective intervencí pro nepřenosná onemocnění, od zdanění tabáku a alkoholu přes snížení soli až k podpoře fyzické aktivity a screeningů. Skotsko v roce 2018 zavedlo minimální cenu za jednotku alkoholu; následné evaluace zaznamenaly pokles spotřeby ve skupině nejtěžších pijáků a snížení úmrtí spojených s alkoholem. Nordické země drží účast na populačních screeningech kolem sedmdesáti procent a více — Česko se 28 procenty má kam růst.
+        Že to jde, ukazují konkrétní programy. Finsko realizovalo od roku 1972 v severní Karélii projekt komplexní intervence proti kardiovaskulární mortalitě — snížení obsahu soli a tuků v potravinách, podpora pohybu, kontrola tlaku — a během několika dekád snížilo úmrtnost na ischemickou chorobu srdeční u středního věku o desítky procent. WHO dodnes uvádí severní Karélii jako vzor populační intervence. WHO Best Buys definuje sadu cost-effective intervencí pro nepřenosná onemocnění, od zdanění tabáku a alkoholu přes snížení soli až k podpoře fyzické aktivity a screeningů. Skotsko v roce 2018 zavedlo minimální cenu za jednotku alkoholu; následné evaluace zaznamenaly pokles spotřeby ve skupině nejtěžších pijáků a snížení úmrtí spojených s alkoholem. Nordické země drží účast na populačních screeningech kolem sedmdesáti procent a více — Česko s 31 procenty má kam růst.
       </p>
 
       <details class="manifest-priority-data">
@@ -449,9 +451,9 @@
         <div class="manifest-priority-data-grid">
           <a class="manifest-data-card" href="indikator-screening_kolorektalni.html">
             <div class="manifest-data-card-id">screening_kolorektalni</div>
-            <div class="manifest-data-card-value">28 %</div>
+            <div class="manifest-data-card-value">31,1 %</div>
             <div class="manifest-data-card-name">Účast na screeningu kolorekta</div>
-            <div class="manifest-data-card-bench">OECD 42 % · Nordic ~70 %</div>
+            <div class="manifest-data-card-bench">OECD 42 % · EU 38 % · Nordic ~70 %</div>
           </a>
           <a class="manifest-data-card" href="indikator-kuractvi_denni.html">
             <div class="manifest-data-card-id">kuractvi_denni</div>
@@ -583,9 +585,9 @@
         <div class="manifest-priority-data-grid">
           <a class="manifest-data-card" href="indikator-sebevrazdy_per_100k.html">
             <div class="manifest-data-card-id">sebevrazdy_per_100k</div>
-            <div class="manifest-data-card-value">12,5 / 100k</div>
+            <div class="manifest-data-card-value">11,6 / 100k</div>
             <div class="manifest-data-card-name">Sebevraždy ČR</div>
-            <div class="manifest-data-card-bench">OECD 11 · EU 11,2 — ČR nad průměrem</div>
+            <div class="manifest-data-card-bench">EU 10,4 (Eurostat, 2023) — ČR nad průměrem</div>
           </a>
           <a class="manifest-data-card" href="indikator-pouzivani_antidepresiv.html">
             <div class="manifest-data-card-id">pouzivani_antidepresiv</div>
@@ -619,16 +621,16 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, na které manifest odkazuje</h4>
       <ul class="article-databox-list">
-        <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita</strong></a> — 220 / 100 000 vs. OECD 140</li>
-        <li><a href="indikator-incidence_kolorektalni.html"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 vs. OECD 36,5</li>
-        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu</strong></a> — 28 % vs. OECD 42 %</li>
+        <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita</strong></a> — 463,75 / 100 000 vs. EU-27 312,95 (Eurostat <code>hlth_cd_asdr2</code>, ESP 2013, 2023)</li>
+        <li><a href="indikator-incidence_kolorektalni.html"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 (hrubá míra, 2023)</li>
+        <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu</strong></a> — 31,1 % vs. OECD 42 % / EU 38 % (2024)</li>
         <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu</strong></a> — 14,4 l/os./rok vs. OECD 8,9</li>
-        <li><a href="indikator-kuractvi_denni.html"><strong>Denní kuřáctví (15+)</strong></a> — 22,6 % vs. OECD 16 %</li>
-        <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy</strong></a> — 12,5 / 100 000 vs. OECD 11 (HAaG 2025)</li>
+        <li><a href="indikator-kuractvi_denni.html"><strong>Denní kuřáctví (15+)</strong></a> — 16,4 % vs. OECD 14,8 % / EU 18,5 %</li>
+        <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy</strong></a> — 11,6 / 100 000 vs. EU 10,4 (Eurostat, 2023)</li>
         <li><a href="indikator-pouzivani_antidepresiv.html"><strong>Spotřeba antidepresiv</strong></a> — 84 DDD/1000/den vs. OECD 67</li>
         <li><a href="indikator-ehealth_adoption.html"><strong>eHealth adoption index</strong></a> — 62 vs. OECD 70</li>
         <li><a href="indikator-spokojenost_informovani.html"><strong>Spokojenost s informováním</strong></a> — 72 % vs. OECD 78 %</li>
-        <li><a href="indikator-platba_z_kapsy_pct.html"><strong>Platby z kapsy</strong></a> — 14 % vs. OECD 20 %</li>
+        <li><a href="indikator-platba_z_kapsy_pct.html"><strong>Platby z kapsy</strong></a> — 13,6 % vs. OECD 18 %</li>
       </ul>
     </aside>
 

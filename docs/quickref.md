@@ -20,7 +20,7 @@ Jednostránkový cheatsheet pro rychlou orientaci. Pro hloubku viz
 | Social bannery | `05_M1_Starter/assets/social/` |
 | ETL/ingest | `05_M1_Starter/ingest/` |
 | Skripty | `05_M1_Starter/scripts/` |
-| Testy | `05_M1_Starter/tests/` (~355 testů) |
+| Testy | `05_M1_Starter/tests/` (731 testů, 0 failures) |
 | Dokumentace pro vývojáře | `docs/` (root level) |
 
 ---
@@ -40,7 +40,7 @@ npm run serve                    # http://localhost:8080
 npm run validate:all             # všech 9 validátorů (indicators, strategies, explainers, prevention, articles, dohodovaci, legislation, financing, clinical-quality)
 
 # Testy
-npm test                         # ~355 testů (349 passing, 6 pre-existing failures z chybějících npm packages)
+npm test                         # 731 testů, 0 failures
 
 # Article cover (po novém článku/refreshi)
 node ingest/scripts/generate-article-cover.js <slug-without-html>

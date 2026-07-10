@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barometr politických prohlášení · HSPA Monitor</title>
+<meta name="description" content="Drží politiku za slovo daty, která už měříme. Sliby z programového prohlášení vlády přeložené na falzifikovatelné checkpointy a výroky politiků o zdravotnictví konfrontované s indikátory.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/barometr" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/barometr" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Barometr politických prohlášení</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <div id="listView">
+
+    <section class="ed-hero" aria-labelledby="barHeroHeadline">
+      <div class="ed-hero-content">
+        <div class="ed-kicker">Barometr politických prohlášení</div>
+        <h1 class="ed-hero-headline" id="barHeroHeadline">Držíme politiku za slovo. Daty, která už měříme.</h1>
+        <p class="ed-hero-lead">
+          Programové prohlášení vlády i veřejné sliby ministra překládáme na <strong>falzifikovatelné checkpointy</strong>: verbatim citace → náš měřitelný výklad → indikátor s hodnotou zamrazenou k datu slibu → stav spočtený z dat. Žádné predikce, žádné motivy — jen vztah slibu k číslům, která sledujeme.
+        </p>
+        <p class="ed-hero-lead">
+          Druhá část, <strong>Ověřovna</strong>, konfrontuje jednotlivé výroky politiků o zdravotnictví s indikátory a primárními zdroji. Metodika je veřejná, interpretaci lze rozporovat a každá oprava je vidět v changelogu.
+        </p>
+      </div>
+      <aside class="ed-hero-stats" aria-label="Klíčová čísla Barometru">
+        <div class="ed-stat ed-stat-static">
+          <div class="ed-stat-num"><span id="statCommitTotal">—</span> <span class="ed-stat-unit">závazků</span></div>
+          <div class="ed-stat-lbl">Sledovaných slibů</div>
+          <div class="ed-stat-meta">Z programového prohlášení a vystoupení ministra</div>
+        </div>
+        <div class="ed-stat ed-stat-static">
+          <div class="ed-stat-num"><span id="statPlniSe">—</span> <span class="ed-stat-unit">plní se</span></div>
+          <div class="ed-stat-lbl">Pohyb chtěným směrem</div>
+          <div class="ed-stat-meta">Data nad tolerančním pásmem nebo postup legislativy</div>
+        </div>
+        <div class="ed-stat ed-stat-static" id="statOpacnySmerBox">
+          <div class="ed-stat-num"><span id="statOpacnySmer">—</span> <span class="ed-stat-unit">opačný směr</span></div>
+          <div class="ed-stat-lbl">Data jdou proti slibu</div>
+          <div class="ed-stat-meta">Nebo předpis stažen · <span id="statCekaNaData">—</span> čeká na data</div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ── Část 1 · Závazky ─────────────────────────────────────────────── -->
+    <div class="leg-plan-head leg-radar-head">
+      <div class="bar-part-divider" aria-hidden="true">
+        <span class="bar-part-num">1</span>
+        <span class="bar-part-tag">Sliby</span>
+        <span class="bar-part-line"></span>
+      </div>
+      <div class="ed-kicker">Závazky</div>
+      <h2 id="barCommitHeading">Co vláda slíbila — a co na to říkají data</h2>
+      <p class="leg-plan-lead">
+        Každý závazek má dvě přísně oddělené vrstvy: <strong>doslovnou citaci</strong> slibu se zdrojem (za tu ručí ten, kdo ji vyslovil) a náš <strong>checkpoint</strong> — falzifikovatelný výklad, který lze rozporovat. Baseline indikátoru je zamrazená k datu slibu; aktuální hodnotu čteme živě z dat. Stav se počítá podle veřejné metodiky, ne odhaduje.
+      </p>
+    </div>
+
+    <div class="filters-row">
+      <nav class="level-nav" id="barStavFilters" aria-label="Filtr závazků podle stavu">
+        <button data-stav-filter="all" class="active">Vše</button>
+        <button data-stav-filter="plni_se">Plní se</button>
+        <button data-stav-filter="bez_pohybu">Bez pohybu</button>
+        <button data-stav-filter="opacny_smer">Opačný směr</button>
+        <button data-stav-filter="ceka_na_data">Čeká na data</button>
+        <button data-stav-filter="nema_meritelny_obsah">Nemá měřitelný obsah</button>
+      </nav>
+      <div class="filters-actions">
+        <span class="badge" id="barCommitCount">0</span>
+      </div>
+    </div>
+
+    <div class="bar-list" id="barCommitList"></div>
+    <div class="empty-state hidden" id="barCommitEmpty">Zatím žádné závazky. Pilotní sadu doplňuje redakce.</div>
+
+    <!-- ── Část 2 · Ověřovna ────────────────────────────────────────────── -->
+    <div class="leg-plan-head leg-radar-head">
+      <div class="bar-part-divider" aria-hidden="true">
+        <span class="bar-part-num">2</span>
+        <span class="bar-part-tag">Výroky</span>
+        <span class="bar-part-line"></span>
+      </div>
+      <div class="ed-kicker">Ověřovna</div>
+      <h2 id="barStatementHeading">Výroky politiků konfrontované s daty</h2>
+      <p class="leg-plan-lead">
+        Jednotlivá faktická tvrzení o zdravotnictví poměřujeme daty dostupnými v době výroku. Čteme je <strong>benevolentně</strong> (steel-man) a verdikt vždy opíráme o konkrétní čísla se zdrojem. Hodnotíme vztah výroku k datům — ne osobu ani úmysl.
+      </p>
+      <div class="filters-actions" style="padding:8px 0 0;">
+        <span class="badge" id="barStatementCount">0</span>
+      </div>
+    </div>
+
+    <div class="bar-list" id="barStatementList"></div>
+    <div class="empty-state hidden" id="barStatementEmpty">Zatím žádné výroky. Pilotní sadu doplňuje redakce.</div>
+
+    <!-- ── Box Metodika + právo na odpověď ─────────────────────────────── -->
+    <section class="bar-method" aria-labelledby="barMethodHeading">
+      <div class="bar-method-inner">
+        <div class="ed-kicker">Jak Barometr čteme</div>
+        <h2 id="barMethodHeading">Metodika a právo na odpověď</h2>
+        <p>
+          Stavy závazků i verdikty výroků se počítají podle přesných pravidel z veřejné metodiky —
+          taxonomie stavů, toleranční pásma, pravidla férovosti a zásada „žádné predikce, žádné motivy".
+          Interpretace každého závazku je náš redakční krok a <strong>lze ji rozporovat</strong>.
+        </p>
+        <p class="bar-method-rights">
+          <strong>Právo na odpověď.</strong> Každý, jehož závazek či výrok zde hodnotíme, má právo na odpověď.
+          Ukáže-li věcnou chybu (v citaci, baseline, výpočtu nebo interpretaci), opravíme ji — viditelně,
+          přes changelog. Kontakt: <a href="mailto:josef@josefpavlovic.cz">josef@josefpavlovic.cz</a>.
+        </p>
+        <div class="bar-method-actions">
+          <a class="bar-method-link" href="https://github.com/veritasderman-rgb/hspa/blob/main/docs/metodika-barometr.md" target="_blank" rel="noopener">Celá metodika Barometru ↗</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── Příbuzné sekce ─────────────────────────────────────────────────── -->
+  <section class="section related-section" aria-labelledby="relatedHeading">
+    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="legislativa.html">
+        <div class="related-card-kicker">Sliby v paragrafech</div>
+        <h4 class="related-card-title">Legislativní radar</h4>
+        <p class="related-card-desc">Kde jsou předpisy, které mají závazky naplnit — od připomínek po Sbírku zákonů.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="hspa-prehled.html">
+        <div class="related-card-kicker">Měřítka dopadu</div>
+        <h4 class="related-card-title">HSPA přehled indikátorů</h4>
+        <p class="related-card-desc">Indikátory, proti kterým poměřujeme sliby — s benchmarky a trendy.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="strategie.html">
+        <div class="related-card-kicker">Kam to celé míří</div>
+        <h4 class="related-card-title">Strategie zdravotnictví</h4>
+        <p class="related-card-desc">Strategické dokumenty říkají, čeho chce stát ve zdravotnictví dosáhnout.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="clanky.html">
+        <div class="related-card-kicker">Long-form journalism</div>
+        <h4 class="related-card-title">Hub článků</h4>
+        <p class="related-card-desc">Podrobné analýzy témat, kterých se sliby i výroky týkají.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/barometr.js"></script>
+
+</body>
+</html>

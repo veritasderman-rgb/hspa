@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Držíme politiku za slovo. Představujeme Barometr politických prohlášení · HSPA Monitor</title>
+<meta name="description" content="Vláda ve svém programovém prohlášení slíbila posílit primární péči, zlepšit dostupnost léků nebo obnovit reformu duševního zdraví. HSPA Monitor spouští Barometr politických prohlášení: každý slib převádíme na měřitelný checkpoint s výchozí hodnotou z dat — a stav plnění počítáme z čísel, ne z dojmů.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Držíme politiku za slovo. Představujeme Barometr politických prohlášení">
+<meta property="og:description" content="Každý slib vlády ve zdravotnictví převádíme na měřitelný checkpoint s baseline z indikátorů. Stav plnění počítají data, ne dojmy — a výroky politiků prochází Ověřovnou.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Legislativa">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    created: 2026-07-10
+    reviewer: claude-code-agent (BAR12, PLAN-PRACE.md v2)
+    status: draft
+    notes: "Doprovodný článek ke spuštění Barometru politických prohlášení (barometr.html).
+      Všechna čísla a citace čerpány z data/barometr.json (pilotní sada: 12 závazků
+      z programového prohlášení vlády z 5. 1. 2026, 8 výroků Ověřovny) — sada prošla
+      nezávislým fact-checkem 2026-07-09 (12/12 citací verbatim na vlada.gov.cz,
+      15/15 baseline proti trend řadám indikátorů, 8/8 výroků verbatim na živých
+      zdrojích). Metodika: docs/metodika-barometr.md. Článek published:false —
+      vydá ho publikační fronta; před publikací cover (generuje publish skript)."
+-->
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-barometr-politickych-prohlaseni">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa</span>
+        <span class="article-tag article-tag-muted">barometr · sliby vlády · ověřovna výroků</span>
+      </div>
+      <h1 class="article-title">Držíme politiku za slovo. Představujeme Barometr politických prohlášení</h1>
+      <p class="article-deck">
+        Programová prohlášení se čtou den po jmenování vlády — a pak už skoro nikdy. My jsme to letošní
+        přečetli jinak: každý zdravotnický slib jsme převedli na <strong>měřitelný checkpoint</strong>
+        s výchozí hodnotou z indikátorů, které tento web denně sleduje. Od dneška lze na jedné stránce
+        sledovat, jestli se sliby plní — a stav neurčuje náš názor, ale <strong>data</strong>.
+        K tomu přidáváme <strong>Ověřovnu</strong>: výroky politiků o zdravotnictví konfrontované s čísly.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">10. července 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">6 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Tenhle web je postavený na jedné posedlosti: každé číslo musí být dohledatelné k primárnímu
+        zdroji. Sledujeme přes 160 indikátorů výkonnosti zdravotnictví, <a href="legislativa.html">legislativu
+        v přípravě i plnění legislativního plánu ministerstva</a> a registr více než 1 300 kvantitativních
+        tvrzení z vlastních článků, který se sám hlídá proti driftu. <strong><a href="barometr.html">Barometr
+        politických prohlášení</a></strong> tu infrastrukturu poprvé obrací směrem ven — od hlídání vlastních
+        textů k hlídání veřejných slibů.
+      </p>
+
+      <h3>Jak čteme slib: citace, interpretace, baseline</h3>
+
+      <p>
+        Základní pravidlo Barometru zní: <strong>oddělit, co politik řekl, od toho, jak to čteme my.</strong>
+        U každého závazku proto vedle sebe stojí <em>doslovná citace</em> z programového prohlášení
+        (s odkazem na zdroj) a naše <em>interpretace</em> — falzifikovatelný checkpoint, který říká,
+        podle čeho poznáme plnění. Citaci nelze rozporovat, je doslovná; interpretaci ano — a přesně
+        proto ji zveřejňujeme.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avJakH">
+        <figcaption class="av-figure-h" id="avJakH">Cesta slibu Barometrem</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Doslovná citace</h4>
+            <p class="av-flow-desc">Slib přebíráme verbatim z programového prohlášení vlády, s odkazem a datem. Žádné parafráze.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Interpretace</h4>
+            <p class="av-flow-desc">Náš checkpoint: který indikátor nebo legislativní krok slib změří. Otevřeně přiznaná, rozporovatelná část.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Zamrazená baseline</h4>
+            <p class="av-flow-desc">Hodnota indikátoru ke dni slibu. Proti ní se měří každý další datový bod — nikdo ji zpětně nepřepisuje.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Stav počítají data</h4>
+            <p class="av-flow-desc">Plní se · bez pohybu · opačný směr · splněno · čeká na data — podle veřejného algoritmu, ne podle nálady redakce.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Metodika:</strong> úplná pravidla včetně tolerančních pásem a práva na odpověď jsou veřejná — <a href="barometr.html#metodika">Barometr → Metodika</a>.</p>
+      </figure>
+
+      <h3>Co říká pilotní sada: hodně čekání — a to je správně</h3>
+
+      <p>
+        Do první sady jsme z programového prohlášení vlády z 5. ledna 2026 vybrali
+        <strong>dvanáct zdravotnických závazků</strong>: posílení primární péče, preventivní bonusy
+        pojišťoven, dostupnost zubní péče a léků, onkologický a kardiovaskulární plán, obnovu reformy
+        péče o duševní zdraví, elektronizaci a další. Aktuální skóre vypadá nenápadně:
+        <strong>devět závazků „čeká na data", jeden se plní, dva nemají měřitelný obsah.</strong>
+      </p>
+
+      <p>
+        To „čeká na data" není alibismus — je to poctivost metodiky. Vláda slibovala v lednu; roční
+        indikátory od té doby většinou nové období nepřinesly, a označit slib za „neplněný" po pěti
+        měsících by bylo stejně nefér jako ho označit za splněný. Barometr je maraton, ne sprint:
+        skutečná hodnota se ukáže, až se řady pohnou. První závazek se už pohnul — slib
+        <em>„Zavedeme národní monitoring kapacit s využitím povinné e-žádanky"</em> je ve stavu
+        <strong>plní se</strong>, protože novela zákona o elektronizaci zdravotnictví, která povinnou
+        e-žádanku zavádí, vstoupila 3. července do připomínkového řízení.
+      </p>
+
+      <h3>„Nemá měřitelný obsah" — nejcennější známka z celého Barometru</h3>
+
+      <p>
+        Dva závazky jsme museli označit kategorií, kterou považujeme za novinářsky nejdůležitější:
+        <strong>nemá měřitelný obsah</strong>. Například slib zapojit pacientské organizace do
+        rozhodovacích procesů nedefinuje žádnou událost, indikátor ani akt, podle kterého by šlo
+        předem říct, kdy je splněn. To není hodnocení záměru — jen konstatování, že slib v této
+        podobě nelze držet za slovo. Pokud ministerstvo checkpoint doplní (např. konkrétní jednací
+        řád nebo zastoupení v konkrétních orgánech), rádi závazek překlasifikujeme — přesně od toho
+        je veřejný changelog.
+      </p>
+
+      <h3>Ověřovna: výroky proti číslům</h3>
+
+      <p>
+        Druhé křídlo Barometru konfrontuje jednotlivé výroky politiků s daty. V pilotní sadě je osm
+        výroků ministra zdravotnictví a premiéra — a výsledek možná překvapí: <strong>většina sedí
+        s daty.</strong> Ověřovna není lovem na chyby; když čísla sedí, napíšeme to. Zajímavější jsou
+        zbylé dva verdikty. Výrok, že počet sester roste, jsme označili jako <strong>zavádějící
+        kontext</strong>: absolutní počet skutečně mírně stoupá, ale v přepočtu
+        <a href="indikator-sestry_per_1000.html">na tisíc obyvatel</a> — což je pro dostupnost péče
+        rozhodující metrika — Česko stagnuje na 9,0 a proti roku 2020 je níž. A superlativ o „největší
+        redukci preskripčních omezení v historii" je <strong>neověřitelný</strong>: samotné rozvolnění
+        1 200 léků je doložené, ale žádná veřejná evidence neumožňuje srovnání s minulostí — což
+        poctivě přiznáváme, místo abychom verdikt tipovali.
+      </p>
+
+      <h3>Pravidla férovosti: steel-man a právo na odpověď</h3>
+
+      <p>
+        Každý výrok čteme v jeho nejsilnější rozumné podobě (tzv. steel-man): pokud lze větu chápat
+        benevolentně, chápeme ji tak. Posuzujeme výroky proti datům, která byla dostupná v době,
+        kdy zazněly. Nikdy nespekulujeme o motivech. A každý, o kom Barometr píše, má
+        <strong>právo na odpověď</strong> — kontakt je přímo na stránce a případné opravy procházejí
+        viditelným changelogem, ne tichým přepsáním.
+      </p>
+
+      <p>
+        Barometr od dneška žije na <a href="barometr.html">skorezdravotnictvi.cz/barometr</a>.
+        Stavy závazků se přepočítávají automaticky s každou aktualizací dat — až se řady pohnou,
+        uvidíte to dřív než v tiskových zprávách.
+      </p>
+
+      <section class="article-sources">
+        <div class="ed-kicker">Zdroje</div>
+        <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+        <div class="sources-group">
+          <h5 class="sources-group-h">Primární</h5>
+          <ul class="article-sources-list">
+            <li><strong>Programové prohlášení vlády České republiky</strong> (5. 1. 2026) — zdroj všech dvanácti závazků, citace doslovné. <a href="https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/" target="_blank" rel="noopener">vlada.gov.cz ↗</a></li>
+            <li><strong>Barometr politických prohlášení</strong> — kompletní pilotní sada: 12 závazků s baseline a stavem, 8 výroků s verdikty a zdůvodněním u každého. <a href="barometr.html">skorezdravotnictvi.cz/barometr</a></li>
+            <li><strong>Novela zákona o elektronizaci zdravotnictví</strong> — VeKLEP, materiál v připomínkovém řízení od 3. 7. 2026 (checkpoint závazku e-žádanky). <a href="https://odok.cz/portal/veklep/material/ALBSDVLDLD32/" target="_blank" rel="noopener">odok.cz — VeKLEP ↗</a></li>
+          </ul>
+        </div>
+        <div class="sources-group">
+          <h5 class="sources-group-h">Metodika</h5>
+          <ul class="article-sources-list">
+            <li><strong>Metodika Barometru</strong> — oddělení citace a interpretace, rozhodovací algoritmus stavů, taxonomie verdiktů Ověřovny, tolerance, právo na odpověď. Veřejný dokument. <a href="barometr.html#metodika">Barometr → Metodika</a></li>
+            <li><strong>Datový kontrakt indikátorů</strong> — baseline hodnoty závazků pocházejí z trend řad indikátorů HSPA Monitoru. <a href="hspa-prehled.html">Přehled indikátorů</a></li>
+          </ul>
+        </div>
+        <p class="article-sources-disclaimer">
+          <strong>Pozn.:</strong> Barometr popisuje plnění veřejných závazků na základě dat; nehodnotí
+          motivy a není tvrzením o kvalitě práce konkrétních osob. Verdikty Ověřovny se vztahují ke
+          konkrétním výrokům ke dni jejich pronesení, nikoli k osobám. Kontakt pro právo na odpověď
+          je uveden na stránce Barometru.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
