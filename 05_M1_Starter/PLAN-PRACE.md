@@ -10,11 +10,13 @@
 > **F2** (2 flagged) · **F3** (skener) · **F5** (zdokumentováno, pipeline-blok) ·
 > **F6** (screening karty) · **F7** (výhled 2027–2029) · **F8** (docs+glosář) ·
 > **U24** (a11y WCAG 2.2) · **U27** (STRAT/IND-STORY existovaly, PREV-PERSONA
-> dostavěno) · **F1: link-audit 100 % publikovaných článků** (4 paralelní
-> subagenti + ruční dohledávka; ~26 mrtvých odkazů opraveno, gov/anti-bot
-> false-positives podchyceny). **verified 116 · review-pending 21 · partial 15**;
-> všech 21 review-pending má F1 marker a zůstává review-pending z doložených
-> důvodů (headline indikátor origin=seed → čeká na F4, nebo otevřený redakční bod).
+> dostavěno) · **F1: link-audit 100 % CELÉHO publikovaného korpusu** (review-pending
+> i partial; 6 paralelních subagentů + ruční dohledávka; ~38 mrtvých odkazů opraveno,
+> gov/anti-bot false-positives podchyceny). **Kritický nález:** 3 publikované články
+> (cmp-iktova-centra, cekaci-doby-kycel, platba-za-vysledek-vzp) měly neuzavřený
+> `<!-- audit:` komentář → renderovaly se prázdné; opraveno. **verified 116 ·
+> review-pending 21 · partial 15**; všech 21 review-pending + 15 partial má F1 marker
+> a zůstává v daném stavu z doložených důvodů (seed indikátor → F4, nebo redakční bod).
 > ZBÝVÁ: **F4** (seed→live → noční ingest, sandbox zakazuje transform; odblokuje
 > většinu zbylých 21 review-pending) · **U22** (Dušek, blok na datový sourcing
 > PUK/ÚZIS) · **U21** manifest + **U28** dark mode (rozhodnutí vlastníka).
