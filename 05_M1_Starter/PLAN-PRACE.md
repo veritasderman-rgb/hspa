@@ -296,7 +296,7 @@ přesně Barometr/články potřebují opakovaně (nespěchá, MCP stačí pro a
 
 | ID | Úkol | Rozsah | Stav |
 |---|---|---|---|
-| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` („Proč tato reforma") + 3 count-up data cards už na `clanek-manifest-reforma-zdravotnictvi.html`. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS tým, viz disclaimer) — obsah needitovat bez autorů. |
+| U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` + 3 hero count-up cards + **Fáze D inline data cards u všech 7 priorit s indikátory** (P1/P2 doplněny 2026-07-10 dle Codex #766: P1 `platba_z_kapsy_pct`, P2 `spokojenost_informovani`; P4/5/8/10/13 už existovaly; P3/6/7/9/11/12 jsou kvalitativní bez indikátoru). `financovani_per_capita` (P1 návrh) v kontraktu neexistuje → nehádáno. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS) — text needitovat, data cards jsou neutrální HSPA vrstva. |
 | U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | ⛔ blok: datový sourcing PUK/ÚZIS (síť/pipeline), dělit na 2+ sessions |
 | U23 | Série Reforma — zbytek: fact-check dílů před publikací (PROMs modul už vyšel) | S–M | připraveno |
 | U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | ✅ hotovo (PR #761) |
