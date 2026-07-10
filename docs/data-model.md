@@ -383,6 +383,8 @@ Validátor: `npm run validate:explainers`.
 
 ## 9. `data/prevention.json` — prevence
 
+> **PREV-PERSONA (U27):** každé téma má `life_phases` (pole z `mlada_rodina | dospeli_40 | seniori_65`) — pohání persona filtr na `prevence.html`. Editorská kategorizace dle obsahu tématu; univerzální životní styl = všechny fáze. Vynucuje `ingest/validate-prevention.js`.
+
 Struktura mimo „array záznamů" — má hero + flow + themes.
 
 ```jsonc

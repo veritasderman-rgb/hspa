@@ -102,11 +102,33 @@ function renderFlow() {
 // Grid karet témat
 // ─────────────────────────────────────────────
 
+let activePersona = 'all';
+
+/** Vybere témata pro danou životní fázi ('all' = vše). Čistá funkce. */
+export function filterThemesByPersona(themes, phase = 'all') {
+  const xs = Array.isArray(themes) ? themes : [];
+  if (phase === 'all') return xs.slice();
+  return xs.filter(t => Array.isArray(t.life_phases) && t.life_phases.includes(phase));
+}
+
 function renderThemes() {
   const grid = document.getElementById('preventionGrid');
   if (!grid) return;
+  const shown = filterThemesByPersona(allThemes, activePersona);
+  grid.innerHTML = shown.map(theme => renderThemeCard(theme)).join('');
+  const empty = document.getElementById('prevPersonaEmpty');
+  if (empty) empty.classList.toggle('hidden', shown.length > 0);
+}
 
-  grid.innerHTML = allThemes.map(theme => renderThemeCard(theme)).join('');
+function wirePersonaFilter() {
+  document.querySelectorAll('#prevPersona button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#prevPersona button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePersona = btn.dataset.phase;
+      renderThemes();
+    });
+  });
 }
 
 function renderThemeCard(theme) {
@@ -279,6 +301,7 @@ function renderList() {
   renderHero();
   renderFlow();
   renderThemes();
+  wirePersonaFilter();
 }
 
 // ─────────────────────────────────────────────
