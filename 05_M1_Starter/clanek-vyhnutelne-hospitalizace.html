@@ -11,6 +11,7 @@
     primary_sources_added: 4
     visual_elements_added: 1
     notes: "Ověřeno proti OECD Health at a Glance 2025 (Avoidable hospital admissions, referenční rok 2021/2022). Centrální hodnoty 580 / 480 aktualizovány na 592 / 473 (Czechia / OECD průměr, OECD HAAG 2025). Title článku, og:title a article-title H2 aktualizovány z „Pět set osmdesát…" na „Téměř šest set…" pro konzistenci s revidovaným číslem 592 (Codex review #254). Opravena metodická chyba: 'OECD a Eurostat měří ACSC u pěti diagnóz' — Eurostat publikuje avoidable MORTALITY (Joint OECD/Eurostat list 2019), ne avoidable hospital admissions; ACSC je metodikou OECD HCQI (Definitions of Health Care Quality Indicators 2022). Smazán neověřitelný řádek z databoxu: 'Kontrolovaná hypertenze 68 % vs OECD 72 %' — primární domácí studie (Bruthans et al. 2019; Cifkova et al. Post-MONICA) ukazují kontrolu hypertenze v ČR cca 32-37 % (muži/ženy, kohorta 25-64), nikoli 68 %; OECD nepublikuje srovnatelný standardizovaný indikátor kontroly TK na úrovni populace. Opraven překlep v sekci 'Co s tím': 'desetitisíce úmrtí ročně' → 'desetitisíce hospitalizací ročně' (téma článku jsou hospitalizace). Aktualizovány zdrojové URL z generických OECD landing page na konkrétní HAAG 2025 sekci avoidable hospital admissions a HCQI metodické dokumenty. Doplněn caveat callout s vysvětlením OECD vs Eurostat metodiky. Status published → review-pending."
+    av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid + caveat callout): av-aside counter paradox ambulantních kontaktů (11,2 vs OECD 6,8, ale ACSC vysoké → koordinace, ne počet), av-data-table 4 mezinárodní modely (QOF / care groups / vårdcentral / telekonzultace). Čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -195,6 +196,14 @@
         Druhá část ACSC hospitalizací představuje pacienty, kteří dispenzární péčí <em>neprošli</em> — buď se k praktickému lékaři neregistrovali, nebo si dispenzární kontroly v souvislosti s chronickou diagnózou nestavěli jako prioritu. Pro tuto skupinu je akutní hospitalizace často první kontakt s diagnózou, který stav popíše. To je v ČR strukturální problém — registrovanost u praktika je formálně vysoká, ale aktivní dispenzární práce s chronickými pacienty je nerovnoměrná podle ordinace a regionu. Indikátor pokrytí preventivní prohlídkou (`prohlidka_prakticky_lekar`) v dashboardu udává 52,6 procenta účasti (ÚZIS/NZIP, mikrodata PPS-08-01, 2023) — tedy téměř polovina dospělých preventivní prohlídkou u praktika ve dvouletém intervalu neprojde, což je další stránka stejného problému.
       </p>
 
+      <aside class="av-aside av-aside-left">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="11.2" data-decimals="1">11,2</span>
+          <span class="av-counter-label">ambulantních kontaktů na osobu a rok</span>
+          <span class="av-counter-foot">OECD 6,8 — hodně kontaktů, ale ACSC přesto vysoké: problém není počet, ale koordinace</span>
+        </div>
+      </aside>
+
       <h3>Tři vrstvy, kde Česko ztrácí</h3>
 
       <p>
@@ -230,6 +239,46 @@
       <p>
         <strong>Telekonzultace praktik–specialista</strong> je samostatný nástroj, který mezi primární péči a specializovanou medicínu přidává mezistupeň. V britském NHS, v některých nizozemských regionech a v severských zemích posílá praktik elektronický dotaz specialistovi (e-consultation, „Advice and Guidance"). Specialista odpoví do 24–72 hodin a zhruba v polovině případů osobní návštěva pacienta není potřebná. Pacient nemusí čekat týdny na termín, praktik dostane odbornou oporu v okamžiku, kdy ji potřebuje, a specializovaná kapacita se uvolňuje pro skutečně komplikované případy. V Česku je tento nástroj v dílčích pilotech, ale plošně nezavedený.
       </p>
+
+      <div class="av-aside-clear"></div>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Co dělají systémy, kde odvratitelné hospitalizace klesají</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Systém</th>
+                <th scope="col">Nástroj</th>
+                <th scope="col">Mechanismus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Velká Británie</th>
+                <td>QOF (od 2004)</td>
+                <td>bonus praktikům za měřitelné výsledky (HbA1c, kontrola TK); až ~20 % rozpočtu na výkon</td>
+              </tr>
+              <tr>
+                <th scope="row">Nizozemsko</th>
+                <td>care groups + bundled payment</td>
+                <td>paušál za chronika/rok → motivace udržet v ambulantní léčbě</td>
+              </tr>
+              <tr>
+                <th scope="row">Skandinávie</th>
+                <td>zdravotní centra primární péče</td>
+                <td>dispenzár u sestry s pravomocí titrovat medikaci dle protokolu</td>
+              </tr>
+              <tr>
+                <th scope="row">UK / NL / severské</th>
+                <td>telekonzultace praktik–specialista</td>
+                <td>e-consultation; ~½ případů bez osobní návštěvy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NHS QOF (BMJ/BJGP); nizozemské care groups; švédský vårdcentral / finský terveyskeskus. V ČR jen dílčí piloty.</p>
+      </figure>
 
       <h3>Co Česko realisticky může</h3>
 
