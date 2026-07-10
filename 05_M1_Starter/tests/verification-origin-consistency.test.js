@@ -38,7 +38,6 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'absolventi_lekarstvi_per_100k',
   'cholesterol_prumer_dospeli',
   'konzumace_ovoce_zeleniny',
-  'nadeje_doziti_zdravi_65',
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
 ]);
