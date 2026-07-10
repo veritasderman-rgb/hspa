@@ -19,9 +19,13 @@
 > `<!-- audit:` komentář → renderovaly se prázdné; opraveno. **verified 116 ·
 > review-pending 21 · partial 15**; všech 21 review-pending + 15 partial má F1 marker
 > a zůstává v daném stavu z doložených důvodů (seed indikátor → F4, nebo redakční bod).
-> ZBÝVÁ (obojí blokované na prostředí, ne na agentech): **F4** (seed→live → noční
-> ingest, sandbox zakazuje transform; odblokuje většinu zbylých 21 review-pending) ·
-> **U22** (Duškův brief, blok na datový sourcing PUK/ÚZIS). Vše ostatní z v2 hotovo.
+> ZBÝVÁ: **F4** (seed→live) — **je proveditelné v session** (síť na Eurostat/OECD SDMX
+> funguje; sandbox zakazuje jen plný `transform` — hodnoty se ověřují cíleně přes
+> konkrétní fetcher a zapisují ručně, viz PLAN-VERIFIKACE-INDIKATORU.md). Dávka 2026-07-10:
+> `perinatalni_umrtnost` seed→live (Eurostat hlth_cd_aperrto, ověřeno 4,8/2024, přidán
+> mapping, F5 výjimka odebrána). **Nález:** 2 rozbité eurostat mappingy (`nadeje_doziti_zdravi_65`,
+> `ohrozeni_chudobou` → HTTP 400, drift API) k opravě v příští dávce. · **U22** (Duškův
+> brief) zůstává blok na ÚZIS/PUK sourcing (data.mzcr.cz CKAN mrtvý — ruční discovery).
 
 ---
 
