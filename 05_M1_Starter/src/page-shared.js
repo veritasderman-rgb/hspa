@@ -504,6 +504,7 @@ export function renderModuleNav(activeId) {
         { id: 'legislativa',   label: 'Legislativní radar',              href: 'legislativa.html', match: ['legislativa.html'] },
       ],
     },
+    { id: 'barometr',    label: 'Barometr',                href: 'barometr.html',           match: ['barometr.html'] },
     { id: 'about',       label: 'O projektu',              href: 'o-projektu.html',         match: ['o-projektu.html'] },
     { id: 'glossary',    label: 'Glosář',                  href: 'glosar.html',             match: ['glosar.html'] },
   ];

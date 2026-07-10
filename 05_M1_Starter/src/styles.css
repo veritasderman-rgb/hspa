@@ -15130,3 +15130,162 @@ a.leg-tl-title { text-decoration: underline; text-underline-offset: 2px; }
   .leg-plan-head h2, .leg-radar-head h2 { font-size: 24px; }
   .leg-part-num { width: 34px; height: 34px; font-size: 18px; }
 }
+
+/* ============================================================
+   Barometr politických prohlášení (barometr.html) · namespace .bar-*
+   Vzor: legislativa (.leg-plan-*). Reuse: .ed-hero, .ed-kicker, .section,
+   .level-nav, .filters-row, .empty-state. Barevná sémantika badge =
+   signální paleta good/warn/bad/neutral (červená JEN pro bad/opačný směr).
+   ============================================================ */
+
+/* Číslované předěly částí (Sliby / Výroky) — klon .leg-part-divider. */
+.bar-part-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.bar-part-num {
+  flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-size: 19px; font-weight: 700;
+  color: var(--paper); background: var(--ink);
+}
+.bar-part-tag {
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mut2);
+}
+.bar-part-line { flex: 1 1 auto; height: 1px; background: var(--rule2); }
+
+/* Seznam karet (závazky i výroky) */
+.bar-list { padding: 4px 40px 8px; display: flex; flex-direction: column; gap: 18px; }
+
+.bar-commit, .bar-statement {
+  border: 1px solid var(--rule2); border-left: 3px solid var(--rule2);
+  padding: 18px 20px; background: var(--paper);
+}
+.bar-commit[data-stav="plni_se"], .bar-commit[data-stav="splneno"] { border-left-color: var(--good); }
+.bar-commit[data-stav="bez_pohybu"] { border-left-color: var(--warn); }
+.bar-commit[data-stav="opacny_smer"] { border-left-color: var(--red); }
+.bar-statement[data-verdikt="sedi_s_daty"] { border-left-color: var(--good); }
+.bar-statement[data-verdikt="zavadejici_kontext"] { border-left-color: var(--warn); }
+.bar-statement[data-verdikt="nesedi"] { border-left-color: var(--red); }
+
+.bar-commit-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.bar-oblast {
+  font-family: var(--sans); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--ink-mut2);
+}
+
+/* Badge (stav / verdikt) — stejná typografie jako .leg-plan-badge. */
+.bar-badge {
+  display: inline-block; font-family: var(--sans);
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
+  padding: 3px 9px; border: 1px solid var(--rule2); color: var(--ink-mut); white-space: nowrap;
+}
+.bar-badge-good { color: var(--good); border-color: var(--good); }
+.bar-badge-warn { color: var(--warn); border-color: var(--warn); }
+.bar-badge-bad { color: var(--red); border-color: var(--red); }
+.bar-badge-neutral { color: var(--ink-mut2); border-color: var(--rule2); }
+
+/* Verbatim citace / výrok */
+.bar-citace, .bar-vyrok {
+  margin: 0 0 14px; padding: 0 0 0 16px; border-left: 3px solid var(--red-soft);
+  font-family: var(--serif); font-size: 18px; line-height: 1.5; color: var(--ink);
+  font-style: italic;
+}
+.bar-citace::before, .bar-vyrok::before { content: "„"; }
+.bar-citace::after, .bar-vyrok::after { content: "\201C"; }
+.bar-cite {
+  display: block; margin-top: 8px; font-style: normal;
+  font-family: var(--sans); font-size: 12px; color: var(--ink-mut2);
+}
+.bar-cite a { color: var(--red); text-decoration: none; border-bottom: 1px solid var(--red); }
+.bar-cite a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* Interpretace / zdůvodnění */
+.bar-interpretace { margin-bottom: 12px; }
+.bar-interpretace p { margin: 4px 0 0; font-family: var(--serif); font-size: 15px; line-height: 1.6; color: var(--ink); }
+.bar-label {
+  font-family: var(--sans); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.1em; font-weight: 600; color: var(--ink-mut2);
+}
+.bar-label-note { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+/* Checkpoint: baseline → aktuální hodnota */
+.bar-checkpoints { display: flex; flex-direction: column; gap: 10px; margin: 4px 0 12px; }
+.bar-metric {
+  padding: 10px 12px; background: var(--paper2); border: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.bar-metric-name {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink);
+  text-decoration: none;
+}
+a.bar-metric-name { color: var(--red); }
+a.bar-metric-name:hover { color: var(--ink); text-decoration: underline; }
+.bar-metric-values {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  font-family: var(--sans); font-size: 15px; color: var(--ink);
+}
+.bar-baseline { color: var(--ink-mut); }
+.bar-metric-year { font-size: 12px; color: var(--ink-mut2); }
+.bar-metric-arrow { color: var(--ink-mut2); }
+.bar-current { font-weight: 700; }
+.bar-metric-nodata { font-size: 13px; color: var(--ink-mut2); font-style: italic; }
+.bar-delta {
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  padding: 1px 7px; border: 1px solid currentColor;
+}
+.bar-delta-good { color: var(--good); }
+.bar-delta-bad { color: var(--red); }
+.bar-delta-flat { color: var(--ink-mut2); }
+.bar-direction {
+  font-family: var(--sans); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-mut2);
+}
+
+/* stav_duvod */
+.bar-stav-duvod {
+  margin: 8px 0 0; font-family: var(--serif); font-size: 14px; line-height: 1.55;
+  color: var(--ink-mut);
+}
+
+/* Chips (legislativa / indikátory / zdroje) */
+.bar-chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+.bar-chip-lbl {
+  font-family: var(--sans); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--ink-mut2); margin-right: 2px;
+}
+.bar-chip {
+  display: inline-block; font-family: var(--sans); font-size: 12px;
+  padding: 3px 9px; border: 1px solid var(--rule2); color: var(--ink);
+  text-decoration: none; white-space: nowrap;
+}
+a.bar-chip:hover { border-color: var(--red); color: var(--red); }
+.bar-chip-leg { border-style: dashed; }
+.bar-chip-src { color: var(--ink-mut); }
+
+/* Statické počitadlo hero — reuse .ed-stat; jen alert varianta */
+.bar-stat-alert { border-color: var(--red) !important; }
+.bar-stat-alert .ed-stat-num { color: var(--red); }
+
+/* Box Metodika + právo na odpověď */
+.bar-method { padding: 12px 40px 8px; margin-top: 32px; }
+.bar-method-inner {
+  border: 1px solid var(--ink); border-left: 4px solid var(--red);
+  padding: 22px 26px; background: var(--paper2);
+}
+.bar-method-inner h2 { font-size: 22px; line-height: 1.2; letter-spacing: -0.3px; margin: 4px 0 8px; }
+.bar-method-inner p { margin: 0 0 10px; font-family: var(--serif); font-size: 15px; line-height: 1.6; color: var(--ink); max-width: 760px; }
+.bar-method-rights { border-top: 1px solid var(--rule); padding-top: 10px; }
+.bar-method-inner a { color: var(--red); text-decoration: none; border-bottom: 1px solid var(--red); }
+.bar-method-inner a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.bar-method-actions { margin-top: 6px; }
+.bar-method-link { font-family: var(--sans); font-size: 14px; font-weight: 600; }
+
+@media (max-width: 720px) {
+  .bar-list { padding: 4px 16px 8px; }
+  .bar-commit, .bar-statement { padding: 16px; }
+  .bar-citace, .bar-vyrok { font-size: 16px; }
+  .bar-method { padding: 12px 16px 8px; }
+  .bar-method-inner { padding: 18px; }
+  .bar-part-num { width: 34px; height: 34px; font-size: 18px; }
+}
