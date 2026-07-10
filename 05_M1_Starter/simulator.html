@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulátor pák — co kdyby české zdravotnictví zatlačilo · HSPA Monitor</title>
+<meta name="description" content="Interaktivní what-if simulátor: zatáhněte za reformní páky (tabáková daň, ošetřovatelský poměr, screening, prevence) a uvidíte modelový dopad na indikátory HSPA. Ilustrativní odhad dle citované evidence, ne predikce.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/simulator" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/simulator" data-seo-injected="1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Simulátor pák</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero sim-hero">
+    <p class="ed-kicker">SIMULÁTOR PÁK · CO KDYBY</p>
+    <h1>Zatáhněte za páku a uvidíte, kudy se to propíše</h1>
+    <p class="ed-lead">
+      Model systému ukazuje, <em>co s čím souvisí</em>. Tady jdeme o krok dál:
+      posuňte reformní páku a simulátor spočítá <strong>modelový dopad na
+      indikátory</strong> podle efektů doložených v datech a článcích. Kde
+      existuje čistá elasticita (např. „+10&nbsp;% ceny cigaret → −4&nbsp;% kouření
+      mladistvých“), spočítá se číslo; jinde ukáže jen směr a sílu.
+    </p>
+    <p class="sim-disclaimer" role="note">
+      <strong>Ilustrativní modelový odhad dle citované evidence — ne predikce.</strong>
+      Reálný dopad závisí na provedení, čase a dalších vlivech. Každá páka i každý
+      efekt má zdroj (viz „Jak to počítáme“ dole).
+    </p>
+  </section>
+
+  <section class="sim-section" aria-label="Interaktivní simulátor">
+    <div class="sim-layout">
+      <form class="sim-controls" id="simControls" aria-label="Reformní páky">
+        <h2 class="sim-h">Páky</h2>
+        <div id="simLeversList"></div>
+        <button type="reset" class="sim-reset" id="simReset">Vynulovat všechny páky</button>
+      </form>
+      <aside class="sim-results" id="simResults" aria-live="polite" aria-label="Modelový dopad na indikátory">
+        <h2 class="sim-h">Modelový dopad</h2>
+        <div id="simResultsList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sim-section sim-method">
+    <details id="simMethod">
+      <summary>Jak to počítáme (a co to neumí)</summary>
+      <p><strong>Dva typy efektu.</strong> <em>Elasticita</em> — kde publikovaná
+      evidence dává koeficient, spočítáme novou hodnotu indikátoru jako
+      <code>původní × (1 + koeficient/100 × posun páky)</code>. <em>Směrový efekt</em>
+      — kde čisté číslo neexistuje, ukážeme jen směr (nahoru/dolů) a sílu
+      (slabá/střední/silná), stejně jako hrany Modelu systému.</p>
+      <p><strong>Meze.</strong> Efekty se nekombinují do jedné souhrnné projekce
+      (páky se nesčítají mezi sebou), neřešíme časové zpoždění ani interakce mezi
+      pákami. Výchozí hodnoty indikátorů jsou aktuální hodnoty z datového
+      kontraktu. Cílem je ukázat <em>řád a směr</em>, ne přesnou předpověď.</p>
+      <ul id="simSources" class="sim-sources"></ul>
+    </details>
+  </section>
+
+  <section class="sim-section sim-context">
+    <h2>Souvislosti</h2>
+    <p>Simulátor navazuje na <a href="model-systemu.html">Model systému</a>
+    (kvalitativní kauzální mapa — „kudy“) a čerpá elasticity a efekty z článků
+    dashboardu. Metodicky vychází ze série o reformách komplexních systémů,
+    zejména <a href="clanek-systemove-mapovani-paky.html">Systémové mapování a páky změny</a>.
+    Každá páka odkazuje na svůj zdroj v sekci „Jak to počítáme“.</p>
+  </section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/simulator.js"></script>
+</body>
+</html>

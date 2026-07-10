@@ -549,11 +549,12 @@ export function renderModuleNav(activeId) {
         // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html'],
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html'],
       children: [
         { id: 'jak-zdravotnictvi', label: 'Zdravotnictví',           href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
         { id: 'cesta-pacienta',    label: 'Cesta pacienta systémem',  href: 'cesta-pacienta.html', match: ['cesta-pacienta.html'] },
         { id: 'model-systemu',     label: 'Model systému',            href: 'model-systemu.html', match: ['model-systemu.html'] },
+        { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
       ],
     },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
