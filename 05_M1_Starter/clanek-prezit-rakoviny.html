@@ -21,6 +21,7 @@
     visual_elements_added: 0
     f1_2026-07-10: "Link-audit (F1): 14 externích odkazů zkontrolováno. Opraven 1 mrtvý odkaz: mzd.gov.cz/vestnik-ministerstva-zdravotnictvi/ (HTTP 404, cesta reorganizována) → mzd.gov.cz/vestniky/ (200, ověřeno WebSearch + curl). eurocare.it vrací trvale HTTP 503 (curl i WebFetch), ale TLS handshake na doméně je funkční (reálný certifikát, ne DNS ENOTFOUND) — dle pravidla ponecháno jako živá, jen dočasně/trvale nedostupná doména, ne potvrzeně mrtvá; poznámka pro redakci, že aktuální EUROCARE-6 výstupy jsou primárně publikovány přes ISS Řím (iss.it/en/eurocare-5). Ponechány jako živé, ale blokující boty: oecd.org ×2 (EU Country Cancer Profile 2023, Health at a Glance 2023 — 403 Akamai bot-block). Ostatní odkazy (mzd.gov.cz ×3 další, doi.org, cancer-inequalities.jrc.ec.europa.eu, iba.muni.cz, svod.cz, uzis.cz) OK 200. Status ponechán review-pending — headline indikátor prezit_rakoviny_5let je live, ale vedlejší indikátory incidence_kolorektalni a incidence_prsu jsou origin: seed a poslední audit (2026-06-20) čeká na ruční schválení redakce."
     notes: "2026-06-20 (denní rutina, fallback audit nejstaršího článku — last_reviewed 2026-05-12, 39 dní). Ověřeno proti EU Country Cancer Profile 2025 (Czechia, EC/OECD, data ECIS/JRC). OPRAVY: (1) rozdíl 5letého přežití sjednocen na 5,1 p.b. (56,1 vs 61,2 %; titulek/počítadlo dříve uváděly „6/−6 p.b.", lead správně „pět"); (2) incidence prsu v datovém boxu opravena na věk. std. 133/100k vs EU 148 (dříve „145 vs OECD 90,7" — míchala hrubou a std. míru a obracela směr, ČR je ve skutečnosti pod EU); (3) odstraněno zavádějící tvrzení o kolorektální incidenci „2× nad průměrem OECD" (hrubá 73,5 vs std. 36,5) — na věk. std. bázi je ČR srovnatelná s EU (muži 94 vs 93, ženy 53 vs 58), zatímco úmrtnost je o 19 % vyšší (32/100k); (4) screening aktualizován na 31,1 % (2024, ÚZIS); (5) opraven překlep zdroje H@G 2024 → 2023. Předchozí audit (2026-05-12): EUROCARE INT Milán + ISS Řím, colon/rectum distinkce, kohortové ukotvení. Status zůstává review-pending — čeká na ruční schválení redakce. | nightly_scan 2026-07-06 (noční rutina, publikační hygiena): z těla článku odstraněny dvě poznámky o revizním procesu ('Auditní disclaimer (2026-05-12)…' a 'Revize 2026-06-20 (denní rutina, fallback audit)…') — redakční changelog nepatří do publikovaného textu (CLAUDE.md publikační hygiena). Veškerá data i zdroje z těchto poznámek (56,1/61,2 %, incidence prsu 133 vs EU 148, kolorektál muži 94/ženy 53, screening 31,1 %, EU Country Cancer Profile 2025) jsou nadále v těle článku a v sekci Zdroje. Beze změny čísel a tvrzení."
+    av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-data-table heterogenita diagnóz (prsu/prostata blízko / kolorektál ztrácí / hrdlo+plíce prostor / pankreas špatný všude), av-bar-compare 5leté přežití kolorektál 56,1 vs 61,2 % + kontext screening 31,1/42 a úmrtnost +19 %. Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -207,6 +208,49 @@
         Důležitější než agregát je, že rozdíl mezi Českem a evropskou špičkou se nerozkládá rovnoměrně mezi diagnózami. Z dat Národního onkologického registru a z CONCORD-3 / EUROCARE se opakuje stejný vzorec.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Kde ČR ztrácí a kde ne — pětileté přežití podle diagnózy</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Diagnóza</th>
+                <th scope="col">ČR vs. Evropa</th>
+                <th scope="col">Proč</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Rakovina prsu</th>
+                <td class="av-good">blízko evropského průměru</td>
+                <td>populační mamografický screening od 2002</td>
+              </tr>
+              <tr>
+                <th scope="row">Rakovina prostaty</th>
+                <td class="av-good">liší se jen okrajově</td>
+                <td>pětileté přežití mezinárodně vysoké</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Kolorektální karcinom</th>
+                <td class="av-bad">zřetelně ztrácí (56,1 vs 61,2 %)</td>
+                <td>pozdější stadium při diagnóze (slabý screening)</td>
+              </tr>
+              <tr>
+                <th scope="row">Děložní hrdlo, plíce</th>
+                <td class="av-mut">prostor pro zlepšení</td>
+                <td>pozdní záchyt</td>
+              </tr>
+              <tr>
+                <th scope="row">Pankreas</th>
+                <td class="av-mut">špatný všude</td>
+                <td>žádný systém s tím dramaticky nepohnul</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NOR ÚZIS; CONCORD-3 (Lancet 2018); EUROCARE; EU Country Cancer Profile 2025.</p>
+      </figure>
+
       <p>
         U <strong>rakoviny prsu</strong> se Česko drží blízko evropského průměru — populační mamografický screening byl spuštěn v roce 2002 (Doporučený standard publikovaný ve Věstníku MZ ČR č. 11/2002; aktuální platné znění je ve Věstníku č. 5/2024) a větší podíl nádorů je díky němu zachycen v časném stadiu. Podobně relativně dobře si vede <strong>rakovina prostaty</strong>, kde je pětileté přežití mezinárodně vysoké a Česko se od evropské špičky liší jen okrajově.
       </p>
@@ -226,6 +270,15 @@
       <p>
         Pět procentních bodů u kolorektálu tedy není soudem o „české onkologii" jako celku. Je soudem o jedné konkrétní diagnóze — té, u které se rozdíl proti Evropě dlouhodobě počítá nejvýrazněji a kde má Česko zároveň nejjasněji identifikovaný kořen problému.
       </p>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Otisk pozdního záchytu: podobný výskyt, vyšší úmrtnost (kolorektál, věk. std.)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" %" data-max="100">
+          <li class="av-bar-row av-bar-row-bad" data-value="56.1" data-display="56,1 %" data-label="Pětileté přežití — ČR" data-note="příčinou pozdější stadium při diagnóze"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="61.2" data-display="61,2 %" data-label="Pětileté přežití — OECD ⌀"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Souvislost:</strong> účast na kolorektálním screeningu ČR jen 31,1 % vs. OECD 42 %; úmrtnost je +19 % nad EU při srovnatelné incidenci. Zdroj: OECD (CONCORD-3); EU CCP 2025.</p>
+      </figure>
 
       <h3>Tři příčiny, které jsou doložené</h3>
 
