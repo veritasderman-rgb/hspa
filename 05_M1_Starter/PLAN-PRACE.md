@@ -27,11 +27,12 @@
 > (hlth_hlye indic_he→hlth_hle) seed→live, eurostat fetcher 17/19→19/19 ok, 3 F5 výjimky
 > odebrány. Zbývá: pár illustrative s živým zdrojem (OECD SDMX2 kandidáti), většina
 > illustrative je korektně one-off/frozen (playbook §8). · **U22** (Duškův brief:
-> 8 klinických indik. + 6 článků) — **PUK scraping FUNGUJE** (puk.js živě: mortalita_30d_ami
-> 6,79 %, trombektomie_cmp 5,18/13 krajů, centralizace_cmp 73,74/14 krajů, pankreas 5,24 %).
-> 3 indikátory `parsed-no-value` (pooperacni_sepse_psi13, mortalita_90d_jicen/plice — parser
-> per-page, ne mrtvá URL). Zbytek U22 = per-page parser fix + 8 indik. sourcing dle briefu
-> + 6 klinických článků (velké, multi-session; brief needs owner spec KTERÝCH 8/6).
+> 8 klinických indik. + 6 článků) — **infra HOTOVA**: `kvalita-pece.html` + `clinical-quality.js`
+> + `clinical-quality.json` (35 indik. + 3 INDIKO), fetchery, nav wired; 8 heatmap indik.
+> sourcováno (puk.js 31/35 ok živě). Onko-próza parser sub-item **VYŘEŠEN**: jícen/plíce/játra
+> vystavují jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný
+> výstup, seed drží roční hodnotu (traps.md; catch málem-regrese). Zbývá jen **6 dlouhých
+> klinických článků** — publikovaný obsah pro veřejný web, potřebuje editorské zadání témat.
 
 ---
 
@@ -307,7 +308,7 @@ přesně Barometr/články potřebují opakovaně (nespěchá, MCP stačí pro a
 | ID | Úkol | Rozsah | Stav |
 |---|---|---|---|
 | U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` + 3 hero count-up cards + **Fáze D inline data cards u všech 7 priorit s indikátory** (P1/P2 doplněny 2026-07-10 dle Codex #766: P1 `platba_z_kapsy_pct`, P2 `spokojenost_informovani`; P4/5/8/10/13 už existovaly; P3/6/7/9/11/12 jsou kvalitativní bez indikátoru). `financovani_per_capita` (P1 návrh) v kontraktu neexistuje → nehádáno. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS) — text needitovat, data cards jsou neutrální HSPA vrstva. |
-| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | 🟡 proveditelné, multi-session (dřívější „blok" mylný): **PUK scraping funguje** (puk.js živě — AMI 6,79 %, trombektomie 5,18/13 krajů, centralizace 73,74/14, pankreas 5,24 %). Zbývá: (a) parser fix 3 `parsed-no-value` (sepse_psi13, jícen, plíce — per-page chart), (b) 8 indik. sourcing + (c) 6 klinických článků — brief needs owner spec KTERÝCH 8/6 |
+| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | 🟢 **infra HOTOVA** — `kvalita-pece.html` (720 ř.), `src/clinical-quality.js` (466 ř.), `data/clinical-quality.json` (35 indik. + 3 INDIKO cesty), `puk.js`/`indiko.js`/`validate-clinical-quality.js`, nav wired. **8 heatmap indik. sourcováno** (sepse PSI-13, AMI, CMP, trombektomie, AWaRe, kolorektál, MDT/čas přes INDIKO — puk.js 31/35 ok živě). Parser sub-item **VYŘEŠEN 2026-07-10**: onko próza (jícen/plíce/játra) vystavuje jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný výstup, seed je roční hodnota (traps.md; málem regrese). Zbývá jen (c) **6 dlouhých klinických článků** — obsah pro veřejný web, potřebuje editorské zadání témat (výběr publikovaných klinických článků nelze fabrikovat autonomně). `sepse_psi13` via iframe PHP-graf = volitelný per-page handler, nízká priorita (seed 0,84 % drží). |
 | U23 | Série Reforma — zbytek: fact-check dílů před publikací (PROMs modul už vyšel) | S–M | připraveno |
 | U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | ✅ hotovo (PR #761) |
 | U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | ✅ hotovo (PR #761) |
