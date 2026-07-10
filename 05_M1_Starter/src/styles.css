@@ -42,9 +42,11 @@
 
 /* ── Dark mode ──────────────────────────────────────────────────────────
    Přepnutí bázových tokenů → aliasy i přímé použití var(--paper/--ink/…)
-   se propíšou automaticky. Default = light; systémový dark přes
-   prefers-color-scheme (pokud uživatel ručně nezvolil light), ruční toggle
-   přes :root[data-theme="dark"]. Brand pravidlo: červená patří jen hrotu střelky. */
+   se propíšou automaticky. Default = VŽDY light (i na systémech s tmavým
+   režimem); tmavý motiv se aktivuje POUZE ručním toggle přes
+   :root[data-theme="dark"] (uloženo v localStorage). Systémové
+   prefers-color-scheme se záměrně NEsleduje — světlé rozhraní je výchozí.
+   Brand pravidlo: červená patří jen hrotu střelky. */
 :root[data-theme="dark"],
 :root[data-theme="dark"] body {
   --paper: #17140f;
@@ -64,27 +66,6 @@
   --surface-warn: rgba(210,146,36,0.12);
   --surface-tint: rgba(150,130,180,0.14);
   color-scheme: dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #17140f;
-    --paper2: #221d16;
-    --ink: #ece5d8;
-    --ink-mut: rgba(236,229,216,0.68);
-    --ink-mut2: rgba(236,229,216,0.66);
-    --rule: rgba(236,229,216,0.16);
-    --rule2: rgba(236,229,216,0.32);
-    --red: #e0563a;
-    --red-soft: rgba(224,86,58,0.14);
-    --good: #56a83f;
-    --warn: #d29224;
-    --bad: #e0563a;
-    --neutral: #9a9184;
-    --modal-bg: rgba(0,0,0,0.62);
-    --surface-warn: rgba(210,146,36,0.12);
-    --surface-tint: rgba(150,130,180,0.14);
-    color-scheme: dark;
-  }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15410,3 +15391,514 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 }
 .prev-persona button.active { background: var(--ink); color: var(--paper); }
 .prev-persona-empty { font-family: var(--serif); color: var(--ink-mut); padding: 20px 0; }
+
+/* =================================================================
+   Simulátor pák (simulator.html) · namespace .sim-*
+   Kvantitativní what-if vrstva nad Modelem systému. Jen tokeny
+   (paper/ink/rule/red + signály) → automaticky dark-safe.
+   ================================================================= */
+.sim-hero .ed-lead { max-width: 760px; }
+.sim-disclaimer {
+  max-width: 760px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+.sim-disclaimer strong { color: var(--ink); }
+
+.sim-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.sim-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .sim-layout { grid-template-columns: 1fr; }
+}
+.sim-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Ovládací panel ── */
+.sim-controls { min-width: 0; }
+.sim-lever {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.sim-lever:first-of-type { padding-top: 0; }
+.sim-lever-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.sim-lever-group {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.sim-lever-label {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sim-lever-desc {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 6px 0 12px;
+}
+.sim-lever-control { display: flex; align-items: center; gap: 14px; }
+.sim-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  accent-color: var(--red);
+  height: 24px;
+  cursor: pointer;
+}
+.sim-slider:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.sim-lever-value {
+  flex: 0 0 auto;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 92px;
+  text-align: right;
+}
+
+/* Toggle jako switch */
+.sim-switch { position: relative; display: inline-flex; flex: 0 0 auto; }
+.sim-toggle {
+  position: absolute;
+  width: 46px; height: 26px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.sim-switch-track {
+  display: inline-block;
+  width: 46px; height: 26px;
+  border-radius: 999px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  position: relative;
+  transition: background 0.15s ease;
+}
+.sim-switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--ink-mut);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.sim-toggle:checked + .sim-switch-track { background: var(--red); border-color: var(--red); }
+.sim-toggle:checked + .sim-switch-track::after { transform: translateX(20px); background: #fff; }
+.sim-toggle:focus-visible + .sim-switch-track { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.sim-reset {
+  margin-top: 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.sim-reset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Výsledky ── */
+.sim-results {
+  min-width: 0;
+  position: sticky;
+  top: 16px;
+}
+@media (max-width: 860px) {
+  .sim-results { position: static; }
+}
+.sim-empty {
+  font-family: var(--serif);
+  color: var(--ink-mut);
+  padding: 24px 0;
+  font-size: 16px;
+}
+.sim-result-group {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.sim-result-group:first-child { padding-top: 0; }
+.sim-result-lever {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sim-result-setting {
+  font-weight: 500;
+  color: var(--red);
+}
+.sim-effect {
+  padding: 10px 0;
+}
+.sim-effect + .sim-effect { border-top: 1px dashed var(--rule); }
+.sim-effect-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.sim-effect-name {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sim-kind {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.sim-kind-dir { opacity: 0.85; }
+.sim-fav {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.sim-fav-good { color: var(--good); border: 1px solid var(--good); }
+.sim-fav-bad  { color: var(--bad);  border: 1px solid var(--bad); }
+.sim-effect-value {
+  font-family: var(--sans);
+  font-size: 15px;
+  margin: 6px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sim-before { color: var(--ink-mut); }
+.sim-after { color: var(--ink); font-weight: 700; }
+.sim-direction { color: var(--ink); font-weight: 600; }
+.sim-arrow { font-size: 17px; font-weight: 700; }
+.sim-arrow-down { color: var(--good); }
+.sim-arrow-up { color: var(--warn); }
+.sim-arrow-flat { color: var(--ink-mut); }
+.sim-delta { color: var(--ink-mut); font-size: 13px; }
+.sim-effect-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+}
+
+/* ── Metodika + souvislosti ── */
+.sim-method details {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0 16px;
+  background: var(--paper2);
+}
+.sim-method summary {
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--ink);
+  padding: 14px 0;
+  cursor: pointer;
+}
+.sim-method p {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.sim-method p strong, .sim-method p em { color: var(--ink); }
+.sim-method code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.sim-sources {
+  margin: 8px 0 16px;
+  padding-left: 20px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.sim-context { padding-top: 4px; }
+.sim-context h2 {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.sim-context p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 720px;
+}
+
+/* =================================================================
+   Osobní zdravotní kompas (kompas.html) · namespace .kompas-*
+   Jen tokeny → dark-safe. Default light (viz decisions-log).
+   ================================================================= */
+.kompas-hero .ed-lead { max-width: 760px; }
+.kompas-disclaimer {
+  max-width: 760px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--red);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.kompas-disclaimer strong { color: var(--ink); }
+
+.kompas-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.kompas-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .kompas-layout { grid-template-columns: 1fr; }
+}
+.kompas-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Formulář ── */
+.kompas-form {
+  min-width: 0;
+  position: sticky;
+  top: 16px;
+}
+@media (max-width: 860px) {
+  .kompas-form { position: static; }
+}
+.kompas-field { margin: 0 0 16px; }
+.kompas-field > label,
+.kompas-fieldset > legend {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 6px;
+  padding: 0;
+}
+.kompas-field input[type="number"],
+.kompas-field select {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 15px;
+  padding: 9px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.kompas-field input[type="number"]:focus-visible,
+.kompas-field select:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.kompas-fieldset { border: 0; margin: 0 0 16px; padding: 0; }
+.kompas-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  margin: 0 14px 6px 0;
+  cursor: pointer;
+}
+.kompas-radio input { accent-color: var(--red); }
+.kompas-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0 0 18px;
+  cursor: pointer;
+}
+.kompas-check input { accent-color: var(--red); margin-top: 2px; }
+.kompas-reset {
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.kompas-reset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Výsledky ── */
+.kompas-results { min-width: 0; }
+.kompas-empty {
+  font-family: var(--serif);
+  color: var(--ink-mut);
+  padding: 24px 0;
+  font-size: 16px;
+}
+.kompas-count {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+}
+.kompas-card {
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--ink-mut);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 0 0 14px;
+  background: var(--paper);
+}
+.kompas-cat-prohlidka { border-left-color: #1e40af; }
+.kompas-cat-screening { border-left-color: var(--red); }
+.kompas-cat-ockovani  { border-left-color: var(--good); }
+.kompas-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.kompas-cat {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-mut);
+}
+.kompas-interval {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--red);
+  text-align: right;
+}
+.kompas-card-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 6px 0 8px;
+  line-height: 1.25;
+}
+.kompas-rec {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.kompas-region {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--paper2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+.kompas-region-lbl { color: var(--ink-mut); }
+.kompas-region strong { color: var(--ink); }
+.kompas-region-rank {
+  font-size: 12px;
+  color: var(--ink-mut);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: auto;
+}
+.kompas-region-good { box-shadow: inset 3px 0 0 var(--good); }
+.kompas-region-bad { box-shadow: inset 3px 0 0 var(--bad); }
+.kompas-region-neutral { box-shadow: inset 3px 0 0 var(--ink-mut); }
+.kompas-links {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0;
+  color: var(--ink);
+}
+.kompas-links-lbl { color: var(--ink-mut); }
+.kompas-links a { color: var(--red); }
+.kompas-src {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 10px 0 0;
+}
+.kompas-src a { color: var(--ink-mut); }
+.kompas-context { padding-top: 4px; }
+.kompas-context h2 {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.kompas-context p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 720px;
+}

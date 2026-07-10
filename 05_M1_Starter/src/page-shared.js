@@ -7,21 +7,22 @@ import { submitNewsletterSignup } from './newsletter-signup.js';
 
 /* ── Dark mode: brzká inicializace tématu ───────────────────────────────
    Nastaví data-theme z uložené volby co nejdřív (při načtení modulu), aby
-   uživatelé s ručně zvoleným tématem viděli minimum probliknutí. Uživatelé
-   bez volby dědí prefers-color-scheme přímo z CSS (bez JS, bez probliknutí). */
+   uživatelé s ručně zapnutým tmavým režimem viděli minimum probliknutí.
+   Výchozí je VŽDY světlý motiv — systémové prefers-color-scheme se
+   záměrně nesleduje; tmavý se zapíná jen ručním toggle. */
 export const THEME_KEY = 'hspa-theme';
 (function initThemeEarly() {
   try {
     const t = localStorage.getItem(THEME_KEY);
     if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
-  } catch (_) { /* private mode / no storage → dědí systémové téma */ }
+  } catch (_) { /* private mode / no storage → výchozí světlý motiv */ }
 })();
 
-/** Aktuální efektivní téma ('dark' | 'light') podle data-theme nebo systému. */
+/** Aktuální efektivní téma ('dark' | 'light'). Výchozí je vždy 'light';
+   'dark' jen když si ho uživatel ručně zapnul (data-theme="dark").
+   Systémové prefers-color-scheme se záměrně nesleduje. */
 export function currentTheme() {
-  const explicit = document.documentElement.getAttribute('data-theme');
-  if (explicit === 'dark' || explicit === 'light') return explicit;
-  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
 }
 
 const THEME_ICON = {
@@ -548,14 +549,20 @@ export function renderModuleNav(activeId) {
         // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html'],
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html'],
       children: [
         { id: 'jak-zdravotnictvi', label: 'Zdravotnictví',           href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
         { id: 'cesta-pacienta',    label: 'Cesta pacienta systémem',  href: 'cesta-pacienta.html', match: ['cesta-pacienta.html'] },
         { id: 'model-systemu',     label: 'Model systému',            href: 'model-systemu.html', match: ['model-systemu.html'] },
+        { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
       ],
     },
-    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html'],
+      children: [
+        { id: 'prevence-hub', label: 'Prevence podle oblastí', href: 'prevence.html', match: ['prevence.html'] },
+        { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
+      ],
+    },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [
