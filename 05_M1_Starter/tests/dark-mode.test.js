@@ -11,12 +11,23 @@ const css = readFileSync(resolve(ROOT, 'src', 'styles.css'), 'utf8');
 const min = readFileSync(resolve(ROOT, 'src', 'styles.min.css'), 'utf8');
 const shared = readFileSync(resolve(ROOT, 'src', 'page-shared.js'), 'utf8');
 
-test('CSS: dark téma přes data-theme i prefers-color-scheme', () => {
+test('CSS: dark téma jen přes data-theme (výchozí je vždy světlý)', () => {
   assert.match(css, /:root\[data-theme="dark"\]/, 'ruční toggle přepínač');
-  assert.match(css, /@media\s*\(prefers-color-scheme:\s*dark\)/, 'systémový default');
+  // Výchozí musí být VŽDY světlý → auto-dark přes prefers-color-scheme se NESMÍ
+  // aplikovat na bázové tokeny (jinak by se web na tmavém systému ztmavil sám).
+  assert.doesNotMatch(
+    css,
+    /@media\s*\(prefers-color-scheme:\s*dark\)\s*\{[^}]*--paper/s,
+    'auto-dark přes prefers-color-scheme byl odstraněn — výchozí je vždy světlý'
+  );
   // bázové tokeny se v dark bloku přepisují
   assert.match(css, /\[data-theme="dark"\][^{]*\{[^}]*--paper:\s*#17140f/s, '--paper dark');
   assert.match(css, /\[data-theme="dark"\][^{]*\{[^}]*--ink:\s*#ece5d8/s, '--ink dark');
+});
+
+test('page-shared.js: currentTheme výchozí světlý (nesleduje systém)', () => {
+  assert.match(shared, /export function currentTheme/, 'currentTheme export');
+  assert.doesNotMatch(shared, /currentTheme[\s\S]{0,220}prefers-color-scheme/, 'currentTheme nesmí číst systémové prefers-color-scheme');
 });
 
 test('CSS: dark tokeny jsou i v minifikátu (build proběhl)', () => {
