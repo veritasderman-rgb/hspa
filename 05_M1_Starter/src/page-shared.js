@@ -557,7 +557,12 @@ export function renderModuleNav(activeId) {
         { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
       ],
     },
-    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html'],
+      children: [
+        { id: 'prevence-hub', label: 'Prevence podle oblastí', href: 'prevence.html', match: ['prevence.html'] },
+        { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
+      ],
+    },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [

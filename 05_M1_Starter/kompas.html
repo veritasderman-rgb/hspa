@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Osobní zdravotní kompas — co se týká právě mě · HSPA Monitor</title>
+<meta name="description" content="Zadejte věk, pohlaví a kraj a Kompas složí, které preventivní prohlídky, screeningy a očkování se vás v českém systému právě týkají — s intervalem, zdrojem a kontextem vašeho kraje. Nic se neukládá ani neodesílá. Informace, ne lékařská rada.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/kompas" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/kompas" data-seo-injected="1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Osobní kompas</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero kompas-hero">
+    <p class="ed-kicker">OSOBNÍ KOMPAS · CO SE TÝKÁ MĚ</p>
+    <h1>Prevence není abstraktní. Zjistěte, co český systém nabízí právě vám.</h1>
+    <p class="ed-lead">
+      Portál měří zdravotnictví jako celek. Tady ho otočíme k vám: zadejte pár
+      údajů a Kompas složí, na které <strong>preventivní prohlídky, screeningy
+      a očkování</strong> máte podle věku a pohlaví nárok — s oficiálním
+      intervalem, zdrojem a tím, jak si vede váš kraj.
+    </p>
+    <p class="kompas-disclaimer" role="note">
+      <strong>Informace, ne lékařská rada.</strong> Kompas ukazuje, co obsahuje
+      český systém prevence pro zadaný profil — nenahrazuje lékaře.
+      <strong>Nic se neukládá ani neodesílá</strong>; výpočet běží jen ve vašem
+      prohlížeči.
+    </p>
+  </section>
+
+  <section class="kompas-section" aria-label="Osobní kompas">
+    <div class="kompas-layout">
+      <form class="kompas-form" id="kompasForm" aria-label="Váš profil">
+        <h2 class="kompas-h">Váš profil</h2>
+
+        <div class="kompas-field">
+          <label for="kompasAge">Věk</label>
+          <input type="number" id="kompasAge" min="0" max="120" step="1" inputmode="numeric" placeholder="např. 45">
+        </div>
+
+        <fieldset class="kompas-field kompas-fieldset">
+          <legend>Pohlaví</legend>
+          <label class="kompas-radio"><input type="radio" name="kompasSex" value="female"> Žena</label>
+          <label class="kompas-radio"><input type="radio" name="kompasSex" value="male"> Muž</label>
+          <label class="kompas-radio"><input type="radio" name="kompasSex" value="all" checked> Nechci uvádět</label>
+        </fieldset>
+
+        <div class="kompas-field">
+          <label for="kompasKraj">Kraj (pro regionální kontext)</label>
+          <select id="kompasKraj">
+            <option value="">— nevybráno —</option>
+          </select>
+        </div>
+
+        <label class="kompas-check">
+          <input type="checkbox" id="kompasSmoking"> Kouřím nebo jsem v minulosti hodně kouřil/a
+        </label>
+
+        <button type="reset" class="kompas-reset" id="kompasReset">Vymazat</button>
+      </form>
+
+      <aside class="kompas-results" id="kompasResults" aria-live="polite" aria-label="Co se vás týká">
+        <h2 class="kompas-h">Co se vás týká</h2>
+        <div id="kompasResultsList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="kompas-section kompas-context">
+    <h2>Souvislosti</h2>
+    <p>Kompas čerpá z veřejných zdrojů: vyhlášek Ministerstva zdravotnictví,
+    národních screeningových programů a krajských dat portálu. Chcete-li vidět,
+    jak si stojí prevence v celém systému, projděte
+    <a href="prevence.html">Co s tím můžu dělat já</a> a
+    <a href="kraje.html">Krajský pohled</a>.</p>
+  </section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/kompas.js"></script>
+</body>
+</html>
