@@ -51,6 +51,12 @@ jobs:
           set -o pipefail
           npm run ingest 2>&1 | tee /tmp/ingest.log
 
+      - name: Build souvislosti graph
+        # Znalostní graf indikátorů (BAR6): slije čerstvé indicators.json
+        # s kurátorovanými datasety (system-model, legislativa, articles,
+        # claims, barometr) do data/souvislosti.json pro blok „Souvislosti".
+        run: npm run build:souvislosti
+
       - name: Generate RSS feed
         run: npm run generate:feed
 
