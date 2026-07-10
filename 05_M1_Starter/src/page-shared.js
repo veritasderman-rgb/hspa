@@ -33,22 +33,35 @@ const THEME_ICON = {
 export function themeToggleHtml() {
   const eff = currentTheme();
   const next = eff === 'dark' ? 'light' : 'dark';
-  return `<button type="button" class="theme-toggle" id="themeToggle" aria-label="Přepnout na ${next === 'dark' ? 'tmavý' : 'světlý'} režim" aria-pressed="${eff === 'dark'}" title="Přepnout světlý/tmavý režim">${eff === 'dark' ? THEME_ICON.light : THEME_ICON.dark}</button>`;
+  return `<button type="button" class="theme-toggle" aria-label="Přepnout na ${next === 'dark' ? 'tmavý' : 'světlý'} režim" aria-pressed="${eff === 'dark'}" title="Přepnout světlý/tmavý režim">${eff === 'dark' ? THEME_ICON.light : THEME_ICON.dark}</button>`;
 }
 
-/** Naváže přepínač tématu: přepne data-theme, uloží volbu, aktualizuje ikonu/aria. */
+/** Naváže VŠECHNY přepínače tématu (desktop nav i mobilní drawer) — třídou, ne id,
+   aby fungoval i na mobilu. Klik přepne data-theme, uloží volbu a synchronizuje
+   ikonu/aria na všech instancích. */
 export function wireThemeToggle() {
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const next = currentTheme() === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem(THEME_KEY, next); } catch (_) { /* ignore */ }
-    const nextNext = next === 'dark' ? 'light' : 'dark';
-    btn.setAttribute('aria-pressed', String(next === 'dark'));
-    btn.setAttribute('aria-label', `Přepnout na ${nextNext === 'dark' ? 'tmavý' : 'světlý'} režim`);
-    btn.innerHTML = next === 'dark' ? THEME_ICON.light : THEME_ICON.dark;
+  const btns = document.querySelectorAll('.theme-toggle');
+  if (!btns.length) return;
+  const sync = () => {
+    const eff = currentTheme();
+    const nextNext = eff === 'dark' ? 'light' : 'dark';
+    btns.forEach(b => {
+      b.setAttribute('aria-pressed', String(eff === 'dark'));
+      b.setAttribute('aria-label', `Přepnout na ${nextNext === 'dark' ? 'tmavý' : 'světlý'} režim`);
+      b.innerHTML = eff === 'dark' ? THEME_ICON.light : THEME_ICON.dark;
+    });
+  };
+  btns.forEach(b => {
+    if (b.dataset.wired === '1') return;
+    b.dataset.wired = '1';
+    b.addEventListener('click', () => {
+      const next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (_) { /* ignore */ }
+      sync();
+    });
   });
+  sync();
 }
 
 /** Kanonická doména webu (sjednoceno s handle sociálních sítí). */
@@ -578,9 +591,9 @@ export function renderModuleNav(activeId) {
   }
 
   wireSubmenuAria(container);
-  wireThemeToggle();
 
   injectMobileNav(mobileTabsHtml);
+  wireThemeToggle(); // po injectMobileNav — naváže i drawer toggle
 }
 
 /**
@@ -702,7 +715,7 @@ function injectMobileNav(tabsHtml) {
     drawer.innerHTML = `
       <div class="mobile-nav-drawer-head">
         <span class="mobile-nav-drawer-title">Menu</span>
-        <button type="button" class="mobile-nav-close" aria-label="Zavřít menu">×</button>
+        <span class="mobile-nav-drawer-actions">${themeToggleHtml()}<button type="button" class="mobile-nav-close" aria-label="Zavřít menu">×</button></span>
       </div>
       <nav class="mobile-nav-list" aria-label="Stránky"></nav>`;
     document.body.appendChild(drawer);
