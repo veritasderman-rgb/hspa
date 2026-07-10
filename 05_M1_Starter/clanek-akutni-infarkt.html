@@ -23,6 +23,8 @@
     visual_elements_added: 0
     notes: "Audit dokumentován v article-review-banner. Klíčové ověření: AMI 30denní case-fatality 5,2 % ČR vs 6,5 % OECD potvrzeno proti OECD Health at a Glance 2025 (Mortality following AMI, admission-based unlinked, age-sex standardizováno na 45+, ref. rok 2023). ESC 2023 ACS Guidelines (Byrne et al., EHJ 2023, DOI 10.1093/eurheartj/ehad191) — časové cíle FMC-to-wire-crossing ≤60/90 min, PCI-related delay ≤120 min upřesněny vůči starší „door-to-balloon\" terminologii. Akademické registry CZECH-1/2/3 (Widimský et al.) korektně atribuovány. UK referenční audit ACS opraven z NACR (cardiac rehabilitation) na MINAP/NCAP (NICOR). Cascade refresh 15. 5. 2026: kardiovaskulární populační mortalita rekonciliována proti Eurostat hlth_cd_asdr2 (ČR 463,75 vs EU-27 312,95 / 100 000, ESP 2013, ref. 2023) — viz související článek clanek-kardiovaskularni-mortalita. Status published → review-pending (čekající na ruční schválení redakce). FALLBACK re-audit 2026-06-13 (denní rutina, fáze 5, nezávislé ověření zdrojů): (1) jádrový claim AMI 5,2/6,5 znovu potvrzen verbatim proti OECD H@G 2025 (unlinked); Keeley Lancet 2003 (7 % vs 9 %, p=0,0002, DOI 10.1016/S0140-6736(03)12113-7) a ESC 2023 (PMID 37622654) re-ověřeny přes PubMed; mzcr.cz odkazy 200. (2) audit-fix N=4: NZIP odkaz 197→955 (404→200); žurnály CZECH-1/2/3 opraveny z 'EHJ/Cor et Vasa' na Int J Cardiol ×2 + EHJ:ACC ×1 (PMID 17442424/24602321/28730895); hero counter 'door-to-balloon' → 'FMC-to-wire-crossing' (sjednoceno s tělem dle ESC 2023); figure note doplněn o OECD H@G 2025 jako zdroj 5,2 %. (3) Codex P2 follow-up: CZECH-3 citace opravena z '2017;8(8)' na '2019;8(8) (epub 2017)' — vol 8(8) je tištěný ročník 2019, 2017 byl jen epub ahead-of-print. OPRAVA 2026-07-06 (U8 dávkový audit): opraveno mylné přiřazení zdroje v databoxu — hodnota 5,2 % byla chybně označena jako 'ÚZIS NRH, in-hospital', ačkoli datový kontrakt (mortalita_inhosp_ami, ÚZIS NRH in-hospital) uvádí 4,57 %; 5,2 % je OECD H@G 2025 admission-based 30denní case-fatality (jak správně uvádí hero counter). Databox nyní rozlišuje obě hodnoty. Keeley 2003 (PMID 12517460) re-ověřeno přes PubMed. Ponecháno review-pending — titulek a rámec 'Pět celá dvě procenta' staví na OECD admission-based hodnotě; sladění headline s kontraktovými 4,57 % je rozhodnutí redakce."
     f1_2026-07-10: "Link-audit (F1): 18 externích odkazů zkontrolováno. Opraven 1 mrtvý odkaz: NICOR/MINAP (HTTP 404, URL cesta redesignována) → nicor.org.uk/national-cardiac-audit-programme/heart-attack-audit-minap (200, ověřeno WebSearch + curl). Ponechány jako živé, ale blokující boty (403 curl, obsah potvrzen WebFetch): doi.org/10.1093/eurheartj/ehad191 (přesměrovává na academic.oup.com, plný text ESC 2023 Guidelines načten), oecd.org/en/publications/health-at-a-glance-2025 a oecd.org/en/topics/sub-issues/health-care-quality-and-outcomes (Akamai bot-block, obsah funkční). Ostatní odkazy (pubmed.ncbi.nlm.nih.gov ×4, mzcr.cz ×2, uzis.cz ×2, kardio-cz.cz, ucr.uu.se, bhf.org.uk, nzip.cz) OK 200. Status ponechán review-pending — nejde o problém s odkazy nebo o seed data (mortalita_inhosp_ami/cmp i mortalita_kardiovaskularni jsou origin: live), ale o dříve zdokumentovaný otevřený editorialní bod (sladění headline 5,2 % OECD vs. kontraktových 4,57 % ÚZIS NRH) — rozhodnutí redakce, ne F1."
+    av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid): av-flow časové cíle STEMI (EKG ≤10 → ≤60/≤90 → >120 fibrinolýza), av-timeline 25 let budování sítě (pol. 90. let → 1996 → 1997-2002 → 2011 → 2015; vše minulé, temporálně stabilní), av-data-table 5 rysů úspěchu + kam replikovat. Všechna fakta 1:1 z textu, text nezměněn (aditivní), claims nedotčeny."
+    av_sweep2_codex_2026-07-10: "Codex P2 (#770): timeline tag 'Registry CZECH-1/2/3' visel na kroku 1997–2002, ale registry sbíraly data 2005/2012/2015 → čtenář by je datoval o roky dřív. Tag odstraněn z kroku 1997–2002, doplněna závorka v desc s korektními roky sběru."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -188,6 +190,33 @@
         Tato limitace neznamená, že číslo nelze interpretovat — znamená, že je třeba ho číst jako ukazatel kvality nemocniční (a periferní akutní) kardiologie, ne jako ukazatel celkového zdravotního stavu populace. Indikátor totiž zahrnuje pouze pacienty, kteří se do nemocnice dostali; pacient, který zemře doma nebo cestou v sanitce, do jmenovatele nepatří. Pro populační pohled slouží jiný indikátor — kardiovaskulární mortalita, kterou dashboard HSPA Monitoru sleduje v ID <code>mortalita_kardiovaskularni</code>. <strong>Hodnota tohoto indikátoru je v současné chvíli předmětem otevřené rekonciliace datového kontraktu</strong> (audit 2026-05-11 ukázal nesoulad mezi hodnotou v dashboardu HSPA Monitoru a OECD <em>Health at a Glance 2025</em>; viz článek <a href="clanek-kardiovaskularni-mortalita.html">Český kardiovaskulární paradox</a>, který popisuje rozdíl mezi akutní a populační vrstvou). Klíčový závěr je v tomto auditním kroku nicméně robustní: i kdyby se konkrétní hodnota populační mortality přepočetla na vyšší absolutní úroveň (OECD H@G 2025 udává pro úmrtnost na nemoci oběhové soustavy v ČR ~370 / 100 000, věkově standardizováno), nezmění to fakt, že akutní vrstva péče v Česku patří k nejlepším v Evropě, zatímco populační břemeno kardiovaskulárních onemocnění zůstává nadprůměrné. Akutní vrstva tímto auditem dotčená není.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Časové cíle akutní léčby STEMI podle ESC 2023 ACS Guidelines</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">EKG ≤ 10 min</h4>
+            <p class="av-flow-desc">Od prvního kontaktu se zdravotnickým systémem (FMC) do natočení EKG.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přímá prezentace: ≤ 60 min</h4>
+            <p class="av-flow-desc">FMC-to-wire-crossing při přímém příjezdu do PCI centra.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Převoz z non-PCI: ≤ 90 min</h4>
+            <p class="av-flow-desc">FMC-to-wire-crossing při překladu z nemocnice bez PCI sálu.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Delay &gt; 120 min → fibrinolýza</h4>
+            <p class="av-flow-desc">Maximální akceptovaná PCI-related delay; nad ni ESC volí fibrinolýzu + elektivní převoz.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Byrne et al., 2023 ESC Guidelines for the management of ACS (Eur Heart J 2023).</p>
+      </figure>
+
       <h3>Síť, která se budovala dvacet pět let</h3>
 
       <p>
@@ -205,6 +234,39 @@
       <p>
         Třetí pilíř je kvalitativní reporting. České kardiology pracují v rámci <strong>Národního registru kardiovaskulárních operací a intervencí (NRKOI)</strong>, jehož součástí je <strong>Národní registr kardiovaskulárních intervencí (NRKI)</strong>; registr provozuje ÚZIS na základě zákona č. 372/2011 Sb. a sleduje výkony PCI včetně časů, indikací a výsledků. Souvisejícím odborným zdrojem jsou akademické registry <strong>CZECH-1/-2/-3</strong> publikované Českou kardiologickou společností (Widimský et al.). Tyto datové zdroje, podobně jako zahraniční (švédský <strong>SWEDEHEART</strong>, britský <strong>MINAP</strong> v rámci National Cardiac Audit Programme — NCAP / NICOR), umožňují benchmarking pracovišť, identifikaci slabých míst a kontinuální zlepšování. Odborná společnost má díky němu přehled o tom, co funguje a co se má zlepšit.
       </p>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Jak se česká AMI síť budovala — 25 let kontinuity</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">pol. 90. let</time>
+            <h4 class="av-timeline-title">Klinický posun k primární PCI</h4>
+            <p class="av-timeline-desc">Randomizované studie ukazují převahu primární PCI nad trombolýzou u STEMI.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1996</time>
+            <h4 class="av-timeline-title">Kardiocentrum FN Královské Vinohrady</h4>
+            <p class="av-timeline-desc">Jedno z prvních pracovišť budoucí sítě.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1997–2002</time>
+            <h4 class="av-timeline-title">PRAGUE-1 / PRAGUE-2</h4>
+            <p class="av-timeline-desc">Spolupráce Prahy, Plzně a dalších center; ústup plošné trombolýzy po roce 2002. (Akademické registry CZECH-1/-2/-3 dokumentovaly praxi později — sběr 2005/2012/2015.)</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2011</time>
+            <h4 class="av-timeline-title">§ 112 zákona 372/2011 Sb.</h4>
+            <p class="av-timeline-desc">Právní základ pro „centra vysoce specializované kardiovaskulární péče".</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2015</time>
+            <h4 class="av-timeline-title">Věstník MZ ČR 13/2015 — formální institucionalizace</h4>
+            <p class="av-timeline-desc">Statut center udělen dle personálních a technických požadavků; síť pokrývá celé území.</p>
+            <span class="av-timeline-tag">Síť hotova</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> § 112 zák. 372/2011 Sb.; Věstník MZ ČR 13/2015; registry CZECH-1/-2/-3 (Widimský et al.).</p>
+      </figure>
 
       <h3>Proč to fungovalo — a co se z toho dá replikovat</h3>
 
@@ -231,6 +293,49 @@
       <p>
         <strong>Dlouhodobá kontinuita.</strong> Česká AMI síť se nestavěla jeden volební cyklus. Postupně se rozšiřovala, postupně se zlepšovala kvalita protokolů, postupně se akreditovala nová pracoviště. Politické střídání vlád proces nezastavilo — kontinuita byla dána odborným konsenzem a institucionálním zakotvením, ne ministerským rozhodnutím. Z reformních debat plyne, že podobnou kontinuitu potřebují i další oblasti — eHealth, primární péče, duševní zdraví —, kde se ale v posledních dvou desetiletích projekty opakovaně ztrácely při personálních a politických změnách.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Pět rysů AMI úspěchu — a kam je replikovat</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rys úspěchu</th>
+                <th scope="col">Co znamenal u AMI</th>
+                <th scope="col">Kam replikovat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Konsenzus odborné komunity</th>
+                <td>shoda kardiologů na primární PCI a nutnosti sítě</td>
+                <td>onkologie (KOC), CMP (iktová centra) — dotažení pomalejší</td>
+              </tr>
+              <tr>
+                <th scope="row">Postupná centralizace</th>
+                <td>akutní péči zvládají specializovaná centra, ne každé lůžko</td>
+                <td>naráží na regionální politickou rezistenci</td>
+              </tr>
+              <tr>
+                <th scope="row">Jasné časové cíle</th>
+                <td>FMC-to-wire ≤ 60 / 90 min — měřitelné a motivující</td>
+                <td>onko (čas k léčbě), CMP (door-to-needle/groin)</td>
+              </tr>
+              <tr>
+                <th scope="row">Registr s hodnocenou kvalitou</th>
+                <td>NRKI sbírá časy a výsledky PCI</td>
+                <td>veřejný per-pracoviště reporting (vzor SWEDEHEART, SSNAP)</td>
+              </tr>
+              <tr>
+                <th scope="row">Dlouhodobá kontinuita</th>
+                <td>síť se stavěla přes střídání vlád, tažena odborností</td>
+                <td>eHealth, primární péče, duševní zdraví</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> reformní dokumenty MZ ČR a doporučení ČKS; mezinárodní vzory SWEDEHEART, MINAP, SSNAP.</p>
+      </figure>
 
       <h3>Co AMI úspěch nevyřešil</h3>
 
