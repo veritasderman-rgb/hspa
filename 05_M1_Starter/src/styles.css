@@ -29,9 +29,62 @@
   --muted: var(--ink-mut);
   --modal-bg: rgba(31,26,20,0.45);
 
+  /* Tint plochy pro caveat/note boxy (přepínají se v dark mode) */
+  --surface-warn: #fff9ec;
+  --surface-tint: #f5f1f7;
+
   /* Typografie */
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: light;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────────────────
+   Přepnutí bázových tokenů → aliasy i přímé použití var(--paper/--ink/…)
+   se propíšou automaticky. Default = light; systémový dark přes
+   prefers-color-scheme (pokud uživatel ručně nezvolil light), ruční toggle
+   přes :root[data-theme="dark"]. Brand pravidlo: červená patří jen hrotu střelky. */
+:root[data-theme="dark"],
+:root[data-theme="dark"] body {
+  --paper: #17140f;
+  --paper2: #221d16;
+  --ink: #ece5d8;
+  --ink-mut: rgba(236,229,216,0.68);
+  --ink-mut2: rgba(236,229,216,0.66);
+  --rule: rgba(236,229,216,0.16);
+  --rule2: rgba(236,229,216,0.32);
+  --red: #e0563a;
+  --red-soft: rgba(224,86,58,0.14);
+  --good: #56a83f;
+  --warn: #d29224;
+  --bad: #e0563a;
+  --neutral: #9a9184;
+  --modal-bg: rgba(0,0,0,0.62);
+  --surface-warn: rgba(210,146,36,0.12);
+  --surface-tint: rgba(150,130,180,0.14);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17140f;
+    --paper2: #221d16;
+    --ink: #ece5d8;
+    --ink-mut: rgba(236,229,216,0.68);
+    --ink-mut2: rgba(236,229,216,0.66);
+    --rule: rgba(236,229,216,0.16);
+    --rule2: rgba(236,229,216,0.32);
+    --red: #e0563a;
+    --red-soft: rgba(224,86,58,0.14);
+    --good: #56a83f;
+    --warn: #d29224;
+    --bad: #e0563a;
+    --neutral: #9a9184;
+    --modal-bg: rgba(0,0,0,0.62);
+    --surface-warn: rgba(210,146,36,0.12);
+    --surface-tint: rgba(150,130,180,0.14);
+    color-scheme: dark;
+  }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -7024,6 +7077,7 @@ body.mobile-nav-open .mobile-nav-drawer { transform: translateX(0); }
 }
 .mobile-nav-close:hover { background: var(--paper2); }
 .mobile-nav-close:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.mobile-nav-drawer-actions { display: inline-flex; align-items: center; gap: 8px; }
 .mobile-nav-list {
   display: flex;
   flex-direction: column;
@@ -10664,6 +10718,27 @@ html {
   color: var(--ink-mut);
 }
 
+/* Přepínač světlý/tmavý režim (U28) — ikonový nav-action, tokenizovaný. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper2);
+  border: 1px solid var(--rule2);
+  border-radius: 6px;
+  padding: 6px;
+  min-width: 36px;
+  min-height: 36px;
+  color: var(--ink-mut);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.theme-toggle:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.theme-toggle svg { display: block; }
+
 @media (max-width: 600px) {
   .site-search-overlay {
     padding-top: 4vh;
@@ -11828,7 +11903,7 @@ body.site-search-open {
   margin: 12px 0 0;
   padding: 12px 16px;
   border-left: 3px solid #7a6a9c;
-  background: #f5f1f7;
+  background: var(--surface-tint);
   font-size: 13px;
   color: var(--ink);
   line-height: 1.55;
@@ -11859,13 +11934,13 @@ body.site-search-open {
 .fnp-filter-field select,
 .fnp-filter-field input {
   padding: 8px 10px; font-family: var(--sans); font-size: 13px;
-  border: 1px solid var(--rule); background: #fff; color: var(--ink);
+  border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
 }
 .fnp-filter-field select:focus,
 .fnp-filter-field input:focus { outline: 2px solid var(--accent, #b8361e); outline-offset: -1px; }
 .fnp-filter-reset {
   padding: 8px 14px; font-family: var(--sans); font-size: 12px;
-  border: 1px solid var(--rule); background: #fff; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--paper); cursor: pointer;
   color: var(--ink-mut); align-self: end;
 }
 .fnp-filter-reset:hover { color: var(--ink); border-color: var(--ink); }
@@ -11894,7 +11969,7 @@ body.site-search-open {
 .fnp-caveat-section { padding-top: 32px; }
 .fnp-caveat-list {
   margin-top: 8px; padding: 16px 16px 16px 32px;
-  border-left: 3px solid #B45F06; background: #fff7ea;
+  border-left: 3px solid #B45F06; background: var(--surface-warn);
   font-size: 13px; line-height: 1.6; color: var(--ink);
 }
 .fnp-caveat-list li { margin-bottom: 8px; }
@@ -11903,12 +11978,12 @@ body.site-search-open {
   margin: 12px 0 0;
   padding: 12px 16px;
   border-left: 3px solid #B45F06;
-  background: #fff9ec;
+  background: var(--surface-warn);
   font-size: 13px;
   line-height: 1.55;
   color: var(--ink);
 }
-.fnp-caveat-link a { color: #6b3f02; text-decoration: underline; }
+.fnp-caveat-link a { color: var(--warn); text-decoration: underline; }
 .fnp-caveat-link a:hover { color: #B45F06; }
 
 /* ── Disclaimer (stáří dat + predikce) ── */
@@ -11917,7 +11992,7 @@ body.site-search-open {
   padding: 20px 24px;
   border: 1px solid #d4c8a0;
   border-left: 4px solid #B45F06;
-  background: #fff9ec;
+  background: var(--surface-warn);
   border-radius: 2px;
 }
 .fn-disclaimer-title {
@@ -11926,7 +12001,7 @@ body.site-search-open {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: #6b3f02;
+  color: var(--warn);
 }
 .fn-disclaimer-list {
   margin: 0;
@@ -11941,6 +12016,7 @@ body.site-search-open {
   font-size: 11.5px;
   padding: 1px 5px;
   background: #f0e6cc;
+  color: #3a2f16;
   border-radius: 2px;
 }
 .fn-disclaimer-link {
@@ -11951,7 +12027,7 @@ body.site-search-open {
   line-height: 1.5;
   color: var(--ink);
 }
-.fn-disclaimer-link a { color: #6b3f02; text-decoration: underline; }
+.fn-disclaimer-link a { color: var(--warn); text-decoration: underline; }
 .fn-disclaimer-link a:hover { color: #B45F06; }
 
 .fn-stat-estimate {

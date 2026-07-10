@@ -116,7 +116,7 @@ git push -u origin claude/<branch>
 │   ├── site-stats.js           ← Statistika hodnocení článků a pokrytí
 │   ├── analytics.js            ← Plausible loader
 │   ├── schema.js               ← JSON-LD structured data
-│   └── styles.css              ← Veškeré CSS (~9 400 LOC, print, a11y; dark mode zatím není)
+│   └── styles.css              ← Veškeré CSS (~9 400 LOC, print, a11y, dark mode — tokenový přepínač)
 │       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
