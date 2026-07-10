@@ -1,0 +1,340 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-10T00:00:00Z",
+  "_doc": "Úhradová vyhláška: zahrajte si na ministra (vyhlaska.html). Hráč rozděluje modelovou obálku meziročního růstu úhrad mezi 8 segmentů péče (baseline 2023 doložen: clanek-financovani-segmenty-2026 / NRHZS ZPP / data/financing.json). Zástupci segmentů jsou TYPIZOVANÉ postavy (ne reálné osoby); jejich argumenty stojí na doložených číslech (argument_sources), ale POŽADAVKY (demand_pct) a REAKCE jsou modelové — ilustrují vyjednávací logiku, nejsou citacemi reálných jednání. Efekty: definitional = přesný přepočet struktury výdajů; directional = doložený směr se zdrojem. Viz PLAN-VYHLASKA-HRA.md.",
+  "baseline_year": 2023,
+  "baseline_total_mld": 459,
+  "baseline_total_source": "NRHZS / pojistné plány ZP 2023; clanek-financovani-segmenty-2026.html; data/financing.json (sankey 2023)",
+  "envelope": {
+    "amount_mld": 40,
+    "label": "Obálka růstu úhrad na příští rok",
+    "note": "Modelová obálka. Ukotvení: vláda pro rok 2027 schválila navýšení platby za státní pojištěnce o 21 mld Kč (na tom visí dohody DR 2027) a pojistné roste s objemem mezd; celková obálka +40 mld ≈ +8,7 % odpovídá řádu meziročního růstu úhrad posledních let.",
+    "source": "TZ MZ ČR k výsledku dohodovacího řízení 2027 (+21 mld platba státu, původní podmínka 25 mld); clanek-dohodovaci-rizeni-2027-vysledek.html; trend úhrad data/financing.json"
+  },
+  "real_2027_context": {
+    "summary": "Reálné dohodovací řízení pro rok 2027 skončilo 18. června 2026 dohodou ve 12 z 15 segmentů. Bez dohody zůstaly akutní lůžková péče, následná lůžková péče a ambulantní specialisté — dohromady přes 60 % nákladů systému (dle serveru Naše zdravotnictví). O jejich úhradách rozhodne úhradová vyhláška.",
+    "source": "TZ MZ ČR „Rekordní shoda ve zdravotnictví“ (18. 6. 2026); clanek-dohodovaci-rizeni-2027-vysledek.html"
+  },
+  "segments": [
+    {
+      "id": "luzkova",
+      "label": "Lůžková péče",
+      "sublabel": "akutní + následná péče, centrové léky v hospitalizaci",
+      "baseline_mld": 256.7,
+      "baseline_share_pct": 55.9,
+      "baseline_source": "clanek-financovani-segmenty-2026.html (NRHZS/ZPP 2023): segment 2 = 256,7 mld = 55,9 %",
+      "representative": {
+        "role": "Ředitelka fakultní nemocnice",
+        "argument": "Osobní náklady lůžkové péče vzrostly 2019–2024 o 56 %, zatímco lékařů přibylo jen o 5 % — platíme víc za tytéž lidi, ne za víc kapacit. Bez navýšení neudržíme provoz oddělení ani zákonné přesčasy.",
+        "argument_sources": [
+          "data/dohodovaci-rizeni.json strategic_analysis (osobní náklady lůžkové +56 % 2019–24; lékaři +5 %)",
+          "clanek-osetrovatelstvi-generacni-propast-2026.html (přesčasy, vyhláška 99/2012 Sb.)"
+        ]
+      },
+      "demand_pct": 10,
+      "demand_reasoning": "Modelový požadavek: pokrýt růst osobních nákladů (doložený trend +56 %/5 let ≈ 9–10 %/rok) a inflaci provozu.",
+      "escalation": {
+        "agree": "Podepisujeme. Rezervy provozu to nevyřeší, ale personál udržíme.",
+        "grudging": "Podepíšeme s výhradami — na investice a stabilizaci sester nezbyde.",
+        "no_deal": "Dohodu neuzavřeme. Ať rozhodne vyhláška — přesně jako v reálném DR 2027, kde akutní i následná lůžková péče skončily bez dohody.",
+        "protest": "Svoláváme krizový štáb nemocnic a lékaři zvažují hromadné výpovědi z přesčasů — jako na podzim 2023, kdy protest ukončilo až prosincové memorandum s vládou."
+      },
+      "protest_precedent_source": "Memorandum vlády ČR a ČLK (prosinec 2023) po hromadných výpovědích lékařů z přesčasových dohod",
+      "real_2027": "bez dohody (akutní i následná lůžková péče)",
+      "effects": [
+        {
+          "kind": "definitional",
+          "indicator": "podil_vydaje_luzkova_pece",
+          "note": "Podíl lůžkové péče na úhradách se z vaší alokace přepočítá přesně — žádný model. ČR 55,9 % vs. OECD ~30 %.",
+          "source": "data/indicators.json (podil_vydaje_luzkova_pece, benchmark OECD 30 %)"
+        },
+        {
+          "kind": "directional",
+          "indicator": "cekaci_doba_kycel",
+          "polarity": "down",
+          "strength": "weak",
+          "active_when": "above_avg",
+          "note": "Nadprůměrné posílení lůžkové kapacity může zkrátit čekání na plánované operace (dnes 118 dní na TEP kyčle) — efekt je ale slabý, hrdlem bývá personál, ne peníze.",
+          "confidence": "low",
+          "source": "data/indicators.json (cekaci_doba_kycel); clanek-pracovni-sila.html (personální hrdlo)"
+        }
+      ]
+    },
+    {
+      "id": "ambulantni",
+      "label": "Ambulantní péče",
+      "sublabel": "praktici, ambulantní specialisté, gynekologie, laboratoře, domácí péče",
+      "baseline_mld": 131.0,
+      "baseline_share_pct": 28.5,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 1; segment 1 = 131,0 mld = 28,5 %",
+      "representative": {
+        "role": "Předseda sdružení ambulantních lékařů",
+        "argument": "Každá koruna v ambulancích šetří nemocnice: ČR má 592 odvratitelných hospitalizací na 100 tisíc obyvatel proti 473 v OECD a na specialistu se čeká průměrně 28 dní. Posilovat lůžka místo ambulancí je dražší cesta k horším výsledkům.",
+        "argument_sources": [
+          "data/indicators.json (hospitalizace_acsc 592 vs. OECD 473; cekaci_doby_specialist 28 dní)",
+          "clanek-vyhnutelne-hospitalizace.html"
+        ]
+      },
+      "demand_pct": 9,
+      "demand_reasoning": "Modelový požadavek: dorovnat mzdovou konkurenci nemocnic (doložený růst jejich osobních nákladů) a zaplatit rozšíření kapacit dispenzární péče.",
+      "escalation": {
+        "agree": "Podepisujeme a rozšíříme ordinační hodiny dispenzárních programů.",
+        "grudging": "Podepíšeme, ale nové kapacity pro chroniky letos nevzniknou.",
+        "no_deal": "Bez dohody — jako ambulantní specialisté v reálném DR 2027. Rozhodne vyhláška.",
+        "protest": "Omezíme objednávání nových pacientů a víkendové služby; čekací doby dál porostou."
+      },
+      "protest_precedent_source": "Reálný nástroj segmentu: omezení kapacit pro pojištěnce; ambulantní specialisté skončili v DR 2027 bez dohody (clanek-dohodovaci-rizeni-2027-vysledek.html)",
+      "real_2027": "praktici a gynekologie s dohodou; ambulantní specialisté bez dohody",
+      "effects": [
+        {
+          "kind": "directional",
+          "indicator": "hospitalizace_acsc",
+          "polarity": "down",
+          "strength": "medium",
+          "active_when": "above_avg",
+          "note": "Silnější primární a ambulantní péče prokazatelně snižuje odvratitelné hospitalizace (592 vs. OECD 473).",
+          "confidence": "medium",
+          "source": "OECD Health at a Glance (ACSC); clanek-vyhnutelne-hospitalizace.html"
+        },
+        {
+          "kind": "directional",
+          "indicator": "cekaci_doby_specialist",
+          "polarity": "down",
+          "strength": "medium",
+          "active_when": "above_avg",
+          "note": "Vyšší úhrady umožňují nasmlouvat víc kapacit ambulantních specialistů → kratší čekání (dnes 28 dní).",
+          "confidence": "medium",
+          "source": "data/indicators.json (cekaci_doby_specialist); docs/plan-dohodovaci-rizeni.md"
+        }
+      ]
+    },
+    {
+      "id": "leky",
+      "label": "Léky na recept",
+      "sublabel": "léčiva vydávaná v lékárnách (bez centrových léků)",
+      "baseline_mld": 45.6,
+      "baseline_share_pct": 9.9,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 6 = 45,6 mld = 9,9 %",
+      "representative": {
+        "role": "Zástupkyně lékárníků",
+        "argument": "Lékárny jsou nejdostupnější zdravotnické zařízení v zemi, ale marže z úhrad nepokrývají provoz malých venkovských lékáren — a s nimi mizí i dohled nad polypragmazií: přes polovinu seniorů 65+ užívá 5 a více léků současně.",
+        "argument_sources": [
+          "data/regions.json (lekarny_per_100k_kraje; polypragmazie_65plus_kraje)",
+          "data/indicators.json (polypragmazie_65plus 51,2 % osob 65+)"
+        ]
+      },
+      "demand_pct": 7,
+      "demand_reasoning": "Modelový požadavek: valorizace dispenzační taxy a signální výkon konzultací, aby se udržela venkovská síť.",
+      "escalation": {
+        "agree": "Podepisujeme; venkovskou síť letos udržíme.",
+        "grudging": "Podepíšeme, ale slabé lékárny budou dál zavírat.",
+        "no_deal": "Bez dohody. V reálném DR se lékárny v posledních letech dohodly — tady by to znamenalo krok zpět.",
+        "protest": "Omezíme víkendové a noční pohotovosti lékáren v regionech."
+      },
+      "protest_precedent_source": "Reálný nástroj segmentu: pohotovostní služby lékáren drží dobrovolně; lékárny patřily ke 3 dohodnutým segmentům pro rok 2026 (clanek-dohodovaci-rizeni-2027-vysledek.html)",
+      "real_2027": "s dohodou",
+      "effects": [
+        {
+          "kind": "none",
+          "note": "Přímý doložený efekt výše úhrad segmentu na sledované indikátory nemáme — hra to přiznává. Nepřímo jde o dostupnost sítě lékáren (krajský dataset) a bezpečnost farmakoterapie.",
+          "source": "data/regions.json (lekarny_per_100k_kraje — context_dependent)"
+        }
+      ]
+    },
+    {
+      "id": "prostredky",
+      "label": "Zdravotnické prostředky",
+      "sublabel": "poukazové pomůcky: inkontinence, sluchadla, vozíky",
+      "baseline_mld": 10.9,
+      "baseline_share_pct": 2.4,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 7 = 10,9 mld = 2,4 %",
+      "representative": {
+        "role": "Zástupce pacientských organizací",
+        "argument": "Pomůcky jsou nejlevnější položka, která drží lidi doma a mimo ústavy: sluchadlo nebo správný vozík rozhodují o samostatnosti. Podfinancování se neprojeví ve statistikách nemocnic, ale v životech pečujících rodin.",
+        "argument_sources": [
+          "clanek-financovani-segmenty-2026.html (struktura segmentu 7)",
+          "data/regions.json (pracovnici_ltc_per_100_65plus — kapacity dlouhodobé péče)"
+        ]
+      },
+      "demand_pct": 7,
+      "demand_reasoning": "Modelový požadavek: valorizace úhradových limitů pomůcek, které roky zaostávají za cenami.",
+      "escalation": {
+        "agree": "Díky — limity konečně dorovnají reálné ceny pomůcek.",
+        "grudging": "Doplatky pacientů dál porostou, ale základ se udrží.",
+        "no_deal": "Bez dohody; rozdíl doplatí pacienti z kapsy.",
+        "protest": "Pacientské organizace svolávají protest před ministerstvem — pomůcky nejsou luxus."
+      },
+      "protest_precedent_source": "Reálný nástroj segmentu: veřejné kampaně pacientských organizací (typizováno)",
+      "real_2027": "s dohodou",
+      "effects": [
+        {
+          "kind": "none",
+          "note": "Doložený kvantitativní efekt na sledované indikátory chybí — poctivá odpověď je „nedoloženo“, dopad je v kvalitě života mimo náš indikátorový rámec.",
+          "source": "PLAN-VYHLASKA-HRA.md (zásada poctivosti)"
+        }
+      ]
+    },
+    {
+      "id": "lazne",
+      "label": "Lázně a ozdravovny",
+      "sublabel": "komplexní a příspěvková lázeňská péče",
+      "baseline_mld": 5.7,
+      "baseline_share_pct": 1.2,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 5 = 5,7 mld = 1,2 %",
+      "representative": {
+        "role": "Ředitel lázeňského zařízení",
+        "argument": "Lázně jsou nejlevnější lůžko v systému a jediná kapacita rehabilitace po operacích a infarktech mimo akutní nemocnice. Když je škrtnete, pacienti zůstanou déle na akutních lůžkách za několikanásobek.",
+        "argument_sources": [
+          "clanek-financovani-segmenty-2026.html (podíl segmentu)",
+          "clanek-hospitalizujeme-nejvic.html (nejdražší je akutní lůžko)"
+        ]
+      },
+      "demand_pct": 8,
+      "demand_reasoning": "Modelový požadavek: dorovnání sazeb za ošetřovací den k růstu energií a mezd.",
+      "escalation": {
+        "agree": "Podepisujeme a udržíme plnou kapacitu poukazů.",
+        "grudging": "Podepíšeme; část kapacit přesměrujeme na samoplátce.",
+        "no_deal": "Bez dohody — kapacity pro pojištěnce omezíme ve prospěch samoplátců.",
+        "protest": "Regionální lázně varují před zavíráním provozů mimo sezónu."
+      },
+      "protest_precedent_source": "Reálný nástroj segmentu: přesun kapacit k samoplátcům (typizováno)",
+      "real_2027": "s dohodou",
+      "effects": [
+        {
+          "kind": "none",
+          "note": "Efekt lázeňské péče na sledované indikátory není v našem rámci doložen — hra přiznává „nedoloženo“. To samo je zjištění: segment žije spíš z tradice než z evidence.",
+          "source": "PLAN-VYHLASKA-HRA.md (zásada poctivosti)"
+        }
+      ]
+    },
+    {
+      "id": "stomatologie",
+      "label": "Stomatologie",
+      "sublabel": "hrazená zubní péče (zbytek platí pacienti přímo)",
+      "baseline_mld": 4.4,
+      "baseline_share_pct": 1.0,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 3 = 4,4 mld = 1,0 %",
+      "representative": {
+        "role": "Zástupkyně zubních lékařů",
+        "argument": "Z úhrad jde na zuby jediné procento — zbytek si lidé platí sami, a kdo na to nemá, nejde vůbec: nesplněná potřeba zubní péče je 1 % populace, nejvíc ze všech typů péče. Bez vyšších úhrad nebudou smlouvy s pojišťovnami pro zubaře zajímavé a síť se dál protrhá.",
+        "argument_sources": [
+          "data/indicators.json (nesplnena_potreba_zubni_pece 1 % populace 16+)",
+          "clanek-nesplnena-potreba-zubni-pece.html",
+          "data/regions.json (stomatologove_per_1000_kraje)"
+        ]
+      },
+      "demand_pct": 12,
+      "demand_reasoning": "Modelový požadavek: nejvyšší relativní růst — základna je malá (4,4 mld) a má dorovnat propast mezi hrazenou a tržní cenou výkonů.",
+      "escalation": {
+        "agree": "Podepisujeme — hrazená péče začne být pro ordinace znovu smysluplná.",
+        "grudging": "Podepíšeme; nové smlouvy s pojišťovnami ale nepřibudou.",
+        "no_deal": "Bez dohody. Ordinace dál přecházejí na přímé platby.",
+        "protest": "Vypovídání smluv s pojišťovnami — pacienti bez peněz zůstanou bez zubaře."
+      },
+      "protest_precedent_source": "Reálný nástroj segmentu: nesmluvní ordinace na přímou platbu (doloženo trendem nesplněné potřeby; clanek-nesplnena-potreba-zubni-pece.html)",
+      "real_2027": "s dohodou (stomatologové se dohodli i pro 2026)",
+      "effects": [
+        {
+          "kind": "directional",
+          "indicator": "nesplnena_potreba_zubni_pece",
+          "polarity": "down",
+          "strength": "medium",
+          "active_when": "above_avg",
+          "note": "Vyšší úhrady drží ordinace ve smluvní síti → dostupnější hrazená péče pro nízkopříjmové skupiny.",
+          "confidence": "medium",
+          "source": "clanek-nesplnena-potreba-zubni-pece.html; data/indicators.json (nesplnena_potreba_zubni_pece)"
+        }
+      ]
+    },
+    {
+      "id": "doprava_zzs",
+      "label": "Doprava a záchranná služba",
+      "sublabel": "ZZS, zdravotnická doprava, letecká záchranná služba",
+      "baseline_mld": 2.1,
+      "baseline_share_pct": 0.5,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segment 4 = 2,1 mld = 0,5 %",
+      "representative": {
+        "role": "Krajský záchranář",
+        "argument": "Držíme dojezd do 20 minut u 94,2 % výjezdů — ale vozový park stárne a posádky odcházejí do nemocnic za vyššími platy. Záchranka je půl procenta úhrad; tady se nešetří miliardy, tady se šetří minuty života.",
+        "argument_sources": [
+          "data/indicators.json (dojezd_zzs 94,2 % výjezdů)",
+          "data/regions.json (dojezd_zzs_kraje)"
+        ]
+      },
+      "demand_pct": 11,
+      "demand_reasoning": "Modelový požadavek: vysoký relativní růst z malé základny — obnova vozů a stabilizace posádek.",
+      "escalation": {
+        "agree": "Podepisujeme; obnova vozového parku může začít.",
+        "grudging": "Podepíšeme, ale obnovu vozů zase odložíme.",
+        "no_deal": "Bez dohody — kraje budou muset záchranku dotovat samy.",
+        "protest": "Posádky drží protestní pohotovost; odbory varují před odchody do nemocnic."
+      },
+      "protest_precedent_source": "Reálný kontext: ZZS financují z úhrad jen menšinu, zřizovateli jsou kraje (typizováno)",
+      "real_2027": "s dohodou",
+      "effects": [
+        {
+          "kind": "directional",
+          "indicator": "dojezd_zzs",
+          "polarity": "up",
+          "strength": "weak",
+          "active_when": "above_avg",
+          "note": "Obnova flotily a stabilizace posádek pomáhá držet/zlepšit podíl dojezdů do 20 minut (94,2 %).",
+          "confidence": "low",
+          "source": "data/indicators.json (dojezd_zzs); data/regions.json (dojezd_zzs_kraje)"
+        }
+      ]
+    },
+    {
+      "id": "ostatni",
+      "label": "Ostatní segmenty",
+      "sublabel": "zvláštní ambulantní péče a další drobné segmenty",
+      "baseline_mld": 2.5,
+      "baseline_share_pct": 0.5,
+      "baseline_source": "clanek-financovani-segmenty-2026.html: segmenty 8/10/11 = 2,5 mld = 0,5 %",
+      "representative": {
+        "role": "Vyjednavač drobných segmentů",
+        "argument": "Jsme zaokrouhlovací chyba rozpočtu — půl procenta úhrad — ale bez nás nefunguje domácí umírání, protialkoholní záchytky ani lékařská pohotovost. Malé segmenty se ve vyhlášce snadno přehlédnou.",
+        "argument_sources": [
+          "clanek-financovani-segmenty-2026.html (struktura ostatních segmentů)"
+        ]
+      },
+      "demand_pct": 5,
+      "demand_reasoning": "Modelový požadavek: udržet krok s inflací.",
+      "escalation": {
+        "agree": "Podepisujeme.",
+        "grudging": "Podepíšeme — jako vždy poslední v řadě.",
+        "no_deal": "Bez dohody; drobné segmenty vyhláška obvykle jen zafixuje.",
+        "protest": "Pohotovostní služby v regionech omezí provozní hodiny."
+      },
+      "protest_precedent_source": "Typizováno (drobné segmenty reálně eskalují zřídka)",
+      "real_2027": "s dohodou",
+      "effects": [
+        {
+          "kind": "none",
+          "note": "Bez doloženého efektu na sledované indikátory.",
+          "source": "PLAN-VYHLASKA-HRA.md (zásada poctivosti)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "id": "status_quo",
+      "label": "Status quo",
+      "desc": "Všem stejné procento — struktura systému se nezmění ani o desetinu. Tak vypadá setrvačnost.",
+      "alloc": { "luzkova": 8.5, "ambulantni": 8.5, "leky": 8.5, "prostredky": 8.5, "lazne": 8.5, "stomatologie": 8.5, "doprava_zzs": 8.5, "ostatni": 8.5 }
+    },
+    {
+      "id": "reformni",
+      "label": "Reformní",
+      "desc": "Přibrzdit lůžka, posílit ambulance, zuby a záchranku — směr, kterým leží průměr OECD.",
+      "alloc": { "luzkova": 6.5, "ambulantni": 12, "leky": 8, "prostredky": 9, "lazne": 6, "stomatologie": 14, "doprava_zzs": 13, "ostatni": 8 }
+    },
+    {
+      "id": "nemocnicni",
+      "label": "Nemocniční priorita",
+      "desc": "Uhasit požár v nemocnicích (osobní náklady +56 %/5 let) — za cenu stagnace všech ostatních.",
+      "alloc": { "luzkova": 11.5, "ambulantni": 5, "leky": 4, "prostredky": 4, "lazne": 4, "stomatologie": 5, "doprava_zzs": 5, "ostatni": 4 }
+    }
+  ]
+}
