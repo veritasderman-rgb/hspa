@@ -5,6 +5,15 @@
 > politických prohlášení** (BAR1–BAR12) a konsolidovaný zbytek práce (F-série).
 > Každý otevřený úkol má prompt ke zkopírování do Claude Code session.
 > Priority: 🔴 kritické · 🟠 důležité · 🟡 rozvoj · ⚪ vize.
+>
+> **📌 Stav k 2026-07-10 (PR #761):** HOTOVO — celý **Barometr** (BAR1–BAR12) ·
+> **F2** (2 flagged) · **F3** (skener) · **F5** (zdokumentováno, pipeline-blok) ·
+> **F6** (screening karty) · **F7** (výhled 2027–2029) · **F8** (docs+glosář) ·
+> **U24** (a11y WCAG 2.2) · **U27** (STRAT/IND-STORY existovaly, PREV-PERSONA
+> dostavěno) · **F1: 13/49 článků** ověřeno.
+> ZBÝVÁ: **F1** (~36 článků, WebFetch → subagenti) · **F4** (seed→live →
+> noční ingest, sandbox zakazuje transform) · **U22** (Dušek, blok na datový
+> sourcing PUK/ÚZIS) · **U21** manifest + **U28** dark mode (rozhodnutí vlastníka).
 
 ---
 
