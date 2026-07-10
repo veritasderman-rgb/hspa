@@ -845,6 +845,14 @@ Baseline je zamrazená k datu slibu (musí odpovídat bodu `trend` řady
 indikátoru). Stavy přepočítává noční rutina (PROMPT_NIGHTLY_ROUTINE § 3.6),
 kandidáty výroků sbírá denní rutina. Opravy jen přes `meta.changelog[]`.
 
+### Výhled 2027–2029 (`plan_vyhled_meta` + `horizont`)
+
+Sekce plánu drží i výhled legislativních prací na léta 2027–2029 (příloha č. 2
+téhož usnesení). Rozlišuje se polem `horizont` na položce `plan_items`:
+`'2026'` (chybějící = default) nebo `'vyhled-2027-2029'`. Metadata výhledového
+dokumentu jsou v `plan_vyhled_meta` (stejná struktura jako `plan_meta`). UI
+`legislativa.html` přepíná mezi horizonty segmentem „Plán 2026 / Výhled 2027–2029".
+
 ## 20. `data/souvislosti.json` — znalostní graf (generovaný)
 
 **Negeneruj ručně** — vzniká build-time skriptem `scripts/build-souvislosti.js`

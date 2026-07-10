@@ -109,6 +109,16 @@ export function computePlanStats(items, now = new Date()) {
   };
 }
 
+/** Horizont položky (chybějící = aktuální rok '2026'). */
+export function itemHorizont(item) {
+  return item?.horizont ?? '2026';
+}
+
+/** Vybere položky daného horizontu ('2026' | 'vyhled-2027-2029'). */
+export function filterPlanByHorizont(items, horizont = '2026') {
+  return (Array.isArray(items) ? items : []).filter(it => itemHorizont(it) === horizont);
+}
+
 /** Filtr plánu podle čipu. `now` injektovatelné kvůli filtru „po termínu". */
 export function filterPlanItems(items, filter = 'all', now = new Date()) {
   const xs = Array.isArray(items) ? items : [];
@@ -201,7 +211,9 @@ let activeSearch = '';
 // Stav sekce plánu.
 let planItems = [];
 let planMeta = null;
+let planVyhledMeta = null;
 let activePlanFilter = 'all';
+let activeHorizont = '2026';
 
 /** Filtr podle fáze + fulltext přes title/title_short/annotation/submitter. */
 export function filterLegislation(items, { phase, search } = {}) {
@@ -390,19 +402,20 @@ function wireFilters() {
 // ── Render sekce plánu ─────────────────────────────────────────────────────
 
 function renderPlanMetaLine() {
-  if (!planMeta) return '';
+  const meta = activeHorizont === 'vyhled-2027-2029' && planVyhledMeta ? planVyhledMeta : planMeta;
+  if (!meta) return '';
   const parts = [];
-  if (planMeta.usneseni) parts.push(`Usnesení vlády ${escapeHtml(planMeta.usneseni)}`);
-  if (planMeta.schvaleno) parts.push(`schváleno ${escapeHtml(formatDate(planMeta.schvaleno))}`);
+  if (meta.usneseni) parts.push(`Usnesení vlády ${escapeHtml(meta.usneseni)}`);
+  if (meta.schvaleno) parts.push(`schváleno ${escapeHtml(formatDate(meta.schvaleno))}`);
   let src = '';
-  if (planMeta.zdroj_url && planMeta.zdroj_nazev) {
-    src = `<a href="${escapeHtml(planMeta.zdroj_url)}" target="_blank" rel="noopener">${escapeHtml(planMeta.zdroj_nazev)} ↗</a>`;
-  } else if (planMeta.zdroj_nazev) {
-    src = escapeHtml(planMeta.zdroj_nazev);
+  if (meta.zdroj_url && meta.zdroj_nazev) {
+    src = `<a href="${escapeHtml(meta.zdroj_url)}" target="_blank" rel="noopener">${escapeHtml(meta.zdroj_nazev)} ↗</a>`;
+  } else if (meta.zdroj_nazev) {
+    src = escapeHtml(meta.zdroj_nazev);
   }
-  const meta = parts.join(' · ');
-  if (!meta && !src) return '';
-  return `<p class="leg-plan-meta">${meta}${meta && src ? ' · ' : ''}${src}</p>`;
+  const metaText = parts.join(' · ');
+  if (!metaText && !src) return '';
+  return `<p class="leg-plan-meta">${metaText}${metaText && src ? ' · ' : ''}${src}</p>`;
 }
 
 function renderPlanRow(item, now) {
@@ -443,7 +456,8 @@ function renderPlanTable() {
   const empty = document.getElementById('legPlanEmpty');
   if (!wrap) return;
   const now = new Date();
-  const filtered = sortPlanItems(filterPlanItems(planItems, activePlanFilter, now), now);
+  const inHorizont = filterPlanByHorizont(planItems, activeHorizont);
+  const filtered = sortPlanItems(filterPlanItems(inHorizont, activePlanFilter, now), now);
 
   if (!filtered.length) {
     wrap.innerHTML = '';
@@ -491,7 +505,8 @@ function renderPlan() {
   mount.hidden = false;
 
   const now = new Date();
-  const s = computePlanStats(planItems, now);
+  const hasVyhled = planItems.some(it => itemHorizont(it) === 'vyhled-2027-2029');
+  const s = computePlanStats(filterPlanByHorizont(planItems, activeHorizont), now);
   const counter = (num, label, extra = '') =>
     `<div class="leg-plan-stat${extra}"><span class="leg-plan-stat-num">${num}</span><span class="leg-plan-stat-lbl">${label}</span></div>`;
 
@@ -510,6 +525,11 @@ function renderPlan() {
         s tím, kde předpis reálně je.
       </p>
       ${renderPlanMetaLine()}
+      ${hasVyhled ? `
+      <nav class="leg-plan-horizont" id="legPlanHorizont" aria-label="Horizont plánu">
+        <button data-horizont="2026" class="${activeHorizont === '2026' ? 'active' : ''}">Plán 2026</button>
+        <button data-horizont="vyhled-2027-2029" class="${activeHorizont === 'vyhled-2027-2029' ? 'active' : ''}">Výhled 2027–2029</button>
+      </nav>` : ''}
     </div>
 
     <div class="leg-plan-stats" role="group" aria-label="Souhrn plnění plánu">
@@ -533,7 +553,20 @@ function renderPlan() {
   `;
 
   wirePlanFilters();
+  wireHorizontToggle();
   renderPlanTable();
+}
+
+function wireHorizontToggle() {
+  document.querySelectorAll('#legPlanHorizont button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#legPlanHorizont button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeHorizont = btn.dataset.horizont;
+      activePlanFilter = 'all';
+      renderPlan(); // překreslí countery i zdroj pro daný horizont
+    });
+  });
 }
 
 async function init() {
@@ -554,6 +587,7 @@ async function init() {
     allItems = legData.items ?? [];
     planItems = Array.isArray(legData.plan_items) ? legData.plan_items : [];
     planMeta = legData.plan_meta ?? null;
+    planVyhledMeta = legData.plan_vyhled_meta ?? null;
     articlesById = new Map((artsData.articles ?? []).map(a => [a.id, a]));
 
     renderStats();
