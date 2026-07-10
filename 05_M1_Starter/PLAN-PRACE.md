@@ -19,13 +19,20 @@
 > `<!-- audit:` komentář → renderovaly se prázdné; opraveno. **verified 116 ·
 > review-pending 21 · partial 15**; všech 21 review-pending + 15 partial má F1 marker
 > a zůstává v daném stavu z doložených důvodů (seed indikátor → F4, nebo redakční bod).
-> ZBÝVÁ: **F4** (seed→live) — **je proveditelné v session** (síť na Eurostat/OECD SDMX
-> funguje; sandbox zakazuje jen plný `transform` — hodnoty se ověřují cíleně přes
-> konkrétní fetcher a zapisují ručně, viz PLAN-VERIFIKACE-INDIKATORU.md). Dávka 2026-07-10:
-> `perinatalni_umrtnost` seed→live (Eurostat hlth_cd_aperrto, ověřeno 4,8/2024, přidán
-> mapping, F5 výjimka odebrána). **Nález:** 2 rozbité eurostat mappingy (`nadeje_doziti_zdravi_65`,
-> `ohrozeni_chudobou` → HTTP 400, drift API) k opravě v příští dávce. · **U22** (Duškův
-> brief) zůstává blok na ÚZIS/PUK sourcing (data.mzcr.cz CKAN mrtvý — ruční discovery).
+> ZBÝVÁ (obojí **proveditelné v session**, opakovatelné/multi-session — dřívější
+> „sandbox-blocked" bylo mylné): **F4** (seed→live) — síť na Eurostat/OECD SDMX funguje;
+> sandbox zakazuje jen plný `transform` (hodnoty cíleně přes fetcher + ruční zápis, viz
+> PLAN-VERIFIKACE-INDIKATORU.md). Dávky 2026-07-10 (PR #766+#767): `perinatalni_umrtnost`,
+> `ohrozeni_chudobou` (ilc_li02 indic_il→statinfo+rskpovth), `nadeje_doziti_zdravi_65`
+> (hlth_hlye indic_he→hlth_hle) seed→live, eurostat fetcher 17/19→19/19 ok, 3 F5 výjimky
+> odebrány. Zbývá: pár illustrative s živým zdrojem (OECD SDMX2 kandidáti), většina
+> illustrative je korektně one-off/frozen (playbook §8). · **U22** (Duškův brief:
+> 8 klinických indik. + 6 článků) — **infra HOTOVA**: `kvalita-pece.html` + `clinical-quality.js`
+> + `clinical-quality.json` (35 indik. + 3 INDIKO), fetchery, nav wired; 8 heatmap indik.
+> sourcováno (puk.js 31/35 ok živě). Onko-próza parser sub-item **VYŘEŠEN**: jícen/plíce/játra
+> vystavují jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný
+> výstup, seed drží roční hodnotu (traps.md; catch málem-regrese). Zbývá jen **6 dlouhých
+> klinických článků** — publikovaný obsah pro veřejný web, potřebuje editorské zadání témat.
 
 ---
 
@@ -301,7 +308,7 @@ přesně Barometr/články potřebují opakovaně (nespěchá, MCP stačí pro a
 | ID | Úkol | Rozsah | Stav |
 |---|---|---|---|
 | U21 | Manifest rozšíření fáze A–D (hero, „Proč reforma", countery, data cards) | L | ✅ hotovo — hero + `manifest-why` + 3 hero count-up cards + **Fáze D inline data cards u všech 7 priorit s indikátory** (P1/P2 doplněny 2026-07-10 dle Codex #766: P1 `platba_z_kapsy_pct`, P2 `spokojenost_informovani`; P4/5/8/10/13 už existovaly; P3/6/7/9/11/12 jsou kvalitativní bez indikátoru). `financovani_per_capita` (P1 návrh) v kontraktu neexistuje → nehádáno. Pozn.: manifest je **autorský politický text** (Pavlovic/Malíková/ČPS) — text needitovat, data cards jsou neutrální HSPA vrstva. |
-| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | ⛔ blok: datový sourcing PUK/ÚZIS (síť/pipeline), dělit na 2+ sessions |
+| U22 | Duškův brief: 8 klinických indikátorů (sourcing PUK/ÚZIS) + 6 článků | L | 🟢 **infra HOTOVA** — `kvalita-pece.html` (720 ř.), `src/clinical-quality.js` (466 ř.), `data/clinical-quality.json` (35 indik. + 3 INDIKO cesty), `puk.js`/`indiko.js`/`validate-clinical-quality.js`, nav wired. **8 heatmap indik. sourcováno** (sepse PSI-13, AMI, CMP, trombektomie, AWaRe, kolorektál, MDT/čas přes INDIKO — puk.js 31/35 ok živě). Parser sub-item **VYŘEŠEN 2026-07-10**: onko próza (jícen/plíce/játra) vystavuje jen víceletou „národní referenční hodnotu", ne roční — `parsed-no-value` je správný výstup, seed je roční hodnota (traps.md; málem regrese). Zbývá jen (c) **6 dlouhých klinických článků** — obsah pro veřejný web, potřebuje editorské zadání témat (výběr publikovaných klinických článků nelze fabrikovat autonomně). `sepse_psi13` via iframe PHP-graf = volitelný per-page handler, nízká priorita (seed 0,84 % drží). |
 | U23 | Série Reforma — zbytek: fact-check dílů před publikací (PROMs modul už vyšel) | S–M | připraveno |
 | U24 | A11y: manuální WCAG 2.2 (target size 24px, dragging alternativa, focus) + blocking CI | M | ✅ hotovo (PR #761) |
 | U27 | Storytelling: STRAT-STORY / IND-STORY / PREV-PERSONA (po jednom) | M–L | ✅ hotovo (PR #761) |

@@ -15,12 +15,15 @@ const MAPPING = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'ingest', 'mapping', 'eurostat_codes.json'), 'utf8')
 );
 
-test('hlth_hlye: indic_he uses HLY_X / LE_X codes (not sex-letter)', () => {
+test('hlth_hlye: hlth_hle uses HLY_Y* / LE_Y* codes + unit=YR (Eurostat 2026 schéma)', () => {
   const m = MAPPING.indicators.nadeje_doziti_zdravi_65;
   assert.equal(m.dataset, 'hlth_hlye');
-  const indic = m.filter_extra.indic_he;
-  // Valid pattern: HLY_0|HLY_50|HLY_65|HLY_PC_0|HLY_PC_50|HLY_PC_65|LE_0|LE_50|LE_65
-  assert.match(indic, /^(HLY|LE)_(0|50|65|PC_0|PC_50|PC_65)$/, `indic_he=${indic} not in valid set`);
+  // Eurostat restrukturalizoval hlth_hlye 2026: dimenze indic_he→hlth_hle,
+  // kód HLY_65→HLY_Y65; roky vyžadují unit=YR (jinak vrací % nebo HTTP 400).
+  assert.equal(m.filter_extra.indic_he, undefined, 'dimenze indic_he byla nahrazena hlth_hle');
+  const indic = m.filter_extra.hlth_hle;
+  assert.match(indic, /^(HLY_Y|LE_Y|HLY_LE_Y)(0|50|65)(_PC)?$/, `hlth_hle=${indic} not in valid set`);
+  assert.equal(m.filter_extra.unit, 'YR', 'hlth_hlye vyžaduje unit=YR pro počet let');
 });
 
 test('hlth_hlye: no separate age dimension (age is encoded in indic_he)', () => {
