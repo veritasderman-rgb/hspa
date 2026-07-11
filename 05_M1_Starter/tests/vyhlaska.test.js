@@ -90,7 +90,10 @@ test('engine: verdict — deficit, dohody a posun podílu lůžkového bloku', (
   assert.equal(v.deficit, true, '10 % všem = deficit');
   const v2 = verdict(SEG, flat(7), doc.envelope.amount_mld, SCALE);
   assert.equal(v2.deficit, false);
-  assert.equal(v2.segmentsTotal, 17);
+  // dohody se počítají jen přes 15 vyjednávacích segmentů DR (centrová léčba
+  // a zákonné položky mají dr_segment: false) — srovnatelné s realitou 12/15
+  assert.equal(v2.segmentsTotal, 15);
+  assert.equal(SEG.filter(s => s.dr_segment === false).length, 2);
   assert.ok(Math.abs(v2.luzkovaShareAfter - v2.luzkovaShareBefore) < 0.1, 'plošný růst podíl nemění');
   const reform = verdict(SEG, { ...flat(7), akutni_luzkova: 4, prakticti: 12 }, doc.envelope.amount_mld, SCALE);
   assert.ok(reform.luzkovaShareAfter < reform.luzkovaShareBefore, 'reformní vyhláška podíl lůžkového bloku snižuje');

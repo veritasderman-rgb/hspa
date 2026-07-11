@@ -120,12 +120,17 @@ export const LUZKOVA_GROUP = ['akutni_luzkova', 'centrove_leky', 'nasledna_luzko
 /**
  * Verdikt vaší vyhlášky: cena vs. obálka (v dnešních cenách), počet dohod
  * (vs. reálné DR 2027), posun podílu lůžkového bloku vůči OECD.
+ * Dohody se počítají JEN přes vyjednávací segmenty DR (dr_segment !== false)
+ * — centrová léčba a zákonné položky se nevyjednávají, takže by srovnání
+ * s reálným „12 z 15" zkreslovaly.
  */
 export function verdict(segments, alloc, envelopeMld, scale = 1) {
   const cost = totalCost(segments, alloc, scale);
   const moods = segments.map(s => ({ id: s.id, mood: moodFor(s, alloc[s.id]) }));
-  const deals = moods.filter(m => m.mood === 'agree' || m.mood === 'grudging').length;
-  const protests = moods.filter(m => m.mood === 'protest').length;
+  const negotiating = segments.filter(s => s.dr_segment !== false);
+  const negMoods = moods.filter(m => negotiating.some(s => s.id === m.id));
+  const deals = negMoods.filter(m => m.mood === 'agree' || m.mood === 'grudging').length;
+  const protests = negMoods.filter(m => m.mood === 'protest').length;
   const totalBase = segments.reduce((a, s) => a + s.baseline_mld, 0);
   const luzIds = LUZKOVA_GROUP.filter(id => segments.some(s => s.id === id));
   const before = luzIds.reduce((a, id) => a + segments.find(s => s.id === id).baseline_mld, 0)
@@ -136,7 +141,7 @@ export function verdict(segments, alloc, envelopeMld, scale = 1) {
     balance: Math.round((envelopeMld - cost) * 10) / 10, // + rezerva / − deficit
     deficit: cost > envelopeMld,
     deals,
-    segmentsTotal: segments.length,
+    segmentsTotal: negotiating.length,
     protests,
     moods,
     luzkovaShareBefore: Math.round(before * 10) / 10,

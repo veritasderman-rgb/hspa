@@ -172,7 +172,7 @@ function renderResults(alloc) {
   const dealsHtml = `
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Dohody</h3>
-      <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} segmentů podepsalo</p>
+      <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} vyjednávacích segmentů podepsalo</p>
       <p class="vh-verdict-note">${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
     </div>`;
 
