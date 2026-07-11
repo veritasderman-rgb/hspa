@@ -14,7 +14,7 @@ const ROOT = path.resolve(__dirname, '..');
 const VALID_KIND = new Set(['definitional', 'directional', 'none']);
 const VALID_POLARITY = new Set(['up', 'down']);
 const VALID_STRENGTH = new Set(['weak', 'medium', 'strong']);
-const ESCALATION_STATES = ['agree', 'grudging', 'no_deal', 'protest'];
+const ESCALATION_STATES = ['boost', 'agree', 'grudging', 'no_deal', 'protest'];
 
 export function validateVyhlaskaHra() {
   const errors = [];

@@ -15,7 +15,7 @@ let INDICATORS = new Map();
 let SCALE = 1; // objem dnešního roku / součet baseline (viz DOC.scale_note)
 
 const STRENGTH_LABEL = { weak: 'slabě', medium: 'středně', strong: 'silně' };
-const MOOD_CLASS = { agree: 'agree', grudging: 'grudging', no_deal: 'nodeal', protest: 'protest' };
+const MOOD_CLASS = { boost: 'boost', agree: 'agree', grudging: 'grudging', no_deal: 'nodeal', protest: 'protest' };
 
 function czNum(v, d = 1) {
   if (v == null || !Number.isFinite(v)) return '—';
@@ -101,7 +101,8 @@ function updateSegmentUi(s, alloc) {
     const reaction = s.escalation?.[mood] || '';
     const precedent = mood === 'protest' && s.protest_precedent_source
       ? ` <span class="vh-mood-src">(precedent: ${escapeHtml(s.protest_precedent_source)})</span>` : '';
-    moodEl.innerHTML = `<strong>${escapeHtml(MOOD_LABELS[mood])}.</strong> „${escapeHtml(reaction)}“${precedent}`;
+    const icon = mood === 'boost' ? '✚ ' : '';
+    moodEl.innerHTML = `<strong>${icon}${escapeHtml(MOOD_LABELS[mood])}.</strong> „${escapeHtml(reaction)}“${precedent}`;
   }
 }
 
@@ -173,7 +174,7 @@ function renderResults(alloc) {
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Dohody</h3>
       <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} vyjednávacích segmentů podepsalo</p>
-      <p class="vh-verdict-note">${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
+      <p class="vh-verdict-note">${v.boosts > 0 ? `✚ ${v.boosts}× rozšíření péče (výrazně nad požadavek → delší ordinační hodiny, nové kapacity, vstup nových metod). ` : ''}${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
     </div>`;
 
   // 2) Struktura — podíl lůžkového bloku vs. OECD
