@@ -539,9 +539,10 @@ export function renderModuleNav(activeId) {
       id: 'financing',
       label: 'Financování',
       href: 'financovani.html',
-      match: ['financovani.html'],
+      match: ['financovani.html', 'vyhlaska.html'],
       children: [
         { id: 'dohodovaci-rizeni',        label: 'Dohodovací řízení',  href: 'dohodovaci-rizeni.html',        match: ['dohodovaci-rizeni.html'] },
+        { id: 'vyhlaska',                 label: 'Úhradová vyhláška: hra', href: 'vyhlaska.html',              match: ['vyhlaska.html'] },
         // 'financovani-poskytovatele' — DOČASNĚ SKRYTO. Provider-level
         // úhradová data jsou velmi citlivá; bez ověřených živých dat
         // (NRHZS denní refresh + audit) je riziko zavádějících závěrů.
@@ -1021,6 +1022,8 @@ export const SITE_TOOLS = [
     desc: 'Držíme politiky za slovo — sliby vlády vs. čísla, která měříme.', verb: 'Otevřít barometr' },
   { id: 'model-systemu', href: 'model-systemu.html', label: 'Model systému',
     desc: 'Interaktivní kauzální mapa: kudy se problém propisuje systémem.', verb: 'Prozkoumat model' },
+  { id: 'vyhlaska',      href: 'vyhlaska.html',      label: 'Úhradová vyhláška: hra',
+    desc: 'Rozdělte růst úhrad jako ministr — a ustůjte reakce segmentů.', verb: 'Zahrát si' },
 ];
 
 /**

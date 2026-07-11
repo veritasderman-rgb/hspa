@@ -6303,6 +6303,8 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
 .home-tool-kompas    { border-left-color: var(--good); }
 .home-tool-barometr  { border-left-color: var(--red); }
 .home-tool-model     { border-left-color: var(--warn); }
+.home-tool-vyhlaska  { border-left-color: var(--ink); }
+.home-tool-wide      { grid-column: 1 / -1; }
 .home-tool-badge {
   align-self: flex-start;
   font-family: var(--sans);
@@ -16032,6 +16034,373 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   margin: 0 0 10px;
 }
 .kompas-context p {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 720px;
+}
+
+/* =================================================================
+   Úhradová vyhláška: hra (vyhlaska.html) · namespace .vh-*
+   Jen tokeny → dark-safe. Modelová hra, viz PLAN-VYHLASKA-HRA.md.
+   ================================================================= */
+.vh-hero .ed-lead { max-width: 780px; }
+.vh-disclaimer {
+  max-width: 780px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.vh-disclaimer strong { color: var(--ink); }
+
+.vh-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.vh-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Obálka ── */
+.vh-envelope {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 16px 18px;
+  margin: 0 0 14px;
+}
+.vh-envelope-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.vh-envelope-label {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.vh-envelope-value {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.vh-envelope-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.vh-envelope-fill {
+  height: 100%;
+  width: 0;
+  background: var(--good);
+  border-radius: 999px;
+  transition: width 0.15s ease, background 0.15s ease;
+}
+.vh-envelope-fill.vh-envelope-over { background: var(--bad); }
+.vh-envelope-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 8px 0 0;
+}
+.vh-envelope-note-over { color: var(--bad); }
+.vh-envelope-note-over a { color: var(--bad); }
+
+.vh-presets { display: flex; gap: 10px; flex-wrap: wrap; }
+.vh-preset {
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 32px;
+  padding: 6px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.vh-preset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Layout ── */
+.vh-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 920px) { .vh-layout { grid-template-columns: 1fr; } }
+
+/* ── Segmentová karta ── */
+.vh-segment {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 16px 18px;
+  margin: 0 0 14px;
+}
+.vh-seg-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.vh-seg-label {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.vh-seg-sublabel {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+}
+.vh-seg-baseline {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-mut);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.vh-rep {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 12px 0;
+  padding: 12px 14px;
+  background: var(--paper2);
+  border-radius: 8px;
+}
+.vh-rep-avatar {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.vh-rep-role {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-mut);
+}
+.vh-rep-arg {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--ink);
+  margin: 4px 0 6px;
+}
+.vh-rep-demand {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  margin: 0;
+}
+.vh-rep-demand strong { color: var(--red); }
+.vh-rep-demand-why { color: var(--ink-mut); }
+.vh-seg-control { display: flex; align-items: center; gap: 14px; }
+.vh-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  accent-color: var(--red);
+  height: 24px;
+  cursor: pointer;
+}
+.vh-slider:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.vh-seg-value {
+  flex: 0 0 auto;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 64px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.vh-mood {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--paper2);
+}
+.vh-mood-agree    { box-shadow: inset 3px 0 0 var(--good); }
+.vh-mood-grudging { box-shadow: inset 3px 0 0 var(--warn); }
+.vh-mood-nodeal   { box-shadow: inset 3px 0 0 var(--ink-mut); }
+.vh-mood-protest  { box-shadow: inset 3px 0 0 var(--bad); color: var(--ink); }
+.vh-mood-protest strong { color: var(--bad); }
+.vh-mood-src { color: var(--ink-mut); font-size: 12px; }
+
+.vh-reset {
+  margin-top: 6px;
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.vh-reset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Výsledky ── */
+.vh-results { min-width: 0; position: sticky; top: 16px; }
+@media (max-width: 920px) { .vh-results { position: static; } }
+.vh-empty {
+  font-family: var(--serif);
+  color: var(--ink-mut);
+  padding: 24px 0;
+  font-size: 16px;
+}
+.vh-verdict-block {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.vh-verdict-block:first-child { padding-top: 0; }
+.vh-verdict-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  margin: 0 0 8px;
+}
+.vh-verdict-big {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.vh-tone-good { color: var(--good); }
+.vh-tone-mid  { color: var(--ink); }
+.vh-tone-bad  { color: var(--bad); }
+.vh-verdict-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+}
+.vh-share-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 52px;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+.vh-share-lbl { font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); }
+.vh-share-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.vh-share-fill { height: 100%; background: var(--ink-mut); border-radius: 999px; transition: width 0.15s ease; }
+.vh-share-fill-after { background: var(--red); }
+.vh-share-fill-oecd { background: var(--good); }
+.vh-share-val {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.vh-effect {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 8px 0;
+}
+.vh-effect-arrow { font-weight: 700; font-size: 15px; }
+.vh-arrow-down { color: var(--good); }
+.vh-arrow-up { color: var(--warn); }
+.vh-effect-none {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+  font-style: italic;
+  margin: 10px 0 0;
+}
+
+/* ── Metodika + souvislosti ── */
+.vh-method details {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0 16px;
+  background: var(--paper2);
+}
+.vh-method summary {
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--ink);
+  padding: 14px 0;
+  cursor: pointer;
+}
+.vh-method p {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.vh-method p strong { color: var(--ink); }
+.vh-sources {
+  margin: 8px 0 16px;
+  padding-left: 20px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.vh-context { padding-top: 4px; }
+.vh-context h2 {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.vh-context p {
   font-family: var(--serif);
   font-size: 16px;
   line-height: 1.6;
