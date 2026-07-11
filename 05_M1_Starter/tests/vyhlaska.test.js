@@ -60,12 +60,15 @@ test('engine: newShares/groupShare — plošný růst strukturu nemění, selekt
   assert.ok(reform < 56.3, 'přibrzděné nemocnice → podíl lůžkového bloku klesá');
 });
 
-test('engine: moodFor — eskalační žebřík podle gapu vs. požadavek', () => {
+test('engine: moodFor — eskalační žebřík podle gapu vs. požadavek (vč. pozitivního extrému)', () => {
   const akut = SEG.find(s => s.id === 'akutni_luzkova'); // demand 9
+  assert.equal(moodFor(akut, 11), 'boost', '≥ +2 nad požadavek → rozšíření péče');
   assert.equal(moodFor(akut, 9), 'agree');
   assert.equal(moodFor(akut, 7.5), 'grudging');
   assert.equal(moodFor(akut, 5.5), 'no_deal');
   assert.equal(moodFor(akut, 3), 'protest');
+  // každý segment má boost text (konkrétní příslib: hodiny/kapacity/metody)
+  for (const s of SEG) assert.ok(s.escalation.boost?.length > 20, `${s.id}: chybí boost`);
 });
 
 test('engine: effectsFor — directional jen při nadprůměrném růstu, definitional skupinově', () => {
@@ -97,6 +100,11 @@ test('engine: verdict — deficit, dohody a posun podílu lůžkového bloku', (
   assert.ok(Math.abs(v2.luzkovaShareAfter - v2.luzkovaShareBefore) < 0.1, 'plošný růst podíl nemění');
   const reform = verdict(SEG, { ...flat(7), akutni_luzkova: 4, prakticti: 12 }, doc.envelope.amount_mld, SCALE);
   assert.ok(reform.luzkovaShareAfter < reform.luzkovaShareBefore, 'reformní vyhláška podíl lůžkového bloku snižuje');
+  // pozitivní extrém: praktici 12 % vs. požadavek 8 % → boost počítán ve verdiktu
+  assert.ok(reform.boosts >= 1, 'štědrá alokace → aspoň jedno rozšíření péče');
+  // plošných 7 % → boost jen u „ostatní" (zákonné položky, požadavek 5 %)
+  assert.equal(verdict(SEG, flat(7), doc.envelope.amount_mld, SCALE).boosts, 1);
+  assert.equal(verdict(SEG, flat(5), doc.envelope.amount_mld, SCALE).boosts, 0, 'skromná vyhláška → žádné rozšíření');
 });
 
 test('data: presety pokrývají všechny segmenty a vejdou se do obálky (škálováno)', () => {

@@ -49,8 +49,9 @@ export function groupShare(segments, alloc, ids) {
   return Math.round(sum * 10) / 10;
 }
 
-export const MOOD_ORDER = ['agree', 'grudging', 'no_deal', 'protest'];
+export const MOOD_ORDER = ['boost', 'agree', 'grudging', 'no_deal', 'protest'];
 export const MOOD_LABELS = {
+  boost: 'Dohoda + rozšíření péče',
   agree: 'Dohoda',
   grudging: 'Podpis s výhradami',
   no_deal: 'Bez dohody — rozhodne vyhláška',
@@ -59,10 +60,13 @@ export const MOOD_LABELS = {
 
 /**
  * Nálada zástupce segmentu podle rozdílu přidělené % vs. modelový požadavek.
+ * gap ≥ +2 → boost (pozitivní extrém: segment slibuje konkrétní rozšíření
+ * péče — ordinační hodiny, kapacity, vstup nových metod);
  * gap ≥ 0 → agree; ≥ −2 → grudging; ≥ −4 → no_deal; jinak protest.
  */
 export function moodFor(segment, allocPct) {
   const gap = (Number(allocPct) || 0) - segment.demand_pct;
+  if (gap >= 2) return 'boost';
   if (gap >= 0) return 'agree';
   if (gap >= -2) return 'grudging';
   if (gap >= -4) return 'no_deal';
@@ -129,7 +133,8 @@ export function verdict(segments, alloc, envelopeMld, scale = 1) {
   const moods = segments.map(s => ({ id: s.id, mood: moodFor(s, alloc[s.id]) }));
   const negotiating = segments.filter(s => s.dr_segment !== false);
   const negMoods = moods.filter(m => negotiating.some(s => s.id === m.id));
-  const deals = negMoods.filter(m => m.mood === 'agree' || m.mood === 'grudging').length;
+  const deals = negMoods.filter(m => ['boost', 'agree', 'grudging'].includes(m.mood)).length;
+  const boosts = moods.filter(m => m.mood === 'boost').length; // vč. nevyjednávacích (rozšíření péče je reálné i tam)
   const protests = negMoods.filter(m => m.mood === 'protest').length;
   const totalBase = segments.reduce((a, s) => a + s.baseline_mld, 0);
   const luzIds = LUZKOVA_GROUP.filter(id => segments.some(s => s.id === id));
@@ -142,6 +147,7 @@ export function verdict(segments, alloc, envelopeMld, scale = 1) {
     deficit: cost > envelopeMld,
     deals,
     segmentsTotal: negotiating.length,
+    boosts,
     protests,
     moods,
     luzkovaShareBefore: Math.round(before * 10) / 10,
