@@ -527,11 +527,12 @@ export function renderModuleNav(activeId) {
       id: 'indicators',
       label: 'Indikátory',
       href: 'index.html',
-      match: ['index.html', '/'],
+      match: ['index.html', '/', 'diagnoza.html'],
       children: [
         { id: 'hspa-prehled', label: 'HSPA přehled',   href: 'hspa-prehled.html', match: ['hspa-prehled.html'] },
         { id: 'kvalita-pece', label: 'Kvalita péče',   href: 'kvalita-pece.html', match: ['kvalita-pece.html'] },
         { id: 'pojistenci',   label: 'Atlas pojištěnců', href: 'pojistenci.html', match: ['pojistenci.html'] },
+        { id: 'diagnoza',     label: 'Diagnóza',       href: 'diagnoza.html',     match: ['diagnoza.html'] },
       ],
     },
     { id: 'kraje',       label: 'Krajský pohled',          href: 'kraje.html',              match: ['kraje.html'] },
