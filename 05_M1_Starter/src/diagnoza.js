@@ -179,9 +179,11 @@ function mereniHtml(ind, entry, doha) {
       </div>`);
   }
   if (doha.gap != null) {
+    // gap je počítán vůči benchmarku, který Doháněč skutečně použil (OECD/EU)
+    const gapBench = doha.benchmark_source === 'eu' ? 'EU' : 'OECD';
     stats.push(`
       <div class="dg-stat">
-        <span class="dg-stat-lbl">Rozdíl vs. OECD</span>
+        <span class="dg-stat-lbl">Rozdíl vs. ${gapBench}</span>
         <span class="dg-stat-val">${doha.gap > 0 ? '+' : ''}${czNum(doha.gap)}${unit}</span>
       </div>`);
   }
@@ -194,7 +196,8 @@ function mereniHtml(ind, entry, doha) {
     </div>` : '';
 
   const links = [`<a href="indicator.html?id=${encodeURIComponent(ind.id)}">Detail indikátoru →</a>`];
-  if (entry.region_dataset) links.push(`<a href="kraje.html">Krajský pohled →</a>`);
+  // deep-link na mapu tohoto indikátoru — kraje.js čte hash #id=<indicator_id>
+  if (entry.region_dataset) links.push(`<a href="kraje.html#id=${encodeURIComponent(ind.id)}">Krajský pohled →</a>`);
 
   return `
     <div class="dg-measure">
