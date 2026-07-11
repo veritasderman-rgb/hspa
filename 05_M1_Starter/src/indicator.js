@@ -139,6 +139,15 @@ function renderDetail(ind, card, regionDataset) {
       </a>
     ` : ''}
 
+    <a class="ind-deepdive-cta" href="diagnoza.html?id=${encodeURIComponent(ind.id)}">
+      <span class="ind-deepdive-cta-icon" aria-hidden="true">🗂</span>
+      <span class="ind-deepdive-cta-body">
+        <span class="ind-deepdive-cta-title">Otevřít spis Diagnózy</span>
+        <span class="ind-deepdive-cta-desc">Kompletní spis případu: příčiny, páky, peníze, politické sliby a co můžete udělat vy.</span>
+      </span>
+      <span class="ind-deepdive-cta-arrow" aria-hidden="true">→</span>
+    </a>
+
     ${card?.patient_story ? `
       <section class="ind-section ind-story-section">
         <h3>Proč na tom záleží</h3>

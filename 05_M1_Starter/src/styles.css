@@ -16434,3 +16434,304 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   color: var(--ink);
   max-width: 720px;
 }
+
+/* === Diagnóza (diagnoza.html) · namespace .dg-* ===
+   Spis případu indikátoru — svislý spis s číslovanými sekcemi.
+   Jen design tokeny → dark-safe (žádné prefers-color-scheme).
+   Viz PLAN-DIAGNOZA.md. */
+
+/* ── Signálové barvy (tokeny) — sdílené pill/hodnota/sparkline ── */
+.dg-signal-good    { color: var(--good); }
+.dg-signal-warn    { color: var(--warn); }
+.dg-signal-bad     { color: var(--bad); }
+.dg-signal-neutral { color: var(--ink-mut); }
+
+/* ── Hero spisu ── */
+.dg-hero .ed-lead { max-width: 780px; }
+.dg-hero-meta {
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--ink);
+  margin: 10px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dg-hero-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.dg-hero-year { color: var(--ink-mut); }
+.dg-hero-bench {
+  color: var(--ink-mut);
+  padding-left: 12px;
+  border-left: 1px solid var(--rule);
+}
+
+/* ── Doháněč ── */
+.dg-dohanec {
+  margin: 22px 0 0;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--red);
+  background: var(--paper2);
+  max-width: 780px;
+}
+.dg-dohanec-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mut);
+  margin: 0 0 6px;
+}
+.dg-dohanec-big {
+  font-family: var(--serif);
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+.dg-dohanec-big-text {
+  /* status ≠ catches_up → místo roku věta; menší, ale pořád velký serif */
+  font-size: clamp(22px, 3.4vw, 32px);
+  line-height: 1.25;
+}
+.dg-dohanec-note {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.dg-dohanec-disclaimer {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 8px 0 0;
+}
+
+/* ── Svislý spis: číslované sekce ── */
+.dg-spis { padding-bottom: 32px; }
+.dg-section {
+  padding: 8px clamp(18px, 4vw, 48px) 26px;
+  max-width: 1060px;
+}
+.dg-h {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.dg-h-num {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+}
+.dg-h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  margin: 0 0 8px;
+}
+.dg-section-lead {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  max-width: 720px;
+}
+.dg-links {
+  font-family: var(--sans);
+  font-size: 14px;
+  margin: 12px 0 0;
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.dg-links a { color: var(--red); }
+.dg-unknown {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-mut);
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  max-width: 780px;
+}
+
+/* ── 01 Měření ── */
+.dg-measure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  max-width: 860px;
+}
+.dg-stat {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dg-stat-lbl {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-mut);
+}
+.dg-stat-val {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.dg-pill {
+  align-self: flex-start;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+.dg-spark-wrap { margin: 16px 0 0; max-width: 440px; }
+.dg-spark {
+  display: block;
+  width: 100%;
+  height: 64px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+}
+.dg-spark-caption {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Karty (Proč, Léčba) ── */
+.dg-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.dg-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  text-decoration: none;
+  color: var(--ink);
+}
+.dg-card:hover { border-color: var(--ink); }
+.dg-card-kind {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.dg-card-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* ── Seznamy (Peníze, Sliby, Co můžu já, Číst dál) ── */
+.dg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 720px;
+}
+.dg-list-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.dg-list-item a { color: var(--ink); }
+.dg-list-item a:hover { color: var(--red); }
+
+/* ── Co můžu já — dva sloupce ── */
+.dg-ja {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 32px);
+}
+
+/* ── Rozcestník ── */
+.dg-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 780px;
+}
+.dg-index-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--rule);
+}
+.dg-index-link {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+.dg-index-link:hover { color: var(--red); }
+.dg-index-count {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mut);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Responzivita: pod 860 px vše do jednoho sloupce ── */
+@media (max-width: 860px) {
+  .dg-measure-grid { grid-template-columns: 1fr; }
+  .dg-cards { grid-template-columns: 1fr; }
+  .dg-ja { grid-template-columns: 1fr; }
+  .dg-hero-bench { border-left: 0; padding-left: 0; }
+}
