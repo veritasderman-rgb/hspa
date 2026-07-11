@@ -21,7 +21,7 @@ export const ROK_STROP = 2100;
 export const EPS_TEMPO = 1e-9;
 
 /** Krátký disclaimer společný pro všechny výstupy. */
-const DISCLAIMER = 'Průměr OECD držíme konstantní — modelová extrapolace, ne predikce.';
+const DISCLAIMER = 'Benchmark držíme konstantní — modelová extrapolace, ne predikce.';
 
 /** Konečné číslo? (odmítá null, undefined, NaN, ±Infinity, ne-čísla) */
 function jeCislo(x) {
@@ -94,10 +94,16 @@ export function dohanec(indicator) {
   if (!indicator || typeof indicator !== 'object') {
     return nedostatekDat('chybí indikátor.');
   }
-  const oecd = indicator.benchmark?.oecd;
-  if (!jeCislo(oecd)) {
-    return nedostatekDat('chybí benchmark OECD.');
+  // Benchmark: primárně OECD, fallback EU (některé indikátory mají jen EU
+  // srovnání) — zdroj se propaguje ve výsledku jako benchmark_source.
+  const maOecd = jeCislo(indicator.benchmark?.oecd);
+  const maEu = jeCislo(indicator.benchmark?.eu);
+  if (!maOecd && !maEu) {
+    return nedostatekDat('chybí benchmark OECD i EU.');
   }
+  const oecd = maOecd ? indicator.benchmark.oecd : indicator.benchmark.eu;
+  const benchmarkSource = maOecd ? 'oecd' : 'eu';
+  const benchLabel = maOecd ? 'průměr OECD' : 'průměr EU';
   const smer = indicator.direction;
   if (smer !== 'higher_is_better' && smer !== 'lower_is_better') {
     return nedostatekDat(
@@ -136,11 +142,12 @@ export function dohanec(indicator) {
   if (lepsi) {
     return {
       status: 'already_better',
+      benchmark_source: benchmarkSource,
       year: null,
       rate,
       gap,
       note:
-        `ČR je už na lepší straně průměru OECD (rozdíl ${czCislo(gapPresne, 2)}${jednotka}) — ` +
+        `ČR je už na lepší straně benchmarku (${benchLabel}) (rozdíl ${czCislo(gapPresne, 2)}${jednotka}) — ` +
         `není co dohánět. ${DISCLAIMER}`,
     };
   }
@@ -150,22 +157,24 @@ export function dohanec(indicator) {
   if (Math.abs(tempo) < EPS_TEMPO) {
     return {
       status: 'diverging',
+      benchmark_source: benchmarkSource,
       year: null,
       rate,
       gap,
       note:
-        'Při současném tempu průměr OECD nedoženeme — stagnujeme (tempo je prakticky nulové). ' +
+        `Při současném tempu ${benchLabel} nedoženeme — stagnujeme (tempo je prakticky nulové). ` +
         DISCLAIMER,
     };
   }
   if (tempo * gapPresne > 0) {
     return {
       status: 'diverging',
+      benchmark_source: benchmarkSource,
       year: null,
       rate,
       gap,
       note:
-        `Při současném tempu průměr OECD nedoženeme — vzdalujeme se ` +
+        `Při současném tempu ${benchLabel} nedoženeme — vzdalujeme se ` +
         `(${czCislo(tempo, 3)}${jednotka} ročně špatným směrem). ${DISCLAIMER}`,
     };
   }
@@ -176,6 +185,7 @@ export function dohanec(indicator) {
   if (rokProtnuti > ROK_STROP) {
     return {
       status: 'diverging',
+      benchmark_source: benchmarkSource,
       year: null,
       rate,
       gap,
@@ -186,11 +196,12 @@ export function dohanec(indicator) {
   }
   return {
     status: 'catches_up',
+    benchmark_source: benchmarkSource,
     year: rokProtnuti,
     rate,
     gap,
     note:
-      `Při současném tempu (${czCislo(tempo, 3)}${jednotka} ročně) doženeme průměr OECD ` +
+      `Při současném tempu (${czCislo(tempo, 3)}${jednotka} ročně) doženeme ${benchLabel} ` +
       `kolem roku ${rokProtnuti}. ${DISCLAIMER}`,
   };
 }

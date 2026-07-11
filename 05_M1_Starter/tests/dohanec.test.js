@@ -157,16 +157,21 @@ test('already_better: ČR na správné straně benchmarku (oba směry)', () => {
 // insufficient_data — každý chybějící vstup zvlášť
 // ---------------------------------------------------------------------------
 
-test('insufficient_data: chybí benchmark.oecd', () => {
+test('insufficient_data: chybí benchmark OECD i EU', () => {
   const bezBenchmarku = dohanec(synteticky({ benchmark: undefined }));
   assert.equal(bezBenchmarku.status, 'insufficient_data');
   assert.equal(bezBenchmarku.year, null);
   assert.equal(bezBenchmarku.rate, null);
   assert.equal(bezBenchmarku.gap, null);
-  assert.match(bezBenchmarku.note, /benchmark OECD/i);
+  assert.match(bezBenchmarku.note, /benchmark OECD i EU/i);
+});
 
+test('fallback: jen EU benchmark → počítá se vůči EU (benchmark_source: eu)', () => {
   const jenEu = dohanec(synteticky({ benchmark: { eu: 84 } }));
-  assert.equal(jenEu.status, 'insufficient_data');
+  assert.notEqual(jenEu.status, 'insufficient_data', 'EU benchmark stačí');
+  assert.equal(jenEu.benchmark_source, 'eu');
+  const sOecd = dohanec(synteticky({}));
+  assert.equal(sOecd.benchmark_source, 'oecd', 'OECD má přednost');
 });
 
 test('insufficient_data: direction context_dependent nebo chybí', () => {
@@ -249,10 +254,11 @@ test('reálný indikátor: nadeje_doziti_total vrací validní a konzistentní v
   assert.ok(VALIDNI_STATUSY.includes(r.status));
   assert.equal(typeof r.note, 'string');
   assert.ok(r.note.length > 0);
-  // V datech chybí benchmark.oecd (jen eu) → Doháněč to musí poctivě přiznat.
-  if (!Number.isFinite(ind.benchmark?.oecd)) {
-    assert.equal(r.status, 'insufficient_data');
-    assert.equal(r.year, null);
+  // V datech chybí benchmark.oecd (jen eu) → fallback na EU benchmark
+  // s poctivým označením zdroje.
+  if (!Number.isFinite(ind.benchmark?.oecd) && Number.isFinite(ind.benchmark?.eu)) {
+    assert.notEqual(r.status, 'insufficient_data', 'EU fallback dává výsledek');
+    assert.equal(r.benchmark_source, 'eu');
   }
 });
 
