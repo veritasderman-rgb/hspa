@@ -7,11 +7,12 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
-import { totalCost, newShares, moodFor, effectsFor, verdict, MOOD_LABELS } from './vyhlaska-engine.js';
+import { totalCost, moodFor, effectsFor, verdict, MOOD_LABELS } from './vyhlaska-engine.js';
 
 let DOC = null;
 let SEGMENTS = [];
 let INDICATORS = new Map();
+let SCALE = 1; // objem dnešního roku / součet baseline (viz DOC.scale_note)
 
 const STRENGTH_LABEL = { weak: 'slabě', medium: 'středně', strong: 'silně' };
 const MOOD_CLASS = { agree: 'agree', grudging: 'grudging', no_deal: 'nodeal', protest: 'protest' };
@@ -37,7 +38,20 @@ function currentAlloc() {
 function renderSegments() {
   const host = document.getElementById('vhSegmentsList');
   if (!host) return;
-  host.innerHTML = SEGMENTS.map(renderSegment).join('');
+  // seskup podle s.group (pořadí dle prvního výskytu v datech)
+  const groups = [];
+  for (const s of SEGMENTS) {
+    let g = groups.find(x => x.name === (s.group || 'Segmenty'));
+    if (!g) { g = { name: s.group || 'Segmenty', items: [] }; groups.push(g); }
+    g.items.push(s);
+  }
+  host.innerHTML = groups.map(g => `
+    <div class="vh-group">
+      <h3 class="vh-group-h">${escapeHtml(g.name)}
+        <span class="vh-group-sum">${czNum(g.items.reduce((a, s) => a + s.baseline_share_pct, 0))} % úhrad</span>
+      </h3>
+      ${g.items.map(renderSegment).join('')}
+    </div>`).join('');
 }
 
 function renderSegment(s) {
@@ -51,7 +65,7 @@ function renderSegment(s) {
           <span class="vh-seg-label">${escapeHtml(s.label)}</span>
           <span class="vh-seg-sublabel">${escapeHtml(s.sublabel || '')}</span>
         </div>
-        <span class="vh-seg-baseline">${czNum(s.baseline_mld)} mld · ${czNum(s.baseline_share_pct)} %</span>
+        <span class="vh-seg-baseline">${czNum(s.baseline_share_pct)} % úhrad · ${czNum(s.baseline_mld)} mld (${DOC.baseline_year})</span>
       </div>
       <div class="vh-rep">
         <span class="vh-rep-avatar" aria-hidden="true">${initials}</span>
@@ -96,7 +110,7 @@ function updateSegmentUi(s, alloc) {
 // ---------------------------------------------------------------------------
 
 function renderEnvelope(alloc) {
-  const cost = totalCost(SEGMENTS, alloc);
+  const cost = totalCost(SEGMENTS, alloc, SCALE);
   const cap = DOC.envelope.amount_mld;
   const valEl = document.getElementById('vhEnvelopeValue');
   const fillEl = document.getElementById('vhEnvelopeFill');
@@ -150,7 +164,7 @@ function renderResults(alloc) {
     return;
   }
 
-  const v = verdict(SEGMENTS, alloc, DOC.envelope.amount_mld);
+  const v = verdict(SEGMENTS, alloc, DOC.envelope.amount_mld, SCALE);
   const effects = effectsFor(SEGMENTS, alloc, INDICATORS);
 
   // 1) Dohody vs. realita
@@ -158,21 +172,20 @@ function renderResults(alloc) {
   const dealsHtml = `
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Dohody</h3>
-      <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} segmentů podepsalo</p>
-      <p class="vh-verdict-note">${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů; bez dohody akutní i následná lůžková péče a ambulantní specialisté.</p>
+      <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} vyjednávacích segmentů podepsalo</p>
+      <p class="vh-verdict-note">${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
     </div>`;
 
-  // 2) Struktura — podíl lůžkové vs. OECD
-  const shares = newShares(SEGMENTS, alloc);
+  // 2) Struktura — podíl lůžkového bloku vs. OECD
   const luzAfter = v.luzkovaShareAfter;
   const drift = luzAfter - v.luzkovaShareBefore;
   const structHtml = `
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Struktura systému</h3>
-      <div class="vh-share-row"><span class="vh-share-lbl">Lůžková péče před</span><div class="vh-share-bar"><div class="vh-share-fill" style="width:${v.luzkovaShareBefore}%"></div></div><span class="vh-share-val">${czNum(v.luzkovaShareBefore)} %</span></div>
+      <div class="vh-share-row"><span class="vh-share-lbl">Lůžkový blok před</span><div class="vh-share-bar"><div class="vh-share-fill" style="width:${v.luzkovaShareBefore}%"></div></div><span class="vh-share-val">${czNum(v.luzkovaShareBefore)} %</span></div>
       <div class="vh-share-row"><span class="vh-share-lbl">Po vaší vyhlášce</span><div class="vh-share-bar"><div class="vh-share-fill vh-share-fill-after" style="width:${luzAfter}%"></div></div><span class="vh-share-val">${czNum(luzAfter)} %</span></div>
       <div class="vh-share-row"><span class="vh-share-lbl">Průměr OECD</span><div class="vh-share-bar"><div class="vh-share-fill vh-share-fill-oecd" style="width:30%"></div></div><span class="vh-share-val">~30 %</span></div>
-      <p class="vh-verdict-note">${drift < -0.05 ? `Podíl lůžkové péče klesá o ${czNum(Math.abs(drift))} p. b. — směrem k OECD. Jedním rokem se struktura pohne jen o desetiny: setrvačnost je hlavní zjištění.` : drift > 0.05 ? `Podíl lůžkové péče dál roste (+${czNum(drift)} p. b.) — od OECD se vzdalujete.` : 'Plošný růst strukturu systému nemění — přesně tak vzniká setrvačnost.'}</p>
+      <p class="vh-verdict-note">Lůžkový blok = akutní nemocnice + centrová léčba + následná péče (NRHZS 2023: 56,3 %). ${drift < -0.05 ? `Vaší vyhláškou klesá o ${czNum(Math.abs(drift))} p. b. — směrem k OECD. Jedním rokem se struktura pohne jen o desetiny: setrvačnost je hlavní zjištění.` : drift > 0.05 ? `Vaší vyhláškou dál roste (+${czNum(drift)} p. b.) — od OECD se vzdalujete.` : 'Plošný růst strukturu nemění — přesně tak vzniká setrvačnost.'}</p>
     </div>`;
 
   // 3) Efekty na indikátory
@@ -237,6 +250,9 @@ async function init() {
     DOC = doc;
     SEGMENTS = doc.segments ?? [];
     INDICATORS = new Map((inds.indicators ?? []).map(i => [i.id, i]));
+    const baseSum = SEGMENTS.reduce((a, s) => a + s.baseline_mld, 0);
+    SCALE = Number.isFinite(doc.current_total_mld) && baseSum > 0
+      ? doc.current_total_mld / baseSum : 1;
 
     renderSegments();
     renderPresets();

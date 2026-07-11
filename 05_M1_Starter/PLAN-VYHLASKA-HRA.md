@@ -1,5 +1,42 @@
 # Plán — Úhradová vyhláška: zahrajte si na ministra (`vyhlaska.html`)
 
+## v2 — plná segmentace (červenec 2026)
+
+Hra přestavěna na **17 segmentů dle skutečného číselníku ZPP** („Struktura
+nákladů na zdravotní služby podle jednotlivých segmentů", Metodika ZPP MZ ČR):
+
+- **Baseline**: ÚZIS **OIS-11-24** (NRHZS, verze 2026-01) — úhrady 2023 po
+  kódech segmentů, celosystémově agregováno; čistý součet **456,1 mld** (bez
+  dvojzápočtu „z toho" řádku 1.7.1 centrových LP). Kódy → názvy ověřeny proti
+  ZPP 2026 ZPMV (příloha č. 11) a sněmovnímu tisku (tabulka pro rok 2016).
+- **Letošní objem**: 2026 ≈ **563 mld** (clanek-deficit-pojisteni-2026);
+  hra škáluje podíly 2023 na letošní objem (`scale = 563/456,1`), transparentně.
+- **Segmenty**: nemocnice akutní (43,2 %), centrová léčba (6,8 %), následná
+  lůžková (6,4 %), praktici, ambulantní specialisté, stomatologie (17,1 mld!),
+  gynekologie, fyzioterapie, laboratoře+radiodiagnostika, domácí péče, ostatní
+  ambulantní (hemodialýza + soc. služby), lázně+ozdravovny, doprava, ZZS+LPS,
+  léky na recept, prostředky, ostatní (zahraničí/§16b/očkovací látky).
+- Reálné DR 2027 flagy: bez dohody akutní lůžková, následná, ambul. specialisté.
+- Nový segment „jednodenní péče" (od 2026, ZPMV plán 620 mil.) zmíněn
+  v metodice — v základně 2023 neexistuje, nemá posuvník.
+
+### ⚠️ Errata nález (k rozhodnutí redakce, mimo tento PR)
+
+Při sourcingu v2 se ukázalo, že `clanek-financovani-segmenty-2026.html`
+(a na něj navázané `data/financing.json` sankey + `data/claims.json` +
+headline v `data/dohodovaci-rizeni.json`) obsahuje chyby:
+
+1. **Popisky malých segmentů prohozené**: kód 3 = lázně+ozdravovny (4,5 mld),
+   ne „Stomatologie 4,4"; stomatologie je kód **1.1 = 17,1 mld** (v článku
+   skrytá uvnitř „ambulantní 131"); kód 5 = ZZS+LPS (5,7), ne „Lázně 5,7";
+   kód 4 = doprava (2,1), ne „Doprava+ZZS".
+2. **Dvojzápočet 1.7.1** (+3,0 mld): publikovaný součet 459 mld vč. „z toho"
+   řádku; čistý součet je 456,1 mld. Týká se i per-pojišťovna žebříčku
+   (VZP 267,9 vs. čistých 266,4).
+
+Hra v2 používá správná čísla; oprava článku + claims + datasetů je
+samostatná redakční dávka.
+
 Interaktivní hra nad reálnou strukturou úhrad: hráč jako „ministr" rozděluje
 **meziroční přírůstek** úhrad mezi 8 segmentů péče, sleduje dopad na strukturu
 systému a indikátory — a čelí **zástupcům segmentů**, kteří argumentují,

@@ -25,6 +25,9 @@ export function validateVyhlaskaHra() {
   if (!doc.envelope || !Number.isFinite(doc.envelope.amount_mld) || !doc.envelope.source) {
     errors.push('envelope: chybí amount_mld nebo source');
   }
+  if (!Number.isFinite(doc.current_total_mld) || !doc.current_total_source) {
+    errors.push('chybí current_total_mld nebo current_total_source (letošní objem systému)');
+  }
   if (!Array.isArray(doc.segments) || doc.segments.length === 0) {
     errors.push('chybí neprázdné pole "segments"');
     return report(errors);
@@ -70,6 +73,13 @@ export function validateVyhlaskaHra() {
           errors.push(`${et}: indikátor neexistuje v indicators.json`);
         }
       }
+      if (eff.kind === 'definitional' && eff.group_segments) {
+        for (const gid of eff.group_segments) {
+          if (!doc.segments.some(x => x.id === gid)) {
+            errors.push(`${et}: group_segments odkazuje na neznámý segment '${gid}'`);
+          }
+        }
+      }
       if (eff.kind === 'directional') {
         if (!VALID_POLARITY.has(eff.polarity)) errors.push(`${et}: directional polarity musí být up|down`);
         if (!VALID_STRENGTH.has(eff.strength)) errors.push(`${et}: directional strength musí být weak|medium|strong`);
@@ -81,7 +91,9 @@ export function validateVyhlaskaHra() {
     errors.push(`suma baseline_mld (${baseSum.toFixed(1)}) se liší od baseline_total_mld (${doc.baseline_total_mld}) o víc než 1 mld`);
   }
 
-  // Presety: validní segmenty + vejdou se do obálky
+  // Presety: validní segmenty + vejdou se do obálky (v dnešních cenách — scale)
+  const scale = Number.isFinite(doc.current_total_mld) && baseSum > 0
+    ? doc.current_total_mld / baseSum : 1;
   for (const p of doc.presets || []) {
     const pt = `preset ${p.id ?? '?'}`;
     let cost = 0;
@@ -89,10 +101,13 @@ export function validateVyhlaskaHra() {
       const seg = doc.segments.find(s => s.id === segId);
       if (!seg) { errors.push(`${pt}: neznámý segment '${segId}'`); continue; }
       if (!Number.isFinite(pct)) errors.push(`${pt}: alokace '${segId}' musí být číslo`);
-      else cost += seg.baseline_mld * (pct / 100);
+      else cost += seg.baseline_mld * scale * (pct / 100);
+    }
+    for (const s of doc.segments) {
+      if (!(s.id in (p.alloc || {}))) errors.push(`${pt}: chybí alokace segmentu '${s.id}'`);
     }
     if (doc.envelope && Number.isFinite(doc.envelope.amount_mld) && cost > doc.envelope.amount_mld + 0.05) {
-      errors.push(`${pt}: cena ${cost.toFixed(1)} mld překračuje obálku ${doc.envelope.amount_mld} mld`);
+      errors.push(`${pt}: cena ${cost.toFixed(1)} mld (škálováno na ${doc.current_year ?? 'dnešek'}) překračuje obálku ${doc.envelope.amount_mld} mld`);
     }
   }
 
