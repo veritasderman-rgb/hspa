@@ -5,10 +5,12 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { corpusTrustStats } from './dolozka-engine.js';
 
 renderModuleNav(null);  // žádný aktivní tab
 renderMastheadDate();
 loadAndRenderQueue();
+renderDolozkaStats();
 
 async function loadAndRenderQueue() {
   const list = document.getElementById('redakceList');
@@ -104,6 +106,31 @@ function renderQuarantined(items) {
       </div>
     </li>
   `).join('');
+}
+
+// Sekce „Důvěryhodnost“ (#duveryhodnost) — statistiky registru tvrzení.
+// Načte data/claims.json + data/indicators.json a přes corpusTrustStats
+// naplní sloty [data-dlz-stat]. Při chybě sloty zůstanou „—".
+function renderDolozkaStats() {
+  return Promise.all([
+    fetch('data/claims.json').then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }),
+    fetch('data/indicators.json').then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }),
+  ]).then(([claimsData, indicatorsData]) => {
+    const indicatorsById = new Map((indicatorsData.indicators ?? []).map(i => [i.id, i]));
+    const stats = corpusTrustStats(claimsData.claims ?? [], indicatorsById);
+    document.querySelectorAll('[data-dlz-stat]').forEach(el => {
+      const value = stats[el.dataset.dlzStat];
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        el.textContent = value.toLocaleString('cs-CZ');
+      }
+    });
+  }).catch(() => {});
 }
 
 function formatDate(iso) {
