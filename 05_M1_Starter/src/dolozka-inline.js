@@ -118,6 +118,7 @@ export function enhanceDolozka({ claims, indicators, root = document } = {}) {
     const verdicts = grp.map((c) => driftStatus(c, indicatorsById));
     const status = verdicts.some((v) => v && v.status === 'changed') ? 'changed'
       : verdicts.some((v) => v && v.status === 'current') ? 'current'
+      : verdicts.some((v) => v && v.status === 'historical') ? 'historical'
       : 'reference';
 
     const chip = doc.createElement('button');
@@ -269,8 +270,12 @@ function fillPanel(panel, grp, verdicts) {
     v.dataset.status = status;
     if (status === 'current') {
       v.textContent = `✓ Odpovídá datovému kontraktu (${fmtNum(verdict.contractValue)}, ${verdict.contractYear})`;
+    } else if (status === 'historical') {
+      v.textContent = `✓ Odpovídá historii (${verdict.historicalYear}: ${fmtNum(verdict.historicalValue)}) · dnes ${fmtNum(verdict.contractValue)} (${verdict.contractYear})`;
     } else if (status === 'changed') {
-      v.textContent = `⚠ Kontrakt dnes uvádí ${fmtNum(verdict.contractValue)} (${verdict.contractYear}) — text vznikl s hodnotou ${fmtNum(claim.value)}`;
+      v.textContent = verdict.historicalYear != null
+        ? `⚠ Trend ${verdict.historicalYear} uvádí ${fmtNum(verdict.historicalValue)} — text má ${fmtNum(claim.value)}`
+        : `⚠ Kontrakt dnes uvádí ${fmtNum(verdict.contractValue)} (${verdict.contractYear}) — text vznikl s hodnotou ${fmtNum(claim.value)}`;
     } else {
       v.textContent = 'Referenční údaj';
     }
@@ -332,8 +337,9 @@ function addBadge(article, stats) {
   const badge = doc.createElement('a');
   badge.className = 'dlz-badge';
   badge.href = 'redakce.html#duveryhodnost';
+  const overeno = (stats.current || 0) + (stats.historical || 0);
   let label = `${stats.total} čísel s doloženým původem`;
-  if (stats.current > 0) label += ` · ✓ ${stats.current} ověřeno`;
+  if (overeno > 0) label += ` · ✓ ${overeno} ověřeno`;
   badge.textContent = label;
 
   meta.appendChild(sep);

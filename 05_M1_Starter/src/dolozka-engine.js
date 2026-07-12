@@ -106,15 +106,17 @@ function pocetDesetin(x) {
  * True, když platí aspoň jedno:
  *  (a) contractValue zaokrouhlená na počet desetinných míst claimValue
  *      se rovná claimValue (epsilon 1e-9),
- *  (b) je-li tolerancePct číslo > 0: relativní odchylka
- *      |claim − contract| / |contract| * 100 <= tolerancePct (contract ≠ 0).
+ *  (b) relativní odchylka |claim − contract| / |contract| * 100
+ *      <= tolerancePct (contract ≠ 0). Výchozí tolerance 2 % — STEJNÁ jako
+ *      v checkClaim nočního skeneru (scripts/nightly-scan.js), aby Doložka
+ *      a noční audit dávaly konzistentní verdikty.
  *
  * @param {number} claimValue — hodnota v textu článku
  * @param {number|null} contractValue — aktuální hodnota datového kontraktu
- * @param {number} [tolerancePct] — volitelná tolerance v procentech
+ * @param {number} [tolerancePct=2] — tolerance v procentech (claim.tolerance_pct)
  * @returns {boolean} — contractValue null/NaN → false
  */
-export function matchesContract(claimValue, contractValue, tolerancePct) {
+export function matchesContract(claimValue, contractValue, tolerancePct = 2) {
   if (!jeCislo(claimValue) || !jeCislo(contractValue)) return false;
 
   // (a) shoda po zaokrouhlení na desetinná místa claimu
@@ -124,9 +126,10 @@ export function matchesContract(claimValue, contractValue, tolerancePct) {
   if (Math.abs(zaokrouhleno - claimValue) <= 1e-9) return true;
 
   // (b) procentní tolerance
-  if (jeCislo(tolerancePct) && tolerancePct > 0 && contractValue !== 0) {
+  const tol = jeCislo(tolerancePct) ? tolerancePct : 2;
+  if (tol > 0 && contractValue !== 0) {
     const odchylkaPct = (Math.abs(claimValue - contractValue) / Math.abs(contractValue)) * 100;
-    if (odchylkaPct <= tolerancePct) return true;
+    if (odchylkaPct <= tol) return true;
   }
 
   return false;
@@ -136,14 +139,20 @@ export function matchesContract(claimValue, contractValue, tolerancePct) {
  * Verdikt driftu jednoho tvrzení vůči datovému kontraktu.
  *
  * status:
- *  - 'current'   — relation exact + check auto + indikátor existuje + matchesContract
- *  - 'changed'   — relation exact + check auto + indikátor existuje + NEmatchuje
- *  - 'reference' — vše ostatní (manual/related/bez indicator_id/chybějící indikátor
- *                  nebo indikátor bez konečné číselné hodnoty) → bez verdiktu
+ *  - 'current'    — relation exact + check auto + indikátor existuje + matchesContract
+ *  - 'historical' — tvrzení je ukotvené ke staršímu roku (as_of < rok kontraktu)
+ *                   a ODPOVÍDÁ trendovému bodu daného roku — správná citace
+ *                   historie NENÍ drift (stejná sémantika jako checkClaim
+ *                   nočního skeneru); nese i dnešní hodnotu kontraktu
+ *  - 'changed'    — relation exact + check auto + indikátor existuje + NEmatchuje
+ *                   (u historických proti trendovému bodu, jinak proti aktuálu)
+ *  - 'reference'  — vše ostatní (manual/related/bez indicator_id/chybějící
+ *                   indikátor, historické tvrzení bez trendového bodu) → bez verdiktu
  *
  * @param {object} claim — záznam z data/claims.json
  * @param {Map<string, object>} indicatorsById — Map z data/indicators.json
- * @returns {{status: string, indicator: object|null, contractValue?: number, contractYear?: number|null}}
+ * @returns {{status: string, indicator: object|null, contractValue?: number,
+ *   contractYear?: number|null, historicalValue?: number, historicalYear?: number}}
  */
 export function driftStatus(claim, indicatorsById) {
   const ind =
@@ -162,23 +171,54 @@ export function driftStatus(claim, indicatorsById) {
     return { status: 'reference', indicator: ind };
   }
 
+  const contractYear = jeCislo(ind.year) ? ind.year : null;
+
+  // Historické tvrzení (as_of starší než rok kontraktu): porovnat proti
+  // trendovému bodu daného roku. Správná citace historie není drift.
+  if (jeCislo(claim.as_of) && contractYear != null && claim.as_of < contractYear) {
+    const bod = (ind.trend ?? []).find((t) => t && t.year === claim.as_of);
+    if (bod && jeCislo(Number(bod.value))) {
+      const shodaH = matchesContract(claim.value, Number(bod.value), claim.tolerance_pct);
+      if (shodaH) {
+        return {
+          status: 'historical',
+          indicator: ind,
+          historicalValue: Number(bod.value),
+          historicalYear: claim.as_of,
+          contractValue: ind.value,
+          contractYear,
+        };
+      }
+      return {
+        status: 'changed',
+        indicator: ind,
+        historicalValue: Number(bod.value),
+        historicalYear: claim.as_of,
+        contractValue: ind.value,
+        contractYear,
+      };
+    }
+    // Historické tvrzení bez trendového bodu — nelze ověřit, poctivá reference.
+    return { status: 'reference', indicator: ind };
+  }
+
   const shoda = matchesContract(claim.value, ind.value, claim.tolerance_pct);
   return {
     status: shoda ? 'current' : 'changed',
     indicator: ind,
     contractValue: ind.value,
-    contractYear: jeCislo(ind.year) ? ind.year : null,
+    contractYear,
   };
 }
 
 /** Společný agregátor statusů přes seznam tvrzení. */
 function spocitejStaty(claims, indicatorsById) {
-  const stat = { total: 0, auto: 0, current: 0, changed: 0, reference: 0 };
+  const stat = { total: 0, auto: 0, current: 0, historical: 0, changed: 0, reference: 0 };
   for (const claim of claims) {
     stat.total += 1;
     const { status } = driftStatus(claim, indicatorsById);
     stat[status] += 1;
-    if (status === 'current' || status === 'changed') stat.auto += 1;
+    if (status === 'current' || status === 'historical' || status === 'changed') stat.auto += 1;
   }
   return stat;
 }

@@ -36,6 +36,9 @@ export function eligibleFor(indicators, type) {
   if (!Array.isArray(indicators)) return [];
   return indicators.filter((i) => {
     if (!i || !jeCislo(i.value) || !i.name || !i.unit) return false;
+    // Jen živě fetchovaná data (origin: live) — seed hodnoty jsou ilustrativní
+    // a kvíz slibuje „skutečná čísla" (review PR #787).
+    if (i.source?.origin !== 'live') return false;
     if (type === 'vs_oecd') {
       if (!jeCislo(i.benchmark?.oecd)) return false;
       const ref = Math.max(Math.abs(i.benchmark.oecd), 1e-9);

@@ -33,17 +33,20 @@ function seedRng(seed) {
 }
 
 test('eligibleFor: vs_oecd vyžaduje benchmark a aspoň 5% rozdíl', () => {
-  const blizko = { id: 'a', name: 'A', unit: '%', value: 100, benchmark: { oecd: 102 } };
-  const daleko = { id: 'b', name: 'B', unit: '%', value: 100, benchmark: { oecd: 80 } };
-  const bezBench = { id: 'c', name: 'C', unit: '%', value: 50 };
-  const ids = eligibleFor([blizko, daleko, bezBench], 'vs_oecd').map((i) => i.id);
-  assert.deepEqual(ids, ['b'], 'projde jen indikátor s dostatečným rozdílem');
+  const zivy = { source: { origin: 'live' } };
+  const blizko = { id: 'a', name: 'A', unit: '%', value: 100, benchmark: { oecd: 102 }, ...zivy };
+  const daleko = { id: 'b', name: 'B', unit: '%', value: 100, benchmark: { oecd: 80 }, ...zivy };
+  const bezBench = { id: 'c', name: 'C', unit: '%', value: 50, ...zivy };
+  const seed = { id: 'd', name: 'D', unit: '%', value: 100, benchmark: { oecd: 80 }, source: { origin: 'seed' } };
+  const ids = eligibleFor([blizko, daleko, bezBench, seed], 'vs_oecd').map((i) => i.id);
+  assert.deepEqual(ids, ['b'], 'projde jen ŽIVÝ indikátor s dostatečným rozdílem (seed vyřazen)');
 });
 
 test('eligibleFor: direction přijímá jen jednoznačný směr', () => {
-  const vic = { id: 'a', name: 'A', unit: '%', value: 1, direction: 'higher_is_better' };
-  const min = { id: 'b', name: 'B', unit: '%', value: 1, direction: 'lower_is_better' };
-  const ctx = { id: 'c', name: 'C', unit: '%', value: 1, direction: 'context_dependent' };
+  const zivy = { source: { origin: 'live' } };
+  const vic = { id: 'a', name: 'A', unit: '%', value: 1, direction: 'higher_is_better', ...zivy };
+  const min = { id: 'b', name: 'B', unit: '%', value: 1, direction: 'lower_is_better', ...zivy };
+  const ctx = { id: 'c', name: 'C', unit: '%', value: 1, direction: 'context_dependent', ...zivy };
   assert.deepEqual(eligibleFor([vic, min, ctx], 'direction').map((i) => i.id), ['a', 'b']);
 });
 
