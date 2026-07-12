@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kvíz: Otestujte se z českého zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Interaktivní kvíz: 10 otázek o českém zdravotnictví generovaných živě z datového kontraktu HSPA Monitoru. Tipněte hodnotu, odhadněte, zda je ČR nad průměrem OECD — správnou odpověď určují data, ne redakce.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Kvíz</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero kv-hero">
+    <p class="ed-kicker">KVÍZ · OTESTUJTE SE</p>
+    <h1>Jak dobře znáte české zdravotnictví? Data vás nejspíš překvapí</h1>
+    <p class="ed-lead">
+      Deset otázek, žádné chytáky — jen skutečná čísla. Tipnete si hodnotu,
+      odhadnete, jestli je Česko <strong>nad, nebo pod průměrem OECD</strong>,
+      a rozhodnete, jestli je růst čísla dobrá zpráva. Otázky se
+      <strong>generují živě z datového kontraktu</strong> portálu: správnou
+      odpověď neurčuje redakce, ale tentýž indikátor, který denně měříme.
+      Každá odpověď vede na celý příběh čísla.
+    </p>
+    <p class="kv-disclaimer" role="note">
+      <strong>Vaše odpovědi ani výsledek se neukládají a nikam
+      neodesílají</strong> — vyhodnocení běží jen ve vašem prohlížeči
+      (stránka měří pouze anonymní návštěvnost jako zbytek portálu).
+      Otázky se losují výhradně z <strong>živě fetchovaných indikátorů</strong>
+      (origin: live), takže příště dostanete jinou sadu.
+    </p>
+  </section>
+
+  <section class="kv-section" aria-label="Kvíz">
+    <div id="kvApp" class="kv-app" aria-live="polite">
+      <noscript><p>Kvíz vyžaduje zapnutý JavaScript.</p></noscript>
+    </div>
+  </section>
+
+  <section class="kv-section kv-method">
+    <details>
+      <summary>Jak kvíz funguje (a proč mu věřit)</summary>
+      <p><strong>Zdroj pravdy je datový kontrakt.</strong> Otázky vznikají
+      z <code>data/indicators.json</code> — stejného souboru, ze kterého čtou
+      všechny stránky portálu. U typu „nad/pod průměrem OECD" se losují jen
+      indikátory, kde se hodnoty liší aspoň o 5 % (žádné chytáky na hraně);
+      u tipování je tolerance ±25 % skutečné hodnoty.</p>
+      <p><strong>Každá otázka nese svůj důkaz.</strong> Po odpovědi uvidíte
+      skutečnou hodnotu, rok, benchmark OECD a odkaz na kartu indikátoru —
+      stejný princip jako <a href="redakce.html#duveryhodnost">Doložka</a>
+      v článcích.</p>
+    </details>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/kviz.js"></script>
+</body>
+</html>

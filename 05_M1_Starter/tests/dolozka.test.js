@@ -31,7 +31,7 @@ function tvrzeni(prepis = {}) {
     metric: 'Testovací metrika',
     value: 52.6,
     unit: '%',
-    as_of: 2023,
+    as_of: 2024,
     location: 'prose',
     indicator_id: 'test_indikator',
     relation: 'exact',
@@ -131,15 +131,16 @@ test('locateClaims: víc nepřekrývajících se quotes → seřazeno podle star
 test('matchesContract: přesná shoda a shoda po zaokrouhlení na desetiny claimu', () => {
   assert.equal(matchesContract(52.6, 52.6), true, 'identická hodnota');
   assert.equal(matchesContract(52.6, 52.63), true, '52,63 zaokrouhleno na 1 des. místo = 52,6');
-  assert.equal(matchesContract(52.6, 52.75), false, '52,75 → 52,8 ≠ 52,6');
+  assert.equal(matchesContract(52.6, 55), false, 'odchylka 4,4 % > výchozí 2% tolerance');
   assert.equal(matchesContract(60, 60.4), true, 'celé číslo: zaokrouhlení na 0 des. míst');
-  assert.equal(matchesContract(60, 60.6), false);
+  assert.equal(matchesContract(60, 63), false, 'odchylka 4,8 % > 2 %');
+  assert.equal(matchesContract(52.6, 52.75), true, 'dev 0,29 % je ve výchozí 2% toleranci (jako checkClaim)');
 });
 
 test('matchesContract: procentní tolerance tolerance_pct', () => {
   assert.equal(matchesContract(100, 104, 5), true, 'odchylka 3,85 % ≤ 5 %');
   assert.equal(matchesContract(100, 110, 5), false, 'odchylka 9,09 % > 5 %');
-  assert.equal(matchesContract(100, 104), false, 'bez tolerance zaokrouhlení nestačí');
+  assert.equal(matchesContract(100, 104), false, 'dev 3,85 % > výchozí 2% tolerance');
 });
 
 test('matchesContract: contract null/NaN/nula → bezpečné chování', () => {
@@ -163,10 +164,12 @@ test('driftStatus: exact + auto + shoda → current (s contractValue a contractY
 });
 
 test('driftStatus: exact + auto + neshoda → changed (vrací contractValue)', () => {
-  const r = driftStatus(tvrzeni(), mapa(55.1, 2025));
+  const r = driftStatus(tvrzeni(), mapa(55.1, 2024));
   assert.equal(r.status, 'changed');
   assert.equal(r.contractValue, 55.1);
-  assert.equal(r.contractYear, 2025);
+  assert.equal(r.contractYear, 2024);
+  // as_of starší než rok kontraktu BEZ trendového bodu → poctivá reference
+  assert.equal(driftStatus(tvrzeni(), mapa(55.1, 2025)).status, 'reference');
 });
 
 test('driftStatus: manual / related / bez indicator_id → reference', () => {
@@ -203,7 +206,7 @@ test('articleTrustStats: počty po statusech a invariant auto = current + change
     tvrzeni({ id: '4', article: 'clanek-jiny.html' }), // jiný článek — nepočítá se
   ];
   const s = articleTrustStats(pole, 'clanek-test.html', mapa());
-  assert.deepEqual(s, { total: 3, auto: 2, current: 1, changed: 1, reference: 1 });
+  assert.deepEqual(s, { total: 3, auto: 2, current: 1, historical: 0, changed: 1, reference: 1 });
 });
 
 // ---------------------------------------------------------------------------
@@ -215,8 +218,8 @@ test('reálná data: corpusTrustStats je konzistentní přes celý registr', () 
   assert.equal(s.total, claimsData.claims.length, 'total = počet záznamů registru');
   assert.ok(s.auto > 0, 'aspoň část tvrzení se kontroluje automaticky');
   assert.ok(s.current > 0, 'aspoň část tvrzení odpovídá kontraktu');
-  assert.equal(s.current + s.changed, s.auto, 'auto = current + changed');
-  assert.equal(s.current + s.changed + s.reference, s.total, 'statusy pokrývají vše');
+  assert.equal(s.current + s.historical + s.changed, s.auto, 'auto = current + historical + changed');
+  assert.equal(s.auto + s.reference, s.total, 'statusy pokrývají vše');
   assert.ok(s.articles > 0, 'registr pokrývá aspoň jeden článek');
   assert.equal(
     s.articles,
@@ -277,4 +280,28 @@ test('locateClaims: reálné otagované quotes z registru se najdou ve svém čl
     const hits = locateClaims(text, [claim]);
     assert.equal(hits.length, 1, `otagovaný quote ${claim.id} se v ${claim.article} najde`);
   }
+});
+
+test('driftStatus: historické tvrzení (as_of < rok kontraktu) se ověřuje proti trendu (jako checkClaim)', () => {
+  const ind = {
+    id: 'hist_ind', value: 73.4, year: 2022, unit: '%',
+    trend: [{ year: 2015, value: 81.7 }, { year: 2019, value: 79.1 }, { year: 2022, value: 73.4 }],
+  };
+  const mapa2 = new Map([['hist_ind', ind]]);
+  const zaklad = { relation: 'exact', check: 'auto', indicator_id: 'hist_ind', unit: '%' };
+  // správná citace historie → historical (ne changed!)
+  const ok = driftStatus({ ...zaklad, value: 81.7, as_of: 2015 }, mapa2);
+  assert.equal(ok.status, 'historical');
+  assert.equal(ok.historicalValue, 81.7);
+  assert.equal(ok.contractValue, 73.4, 'nese i dnešní hodnotu kontraktu');
+  // chybná citace historie → changed (proti trendovému bodu)
+  const spatne = driftStatus({ ...zaklad, value: 85, as_of: 2015 }, mapa2);
+  assert.equal(spatne.status, 'changed');
+  assert.equal(spatne.historicalYear, 2015);
+  // historické bez trendového bodu → reference (nelze ověřit)
+  const bezBodu = driftStatus({ ...zaklad, value: 80, as_of: 2010 }, mapa2);
+  assert.equal(bezBodu.status, 'reference');
+  // aktuální tvrzení (as_of == rok) se dál měří proti value
+  const aktualni = driftStatus({ ...zaklad, value: 73.4, as_of: 2022 }, mapa2);
+  assert.equal(aktualni.status, 'current');
 });

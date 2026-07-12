@@ -1025,6 +1025,8 @@ export const SITE_TOOLS = [
     desc: 'Interaktivní kauzální mapa: kudy se problém propisuje systémem.', verb: 'Prozkoumat model' },
   { id: 'vyhlaska',      href: 'vyhlaska.html',      label: 'Úhradová vyhláška: hra',
     desc: 'Rozdělte růst úhrad jako ministr — a ustůjte reakce segmentů.', verb: 'Zahrát si' },
+  { id: 'kviz',          href: 'kviz.html',          label: 'Kvíz: otestujte se',
+    desc: 'Deset otázek z živých dat — tipněte hodnotu, srovnejte ČR s OECD.', verb: 'Spustit kvíz' },
 ];
 
 /**
