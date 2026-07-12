@@ -30,8 +30,8 @@ Automatický sken nepokryje všechna AA kritéria verze 2.2. Tyto kontroluj ruč
 | SC | Kritérium | Co ověřit |
 |---|---|---|
 | **2.4.11** | Focus Not Obscured (Min) | Zafokusovaný prvek nesmí být schovaný pod sticky lištou. Řešeno `html { scroll-padding-top }` v `styles.css`; ověř při tabování pod horním menu. |
-| **2.5.7** | Dragging Movements | Vše ovladatelné tažením (mapa krajů) musí jít i klikem/klávesnicí. Mapa: `cz-map.js` má `tabindex`/`role=button` na dlaždicích. |
-| **2.5.8** | Target Size (Min) | Klikací cíle ≥ 24×24 px nebo dostatečný rozestup. Sleduj nav chipy, filtry, TOC, paginaci. Viz `target-size` v baseline reportu. |
+| **2.5.7** | Dragging Movements | **Ověřeno 2026-07-10 (U24):** mapa krajů (`cz-map.js`) je kartogram bez jakékoli operace tažením — dlaždice mají `tabindex="0"`/`role="button"`, hodnota se zobrazí na `mouseenter` i `focus` (klávesnice). Kritérium se fakticky neuplatní (žádný drag), přesto je plně ovladatelná klávesnicí. |
+| **2.5.8** | Target Size (Min) | Klikací cíle ≥ 24×24 px. **U24:** `min-height: 24px` safeguard přidán na `.level-nav`/`.cat-nav`/`.leg-plan-filters`/`.leg-plan-horizont` chipy (`styles.css`); textové odkazy v proudu textu jsou z pravidla vyňaté. Ověřuje axe `target-size` (wcag22aa) v CI. |
 | **3.2.6** | Consistent Help | Vyhledávání/nápověda na konzistentním místě napříč stránkami (sdílený `page-shared.js`). |
 | **3.3.7 / 3.3.8** | Redundant Entry / Accessible Auth | N/A — web nemá přihlášení ani vstupní formuláře (kromě fulltextu). |
 

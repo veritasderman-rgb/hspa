@@ -13,6 +13,7 @@
     finding_2026-06-01_verified: "VERIFIKACE DOKONČENA (datová iterace přes ECDC Surveillance Atlas REST API). Ověřena ČR hodnota: ESCCOL.FLUOROQUINOLONES.R.PROPORTION (measureId 1146416), geoCode CZ, AMR dataset 2024 = 19,2 % (N=4 268 izolátů), NE smyšlených 13,1 %. Řada 2001–2024 (vrchol 26–28 % 2008/2016, 17,2 % 2023, 19,2 % 2024). ČR mírně POD EU/EEA průměrem 22,5 % (good signal). Indikátor: 13,1→19,2, origin seed→live, verified. Článek: titulek/re-thesis/published→true, noindex odebráno."
     notes: "Kaskádová revize AMR clusteru navazující na audit sourozeneckého článku clanek-spotreba-antibiotik.html (2026-05-10) a clanek-nosokomialni-infekce.html (čeká na samostatný audit). Ověřeno proti ECDC EARS-Net Annual Epidemiological Report for 2024 a Country sheet 2024 Czechia (antibiotic.ecdc.europa.eu), Akčnímu plánu NAP ČR 2019–2022 (vláda ČR, usnesení č. 75/2019), historii NAP od usnesení vlády č. 595/2009, WHO Global Action Plan on AMR (rezoluce WHA68.7, květen 2015), WHO Ten threats to global health 2019 a Surviving Sepsis Campaign 2021 guidelines (Intensive Care Medicine, 2021). Klíčové opravy: (1) chybné datování českého NAP — článek tvrdil 'Česko má od roku 2018 nastavený plán', skutečnost: NAP samotný od 4. 5. 2009 (usnesení vlády č. 595), aktuální Akční plán NAP 2019–2022 schválen 28. 1. 2019 (usnesení vlády č. 75), AP NAP po 2022 zatím nebyl veřejně zveřejněn jako navazující dokument. (2) WHO Ten threats — explicitně datováno na rok 2019 (původní formulace nezmiňovala rok publikace seznamu). (3) Surviving Sepsis Campaign claim — kvalifikováno: SSC 2021 doporučuje 1 hodinu u septického šoku, ale recentní meta-analýzy (Br J Med 2024 systematic review na 190 896 pacientech) ukazují, že časový práh 3 hod je rovněž asociován s mortalitním benefitem; striktní 1-hour bundle je proto v současnosti revidován. (4) Komunitní rezistence > 20 % — vágní 'v evropských AMR reportech' nahrazeno explicitním přiznáním limitace s odkazem na ECDC AER 2024. (5) Lancet ID / CID studie o ASP — generická citace nahrazena odkazem na Cochrane review (Davey et al., 2017) jako primární evidence base. (6) Cross-article reference 'článek 22/25/26' nahrazeny slug odkazy na clanek-nosokomialni-infekce.html a clanek-spotreba-antibiotik.html. (7) Generické URL (szu.cz, ecdc.europa.eu/about, ema.europa.eu, mzcr.cz, england.nhs.uk, who.int/europe/initiatives/one-health) nahrazeny stabilními permalinky primárních zdrojů. (8) Doplněn caveat v databoxu o pojmu 'OECD průměr 11,5 %' — metodická karta indikátoru používá benchmark_source: eurostat (hlth_rs_resist), nikoliv OECD; pojem 'OECD 11,5' je zjednodušení a měl by být revidován v navazující datové iteraci. (9) Doplněn audit-status banner v hlavičce a interní cross-link na sourozenecký článek o spotřebě. (10) Hodnota 13,1 % v ČR a 11,5 % EU benchmark z dashboardu nebyla v této session přímo verifikována proti ECDC AER 2024 PDF (atlas.ecdc.europa.eu vrátil 503, AER 2024 PDF byl binární); origin v data/indicators.json zůstává 'seed' a vyžaduje napojení na primární EARS-Net výstup — out-of-scope této redakční iterace. Status published → review-pending."
     finding_2026-06-22: "Doplnění (uživatelský požadavek) o globální výhled a governance AMR. (1) Nová sekce 'Globální výhled' + aside counter: GRAM forecast (GBD 2021 AMR Collaborators, Lancet 2024, DOI 10.1016/S0140-6736(24)01867-1) — 2050 1,91 mil. přímých / 8,22 mil. asociovaných úmrtí, +~70 % vs 2021, >39 mil. kumulativně 2025–2050, ~92 mil. odvratitelných lepší péčí. (2) Governance studie 161 zemí (Patel et al., Lancet Infect Dis 2025, DOI 10.1016/S1473-3099(25)00406-2): IPC + surveillance + stewardship nejsilněji korelují s nižší zátěží — doplněno do sekce 'Co dělají systémy'. (3) Nizozemský model SWAB/NethMap + EU pokyny pro uvážlivé používání antimikrobik (2017/C 212/01). Přidán nový zdrojový blok recenzované literatury; dateModified + audit.last_reviewed → 2026-06-22; reading time 9→12. audit-status zůstává verified (vše doloženo DOI/primárními zdroji)."
+    av_sweep_2026-07-10: "Doplněny AV vizuály (článek měl hero counter-grid + 2 inline aside): av-bar-compare rezistence FQ (EU 22,5 / ČR 19,2 / severské+NL 5–8 %), av-data-table 5 pák nízké rezistence (narrow-spectrum, ASP, SWAB/NethMap, One Health, vakcinace) vč. stavu v ČR. Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -248,6 +249,16 @@
 
       <h3>Co dělají systémy s nízkou rezistencí</h3>
 
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Rezistence invazivní E. coli na fluorochinolony (% izolátů, 2024)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="25" data-unit="%">
+          <li class="av-bar-row av-bar-row-bad" data-value="22.5" data-label="EU/EEA průměr"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="19.2" data-label="Česko" data-note="ze 4 268 invazivních izolátů; spodní odhad reálné populační rezistence"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="6.5" data-display="5–8" data-label="Severské země + Nizozemsko"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC EARS-Net / Surveillance Atlas 2024 (invazivní izoláty z hemokultury a likvoru).</p>
+      </figure>
+
       <p>
         Severské země (Norsko, Švédsko, Dánsko, Finsko) a Nizozemsko mají v evropském srovnání jednu z nejnižších rezistencí E. coli k FQ — kolem 5–8 procent v invazivních izolátech, při srovnatelné populační velikosti a podobné demografii. Co je za rozdílem.
       </p>
@@ -276,6 +287,49 @@
         Že nejde jen o dojem z několika severských zemí, potvrzuje systematická analýza <em>Lancet Infectious Diseases</em> z roku 2025, která ohodnotila správu (governance) národních akčních plánů proti AMR ve <strong>161 zemích</strong>. Země s lepší správou těchto plánů měly prokazatelně nižší zátěž rezistence (korelace se zátěží úmrtí r ≈ −0,48; p &lt; 0,001) a vůbec nejsilněji s nižší zátěží souvisely tři oblasti: <strong>prevence a kontrola infekcí, surveillance spotřeby antibiotik a antibiotic stewardship</strong>. Nejlépe vyšlo Norsko, nejhůře nízkopříjmové země — governance AMR je tedy z velké části otázka investic a kapacit, a právě tyto tři oblasti mají největší návratnost. Evropským referenčním standardem pro národní politiky jsou přitom <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52017XC0701(01)" target="_blank" rel="noopener">Pokyny EU pro uvážlivé používání antimikrobik v humánním lékařství</a>, postavené na přístupu One Health a na antibiotic stewardship.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Pět pák nízké rezistence — co dělají severské systémy a Nizozemsko jinak</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Páka</th>
+                <th scope="col">Jak funguje</th>
+                <th scope="col">Stav v ČR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">„Narrow-spectrum first"</th>
+                <td>úzkospektrá ATB jako prvovolba (penicilin V u angíny, nitrofurantoin u UTI); FQ rezervovány</td>
+                <td class="av-mut">preskripční kultura zatím širokospektrá u řady indikací</td>
+              </tr>
+              <tr>
+                <th scope="row">ASP v každé nemocnici</th>
+                <td>klinický farmakolog / infektolog kontroluje širokospektrou preskripci, řídí de-eskalaci</td>
+                <td class="av-bad">chybí v řadě českých nemocnic; není povinný</td>
+              </tr>
+              <tr>
+                <th scope="row">SWAB + NethMap (NL)</th>
+                <td>národní pracovní skupina + roční přehled spotřeby i rezistence v jednom dokumentu</td>
+                <td class="av-bad">navazující Akční plán NAP po 2019–2022 veřejně nedohledán</td>
+              </tr>
+              <tr>
+                <th scope="row">One Health</th>
+                <td>omezená veterinární spotřeba + propojená humánní/veterinární/environmentální surveillance</td>
+                <td class="av-mut">veterinární FQ klesají, ale historický dluh ve flóře přetrvává</td>
+              </tr>
+              <tr>
+                <th scope="row">Vakcinace</th>
+                <td>pneumokok (Prevenar), HPV, MMR → méně infekcí → méně antibiotik → méně rezistence</td>
+                <td class="av-good">funkční očkovací program (tichý spojenec)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Cochrane (Davey et al. 2017); Lancet Infect Dis 2025 (governance 161 zemí); ECDC; SWAB/NethMap.</p>
+      </figure>
+
       <h3>Co Česko realisticky může</h3>
 
       <p>
@@ -283,7 +337,7 @@
       </p>
 
       <p>
-        <strong>Národní antibiotický program (NAP) a jeho Akční plán.</strong> Český NAP byl založen <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/" target="_blank" rel="noopener">usnesením vlády ČR č. 595 ze dne 4. května 2009</a>; navazující <a href="https://www.sukl.cz/akcni-plan-narodniho-antibiotickeho-programu-pro-roky-2019" target="_blank" rel="noopener">Akční plán NAP pro období 2019–2022</a> schválila vláda usnesením č. 75 ze dne 28. ledna 2019. Aktuálně veřejně dohledatelný formálně účinný navazující dokument pro období po roce 2022 nebyl v rámci této revize identifikován — to samo o sobě je signál, že programu chybí kontinuita strategického cyklu. Co programu obecně schází, je důslednější implementace na úrovni každé nemocnice (povinný ASP s personálním zajištěním) a ve veterinární medicíně (regulace kategorií „critically important" antibiotik podle <a href="https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/categorisation-antibiotics-used-animals-promote-responsible-use-protect-public-and-animal-health" target="_blank" rel="noopener">EMA AMEG kategorizace</a>).
+        <strong>Národní antibiotický program (NAP) a jeho Akční plán.</strong> Český NAP byl založen <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/" target="_blank" rel="noopener">usnesením vlády ČR č. 595 ze dne 4. května 2009</a>; navazující <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/dokumenty-ke-stazeni/narodni-strategicke-dokumenty/" target="_blank" rel="noopener">Akční plán NAP pro období 2019–2022</a> schválila vláda usnesením č. 75 ze dne 28. ledna 2019. Aktuálně veřejně dohledatelný formálně účinný navazující dokument pro období po roce 2022 nebyl v rámci této revize identifikován — to samo o sobě je signál, že programu chybí kontinuita strategického cyklu. Co programu obecně schází, je důslednější implementace na úrovni každé nemocnice (povinný ASP s personálním zajištěním) a ve veterinární medicíně (regulace kategorií „critically important" antibiotik podle <a href="https://www.ema.europa.eu/en/veterinary-regulatory-overview/antimicrobial-resistance-veterinary-medicine/categorisation-antibiotics-used-animals-promote-responsible-use-protect-public-and-animal-health" target="_blank" rel="noopener">EMA AMEG kategorizace</a>).
       </p>
 
       <p>
@@ -357,7 +411,7 @@
         <ul class="article-sources-list">
           <li><strong>WHO Global Action Plan on AMR (2015)</strong> — globální rámec přijatý 68. Světovým zdravotnickým shromážděním (rezoluce WHA68.7). <a href="https://www.who.int/publications/i/item/9789241509763" target="_blank" rel="noopener">who.int ↗</a></li>
           <li><strong>WHO — Ten threats to global health in 2019</strong> — seznam, kde AMR figuruje mezi deseti hlavními globálními zdravotními hrozbami. <a href="https://www.who.int/news-room/spotlight/ten-threats-to-global-health-in-2019" target="_blank" rel="noopener">who.int ↗</a></li>
-          <li><strong>Akční plán Národního antibiotického programu ČR pro období 2019–2022</strong> — strategický dokument schválený usnesením vlády č. 75 ze dne 28. 1. 2019. <a href="https://www.sukl.cz/akcni-plan-narodniho-antibiotickeho-programu-pro-roky-2019" target="_blank" rel="noopener">sukl.cz ↗</a></li>
+          <li><strong>Akční plán Národního antibiotického programu ČR pro období 2019–2022</strong> — strategický dokument schválený usnesením vlády č. 75 ze dne 28. 1. 2019. <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/dokumenty-ke-stazeni/narodni-strategicke-dokumenty/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
           <li><strong>European One Health Action Plan against AMR (2017) + Council Recommendation 2023/C 220/01</strong> — evropský strategický rámec One Health. <a href="https://health.ec.europa.eu/antimicrobial-resistance/eu-action-antimicrobial-resistance_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
           <li><strong>NHS England — Antimicrobial stewardship resources</strong> — britský model nemocničního ASP. <a href="https://www.england.nhs.uk/medicines-2/medicines-advice-and-support/antimicrobial-resistance-amr/" target="_blank" rel="noopener">england.nhs.uk ↗</a></li>
           <li><strong>Pokyny EU pro uvážlivé používání antimikrobik v humánním lékařství (2017/C 212/01)</strong> — evropský referenční standard pro národní politiky, postavený na One Health a antibiotic stewardship. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52017XC0701(01)" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>

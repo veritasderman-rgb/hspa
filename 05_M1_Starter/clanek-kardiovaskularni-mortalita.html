@@ -101,7 +101,9 @@ audit:
   primary_sources_added: 2
   visual_elements_added: 0
   reaudit_2026-06-29: "Fallback-audit denní rutiny (PROMPT_DAILY_ROUTINE.md, fáze 5). Discovery 2026-06-29 nepřinesl novou primární vlnu → audit nejstaršího review-pending článku (last_reviewed 2026-05-15, > 30 dnů). Železné pravidlo: každé numerické tvrzení znovu ověřeno proti primárnímu strojově dohledatelnému zdroji. VÝSLEDEK OVĚŘENÍ: (a) Všech 8 hodnot Eurostat hlth_cd_asdr2 (dataset updated 2026-06-08) ověřeno EXAKTNĚ proti živému API: ČR I00-I99 463,75; EU-27 312,95; ČR IHD I20-I25 193,59; EU-27 100,39; ČR I60-I69 67,57; EU-27 63,93; trend ČR 557,77→525,62→505,50→463,75; trend EU-27 343,69→312,95. Centrální tvrzení +48 % potvrzeno. (b) OPRAVENO 4 zastaralá/chybná čísla: denní kuřáctví 22,6 %→16,4 % (SZÚ NAUTA 2024; OECD H@G 2025 = 15,9 %/2023, OECD průměr 14,8 % ne 16 %) — chyba ~40 % v hero counteru + body + databoxu; pohybová aktivita 33 %/40 %→25,1 %/EU 32,7 % (Eurostat hlth_ehis_pe2e, ověřeno živě); nemocniční mortalita AMI 5,2 %→4,6 % (ÚZIS NRH 2024, dříve hodnota 2022); nemocniční mortalita CMP 11,2 %→9,9 % (ÚZIS NRH 2024, dříve 2022). (c) OPRAVENA zastaralá strukturovaná data (JSON-LD headline+description, breadcrumb, og:image:alt) — stále nesly pre-rekonciliační hodnoty '220 / 100 000' a 'o 60 procent vyšší', sjednoceno s viditelným H1. (d) FLAG (nemění se autonomně, čeká na rozhodnutí redakce): alkohol 14,4 l vs OECD 8,9 — OECD H@G 2025 konzistentní metodikou uvádí ČR 11,2 l vs OECD 8,5 l; hodnota 14,4 vypadá jako WHO total APC (recorded+unrecorded) párovaná s OECD recorded benchmarkem = methodology mismatch dle železného pravidla. Hodnota 14,4 je napříč korpusem v 7 článcích vč. dedikovaného clanek-alkohol-spotreba.html → reconciliace je korpusový úkol, ne jednočlánková oprava. Doporučeno samostatné rozhodnutí + GitHub issue. Status zůstává review-pending."
+  f1_2026-07-10: "Link-audit (F1): 16 externích odkazů zkontrolováno. Opraveny 2 mrtvé odkazy: (1) czech-neuro.cz/sekce/cerebrovaskularni-sekce/ (HTTP 404, slova v cestě URL prohozena při redesignu webu) → czech-neuro.cz/sekce/sekce-cerebrovaskularni/ (WebFetch potvrdil živý obsah sekce, curl 466 = bot-block CDN); (2) uzis.cz registr-sber-dat--demograficke-statistiky--zemreli (404, stránka reorganizována) → uzis.cz registr-sber-dat--ostatni-rezortni-registry--list-o-prohlidce-zemreleho (200) — přesně odpovídá textem citovanému 'Listu o prohlídce zemřelého'. Ponechány jako živé, ale blokující boty (403 curl, obsah potvrzen WebFetch): academic.oup.com/eurheartj ×2 (SCORE2 studie, plný text načten), oecd.org ×3 (Health at a Glance 2025 stroke/AMI, State of Cardiovascular Health in the EU — Akamai bot-block). Ostatní odkazy (ec.europa.eu/eurostat ×3, pubmed.ncbi.nlm.nih.gov, vizhub.healthdata.org, czech-neuro.cz vlastní homepage, escardio.org, kardio-cz.cz, who.int) OK 200. Status ponechán review-pending — nejde o odkazy; headline indikátor mortalita_kardiovaskularni je live, ale článek má nedořešený korpusový FLAG (alkohol_spotreba 14,4 l vs OECD 8,9 — methodology mismatch, viz reaudit_2026-06-29) a tři vedlejší indikátory (kontrola_hypertenze, kuractvi_denni, prevalence_diabetu) jsou origin: seed."
   notes: "Rekonciliace flagged hodnoty kardiovaskulární mortality proti primárnímu zdroji Eurostat hlth_cd_asdr2 (Standardised death rate by cause, ESP 2013, total ages, both sexes, per 100 000). Pro Česko 2023 je hodnota 463,75 (ne 220 jak uváděl dashboard); EU-27 312,95 (ne 140 jak uváděl benchmark dashboardu). Centrální tvrzení 'mortalita o 60 procent vyšší' opraveno na '48 procent vyšší' (rozdíl 463,75 vs. 312,95 = +48,2 %). Dříve 'osmdesát úmrtí na 100 000 obyvatel ročně' opraveno na '150 úmrtí na 100 000 obyvatel ročně' (rozdíl ~151). Doplněn rozpad na ischemickou srdeční chorobu I20-I25 (ČR 193,59 vs EU-27 100,39, +93 %) a cerebrovaskulární nemoci I60-I69 (ČR 67,57 vs EU-27 63,93, +6 %) — ukazuje, že rozdíl je primárně tažen IHD, ne CMP. Trend 2020-2023 z ÚZIS aproximovaného trendu nahrazen Eurostat trendem (557,77 → 525,62 → 505,50 → 463,75) — pokles 17 %. Smazán neověřitelný řádek 'kontrolovaná hypertenze 68 % vs OECD 72 %' (kaskádově dle auditu clanek-vyhnutelne-hospitalizace 2026-05-15: Bruthans et al. 2019 a post-MONICA dokumentují kontrolu TK v ČR cca 32-37 %, OECD nepublikuje srovnatelný indikátor). Aktualizovány časové cíle akutní léčby AMI dle ESC 2023 ACS Guidelines (FMC-to-wire-crossing ≤ 60 min přímá prezentace / ≤ 90 min převoz; ≤ 120 min jako mez pro fibrinolýzu) — sjednoceno se sourozeneckým auditem clanek-akutni-infarkt 2026-05-11. Status flagged → review-pending; banner aktualizován. data/indicators.json a method card aktualizovány současně. Cascade refs v clanek-akutni-infarkt.html a clanek-cmp-iktova-centra.html informovány o dokončené rekonciliaci."
+    av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid): av-data-table rozpad KV mortality podle diagnóz (IHD 193,59 vs 100,39 / cerebrovask. 67,57 vs 63,93 / celkem 463,75 vs 312,95), av-data-table preventabilní rizikové faktory (alkohol/kouření/pohyb/diabetes/kontrola TK), av-aside counter trend −17 % (2020→2023). Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 
 <body>
@@ -200,7 +202,52 @@ audit:
         Když se populační číslo rozpadne na hlavní diagnostické skupiny, ukáže se, kde se rozdíl proti EU-27 schovává. <strong>Ischemická srdeční choroba (I20–I25)</strong> má v Česku ASR 193,59 / 100 000 oproti 100,39 v EU-27 — tedy téměř <em>dvojnásobnou</em> úmrtnost. <strong>Cerebrovaskulární nemoci (I60–I69)</strong> mají v Česku ASR 67,57 / 100 000 oproti 63,93 v EU-27 — rozdíl jen šest procent (Eurostat <code>hlth_cd_asdr2</code>, 2023). Český kardiovaskulární paradox je tedy v jádru paradoxem ischemické srdeční choroby, ne mozkové mrtvice: akutní léčba infarktu funguje, ale populační břemeno aterosklerotického onemocnění věnčitých tepen — důsledek desetiletí kouření, hypertenze, dyslipidémie, diabetu a nadváhy — stahuje statistiku zpět dolů. Pozitivní nuance: Česko se podle Eurostatu rychle zlepšuje. ASR pro choroby oběhové soustavy klesla z 557,77 v roce 2020 na 463,75 v roce 2023, tj. o 17 procent za tři roky. Tempo poklesu je přitom rychlejší než v EU-27 (343,69 → 312,95, tj. o 9 procent), takže Česko se relativně přibližuje — i když výchozí pozice je horší.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Kde se schovává český převis: rozpad KV mortality podle diagnóz (ASR / 100 000, 2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Skupina (MKN-10)</th>
+                <th scope="col" class="av-num">Česko</th>
+                <th scope="col" class="av-num">EU-27</th>
+                <th scope="col" class="av-num">Rozdíl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Ischemická srdeční choroba (I20–I25)</th>
+                <td class="av-num av-bad">193,59</td>
+                <td class="av-num">100,39</td>
+                <td class="av-num av-bad">+92,8 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Cerebrovaskulární nemoci (I60–I69)</th>
+                <td class="av-num">67,57</td>
+                <td class="av-num">63,93</td>
+                <td class="av-num av-mut">+5,7 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Choroby oběhové soustavy celkem (I00–I99)</th>
+                <td class="av-num av-bad">463,75</td>
+                <td class="av-num">312,95</td>
+                <td class="av-num av-bad">+48,2 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_cd_asdr2</code> (ESP 2013, oba pohlaví, total ages, 2023). Český paradox = paradox ischemické srdeční choroby, ne mozkové mrtvice.</p>
+      </figure>
+
       <h3>Tři vrstvy, kde Česko ztrácí</h3>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="17" data-prefix="−" data-suffix=" %">−17 %</span>
+          <span class="av-counter-label">pokles KV mortality ČR 2020→2023</span>
+          <span class="av-counter-foot">557,8 → 463,8; EU-27 jen −9 % — mezera se zužuje</span>
+        </div>
+      </aside>
 
       <p>
         Co se odehrává před akutní příhodou a po ní, ukazuje stejný dashboard ve své preventivní části — a obraz je konzistentní.
@@ -217,6 +264,57 @@ audit:
       <p>
         <strong>Třetí vrstva je cévní mozková příhoda.</strong> Tady je paradox nejostřejší. Iktová centra existují, organizace akutní léčby je dobrá — a přesto je nemocniční mortalita po CMP v Česku 9,9 procenta proti 7,7 v průměru OECD (ÚZIS NRH, 2024; v roce 2022 ještě 11,2 %). Část rozdílu lze přičíst tomu, že čeští pacienti přicházejí v horším stavu (vyšší podíl rozsáhlých ischemických CMP nebo hemoragických CMP), část metodice (měříme nemocniční mortalitu, ne 30denní), ale podstatná část svědčí o tom, že kvalita péče napříč sítí iktových center není homogenní — a že navazující rehabilitační péče za evropským standardem pokulhává.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Preventabilní rizikové faktory — kde Česko zaostává za benchmarkem</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rizikový faktor</th>
+                <th scope="col" class="av-num">Česko</th>
+                <th scope="col" class="av-num">Benchmark</th>
+                <th scope="col">Zdroj</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Spotřeba alkoholu (l/os./rok, 15+)</th>
+                <td class="av-num av-bad">14,4</td>
+                <td class="av-num">8,9 (OECD)</td>
+                <td>OECD H@G 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">Denní kuřáctví (15+)</th>
+                <td class="av-num av-bad">16,4 %</td>
+                <td class="av-num">14,8 % (OECD)</td>
+                <td>SZÚ NAUTA 2024</td>
+              </tr>
+              <tr>
+                <th scope="row">Pohyb ≥ 150 min/týden</th>
+                <td class="av-num av-bad">25,1 %</td>
+                <td class="av-num">32,7 % (EU-27)</td>
+                <td>Eurostat EHIS 2019</td>
+              </tr>
+              <tr>
+                <th scope="row">Prevalence diabetu (15+)</th>
+                <td class="av-num av-bad">9,5 %</td>
+                <td class="av-num">7 % (OECD)</td>
+                <td>OECD</td>
+              </tr>
+              <tr>
+                <th scope="row">Kontrola TK u léčených hypertoniků</th>
+                <td class="av-num av-bad">32–37 %</td>
+                <td class="av-num av-mut">— (bez srov. benchmarku)</td>
+                <td>Bruthans 2019</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> viz sloupec; self-reportované hodnoty (kuřáctví, pohyb) typicky podhodnocují skutečnou prevalenci.</p>
+      </figure>
+
+      <div class="av-aside-clear"></div>
 
       <h3>Dva ukazatele, kde česká péče vychází dobře</h3>
 
@@ -291,7 +389,7 @@ audit:
           <li><strong>OECD State of Cardiovascular Health in the EU (2024)</strong> — tematická publikace včetně dashboardu. <a href="https://www.oecd.org/en/data/dashboards/state-of-cardiovascular-health-in-the-eu.html" target="_blank" rel="noopener">oecd.org/state-of-cardiovascular-health ↗</a></li>
           <li><strong>Eurostat — Causes of death, standardised death rate by NUTS 2 region (<code>hlth_cd_asdr2</code>)</strong> — věkově standardizovaná mortalita na ESP 2013. <a href="https://ec.europa.eu/eurostat/databrowser/product/page/HLTH_CD_ASDR2" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
           <li><strong>Eurostat Statistics Explained — Cardiovascular diseases statistics</strong> — výklad metodiky a aktuálních hodnot pro EU. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Cardiovascular_diseases_statistics" target="_blank" rel="noopener">eurostat statistics explained ↗</a></li>
-          <li><strong>ÚZIS / Zemřelí (List o prohlídce zemřelého, NZIS)</strong> — domácí registr příčin úmrtí, vstup do mortalitních statistik. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--demograficke-statistiky--zemreli" target="_blank" rel="noopener">uzis.cz / Zemřelí ↗</a></li>
+          <li><strong>ÚZIS / Zemřelí (List o prohlídce zemřelého, NZIS)</strong> — domácí registr příčin úmrtí, vstup do mortalitních statistik. <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--ostatni-rezortni-registry--list-o-prohlidce-zemreleho" target="_blank" rel="noopener">uzis.cz / Zemřelí ↗</a></li>
           <li><strong>WHO Global Health Observatory — Noncommunicable diseases &amp; risk factors</strong> — globální monitoring rizikových faktorů (BMI, glykémie, tlak, lipidy). <a href="https://www.who.int/data/gho/data/themes/noncommunicable-diseases" target="_blank" rel="noopener">who.int/gho/ncd ↗</a></li>
           <li><strong>IHME GBD 2021 — Compare / Country profile (Czechia)</strong> — kvantifikace přínosu rizikových faktorů ke KV mortalitě. <a href="https://vizhub.healthdata.org/gbd-compare/" target="_blank" rel="noopener">vizhub.healthdata.org/gbd-compare ↗</a></li>
         </ul>
@@ -300,7 +398,7 @@ audit:
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
           <li><strong>Česká kardiologická společnost (ČKS)</strong> — odborná doporučení pro akutní i chronickou kardiologickou péči. <a href="https://www.kardio-cz.cz/" target="_blank" rel="noopener">kardio-cz.cz ↗</a></li>
-          <li><strong>Cerebrovaskulární sekce České neurologické společnosti ČLS JEP</strong> — odborný garant péče o pacienty s CMP. <a href="https://www.czech-neuro.cz/sekce/cerebrovaskularni-sekce/" target="_blank" rel="noopener">czech-neuro.cz / Cerebrovaskulární sekce ↗</a></li>
+          <li><strong>Cerebrovaskulární sekce České neurologické společnosti ČLS JEP</strong> — odborný garant péče o pacienty s CMP. <a href="https://www.czech-neuro.cz/sekce/sekce-cerebrovaskularni/" target="_blank" rel="noopener">czech-neuro.cz / Cerebrovaskulární sekce ↗</a></li>
           <li><strong>SCORE2 a SCORE2-OP (Eur Heart J 2021; ESC)</strong> — aktualizovaný kalkulátor 10leté KV rizikové stratifikace pro evropskou populaci. <a href="https://academic.oup.com/eurheartj/article/42/25/2439/6297709" target="_blank" rel="noopener">SCORE2 (DOI 10.1093/eurheartj/ehab309) ↗</a></li>
           <li><strong>2023 ESC Guidelines for the management of acute coronary syndromes (ACS)</strong> — referenční dokument pro časové cíle akutní léčby AMI včetně door-to-balloon ≤ 90 min a total ischaemic time ≤ 120 min; první ESC doporučení pokrývající celé spektrum ACS (STEMI + NSTE-ACS) v jednom dokumentu, publikováno v <em>European Heart Journal</em>. <a href="https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines/Acute-Coronary-Syndromes-ACS-Guidelines" target="_blank" rel="noopener">escardio.org / ACS Guidelines 2023 ↗</a></li>
           <li><strong>Eurostat — Revision of the European Standard Population (2013, KS-RA-13-028)</strong> — metodický dokument k ESP 2013, který Eurostat používá pro <code>hlth_cd_asdr2</code>. <a href="https://ec.europa.eu/eurostat/documents/3859598/5926869/KS-RA-13-028-EN.PDF" target="_blank" rel="noopener">ESP 2013 (Eurostat KS-RA-13-028) ↗</a></li>

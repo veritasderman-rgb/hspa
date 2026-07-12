@@ -1,0 +1,529 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-09T00:00:00Z",
+  "meta": {
+    "nazev": "Barometr politických prohlášení",
+    "popis": "Drží politiku za slovo daty, která už měříme. Metodika: docs/metodika-barometr.md.",
+    "source": {
+      "nazev": "Programové prohlášení vlády České republiky (vláda Andreje Babiše)",
+      "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+      "datum": "2026-01-05"
+    },
+    "vlada_datum": "2026-01-05",
+    "kontakt": "josef@josefpavlovic.cz",
+    "changelog": [
+      {
+        "datum": "2026-07-09",
+        "polozka": "meta",
+        "zmena": "Založen dataset se schématem dle docs/metodika-barometr.md a jednou fixture položkou každého typu.",
+        "duvod": "Inicializace Barometru (BAR2). Pilotní obsah doplní BAR3 (závazky) a BAR4 (výroky)."
+      },
+      {
+        "datum": "2026-07-09",
+        "polozka": "commitments",
+        "zmena": "Pilotní extrakce 12 závazků z kapitoly 11 (Zdravotnictví) programového prohlášení vlády schváleného 5. 1. 2026; nahrazena fixture položka závazku. Baseline hodnoty zamrazeny k datu slibu z trend polí data/indicators.json.",
+        "duvod": "BAR3 — pilotní naplnění části Závazky. Dva závazky poctivě označeny „nemá měřitelný obsah\" (pacientské organizace, dohodovací řízení)."
+      },
+      {
+        "datum": "2026-07-09",
+        "polozka": "statements",
+        "zmena": "Pilotní sada 8 výroků politiků o zdravotnictví (duben–červenec 2026); nahrazena fixture položka výroku. Verbatim citace dohledány v primárních záznamech (vlada.gov.cz, ČT24, Zdravotnický deník, Zdravé zprávy), verdikty konfrontovány s data/indicators.json, data/claims.json a doloženými primárními zdroji.",
+        "duvod": "BAR4 — pilotní naplnění části Ověřovna dle metodiky §4 (steel-man, tolerance §4.3, čísla se zdrojem)."
+      }
+    ]
+  },
+  "commitments": [
+    {
+      "id": "pp2026-primarni-pece",
+      "citace_verbatim": "Podpoříme rozvoj a posílení primární péče, včetně zapojení lékáren do preventivních a jednoduchých screeningových programů. Klíčovou roli v primární péči však musí hrát praktický lékař, disponující dostatečnými kompetencemi a zázemím. Proto budeme podporovat plošný rozvoj sdružených praxí praktických lékařů s cílem zajistit co nejširší dostupnost primární péče pro pacienty a kvalitní pracovní podmínky pro praktiky.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Procesy",
+      "interpretace": "Posílení primární péče čteme přes její měřitelný výsledek: odvratitelné hospitalizace (ACSC) — hospitalizace pro stavy, kterým dobře fungující primární péče umí předejít. Primární indikátor: hospitalizace_acsc, chtěný směr pokles. Baseline 580 hospitalizací na 100 000 obyvatel (2023, poslední hodnota dostupná k datu slibu). Slib nejmenuje číselný cíl, měříme proto směr: pokles ACSC nad toleranční pásmo = plní se, růst = opačný směr.",
+      "linked_indicators": [
+        {
+          "id": "hospitalizace_acsc",
+          "baseline_value": 580,
+          "baseline_year": 2023,
+          "direction_wanted": "lower_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnota trendu je za rok 2023.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-preventivni-bonusy",
+      "citace_verbatim": "Ve spolupráci se zdravotními pojišťovnami zavedeme finanční bonusy pro občany, kteří se pravidelně účastní preventivních prohlídek.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Procesy",
+      "interpretace": "Slib má dva kroky: zavedení bonusů (ověřitelná událost) a jejich smysl — vyšší účast na preventivních prohlídkách. Primární indikátor: prohlidka_prakticky_lekar (pokrytí preventivní prohlídkou u praktického lékaře), chtěný směr růst. Baseline 52,6 % (2023, poslední hodnota dostupná k datu slibu). Plní se = pokrytí po slibu roste nad toleranční pásmo; samotné zavedení bonusů bez růstu účasti komentujeme ve zdůvodnění stavu.",
+      "linked_indicators": [
+        {
+          "id": "prohlidka_prakticky_lekar",
+          "baseline_value": 52.6,
+          "baseline_year": 2023,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnota trendu je za rok 2023; zavedení bonusů zatím nebylo doloženo.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-zubni-pece",
+      "citace_verbatim": "Dostupnost zubní péče posílíme navýšením počtu stomatologů poskytujících služby hrazené z veřejného zdravotního pojištění a vytvoříme síť urgentních stomatologických pohotovostí.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Výstupy",
+      "interpretace": "Cílem slibu je dostupnost, měříme proto výsledek: nesplněnou potřebu zubní péče (EU-SILC). Primární indikátor: nesplnena_potreba_zubni_pece, chtěný směr pokles; baseline 1,3 % populace 16+ (2024, poslední hodnota dostupná k datu slibu — údaj za rok 2025 v době slibu publikován nebyl). Kontextový indikátor: stomatologove_per_1000 (počet zubních lékařů na 1 000 obyvatel, chtěný směr růst, baseline 0,78 v roce 2023) — sleduje slíbený mechanismus; nerozlišuje ale smluvní a nesmluvní stomatology, což komentujeme ve zdůvodnění stavu.",
+      "linked_indicators": [
+        {
+          "id": "nesplnena_potreba_zubni_pece",
+          "baseline_value": 1.3,
+          "baseline_year": 2024,
+          "direction_wanted": "lower_is_better"
+        },
+        {
+          "id": "stomatologove_per_1000",
+          "baseline_value": 0.78,
+          "baseline_year": 2023,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Hodnota za rok 2025 (1,0 %) byla publikována až po slibu, ale pokrývá období, které slibu předcházelo — do vyhodnocení se nepočítá (metodika §3.3: první celé nové období po slibu je rok 2026). Věcné vyhodnocení po publikaci dat za rok 2026.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-dostupnost-leku",
+      "citace_verbatim": "Budeme dělat vše pro zajištění dostupnosti léků, včetně vytvoření robustních rezervních zásob a tvrdého postihu nedovolených reexportů.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Výstupy",
+      "interpretace": "Dostupnost léků měříme podílem léčiv s omezenou dostupností (LPOD) na aktivně obchodovaných přípravcích. Primární indikátor: lpod_share_critical, chtěný směr pokles. Baseline 5,7 % (2025) — ukazatel se počítá průběžně z denních otevřených dat SÚKL, hodnota za rok 2025 byla k datu slibu (5. 1. 2026) dostupná. Plní se = podíl LPOD za první celý rok po slibu (2026) klesne pod baseline nad toleranční pásmo.",
+      "linked_indicators": [
+        {
+          "id": "lpod_share_critical",
+          "baseline_value": 5.7,
+          "baseline_year": 2025,
+          "direction_wanted": "lower_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Průběžná hodnota za rok 2026 (5,4 %) je pod baseline 5,7 % (2025), rok 2026 ale ještě není uzavřené datové období — do vyhodnocení se zatím nepočítá (metodika §3.3). Věcné vyhodnocení po uzavření roku 2026.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-onko-kardio-plany",
+      "citace_verbatim": "Implementujeme Národní onkologický plán a Národní kardiovaskulární plán, které se zaměřují na prevenci a léčbu dvou nejčastějších příčin úmrtí v České republice.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Výsledky",
+      "interpretace": "Implementace obou plánů se má projevit na úmrtnosti, kterou plány cílí. Primární indikátor: mortalita_kardiovaskularni (standardizovaná úmrtnost na kardiovaskulární nemoci, nejčastější příčina úmrtí v ČR), chtěný směr pokles, baseline 463,75 na 100 000 obyvatel (2023). Kontextový indikátor: mortalita_onkologicka, chtěný směr pokles, baseline 250,43 (2023). Jde o dlouhodobé výsledkové ukazatele — efekt implementace se projevuje se zpožděním; hodnotíme směr trendu, ne roční výkyvy.",
+      "linked_indicators": [
+        {
+          "id": "mortalita_kardiovaskularni",
+          "baseline_value": 463.75,
+          "baseline_year": 2023,
+          "direction_wanted": "lower_is_better"
+        },
+        {
+          "id": "mortalita_onkologicka",
+          "baseline_value": 250.43,
+          "baseline_year": 2023,
+          "direction_wanted": "lower_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnoty trendů jsou za rok 2023.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-dusevni-zdravi-reforma",
+      "citace_verbatim": "Obnovíme státem řízený proces reformy péče o duševní zdraví s cílem zvýšení dostupnosti a kvality služeb u všech cílových skupin, včetně dětí a adolescentů.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Struktury",
+      "interpretace": "Slíbeným cílem obnovené reformy je dostupnost služeb; jejím vlajkovým měřítkem je síť center duševního zdraví. Primární indikátor: centra_dusevniho_zdravi_per_100k, chtěný směr růst, baseline 0,37 centra na 100 000 obyvatel (2024, poslední hodnota dostupná k datu slibu). Kontextový indikátor: psychiatri_per_100k (chtěný směr růst, baseline 12,8 v roce 2023). Plní se = síť CDZ po slibu roste nad toleranční pásmo.",
+      "linked_indicators": [
+        {
+          "id": "centra_dusevniho_zdravi_per_100k",
+          "baseline_value": 0.37,
+          "baseline_year": 2024,
+          "direction_wanted": "higher_is_better"
+        },
+        {
+          "id": "psychiatri_per_100k",
+          "baseline_value": 12.8,
+          "baseline_year": 2023,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnota trendu primárního indikátoru je za rok 2024.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-ezadanka-monitoring",
+      "citace_verbatim": "Zavedeme národní monitoring kapacit s využitím povinné e-žádanky a sběru čekacích dob na úrovni poskytovatelů.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Procesy",
+      "interpretace": "Checkpoint je legislativní: povinnou e-žádanku zavádí novela zákona č. 325/2021 Sb., o elektronizaci zdravotnictví. Sledujeme postup novely fázemi legislativního procesu (metodika §3.4). Splněno = novela platná a národní monitoring kapacit a čekacích dob spuštěn; do té doby stav podle postupu legislativy.",
+      "linked_indicators": [],
+      "legislativa_ids": [
+        "novela-elektronizace-zdravotnictvi-2026"
+      ],
+      "stav": "plni_se",
+      "stav_duvod": "Novela zákona o elektronizaci zdravotnictví, která zavádí povinnou e-žádanku, vstoupila 3. 7. 2026 do připomínkového řízení (VeKLEP ALBSDVLDLD32, připomínky do 3. 8. 2026). Od data slibu (5. 1. 2026) se legislativní proces posunul vpřed — metodika §3.4 bod 2. Monitoring kapacit zatím spuštěn není.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-elektronizace",
+      "citace_verbatim": "Jednoznačnou prioritou pro nás je elektronizace zdravotnictví s cílem sdílení dat mezi poskytovateli, snížení administrativní zátěže a zajištění přístupu pacientů k vlastním zdravotním záznamům.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Struktury",
+      "interpretace": "Kombinovaný závazek: cílem je pokrok elektronizace, prostředkem legislativa. Primární indikátor: ehealth_adoption (index adopce elektronického zdravotnictví 0–100), chtěný směr růst, baseline 62 (2024, poslední hodnota dostupná k datu slibu). Legislativní větev (novela zákona o elektronizaci zdravotnictví, adaptace EHDS) slouží jako předstihový signál a komentuje se ve zdůvodnění stavu (metodika §3.4).",
+      "linked_indicators": [
+        {
+          "id": "ehealth_adoption",
+          "baseline_value": 62,
+          "baseline_year": 2024,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [
+        "novela-elektronizace-zdravotnictvi-2026",
+        "plan-adaptace-ehds"
+      ],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nevyšlo nové datové období primárního indikátoru (poslední hodnota 62 za rok 2024). Předstihový signál legislativní větve je pozitivní: novela zákona o elektronizaci zdravotnictví je od 3. 7. 2026 v připomínkovém řízení.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-paliativni-pece",
+      "citace_verbatim": "Podpoříme rozvoj a dostupnost paliativní péče.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Struktury",
+      "interpretace": "Rozvoj a dostupnost paliativní péče měříme kapacitami a výsledkem. Primární indikátor: mobilni_paliativni_tymy_per_milion (týmy mobilní specializované paliativní péče na milion obyvatel), chtěný směr růst, baseline 4,6 (2024, poslední hodnota dostupná k datu slibu). Kontextové indikátory: hospicova_pece_luzka (růst, baseline 5,0 lůžek na 100 000 obyvatel, 2023) a umrti_doma_nebo_hospici_pct (růst, baseline 26,2 %, 2022).",
+      "linked_indicators": [
+        {
+          "id": "mobilni_paliativni_tymy_per_milion",
+          "baseline_value": 4.6,
+          "baseline_year": 2024,
+          "direction_wanted": "higher_is_better"
+        },
+        {
+          "id": "hospicova_pece_luzka",
+          "baseline_value": 5,
+          "baseline_year": 2023,
+          "direction_wanted": "higher_is_better"
+        },
+        {
+          "id": "umrti_doma_nebo_hospici_pct",
+          "baseline_value": 26.2,
+          "baseline_year": 2022,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnota trendu primárního indikátoru je za rok 2024.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-centralizace-presun-pece",
+      "citace_verbatim": "Chceme vytvářet regionální nemocniční sítě s vyšší mírou spolupráce a dělby práce, než je tomu nyní. Budeme podporovat smysluplnou centralizaci péče a její přesun do jednodenní, stacionární, ambulantní a domácí oblasti.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Struktury",
+      "interpretace": "Přesun péče z akutních lůžek do jednodenní, ambulantní a domácí oblasti se v datech projeví poklesem počtu akutních lůžek a růstem podílu výdajů na ambulantní péči. Primární indikátor: postele_akutni_per_1000, chtěný směr pokles (redakční interpretace — slíbený přesun péče znamená méně akutních lůžek; lze rozporovat), baseline 4,0 lůžka na 1 000 obyvatel (2023). Kontextový indikátor: podil_vydaje_ambulantni_pece (růst, baseline 28,5 %, 2023).",
+      "linked_indicators": [
+        {
+          "id": "postele_akutni_per_1000",
+          "baseline_value": 4,
+          "baseline_year": 2023,
+          "direction_wanted": "lower_is_better"
+        },
+        {
+          "id": "podil_vydaje_ambulantni_pece",
+          "baseline_value": 28.5,
+          "baseline_year": 2023,
+          "direction_wanted": "higher_is_better"
+        }
+      ],
+      "legislativa_ids": [],
+      "stav": "ceka_na_data",
+      "stav_duvod": "Od slibu (5. 1. 2026) nebylo publikováno žádné celé nové datové období primárního indikátoru. První věcné vyhodnocení proběhne po publikaci dat za rok 2026 (metodika §3.3). Poslední hodnoty trendů jsou za rok 2023.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-pacientske-organizace",
+      "citace_verbatim": "Zapojíme pacientské organizace do rozhodovacích procesů, aby mohly ovlivňovat kvalitu a organizaci péče.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Procesy",
+      "interpretace": "Ze slibu nelze odvodit verifikovatelný checkpoint: „zapojení do rozhodovacích procesů\" nemá definovanou podobu, rozsah ani termín, žádný sledovaný indikátor ho neměří a slib se neváže na konkrétní legislativní akt. Pokud vláda zapojení formalizuje (např. předpisem ukotvujícím pacientské organizace v rozhodovacích orgánech), závazek reinterpretujeme s baseline k původnímu datu slibu (metodika §6).",
+      "linked_indicators": [],
+      "legislativa_ids": [],
+      "stav": "nema_meritelny_obsah",
+      "stav_duvod": "Slib nemá měřitelný obsah: neexistuje indikátor, doložitelný legislativní akt ani ověřitelná událost, kterou by šlo předem definovat jako splnění či nesplnění (metodika §3.1). To není hodnocení záměru — jen konstatování, že slib v této podobě nelze daty ověřit.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    },
+    {
+      "id": "pp2026-dohodovaci-rizeni",
+      "citace_verbatim": "Jsme pro navrácení základních principů dohodovacího řízení, kdy je dohoda v rukou pojišťoven a poskytovatelů a ministerstvo přistupuje spravedlivě ke všem segmentům. Úhradová vyhláška má sloužit k potvrzení dohod a její role bude postupně omezována ve prospěch aktivnější úlohy a větší zodpovědnosti zdravotních pojišťoven za zajištění péče pro své pojištěnce.",
+      "zdroj": {
+        "nazev": "Programové prohlášení vlády České republiky (schváleno 5. ledna 2026), kapitola 11. Zdravotnictví",
+        "url": "https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/",
+        "datum": "2026-01-05"
+      },
+      "oblast": "Struktury",
+      "interpretace": "„Postupné omezování role úhradové vyhlášky\" nemá v našich datech měřitelnou definici: nesledujeme podíl segmentů s dohodou v dohodovacím řízení ani rozsah odchylek úhradové vyhlášky od uzavřených dohod, a slib neurčuje termín ani cílový stav. Pokud začneme výsledky dohodovacího řízení systematicky sledovat, nebo vláda předloží konkrétní legislativní změnu úhradové regulace, závazek reinterpretujeme (metodika §6).",
+      "linked_indicators": [],
+      "legislativa_ids": [],
+      "stav": "nema_meritelny_obsah",
+      "stav_duvod": "Slib nemá měřitelný obsah v dostupných datech: žádný sledovaný indikátor neměří roli úhradové vyhlášky vůči dohodám a slib nejmenuje konkrétní legislativní krok s termínem (metodika §3.1). Poctivé označení limitu — ne hodnocení záměru.",
+      "stav_od": "2026-07-09",
+      "historie": []
+    }
+  ],
+  "statements": [
+    {
+      "id": "vojtech-2026-05-12-pocet-sester",
+      "vyrok_verbatim": "Faktem je, že teď když se díváme na ta data, tak nám ještě stále mírně stoupá počet sester za rok 2024, 96 000 sester, 96 500 sester v českém zdravotnictví. Meziročně asi o půl procenta navíc, takže zatím vidíme, že ten trend je stoupající",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-05-12",
+      "kde": {
+        "nazev": "Tisková konference po podpisu Deklarace o spolupráci na podporu duševního zdraví (přepis, vlada.gov.cz)",
+        "url": "https://vlada.gov.cz/cz/media-centrum/tiskove-konference/tiskova-konference-po-podpisu-deklarace-o-spolupraci-na-podporu-dusevniho-zdravi--12--kvetna-2026-226980/"
+      },
+      "verdikt": "zavadejici_kontext",
+      "verdikt_zduvodneni": "Absolutní údaje nelze z našich dat vyvrátit: indikátor sestry_per_1000 (ÚZIS · NRZP) vedeme v přepočtu na 1 000 obyvatel a absolutní počty sester neevidujeme; steel-man čtení (absolutní počet mírně roste) tedy připouštíme. Rámování „trend je stoupající\" ale zamlčuje přepočet na obyvatele, který je pro dostupnost péče rozhodující: na 1 000 obyvatel počet praktikujících sester stagnuje na 9,0 (2022, 2023 i 2024) a proti 9,2 z roku 2020 je nižší; průměr OECD je 9,2. Deklarovaný meziroční růst o 0,5 % je pod rozlišením řady (0,1 ≈ 1 %) a v dostupnosti sester na obyvatele se nepropisuje. Jde o záměnu absolutního a relativního základu (metodika §4.2): jednotlivá čísla jsou v toleranci, vyznění „situace se zlepšuje\" ale data o dostupnosti nepodporují.",
+      "linked_indicators": [
+        "sestry_per_1000"
+      ],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — indikátor Praktikující sestry / 1 000 obyvatel (ÚZIS · NRZP)",
+          "url": "indicator.html?id=sestry_per_1000"
+        }
+      ]
+    },
+    {
+      "id": "babis-2026-05-12-vydaje-zdravotnictvi",
+      "vyrok_verbatim": "máme tady dva ministry, kteří mají ze všech členů vlády největší rozpočet. Rozpočet Ministerstva práce a sociálních věcí se blíží k 1 000 miliardám a samozřejmě zdravotnictví, pokud si pamatuji, tak se blížíme kolem 550, 600 miliard. Tyhle dva resorty jsou nejdůležitější pro každodenní život našich spoluobčanů",
+      "kdo": "Andrej Babiš",
+      "funkce": "předseda vlády",
+      "kdy": "2026-05-12",
+      "kde": {
+        "nazev": "Tisková konference po podpisu Deklarace o spolupráci na podporu duševního zdraví (přepis, vlada.gov.cz)",
+        "url": "https://vlada.gov.cz/cz/media-centrum/tiskove-konference/tiskova-konference-po-podpisu-deklarace-o-spolupraci-na-podporu-dusevniho-zdravi--12--kvetna-2026-226980/"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Steel-man čtení: „rozpočtem\" zdravotnictví premiér zjevně míní peníze protékající systémem veřejného zdravotního pojištění, ne rozpočtovou kapitolu ministerstva. Celkové výdaje systému veřejného zdravotního pojištění v roce 2026 dosahují zhruba 563 miliard Kč (registr tvrzení, claim deficit-pojisteni-2026--04) — tedy uvnitř uvedeného intervalu „kolem 550, 600 miliard\". Celkové výdaje na zdravotnictví ze všech zdrojů byly v roce 2024 ještě vyšší: 696,7 mld Kč, tj. 8,6 % HDP (ČSÚ · zdravotnické účty SHA, claim financovani-sha--01) — i při tomto širším čtení by šlo o podhodnocení, ne nadsázku. Výrok uvozený výhradou „pokud si pamatuji\" odpovídá datům.",
+      "linked_indicators": [
+        "vydaje_zdravotnictvi_hdp"
+      ],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — Deficit veřejného zdravotního pojištění 2026 (výdaje systému 563 mld Kč)",
+          "url": "clanek-deficit-pojisteni-2026.html"
+        },
+        {
+          "nazev": "Zdravé Česko — Financování zdravotnictví podle SHA (696,7 mld Kč, 8,6 % HDP, 2024)",
+          "url": "clanek-financovani-sha.html"
+        }
+      ]
+    },
+    {
+      "id": "babis-2026-06-07-rezervy-pojistoven",
+      "vyrok_verbatim": "Minulá vláda, pan (bývalý ministr zdravotnictví Vlastimil) Válek, navyšoval výdaje a neměl na to příjmy. Takže vysáli rezervy státních pojišťoven a peníze tam chybí",
+      "kdo": "Andrej Babiš",
+      "funkce": "předseda vlády",
+      "kdy": "2026-06-07",
+      "kde": {
+        "nazev": "ČT24 — Valorizace dle vlády zabrání kolapsu zdravotnictví. Problémy nevyřeší, zní z opozice (7. 6. 2026)",
+        "url": "https://ct24.ceskatelevize.cz/clanek/domaci/valorizace-dle-vlady-zabrani-kolapsu-zdravotnictvi-problemy-nevyresi-zni-z-opozice-374318"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Obě ústřední tvrzení data potvrzují. (1) Výdaje rostly rychleji než příjmy: výdaje systému veřejného zdravotního pojištění na péči rostou tempem +6,4 % ročně, příjmy z pojistného +5,5 % (claims deficit-pojisteni-2026--05 a --06). (2) Rezervy se čerpaly: zůstatky na účtech pojišťoven klesly z 64,4 mld Kč (konec 2020) přes necelých 57 mld (konec 2022) a 47,7 mld (konec 2024; Zdravotnický deník, 10. 2. 2025) na cca 32 mld Kč ke konci roku 2025 (reporting pojišťoven, claim deficit-pojisteni-2026--03) — tedy zhruba na polovinu. „Peníze tam chybí\": souhrnný deficit systému pro rok 2026 odhaduje MZ na −12,2 až −15,5 mld Kč (claim deficit-pojisteni-2026--02). Vedlejší nepřesnosti, které verdikt nemění: „vysáli\" je nadsázka (v rezervách zbývá ~32 mld Kč, při současném deficitu zhruba na dva roky — claim deficit-vzp-2026--11) a zdravotní pojišťovny nejsou „státní\", jde o veřejnoprávní instituce. Kontext: deficitní hospodaření po pandemii bylo zčásti plánovaným čerpáním rezerv skrze úhradové vyhlášky; hodnotíme vztah výroku k datům, ne tehdejší politiku.",
+      "linked_indicators": [],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — Deficit veřejného zdravotního pojištění 2026 (rezervy 32 mld, deficit −12,2 až −15,5 mld)",
+          "url": "clanek-deficit-pojisteni-2026.html"
+        },
+        {
+          "nazev": "Zdravé Česko — Deficit VZP 2026 (run-rate vyčerpání rezerv ~2 roky)",
+          "url": "clanek-deficit-vzp-2026.html"
+        },
+        {
+          "nazev": "Zdravotnický deník (10. 2. 2025) — Zdravotní pojišťovny jsou nuceny plánovat deficity (zůstatky 64,4 mld 2020 → 57 mld 2022 → 47,7 mld 2024)",
+          "url": "https://www.zdravotnickydenik.cz/2025/02/zdravotni-pojistovny-jsou-nuceny-planovat-deficity-pokryvaji-je-z-rezerv-ty-se-ale-tenci/"
+        }
+      ]
+    },
+    {
+      "id": "vojtech-2026-06-29-laboratorni-data",
+      "vyrok_verbatim": "Už nyní máme centralizováno přes 400 milionů laboratorních vyšetření. Napojeny máme skutečně téměř všechny laboratoře v České republice s výsledky vyšetření každého z nás 5 let dozadu",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-06-29",
+      "kde": {
+        "nazev": "Kardiologická konference (cit. dle Zdravotnického deníku, 29. 6. 2026; datujeme dnem publikace záznamu)",
+        "url": "https://www.zdravotnickydenik.cz/2026/06/adam-vojtech-kardiologicka-konference/"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Ústřední číslo sedí: centrální úložiště laboratorních dat (ÚZIS/NCEZ) obsahuje 405 milionů laboratorních výsledků z 282 laboratoří (registr tvrzení, claim cholesterol-mapa-obci--02) — „přes 400 milionů\" odpovídá přesně. Z téže datové základny vychází i náš indikátor průměrného celkového cholesterolu dospělých (cholesterol_prumer_dospeli: 4,92 mmol/l, 2025). Vedlejší tvrzení „téměř všechny laboratoře\" a hloubka „5 let dozadu\" samostatně ověřit nemůžeme (celkový počet laboratoří v ČR neevidujeme); údaj o 282 napojených laboratořích je s nimi slučitelný a verdikt nemění.",
+      "linked_indicators": [
+        "cholesterol_prumer_dospeli"
+      ],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — Mapa cholesterolu po obcích (405 mil. laboratorních výsledků z 282 laboratoří)",
+          "url": "clanek-cholesterol-mapa-obci.html"
+        },
+        {
+          "nazev": "Zdravé Česko — indikátor Průměrný celkový cholesterol dospělých",
+          "url": "indicator.html?id=cholesterol_prumer_dospeli"
+        }
+      ]
+    },
+    {
+      "id": "vojtech-2026-06-30-preskripce-1200",
+      "vyrok_verbatim": "Rozvolnění preskripčních omezení typu E se týká 1 200 léků, tedy osminy všech léčiv hrazených z pojištění předepisovaných v ambulancích.",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-06-30",
+      "kde": {
+        "nazev": "Tisková konference MZ k rozvolnění preskripčních omezení (cit. dle Zdravotnického deníku, 1. 7. 2026)",
+        "url": "https://www.zdravotnickydenik.cz/2026/07/konec-preskripcnich-omezeni-prakticti-lekari/"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Obě čísla sedí s doloženými podklady: rozvolnění preskripčních omezení typu E účinné od 1. 7. 2026 se týká více než 1 200 léčivých přípravků (registr tvrzení, claim preskripce-praktici-2026--01), což odpovídá zhruba jedné osmině, tj. 12,5 %, všech hrazených léčiv předepisovaných v ambulantní péči (claim preskripce-praktici-2026--02). Počet i podíl uvedený ministrem jsou v souladu s těmito hodnotami.",
+      "linked_indicators": [],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — Rozvolnění preskripce pro praktické lékaře 2026 (1 200 LP, osmina hrazených léčiv)",
+          "url": "clanek-preskripce-praktici-2026.html"
+        }
+      ]
+    },
+    {
+      "id": "vojtech-2026-04-17-hygieny-140-mist",
+      "vyrok_verbatim": "My jsme v době covidu personálně posílili hygienické stanice. Když přišla nová vláda, škrtla 140 míst.",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-04-17",
+      "kde": {
+        "nazev": "Vystoupení ve Sněmovně k legislativním prioritám resortu (cit. dle Zdravotnického deníku, 17. 4. 2026; datujeme dnem publikace záznamu)",
+        "url": "https://www.zdravotnickydenik.cz/2026/04/hygieny-nelekari-uhrady-legislativni-priority-zdravotnictvi-adam-vojtech/"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Dobové zpravodajství výrok potvrzuje v rámci tolerance: rozpočet krajských hygienických stanic byl v roce 2022 snížen o více než 90 milionů Kč, což odpovídalo zrušení asi 130 pracovních míst; tehdejší premiér Petr Fiala mluvil o „134 místech neobsazených\" (Seznam Zprávy, 9. 2. 2022). Ministrových „140 míst\" se od doložených 134 liší o ~4,5 %, tedy uvnitř 5% tolerance metodiky (§4.3). Personální posílení hygien během pandemie dobové zprávy rovněž popisují — škrty z roku 2022 mířily podle nich zhruba na rozsah kapacit přidaných za covidu. Kontext, který verdikt nemění: tehdejší vláda tvrdila, že šlo převážně o neobsazená místa, odbory mluvily o skutečném propouštění; formulace „škrtla místa\" platí v obou čteních (rušila se systemizovaná místa, spor byl o jejich obsazenost).",
+      "linked_indicators": [],
+      "zdroje": [
+        {
+          "nazev": "Seznam Zprávy (9. 2. 2022) — Odbory: Z hygien se kvůli škrtům bude vyhazovat (škrt >90 mil. Kč, ~130 míst; Fiala: 134 neobsazených)",
+          "url": "https://www.seznamzpravy.cz/clanek/koronavirus-vlada-nerika-pravdu-z-hygien-se-kvuli-skrtum-bude-vyhazovat-tvrdi-odbory-187902"
+        }
+      ]
+    },
+    {
+      "id": "vojtech-2026-07-09-bilancovani-20-procent",
+      "vyrok_verbatim": "Plnění programového prohlášení vlády v oblasti zdravotnictví, kde jsme za ten půl rok udělali obrovský kus práce, aktuálně máme splněno zhruba 20 procent, což si myslím, není vůbec špatné",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-07-09",
+      "kde": {
+        "nazev": "Bilancování prvního půlroku resortu (cit. dle Zdravých zpráv, 9. 7. 2026)",
+        "url": "https://www.zdravezpravy.cz/2026/07/09/ministr-vojtech-bilancuje-splneno-je-20-cilu-dalsi-jsou-v-procesu/"
+      },
+      "verdikt": "sedi_s_daty",
+      "verdikt_zduvodneni": "Číslo odpovídá primárnímu zdroji: podle vyhodnocení MZ je splněno či fakticky dokončeno 22 ze 119 hodnocených položek programového prohlášení v gesci zdravotnictví, tj. 18,5 % (tisková zpráva MZ, 9. 7. 2026); „zhruba 20 procent\" je v toleranci zaokrouhlení (§4.3). Podstatná výhrada, kterou čtenář má znát: jde o sebehodnocení ministerstva podle jeho vlastního počítání položek, žádná nezávislá metrika plnění neexistuje. Naše datová konfrontace zatím většinu slibů ověřit nemůže — z 12 pilotních závazků kapitoly Zdravotnictví v tomto Barometru je 9 ve stavu „čeká na data\" (roční data za 2026 ještě nevyšla), 1 „plní se\", 2 „nemá měřitelný obsah\" a žádný nelze označit za „splněno\". To výrok nevyvrací: položky započtené ministerstvem jsou převážně procesní kroky, z nichž některé doložitelně nastaly (např. rozvolnění preskripčních omezení od 1. 7. 2026).",
+      "linked_indicators": [],
+      "zdroje": [
+        {
+          "nazev": "MZ ČR (9. 7. 2026) — Ministr zdravotnictví Adam Vojtěch bilancuje první půlrok (22 ze 119 položek)",
+          "url": "https://mzd.gov.cz/tiskove-centrum-mz/ministr-zdravotnictvi-adam-vojtech-bilancuje-prvni-pulrok-silnejsi-primarni-pece-modernizace-zdravotnictvi-a-systemove-zmeny/"
+        }
+      ]
+    },
+    {
+      "id": "vojtech-2026-07-09-nejvetsi-redukce-preskripce",
+      "vyrok_verbatim": "Udělali jsme asi největší redukci preskripčních omezení pro praktiky v historii. Myslím, že to velmi oceňují a je to dobré pro pacienty",
+      "kdo": "Adam Vojtěch",
+      "funkce": "ministr zdravotnictví",
+      "kdy": "2026-07-09",
+      "kde": {
+        "nazev": "Bilancování prvního půlroku resortu (cit. dle Zdravých zpráv, 9. 7. 2026)",
+        "url": "https://www.zdravezpravy.cz/2026/07/09/ministr-vojtech-bilancuje-splneno-je-20-cilu-dalsi-jsou-v-procesu/"
+      },
+      "verdikt": "neoveritelne",
+      "verdikt_zduvodneni": "Rozsah aktuálního rozvolnění je doložen: více než 1 200 léčivých přípravků, zhruba osmina hrazených ambulantních léčiv (registr tvrzení, claims preskripce-praktici-2026--01 a --02). Historický superlativ „největší v historii\" ale ověřit nelze: veřejná srovnatelná evidence rozsahu dřívějších úprav preskripčních omezení neexistuje — hledali jsme v tiskovém centru MZ (mzd.gov.cz) a v otevřených datech SÚKL, souhrnnou časovou řadu změn preskripčních omezení žádný z těchto zdrojů nepublikuje. Sám mluvčí tvrzení změkčil slovem „asi\". Jde o konstatování limitu dostupných dat, ne o zpochybnění výroku.",
+      "linked_indicators": [],
+      "zdroje": [
+        {
+          "nazev": "Zdravé Česko — Rozvolnění preskripce pro praktické lékaře 2026 (1 200 LP, osmina hrazených léčiv)",
+          "url": "clanek-preskripce-praktici-2026.html"
+        }
+      ]
+    }
+  ]
+}

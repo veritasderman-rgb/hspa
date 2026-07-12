@@ -11,6 +11,37 @@ Pro per-page popis stránek (kde se komponenty používají) viz [`site-architec
 
 ---
 
+# 0a. Dark mode (U28)
+
+Web má světlý i tmavý režim postavený na **tokenové vrstvě** v `:root`
+(`--paper --paper2 --ink --ink-mut(2) --rule(2) --red --red-soft`, signály
+`--good --warn --bad --neutral`, `--modal-bg`, tint plochy `--surface-warn
+--surface-tint`). ~90 % CSS jede přes `var(--…)`, takže dark režim = přepsání
+bázových tokenů; aliasy (`--bg --text --border …`) i přímé použití se propíšou samy.
+
+**Jak se přepíná:**
+- **Default = světlo.** Uživatel bez volby dědí systémové téma přes
+  `@media (prefers-color-scheme: dark)` (bez JS, bez probliknutí).
+- **Ruční přepínač** v nav liště (`.theme-toggle`, `themeToggleHtml()` +
+  `wireThemeToggle()` v `page-shared.js`) nastaví `data-theme="dark|light"` na
+  `<html>` a uloží volbu do `localStorage['hspa-theme']`. Ruční volba vyhrává nad
+  systémem (`:root[data-theme="dark"]`, resp. `:not([data-theme="light"])` v media query).
+- Brzká inicializace (`initThemeEarly()` IIFE) nastaví `data-theme` co nejdřív;
+  obalená `try/catch` (import v node/testech bez DOM nespadne).
+
+**Pravidla:**
+- Nové barvy piš přes tokeny, ne raw hex — jinak v dark režimu „vypadnou".
+- **Brand pravidlo platí i v dark:** červená (`--red`, v dark rozjasněná na `#e0563a`)
+  patří jen hrotu střelky kompasu; zbytek je inkoust (`--ink`).
+- Barevné chip/badge s vlastním světlým tintem a tmavým textem zůstávají čitelné
+  v obou režimech (standardní chování) — neřeš je.
+- Print styly (`@media print`) drží černou na bílé — dark je neovlivňuje.
+- Vizuální regrese (`tests/e2e/visual.spec.js`) běží ve světlém režimu (default),
+  takže baselines drží; dark snímky lze doplnit později přes `colorScheme:'dark'`.
+- Regresní guard: `tests/dark-mode.test.js` (dark blok v CSS + minifikátu, exporty přepínače).
+
+---
+
 # 0. Brand mark — HSPA Kompas
 
 Stálý grafický prvek webu. **Přístroj orientace, ne medicínská ikona** — kruhová

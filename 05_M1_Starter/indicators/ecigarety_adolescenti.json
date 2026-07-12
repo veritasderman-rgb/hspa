@@ -1,0 +1,53 @@
+{
+  "id": "ecigarety_adolescenti",
+  "name": "Užívání e-cigaret u dospívajících (13–15 let)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky u adolescentů",
+  "definition": "Podíl žáků ve věku 13–15 let, kteří v posledních 30 dnech alespoň jednou užili elektronickou cigaretu (tzv. current use). Standardní ukazatel mezinárodního školního šetření GYTS (Global Youth Tobacco Survey), v ČR realizovaného Státním zdravotním ústavem ve spolupráci s WHO a CDC.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "szu_gyts",
+      "endpoint": "https://szu.gov.cz/publikace/data/gyts/",
+      "dataset": "Global Youth Tobacco Survey — Czech Republic country report",
+      "dimensions": ["věk 13–15", "pohlaví", "typ nikotinového výrobku"]
+    },
+    "fallback": {
+      "type": "who_hbsc",
+      "code": "e-cigarette-use-last-30-days-use"
+    }
+  },
+  "benchmark_source": {
+    "type": "who_hbsc",
+    "code": "e-cigarette-use-last-30-days-use",
+    "dataset": "WHO/Europe HBSC 2021/22 — cross-national průměr current use e-cigaret u 15letých (44 zemí/regionů). Slouží jako nejbližší dostupný evropský srovnávací bod; GYTS ani OECD samostatný jednotný EU/OECD průměr pro tento ukazatel nepublikují. Pozor na odlišnou věkovou kategorii (HBSC 15 let vs GYTS 13–15) a odlišné šetření — srovnání je orientační.",
+    "value": 20,
+    "url": "https://data-browser.hbsc.org/measure/e-cigarette-use-last-30-days-use/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "periodic",
+  "stewards": [
+    "SZÚ",
+    "WHO",
+    "CDC"
+  ],
+  "method_notes": "GYTS Česká republika (SZÚ) měří srovnatelný ukazatel current use e-cigaret od roku 2016 (11,2 %); v roce 2022 hodnota vzrostla na 21,4 % (vzorek 3 190 žáků 13–15 let, návratnost 62 %). Ukazatel je záměrně samostatný vedle indikátoru prevalence_koureni_adolescenti (kouření klasických cigaret, HBSC, 15letí) — měří odlišný produkt s odlišnou dynamikou: zatímco prevalence klasických cigaret klesá, expozici nikotinu z velké části přebírají e-cigarety a nově nikotinové sáčky. Doplňkově NAUTA 2025 (SZÚ) sleduje širší skupinu 15–24 let a dokumentuje strmý posun k nejsilnějším náplním.",
+  "limitations": "GYTS je periodické šetření (v ČR rounds 2011/2016/2022), nikoli roční — trend má řídké body. Věková kategorie 13–15 se liší od HBSC (15 let), proto je mezinárodní srovnání orientační. Sebehodnocené užívání ve školním dotazníku podléhá desirability bias. Nikotinové sáčky (bez tabáku i bez páry) nejsou v GYTS 2022 samostatně vykázány — sledují je novější šetření (NAUTA).",
+  "determinants": [
+    "Dostupnost ochucených náplní a jednorázových vapes cílených na mládež",
+    "Marketing na sociálních sítích mimo dosah klasické mediální regulace (TPD2)",
+    "Nízké zdanění e-liquidů a nikotinových sáčků oproti tabáku",
+    "Slabý enforcement zákazu prodeje nezletilým (online i kamenné prodejny)",
+    "Socioekonomický gradient a normalizace vapingu ve vrstevnických skupinách"
+  ],
+  "importance": "Naprostá většina celoživotních uživatelů nikotinu začíná v adolescenci. Adolescentní mozek si vytváří nikotinovou závislost rychleji než mozek dospělého a longitudinální studie ukazují, že e-cigareta funguje jako vstupní produkt k pozdějšímu kouření. Rychlý nárůst je proto předstihovým ukazatelem budoucí zátěže CHOPN, kardiovaskulárních a nádorových onemocnění — a zároveň citlivým měřítkem účinnosti regulace a školní prevence.",
+  "patient_story": "Tereza je čtrnáct a chodí do deváté třídy základní školy v Ústí nad Labem. Na dívčích záchodech o velké přestávce koluje jednorázová e-cigareta s příchutí melounu; vydrží asi na tři sta potáhnutí a stojí míň než dvě obědové svačiny. „Není to jako cigáro, nesmrdí to a všichni to mají,\" říká. Její třídní metodička prevence to ví, ale kapacitu na systematickou práci nemá — prevence stojí na jedné dobrovolné přednášce za rok. Tereza sama sebe za kuřačku nepovažuje. Cigaretu nikdy nezkusila.\n\nData ukazují, že Tereza není výjimka, ale trend. Podle šetření GYTS (Státní zdravotní ústav, WHO/CDC) užilo v roce 2022 elektronickou cigaretu v posledních 30 dnech 21,4 % českých třinácti- až patnáctiletých. To je téměř dvojnásobek oproti roku 2016, kdy to bylo 11,2 %. Signál indikátoru je „warn\": hodnota se pohybuje kolem evropského srovnávacího bodu (cross-national průměr sítě HBSC pro patnáctileté je 20 %), ale trajektorie prudce roste a e-cigarety v mezidobí předběhly klasické cigarety, jejichž prevalence naopak klesá. Mezi sousedy je obraz pestrý: polské školní vzorky patří k evropské špičce, slovenské jsou výrazně nižší.\n\nStrukturálně jde o selhání regulace, která nedrží krok s produktem. Evropská směrnice TPD2 z roku 2014 vznikla pro dobu, kdy e-cigareta byla nika pro dospělé kuřáky hledající alternativu. Jednorázové vapes s příchutěmi bubblegum, mango a meloun, marketing přes influencery na TikToku a symbolická věková kontrola při online nákupu jsou ale navrženy pro teenagery, kteří dosud nekouřili. E-liquidy a nově nikotinové sáčky jsou navíc zdaněny výrazně mírněji než tabák, takže cenová bariéra — nejúčinnější nástroj proti užívání u mládeže — prakticky neexistuje.\n\nPolitická páka je konkrétní a rozdělená mezi několik resortů. Ministerstvo zdravotnictví připravuje zákaz charakteristických příchutí e-cigaret a transpozici chystané směrnice TPD3; Ministerstvo financí drží klíč ke zdanění e-liquidů a nikotinových sáčků na úroveň blízkou tabáku; Česká obchodní inspekce má pravomoc k mystery shoppingu a pokutám za prodej nezletilým, ale bez kapacity na systematické testování. A národní program „Škola bez nikotinu\" (SZÚ, 2023) existuje, je ale dobrovolný a bez plošné evaluace. Zpomalá regulace znamená, že každý ročník, který projde školou v době ochucených jednorázových vapes, si odnese vyšší podíl budoucích závislých na nikotinu.",
+  "framework": "hspa",
+  "dimension": "zdravi",
+  "verification_status": "preliminary"
+}

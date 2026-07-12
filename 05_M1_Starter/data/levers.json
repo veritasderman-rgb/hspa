@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-10T00:00:00Z",
+  "_doc": "Páky pro Simulátor pák (simulator.html). Kvantitativní vrstva nad Modelem systému. VŠE je ilustrativní modelový odhad dle citované evidence, NE predikce. Každý efekt cílí na existující indikátor v data/indicators.json a nese zdroj. Typy efektu: 'elasticity' (coef_per_unit × posun páky = relativní % změna hodnoty indikátoru) a 'directional' (polarity down/up + strength weak/medium/strong, bez čísla). Viz PLAN-SIMULATOR-PAK.md.",
+  "levers": [
+    {
+      "id": "tabakova_dan",
+      "label": "Tabáková daň (cena cigaret)",
+      "group": "Prevence",
+      "desc": "Zvýšení spotřební daně z cigaret zdražuje krabičku a tlačí prevalenci kouření u mladistvých dolů. ČR má tabákovou daň pod britskou/irskou úrovní.",
+      "control": { "type": "slider", "unit": "% zvýšení ceny", "min": 0, "max": 50, "step": 5, "default": 0 },
+      "system_model_node": "kuractvi",
+      "effects": [
+        {
+          "indicator": "prevalence_koureni_adolescenti",
+          "kind": "elasticity",
+          "coef_per_unit": -0.4,
+          "note": "+10 % ceny → −4 % prevalence u mladistvých (cenová elasticita −0,4).",
+          "confidence": "medium",
+          "source": "WHO / Chaloupka et al. (modelovací studie); clanek-koureni-adolescenti.html"
+        }
+      ]
+    },
+    {
+      "id": "osetrovatelsky_pomer",
+      "label": "Ošetřovatelský poměr (méně pacientů na sestru)",
+      "group": "Struktury",
+      "desc": "Zlepšení poměru sestra–pacient (méně pacientů na jednu sestru) prokazatelně snižuje nemocniční mortalitu. Zde páka udává, o kolik pacientů se poměr zlepší.",
+      "control": { "type": "slider", "unit": "o kolik pacientů/sestru méně", "min": 0, "max": 3, "step": 1, "default": 0 },
+      "system_model_node": "nelekarsky_personal",
+      "effects": [
+        {
+          "indicator": "mortalita_inhosp_cmp",
+          "kind": "elasticity",
+          "coef_per_unit": -7,
+          "note": "Každý pacient navíc na sestru zvyšuje 30denní mortalitu ~7 %; zlepšení poměru ji symetricky snižuje.",
+          "confidence": "medium",
+          "source": "Aiken et al., The Lancet 2014 (aktualizace 2022); clanek-osetrovatelstvi-generacni-propast-2026.html"
+        }
+      ]
+    },
+    {
+      "id": "dan_z_cukru",
+      "label": "Daň z cukru (sugar levy)",
+      "group": "Prevence",
+      "desc": "Daň z nápojů s přidaným cukrem britského typu (daní výrobce → reformulace, ne zdražení spotřebiteli). ČR ji nemá.",
+      "control": { "type": "toggle", "unit": "zavedeno", "default": 0 },
+      "system_model_node": "vyziva_obezita",
+      "effects": [
+        {
+          "indicator": "deti_obezita_cosi",
+          "kind": "directional",
+          "polarity": "down",
+          "strength": "medium",
+          "note": "Britská Soft Drinks Industry Levy: 50 % výrobců reformulovalo, příjem cukru z nápojů u dětí −10 %. Dopad na prevalenci obezity je pozvolný.",
+          "confidence": "medium",
+          "source": "Public Health England 2020; clanek-deti-obezita-cosi.html"
+        }
+      ]
+    },
+    {
+      "id": "adresne_zvani_screening",
+      "label": "Adresné zvaní na kolorektální screening",
+      "group": "Procesy",
+      "desc": "Aktivní zvaní (ne jen dopis) zvyšuje účast na kolorektálním screeningu; vyšší účast → časnější stadium → lepší přežití.",
+      "control": { "type": "toggle", "unit": "posíleno", "default": 0 },
+      "system_model_node": "screening_prevence",
+      "effects": [
+        {
+          "indicator": "screening_kolorektalni",
+          "kind": "directional",
+          "polarity": "up",
+          "strength": "medium",
+          "note": "Účast ČR jen 31,1 % vs. OECD 42 %; adresné zvaní ji v jiných systémech zvedá.",
+          "confidence": "medium",
+          "source": "OECD; clanek-prezit-rakoviny.html, clanek-mamograf-rakovina-prsu.html"
+        },
+        {
+          "indicator": "prezit_rakoviny_5let",
+          "kind": "directional",
+          "polarity": "up",
+          "strength": "medium",
+          "note": "Vyšší záchyt v časném stadiu zlepšuje pětileté přežití (kolorektál).",
+          "confidence": "medium",
+          "source": "CONCORD-3 (Lancet 2018); clanek-prezit-rakoviny.html"
+        }
+      ]
+    },
+    {
+      "id": "qof_prevence",
+      "label": "Výkonová bonifikace praktiků (QOF-typ)",
+      "group": "Procesy",
+      "desc": "Bonus praktikům za měřitelné výsledky dispenzární péče a účast na prevenci (britský QOF). Zvyšuje pokrytí prevencí a snižuje odvratitelné hospitalizace.",
+      "control": { "type": "toggle", "unit": "zavedeno", "default": 0 },
+      "system_model_node": "primarni_pece",
+      "effects": [
+        {
+          "indicator": "prohlidka_prakticky_lekar",
+          "kind": "directional",
+          "polarity": "up",
+          "strength": "medium",
+          "note": "Aktivní zvaní + bonifikace zvyšují účast na preventivní prohlídce (dnes 52,6 %).",
+          "confidence": "medium",
+          "source": "NHS QOF / NHS Health Check; clanek-preventivni-prohlidka.html"
+        },
+        {
+          "indicator": "hospitalizace_acsc",
+          "kind": "directional",
+          "polarity": "down",
+          "strength": "medium",
+          "note": "Silnější dispenzár chroniků snižuje odvratitelné hospitalizace (dnes 592 vs. OECD 473).",
+          "confidence": "medium",
+          "source": "NHS QOF (BMJ/BJGP); clanek-vyhnutelne-hospitalizace.html"
+        }
+      ]
+    },
+    {
+      "id": "posun_luzkova_ambulantni",
+      "label": "Posun péče z lůžek do ambulance",
+      "group": "Struktury",
+      "desc": "Přesun těžiště z akutní lůžkové péče do ambulantní a jednodenní chirurgie. ČR dává do lůžek 55,9 % úhrad vs. OECD ~30 %.",
+      "control": { "type": "toggle", "unit": "reforma spuštěna", "default": 0 },
+      "system_model_node": "financovani_systemu",
+      "effects": [
+        {
+          "indicator": "podil_vydaje_luzkova_pece",
+          "kind": "directional",
+          "polarity": "down",
+          "strength": "strong",
+          "note": "Institucionalizace jednodenní chirurgie a silnější primární péče snižuje podíl výdajů na lůžkovou péči.",
+          "confidence": "low",
+          "source": "clanek-financovani-segmenty-2026.html, clanek-hospitalizujeme-nejvic.html"
+        }
+      ]
+    }
+  ]
+}

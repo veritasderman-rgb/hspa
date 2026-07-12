@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 <!--
 audit:
-  last_reviewed: 2026-05-16
+  last_reviewed: 2026-07-10
   reviewer: claude-code-agent
   status: review-pending
   priority: P1 (legislativní aktualita — senátní novela 372/2011 Sb. v projednávání; první čtení 11. 2. 2026, výborové projednávání + úprava textu v březnu 2026, kandidát k projednání na plénu Senátu jaro/léto 2026)
@@ -27,6 +27,9 @@ audit:
     update_2026-06-05 (dle issue #510): Doplněn aktualizační aside v těle článku — výbor Senátu pro zdravotnictví doporučil plénu novelu schválit ve znění pozměňovacích návrhů (4 pro, 0 proti, 2 zdrželi), plénum rozhodne během léta 2026, navržená účinnost 1. ledna 2029 (čas na ustavení etických komisí), procesní pojistka druhého nezávislého lékaře. Zdroj: Zdravotnický deník 6/2026 (verbatim „navrhovaná účinnost… je stanovena na 1. ledna 2029"). POZN.: issue #510 uvádělo účinnost 1. 1. 2028 — citovaný primární mediální zdroj však uvádí 2029; použito 2029. Primární zdroj senat.cz (číslo tisku, přesné usnesení) zůstává k ověření — v běžícím prostředí blokován. Audit-status ponechán verified (sourcing přes ZD 6/2026).
     update_2026-06-30 (konzistence se statusem Strategie): Vláda 29. 6. 2026 schválila Strategii rozvoje paliativní péče do 2035 (TZ MZ ČR, ověřeno přímým fetchem) — datový záznam strategie_paliativni_2035 v strategies.json přepnut proposed→active. Opraveny dvě viditelné poznámky ke zdrojům (databox + sekce Zdroje), které tvrdily, že „Strategie zatím není veřejně schválena / zveřejněna" — to je po 29. 6. nepřesné; nově: Strategii schválila vláda 29. 6. 2026, navazující implementační plány (dospělí + děti) se dokončují do 2027. Kapacitní čísla v článku nadále pocházejí z analytické části k 30. 4. 2025 (beze změny). Toto NEní senátní novela paliativní péče (samostatný legislativní proces, status v článku beze změny).
     nightly_scan 2026-07-06 (noční rutina, publikační hygiena): z viditelné poznámky pod článkem odstraněna věta o revizním procesu ("Text byl publikován 15. 5. 2026 a 16. 5. 2026 prošel auditní revizí; podrobnosti viz banner v záhlaví") — redakční proces + odkaz na neexistující banner nepatří do publikovaného textu (CLAUDE.md publikační hygiena). Zdrojové a datové caveaty (Senát, kapacitní data Strategie 2035, ČSPM odhady, schválení vlády 29. 6. 2026) zachovány. Beze změny čísel a tvrzení.
+    nightly_review 2026-07-10 (noční rutina, FÁZE 3 — kontrola aktuálnosti): doplněn dosud chybějící legislativní kontext — kromě zdravotního výboru (doporučil schválit 4:0:2) senátní SOCIÁLNÍ výbor (výbor pro sociální politiku) novelu na červnovém jednání ZAMÍTL (zdroj: Zdravotnický deník, 10. 6. 2026 — socialni-vybor-senat-paliativni-pece; publikováno 10. 6.). Aktualizační aside dosud uváděl jen kladné doporučení zdravotního výboru, což dávalo jednostranný obraz podpory výborů před hlasováním pléna. Ověřeno WebSearch + WebFetch (ZD 10. 6. 2026); primární zdroj senat.cz při zpracování nedostupný (HTTP 503) — konkrétní usnesení a poměr hlasů sociálního výboru zůstávají k ověření na senat.cz. Ověřeno též, že senátní novela zatím NEBYLA doručena do Poslanecké sněmovny (PSP tisky k zákonu 372/2011 neobsahují tuto předlohu — WebFetch psp.cz 2026-07-10); formulace „putuje do Sněmovny" upravena na „do Sněmovny zatím doručena nebyla". Beze změny čísel a stávajících tvrzení; přidán zdroj ZD (sociální výbor) do sekce Zdroje. audit-status verified → review-pending (čeká na ruční schválení). published zůstává true.
+    av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-counter-grid kapacitní mezera (240 lékařů / 524 lůžek / 11 ze 14 krajů MSPP / 32 % přístup), av-bar-compare hospicová lůžka (EAPC 8–10 / WHO 5 / ČR 5 na 100k), av-data-table 2 mezinárodní modely (BE/NL vs DE/AT/FR). Všechna čísla 1:1 z textu, text nezměněn (aditivní), claims nedotčeny."
+    av_sweep2_codex_2026-07-10: "Codex P2 (#770): Rakousko chybně klasifikováno jako 'ne' u asist. sebevraždy — Sterbeverfügungsgesetz (od 1. 1. 2022) ji povoluje (eutanazie zůstává zakázána). Faktická oprava: (1) řádek Rakousko v av-data-table upřesněn na 'asist. sebevražda ano (2022), eutanazie ne' + zdroj Sterbeverfügungsgesetz; (2) minimálně opravena i věta v těle § Mezinárodní srovnání (vyčleněno Rakousko z 'Německo, Rakousko a Francie ... nemají povoleno'), aby tělo a tabulka nekolidovaly a nešířily faktickou chybu. Věta na ř. 346 ('upravily sedaci, aniž by se přiblížily legalizaci eutanazie') zůstává korektní (asist. sebevražda ≠ eutanazie). Claims quotes nedotčeny."
 -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="Paliativní péče míří do zákona. Co skutečně mění senátní novela a co (ne)může sama o sobě vyřešit">
@@ -34,7 +37,7 @@ audit:
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-01">
 <meta property="article:section" content="Legislativní iniciativa">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -67,7 +70,7 @@ audit:
         "@id": "https://skorezdravotnictvi.cz/clanek-novela-paliativni-pece"
       },
       "datePublished": "2026-06-01",
-      "dateModified": "2026-05-16",
+      "dateModified": "2026-07-10",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -161,9 +164,9 @@ audit:
 
       <aside class="article-callout" aria-label="Aktualizace k legislativnímu vývoji" style="margin:0 0 24px 0;padding:16px 18px;border:1px solid var(--ink);border-left:4px solid var(--ink);background:var(--paper);font-family:var(--sans);font-size:14px;line-height:1.6;">
         <p style="margin:0 0 6px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink);">Aktualizace · 5. června 2026</p>
-        <p style="margin:0 0 8px 0;">Výbor Senátu pro zdravotnictví na začátku června 2026 přijal usnesení, kterým <strong>doporučil plénu novelu schválit ve znění pozměňovacích návrhů</strong> (poměr hlasů 4 pro, nikdo proti, 2 se zdrželi). O osudu novely má <strong>plénum Senátu rozhodovat během léta 2026</strong>; pokud ji horní komora schválí, putuje do Sněmovny.</p>
+        <p style="margin:0 0 8px 0;">Výbor Senátu pro zdravotnictví na začátku června 2026 přijal usnesení, kterým <strong>doporučil plénu novelu schválit ve znění pozměňovacích návrhů</strong> (poměr hlasů 4 pro, nikdo proti, 2 se zdrželi). Postoje senátních výborů se ale rozešly: <strong>senátní sociální výbor</strong> (výbor pro sociální politiku) novelu na svém červnovém jednání <strong>zamítl</strong> (Zdravotnický deník, 10. 6. 2026). O osudu novely má <strong>plénum Senátu rozhodovat během léta 2026</strong>; do Poslanecké sněmovny předloha zatím doručena nebyla.</p>
         <p style="margin:0 0 8px 0;">Upravený text počítá s <strong>nabytím účinnosti od 1. ledna 2029</strong> — odklad má dát zařízením čas zejména na ustavení etických komisí. Novela zároveň zpřísňuje procesní pojistku: rozhodnutí o nezahájení nebo ukončení život udržující léčby či o kontinuální hluboké paliativní sedaci <strong>nesmí učinit ošetřující lékař sám</strong> — povinně se na něm musí podílet další nezávislý lékař mimo ošetřující tým; při sporu s pacientem nebo rodinou se věc eskaluje k širšímu posouzení a v krajním případě k soudu. Upravený text také přejmenoval klíčový pojem z původně zvažované „neadekvátní léčby" na přesnější „nepřiměřenou léčbu".</p>
-        <p style="margin:0;font-size:13px;color:var(--ink-mut);">Zdroj: Zdravotnický deník, 6/2026. Aktuální stav senátního tisku a přesné usnesení výboru doporučujeme ověřit přímo na webu Senátu PČR (senat.cz) — primární zdroj byl při zpracování nedostupný.</p>
+        <p style="margin:0;font-size:13px;color:var(--ink-mut);">Zdroj: Zdravotnický deník, 6/2026 (usnesení zdravotního výboru; zamítnutí sociálním výborem 10. 6. 2026). Aktuální stav senátního tisku a přesná usnesení výborů doporučujeme ověřit přímo na webu Senátu PČR (senat.cz) — primární zdroj byl při zpracování nedostupný.</p>
       </aside>
 
       <p class="article-lead">
@@ -253,6 +256,33 @@ audit:
         Zákon může zakotvit nárok; nárok ale nelze uplatnit, pokud poskytovatel neexistuje. A v paliativní péči je propast mezi zákonným nárokem a reálnou kapacitou strukturálním problémem.
       </p>
 
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Propast mezi nárokem a kapacitou — paliativní péče v číslech (2023–2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="240">240</span>
+            <span class="av-counter-label">atestovaných paliativních lékařů</span>
+            <span class="av-counter-foot">145 + 95; přírůstek jen 15–20 atestací/rok</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="524">524</span>
+            <span class="av-counter-label">hospicových lůžek (25 hospiců)</span>
+            <span class="av-counter-foot">≈ 5 / 100 000 obyv. — plní WHO, ne EAPC</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter">11 / 14</span>
+            <span class="av-counter-label">krajů s mobilní paliativní péčí (MSPP)</span>
+            <span class="av-counter-foot">3 kraje bez akreditovaného poskytovatele nebo jen v krajském městě</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="32" data-prefix="jen " data-suffix=" %">jen 32 %</span>
+            <span class="av-counter-label">pacientů má přístup ke specializované paliativní péči</span>
+            <span class="av-counter-foot">potřebuje ji 70–80 tis. ročně, dostane se k ní 30–35 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Strategie rozvoje paliativní péče v ČR do 2035 (MZ ČR, verze 30. 4. 2025, data k 2023); ČSPM.</p>
+      </figure>
+
       <p>
         Analytická část Strategie rozvoje paliativní péče v ČR do roku 2035, publikovaná Ministerstvem zdravotnictví ve verzi z 30. dubna 2025, dokumentuje, jak úzký je dnes specialistický základ. Ke stavu z listopadu 2023 měla ČR <strong>240 atestovaných lékařů</strong> (145 s atestací z paliativní medicíny + 95 s atestací paliativní medicína a léčba bolesti), 32 lékařů v atestační přípravě a roční přírůstek 15–20 atestací ročně. Paliativní medicína je v Česku relativně nový atestační obor — specializační vzdělávání běží od roku 2011 v rámci nástavbového oboru. Tento přírůstek ani vzdaleně nepokryje potřebu, kterou populace s rostoucím počtem chronicky nemocných seniorů v příští dekádě vygeneruje (Strategie pracuje s predikcí až 140 tis. úmrtí ročně, z toho zhruba 21 tis. v péči mobilních specializovaných týmů). Konkrétní cílový počet paliativních lékařů do roku 2035 analytická část Strategie nestanovuje — to bude úkolem akčního plánu, který má teprve vzniknout.
       </p>
@@ -268,6 +298,16 @@ audit:
       <p>
         Tato čísla je nutno číst jako systémový, nikoliv jen finanční problém. Peníze — resp. zákonný nárok na úhradu — jsou podmínkou nutnou, ne dostatečnou. Bez lékařů, bez sester s paliativní atestací, bez mobilních týmů a bez lůžkové kapacity v regionech zůstane zákonný nárok na papíře.
       </p>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Hospicová lůžka na 100 000 obyvatel — ČR vs. mezinárodní benchmarky</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="10">
+          <li class="av-bar-row av-bar-row-good" data-value="9" data-display="8–10" data-label="EAPC benchmark (Delphi 2022)" data-note="ČR by potřebovala zhruba dvojnásobek dnešní kapacity"></li>
+          <li class="av-bar-row" data-value="5" data-label="WHO benchmark"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="5" data-label="Česko" data-note="524 lůžek, ale soustředěná v Praze a krajských městech"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO; EAPC Delphi study 2022; Strategie MZ ČR 2025.</p>
+      </figure>
 
       <h3>Kdo to platí dnes — úhradová praxe, kódy MSPP a pojišťovny</h3>
 
@@ -322,8 +362,57 @@ audit:
       </p>
 
       <p>
-        Německo, Rakousko a Francie jsou zeměmi, které eutanazii ani asistovanou sebevraždu (s nuancemi po nálezu BVerfG 2020) nemají zákonně povoleny, ale zákonně upravily závaznost dříve vyslovených přání a rámec klinicky přijímané hluboké sedace v závěru života. Německý § 1901a BGB (Patientenverfügung, v účinnosti od 1. září 2009; od 1. ledna 2023 v rámci reformy opatrovnického práva přečíslován na § 1827 BGB) zavedl písemnou formu závazné předem vyjádřené vůle pacienta. § 217 StGB (zákaz „obchodně organizované" pomoci při sebeusmrcení, v účinnosti od prosince 2015) Spolkový ústavní soud rozsudkem z 26. února 2020 zrušil jako protiústavní — ilustrace toho, že legislativní cesty v této oblasti jsou citlivé. Francie přijala 2. února 2016 zákon Claeys-Leonetti, který zakotvuje právo na „hlubokou a kontinuální sedaci" pro terminálně nemocné pacienty s nevratnou prognózou blízkého úmrtí; zákon je považován za model, který senátní novela Procházkové do značné míry následuje.
+        Německo a Francie jsou zeměmi, které eutanazii ani asistovanou sebevraždu (s nuancemi po nálezu BVerfG 2020) nemají zákonně povoleny, ale zákonně upravily závaznost dříve vyslovených přání a rámec klinicky přijímané hluboké sedace v závěru života. Rakousko od 1. ledna 2022 zákonem Sterbeverfügungsgesetz povoluje asistovanou sebevraždu (eutanazie zůstává zakázána) a rovněž upravuje sedaci v závěru života. Německý § 1901a BGB (Patientenverfügung, v účinnosti od 1. září 2009; od 1. ledna 2023 v rámci reformy opatrovnického práva přečíslován na § 1827 BGB) zavedl písemnou formu závazné předem vyjádřené vůle pacienta. § 217 StGB (zákaz „obchodně organizované" pomoci při sebeusmrcení, v účinnosti od prosince 2015) Spolkový ústavní soud rozsudkem z 26. února 2020 zrušil jako protiústavní — ilustrace toho, že legislativní cesty v této oblasti jsou citlivé. Francie přijala 2. února 2016 zákon Claeys-Leonetti, který zakotvuje právo na „hlubokou a kontinuální sedaci" pro terminálně nemocné pacienty s nevratnou prognózou blízkého úmrtí; zákon je považován za model, který senátní novela Procházkové do značné míry následuje.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Dva modely, ve kterých se pohybuje česká debata</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col">Eutanazie / asist. sebevražda</th>
+                <th scope="col">Zákonná úprava sedace / DVP</th>
+                <th scope="col">Klíčový předpis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Belgie</th>
+                <td class="av-mut">ano</td>
+                <td>paliativní péče jako právo; sedace prof. protokoly</td>
+                <td>zákony z 28. 5. + 14. 6. 2002 (jeden balíček)</td>
+              </tr>
+              <tr>
+                <th scope="row">Nizozemsko</th>
+                <td class="av-mut">ano</td>
+                <td>ano (tři odlišné instituty)</td>
+                <td>jedna z nejrozvinutějších paliativních péčí v EU</td>
+              </tr>
+              <tr>
+                <th scope="row">Německo</th>
+                <td>ne (§ 217 zrušen BVerfG 2020)</td>
+                <td>závazné DVP (Patientenverfügung)</td>
+                <td>§ 1901a → 1827 BGB (od 1. 9. 2009)</td>
+              </tr>
+              <tr>
+                <th scope="row">Rakousko</th>
+                <td class="av-mut">asist. sebevražda ano (2022), eutanazie ne</td>
+                <td>hluboká sedace v závěru života</td>
+                <td>Sterbeverfügungsgesetz (od 1. 1. 2022)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Francie</th>
+                <td>ne</td>
+                <td>právo na hlubokou a kontinuální sedaci</td>
+                <td>zákon Claeys-Leonetti (2. 2. 2016) — vzor pro ČR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> belgické zákony 2002; § 1827 BGB; BVerfG 26. 2. 2020; francouzský zákon Claeys-Leonetti 2016.</p>
+      </figure>
 
       <p>
         Pro českou situaci je relevantní francouzský model: zákon Claeys-Leonetti zakotvil právo na paliativní sedaci a dříve vyslovená přání v závaznějším formátu, aniž by otevřel debatu o eutanazii. Pět let po přijetí zákona francouzské ministerstvo zdravotnictví v hodnotící zprávě konstatovalo, že zákon je znám pouze třetině lékařů a méně než pětině veřejnosti — a že bez informační kampaně a vzdělávání nemocnic k reálné změně nedošlo. Tento nález je pro český kontext varovným signálem.
@@ -405,6 +494,7 @@ audit:
           <li><strong>Senát PČR — poslední projednávané tisky</strong> — přehled aktuálního legislativního stavu senátní novely. <a href="https://www.senat.cz/dokumenty/posledni_projednavane_tisky.php" target="_blank" rel="noopener">senat.cz ↗</a></li>
           <li><strong>Zdravotnický deník — novela paliativní péče (3/2026)</strong> — zpravodajství o úpravě textu Procházkovou v březnu 2026. <a href="https://www.zdravotnickydenik.cz/2026/03/novela-o-paliativni-peci-senatorka-ji-upravila/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
           <li><strong>Zdravotnický deník — výbor doporučil novelu schválit (6/2026)</strong> — usnesení výboru pro zdravotnictví (4 : 0 : 2), projednání pléna „během léta", navržená účinnost 1. 1. 2029, procesní pojistka druhého nezávislého lékaře. <a href="https://www.zdravotnickydenik.cz/2026/06/konec-marneho-utrpeni-na-pristrojich-senatori-posunuli-dal-zakon-o-dustojne-smrti/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
+          <li><strong>Zdravotnický deník — sociální výbor Senátu novelu odmítl (10. 6. 2026)</strong> — výbor pro sociální politiku novelu na svém červnovém jednání zamítl; postoje senátních výborů se tak rozešly (zdravotní výbor doporučil schválit, sociální výbor zamítl) před rozhodnutím pléna. <a href="https://www.zdravotnickydenik.cz/2026/06/socialni-vybor-senat-paliativni-pece/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">

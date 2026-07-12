@@ -5,12 +5,14 @@
   audit:
     last_reviewed: 2026-07-10
     reviewer: claude-code-agent
-    status: review-pending
-    reaudit_2026-07-10: "Fallback audit. Centrální ACSC 592/473 reověřeno proti OECD Health at a Glance 2025 (country profile Czechia) — OK. Opraven cross-file drift z auditu 2026-05-15: articles.json title+perex zaostávaly (580/480 → 592/473, 'Pět set osmdesát' → 'Téměř šest set'); JSON-LD headline/description a og:image:alt regenerovány z articles.json. Databox sladěn s živým kontraktem: prohlídka u praktika 48 % → 52,6 % (2023, ÚZIS live), míra hospitalizací 18 800 → 17 990/100k (2024, ÚZIS NRH live), prevalence diabetu zdroj IDF → EHIS·SZÚ (hodnota 9,5 % beze změny). Claims 04/07/08 synchronizovány s upraveným textem. Zdrojové odkazy live (OECD/NHS 403 = bot-block, ne dead link)."
+    status: verified
+    update_2026-07-09: "F1 dávkový plný audit. Jádrové ACSC hodnoty 592 (ČR) / 473 (OECD průměr) z OECD Health at a Glance 2025 (avoidable hospital admissions, 5 diagnóz 15+, age-sex standardizováno) — ponechány, ověřeny předchozím auditem 2026-05-15. REKONCILIACE DATABOXU S KONTRAKTEM: (1) prohlidka_prakticky_lekar mezitím zlivněn (ÚZIS/NZIP mikrodata PPS-08-01, verified 2026-06-10): 52,6 % (2023), článek stál na staré seed hodnotě 48 % — opraveno v těle i databoxu (52,6 % účast → téměř polovina neprojde, framing zachován). (2) hospitalizace_na_100k 18 800 → 17 990 (kontrakt 17 989,8, 2024). Ambulantní kontakty 11,2 vs. OECD 6,8 souhlasí s kontraktem. Metodické oddělení ACSC (OECD HCQI) vs. avoidable mortality (Eurostat) zachováno. Link-check: OECD odkazy 403 = bot-block (funkční v prohlížeči), digital.nhs.uk QOF 403 = bot-block. Status review-pending → verified (čísla srovnána s ověřeným kontraktem, metodika konzistentní)."
+    reaudit_2026-07-10: "Fallback audit (nezávislý na F1 z 2026-07-09, shodné závěry). Centrální ACSC 592/473 reověřeno proti OECD Health at a Glance 2025 (country profile Czechia) — OK. Opraven cross-file drift z auditu 2026-05-15: articles.json title+perex zaostávaly (580/480 → 592/473, 'Pět set osmdesát' → 'Téměř šest set'); JSON-LD headline/description a og:image:alt regenerovány z articles.json. Databox: prevalence diabetu zdroj IDF → EHIS·SZÚ (hodnota 9,5 % beze změny, vyhnutí cross-metodika páru); míra hospitalizací doplněn zdroj ÚZIS NRH. Zdrojové odkazy live (OECD/NHS 403 = bot-block, ne dead link)."
     unverified_claims_removed: 1
     primary_sources_added: 4
     visual_elements_added: 1
     notes: "Ověřeno proti OECD Health at a Glance 2025 (Avoidable hospital admissions, referenční rok 2021/2022). Centrální hodnoty 580 / 480 aktualizovány na 592 / 473 (Czechia / OECD průměr, OECD HAAG 2025). Title článku, og:title a article-title H2 aktualizovány z „Pět set osmdesát…" na „Téměř šest set…" pro konzistenci s revidovaným číslem 592 (Codex review #254). Opravena metodická chyba: 'OECD a Eurostat měří ACSC u pěti diagnóz' — Eurostat publikuje avoidable MORTALITY (Joint OECD/Eurostat list 2019), ne avoidable hospital admissions; ACSC je metodikou OECD HCQI (Definitions of Health Care Quality Indicators 2022). Smazán neověřitelný řádek z databoxu: 'Kontrolovaná hypertenze 68 % vs OECD 72 %' — primární domácí studie (Bruthans et al. 2019; Cifkova et al. Post-MONICA) ukazují kontrolu hypertenze v ČR cca 32-37 % (muži/ženy, kohorta 25-64), nikoli 68 %; OECD nepublikuje srovnatelný standardizovaný indikátor kontroly TK na úrovni populace. Opraven překlep v sekci 'Co s tím': 'desetitisíce úmrtí ročně' → 'desetitisíce hospitalizací ročně' (téma článku jsou hospitalizace). Aktualizovány zdrojové URL z generických OECD landing page na konkrétní HAAG 2025 sekci avoidable hospital admissions a HCQI metodické dokumenty. Doplněn caveat callout s vysvětlením OECD vs Eurostat metodiky. Status published → review-pending."
+    av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid + caveat callout): av-aside counter paradox ambulantních kontaktů (11,2 vs OECD 6,8, ale ACSC vysoké → koordinace, ne počet), av-data-table 4 mezinárodní modely (QOF / care groups / vårdcentral / telekonzultace). Čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +25,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-07">
 <meta property="article:section" content="Primární péče">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -192,8 +194,16 @@
       </p>
 
       <p>
-        Druhá část ACSC hospitalizací představuje pacienty, kteří dispenzární péčí <em>neprošli</em> — buď se k praktickému lékaři neregistrovali, nebo si dispenzární kontroly v souvislosti s chronickou diagnózou nestavěli jako prioritu. Pro tuto skupinu je akutní hospitalizace často první kontakt s diagnózou, který stav popíše. To je v ČR strukturální problém — registrovanost u praktika je formálně vysoká, ale aktivní dispenzární práce s chronickými pacienty je nerovnoměrná podle ordinace a regionu. Indikátor pokrytí preventivní prohlídkou (`prohlidka_prakticky_lekar`) v dashboardu udává jen 52,6 procenta účasti (2023) — což je další stránka stejného problému.
+        Druhá část ACSC hospitalizací představuje pacienty, kteří dispenzární péčí <em>neprošli</em> — buď se k praktickému lékaři neregistrovali, nebo si dispenzární kontroly v souvislosti s chronickou diagnózou nestavěli jako prioritu. Pro tuto skupinu je akutní hospitalizace často první kontakt s diagnózou, který stav popíše. To je v ČR strukturální problém — registrovanost u praktika je formálně vysoká, ale aktivní dispenzární práce s chronickými pacienty je nerovnoměrná podle ordinace a regionu. Indikátor pokrytí preventivní prohlídkou (`prohlidka_prakticky_lekar`) v dashboardu udává 52,6 procenta účasti (ÚZIS/NZIP, mikrodata PPS-08-01, 2023) — tedy téměř polovina dospělých preventivní prohlídkou u praktika ve dvouletém intervalu neprojde, což je další stránka stejného problému.
       </p>
+
+      <aside class="av-aside av-aside-left">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="11.2" data-decimals="1">11,2</span>
+          <span class="av-counter-label">ambulantních kontaktů na osobu a rok</span>
+          <span class="av-counter-foot">OECD 6,8 — hodně kontaktů, ale ACSC přesto vysoké: problém není počet, ale koordinace</span>
+        </div>
+      </aside>
 
       <h3>Tři vrstvy, kde Česko ztrácí</h3>
 
@@ -231,6 +241,46 @@
         <strong>Telekonzultace praktik–specialista</strong> je samostatný nástroj, který mezi primární péči a specializovanou medicínu přidává mezistupeň. V britském NHS, v některých nizozemských regionech a v severských zemích posílá praktik elektronický dotaz specialistovi (e-consultation, „Advice and Guidance"). Specialista odpoví do 24–72 hodin a zhruba v polovině případů osobní návštěva pacienta není potřebná. Pacient nemusí čekat týdny na termín, praktik dostane odbornou oporu v okamžiku, kdy ji potřebuje, a specializovaná kapacita se uvolňuje pro skutečně komplikované případy. V Česku je tento nástroj v dílčích pilotech, ale plošně nezavedený.
       </p>
 
+      <div class="av-aside-clear"></div>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Co dělají systémy, kde odvratitelné hospitalizace klesají</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Systém</th>
+                <th scope="col">Nástroj</th>
+                <th scope="col">Mechanismus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Velká Británie</th>
+                <td>QOF (od 2004)</td>
+                <td>bonus praktikům za měřitelné výsledky (HbA1c, kontrola TK); až ~20 % rozpočtu na výkon</td>
+              </tr>
+              <tr>
+                <th scope="row">Nizozemsko</th>
+                <td>care groups + bundled payment</td>
+                <td>paušál za chronika/rok → motivace udržet v ambulantní léčbě</td>
+              </tr>
+              <tr>
+                <th scope="row">Skandinávie</th>
+                <td>zdravotní centra primární péče</td>
+                <td>dispenzár u sestry s pravomocí titrovat medikaci dle protokolu</td>
+              </tr>
+              <tr>
+                <th scope="row">UK / NL / severské</th>
+                <td>telekonzultace praktik–specialista</td>
+                <td>e-consultation; ~½ případů bez osobní návštěvy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NHS QOF (BMJ/BJGP); nizozemské care groups; švédský vårdcentral / finský terveyskeskus. V ČR jen dílčí piloty.</p>
+      </figure>
+
       <h3>Co Česko realisticky může</h3>
 
       <p>
@@ -262,7 +312,7 @@
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
         <li><a href="indikator-hospitalizace_acsc.html"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 / 100 000 vs. OECD 473 (OECD HAAG 2025, ref. rok 2021/2022; proxy primární péče)</li>
-        <li><a href="indikator-prohlidka_prakticky_lekar.html"><strong>Pokrytí preventivní prohlídkou u praktika</strong></a> — 52,6 % (2023, ÚZIS · NZIS; zákon 48/1997, vyhl. 70/2012)</li>
+        <li><a href="indikator-prohlidka_prakticky_lekar.html"><strong>Pokrytí preventivní prohlídkou u praktika</strong></a> — 52,6 % (ÚZIS/NZIP mikrodata PPS-08-01, 2023; zákon 48/1997, vyhl. 70/2012)</li>
         <li><a href="indikator-ambulantni_kontakty_per_capita.html"><strong>Ambulantní kontakty</strong></a> — 11,2 / os./rok vs. OECD 6,8 (OECD HAAG 2023)</li>
         <li><a href="indikator-hospitalizace_na_100k.html"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 17 990 / 100 000 vs. OECD 14 600 (2024, ÚZIS NRH)</li>
         <li><a href="indikator-prevalence_diabetu.html"><strong>Prevalence diabetu</strong></a> — 9,5 % vs. OECD 7 % (EHIS · SZÚ)</li>

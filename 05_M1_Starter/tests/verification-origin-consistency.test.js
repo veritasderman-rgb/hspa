@@ -29,12 +29,15 @@ const ROOT = path.resolve(__dirname, '..');
 // má origin: seed. Nepřidávej sem nové indikátory jen proto, aby test prošel;
 // smysl seznamu je zachytit stav v okamžiku zavedení testu, ne skrývat nové
 // regrese. Nové nekonzistence (mimo tento seznam) MUSÍ test shodit.
+// F5 2026-07-10: všech 7 níže je stále origin:seed s verified kartou. „Zlivnění"
+// vyžaduje běh reálné ingest pipeline (fetcher + síť + cache + transform), který
+// se v sandboxu spouštět NESMÍ (traps.md — degraduje živá data). Odblokuje je
+// noční ingest / dávka F4, ne editace v PR. Seznam proto zůstává; test hlídá, že
+// neobsahuje mrtvé (už-ne-verified) položky.
 const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'absolventi_lekarstvi_per_100k',
   'cholesterol_prumer_dospeli',
   'konzumace_ovoce_zeleniny',
-  'nadeje_doziti_zdravi_65',
-  'perinatalni_umrtnost',
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
 ]);

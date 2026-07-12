@@ -139,6 +139,15 @@ function renderDetail(ind, card, regionDataset) {
       </a>
     ` : ''}
 
+    <a class="ind-deepdive-cta" href="diagnoza.html?id=${encodeURIComponent(ind.id)}">
+      <span class="ind-deepdive-cta-icon" aria-hidden="true">🗂</span>
+      <span class="ind-deepdive-cta-body">
+        <span class="ind-deepdive-cta-title">Otevřít spis Diagnózy</span>
+        <span class="ind-deepdive-cta-desc">Kompletní spis případu: příčiny, páky, peníze, politické sliby a co můžete udělat vy.</span>
+      </span>
+      <span class="ind-deepdive-cta-arrow" aria-hidden="true">→</span>
+    </a>
+
     ${card?.patient_story ? `
       <section class="ind-section ind-story-section">
         <h3>Proč na tom záleží</h3>
@@ -194,6 +203,11 @@ function renderDetail(ind, card, regionDataset) {
       </div>
     </section>
 
+    <section class="ind-section suv-section" id="suvSection" hidden aria-labelledby="suvHeading">
+      <h3 id="suvHeading">Souvislosti</h3>
+      <div id="suvBody"></div>
+    </section>
+
     <footer class="ind-detail-footer">
       <span>Zdroj hodnoty: <strong>${escapeHtml(ind.source?.name ?? '?')}</strong></span>
       ${ind.source?.url ? `<a href="${escapeHtml(ind.source.url)}" target="_blank" rel="noopener">primární zdroj ↗</a>` : ''}
@@ -229,6 +243,84 @@ function renderDetail(ind, card, regionDataset) {
   }
 
   loadRelated(ind.id);
+  loadSouvislosti(ind.id);
+}
+
+// ── Souvislosti — sdílená vrstva (data/souvislosti.json, build-time graf) ──
+
+const SUV_STAV_LABEL = {
+  nema_meritelny_obsah: 'Nemá měřitelný obsah',
+  ceka_na_data: 'Čeká na data',
+  plni_se: 'Plní se',
+  bez_pohybu: 'Bez pohybu',
+  opacny_smer: 'Opačný směr',
+  splneno: 'Splněno',
+};
+const SUV_POLARITY = { plus: '↑ posiluje', minus: '↓ tlumí' };
+
+/**
+ * Čisté sestavení HTML bloku Souvislosti z bucketu souvislosti.json.
+ * Vrací '' pokud bucket nenese žádnou zobrazitelnou vazbu (sekce se skryje).
+ * Články záměrně nevykresluje — ty pokrývá „Související obsah" výše.
+ */
+export function souvislostiHtml(bucket) {
+  if (!bucket) return '';
+  const parts = [];
+
+  const model = bucket.model;
+  if (model?.node || model?.incoming?.length || model?.outgoing?.length) {
+    const rows = [];
+    if (model.node) {
+      rows.push(`<p class="suv-node">V kauzální mapě systému patří k: <strong>${escapeHtml(model.node.label)}</strong> <span class="suv-tag">${escapeHtml(model.node.layer ?? '')}</span></p>`);
+    }
+    const edgeList = (edges, heading) => {
+      if (!edges?.length) return '';
+      const lis = edges.map(e =>
+        `<li title="${escapeHtml(e.mechanism ?? '')}"><span class="suv-pol suv-pol-${escapeHtml(e.polarity ?? 'plus')}">${SUV_POLARITY[e.polarity] ?? '→'}</span> ${escapeHtml(e.label)}</li>`
+      ).join('');
+      return `<h4>${heading}</h4><ul class="suv-list">${lis}</ul>`;
+    };
+    rows.push(edgeList(model.incoming, 'Co na něj působí'));
+    rows.push(edgeList(model.outgoing, 'Na co má vliv'));
+    rows.push(`<p class="suv-more"><a href="model-systemu.html">Otevřít kauzální mapu systému →</a></p>`);
+    parts.push(`<div class="suv-group">${rows.join('')}</div>`);
+  }
+
+  if (bucket.legislativa?.length) {
+    const lis = bucket.legislativa.map(l =>
+      `<li>${escapeHtml(l.title ?? l.nazev ?? l.id)} <span class="suv-tag">${escapeHtml(l.phase ?? l.stav ?? '')}</span></li>`
+    ).join('');
+    parts.push(`<div class="suv-group"><h4>Legislativa v běhu</h4><ul class="suv-list">${lis}</ul><p class="suv-more"><a href="legislativa.html">Legislativní radar →</a></p></div>`);
+  }
+
+  const bar = bucket.barometr;
+  if (bar?.commitments?.length || bar?.statements?.length) {
+    const lis = (bar.commitments ?? []).map(c =>
+      `<li>Závazek vlády (${escapeHtml(c.oblast ?? '')}) <span class="suv-tag suv-stav-${escapeHtml(c.stav ?? '')}">${SUV_STAV_LABEL[c.stav] ?? escapeHtml(c.stav ?? '')}</span></li>`
+    ).join('');
+    const stCount = (bar.statements ?? []).length;
+    const stLine = stCount ? `<p class="suv-note">${stCount}× výrok v Ověřovně se opírá o tento indikátor.</p>` : '';
+    parts.push(`<div class="suv-group"><h4>Sliby a výroky, které na něj míří</h4>${lis ? `<ul class="suv-list">${lis}</ul>` : ''}${stLine}<p class="suv-more"><a href="barometr.html">Barometr politických prohlášení →</a></p></div>`);
+  }
+
+  return parts.filter(Boolean).join('');
+}
+
+/** Načte data/souvislosti.json a vykreslí sekci; bez vazeb zůstává skrytá. */
+async function loadSouvislosti(id) {
+  try {
+    const res = await fetch('data/souvislosti.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    const bucket = data?.indicators?.[id];
+    const html = souvislostiHtml(bucket);
+    if (!html) return;
+    const section = document.getElementById('suvSection');
+    const body = document.getElementById('suvBody');
+    if (!section || !body) return;
+    body.innerHTML = html;
+    section.hidden = false;
+  } catch { /* souvislosti jsou doplněk — selhání nesmí shodit detail */ }
 }
 
 /**

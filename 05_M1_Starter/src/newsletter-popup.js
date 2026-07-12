@@ -1,7 +1,7 @@
 // Newsletter popup — nenápadná rohová karta vpravo dole, která se vysune
-// po doscrollování 55 % stránky. Reuse Brevo endpointu z footeru
+// po ~10 sekundách strávených na stránce. Reuse Brevo endpointu z footeru
 // (/api/subscribe, viz newsletter-signup.js).
-// Návrh viz BACKLOG B-39: scroll trigger, rohová karta, všechny stránky,
+// Návrh viz BACKLOG B-39: časový trigger, rohová karta, všechny stránky,
 // návrat po 30 dnech, jedno zobrazení na návštěvu.
 
 import { submitNewsletterSignup } from './newsletter-signup.js';
@@ -9,7 +9,7 @@ import { submitNewsletterSignup } from './newsletter-signup.js';
 const STORAGE_KEY = 'zdrave-cesko/nl-popup';
 const SESSION_KEY = 'zdrave-cesko/nl-popup-session';
 const DISMISS_DAYS = 30;
-const SCROLL_TRIGGER = 0.55;
+const SHOW_DELAY_MS = 10000; // po ~10 s na stránce nabídneme newsletter
 
 function readState() {
   try {
@@ -74,8 +74,9 @@ function footerNewsletterVisible() {
 }
 
 /**
- * Inicializuje popup: navěsí scroll listener, který po doscrollování
- * SCROLL_TRIGGER vykreslí kartu. Bezpečné pro opakované volání i SSR.
+ * Inicializuje popup: po ~10 s strávených na stránce vysune kartu. Když
+ * uživatel v tu chvíli právě vidí footer formulář, popup se nezobrazí
+ * (duplicita). Bezpečné pro opakované volání i SSR.
  */
 export function initNewsletterPopup() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
@@ -83,28 +84,13 @@ export function initNewsletterPopup() {
   window.__nlPopupInit = true;
   if (!shouldShowPopup(readState(), Date.now(), readSession())) return;
 
-  let armed = true;
-  const onScroll = () => {
-    if (!armed) return;
-    const doc = document.documentElement;
-    const scrollable = doc.scrollHeight - window.innerHeight;
-    if (scrollable < 200) return; // příliš krátká stránka — netriggerovat
-    const ratio = (window.scrollY || doc.scrollTop || 0) / scrollable;
-    if (ratio >= SCROLL_TRIGGER) {
-      // Uživatel u patičky vidí stejný formulář inline — popup by ho jen
-      // překryl. Doscrolloval až sem, takže nabídku už zaregistroval; pro
-      // tuto stránku trigger zcela odzbrojíme.
-      if (footerNewsletterVisible()) {
-        armed = false;
-        window.removeEventListener('scroll', onScroll);
-        return;
-      }
-      armed = false;
-      window.removeEventListener('scroll', onScroll);
-      showPopup();
-    }
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.setTimeout(() => {
+    if (!shouldShowPopup(readState(), Date.now(), readSession())) return;
+    // Uživatel právě u patičky vidí stejný formulář inline — popup by ho jen
+    // překryl. Nabídku už tedy zaregistroval, tuto stránku přeskočíme.
+    if (footerNewsletterVisible()) return;
+    showPopup();
+  }, SHOW_DELAY_MS);
 }
 
 function showPopup() {

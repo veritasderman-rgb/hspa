@@ -23,7 +23,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | JSON schémata všech datasetů | [`docs/data-model.md`](docs/data-model.md) |
 | Sitemap, per-page mapa JS modulů | [`docs/site-architecture.md`](docs/site-architecture.md) |
 | Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
-| Backlog, status auditu | [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md), [`05_M1_Starter/STATUS_AUDIT_*.md`](05_M1_Starter/) |
+| Backlog, status auditu | [`BACKLOG.md`](BACKLOG.md), [`STATUS_AUDIT_*.md`](.) |
 | Denní rutina cronu | [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) |
 
 ---
@@ -46,7 +46,7 @@ Veškerý vývoj probíhá v **`05_M1_Starter/`**. Ostatní adresáře jsou podk
 ```bash
 cd 05_M1_Starter
 npm install
-npm test          # 672 testů, 0 failures
+npm test          # 731 testů, 0 failures
 npm run serve     # http://localhost:8080
 ```
 
@@ -116,7 +116,7 @@ git push -u origin claude/<branch>
 │   ├── site-stats.js           ← Statistika hodnocení článků a pokrytí
 │   ├── analytics.js            ← Plausible loader
 │   ├── schema.js               ← JSON-LD structured data
-│   └── styles.css              ← Veškeré CSS (~9 400 LOC, print, a11y; dark mode zatím není)
+│   └── styles.css              ← Veškeré CSS (~9 400 LOC, print, a11y, dark mode — tokenový přepínač)
 │       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
@@ -409,9 +409,9 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
 - [`05_M1_Starter/PLAN-SYSTEM-MODEL.md`](05_M1_Starter/PLAN-SYSTEM-MODEL.md) — plán stránky Model systému (`model-systemu.html` + `data/system-model.json`): kauzální graf pák a vazeb
 - [`05_M1_Starter/PLAN-CLAIMS.md`](05_M1_Starter/PLAN-CLAIMS.md) — plán registru tvrzení (`data/claims.json`): samo-verifikující se korpus, automatická detekce driftu
-- [`05_M1_Starter/BACKLOG.md`](05_M1_Starter/BACKLOG.md) — aktuální backlog
+- [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
-- [`05_M1_Starter/STATUS_AUDIT_2026-05-18.md`](05_M1_Starter/STATUS_AUDIT_2026-05-18.md) — historický audit stavu
+- [`STATUS_AUDIT_2026-05-18.md`](STATUS_AUDIT_2026-05-18.md) — historický audit stavu
 - [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
 - [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`
 - [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md) — sociální rutina (1×/den): doplňuje frontu Bufferu na 10 postů/kanál podle aktuálnosti; Buffer = zdroj pravdy

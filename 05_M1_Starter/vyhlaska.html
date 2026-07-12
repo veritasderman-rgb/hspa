@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Úhradová vyhláška: zahrajte si na ministra · HSPA Monitor</title>
+<meta name="description" content="Interaktivní hra: rozdělte růst úhrad mezi segmenty českého zdravotnictví jako ministr. Zástupci segmentů argumentují a vyjednávají — a když dostanou málo, eskalují. Modelová hra na doložených datech, ne predikce.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/vyhlaska" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/vyhlaska" data-seo-injected="1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Úhradová vyhláška</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero vh-hero">
+    <p class="ed-kicker">ÚHRADOVÁ VYHLÁŠKA · HRA</p>
+    <h1>Zahrajte si na ministra. Rozdělte 40 miliard — a ustůjte, co přijde</h1>
+    <p class="ed-lead">
+      Úhradová vyhláška nerozděluje celý rozpočet zdravotnictví — rozděluje
+      <strong>meziroční přírůstek</strong> nad setrvačnou základnou. Letos
+      systémem proteče zhruba <strong>563 miliard korun</strong>; vy teď držíte
+      tužku nad obálkou růstu pro <strong>17 segmentů péče</strong> podle
+      skutečného číselníku úhrad — od fakultních nemocnic přes praktiky
+      a zubaře až po záchranku. Zástupci segmentů vám řeknou, proč si zaslouží
+      víc — a když dostanou málo, <strong>nepodepíšou, nebo rovnou
+      eskalují</strong>. Přesně jako v reálném dohodovacím řízení, kde se pro
+      rok 2027 dohodlo 12 z 15 segmentů.
+    </p>
+    <p class="vh-disclaimer" role="note">
+      <strong>Modelová hra na doložených datech — ne predikce ani záznam reálných jednání.</strong>
+      Podíly segmentů (NRHZS 2023, datová podpora dohodovacího řízení ÚZIS),
+      letošní objem systému i nákladové trendy jsou doložené — zdroj u každého
+      čísla. Zástupci jsou typizované postavy a jejich požadavky jsou modelové —
+      ilustrují vyjednávací logiku, necitují konkrétní osoby ani asociace.
+    </p>
+  </section>
+
+  <section class="vh-section" aria-label="Obálka a presety">
+    <div class="vh-envelope" id="vhEnvelope">
+      <div class="vh-envelope-head">
+        <span class="vh-envelope-label">Rozděleno z obálky růstu</span>
+        <span class="vh-envelope-value" id="vhEnvelopeValue">0 / 40 mld Kč</span>
+      </div>
+      <div class="vh-envelope-bar" role="img" aria-label="Čerpání obálky růstu">
+        <div class="vh-envelope-fill" id="vhEnvelopeFill"></div>
+      </div>
+      <p class="vh-envelope-note" id="vhEnvelopeNote"></p>
+    </div>
+    <div class="vh-presets" id="vhPresets" role="group" aria-label="Přednastavené scénáře"></div>
+  </section>
+
+  <section class="vh-section" aria-label="Segmenty péče">
+    <div class="vh-layout">
+      <form class="vh-controls" id="vhControls" aria-label="Rozdělení růstu mezi segmenty">
+        <h2 class="vh-h">Segmenty a jejich zástupci</h2>
+        <div id="vhSegmentsList"></div>
+        <button type="reset" class="vh-reset" id="vhReset">Vynulovat vyhlášku</button>
+      </form>
+      <aside class="vh-results" id="vhResults" aria-live="polite" aria-label="Verdikt vaší vyhlášky">
+        <h2 class="vh-h">Vaše vyhláška</h2>
+        <div id="vhResultsList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="vh-section vh-method">
+    <details id="vhMethod">
+      <summary>Jak hra počítá (a co je modelové)</summary>
+      <p><strong>Doložené:</strong> úhrady po segmentech za poslední uzavřený
+      rok 2023 z datového souhrnu ÚZIS <em>OIS-11-24 — Náklady zdravotních
+      pojišťoven dle segmentů péče</em> (NRHZS, verze 2026-01) — součet
+      456,1&nbsp;mld bez dvojzápočtu „z&nbsp;toho" řádku centrových léků;
+      názvy a členění segmentů podle číselníku „Struktura nákladů na zdravotní
+      služby podle jednotlivých segmentů" (Metodika ZPP MZ&nbsp;ČR, ověřeno
+      v&nbsp;ZPP&nbsp;2026 ZPMV); letošní objem systému ~563&nbsp;mld
+      a rámec reálného DR&nbsp;2027 (12/15 dohod, +21&nbsp;mld platby státu).</p>
+      <p><strong>Škálování na letošek.</strong> Po segmentech existují uzavřená
+      data jen za rok 2023 — hra proto počítá cenu vaší vyhlášky z podílů 2023
+      aplikovaných na letošní objem 563&nbsp;mld (transparentní dopočet).
+      Od roku 2026 navíc přibyl nový segment „jednodenní péče" — v základně
+      2023 ještě neexistuje, proto nemá vlastní posuvník.</p>
+      <p><strong>Přepočet struktury výdajů je přesná matematika</strong> —
+      posunete peníze, podíl segmentu se přepočítá. <strong>Směrové
+      efekty</strong> na indikátory mají zdroj a aktivují se, když segment
+      posílíte nadprůměrně (plošný růst strukturu nemění).
+      <strong>Modelové:</strong> výše obálky, požadavky segmentů a reakce
+      zástupců — ilustrují logiku vyjednávání, nejsou citacemi. U segmentů,
+      kde evidence efektu chybí, to hra přizná. Reakce mají pět stupňů:
+      dáte-li segmentu výrazně víc, než žádá (≥ 2 p. b. nad požadavek),
+      slíbí <strong>rozšíření péče</strong> — delší ordinační hodiny, nové
+      kapacity či rychlejší vstup nových metod; směrem dolů eskalují přes
+      podpis s výhradami a „bez dohody" až po protest.</p>
+      <ul id="vhSources" class="vh-sources"></ul>
+    </details>
+  </section>
+
+  <section class="vh-section vh-context">
+    <h2>Souvislosti</h2>
+    <p>Jak reálné dohodovací řízení dopadlo, čtěte v článku
+    <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">Dohoda ve 12 z 15 segmentů</a>;
+    odkud se berou podíly segmentů, vysvětluje
+    <a href="clanek-financovani-segmenty-2026.html">Kam plyne 459 miliard</a>.
+    Datovou podporu vyjednávání najdete v modulu
+    <a href="dohodovaci-rizeni.html">Dohodovací řízení</a> a celkové toky peněz
+    na stránce <a href="financovani.html">Financování</a>.</p>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/vyhlaska.js"></script>
+</body>
+</html>

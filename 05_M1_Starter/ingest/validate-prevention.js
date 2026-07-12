@@ -58,6 +58,13 @@ for (const t of prev.themes) {
   if (!Array.isArray(t.try_this_week) || t.try_this_week.length < 3)
     errors.push(`${tag}: try_this_week must have ≥3 items (got ${t.try_this_week?.length ?? 0})`);
 
+  // PREV-PERSONA: životní fáze (persona filtr). Povinné, neprázdné, jen platné hodnoty.
+  const VALID_PHASES = ['mlada_rodina', 'dospeli_40', 'seniori_65'];
+  if (!Array.isArray(t.life_phases) || t.life_phases.length === 0)
+    errors.push(`${tag}: life_phases musí být neprázdné pole`);
+  else for (const ph of t.life_phases)
+    if (!VALID_PHASES.includes(ph)) errors.push(`${tag}: neplatná life_phase '${ph}'`);
+
   if (typeof t.what_we_know !== 'string' || t.what_we_know.length < 100)
     errors.push(`${tag}: what_we_know too short (${t.what_we_know?.length ?? 0} chars, min 100)`);
 

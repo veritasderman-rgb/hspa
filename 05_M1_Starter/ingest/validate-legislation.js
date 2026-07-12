@@ -18,6 +18,9 @@ export const REQUIRED_PLAN_META = ['usneseni', 'schvaleno', 'zdroj_nazev', 'zdro
 export const REQUIRED_PLAN_ITEM = ['id', 'nazev', 'popis', 'typ', 'plan_termin', 'stav'];
 export const VALID_PLAN_TYPES = ['ustavni_zakon', 'vecny_zamer', 'zakon', 'novela_zakona', 'narizeni_vlady', 'novela_narizeni', 'vyhlaska', 'novela_vyhlasky'];
 export const VALID_PLAN_STAV = ['nezahajeno', 'pripominkove_rizeni', 'vlada', 'parlament', 'sbirka', 'stazeno'];
+// Horizont plánu: aktuální rok vs. výhled 2027–2029 (příloha č. 2 usnesení).
+// Chybějící pole = '2026' (zpětná kompatibilita se staršími záznamy).
+export const VALID_PLAN_HORIZONT = ['2026', 'vyhled-2027-2029'];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -143,6 +146,7 @@ export function validatePlan(data, radarIds, errors) {
 
     if (item.typ && !VALID_PLAN_TYPES.includes(item.typ)) errors.push(`${tag}: invalid typ '${item.typ}'`);
     if (item.stav && !VALID_PLAN_STAV.includes(item.stav)) errors.push(`${tag}: invalid stav '${item.stav}'`);
+    if (item.horizont != null && !VALID_PLAN_HORIZONT.includes(item.horizont)) errors.push(`${tag}: invalid horizont '${item.horizont}'`);
 
     if (item.plan_termin != null && item.plan_termin !== '' && !MONTH_RE.test(item.plan_termin)) {
       errors.push(`${tag}: plan_termin '${item.plan_termin}' není YYYY-MM`);

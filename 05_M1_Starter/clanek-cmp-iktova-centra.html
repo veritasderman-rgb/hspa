@@ -13,6 +13,10 @@
     notes: "Fallback-audit nejstaršího needitovaného článku (chyběl audit blok). Nezávislá source-verification odhalila, že centrální KPI (in-hospital mortalita po CMP) byla zastaralá a metodicky neaktuální: článek uváděl 11,2 % (MKN-10 I60–I64, vč. hemoragických), ale indikátor mortalita_inhosp_cmp byl mezitím (a) zúžen na ischemickou CMP (MKN-10 I63) kvůli sladění s OECD ischemic benchmarkem a (b) aktualizován na vlnu NRH 2024 = 9,9 % (metodická karta verified 2026-06-01; cover_viz v articles.json už 9,9 nesl). Sjednoceno napříč souborem: titulek (Pětina víc → 9,9 % proti 7,7 v OECD), deck, og/twitter/JSON-LD, hero counter, funnel result + context, databox, metodické poznámky; gap +3,5 pp → +2,2 pp; MKN I60–I64 → I63. Reconcilovány i cross-ref hodnoty s verifikovanými sesterskými články: denní kuřáctví 22,6 → 16,4 % vs OECD 14,8 (clanek-koureni); spotřeba alkoholu v těle 11,2/9,8 → 14,4/8,9 (clanek-alkohol-spotreba, shoda s figure/databox); obezita 17/14,6 → 19,8/16,5 (Eurostat). OECD benchmark 7,7 % potvrzen z datového kontraktu (externí fetch OECD URL 403 anti-bot). DOI landmark studií (ECASS III, DAWN, DEFUSE-3, HERMES, Helsinki) ponechány. Otevřený bod mimo rozsah: AMI cross-ref 5,2 % odpovídá sesterskému clanek-akutni-infarkt (titulek), ale datový kontrakt mortalita_inhosp_ami = 4,57 % — ponecháno na 5,2 kvůli vnitřní konzistenci s odkazovaným článkem; clanek-akutni-infarkt potřebuje vlastní rekonciliaci. Status review-pending — headline-level změna čeká na ruční schválení redakce."
     update_2026-07-06: "U6 rychlý audit (doplnění audit-status do articles.json + link-check). Centrální čísla odpovídají datovému kontraktu (mortalita_inhosp_cmp 9,9 % vs. OECD 7,7 / EU 8,5, 2024). Link-check odhalil 2 mrtvé odkazy (HTTP 404): doi.org/10.1212/WNL.0b013e3182574d2c (DOI nenalezen — ověřit správnost citace landmark studie) a nzip.cz/clanek/188-cevni-mozkova-prihoda (stránka přesunuta). Dále 2 odkazy nedostupné ze sandboxu (qualityregistry.eu, strokeaudit.org — TLS/connection fail, může jít o blokaci proxy). Status review-pending → partial (známé otevřené body: mrtvé odkazy + neschválená headline změna z 2026-06-23). Opravu odkazů provede plný audit (U8)."
     update_2026-07-06b: "U8 dávkový audit — vyřešeny 2 mrtvé odkazy z U6 link-checku: (1) DOI Meretoja Helsinki Stroke Model opraveno z 10.1212/WNL.0b013e3182574d2c (404) na správné 10.1212/WNL.0b013e31825d6011 (ověřeno přes PubMed, PMID 22622858, Neurology 2012;79(4):306–313); doplněn PMID odkaz. (2) NZIP CMP odkaz opraven z /clanek/188-cevni-mozkova-prihoda (404, ID přeindexováno) na /clanek/980-cevni-mozkova-prihoda-co-to-je (ověřeno vyhledáváním). Centrální čísla (mortalita_inhosp_cmp 9,9 % vs OECD 7,7 / EU 8,5; KV 463,75 vs EU-27 312,95; kuřáctví 16,4/14,8; alkohol 14,4/8,9; kontrola_hypertenze 68/72) znovu potvrzena vůči datovému kontraktu. Landmark DOI ECASS III / DAWN / DEFUSE-3 / HERMES ponechány (ověřeny v dřívějších revizích). Ponecháno partial — headline-level změna (11,2 → 9,9 %) i AMI cross-ref 5,2 % vs kontrakt 4,57 % čekají na schválení redakce."
+    f1_2026-07-10: "Link-audit (F1) + kritická oprava: audit komentář postrádal uzavírací značku (nula výskytů v celém souboru) — celý zbytek dokumentu (title, meta, body) byl fakticky vnořen do HTML komentáře a stránka by se v prohlížeči vykreslila prázdná; doplněno. Link-check: 0 nových mrtvých odkazů. Živé, ale botem blokované zdroje ponechány beze změny: 5× doi.org (HTTP 403 — DOI resolvery ECASS III/DAWN/DEFUSE-3/HERMES/Helsinki potvrzeny funkční přes WebFetch redirect na nejm.org), qualityregistry.eu (RES-Q, HTTP 000/503 — potvrzeno živé přes web search), strokeaudit.org (SSNAP, HTTP 000/503 — potvrzeno živé přes WebFetch), czech-neuro.cz 2× (HTTP 466 — potvrzeno živé přes WebFetch, titulní stránka ČNS se načítá). uzis.cz/NRH a ostatní odkazy OK (HTTP 200). Ponecháno partial — otevřené body z 2026-07-06b (headline změna 11,2 → 9,9 % a AMI cross-ref 5,2 vs. 4,57 %) čekají na schválení redakce."
+    av_sweep3_2026-07-10: "Doplněn 1 AV vizuál (článek už měl hero counter-grid + custom cmp-funnel pro 3 vrstvy — NEDUPLIKOVÁNO): av-data-table 3 mezinárodní modely (Helsinki door-to-needle <20 min / Riks-Stroke+DAP / SSNAP). Fakta 1:1 z textu, text nezměněn (aditivní), claims nedotčeny."
+    av_sweep3_codex_2026-07-10: "Codex P2 (#771): seskupený řádek Riks-Stroke/DAP měl '(od 1994)', což platí jen pro Riks-Stroke (tělo článku 1994 přiřazuje pouze švédskému registru); dánský DAP pokrývá akutní CMP od 2003. Upřesněno na 'Riks-Stroke od 1994, DAP akutní CMP od 2003' (zdroj: Dansk Apopleksiregister / CLEP)."
+-->
 <title>Iktová centra fungují, výsledky horší. Úmrtnost po cévní mozkové příhodě 9,9 % proti 7,7 v OECD · HSPA Monitor</title>
 <meta name="description" content="Nemocniční mortalita po ischemické cévní mozkové příhodě je v Česku 9,9 procenta proti 7,7 v průměru OECD. Akutní léčbu (trombolýza, trombektomie) máme dobře organizovanou — co tedy stahuje výsledky dolů.">
 <meta name="robots" content="index, follow">
@@ -267,6 +271,39 @@
       <p>
         Společným jmenovatelem všech tří modelů je propojení akutní léčby, dlouhodobého sledování a otevřeného hodnocení kvality. Česko se postupně zapojuje do mezinárodního registru <strong>RES-Q</strong> (Registry of Stroke Care Quality, koordinovaný ESO) přes Cerebrovaskulární sekci ČNS a má vlastní agendu pod hlavičkou „CEREBRO", ale otevřené hodnocení kvality jednotlivých center s pacientskými výsledky publikovanými na úrovni pracoviště zatím chybí v rozsahu, jaký mají Riks-Stroke nebo SSNAP.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Tři modely, které řeší přesně to, kde Česko ztrácí</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Na co míří</th>
+                <th scope="col">Výsledek / rys</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Helsinki Stroke Model</th>
+                <td>akutní fáze — každý krok od telefonátu po trombolytikum</td>
+                <td class="av-good">mediánový door-to-needle pod 20 min (replikováno v Melbourne)</td>
+              </tr>
+              <tr>
+                <th scope="row">Riks-Stroke (SE) / DAP (DK)</th>
+                <td>90denní funkční výsledky (mRS), kvalita rehabilitace, návrat do života</td>
+                <td>veřejné srovnání nemocnic per pracoviště (Riks-Stroke od 1994, DAP akutní CMP od 2003)</td>
+              </tr>
+              <tr>
+                <th scope="row">SSNAP (UK)</th>
+                <td>čtvrtletní hodnocení iktových center napříč doménami</td>
+                <td>skóre A–E veřejné na úrovni jednotlivých pracovišť</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Meretoja et al., Neurology 2012 / Stroke 2013; Riks-Stroke; Dansk Apopleksiregister; SSNAP. ČR se zapojuje do RES-Q (ESO) / CEREBRO, ale veřejné per-pracoviště hodnocení zatím chybí.</p>
+      </figure>
 
       <h3>Co s tím</h3>
 
