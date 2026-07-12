@@ -257,6 +257,39 @@ function safeTagBoundary(html, idx, dir) {
  *      kontrolu) a vlastní label aktuálního odkazu se z kontroly vyloučí
  *      (label = název indikátoru, ne citace).
  */
+/**
+ * Odstraní z textového okna čísla, která NEJSOU citací hodnoty indikátoru
+ * (issue #688 — falešné poplachy indicator-driftu):
+ *   - 4ciferné roky 19xx/20xx (samostatné i „(2022)", „roku 2024")
+ *   - paragrafové/sbírkové citace „95/2004", „48/1997 Sb."
+ *   - číselné skupiny z vlastního slugu indikátoru (per_100k → 100,
+ *     _15_19 → 15 a 19, _65 → 65) jako samostatné tokeny vč. rozsahů 15–19
+ * Vrací očištěný text jen pro TEST přítomnosti citace — na shodu variant
+ * hodnoty se dál používá původní okno.
+ */
+export function stripNonValueNumbers(window, indicatorId = '') {
+  let out = String(window);
+  // sbírkové citace dřív než roky (95/2004 by jinak nechalo „95/")
+  out = out.replace(/\b\d{1,4}\s*\/\s*(19|20)\d{2}\b/g, ' ');
+  // samostatné roky
+  out = out.replace(/\b(19|20)\d{2}\b/g, ' ');
+  // kulaté jmenovatele míry („na 100 000 obyvatel", „/ 1 000") — strukturální
+  // dělitel, nikdy hodnota indikátoru (hodnoty jsou rate/%/per-capita, ne
+  // rovné tisíce). Bezpečné jako roky.
+  out = out.replace(/\b(?:100|10|1)\s?000\b/g, ' ');
+  // věkové prahy s „+" („18+", „65+", „80 +") — populační kvalifikátor, ne
+  // hodnota (hodnota nemá sufix „+"). Bezpečné.
+  out = out.replace(/\b\d{1,3}\s?\+/g, ' ');
+  // číselné skupiny z vlastního slugu (100k → 100; boundary, ať nezmizí
+  // části skutečných hodnot)
+  const slugDigits = [...new Set((indicatorId.match(/\d+/g) ?? []))];
+  for (const d of slugDigits) {
+    // token samostatně, v rozsahu (15–19) nebo se sufixem k (100k)
+    out = out.replace(new RegExp(`(?<![\\d,.])${d}(?:\\s*[–-]\\s*\\d{1,3})?k?(?![\\d,.])`, 'g'), ' ');
+  }
+  return out;
+}
+
 export function findIndicatorDrift(htmlRaw, indicatorsById) {
   // Odstraň bloky, kde čísla nejsou citace hodnot indikátoru, ale popisky/roky
   // u cross-link karet: „Příbuzné sekce" (article-related), „Primární zdroje"
@@ -272,6 +305,16 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
     .replace(/(<a[^>]*href="[^"]*indikator[^"]*"[^>]*>)[\s\S]*?(<\/a>)\s*\(\d{4}\)/g, '$1$2');
 
   const drifts = [];
+  // Celý text článku (bez cross-link karet) — pro kontrolu, zda je aktuální
+  // hodnota přítomna kdekoli v článku, ne jen v okně daného odkazu (issue
+  // #688: „cílová hodnota je v článku přítomna, jen mimo okno").
+  const fullText = stripTags(html);
+  // Varianta hodnoty se v textu shoduje jako samostatné číslo (ne podřetězec
+  // jiného čísla — „2" uvnitř „2026" nesmí platit).
+  const valuePresent = (variants, hay) => variants.some(v => {
+    const escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`(?<![\\d,.])${escaped}(?![\\d,.])`).test(hay);
+  });
   // Statická stránka indikator-{id}.html (preferovaná) i fallback indicator.html?id={id}.
   const re = /indikator-([a-z0-9_]+)\.html|indicator\.html\?id=([a-z0-9_]+)/g;
   const seen = new Set();
@@ -308,8 +351,12 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
     }
 
     const window = stripTags(slice);
-    // citace čísla v okně? (číslo s desetinnou čárkou, nebo ≥2 cifry vedle sebe)
-    if (!/\d+,\d+|\d{2,}/.test(window)) {
+    // citace čísla v okně? (číslo s desetinnou čárkou, nebo ≥2 cifry vedle
+    // sebe) — čísla, která citací hodnoty nejsou (roky, věkové rozsahy,
+    // číslice z vlastního slugu, paragrafové citace), se před testem
+    // odfiltrují (issue #688 — falešné poplachy).
+    const testWindow = stripNonValueNumbers(window, id);
+    if (!/\d+,\d+|\d{2,}/.test(testWindow)) {
       // Položka seznamu bez čísla → není co ověřovat u TOHOTO výskytu, ale
       // stejný indikátor může být citován s hodnotou jinde v článku —
       // nezaznamenávej jako „viděno" a zkus další výskyt.
@@ -319,13 +366,14 @@ export function findIndicatorDrift(htmlRaw, indicatorsById) {
     }
     seen.add(id);
     const variants = valueVariants(ind.value);
-    // Boundary matching: varianta nesmí být podřetězcem jiného čísla
-    // (jednociferné „2" by jinak matchlo uvnitř roku „2026" → falešná shoda).
-    const matchesVariant = variants.some(v => {
-      const escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      return new RegExp(`(?<![\\d,.])${escaped}(?![\\d,.])`).test(window);
-    });
-    if (matchesVariant) continue;
+    // Aktuální hodnota v okně odkazu → citace sedí, žádný drift.
+    if (valuePresent(variants, window)) continue;
+    // Aktuální hodnota kdekoli v článku → citace je jen mimo okno tohoto
+    // odkazu (typicky odkaz-atribuce vedle čísla jiné metriky/benchmarku).
+    // Není to zastaralá citace — nehlásit (issue #688/#745: 13 falešných
+    // poplachů, kde okno chytlo sousední číslo, ale správná hodnota je
+    // citována jinde v témže článku).
+    if (valuePresent(variants, fullText)) continue;
     drifts.push({
       id,
       current: `${ind.value} ${ind.unit ?? ''} (${ind.year ?? '?'})`.trim(),
