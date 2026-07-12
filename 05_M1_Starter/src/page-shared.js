@@ -7,21 +7,22 @@ import { submitNewsletterSignup } from './newsletter-signup.js';
 
 /* ── Dark mode: brzká inicializace tématu ───────────────────────────────
    Nastaví data-theme z uložené volby co nejdřív (při načtení modulu), aby
-   uživatelé s ručně zvoleným tématem viděli minimum probliknutí. Uživatelé
-   bez volby dědí prefers-color-scheme přímo z CSS (bez JS, bez probliknutí). */
+   uživatelé s ručně zapnutým tmavým režimem viděli minimum probliknutí.
+   Výchozí je VŽDY světlý motiv — systémové prefers-color-scheme se
+   záměrně nesleduje; tmavý se zapíná jen ručním toggle. */
 export const THEME_KEY = 'hspa-theme';
 (function initThemeEarly() {
   try {
     const t = localStorage.getItem(THEME_KEY);
     if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
-  } catch (_) { /* private mode / no storage → dědí systémové téma */ }
+  } catch (_) { /* private mode / no storage → výchozí světlý motiv */ }
 })();
 
-/** Aktuální efektivní téma ('dark' | 'light') podle data-theme nebo systému. */
+/** Aktuální efektivní téma ('dark' | 'light'). Výchozí je vždy 'light';
+   'dark' jen když si ho uživatel ručně zapnul (data-theme="dark").
+   Systémové prefers-color-scheme se záměrně nesleduje. */
 export function currentTheme() {
-  const explicit = document.documentElement.getAttribute('data-theme');
-  if (explicit === 'dark' || explicit === 'light') return explicit;
-  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
 }
 
 const THEME_ICON = {
@@ -526,11 +527,12 @@ export function renderModuleNav(activeId) {
       id: 'indicators',
       label: 'Indikátory',
       href: 'index.html',
-      match: ['index.html', '/'],
+      match: ['index.html', '/', 'diagnoza.html'],
       children: [
         { id: 'hspa-prehled', label: 'HSPA přehled',   href: 'hspa-prehled.html', match: ['hspa-prehled.html'] },
         { id: 'kvalita-pece', label: 'Kvalita péče',   href: 'kvalita-pece.html', match: ['kvalita-pece.html'] },
         { id: 'pojistenci',   label: 'Atlas pojištěnců', href: 'pojistenci.html', match: ['pojistenci.html'] },
+        { id: 'diagnoza',     label: 'Diagnóza',       href: 'diagnoza.html',     match: ['diagnoza.html'] },
       ],
     },
     { id: 'kraje',       label: 'Krajský pohled',          href: 'kraje.html',              match: ['kraje.html'] },
@@ -538,9 +540,10 @@ export function renderModuleNav(activeId) {
       id: 'financing',
       label: 'Financování',
       href: 'financovani.html',
-      match: ['financovani.html'],
+      match: ['financovani.html', 'vyhlaska.html'],
       children: [
         { id: 'dohodovaci-rizeni',        label: 'Dohodovací řízení',  href: 'dohodovaci-rizeni.html',        match: ['dohodovaci-rizeni.html'] },
+        { id: 'vyhlaska',                 label: 'Úhradová vyhláška: hra', href: 'vyhlaska.html',              match: ['vyhlaska.html'] },
         // 'financovani-poskytovatele' — DOČASNĚ SKRYTO. Provider-level
         // úhradová data jsou velmi citlivá; bez ověřených živých dat
         // (NRHZS denní refresh + audit) je riziko zavádějících závěrů.
@@ -548,14 +551,20 @@ export function renderModuleNav(activeId) {
         // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html'],
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html'],
       children: [
         { id: 'jak-zdravotnictvi', label: 'Zdravotnictví',           href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
         { id: 'cesta-pacienta',    label: 'Cesta pacienta systémem',  href: 'cesta-pacienta.html', match: ['cesta-pacienta.html'] },
         { id: 'model-systemu',     label: 'Model systému',            href: 'model-systemu.html', match: ['model-systemu.html'] },
+        { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
       ],
     },
-    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html'] },
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html'],
+      children: [
+        { id: 'prevence-hub', label: 'Prevence podle oblastí', href: 'prevence.html', match: ['prevence.html'] },
+        { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
+      ],
+    },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [
@@ -998,4 +1007,45 @@ function boldEnumPrefix(html) {
   // První písmeno na velké
   const cap = topic.charAt(0).toLocaleUpperCase('cs-CZ') + topic.slice(1);
   return `<strong>${cap}</strong> ${m[2]} ${m[3]}`;
+}
+
+/**
+ * Kanonický seznam interaktivních nástrojů webu — jediný zdroj pravdy pro
+ * prolinkování mezi nástroji navzájem (blok „Prozkoumejte dál" na každé
+ * nástrojové stránce) i pro homepage sekci.
+ */
+export const SITE_TOOLS = [
+  { id: 'simulator',     href: 'simulator.html',     label: 'Simulátor pák',
+    desc: 'Posuňte reformní páku a uvidíte modelový dopad na indikátory.', verb: 'Zkusit simulátor' },
+  { id: 'kompas',        href: 'kompas.html',        label: 'Osobní zdravotní kompas',
+    desc: 'Zadejte věk a kraj a zjistěte, co se v prevenci týká právě vás.', verb: 'Otevřít kompas' },
+  { id: 'barometr',      href: 'barometr.html',      label: 'Barometr politických prohlášení',
+    desc: 'Držíme politiky za slovo — sliby vlády vs. čísla, která měříme.', verb: 'Otevřít barometr' },
+  { id: 'model-systemu', href: 'model-systemu.html', label: 'Model systému',
+    desc: 'Interaktivní kauzální mapa: kudy se problém propisuje systémem.', verb: 'Prozkoumat model' },
+  { id: 'vyhlaska',      href: 'vyhlaska.html',      label: 'Úhradová vyhláška: hra',
+    desc: 'Rozdělte růst úhrad jako ministr — a ustůjte reakce segmentů.', verb: 'Zahrát si' },
+];
+
+/**
+ * Vyrenderuje blok „Prozkoumejte dál" — karty ostatních nástrojů (kromě
+ * aktivního) — do elementu #toolSiblings, je-li na stránce přítomen.
+ * Zajišťuje, že jsou nástroje provázané mezi sebou z jednoho zdroje pravdy.
+ * @param {string} activeId  id aktuálního nástroje (vyloučí se ze seznamu)
+ */
+export function renderRelatedTools(activeId, el = (typeof document !== 'undefined' ? document.getElementById('toolSiblings') : null)) {
+  if (!el) return;
+  const others = SITE_TOOLS.filter(t => t.id !== activeId);
+  if (!others.length) return;
+  el.innerHTML = `
+    <div class="ed-kicker">Prozkoumejte dál</div>
+    <h2 class="tool-siblings-h">Další interaktivní nástroje</h2>
+    <div class="tool-siblings-grid">
+      ${others.map(t => `
+        <a class="tool-sibling-card" href="${t.href}">
+          <span class="tool-sibling-title">${escapeHtml(t.label)}</span>
+          <span class="tool-sibling-desc">${escapeHtml(t.desc)}</span>
+          <span class="tool-sibling-cta">${escapeHtml(t.verb)} →</span>
+        </a>`).join('')}
+    </div>`;
 }

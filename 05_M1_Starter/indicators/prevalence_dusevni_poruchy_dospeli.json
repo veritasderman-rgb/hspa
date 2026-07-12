@@ -1,0 +1,50 @@
+{
+  "id": "prevalence_dusevni_poruchy_dospeli",
+  "name": "Prevalence duševního onemocnění (dospělí)",
+  "area": "Výsledky",
+  "domain": "Duševní zdraví",
+  "subdomain": "Prevalence duševních poruch",
+  "definition": "Podíl dospělé populace (18+) s aktuálně přítomnou duševní poruchou zjištěnou strukturovaným diagnostickým rozhovorem M.I.N.I. (Mini International Neuropsychiatric Interview) v reprezentativním populačním šetření. Zahrnuje afektivní poruchy (zejména depresi), úzkostné poruchy, poruchy spojené s užíváním alkoholu a riziko sebevraždy. Zdroj: Národní monitoring duševního zdraví (CZEMS) Národního ústavu duševního zdraví.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "national_survey",
+      "endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7573458/",
+      "dataset": "CZEMS — Národní monitoring duševního zdraví, NUDZ (vlny 2017, 2020, 2022)",
+      "dimensions": {
+        "age_range": "18+",
+        "country": "CZ",
+        "instrument": "M.I.N.I. v5",
+        "condition": "any_current_mental_disorder"
+      }
+    },
+    "fallback": {
+      "type": "journal_article",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38042095/"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Přímý mezinárodní benchmark pro tento ukazatel neexistuje, protože zdroje používají neslučitelné metodiky. OECD Health at a Glance: Europe 2018 (modelové odhady IHME, rok 2016) uvádí, že duševní poruchu mělo 17,3 % populace EU (~84 mil. lidí); v tomto modelovém pohledu se ČR řadí spíše k nižšímu pásmu. Eurostat EHIS 2019 (sebehodnocení, PHQ-8) naopak řadí ČR mezi země s NEJNIŽŠÍ deklarovanou depresí v EU (≤ 3,0 % středně těžkých a těžších depresivních příznaků proti průměru EU 6,3 %). Česká hodnota z diagnostického rozhovoru (M.I.N.I., 27,22 %) je bodová prevalence a s modelovými/sebehodnotícími odhady je srovnatelná jen orientačně.",
+    "value": null,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-europe-2018_health_glance_eur-2018-en.html"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "periodic",
+  "stewards": [
+    "NUDZ (Národní ústav duševního zdraví) — Národní monitoring duševního zdraví / CZEMS",
+    "Ministerstvo zdravotnictví ČR — Reforma péče o duševní zdraví"
+  ],
+  "method_notes": "Data pocházejí z opakovaných reprezentativních průřezových šetření dospělé české populace (Winkler et al., Epidemiology and Psychiatric Sciences 2020; Potočár et al., Psychiatry Research 2024), realizovaných NUDZ pod hlavičkou CZEMS / Národní monitoring duševního zdraví. Diagnostika probíhala nástrojem M.I.N.I. v5, který má vysokou shodu s klinicky stanovenou diagnózou. Aktuální prevalence JAKÉKOLI duševní poruchy: 20,02 % (2017, n=3306) → 29,63 % (květen 2020, n=3021) → 27,22 % (listopad–prosinec 2022, n=7311). Samotná depresivní porucha vzrostla z 3,96 % (2017) na 11,77 % (2020), úzkostné poruchy z 7,79 % na 12,84 %. Klíčovým doprovodným zjištěním je léčebná mezera (treatment gap): podle CZEMS 2017 nedostávalo péči 61 % lidí s afektivní poruchou a až 93 % lidí s poruchou z užívání alkoholu (Winkler et al., European Psychiatry 2019). Hodnota není srovnatelná 1:1 se sebehodnotícím Eurostat EHIS ani s modelovými odhady IHME/OECD.",
+  "limitations": "Jde o bodovou prevalenci z diagnostického rozhovoru M.I.N.I., nikoli o klinicky potvrzenou diagnózu ani o roční prevalenci — hodnoty proto nejsou přímo srovnatelné s modelovými odhady IHME (OECD) ani se sebehodnotícím šetřením Eurostat EHIS, které pro ČR paradoxně vykazuje jednu z nejnižších hodnot v EU. Vlny nejsou pravidelně roční (2017, 2020, 2022) a část nárůstu souvisí s pandemií COVID-19 a způsobem sběru (online/telefon). Šetření nepokrývá institucionalizovanou populaci a neumožňuje krajský rozpad. Ukazatel je proto veden jako monitorovací výsledkový indikátor, ne jako rutinně aktualizovaná administrativní statistika.",
+  "importance": "<p>Prevalence duševního onemocnění je <strong>základní výsledkový ukazatel</strong> pro celou vlajkovou Reformu péče o duševní zdraví: říká, jak velkou zátěž má systém vůbec obsloužit. Bez něj dashboard měří jen následky (sebevraždy, předávkování) a vstupy (počty psychiatrů, lůžka CDZ, výdaje), ale ne samotnou velikost problému.</p><p>Česká hodnota vypráví neobvyklý příběh <strong>měřicího paradoxu</strong>: v rutinních mezinárodních statistikách (sebehodnotící EHIS, modelové odhady IHME) vypadá Česko jako země s podprůměrnou duševní nemocností. Jakmile se ale použije strukturovaný diagnostický rozhovor, ukáže se, že aktuální duševní poruchu má více než čtvrtina dospělých a že drtivá většina z nich se neléčí. Rozdíl mezi „jak se cítíme dotázáni v anketě\" a „co ukáže diagnostika\" je sám o sobě politickým sdělením — signalizuje stigma a nízké sebe-rozpoznání, tedy přesně to, co reforma slibuje řešit sítí Center duševního zdraví (CDZ) a destigmatizací.</p>",
+  "determinants": "**Stigma a nízké sebe-rozpoznání.** Klíčový determinant rozdílu mezi českými a mezinárodními čísly. V sebehodnotících šetřeních (EHIS) Češi deklarují depresi méně často než většina EU, přestože diagnostický rozhovor odhalí vysokou skutečnou prevalenci. Nízké rozpoznání vlastního problému je zároveň hlavní bariérou vyhledání péče.\n\n**Léčebná mezera (treatment gap).** Podle CZEMS nedostávalo péči 61 % lidí s afektivní poruchou a až 93 % lidí s poruchou z užívání alkoholu. Vysoký podíl neléčených udržuje prevalenci vysokou — neléčené poruchy chronifikují a kumulují se v populaci.\n\n**Dostupnost ambulantní psychiatrie a psychoterapie.** Nerovnoměrná síť ambulantních psychiatrů, dlouhé objednací lhůty a samoplatební psychoterapie odsouvají léčbu. Reforma buduje síť Center duševního zdraví (CDZ), ta ale zatím nepokrývá celé území rovnoměrně.\n\n**Pandemie COVID-19 a ekonomická nejistota.** Skokový nárůst prevalence mezi lety 2017 a 2020 časově odpovídá pandemii, lockdownům a ekonomické nejistotě. Část zvýšené hodnoty v roce 2022 tak odráží dlouhý stín pandemie i způsob sběru dat.\n\n**Metodika měření.** Výsledek silně závisí na nástroji: bodová prevalence z diagnostického rozhovoru M.I.N.I. dává řádově vyšší čísla než roční sebehodnocení EHIS nebo modelové odhady IHME. Interpretace ukazatele proto musí vždy uvádět použitou čočku.",
+  "patient_story": "Marku je čtyřicet dva a řídí montážní linku u Mladé Boleslavi. Poprvé si všiml, že „něco nehraje\", během druhého lockdownu — nemohl spát, ráno vstával s tíhou na hrudi, přestalo ho bavit cokoli. Kdyby vyplnil evropskou anketu o zdraví, nejspíš by depresi nepřiznal; v Česku se o tom „nemluví\" a Marek by řekl, že je jen unavený. Kdyby ale prošel diagnostickým rozhovorem, který používá Národní monitoring duševního zdraví, zapadl by přesně do jednoho z nejsilnějších zjištění, jaká o Česku máme.\n\nPodle Národního monitoringu duševního zdraví (NUDZ, projekt CZEMS) mělo v roce 2022 aktuální duševní poruchu 27,22 % dospělých Čechů — více než čtvrtina. V roce 2017 to bylo 20 %, na jaře pandemického roku 2020 skoro 30 %. Samotná deprese se mezi roky 2017 a 2020 ztrojnásobila (z 3,96 na 11,77 %). Přitom v sebehodnotícím evropském šetření EHIS patří Česko k zemím s NEJNIŽŠÍ deklarovanou depresí v celé EU (pod 3 % proti průměru 6,3 %). Stejná země, dvě úplně jiné odpovědi — podle toho, čím se ptáte.\n\nTen rozdíl není statistická kuriozita, ale diagnóza systému. Nízká čísla ze sebehodnocení odrážejí stigma a nízké sebe-rozpoznání: Marek neřekne „mám depresi\", řekne „jsem utahaný\". A i když si problém připustí, naráží na druhou zeď — léčebnou mezeru. Podle CZEMS se v Česku neléčí 61 % lidí s afektivní poruchou a až 93 % lidí se závislostí na alkoholu. Ambulantní psychiatr má objednací lhůtu měsíce, psychoterapie se často platí z kapsy a síť Center duševního zdraví zatím nepokrývá celé území rovnoměrně. Marek nakonec zůstal roky nediagnostikovaný — ne proto, že by péči odmítal, ale protože k ní nevedla schůdná cesta.\n\nPolitická páka je jasně pojmenovaná a leží na stole. Vlajková Reforma péče o duševní zdraví (Ministerstvo zdravotnictví) staví právě na tom, co Markův příběh ukazuje: dostavět síť Center duševního zdraví do všech okresů, zkrátit cestu od praktického lékaře k psychiatrovi, hradit psychoterapii z veřejného pojištění a systematicky destigmatizovat. Bez ukazatele skutečné prevalence ale nelze měřit, zda reforma zabírá — proto ho dashboard sleduje vedle sebevražd, výdajů na duševní zdraví a hustoty CDZ. Číslo 27,22 % je zátěž, kterou má systém obsloužit; treatment gap 61–93 % je míra, jak moc to zatím nezvládá.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}

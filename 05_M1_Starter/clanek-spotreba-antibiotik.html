@@ -25,6 +25,7 @@
     audit_2026_06_16_codex_fix: "Codex review (PR #622, P1) správně upozornil, že původní formulace caveatu přeháněla: imputace ČR se v AER 2024 týká (a) rozpadu komunita/nemocnice za rok 2020 a (b) vstupu ČR do výpočtu EU/EEA populačně vážených PRŮMĚRŮ — nikoli toho, že by ČR za 2024 neměla žádnou reportovanou hodnotu. Footnote b u ČR varuje pouze před nesrovnatelností s předchozími roky. Caveat aside, nemocniční odstavec, databox i zdroje přeformulovány na ověřitelné znění (kotva 2023 kvůli NESROVNATELNOSTI hodnoty 2024, ne kvůli její neexistenci). Konkrétní hodnotu ČR komunita 2024 z Tabulky 4 (Codex uvádí 16,5) se z primárního PDF nepodařilo strojově ověřit (tabulky jsou rastrová/CID grafika) — proto ji článek neuvádí jako tvrzené číslo, jen popisuje ECDC výhradu nesrovnatelnosti."
     nightly_scan: "2026-06-11 — noční sken (indicator-drift): databox indikátor rezistence_antibiotik_ecoli citoval 13,1 % vs. OECD 11,5 % s poznámkou 'kontrola probíhá'. Dashboard indikátor je nyní origin=live, verification_status=verified (verified_at 2026-06-01), hodnota 19,2 % (2024, ECDC EARS-Net, fetched 2026-06-10), benchmark EU 22,5 %. Citace aktualizována na ověřenou hodnotu z primárního zdroje (ECDC Surveillance Atlas / EARS-Net). Řádek infekce_nosokomialni ponechán beze změny (hodnota 6,5 % stále odpovídá dashboardu, indikátor je dosud origin=seed). Status verified → review-pending k redakční kontrole."
     f1_2026-07-10: "Audit (F1, link-check). Ověřeno 15 externích odkazů. 1 živý-ale-blokovaný ponechán beze změny: szu.gov.cz (curl 502, WebFetch potvrzuje živý obsah SZÚ — gov.cz doména, sandbox/anti-bot). OECD Health at a Glance 2025 vrací 403 (anti-bot Cloudflare, ověřeno WebFetch, obsah živý) — ponecháno. Ostatní odkazy (ECDC ESAC-Net, ATC/DDD index, RCGP, Eurobarometer, ČLS, gov.uk ESPAUR, strama.se, swab.nl) OK 200. Žádný mrtvý odkaz, žádná úprava href. Status ponechán review-pending: headline indikátor spotreba_antibiotik má origin=seed; obsah čeká na F4 verifikaci indikátoru (seed→live)."
+    av_sweep3_2026-07-10: "Doplněny 2 AV vizuály (článek už měl hero + komunitní country tabulku — NEDUPLIKOVÁNO): av-counter-grid nemocniční paradox (3,17 nejvyšší v EU / 1,61 EU průměr / 14,2 % nejnižší podíl širokospektrých), av-data-table modely (Strama/SWAB/TARGET/EAAD). Čísla 1:1 z textu/caveatu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -271,6 +272,28 @@
         </figcaption>
       </figure>
 
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Nemocniční paradox: nejvyšší objem v EU, ale nejlépe cílený (ESAC-Net 2023)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="3.17" data-decimals="2">3,17</span>
+            <span class="av-counter-label">nemocniční spotřeba ČR (DDD/1000/den)</span>
+            <span class="av-counter-foot">nejvyšší v celé EU/EEA</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1.61" data-decimals="2">1,61</span>
+            <span class="av-counter-label">EU/EEA populačně vážený průměr</span>
+            <span class="av-counter-foot">minimum 0,77 (Nizozemsko)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="14.2" data-decimals="1" data-suffix=" %">14,2 %</span>
+            <span class="av-counter-label">podíl širokospektrých z nemocniční J01</span>
+            <span class="av-counter-foot">nejnižší v EU/EEA (průměr 40,1 %, max 65 % BG)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC ESAC-Net Annual Epidemiological Report 2023. Vyšší objem, ale lépe cílený.</p>
+      </figure>
+
       <p>
         Klíčová rezerva je v <strong>nemocniční spotřebě</strong>, kterou samotný ambulantní indikátor nezachycuje. <a href="https://www.ecdc.europa.eu/en/publications-data/antimicrobial-consumption-eueea-esac-net-annual-epidemiological-report-2023" target="_blank" rel="noopener">ESAC-Net Annual Epidemiological Report 2023</a> uvádí českou nemocniční spotřebu antibiotik (ATC J01) jako nejvyšší v celé EU/EEA — 3,17 DDD na 1 000 obyvatel a den, proti EU/EEA populačně váženému průměru 1,61 a minimu 0,77 v Nizozemsku. Novější vlna <a href="https://www.ecdc.europa.eu/en/publications-data/antimicrobial-consumption-eueea-esac-net-annual-epidemiological-report-2024" target="_blank" rel="noopener">ESAC-Net za rok 2024</a> (publ. 18. 11. 2025) tento obraz potvrzuje: Česko je s 2,50 DDD/1000/den i v roce 2024 <strong>nejvyšším nemocničním spotřebitelem v EU/EEA</strong> (EU/EEA průměr 1,67, minimum 0,77 Nizozemsko). Meziroční pokles hodnoty z 3,17 na 2,50 je ovšem nutné číst opatrně — ECDC k ČR za 2024 uvádí, že <em>země změnila metodiku sběru dat, což může ovlivnit srovnatelnost s předchozími roky</em>, takže rozdíl nemusí znamenat reálný pokles spotřeby. Pozitivní protiváha: české nemocnice mají z celkové J01 spotřeby zároveň nejnižší podíl tzv. širokospektrých antibiotik (14,2 % vs. EU/EEA průměr 40,1 %, maximum 65 % v Bulharsku, ESAC-Net 2023) — tedy vyšší objem, ale lépe cílený. Klinický farmakolog nebo infektolog s pravomocí kontrolovat preskripci širokospektrých ATB chybí v řadě českých nemocnic, jak rozebíral souběžný článek o nosokomiálních infekcích. Detailní rozpad nemocniční spotřeby ČR podle typu oddělení (JIP, standardní lůžka) je předmětem samostatného indikátoru, který v dashboardu zatím nemáme.
       </p>
@@ -300,6 +323,44 @@
       <p>
         <strong>European Antibiotic Awareness Day (EAAD)</strong> a <strong>World Antimicrobial Resistance Awareness Week</strong> jsou koordinované populační kampaně, do kterých se Česko zapojuje a které mají zdokumentovaný populační efekt na povědomí.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Modely antibiotické politiky s ještě nižší spotřebou</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col">Nástroj</th>
+                <th scope="col">Klíčový mechanismus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Švédsko</th>
+                <td>Strama (od 1995)</td>
+                <td>koordinátor ATB politiky v každém regionu; peer-comparison reporty</td>
+              </tr>
+              <tr>
+                <th scope="row">Nizozemsko</th>
+                <td>SWAB</td>
+                <td>národní guidelines + stewardship napříč ambulancí i nemocnicí</td>
+              </tr>
+              <tr>
+                <th scope="row">Velká Británie</th>
+                <td>TARGET Antibiotics Toolkit</td>
+                <td>peer-comparison pro praktiky; komunitní spotřeba pomalu klesá (ESPAUR)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">EU / ČR</th>
+                <td>EAAD (18. 11.) + WAAW</td>
+                <td>koordinované populační kampaně; ČR se zapojuje</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Strama (SE); SWAB (NL); UKHSA ESPAUR (UK); ECDC EAAD.</p>
+      </figure>
 
       <h3>Co Česko realisticky může zlepšit</h3>
 

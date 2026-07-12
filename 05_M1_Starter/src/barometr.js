@@ -6,7 +6,7 @@
 // (ingest/validate-barometr.js). Vzor stránky: src/legislativa.js.
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 
 // ── Enumy → UI (docs/metodika-barometr.md §3.1, §4.2) ──────────────────────
 // Barevná sémantika badge = signální paleta good/warn/bad/neutral.
@@ -295,6 +295,7 @@ async function init() {
 
   renderModuleNav('barometr');
   renderMastheadDate();
+  renderRelatedTools('barometr');
 
   try {
     const [barRes, indRes, legRes] = await Promise.all([

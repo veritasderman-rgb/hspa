@@ -20,6 +20,7 @@
     update_2026-07-06: "U6 rychlý audit (doplnění audit-status do articles.json + link-check). Dva známé otevřené body: (1) indicator-drift — článek v databoxu uvádí 'dashboard 14 % (odhad 2024)', datový kontrakt platba_z_kapsy_pct ale aktuálně nese 13,6 % (2024); národní kotva 14,6 % (ČSÚ 2023) beze změny. (2) Mrtvý odkaz (HTTP 404): sukl.gov.cz/encyklopedie/co-je-to-zapocitatelny-doplatek (stránka přesunuta po redesignu webu SÚKL). Status review-pending → partial. Opravu provede plný audit (U8)."
     nightly_scan: "2026-06-13 — noční sken: indicator-drift na vydaje_zdravotnictvi_hdp. Článek dvakrát citoval odhad dashboardu pro rok 2024 jako 8,5 % HDP (sekce 'Mezinárodní srovnání' a 'Pozn. k údajům'), datový kontrakt data/indicators.json ale aktuálně uvádí 8,6 % (2024). Sjednoceno na 8,6 % — jde o popis vlastní hodnoty dashboardu, ČSÚ údaj za 2023 (8,4 %, ověřeno) i mezinárodní hodnoty beze změny. Status verified → review-pending k redakční kontrole."
     f1_2026-07-10: "Link-audit (F1): opraven 1 mrtvý odkaz — sukl.gov.cz/encyklopedie/co-je-to-zapocitatelny-doplatek/ (HTTP 404, celá sekce /encyklopedie/ na webu SÚKL zrušena, ověřeno i přes WebFetch) → sukl.gov.cz/dulezite-informace/elektronizace-zdravotnictvi-postupuje-novy-system-evidence-zapocitatelnych-doplatku/ (HTTP 200, tentýž okruh tématu — centralizovaná evidence doplatků a ochranných limitů). Živé, ale botem blokované (HTTP 403) zdroje ponechány beze změny: oecd.org (2×, System of Health Accounts 2011, Health at a Glance 2025 — financial hardship). Ostatní odkazy (ČSÚ, Eurostat, WHO, NZIP, zakonyprolidi.cz, druhý SÚKL odkaz) OK (HTTP 200). Ponecháno partial — otevřený bod z 2026-07-06 (indicator-drift dashboard 14 % vs. datový kontrakt 13,6 %) trvá."
+    av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-data-table 4 složky OOP (léky/stomatologie/optometrie/nadstandardy) vč. ochrany, av-bar-compare mezinárodní OOP (BG 35,5 / EL 34,3 / IT 22,3 / EU 15 / ČR 14,6 / SE 13,4 / DE 10,7 / FR 8,9 / LU 8,5). Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta name="article:audit-status" content="partial">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -199,6 +200,44 @@
         Český OOP se rozkládá nerovnoměrně. Z dat ÚZIS, ČSÚ a domácí literatury vyplývá, že hlavní složky tvoří čtyři skupiny.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Čtyři hlavní složky přímých plateb pacientů v ČR</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Složka</th>
+                <th scope="col">Co pacient platí</th>
+                <th scope="col">Ochrana / kontext</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Doplatky na léky</th>
+                <td>rozdíl mezi úhradou SÚKL a tržní cenou; u novějších léků stovky–tisíce Kč/měsíc</td>
+                <td class="av-good">roční ochranný limit (§ 16b), od 2025 evidence v eReceptu (SÚKL)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Stomatologie</th>
+                <td>fotokompozit, korunky, implantáty, ortodoncie dospělých, dentální hygiena</td>
+                <td class="av-bad">největší jednorázový OOP výdaj; důvod odkládání péče</td>
+              </tr>
+              <tr>
+                <th scope="row">Optometrie a brýle</th>
+                <td>prakticky celá dioptrická korekce z vlastní kapsy</td>
+                <td class="av-mut">běžné i v jiných zemích EU</td>
+              </tr>
+              <tr>
+                <th scope="row">Nadstandardní výkony</th>
+                <td>rozdíl nad hrazený standard (typ čočky, jednolůžkový pokoj…)</td>
+                <td class="av-bad">šedá zóna mezi „doplatkem" a „neformální platbou"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS, ČSÚ Zdravotnické účty; SÚKL (ochranný limit); zákon 48/1997 Sb. § 16b.</p>
+      </figure>
+
       <p>
         <strong>Doplatky na léky.</strong> Pacient v ČR doplácí část ceny léčiva, pokud SÚKL stanoví úhradu z veřejného zdravotního pojištění nižší, než je tržní cena. U některých léků (zejména novějších přípravků s jednou aktivní látkou bez substitutu) může doplatek dosahovat stovek nebo tisíců korun měsíčně. Existuje <em>roční ochranný limit</em> doplatků (regulovaný zákonem o veřejném zdravotním pojištění), který chrání zejména seniory a pacienty s velkou polypragmazií, ale jeho nastavení a praktická aplikace se v posledních letech opakovaně mění.
       </p>
@@ -226,6 +265,22 @@
       </p>
 
       <h3>Mezinárodní srovnání — kde 14,6 % stojí v EU</h3>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Přímé platby pacientů (% zdravotních výdajů, 2023) — kde stojí ČR v EU</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="36" data-unit="%">
+          <li class="av-bar-row av-bar-row-bad" data-value="35.5" data-label="Bulharsko"></li>
+          <li class="av-bar-row" data-value="34.3" data-label="Řecko"></li>
+          <li class="av-bar-row" data-value="22.3" data-label="Itálie"></li>
+          <li class="av-bar-row" data-value="15" data-label="EU-27 ⌀"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="14.6" data-label="Česko" data-note="ČSÚ 2023 — horní třetina EU z pohledu finanční ochrany"></li>
+          <li class="av-bar-row" data-value="13.4" data-label="Švédsko"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="10.7" data-label="Německo"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="8.9" data-label="Francie"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="8.5" data-label="Lucembursko"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_sha11_hf</code> (2023); ČSÚ (ČR 14,6 %).</p>
+      </figure>
 
       <p>
         České OOP 14,6 % (ČSÚ, 2023) řadí ČR zhruba na evropský průměr (Eurostat 2023: ~15 %) a do horní třetiny zemí EU z pohledu finanční ochrany — ne ale mezi vůbec nejnižší. Hodnoty níže uvedené pro evropské státy pocházejí z Eurostatu <code>hlth_sha11_hf</code> (current health expenditure, 2023). <strong>Lucembursko</strong> 8,5 %, <strong>Francie</strong> 8,9 % a <strong>Chorvatsko</strong> 9,4 % jsou v EU jediné státy s OOP pod 10 %; ve Francii to umožňuje kombinace univerzální veřejné pojišťovny (Sécurité Sociale) a doplňkových pojištění (mutuelles), které ošetří podstatnou část doplatků. <strong>Německo</strong> 10,7 % — kombinace veřejného zákonného pojištění a soukromého pojištění pro některé skupiny. <strong>Severské země</strong> jsou v užším rozmezí, než se někdy uvádí: Švédsko 13,4 %, Dánsko 13,9 % a Norsko 14,1 % — všechny zhruba na úrovni ČR, při převážně daňově financovaném systému. <strong>Nizozemsko</strong> mělo podle OECD Health at a Glance 2023 OOP kolem 9 % (povinná soukromá pojistka + veřejná regulace).

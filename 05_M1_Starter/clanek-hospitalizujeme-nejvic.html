@@ -11,6 +11,7 @@
     visual_elements_added: 1
     audit_2026_06_18: "Denní rutina (čtvrtek) → FALLBACK-AUDIT/ARTICLE-REVISE. Trigger: datový drift mezi publikovaným článkem (poslední audit 2026-05-16, kdy klíčové indikátory měly origin: seed) a ŽIVÝM ověřeným dashboardem. Ingest pipeline (fetched 2026-06-16) mezitím přepnula tři indikátory na origin: live + verification_status: verified s odlišnými hodnotami. Ověřeno přímo z data/indicators.json a z OECD HAG 2025 / Czechia Country Health Profile 2025: (1) hospitalizace_na_100k = 17 989,8 /100k (2024, ÚZIS NRH, live, verified, verified_at 2026-06-01; trend 2022→2024: 17 887→17 988→17 990) — článek dosud uváděl seed-hodnotu 18 800 a headline 'Devatenáct tisíc' (≈19 000), tj. o ~800–1000/100k vyšší než ověřená živá hodnota → headline přepsán na 'Osmnáct tisíc', všechny výskyty 18 800 → 17 990 (deck, meta description, og:title/description, og:image:alt, JSON-LD headline/description/breadcrumb, caveat, tělo, databox); (2) postele_akutni_per_1000 = 4,0 /1000 (2023, OECD Health Statistics curative beds, live, verified) — deck/tělo 4,1 → 4,0; (3) framing 'origin: seed, vyžaduje re-validaci' u hospitalizace + JIP je nyní zastaralý (oba live+verified) → disclaimery a databox přeformulovány; jediná zbývající seed hodnota clusteru je prumerna_delka_hospitalizace (ALOS 7 dní), caveat o ALOS z 05-16 zůstává. SEKUNDÁRNÍ NÁLEZ (vizuál): hero av-counter-grid stále nesl čísla z OECD Health at a Glance 2023 (22/100 obyv., 6,6 lůžek vs 4,3, ALOS 6,4 vs 7,2 — směrově protiřečilo tělu, ~13 % ACSC), citoval superseded edici → přepsán na hodnoty konzistentní s ověřeným tělem + dashboardem a citaci HAG 2025 / živý dashboard: hospitalizace 17 990 vs 14 600 (ÚZIS NRH live verified), nemocniční lůžka 6,4 vs OECD 4,2 (HAG 2025, ověřeno z Country Health Profile 2025), JIP 44,6 vs 18 (OECD adult ICU live verified), ACSC 592 vs 473 (HAG 2025 ref. 2021/22). ALOS (nejnejistější, jediný seed) z hera vypuštěna a ponechána v próze s caveatem. JSON-LD dateModified 2026-05-16 → 2026-06-18. Žádné nové neověřené číslo nebylo přidáno — všechny hodnoty pocházejí z live verified dashboardu nebo z OECD HAG 2025. Status zůstává verified (každá hodnota nyní odpovídá primárně-zdrojově ověřenému indikátoru); redakce potvrzuje headline-změnu přes merge PR."
     notes: "Kaskádová revize lůžkového clusteru navazující na audit clanek-vyhnutelne-hospitalizace.html (2026-05-15). Ověřeno proti OECD Health at a Glance 2025 (avoidable hospital admissions, hospital beds and occupancy chapters), Czechia Country Health Profile 2025 (OECD/European Observatory, září 2025), ČSÚ Healthcare 2024 (https://csu.gov.cz/healthcare) a interní metodické kartě indicators/luzka_jip_per_100k.json. Opraveny tři klíčové numerické nesrovnalosti: (1) ACSC 580/480 → 592/473 — sjednoceno se sourozeneckým auditem vyhnutelne-hospitalizace (OECD HAAG 2025, ref. rok 2021/2022, age-sex standardizováno); (2) Lůžka intenzivní péče 35/14 → caveat s rozlišením metodiky — interní metodická karta uvádí pro ČR ~40 ICU/100k (OECD standard ESICM) a Zdravotnický deník 03/2026 (Dušek/NRHZS) cca 40 ICU/100k (CZ) vs OECD průměr cca 17/100k; NRHZS 2024 reportuje širší IP definici (ARO 821 + JIP 4 906 = 5 727 lůžek, tj. cca 52/100k), která zahrnuje 1. úroveň oborových JIP nesplňujících ESICM 2./3. úroveň — proto 'dvojnásobek' formulace přepsána na metodicky korektní 'dvojnásobek až trojnásobek dle definice'; (3) ALOS 7 dní vs OECD 6,5 — doplněn explicitní caveat citující ČSÚ 2024 (ALOS akutní péče v ČR klesla z 6,6 dne v 2010 na 5,5 dne; ÚZIS NRH 2019 vykazuje 6,0 dne pro nemocnice exkl. následnou péči a 8,0 dne včetně), tj. 7 dní dashboardová hodnota není u OECD standardizované akutní péče a vyžaduje re-validaci proti aktuální vlně NRHZS. Doplněn caveat callout (komponenta .article-callout-caveat) za article-lead s vysvětlením metodických rozdílů ÚZIS NRH / OECD discharges / ESICM ICU vs NRHZS IP. Sekce Zdroje rozšířena z 6 generických položek na 11 stabilních primárních permalinků (OECD HAAG 2025 hospital activity, OECD HAAG 2025 hospital beds and occupancy, Czechia Country Health Profile 2025 PDF, OECD HCQI Definitions 2022, ÚZIS NRH registr permalink, ÚZIS Hospitalizovaní v nemocnicích ČR 2019, ČSÚ Healthcare landing page, Zdravotnický deník 03/2026 přebytek JIP, Eurostat hlth_co_disch2, NHS Digital QOF, NHS England Better Care Fund). Status published → review-pending. OTEVŘENÁ OTÁZKA pro datovou iteraci: indikátory luzka_jip_per_100k (value: 35), prumerna_delka_hospitalizace (value: 7) a hospitalizace_na_100k (value: 18 800) v dashboardu mají origin: seed a fetched_at 2026-05-04/05 — vyžadují napojení na NRHZS/NRH/OECD a re-publikaci do data/indicators.json (out-of-scope této iterace)."
+    av_sweep_2026-07-10: "Doplněny AV vizuály (článek měl hero counter-grid + caveat callout): av-data-table 'tři vrstvy' hospitalizačního náskoku (ACSC / day-case / sociální lůžko), av-bar-compare míra hospitalizací ČR 17 990 vs OECD 14 600 vs severské ≈12 600–13 500 (odvozeno z −25 až −30 % uvedených v textu). Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,6 +207,39 @@
         Mezinárodní srovnávací studie OECD a Eurostat opakovaně rozkládají rozdíl v hospitalizační míře mezi zeměmi do tří strukturálních vrstev.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Tři vrstvy, ze kterých se rodí český hospitalizační náskok nad OECD</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Vrstva</th>
+                <th scope="col">O co jde</th>
+                <th scope="col">Co by to řešilo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Ambulantně řešitelné stavy (ACSC)</th>
+                <td>592 vs. 473/100k — diabetes, CHOPN, srdeční selhání, hypertenze, astma; primární péče je nezachytila včas</td>
+                <td>silnější primární péče a dispenzarizace chroniků</td>
+              </tr>
+              <tr>
+                <th scope="row">Lůžko místo jednodenní chirurgie</th>
+                <td>výkony, které jinde běží jako day case (katarakta, laparoskopie, endoskopie), u nás končí nocí v nemocnici</td>
+                <td>úhrada zvýhodňující day case + ambulantní chirurgická pracoviště</td>
+              </tr>
+              <tr>
+                <th scope="row">Sociální lůžko v nemocnici</th>
+                <td>pacient zůstává na akutním lůžku, protože chybí místo v sociálních službách („technická hospitalizace")</td>
+                <td>integrovaná zdravotně-sociální péče (MZ + MPSV)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health at a Glance 2025 (avoidable admissions); rozklad dle mezinárodních srovnávacích studií OECD/Eurostat.</p>
+      </figure>
+
       <p>
         <strong>Hospitalizace pro stavy, které mají být řešeny ambulantně.</strong> ACSC indikátor (592 / 100 000 vs. OECD průměr 473 podle <em>OECD Health at a Glance</em> 2025, ref. rok 2021/2022, age-sex standardizováno) tento jev kvantifikuje pro pět chronických diagnóz — diabetes, CHOPN, srdeční selhání, nekomplikovanou hypertenzi a astma. V Česku tyto pacienty častěji než ve srovnatelných zemích hospitalizujeme proto, že primární péče jejich stav nezvládla zachytit a stabilizovat dřív. Souvislost se sourozeneckým článkem <a href="clanek-vyhnutelne-hospitalizace.html">vyhnutelne-hospitalizace</a> této redakční řady je přímá: část hospitalizační rezervy proti OECD se schovává právě tam.
       </p>
@@ -229,6 +263,16 @@
       </p>
 
       <h3>Co dělají systémy s nižší mírou hospitalizací</h3>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Míra hospitalizací na 100 000 obyvatel — ČR vs. referenční systémy</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="18000">
+          <li class="av-bar-row av-bar-row-highlight" data-value="17990" data-display="17 990" data-label="Česko" data-note="ÚZIS NRH 2024 (origin: live, verified)"></li>
+          <li class="av-bar-row" data-value="14600" data-display="14 600" data-label="OECD ⌀"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="12950" data-display="≈ 12 600–13 500" data-label="Severské země" data-note="cca 25–30 % pod ČR při srovnatelných výsledcích zdraví"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS NRH (ČR); OECD Health at a Glance 2025 (discharges). Severská hodnota odvozena z −25 až −30 % vůči ČR uvedených v textu.</p>
+      </figure>
 
       <p>
         <strong>Skandinávie</strong> — Norsko, Švédsko, Dánsko, Finsko — postupně od 90. let snižuje počet akutních lůžek a posiluje primární péči, domácí péči a komunitní zdravotní centra. Hospitalizace v severských zemích jsou řádově o 25–30 procent nižší než v Česku, při srovnatelných výsledcích zdraví populace. Klíčem je „step-down" filozofie — pacient, který není kandidátem na akutní lůžko, dostane péči v sub-akutním nebo komunitním zařízení, ne v nemocnici plné akutních resorts.

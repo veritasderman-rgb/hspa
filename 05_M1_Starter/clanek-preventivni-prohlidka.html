@@ -24,6 +24,7 @@
     notes: "Účast na preventivní prohlídce u PL v 2letém intervalu. Původní seed 48 % nyní nahrazen verifikovanou hodnotou z datového kontraktu 52,6 % (2023) — indikátor prohlidka_prakticky_lekar byl 2026-06-10 zlivněn z ÚZIS/NZIP otevřených dat PPS-08-01 (mikrodata 1 osoba/rok, 2leté pokrytí osob 18+; verification_status: verified). Vyhláška 70/2012 Sb. — interval 2 roky pro dospělé 18+ potvrzeno (§ 2 odst. 2). Mezinárodní modely (NHS Health Check 2009 — UK NHS, Gesundheits-Check-up 35 — Německo, examen périodique de santé — Francie) korektně atribuovány.
     update_2026-07-09: \"F1 dávkový plný audit. (1) Centrální číslo 48 % → 52,6 % napříč článkem (title 'Půlka' zachován — 47,4 % neprojde), hero counter, deck, meta/og/JSON-LD description, lead ('přes pět milionů' → 'přes čtyři miliony'), tělo, závěr, zdroj figury (VZP/ÚZIS → ÚZIS/NZIP PPS-08-01). (2) Databox srovnán s kontraktem: ACSC 580/480 → 592/473 (OECD H@G 2025), screening kolorektální 28/42 → 31,1 % vs. OECD 42 / EU 38 (2024), kardiovaskulární mortalita 220/OECD 140 → 463,75 vs. EU-27 312,95 (Eurostat hlth_cd_asdr2, 2023). (3) Interní link kolonoskopie.html ověřen (existuje). (4) OTEVŘENO (drží partial): indikátor kontrola_hypertenze v databoxu 68 % vs. OECD 72 % má origin: seed a je sporný — primární české studie (Bruthans 2019, Cifková post-MONICA) uvádějí kontrolu TK cca 32–37 %; sibling clanek-vyhnutelne-hospitalizace tento řádek z databoxu odstranil. Ponecháno s explicitním 'origin seed', k rozhodnutí redakce/datové iterace. Status zůstává partial.\"
     f1_2026-07-10: "F1 link-audit: 9 externích odkazů zkontrolováno, žádný mrtvý. OECD — Realising the potential of primary health care (oecd.org/en/topics/health.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním jako platná, aktuální OECD stránka; ponecháno beze změny. Ostatní odkazy (escardio.org, g-ba.de, nhs.uk NHS Health Check, nzip.cz, splcr.cz, zakonyprolidi.cz) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (indikátor kontrola_hypertenze s origin: seed, sporný proti primárním českým studiím) odkazy neřeší, čeká na rozhodnutí redakce/datové iterace."
+    av_sweep4_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-data-table 'kdo přeskakuje' (4 skupiny) + av-data-table evropské programy prevence (NHS Health Check / Check-up 35 / examen périodique / Skandinávie). Čísla/fakta 1:1 z textu, text nezměněn (aditivní), claims nedotčeny."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -213,6 +214,44 @@
         Z domácí literatury a šetření zdravotních pojišťoven vyplývá, že preventivní prohlídku přeskakují především čtyři skupiny.
       </p>
 
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Kdo prohlídku přeskakuje — a proč na tom záleží</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Skupina</th>
+                <th scope="col">Argument „proč ne"</th>
+                <th scope="col">Proč právě u ní záleží</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Mladí dospělí (20–35)</th>
+                <td>„necítím se nemocný"</td>
+                <td>tvoří se základní KV a metabolické riziko — desítky let návratnosti</td>
+              </tr>
+              <tr>
+                <th scope="row">Muži středního věku (40–55)</th>
+                <td>účast výrazně nižší než u žen</td>
+                <td>rozhoduje se o budoucí KV mortalitě, rakovině střeva, duševním zdraví</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Sociálně znevýhodnění</th>
+                <td>nižší vzdělání, nejisté zaměstnání</td>
+                <td>vyšší rizika + nižší zapojení; gradient ostřejší než v SE/NL</td>
+              </tr>
+              <tr>
+                <th scope="row">Bez registrovaného praktika</th>
+                <td>provozní bariéra, ne zákonná</td>
+                <td>roste v krajích s nedostatkem praktiků</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> domácí literatura a šetření zdravotních pojišťoven. Registrovanost u praktika 95+ %, ale účast na prevenci jen 52,6 %.</p>
+      </figure>
+
       <p>
         <strong>Mladí dospělí (20–35 let)</strong> bez subjektivních problémů. „Necítím se nemocný, k lékaři nemusím." V této věkové kategorii se ale tvoří základní kardiovaskulární a metabolické riziko (přírůstek hmotnosti, sedavé chování, počátek dlouhodobé hypertenze nebo prediabetu). Včasný záchyt rizikových faktorů u mladého dospělého má desítky let návratnosti.
       </p>
@@ -250,6 +289,44 @@
       <p>
         <strong>WHO Best Buys</strong> a <strong>European Society of Cardiology</strong> (ESC) doporučují populační kardiovaskulární prevenci jako jednu z nejúčinnějších cost-effective intervencí v moderní medicíně. SCORE2 jako kalkulátor rizika je k dispozici od roku 2021 jako evropský referenční nástroj.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Programy strukturované prevence v Evropě</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col">Program</th>
+                <th scope="col">Klíčový rys</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Velká Británie</th>
+                <td>NHS Health Check (od 2009)</td>
+                <td>adresná pozvánka 40–74 let, každých 5 let, strukturovaný plán</td>
+              </tr>
+              <tr>
+                <th scope="row">Německo</th>
+                <td>Gesundheitsuntersuchung („Check-up 35", od 1989)</td>
+                <td>aktivní zvaní pojišťovnami + kulturní norma „Vorsorge"</td>
+              </tr>
+              <tr>
+                <th scope="row">Francie</th>
+                <td>examen périodique de santé</td>
+                <td>Centra zdravotního vyšetření; pozvánka v milnících (16/30/45/60/70)</td>
+              </tr>
+              <tr>
+                <th scope="row">Skandinávie</th>
+                <td>zdravotní střediska + P4P</td>
+                <td>aktivní zvaní, bonifikace praktiků, dispenzár u sestry (NP)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> NHS Health Check (BMJ/Lancet); německé Gesundheitsuntersuchung; francouzský examen périodique; skandinávská praxe. SCORE2 jako evropský kalkulátor rizika od 2021.</p>
+      </figure>
 
       <h3>Co Česko realisticky může</h3>
 

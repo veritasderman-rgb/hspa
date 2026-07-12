@@ -21,6 +21,7 @@
     notes: "VERIFIED 2026-06-17. Centralni teze opravena a doverena proti indikatoru prevalence_koureni_adolescenti (14 %, 2022, benchmark {}, signal neutral) i primarnimu WHO/HBSC zdroji (data browser: CR 15leti ~14 % current use, lifetime 31 %; cross-national prumer 15 % / lifetime 25 %; e-cig current 20 % / ever 32 %). Odstranena fabrikovana teze 'o 49 % nad OECD (11,5 %)' i neplatne benchmarky 11,5/12,8. NAUTA 2025 cisla overena proti SZU TZ 29.5.2026 (15-24 let: 38,8 % nikotin, 26,0 % denne, e-cig 25,6 % mesicne, nejsilnejsi naplne 5,0 %→35,6 %; e-cig populacne 11,6 %; prichut jako duvod ~polovina uzivatelu). Skola bez nikotinu / 70+ skol overeno proti WHO PACE Czechia 2025 + SZU 2023. SMAZANO jako nedoloziteln: finsky 'JOKI' program a tvrzeni o poklesu prevalence 'o 12 procentnich bodu' (skutecny program je North Karelia Youth Project, jiny efekt), irsky BLAST 'vysledky konzistentni' (bez cisla/zdroje), puvodni prichut 61,5 % (neodpovida NAUTA 2025 TZ — nahrazeno 'polovinou'). Odstraneny vsechny redakcni 'stazeno z produkce / flagged / GitHub issue' formulace z viditelneho textu. published:false ponechano k centralni uprave articles.json.
 
     nightly_scan 2026-07-07: indicator-drift kuractvi_denni ověřeno — bez zásahu. Obě zmínky (odst. 'Co měříme...' a 'Socioekonomický gradient') už správně odlišují kuractvi_denni (dospělí 18+, EHIS/ČSÚ, denní kouření) od prevalence_koureni_adolescenti (patnáctiletí, HBSC, current use 30 dní) — necitují konkrétní hodnotu kuractvi_denni, jen odkaz+atribuci. Falešně pozitivní nález skeneru (kolize s blízkými čísly 14 %/15 %/20 % patřícími adolescentnímu indikátoru). Konzistentní s clanek-vydaje-prevence.html."
+    av_sweep3_2026-07-10: "Doplněny AV vizuály (článek měl jen hero figuru): av-bar-compare HBSC current use (e-cigarety 20 > cigarety 15 > ČR cigarety ≈14), av-counter-grid NAUTA 2025 (38,8 % nikotin / 25,6 % e-cig 15-24 / 35,6 % nejsilnější náplně / ~50 % příchuť), av-data-table 5 strukturálních příčin. Všechna čísla 1:1 z textu/ověřených callout boxů, text nezměněn (aditivní), claims nedotčeny."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -229,6 +230,43 @@
         Ukazatel kouření cigaret zachycuje jen část nikotinové expozice adolescentů. Podle WHO/Europe (HBSC 2021/22 survey) <strong>e-cigarety předčily klasické cigarety</strong>: cross-national current use e-cigaret (posledních 30 dnů) je <strong>20 %</strong> oproti 15 % u cigaret, a e-cigaretu někdy vyzkoušelo 32 % patnáctiletých.
       </p>
 
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Užívání v posledních 30 dnech — e-cigarety už předběhly klasické (patnáctiletí, HBSC 2021/22)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="20" data-unit="%">
+          <li class="av-bar-row av-bar-row-bad" data-value="20" data-label="E-cigarety (cross-national ⌀)" data-note="někdy vyzkoušelo 32 % patnáctiletých"></li>
+          <li class="av-bar-row" data-value="15" data-label="Klasické cigarety (cross-national ⌀)"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="14" data-display="≈ 14" data-label="Klasické cigarety — Česko" data-note="lifetime 31 %; ČR zhruba na průměru sítě HBSC"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO/Europe HBSC 2021/22 survey (current use, 44 zemí/regionů).</p>
+      </figure>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">NAUTA 2025: nikotin u mladých 15–24 let (SZÚ, TZ 29. 5. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="38.8" data-decimals="1" data-suffix=" %">38,8 %</span>
+            <span class="av-counter-label">užívá nějaký nikotinový produkt</span>
+            <span class="av-counter-foot">denně 26,0 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="25.6" data-decimals="1" data-suffix=" %">25,6 %</span>
+            <span class="av-counter-label">e-cigarety alespoň měsíčně (15–24 let)</span>
+            <span class="av-counter-foot">populačně 11,6 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="35.6" data-decimals="1" data-suffix=" %">35,6 %</span>
+            <span class="av-counter-label">podíl nejsilnějších náplní mezi uživateli</span>
+            <span class="av-counter-foot">skok z 5,0 % (2022) → 35,6 % (2025)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="50" data-prefix="~" data-suffix=" %">~50 %</span>
+            <span class="av-counter-label">jako důvod uvádí příchuť</span>
+            <span class="av-counter-foot">MZ ČR připravuje zákaz charakteristických příchutí</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SZÚ — Národní výzkum užívání tabáku a alkoholu (NAUTA) 2025, tisková zpráva 29. 5. 2026.</p>
+      </figure>
+
       <p>
         Národní šetření <strong>NAUTA 2025</strong> (SZÚ, tisková zpráva 29. 5. 2026) doplňuje obrázek za starší věkovou skupinu 15–24 let (pozor: jiná věková kategorie než HBSC 15letí): nějaký nikotinový produkt užívá <strong>38,8 %</strong> a denně <strong>26,0 %</strong>; e-cigarety alespoň jednou měsíčně užívá 11,6 % populace, ve věku 15–24 let ale 25,6 %. Nejvíce alarmující je posun k nejsilnějším náplním — jejich podíl mezi uživateli 15–24 let vzrostl z 5,0 % (2022) na <strong>35,6 % (2025)</strong> — a přibližně <strong>polovina</strong> mladých uživatelů uvádí jako důvod příchuť. MZ ČR podle mediálních zpráv připravuje zákaz charakteristických příchutí e-cigaret.
       </p>
@@ -262,6 +300,49 @@
       <p>
         <strong>Marketing zaměřený na mládež.</strong> Tabákový průmysl historicky cílil kampaněmi na věkovou skupinu 12–18 let — dokumenty z procesů v USA a EU to explicitně potvrzují. V éře sociálních sítí tento marketing probíhá prostřednictvím influencerů, Spotify, TikToku a YouTube, kde tradiční mediální regulace TPD2 nefunguje. Elektronické cigarety s příchutí bubblegum, mango nebo watermelon nejsou navrženy pro dospělé kuřáky hledající alternativu — jsou navrženy pro teenagery, kteří dosud nekouřili.
       </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Pět strukturálních příčin, proč ČR zaostává</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Příčina</th>
+                <th scope="col">Mechanismus</th>
+                <th scope="col">Doklad / číslo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Nerovnoměrná školní prevence</th>
+                <td>„Škola bez nikotinu" (SZÚ) je dobrovolná, pokrytí není plošné</td>
+                <td>&gt; 70 škol zapojeno; celostátní evaluace chybí</td>
+              </tr>
+              <tr>
+                <th scope="row">Cena a dostupnost</th>
+                <td>tabáková daň pod britskou/irskou úrovní; slabý enforcement prodeje nezletilým</td>
+                <td class="av-bad">+10 % ceny → −4 % spotřeby mladistvých (WHO)</td>
+              </tr>
+              <tr>
+                <th scope="row">Socioekonomický gradient</th>
+                <td>reprodukuje zdravotní nerovnosti (dřívější nemoc, nižší naděje dožití)</td>
+                <td>nižší příjem/vzdělání rodičů → víc kouření (HBSC ČR)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Marketing na mládež</th>
+                <td>influenceři, TikTok, YouTube — mimo dosah TPD2 regulace</td>
+                <td>příchutě bubblegum/mango cílí na teenagery</td>
+              </tr>
+              <tr>
+                <th scope="row">Slabá regulace e-cigaret</th>
+                <td>TPD2 nereguluje soc. sítě ani příchutě; TPD3 teprve v procesu</td>
+                <td>online věková kontrola symbolická</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO PACE case study Czechia 2025; WHO (Chaloupka et al.); HBSC ČR; TPD2/TPD3.</p>
+      </figure>
 
       <h3>Biologický základ: proč věk zahájení rozhoduje</h3>
 
