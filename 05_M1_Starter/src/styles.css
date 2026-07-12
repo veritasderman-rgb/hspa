@@ -16735,3 +16735,106 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   .dg-ja { grid-template-columns: 1fr; }
   .dg-hero-bench { border-left: 0; padding-left: 0; }
 }
+
+/* ===== Doložka (.dlz-*) ===== */
+/* Inline průkaz původu čísel v článcích (src/dolozka-inline.js).
+   Výhradně design tokeny — dark mode řeší [data-theme="dark"] přepnutím
+   tokenů, žádný prefers-color-scheme, žádné vlastní barvy. */
+
+.dlz-chip {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: inherit;
+  border-bottom: 1px dotted var(--ink-mut);
+}
+.dlz-chip::after {
+  font-size: 0.75em;
+  vertical-align: super;
+  font-family: var(--sans);
+}
+.dlz-chip[data-dlz-status="current"]::after { content: " ✓"; color: var(--good); }
+.dlz-chip[data-dlz-status="changed"]::after { content: " ⚠"; color: var(--warn); }
+.dlz-chip[data-dlz-status="reference"]::after { content: " ·"; color: var(--ink-mut); }
+.dlz-chip:hover,
+.dlz-chip:focus-visible {
+  border-bottom-color: var(--red);
+  outline-offset: 3px;
+}
+
+/* Cross-node fallback: jen stavová značka za quote, bez podtržení textu. */
+.dlz-mark {
+  border-bottom: none;
+}
+
+.dlz-panel {
+  position: absolute;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--red);
+  padding: 14px 16px;
+  max-width: 340px;
+  box-shadow: 0 6px 20px -4px var(--rule2);
+  z-index: 50;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.dlz-panel-metric {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.dlz-panel-verdict {
+  margin-top: 6px;
+}
+/* Víc tvrzení na jednom quote („72 % vs. OECD 78 %") — oddělené bloky. */
+.dlz-panel-claim + .dlz-panel-claim {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+.dlz-panel-verdict[data-status="current"] { color: var(--good); }
+.dlz-panel-verdict[data-status="changed"] { color: var(--warn); }
+.dlz-panel-verdict[data-status="reference"] { color: var(--ink-mut); }
+.dlz-panel-note {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--ink-mut);
+}
+.dlz-panel-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rule2);
+}
+.dlz-panel-link:hover,
+.dlz-panel-link:focus-visible {
+  border-bottom-color: var(--red);
+}
+.dlz-panel-foot {
+  font-size: 11.5px;
+  color: var(--ink-mut);
+  border-top: 1px solid var(--rule);
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.dlz-badge {
+  font-family: var(--sans);
+  font-size: inherit;
+  color: var(--ink-mut);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rule);
+}
+.dlz-badge:hover {
+  color: var(--red);
+}
+
+@media (max-width: 640px) {
+  .dlz-panel { max-width: calc(100vw - 32px); }
+}

@@ -240,3 +240,41 @@ test('reálná data: exact + auto tvrzení dostávají verdikt (ne reference)', 
     assert.ok(Number.isFinite(r.contractValue), `claim ${claim.id} nese contractValue`);
   }
 });
+
+// ---------------------------------------------------------------------------
+// locateClaims — review nálezy PR #786 (quotes s HTML tagy, sdílené quotes)
+// ---------------------------------------------------------------------------
+
+test('locateClaims: quote s inline HTML tagy se najde v čistém textu (review #786)', () => {
+  const body = 'Studie v JAMA Network Open ukázala pokles — ČR 26,3 % oproti průměru.';
+  const sTagem = { id: 't1', quote: 'v <em>JAMA Network Open</em> ukázala' };
+  const sKoncovymi = { id: 't2', quote: 'pokles</a></strong> — ČR 26,3 %' };
+  const hits = locateClaims(body, [sTagem, sKoncovymi]);
+  assert.equal(hits.length, 2, 'oba otagované quotes se po stripu tagů najdou');
+});
+
+test('locateClaims: dva claims se STEJNÝM quote → jeden výskyt se skupinou obou (review #786)', () => {
+  const body = 'Spokojenost: 72 % vs. OECD 78 % — pod průměrem.';
+  const cr = { id: 'cr', quote: '72 % vs. OECD 78 %', metric: 'ČR' };
+  const oecd = { id: 'oecd', quote: '72 % vs. OECD 78 %', metric: 'OECD' };
+  const hits = locateClaims(body, [cr, oecd]);
+  assert.equal(hits.length, 1, 'jeden sdílený výskyt');
+  assert.equal(hits[0].claims.length, 2, 'skupina nese OBA claims');
+  assert.equal(hits[0].claim.id, 'cr', 'claim = první ze skupiny (zpětná kompatibilita)');
+  // entry bez skupiny má claims = [claim]
+  const solo = locateClaims('Hodnota 52,6 procenta.', [{ id: 's', quote: '52,6 procenta' }]);
+  assert.equal(solo[0].claims.length, 1);
+});
+
+test('locateClaims: reálné otagované quotes z registru se najdou ve svém článku', () => {
+  const fs2 = fs;
+  const otagovane = claimsData.claims.filter((c) => /<[^>]+>/.test(c.quote)).slice(0, 3);
+  assert.ok(otagovane.length >= 1, 'registr obsahuje otagované quotes');
+  for (const claim of otagovane) {
+    const html = fs2.readFileSync(path.join(ROOT, claim.article), 'utf8');
+    // textová vrstva: strip tagů z HTML (jako textContent) + normalizace
+    const text = normText(html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<[^>]*>/g, ' '));
+    const hits = locateClaims(text, [claim]);
+    assert.equal(hits.length, 1, `otagovaný quote ${claim.id} se v ${claim.article} najde`);
+  }
+});

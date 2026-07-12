@@ -44,37 +44,48 @@ export function claimsForArticle(claims, slug) {
  * Najde pozice citátů (claim.quote) v normalizovaném textu článku.
  *
  * Pravidla:
- *  - hledá se normText(quote) jako substring v bodyText (už normalizovaném),
- *  - kandidáti se řadí podle délky needle SESTUPNĚ — při překryvu vyhrává
+ *  - needle = normText(quote BEZ inline HTML tagů) — část quotes v registru
+ *    obsahuje markup (</a></strong>, <em>…</em>); DOM vrstva matchuje proti
+ *    textContent, kde tagy nejsou (stejné stripování dělá claims-verify),
+ *  - claims se STEJNÝM needle (např. „72 % vs. OECD 78 %" = dvě metriky
+ *    v jedné citaci) se seskupí do jednoho výskytu — entry nese `claims`
+ *    se všemi, `claim` je první z nich (zpětná kompatibilita),
+ *  - skupiny se řadí podle délky needle SESTUPNĚ — při překryvu vyhrává
  *    delší quote, kratší překrývající se zahodí,
- *  - každý quote max 1× (první výskyt přes indexOf),
+ *  - každý needle max 1× (první výskyt přes indexOf),
  *  - prázdný nebo nenalezený quote se přeskočí.
  *
  * @param {string} bodyText — normText() celého textu článku
  * @param {Array<object>} claims — tvrzení jednoho článku
- * @returns {Array<{claim: object, start: number, end: number}>} seřazeno podle start
+ * @returns {Array<{claim: object, claims: Array<object>, start: number, end: number}>} seřazeno podle start
  */
 export function locateClaims(bodyText, claims) {
   if (typeof bodyText !== 'string' || !bodyText || !Array.isArray(claims)) return [];
 
-  // Kandidáti s normalizovaným needle, delší první (stabilní vůči překryvům).
-  const kandidati = claims
-    .map((claim) => ({ claim, needle: normText(claim?.quote ?? '') }))
-    .filter((k) => k.needle.length > 0)
-    .sort((a, b) => b.needle.length - a.needle.length);
+  // Seskupení podle needle (quote bez tagů, normalizovaný).
+  const skupiny = new Map();
+  for (const claim of claims) {
+    const needle = normText(String(claim?.quote ?? '').replace(/<[^>]*>/g, ' '));
+    if (!needle) continue;
+    if (!skupiny.has(needle)) skupiny.set(needle, []);
+    skupiny.get(needle).push(claim);
+  }
+
+  // Delší needle první (stabilní vůči překryvům).
+  const kandidati = [...skupiny.entries()].sort((a, b) => b[0].length - a[0].length);
 
   /** Obsazené intervaly [start, end) — překrývající se kratší quotes zahodíme. */
   const obsazeno = [];
   const nalezeno = [];
 
-  for (const { claim, needle } of kandidati) {
+  for (const [needle, grp] of kandidati) {
     const start = bodyText.indexOf(needle);
     if (start === -1) continue; // nenalezený quote přeskoč
     const end = start + needle.length;
     const koliduje = obsazeno.some((i) => start < i.end && end > i.start);
     if (koliduje) continue; // delší už místo drží
     obsazeno.push({ start, end });
-    nalezeno.push({ claim, start, end });
+    nalezeno.push({ claim: grp[0], claims: grp, start, end });
   }
 
   return nalezeno.sort((a, b) => a.start - b.start);

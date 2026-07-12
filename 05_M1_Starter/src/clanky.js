@@ -4,6 +4,7 @@ import { renderModuleNav, renderMastheadDate, loadGlossaryTerms, isArticleVisibl
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { enhanceArticleToc } from './article-toc.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
+import { enhanceDolozka } from './dolozka-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
 import { enhanceArticleShare } from './article-share.js';
 import { enhanceSeriesNav, SERIES, SERIES_TITLE } from './series-nav.js';
@@ -19,6 +20,12 @@ loadAndRenderArticles();
 enhanceSeriesNav();  // číslovaná navigace série na dílech (idempotent, jinak no-op)
 enhanceArticleRelated(); // generuje "Příbuzné sekce" na clanek-*.html (idempotent)
 enhanceArticleShare();   // sdílecí pásek pod článkem (idempotent, na hubu no-op)
+// Doložka: klikatelné doložky tvrzení (registr claims.json × datový kontrakt);
+// na hubu no-op (chybí .article-page), selhání fetch → tiše bez doložek.
+Promise.all([
+  fetch('data/claims.json').then(r => r.json()),
+  fetch('data/indicators.json').then(r => r.json()),
+]).then(([claims, indicators]) => enhanceDolozka({ claims, indicators })).catch(() => {});
 
 /**
  * Vloží AI disclaimer banner do stránek sekce Články.

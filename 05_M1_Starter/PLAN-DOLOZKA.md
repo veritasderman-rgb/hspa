@@ -22,10 +22,13 @@ export function claimsForArticle(claims, slug)
 // vrací claims s article === slug.
 
 export function locateClaims(bodyText, claims)
-// bodyText: normText() celého textu článku. Hledá normText(claim.quote)
-// jako substring. Delší quotes první (překryvy: delší vyhrává, kratší
-// překrývající se zahodí). Každý quote max 1× (první výskyt).
-// vrací [{ claim, start, end }] seřazené podle start (pozice v NORMALIZOVANÉM textu).
+// bodyText: normText() celého textu článku. Needle = normText(quote BEZ
+// inline HTML tagů) — část quotes v registru markup obsahuje a DOM vrstva
+// matchuje proti textContent (review PR #786). Claims se stejným needle se
+// seskupí do jednoho výskytu. Delší quotes první (překryvy: delší vyhrává,
+// kratší překrývající se zahodí). Každý needle max 1× (první výskyt).
+// vrací [{ claim, claims, start, end }] seřazené podle start — `claims` je
+// celá skupina sdílející quote, `claim` první z ní (zpětná kompatibilita).
 
 export function matchesContract(claimValue, contractValue, tolerancePct)
 // true když se kontraktová hodnota rovná claimu po zaokrouhlení na počet
