@@ -21,6 +21,7 @@
     update_2026-07-09: "F1 dávkový audit — rekonciliace faktických čísel manifestu s datovým kontraktem (hodnotové a politické soudy dle pravidla neauditovány). Opraveno několik zastaralých seed hodnot proti aktuálnímu kontraktu: (1) hero counter mislabel — 22,6 % 'denních kuřáků, OECD 16 %' opraveno na 16,4 % denních (OECD 14,8 %), 22,6 % zaměňovalo kuřáky tabáku celkem (22,4 %) za denní; foot doplněn. (2) screening kolorekta 28 % → 31,1 % (kontrakt screening_kolorektalni, OECD 42 / EU 38, 2024) napříč hero counterem, data-cardem, prioritním seznamem i závěrečnou pasáží. (3) Databox indikátorů srovnán s kontraktem: kardiovaskulární mortalita 220/OECD 140 → 463,75 vs. EU-27 312,95 (Eurostat hlth_cd_asdr2); incidence kolorekta bez smyšleného benchmarku 'OECD 36,5' (kontrakt bez benchmarku); denní kuřáctví 22,6/16 → 16,4/14,8; sebevraždy 12,5/OECD 11 → 11,6 vs. EU 10,4 (kontrakt 11,59/10,37); platba z kapsy 14 → 13,6 %. (4) Data-cards platba (14 → 13,6 %) a sebevraždy (12,5 → 11,6, bench EU 10,4) srovnány; prioritní seznam 'sebevraždy ~13' → ~11,6. Hodnota kardiovaskulární mortality 463/313 v prioritním seznamu a cover_viz už byla správná. Zůstává partial — manifest je autorský politický text vyžadující per-claim ruční audit zbývajících věcných tvrzení (AWaRe 37,1 %, výpadky léčiv, mezinárodní programové odkazy); toto kolo srovnalo jen čísla přímo navázaná na indikátory dashboardu."
     notes: "Manifest — politicky laděný autorský text (Pavlovic, Malíková, Resortní tým ČPS pro zdravotnictví). PER POKYNY: hodnotové soudy a politické postoje se neauditují (autorský názor). Faktická tvrzení uvnitř (čísla, právní normy, citace OECD/WHO) by měla být auditována stejně jako v redakčních článcích. DOPORUČENO pro ruční audit: projít 13 oblastí a verifikovat všechna konkrétní čísla/odkazy v kontextu primárních zdrojů. Tam, kde manifest odkazuje na jiné HSPA články jako referenci, čerpá z jejich auditního stavu. Status published → partial — vyžaduje per-claim audit s explicitním oddělením názor/fakt."
     f1_2026-07-10: "F1 link-audit: 14 externích odkazů zkontrolováno, žádný mrtvý. OECD HSPA Framework CZ (oecd.org/en/publications/health-system-performance-assessment-framework-for-the-czech-republic_5d59b667-en.html) vrací HTTP 403 při skenu (anti-bot Cloudflare) — ověřeno webovým vyhledáním, že jde o platnou, aktuální OECD publikaci; ponecháno beze změny. Ostatní odkazy (e-estonia.com, ecrin.org, GitHub, NHS England, g-ba.de, has-sante.fr, kanta.fi, nice.org.uk, sundhed.dk, who.int) vrací HTTP 200. Ponecháno partial — otevřený bod z 2026-07-09 (per-claim ruční audit zbývajících věcných tvrzení manifestu, např. AWaRe 37,1 %, výpadky léčiv) trvá, odkazy s ním nesouvisí."
+    reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A). Současně sladěna zastaralá čísla v prioritě 8 a counteru s kontraktem: KV mortalita 220/140 → 463,75/EU-27 312,95 (Eurostat ESP 2013, 2023 — jiná standardizace než původní OECD pár), screening kolorektální 28/42 → 31,1/42, kuřáctví 22,6/16 → 16,4/14,8; incidence kolorektálního karcinomu 73,5 ponechána (kontrakt souhlasí), benchmark 36,5 vypuštěn (kontrakt benchmark nemá)."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -264,9 +265,9 @@
             <span class="av-counter-foot">léčebná péče rostla 14 % ve stejném období</span>
           </div>
           <div class="av-counter-block av-counter-block-bad">
-            <span class="av-counter" data-value="220">220</span>
+            <span class="av-counter" data-value="463.75" data-decimals="2">463,75</span>
             <span class="av-counter-label">kardiovaskulární mortalita CZ / 100 tis.</span>
-            <span class="av-counter-foot">OECD průměr ~140 — pětina rezervy preventabilní</span>
+            <span class="av-counter-foot">EU-27 průměr 312,95 (Eurostat, ESP 2013, 2023)</span>
           </div>
         </div>
         <p class="av-figure-note"><strong>Zdroj:</strong> HSPA Monitor — indikátory <code>koureni</code>, <code>screening_kolorektalni</code>, <code>vydaje_prevence</code>, <code>mortalita_kardiovaskularni</code>.</p>
@@ -459,7 +460,7 @@
       </aside>
 
       <p>
-        Na preventivní programy české zdravotnictví dlouhodobě vydává malý zlomek celkových výdajů a růst v segmentu prevence je výrazně pomalejší než v segmentu léčebné péče. Při srovnání let 2017 a 2018 vzrostly výdaje na léčebnou péči o 14 procent, na preventivní péči pouze o 2,3. Zároveň primárními příčinami úmrtí v ČR jsou kardiovaskulární a nádorová onemocnění, jejichž významná část je preventabilní. V dashboardu HSPA Monitoru se to ukazuje napříč indikátory: kardiovaskulární mortalita 220 oproti 140 v OECD, incidence kolorektálního karcinomu 73,5 vs. 36,5, účast na kolorektálním screeningu 28 procent vs. 42, denní kuřáctví 22,6 procenta vs. 16, spotřeba alkoholu 14,4 vs. 8,9 litru čistého alkoholu na osobu starší patnácti let. Koncepce Zdraví 2030 má dobré cíle, ale chybí jí odbor a tým, který by ji důsledně realizoval.
+        Na preventivní programy české zdravotnictví dlouhodobě vydává malý zlomek celkových výdajů a růst v segmentu prevence je výrazně pomalejší než v segmentu léčebné péče. Při srovnání let 2017 a 2018 vzrostly výdaje na léčebnou péči o 14 procent, na preventivní péči pouze o 2,3. Zároveň primárními příčinami úmrtí v ČR jsou kardiovaskulární a nádorová onemocnění, jejichž významná část je preventabilní. V dashboardu HSPA Monitoru se to ukazuje napříč indikátory: kardiovaskulární mortalita 463,75 oproti 312,95 v průměru EU-27 (Eurostat, 2023), incidence kolorektálního karcinomu 73,5 / 100 000, účast na kolorektálním screeningu 31,1 procenta vs. 42 v OECD, denní kuřáctví 16,4 procenta vs. 14,8, registrovaná spotřeba alkoholu 11,2 vs. 8,5 litru čistého alkoholu na osobu starší patnácti let (2023, OECD Health at a Glance 2025). Koncepce Zdraví 2030 má dobré cíle, ale chybí jí odbor a tým, který by ji důsledně realizoval.
       </p>
 
       <p>
@@ -487,9 +488,9 @@
           </a>
           <a class="manifest-data-card" href="indikator-alkohol_spotreba.html">
             <div class="manifest-data-card-id">alkohol_spotreba</div>
-            <div class="manifest-data-card-value">14,4 l</div>
-            <div class="manifest-data-card-name">Čistý alkohol / os. ≥ 15 let / rok</div>
-            <div class="manifest-data-card-bench">OECD 8,9 l · 3. nejvyšší v EU</div>
+            <div class="manifest-data-card-value">11,2 l</div>
+            <div class="manifest-data-card-name">Registrovaný čistý alkohol / os. ≥ 15 let / rok</div>
+            <div class="manifest-data-card-bench">OECD 8,5 l · o třetinu nad průměrem</div>
           </a>
           <a class="manifest-data-card" href="indikator-mortalita_kardiovaskularni.html">
             <div class="manifest-data-card-id">mortalita_kardiovaskularni</div>
@@ -648,7 +649,7 @@
         <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita</strong></a> — 463,75 / 100 000 vs. EU-27 312,95 (Eurostat <code>hlth_cd_asdr2</code>, ESP 2013, 2023)</li>
         <li><a href="indikator-incidence_kolorektalni.html"><strong>Incidence kolorektálního karcinomu</strong></a> — 73,5 / 100 000 (hrubá míra, 2023)</li>
         <li><a href="indikator-screening_kolorektalni.html"><strong>Účast na kolorektálním screeningu</strong></a> — 31,1 % vs. OECD 42 % / EU 38 % (2024)</li>
-        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu</strong></a> — 14,4 l/os./rok vs. OECD 8,9</li>
+        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu</strong></a> — 11,2 l/os./rok (registrovaná, 2023) vs. OECD 8,5</li>
         <li><a href="indikator-kuractvi_denni.html"><strong>Denní kuřáctví (15+)</strong></a> — 16,4 % vs. OECD 14,8 % / EU 18,5 %</li>
         <li><a href="indikator-sebevrazdy_per_100k.html"><strong>Sebevraždy</strong></a> — 11,6 / 100 000 vs. EU 10,4 (Eurostat, 2023)</li>
         <li><a href="indikator-pouzivani_antidepresiv.html"><strong>Spotřeba antidepresiv</strong></a> — 84 DDD/1000/den vs. OECD 67</li>
