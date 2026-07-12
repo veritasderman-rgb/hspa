@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "generated_at": "2026-07-10T00:22:29.032Z",
+  "generated_at": "2026-07-12T13:10:39.866Z",
   "_doc": "Souvislosti — build-time znalostní graf indikátorů. Generuje scripts/build-souvislosti.js z indicators + system-model + legislativa + articles + claims + barometr. NEEDITOVAT ručně (přepíše refresh pipeline). Mapa indicator_id → { model, legislativa[], articles[], claims[], barometr }.",
   "counts": {
-    "indicators_total": 166,
-    "indicators_with_links": 127,
+    "indicators_total": 168,
+    "indicators_with_links": 130,
     "sources": {
       "system_model_nodes": 24,
       "legislativa_items": 12,
-      "legislativa_plan_items": 6,
-      "articles_visible": 152,
+      "legislativa_plan_items": 10,
+      "articles_visible": 155,
       "claims": 1377,
       "barometr": true
     }
@@ -690,6 +690,104 @@
           "unit": "%",
           "as_of": 2023,
           "relation": "derived"
+        }
+      ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
+    "benzodiazepiny_seniori_65plus": {
+      "id": "benzodiazepiny_seniori_65plus",
+      "name": "Dlouhodobé užívání benzodiazepinů u seniorů (65+)",
+      "model": null,
+      "legislativa": [],
+      "articles": [
+        {
+          "id": "benzodiazepiny-seniori",
+          "slug": "clanek-benzodiazepiny-seniori.html",
+          "title": "Každý sedmý český senior bere léky na spaní a nervy dlouhodobě. V Německu jen každý sedmnáctý",
+          "date": "2026-07-10",
+          "rubric": "klinika"
+        }
+      ],
+      "claims": [
+        {
+          "id": "benzodiazepiny-seniori--01",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "V Česku užívá benzodiazepiny — léky na úzkost a nespavost — pravidelně zhruba 15 % lidí nad 65 let.",
+          "metric": "Podíl osob 65+ v ČR pravidelně užívajících benzodiazepiny",
+          "value": 15,
+          "unit": "%",
+          "as_of": 2024,
+          "relation": "exact"
+        },
+        {
+          "id": "benzodiazepiny-seniori--02",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "v Německu, kde dlouhodobě benzodiazepiny bere kolem 6 % seniorů",
+          "metric": "Podíl komunitně žijících seniorů 65+ dlouhodobě užívajících benzodiazepiny v Německu — jiný zdroj a mírně odlišná definice pravidelného užívání než český indikátor",
+          "value": 6,
+          "unit": "%",
+          "as_of": null,
+          "relation": "related"
+        },
+        {
+          "id": "benzodiazepiny-seniori--03",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "2,5× vyšší podíl než v Německu (~6 %)",
+          "metric": "Poměr českého podílu seniorů užívajících benzodiazepiny (15 %) vůči Německu (~6 %) — odvozený násobek",
+          "value": 2.5,
+          "unit": "×",
+          "as_of": null,
+          "relation": "derived"
+        },
+        {
+          "id": "benzodiazepiny-seniori--04",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "naměřila sdruženou prevalenci 14,9 %",
+          "metric": "Sdružená prevalence užívání benzodiazepinů u komunitně žijících seniorů 65+ v 7 zemích EU, data 2019–2020 (benchmark eu indikátoru)",
+          "value": 14.9,
+          "unit": "%",
+          "as_of": 2020,
+          "relation": "derived"
+        },
+        {
+          "id": "benzodiazepiny-seniori--06",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "Celkově se v zemi ročně distribuuje kolem 45 milionů denních dávek benzodiazepinů",
+          "metric": "Roční distribuce benzodiazepinů v ČR v definovaných denních dávkách (DDD) — jiná metrika (distribuce léčiv) než prevalence užívání u seniorů",
+          "value": 45000000,
+          "unit": "DDD/rok",
+          "as_of": null,
+          "relation": "related"
+        },
+        {
+          "id": "benzodiazepiny-seniori--07",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "přibližně 4,2 definované denní dávky na obyvatele staršího patnácti let za rok",
+          "metric": "Roční distribuce benzodiazepinů přepočtená na obyvatele 15+ (DDD/obyv./rok) — jiná metrika než prevalence u seniorů",
+          "value": 4.2,
+          "unit": "DDD/obyv. 15+/rok",
+          "as_of": null,
+          "relation": "related"
+        },
+        {
+          "id": "benzodiazepiny-seniori--08",
+          "article": "clanek-benzodiazepiny-seniori.html",
+          "article_slug": "clanek-benzodiazepiny-seniori.html",
+          "quote": "2× častější užívání u žen než u mužů",
+          "metric": "Poměr prevalence pravidelného užívání benzodiazepinů žen vůči mužům v ČR (přibližný násobek)",
+          "value": 2,
+          "unit": "×",
+          "as_of": null,
+          "relation": "related"
         }
       ],
       "barometr": {
@@ -4421,6 +4519,41 @@
         "statements": []
       }
     },
+    "kojeni_pri_propusteni": {
+      "id": "kojeni_pri_propusteni",
+      "name": "Plné kojení při propuštění z porodnice",
+      "model": null,
+      "legislativa": [],
+      "articles": [],
+      "claims": [
+        {
+          "id": "stret-zajmu-vyziva-kojencu--02",
+          "article": "clanek-stret-zajmu-vyziva-kojencu.html",
+          "article_slug": "clanek-stret-zajmu-vyziva-kojencu.html",
+          "quote": "73,4 % v roce 2020",
+          "metric": "Podíl novorozenců plně (výhradně) kojených při propuštění z porodnice, ČR",
+          "value": 73.4,
+          "unit": "%",
+          "as_of": 2020,
+          "relation": "exact"
+        },
+        {
+          "id": "stret-zajmu-vyziva-kojencu--03",
+          "article": "clanek-stret-zajmu-vyziva-kojencu.html",
+          "article_slug": "clanek-stret-zajmu-vyziva-kojencu.html",
+          "quote": "72,2 % v roce 2021",
+          "metric": "Podíl novorozenců plně (výhradně) kojených při propuštění z porodnice, ČR",
+          "value": 72.2,
+          "unit": "%",
+          "as_of": 2021,
+          "relation": "exact"
+        }
+      ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
     "kontrola_hypertenze": {
       "id": "kontrola_hypertenze",
       "name": "Kontrolovaná hypertenze (TK < 140/90 mmHg)",
@@ -4710,6 +4843,20 @@
           "title": "Program na záchyt rakoviny plic má tři roky. Dosáhl na 2,7 % rizikových",
           "date": "2026-06-17",
           "rubric": "prevence"
+        },
+        {
+          "id": "preziti-karcinom-plic",
+          "slug": "clanek-preziti-karcinom-plic.html",
+          "title": "Nejsmrtelnější nádor. Proč přežije rakovinu plic v Česku jen každý desátý",
+          "date": "2026-07-11",
+          "rubric": "klinika"
+        },
+        {
+          "id": "nadeje-doziti-vzdelani",
+          "slug": "clanek-nadeje-doziti-vzdelani.html",
+          "title": "Třináct let života navíc za diplom",
+          "date": "2026-07-12",
+          "rubric": "populace"
         }
       ],
       "claims": [
@@ -6806,9 +6953,27 @@
           "title": "Program na záchyt rakoviny plic má tři roky. Dosáhl na 2,7 % rizikových",
           "date": "2026-06-17",
           "rubric": "prevence"
+        },
+        {
+          "id": "preziti-karcinom-plic",
+          "slug": "clanek-preziti-karcinom-plic.html",
+          "title": "Nejsmrtelnější nádor. Proč přežije rakovinu plic v Česku jen každý desátý",
+          "date": "2026-07-11",
+          "rubric": "klinika"
         }
       ],
       "claims": [
+        {
+          "id": "preziti-karcinom-plic--08",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "4 973 úmrtí na rakovinu plic za rok",
+          "metric": "Počet úmrtí na zhoubný nádor plic (C33–C34) v ČR za rok 2022 — absolutní počet, jiná metrika než standardizovaná onkologická mortalita",
+          "value": 4973,
+          "unit": "úmrtí/rok",
+          "as_of": 2022,
+          "relation": "related"
+        },
         {
           "id": "centrum-onkologicke-prevence-mou-2026--10",
           "article": "clanek-centrum-onkologicke-prevence-mou-2026.html",
@@ -7245,11 +7410,11 @@
           "id": "alkohol-spotreba--07",
           "article": "clanek-alkohol-spotreba.html",
           "article_slug": "clanek-alkohol-spotreba.html",
-          "quote": "preventabilní mortalita 195 vs. 168 (2022)",
+          "quote": "preventabilní mortalita 174 vs. 151 v EU (2023)",
           "metric": "preventabilní mortalita ČR vs. EU — hodnota v článku (195/168, rok 2022) neodpovídá aktuální hodnotě indikátoru v datovém kontraktu (173,86/150,85, rok 2023), pravděpodobně starší datová vlna",
-          "value": 195,
+          "value": 174,
           "unit": "na 100 000 ob.",
-          "as_of": 2022,
+          "as_of": 2023,
           "relation": "related"
         }
       ],
@@ -7665,6 +7830,13 @@
           "title": "Medikalizace veřejného zdraví: když z prevence uděláme ambulanci",
           "date": "2026-06-25",
           "rubric": "prevence"
+        },
+        {
+          "id": "nadeje-doziti-vzdelani",
+          "slug": "clanek-nadeje-doziti-vzdelani.html",
+          "title": "Třináct let života navíc za diplom",
+          "date": "2026-07-12",
+          "rubric": "populace"
         }
       ],
       "claims": [
@@ -7751,8 +7923,39 @@
         "outgoing": []
       },
       "legislativa": [],
-      "articles": [],
-      "claims": [],
+      "articles": [
+        {
+          "id": "nadeje-doziti-vzdelani",
+          "slug": "clanek-nadeje-doziti-vzdelani.html",
+          "title": "Třináct let života navíc za diplom",
+          "date": "2026-07-12",
+          "rubric": "populace"
+        }
+      ],
+      "claims": [
+        {
+          "id": "nadeje-doziti-vzdelani--01",
+          "article": "clanek-nadeje-doziti-vzdelani.html",
+          "article_slug": "clanek-nadeje-doziti-vzdelani.html",
+          "quote": "o 13 let delší život",
+          "metric": "Rozdíl v naději dožití mužů: vysokoškolské vs. základní vzdělání, od věku 25 let, ČR",
+          "value": 13,
+          "unit": "let",
+          "as_of": 2018,
+          "relation": "exact"
+        },
+        {
+          "id": "nadeje-doziti-vzdelani--02",
+          "article": "clanek-nadeje-doziti-vzdelani.html",
+          "article_slug": "clanek-nadeje-doziti-vzdelani.html",
+          "quote": "druhý největší vzdělanostní rozdíl v naději dožití ze sledovaných evropských zemí",
+          "metric": "Pořadí ČR ve vzdělanostním rozdílu naděje dožití mužů (2. z 23 evropských zemí)",
+          "value": 2,
+          "unit": "pořadí",
+          "as_of": null,
+          "relation": "derived"
+        }
+      ],
       "barometr": {
         "commitments": [],
         "statements": []
@@ -8570,7 +8773,15 @@
         ]
       },
       "legislativa": [],
-      "articles": [],
+      "articles": [
+        {
+          "id": "nadeje-doziti-vzdelani",
+          "slug": "clanek-nadeje-doziti-vzdelani.html",
+          "title": "Třináct let života navíc za diplom",
+          "date": "2026-07-12",
+          "rubric": "populace"
+        }
+      ],
       "claims": [],
       "barometr": {
         "commitments": [],
@@ -10228,6 +10439,13 @@
           "title": "Nárok narazí na demografii. Proč bude do roku 2050 čekat dvakrát víc seniorů na péči, kterou systém slibuje",
           "date": "2026-05-27",
           "rubric": "populace"
+        },
+        {
+          "id": "benzodiazepiny-seniori",
+          "slug": "clanek-benzodiazepiny-seniori.html",
+          "title": "Každý sedmý český senior bere léky na spaní a nervy dlouhodobě. V Německu jen každý sedmnáctý",
+          "date": "2026-07-10",
+          "rubric": "klinika"
         }
       ],
       "claims": [
@@ -10425,9 +10643,9 @@
           "id": "okresni-nemocnice-personalni-krize--08",
           "article": "clanek-okresni-nemocnice-personalni-krize.html",
           "article_slug": "clanek-okresni-nemocnice-personalni-krize.html",
-          "quote": "Akutní lůžka / 1 000 obyvatel — ČR 4,2 vs. OECD 3,5, ale s vysokou regionální disperzí",
+          "quote": "Akutní lůžka / 1 000 obyvatel — ČR 4,0 vs. OECD 3,5, ale s vysokou regionální disperzí",
           "metric": "akutní lůžka na 1 000 obyvatel v ČR",
-          "value": 4.2,
+          "value": 4,
           "unit": "/ 1 000 obyv.",
           "as_of": 2023,
           "relation": "exact"
@@ -10594,6 +10812,13 @@
           "title": "Kde Česko vede Evropu: nejnižší úmrtnost na předávkování drogami",
           "date": "2026-06-08",
           "rubric": "dusevni-zdravi"
+        },
+        {
+          "id": "benzodiazepiny-seniori",
+          "slug": "clanek-benzodiazepiny-seniori.html",
+          "title": "Každý sedmý český senior bere léky na spaní a nervy dlouhodobě. V Německu jen každý sedmnáctý",
+          "date": "2026-07-10",
+          "rubric": "klinika"
         }
       ],
       "claims": [
@@ -11184,6 +11409,104 @@
         "statements": []
       }
     },
+    "prezit_karcinom_plic_5let": {
+      "id": "prezit_karcinom_plic_5let",
+      "name": "Pětileté přežití po diagnóze karcinomu plic",
+      "model": null,
+      "legislativa": [],
+      "articles": [
+        {
+          "id": "preziti-karcinom-plic",
+          "slug": "clanek-preziti-karcinom-plic.html",
+          "title": "Nejsmrtelnější nádor. Proč přežije rakovinu plic v Česku jen každý desátý",
+          "date": "2026-07-11",
+          "rubric": "klinika"
+        }
+      ],
+      "claims": [
+        {
+          "id": "preziti-karcinom-plic--01",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "Pětileté přežití po diagnóze karcinomu plic je v Česku 10,6 procenta — proti 17,1 procenta v průměru zemí OECD a 15,0 procenta v Evropské unii.",
+          "metric": "Pětileté čisté přežití karcinomu plic v ČR, metodika CONCORD-3, kohorta 2010–2014, věkově standardizované, obě pohlaví",
+          "value": 10.6,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "exact"
+        },
+        {
+          "id": "preziti-karcinom-plic--02",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "průměr zemí OECD je 17,1 procenta a průměr Evropské unie 15,0 procenta",
+          "metric": "Nevážený průměr OECD (n=34) pětiletého čistého přežití karcinomu plic, kohorta 2010–14 (benchmark indikátoru)",
+          "value": 17.1,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "derived"
+        },
+        {
+          "id": "preziti-karcinom-plic--03",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "průměr zemí OECD je 17,1 procenta a průměr Evropské unie 15,0 procenta",
+          "metric": "Nevážený průměr EU (n=24) pětiletého čistého přežití karcinomu plic, kohorta 2010–14 (benchmark indikátoru)",
+          "value": 15,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "derived"
+        },
+        {
+          "id": "preziti-karcinom-plic--04",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "v kohortě 2000–04 bylo přežití 8,6 procenta, v kohortě 2005–09 už 9,8 procenta",
+          "metric": "Historický trend pětiletého čistého přežití karcinomu plic v ČR — kohorta 2000–2004 (následující kohorta 9,8 %)",
+          "value": 8.6,
+          "unit": "%",
+          "as_of": 2004,
+          "relation": "derived"
+        },
+        {
+          "id": "preziti-karcinom-plic--05",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "Německo dosahuje 18,3 procenta, Rakousko 19,7 procenta",
+          "metric": "Pětileté čisté přežití karcinomu plic v Německu (Rakousko 19,7 %), CONCORD-3, kohorta 2010–14 — táž metrika pro sousední země",
+          "value": 18.3,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "related"
+        },
+        {
+          "id": "preziti-karcinom-plic--06",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "Nejblíž je nám Slovensko s 11,2 procenta",
+          "metric": "Pětileté čisté přežití karcinomu plic na Slovensku, CONCORD-3, kohorta 2010–14",
+          "value": 11.2,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "related"
+        },
+        {
+          "id": "preziti-karcinom-plic--07",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "Japonsko s 32,9 procenta, Korea s 25,1 procenta a USA s 21,2 procenta",
+          "metric": "Pětileté čisté přežití karcinomu plic v Japonsku (Korea 25,1 %, USA 21,2 %), CONCORD-3, kohorta 2010–14",
+          "value": 32.9,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "related"
+        }
+      ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
     "prezit_karcinom_prsu_5let": {
       "id": "prezit_karcinom_prsu_5let",
       "name": "Pětileté přežití po diagnóze karcinomu prsu",
@@ -11195,6 +11518,13 @@
           "slug": "clanek-preziti-karcinom-prsu.html",
           "title": "Pět let po diagnóze: jak dobře Česko léčí rakovinu prsu",
           "date": "2026-06-27",
+          "rubric": "klinika"
+        },
+        {
+          "id": "preziti-karcinom-plic",
+          "slug": "clanek-preziti-karcinom-plic.html",
+          "title": "Nejsmrtelnější nádor. Proč přežije rakovinu plic v Česku jen každý desátý",
+          "date": "2026-07-11",
           "rubric": "klinika"
         }
       ],
@@ -11227,6 +11557,17 @@
           "article_slug": "clanek-preziti-karcinom-prsu.html",
           "quote": "81,4 % Pětileté přežití v ČR (kohorta 2010–14)",
           "metric": "Pětileté čisté přežití karcinomu prsu v ČR (av-counter)",
+          "value": 81.4,
+          "unit": "%",
+          "as_of": 2014,
+          "relation": "exact"
+        },
+        {
+          "id": "preziti-karcinom-plic--10",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "Pětileté přežití karcinomu prsu — srovnávací vzor: nádor s fungujícím screeningem (81,4 %)",
+          "metric": "Pětileté čisté přežití karcinomu prsu v ČR, CONCORD-3, kohorta 2010–14",
           "value": 81.4,
           "unit": "%",
           "as_of": 2014,
@@ -13269,6 +13610,13 @@
           "title": "Program na záchyt rakoviny plic má tři roky. Dosáhl na 2,7 % rizikových",
           "date": "2026-06-17",
           "rubric": "prevence"
+        },
+        {
+          "id": "preziti-karcinom-plic",
+          "slug": "clanek-preziti-karcinom-plic.html",
+          "title": "Nejsmrtelnější nádor. Proč přežije rakovinu plic v Česku jen každý desátý",
+          "date": "2026-07-11",
+          "rubric": "klinika"
         }
       ],
       "claims": [
@@ -13315,6 +13663,17 @@
           "unit": "%",
           "as_of": 2022,
           "relation": "related"
+        },
+        {
+          "id": "preziti-karcinom-plic--09",
+          "article": "clanek-preziti-karcinom-plic.html",
+          "article_slug": "clanek-preziti-karcinom-plic.html",
+          "quote": "jeho dosah byl po třech letech jen kolem 2,7 procenta cílové populace",
+          "metric": "Kumulativní pokrytí cílové populace programu časného záchytu karcinomu plic, 2022–2024",
+          "value": 2.7,
+          "unit": "%",
+          "as_of": 2024,
+          "relation": "exact"
         }
       ],
       "barometr": {
@@ -14573,6 +14932,26 @@
           "relation": "derived"
         }
       ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
+    "spotreba_opioidu": {
+      "id": "spotreba_opioidu",
+      "name": "Spotřeba opioidních analgetik (komunitní sektor)",
+      "model": null,
+      "legislativa": [],
+      "articles": [
+        {
+          "id": "benzodiazepiny-seniori",
+          "slug": "clanek-benzodiazepiny-seniori.html",
+          "title": "Každý sedmý český senior bere léky na spaní a nervy dlouhodobě. V Německu jen každý sedmnáctý",
+          "date": "2026-07-10",
+          "rubric": "klinika"
+        }
+      ],
+      "claims": [],
       "barometr": {
         "commitments": [],
         "statements": []
@@ -17296,41 +17675,6 @@
           "unit": "na mil. ob.",
           "as_of": 2023,
           "relation": "derived"
-        }
-      ],
-      "barometr": {
-        "commitments": [],
-        "statements": []
-      }
-    },
-    "kojeni_pri_propusteni": {
-      "id": "kojeni_pri_propusteni",
-      "name": "Plné kojení při propuštění z porodnice",
-      "model": null,
-      "legislativa": [],
-      "articles": [],
-      "claims": [
-        {
-          "id": "stret-zajmu-vyziva-kojencu--02",
-          "article": "clanek-stret-zajmu-vyziva-kojencu.html",
-          "article_slug": "clanek-stret-zajmu-vyziva-kojencu.html",
-          "quote": "73,4 % v roce 2020",
-          "metric": "Podíl novorozenců plně (výhradně) kojených při propuštění z porodnice, ČR",
-          "value": 73.4,
-          "unit": "%",
-          "as_of": 2020,
-          "relation": "exact"
-        },
-        {
-          "id": "stret-zajmu-vyziva-kojencu--03",
-          "article": "clanek-stret-zajmu-vyziva-kojencu.html",
-          "article_slug": "clanek-stret-zajmu-vyziva-kojencu.html",
-          "quote": "72,2 % v roce 2021",
-          "metric": "Podíl novorozenců plně (výhradně) kojených při propuštění z porodnice, ČR",
-          "value": 72.2,
-          "unit": "%",
-          "as_of": 2021,
-          "relation": "exact"
         }
       ],
       "barometr": {
