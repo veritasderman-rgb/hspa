@@ -45,18 +45,21 @@ function renderOtazka(stav) {
   const karta = el('div', 'kv-card');
   karta.appendChild(el('div', 'kv-progress', `Otázka ${stav.i + 1} / ${stav.otazky.length} · skóre ${stav.spravne}`));
 
-  if (q.type === 'vs_oecd') {
-    karta.appendChild(el('h2', 'kv-q', `${q.name}${q.year ? ` (${q.year})` : ''} — je Česko NAD, nebo POD průměrem OECD?`));
-    karta.appendChild(el('p', 'kv-hint', `Měří se v jednotce: ${q.unit}.`));
+  if (q.type === 'vs_oecd' || q.type === 'direction') {
+    if (q.type === 'vs_oecd') {
+      karta.appendChild(el('h2', 'kv-q', `${q.name}${q.year ? ` (${q.year})` : ''} — je Česko NAD, nebo POD průměrem OECD?`));
+      karta.appendChild(el('p', 'kv-hint', `Měří se v jednotce: ${q.unit}.`));
+    } else {
+      karta.appendChild(el('h2', 'kv-q', `„${q.name}" — když tohle číslo ROSTE, je to pro zdraví dobrá zpráva?`));
+    }
+    const popisky = q.type === 'vs_oecd'
+      ? ['Nad průměrem OECD', 'Pod průměrem OECD']
+      : ['Dobrá zpráva 👍', 'Špatná zpráva 👎'];
     const btns = el('div', 'kv-answers');
-    btns.appendChild(btn('Nad průměrem OECD', () => odpoved(stav, q, true)));
-    btns.appendChild(btn('Pod průměrem OECD', () => odpoved(stav, q, false)));
-    karta.appendChild(btns);
-  } else if (q.type === 'direction') {
-    karta.appendChild(el('h2', 'kv-q', `„${q.name}" — když tohle číslo ROSTE, je to pro zdraví dobrá zpráva?`));
-    const btns = el('div', 'kv-answers');
-    btns.appendChild(btn('Dobrá zpráva 👍', () => odpoved(stav, q, true)));
-    btns.appendChild(btn('Špatná zpráva 👎', () => odpoved(stav, q, false)));
+    const bAno = btn(popisky[0], () => odpoved(stav, q, true, bAno, bNe));
+    const bNe = btn(popisky[1], () => odpoved(stav, q, false, bNe, bAno));
+    btns.appendChild(bAno);
+    btns.appendChild(bNe);
     karta.appendChild(btns);
   } else {
     karta.appendChild(el('h2', 'kv-q', `Tipněte si: ${q.name}${q.year ? ` (${q.year})` : ''}`));
@@ -82,12 +85,17 @@ function renderOtazka(stav) {
   app.appendChild(karta);
 }
 
-function odpoved(stav, q, answer) {
+function odpoved(stav, q, answer, kliknute, druhe) {
   const vysledek = evaluateAnswer(q, answer);
   if (vysledek.correct) stav.spravne += 1;
 
   const karta = app.querySelector('.kv-card');
   karta.querySelectorAll('button, input').forEach((b) => { b.disabled = true; });
+  // binární otázky: zeleně správnou volbu, přeškrtnout chybnou zvolenou
+  if (kliknute && druhe) {
+    (vysledek.correct ? kliknute : druhe).classList.add('kv-correct');
+    if (!vysledek.correct) kliknute.classList.add('kv-picked-wrong');
+  }
 
   const fb = el('div', 'kv-feedback');
   fb.dataset.ok = vysledek.correct ? '1' : '0';
@@ -121,7 +129,8 @@ function odpoved(stav, q, answer) {
   fb.appendChild(dalsi);
 
   karta.appendChild(fb);
-  dalsi.focus();
+  fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  dalsi.focus({ preventScroll: true });
 }
 
 function renderVysledek(stav) {
