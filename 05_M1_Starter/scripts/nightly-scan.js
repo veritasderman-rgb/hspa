@@ -273,12 +273,12 @@ export function stripNonValueNumbers(window, indicatorId = '') {
   out = out.replace(/\b\d{1,4}\s*\/\s*(19|20)\d{2}\b/g, ' ');
   // samostatné roky
   out = out.replace(/\b(19|20)\d{2}\b/g, ' ');
-  // kulaté jmenovatele míry („na 100 000 obyvatel", „/ 1 000") — strukturální
-  // dělitel, nikdy hodnota indikátoru (hodnoty jsou rate/%/per-capita, ne
-  // rovné tisíce). Bezpečné jako roky.
-  out = out.replace(/\b(?:100|10|1)\s?000\b/g, ' ');
   // věkové prahy s „+" („18+", „65+", „80 +") — populační kvalifikátor, ne
-  // hodnota (hodnota nemá sufix „+"). Bezpečné.
+  // hodnota (hodnota nemá sufix „+"). Bezpečné. (Jmenovatele míry jako
+  // „100 000" ZDE NESTRIPUJEME — u jednociferných rate-citací „3 / 1 000"
+  // by jmenovatel byl jediný vícemístný token a zamaskoval by zastaralou
+  // citaci; jmenovatel se místo toho drží v okně a je důkazem, že sousední
+  // číslo je hodnota — viz review PR #784.)
   out = out.replace(/\b\d{1,3}\s?\+/g, ' ');
   // číselné skupiny z vlastního slugu (100k → 100; boundary, ať nezmizí
   // části skutečných hodnot)

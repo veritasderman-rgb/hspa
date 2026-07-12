@@ -202,14 +202,14 @@ test('stripNonValueNumbers: odfiltruje roky, slug číslice a sbírkové citace 
   assert.ok(!/\d{2,}/.test(stripNonValueNumbers('podle zákona 95/2004 Sb. a vyhlášky 70/2012', 'lekari_per_1000')));
   // skutečná hodnota s desetinnou čárkou PŘEŽIJE filtr
   assert.ok(/\d+,\d+/.test(stripNonValueNumbers('účast jen 52,6 procenta (2023)', 'prohlidka_prakticky_lekar')));
-  // kulaté jmenovatele míry (issue #745) — „100 000", „1 000", „10 000"
-  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('incidentů per 100 000 obsloužených pacientů', 'ehealth_adoption')));
-  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('hustota sester / 1 000 obyvatel', 'sestry_per_1000')));
   // věkový práh se sufixem „+" (issue #745) — „18+", „65+"
   assert.ok(!/\d{2,}/.test(stripNonValueNumbers('denní kouření dospělých, věk 18+', 'kuractvi_denni')));
   assert.ok(!/\d{2,}/.test(stripNonValueNumbers('pracovníci LTC na 100 osob 65+', 'pracovnici_ltc_per_100_65plus')));
   // reálná hodnota se sufixem jednotky (ne „+") PŘEŽIJE — např. „62 index"
   assert.ok(/\d{2,}/.test(stripNonValueNumbers('adopce e-zdravotnictví 62 index', 'ehealth_adoption')));
+  // jmenovatel míry „1 000" se NESTRIPUJE (review PR #784) — u jednociferné
+  // rate-citace „3 / 1 000" musí zůstat důkazem, že „3" je hodnota
+  assert.ok(/\d{2,}/.test(stripNonValueNumbers('hustota 3 sestry / 1 000 obyvatel', 'sestry_per_1000')));
 });
 
 test('findIndicatorDrift: odkaz-atribuce se správnou hodnotou jinde v článku se neflaguje (issue #745)', async () => {
