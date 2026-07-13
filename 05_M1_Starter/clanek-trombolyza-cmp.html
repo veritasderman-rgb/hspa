@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mrtvice v Česku: proč tu trombolýzu dostane dvakrát víc pacientů než v průměru Evropy (DRAFT) · HSPA Monitor</title>
+<meta name="description" content="Česko léčí intravenózní trombolýzou 31,4 % pacientů s ischemickou cévní mozkovou příhodou (2022) — téměř dvojnásobek evropského průměru 17,1 %. Za výsledkem stojí síť iktových center a přednemocniční triáž. Slabinou zůstává velká regionální nerovnost.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mrtvice v Česku: proč tu trombolýzu dostane dvakrát víc pacientů než v průměru Evropy">
+<meta property="og:description" content="ESO / European Stroke Journal 2023: Česko trombolyzuje 30,9 % ischemických CMP (2019), 31,4 % (2022) — proti evropskému průměru 17,1 %. Úspěch centralizace iktové péče, který kazí regionální nerovnost.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-07-13">
+<meta property="article:section" content="Klinika">
+<meta name="article:audit-status" content="draft">
+<!--
+  audit:
+    last_reviewed: 2026-07-13
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: novy-indikator-trombolyza_ischemicka_cmp
+    notes: "Draft doprovazi novy indikator trombolyza_ischemicka_cmp (podil ischemickych CMP lecenych intravenozni trombolyzou; value 31,4 % / 2022 z narodniho registru iktove pece; trend 2019 30,9 -> 2020 27,3 (covid) -> 2022 31,4; benchmark eu 17,1 = evropsky prumer 2019 dle ESO / European Stroke Journal 2023 Aguiar de Sousa et al.; signal good; direction higher_is_better; framework hspa; dimension kvalita; area Procesy). Mezinarodni srovnani (ESO 2019, % incidentnich ischemickych CMP): Nemecko 37,18; Rakousko 30,77; Cesko 30,88; Slovensko 21,11; Polsko 20,90; evropsky prumer 17,14; maximum Lotyssko 52,66; EVT Svycarsko 21,78. Cesko EVT 8,85 % (2019 ESO) / 5,18 % (k-davky PUK 2019). ~47 iktovych center. Regionalni nerovnost: Havlickuv Brod/Sumperk/Novy Jicin ~9 %, nejlepsi centra >40 %. Vsechna cisla 1:1 z metodicke karty. Pozor: Cesko NENI striktne svetova 1 (Nemecko/Lotyssko vyse v ESneni 2019) — clanek zamerne ramuje jako jednu z nejvyssich v Evrope / ~2x prumer. Pred publikaci: overit narodni hodnotu 2022 proti UZIS/registru CVS CNS, doplnit cover, povysit status + published:true, srovnat robots na index."
+-->
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Klinika</span>
+        <span class="article-tag article-tag-muted">Iktová péče · Kvalita · Akutní medicína</span>
+      </div>
+      <h1 class="article-title">Mrtvice v Česku: proč tu trombolýzu dostane dvakrát víc pacientů než v průměru Evropy</h1>
+      <p class="article-deck">
+        Když se řekne české zdravotnictví, málokdo pomyslí na světovou špičku. U léčby akutní mozkové mrtvice ale Česko mezi nejlepší v Evropě patří: intravenózní trombolýzu — lék rozpouštějící sraženinu — tu v roce 2022 dostalo <strong>31,4 %</strong> pacientů s ischemickou cévní mozkovou příhodou, zatímco evropský průměr je jen <strong>17,1 %</strong>. Nový indikátor <code>trombolyza_ischemicka_cmp</code> ukazuje, co dokáže dobře zorganizovaná péče — a kde má i tenhle úspěch trhliny.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">13. července 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co tento indikátor měří.</strong>
+        Podíl pacientů s akutní ischemickou cévní mozkovou příhodou (mozkovým infarktem), kterým byla podána
+        intravenózní trombolýza (IVT) — tedy lék rozpouštějící krevní sraženinu v úzkém časovém okně po vzniku iktu —
+        ze všech hospitalizovaných pro ischemickou CMP. Jde o <em>procesní</em> ukazatel kvality akutní péče:
+        měří, zda systém dostane správnou léčbu ke správnému pacientovi včas. Doplňuje se s výsledkovým
+        indikátorem <a href="indikator-mortalita_inhosp_cmp.html"><code>mortalita_inhosp_cmp</code></a>
+        (nemocniční úmrtnost po CMP) a s druhou rekanalizační metodou, mechanickou trombektomií.
+      </div>
+
+      <p class="article-lead">
+        Ischemická cévní mozková příhoda vzniká ucpáním mozkové tepny sraženinou. Od té chvíle běží čas: bez průtoku odumírají každou minutu miliony neuronů. Platí neurologické „čas je mozek“. Intravenózní trombolýza dokáže sraženinu rozpustit, obnovit průtok a v části případů vrátit pacientovi funkční nezávislost — schopnost mluvit, hýbat se, žít bez cizí pomoci. Rozdíl mezi včasnou léčbou a jejím zmeškáním je rozdíl mezi návratem domů a doživotní invaliditou. A právě v tom, jak velké části pacientů dokáže systém tuhle léčbu podat, se ukazuje jeho skutečná výkonnost.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTromboHeroH">
+        <figcaption class="av-figure-h" id="avTromboHeroH">Trombolýza u ischemické CMP v Česku — klíčová čísla</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="31.4" data-decimals="1" data-suffix=" %">31,4 %</span>
+            <span class="av-counter-label">ischemických CMP léčeno trombolýzou (2022)</span>
+            <span class="av-counter-foot">národní registr · signal: good</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="17.1" data-decimals="1" data-suffix=" %">17,1 %</span>
+            <span class="av-counter-label">evropský průměr (ESO, 2019)</span>
+            <span class="av-counter-foot">Česko trombolyzuje téměř dvojnásobek</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="47" data-prefix="~">~47</span>
+            <span class="av-counter-label">iktových center v síti</span>
+            <span class="av-counter-foot">z toho ~13 komplexních (trombektomie)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="9" data-suffix=" %">9 %</span>
+            <span class="av-counter-label">šance na trombolýzu v nejhorších okresech</span>
+            <span class="av-counter-foot">regionální nerovnost pod průměrem</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> ÚZIS / Cerebrovaskulární sekce ČNS ČLS JEP — národní registr iktové péče (31,4 %, 2022); Aguiar de Sousa D et al., <em>European Stroke Journal</em> 2023 (evropský průměr IVT 17,1 % za 2019).</p>
+      </figure>
+
+      <h3>Co ukazují primární data</h3>
+
+      <p>
+        Indikátor <code>trombolyza_ischemicka_cmp</code> vychází z národního registru iktové péče, který v Česku spravuje ÚZIS ve spolupráci s Cerebrovaskulární sekcí České neurologické společnosti. Mezinárodní srovnatelnost zajišťuje ESO Stroke Service Tracker (dříve registr RES-Q / ESO-EAST) a jeho peer-reviewed vyhodnocení publikované v <em>European Stroke Journal</em>. Hodnota se počítá prostě: počet ischemických CMP léčených trombolýzou dělený počtem všech hospitalizovaných pro mozkový infarkt, vynásobeno stem.
+      </p>
+
+      <p>
+        Výsledek je pozoruhodný: v roce 2022 dostalo intravenózní trombolýzu <strong>31,4 %</strong> pacientů s ischemickým iktem. Podle studie <em>European Stroke Journal</em> (2023) přitom evropský průměr činil jen <strong>17,1 %</strong> (rok 2019). Česko tak trombolyzuje téměř dvojnásobný podíl pacientů oproti evropskému průměru. Signál indikátoru je proto <strong>good</strong> — jeden z mála ukazatelů v celém dashboardu, kde Česko nezaostává, ale naopak patří k evropské špičce.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Proč „procesní“ ukazatel a co neměří.</strong>
+        Vysoký podíl trombolyzovaných je <em>nutná, ne postačující</em> podmínka dobrého výsledku.
+        Rozhoduje také čas (door-to-needle), správnost indikace a navazující mechanická trombektomie
+        u velkých uzávěrů. Indikátor navíc nezachytí pacienty, kteří se do terapeutického okna vůbec
+        nedostanou — protože příznaky nerozpoznali nebo dorazili pozdě. Prehospitální fáze je mimo přímý
+        vliv nemocnice, a přesto rozhoduje o stropu, kterého lze dosáhnout.
+      </div>
+
+      <h3>Trend v čase: propad během covidu a návrat na špičku</h3>
+
+      <p>
+        Časová řada ukazuje odolnost systému. V roce 2019 činil podíl trombolyzovaných 30,9 %, během první vlny pandemie covid-19 v roce 2020 klesl na 27,3 % (méně pacientů volalo záchranku včas, část kapacit šla na covid) a v roce 2022 se vrátil na 31,4 %. Pandemický propad byl přechodný a systém se z něj rychle zotavil — to samo o sobě vypovídá o robustnosti sítě.
+      </p>
+
+      <figure class="av-figure">
+        <figcaption class="av-figure-h">Podíl ischemických CMP léčených trombolýzou — vývoj v ČR</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="31.4" data-unit="%">
+          <li class="av-bar-row av-bar-row-good av-bar-row-highlight" data-value="31.4" data-display="31,4" data-label="Česko 2022" data-note="návrat na špičku"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="30.9" data-display="30,9" data-label="Česko 2019" data-note="ESO / European Stroke Journal"></li>
+          <li class="av-bar-row av-bar-row-warn" data-value="27.3" data-display="27,3" data-label="Česko 2020" data-note="pandemický propad covid-19"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="17.1" data-display="17,1" data-label="Evropský průměr (2019)"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Aguiar de Sousa D et al., <em>European Stroke Journal</em> 2023 (2019: 30,9 %; 2020: 27,3 %; evropský průměr 17,1 %); národní registr iktové péče (2022: 31,4 %).</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: kde stojí Česko mezi sousedy</h3>
+
+      <p>
+        Trombolýza je dostupná po celé Evropě, ale využívá se dramaticky nerovně. Podle studie <em>European Stroke Journal</em> (2023), která porovnala rok 2019, se podíl trombolyzovaných mezi zeměmi lišil od jednotek procent po přes padesát. Nejvyšší hodnotu vykázalo Lotyšsko (52,66 %), následované Německem (37,18 %). Česko se svými 30,88 % (2019) patřilo do horní skupiny — nad Rakouskem (30,77 %) a výrazně nad oběma dalšími sousedy: Polskem (20,90 %) a Slovenskem (21,11 %). Evropský průměr byl přitom jen 17,14 %. Česko tedy není absolutní světová jednička — Německo i pobaltské země jsou výše — ale patří k evropské špičce a nechává za sebou většinu kontinentu.
+      </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Podíl ischemických CMP léčených trombolýzou — Česko, sousedé a evropský rámec (2019)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země / rámec</th>
+                <th scope="col">Podíl IVT</th>
+                <th scope="col">Zdroj a poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Lotyšsko (evropské maximum)</th>
+                <td class="av-good">52,66 %</td>
+                <td>ESO / <em>European Stroke Journal</em> 2023, rok 2019</td>
+              </tr>
+              <tr>
+                <th scope="row">Německo</th>
+                <td class="av-good">37,18 %</td>
+                <td>tamtéž, rok 2019</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Česko</th>
+                <td class="av-good">30,88 % (2019) · 31,4 % (2022)</td>
+                <td>ESO 2019; národní registr 2022</td>
+              </tr>
+              <tr>
+                <th scope="row">Rakousko</th>
+                <td>30,77 %</td>
+                <td>tamtéž, rok 2019</td>
+              </tr>
+              <tr>
+                <th scope="row">Slovensko</th>
+                <td class="av-warn">21,11 %</td>
+                <td>tamtéž, rok 2019</td>
+              </tr>
+              <tr>
+                <th scope="row">Polsko</th>
+                <td class="av-warn">20,90 %</td>
+                <td>tamtéž, rok 2019</td>
+              </tr>
+              <tr>
+                <th scope="row">Evropský průměr</th>
+                <td class="av-bad">17,14 %</td>
+                <td>ESO 2019 (95% CI 12,98–21,30); benchmark.eu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Aguiar de Sousa D et al., „Delivery of acute ischaemic stroke treatments in the European region in 2019 and 2020“, <em>European Stroke Journal</em> 2023;8(3):618–628. Hodnoty = IVT jako % incidentních ischemických CMP.</p>
+      </figure>
+
+      <p>
+        Srovnání se sousedy je politicky výmluvné: Česko i Slovensko vyšly ze stejného zdravotnického dědictví, přesto Česko trombolyzuje o polovinu vyšší podíl pacientů než Slovensko. Rozdíl není v penězích ani v lécích — trombolytikum je všude stejné a levné — ale v <em>organizaci</em>. Totéž platí o druhé rekanalizační metodě, mechanické trombektomii (fyzické vytažení sraženiny katetrem u velkých uzávěrů): tu Česko provedlo přibližně u 8,85 % ischemických CMP (2019, ESO), přičemž oficiální ukazatel Portálu ukazatelů kvality z administrativních dat vykázal 5,18 % (2019). I zde je zásadní síť komplexních center, kterých je v Česku zhruba třináct.
+      </p>
+
+      <h3>Strukturální analýza: proč se to Česku daří</h3>
+
+      <p>
+        <strong>Centralizace do certifikovaných center.</strong> Klíčové rozhodnutí padlo kolem roku 2010: akutní iktovou péči Česko cíleně soustředilo do certifikovaných iktových center (dnes jich je zhruba 47, z toho asi 13 komplexních cerebrovaskulárních center schopných trombektomie), místo aby zůstala roztříštěná po desítkách malých nemocnic bez dostatečného objemu a expertizy. Centralizace je hlavní strukturální příčinou vysokého podílu trombolyzovaných — koncentruje zkušenost, přístroje i tým 24 hodin denně.
+      </p>
+
+      <p>
+        <strong>Přednemocniční triáž záchranné služby.</strong> Zdravotnická záchranná služba pacienta s podezřením na iktus nepřeváží do nejbližší nemocnice, ale rovnou do iktového centra, a cestou předává avízo, aby tým čekal připravený. Tím se šetří kritické minuty a roste podíl pacientů, kteří se vejdou do terapeutického okna.
+      </p>
+
+      <p>
+        <strong>Měření a soutěž o čas „door-to-needle“.</strong> Česká centra dlouhodobě měří a zveřejňují čas od příjezdu pacienta k podání trombolýzy. Nejlepší pracoviště se dostávají pod 15 minut — mezi světově nejrychlejší. Transparentní srovnání center funguje jako tlak na kvalitu: nikdo nechce být poslední v žebříčku.
+      </p>
+
+      <p>
+        <strong>Osvěta „čas je mozek“.</strong> Kampaně učí veřejnost rozpoznat příznaky (náhlá slabost či pokles koutku, porucha řeči — systém FAST) a okamžitě volat 155. Čím dřív laik zareaguje, tím víc pacientů dorazí v okně, kdy trombolýza ještě dává smysl. Prehospitální fáze určuje strop, kterého může nemocnice vůbec dosáhnout.
+      </p>
+
+      <p>
+        <strong>Úhrada a mezinárodní podpora.</strong> Výkony akutní iktové péče jsou hrazené z veřejného zdravotního pojištění a rozvoj sítě podpořila i mezinárodní iniciativa Angels a program ESO-EAST, díky nimž desítky českých center získaly evropská ocenění za kvalitu (diamantové statusy ESO Angels Awards). Peníze tu nejsou hlavní pákou — rozhodla organizace.
+      </p>
+
+      <figure class="av-figure av-figure-wide">
+        <figcaption class="av-figure-h">Pět pilířů českého úspěchu — a kdo má kompetenci je udržet</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Pilíř</th>
+                <th scope="col">Mechanismus</th>
+                <th scope="col">Kompetence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Síť iktových center</th>
+                <td>centralizace péče do ~47 certifikovaných center od 2010</td>
+                <td>MZ ČR (metodické pokyny, certifikace)</td>
+              </tr>
+              <tr>
+                <th scope="row">Triáž ZZS</th>
+                <td>převoz rovnou do centra + avízo předem</td>
+                <td>ZZS krajů · MZ ČR</td>
+              </tr>
+              <tr>
+                <th scope="row">Door-to-needle</th>
+                <td>měření a zveřejňování času k podání léku</td>
+                <td>iktová centra · odborná společnost</td>
+              </tr>
+              <tr>
+                <th scope="row">Osvěta FAST</th>
+                <td>rozpoznání příznaků a včasné volání 155</td>
+                <td>MZ ČR · odborné společnosti · média</td>
+              </tr>
+              <tr>
+                <th scope="row">Úhrada výkonů</th>
+                <td>hrazení z veřejného pojištění + program ESO-EAST/Angels</td>
+                <td>zdravotní pojišťovny · MZ ČR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Metodický pokyn MZ ČR — péče o pacienty s CMP; Národní kardiovaskulární plán ČR 2025–2035; ESO Angels Initiative.</p>
+      </figure>
+
+      <h3>Slabé místo: regionální nerovnost</h3>
+
+      <p>
+        Celostátní průměr přes 30 % je působivý, ale zakrývá velké rozdíly. Šance pacienta na trombolýzu závisí na tom, kde ho iktus zastihne. Zatímco špičková centra překračují 40 % trombolyzovaných, v některých okresech — mediálně zmiňovány bývají Havlíčkův Brod, Šumperk nebo Nový Jičín — klesá reálná šance na trombolýzu k zhruba devíti procentům. Rozdíl mezi nejlepším a nejhorším okresem je tak vícenásobný. To je jádro nespravedlnosti, kterou celostátní úspěch maskuje: dostupnost špičkové akutní péče nesmí být loterií podle PSČ.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Signal „good“ — a přesto varování.</strong>
+        Národní hodnota (31,4 %) je právem hodnocena jako good: Česko je hluboko nad evropským průměrem.
+        Signál se ale vztahuje k <em>celostátnímu průměru</em>. Kdyby se stejný indikátor počítal per okres,
+        část republiky by svítila červeně. Kvalita akutní iktové péče je tak zároveň českým úspěchem
+        i důkazem, jak moc na regionální dostupnosti záleží.
+      </div>
+
+      <h3>Politické páky: co konkrétně udělat</h3>
+
+      <p>
+        <strong>Udržet a doladit síť center.</strong> Úspěch není zadarmo napořád — vyžaduje personální a přístrojové zajištění provozu 24/7. Cílový stav sítě a kvality iktové péče ukotvuje Národní kardiovaskulární plán ČR 2025–2035 (MZ ČR); jeho naplnění je hlavní zárukou, že se laťka nesníží.
+      </p>
+
+      <p>
+        <strong>Narovnat regionální rozdíly.</strong> Klíčová páka je cílená podpora podprůměrných okresů — dojezdová logistika ZZS, telemedicínská konzultace („telestroke“, kdy neurolog z komplexního centra vede indikaci na dálku) a jasné spádové protokoly. Kompetence leží na MZ ČR a krajích jako zřizovatelích ZZS.
+      </p>
+
+      <p>
+        <strong>Pokračovat v prehospitální osvětě.</strong> Strop dostupnosti určuje, jak rychle pacient dorazí. Trvalá kampaň „čas je mozek“ a nácvik FAST ve školách i mezi seniory zvyšují podíl pacientů v okně — bez jediného nového přístroje.
+      </p>
+
+      <p>
+        <strong>Rozšířit trombektomii.</strong> U velkých uzávěrů je mechanická trombektomie účinnější než samotná trombolýza. Rozšíření kapacit komplexních center a jejich rovnoměrnější rozmístění je logickým dalším krokem; oficiální ukazatel Portálu ukazatelů kvality (podíl hospitalizací s trombektomií) umožňuje pokrok průběžně měřit.
+      </p>
+
+      <p>
+        <strong>Měřit a zveřejňovat kvalitu.</strong> To, co Česko dostalo na špičku, byla mimo jiné transparentnost — veřejné srovnání center v čase door-to-needle a podílu léčených. Rozšíření tohoto měření na okresní dostupnost a jeho pravidelná publikace udrží tlak tam, kde je potřeba.
+      </p>
+
+      <h3>Biologický základ: proč každá minuta rozhoduje</h3>
+
+      <p>
+        Při uzávěru velké mozkové tepny odumírá odhadem kolem 1,9 milionu neuronů za minutu neléčené ischemie. Terapeutické okno pro intravenózní trombolýzu je úzké (řádově do 4,5 hodiny od vzniku příznaků, u vybraných pacientů s pomocí zobrazení o něco déle) a s každou uplynulou minutou klesá pravděpodobnost dobrého výsledku a roste riziko komplikací. Proto není důležité jen <em>zda</em> pacient trombolýzu dostane, ale <em>jak rychle</em>. Česká kombinace hustá síť center + triáž ZZS + rychlý door-to-needle přesně tuhle časovou rovnici řeší — a proto se promítá do vysokého podílu léčených i do lepších výsledků.
+      </p>
+
+      <p>
+        Klinická i ekonomická logika je jednoznačná: pacient, který díky včasné trombolýze odejde domů soběstačný, nezatíží systém dlouhodobou rehabilitací, ústavní péčí ani invalidním důchodem. Investice do organizace akutní iktové péče se vrací mnohonásobně — v ušetřených letech kvalitního života i v nákladech, které nevzniknou.
+      </p>
+
+      <h3>Závěr</h3>
+
+      <p>
+        Česká iktová péče je vzácný příběh, kde české zdravotnictví patří k nejlepším v Evropě: trombolýzu tu v roce 2022 dostalo 31,4 % pacientů s ischemickou mrtvicí, téměř dvojnásobek evropského průměru 17,1 %. Nerozhodly peníze — trombolytikum je levné a všude stejné — ale strukturální volba: centralizace do certifikovaných center, přednemocniční triáž, měření času a osvěta. Je to důkaz, že organizace péče dokáže přinést špičkový výsledek i tam, kde systém jinak zaostává.
+      </p>
+
+      <p>
+        Zároveň je to varování. Celostátní úspěch maskuje regionální nerovnost, kde v nejhorších okresech klesá šance na trombolýzu k devíti procentům. Úkolem příštích let není objevit nový lék, ale dotáhnout osvědčený model do posledního okresu — aby stejnou šanci jako pacient v Ostravě nebo Praze dostal i ten v Havlíčkově Brodě. Národní kardiovaskulární plán k tomu dává rámec; rozhodne, jestli ho stát a kraje naplní.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-trombolyza_ischemicka_cmp.html"><strong>Podíl ischemických CMP léčených trombolýzou</strong></a> — ČR 31,4 % (2022) vs. evropský průměr 17,1 % · signal: good</li>
+        <li><a href="indikator-mortalita_inhosp_cmp.html"><strong>Nemocniční úmrtnost po cévní mozkové příhodě</strong></a> — výsledkový protějšek procesního ukazatele trombolýzy</li>
+        <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Kardiovaskulární mortalita</strong></a> — širší kontext Národního kardiovaskulárního plánu</li>
+        <li><a href="indikator-dojezd_zzs.html"><strong>Dojezdová doba ZZS</strong></a> — prehospitální fáze určující strop dostupnosti trombolýzy</li>
+        <li><a href="indikator-mortalita_lecitelna.html"><strong>Léčitelná (treatable) mortalita</strong></a> — úmrtí odvratitelná včasnou a kvalitní léčbou</li>
+      </ul>
+    </aside>
+
+    <aside class="article-sources" aria-label="Primární zdroje">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Primární data a odborná literatura</h4>
+      <ul class="article-sources-list">
+        <li>
+          <strong>Aguiar de Sousa D et al. — Delivery of acute ischaemic stroke treatments in the European region in 2019 and 2020 (European Stroke Journal, 2023)</strong><br>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10472963/" rel="noopener noreferrer" target="_blank">pmc.ncbi.nlm.nih.gov — PMC10472963</a> · Česko IVT 30,88 % (2019) / 27,29 % (2020); EVT 8,85 % (2019); evropský průměr IVT 17,14 %; Německo 37,18 %, Rakousko 30,77 %, Polsko 20,90 %, Slovensko 21,11 %, Lotyšsko 52,66 %
+        </li>
+        <li>
+          <strong>ÚZIS ČR — souhrnné reporty a Národní registr hospitalizovaných</strong><br>
+          <a href="https://www.uzis.cz/index.php?pg=vystupy--souhrnne-reporty" rel="noopener noreferrer" target="_blank">uzis.cz — souhrnné reporty</a> · národní data o hospitalizacích a výkonech u cévní mozkové příhody
+        </li>
+        <li>
+          <strong>Portál ukazatelů kvality zdravotních služeb (Kancelář zdravotního pojištění) — Podíl hospitalizačních případů s užitím mechanické trombektomie</strong><br>
+          <a href="https://puk.kancelarzp.cz/podil-hospitalizacnich-pripadu-s-uzitim-mechanicke-trombektomie/" rel="noopener noreferrer" target="_blank">puk.kancelarzp.cz — trombektomie</a> · oficiální ukazatel z administrativních k-dávek; ČR 5,18 % (2019), velká regionální variabilita
+        </li>
+        <li>
+          <strong>Ministerstvo zdravotnictví ČR — Metodický pokyn: péče o pacienty s akutní cévní mozkovou příhodou (2021)</strong><br>
+          <a href="https://mzd.gov.cz/wp-content/uploads/2021/08/Metodick%C3%BD-pokyn-p%C3%A9%C4%8De-o-pacienty-s-CMP.pdf" rel="noopener noreferrer" target="_blank">mzd.gov.cz — Metodický pokyn CMP (PDF)</a> · organizace iktové sítě, triáž, spádovost
+        </li>
+        <li>
+          <strong>Ministerstvo zdravotnictví ČR — Národní kardiovaskulární plán ČR na období 2025–2035</strong><br>
+          <a href="https://mzd.gov.cz/wp-content/uploads/2025/01/Narodni-kardiovaskularni-plan-CR-na-obdobi-2025-2035.pdf" rel="noopener noreferrer" target="_blank">mzd.gov.cz — Národní kardiovaskulární plán (PDF)</a> · strategický rámec rozvoje sítě a kvality iktové péče
+        </li>
+        <li>
+          <strong>NZIP — Cévní mozková příhoda: iktové centrum</strong><br>
+          <a href="https://www.nzip.cz/clanek/986-cevni-mozkova-prihoda-iktove-centrum" rel="noopener noreferrer" target="_blank">nzip.cz — iktové centrum</a> · veřejné vysvětlení sítě iktových center a jejich role
+        </li>
+        <li>
+          <strong>Neumann J et al. — Mechanical Thrombectomy Quality Indicators Study in Czech Stroke Centers (METRICS, Stroke 2022)</strong><br>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35104746/" rel="noopener noreferrer" target="_blank">pubmed — METRICS study (PMID 35104746)</a> · ukazatele kvality trombektomie v českých centrech
+        </li>
+        <li>
+          <strong>Angels Initiative / ESO — Improving stroke care; ocenění českých center (ESO Angels Awards)</strong><br>
+          <a href="https://www.angels-initiative.com/angels-community/stories/22-diamond-awards-four-lessons-czech-republic" rel="noopener noreferrer" target="_blank">angels-initiative.com — Czech Republic</a> · desítky českých center s diamantovým statusem kvality
+        </li>
+      </ul>
+    </aside>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="site-footer-legal">Data jsou agregovaná, bez osobních údajů. Zdrojová data: ÚZIS, ČSÚ, OECD, Eurostat, SZÚ, ESO. Licencováno CC BY 4.0.</p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
