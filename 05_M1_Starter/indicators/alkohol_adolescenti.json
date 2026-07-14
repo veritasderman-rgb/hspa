@@ -1,0 +1,51 @@
+{
+  "id": "alkohol_adolescenti",
+  "name": "Pití alkoholu u dospívajících (16 let)",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizikové zvyky u adolescentů",
+  "definition": "Podíl šestnáctiletých žáků a žákyň, kteří pili alkohol alespoň jednou v posledních 30 dnech (current use). Vychází z Evropské školní studie o alkoholu a jiných drogách (ESPAD), která probíhá každé čtyři roky ve 37 evropských zemích; českou část realizuje Národní monitorovací středisko pro drogy a závislosti (NMS, Úřad vlády ČR) ve spolupráci s EUDA. POZN.: ESPAD publikuje více ukazatelů — celoživotní užití, užití v posledních 30 dnech (current use), nadměrné pití (binge) a opilost; tento indikátor měří current use, standardní ukazatel pro mezinárodní i časové srovnání.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "espad",
+      "url": "https://www.drogy-info.cz/en/article/media-centre/results-of-the-czech-part-of-the-espad-2024-study-released/",
+      "dataset": "ESPAD 2024 — česká část (Národní monitorovací středisko pro drogy a závislosti, Úřad vlády ČR / EUDA). Vzorek 2 977 žáků narozených v roce 2008 (věk ~16 let) ze 151 škol; sběr 2024, publikováno 20. 5. 2025.",
+      "dimensions": {
+        "age": "16",
+        "country": "CZ",
+        "measure": "alcohol_use_last_30_days"
+      }
+    },
+    "fallback": {
+      "type": "hbsc",
+      "url": "https://data-browser.hbsc.org/measure/alcohol-use-last-30-days-use/",
+      "note": "WHO/HBSC (Health Behaviour in School-aged Children) — alternativní zdroj pro užívání alkoholu u 15letých, publikováno každé 4 roky."
+    }
+  },
+  "benchmark_source": {
+    "type": "espad",
+    "code": "ESPAD_ALC_30D",
+    "dataset": "Průměr zemí ESPAD 2024 (37 evropských zemí) pro užití alkoholu v posledních 30 dnech = 42 %. ESPAD nepublikuje samostatný OECD ani EU-27 průměr; benchmark „eu\" v seedu odpovídá tomuto ESPAD průměru. Nejvyšší hodnoty vykazují Dánsko, Rakousko a Maďarsko; ČR patří dlouhodobě k zemím nad průměrem.",
+    "value": 42,
+    "url": "https://www.euda.europa.eu/publications/data-factsheets/espad-2024-key-findings_en"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "every_4_years",
+  "stewards": [
+    "Národní monitorovací středisko pro drogy a závislosti (NMS, Úřad vlády ČR)",
+    "EUDA (European Union Drugs Agency)",
+    "MZČR"
+  ],
+  "method_notes": "ESPAD používá mezinárodně standardizovaný dotazník na reprezentativním vzorku 16letých a umožňuje srovnání zemí i časovou řadu od roku 1995. Current use (posledních 30 dní) u českých 16letých klesl z vrcholu 79 % (2011) na 62,7 % (2019) a 56 % (2024) — dlouhodobý pokles, který se v roce 2024 zpomalil. ČR přesto zůstává nad průměrem ESPAD (42 %) i u rizikovějších forem: nadměrné pití (5+ sklenic při jedné příležitosti v posl. 30 dnech) uvedlo ~38 % (ESPAD průměr 31 %) a stav opilosti ~16 % (ESPAD průměr 13 %); celoživotní zkušenost s alkoholem má přes 90 % českých 16letých (ESPAD průměr 73 %). Hodnoty jsou sebehodnocené (self-report).",
+  "limitations": "1) Průřezové šetření — nezachycuje kauzalitu. 2) Self-report vede k pravděpodobné podregistraci. 3) Čtyřletá frekvence neumožňuje roční sledování. 4) Current use nerozlišuje intenzitu — samostatně se sledují nadměrné pití a opilost. 5) Věková kategorie ESPAD (16 let) se liší od HBSC (15 let), přímé srovnání obou zdrojů je orientační.",
+  "determinants": "**Dostupnost a vymáhání zákazu prodeje nezletilým.** Prodej alkoholu osobám mladším 18 let je v ČR zákonem zakázán (zákon č. 65/2017 Sb.), ale kontrola dodržování je sporadická a mystery shopping není systematický — alkohol je pro české teenagery snadno dostupný.\n\n**Cena a zdanění.** Pivo a víno patří v ČR k nejlevnějším v Evropě; spotřební daň na pivo je nízká a víno není zdaněno vůbec. Cenová bariéra, která u mládeže funguje nejsilněji, tak prakticky chybí.\n\n**Kulturní normalizace.** Alkohol — zejména pivo — je v ČR součástí sociální normy a tolerance k pití mladistvých je vysoká. Rodinný a vrstevnický kontext jsou silnými prediktory zahájení pití v adolescenci.\n\n**Marketing a reklama.** Reklama na alkohol je v ČR povolena v širokém rozsahu (TV, sport, sociální sítě) a samoregulace je slabá; expozice mládeže reklamě je prokázaným rizikovým faktorem.\n\n**Školní a komunitní prevence.** Programy primární prevence existují, ale pokrytí není plošné a celostátní evaluace dopadu je omezená.",
+  "importance": "Zahájení pravidelného pití v adolescenci zvyšuje riziko pozdější závislosti, poškození vyvíjejícího se mozku a rizikového chování (úrazy, nechráněný sex). Nadměrné pití (binge) je nejškodlivější vzorec a v ČR zůstává nadprůměrný i přes celkový pokles konzumace. Indikátor je citlivým ukazatelem účinnosti alkoholové politiky (dostupnost, cena, reklama, enforcement) a zároveň prediktorem budoucí zátěže nemocí spojených s alkoholem (jaterní cirhóza, nádory, úrazy) v celé populační kohortě.",
+  "patient_story": "Náměstí v okresním městě, pátek večer po vysvědčení. Tereza (16) sedí s partou na lavičce; někdo starší koupil v nonstopu bednu piva a nikdo se u pokladny neptal na občanku. Tereza není výjimka — je v tom česká norma. Pro většinu jejích spolužáků je alkohol první a nejsnáze dostupná návyková látka, dávno předtím než cokoli jiného.\n\nPodle studie ESPAD 2024 (Národní monitorovací středisko pro drogy a závislosti; vzorek 2 977 šestnáctiletých narozených v roce 2008) pilo alkohol v posledních 30 dnech 56 % českých 16letých. To je dlouhodobě sestupně — z vrcholu 79 % v roce 2011 přes 62,7 % v roce 2019 — ale stále výrazně nad průměrem zemí ESPAD (42 %), takže signal je bad. Horší je obrázek u rizikových vzorců: nadměrnou dávku (5+ sklenic při jedné příležitosti) uvedlo v posl. 30 dnech kolem 38 % (evropský průměr 31 %) a opilost kolem 16 %. Celoživotní zkušenost s alkoholem má přes 90 % českých šestnáctiletých.\n\nStrukturálně jde o učebnicový důsledek alkoholové politiky: pivo je v Česku levnější než v drtivé většině Evropy, víno se nezdaňuje spotřební daní vůbec, zákaz prodeje nezletilým se prakticky nevymáhá a reklama na alkohol je všudypřítomná. Kulturní tolerance k pití mládeže je vysoká — alkohol je normalizovaný tak, že jeho konzumace patnáctiletými nikoho nepohorší. Cenová páka, která u mladých funguje nejsilněji, tak chybí a dostupnost je téměř neomezená.\n\nPolitická páka existuje a je dobře zmapovaná: zvýšení spotřební daně na pivo a zavedení daně z vína (kompetence Ministerstva financí), systematický mystery shopping a pokuty za prodej nezletilým (Česká obchodní inspekce), přísnější regulace reklamy na alkohol (MZ ČR), minimální jednotková cena a plošná školní prevence s evaluací (MŠMT + MZ ČR). Indikátor v HSPA dashboardu sleduje current use u 16letých jako výsledkový ukazatel účinnosti této politiky; komplementární je sledování nadměrného pití a opilosti, kde ČR zaostává výrazněji než u samotné prevalence.",
+  "framework": "hspa",
+  "dimension": "zdravi"
+}
