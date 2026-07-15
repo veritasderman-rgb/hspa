@@ -78,6 +78,11 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-dohodovaci-rizeni-2027-vysledek': {
+    kicker: 'Financování · dohodovací řízení', signal: 'good',
+    stat: '12/15', claim: 'segmentů se dohodlo na úhradách 2027. Loni jen 3 z 15.',
+    context: '3 finančně největší segmenty ale zůstaly bez dohody — rozhodne úhradová vyhláška do konce října.',
+  },
   'clanek-react-eu-nku-kontrola-2026': {
     kicker: 'Financování · kontrola', signal: 'warn',
     stat: '21', claim: 'měsíců ležel spektrometr za 1,46 mil. Kč nepoužitý v krabici.',
