@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "generated_at": "2026-07-15T08:08:08.660Z",
+  "generated_at": "2026-07-16T08:12:27.749Z",
   "_doc": "Souvislosti — build-time znalostní graf indikátorů. Generuje scripts/build-souvislosti.js z indicators + system-model + legislativa + articles + claims + barometr. NEEDITOVAT ručně (přepíše refresh pipeline). Mapa indicator_id → { model, legislativa[], articles[], claims[], barometr }.",
   "counts": {
-    "indicators_total": 171,
-    "indicators_with_links": 130,
+    "indicators_total": 172,
+    "indicators_with_links": 132,
     "sources": {
       "system_model_nodes": 24,
       "legislativa_items": 12,
       "legislativa_plan_items": 10,
-      "articles_visible": 158,
+      "articles_visible": 159,
       "claims": 1377,
       "barometr": true
     }
@@ -2887,6 +2887,60 @@
         "statements": []
       }
     },
+    "farmaceuti_per_100k": {
+      "id": "farmaceuti_per_100k",
+      "name": "Praktikující farmaceuti / 100 000 obyvatel",
+      "model": null,
+      "legislativa": [],
+      "articles": [
+        {
+          "id": "farmaceuti-pracovni-sila",
+          "slug": "clanek-farmaceuti-pracovni-sila.html",
+          "title": "Hodně lékáren, málo lékárníků. Česko má 76 farmaceutů na 100 000 lidí — pod průměrem i pod všemi sousedy",
+          "date": "2026-07-16",
+          "rubric": "dostupnost"
+        }
+      ],
+      "claims": [
+        {
+          "id": "farmaceuti-pracovni-sila--01",
+          "article": "clanek-farmaceuti-pracovni-sila.html",
+          "article_slug": "clanek-farmaceuti-pracovni-sila.html",
+          "quote": "76 praktikujících farmaceutů na 100 000 obyvatel",
+          "metric": "Praktikující farmaceuti na 100 000 obyvatel (ISCO-08 2262), veřejné i nemocniční lékárny",
+          "value": 76,
+          "unit": "na 100 000 ob.",
+          "as_of": 2023,
+          "relation": "exact"
+        },
+        {
+          "id": "farmaceuti-pracovni-sila--02",
+          "article": "clanek-farmaceuti-pracovni-sila.html",
+          "article_slug": "clanek-farmaceuti-pracovni-sila.html",
+          "quote": "pod průměrem OECD (86)",
+          "metric": "Průměr OECD praktikujících farmaceutů na 100 000 obyvatel",
+          "value": 86,
+          "unit": "na 100 000 ob.",
+          "as_of": 2023,
+          "relation": "derived"
+        },
+        {
+          "id": "farmaceuti-pracovni-sila--08",
+          "article": "clanek-farmaceuti-pracovni-sila.html",
+          "article_slug": "clanek-farmaceuti-pracovni-sila.html",
+          "quote": "od 66,7 na 100 000 obyvatel v roce 2010 na 73,1 v roce 2020",
+          "metric": "Časová řada hustoty praktikujících farmaceutů v ČR (Eurostat), výchozí bod 2010",
+          "value": 66.7,
+          "unit": "na 100 000 ob.",
+          "as_of": 2010,
+          "relation": "related"
+        }
+      ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
     "gender_pay_gap_zdravotnictvi": {
       "id": "gender_pay_gap_zdravotnictvi",
       "name": "Rozdíl v odměňování žen a mužů ve zdravotnictví a sociální péči",
@@ -5273,6 +5327,13 @@
           "rubric": "financovani"
         },
         {
+          "id": "farmaceuti-pracovni-sila",
+          "slug": "clanek-farmaceuti-pracovni-sila.html",
+          "title": "Hodně lékáren, málo lékárníků. Česko má 76 farmaceutů na 100 000 lidí — pod průměrem i pod všemi sousedy",
+          "date": "2026-07-16",
+          "rubric": "dostupnost"
+        },
+        {
           "id": "nadstandardy-2-irsko-kanada",
           "slug": "clanek-nadstandardy-2-irsko-kanada.html",
           "title": "Poučení z Irska a Kanady. Dvě země, dvě odpovědi na tutéž otázku o připlácení",
@@ -5346,6 +5407,38 @@
           "unit": "/ 1 000 obyv.",
           "as_of": 2024,
           "relation": "exact"
+        }
+      ],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
+    "lekarny_per_100k": {
+      "id": "lekarny_per_100k",
+      "name": "Hustota lékáren / 100 000 obyvatel",
+      "model": null,
+      "legislativa": [],
+      "articles": [
+        {
+          "id": "farmaceuti-pracovni-sila",
+          "slug": "clanek-farmaceuti-pracovni-sila.html",
+          "title": "Hodně lékáren, málo lékárníků. Česko má 76 farmaceutů na 100 000 lidí — pod průměrem i pod všemi sousedy",
+          "date": "2026-07-16",
+          "rubric": "dostupnost"
+        }
+      ],
+      "claims": [
+        {
+          "id": "farmaceuti-pracovni-sila--05",
+          "article": "clanek-farmaceuti-pracovni-sila.html",
+          "article_slug": "clanek-farmaceuti-pracovni-sila.html",
+          "quote": "2,37 lékárny na 10 000 obyvatel",
+          "metric": "Hustota lékáren a výdejních míst na 10 000 obyvatel (ÚZIS 2021)",
+          "value": 2.37,
+          "unit": "na 10 000 ob.",
+          "as_of": 2021,
+          "relation": "related"
         }
       ],
       "barometr": {
@@ -10568,6 +10661,13 @@
           "title": "Každý sedmý český senior bere léky na spaní a nervy dlouhodobě. V Německu jen každý sedmnáctý",
           "date": "2026-07-10",
           "rubric": "klinika"
+        },
+        {
+          "id": "farmaceuti-pracovni-sila",
+          "slug": "clanek-farmaceuti-pracovni-sila.html",
+          "title": "Hodně lékáren, málo lékárníků. Česko má 76 farmaceutů na 100 000 lidí — pod průměrem i pod všemi sousedy",
+          "date": "2026-07-16",
+          "rubric": "dostupnost"
         }
       ],
       "claims": [
