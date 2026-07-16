@@ -1,0 +1,50 @@
+{
+  "id": "koureni_v_tehotenstvi",
+  "name": "Kouření v těhotenství",
+  "area": "Výsledky",
+  "domain": "Zdravotní rizika",
+  "subdomain": "Rizika v těhotenství",
+  "definition": "Podíl rodiček, u nichž je v Národním registru reprodukčního zdraví (modul Rodička) evidováno kouření v průběhu těhotenství. Zdroj hlásí gynekolog/porodník na základě údajů od rodičky; jde tedy o evidované (nahlášené) kouření, nikoli o biochemicky ověřenou expozici. Sledováno jako samostatná kategorie „kouření\" (bez kombinací s alkoholem/drogami).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrrz",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-reprodukcniho-zdravi--modul-rodicek",
+      "dataset": "Národní registr reprodukčního zdraví (NRRZ) — modul Rodička (NRROD); publikace edice Zdravotnická statistika „Rodička a novorozenec\", tabulka 2.11 (Rodičky podle návykových látek užívaných v těhotenství a věku)",
+      "dimensions": {
+        "country": "CZ",
+        "age_group": "–17, 18–19, 20–24, 25–29, 30–34, 35+",
+        "substance": "kouření"
+      }
+    },
+    "fallback": {
+      "type": "publication_pdf",
+      "url": "https://www.uzis.cz/res/f/008461/rodnov2023.pdf"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_harmonized_benchmark",
+    "dataset": "Neexistuje jeden harmonizovaný EU/OECD benchmark: národní zdroje se liší metodikou (registr hlášený porodníkem vs. dotazníkové šetření, různé definice — celotěhotenské vs. 3. trimestr). Nejbližší srovnatelný odhad je souhrnná prevalence pro Evropský region WHO 8,1 % (systematický přehled, Lancet Global Health 2018) — nejvyšší ze všech regionů WHO; globální odhad 1,7 %. Nejbližší sousedé na bázi self-reportu: Německo 10,9 % (KiGGS Welle 2), Slovensko ≈ 13 %. Euro-Peristat (data 2010/2015) uvádí širokou variabilitu zemí. Hodnota v seedu (benchmark.eu = 8,1) je proto indikativní srovnávací kotva, ne oficiální EU průměr.",
+    "value": 8.1,
+    "url": "https://www.thelancet.com/journals/langlo/article/PIIS2214-109X(18)30223-7/fulltext"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 30
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr reprodukčního zdraví)",
+    "SZÚ",
+    "Euro-Peristat"
+  ],
+  "method_notes": "Roční administrativní řada z NRRZ (modul Rodička). Hodnota 10,4 % (2023) je podíl rodiček s evidovaným kouřením (kategorie „kouření\" bez kombinací; s kombinacemi kouření+alkohol/drogy je podíl ≈ 10,7 %). Klíčová je věková gradace: u matek mladších 17 let kouřilo v roce 2023 49,5 %, u skupiny 18–19 let 40,0 %, zatímco u matek 30+ podíl klesá k 7–8 %. Široké varovné pásmo (warn 30 %) reflektuje měřicí nejistotu self-reportu: registr kouření systematicky podhodnocuje, takže skutečná prevalence je pravděpodobně vyšší; srovnání se zahraničím je zatíženo rozdílnou metodikou. Signal proto čte spíše polohu vůči evropskému odhadu a mírně rostoucí domácí trend než ostré pořadí mezi zeměmi.",
+  "limitations": "Self-report hlášený porodníkem — podhodnocení skutečné prevalence (biochemické studie s kotininem ukazují reálné hodnoty o 5–10 p. b. vyšší). Registr nezachycuje intenzitu (počet cigaret/den) ani načasování (které trimestry). Mezinárodní srovnání je orientační kvůli rozdílným definicím a zdrojům. Regionální rozpad na úrovni kraje/okresu není v základní tabulce publikován.",
+  "determinants": "Silný sociální gradient — kouření v těhotenství koncentruje u nejmladších matek, u matek s nižším vzděláním a příjmem a v strukturálně slabších regionech (Ústecký, Karlovarský, Moravskoslezský kraj). Souvisí s dostupností a cenou tabáku, s absencí systematické krátké intervence odvykání v prenatální péči a s kulturní normalizací kouření v části populace.",
+  "importance": "Kouření v těhotenství je jedním z nejlépe ovlivnitelných rizik perinatálního zdraví. Zvyšuje riziko nízké porodní hmotnosti (o 200–300 g nižší hmotnost, riziko 1,9×), předčasného porodu, intrauterinní růstové restrikce, syndromu náhlého úmrtí kojence i pozdějších respiračních a metabolických onemocnění dítěte. Propojuje se s indikátory nizka_porodna_hmotnost_pct, predcasne_porody_pct a perinatalni_umrtnost jako jejich přímý ovlivnitelný determinant.",
+  "patient_story": "Prenatální poradna v Mostě, čtvrtý měsíc. Osmnáctiletá Tereza sedí naproti porodní asistentce, která má v dotazníku k modulu Rodička jednu nenápadnou položku: kouření v těhotenství. Tereza zaváhá a řekne „už jen pár denně\". Do registru se zapíše „ano\". Tereza není výjimka — patří do věkové skupiny, kde je kouření v těhotenství spíš pravidlem než výjimkou: u nastávajících matek ve věku 18–19 let kouřilo v roce 2023 podle ÚZIS 40 %, u dívek do 17 let dokonce 49,5 %.\n\nCelostátní číslo je přitom mnohem nižší. Podle Národního registru reprodukčního zdraví (ÚZIS, publikace Rodička a novorozenec 2023) kouřilo v těhotenství 10,4 % rodiček. Trend se po poklesu na 9,8 % v roce 2021 opět mírně zvedl (10,1 % v roce 2022, 10,4 % v roce 2023) — proto indikátor svítí signálem warn, nikoli good. V evropském srovnání je Česko nad souhrnným odhadem pro Evropský region WHO (8,1 %, nejvyšší region světa; globální odhad 1,7 %), zhruba na úrovni Německa (10,9 %) a pod Slovenskem (≈ 13 %). Celostátní průměr ale skrývá to podstatné: rozdíl mezi mladou matkou z Ústeckého kraje a třicátnicí z Prahy je propastný.\n\nProč je hodnota taková? Kouření v těhotenství v Česku kopíruje sociální gradient — koncentruje se u nejmladších matek, u žen s nižším vzděláním a příjmem a ve strukturálně slabších regionech. Systém navíc na záchyt spoléhá, ale na intervenci ne: prenatální péče kuřačku většinou zaeviduje, ale nenabídne jí strukturované odvykání. Chybí hrazená krátká intervence (protokol 5A — zeptat se, poradit, posoudit, pomoci, zařídit), chybí návaznost na odvykací poradny a levné cigarety cenovou bariéru nevytvářejí. Registr přitom skutečnost spíš podhodnocuje: biochemické studie ukazují, že reálný podíl je o několik procentních bodů vyšší.\n\nPolitická páka je konkrétní a levná. Zaprvé: zavést do prenatální péče povinnou krátkou intervenci odvykání s úhradou z veřejného pojištění a napojením na odvykací centra (kompetence MZ ČR a zdravotní pojišťovny přes úhradovou vyhlášku). Zadruhé: cílit na nejrizikovější skupinu — nejmladší a sociálně znevýhodněné matky — programy vázanými na gynekologické ambulance a poradny pro těhotné. Zatřetí: udržet daňovou páku na tabák a doplnit monitoring o intenzitu a načasování kouření, aby politika mohla měřit dopad. Pro dítě Terezy rozhoduje, jestli u té jedné položky v dotazníku systém skončí, nebo teprve začne.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
