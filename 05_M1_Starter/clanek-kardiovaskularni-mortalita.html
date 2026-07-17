@@ -104,6 +104,7 @@ audit:
   f1_2026-07-10: "Link-audit (F1): 16 externích odkazů zkontrolováno. Opraveny 2 mrtvé odkazy: (1) czech-neuro.cz/sekce/cerebrovaskularni-sekce/ (HTTP 404, slova v cestě URL prohozena při redesignu webu) → czech-neuro.cz/sekce/sekce-cerebrovaskularni/ (WebFetch potvrdil živý obsah sekce, curl 466 = bot-block CDN); (2) uzis.cz registr-sber-dat--demograficke-statistiky--zemreli (404, stránka reorganizována) → uzis.cz registr-sber-dat--ostatni-rezortni-registry--list-o-prohlidce-zemreleho (200) — přesně odpovídá textem citovanému 'Listu o prohlídce zemřelého'. Ponechány jako živé, ale blokující boty (403 curl, obsah potvrzen WebFetch): academic.oup.com/eurheartj ×2 (SCORE2 studie, plný text načten), oecd.org ×3 (Health at a Glance 2025 stroke/AMI, State of Cardiovascular Health in the EU — Akamai bot-block). Ostatní odkazy (ec.europa.eu/eurostat ×3, pubmed.ncbi.nlm.nih.gov, vizhub.healthdata.org, czech-neuro.cz vlastní homepage, escardio.org, kardio-cz.cz, who.int) OK 200. Status ponechán review-pending — nejde o odkazy; headline indikátor mortalita_kardiovaskularni je live, ale článek má nedořešený korpusový FLAG (alkohol_spotreba 14,4 l vs OECD 8,9 — methodology mismatch, viz reaudit_2026-06-29) a tři vedlejší indikátory (kontrola_hypertenze, kuractvi_denni, prevalence_diabetu) jsou origin: seed."
   notes: "Rekonciliace flagged hodnoty kardiovaskulární mortality proti primárnímu zdroji Eurostat hlth_cd_asdr2 (Standardised death rate by cause, ESP 2013, total ages, both sexes, per 100 000). Pro Česko 2023 je hodnota 463,75 (ne 220 jak uváděl dashboard); EU-27 312,95 (ne 140 jak uváděl benchmark dashboardu). Centrální tvrzení 'mortalita o 60 procent vyšší' opraveno na '48 procent vyšší' (rozdíl 463,75 vs. 312,95 = +48,2 %). Dříve 'osmdesát úmrtí na 100 000 obyvatel ročně' opraveno na '150 úmrtí na 100 000 obyvatel ročně' (rozdíl ~151). Doplněn rozpad na ischemickou srdeční chorobu I20-I25 (ČR 193,59 vs EU-27 100,39, +93 %) a cerebrovaskulární nemoci I60-I69 (ČR 67,57 vs EU-27 63,93, +6 %) — ukazuje, že rozdíl je primárně tažen IHD, ne CMP. Trend 2020-2023 z ÚZIS aproximovaného trendu nahrazen Eurostat trendem (557,77 → 525,62 → 505,50 → 463,75) — pokles 17 %. Smazán neověřitelný řádek 'kontrolovaná hypertenze 68 % vs OECD 72 %' (kaskádově dle auditu clanek-vyhnutelne-hospitalizace 2026-05-15: Bruthans et al. 2019 a post-MONICA dokumentují kontrolu TK v ČR cca 32-37 %, OECD nepublikuje srovnatelný indikátor). Aktualizovány časové cíle akutní léčby AMI dle ESC 2023 ACS Guidelines (FMC-to-wire-crossing ≤ 60 min přímá prezentace / ≤ 90 min převoz; ≤ 120 min jako mez pro fibrinolýzu) — sjednoceno se sourozeneckým auditem clanek-akutni-infarkt 2026-05-11. Status flagged → review-pending; banner aktualizován. data/indicators.json a method card aktualizovány současně. Cascade refs v clanek-akutni-infarkt.html a clanek-cmp-iktova-centra.html informovány o dokončené rekonciliaci."
     av_sweep2_2026-07-10: "Doplněny AV vizuály (článek měl jen hero counter-grid): av-data-table rozpad KV mortality podle diagnóz (IHD 193,59 vs 100,39 / cerebrovask. 67,57 vs 63,93 / celkem 463,75 vs 312,95), av-data-table preventabilní rizikové faktory (alkohol/kouření/pohyb/diabetes/kontrola TK), av-aside counter trend −17 % (2020→2023). Všechna čísla 1:1 z textu/databoxu, text nezměněn (aditivní), claims nedotčeny."
+  reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A)."
 -->
 
 <body>
@@ -254,7 +255,7 @@ audit:
       </p>
 
       <p>
-        <strong>První vrstva je životní styl.</strong> Češi pijí 14,4 litru čistého alkoholu na osobu nad patnáct let oproti 8,9 v průměru OECD — jeden z největších rozdílů napříč celou skupinou rizikových faktorů. Denně kouří 16,4 procenta dospělých (SZÚ <em>Národní výzkum užívání tabáku a alkoholu 2024</em>), o málo víc než průměr OECD 14,8 (OECD <em>Health at a Glance 2025</em>: ČR 15,9 % za rok 2023). Doporučenou hladinu pohybu podle WHO (≥ 150 minut týdně) splňuje jen 25 procent dospělých proti 33 v průměru EU-27 (Eurostat EHIS, <code>hlth_ehis_pe2e</code>, vlna 2019). Šest z deseti dospělých má nadváhu nebo obezitu, prevalence diabetu je 9,5 procenta proti 7 v průměru OECD. Žádný z těchto faktorů sám nevysvětluje rozdíl <strong>asi 150 zemřelých na 100 000 obyvatel ročně</strong> (Eurostat <code>hlth_cd_asdr2</code>, 2023: ČR 463,75 vs EU-27 312,95) — všechny dohromady ho vysvětlují bez problémů. Epidemiologické analýzy WHO a Globální zprávy o břemenu nemocí (Global Burden of Disease, IHME) řadí kombinaci kouření, alkoholu, hypertenze, dyslipidémie a obezity mezi pět největších přispěvatelů kardiovaskulární mortality napříč zeměmi.
+        <strong>První vrstva je životní styl.</strong> Češi pijí 11,2 litru čistého alkoholu na osobu nad patnáct let oproti 8,5 v průměru OECD (registrovaná spotřeba, 2023, OECD <em>Health at a Glance 2025</em>) — zhruba o třetinu víc, než je průměr. Denně kouří 16,4 procenta dospělých (SZÚ <em>Národní výzkum užívání tabáku a alkoholu 2024</em>), o málo víc než průměr OECD 14,8 (OECD <em>Health at a Glance 2025</em>: ČR 15,9 % za rok 2023). Doporučenou hladinu pohybu podle WHO (≥ 150 minut týdně) splňuje jen 25 procent dospělých proti 33 v průměru EU-27 (Eurostat EHIS, <code>hlth_ehis_pe2e</code>, vlna 2019). Šest z deseti dospělých má nadváhu nebo obezitu, prevalence diabetu je 9,5 procenta proti 7 v průměru OECD. Žádný z těchto faktorů sám nevysvětluje rozdíl <strong>asi 150 zemřelých na 100 000 obyvatel ročně</strong> (Eurostat <code>hlth_cd_asdr2</code>, 2023: ČR 463,75 vs EU-27 312,95) — všechny dohromady ho vysvětlují bez problémů. Epidemiologické analýzy WHO a Globální zprávy o břemenu nemocí (Global Burden of Disease, IHME) řadí kombinaci kouření, alkoholu, hypertenze, dyslipidémie a obezity mezi pět největších přispěvatelů kardiovaskulární mortality napříč zeměmi.
       </p>
 
       <p>
@@ -279,10 +280,10 @@ audit:
             </thead>
             <tbody>
               <tr class="av-row-highlight">
-                <th scope="row">Spotřeba alkoholu (l/os./rok, 15+)</th>
-                <td class="av-num av-bad">14,4</td>
-                <td class="av-num">8,9 (OECD)</td>
-                <td>OECD H@G 2025</td>
+                <th scope="row">Spotřeba alkoholu (registrovaná, l/os./rok, 15+)</th>
+                <td class="av-num av-bad">11,2</td>
+                <td class="av-num">8,5 (OECD)</td>
+                <td>OECD H@G 2025 (2023)</td>
               </tr>
               <tr>
                 <th scope="row">Denní kuřáctví (15+)</th>
@@ -366,7 +367,7 @@ audit:
         <li><a href="indikator-mortalita_inhosp_ami.html"><strong>Nemocniční úmrtnost po akutním infarktu myokardu</strong></a> — 4,6 % vs. OECD 6,5 % (ÚZIS NRH, 2024; zahrnuje pouze hospitalizované)</li>
         <li><a href="indikator-mortalita_inhosp_cmp.html"><strong>Nemocniční úmrtnost po cévní mozkové příhodě</strong></a> — 9,9 % vs. OECD 7,7 % (ÚZIS NRH, 2024; zahrnuje pouze hospitalizované)</li>
         <li><a href="indikator-kuractvi_denni.html"><strong>Denní kuřáctví (15+)</strong></a> — 16,4 % vs. OECD 14,8 % (SZÚ NAUTA 2024 / OECD H@G 2025)</li>
-        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 14,4 l/os./rok vs. OECD 8,9</li>
+        <li><a href="indikator-alkohol_spotreba.html"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 11,2 l/os./rok (registrovaná, 2023) vs. OECD 8,5</li>
         <li><a href="indikator-pohybova_aktivita_dospeli.html"><strong>Doporučená pohybová aktivita (≥ 150 min/týden, 15+)</strong></a> — 25,1 % vs. EU-27 32,7 % (Eurostat EHIS 2019)</li>
         <li><a href="indikator-prevalence_diabetu.html"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % vs. OECD 7 %</li>
       </ul>

@@ -78,6 +78,11 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-dohodovaci-rizeni-2027-vysledek': {
+    kicker: 'Financování · dohodovací řízení', signal: 'good',
+    stat: '12/15', claim: 'segmentů se dohodlo na úhradách 2027. Loni jen 3 z 15.',
+    context: '3 finančně největší segmenty ale zůstaly bez dohody — rozhodne úhradová vyhláška do konce října.',
+  },
   'clanek-react-eu-nku-kontrola-2026': {
     kicker: 'Financování · kontrola', signal: 'warn',
     stat: '21', claim: 'měsíců ležel spektrometr za 1,46 mil. Kč nepoužitý v krabici.',
@@ -361,7 +366,7 @@ const MANIFEST = {
   'clanek-nadeje-doziti-zdravi': { kicker: 'Stárnutí · kvalita života', signal: 'bad', stat: '7,7', claim: 'let ve zdraví zbývá českému seniorovi po 65.', context: 'Průměr EU 9,4. Propast 1,7 roku — skoro dekáda v omezení.' },
   'clanek-pracovni-sila': { kicker: 'Pracovní síla · lékaři', signal: 'warn', stat: '4,2', claim: 'lékaře na 1 000 obyvatel — víc než OECD (3,9).', context: 'Problém není počet, ale distribuce a úzké kompetence sester.' },
   'clanek-ezkarta-ehealth': { kicker: 'Digitalizace · eHealth', signal: 'bad', stat: '62', barPct: 62, claim: 'bodů ze sta — český eHealth index. OECD má 70.', context: 'Pilot EZKarty propadl testem; dva ze tří lékařů nezná Patient Summary.' },
-  'clanek-transplantace-darcovstvi-organu': { kicker: 'Transplantace · orgány', signal: 'good', stat: '341', claim: 'zemřelých dárců orgánů — český rekord roku 2025.', context: '31,9 na milion obyvatel řadí Česko do top 10 světa.' },
+  'clanek-transplantace-darcovstvi-organu': { kicker: 'Transplantace · orgány', signal: 'good', stat: '975', claim: 'transplantovaných orgánů — český rekord roku 2025 (+23 meziročně).', context: '341 zemřelých dárců, 31,9 na milion — Česko v top 10 světa.' },
   'clanek-prihranicni-zachranka-cr-sk-2026': { kicker: 'Dostupnost · záchranka', signal: 'good', context: 'Nejbližší posádka vyjede přes hranici — 3 české a 4 slovenské kraje.', headline: 'U infarktu nerozhoduje hranice, ale čas. Smlouva ČR–SR to mění.' },
   'clanek-data-leci-cesko-2026': { kicker: 'Reforma · kvalita péče', signal: 'neutral', context: 'NIKEZ, ÚZIS a INDIKO staví měření kvality péče na veřejná data.', headline: 'Česko dlouho platilo za objem. Teď začíná měřit, kolik stojí kvalita.' },
   'clanek-digi-5-strategie-ehds-2030': { kicker: 'Digitalizace · strategie', signal: 'neutral', context: 'Strategie 2025–2035, EHDS 2029. Co je závazné a co jen sliby.', headline: 'Slíbený termín digitalizace: je v zákoně, nebo jen v projevu?' },

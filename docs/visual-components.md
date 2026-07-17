@@ -772,6 +772,33 @@ Top-of-page banner zobrazený nad článkem podle hodnoty `audit-status` v
 CSS modifikátory: `audit-banner-warn` (žlutá pro review-pending/partial),
 `audit-banner-bad` (červená pro flagged/draft-flagged).
 
+## 2.9 Doložka — `.dlz-*`
+
+Klikatelné doložky kvantitativních tvrzení v článcích. Číslo v textu, které je
+evidované v registru tvrzení, se obalí nenápadným chipem — klik otevře panel
+s průkazem původu (metrika, hodnota + rok z textu, párovaný indikátor, aktuální
+hodnota datového kontraktu, primární zdroj). K tomu badge v `.article-meta`
+(„N čísel s doloženým původem“) a agregované statistiky korpusu na
+`redakce.html#duveryhodnost` (sloty `[data-dlz-stat]`, plní `src/redakce.js`).
+
+| | |
+|---|---|
+| **CSS** | `.dlz-chip`, `.dlz-mark`, `.dlz-panel`, `.dlz-badge` |
+| **JS** | `src/dolozka-engine.js` (čistá logika — drift, párování, statistiky; bez DOM), `src/dolozka-inline.js` (DOM — offset mapping, chipy, panel) |
+| **Data** | `data/claims.json` (registr tvrzení) + `data/indicators.json` (kontrakt) |
+| **Použito na** | `clanek-*.html` (chipy + panel + badge), `redakce.html#duveryhodnost` (statistiky) |
+
+### Stavová logika (driftStatus)
+
+| Stav | Podmínka | V panelu |
+|---|---|---|
+| `current` ✓ | relation `exact` + check `auto` + hodnota odpovídá kontraktu | „Odpovídá datovému kontraktu“ |
+| `changed` ⚠ | relation `exact` + check `auto` + kontrakt dnes uvádí jinou hodnotu | „Kontrakt dnes uvádí X — text vznikl s hodnotou Y" |
+| `reference` · | vše ostatní (manual / related / bez `indicator_id`) | „Referenční údaj“ + `source_note`, bez verdiktu |
+
+Chipy nesou `data-dlz-status`, sufix ✓/⚠ řeší CSS přes `::after`. Jen design
+tokeny, dark mode výhradně přes `[data-theme="dark"]`.
+
 ---
 
 # 3. Animation patterns

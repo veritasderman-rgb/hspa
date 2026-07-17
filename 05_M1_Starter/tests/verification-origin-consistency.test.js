@@ -34,12 +34,23 @@ const ROOT = path.resolve(__dirname, '..');
 // se v sandboxu spouštět NESMÍ (traps.md — degraduje živá data). Odblokuje je
 // noční ingest / dávka F4, ne editace v PR. Seznam proto zůstává; test hlídá, že
 // neobsahuje mrtvé (už-ne-verified) položky.
+// 2026-07-12: vydaje_prevence_pct přechodně origin:seed. Karta je verified
+// (OECD SHA HC6, hodnota 2,736 % / 2023 beze změny), ale refresh cyklu
+// 2026-07-12 (run refresh.yml #76) živý OECD SHA fetch nedotáhl → transform
+// ponechal hodnotu, ale origin spadl na seed. Klasický verified-but-flaky-live
+// stav jako ostatní položky seznamu; odblokuje ho příští úspěšný live fetch.
+// 2026-07-17: nesplnena_potreba_zubni_pece přechodně origin:seed. Karta je
+// verified (EU-SILC, hodnota 1,0 % / 2025 beze změny), ale refresh cyklu
+// 2026-07-17 živý fetch nedotáhl → transform ponechal hodnotu, origin spadl
+// na seed. Stejný verified-but-flaky-live stav jako ostatní položky.
 const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'absolventi_lekarstvi_per_100k',
   'cholesterol_prumer_dospeli',
   'konzumace_ovoce_zeleniny',
+  'nesplnena_potreba_zubni_pece',
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
+  'vydaje_prevence_pct',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {

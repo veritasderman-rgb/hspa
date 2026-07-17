@@ -69,17 +69,19 @@ jobs:
       - name: Generate sitemap
         run: npm run generate:sitemap
 
-      - name: Validate data contract
+      - name: Validate data (all datasets)
         id: validate
+        # Data-integritní brána cronu: validuje ČERSTVĚ zaingestovaná data
+        # napříč všemi datasety (indikátory, strategie, explainery, prevence,
+        # články, claims-quotes, …). Nahrazuje dřívější plný `npm test`, který
+        # nad re-ingestovanými, síťově proměnlivými daty padal na editorialních
+        # konzistenčních testech (verification-origin-consistency) i bez reálné
+        # chyby — kód se v cronu nemění (běží nad commitnutým mainem), takže
+        # unit-testy tu regresi zachytit nemohou, jen šum. Plnou testovou sadu
+        # nad COMMITNUTÝMI daty hlídá deploy-check.yml na každém PR. (issue #681)
         run: |
           set -o pipefail
-          npm run validate:data 2>&1 | tee /tmp/validate.log
-
-      - name: Run tests
-        id: tests
-        run: |
-          set -o pipefail
-          npm test 2>&1 | tee /tmp/tests.log
+          npm run validate:all 2>&1 | tee /tmp/validate.log
 
       - name: Verify data freshness
         id: freshness
@@ -101,9 +103,6 @@ jobs:
           echo "::endgroup::"
           echo "::group::Last 80 lines of validate log"
           tail -n 80 /tmp/validate.log 2>/dev/null || echo "no validate log"
-          echo "::endgroup::"
-          echo "::group::Last 80 lines of tests log"
-          tail -n 80 /tmp/tests.log 2>/dev/null || echo "no tests log"
           echo "::endgroup::"
           echo "::group::Last 80 lines of freshness log"
           tail -n 80 /tmp/freshness.txt 2>/dev/null || echo "no freshness log"
@@ -154,19 +153,23 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🚨 Data refresh failure — fetchery selhávají';
+            const title = '🚨 Data refresh failure — cron refresh.yml selhal';
             const body = [
-              '**Automatický cron `refresh.yml` selhal při kontrole čerstvosti dat.**',
+              '**Automatický cron `refresh.yml` selhal.** Data NEbyla pushnuta do `main`.',
               '',
               `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
               `Datum: ${new Date().toISOString()}`,
               '',
-              'Tichý fallback na seed byl zachycen `verify:freshness`. Data NEbyla pushnuta do `main`.',
+              'Brána cronu = `validate:all` (integrita čerstvých dat) + `verify:freshness`',
+              '(poměr `origin: live` ≥ `MIN_LIVE_RATIO`). Selhal jeden z nich.',
               '',
               '## Co s tím',
-              '1. Otevřít run log a zjistit, který fetcher (ČSÚ/Eurostat/OECD/ÚZIS) selhává.',
-              '2. Pokud upstream API vrací 404/400, ověřit aktuální URL/dimenze v `PLAN_AUTOMATICKY_INGEST.md`.',
-              '3. Po opravě fetcheru spustit `workflow_dispatch` pro re-run.',
+              '1. Otevřít run log, sekce „Diagnostics on failure" — rozliš, zda spadl',
+              '   `validate` (nevalidní dataset) nebo `freshness` (moc fetcherů na seed).',
+              '2. **freshness**: zjistit, který fetcher tiše spadl na seed (souhrn fetcherů',
+              '   v ingest logu); u 404/400 ověřit URL/dimenze v `PLAN_AUTOMATICKY_INGEST.md`.',
+              '3. **validate**: oprav dataset dle výpisu validátoru.',
+              '4. Po opravě spustit `workflow_dispatch` pro re-run.',
               '',
               '_Issue je automaticky aktualizován při dalším selhání._'
             ].join('\n');

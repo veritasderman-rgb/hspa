@@ -189,3 +189,60 @@ test('findIndicatorDrift: přeťatý sousední odkaz na okraji okna nezanechá z
   const html = '<p>Souvisí s hustotou <a href="indikator-nejaky_jiny_per_100k.html">psychiatrů</a> a spotřebou <a href="indikator-bar_ind.html">antidepresiv</a>; bez konkrétní hodnoty.</p>';
   assert.equal(findIndicatorDrift(html, byId).length, 0, 'zbytek href sousedního odkazu se nesmí počítat jako citace');
 });
+
+test('stripNonValueNumbers: odfiltruje roky, slug číslice a sbírkové citace (issue #688)', async () => {
+  const { stripNonValueNumbers } = await import('../scripts/nightly-scan.js');
+  // věkový rozsah ze slugu
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('sebevraždy mladistvých 15–19 let, detail indikátoru', 'sebevrazdy_mladistvi_15_19')));
+  // rok v popisku grafu
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('Proočkovanost MMR (2022), zdroj ÚZIS', 'vakcinace_mmr_deti')));
+  // „100k" ze slugu sousedního odkazu
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('psychiatrů na 100k obyvatel, spotřeba antidepresiv', 'psychiatri_per_100k')));
+  // sbírková citace
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('podle zákona 95/2004 Sb. a vyhlášky 70/2012', 'lekari_per_1000')));
+  // skutečná hodnota s desetinnou čárkou PŘEŽIJE filtr
+  assert.ok(/\d+,\d+/.test(stripNonValueNumbers('účast jen 52,6 procenta (2023)', 'prohlidka_prakticky_lekar')));
+  // věkový práh se sufixem „+" (issue #745) — „18+", „65+"
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('denní kouření dospělých, věk 18+', 'kuractvi_denni')));
+  assert.ok(!/\d{2,}/.test(stripNonValueNumbers('pracovníci LTC na 100 osob 65+', 'pracovnici_ltc_per_100_65plus')));
+  // reálná hodnota se sufixem jednotky (ne „+") PŘEŽIJE — např. „62 index"
+  assert.ok(/\d{2,}/.test(stripNonValueNumbers('adopce e-zdravotnictví 62 index', 'ehealth_adoption')));
+  // jmenovatel míry „1 000" se NESTRIPUJE (review PR #784) — u jednociferné
+  // rate-citace „3 / 1 000" musí zůstat důkazem, že „3" je hodnota
+  assert.ok(/\d{2,}/.test(stripNonValueNumbers('hustota 3 sestry / 1 000 obyvatel', 'sestry_per_1000')));
+});
+
+test('findIndicatorDrift: odkaz-atribuce se správnou hodnotou jinde v článku se neflaguje (issue #745)', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([
+    ['prezit_karcinom_prsu_5let', { id: 'prezit_karcinom_prsu_5let', value: 81.4, unit: '%', year: 2014 }],
+  ]);
+  // Metodický odstavec u odkazu obsahuje jiné číslo („MKN-10 C50"), ale
+  // správná hodnota 81,4 % je citována jinde v článku → není to drift.
+  const html = `
+    <p>Pětileté přežití karcinomu prsu je v Česku <strong>81,4 %</strong>.</p>
+    <p>Indikátor <a href="indikator-prezit_karcinom_prsu_5let.html">prezit_karcinom_prsu_5let</a>
+       sleduje čisté přežití (MKN-10 C50) očištěné o jiné příčiny úmrtí.</p>`;
+  assert.equal(findIndicatorDrift(html, byId).length, 0, 'hodnota v článku přítomna → žádný drift');
+  // Když správná hodnota v článku NENÍ nikde a okno cituje jiné číslo → flag.
+  const stale = `
+    <p>Pětileté přežití je podle staršího odhadu <strong>74,0 %</strong>
+       (<a href="indikator-prezit_karcinom_prsu_5let.html">indikátor</a>).</p>`;
+  assert.equal(findIndicatorDrift(stale, byId).length, 1, 'chybí správná hodnota → drift se hlásí');
+});
+
+test('findIndicatorDrift: falešné poplachy z #688 už neflaguje, skutečný drift ano', async () => {
+  const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
+  const byId = new Map([
+    ['sebevrazdy_mladistvi_15_19', { id: 'sebevrazdy_mladistvi_15_19', value: 6.96, unit: '/100k', year: 2023 }],
+    ['vakcinace_mmr_deti', { id: 'vakcinace_mmr_deti', value: 83.7, unit: '%', year: 2022 }],
+  ]);
+  // okno obsahuje jen věkový rozsah/rok → žádná citace hodnoty → žádný flag
+  const fp = `
+    <p>Sebevraždy mladistvých ve věku 15–19 let sledujeme v <a href="indikator-sebevrazdy_mladistvi_15_19.html">indikátoru</a>.</p>
+    <p>Detail v <a href="indikator-vakcinace_mmr_deti.html">indikátoru MMR</a> (za rok 2022).</p>`;
+  assert.equal(findIndicatorDrift(fp, byId).length, 0, 'roky a věkové rozsahy nejsou citace');
+  // skutečná zastaralá citace se flaguje dál
+  const real = '<p>Proočkovanost MMR je 91,2 procenta — <a href="indikator-vakcinace_mmr_deti.html">detail</a>.</p>';
+  assert.equal(findIndicatorDrift(real, byId).length, 1, 'zastaralé číslo se pořád chytá');
+});

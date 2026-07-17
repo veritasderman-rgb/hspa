@@ -1,0 +1,54 @@
+{
+  "id": "trombolyza_ischemicka_cmp",
+  "name": "Podíl ischemických cévních mozkových příhod léčených trombolýzou",
+  "area": "Procesy",
+  "domain": "Kvalita péče",
+  "subdomain": "Akutní iktová péče",
+  "definition": "Podíl pacientů s akutní ischemickou cévní mozkovou příhodou (mozkovým infarktem), kterým byla podána intravenózní trombolýza (IVT) — tj. rozpuštění krevní sraženiny lékem (altepláza/tenektepláza) v časovém okně po vzniku iktu — vztažený ke všem hospitalizovaným pro ischemickou CMP. Ukazatel měří proces akutní rekanalizační léčby (dostupnost a využití trombolýzy v síti iktových center), nikoli výsledek péče. Doplňuje se s výsledkovým indikátorem nemocniční mortality po CMP (mortalita_inhosp_cmp) a s druhou rekanalizační metodou — mechanickou trombektomií.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_registr",
+      "endpoint": "https://www.uzis.cz/index.php?pg=vystupy--souhrnne-reporty",
+      "dataset": "Národní registr hospitalizovaných / registr cerebrovaskulární péče (ÚZIS ČR) ve spolupráci s Cerebrovaskulární sekcí České neurologické společnosti ČLS JEP; síť iktových center MZ ČR. Mezinárodní srovnatelnost zajišťuje ESO Stroke Service Tracker (dříve ESO-EAST / registr RES-Q).",
+      "dimensions": {
+        "diagnoza": "ischemická CMP (I63)",
+        "vykon": "intravenózní trombolýza (IVT)",
+        "uzemi": "ČR celkem, rozpad na iktová centra / kraj / okres",
+        "rok": "roční"
+      }
+    },
+    "fallback": {
+      "type": "puk_kancelarzp",
+      "url": "https://puk.kancelarzp.cz/podil-hospitalizacnich-pripadu-s-uzitim-mechanicke-trombektomie/",
+      "note": "Portál ukazatelů kvality zdravotních služeb (Kancelář zdravotního pojištění) publikuje z administrativních dat (k-dávky) příbuzný oficiální ukazatel „Podíl hospitalizačních případů s užitím mechanické trombektomie\" — druhou rekanalizační metodu. Podíl trombolyzovaných rekonstruujeme z národního registru a z publikací ESO Stroke Service Tracker (European Stroke Journal); administrativní k-dávky slouží jako křížová kontrola objemu výkonů."
+    }
+  },
+  "benchmark_source": {
+    "type": "eso_stroke_journal",
+    "code": "ESO_IVT_SHARE_ISCHEMIC_STROKE",
+    "dataset": "Aguiar de Sousa D, et al. „Delivery of acute ischaemic stroke treatments in the European region in 2019 and 2020.\" European Stroke Journal 2023;8(3):618–628. Evropský průměr podílu ischemických CMP léčených intravenózní trombolýzou činil 17,14 % (rok 2019, 95% CI 12,98–21,30). Česko ve stejném roce vykázalo 30,88 % — jeden z nejvyšších podílů v Evropě a téměř dvojnásobek evropského průměru (výše bylo Německo 37,18 %, Rakousko 30,77 % a Lotyšsko 52,66 %; níže Polsko 20,90 % a Slovensko 21,11 %). Jako benchmark.eu používáme evropský průměr 17,1 %.",
+    "value": 17.1,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10472963/"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr hospitalizovaných, registr cerebrovaskulární péče)",
+    "Cerebrovaskulární sekce České neurologické společnosti ČLS JEP",
+    "Ministerstvo zdravotnictví ČR (síť iktových center, Národní kardiovaskulární plán 2025–2035)",
+    "ESO — European Stroke Organisation (Stroke Service Tracker / Angels Initiative)"
+  ],
+  "method_notes": "Hodnota je počítána jako počet ischemických CMP léčených intravenózní trombolýzou dělený počtem všech hospitalizovaných pro ischemickou CMP × 100. Headline hodnota 31,4 % (2022) vychází z národního registru iktové péče a odpovídá dlouhodobě jednomu z nejvyšších podílů trombolyzovaných v Evropě, který Česko opakovaně vykazuje (Cerebrovaskulární sekce ČNS ČLS JEP). Časová řada kombinuje peer-reviewed evropské srovnání (European Stroke Journal 2023: 30,88 % za 2019, propad na 27,29 % v roce 2020 během pandemie covid-19) s národním registrem (31,4 % za 2022). Pozor na metodické rozdíly mezi zdroji: jmenovatel „všechny ischemické CMP\" vs „incidentní první ikty\" a rozsah sítě center se mezi publikacemi mírně liší, proto je agregát orientační (origin: seed, verification_status: preliminary). Benchmark 17,1 % je evropský průměr roku 2019 ze stejné studie; evropské podíly trombolýzy jsou meziročně poměrně stabilní, takže srovnání zůstává vypovídající i vůči novější české hodnotě. Mechanickou trombektomii (druhá rekanalizační metoda) Česko provedlo přibližně u 8,85 % ischemických CMP (2019, ESO), resp. 5,18 % dle administrativních k-dávek PUK (2019) — sleduje ji samostatný oficiální ukazatel PUK.",
+  "limitations": "1. **Metodická nejednotnost** — podíl závisí na definici jmenovatele (všechny ischemické CMP vs incidentní první ikty) a na tom, zda se počítají jen certifikovaná iktová centra; hodnoty z různých zdrojů proto nejsou plně zaměnitelné. 2. **Proces, ne výsledek** — vysoký podíl trombolyzovaných je nutná, nikoli postačující podmínka dobrého výsledku; rozhoduje také čas (door-to-needle), kvalita indikace a navazující trombektomie. 3. **Regionální nerovnost** — celostátní průměr přes 30 % zakrývá velké rozdíly mezi centry a okresy: v některých okresech (např. Havlíčkův Brod, Šumperk, Nový Jičín) klesá reálná šance na trombolýzu k ~9 %, zatímco nejlepší centra překračují 40 %. 4. **Časová dostupnost** — trombolýzu lze podat jen v úzkém okně od vzniku příznaků; podíl je proto limitován tím, jak rychle pacient rozpozná příznaky a dorazí do centra (prehospitální fáze mimo přímý vliv nemocnice). 5. **Kontraindikace** — část ischemických CMP trombolýzu z medicínských důvodů nikdy nedostane, takže teoretické maximum je výrazně pod 100 %.",
+  "determinants": "**Síť iktových center a její certifikace.** Česko vybudovalo od roku 2010 celostátní síť zhruba 47 iktových center (z toho ~13 komplexních cerebrovaskulárních center schopných trombektomie), řízenou metodickými pokyny MZ ČR a triáží zdravotnické záchranné služby. Centralizace akutní iktové péče do certifikovaných center je hlavním strukturálním determinantem vysokého podílu trombolyzovaných.\n\n**Prehospitální triáž a čas.** Zásadní je čas od vzniku příznaků k podání léku. Systém FAST osvěty, přednemocniční triáže ZZS (převoz rovnou do iktového centra) a interního „door-to-needle\" managementu (nejlepší česká centra dosahují času pod 15 minut) rozhoduje o tom, kolik pacientů se do okna vejde.\n\n**Úhrada a organizace.** Výkony akutní iktové péče jsou hrazené z veřejného zdravotního pojištění; provoz center 24/7 vyžaduje personální a přístrojové zajištění (CT/MR, neurolog, intervenční radiolog). Kompetence rozvoje leží na MZ ČR (síť center) a plátcích (úhrada).\n\n**Osvěta veřejnosti.** Rozpoznání příznaků iktu laikem (náhlá slabost, porucha řeči, pokles koutku) a okamžité volání 155 je předpokladem včasného příjezdu; kampaně (FAST / „Čas je mozek\") zvyšují podíl pacientů v terapeutickém okně.\n\n**Národní kardiovaskulární plán 2025–2035.** Strategický rámec MZ ČR staví cílový stav sítě a kvality iktové péče a umožňuje měřit pokrok.",
+  "importance": "Cévní mozková příhoda je jednou z hlavních příčin úmrtí a získané invalidity dospělých v Česku. U ischemického iktu, který tvoří většinu případů, platí „čas je mozek\" — každou minutu bez průtoku odumírají miliony neuronů. Intravenózní trombolýza (a navazující mechanická trombektomie) dokáže sraženinu rozpustit či odstranit a v části případů vrátit pacientovi funkční nezávislost, kterou by jinak ztratil.\n\nZ pohledu výkonnosti zdravotního systému (HSPA) je podíl trombolyzovaných modelovým procesním ukazatelem kvality akutní péče: měří, zda systém dokáže dostat správnou léčbu ke správnému pacientovi v úzkém časovém okně. Je to jeden z mála indikátorů, kde Česko patří ke světové špičce — a proto slouží i jako důkaz, že cílená centralizace a organizace péče dokáže přinést špičkový výsledek. Zároveň odhaluje slabé místo: velkou regionální nerovnost v reálné dostupnosti.",
+  "patient_story": "Sobota ráno, panelákový byt v Ostravě. Pětašedesátiletému panu Jaroslavovi náhle poklesne koutek úst a nedokáže domluvit — slova se mu pletou. Manželka si vybaví kampaň „čas je mozek\", nezaváhá a volá 155. Posádka záchranné služby ho nepřeváží do nejbližší nemocnice, ale rovnou do iktového centra; cestou předává avízo, takže tým už na pana Jaroslava čeká u dveří. CT vyloučí krvácení, neurolog potvrdí ucpanou tepnu a do žíly jde trombolýza. Za pár týdnů chodí pan Jaroslav sám do parku. Rozdíl mezi invaliditou a návratem domů se odehrál v prvních minutách — a v tom, že systém byl připravený.\n\nČesko léčí trombolýzou mimořádně vysoký podíl pacientů s ischemickým iktem: v roce 2022 to bylo 31,4 % — dlouhodobě jeden z nejvyšších podílů v Evropě. Signál je good: evropský průměr podle studie European Stroke Journal (2023) činil jen 17,1 % (rok 2019), tedy zhruba polovina české úrovně; výše než Česko byly jen Německo, Rakousko a pobaltské země. Trend je stabilně vysoký — 30,9 % v roce 2019, propad na 27,3 % během pandemie covid-19 v roce 2020 a návrat na 31,4 % v roce 2022. Za výsledkem stojí síť zhruba 47 iktových center, přednemocniční triáž záchranné služby a interní management, kde nejlepší centra podají lék do 15 minut od příjezdu.\n\nProč se to Česku daří, když v řadě evropských zemí dostane trombolýzu jen zlomek pacientů? Rozhodla strukturální volba: od roku 2010 se akutní iktová péče cíleně centralizovala do certifikovaných center řízených metodickými pokyny ministerstva, místo aby zůstala roztříštěná po malých nemocnicích. K tomu přišla triáž ZZS („vezeme rovnou do centra\"), osvěta FAST a měření času door-to-needle. Je to učebnicový příklad, že organizace péče — ne jen peníze — rozhoduje o výsledku. Slabinou zůstává regionální nerovnost: v okresech jako Havlíčkův Brod, Šumperk nebo Nový Jičín klesá reálná šance na trombolýzu k devíti procentům, zatímco špičková centra překračují čtyřicet.\n\nPolitická páka je jasná a leží převážně na straně státu a plátce. Udržet a doladit síť center (kompetence MZ ČR, ukotveno v Národním kardiovaskulárním plánu 2025–2035), narovnat regionální rozdíly cílenou podporou podprůměrných okresů, pokračovat v prehospitální triáži a osvětě „čas je mozek\" a průběžně měřit kvalitu (door-to-needle, podíl trombolyzovaných i trombektomovaných) — to jsou konkrétní kroky, které rozhodnou, jestli i pacient mimo velké město dostane stejnou šanci jako pan Jaroslav v Ostravě. Česká iktová péče ukazuje, že to jde; úkolem je nenechat úspěch zamrznout a dotáhnout ho do posledního okresu.",
+  "framework": "hspa",
+  "dimension": "kvalita",
+  "verification_status": "preliminary"
+}

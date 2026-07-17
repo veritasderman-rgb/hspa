@@ -23,6 +23,7 @@
     primary_sources_count: 4
     visual_elements_count: 4
     notes: "Nový draft + nový indikátor mortalita_jaterni_chronicka (úmrtnost na chronická onemocnění jater, MKN-10 K70 + K73–K74). Data ověřena živě z Eurostat disseminačního API (hlth_cd_asdr2, icd10=K70_K73_K74, sex=T, age=TOTAL, unit=RT) dne 2026-06-09. ČR 2023 = 19,5 na 100 000 ob.; trend 2019:19,35 / 2020:19,51 / 2021:21,32 / 2022:21,54 / 2023:19,5 (dlouhodobě bez zlepšení, covid vrchol 2021–2022). Benchmark EU27_2020 2023 = 13,68 (stejný kód). Sousedé 2023: AT 14,82 / DE 15,97 / PL 20,73 / SK 27,54. CZ o ~43 % nad EU → signal bad. Distinkce: měří populační škody z alkoholu (alkoholová cirhóza tvoří většinu), uzavírá řetězec spotřeba alkoholu (alkohol_spotreba) → výsledek (úmrtí). Strukturální faktory: vysoká spotřeba alkoholu, nízká daň z piva a dostupnost, pozdní záchyt jaterní fibrózy, nedoléčená HCV. Politická páka: minimální cena za jednotku alkoholu, spotřební daň z piva, omezení dostupnosti a reklamy, krátké intervence a screening fibrózy. Verified 2026-06-17: jaterní mortalita CZ 19,5 a sousedé (AT 14,82 / DE 15,97 / PL 20,73 / SK 27,54 / EU27 13,68) přeověřeny živě z Eurostat API; údaj o spotřebě alkoholu opraven z chybných 11–12 l na hodnotu indikátoru alkohol_spotreba 14,4 l/os. (2024, OECD, ~60 % nad OECD 8,9). Zdroje: Eurostat hlth_cd_asdr2, OECD Preventing Harmful Alcohol Use (Czechia), OECD/State of Health in the EU Czechia profile, ČSÚ (příčiny úmrtí), SZÚ (spotřeba alkoholu)."
+    reconcile_2026-07-12: "alkohol_spotreba 14,4/8,9 → recorded 11,2/8,5 (OECD H@G 2025, issue #690 varianta A); methodology caveat doplněn."
 -->
 <meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -46,7 +47,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-jaterni-mortalita-alkohol#article",
       "headline": "Cena levného piva: Česko umírá na nemocná játra o 43 % častěji než Evropa",
-      "description": "Úmrtnost na chronická onemocnění jater je v ČR 19,5 na 100 000 obyvatel (2023) — o zhruba 43 % nad průměrem EU27 (13,7) a bez dlouhodobého zlepšení. Většinu těch úmrtí způsobila alkoholová cirhóza, nejtvrdší populační stopa, jakou levný a všudypřítomný alkohol zanechává. Indikátor uzavírá řetězec od rizika (spotřeba alkoholu, kolem 11–12 l čistého alkoholu na dospělého ročně) k jeho ceně (předčasná úmrtí). Ve středoevropském srovnání je Česko (19,5) hůř než Rakousko (14,8) i Německo (16,0), zhruba na úrovni Polska (20,7) a lépe jen než Slovensko (27,5). Nový draft + nový indikátor mortalita_jaterni_chronicka z Eurostat hlth_cd_asdr2.",
+      "description": "Úmrtnost na chronická onemocnění jater je v ČR 19,5 na 100 000 obyvatel (2023) — o zhruba 43 % nad průměrem EU27 (13,7) a bez dlouhodobého zlepšení. Většinu těch úmrtí způsobila alkoholová cirhóza, nejtvrdší populační stopa, jakou levný a všudypřítomný alkohol zanechává. Indikátor uzavírá řetězec od rizika (spotřeba alkoholu, 11,2 l registrovaného čistého alkoholu na osobu 15+ ročně podle OECD Health at a Glance 2025) k jeho ceně (předčasná úmrtí). Ve středoevropském srovnání je Česko (19,5) hůř než Rakousko (14,8) i Německo (16,0), zhruba na úrovni Polska (20,7) a lépe jen než Slovensko (27,5). Nový draft + nový indikátor mortalita_jaterni_chronicka z Eurostat hlth_cd_asdr2.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-jaterni-mortalita-alkohol.png"
@@ -166,9 +167,9 @@
             <span class="av-counter-foot">ČR je o zhruba 43 % výš</span>
           </div>
           <div class="av-counter-block av-counter-block-neutral">
-            <span class="av-counter" data-value="14.4" data-decimals="1" data-suffix=" l">14,4 l</span>
-            <span class="av-counter-label">čistého alkoholu na osobu / rok, ČR (2024)</span>
-            <span class="av-counter-foot">mezi nejvyššími hodnotami v OECD</span>
+            <span class="av-counter" data-value="11.2" data-decimals="1" data-suffix=" l">11,2 l</span>
+            <span class="av-counter-label">registrovaného čistého alkoholu na osobu 15+ / rok, ČR (2023)</span>
+            <span class="av-counter-foot">OECD H@G 2025 · průměr OECD 8,5 l · dlouhodobě nejvyšší pásmo OECD</span>
           </div>
           <div class="av-counter-block av-counter-block-good">
             <span class="av-counter" data-value="14.8" data-decimals="1">14,8</span>
@@ -176,7 +177,7 @@
             <span class="av-counter-foot">Slovensko naopak 27,5</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, dataset hlth_cd_asdr2 (chronic liver disease, MKN-10 K70 + K73–K74, standardizovaná míra na 100 000 ob., ESP 2013). Benchmark = průměr EU27. Ověřeno z Eurostat API 9. 6. 2026.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, dataset hlth_cd_asdr2 (chronic liver disease, MKN-10 K70 + K73–K74, standardizovaná míra na 100 000 ob., ESP 2013). Benchmark = průměr EU27. Ověřeno z Eurostat API 9. 6. 2026. Spotřeba alkoholu: OECD <em>Health at a Glance 2025</em> (registrovaná spotřeba, 2023).</p>
       </figure>
 
       <h3>Co indikátor měří</h3>
@@ -281,7 +282,7 @@
       <h3>Proč jsme tak vysoko</h3>
 
       <p>
-        Příčina není záhada. Česko patří ke <strong>světové špičce ve spotřebě alkoholu</strong> — 14,4 litru čistého alkoholu na osobu ročně (2024), zhruba o 60 % nad průměrem OECD (8,9) a dlouhodobě mezi nejvyššími hodnotami vůbec. A chronická onemocnění jater jsou nejtvrdším populačním důsledkem té spotřeby. Hlavní část jaterní úmrtnosti tvoří alkoholová cirhóza, takže česká nadměrná hodnota je v podstatě přímou daní za národní zvyk.
+        Příčina není záhada. Česko se ve spotřebě alkoholu <strong>dlouhodobě drží v nejvyšším pásmu OECD</strong> — 11,2 litru čistého alkoholu na osobu ročně (2023, registrovaná spotřeba), podle OECD Health at a Glance 2025 zhruba o třetinu nad průměrem OECD (8,5). A chronická onemocnění jater jsou nejtvrdším populačním důsledkem té spotřeby. Hlavní část jaterní úmrtnosti tvoří alkoholová cirhóza, takže česká nadměrná hodnota je v podstatě přímou daní za národní zvyk.
       </p>
 
       <p>
@@ -324,7 +325,7 @@
         <li><strong>Trend</strong> — 19,35 (2019) → 21,32 (2021, covid) → 21,54 (2022) → 19,5 (2023); bez dlouhodobého poklesu</li>
         <li><strong>Průměr EU27 (2023)</strong> — 13,7; ČR je o ~43 % výš</li>
         <li><strong>Sousedé (2023)</strong> — Rakousko 14,8, Německo 16,0, Polsko 20,7, Slovensko 27,5</li>
-        <li><strong>Hlavní příčina</strong> — alkoholová cirhóza; ČR má 14,4 l čistého alkoholu na osobu / rok (2024, OECD)</li>
+        <li><strong>Hlavní příčina</strong> — alkoholová cirhóza; ČR má 11,2 l registrovaného čistého alkoholu na osobu 15+ / rok (2023, OECD Health at a Glance 2025; průměr OECD 8,5 l)</li>
         <li><strong>Co měří</strong> — populační škody z alkoholu (výsledek), uzavírá řetězec od spotřeby (riziko)</li>
         <li><strong>Strukturální faktor</strong> — vysoká spotřeba, nízká daň a dostupnost alkoholu, pozdní záchyt fibrózy, nedoléčená HCV</li>
       </ul>
@@ -347,13 +348,14 @@
         <h5 class="sources-group-h">Kontext a mezinárodní srovnání</h5>
         <ul class="article-sources-list">
           <li><strong>ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku</strong> — národní zdroj prvotních dat o příčinách úmrtí, harmonizovaný do Eurostatu. <a href="https://www.czso.cz/csu/czso/zdravotnictvi" target="_blank" rel="noopener">czso.cz ↗</a></li>
-          <li><strong>OECD — Preventing Harmful Alcohol Use, Czechia (2025)</strong> — spotřeba čistého alkoholu na osobu a rizikové pití v ČR v mezinárodním srovnání; zdroj údaje 14,4 l. <a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/07/preventing-harmful-alcohol-use-country-notes_88239678/czechia_32cf3c93/154af513-en.pdf" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2025</strong> — registrovaná (recorded) spotřeba čistého alkoholu: ČR 11,2 l / os. 15+ (2023), průměr OECD 8,5 l; zdroj údaje o spotřebě v článku. <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_8f9e3f98-en.html" target="_blank" rel="noopener">oecd.org · H@G 2025 ↗</a></li>
+          <li><strong>OECD — Preventing Harmful Alcohol Use, Czechia (2025)</strong> — spotřeba čistého alkoholu na osobu a rizikové pití v ČR v mezinárodním srovnání (kontext). <a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/07/preventing-harmful-alcohol-use-country-notes_88239678/czechia_32cf3c93/154af513-en.pdf" target="_blank" rel="noopener">oecd.org ↗</a></li>
           <li><strong>SZÚ — Užívání alkoholu v ČR</strong> — populační data o spotřebě alkoholu a rizikovém pití (kontext příčiny). <a href="https://szu.gov.cz/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
           <li><strong>OECD / European Commission — State of Health in the EU: Czechia Country Health Profile</strong> — kontext spotřeby alkoholu a jejích zdravotních důsledků v ČR. <a href="https://health.ec.europa.eu/state-health-eu/country-health-profiles_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Všechny hodnoty (ČR 19,5 za rok 2023, časová řada, sousední země i benchmark EU27 13,7) vycházejí z datasetu Eurostat hlth_cd_asdr2 pro kód K70_K73_K74, standardizovanou míru a oba pohlaví; staženo z Eurostat disseminačního API 9. 6. 2026. Údaj o spotřebě alkoholu (14,4 l čistého alkoholu na osobu, 2024) pochází z OECD Health Statistics, viz indikátor spotřeby alkoholu v dashboardu. Seed záznam v dashboardu bude při přechodu na ověřený živý zdroj synchronizován přímo s aktualizacemi Eurostatu.
+        <strong>Pozn. k údajům:</strong> Všechny hodnoty (ČR 19,5 za rok 2023, časová řada, sousední země i benchmark EU27 13,7) vycházejí z datasetu Eurostat hlth_cd_asdr2 pro kód K70_K73_K74, standardizovanou míru a oba pohlaví; staženo z Eurostat disseminačního API 9. 6. 2026. Údaj o spotřebě alkoholu (11,2 l čistého alkoholu na osobu 15+, 2023) je registrovaná (recorded) spotřeba podle OECD Health at a Glance 2025, viz indikátor spotřeby alkoholu v dashboardu; národní odhady včetně neregistrované spotřeby (přeshraniční nákupy, domácí výroba; ČSÚ/SZÚ) uvádějí ~14,4 l a s průměrem OECD je nelze přímo srovnávat. Seed záznam v dashboardu bude při přechodu na ověřený živý zdroj synchronizován přímo s aktualizacemi Eurostatu.
       </p>
     </section>
 

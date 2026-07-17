@@ -21,6 +21,7 @@ Jednostránkový cheatsheet pro rychlou orientaci. Pro hloubku viz
 | ETL/ingest | `05_M1_Starter/ingest/` |
 | Skripty | `05_M1_Starter/scripts/` |
 | Testy | `05_M1_Starter/tests/` (731 testů, 0 failures) |
+| Doložka (registr tvrzení) | `data/claims.json` → klikatelné doložky v článcích; engine `src/dolozka-engine.js`, UI `src/dolozka-inline.js`, statistiky `redakce.html#duveryhodnost` |
 | Dokumentace pro vývojáře | `docs/` (root level) |
 
 ---
@@ -100,6 +101,7 @@ git push -u origin claude/<branch-name>
 | `.narok-svg-figure` | Custom decision tree / Venn / scissor SVGs | série Nárok pojištěnce |
 | `.clinical-*` | (plánováno) clinical-quality vizuálky | kvalita-pece.html |
 | `.timeline-*` | Časová osa (HSPA, projekt) | o-projektu.html |
+| `.dlz-*` | Doložka (klikatelné doložky tvrzení, panel, badge) | clanek-*.html, redakce.html |
 
 ---
 
