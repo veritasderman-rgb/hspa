@@ -16,7 +16,7 @@
 //     "heading": "…",                  // H1 úvodu
 //     "paragraphs": ["…", "…"]         // 2–4 odstavce; povolené <strong>, <em>, <a href>
 //   },
-//   "articles": [                      // 3–4 položky; první = hlavní karta
+//   "articles": [                      // 3–4 položky (výjimečně až 6 s nástroji); první = hlavní karta
 //     {
 //       "kicker": "Rubrika · 8. 7. 2026",
 //       "title": "…",
@@ -42,8 +42,8 @@ const spec = JSON.parse(fs.readFileSync(specPath, 'utf8'));
 for (const field of ['previewText', 'edition_label', 'intro', 'articles']) {
   if (!spec[field]) { console.error(`Spec: chybí pole "${field}"`); process.exit(1); }
 }
-if (!Array.isArray(spec.articles) || spec.articles.length < 1 || spec.articles.length > 4) {
-  console.error('Spec: articles musí mít 1–4 položky (cíl rutiny: 3–4).');
+if (!Array.isArray(spec.articles) || spec.articles.length < 1 || spec.articles.length > 6) {
+  console.error('Spec: articles musí mít 1–6 položek (cíl rutiny: 3–4; výjimečná vydání s nástroji portálu až 6).');
   process.exit(1);
 }
 for (const a of spec.articles) {

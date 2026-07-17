@@ -35,8 +35,24 @@
       "name": "HSPA newsletter — 2026-07-17 (pátek)",
       "subject": "76 farmaceutů na 100 000 — méně než celé okolí",
       "scheduled_for": "2026-07-17T11:00:00+02:00",
-      "note": "Ruční fallback běh (GitHub Actions cron 07:33 UTC toho dne nenaskočil — žádný nový run ve workflow historii ~40 min po plánovaném čase). Pozor: kampaň byla založena se sender referencí {\"id\":1}, což se v Brevu vyřešilo na registrované jméno odesílatele „SkoreZdravko“ místo značkového „HSPA Monitor · Skóre zdravotnictví“ — opravit ručně v Brevu (pole Sender name) před pátečním odesláním.",
+      "note": "ZRUŠENO/NAHRAZENO kampaní #8 — sender byl založen referencí {\"id\":1}, což se v Brevu vyřešilo na jméno „SkoreZdravko“ místo značkového „HSPA Monitor · Skóre zdravotnictví“, a obsah neobsahoval dodatečně vyžádané nástroje (barometr, hra o úhradové vyhlášce). MCP nástroje pro Brevo dostupné v této session neumí kampaň upravit ani smazat — #7 je stále naplánovaná na stejný čas a list jako #8 a MUSÍ být ručně zrušena v Brevu před pátkem 11:00, jinak odběratelé dostanou e-mail dvakrát.",
       "articles": [
+        "clanek-farmaceuti-pracovni-sila.html",
+        "clanek-katastroficke-vydaje-zdravi.html",
+        "clanek-zdravotni-gramotnost.html",
+        "clanek-financovani-segmenty-2026.html"
+      ],
+      "featured_indicator": "farmaceuti_per_100k"
+    },
+    {
+      "brevo_campaign_id": 8,
+      "name": "HSPA newsletter — 2026-07-17 (pátek) — v2 (nahrazuje #7)",
+      "subject": "Zahrajte si na ministra zdravotnictví",
+      "scheduled_for": "2026-07-17T11:00:00+02:00",
+      "note": "Kanonické vydání pro 2026-07-17 — nahrazuje #7 (opravené sender jméno, přidány na žádost uživatele dva nástroje portálu jako první dvě karty: hra Úhradová vyhláška a Barometr politických prohlášení). Vyžadovalo zvýšení limitu scripts/newsletter-build.js articles z 4 na 6 položek. Kampaň #7 musí být ručně zrušena v Brevu, jinak dojde k duplicitnímu odeslání.",
+      "articles": [
+        "vyhlaska",
+        "barometr",
         "clanek-farmaceuti-pracovni-sila.html",
         "clanek-katastroficke-vydaje-zdravi.html",
         "clanek-zdravotni-gramotnost.html",
