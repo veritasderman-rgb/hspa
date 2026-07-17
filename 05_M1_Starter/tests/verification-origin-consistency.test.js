@@ -46,6 +46,10 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
   'vydaje_prevence_pct',
+  // 2026-07-17: refresh cyklus zapsal origin:seed (verified karta, hodnota
+  // 1,0 % / 2025 z EHIS); odblokuje příští úspěšný live fetch. Stejný
+  // verified-but-flaky-live stav jako ostatní položky.
+  'nesplnena_potreba_zubni_pece',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
