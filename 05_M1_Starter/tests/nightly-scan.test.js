@@ -246,3 +246,26 @@ test('findIndicatorDrift: falešné poplachy z #688 už neflaguje, skutečný dr
   const real = '<p>Proočkovanost MMR je 91,2 procenta — <a href="indikator-vakcinace_mmr_deti.html">detail</a>.</p>';
   assert.equal(findIndicatorDrift(real, byId).length, 1, 'zastaralé číslo se pořád chytá');
 });
+
+test('isDriftIgnored: ověřený falešný pár se ignoruje, ostatní ne', async () => {
+  const { isDriftIgnored } = await import('../scripts/nightly-scan.js');
+  const ign = new Set(['clanek-x.html::ehealth_adoption']);
+  assert.equal(isDriftIgnored('clanek-x.html', 'ehealth_adoption', ign), true);
+  assert.equal(isDriftIgnored('clanek-x.html', 'jiny_indikator', ign), false, 'jiný indikátor v témže článku se neignoruje');
+  assert.equal(isDriftIgnored('clanek-y.html', 'ehealth_adoption', ign), false, 'stejný indikátor v jiném článku se neignoruje');
+});
+
+test('nightly-scan-ignore.json: validní schéma a všechny páry mají důvod+datum', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const dir = path.dirname(fileURLToPath(import.meta.url));
+  const doc = JSON.parse(fs.readFileSync(path.resolve(dir, '..', 'scripts', 'nightly-scan-ignore.json'), 'utf8'));
+  assert.ok(Array.isArray(doc.ignore), 'ignore je pole');
+  for (const e of doc.ignore) {
+    assert.ok(e.article && e.article.endsWith('.html'), `${e.indicator}: article je clanek-*.html`);
+    assert.ok(e.indicator && /^[a-z0-9_]+$/.test(e.indicator), `${e.article}: indicator je slug`);
+    assert.ok(e.reason && e.reason.length > 20, `${e.article}/${e.indicator}: netriviální reason`);
+    assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(e.added), `${e.article}/${e.indicator}: added je datum`);
+  }
+});
