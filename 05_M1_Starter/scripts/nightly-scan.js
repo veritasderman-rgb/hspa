@@ -145,6 +145,27 @@ function loadIndicatorsById() {
   return _indicatorsCache;
 }
 
+// Ověřené falešné poplachy indicator-driftu (odkazy-atribuce, kde se hodnota
+// indikátoru záměrně necituje) — skener je přestane hlásit. Zdroj:
+// scripts/nightly-scan-ignore.json. Klíč = article + "::" + indicator.
+let _driftIgnoreCache = null;
+function loadDriftIgnore() {
+  if (_driftIgnoreCache) return _driftIgnoreCache;
+  _driftIgnoreCache = new Set();
+  try {
+    const doc = JSON.parse(readFileSync(resolve(ROOT, 'scripts', 'nightly-scan-ignore.json'), 'utf8'));
+    for (const e of doc.ignore ?? []) {
+      if (e && e.article && e.indicator) _driftIgnoreCache.add(e.article + '::' + e.indicator);
+    }
+  } catch { /* soubor nemusí existovat — pak se nic neignoruje */ }
+  return _driftIgnoreCache;
+}
+
+/** True, když je dvojice (článek, indikátor) na seznamu ověřených falešných poplachů. */
+export function isDriftIgnored(article, indicatorId, ignoreSet = loadDriftIgnore()) {
+  return ignoreSet.has(article + '::' + indicatorId);
+}
+
 /**
  * Varianty zápisu hodnoty indikátoru, jak se může objevit v textu článku:
  * desetinná čárka, zaokrouhlení (2 des. → 1 des. → celé číslo), mezera
@@ -530,6 +551,8 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
     //     indikátoru zůstaly se starou hodnotou).
     const drifts = findIndicatorDrift(html, loadIndicatorsById());
     for (const d of drifts) {
+      // Ověřené falešné poplachy (odkaz-atribuce bez citace hodnoty) přeskoč.
+      if (isDriftIgnored(slug, d.id)) continue;
       flags.push({ type: 'indicator-drift', severity: 'review', indicator: d.id,
         note: `Okolí odkazu na indikátor ${d.id} cituje číslo, které neodpovídá aktuální hodnotě ${d.current} — ověř a aktualizuj citaci.`,
         context: d.context });
