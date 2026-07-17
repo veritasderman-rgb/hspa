@@ -1,0 +1,57 @@
+{
+  "id": "absolventi_osetrovatelstvi_per_100k",
+  "name": "Absolventi ošetřovatelství",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Budoucí kapacity",
+  "definition": "Počet absolventů ošetřovatelských oborů (všeobecná sestra + praktická/asistentská úroveň) v ČR za daný rok, přepočtený na 100 000 obyvatel. Indikátor budoucí kapacity ošetřovatelské pracovní síly — paralela k absolventům lékařství.",
+  "unit": "/ 100 000 obyvatel",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_sdmx2",
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_REAC_EMP@DF_GRAD",
+      "version": "1.1",
+      "dims": {
+        "MEASURE": "HSG",
+        "UNIT_MEASURE": "10P5HB",
+        "HEALTH_PROF": "MINU"
+      },
+      "note": "OECD Health Statistics — Health graduates (nurses, HEALTH_PROF=MINU = všechny sestry vč. praktických), per 100 000 obyvatel. SDMX 2.0 Data Explorer endpoint (datový dotaz vyžaduje verzi 1.1, legacy stats.oecd.org je 404). Ověřeno živě 2026-07-10: ČR 38,76 (2024), OECD ⌀ 44,4, EU27 ⌀ 39,1. Profesní sestry samostatně (HEALTH_PROF=MINUQUAL): ČR jen 16,1 vs OECD ⌀ 34,8."
+    },
+    "fallback": "ÚZIS ČR — Absolventi zdravotnických oborů (NZIS) a MŠMT — statistika absolventů VŠ/VOŠ oboru Ošetřovatelství (SIMS). Slouží k rekonciliaci národní hodnoty a k rozpadu na všeobecné vs. praktické sestry."
+  },
+  "benchmark_source": {
+    "type": "oecd_sdmx2",
+    "dataflow": "DSD_HEALTH_REAC_EMP@DF_GRAD",
+    "value": 44.36,
+    "url": "https://data-explorer.oecd.org/vis?fs[0]=Topic%2C1%7CHealth%23HEA%23&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_EMP%40DF_GRAD",
+    "note": "OECD průměr (mean jednotlivých členských zemí za rok 2024, n=35): 44,4 / 100 000. EU27 průměr 39,1. Sousedé 2024: Německo 45,2; Rakousko 42,1; Slovensko 28,2; Polsko 25,4."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "OECD",
+    "ÚZIS ČR",
+    "MŠMT",
+    "MZČR"
+  ],
+  "method_notes": "OECD měření HSG/MINU = absolventi ošetřovatelství (sestry), per 100 000 obyvatel, zahrnuje profesní i praktickou/asistentskou úroveň. Pro ČR je klíčový rozpad: profesní sestry (HEALTH_PROF=MINUQUAL, tj. „všeobecná sestra\" s vyšším/vysokoškolským vzděláním) tvoří jen ~16 / 100 000, zbytek jsou praktické sestry a zdravotničtí asistenti. Celková hodnota tak vypadá lépe než pipeline plně kvalifikovaných sester.",
+  "limitations": "Metodický zlom: skok 2016→2017 (15,8 → 29,1) odráží rozšíření zahrnutých ošetřovatelských úrovní v OECD sběru, ne reálný nárůst — proto trend v kontraktu začíná rokem 2019. Absolventi ≠ vstupy do praxe: část absolventů do lůžkové péče nikdy nenastoupí nebo brzy odchází (retence, mzdy, fyzická náročnost). Rozlišení všeobecná vs. praktická sestra není v OECD hlavičce vidět bez rozpadu na MINUQUAL.",
+  "determinants": [
+    "Kapacita a atraktivita studia (VŠ/VOŠ ošetřovatelství, střední zdravotnické školy)",
+    "Cena práce a pracovní podmínky sester (retence, fyzická i psychická zátěž)",
+    "Kompetenční rámec a autonomie sester (rozsah samostatné práce)",
+    "Poměr profesní vs. praktická sestra daný reformou vzdělávání 2017",
+    "Migrace mladých sester (příhraniční regiony → DE/AT)"
+  ],
+  "importance": "Sestry jsou nejpočetnější a systémově nejkritičtější zdravotnická profese; jejich nedostatek (dlouhodobě chybí kolem 2–3 tisíc sester) přímo omezuje počet otevřených lůžek a dostupnost akutní i následné péče. Pipeline absolventů je nejzazší páka, kterou lze deficit reálně otočit — proto patří do HSPA jako ukazatel udržitelnosti systému.",
+  "patient_story": "Fakultní nemocnice, interní oddělení, noční směna. Markéta má rok po státnicích z všeobecného ošetřovatelství a stará se sama o 14 pacientů — dvě kolegyně na oddělení chybí a služba se lepí z přesčasů. Přesně tahle scéna je důvod, proč Česko roky mluví o krizi sester. A přitom čísel absolventů není zdánlivě málo: ošetřovatelství v ČR ročně dokončí 38,76 na 100 000 obyvatel (2024).\n\nAbsolventi ošetřovatelství na 100 000 obyvatel: ČR 38,76, OECD ⌀ 44,4, EU27 ⌀ 39,1 (OECD Health Statistics, 2024) — signal warn, tedy pod průměrem OECD, zhruba na úrovni EU. Trend přitom roste: 28,7 (2019) → 35,9 (2023) → 38,76 (2024). Problém není v celkovém objemu, ale v jeho složení a v tom, co se s absolventy stane dál.\n\nStrukturálně český systém vychovává hodně praktických sester a zdravotnických asistentů, ale plně kvalifikovaných profesních (všeobecných) sester promuje jen kolem 16 na 100 000 — méně než polovinu průměru OECD (34,8) a nejméně ze všech sousedů. To je jádro deficitu: praktická sestra nemá stejné kompetence jako všeobecná a nemůže ji plně nahradit. K tomu se přidává slabá retence — část absolventek do lůžkové péče vůbec nenastoupí nebo brzy odejde kvůli mzdám, fyzické zátěži a přesčasům, v příhraničí navíc odcházejí do Německa a Rakouska.\n\nAbsolventi ošetřovatelství jsou indikátor budoucí kapacity a zároveň varování, že objem sám o sobě krizi neřeší. Politické páky: navýšit počty studentů všeobecné sestry (opakovaně navrhováno zdvojnásobení), zvýšit cenu práce a rozšířit kompetence sester (priorita MZČR i profesních organizací), stabilizovat absolventky v hrazené síti a zlepšit prostupnost mezi praktickou a všeobecnou sestrou. Indikátor v HSPA dashboardu sleduje ošetřovatelskou pipeline s důrazem na kvalifikační mix a retenci, ne jen na hrubý počet promocí.",
+  "framework": "hspa",
+  "dimension": "efektivita",
+  "verification_status": "review-pending"
+}
