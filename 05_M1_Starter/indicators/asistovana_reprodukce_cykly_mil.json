@@ -1,0 +1,51 @@
+{
+  "id": "asistovana_reprodukce_cykly_mil",
+  "name": "Cykly asistované reprodukce na milion obyvatel",
+  "area": "Procesy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Asistovaná reprodukce",
+  "definition": "Počet zahájených léčebných cyklů asistované reprodukce (IVF, ICSI a z nich odvozené cykly včetně kryoembryotransferů) provedených v českých centrech za rok, přepočtený na milion obyvatel. Metrika odpovídá ukazateli „ART cycles per million inhabitants“ používanému evropským monitoringem ESHRE EIM, a měří tak dostupnost a využití vysoce specializované reprodukční péče.",
+  "unit": "cyklů/mil. obyv.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrrz",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-reprodukcniho-zdravi--modul-asistovane-reprodukce",
+      "dataset": "Národní registr reprodukčního zdraví (NRRZ) — modul Asistované reprodukce (NRAR); ročenka edice Zdravotnická statistika „Asistovaná reprodukce v České republice“ (agregované absolutní počty cyklů a center), přepočet na milion obyvatel dle střední stav populace ČSÚ",
+      "dimensions": {
+        "country": "CZ",
+        "age_group": "žena <35, 35–39, 40+",
+        "cycle_type": "IVF, ICSI, KET/FET",
+        "outcome": "zahájené cykly / klinická těhotenství / porody"
+      }
+    },
+    "fallback": {
+      "type": "open_data_csv",
+      "url": "https://www.nzip.cz/data/2542-asistovana-reprodukce-prubeh-efektivita-otevrena-data"
+    }
+  },
+  "benchmark_source": {
+    "type": "eshre_eim",
+    "code": "art_cycles_per_million_inhabitants",
+    "dataset": "ESHRE — ART in Europe 2019 (European IVF-monitoring Consortium, EIM; Human Reproduction). Evropský průměr 1 581 cyklů na milion obyvatel napříč 21 zeměmi s úplným reportingem; Česko je v tomto ukazateli dlouhodobě na 1. místě v Evropě (3 621 cyklů/mil. obyv., 2019). Benchmark eu = tento evropský průměr.",
+    "value": 1581,
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10694409/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr reprodukčního zdraví — modul Asistované reprodukce)",
+    "Sekce asistované reprodukce České gynekologicko-porodnické společnosti ČLS JEP",
+    "ESHRE EIM (mezinárodní srovnání)"
+  ],
+  "method_notes": "Ukazatel převádí absolutní počet zahájených cyklů asistované reprodukce (NRAR / ÚZIS) na milion obyvatel, aby byl přímo srovnatelný s evropským monitoringem ESHRE EIM. Podle ESHRE „ART in Europe 2019“ vykázalo Česko 3 621 cyklů na milion obyvatel — nejvyšší hodnotu v Evropě, více než dvojnásobek evropského průměru 1 581. V absolutních číslech to odpovídá zhruba 38 tisícům cyklů ročně (pro kontext: cca 17 tisíc cyklů v roce 2007, přes 30 tisíc v roce 2014); v roce 2020 bylo v ČR 48 registrovaných center. Signal „good“ čte vysokou dostupnost oproti evropskému průměru; direction higher_is_better je zvolen z pohledu přístupnosti hrazené reprodukční péče. Trend je odvozen z absolutních počtů cyklů NRAR přepočtených na střední stav populace (ČSÚ) a je proto v seedu orientační (origin seed, verification_status illustrative). Vysoká hodnota je zároveň symptomem — odráží mimořádně vysoký a rostoucí věk prvorodiček v ČR, tedy rostoucí poptávku po léčbě neplodnosti.",
+  "limitations": "Metrika „cyklů na milion obyvatel“ mísí dostupnost (nabídku a úhradu) s poptávkou (prevalencí neplodnosti, odkladem rodičovství) a nelze je z jednoho čísla oddělit. Vysoká hodnota tedy neznamená jen dobrou přístupnost, ale i vysokou potřebu. Reporting mezi zeměmi se liší v úplnosti a v tom, zda se počítají kryoembryotransfery; Česko reportuje kompletně, což ho posouvá výše. Ukazatel neměří úspěšnost (podíl cyklů vedoucích k porodu) ani rovnost přístupu (věková hranice, počet hrazených cyklů, dřívější vyloučení svobodných žen a párů stejného pohlaví z úhrady). Regionální rozpad (koncentrace center do Prahy a Brna) není v hlavní metrice zachycen.",
+  "determinants": "Poptávku po asistované reprodukci žene především odklad rodičovství — Česko patří k zemím s nejvyšším a stále rostoucím věkem prvorodiček (nad 28 let), s ním klesá přirozená plodnost a roste potřeba léčby. Na straně nabídky působí hustá síť soukromých center, mezinárodně konkurenceschopné ceny (reprodukční turismus) a velkorysá úhrada z veřejného pojištění (až 4 cykly do věku 40 let). Determinantem rovnosti jsou zákonné podmínky úhrady: věková hranice, počet hrazených cyklů a okruh oprávněných osob.",
+  "importance": "Asistovaná reprodukce je v Česku systémově významná dvojím způsobem. Za prvé je to indikátor dostupnosti vysoce specializované péče, kde ČR patří ke světové špičce a kde funguje jasná politická páka (úhradová pravidla v zákoně č. 48/1997 Sb.). Za druhé je to citlivý ukazatel demografického napětí — vysoká a rostoucí spotřeba cyklů odráží odklad rodičovství a pokles plodnosti, a propojuje se tak s indikátory plodnost_mladistvych_15_19, predcasne_porody_pct (více vícečetných a rizikových těhotenství) a nizka_porodna_hmotnost_pct.",
+  "patient_story": "Ordinace centra asistované reprodukce v Brně, únorové ráno. Petře je 39 let a 8 měsíců. Lékařka jí vysvětluje, že pokud chce zahájit další cyklus hrazený pojišťovnou, musí to stihnout do dne před čtyřicátými narozeninami — pak nárok na úhradu končí ze zákona. Petra počítá dny. Není sama: Česko je zemí, kde se na milion obyvatel provede nejvíc cyklů asistované reprodukce v celé Evropě.\n\nČíslo je ohromující. Podle evropského monitoringu ESHRE vykázalo Česko 3 621 cyklů na milion obyvatel — první místo v Evropě a více než dvojnásobek evropského průměru 1 581. V absolutních počtech jde zhruba o 38 tisíc cyklů ročně v síti 48 center. Signal svítí „good“: z pohledu přístupnosti hrazené reprodukční péče je Česko světová špička. Za tím vysokým číslem se ale skrývá druhý příběh — proč té péče potřebujeme tolik.\n\nStrukturální faktory jsou dva a táhnou proti sobě. Na jedné straně velkorysost systému: veřejné pojištění hradí až čtyři cykly IVF a novela zákona č. 48/1997 Sb. od roku 2022 posunula věkovou hranici z 39 na 40 let. K tomu hustá síť center, konkurenceschopné ceny a reprodukční turismus. Na straně druhé demografie: Česko patří k zemím s nejvyšším věkem prvorodiček, a čím později ženy plánují první dítě, tím víc klesá přirozená plodnost a roste poptávka po léčbě. Vysoká spotřeba cyklů je tak zároveň úspěchem dostupnosti i symptomem odkladu rodičovství.\n\nPolitická páka je přesně ohraničená a leží v zákoně o veřejném zdravotním pojištění. Je to věková hranice úhrady (dnes do 40 let), počet hrazených cyklů (4), a okruh oprávněných — teprve nedávno se rozšiřuje k svobodným ženám a párům stejného pohlaví, které byly z hrazené péče dříve fakticky vyloučeny. Kompetenci má zákonodárce a MZ ČR přes úhradovou vyhlášku; pojišťovny pravidla vyplácejí. Pro Petru je to den v kalendáři. Pro systém je to otázka, zda vysoké číslo číst jako výkladní skříň dostupnosti — nebo jako varování, že se v Česku rodičovství odkládá tak dlouho, až ho stále častěji musí dohánět laboratoř.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
