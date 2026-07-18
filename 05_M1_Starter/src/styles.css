@@ -6336,6 +6336,112 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
 @media (max-width: 520px) {
   .rozcestnik-grid { grid-template-columns: 1fr; }
 }
+/* Dvojí akce karty: hlavní blok vede na persona minihomepage,
+   .rozcestnik-links pod ním jsou přímé zkratky. */
+.rozcestnik-card-main {
+  display: flex; flex-direction: column; gap: 6px;
+  text-decoration: none; color: inherit;
+}
+.rozcestnik-card-main:hover .rozcestnik-card-h { color: var(--red); }
+.rozcestnik-enter {
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  color: var(--red); margin-top: 2px;
+}
+
+/* =================================================================
+   Persona minihomepage (pro-*.html) — plní src/persona.js z
+   data/personas.json. Jen tokeny → dark-safe.
+   ================================================================= */
+.persona-page { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--content-pad, 32px) 40px; }
+.persona-hero {
+  padding: 34px 0 26px; margin-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.persona-back {
+  font-family: var(--sans); font-size: 13px; color: var(--ink-mut);
+  text-decoration: none; display: inline-block; margin-bottom: 12px;
+}
+.persona-back:hover { color: var(--red); }
+.persona-hero-h {
+  font-family: var(--serif); font-size: clamp(28px, 4vw, 42px); font-weight: 700;
+  line-height: 1.1; letter-spacing: -0.5px; color: var(--ink); margin: 6px 0 12px;
+}
+.persona-hero-lead {
+  font-family: var(--sans); font-size: 16px; line-height: 1.55;
+  color: var(--ink-mut); max-width: 68ch; margin: 0;
+}
+.persona-section { padding: 28px 0 4px; }
+.persona-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.persona-section-h {
+  font-family: var(--serif); font-size: 22px; font-weight: 700;
+  color: var(--ink); margin: 0 0 16px; line-height: 1.15;
+}
+.persona-section-all { font-family: var(--sans); font-size: 13px; color: var(--red); text-decoration: none; }
+.persona-section-all:hover { text-decoration: underline; }
+
+.persona-tools-grid, .persona-ind-grid, .persona-articles-grid, .persona-themes-grid {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 14px;
+}
+.persona-tools-grid { grid-template-columns: repeat(3, 1fr); }
+.persona-ind-grid { grid-template-columns: repeat(2, 1fr); }
+.persona-articles-grid { grid-template-columns: repeat(2, 1fr); }
+.persona-themes-grid { grid-template-columns: repeat(3, 1fr); }
+
+.persona-tool a, .persona-theme a {
+  display: flex; flex-direction: column; gap: 5px; height: 100%;
+  border: 1px solid var(--rule); border-top: 3px solid var(--ink);
+  background: var(--paper2); padding: 16px 16px 14px;
+  text-decoration: none; color: inherit;
+  transition: background 0.12s, border-color 0.12s;
+}
+.persona-tool a:hover, .persona-theme a:hover { background: var(--paper); border-top-color: var(--red); }
+.persona-tool-h { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--ink); }
+.persona-tool-desc { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); line-height: 1.4; }
+.persona-tool-arrow { font-family: var(--sans); font-size: 13px; color: var(--ink-mut2); margin-top: auto; }
+
+.persona-ind {
+  border: 1px solid var(--rule); border-left: 3px solid var(--ink-mut2);
+  background: var(--paper2);
+}
+.persona-ind.ind-takeaway-good { border-left-color: var(--good); }
+.persona-ind.ind-takeaway-warn { border-left-color: var(--warn); }
+.persona-ind.ind-takeaway-bad { border-left-color: var(--bad); }
+.persona-ind a { display: flex; flex-direction: column; gap: 6px; padding: 15px 16px; text-decoration: none; color: inherit; }
+.persona-ind a:hover .persona-ind-name { color: var(--red); }
+.persona-ind-name { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--ink); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.persona-ind-spark { flex: 0 0 auto; }
+.persona-ind-take { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); line-height: 1.45; }
+
+.persona-article a {
+  display: flex; flex-direction: column; gap: 6px; height: 100%;
+  border: 1px solid var(--rule); border-top: 3px solid var(--ink);
+  background: var(--paper2); padding: 16px 18px 15px; text-decoration: none; color: inherit;
+  transition: background 0.12s, transform 0.12s, border-color 0.12s;
+}
+.persona-article a:hover { background: var(--paper); border-top-color: var(--red); transform: translateX(2px); }
+.persona-article-tag { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--red); }
+.persona-article-h { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.persona-article-perex { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); line-height: 1.45; }
+
+.persona-theme-kicker { font-family: var(--sans); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-mut2); }
+.persona-theme-h { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.15; }
+.persona-theme-arrow { font-family: var(--sans); font-size: 13px; color: var(--ink-mut2); margin-top: auto; }
+
+.persona-cross { border-top: 1px solid var(--rule); margin-top: 20px; }
+.persona-cross-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.persona-cross-link {
+  display: flex; flex-direction: column; gap: 3px;
+  border: 1px solid var(--rule); background: transparent; padding: 12px 14px;
+  text-decoration: none; color: var(--ink-mut);
+}
+.persona-cross-link:hover { border-color: var(--ink-mut2); color: var(--ink); }
+.persona-cross-link span:first-child { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--red); }
+.persona-cross-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--ink); }
+
+@media (max-width: 820px) {
+  .persona-tools-grid, .persona-themes-grid, .persona-cross-grid { grid-template-columns: 1fr; }
+  .persona-ind-grid, .persona-articles-grid { grid-template-columns: 1fr; }
+}
 
 /* =================================================================
    Homepage — Interaktivní nástroje (.home-tools) + sdílený blok
