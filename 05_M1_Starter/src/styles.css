@@ -2534,12 +2534,14 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 .home-snapshot-stats .ed-stat:last-child { border-right: none; }
 .home-snapshot-stats .ed-stat:hover { padding-left: 16px; }
 @media (max-width: 760px) {
-  .home-snapshot-stats { grid-template-columns: repeat(2, 1fr); }
+  /* Dvojitá třída, aby přebila base .ed-hero-stats.home-snapshot-stats (0,2,0) —
+     media query nezvyšuje specificitu. */
+  .ed-hero-stats.home-snapshot-stats { grid-template-columns: repeat(2, 1fr); }
   .home-snapshot-stats .ed-stat:nth-child(2n) { border-right: none; }
   .home-snapshot-stats .ed-stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
 }
 @media (max-width: 440px) {
-  .home-snapshot-stats { grid-template-columns: 1fr; }
+  .ed-hero-stats.home-snapshot-stats { grid-template-columns: 1fr; }
   .home-snapshot-stats .ed-stat { border-right: none; border-bottom: 1px solid var(--rule); }
   .home-snapshot-stats .ed-stat:last-child { border-bottom: none; }
 }
