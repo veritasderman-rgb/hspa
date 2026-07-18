@@ -10,6 +10,10 @@
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
 import { buildTakeaway, sparklineSvg } from './indicator-takeaway.js';
+import { indicatorCardHtml } from './indicator-card.js';
+
+const GRID_MAX = 24;
+const SIGNAL_RANK = { bad: 0, warn: 1, good: 2, neutral: 3 };
 
 const PERSONAS_URL = 'data/personas.json';
 const INDICATORS_URL = 'data/indicators.json';
@@ -52,7 +56,9 @@ async function init() {
     const themes = themesData.themes ?? [];
 
     document.title = `${persona.hero.headline} · HSPA Monitor`;
-    root.innerHTML = renderPersonaPage(persona, { indById, articles, themes, others });
+    root.innerHTML = renderPersonaPage(persona, {
+      indById, indicators: indData.indicators ?? [], articles, themes, others,
+    });
   } catch (err) {
     console.error(err);
     root.innerHTML = `<div class="status error">Nepodařilo se načíst data: ${escapeHtml(err.message)}.</div>`;
@@ -67,15 +73,78 @@ async function init() {
  * @returns {string}
  */
 export function renderPersonaPage(persona, ctx) {
-  const { indById, articles, themes, others } = ctx;
+  const { indById, indicators, articles, themes, others } = ctx;
   return [
     renderHero(persona),
     renderTools(persona),
     renderIndicators(persona, indById),
     renderArticles(persona, articles),
     renderThemes(persona, themes),
+    renderIndicatorGrid(persona, selectGridIndicators(persona, indicators ?? [], themes)),
     renderCrossLinks(others),
   ].filter(Boolean).join('\n');
+}
+
+/**
+ * Vybere ~20–30 indikátorů relevantních pro personu do koncového gridu.
+ * Priorita: kotevní indikátory + indikátory tematických linií persony (jádro),
+ * pak doplnění z HSPA dimenzí persony (grid_dimensions) do GRID_MAX. Doplnění
+ * je seřazené podle závažnosti signálu (bad → warn → good → neutral), aby se
+ * napřed ukázalo to nejdůležitější. Mikroindikátory rezistence (rezistence_*)
+ * se do doplnění nezahrnují — jinak by 26 téměř totožných karet grid zahltilo.
+ *
+ * Čistá funkce (testovatelná).
+ *
+ * @param {object} persona
+ * @param {Array<object>} indicators — data/indicators.json → .indicators
+ * @param {Array<object>} themes — data/themes.json → .themes
+ * @param {number} [max=GRID_MAX]
+ * @returns {Array<object>}
+ */
+export function selectGridIndicators(persona, indicators, themes, max = GRID_MAX) {
+  const byId = new Map((indicators ?? []).map(i => [i.id, i]));
+  const themeById = new Map((themes ?? []).map(t => [t.id, t]));
+
+  // Jádro: kotvy + indikátory linií, v pořadí, bez duplicit.
+  const seedIds = [];
+  const seen = new Set();
+  const pushId = (id) => { if (id && !seen.has(id) && byId.has(id)) { seen.add(id); seedIds.push(id); } };
+  (persona.indicator_ids ?? []).forEach(pushId);
+  (persona.theme_ids ?? []).forEach(tid => (themeById.get(tid)?.indicator_ids ?? []).forEach(pushId));
+
+  const result = seedIds.map(id => byId.get(id));
+
+  // Doplnění z dimenzí persony.
+  const dims = new Set(persona.grid_dimensions ?? []);
+  const topup = (indicators ?? [])
+    .filter(i => i && !seen.has(i.id)
+      && !i.id.startsWith('rezistence_')
+      && dims.has(i.dimension)
+      && i.value != null)
+    .sort((a, b) => {
+      const s = (SIGNAL_RANK[a.signal] ?? 3) - (SIGNAL_RANK[b.signal] ?? 3);
+      return s !== 0 ? s : String(a.name).localeCompare(String(b.name), 'cs');
+    });
+  for (const ind of topup) {
+    if (result.length >= max) break;
+    seen.add(ind.id);
+    result.push(ind);
+  }
+  return result.slice(0, max);
+}
+
+function renderIndicatorGrid(persona, gridInds) {
+  if (!gridInds?.length) return '';
+  const cards = gridInds.map(indicatorCardHtml).filter(Boolean).join('');
+  return `
+    <section class="persona-section persona-grid-section" aria-labelledby="pGridH">
+      <div class="persona-section-head">
+        <h2 class="persona-section-h" id="pGridH">Přehled indikátorů pro vás</h2>
+        <a class="persona-section-all" href="index.html#indicatorsSection">Všechny indikátory →</a>
+      </div>
+      <p class="persona-grid-note">${gridInds.length} vybraných ukazatelů blízkých této perspektivě — hodnota, srovnání s OECD/EU a trend. Klik otevře plný detail.</p>
+      <div class="card-grid">${cards}</div>
+    </section>`;
 }
 
 function renderHero(p) {
