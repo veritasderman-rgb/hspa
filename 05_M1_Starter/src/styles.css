@@ -2511,6 +2511,39 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 
 .ed-hero-content { min-width: 0; }
 
+/* Štíhlé hero (reorder homepage): jeden sloupec, bez dlouhého leadu a bez
+   stats panelu — rozcestník se tím dostane nad ohyb. Stats se přesunuly do
+   sekce „Jak jsme na tom" (.home-snapshot-stats). */
+.ed-hero-slim {
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding-bottom: 26px;
+}
+.ed-hero-slim .ed-hero-headline { max-width: 900px; }
+
+/* Stats jako horizontální pás v sekci dimenzí (dřív svislý panel v hero).
+   Dvojitá třída kvůli specificitě — .ed-hero-stats níže nastavuje flex column. */
+.ed-hero-stats.home-snapshot-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 2px solid var(--ink); margin: 4px 0 24px;
+}
+.home-snapshot-stats .ed-stat {
+  padding: 14px 16px 12px;
+  border-bottom: none; border-right: 1px solid var(--rule);
+}
+.home-snapshot-stats .ed-stat:last-child { border-right: none; }
+.home-snapshot-stats .ed-stat:hover { padding-left: 16px; }
+@media (max-width: 760px) {
+  .home-snapshot-stats { grid-template-columns: repeat(2, 1fr); }
+  .home-snapshot-stats .ed-stat:nth-child(2n) { border-right: none; }
+  .home-snapshot-stats .ed-stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+}
+@media (max-width: 440px) {
+  .home-snapshot-stats { grid-template-columns: 1fr; }
+  .home-snapshot-stats .ed-stat { border-right: none; border-bottom: 1px solid var(--rule); }
+  .home-snapshot-stats .ed-stat:last-child { border-bottom: none; }
+}
+
 .ed-hero-headline {
   font-family: var(--serif);
   font-size: 56px;
