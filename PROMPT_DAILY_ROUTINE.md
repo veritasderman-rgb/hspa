@@ -209,6 +209,10 @@ Evergreen ≠ nižší laťka; jen nevyžaduje, aby se něco stalo *dnes*.
 1. Otevři `data/article-backlog.json`. Vyber položku se `status: ready`
    a **nejnižším `priority`** (menší číslo = dřív). Při shodě rozhoduje pořadí
    v souboru.
+   > Pozn. k cestám: všechny cesty `data/*` v tomto promptu jsou relativní
+   > k `05_M1_Starter/` (aktivní adresář, kde rutina pracuje). Z kořene repa je
+   > to tedy `05_M1_Starter/data/article-backlog.json` — spouštěné skripty proto
+   > používají plnou cestu (viz snippet v Kroku 3.4), próza zkrácenou.
 2. Ověř, že položka **není redundantní** s už publikovaným článkem (projdi
    `data/articles.json` na `anchor_indicators` — pokud už některý má silný
    článek pokrývající stejný úhel, přeskoč na další a označ přeskočenou
