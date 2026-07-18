@@ -1,0 +1,86 @@
+{
+  "_doc": "Definice čtyř cílovek (person) pro intent rozcestník na homepage a persona minihomepage (pro-*.html). Jeden zdroj pravdy: z tohoto souboru čte rozcestník na index.html (přes src/persona.js → renderRozcestnik) i minihomepage (renderPersonaPage). Každá persona: slug (soubor pro-{slug}.html), label (chip na kartě), hero (kicker/headline/lead), tools (rychlé odkazy — href musí existovat), indicator_ids (pás s buildTakeaway verdiktem), topics (filtr článků z articles.json), theme_ids (odkazy na tematické linie — tematicke-linie.html?id=). Testy hlídají schema + existenci všech odkazů/id.",
+  "version": "1.0",
+  "personas": [
+    {
+      "id": "pacient",
+      "slug": "pacienty",
+      "label": "Pacient & laik",
+      "card_title": "Co se týká mě",
+      "card_desc": "Praktická vrstva — co si můžu ověřit sám a co mám nárok dostat.",
+      "hero": {
+        "kicker": "Minihomepage · Pacient & laik",
+        "headline": "Co se českého zdravotnictví týká přímo vás",
+        "lead": "Praktická vrstva dashboardu: co si můžete sami ověřit, na co máte nárok a kde se vyplatí být aktivní. Od osobního kompasu přes prevenci až po čísla, která se dotýkají vašeho těla a vaší peněženky."
+      },
+      "tools": [
+        { "href": "kompas.html", "title": "Osobní zdravotní kompas", "desc": "Co se týká právě vás — podle věku, pohlaví a situace." },
+        { "href": "prevence.html", "title": "Prevence: co můžu dělat já", "desc": "Vakcinace a screeningy — na co máte nárok a kdy." },
+        { "href": "kviz.html", "title": "Kvíz o českém zdravotnictví", "desc": "Otestujte se — kolik toho o systému opravdu víte." }
+      ],
+      "indicator_ids": ["nadeje_doziti_zdravi_65", "cekaci_doby_specialist", "screening_kolorektalni", "nesplnena_potreba_zubni_pece"],
+      "topics": ["prevence", "dostupnost"],
+      "theme_ids": ["najit_nemoc_driv", "dostat_peci_vcas", "zit_dele_ve_zdravi"]
+    },
+    {
+      "id": "novinar",
+      "slug": "novinare",
+      "label": "Novinář & publicista",
+      "card_title": "Píšu o zdravotnictví",
+      "card_desc": "Ověřená čísla, kontext a kontrola slibů — podklady s primárními zdroji.",
+      "hero": {
+        "kicker": "Minihomepage · Novinář & publicista",
+        "headline": "Ověřená čísla a kontext pro psaní o zdravotnictví",
+        "lead": "Podklady s primárními zdroji, kontrola politických slibů a legislativa v běhu. Každé číslo nese odkaz na zdroj, každý graf jde vložit do vašeho článku. Od Barometru prohlášení po nejnovější datové analýzy."
+      },
+      "tools": [
+        { "href": "clanky.html", "title": "Články s daty a zdroji", "desc": "Long-form analýzy — každé tvrzení s primárním zdrojem." },
+        { "href": "barometr.html", "title": "Barometr politických prohlášení", "desc": "Výroky politiků konfrontované s daty dashboardu." },
+        { "href": "legislativa.html", "title": "Legislativní radar", "desc": "Zákony a novely v běhu — stav a dopad." }
+      ],
+      "indicator_ids": ["mortalita_lecitelna", "mri_per_milion", "rezistence_acinetobacter_karbapenem", "vydaje_zdravotnictvi_hdp"],
+      "topics": ["legislativa", "financovani"],
+      "theme_ids": ["platby_za_objem", "dostat_peci_vcas"]
+    },
+    {
+      "id": "badatel",
+      "slug": "badatele",
+      "label": "Student & badatel",
+      "card_title": "Zkoumám systém",
+      "card_desc": "Datový rámec HSPA, metodika a pojmy — jak se výkonnost systému měří.",
+      "hero": {
+        "kicker": "Minihomepage · Student & badatel",
+        "headline": "Jak se měří výkonnost zdravotního systému",
+        "lead": "Datový rámec HSPA, metodika a pojmy na jednom místě. 174 indikátorů ve čtyřech oblastech, metodické karty s primárními zdroji a otevřená data ke stažení. Od přehledu po spis Diagnózy."
+      },
+      "tools": [
+        { "href": "hspa-prehled.html", "title": "HSPA přehled indikátorů", "desc": "Datový rámec — 174 indikátorů ve čtyřech oblastech." },
+        { "href": "jak-funguje.html", "title": "Jak hodnocení funguje", "desc": "Metodika HSPA — jak se výkonnost systému počítá." },
+        { "href": "glosar.html", "title": "Glosář pojmů", "desc": "Odborné termíny srozumitelně a s odkazy." }
+      ],
+      "indicator_ids": ["nadeje_doziti_total", "vydaje_zdravotnictvi_hdp", "lekari_per_1000", "mortalita_preventabilni"],
+      "topics": ["populace", "klinika"],
+      "theme_ids": ["zit_dele_ve_zdravi", "digitalni_zdravotnictvi"]
+    },
+    {
+      "id": "politika",
+      "slug": "politiku",
+      "label": "Tvůrce politiky",
+      "card_title": "Rozhoduju o systému",
+      "card_desc": "Strategie, kauzální páky a peníze — kde se ve zdravotnictví vyplatí zatlačit.",
+      "hero": {
+        "kicker": "Minihomepage · Tvůrce politiky",
+        "headline": "Kde se ve zdravotnictví vyplatí zatlačit",
+        "lead": "Strategie, kauzální páky a peníze v systému. Model provazuje, co na co působí; dohodovací řízení ukazuje, kam tečou stovky miliard; Barometr sleduje, jestli se závazky plní. Podklady pro rozhodování, ne jen popis stavu."
+      },
+      "tools": [
+        { "href": "strategie.html", "title": "Národní strategie", "desc": "Strategické dokumenty a jejich provázání s daty." },
+        { "href": "model-systemu.html", "title": "Model systému — páky změny", "desc": "Kauzální mapa: kde zatlačit, aby se systém pohnul." },
+        { "href": "dohodovaci-rizeni.html", "title": "Dohodovací řízení — peníze", "desc": "Kam tečou stovky miliard z veřejného pojištění." }
+      ],
+      "indicator_ids": ["vydaje_zdravotnictvi_hdp", "sestry_per_1000", "mortalita_preventabilni", "cekaci_doby_specialist"],
+      "topics": ["financovani", "legislativa"],
+      "theme_ids": ["platby_za_objem", "dostat_peci_vcas"]
+    }
+  ]
+}

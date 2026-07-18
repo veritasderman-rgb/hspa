@@ -28,6 +28,18 @@ test('rozcestník existuje a má čtyři persona-karty', () => {
   assert.equal(personas.length, 4, 'každá karta má mít personu');
 });
 
+test('každá karta rozcestníku vede na persona minihomepage pro-*.html', () => {
+  const sec = rozcestnikSection();
+  const personas = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'data', 'personas.json'), 'utf8')
+  ).personas;
+  for (const p of personas) {
+    const href = `pro-${p.slug}.html`;
+    assert.ok(sec.includes(`href="${href}"`), `rozcestník neodkazuje na minihomepage ${href}`);
+    assert.ok(fs.existsSync(path.join(ROOT, href)), `minihomepage ${href} neexistuje`);
+  }
+});
+
 test('všechny odkazy rozcestníku míří na existující stránky (žádné 404)', () => {
   const sec = rozcestnikSection();
   const hrefs = [...sec.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
