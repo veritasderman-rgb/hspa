@@ -6284,6 +6284,60 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
 }
 
 /* =================================================================
+   Homepage — intent rozcestník. Statická sekce hned po hero, která
+   podle záměru návštěvníka (pacient / novinář / badatel / tvůrce
+   politiky) nasměruje na relevantní klastr. Léčí bounce na homepage
+   (GA4: 760 uživatelů, 21 s). Jen tokeny → dark-safe.
+   ================================================================= */
+.home-rozcestnik {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 8px var(--content-pad, 32px) 44px;
+}
+.home-rozcestnik-lead {
+  font-family: var(--sans); font-size: 15px; color: var(--ink-mut);
+  max-width: 62ch; margin: 4px 0 22px; line-height: 1.5;
+}
+.rozcestnik-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.rozcestnik-card {
+  display: flex; flex-direction: column; gap: 7px;
+  border: 1px solid var(--rule); border-top: 3px solid var(--ink);
+  background: var(--paper2); padding: 18px 18px 16px;
+}
+.rozcestnik-persona {
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.4px; text-transform: uppercase; color: var(--red);
+}
+.rozcestnik-card-h {
+  font-family: var(--serif); font-size: 19px; font-weight: 700;
+  margin: 0; color: var(--ink); line-height: 1.15;
+}
+.rozcestnik-card-desc {
+  font-family: var(--sans); font-size: 13px; color: var(--ink-mut);
+  margin: 0 0 2px; line-height: 1.45;
+}
+.rozcestnik-links {
+  list-style: none; margin: auto 0 0; padding: 9px 0 0;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.rozcestnik-links a {
+  font-family: var(--sans); font-size: 13px; color: var(--ink);
+  text-decoration: none; display: flex; justify-content: space-between; gap: 8px;
+}
+.rozcestnik-links a:hover { color: var(--red); }
+.rozcestnik-links a span { color: var(--ink-mut2); }
+@media (max-width: 900px) {
+  .rozcestnik-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .rozcestnik-grid { grid-template-columns: 1fr; }
+}
+
+/* =================================================================
    Homepage — Interaktivní nástroje (.home-tools) + sdílený blok
    „Prozkoumejte dál" na nástrojových stránkách (.tool-siblings).
    Jen tokeny → dark-safe.
