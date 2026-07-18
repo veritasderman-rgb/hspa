@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { renderPersonaPage } from '../src/persona.js';
+import { renderPersonaPage, selectGridIndicators } from '../src/persona.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -65,14 +65,39 @@ test('každá persona najde alespoň jeden viditelný článek podle topics', ()
   }
 });
 
+test('grid_dimensions každé persony jsou platné HSPA dimenze', () => {
+  const validDims = new Set(indicators.map(i => i.dimension).filter(Boolean));
+  for (const p of personas) {
+    assert.ok(Array.isArray(p.grid_dimensions) && p.grid_dimensions.length >= 1, `persona ${p.id} bez grid_dimensions`);
+    for (const d of p.grid_dimensions) assert.ok(validDims.has(d), `persona ${p.id}: neznámá dimenze ${d}`);
+  }
+});
+
+test('selectGridIndicators vrací 20–30 relevantních indikátorů bez duplicit a bez rezistence_ záplavy', () => {
+  for (const p of personas) {
+    const grid = selectGridIndicators(p, indicators, themes);
+    assert.ok(grid.length >= 20 && grid.length <= 30, `persona ${p.id}: grid má ${grid.length} (očekáváno 20–30)`);
+    const ids = grid.map(i => i.id);
+    assert.equal(new Set(ids).size, ids.length, `persona ${p.id}: duplicitní indikátory v gridu`);
+    for (const i of grid) assert.ok(i && i.value != null, `persona ${p.id}: karta bez hodnoty`);
+    // Kotvy persony jsou v gridu (jádro relevance).
+    for (const anchor of p.indicator_ids) assert.ok(ids.includes(anchor), `persona ${p.id}: kotva ${anchor} chybí v gridu`);
+    // Mikroindikátory rezistence se z doplnění vynechávají.
+    const res = ids.filter(id => id.startsWith('rezistence_'));
+    assert.ok(res.length <= 1, `persona ${p.id}: příliš mnoho rezistence_ v gridu (${res.length})`);
+  }
+});
+
 test('renderPersonaPage vyrenderuje smysluplné HTML bez leaků', () => {
   const indById = new Map(indicators.map(i => [i.id, i]));
   for (const p of personas) {
     const others = personas.filter(x => x.id !== p.id);
-    const html = renderPersonaPage(p, { indById, articles, themes, others });
+    const html = renderPersonaPage(p, { indById, indicators, articles, themes, others });
     assert.ok(html.includes(p.hero.headline), `render ${p.id} bez headline`);
     assert.ok(/persona-tool/.test(html), `render ${p.id} bez nástrojů`);
     assert.ok(/persona-ind/.test(html), `render ${p.id} bez indikátorů`);
+    assert.ok(/class="card-grid"/.test(html), `render ${p.id} bez koncového gridu`);
+    assert.ok((html.match(/class="indicator-card"/g) ?? []).length >= 20, `render ${p.id}: grid má < 20 karet`);
     assert.ok(html.includes('pro-'), `render ${p.id} bez křížových odkazů`);
     assert.doesNotMatch(html, /undefined|\[object Object\]/, `render ${p.id} obsahuje leak`);
   }
