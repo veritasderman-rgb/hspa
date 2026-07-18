@@ -160,9 +160,39 @@ Na základě discovery reportu rozhodnu, kterou cestou půjdeme dnes:
 │  ├─ ANO → ARTICLE-REVISE flow (revize konkrétního článku, fáze 4+5 + audit per old prompt)
 │  └─ NE ↓
 │
+┌─ Evergreen backlog (data/article-backlog.json) obsahuje položku se `status: ready`?
+│  ├─ ANO → EVERGREEN-WRITE flow (napsat analytický článek podle top položky,
+│  │        fáze 3+4+5 — viz níže). Toto je HLAVNÍ zdroj růstu zásobníku.
+│  └─ NE ↓
+│
 └─ Fallback: audit nejstaršího auditovaného článku (per `audit.last_reviewed`)
    za podmínky, že nebyl audited <30 dnů
 ```
+
+> **Proč tahle větev existuje.** Nejhodnotnější žurnalistika dashboardu je
+> **analytická** (vysvětlit příběh indikátoru, který v datech *už je*), ne
+> reaktivní. Ta nepotřebuje dnešní news-trigger. Bez evergreen větve router
+> ve dnech bez čerstvého spouštěče (= většina dní) spadne rovnou na
+> FALLBACK-AUDIT a zásobník neroste. Evergreen backlog je předschválená fronta
+> takových námětů (každý ukotvený v existujících indikátorech / datech).
+
+### Kadenční pojistka (nadřazená volbě větve)
+
+Před rozhodnutím spočítej **dní od posledního nového článku** (ARTICLE-WRITE
+nebo EVERGREEN-WRITE — nikoli audit/revize; zjistíš z `git log` nad
+`clanek-*.html` nebo z nejnovějšího `creation_phase: *article-write*` v
+`data/articles.json`).
+
+- **> 2 dny bez nového článku** → EVERGREEN-WRITE se **vynutí** (pokud
+  reaktivní spouštěč nevyšel a evergreen backlog není prázdný). Fallback-audit
+  se v tom případě přeskočí. Cíl: rozbít sérii „audit za auditem, nula psaní".
+- **Týdenní kvóta**: mířit na **≥ 3 nové články/týden**. Audit je výplň
+  zbývajících dní, ne default. Pokud jsi za poslední rozběhnutý týden (po–ne)
+  napsal < 3 nové články, upřednostni EVERGREEN-WRITE i při dostupném auditu.
+
+Kvalita se **nesnižuje** — evergreen článek prochází stejným železným pravidlem
+(každé číslo primární strojově dohledatelný zdroj) i fází 5 (nezávislý audit).
+Evergreen ≠ nižší laťka; jen nevyžaduje, aby se něco stalo *dnes*.
 
 ### Pravidla pro výběr
 
@@ -173,6 +203,23 @@ Na základě discovery reportu rozhodnu, kterou cestou půjdeme dnes:
   3. Doložitelnost (kolik primárních zdrojů máme k dispozici)
   4. Mezera v korpusu (vyhneme se redundancím s publikovanými)
 - Před spuštěním fáze 3 vytvoř soubor `discovery/routing-YYYY-MM-DD.md` s rozhodnutím + krátkým zdůvodněním (3–5 řádků)
+
+**Výběr z evergreen backlogu (EVERGREEN-WRITE):**
+
+1. Otevři `data/article-backlog.json`. Vyber položku se `status: ready`
+   a **nejnižším `priority`** (menší číslo = dřív). Při shodě rozhoduje pořadí
+   v souboru.
+2. Ověř, že položka **není redundantní** s už publikovaným článkem (projdi
+   `data/articles.json` na `anchor_indicators` — pokud už některý má silný
+   článek pokrývající stejný úhel, přeskoč na další a označ přeskočenou
+   `status: done` s poznámkou, nebo ji ponech a vyber jinou).
+3. `anchor_indicators` + `primary_sources` z položky jsou startovní datový rámec
+   (fáze 3.1). Stále platí: čísla ověř z primárního zdroje, ne z backlogu.
+4. Po dokončení článku přepni položku na `status: "done"` a doplň `"slug"`.
+   Tím se sama vyřadí z fronty. Redakce průběžně doplňuje nové náměty na konec.
+5. Když je backlog prázdný (vše `done`), teprve pak padá routing na
+   FALLBACK-AUDIT — a je to signál doplnit fronto o nové náměty
+   (osiřelé indikátory bez článku, podvyživená témata).
 
 ---
 
@@ -549,7 +596,8 @@ Striktně dodržuj implementovaný HSPA design — komponenty z `src/styles.css`
 - Zdroje, kde se nic nezměnilo: [stručný seznam]
 
 ### Phase 2: Routing
-- Rozhodnutí: ARTICLE-WRITE / ARTICLE-REVISE / INDICATOR-ADD / FALLBACK-AUDIT
+- Rozhodnutí: ARTICLE-WRITE / EVERGREEN-WRITE / ARTICLE-REVISE / INDICATOR-ADD / FALLBACK-AUDIT
+- Dní od posledního nového článku: [N] · týdenní kvóta nových článků: [X/3]
 - Důvod: [3–5 vět]
 
 ### Phase 3: Creation (pokud article-write)
