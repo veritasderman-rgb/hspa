@@ -1,0 +1,267 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-19T12:00:00Z",
+  "_doc": "Tři židle · Akt III — Příběh pacienta (pribeh-pacienta.html). Tři typizované persony procházejí systémem krok za krokem; každý krok má dvojí vyprávění (pacient / lékař) a doklad v indikátoru či článku. Kostra fází se přebírá z data/cesta-pacienta.json (phase_ref); obsah kroků je vlastní. disease_ref smí mít jen onkologická persona. Kroky citlivé na kapacitu (wait_sensitive) posouvá modifikátor čekacích dob z aktu II. Modelová hra, ne predikce. Viz PLAN-TRI-ZIDLE.md.",
+  "waiting_shift_weeks": 2,
+  "waiting_shift_source": "Modelový posun: rozhodnutí ředitele z aktu II (kapacity, zavřená oddělení) posouvají čekání na kapacitně citlivých krocích o ±2 týdny; směr je doložen mechanismem (kapacita ↔ objednací doby, srov. cekaci_doby_specialist), velikost je herní konstanta.",
+  "personas": [
+    {
+      "id": "cmp_senior",
+      "label": "Pan Josef, 72 let",
+      "sublabel": "Ischemická cévní mozková příhoda",
+      "intro": "Ráno mu náhle poklesne koutek a přestane hýbat pravou rukou. Následujících dvanáct týdnů rozhodne o tom, jestli se vrátí domů, nebo do ústavní péče. CMP má v Česku ročně ~25 000 nově hospitalizovaných.",
+      "intro_source": "clanek-cmp-iktova-centra.html",
+      "steps": [
+        {
+          "id": "priznaky",
+          "phase_ref": "priznaky",
+          "title": "Poklesnutý koutek v 7:40 ráno",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Nemůžete zvednout ruku a špatně se vám mluví. Manželka váhá: volat záchranku, nebo počkat, jestli to přejde? Nikdo vám nikdy neřekl, že teď běží čas, ve kterém se rozhoduje o vašem mozku.",
+            "lekar": "Dispečerka ZZS jede podle FAST protokolu: pokles koutku + porucha řeči = suspektní CMP, výjezd s prioritou. Terapeutické okno intravenózní trombolýzy je 4,5 hodiny od začátku příznaků — každá minuta váhání doma ukusuje z šance na účinnou léčbu."
+          },
+          "decision": {
+            "question": "Co uděláte?",
+            "options": [
+              { "id": "volat", "label": "Volat 155 hned", "cost_oop_kc": 0, "time_weeks_delta": 0, "note": "Správně. Dojezd ZZS je v ČR mediánově do 10 minut a suspektní CMP míří rovnou do iktového centra." },
+              { "id": "cekat", "label": "„Počkáme do oběda, třeba to přejde“", "cost_oop_kc": 0, "time_weeks_delta": 4, "note": "Reálně nejčastější chyba. Promeškané okno trombolýzy = těžší deficit a v modelu +4 týdny rehabilitace navíc." }
+            ]
+          },
+          "indicators": ["dojezd_zzs"],
+          "sources": ["clanek-cmp-iktova-centra.html (okno 4,5 h, ESO 2021)", "clanek-trombolyza-cmp.html"]
+        },
+        {
+          "id": "iktove_centrum",
+          "phase_ref": "diagnostika",
+          "title": "CT do hodiny, rozhodnutí do minut",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "V nemocnici jde všechno nezvykle rychle: CT, odběry, tým lidí kolem vás. Nikdo nevysvětluje — na vysvětlování bude čas potom. Podepisujete (levou rukou) souhlas s podáním léku.",
+            "lekar": "Síť ~47 iktových center drží čas door-to-needle typicky pod 60 minut. Trombolýzu v ČR dostane 31,4 % ischemických CMP — téměř dvojnásobek evropského průměru (17,1 %). Tady systém funguje výborně; slabé místo přijde později."
+          },
+          "indicators": ["trombolyza_ischemicka_cmp"],
+          "sources": ["clanek-trombolyza-cmp.html (31,4 % vs. EU 17,1 %)", "clanek-cmp-iktova-centra.html (door-to-needle < 60 min)"]
+        },
+        {
+          "id": "hospitalizace",
+          "phase_ref": "lecba",
+          "title": "Dva týdny na iktové jednotce",
+          "base_time_weeks": 2,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Ruka se pomalu vrací, řeč taky. Ptáte se, kdy domů — a poprvé slyšíte slovo „rehabilitace“ a větu „uvidíme, kde bude místo“.",
+            "lekar": "Akutní fáze se daří (inhospitalní mortalita ischemické CMP 9,9 %). Jenže překlad na následnou/rehabilitační péči je úzké hrdlo — pacient po CMP blokuje akutní lůžko, protože navazující kapacita chybí. Přesně tohle řeší ředitel v aktu II."
+          },
+          "indicators": ["mortalita_inhosp_cmp"],
+          "sources": ["clanek-cmp-iktova-centra.html (mortalita 9,9 %)", "clanek-hospitalizujeme-nejvic.html (bed-blocking)"]
+        },
+        {
+          "id": "rehabilitace",
+          "phase_ref": "lecba",
+          "title": "Boj o rehabilitační lůžko",
+          "base_time_weeks": 6,
+          "wait_sensitive": true,
+          "views": {
+            "pacient": "Na lůžkovou rehabilitaci se čeká. Můžete čekat doma s dojížděním, nebo vzít vzdálenější ústav. Prvně za celou nemoc řešíte peníze: dojíždění, doplatky, kdo se o vás doma postará.",
+            "lekar": "Neurolog ví, že o výsledné soběstačnosti rozhoduje včasná a dostatečně intenzivní rehabilitace — a že jeho doporučení narazí na reálná volná lůžka. Kapacita následné péče je přesně to, co ředitel nemocnice ve svém roce podržel, nebo seškrtal.",
+            "reditel_note": "Krok je citlivý na výsledek aktu II — čekání se posouvá podle stavu vaší nemocnice."
+          },
+          "decision": {
+            "question": "Jak vyřešíte rehabilitaci?",
+            "options": [
+              { "id": "luzkova", "label": "Čekat na lůžkovou rehabilitaci", "cost_oop_kc": 0, "time_weeks_delta": 0, "note": "Intenzivnější program, ale čekáte na místo." },
+              { "id": "ambulantni", "label": "Ambulantně s dojížděním", "cost_oop_kc": 2400, "time_weeks_delta": -2, "note": "Začnete dřív; dojíždění 3× týdně jde z vaší kapsy (modelový náklad)." }
+            ]
+          },
+          "indicators": ["luzka_dlouhodobe_pece_65plus", "platba_z_kapsy_pct"],
+          "sources": ["clanek-hospitalizujeme-nejvic.html", "clanek-platba-z-kapsy.html"]
+        },
+        {
+          "id": "sledovani",
+          "phase_ref": "sledovani",
+          "title": "Návrat domů — a sekundární prevence",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Domů se vracíte s taškou léků a papírem, kterému nerozumíte. Teď je všechno na vás a na praktikovi: tlak, antikoagulace, pohyb. Druhá CMP by byla horší než ta první.",
+            "lekar": "Praktik přebírá pacienta do dispenzární péče: kontroly tlaku, léky, režim. Sekundární prevence je levná a účinná — ale stojí na tom, jestli pacient na prohlídky opravdu chodí."
+          },
+          "indicators": ["prohlidka_prakticky_lekar"],
+          "sources": ["clanek-cmp-iktova-centra.html"]
+        }
+      ],
+      "outcome_note": "O výsledku pana Josefa rozhodly dvě věci, které v grafech nejsou vidět vedle sebe: minuty na začátku (jeho rozhodnutí volat 155) a týdny na konci (kapacita rehabilitace — rozhodnutí ředitele a ministra)."
+    },
+    {
+      "id": "prs_zena",
+      "label": "Paní Marie, 52 let",
+      "sublabel": "Pozvánka na screeningový mamograf",
+      "disease_ref": "prs",
+      "intro": "V obálce od pojišťovny je pozvánka na mamograf — nárok zdarma každé dva roky pro ženy 45–69 let. Účast v ČR je ~60 % (cíl WHO 70 %). Ročně přibude 7 918 nových případů rakoviny prsu.",
+      "intro_source": "clanek-mamograf-rakovina-prsu.html",
+      "steps": [
+        {
+          "id": "pozvanka",
+          "phase_ref": "prevence",
+          "title": "Obálka, kterou 4 z 10 žen zahodí",
+          "base_time_weeks": 1,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Nic vás nebolí, práce je hektická a mamograf „počká“. Přesně takhle uvažuje 40 % pozvaných žen — a právě u nich se nádory najdou později a větší.",
+            "lekar": "Screening je populační sázka na časný záchyt: mamograf odhalí nádor roky předtím, než je hmatný. Radiolog na snímku nehledá „jestli něco bolí“, ale milimetrové mikrokalcifikace. Účast 60 % znamená, že systém vidí jen šest žen z deseti."
+          },
+          "decision": {
+            "question": "Co s pozvánkou?",
+            "options": [
+              { "id": "jit", "label": "Objednat se hned", "cost_oop_kc": 0, "time_weeks_delta": 0, "note": "Screening je plně hrazený (§ 30 zák. 48/1997 Sb.)." },
+              { "id": "odlozit", "label": "„Letos nestíhám“", "cost_oop_kc": 0, "time_weeks_delta": 52, "note": "Model: nález až za rok. U karcinomu prsu je rok náskoku rozdíl ve stadiu — a stadium je rozdíl v přežití." }
+            ]
+          },
+          "indicators": ["screening_mamograficky"],
+          "sources": ["clanek-mamograf-rakovina-prsu.html (účast 60 %, nárok 45–69)"]
+        },
+        {
+          "id": "dovysetreni",
+          "phase_ref": "diagnostika",
+          "title": "„Potřebujeme doplňující snímky“",
+          "base_time_weeks": 3,
+          "wait_sensitive": true,
+          "views": {
+            "pacient": "Telefonát z centra je úder: doplňující vyšetření, biopsie. Tři týdny mezi „něčím na snímku“ a diagnózou jsou nejdelší tři týdny života — a každý den čekání navíc je krutý.",
+            "lekar": "Radiolog indikuje core-cut biopsii; histologie rozhodne o všem dalším. Kapacita mamodiagnostických center určuje, jak dlouho žena čeká mezi podezřením a jistotou — je to kapacitně citlivý krok, který se ve špatně personálně vybavené síti protahuje.",
+            "reditel_note": "Krok je citlivý na výsledek aktu II."
+          },
+          "indicators": ["cekaci_doby_specialist"],
+          "sources": ["clanek-mamograf-rakovina-prsu.html", "clanek-preziti-karcinom-prsu.html"]
+        },
+        {
+          "id": "lecba",
+          "phase_ref": "lecba",
+          "title": "Operace a onkologická léčba",
+          "base_time_weeks": 16,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Diagnóza: časný karcinom. Operace, pak léčba podle typu nádoru. Můžete požádat o druhý názor v komplexním onkologickém centru — je to vaše právo, ne drzost.",
+            "lekar": "Časný záchyt = prs šetřící výkon a výrazně lepší prognóza; pětileté přežití u karcinomu prsu v ČR se drží vysoko právě díky screeningem zachyceným časným stadiím. Multidisciplinární tým KOC rozhoduje o kombinaci léčby."
+          },
+          "decision": {
+            "question": "Vyžádáte si druhý názor v KOC?",
+            "options": [
+              { "id": "ano", "label": "Ano, druhý názor", "cost_oop_kc": 0, "time_weeks_delta": 2, "note": "Dva týdny navíc za jistotu, že plán léčby je správně. Hrazeno." },
+              { "id": "ne", "label": "Ne, důvěřuji týmu", "cost_oop_kc": 0, "time_weeks_delta": 0, "note": "Legitimní volba — u jasného nálezu se plány liší málokdy." }
+            ]
+          },
+          "indicators": ["prezit_karcinom_prsu_5let"],
+          "sources": ["clanek-preziti-karcinom-prsu.html", "clanek-mamograf-rakovina-prsu.html"]
+        },
+        {
+          "id": "dispenzarizace",
+          "phase_ref": "sledovani",
+          "title": "Život s kontrolami",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Léčba končí, kontroly zůstávají — nejdřív po třech měsících, pak po půl roce. Jizva se zahojí dřív než strach z každé další mamografie.",
+            "lekar": "Dispenzární schéma sleduje recidivu i pozdní následky léčby. Pro systém je paní Marie úspěch: záchyt ve screeningu, časné stadium, plná léčba. Statistika pětiletého přežití se skládá přesně z takových příběhů."
+          },
+          "indicators": ["prezit_karcinom_prsu_5let", "mortalita_onkologicka"],
+          "sources": ["clanek-preziti-karcinom-prsu.html"]
+        }
+      ],
+      "outcome_note": "Rozdíl mezi dobrým a špatným koncem paní Marie se nerozhodl v nemocnici, ale u kuchyňského stolu nad obálkou s pozvánkou. Screening je jediný krok cesty, který má plně v rukou pacient."
+    },
+    {
+      "id": "diabetik",
+      "label": "Pan Karel, 58 let",
+      "sublabel": "Diabetes 2. typu a noha, která nebolí",
+      "intro": "Jeden z 930 000 diagnostikovaných diabetiků v ČR (~9 % dospělých). Diabetes nebolí — a právě proto Česko amputuje o 27 % víc dolních končetin diabetiků, než je průměr OECD.",
+      "intro_source": "clanek-diabeticke-amputace.html",
+      "steps": [
+        {
+          "id": "prohlidka",
+          "phase_ref": "prevence",
+          "title": "Prohlídka, na kterou se nechodí",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Cukrovku „máte pod kontrolou“ — prášky berete, když si vzpomenete, a k praktikovi jdete, když něco bolí. Diabetes ale nebolí. To je celý jeho trik.",
+            "lekar": "Praktik má diabetika 2. typu v dispenzarizaci: glykovaný hemoglobin, ledviny, oči — a nohy. Vyšetření nohou monofilamentem trvá dvě minuty a je to nejlevnější prevence amputace v celé medicíně. Ale jen u pacientů, kteří přijdou."
+          },
+          "decision": {
+            "question": "Chodíte na pravidelné prohlídky?",
+            "options": [
+              { "id": "chodit", "label": "Ano, dvakrát ročně", "cost_oop_kc": 0, "time_weeks_delta": 0, "note": "Defekt na noze se najde, dokud je malý." },
+              { "id": "nechodit", "label": "Jen když něco je", "cost_oop_kc": 0, "time_weeks_delta": 6, "note": "Model: defekt se najde pozdě — o šest týdnů hojení (a jedno riziko) víc." }
+            ]
+          },
+          "indicators": ["prohlidka_prakticky_lekar", "prevalence_diabetu"],
+          "sources": ["clanek-diabeticke-amputace.html", "clanek-polypragmazie-senioru.html"]
+        },
+        {
+          "id": "diabetologie",
+          "phase_ref": "diagnostika",
+          "title": "Čekání na diabetologii",
+          "base_time_weeks": 4,
+          "wait_sensitive": true,
+          "views": {
+            "pacient": "Praktik vás posílá na diabetologii „doladit léčbu“. Nejbližší volný termín je za měsíc — pokud nemáte známé nebo nezaplatíte v soukromé ambulanci.",
+            "lekar": "Ambulantní specialista pracuje s objednací dobou, která kopíruje kapacitu oboru v regionu. Diabetologie patří k oborům, kde stárnutí lékařů kapacitu reálně ukusuje — a objednací doby jsou první, kdo to pozná.",
+            "reditel_note": "Krok je citlivý na výsledek aktu II."
+          },
+          "indicators": ["cekaci_doby_specialist", "podil_lekaru_55plus"],
+          "sources": ["clanek-okresni-nemocnice-personalni-krize.html (stárnutí lékařů)", "clanek-pracovni-sila.html"]
+        },
+        {
+          "id": "noha",
+          "phase_ref": "lecba",
+          "title": "Puchýř, který nebolí",
+          "base_time_weeks": 8,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Na chodidle máte týden otlak z nových bot. Nebolí (neuropatie znecitlivěla nervy) — tak proč běhat po doktorech? Přesně takhle začíná 1 200 amputací ročně.",
+            "lekar": "Diabetická noha je závod s časem: dobře vedená podiatrická péče zhojí defekt, zanedbaný končí chirurgicky. ČR má 12,1 amputací na 100 000 diabetiků (OECD 9,5) — a jednoletá mortalita po velké amputaci je 30–40 %, srovnatelná s onkologickými diagnózami."
+          },
+          "decision": {
+            "question": "Co s otlakem?",
+            "options": [
+              { "id": "podiatrie", "label": "Hned do podiatrické ambulance", "cost_oop_kc": 500, "time_weeks_delta": 0, "note": "Odlehčení, převazy, hojení. Doplatky na krytí jsou modelový náklad z kapsy." },
+              { "id": "samo", "label": "„Zahojí se to samo“", "cost_oop_kc": 0, "time_weeks_delta": 10, "note": "Nejdražší úspora v celé hře: rozvinutý defekt znamená měsíce hojení a reálné riziko amputace." }
+            ]
+          },
+          "indicators": ["amputace_dk_diabetici"],
+          "sources": ["clanek-diabeticke-amputace.html (12,1/100k, +27 % vs. OECD, mortalita 30–40 %)"]
+        },
+        {
+          "id": "hospitalizace_acsc",
+          "phase_ref": "lecba",
+          "title": "Nemocnice jako selhání ambulance",
+          "base_time_weeks": 1,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Týden na interně kvůli dekompenzaci cukrovky. Z pohledu pacienta smůla; z pohledu systému zbytečnost — všechno, co se tu děje, se dalo zvládnout ambulantně o měsíc dřív.",
+            "lekar": "Hospitalizace pro diabetes patří mezi odvratitelné (ACSC): dobře vedený diabetik se na akutní lůžko dostat nemá. Každá taková hospitalizace je zpráva o díře v ambulantní péči — a ČR jich má nadprůměr."
+          },
+          "indicators": ["hospitalizace_acsc"],
+          "sources": ["clanek-hospitalizujeme-nejvic.html", "clanek-diabeticke-amputace.html"]
+        },
+        {
+          "id": "rezim",
+          "phase_ref": "sledovani",
+          "title": "Deset let, které rozhodnou",
+          "base_time_weeks": 0,
+          "wait_sensitive": false,
+          "views": {
+            "pacient": "Diabetes vás bude provázet dál — ale amputace, dialýza ani slepota nejsou jeho povinná výbava. Rozhodne pravidelnost: prohlídky, nohy, léky. Nuda, která zachraňuje končetiny.",
+            "lekar": "Chronická péče je maraton praktika, diabetologa a pacienta. Trend je dobrý (amputace −24 % od 2019) — ale k průměru OECD vede jen přes systematickou dispenzarizaci a podiatrickou síť."
+          },
+          "indicators": ["amputace_dk_diabetici", "prohlidka_prakticky_lekar"],
+          "sources": ["clanek-diabeticke-amputace.html (trend −24 %)"]
+        }
+      ],
+      "outcome_note": "Pan Karel neprohrává s medicínou — prohrává s všedností. Všechny drahé konce diabetu začínají levně: vynechanou prohlídkou a otlakem, který nebolel."
+    }
+  ]
+}
