@@ -9,6 +9,7 @@ import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { budgetFromMinistr, verdict } from './reditel-engine.js';
 import { loadState, saveAct } from './hra-stav.js';
+import { renderCampaignStepper } from './hra-stepper.js';
 
 let DOC = null;
 let INDICATORS = new Map();
@@ -184,6 +185,7 @@ function renderSources() {
 
 function refresh() {
   renderResults(currentDecisions());
+  renderCampaignStepper('reditel');
 }
 
 async function init() {

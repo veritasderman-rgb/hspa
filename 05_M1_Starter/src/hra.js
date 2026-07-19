@@ -193,11 +193,25 @@ function renderSummary() {
     }
   });
   document.getElementById('hraAdopt')?.addEventListener('click', () => {
-    // sdílené vstupy se stanou lokální kampaní
+    // Sdílený kód nese jen VSTUPY — odvozené verdikty při převzetí rovnou
+    // dopočítáme enginy, aby stepper i hub ukázaly správný stav (dokončeno)
+    // bez nutnosti akty znovu prohrát.
     resetCampaign();
     if (SHARED.ministr) saveAct('ministr', SHARED.ministr);
-    if (SHARED.reditel) saveAct('reditel', SHARED.reditel);
-    if (SHARED.pacient) saveAct('pacient', SHARED.pacient);
+    if (SHARED.reditel) {
+      const r = reditelSummary(SHARED);
+      saveAct('reditel', {
+        ...SHARED.reditel,
+        ...(r ? { verdict: { axes: r.axes, tones: r.tones, waiting: r.waiting, complete: r.complete } } : {}),
+      });
+    }
+    if (SHARED.pacient) {
+      const p = pacientSummary(SHARED);
+      saveAct('pacient', {
+        ...SHARED.pacient,
+        ...(p ? { outcome: { weeks: p.outcome.weeks, oop_kc: p.outcome.oop_kc, complete: p.outcome.complete, waiting: p.outcome.waiting } } : {}),
+      });
+    }
     location.href = 'hra.html';
   });
 }
