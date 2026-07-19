@@ -9,6 +9,7 @@ import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { journeyOutcome, bestCaseOutcome, waitingFromCampaign } from './pribeh-engine.js';
 import { loadState, saveAct } from './hra-stav.js';
+import { renderCampaignStepper } from './hra-stepper.js';
 
 let DOC = null;
 let INDICATORS = new Map();
@@ -212,6 +213,7 @@ function renderOutcome(decisions) {
 
 function refresh() {
   renderOutcome(PERSONA ? currentDecisions() : {});
+  renderCampaignStepper('pacient');
 }
 
 // ---------------------------------------------------------------------------

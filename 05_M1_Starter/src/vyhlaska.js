@@ -9,6 +9,7 @@ import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { totalCost, moodFor, effectsFor, verdict, MOOD_LABELS } from './vyhlaska-engine.js';
 import { saveAct } from './hra-stav.js';
+import { renderCampaignStepper } from './hra-stepper.js';
 
 let DOC = null;
 let SEGMENTS = [];
@@ -245,6 +246,7 @@ function refresh() {
   SEGMENTS.forEach(s => updateSegmentUi(s, alloc));
   renderEnvelope(alloc);
   renderResults(alloc);
+  renderCampaignStepper('ministr');
 }
 
 async function init() {

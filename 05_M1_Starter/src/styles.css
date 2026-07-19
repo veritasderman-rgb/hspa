@@ -18140,3 +18140,203 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   margin: 0;
 }
 .cp-play-cta strong { color: var(--ink); }
+
+/* =================================================================
+   Tři židle — kampaňový stepper + „Jak hrát" + flow na hubu
+   · .hra-stepper*, .hra-howto*, .hra-flow* · jen tokeny → dark-safe
+   ================================================================= */
+.hra-campaign-strip { padding: 0 clamp(18px, 4vw, 48px) 8px; }
+.hra-stepper {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 12px 16px;
+  margin: 0 0 12px;
+}
+.hra-stepper-title {
+  display: block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 8px;
+}
+.hra-stepper-steps {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+}
+.hra-stepper-item { display: flex; align-items: center; }
+.hra-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  text-decoration: none;
+  background: var(--paper);
+}
+.hra-step:hover { border-color: var(--ink); }
+.hra-step-current { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.hra-step-num {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--paper);
+  background: var(--ink-mut);
+  border-radius: 999px;
+  min-width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.hra-step-done .hra-step-num { background: var(--good); }
+.hra-step-progress .hra-step-num { background: var(--warn); }
+.hra-step-current .hra-step-num { background: var(--ink); }
+.hra-step-body { display: flex; flex-direction: column; }
+.hra-step-label { font-family: var(--sans); font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.hra-step-sub { font-family: var(--sans); font-size: 10.5px; color: var(--ink-mut); line-height: 1.25; }
+.hra-step-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-mut);
+  padding: 0 8px;
+  line-height: 1.1;
+}
+.hra-step-arrow em {
+  font-style: normal;
+  font-size: 9.5px;
+  white-space: nowrap;
+  color: var(--ink-mut);
+  opacity: 0.9;
+}
+.hra-stepper-hint {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 8px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+}
+.hra-stepper-hint:hover { opacity: 0.75; }
+@media (max-width: 720px) {
+  .hra-stepper-steps { flex-direction: column; align-items: flex-start; }
+  .hra-stepper-item { flex-direction: column; align-items: flex-start; }
+  .hra-step { width: 100%; }
+  .hra-step-arrow { flex-direction: row; gap: 6px; padding: 3px 0 3px 10px; }
+  .hra-step-arrow em { white-space: normal; }
+}
+
+.hra-howto {
+  border-left: 3px solid var(--rule);
+  background: var(--paper2);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  max-width: 780px;
+}
+.hra-howto-h {
+  display: block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin-bottom: 4px;
+}
+.hra-howto-steps {
+  margin: 0;
+  padding-left: 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.hra-howto-steps li { margin: 2px 0; }
+.hra-howto-steps strong { color: var(--ink); }
+
+/* Hub — vizuální řetěz kampaně */
+.hra-flow {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+.hra-flow-node {
+  flex: 1 1 160px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 12px 14px;
+  font-family: var(--sans);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 150px;
+}
+.hra-flow-node strong { font-size: 14px; color: var(--ink); }
+.hra-flow-node small { font-size: 12px; line-height: 1.4; color: var(--ink-mut); }
+.hra-flow-node-final { border-left: 3px solid var(--good); }
+.hra-flow-num {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 999px;
+  min-width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+}
+.hra-flow-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans);
+  color: var(--ink-mut);
+  padding: 0 4px;
+  text-align: center;
+}
+.hra-flow-arrow { font-size: 18px; line-height: 1; }
+.hra-flow-link em { font-style: normal; font-size: 10px; max-width: 90px; line-height: 1.3; }
+@media (max-width: 860px) {
+  .hra-flow { flex-direction: column; }
+  .hra-flow-link { flex-direction: row; gap: 6px; padding: 2px 0; }
+  .hra-flow-link em { max-width: none; }
+  .hra-flow-arrow { transform: rotate(90deg); font-size: 14px; }
+}
+.hra-why {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  max-width: 1000px;
+}
+.hra-why li {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  border-left: 2px solid var(--rule);
+  padding-left: 12px;
+}
+.hra-why strong { color: var(--ink); display: block; }
