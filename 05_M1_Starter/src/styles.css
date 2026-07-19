@@ -17836,3 +17836,109 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 .pp-method details { font-family: var(--sans); font-size: 14px; max-width: 780px; }
 .pp-method summary { cursor: pointer; color: var(--ink-mut); }
 .pp-context p { max-width: 780px; }
+
+/* =================================================================
+   Tři židle — perspektivy na Modelu systému (model-systemu.html)
+   · .msys-role-*, .msys-persp-*, .msys-*-conflict · jen tokeny → dark-safe
+   ================================================================= */
+.msys-roles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+.msys-role-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.msys-role-lbl {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.msys-role, .msys-conflicts {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 5px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-mut);
+  cursor: pointer;
+}
+.msys-role:hover, .msys-conflicts:hover { border-color: var(--ink); color: var(--ink); }
+.msys-role-active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.msys-conflicts-active { background: var(--warn); border-color: var(--warn); color: var(--paper); }
+.msys-role-note {
+  flex-basis: 100%;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* Uzly v mlze — role je ze své židle nevidí */
+.msys-role-on .msys-node-fog { opacity: 0.28; }
+.msys-role-on .msys-node-fog rect { stroke-dasharray: 4 3; }
+
+/* Hrany se střetem zájmů rolí */
+.msys-conflicts-on .msys-edge { opacity: 0.18; }
+.msys-conflicts-on .msys-edge-conflict {
+  opacity: 1;
+  stroke: var(--warn);
+  stroke-width: 3;
+  stroke-dasharray: 7 4;
+}
+.msys-conflicts-on .msys-edge-hot { opacity: 1; }
+
+/* Panel — pohled role na uzel */
+.msys-persp {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  border-radius: 0 8px 8px 0;
+  background: var(--paper2);
+  padding: 10px 12px;
+  margin: 10px 0;
+  font-family: var(--sans);
+}
+.msys-persp-fog { border-left-color: var(--warn); }
+.msys-persp-role {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.msys-persp-alt { display: block; font-size: 14px; color: var(--ink); margin: 3px 0 2px; }
+.msys-persp-note { font-size: 12.5px; line-height: 1.5; color: var(--ink-mut); margin: 0; }
+.msys-edge-conflict-note {
+  display: block;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--paper2);
+  border-left: 2px solid var(--warn);
+  padding: 4px 8px;
+  margin-top: 4px;
+}
+.msys-fallback-persp {
+  list-style: none;
+  padding: 6px 0 0 12px;
+  margin: 4px 0 0;
+  border-left: 2px solid var(--rule);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+.msys-fallback-persp li { margin: 0 0 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .msys-node { transition: opacity 0.2s ease; }
+}
