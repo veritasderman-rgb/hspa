@@ -14,6 +14,8 @@ const VALID_LAYERS = ['Struktury', 'Procesy', 'Výstupy', 'Výsledky'];
 const VALID_KINDS = ['lever', 'flow', 'outcome'];
 const VALID_POLARITIES = ['plus', 'minus'];
 const VALID_STRENGTHS = ['strong', 'weak'];
+const PERSPECTIVE_ROLES = ['pacient', 'lekar', 'reditel'];
+const VALID_VISIBILITY = ['clear', 'fog'];
 
 function loadIdSet(file, key, field = 'id') {
   const p = path.join(ROOT, file);
@@ -80,6 +82,19 @@ function validate() {
     }
     const hasEvidence = (n.indicators ?? []).length > 0 || (n.articles ?? []).length > 0;
     if (!hasEvidence) errors.push(`${tag}: uzel nemá žádný indikátor ani článek (model drží jen doložené uzly)`);
+
+    // Perspektivy Tři židle: každý uzel nese pohled všech tří rolí
+    if (!n.perspectives) {
+      errors.push(`${tag}: chybí perspectives (Tři židle — pacient/lekar/reditel)`);
+    } else {
+      for (const role of PERSPECTIVE_ROLES) {
+        const p = n.perspectives[role];
+        if (!p) { errors.push(`${tag}: perspectives.${role} chybí`); continue; }
+        if (!VALID_VISIBILITY.includes(p.visibility)) errors.push(`${tag}: perspectives.${role}.visibility musí být clear|fog`);
+        if (!p.alt_label) errors.push(`${tag}: perspectives.${role}.alt_label chybí`);
+        if (!p.note) errors.push(`${tag}: perspectives.${role}.note chybí`);
+      }
+    }
   }
 
   const edgeIds = new Set();
@@ -103,6 +118,8 @@ function validate() {
         errors.push(`${tag}: article '${slug}' nenalezen v data/articles.json`);
       }
     }
+    if (e.conflict != null && typeof e.conflict !== 'boolean') errors.push(`${tag}: conflict musí být boolean`);
+    if (e.conflict && !e.conflict_note) errors.push(`${tag}: conflict hrana musí mít conflict_note (čí zisk je čí náklad)`);
     connected.add(e.from);
     connected.add(e.to);
   }

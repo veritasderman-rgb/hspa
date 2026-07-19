@@ -237,7 +237,8 @@ function penizeHtml(segments) {
   return `
     <p class="dg-section-lead">Segmenty úhradové vyhlášky, jejichž posílení má na indikátor doložený efekt.</p>
     <ul class="dg-list">${items}</ul>
-    <p class="dg-links"><a href="vyhlaska.html">Zahrát si na ministra →</a></p>`;
+    <p class="dg-links"><a href="vyhlaska.html">Zahrát si na ministra →</a>
+    <a href="hra.html">Celá kampaň Tři židle →</a></p>`;
 }
 
 function slibyHtml(items) {

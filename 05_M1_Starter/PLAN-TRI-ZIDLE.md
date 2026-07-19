@@ -1,6 +1,6 @@
 # Plán — „Tři židle": jeden systém, tři pohledy (herní trilogie)
 
-**Stav:** návrh ke schválení vlastníkem.
+**Stav:** schváleno vlastníkem (session 2026-07-19), implementováno (dávky 0–E v jednom PR).
 **Datum:** 2026-07-19.
 **Branch:** `claude/nova-interaktivni-hra-oxc8zd` (tento plán; implementační dávky
 mají vlastní branche/PR dle standardního workflow).
@@ -89,7 +89,7 @@ hráč rozhoduje, systém reaguje. Deterministický engine, žádná náhoda.
   },
   "handoff": {
     "note": "růst rozpočtu = vážený růst segmentů akutní + následná lůžková z aktu I",
-    "segments": ["nemocnice_akutni", "nasledna_luzkova"],
+    "segments": ["akutni_luzkova", "nasledna_luzkova"],
     "default_growth_pct": 0, "default_source": "reálná vyhláška 432/2025 Sb."
   },
   "decisions": [{
@@ -140,11 +140,15 @@ průchodů je hlavní sdělení aktu.
 
 ### Data — `data/pribeh-pacienta.json`
 
-- **3 startovní persony** (typizované, ne reálné osoby), vybrané tak, aby
-  znovu použily kostru `data/cesta-pacienta.json` (fáze × diagnózy):
-  senior po CMP (iktus), žena 52 let (screening → onkologie),
-  chronik s diabetem. Další persony přidávat lze po jedné (jako články).
-- Struktura: `{ personas: [{ id, label, kraj_default, disease_ref,
+- **3 startovní persony** (typizované, ne reálné osoby): senior po CMP
+  (iktus), žena 52 let (screening → onkologie), chronik s diabetem. Další
+  persony přidávat lze po jedné (jako články).
+- Z `data/cesta-pacienta.json` se znovu použije **jen kostra fází**
+  (`phase_ref` na `prevence…sledovani`); obsah kroků je definován přímo
+  v `pribeh-pacienta.json`. Diagnózy explaineru jsou všechny onkologické,
+  proto `disease_ref` je **volitelný** a smí ho mít jen onko persona
+  (validátor kontroluje existenci) — persony CMP a diabetes ho nemají.
+- Struktura: `{ personas: [{ id, label, kraj_default, disease_ref?,
   steps: [{ id, phase_ref, views: { pacient, lekar }, decision?: { options: [
   { id, label, cost_oop?, wait_modifier?, next }] }, indicators: [],
   sources: [] }], outcomes: {…} }] }`.

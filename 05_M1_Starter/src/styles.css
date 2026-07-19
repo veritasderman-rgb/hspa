@@ -6556,6 +6556,7 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
 .home-tool-barometr  { border-left-color: var(--red); }
 .home-tool-model     { border-left-color: var(--warn); }
 .home-tool-vyhlaska  { border-left-color: var(--ink); }
+.home-tool-trizidle  { border-left-color: var(--good); }
 .home-tool-wide      { grid-column: 1 / -1; }
 .home-tool-badge {
   align-self: flex-start;
@@ -17266,3 +17267,876 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   .kv-slider-out { text-align: center; min-width: 0; }
   .kv-confirm, .kv-next { width: 100%; }
 }
+
+/* =================================================================
+   Tři židle · Akt II — Rok ředitele nemocnice (reditel.html) · .rd-*
+   Jen tokeny → dark-safe. Modelová hra, viz PLAN-TRI-ZIDLE.md.
+   ================================================================= */
+.rd-hero .ed-lead { max-width: 780px; }
+.rd-disclaimer {
+  max-width: 780px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.rd-disclaimer strong { color: var(--ink); }
+
+.rd-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.rd-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Handoff z aktu I ── */
+.rd-handoff {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 16px 18px;
+  max-width: 780px;
+}
+.rd-handoff-campaign { border-left: 3px solid var(--good); }
+.rd-handoff-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.rd-handoff-value {
+  display: block;
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin: 4px 0 2px;
+}
+.rd-handoff-growth { font-size: 15px; font-weight: 600; color: var(--ink-mut); }
+.rd-handoff-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+}
+
+/* ── Layout ── */
+.rd-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 920px) { .rd-layout { grid-template-columns: 1fr; } }
+
+/* ── Kvartály a rozhodnutí ── */
+.rd-quarter { margin: 0 0 10px; }
+.rd-quarter-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 18px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--ink);
+}
+.rd-quarter:first-child .rd-quarter-h { margin-top: 0; }
+.rd-decision {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 14px 16px;
+  margin: 0 0 12px;
+}
+.rd-decision-label {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 0 6px;
+}
+.rd-decision-q {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 6px 0 4px;
+}
+.rd-decision-context {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.rd-decision-src { opacity: 0.8; }
+.rd-options { display: grid; gap: 8px; }
+.rd-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--paper2);
+}
+.rd-option:hover { border-color: var(--ink); }
+.rd-option:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.rd-option input { margin-top: 3px; }
+.rd-option-body { display: block; flex: 1; }
+.rd-option-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.rd-option-label { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+.rd-option-cost {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-mut);
+}
+.rd-cost-spend { color: var(--bad); }
+.rd-cost-save { color: var(--good); }
+.rd-option-note {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-mut);
+  margin-top: 2px;
+}
+.rd-ind-row {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  margin: 10px 0 0;
+}
+.rd-ind-chip {
+  display: inline-block;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px 10px;
+  margin: 2px 2px 0 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.rd-ind-chip:hover { border-color: var(--ink); }
+.rd-reset {
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 32px;
+  padding: 6px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  margin-top: 6px;
+}
+.rd-reset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── Výsledky ── */
+.rd-results { position: sticky; top: 16px; }
+@media (max-width: 920px) { .rd-results { position: static; } }
+.rd-block {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 14px 16px;
+  margin: 0 0 12px;
+}
+.rd-block-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.rd-proj { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13.5px; }
+.rd-proj td { padding: 4px 0; border-bottom: 1px dashed var(--rule); color: var(--ink); }
+.rd-proj tr:last-child td { border-bottom: none; }
+.rd-num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.rd-plus { color: var(--good); }
+.rd-minus { color: var(--bad); }
+.rd-axis {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  margin: 0 0 6px;
+  border: 1px solid var(--rule);
+  font-family: var(--sans);
+}
+.rd-axis-label { font-size: 13.5px; font-weight: 600; color: var(--ink); flex: 1; }
+.rd-axis-val { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rd-axis-tone { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+.rd-tone-good { border-left: 3px solid var(--good); }
+.rd-tone-good .rd-axis-tone { color: var(--good); }
+.rd-tone-mid { border-left: 3px solid var(--warn); }
+.rd-tone-mid .rd-axis-tone { color: var(--warn); }
+.rd-tone-bad { border-left: 3px solid var(--bad); }
+.rd-tone-bad .rd-axis-tone { color: var(--bad); }
+.rd-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+}
+.rd-reaction {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  border-left: 3px solid var(--warn);
+  background: var(--paper);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+}
+.rd-reaction-src { display: block; font-size: 11.5px; color: var(--ink-mut); margin-top: 3px; }
+.rd-campaign-cta { border-left: 3px solid var(--good); }
+.rd-campaign-link, .vh-campaign-link {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 8px;
+  padding: 8px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+.rd-campaign-link:hover, .vh-campaign-link:hover { background: var(--paper); color: var(--ink); }
+.rd-method details { font-family: var(--sans); font-size: 14px; max-width: 780px; }
+.rd-method summary { cursor: pointer; color: var(--ink-mut); }
+.rd-sources { font-size: 12.5px; color: var(--ink-mut); line-height: 1.6; }
+.rd-context p { max-width: 780px; }
+
+/* =================================================================
+   Tři židle · Akt III — Příběh pacienta (pribeh-pacienta.html) · .pp-*
+   Jen tokeny → dark-safe. Modelová hra, viz PLAN-TRI-ZIDLE.md.
+   ================================================================= */
+.pp-hero .ed-lead { max-width: 780px; }
+.pp-disclaimer {
+  max-width: 780px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.pp-disclaimer strong { color: var(--ink); }
+
+.pp-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.pp-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Výběr persony ── */
+.pp-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  max-width: 900px;
+}
+.pp-persona {
+  text-align: left;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.pp-persona:hover { border-color: var(--ink); }
+.pp-persona-active { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.pp-persona-label { display: block; font-size: 16px; font-weight: 700; color: var(--ink); }
+.pp-persona-sub { display: block; font-size: 13px; color: var(--ink-mut); margin-top: 2px; }
+
+/* ── Layout cesty ── */
+.pp-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 920px) { .pp-layout { grid-template-columns: 1fr; } }
+.pp-outcome { position: sticky; top: 16px; }
+@media (max-width: 920px) { .pp-outcome { position: static; } }
+
+.pp-journey-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pp-role-toggle { display: flex; gap: 6px; }
+.pp-role {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 5px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-mut);
+  cursor: pointer;
+}
+.pp-role:hover { border-color: var(--ink); color: var(--ink); }
+.pp-role-active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.pp-intro {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 720px;
+  margin: 10px 0 6px;
+}
+.pp-wait-banner {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  padding: 8px 12px;
+  max-width: 720px;
+  margin: 8px 0 0;
+}
+
+/* ── Kroky ── */
+.pp-steps { list-style: none; margin: 14px 0 0; padding: 0; }
+.pp-step {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 14px 16px;
+  margin: 0 0 12px;
+}
+.pp-step-shift-delsi { border-left: 3px solid var(--warn); }
+.pp-step-shift-kratsi { border-left: 3px solid var(--good); }
+.pp-step-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.pp-step-num {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 999px;
+  min-width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-step-title { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); flex: 1; }
+.pp-phase-chip {
+  font-family: var(--sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px 10px;
+}
+.pp-view {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 10px 0 0;
+}
+.pp-view-lekar { border-left: 2px solid var(--rule); padding-left: 12px; }
+.pp-reditel-note {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+  margin: 6px 0 0;
+  padding-left: 14px;
+}
+.pp-decision {
+  border: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.pp-decision-q {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 0;
+  margin-bottom: 2px;
+}
+.pp-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--paper2);
+}
+.pp-option:hover { border-color: var(--ink); }
+.pp-option:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.pp-option input { margin-top: 3px; }
+.pp-option-body { display: block; flex: 1; }
+.pp-option-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.pp-option-label { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+.pp-option-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-mut);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pp-option-note {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-mut);
+  margin-top: 2px;
+}
+.pp-step-foot {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--ink-mut);
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pp-shift-note { color: var(--ink); font-weight: 600; }
+.pp-ind-chip {
+  display: inline-block;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 1px 10px;
+  margin: 2px 2px 0 0;
+  font-size: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.pp-ind-chip:hover { border-color: var(--ink); }
+.pp-src { opacity: 0.85; }
+
+/* ── Výsledovka ── */
+.pp-empty {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+.pp-block {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 14px 16px;
+  margin: 0 0 12px;
+}
+.pp-block-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.pp-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-family: var(--sans);
+}
+.pp-stat:last-of-type { border-bottom: none; }
+.pp-stat-lbl { font-size: 13px; color: var(--ink-mut); }
+.pp-stat-val { font-size: 14px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pp-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 8px 0 0;
+}
+.pp-replay {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-top: 10px;
+  padding: 7px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.pp-replay:hover { background: var(--ink); color: var(--paper); }
+.pp-campaign-cta { border-left: 3px solid var(--good); }
+.pp-campaign-link {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 8px 8px 0 0;
+  padding: 7px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+.pp-campaign-link:hover { background: var(--paper); color: var(--ink); }
+.pp-campaign-link-sec { background: var(--paper); color: var(--ink); }
+.pp-campaign-link-sec:hover { background: var(--ink); color: var(--paper); }
+.pp-method details { font-family: var(--sans); font-size: 14px; max-width: 780px; }
+.pp-method summary { cursor: pointer; color: var(--ink-mut); }
+.pp-context p { max-width: 780px; }
+
+/* =================================================================
+   Tři židle — perspektivy na Modelu systému (model-systemu.html)
+   · .msys-role-*, .msys-persp-*, .msys-*-conflict · jen tokeny → dark-safe
+   ================================================================= */
+.msys-roles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+.msys-role-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.msys-role-lbl {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.msys-role, .msys-conflicts {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 5px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-mut);
+  cursor: pointer;
+}
+.msys-role:hover, .msys-conflicts:hover { border-color: var(--ink); color: var(--ink); }
+.msys-role-active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.msys-conflicts-active { background: var(--warn); border-color: var(--warn); color: var(--paper); }
+.msys-role-note {
+  flex-basis: 100%;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 0;
+  max-width: 720px;
+}
+
+/* Uzly v mlze — role je ze své židle nevidí */
+.msys-role-on .msys-node-fog { opacity: 0.28; }
+.msys-role-on .msys-node-fog rect { stroke-dasharray: 4 3; }
+
+/* Hrany se střetem zájmů rolí */
+.msys-conflicts-on .msys-edge { opacity: 0.18; }
+.msys-conflicts-on .msys-edge-conflict {
+  opacity: 1;
+  stroke: var(--warn);
+  stroke-width: 3;
+  stroke-dasharray: 7 4;
+}
+.msys-conflicts-on .msys-edge-hot { opacity: 1; }
+
+/* Panel — pohled role na uzel */
+.msys-persp {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  border-radius: 0 8px 8px 0;
+  background: var(--paper2);
+  padding: 10px 12px;
+  margin: 10px 0;
+  font-family: var(--sans);
+}
+.msys-persp-fog { border-left-color: var(--warn); }
+.msys-persp-role {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.msys-persp-alt { display: block; font-size: 14px; color: var(--ink); margin: 3px 0 2px; }
+.msys-persp-note { font-size: 12.5px; line-height: 1.5; color: var(--ink-mut); margin: 0; }
+.msys-edge-conflict-note {
+  display: block;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--paper2);
+  border-left: 2px solid var(--warn);
+  padding: 4px 8px;
+  margin-top: 4px;
+}
+.msys-fallback-persp {
+  list-style: none;
+  padding: 6px 0 0 12px;
+  margin: 4px 0 0;
+  border-left: 2px solid var(--rule);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+.msys-fallback-persp li { margin: 0 0 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .msys-node { transition: opacity 0.2s ease; }
+}
+
+/* =================================================================
+   Tři židle — hub kampaně (hra.html) · namespace .hra-*
+   Jen tokeny → dark-safe. Modelová hra, viz PLAN-TRI-ZIDLE.md.
+   ================================================================= */
+.hra-hero .ed-lead { max-width: 780px; }
+.hra-disclaimer {
+  max-width: 780px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.hra-disclaimer strong { color: var(--ink); }
+.hra-shared-banner {
+  max-width: 780px;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--good);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+}
+.hra-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.hra-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Karty aktů ── */
+.hra-acts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px;
+}
+.hra-act {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hra-act-done { border-left: 3px solid var(--good); }
+.hra-act-progress { border-left: 3px solid var(--warn); }
+.hra-act-head { display: flex; align-items: baseline; gap: 10px; }
+.hra-act-num {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 999px;
+  min-width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.hra-act-title { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); flex: 1; }
+.hra-act-status {
+  font-family: var(--sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+}
+.hra-act-done .hra-act-status { color: var(--good); }
+.hra-act-progress .hra-act-status { color: var(--warn); }
+.hra-act-desc {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+  margin: 0;
+  flex: 1;
+}
+.hra-act-detail {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  border-top: 1px dashed var(--rule);
+  padding-top: 8px;
+  margin: 0;
+}
+.hra-act-cta {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+.hra-act-cta:hover { text-decoration: underline; }
+.hra-tone-good { color: var(--good); }
+.hra-tone-mid { color: var(--warn); }
+.hra-tone-bad { color: var(--bad); }
+
+/* ── Výsledovka ── */
+.hra-note {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  max-width: 720px;
+}
+.hra-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.hra-sum-block {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper2);
+  padding: 14px 16px;
+}
+.hra-sum-h {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 8px;
+}
+.hra-sum-body { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--ink); margin: 0; }
+.hra-sum-moral {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  border-left: 3px solid var(--ink);
+  padding: 8px 14px;
+  margin: 16px 0 0;
+  max-width: 720px;
+}
+.hra-share { margin-top: 16px; }
+.hra-share-lbl { font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); display: block; margin-bottom: 6px; }
+.hra-share-row { display: flex; gap: 8px; flex-wrap: wrap; max-width: 720px; }
+.hra-share-url {
+  flex: 1;
+  min-width: 220px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.hra-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.hra-btn:hover { background: var(--paper); color: var(--ink); }
+.hra-btn-sec { background: var(--paper); color: var(--ink); margin-top: 10px; }
+.hra-btn-sec:hover { background: var(--ink); color: var(--paper); }
+.hra-context p { max-width: 780px; }
+
+/* Cesta pacienta — CTA na hru Příběh pacienta (Tři židle, akt III) */
+.cp-play-cta {
+  padding: 8px clamp(18px, 4vw, 48px) 20px;
+}
+.cp-play-cta p {
+  max-width: 720px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  border-left: 3px solid var(--good);
+  background: var(--paper2);
+  padding: 12px 16px;
+  margin: 0;
+}
+.cp-play-cta strong { color: var(--ink); }

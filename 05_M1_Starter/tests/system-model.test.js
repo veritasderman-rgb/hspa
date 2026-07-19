@@ -107,3 +107,42 @@ test('splitLabel: krátký label 1 řádek, dlouhý 2 vyvážené řádky', () =
   assert.equal(two.length, 2);
   assert.equal(two.join(' '), 'Prevence a screeningy');
 });
+
+// --- Tři židle: perspektivy rolí + konfliktní hrany (PLAN-TRI-ZIDLE.md) ---
+import { PERSPECTIVE_ROLES, perspectiveFor, fogNodesFor, conflictEdges } from '../src/system-model.js';
+
+test('perspektivy: každý uzel nese pohled všech tří rolí s validní visibility', () => {
+  for (const n of model.nodes) {
+    for (const role of PERSPECTIVE_ROLES) {
+      const p = perspectiveFor(n, role);
+      assert.ok(p, `node ${n.id}: chybí perspektiva ${role}`);
+      assert.ok(['clear', 'fog'].includes(p.visibility), `node ${n.id}/${role}: visibility '${p.visibility}'`);
+      assert.ok(p.alt_label?.length > 2, `node ${n.id}/${role}: alt_label`);
+      assert.ok(p.note?.length > 20, `node ${n.id}/${role}: note příliš krátká`);
+    }
+  }
+});
+
+test('perspektivy: každá role má i mlhu, i jasno (jinak přepínač nic neukáže)', () => {
+  for (const role of PERSPECTIVE_ROLES) {
+    const fog = fogNodesFor(role, model.nodes);
+    assert.ok(fog.length >= 3, `${role}: příliš málo fog uzlů (${fog.length})`);
+    assert.ok(fog.length <= model.nodes.length - 3, `${role}: skoro vše v mlze`);
+  }
+});
+
+test('perspektivy: výsledková vrstva je pointa — z žádné židle není celá jasně vidět', () => {
+  const outcomes = model.nodes.filter(n => n.layer === 'Výsledky');
+  for (const role of PERSPECTIVE_ROLES) {
+    const fogged = outcomes.filter(n => perspectiveFor(n, role).visibility === 'fog');
+    assert.ok(fogged.length >= 1, `${role}: vidí celou výsledkovou vrstvu — pointa mlhy se ztrácí`);
+  }
+});
+
+test('konflikty: označené hrany existují, mají poznámku a je jich rozumně', () => {
+  const conflicts = conflictEdges(model.edges);
+  assert.ok(conflicts.length >= 4 && conflicts.length <= 12, `počet konfliktů ${conflicts.length}`);
+  for (const e of conflicts) {
+    assert.ok(e.conflict_note?.length > 30, `${e.id}: conflict_note chybí/krátká`);
+  }
+});

@@ -540,7 +540,7 @@ export function renderModuleNav(activeId) {
       id: 'financing',
       label: 'Financování',
       href: 'financovani.html',
-      match: ['financovani.html', 'vyhlaska.html'],
+      match: ['financovani.html', 'vyhlaska.html', 'reditel.html'],
       children: [
         { id: 'dohodovaci-rizeni',        label: 'Dohodovací řízení',  href: 'dohodovaci-rizeni.html',        match: ['dohodovaci-rizeni.html'] },
         { id: 'vyhlaska',                 label: 'Úhradová vyhláška: hra', href: 'vyhlaska.html',              match: ['vyhlaska.html'] },
@@ -551,12 +551,13 @@ export function renderModuleNav(activeId) {
         // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html'],
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html', 'hra.html', 'pribeh-pacienta.html'],
       children: [
         { id: 'jak-zdravotnictvi', label: 'Zdravotnictví',           href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
         { id: 'cesta-pacienta',    label: 'Cesta pacienta systémem',  href: 'cesta-pacienta.html', match: ['cesta-pacienta.html'] },
         { id: 'model-systemu',     label: 'Model systému',            href: 'model-systemu.html', match: ['model-systemu.html'] },
         { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
+        { id: 'tri-zidle',         label: 'Tři židle: hra',           href: 'hra.html',           match: ['hra.html', 'pribeh-pacienta.html'] },
       ],
     },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html'],
@@ -1025,6 +1026,8 @@ export const SITE_TOOLS = [
     desc: 'Interaktivní kauzální mapa: kudy se problém propisuje systémem.', verb: 'Prozkoumat model' },
   { id: 'vyhlaska',      href: 'vyhlaska.html',      label: 'Úhradová vyhláška: hra',
     desc: 'Rozdělte růst úhrad jako ministr — a ustůjte reakce segmentů.', verb: 'Zahrát si' },
+  { id: 'tri-zidle',     href: 'hra.html',           label: 'Tři židle: herní kampaň',
+    desc: 'Ministr → ředitel nemocnice → pacient: projděte systém ze všech tří židlí.', verb: 'Hrát kampaň' },
   { id: 'kviz',          href: 'kviz.html',          label: 'Kvíz: otestujte se',
     desc: 'Deset otázek z živých dat — tipněte hodnotu, srovnejte ČR s OECD.', verb: 'Spustit kvíz' },
 ];

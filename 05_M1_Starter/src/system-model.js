@@ -62,6 +62,24 @@ export function layerNodes(layer, nodes) {
   return nodes.filter(n => n.layer === layer);
 }
 
+export const PERSPECTIVE_ROLES = ['pacient', 'lekar', 'reditel'];
+export const ROLE_LABELS = { pacient: 'Pacient', lekar: 'Lékař', reditel: 'Ředitel nemocnice' };
+
+/** Pohled role na uzel (Tři židle); null pro neznámou roli/uzel bez perspektiv. */
+export function perspectiveFor(node, role) {
+  return node?.perspectives?.[role] ?? null;
+}
+
+/** Uzly, které daná role vidí jen v mlze (visibility: fog). */
+export function fogNodesFor(role, nodes) {
+  return nodes.filter(n => perspectiveFor(n, role)?.visibility === 'fog').map(n => n.id);
+}
+
+/** Hrany označené jako střet zájmů rolí (conflict: true). */
+export function conflictEdges(edges) {
+  return edges.filter(e => e.conflict === true);
+}
+
 // Rozdělí label na max 2 řádky pro SVG <tspan> (šířka uzlu ~150 px ≈ 18 znaků).
 export function splitLabel(label, maxChars = 18) {
   const words = String(label).split(' ');
@@ -89,6 +107,8 @@ let INDICATORS = new Map();
 let ARTICLES = new Map();
 let activeNodeId = null;
 let leverModeFor = null;
+let activeRole = null;      // Tři židle: null = vše | pacient | lekar | reditel
+let conflictsOn = false;    // zvýraznění hran se střetem zájmů rolí
 
 const nodeById = id => MODEL.nodes.find(n => n.id === id);
 
@@ -195,7 +215,48 @@ function edgeLine(e, dir) {
     <button type="button" class="msys-jump" data-jump="${escapeHtml(other.id)}">${arrow} ${escapeHtml(other.label)}</button>
     <span class="msys-edge-sign" aria-label="${e.polarity === 'plus' ? 'podporuje' : 'zatěžuje'}">${sign}</span>
     <span class="msys-edge-mech">${escapeHtml(e.mechanism)}</span>
+    ${e.conflict ? `<span class="msys-edge-conflict-note">⚡ Střet zájmů: ${escapeHtml(e.conflict_note)}</span>` : ''}
   </li>`;
+}
+
+// ---------------------------------------------------------------------------
+// Tři židle — přepínač rolí + konflikty
+// ---------------------------------------------------------------------------
+
+function renderRoleBar() {
+  const host = document.getElementById('msysRoles');
+  if (!host) return;
+  const chip = (role, label) => `
+    <button type="button" class="msys-role${activeRole === role ? ' msys-role-active' : ''}"
+      data-role="${role ?? ''}" role="radio" aria-checked="${activeRole === role}">${label}</button>`;
+  host.innerHTML = `
+    <div class="msys-role-group" role="radiogroup" aria-label="Perspektiva role (Tři židle)">
+      <span class="msys-role-lbl">Tři židle:</span>
+      ${chip(null, 'Vše')}
+      ${PERSPECTIVE_ROLES.map(r => chip(r, ROLE_LABELS[r])).join('')}
+    </div>
+    <button type="button" class="msys-conflicts${conflictsOn ? ' msys-conflicts-active' : ''}"
+      aria-pressed="${conflictsOn}" id="msysConflictsBtn">⚡ Ukázat konflikty rolí</button>
+    <p class="msys-role-note" aria-live="polite">${activeRole
+      ? `Ztlumené oblasti ${ROLE_LABELS[activeRole].toLowerCase()} ze své židle nevidí — rozhodují o něm jiní. Klik na uzel ukáže, jak ho tato role zažívá.`
+      : conflictsOn
+        ? 'Zvýrazněné vazby jsou střety zájmů: zisk jedné židle je náklad jiné. Klik na uzel ukáže detail.'
+        : 'Jeden systém, tři pohledy: vyberte roli a uvidíte, co z mapy skutečně vidí — a co je pro ni v mlze.'}</p>`;
+
+  host.querySelectorAll('.msys-role').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.role || null;
+      activeRole = activeRole === role ? null : role;
+      renderRoleBar();
+      applyHighlights();
+      if (activeNodeId) renderPanel(activeNodeId);
+    });
+  });
+  document.getElementById('msysConflictsBtn')?.addEventListener('click', () => {
+    conflictsOn = !conflictsOn;
+    renderRoleBar();
+    applyHighlights();
+  });
 }
 
 function renderPanel(nodeId) {
@@ -233,6 +294,14 @@ function renderPanel(nodeId) {
       </div>
       <h3 class="msys-panel-name">${escapeHtml(node.label)}</h3>
       <p class="msys-panel-desc">${escapeHtml(node.desc)}</p>
+      ${activeRole && perspectiveFor(node, activeRole) ? (() => {
+        const p = perspectiveFor(node, activeRole);
+        return `<div class="msys-persp msys-persp-${p.visibility}">
+          <span class="msys-persp-role">Očima role ${escapeHtml(ROLE_LABELS[activeRole])}${p.visibility === 'fog' ? ' · v mlze' : ''}</span>
+          <strong class="msys-persp-alt">„${escapeHtml(p.alt_label)}“</strong>
+          <p class="msys-persp-note">${escapeHtml(p.note)}</p>
+        </div>`;
+      })() : ''}
       ${leverBtn}
       ${leverSummary}
       ${inds ? `<h4>Co to měří na dashboardu</h4><div class="msys-ind-list">${inds}</div>` : ''}
@@ -291,14 +360,20 @@ function applyHighlights() {
 
   const dimming = Boolean(leverModeFor || activeNodeId);
   svg.classList.toggle('msys-dimmed', dimming);
+  const conflicts = conflictsOn ? new Set(conflictEdges(MODEL.edges).map(e => e.id)) : new Set();
+  svg.classList.toggle('msys-conflicts-on', conflictsOn);
   svg.querySelectorAll('.msys-edge').forEach(el => {
     el.classList.toggle('msys-edge-hot', hot.has(el.dataset.edge));
+    el.classList.toggle('msys-edge-conflict', conflicts.has(el.dataset.edge));
   });
+  const fog = activeRole ? new Set(fogNodesFor(activeRole, MODEL.nodes)) : new Set();
+  svg.classList.toggle('msys-role-on', Boolean(activeRole));
   svg.querySelectorAll('.msys-node').forEach(el => {
     const id = el.dataset.node;
     el.classList.toggle('msys-node-active', id === activeNodeId);
     el.classList.toggle('msys-node-affected', affected.has(id));
     el.classList.toggle('msys-node-neighbor', neighbors.has(id));
+    el.classList.toggle('msys-node-fog', fog.has(id));
   });
 }
 
@@ -347,10 +422,16 @@ function renderFallbackList() {
       const inds = (n.indicators ?? []).slice(0, 3).map(indicatorChip).filter(Boolean).join('');
       const { outgoing } = edgesFor(n.id, MODEL.edges);
       const affects = outgoing.map(e => nodeById(e.to)).filter(Boolean).map(x => x.label).join(', ');
+      const persp = PERSPECTIVE_ROLES
+        .map(r => ({ r, p: perspectiveFor(n, r) }))
+        .filter(x => x.p)
+        .map(x => `<li><strong>${escapeHtml(ROLE_LABELS[x.r])}${x.p.visibility === 'fog' ? ' (v mlze)' : ''}:</strong> „${escapeHtml(x.p.alt_label)}“ — ${escapeHtml(x.p.note)}</li>`)
+        .join('');
       return `<li>
         <strong>${escapeHtml(n.label)}</strong>${n.kind === 'lever' ? ' <em>(páka)</em>' : ''}<br>
         ${escapeHtml(n.desc)}
         ${affects ? `<br><small>Ovlivňuje: ${escapeHtml(affects)}</small>` : ''}
+        ${persp ? `<ul class="msys-fallback-persp">${persp}</ul>` : ''}
         ${inds ? `<div class="msys-ind-list">${inds}</div>` : ''}
       </li>`;
     }).join('');
@@ -380,9 +461,18 @@ async function init() {
     ARTICLES = new Map((arts.articles ?? []).map(a => [a.slug, a]));
 
     renderSvg(host);
+    renderRoleBar();
     wireInteractions();
     renderPanelEmpty();
     renderFallbackList();
+
+    // deep-link ?role= (hub kampaně Tři židle odkazuje na konkrétní židli)
+    const urlRole = new URLSearchParams(location.search).get('role');
+    if (PERSPECTIVE_ROLES.includes(urlRole)) {
+      activeRole = urlRole;
+      renderRoleBar();
+      applyHighlights();
+    }
 
     const statsEl = document.getElementById('msysStats');
     if (statsEl) {

@@ -1,0 +1,211 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-19T12:00:00Z",
+  "_doc": "Tři židle · Akt II — Rok ředitele nemocnice (reditel.html). Modelová okresní nemocnice: rozpočet se odvodí z růstu lůžkových segmentů ve hře na ministra (data/vyhlaska-hra.json), hráč prochází 4 kvartály rozhodnutí, personál a pacienti reagují podle doložených precedentů. Modelová hra, ne predikce ani záznam reálné nemocnice. Viz PLAN-TRI-ZIDLE.md.",
+  "hospital": {
+    "label": "Modelová okresní nemocnice",
+    "profile": "300 akutních lůžek, 6 lůžkových oborů (interna, chirurgie, gynekologie/porodnice, pediatrie, ARO/JIP, ortopedie), spádová populace ~100 tisíc obyvatel, ER 24/7.",
+    "profile_source": "Typizace dle clanek-okresni-nemocnice-personalni-krize.html (okresní nemocnice = 200–500 lůžek, 4–7 oborů, spád 50–150 tis.)",
+    "baseline_budget_mil": 650,
+    "baseline_budget_source": "Modelový předpoklad odvozený z clanek-okresni-nemocnice-personalni-krize.html: 50–80 mil. Kč ročně ≈ 8–12 % základní sazby typické 300lůžkové nemocnice → základ úhrad ~650 mil. Kč",
+    "structural_deficit_mil": 30,
+    "structural_deficit_source": "clanek-okresni-nemocnice-personalni-krize.html: „i při plném naplnění plánovaného objemu DRG a kapitační platby vzniká strukturální deficit cca 25–35 milionů korun ročně“ (dopis vedení Nemocnice Pelhřimov městské radě)",
+    "personnel_share_pct": 55,
+    "personnel_share_source": "Modelový předpoklad redakce (typizovaný podíl osobních nákladů lůžkového zařízení); nákladový trend doložen: osobní náklady lůžkové péče +56 % 2019–2024 (data/dohodovaci-rizeni.json, strategic_analysis)",
+    "personnel_drift_pct": 9,
+    "personnel_drift_source": "Osobní náklady lůžkové péče +56 % za 2019–2024 ≈ +9 % ročně (data/dohodovaci-rizeni.json, strategic_analysis)",
+    "other_drift_pct": 3,
+    "other_drift_source": "Modelový předpoklad: růst věcných nákladů ~inflace"
+  },
+  "handoff": {
+    "note": "Růst rozpočtu nemocnice = vážený růst úhrad segmentů akutní a následné lůžkové péče z aktu I (hra na ministra). Bez odehraného aktu I se použije default dle reálné vyhlášky.",
+    "segments": [
+      { "id": "akutni_luzkova", "weight": 0.85 },
+      { "id": "nasledna_luzkova", "weight": 0.15 }
+    ],
+    "weights_source": "Modelový předpoklad: úhrady okresní nemocnice tvoří převážně akutní lůžková péče; menšinově následná lůžka",
+    "default_growth_pct": 7,
+    "default_growth_source": "Aproximace růstu úhrad lůžkové péče dle úhradové vyhlášky č. 432/2025 Sb. pro 2026 (clanek-uhradova-vyhlaska.html); shodná s presetem „status quo“ hry na ministra",
+    "demand_ref_pct": 9,
+    "demand_ref_source": "Modelový požadavek segmentu akutní lůžkové péče ve hře na ministra (data/vyhlaska-hra.json, demand_pct akutni_luzkova) — startovní nálada personálu se odvíjí od toho, jak ministr požadavek naplnil"
+  },
+  "axes": [
+    { "id": "hospodareni", "label": "Hospodaření", "desc": "Roční bilance: rozpočet z vyhlášky minus nákladový drift, strukturální deficit a vaše rozhodnutí." },
+    { "id": "personal", "label": "Personál", "desc": "Morálka a stabilita týmů — o výpovědích rozhoduje víc než mzdový výměr." },
+    { "id": "pacienti", "label": "Pacienti", "desc": "Dostupnost a zkušenost pacientů: čekání, zavřená oddělení, stížnosti." }
+  ],
+  "decisions": [
+    {
+      "id": "platy_sester",
+      "quarter": 1,
+      "label": "Platy sester",
+      "question": "Krajská nemocnice o 40 minut dál nabírá sestry s náborovým příspěvkem. Co uděláte se mzdami?",
+      "context": "Osobní náklady lůžkové péče vzrostly 2019–2024 o 56 % — mzdová soutěž o sestry je realita, ne hypotéza.",
+      "context_source": "data/dohodovaci-rizeni.json (strategic_analysis); indikátory sestry_per_1000, osetrovaci_dny_na_uvazek_sestry",
+      "indicator_links": ["sestry_per_1000", "osetrovaci_dny_na_uvazek_sestry"],
+      "options": [
+        { "id": "zvysit", "label": "Plošně přidat 8 %", "cost_mil": 18, "effects": { "personal": 2, "pacienti": 0 }, "note": "Drahé, ale drží konkurenceschopnost vůči krajské nemocnici." },
+        { "id": "odmeny", "label": "Jednorázové odměny", "cost_mil": 6, "effects": { "personal": 1, "pacienti": 0 }, "note": "Levnější gesto — pomůže náladě, nevyřeší srovnání tarifů." },
+        { "id": "drzet", "label": "Držet tarify", "cost_mil": 0, "effects": { "personal": -1, "pacienti": 0 }, "note": "Úspora hned; riziko odchodů tam, kde je konkurence blízko." }
+      ]
+    },
+    {
+      "id": "prescasy",
+      "quarter": 1,
+      "label": "Přesčasy lékařů",
+      "question": "Interna slouží dlouhodobě nad limity memoranda z prosince 2023. Jak zajistíte služby?",
+      "context": "Systematické přesčasy nad rámec memoranda byly jedním ze tří důvodů hromadné výpovědi 11 z 12 internistů v Pelhřimově (únor 2026).",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html; Memorandum vlády ČR a ČLK (prosinec 2023)",
+      "indicator_links": ["lekari_per_1000", "podil_lekaru_55plus"],
+      "options": [
+        { "id": "dodrzet", "label": "Dodržet limity (externisté na služby)", "cost_mil": 12, "effects": { "personal": 1, "pacienti": 0 }, "note": "Nákup služeb od externistů a okolních nemocnic — drahé, ale legální a udržitelné." },
+        { "id": "prekracovat", "label": "Jet dál na přesčasech", "cost_mil": 0, "effects": { "personal": -2, "pacienti": 0 }, "note": "Nula nákladů navíc — přesně scénář, který v Pelhřimově skončil hromadnou výpovědí." },
+        { "id": "omezit", "label": "Omezit noční provoz ER", "cost_mil": -8, "effects": { "personal": 0, "pacienti": -2 }, "note": "Ušetří služby, ale spád v noci jezdí o 40 minut dál." }
+      ]
+    },
+    {
+      "id": "porodnice",
+      "quarter": 2,
+      "label": "Porodnice pod minimálním objemem",
+      "question": "Vaše porodnice má ~550 porodů ročně — pod diskutovaným minimem 600 pro udržení erudice. Co s ní?",
+      "context": "Návrhy reformy sítě počítají s minimálními objemy výkonů pro akreditaci (interna ~1 500 hospitalizací, chirurgie ~800, porodnice ~600 porodů ročně). Malá porodnice je ztrátová a personálně křehká.",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html (minimální objemy, ekonomika okresní nemocnice); clanek-predcasne-porody-centralizace.html",
+      "indicator_links": ["prumerna_delka_hospitalizace"],
+      "options": [
+        { "id": "drzet", "label": "Držet za každou cenu", "cost_mil": 15, "effects": { "personal": 0, "pacienti": 1 }, "note": "Dostupnost pro region; roční ztráta oddělení jde za vámi." },
+        { "id": "sdilet", "label": "Sdílený provoz s krajskou nemocnicí", "cost_mil": 8, "effects": { "personal": 0, "pacienti": 0 }, "note": "Rotace lékařů holdingovým modelem (vzor Vysočina) — kompromis nákladů i erudice." },
+        { "id": "zavrit", "label": "Zavřít a přesměrovat", "cost_mil": -15, "effects": { "personal": -1, "pacienti": -1 }, "note": "Ekonomicky čisté; rodičky jedou 40+ minut a město bude protestovat." }
+      ]
+    },
+    {
+      "id": "ambulance",
+      "quarter": 2,
+      "label": "Přesun péče do ambulancí",
+      "question": "ČR drží v lůžkové péči 56 % úhrad (OECD ~30 %). Otevřete jednodenní chirurgii a interní ambulanci?",
+      "context": "Přesun z lůžek do ambulantní a jednodenní péče je hlavní strukturální doporučení pro ČR; od 2026 existuje nový úhradový segment jednodenní péče.",
+      "context_source": "data/vyhlaska-hra.json (podíl lůžkového bloku, segment jednodenní péče); indikátor podil_vydaje_luzkova_pece",
+      "indicator_links": ["podil_vydaje_luzkova_pece", "hospitalizace_acsc"],
+      "options": [
+        { "id": "otevrit", "label": "Otevřít (investice)", "cost_mil": 10, "effects": { "personal": 0, "pacienti": 1 }, "note": "Investice se v dalších letech vrací v úhradách; kratší hospitalizace." },
+        { "id": "odlozit", "label": "Letos ne", "cost_mil": 0, "effects": { "personal": 0, "pacienti": 0 }, "note": "Nic se nezhorší — jen zůstáváte u struktury, kterou OECD Česku vytýká." }
+      ]
+    },
+    {
+      "id": "nabor",
+      "quarter": 3,
+      "label": "Nábor lékařů",
+      "question": "Pro celou okresní síť zbývá ročně jen 350–500 čerstvě atestovaných lékařů. Jak o ně budete soutěžit?",
+      "context": "40 % lékařů je starších 55 let; fakultní nemocnice do 90 minut autem nabízí vyšší plat i vybavení. Kdo nenabírá, tomu tým zestárne a odejde.",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html (generační obměna 2025–2032, konkurence FN); indikátory podil_lekaru_55plus, absolventi_lekarstvi_per_100k",
+      "indicator_links": ["podil_lekaru_55plus", "absolventi_lekarstvi_per_100k", "lekari_per_1000"],
+      "options": [
+        { "id": "rezidenti", "label": "Rezidenční místa + náborový příspěvek", "cost_mil": 12, "effects": { "personal": 2, "pacienti": 0 }, "note": "Pomalé, ale jediné udržitelné: vychovat si atestanty a dát jim důvod zůstat." },
+        { "id": "agentura", "label": "Agenturní lékaři na služby", "cost_mil": 24, "effects": { "personal": 1, "pacienti": 0 }, "note": "Rychlá záplata za dvojnásobnou cenu — kmenoví vidí, kolik bere externista." },
+        { "id": "nic", "label": "Letos nenabírat", "cost_mil": 0, "effects": { "personal": -1, "pacienti": 0 }, "note": "Úspora dnes, eroze služeb zítra." }
+      ]
+    },
+    {
+      "id": "investice",
+      "quarter": 3,
+      "label": "Investice roku",
+      "question": "Zřizovatel spolufinancuje jednu větší investici. Kterou vyberete?",
+      "context": "Zastaralé vybavení je vedle platů druhý důvod, proč lékaři odcházejí do fakultních nemocnic („vyšší plat, lepší vybavení, širší škála výkonů“).",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html (motivace odchodů)",
+      "indicator_links": ["cekaci_doby_specialist"],
+      "options": [
+        { "id": "ct", "label": "Nové CT + dovybavení JIP", "cost_mil": 20, "effects": { "personal": 1, "pacienti": 1 }, "note": "Zkrátí objednací doby na zobrazení a zvedne prestiž pracoviště." },
+        { "id": "pavilon", "label": "Rekonstrukce interního pavilonu", "cost_mil": 12, "effects": { "personal": 0, "pacienti": 1 }, "note": "Důstojné prostředí pro pacienty i personál; klinicky nemění nic." },
+        { "id": "odlozit", "label": "Letos nic", "cost_mil": 0, "effects": { "personal": 0, "pacienti": -1 }, "note": "Investiční dluh úročí: přístroje stárnou rychleji než rozpočty rostou." }
+      ]
+    },
+    {
+      "id": "uspory",
+      "quarter": 4,
+      "label": "Podzimní rozpočtová korekce",
+      "question": "Ekonomický náměstek přináší návrh úspor před závěrkou. Jak hluboko říznete?",
+      "context": "Strukturální deficit okresní nemocnice (25–35 mil. ročně) nezmizí dobrou vůlí — někdo ho zaplatí: vy úsporami, nebo zřizovatel sanací.",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html (ekonomika okresní nemocnice)",
+      "indicator_links": ["podfinancovani_oblastni_interna_cm"],
+      "options": [
+        { "id": "provoz", "label": "Provozní úspory (energie, nákupy)", "cost_mil": -6, "effects": { "personal": 0, "pacienti": 0 }, "note": "Bezbolestné maximum: společné nákupy, energetická opatření." },
+        { "id": "plosne", "label": "Plošné škrty vč. provozu oddělení", "cost_mil": -14, "effects": { "personal": -1, "pacienti": -1 }, "note": "Čísla se zlepší hned; nálada a objednací doby hned taky — opačným směrem." },
+        { "id": "nic", "label": "Neškrtat", "cost_mil": 0, "effects": { "personal": 0, "pacienti": 0 }, "note": "Deficit poneseš k zřizovateli celý — a bude to politické téma." }
+      ]
+    },
+    {
+      "id": "vedeni",
+      "quarter": 4,
+      "label": "Styl vedení",
+      "question": "Primáři žádají pravidelná setkání vedení s odděleními a transparentní plán služeb. Dáte tomu čas?",
+      "context": "V Pelhřimově byla „neschopnost vedení personální problém řešit“ jedním ze tří důvodů výpovědí — a většina výpovědí byla stažena až po nástupu nového vedení. Kultura řízení je levná páka s doloženým efektem.",
+      "context_source": "clanek-okresni-nemocnice-personalni-krize.html (důvody výpovědí; stažení výpovědí po změně vedení)",
+      "indicator_links": ["spokojenost_pece"],
+      "options": [
+        { "id": "transparentne", "label": "Town-hally + transparentní rozpis služeb", "cost_mil": 2, "effects": { "personal": 1, "pacienti": 0 }, "note": "Nejlevnější rozhodnutí roku s reálným precedentem." },
+        { "id": "ignorovat", "label": "Není čas, řeším peníze", "cost_mil": 0, "effects": { "personal": -1, "pacienti": 0 }, "note": "Přesně takhle zní first draft každé personální krize." }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "id": "vypovedi_interna",
+      "axis": "personal",
+      "operator": "lte",
+      "threshold": -4,
+      "label": "Hromadná výpověď lékařů interny",
+      "desc": "Interna podává hromadnou výpověď; oddělení hrozí zavření a kraj řeší převzetí péče.",
+      "precedent_source": "Nemocnice Pelhřimov, únor 2026: výpověď 11 z 12 lékařů interny (clanek-okresni-nemocnice-personalni-krize.html)"
+    },
+    {
+      "id": "vrchni_sestra",
+      "axis": "personal",
+      "operator": "lte",
+      "threshold": -2,
+      "label": "Rezignace vrchní sestry",
+      "desc": "Vrchní sestra chirurgie rezignuje; s ní odchází dvě služebně nejstarší sestry.",
+      "precedent_source": "Nemocnice Znojmo, únor 2026: rezignace vrchní sestry chirurgie a primáře (clanek-okresni-nemocnice-personalni-krize.html)"
+    },
+    {
+      "id": "stabilizace",
+      "axis": "personal",
+      "operator": "gte",
+      "threshold": 3,
+      "label": "Tým se stabilizoval",
+      "desc": "Podané výpovědi jsou staženy, na rezidenční místa se hlásí první atestanti.",
+      "precedent_source": "Nemocnice Pelhřimov, 2026: většina výpovědí stažena po nástupu nového vedení (clanek-okresni-nemocnice-personalni-krize.html)"
+    },
+    {
+      "id": "odliv_pacientu",
+      "axis": "pacienti",
+      "operator": "lte",
+      "threshold": -3,
+      "label": "Stížnosti a odliv pacientů",
+      "desc": "Roste počet stížností, spádoví pacienti volí fakultní nemocnici do 90 minut autem; pojišťovna ohlašuje kontrolu dostupnosti.",
+      "precedent_source": "clanek-okresni-nemocnice-personalni-krize.html (alternativa FN 60–90 minut autem); kontaktní mechanismus stížností viz prevence.html (ombudsman ZP)"
+    },
+    {
+      "id": "kratsi_cekacky",
+      "axis": "pacienti",
+      "operator": "gte",
+      "threshold": 2,
+      "label": "Kratší objednací doby",
+      "desc": "Nové kapacity a vybavení zkracují objednací doby; spád se vrací.",
+      "precedent_source": "Modelový efekt kapacitních rozhodnutí; srov. indikátory cekaci_doby_specialist, cekaci_doba_kycel"
+    },
+    {
+      "id": "sanace",
+      "axis": "hospodareni",
+      "operator": "lt",
+      "threshold": -20,
+      "label": "Sanace zřizovatelem",
+      "desc": "Deficit nad rámec obvyklého dokrytí — zřizovatel svolává mimořádné zastupitelstvo a mluví se o vašem odvolání.",
+      "precedent_source": "clanek-okresni-nemocnice-personalni-krize.html (dopis Nemocnice Pelhřimov městské radě o strukturálním deficitu)"
+    }
+  ],
+  "verdict_bands": {
+    "hospodareni": { "good_gte": 0, "mid_gte": -20 },
+    "personal": { "good_gte": 2, "mid_gte": -1 },
+    "pacienti": { "good_gte": 1, "mid_gte": -1 },
+    "note": "Pásma jsou modelová; záměr designu: bez štědré vyhlášky z aktu I nelze mít všechny tři osy zelené — o tom hra je."
+  }
+}

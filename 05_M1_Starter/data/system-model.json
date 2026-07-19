@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "generated_at": "2026-07-07T12:00:00Z",
-  "_doc": "Kauzální model českého zdravotnictví (PLAN-SYSTEM-MODEL.md). Uzly = oblasti/páky ve 4 vrstvách HSPA, hrany = doložené kauzální vazby. Layout kurátorovaný (x,y = střed uzlu ve viewBox 1000×768). Obsah syntetizován z korpusu článků a indikátorů, každý uzel i hrana nese doklad.",
+  "_doc": "Kauzální model českého zdravotnictví (PLAN-SYSTEM-MODEL.md). Uzly = oblasti/páky ve 4 vrstvách HSPA, hrany = doložené kauzální vazby. Layout kurátorovaný (x,y = střed uzlu ve viewBox 1000×768). Obsah syntetizován z korpusu článků a indikátorů, každý uzel i hrana nese doklad. Perspektivy (Tři židle): každý uzel nese pohled pacient/lekar/reditel (visibility clear|fog, alt_label, note); hrany s conflict:true označují doložený střet zájmů rolí (conflict_note). Viz PLAN-TRI-ZIDLE.md.",
   "nodes": [
     {
       "id": "financovani_systemu",
@@ -23,7 +23,24 @@
         "clanek-vydaje-zdravotnictvi.html",
         "clanek-platba-statu-statni-pojistenci.html",
         "clanek-financovani-segmenty-2026.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Odkud se berou peníze",
+          "note": "Pojistné z výplaty odchází neviditelně; kolik systém má a nemá, pacient pozná až frontou nebo doplatkem."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Rozpočet, o kterém nerozhoduji",
+          "note": "Lékař vidí jen důsledky: kolik času a vybavení si oddělení může dovolit na jednoho pacienta."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Strop mých příjmů",
+          "note": "Zdravotně pojistné plány pojišťoven čte ředitel dřív než noviny — odsud teče každá koruna úhrad."
+        }
+      }
     },
     {
       "id": "uhradovy_mechanismus",
@@ -44,7 +61,24 @@
         "clanek-dohodovaci-rizeni-2027-vysledek.html",
         "clanek-platba-za-vysledek-vzp.html",
         "clanek-financovani-segmenty-2026.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Proč mě nechtějí vzít",
+          "note": "Body, kapitace a DRG pacient nevidí — jen to, že se některý výkon „nedělá“ a jinde je fronta."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Co se vyplatí dělat",
+          "note": "Hodnota bodu a limity určují, které výkony si ordinace může dovolit — medicína naráží na sazebník."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Z čeho platím výplaty",
+          "note": "Úhradová vyhláška je pro ředitele rozpočtový zákon: rozhoduje o platech, službách i investicích."
+        }
+      }
     },
     {
       "id": "financni_ochrana",
@@ -63,7 +97,24 @@
         "clanek-platba-z-kapsy.html",
         "clanek-nadstandardy-3-cesky-narok.html",
         "clanek-financovani-sha.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Kolik platím z kapsy",
+          "note": "Doplatky a soukromé platby — jediná část financí systému, kterou pacient zná do koruny."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Co si pacient může dovolit",
+          "note": "Lékař to vidí jen nepřímo: pacient, který kvůli doplatkům nedobere léky nebo odkládá zubaře."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Platby mimo pojišťovnu",
+          "note": "Pro rozpočet nemocnice okrajová položka; sociální dopad plateb ředitel neřeší."
+        }
+      }
     },
     {
       "id": "udrzitelnost_financi",
@@ -83,7 +134,24 @@
         "clanek-deficit-pojisteni-2026.html",
         "clanek-vydaje-zdravotnictvi.html",
         "clanek-platba-statu-statni-pojistenci.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Bude na péči i za deset let?",
+          "note": "Deficit systému je pro pacienta abstrakce — dokud se nepromění v doplatky a fronty."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Bilance, kterou neléčím",
+          "note": "Dlouhodobou udržitelnost lékař v ordinaci nevidí; pozná až její důsledky v úhradách."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Přežije moje nemocnice?",
+          "note": "Deficit pojištění znamená tlak na úhrady — a ředitel je první, kdo ho pocítí."
+        }
+      }
     },
     {
       "id": "pracovni_sila",
@@ -105,7 +173,24 @@
         "clanek-starnuti-lekaru.html",
         "clanek-osetrovatelstvi-generacni-propast-2026.html",
         "clanek-ja-heroes-workforce-2026.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Kdo se o mě stará",
+          "note": "Nedostatek sester pacient pozná až přetíženou směnou a zrušeným termínem, ne ve statistice úvazků."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Kolik nás slouží",
+          "note": "Přesčasy, neobsazené služby a stárnoucí kolegové — realita každé porady oddělení."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Koho seženu a udržím",
+          "note": "Personál je největší nákladová položka i největší riziko: jedna hromadná výpověď zavře oddělení."
+        }
+      }
     },
     {
       "id": "sit_kapacity",
@@ -128,7 +213,24 @@
         "clanek-centralizace-chirurgie-2027.html",
         "clanek-dostupnost-radioterapie-2026.html",
         "clanek-hospitalizujeme-nejvic.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Jak daleko to mám",
+          "note": "Vzdálenost k porodnici, pohotovosti nebo iktovému centru — to je pro pacienta celá „síť“."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Mapa, kterou nekreslím",
+          "note": "Jednotlivý lékař síť nezmění; pozná ji, když okolní oddělení zavře a pacienti přetečou k němu."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Která oddělení udržím",
+          "note": "Držet, sdílet, nebo zavřít ztrátové oddělení — nejtěžší rozhodnutí ředitelského mandátu."
+        }
+      }
     },
     {
       "id": "objem_struktura_pece",
@@ -150,7 +252,24 @@
         "clanek-hospitalizujeme-nejvic.html",
         "clanek-centralizace-chirurgie-2027.html",
         "clanek-okresni-nemocnice-personalni-krize.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Kde se léčí nejvíc",
+          "note": "Že se v ČR hospitalizuje výrazně víc než jinde, pacient nevidí — pro něj je pobyt v nemocnici „normální“."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Lůžko vs. ambulance",
+          "note": "Lékař denně vidí pacienty, kteří na akutním lůžku být nemuseli — kdyby bylo kam je poslat."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Obložnost platí provoz",
+          "note": "Prázdné lůžko je pro systém dobrá zpráva a pro rozpočet nemocnice ztráta — přesně tudy vede konflikt."
+        }
+      }
     },
     {
       "id": "prevence_screeningy",
@@ -174,7 +293,24 @@
         "clanek-mamograf-rakovina-prsu.html",
         "clanek-rakovina-tlusteho-streva.html",
         "clanek-cervix-hpv.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Pozvánky, na které nejdu",
+          "note": "Screening je jediný krok cesty systémem, který má pacient plně ve svých rukou."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Záchyt, dokud je čas",
+          "note": "Praktik zve, vysvětluje a uklidňuje — prevence je jeho nejlevnější účinný nástroj."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Pacienti, kteří nepřijdou",
+          "note": "Prevence šetří systému, ne nemocnici — v ředitelově rozvaze se neobjeví."
+        }
+      }
     },
     {
       "id": "rizikove_chovani",
@@ -198,7 +334,24 @@
         "clanek-bmi-obezita.html",
         "clanek-obezita-jidelny-reforma.html",
         "clanek-jaterni-mortalita-alkohol.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Moje cigarety, můj cukr",
+          "note": "Rizika, která pacient žije — a která zdravotnictví samo nezmění."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Co si pacienti přinášejí",
+          "note": "Velká část chronické medicíny má kořeny v životním stylu — lékař to vidí v každé anamnéze."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Odkud se berou diagnózy",
+          "note": "Prevalence rizik určuje budoucí pacienty nemocnice, ale do ročního rozpočtu se nepropisuje."
+        }
+      }
     },
     {
       "id": "akutni_pece",
@@ -220,7 +373,24 @@
         "clanek-akutni-infarkt.html",
         "clanek-cmp-iktova-centra.html",
         "clanek-ohca-zachrana-srdce.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Když jde o minuty",
+          "note": "Záchranka, urgent, iktové centrum — moment, kdy pacient systém potřebuje celý a hned."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Služba v plném provozu",
+          "note": "Akutní medicína je výkladní skříň systému — a nejtvrdší test personálního obsazení."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Služby, které musím obsadit",
+          "note": "ER 24/7 neodpustí neobsazenou službu; akutní provoz je ředitelova noční můra i vizitka."
+        }
+      }
     },
     {
       "id": "kvalita_bezpecnost",
@@ -244,7 +414,24 @@
         "clanek-rezistence-antibiotik.html",
         "clanek-spotreba-antibiotik.html",
         "clanek-nikez-jak-funguje-2026.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Jak dobře mě léčí",
+          "note": "Pacient kvalitu nezměří — pozná vlídnost a čekání, ne reoperace či infekce. Přesně proto existují indikátory."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Standardy a komplikace",
+          "note": "Checklisty, hlášení nežádoucích událostí, morbiditní konference — kvalita je denní řemeslo."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Akreditace a reputace",
+          "note": "Ředitel kvalitu vidí přes akreditace, žebříčky a stížnosti — a přes soudní spory, když selže."
+        }
+      }
     },
     {
       "id": "primarni_pece",
@@ -266,7 +453,24 @@
         "clanek-ambulantni-kontakty.html",
         "clanek-preskripce-praktici-2026.html",
         "clanek-vyhnutelne-hospitalizace.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Můj praktik",
+          "note": "První dveře do systému — pokud v okolí nějaké ordinace přijímají."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Vrátný systému",
+          "note": "Gatekeeping drží specialisty i nemocnice nad vodou — bez silných praktiků se systém hroutí odshora."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Péče před branou nemocnice",
+          "note": "Silní praktici jsou pro nemocnici neviditelný spojenec: drží pacienty mimo lůžka."
+        }
+      }
     },
     {
       "id": "chronicka_koordinace",
@@ -288,7 +492,24 @@
         "clanek-reforma-primarni-pece-2027.html",
         "clanek-preskripce-praktici-2026.html",
         "clanek-ambulantni-kontakty.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Kdo mě vede nemocí",
+          "note": "Chronik pozná koordinaci podle toho, kolikrát musí vyprávět tentýž příběh znovu."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Předávání pacienta",
+          "note": "Dispenzarizace a mezioborová komunikace — tam, kde selže, přijede pacient sanitkou."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Pacienti mezi institucemi",
+          "note": "Koordinace se odehrává mezi ordinacemi mimo nemocnici; ředitel vidí až její selhání na urgentu."
+        }
+      }
     },
     {
       "id": "dostupnost_pece",
@@ -310,7 +531,24 @@
         "clanek-cekaci-doby-kycel.html",
         "clanek-nesplnena-potreba-zubni-pece.html",
         "clanek-reforma-pohotovosti-290-2025.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Jak dlouho čekám",
+          "note": "Čekání je pacientova nejhmatatelnější zkušenost se systémem — a hlavní měna jeho důvěry."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Plný diář",
+          "note": "Objednací kniha je lékařův barometr dostupnosti — a zdroj každodenních dilemat koho předběhnout."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Čekací listiny mé nemocnice",
+          "note": "Dostupnost je věc, kterou řediteli měří kraj, pojišťovna i místní facebook."
+        }
+      }
     },
     {
       "id": "zkusenost_pacienta",
@@ -331,7 +569,24 @@
         "clanek-ambulantni-kontakty.html",
         "clanek-preskripce-praktici-2026.html",
         "clanek-nesplnena-potreba-zubni-pece.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Jak se mnou mluví",
+          "note": "Důstojnost, informace, čas — to, co si pacient pamatuje, i když dopadlo všechno dobře."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Jak to prožívá pacient",
+          "note": "V provozu na prožívání nezbývá prostor; dotazníky spokojenosti čte někdo jiný."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Stížnosti na mém stole",
+          "note": "Ředitel vidí špičku ledovce: stížnosti a děkovné dopisy. Většina zkušenosti pacientů zůstává pod hladinou."
+        }
+      }
     },
     {
       "id": "dusevni_zdravi_sluzby",
@@ -355,7 +610,24 @@
         "clanek-detska-psychiatrie-krize.html",
         "clanek-psychiatricke-hospitalizace-reforma-2026.html",
         "clanek-sebevrazdy-dusevni-zdravi.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Kde hledat pomoc",
+          "note": "Měsíce čekání na psychiatra či psychologa — dostupnost duševní péče pacient zažívá nejtvrději."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Kam odeslat duši",
+          "note": "Nejtěžší odeslání v systému: kapacity nejsou a praktik zůstává s pacientem sám."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Péče mimo můj areál",
+          "note": "Reforma míří do komunitních center mimo nemocnice; ředitel akutní nemocnice ji sleduje zpovzdálí."
+        }
+      }
     },
     {
       "id": "dlouhodoba_paliativni",
@@ -379,7 +651,24 @@
         "clanek-socialne-zdravotni-pomezi-2026.html",
         "clanek-hospicova-pece.html",
         "clanek-mobilni-paliativni-tymy.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Kam s mámou",
+          "note": "Shánění lůžka následné péče či hospicu je práce na plný úvazek — obvykle pro rodinu."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Kam propustit pacienta",
+          "note": "Doléčený pacient bez navazující péče blokuje akutní lůžko — denní realita interny."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Ucpaná lůžka",
+          "note": "Chybějící následná péče drží pacienty na drahých akutních lůžkách — a kazí DRG kalkulaci."
+        }
+      }
     },
     {
       "id": "lekova_politika",
@@ -399,7 +688,24 @@
       "articles": [
         "clanek-generika-biosimilars-uspora.html",
         "clanek-hta-jca-eu-2026.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Proč doplácím zrovna já",
+          "note": "Úhrady a revize cen léků jsou pro pacienta černá skříňka — vidí až cenovku v lékárně."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Co smím předepsat",
+          "note": "Preskripční omezení, revize úhrad a pozitivní listy — lékárník a sazebník za ramenem každého receptu."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Centrové rozpočty",
+          "note": "Centrová léčba se řeší ve fakultních nemocnicích; okresního ředitele míjí — i s penězi."
+        }
+      }
     },
     {
       "id": "digitalizace_data",
@@ -420,7 +726,24 @@
         "clanek-ezkarta-ehealth.html",
         "clanek-novela-elektronizace-2026.html",
         "clanek-datova-patere-lock-in.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Proč všude vyprávím znovu",
+          "note": "Nesdílená dokumentace je pro pacienta jen déjà vu v každé nové čekárně."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Systémy, do kterých klikám",
+          "note": "Administrativa a nekompatibilní systémy ukusují z ordinační doby — digitalizace je slib i zátěž."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "IT, které musím zaplatit",
+          "note": "Nemocniční systém, kyberbezpečnost, vendor lock-in — položky, které v úhradách nikdo nevidí."
+        }
+      }
     },
     {
       "id": "governance_legislativa",
@@ -443,7 +766,24 @@
         "clanek-institut-verejneho-zdravi.html",
         "clanek-ukazatele-dashboard.html",
         "clanek-posledni-mile-implementace.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Kdo to celé řídí",
+          "note": "Zákony a vyhlášky pacient nevidí — pozná až jejich důsledky u lékaře a v lékárně."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Pravidla shora",
+          "note": "Novelu lékař obvykle pozná podle nového povinného formuláře."
+        },
+        "reditel": {
+          "visibility": "clear",
+          "alt_label": "Vyhlášky, které musím splnit",
+          "note": "Personální vyhláška, věstníky, kontroly — governance je ředitelův každodenní mantinel."
+        }
+      }
     },
     {
       "id": "socialni_determinanty",
@@ -463,7 +803,24 @@
         "clanek-zdravotni-gramotnost.html",
         "clanek-nadeje-doziti-vzdelani.html",
         "clanek-medikalizace-verejneho-zdravi.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Co se zdravím zdánlivě nesouvisí",
+          "note": "Největší vliv na zdraví — vzdělání, práce, bydlení — pacient nevnímá jako zdravotní téma."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Co vidím v anamnéze",
+          "note": "Sociální gradient lékař potkává denně — a nemá na něj recept."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Spádová demografie",
+          "note": "Sociální skladba spádu určuje case-mix nemocnice, ale ředitel ji nezmění."
+        }
+      }
     },
     {
       "id": "odvratitelna_mortalita",
@@ -484,7 +841,24 @@
         "clanek-pyll.html",
         "clanek-lecitelna-mortalita.html",
         "clanek-kardiovaskularni-mortalita.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Úmrtí, která nemusela být",
+          "note": "Populační vzorec jednotlivec neuvidí — proto ho musí hlídat data."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Případy vs. vzorec",
+          "note": "Jednotlivé případy lékař zná jménem; systémový vzorec odvratitelných úmrtí vidí jen registry."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Výsledek, který nikdo nevlastní",
+          "note": "Odvratitelná úmrtnost nemá v systému jedinou odpovědnou židli — a přesně to je problém."
+        }
+      }
     },
     {
       "id": "delka_kvalita_zivota",
@@ -504,7 +878,24 @@
       "articles": [
         "clanek-nadeje-doziti-zdravi.html",
         "clanek-pyll.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "clear",
+          "alt_label": "Moje roky ve zdraví",
+          "note": "Jediný ukazatel systému, který pacient nečte, ale žije."
+        },
+        "lekar": {
+          "visibility": "fog",
+          "alt_label": "Horizont za ordinací",
+          "note": "Léta života ve zdraví se rozhodují z většiny mimo ordinaci — prevencí, prostředím, politikou."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Za horizontem rozpočtu",
+          "note": "Dlouhodobé populační výsledky se do ročního hospodaření nemocnice nepropisují."
+        }
+      }
     },
     {
       "id": "nerovnosti",
@@ -526,7 +917,24 @@
         "clanek-katastroficke-vydaje-zdravi.html",
         "clanek-zubni-kaz-deti.html",
         "clanek-zdravotni-gramotnost.html"
-      ]
+      ],
+      "perspectives": {
+        "pacient": {
+          "visibility": "fog",
+          "alt_label": "Jinde je to jinak",
+          "note": "Pacient srovnává s čekárnou vedle, ne s jiným krajem — nerovnosti vidí jen statistika."
+        },
+        "lekar": {
+          "visibility": "clear",
+          "alt_label": "Praha není pohraničí",
+          "note": "Rozdíl mezi praxí v centru a v periferii zná lékař z vlastních štací — v kapacitách i v pacientech."
+        },
+        "reditel": {
+          "visibility": "fog",
+          "alt_label": "Nerovnost jako kontext",
+          "note": "Krajské rozdíly ředitel zná, ale řeší jen svůj spád; vyrovnávání je role státu."
+        }
+      }
     }
   ],
   "edges": [
@@ -603,7 +1011,9 @@
         "clanek-uhradova-vyhlaska.html",
         "clanek-financovani-segmenty-2026.html",
         "clanek-platba-za-vysledek-vzp.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Platba za výkon a obložnost živí nemocnici (ředitel), ale drží pacienty na lůžkách, kde být nemusí (pacient, systém)."
     },
     {
       "id": "uhradovy_mechanismus__kvalita_bezpecnost",
@@ -650,7 +1060,9 @@
       "strength": "weak",
       "articles": [
         "clanek-deficit-pojisteni-2026.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Prevence šetří celému systému, ale žádné židli jednotlivě — nemocnici ubírá výkony, proto ji nikdo „nevlastní“."
     },
     {
       "id": "pracovni_sila__sit_kapacity",
@@ -686,7 +1098,9 @@
       "strength": "strong",
       "articles": [
         "clanek-hospitalizujeme-nejvic.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Hustá lůžková síť je pro ředitele příjem a jistota, pro systém neefektivita, kterou OECD Česku vytýká."
     },
     {
       "id": "sit_kapacity__kvalita_bezpecnost",
@@ -710,7 +1124,9 @@
       "articles": [
         "clanek-dostupnost-radioterapie-2026.html",
         "clanek-okresni-nemocnice-personalni-krize.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Zavření ztrátového oddělení uleví rozpočtu ředitele — a prodlouží cestu pacienta o desítky minut."
     },
     {
       "id": "governance_legislativa__pracovni_sila",
@@ -940,7 +1356,9 @@
       "strength": "strong",
       "articles": [
         "clanek-nosokomialni-infekce.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Úspora na směnách a přesčasy šetří rozpočet ředitele; účet platí bezpečnost pacienta a zdraví lékařů."
     },
     {
       "id": "governance_legislativa__kvalita_bezpecnost",
@@ -1277,7 +1695,9 @@
       "articles": [
         "clanek-socialne-zdravotni-pomezi-2026.html",
         "clanek-umrti-doma-hospic.html"
-      ]
+      ],
+      "conflict": true,
+      "conflict_note": "Doléčený pacient bez návazné péče drží řediteli obloženost akutního lůžka — a pacientovi krade týdny rehabilitace."
     },
     {
       "id": "dlouhodoba_paliativni__zkusenost_pacienta",
