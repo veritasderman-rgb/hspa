@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rok ředitele nemocnice: hra · HSPA Monitor</title>
+<meta name="description" content="Tři židle, akt II: rozpočet vaší modelové okresní nemocnice určila vyhláška, kterou jste podepsali jako ministr. Čtyři kvartály rozhodování o platech, přesčasech a odděleních — personál a pacienti reagují podle doložených precedentů. Modelová hra, ne predikce.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Tři židle</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero rd-hero">
+    <p class="ed-kicker">TŘI ŽIDLE · AKT II — ŘEDITEL NEMOCNICE</p>
+    <h1>Vyhláška je podepsaná. Teď s ní přežijte rok o patro níž</h1>
+    <p class="ed-lead">
+      Sedíte v ředitelně modelové okresní nemocnice: <strong>300 akutních
+      lůžek, šest oborů, spád ~100 tisíc obyvatel</strong> — a rozpočet,
+      který vám určila úhradová vyhláška. Čekají vás <strong>čtyři kvartály
+      rozhodnutí</strong>: platy sester, přesčasy lékařů, ztrátová porodnice,
+      nábor proti fakultní nemocnici o hodinu dál. Personál a pacienti
+      reagují podle skutečných precedentů — od rezignace vrchní sestry až po
+      hromadnou výpověď interny, jak ji v únoru 2026 zažil Pelhřimov.
+    </p>
+    <p class="rd-disclaimer" role="note">
+      <strong>Modelová hra na doložených datech — ne predikce ani záznam reálné nemocnice.</strong>
+      Parametry nemocnice jsou typizované (zdroj u každého čísla), rozhodovací
+      situace a prahy reakcí jsou modelové — ilustrují ekonomiku a personální
+      dynamiku okresních nemocnic doloženou v našem korpusu. Žádná postava
+      není reálná osoba.
+    </p>
+  </section>
+
+  <section class="rd-section" aria-label="Rozpočet z aktu I" id="rdHandoff"></section>
+
+  <section class="rd-section" aria-label="Rozhodnutí roku">
+    <div class="rd-layout">
+      <form class="rd-controls" id="rdControls" aria-label="Rozhodnutí ředitele po kvartálech">
+        <h2 class="rd-h">Váš rok, kvartál po kvartálu</h2>
+        <div id="rdDecisionsList"></div>
+        <button type="reset" class="rd-reset" id="rdReset">Začít rok znovu</button>
+      </form>
+      <aside class="rd-results" id="rdResults" aria-live="polite" aria-label="Výsledky vašeho roku">
+        <h2 class="rd-h">Váš rok v číslech</h2>
+        <div id="rdResultsList"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="rd-section rd-method">
+    <details id="rdMethod">
+      <summary>Jak hra počítá (a co je modelové)</summary>
+      <p><strong>Rozpočet:</strong> základ úhrad ~650 mil. Kč je modelový
+      předpoklad odvozený z publikované ekonomiky typické 300lůžkové okresní
+      nemocnice; roční růst přebírá hra z aktu I (vážený růst akutní
+      a následné lůžkové péče z vaší vyhlášky), bez odehraného aktu I platí
+      default reálné vyhlášky. <strong>Nákladový drift je doložený:</strong>
+      osobní náklady lůžkové péče rostly 2019–2024 o 56 % (~9 % ročně);
+      strukturální deficit 25–35 mil. Kč ročně cituje dopis vedení Nemocnice
+      Pelhřimov městské radě.</p>
+      <p><strong>Rozhodnutí a reakce jsou modelové s doloženými
+      precedenty:</strong> hromadná výpověď 11 z 12 internistů (Pelhřimov,
+      únor 2026), rezignace vrchní sestry (Znojmo, únor 2026), stažení
+      výpovědí po změně vedení. Prahy os jsou herní konstrukce — ukazují
+      logiku eskalace, nepredikují konkrétní nemocnici. Bilance je přesná
+      aritmetika nad modelovými parametry.</p>
+      <ul id="rdSources" class="rd-sources"></ul>
+    </details>
+  </section>
+
+  <section class="rd-section rd-context">
+    <h2>Souvislosti</h2>
+    <p>Personální krizi okresních nemocnic mapuje článek
+    <a href="clanek-okresni-nemocnice-personalni-krize.html">Tichá personální krize okresních nemocnic</a>;
+    mzdovou dynamiku <a href="clanek-pracovni-sila.html">Pracovní síla ve zdravotnictví</a>.
+    Rozpočet, se kterým tu hospodaříte, vzniká ve hře
+    <a href="vyhlaska.html">Úhradová vyhláška: zahrajte si na ministra</a> —
+    a to, jak váš rok dopadne, pozná pacient v aktu III:
+    <a href="pribeh-pacienta.html">Příběh pacienta</a>.</p>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/reditel.js"></script>
+</body>
+</html>
