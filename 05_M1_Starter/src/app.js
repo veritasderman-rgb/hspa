@@ -6,6 +6,7 @@ import './analytics.js';
 import { renderFooter, renderModuleNav, isArticleVisible, resolveVerificationStatus, verifBadgeHtml, formatNumberCz } from './page-shared.js';
 import { enhanceArticleVisuals } from './article-visuals.js';
 import { getSiteStats, applyDataStats } from './site-stats.js';
+import { buildHeroViz } from './hero-viz.js';
 
 if (typeof window !== 'undefined') renderModuleNav('indicators');
 
@@ -361,6 +362,16 @@ function renderEditorialHero() {
         if (allIndicators[i].id === id) return allIndicators[i];
       }
       return null;
+    }
+
+    // Animovaná hero vizualizace vedle nadpisu — křivka naděje dožití (ČR),
+    // navázaná na headline. Selhání nesmí shodit hero.
+    const vizEl = document.getElementById('edHeroViz');
+    if (vizEl) {
+      try {
+        const html = buildHeroViz(findInd('nadeje_doziti_total'), findInd('nadeje_doziti_zdravi_65'));
+        if (html) vizEl.innerHTML = html;
+      } catch (e) { console.error('[hero] viz failed:', e); }
     }
 
     // 4 hero stats — vybrané charakteristické indikátory napříč signály
