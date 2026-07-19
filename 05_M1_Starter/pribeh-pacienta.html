@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Příběh pacienta: hra · HSPA Monitor</title>
+<meta name="description" content="Tři židle, akt III: projděte cestu pacienta systémem, který jste nastavili jako ministr a ředitel — a pak si ji přehrajte očima lékaře. Tři typizované persony (CMP, screening prsu, diabetes), každý krok doložený indikátorem nebo článkem. Modelová hra, ne predikce.">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Tři židle</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero pp-hero">
+    <p class="ed-kicker">TŘI ŽIDLE · AKT III — PACIENT (A LÉKAŘ)</p>
+    <h1>Tentýž systém zdola: jedna cesta, dvoje oči</h1>
+    <p class="ed-lead">
+      Ministr rozdělil peníze, ředitel s nimi přežil rok — a teď do té čekárny
+      vstupuje pacient. Vyberte si jednu ze tří <strong>typizovaných person</strong>
+      a projděte její cestu krok za krokem: rozhodnutí, čekání, platby z kapsy.
+      Až dojdete na konec, přehrajte si <strong>tutéž cestu očima lékaře</strong> —
+      stejné události, druhá strana přepážky. Pokud jste odehráli akt II,
+      čekací doby vaší nemocnice se do cesty propíší.
+    </p>
+    <p class="pp-disclaimer" role="note">
+      <strong>Modelová hra na doložených datech — ne predikce ani kazuistika reálné osoby.</strong>
+      Persony jsou typizované postavy; každý krok cesty má doklad v indikátoru
+      nebo článku (zdroj uveden u kroku). Časy a platby v rozhodnutích jsou
+      modelové — ilustrují doložené mechanismy, neradí v konkrétní zdravotní
+      situaci. Zdravotní stav řešte se svým lékařem.
+    </p>
+  </section>
+
+  <section class="pp-section" aria-label="Výběr persony">
+    <h2 class="pp-h">Kdo dnes vejde do systému?</h2>
+    <div id="ppPicker"></div>
+  </section>
+
+  <section class="pp-section" aria-label="Cesta systémem">
+    <div class="pp-layout">
+      <div class="pp-journey" id="ppJourney"></div>
+      <aside class="pp-outcome" id="ppOutcomeWrap" aria-live="polite" aria-label="Výsledek cesty">
+        <h2 class="pp-h">Vaše cesta</h2>
+        <div id="ppOutcome"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="pp-section pp-method">
+    <details id="ppMethod">
+      <summary>Jak hra počítá (a co je modelové)</summary>
+      <p><strong>Doložené:</strong> mechanismy a čísla v popisech kroků
+      (okno trombolýzy 4,5 h, účast ve screeningu ~60 %, 12,1 amputací na
+      100 000 diabetiků…) pocházejí z článků korpusu a živých indikátorů —
+      zdroj je uveden u každého kroku, indikátory jsou proklikávací.</p>
+      <p><strong>Modelové:</strong> délky čekání v týdnech a platby z kapsy
+      u jednotlivých rozhodnutí ilustrují doložené mechanismy, nejsou měřením.
+      Kapacitně citlivé kroky posouvá o ±2 týdny výsledek aktu II — směr
+      vazby (kapacita ↔ objednací doby) je doložený, velikost posunu je herní
+      konstanta. Fáze cesty přebíráme z výkladové stránky
+      <a href="cesta-pacienta.html">Cesta pacienta systémem</a>.</p>
+    </details>
+  </section>
+
+  <section class="pp-section pp-context">
+    <h2>Souvislosti</h2>
+    <p>Výkladová mapa fází bez hraní: <a href="cesta-pacienta.html">Cesta pacienta systémem</a>.
+    Odkud se vzal rozpočet vaší nemocnice, ukazují akty
+    <a href="vyhlaska.html">I — Úhradová vyhláška</a> a
+    <a href="reditel.html">II — Rok ředitele nemocnice</a>.
+    Celou kampaň shrnuje <a href="hra.html">výsledovka Tří židlí</a>.</p>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/pribeh-pacienta.js"></script>
+</body>
+</html>
