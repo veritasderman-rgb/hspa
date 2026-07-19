@@ -17,6 +17,7 @@ let PHASES = new Map(); // z cesta-pacienta.json (label fází)
 let PERSONA = null;
 let ROLE = 'pacient'; // pacient | lekar
 let WAITING = 'stejne';
+let DECISIONS = {}; // zdroj pravdy rozhodnutí — lékařský režim rozhodnutí jen čte
 
 const WAIT_BANNER = {
   kratsi: 'Vaše nemocnice z aktu II drží kratší objednací doby — kapacitně citlivé kroky se o 2 týdny zkracují.',
@@ -29,7 +30,12 @@ function czNum(v, d = 0) {
 }
 
 function currentDecisions() {
-  const out = {};
+  return DECISIONS;
+}
+
+/** Přečte zaškrtnutá rozhodnutí z DOMu (jen pohled pacienta radia renderuje). */
+function readDecisionsFromDom() {
+  const out = { ...DECISIONS };
   for (const s of PERSONA.steps) {
     if (!s.decision) continue;
     const checked = document.querySelector(`input[name="pp-${s.id}"]:checked`);
@@ -61,6 +67,7 @@ function renderPicker() {
 function selectPersona(id) {
   PERSONA = DOC.personas.find(p => p.id === id) || null;
   ROLE = 'pacient';
+  DECISIONS = {};
   renderPicker();
   renderJourney();
   refresh();
@@ -89,6 +96,10 @@ function renderJourney() {
       </div>
     </div>
     <p class="pp-intro">${escapeHtml(p.intro)} <span class="pp-src">(${escapeHtml(p.intro_source)})</span></p>
+    ${ROLE === 'lekar' ? `<p class="pp-mode-banner" role="note"><strong>Stejná cesta, jiné oči.</strong>
+      Teď čtete dokumentaci a vidíte kapacity, protokoly a čísla systému.
+      Rozhodnutí už padla v pohledu pacienta — tady vidíte jen jejich stopu v kartě.
+      A u každého kroku i to, co lékař <em>nevidí vůbec</em>.</p>` : ''}
     ${WAIT_BANNER[WAITING] ? `<p class="pp-wait-banner">${escapeHtml(WAIT_BANNER[WAITING])} <a href="reditel.html">Akt II →</a></p>` : ''}
     <form id="ppSteps">
       <ol class="pp-steps">
@@ -97,33 +108,46 @@ function renderJourney() {
     </form>`;
   host.querySelectorAll('.pp-role').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (ROLE === 'pacient') DECISIONS = readDecisionsFromDom();
       ROLE = btn.dataset.role;
-      const decisions = currentDecisions();
       renderJourney();
-      restoreDecisions(decisions);
+      restoreDecisions(DECISIONS);
       refresh();
     });
   });
-  document.getElementById('ppSteps').addEventListener('input', refresh);
+  document.getElementById('ppSteps').addEventListener('input', () => {
+    if (ROLE === 'pacient') DECISIONS = readDecisionsFromDom();
+    refresh();
+  });
 }
 
 function renderStep(s, idx) {
   const phase = PHASES.get(s.phase_ref);
-  const view = s.views[ROLE] || '';
   const shifted = s.wait_sensitive && WAITING !== 'stejne';
   const chips = (s.indicators || []).map(ind => {
     const meta = INDICATORS.get(ind);
     return `<a class="pp-ind-chip" href="indicator.html?id=${encodeURIComponent(ind)}">${escapeHtml(meta?.name || ind)}</a>`;
   }).join('');
-  return `
-    <li class="pp-step ${shifted ? `pp-step-shift-${WAITING}` : ''}">
+  const foot = `
+      <p class="pp-step-foot">
+        ${shifted ? `<span class="pp-shift-note">${WAITING === 'delsi' ? `+${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)` : `−${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)`}</span>` : ''}
+        ${chips ? `<span class="pp-ind-row">Data: ${chips}</span>` : ''}
+        <span class="pp-src">Zdroje: ${s.sources.map(escapeHtml).join(' · ')}</span>
+      </p>`;
+  const head = `
       <div class="pp-step-head">
         <span class="pp-step-num" aria-hidden="true">${idx + 1}</span>
         <span class="pp-step-title">${escapeHtml(s.title)}</span>
+        ${ROLE === 'lekar' ? '<span class="pp-record-chip">záznam</span>' : ''}
         <span class="pp-phase-chip">${escapeHtml(phase?.label || s.phase_ref)}</span>
-      </div>
-      <p class="pp-view pp-view-${ROLE}">${escapeHtml(view)}</p>
-      ${ROLE === 'lekar' && s.views.reditel_note ? `<p class="pp-reditel-note">${escapeHtml(s.views.reditel_note)}</p>` : ''}
+      </div>`;
+
+  // ── Pohled pacienta: příběh + interaktivní rozhodnutí ──
+  if (ROLE === 'pacient') {
+    return `
+    <li class="pp-step ${shifted ? `pp-step-shift-${WAITING}` : ''}">
+      ${head}
+      <p class="pp-view pp-view-pacient">${escapeHtml(s.views.pacient || '')}</p>
       ${s.decision ? `
         <fieldset class="pp-decision">
           <legend class="pp-decision-q">${escapeHtml(s.decision.question)}</legend>
@@ -139,11 +163,34 @@ function renderStep(s, idx) {
               </span>
             </label>`).join('')}
         </fieldset>` : ''}
-      <p class="pp-step-foot">
-        ${shifted ? `<span class="pp-shift-note">${WAITING === 'delsi' ? `+${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)` : `−${DOC.waiting_shift_weeks} týd. — stav vaší nemocnice (akt II)`}</span>` : ''}
-        ${chips ? `<span class="pp-ind-row">Data: ${chips}</span>` : ''}
-        <span class="pp-src">Zdroje: ${s.sources.map(escapeHtml).join(' · ')}</span>
-      </p>
+      ${foot}
+    </li>`;
+  }
+
+  // ── Pohled lékaře: dokumentace místo příběhu — fakta systému, stopa
+  //    pacientova rozhodnutí v kartě a slepá skvrna. Žádná interakce:
+  //    rozhodnutí už padla, tady se čte, co po nich zbylo. ──
+  const chosen = s.decision ? s.decision.options.find(o => o.id === DECISIONS[s.id]) : null;
+  const facts = (s.lekar_facts || []).map(f => `
+      <div class="pp-fact"><dt class="pp-fact-label">${escapeHtml(f.label)}</dt><dd class="pp-fact-value">${escapeHtml(f.value)}</dd></div>`).join('');
+  return `
+    <li class="pp-step pp-step-lekar ${shifted ? `pp-step-shift-${WAITING}` : ''}">
+      ${head}
+      <p class="pp-view pp-view-lekar">${escapeHtml(s.views.lekar || '')}</p>
+      ${s.views.reditel_note ? `<p class="pp-reditel-note">${escapeHtml(s.views.reditel_note)}</p>` : ''}
+      ${facts ? `<dl class="pp-lekar-facts" aria-label="Fakta systému k tomuto kroku">${facts}</dl>` : ''}
+      ${s.decision ? (chosen ? `
+        <div class="pp-lekar-record">
+          <span class="pp-lekar-record-h">Stopa v dokumentaci</span>
+          <p class="pp-lekar-record-choice">Pacient: ${chosen.label.startsWith('„') ? escapeHtml(chosen.label) : `„${escapeHtml(chosen.label)}“`}</p>
+          <p class="pp-lekar-record-note">${escapeHtml(chosen.lekar_reflection || '')}</p>
+        </div>` : `
+        <div class="pp-lekar-record pp-lekar-record-empty">
+          <span class="pp-lekar-record-h">Stopa v dokumentaci</span>
+          <p class="pp-lekar-record-note">Rozhodnutí zatím nepadlo — přepněte na „Očima pacienta“ a rozhodněte. Lékař vidí až důsledek.</p>
+        </div>`) : ''}
+      <p class="pp-lekar-blind"><span class="pp-lekar-blind-h" aria-hidden="true">⌀</span> <strong>Lékař nevidí:</strong> ${escapeHtml(s.lekar_blind || '')}</p>
+      ${foot}
     </li>`;
 }
 
@@ -177,12 +224,18 @@ function renderOutcome(decisions) {
       ${o.weeks > best.weeks ? `<p class="pp-note">Rozdíl ${czNum(o.weeks - best.weeks)} týdnů jde za vašimi rozhodnutími${WAITING === 'delsi' ? ' a za stavem nemocnice z aktu II' : ''}.</p>` : `<p class="pp-note">Rychleji to systémem projít nešlo${WAITING === 'kratsi' ? ' — pomohla i nemocnice z aktu II' : ''}.</p>`}
       ${o.complete ? '' : `<p class="pp-note">Zbývá rozhodnout ${o.totalDecisions - o.answered} z ${o.totalDecisions} situací.</p>`}
     </div>
-    ${o.complete ? `
+    ${o.complete ? (ROLE === 'lekar' ? `
+      <div class="pp-block pp-outcome-note">
+        <h3 class="pp-block-h">Dvojí pravda jedné cesty</h3>
+        <p class="pp-truth"><span class="pp-truth-who">Pacient si odnáší:</span> ${escapeHtml(PERSONA.outcome_note)}</p>
+        <p class="pp-truth pp-truth-lekar"><span class="pp-truth-who">Lékař si odnáší:</span> ${escapeHtml(PERSONA.outcome_lekar)}</p>
+        <p class="pp-note">Oba mají pravdu — a každý viděl jen půlku. Přesně proto tenhle web měří systém daty, ne dojmy jedné židle.</p>
+      </div>` : `
       <div class="pp-block pp-outcome-note">
         <h3 class="pp-block-h">Co si z cesty odnést</h3>
         <p class="pp-note">${escapeHtml(PERSONA.outcome_note)}</p>
-        ${ROLE === 'pacient' ? `<button type="button" class="pp-replay" id="ppReplay">Přehrát tutéž cestu očima lékaře →</button>` : ''}
-      </div>
+        <button type="button" class="pp-replay" id="ppReplay">Přehrát tutéž cestu očima lékaře →</button>
+      </div>`) + `
       <div class="pp-block pp-campaign-cta">
         <h3 class="pp-block-h">Kampaň Tři židle</h3>
         <p class="pp-note">Prošli jste systém shora dolů: ministr → ředitel → pacient. Epilog ukáže celou mapu — a co z ní každá židle ve skutečnosti vidí.</p>
@@ -193,10 +246,9 @@ function renderOutcome(decisions) {
   const replay = document.getElementById('ppReplay');
   if (replay) {
     replay.addEventListener('click', () => {
+      DECISIONS = readDecisionsFromDom();
       ROLE = 'lekar';
-      const dec = currentDecisions();
       renderJourney();
-      restoreDecisions(dec);
       refresh();
       document.getElementById('ppJourney')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -248,8 +300,8 @@ async function init() {
       ? urlPersona : campaign.pacient?.persona;
     if (startId && DOC.personas.some(p => p.id === startId)) {
       selectPersona(startId);
-      const saved = campaign.pacient?.decisions || {};
-      restoreDecisions(saved);
+      DECISIONS = campaign.pacient?.decisions || {};
+      restoreDecisions(DECISIONS);
     }
     refresh();
   } catch (err) {

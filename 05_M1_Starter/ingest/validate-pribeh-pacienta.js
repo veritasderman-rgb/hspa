@@ -39,6 +39,7 @@ export function validatePribehPacienta() {
     if (!p.label || !p.sublabel) errors.push(`${tag}: chybí label/sublabel`);
     if (!p.intro || !p.intro_source) errors.push(`${tag}: chybí intro/intro_source`);
     if (!p.outcome_note) errors.push(`${tag}: chybí outcome_note`);
+    if (!p.outcome_lekar) errors.push(`${tag}: chybí outcome_lekar (dvojí závěr cesty)`);
     if (p.disease_ref !== undefined && !diseaseIds.has(p.disease_ref)) {
       errors.push(`${tag}: disease_ref '${p.disease_ref}' neexistuje v cesta-pacienta.json (mají ho jen onkologické persony)`);
     }
@@ -55,6 +56,15 @@ export function validatePribehPacienta() {
       if (!phaseIds.has(s.phase_ref)) errors.push(`${st}: phase_ref '${s.phase_ref}' neexistuje v cesta-pacienta.json`);
       if (!s.title) errors.push(`${st}: chybí title`);
       if (!s.views?.pacient || !s.views?.lekar) errors.push(`${st}: chybí dvojí vyprávění views.pacient/views.lekar`);
+      // Lékařova vrstva: kontrast obou pohledů musí být strukturální, ne jen jiný odstavec
+      if (!Array.isArray(s.lekar_facts) || s.lekar_facts.length === 0) {
+        errors.push(`${st}: chybí lekar_facts (fakta z druhé strany přepážky)`);
+      } else {
+        for (const f of s.lekar_facts) {
+          if (!f.label || !f.value) errors.push(`${st}: lekar_facts položka musí mít label i value`);
+        }
+      }
+      if (!s.lekar_blind) errors.push(`${st}: chybí lekar_blind (slepá skvrna lékaře)`);
       if (!Number.isFinite(s.base_time_weeks) || s.base_time_weeks < 0) errors.push(`${st}: base_time_weeks musí být nezáporné číslo`);
       if (typeof s.wait_sensitive !== 'boolean') errors.push(`${st}: wait_sensitive musí být boolean`);
       if (s.wait_sensitive) hasWaitSensitive = true;
@@ -73,6 +83,7 @@ export function validatePribehPacienta() {
             if (!o.id || optSeen.has(o.id)) errors.push(`${ot}: chybí/duplicitní id`);
             if (o.id) optSeen.add(o.id);
             if (!o.label || !o.note) errors.push(`${ot}: chybí label/note`);
+            if (!o.lekar_reflection) errors.push(`${ot}: chybí lekar_reflection (jak volba vypadá v dokumentaci lékaře)`);
             if (!Number.isFinite(o.cost_oop_kc) || o.cost_oop_kc < 0) errors.push(`${ot}: cost_oop_kc musí být nezáporné číslo`);
             if (!Number.isFinite(o.time_weeks_delta)) errors.push(`${ot}: time_weeks_delta musí být číslo`);
           }
