@@ -2511,15 +2511,40 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 
 .ed-hero-content { min-width: 0; }
 
-/* Štíhlé hero (reorder homepage): jeden sloupec, bez dlouhého leadu a bez
-   stats panelu — rozcestník se tím dostane nad ohyb. Stats se přesunuly do
-   sekce „Jak jsme na tom" (.home-snapshot-stats). */
-.ed-hero-slim {
-  grid-template-columns: 1fr;
-  gap: 20px;
-  padding-bottom: 26px;
+/* Hero (po reorderu): dlouhý lead odstraněn, stats přesunuty do „Jak jsme na
+   tom". Pravý sloupec drží animovanou vizualizaci (.ed-hero-viz). */
+.ed-hero-slim { grid-template-columns: 1fr; }
+
+/* Animovaný hero graf — křivka naděje dožití (ČR), navázaná na headline. */
+.ed-hero-viz { display: flex; align-items: center; justify-content: center; min-width: 0; }
+.ed-hero-viz-card {
+  margin: 0; width: 100%; max-width: 380px;
+  border: 1px solid var(--rule); border-top: 3px solid var(--ink);
+  background: var(--paper2); padding: 14px 16px 12px;
 }
-.ed-hero-slim .ed-hero-headline { max-width: 900px; }
+.hero-viz-svg { display: block; width: 100%; height: auto; }
+.hero-viz-title { font-family: var(--sans); font-size: 11px; font-weight: 600; fill: var(--ink-mut); letter-spacing: 0.3px; }
+.hero-viz-ax { font-family: var(--sans); font-size: 10px; fill: var(--ink-mut2); }
+.hero-viz-val { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+.hero-viz-ref { stroke-width: 1; stroke-dasharray: 4 3; opacity: 0.6; }
+.hero-viz-ref-lbl { font-family: var(--sans); font-size: 9.5px; fill: var(--ink-mut2); }
+.hero-viz-line { fill: none; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.hero-viz-area { opacity: 0.10; }
+.ed-hero-viz-cap {
+  font-family: var(--sans); font-size: 12px; color: var(--ink-mut); line-height: 1.4;
+  margin: 8px 0 0; padding-top: 8px; border-top: 1px solid var(--rule);
+}
+.hero-viz-ref { stroke: var(--ink-mut2); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-viz-line { stroke-dashoffset: 1; animation: heroVizDraw 1.9s cubic-bezier(.4, 0, .2, 1) .25s forwards; }
+  .hero-viz-dot, .hero-viz-val { opacity: 0; animation: heroVizPop .5s ease 1.85s forwards; }
+}
+@keyframes heroVizDraw { to { stroke-dashoffset: 0; } }
+@keyframes heroVizPop { to { opacity: 1; } }
+@media (max-width: 760px) {
+  .ed-hero-viz { justify-content: flex-start; }
+  .ed-hero-viz-card { max-width: 420px; }
+}
 
 /* Stats jako horizontální pás v sekci dimenzí (dřív svislý panel v hero).
    Dvojitá třída kvůli specificitě — .ed-hero-stats níže nastavuje flex column. */
