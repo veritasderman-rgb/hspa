@@ -1,6 +1,6 @@
 # Plán — „Tři židle": jeden systém, tři pohledy (herní trilogie)
 
-**Stav:** návrh ke schválení vlastníkem.
+**Stav:** schváleno vlastníkem (session 2026-07-19), implementováno (dávky 0–E v jednom PR).
 **Datum:** 2026-07-19.
 **Branch:** `claude/nova-interaktivni-hra-oxc8zd` (tento plán; implementační dávky
 mají vlastní branche/PR dle standardního workflow).
