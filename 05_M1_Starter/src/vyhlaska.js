@@ -8,6 +8,7 @@
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { totalCost, moodFor, effectsFor, verdict, MOOD_LABELS } from './vyhlaska-engine.js';
+import { saveAct } from './hra-stav.js';
 
 let DOC = null;
 let SEGMENTS = [];
@@ -205,7 +206,17 @@ function renderResults(alloc) {
       ${none.length ? `<p class="vh-effect-none">U segmentů ${none.map(e => escapeHtml(SEGMENTS.find(s => s.id === e.segment)?.label || e.segment)).join(', ')} doložený efekt na sledované indikátory nemáme — hra to přiznává.</p>` : ''}
     </div>`;
 
-  host.innerHTML = dealsHtml + structHtml + effHtml;
+  // 4) Kampaň Tři židle: vyhláška podepsána → pokračování jako ředitel
+  saveAct('ministr', { alloc, verdict: { deals: v.deals, boosts: v.boosts, protests: v.protests, deficit: v.deficit, cost: v.cost } });
+  const ctaHtml = `
+    <div class="vh-verdict-block vh-campaign-cta">
+      <h3 class="vh-verdict-h">Kampaň Tři židle</h3>
+      <p class="vh-verdict-note">Vyhláška je na světě. Teď si vyzkoušejte, jak se s ní žije o patro níž —
+        rozpočet vaší modelové nemocnice se odvodí z růstu, který jste právě přidělili lůžkové péči.</p>
+      <a class="vh-campaign-link" href="reditel.html">Pokračovat jako ředitel nemocnice →</a>
+    </div>`;
+
+  host.innerHTML = dealsHtml + structHtml + effHtml + ctaHtml;
 }
 
 function renderSources() {
