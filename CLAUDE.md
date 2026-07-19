@@ -409,6 +409,7 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) — plán implementace Kvality péče (PUK + INDIKO)
 - [`05_M1_Starter/PLAN-SYSTEM-MODEL.md`](05_M1_Starter/PLAN-SYSTEM-MODEL.md) — plán stránky Model systému (`model-systemu.html` + `data/system-model.json`): kauzální graf pák a vazeb
 - [`05_M1_Starter/PLAN-CLAIMS.md`](05_M1_Starter/PLAN-CLAIMS.md) — plán registru tvrzení (`data/claims.json`): samo-verifikující se korpus, automatická detekce driftu
+- [`05_M1_Starter/PLAN-TRI-ZIDLE.md`](05_M1_Starter/PLAN-TRI-ZIDLE.md) — plán herní trilogie „Tři židle" (ministr → ředitel nemocnice → pacient/lékař + perspektivy na Modelu systému)
 - [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
 - [`STATUS_AUDIT_2026-05-18.md`](STATUS_AUDIT_2026-05-18.md) — historický audit stavu
