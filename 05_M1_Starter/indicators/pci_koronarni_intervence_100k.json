@@ -1,0 +1,52 @@
+{
+  "id": "pci_koronarni_intervence_100k",
+  "name": "Perkutánní koronární intervence (PCI) na 100 000 obyvatel",
+  "area": "Procesy",
+  "domain": "Vysoce specializovaná péče",
+  "subdomain": "Intervenční kardiologie",
+  "definition": "Počet katetrizačních (perkutánních) koronárních intervencí — PCI, tj. roztažení a stentáž zúžené věnčité tepny katétrem — provedených v českých kardiocentrech za rok, přepočtený na 100 000 obyvatel. Zahrnuje jak akutní primární PCI u infarktu (STEMI/NSTEMI), tak elektivní výkony u stabilní ischemické choroby srdeční. Metrika odpovídá ukazateli „transluminal coronary angioplasty“ (kód CM36_TRS) harmonizovaného datasetu Eurostatu hlth_co_proc2 a měří dostupnost a využití vysoce specializované intervenční kardiologie.",
+  "unit": "výkonů/100 tis. obyv.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrki",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-kardiovaskularnich-operaci-a-intervenci--modul-kardiovaskularnich-intervenci",
+      "dataset": "Národní registr kardiovaskulárních operací a intervencí (NRKOI) — modul kardiovaskulárních intervencí (NRKI); publikace ÚZIS „Provedené kardiovaskulární intervence v období 2005–2021“ (otevřený dataset nkis-ds-nrki-2021.xlsx, list ČR, řádek „Typ výkonu → Koronární intervence“). Absolutní počet koronárních intervencí za rok přepočtený na 100 000 obyvatel dle středního stavu populace ČSÚ.",
+      "dimensions": {
+        "country": "CZ",
+        "procedure": "koronární intervence (PCI) / nekoronární intervence",
+        "indication": "STEMI, NSTEMI, nestabilní AP, stabilní ICHS (SAP), staged PCI",
+        "access": "radiální / femorální; podíl lékových stentů"
+      }
+    },
+    "fallback": {
+      "type": "eurostat_json",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_co_proc2/default/table?lang=en&category=hlth_co_proc2 (icd9cm=CM36_TRS, unit=P_HTHAB, icha_hc=TOT_PAT)"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_co_proc2 / CM36_TRS",
+    "dataset": "Eurostat — chirurgické operace a výkony (hlth_co_proc2), „Transluminal coronary angioplasty“ na 100 000 obyvatel (unit P_HTHAB, icha_hc TOT_PAT). Podle Eurostat Statistics Explained činil průměr EU v roce 2023 248,3 výkonu na 100 000 obyvatel; Česko se v letech 2015–2020 pohybovalo mezi 196 a 219 a leží pod všemi středoevropskými sousedy (Německo 384–419, Rakousko 306–326, Polsko 213–259, Maďarsko 211–242). Benchmark eu = průměr EU 248.",
+    "value": 248,
+    "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Surgical_operations_and_procedures_statistics"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr kardiovaskulárních operací a intervencí — modul NRKI)",
+    "Česká kardiologická společnost ČLS JEP (Pracovní skupina intervenční kardiologie)",
+    "Eurostat (mezinárodní srovnání, hlth_co_proc2)"
+  ],
+  "method_notes": "Ukazatel převádí absolutní počet koronárních intervencí (PCI) z registru NRKI/ÚZIS na 100 000 obyvatel, aby byl přímo srovnatelný s harmonizovaným datasetem Eurostatu (CM36_TRS). Kontrolní přepočet potvrzuje kompatibilitu: NRKI vykázalo v roce 2019 celkem 23 379 koronárních intervencí, což při středním stavu populace 10,67 mil. dává 219,1 na 100 000 — Eurostat pro ČR 2019 uvádí 219,3. Poslední rok registru NRKI je 2021 s 21 234 koronárními intervencemi (přepočet na 100 000: 202); pokles proti roku 2019 odráží utlumení elektivních výkonů během pandemie covid-19 (2020–2021) i revizi populačního jmenovatele po sčítání 2021. Signal warn (direction higher_is_better) čte hodnotu ČR zhruba 19 % pod průměrem EU (248) — Česko provádí méně PCI na obyvatele než EU i všichni sousedé. Interpretaci je nutné číst spolu s výbornými výsledky: díky brzy vybudované celoplošné síti primární PCI (tzv. český model) patří ČR ke špičce v akutní péči o STEMI a k zemím s nejrychleji klesající nemocniční úmrtností po infarktu. Nižší celkový objem PCI se proto koncentruje na straně elektivních výkonů u stabilní ICHS, kde recentní doporučené postupy (studie ISCHEMIA) posilují úlohu optimální farmakoterapie. Trend a hodnota jsou v seedu orientační (origin seed, verification_status illustrative).",
+  "limitations": "Objem PCI na obyvatele je ukazatel dvojznačný: vyšší hodnota znamená lepší dostupnost akutní i elektivní revaskularizace, ale velmi vysoké hodnoty (např. Německo) mohou signalizovat i nadužívání elektivních výkonů u stabilní choroby, kde recentní evidence favorizuje farmakoterapii. Direction higher_is_better je proto zvolen z pohledu dostupnosti a nesmí se číst jako „čím víc, tím lépe“ bez ohledu na indikaci. Metrika nerozlišuje mezi akutní primární PCI (kde je vyšší objem jednoznačně žádoucí) a elektivní PCI (kde je namístě uvážlivost). Reporting mezi zeměmi se může lišit v tom, zda se počítají výkony, nebo pacienti/případy; NRKI i Eurostat CM36_TRS pracují s výkony/případy na bázi „total patient“ a jsou vzájemně konzistentní. Regionální rozpad (koncentrace do kardiocenter) není v hlavní metrice zachycen a data NRKI k roku 2021 jsou nejnovější publikovanou vlnou otevřeného datasetu.",
+  "determinants": "Objem PCI určuje na straně nabídky hustá a rovnoměrná síť kardiocenter s nepřetržitým provozem katetrizačních sálů (základ českého modelu primární PCI), úhradová pravidla veřejného zdravotního pojištění a dostupnost intervenčních kardiologů. Na straně poptávky působí epidemiologie ischemické choroby srdeční — vysoká prevalence kardiovaskulárních rizik (kouření, obezita, hypertenze, diabetes) generuje jak akutní infarkty, tak stabilní ICHS. Determinantem struktury výkonů je i posun doporučených postupů: u stabilní choroby roste role optimální farmakoterapie oproti elektivní revaskularizaci.",
+  "importance": "Perkutánní koronární intervence je systémově významná dvojím způsobem. Za prvé je to indikátor dostupnosti vysoce specializované akutní péče: celoplošná síť primární PCI patří k hlavním důvodům, proč v Česku dlouhodobě klesá nemocniční úmrtnost po infarktu (mortalita_inhosp_ami) a proč se daří snižovat kardiovaskulární mortalitu, byť ta zůstává nadprůměrná (mortalita_kardiovaskularni). Za druhé je to citlivý ukazatel priorit: Česko má výbornou akutní péči, ale celkový objem PCI na obyvatele pod EU i pod všemi sousedy otevírá otázku dostupnosti elektivní revaskularizace a regionální rovnosti — přesně ta témata, na která cílí Národní kardiovaskulární plán ČR 2025–2035.",
+  "patient_story": "Kardiocentrum krajské nemocnice, noční služba. Sanitka přiváží pana Jaroslava (63) s akutním infarktem přední stěny — bolest na hrudi ho probudila před hodinou. Cesta z dispečinku vede rovnou na katetrizační sál; intervenční kardiolog zavede katétr přes zápěstí, najde ucpanou věnčitou tepnu a během několika minut ji roztáhne a vyztuží stentem. Krevní tok se obnoví, sval srdečního svalu je zachráněn. Přesně tohle — nepřetržitá, celoplošně dostupná primární PCI — udělalo z Česka jednu ze světově uznávaných zemí v akutní péči o infarkt.\n\nA přesto data ukazují druhý, méně slavný příběh. Podle registru NRKI/ÚZIS provedla česká kardiocentra v roce 2021 celkem 21 234 koronárních intervencí, tedy 202 výkonů na 100 000 obyvatel. To je zhruba o pětinu méně než průměr Evropské unie (248) a méně než u všech středoevropských sousedů: Německo dělá 384–419 PCI na 100 000, Rakousko 306–326, Polsko 213–259, Maďarsko 211–242. Signál proto svítí warn — ne jako poplach nad akutní péčí, ale jako otázka nad celkovým objemem revaskularizací.\n\nStrukturální vysvětlení má dvě vrstvy. První je úspěch: Česko vybudovalo síť primární PCI brzy a rovnoměrně, takže akutní infarkty jsou pokryté prakticky beze zbytku a jejich objem se nemá kam „nafouknout“. Nižší celkové číslo se proto koncentruje na straně elektivních výkonů u stabilní ischemické choroby — a tady recentní evidence (studie ISCHEMIA) posiluje roli optimální farmakoterapie oproti plánované katetrizaci, takže nižší objem nemusí znamenat horší péči. Druhá vrstva je ale skutečná bariéra: výkony se koncentrují do velkých kardiocenter a mezi kraji i mezi pojištěnci s různým přístupem k odeslání existují rozdíly, které celostátní průměr schová. Pandemie covid-19 navíc v letech 2020–2021 utlumila elektivní výkony a objem se nevrátil na úroveň roku 2019 (219 na 100 000).\n\nPolitická páka je pojmenovaná a aktuální. Národní kardiovaskulární plán ČR na období 2025–2035 (MZČR) explicitně míří na optimalizaci a rovnoměrnost sítě kardiocenter, na čekací doby elektivních výkonů a na regionální dostupnost. Kompetenci má ministerstvo zdravotnictví (statut center vysoce specializované péče, úhradová vyhláška) společně se zdravotními pojišťovnami a Českou kardiologickou společností, která drží odborné standardy. Pro pana Jaroslava fungoval systém dokonale. Otázka, kterou číslo 202 klade, zní jinak: dostane se stejně spolehlivá elektivní revaskularizace i k pacientovi se stabilní anginou v okrajovém regionu — a měří systém dostupnost tam, kde se rozhoduje o kvalitě života, ne jen o jeho záchraně?",
+  "framework": "hspa",
+  "dimension": "dostupnost",
+  "verification_status": "illustrative"
+}
