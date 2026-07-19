@@ -103,3 +103,28 @@ test('engine: optionFor — vrací null pro krok bez rozhodnutí i bez odpovědi
   const withDecision = p.steps.find(s => s.decision);
   assert.equal(optionFor(withDecision, {}), null);
 });
+
+test('lékařova vrstva: každý krok má fakta a slepou skvrnu, každá volba stopu v dokumentaci', () => {
+  for (const p of doc.personas) {
+    assert.ok(p.outcome_lekar?.length > 40, `${p.id}: outcome_lekar`);
+    for (const s of p.steps) {
+      assert.ok(Array.isArray(s.lekar_facts) && s.lekar_facts.length >= 1, `${p.id}/${s.id}: lekar_facts`);
+      for (const f of s.lekar_facts) {
+        assert.ok(f.label && f.value, `${p.id}/${s.id}: fakt bez label/value`);
+      }
+      assert.ok(s.lekar_blind?.length > 30, `${p.id}/${s.id}: lekar_blind`);
+      for (const o of s.decision?.options ?? []) {
+        assert.ok(o.lekar_reflection?.length > 30, `${p.id}/${s.id}/${o.id}: lekar_reflection`);
+      }
+    }
+  }
+});
+
+test('lékařova vrstva: pohledy pacient/lékař se liší i textově (žádný copy-paste)', () => {
+  for (const p of doc.personas) {
+    for (const s of p.steps) {
+      assert.notEqual(s.views.pacient, s.views.lekar, `${p.id}/${s.id}: identické pohledy`);
+      assert.notEqual(s.views.lekar, s.lekar_blind, `${p.id}/${s.id}: blind duplikuje pohled`);
+    }
+  }
+});
