@@ -1,0 +1,66 @@
+name: Rotate awareness weeks
+
+# Týdenní rotace „Týdnů zdraví" (Světový týden kojení, Den duševního zdraví, …).
+# Spouští se každé pondělí v 04:00 UTC. Nemění obsah — jen posouvá stav záznamů
+# v data/awareness-weeks.json:
+#   • doběhnuté týdny → archived,
+#   • nejbližší hotový draft v okně 14 dní → ready (aby popup + microsite
+#     naskočily včas).
+# Obsah jednotlivých týdnů připravuje předem člověk/agent jako draft
+# (viz 05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md). Detaily viz
+# scripts/awareness-rotate.js. Pokud něco změní, commitne zpět do main →
+# Vercel se rebuildne.
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'   # každé pondělí 04:00 UTC
+  workflow_dispatch:        # umožní manuální spuštění z GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rotate awareness weeks
+        run: node scripts/awareness-rotate.js | tee /tmp/aw-out.txt
+
+      - name: Validate registry
+        run: npm run validate:awareness-weeks
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit + push if changes
+        run: |
+          if git diff --quiet data/awareness-weeks.json; then
+            echo "Beze změny stavu — nic ke commitu."
+            exit 0
+          fi
+          CHANGES=$(grep -E '^  - (activated|archived):' /tmp/aw-out.txt || echo "")
+          DATE=$(date -u +%Y-%m-%d)
+          git add data/awareness-weeks.json
+          git commit -m "chore(tyden): rotace týdnů zdraví $DATE
+
+          $CHANGES
+
+          Auto-rotace .github/workflows/awareness-weekly.yml" || exit 0
+          git push origin HEAD:main

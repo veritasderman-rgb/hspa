@@ -71,7 +71,37 @@ function renderSection(section, week) {
     if (!items) return '';
     body = `<p class="aw-chips">${items}</p>`;
   }
-  return `<section class="aw-block"><h2 class="aw-block-h">${escapeHtml(section.h)}</h2>${body}</section>`;
+  const intro = section.intro ? `<p class="aw-block-intro">${escapeHtml(section.intro)}</p>` : '';
+  return `<section class="aw-block"><h2 class="aw-block-h">${escapeHtml(section.h)}</h2>${intro}${body}</section>`;
+}
+
+// „Proč na tom záleží" — kontextový blok microsite (nezávislý na propojeném obsahu).
+function renderContext(ctx) {
+  if (!ctx) return '';
+  const cards = [];
+  if (ctx.why) {
+    cards.push(`<article class="aw-ctx-card"><h3 class="aw-ctx-h">Proč na tom záleží</h3><p>${escapeHtml(ctx.why)}</p></article>`);
+  }
+  if (Array.isArray(ctx.affects) && ctx.affects.length) {
+    cards.push(`<article class="aw-ctx-card"><h3 class="aw-ctx-h">Co to ovlivňuje</h3>
+      <ul class="aw-ctx-list">${ctx.affects.map(a => `<li>${escapeHtml(a)}</li>`).join('')}</ul></article>`);
+  }
+  if (ctx.cz) {
+    cards.push(`<article class="aw-ctx-card aw-ctx-cz"><h3 class="aw-ctx-h">Jak na tom je Česko</h3><p>${escapeHtml(ctx.cz)}</p></article>`);
+  }
+  if (!cards.length && !ctx.origin && !(Array.isArray(ctx.celebrate) && ctx.celebrate.length)) return '';
+  let originBlock = '';
+  if (ctx.origin || (Array.isArray(ctx.celebrate) && ctx.celebrate.length)) {
+    const celebrate = Array.isArray(ctx.celebrate) && ctx.celebrate.length
+      ? `<ul class="aw-ctx-list aw-ctx-celebrate">${ctx.celebrate.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>` : '';
+    originBlock = `<section class="aw-block aw-origin">
+      <h2 class="aw-block-h">Proč tenhle týden vznikl a jak ho uctít</h2>
+      ${ctx.origin ? `<p class="aw-origin-lead">${escapeHtml(ctx.origin)}</p>` : ''}
+      ${celebrate}
+    </section>`;
+  }
+  const grid = cards.length ? `<section class="aw-block aw-context"><div class="aw-ctx-grid">${cards.join('')}</div></section>` : '';
+  return grid + originBlock;
 }
 
 function renderWeek(week, isActive) {
@@ -85,6 +115,7 @@ function renderWeek(week, isActive) {
       <p class="ed-lead">${escapeHtml(week.lead)}</p>
       <p class="aw-hero-meta">${escapeHtml(formatRange(week))}${week.observance_source ? ` · ${escapeHtml(week.observance_source)}` : ''}</p>
     </section>
+    ${renderContext(week.context)}
     ${sections}
     ${week.observance_url ? `<section class="aw-block aw-source"><p>Oficiální stránka: <a href="${escapeHtml(week.observance_url)}" target="_blank" rel="noopener">${escapeHtml(week.observance)} ↗</a></p></section>` : ''}`;
 }
