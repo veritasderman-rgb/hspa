@@ -3,6 +3,7 @@
 import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
+import { initAwarenessPopup } from './awareness-popup.js';
 import { submitNewsletterSignup } from './newsletter-signup.js';
 
 /* ── Dark mode: brzká inicializace tématu ───────────────────────────────
@@ -518,7 +519,8 @@ export function renderBrandMark() {
 }
 
 export function renderModuleNav(activeId) {
-  initNewsletterPopup();
+  initAwarenessPopup();   // Týden zdraví má prioritu; nastaví __awPopupActive
+  initNewsletterPopup();  // spustí se jen mimo aktivní awareness-týden
   renderBrandMark();
   injectOrgSchema();
   const path = window.location.pathname;
