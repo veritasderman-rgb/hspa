@@ -1,0 +1,52 @@
+{
+  "id": "docasna_pracovni_neschopnost_pct",
+  "name": "Průměrné procento dočasné pracovní neschopnosti",
+  "area": "Výsledky",
+  "domain": "Zátěž nemocí",
+  "subdomain": "Pracovní neschopnost",
+  "definition": "Průměrné procento dočasné pracovní neschopnosti (DPN) vyjadřuje, kolik ze sta nemocensky pojištěných osob je průměrně každý den v pracovní neschopnosti pro nemoc nebo úraz. Ukazatel počítá Český statistický úřad z administrativních dat České správy sociálního zabezpečení (ČSSZ), která od roku 2020 vznikají elektronicky přes systém eNeschopenka. Je to souhrnná míra nemocenské zátěže ekonomicky aktivní populace — na pomezí zdravotního stavu obyvatel a nastavení systému nemocenského pojištění.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "csu_statistics",
+      "endpoint": "https://csu.gov.cz/pracovni-neschopnost",
+      "dataset": "Pracovní neschopnost pro nemoc a úraz v České republice (roční, čtvrtletní a měsíční výstupy ČSÚ z dat ČSSZ / eNeschopenka)",
+      "dimensions": {
+        "geo": "CZ + kraje + okresy",
+        "sex": "muži / ženy / celkem",
+        "reason": "nemoc / pracovní úraz / ostatní úraz",
+        "detail": "průměrné procento DPN, průměrný denní stav práce neschopných, průměrná doba trvání případu, počet nově hlášených případů"
+      }
+    },
+    "fallback": {
+      "type": "vdb_table",
+      "url": "https://vdb.czso.cz/vdbvo2/faces/cs/index.jsf?page=statistiky#katalog=30853",
+      "note": "Veřejná databáze ČSÚ (VDB), skupina „Pracovní neschopnost pro nemoc a úraz\" — časové řady a rozpad podle krajů, pohlaví a příčiny. Analytické publikace ČSÚ (kód 260004) shrnují roční výsledky včetně komentáře a odvětvového rozpadu. Zdrojová data drží ČSSZ (informační systém nemocenského pojištění, eNeschopenka)."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_comparable_benchmark",
+    "dataset": "Přímo srovnatelný mezinárodní benchmark neexistuje. Eurostat i OECD sledují absenci v práci odlišnou metodikou: Eurostat (výběrové šetření pracovních sil, řada lfsi_abt / lfsa_absrea) měří podíl zaměstnaných, kteří byli v referenčním týdnu nepřítomni z důvodu vlastní nemoci — pro Česko to dává řádově vyšší čísla (jednotky až přes deset procent v závislosti na sezoně) a není totožné s administrativním „průměrným procentem DPN\" ČSÚ. WHO (databáze HFA) používá „počet dnů absence na zaměstnance a rok\". Kvůli různým jmenovatelům (pojištěnci vs. zaměstnaní), různým vylučovaným skupinám a různému způsobu sběru (administrativa vs. dotazník) se čísla nedají klást vedle sebe jako jedna hodnota. Kontextově: mezi zeměmi střední a východní Evropy patří Česko dlouhodobě k zemím s nadprůměrnou mírou nemocenské absence.",
+    "value": null,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/lfsi_abt_q/default/table?lang=en"
+  },
+  "signal_thresholds": {
+    "good": 0.3,
+    "warn": 0.6
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ (Český statistický úřad)",
+    "ČSSZ (Česká správa sociálního zabezpečení)",
+    "MPSV (Ministerstvo práce a sociálních věcí)"
+  ],
+  "method_notes": "Ukazatel = průměrný denní počet práce neschopných pro nemoc a úraz děleno počtem nemocensky pojištěných, × 100. Zdrojem je informační systém ČSSZ; od roku 2020 se případy hlásí elektronicky (eNeschopenka), což zpřesnilo a zkompletovalo záchyt. Do statistiky nevstupují skupiny s vlastním systémem zabezpečení v nemoci (příslušníci bezpečnostních sborů, vojáci z povolání). Hodnota za rok 2024 činila 4,5 % (ženy 4,8 %, muži 4,2 %); průměrně bylo denně v neschopnosti zhruba 214 tisíc pojištěnců a průměrná délka jednoho případu byla kolem 31 dnů. Časová řada: 2020 a 2021 po 5,5 %, 2022 5,3 %, 2023 4,6 %, 2024 4,5 % — po pandemickém vrcholu klesá, zůstává ale nad úrovní z doby platnosti třídenní karenční doby. Zásadní systémový zlom: od 1. července 2019 byla zrušena karenční doba (náhrada mzdy náleží od prvního dne nemoci), což zvýšilo počet krátkých neschopenek. Nejvyšší nemocnost vykazuje zpracovatelský průmysl (kolem 6 %), nejnižší informační a komunikační služby (kolem 1,5 %).",
+  "limitations": "Indikátor nelze číst jednosměrně jako „čím méně, tím lépe\": nízká hodnota může znamenat zdravější populaci, ale i presentismus (chození do práce nemocný), zatímco vyšší hodnota může odrážet jak vyšší nemocnost, tak štědřejší a férovější systém nemocenské, který lidem umožní se skutečně vyléčit a nešířit infekci. Hodnota je citlivá na legislativu (karenční doba), na chřipkové sezony a mimořádné události (covid-19), na věkovou a odvětvovou strukturu pojištěnců i na kontrolní praxi. Nezahrnuje OSVČ bez dobrovolného nemocenského pojištění a osoby mimo trh práce. Mezinárodní srovnání je kvůli odlišné metodice pouze orientační.",
+  "importance": "<p>Nemocenská absence je jedním z mála ukazatelů, který spojuje <strong>zdraví populace, výkonnost ekonomiky a nastavení sociálního systému</strong> do jednoho čísla. Pro HSPA je to doplňkový monitorovací ukazatel zátěže nemocí u pracující populace: dny strávené v neschopnosti představují ztracenou produktivitu i signál o tom, jak nemocná (a jak dobře léčená) je ekonomicky aktivní část společnosti.</p><p>Zároveň je to jeden z nejcitlivějších <strong>politických ukazatelů</strong> v celém dashboardu, protože ho přímo formuje legislativa. Zrušení třídenní karenční doby v roce 2019 je učebnicový příklad páky: jediná změna zákona měřitelně posunula chování statisíců lidí. Právě proto je nutné číst DPN obousměrně — vysoké číslo není samo o sobě „špatné\", stejně jako nízké není samo o sobě „dobré\". Rozhoduje, zda za ním stojí presentismus a odrazování nemocných od léčby, nebo naopak skutečné vyléčení a omezení šíření nákazy na pracovišti.</p>",
+  "determinants": "**Nastavení nemocenského systému.** Nejsilnější pákou je existence a délka karenční doby a výše náhrady mzdy. Třídenní karenční doba (2009–2019) tlačila hodnotu dolů — a odrazovala část lidí od zůstání doma i tehdy, když byli nemocní. Její zrušení v červenci 2019 zvedlo počet krátkých neschopenek. Digitalizace (eNeschopenka od 2020) snížila administrativní bariéru hlášení.\n\n**Epidemiologická situace.** Chřipkové a respirační sezony a mimořádné události (pandemie covid-19 v letech 2020–2021) hodnotu krátkodobě výrazně zvedají. Pandemický vrchol 5,5 % odráží jak samotná onemocnění, tak karantény.\n\n**Struktura pracovní síly.** Nemocnost je vyšší v odvětvích s fyzicky náročnou a rizikovou prací (zpracovatelský průmysl kolem 6 %) a nižší v kancelářských oborech (IT kolem 1,5 %). Roli hraje i věkové složení a podíl žen (ženy vykazují mírně vyšší nemocnost).\n\n**Zdravotní stav a dostupnost péče.** Prevalence chronických onemocnění, včasnost léčby a dostupnost praktických lékařů ovlivňují jak počet, tak délku případů. Delší případy (kolem 31 dnů v průměru) táhnou nahoru zejména závažnější diagnózy a rehabilitace po úrazech.\n\n**Kontrolní a motivační praxe.** Intenzita kontrol dodržování režimu práce neschopných a firemní kultura (tlak na docházku vs. podpora zůstat doma) ovlivňují chování na obou koncích.",
+  "patient_story": "Pondělí ráno, hala strojírenské firmy na Vysočině. Pan Miroslav (54), seřizovač, se probudil s horečkou a kašlem. Ještě před pěti lety by šel do práce i tak — první tři dny nemoci byly bez náhrady mzdy (takzvaná karenční doba) a on si výpadek příjmu nemohl dovolit. Dnes zavolá praktikovi, ten vystaví eNeschopenku pár kliky a Miroslav zůstane doma už od prvního dne s náhradou mzdy. Nenakazí kolegy u sousedního stroje, vyléčí se a za týden se vrátí. Miroslav je toho rána jedním z čísel, ze kterých se skládá průměrné procento dočasné pracovní neschopnosti.\n\nV roce 2024 činilo toto číslo 4,5 % — tolik ze sta nemocensky pojištěných osob bylo průměrně každý den doma na neschopence. Prakticky to znamená, že denně chybělo v práci kolem 214 tisíc lidí a jeden případ trval v průměru zhruba 31 dnů. Po pandemickém vrcholu (5,5 % v letech 2020 i 2021, pak 5,3 % a 4,6 %) hodnota klesá, zůstává ale nad úrovní z doby, kdy platila třídenní karenční doba. Nejvíc se stůně ve zpracovatelském průmyslu (kolem 6 %), nejméně v kancelářských oborech (kolem 1,5 %).\n\nStrukturální pozadí je poučné právě tím, jak ostře ukazuje sílu jediného zákona. Do roku 2008 se první dny nemoci proplácely; v letech 2009–2019 platila třídenní karenční doba, která nemocenskou absenci srazila dolů — část lidí ale chodila do práce nemocná, protože si tři dny bez náhrady nemohla dovolit. Od 1. července 2019 se karenční doba zrušila a náhrada mzdy náleží od prvního dne; od roku 2020 navíc eNeschopenka odstranila papírování. Číslo proto nelze číst jednosměrně: vyšší absence může znamenat nemocnější populaci, ale také systém, který lidem konečně umožní se skutečně vyléčit a nešířit nákazu. Nižší absence může znamenat zdraví — nebo presentismus a strach ze ztráty příjmu.\n\nPolitická páka je zde neobvykle konkrétní a leží celá na straně státu. Parametry nemocenské — existence a délka karenční doby, výše náhrady mzdy, hranice mezi obdobím hrazeným zaměstnavatelem a státem — určuje zákon o nemocenském pojištění a zákoník práce; kompetenci má Ministerstvo práce a sociálních věcí spolu s Parlamentem, data drží ČSSZ a publikuje ČSÚ. Debata o (znovu)zavedení karenční doby se v Česku vrací při každém hledání úspor. HSPA k ní přidává jeden střízlivý požadavek: neřídit se jen fiskálním číslem, ale sledovat i to, co se skrývá za nižší absencí — zda méně dnů doma znamená zdravější lidi, nebo jen nemocné u strojů. Pro pana Miroslava a jeho kolegy je to rozdíl mezi vyléčenou chřipkou a rozjetou nákazou na celé směně.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
