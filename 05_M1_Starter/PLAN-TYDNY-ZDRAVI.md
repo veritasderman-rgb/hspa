@@ -1,7 +1,17 @@
 # Plán: „Týdny zdraví" — popup + microsite k mezinárodním dnům
 
-**Stav:** návrh ke schválení vlastníkem.
+**Stav:** schváleno vlastníkem (2026-07-20), staví se.
 **Datum:** 2026-07-20.
+
+**Rozhodnutí redakce (uzamčeno 2026-07-20):**
+1. **Hustota: jen marquee dny** (~30–35 týdnů) — popup jen v týdnech se
+   skutečným mezinárodním dnem; jinak běží newsletter popup. Evergreen se
+   případně doplní podle ohlasu.
+2. **Týdny bez dostatečného obsahu se vynechají** (žádný popup) — nikdy se
+   nestaví microsite „naprázdno" ani se kvůli ní neobjednává článek.
+3. **Značka „Týden zdraví", URL `tyden.html`** (+ `?id=`).
+4. Interval týdne **není nutně pondělí–neděle** — kopíruje skutečný termín
+   observance (viz oprava §1.1), aby popup neházel nepravdivé datum.
 **Branch:** `claude/plan-tydny-zdravi`.
 **Cíl:** Systém, který každý týden vyzdvihne jeden **mezinárodní zdravotní den/týden**:
 nenápadný **popup** na webu (visí celý týden) → **mikro landing page** (microsite)
@@ -48,8 +58,8 @@ tests/awareness-weeks.test.js     ← pure helpery (activeWeekFor, no-overlap, d
     "id": "svetovy-tyden-kojeni-2026",
     "observance": "Světový týden kojení (WBW)",
     "observance_source": "WABA / WHO — World Breastfeeding Week, 1.–7. srpna",
-    "start": "2026-07-27",           // pondělí — týden, kdy popup visí
-    "end": "2026-08-02",             // neděle
+    "start": "2026-08-01",           // začátek observance (WBW 1.–7. 8.)
+    "end": "2026-08-07",             // konec observance
     "theme": "kojeni",
     "kicker": "Světový týden kojení",
     "title": "Kojení: co o něm víme z dat — a kde Česko tlačí bota",
@@ -77,7 +87,9 @@ tests/awareness-weeks.test.js     ← pure helpery (activeWeekFor, no-overlap, d
 }
 ```
 
-- **`start` je vždy pondělí, `end` neděle**; týdny se nepřekrývají (hlídá validátor).
+- **`start`/`end` kopírují skutečný termín observance** (ne nutně pondělí–neděle);
+  interval typicky 5–9 dní; týdny se **nepřekrývají** (hlídá validátor). Popup tak
+  visí přesně v dnech, kdy den/týden skutečně probíhá, a nehlásí nepravdivé datum.
 - Aktivní záznam = ten, jehož interval obsahuje dnešek a má `status: ready`.
   Když žádný, popup se nezobrazí (fallback na newsletter popup).
 - Odkazy (`linked_*`) míří na existující obsah; validátor kontroluje existenci.
@@ -129,72 +141,55 @@ deploy „napevno" — jen udržování registru.**
 
 ## 2) Kalendář témat (srpen 2026 – červenec 2027)
 
-Pondělní týdny; u pohyblivých dnů rutina před publikací ověří přesné datum.
-Legenda pokrytí obsahem: ✅ silné (5+ článků) · ◒ částečné (1–4) · ✍ chybí (napsat).
+**Jen marquee dny** (rozhodnutí §0.1); týdny bez mezinárodního dne se vynechají
+(běží newsletter popup). Datum = skutečný termín observance; u pohyblivých dnů
+rutina před publikací ověří přesné datum daného ročníku.
+Legenda pokrytí obsahem: ✅ silné (5+ článků) · ◒ částečné (1–4). Po korektuře
+inventury (Codex) mají obsah i dárcovství krve a vedra/ovzduší.
 
-| # | Týden (po–ne) | Mezinárodní den / týden | Téma | Obsah |
+| # | Termín | Mezinárodní den / týden | Téma | Obsah |
 |---|---|---|---|---|
-| 1 | 27.7.–2.8. | **Světový týden kojení** (1.–7.8.) | kojení, výživa kojenců | ◒ |
-| 2 | 3.–9.8. | Světový týden kojení (dozvuk) / dětské zdraví | perinatální, porod | ◒ |
-| 3 | 10.–16.8. | *(bez marquee)* | prevence / životní styl | ✅ |
-| 4 | 17.–23.8. | *(bez marquee)* | zdravotní gramotnost | ◒ |
-| 5 | 24.–30.8. | *(bez marquee)* | pracovní síla / sestry | ◒ |
-| 6 | 31.8.–6.9. | Den bezpečnosti pacientů (17.9. blízko) | bezpečnost péče | ✅ |
-| 7 | 7.–13.9. | **Světový den prevence sebevražd** (10.9.) + **Světový den sepse** (13.9.) | duševní zdraví / sepse | ✅ / ◒ |
-| 8 | 14.–20.9. | **Světový den bezpečí pacientů** (17.9.) | bezpečnost péče, dekubity | ✅ |
-| 9 | 21.–27.9. | **Světový den Alzheimera** (21.9.) + **Světový den srdce** (29.9.) | demence / kardio | ◒ / ✅ |
-| 10 | 28.9.–4.10. | Světový den srdce (dozvuk) | kardiovaskulární mortalita, CMP | ✅ |
-| 11 | 5.–11.10. | **Světový den duševního zdraví** (10.10.) | duševní zdraví | ✅ |
-| 12 | 12.–18.10. | Světový den míchání rukou / hygieny; Den paliativní péče (2. sobota) | paliativní péče | ✅ |
-| 13 | 19.–25.10. | **Světový den boje proti rakovině prsu** (měsíc) | screening prsu, onkologie | ✅ |
-| 14 | 26.10.–1.11. | Onkologická prevence (dozvuk) | screeningy, HPV | ✅ |
-| 15 | 2.–8.11. | *(Movember)* mužské zdraví | prostata, mužské zdraví | ◒ |
-| 16 | 9.–15.11. | **Světový den diabetu** (14.11.) | diabetes | ◒ |
-| 17 | 16.–22.11. | **Světový antibiotický týden** (18.–24.11.) | antibiotická rezistence | ✅ |
-| 18 | 23.–29.11. | Antibiotický týden (dozvuk) / CHOPN (3. středa) | rezistence / respirační | ✅ |
-| 19 | 30.11.–6.12. | **Světový den boje proti AIDS** (1.12.) | HIV, sexuální zdraví | ✅ |
-| 20 | 7.–13.12. | *(zima, chřipka)* | vakcinace, respirační infekce | ✅ |
-| 21 | 14.–20.12. | Univerzální zdravotní pokrytí (12.12.) | dostupnost, financování | ✅ |
-| 22 | 21.–27.12. | *(svátky — lehké téma)* | prevence / životní styl | ✅ |
-| 23 | 28.12.–3.1. | *(novoroční předsevzetí)* | kouření, alkohol, obezita | ✅ |
-| 24 | 4.–10.1. | *(novoroční předsevzetí — dozvuk)* | pohyb, výživa, nápoje | ✅ |
-| 25 | 11.–17.1. | *(bez marquee)* | zdravotní gramotnost | ◒ |
-| 26 | 18.–24.1. | *(bez marquee)* | digitalizace / eHealth | ✅ |
-| 27 | 25.–31.1. | Světový den nemocí bez léčby / vzácné (blízko) | vzácná onemocnění | ◒ |
-| 28 | 1.–7.2. | **Světový den boje proti rakovině** (4.2.) | onkologie, screening | ✅ |
-| 29 | 8.–14.2. | Mezinárodní den epilepsie (2. po) / dětská onkologie (15.2.) | dětské zdraví | ◒ |
-| 30 | 15.–21.2. | **Mezinárodní den dětské onkologie** (15.2.) | dětská onkologie | ◒ |
-| 31 | 22.–28.2. | **Den vzácných onemocnění** (28./29.2.) | vzácná onemocnění, centrová léčba | ◒ |
-| 32 | 1.–7.3. | **Světový den obezity** (4.3.) | obezita, výživa, nápoje | ✅ |
-| 33 | 8.–14.3. | Mezinárodní den žen (8.3.) — zdraví žen | reprodukční, gender pay gap | ◒ |
-| 34 | 15.–21.3. | Světový den spánku (pá) | životní styl / duševní | ◒ |
-| 35 | 22.–28.3. | **Světový den tuberkulózy** (24.3.) | TBC, přenosné nemoci | ◒ |
-| 36 | 29.3.–4.4. | *(příprava na Světový den zdraví)* | veřejné zdraví | ✅ |
-| 37 | 5.–11.4. | **Světový den zdraví** (7.4.) | veřejné zdraví, systém | ✅ |
-| 38 | 12.–18.4. | Světový den hemofilie (17.4.) | vzácná / krev | ◒ |
-| 39 | 19.–25.4. | **Světový imunizační týden** (24.–30.4.) | vakcinace | ✅ |
-| 40 | 26.4.–2.5. | Imunizační týden (dozvuk) / Den bezpečnosti práce (28.4.) | vakcinace / pracovní síla | ✅ |
-| 41 | 3.–9.5. | **Světový den hygieny rukou** (5.5.) + Den astmatu | bezpečnost péče / respirační | ✅ |
-| 42 | 10.–16.5. | **Mezinárodní den sester** (12.5.) | pracovní síla, sestry | ✅ |
-| 43 | 17.–23.5. | **Světový den hypertenze** (17.5.) | kardio, hypertenze | ✅ |
-| 44 | 24.–30.5. | Světový den bez tabáku (31.5.) — předehra | kouření | ✅ |
-| 45 | 31.5.–6.6. | **Světový den bez tabáku** (31.5.) | kouření, tabák | ✅ |
-| 46 | 7.–13.6. | Světový den bezpečnosti potravin (7.6.) | výživa, bezpečnost | ◒ |
-| 47 | 14.–20.6. | **Světový den dárců krve** (14.6.) | transfuze, dárcovství | ✍ |
-| 48 | 21.–27.6. | *(bez marquee)* | financování / reforma | ✅ |
-| 49 | 28.6.–4.7. | *(léto — dostupnost o prázdninách)* | dostupnost, ZZS | ✅ |
-| 50 | 5.–11.7. | *(léto)* | úrazy / prevence | ◒ |
-| 51 | 12.–18.7. | *(léto — vedra)* | životní prostředí / vedra | ✍ |
-| 52 | 19.–25.7. | *(příprava na WBW 2027)* | kojení | ◒ |
+| 1 | 1.–7.8.2026 | **Světový týden kojení** (WBW) | kojení, výživa kojenců | ◒ **(pilot)** |
+| 2 | 10.9. | **Světový den prevence sebevražd** | duševní zdraví | ✅ |
+| 3 | 13.9. | Světový den sepse | sepse, bezpečnost péče | ◒ |
+| 4 | 17.9. | **Světový den bezpečí pacientů** | bezpečnost péče, dekubity | ✅ |
+| 5 | 21.9. | Světový den Alzheimera | demence, dlouhodobá péče | ◒ |
+| 6 | 29.9. | **Světový den srdce** | kardio, CMP, cholesterol | ✅ |
+| 7 | 10.10. | **Světový den duševního zdraví** | duševní zdraví | ✅ |
+| 8 | 2. sobota 10. | Světový den paliativní a hospicové péče | paliativní péče | ✅ |
+| 9 | říjen (měsíc) | Měsíc boje proti rakovině prsu | screening prsu, onkologie | ✅ |
+| 10 | 14.11. | **Světový den diabetu** | diabetes | ◒ |
+| 11 | 18.–24.11. | **Světový antibiotický týden** | antibiotická rezistence | ✅ |
+| 12 | 3. středa 11. | Světový den CHOPN | respirační nemoci | ◒ |
+| 13 | 1.12. | **Světový den boje proti AIDS** | HIV, sexuální zdraví | ✅ |
+| 14 | 12.12. | Den univerzálního zdravotního pokrytí | dostupnost, financování | ✅ |
+| 15 | 4.2. | **Světový den boje proti rakovině** | onkologie, screening | ✅ |
+| 16 | 15.2. | Mezinárodní den dětské onkologie | dětská onkologie | ◒ |
+| 17 | 28./29.2. | **Den vzácných onemocnění** | vzácná onemocnění, centrová léčba | ◒ |
+| 18 | 4.3. | **Světový den obezity** | obezita, výživa, nápoje | ✅ |
+| 19 | 3. pátek 3. | Světový den spánku | životní styl, duševní zdraví | ◒ |
+| 20 | 24.3. | **Světový den tuberkulózy** | TBC, přenosné nemoci | ◒ |
+| 21 | 7.4. | **Světový den zdraví** | veřejné zdraví, systém | ✅ |
+| 22 | 17.4. | Světový den hemofilie | vzácná onemocnění, krev | ◒ |
+| 23 | 24.–30.4. | **Světový imunizační týden** | vakcinace | ✅ |
+| 24 | 5.5. | Světový den hygieny rukou | bezpečnost péče, rezistence | ✅ |
+| 25 | 12.5. | **Mezinárodní den sester** | pracovní síla, sestry | ✅ |
+| 26 | 17.5. | **Světový den hypertenze** | kardio, hypertenze | ✅ |
+| 27 | 31.5. | **Světový den bez tabáku** | kouření, tabák | ✅ |
+| 28 | 7.6. | Světový den bezpečnosti potravin | výživa, bezpečnost potravin | ◒ |
+| 29 | 14.6. | **Světový den dárců krve** | dárcovství krve/plazmy | ◒ |
+| 30 | červenec (vedra) | Sezónní: vedra a zdraví / ovzduší | vedra, znečištění ovzduší | ◒ |
+| 31 | 1.–7.8.2027 | **Světový týden kojení** (2. ročník) | kojení | ◒ |
 
 **Poznámky ke kalendáři:**
 - Přesná data pohyblivých dnů (paliativní péče, CHOPN, spánek…) rutina ověří
-  před publikací daného týdne; tabulka je plán, ne finální datum.
-- „Bez marquee" týdny dostanou **evergreen téma** z korpusu — web tak má popup
-  i mimo velké dny (volitelné: lze je nechat bez popupu, viz §6 otázka 1).
-- **Obsahové mezery (✍/◒):** dárcovství krve a vedra/prostředí jsou nejtenčí —
-  buď se microsite postaví jen z indikátorů + prevence, nebo se k danému týdnu
-  doobjedná článek (napojení na denní/noční článkovou rutinu s předstihem).
+  před publikací daného ročníku.
+- **Korekce inventury (Codex):** dárcovství krve má `clanek-darcovstvi-krve-plazma`
+  + indikátor `darcovstvi_krve_plazma_per_1000`; vedra `clanek-nemocnice-v-horku`
+  a ovzduší `clanek-pm25-spinavy-vzduch` — tyto týdny **nejsou** obsahové mezery
+  a rutina je má prolinkovat, ne objednávat nové články.
+- Pořadí je orientační; skutečné pořadí drží datově registr. Marquee dnů je ~31,
+  což pokrývá zhruba dvě třetiny roku; zbytek roku běží newsletter popup.
 
 ## 3) Microsite: co v ní je
 
@@ -224,18 +219,14 @@ Každá microsite skládá z existujícího obsahu (žádná duplikace textů):
 - Sociální + newsletter: rutina může předvyplnit posty a zmínku (napojení na
   stávající Buffer/Brevo rutiny) — mimo rozsah první dávky.
 
-## 6) Otázky k rozhodnutí (před stavbou)
+## 6) Rozhodnutí (uzamčeno 2026-07-20)
 
-1. **Hustota kalendáře:** popup **každý týden** (evergreen témata i mimo velké
-   dny), nebo **jen týdny s mezinárodním dnem** (cca 30–35 týdnů, jinak
-   newsletter popup)? *(Doporučení: začít jen s marquee dny, evergreen doplnit
-   podle ohlasu.)*
-2. **Chování popupu:** zobrazit **jednou za návštěvu** a po zavření mlčet do
-   konce týdne (doporučeno), nebo agresivněji?
-3. **Obsahové mezery** (dárcovství krve, vedra): postavit microsite jen z
-   indikátorů/prevence, nebo k těm týdnům **doobjednat článek** s předstihem?
-4. **URL/název:** `tyden.html` (+ `?id=`) a značka „Týden zdraví" — vyhovuje,
-   nebo jiný název (např. `kalendar-zdravi.html`)?
+1. **Hustota:** jen marquee dny (~31 týdnů); jinak newsletter popup. ✅
+2. **Chování popupu:** jednou za návštěvu, po zavření mlčet do konce týdne. ✅
+3. **Obsahové mezery:** týdny bez dostatečného obsahu se **vynechají** (žádný
+   popup); nikdy se nestaví microsite naprázdno ani se neobjednává článek.
+   (Po korekci inventury jsou dárcovství krve i vedra/ovzduší pokryté — viz §2.) ✅
+4. **URL/název:** `tyden.html` (+ `?id=`), značka „Týden zdraví". ✅
 
 ## 7) Dávky
 
@@ -243,8 +234,7 @@ Každá microsite skládá z existujícího obsahu (žádná duplikace textů):
 |---|---|
 | 0 | Tento plán + rozhodnutí §6 |
 | 1 | Infrastruktura: registr + `tyden.html` + `awareness-week.js` + popup + validátor + testy; **pilot = Světový týden kojení** (kompletní záznam) |
-| 2 | Naplnění kalendáře Q3–Q4 2026 (týdny 1–20) daty + covers |
-| 3 | Naplnění Q1–Q3 2027 (týdny 21–52) + týdenní rutina (PROMPT + workflow) |
-| — | Průběžně: doobjednané články pro obsahové mezery (mimo tuto sérii) |
+| 2 | Naplnění marquee dnů Q3–Q4 2026 (# 2–14) daty + covers |
+| 3 | Naplnění # 15–31 (2027) + týdenní rutina (PROMPT + workflow) |
 
 *Generated by Claude Code.*
