@@ -29,6 +29,10 @@ Plán témat na celý rok (marquee dny do července 2027) je v
   je jen **přepínač stavu**: doběhnuté týdny archivuje (`ready`→`archived`) a nejbližší
   **hotový** `draft` v okně 14 dní před startem překlopí na `ready`. Nikdy nepíše text
   a **neaktivuje nekompletní draft** (viz kritéria `assessReadiness`).
+- **Archivace nic nemaže.** Archivovaný týden zůstává trvale dostupný na
+  `tyden.html?id=<id>` (sekce „Proběhlé týdny zdraví" na microsite + záznam
+  v sitemap.xml) — landing pages fungují jako stálý rozcestník k tématu,
+  na který se dá odkazovat i po skončení observance.
 
 Tvým úkolem je tedy držet frontu tak, aby vždy byl **připravený draft na nejbližší
 nadcházející marquee den**.

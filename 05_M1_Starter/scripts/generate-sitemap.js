@@ -90,7 +90,7 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [] } = {}) {
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [] } = {}) {
   // Pozn.: isIndexable() čte robots meta z HTML, proto mu předáváme `.html` loc;
   // do sitemapy ale zapisujeme kanonickou (clean) URL přes canonicalPath().
   const staticEntries = STATIC_PAGES
@@ -111,6 +111,17 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
   const indicatorEntries = indicatorPages
     .filter(loc => isIndexable(loc))
     .map(loc => urlEntry({ loc: canonicalPath(loc), lastmod: today, changefreq: 'monthly', priority: '0.6' }));
+  // Týdny zdraví: každý ready/archived týden má trvalou landing page
+  // /tyden?id=… (archiv proběhlých mezinárodních dnů zůstává odkazovatelný).
+  // Drafty se vynechávají — nemají ještě publikovatelný obsah.
+  const awarenessEntries = awarenessWeeks
+    .filter(w => w.id && (w.status === 'ready' || w.status === 'archived'))
+    .map(w => urlEntry({
+      loc: `/tyden?id=${encodeURIComponent(w.id)}`,
+      lastmod: w.end && w.end < today ? w.end : today,
+      changefreq: w.end && w.end < today ? 'yearly' : 'weekly',
+      priority: '0.5',
+    }));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -118,6 +129,7 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
     ...staticEntries,
     ...articleEntries,
     ...indicatorEntries,
+    ...awarenessEntries,
     '</urlset>',
     '',
   ].join('\n');
@@ -134,7 +146,8 @@ function main() {
   const indicatorPages = indicators
     .map(i => `/indikator-${i.id}.html`)
     .filter(loc => existsSync(resolve(ROOT, loc.replace(/^\//, ''))));
-  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages });
+  const awarenessWeeks = JSON.parse(readFileSync(resolve(ROOT, 'data/awareness-weeks.json'), 'utf8')).weeks ?? [];
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks });
   if (stdout) {
     console.log(xml);
     return;
