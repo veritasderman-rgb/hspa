@@ -86,7 +86,21 @@ const AI_SERIES = {
   ],
 };
 
-export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES, AI_SERIES];
+const PM_PH_SERIES = {
+  title: 'Přesná medicína vs. veřejné zdraví',
+  hub: 'clanky.html',
+  lead: 'série o sporu mezi personalizovanou medicínou a zdravím populace, v šesti dílech',
+  parts: [
+    { n: 1, slug: 'clanek-presna-medicina-vs-verejne-zdravi-spor.html', short: 'Spor, který se u nás nevede nahlas' },
+    { n: 2, slug: 'clanek-presna-medicina-tri-konfigurace.html',        short: 'Tři způsoby, jak smířit genom a populaci' },
+    { n: 3, slug: 'clanek-precizni-verejne-zdravi.html',                short: 'Precizní veřejné zdraví: příslib, nebo přebalený individualismus?' },
+    { n: 4, slug: 'clanek-co-urcuje-zdravi-naroda.html',                short: 'Co doopravdy určuje zdraví národa' },
+    { n: 5, slug: 'clanek-presna-medicina-solidarita.html',            short: 'Solidarita, nebo osobní účet?' },
+    { n: 6, slug: 'clanek-presna-medicina-ceska-cesta.html',           short: 'Česká cesta: přesně, a přitom spravedlivě' },
+  ],
+};
+
+export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES, AI_SERIES, PM_PH_SERIES];
 
 // Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
 // sérii přes tyto dva exporty — necháváme je ukazovat na ni.
