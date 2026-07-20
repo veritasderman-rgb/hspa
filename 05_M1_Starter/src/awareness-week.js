@@ -104,6 +104,20 @@ function renderContext(ctx) {
   return grid + originBlock;
 }
 
+// Zdroje: oficiální stránka observance + volitelné další odkazy (references).
+function renderSources(week) {
+  const rows = [];
+  if (week.observance_url) {
+    rows.push(`<li>Oficiální stránka: <a href="${escapeHtml(week.observance_url)}" target="_blank" rel="noopener">${escapeHtml(week.observance)} ↗</a></li>`);
+  }
+  for (const r of week.references || []) {
+    if (!r || !r.url) continue;
+    rows.push(`<li><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.label || r.url)} ↗</a></li>`);
+  }
+  if (!rows.length) return '';
+  return `<section class="aw-block aw-source"><h2 class="aw-block-h">Zdroje a odkazy</h2><ul class="aw-source-list">${rows.join('')}</ul></section>`;
+}
+
 function renderWeek(week, isActive) {
   const host = document.getElementById('awContent');
   document.title = `${week.title} · Týden zdraví · HSPA Monitor`;
@@ -117,7 +131,7 @@ function renderWeek(week, isActive) {
     </section>
     ${renderContext(week.context)}
     ${sections}
-    ${week.observance_url ? `<section class="aw-block aw-source"><p>Oficiální stránka: <a href="${escapeHtml(week.observance_url)}" target="_blank" rel="noopener">${escapeHtml(week.observance)} ↗</a></p></section>` : ''}`;
+    ${renderSources(week)}`;
 }
 
 function renderHub(weeks, day) {
