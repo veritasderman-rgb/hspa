@@ -39,6 +39,17 @@ export function resolveWeek(weeks, day, id) {
   return activeWeekFor(day, weeks) || upcomingWeeks(day, weeks)[0] || null;
 }
 
+/**
+ * Proběhlé týdny (end < den) pro archiv, řazené od nejnovějšího.
+ * Drafty se vynechávají — nikdy neběžely, takže nemají co archivovat.
+ */
+export function pastWeeks(day, weeks) {
+  const t = parseDay(day);
+  return (weeks || [])
+    .filter(w => w.status !== 'draft' && parseDay(w.end) < t)
+    .sort((a, b) => parseDay(b.start) - parseDay(a.start));
+}
+
 const MONTHS = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
 export function formatRange(week) {
   const fmt = (s) => { const [, m, d] = s.split('-').map(Number); return `${d}. ${MONTHS[m - 1]}`; };

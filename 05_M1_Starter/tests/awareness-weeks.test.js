@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseDay, isWithin, activeWeekFor, upcomingWeeks, resolveWeek, formatRange } from '../src/awareness-core.js';
+import { parseDay, isWithin, activeWeekFor, upcomingWeeks, pastWeeks, resolveWeek, formatRange } from '../src/awareness-core.js';
 import { shouldShowAwarenessPopup } from '../src/awareness-popup.js';
 import { validateAwarenessWeeks } from '../ingest/validate-awareness-weeks.js';
 import { rotate, assessReadiness, isPublishedArticle } from '../scripts/awareness-rotate.js';
@@ -64,6 +64,22 @@ test('helper: resolveWeek — ?id override, jinak aktivní, jinak nejbližší p
 
 test('helper: formatRange čte česky', () => {
   assert.equal(formatRange({ start: '2026-08-01', end: '2026-08-07' }), '1. srpna – 7. srpna 2026');
+});
+
+test('helper: pastWeeks — archiv řadí od nejnovějšího, drafty vynechává', () => {
+  const weeks = [
+    { id: 'a', status: 'archived', start: '2026-08-01', end: '2026-08-07' },
+    { id: 'b', status: 'ready', start: '2026-10-05', end: '2026-10-11' },
+    { id: 'c', status: 'draft', start: '2026-09-01', end: '2026-09-07' },
+  ];
+  const past = pastWeeks('2026-11-01', weeks);
+  assert.deepEqual(past.map(w => w.id), ['b', 'a'], 'nejnovější první; draft c chybí');
+  assert.deepEqual(pastWeeks('2026-07-01', weeks), [], 'před prvním týdnem prázdné');
+});
+
+test('helper: resolveWeek s ?id vrací i archivovaný týden (trvalá landing page)', () => {
+  const weeks = [{ id: 'old', status: 'archived', start: '2026-08-01', end: '2026-08-07' }];
+  assert.equal(resolveWeek(weeks, '2026-12-01', 'old').id, 'old');
 });
 
 // ── Týdenní rotace (scripts/awareness-rotate.js) ──────────────────────────

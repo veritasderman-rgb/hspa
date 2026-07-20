@@ -9,7 +9,7 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, isArticleVisible } from './page-shared.js';
-import { activeWeekFor, upcomingWeeks, resolveWeek, formatRange } from './awareness-core.js';
+import { activeWeekFor, upcomingWeeks, pastWeeks, resolveWeek, parseDay, formatRange } from './awareness-core.js';
 
 // ---------------------------------------------------------------------------
 // Render (DOM)
@@ -118,35 +118,59 @@ function renderSources(week) {
   return `<section class="aw-block aw-source"><h2 class="aw-block-h">Zdroje a odkazy</h2><ul class="aw-source-list">${rows.join('')}</ul></section>`;
 }
 
-function renderWeek(week, isActive) {
+function renderWeek(week, isActive, isPast) {
   const host = document.getElementById('awContent');
   document.title = `${week.title} · Týden zdraví · HSPA Monitor`;
   const sections = (week.microsite?.sections || []).map(s => renderSection(s, week)).join('');
+  const pastNote = isPast ? `
+    <div class="aw-block"><p class="aw-past-note">Tento Týden zdraví proběhl v termínu ${escapeHtml(formatRange(week))}. Stránku necháváme dostupnou jako trvalý rozcestník k tématu — články i živé ukazatele níže platí dál.</p></div>` : '';
   host.innerHTML = `
     <section class="ed-hero aw-hero">
-      <p class="ed-kicker">${isActive ? 'Právě probíhá · ' : ''}${escapeHtml(week.kicker)}</p>
+      <p class="ed-kicker">${isActive ? 'Právě probíhá · ' : ''}${isPast ? 'Z archivu · ' : ''}${escapeHtml(week.kicker)}</p>
       <h1>${escapeHtml(week.title)}</h1>
       <p class="ed-lead">${escapeHtml(week.lead)}</p>
       <p class="aw-hero-meta">${escapeHtml(formatRange(week))}${week.observance_source ? ` · ${escapeHtml(week.observance_source)}` : ''}</p>
     </section>
+    ${pastNote}
     ${renderContext(week.context)}
     ${sections}
     ${renderSources(week)}`;
+}
+
+// Trvalé URL: při ?id= přepíšeme canonical/og:url na variantu s parametrem,
+// aby archivní landing pages byly samostatně odkazovatelné a indexovatelné.
+function updateCanonical(weekId) {
+  if (!weekId) return;
+  const url = `https://skorezdravotnictvi.cz/tyden?id=${encodeURIComponent(weekId)}`;
+  const canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.setAttribute('href', url);
+  const og = document.querySelector('meta[property="og:url"]');
+  if (og) og.setAttribute('content', url);
+}
+
+function hubCards(list) {
+  return list.map(w => `<a class="aw-hub-card" href="tyden.html?id=${encodeURIComponent(w.id)}">
+        <span class="aw-hub-date">${escapeHtml(formatRange(w))}</span>
+        <span class="aw-hub-title">${escapeHtml(w.kicker)}</span>
+      </a>`).join('');
 }
 
 function renderHub(weeks, day) {
   const host = document.getElementById('awHub');
   if (!host) return;
   const up = upcomingWeeks(day, weeks).filter(w => w.status === 'ready');
-  if (!up.length) { host.innerHTML = ''; return; }
-  host.innerHTML = `
-    <h2 class="aw-block-h">Další týdny zdraví</h2>
-    <div class="aw-hub-grid">
-      ${up.map(w => `<a class="aw-hub-card" href="tyden.html?id=${encodeURIComponent(w.id)}">
-        <span class="aw-hub-date">${escapeHtml(formatRange(w))}</span>
-        <span class="aw-hub-title">${escapeHtml(w.kicker)}</span>
-      </a>`).join('')}
-    </div>`;
+  const past = pastWeeks(day, weeks);
+  const parts = [];
+  if (up.length) {
+    parts.push(`<h2 class="aw-block-h">Další týdny zdraví</h2>
+    <div class="aw-hub-grid">${hubCards(up)}</div>`);
+  }
+  if (past.length) {
+    parts.push(`<h2 class="aw-block-h">Proběhlé týdny zdraví</h2>
+    <p class="aw-block-intro">Archiv skončených mezinárodních dnů — každá stránka zůstává trvale dostupná jako rozcestník k tématu.</p>
+    <div class="aw-hub-grid aw-hub-past">${hubCards(past)}</div>`);
+  }
+  host.innerHTML = parts.join('');
 }
 
 async function init() {
@@ -168,9 +192,12 @@ async function init() {
     if (!week) {
       host.innerHTML = `<section class="ed-hero aw-hero"><h1>Týden zdraví</h1>
         <p class="ed-lead">Právě neprobíhá žádný tematický týden. Sledujte kalendář — brzy tu bude další mezinárodní zdravotní den.</p></section>`;
+      renderHub(reg.weeks, today);
       return;
     }
-    renderWeek(week, activeWeekFor(today, reg.weeks)?.id === week.id);
+    const isPast = parseDay(week.end) < parseDay(today);
+    renderWeek(week, activeWeekFor(today, reg.weeks)?.id === week.id, isPast);
+    if (id) updateCanonical(week.id);
     renderHub(reg.weeks.filter(w => w.id !== week.id), today);
   } catch (err) {
     host.innerHTML = renderErrorState('Týden zdraví se nepodařilo načíst.', err);
