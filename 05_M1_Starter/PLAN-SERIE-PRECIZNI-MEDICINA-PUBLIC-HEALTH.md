@@ -1,7 +1,14 @@
 # Plán: Série „Přesná medicína vs. veřejné zdraví — spor o jeden systém"
 
-**Stav:** návrh ke schválení vlastníkem.
+**Stav:** schváleno vlastníkem (2026-07-20), píše se.
 **Datum:** 2026-07-20.
+
+**Rozhodnutí redakce (uzamčeno 2026-07-20):**
+1. **Rozsah: 6 dílů** (plný oblouk dle §2).
+2. **Linie a tag:** pod stávající populačně-determinantovou — tag
+   `Populace a determinanty · spravedlnost` (žádná nová linie/tag).
+3. **Díl 6: policy-doporučující (manifest)** — konkrétní doporučení pro ČR.
+4. Tempo: psát po dávkách dle §9 (dávka 1 = díly 1+2).
 **Branch:** `claude/serie-precizni-medicina-public-health`.
 **Typ:** edukativně-publicistická série (long-form), 6 dílů, sériová navigace
 jako u „Jak (ne)reformovat komplexní systém".
