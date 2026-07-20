@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co doopravdy určuje zdraví národa · HSPA Monitor</title>
+<meta name="description" content="Většinu zdraví populace vysvětlují podmínky, ne geny. Díl 4 série o přesné medicíně a veřejném zdraví: sociální determinanty, gradient, reprezentativita genomických databází a riziko, že cílená medicína nerovnosti prohloubí.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Co doopravdy určuje zdraví národa">
+<meta property="og:description" content="Díl 4 série: sociální determinanty vs. genom, inverzní zákon péče v éře dat a strukturální nespravedlnost (Green, Prainsack, Sabatello). Proč PM, která ignoruje podmínky, riskuje prohloubení nerovností.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-07-20">
+<meta property="article:section" content="Populace a determinanty">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<!--
+  audit:
+    last_reviewed: 2026-07-20
+    reviewer: claude-code-agent
+    status: draft
+    poznámky:
+      - Díl 4/6 série „Přesná medicína vs. veřejné zdraví".
+      - Opěrný zdroj: Green, Prainsack, Sabatello (Med Health Care Philos 2023, DOI 10.1007/s11019-023-10158-8).
+      - DRAFT: podíl „~80/90 % zdraví mimo zdravotní péči" je uveden jako řádová teze literatury (Dahlgren-Whitehead / county health rankings), ne jako přesné české číslo — před publikací ověřit formulaci. published:false; noindex.
+-->
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Populace a determinanty</span>
+        <span class="article-tag article-tag-muted">Přesná medicína · Nerovnosti · Spravedlnost</span>
+      </div>
+      <h1 class="article-title">Co doopravdy určuje zdraví národa</h1>
+      <p class="article-deck">
+        Kdyby zdraví populace určovaly hlavně geny a léčba, byla by přesná
+        medicína bez debat správnou sázkou. Jenže největší část rozdílů ve
+        zdraví vysvětlují <strong>podmínky, ve kterých lidé žijí</strong> —
+        a genomika, která je pomíjí, riskuje, že propast mezi skupinami spíš
+        rozevře. Čtvrtý díl série.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        <em>Navazuje na díl 3.</em> Ukázali jsme, že „precizní veřejné zdraví"
+        pomůže populaci jen tehdy, když je spojené s tím, co ji drží zdravou.
+        Tenhle díl pojmenovává, co to „to" je — a proč je pro přesnou medicínu
+        tak nepohodlné.
+      </p>
+
+      <p>
+        Ve veřejném zdraví se traduje jedno hrubé, ale poučné pravidlo: na tom,
+        jak dlouho a jak zdravě lidé žijí, se zdravotní péče podílí menšinově.
+        Zbytek — obvykle se uvádí většina — jde na vrub <strong>sociálním
+        determinantům</strong>: příjmu, vzdělání, práci, bydlení, prostředí a
+        chování, které z těchto podmínek vyrůstá. Přesné procento se liší podle
+        metody a je předmětem sporů, ale směr je jasný a opakovaně doložený:
+        nejvíc zdraví se „vyrábí" mimo ordinace a nemocnice.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDetH">
+        <figcaption class="av-figure-h" id="avDetH">Co formuje zdraví populace (řádová ilustrace)</figcaption>
+        <div class="av-bar-list">
+          <div class="av-bar-row">
+            <span class="av-bar-label">Sociální a ekonomické podmínky, chování, prostředí</span>
+            <div class="av-bar-track"><div class="av-bar-fill" style="width:80%"></div></div>
+            <span class="av-bar-val">většina</span>
+          </div>
+          <div class="av-bar-row">
+            <span class="av-bar-label">Zdravotní péče (včetně cílené léčby)</span>
+            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-muted" style="width:20%"></div></div>
+            <span class="av-bar-val">menšina</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Čtení grafiky:</strong> poměr je řádová ilustrace tradovaná v literatuře o determinantách zdraví (rámec Dahlgren–Whitehead a modely „health rankings"), ne přesné české měření. Ukazuje směr: většina zdraví populace vzniká mimo zdravotní systém.</p>
+      </figure>
+
+      <h2>Gradient: zdraví kopíruje společenský žebříček</h2>
+
+      <p>
+        Nejtvrdší doklad je takzvaný <strong>sociální gradient zdraví</strong>:
+        čím výš na společenském žebříčku, tím lepší zdraví — a to plynule, po
+        celé délce žebříčku, ne jen na jeho dně. Není to tak, že „chudí jsou
+        nemocní a ostatní zdraví". Je to spojitá řada: člověk se středním
+        příjmem je na tom v průměru hůř než člověk s vysokým a lépe než člověk
+        s nízkým. V Česku ten gradient vidíme mezi kraji i okresy — rozdíly v
+        naději dožití mezi nejbohatšími a nejchudšími regiony se počítají v
+        letech a roky se nehýbou.
+      </p>
+
+      <p>
+        Genom tenhle gradient nevysvětluje. Geny se mezi chudými a bohatými
+        okresy nijak dramaticky neliší — liší se podmínky. A to je pro přesnou
+        medicínu zásadní: pokud většinu problému tvoří podmínky, pak sebelepší
+        cílená léčba řeší menšinovou část, a to ještě až poté, co nemoc vznikne.
+      </p>
+
+      <h2>Reprezentativita: kdo chybí v databázích</h2>
+
+      <p>
+        Přesná medicína má navíc vlastní, méně viditelný problém se spravedlností:
+        <strong>kdo je v genomických databázích</strong>. Většina dosud
+        sekvenovaných genomů pochází z populací evropského původu a z lidí, kteří
+        mají k výzkumu blízko — vzdělaných, důvěřujících instituce, žijících ve
+        městech. Skóre rizik a cílené terapie odvozené z takových dat pak fungují
+        nejlépe právě pro tyto skupiny a hůř pro ty, které v datech chybějí.
+      </p>
+
+      <p>
+        Výsledkem je paradox: technologie, která slibuje „medicínu na míru",
+        sedí nejlíp těm, kdo už mají výhodu — a nejhůř těm, kdo by pomoc
+        potřebovali nejvíc. Právě proto si americký program All of Us dal za
+        cíl cíleně zahrnout podreprezentované skupiny (viz díl 2). Bez takového
+        vědomého úsilí přesná medicína nerovnosti nezmenšuje — reprodukuje je.
+      </p>
+
+      <h2>Inverzní zákon péče v éře dat</h2>
+
+      <p>
+        Britský lékař Julian Tudor Hart formuloval už v roce 1971
+        <strong>inverzní zákon péče</strong>: dostupnost dobré péče má tendenci
+        být nepřímo úměrná potřebě té péče v dané populaci. Kdo nejvíc potřebuje,
+        nejméně dostane. V éře dat a přesné medicíny dostává tenhle zákon novou
+        podobu: nejvíc z genomiky, aplikací a rizikových skóre vytěží ti, kdo
+        umějí data využít a mají na navazující péči prostředky. Data sama o sobě
+        nerovnost neruší — bez cíleného úsilí ji zesilují.
+      </p>
+
+      <h2>Strukturální nespravedlnost, ne jen individuální smůla</h2>
+
+      <p>
+        Filozofové Sara Greenová, Barbara Prainsacková a Maya Sabatellová to
+        shrnují pojmem <strong>strukturální nespravedlnost</strong>: rozdíly ve
+        zdraví nejsou souhrn individuálních smůl ani „špatných genů", ale
+        důsledek toho, jak je uspořádaná společnost. Přesná medicína podle nich
+        má tendenci tuhle strukturu zneviditelnit — přesouvá pozornost na
+        biologii jednotlivce a nechává příčiny v podmínkách stranou. Není to
+        výtka, že by cílená léčba byla zbytečná; je to varování, že když se
+        stane hlavním rámcem, snadno zakryje to podstatné.
+      </p>
+
+      <div class="av-callout" role="note">
+        <p><strong>Co si odnést.</strong> Přesná medicína a determinanty nejsou
+        soupeři o pravdu — obojí je pravda. Chyba nastává, když se z jednoho
+        stane výmluva neřešit druhé: „investujeme do personalizované medicíny"
+        nesmí být náhrada za „řešíme, proč se v chudých okresech umírá dřív".
+        Zdraví národa se rozhoduje především tam, kam genom nedosáhne.</p>
+      </div>
+
+      <p>
+        Zbývá nejtěžší otázka celé série: když je cílená léčba drahá a pomáhá
+        úzkým skupinám, zatímco determinanty jsou levné a týkají se všech — jak
+        to celé zaplatit, aniž se rozbije solidarita, na které stojí veřejné
+        pojištění? To je téma <strong>dílu 5</strong>.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <h4 class="article-databox-h">Souvislosti na webu</h4>
+      <ul class="article-databox-list">
+        <li><a href="clanek-precizni-verejne-zdravi.html">Díl 3: Precizní veřejné zdraví</a></li>
+        <li><a href="clanek-zdravotni-gramotnost.html">Skoro každý druhý Čech nerozumí informacím o svém zdraví</a></li>
+        <li><a href="kraje.html">Krajský pohled</a> — regionální gradient ve zdraví a kapacitách.</li>
+        <li><a href="model-systemu.html">Model systému</a> — uzel „Sociální determinanty".</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        Poměr „většina zdraví mimo péči" je řádová teze literatury o determinantách, ne přesné české číslo; krajský gradient je doložen daty HSPA Monitoru.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <h4 class="article-sources-h">Zdroje</h4>
+      <ul class="article-sources-list">
+        <li>Green S., Prainsack B., Sabatello M. (2023). Precision medicine and the problem of structural injustice. <em>Medicine, Health Care and Philosophy</em>. DOI: 10.1007/s11019-023-10158-8.</li>
+        <li>Galasso I., Pickersgill M., Testa G. (2026). Precision medicine 'versus' or 'for' public health? <em>Social Science &amp; Medicine</em>. DOI: 10.1016/j.socscimed.2025.118785.</li>
+        <li>Hart J. T. (1971). The Inverse Care Law. <em>The Lancet</em>.</li>
+        <li>Dahlgren G., Whitehead M. — model sociálních determinantů zdraví (WHO).</li>
+      </ul>
+      <p class="article-sources-disclaimer">
+        Interpretace pro české prostředí je redakční. Přesná procenta podílu determinantů se v literatuře liší podle metody; text uvádí směr, ne jedno číslo.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a href="clanek-precizni-verejne-zdravi.html">← Díl 3: Precizní veřejné zdraví</a>
+      <a href="clanek-presna-medicina-solidarita.html">Díl 5: Solidarita, nebo osobní účet? →</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
