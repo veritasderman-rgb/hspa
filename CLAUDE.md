@@ -416,6 +416,7 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
 - [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`
 - [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md) — sociální rutina (1×/den): doplňuje frontu Bufferu na 10 postů/kanál podle aktuálnosti; Buffer = zdroj pravdy
+- [`05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md`](05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md) — týdenní rutina „Týdnů zdraví": agent připraví draft dalšího mezinárodního dne (`data/awareness-weeks.json`), cron `awareness-weekly.yml` (`scripts/awareness-rotate.js`) ho pak deterministicky přepne draft→ready a archivuje doběhnuté; microsite `tyden.html` + popup se aktivují podle data
 - [`05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md`](05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md) — týdenní newsletter (čtvrtek → pátek 11:00 přes Brevo): Florencin úvod + 3–4 neposlané články; evidence `data/newsletter-log.json`, builder `scripts/newsletter-build.js`
 - [`docs/social-copywriting-manual.md`](docs/social-copywriting-manual.md) — jak psát příspěvky (hlavní věc do 1. věty, věcně ale poutavě, délky per síť, checklist)
 - [`docs/social-buffer-prvni-prispevky.md`](docs/social-buffer-prvni-prispevky.md) — hotové launch příspěvky (etalon tónu a struktury)

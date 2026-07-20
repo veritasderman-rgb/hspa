@@ -77,6 +77,19 @@ export function validateAwarenessWeeks() {
     if (w.status === 'ready' && !hasEvidence) {
       errors.push(`${tag}: ready týden musí mít aspoň 1 článek nebo indikátor`);
     }
+
+    // Ready týden musí mít kontextový blok (proč záleží / co ovlivňuje / jak na tom je ČR),
+    // aby microsite nebyla jen odkazovník.
+    if (w.status === 'ready') {
+      const c = w.context;
+      if (!c || typeof c !== 'object') {
+        errors.push(`${tag}: ready týden musí mít context (why/affects/cz)`);
+      } else {
+        if (!c.why) errors.push(`${tag}: context.why chybí`);
+        if (!Array.isArray(c.affects) || c.affects.length === 0) errors.push(`${tag}: context.affects musí být neprázdné pole`);
+        if (!c.cz) errors.push(`${tag}: context.cz chybí`);
+      }
+    }
   }
 
   // Překryv intervalů

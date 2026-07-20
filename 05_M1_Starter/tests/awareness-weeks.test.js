@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { parseDay, isWithin, activeWeekFor, upcomingWeeks, resolveWeek, formatRange } from '../src/awareness-core.js';
 import { shouldShowAwarenessPopup } from '../src/awareness-popup.js';
 import { validateAwarenessWeeks } from '../ingest/validate-awareness-weeks.js';
+import { rotate, assessReadiness, isPublishedArticle } from '../scripts/awareness-rotate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -63,6 +64,75 @@ test('helper: resolveWeek — ?id override, jinak aktivní, jinak nejbližší p
 
 test('helper: formatRange čte česky', () => {
   assert.equal(formatRange({ start: '2026-08-01', end: '2026-08-07' }), '1. srpna – 7. srpna 2026');
+});
+
+// ── Týdenní rotace (scripts/awareness-rotate.js) ──────────────────────────
+
+test('data: ready pilot má kompletní context (why/affects/cz)', () => {
+  const wbw = reg.weeks.find(w => w.id === 'svetovy-tyden-kojeni-2026');
+  assert.ok(wbw.context, 'context chybí');
+  assert.ok(wbw.context.why, 'why chybí');
+  assert.ok(Array.isArray(wbw.context.affects) && wbw.context.affects.length > 0, 'affects chybí');
+  assert.ok(wbw.context.cz, 'cz chybí');
+});
+
+const CTX = () => ({
+  artById: new Map([
+    ['clanek-a.html', { slug: 'clanek-a.html', published: true, date: '2026-01-01' }],
+    ['clanek-draft.html', { slug: 'clanek-draft.html', published: false }],
+  ]),
+  indIds: new Set(['ind_x']),
+  prevIds: new Set(['tema_y']),
+  root: null, // vypne kontrolu existence souboru
+});
+
+test('rotate: archivuje doběhnutý ready týden', () => {
+  const doc = { weeks: [{ id: 'past', status: 'ready', start: '2026-01-01', end: '2026-01-07' }] };
+  const { changes } = rotate(doc, '2026-03-01', CTX());
+  assert.equal(doc.weeks[0].status, 'archived');
+  assert.deepEqual(changes, [{ id: 'past', action: 'archived' }]);
+});
+
+test('rotate: aktivuje hotový draft v okně 14 dní (nejvýše jeden)', () => {
+  const base = { context: { why: 'w', affects: ['a'], cz: 'c' }, popup: { headline: 'h', body: 'b', cta: 'c' }, kicker: 'k', title: 't', lead: 'l', linked_indicators: ['ind_x'] };
+  const doc = { weeks: [
+    { ...base, id: 'soon', status: 'draft', start: '2026-03-05', end: '2026-03-11' },
+    { ...base, id: 'later', status: 'draft', start: '2026-03-20', end: '2026-03-26' },
+  ] };
+  const { changes } = rotate(doc, '2026-03-01', CTX());
+  assert.equal(doc.weeks[0].status, 'ready', 'nejbližší aktivován');
+  assert.equal(doc.weeks[1].status, 'draft', 'druhý zůstává draft');
+  assert.deepEqual(changes.filter(c => c.action === 'activated'), [{ id: 'soon', action: 'activated' }]);
+});
+
+test('rotate: neaktivuje draft mimo okno 14 dní', () => {
+  const base = { context: { why: 'w', affects: ['a'], cz: 'c' }, popup: { headline: 'h', body: 'b', cta: 'c' }, kicker: 'k', title: 't', lead: 'l', linked_indicators: ['ind_x'] };
+  const doc = { weeks: [{ ...base, id: 'far', status: 'draft', start: '2026-05-01', end: '2026-05-07' }] };
+  rotate(doc, '2026-03-01', CTX());
+  assert.equal(doc.weeks[0].status, 'draft');
+});
+
+test('rotate: neaktivuje nekompletní draft (chybí context)', () => {
+  const doc = { weeks: [{ id: 'thin', status: 'draft', start: '2026-03-05', end: '2026-03-11', popup: { headline: 'h', body: 'b', cta: 'c' }, kicker: 'k', title: 't', lead: 'l', linked_indicators: ['ind_x'] }] };
+  const { changes } = rotate(doc, '2026-03-01', CTX());
+  assert.equal(doc.weeks[0].status, 'draft');
+  const skip = changes.find(c => c.action === 'skipped');
+  assert.ok(skip && skip.reasons.some(r => /context/.test(r)));
+});
+
+test('rotate: prázdná microsite (jen draft článek, žádný indikátor) se neaktivuje', () => {
+  const doc = { weeks: [{ id: 'empty', status: 'draft', start: '2026-03-05', end: '2026-03-11', context: { why: 'w', affects: ['a'], cz: 'c' }, popup: { headline: 'h', body: 'b', cta: 'c' }, kicker: 'k', title: 't', lead: 'l', linked_articles: ['clanek-draft.html'], linked_indicators: [] }] };
+  const { changes } = rotate(doc, '2026-03-01', CTX());
+  assert.equal(doc.weeks[0].status, 'draft');
+  const skip = changes.find(c => c.action === 'skipped');
+  assert.ok(skip && skip.reasons.some(r => /prázdná/.test(r)));
+});
+
+test('isPublishedArticle: draft a budoucí datum jsou skryté', () => {
+  assert.equal(isPublishedArticle({ published: true, date: '2026-01-01' }, '2026-03-01'), true);
+  assert.equal(isPublishedArticle({ published: false }, '2026-03-01'), false);
+  assert.equal(isPublishedArticle({ published: true, date: '2026-09-01' }, '2026-03-01'), false);
+  assert.equal(isPublishedArticle(null, '2026-03-01'), false);
 });
 
 test('popup: shouldShow — dismiss per-týden a jednou za návštěvu', () => {
