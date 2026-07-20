@@ -23,6 +23,7 @@
     visual_elements_added: 0
     notes: "Index adopce digitálního zdravotnictví 62 (ČR) vs OECD 70 — primární zdroj: OECD Digital Health Indicators / Survey on Health Data Governance. FLAG: konkrétní hodnoty mohou pocházet z více vln (DHI 2021, DHI 2024) — doporučujeme verifikovat aktuální OECD Digital Health Survey 2024 nebo OECD HAAG 2025 sekci 'digital health'. eRecept v ČR od 2018 (zák. č. 70/2013 Sb. o léčivech ve znění zákona č. 70/2018 Sb.) — povinná elektronická preskripce — atribuce OK. Mezinárodní reference: Estonsko (X-Road / Patient Portal), Dánsko (Sundhed.dk, MedCom), Finsko (Kanta) — well-documented, ale doporučujeme verifikovat aktuální data adopce. Status published → partial. OVĚŘENÍ 2026-07-06 (U8 dávkový audit): dashboardové hodnoty souhlasí s datovým kontraktem — ehealth_adoption 62 vs OECD 70 (origin seed, MZ ČR eHealth, kompozitní index), spokojenost_informovani 72 vs OECD 78. Legislativní fakta ověřena: povinný eRecept od 2018 (zák. 70/2013 Sb. ve znění 70/2018 Sb.), EHDS implementační lhůty (2025–2027 pacientská rovina, 2031 sekundární využití) odpovídají publikovaným milníkům EU. Odkazy funkční. Ponecháno partial — hodnota 62 je konstruovaný kompozitní index (origin seed), nelze ji nezávisle ověřit proti externímu primárnímu zdroji (OECD Digital Health Survey blokuje automatizovaný fetch, HTTP 403); článek je vůči tomuto omezení transparentní."
     f1_2026-07-10: "Audit (F1): čísla ověřena proti kontraktu — eHealth index 62 (=ehealth_adoption), benchmark OECD 70, spokojenost s informováním 72 % vs OECD 78 % — vše sedí. Bez driftu. Status review-pending/partial → verified."
+    f2_2026-07-20: "FALLBACK-AUDIT (validace všech zdrojů, živě). Dvě substantivní opravy, které předchozí audity (07-06, 07-10 zaměřené jen na kompozitní index) nezachytily: (1) Chybné tvrzení, že zákon o elektronickém zdravotnictví 'opakovaně neprošel' — ve skutečnosti zákon č. 325/2021 Sb. o elektronizaci zdravotnictví byl přijat 2021, plná účinnost od 1. 1. 2026 (kmenové registry, integrované datové rozhraní); reálným problémem je pomalá implementace (NKÚ 22/20: 0 ze 4 registrů k 1. 1. 2023). Doplněno spuštění Národního portálu eZdraví + eŽádanek (2. 1. 2026). Zdroje: zakonyprolidi.cz/cs/2021-325, mzd.gov.cz, ezdravi.gov.cz. POZN. (Codex review PR #825): zákon definuje TŘI kmenové registry (poskytovatelů, zdravotnických pracovníků, pacientů), centrální eHealth služby jsou samostatná infrastruktura — text opraven z chybného 'čtyři kmenové registry' na 'tři + centrální služby' (shodně s clanek-digi-3-dve-vrstvy-ncez.html:208). Pozor: clanek-datova-patere-lock-in.html a data/claims.json (datova-patere-lock-in--05) nesou stejnou chybu 'ze 4 registrů' — mimo scope tohoto PR, k opravě samostatně. (2) Chybné EHDS lhůty '2025–2027 pacientská rovina, 2031 sekundární využití' — dle Nařízení (EU) 2025/327 (v platnosti 26. 3. 2025): prováděcí akty do 3/2027, primární využití 1. skupina od 3/2029, 2. skupina od 3/2031, sekundární využití většina kategorií od 3/2029. Zdroj: health.ec.europa.eu. Páteř beze změny: index 62 vs 70 (origin seed), eRecept od 2018 (§ 81 zák. 378/2007 Sb.), Estonsko 2008 / Dánsko sundhed.dk 2003 / Finsko Kanta ověřeny. dateModified 2026-06-10 → 2026-07-20. Status zůstává verified."
 -->
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
@@ -56,7 +57,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-ehealth"
       },
       "datePublished": "2026-05-07",
-      "dateModified": "2026-06-10",
+      "dateModified": "2026-07-20",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -188,7 +189,7 @@
       </p>
 
       <p>
-        Třetím dílčím prvkem je výdejní portál pacienta — Portál občana zpřístupňuje řadu zdravotních informací (čerpané receptem hrazené léky, očkování, výpis z registru pojištěnců). Jeho rozsah ale stále zůstává za tím, co znají uživatelé v Estonsku, Dánsku nebo Finsku — především v oblasti přístupu k vlastní zdravotní dokumentaci, výsledkům laboratorních a zobrazovacích vyšetření a propouštěcím zprávám.
+        Třetím dílčím prvkem je pacientský portál — Portál občana zpřístupňuje řadu zdravotních informací (čerpané receptem hrazené léky, očkování, výpis z registru pojištěnců) a od 2. ledna 2026 na něj navazuje Národní portál elektronického zdravotnictví (eZdraví) s prvními verzemi elektronických žádanek a přístupem k dalším údajům o pacientovi. Jeho rozsah ale stále zůstává za tím, co znají uživatelé v Estonsku, Dánsku nebo Finsku — především v oblasti přístupu k vlastní zdravotní dokumentaci, výsledkům laboratorních a zobrazovacích vyšetření a propouštěcím zprávám; eŽádanky navíc startují jen v pilotním a dobrovolném režimu.
       </p>
 
       <h3>Tři vrstvy, kde Česko reálně zaostává</h3>
@@ -198,11 +199,11 @@
       </p>
 
       <p>
-        <strong>Sdílení zdravotní dokumentace mezi pracovišti.</strong> Pacient přesouvaný mezi nemocnicí a ambulantním specialistou, mezi praktickým lékařem a krajskou nemocnicí, mezi krajskou a fakultní nemocnicí dnes v Česku často nese papírovou dokumentaci nebo CD s obrazovou dokumentací. Lékař v cílovém pracovišti má povinnost si vyžádat předchozí dokumentaci, ale technicky to často znamená telefonát, e-mail nebo poštu. Záchranná služba v terénu nemá přístup k aktuálnímu zdravotnímu záznamu pacienta, kterého ošetřuje. Toto není pomalost — je to nedostatek standardu, který by umožnil digitální výměnu mezi nemocničními informačními systémy (NIS) a ambulantními informačními systémy (AIS) různých dodavatelů. Navrhovaný zákon o elektronickém zdravotnictví, který by takový standard ukotvil, je v ČR opakovaně formulovaný a opakovaně neprošel.
+        <strong>Sdílení zdravotní dokumentace mezi pracovišti.</strong> Pacient přesouvaný mezi nemocnicí a ambulantním specialistou, mezi praktickým lékařem a krajskou nemocnicí, mezi krajskou a fakultní nemocnicí dnes v Česku často nese papírovou dokumentaci nebo CD s obrazovou dokumentací. Lékař v cílovém pracovišti má povinnost si vyžádat předchozí dokumentaci, ale technicky to často znamená telefonát, e-mail nebo poštu. Záchranná služba v terénu nemá přístup k aktuálnímu zdravotnímu záznamu pacienta, kterého ošetřuje. Toto není nedostatek zákona — zákon o elektronizaci zdravotnictví (č. 325/2021 Sb.) přijatý v roce 2021 zavádí integrované datové rozhraní a kmenové registry (pacientů, poskytovatelů, zdravotnických pracovníků) a nabíhá po částech, s plnou účinností od 1. ledna 2026. Problém je pomalá implementace: podle kontrolního závěru NKÚ (kontrolní akce 22/20) nebyl k zákonnému termínu 1. ledna 2023 spuštěn ani jeden ze tří kmenových registrů (poskytovatelů, zdravotnických pracovníků a pacientů) ani centrální eHealth služby a klíčové projekty sdílení dokumentace nabraly roky zpoždění. Povinné standardy digitální výměny mezi nemocničními informačními systémy (NIS) a ambulantními informačními systémy (AIS) různých dodavatelů se tak zavádějí až se zpožděním oproti původním plánům.
       </p>
 
       <p>
-        <strong>Interoperabilita.</strong> Zdravotnické systémy v ČR běží na desítkách různých NIS a AIS od různých dodavatelů. Každý má svou datovou strukturu, své kódování, své rozhraní. Mezinárodní standardy — HL7 FHIR, SNOMED CT, LOINC — jsou v ČR v různé míře implementovány, ale jejich povinné využívání není legislativně zakotveno. EU od roku 2025 postupně spouští <em>European Health Data Space</em> (EHDS), který má povinnou interoperabilitu nastavit napříč členskými státy v dvou rozměrech: pro pacientskou péči (sdílení záznamu napříč EU) a pro sekundární využití dat (výzkum, veřejné zdraví, AI). Implementační lhůty jsou pro pacientskou rovinu cca rok 2025–2027, pro sekundární využití do 2031. Česká příprava na EHDS běží, ale tempo a personální zajištění reflektují pomalou roli, kterou MZ historicky v digitalizaci hraje.
+        <strong>Interoperabilita.</strong> Zdravotnické systémy v ČR běží na desítkách různých NIS a AIS od různých dodavatelů. Každý má svou datovou strukturu, své kódování, své rozhraní. Mezinárodní standardy — HL7 FHIR, SNOMED CT, LOINC — jsou v ČR v různé míře implementovány, ale jejich povinné využívání není legislativně zakotveno. Nařízení o <em>European Health Data Space</em> (EHDS, Nařízení (EU) 2025/327) vstoupilo v platnost 26. března 2025 a má povinnou interoperabilitu nastavit napříč členskými státy ve dvou rozměrech: pro pacientskou péči (sdílení záznamu napříč EU) a pro sekundární využití dat (výzkum, veřejné zdraví, AI). Většina povinností se ale rozbíhá až po přechodném období: prováděcí akty Komise mají být přijaty do března 2027, primární využití první skupiny dat (pacientské souhrny, e-recepty) se použije od března 2029, druhé skupiny (snímky, laboratorní výsledky, propouštěcí zprávy) od března 2031; sekundární využití většiny kategorií rovněž od března 2029. Česká příprava na EHDS běží, ale tempo a personální zajištění reflektují pomalou roli, kterou MZ historicky v digitalizaci hrálo.
       </p>
 
       <p>
@@ -234,7 +235,7 @@
       <h3>Co Česko realisticky může</h3>
 
       <p>
-        Plán digitalizace zdravotnictví v ČR — připravený MZ a Národním centrem elektronického zdravotnictví (NCEZ) — formuluje cíle, které se v různých variantách opakují roky: zákon o elektronickém zdravotnictví, registr poskytovatelů a pacientů s eIdentitou, povinné standardy datové výměny, pacientský portál integrující více zdrojů. Implementace probíhá pomalu, dotčená je řada zákonů a několik resortů (MZ, MV, MPSV, MŠMT pro vzdělávání profesionálů). EHDS, který přichází z evropské úrovně, část tlaku na realizaci zvyšuje — povinnost na národní straně je ale realisticky dotaženo až po roce 2027, podle připravenosti infrastruktury a legislativního průchodu.
+        Plán digitalizace zdravotnictví v ČR — připravený MZ a Národním centrem elektronického zdravotnictví (NCEZ) — stojí na zákoně o elektronizaci zdravotnictví (č. 325/2021 Sb.) a formuluje cíle, které se v různých variantách opakují roky: registr poskytovatelů a pacientů s eIdentitou, povinné standardy datové výměny, pacientský portál integrující více zdrojů. Legislativní rámec tedy existuje; slabinou zůstává implementace — probíhá pomalu, dotčená je řada zákonů a několik resortů (MZ, MV, MPSV, MŠMT pro vzdělávání profesionálů). EHDS, který přichází z evropské úrovně, část tlaku na realizaci zvyšuje — plná povinnost pro sdílení pacientských dat napříč EU ale nastává až od roku 2029, respektive 2031 pro snímky a laboratorní výsledky, podle připravenosti infrastruktury a legislativního průchodu.
       </p>
 
       <p>
@@ -278,7 +279,9 @@
         <h5 class="sources-group-h">Metodika</h5>
         <ul class="article-sources-list">
           <li><strong>NCEZ (ČR)</strong> — Národní centrum elektronického zdravotnictví. <a href="https://ncez.mzcr.cz/" target="_blank" rel="noopener">ncez.mzcr.cz ↗</a></li>
+          <li><strong>Zákon č. 325/2021 Sb., o elektronizaci zdravotnictví</strong> — přijat 2021, plná účinnost od 1. 1. 2026 (integrované datové rozhraní, kmenové registry). <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
           <li><strong>SÚKL — eRecept</strong> — informace o elektronickém receptu pro pacienty i lékaře. <a href="https://www.epreskripce.cz/" target="_blank" rel="noopener">epreskripce.cz ↗</a></li>
+          <li><strong>Národní portál elektronického zdravotnictví (eZdraví)</strong> — Portál lékaře a pacienta, eŽádanky (spuštěno 2. 1. 2026). <a href="https://www.ezdravi.gov.cz/" target="_blank" rel="noopener">ezdravi.gov.cz ↗</a></li>
           <li><strong>Portál občana — zdravotní záznamy</strong> — pacientský přístup k vybraným údajům. <a href="https://obcan.portal.gov.cz/" target="_blank" rel="noopener">obcan.portal.gov.cz ↗</a></li>
           <li><strong>HL7 FHIR</strong> — mezinárodní standard datové výměny ve zdravotnictví. <a href="https://hl7.org/fhir/" target="_blank" rel="noopener">hl7.org/fhir ↗</a></li>
         </ul>
@@ -286,14 +289,14 @@
       <div class="sources-group">
         <h5 class="sources-group-h">Policy inspirace</h5>
         <ul class="article-sources-list">
-          <li><strong>European Health Data Space (EHDS)</strong> — evropský regulační rámec pro sdílení a využití zdravotních dat. <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>European Health Data Space (EHDS) — Nařízení (EU) 2025/327</strong> — evropský regulační rámec pro sdílení a využití zdravotních dat, včetně implementačních lhůt (2027 / 2029 / 2031). <a href="https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space-regulation-ehds_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
           <li><strong>Estonsko e-Health</strong> — národní zdravotní informační systém. <a href="https://e-estonia.com/solutions/healthcare/" target="_blank" rel="noopener">e-estonia.com ↗</a></li>
           <li><strong>Dánsko sundhed.dk</strong> — národní zdravotní portál od roku 2003. <a href="https://www.sundhed.dk/" target="_blank" rel="noopener">sundhed.dk ↗</a></li>
           <li><strong>Finsko Kanta</strong> — národní zdravotní záznam, e-Prescription, Omakanta. <a href="https://www.kanta.fi/en/" target="_blank" rel="noopener">kanta.fi ↗</a></li>
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Hodnota 62 indexu eHealth pochází z dashboardu HSPA Monitoru ke dni vydání článku. EHDS implementační lhůty (2025–2027 pro pacientskou rovinu, 2031 pro sekundární využití) odpovídají publikovaným milníkům EU; přesné národní termíny budou upřesněny implementačními předpisy. Pro detaily o EHDS doporučujeme zdroje EU a NCEZ.
+        <strong>Pozn. k údajům:</strong> Hodnota 62 indexu eHealth pochází z dashboardu HSPA Monitoru ke dni vydání článku. EHDS implementační lhůty (nařízení v platnosti 26. 3. 2025; primární využití první skupiny dat od 3/2029, druhé skupiny od 3/2031; sekundární využití většiny kategorií od 3/2029) odpovídají Nařízení (EU) 2025/327; přesné národní termíny budou upřesněny implementačními předpisy. Pro detaily o EHDS doporučujeme zdroje EU a NCEZ.
       </p>
     </section>
 
