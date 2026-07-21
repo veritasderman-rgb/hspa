@@ -1,0 +1,53 @@
+{
+  "id": "nadumrtnost",
+  "name": "Nadúmrtnost (excess mortality)",
+  "area": "Výsledky",
+  "domain": "Mortalita",
+  "subdomain": "Odolnost systému",
+  "definition": "Nadúmrtnost vyjadřuje, o kolik procent překročil skutečný počet zemřelých v daném období počet, který by odpovídal běžnému stavu bez mimořádné události (pandemie, vlna veder, epidemie chřipky). Referenčním (očekávaným) stavem je průměrný počet zemřelých ve stejném kalendářním měsíci v letech 2016–2019. Ukazatel se počítá jako tzv. p-skóre: (skutečné úmrtí − očekávané úmrtí) / očekávané úmrtí × 100. Roční hodnota v tomto dashboardu je průměr dvanácti měsíčních p-skóre daného roku podle Eurostatu (tabulka demo_mexrt). Nadúmrtnost je souhrnný ukazatel odolnosti (resilience) zdravotního systému a celé společnosti vůči šokům: na rozdíl od příčinově vázaných ukazatelů (preventabilní, léčitelná mortalita) neměří jednu diagnózu, ale schopnost systému absorbovat mimořádnou zátěž bez dodatečných úmrtí.",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "endpoint": "https://ec.europa.eu/eurostat/databrowser/view/demo_mexrt/default/table",
+      "dataset": "Eurostat demo_mexrt — Excess mortality by month (% dodatečných úmrtí oproti měsíčnímu průměru 2016–2019)",
+      "note": "Eurostat publikuje ukazatel měsíčně pro všechny členské státy EU a EHP. Roční hodnota uvedená jako referenční je průměr dvanácti měsíčních p-skóre daného roku. Časová řada ČR (roční průměr měsíčních p-skóre): 2020 = 18,2 %; 2021 = 26,3 % (vrchol); 2022 = 9,7 %; 2023 = 2,9 %; 2024 = 2,6 %; 2025 předběžně 2,7 %. Nejvyšší měsíční hodnota ČR: listopad 2020 = +78,3 %. Sada aktualizována 2026-06-17. Doplňkovým primárním zdrojem je ČSÚ (týdenní a roční počty zemřelých), který stejná data poskytuje Eurostatu.",
+      "dimensions": {
+        "uzemi": "ČR celkem (dostupné i EU-27 a jednotlivé členské státy)",
+        "cas": "měsíční p-skóre, agregováno na roční průměr",
+        "metrika": "% dodatečných úmrtí oproti měsíčnímu průměru 2016–2019"
+      }
+    },
+    "fallback": {
+      "type": "csu",
+      "url": "https://www.czso.cz/csu/czso/obypz_cr",
+      "note": "ČSÚ — Pohyb obyvatelstva / Zemřelí podle týdnů; roční a týdenní počty zemřelých, ze kterých lze nadúmrtnost dopočítat proti vlastnímu baseline 2016–2019."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "demo_mexrt",
+    "dataset": "Eurostat demo_mexrt — EU-27 (populačně vážený průměr). Roční průměr měsíčních p-skóre EU-27: 2020 = 12,0 %; 2021 = 15,4 %; 2022 = 12,5 %; 2023 = 4,5 %; 2024 = 3,6 %; 2025 předběžně 3,6 %. Sousední země 2024: Německo 8,1 %, Rakousko 9,1 %, Polsko 0,8 %, Slovensko 1,2 %.",
+    "value": 3.6,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mexrt/default/table"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "monthly",
+  "stewards": [
+    "Eurostat (Directorate F — Social statistics)",
+    "Český statistický úřad (ČSÚ) — oddělení demografické statistiky",
+    "Státní zdravotní ústav (SZÚ) — monitoring úmrtnosti a vln veder"
+  ],
+  "method_notes": "P-skóre podle Eurostatu (demo_mexrt); baseline = průměr stejného kalendářního měsíce 2016–2019. Roční hodnota indikátoru je nevážený průměr dvanácti měsíčních p-skóre daného roku — jde o dobrou aproximaci, nikoli o počtem úmrtí vážený roční nadpočet; proto je origin veden jako seed a status review-pending do doby, než roční hodnotu potvrdí živý ingest (Eurostat SDMX + kontrola proti ČSÚ). Kontrola věrohodnosti: dopočet ČR 2021 (≈ 26 %) odpovídá rekordním ~140 tis. zemřelých oproti ~111 tis. baseline. Signál good/warn/bad se počítá proti EU-27 (lower_is_better): hodnota ČR 2024 (2,6 %) leží pod EU-27 (3,6 %), tedy good.",
+  "limitations": "1. **Roční hodnota je aproximace** — průměr měsíčních p-skóre není totéž co počtem úmrtí vážený roční nadpočet; oficiálně Eurostat publikuje ukazatel jen měsíčně. 2. **Citlivost na baseline** — období 2016–2019 zahrnuje relativně mírné sezóny chřipky; jiná volba baseline (např. delší období nebo trendová projekce zohledňující stárnutí populace) by hodnoty posunula. 3. **Nerozliší příčinu** — nadúmrtnost sčítá covid, chřipku, vlny veder, odloženou péči i nepřímé dopady; sama o sobě neříká, čím byla způsobena. 4. **Homogenita v čase** — změny ve vykazování a revize dat mohou ovlivnit srovnatelnost starší a novější části řady. 5. **Nezachycuje podúmrtnost jako 'úspěch'** — záporné hodnoty (méně úmrtí než baseline) mohou odrážet i tzv. harvesting po předchozí vlně, ne trvalé zlepšení.",
+  "determinants": "**Věková a zdravotní struktura populace.** Vyšší podíl seniorů a lidí s chronickou multimorbiditou zvyšuje zranitelnost vůči jakémukoli šoku — pandemii, chřipkové sezóně i vlně veder.\n\n**Proočkovanost a prevence.** Nižší proočkovanost proti covid-19 a chřipce u rizikových skupin (v ČR patří proočkovanost seniorů proti chřipce dlouhodobě k nejnižším v EU) přímo zvyšuje sezónní nadúmrtnost respiračních příčin, které dnes tvoří jádro české nadúmrtnosti.\n\n**Kapacita a odolnost zdravotního systému.** Rezerva lůžek intenzivní péče, personální kapacita a schopnost rychle přesměrovat péči rozhodují, zda se šok promítne do dodatečných úmrtí. Odložená a nedostupná péče během vln zvyšuje nepřímou nadúmrtnost.\n\n**Připravenost na vlny veder.** Klimatická změna zvyšuje frekvenci extrémních teplot; existence a funkčnost systému včasného varování a akčního plánu pro vlny veder (SZÚ) ovlivňuje letní nadúmrtnost, byť ta je v ČR zatím mírnější než v Rakousku či Německu.\n\n**Sociální determinanty.** Vzdělání, příjem a regionální nerovnosti se promítají do odlišné expozice i přístupu k péči a tím i do rozložení nadúmrtnosti mezi kraji a sociálními skupinami.",
+  "importance": "Nadúmrtnost je nejsouhrnnějším ukazatelem toho, jak dobře systém a společnost ustály mimořádnou zátěž. Zatímco naděje dožití nebo preventabilní mortalita popisují 'běžný' stav, nadúmrtnost měří odolnost vůči šokům — přesně tu vlastnost, kterou pandemie covid-19 prověřila u všech evropských systémů najednou a která je v post-pandemické éře stále považována za klíčovou dimenzi výkonnosti (OECD Health at a Glance, EU State of Health in the EU).\n\nČeská zkušenost je učebnicová: v letech 2020–2021 patřila ČR k nejhůře zasaženým zemím světa (nadúmrtnost 2021 přes 26 %, měsíční vrchol v listopadu 2020 +78 %), zatímco v letech 2023–2025 se vrátila k hodnotám kolem 2,6–2,9 % — pod průměr EU-27. To ukazuje, že mimořádná zátěž není osud: rozdíl mezi katastrofickou a zvládnutou vlnou dělá připravenost, proočkovanost a kapacita systému.\n\nMezinárodní srovnání dává indikátoru zvláštní hodnotu: Německo (8,1 %) a Rakousko (9,1 %) zůstávají i v roce 2024 výrazně nad ČR, což vyvrací zjednodušené čtení 'bohatší = odolnější' a otevírá otázku, čím se poté-pandemické trajektorie liší.",
+  "patient_story": "Fakultní nemocnice, jednotka intenzivní péče, listopad 2020. Sestra Markéta si po dvanáctihodinové službě sundává respirátor a na tváři jí zůstávají otisky. Na oddělení, kde se běžně staralo o dvanáct pacientů, jich toho měsíce leží dvacet a všichni na kyslíku. Byl to nejhorší měsíc v novodobé historii českého zdravotnictví: nadúmrtnost dosáhla v listopadu 2020 hodnoty +78 procent — o tři čtvrtiny víc zemřelých, než by odpovídalo běžnému listopadu. Za celý rok 2021 skončila česká nadúmrtnost na 26 procentech, což řadilo Česko mezi nejhůře zasažené země světa.\n\nO čtyři roky později vypadá stejné oddělení jinak. V roce 2024 klesla česká nadúmrtnost na 2,6 procenta — pod průměr Evropské unie (3,6 procenta) a hluboko pod hodnoty, které stále vykazují Německo (8,1 procenta) a Rakousko (9,1 procenta). Signál indikátoru je proto good. Trajektorie je jednoznačná: 18,2 procenta (2020), 26,3 procenta (2021), 9,7 procenta (2022), 2,9 procenta (2023), 2,6 procenta (2024). Šok odezněl a systém se vrátil k normálu.\n\nProč vlastně? Nadúmrtnost nesčítá jednu diagnózu, ale schopnost systému absorbovat zátěž. České jádro nadúmrtnosti dnes tvoří zimní respirační vlny — chřipka a covid u seniorů, kde patří česká proočkovanost proti chřipce k nejnižším v EU. Letní vlny veder, které v roce 2022 srazily Rakousko (+20 procent v červenci) i Německo (+18 procent v srpnu), zasáhly Česko mírněji (+9,4 procenta v srpnu 2022). Rozdíl mezi katastrofickou a zvládnutou vlnou nedělá náhoda: dělá ho proočkovanost, rezerva lůžek intenzivní péče a připravenost na extrémní teploty.\n\nPolitická páka je konkrétní. Nejvyšší návratnost má zvýšení proočkovanosti seniorů 65+ proti chřipce a covid-19 (kompetence: MZČR, SZÚ, praktičtí lékaři přes aktivní zvaní a úhradu podzimní vakcinace), udržení rezervní kapacity intenzivní péče a funkční akční plán pro vlny veder se systémem včasného varování (SZÚ). Pan Josef, 74 let, který přežil listopad 2020 na Markétině oddělení, je dnes jedním z těch, jejichž další zima závisí na tom, zda se systém poučil — nebo zda čeká, až přijde další šok nepřipravený.",
+  "framework": "monitoring",
+  "dimension": "zdravi",
+  "verification_status": "review-pending"
+}
