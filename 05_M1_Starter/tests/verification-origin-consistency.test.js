@@ -51,6 +51,14 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
   'vydaje_prevence_pct',
+  // ÚZIS NRH (Národní registr hospitalizovaných) — hodnoty ověřeny proti
+  // publikacím ÚZIS a udržovány manuálním extraktem (ingest/mapping/
+  // uzis_indicator_extracts.json); automatický fetcher zatím není (typ
+  // uzis_nrh bez endpointu), takže kontrakt nese origin: seed. Odeber, jakmile
+  // vznikne živý NRH fetcher.
+  'hospitalizace_na_100k',
+  'mortalita_inhosp_ami',
+  'mortalita_inhosp_cmp',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {

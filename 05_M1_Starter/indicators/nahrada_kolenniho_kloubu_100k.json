@@ -1,0 +1,52 @@
+{
+  "id": "nahrada_kolenniho_kloubu_100k",
+  "name": "Náhrada kolenního kloubu na 100 000 obyvatel",
+  "area": "Výstupy",
+  "domain": "Nemocniční péče",
+  "subdomain": "Elektivní ortopedie",
+  "definition": "Počet operací náhrady kolenního kloubu (totální i částečná endoprotéza kolena včetně revizních výkonů), provedených při hospitalizaci a přepočtených na 100 000 obyvatel za rok. Metrika odpovídá ukazateli OECD „Knee replacement (including the revision of knee replacement)“ (kód CM8154, péče Inpatient) z datové sady Health Care Utilisation — Surgical procedures a měří objem a dostupnost elektivní ortopedické chirurgie velkých kloubů. Denní (ambulantní) výkony jsou v Česku u kolene zanedbatelné (~0,2 na 100 000), inpatient hodnota proto prakticky odpovídá celkovému objemu.",
+  "unit": "operací/100 tis. obyv.",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrkn",
+      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-kloubnich-nahrad",
+      "dataset": "Národní registr kloubních náhrad (NRKN, ÚZIS ČR) — otevřený dataset „Počet operací totálních endoprotéz“ (NZIP data č. 2656 / datový souhrn č. 2438, list koleno), roční počty primárních a revizních výkonů náhrady kolenního kloubu podle provádějícího pracoviště, kraje bydliště, pohlaví a věkových kategorií, 2019–2024. Absolutní počet operací přepočtený na 100 000 obyvatel dle středního stavu populace ČSÚ.",
+      "dimensions": {
+        "country": "CZ",
+        "procedure": "totální / částečná endoprotéza kolena, primoimplantace i revize",
+        "care": "hospitalizační (inpatient) vs. jednodenní (day)",
+        "breakdown": "kraj bydliště, pohlaví, pětileté věkové kategorie, provádějící pracoviště"
+      }
+    },
+    "fallback": {
+      "type": "oecd_sdmx",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_PROC@DF_SURG_PROC,1.2/CZE...CM8154.?format=csvfilewithlabels (MEASURE=PRC, UNIT=Cases per 100 000 persons, MEDICAL_PROCEDURE=CM8154 Knee replacement, CARE_TYPE=Inpatient)"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DF_SURG_PROC / CM8154 (Knee replacement, Inpatient, per 100 000)",
+    "dataset": "OECD Health Statistics — Health Care Utilisation, Surgical procedures (dataflow DSD_HEALTH_PROC@DF_SURG_PROC). Za rok 2024 činil nevážený průměr zemí OECD s dostupnými daty 174,1 operace na 100 000 obyvatel (31 zemí) a nevážený průměr členských států EU 177,7 (21 zemí). Nejvyšší hodnoty vykazují Švýcarsko (328,2), Island (316,9), Německo (288,3), Finsko (274,0) a Rakousko (245,5); nejnižší v regionu Polsko (108,8) a Maďarsko (90,6). Slovensko 146,3. Česko (212,4) leží v horní třetině žebříčku — nad průměrem OECD i EU. Benchmark oecd = 174,1, eu = 177,7 (vlastní výpočet z OECD Data Explorer, hodnoty za 2024).",
+    "value": 174.1,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en/full-report/hip-and-knee-replacement_687dec46.html"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr kloubních náhrad — NRKN)",
+    "Česká společnost pro ortopedii a traumatologii ČLS JEP (Komise pro registr kloubních náhrad)",
+    "OECD (mezinárodní srovnání, Health Care Utilisation — Surgical procedures)"
+  ],
+  "method_notes": "Ukazatel převádí roční počet operací náhrady kolenního kloubu z registru NRKN/ÚZIS na 100 000 obyvatel, aby byl přímo srovnatelný s harmonizovaným ukazatelem OECD (CM8154, péče Inpatient). Hodnoty v seedu jsou převzaty přímo z OECD Data Explorer (dataflow DF_SURG_PROC), který pro Česko čerpá z NRKN: 2019 = 114,8; 2020 = 110,5; 2021 = 103,4 (pandemické dno); 2022 = 171,2; 2023 = 196,3; 2024 = 212,4 na 100 000. Kontrolní přepočet z otevřeného datasetu NRKN (2023: 15 871 jednostranných + 299 oboustranných primárních TEP kolena) potvrzuje řádovou konzistenci; OECD číslo je vyšší, protože zahrnuje i revizní a částečné (unikompartmentální) náhrady. Trajektorie je učebnicová: propad během covid-19 (2020–2021) následovaný prudkým dohnáním odložených elektivních výkonů — objem se mezi lety 2021 a 2024 víc než zdvojnásobil. Signál je neutral: direction je context_dependent, protože vyšší objem lze číst jako lepší dostupnost i jako riziko nadužívání, a interpretace závisí na indikační přísnosti a výsledcích (PROMs). Trend a hodnota jsou v seedu vedeny jako origin seed / review-pending, dokud je nepotvrdí živý ingest z OECD a kontrola proti NRKN.",
+  "limitations": "Objem náhrad kolenního kloubu na obyvatele je dvojznačný ukazatel: vyšší hodnota znamená lepší dostupnost elektivní chirurgie a řešení chronické bolesti a ztráty mobility u gonartrózy, ale velmi vysoké hodnoty (Švýcarsko, Německo) mohou signalizovat i nadužívání u pacientů, kteří by profitovali z konzervativní léčby. Direction context_dependent proto vylučuje čtení „čím víc, tím lépe“. Metrika sleduje počet výkonů, nikoli jejich vhodnost ani výsledek (k tomu slouží PROMs — Oxford Knee Score, EQ-5D — které OECD sbírá zvlášť a Česko je zatím systematicky nevykazuje). Srovnatelnost mezi zeměmi je citlivá na to, zda se počítají výkony, kloubní jednotky, nebo pacienti, a zda jsou zahrnuty revize a částečné náhrady; OECD sérii pro ČR čerpá z NRKN, ale jednotlivé národní registry se v definicích mírně liší. Průměry OECD a EU jsou zde nevážené (prostý průměr zemí), nikoli populačně vážené. Hodnota za 2024 je nejnovější dostupná; NRKN zveřejňuje data s ročním zpožděním.",
+  "determinants": "Poptávku po náhradě kolenního kloubu určuje především epidemiologie osteoartrózy: stárnutí populace a rostoucí prevalence nadváhy a obezity (viz obezita_prevalence) přímo zvyšují výskyt pokročilé gonartrózy, která je hlavní indikací výkonu. Na straně nabídky rozhoduje kapacita ortopedické sítě — počet operačních sálů, anesteziologů, ortopedů a lůžek — a úhradová pravidla veřejného zdravotního pojištění (DRG, bonifikace elektivní chirurgie). Klíčovým determinantem posledních let byl pandemický šok: covid-19 v letech 2020–2021 utlumil elektivní výkony a vytvořil frontu odložené péče, jejíž dohánění vysvětluje strmý růst objemu po roce 2022. Rozdíly mezi kraji a mezi pojištěnci s různým přístupem k odeslání a k samoplatebním výkonům formují reálnou (ne)rovnost v dostupnosti.",
+  "importance": "Náhrada kolenního kloubu je systémově významná jako indikátor dostupnosti elektivní chirurgie a schopnosti systému řešit chronickou, invalidizující, ale neakutní zátěž. Na rozdíl od akutní péče se elektivní ortopedie snadno stává tlumičem rozpočtových a kapacitních tlaků — čekací fronty rostou první a zkracují se poslední. Ukazatel proto úzce souvisí s čekacími dobami na náhradu velkých kloubů (cekaci_doba_kycel): objem a čekání jsou dvě strany téže kapacitní mince. Vysoký a rostoucí objem v Česku ukazuje, že systém dokázal po pandemii výrazně navýšit kapacitu elektivní chirurgie — což je dobrá zpráva pro dostupnost — a zároveň otevírá otázku indikační přísnosti a regionální rovnosti. Doplňuje tak dosud chybějící pohled dashboardu na objem plánované ortopedické péče o velké klouby.",
+  "patient_story": "Ordinace ortopeda, Zlín, únor 2024. Paní Věře je 68 let, dvacet let učila na základní škole a poslední tři roky ji každý krok bolí v pravém koleni. Rentgen ukazuje pokročilou gonartrózu — chrupavka je prakticky pryč, kost drhne o kost. „Konzervativně už nemáme co nabídnout,“ říká lékař. „Doporučuji totální endoprotézu.“ Paní Věra se ptá na termín a slyší odpověď, kterou by před pěti lety neslyšela: operace je za necelé tři měsíce. České nemocnice totiž po pandemii výrazně navýšily kapacitu plánované ortopedie a dohánějí odloženou frontu.\n\nČísla to potvrzují. V roce 2024 provedla česká pracoviště 212,4 operace náhrady kolenního kloubu na 100 000 obyvatel (OECD, data z registru NRKN/ÚZIS). Ještě v roce 2021 — na dně pandemie — to bylo jen 103,4; objem se tedy za tři roky víc než zdvojnásobil. Česko se tím dostalo do horní třetiny zemí OECD: nad nevážený průměr OECD (174,1) i EU (177,7), nad Slovensko (146,3) i Polsko (108,8), byť stále pod Německem (288,3) a Rakouskem (245,5), která dělají nejvíc kolen v Evropě. Signál je ovšem neutrální — vyšší objem sám o sobě není ani dobrá, ani špatná zpráva.\n\nStrukturálně stojí za tím trajektorií dvě síly. Poptávku žene stárnutí a obezita: pokročilá artróza kolene je nemocí vysokého věku a vysoké hmotnosti a obojího v Česku přibývá. Nabídku formovala kapacita ortopedické sítě a pandemický šok — covid-19 v letech 2020 a 2021 elektivní operace utlumil a vytvořil frontu, kterou systém od roku 2022 rychle dohání. Právě proto je objem tak dvojznačný: vyšší číslo znamená, že se paní Věra dostane na operaci dřív a nebude roky trpět bolestí a ztrátou mobility, ale velmi vysoké hodnoty jinde v Evropě vyvolávají i otázku, zda se neoperují i pacienti, kterým by pomohla méně invazivní léčba.\n\nPolitická páka je konkrétní. Objem a čekací doby elektivní ortopedie určuje úhradová vyhláška a nastavení DRG plateb za velké kloubní náhrady, kompetenci drží Ministerstvo zdravotnictví společně se zdravotními pojišťovnami. Nástroji jsou cílené programy na zkrácení čekacích front, transparentní reporting objemů a čekání podle nemocnic, rozšíření rychlé pooperační rehabilitace a — na druhé straně — indikační standardy a sběr výsledků hlášených pacienty (PROMs), které hlídají, aby růst objemu neznamenal nadužívání. Pro paní Věru systém zafungoval dobře; otázka, kterou číslo 212,4 klade, zní, zda stejně spolehlivě funguje i v okrajovém kraji a zda se objem opírá o správně indikované pacienty.",
+  "framework": "hspa",
+  "dimension": "dostupnost",
+  "verification_status": "review-pending"
+}
