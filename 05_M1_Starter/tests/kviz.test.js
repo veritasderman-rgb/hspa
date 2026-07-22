@@ -108,8 +108,20 @@ test('scoreVerdict: 5 pásem, krajní hodnoty', () => {
   assert.ok(scoreVerdict(0, 0).tier >= 1, 'prázdný kvíz nespadne');
 });
 
-test('reálná data: pool je dost velký na 10 otázek bez opakování', () => {
+test('reálná data: kvíz sestaví 10 otázek bez opakování napříč seedy', () => {
+  // Skutečná záruka není „aspoň 10 kandidátů na typ" (to je nafouknutý proxy —
+  // 10otázkový kvíz round-robinem přes 3 typy vezme z každého typu jen ~⌈10/3⌉=4),
+  // nýbrž že buildQuestions() vyprodukuje plných 10 otázek s unikátními indikátory.
+  // Testujeme přímo tuhle invariantu pro několik seedů (i pro krajní pool live dat).
+  for (const seed of [1, 7, 42, 99, 1234, 55555]) {
+    const qs = buildQuestions(INDICATORS, { count: 10, rng: seedRng(seed) });
+    assert.equal(qs.length, 10, `seed ${seed}: očekáváno 10 otázek`);
+    const ids = new Set(qs.map((q) => q.id));
+    assert.equal(ids.size, 10, `seed ${seed}: indikátory se nesmí opakovat`);
+  }
+  // Round-robin dělí otázky rovnoměrně mezi typy → každý typ musí uživit svůj
+  // podíl ⌈count / početTypů⌉. Tři typy, 10 otázek → nejvýše 4 z jednoho typu.
   for (const type of ['vs_oecd', 'guess', 'direction']) {
-    assert.ok(eligibleFor(INDICATORS, type).length >= 10, `${type}: aspoň 10 kandidátů`);
+    assert.ok(eligibleFor(INDICATORS, type).length >= 4, `${type}: aspoň 4 kandidáti (podíl round-robinu)`);
   }
 });
