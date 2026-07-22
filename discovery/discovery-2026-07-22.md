@@ -23,7 +23,7 @@ Běh denní rutiny (PROMPT_DAILY_ROUTINE.md). Důraz běhu: **validace a ověře
 ## Ověřené primární zdroje tohoto běhu
 - **ECDC Surveillance Atlas of Infectious Diseases** — chronická hepatitida B+C, ČR (dataset 361, HealthTopic 26). Live v `data/indicators.json`.
 - **SZÚ / ISIN — Informační systém infekčních nemocí** (přes NZIP, portál ÚZIS/MZ): počty hepatitid B a C v ČR, léčitelnost HCV, očkování.
-- **WHO — Elimination of hepatitis by 2030** + Global Hepatitis Report 2024: cíle 90 % diagnostikovaných / 80 % léčených / −90 % nových nákaz / −65 % úmrtnosti (vs 2015); svět mimo trajektorii (~1,1 mil. úmrtí/rok vs cíl <0,5 mil.).
+- **WHO — Elimination of hepatitis by 2030** + Global Hepatitis Report 2024: cíle 90 % diagnostikovaných / 80 % léčených / −90 % nových nákaz / −65 % úmrtnosti (vs 2015); svět mimo trajektorii (~1,3 mil. úmrtí/rok za rok 2022, nárůst z 1,1 mil. v 2019, vs cíl <0,5 mil.; diagnostikováno jen ~36 % HCV a ~13 % HBV).
 - **MZ ČR — vyhláška 389/2023 Sb.**: povinné hlášení virových hepatitid.
 
 ## Doporučení pro routing fáze

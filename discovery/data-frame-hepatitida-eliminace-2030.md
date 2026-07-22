@@ -15,7 +15,7 @@
 
 ## Cíle WHO eliminace 2030 (vs baseline 2015)
 - −90 % nových nákaz · −65 % úmrtnosti · **90 % diagnostikovaných** · **80 % léčených** — WHO, Elimination of hepatitis by 2030
-- Svět mimo trajektorii: ~1,1 mil. úmrtí/rok (2022) vs cíl <0,5 mil.; celosvětově léčeno ~9,4 mil. lidí na HCV vs cíl 40 mil. — WHO Global Hepatitis Report 2024
+- Svět mimo trajektorii: ~1,3 mil. úmrtí/rok (odhad za 2022, nárůst z 1,1 mil. v 2019) vs cíl <0,5 mil.; celosvětově diagnostikováno jen ~36 % lidí s HCV a ~13 % s HBV — WHO Global Hepatitis Report 2024
 
 ## Legislativa
 - Vyhláška č. **389/2023 Sb.**, příloha č. 18 — systém epidemiologické surveillance, povinné hlášení virových hepatitid B a C
