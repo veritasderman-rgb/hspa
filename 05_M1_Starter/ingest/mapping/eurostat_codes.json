@@ -208,7 +208,7 @@
       }
     },
     "nesplnena_potreba_zubni_pece": {
-      "_doc": "Self-reported unmet need for dental examination (hlth_silc_09), souhrnný důvod reason=TXP_TFAR_WLIST (příliš drahé / daleko / čekací listina), populace 16+, quantile=TOTAL, unit=PC. Ověřeno živě 2026-07-06: CZ 1,0 % (2025), EU27 3,3 %.",
+      "_doc": "Self-reported unmet need for dental examination (hlth_silc_09), souhrnný důvod reason=TXP_TFAR_WLIST (příliš drahé / daleko / čekací listina), populace 16+, quant_inc=TOTAL, unit=PC. Ověřeno živě 2026-07-06: CZ 1,0 % (2025), EU27 3,3 %. [FIX 2026-07-23: dimenze příjmu je quant_inc, ne quantile → dřív HTTP 400.]",
       "dataset": "hlth_silc_09",
       "country_dim": "geo",
       "cz_code": "CZ",
@@ -217,8 +217,8 @@
         "sex": "T",
         "age": "Y_GE16",
         "reason": "TXP_TFAR_WLIST",
-        "quantile": "TOTAL",
-        "unit": "PC"
+        "unit": "PC",
+        "quant_inc": "TOTAL"
       }
     },
     "umela_preruseni_tehotenstvi": {
@@ -254,6 +254,20 @@
         "age": "Y15-19",
         "icd10": "X60-X84_Y870",
         "unit": "RT"
+      }
+    },
+    "konzumace_ovoce_zeleniny": {
+      "_doc": "Daily consumption of fruit & vegetables, 5+ portions (hlth_ehis_fv3e, n_portion=GE5, isced11=TOTAL). EHIS triannuální, poslední vlna 2019. Ověřeno živě 2026-07-23: CZ 7,7 % (2019), EU27 12,4 %.",
+      "dataset": "hlth_ehis_fv3e",
+      "country_dim": "geo",
+      "cz_code": "CZ",
+      "eu_code": "EU27_2020",
+      "filter_extra": {
+        "sex": "T",
+        "age": "TOTAL",
+        "isced11": "TOTAL",
+        "n_portion": "GE5",
+        "unit": "PC"
       }
     }
   }

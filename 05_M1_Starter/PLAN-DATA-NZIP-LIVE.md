@@ -279,13 +279,21 @@ Dávka A3 (Eurostat tps00202): sebevrazdy_mladistvi_15_19 → ŽIVĚ + OVĚŘENO
    mapping tps00202 přidán, buildIndicator ověřen origin=live; hodnota == seed, 0 korpusová
    korekce — 3 claimy konzistentní). Antibiotika (A?) ODLOŽENA: ECDC AMC Atlas API
    nevrací measure_id přes GetDatasets, Eurostat AMC neexistuje → potřeba jiný zdroj/session.
+Dávka A4 (Eurostat hlth_silc_09): nesplnena_potreba_zubni_pece → ŽIVĚ + OVĚŘENO
+   (1,0 % 2025, EU27 3,3 %). ROOT CAUSE HTTP 400: dental dataset používá příjmovou
+   dimenzi `quant_inc`, NE `quantile` (medical hlth_silc_08 má `quantile`) — oprava
+   mappingu + karty + testu; buildIndicator ověřen origin=live. 6 claimů (2024 TOTAL
+   1,3 %, EU 3,3 %, gradient QU1 2,5 % / QU5 0,5 % = 5×) ověřeno proti API, konzistentní,
+   0 korpusová korekce.
+Dávka A5 (Eurostat hlth_ehis_fv3e): konzumace_ovoce_zeleniny → ŽIVĚ + OVĚŘENO
+   (7,7 % 2019, EU27 12,4 %; EHIS poslední vlna 2019). Mapping přidán, buildIndicator
+   origin=live. 11 claimů ověřeno PROTI ŽIVÉMU API včetně všech mezinárodních srovnání
+   (DE 10,9 / IE 32,9 / NL 29,5 / AT 5,6 / PL 8,6 / RO 2,4 / SK 8,5 GE5 2019) — vše sedí,
+   0 korpusová korekce.
 ```
 
-**Nález (mimo rozsah dávky, k dořešení):** `nesplnena_potreba_zubni_pece` mapping
-(`hlth_silc_09`, reason=`TXP_TFAR_WLIST`) vrací **HTTP 400** — kód důvodu už v číselníku
-neexistuje (Eurostat restrukturalizace, stejně jako u `unmet_need_medical` dřív). Indikátor
-je proto pořád seed; oprava = najít platný souhrnný `reason` kód (např. `TOOEXP` sólo)
-a re-ověřit. Samostatná mikro-dávka.
+*(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
+příčinou nebyl reason kód, ale špatné jméno příjmové dimenze.)*
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
 `pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:
