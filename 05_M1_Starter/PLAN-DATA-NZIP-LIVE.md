@@ -262,12 +262,30 @@ Dávka A1 (SÚKL DIS-13): spotreba_opioidu → ŽIVĚ + OVĚŘENO (14,7 DDD/1000
    řada 2021–24 z DIS-13, křížově proti nezávislé referenci 2018=13,05 ↑) ✅ první „Ověřeno".
 ```
 
-**Nález k dořešení (samostatná korekce, jako kojení):** `pouzivani_antidepresiv` má
-seed **84** DDD/1000/den (2023), ale výpočet z DIS-13 dává **76,7** a **OECD uvádí ČR
-2023 = 75,3** — tj. seed je nadhodnocený ~11 %. Číslo „84" je navíc **napříč korpusem**
-(8 claimů v 5 článcích: protidrogova-dusevni-politika, manifest-reforma, reforma-psychiatrie-13-let,
-sebevrazdy-dusevni-zdravi). Oprava = koordinovaná editorská korekce indikátoru + článků +
-claimů (~77–79). Indikátor zatím ponechán seed (nemíchat s napojovací dávkou).
+**Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
+`pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:
+- výpočet z **SÚKL DIS-13** (LEKARNA, N06A, D−V) dává řadu 2021–24: **71,3 / 74,4 / 76,7 / 78,9**;
+- **OECD**: ČR 2023 = **75,3** DDD/1000/den; OECD **průměr** 52,4 (2010) → **69,5 (2020)**, rostoucí;
+  ČR byla historicky **pod** průměrem, rychle dohání → 2023 je **zhruba na úrovni** průměru OECD,
+  **NE „výrazně nad"**.
+- ⇒ seed 84 je nadhodnocený ~11 % a narativ „84 vs OECD 67, o čtvrtinu více, výrazně nad" je **věcně chybný**.
+
+**Rozsah korekce (napříč korpusem — 8 claimů, 4 články):**
+`clanek-protidrogova-dusevni-politika-mz-2026` (av-counter data-value="84", próza, related-link),
+`clanek-manifest-reforma-zdravotnictvi` (counter, data-card, próza, link),
+`clanek-reforma-psychiatrie-13-let` (próza, related-link),
+`clanek-sebevrazdy-dusevni-zdravi` (counter, próza, link). **Pozor:** v sebevrazdy je „84" i
+v kódu MKN-10 **X60–X84** — ten NEMĚNIT; měnit jen antidepresivní řetězce („84 DDD", `data-value="84"`).
+Fix: 84 → **77** (ČR 2023); „o čtvrtinu více" → „mírně nad / zhruba na úrovni průměru OECD";
++ indikátor value 78,9 (2024) origin:live verified; + 8 claimů (value 84→77, quote). Pak
+`build:diagnoza` (titulky beze změny), `validate:all`, `npm test`.
+
+**Zjištění o zbytku Vlny A (scan 2026-07-23):** ze všech pharma-consumption seed indikátorů má
+**jen `lpod_share_critical` 0 claimů** (a ten je metodicky nejasný). Všechny ostatní
+(antibiotika 6, benzodiazepiny 7, antidepresiva 8, vakcíny 4–7 claimů) mají **korpusový dopad** —
+tj. každý = koordinovaná korekce jako výše. `spotreba_opioidu` (0 claimů) byl jediný „čistý"
+rychlý wins. **Zbytek Vlny A je proto maraton pečlivých korekcí, ne dávka rychlých napojení** —
+plánovat jako samostatné cílené PR, každý přes §4.
 
 **Zbývá 16 bez URL — patří do Vlny A (live), NELZE bezpečně zavřít pouhým odkazem:**
 většina jsou **NRHZS kapacitní metriky dopočítávané z mikrodat** (`obloznost_*`,
