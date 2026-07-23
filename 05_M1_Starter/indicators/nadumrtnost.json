@@ -9,15 +9,14 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "eurostat",
-      "endpoint": "https://ec.europa.eu/eurostat/databrowser/view/demo_mexrt/default/table",
-      "dataset": "Eurostat demo_mexrt — Excess mortality by month (% dodatečných úmrtí oproti měsíčnímu průměru 2016–2019)",
-      "note": "Eurostat publikuje ukazatel měsíčně pro všechny členské státy EU a EHP. Roční hodnota uvedená jako referenční je průměr dvanácti měsíčních p-skóre daného roku. Časová řada ČR (roční průměr měsíčních p-skóre): 2020 = 18,2 %; 2021 = 26,3 % (vrchol); 2022 = 9,7 %; 2023 = 2,9 %; 2024 = 2,6 %; 2025 předběžně 2,7 %. Nejvyšší měsíční hodnota ČR: listopad 2020 = +78,3 %. Sada aktualizována 2026-06-17. Doplňkovým primárním zdrojem je ČSÚ (týdenní a roční počty zemřelých), který stejná data poskytuje Eurostatu.",
-      "dimensions": {
-        "uzemi": "ČR celkem (dostupné i EU-27 a jednotlivé členské státy)",
-        "cas": "měsíční p-skóre, agregováno na roční průměr",
-        "metrika": "% dodatečných úmrtí oproti měsíčnímu průměru 2016–2019"
-      }
+      "type": "eurostat_jsonstat",
+      "dataset": "demo_mexrt",
+      "params": {
+        "geo": "CZ",
+        "unit": "PC"
+      },
+      "aggregate": "annual_mean (roční průměr měsíčních p-skóre, jen kompletní roky)",
+      "note": "Excess mortality (Eurostat demo_mexrt) — roční hodnota = prostý průměr dvanácti měsíčních p-skóre (% dodatečných úmrtí oproti měsíčnímu průměru 2016–2019). Národním zdrojem prvotních dat je ČSÚ (týdenní a roční počty zemřelých), harmonizováno do Eurostatu. Živě reportuje poslední KOMPLETNÍ rok. Ověřeno 2026-07-23: CZ 2,7 % (2025), EU27 3,6 %; řada CZ 2020=18,2 / 2021=26,3 / 2022=9,7 / 2023=2,9 / 2024=2,6 / 2025=2,7."
     },
     "fallback": {
       "type": "csu",

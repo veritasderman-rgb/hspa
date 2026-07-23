@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { aggregateAnnualMean } from '../ingest/fetchers/eurostat.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MAPPING = JSON.parse(
@@ -98,4 +99,24 @@ test('umela_preruseni_tehotenstvi: demo_fabortind, ABORTRT, bez eu_code (context
   assert.equal(m.filter_extra.unit, 'RT');
   // Kontextový indikátor → žádný EU agregát (jinak by fetcher zbytečně tahal EU řadu).
   assert.equal(m.eu_code, undefined);
+});
+
+test('nadumrtnost: demo_mexrt, aggregate=annual_mean (měsíční → roční)', () => {
+  const m = MAPPING.indicators.nadumrtnost;
+  assert.equal(m.dataset, 'demo_mexrt');
+  assert.equal(m.aggregate, 'annual_mean');
+  assert.equal(m.min_periods, 12);
+  assert.equal(m.filter_extra.unit, 'PC');
+});
+
+test('aggregateAnnualMean: průměruje měsíce, vynechá neúplné roky', () => {
+  // 2024 = 12 měsíců (kompletní), 2025 = jen 2 měsíce (neúplný → vynechán)
+  const obs = [];
+  for (let mo = 1; mo <= 12; mo++) obs.push({ geo: 'CZ', time: `2024-${String(mo).padStart(2, '0')}`, value: mo <= 6 ? 2 : 4 });
+  obs.push({ geo: 'CZ', time: '2025-01', value: 10 });
+  obs.push({ geo: 'CZ', time: '2025-02', value: 12 });
+  const out = aggregateAnnualMean(obs, 'geo', { minPeriods: 12 });
+  assert.equal(out.length, 1, 'jen kompletní rok 2024');
+  assert.equal(out[0].time, '2024');
+  assert.equal(out[0].value, 3); // průměr (2×6 + 4×6)/12 = 3
 });
