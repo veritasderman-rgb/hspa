@@ -296,17 +296,20 @@ Dávka A6 (Eurostat demo_mexrt + ROZŠÍŘENÍ FETCHERU): nadumrtnost → ŽIVĚ
    2 testy. Reprodukuje řadu karty přesně (2020=18,2 … 2024=2,6 / 2025=2,7). Živě
    reportuje poslední kompletní rok (2026 s 3 měsíci vynechán). 0 claimů; flagship
    článek year-labeled 2024=2,6 → ponechán (jako A4/A5, dashboard je čerstvější).
-A7 (luzka_dlouhodobe_pece_65plus) — §4 ZAMÍTL ŽIVÉ NAPOJENÍ (nikoli únava, ale
-   comparability landmine à la kojení): CZ ratio je reprodukovatelné (beds NRCBED
-   2020 = 75 174 ÷ demo_pjan Y_GE65 ~2,13 mil × 1000 = 35,3 ✓ == seed), ALE
-   **hlth_rs_bdsns NEMÁ agregát EU27** (260 geo = jen státy + NUTS regiony, žádné
-   EU27_2020). ⇒ seedový benchmark **eu:46 NELZE reprodukovat ze stejného zdroje**;
-   živá CZ hodnota s neověřitelným benchmarkem = přesně ten nesouměřitelný
-   referenční problém, který §4 má chytat. Navíc data končí 2020 (nulová čerstvost).
-   VERDIKT: nezavádět jako „verified/live" dokud se nedohledá zdroj EU průměru
-   (pravděpodobně OECD Health at a Glance „LTC beds", ne Eurostat). CZ hodnotu lze
-   případně zživit jako `partial` s benchmarkem z odděleného doloženého zdroje —
-   to je samostatné rozhodnutí redakce, ne mechanický wire.
+A7 (luzka_dlouhodobe_pece_65plus) — WIREABLE (oprava dřívějšího chybného verdiktu;
+   Codex #866). CZ ratio je reprodukovatelné (beds NRCBED 2020 = 75 174 ÷ demo_pjan
+   Y_GE65 ~2,13 mil × 1000 = 35,3 ✓ == seed). Benchmark **eu:46 JE reprodukovatelný**
+   — karta ho dokumentuje jako **průměr 6 srovnatelných zemí ze stejného zdroje
+   hlth_rs_bdsns** (DE 54,3 / NL 70,5 / FR 48,0 / SK 46,8 / AT 46,0 / PL 10,7 ≈ 46),
+   ne jako EU27 agregát (ten Eurostat pro tuto sadu nemá). Můj dřívější „§4 zamítl"
+   byl OMYL — nepřečetl jsem benchmark_source karty. Zbývá jen: `ratio` režim fetcheru
+   (beds ÷ demo_pjan Y_GE65) pro CZ, benchmark zůstává doloženou 6-zemní konstantou.
+   Data končí 2020 (malá čerstvost), ale to napojení nebrání.
+Dávka A8 (OECD SDMX, reakce na Codex #866): absolventi_lekarstvi_per_100k → ŽIVĚ
+   (16,3/100k 2024, OECD ⌀ 15,4). ROOT CAUSE: mapping měl verzi dataflow 1.0, ale
+   DSD_HEALTH_REAC_EMP@DF_GRAD je na v1.1 (jako absolventi_osetrovatelstvi) → 404.
+   Oprava = bump verze. Zároveň OPRAVENY 3 chybné závěry z #866 (A7 benchmark
+   reprodukovatelný, OECD větev 9/11 živá ne rozbitá, počty 73/76 ne 74/78).
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
@@ -317,12 +320,14 @@ příčinou nebyl reason kód, ale špatné jméno příjmové dimenze.)*
 Každý zbývající seed indikátor má doložený terminální stav — ne „nedošlo na něj",
 ale konkrétní technický blokátor:
 
-- **OECD SDMX (~11 mapovaných + ~12 seed) — ROZBITÝ ENDPOINT.** `oecd_sdmx2` fetcher
-  vrací **HTTP 404** (test: dataflow `OECD.ELS.HD,DSD_HEALTH_REAC_EMP@DF_GRAD,1.0`).
-  OECD deprecoval staré dataflow ID ve prospěch nového Data Exploreru; mapované ID
-  už neexistují. ⇒ celá OECD větev vyžaduje **re-discovery aktuálních dataflow ID**
-  per indikátor (OECD SDMX je notoricky proměnlivý) — samostatná investigativní vlna,
-  ne mechanický wire. Proto jsou OECD-mapované indikátory pořád seed.
+- **OECD SDMX — VĚTŠINOU FUNGUJE (oprava dřívějšího chybného verdiktu; Codex #866).**
+  Z 11 mapovaných je **9 živých**; můj dřívější závěr „celá větev rozbitá" plynul
+  z jediného 404 na `DF_GRAD,1.0` — ve skutečnosti šlo o zastaralou **verzi** v mappingu,
+  ne mrtvý dataflow. Opraveno v A8: `absolventi_lekarstvi_per_100k` v1.0 → **v1.1**
+  (stejný dataflow, jaký už `absolventi_osetrovatelstvi` používá živě) → živě 16,3 (2024).
+  Zbývá jediný skutečně nefunkční: **`vydaje_prevence_pct`** (DSD_SHA@DF_SHA v1.0 vrací
+  prázdno — SHA dataflow změnil strukturu/klíč; potřebuje re-discovery klíče, ne celé větve).
+  ~12 dalších OECD-source seed indikátorů zatím nemá mapping (samostatné napojení per kus).
 - **~45 ÚZIS — BLOKOVÁNO PROSTŘEDÍM.** NRHZS microdata (těžký stream, uživatel
   odmítl) nebo NZIP `nzip_id` (jen browser session; Playwright blokován, viz §0a).
 - **Antibiotika — ECDC AMC API NEPOSKYTUJE `measure_id`** (GetDatasets nevrací AMC
@@ -330,10 +335,11 @@ ale konkrétní technický blokátor:
 - **`gender_pay_gap_zdravotnictvi` — COMPARABILITY.** CZ-zdravotnictví 24,9 % vs
   EU-celoekonomika 17,4 % = nesouměřitelné (§4 by zablokoval).
 
-**Bilance session (A1–A6 hotovo):** kontrakt 179 ind., **74 live / 78 verified.**
-Vše bezpečně napojitelné existující pipeline (SÚKL chronická léčiva, přímý Eurostat,
-+ nový `annual_mean` režim) je hotové. Zbytek je jiná třída (rozbitý OECD endpoint,
-blokované prostředí) — ne pod tímto kontextem.
+**Bilance session (A1–A6 + A8 hotovo):** kontrakt 179 ind., **73 live / 76 verified**
+(oprava dřívějšího chybného „74/78" — Codex #866; skutečný stav v `data/indicators.json`).
+Zbývá: A7 luzka (wireable, potřebuje `ratio` režim), `vydaje_prevence_pct` (SHA klíč),
+~12 nemapovaných OECD (per kus), ~45 ÚZIS (blokované prostředím), antibiotika (ECDC AMC API),
+gender_pay_gap (comparability).
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
 `pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:
