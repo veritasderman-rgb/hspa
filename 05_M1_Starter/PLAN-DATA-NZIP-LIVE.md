@@ -274,7 +274,18 @@ Codex follow-up A2: benchmark oecd 67→69,5 (ověřený průměr), narativ „z
    → „mírně nad průměrem OECD (o cca desetinu)" napříč kartou/články/claims/perex/manifest;
    dořešeny zbylé 67-reference (protidrogova, manifest, reforma-psychiatrie) + perex articles.json;
    regen seo:indicators + manifest-substránky + souvislosti. ✅ konzistentní 78,9 vs 69,5.
+Dávka A3 (Eurostat tps00202): sebevrazdy_mladistvi_15_19 → ŽIVĚ + OVĚŘENO
+   (6,96/100k 2023, EU27 4,17; karta přepnuta csu_datastat→eurostat_jsonstat primary,
+   mapping tps00202 přidán, buildIndicator ověřen origin=live; hodnota == seed, 0 korpusová
+   korekce — 3 claimy konzistentní). Antibiotika (A?) ODLOŽENA: ECDC AMC Atlas API
+   nevrací measure_id přes GetDatasets, Eurostat AMC neexistuje → potřeba jiný zdroj/session.
 ```
+
+**Nález (mimo rozsah dávky, k dořešení):** `nesplnena_potreba_zubni_pece` mapping
+(`hlth_silc_09`, reason=`TXP_TFAR_WLIST`) vrací **HTTP 400** — kód důvodu už v číselníku
+neexistuje (Eurostat restrukturalizace, stejně jako u `unmet_need_medical` dřív). Indikátor
+je proto pořád seed; oprava = najít platný souhrnný `reason` kód (např. `TOOEXP` sólo)
+a re-ověřit. Samostatná mikro-dávka.
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
 `pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:

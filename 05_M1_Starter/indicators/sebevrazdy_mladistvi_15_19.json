@@ -9,19 +9,21 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "csu_datastat",
-      "endpoint": "https://csu.gov.cz/sebevrazdy_zaj",
-      "dataset": "ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku / Sebevraždy v ČR (úmyslné sebepoškození, dg. X60–X84, věková skupina 15–19)",
-      "dimensions": {
-        "age": "Y15-19",
+      "type": "eurostat_jsonstat",
+      "dataset": "tps00202",
+      "params": {
+        "geo": "CZ",
         "sex": "T",
-        "country": "CZ",
-        "icd10": "X60-X84"
-      }
+        "age": "Y15-19",
+        "icd10": "X60-X84_Y870",
+        "unit": "RT"
+      },
+      "note": "Suicide death rate age 15–19 (Eurostat tps00202) — hrubá věkově-specifická míra na 100 000 obyvatel téže kohorty, obě pohlaví. Národním zdrojem prvotních dat je ČSÚ (List o prohlídce zemřelého → Zemřelí podle seznamu příčin smrti, pohlaví a věku), harmonizovaný do Eurostatu. Ověřeno živě 2026-07-23: CZ 6,96 (2023), EU27 4,17."
     },
     "fallback": {
-      "type": "eurostat",
-      "url": "https://ec.europa.eu/eurostat/databrowser/view/tps00202/default/table?lang=en"
+      "type": "csu_datastat",
+      "endpoint": "https://csu.gov.cz/sebevrazdy_zaj",
+      "dataset": "ČSÚ — Zemřelí podle seznamu příčin smrti, pohlaví a věku / Sebevraždy v ČR (úmyslné sebepoškození, dg. X60–X84, věková skupina 15–19)"
     }
   },
   "benchmark_source": {
