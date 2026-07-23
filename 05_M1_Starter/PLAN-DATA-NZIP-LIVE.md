@@ -302,9 +302,13 @@ A7 (luzka_dlouhodobe_pece_65plus) — WIREABLE (oprava dřívějšího chybného
    — karta ho dokumentuje jako **průměr 6 srovnatelných zemí ze stejného zdroje
    hlth_rs_bdsns** (DE 54,3 / NL 70,5 / FR 48,0 / SK 46,8 / AT 46,0 / PL 10,7 ≈ 46),
    ne jako EU27 agregát (ten Eurostat pro tuto sadu nemá). Můj dřívější „§4 zamítl"
-   byl OMYL — nepřečetl jsem benchmark_source karty. Zbývá jen: `ratio` režim fetcheru
-   (beds ÷ demo_pjan Y_GE65) pro CZ, benchmark zůstává doloženou 6-zemní konstantou.
-   Data končí 2020 (malá čerstvost), ale to napojení nebrání.
+   byl OMYL — nepřečetl jsem benchmark_source karty. Zbývá `ratio` režim fetcheru pro
+   CZ, benchmark zůstává doloženou 6-zemní konstantou. POZOR na jmenovatel (§4, ověřeno
+   2026-07-23): **demo_pjan ANI demo_pjangroup nemají agregát `Y_GE65`** (jen jednoleté
+   věky + TOTAL). Seed 35,3 vznikl metodou z karty (`demo_pjanind`: podíl 65+ × střední
+   stav obyvatel) — `ratio` režim musí tuto metodu replikovat PŘESNĚ (nebo sečíst
+   jednoleté věky Y65..Y_OPEN), jinak vyjde jiné číslo. Data končí 2020. ⇒ wireable,
+   ale jmenovatel je přesná práce, ne mechanický join.
 Dávka A8 (OECD SDMX, reakce na Codex #866): absolventi_lekarstvi_per_100k → ŽIVĚ
    (16,3/100k 2024, OECD ⌀ 15,4). ROOT CAUSE: mapping měl verzi dataflow 1.0, ale
    DSD_HEALTH_REAC_EMP@DF_GRAD je na v1.1 (jako absolventi_osetrovatelstvi) → 404.

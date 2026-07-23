@@ -44,10 +44,10 @@ const ROOT = path.resolve(__dirname, '..');
 // 2026-07-17 živý fetch nedotáhl → transform ponechal hodnotu, origin spadl
 // na seed. Stejný verified-but-flaky-live stav jako ostatní položky.
 const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
-  'absolventi_lekarstvi_per_100k',
+  // Odebráno po zživení (Vlna A): absolventi_lekarstvi_per_100k (A8),
+  // konzumace_ovoce_zeleniny (A5), nesplnena_potreba_zubni_pece (A4) — teď
+  // origin:live, takže regrese na seed MÁ padnout, ne být tolerována.
   'cholesterol_prumer_dospeli',
-  'konzumace_ovoce_zeleniny',
-  'nesplnena_potreba_zubni_pece',
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
   'vydaje_prevence_pct',
