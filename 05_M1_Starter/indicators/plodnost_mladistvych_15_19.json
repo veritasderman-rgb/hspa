@@ -9,16 +9,21 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "csu_demografie",
-      "dataset": "Pohyb obyvatelstva ČR / Narození — míry plodnosti podle věku matky",
-      "url": "https://csu.gov.cz/narozeni",
-      "dimensions": ["věk matky (5leté skupiny)", "kraj", "okres", "rok"],
-      "note": "ČSÚ ČR — demografická statistika (Pohyb obyvatelstva ČR, Demografická ročenka, Veřejná databáze VDB). Míra plodnosti žen 15–19 let se počítá jako počet živě narozených matkám 15–19 let dělený středním stavem žen 15–19 let, ×1000. Hodnota je harmonizovaná s Eurostat demo_frate (age Y15-19) — ČSÚ je národním zdrojem těchto dat pro Eurostat, národní čísla se proto shodují."
+      "type": "eurostat_jsonstat",
+      "dataset": "demo_frate",
+      "params": {
+        "geo": "CZ",
+        "age": "Y15-19",
+        "agedef": "COMPLET",
+        "unit": "NR"
+      },
+      "scale": 1000,
+      "note": "Teenage fertility rate (Eurostat demo_frate, age Y15-19). Eurostat vrací počet na ženu → scale ×1000 = na 1000 žen 15–19. Ověřeno živě 2026-07-23: CZ 5,6 (2024), EU27 6,2. Národním zdrojem prvotních dat je ČSÚ (Pohyb obyvatelstva ČR — živě narození matkám 15–19 / střední stav žen 15–19 ×1000), harmonizovaný do Eurostatu, proto se národní čísla shodují."
     },
     "fallback": {
-      "type": "eurostat",
-      "dataset": "demo_frate — Fertility rates by age (age Y15-19, agedef COMPLET), geo CZ",
-      "url": "https://ec.europa.eu/eurostat/databrowser/product/view/demo_frate"
+      "type": "csu_demografie",
+      "dataset": "Pohyb obyvatelstva ČR / Narození — míry plodnosti podle věku matky",
+      "url": "https://csu.gov.cz/narozeni"
     }
   },
   "benchmark_source": {

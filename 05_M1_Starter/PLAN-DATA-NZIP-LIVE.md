@@ -331,6 +331,23 @@ Dávka A10 (Eurostat NACE Q + oprava mého §4 omylu): gender_pay_gap_zdravotnic
    EU-27 NACE Q GPG = 18,0 2024; EU/EEA vč. NO/IS ~17,4). Napojeno z earn_gr_gpgr2
    (nace_r2=Q), bez eu_code (Eurostat nemá EU agregát pro NACE Q → benchmark = doložený
    medián). Hodnota 24,9 == seed. 5 claimů konzistentní. → 75 live / 79 verified.
+Pokus A11 (OECD DF_PHYS_CAT): podil_prakticti_lekari → napojeno živě, pak REVERTOVÁNO
+   (Codex #868). OECD EMPLGENP 2023=16,86 ≈ seed 16,9 KORROBORUJE hodnotu, ALE:
+   (P1) OECD UNIT PT_WR_PRF_HLTH = „% profesně AKTIVNÍCH lékařů", zatímco karta definuje
+   jmenovatel jako „praktikující" lékaře — jiný jmenovatel = jiná veličina, nelze bez
+   opravy definice; (P2) flagship článek `clanek-podil-prakticti-lekari` je natvrdo na
+   16,9 %/2023 a uvádí origin:seed → živé 17,2 by rozporovalo. Můj „0 claimů = čisté" byl
+   chybný (článek claimy netrackuje). Vráceno na seed; napojení = definiční §4 + srovnání
+   článku, ne mechanický wire. → zpět 75 live / 79 verified.
+Dávka A12 (Eurostat demo_frate + NOVÁ SCHOPNOST FETCHERU `scale`): plodnost_mladistvych_15_19
+   → ŽIVĚ + OVĚŘENO (5,6 na 1000 žen 15–19, 2024; EU27 6,2). Přidán volitelný `scale`
+   (+`round`) do eurostat.js: demo_frate vrací plodnost „na ženu" (0,00563) → scale ×1000 =
+   konvenční „na 1000 žen" (5,6). Default scale=1 → žádný dopad na dosud napojené indikátory.
+   round:1 sjednocuje živou hodnotu se seedem/claimy/článkem (2024=5,6, 2018=10,8). Karta
+   přepnuta csu_demografie→eurostat_jsonstat (ČSÚ národní zdroj ve fallbacku); +1 mapping test.
+   3 claimy (5,6 2024 / 10,8 2018 / EU 6,2) konzistentní, 0 korpusová korekce. → 76 live / 80 verified.
+   (Pozn.: `scale` je znovupoužitelné i pro dřívější blokátory typu „nutná konverze, kterou
+   fetcher neumí" — u Eurostatu; OECD fetcher má vlastní cestu.)
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
@@ -364,12 +381,29 @@ ale konkrétní technický blokátor:
   - `farmaceuti_per_100k` → NECHAT seed: DF_PHST nabízí jen jednotky PS (osoby) nebo 10P3HB
     (na 1000 = 0,77), ŽÁDNOU „na 100k" (seed 76/100k) → nutná konverze ×100, kterou fetcher
     neumí; navíc OECD končí 2022 (77/100k) < seed 2023 (76). Ověřeno, není mechanický wire.
-  - `podil_prakticti_lekari`, `spokojenost_pece` → napojitelné (per-kus discovery dims),
-    nízký/žádný claim-radius; ready pro cílenou dávku (nutno ověřit jednotku + rok vs seed).
+  - `podil_prakticti_lekari` → TERMINÁLNÍ OBSTACLE (pokus A11 revertován + doražena §4):
+    OECD DF_PHYS_CAT nabízí pro EMPLGENP JEDINOU procentní jednotku `PT_WR_PRF_HLTH` =
+    „% profesně AKTIVNÍCH lékařů". Karta/článek ale definují jmenovatel jako „praktikující"
+    (praktikující ≠ profesně aktivní: aktivní zahrnuje admin/výzkum). **OECD tedy neumí dodat
+    hodnotu odpovídající definici indikátoru** — a odpovídající zdroj (ÚZIS NRZP head-count
+    praktikujících) je prostředím blokovaný. Seed 16,9 je navíc mislabeled (vzat z OECD
+    prof-aktivní, ale označen „praktikující"). ⇒ napojení vyžaduje buď (a) redefinici
+    indikátoru na „profesně aktivní" + přepis flagship článku (editorial rozhodnutí redakce),
+    nebo (b) ÚZIS NRZP (blokované). Ne mechanický wire — ověřeno kontrolou jednotek dataflow.
+  - `spokojenost_pece` → OBSTACLE (ověřeno): OECD patient-experience dataflowy (DF_PE, PaRIS)
+    vracejí 404 přes v1.0/1.1/2.0 (verze/klíč) a hlavně — „spokojenost 75%" nemapuje na jediný
+    jasný measure (patient experience = mnoho survey otázek), CZ pokrytí v OECD bývá řídké.
+    Potřebuje identifikaci konkrétního measure + ověření CZ coverage, ne mechanický wire.
   - `nahrada_kolenniho_kloubu_100k` → DF_SURG_PROC má **18 dimenzí** + je třeba dohledat kód
     MEDICAL_PROCEDURE pro náhradu kolena + UNIT rate/100k; složitější klíč, samostatná dávka.
-  - `podil_lekaru_55plus` (10 claimů), `prezit_karcinom_plic_5let` (7 claimů, seed 2014) →
-    HCQO/REAC dataflowy dostupné, ALE vysoký claim-radius → napojení = korpusová kontrola per §4.
+  - `prezit_karcinom_plic_5let` → JIŽ verified + v exceptions; KŘÍŽOVĚ POTVRZENO 2026-07-23
+    proti OECD DF_CC MEASURE=CCLUNTSR = 2014=10,6 (přesná shoda se seedem). OECD má JEN 2014
+    (CONCORD-3, zamrzlé) → origin zůstává seed, hodnota doložena. 7 claimů = CONCORD-3
+    mezinárodní srovnání, konzistentní. Hotovo, beze změny.
+  - `podil_lekaru_55plus` → OBSTACLE (ověřeno): DF_PHYS_AGE_SEX má věkové pásmo Y55T64
+    (2024=18,1 %), ale seed je „55+" = nutno sečíst 55–64 + 65+; navíc seed je ÚZIS/NRZP
+    (definice se může lišit od OECD) a 10 claimů = vysoký blast-radius. Age-sum + definiční
+    §4 + korpusová kontrola, ne mechanický wire.
   - `vydaje_dlouhodoba_pece_hdp` → DF_SHA (stejný jako vydaje_prevence) → riziko stejného
     §4 landmine (volatilita/teze); prověřit blast-radius (5 claimů) před aktivací.
   - `incidence_prsu` → NENÍ OECD SDMX (zdroj EU Country Cancer Profile / ECIS-IARC), jiná cesta.
@@ -384,10 +418,11 @@ ale konkrétní technický blokátor:
   (spočtený medián EU-27 NACE Q GPG = 18,0 (2024); EU/EEA vč. NO/IS ~17,4). Srovnání je
   souměřitelné → napojeno živě z Eurostat earn_gr_gpgr2.
 
-**Bilance session (A1–A10 hotovo):** kontrakt 179 ind., **75 live / 79 verified**
-(oprava dřívějšího chybného „74/78" — Codex #866). Zbývá: A7/vydaje flip (editorial,
-fix připraven), ~10 nemapovaných OECD (per kus, metoda ověřena A9), ~45 ÚZIS
-(blokované prostředím), antibiotika (ECDC AMC API).
+**Bilance session (A1–A10 + A12 hotovo):** kontrakt 179 ind., **76 live / 80 verified**
+(A12 = plodnost_mladistvych_15_19 přes demo_frate + nová schopnost `scale`; A11
+podil_prakticti revertován). Zbývá: A7/vydaje flip (editorial, fix připraven),
+~9 nemapovaných OECD (per kus, metoda ověřena A9), ~45 ÚZIS (blokované prostředím),
+antibiotika (ECDC AMC API).
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
 `pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:

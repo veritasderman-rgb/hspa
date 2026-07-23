@@ -92,6 +92,17 @@ test('nesplnena_potreba_zubni_pece: hlth_silc_09, souhrnný reason TXP_TFAR_WLIS
   assert.equal(m.filter_extra.unit, 'PC');
 });
 
+test('plodnost_mladistvych_15_19: demo_frate, scale 1000 (na ženu → na 1000 žen)', () => {
+  const m = MAPPING.indicators.plodnost_mladistvych_15_19;
+  assert.equal(m.dataset, 'demo_frate');
+  assert.equal(m.filter_extra.age, 'Y15-19');
+  assert.equal(m.filter_extra.unit, 'NR');
+  // demo_frate vrací plodnost jako „počet na ženu" (0,00563) — scale ×1000 dá
+  // konvenční „na 1000 žen" (5,6). round:1 sjednocuje s článkem/claimy.
+  assert.equal(m.scale, 1000);
+  assert.equal(m.round, 1);
+});
+
 test('umela_preruseni_tehotenstvi: demo_fabortind, ABORTRT, bez eu_code (context_dependent)', () => {
   const m = MAPPING.indicators.umela_preruseni_tehotenstvi;
   assert.equal(m.dataset, 'demo_fabortind');
