@@ -230,7 +230,18 @@ npm run verify:freshness      # kontrola stáří
 po Dávce B1 (link):    bez source.url 34 → 26  (+8: COSI, HIV, NZR, WUENIC, OHCA, KST, Zemřelí, hospice)
 po Dávce B2 (link):    26 → 20  (+6: CZECHSEX ×5, ÚZIS Psychiatrická péče)
 po Dávce B3 (link):    20 → 17  (+3: SHARE, SÚKL open-data ×2)
+Codex fix (SÚKL):      SÚKL homepage → konkrétní sada DIS-13 (opioidy, antidepresiva)
+po Dávce B4 (link):    17 → 16  (+1: kontrola_hypertenze → SZÚ EHES)
 ```
+
+**Zbývá 16 bez URL — patří do Vlny A (live), NELZE bezpečně zavřít pouhým odkazem:**
+většina jsou **NRHZS kapacitní metriky dopočítávané z mikrodat** (`obloznost_*`,
+`osetrovaci_dny_*`, `podil_senioru_*`, `podfinancovani_*`, `nevyuzite_osetrovaci_dny_ip`,
+`uhrada_zp_per_pojistenec`) — nemají samostatnou „klikací" sadu, jejich hodnota se
+počítá ze stažených mikrodat (těžký fetch). Dále ambivalentní zdroj (`podil_vydaje_*`,
+`vydaje_leky_hdp`, `lpod_share_critical`, `cekaci_doba_kycel`, `ehealth_adoption`,
+NRC šetření `bezpecnost_padu_nemocnice`/`spokojenost_informovani`). → **Vlna A**
+vyžaduje rozhodnutí, zda pouštět datové fetche (agregátní / mikrodata).
 
 **Odloženo z Vlny B (protokol §4 — deklarovaný zdroj neseděl s ověřitelnou sadou;
 řeší se ve Vlně A / vyžaduje potvrzení zdroje):** `cekaci_doba_kycel` (VZP?),
