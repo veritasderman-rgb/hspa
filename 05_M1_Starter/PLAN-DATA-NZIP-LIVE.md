@@ -257,7 +257,17 @@ po Dávce B2 (link):    26 → 20  (+6: CZECHSEX ×5, ÚZIS Psychiatrická péč
 po Dávce B3 (link):    20 → 17  (+3: SHARE, SÚKL open-data ×2)
 Codex fix (SÚKL):      SÚKL homepage → konkrétní sada DIS-13 (opioidy, antidepresiva)
 po Dávce B4 (link):    17 → 16  (+1: kontrola_hypertenze → SZÚ EHES)
+── VLNA A zahájena ──
+Dávka A1 (SÚKL DIS-13): spotreba_opioidu → ŽIVĚ + OVĚŘENO (14,7 DDD/1000/den 2024,
+   řada 2021–24 z DIS-13, křížově proti nezávislé referenci 2018=13,05 ↑) ✅ první „Ověřeno".
 ```
+
+**Nález k dořešení (samostatná korekce, jako kojení):** `pouzivani_antidepresiv` má
+seed **84** DDD/1000/den (2023), ale výpočet z DIS-13 dává **76,7** a **OECD uvádí ČR
+2023 = 75,3** — tj. seed je nadhodnocený ~11 %. Číslo „84" je navíc **napříč korpusem**
+(8 claimů v 5 článcích: protidrogova-dusevni-politika, manifest-reforma, reforma-psychiatrie-13-let,
+sebevrazdy-dusevni-zdravi). Oprava = koordinovaná editorská korekce indikátoru + článků +
+claimů (~77–79). Indikátor zatím ponechán seed (nemíchat s napojovací dávkou).
 
 **Zbývá 16 bez URL — patří do Vlny A (live), NELZE bezpečně zavřít pouhým odkazem:**
 většina jsou **NRHZS kapacitní metriky dopočítávané z mikrodat** (`obloznost_*`,
