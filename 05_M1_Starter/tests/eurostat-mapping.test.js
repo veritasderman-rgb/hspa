@@ -82,7 +82,12 @@ test('nesplnena_potreba_zubni_pece: hlth_silc_09, souhrnný reason TXP_TFAR_WLIS
   assert.equal(m.dataset, 'hlth_silc_09');
   assert.equal(m.filter_extra.reason, 'TXP_TFAR_WLIST');
   assert.equal(m.filter_extra.age, 'Y_GE16');
-  assert.equal(m.filter_extra.quantile, 'TOTAL');
+  // POZOR: na rozdíl od hlth_silc_08 (medical) používá hlth_silc_09 (dental)
+  // příjmovou dimenzi "quant_inc", NE "quantile" — quantile=TOTAL vracelo HTTP 400
+  // (ověřeno živě proti API 2026-07-23). Sourozenecké datasety mají různá jména dimenze.
+  assert.equal(m.filter_extra.quantile, undefined,
+    'hlth_silc_09 dimension is "quant_inc", not "quantile"');
+  assert.equal(m.filter_extra.quant_inc, 'TOTAL');
   assert.equal(m.filter_extra.unit, 'PC');
 });
 
