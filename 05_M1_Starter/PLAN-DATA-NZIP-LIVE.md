@@ -372,10 +372,15 @@ ale konkrétní technický blokátor:
   - `farmaceuti_per_100k` → NECHAT seed: DF_PHST nabízí jen jednotky PS (osoby) nebo 10P3HB
     (na 1000 = 0,77), ŽÁDNOU „na 100k" (seed 76/100k) → nutná konverze ×100, kterou fetcher
     neumí; navíc OECD končí 2022 (77/100k) < seed 2023 (76). Ověřeno, není mechanický wire.
-  - `podil_prakticti_lekari` → OBSTACLE (pokus A11 revertován, Codex #868): OECD EMPLGENP
-    2023=16,86 korroboruje seed 16,9, ALE jmenovatel se liší (OECD „profesně aktivní" vs karta
-    „praktikující") + flagship článek je natvrdo na 16,9/2023/seed. Napojení = definiční §4 +
-    srovnání článku, ne mechanický wire (mimo napojitelné mechanicky).
+  - `podil_prakticti_lekari` → TERMINÁLNÍ OBSTACLE (pokus A11 revertován + doražena §4):
+    OECD DF_PHYS_CAT nabízí pro EMPLGENP JEDINOU procentní jednotku `PT_WR_PRF_HLTH` =
+    „% profesně AKTIVNÍCH lékařů". Karta/článek ale definují jmenovatel jako „praktikující"
+    (praktikující ≠ profesně aktivní: aktivní zahrnuje admin/výzkum). **OECD tedy neumí dodat
+    hodnotu odpovídající definici indikátoru** — a odpovídající zdroj (ÚZIS NRZP head-count
+    praktikujících) je prostředím blokovaný. Seed 16,9 je navíc mislabeled (vzat z OECD
+    prof-aktivní, ale označen „praktikující"). ⇒ napojení vyžaduje buď (a) redefinici
+    indikátoru na „profesně aktivní" + přepis flagship článku (editorial rozhodnutí redakce),
+    nebo (b) ÚZIS NRZP (blokované). Ne mechanický wire — ověřeno kontrolou jednotek dataflow.
   - `spokojenost_pece` → OBSTACLE (ověřeno): OECD patient-experience dataflowy (DF_PE, PaRIS)
     vracejí 404 přes v1.0/1.1/2.0 (verze/klíč) a hlavně — „spokojenost 75%" nemapuje na jediný
     jasný measure (patient experience = mnoho survey otázek), CZ pokrytí v OECD bývá řídké.
