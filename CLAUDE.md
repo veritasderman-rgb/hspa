@@ -412,6 +412,7 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - [`05_M1_Starter/PLAN-TRI-ZIDLE.md`](05_M1_Starter/PLAN-TRI-ZIDLE.md) — plán herní trilogie „Tři židle" (ministr → ředitel nemocnice → pacient/lékař + perspektivy na Modelu systému)
 - [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
+- [`05_M1_Starter/PLAN-DATA-NZIP-LIVE.md`](05_M1_Starter/PLAN-DATA-NZIP-LIVE.md) — NZIP/ÚZIS větev verifikace: živé indikátory z „Datového zpravodajství" + doplnění datasetů ke článkům, s **povinným ověřovacím protokolem dat** (kojení-proof); **samostatný vstupní bod pro tu práci**
 - [`STATUS_AUDIT_2026-05-18.md`](STATUS_AUDIT_2026-05-18.md) — historický audit stavu
 - [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek)
 - [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`
