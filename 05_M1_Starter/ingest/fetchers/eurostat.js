@@ -55,6 +55,35 @@ function buildTrend(observations, countryDim, code, years = 5) {
     .slice(-years);
 }
 
+/**
+ * Agreguje sub-roční pozorování (např. měsíční p-skóre demo_mexrt) na roční
+ * hodnoty jako prostý průměr period v daném roce. Vrací jen roky s alespoň
+ * `minPeriods` periodami (default 12 = kompletní rok), aby se nezapočítal
+ * rozběhnutý neúplný rok. Používá se, když mapping obsahuje
+ * `aggregate: 'annual_mean'`. Ostatní indikátory tímto krokem neprocházejí.
+ */
+export function aggregateAnnualMean(observations, countryDim, { minPeriods = 12, round = 1 } = {}) {
+  const groups = new Map(); // `${country}|${year}` -> { [countryDim], time, values[] }
+  for (const o of observations) {
+    if (o.value == null) continue;
+    const period = String(o.time ?? o.TIME_PERIOD ?? o.year ?? '');
+    const year = period.slice(0, 4);
+    if (!/^\d{4}$/.test(year)) continue;
+    const country = o[countryDim];
+    const key = `${country}|${year}`;
+    if (!groups.has(key)) groups.set(key, { [countryDim]: country, time: year, values: [] });
+    groups.get(key).values.push(o.value);
+  }
+  const factor = 10 ** round;
+  const out = [];
+  for (const g of groups.values()) {
+    if (g.values.length < minPeriods) continue; // jen kompletní roky
+    const mean = g.values.reduce((a, b) => a + b, 0) / g.values.length;
+    out.push({ [countryDim]: g[countryDim], time: g.time, value: Math.round(mean * factor) / factor });
+  }
+  return out;
+}
+
 export async function fetchEurostatIndicator(indicatorId, mapping, opts = {}) {
   const { force = false, fetchImpl, sleepImpl } = opts;
   const cacheName = `eurostat_${indicatorId}.json`;
@@ -67,8 +96,11 @@ export async function fetchEurostatIndicator(indicatorId, mapping, opts = {}) {
   const url = buildUrl(mapping);
   console.log(`  [eurostat] ${indicatorId}: ${url}`);
   const raw = await fetchWithRetry(url, { fetchImpl, sleepImpl });
-  const observations = parseJsonStat(raw);
   const countryDim = mapping.country_dim ?? 'geo';
+  let observations = parseJsonStat(raw);
+  if (mapping.aggregate === 'annual_mean') {
+    observations = aggregateAnnualMean(observations, countryDim, { minPeriods: mapping.min_periods ?? 12 });
+  }
 
   const cz = pickLatestForCountry(observations, countryDim, mapping.cz_code);
   const eu = mapping.eu_code ? pickLatestForCountry(observations, countryDim, mapping.eu_code) : null;

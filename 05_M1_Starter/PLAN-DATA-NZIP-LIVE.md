@@ -290,6 +290,18 @@ Dávka A5 (Eurostat hlth_ehis_fv3e): konzumace_ovoce_zeleniny → ŽIVĚ + OVĚ�
    origin=live. 11 claimů ověřeno PROTI ŽIVÉMU API včetně všech mezinárodních srovnání
    (DE 10,9 / IE 32,9 / NL 29,5 / AT 5,6 / PL 8,6 / RO 2,4 / SK 8,5 GE5 2019) — vše sedí,
    0 korpusová korekce.
+Dávka A6 (Eurostat demo_mexrt + ROZŠÍŘENÍ FETCHERU): nadumrtnost → ŽIVĚ + OVĚŘENO
+   (2,7 % 2025, EU27 3,6 %). Přidán agregační režim `aggregate: annual_mean` do
+   eurostat.js (měsíční p-skóre → roční průměr, jen kompletní roky ≥12 měsíců) +
+   2 testy. Reprodukuje řadu karty přesně (2020=18,2 … 2024=2,6 / 2025=2,7). Živě
+   reportuje poslední kompletní rok (2026 s 3 měsíci vynechán). 0 claimů; flagship
+   článek year-labeled 2024=2,6 → ponechán (jako A4/A5, dashboard je čerstvější).
+A7 (luzka_dlouhodobe_pece_65plus) — SCOUTED, nezavedeno: ratio ověřen ručně
+   (beds NRCBED 2020 = 75 174 ÷ 65+ pop ~2,13 mil × 1000 = 35,3 ✓ == seed), ALE
+   (a) vyžaduje DVOU-datasetový join (hlth_rs_bdsns NR ÷ demo_pjan Y_GE65) = nový
+   `ratio` režim fetcheru, těžší než annual_mean; (b) hlth_rs_bdsns končí 2020 →
+   „live" nepřináší čerstvost. Doporučeno: samostatné PR s čistým kontextem,
+   §4 na volbu populace (demo_pjan Y_GE65 k 1.1. vs střední stav).
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
