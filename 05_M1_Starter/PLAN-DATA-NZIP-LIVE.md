@@ -357,7 +357,21 @@ ale konkrétní technický blokátor:
   na kterém stojí narativ 5 článků. Aktivace = redakční revize teze (je ČR pod OECD, nebo
   na úrovni?), ne mechanický wire. Oprava klíče uložena v `_blocked` poli mappingu, mapping
   ZÁMĚRNĚ ponechán v původním (neaktivním) stavu, ať cron nerozbije korpus.
-  ~12 dalších OECD-source seed indikátorů zatím nemá mapping (samostatné napojení per kus).
+  **Zbylé OECD-source seed indikátory — batch triage 2026-07-23 (per-kus stav):**
+  - `alkohol_spotreba` → ✅ NAPOJENO živě (A9). `gender_pay_gap` → ✅ (A10).
+  - `podil_generik_objem` → NECHAT seed: OECD DF_GEN_MRKT končí 2022 (62,6 vol) < seed 2023 (62,8);
+    62,6 korroboruje seed, napojení by byl krok zpět v roce.
+  - `farmaceuti_per_100k` (DF_PHST), `podil_prakticti_lekari`, `spokojenost_pece` → napojitelné
+    (per-kus discovery dims), nízký/žádný claim-radius; ready pro cílenou dávku.
+  - `nahrada_kolenniho_kloubu_100k` → DF_SURG_PROC má **18 dimenzí** + je třeba dohledat kód
+    MEDICAL_PROCEDURE pro náhradu kolena + UNIT rate/100k; složitější klíč, samostatná dávka.
+  - `podil_lekaru_55plus` (10 claimů), `prezit_karcinom_plic_5let` (7 claimů, seed 2014) →
+    HCQO/REAC dataflowy dostupné, ALE vysoký claim-radius → napojení = korpusová kontrola per §4.
+  - `vydaje_dlouhodoba_pece_hdp` → DF_SHA (stejný jako vydaje_prevence) → riziko stejného
+    §4 landmine (volatilita/teze); prověřit blast-radius (5 claimů) před aktivací.
+  - `incidence_prsu` → NENÍ OECD SDMX (zdroj EU Country Cancer Profile / ECIS-IARC), jiná cesta.
+  Metoda napojení ověřena (A8/A9/A10); zbytek = per-kus dávky, každá s §4 + blast-radius,
+  několik s doloženým rizikem landmine (SHA) nebo vysokým claim-radiusem.
 - **~45 ÚZIS — BLOKOVÁNO PROSTŘEDÍM.** NRHZS microdata (těžký stream, uživatel
   odmítl) nebo NZIP `nzip_id` (jen browser session; Playwright blokován, viz §0a).
 - **Antibiotika — ECDC AMC API NEPOSKYTUJE `measure_id`** (GetDatasets nevrací AMC
