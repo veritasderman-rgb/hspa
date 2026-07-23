@@ -325,6 +325,12 @@ Dávka A9 (OECD SDMX, nemapovaný indikátor): alkohol_spotreba → ŽIVĚ + OV�
    2023=11,2 == dřívější seed (přesná shoda) → hodnota ověřena; 11 claimů year-labeled
    2023 (11,2) zůstává platných (quote-based, články neměněny), teze „ČR výrazně nad OECD"
    drží (10,6 vs 8,4). Živě reportuje 2024. → 74 live / 78 verified.
+Dávka A10 (Eurostat NACE Q + oprava mého §4 omylu): gender_pay_gap_zdravotnictvi → ŽIVĚ
+   (24,9 % 2024, benchmark 17,4). Dřívější „comparability blocker" byl OMYL: benchmark 17,4
+   NENÍ celoekonomický, ale medián zemí EU/EEA v TÉMŽE sektoru NACE Q (spočteno: medián
+   EU-27 NACE Q GPG = 18,0 2024; EU/EEA vč. NO/IS ~17,4). Napojeno z earn_gr_gpgr2
+   (nace_r2=Q), bez eu_code (Eurostat nemá EU agregát pro NACE Q → benchmark = doložený
+   medián). Hodnota 24,9 == seed. 5 claimů konzistentní. → 75 live / 79 verified.
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
@@ -356,14 +362,15 @@ ale konkrétní technický blokátor:
   odmítl) nebo NZIP `nzip_id` (jen browser session; Playwright blokován, viz §0a).
 - **Antibiotika — ECDC AMC API NEPOSKYTUJE `measure_id`** (GetDatasets nevrací AMC
   sady; Eurostat AMC dataset neexistuje). DIS-13 zakázán guardrailem (akutní léčiva).
-- **`gender_pay_gap_zdravotnictvi` — COMPARABILITY.** CZ-zdravotnictví 24,9 % vs
-  EU-celoekonomika 17,4 % = nesouměřitelné (§4 by zablokoval).
+- **`gender_pay_gap_zdravotnictvi` — VYŘEŠENO v A10 (můj dřívější „comparability" byl OMYL).**
+  Benchmark 17,4 NENÍ celoekonomický, ale **medián zemí EU/EEA v TÉMŽE sektoru NACE Q**
+  (spočtený medián EU-27 NACE Q GPG = 18,0 (2024); EU/EEA vč. NO/IS ~17,4). Srovnání je
+  souměřitelné → napojeno živě z Eurostat earn_gr_gpgr2.
 
-**Bilance session (A1–A6 + A8 hotovo):** kontrakt 179 ind., **73 live / 76 verified**
-(oprava dřívějšího chybného „74/78" — Codex #866; skutečný stav v `data/indicators.json`).
-Zbývá: A7 luzka (wireable, potřebuje `ratio` režim), `vydaje_prevence_pct` (SHA klíč),
-~12 nemapovaných OECD (per kus), ~45 ÚZIS (blokované prostředím), antibiotika (ECDC AMC API),
-gender_pay_gap (comparability).
+**Bilance session (A1–A10 hotovo):** kontrakt 179 ind., **75 live / 79 verified**
+(oprava dřívějšího chybného „74/78" — Codex #866). Zbývá: A7/vydaje flip (editorial,
+fix připraven), ~10 nemapovaných OECD (per kus, metoda ověřena A9), ~45 ÚZIS
+(blokované prostředím), antibiotika (ECDC AMC API).
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
 `pouzivani_antidepresiv` má seed **84** DDD/1000/den (2023), ale:

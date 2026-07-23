@@ -9,15 +9,14 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "structure_of_earnings_survey",
-      "endpoint": "https://csu.gov.cz/struktura-mezd-zamestnancu",
-      "dataset": "ČSÚ — Struktura mezd zaměstnanců (Structure of Earnings Survey); rozdíly v odměňování žen a mužů podle odvětví CZ-NACE. Český zdroj je harmonizován a publikován Eurostatem v sadě earn_gr_gpgr2 (sekce Q).",
-      "dimensions": {
-        "country": "CZ",
-        "nace_section": "Q — Zdravotní a sociální péče",
-        "sex": "muži / ženy",
-        "earnings": "hrubý hodinový výdělek"
-      }
+      "type": "eurostat_jsonstat",
+      "dataset": "earn_gr_gpgr2",
+      "params": {
+        "geo": "CZ",
+        "nace_r2": "Q",
+        "unit": "PC"
+      },
+      "note": "Gender pay gap (unadjusted) v NACE Q (zdravotnictví a sociální péče), Eurostat earn_gr_gpgr2. Eurostat nemá EU27 agregát pro NACE Q → benchmark je medián zemí EU/EEA (viz benchmark_source), STEJNÝ sektor. Ověřeno živě 2026-07-23: CZ 24,9 % (2024); řada roste (2021=17,7 → 2024=24,9)."
     },
     "fallback": {
       "type": "eurostat_dataset",
@@ -41,11 +40,13 @@
     "Ministerstvo práce a sociálních věcí (MPSV) — ISPV / agenda rovného odměňování",
     "Eurostat — earn_gr_gpgr2"
   ],
-  "method_notes": "Hodnota 24,9 % za rok 2024 (sekce NACE Q) řadí Česko mezi pět zemí EU/EEA s největší propastí v odměňování ve zdravotnictví a sociální péči — výrazně nad medián 29 států (17,4 %). Trend ukazuje znepokojivý obrat: po poklesu z 25,6 % (2018) na 17,7 % (2021) se gap od roku 2022 znovu rozevírá (18,6 % → 21,4 % → 24,9 %). Mezi sousedy je Slovensko podobně vysoko (24,3 %), Německo níže (18,7 %), Polsko (12,2 %) a Rakousko (8,6 %) výrazně níže. Neočištěný gap měří celkovou nerovnost v sektoru, nikoli mzdovou diskriminaci na stejné pozici — očištěný gap (po kontrole profese, úvazku a seniority) je v ČR řádově nižší (~5 %), rozdíl mezi oběma čísly je ale sám o sobě výpovědí o segregaci. Origin = seed: hodnota je orientačně zanesena pro vývojové prostředí, ostrá data tečou z ČSÚ SES a Eurostatu.",
+  "method_notes": "Hodnota 24,9 % za rok 2024 (sekce NACE Q) řadí Česko mezi pět zemí EU/EEA s největší propastí v odměňování ve zdravotnictví a sociální péči — výrazně nad medián 29 států (17,4 %). Trend ukazuje znepokojivý obrat: po poklesu z 25,6 % (2018) na 17,7 % (2021) se gap od roku 2022 znovu rozevírá (18,6 % → 21,4 % → 24,9 %). Mezi sousedy je Slovensko podobně vysoko (24,3 %), Německo níže (18,7 %), Polsko (12,2 %) a Rakousko (8,6 %) výrazně níže. Neočištěný gap měří celkovou nerovnost v sektoru, nikoli mzdovou diskriminaci na stejné pozici — očištěný gap (po kontrole profese, úvazku a seniority) je v ČR řádově nižší (~5 %), rozdíl mezi oběma čísly je ale sám o sobě výpovědí o segregaci. Origin = seed: hodnota je orientačně zanesena pro vývojové prostředí, ostrá data tečou z ČSÚ SES a Eurostatu. | §4 comparability OVĚŘENO 2026-07-23: benchmark 17,4 je medián zemí EU/EEA v TÉMŽE sektoru NACE Q (ne celoekonomický průměr) — spočtený medián EU-27 NACE Q GPG je 18,0 (2024), EU/EEA vč. NO/IS ~17,4. Srovnání CZ-zdravotnictví vs EU/EEA-zdravotnictví je souměřitelné.",
   "limitations": "Neočištěný GPG nelze zaměňovat za diskriminaci „za stejnou práci stejnou mzdu\" — velkou část rozdílu vysvětluje vertikální a horizontální segregace (ženy chybějí na primářských a vedoucích pozicích a v lépe placených oborech) a vyšší podíl zkrácených úvazků u žen. Sekce Q sdružuje zdravotní i sociální péči, nelze je z tohoto řezu oddělit. Český vstup do Eurostatu má mírně odlišný rozsah (pokrývá i podniky do 10 zaměstnanců a sekci O), což komplikuje přesné mezinárodní srovnání. V časové řadě je kolem roku 2019 patrný metodický zlom; čísla se mohou při uzávěrce SES zpětně revidovat.",
   "determinants": "Vertikální segregace (muži obsazují primářské, přednostenské a manažerské pozice s vyššími příplatky a osobním ohodnocením), horizontální segregace mezi obory, vyšší podíl žen na zkrácených úvazcích, přerušení kariéry kvůli mateřské a rodičovské (zpomalený postup platovými tabulkami), nižší počet přesčasových a pohotovostních hodin u žen, struktura příplatků odměňující nepřetržitý provoz.",
   "importance": "Zdravotnictví a sociální péče je silně feminizované odvětví — ženy tvoří většinu pracovní síly (téměř všechny sestry, většina lékařů v mladších ročnících), přesto je propast v odměňování jedna z nejvyšších ze všech sektorů. To má přímý dopad na udržitelnost pracovní síly: nerovné odměňování zhoršuje retenci, motivaci a ochotu žen ucházet se o vedoucí role. Rovnost v odměňování je proto nejen otázkou spravedlnosti, ale i strukturální stability systému, který stojí a padá s personálem.",
   "patient_story": "Markéta je anestezioložka ve fakultní nemocnici na Moravě. Třiačtyřicet let, dvě děti, atestace, noční služby. Když si jednou u kávy s kolegou srovnali výplatní pásky — oba stejná atestace, stejné oddělení, on o dva roky kratší praxi — zjistila, že bere znatelně méně. Ne proto, že by někdo porušil zákon. Ale proto, že on slouží víc přesčasů, sedí ve vedení sekce a postoupil v platové tabulce rychleji, zatímco ona dvakrát na rok odešla na rodičovskou. Markéta není výjimka. Je statistika.\n\nV roce 2024 činil neočištěný rozdíl v odměňování žen a mužů ve zdravotnictví a sociální péči v Česku 24,9 %. Žena v tomto odvětví vydělá za hodinu práce průměrně o necelou čtvrtinu méně než muž. Je to signál „bad\": medián 29 zemí EU/EEA je 17,4 %, a Česko je tak pátou zemí s největší propastí — hned za Lotyšskem, Portugalskem, Litvou a Kyprem. A co je horší, trend se zhoršuje: ještě v roce 2021 klesl gap na 17,7 %, od té doby se ale znovu rozevírá (2022: 18,6 %, 2023: 21,4 %, 2024: 24,9 %).\n\nProč je propast tak velká právě tam, kde ženy tvoří většinu pracovní síly? Odpověď je strukturální. Gap neměří diskriminaci „za stejnou práci\" — ta je po očištění řádově nižší (kolem 5 %). Měří segregaci: muži obsazují primářská, přednostenská a manažerská místa s vyššími příplatky a osobním ohodnocením; ženy častěji pracují na zkrácený úvazek, slouží méně přesčasů a pohotovostí a přerušují kariéru kvůli mateřství, čímž zpomalí postup platovými tabulkami na roky, které už nedoženou. Feminizované odvětví tak paradoxně vyrábí jednu z nejvyšších mzdových nerovností ze všech sektorů ekonomiky — a srovnání to ukazuje ostře: Rakousko má ve stejné sekci gap jen 8,6 %, Polsko 12,2 %, Německo 18,7 %.\n\nPolitická páka je konkrétní a leží především v rukou státu. Za prvé: transpozice evropské směrnice o transparentnosti odměňování (2023/970), která firmy i nemocnice donutí zveřejňovat mzdové rozpětí a reportovat gap — bez dat se nerovnost neřídí. Za druhé: revize platových tabulek a systému příplatků tak, aby neznevýhodňovaly přerušenou kariéru a zkrácené úvazky. Za třetí: cílená podpora žen do vedoucích a primářských pozic, kde se rozdíl tvoří nejvíc. Kompetenci sdílí ministerstvo zdravotnictví (zřizovatel fakultních nemocnic a tvůrce úhradové vyhlášky, z níž platy tečou), ministerstvo práce a sociálních věcí (agenda rovného odměňování) a vedení jednotlivých nemocnic. Pro Markétu to znamená rozdíl mezi systémem, který její přerušenou kariéru trestá, a systémem, který ji dorovná.",
   "framework": "monitoring",
-  "dimension": "spravedlnost"
+  "dimension": "spravedlnost",
+  "verification_status": "verified",
+  "verified_at": "2026-07-23"
 }
