@@ -285,6 +285,11 @@ Dávka A4 (Eurostat hlth_silc_09): nesplnena_potreba_zubni_pece → ŽIVĚ + OV�
    mappingu + karty + testu; buildIndicator ověřen origin=live. 6 claimů (2024 TOTAL
    1,3 %, EU 3,3 %, gradient QU1 2,5 % / QU5 0,5 % = 5×) ověřeno proti API, konzistentní,
    0 korpusová korekce.
+Dávka A5 (Eurostat hlth_ehis_fv3e): konzumace_ovoce_zeleniny → ŽIVĚ + OVĚŘENO
+   (7,7 % 2019, EU27 12,4 %; EHIS poslední vlna 2019). Mapping přidán, buildIndicator
+   origin=live. 11 claimů ověřeno PROTI ŽIVÉMU API včetně všech mezinárodních srovnání
+   (DE 10,9 / IE 32,9 / NL 29,5 / AT 5,6 / PL 8,6 / RO 2,4 / SK 8,5 GE5 2019) — vše sedí,
+   0 korpusová korekce.
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
