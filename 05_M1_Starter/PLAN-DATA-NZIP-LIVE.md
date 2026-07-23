@@ -279,8 +279,6 @@ Dávka A3 (Eurostat tps00202): sebevrazdy_mladistvi_15_19 → ŽIVĚ + OVĚŘENO
    mapping tps00202 přidán, buildIndicator ověřen origin=live; hodnota == seed, 0 korpusová
    korekce — 3 claimy konzistentní). Antibiotika (A?) ODLOŽENA: ECDC AMC Atlas API
    nevrací measure_id přes GetDatasets, Eurostat AMC neexistuje → potřeba jiný zdroj/session.
-```
-
 Dávka A4 (Eurostat hlth_silc_09): nesplnena_potreba_zubni_pece → ŽIVĚ + OVĚŘENO
    (1,0 % 2025, EU27 3,3 %). ROOT CAUSE HTTP 400: dental dataset používá příjmovou
    dimenzi `quant_inc`, NE `quantile` (medical hlth_silc_08 má `quantile`) — oprava
