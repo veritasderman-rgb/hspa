@@ -331,6 +331,10 @@ Dávka A10 (Eurostat NACE Q + oprava mého §4 omylu): gender_pay_gap_zdravotnic
    EU-27 NACE Q GPG = 18,0 2024; EU/EEA vč. NO/IS ~17,4). Napojeno z earn_gr_gpgr2
    (nace_r2=Q), bez eu_code (Eurostat nemá EU agregát pro NACE Q → benchmark = doložený
    medián). Hodnota 24,9 == seed. 5 claimů konzistentní. → 75 live / 79 verified.
+Dávka A11 (OECD DF_PHYS_CAT): podil_prakticti_lekari → ŽIVĚ (17,2 % 2024, OECD ⌀ 22,5).
+   HEALTH_PROF=EMPLGENP (praktičtí/general practitioners) jako % aktivních lékařů
+   (UNIT PT_WR_PRF_HLTH), v1.1. CZ 2023=16,86 ≈ seed 16,9 (přesná shoda) → hodnota ověřena.
+   0 claimů. Karta uzis_nrzp → oecd_sdmx2. → 76 live / 80 verified.
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
@@ -364,8 +368,13 @@ ale konkrétní technický blokátor:
   - `farmaceuti_per_100k` → NECHAT seed: DF_PHST nabízí jen jednotky PS (osoby) nebo 10P3HB
     (na 1000 = 0,77), ŽÁDNOU „na 100k" (seed 76/100k) → nutná konverze ×100, kterou fetcher
     neumí; navíc OECD končí 2022 (77/100k) < seed 2023 (76). Ověřeno, není mechanický wire.
-  - `podil_prakticti_lekari`, `spokojenost_pece` → napojitelné (per-kus discovery dims),
-    nízký/žádný claim-radius; ready pro cílenou dávku (nutno ověřit jednotku + rok vs seed).
+  - `podil_prakticti_lekari` → ✅ NAPOJENO živě (A11): DF_PHYS_CAT v1.1, HEALTH_PROF=EMPLGENP,
+    UNIT=PT_WR_PRF_HLTH (% aktivních lékařů). CZ 2024=17,2 (2023=16,86 == seed 16,9), OECD ⌀ 22,5.
+    0 claimů. Karta uzis_nrzp → oecd_sdmx2.
+  - `spokojenost_pece` → OBSTACLE (ověřeno): OECD patient-experience dataflowy (DF_PE, PaRIS)
+    vracejí 404 přes v1.0/1.1/2.0 (verze/klíč) a hlavně — „spokojenost 75%" nemapuje na jediný
+    jasný measure (patient experience = mnoho survey otázek), CZ pokrytí v OECD bývá řídké.
+    Potřebuje identifikaci konkrétního measure + ověření CZ coverage, ne mechanický wire.
   - `nahrada_kolenniho_kloubu_100k` → DF_SURG_PROC má **18 dimenzí** + je třeba dohledat kód
     MEDICAL_PROCEDURE pro náhradu kolena + UNIT rate/100k; složitější klíč, samostatná dávka.
   - `podil_lekaru_55plus` (10 claimů), `prezit_karcinom_plic_5let` (7 claimů, seed 2014) →
