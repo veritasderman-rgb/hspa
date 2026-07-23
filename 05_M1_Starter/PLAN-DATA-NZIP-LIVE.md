@@ -10,6 +10,31 @@
 > (rámec seed→verified) — tento plán je jeho **NZIP/ÚZIS větev** + lehká vlna
 > „přilep dataset".
 
+## 0a. Feasibility v prostředí (zjištěno 2026-07-23) — ČTI PŘED VLNOU A
+
+Prověřeno přímo v běžícím prostředí, co pro Vlnu A funguje:
+
+- ✅ **curl / node-http přes agent proxy funguje** (HTTP 200 na nzip.cz, data.mzcr.cz, opendata.sukl.cz, uzis.cz, szu.gov.cz).
+- ✅ **SÚKL open data = přímé CSV, curl-fetchovatelné** — nejsnazší live cesta. Vzor:
+  `https://opendata.sukl.cz/?q=katalog/dis-13` listuje měsíční soubory
+  `https://opendata.sukl.cz/soubory/DIS13/DIS13_YYYYMMv01.csv` + datové rozhraní PDF.
+  Vhodné pro `spotreba_opioidu`, `pouzivani_antidepresiv` (ATC N02A / N06A) —
+  **pozor: přepočet na DDD/1000/den vyžaduje join DDD tabulky (WHO ATC/DDD nebo DLP)
+  a pečlivý §4** (to je hlavní práce, ne stažení).
+- ✅ **Existující fetchery** `eurostat.js`, `oecd_sdmx2.js`, `ecdc_atlas.js` volají
+  SDMX/JSON-stat API přes curl — funkční alternativa (viz `PLAN-VERIFIKACE-INDIKATORU.md`).
+- ⚠️ **NZIP „datové zpravodajství" katalog je plně JS (Symfony SPA)** — `nzip_id`
+  datových sad **nejde dohledat curl scrapingem**, a **Playwright/Chromium je v této
+  web session blokován proxy** (`ERR_CONNECTION_RESET`). ⇒ Pro nové NZIP sady je
+  potřeba buď (a) znát `nzip_id` předem (z článku / od uživatele), nebo (b) session
+  s browser-přístupem. Známé ID: kojení NR-10-12 = `nzip_id 1934`.
+- ⚠️ **NRHZS mikrodata** (`obloznost_*`, `osetrovaci_dny_*`, `podil_*`…) = stream
+  100–300 MB, `microdata_ratio`. Těžké; pouštět jen s vědomým souhlasem.
+
+**Doporučené pořadí Vlny A odsud:** (1) SÚKL DIS-13 pharma přes existující vzor,
+(2) Eurostat/OECD přes hotové fetchery, (3) NZIP sady jakmile jsou známa `nzip_id`,
+(4) NRHZS mikrodata naposled.
+
 ---
 
 ## 0. TL;DR
