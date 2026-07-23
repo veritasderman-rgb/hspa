@@ -30,6 +30,14 @@ Prověřeno přímo v běžícím prostředí, co pro Vlnu A funguje:
   s browser-přístupem. Známé ID: kojení NR-10-12 = `nzip_id 1934`.
 - ⚠️ **NRHZS mikrodata** (`obloznost_*`, `osetrovaci_dny_*`, `podil_*`…) = stream
   100–300 MB, `microdata_ratio`. Těžké; pouštět jen s vědomým souhlasem.
+- ⛔ **DIS-13 NENÍ platný zdroj pro AKUTNÍ léčiva (antibiotika J01)** — §4 to zachytil:
+  výpočet z DIS-13 dal ČR **18,3** DDD/1000/den J01, ale nezávislá reference **ECDC
+  ESAC-Net ≈ 15–16** (komunitní spotřeba) → nadhodnocení ~15 %. DIS-13 měří **dodávky
+  distributorů do lékáren** (velkoobchodní tok), ne skutečný výdej; u sezónních/akutních
+  léčiv se dodávky a spotřeba v čase rozcházejí (předzásobení). Pro **chronická** léčiva
+  (opioidy, antidepresiva) roční tok ≈ spotřeba, proto tam DIS-13 sedí do ~2 %. ⇒
+  `spotreba_antibiotik` **NENAPOJOVAT z DIS-13**; jediný obhajitelný live zdroj je **ECDC
+  ESAC-Net** (`ingest/fetchers/ecdc_atlas.js`). Toto pravidlo platí pro každé akutní ATC.
 
 **Doporučené pořadí Vlny A odsud:** (1) SÚKL DIS-13 pharma přes existující vzor,
 (2) Eurostat/OECD přes hotové fetchery, (3) NZIP sady jakmile jsou známa `nzip_id`,
@@ -200,7 +208,7 @@ přineseme hodnotu: **odkaz na konkrétní datovou sadu**.
 
 | Prio | NZIP téma / sada | Cíl u nás | Live? | Vlna |
 |---|---|---|---|---|
-| P1 | NRHZS léčiva ATC — ATB (J01) | `spotreba_antibiotik` enrich | ano | A1 |
+| P1 | ECDC ESAC-Net — ATB (J01) | `spotreba_antibiotik` enrich (⛔ NE z DIS-13, viz §0a) | ano | A1 |
 | P1 | NRML — novorozenci/rodičky | `nizka_porodna_hmotnost_pct` (bez URL) | ano | A2 |
 | P1 | NRHZS — hospicová/paliativní lůžka | `hospicova_pece_luzka` (bez URL) | ano | A3 |
 | P1 | SZÚ/NRL — HIV | `hiv_nove_diagnozy` (bez URL) | část | A4/B |
@@ -262,6 +270,10 @@ Dávka A1 (SÚKL DIS-13): spotreba_opioidu → ŽIVĚ + OVĚŘENO (14,7 DDD/1000
    řada 2021–24 z DIS-13, křížově proti nezávislé referenci 2018=13,05 ↑) ✅ první „Ověřeno".
 Dávka A2 (SÚKL DIS-13 + korpusová korekce): pouzivani_antidepresiv → ŽIVĚ + OVĚŘENO
    (78,9 DDD/1000/den 2024; opraveno 84→77 napříč 4 články + 8 claimů; OECD 75,3 ✓) ✅.
+Codex follow-up A2: benchmark oecd 67→69,5 (ověřený průměr), narativ „zhruba na úrovni"
+   → „mírně nad průměrem OECD (o cca desetinu)" napříč kartou/články/claims/perex/manifest;
+   dořešeny zbylé 67-reference (protidrogova, manifest, reforma-psychiatrie) + perex articles.json;
+   regen seo:indicators + manifest-substránky + souvislosti. ✅ konzistentní 78,9 vs 69,5.
 ```
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
