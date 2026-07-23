@@ -361,8 +361,11 @@ ale konkrétní technický blokátor:
   - `alkohol_spotreba` → ✅ NAPOJENO živě (A9). `gender_pay_gap` → ✅ (A10).
   - `podil_generik_objem` → NECHAT seed: OECD DF_GEN_MRKT končí 2022 (62,6 vol) < seed 2023 (62,8);
     62,6 korroboruje seed, napojení by byl krok zpět v roce.
-  - `farmaceuti_per_100k` (DF_PHST), `podil_prakticti_lekari`, `spokojenost_pece` → napojitelné
-    (per-kus discovery dims), nízký/žádný claim-radius; ready pro cílenou dávku.
+  - `farmaceuti_per_100k` → NECHAT seed: DF_PHST nabízí jen jednotky PS (osoby) nebo 10P3HB
+    (na 1000 = 0,77), ŽÁDNOU „na 100k" (seed 76/100k) → nutná konverze ×100, kterou fetcher
+    neumí; navíc OECD končí 2022 (77/100k) < seed 2023 (76). Ověřeno, není mechanický wire.
+  - `podil_prakticti_lekari`, `spokojenost_pece` → napojitelné (per-kus discovery dims),
+    nízký/žádný claim-radius; ready pro cílenou dávku (nutno ověřit jednotku + rok vs seed).
   - `nahrada_kolenniho_kloubu_100k` → DF_SURG_PROC má **18 dimenzí** + je třeba dohledat kód
     MEDICAL_PROCEDURE pro náhradu kolena + UNIT rate/100k; složitější klíč, samostatná dávka.
   - `podil_lekaru_55plus` (10 claimů), `prezit_karcinom_plic_5let` (7 claimů, seed 2014) →
