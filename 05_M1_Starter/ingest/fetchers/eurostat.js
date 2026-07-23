@@ -106,13 +106,24 @@ export async function fetchEurostatIndicator(indicatorId, mapping, opts = {}) {
   const eu = mapping.eu_code ? pickLatestForCountry(observations, countryDim, mapping.eu_code) : null;
   const trend = buildTrend(observations, countryDim, mapping.cz_code);
 
+  // Volitelný přepočet jednotky. Např. demo_frate vrací plodnost jako „počet
+  // na ženu" (0,00563) — scale:1000 dá „na 1000 žen" (5,63). Když `scale`
+  // chybí nebo == 1, hodnoty projdou beze změny (žádný dopad na dosud napojené
+  // indikátory). Zaokrouhlení na `round` desetinných míst (default 2).
+  const scale = mapping.scale ?? 1;
+  const applyScale = (v) => {
+    if (scale === 1 || v == null) return v;
+    const f = 10 ** (mapping.round ?? 2);
+    return Math.round(v * scale * f) / f;
+  };
+
   const result = {
     indicator_id: indicatorId,
     fetched_at: new Date().toISOString(),
     url,
-    cz: cz ? { year: Number(cz.time ?? cz.TIME_PERIOD ?? cz.year), value: cz.value } : null,
-    eu: eu ? { year: Number(eu.time ?? eu.TIME_PERIOD ?? eu.year), value: eu.value } : null,
-    trend,
+    cz: cz ? { year: Number(cz.time ?? cz.TIME_PERIOD ?? cz.year), value: applyScale(cz.value) } : null,
+    eu: eu ? { year: Number(eu.time ?? eu.TIME_PERIOD ?? eu.year), value: applyScale(eu.value) } : null,
+    trend: trend.map(t => ({ year: t.year, value: applyScale(t.value) })),
     n_observations: observations.length,
   };
   writeCache(cacheName, result);
