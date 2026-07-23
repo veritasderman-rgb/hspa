@@ -296,19 +296,20 @@ Dávka A6 (Eurostat demo_mexrt + ROZŠÍŘENÍ FETCHERU): nadumrtnost → ŽIVĚ
    2 testy. Reprodukuje řadu karty přesně (2020=18,2 … 2024=2,6 / 2025=2,7). Živě
    reportuje poslední kompletní rok (2026 s 3 měsíci vynechán). 0 claimů; flagship
    článek year-labeled 2024=2,6 → ponechán (jako A4/A5, dashboard je čerstvější).
-A7 (luzka_dlouhodobe_pece_65plus) — WIREABLE (oprava dřívějšího chybného verdiktu;
-   Codex #866). CZ ratio je reprodukovatelné (beds NRCBED 2020 = 75 174 ÷ demo_pjan
-   Y_GE65 ~2,13 mil × 1000 = 35,3 ✓ == seed). Benchmark **eu:46 JE reprodukovatelný**
-   — karta ho dokumentuje jako **průměr 6 srovnatelných zemí ze stejného zdroje
-   hlth_rs_bdsns** (DE 54,3 / NL 70,5 / FR 48,0 / SK 46,8 / AT 46,0 / PL 10,7 ≈ 46),
-   ne jako EU27 agregát (ten Eurostat pro tuto sadu nemá). Můj dřívější „§4 zamítl"
-   byl OMYL — nepřečetl jsem benchmark_source karty. Zbývá `ratio` režim fetcheru pro
-   CZ, benchmark zůstává doloženou 6-zemní konstantou. POZOR na jmenovatel (§4, ověřeno
-   2026-07-23): **demo_pjan ANI demo_pjangroup nemají agregát `Y_GE65`** (jen jednoleté
-   věky + TOTAL). Seed 35,3 vznikl metodou z karty (`demo_pjanind`: podíl 65+ × střední
-   stav obyvatel) — `ratio` režim musí tuto metodu replikovat PŘESNĚ (nebo sečíst
-   jednoleté věky Y65..Y_OPEN), jinak vyjde jiné číslo. Data končí 2020. ⇒ wireable,
-   ale jmenovatel je přesná práce, ne mechanický join.
+A7 (luzka_dlouhodobe_pece_65plus) — HODNOTA KŘÍŽOVĚ OVĚŘENA ze 2 zdrojů; živý wire
+   připraven (OECD), zbývá jen redakční sladění článku. Postup 2026-07-23:
+   (1) Eurostat rekonstrukce jmenovatele: demo_pjan NEMÁ agregát Y_GE65 (jen jednoleté
+   věky), ale součet Y65..Y_OPEN dá CZ 2020 = 2 131 630 → beds 75 174 / × 1000 = **35,27
+   ≈ seed 35,3** ✓. (2) LEPŠÍ CESTA: **OECD DF_HEALTH_LTCR_BED poskytuje metriku PŘÍMO**
+   — UNIT_MEASURE `10P3HB_Y_GE65` (lůžka na 1000 ob. 65+), MEASURE=LTCB, MODE_PROVISION=INST.
+   Přes stávající oecd_sdmx2 fetcher: **CZ 2024 = 35,1** (2020 = 35,3 == seed!), OECD ⌀ 39,
+   řada 2019–24. Mapping PŘIDÁN (`ingest/mapping/oecd_sdmx2_codes.json`), fetch ověřen.
+   ⇒ seed 35,3 potvrzen NEZÁVISLE dvěma zdroji (Eurostat součet + OECD 2020).
+   ZBÝVÁ (redakční, ne mechanické): přepnout kartu na oecd_sdmx2 + srovnat flagship
+   článek `clanek-luzka-dlouhodobe-pece` — má 3 claimy (35,3 / 37,6 „pokles" / 46 = 6-zemní
+   průměr). Při přepnutí na OECD se benchmark mění 46 → OECD ⌀ 39 → článek potřebuje
+   sladit (35,3→35,1, 46→39 nebo 46 jako sekundární „srovnání se sousedy"). To je obsahová
+   práce s flagship textem — nechávám na cílené PR s čistým kontextem, ať se nerozbije narativ.
 Dávka A8 (OECD SDMX, reakce na Codex #866): absolventi_lekarstvi_per_100k → ŽIVĚ
    (16,3/100k 2024, OECD ⌀ 15,4). ROOT CAUSE: mapping měl verzi dataflow 1.0, ale
    DSD_HEALTH_REAC_EMP@DF_GRAD je na v1.1 (jako absolventi_osetrovatelstvi) → 404.
