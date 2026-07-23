@@ -9,19 +9,15 @@
   "direction": "higher_is_better",
   "data_source": {
     "primary": {
-      "type": "oecd_sdmx2",
-      "dataflow": "DSD_HEALTH_EMP_REAC@DF_PHYS_CAT",
-      "dims": {
-        "MEASURE": "HSE",
-        "UNIT_MEASURE": "PT_WR_PRF_HLTH",
-        "HEALTH_PROF": "EMPLGENP",
-        "AGE": "_Z",
-        "SEX": "_Z",
-        "WORKER_STATUS": "_Z",
-        "HEALTH_PROF_ACTIVITY_STATUS": "_Z",
-        "PRICE_BASE": "_Z"
-      },
-      "note": "OECD Health Statistics — Physicians by category, general practitioners (EMPLGENP) jako % profesně aktivních lékařů. Nový SDMX Data Explorer, v1.1. Ověřeno živě 2026-07-23: CZ 2024=17,2 (2023=16,86 ≈ dřívější seed 16,9), OECD ⌀ 22,5."
+      "type": "uzis_nrzp",
+      "endpoint": "https://www.uzis.cz/",
+      "dataset": "Národní registr zdravotnických pracovníků (NRZP) / ročenka Lékaři, zubní lékaři a farmaceuti",
+      "dimensions": ["obor (praktický lékař pro dospělé, PLDD)", "celkový počet lékařů", "rok"],
+      "note": "ÚZIS ročně publikuje počty lékařů podle oboru. Podíl generalistů = (PLD + PLDD) / všichni praktikující lékaři (head count).",
+      "_dev_notes": [
+        "Zdrojová tabulka NZIS: počet lékařů podle oboru činnosti; generalisty tvoří praktičtí lékaři pro dospělé a praktičtí lékaři pro děti a dorost.",
+        "Endpoint / dataset dohledat v https://www.uzis.cz/index.php?pg=vystupy--datova-nabidka"
+      ]
     },
     "fallback": {
       "type": "oecd",
@@ -57,7 +53,5 @@
   "importance": "Podíl generalistů je jedním z nejsilnějších strukturních prediktorů výkonnosti systému. Systémy s robustní primární péčí mají nižší odvratitelné hospitalizace (ACSC), lepší kontinuitu péče u chronických nemocí a nižší náklady při srovnatelných výsledcích. Nízký český podíl (~16,9 %, hluboko pod průměrem OECD ~23 %) signalizuje, že těžiště systému leží ve specializované a nemocniční péči — a že primární péče je poddimenzovaná právě tam, kde by mohla nejlevněji zachytit problém dřív.",
   "patient_story": "Malá obec na Bruntálsku, ordinace praktického lékaře, jaro 2026. Panu Jaroslavovi (72) minulý měsíc odešel do důchodu obvodní lékař, ke kterému chodil čtyřicet let. Nejbližší praktik, který bere nové pacienty, ordinuje o dvě obce dál a má seznam plný — pan Jaroslav se dozvěděl, že registraci mu potvrdí nejdřív za půl roku. Mezitím mu došly léky na tlak a cukrovku a na kontrolu si musel zajet rovnou k internistovi do okresní nemocnice. Tahle scéna se v Česku opakuje čím dál častěji a stojí za ní jedno strukturní číslo.\n\nPraktičtí lékaři (generalisté) tvoří v Česku jen 16,9 % všech praktikujících lékařů (ÚZIS / OECD, 2023). Průměr zemí OECD je kolem 23 % — Česko patří k zemím s nejnižším podílem generalistů vůbec. V přepočtu na obyvatele to znamená zhruba 71 praktiků na 100 000 lidí, zatímco sousední Rakousko jich má 146 a Německo kolem 106. Signál je proto špatný (bad): lékařů má Česko nadprůměrně, ale těžiště jejich odbornosti leží ve specializacích, ne v primární péči.\n\nStrukturně jde o dědictví i o pobídky. Model péče z doby poliklinik postavil na první místo ambulantní specialisty; všeobecné praktické lékařství mělo dlouho nižší prestiž i horší úhradové postavení. Dnes se k tomu přidává stárnutí — velká část praktiků je v důchodovém věku a nových atestovaných všeobecných praktiků přibývá pomalu. Slabý gatekeeping (pacient jde přímo ke specialistovi) navíc dlouhodobě tlumil tlak na posílení primární péče.\n\nPolitická páka je konkrétní a leží u Ministerstva zdravotnictví a zdravotních pojišťoven. Patří sem dotační rezidenční místa pro atestaci ve všeobecném praktickém lékařství, bonifikace v kapitační platbě za rozšířené kompetence a péči o chronické pacienty, rozšíření pravomocí praktiků (předepisování, dispenzarizace) a definice spádových oblastí s pobídkou pro deficitní regiony. Cílem není mít víc lékařů celkově — Česko jich má dost — ale přesunout jejich těžiště blíž k pacientovi, jako je pan Jaroslav.",
   "framework": "hspa",
-  "dimension": "dostupnost",
-  "verification_status": "verified",
-  "verified_at": "2026-07-23"
+  "dimension": "dostupnost"
 }
