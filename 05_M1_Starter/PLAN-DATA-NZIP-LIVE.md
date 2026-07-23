@@ -334,8 +334,17 @@ ale konkrétní technický blokátor:
   z jediného 404 na `DF_GRAD,1.0` — ve skutečnosti šlo o zastaralou **verzi** v mappingu,
   ne mrtvý dataflow. Opraveno v A8: `absolventi_lekarstvi_per_100k` v1.0 → **v1.1**
   (stejný dataflow, jaký už `absolventi_osetrovatelstvi` používá živě) → živě 16,3 (2024).
-  Zbývá jediný skutečně nefunkční: **`vydaje_prevence_pct`** (DSD_SHA@DF_SHA v1.0 vrací
-  prázdno — SHA dataflow změnil strukturu/klíč; potřebuje re-discovery klíče, ne celé větve).
+  **`vydaje_prevence_pct`** (DSD_SHA@DF_SHA) — TECHNICKY VYŘEŠENO, ale ZÁMĚRNĚ
+  NEAKTIVOVÁNO (§4). Root cause: SHA dataflow získal dimenzi FINANCING_SCHEME_REV
+  (12 dims místo 11) + verze 1.0→1.1. Správný klíč: `.A..PT_EXP_HLTH._T..HC6.._T..._Z`,
+  version 1.1 → fetch vrací CZ 2024=3,069, OECD ⌀ 3,1 (2023=2,736 == seed). NEAKTIVUJI:
+  živá hodnota 2024=3,069 (≈3,1) by rozbila **5 auto-claimů „2,7 %"** napříč 5 články
+  + tezi o podinvestování prevence. §4 nález: řada je COVID-volatilní (2019=3,185 /
+  2020=3,923 / 2021=8,412 / 2022=5,206 / 2023=**2,736 dip** / 2024=3,069) — ČR je
+  strukturálně ~3,1, u průměru OECD, NE jasně pod. Seed 2,736 (2023) je jednoletý dolík,
+  na kterém stojí narativ 5 článků. Aktivace = redakční revize teze (je ČR pod OECD, nebo
+  na úrovni?), ne mechanický wire. Oprava klíče uložena v `_blocked` poli mappingu, mapping
+  ZÁMĚRNĚ ponechán v původním (neaktivním) stavu, ať cron nerozbije korpus.
   ~12 dalších OECD-source seed indikátorů zatím nemá mapping (samostatné napojení per kus).
 - **~45 ÚZIS — BLOKOVÁNO PROSTŘEDÍM.** NRHZS microdata (těžký stream, uživatel
   odmítl) nebo NZIP `nzip_id` (jen browser session; Playwright blokován, viz §0a).
