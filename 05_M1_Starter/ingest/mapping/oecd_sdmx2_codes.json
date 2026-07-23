@@ -4,7 +4,7 @@
     "absolventi_lekarstvi_per_100k": {
       "agency": "OECD.ELS.HD",
       "dataflow": "DSD_HEALTH_REAC_EMP@DF_GRAD",
-      "version": "1.0",
+      "version": "1.1",
       "dims": {
         "MEASURE": "HSG",
         "UNIT_MEASURE": "10P5HB",
@@ -77,7 +77,8 @@
       "start_period": 2015,
       "trend_years": 6,
       "source_name": "OECD Health Statistics — Health expenditure (SHA), prevence HC6",
-      "source_url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA"
+      "source_url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_SHA%40DF_SHA",
+      "_blocked": "SHA fetch vrací prázdno (starý 11-poz klíč, dataflow získal FINANCING_SCHEME_REV → 12 dims; správně je version=1.1 + key=.A..PT_EXP_HLTH._T..HC6.._T..._Z). ZÁMĚRNĚ NEAKTIVOVÁNO: živá hodnota by skočila na 2024=3,069 (≈3,1), což rozbíjí 5 auto-claimů „2,7 %\" + tezi 5 článků o podinvestování prevence. §4: řada je COVID-volatilní (2019=3,185 / 2021=8,412 / 2023=2,736 dip / 2024=3,069), ČR je strukturálně ~3,1 (u průměru OECD), ne jasně pod. Aktivace = redakční revize teze, ne datový wire."
     },
     "prezit_karcinom_prsu_5let": {
       "agency": "OECD.ELS.HD",
@@ -170,6 +171,23 @@
       "trend_years": 6,
       "source_name": "OECD Health Care Quality — Acute care (hip-fracture surgery ≤2 dny)",
       "source_url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HCQO%40DF_AC"
+    },
+    "alkohol_spotreba": {
+      "agency": "OECD.ELS.HD",
+      "dataflow": "DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC",
+      "version": "1.0",
+      "key": ".A.AC.Y_GE15._T.L_PS._Z",
+      "dims": {
+        "MEASURE": "AC",
+        "AGE": "Y_GE15",
+        "SEX": "_T",
+        "UNIT_MEASURE": "L_PS",
+        "METHODOLOGY": "_Z"
+      },
+      "start_period": 2015,
+      "trend_years": 6,
+      "source_name": "OECD Health Statistics — Alcohol consumption (litres per capita 15+)",
+      "source_url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_LVNG%40DF_HEALTH_LVNG_AC"
     }
   }
 }
