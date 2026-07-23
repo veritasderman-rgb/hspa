@@ -9,9 +9,16 @@
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
-      "type": "oecd",
-      "code": "ALCOHOL",
-      "dataset": "HEALTH_STAT"
+      "type": "oecd_sdmx2",
+      "dataflow": "DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC",
+      "dims": {
+        "MEASURE": "AC",
+        "AGE": "Y_GE15",
+        "SEX": "_T",
+        "UNIT_MEASURE": "L_PS",
+        "METHODOLOGY": "_Z"
+      },
+      "note": "OECD Health Statistics — registrovaná spotřeba čistého alkoholu, litry na osobu 15+. Nový SDMX Data Explorer (DF_HEALTH_LVNG_AC). Ověřeno živě 2026-07-23: CZ 2024=10,6 (2023=11,2 == dřívější seed, přesná shoda), OECD ⌀ 8,4. Řada klesá (2019=11,9 → 2024=10,6)."
     },
     "fallback": {
       "type": "csu",
@@ -36,5 +43,7 @@
   "limitations": "Registrovaná spotřeba nezahrnuje neregistrovanou část (přeshraniční nákupy, domácí výroba, turistika). Národní odhad VČETNĚ neregistrované spotřeby (~14,4 l, ČSÚ/SZÚ) je o ~3 l vyšší — jde o JINOU metodiku (WHO total APC) a nesmí se párovat s OECD recorded benchmarkem bez explicitního caveatu (železné pravidlo redakce). Do 2026-07 karta držela národní odhad 14,4 l proti OECD benchmarku — methodology mismatch opraven reconciliací dle issue #690 (varianta A: recorded/recorded). EU průměr v recorded metodice OECD nepublikuje — benchmark je pouze OECD.",
   "patient_story": "Pondělí ráno, krajská nemocnice, internista píše propouštěcí zprávu 58letého pacienta hospitalizovaného s akutní pankreatitidou. „Alkohol — 5–6 piv denně víkendy, do toho destiláty.\" Pacient sám sebe nevidí jako problémového piáka. V Česku je to nejběžnější odpověď: pití je sociálně normalizované, klinický práh „škodlivé spotřeby\" společensky neznámý.\n\nRoční registrovaná spotřeba čistého alkoholu na obyvatele 15+ je v Česku 11,2 litru (OECD Health at a Glance 2025, rok 2023) proti průměru OECD 8,5 litru — zhruba o třetinu víc; s neregistrovanou spotřebou (přeshraniční nákupy, domácí výroba) národní odhad přesahuje 14 litrů. Česko se trvale drží v nejvyšším pásmu spotřeby v OECD. Mužská spotřeba je 2,5× vyšší než ženská. Z toho cca 70 % pivo, 20 % destiláty, 10 % víno.\n\nStrukturálně český alkoholový režim odráží historickou tradici a politickou neochotu zavádět omezení. Pivo má od 2020 sníženou sazbu DPH, prodej v supermarketech je 24/7, na ulici legální, sponzorství sportu masivní. Spotřební daň z lihu je v EU pásmu, ale na pivo a víno extrémně nízká — víno bez spotřební daně vůbec. Léčebné kapacity protialkoholní léčby jsou regionálně rozmístěné nerovnoměrně — Praha a Brno mají kapacitu, Karlovarský a Liberecký kraj jsou pod dlouhodobým tlakem.\n\nAlkohol je podle Lancet 2018 (Burton & Sheron) odpovědný za 7 % všech úmrtí v Česku — to je více než AIDS, tuberkulóza, malárie a dopravní nehody dohromady globálně. Vstupuje do jaterní cirhózy, kardiovaskulárních příhod, onkologie (jícen, prsní žláza, kolorektum), úrazů a sebevražd. Politická páka existuje (zvýšení spotřební daně na pivo, omezení reklamy, ban sponzorství), ale je dlouhodobě blokovaná lobbyingem pivovarů. WHO doporučuje cílovou redukci o 10 % do 2030 — Česko k ní nesměřuje. Indikátor v dashboardu HSPA Monitor sleduje tento parametr jako klíčový determinant preventovatelné mortality.",
   "framework": "hspa",
-  "dimension": "zdravi"
+  "dimension": "zdravi",
+  "verification_status": "verified",
+  "verified_at": "2026-07-23"
 }

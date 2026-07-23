@@ -319,6 +319,12 @@ Dávka A8 (OECD SDMX, reakce na Codex #866): absolventi_lekarstvi_per_100k → �
    DSD_HEALTH_REAC_EMP@DF_GRAD je na v1.1 (jako absolventi_osetrovatelstvi) → 404.
    Oprava = bump verze. Zároveň OPRAVENY 3 chybné závěry z #866 (A7 benchmark
    reprodukovatelný, OECD větev 9/11 živá ne rozbitá, počty 73/76 ne 74/78).
+Dávka A9 (OECD SDMX, nemapovaný indikátor): alkohol_spotreba → ŽIVĚ + OVĚŘENO
+   (10,6 l/os. 2024, OECD ⌀ 8,4). Nový mapping DSD_HEALTH_LVNG@DF_HEALTH_LVNG_AC
+   (MEASURE=AC, AGE=Y_GE15, L_PS), karta přepnuta z legacy typu `oecd` na `oecd_sdmx2`.
+   2023=11,2 == dřívější seed (přesná shoda) → hodnota ověřena; 11 claimů year-labeled
+   2023 (11,2) zůstává platných (quote-based, články neměněny), teze „ČR výrazně nad OECD"
+   drží (10,6 vs 8,4). Živě reportuje 2024. → 74 live / 78 verified.
 ```
 
 *(Dřívější nález „`nesplnena_potreba_zubni_pece` vrací HTTP 400" vyřešen v A4 výše —
