@@ -1,0 +1,57 @@
+{
+  "id": "podil_prakticti_lekari",
+  "name": "Podíl praktických lékařů (generalistů) mezi všemi lékaři",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Primární péče",
+  "definition": "Podíl praktických lékařů (generalistů — praktičtí lékaři pro dospělé a praktičtí lékaři pro děti a dorost) na celkovém počtu praktikujících lékařů. Ukazatel měří, jak silné je v systému těžiště primární péče vůči specializované péči.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrzp",
+      "endpoint": "https://www.uzis.cz/",
+      "dataset": "Národní registr zdravotnických pracovníků (NRZP) / ročenka Lékaři, zubní lékaři a farmaceuti",
+      "dimensions": ["obor (praktický lékař pro dospělé, PLDD)", "celkový počet lékařů", "rok"],
+      "note": "ÚZIS ročně publikuje počty lékařů podle oboru. Podíl generalistů = (PLD + PLDD) / všichni praktikující lékaři (head count).",
+      "_dev_notes": [
+        "Zdrojová tabulka NZIS: počet lékařů podle oboru činnosti; generalisty tvoří praktičtí lékaři pro dospělé a praktičtí lékaři pro děti a dorost.",
+        "Endpoint / dataset dohledat v https://www.uzis.cz/index.php?pg=vystupy--datova-nabidka"
+      ]
+    },
+    "fallback": {
+      "type": "oecd",
+      "code": "GENERALISTS_SHARE",
+      "dataset": "OECD Health Statistics — Health Care Resources, Physicians by category"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "GENERALISTS_SHARE",
+    "dataset": "OECD Health Statistics / Health at a Glance 2023 — Doctors by category. Napříč zeměmi OECD tvoří generalisté v průměru zhruba 23 % lékařů; definice generalisty se mezi zeměmi liší (zlomy v časových řadách u řady států), proto se srovnání interpretuje jako řádové, nikoli na desetinu přesné.",
+    "value": 23,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en/full-report/doctors-by-age-sex-and-category_f14b891b.html"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS",
+    "OECD",
+    "Eurostat"
+  ],
+  "method_notes": "Head count (nikoli přepočtené úvazky). Generalisty tvoří praktičtí lékaři pro dospělé (PLD) a praktičtí lékaři pro děti a dorost (PLDD). Jmenovatel = všichni praktikující lékaři. Mezinárodním protějškem je ukazatel OECD/Eurostatu „podíl generalistů mezi lékaři“ resp. „generalisté na 100 000 obyvatel“.",
+  "limitations": "Definice generalisty není mezinárodně plně harmonizovaná (některé země řadí k GP i jiné kategorie), proto je srovnání řádové. Podíl neříká nic o regionálním rozložení praktiků ani o jejich věkové struktuře — nízký podíl generalistů se navíc kombinuje s vysokým podílem lékařů 55+ (viz související indikátor), což riziko primární péče dále zvyšuje. Trend je v seed verzi ilustrativní; headline hodnota (~16,9 %) vychází z veřejných přehledů OECD/Eurostatu a ÚZIS a bude potvrzena živým ingestem z NRZP.",
+  "determinants": [
+    "Historicky specializačně orientovaný model péče (polikliniky, silná ambulantní specializovaná síť) z doby před rokem 1989.",
+    "Nízká prestiž a dlouhodobě horší úhradové postavení všeobecného praktického lékařství oproti specializacím.",
+    "Stárnutí sboru praktiků a nedostatečný přísun nových atestovaných VPL (viz absolventi a podíl lékařů 55+).",
+    "Slabý gatekeeping — pacient může jít přímo ke specialistovi, což tlumí poptávku po posílení primární péče."
+  ],
+  "importance": "Podíl generalistů je jedním z nejsilnějších strukturních prediktorů výkonnosti systému. Systémy s robustní primární péčí mají nižší odvratitelné hospitalizace (ACSC), lepší kontinuitu péče u chronických nemocí a nižší náklady při srovnatelných výsledcích. Nízký český podíl (~16,9 %, hluboko pod průměrem OECD ~23 %) signalizuje, že těžiště systému leží ve specializované a nemocniční péči — a že primární péče je poddimenzovaná právě tam, kde by mohla nejlevněji zachytit problém dřív.",
+  "patient_story": "Malá obec na Bruntálsku, ordinace praktického lékaře, jaro 2026. Panu Jaroslavovi (72) minulý měsíc odešel do důchodu obvodní lékař, ke kterému chodil čtyřicet let. Nejbližší praktik, který bere nové pacienty, ordinuje o dvě obce dál a má seznam plný — pan Jaroslav se dozvěděl, že registraci mu potvrdí nejdřív za půl roku. Mezitím mu došly léky na tlak a cukrovku a na kontrolu si musel zajet rovnou k internistovi do okresní nemocnice. Tahle scéna se v Česku opakuje čím dál častěji a stojí za ní jedno strukturní číslo.\n\nPraktičtí lékaři (generalisté) tvoří v Česku jen 16,9 % všech praktikujících lékařů (ÚZIS / OECD, 2023). Průměr zemí OECD je kolem 23 % — Česko patří k zemím s nejnižším podílem generalistů vůbec. V přepočtu na obyvatele to znamená zhruba 71 praktiků na 100 000 lidí, zatímco sousední Rakousko jich má 146 a Německo kolem 106. Signál je proto špatný (bad): lékařů má Česko nadprůměrně, ale těžiště jejich odbornosti leží ve specializacích, ne v primární péči.\n\nStrukturně jde o dědictví i o pobídky. Model péče z doby poliklinik postavil na první místo ambulantní specialisty; všeobecné praktické lékařství mělo dlouho nižší prestiž i horší úhradové postavení. Dnes se k tomu přidává stárnutí — velká část praktiků je v důchodovém věku a nových atestovaných všeobecných praktiků přibývá pomalu. Slabý gatekeeping (pacient jde přímo ke specialistovi) navíc dlouhodobě tlumil tlak na posílení primární péče.\n\nPolitická páka je konkrétní a leží u Ministerstva zdravotnictví a zdravotních pojišťoven. Patří sem dotační rezidenční místa pro atestaci ve všeobecném praktickém lékařství, bonifikace v kapitační platbě za rozšířené kompetence a péči o chronické pacienty, rozšíření pravomocí praktiků (předepisování, dispenzarizace) a definice spádových oblastí s pobídkou pro deficitní regiony. Cílem není mít víc lékařů celkově — Česko jich má dost — ale přesunout jejich těžiště blíž k pacientovi, jako je pan Jaroslav.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
