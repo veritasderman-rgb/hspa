@@ -377,8 +377,14 @@ ale konkrétní technický blokátor:
     Potřebuje identifikaci konkrétního measure + ověření CZ coverage, ne mechanický wire.
   - `nahrada_kolenniho_kloubu_100k` → DF_SURG_PROC má **18 dimenzí** + je třeba dohledat kód
     MEDICAL_PROCEDURE pro náhradu kolena + UNIT rate/100k; složitější klíč, samostatná dávka.
-  - `podil_lekaru_55plus` (10 claimů), `prezit_karcinom_plic_5let` (7 claimů, seed 2014) →
-    HCQO/REAC dataflowy dostupné, ALE vysoký claim-radius → napojení = korpusová kontrola per §4.
+  - `prezit_karcinom_plic_5let` → JIŽ verified + v exceptions; KŘÍŽOVĚ POTVRZENO 2026-07-23
+    proti OECD DF_CC MEASURE=CCLUNTSR = 2014=10,6 (přesná shoda se seedem). OECD má JEN 2014
+    (CONCORD-3, zamrzlé) → origin zůstává seed, hodnota doložena. 7 claimů = CONCORD-3
+    mezinárodní srovnání, konzistentní. Hotovo, beze změny.
+  - `podil_lekaru_55plus` → OBSTACLE (ověřeno): DF_PHYS_AGE_SEX má věkové pásmo Y55T64
+    (2024=18,1 %), ale seed je „55+" = nutno sečíst 55–64 + 65+; navíc seed je ÚZIS/NRZP
+    (definice se může lišit od OECD) a 10 claimů = vysoký blast-radius. Age-sum + definiční
+    §4 + korpusová kontrola, ne mechanický wire.
   - `vydaje_dlouhodoba_pece_hdp` → DF_SHA (stejný jako vydaje_prevence) → riziko stejného
     §4 landmine (volatilita/teze); prověřit blast-radius (5 claimů) před aktivací.
   - `incidence_prsu` → NENÍ OECD SDMX (zdroj EU Country Cancer Profile / ECIS-IARC), jiná cesta.
