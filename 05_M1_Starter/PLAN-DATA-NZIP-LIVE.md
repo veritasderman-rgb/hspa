@@ -260,6 +260,8 @@ po Dávce B4 (link):    17 → 16  (+1: kontrola_hypertenze → SZÚ EHES)
 ── VLNA A zahájena ──
 Dávka A1 (SÚKL DIS-13): spotreba_opioidu → ŽIVĚ + OVĚŘENO (14,7 DDD/1000/den 2024,
    řada 2021–24 z DIS-13, křížově proti nezávislé referenci 2018=13,05 ↑) ✅ první „Ověřeno".
+Dávka A2 (SÚKL DIS-13 + korpusová korekce): pouzivani_antidepresiv → ŽIVĚ + OVĚŘENO
+   (78,9 DDD/1000/den 2024; opraveno 84→77 napříč 4 články + 8 claimů; OECD 75,3 ✓) ✅.
 ```
 
 **Nález k dořešení (samostatná korekce, jako kojení) — TURNKEY SPEC:**
