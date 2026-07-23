@@ -569,14 +569,14 @@ const PRIORITIES = [
   {
     num: 13, slug: 'dusevni-zdravi',
     name: 'Dostupná péče o duševní zdraví',
-    deck: 'Sebevražednost ČR 12,5/100k vs OECD 11. Antidepresiva 84 DDD/1000/den vs OECD 67 — léky se předepisují, systém péče ne. Center duševního zdraví je málo, jejich pokrytí nerovnoměrné, personál malý.',
+    deck: 'Sebevražednost ČR 12,5/100k vs OECD 11. Antidepresiva 77 DDD/1000/den, mírně nad průměrem OECD — léky se předepisují, systém péče ne. Center duševního zdraví je málo, jejich pokrytí nerovnoměrné, personál malý.',
     why: {
-      state: 'Reforma psychiatrické péče běží od 2013, vznikla síť Center duševního zdraví, ale jejich pokrytí je nerovnoměrné. Antidepresiva se předepisují víc než v OECD, zatímco psychiatrů je méně a hospitalizace jsou výrazně delší.',
+      state: 'Reforma psychiatrické péče běží od 2013, vznikla síť Center duševního zdraví, ale jejich pokrytí je nerovnoměrné. Antidepresiv se předepisuje mírně nad průměrem OECD, zatímco psychiatrů je méně a hospitalizace jsou výrazně delší.',
       holds: 'Psychoterapie není zákonem definovaná profese, takže pojištění hradí nesystematicky. Děti a mladiství mají nejhorší dostupnost — dětských psychiatrů je kriticky málo.',
       change: 'Zákonná definice psychoterapeuta a systematická úhrada, rozšíření personálu CDZ, dostupnost dětské psychiatrie a posun zdrojů z lůžkové do komunitní péče.',
       risk: 'Bez systému péče zůstanou léky náhradou za léčbu. Neléčená duševní onemocnění zvyšují sebevražednost, pracovní neschopnost i zátěž rodin.',
     },
-    quote: 'Antidepresiva nejsou náhrada za systém. Léky se v Česku předepisují víc než v OECD, ale dostupnost terapie zaostává.',
+    quote: 'Antidepresiva nejsou náhrada za systém. Léků se v Česku předepisuje mírně nad průměrem OECD, ale dostupnost terapie výrazně zaostává.',
     indicators: ['sebevrazdy_per_100k', 'pouzivani_antidepresiv', 'psychiatri_per_100k', 'psychiatrie_prumerna_delka_hospitalizace'],
     actions: [
       { action: 'Zákonná definice psychoterapeuta + systematická úhrada psychoterapie', lever: 'Nový zákon o psychoterapii', time: 'Rok 1' },
