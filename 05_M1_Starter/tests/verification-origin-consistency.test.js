@@ -48,6 +48,10 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   // konzumace_ovoce_zeleniny (A5), nesplnena_potreba_zubni_pece (A4) — teď
   // origin:live, takže regrese na seed MÁ padnout, ne být tolerována.
   'cholesterol_prumer_dospeli',
+  // luzka_dlouhodobe_pece_65plus: hodnota 35,3 křížově ověřena 2 zdroji (OECD
+  // DF_HEALTH_LTCR_BED 2020=35,3 + Eurostat součet jednoletých věků 65+ = 35,27),
+  // ale zdroj (Eurostat hlth_rs_bdsns) končí 2020 → žádný živý feed, origin:seed.
+  'luzka_dlouhodobe_pece_65plus',
   'plodnost_mladistvych_15_19',
   'prezit_karcinom_plic_5let',
   'vydaje_prevence_pct',

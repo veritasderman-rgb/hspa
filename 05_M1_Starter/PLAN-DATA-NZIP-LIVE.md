@@ -303,13 +303,17 @@ A7 (luzka_dlouhodobe_pece_65plus) — HODNOTA KŘÍŽOVĚ OVĚŘENA ze 2 zdrojů
    ≈ seed 35,3** ✓. (2) LEPŠÍ CESTA: **OECD DF_HEALTH_LTCR_BED poskytuje metriku PŘÍMO**
    — UNIT_MEASURE `10P3HB_Y_GE65` (lůžka na 1000 ob. 65+), MEASURE=LTCB, MODE_PROVISION=INST.
    Přes stávající oecd_sdmx2 fetcher: **CZ 2024 = 35,1** (2020 = 35,3 == seed!), OECD ⌀ 39,
-   řada 2019–24. Mapping PŘIDÁN (`ingest/mapping/oecd_sdmx2_codes.json`), fetch ověřen.
-   ⇒ seed 35,3 potvrzen NEZÁVISLE dvěma zdroji (Eurostat součet + OECD 2020).
-   ZBÝVÁ (redakční, ne mechanické): přepnout kartu na oecd_sdmx2 + srovnat flagship
-   článek `clanek-luzka-dlouhodobe-pece` — má 3 claimy (35,3 / 37,6 „pokles" / 46 = 6-zemní
-   průměr). Při přepnutí na OECD se benchmark mění 46 → OECD ⌀ 39 → článek potřebuje
-   sladit (35,3→35,1, 46→39 nebo 46 jako sekundární „srovnání se sousedy"). To je obsahová
-   práce s flagship textem — nechávám na cílené PR s čistým kontextem, ať se nerozbije narativ.
+   řada 2019–24 (fetch ověřen). ⇒ seed 35,3 potvrzen NEZÁVISLE dvěma zdroji.
+   VÝSLEDEK A7: indikátor označen **verified** (hodnota křížově ověřena) + přidán do
+   `KNOWN_SEED_VERIFIED_EXCEPTIONS` (origin zůstává seed — Eurostat hlth_rs_bdsns končí
+   2020, žádný živý feed). OECD mapping po ověření ODSTRANĚN (orphaned by tahal zbytečný
+   fetch). Živé napojení přes OECD je MOŽNÉ, ale NENÍ mechanické: mění benchmark 46 (6-zemní
+   Eurostat průměr) → OECD ⌀ 39, což **rozporuje centrální tezi flagship článku**
+   `clanek-luzka-dlouhodobe-pece` („Česko má o čtvrtinu méně lůžek než srovnatelné země",
+   35,3 vs 46 = −23 %; přes OECD by bylo 35,1 vs 39 = −10 %). Přepnutí = obsahová revize
+   teze článku NEBO míchání zdrojů (value OECD + benchmark Eurostat, §4 red flag). ⇒ cílené
+   redakční PR, ne datový wire. Spec OECD pro budoucí aktivaci: DF_HEALTH_LTCR_BED, MEASURE=LTCB,
+   UNIT_MEASURE=10P3HB_Y_GE65, MODE_PROVISION=INST, ostatní _Z, v1.0.
 Dávka A8 (OECD SDMX, reakce na Codex #866): absolventi_lekarstvi_per_100k → ŽIVĚ
    (16,3/100k 2024, OECD ⌀ 15,4). ROOT CAUSE: mapping měl verzi dataflow 1.0, ale
    DSD_HEALTH_REAC_EMP@DF_GRAD je na v1.1 (jako absolventi_osetrovatelstvi) → 404.
