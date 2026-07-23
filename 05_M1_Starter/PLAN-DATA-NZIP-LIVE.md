@@ -227,9 +227,18 @@ npm run verify:freshness      # kontrola stáří
 
 ```
 2026-07-22 (výchozí):  live 66 / seed 112 · bez source.url 34 · verified (viz PLAN-VERIFIKACE)
-po Dávce A1 (…):        …
-po Dávce B1 (link):     bez source.url →  …
+po Dávce B1 (link):    bez source.url 34 → 26  (+8: COSI, HIV, NZR, WUENIC, OHCA, KST, Zemřelí, hospice)
+po Dávce B2 (link):    26 → 20  (+6: CZECHSEX ×5, ÚZIS Psychiatrická péče)
+po Dávce B3 (link):    20 → 17  (+3: SHARE, SÚKL open-data ×2)
 ```
+
+**Odloženo z Vlny B (protokol §4 — deklarovaný zdroj neseděl s ověřitelnou sadou;
+řeší se ve Vlně A / vyžaduje potvrzení zdroje):** `cekaci_doba_kycel` (VZP?),
+`kontrola_hypertenze` (SZÚ EHES), `ehealth_adoption` (MZ eHealth), `vydaje_leky_hdp`,
+`bezpecnost_padu_nemocnice` (NRC), `spokojenost_informovani` (NRC), a NRHZS kapacitní
+metriky (`obloznost_*`, `osetrovaci_dny_*`, `podil_*`, `podfinancovani_*`,
+`nevyuzite_osetrovaci_dny_ip`, `uhrada_zp_per_pojistenec`, `podil_vydaje_*`,
+`lpod_share_critical`) — kandidáti na živé napojení přes `nzip_opendata.js` (dávka A3).
 
 ---
 
