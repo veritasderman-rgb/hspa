@@ -78,6 +78,50 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-kojeni-obrat-porodnice': {
+    kicker: 'Kojení · porodnice', signal: 'warn',
+    stat: '44–96', statSuffix: '%',
+    claim: 'Tak velký je rozdíl v plném kojení mezi českými porodnicemi.',
+    context: 'Rozpětí nevysvětlí medicína, ale praxe oddělení.',
+  },
+  'clanek-plodnost-mladistvych': {
+    kicker: 'Reprodukční zdraví · kraje', signal: 'warn',
+    stat: '4×', claim: 'rozdíl v plodnosti mladistvých mezi Ústeckým krajem a Prahou.',
+    context: 'Národní průměr (5,6 na 1000) tuto propast schová.',
+  },
+  'clanek-umela-preruseni-tehotenstvi': {
+    kicker: 'Reprodukční zdraví', signal: 'good',
+    stat: '4,9', claim: 'umělých přerušení na 1 000 žen — historické minimum v Česku.',
+    context: 'Za poklesem stojí antikoncepce, kterou ČR neproplácí.',
+  },
+  'clanek-cholesterol-mapa-obci': {
+    kicker: 'Prevence · data', signal: 'good',
+    stat: '5,0', claim: 'Průměrný cholesterol Čechů klesl pod cílovou hodnotu — díky léčbě.',
+    context: 'Kraje s vyšší úmrtností mají spíš nižší průměr — víc léčby.',
+  },
+  'clanek-plne-kojeni-porodnice': {
+    kicker: 'Kojení · porodnice', signal: 'warn',
+    stat: '72,4', statSuffix: '%', barPct: 72,
+    claim: 'bylo dno plného kojení při propuštění (2021). V roce 2000 to bylo ~90 %.',
+    context: 'Novější data ukazují mírný obrat — 75,1 % v roce 2024.',
+  },
+  'clanek-darcovstvi-krve-plazma': {
+    kicker: 'Dárcovství · krev', signal: 'neutral',
+    stat: '133', claim: 'odběrů krve a plazmy na 1 000 obyvatel — nejvíc v Evropě.',
+    context: 'Netáhne to dobročinnost, ale placený odběr plazmy.',
+  },
+  'clanek-vydaje-dusevni-zdravi': {
+    kicker: 'Financování · duševní zdraví', signal: 'bad',
+    stat: '4', statSuffix: '%', barPct: 4,
+    claim: 'výdajů na zdravotnictví jde na duševní zdraví.',
+    context: 'Zátěž nemocí je přitom ~15 %. EU15 dává kolem 7 %.',
+  },
+  'clanek-casna-operace-zlomeniny-kycle': {
+    kicker: 'Kvalita péče · senioři', signal: 'warn',
+    stat: '79', statSuffix: '%', barPct: 79,
+    claim: 'seniorů se zlomeninou kyčle Česko odoperuje do 48 hodin.',
+    context: 'Průměr OECD (80,1 %) na dosah, Německo ale 93,8 %.',
+  },
   'clanek-dohodovaci-rizeni-2027-vysledek': {
     kicker: 'Financování · dohodovací řízení', signal: 'good',
     stat: '12/15', claim: 'segmentů se dohodlo na úhradách 2027. Loni jen 3 z 15.',
