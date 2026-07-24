@@ -1,0 +1,57 @@
+{
+  "id": "hospitalizace_deti_psychiatrie_akutni",
+  "name": "Hospitalizace dětí a dospívajících na akutních psychiatrických lůžkách",
+  "area": "Výstupy",
+  "domain": "Duševní zdraví",
+  "subdomain": "Dětská a dorostová psychiatrie",
+  "definition": "Počet dokončených hospitalizací osob mladších 19 let na akutních psychiatrických lůžkách za rok (ČR celkem). Akutní lůžko je určeno pro krátkodobou stabilizaci a diagnostiku; nárůst počtu těchto hospitalizací u dětí je nepřímým ukazatelem toho, jak dobře systém dokáže zachytit duševní obtíže dětí dřív, než skončí akutní krizí — tedy dostupnosti ambulantní a komunitní péče o duševní zdraví dětí.",
+  "unit": "hospitalizací ročně (0–19 let)",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://www.uzis.cz/index.php?pg=vystupy--statistika-vybranych-oboru-lekarske-pece--psychiatrie",
+      "dataset": "ÚZIS ČR — Psychiatrická péče (NZIS) / Národní registr hrazených zdravotních služeb; ročenka Psychiatrická péče a analytické výstupy Národního portálu psychiatrické péče",
+      "dimensions": ["věk pacienta (0–19 let)", "typ lůžka (akutní)", "dokončené hospitalizace", "rok"],
+      "note": "Dokončené hospitalizace osob do 19 let na akutních psychiatrických lůžkách. Osoby do 20 let tvoří tradičně zhruba 12 % všech akutních psychiatrických hospitalizací.",
+      "_dev_notes": [
+        "Zdrojová data: ÚZIS Psychiatrická péče (roční), Národní portál psychiatrické péče (psychiatrie.uzis.cz), oborová statistika Dětská a dorostová psychiatrie.",
+        "Headline 4 067 (2023) je citovaná hodnota ÚZIS; trend v seed verzi je ilustrativní (robustní je zdvojnásobení za dekádu 2013→2023).",
+        "Endpoint / přesnou tabulku dohledat v https://psychiatrie.uzis.cz/cs/psychiatrie-v-datech/"
+      ]
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://psychiatrie.uzis.cz/res/file/oborove-statistiky/detska-psychiatrie.pdf"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Harmonizované mezinárodní srovnání počtu dětských psychiatrických hospitalizací na obyvatele neexistuje — systémy se liší v tom, co se počítá jako akutní psychiatrické lůžko, jak jsou vedeny hranice věku a jak je organizovaná ambulantní vs. lůžková péče. Srovnatelný je spíš směr trendu: prudký nárůst hospitalizací a sebepoškození dospívajících (zejména dívek) po roce 2010 je dobře doložen napříč zeměmi OECD. Na Slovensku vzrostl počet pokusů o sebevraždu u dospívajících 15–19 let v roce 2021 o 76,2 % (Národné centrum zdravotníckych informácií).",
+    "value": null,
+    "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en.html"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní portál psychiatrické péče)",
+    "Sekce dětské a dorostové psychiatrie ČLS JEP",
+    "Národní ústav duševního zdraví (NUDZ)"
+  ],
+  "method_notes": "Dokončené hospitalizace osob do 19 let na akutních psychiatrických lůžkách, ČR celkem. V roce 2023 jich bylo 4 067 — téměř dvojnásobek proti roku 2013 (~2 100). Počet dětí a dospívajících v psychiatrické péči celkově vzrostl od roku 2010 o zhruba 73 %. Indikátor je veden jako context_dependent: rostoucí počet může odrážet vyšší skutečnou nemocnost, lepší záchyt i (především) nedostatek ambulantní a komunitní alternativy, kvůli němuž se péče koncentruje na vzácná akutní lůžka. Souvisí s indikátory dostupnosti komunitní péče (centra duševního zdraví) a sebevražednosti mladistvých.",
+  "limitations": "Absolutní počet nezohledňuje velikost dětské populace ani meziroční změny v evidenci a v definici akutního lůžka; časová řada může obsahovat metodické zlomy. Rostoucí trend nelze jednoznačně rozdělit na složku 'více nemocných dětí', 'lepší záchyt' a 'chybějící ambulantní kapacita'. Indikátor neměří kvalitu ani délku péče a v seed verzi má ilustrativní trend — headline hodnota (4 067, 2023) je citovaná z ÚZIS, mezilehlé body budou potvrzeny živým ingestem.",
+  "determinants": [
+    "Dlouhodobě poddimenzovaná ambulantní a komunitní dětská psychiatrie — jen kolem 200 dětských psychiatrů, z toho zhruba 80 starších 65 let (2023), a mnohaměsíční čekací doby.",
+    "Chybějící síť komunitních služeb pro děti (multidisciplinární týmy, Centra duševního zdraví pro děti a dorost teprve vznikají), takže krize končí akutní hospitalizací.",
+    "Nárůst symptomů duševních obtíží u dospívajících — národní monitoring uvádí u žáků 9. tříd kolem 40 % se zvýšenou mírou depresivních a 30 % úzkostných symptomů.",
+    "Slabé propojení školství, sociálních služeb a zdravotnictví v prevenci a včasné intervenci."
+  ],
+  "importance": "Dětská a dorostová psychiatrie je jedním z nejzřetelnějších míst, kde se láme nedostatek komunitní péče do akutní krize. Když chybí dostupná ambulance nebo komunitní tým, dítě se do systému dostane až v akutním stavu — přes urgentní příjem a akutní lůžko. Zdvojnásobení počtu akutních hospitalizací dětí za deset let je proto varovný systémový signál: neměří jen zdraví dětí, ale i schopnost systému zachytit problém dřív a jinde než na nemocničním lůžku.",
+  "patient_story": "Dětské oddělení psychiatrické nemocnice, podzim 2025. Patnáctiletá Tereza sem přišla po druhém sebepoškození během půl roku. Rodiče se pomoci dovolávali už na jaře — objednali ji k ambulantnímu dětskému psychiatrovi, ale nejbližší volný termín byl až za pět měsíců. Než přišel, přišla krize. Akutní lůžko není místo, kde měla Tereza svůj příběh začít; je to místo, kam ji dovedlo to, že dřív a blíž domovu nebylo kam jít.\n\nTerezin případ není výjimka, ale trend. V roce 2023 evidoval ÚZIS 4 067 dokončených hospitalizací osob do 19 let na akutních psychiatrických lůžkách — téměř dvojnásobek proti roku 2013. Počet dětí a dospívajících v psychiatrické péči vzrostl od roku 2010 zhruba o 73 %. Protože harmonizované mezinárodní srovnání neexistuje, signál vedeme jako neutrální — vypovídací hodnotu nese směr křivky, ne jedno číslo. A ten směr je jednoznačný: strmě nahoru, stejně jako ve většině zemí OECD, kde po roce 2010 prudce přibylo sebepoškození dospívajících, zejména dívek. Na Slovensku vzrostly pokusy o sebevraždu u dospívajících v roce 2021 o 76,2 %.\n\nStrukturně za číslem stojí chybějící patro systému. Dětských psychiatrů je v Česku jen kolem dvou set a zhruba čtyřicet z nich je starších 65 let; lůžek pro děti a dorost je něco přes 570 a specializovaná pracoviště jen v Opařanech, Lounech a Velké Bíteši. Ambulantní kapacita nestačí, komunitní služby pro děti teprve vznikají — a tak se poptávka koncentruje tam, kde je nejdražší a nejzazší: na akutním lůžku. Rostoucí číslo tedy neměří jen to, jak se daří dětem, ale i to, jak málo je jiných dveří, kterými mohou vejít.\n\nPolitická páka leží u Ministerstva zdravotnictví, pojišťoven a napříč resorty. Patří sem dobudování Center duševního zdraví pro děti a dorost a multidisciplinárních ambulantních týmů, dotační program na atestace v dětské psychiatrii a psychologii, navázání školních psychologů a sociálních služeb na zdravotnictví a zkrácení čekacích dob v ambulancích. Cílem je jediné: aby dítě jako Tereza mělo kam jít dřív, blíž a bez pětiměsíčního čekání — a aby křivka akutních hospitalizací klesla proto, že krizím systém předchází, ne proto, že by na ně přestal stačit.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
