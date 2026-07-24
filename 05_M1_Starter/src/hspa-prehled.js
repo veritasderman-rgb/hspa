@@ -54,14 +54,34 @@ function renderGapSection(indicators) {
   const tbody = document.getElementById('hspaGapTableBody');
   if (!haveEl || !tbody) return;
 
-  const total = indicators.length;
-  const missing = Math.max(0, OECD_FRAMEWORK_TOTAL - total);
-  haveEl.textContent = String(total);
+  // Pokrytí rámce počítáme JEN z indikátorů zařazených do HSPA rámce
+  // (framework === 'hspa'); doplňkové monitoring indikátory (hustota lékáren,
+  // výpadky léčiv, finance ZP…) stojí mimo formální rámec a do coverage se
+  // nepočítají — jinak by „máme" přerostlo cíl 122.
+  const frameworkInds = indicators.filter(i => i.framework === 'hspa');
+  const covered = frameworkInds.length;
+  const monitoringCount = indicators.length - covered;
+  const missing = Math.max(0, OECD_FRAMEWORK_TOTAL - covered);
+  const surplus = Math.max(0, covered - OECD_FRAMEWORK_TOTAL);
+
+  haveEl.textContent = String(covered);
   if (missingEl) missingEl.textContent = String(missing);
 
-  // Spočítáme, kolik našich indikátorů spadá do každé OECD domény (přes ourDomains mapping)
+  // Doplňkový počet + přebytek/mezera — drží větu smysluplnou i když covered ≠ 122
+  const monitoringEl = document.getElementById('hspaGapMonitoringCount');
+  if (monitoringEl) monitoringEl.textContent = String(monitoringCount);
+  const surplusEl = document.getElementById('hspaGapSurplus');
+  if (surplusEl) {
+    surplusEl.textContent = surplus > 0
+      ? ` — o ${surplus} víc, než rámec formálně obsahuje; přebytek revidujeme a přesouváme mezi doplňkové indikátory`
+      : '';
+  }
+  const missingClause = document.getElementById('hspaGapMissingClause');
+  if (missingClause) missingClause.style.display = missing > 0 ? '' : 'none';
+
+  // Coverage podle domén počítáme rovněž jen z rámcových indikátorů
   const ourByDomain = {};
-  for (const ind of indicators) {
+  for (const ind of frameworkInds) {
     const d = ind.domain || 'other';
     ourByDomain[d] = (ourByDomain[d] || 0) + 1;
   }
