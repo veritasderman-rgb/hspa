@@ -1,0 +1,58 @@
+{
+  "id": "kapavka_incidence",
+  "name": "Hlášené případy kapavky (gonorea)",
+  "area": "Výsledky",
+  "domain": "Přenosná onemocnění",
+  "subdomain": "Pohlavně přenosné infekce",
+  "definition": "Počet nově hlášených případů gonokokové infekce (kapavka, dg. A54 dle MKN-10) na 100 000 obyvatel a rok v České republice. Zdrojem je Registr pohlavních nemocí (RPN), do něhož je hlášení pohlavních nemocí ze zákona povinné; data spravuje ÚZIS ČR ve spolupráci se Státním zdravotním ústavem a dlouhodobá řada sahá do roku 1994 (statistické sledování pohlavních nemocí probíhá od roku 1959).",
+  "unit": "na 100 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://www.nzip.cz/data/2639-pohlavni-nemoci-otevrena-data",
+      "dataset": "ÚZIS ČR / SZÚ — Registr pohlavních nemocí (RPN); otevřená datová sada „Pohlavní nemoci v ČR\" (dg. A54 gonokoková infekce), roční hlášené případy podle věku, pohlaví a kraje.",
+      "dimensions": ["diagnóza (A54 gonokoková infekce)", "věk", "pohlaví", "kraj", "rok"],
+      "note": "Reportingový přehled ÚZIS: „Incidence — hlášené případy pohlavních nemocí podle věku a pohlaví\" (reporting.uzis.cz, tab. 6.1.2). Hodnota 2024 = 3 065 hlášených případů / 28,1 na 100 000 obyvatel.",
+      "_dev_notes": [
+        "Primární strukturovaný zdroj: NZIP otevřená data „Pohlavní nemoci v ČR\" (nzip.cz/data/2639) a reporting.uzis.cz (Incidence pohlavních nemocí dle věku a pohlaví).",
+        "Headline 2024: 3 065 případů, 28,1/100 000, muži 79,7 %, nejčastěji věk 20–34 let (NZIP/ÚZIS, RPN).",
+        "Trend v seed verzi: hard-anchory jsou 2024 = 28,1 a čtyřnásobný nárůst proti roku 2010 (implikuje ~7,0/100 000 v 2010). Mezilehlé body jsou rekonstruovaný odhad rostoucí řady a budou potvrzeny živým ingestem z RPN."
+      ]
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://www.nzip.cz/clanek/1894-kapavka"
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc",
+    "code": "GONO_notif_rate",
+    "dataset": "Gonorrhoea — Annual Epidemiological Report for 2023 (ECDC): 96 969 potvrzených případů ve 28 zemích EU/EEA, hrubá míra hlášení 25,0 na 100 000 obyvatel (nejvyšší od začátku evropského dohledu v roce 2009; +321 % oproti roku 2014, +31 % meziročně). MSM tvořili 58 % případů.",
+    "value": 25.0,
+    "url": "https://www.ecdc.europa.eu/en/publications-data/gonorrhoea-annual-epidemiological-report-2023"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR — Registr pohlavních nemocí (RPN)",
+    "Státní zdravotní ústav — Národní referenční laboratoř pro STI",
+    "ECDC"
+  ],
+  "method_notes": "V roce 2024 bylo v ČR hlášeno 3 065 případů kapavky, tj. 28,1 na 100 000 obyvatel — čtyřnásobek proti roku 2010. Muži tvoří 79,7 % případů, nejčastější věková skupina je 20–34 let, nejvíce zasaženou skupinou jsou muži mající sex s muži (MSM). Signál je nastaven na 'bad' (špatný): česká míra (28,1) překonává poslední publikovanou míru EU/EEA (25,0 na 100 000, ECDC 2023) a řada strmě roste proti dlouhodobému cíli poklesu — kapavka je přitom onemocnění s dostupnou prevencí (kondom, partnerská depistáž, cílené testování rizikových skupin) i léčbou. Trend v EU/EEA je rovněž rostoucí (+321 % od 2014), ČR ale patří mezi země nad průměrem. Kapavka navíc rychle získává rezistenci k antibiotikům (makrolidy, fluorochinolony), takže indikátor se přímo pojí s antibiotickou politikou a klastrem indikátorů rezistence na dashboardu.",
+  "limitations": "(1) Hlášené případy podhodnocují skutečný výskyt — velká část infekcí je asymptomatická (zejména u žen) a nezachytí se; ukazatel je proto směsí incidence a intenzity/dostupnosti testování. (2) Rok českého údaje (2024) a publikovaného benchmarku ECDC (2023) se liší; míra EU/EEA 2024 nebyla v době přípravy k dispozici a pravděpodobně dále roste — srovnání „ČR nad EU\" je proto třeba číst jako řádové, nikoli přesné meziroční. (3) Metodika hlášení a laboratorní diagnostiky (NAAT vs. kultivace) se v čase i mezi zeměmi mění, což ovlivňuje záchyt. (4) Mezilehlé body časové řady jsou v seed verzi rekonstruovaný odhad; robustní jsou hodnota 2024 (28,1 / 3 065) a čtyřnásobný nárůst proti 2010. (5) Regionální koncentrace (velká města, Praha) zkresluje krajské míry.",
+  "determinants": [
+    "Sexuální chování a prevence — podíl chráněného pohlavního styku, počet partnerů a míra rizikového chování; nejvíce zasaženou skupinou jsou MSM. Dostupnost a normalizace testování rozhoduje o záchytu.",
+    "Cílené testovací a depistážní programy — partnerská depistáž (dohledání a léčba kontaktů) a nízkoprahové/komunitní testování rizikových skupin snižují další přenos; jejich slabé financování udržuje řetězce přenosu.",
+    "Antimikrobiální rezistence — rostoucí rezistence gonokoka k makrolidům a fluorochinolonům (a hrozba selhání ceftriaxonu) zvyšuje riziko selhání léčby; nutná je kultivace s citlivostí a surveillance rezistence.",
+    "Sexuální výchova a osvěta — úroveň sexuální gramotnosti, destigmatizace testování a informovanost o příznacích a přenosu ovlivňují včasný záchyt.",
+    "Souběh s HIV a PrEP — u uživatelů PrEP a HIV-pozitivních probíhá častější screening STI, což zvyšuje záchyt; zároveň jde o populace s vyšším rizikem — indikátor je proto provázaný s dostupností PrEP a prevence HIV."
+  ],
+  "importance": "Kapavka je nejčastější bakteriální pohlavně přenosnou infekcí s povinným hlášením v Česku a její strmý nárůst je citlivým barometrem primární prevence, sexuálního zdraví a dostupnosti testování. Dashboard dosud sledoval HIV, virové hepatitidy, TBC, pertusi a spalničky, ale žádnou z klasických bakteriálních STI — kapavka tuto mezeru zaplňuje a doplňuje obraz sexuálního zdraví populace. Indikátor má nezvykle konkrétní politickou páku (financování partnerské depistáže a komunitního testování, sexuální výchova, dostupnost PrEP se screeningem STI) a zároveň se přes antimikrobiální rezistenci propojuje s klastrem indikátorů rezistence a antibiotické spotřeby: multirezistentní gonokok je prioritním patogenem WHO a Česko nemá důvod čekat, až se selhání léčby stane realitou. Rostoucí kapavka je také předstihovým signálem pro šíření dalších STI včetně HIV, protože sdílí cesty přenosu i rizikové skupiny.",
+  "patient_story": "Ordinace kožního a venerologického oddělení, Brno, jaro 2025. Martin, 26, přišel kvůli příznakům, které nejdřív ignoroval. Test potvrdil kapavku. Lékařka mu vysvětlila, že sám je jen špička ledovce: měl by přijít i jeho partner, jinak se budou nakazovat znovu dokola. Martin patří mezi 3 065 lidí, kterým byla v roce 2024 v Česku diagnostikována kapavka — a mezi 79,7 % případů, které tvoří muži. Nejčastěji jde o muže ve věku 20 až 34 let.\n\nČísla kreslí strmou křivku. V roce 2024 dosáhla míra hlášené kapavky 28,1 případu na 100 000 obyvatel — čtyřnásobek proti roku 2010. Tím se Česko dostalo nad poslední publikovanou míru EU/EEA (25,0 na 100 000, ECDC za rok 2023), přestože i evropský průměr rychle roste (+321 % od roku 2014). Signál je proto nastaven na špatný: nejde o ojedinělý výkyv, ale o dlouhodobý vzestupný trend u infekce, které lze předcházet i ji léčit. Nejvíce zasaženou skupinou zůstávají muži mající sex s muži.\n\nStrukturálně za nárůstem stojí několik věcí. Za prvé slabá partnerská depistáž a nízkoprahové testování — bez systematického dohledání a léčby kontaktů se řetězce přenosu nepřetrhnou. Za druhé podceněná sexuální výchova a stigma, které oddalují testování a léčbu. A za třetí tichá, ale zásadní hrozba: gonokok rychle získává rezistenci k antibiotikům (makrolidy, fluorochinolony) a s hrozbou selhání ceftriaxonu se z každého případu stává i test antibiotické politiky. Právě proto tento indikátor patří do stejné rodiny jako ukazatele rezistence a spotřeby antibiotik.\n\nPolitická páka je konkrétní a levná ve srovnání s tím, co řeší. Patří sem financování partnerské depistáže a komunitního/nízkoprahového testování rizikových skupin, začlenění screeningu STI do péče o uživatele PrEP, posílení sexuální výchovy a destigmatizace testování, a povinná surveillance rezistence gonokoka s kultivací a citlivostí. Kompetenci má Ministerstvo zdravotnictví, zdravotní pojišťovny a SZÚ. Pro Martina by to znamenalo, že jeho partner dostane pozvání na test a léčbu dřív, než nákazu předá dál — a že antibiotikum, které Martina vyléčilo, bude fungovat i za pět let.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
