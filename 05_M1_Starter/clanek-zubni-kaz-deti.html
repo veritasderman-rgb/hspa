@@ -14,7 +14,7 @@
 <meta property="article:section" content="Dětské zdraví">
 <!--
   audit:
-    last_reviewed: 2026-06-03
+    last_reviewed: 2026-07-25
     reviewer: claude-code-agent
     status: verified
     created_at: 2026-06-03
@@ -23,6 +23,7 @@
     visual_elements_count: 4
     notes: "Vytvořeno spolu s novým indikátorem kazivost_chrupu_12let. Klíčová data: index KPE 12letých dětí ČR ~1,9 (nejnovější srovnatelný národní údaj 2013, WHO Global Oral Health Data Bank); poslední velké národní šetření ÚZIS 2003 = 2,96 KPE, 24,2 % dětí s intaktním chrupem (n=5832). Trend: 1994 ~3,4 → 1997 ~3,1 → 2003 2,96 → 2013 1,9 (orientační, různá metodika; origin: seed). Benchmark: WHO evropský region ~1,6; Německo 0,5 (DAJ/DMS 2016, 78,8 % bez kazu); Slovensko 1,4 (2021); Polsko 2,4 (2019); Rakousko ~0,7–1,0. Signál warn (1,9 vs 1,6 EU benchmark). Politická páka: školní programy pečetění fisur a fluoridových laků, dostupnost dětské stomatologie (úhrada, rezidenční místa pedostomatologie), obnova národního monitoringu orálního zdraví dětí (ÚZIS/SZÚ). Status: draft — published:false do redakčního schválení; hodnoty trendu orientační (seed), nehomogenní časová řada."
     drift_review_2026-07-07: "Nightly indicator-drift flag (ucast_preventivni_prohlidky_stomatolog, kontrakt 52,1 % 2023) přezkoumán — odkaz indikator-ucast_preventivni_prohlidky_stomatolog.html se objevuje 2x (strukturální analýza + databox) jen jako křížový odkaz na příbuzný indikátor dostupnosti, bez citace čísla z tohoto indikátoru v okolním textu. Falešně pozitivní nález skeneru — beze změny. Srovnáno s clanek-nesplnena-potreba-zubni-pece.html (tentýž indikátor, stejná citace = žádná): konzistentní."
+    f1_2026-07-25: "Audit (denní rutina, důraz na validaci zdrojů) proti ŽIVÝM primárním zdrojům — první skutečná verifikace seed hodnot (dosud jen origin:seed). OPRAVA (věcná, číslo+zdroj) — Polsko: 2,4 (2019, bez dohledatelného zdroje) → ≈2,8; primární: MZ PL 'Monitorowanie stanu zdrowia jamy ustnej 2016–2020', 12leté PUWZ=2,84 (2016–2019). Upraveno napříč (bar data-max 2,5→3, tabulka, databox, disclaimery). UPŘESNĚNÍ — Slovensko: 1,4 potvrzeno primárně (NCZI: 2,01/2009 → 1,40/2022), rok 2021→2022, doplněn zdroj NCZI. UPŘESNĚNÍ — Německo: DAJ/NOHSC 2016 = DMFT 0,44 (78,8 % bez kazu); 0,5 ponecháno jako zaokrouhlení, přesná hodnota doplněna do textu i zdrojů. DOPLNĚNÍ — provenience central KPI: české 1,9/2013 je z databázové kompilace WHO Global Oral Health Data Bank/CAPP, ne z národního šetření; WHO profily 2022 měří prevalenci neošetřeného kazu (GBD), ne DMFT-12 → novější národní DMFT neexistuje (posiluje tezi 'stát přestal měřit'). DOPLNĚNÍ — nuance benchmarku: evropská meta-analýza (36 zemí 2011–2022) sdružila DMFT-12 ≈ 2,1, tj. CZ 1,9 leží kolem/mírně pod širším evropským poolem, výrazně nad záp. Evropou. Doplněny národní primární zdroje (DAJ, NCZI, MZ PL Monitoring) + meta-analýza do sekce Zdroje. Ověřeno OK: ÚZIS 2003 = 2,96 KPE (odkaz PDF živý 200); headline 'zhruba 4× víc než DE' drží (1,9/0,44=4,3). last_reviewed 2026-06-03→2026-07-25; dateModified→2026-07-25. Status ponechán verified (opravy jsou upřesnění; teze i headline drží)."
 -->
 <meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -57,7 +58,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-zubni-kaz-deti"
       },
       "datePublished": "2026-06-10",
-      "dateModified": "2026-06-03",
+      "dateModified": "2026-07-25",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -213,20 +214,24 @@
       <h3>Mezinárodní srovnání: rozdíl není v genech</h3>
 
       <p>
-        Když český průměr postavíme vedle sousedů a evropské špičky, vyjde najevo, jak velký prostor ke zlepšení zůstává. <strong>Německo</strong> dosahuje u dvanáctiletých dětí průměru jen <strong>0,5 KPE</strong> a téměř <strong>79 % německých dětí nemá kaz vůbec</strong> (národní šetření 2016) — to je dnes nejlepší výsledek v EU. Blízko jsou i <strong>Rakousko</strong> (přibližně 0,7 až 1,0) a <strong>Slovensko</strong> (1,4 v roce 2021). Hůř než Česko je na tom v regionu třeba <strong>Polsko</strong> (2,4 v roce 2019). Český výsledek 1,9 tak leží v pomyslném středním pásmu — lepší než Polsko, ale výrazně, řádově až čtyřnásobně horší než Německo.
+        Když český průměr postavíme vedle sousedů a evropské špičky, vyjde najevo, jak velký prostor ke zlepšení zůstává. <strong>Německo</strong> dosahuje u dvanáctiletých dětí průměru jen kolem <strong>0,5 KPE</strong> (národní šetření DAJ 2016: přesně 0,44) a téměř <strong>79 % německých dětí nemá kaz vůbec</strong> (přesně 78,8 %, 2016) — to je dnes nejlepší výsledek v EU. Blízko jsou i <strong>Rakousko</strong> (přibližně 0,7 až 1,0) a <strong>Slovensko</strong> (1,4; slovenské NCZI eviduje u dvanáctiletých pokles z 2,01 v roce 2009 na 1,40 v roce 2022). Hůř než Česko je na tom v regionu třeba <strong>Polsko</strong> (přibližně 2,8; celostátní monitoring MZ PL 2016–2019). Český výsledek 1,9 tak leží v pomyslném středním pásmu — lepší než Polsko, ale výrazně, řádově až čtyřnásobně horší než Německo.
+      </p>
+
+      <p>
+        Jedno upřesnění k benchmarku: hodnota „průměr evropského regionu WHO ≈ 1,6" je orientační referenční číslo ze starší databázové kompilace. Novější evropská systematická review a meta-analýza (36 zemí, šetření 2011–2022) sdružila průměrný DMFT dvanáctiletých na <strong>≈ 2,1</strong> — český výsledek 1,9 tak leží zhruba <em>kolem, spíše mírně pod</em> tímto širším evropským poolem (který nahoru táhne východní Evropa), zatímco vůči západoevropské špičce (Německo, Rakousko, severské země pod 1,0) zůstává výrazně horší. Poctivé čtení tedy zní: Česko není evropský propadák, ale ani zdaleka nevyužilo prevenci tak jako země, kterým se kazivost podařilo stlačit k nule.
       </p>
 
       <figure class="av-figure av-figure-wide" aria-labelledby="avKazBarH">
         <figcaption class="av-figure-h" id="avKazBarH">Průměrný index KPE/DMFT dvanáctiletých dětí — Česko vs. okolní země</figcaption>
-        <ol class="av-bar-compare av-bar-compare-list" data-max="2.5" data-unit=" KPE">
-          <li class="av-bar-row av-bar-row-good" data-value="0.5" data-label="Německo" data-note="2016 · 79 % bez kazu"></li>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="3" data-unit=" KPE">
+          <li class="av-bar-row av-bar-row-good" data-value="0.5" data-label="Německo" data-note="DAJ 2016 · 79 % bez kazu"></li>
           <li class="av-bar-row av-bar-row-good" data-value="0.9" data-label="Rakousko" data-note="~0,7–1,0"></li>
-          <li class="av-bar-row" data-value="1.4" data-label="Slovensko" data-note="2021"></li>
-          <li class="av-bar-row" data-value="1.6" data-label="Průměr WHO Evropa" data-note="benchmark"></li>
+          <li class="av-bar-row" data-value="1.4" data-label="Slovensko" data-note="NCZI 2022"></li>
+          <li class="av-bar-row" data-value="1.6" data-label="Průměr WHO Evropa" data-note="benchmark (orient.)"></li>
           <li class="av-bar-row av-bar-row-bad" data-value="1.9" data-label="Česko" data-note="2013"></li>
-          <li class="av-bar-row" data-value="2.4" data-label="Polsko" data-note="2019"></li>
+          <li class="av-bar-row" data-value="2.8" data-label="Polsko" data-note="MZ PL 2016–2019"></li>
         </ol>
-        <p class="av-figure-note"><strong>Zdroj:</strong> WHO Oral Health Country Profiles / Global Oral Health Data Bank; národní šetření jednotlivých zemí (Německo DAJ/DMS 2016). Roky šetření se liší; prahy diagnostiky kazu nejsou plně harmonizované — hodnoty berte jako orientační.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Národní šetření jednotlivých zemí — Německo DAJ/NOHSC 2016 (0,44), Slovensko NCZI (1,40; 2022), Polsko MZ PL „Monitorowanie stanu zdrowia jamy ustnej" 2016–2019 (2,84); ČR WHO Global Oral Health Data Bank / ÚZIS 2003. Roky šetření se liší; prahy diagnostiky kazu nejsou plně harmonizované — hodnoty berte jako orientační.</p>
       </figure>
 
       <p>
@@ -267,13 +272,13 @@
               </tr>
               <tr>
                 <th scope="row">Polsko</th>
-                <td class="av-num av-bad">2,4</td>
-                <td>jeden z horších výsledků v EU</td>
+                <td class="av-num av-bad">~2,8</td>
+                <td>jeden z horších výsledků v EU (MZ PL, monitoring 2016–2019)</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> WHO Oral Health Country Profiles a národní šetření (roky 2013–2021 dle země). Hodnota pro Rakousko je orientační odhad z posledního národního šetření.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Národní šetření dle země (Německo DAJ 2016 · Slovensko NCZI 2022 · Polsko MZ PL 2016–2019) a WHO Oral Health Country Profiles / Global Oral Health Data Bank. Hodnota pro Rakousko je orientační odhad z posledního národního šetření; roky se liší, prahy diagnostiky nejsou plně harmonizované.</p>
       </figure>
 
       <h3>Strukturální analýza: pět faktorů, které kaz rozhodují</h3>
@@ -365,12 +370,12 @@
         <li><strong>Poslední velké národní šetření</strong> — ÚZIS 2003: 2,96 KPE, 24,2 % dětí bez kazu (n = 5 832)</li>
         <li><strong>Trend</strong> — ~3,4 (1994) → 2,96 (2003) → 1,9 (2013); klesající</li>
         <li><strong>Benchmark</strong> — průměr evropského regionu WHO ~1,6 (signál warn)</li>
-        <li><strong>Mezinárodní srovnání</strong> — DE 0,5 · AT ~0,9 · SK 1,4 · CZ 1,9 · PL 2,4</li>
+        <li><strong>Mezinárodní srovnání</strong> — DE 0,5 (0,44) · AT ~0,9 · SK 1,4 (2022) · CZ 1,9 · PL ~2,8 (2016–2019)</li>
         <li><strong>Směr</strong> — nižší je lepší (lower_is_better)</li>
         <li><strong>Frekvence</strong> — decadal; pravidelný národní monitoring chybí</li>
       </ul>
       <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
-        <strong>Pozn. k údajům:</strong> Hodnoty jsou orientační (origin: seed). Časová řada není homogenní — kombinuje národní šetření z různých let (1994–2013) s odlišnou metodikou výběru a kalibrace examinátorů. Nejnovější srovnatelný národní údaj (~1,9) je z roku 2013; poslední velké reprezentativní celostátní šetření provedl ÚZIS v roce 2003 (2,96 KPE). Benchmark 1,6 reprezentuje průměr evropského regionu WHO; hodnoty jednotlivých zemí pocházejí z národních šetření různých let (2013–2021) a z WHO Oral Health Country Profiles. Prahy diagnostiky kazu nejsou mezi zeměmi plně harmonizované.
+        <strong>Pozn. k údajům:</strong> Hodnoty jsou orientační (origin: seed). Časová řada není homogenní — kombinuje národní šetření z různých let (1994–2013) s odlišnou metodikou výběru a kalibrace examinátorů. Nejnovější srovnatelný národní údaj (~1,9) je z roku 2013 a pochází z mezinárodní databázové kompilace (WHO Global Oral Health Data Bank / CAPP), <em>nikoli</em> z národního šetření; poslední velké reprezentativní celostátní šetření provedl ÚZIS v roce 2003 (2,96 KPE). Novější profily WHO (Global Oral Health Status Report 2022) měří prevalenci neošetřeného kazu (odhad GBD), nikoli DMFT-12 — novější srovnatelný národní údaj DMFT tedy neexistuje. Benchmark 1,6 je orientační starší referenční hodnota evropského regionu WHO; pro kontext: evropská meta-analýza (36 zemí, 2011–2022) sdružila DMFT-12 na ≈ 2,1. Hodnoty jednotlivých zemí pocházejí z národních šetření různých let (2013–2022) a z WHO Oral Health Country Profiles. Prahy diagnostiky kazu nejsou mezi zeměmi plně harmonizované.
       </p>
     </aside>
 
@@ -392,8 +397,17 @@
           <li><strong>WHO — Global Oral Health Data Bank</strong> — historická i aktuální data DMFT/KPE podle zemí. <a href="https://www.who.int/teams/noncommunicable-diseases/global-status-report-on-oral-health-2022" target="_blank" rel="noopener">who.int (oral health) ↗</a></li>
         </ul>
       </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Národní šetření srovnávaných zemí</h5>
+        <ul class="article-sources-list">
+          <li><strong>Německo — DAJ / Deutsche Arbeitsgemeinschaft für Jugendzahnpflege, epidemiologické šetření 2016 (NOHSC)</strong> — dvanáctiletí: DMFT 0,44, 78,8 % bez kazu (n ≈ 56 000). <a href="https://www.daj.de/" target="_blank" rel="noopener">daj.de ↗</a></li>
+          <li><strong>Slovensko — Národné centrum zdravotníckych informácií (NCZI)</strong> — vývoj indexu KPE dvanáctiletých: 2,01 (2009) → 1,40 (2022). <a href="https://www.nczisk.sk/" target="_blank" rel="noopener">nczisk.sk ↗</a></li>
+          <li><strong>Polsko — MZ PL, „Monitorowanie stanu zdrowia jamy ustnej populacji polskiej 2016–2020"</strong> — dvanáctiletí: průměr PUWZ (DMFT) 2,84 (šetření 2016–2019). <a href="https://www.gov.pl/web/zdrowie/monitorowanie-stanu-zdrowia-jamy-ustnej-populacji-polskiej-w-latach-2016-2020" target="_blank" rel="noopener">gov.pl ↗</a></li>
+          <li><strong>Evropská meta-analýza kazivosti dvanáctiletých (36 zemí, 2011–2022)</strong> — sdružený průměr DMFT-12 ≈ 2,1; kontext pro benchmark. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11626496/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Český index KPE dvanáctiletých dětí (~1,9) vychází z nejnovějšího srovnatelného národního údaje (rok 2013, WHO Global Oral Health Data Bank); poslední velké reprezentativní celostátní šetření provedl ÚZIS v roce 2003 (průměr 2,96 KPE, 24,2 % dětí s intaktním chrupem). Časová řada je nehomogenní (různá metodika napříč lety) a hodnoty jsou orientační (origin: seed). Benchmark 1,6 představuje průměr evropského regionu WHO; hodnoty pro Německo (0,5; 2016), Rakousko (~0,9), Slovensko (1,4; 2021) a Polsko (2,4; 2019) pocházejí z národních šetření a WHO Oral Health Country Profiles. Údaje budou upřesněny při přechodu indikátoru na ověřený živý zdroj a po případném obnovení národního monitoringu orálního zdraví dětí.
+        <strong>Pozn. k údajům:</strong> Český index KPE dvanáctiletých dětí (~1,9) vychází z nejnovějšího srovnatelného národního údaje (rok 2013, WHO Global Oral Health Data Bank / CAPP — databázová kompilace, nikoli národní šetření); poslední velké reprezentativní celostátní šetření provedl ÚZIS v roce 2003 (průměr 2,96 KPE, 24,2 % dětí s intaktním chrupem). Novější profily WHO (2022) měří prevalenci neošetřeného kazu (GBD), ne DMFT-12 — novější národní údaj DMFT proto neexistuje, což ilustruje hlavní tezi článku o chybějícím monitoringu. Časová řada je nehomogenní (různá metodika napříč lety) a hodnoty jsou orientační (origin: seed). Benchmark 1,6 je orientační starší referenční hodnota evropského regionu WHO (evropská meta-analýza 36 zemí 2011–2022 sdružila DMFT-12 na ≈ 2,1); hodnoty pro Německo (0,5; přesně DAJ 2016 = 0,44, 78,8 % bez kazu), Rakousko (~0,9), Slovensko (1,4; NCZI 2022) a Polsko (~2,8; celostátní monitoring MZ PL 2016–2019) pocházejí z národních šetření a WHO Oral Health Country Profiles. Údaje budou upřesněny při přechodu indikátoru na ověřený živý zdroj a po případném obnovení národního monitoringu orálního zdraví dětí.
       </p>
     </section>
 
