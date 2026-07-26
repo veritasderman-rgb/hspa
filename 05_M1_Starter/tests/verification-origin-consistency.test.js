@@ -63,6 +63,13 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'hospitalizace_na_100k',
   'mortalita_inhosp_ami',
   'mortalita_inhosp_cmp',
+  // SÚKL DIS-13 (dodávky distribuovaných humánních LP) — hodnoty primárně
+  // ověřeny 2026-07-23 (Vlna A: „ŽIVĚ+OVĚŘENO" ze SÚKL opendata DIS-13,
+  // výpočet DDD/1000/den, komunitní sektor), ale automatický DIS-13 fetcher
+  // zatím není zapojen → kontrakt nese origin: seed. Odeber, jakmile vznikne
+  // živý SÚKL DIS-13 feed.
+  'pouzivani_antidepresiv',
+  'spotreba_opioidu',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
