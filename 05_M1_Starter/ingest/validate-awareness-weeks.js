@@ -15,12 +15,18 @@ const VALID_SECTION = new Set(['articles', 'indicators', 'prevention', 'tools'])
 function day(s) {
   if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return NaN;
   const [y, m, d] = s.split('-').map(Number);
-  return Date.UTC(y, m - 1, d);
+  const t = Date.UTC(y, m - 1, d);
+  // Round-trip kontrola: Date.UTC neexistující dny tiše normalizuje
+  // (2026-02-31 → 3. března) — takové datum odmítáme.
+  const dt = new Date(t);
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m - 1 || dt.getUTCDate() !== d) return NaN;
+  return t;
 }
 
-export function validateAwarenessWeeks() {
+export function validateAwarenessWeeks(docOverride) {
   const errors = [];
-  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'awareness-weeks.json'), 'utf8'));
+  // docOverride: testy validují syntetické dokumenty bez zápisu na disk
+  const doc = docOverride ?? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'awareness-weeks.json'), 'utf8'));
   const articles = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'articles.json'), 'utf8'));
   const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
   const prevention = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'prevention.json'), 'utf8'));
@@ -52,6 +58,17 @@ export function validateAwarenessWeeks() {
       const span = (b - a) / 86400000 + 1;
       if (span > 14) errors.push(`${tag}: interval delší než 14 dní (${span})`);
       intervals.push({ id: w.id, a, b });
+    }
+
+    // Volitelné okno předběžného ohlášení (kampaň „visí dřív"): musí být
+    // validní datum PŘED startem a ne absurdně brzy (max 14 dní předstih).
+    if (w.announce_from != null) {
+      const an = day(w.announce_from);
+      if (!Number.isFinite(an)) errors.push(`${tag}: neplatný announce_from '${w.announce_from}'`);
+      else if (Number.isFinite(a)) {
+        if (an >= a) errors.push(`${tag}: announce_from musí být před start`);
+        else if ((a - an) / 86400000 > 14) errors.push(`${tag}: announce_from víc než 14 dní před startem`);
+      }
     }
 
     const p = w.popup || {};
