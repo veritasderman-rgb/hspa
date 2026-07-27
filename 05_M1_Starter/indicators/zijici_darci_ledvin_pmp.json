@@ -1,0 +1,61 @@
+{
+  "id": "zijici_darci_ledvin_pmp",
+  "name": "Transplantace ledvin od žijících dárců (na milion obyvatel)",
+  "area": "Procesy",
+  "domain": "Vysoce specializovaná péče",
+  "subdomain": "Program žijících dárců",
+  "definition": "Počet transplantací ledviny od žijícího dárce provedených v České republice za rok, přepočtený na milion obyvatel (pmp). Žijící dárcovství znamená, že zdravý člověk — nejčastěji příbuzný, partner nebo blízký pacienta — daruje jednu ze svých dvou ledvin. Oproti orgánu od zemřelého dárce má ledvina od žijícího dárce prokazatelně lepší dlouhodobé přežití štěpu, umožňuje plánovat výkon dopředu a v ideálním případě i transplantovat pacienta ještě před zahájením dialýzy (pre-emptivní transplantace). Ukazatel je doplňkem k celkové transplantační aktivitě (transplantace_per_milion) a k dárcovství od zemřelých (zemreli_darci_organu_pmp) a měří, jak dobře systém dokáže mobilizovat tento nedostatkově využívaný, ale medicínsky nejhodnotnější zdroj ledvin.",
+  "unit": "na milion obyvatel",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_kst",
+      "endpoint": "https://kst.cz/statistiky/",
+      "dataset": "Koordinační středisko transplantací (KST) — celostátní statistika odběrové a transplantační aktivity; roční počty transplantací ledvin s rozpadem na zemřelé a žijící dárce. Doplňkově Česká transplantační společnost (transplant.cz) a výroční přehledy IKEM (dominantní transplantační centrum ČR).",
+      "dimensions": ["typ dárce (zemřelý / žijící)", "orgán (ledvina)", "transplantační centrum", "rok"],
+      "note": "KST/IKEM: v roce 2024 bylo v ČR transplantováno celkem 488 ledvin, z toho 452 od zemřelých a 36 od žijících dárců (≈ 3,3 na milion obyvatel při populaci ~10,9 mil.). Žijící dárcovství tvoří dlouhodobě jen zhruba 8 % dárců ledvin. Pro srovnání: samotný IKEM provedl 28 transplantací od žijících dárců v roce 2024 (i v letech 2021 a 2022 shodně po 28), zbytek připadá na ostatní centra (Motol, Plzeň, Hradec Králové, Brno, Ostrava, Olomouc).",
+      "_dev_notes": [
+        "Primární strukturovaný zdroj: KST — celostátní statistika transplantační a odběrové aktivity (kst.cz/statistiky), roční rozpad ledvin na zemřelé vs. žijící dárce.",
+        "Headline 2024: 36 transplantací ledviny od žijícího dárce celostátně (452 od zemřelých, 488 celkem) → ≈ 3,3 na milion obyvatel. Podíl žijících dárců ≈ 7–8 % (KST).",
+        "Trend v seed je ORIENTAČNÍ: pevně ověřený je bod 2024 (36 národně). Body 2020–2023 jsou rekonstruovány z ročních národních součtů transplantací ledvin (2022 = 520, 2023 = 488) a z podílu žijících dárců ~8 % a z výročních dat IKEM (žijící 28 v 2021 i 2022) — národní počty žijících dárců se dlouhodobě pohybují v pásmu ~30–40 ročně (≈ 2,9–3,6 pmp) a spíše stagnují/mírně klesají. Před přepnutím na 'live' je nutné dotáhnout přesnou celostátní řadu z KST ročenky.",
+        "Benchmark: ERA Registry (Boenink et al., NDT 2025) — evropská míra transplantací ledvin od žijících dárců 13 pmp (2022), rozpětí 0 (Chorvatsko) až 39 pmp (Turecko). Nizozemsko ~30 pmp žijících dárců (IRODaT). ČR ~3,3 pmp = zhruba čtvrtina evropského průměru.",
+        "Metodická poznámka: ČR je naopak evropská špička v dárcovství od ZEMŘELÝCH (viz zemreli_darci_organu_pmp) — nízké žijící dárcovství tedy neznamená malý transplantační program, ale nevyužitou rezervu; krátká čekací doba na ledvinu od zemřelého dárce (~1 rok) paradoxně snižuje motivaci hledat žijícího dárce."
+      ]
+    },
+    "fallback": {
+      "type": "irodat",
+      "url": "https://www.irodat.org/?p=database"
+    }
+  },
+  "benchmark_source": {
+    "type": "era_registry",
+    "code": "living_donor_KT_rate_pmp",
+    "dataset": "ERA Registry (European Renal Association) — „Living and deceased donor kidney transplant rates across Europe\" (Figure of the month, dle Boenink et al., Nephrology Dialysis Transplantation 2025): celková evropská míra transplantací ledvin od žijících dárců činila v roce 2022 13 na milion obyvatel, s rozpětím od 0 (Chorvatsko) po 39 pmp (Turecko). Doplňkově IRODaT (International Registry in Organ Donation and Transplantation): Nizozemsko ~30 pmp žijících dárců orgánů. Česko s ~3,3 pmp leží zhruba na čtvrtině evropského průměru, ačkoli v dárcovství od zemřelých patří k evropské špičce.",
+    "value": 13,
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12341905/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Koordinační středisko transplantací (KST) — celostátní koordinace dárcovství a transplantací",
+    "ÚZIS ČR — Národní zdravotnický informační systém",
+    "Česká transplantační společnost ČLS JEP · transplantační centra (IKEM a další)",
+    "ERA Registry / IRODaT — mezinárodní srovnání"
+  ],
+  "method_notes": "V roce 2024 provedla česká transplantační centra 36 transplantací ledviny od žijícího dárce z celkových 488 transplantovaných ledvin (452 od zemřelých), tedy přibližně 3,3 na milion obyvatel. Žijící dárcovství tak tvoří dlouhodobě jen zhruba 8 % dárců ledvin a jeho absolutní počty se roky drží v pásmu ~30–40 ročně, spíše se stagnací. Signál je nastaven na 'bad' (špatný): evropská míra transplantací ledvin od žijících dárců je 13 na milion obyvatel (ERA Registry, 2022), takže Česko leží zhruba na čtvrtině evropského průměru; Nizozemsko dosahuje ~30 pmp. Paradox spočívá v tom, že ČR je zároveň evropskou špičkou v dárcovství od zemřelých (viz zemreli_darci_organu_pmp) — nízké žijící dárcovství proto neukazuje slabý transplantační program, ale nevyužitou medicínskou rezervu. Ledvina od žijícího dárce vydrží průměrně déle, umožňuje plánovanou i pre-emptivní transplantaci a zkracuje čas na dialýze. Origin = seed: hodnoty jsou orientačně zaneseny pro vývojové prostředí, ostrá data tečou z celostátní statistiky KST.",
+  "limitations": "(1) Headline 2024 (36 národně) je ověřený, ale body časové řady 2020–2023 jsou v seedu rekonstruovány z národních součtů transplantací ledvin a z podílu žijících dárců (~8 %) a výročních dat IKEM — přesnou celostátní řadu je nutné dotáhnout z ročenky KST před přepnutím na 'live'. (2) Absolutní počty jsou malé (desítky ročně), takže přepočet na milion obyvatel meziročně kolísá i při malé změně počtu výkonů — trend čtěte jako pásmo, ne jako přesnou křivku. (3) Rok českého údaje (2024) a publikovaného evropského benchmarku ERA Registry (2022) se liší; srovnání „ČR ~čtvrtina evropského průměru\" čtěte jako řádové. (4) Nižší žijící dárcovství je v ČR částečně důsledkem dobré dostupnosti orgánů od zemřelých a krátké čekací doby — indikátor proto nelze číst izolovaně od zemreli_darci_organu_pmp a od čekacích dob na transplantaci. (5) Mezinárodní srovnatelnost ovlivňují rozdíly v evidenci (žijící dárci orgánů vs. konkrétně ledvin) a v definici pmp mezi registry (ERA, IRODaT, Rada Evropy).",
+  "determinants": [
+    "Čekací doba na ledvinu od zemřelého dárce — ČR má díky vysokému dárcovství od zemřelých krátkou čekací dobu (~1 rok), což paradoxně snižuje motivaci pacientů i lékařů hledat žijícího dárce. Je to hlavní strukturální brzda žijícího programu.",
+    "Rozvinutost programu párových výměn (paired kidney exchange) — když má dvojice pacient–dárce neshodné krevní skupiny nebo protilátky, párová (i mezinárodní) výměna umožní transplantaci křížem. ČR se do párových a mezinárodních výměn zapojuje jen omezeně, čímž se ztrácí část potenciálních žijících dárců.",
+    "Informovanost pacientů a preemptivní odesílání — část nemocných se o možnosti žijícího dárce dozví pozdě, až na dialýze; systematické nabízení pre-emptivní transplantace (ještě před dialýzou) a včasná edukace rodiny rozhodují o počtu žijících dárců.",
+    "Ekonomická a organizační zátěž dárce — dárcovství znamená operaci, rekonvalescenci a výpadek příjmu; míra náhrady nákladů a ztráty výdělku dárci, dostupnost pracovního volna a hladkost vyšetřovacího procesu ovlivňují ochotu darovat.",
+    "Kapacita a koncentrace center — žijící program je náročný na koordinaci imunologického vyšetření, chirurgii a follow-up; koncentrace do několika center (dominantně IKEM) usnadňuje expertízu, ale i omezuje geografickou dostupnost pro pacienty z okrajových regionů."
+  ],
+  "importance": "Transplantace ledviny od žijícího dárce je medicínsky nejhodnotnější formou náhrady funkce ledvin: štěp vydrží průměrně déle než od zemřelého dárce, výkon lze naplánovat a v ideálním případě provést ještě před dialýzou. Dashboard už sleduje celkovou transplantační aktivitu i dárcovství od zemřelých, ale žijící dárcovství — kde Česko výrazně zaostává — dosud chybělo. Právě tady je totiž největší nevyužitá rezerva: zatímco v dárcovství od zemřelých patří ČR k evropské špičce, u žijících dárců drží jen zhruba čtvrtinu evropského průměru. Indikátor má konkrétní a dobře uchopitelnou politickou páku (párové výměny, pre-emptivní transplantace, náhrada nákladů dárci, edukace) a přímo se propojuje s indikátory čekacích dob, dialýzy a celkového transplantačního programu. Měřit žijící dárcovství proto znamená měřit, zda systém dokáže využít i nejhodnotnější — a přitom nejméně využívaný — zdroj ledvin.",
+  "patient_story": "Ostrava, podzim 2024. Petr (54) chodí třikrát týdně na dialýzu; každé sezení mu zabere půl dne a bere mu síly. Jeho manželka Lenka je ochotná darovat mu ledvinu a krevní skupiny by seděly — jenže o téhle možnosti se pár dozvěděl až po roce na dialýze, když se sám doptal. „Nikdo nám dřív neřekl, že to jde takhle,\" popisuje Lenka. Petr je jedním z mála: v roce 2024 bylo v celém Česku provedeno jen 36 transplantací ledviny od žijícího dárce — z celkových 488 transplantovaných ledvin.\n\nČísla ukazují jasné zaostávání. Oněch 36 výkonů odpovídá přibližně 3,3 transplantace na milion obyvatel, zatímco evropská míra dosahuje 13 na milion (ERA Registry, 2022) a Nizozemsko se pohybuje kolem 30. Česko tedy leží zhruba na čtvrtině evropského průměru a signál je nastaven na špatný. Žijící dárci přitom tvoří dlouhodobě jen asi 8 % dárců ledvin a jejich počet roky spíše stagnuje kolem 30–40 ročně. A nejde o slabý transplantační program jako celek — právě naopak.\n\nStrukturálně je za tím paradox. Česko je evropskou špičkou v dárcovství od zemřelých dárců, díky čemuž je čekací doba na ledvinu od zemřelého dárce krátká — často jen kolem jednoho roku. To je dobrá zpráva, která má ale vedlejší účinek: když pacient dostane orgán poměrně rychle „ze systému\", zmizí tlak hledat žijícího dárce v rodině. K tomu se přidává málo rozvinutý program párových výměn (kdy si dvojice s neshodnou krevní skupinou vzájemně „prohodí\" dárce), pozdní informování pacientů a ekonomická zátěž, kterou dárcovství pro dárce znamená. Výsledkem je nevyužitá rezerva těch nejkvalitnějších štěpů.\n\nPolitická páka je proto nezvykle konkrétní. Zaprvé, rozšířit a zmezinárodnit program párových výměn, aby se využily i imunologicky nekompatibilní dvojice. Zadruhé, systematicky nabízet pre-emptivní transplantaci a informovat pacienty i jejich blízké o možnosti žijícího dárce dřív, než začne dialýza. Zatřetí, odstranit ekonomické překážky na straně dárce — plná náhrada nákladů, ztráty výdělku a pracovního volna. Kompetenci sdílejí Ministerstvo zdravotnictví (nastavení úhrad a pravidel), Koordinační středisko transplantací (organizace párových výměn) a transplantační centra. Pro Petra a Lenku by přitom stačilo málo: dozvědět se o možnosti včas — a mít cestu, která dárce neodrazuje.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
