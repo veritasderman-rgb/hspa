@@ -50,6 +50,9 @@ export function shouldShowAwarenessPopup(weekId, state = {}, session = {}) {
  */
 export function popupVariant(week, mode) {
   const p = week.popup || {};
+  // CTA vždy s ?id= — bez něj by tyden.html (resolveWeek) mohl při překryvu
+  // ohlašovacího okna s jiným nadcházejícím týdnem otevřít nesprávný obsah.
+  const href = `tyden.html?id=${encodeURIComponent(week.id)}`;
   if (mode === 'announce') {
     return {
       stateKey: `${week.id}:announce`,
@@ -57,6 +60,7 @@ export function popupVariant(week, mode) {
       body: p.announce_body || p.body || week.lead || '',
       cta: p.announce_cta || 'Podívat se, co chystáme',
       range: formatRange(week),
+      href,
     };
   }
   return {
@@ -65,6 +69,7 @@ export function popupVariant(week, mode) {
     body: p.body || week.lead || '',
     cta: p.cta || 'Otevřít týden',
     range: null,
+    href,
   };
 }
 
@@ -82,7 +87,7 @@ function showPopup(week, variant) {
       <p class="aw-popup-h">${escapeText(variant.headline)}</p>
       <p class="aw-popup-lead">${escapeText(variant.body)}</p>
       ${variant.range ? `<p class="aw-popup-range">${escapeText(variant.range)}</p>` : ''}
-      <a class="aw-popup-cta" href="tyden.html">${escapeText(variant.cta)}</a>
+      <a class="aw-popup-cta" href="${escapeText(variant.href)}">${escapeText(variant.cta)}</a>
     </div>`;
   document.body.appendChild(wrap);
   markSessionShown(variant.stateKey);

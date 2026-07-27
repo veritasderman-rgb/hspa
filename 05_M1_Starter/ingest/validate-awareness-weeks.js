@@ -15,7 +15,12 @@ const VALID_SECTION = new Set(['articles', 'indicators', 'prevention', 'tools'])
 function day(s) {
   if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return NaN;
   const [y, m, d] = s.split('-').map(Number);
-  return Date.UTC(y, m - 1, d);
+  const t = Date.UTC(y, m - 1, d);
+  // Round-trip kontrola: Date.UTC neexistující dny tiše normalizuje
+  // (2026-02-31 → 3. března) — takové datum odmítáme.
+  const dt = new Date(t);
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m - 1 || dt.getUTCDate() !== d) return NaN;
+  return t;
 }
 
 export function validateAwarenessWeeks(docOverride) {

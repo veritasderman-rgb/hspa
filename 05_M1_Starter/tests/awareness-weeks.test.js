@@ -203,3 +203,23 @@ test('validace: announce_from musí být před startem a max 14 dní předem', (
   assert.equal(run('2026-07-01'), false, 'víc než 14 dní předem selže');
   assert.equal(run('nesmysl'), false, 'neplatné datum selže');
 });
+
+test('parseDay: odmítá neexistující kalendářní dny (Codex #885)', () => {
+  assert.ok(Number.isFinite(parseDay('2026-02-28')));
+  assert.ok(Number.isNaN(parseDay('2026-02-31')), '31. února neexistuje');
+  assert.ok(Number.isNaN(parseDay('2026-13-01')), '13. měsíc neexistuje');
+  assert.ok(Number.isNaN(parseDay('2026-04-31')), '31. dubna neexistuje');
+  assert.ok(Number.isFinite(parseDay('2028-02-29')), 'přestupný rok projde');
+  assert.ok(Number.isNaN(parseDay('2026-02-29')), 'nepřestupný 29. únor selže');
+});
+
+test('validace: announce_from s neexistujícím dnem selže (2026-02-31)', () => {
+  const base = { id: 'a', observance: 'o', observance_source: 's', kicker: 'k', title: 't', lead: 'l', status: 'ready', start: '2026-08-01', end: '2026-08-07', popup: { headline: 'h', body: 'b', cta: 'c' }, context: { why: 'w', affects: ['x'], cz: 'c' }, linked_indicators: ['nadeje_doziti_total'] };
+  assert.equal(validateAwarenessWeeks({ weeks: [{ ...base, announce_from: '2026-07-32' }] }), false);
+});
+
+test('popupVariant: CTA vede na tyden.html?id= (překryv ohlášení s jiným týdnem)', () => {
+  const w = { id: 'svetovy-tyden-kojeni-2026', observance: 'X', start: '2026-08-01', end: '2026-08-07', popup: {} };
+  assert.equal(popupVariant(w, 'announce').href, 'tyden.html?id=svetovy-tyden-kojeni-2026');
+  assert.equal(popupVariant(w, 'active').href, 'tyden.html?id=svetovy-tyden-kojeni-2026');
+});
