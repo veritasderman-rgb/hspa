@@ -137,6 +137,10 @@ async function main() {
   }
   Object.assign(dm, {
     name: 'Naděje dožití (muži)',
+    // Bez kontraktového indikátoru — area/domain nese dataset sám, aby ho
+    // selector na kraje.html zařadil správně (jinak spadne do „Ostatní").
+    area: 'Výsledky',
+    domain: 'Zdravotní stav',
     unit: 'let',
     year: Number(krPeriod.slice(-4)),
     country_avg: crMuzi,

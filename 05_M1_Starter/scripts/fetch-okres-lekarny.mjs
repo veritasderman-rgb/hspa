@@ -222,6 +222,9 @@ async function main() {
     name: `SÚKL — Seznam lékáren (stav k ${snapshotDate}); populace ČSÚ (průměr ${period})`,
     url: 'https://opendata.sukl.cz/?q=katalog/seznam-lekaren',
   };
+  // Top-level note se renderuje na detailu indikátoru (src/indicator.js) —
+  // musí popisovat AKTUÁLNÍ metodiku a závěry, ne předchozí PSČ-odhad.
+  ds.note = `Výpočet: SÚKL Seznam lékáren (vč. OOVL, stav k ${snapshotDate}), každá lékárna přiřazena okresu přes ČSÚ číselník obcí (bez PSČ heuristik); jmenovatel průměrná populace okresů ${period} (ČSÚ úmrtnostní tabulky, Px). Krajská čísla = součet okresů, celorepublikový průměr odpovídá živému indikátoru. Nejvyšší hustotu mají Královéhradecký, Jihomoravský a Zlínský kraj, nejnižší Ústecký, Středočeský a Liberecký — Středočeský kraj je specifický spádovostí do pražských lékáren. Indikátor je context_dependent: ČR má hustotu pod průměrem OECD, ale to automaticky neznamená horší dostupnost — viz Dánsko (~17/100k) s plně regulovanou sítí.`;
   ds.okresy = {
     source: 'SÚKL — Seznam lékáren (vč. OOVL); obce→okres dle ČSÚ číselníku; populace ČSÚ úmrtnostní tabulky (Px)',
     source_url: 'https://opendata.sukl.cz/?q=katalog/seznam-lekaren',
