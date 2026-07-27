@@ -2454,6 +2454,53 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 }
 .kraje-foot-text a:hover { text-decoration: underline; }
 
+/* Okresní drill-down (klik na kraj v mapě/žebříčku) */
+.kraje-meta-drill {
+  font-family: var(--sans); font-size: 11px; color: var(--red);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.kraje-rank-clickable { cursor: pointer; }
+.kraje-rank-clickable:hover .kraje-rank-name,
+.kraje-rank-clickable:focus-visible .kraje-rank-name { color: var(--red); }
+.kraje-drill {
+  margin-top: 20px;
+  background: var(--paper2);
+  border: 1px solid var(--rule);
+  padding: 18px;
+}
+.kraje-drill-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 12px;
+}
+.kraje-drill-h {
+  font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--ink);
+}
+.kraje-drill-close {
+  background: none; border: 1px solid var(--rule2); color: var(--ink-mut);
+  font-size: 16px; line-height: 1; padding: 2px 9px; cursor: pointer;
+}
+.kraje-drill-close:hover { color: var(--red); border-color: var(--red); }
+.kraje-drill-list { list-style: none; }
+.kraje-drill-row {
+  display: grid; grid-template-columns: minmax(110px, 160px) 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 5px 0; border-bottom: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 13px;
+}
+.kraje-drill-row:last-child { border-bottom: none; }
+.kraje-drill-name { color: var(--ink); }
+.kraje-drill-bar-wrap { position: relative; height: 10px; background: var(--paper); }
+.kraje-drill-bar { position: absolute; inset: 0 auto 0 0; display: block; background: var(--neutral); opacity: 0.75; }
+.kraje-drill-good .kraje-drill-bar { background: var(--good); }
+.kraje-drill-bad .kraje-drill-bar { background: var(--bad); }
+.kraje-drill-val { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.kraje-drill-note {
+  margin-top: 12px; font-family: var(--serif); font-size: 12.5px;
+  font-style: italic; color: var(--ink-mut); line-height: 1.55;
+}
+.kraje-drill-note a { color: var(--red); text-decoration: none; font-weight: 600; }
+.kraje-drill-note a:hover { text-decoration: underline; }
+
 @media (max-width: 880px) {
   .kraje-layout { grid-template-columns: 1fr; }
   .kraje-map { height: 400px; }
@@ -2461,6 +2508,8 @@ details.hero > summary:hover .hero-summary-icon { color: var(--ink); }
 @media (max-width: 480px) {
   .kraje-rank-row { grid-template-columns: 24px 1fr auto; }
   .kraje-rank-diff { display: none; }
+  .kraje-drill-row { grid-template-columns: minmax(90px, 1fr) auto; }
+  .kraje-drill-bar-wrap { display: none; }
 }
 
 /* Detail link na indikátorové kartě */

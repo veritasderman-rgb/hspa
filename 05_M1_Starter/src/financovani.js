@@ -7,7 +7,7 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
-import { registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
+import { registerCzMap, applyChoropleth } from './cz-choropleth.js';
 
 let FINANCING = null;
 
@@ -508,15 +508,14 @@ async function renderRegionMap() {
   }
   if (!registerCzMap(geo)) return;
 
-  const option = buildChoroplethOption({
+  const chart = echarts.init(container);
+  applyChoropleth(chart, {
     regions: fin.regions,
     country_avg: fin.country_avg,
     unit: fin.unit,
     direction: fin.direction ?? 'context_dependent',
     name: 'Výdaje ZP na pojištěnce',
   });
-  const chart = echarts.init(container);
-  chart.setOption(option);
   window.addEventListener('resize', () => chart.resize());
 
   populateRegionTable(fin);

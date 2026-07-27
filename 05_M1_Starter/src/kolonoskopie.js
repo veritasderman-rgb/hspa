@@ -5,7 +5,7 @@
 
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState } from './page-shared.js';
-import { REGION_NAME_BY_CODE, registerCzMap, buildChoroplethOption } from './cz-choropleth.js';
+import { REGION_NAME_BY_CODE, registerCzMap, applyChoropleth } from './cz-choropleth.js';
 
 let DATA = null;
 const charts = {};   // canvasId → Chart instance
@@ -57,7 +57,7 @@ function drawMap(hostId, dataset) {
     inst = echarts.init(el);
     maps[hostId] = inst;
   }
-  inst.setOption(buildChoroplethOption(dataset), true);
+  applyChoropleth(inst, dataset);
 }
 
 // ─────────────────────────────────────────────
