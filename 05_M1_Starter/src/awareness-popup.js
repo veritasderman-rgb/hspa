@@ -5,7 +5,7 @@
 // jestli převzal řízení). Dismiss per-týden (localStorage), 1× za návštěvu.
 // Vzor: newsletter-popup.js. Viz PLAN-TYDNY-ZDRAVI.md.
 
-import { activeWeekFor } from './awareness-core.js';
+import { activeWeekFor, announceWeekFor, formatRange } from './awareness-core.js';
 
 const STORAGE_KEY = 'zdrave-cesko/aw-popup';   // { [weekId]: dismissedAt }
 const SESSION_KEY = 'zdrave-cesko/aw-popup-session';
@@ -43,29 +43,54 @@ export function shouldShowAwarenessPopup(weekId, state = {}, session = {}) {
   return true;
 }
 
-function showPopup(week) {
+/**
+ * Texty popupu pro daný režim. Režim 'announce' (před startem týdne) má
+ * vlastní stavový klíč — dismiss ohlášení tedy NEumlčí ostrý popup, který
+ * se od prvního dne týdne ukáže znovu.
+ */
+export function popupVariant(week, mode) {
+  const p = week.popup || {};
+  if (mode === 'announce') {
+    return {
+      stateKey: `${week.id}:announce`,
+      headline: p.announce_headline || `Blíží se ${week.observance || 'Týden zdraví'}`,
+      body: p.announce_body || p.body || week.lead || '',
+      cta: p.announce_cta || 'Podívat se, co chystáme',
+      range: formatRange(week),
+    };
+  }
+  return {
+    stateKey: week.id,
+    headline: p.headline || week.title || '',
+    body: p.body || week.lead || '',
+    cta: p.cta || 'Otevřít týden',
+    range: null,
+  };
+}
+
+function showPopup(week, variant) {
   if (document.getElementById('awPopup')) return;
   const wrap = document.createElement('aside');
   wrap.id = 'awPopup';
   wrap.className = 'aw-popup';
   wrap.setAttribute('role', 'dialog');
   wrap.setAttribute('aria-label', week.observance || 'Týden zdraví');
-  const p = week.popup || {};
   wrap.innerHTML = `
     <div class="aw-popup-card">
       <button type="button" class="aw-popup-close" aria-label="Zavřít upozornění">&times;</button>
       <div class="ed-kicker">${escapeText(week.kicker || 'Týden zdraví')}</div>
-      <p class="aw-popup-h">${escapeText(p.headline || week.title || '')}</p>
-      <p class="aw-popup-lead">${escapeText(p.body || week.lead || '')}</p>
-      <a class="aw-popup-cta" href="tyden.html">${escapeText(p.cta || 'Otevřít týden')}</a>
+      <p class="aw-popup-h">${escapeText(variant.headline)}</p>
+      <p class="aw-popup-lead">${escapeText(variant.body)}</p>
+      ${variant.range ? `<p class="aw-popup-range">${escapeText(variant.range)}</p>` : ''}
+      <a class="aw-popup-cta" href="tyden.html">${escapeText(variant.cta)}</a>
     </div>`;
   document.body.appendChild(wrap);
-  markSessionShown(week.id);
+  markSessionShown(variant.stateKey);
   void wrap.offsetWidth;
   wrap.classList.add('aw-popup--visible');
 
   const close = () => {
-    writeDismissed(week.id);
+    writeDismissed(variant.stateKey);
     wrap.classList.remove('aw-popup--visible');
     document.removeEventListener('keydown', onKey);
     setTimeout(() => wrap.remove(), 300);
@@ -92,12 +117,16 @@ export async function initAwarenessPopup() {
   try {
     const reg = await fetch('data/awareness-weeks.json').then(r => r.json());
     const today = new Date().toISOString().slice(0, 10);
-    const week = activeWeekFor(today, reg.weeks || []);
+    // Ostrý týden má přednost; mimo něj zkusíme okno předběžného ohlášení
+    // (announce_from ≤ dnes < start) — kampaň tak může „viset dřív".
+    const active = activeWeekFor(today, reg.weeks || []);
+    const week = active || announceWeekFor(today, reg.weeks || []);
     if (!week) return false;
+    const variant = popupVariant(week, active ? 'active' : 'announce');
     window.__awPopupActive = true; // signál pro newsletter popup, ať mlčí
-    if (!shouldShowAwarenessPopup(week.id, readState(), readSession())) return true;
+    if (!shouldShowAwarenessPopup(variant.stateKey, readState(), readSession())) return true;
     window.setTimeout(() => {
-      if (shouldShowAwarenessPopup(week.id, readState(), readSession())) showPopup(week);
+      if (shouldShowAwarenessPopup(variant.stateKey, readState(), readSession())) showPopup(week, variant);
     }, SHOW_DELAY_MS);
     return true;
   } catch {

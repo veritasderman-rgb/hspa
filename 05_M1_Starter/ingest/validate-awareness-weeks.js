@@ -18,9 +18,10 @@ function day(s) {
   return Date.UTC(y, m - 1, d);
 }
 
-export function validateAwarenessWeeks() {
+export function validateAwarenessWeeks(docOverride) {
   const errors = [];
-  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'awareness-weeks.json'), 'utf8'));
+  // docOverride: testy validují syntetické dokumenty bez zápisu na disk
+  const doc = docOverride ?? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'awareness-weeks.json'), 'utf8'));
   const articles = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'articles.json'), 'utf8'));
   const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
   const prevention = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'prevention.json'), 'utf8'));
@@ -52,6 +53,17 @@ export function validateAwarenessWeeks() {
       const span = (b - a) / 86400000 + 1;
       if (span > 14) errors.push(`${tag}: interval delší než 14 dní (${span})`);
       intervals.push({ id: w.id, a, b });
+    }
+
+    // Volitelné okno předběžného ohlášení (kampaň „visí dřív"): musí být
+    // validní datum PŘED startem a ne absurdně brzy (max 14 dní předstih).
+    if (w.announce_from != null) {
+      const an = day(w.announce_from);
+      if (!Number.isFinite(an)) errors.push(`${tag}: neplatný announce_from '${w.announce_from}'`);
+      else if (Number.isFinite(a)) {
+        if (an >= a) errors.push(`${tag}: announce_from musí být před start`);
+        else if ((a - an) / 86400000 > 14) errors.push(`${tag}: announce_from víc než 14 dní před startem`);
+      }
     }
 
     const p = w.popup || {};

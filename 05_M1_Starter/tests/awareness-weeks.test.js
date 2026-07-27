@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseDay, isWithin, activeWeekFor, upcomingWeeks, pastWeeks, resolveWeek, formatRange } from '../src/awareness-core.js';
-import { shouldShowAwarenessPopup } from '../src/awareness-popup.js';
+import { parseDay, isWithin, activeWeekFor, announceWeekFor, upcomingWeeks, pastWeeks, resolveWeek, formatRange } from '../src/awareness-core.js';
+import { shouldShowAwarenessPopup, popupVariant } from '../src/awareness-popup.js';
 import { validateAwarenessWeeks } from '../ingest/validate-awareness-weeks.js';
 import { rotate, assessReadiness, isPublishedArticle } from '../scripts/awareness-rotate.js';
 
@@ -157,4 +157,49 @@ test('popup: shouldShow — dismiss per-týden a jednou za návštěvu', () => {
   assert.equal(shouldShowAwarenessPopup('w1', {}, { shown: 'w1' }), false, 'už zobrazený v návštěvě');
   assert.equal(shouldShowAwarenessPopup('w1', { w2: 1 }, { shown: 'w2' }), true, 'jiný týden nevadí');
   assert.equal(shouldShowAwarenessPopup(null, {}, {}), false);
+});
+
+test('announceWeekFor: okno announce_from ≤ den < start, jen ready', () => {
+  const w = { id: 'kojeni', status: 'ready', start: '2026-08-01', end: '2026-08-07', announce_from: '2026-07-27' };
+  assert.equal(announceWeekFor('2026-07-26', [w]), null, 'před oknem mlčí');
+  assert.equal(announceWeekFor('2026-07-27', [w])?.id, 'kojeni', 'první den okna ohlašuje');
+  assert.equal(announceWeekFor('2026-07-31', [w])?.id, 'kojeni', 'den před startem ohlašuje');
+  assert.equal(announceWeekFor('2026-08-01', [w]), null, 'od startu přebírá ostrý týden (activeWeekFor)');
+  assert.equal(announceWeekFor('2026-07-28', [{ ...w, status: 'draft' }]), null, 'draft se neohlašuje');
+  assert.equal(announceWeekFor('2026-07-28', [{ ...w, announce_from: undefined }]), null, 'bez announce_from se neohlašuje');
+});
+
+test('popupVariant: announce má vlastní stateKey a texty; dismiss ohlášení neumlčí ostrý popup', () => {
+  const w = {
+    id: 'kojeni', observance: 'Světový týden kojení', start: '2026-08-01', end: '2026-08-07',
+    popup: { headline: 'Je týden', body: 'B', cta: 'Otevřít', announce_headline: 'Blíží se', announce_body: 'AB', announce_cta: 'Mrknout' },
+  };
+  const ann = popupVariant(w, 'announce');
+  const act = popupVariant(w, 'active');
+  assert.equal(ann.stateKey, 'kojeni:announce');
+  assert.equal(act.stateKey, 'kojeni');
+  assert.equal(ann.headline, 'Blíží se');
+  assert.equal(act.headline, 'Je týden');
+  assert.ok(ann.range && /srpna/.test(ann.range), 'ohlášení nese termín týdne');
+  // klíčové: zavření ohlášení nesmí umlčet ostrý popup
+  const state = { [ann.stateKey]: Date.now() };
+  assert.equal(shouldShowAwarenessPopup(ann.stateKey, state, {}), false);
+  assert.equal(shouldShowAwarenessPopup(act.stateKey, state, {}), true);
+});
+
+test('popupVariant: announce fallbacky bez vlastních textů', () => {
+  const w = { id: 'x', observance: 'Den X', start: '2026-09-10', end: '2026-09-16', lead: 'L', popup: { headline: 'H', body: 'B', cta: 'C' } };
+  const ann = popupVariant(w, 'announce');
+  assert.equal(ann.headline, 'Blíží se Den X');
+  assert.equal(ann.body, 'B');
+  assert.equal(ann.cta, 'Podívat se, co chystáme');
+});
+
+test('validace: announce_from musí být před startem a max 14 dní předem', () => {
+  const base = { id: 'a', observance: 'o', observance_source: 's', kicker: 'k', title: 't', lead: 'l', status: 'ready', start: '2026-08-01', end: '2026-08-07', popup: { headline: 'h', body: 'b', cta: 'c' }, context: { why: 'w', affects: ['x'], cz: 'c' }, linked_indicators: ['nadeje_doziti_total'] };
+  const run = (announce_from) => validateAwarenessWeeks({ weeks: [{ ...base, announce_from }] });
+  assert.equal(run('2026-07-27'), true, 'platné okno projde');
+  assert.equal(run('2026-08-01'), false, 'announce_from == start selže');
+  assert.equal(run('2026-07-01'), false, 'víc než 14 dní předem selže');
+  assert.equal(run('nesmysl'), false, 'neplatné datum selže');
 });

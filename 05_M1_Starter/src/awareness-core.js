@@ -25,6 +25,22 @@ export function activeWeekFor(day, weeks) {
   return (weeks || []).find(w => w.status === 'ready' && isWithin(w, day)) || null;
 }
 
+/**
+ * Týden v okně předběžného ohlášení: ready záznam s announce_from,
+ * announce_from ≤ den < start. Umožňuje kampani „viset dřív" — popup běží
+ * v ohlašovací variantě ještě před začátkem týdne. Bez announce_from se
+ * týden předem neohlašuje (výchozí chování beze změny).
+ */
+export function announceWeekFor(day, weeks) {
+  const t = parseDay(day);
+  return (weeks || []).find(w =>
+    w.status === 'ready'
+    && Number.isFinite(parseDay(w.announce_from))
+    && t >= parseDay(w.announce_from)
+    && t < parseDay(w.start)
+  ) || null;
+}
+
 /** Nejbližší nadcházející ne-archivované týdny (start > den), dle startu. */
 export function upcomingWeeks(day, weeks) {
   const t = parseDay(day);
