@@ -19,6 +19,19 @@ const KRAJ_CODES = new Set([
 
 const withOkresy = regions.datasets.filter(d => d.okresy);
 
+test('dataset id jsou unikátní a nekolidují s indicator_id jiných sad', () => {
+  // kraje.js řeší výběr přes id (fallback indicator_id pro staré deep-linky).
+  // Pokud by id jedné sady == indicator_id jiné, legacy hash by se tiše
+  // přesměroval na jinou metriku (nález Codex, PR #883 — screening_kolorektalni).
+  const ids = regions.datasets.map(d => d.id).filter(Boolean);
+  assert.equal(new Set(ids).size, ids.length, 'duplicitní dataset id');
+  for (const d of regions.datasets) {
+    const clash = regions.datasets.filter(x => x !== d && x.indicator_id === d.id);
+    assert.deepEqual(clash.map(x => x.id), [],
+      `dataset id "${d.id}" koliduje s indicator_id sad: ${clash.map(x => x.id).join(', ')}`);
+  }
+});
+
 test('alespoň jeden dataset nese okresní rozpad (nadeje_doziti_zeny)', () => {
   assert.ok(withOkresy.some(d => d.indicator_id === 'nadeje_doziti_zeny'),
     'nadeje_doziti_zeny má mít blok okresy (plní scripts/fetch-okres-nadeje-doziti.mjs)');

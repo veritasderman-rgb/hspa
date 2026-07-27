@@ -847,11 +847,13 @@ function renderRegionDataset(ds) {
   document.getElementById('regionsBadge').textContent =
     `${ds.regions.length} krajů · průměr ČR ${formatNumberCz(ds.country_avg)} ${ds.unit} (${ds.year})`;
 
-  // Teaser link na /kraje — předáme aktuální indikátor v hash, aby krajský
-  // pohled rovnou ukázal stejný datový řez, který uživatel sleduje zde.
+  // Teaser link na /kraje — předáme aktuální datový řez v hash, aby krajský
+  // pohled rovnou ukázal totéž, co uživatel sleduje zde. Preferujeme unikátní
+  // dataset id: přes indicator_id by se u indikátoru s více sadami (např.
+  // screening_kolorektalni) otevřela vždy jen první z nich.
   const teaserCta = document.getElementById('regionsTeaserCta');
-  if (teaserCta && ds.indicator_id) {
-    teaserCta.href = `kraje.html#id=${encodeURIComponent(ds.indicator_id)}`;
+  if (teaserCta && (ds.id || ds.indicator_id)) {
+    teaserCta.href = `kraje.html#id=${encodeURIComponent(ds.id || ds.indicator_id)}`;
   }
 
   const header = document.getElementById('regionsTableValueHeader');
