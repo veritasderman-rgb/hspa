@@ -33,6 +33,29 @@ const PAD = 6;
 const COLS = 8;
 const ROWS = 4;
 
+/** True, když je aktivní tmavý režim (tokenový přepínač data-theme). */
+function isDarkTheme() {
+  if (typeof document === 'undefined') return false;
+  return document.documentElement.getAttribute('data-theme') === 'dark';
+}
+
+/* Automatické překreslení tile-map při přepnutí tématu: výplně dlaždic jsou
+   inline (SVG fill), takže na rozdíl od textů (var(--ink) v CSS) samy
+   nepřepnou. Jediný MutationObserver re-renderuje všechny živé hosty. */
+const _renderedHosts = new Map(); // host -> { dataset, hooks }
+let _themeObserver = null;
+
+function ensureThemeObserver() {
+  if (_themeObserver || typeof MutationObserver === 'undefined' || typeof document === 'undefined') return;
+  _themeObserver = new MutationObserver(() => {
+    for (const [host, entry] of _renderedHosts) {
+      if (!host.isConnected) { _renderedHosts.delete(host); continue; }
+      renderCzMap(host, entry.dataset, entry.hooks);
+    }
+  });
+  _themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+
 /**
  * Vytvoří inline SVG s tile-mapou krajů.
  * @param {HTMLElement} host  Cílový element, do kterého se vloží SVG.
@@ -46,6 +69,10 @@ export function renderCzMap(host, dataset, hooks = {}) {
   const betterHigher = dataset.direction !== 'lower_is_better';
   const isContextDependent = dataset.direction === 'context_dependent';
   const avg = dataset.country_avg;
+  const dark = isDarkTheme();
+
+  _renderedHosts.set(host, { dataset, hooks });
+  ensureThemeObserver();
 
   // Spočti relativní deviation pro fill barvu
   const tiles = REGION_TILES.map(([code, col, row, lbl]) => {
@@ -66,7 +93,7 @@ export function renderCzMap(host, dataset, hooks = {}) {
           <text x="${x + TILE_W/2}" y="${y + TILE_H/2 + 4}" text-anchor="middle" class="cz-tile-lbl">${t.lbl}</text>
         </g>`;
     }
-    const fill = isContextDependent ? pickColorNeutral(t.relPct) : pickColor(t.relPct, betterHigher);
+    const fill = isContextDependent ? pickColorNeutral(t.relPct, dark) : pickColor(t.relPct, betterHigher, dark);
     const valueText = formatValueShort(t.region.value);
     const titleText = `${t.region.name}: ${t.region.value} ${escapeXml(dataset.unit)} (${t.relPct >= 0 ? '+' : ''}${t.relPct.toFixed(1)} % od průměru ČR)`;
     return `
@@ -121,19 +148,21 @@ export function renderCzMap(host, dataset, hooks = {}) {
 
 /**
  * Vrátí barvu obdélníku v dichromatickém schématu (good/bad) s neutrální zónou
- * blízko průměru (±2 %).
+ * blízko průměru (±2 %). Světlý režim = pastely (na nich čte tmavý inkoust),
+ * tmavý režim = hluboké tóny (na nich čte světlý inkoust var(--ink)).
  * @param {number} relPct  hodnota minus průměr v procentech
  * @param {boolean} betterHigher  true pokud direction = higher_is_better
+ * @param {boolean} [dark]  tmavý režim (data-theme="dark")
  */
-export function pickColor(relPct, betterHigher) {
+export function pickColor(relPct, betterHigher, dark = false) {
   const positive = relPct > 0;
   const isGood = betterHigher ? positive : !positive;
   const mag = Math.min(Math.abs(relPct) / 20, 1); // saturate at 20 %
-  if (Math.abs(relPct) < 2) return '#E2E8F0'; // neutrální zóna
+  if (Math.abs(relPct) < 2) return dark ? '#3a3630' : '#E2E8F0'; // neutrální zóna
   if (isGood) {
-    return blend('#E6F4EA', '#1F7A1F', mag);
+    return dark ? blend('#26401f', '#4f9c3a', mag) : blend('#E6F4EA', '#1F7A1F', mag);
   } else {
-    return blend('#FCE8E6', '#990000', mag);
+    return dark ? blend('#43201a', '#c74a2e', mag) : blend('#FCE8E6', '#990000', mag);
   }
 }
 
@@ -142,10 +171,16 @@ export function pickColor(relPct, betterHigher) {
  * průměru jako lepší/horší, ale ukazujeme intenzitu odchylky modře (nad)
  * a oranžově (pod) jako neutrální gradient.
  * @param {number} relPct
+ * @param {boolean} [dark]  tmavý režim (data-theme="dark")
  */
-export function pickColorNeutral(relPct) {
+export function pickColorNeutral(relPct, dark = false) {
   const mag = Math.min(Math.abs(relPct) / 20, 1);
-  if (Math.abs(relPct) < 2) return '#E2E8F0';
+  if (Math.abs(relPct) < 2) return dark ? '#3a3630' : '#E2E8F0';
+  if (dark) {
+    return relPct > 0
+      ? blend('#28304d', '#5b74d6', mag)   // nad průměr — modrý gradient
+      : blend('#43301a', '#c07a2a', mag);  // pod průměr — oranžový gradient
+  }
   return relPct > 0
     ? blend('#E0E7FF', '#3B5BDB', mag)   // nad průměr — modrý gradient
     : blend('#FFF4E6', '#D9480F', mag);  // pod průměr — oranžový gradient
