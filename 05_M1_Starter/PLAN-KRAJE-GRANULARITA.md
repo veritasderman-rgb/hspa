@@ -68,8 +68,9 @@ Třídy proveditelnosti:
 
 | # | Dataset (indicator_id) | Zdroj kraj. dat | Okres | Obec/ORP | Třída | Poznámka |
 |---|---|---|---|---|---|---|
-| 1 | nadeje_doziti_total | ČSÚ | NE (jen po pohlavích) | ORP po pohlavích (OBY04BOR) | D* | Oboupohlavní okresní e₀ ČSÚ nepublikuje; nemíchat pohlaví. *Alternativa: přidat kraj. dataset `nadeje_doziti_muzi` + jeho okresy (A). |
+| 1 | nadeje_doziti_total | ČSÚ | NE (jen po pohlavích) | ORP po pohlavích (OBY04BOR) | D* | Oboupohlavní okresní e₀ ČSÚ nepublikuje; nemíchat pohlaví. *Alternativa realizována: dataset `nadeje_doziti_muzi` (viz řádek 2b). |
 | 2 | **nadeje_doziti_zeny** | ČSÚ | ✅ **NAPOJENO** (OBY04BOT01, 5letý ⌀ 2021–25) | ORP možné (OBY04BOR) | **A — hotovo** | §4: všech 14 krajů v rozsahu svých okresů. |
+| 2b | **nadeje_doziti_muzi** (nový dataset) | ČSÚ | ✅ **NAPOJENO** (kraje OBY04BKT01 2letý ⌀ 2024–25; okresy OBY04BOT01 5letý ⌀; ČR OBY04BCRT01 jednoletá 2025 = 77,5) | ORP možné | **A — hotovo** | Okresní rozptyl mužů 5,4 roku (Most 73,1 … Praha-západ 78,5) > ženy (4,3). Publikační žebřík period ČSÚ (1letá/2letá/5letá) přiznán v note. |
 | 3 | lekari_per_1000 | ÚZIS NRZP | nepublikováno veřejně | — | C | ÚZIS ročenky okresní řady zrušeny (~2013); NRZP open data kraj. |
 | 4 | mortalita_kardiovaskularni | ČSÚ/Eurostat SDR | počty OBY04C | ORP počty | B | Okresně jen hrubá míra (vs. krajská standardizovaná) + 5letý ⌀; nutná viditelná výhrada. |
 | 5 | obezita_prevalence | EHIS | — | — | D | Survey ~10 tis. respondentů — okres nemá oporu. |
@@ -100,7 +101,7 @@ Třídy proveditelnosti:
 | 30 | pm25_expozice | EEA/CHMI | gridová data | obec teoreticky | C | CHMI publikuje gridy/stanice — agregace na okres = GIS projekt. |
 | 31 | cekaci_doby_specialist | šetření | — | — | D | |
 | 32 | pracovnici_ltc_per_100_65plus | ÚZIS/MPSV | neveřejné | — | C | |
-| 33 | **lekarny_per_100k** | SÚKL | ✅ spočitatelné | ✅ i OBEC | **A — další kandidát** | SÚKL open data = seznam lékáren s adresami (curl OK) + ČSÚ OBY01PD populace okresů → hustota na okres i obec. Nejlepší další dávka. |
+| 33 | **lekarny_per_100k** | SÚKL | ✅ **NAPOJENO** (SÚKL seznam 2026-06-30 + ČSÚ Px populace; `scripts/fetch-okres-lekarny.mjs`) | ✅ OBEC možná (mapování obcí hotové) | **A — hotovo** | ⚠️ Nález: krajský seed (avg 26,7; Praha 32,4) odporoval živému kontraktu (25,06) → krajská vrstva PŘEPOČTENA týmž výpočtem (avg 24,9; rekonciliace okres→kraj přesná). Mapování MESTO→okres: ČSÚ dimenze UZ5OK „Obce (okres)" (6 258 obcí jedním dotazem — text „5" matchuje kód) + kaskáda (unikátní jméno → PSČ-kraj → nejbližší medián PSČ okresu); 2 687/2 687 namapováno. |
 | 34 | spotreba_opioidu | SÚKL DIS-13 | — | — | D | DIS-13 = dodávky do lékáren dle sídla lékárny ≠ spotřeba obyvatel okresu (ekologický klam, spádovost). |
 | 35 | polypragmazie_65plus | ZP/ÚZIS | neveřejné | — | C | |
 | 36 | incidence_prsu | ÚZIS NOR | SVOD | — | C | Jako #27. |
@@ -114,30 +115,23 @@ Třídy proveditelnosti:
 **Souhrn:** 2× A (1 hotovo, 1 kandidát), 6× B (ČSÚ počty → hrubé míry s výhradou),
 ~15× C (neveřejné/heavy/browser), zbytek D (survey/národní/metodicky nepřenosné).
 
-## 3. Doporučené další dávky (v pořadí)
+## 3. Stav dávek a doporučené pokračování
 
-1. **`lekarny_per_100k` → okresy (třída A).** SÚKL seznam lékáren (open data,
-   curl) + ČSÚ OBY01PD populace okresů. Ověření: součet okresů = kraj (přesná
-   rekonciliace, žádná metodická odchylka). Bonus: obecní úroveň pro článek
-   o dostupnosti lékáren.
-2. **`nadeje_doziti_muzi` (nový krajský dataset + okresy).** Stejný zdroj jako
-   ženy (OBY04BOT01, POHZM=1) — mužská e₀ má větší okresní rozptyl (Most 73,1
-   vs Praha-západ 78,5 = 5,4 roku!) a je novinářsky nosnější než ženská.
-   Skript už umí obě pohlaví — rozšířit o zápis obou datasetů.
-3. **Kojenecká úmrtnost okresně (třída B)** — OBY04A+OBY03, pětiletý průměr,
+**Hotovo (2026-07-27):** 1. `nadeje_doziti_zeny` okresy · 2. `nadeje_doziti_muzi`
+(nový krajský dataset + okresy) · 3. `lekarny_per_100k` okresy + přepočet krajské
+vrstvy (seed→computed, soulad s živým kontraktem).
+
+**Nálezy z dávky lékáren (k dořešení jinde):**
+- `PSC_KRAJ_MAP` v `ingest/fetchers/sukl.js` má chybná pásma na moravské hranici:
+  750–753 (Přerov, Olomoucký) spadá do pásma mapovaného na Moravskoslezský
+  a 792–794 (Bruntál, Moravskoslezský) do pásma Olomouckého. Krajské agregace
+  fetcheru jsou tím zkreslené → měl by přejít na mapování obec→okres→kraj
+  (převodník UZ5OK je hotový v `scripts/fetch-okres-lekarny.mjs`).
+- Obecní úroveň lékáren je na dosah (mapování obcí existuje) — čeká jen na UI
+  pro obce (drill-down 2. úrovně) nebo samostatnou stránku.
+
+**Další v pořadí:**
+1. **Kojenecká úmrtnost okresně (třída B)** — OBY04A+OBY03, pětiletý průměr,
    viditelná výhrada „hrubá míra, 5letý průměr".
-4. **Mortalitní ukazatele (B)** — jednotný vzor „okresní hrubá míra (5letý ⌀)
-   vs. krajská standardizovaná" + společná UI výhrada; dělat až po 1–3.
-
-## 4. Pravidla (kojení-proof pro okresy)
-
-1. **Nemíchat metodiky bez označení** — okresní hodnota jiné konstrukce
-   (hrubá vs. standardizovaná, 5letý ⌀ vs. jednoletá) MUSÍ nést `note`
-   zobrazenou v drill-down panelu.
-2. **Nemíchat populace** — pohlavně specifická krajská řada dostane jen
-   pohlavně shodný okresní rozpad (žádné „total" z průměru mužů a žen).
-3. **Rekonciliace** — kde jde (počty, hustoty), součet okresů musí dát kraj;
-   kde nejde (tabulkové ukazatele), aspoň rozsahový test (kraj v [min,max]
-   okresů ± tolerance) — vynuceno testem `regions-okresy.test.js`.
-4. **Ekologický klam** — veličiny vázané na sídlo zařízení (dodávky léčiv,
-   výkony nemocnic) se NEPŘEPOČÍTÁVAJÍ na obyvatele okresu sídla.
+2. **Mortalitní ukazatele (B)** — jednotný vzor „okresní hrubá míra (5letý ⌀)
+   vs. krajská standardizovaná" + společná UI výhrada.
