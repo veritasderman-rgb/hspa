@@ -95,11 +95,13 @@ function populateSelector() {
   const sel = document.getElementById('krajeSelect');
   if (!sel) return;
 
-  // Seskupit datasety podle area indikátoru pro lepší orientaci
+  // Seskupit datasety podle area indikátoru pro lepší orientaci.
+  // Dataset bez kontraktového indikátoru může nést area sám (např.
+  // nadeje_doziti_muzi, kojenecka_umrtnost) — jinak spadne do „Ostatní".
   const byArea = { 'Výsledky': [], 'Výstupy': [], 'Procesy': [], 'Struktury': [], 'Ostatní': [] };
   for (const d of allDatasets) {
     const ind = allIndicators.find(i => i.id === d.indicator_id);
-    const area = (ind && ind.area) || 'Ostatní';
+    const area = (ind && ind.area) || d.area || 'Ostatní';
     (byArea[area] || byArea['Ostatní']).push({ ...d, _ind: ind });
   }
 
@@ -232,7 +234,8 @@ function renderMeta(dataset) {
   const el = document.getElementById('krajeMeta');
   if (!el) return;
   const ind = allIndicators.find(i => i.id === dataset.indicator_id);
-  const area = ind ? `${ind.area} · ${ind.domain}` : '';
+  const area = ind ? `${ind.area} · ${ind.domain}`
+    : (dataset.area ? `${dataset.area}${dataset.domain ? ' · ' + dataset.domain : ''}` : '');
   const year = dataset.year ? ` · ${dataset.year}` : '';
   const fw = ind && ind.framework === 'monitoring' ? ' · <span class="fw-badge fw-monitoring">Monitoring</span>' : '';
   const drill = dataset.okresy && Array.isArray(dataset.okresy.items)
