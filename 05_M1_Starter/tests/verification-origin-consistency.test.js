@@ -70,6 +70,16 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   // živý SÚKL DIS-13 feed.
   'pouzivani_antidepresiv',
   'spotreba_opioidu',
+  // 2026-07-28: pět OECD indikátorů přechodně origin:seed. Refresh cyklu
+  // 2026-07-27 (commit b2a9282) živý OECD fetch nedotáhl → transform ponechal
+  // hodnoty (karty verified beze změny), origin spadl na seed. Stejný
+  // verified-but-flaky-live stav jako precedens 2026-07-17; odblokuje je
+  // příští úspěšný live fetch — pak odeber.
+  'jednodenni_chirurgie_katarakta',
+  'luzka_jip_per_100k',
+  'postele_akutni_per_1000',
+  'prezit_karcinom_prsu_5let',
+  'prezit_rakoviny_5let',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
