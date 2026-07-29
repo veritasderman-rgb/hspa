@@ -285,6 +285,8 @@ function safeTagBoundary(html, idx, dir) {
  *   - paragrafové/sbírkové citace „95/2004", „48/1997 Sb."
  *   - číselné skupiny z vlastního slugu indikátoru (per_100k → 100,
  *     _15_19 → 15 a 19, _65 → 65) jako samostatné tokeny vč. rozsahů 15–19
+ *   - jmenovatel míry, PŘED nímž nestojí čitatel („lékařů na 1 000 obyvatel",
+ *     „sestry / 1 000 obyvatel") — tam je to jen název jednotky, ne citace
  * Vrací očištěný text jen pro TEST přítomnosti citace — na shodu variant
  * hodnoty se dál používá původní okno.
  */
@@ -295,12 +297,21 @@ export function stripNonValueNumbers(window, indicatorId = '') {
   // samostatné roky
   out = out.replace(/\b(19|20)\d{2}\b/g, ' ');
   // věkové prahy s „+" („18+", „65+", „80 +") — populační kvalifikátor, ne
-  // hodnota (hodnota nemá sufix „+"). Bezpečné. (Jmenovatele míry jako
-  // „100 000" ZDE NESTRIPUJEME — u jednociferných rate-citací „3 / 1 000"
-  // by jmenovatel byl jediný vícemístný token a zamaskoval by zastaralou
-  // citaci; jmenovatel se místo toho drží v okně a je důkazem, že sousední
-  // číslo je hodnota — viz review PR #784.)
+  // hodnota (hodnota nemá sufix „+"). Bezpečné.
   out = out.replace(/\b\d{1,3}\s?\+/g, ' ');
+  // Jmenovatel míry BEZ čitatele — „hustotu lékařů na 1 000 obyvatel",
+  // „psychiatrů na 100 tisíc obyvatel", „sestry / 1 000 obyvatel". Tam je
+  // vícemístné číslo pouhým názvem jednotky, a protože bývá jediným číslem
+  // v okně, spouštělo falešný drift (issues #745, #793, #817, #878).
+  // Rate-citace „3 sestry / 1 000 obyvatel" se NEstripuje: stojí-li poblíž
+  // před jmenovatelem číslo, je to čitatel a jmenovatel se drží v okně jako
+  // důkaz, že sousední (třeba jednociferná) hodnota JE citace (review PR
+  // #784). Proto lookbehind blokuje strip, když v předchozích ~25 znacích
+  // jakákoli číslice je.
+  out = out.replace(
+    /(?<!\d[^\d]{0,25})(?:\bna\b|\bper\b|\/)\s*(?:1\s?000\s?000|100\s?000|10\s?000|1\s?000|100|10|1)(?:\s?(?:tisíc|tis\.|mil\.|milion(?:ů|u)?))?(?=\s*(?:obyvatel|ob\.|osob|lidí|žen|mužů|mužu|dětí|dětských|živě|porodů|pacientů|případů|lůžek|úvazků))/gi,
+    ' ',
+  );
   // číselné skupiny z vlastního slugu (100k → 100; boundary, ať nezmizí
   // části skutečných hodnot)
   const slugDigits = [...new Set((indicatorId.match(/\d+/g) ?? []))];
