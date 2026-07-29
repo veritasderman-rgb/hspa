@@ -212,6 +212,28 @@ test('stripNonValueNumbers: odfiltruje roky, slug číslice a sbírkové citace 
   assert.ok(/\d{2,}/.test(stripNonValueNumbers('hustota 3 sestry / 1 000 obyvatel', 'sestry_per_1000')));
 });
 
+test('stripNonValueNumbers: jmenovatel míry BEZ čitatele je název jednotky, ne citace (issue #878)', async () => {
+  const { stripNonValueNumbers } = await import('../scripts/nightly-scan.js');
+  // Odkaz-atribuce v běžném odstavci: jediné číslo v okně je jmenovatel
+  // v labelu odkazu („hustotu lékařů na 1 000 obyvatel") — žádná citace
+  // hodnoty. Dřív to spouštělo falešný indicator-drift.
+  assert.ok(!/\d+,\d+|\d{2,}/.test(stripNonValueNumbers(
+    'HSPA Monitor už několik ukazatelů sleduje: hustotu lékařů na 1 000 obyvatel i počet absolventů',
+    'lekari_per_1000')));
+  assert.ok(!/\d+,\d+|\d{2,}/.test(stripNonValueNumbers(
+    'hustotu lékáren na 100 000 obyvatel', 'lekarny_per_100k')));
+  assert.ok(!/\d+,\d+|\d{2,}/.test(stripNonValueNumbers(
+    'psychiatrů na 100 tisíc obyvatel i průměrnou délku hospitalizace', 'psychiatri_per_100k')));
+  assert.ok(!/\d+,\d+|\d{2,}/.test(stripNonValueNumbers(
+    'adopcí elektronického zdravotnictví per 100 000 obyvatel', 'ehealth_adoption')));
+  // REÁLNÝ drift (zastaralá hodnota u jmenovatele) filtr PŘEŽIJE — jinak by
+  // heuristika maskovala to, co má hlásit
+  assert.ok(/\d+,\d+/.test(stripNonValueNumbers(
+    'zastaralá hustota 3,8 lékaře na 1 000 obyvatel', 'lekari_per_1000')));
+  assert.ok(/\d+,\d+/.test(stripNonValueNumbers(
+    'kojenecká úmrtnost klesla na 2,4 na 1 000 živě narozených', 'mortalita_kojenecka')));
+});
+
 test('findIndicatorDrift: odkaz-atribuce se správnou hodnotou jinde v článku se neflaguje (issue #745)', async () => {
   const { findIndicatorDrift } = await import('../scripts/nightly-scan.js');
   const byId = new Map([

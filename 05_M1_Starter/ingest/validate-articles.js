@@ -64,6 +64,44 @@ function findReviewBanner(html) {
   return m[0].replace(/\s+/g, ' ').slice(0, 140);
 }
 
+/**
+ * Interní procesní žargon ve VIDITELNÉ vrstvě článku — nezávisle na tom, jakou
+ * třídu jeho obal nese (issue #847: blok „Pozn. k revizi" unikl do čtenářské
+ * vrstvy v <aside class="article-audit-note">, kterou detektor bannerů neznal).
+ * Fráze jsou volené tak, aby šlo o redakční proces, ne o téma článku — proto
+ * ne samotné „draft" či „audit" (článek smí psát o návrhu zákona i o auditu NKÚ).
+ * HTML komentáře se odstraňují: `audit:` blok v hlavičce je správné místo,
+ * kam tyhle poznámky patří.
+ */
+const INTERNAL_PROCESS_MARKERS = [
+  /Republikace\s+teprve\s+po/i,
+  /(?:Status|status)\s+(?:článku\s+)?(?:je\s+|ponechán\s*(?:jako)?\s*)?[:\s]\s*(?:review-pending|draft|partial|flagged)/,
+  /\b(?:podléhá|čeká\s+na)\s+ručním?u?\s+schválení/i,
+  /vytvořeno\s+daily\s+routine/i,
+  /\baudit-status\b/i,
+  /\breview-pending\b/i,
+  /\bdraft-flagged\b/i,
+  /\b(?:TODO|FIXME|XXX):/,
+];
+
+function findInternalProcessNotes(html) {
+  const visible = html.replace(/<!--[\s\S]*?-->/g, ' ');
+  const body = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(visible)?.[1] ?? visible;
+  const text = body.replace(/<[^>]+>/g, ' ');
+  const hits = [];
+  for (const re of INTERNAL_PROCESS_MARKERS) {
+    const m = re.exec(text);
+    if (m) {
+      const at = Math.max(0, m.index - 40);
+      hits.push({
+        pattern: re.source,
+        snippet: text.slice(at, m.index + 90).replace(/\s+/g, ' ').trim(),
+      });
+    }
+  }
+  return hits;
+}
+
 function validate() {
   const articlesFile = path.join(ROOT, 'data', 'articles.json');
   if (!fs.existsSync(articlesFile)) {
@@ -134,6 +172,16 @@ function validate() {
       errors.push(`${a.id} (${a.slug}): <aside class="article-review-banner"> v publikovaném článku — interní redakční poznámka, odstraň před publikací: "${reviewBanner}"`);
     } else if (reviewBanner) {
       warnings.push(`${a.id}: article-review-banner v draftu (musí být odstraněn před publikací)`);
+    }
+
+    // Interní procesní žargon ve viditelné vrstvě — nezávisle na obalu (#847).
+    const internalNotes = findInternalProcessNotes(html);
+    if (internalNotes.length && a.published !== false) {
+      for (const n of internalNotes) {
+        errors.push(`${a.id} (${a.slug}): interní redakční poznámka ve viditelném textu (/${n.pattern}/) — patří do HTML komentáře "audit:", ne do článku: "${n.snippet}"`);
+      }
+    } else if (internalNotes.length) {
+      warnings.push(`${a.id}: ${internalNotes.length} interních procesních markerů ve viditelném textu draftu (odstraň před publikací)`);
     }
   }
 
