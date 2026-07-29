@@ -5,10 +5,10 @@
   audit:
     last_reviewed: 2026-07-29
     reviewer: claude-code-agent
-    status: verified
+    status: partial
     notes: "Nový indikátor hiv_nove_diagnozy. Národní hodnota 2,7/100 tis. (293 případů u občanů + rezidentů) z NRL SZÚ, tisková zpráva 2. 2. 2026. Trend 2020–2025 z ročních/měsíčních zpráv NRL SZÚ. Benchmark EU/EEA 5,3/100 tis. (2023) z ECDC HIV/AIDS surveillance in Europe 2024. Signál warn je trendové editorial vyhodnocení (statický výpočet z benchmarku by vrátil good)."
     f1_2026-07-10: "Audit (F1, link-check). Ověřeno 10 externích odkazů. 2 živé-ale-sandbox-blokované ponechány beze změny: szu.gov.cz/tema/prevence/hiv-aids/ a szu.gov.cz/tiskove-zpravy/... (curl 502, WebFetch potvrzuje živý obsah SZÚ — gov.cz doména). Ostatní odkazy (ECDC Atlas, ECDC HIV/AIDS surveillance 2024, infektologie.cz PrEP/PEP standardy PDF, chciprep.cz, prevencehiv.cz, bundesgesundheitsministerium.de) OK 200. Žádný mrtvý odkaz, žádná úprava href. Status ponechán review-pending: headline indikátor hiv_nove_diagnozy má origin=seed; obsah čeká na F4 verifikaci indikátoru (seed→live)."
-    f2_2026-07-29: "Nezávislý fact-audit proti primárním zdrojům (mandát session: validace všech zdrojů). PASS. OVĚŘENO verbatim: SZÚ TZ 2. 2. 2026 — 293 případů (153 obč. + 140 rez.), 2,7/100k, +86 ukr. uprchlíků (942 kumul. od 2022), sex. přenos 86,3 %, MSM 151 (51,5 %), 234 mužů/59 žen (20,1 %), IDU 3,8 %, Praha 32,4 %; SZÚ aktuality — kumul. 5 135 od 1985, 2024 míra 2,5. ECDC 2024 (2023 data) — EU/EEA 5,3/100k, −15,9 % vs. 2014 (6,3), ~24 731 diagnóz; ECDC 2025 (2024 data, publ. 27. 11. 2025) — EU/EEA opět 5,3/100k (24 164). Německo PrEP hrazená ze stat. pojištění od 9/2019 (RKI). ČR PrEP od 2017 samoplátce (prevencehiv.cz); dotace do 26 let ChciPrEP/MZ ČR (chciprep.cz/young). AUDIT-FIX 3 drobnosti: (1) krajské pořadí Jihomoravský 13,3 % > Středočeský 12,3 % upřesněno; (2) dotace PrEP upřesněna na věkovou (≤26, ne striktně MSM), odstraněno neověřené „březen 2025"; (3) doplněna aktualizační věta + zdroj ECDC 2025 (benchmark 5,3 stále platí). Pozn.: indikátor hiv_nove_diagnozy zůstává origin=seed (pipeline), hodnota však nezávisle ověřena proti primární TZ SZÚ. Status review-pending → verified."
+    f2_2026-07-29: "Nezávislý fact-audit proti primárním zdrojům (mandát session: validace všech zdrojů). PASS. OVĚŘENO verbatim: SZÚ TZ 2. 2. 2026 — 293 případů (153 obč. + 140 rez.), 2,7/100k, +86 ukr. uprchlíků (942 kumul. od 2022), sex. přenos 86,3 %, MSM 151 (51,5 %), 234 mužů/59 žen (20,1 %), IDU 3,8 %, Praha 32,4 %; SZÚ aktuality — kumul. 5 135 od 1985, 2024 míra 2,5. ECDC 2024 (2023 data) — EU/EEA 5,3/100k, −15,9 % vs. 2014 (6,3), ~24 731 diagnóz; ECDC 2025 (2024 data, publ. 27. 11. 2025) — EU/EEA opět 5,3/100k (24 164). Německo PrEP hrazená ze stat. pojištění od 9/2019 (RKI). ČR PrEP od 2017 samoplátce (prevencehiv.cz); dotace do 26 let ChciPrEP/MZ ČR (chciprep.cz/young). AUDIT-FIX 3 drobnosti: (1) krajské pořadí Jihomoravský 13,3 % > Středočeský 12,3 % upřesněno; (2) dotace PrEP upřesněna na věkovou (≤26, ne striktně MSM), odstraněno neověřené „březen 2025"; (3) doplněna aktualizační věta + zdroj ECDC 2025 (benchmark 5,3 stále platí). Pozn.: indikátor hiv_nove_diagnozy zůstává origin=seed (pipeline), hodnota však nezávisle ověřena proti primární TZ SZÚ. Status review-pending → partial (NE verified): jádro (KPI + EU/EEA benchmark) plně ověřeno, ale tabulka „Mezinárodní kontext" (DE/AT/PL/SK) nese stále přibližné míry explicitně označené k ověření v ECDC Atlas — dokud nejsou per-country míry ověřeny proti primárnímu zdroji, čtenářský audit-banner zůstává (viz Codex P1 #891). Povýšení na verified až po atlas-verifikaci sousedních zemí."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-02">
 <meta property="article:section" content="Infekční nemoci · prevence HIV">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="partial">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
