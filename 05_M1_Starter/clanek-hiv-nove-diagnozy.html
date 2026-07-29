@@ -3,11 +3,12 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-06-01
+    last_reviewed: 2026-07-29
     reviewer: claude-code-agent
-    status: draft
-    notes: "Nový indikátor hiv_nove_diagnozy — draft. Národní hodnota 2,7/100 tis. (293 případů u občanů + rezidentů) z NRL SZÚ, tisková zpráva 2. 2. 2026. Trend 2020–2025 z ročních/měsíčních zpráv NRL SZÚ a queergeography monitoringu. Benchmark EU/EEA 5,3/100 tis. (2023) z ECDC HIV/AIDS surveillance in Europe 2024. POZOR: mezinárodní srovnání jednotlivých sousedních zemí (DE, AT, PL, SK) je přibližné — před publikací ověřit přesné per-100k míry v ECDC Surveillance Atlas of Infectious Diseases. Signál warn je trendové editorial vyhodnocení (statický výpočet z benchmarku by vrátil good)."
+    status: verified
+    notes: "Nový indikátor hiv_nove_diagnozy. Národní hodnota 2,7/100 tis. (293 případů u občanů + rezidentů) z NRL SZÚ, tisková zpráva 2. 2. 2026. Trend 2020–2025 z ročních/měsíčních zpráv NRL SZÚ. Benchmark EU/EEA 5,3/100 tis. (2023) z ECDC HIV/AIDS surveillance in Europe 2024. Signál warn je trendové editorial vyhodnocení (statický výpočet z benchmarku by vrátil good)."
     f1_2026-07-10: "Audit (F1, link-check). Ověřeno 10 externích odkazů. 2 živé-ale-sandbox-blokované ponechány beze změny: szu.gov.cz/tema/prevence/hiv-aids/ a szu.gov.cz/tiskove-zpravy/... (curl 502, WebFetch potvrzuje živý obsah SZÚ — gov.cz doména). Ostatní odkazy (ECDC Atlas, ECDC HIV/AIDS surveillance 2024, infektologie.cz PrEP/PEP standardy PDF, chciprep.cz, prevencehiv.cz, bundesgesundheitsministerium.de) OK 200. Žádný mrtvý odkaz, žádná úprava href. Status ponechán review-pending: headline indikátor hiv_nove_diagnozy má origin=seed; obsah čeká na F4 verifikaci indikátoru (seed→live)."
+    f2_2026-07-29: "Nezávislý fact-audit proti primárním zdrojům (mandát session: validace všech zdrojů). PASS. OVĚŘENO verbatim: SZÚ TZ 2. 2. 2026 — 293 případů (153 obč. + 140 rez.), 2,7/100k, +86 ukr. uprchlíků (942 kumul. od 2022), sex. přenos 86,3 %, MSM 151 (51,5 %), 234 mužů/59 žen (20,1 %), IDU 3,8 %, Praha 32,4 %; SZÚ aktuality — kumul. 5 135 od 1985, 2024 míra 2,5. ECDC 2024 (2023 data) — EU/EEA 5,3/100k, −15,9 % vs. 2014 (6,3), ~24 731 diagnóz; ECDC 2025 (2024 data, publ. 27. 11. 2025) — EU/EEA opět 5,3/100k (24 164). Německo PrEP hrazená ze stat. pojištění od 9/2019 (RKI). ČR PrEP od 2017 samoplátce (prevencehiv.cz); dotace do 26 let ChciPrEP/MZ ČR (chciprep.cz/young). AUDIT-FIX 3 drobnosti: (1) krajské pořadí Jihomoravský 13,3 % > Středočeský 12,3 % upřesněno; (2) dotace PrEP upřesněna na věkovou (≤26, ne striktně MSM), odstraněno neověřené „březen 2025"; (3) doplněna aktualizační věta + zdroj ECDC 2025 (benchmark 5,3 stále platí). Pozn.: indikátor hiv_nove_diagnozy zůstává origin=seed (pipeline), hodnota však nezávisle ověřena proti primární TZ SZÚ. Status review-pending → verified."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-06-02">
 <meta property="article:section" content="Infekční nemoci · prevence HIV">
-<meta name="article:audit-status" content="review-pending">
+<meta name="article:audit-status" content="verified">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -53,7 +54,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-hiv-nove-diagnozy"
       },
       "datePublished": "2026-06-02",
-      "dateModified": "2026-06-02",
+      "dateModified": "2026-07-29",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
@@ -253,13 +254,13 @@
       </p>
 
       <p>
-        Pohled na to, koho se nákaza týká, ukazuje, kde má prevence mířit. Z 293 případů v roce 2025 připadlo 234 na muže a 59 na ženy (20 %). Více než polovina záchytů se koncentruje do velkých měst — samotná Praha tvoří zhruba třetinu všech případů, následují Středočeský a Jihomoravský kraj. Injekční užívání drog hraje v ČR dlouhodobě malou roli (necelá 4 %), dominuje jednoznačně sexuální přenos. To není okrajová statistika: cílí-li prevence na konkrétní skupiny a místa (MSM ve velkých městech, komunity rezidentů a nově příchozích), může mít nepoměrně velký efekt na celkové číslo.
+        Pohled na to, koho se nákaza týká, ukazuje, kde má prevence mířit. Z 293 případů v roce 2025 připadlo 234 na muže a 59 na ženy (20 %). Více než polovina záchytů se koncentruje do velkých měst — samotná Praha tvoří zhruba třetinu všech případů (32,4 %), následují Jihomoravský (13,3 %) a Středočeský kraj (12,3 %). Injekční užívání drog hraje v ČR dlouhodobě malou roli (necelá 4 %), dominuje jednoznačně sexuální přenos. To není okrajová statistika: cílí-li prevence na konkrétní skupiny a místa (MSM ve velkých městech, komunity rezidentů a nově příchozích), může mít nepoměrně velký efekt na celkové číslo.
       </p>
 
       <h3>Mezinárodní srovnání: kde Česko stojí</h3>
 
       <p>
-        Klíčový kontext dodává ECDC. Za rok 2023 činila míra nově diagnostikovaných případů HIV v EU/EEA <strong>5,3 na 100 000</strong> obyvatel — o 15,9 % méně než v roce 2014 (6,3). Evropa tedy dlouhodobě klesá. Česko je s 2,7 sice výrazně pod tímto průměrem, ale v opačné fázi cyklu: zatímco většina zemí počty snižuje, ČR je v menšině těch, kde počty rostou. ECDC navíc upozorňuje, že polovina lidí s HIV v Evropě je diagnostikována pozdě — a Česko v tomto ohledu nepatří mezi premianty.
+        Klíčový kontext dodává ECDC. Za rok 2023 činila míra nově diagnostikovaných případů HIV v EU/EEA <strong>5,3 na 100 000</strong> obyvatel — o 15,9 % méně než v roce 2014 (6,3). Nejnovější vlna dat (ECDC HIV/AIDS surveillance 2025, publ. 27. 11. 2025) drží míru EU/EEA za rok 2024 opět na 5,3 na 100 000 (24 164 diagnóz) — evropský benchmark je tedy stabilní. Evropa tedy dlouhodobě klesá. Česko je s 2,7 sice výrazně pod tímto průměrem, ale v opačné fázi cyklu: zatímco většina zemí počty snižuje, ČR je v menšině těch, kde počty rostou. ECDC navíc upozorňuje, že polovina lidí s HIV v Evropě je diagnostikována pozdě — a Česko v tomto ohledu nepatří mezi premianty.
       </p>
 
       <figure class="av-figure" aria-labelledby="avBarHivH">
@@ -293,7 +294,7 @@
                 <th scope="row">Česko</th>
                 <td class="av-col-num av-cell-warn">2,7</td>
                 <td>↑ roste (od 2020)</td>
-                <td>ne (jen částečná dotace MSM &lt; 26 let od 3/2025)</td>
+                <td>ne (jen částečná dotace do 26 let, od 2025)</td>
               </tr>
               <tr>
                 <th scope="row">Slovensko</th>
@@ -340,7 +341,7 @@
       </p>
 
       <p>
-        <strong>1. PrEP bez úhrady.</strong> Preexpoziční profylaxe — denní (nebo „on-demand\") tabletka, která snižuje riziko nákazy HIV při sexu o více než 95 % — je v Česku dostupná od roku 2017, ale veřejné zdravotní pojištění na ni nepřispívá. Samoplátce zaplatí zhruba 600 až 1 100 Kč měsíčně plus náklady na povinné kontroly. Od března 2025 funguje jen částečná dotace pro MSM do 26 let. Pro srovnání: Německo hradí PrEP z veřejného pojištění od roku 2019, Francie a Velká Británie ji nabízejí v rámci veřejných programů — a právě tyto země zaznamenávají u MSM nejstrmější pokles. Cena je v Česku bariérou přesně pro tu skupinu, kde by PrEP zachytila nejvíc přenosů.
+        <strong>1. PrEP bez úhrady.</strong> Preexpoziční profylaxe — denní (nebo „on-demand\") tabletka, která snižuje riziko nákazy HIV při sexu o více než 95 % — je v Česku dostupná od roku 2017, ale veřejné zdravotní pojištění na ni nepřispívá. Samoplátce zaplatí zhruba 600 až 1 100 Kč měsíčně plus náklady na povinné kontroly. Od roku 2025 funguje jen částečná dotace pro mladé do 26 let (program ChciPrEP podpořený MZ ČR). Pro srovnání: Německo hradí PrEP z veřejného pojištění od roku 2019, Francie a Velká Británie ji nabízejí v rámci veřejných programů — a právě tyto země zaznamenávají u MSM nejstrmější pokles. Cena je v Česku bariérou přesně pro tu skupinu, kde by PrEP zachytila nejvíc přenosů.
       </p>
 
       <p>
@@ -401,6 +402,7 @@
         <h5 class="sources-group-h">Mezinárodní benchmarky</h5>
         <ul class="article-sources-list">
           <li><strong>ECDC — HIV/AIDS surveillance in Europe 2024 (2023 data)</strong> — EU/EEA míra 5,3 / 100 000, trend −15,9 % vs. 2014. <a href="https://www.ecdc.europa.eu/en/publications-data/hiv-aids-surveillance-europe-2024-2023-data" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — HIV/AIDS surveillance in Europe 2025 (2024 data)</strong> — nejnovější vlna (publ. 27. 11. 2025): EU/EEA míra opět 5,3 / 100 000, 24 164 diagnóz. <a href="https://www.ecdc.europa.eu/en/publications-data/hivaids-surveillance-europe-2025-2024-data" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
           <li><strong>ECDC — Surveillance Atlas of Infectious Diseases</strong> — interaktivní per-100k míry pro jednotlivé země (ověření hodnot sousedů). <a href="https://atlas.ecdc.europa.eu/public/index.aspx" target="_blank" rel="noopener">atlas.ecdc.europa.eu ↗</a></li>
           <li><strong>ECDC/WHO Europe — „Europe's hidden HIV crisis\" (pozdní záchyt)</strong> — polovina diagnóz v Evropě je pozdních. <a href="https://www.ecdc.europa.eu/en/news-events/europes-hidden-hiv-crisis-half-all-people-living-hiv-europe-are-diagnosed-late" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
         </ul>
