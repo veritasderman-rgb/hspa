@@ -1,0 +1,52 @@
+{
+  "id": "mri_vysetreni_per_1000",
+  "name": "Vyšetření magnetickou rezonancí na 1 000 obyvatel",
+  "area": "Výstupy",
+  "domain": "Diagnostická péče",
+  "subdomain": "Zobrazovací metody",
+  "definition": "Roční počet vyšetření magnetickou rezonancí (MR) přepočtený na 1 000 obyvatel. Čitatel = počet MR vyšetření vykázaných u nemocnic i ambulantních poskytovatelů za kalendářní rok; jmenovatel = střední stav populace. Indikátor měří skutečné využití (throughput) zobrazovací diagnostiky, nikoli počet přístrojů — doplňuje strukturní ukazatel mri_per_milion (hustota přístrojů) o pohled na to, kolik vyšetření systém reálně odbaví.",
+  "unit": "vyšetření / 1 000 obyv.",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_co_exam?format=JSON&geo=CZ&facility=MRI&icha_hp=HP1_3&unit=P_HTHAB",
+      "dataset": "hlth_co_exam — Medical technologies: examinations by medical imaging techniques (CT, MRI and PET)",
+      "dimensions": {
+        "geo": "CZ",
+        "facility": "MRI (Magnetic Resonance Imaging Units)",
+        "icha_hp": "HP1_3 — nemocnice i ambulantní poskytovatelé",
+        "unit": "P_HTHAB (na 100 000 obyvatel); přepočet /100 na 1 000 obyvatel"
+      }
+    },
+    "fallback": {
+      "type": "uzis_nzis",
+      "note": "Národní zdroj — ÚZIS ČR / Národní zdravotnický informační systém (NZIS), roční výkazy o činnosti zobrazovacích pracovišť (počty MR vyšetření podle poskytovatelů). Z těchto administrativních dat je odvozena hodnota, kterou ČR reportuje do Eurostatu; národní a eurostatový součet se mohou mírně lišit vymezením vykazujících pracovišť."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_co_exam · MRI · P_HTHAB",
+    "dataset": "Eurostat — Medical technologies: examinations by medical imaging techniques (MRI). Průměr EU 95,4 vyšetření / 1 000 obyv. je neváženým průměrem napříč 24 zeměmi EU s daty za rok 2023; medián 93,1. Populačně vážený průměr je vyšší (≈113/1 000), protože ho táhnou Německo (166) a Francie (163) s výkonovou (fee-for-service) úhradou a sklonem k nadužívání. OECD Health at a Glance 2023 uvádí průměr OECD ≈83 vyšetření / 1 000 (referenční rok 2021).",
+    "value": 95.4,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_co_exam/default/table"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (NZIS)",
+    "Eurostat",
+    "OECD Health Statistics"
+  ],
+  "method_notes": "Objem MR vyšetření je záměrně veden jako context_dependent (signál neutral): vyšší hodnota není automaticky „lepší\" ani nižší „horší\". Země s výkonovou úhradou (Německo 166, Francie 163, Rakousko 168 vyšetření / 1 000 v roce 2023) vykazují vysoké objemy z části kvůli nadužívání; země se silným gatekeepingem praktického lékaře (Nizozemsko 60) mají objemy nízké, aniž by tím trpěla kvalita. České číslo (79,7 na 1 000 v roce 2024) je proto nutné číst v kontextu dalších dvou parametrů: hustoty přístrojů (VZP mělo v roce 2026 nasmlouvaných 115 MR přístrojů, tj. přibližně 12 na milion obyvatel — pod průměrem EU) a čekacích dob. Nízký objem v ČR nevzniká úsporným gatekeepingem, ale kapacitním stropem: úhradová vyhláška až do roku 2026 limitovala objem hrazených vyšetření, což vytvářelo čekací listy a tlačilo část pacientů k samoplatbě. Trend je proto rostoucí (z 60,1 v roce 2019 na 79,7 v roce 2024), jak přibývají přístroje i uvolněné limity.",
+  "limitations": "(1) Objem sám o sobě neměří vhodnost indikace ani čekací dobu — dvě klíčové veličiny kvality přístupu, které Eurostat v tomto datasetu nesleduje. (2) Zahrnuje nemocniční i ambulantní pracoviště (HP1_3); vykazování samoplátcovských vyšetření se mezi zeměmi liší a může objem podhodnocovat. (3) Mezinárodní srovnání je zkresleno rozdílnými úhradovými modely (výkonová úhrada nadhodnocuje objem), proto je context_dependent. (4) Benchmark OECD (≈83) je z roku 2021, EU průměr (95,4) z roku 2023 — roky se liší; oba jsou orientační kontext, ne prahová hodnota signálu.",
+  "determinants": "**Kapacitní strop úhradové vyhlášky.** Objem hrazených MR vyšetření byl dlouhodobě limitován regulačními mechanismy úhradové vyhlášky. Poskytovatel, který strop vyčerpal, další hrazená vyšetření prodělával — vznikaly čekací listy a tlak na samoplatbu. Uvolnění stropu je nejsilnější pákou na objem.\n\n**Hustota a stáří přístrojů.** VZP mělo v roce 2026 nasmlouvaných 115 MR přístrojů (≈12 na milion obyvatel, pod průměrem EU). Nová instalace je investičně i personálně náročná; VZP proto sází i na lepší využití stávajících strojů (vícesměnný provoz).\n\n**Personál.** MR provoz váže radiology a radiologické asistenty. I při uvolněném financování je limitem dostupnost personálu — bez lidí se kapacita nenavýší, i když jsou peníze.\n\n**Indikační praxe.** Podíl vyšetření závisí na tom, jak často je indikují praktici a ambulantní specialisté. Slabý gatekeeping a výkonová úhrada objem zvyšují (Německo), silný gatekeeping ho drží nízko (Nizozemsko) — proto samotné číslo nevypovídá o kvalitě.",
+  "importance": "**Brána k diagnóze.** MR je klíčová u neurologických, onkologických, ortopedických a kardiologických stavů, kde nezáří a rozliší měkké tkáně. Dostupnost MR se přímo promítá do rychlosti diagnózy a zahájení léčby — čekání týdny až měsíce může u onkologického nálezu rozhodovat o prognóze.\n\n**Test kapacitního řízení.** Objem MR ukazuje, jak systém řídí kapacitu drahé technologie: přeinvestování vede k nadužívání a plýtvání, poddimenzování k čekacím listům a samoplatbám. Ideál je vysoké využití existujících strojů při přiměřené indikaci.\n\n**Rovnost přístupu.** Čekací doby a nabídka samoplateb se liší mezi kraji a poskytovateli. Pacient, který si vyšetření zaplatí, se dostane na řadu dřív — objem hrazených vyšetření je tak i ukazatelem toho, nakolik je rychlá diagnostika otázkou peněz.\n\n**Mezinárodní pozice.** Česko (79,7 / 1 000 v roce 2024) je pod průměrem EU (95,4) i mnoha sousedů, ale nad Polskem (73) a Nizozemskem (60). Rostoucí trend a uvolnění limitů v roce 2026 pozici zlepšují.",
+  "patient_story": "Ordinace neurologa, krajské město, únorové pondělí. Pan Jaroslav (58) přišel s několik týdnů trvajícími výpadky citlivosti v pravé ruce. Neurolog má podezření, které dokáže potvrdit nebo vyvrátit jediné vyšetření — magnetická rezonance mozku a krční páteře. Napíše žádanku a řekne větu, kterou pacienti v Česku slýchají často: „Termín vám dají, ale budete pár týdnů čekat. Nebo si to můžete zaplatit a jít dřív.\"\n\nČesko odbaví ročně 79,7 vyšetření magnetickou rezonancí na tisíc obyvatel (Eurostat, 2024). Ještě v roce 2019 to bylo 60,1 — objem soustavně roste, jak přibývají přístroje a uvolňují se úhradové limity. Přesto je české číslo pod průměrem Evropské unie (95,4 na tisíc) a hluboko pod zeměmi s výkonovou úhradou jako Německo (166) nebo Rakousko (168). Signál je neutral: vysoký objem sám o sobě není lepší — Německo a Francie vyšetření zčásti nadužívají, Nizozemsko (60) je naopak drží nízko silným gatekeepingem, aniž trpí kvalita. Českou hodnotu je proto nutné číst v kontextu.\n\nA ten kontext je strukturální. Nízký objem v Česku nevzniká úsporným gatekeepingem, ale kapacitním stropem. Úhradová vyhláška až do roku 2026 limitovala počet hrazených vyšetření; poskytovatel, který strop vyčerpal, další vyšetření prodělával. Výsledkem byly čekací listy — ve Středočeském kraji v průměru kolem čtyř týdnů — a tlak na samoplatbu: kdo zaplatí, jde na řadu dřív. K tomu se přidává řídká síť přístrojů (VZP jich mělo nasmlouvaných 115, tj. asi 12 na milion obyvatel, pod průměrem EU) a nedostatek radiologů, který kapacitu limituje i tam, kde jsou peníze.\n\nPolitická páka je konkrétní a čerstvá. V únoru 2026 VZP oznámila, že 81 z 115 nemocnic s MR přístrojem umožní překročit limity úhradové vyhlášky a vyčlenila na to 150 milionů korun navíc — s cílem zkrátit čekací doby. Argument je efektivitní: kdyby všechny zapojené nemocnice zvýšily produkci jen o desetinu, nahradilo by to instalaci 13 nových přístrojů. To je ta správná páka — lépe využít drahé stroje, které už stojí. Pro pana Jaroslava to znamená rozdíl mezi diagnózou za týden a za měsíc; pro systém rozdíl mezi rychlou léčbou a onkologickým nálezem, který mezitím poroste. Kompetenci drží plátci (úhradová vyhláška, smlouvy pojišťoven) a ministerstvo zdravotnictví, které rozhoduje o síti přístrojů a regulaci indikací.",
+  "framework": "hspa",
+  "dimension": "dostupnost",
+  "verification_status": "review-pending"
+}
