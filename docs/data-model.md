@@ -147,7 +147,7 @@ vlastnost běhu pipeline, ne vlastnost metodiky indikátoru — proto žije jen
 v `data/indicators.json.indicators[].source.origin`, který transform
 přegeneruje při každém běhu. Kopírovat ho i do karty by vytvořilo dva zdroje
 pravdy, které se rozjedou (karta je commitovaná ručně, kontrakt se přepisuje
-cronem denně).
+týdenním cronem).
 
 Karta místo toho nese **editorial** pole `verification_status` (`verified` |
 `preliminary` | `illustrative` | ...) + `verified_at` — to je tvrzení redakce

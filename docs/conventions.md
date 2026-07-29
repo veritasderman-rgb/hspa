@@ -246,7 +246,7 @@ Externí odkazy vždy s `target="_blank" rel="noopener"` a šipkou „↗".
 
 - Všechna data agregovaná — žádné PII, žádná data per-pacient.
 - `User-Agent: ZdraveCesko-HSPA/1.0` ve všech HTTP požadavcích (fetchery).
-- Cron maximálně 1× denně (rate limit ÚZIS, OECD, Eurostat).
+- Cron nejvýše 1× denně (rate limit ÚZIS, OECD, Eurostat); datový refresh běží týdně (pondělí 06:00 UTC) — zdroje publikují ročně až čtvrtletně.
 - Žádné API klíče v kódu — vše veřejné endpoints.
 - `.env` v gitignore, žádné secrets v commitu.
 

@@ -45,8 +45,8 @@ test('summarize: mixed live/seed', () => {
   assert.equal(s.by_source['ČSÚ'].seed, 2);
 });
 
-test('summarize: detects stale fetched_at older than 7 days', () => {
-  const old = new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString();
+test('summarize: detects stale fetched_at older than 14 days (2× perioda týdenního refreshe)', () => {
+  const old = new Date(Date.now() - 20 * 24 * 3600 * 1000).toISOString();
   const fresh = new Date().toISOString();
   const indicators = [
     { id: 'old1', source: { name: 'OECD', origin: 'live', fetched_at: old } },
@@ -55,6 +55,14 @@ test('summarize: detects stale fetched_at older than 7 days', () => {
   const s = summarize(indicators);
   assert.equal(s.stale_count, 1);
   assert.equal(s.stale_sample[0].id, 'old1');
+});
+
+test('summarize: data stará 10 dní NEJSOU stale — týdenní cron + vynechaný běh se vejde do prahu', () => {
+  // Regrese k překlopení na týdenní refresh: s původním 7denním prahem by
+  // report těsně před dalším pondělním během označil za stale celý kontrakt.
+  const tenDays = new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString();
+  const s = summarize([{ id: 'x', source: { name: 'OECD', origin: 'live', fetched_at: tenDays } }]);
+  assert.equal(s.stale_count, 0);
 });
 
 test('summarize: handles missing source field', () => {

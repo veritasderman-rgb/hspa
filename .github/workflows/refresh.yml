@@ -1,8 +1,19 @@
 name: Refresh data
 
-# Spouští se každý den v 06:00 UTC. Provede ingest pipeline,
+# Spouští se v pondělí 06:00 UTC. Provede ingest pipeline,
 # validuje výsledek a commitne změny v data/ (+ nový snapshot)
 # zpět do repa. Vercel se po pushi sám rebuildne.
+#
+# PROČ TÝDNĚ, NE DENNĚ (změna 2026-07-29):
+# Zdroje (OECD, Eurostat, ČSÚ, ÚZIS) publikují ročně až čtvrtletně, ne denně.
+# Měření na 71 snapshotech (2026-05-05 → 07-29): medián 1 změna hodnoty za den
+# — a i ta je většinou nově přidaný indikátor nebo redakční oprava, ne nová
+# vlna ze zdroje. Rok dat se posunul jen u 26 % indikátorů za celé tři měsíce.
+# Denní běh naopak generoval šum: 2026-07-27 nula změn hodnot, ale pět flipů
+# origin live→seed při výpadku zdroje (viz PR #893 — OECD Accept-Language).
+# Týdenní kadence drží zpoždění za novou vlnou pod 7 dny, sedmkrát sníží počet
+# běhů i flipů a zpomalí přírůstek snapshotů v repu. Pro cílený doběh při
+# známé publikaci je tu workflow_dispatch.
 #
 # Po ingestu spustí verify:freshness, který fail-uje pokud
 # poměr indikátorů s `origin: live` klesne pod MIN_LIVE_RATIO.
@@ -10,8 +21,8 @@ name: Refresh data
 
 on:
   schedule:
-    - cron: '0 6 * * *'
-  workflow_dispatch:  # umožní manuální spuštění z GitHub UI
+    - cron: '0 6 * * 1'   # pondělí 06:00 UTC
+  workflow_dispatch:  # ruční doběh, když zdroj vydá novou vlnu mimo pondělí
 
 permissions:
   contents: write  # potřeba pro commit do data/
