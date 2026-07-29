@@ -139,14 +139,19 @@ export async function fetchOecdSdmx2Indicator(indicatorId, mapping, opts = {}) {
   const url = buildOecdSdmx2Url(mapping, { startPeriod: mapping.start_period ?? 2015 });
   // OECD SDMX endpoint vrací 500 na Accept: application/json (content negotiation
   // koliduje s format=jsondata) — vynutíme Accept: */* a parsujeme JSON ručně.
+  // Accept-Language je POVINNÁ: bez ní server odpoví HTTP 500 s tělem
+  // "languageTag1" (interní chyba parsování jazykového tagu), a to deterministicky
+  // pro všech 12 mapovaných dataflow. Právě tohle stálo za opakovanými pády
+  // OECD fetche a tichým propadem indikátorů na origin: seed (issues #873, #889).
   // Větší datasety navíc přes HTTP/1.1 (undici) končí 500, přes HTTP/2 fungují
   // → na 5xx zkusíme HTTP/2 transport.
+  const OECD_HEADERS = { Accept: '*/*', 'Accept-Language': 'en' };
   let res;
   try {
-    res = await fetchWithRetry(url, { fetchImpl, headers: { Accept: '*/*' } });
+    res = await fetchWithRetry(url, { fetchImpl, headers: OECD_HEADERS });
   } catch (err) {
     if (!fetchImpl && err?.status >= 500) {
-      res = await fetchHttp2(url, { timeoutMs: 180_000 });
+      res = await fetchHttp2(url, { timeoutMs: 180_000, headers: OECD_HEADERS });
     } else {
       throw err;
     }

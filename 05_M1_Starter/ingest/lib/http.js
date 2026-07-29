@@ -111,12 +111,19 @@ export async function fetchHttp2(url, options = {}) {
     }, timeoutMs);
     client.on('error', err => { clearTimeout(timer); reject(err); });
 
+    // HTTP/2 zakazuje velká písmena v názvech hlaviček (node vyhodí
+    // ERR_INVALID_HTTP_TOKEN) — volající píše „Accept-Language" jako u fetch(),
+    // proto normalizujeme. Bez toho by fallback na HTTP/2 spadl dřív, než se
+    // vůbec dostane k požadavku.
+    const lowerHeaders = Object.fromEntries(
+      Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]),
+    );
     const req = client.request({
       [constants.HTTP2_HEADER_METHOD]: 'GET',
       [constants.HTTP2_HEADER_PATH]: u.pathname + u.search,
       'user-agent': CONFIG.uzis.user_agent,
       accept: '*/*',
-      ...headers,
+      ...lowerHeaders,
     });
 
     let status = 0;
