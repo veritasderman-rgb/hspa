@@ -153,7 +153,7 @@ git push -u origin claude/<branch>
 ## Datový tok
 
 ```
-GitHub Actions (denně 06:00 UTC)
+GitHub Actions (týdně, pondělí 06:00 UTC)
   ↓ npm run ingest
 ingest/fetchers/* → ingest/cache/*
   ↓ npm run transform
@@ -376,13 +376,13 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - **Framework Preset:** Other (statický web)
 - **Build Command:** *(prázdné)*
 - Po každém push do `main` Vercel automaticky rebuildne
-- GitHub Actions cron (06:00 UTC) commituje čerstvá data → Vercel rebuild
+- GitHub Actions cron (pondělí 06:00 UTC) commituje čerstvá data → Vercel rebuild
 
 ## Bezpečnostní pravidla
 
 - Všechna data jsou agregovaná — žádné PII
 - `User-Agent: ZdraveCesko-HSPA/1.0` ve všech HTTP požadavcích
-- Cron maximálně jednou denně (rate limit ÚZIS)
+- Cron nejvýše jednou denně (rate limit ÚZIS); datový refresh běží týdně (pondělí)
 - Žádné API klíče — vše veřejné zdroje
 
 ## Další dokumentace

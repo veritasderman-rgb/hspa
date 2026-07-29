@@ -97,3 +97,25 @@ test('trendArrow: context_dependent → třída flat bez ohledu na směr', () =>
   const ind = { direction: 'context_dependent', trend: [{ year: 2023, value: 8 }, { year: 2024, value: 9 }] };
   assert.equal(trendArrow(ind).cls, 'flat');
 });
+
+test('STALE_HOURS na homepage odpovídá kadenci refreshe a prahu verifieru', async () => {
+  // Regrese k překlopení na týdenní cron (PR #894, nález Codexu): frontend měl
+  // vlastní práh 26 h (denní cron + rezerva), takže by od úterý značil zdravá
+  // data červeným „stale". Obě vrstvy musí mít stejnou definici zastaralosti —
+  // jinak si web a CI protiřečí.
+  const fs = await import('node:fs');
+  const appSrc = fs.readFileSync(new URL('../src/app.js', import.meta.url), 'utf8');
+  const m = /const STALE_HOURS = (\d+);/.exec(appSrc);
+  assert.ok(m, 'src/app.js musí definovat STALE_HOURS');
+  const staleHours = Number(m[1]);
+
+  const verifySrc = fs.readFileSync(new URL('../ingest/verify-freshness.js', import.meta.url), 'utf8');
+  const v = /const STALE_AFTER_DAYS = (\d+);/.exec(verifySrc);
+  assert.ok(v, 'verify-freshness.js musí definovat STALE_AFTER_DAYS');
+  const staleDays = Number(v[1]);
+
+  assert.equal(staleHours, staleDays * 24,
+    `STALE_HOURS (${staleHours}) musí odpovídat STALE_AFTER_DAYS (${staleDays} dní) z verify-freshness.js`);
+  assert.ok(staleHours >= 7 * 24,
+    'práh musí být delší než týdenní perioda refreshe, jinak web hlásí falešně zastaralá data');
+});

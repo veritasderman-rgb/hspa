@@ -14,7 +14,13 @@ const DATA_URL = 'data/indicators.json';
 const REGIONS_URL = 'data/regions.json';
 const LS_KEY = 'zdrave-cesko/last-data';
 const LS_FETCHED_KEY = 'zdrave-cesko/last-fetched-at';
-const STALE_HOURS = 26;
+// Práh, po kterém homepage označí data jako zastaralá (červený štítek u
+// „Aktualizováno …"). Musí odpovídat kadenci refreshe: cron běží týdně
+// (pondělí 06:00 UTC), takže 336 h = 14 dní = 2× perioda — stejná tolerance
+// na jeden vynechaný běh, jakou používá ingest/verify-freshness.js
+// (STALE_AFTER_DAYS). S původními 26 h (denní cron + rezerva) by web od úterý
+// značil za zastaralá data, která jsou zcela v pořádku.
+const STALE_HOURS = 336;
 
 // Jednorázová migrace: persona switcher (Veřejnost/Odborník/Politik) byl
 // odstraněn — vyčistíme orphan localStorage key u vracejících se uživatelů.

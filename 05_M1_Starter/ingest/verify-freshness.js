@@ -40,7 +40,12 @@ export function summarize(indicators) {
   const total = indicators.length;
   const byOrigin = {};
   const bySource = {};
-  const stale = []; // indicators where source.fetched_at > 7 days
+  // Práh stáří je 14 dní = 2× perioda refreshe (týdenní cron, pondělí 06:00
+  // UTC). Musí být delší než perioda, jinak by report těsně před dalším během
+  // označil za „stale" prakticky celý kontrakt. Dvojnásobek dá prostor i pro
+  // jeden vynechaný běh. Pozn.: stale_count je informativní, gate je live_ratio.
+  const STALE_AFTER_DAYS = 14;
+  const stale = []; // indikátory, jejichž source.fetched_at je starší než STALE_AFTER_DAYS
 
   for (const ind of indicators) {
     const origin = ind.source?.origin ?? 'unknown';
@@ -53,7 +58,7 @@ export function summarize(indicators) {
     else if (origin === 'seed') bySource[sourceName].seed += 1;
 
     const fetched = ind.source?.fetched_at ? new Date(ind.source.fetched_at) : null;
-    if (fetched && Date.now() - fetched.getTime() > 7 * 24 * 3600 * 1000) {
+    if (fetched && Date.now() - fetched.getTime() > STALE_AFTER_DAYS * 24 * 3600 * 1000) {
       stale.push({ id: ind.id, fetched_at: ind.source.fetched_at });
     }
   }
@@ -95,7 +100,7 @@ function formatReport(summary) {
   const lines = [];
   lines.push(`Total indicators: ${summary.total}`);
   lines.push(`Live origin: ${summary.live} (${(summary.live_ratio * 100).toFixed(1)}%)`);
-  lines.push(`Stale (>7 days): ${summary.stale_count}`);
+  lines.push(`Stale (>14 days): ${summary.stale_count}`);
   lines.push('');
   lines.push('By origin:');
   for (const [k, v] of Object.entries(summary.by_origin)) {

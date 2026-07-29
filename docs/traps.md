@@ -101,7 +101,7 @@ tests/uzis_nzis.test.js
 
 ### 9. Daily routine commitne soubory, které měníš
 
-Cron 06:00 UTC commituje:
+Týdenní refresh (pondělí 06:00 UTC) a denní rutina commitují:
 - `data/snapshot-YYYY-MM-DD.json`
 - `data/freshness.json` (update)
 - `discovery/discovery-YYYY-MM-DD.md`
