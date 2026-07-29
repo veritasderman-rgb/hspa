@@ -80,6 +80,14 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'postele_akutni_per_1000',
   'prezit_karcinom_prsu_5let',
   'prezit_rakoviny_5let',
+  // 2026-07-29: unmet_need_medical přechodně origin:seed. Karta je verified
+  // (Eurostat EU-SILC, hodnota 0,3 % populace 16+ / 2025 beze změny), ale
+  // refresh cyklu 2026-07-27/28 (commit 70b2282 „data: refresh 2026-07-28")
+  // živý Eurostat fetch nedotáhl (fetched_at 2026-07-27T09:45) → transform
+  // ponechal hodnotu, origin spadl na seed. Stejný verified-but-flaky-live stav
+  // jako precedenty 2026-07-17 a 2026-07-28; odblokuje ho příští úspěšný live
+  // fetch — pak odeber.
+  'unmet_need_medical',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
