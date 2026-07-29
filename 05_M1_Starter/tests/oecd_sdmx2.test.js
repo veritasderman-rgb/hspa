@@ -200,3 +200,57 @@ test('parseOecdSdmx2: pod prahem 5 členů se benchmark nepočítá', () => {
   assert.equal(r.cz.value, 10);
   assert.equal(r.benchmark.oecd, undefined);
 });
+
+test('fetchOecdSdmx2Indicator posílá Accept-Language — bez ní OECD vrací HTTP 500 "languageTag1"', async () => {
+  const { fetchOecdSdmx2Indicator } = await import('../ingest/fetchers/oecd_sdmx2.js');
+  const seen = [];
+  // Server, který věrně napodobuje chování sdmx.oecd.org: chybí-li
+  // Accept-Language, odpoví 500 s tělem "languageTag1" (ověřeno živě
+  // 2026-07-29 na všech 12 mapovaných dataflow). Právě tenhle stav
+  // tiše shazoval OECD indikátory na origin: seed.
+  const fetchImpl = async (url, opts = {}) => {
+    const headers = opts.headers ?? {};
+    seen.push(headers);
+    const lang = headers['Accept-Language'] ?? headers['accept-language'];
+    if (!lang) {
+      return { ok: false, status: 500, headers: new Map(), text: async () => 'languageTag1' };
+    }
+    return {
+      ok: true,
+      status: 200,
+      headers: new Map(),
+      json: async () => ({
+        data: {
+          structures: [{
+            dimensions: {
+              observation: [
+                { id: 'REF_AREA', values: [{ id: 'CZE' }, { id: 'AUT' }, { id: 'DEU' }, { id: 'FRA' }, { id: 'ITA' }, { id: 'POL' }] },
+                { id: 'TIME_PERIOD', values: [{ id: '2023' }] },
+              ],
+            },
+          }],
+          dataSets: [{ observations: { '0:0': [10], '1:0': [20], '2:0': [30], '3:0': [40], '4:0': [50], '5:0': [60] } }],
+        },
+      }),
+      text: async () => '',
+    };
+  };
+
+  const mapping = { agency: 'OECD.ELS.HD', dataflow: 'DSD_TEST@DF_TEST', version: '1.0', dims: {} };
+  const out = await fetchOecdSdmx2Indicator('test_indicator', mapping, { fetchImpl });
+
+  assert.equal(out.cz.value, 10, 'hodnota ČR se má vyparsovat');
+  assert.ok(seen.length > 0, 'fetch musí proběhnout');
+  for (const h of seen) {
+    const lang = h['Accept-Language'] ?? h['accept-language'];
+    assert.ok(lang, 'každý požadavek na OECD musí nést Accept-Language, jinak server vrací 500');
+  }
+});
+
+test('fetchHttp2 normalizuje názvy hlaviček na lowercase (HTTP/2 zakazuje velká písmena)', async () => {
+  // Regrese: fallback na HTTP/2 dostával { Accept-Language: 'en' } s velkým
+  // písmenem a node http2 by na tom spadl dřív, než odešle požadavek.
+  const src = await import('node:fs').then(fs =>
+    fs.readFileSync(new URL('../ingest/lib/http.js', import.meta.url), 'utf8'));
+  assert.match(src, /toLowerCase\(\)/, 'fetchHttp2 musí názvy hlaviček normalizovat');
+});
