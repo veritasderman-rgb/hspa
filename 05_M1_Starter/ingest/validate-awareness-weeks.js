@@ -74,6 +74,23 @@ export function validateAwarenessWeeks(docOverride) {
     const p = w.popup || {};
     if (!p.headline || !p.body || !p.cta) errors.push(`${tag}: popup musí mít headline/body/cta`);
 
+    // Volitelné hero médium (video/obrázek vedle úvodního textu microsite).
+    // alt je povinný (přístupnost) a odkazované soubory musí existovat.
+    if (w.hero_media != null) {
+      const hm = w.hero_media;
+      if (!['video', 'image'].includes(hm.kind)) {
+        errors.push(`${tag}: hero_media.kind musí být video|image`);
+      }
+      if (!hm.src) errors.push(`${tag}: hero_media.src chybí`);
+      else if (!fs.existsSync(path.join(ROOT, hm.src))) {
+        errors.push(`${tag}: hero_media.src '${hm.src}' neexistuje`);
+      }
+      if (hm.poster && !fs.existsSync(path.join(ROOT, hm.poster))) {
+        errors.push(`${tag}: hero_media.poster '${hm.poster}' neexistuje`);
+      }
+      if (!hm.alt) errors.push(`${tag}: hero_media.alt chybí (přístupnost)`);
+    }
+
     // Volitelný datový příběh (animované vizuály na microsite). Každý vizuál
     // MUSÍ nést zdroj (note) — čísla bez atribuce na web nepatří.
     if (w.data_story != null) {
