@@ -243,3 +243,18 @@ test('validace: data_story — struktura vizuálů a povinný zdroj (note)', () 
   assert.equal(run({ items: [{ kind: 'counters', items: [{ display: '~50 %', label: 'x' }], note: 'z' }] }), true, 'counter jen s display projde');
   assert.equal(run({ items: [{ kind: 'bars', rows: [{ label: 'x' }], note: 'z' }] }), false, 'řádek bez value selže');
 });
+
+
+test('validace: hero_media — povinný alt a existující soubory', () => {
+  const base = { id: 'a', observance: 'o', observance_source: 's', kicker: 'k', title: 't', lead: 'l', status: 'ready', start: '2026-08-01', end: '2026-08-07', popup: { headline: 'h', body: 'b', cta: 'c' }, context: { why: 'w', affects: ['x'], cz: 'c' }, linked_indicators: ['nadeje_doziti_total'] };
+  const run = (hero_media) => validateAwarenessWeeks({ weeks: [{ ...base, hero_media }] });
+  const existing = 'assets/tydny/kojeni-2026/nit-obrat.mp4';
+  const existingPoster = 'assets/tydny/kojeni-2026/klic-story.png';
+
+  assert.equal(run({ kind: 'video', src: existing, poster: existingPoster, alt: 'popis animace' }), true, 'platné hero_media projde');
+  assert.equal(run({ kind: 'gif', src: existing, alt: 'x' }), false, 'neznámý kind selže');
+  assert.equal(run({ kind: 'video', alt: 'x' }), false, 'chybějící src selže');
+  assert.equal(run({ kind: 'video', src: 'assets/neexistuje.mp4', alt: 'x' }), false, 'neexistující soubor selže');
+  assert.equal(run({ kind: 'video', src: existing, poster: 'assets/neexistuje.png', alt: 'x' }), false, 'neexistující poster selže');
+  assert.equal(run({ kind: 'video', src: existing }), false, 'chybějící alt selže (přístupnost)');
+});

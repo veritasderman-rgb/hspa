@@ -195,18 +195,49 @@ function renderSources(week) {
   return `<section class="aw-block aw-source"><h2 class="aw-block-h">Zdroje a odkazy</h2><ul class="aw-source-list">${rows.join('')}</ul></section>`;
 }
 
+// Hero médium (video/obrázek vpravo vedle úvodního textu) — deklarované
+// v registru (hero_media). Video: muted/loop/playsinline; při
+// prefers-reduced-motion se autoplay vynechá a zůstane poster + ovládání.
+function renderHeroMedia(media) {
+  if (!media || !media.src) return '';
+  const caption = media.caption
+    ? `<figcaption class="aw-hero-media-caption">${escapeHtml(media.caption)}</figcaption>` : '';
+  if (media.kind === 'video') {
+    const reduced = typeof window !== 'undefined'
+      && typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const playback = reduced ? 'controls' : 'autoplay loop';
+    return `<figure class="aw-hero-media">
+      <video class="aw-hero-media-el" ${playback} muted playsinline preload="metadata"
+        ${media.poster ? `poster="${escapeHtml(media.poster)}"` : ''}
+        aria-label="${escapeHtml(media.alt || '')}">
+        <source src="${escapeHtml(media.src)}" type="video/mp4">
+      </video>
+      ${caption}
+    </figure>`;
+  }
+  return `<figure class="aw-hero-media">
+    <img class="aw-hero-media-el" src="${escapeHtml(media.src)}" alt="${escapeHtml(media.alt || '')}" loading="lazy">
+    ${caption}
+  </figure>`;
+}
+
 function renderWeek(week, isActive, isPast) {
   const host = document.getElementById('awContent');
   document.title = `${week.title} · Týden zdraví · HSPA Monitor`;
   const sections = (week.microsite?.sections || []).map(s => renderSection(s, week)).join('');
   const pastNote = isPast ? `
     <div class="aw-block"><p class="aw-past-note">Tento Týden zdraví proběhl v termínu ${escapeHtml(formatRange(week))}. Stránku necháváme dostupnou jako trvalý rozcestník k tématu — články i živé ukazatele níže platí dál.</p></div>` : '';
+  const heroMedia = renderHeroMedia(week.hero_media);
   host.innerHTML = `
-    <section class="ed-hero aw-hero">
-      <p class="ed-kicker">${isActive ? 'Právě probíhá · ' : ''}${isPast ? 'Z archivu · ' : ''}${escapeHtml(week.kicker)}</p>
-      <h1>${escapeHtml(week.title)}</h1>
-      <p class="ed-lead">${escapeHtml(week.lead)}</p>
-      <p class="aw-hero-meta">${escapeHtml(formatRange(week))}${week.observance_source ? ` · ${escapeHtml(week.observance_source)}` : ''}</p>
+    <section class="ed-hero aw-hero${heroMedia ? ' aw-hero--with-media' : ''}">
+      <div class="aw-hero-text">
+        <p class="ed-kicker">${isActive ? 'Právě probíhá · ' : ''}${isPast ? 'Z archivu · ' : ''}${escapeHtml(week.kicker)}</p>
+        <h1>${escapeHtml(week.title)}</h1>
+        <p class="ed-lead">${escapeHtml(week.lead)}</p>
+        <p class="aw-hero-meta">${escapeHtml(formatRange(week))}${week.observance_source ? ` · ${escapeHtml(week.observance_source)}` : ''}</p>
+      </div>
+      ${heroMedia}
     </section>
     ${pastNote}
     ${renderDataStory(week.data_story)}
