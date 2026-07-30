@@ -211,8 +211,11 @@ function renderHeroMedia(media) {
       && typeof window.matchMedia === 'function'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const playback = reduced ? 'controls' : 'autoplay loop';
+    // Akční tlačítko (play/pause) s měnícím se labelem — BEZ aria-pressed:
+    // kombinace měnícího se jména a pressed stavu si u čteček protiřečí
+    // („Přehrát animaci, pressed") — Codex #901, ARIA APG.
     const pauseBtn = reduced ? '' : `
-      <button type="button" class="aw-hero-media-toggle" aria-label="Pozastavit animaci" aria-pressed="false">⏸</button>`;
+      <button type="button" class="aw-hero-media-toggle" aria-label="Pozastavit animaci">⏸</button>`;
     return `<figure class="aw-hero-media">
       <video class="aw-hero-media-el" ${playback} muted playsinline preload="metadata"
         ${media.poster ? `poster="${escapeHtml(media.poster)}"` : ''}
@@ -240,7 +243,6 @@ function wireHeroMediaToggle(host) {
     const playing = !video.paused && !video.ended;
     btn.textContent = playing ? '⏸' : '▶';
     btn.setAttribute('aria-label', playing ? 'Pozastavit animaci' : 'Přehrát animaci');
-    btn.setAttribute('aria-pressed', playing ? 'false' : 'true');
   };
   video.addEventListener('play', syncBtn);
   video.addEventListener('pause', syncBtn);
