@@ -1,0 +1,57 @@
+{
+  "id": "deti_ambulantni_psychiatrie",
+  "name": "Děti a dorost v ambulantní psychiatrické péči",
+  "area": "Výstupy",
+  "domain": "Duševní zdraví",
+  "subdomain": "Dětská a dorostová psychiatrie",
+  "definition": "Počet dětí a dospívajících do 19 let (věková skupina 0–19), kteří byli za rok ošetřeni v ambulantní psychiatrické péči v ČR (unikátní léčení pacienti, ČR celkem). Na rozdíl od akutních hospitalizací zachycuje tento ukazatel objem poptávky u vstupních dveří systému — kolik dětí se vůbec dostane k ambulantnímu psychiatrovi. Rostoucí počet je nepřímým ukazatelem jak zhoršující se duševní pohody dospívajících, tak schopnosti (a kapacity) systému tuto poptávku zachytit v ambulanci, dříve než přeroste v akutní krizi.",
+  "unit": "pacientů ročně (0–19 let)",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://psychiatrie.uzis.cz/index.php?pg=psychiatrie-v-datech",
+      "dataset": "ÚZIS ČR — Psychiatrická péče (NZIS) / Národní registr hrazených zdravotních služeb; ročenka Psychiatrická péče a oborová statistika Dětská a dorostová psychiatrie na Národním portálu psychiatrické péče",
+      "dimensions": ["věk pacienta (0–19 let)", "typ péče (ambulantní)", "léčení pacienti", "rok"],
+      "note": "Počet léčených pacientů do 19 let v ambulantní psychiatrické péči, ČR celkem. Roční publikace ÚZIS Psychiatrická péče uvádí počty ambulantně léčených pacientů podle věkových skupin.",
+      "_dev_notes": [
+        "Zdrojová data: ÚZIS Psychiatrická péče (roční), Národní portál psychiatrické péče (psychiatrie.uzis.cz), oborová statistika Dětská a dorostová psychiatrie.",
+        "Headline ~65 000 (2023) je citovaná/zaokrouhlená hodnota ÚZIS; ~58 600 v 2021 a ~63 000 v 2022 z týchž ročních výstupů. Robustní je vzestupný trend a řádová úroveň (kolem 60 tisíc dětí ročně).",
+        "Přesnou tabulku (léčení pacienti 0–19 v ambulantní psychiatrii) dohledat v https://psychiatrie.uzis.cz/ — v seed verzi jsou mezilehlé body zaokrouhlené a budou potvrzeny živým ingestem z NZIS."
+      ]
+    },
+    "fallback": {
+      "type": "press_release",
+      "url": "https://psychiatrie.uzis.cz/res/file/oborove-statistiky/detska-psychiatrie.pdf"
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Harmonizované mezinárodní srovnání počtu dětí v ambulantní psychiatrické péči na obyvatele neexistuje — systémy se liší v tom, kdo je 'psychiatrický pacient' (psychiatr vs. psycholog vs. praktik), jak vedou věkovou hranici a jak organizují ambulantní vs. komunitní péči. Srovnatelný je spíš směr: zhoršování duševní pohody dospívajících je doloženo napříč zeměmi OECD. Nejbližší čitelný benchmark nabízí studie HBSC (WHO), která je od začátku mezinárodně srovnatelná: v Česku podle HBSC 2024 mělo 7,1 % šestnáctiletých zkušenost s antidepresivy (dívky 9,3 %, chlapci 4,6 %). Na Slovensku vzrostl počet pokusů o sebevraždu u dospívajících 15–19 let v roce 2021 o 76,2 % (Národné centrum zdravotníckych informácií).",
+    "value": null,
+    "url": "https://zdravagenerace.cz/"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní portál psychiatrické péče)",
+    "Sekce dětské a dorostové psychiatrie ČLS JEP",
+    "Národní ústav duševního zdraví (NUDZ)"
+  ],
+  "method_notes": "Počet dětí a dospívajících do 19 let léčených v ambulantní psychiatrické péči, ČR celkem. V roce 2023 to bylo přibližně 65 000 pacientů — meziroční vzestup z přibližně 58 600 v roce 2021 a přibližně 63 000 v roce 2022. Počet dětí a dospívajících v psychiatrické péči celkově vzrostl od roku 2010 zhruba o 73 %. Indikátor je veden jako context_dependent: rostoucí počet může odrážet vyšší skutečnou nemocnost, lepší záchyt a odbourání stigmatu, i tlak na úzkou ambulantní kapacitu. Doplňuje dosud sledovanou akutní lůžkovou zátěž (hospitalizace_deti_psychiatrie_akutni) o pohled na vstupní dveře systému — kolik dětí se k ambulantní péči vůbec dostane.",
+  "limitations": "Absolutní počet nezohledňuje velikost dětské populace ani meziroční změny v evidenci a definici 'léčeného pacienta'; časová řada může obsahovat metodické zlomy. Rostoucí trend nelze jednoznačně rozdělit na složku 'více nemocných dětí', 'lepší záchyt' a 'lepší evidence'. Indikátor neměří kvalitu, intenzitu ani délku péče a nezachycuje děti, které se k ambulantnímu psychiatrovi kvůli čekacím dobám vůbec nedostanou (skrytá poptávka). V seed verzi jsou mezilehlé body zaokrouhlené — headline hodnota (přibližně 65 000, 2023) je citovaná z ÚZIS, dílčí roky budou potvrzeny živým ingestem z NZIS.",
+  "determinants": [
+    "Zhoršující se duševní pohoda dospívajících — národní monitoring uvádí u žáků 9. tříd kolem 40 % se zvýšenou mírou depresivních a kolem 30 % úzkostných symptomů; podle HBSC 2024 mělo 7,1 % šestnáctiletých zkušenost s antidepresivy.",
+    "Poddimenzovaná ambulantní dětská psychiatrie — kolem 157–200 dětských a dorostových psychiatrů na celou ČR, značná část blízko důchodového věku, a čekací doby na neakutní vyšetření 4–8 měsíců.",
+    "Chybějící síť komunitních služeb pro děti — Centra duševního zdraví pro děti a dorost teprve vznikají (standard ve Věstníku MZ č. 9/2025), takže poptávka se koncentruje do řídké ambulantní sítě.",
+    "Odbourávání stigmatu a lepší povědomí rodičů i škol, které zvyšuje vyhledávání pomoci — část nárůstu je proto i pozitivním signálem lepšího záchytu."
+  ],
+  "importance": "Ambulantní psychiatrická péče jsou vstupní dveře systému duševního zdraví dětí. Počet dětí, které jimi ročně projdou, měří dvě věci najednou: jak velká je poptávka (kolik dětí duševní obtíže vůbec přivedou k odborníkovi) a jak ji dokáže zachytit řídká síť dětských psychiatrů. Když ambulantní kapacita nestačí a děti čekají měsíce, poptávka se přelévá k té nejzazší a nejdražší formě péče — akutnímu lůžku. Sledovat objem ambulantní péče proto znamená sledovat, zda systém drží krizím předsazené patro, nebo se rozpadá směrem k urgentnímu příjmu.",
+  "patient_story": "Ordinace dětské psychiatričky v krajském městě, jaro 2025. Matka volá kvůli třináctileté Kláře, která přestala jíst a chodit do školy. Slyší vlídnou, ale neúprosnou větu: nejbližší volný termín je za šest měsíců. Klára se tak přidá do velké, rostoucí skupiny — a zároveň do ní možná nepřidá vůbec, pokud rodina čekání vzdá. Přesně na téhle hraně se láme dostupnost dětské duševní péče v Česku.\n\nČíslo za tím příběhem je velké. V roce 2023 prošlo ambulantní psychiatrickou péčí přibližně 65 000 dětí a dospívajících do 19 let — meziročně víc než v roce 2021, kdy jich bylo kolem 58 600. Počet dětí v psychiatrické péči vzrostl od roku 2010 zhruba o 73 %. Protože harmonizované mezinárodní srovnání neexistuje, vedeme signál jako neutrální; vypovídací hodnotu nese směr křivky, ne jedno číslo. A ten směr potvrzuje i mezinárodně srovnatelná studie HBSC: v roce 2024 mělo v Česku 7,1 % šestnáctiletých zkušenost s antidepresivy, u dívek 9,3 %.\n\nStrukturně stojí za číslem úzké hrdlo. Dětských a dorostových psychiatrů je v celé zemi jen kolem 157 až 200 a velká část z nich se blíží důchodu; čekací doby na neakutní vyšetření se hlásí na 4 až 8 měsíců. Komunitní služby pro děti — Centra duševního zdraví pro děti a dorost — teprve vznikají, standard vyšel ve Věstníku MZ až v roce 2025. Rostoucí počet ambulantně léčených dětí tedy neměří jen to, jak se dětem daří, ale i to, jak úzkými dveřmi musí projít — a kolik jich za nimi čeká, nebo to vzdá.\n\nPolitická páka leží u Ministerstva zdravotnictví, zdravotních pojišťoven a napříč resorty. Patří sem dobudování Center duševního zdraví pro děti a dorost a multidisciplinárních ambulantních týmů, dotační program na atestace v dětské psychiatrii a klinické psychologii, navázání školních psychologů a poraden na zdravotnictví a úhradová motivace za včasný záchyt. Cílem je, aby dítě jako Klára mělo kam jít dřív než za půl roku — a aby rostoucí počet ambulantně ošetřených dětí byl známkou lepšího záchytu, ne přetékající, poddimenzované sítě.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
