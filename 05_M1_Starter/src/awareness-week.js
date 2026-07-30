@@ -18,6 +18,7 @@ import { enhanceArticleVisuals } from './article-visuals.js';
 
 let INDICATORS = new Map();
 let ARTICLES = new Map();
+let PREV_NAMES = new Map();
 const SIGNAL_LABEL = { good: 'dobré', warn: 'varování', bad: 'špatné', neutral: 'neutrální' };
 const TOOL_LABELS = {
   'kompas.html': 'Osobní zdravotní kompas',
@@ -62,8 +63,10 @@ function renderSection(section, week) {
     if (!body) return '';
     body = `<div class="aw-ind-list">${body}</div>`;
   } else if (section.kind === 'prevention') {
+    // Lidský název tématu z prevention.json — syrový slug (deti_prostredi)
+    // do UI nepatří.
     const items = (week.linked_prevention_themes || [])
-      .map(t => `<a class="aw-chip" href="prevence.html#${encodeURIComponent(t)}">${escapeHtml(t)}</a>`).join('');
+      .map(t => `<a class="aw-chip" href="prevence.html#${encodeURIComponent(t)}">${escapeHtml(PREV_NAMES.get(t) || t)}</a>`).join('');
     if (!items) return '';
     body = `<p class="aw-chips">${items} <a class="aw-chip aw-chip-all" href="prevence.html">Celá prevence →</a></p>`;
   } else if (section.kind === 'tools') {
@@ -152,6 +155,30 @@ function renderDataStory(story) {
   </section>`;
 }
 
+// Časová osa týdne (timeline v registru) — příběhový oblouk tématu přes
+// existující AV komponentu .av-timeline. Stavy: done | now | future | warn.
+function renderTimeline(tl) {
+  if (!tl || !Array.isArray(tl.items) || !tl.items.length) return '';
+  const STATES = new Set(['done', 'now', 'future', 'warn']);
+  const items = tl.items.map(it => {
+    if (!it || !it.date || !it.title) return '';
+    const state = STATES.has(it.state) ? it.state : 'done';
+    return `<li class="av-timeline-item av-timeline-item-${state}">
+      <time class="av-timeline-date">${escapeHtml(it.date)}</time>
+      <h4 class="av-timeline-title">${escapeHtml(it.title)}</h4>
+      ${it.desc ? `<p class="av-timeline-desc">${escapeHtml(it.desc)}</p>` : ''}
+      ${it.tag ? `<span class="av-timeline-tag">${escapeHtml(it.tag)}</span>` : ''}
+    </li>`;
+  }).filter(Boolean).join('');
+  if (!items) return '';
+  return `<section class="aw-block aw-timeline">
+    ${tl.h ? `<h2 class="aw-block-h">${escapeHtml(tl.h)}</h2>` : ''}
+    ${tl.intro ? `<p class="aw-block-intro">${escapeHtml(tl.intro)}</p>` : ''}
+    <ol class="av-timeline">${items}</ol>
+    ${tl.note ? `<p class="av-figure-note">${escapeHtml(tl.note)}</p>` : ''}
+  </section>`;
+}
+
 // „Proč na tom záleží" — kontextový blok microsite (nezávislý na propojeném obsahu).
 function renderContext(ctx) {
   if (!ctx) return '';
@@ -198,6 +225,10 @@ function renderSources(week) {
 // Hero médium (video/obrázek vpravo vedle úvodního textu) — deklarované
 // v registru (hero_media). Video: muted/loop/playsinline; při
 // prefers-reduced-motion se autoplay vynechá a zůstane poster + ovládání.
+// Autoplay varianta MUSÍ nést tlačítko pauzy (WCAG 2.2.2 — automaticky se
+// pohybující obsah delší než 5 s potřebuje uživatelský stop; Codex #900):
+// reduced-motion preference nestačí, potřebu zastavit mají i uživatelé,
+// kteří ji nemají zapnutou.
 function renderHeroMedia(media) {
   if (!media || !media.src) return '';
   const caption = media.caption
@@ -207,12 +238,17 @@ function renderHeroMedia(media) {
       && typeof window.matchMedia === 'function'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const playback = reduced ? 'controls' : 'autoplay loop';
+    // Akční tlačítko (play/pause) s měnícím se labelem — BEZ aria-pressed:
+    // kombinace měnícího se jména a pressed stavu si u čteček protiřečí
+    // („Přehrát animaci, pressed") — Codex #901, ARIA APG.
+    const pauseBtn = reduced ? '' : `
+      <button type="button" class="aw-hero-media-toggle" aria-label="Pozastavit animaci">⏸</button>`;
     return `<figure class="aw-hero-media">
       <video class="aw-hero-media-el" ${playback} muted playsinline preload="metadata"
         ${media.poster ? `poster="${escapeHtml(media.poster)}"` : ''}
         aria-label="${escapeHtml(media.alt || '')}">
         <source src="${escapeHtml(media.src)}" type="video/mp4">
-      </video>
+      </video>${pauseBtn}
       ${caption}
     </figure>`;
   }
@@ -220,6 +256,29 @@ function renderHeroMedia(media) {
     <img class="aw-hero-media-el" src="${escapeHtml(media.src)}" alt="${escapeHtml(media.alt || '')}" loading="lazy">
     ${caption}
   </figure>`;
+}
+
+// Propojí tlačítko pauzy s videem (volané po vložení markupů do DOM).
+// Stav tlačítka se řídí událostmi videa, ne pořadím kliků — když prohlížeč
+// autoplay zablokuje (spořič baterie, chybějící kodek), tlačítko ukazuje ▶
+// a první klik přehrává, místo aby lhalo o „pozastavení".
+function wireHeroMediaToggle(host) {
+  const btn = host.querySelector('.aw-hero-media-toggle');
+  const video = host.querySelector('.aw-hero-media video');
+  if (!btn || !video) return;
+  const syncBtn = () => {
+    const playing = !video.paused && !video.ended;
+    btn.textContent = playing ? '⏸' : '▶';
+    btn.setAttribute('aria-label', playing ? 'Pozastavit animaci' : 'Přehrát animaci');
+  };
+  video.addEventListener('play', syncBtn);
+  video.addEventListener('pause', syncBtn);
+  btn.addEventListener('click', () => {
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
+    syncBtn();
+  });
+  syncBtn();
 }
 
 function renderWeek(week, isActive, isPast) {
@@ -242,10 +301,12 @@ function renderWeek(week, isActive, isPast) {
     ${pastNote}
     ${renderDataStory(week.data_story)}
     ${renderContext(week.context)}
+    ${renderTimeline(week.timeline)}
     ${sections}
     ${renderSources(week)}`;
   // Rozanimuje AV komponenty datového příběhu (count-up, bary, trend čára).
   enhanceArticleVisuals(host);
+  wireHeroMediaToggle(host);
 }
 
 // Trvalé URL: při ?id= přepíšeme canonical/og:url na variantu s parametrem,
@@ -290,13 +351,15 @@ async function init() {
   const host = document.getElementById('awContent');
   if (!host) return;
   try {
-    const [reg, inds, arts] = await Promise.all([
+    const [reg, inds, arts, prev] = await Promise.all([
       fetch('data/awareness-weeks.json').then(r => r.json()),
       fetch('data/indicators.json').then(r => r.json()),
       fetch('data/articles.json').then(r => r.json()),
+      fetch('data/prevention.json').then(r => r.json()).catch(() => ({})),
     ]);
     INDICATORS = new Map((inds.indicators || []).map(i => [i.id, i]));
     ARTICLES = new Map((arts.articles || []).map(a => [a.slug, a]));
+    PREV_NAMES = new Map((prev.themes || []).map(t => [t.id, t.name || t.title || t.id]));
     const today = new Date().toISOString().slice(0, 10);
     const id = new URLSearchParams(location.search).get('id');
     const week = resolveWeek(reg.weeks, today, id);

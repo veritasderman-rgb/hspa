@@ -113,6 +113,32 @@ export function rotate(doc, today, ctx, { leadDays = LEAD_DAYS } = {}) {
   return { doc, changes };
 }
 
+/**
+ * Synchronizace og:image v tyden.html s kampaňovým vizuálem aktuálního týdne.
+ * Crawlery sociálních sítí neběží JS (client-side injekce je pro náhledy
+ * k ničemu — Codex #900), takže statické HTML musí nést správný obrázek.
+ * Meta tagy jsou označené data-aw-og="1"; hodnota = absolutní URL og_image
+ * vybraného týdne (aktivní ready, jinak nejbližší nadcházející ready),
+ * fallback brand og-default. Pure — testovatelné bez disku.
+ *
+ * @returns {{html: string, url: string, changed: boolean}}
+ */
+export function syncTydenOgImage(html, weeks, today) {
+  const tday = day(today);
+  const ready = (weeks || []).filter(w => w.status === 'ready'
+    && Number.isFinite(day(w.start)) && Number.isFinite(day(w.end)));
+  const active = ready.find(w => day(w.start) <= tday && tday <= day(w.end));
+  const upcoming = ready.filter(w => day(w.start) > tday).sort((a, b) => day(a.start) - day(b.start))[0];
+  const week = active || upcoming;
+  const rel = (week && week.og_image) || 'assets/brand/og-default.png';
+  const url = `https://skorezdravotnictvi.cz/${rel.replace(/^\//, '')}`;
+  const out = html.replace(
+    /(<meta\s+(?:property="og:image"|name="twitter:image")\s+content=")[^"]*("[^>]*data-aw-og="1")/g,
+    `$1${url}$2`,
+  );
+  return { html: out, url, changed: out !== html };
+}
+
 function loadCtx() {
   const articles = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'articles.json'), 'utf8'));
   const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
@@ -130,6 +156,16 @@ function main() {
   const doc = JSON.parse(fs.readFileSync(REG, 'utf8'));
   const ctx = loadCtx();
   const { changes } = rotate(doc, today, ctx);
+
+  // og:image v tyden.html drž v syncu s aktuálním týdnem VŽDY (i bez změny
+  // stavů) — kampaň mohla dostat nový vizuál mezi rotacemi.
+  const tydenPath = path.join(ROOT, 'tyden.html');
+  const tydenHtml = fs.readFileSync(tydenPath, 'utf8');
+  const og = syncTydenOgImage(tydenHtml, doc.weeks, today);
+  if (og.changed) {
+    fs.writeFileSync(tydenPath, og.html);
+    console.log(`og:image tyden.html → ${og.url}`);
+  }
 
   const acted = changes.filter(c => c.action === 'archived' || c.action === 'activated');
   if (!acted.length) {
