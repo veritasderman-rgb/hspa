@@ -1,16 +1,18 @@
 // HSPA Monitor — design system pro vizuální komponenty v článcích.
 //
-// Pět komponent (.av-*):
+// Šest komponent (.av-*):
 //   .av-timeline      vertikální chronologie (legislativa, reformy, epochy)
 //   .av-bar-compare   srovnání hodnot pomocí horizontálních barů
 //   .av-data-table    standardizovaná tabulka (země × parametry, scénáře)
 //   .av-flow          flow diagram s kroky a šipkami (proces, datový tok)
 //   .av-counter       animované velké číslo (IntersectionObserver count-up)
+//   .av-trend         animovaná SVG časová řada (draw-on-scroll čára)
 //
 // Pure markup: většinu práce řeší CSS (.av-* třídy v src/styles.css).
 // JS modul pouze:
 //   - dopočítá šířky barů v .av-bar-compare z data-value
 //   - spustí count-up animaci v .av-counter
+//   - vykreslí a rozanimuje SVG čáru v .av-trend
 // Respektuje prefers-reduced-motion (žádná animace, hned finální stav).
 //
 // Použití (auto-bootstrap z src/clanky.js):
@@ -34,6 +36,7 @@ export function enhanceArticleVisuals(root) {
   const scope = root ?? document;
   enhanceBarCompare(scope);
   enhanceCounters(scope);
+  enhanceTrends(scope);
   enhanceScrollableTables(scope);
 }
 
@@ -248,6 +251,159 @@ export function formatNumber(v, decimals) {
     ? v.toFixed(decimals).replace('.', ',')
     : String(Math.round(v));
   return rounded.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+
+// =====================================================================
+//  .av-trend — animovaná SVG časová řada
+// =====================================================================
+//
+// Markup:
+//   <figure class="av-trend" data-unit="%">
+//     <figcaption class="av-trend-h">Titulek</figcaption>
+//     <div class="av-trend-chart"
+//          data-points='[{"year":2000,"value":90.6},{"year":2024,"value":75.1}]'
+//          data-min="60" data-max="100"
+//          data-break-year="2020" data-break-label="změna vykazování"></div>
+//     <p class="av-trend-note">Zdroj…</p>
+//   </figure>
+//
+// Osa X je úměrná roku (nerovnoměrné řady se nekreslí jako rovnoměrné —
+// mezera 2000→2015 je vizuálně delší než 2021→2022). Popisky hodnot nesou
+// první, poslední a minimální bod; roky všechny body. data-break-year vloží
+// svislou přerušovanou linku (např. změna metodiky) — poctivost řady.
+// Animace: čára se „kreslí" přes stroke-dashoffset po vstupu do viewportu,
+// body a popisky nabíhají se zpožděním. Reduced motion → statický finální stav.
+
+const TREND_W = 640;
+const TREND_H = 240;
+const TREND_PAD = { left: 30, right: 46, top: 34, bottom: 30 };
+
+/**
+ * Pure geometrie trendu — souřadnice bodů, SVG path a index minima.
+ * Exportováno pro testy (bez DOM).
+ *
+ * @param {{year:number, value:number}[]} points
+ * @param {{min?:number, max?:number}} [opts] rozsah osy Y (default z dat ±8 % pásmo)
+ * @returns {null | {dots:{x:number,y:number,year:number,value:number}[], path:string,
+ *   area:string, minIdx:number, yMin:number, yMax:number, xForYear:(y:number)=>number}}
+ */
+export function trendGeometry(points, opts = {}) {
+  const pts = (points || []).filter(p => p && Number.isFinite(p.year) && Number.isFinite(p.value));
+  if (pts.length < 2) return null;
+  const sorted = [...pts].sort((a, b) => a.year - b.year);
+  const years = sorted.map(p => p.year);
+  const values = sorted.map(p => p.value);
+  const y0 = Math.min(...years);
+  const y1 = Math.max(...years);
+  if (y1 === y0) return null;
+  const vLo = Math.min(...values);
+  const vHi = Math.max(...values);
+  const span = (vHi - vLo) || 1;
+  const yMin = Number.isFinite(opts.min) ? opts.min : vLo - span * 0.12;
+  const yMax = Number.isFinite(opts.max) ? opts.max : vHi + span * 0.12;
+  if (yMax <= yMin) return null;
+
+  const plotW = TREND_W - TREND_PAD.left - TREND_PAD.right;
+  const plotH = TREND_H - TREND_PAD.top - TREND_PAD.bottom;
+  const xForYear = (yr) => TREND_PAD.left + ((yr - y0) / (y1 - y0)) * plotW;
+  const yForVal = (v) => TREND_PAD.top + (1 - (v - yMin) / (yMax - yMin)) * plotH;
+
+  const dots = sorted.map(p => ({
+    x: round2(xForYear(p.year)), y: round2(yForVal(p.value)), year: p.year, value: p.value,
+  }));
+  const path = dots.map((d, i) => `${i === 0 ? 'M' : 'L'}${d.x} ${d.y}`).join(' ');
+  const baseline = round2(TREND_H - TREND_PAD.bottom);
+  const area = `${path} L${dots[dots.length - 1].x} ${baseline} L${dots[0].x} ${baseline} Z`;
+  let minIdx = 0;
+  dots.forEach((d, i) => { if (d.value < dots[minIdx].value) minIdx = i; });
+  return { dots, path, area, minIdx, yMin, yMax, xForYear };
+}
+
+function round2(v) { return Math.round(v * 100) / 100; }
+
+function enhanceTrends(scope) {
+  const groups = scope.querySelectorAll('.av-trend:not([data-av-init])');
+  groups.forEach(group => {
+    group.dataset.avInit = '1';
+    const chart = group.querySelector('.av-trend-chart');
+    if (!chart) return;
+    let points;
+    try { points = JSON.parse(chart.dataset.points || '[]'); } catch { return; }
+    const geo = trendGeometry(points, {
+      min: parseFloat(chart.dataset.min),
+      max: parseFloat(chart.dataset.max),
+    });
+    if (!geo) return;
+    const unit = chart.dataset.unit ?? group.dataset.unit ?? '';
+    const fmt = (v) => formatNumber(v, Number.isInteger(v) ? 0 : 1) + (unit ? ` ${unit}` : '');
+
+    // Popisky hodnot: první, poslední a minimum (pokud je jiný bod).
+    const labelIdx = new Set([0, geo.dots.length - 1, geo.minIdx]);
+    const baseline = TREND_H - TREND_PAD.bottom;
+
+    let breakMarkup = '';
+    const breakYear = parseFloat(chart.dataset.breakYear);
+    if (Number.isFinite(breakYear)) {
+      const bx = round2(geo.xForYear(breakYear));
+      const bl = chart.dataset.breakLabel || '';
+      breakMarkup = `
+        <line class="av-trend-break" x1="${bx}" y1="${TREND_PAD.top - 6}" x2="${bx}" y2="${baseline}" />
+        ${bl ? `<text class="av-trend-break-label" x="${bx}" y="${TREND_PAD.top - 12}" text-anchor="middle">${escapeHtml(bl)}</text>` : ''}`;
+    }
+
+    const dotsMarkup = geo.dots.map((d, i) => {
+      const isMin = i === geo.minIdx && labelIdx.size > 2;
+      // Popisek minima jde POD bod — nad ním prochází klesající čára a text
+      // by s ní kolidoval; první/poslední bod mají popisek nad sebou.
+      const labelY = isMin ? d.y + 22 : d.y - 10;
+      const label = labelIdx.has(i)
+        ? `<text class="av-trend-val${isMin ? ' av-trend-val-min' : ''}" x="${d.x}" y="${labelY}" text-anchor="middle">${escapeHtml(fmt(d.value))}</text>`
+        : '';
+      const yearLabel = labelIdx.has(i)
+        ? `<text class="av-trend-year" x="${d.x}" y="${baseline + 18}" text-anchor="middle">${d.year}</text>`
+        : '';
+      return `<g class="av-trend-dot-g" style="transition-delay:${0.9 + i * 0.12}s">
+        <circle class="av-trend-dot${isMin ? ' av-trend-dot-min' : ''}" cx="${d.x}" cy="${d.y}" r="4" />
+        ${label}${yearLabel}</g>`;
+    }).join('');
+
+    const aria = chart.getAttribute('aria-label')
+      || `Vývoj v čase: ${geo.dots.map(d => `${d.year} ${fmt(d.value)}`).join(', ')}`;
+    chart.setAttribute('role', 'img');
+    chart.setAttribute('aria-label', aria);
+    chart.innerHTML = `
+      <svg viewBox="0 0 ${TREND_W} ${TREND_H}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+        <line class="av-trend-axis" x1="${TREND_PAD.left}" y1="${baseline}" x2="${TREND_W - TREND_PAD.right}" y2="${baseline}" />
+        <path class="av-trend-area" d="${geo.area}" />
+        ${breakMarkup}
+        <path class="av-trend-line" d="${geo.path}" />
+        ${dotsMarkup}
+      </svg>`;
+
+    const line = chart.querySelector('.av-trend-line');
+    if (REDUCED_MOTION || typeof IntersectionObserver === 'undefined'
+        || typeof line?.getTotalLength !== 'function') {
+      group.classList.add('av-trend--drawn');
+      return;
+    }
+    // Draw-on: dashoffset od plné délky k nule; CSS transition to rozjede
+    // po přidání třídy av-trend--drawn (IntersectionObserver níže).
+    let len = 0;
+    try { len = line.getTotalLength(); } catch { /* detached svg (jsdom) */ }
+    if (len > 0) {
+      line.style.strokeDasharray = String(len);
+      line.style.strokeDashoffset = String(len);
+    }
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        group.classList.add('av-trend--drawn');
+        if (len > 0) line.style.strokeDashoffset = '0';
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.35 });
+    obs.observe(group);
+  });
 }
 
 // =====================================================================

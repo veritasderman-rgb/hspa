@@ -74,6 +74,55 @@ export function validateAwarenessWeeks(docOverride) {
     const p = w.popup || {};
     if (!p.headline || !p.body || !p.cta) errors.push(`${tag}: popup musí mít headline/body/cta`);
 
+    // Volitelný datový příběh (animované vizuály na microsite). Každý vizuál
+    // MUSÍ nést zdroj (note) — čísla bez atribuce na web nepatří.
+    if (w.data_story != null) {
+      const ds = w.data_story;
+      if (!Array.isArray(ds.items) || ds.items.length === 0) {
+        errors.push(`${tag}: data_story musí mít neprázdné pole items`);
+      } else {
+        ds.items.forEach((it, i) => {
+          const itag = `${tag}: data_story[${i}]`;
+          if (!it || !['counters', 'trend', 'bars'].includes(it.kind)) {
+            errors.push(`${itag}: kind musí být counters|trend|bars`); return;
+          }
+          if (!it.note) errors.push(`${itag}: chybí note se zdrojem dat`);
+          if (it.kind === 'trend') {
+            const pts = Array.isArray(it.points) ? it.points : [];
+            if (pts.length < 2) errors.push(`${itag}: trend potřebuje aspoň 2 body`);
+            for (const pt of pts) {
+              if (!pt || !Number.isFinite(pt.year) || !Number.isFinite(pt.value)) {
+                errors.push(`${itag}: bod trendu musí mít číselné year a value`); break;
+              }
+            }
+            // Osa X potřebuje rozpětí — body se shodným rokem by trendGeometry
+            // odmítla a graf by se vykreslil prázdný (Codex #899).
+            const years = new Set(pts.filter(pt => pt && Number.isFinite(pt.year)).map(pt => pt.year));
+            if (pts.length >= 2 && years.size < 2) {
+              errors.push(`${itag}: body trendu musí mít aspoň 2 různé roky`);
+            }
+          } else if (it.kind === 'counters') {
+            const cs = Array.isArray(it.items) ? it.items : [];
+            if (!cs.length) errors.push(`${itag}: counters potřebují aspoň 1 položku`);
+            for (const c of cs) {
+              if (!c || !c.label) { errors.push(`${itag}: counter bez label`); break; }
+              if (!Number.isFinite(c.value) && !c.display) {
+                errors.push(`${itag}: counter potřebuje číselné value nebo display`); break;
+              }
+            }
+          } else if (it.kind === 'bars') {
+            const rs = Array.isArray(it.rows) ? it.rows : [];
+            if (!rs.length) errors.push(`${itag}: bars potřebují aspoň 1 řádek`);
+            for (const r of rs) {
+              if (!r || !r.label || !Number.isFinite(r.value)) {
+                errors.push(`${itag}: řádek bars musí mít label a číselné value`); break;
+              }
+            }
+          }
+        });
+      }
+    }
+
     for (const s of w.microsite?.sections || []) {
       if (!VALID_SECTION.has(s.kind)) errors.push(`${tag}: sekce kind '${s.kind}' není articles|indicators|prevention|tools`);
       if (!s.h) errors.push(`${tag}: sekce bez nadpisu`);

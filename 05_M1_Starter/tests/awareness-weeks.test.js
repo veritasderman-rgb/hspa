@@ -223,3 +223,23 @@ test('popupVariant: CTA vede na tyden.html?id= (překryv ohlášení s jiným t�
   assert.equal(popupVariant(w, 'announce').href, 'tyden.html?id=svetovy-tyden-kojeni-2026');
   assert.equal(popupVariant(w, 'active').href, 'tyden.html?id=svetovy-tyden-kojeni-2026');
 });
+
+test('validace: data_story — struktura vizuálů a povinný zdroj (note)', () => {
+  const base = { id: 'a', observance: 'o', observance_source: 's', kicker: 'k', title: 't', lead: 'l', status: 'ready', start: '2026-08-01', end: '2026-08-07', popup: { headline: 'h', body: 'b', cta: 'c' }, context: { why: 'w', affects: ['x'], cz: 'c' }, linked_indicators: ['nadeje_doziti_total'] };
+  const run = (data_story) => validateAwarenessWeeks({ weeks: [{ ...base, data_story }] });
+
+  const validTrend = { kind: 'trend', points: [{ year: 2020, value: 70 }, { year: 2024, value: 75 }], note: 'Zdroj: ÚZIS' };
+  const validCounters = { kind: 'counters', items: [{ value: 75.1, label: 'plně kojeno' }], note: 'Zdroj: ÚZIS' };
+  const validBars = { kind: 'bars', rows: [{ label: 'Strakonice', value: 95.6 }], note: 'Zdroj: ÚZIS' };
+  assert.equal(run({ h: 'Data', items: [validTrend, validCounters, validBars] }), true, 'platný data_story projde');
+
+  assert.equal(run({ items: [] }), false, 'prázdné items selžou');
+  assert.equal(run({ items: [{ kind: 'pie', note: 'x' }] }), false, 'neznámý kind selže');
+  assert.equal(run({ items: [{ ...validTrend, note: undefined }] }), false, 'vizuál bez zdroje selže');
+  assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020, value: 70 }], note: 'z' }] }), false, 'trend s 1 bodem selže');
+  assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020 }, { year: 2021, value: 2 }], note: 'z' }] }), false, 'bod bez value selže');
+  assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020, value: 1 }, { year: 2020, value: 2 }], note: 'z' }] }), false, 'shodné roky selžou — trendGeometry by graf nevykreslila (Codex #899)');
+  assert.equal(run({ items: [{ kind: 'counters', items: [{ label: 'x' }], note: 'z' }] }), false, 'counter bez value i display selže');
+  assert.equal(run({ items: [{ kind: 'counters', items: [{ display: '~50 %', label: 'x' }], note: 'z' }] }), true, 'counter jen s display projde');
+  assert.equal(run({ items: [{ kind: 'bars', rows: [{ label: 'x' }], note: 'z' }] }), false, 'řádek bez value selže');
+});

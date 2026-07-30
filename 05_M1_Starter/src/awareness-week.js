@@ -10,6 +10,7 @@
 import './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, isArticleVisible } from './page-shared.js';
 import { activeWeekFor, upcomingWeeks, pastWeeks, resolveWeek, parseDay, formatRange } from './awareness-core.js';
+import { enhanceArticleVisuals } from './article-visuals.js';
 
 // ---------------------------------------------------------------------------
 // Render (DOM)
@@ -75,6 +76,82 @@ function renderSection(section, week) {
   return `<section class="aw-block"><h2 class="aw-block-h">${escapeHtml(section.h)}</h2>${intro}${body}</section>`;
 }
 
+// ---------------------------------------------------------------------------
+// Datový příběh — animované vizuály hned pod hero (data_story v registru).
+// Skládá se z AV komponent designsystému (av-counter, av-bar-compare,
+// av-trend); animace spouští enhanceArticleVisuals po vložení do DOM.
+// Registr týdne deklaruje jen data — markup vzniká zde, takže budoucí týdny
+// (duševní zdraví, antibiotika…) dostanou stejné vizuály bez psaní HTML.
+// ---------------------------------------------------------------------------
+
+const COUNTER_ACCENTS = new Set(['good', 'warn', 'bad', 'neutral']);
+
+function dataStoryCounters(item) {
+  const blocks = (item.items || []).map(c => {
+    const accent = COUNTER_ACCENTS.has(c.accent) ? ` av-counter-block-${c.accent}` : '';
+    const num = Number.isFinite(c.value)
+      ? `<span class="av-counter" data-value="${c.value}"${Number.isFinite(c.decimals) ? ` data-decimals="${c.decimals}"` : ''}${c.prefix ? ` data-prefix="${escapeHtml(c.prefix)}"` : ''}${c.suffix ? ` data-suffix="${escapeHtml(c.suffix)}"` : ''}>${escapeHtml(c.display || String(c.value))}</span>`
+      : `<span class="av-counter">${escapeHtml(c.display || '—')}</span>`;
+    return `<div class="av-counter-block${accent}">
+      ${num}
+      <span class="av-counter-label">${escapeHtml(c.label || '')}</span>
+      ${c.foot ? `<span class="av-counter-foot">${escapeHtml(c.foot)}</span>` : ''}
+    </div>`;
+  }).join('');
+  if (!blocks) return '';
+  return `<figure class="av-figure">
+    ${item.h ? `<figcaption class="av-figure-h">${escapeHtml(item.h)}</figcaption>` : ''}
+    <div class="av-counter-grid">${blocks}</div>
+    ${item.note ? `<p class="av-figure-note">${escapeHtml(item.note)}</p>` : ''}
+  </figure>`;
+}
+
+function dataStoryTrend(item) {
+  const points = (item.points || []).filter(p => p && Number.isFinite(p.year) && Number.isFinite(p.value));
+  if (points.length < 2) return '';
+  return `<figure class="av-trend">
+    ${item.h ? `<figcaption class="av-trend-h">${escapeHtml(item.h)}</figcaption>` : ''}
+    <div class="av-trend-chart"
+      data-points="${escapeHtml(JSON.stringify(points))}"
+      ${item.unit ? `data-unit="${escapeHtml(item.unit)}"` : ''}
+      ${Number.isFinite(item.min) ? `data-min="${item.min}"` : ''}
+      ${Number.isFinite(item.max) ? `data-max="${item.max}"` : ''}
+      ${Number.isFinite(item.break_year) ? `data-break-year="${item.break_year}"` : ''}
+      ${item.break_label ? `data-break-label="${escapeHtml(item.break_label)}"` : ''}></div>
+    ${item.note ? `<p class="av-trend-note">${escapeHtml(item.note)}</p>` : ''}
+  </figure>`;
+}
+
+function dataStoryBars(item) {
+  const rows = (item.rows || []).filter(r => r && Number.isFinite(r.value)).map(r => {
+    const cls = r.accent === 'highlight' ? ' av-bar-row-highlight' : r.accent === 'good' ? ' av-bar-row-good' : '';
+    return `<li class="av-bar-row${cls}" data-value="${r.value}" data-label="${escapeHtml(r.label || '')}"${r.note ? ` data-note="${escapeHtml(r.note)}"` : ''}${r.display ? ` data-display="${escapeHtml(r.display)}"` : ''}></li>`;
+  }).join('');
+  if (!rows) return '';
+  return `<figure class="av-figure">
+    ${item.h ? `<figcaption class="av-figure-h">${escapeHtml(item.h)}</figcaption>` : ''}
+    <ol class="av-bar-compare av-bar-compare-list"${item.unit ? ` data-unit="${escapeHtml(item.unit)}"` : ''}${Number.isFinite(item.max) ? ` data-max="${item.max}"` : ''}>${rows}</ol>
+    ${item.note ? `<p class="av-figure-note">${escapeHtml(item.note)}</p>` : ''}
+  </figure>`;
+}
+
+function renderDataStory(story) {
+  if (!story || !Array.isArray(story.items) || !story.items.length) return '';
+  const blocks = story.items.map(item => {
+    if (!item) return '';
+    if (item.kind === 'counters') return dataStoryCounters(item);
+    if (item.kind === 'trend') return dataStoryTrend(item);
+    if (item.kind === 'bars') return dataStoryBars(item);
+    return '';
+  }).filter(Boolean).join('');
+  if (!blocks) return '';
+  return `<section class="aw-block aw-data">
+    ${story.h ? `<h2 class="aw-block-h">${escapeHtml(story.h)}</h2>` : ''}
+    ${story.intro ? `<p class="aw-block-intro">${escapeHtml(story.intro)}</p>` : ''}
+    ${blocks}
+  </section>`;
+}
+
 // „Proč na tom záleží" — kontextový blok microsite (nezávislý na propojeném obsahu).
 function renderContext(ctx) {
   if (!ctx) return '';
@@ -132,9 +209,12 @@ function renderWeek(week, isActive, isPast) {
       <p class="aw-hero-meta">${escapeHtml(formatRange(week))}${week.observance_source ? ` · ${escapeHtml(week.observance_source)}` : ''}</p>
     </section>
     ${pastNote}
+    ${renderDataStory(week.data_story)}
     ${renderContext(week.context)}
     ${sections}
     ${renderSources(week)}`;
+  // Rozanimuje AV komponenty datového příběhu (count-up, bary, trend čára).
+  enhanceArticleVisuals(host);
 }
 
 // Trvalé URL: při ?id= přepíšeme canonical/og:url na variantu s parametrem,
