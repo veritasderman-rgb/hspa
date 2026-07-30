@@ -51,13 +51,14 @@ jobs:
 
       - name: Commit + push if changes
         run: |
-          if git diff --quiet data/awareness-weeks.json; then
+          if git diff --quiet data/awareness-weeks.json tyden.html; then
             echo "Beze změny stavu — nic ke commitu."
             exit 0
           fi
           CHANGES=$(grep -E '^  - (activated|archived):' /tmp/aw-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)
-          git add data/awareness-weeks.json
+          # tyden.html: rotate skript synchronizuje og:image s aktuálním týdnem
+          git add data/awareness-weeks.json tyden.html
           git commit -m "chore(tyden): rotace týdnů zdraví $DATE
 
           $CHANGES

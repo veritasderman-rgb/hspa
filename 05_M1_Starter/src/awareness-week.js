@@ -198,6 +198,10 @@ function renderSources(week) {
 // Hero médium (video/obrázek vpravo vedle úvodního textu) — deklarované
 // v registru (hero_media). Video: muted/loop/playsinline; při
 // prefers-reduced-motion se autoplay vynechá a zůstane poster + ovládání.
+// Autoplay varianta MUSÍ nést tlačítko pauzy (WCAG 2.2.2 — automaticky se
+// pohybující obsah delší než 5 s potřebuje uživatelský stop; Codex #900):
+// reduced-motion preference nestačí, potřebu zastavit mají i uživatelé,
+// kteří ji nemají zapnutou.
 function renderHeroMedia(media) {
   if (!media || !media.src) return '';
   const caption = media.caption
@@ -207,12 +211,14 @@ function renderHeroMedia(media) {
       && typeof window.matchMedia === 'function'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const playback = reduced ? 'controls' : 'autoplay loop';
+    const pauseBtn = reduced ? '' : `
+      <button type="button" class="aw-hero-media-toggle" aria-label="Pozastavit animaci" aria-pressed="false">⏸</button>`;
     return `<figure class="aw-hero-media">
       <video class="aw-hero-media-el" ${playback} muted playsinline preload="metadata"
         ${media.poster ? `poster="${escapeHtml(media.poster)}"` : ''}
         aria-label="${escapeHtml(media.alt || '')}">
         <source src="${escapeHtml(media.src)}" type="video/mp4">
-      </video>
+      </video>${pauseBtn}
       ${caption}
     </figure>`;
   }
@@ -220,6 +226,30 @@ function renderHeroMedia(media) {
     <img class="aw-hero-media-el" src="${escapeHtml(media.src)}" alt="${escapeHtml(media.alt || '')}" loading="lazy">
     ${caption}
   </figure>`;
+}
+
+// Propojí tlačítko pauzy s videem (volané po vložení markupů do DOM).
+// Stav tlačítka se řídí událostmi videa, ne pořadím kliků — když prohlížeč
+// autoplay zablokuje (spořič baterie, chybějící kodek), tlačítko ukazuje ▶
+// a první klik přehrává, místo aby lhalo o „pozastavení".
+function wireHeroMediaToggle(host) {
+  const btn = host.querySelector('.aw-hero-media-toggle');
+  const video = host.querySelector('.aw-hero-media video');
+  if (!btn || !video) return;
+  const syncBtn = () => {
+    const playing = !video.paused && !video.ended;
+    btn.textContent = playing ? '⏸' : '▶';
+    btn.setAttribute('aria-label', playing ? 'Pozastavit animaci' : 'Přehrát animaci');
+    btn.setAttribute('aria-pressed', playing ? 'false' : 'true');
+  };
+  video.addEventListener('play', syncBtn);
+  video.addEventListener('pause', syncBtn);
+  btn.addEventListener('click', () => {
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
+    syncBtn();
+  });
+  syncBtn();
 }
 
 function renderWeek(week, isActive, isPast) {
@@ -246,6 +276,7 @@ function renderWeek(week, isActive, isPast) {
     ${renderSources(week)}`;
   // Rozanimuje AV komponenty datového příběhu (count-up, bary, trend čára).
   enhanceArticleVisuals(host);
+  wireHeroMediaToggle(host);
 }
 
 // Trvalé URL: při ?id= přepíšeme canonical/og:url na variantu s parametrem,

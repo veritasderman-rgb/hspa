@@ -258,3 +258,30 @@ test('validace: hero_media — povinný alt a existující soubory', () => {
   assert.equal(run({ kind: 'video', src: existing, poster: 'assets/neexistuje.png', alt: 'x' }), false, 'neexistující poster selže');
   assert.equal(run({ kind: 'video', src: existing }), false, 'chybějící alt selže (přístupnost)');
 });
+
+test('syncTydenOgImage: og:image sleduje aktivní/nadcházející ready týden (Codex #900)', async () => {
+  const { syncTydenOgImage } = await import('../scripts/awareness-rotate.js');
+  const html = `<meta property="og:image" content="https://skorezdravotnictvi.cz/stare.png" data-aw-og="1">
+<meta name="twitter:card" content="summary_large_image" data-aw-og="1">
+<meta name="twitter:image" content="https://skorezdravotnictvi.cz/stare.png" data-aw-og="1">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/tyden" data-seo-injected="1">`;
+  const weeks = [
+    { id: 'kojeni', status: 'ready', start: '2026-08-01', end: '2026-08-07', og_image: 'assets/tydny/kojeni-2026/klic-ctverec.png' },
+    { id: 'dusevni', status: 'ready', start: '2026-10-05', end: '2026-10-11', og_image: 'assets/tydny/dusevni/og.png' },
+  ];
+  // Aktivní týden vyhrává
+  const active = syncTydenOgImage(html, weeks, '2026-08-03');
+  assert.ok(active.changed);
+  assert.match(active.html, /og:image" content="https:\/\/skorezdravotnictvi\.cz\/assets\/tydny\/kojeni-2026\/klic-ctverec\.png"/);
+  assert.match(active.html, /twitter:image" content="https:\/\/skorezdravotnictvi\.cz\/assets\/tydny\/kojeni-2026\/klic-ctverec\.png"/);
+  // og:url bez data-aw-og zůstává nedotčené
+  assert.match(active.html, /og:url" content="https:\/\/skorezdravotnictvi\.cz\/tyden"/);
+  // Mimo aktivní okno platí nejbližší nadcházející
+  const upcoming = syncTydenOgImage(html, weeks, '2026-09-01');
+  assert.match(upcoming.html, /assets\/tydny\/dusevni\/og\.png/);
+  // Bez ready týdne fallback na brand default; idempotence (changed=false)
+  const fallback = syncTydenOgImage(html, [], '2026-09-01');
+  assert.match(fallback.html, /assets\/brand\/og-default\.png/);
+  const again = syncTydenOgImage(fallback.html, [], '2026-09-01');
+  assert.equal(again.changed, false, 'druhý průchod už nic nemění');
+});
