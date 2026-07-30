@@ -9591,6 +9591,76 @@ body.nl-popup-open .scroll-top-btn {
   margin-top: 4px;
 }
 
+/* ── .av-trend — animovaná SVG časová řada (draw-on-scroll) ── */
+.av-trend {
+  margin: 26px 0;
+  padding: 18px 18px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--red);
+}
+.av-trend-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 10px;
+  letter-spacing: 0.01em;
+}
+.av-trend-chart svg { display: block; width: 100%; height: auto; }
+.av-trend-axis { stroke: var(--rule); stroke-width: 1; }
+.av-trend-area {
+  fill: var(--red);
+  opacity: 0;
+  transition: opacity 0.9s ease 0.9s;
+}
+.av-trend--drawn .av-trend-area { opacity: 0.07; }
+.av-trend-line {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.av-trend-break {
+  stroke: var(--ink-mut2);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.av-trend-break-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  fill: var(--ink-mut2);
+  letter-spacing: 0.02em;
+}
+.av-trend-dot-g { opacity: 0; transition: opacity 0.45s ease; }
+.av-trend--drawn .av-trend-dot-g { opacity: 1; }
+.av-trend-dot { fill: var(--paper); stroke: var(--red); stroke-width: 2; }
+.av-trend-dot-min { fill: var(--red); }
+.av-trend-val {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.av-trend-val-min { fill: var(--red); }
+.av-trend-year {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-mut);
+}
+.av-trend-note {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ink-mut);
+  margin: 10px 0 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-trend-line, .av-trend-area, .av-trend-dot-g { transition: none; }
+}
+
 @media (max-width: 600px) {
   .av-counter { font-size: 30px; }
   .av-counter-grid { gap: 14px; }

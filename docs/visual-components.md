@@ -433,6 +433,48 @@ což může zlikvidovat sémantiku původního obsahu. Pokud chceš zachovat pln
 
 ---
 
+## 6. `.av-trend` — animovaná časová řada
+
+SVG čárový graf, který se „nakreslí" (draw-on-scroll přes stroke-dashoffset),
+když uživatel scrolluje do viewportu; body a popisky pak nabíhají se
+zpožděním. Respektuje `prefers-reduced-motion` — tehdy statický finální stav.
+Osa X je **úměrná roku**, ne pořadí bodu — nerovnoměrné řady (2000, 2015,
+2021…) se nekreslí jako rovnoměrné. Popisky hodnot nesou první, poslední a
+minimální bod; ostatní body jen tečku.
+
+### Markup
+
+```html
+<figure class="av-trend" data-unit="%">
+  <figcaption class="av-trend-h">Podíl plně kojených při propuštění (ČR)</figcaption>
+  <div class="av-trend-chart"
+       data-points='[{"year":2000,"value":90.6},{"year":2021,"value":72.4},{"year":2024,"value":75.1}]'
+       data-min="66" data-max="96"
+       data-break-year="2020" data-break-label="změna vykazování"></div>
+  <p class="av-trend-note">Zdroj: ÚZIS — NRRZ…</p>
+</figure>
+```
+
+### Data atributy
+
+| Atribut | Kde | Význam |
+|---|---|---|
+| `data-points` | `.av-trend-chart` | JSON pole `{year, value}` (min. 2 body) |
+| `data-unit` | chart nebo figure | jednotka k popiskům hodnot |
+| `data-min` / `data-max` | `.av-trend-chart` | rozsah osy Y (default: rozsah dat ±12 %) |
+| `data-break-year` | `.av-trend-chart` | svislá přerušovaná linka (změna metodiky) |
+| `data-break-label` | `.av-trend-chart` | popisek break linky |
+
+### Kdy použít
+
+- Vývoj jednoho ukazatele v čase, kde tvar křivky JE sdělení (pokles → dno →
+  obrat), typicky na landing pages (Týdny zdraví) a v článcích.
+- NE pro srovnání více sérií (zatím jedna čára) — na to `.av-bar-compare`
+  nebo `.av-data-table`.
+
+Pure geometrie je exportovaná jako `trendGeometry(points, {min, max})`
+(testovatelná bez DOM, `tests/article-visuals.test.js`).
+
 ## Migrace z existujících patternů
 
 Existující CSS třídy v `styles.css` jsou bohaté, ale nesourodé. Postupná migrace
