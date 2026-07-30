@@ -29,6 +29,20 @@ const PAGES = [
   // size mismatch. Přístupnost about pokrývá a11y.spec.js.
 ];
 
+test.beforeEach(async ({ page }) => {
+  // Awareness popup (Týden zdraví) se od PR #898 zobrazuje takřka okamžitě
+  // (300 ms) jako centrovaný modal s podkladem přes celou stránku — během
+  // kampaně by překryl KAŽDÝ snapshot (~85 % pixelů diff) a mimo kampaň by
+  // zmizel, takže baseline by nebyla stabilní. Pro vizuální regresi oba
+  // popupy deterministicky vypneme přes idempotentní guard flagy modulů
+  // (awareness-popup.js / newsletter-popup.js kontrolují window.__*PopupInit
+  // a s nastaveným flagem se vůbec neinicializují).
+  await page.addInitScript(() => {
+    window.__awPopupInit = true;
+    window.__nlPopupInit = true;
+  });
+});
+
 for (const { path, name } of PAGES) {
   test(`visual: ${name}`, async ({ page }) => {
     await page.goto(path, { waitUntil: 'networkidle' });
