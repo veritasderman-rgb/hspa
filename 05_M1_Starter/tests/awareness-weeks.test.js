@@ -285,3 +285,16 @@ test('syncTydenOgImage: og:image sleduje aktivní/nadcházející ready týden (
   const again = syncTydenOgImage(fallback.html, [], '2026-09-01');
   assert.equal(again.changed, false, 'druhý průchod už nic nemění');
 });
+
+test('validace: timeline — body s date+title, platné stavy, povinné zdroje', () => {
+  const base = { id: 'a', observance: 'o', observance_source: 's', kicker: 'k', title: 't', lead: 'l', status: 'ready', start: '2026-08-01', end: '2026-08-07', popup: { headline: 'h', body: 'b', cta: 'c' }, context: { why: 'w', affects: ['x'], cz: 'c' }, linked_indicators: ['nadeje_doziti_total'] };
+  const run = (timeline) => validateAwarenessWeeks({ weeks: [{ ...base, timeline }] });
+  const item = { date: '1991', title: 'BFHI', state: 'done' };
+
+  assert.equal(run({ h: 'Osa', items: [item], note: 'Zdroj: WHO' }), true, 'platná osa projde');
+  assert.equal(run({ items: [] }), false, 'prázdné items selžou');
+  assert.equal(run({ items: [item] }), false, 'osa bez note se zdroji selže');
+  assert.equal(run({ items: [{ title: 'bez data' }], note: 'z' }), false, 'bod bez date selže');
+  assert.equal(run({ items: [{ ...item, state: 'maybe' }], note: 'z' }), false, 'neznámý state selže');
+  assert.equal(run({ items: [{ date: '2024', title: 'ok' }], note: 'z' }), true, 'state je volitelný (default done)');
+});

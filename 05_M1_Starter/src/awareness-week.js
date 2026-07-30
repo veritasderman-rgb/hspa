@@ -18,6 +18,7 @@ import { enhanceArticleVisuals } from './article-visuals.js';
 
 let INDICATORS = new Map();
 let ARTICLES = new Map();
+let PREV_NAMES = new Map();
 const SIGNAL_LABEL = { good: 'dobré', warn: 'varování', bad: 'špatné', neutral: 'neutrální' };
 const TOOL_LABELS = {
   'kompas.html': 'Osobní zdravotní kompas',
@@ -62,8 +63,10 @@ function renderSection(section, week) {
     if (!body) return '';
     body = `<div class="aw-ind-list">${body}</div>`;
   } else if (section.kind === 'prevention') {
+    // Lidský název tématu z prevention.json — syrový slug (deti_prostredi)
+    // do UI nepatří.
     const items = (week.linked_prevention_themes || [])
-      .map(t => `<a class="aw-chip" href="prevence.html#${encodeURIComponent(t)}">${escapeHtml(t)}</a>`).join('');
+      .map(t => `<a class="aw-chip" href="prevence.html#${encodeURIComponent(t)}">${escapeHtml(PREV_NAMES.get(t) || t)}</a>`).join('');
     if (!items) return '';
     body = `<p class="aw-chips">${items} <a class="aw-chip aw-chip-all" href="prevence.html">Celá prevence →</a></p>`;
   } else if (section.kind === 'tools') {
@@ -149,6 +152,30 @@ function renderDataStory(story) {
     ${story.h ? `<h2 class="aw-block-h">${escapeHtml(story.h)}</h2>` : ''}
     ${story.intro ? `<p class="aw-block-intro">${escapeHtml(story.intro)}</p>` : ''}
     ${blocks}
+  </section>`;
+}
+
+// Časová osa týdne (timeline v registru) — příběhový oblouk tématu přes
+// existující AV komponentu .av-timeline. Stavy: done | now | future | warn.
+function renderTimeline(tl) {
+  if (!tl || !Array.isArray(tl.items) || !tl.items.length) return '';
+  const STATES = new Set(['done', 'now', 'future', 'warn']);
+  const items = tl.items.map(it => {
+    if (!it || !it.date || !it.title) return '';
+    const state = STATES.has(it.state) ? it.state : 'done';
+    return `<li class="av-timeline-item av-timeline-item-${state}">
+      <time class="av-timeline-date">${escapeHtml(it.date)}</time>
+      <h4 class="av-timeline-title">${escapeHtml(it.title)}</h4>
+      ${it.desc ? `<p class="av-timeline-desc">${escapeHtml(it.desc)}</p>` : ''}
+      ${it.tag ? `<span class="av-timeline-tag">${escapeHtml(it.tag)}</span>` : ''}
+    </li>`;
+  }).filter(Boolean).join('');
+  if (!items) return '';
+  return `<section class="aw-block aw-timeline">
+    ${tl.h ? `<h2 class="aw-block-h">${escapeHtml(tl.h)}</h2>` : ''}
+    ${tl.intro ? `<p class="aw-block-intro">${escapeHtml(tl.intro)}</p>` : ''}
+    <ol class="av-timeline">${items}</ol>
+    ${tl.note ? `<p class="av-figure-note">${escapeHtml(tl.note)}</p>` : ''}
   </section>`;
 }
 
@@ -274,6 +301,7 @@ function renderWeek(week, isActive, isPast) {
     ${pastNote}
     ${renderDataStory(week.data_story)}
     ${renderContext(week.context)}
+    ${renderTimeline(week.timeline)}
     ${sections}
     ${renderSources(week)}`;
   // Rozanimuje AV komponenty datového příběhu (count-up, bary, trend čára).
@@ -323,13 +351,15 @@ async function init() {
   const host = document.getElementById('awContent');
   if (!host) return;
   try {
-    const [reg, inds, arts] = await Promise.all([
+    const [reg, inds, arts, prev] = await Promise.all([
       fetch('data/awareness-weeks.json').then(r => r.json()),
       fetch('data/indicators.json').then(r => r.json()),
       fetch('data/articles.json').then(r => r.json()),
+      fetch('data/prevention.json').then(r => r.json()).catch(() => ({})),
     ]);
     INDICATORS = new Map((inds.indicators || []).map(i => [i.id, i]));
     ARTICLES = new Map((arts.articles || []).map(a => [a.slug, a]));
+    PREV_NAMES = new Map((prev.themes || []).map(t => [t.id, t.name || t.title || t.id]));
     const today = new Date().toISOString().slice(0, 10);
     const id = new URLSearchParams(location.search).get('id');
     const week = resolveWeek(reg.weeks, today, id);
