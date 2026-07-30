@@ -18709,27 +18709,34 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   background: var(--paper2);
 }
 
-/* ── Popup (rohová karta vpravo dole; vzor .nl-popup) ── */
+/* ── Popup (centrovaný modal s podkladem; vzor .modal-backdrop) ── */
 .aw-popup {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  inset: 0;
   z-index: 60;
-  max-width: 340px;
-  transform: translateY(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--modal-bg);
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
-.aw-popup--visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
+.aw-popup--visible { opacity: 1; pointer-events: auto; }
 .aw-popup-card {
   position: relative;
+  width: 100%;
+  max-width: 400px;
   border: 1px solid var(--ink);
   border-radius: 12px;
   background: var(--paper);
-  padding: 16px 18px 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+  padding: 22px 22px 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 0.3s ease;
 }
+.aw-popup--visible .aw-popup-card { transform: translateY(0) scale(1); }
 .aw-popup-close {
   position: absolute;
   top: 8px;
@@ -18742,7 +18749,7 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   cursor: pointer;
 }
 .aw-popup-close:hover { color: var(--ink); }
-.aw-popup-h { font-family: var(--sans); font-size: 16px; font-weight: 700; color: var(--ink); margin: 4px 0 6px; }
+.aw-popup-h { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--ink); margin: 4px 0 6px; }
 .aw-popup-lead { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-mut); margin: 0 0 12px; }
 .aw-popup-range { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--red); margin: -6px 0 12px; letter-spacing: 0.02em; }
 .aw-popup-cta {
@@ -18758,8 +18765,9 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 }
 .aw-popup-cta:hover { opacity: 0.85; }
 @media (prefers-reduced-motion: reduce) {
-  .aw-popup { transition: opacity 0.2s ease; transform: none; }
+  .aw-popup, .aw-popup-card { transition: opacity 0.2s ease; transform: none; }
 }
 @media (max-width: 480px) {
-  .aw-popup { left: 12px; right: 12px; max-width: none; }
+  .aw-popup { padding: 14px; }
+  .aw-popup-card { padding: 18px 18px 20px; }
 }

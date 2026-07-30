@@ -1,15 +1,18 @@
-// Týden zdraví — globální popup. Rohová karta (vpravo dole) upozorňující na
-// právě probíhající mezinárodní zdravotní den/týden, s odkazem na microsite
-// tyden.html. Priorita nad newsletter popupem: je-li aktivní awareness-týden,
-// běží tenhle a newsletter se v daném týdnu nespustí (initAwarenessPopup vrací,
-// jestli převzal řízení). Dismiss per-týden (localStorage), 1× za návštěvu.
+// Týden zdraví — globální popup. Centrovaný modal s podkladem (backdrop)
+// upozorňující na právě probíhající mezinárodní zdravotní den/týden, s
+// odkazem na microsite tyden.html. Priorita nad newsletter popupem: je-li
+// aktivní awareness-týden, běží tenhle a newsletter se v daném týdnu
+// nespustí (initAwarenessPopup vrací, jestli převzal řízení). Dismiss
+// per-týden (localStorage), 1× za návštěvu. Zobrazí se prakticky ihned po
+// příchodu na stránku (SHOW_DELAY_MS) — jen tolik, aby proběhla úvodní
+// vykreslovací práce (nav, brand mark) předtím, než se karta objeví.
 // Vzor: newsletter-popup.js. Viz PLAN-TYDNY-ZDRAVI.md.
 
 import { activeWeekFor, announceWeekFor, formatRange } from './awareness-core.js';
 
 const STORAGE_KEY = 'zdrave-cesko/aw-popup';   // { [weekId]: dismissedAt }
 const SESSION_KEY = 'zdrave-cesko/aw-popup-session';
-const SHOW_DELAY_MS = 6000;
+const SHOW_DELAY_MS = 300;
 
 function readState() {
   try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : {}; }
@@ -79,6 +82,7 @@ function showPopup(week, variant) {
   wrap.id = 'awPopup';
   wrap.className = 'aw-popup';
   wrap.setAttribute('role', 'dialog');
+  wrap.setAttribute('aria-modal', 'true');
   wrap.setAttribute('aria-label', week.observance || 'Týden zdraví');
   wrap.innerHTML = `
     <div class="aw-popup-card">
@@ -98,10 +102,15 @@ function showPopup(week, variant) {
     writeDismissed(variant.stateKey);
     wrap.classList.remove('aw-popup--visible');
     document.removeEventListener('keydown', onKey);
+    wrap.removeEventListener('click', onBackdropClick);
     setTimeout(() => wrap.remove(), 300);
   };
   const onKey = (e) => { if (e.key === 'Escape') close(); };
+  // Klik na podklad (mimo kartu) zavírá — stejná konvence jako .modal-backdrop
+  // u metodických karet indikátorů (app.js closeModalAndFocus).
+  const onBackdropClick = (e) => { if (e.target === wrap) close(); };
   wrap.querySelector('.aw-popup-close').addEventListener('click', close);
+  wrap.addEventListener('click', onBackdropClick);
   document.addEventListener('keydown', onKey);
 }
 
