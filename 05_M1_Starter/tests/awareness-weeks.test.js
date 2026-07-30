@@ -238,6 +238,7 @@ test('validace: data_story — struktura vizuálů a povinný zdroj (note)', () 
   assert.equal(run({ items: [{ ...validTrend, note: undefined }] }), false, 'vizuál bez zdroje selže');
   assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020, value: 70 }], note: 'z' }] }), false, 'trend s 1 bodem selže');
   assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020 }, { year: 2021, value: 2 }], note: 'z' }] }), false, 'bod bez value selže');
+  assert.equal(run({ items: [{ kind: 'trend', points: [{ year: 2020, value: 1 }, { year: 2020, value: 2 }], note: 'z' }] }), false, 'shodné roky selžou — trendGeometry by graf nevykreslila (Codex #899)');
   assert.equal(run({ items: [{ kind: 'counters', items: [{ label: 'x' }], note: 'z' }] }), false, 'counter bez value i display selže');
   assert.equal(run({ items: [{ kind: 'counters', items: [{ display: '~50 %', label: 'x' }], note: 'z' }] }), true, 'counter jen s display projde');
   assert.equal(run({ items: [{ kind: 'bars', rows: [{ label: 'x' }], note: 'z' }] }), false, 'řádek bez value selže');

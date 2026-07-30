@@ -95,6 +95,12 @@ export function validateAwarenessWeeks(docOverride) {
                 errors.push(`${itag}: bod trendu musí mít číselné year a value`); break;
               }
             }
+            // Osa X potřebuje rozpětí — body se shodným rokem by trendGeometry
+            // odmítla a graf by se vykreslil prázdný (Codex #899).
+            const years = new Set(pts.filter(pt => pt && Number.isFinite(pt.year)).map(pt => pt.year));
+            if (pts.length >= 2 && years.size < 2) {
+              errors.push(`${itag}: body trendu musí mít aspoň 2 různé roky`);
+            }
           } else if (it.kind === 'counters') {
             const cs = Array.isArray(it.items) ? it.items : [];
             if (!cs.length) errors.push(`${itag}: counters potřebují aspoň 1 položku`);
