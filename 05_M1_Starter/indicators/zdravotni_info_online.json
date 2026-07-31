@@ -1,0 +1,57 @@
+{
+  "id": "zdravotni_info_online",
+  "name": "Vyhledávání zdravotních informací online",
+  "area": "Struktury",
+  "domain": "Digitalizace zdravotnictví",
+  "subdomain": "Digitální zdravotní gramotnost",
+  "definition": "Podíl osob ve věku 16–74 let, které za posledních 12 měsíců použily internet k vyhledávání informací o zdraví (nemoci, výživa, zdravotní stav, léčba). Harmonizovaný ukazatel Eurostatu (šetření o využívání ICT v domácnostech), srovnatelný napříč EU.",
+  "unit": "%",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_sdmx",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/isoc_ci_ac_i",
+      "dataset": "isoc_ci_ac_i — Internet use: seeking health information (indic_is=I_IHIF, unit=PC_IND, ind_type=IND_TOTAL)",
+      "dimensions": {
+        "indic_is": "I_IHIF",
+        "unit": "PC_IND",
+        "ind_type": "IND_TOTAL",
+        "age_range": "16-74",
+        "geo": "CZ"
+      }
+    },
+    "fallback": {
+      "type": "eurostat_databrowser",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/isoc_ci_ac_i/default/table"
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_sdmx",
+    "code": "I_IHIF",
+    "dataset": "isoc_ci_ac_i — průměr EU27 (2024). Doplňkový kontrast: přístup k vlastní zdravotní dokumentaci online (I_IUAPR) — EU27 2024 = 27,7 %, ČR jen 1,7 % (2020, poslední dostupný rok), Dánsko 61,5 %, Finsko 73,6 %.",
+    "value": 58.2,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/isoc_ci_ac_i/default/table"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Eurostat (šetření o využívání ICT v domácnostech a jednotlivci)",
+    "ČSÚ (národní sběr dat pro Eurostat)",
+    "Národní centrum elektronického zdravotnictví (NCEZ), MZ ČR"
+  ],
+  "method_notes": "Data pocházejí z každoročního harmonizovaného šetření Eurostatu o využívání informačních technologií jednotlivci. Ukazatel měří poptávkovou stranu digitálního zdravotnictví — jak aktivně obyvatelé sami vyhledávají zdravotní informace na internetu. Česko patří mezi nadprůměrně aktivní země EU (68,4 % v roce 2024 vs. 58,2 % průměr EU), s dlouhodobě rostoucím trendem (56,5 % v roce 2019). Vysoká poptávka po digitálních zdravotních informacích ostře kontrastuje s nabídkovou stranou: přístup k vlastní zdravotní dokumentaci online (Eurostat I_IUAPR) mělo v ČR jen 1,7 % lidí (2020) proti 27,7 % průměru EU a přes 60 % v Dánsku či Finsku. Poptávka existuje, stát ji však zatím nepromítá do infrastruktury (chybí univerzální pacientský portál, nízké využití lékového záznamu).",
+  "limitations": "Self-report; ukazatel neměří kvalitu ani zdroj vyhledávaných informací — vysoké číslo může částečně odrážet i vyhledávání kvůli nedostupnosti lékaře nebo riziko dezinformací. Data se sbírají pro věkovou skupinu 16–74 let, takže nejstarší senioři (nejčastější uživatelé péče) nejsou plně pokryti. Rok 2025 vykazuje u ČR metodicky nesourodý pokles (57,2 %), proto se jako referenční bere rok 2024. Ukazatel měří poptávku, ne to, zda systém na poptávku odpovídá — proto je nutné číst ho spolu s ukazatelem přístupu ke zdravotní dokumentaci online.",
+  "determinants": [
+    "Rozšíření internetu a chytrých telefonů v populaci",
+    "Digitální gramotnost a věková struktura uživatelů",
+    "Dostupnost a důvěryhodnost českých zdrojů zdravotních informací (NZIP.cz)",
+    "Absence univerzálního pacientského portálu, který by poptávku po informacích převedl na přístup k vlastním datům"
+  ],
+  "importance": "Aktivní vyhledávání zdravotních informací je předpokladem informovaného pacienta, prevence a samosprávy chronických onemocnění. Vysoká a rostoucí poptávka je strukturální aktivum — ukazuje, že česká populace je připravena na digitální zdravotnictví. Zároveň odhaluje politickou příležitost: pokud stát nabídne důvěryhodné informace a přístup k vlastní dokumentaci, existuje kdo je bude využívat. Nevyužitá poptávka je promarněná páka.",
+  "patient_story": "Marta (63) ze Zlínského kraje si po návštěvě praktika sedne k tabletu. Lékař jí předepsal nový lék na tlak, ale na dotazy nebyl čas. Zadá do vyhledávače název léku, pak „vysoký tlak dieta\", pak „jak často měřit tlak doma\". Během půlhodiny přečte deset stránek různé kvality. Chtěla by se podívat i na výsledky svých odběrů a na to, co jí kdy který lékař předepsal — ale to na internetu nenajde. Ta data o ní existují, jen k nim nemá jak se dostat.\n\nMarta není výjimka. V roce 2024 vyhledávalo zdravotní informace online 68,4 % Čechů — víc než průměr Evropské unie (58,2 %) a víc než Němci, Slováci nebo Poláci. Trend jde nahoru: ještě v roce 2019 to bylo 56,5 %. Poptávka po digitálním zdraví v Česku není problém. Češi patří mezi nejaktivnější národy EU, když jde o hledání informací o vlastním těle.\n\nProblém je nabídka. Zatímco Češi zdravotní informace aktivně hledají, přístup k vlastní zdravotní dokumentaci online má podle Eurostatu jen 1,7 % z nich (2020) — proti 27,7 % průměru EU a více než 60 % v Dánsku a Finsku. Tady je ta trhlina: stát dosud nepostavil univerzální pacientský portál, lékový záznam se využívá málo a jednotlivé systémy spolu nemluví. Obrovská poptávka naráží na prázdnou nabídku. Marta googlí cizí stránky, protože k vlastním datům ji nikdo nepustí.\n\nPáka je jasná a leží u státu. Transpozice evropského nařízení o prostoru pro zdravotní data (EHDS) i budování Národního centra elektronického zdravotnictví — které EU přímo spolufinancuje — mají za cíl dát pacientovi přístup k jeho záznamům. Kompetenci drží ministerstvo zdravotnictví a ÚZIS. Konkrétní kroky: dokončit pacientský portál, propojit lékový záznam a výsledky vyšetření a nabídnout důvěryhodný český zdroj informací (NZIP.cz) tak viditelně, aby lidé jako Marta nemuseli spoléhat na náhodné weby. Poptávka už existuje — chybí jen to, co na ni odpoví.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
