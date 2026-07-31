@@ -99,6 +99,45 @@ const MANIFEST = {
     stat: '5,0', claim: 'Průměrný cholesterol Čechů klesl pod cílovou hodnotu — díky léčbě.',
     context: 'Kraje s vyšší úmrtností mají spíš nižší průměr — víc léčby.',
   },
+  'clanek-luzka-dlouhodobe-pece': {
+    kicker: 'Dlouhodobá péče', signal: 'bad',
+    stat: '35,3', claim: 'lůžka dlouhodobé péče na 1 000 seniorů 65+ — o čtvrtinu pod evropským průměrem.',
+    context: 'Kapacita roste pomaleji než populace seniorů — přepočteno klesá.',
+  },
+  'clanek-barometr-politickych-prohlaseni': {
+    kicker: 'Governance · nástroj', signal: 'neutral',
+    stat: '12', claim: 'vládních závazků převádíme na měřitelné checkpointy s daty.',
+    context: 'Nový Barometr politických prohlášení + Ověřovna výroků.',
+  },
+  'clanek-poraneni-hraze': {
+    kicker: 'Porodnictví · kvalita', signal: 'neutral',
+    stat: '1,71', statSuffix: '%',
+    claim: 'rodiček mělo závažné poranění hráze III.–IV. stupně (2022).',
+    context: 'Mírně roste, jak správně ustupuje rutinní epiziotomie.',
+  },
+  'clanek-dekubity-nemocnice': {
+    kicker: 'Kvalita · bezpečnost péče', signal: 'warn',
+    stat: '4,3', statSuffix: '%',
+    claim: 'pacientů má dekubitus podle šetření — registr eviduje jen 1,2 %.',
+    context: 'Mezera není o horší péči, ale o tom, že se neměří jednotně.',
+  },
+  'clanek-perinatalni-umrtnost': {
+    kicker: 'Kvalita péče · novorozenci', signal: 'good',
+    stat: '4,8', claim: 'perinatální úmrtnost na 1 000 narozených — pod průměrem EU i všemi sousedy.',
+    context: 'Za tím stojí centralizace do 12 perinatologických center.',
+  },
+  'clanek-ovoce-zelenina': {
+    kicker: 'Prevence · výživa', signal: 'bad',
+    stat: '7,7', statSuffix: '%', barPct: 8,
+    claim: 'dospělých Čechů sní 5 porcí ovoce a zeleniny denně — půlka nesní žádnou.',
+    context: 'Pod průměrem EU (12,4 %) a od roku 2014 klesá.',
+  },
+  'clanek-starnuti-lekaru': {
+    kicker: 'Pracovní síla · lékaři', signal: 'warn',
+    stat: '41', statSuffix: '%', barPct: 41,
+    claim: 'českých lékařů je starších 55 let (2022) — nad průměrem EU.',
+    context: 'U praktiků a pediatrů se podíl nad 60 let blíží polovině.',
+  },
   'clanek-plne-kojeni-porodnice': {
     kicker: 'Kojení · porodnice', signal: 'warn',
     stat: '72,4', statSuffix: '%', barPct: 72,
