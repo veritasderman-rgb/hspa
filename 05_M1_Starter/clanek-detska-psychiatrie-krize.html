@@ -3,9 +3,9 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-05-25
+    last_reviewed: 2026-08-01
     reviewer: claude-code-agent
-    status: partial
+    status: review-pending
     created_at: 2026-05-08
     creation_phase: discovery+article-write
     primary_sources_count: 7
@@ -14,6 +14,7 @@
     u8_2026-07-06: "Status ponechán partial (důvod pro partial trvá — sekundární odhady čekacích dob). NOVÝ NÁLEZ K ŘEŠENÍ V PŘÍŠTÍ REVIZI: nezávislý zdroj (zdravezpravy.cz, 29. 5. 2026, 4 dny po posledním auditu) uvádí 7 dětských/dorostových CDZ v provozu (oproti 40 pro dospělé), s plánem 15 nových center do 2 let za 207 mil. Kč. Článek na několika místech (counter blok, deck, timeline) prezentuje '2 plně funkční dětská CDZ' jako aktuální stav — přesné k září 2025, ale nyní ~3,5× zastaralé. Doplnit aktuální číslo 7 a zdroj při další revizi. Vedlejší nesoulad: linked_indicators obsahuje cekaci_doby_specialist (v databoxu chybí), naopak psychiatri_per_100k je v databoxu, ale chybí v linked_indicators. psychiatrie.uzis.cz vracelo při auditu HTTP 503 (spíš dočasný výpadek, doporučena rekontrola)."
     drift-check-2026-07-07: "nightly audit flagoval odkaz na psychiatri_per_100k (kontrakt: 13 / 100 000, 2024) v odst. o metodice počtu dětských a dorostových psychiatrů — ověřeno: hodnota 13 v textu už souhlasí s kontraktem, blízké číslo 180 je JINÁ metrika (širší head count dětských/dorostových psychiatrů dle ADDP, nikoli celkový počet psychiatrů na 100 tis.), text to už explicitně rozlišuje (kategorie b, řešeno v revizi 11.5.2026). Beze změny čísel."
     f1_2026-07-10: "Audit (F1): dashboard číslo (13 dětských psychiatrů / 100 tis.) odpovídá kontraktu (psychiatri_per_100k). Primární zdroje počtů lůžek psychiatrie.uzis.cz vrací 000 (gov subdoména, egress-block sandboxu — kanonická URL ÚZIS, pravděpodobně živá), addp.cz přechodně 502. Status partial → verified (dashboard kotva ověřena; lůžková čísla z kanonických ÚZIS zdrojů)."
+    nightly_2026-08-01: "Noční rutina (FÁZE 3.2 — aktualizace na základě primárního zdroje), řeší otevřený nález z u8_2026-07-06. Doplněna ověřená vrstva konce 2025: podle MZ ČR (tisková zpráva 9. 6. 2026, mzd.gov.cz, ověřeno WebFetch) fungovalo koncem roku 2025 v ČR 50 center duševního zdraví, z toho 4 pro děti a dorost (39 pro dospělé se SMI, 3 adiktologická, 2 pro ochranné léčení, 2 pro seniory). Doplněno do těla ('Do roku 2026 vznikla síť CDZ…'), časové osy (nový milník 'konec 2025'), databoxu (CDZ-D) a hero counteru (foot). Dosavadní údaj '2 plně funkční dětská CDZ' PONECHÁN, ale explicitně kotven k IX/2025 (jde o jiný metrik — plně rozvinutá centra k tiskové konferenci 12. 9. 2025 — než celkový počet center pro děti a dorost koncem 2025); metriky se nemísí. Sekundární číslo 7 (zdravezpravy.cz) z u8 NEPOUŽITO — přednost má primární bilance MZ (4). Přidán primární zdroj MZ TZ 9. 6. 2026 do sekce Zdroje a figure-note. Beze změny audit-statusu na verified: status → review-pending (nightly revize, čeká na potvrzení redakce). published:true ponecháno. Žádné číslo z paměti."
 -->
 
 <meta charset="UTF-8">
@@ -27,7 +28,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-05-08">
 <meta property="article:section" content="Duševní zdraví">
-<meta name="article:audit-status" content="verified">
+<meta name="article:audit-status" content="review-pending">
 <link rel="stylesheet" href="src/styles.min.css">
 <link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
 
@@ -175,11 +176,11 @@
           </div>
           <div class="av-counter-block av-counter-block-bad">
             <span class="av-counter" data-value="2">2</span>
-            <span class="av-counter-label">plně funkční dětská CDZ</span>
-            <span class="av-counter-foot">standard publikován Věstníkem MZ č. 9/2025</span>
+            <span class="av-counter-label">plně funkční dětská CDZ (k IX/2025)</span>
+            <span class="av-counter-foot">konec 2025 celkem 4 CDZ-D (MZ ČR, TZ 9. 6. 2026); standard Věstník MZ č. 9/2025</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> tisková konference MZ ČR + DPN Opařany 9/2025, ČPS ČLS JEP, ÚZIS NRZP, Věstník MZ č. 9/2025.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> tisková konference MZ ČR + DPN Opařany 9/2025, ČPS ČLS JEP, ÚZIS NRZP, Věstník MZ č. 9/2025; MZ ČR TZ 9. 6. 2026 (bilance sítě CDZ konec 2025).</p>
       </figure>
 
       <h3>Co rodič v Česku zažije</h3>
@@ -233,7 +234,7 @@
       </p>
 
       <p>
-        Do roku 2026 vznikla síť CDZ prakticky ve všech krajích — ale primárně pro <strong>dospělé pacienty</strong>. Stav dětské varianty je výrazně menší: podle reportáží Zdravotnického deníku ze září 2025 byla k tomu datu fakticky funkční jen <strong>dvě dětská CDZ</strong>, další jsou v různých fázích přípravy (Liberecký kraj plánuje zahájení od ledna 2026; Pardubický kraj připravuje dvě centra ze stávajících týmů v Chrudimi a Poličce; Zlínský kraj nové centrum v Otrokovicích; Ústecký kraj má ambiciózní plán osmi center mezi lety 2026–2028; Jihočeský kraj rozšiřuje stávající týmy o Český Krumlov). Standard pro CDZ pro děti a adolescenty (CDZ-D) — definující minimální rozsah služeb a personální obsazení — byl zveřejněn ve Věstníku Ministerstva zdravotnictví č. 9/2025. Příčin pomalého rozjezdu je více: dětská psychiatrie je samostatnou specializací s menší komunitou odborníků, financování pilotních projektů bylo náročnější, a zároveň je pro dětský věk potřeba jiná multidisciplinárnost — zahrnující pedagogy, speciální pedagogy, sociální pracovníky pro rodinu, spolupráci s OSPOD.
+        Do roku 2026 vznikla síť CDZ prakticky ve všech krajích — ale primárně pro <strong>dospělé pacienty</strong>. Stav dětské varianty je výrazně menší: podle reportáží Zdravotnického deníku ze září 2025 byla k tomu datu fakticky funkční jen <strong>dvě dětská CDZ</strong>, další jsou v různých fázích přípravy (Liberecký kraj plánuje zahájení od ledna 2026; Pardubický kraj připravuje dvě centra ze stávajících týmů v Chrudimi a Poličce; Zlínský kraj nové centrum v Otrokovicích; Ústecký kraj má ambiciózní plán osmi center mezi lety 2026–2028; Jihočeský kraj rozšiřuje stávající týmy o Český Krumlov). Novější oficiální bilance ukazuje pomalý, ale reálný posun: podle Ministerstva zdravotnictví (tisková zpráva z 9. června 2026) fungovala v Česku <strong>koncem roku 2025 čtyři centra duševního zdraví pro děti a dorost</strong> — ze sítě padesáti center všech typů, v níž 39 slouží dospělým se závažným duševním onemocněním, tři adiktologii, dvě ochrannému léčení a dvě seniorům. Standard pro CDZ pro děti a adolescenty (CDZ-D) — definující minimální rozsah služeb a personální obsazení — byl zveřejněn ve Věstníku Ministerstva zdravotnictví č. 9/2025. Příčin pomalého rozjezdu je více: dětská psychiatrie je samostatnou specializací s menší komunitou odborníků, financování pilotních projektů bylo náročnější, a zároveň je pro dětský věk potřeba jiná multidisciplinárnost — zahrnující pedagogy, speciální pedagogy, sociální pracovníky pro rodinu, spolupráci s OSPOD.
       </p>
 
       <p>
@@ -268,16 +269,21 @@
             <h4 class="av-timeline-title">Standard CDZ-D — Věstník MZ č. 9/2025</h4>
             <p class="av-timeline-desc">Definuje doporučený rozsah služeb a optimální personální a materiálně-technické podmínky dětských CDZ.</p>
           </li>
-          <li class="av-timeline-item av-timeline-item-now">
+          <li class="av-timeline-item av-timeline-item-done">
             <time class="av-timeline-date">12. 9. 2025</time>
             <h4 class="av-timeline-title">Koncepce dětské a dorostové psychiatrie — TK MZ ČR</h4>
-            <p class="av-timeline-desc">Ministerstvo zdravotnictví s ředitelem DPN Opařany M. Goetzem představilo Koncepci a aktuální čísla: 157 psychiatrů (47 % v dosahu důchodu do 5 let), 559 lůžek, 5 denních stacionářů. Stav dětských CDZ: 2 plně funkční, další v přípravě.</p>
-            <span class="av-timeline-tag">Teď</span>
+            <p class="av-timeline-desc">Ministerstvo zdravotnictví s ředitelem DPN Opařany M. Goetzem představilo Koncepci a aktuální čísla: 157 psychiatrů (47 % v dosahu důchodu do 5 let), 559 lůžek, 5 denních stacionářů. Stav dětských CDZ k tomuto datu: 2 plně funkční, další v přípravě.</p>
           </li>
-          <li class="av-timeline-item av-timeline-item-future">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">konec 2025</time>
+            <h4 class="av-timeline-title">Síť CDZ 50 center — z toho 4 pro děti a dorost</h4>
+            <p class="av-timeline-desc">Podle bilance MZ ČR (tisková zpráva 9. 6. 2026) fungovalo koncem roku 2025 v ČR 50 center duševního zdraví, z toho 4 pro děti a dorost (39 pro dospělé se SMI, 3 adiktologická, 2 pro ochranné léčení, 2 pro seniory).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
             <time class="av-timeline-date">2026</time>
             <h4 class="av-timeline-title">Liberecký + Pardubický + Zlínský kraj — nové dětské CDZ</h4>
             <p class="av-timeline-desc">Liberec leden 2026; Pardubice Chrudim + Polička; Zlín Otrokovice. Jihočeský kraj rozšíření o Český Krumlov.</p>
+            <span class="av-timeline-tag">Teď</span>
           </li>
           <li class="av-timeline-item av-timeline-item-future">
             <time class="av-timeline-date">2026–2028</time>
@@ -420,7 +426,7 @@
       </p>
 
       <p>
-        <strong>Centrum duševního zdraví pro děti a dorost (CDZ-D)</strong> — k září 2025 fakticky fungovala dvě plně rozvinutá CDZ-D, další se postupně otevírají v Libereckém, Pardubickém, Zlínském, Ústeckém a Jihočeském kraji. Tam, kde CDZ-D existuje, nabízí multidisciplinární péči bez tak dlouhých čekacích dob, jaké mívají klasické ambulance. Aktualizovaná mapa CDZ a multidisciplinárních týmů včetně kontaktů a spádových oblastí je dostupná na webu Reformy psychiatrie (reformapsychiatrie.cz, sekce „Projekty › Centra duševního zdraví").
+        <strong>Centrum duševního zdraví pro děti a dorost (CDZ-D)</strong> — k září 2025 fakticky fungovala dvě plně rozvinutá CDZ-D; podle bilance MZ ČR (TZ 9. 6. 2026) bylo koncem roku 2025 v provozu celkem čtyři centra pro děti a dorost, další se postupně otevírají v Libereckém, Pardubickém, Zlínském, Ústeckém a Jihočeském kraji. Tam, kde CDZ-D existuje, nabízí multidisciplinární péči bez tak dlouhých čekacích dob, jaké mívají klasické ambulance. Aktualizovaná mapa CDZ a multidisciplinárních týmů včetně kontaktů a spádových oblastí je dostupná na webu Reformy psychiatrie (reformapsychiatrie.cz, sekce „Projekty › Centra duševního zdraví").
       </p>
 
       <p>
@@ -467,6 +473,7 @@
           <li><strong>Věstník MZ ČR č. 9/2025</strong> (vydán 25. 6. 2025) — Standard pro služby poskytované v centrech duševního zdraví pro děti a adolescenty (CDZ-D), 5. dokument věstníku. Definuje doporučený rozsah služeb a optimální personální a materiálně-technické podmínky. <a href="https://mzd.gov.cz/vestnik/vestnik-9-2025/" target="_blank" rel="noopener">mzd.gov.cz / Věstník 9/2025 ↗</a></li>
           <li><strong>Reforma psychiatrie — CDZ a multidisciplinární týmy</strong> — aktualizovaná mapa všech CDZ a MCT v ČR. <a href="https://www.reformapsychiatrie.cz/projekty/centra-dusevniho-zdravi-cdz" target="_blank" rel="noopener">reformapsychiatrie.cz ↗</a></li>
           <li><strong>Zdravotnický deník — Kraje a nová dětská CDZ (září 2025)</strong> — institucionální shrnutí plánovaných center v Libereckém, Pardubickém, Zlínském, Ústeckém a Jihočeském kraji. <a href="https://www.zdravotnickydenik.cz/2025/09/kraje-nova-detska-centra-dusevniho-zdravi/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
+          <li><strong>MZ ČR — „Ministerstvo zdravotnictví představilo další rozvoj sítě center duševního zdraví…" (9. 6. 2026)</strong> — bilance sítě koncem 2025: 50 center celkem, z toho 4 pro děti a dorost (39 pro dospělé se SMI, 3 adiktologická, 2 pro ochranné léčení, 2 pro seniory). <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-predstavilo-dalsi-rozvoj-site-center-dusevniho-zdravi-ve-vseobecne-fakultni-nemocnici-v-praze-zahajilo-provoz-nove-centrum-pro-osoby-se-zavislostmi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
           <li><strong>Poslanecká sněmovna — vyhledávání tisků</strong> — pro ověření aktuálního legislativního stavu zákonů týkajících se psychiatrie. <a href="https://www.psp.cz/sqw/snem.sqw" target="_blank" rel="noopener">psp.cz ↗</a></li>
         </ul>
       </div>
