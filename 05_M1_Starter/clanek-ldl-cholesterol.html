@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(DRAFT) Zlý cholesterol Čechů klesá. Ti, kdo léčbu potřebují nejvíc, ale cíle nedosahují · HSPA Monitor</title>
+<meta name="description" content="Průměrný LDL cholesterol dospělých v Česku klesl na 2,98 mmol/l (2025) z 3,18 mmol/l v roce 2020 — poprvé pod prahem pro nízké riziko. Data z NZIS ale skrývají zásadní mezeru: podle evropské studie DA VINCI dosáhne cíle jen 18 % nejrizikovějších pacientů. Nový HSPA indikátor a analýza propasti mezi klesajícím průměrem a nedoléčenými pacienty.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zlý cholesterol Čechů klesá. Ti, kdo léčbu potřebují nejvíc, ale cíle nedosahují">
+<meta property="og:description" content="Průměrný LDL cholesterol dospělých klesl na 2,98 mmol/l (2025). Populace se zlepšuje, ale jen 18 % velmi rizikových pacientů dosahuje cíle LDL < 1,4 mmol/l. Kde je páka.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-01">
+<meta property="article:section" content="Prevence">
+<!--
+  audit:
+    last_reviewed: 2026-08-01
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: article-write (nový indikátor ldl_cholesterol_dospeli z ÚZIS NZIS OIS-15-01)
+    notes: "Nový HSPA indikátor: Průměrný LDL cholesterol dospělých. PRIMÁRNÍ DATA: ÚZIS ČR — NZIS Open, OIS-15-01 (Laboratorní data, ISSN 2695-0340), blok ldl_cholesterol; mezivýstup ingest/nzip-extracts/OIS-15-01-cholesterol.json. Národní řada LDL (mmol/l): 2020=3,18; 2021=3,16; 2022=3,09; 2023=3,06; 2024=3,02; 2025=2,98 (seed value). Krajské hodnoty 2025 (mmol/l): Praha 3,00; Středočeský 2,99; Jihočeský 3,00; Plzeňský 2,98; Karlovarský 2,88; Ústecký 2,94; Liberecký 3,02; Královéhradecký 2,96; Pardubický 3,06; Vysočina 2,95; Jihomoravský 3,04; Olomoucký 2,99; Zlínský 2,89; Moravskoslezský 2,93. BENCHMARK: clinical_target 3,0 mmol/l (ESC/EAS 2019, nízké riziko); mezinárodní kontext studie DA VINCI (Ray KK et al., Eur J Prev Cardiol 2021, 18 zemí EU): cíle 2019 dosáhlo 33 % léčených, jen 18 % velmi rizikových pacientů dosáhlo LDL < 1,4 mmol/l; střední a východní Evropa nejhorší. DOWNSTREAM: KV mortalita CZ 463,75 vs EU 312,95 /100 tis. (indikátor mortalita_kardiovaskularni). SIGNÁL: warn (lower_is_better, value 2,98 vs práh 3,0). POLITICKÁ PÁKA: úhradová kritéria hypolipidemik (ezetimib, PCSK9i, inklisiran — SÚKL/plátci), titrace + adherence v primární péči (projekt PUK adherence_statiny), preventivní prohlídky a přechod pediatr→praktik, registry dosahování cíle. Hodnoty v textu sladěny s data/indicators.json (value 2,98). DRAFT, published:false, noindex — před publikací ověřit aktuální úhradová kritéria PCSK9i a případná novější data NZIS."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Prevence</span>
+        <span class="article-tag article-tag-muted">kardiovaskulární riziko · cholesterol · statiny · NZIS</span>
+      </div>
+      <h1 class="article-title">Zlý cholesterol Čechů klesá. Ti, kdo léčbu potřebují nejvíc, ale cíle nedosahují</h1>
+      <p class="article-deck">
+        Průměrný LDL-cholesterol — ten „zlý" — klesl u dospělých Čechů na <strong>2,98 mmol/l</strong> (2025) z 3,18 v roce 2020. Poprvé je pod prahem, který vodítka doporučují lidem s nízkým rizikem. Zní to jako jednoznačně dobrá zpráva a zčásti je. Jenže populační průměr skrývá zásadní mezeru: podle evropské studie DA VINCI dosáhne přísnějšího cíle jen <strong>18 % nejrizikovějších pacientů</strong> — a střední a východní Evropa je na tom nejhůř. Nový HSPA indikátor a analýza propasti mezi klesajícím průměrem a nedoléčenými, kteří léčbu potřebují nejvíc.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Jiří (58) z Ústeckého kraje leží třetí den po infarktu na koronární jednotce. Než ho pustí domů, kardiolog mu předepíše statin ve vysoké dávce a nakreslí na papír jednoduchý cíl: LDL-cholesterol musí klesnout pod 1,4 mmol/l, jinak riziko dalšího infarktu zůstává vysoké. Jiří přikývne, doma lék bere. Na kontrolu za rok se ale nedostaví — cítí se dobře, práce, vnoučata. Dávku mu nikdo nenavýší, kombinaci nepřidá a jeho LDL se drží kolem 2,3 mmol/l. Formálně je „léčen", fakticky je nedoléčen. A přesně takoví pacienti se ztrácejí za uklidňujícím národním průměrem, který právě poprvé spadl pod hezké kulaté číslo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">LDL cholesterol dospělých v Česku — průměr klesá, riziko zůstává skryté</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2.98" data-decimals="2">2,98</span>
+            <span class="av-counter-label">mmol/l — průměrný LDL dospělých (2025)</span>
+            <span class="av-counter-foot">poprvé pod prahem 3,0 mmol/l pro nízké riziko</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="3.18" data-decimals="2">3,18</span>
+            <span class="av-counter-label">mmol/l — průměr v roce 2020</span>
+            <span class="av-counter-foot">pět let plynulého poklesu, hlavně díky statinům</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1.4" data-decimals="1">1,4</span>
+            <span class="av-counter-label">mmol/l — cíl pro pacienta po infarktu</span>
+            <span class="av-counter-foot">velmi vysoké riziko: cíl je výrazně přísnější než průměr</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="18">18</span>
+            <span class="av-counter-label">% velmi rizikových pacientů v EU dosahuje cíle</span>
+            <span class="av-counter-foot">studie DA VINCI, 18 zemí — CEE nejhůř</span>
+          </div>
+        </div>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR — NZIS Open, OIS-15-01 (Laboratorní data), blok LDL-cholesterol, 2020–2025. Cíle a mezinárodní kontext: ESC/EAS 2019, studie DA VINCI (Eur J Prev Cardiol 2021).</p>
+      </figure>
+
+      <h3>Proč zrovna LDL, a ne „cholesterol"</h3>
+      <p>
+        Když se řekne „cholesterol", většina lidí si představí jedno číslo z odběru. Ve skutečnosti jsou důležité jeho složky. <strong>LDL-cholesterol</strong> (low-density lipoprotein) je ten, který se ukládá do stěn tepen a spouští aterosklerózu — proto se mu říká „zlý". <strong>HDL</strong> je naopak spíš ochranný. Celkový cholesterol obě složky sčítá dohromady, takže je jen hrubým vodítkem. Vodítka odborných společností, samotná léčba i úhradová pravidla proto necílí na celkový cholesterol, ale právě na LDL.
+      </p>
+      <p>
+        LDL je navíc jedním z nejlépe doložených kauzálních rizikových faktorů v celé medicíně. Desítky randomizovaných studií i genetické analýzy ukazují totéž: čím nižší LDL, tím nižší riziko infarktu a cévní mozkové příhody, a to prakticky bez dolní hranice, pod kterou by přínos mizel. Každé snížení LDL o 1 mmol/l snižuje riziko závažných cévních příhod zhruba o pětinu. To dělá z LDL vzácnou věc — rizikový faktor, na který existuje levná, účinná léčba (statiny) i jasný, měřitelný cíl. Sledovat výkonnost systému v prevenci srdečně-cévních nemocí bez LDL by bylo jako hodnotit onkologii bez stagingu.
+      </p>
+      <p>
+        Cíl přitom není pro všechny stejný. Řídí se celkovým kardiovaskulárním rizikem: u zdravého dospělého s nízkým rizikem stačí LDL pod 3,0 mmol/l, u středního rizika pod 2,6, u vysokého pod 1,8 a u velmi vysokého (pacienti po infarktu jako Jiří, diabetici s orgánovým postižením) pod 1,4 mmol/l — a současně o polovinu níž, než byla výchozí hodnota. Tato stupňovitost je klíčem k pochopení, proč klesající populační průměr může být zároveň dobrá i zavádějící zpráva.
+      </p>
+
+      <h3>Stav v Česku: průměr klesá, a to plynule</h3>
+      <p>
+        Díky datovému skladu NZIS — přes 405 milionů laboratorních výsledků z 282 laboratoří — umí Česko poprvé změřit průměrný LDL dospělé populace, a dokonce ho sledovat v čase. A trend je jednoznačný. Za pět let klesl průměrný LDL-cholesterol z 3,18 mmol/l (2020) na <strong>2,98 mmol/l (2025)</strong>. Pokles je plynulý, rok za rokem, bez skoků — 3,16, 3,09, 3,06, 3,02, 2,98. Poprvé je průměr pod prahem 3,0 mmol/l, který vodítka doporučují lidem s nízkým rizikem. Souběžně klesá i průměrný celkový cholesterol (z 5,08 na 4,92 mmol/l) a podíl lidí s vysokým cholesterolem.
+      </p>
+      <p>
+        Čím to je? Kardiologové (mj. Michal Vrablík z České společnosti pro aterosklerózu nebo Aleš Linhart) pokles přičítají hlavně léčbě. Rozšíření statinů a jejich kombinací s ezetimibem je jednou z nejúčinnějších a zároveň nejlevnějších intervencí, jaké medicína má; generické statiny jsou levné a plně hrazené. Část poklesu jde i na vrub lepšího záchytu a měření. Roste totiž i počet lidí, kterým se LDL vůbec změří — z 1,6 milionu (2020) na 2,8 milionu osob (2025) — mimo jiné proto, že se LDL stále častěji měří přímo místo dřívějšího dopočítávání z rovnice.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Vývoj průměrného LDL cholesterolu dospělých v Česku (mmol/l)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Průměrný LDL (mmol/l)</th>
+                <th scope="col" class="av-num">Osob s dostupným LDL (mil.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2020</th><td class="av-num">3,18</td><td class="av-num">1,63</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">3,16</td><td class="av-num">2,06</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">3,09</td><td class="av-num">2,30</td></tr>
+              <tr><th scope="row">2023</th><td class="av-num">3,06</td><td class="av-num">2,50</td></tr>
+              <tr><th scope="row">2024</th><td class="av-num">3,02</td><td class="av-num">2,73</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2025</th><td class="av-num">2,98</td><td class="av-num">2,80</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR — NZIS Open, OIS-15-01 (Laboratorní data), blok LDL-cholesterol. Populačně vážený národní průměr (agregát HSPA Monitoru z ORP-úrovně otevřených dat).</p>
+      </figure>
+
+      <h3>Mapa průměru není mapou rizika</h3>
+      <p>
+        Tady začíná zápletka. Kdyby byl průměrný LDL mapou rizika, čekali bychom, že nejvyšší hodnoty budou tam, kde lidé nejvíc umírají na srdečně-cévní nemoci — v Karlovarském, Ústeckém nebo Moravskoslezském kraji. Data ale ukazují opak. Právě tyto kraje mají spíš <strong>nižší</strong> průměrný LDL: Karlovarský 2,88, Zlínský 2,89, Moravskoslezský 2,93, Ústecký 2,94 mmol/l. Naopak nejvyšší průměry mají spíš klidnější kraje — Pardubický (3,06), Jihomoravský (3,04) či Liberecký (3,02).
+      </p>
+      <p>
+        Vysvětlení není, že by v Karlovarském kraji byli lidé zdravější. Spíš naopak: v regionech s vyšším rizikem se rizikoví pacienti častěji testují a léčí, a to měřený průměr stlačuje. Kdo je na statinech, má nízké LDL — a když se v kraji léčí hodně lidí, průměr klesá, i když je celková zátěž nemocí vysoká. Populační průměr LDL tak měří spíš <em>intenzitu léčby a záchytu</em> než skutečné riziko. To je důležité varování pro každého, kdo by chtěl podle takové mapy alokovat zdroje: číslo, které vypadá „nejlépe", může být z kraje, který je na tom „nejhůř".
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Průměrný LDL cholesterol podle kraje (2025, mmol/l) — nižší číslo často znamená více léčených</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" mmol/l" data-max="3.3">
+          <li class="av-bar-row" data-value="3.06" data-label="Pardubický"></li>
+          <li class="av-bar-row" data-value="3.04" data-label="Jihomoravský"></li>
+          <li class="av-bar-row" data-value="3.02" data-label="Liberecký"></li>
+          <li class="av-bar-row" data-value="3.00" data-label="Praha"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="2.98" data-label="ČR celkem"></li>
+          <li class="av-bar-row" data-value="2.94" data-label="Ústecký"></li>
+          <li class="av-bar-row" data-value="2.93" data-label="Moravskoslezský"></li>
+          <li class="av-bar-row" data-value="2.89" data-label="Zlínský"></li>
+          <li class="av-bar-row" data-value="2.88" data-label="Karlovarský"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR — NZIS Open, OIS-15-01, krajské populačně vážené průměry LDL, 2025. Kraje s vysokou kardiovaskulární úmrtností (Karlovarský, Ústecký, Moravskoslezský) mají spíš nižší průměrný LDL — projev vyššího záchytu a léčby rizikových pacientů, ne nižšího rizika.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: populace v pořádku, rizikoví pacienti pozadu</h3>
+      <p>
+        Český populační průměr LDL kolem 3,0 mmol/l není v evropském kontextu nijak špatný — populační průměry v západní i střední Evropě se pohybují podobně a všude klesají, jak se šíří statiny. Problém se ale neschovává v průměru zdravé populace. Skutečná mezera je v tom, jestli systém dokáže srazit LDL u <strong>rizikových</strong> pacientů, kde má léčba největší absolutní přínos — a tam Evropa, a zvlášť její středo- a východoevropská část, výrazně zaostává.
+      </p>
+      <p>
+        Ukázala to velká observační studie <strong>DA VINCI</strong> (Ray a kol., 18 zemí EU, publikováno 2021). Mezi pacienty, kteří už nějakou léčbu na snížení cholesterolu brali, dosáhla cíle podle vodítek z roku 2019 jen <strong>třetina (33 %)</strong>. A u <strong>velmi rizikových</strong> pacientů — po infarktu, po cévní mozkové příhodě — se pod cílovou hodnotu 1,4 mmol/l dostalo jen <strong>18 %</strong>. Zbytek zůstal formálně léčen, ale nedoléčen, přesně jako Jiří. Následná analýza upozornila, že státy střední a východní Evropy patří v dosahování cílů k nejhorším v EU — kombinací klinické setrvačnosti, opatrné titrace a přísnějších úhradových pravidel pro moderní léky.
+      </p>
+      <p>
+        Že tahle mezera něco stojí, je v Česku vidět na konci řetězce. Kardiovaskulární nemoci jsou u nás nejčastější příčinou úmrtí a standardizovaná úmrtnost na ně činí <strong>463,75 na 100 000 obyvatel</strong> — zhruba o polovinu víc než průměr Evropské unie (312,95). Slovensko patří spolu s dalšími zeměmi regionu k těm s nejvyšší úmrtností na ischemickou chorobu srdeční; Polsko je na tom podobně. Naopak Rakousko a Německo — se srovnatelnými populačními průměry cholesterolu — mají díky lepšímu záchytu a agresivnější léčbě rizikových pacientů výrazně nižší srdečně-cévní úmrtnost. Rozdíl neleží v tom, jak vysoký cholesterol lidé „mají", ale v tom, jak důsledně ho systém u ohrožených srazí.
+      </p>
+
+      <h3>Strukturální analýza: proč jsou rizikoví pacienti nedoléčení</h3>
+      <p>
+        Za mezerou mezi klesajícím průměrem a nedoléčenými rizikovými pacienty stojí čtyři systémové příčiny. První je <strong>klinická setrvačnost</strong>. I u pacienta po infarktu se dávka statinu často nenavýší a kombinace (statin + ezetimib) nepřidá, přestože kontrolní odběr ukazuje, že cíle nedosahuje. Titrace léčby „nahoru" vyžaduje kontrolu, rozhodnutí a čas — a ten v přetížené ambulanci chybí.
+      </p>
+      <p>
+        Druhou příčinou je <strong>adherence</strong>. Statin je léčba na roky, ideálně na celý život, ale pacient, který se cítí dobře, ji vysazuje. Data plátců (projekt PUK, Adherence pacientů léčených statiny) ukazují, že po roce léčby zůstává věrná zhruba polovina pacientů. Bez léku LDL rychle vystoupá zpět. Třetí příčinou jsou <strong>úhradová pravidla pro moderní hypolipidemika</strong>: ezetimib je dnes levný a dostupný, ale úhrada inhibitorů PCSK9 (alirokumab, evolokumab) a inklisiranu je vázána na přísná kritéria — velmi vysoké riziko a LDL trvale nad prahem i při maximální tolerované statinové léčbě, a preskripce jen ve specializovaných centrech. Tím se nejúčinnější léky nedostanou k části pacientů, kteří by z nich měli největší prospěch.
+      </p>
+      <p>
+        Čtvrtou příčinou je <strong>záchyt</strong>. LDL se změří jen tomu, kdo se dostane k testu. Na preventivní prohlídku u praktického lékaře přitom chodí jen zhruba polovina dospělých (52,6 %) a při přechodu od dětského k praktickému lékaři mezi 18. a 20. rokem ze systému vypadává významná část mladých dospělých, jejichž riziko se pak roky neměří. Cholesterol nebolí — a co se neměří, to se neléčí.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="82">82</span>
+          <span class="av-counter-label">% velmi rizikových pacientů v EU cíle LDL nedosahuje</span>
+          <span class="av-counter-foot">obráceně: jen 18 % se dostane pod 1,4 mmol/l (DA VINCI) — mezera největší tam, kde má léčba největší přínos</span>
+        </div>
+      </aside>
+
+      <h3>Politická páka: doléčit rizikové, ne honit průměr</h3>
+      <p>
+        Dobrá zpráva je, že tenhle problém má konkrétní páky a jasné majitele — a na rozdíl od většiny prevence tu nejde o přesvědčování lidí, aby změnili životní styl, ale o dotažení léčby, kterou pacienti už dostávají. Páky jsou čtyři a doplňují se.
+      </p>
+      <p>
+        Za prvé, <strong>úhradová kritéria</strong>. Uvolnit podmínky pro moderní hypolipidemika (ezetimib v kombinaci, inhibitory PCSK9, inklisiran) u velmi rizikových pacientů tak, aby se lék dostal k tomu, kdo cíle nedosahuje maximální statinovou léčbou. Gesci mají SÚKL a zdravotní pojišťovny; jde o úpravu úhradových pravidel, ne o novou technologii. Za druhé, <strong>primární péče</strong>: podpořit titraci dávky a adherenci — připomínkové systémy, bonifikace za dosažení cíle u rizikových pacientů, delegace kontrol na sestry. Za třetí, <strong>záchyt</strong>: posílit preventivní prohlídky a hlavně zajistit bezešvý přechod mladých dospělých od pediatra k praktikovi, aby ze sledování nevypadli.
+      </p>
+      <p>
+        Za čtvrté, <strong>data a registry</strong>. Aby systém věděl, koho nedoléčuje, potřebuje sledovat ne průměr, ale dosahování stupňovaného cíle u rizikových skupin. K tomu pomůže rozšíření přímého měření LDL, propojení laboratorních a preskripčních dat a registry dosahování cíle — přesně ten typ infrastruktury, který má u nás koordinovat digitalizace zdravotnictví a evropský rámec pro sdílení zdravotních dat (EHDS). Ministerstvo zdravotnictví, ÚZIS a plátci mají všechny nástroje v ruce.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        Průměrný LDL-cholesterol je dobrý příklad toho, proč HSPA Monitor sleduje i „výsledkové" ukazatele rizika, ne jen mortalitu na konci řetězce. Sám o sobě posílá spíš uklidňující signál — 2,98 mmol/l, poprvé pod prahem, pět let plynulého poklesu. Ale skutečnou hodnotu získává až v kontextu: klesající populační průměr a přitom jen 18 % nejrizikovějších pacientů u cíle, k tomu kardiovaskulární úmrtnost o polovinu nad průměrem EU. Ta nůžková mezera — populace se v průměru zlepšuje, zatímco ti nejohroženější zůstávají nedoléčeni — je přesně to, co má dobrá výkonnostní analýza odhalit.
+      </p>
+      <p>
+        Řešení nestojí na jednom čísle, ale na jeho správném čtení: <strong>nesledovat průměr, ale doléčení rizikových</strong>; <strong>uvolnit léčbu tam, kde má největší přínos</strong> (úhrady moderních hypolipidemik u velmi rizikových); a <strong>podchytit ty, kdo z měření vypadávají</strong>. Jiří mezitím doma bere svůj statin a cítí se dobře. Jeho LDL je pořád nad cílem, o kterém mu kardiolog kreslil na papír — ale nikdo mu dávku nenavýšil a on na kontrolu nepřišel. Najít Jiřího a doléčit ho, dřív než přijde druhý infarkt, je levnější a účinnější než cokoli, co dokáže snížit jedno číslo na národní mapě. To už totiž klesá samo.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-ldl_cholesterol_dospeli.html"><strong>Průměrný LDL cholesterol dospělých</strong></a> — 2,98 mmol/l (ČR, 2025), klesá z 3,18 (2020) · signál warn — klinicky primární cíl prevence aterosklerózy</li>
+        <li><a href="indikator-cholesterol_prumer_dospeli.html"><strong>Průměrný celkový cholesterol dospělých</strong></a> — širší, hrubší ukazatel (4,92 mmol/l, 2025); LDL je z něj klinicky rozhodující složka</li>
+        <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Mortalita na kardiovaskulární nemoci</strong></a> — 463,75 /100 tis. (ČR) vs 312,95 v EU · konec řetězce, který LDL na začátku spoluurčuje</li>
+        <li><a href="indikator-prohlidka_prakticky_lekar.html"><strong>Pokrytí preventivní prohlídkou u praktika</strong></a> — 52,6 %; záchyt rizika stojí a padá s tím, kdo se k testu dostane</li>
+        <li><a href="indikator-kontrola_hypertenze.html"><strong>Kontrolovaná hypertenze</strong></a> — sesterský ukazatel prevence KVN: tlak i cholesterol tvoří dohromady celkové riziko</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — LDL a cholesterol v ČR</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — NZIS Open: Prošetřenost a hodnoty laboratorních parametrů v NZIS (OIS 15-01, ISSN 2695-0340)</strong> — národní a krajské populačně vážené hodnoty LDL a celkového cholesterolu z datového skladu NZIS (2020–2025). <a href="https://www.nzip.cz/data/2780-laboratorni-data-datovy-souhrn" target="_blank" rel="noopener">nzip.cz/data/2780 ↗</a></li>
+          <li><strong>Česká společnost pro aterosklerózu — doporučené postupy pro diagnostiku a léčbu dyslipidemií</strong> — cílové hodnoty LDL podle kardiovaskulárního rizika a český kontext léčby. <a href="https://www.athero.cz/" target="_blank" rel="noopener">athero.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní kontext a vodítka</h5>
+        <ul class="article-sources-list">
+          <li><strong>ESC/EAS 2019 Guidelines for the management of dyslipidaemias</strong> — evropská vodítka se stupňovanými cílovými hodnotami LDL podle rizika. <a href="https://academic.oup.com/eurheartj/article/41/1/111/5556353" target="_blank" rel="noopener">eurheartj (ESC/EAS 2019) ↗</a></li>
+          <li><strong>Ray KK a kol.: EU-Wide Cross-Sectional Observational Study of Lipid-Modifying Therapy Use — the DA VINCI study (Eur J Prev Cardiol, 2021)</strong> — dosahování cílů LDL v 18 zemích EU (33 % léčených, 18 % velmi rizikových). <a href="https://academic.oup.com/eurjpc/article/28/11/1279/5898664" target="_blank" rel="noopener">DA VINCI ↗</a></li>
+          <li><strong>Eurostat — Cardiovascular diseases statistics</strong> — standardizovaná úmrtnost na nemoci oběhové soustavy podle zemí (mezinárodní srovnání konce řetězce). <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Cardiovascular_diseases_statistics" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 2,98 mmol/l (ČR, 2025) i celá časová řada a krajské hodnoty pocházejí z otevřených dat ÚZIS ČR (NZIS Open, OIS-15-01, blok LDL-cholesterol) a jsou sladěny s kanonickou hodnotou v data/indicators.json. Národní i krajský průměr je populačně vážený agregát HSPA Monitoru z ORP-úrovně dat; ÚZIS oficiální národní průměr LDL v této sadě nepublikuje. Populační průměr LDL není mapou rizika — klinicky rozhodující je dosahování stupňovaného cíle (< 1,8, resp. < 1,4 mmol/l u nejrizikovějších), ne průměr celé populace. Mezinárodní čísla (33 % / 18 %) jsou ze studie DA VINCI (2021); úmrtnostní srovnání vychází z indikátoru mortalita_kardiovaskularni. <strong>Článek je rozpracovaný draft</strong> — před publikací ověřit aktuální úhradová kritéria inhibitorů PCSK9 a případná novější data NZIS.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
