@@ -568,7 +568,20 @@ export function renderModuleNav(activeId) {
         { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
       ],
     },
-    { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
+    { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'],
+      // Rubriky = stabilní osa korpusu (data/rubrics.json) — dropdown dává
+      // každé rubrice přímý vstup z hlavní navigace.
+      children: [
+        { id: 'rubrika-prevence',      label: 'Prevence',              href: 'rubrika.html?id=prevence',      match: [] },
+        { id: 'rubrika-legislativa',   label: 'Legislativa a reforma', href: 'rubrika.html?id=legislativa',   match: [] },
+        { id: 'rubrika-financovani',   label: 'Financování',           href: 'rubrika.html?id=financovani',   match: [] },
+        { id: 'rubrika-dostupnost',    label: 'Dostupnost a regiony',  href: 'rubrika.html?id=dostupnost',    match: [] },
+        { id: 'rubrika-klinika',       label: 'Klinika',               href: 'rubrika.html?id=klinika',       match: [] },
+        { id: 'rubrika-populace',      label: 'Stav populace',         href: 'rubrika.html?id=populace',      match: [] },
+        { id: 'rubrika-dusevni',       label: 'Duševní zdraví',        href: 'rubrika.html?id=dusevni-zdravi', match: [] },
+        { id: 'rubrika-digitalizace',  label: 'Digitalizace',          href: 'rubrika.html?id=digitalizace',  match: [] },
+      ],
+    },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [
         { id: 'strategie-cr',  label: 'Strategie českého zdravotnictví', href: 'strategie.html',   match: ['strategie.html'] },
