@@ -219,6 +219,28 @@ async function loadAndRenderArticles() {
     return filtered;
   }
 
+  const MONTHS_CZ = ['leden', 'únor', 'březen', 'duben', 'květen', 'červen',
+    'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec'];
+
+  function monthKey(a) { return String(a.date ?? '').slice(0, 7); } // YYYY-MM
+
+  function monthLabel(key) {
+    const [y, m] = key.split('-').map(Number);
+    if (!y || !m) return key;
+    return `${MONTHS_CZ[m - 1]} ${y}`;
+  }
+
+  // Řez seznamu zarovnaný na hranici měsíce: vrátí počet položek ≥ minCount
+  // tak, aby poslední zobrazený měsíc byl kompletní (archiv se načítá po
+  // měsících, ne po arbitrárních dvanáctkách).
+  function extendToMonthBoundary(filtered, minCount) {
+    if (minCount >= filtered.length) return filtered.length;
+    const key = monthKey(filtered[minCount - 1]);
+    let i = minCount;
+    while (i < filtered.length && monthKey(filtered[i]) === key) i++;
+    return i;
+  }
+
   function render() {
     const filtered = applyFilters();
 
@@ -230,17 +252,32 @@ async function loadAndRenderArticles() {
     }
     empty?.classList.add('hidden');
 
-    const visible = filtered.slice(0, pageSize);
-    list.innerHTML = visible.map(renderItem).join('');
+    const cut = extendToMonthBoundary(filtered, pageSize);
+    const visible = filtered.slice(0, cut);
 
-    // Pagination control
+    // Seskupení po měsících: mezi položky se vkládají hlavičky měsíců —
+    // orientace v ~200článkovém archivu podle času.
+    const parts = [];
+    let lastMonth = null;
+    for (const a of visible) {
+      const mk = monthKey(a);
+      if (mk && mk !== lastMonth) {
+        parts.push(`<li class="article-archive-month"><h4 class="article-archive-month-h">${esc(monthLabel(mk))}</h4></li>`);
+        lastMonth = mk;
+      }
+      parts.push(renderItem(a));
+    }
+    list.innerHTML = parts.join('');
+
+    // Pagination: načítá se vždy celý další měsíc
     if (controls) {
-      if (filtered.length > pageSize) {
+      if (filtered.length > cut) {
         controls.classList.remove('hidden');
-        const remaining = filtered.length - pageSize;
-        const nextBatch = Math.min(12, remaining);
-        if (moreBtn) moreBtn.textContent = `Zobrazit dalších ${nextBatch} článků (${remaining} zbývá)`;
+        const nextKey = monthKey(filtered[cut]);
+        const nextCount = extendToMonthBoundary(filtered, cut + 1) - cut;
+        if (moreBtn) moreBtn.textContent = `Zobrazit ${esc(monthLabel(nextKey))} (${nextCount} čl.)`;
         if (progressEl) progressEl.textContent = `${visible.length} / ${filtered.length}`;
+        moreBtn && (moreBtn.dataset.nextSize = String(cut + 1));
       } else {
         controls.classList.add('hidden');
         if (progressEl) progressEl.textContent = `${filtered.length} / ${filtered.length}`;
@@ -296,6 +333,16 @@ async function loadAndRenderArticles() {
     });
   }
 
+  // Stav filtrů v URL (hash) — vyfiltrovaný pohled je sdílitelný odkazem:
+  // clanky.html#rubric=prevence&q=očkování
+  function syncUrl() {
+    const parts = [];
+    if (activeRubric !== 'all') parts.push(`rubric=${encodeURIComponent(activeRubric)}`);
+    if (searchQuery) parts.push(`q=${encodeURIComponent(searchQuery)}`);
+    const newHash = parts.length ? '#' + parts.join('&') : '';
+    history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+  }
+
   // Aktivuje filtr archivu na danou rubriku (sdílené chipy i kartami rubrik)
   function selectRubric(rubric, { scroll = false } = {}) {
     activeRubric = rubric;
@@ -303,8 +350,7 @@ async function loadAndRenderArticles() {
     document.querySelectorAll('.topic-chip').forEach(b =>
       b.classList.toggle('active', b.dataset.rubric === rubric));
     render();
-    const newHash = rubric === 'all' ? '' : `#rubric=${encodeURIComponent(rubric)}`;
-    history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+    syncUrl();
     if (scroll) {
       document.querySelector('.article-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -315,9 +361,9 @@ async function loadAndRenderArticles() {
     btn.addEventListener('click', () => selectRubric(btn.dataset.rubric));
   });
 
-  // Wire "show more"
+  // Wire "show more" — další celý měsíc (nextSize spočítal render())
   moreBtn?.addEventListener('click', () => {
-    pageSize += 12;
+    pageSize = parseInt(moreBtn.dataset.nextSize ?? '', 10) || (pageSize + 12);
     render();
   });
 
@@ -331,6 +377,7 @@ async function loadAndRenderArticles() {
         searchQuery = searchInput.value.trim();
         pageSize = 12;
         render();
+        syncUrl();
         // Scroll to list on first search keystroke
         if (searchQuery && !searchInput.dataset.scrolled) {
           searchInput.dataset.scrolled = '1';
@@ -344,7 +391,7 @@ async function loadAndRenderArticles() {
   // Pozn.: karty rubrik odkazují na rubrika.html?id=… (samostatná stránka, F3);
   // in-page filtr archivu řídí chipy (selectRubric) a hash #rubric=… níže.
 
-  // Read initial rubric from URL hash (#rubric=... ; #topic=... jako legacy alias)
+  // Read initial state from URL hash (#rubric=...&q=... ; #topic=... legacy alias)
   const hashMatch = window.location.hash.match(/(?:rubric|topic)=([^&]+)/);
   if (hashMatch) {
     const initial = decodeURIComponent(hashMatch[1]);
@@ -353,6 +400,12 @@ async function loadAndRenderArticles() {
       activeRubric = initial;
       document.querySelectorAll('.topic-chip').forEach(b => b.classList.toggle('active', b === btn));
     }
+  }
+  const qMatch = window.location.hash.match(/(?:^#|&)q=([^&]+)/);
+  if (qMatch) {
+    searchQuery = decodeURIComponent(qMatch[1]);
+    const si = document.getElementById('hubSearch');
+    if (si) si.value = searchQuery;
   }
 
   updateCounts();
