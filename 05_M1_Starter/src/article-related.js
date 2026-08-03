@@ -66,19 +66,43 @@ async function loadJson(path) {
   }
 }
 
-function pickRelatedArticles(currentSlug, currentTopics, allArticles, max = 2) {
-  const currentSet = new Set(currentTopics || []);
-  if (!currentSet.size) return [];
-  return allArticles
-    .filter(a => a.slug !== currentSlug && a.published !== false)
-    .map(a => {
-      const overlap = (a.topics || []).filter(t => currentSet.has(t)).length;
-      return { article: a, overlap };
-    })
-    .filter(x => x.overlap > 0)
-    .sort((a, b) => b.overlap - a.overlap || (a.article.title || '').localeCompare(b.article.title || ''))
-    .slice(0, max)
-    .map(x => x.article);
+/**
+ * Věcná příbuznost dvou článků. Dřívější výběr přes překryv `topics`
+ * (8 hrubých hodnot) byl při 200+ článcích skoro náhodný — desítky článků
+ * sdílejí totéž topic. Skóre staví na sémantické síti korpusu:
+ *
+ *   překryv linked_indicators … ×3 za každý společný indikátor (nejjemnější signál)
+ *   shodný tag (řízený slovník) … +2
+ *   shodná rubrika              … +1
+ *
+ * Tie-break: novější datum, pak slug (determinismus).
+ * Vstupní `allArticles` už musí být přefiltrované na viditelné články —
+ * scorer je čistá funkce bez závislosti na čase (testovatelnost).
+ *
+ * @param {Object} article — aktuální článek (záznam z articles.json)
+ * @param {Array}  allArticles — kandidáti (viditelné články)
+ * @param {number} max
+ * @returns {Array} nejpříbuznější články, seřazené sestupně
+ */
+export function pickRelatedByAffinity(article, allArticles, max = 4) {
+  const myInds = new Set(article.linked_indicators ?? []);
+  const scored = [];
+  for (const a of allArticles) {
+    if (a.slug === article.slug) continue;
+    let score = 0;
+    for (const id of a.linked_indicators ?? []) {
+      if (myInds.has(id)) score += 3;
+    }
+    if (article.tag && a.tag === article.tag) score += 2;
+    if (article.rubric && a.rubric === article.rubric) score += 1;
+    if (score > 0) scored.push({ a, score });
+  }
+  scored.sort((x, y) =>
+    y.score - x.score
+    || String(y.a.date ?? '').localeCompare(String(x.a.date ?? ''))
+    || String(x.a.slug ?? '').localeCompare(String(y.a.slug ?? ''))
+  );
+  return scored.slice(0, max).map(x => x.a);
 }
 
 function findTheme(linkedIndicators, themesData) {
@@ -115,7 +139,6 @@ function buildCards(article, articlesData, themesData, strategiesData, indicator
   const cards = [];
   const linkedIndicators = article.linked_indicators || [];
   const linkedPrevention = article.linked_prevention_themes || [];
-  const topics = article.topics || [];
 
   // 0) Rubrika článku — landing s ostatními texty stejné rubriky
   const rubric = findRubric(article.rubric, rubricsData);
@@ -173,16 +196,8 @@ function buildCards(article, articlesData, themesData, strategiesData, indicator
     });
   }
 
-  // 5) Související články (max 2 podle topic overlap)
-  const related = pickRelatedArticles(article.slug, topics, articlesData?.articles || [], 2);
-  for (const a of related) {
-    cards.push({
-      href: a.slug,
-      kicker: a.tag || 'Související článek',
-      title: a.title,
-      desc: a.perex ? (a.perex.length > 140 ? a.perex.slice(0, 137).trimEnd() + '…' : a.perex) : 'Long-form analýza navazujícího tématu.'
-    });
-  }
+  // 5) Související články mají vlastní viditelný blok (renderSuggestSection)
+  //    — v Příbuzných sekcích by je duplikoval.
 
   // 6) Vždy hub jako poslední fallback
   cards.push({
@@ -202,6 +217,46 @@ function buildCards(article, articlesData, themesData, strategiesData, indicator
     if (dedup.length >= 6) break;
   }
   return dedup;
+}
+
+/**
+ * Blok „Související články" — 3–4 věcně nejbližší texty (pickRelatedByAffinity)
+ * s perexem, vykreslený hned za článkem (před Příbuznými sekcemi).
+ */
+function renderSuggestSection(articles) {
+  const section = el('section', 'section article-suggest-section');
+  section.setAttribute('aria-labelledby', 'articleSuggestHeading');
+  section.dataset.suggestRendered = '1';
+  section.appendChild(el('div', 'section-title',
+    '<h3 id="articleSuggestHeading">Související články</h3>'
+  ));
+  const grid = el('ol', 'article-suggest-grid');
+  for (const a of articles) {
+    const li = document.createElement('li');
+    const perex = a.perex
+      ? (a.perex.length > 180 ? a.perex.slice(0, 177).trimEnd() + '…' : a.perex)
+      : '';
+    let dateStr = '';
+    if (a.date) {
+      const d = new Date(a.date + 'T12:00:00');
+      if (!Number.isNaN(d.getTime())) {
+        dateStr = d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+    }
+    li.innerHTML = `
+      <a class="article-suggest-card" href="${escapeHtml(a.slug)}">
+        <span class="article-suggest-meta">
+          <span class="article-suggest-tag">${escapeHtml(a.tag || 'Článek')}</span>
+          ${dateStr ? `<span class="article-suggest-date">${escapeHtml(dateStr)}</span>` : ''}
+        </span>
+        <h4 class="article-suggest-title">${escapeHtml(a.title || '')}</h4>
+        ${perex ? `<p class="article-suggest-perex">${escapeHtml(perex)}</p>` : ''}
+        <span class="article-suggest-cta" aria-hidden="true">Číst článek →</span>
+      </a>`;
+    grid.appendChild(li);
+  }
+  section.appendChild(grid);
+  return section;
 }
 
 function renderSection(cards) {
@@ -259,4 +314,14 @@ export async function enhanceArticleRelated() {
 
   const section = renderSection(cards);
   main.insertBefore(section, articleEl.nextSibling);
+
+  // „Související články" — před Příbuzné sekce, jen když má co ukázat.
+  if (article && !main.querySelector('.article-suggest-section')) {
+    const { isArticleVisible } = await import('./page-shared.js');
+    const visible = articlesList.filter(a => isArticleVisible(a));
+    const suggested = pickRelatedByAffinity(article, visible, 4);
+    if (suggested.length >= 2) {
+      main.insertBefore(renderSuggestSection(suggested), section);
+    }
+  }
 }

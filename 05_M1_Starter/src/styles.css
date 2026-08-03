@@ -11293,6 +11293,75 @@ body.site-search-open {
 }
 
 /* =================================================================
+   Související články — blok pod článkem (pickRelatedByAffinity)
+   ================================================================= */
+.article-suggest-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.article-suggest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.article-suggest-card:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+.article-suggest-card:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.article-suggest-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.article-suggest-tag {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--red);
+}
+.article-suggest-date {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  white-space: nowrap;
+}
+.article-suggest-title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+}
+.article-suggest-perex {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  flex: 1;
+}
+.article-suggest-cta {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.article-suggest-card:hover .article-suggest-cta { color: var(--red); }
+
+/* =================================================================
    Article cover image — NYT-style hero illustration
    ================================================================= */
 .article-cover {
