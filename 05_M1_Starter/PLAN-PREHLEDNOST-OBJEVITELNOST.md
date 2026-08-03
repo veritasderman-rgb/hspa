@@ -101,7 +101,12 @@ indikátorů) by dal řádově přesnější příbuznost — a už se načítaj
 - Položka „⌕ Hledat" nahoře v mobile drawer (`.mobile-nav-drawer-head`
   actions, nebo první položka `.mobile-nav-list`).
 - Overlay input `font-size: 16px` na mobilu (jinak iOS zoomuje stránku).
-- Test: trigger existuje v mobile DOM, kliknutí otevře overlay.
+- Test: nesmí kontrolovat jen existenci v DOM (ta je splněná i dnes —
+  desktopový trigger existuje, jen je pod 600 px skrytý přes CSS). Akceptační
+  test musí ověřit **computed visibility/focusability při viewportu < 600 px**
+  a existenci ovladatelného prvku v draweru (např. jsdom + matchMedia mock,
+  nebo aspoň assert na CSS pravidla: mobilní trigger nesmí být v žádném
+  `@media` bloku `display: none`).
 
 **1b. Hygiena metadat**
 - `kind`: normalizovat (`analyza`→`analysis`, `clanek`→`article`), doplnit
@@ -160,12 +165,18 @@ indikátorů) by dal řádově přesnější příbuznost — a už se načítaj
 
 **3c. Fulltextový index**
 - Build krok (cron/publish pipeline) vygeneruje `data/search-index.json`:
-  slug, title, perex, H2/H3 nadpisy, prvních ~200 slov + zvýrazněná tvrzení
-  z každého `clanek-*.html`. Statický web → index se počítá při publikaci,
-  ne v prohlížeči.
+  slug, title, perex + **celý normalizovaný text článku** (stripnuté HTML,
+  bez skriptů/AV markup, lowercase, sbalené whitespace). Jen výňatek
+  (nadpisy + prvních N slov) by nebyl fulltext — dotaz vyskytující se až
+  v druhé polovině textu by článek nenašel. Statický web → index se počítá
+  při publikaci, ne v prohlížeči.
+- Odhad velikosti: long-form ~1 500–2 500 slov/článek → 212 článků ≈ 2–3 MB
+  raw, ~0,7–1 MB gzipped. Pro lazy fetch při prvním hledání přijatelné;
+  kdyby index přerostl (500+ článků), rozdělit na shardy po rocích nebo
+  držet v indexu jen normalizovaná slova bez duplicit (bag-of-words
+  per článek), což velikost srazí o ~40–60 %.
 - Overlay i hub search jej použijí (lazy fetch při prvním hledání, jako
-  dnes). Odhad velikosti: 212 článků × ~1 kB ≈ 200–300 kB gzipped ~70 kB —
-  v pořádku pro lazy load.
+  dnes); do doby načtení indexu se hledá nad metadaty jako teď.
 
 ### Vlna 4 — governance (aby to vydrželo)
 
