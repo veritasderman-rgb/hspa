@@ -7,7 +7,7 @@ import { enhanceInlineGlossary } from './glossary-inline.js';
 import { enhanceDolozka } from './dolozka-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
 import { enhanceArticleShare } from './article-share.js';
-import { enhanceSeriesNav, SERIES, SERIES_TITLE } from './series-nav.js';
+import { enhanceSeriesNav, loadSeriesRegistry } from './series-nav.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
@@ -451,36 +451,50 @@ function renderHubLatest(articles) {
  * první). Když redakce žádný nevybere, sekce se skryje.
  */
 /**
- * Rozcestník 9dílné série „Jak (ne)reformovat komplexní systém". Registr dílů
- * (pořadí, slug, název) je sdílený se sériovou navigací v článcích
- * (src/series-nav.js) — jediný zdroj pravdy. Respektuje viditelnost: díl, který
- * není v `articles` (= isArticleVisible=false), se vykreslí jako neaktivní
- * „připravujeme". Sekce se skryje, dokud není viditelný ani jeden díl.
+ * Rozcestník všech článkových sérií. Registr žije v data/series.json
+ * (jediný zdroj pravdy — sdílený s in-article navigací v src/series-nav.js).
+ * Respektuje viditelnost: díl, který není v `articles`
+ * (= isArticleVisible=false), se vykreslí jako neaktivní „připravujeme".
+ * Série bez jediného viditelného dílu se nevykreslí; sekce se skryje,
+ * když není co ukázat.
  */
-function renderHubSeries(articles) {
+async function renderHubSeries(articles) {
   const section = document.querySelector('.hub-series-section');
   const wrap = document.getElementById('hubSeries');
   if (!wrap) return;
 
+  const registry = await loadSeriesRegistry();
   const visible = new Set(articles.map(a => a.slug));
-  if (!SERIES.some(d => visible.has(d.slug))) {
+  const renderable = registry.filter(s => (s.parts ?? []).some(d => visible.has(d.slug)));
+
+  if (!renderable.length) {
     if (section) section.classList.add('hidden');
     wrap.innerHTML = '';
     return;
   }
   if (section) section.classList.remove('hidden');
 
-  wrap.innerHTML = SERIES.map(d => {
-    if (visible.has(d.slug)) {
-      return `<li><a href="${esc(d.slug)}" class="hub-series-card">
+  wrap.innerHTML = renderable.map(s => {
+    const doneCount = s.parts.filter(d => visible.has(d.slug)).length;
+    const partsHtml = s.parts.map(d => {
+      if (visible.has(d.slug)) {
+        return `<li><a href="${esc(d.slug)}" class="hub-series-card">
+          <span class="hub-series-num">${d.n}</span>
+          <span class="hub-series-card-title">${esc(d.short)}</span>
+        </a></li>`;
+      }
+      return `<li><span class="hub-series-card hub-series-card-soon" aria-disabled="true">
         <span class="hub-series-num">${d.n}</span>
-        <span class="hub-series-card-title">${esc(d.short)}</span>
-      </a></li>`;
-    }
-    return `<li><span class="hub-series-card hub-series-card-soon" aria-disabled="true">
-      <span class="hub-series-num">${d.n}</span>
-      <span class="hub-series-card-title">${esc(d.short)}<span class="hub-series-soon">připravujeme</span></span>
-    </span></li>`;
+        <span class="hub-series-card-title">${esc(d.short)}<span class="hub-series-soon">připravujeme</span></span>
+      </span></li>`;
+    }).join('');
+    return `<li class="hub-series-block">
+      <div class="hub-series-block-head">
+        <h4 class="hub-series-block-title">${esc(s.title)}</h4>
+        <span class="hub-series-block-count">${doneCount}/${s.parts.length} dílů</span>
+      </div>
+      <ol class="hub-series-grid">${partsHtml}</ol>
+    </li>`;
   }).join('');
 }
 

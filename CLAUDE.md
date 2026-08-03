@@ -80,7 +80,7 @@ git push -u origin claude/<branch>
 ├── clanky.html                 ← Hub všech článků (matrix + filtry)
 ├── clanek-*.html               ← 212+ článků (long-form journalism, roste ~1/den)
 ├── hspa-prehled.html           ← HSPA 4 oblasti × domény (přehled indikátorů)
-├── tematicke-linie.html        ← 8 tematických linií (linie = sada článků)
+├── tematicke-linie.html        ← 5 tematických linií (linie = indikátory + články + strategie)
 ├── kraje.html                  ← Regionální dashboard (mapa krajů + tabulky)
 ├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
 ├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
@@ -124,7 +124,7 @@ git push -u origin claude/<branch>
 │   ├── articles.json           ← Metadata 212+ článků (audit, rubric, tag, linked_indicators)
 │   ├── glossary.json           ← 110 termínů (definice, odkazy)
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
-│   ├── themes.json             ← 8 tematických linií (mentální zdraví, prevence, …)
+│   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy

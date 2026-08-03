@@ -225,6 +225,31 @@ function validate() {
     }
   }
 
+  // Referenční integrita sérií: každý slug v data/series.json musí existovat
+  // v articles.json (série je jediný zdroj pravdy o členství — mrtvý slug by
+  // v navigaci sérií vyrobil trvalé „připravujeme").
+  const seriesFile = path.join(ROOT, 'data', 'series.json');
+  if (fs.existsSync(seriesFile)) {
+    const bySlug = new Set(articles.map(a => a.slug));
+    const seriesData = JSON.parse(fs.readFileSync(seriesFile, 'utf8'));
+    for (const s of seriesData.series ?? []) {
+      if (!s.id || !s.title || !Array.isArray(s.parts)) {
+        errors.push(`series "${s.id ?? '?'}": chybí id/title/parts`);
+        continue;
+      }
+      for (const d of s.parts) {
+        if (!bySlug.has(d.slug)) {
+          errors.push(`series "${s.id}" díl ${d.n}: slug "${d.slug}" není v articles.json`);
+        }
+      }
+      const nums = s.parts.map(d => d.n);
+      const expected = Array.from({ length: s.parts.length }, (_, i) => i + 1);
+      if (JSON.stringify(nums) !== JSON.stringify(expected)) {
+        errors.push(`series "${s.id}": číslování dílů není souvislé 1..${s.parts.length} (${nums.join(',')})`);
+      }
+    }
+  }
+
   console.log(`Articles validated: ${articles.length}`);
   if (warnings.length) {
     console.log(`Warnings: ${warnings.length}`);
