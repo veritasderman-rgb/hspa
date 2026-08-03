@@ -78,9 +78,9 @@ git push -u origin claude/<branch>
 05_M1_Starter/
 ├── index.html                  ← Homepage (hub matrix, dimensions, finance, podcasts)
 ├── clanky.html                 ← Hub všech článků (matrix + filtry)
-├── clanek-*.html               ← 65 článků (long-form journalism)
+├── clanek-*.html               ← 212+ článků (long-form journalism, roste ~1/den)
 ├── hspa-prehled.html           ← HSPA 4 oblasti × domény (přehled indikátorů)
-├── tematicke-linie.html        ← 8 tematických linií (linie = sada článků)
+├── tematicke-linie.html        ← 5 tematických linií (linie = indikátory + články + strategie)
 ├── kraje.html                  ← Regionální dashboard (mapa krajů + tabulky)
 ├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
 ├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
@@ -120,11 +120,11 @@ git push -u origin claude/<branch>
 │       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
-│   ├── indicators.json         ← Datový kontrakt HSPA (80 indikátorů)
-│   ├── articles.json           ← Metadata 65 článků (audit, topics, linked_indicators)
+│   ├── indicators.json         ← Datový kontrakt HSPA (190 indikátorů: 131 HSPA + 59 monitoring)
+│   ├── articles.json           ← Metadata 212+ článků (audit, rubric, tag, linked_indicators)
 │   ├── glossary.json           ← 110 termínů (definice, odkazy)
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
-│   ├── themes.json             ← 8 tematických linií (mentální zdraví, prevence, …)
+│   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
@@ -133,10 +133,14 @@ git push -u origin claude/<branch>
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
 │   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
 │   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
+│   ├── tags.json               ← Řízený slovník tagů článků + aliasy (validované)
+│   ├── series.json             ← Registr článkových sérií (členství = zdroj pravdy)
+│   ├── rubrics.json            ← 8 rubrik (primární osa článků, landing pages)
+│   ├── search-index.json       ← Fulltextový index článků (build:search-index)
 │   ├── cz-regions.geojson      ← GeoJSON krajů
 │   └── snapshot-YYYY-MM-DD.json ← Denní snapshoty datového kontraktu
 │
-├── indicators/                 ← Metodické karty (1 JSON = 1 indikátor, 80 souborů)
+├── indicators/                 ← Metodické karty (1 JSON = 1 indikátor)
 ├── ingest/
 │   ├── run.js                  ← Orchestrátor (spouštěn GitHub Actions)
 │   ├── transform.js            ← Harmonizace + výpočet signálů
@@ -430,3 +434,4 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - `node_modules/`
 - `*.lock`
 - `data/snapshot-*.json` — denní snapshoty (historie datového kontraktu)
+- `data/search-index.json` — generovaný fulltextový index (`npm run build:search-index`)

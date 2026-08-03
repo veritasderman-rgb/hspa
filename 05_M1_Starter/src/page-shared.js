@@ -568,7 +568,20 @@ export function renderModuleNav(activeId) {
         { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
       ],
     },
-    { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'] },
+    { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'],
+      // Rubriky = stabilní osa korpusu (data/rubrics.json) — dropdown dává
+      // každé rubrice přímý vstup z hlavní navigace.
+      children: [
+        { id: 'rubrika-prevence',      label: 'Prevence',              href: 'rubrika.html?id=prevence',      match: [] },
+        { id: 'rubrika-legislativa',   label: 'Legislativa a reforma', href: 'rubrika.html?id=legislativa',   match: [] },
+        { id: 'rubrika-financovani',   label: 'Financování',           href: 'rubrika.html?id=financovani',   match: [] },
+        { id: 'rubrika-dostupnost',    label: 'Dostupnost a regiony',  href: 'rubrika.html?id=dostupnost',    match: [] },
+        { id: 'rubrika-klinika',       label: 'Klinika',               href: 'rubrika.html?id=klinika',       match: [] },
+        { id: 'rubrika-populace',      label: 'Stav populace',         href: 'rubrika.html?id=populace',      match: [] },
+        { id: 'rubrika-dusevni',       label: 'Duševní zdraví',        href: 'rubrika.html?id=dusevni-zdravi', match: [] },
+        { id: 'rubrika-digitalizace',  label: 'Digitalizace',          href: 'rubrika.html?id=digitalizace',  match: [] },
+      ],
+    },
     { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html'],
       children: [
         { id: 'strategie-cr',  label: 'Strategie českého zdravotnictví', href: 'strategie.html',   match: ['strategie.html'] },
@@ -693,6 +706,23 @@ function injectMobileNav(tabsHtml) {
   const topbar = document.querySelector('header.topbar');
   if (!topbar) return;
 
+  // Mobilní vstup do vyhledávání: desktopový .site-search-trigger žije uvnitř
+  // .module-nav, která se pod 720 px skrývá — mobil proto potřebuje vlastní
+  // trigger v topbaru (viditelnost řídí CSS breakpoint 720 px jako hamburger).
+  let searchBtn = document.getElementById('mobileSearchTrigger');
+  if (!searchBtn) {
+    searchBtn = document.createElement('button');
+    searchBtn.id = 'mobileSearchTrigger';
+    searchBtn.className = 'mobile-search-trigger';
+    searchBtn.setAttribute('type', 'button');
+    searchBtn.setAttribute('aria-label', 'Otevřít vyhledávání');
+    searchBtn.innerHTML = '<span aria-hidden="true">⌕</span>';
+    searchBtn.addEventListener('click', () => {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+    });
+    topbar.appendChild(searchBtn);
+  }
+
   let toggle = document.getElementById('mobileNavToggle');
   if (!toggle) {
     toggle = document.createElement('button');
@@ -729,6 +759,7 @@ function injectMobileNav(tabsHtml) {
         <span class="mobile-nav-drawer-title">Menu</span>
         <span class="mobile-nav-drawer-actions">${themeToggleHtml()}<button type="button" class="mobile-nav-close" aria-label="Zavřít menu">×</button></span>
       </div>
+      <button type="button" class="mobile-nav-search" id="mobileNavSearch"><span aria-hidden="true">⌕</span> Hledat na webu</button>
       <nav class="mobile-nav-list" aria-label="Stránky"></nav>`;
     document.body.appendChild(drawer);
   }
@@ -758,6 +789,10 @@ function injectMobileNav(tabsHtml) {
     document.body.classList.contains('mobile-nav-open') ? close() : open();
   });
   drawer.querySelector('.mobile-nav-close').addEventListener('click', close);
+  drawer.querySelector('.mobile-nav-search')?.addEventListener('click', () => {
+    close();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+  });
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && document.body.classList.contains('mobile-nav-open')) close();

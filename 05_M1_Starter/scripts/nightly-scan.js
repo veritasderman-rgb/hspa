@@ -537,6 +537,14 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
       note: `Publikováno před ${age} měsíci (${article.date}) — zvaž revizi čísel a zdrojů.` });
   }
 
+  // 3b) taxonomie — článek bez vazby na indikátory je sirotek mimo
+  // sémantickou síť (Související články, zpětné odkazy, linie). Validátor
+  // to hlásí jen jako warning; noční worklist je vehikl, jak dluh splácet.
+  if (!Array.isArray(article.linked_indicators) || article.linked_indicators.length === 0) {
+    flags.push({ type: 'missing-indicators', severity: 'review',
+      note: 'Chybí linked_indicators — doplň vazbu na 1–3 indikátory datového kontraktu (článek je mimo sémantickou síť).' });
+  }
+
   // text-based (vyžaduje HTML)
   if (existsSync(htmlPath)) {
     const html = readFileSync(htmlPath, 'utf8');
@@ -629,6 +637,7 @@ function buildReport(items, today) {
   lines.push('| --- | ---: | --- |');
   const TYPE_ACTION = {
     'missing-cover': 'Auto-fix: vygenerovat + injektovat cover',
+    'missing-indicators': 'Revize: doplnit linked_indicators (sirotek mimo sémantickou síť)',
     'topical-expired': 'Revize: aktualizovat na „po události“',
     'date-passed': 'Revize: ověřit budoucí vs. minulý čas u data',
     'check-sources': 'Revize: zkontrolovat zdrojové odkazy (WebFetch)',
@@ -698,7 +707,7 @@ function buildReport(items, today) {
 
 function flagSeverity(type) {
   return ({
-    'missing-cover': 'auto-fix', 'topical-expired': 'review', 'date-passed': 'review',
+    'missing-cover': 'auto-fix', 'missing-indicators': 'review', 'topical-expired': 'review', 'date-passed': 'review',
     'check-sources': 'review', 'no-html': 'review', 'year-past': 'low', 'stale-date': 'low',
     'indicator-drift': 'review', 'claims-drift': 'review', 'claims-stale': 'low', 'claims-missing': 'low',
   })[type] || 'review';

@@ -1,111 +1,38 @@
-// Sériová navigace pro 9dílnou sérii „Jak (ne)reformovat komplexní systém".
+// Sériová navigace článkových sérií (kolekcí s pořadím).
 //
 // Na stránkách clanek-*.html, které do série patří, vykreslí JEDNOTNÝ seznam
 // všech dílů (s názvy) — hned pod hlavičkou článku a znovu na jeho konci.
 // Aktuální díl je v obou seznamech zvýrazněn červenou tečkou „jste zde".
 //
-// Idempotentní: na ne-sériových stránkách (nebo při opakovaném volání) tiše
-// skončí. Pořadí a čísla odpovídají samočíslování „díl N/9" uvnitř textů
-// (registr viz PLAN-SERIE-REFORMA-KOMPLEXITA.md). Při změně série se edituje
-// jen pole SERIES níže — propíše se do všech dílů automaticky.
+// Registr sérií žije v data/series.json (jediný zdroj pravdy — sdílený
+// s rozcestníkem na hubu v src/clanky.js). Přidání série = přidat objekt
+// do series.json; žádný kód se needituje. Referenční integritu slugů hlídá
+// ingest/validate-articles.js.
 //
-// Respektuje viditelnost (isArticleVisible): díl, který ještě není publikovaný
-// (published:false nebo datum v budoucnu), se vykreslí jako neaktivní
-// („připravujeme"), nikdy ne jako živý odkaz na draft. Seznam tak zůstává
-// konzistentní s hubem i v období, kdy série vychází po částech.
+// Idempotentní: na ne-sériových stránkách (nebo při opakovaném volání) tiše
+// skončí. Respektuje viditelnost (isArticleVisible): díl, který ještě není
+// publikovaný (published:false nebo datum v budoucnu), se vykreslí jako
+// neaktivní („připravujeme"), nikdy ne jako živý odkaz na draft.
 
 import { isArticleVisible } from './page-shared.js';
 
-// Registr sérií. Každá série = { title, hub, lead, parts:[{n,slug,short}] }.
-// `lead` je dovětek za názvem v úvodní větě navigace („… — <lead>:").
-// Přidání nové série = přidat objekt do SERIES_REGISTRY; in-article navigace
-// ji propíše automaticky do všech jejích dílů (detekce podle slugu).
-const REFORM_SERIES = {
-  title: 'Jak (ne)reformovat komplexní systém',
-  hub: 'clanky.html',
-  lead: 'detailního průvodce reformou zdravotního systému v devíti dílech',
-  parts: [
-    { n: 1, slug: 'clanek-teorie-zmeny.html',               short: 'Teorie změny a logický model' },
-    { n: 2, slug: 'clanek-rizeni-podle-vysledku.html',      short: 'Řízení podle výsledků' },
-    { n: 3, slug: 'clanek-komplexita-reforem.html',         short: 'Komplexita, chaos a okno příležitosti' },
-    { n: 4, slug: 'clanek-systemove-mapovani-paky.html',    short: 'Systémové mapování a páky změny' },
-    { n: 5, slug: 'clanek-datova-patere-lock-in.html',      short: 'Datová páteř, interoperabilita a lock-in' },
-    { n: 6, slug: 'clanek-ukazatele-dashboard.html',        short: 'Ukazatele a dashboard, který vede k akci' },
-    { n: 7, slug: 'clanek-platit-za-vysledek-vbhc.html',    short: 'Platit za výsledek (value-based healthcare)' },
-    { n: 8, slug: 'clanek-governance-nezavislost.html',     short: 'Governance a nezávislost měřičů' },
-    { n: 9, slug: 'clanek-posledni-mile-implementace.html', short: 'Poslední míle: implementace reforem' },
-  ],
-};
+let _registryPromise = null;
 
-const EPIDEMIOLOGIE_SERIES = {
-  title: 'Epidemiologie: věda, která počítá s nákazou',
-  hub: 'clanky.html',
-  lead: 'vědeckého seriálu o tom, proč epidemiologii a očkování věřit — s principy k vyzkoušení na simulátoru nedovarenytapir.cz, ve čtyřech dílech',
-  parts: [
-    { n: 1, slug: 'clanek-epidemiologie-1-proc-verit-cislum.html',  short: 'Proč věřit číslům: od mapy cholery k reprodukčnímu číslu' },
-    { n: 2, slug: 'clanek-epidemiologie-2-ockovani-dukaz.html',     short: 'Očkování: nejlépe doložená intervence v dějinách medicíny' },
-    { n: 3, slug: 'clanek-epidemiologie-3-modely-rozhodovani.html', short: 'Modely, trasování a krizové rozhodování' },
-    { n: 4, slug: 'clanek-epidemiologie-4-nedovera-dezinformace.html', short: 'Jak porazit nedůvěru: váhání s očkováním a dezinformace' },
-  ],
-};
-
-const NAPOJE_SERIES = {
-  title: 'Slazené nápoje, energeťáky a šťávy',
-  hub: 'clanky.html',
-  lead: 'průvodce nápoji a cukrem s důrazem na děti, v šesti dílech',
-  parts: [
-    { n: 1, slug: 'clanek-napoje-1-tekuty-cukr.html',    short: 'Tekutý cukr: proč na nápojích záleží víc než na zákusku' },
-    { n: 2, slug: 'clanek-napoje-2-mytus-stavy.html',     short: 'Mýtus zdravé šťávy: proč 100% džus není lepší než kola' },
-    { n: 3, slug: 'clanek-napoje-3-energetaky-deti.html', short: 'Energetické nápoje: co kofein a cukr dělají dětem' },
-    { n: 4, slug: 'clanek-napoje-4-alkohol-mytus.html',   short: 'Pivo, víno a mýtus zdravého alkoholu' },
-    { n: 5, slug: 'clanek-napoje-5-co-pit.html',          short: 'Co tedy pít: voda, čaj a (pro dospělé) káva' },
-    { n: 6, slug: 'clanek-napoje-6-dan-regulace.html',    short: 'Daň, etikety, automaty: co na slazené nápoje platí' },
-  ],
-};
-
-const DIGI_SERIES = {
-  title: 'Digitální zdravotnictví srozumitelně',
-  hub: 'clanky.html',
-  lead: 'průvodce digitalizací českého zdravotnictví od papírku po EHDS, v pěti dílech',
-  parts: [
-    { n: 1, slug: 'clanek-digi-1-co-to-je.html',                short: 'Co to je: od papírku k datům' },
-    { n: 2, slug: 'clanek-digi-2-jak-funguje-api.html',         short: 'Jak to funguje: co je API a kde jsou data' },
-    { n: 3, slug: 'clanek-digi-3-dve-vrstvy-ncez.html',         short: 'Dvě vrstvy: staré ostrovy a páteř NCEZ' },
-    { n: 4, slug: 'clanek-digi-4-povinne-dobrovolne-2026.html', short: 'Co je v roce 2026 povinné a co dobrovolné' },
-    { n: 5, slug: 'clanek-digi-5-strategie-ehds-2030.html',     short: 'Kam to směřuje: strategie, EHDS a rok 2030' },
-  ],
-};
-
-const AI_SERIES = {
-  title: 'AI ve zdravotnictví',
-  hub: 'clanky.html',
-  lead: 'průvodce umělou inteligencí v medicíně ve dvou dílech — co je prokázáno a co zatím jen slibováno',
-  parts: [
-    { n: 1, slug: 'clanek-ai-zdravotnictvi-1-vstricnost.html', short: 'Vstřícnost: přepis konzultací, zvaní na prevenci, srozumitelné zprávy' },
-    { n: 2, slug: 'clanek-ai-zdravotnictvi-2-lecba.html',      short: 'Diagnostika a výzkum: snímky, EKG a hon na nová antibiotika' },
-  ],
-};
-
-const PM_PH_SERIES = {
-  title: 'Přesná medicína vs. veřejné zdraví',
-  hub: 'clanky.html',
-  lead: 'série o sporu mezi personalizovanou medicínou a zdravím populace, v šesti dílech',
-  parts: [
-    { n: 1, slug: 'clanek-presna-medicina-vs-verejne-zdravi-spor.html', short: 'Spor, který se u nás nevede nahlas' },
-    { n: 2, slug: 'clanek-presna-medicina-tri-konfigurace.html',        short: 'Tři způsoby, jak smířit genom a populaci' },
-    { n: 3, slug: 'clanek-precizni-verejne-zdravi.html',                short: 'Precizní veřejné zdraví: příslib, nebo přebalený individualismus?' },
-    { n: 4, slug: 'clanek-co-urcuje-zdravi-naroda.html',                short: 'Co doopravdy určuje zdraví národa' },
-    { n: 5, slug: 'clanek-presna-medicina-solidarita.html',            short: 'Solidarita, nebo osobní účet?' },
-    { n: 6, slug: 'clanek-presna-medicina-ceska-cesta.html',           short: 'Česká cesta: přesně, a přitom spravedlivě' },
-  ],
-};
-
-export const SERIES_REGISTRY = [REFORM_SERIES, EPIDEMIOLOGIE_SERIES, NAPOJE_SERIES, DIGI_SERIES, AI_SERIES, PM_PH_SERIES];
-
-// Zpětná kompatibilita: hub-rozcestník v clanky.js renderuje 9dílnou reformní
-// sérii přes tyto dva exporty — necháváme je ukazovat na ni.
-export const SERIES = REFORM_SERIES.parts;
-export const SERIES_TITLE = REFORM_SERIES.title;
+/**
+ * Načte registr sérií z data/series.json (cache na modul; jeden fetch na
+ * stránku). Při chybě vrací prázdný seznam — navigace se prostě nevykreslí.
+ *
+ * @returns {Promise<Array<{id:string,title:string,hub:string,lead:string,parts:Array}>>}
+ */
+export function loadSeriesRegistry() {
+  if (!_registryPromise) {
+    _registryPromise = fetch('data/series.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => Array.isArray(d?.series) ? d.series : [])
+      .catch(() => []);
+  }
+  return _registryPromise;
+}
 
 function escapeHtml(str) {
   return String(str ?? '').replace(/[&<>"']/g, c => ({
@@ -193,9 +120,10 @@ export async function enhanceSeriesNav() {
   const slug = detectArticleSlug();
   if (!slug) return;
   // Najdi sérii, do které článek patří (napříč registrem), a index dílu v ní.
+  const registry = await loadSeriesRegistry();
   let series = null, idx = -1;
-  for (const s of SERIES_REGISTRY) {
-    const i = s.parts.findIndex(d => d.slug === slug);
+  for (const s of registry) {
+    const i = (s.parts ?? []).findIndex(d => d.slug === slug);
     if (i !== -1) { series = s; idx = i; break; }
   }
   if (!series) return; // článek není součástí žádné série

@@ -4,6 +4,16 @@
 Vzniklo ze zamyšlení nad stavem webu k 2026-08-03: korpus přerostl chronologický
 model prezentace a potřebuje strukturální odpověď.
 
+> **Stav implementace (2026-08-03):** vlny 1–4 implementovány v jednom PR
+> (mobilní vyhledávání, tags.json + normalizace, related přes indikátory,
+> series.json + linie↔články, homepage řádek rubrik, rubriky jako landing
+> pages + nav dropdown, archiv po měsících + URL stav, fulltextový index,
+> validátor + rutiny + nightly check). Jediná vědomá odchylka: členství
+> v sérii drží `data/series.json` (jediný zdroj pravdy), ne pole
+> `series` v articles.json — validátor hlídá referenční integritu.
+> Otevřený zbytek: 18 článků bez `linked_indicators` (nightly worklist
+> `missing-indicators`), případné shardování indexu při 500+ článcích.
+
 ---
 
 ## 1) Diagnóza — co dnes máme a proč to přestává stačit

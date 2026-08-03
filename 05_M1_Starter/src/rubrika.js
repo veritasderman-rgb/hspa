@@ -92,7 +92,22 @@ async function init() {
 
   document.title = `${rubric.label} · Rubriky · HSPA Monitor`;
 
+  // SEO: každá rubrika je vlastní landing page s vlastní canonical URL
+  // a popisem (dřív canonical ukazovala na clanky.html a rubriky se
+  // neindexovaly — při 20–50 článcích na rubriku je vlastní vstup na místě).
+  const canonicalHref = `https://skorezdravotnictvi.cz/rubrika?id=${encodeURIComponent(rubric.id)}`;
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', canonicalHref);
+  document.querySelector('meta[name="description"]')?.setAttribute('content',
+    `${rubric.label}: ${rubric.lead}`);
+
   const items = sortNewestFirst(articles.filter(a => a.rubric === id && isArticleVisible(a)));
+  const essentials = items.filter(a => a.pinned_essential === true).slice(0, 3);
 
   view.innerHTML = `
     <section class="ed-hero hub-rubric-${esc(rubric.color)}" aria-labelledby="rubricHeadline" style="border-left-width:4px;border-left-style:solid;padding-left:20px;">
@@ -109,6 +124,13 @@ async function init() {
         </div>
       </aside>
     </section>
+
+    ${essentials.length ? `
+    <section class="article-list-section" aria-labelledby="rubricEssentialsH">
+      <div class="ed-kicker">Pro orientaci</div>
+      <h3 class="hub-section-h" id="rubricEssentialsH">Začněte tady</h3>
+      <ol class="article-list">${essentials.map(renderItem).join('')}</ol>
+    </section>` : ''}
 
     <section class="article-list-section" aria-labelledby="rubricListH">
       <h3 class="hub-section-h" id="rubricListH">Všechny články v rubrice</h3>

@@ -3,12 +3,13 @@
 // a renderuje list karet témat nebo detail jednoho tématu (z URL ?id=...).
 
 import './analytics.js';
-import { renderModuleNav, renderMastheadDate, escapeHtml } from './page-shared.js';
+import { renderModuleNav, renderMastheadDate, escapeHtml, isArticleVisible } from './page-shared.js';
 
 let allThemes = [];
 let allIndicators = [];
 let allStrategies = [];
 let allExplainers = [];
+let allArticles = [];
 
 function findIndicator(id) {
   return allIndicators.find(i => i.id === id) ?? null;
@@ -126,6 +127,32 @@ function renderStrategyCard(s) {
   </a>`;
 }
 
+/**
+ * Články linie — vazba přes sémantickou síť: článek patří do linie, když
+ * sdílí aspoň jeden indikátor s theme.indicator_ids. Řazeno počtem
+ * společných indikátorů, pak datem (nejnovější první).
+ */
+export function articlesForTheme(theme, articles, max = 8) {
+  const inds = new Set(theme.indicator_ids ?? []);
+  return articles
+    .map(a => ({ a, overlap: (a.linked_indicators ?? []).filter(id => inds.has(id)).length }))
+    .filter(x => x.overlap > 0)
+    .sort((x, y) => y.overlap - x.overlap || String(y.a.date ?? '').localeCompare(String(x.a.date ?? '')))
+    .slice(0, max)
+    .map(x => x.a);
+}
+
+function renderArticleRow(a) {
+  const perex = a.perex ? (a.perex.length > 150 ? a.perex.slice(0, 147).trimEnd() + '…' : a.perex) : '';
+  return `<a class="theme-article-row" href="${escapeHtml(a.slug)}">
+    <span class="theme-article-tag">${escapeHtml(a.tag || 'Článek')}</span>
+    <span class="theme-article-body">
+      <span class="theme-article-title">${escapeHtml(a.title || '')}</span>
+      ${perex ? `<span class="theme-article-perex">${escapeHtml(perex)}</span>` : ''}
+    </span>
+  </a>`;
+}
+
 function renderExplainerCard(e) {
   if (!e) return '';
   return `<a class="theme-expl-card" href="jak-funguje.html?id=${escapeHtml(e.id)}">
@@ -148,6 +175,7 @@ function showDetail(id, pushHistory = true) {
   detailView.classList.remove('hidden');
 
   const indicators = theme.indicator_ids.map(findIndicator).filter(Boolean);
+  const themeArticles = articlesForTheme(theme, allArticles);
   const strategies = theme.strategy_ids.map(findStrategy).filter(Boolean);
   const explainers = theme.explainer_ids.map(findExplainer).filter(Boolean);
 
@@ -190,6 +218,14 @@ function showDetail(id, pushHistory = true) {
         </div>
       </section>
 
+      ${themeArticles.length > 0 ? `
+      <section class="theme-section" aria-labelledby="themeArtHeadline">
+        <h3 class="theme-section-title" id="themeArtHeadline">Články v této linii (${themeArticles.length})</h3>
+        <div class="theme-article-grid">
+          ${themeArticles.map(renderArticleRow).join('')}
+        </div>
+      </section>` : ''}
+
       ${strategies.length > 0 ? `
       <section class="theme-section" aria-labelledby="themeStratHeadline">
         <h3 class="theme-section-title" id="themeStratHeadline">Relevantní strategie</h3>
@@ -226,16 +262,18 @@ async function init() {
   renderMastheadDate();
 
   try {
-    const [themesData, indData, stratData, explData] = await Promise.all([
+    const [themesData, indData, stratData, explData, artData] = await Promise.all([
       fetch('data/themes.json').then(r => r.json()),
       fetch('data/indicators.json').then(r => r.json()),
       fetch('data/strategies.json').then(r => r.ok ? r.json() : { strategies: [] }).catch(() => ({ strategies: [] })),
       fetch('data/explainers.json').then(r => r.ok ? r.json() : { explainers: [] }).catch(() => ({ explainers: [] })),
+      fetch('data/articles.json').then(r => r.ok ? r.json() : { articles: [] }).catch(() => ({ articles: [] })),
     ]);
     allThemes = themesData.themes ?? [];
     allIndicators = indData.indicators ?? [];
     allStrategies = stratData.strategies ?? [];
     allExplainers = explData.explainers ?? [];
+    allArticles = (artData.articles ?? []).filter(a => isArticleVisible(a));
   } catch {
     document.getElementById('themeList').innerHTML = '<p class="empty-state">Nepodařilo se načíst data.</p>';
     return;

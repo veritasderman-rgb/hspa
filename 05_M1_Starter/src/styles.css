@@ -5192,6 +5192,20 @@ ul.md-enum > li > strong:first-child {
   border-top: 2px solid var(--ink);
 }
 .article-list-item { border-bottom: 1px solid var(--rule); }
+/* Hlavička měsíce v archivu (seskupení po měsících) */
+.article-archive-month {
+  padding: 22px 0 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.article-archive-month-h {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mut);
+}
 .article-list-link {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -7548,8 +7562,54 @@ body.mobile-nav-open .mobile-nav-drawer { transform: translateX(0); }
   color: var(--red);
 }
 
+/* Mobilní trigger vyhledávání — ikona ⌕ v topbaru vedle hamburgeru.
+   Desktopový .site-search-trigger je uvnitř .module-nav (pod 720 px skrytá),
+   tenhle prvek je jediný viditelný vstup do overlaye na mobilu. */
+.mobile-search-trigger {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--rule2);
+  border-radius: 4px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink);
+  transition: background 0.15s, border-color 0.15s;
+}
+.mobile-search-trigger:hover { background: var(--paper2); border-color: var(--ink); }
+.mobile-search-trigger:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* Položka Hledat v mobile draweru — druhý vstup do overlaye (zavře drawer). */
+.mobile-nav-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 32px);
+  margin: 12px 16px 4px;
+  padding: 10px 14px;
+  font-family: var(--sans);
+  font-size: 15px;
+  text-align: left;
+  background: var(--paper2);
+  border: 1px solid var(--rule2);
+  border-radius: 6px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.mobile-nav-search:hover { background: var(--paper); border-color: var(--ink); }
+.mobile-nav-search:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.mobile-nav-search span { font-size: 18px; line-height: 1; }
+
 @media (max-width: 720px) {
   .mobile-nav-toggle { display: inline-flex; }
+  .mobile-search-trigger { display: inline-flex; }
   /* Skryjeme inline module-nav v topbaru — místo ní hamburger */
   header.topbar .module-nav { display: none; }
   header.topbar {
@@ -11245,6 +11305,184 @@ html {
 body.site-search-open {
   overflow: hidden;
 }
+
+/* =================================================================
+   Homepage — řádek rubrik pod nejnovějšími články (mapa korpusu)
+   ================================================================= */
+.home-rubrics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.home-rubric-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper2);
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.home-rubric-chip:hover { border-color: var(--ink); background: var(--paper); }
+.home-rubric-chip:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.home-rubric-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-mut);
+}
+
+/* =================================================================
+   Tematické linie — Články v linii (vazba přes linked_indicators)
+   ================================================================= */
+.theme-article-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.theme-article-row {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.theme-article-row:hover { border-color: var(--ink); }
+.theme-article-row:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.theme-article-tag {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--red);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 110px;
+}
+.theme-article-body { display: flex; flex-direction: column; gap: 3px; }
+.theme-article-title { font-weight: 600; line-height: 1.35; }
+.theme-article-perex {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+@media (max-width: 600px) {
+  .theme-article-row { flex-direction: column; gap: 6px; }
+  .theme-article-tag { min-width: 0; }
+}
+
+/* =================================================================
+   Hub — sekce Série: bloky všech sérií z data/series.json
+   ================================================================= */
+.hub-series-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.hub-series-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.hub-series-block-title {
+  margin: 0;
+  font-size: 18px;
+}
+.hub-series-block-count {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  white-space: nowrap;
+}
+
+/* =================================================================
+   Související články — blok pod článkem (pickRelatedByAffinity)
+   ================================================================= */
+.article-suggest-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.article-suggest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.article-suggest-card:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+.article-suggest-card:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.article-suggest-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.article-suggest-tag {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--red);
+}
+.article-suggest-date {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink-mut);
+  white-space: nowrap;
+}
+.article-suggest-title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+}
+.article-suggest-perex {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+  flex: 1;
+}
+.article-suggest-cta {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.article-suggest-card:hover .article-suggest-cta { color: var(--red); }
 
 /* =================================================================
    Article cover image — NYT-style hero illustration

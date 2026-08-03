@@ -65,6 +65,9 @@ ani nechodí na síť — vyrobí tříděný worklist. Ty podle něj jednáš. 
 Typy flagů: `missing-cover` (auto-fix), `date-passed` (review — datum bylo při
 publikaci budoucí, dnes uplynulo, v okolí dopředná formulace), `check-sources`
 (review — prioritní legislativní/EU odkazy ke kontrole), `topical-expired`,
+`missing-indicators` (review — článek bez `linked_indicators` je sirotek mimo
+sémantickou síť: doplň 1–3 vazby na indikátory; tag drž ve slovníku
+`data/tags.json`, drift metadat srovná `node scripts/normalize-article-metadata.js`),
 `stale-date` (low), `no-html`.
 
 ---

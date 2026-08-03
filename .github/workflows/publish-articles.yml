@@ -48,6 +48,9 @@ jobs:
       - name: Regenerate sitemap
         run: npm run generate:sitemap
 
+      - name: Regenerate search index
+        run: npm run build:search-index
+
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -59,7 +62,7 @@ jobs:
             echo "No changes to articles.json — nothing to commit."
             exit 0
           fi
-          git add feed.xml sitemap.xml
+          git add feed.xml sitemap.xml data/search-index.json
           # Extract published list for commit message
           PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)

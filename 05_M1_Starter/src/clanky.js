@@ -7,7 +7,7 @@ import { enhanceInlineGlossary } from './glossary-inline.js';
 import { enhanceDolozka } from './dolozka-inline.js';
 import { enhanceArticleRelated } from './article-related.js';
 import { enhanceArticleShare } from './article-share.js';
-import { enhanceSeriesNav, SERIES, SERIES_TITLE } from './series-nav.js';
+import { enhanceSeriesNav, loadSeriesRegistry } from './series-nav.js';
 
 renderModuleNav('articles');
 renderMastheadDate();
@@ -88,7 +88,7 @@ function injectAiDisclaimer() {
           <h4 class="ai-disclaimer-steps-h">Jak to celé funguje krok po kroku</h4>
           <ol class="ai-disclaimer-steps">
             <li><strong>Sběr dat.</strong> Každý den v 06:00 UTC se automaticky stahují čerstvá data z otevřených zdrojů: ÚZIS NRPZS, ČSÚ DataStat, OECD Health Statistics, Eurostat, Sbírka zákonů a další veřejné registry. Romantika digitálního věku.</li>
-            <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty 80 indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
+            <li><strong>Rešerše.</strong> Dostávám aktuální datový snapshot, metodické karty všech indikátorů a související textové podklady — zákony, vyhlášky, metodiky a primární zdroje. Tedy přesně to, co si člověk obvykle nechává „na později".</li>
             <li><strong>Návrh článku.</strong> Připravím analytický text s odkazy na konkrétní indikátory a zdroje. Vždy. Bez výjimky. Na rozdíl od některých debat o zdravotnictví se zde tvrzení pokud možno neopírají pouze o silný pocit.</li>
             <li><strong>Lidská kontrola.</strong> Autor projektu texty namátkově prochází a opravuje zjevné nesrovnalosti. Není to klasická redakční editace řádek po řádku — spíš dohled dospělého v místnosti, s vědomím, že dospělý má i jiné schůzky.</li>
             <li><strong>Publikace.</strong> Článek se objeví zde, opatřen disclaimerem. Jsme sice zvědaví, ale ne úplně bez pudu sebezáchovy.</li>
@@ -205,6 +205,23 @@ async function loadAndRenderArticles() {
   const moreBtn = document.getElementById('hubListMore');
   const progressEl = document.getElementById('hubListProgress');
 
+  // Fulltext hub searche: lazy fetch data/search-index.json při prvním
+  // hledání; než doběhne, hledá se jen v metadatech (progressive enhancement).
+  let hubFulltext = null;
+  let hubFulltextStarted = false;
+  function ensureHubFulltext() {
+    if (hubFulltextStarted) return;
+    hubFulltextStarted = true;
+    fetch('data/search-index.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!Array.isArray(d?.entries)) return;
+        hubFulltext = new Map(d.entries.map(e => [e.slug, String(e.text ?? '').toLowerCase()]));
+        if (searchQuery) render(); // přehodnoť aktuální dotaz i proti tělům článků
+      })
+      .catch(() => { /* bez fulltextu hledáme dál v metadatech */ });
+  }
+
   function applyFilters() {
     let filtered = activeRubric === 'all'
       ? articles
@@ -213,10 +230,34 @@ async function loadAndRenderArticles() {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter(a => {
         const hay = `${a.title ?? ''} ${a.perex ?? ''} ${a.tag ?? ''}`.toLowerCase();
-        return hay.includes(q);
+        if (hay.includes(q)) return true;
+        const ft = hubFulltext?.get(a.slug);
+        return !!ft && ft.includes(q);
       });
     }
     return filtered;
+  }
+
+  const MONTHS_CZ = ['leden', 'únor', 'březen', 'duben', 'květen', 'červen',
+    'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec'];
+
+  function monthKey(a) { return String(a.date ?? '').slice(0, 7); } // YYYY-MM
+
+  function monthLabel(key) {
+    const [y, m] = key.split('-').map(Number);
+    if (!y || !m) return key;
+    return `${MONTHS_CZ[m - 1]} ${y}`;
+  }
+
+  // Řez seznamu zarovnaný na hranici měsíce: vrátí počet položek ≥ minCount
+  // tak, aby poslední zobrazený měsíc byl kompletní (archiv se načítá po
+  // měsících, ne po arbitrárních dvanáctkách).
+  function extendToMonthBoundary(filtered, minCount) {
+    if (minCount >= filtered.length) return filtered.length;
+    const key = monthKey(filtered[minCount - 1]);
+    let i = minCount;
+    while (i < filtered.length && monthKey(filtered[i]) === key) i++;
+    return i;
   }
 
   function render() {
@@ -230,17 +271,32 @@ async function loadAndRenderArticles() {
     }
     empty?.classList.add('hidden');
 
-    const visible = filtered.slice(0, pageSize);
-    list.innerHTML = visible.map(renderItem).join('');
+    const cut = extendToMonthBoundary(filtered, pageSize);
+    const visible = filtered.slice(0, cut);
 
-    // Pagination control
+    // Seskupení po měsících: mezi položky se vkládají hlavičky měsíců —
+    // orientace v ~200článkovém archivu podle času.
+    const parts = [];
+    let lastMonth = null;
+    for (const a of visible) {
+      const mk = monthKey(a);
+      if (mk && mk !== lastMonth) {
+        parts.push(`<li class="article-archive-month"><h4 class="article-archive-month-h">${esc(monthLabel(mk))}</h4></li>`);
+        lastMonth = mk;
+      }
+      parts.push(renderItem(a));
+    }
+    list.innerHTML = parts.join('');
+
+    // Pagination: načítá se vždy celý další měsíc
     if (controls) {
-      if (filtered.length > pageSize) {
+      if (filtered.length > cut) {
         controls.classList.remove('hidden');
-        const remaining = filtered.length - pageSize;
-        const nextBatch = Math.min(12, remaining);
-        if (moreBtn) moreBtn.textContent = `Zobrazit dalších ${nextBatch} článků (${remaining} zbývá)`;
+        const nextKey = monthKey(filtered[cut]);
+        const nextCount = extendToMonthBoundary(filtered, cut + 1) - cut;
+        if (moreBtn) moreBtn.textContent = `Zobrazit ${esc(monthLabel(nextKey))} (${nextCount} čl.)`;
         if (progressEl) progressEl.textContent = `${visible.length} / ${filtered.length}`;
+        moreBtn && (moreBtn.dataset.nextSize = String(cut + 1));
       } else {
         controls.classList.add('hidden');
         if (progressEl) progressEl.textContent = `${filtered.length} / ${filtered.length}`;
@@ -296,6 +352,16 @@ async function loadAndRenderArticles() {
     });
   }
 
+  // Stav filtrů v URL (hash) — vyfiltrovaný pohled je sdílitelný odkazem:
+  // clanky.html#rubric=prevence&q=očkování
+  function syncUrl() {
+    const parts = [];
+    if (activeRubric !== 'all') parts.push(`rubric=${encodeURIComponent(activeRubric)}`);
+    if (searchQuery) parts.push(`q=${encodeURIComponent(searchQuery)}`);
+    const newHash = parts.length ? '#' + parts.join('&') : '';
+    history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+  }
+
   // Aktivuje filtr archivu na danou rubriku (sdílené chipy i kartami rubrik)
   function selectRubric(rubric, { scroll = false } = {}) {
     activeRubric = rubric;
@@ -303,8 +369,7 @@ async function loadAndRenderArticles() {
     document.querySelectorAll('.topic-chip').forEach(b =>
       b.classList.toggle('active', b.dataset.rubric === rubric));
     render();
-    const newHash = rubric === 'all' ? '' : `#rubric=${encodeURIComponent(rubric)}`;
-    history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+    syncUrl();
     if (scroll) {
       document.querySelector('.article-list-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -315,9 +380,9 @@ async function loadAndRenderArticles() {
     btn.addEventListener('click', () => selectRubric(btn.dataset.rubric));
   });
 
-  // Wire "show more"
+  // Wire "show more" — další celý měsíc (nextSize spočítal render())
   moreBtn?.addEventListener('click', () => {
-    pageSize += 12;
+    pageSize = parseInt(moreBtn.dataset.nextSize ?? '', 10) || (pageSize + 12);
     render();
   });
 
@@ -329,8 +394,10 @@ async function loadAndRenderArticles() {
       clearTimeout(debounce);
       debounce = setTimeout(() => {
         searchQuery = searchInput.value.trim();
+        if (searchQuery) ensureHubFulltext();
         pageSize = 12;
         render();
+        syncUrl();
         // Scroll to list on first search keystroke
         if (searchQuery && !searchInput.dataset.scrolled) {
           searchInput.dataset.scrolled = '1';
@@ -344,7 +411,7 @@ async function loadAndRenderArticles() {
   // Pozn.: karty rubrik odkazují na rubrika.html?id=… (samostatná stránka, F3);
   // in-page filtr archivu řídí chipy (selectRubric) a hash #rubric=… níže.
 
-  // Read initial rubric from URL hash (#rubric=... ; #topic=... jako legacy alias)
+  // Read initial state from URL hash (#rubric=...&q=... ; #topic=... legacy alias)
   const hashMatch = window.location.hash.match(/(?:rubric|topic)=([^&]+)/);
   if (hashMatch) {
     const initial = decodeURIComponent(hashMatch[1]);
@@ -353,6 +420,13 @@ async function loadAndRenderArticles() {
       activeRubric = initial;
       document.querySelectorAll('.topic-chip').forEach(b => b.classList.toggle('active', b === btn));
     }
+  }
+  const qMatch = window.location.hash.match(/(?:^#|&)q=([^&]+)/);
+  if (qMatch) {
+    searchQuery = decodeURIComponent(qMatch[1]);
+    const si = document.getElementById('hubSearch');
+    if (si) si.value = searchQuery;
+    ensureHubFulltext(); // sdílený odkaz s dotazem → rovnou i fulltext
   }
 
   updateCounts();
@@ -451,36 +525,50 @@ function renderHubLatest(articles) {
  * první). Když redakce žádný nevybere, sekce se skryje.
  */
 /**
- * Rozcestník 9dílné série „Jak (ne)reformovat komplexní systém". Registr dílů
- * (pořadí, slug, název) je sdílený se sériovou navigací v článcích
- * (src/series-nav.js) — jediný zdroj pravdy. Respektuje viditelnost: díl, který
- * není v `articles` (= isArticleVisible=false), se vykreslí jako neaktivní
- * „připravujeme". Sekce se skryje, dokud není viditelný ani jeden díl.
+ * Rozcestník všech článkových sérií. Registr žije v data/series.json
+ * (jediný zdroj pravdy — sdílený s in-article navigací v src/series-nav.js).
+ * Respektuje viditelnost: díl, který není v `articles`
+ * (= isArticleVisible=false), se vykreslí jako neaktivní „připravujeme".
+ * Série bez jediného viditelného dílu se nevykreslí; sekce se skryje,
+ * když není co ukázat.
  */
-function renderHubSeries(articles) {
+async function renderHubSeries(articles) {
   const section = document.querySelector('.hub-series-section');
   const wrap = document.getElementById('hubSeries');
   if (!wrap) return;
 
+  const registry = await loadSeriesRegistry();
   const visible = new Set(articles.map(a => a.slug));
-  if (!SERIES.some(d => visible.has(d.slug))) {
+  const renderable = registry.filter(s => (s.parts ?? []).some(d => visible.has(d.slug)));
+
+  if (!renderable.length) {
     if (section) section.classList.add('hidden');
     wrap.innerHTML = '';
     return;
   }
   if (section) section.classList.remove('hidden');
 
-  wrap.innerHTML = SERIES.map(d => {
-    if (visible.has(d.slug)) {
-      return `<li><a href="${esc(d.slug)}" class="hub-series-card">
+  wrap.innerHTML = renderable.map(s => {
+    const doneCount = s.parts.filter(d => visible.has(d.slug)).length;
+    const partsHtml = s.parts.map(d => {
+      if (visible.has(d.slug)) {
+        return `<li><a href="${esc(d.slug)}" class="hub-series-card">
+          <span class="hub-series-num">${d.n}</span>
+          <span class="hub-series-card-title">${esc(d.short)}</span>
+        </a></li>`;
+      }
+      return `<li><span class="hub-series-card hub-series-card-soon" aria-disabled="true">
         <span class="hub-series-num">${d.n}</span>
-        <span class="hub-series-card-title">${esc(d.short)}</span>
-      </a></li>`;
-    }
-    return `<li><span class="hub-series-card hub-series-card-soon" aria-disabled="true">
-      <span class="hub-series-num">${d.n}</span>
-      <span class="hub-series-card-title">${esc(d.short)}<span class="hub-series-soon">připravujeme</span></span>
-    </span></li>`;
+        <span class="hub-series-card-title">${esc(d.short)}<span class="hub-series-soon">připravujeme</span></span>
+      </span></li>`;
+    }).join('');
+    return `<li class="hub-series-block">
+      <div class="hub-series-block-head">
+        <h4 class="hub-series-block-title">${esc(s.title)}</h4>
+        <span class="hub-series-block-count">${doneCount}/${s.parts.length} dílů</span>
+      </div>
+      <ol class="hub-series-grid">${partsHtml}</ol>
+    </li>`;
   }).join('');
 }
 
