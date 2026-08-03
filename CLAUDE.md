@@ -133,6 +133,10 @@ git push -u origin claude/<branch>
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
 │   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
 │   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
+│   ├── tags.json               ← Řízený slovník tagů článků + aliasy (validované)
+│   ├── series.json             ← Registr článkových sérií (členství = zdroj pravdy)
+│   ├── rubrics.json            ← 8 rubrik (primární osa článků, landing pages)
+│   ├── search-index.json       ← Fulltextový index článků (build:search-index)
 │   ├── cz-regions.geojson      ← GeoJSON krajů
 │   └── snapshot-YYYY-MM-DD.json ← Denní snapshoty datového kontraktu
 │
