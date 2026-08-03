@@ -1759,10 +1759,40 @@ async function loadAndRenderHomeArticles() {
         </a>
       </li>
     `).join('');
+
+    renderHomeRubricsRow(data.articles ?? []);
   } catch (err) {
     console.error('home articles load failed:', err);
     grid.innerHTML = '<li class="home-article-card"><p class="home-article-perex">Články se nepodařilo načíst.</p></li>';
   }
+}
+
+/**
+ * Kompaktní mapa korpusu pod nejnovějšími články: 8 rubrik s počty
+ * viditelných textů, odkazy na rubrikové landing pages. Jeden řádek
+ * prostoru, který ukazuje věcnou strukturu ~200článkového korpusu —
+ * chronologické okno „poslední 3" ji samo neunese.
+ */
+async function renderHomeRubricsRow(allArticles) {
+  const wrap = document.getElementById('homeRubricsRow');
+  if (!wrap) return;
+  try {
+    const res = await fetch('data/rubrics.json');
+    if (!res.ok) return;
+    const rubricsData = await res.json();
+    const counts = {};
+    for (const a of allArticles) {
+      if (!isArticleVisible(a)) continue;
+      counts[a.rubric] = (counts[a.rubric] ?? 0) + 1;
+    }
+    const rubrics = (rubricsData.rubrics ?? [])
+      .slice()
+      .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+    wrap.innerHTML = rubrics.map(r => `
+      <a class="home-rubric-chip" href="rubrika.html?id=${encodeURIComponent(r.id)}">
+        ${r.label}<span class="home-rubric-count">${counts[r.id] ?? 0}</span>
+      </a>`).join('');
+  } catch { /* mapa rubrik je progressive enhancement — bez ní se nic neděje */ }
 }
 
 function formatArticleDate(iso) {
