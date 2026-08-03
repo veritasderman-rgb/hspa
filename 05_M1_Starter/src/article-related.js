@@ -11,13 +11,13 @@
 const HUB_FALLBACK_CARDS = [
   {
     href: 'clanky.html',
-    kicker: '65 článků · long-form',
+    kicker: 'Analytické články · long-form',
     title: 'Hub článků',
     desc: 'Všechny publikované analýzy v jednom místě — co data o českém zdravotnictví skutečně říkají.'
   },
   {
     href: 'hspa-prehled.html',
-    kicker: 'Datový rámec · 80 indikátorů',
+    kicker: 'Datový rámec · 4 oblasti × 12 domén',
     title: 'HSPA přehled',
     desc: 'Indikátory zařazené ve čtyřech HSPA oblastech a dvanácti doménách.'
   },

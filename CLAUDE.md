@@ -78,7 +78,7 @@ git push -u origin claude/<branch>
 05_M1_Starter/
 ├── index.html                  ← Homepage (hub matrix, dimensions, finance, podcasts)
 ├── clanky.html                 ← Hub všech článků (matrix + filtry)
-├── clanek-*.html               ← 65 článků (long-form journalism)
+├── clanek-*.html               ← 212+ článků (long-form journalism, roste ~1/den)
 ├── hspa-prehled.html           ← HSPA 4 oblasti × domény (přehled indikátorů)
 ├── tematicke-linie.html        ← 8 tematických linií (linie = sada článků)
 ├── kraje.html                  ← Regionální dashboard (mapa krajů + tabulky)
@@ -120,8 +120,8 @@ git push -u origin claude/<branch>
 │       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
-│   ├── indicators.json         ← Datový kontrakt HSPA (80 indikátorů)
-│   ├── articles.json           ← Metadata 65 článků (audit, topics, linked_indicators)
+│   ├── indicators.json         ← Datový kontrakt HSPA (190 indikátorů: 131 HSPA + 59 monitoring)
+│   ├── articles.json           ← Metadata 212+ článků (audit, rubric, tag, linked_indicators)
 │   ├── glossary.json           ← 110 termínů (definice, odkazy)
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
 │   ├── themes.json             ← 8 tematických linií (mentální zdraví, prevence, …)
@@ -136,7 +136,7 @@ git push -u origin claude/<branch>
 │   ├── cz-regions.geojson      ← GeoJSON krajů
 │   └── snapshot-YYYY-MM-DD.json ← Denní snapshoty datového kontraktu
 │
-├── indicators/                 ← Metodické karty (1 JSON = 1 indikátor, 80 souborů)
+├── indicators/                 ← Metodické karty (1 JSON = 1 indikátor)
 ├── ingest/
 │   ├── run.js                  ← Orchestrátor (spouštěn GitHub Actions)
 │   ├── transform.js            ← Harmonizace + výpočet signálů

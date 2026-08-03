@@ -118,6 +118,20 @@ function validate() {
     validRubrics = new Set(JSON.parse(fs.readFileSync(rubricsFile, 'utf8')).rubrics.map(r => r.id));
   }
 
+  // Tagy — řízený slovník (data/tags.json). Volný text mimo slovník → fail
+  // u publikovaného článku (drift taxonomie), warning u draftu.
+  const tagsFile = path.join(ROOT, 'data', 'tags.json');
+  let validTags = null;
+  let tagAliases = {};
+  if (fs.existsSync(tagsFile)) {
+    const tagsData = JSON.parse(fs.readFileSync(tagsFile, 'utf8'));
+    validTags = new Set(tagsData.tags.map(t => t.label));
+    tagAliases = tagsData.aliases ?? {};
+  }
+
+  // Druh textu — uzavřený enum (normalizuje scripts/normalize-article-metadata.js).
+  const VALID_KINDS = new Set(['article', 'analysis', 'explainer', 'manifest']);
+
   const errors = [];
   const warnings = [];
 
@@ -139,6 +153,32 @@ function validate() {
         errors.push(`${a.id} (${a.slug}): rubric="${a.rubric}" není v data/rubrics.json`);
       }
     }
+    // Tag (řízený slovník) — publikovaný článek: fail; draft: warning.
+    if (validTags) {
+      if (!a.tag) {
+        if (a.published !== false) errors.push(`${a.id} (${a.slug}): chybí pole "tag"`);
+        else warnings.push(`${a.id}: draft bez tagu (doplň před publikací)`);
+      } else if (!validTags.has(a.tag)) {
+        const hint = tagAliases[a.tag] ? ` (alias → "${tagAliases[a.tag]}", spusť scripts/normalize-article-metadata.js)` : ' (doplň do data/tags.json, nebo použij existující label)';
+        if (a.published !== false) errors.push(`${a.id} (${a.slug}): tag="${a.tag}" není v data/tags.json${hint}`);
+        else warnings.push(`${a.id}: draft s tagem mimo slovník: "${a.tag}"${hint}`);
+      }
+    }
+
+    // Kind (enum) — publikovaný: fail; draft: warning.
+    if (!a.kind || !VALID_KINDS.has(a.kind)) {
+      const msg = `kind="${a.kind ?? '(chybí)'}" — povolené: ${[...VALID_KINDS].join(', ')}`;
+      if (a.published !== false) errors.push(`${a.id} (${a.slug}): ${msg}`);
+      else warnings.push(`${a.id}: draft — ${msg}`);
+    }
+
+    // Vazba na datový kontrakt — články bez linked_indicators jsou v korpusu
+    // sirotci (nefunguje related-by-indicators ani zpětné odkazy z indikátorů).
+    // Zatím warning (legacy články), nový obsah má vazbu mít vždy.
+    if (!Array.isArray(a.linked_indicators) || a.linked_indicators.length === 0) {
+      warnings.push(`${a.id}: bez linked_indicators (článek je mimo sémantickou síť — dopln vazbu na indikátory)`);
+    }
+
     const file = path.join(ROOT, a.slug);
     if (!fs.existsSync(file)) {
       errors.push(`${a.id}: HTML file ${a.slug} not found`);

@@ -80,7 +80,7 @@ function renderPreventionCTA() {
 function renderRelated() {
   const cards = [
     { href: 'prevence.html', kicker: 'Prevence v praxi', title: 'Co s tím můžu dělat já', desc: 'Konkrétní kroky — životní styl, očkování, screening. Kde máte reálnou páku a týdenní startovací balíček.' },
-    { href: 'hspa-prehled.html', kicker: '80 indikátorů systému', title: 'HSPA přehled', desc: 'Screening, vakcinace a výsledky onkologické péče v datovém rámci HSPA.' },
+    { href: 'hspa-prehled.html', kicker: 'Indikátory systému', title: 'HSPA přehled', desc: 'Screening, vakcinace a výsledky onkologické péče v datovém rámci HSPA.' },
     { href: 'strategie.html', kicker: 'Národní cíle 2030/2035', title: 'Strategie', desc: 'Co stát plánuje pro screening, včasný záchyt a snížení rizikových faktorů.' },
   ].map(c => `
     <a class="related-card" href="${c.href}">
