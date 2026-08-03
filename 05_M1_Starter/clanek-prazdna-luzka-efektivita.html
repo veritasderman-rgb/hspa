@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-03
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-08-03
+    creation_phase: discovery+evergreen-write
+    primary_sources_count: 6
+    visual_elements_count: 4
+    notes: "EVERGREEN-WRITE (backlog priorita 5, prazdna-luzka-efektivita), vynuceno kadenční pojistkou (>2 dny bez nového článku). Centrální KPI: obložnost standardních akutních lůžek 56,0 % (2024) — ověřeno PŘÍMO z xlsx NRHZS datový souhrn Obložnost lůžek SSS-05-03 (verze 2025-01, stav k 31.12.2024). Sekundární ověřené: intenzivní lůžka 62,0 %, následná 84,2 %; kapacity STAN 42 309 / JIP 5 727 lůžek z NRHZS SSS-05-02. Ekvivalent prázdných akutních lůžek ~18 600 (42 309 × 0,440) je transparentní odvození z primárních vstupů. Nevyužité OD IP ~803 000 (ARO 104 883 + JIP 698 369) z prezentace ředitele ÚZIS (VZ PS PČR 13.5.2026, NZIP 2712/2226), konzistentní s obložností IP 62 %; indikátor preliminary. Akutní lůžka 4,0/1000 vs OECD 3,5 = indikátor origin:live (OECD Health Statistics). Trend STAN obložnosti 2015→2024 (65,6 → 52,7 covid 2020 → 56,0) z téhož xlsx. Metodická výhrada (obložnost = OD/(lůžka k 31.12. × 365); >100 % u JIP; prioritně VZP) uvedena v caveat callout. Interna 66,1 % ponechána jen jako kontext, ne centrální claim (obor-level, indikátor zůstává preliminary). Status: review-pending — čeká na ruční schválení redakce. published:false, konec fronty (scheduled_for 2026-08-04)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akutní lůžka využíváme z 56 procent. Česko drží nemocniční kapacitu, kterou z velké části nevyužívá · HSPA Monitor</title>
+<meta name="description" content="Standardní akutní lůžka měla v Česku v roce 2024 obložnost 56,0 %, intenzivní 62,0 % (ÚZIS NRHZS, stav k 31. 12. 2024). To odpovídá ekvivalentu zhruba 18 600 průměrně prázdných akutních lůžek. Přitom akutních lůžek má Česko 4,0 na tisíc obyvatel oproti 3,5 v průměru OECD — víc kapacity a nižší využití zároveň. Vedle poloprázdných akutních lůžek jsou přitom následná lůžka obsazena z 84 %.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Akutní lůžka využíváme z 56 procent. Česko drží nemocniční kapacitu, kterou z velké části nevyužívá">
+<meta property="og:description" content="Obložnost akutních lůžek 56 %, intenzivních 62 %, následných 84 % (ÚZIS NRHZS 2024). Česko má víc akutních lůžek než průměr OECD a využívá je méně. Co s nadkapacitou dělají systémy, které lůžka transformují.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-04">
+<meta property="article:section" content="Nemocniční péče">
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nemocniční péče</span>
+        <span class="article-tag article-tag-muted">Lůžka · obložnost · efektivita · kapacita</span>
+      </div>
+      <h1 class="article-title">Akutní lůžka využíváme z 56 procent. Česko drží nemocniční kapacitu, kterou z velké části nevyužívá</h1>
+      <p class="article-deck">
+        Standardní akutní lůžka měla v roce 2024 v Česku průměrnou obložnost <strong>56,0 %</strong>, lůžka intenzivní péče <strong>62,0 %</strong> (ÚZIS, Národní registr hrazených zdravotních služeb, stav k 31. 12. 2024). Jinými slovy: z 42 309 nasmlouvaných akutních lůžek zůstává v průměru přes 40 % nevyužitých — ekvivalent zhruba <strong>18 600 prázdných lůžek</strong> každý den. Přitom akutních lůžek má Česko 4,0 na tisíc obyvatel oproti 3,5 v průměru OECD. Máme víc kapacity než většina Evropy a využíváme ji méně. A hned vedle poloprázdných akutních oddělení jsou následná lůžka obsazena z 84 %.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">4. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Prázdné lůžko není samo o sobě špatná zpráva — určitá rezerva je nutná, aby nemocnice zvládla sezónní vlnu, hromadnou nehodu nebo epidemii. Problém nastává, když je rezerva trvalá a plošná: kapacita, kterou platí veřejné zdravotní pojištění a která váže personál, přístroje a provozní náklady, průměrně z velké části stojí. České akutní nemocnice jsou přesně v této situaci — a data ÚZIS to ukazují rok co rok.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avOblHeroH">
+        <figcaption class="av-figure-h" id="avOblHeroH">Obložnost lůžek v ČR v roce 2024 — akutní kapacita poloprázdná, následná téměř plná</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="56" data-decimals="1" data-suffix=" %">56,0 %</span>
+            <span class="av-counter-label">obložnost standardních akutních lůžek</span>
+            <span class="av-counter-foot">42 309 lůžek; ÚZIS NRHZS, stav k 31. 12. 2024</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="62" data-decimals="1" data-suffix=" %">62,0 %</span>
+            <span class="av-counter-label">obložnost lůžek intenzivní péče (JIP + ARO)</span>
+            <span class="av-counter-foot">5 727 lůžek; ÚZIS NRHZS 2024</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="84.2" data-decimals="1" data-suffix=" %">84,2 %</span>
+            <span class="av-counter-label">obložnost následných lůžek</span>
+            <span class="av-counter-foot">druhá strana mince — kontrast s akutní kapacitou</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="18600" data-prefix="≈ ">≈ 18 600</span>
+            <span class="av-counter-label">ekvivalent průměrně prázdných akutních lůžek</span>
+            <span class="av-counter-foot">42 309 × (1 − 0,560); odvození z NRHZS</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — Národní registr hrazených zdravotních služeb (NRHZS), datový souhrn <em>Obložnost lůžek v rámci veřejného zdravotního pojištění v ČR</em> (SSS-05-03, verze 2025-01, stav k 31. 12. 2024, zpracováno 12. 8. 2025) a <em>Kapacity lůžkového fondu</em> (SSS-05-02). Hodnoty odečteny přímo z datových souborů xlsx.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak se obložnost počítá">
+        <p class="article-callout-h">Caveat — co „obložnost" přesně znamená</p>
+        <p>ÚZIS počítá obložnost jako <strong>počet realizovaných ošetřovacích dnů děleno počtem nasmlouvaných lůžek k 31. prosinci × 365</strong>. Z toho plynou tři výhrady, které je při čtení nutné držet v hlavě:</p>
+        <p><strong>1. Počet lůžek je brán ke konci roku.</strong> Pokud nemocnice v průběhu roku lůžka zredukuje, výpočet použije nižší koncový počet — obložnost pak může vyjít i nad 100 %. U intenzivních lůžek (JIP) navíc lze na jednom lůžku vystřídat během jednoho dne víc pacientů. „Prázdná lůžka" a „nevyužité ošetřovací dny" v tomto článku jsou proto <strong>řádový průměr rezervy</strong>, ne přesný počet fyzicky prázdných postelí v každém okamžiku.</p>
+        <p><strong>2. Analýza vychází z lůžek prioritně nasmlouvaných s VZP.</strong> Zařízení může mít lůžka nasmlouvaná s více pojišťovnami; překryv nelze zjistit, proto se počítá s prioritním seznamem. To u některých typů zařízení hodnotu mírně zkresluje (proto např. u odborných léčebných ústavů souhrn vykazuje 0 %).</p>
+        <p><strong>3. Číslo je celostátní průměr.</strong> Skrývá velké rozdíly mezi kraji (Ústecký kraj u akutních lůžek 45,8 %, Zlínský 61,6 % v 2024) i mezi obory a jednotlivými nemocnicemi. Nízká celostátní obložnost neznamená, že prázdné je každé lůžko stejně — část kapacity je naopak přetížená.</p>
+      </aside>
+
+      <h3>Poloprázdná akutní lůžka vedle přeplněných následných</h3>
+
+      <p>
+        Nejsilnější sdělení dat není samotné číslo 56 %, ale <strong>kontrast</strong> mezi typy lůžek. Zatímco akutní a intenzivní kapacita stojí zhruba ze dvou pětin ladem, následná (ošetřovatelská a dlouhodobá) lůžka jsou obsazena z více než 80 %. Systém má rezervu tam, kde ji nepotřebuje, a je napjatý tam, kde by kapacitu potřeboval nejvíc — u pacientů, kteří po akutní fázi potřebují doléčení a nemají kam odejít.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avOblTableH">
+        <figcaption class="av-figure-h" id="avOblTableH">Obložnost podle typu lůžka v ČR (2024) a počet nasmlouvaných lůžek</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Typ lůžka</th>
+                <th scope="col">Obložnost 2024</th>
+                <th scope="col">Nasmlouvaných lůžek</th>
+                <th scope="col">Co to znamená</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Standardní akutní</th>
+                <td>56,0 %</td>
+                <td>42 309</td>
+                <td>největší lůžkový fond, průměrně přes 40 % rezervy</td>
+              </tr>
+              <tr>
+                <th scope="row">Intenzivní (JIP + ARO)</th>
+                <td>62,0 %</td>
+                <td>5 727</td>
+                <td>nejdražší lůžka; rezerva má i roli surge kapacity</td>
+              </tr>
+              <tr>
+                <th scope="row">Následná (LDN, ošetřovatelská, OLU, hospic, NIP, DIOP)</th>
+                <td>84,2 %</td>
+                <td>—</td>
+                <td>téměř plno — poptávka převyšuje nabídku</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS NRHZS — datové souhrny <em>Obložnost lůžek</em> (SSS-05-03) a <em>Kapacity lůžkového fondu</em> (SSS-05-02), stav k 31. 12. 2024. Počet následných lůžek je součet více kategorií (LDN, OSET, OLU, HOSP, NIP, DIOP).</p>
+      </figure>
+
+      <p>
+        Tenhle nepoměr je stejná mince jako téma, kterému se HSPA Monitor věnoval v článku o <a href="clanek-luzka-dlouhodobe-pece.html">lůžkách dlouhodobé péče</a>: následných a dlouhodobých lůžek má Česko v přepočtu na seniory pod evropským průměrem, a proto se plní. Část pacientů zůstává „ležet" na akutním lůžku, protože pro ně není místo v následné nebo sociální péči — takzvaná technická či sociální hospitalizace. Akutní obložnost 56 % tak paradoxně obsahuje i pacienty, kteří tam už medicínsky nepatří.
+      </p>
+
+      <h3>Kapacita, kterou covid nakopl dolů a která se nevrátila</h3>
+
+      <p>
+        Obložnost akutních lůžek přitom není konstanta. Ještě v polovině 2010. let se pohybovala kolem 65 %. Pandemie covidu v roce 2020 ji srazila na 52,7 % (odložené plánované výkony, uzavřená oddělení) a — to je podstatné — na předpandemickou úroveň se od té doby <strong>nevrátila</strong>. V roce 2024 je na 56 %, tedy zhruba o deset procentních bodů níž než v polovině minulé dekády.
+      </p>
+
+      <figure class="av-bar-compare" data-max="100" data-unit="%" aria-labelledby="avOblTrendH">
+        <figcaption class="av-bar-compare-h" id="avOblTrendH">Obložnost standardních akutních lůžek v ČR (%, 2015–2024)</figcaption>
+        <ol class="av-bar-compare-list">
+          <li class="av-bar-row" data-value="65.6" data-label="2015"></li>
+          <li class="av-bar-row" data-value="61.3" data-label="2019"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="52.7" data-label="2020" data-note="propad kvůli covidu"></li>
+          <li class="av-bar-row" data-value="55.8" data-label="2022"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="56.0" data-label="2024"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="70" data-label="Orientační cíl ⌀ OECD"></li>
+        </ol>
+        <p class="av-bar-compare-note"><strong>Zdroj:</strong> ÚZIS NRHZS, datový souhrn <em>Obložnost lůžek</em> (SSS-05-03), řádek „Standartní akutní lůžka / Celkem", roky 2015–2024. Orientační průměr obsazenosti akutních lůžek v zemích OECD se dlouhodobě pohybuje kolem 70 % (OECD <em>Health at a Glance</em>).</p>
+      </figure>
+
+      <h3>Víc lůžek a nižší využití zároveň — strukturální rozpor</h3>
+
+      <p>
+        Nízká obložnost by nebyla problém, kdyby Česko mělo lůžek málo a udržovalo je štíhlá. Opak je pravdou. Akutních lůžek má Česko <strong>4,0 na tisíc obyvatel</strong> oproti <strong>3,5 v průměru OECD</strong> (OECD Health Statistics, curative care beds, 2023) — a když se do počtu zahrnou i následná a psychiatrická lůžka, dostává se podle OECD <em>Czechia Country Health Profile 2025</em> na 6,4 lůžka na tisíc, tedy zhruba čtvrtinu nad průměr EU. Máme tedy nadprůměrně velký lůžkový fond a využíváme ho podprůměrně. To je definice strukturální neefektivity: kapacita existuje, je zaplacená, ale nepracuje.
+      </p>
+
+      <p>
+        Zapadá to do širšího obrazu, který HSPA Monitor popsal v článku <a href="clanek-hospitalizujeme-nejvic.html">o míře hospitalizací</a>: Česko je jednou z nejvíce <em>nemocnice-centric</em> zemí OECD — hospitalizuje víc, drží víc lůžek, leží déle. Nízká obložnost je jen další úhel téhož jevu. Není to tak, že by lůžka chyběla a proto stála; stojí, protože jich je moc vzhledem k tomu, kolik péče se dá a má odehrát mimo lůžko — ambulantně, jednodenně, v primární péči.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Řešením není lůžka plošně „zaplnit" (to by znamenalo hospitalizovat ještě víc), ale kapacitu <strong>transformovat</strong>. Domácí analýzy i OECD odhadují, že kdyby se obložnost akutních lůžek přiblížila průměru OECD kolem 70 %, uvolnily by se tisíce lůžek — právě pro segment, který je dnes přetížený, tedy následnou a dlouhodobou péči. Konkrétně to znamená tři páky, které se navzájem posilují:
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPakyH">
+        <figcaption class="av-figure-h" id="avPakyH">Tři páky, jak z nevyužité akutní kapacity udělat chybějící následnou</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přesun výkonů do jednodenní chirurgie</h4>
+            <p class="av-flow-desc">Výkony, které jinde běží ambulantně (katarakta, kýly, artroskopie, endoskopie), u nás často končí nocí na lůžku. Úhrada, která zvýhodní <em>day case</em>, sníží poptávku po akutním lůžku, aniž by ubrala péči. Viz článek o <a href="clanek-jednodenni-chirurgie-katarakta.html">jednodenní chirurgii</a>.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Transformace akutních lůžek na následná</h4>
+            <p class="av-flow-desc">Prázdné akutní lůžko a chybějící následné lůžko jsou často ve stejné budově. Překlopení kapacity (a úhrad) z akutního na následný a ošetřovatelský režim řeší oba nepoměry najednou.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Uvolnění „sociálních" hospitalizací</h4>
+            <p class="av-flow-desc">Pacient, který na akutním lůžku čeká na místo v sociální službě, blokuje kapacitu i zdroje. Integrace zdravotní a sociální péče (MZ + MPSV) je předpokladem, aby akutní obložnost odrážela skutečnou akutní potřebu.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> rámec vychází z HSPA metodiky (efektivita) a z domácích i OECD analýz transformace lůžkového fondu; jednotlivé páky jsou rozvedené v propojených článcích HSPA Monitoru.</p>
+      </figure>
+
+      <p>
+        Politicky je to náročné, protože každá redukce akutních lůžek se v regionu čte jako „rušení nemocnice", i když ve skutečnosti jde o modernizaci — méně nocí na lůžku, víc ambulantní a jednodenní péče, silnější doléčení. Ale čísla ÚZIS jsou v tomhle jednoznačná: kapacita, kterou platíme, z velké části stojí, zatímco jinde ve stejném systému chybí. Prázdné lůžko není úspora — je to zaplacený, ale nevyužitý zdroj.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-obloznost_intenzivni_pece_pct.html"><strong>Využití lůžek intenzivní péče (JIP/ARO)</strong></a> — 62,0 % (2024), ÚZIS NRHZS (dashboard <code>origin: live</code>, verified 2026-08-03; oprava seed hodnoty 63 %)</li>
+        <li><a href="indikator-nevyuzite_osetrovaci_dny_ip.html"><strong>Nevyužité ošetřovací dny intenzivní péče</strong></a> — ≈ 803 000 OD / rok (2024): ARO 104 883 + JIP 698 369 (prezentace ředitele ÚZIS prof. Duška, VZ PS PČR 13. 5. 2026; NZIP 2712/2226). Konzistentní s obložností IP 62 % z NRHZS; indikátor <code>preliminary</code> (žádá primární replikaci)</li>
+        <li><a href="indikator-obloznost_interna_standard_pct.html"><strong>Využití akutních standardních lůžek vnitřního lékařství</strong></a> — obor vnitřního lékařství (nejobsazenější lůžkový obor) ≈ 66 % dle obor. dat ÚZIS 2023; hodnota indikátoru je <code>preliminary</code> (obor-level, čeká na parsování primární tabulky ÚZIS Lůžková péče)</li>
+        <li><a href="indikator-postele_akutni_per_1000.html"><strong>Akutní lůžka na 1 000 obyvatel</strong></a> — 4,0 vs OECD 3,5 (OECD Health Statistics, curative care beds, 2023; <code>origin: live</code>)</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k indikátorům:</strong> Obložnost = realizované ošetřovací dny / (nasmlouvaná lůžka k 31. 12. × 365); u JIP může přesáhnout 100 % (víc pacientů na lůžku za den). Hodnoty standardních akutních (56,0 %), intenzivních (62,0 %) a následných lůžek (84,2 %) i počty lůžek (STAN 42 309, JIP 5 727) jsou odečteny přímo z datových souborů NRHZS (stav k 31. 12. 2024). Ekvivalent ≈ 18 600 prázdných akutních lůžek je transparentní přepočet z těchto vstupů (42 309 × podíl nevyužití), ne přesný počet fyzicky prázdných postelí. Nevyužité ošetřovací dny intenzivní péče (≈ 803 000 OD, ARO 104 883 + JIP 698 369) pocházejí z prezentace ředitele ÚZIS (VZ PS PČR 13. 5. 2026) a jsou konzistentní s obložností IP 62 % z NRHZS. Indikátor `obloznost_intenzivni_pece_pct` (62,0 %, oprava seed hodnoty 63 %) byl napojen na primární NRHZS zdroj a přepnut na `origin: live` + verified; `nevyuzite_osetrovaci_dny_ip` (803 252) a `obloznost_interna_standard_pct` zůstávají `preliminary` (žádají primární replikaci, resp. obor-level obložnost nepochází z NRHZS souhrnu).
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data — obložnost a kapacity lůžek (ÚZIS / NZIP)</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS / NZIP — Obložnost lůžek v rámci veřejného zdravotního pojištění v ČR</strong> (datový souhrn NRHZS SSS-05-03, verze 2025-01, stav k 31. 12. 2024; xlsx + metodika). <a href="https://www.nzip.cz/data/1780-luzkovy-fond-obloznost-datovy-souhrn" target="_blank" rel="noopener">nzip.cz/data/1780-luzkovy-fond-obloznost ↗</a></li>
+          <li><strong>ÚZIS / NZIP — Kapacity lůžkového fondu (počet lůžek)</strong> (datový souhrn NRHZS SSS-05-02, stav k 31. 12. 2024; xlsx: STAN 42 309, JIP 5 727 lůžek). <a href="https://www.nzip.cz/data/1779-luzkovy-fond-kapacity-datovy-souhrn" target="_blank" rel="noopener">nzip.cz/data/1779-luzkovy-fond-kapacity ↗</a></li>
+          <li><strong>ÚZIS — Lůžková péče</strong> (statistika zdravotních služeb; obor-level využití lůžek vč. vnitřního lékařství). <a href="https://www.uzis.cz/index.php?pg=vystupy--statistika-zdravotnich-sluzeb--luzkova-pece" target="_blank" rel="noopener">uzis.cz/luzkova-pece ↗</a></li>
+          <li><strong>ÚZIS — Národní registr hrazených zdravotních služeb (NRHZS)</strong>, registr a metodika (§77a zák. 372/2011 Sb.). <a href="https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-registr-hrazenych-zdravotnich-sluzeb" target="_blank" rel="noopener">uzis.cz/nrhzs ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data — mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD — Health Statistics: Hospital beds by function (curative care)</strong> (akutní lůžka ČR 4,0 vs OECD 3,5 / 1 000; dataset). <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC" target="_blank" rel="noopener">data-explorer.oecd.org/hospital-beds ↗</a></li>
+          <li><strong>OECD &amp; European Observatory — Czechia Country Health Profile 2025</strong> (září 2025; 6,4 nemocničních lůžek / 1 000, obsazenost cca 62 % v 2023, discharges pod pre-pandemickou úrovní). <a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/12/country-health-profile-2025-country-notes_7e72146d/czechia_e16c6d2d/7d087e31-en.pdf" target="_blank" rel="noopener">oecd.org/czechia-country-profile-2025.pdf ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-hospitalizujeme-nejvic</strong> — míra hospitalizací a počet lůžek v ČR vs OECD (nemocnice-centric systém). <a href="clanek-hospitalizujeme-nejvic.html">clanek-hospitalizujeme-nejvic.html</a></li>
+          <li><strong>clanek-luzka-dlouhodobe-pece</strong> — nedostatek následných/dlouhodobých lůžek (druhá strana téže mince). <a href="clanek-luzka-dlouhodobe-pece.html">clanek-luzka-dlouhodobe-pece.html</a></li>
+          <li><strong>clanek-jednodenni-chirurgie-katarakta</strong> — potenciál přesunu výkonů do jednodenní chirurgie. <a href="clanek-jednodenni-chirurgie-katarakta.html">clanek-jednodenni-chirurgie-katarakta.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Obložnost lůžek je celostátní průměr z NRHZS a vychází z lůžek prioritně nasmlouvaných s VZP; skrývá rozdíly mezi kraji, obory a zařízeními. „Prázdná lůžka" a „nevyužité ošetřovací dny" jsou odvozené řádové veličiny (lůžka × podíl nevyužití, resp. lůžka × 365 × podíl nevyužití), ne přesný počet fyzicky prázdných postelí v konkrétním okamžiku — určitá rezerva je pro chod nemocnice nutná. Trend uvnitř země (pokles obložnosti po roce 2020) je robustnější než srovnání absolutní úrovně mezi zeměmi, kde se liší definice akutního lůžka.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
