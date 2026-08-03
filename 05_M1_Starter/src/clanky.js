@@ -205,6 +205,23 @@ async function loadAndRenderArticles() {
   const moreBtn = document.getElementById('hubListMore');
   const progressEl = document.getElementById('hubListProgress');
 
+  // Fulltext hub searche: lazy fetch data/search-index.json při prvním
+  // hledání; než doběhne, hledá se jen v metadatech (progressive enhancement).
+  let hubFulltext = null;
+  let hubFulltextStarted = false;
+  function ensureHubFulltext() {
+    if (hubFulltextStarted) return;
+    hubFulltextStarted = true;
+    fetch('data/search-index.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!Array.isArray(d?.entries)) return;
+        hubFulltext = new Map(d.entries.map(e => [e.slug, String(e.text ?? '').toLowerCase()]));
+        if (searchQuery) render(); // přehodnoť aktuální dotaz i proti tělům článků
+      })
+      .catch(() => { /* bez fulltextu hledáme dál v metadatech */ });
+  }
+
   function applyFilters() {
     let filtered = activeRubric === 'all'
       ? articles
@@ -213,7 +230,9 @@ async function loadAndRenderArticles() {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter(a => {
         const hay = `${a.title ?? ''} ${a.perex ?? ''} ${a.tag ?? ''}`.toLowerCase();
-        return hay.includes(q);
+        if (hay.includes(q)) return true;
+        const ft = hubFulltext?.get(a.slug);
+        return !!ft && ft.includes(q);
       });
     }
     return filtered;
@@ -375,6 +394,7 @@ async function loadAndRenderArticles() {
       clearTimeout(debounce);
       debounce = setTimeout(() => {
         searchQuery = searchInput.value.trim();
+        if (searchQuery) ensureHubFulltext();
         pageSize = 12;
         render();
         syncUrl();
@@ -406,6 +426,7 @@ async function loadAndRenderArticles() {
     searchQuery = decodeURIComponent(qMatch[1]);
     const si = document.getElementById('hubSearch');
     if (si) si.value = searchQuery;
+    ensureHubFulltext(); // sdílený odkaz s dotazem → rovnou i fulltext
   }
 
   updateCounts();

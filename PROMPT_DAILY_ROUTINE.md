@@ -408,7 +408,9 @@ frontend stejně sortuje podle `date`):
   "id": "{slug bez clanek- prefixu a .html}",
   "slug": "clanek-{slug}.html",
   "number": "{N+1}",
-  "tag": "{Sekce}",
+  "tag": "{label z data/tags.json}",
+  "rubric": "{prevence|legislativa|financovani|dostupnost|klinika|populace|dusevni-zdravi|digitalizace}",
+  "kind": "{article|analysis|explainer}",
   "date": "{next_slot}",
   "published": false,
   "scheduled_for": "{next_slot}",
@@ -419,6 +421,22 @@ frontend stejně sortuje podle `date`):
   "topics": ["legislativa|financovani|klinika|prevence|populace|dusevni-zdravi|dostupnost|digitalizace"]
 }
 ```
+
+**Publikační kontrakt metadat (hlídá `npm run validate:articles` — fail u publikovaného článku):**
+
+1. `tag` MUSÍ být přesný `label` z `05_M1_Starter/data/tags.json` — žádný volný
+   text. Chybí-li vhodný tag, přidej ho nejdřív do slovníku (nový objekt do
+   `tags`), pak použij. Historické varianty řeší `aliases` +
+   `node scripts/normalize-article-metadata.js`.
+2. `rubric` MUSÍ být id z `data/rubrics.json` (primární osa korpusu).
+3. `kind` MUSÍ být z enum `article | analysis | explainer | manifest`.
+4. `linked_indicators` — aspoň jeden indikátor (článek bez vazby je sirotek
+   mimo sémantickou síť: nefunguje blok „Související články", zpětné odkazy
+   z indikátorů ani zařazení do tematických linií).
+5. **Souvislosti při psaní, ne zpětně**: zvaž, jestli článek patří do některé
+   série (`data/series.json` — pokud ano, přidej slug do `parts` série) a
+   jestli navazuje na tematickou linii (vazba jde automaticky přes
+   `linked_indicators` × `themes.json`).
 
 **Konvence dat napříč souborem článku:**
 

@@ -23,6 +23,8 @@ let _overlay = null;
 let _lastFocus = null;
 let _activeIdx = 0;
 let _currentResults = [];
+let _fulltext = null;         // Map<slug, lowercase text> — až po doběhnutí fetche
+let _fulltextStarted = false;
 
 /**
  * Globální bootstrap — připne keyboard listener a injectuje overlay
@@ -119,13 +121,18 @@ export function buildIndex({ articles = [], indicators = [], glossary = [] } = {
  *   - exact match v label: +100
  *   - prefix label match: +50
  *   - každý token match v label: +20
- *   - každý token match v haystack: +5
+ *   - každý token match v haystack (title/perex/tag): +5
+ *   - každý token match ve fulltextu článku: +3 (jen když nematchl výš)
+ *
+ * Fulltext (data/search-index.json) je volitelný — bez něj se hledá jen
+ * v metadatech (než index doběhne, nebo když fetch selže).
  *
  * @param {string} query
  * @param {Array} index
+ * @param {Map<string,string>|null} [fulltext] — slug → lowercase text
  * @returns {Array} seřazené sestupně podle skóre
  */
-export function searchIndex(query, index) {
+export function searchIndex(query, index, fulltext = null) {
   if (!query || !query.trim() || !Array.isArray(index)) return [];
   const q = query.toLowerCase().trim();
   const tokens = q.split(/\s+/).filter(Boolean);
@@ -135,16 +142,36 @@ export function searchIndex(query, index) {
   for (const item of index) {
     let score = 0;
     const labelLower = item.label.toLowerCase();
+    const ft = (fulltext && item.type === 'article') ? fulltext.get(item.id) : null;
     if (labelLower === q) score += 100;
     else if (labelLower.startsWith(q)) score += 50;
     for (const tok of tokens) {
       if (labelLower.includes(tok)) score += 20;
       else if (item.haystack.includes(tok)) score += 5;
+      else if (ft && ft.includes(tok)) score += 3;
     }
     if (score > 0) scored.push({ ...item, _score: score });
   }
   scored.sort((a, b) => b._score - a._score);
   return scored;
+}
+
+/**
+ * Lazy nastartuje fetch fulltextového indexu (~1 MB gzip) na pozadí —
+ * neblokuje první vykreslení výsledků; jakmile doběhne, další keystroke
+ * už hledá i v tělech článků. Jediný pokus na session.
+ */
+function ensureFulltext(onReady) {
+  if (_fulltextStarted) return;
+  _fulltextStarted = true;
+  fetch('data/search-index.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (!Array.isArray(d?.entries)) return;
+      _fulltext = new Map(d.entries.map(e => [e.slug, String(e.text ?? '').toLowerCase()]));
+      onReady?.();
+    })
+    .catch(() => { /* fulltext je progressive enhancement */ });
 }
 
 // =====================================================================
@@ -210,7 +237,14 @@ function ensureOverlay() {
     el.addEventListener('click', closeOverlay);
   });
   const input = _overlay.querySelector('#siteSearchInput');
-  input.addEventListener('input', () => renderResults(input.value));
+  input.addEventListener('input', () => {
+    // Fulltext se stahuje až když uživatel opravdu hledá (první keystroke);
+    // po doběhnutí se aktuální dotaz přehodnotí i proti tělům článků.
+    ensureFulltext(() => {
+      if (!_overlay.hidden && input.value.trim()) renderResults(input.value);
+    });
+    renderResults(input.value);
+  });
   input.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
@@ -290,7 +324,7 @@ function renderResults(query) {
     return;
   }
 
-  const all = searchIndex(query, _index ?? []);
+  const all = searchIndex(query, _index ?? [], _fulltext);
   if (all.length === 0) {
     wrap.innerHTML = `
       <div class="site-search-empty">
