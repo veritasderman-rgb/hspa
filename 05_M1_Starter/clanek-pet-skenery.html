@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(DRAFT) PET skenery: Česko diagnostiku rakoviny dohání, ale pacient z okraje kraje čeká dál · HSPA Monitor</title>
+<meta name="description" content="V Česku bylo v roce 2024 v provozu 23 PET/CT přístrojů — 2,1 na milion obyvatel. Za dekádu se hustota více než ztrojnásobila a ČR předběhla Slovensko, Polsko i Německo, přesto zůstává pod průměrem OECD (2,6). Nový HSPA indikátor a analýza toho, proč o dostupnosti špičkové onkologické diagnostiky nerozhoduje národní průměr, ale rozmístění a čekací doby.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PET skenery: Česko diagnostiku rakoviny dohání, ale pacient z okraje kraje čeká dál">
+<meta property="og:description" content="23 PET/CT přístrojů, 2,1 na milion obyvatel (2024). Za dekádu ztrojnásobení, přesto pod průměrem OECD (2,6). Kde je páka — a proč rozhoduje rozmístění, ne průměr.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-03">
+<meta property="article:section" content="Dostupnost péče">
+<!--
+  audit:
+    last_reviewed: 2026-08-03
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: article-write (nový indikátor pet_skenery_per_milion z ÚZIS NZIS SSS-04-02)
+    notes: "Nový HSPA indikátor: PET skenery na milion obyvatel. PRIMÁRNÍ DATA: ÚZIS ČR — NZIS, datový souhrn SSS-04-02 (Přístrojové vybavení zdravotnických zařízení, Roční výkaz T (MZ) 1-01), řádek výkazu 50-51 Pozitronová emisní tomografie PET; mezivýstup ingest/nzip-extracts/sss-04-02-pristroje-vyvoj-cr.json. Národní řada počtu PET přístrojů: 2006=5; 2011=8; 2016=16; 2018=17; 2020=18; 2022=18; 2023=23; 2024=23. Hustota na milion: 2006=0,49; 2018=1,60; 2020=1,68; 2024=2,11 (seed value 2,1). BENCHMARK: OECD Health at a Glance 2023 (Diagnostic technologies), průměr OECD ~2,6 na milion. Mezinárodní kontext (WHO GHO / OECD, poslední dostupné roky): Dánsko 8,3; Itálie 3,5; Finsko 2,7; Rakousko 2,7; Belgie 2,6; Francie 2,6; Nizozemsko 2,3; Španělsko 1,8; Slovensko 1,5; Německo ~1,5; Polsko 0,9. KŘÍŽOVÁ VALIDACE: řada ÚZIS pro rok 2018 (17 přístrojů = 1,60/mil.) se shoduje s WHO GHO (1,59/mil.). SIGNÁL: warn (higher_is_better, value 2,1 vs OECD 2,6, thresholds good:5/warn:20 → -19 % → warn). POLITICKÁ PÁKA: síť center vysoce specializované péče (Věstník MZ), úhrada PET/CT vyšetření (plátci), kapitálové investice (IROP/NPO), dodávka radiofarmaka (18F-FDG) + personál nukleární medicíny. Hodnoty v textu sladěny s data/indicators.json (value 2,1). DRAFT, published:false, noindex — před publikací ověřit počet a rozmístění pracovišť PET/CT a aktuální úhradová pravidla."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Dostupnost péče</span>
+        <span class="article-tag article-tag-muted">onkologie · diagnostika · PET/CT · zdravotnická technika · NZIS</span>
+      </div>
+      <h1 class="article-title">PET skenery: Česko diagnostiku rakoviny dohání, ale pacient z okraje kraje čeká dál</h1>
+      <p class="article-deck">
+        V roce 2024 bylo v Česku v provozu <strong>23 PET/CT přístrojů</strong> — <strong>2,1 na milion obyvatel</strong>. Za necelou dekádu se hustota špičkové onkologické diagnostiky více než ztrojnásobila a ČR předběhla Slovensko, Polsko i Německo. Přesto zůstává pod průměrem OECD (2,6) a — což je důležitější — přístroje jsou koncentrované do zhruba tuctu velkých center. Nový HSPA indikátor a analýza toho, proč o dostupnosti nerozhoduje národní průměr, ale rozmístění a čekací doby.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Marii (61) z Bruntálska našel plicní lékař na CT stín na plíci. Než onkolog rozhodne, jestli je nádor operovatelný, potřebuje přesný staging — a ten dá jen PET/CT, vyšetření, které zobrazí metabolickou aktivitu nádoru a odhalí, jestli se rozšířil i tam, kde ho běžné CT nevidí. V Moravskoslezském kraji je pracoviště v Ostravě; Marie tam dojíždí přes hodinu a na termín čeká tři týdny. Ty tři týdny jsou pro ni věčnost strachu a pro nádor čas navíc. Přesně o tomhle rozhoduje hustota přístrojů, kterou žádný pacient nevidí — dokud ji nepotřebuje.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">PET/CT v Česku — kapacita rychle roste, přesto pod průměrem OECD</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2.1" data-decimals="1">2,1</span>
+            <span class="av-counter-label">PET přístroje na milion obyvatel (2024)</span>
+            <span class="av-counter-foot">pod průměrem OECD (2,6), ale nad Slovenskem i Německem</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="23">23</span>
+            <span class="av-counter-label">PET/CT přístrojů v provozu (2024)</span>
+            <span class="av-counter-foot">z 5 přístrojů v roce 2006 — více než ztrojnásobení hustoty</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="2.6" data-decimals="1">2,6</span>
+            <span class="av-counter-label">na milion — přibližný průměr OECD</span>
+            <span class="av-counter-foot">Dánsko 8,3 · Itálie 3,5 · Rakousko 2,7 · Polsko 0,9</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="12">~12</span>
+            <span class="av-counter-label">pracovišť nese celou kapacitu</span>
+            <span class="av-counter-foot">koncentrace do fakultních a onkologických center → nerovný dojezd</span>
+          </div>
+        </div>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR — NZIS, datový souhrn SSS-04-02 (Přístrojové vybavení zdravotnických zařízení), řádek 50-51, 2006–2024. Mezinárodní srovnání: WHO GHO / OECD Health at a Glance 2023 (Diagnostic technologies).</p>
+      </figure>
+
+      <h3>Co PET/CT vlastně je — a proč na počtu přístrojů záleží</h3>
+      <p>
+        <strong>Pozitronová emisní tomografie (PET)</strong> je zobrazovací metoda, která na rozdíl od CT nebo magnetické rezonance neukazuje jen tvar tkání, ale jejich <em>metabolismus</em>. Pacient dostane malé množství radiofarmaka — nejčastěji fluorodeoxyglukózy značené fluorem-18 (18F-FDG), tedy cukru s radioaktivní značkou. Nádorové buňky spotřebovávají cukr rychleji než okolí, takže se na snímku „rozsvítí". Dnes se PET prakticky vždy kombinuje s CT do jednoho hybridního přístroje (PET/CT), který metabolickou mapu překryje s přesnou anatomií.
+      </p>
+      <p>
+        Pro onkologii je to zásadní nástroj. PET/CT je standardem <strong>stagingu</strong> (určení rozsahu nádoru) a <strong>restagingu</strong> u řady diagnóz — lymfomů, karcinomu plic, kolorektálního karcinomu, gynekologických nádorů, melanomu a stále častěji i karcinomu prostaty (s radiofarmakem PSMA). Používá se také k hodnocení odpovědi na léčbu a k odhalení skrytých metastáz. Výsledek přitom přímo mění léčebný plán: přesnější staging rozhoduje o tom, zda pacient dostane kurativní operaci, radioterapii, nebo paliativní léčbu. Nedostupnost nebo dlouhé čekání se proto promítají do horších výsledků — a Česko má právě u onkologie prostor ke zlepšení.
+      </p>
+      <p>
+        Dosud dashboard sledoval kapacitu zobrazovací diagnostiky jen u <a href="indikator-ct_per_milion.html">CT</a> a <a href="indikator-mri_per_milion.html">magnetické rezonance</a>. PET/CT byl chybějící článek diagnostického řetězce — ten, který nejvíc rozhoduje o onkologii. Nový indikátor ho doplňuje jako třetí pilíř zobrazovací kapacity.
+      </p>
+
+      <h3>Stav v Česku: rychlý růst z nízké základny</h3>
+      <p>
+        Díky ročnímu výkazu o přístrojovém vybavení, který ÚZIS agreguje do datového souhrnu SSS-04-02, lze počet PET přístrojů sledovat zpětně až do roku 2006. A trend je jednoznačně vzestupný. Z pouhých <strong>5 přístrojů (2006)</strong> vyrostla síť na 8 (2011), 16 (2016), 18 (2020–2022) a po vlně investic skokem na <strong>23 přístrojů (2023–2024)</strong>. Přepočteno na milion obyvatel hustota vzrostla z 0,5 na <strong>2,1</strong> — více než ztrojnásobení za necelou dekádu. Málokterý ukazatel zdravotnické infrastruktury roste tak rychle.
+      </p>
+      <p>
+        Že jde o reálná, mezinárodně srovnatelná čísla, potvrzuje křížová kontrola: hodnota ÚZIS pro rok 2018 (17 přístrojů, tedy 1,6 na milion) se přesně shoduje s údajem, který za Česko téhož roku vykázala Světová zdravotnická organizace ve své databázi Global Health Observatory (1,59 na milion). Národní řada tedy není odhad — je to sečtený inventář instalovaných přístrojů.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Vývoj počtu PET přístrojů v Česku a jejich hustoty na milion obyvatel</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Počet PET přístrojů</th>
+                <th scope="col" class="av-num">Na milion obyvatel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2006</th><td class="av-num">5</td><td class="av-num">0,5</td></tr>
+              <tr><th scope="row">2011</th><td class="av-num">8</td><td class="av-num">0,8</td></tr>
+              <tr><th scope="row">2016</th><td class="av-num">16</td><td class="av-num">1,5</td></tr>
+              <tr><th scope="row">2018</th><td class="av-num">17</td><td class="av-num">1,6</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">18</td><td class="av-num">1,7</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">18</td><td class="av-num">1,7</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2024</th><td class="av-num">23</td><td class="av-num">2,1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: ÚZIS ČR — NZIS, datový souhrn SSS-04-02 (Přístrojové vybavení zdravotnických zařízení, Roční výkaz T (MZ) 1-01), řádek 50-51 „Pozitronová emisní tomografie PET". Hustota přepočtena na střední stav obyvatel ČSÚ.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: pod průměrem, ale už ne na chvostu</h3>
+      <p>
+        V evropském kontextu je Česko se svými 2,1 přístroji na milion obyvatel v druhé polovině žebříčku, ale zdaleka ne nejhůř. Nad průměrem OECD (kolem 2,6) leží severské a jihoevropské země s tradičně hustou sítí nukleární medicíny — <strong>Dánsko (8,3)</strong>, které je evropským extrémem, <strong>Itálie (3,5)</strong>, <strong>Finsko a Rakousko (2,7)</strong>. Kolem průměru se drží <strong>Belgie a Francie (2,6)</strong> a <strong>Nizozemsko (2,3)</strong>.
+      </p>
+      <p>
+        Pod Českem je přitom řada srovnatelných zemí. <strong>Španělsko</strong> má 1,8 přístroje na milion, <strong>Slovensko 1,5</strong>, <strong>Polsko jen 0,9</strong>. A překvapivě nízko je i <strong>Německo (kolem 1,5)</strong> — ne proto, že by na přístroje nemělo, ale proto, že úhrada PET vyšetření je tam historicky restriktivní a indikace přísně vymezené. To je důležité poučení: hustota přístrojů není jen otázkou bohatství, ale politického rozhodnutí, kolik a jakých vyšetření systém proplácí.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">PET skenery na milion obyvatel — mezinárodní srovnání (poslední dostupné roky)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" / mil." data-max="8.5">
+          <li class="av-bar-row" data-value="8.3" data-label="Dánsko"></li>
+          <li class="av-bar-row" data-value="3.5" data-label="Itálie"></li>
+          <li class="av-bar-row" data-value="2.7" data-label="Rakousko"></li>
+          <li class="av-bar-row" data-value="2.7" data-label="Finsko"></li>
+          <li class="av-bar-row" data-value="2.6" data-label="Belgie"></li>
+          <li class="av-bar-row" data-value="2.6" data-label="Francie"></li>
+          <li class="av-bar-row" data-value="2.6" data-label="Ø OECD"></li>
+          <li class="av-bar-row" data-value="2.3" data-label="Nizozemsko"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="2.1" data-label="Česko"></li>
+          <li class="av-bar-row" data-value="1.8" data-label="Španělsko"></li>
+          <li class="av-bar-row" data-value="1.5" data-label="Slovensko"></li>
+          <li class="av-bar-row" data-value="1.5" data-label="Německo"></li>
+          <li class="av-bar-row" data-value="0.9" data-label="Polsko"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: WHO Global Health Observatory (Total density per million population: positron emission tomography) a OECD Health at a Glance 2023 (Diagnostic technologies). Referenční roky se mezi zeměmi liší (2018–2023); hodnoty jsou orientační, protože definice „PET" vs. „PET/CT" a metodika sběru nejsou plně jednotné.</p>
+      </figure>
+
+      <h3>Mapa průměru není mapou dostupnosti</h3>
+      <p>
+        Národní hustota 2,1 na milion je užitečné číslo pro mezinárodní srovnání, ale pro pacienta jako Marie skoro nic neznamená. Rozhodující totiž není, kolik je přístrojů v zemi, ale <em>jak daleko</em> má k nejbližšímu a <em>jak dlouho</em> na vyšetření čeká. A tady se národní průměr rozpadá. Oněch 23 přístrojů je koncentrováno do zhruba tuctu pracovišť nukleární medicíny — převážně velkých fakultních nemocnic (Praha, Brno, Olomouc, Ostrava, Hradec Králové, Plzeň) a onkologických center. Řada okresů, a v některých případech i celý kraj mimo své krajské město, žádné vlastní PET/CT nemá.
+      </p>
+      <p>
+        Ta koncentrace má svou logiku: PET/CT je nákladná technologie (jeden přístroj stojí desítky milionů korun, k tomu stavební úpravy se stíněním, radiační ochrana a specializovaný personál) a soustředění do center zvyšuje jejich vytíženost i kvalitu čtení snímků. Cena za efektivitu se ale platí v nerovnosti dojezdu. Pacient z odlehlého okresu absolvuje před vlastní léčbou několik cest přes celý kraj — a čekací doba na termín se v exponovaných centrech počítá na týdny. Právě tuhle skrytou nerovnost národní průměr zakrývá.
+      </p>
+
+      <h3>Strukturální analýza: co drží hustotu tam, kde je</h3>
+      <p>
+        Za výslednou hustotou a jejím rozložením stojí několik systémových faktorů. Prvním je <strong>onkologická poptávka</strong>. Česko má vysokou incidenci i úmrtnost na nádory a počet indikací k PET/CT trvale roste — jednak přibývá diagnóz, u nichž je vyšetření standardem, jednak přicházejí nová radiofarmaka (PSMA u karcinomu prostaty, receptorová PET u neuroendokrinních nádorů). Poptávka tak roste rychleji, než přibývají přístroje.
+      </p>
+      <p>
+        Druhým faktorem jsou <strong>kapitálové náklady a síť center</strong>. Vysoká pořizovací i provozní cena tlačí na koncentraci do center vysoce specializované onkologické péče, která vymezuje Věstník ministerstva zdravotnictví. To zvyšuje efektivitu, ale prohlubuje geografickou nerovnost. Třetím faktorem je <strong>úhrada vyšetření</strong>: kolik PET/CT vyšetření pojišťovny proplatí, určuje, zda se pracovišti vyplatí pořídit další přístroj a kolik pacientů reálně vyšetří. Německý příklad ukazuje, že restriktivní úhrada drží hustotu nízko i v bohaté zemi.
+      </p>
+      <p>
+        Čtvrtým, často opomíjeným faktorem je <strong>dostupnost radiofarmaka a personálu</strong>. 18F-FDG má poločas rozpadu jen 110 minut, takže pracoviště musí být v dosahu cyklotronu nebo mít spolehlivou rychlou logistiku dodávek. A bez dostatku lékařů nukleární medicíny, kteří snímky čtou, zůstane i nový přístroj nevyužitý. Počet přístrojů je proto jen jednou — byť nejviditelnější — proměnnou skutečné dostupnosti.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="110">110</span>
+          <span class="av-counter-label">minut — poločas rozpadu radiofarmaka 18F-FDG</span>
+          <span class="av-counter-foot">PET pracoviště musí být v dosahu cyklotronu nebo rychlé logistiky — technologie limituje i to, kam vůbec lze přístroj umístit</span>
+        </div>
+      </aside>
+
+      <h3>Politická páka: ne víc přístrojů, ale kratší dojezd a čekání</h3>
+      <p>
+        Dobrá zpráva je, že skoková čísla posledních let ukazují, že přidávat kapacitu Česko umí — mezi lety 2022 a 2023 přibylo pět přístrojů naráz. Cílem ale není maximalizovat počet skenerů (nad určitou úroveň hrozí naopak nadužívání a neindikovaná vyšetření), nýbrž zajistit, aby se pacient jako Marie k vyšetření dostal rychle a bez zbytečného cestování. Páky jsou čtyři a mají jasné majitele.
+      </p>
+      <p>
+        Za prvé, <strong>síť a rozmístění</strong>. Plánovat kapacitu tak, aby žádný kraj nezůstal bez dostupného PET/CT a aby se čekací doby v přetížených centrech nevymykaly. Gesci mají ministerstvo zdravotnictví (Věstník, vymezení center vysoce specializované péče) a kraje. Za druhé, <strong>úhrada navázaná na dostupnost</strong>: nastavit počet a strukturu hrazených vyšetření tak, aby motivovaly ke zkrácení čekacích lhůt, případně zavést lhůty jako podmínku úhrady. To je věc plátců a Seznamu zdravotních výkonů.
+      </p>
+      <p>
+        Za třetí, <strong>kapitálové investice</strong>. Pořízení přístrojů táhnou dotační programy — Integrovaný regionální operační program (IROP) a Národní plán obnovy. Cílené směřování investic do podvybavených regionů může nerovnost dojezdu snížit rychleji než tržní logika, která přístroje soustřeďuje tam, kde už jsou. Za čtvrté, <strong>radiofarmakum a personál</strong>: bez zajištěné dodávky 18F-FDG a dostatku lékařů nukleární medicíny zůstane každý nový přístroj poddimenzovaný. To vyžaduje koordinaci sítě cyklotronů a vzdělávací kapacity oboru.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        PET/CT je učebnicový příklad toho, proč HSPA Monitor sleduje i strukturální ukazatele „na vstupu", ne jen výsledky na konci řetězce. Sám o sobě vypadá indikátor jako úspěch: hustota se za dekádu více než ztrojnásobila, Česko předběhlo několik sousedů a rychle se blíží průměru OECD. Skutečnou hodnotu ale číslo získává až v kontextu diagnostického řetězce: kapacita, která rozhoduje o onkologických výsledcích, je stále pod průměrem OECD a — hlavně — nerovnoměrně rozmístěná. Nůžková mezera mezi „národní průměr roste" a „pacient z okraje kraje čeká tři týdny a dojíždí přes hodinu" je přesně to, co má dobrá výkonnostní analýza odhalit.
+      </p>
+      <p>
+        Řešení nestojí na honbě za nejvyšším počtem přístrojů, ale na jejich <strong>chytrém rozmístění</strong>, <strong>úhradě navázané na čekací lhůty</strong> a <strong>zajištění radiofarmaka i personálu</strong>. Marie mezitím čeká na svůj termín v Ostravě a s ním na rozhodnutí, které určí zbytek její léčby. Zkrátit její tři týdny — a ujistit se, že stejně dlouho nečeká ani pacient z okresu, kde žádné pracoviště není — je levnější a účinnější než jakékoli číslo na národní mapě. To už totiž roste samo.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-pet_skenery_per_milion.html"><strong>PET skenery na milion obyvatel</strong></a> — 2,1 na milion (ČR, 2024), roste z 0,5 (2006) · signál warn — kapacita špičkové onkologické diagnostiky</li>
+        <li><a href="indikator-ct_per_milion.html"><strong>CT přístroje na milion obyvatel</strong></a> — sesterský pilíř zobrazovací kapacity; CT je základ, PET/CT nadstavba pro metabolický staging</li>
+        <li><a href="indikator-mri_per_milion.html"><strong>MR přístroje na milion obyvatel</strong></a> — třetí ze zobrazovacích technologií; ČR pod průměrem OECD i u magnetické rezonance</li>
+        <li><a href="indikator-mortalita_onkologicka.html"><strong>Onkologická mortalita</strong></a> — konec řetězce, který včasná a přesná diagnostika na začátku spoluurčuje</li>
+        <li><a href="indikator-prezit_rakoviny_5let.html"><strong>Pětileté přežití u rakoviny</strong></a> — výsledek, na který staging a volba léčby přímo navazují</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — přístrojové vybavení v ČR</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — NZIS: datový souhrn SSS-04-02 „Přístrojové vybavení zdravotnických zařízení"</strong> (zdroj: Roční výkaz o přístrojovém vybavení T (MZ) 1-01) — národní časová řada počtu přístrojů podle druhu, 2006–2024, včetně řádku „Pozitronová emisní tomografie PET". <a href="https://www.nzip.cz/data/2180-pristrojove-vybaveni-datovy-souhrn" target="_blank" rel="noopener">nzip.cz/data/2180 ↗</a></li>
+          <li><strong>Věstník Ministerstva zdravotnictví ČR — centra vysoce specializované onkologické péče</strong> — vymezení sítě center, do nichž je špičková diagnostika a léčba soustředěna. <a href="https://mzd.gov.cz/dokumenty/" target="_blank" rel="noopener">mzd.gov.cz/dokumenty ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>WHO Global Health Observatory — Total density per million population: positron emission tomography</strong> — mezinárodně srovnatelná hustota PET přístrojů podle zemí. <a href="https://www.who.int/data/gho/data/indicators/indicator-details/GHO/total-density-per-million-population-positron-emission-tomography" target="_blank" rel="noopener">who.int/data/gho ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2023, kapitola Diagnostic technologies</strong> — hustota CT, MR a PET skenerů na milion obyvatel a jejich mezinárodní srovnání. <a href="https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en.html" target="_blank" rel="noopener">oecd.org — Health at a Glance 2023 ↗</a></li>
+          <li><strong>Our World in Data — Availability of positron emission tomography (PET) imaging</strong> — přehledný mezinárodní graf hustoty PET (zpracování dat WHO). <a href="https://ourworldindata.org/grapher/availability-of-positron-emission-tomography-pet-imaging" target="_blank" rel="noopener">ourworldindata.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 2,1 přístroje na milion obyvatel (ČR, 2024) i celá časová řada pocházejí z otevřených dat ÚZIS ČR (NZIS, datový souhrn SSS-04-02, řádek „Pozitronová emisní tomografie PET") a jsou sladěny s kanonickou hodnotou v data/indicators.json. Řada ÚZIS je pro rok 2018 shodná s údajem WHO GHO (1,6 na milion), což potvrzuje mezinárodní srovnatelnost. Mezinárodní hodnoty pocházejí z WHO GHO a OECD Health at a Glance 2023; referenční roky se mezi zeměmi liší (2018–2023) a definice „PET" vs. „PET/CT" nejsou plně jednotné, proto jsou srovnávací čísla orientační. Hustota přístrojů měří kapacitu, ne dostupnost pro konkrétního pacienta — o té rozhoduje rozmístění a čekací doby, které národní průměr nezachytí. <strong>Článek je rozpracovaný draft</strong> — před publikací ověřit aktuální počet a rozmístění pracovišť PET/CT a úhradová pravidla PET vyšetření.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
