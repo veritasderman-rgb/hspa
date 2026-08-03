@@ -430,3 +430,4 @@ datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 - `node_modules/`
 - `*.lock`
 - `data/snapshot-*.json` — denní snapshoty (historie datového kontraktu)
+- `data/search-index.json` — generovaný fulltextový index (`npm run build:search-index`)
