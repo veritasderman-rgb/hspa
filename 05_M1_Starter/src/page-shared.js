@@ -693,6 +693,23 @@ function injectMobileNav(tabsHtml) {
   const topbar = document.querySelector('header.topbar');
   if (!topbar) return;
 
+  // Mobilní vstup do vyhledávání: desktopový .site-search-trigger žije uvnitř
+  // .module-nav, která se pod 720 px skrývá — mobil proto potřebuje vlastní
+  // trigger v topbaru (viditelnost řídí CSS breakpoint 720 px jako hamburger).
+  let searchBtn = document.getElementById('mobileSearchTrigger');
+  if (!searchBtn) {
+    searchBtn = document.createElement('button');
+    searchBtn.id = 'mobileSearchTrigger';
+    searchBtn.className = 'mobile-search-trigger';
+    searchBtn.setAttribute('type', 'button');
+    searchBtn.setAttribute('aria-label', 'Otevřít vyhledávání');
+    searchBtn.innerHTML = '<span aria-hidden="true">⌕</span>';
+    searchBtn.addEventListener('click', () => {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+    });
+    topbar.appendChild(searchBtn);
+  }
+
   let toggle = document.getElementById('mobileNavToggle');
   if (!toggle) {
     toggle = document.createElement('button');
@@ -729,6 +746,7 @@ function injectMobileNav(tabsHtml) {
         <span class="mobile-nav-drawer-title">Menu</span>
         <span class="mobile-nav-drawer-actions">${themeToggleHtml()}<button type="button" class="mobile-nav-close" aria-label="Zavřít menu">×</button></span>
       </div>
+      <button type="button" class="mobile-nav-search" id="mobileNavSearch"><span aria-hidden="true">⌕</span> Hledat na webu</button>
       <nav class="mobile-nav-list" aria-label="Stránky"></nav>`;
     document.body.appendChild(drawer);
   }
@@ -758,6 +776,10 @@ function injectMobileNav(tabsHtml) {
     document.body.classList.contains('mobile-nav-open') ? close() : open();
   });
   drawer.querySelector('.mobile-nav-close').addEventListener('click', close);
+  drawer.querySelector('.mobile-nav-search')?.addEventListener('click', () => {
+    close();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '/', bubbles: true }));
+  });
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && document.body.classList.contains('mobile-nav-open')) close();
