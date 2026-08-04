@@ -200,12 +200,43 @@ Detailní schémata všech `data/*.json` viz [`docs/data-model.md`](../docs/data
 ```bash
 npm test                  # Spustí všechny testy (~260)
 npm run build:css         # Minifikace styles.css → styles.min.css (NUTNÉ po každé úpravě CSS — hlídá test)
+npm run build:generated   # Přegeneruje VŠECHNY generované artefakty (po každém merge/rebase)
+npm run setup:git         # Merge driver pro generované soubory (běží i sám po `npm install`)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
 npm run serve             # Lokální HTTP server
 ```
+
+## Generované artefakty (nekonfliktní merge)
+
+Čtyři commitnuté soubory se negenerují ručně — vznikají z ostatního obsahu repa:
+
+| Soubor | Builder |
+|---|---|
+| `data/search-index.json` | `npm run build:search-index` |
+| `data/diagnoza-index.json` | `npm run build:diagnoza` |
+| `data/souvislosti.json` | `npm run build:souvislosti` |
+| `src/styles.min.css` | `npm run build:css` |
+
+Protože je přepisuje skoro každý obsahový PR i denní publikační cron,
+konfliktovaly prakticky pokaždé, když se sešly dvě větve. Kořenový
+`.gitattributes` je proto značí `merge=generated` — merge/rebase se na nich
+nezastaví a vezme aktuální stranu.
+
+**Po každém merge/rebase, který se jich dotkl, spusť `npm run build:generated`.**
+Výsledek merge je jen mezistav; přegenerování z něj udělá pravdu. Zapomenout
+nejde — drift testy (`tests/generated-artifacts.test.js`, `diagnoza-index`,
+`css-min`) selžou, když soubor neodpovídá zdrojům.
+
+Merge driver git nepřenáší klonem, nastaví ho `npm run setup:git` (spouští se
+sám z `postinstall`). Buildery zapisují idempotentně — když se změní jen
+`generated_at`, soubor na disku nechají být.
+
+⚠️ Do `merge=generated` patří JEN artefakty, které `build:generated` umí
+přegenerovat offline a deterministicky. Nikdy tam nedávej něco taženého ze
+sítě (`data/kolonoskopie.json`) — tiché převzetí jedné strany by ztratilo data.
 
 ## Stav (květen 2026)
 

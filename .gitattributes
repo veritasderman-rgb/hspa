@@ -1,0 +1,29 @@
+# Generované artefakty commitnuté do repa
+# ----------------------------------------
+# Tyhle soubory se NEPÍŠOU ručně — vznikají z jiných souborů v repu
+# (`npm run build:generated`). Protože je dřív nebo později přepíše skoro
+# každý obsahový PR i denní publikační cron, konfliktovaly prakticky pokaždé,
+# když se sešly dvě větve — a řešení bylo vždy stejné: zahodit obě verze
+# a přegenerovat.
+#
+#   merge=generated  → merge/rebase se na nich nezastaví (vezme aktuální
+#                      stranu). Výsledek je mezistav — po merge PŘEGENERUJ:
+#                        cd 05_M1_Starter && npm run build:generated
+#                      Zapomenout nejde: drift testy v tests/ selžou.
+#   -diff            → git/GitHub je nezobrazuje v diffu (3,5 MB šumu)
+#
+# Merge driver není součástí klonu, musí se nastavit v lokálním gitu:
+#   cd 05_M1_Starter && npm run setup:git      (běží i samo po `npm install`)
+#
+# POZOR: sem patří jen soubory, které umí `npm run build:generated`
+# přegenerovat offline a deterministicky. Artefakty ze sítě (kolonoskopie.json)
+# tu být NESMÍ — u nich by tiché převzetí jedné strany znamenalo ztrátu dat.
+
+05_M1_Starter/data/search-index.json    merge=generated -diff linguist-generated=true
+05_M1_Starter/data/diagnoza-index.json  merge=generated -diff linguist-generated=true
+05_M1_Starter/data/souvislosti.json     merge=generated -diff linguist-generated=true
+05_M1_Starter/src/styles.min.css        merge=generated -diff linguist-generated=true
+
+# Denní snapshoty datového kontraktu — každý den vlastní soubor, takže
+# nekonfliktují; jen ať nezahlcují diff v PR.
+05_M1_Starter/data/snapshot-*.json      -diff linguist-generated=true
