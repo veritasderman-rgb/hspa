@@ -28,9 +28,10 @@
 // Použití:  npm run build:souvislosti  [--dry]
 // Zapojeno do refresh pipeline (.github/workflows/refresh.yml) po transformu.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeGeneratedJson } from './lib/write-generated.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DRY = process.argv.includes('--dry');
@@ -301,13 +302,14 @@ export function buildSouvislosti({ root = ROOT, now = new Date(), data } = {}) {
 function main() {
   const result = buildSouvislosti();
   const outPath = resolve(ROOT, 'data/souvislosti.json');
-  if (!DRY) writeFileSync(outPath, JSON.stringify(result, null, 2) + '\n');
+  let written = false;
+  if (!DRY) written = writeGeneratedJson(outPath, result, { pretty: true });
   const c = result.counts;
   console.log(
     `souvislosti.json: ${c.indicators_with_links}/${c.indicators_total} indikátorů s vazbami ` +
       `(model ${c.sources.system_model_nodes} uzlů, legislativa ${c.sources.legislativa_items}+${c.sources.legislativa_plan_items}, ` +
       `články ${c.sources.articles_visible}, claims ${c.sources.claims}, barometr ${c.sources.barometr ? 'ano' : 'ne'})` +
-      (DRY ? ' [dry]' : ''),
+      (DRY ? ' [dry]' : written ? '' : ' [beze změny]'),
   );
 }
 

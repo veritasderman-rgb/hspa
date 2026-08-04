@@ -25,6 +25,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeGeneratedJson } from './lib/write-generated.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -99,13 +100,12 @@ function main() {
     return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
   });
 
-  const json = JSON.stringify(index);
-  const sizeKb = Math.round(json.length / 1024);
+  const sizeKb = Math.round(JSON.stringify(index).length / 1024);
   console.log(`search-index: ${index.count} článků, ${sizeKb} kB raw`);
 
   if (!DRY) {
-    fs.writeFileSync(path.join(ROOT, 'data', 'search-index.json'), json + '\n');
-    console.log('data/search-index.json zapsáno.');
+    const written = writeGeneratedJson(path.join(ROOT, 'data', 'search-index.json'), index);
+    console.log(written ? 'data/search-index.json zapsáno.' : 'data/search-index.json beze změny.');
   }
 }
 

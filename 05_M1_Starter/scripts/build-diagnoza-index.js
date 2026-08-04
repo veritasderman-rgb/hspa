@@ -28,9 +28,10 @@
 //
 // Použití: npm run build:diagnoza
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { writeGeneratedJson } from './lib/write-generated.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_PATH = resolve(ROOT, 'data', 'diagnoza-index.json');
@@ -223,8 +224,11 @@ export function countLinks(file) {
 // CLI: node scripts/build-diagnoza-index.js
 if (import.meta.url === `file://${process.argv[1]}`) {
   const index = buildDiagnozaIndex();
-  writeFileSync(OUT_PATH, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
+  const written = writeGeneratedJson(OUT_PATH, index, { pretty: true });
   const n = Object.keys(index.indicators).length;
   const m = Object.values(index.indicators).reduce((acc, f) => acc + countLinks(f), 0);
-  console.log(`OK: diagnoza-index — ${n} indikátorů se spisem, ${m} vazeb celkem`);
+  console.log(
+    `OK: diagnoza-index — ${n} indikátorů se spisem, ${m} vazeb celkem` +
+      (written ? '' : ' [beze změny]'),
+  );
 }

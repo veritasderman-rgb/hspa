@@ -238,8 +238,37 @@ git fetch origin main
 git rebase origin/main   # nebo merge
 # Pokud conflict v data/snapshot-*.json: použij verzi z origin/main (jejich snapshot)
 git rebase --continue
+npm run build:generated  # generované artefakty vzaly jednu stranu — přegeneruj
 git push --force-with-lease origin claude/branch-name
 ```
+
+### Konflikt v generovaném souboru (search-index, diagnoza-index, souvislosti, styles.min.css)
+
+Tyhle čtyři soubory přepisuje skoro každý obsahový PR i denní cron, takže dřív
+konfliktovaly pořád dokola — a řešení bylo vždy stejné: zahodit obě verze a
+přegenerovat. Kořenový `.gitattributes` je proto značí `merge=generated`, takže
+se na nich merge ani rebase nezastaví.
+
+**Jednou na klon** (git merge drivery nepřenáší; `npm install` to udělá sám):
+
+```bash
+cd 05_M1_Starter && npm run setup:git
+```
+
+**Po každém merge/rebase**, který se jich dotkl:
+
+```bash
+cd 05_M1_Starter && npm run build:generated
+```
+
+Past: bez `setup:git` atribut nic nedělá a konflikt přijde jako dřív — pokud
+se objeví, zkontroluj `git config --get merge.generated.driver` (má vrátit
+`true`). Druhá past: přeskočené přegenerování. To ale spolehlivě chytnou drift
+testy (`tests/generated-artifacts.test.js`, `tests/diagnoza-index.test.js`,
+`tests/css-min.test.js`) — commit se stálým artefaktem neprojde.
+
+GitHub server-side merge drivery nezná, takže PR může pořád hlásit konflikt
+v těchto souborech; lokální rebase ho ale vyřeší bez ruční editace.
 
 ### Pokud validátor selže na neviditelný diff
 
