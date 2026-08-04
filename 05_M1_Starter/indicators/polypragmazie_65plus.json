@@ -10,8 +10,9 @@
   "data_source": {
     "primary": {
       "type": "uzis_nzis_lekovy_modul",
-      "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-informacni-system--lekove-zaznamy-pacientu",
-      "note": "ÚZIS NZIS Lékový modul agreguje individuální preskripční záznamy ze systému eRecept (SÚKL provoz) na úrovni rodného čísla pacienta — výstupní agregát je anonymizován po krajích a věkových kohortách 65–74, 75–84, 85+. Datová kvalita je vázána na pokrytí elektronizace preskripce: v roce 2024 cca 96 % všech receptů v ČR (SÚKL roční zpráva eReceptu 2024). Datová zpoždění: roční agregát s prodlevou cca 9 měsíců po skončení sledovaného roku."
+      "status": "planned",
+      "endpoint": "https://www.epreskripce.gov.cz/",
+      "note": "PLÁNOVANÝ zdroj, zatím nedostupný — indikátor proto běží na seedu (viz source v data/indicators.json). Individuální preskripční záznamy vznikají v systému eRecept, jehož centrální úložiště a lékový záznam provozuje SÚKL (§ 81 zákona č. 378/2007 Sb.); endpoint proto míří na SÚKL eRecept, ne na ÚZIS. Agregát polypragmazie po krajích a věkových kohortách 65–74, 75–84, 85+ ale NENÍ publikován jako otevřená data a „lékový modul“ není mezi zveřejněnými komponentami NZIS — dokud jedno či druhé nevznikne, živý ingest není možný. Pokrytí elektronizace preskripce (cca 96 % receptů v roce 2024 dle SÚKL) je pro budoucí kvalitu určující, ale samo o sobě agregát nenahrazuje."
     },
     "fallback": {
       "type": "oecd",
