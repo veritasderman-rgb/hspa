@@ -509,6 +509,10 @@ const MANIFEST = {
   'clanek-digi-1-co-to-je': { kicker: 'Digitalizace · série', signal: 'neutral', context: 'eRecept od 2018, eNeschopenka od 2020 — používáte to, aniž víte.', headline: 'Digitalizace není jedna databáze. Data zůstávají u lékaře, síť je propojí.' },
   'clanek-stret-zajmu-vyziva-kojencu': { kicker: 'Veřejné zdraví · etika', signal: 'bad', context: 'Komerční vliv teče dál přes odborné společnosti napojené na výrobce.', headline: 'Komise pro výživu kojenců vyřadila střet zájmů. Za dva roky ho pustila zpět.' },
   'clanek-nadstandardy-1-otevrene-dvere': { kicker: 'Nadstandardy', signal: 'neutral', stat: '12', claim: 'let leží otevřené dveře k nadstandardům — nikdo jimi neprošel.', context: 'Ústavní soud 2013 nadstandardy nezakázal. Pokus 2025 (Válek) neprošel.' },
+  'clanek-predcasne-porody-centralizace': { kicker: 'Porodnictví · předčasné porody', signal: 'good', stat: '6,4', statSuffix: '%', claim: 'dětí se v Česku rodí předčasně — pod evropským průměrem 7,4 %.', context: '85,9 % velmi předčasných porodů proběhne ve 12 centrech.' },
+  'clanek-prevalence-dusevnich-poruch': { kicker: 'Duševní zdraví · prevalence', signal: 'bad', stat: '27,2', statSuffix: '%', barPct: 27, claim: 'dospělých Čechů má aktuální duševní poruchu (2022).', context: '61 až 93 % z nich se nikdy neléčí.' },
+  'clanek-nadumrtnost-cesko': { kicker: 'Odolnost systému · nadúmrtnost', signal: 'good', stat: '2,6', statSuffix: '%', claim: 'nadúmrtnost Česka v roce 2024 — pod průměrem EU (3,6 %).', context: 'V roce 2021 to bylo 26,3 % — mezi nejhoršími na světě.' },
+  'clanek-nahrada-kolenniho-kloubu': { kicker: 'Ortopedie · objem péče', signal: 'neutral', stat: '212,4', claim: 'náhrad kolenního kloubu na 100 000 obyvatel (2024) — nad průměrem EU.', context: 'Za tři roky víc než dvojnásobek (2021: 103,4).' },
 };
 
 function escapeXml(s) {
