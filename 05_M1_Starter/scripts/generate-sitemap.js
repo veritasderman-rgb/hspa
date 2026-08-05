@@ -51,6 +51,7 @@ export const STATIC_PAGES = [
   { loc: '/kraje.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/pojistenci.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/prevence.html', priority: '0.8', changefreq: 'weekly' },
+  { loc: '/vedra.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/strategie.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/tyden.html', priority: '0.6', changefreq: 'weekly' },
   { loc: '/hra.html', priority: '0.7', changefreq: 'monthly' },
