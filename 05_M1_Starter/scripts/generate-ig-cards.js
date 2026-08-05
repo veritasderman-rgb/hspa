@@ -1,20 +1,25 @@
 #!/usr/bin/env node
 // generate-ig-cards.js
-// Generuje sociální karty v „stat-hero" stylu pro Instagram a Facebook:
+// Generuje sociální karty v „stat-hero" stylu pro Instagram, Facebook a X:
 // obří číslo jako vizuální hrdina na tmavém vysoce kontrastním pozadí, signální
-// barva, úderný claim. Cílem je thumb-stopping grafika nativní pro IG/FB —
+// barva, úderný claim. Cílem je thumb-stopping grafika nativní pro daný feed —
 // scroll-stopper, ne vsazený landscape web-cover.
 //
-// Dva formáty:
-//   • square  1080×1080  → feed/post     → assets/social/ig/<slug>.png
-//   • story   1080×1920  → Stories/Reels → assets/social/ig-story/<slug>.png
+// Tři formáty — jeden na každý tvar plochy, kterou sítě opravdu zobrazují:
+//   • square    1080×1080  → IG/FB feed    → assets/social/ig/<slug>.png
+//   • story     1080×1920  → Stories/Reels → assets/social/ig-story/<slug>.png
 //     (9:16 s respektovanými IG safe-zónami — horní/dolní okraj zůstává volný
 //      pro overlay UI: profil nahoře, odpovědní lišta / akce Reels dole)
+//   • landscape 1600×900   → X/Twitter     → assets/social/x/<slug>.png
+//     (16:9 — X čtvercový obrázek v timeline ořízne na šířku a ukrojí claim
+//      i patičku; landscape se zobrazí celý. Bez CTA „odkaz v biu" — na X je
+//      odkaz klikací přímo v postu.)
 //
-//   node scripts/generate-ig-cards.js                      # všechny, oba formáty
+//   node scripts/generate-ig-cards.js                      # všechny, všechny formáty
 //   node scripts/generate-ig-cards.js <slug> [<slug>]      # vybrané slugy
 //   node scripts/generate-ig-cards.js --format story       # jen vertikální
 //   node scripts/generate-ig-cards.js --format square      # jen čtvercové
+//   node scripts/generate-ig-cards.js --format landscape   # jen 16:9 pro X
 //   node scripts/generate-ig-cards.js --svg <slug>         # zapíše jen .svg náhled
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -61,11 +66,27 @@ const LAYOUTS = {
     footerLineY: 1556, footerTextY: 1604, brandFont: 34, domainFont: 28,
     headFont: 88, headLineH: 102, headStartY: 700, headWrap: 18, headMaxLines: 5,
   },
+  // 16:9 pro X. Nižší plocha než square → sazba je vodorovnější: menší hrdina,
+  // širší zlom claimu (42 znaků místo 22), aby text zaplnil šířku a nevznikl
+  // pruh prázdna vpravo. CTA je vypnuté — na X vede odkaz přímo z postu.
+  landscape: {
+    W: 1600, H: 900, M: 110,
+    accentRuleY: 96, accentRuleW: 88,
+    kickerY: 148, kickerFont: 28,
+    heroBaseline: 420, heroSizes: { 2: 300, 3: 264, 4: 224, more: 188 },
+    claimGap: 116, claimFont: 54, claimLineH: 68, claimWrap: 44, claimMaxLines: 3,
+    barH: 26, barGap: 44,
+    ctxGap: 62, ctxFont: 30, ctxLineH: 40, ctxWrap: 62,
+    cta: null,
+    footerLineY: 826, footerTextY: 872, brandFont: 32, domainFont: 27,
+    headFont: 64, headLineH: 78, headStartY: 340, headWrap: 40, headMaxLines: 3,
+  },
 };
 
 const OUT_DIRS = {
   square: resolve(ROOT, 'assets/social/ig'),
   story: resolve(ROOT, 'assets/social/ig-story'),
+  landscape: resolve(ROOT, 'assets/social/x'),
 };
 
 // Každá karta: buď „stat" režim (stat + claim), nebo „headline" režim.
@@ -601,7 +622,7 @@ function buildStatCard(meta, L) {
     cursorY = barY + L.barH;
   }
   if (context) {
-    const ctxLines = wrap(context, 40).slice(0, 2);
+    const ctxLines = wrap(context, L.ctxWrap || 40).slice(0, 2);
     const ctxStartY = cursorY + L.ctxGap;
     blocks.push(ctxLines
       .map((l, i) => `<text class="context" x="${L.M}" y="${ctxStartY + i * L.ctxLineH}">${escapeXml(l)}</text>`)
@@ -670,11 +691,11 @@ async function main() {
   const svgOnly = args.includes('--svg');
   args = args.filter(a => a !== '--svg');
 
-  let formats = ['square', 'story'];
+  let formats = ['square', 'story', 'landscape'];
   const fmtIdx = args.indexOf('--format');
   if (fmtIdx !== -1) {
     const val = args[fmtIdx + 1];
-    if (!LAYOUTS[val]) { console.error(`⚠️  Neznámý formát „${val}". Použij square|story.`); process.exit(1); }
+    if (!LAYOUTS[val]) { console.error(`⚠️  Neznámý formát „${val}". Použij square|story|landscape.`); process.exit(1); }
     formats = [val];
     args.splice(fmtIdx, 2);
   }
