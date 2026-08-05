@@ -3,7 +3,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { assessHtml, holdReason, pickArticleToPublish, promoteStatusForPublish } from '../scripts/publish-scheduled.js';
+import { assessHtml, holdReason, pickArticleToPublish, promoteStatusForPublish, assignPublicationNumber } from '../scripts/publish-scheduled.js';
 
 test('assessHtml: čistý publikovatelný článek nemá draft markery', () => {
   const html = '<title>Něco zajímavého · HSPA Monitor</title>'
@@ -131,4 +131,45 @@ test('pickArticleToPublish: shoda ready_since → rozhodne scheduled_for', () =>
     { slug: 'b', ready_since: '2026-05-05', scheduled_for: '2026-05-22' },
   ]);
   assert.equal(r.article.slug, 'b');
+});
+
+// --- Redakční pořadové číslo se přiděluje až při publikaci ---------------
+// Dokud ho nastavoval draft, dva PR z jedné noci si sáhly pro stejné `max+1`,
+// kolidovaly na témže řádku articles.json a po „vezmi obojí" zůstaly dva
+// články se stejným číslem (v korpusu jich takhle bylo 18). Publikace je
+// sériová — nejvýš jeden článek denně — takže tady kolize nastat nemůže.
+
+test('assignPublicationNumber: draft bez čísla dostane max+1', () => {
+  const draft = { slug: 'novy' };
+  const all = [{ number: 3 }, { number: 7 }, { number: 5 }, draft];
+  assert.equal(assignPublicationNumber(draft, all), 8);
+  assert.equal(draft.number, 8);
+});
+
+test('assignPublicationNumber: článek s číslem se nepřečíslovává', () => {
+  const a = { slug: 'stary', number: 42 };
+  assert.equal(assignPublicationNumber(a, [{ number: 99 }, a]), null);
+  assert.equal(a.number, 42);
+});
+
+test('assignPublicationNumber: nečíselné number (manifest „M") se nepočítá do maxima', () => {
+  const draft = { slug: 'novy' };
+  assert.equal(assignPublicationNumber(draft, [{ number: 'M' }, { number: 4 }, draft]), 5);
+});
+
+test('assignPublicationNumber: prázdný korpus začíná od 1', () => {
+  const draft = { slug: 'prvni' };
+  assert.equal(assignPublicationNumber(draft, [draft]), 1);
+});
+
+test('assignPublicationNumber: dvě publikace po sobě nikdy nedají stejné číslo', () => {
+  const all = [{ number: 1 }, { number: 2 }];
+  const first = { slug: 'a' };
+  all.push(first);
+  assignPublicationNumber(first, all);
+  const second = { slug: 'b' };
+  all.push(second);
+  assignPublicationNumber(second, all);
+  assert.notEqual(first.number, second.number);
+  assert.deepEqual([first.number, second.number], [3, 4]);
 });

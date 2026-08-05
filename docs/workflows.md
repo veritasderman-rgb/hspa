@@ -88,7 +88,6 @@ Standardní layout sekcí:
 {
   "id": "{slug-without-clanek-prefix-or-html}",
   "slug": "clanek-{slug}.html",
-  "number": "{next-highest+1}",
   "tag": "Životní styl | Onkologie | …",
   "date": "2026-05-27",
   "title": "...",
@@ -99,6 +98,16 @@ Standardní layout sekcí:
   "published": true | false
 }
 ```
+
+> **`number` do záznamu NEPIŠ.** Redakční pořadové číslo přiděluje až publikační
+> cron (`assignPublicationNumber` v `scripts/publish-scheduled.js`) v okamžiku
+> vydání. Dokud si ho bral každý draft jako `max+1`, dva PR připravené tutéž noc
+> si sáhly pro totéž číslo a kolidovaly na stejném řádku `articles.json` — první
+> šel zmergovat, druhý ne, a když se konflikt vyřešil „vezmi obojí", zůstaly dva
+> články se stejným číslem (v korpusu jich takhle bylo 18). Publikace je naopak
+> sériová, nejvýš jeden článek denně, takže tam kolize nastat nemůže.
+> Validátor `validate:articles` duplicitu i chybějící číslo u publikovaného
+> článku odmítne.
 
 ### 3. Cover obrázek
 
