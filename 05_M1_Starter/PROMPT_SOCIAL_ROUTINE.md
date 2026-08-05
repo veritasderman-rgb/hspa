@@ -61,13 +61,22 @@ okamžitá publikace), **zastav se a nahlas to** místo provedení.
 generuje `node scripts/generate-ig-cards.js` (manifest slugů přímo ve skriptu).
 Tmavý stat-hero headline je **standard pro všechny sítě (FB / IG / X) i
 vertikální slot**. Světlý landscape web-cover (`assets/covers/`) se v sociálu
-**nepoužívá** — jako headline působí slabě. Cesty:
+**nepoužívá** — jako headline působí slabě.
+
+**Formát ber podle sítě, ne jeden pro všechny** — každá síť má jiný tvar plochy
+a cizí poměr stran si ořízne:
 
 | Účel | Cesta | Rozměr | Použití |
 |---|---|---|---|
-| **Feed** (post) | `assets/social/ig/<slug>.png` | 1080×1080 | FB/IG/X feed — **povinné** |
-| **Story/Reels** | `assets/social/ig-story/<slug>.png` | 1080×1920 | denní vertikální slot (Fáze 3b) |
+| **FB/IG feed** (post) | `assets/social/ig/<slug>.png` | 1080×1080 (1:1) | FB a IG feed — **povinné** |
+| **X feed** (tweet) | `assets/social/x/<slug>.png` | 1600×900 (16:9) | X/Twitter — **povinné**, fallback `ig/` |
+| **Story/Reels** | `assets/social/ig-story/<slug>.png` | 1080×1920 (9:16) | denní vertikální slot (Fáze 3b) |
 | Nouzový fallback | `assets/covers/<slug>.png` | landscape | jen výjimečně, když kartu opravdu nelze dogenerovat (FB/X text-only, IG přeskoč) |
+
+X ořízne čtvercový obrázek v timeline na šířku a ukrojí claim i patičku, proto
+má vlastní 16:9 kartu bez CTA „odkaz v biu" (na X je odkaz klikací v postu).
+Chybí-li slugu `x/` karta, **použij čtvercovou** — ořez je menší škoda než
+žádná grafika; kartu doplň `npm run ig:cards -- --format landscape <slug>`.
 
 **Chybí-li článku stat-hero karta** (slug není v `MANIFEST`u
 `scripts/generate-ig-cards.js`): přidej ho do manifestu (stat + claim nebo
@@ -157,6 +166,8 @@ podle manuálu [`docs/social-copywriting-manual.md`](../docs/social-copywriting-
 - **Max 280 znaků** (Free účet; pokud `get_channel` ukáže placený tier, limit
   povol vyšší). Odkaz se počítá jako 23 znaků. Stručný hook + 1 číslo + odkaz +
   1–2 hashtagy + cover. Raději kratší než na hraně.
+- Grafika = **16:9 karta** `assets/social/x/<slug>.png` (ne čtvercová — tu X
+  v timeline ořízne). `altText` = „Grafika článku … na portálu HSPA Monitor.".
 
 ### Fáze 3b — Denní vertikální slot (Story/Reels)
 Vedle feedu zařaď **na Facebook i Instagram po `VERTICAL_PER_DAY` (=1)
