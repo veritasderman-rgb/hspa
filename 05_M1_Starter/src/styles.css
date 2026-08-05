@@ -19167,6 +19167,7 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 
 .vd-section { margin: 48px 0; }
 .vd-lead { max-width: 68ch; margin-bottom: 22px; }
+.vd-section > p { max-width: 68ch; }
 
 /* Sedm pravidel */
 .vd-rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
@@ -19248,8 +19249,71 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 }
 .vd-myth-fact { margin: 0; font-size: .94rem; line-height: 1.55; }
 
-/* Ilustrace — celoplošná deska mezi sekcemi */
-.vd-plate { margin: 28px 0; }
+/* ── Ilustrace ──────────────────────────────────────────────────────
+   Sazba stránky stojí na jedné mřížce: text drží čitelnou šířku vlevo,
+   ilustrace sedí v pevném sloupci vpravo a je zarovnaná k hornímu okraji
+   nadpisu. Dřív byl v gridu jen úvodní odstavec, takže vyšší obrázek
+   natáhl řádek a mezi úvodem a odrážkami zela díra — text se rozpojil
+   od vlastního obsahu. Do levého sloupce proto patří CELÝ blok. */
+
+:root {
+  --vd-gap: 40px;
+}
+
+/* Blok „konkrétní situace": text vlevo celý, obrázek vpravo nahoře. */
+.vd-topic { display: grid; gap: 22px; }
+@media (min-width: 980px) {
+  .vd-topic {
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 1fr);
+    column-gap: var(--vd-gap);
+    align-items: start;
+  }
+}
+.vd-topic-body > :first-child { margin-top: 0; }
+.vd-topic-body > :last-child { margin-bottom: 0; }
+/* Odrážky nesmí lepit na úvodní odstavec — je to jeden myšlenkový celek,
+   ale ne jedna slepenina. */
+.vd-topic-body p + .vd-list,
+.vd-topic-body p + .av-data-table-wrap { margin-top: 16px; }
+.vd-topic-body .vd-list + p { margin-top: 14px; }
+/* Uvnitř sloupce už šířku hlídá mřížka — vlastní max-width by text
+   zúžil podruhé a vrátil prázdné pravé pole. */
+.vd-topic-body p,
+.vd-topic-body .vd-list { max-width: none; }
+
+/* Stejné rozvržení pro úvod sekce s ilustrací (úžeh/úpal). */
+.vd-intro-split { display: grid; gap: 22px; margin-bottom: 26px; }
+@media (min-width: 980px) {
+  .vd-intro-split {
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 1fr);
+    column-gap: var(--vd-gap);
+    align-items: start;
+  }
+}
+.vd-intro-text > :first-child { margin-top: 0; }
+.vd-intro-text .vd-lead { max-width: none; margin-bottom: 12px; }
+.vd-intro-note {
+  margin: 0;
+  font-size: .92rem;
+  line-height: 1.55;
+  color: var(--ink-mut, inherit);
+  border-left: 2px solid var(--rule);
+  padding-left: 12px;
+}
+
+/* Obrázek ve sloupci */
+.vd-topic-figure { margin: 0; }
+.vd-topic-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+/* Celoplošná deska — jen tam, kde má obrázek nést celou šířku
+   (otvírák stránky, pás nad mřížkou rizikových skupin). */
+.vd-plate { margin: 26px 0; }
 .vd-plate img {
   display: block;
   width: 100%;
@@ -19263,24 +19327,7 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   color: var(--ink-mut, inherit);
   max-width: 68ch;
 }
-.vd-plate-hero { margin: 0 0 8px; }
-
-/* Tematický blok: text vlevo, ilustrace vpravo. Řeší i to, že text je
-   omezený na 68ch — bez druhého sloupce zůstávala vpravo od odstavců
-   prázdná půlka stránky, zatímco tabulky pod nimi šly přes celou šířku. */
-.vd-topic-head { display: grid; gap: 24px; align-items: start; }
-@media (min-width: 900px) {
-  .vd-topic-head { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 32px; }
-}
-.vd-topic-text > :first-child { margin-top: 0; }
-.vd-topic-figure { margin: 0; }
-.vd-topic-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-}
+.vd-plate-hero { margin: 0 0 10px; }
 
 /* Odkazy na původní materiály */
 .vd-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
