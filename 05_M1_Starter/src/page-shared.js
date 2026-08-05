@@ -562,10 +562,11 @@ export function renderModuleNav(activeId) {
         { id: 'tri-zidle',         label: 'Tři židle: hra',           href: 'hra.html',           match: ['hra.html', 'pribeh-pacienta.html'] },
       ],
     },
-    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html'],
+    { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html', 'vedra.html'],
       children: [
         { id: 'prevence-hub', label: 'Prevence podle oblastí', href: 'prevence.html', match: ['prevence.html'] },
         { id: 'kompas',       label: 'Osobní kompas',          href: 'kompas.html',   match: ['kompas.html'] },
+        { id: 'vedra',        label: 'Vedra a zdraví',         href: 'vedra.html',    match: ['vedra.html'] },
       ],
     },
     { id: 'articles',    label: 'Články',                  href: 'clanky.html',             match: ['clanky.html', 'rubrika.html'],
