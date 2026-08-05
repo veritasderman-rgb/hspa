@@ -189,7 +189,7 @@ Metadata všech článků v sekci Články. Tělo článku není v JSON — je v
     {
       "id": "manifest-reforma-zdravotnictvi",       // slug bez "clanek-" prefixu
       "slug": "clanek-manifest-reforma-zdravotnictvi.html",  // soubor v repo root
-      "number": "M",                                 // pořadové (M pro manifest)
+      "number": "M",                                 // redakční pořadové; přiděluje publikační cron, ne draft ("M" = manifest)
       "tag": "Manifest",                             // zobrazovaný tag
       "date": "2026-05-07",                          // ISO datum publikace
       "kind": "manifest",                            // article | manifest | explainer

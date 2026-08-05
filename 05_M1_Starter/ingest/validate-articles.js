@@ -135,10 +135,38 @@ function validate() {
   const errors = [];
   const warnings = [];
 
+  // Redakční pořadové číslo musí být unikátní.
+  //
+  // Historicky ho nastavoval každý draft už při vzniku jako `max+1`. Dva PR
+  // připravené tutéž noc si sáhly pro stejné číslo, druhý spadl do konfliktu
+  // a při jeho řešení stylem „vezmi obojí" vznikla dvojice se shodným číslem —
+  // takhle jich v korpusu bylo 18, aniž by na to cokoli upozornilo. Číslo teď
+  // přiděluje až publikační cron (assignPublicationNumber), kde je publikace
+  // sériová; tenhle test hlídá, že se ruční přidělování nevrátí zadními vrátky.
+  const byNumber = new Map();
+  for (const a of articles) {
+    if (a.number == null || a.number === '') continue;
+    const key = String(a.number);
+    if (!byNumber.has(key)) byNumber.set(key, []);
+    byNumber.get(key).push(a.slug ?? a.id ?? '?');
+  }
+  for (const [num, slugs] of byNumber) {
+    if (slugs.length > 1) {
+      errors.push(`number #${num} použit ${slugs.length}×: ${slugs.join(', ')} — číslo přiděluje až publikace, v draftu ho nenastavuj`);
+    }
+  }
+
   for (const a of articles) {
     if (!a.slug) {
       errors.push(`${a.id || '?'}: missing slug`);
       continue;
+    }
+
+    // Publikovaný článek číslo mít musí (přidělí ho cron při vydání) — bez něj
+    // by vypadl z řazení podle `number` na homepage i v hubu. Draft ho mít
+    // nemusí a nemá; to je celý smysl přesunu přidělování na publikaci.
+    if (a.published !== false && (a.number == null || a.number === '')) {
+      errors.push(`${a.id} (${a.slug}): publikovaný článek nemá "number" — cron ho měl přidělit při publikaci`);
     }
 
     // Kontrola rubriky (jen pro publikované — drafty smí rubric doplnit později)

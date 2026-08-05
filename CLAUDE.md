@@ -405,6 +405,21 @@ Publikovaný článek dostane `date` = den publikace (zobrazí se s aktuálním
 datem a uplatní se pravidlo viditelnosti v 06:00). Rozhodování při shodě:
 `ready_since` → `scheduled_for` → `slug`.
 
+**Redakční číslo `number` přiděluje také až publikace** (`assignPublicationNumber`).
+Draft ani PR ho nenastavuje. Dokud si ho bral každý draft jako `max+1`, dva PR
+z jedné noci si sáhly pro totéž číslo a kolidovaly na stejném řádku
+`articles.json` — první šel zmergovat, druhý spadl do konfliktu, a po „vezmi
+obojí" zůstaly dva články se stejným číslem (v korpusu jich takhle bylo 18,
+než to validátor začal hlídat). Publikace je sériová, takže tam kolize nastat
+nemůže. `validate:articles` odmítne duplicitu i publikovaný článek bez čísla.
+
+**Počty indikátorů ve statickém HTML se ručně nebumpují.** `data-stat` spany
+nesou jen zaokrouhlenou formulaci („kolem 190"), přesnou hodnotu doplní za běhu
+`src/site-stats.js`. Dřív musel každý PR s novým indikátorem přepsat 191→192
+v deseti místech napříč čtyřmi soubory; dva takové PR kolidovaly a při sériovém
+merge vznikl špatný součet. Hlídá `tests/site-stats-fallbacks.test.js` —
+přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skutečnosti.
+
 ## Deploy (Vercel)
 
 - **Root Directory:** `05_M1_Starter`

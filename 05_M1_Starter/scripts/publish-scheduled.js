@@ -161,6 +161,36 @@ export function promoteStatusForPublish(article) {
 }
 
 /**
+ * Přidělí článku redakční pořadové číslo (`number`) v okamžiku publikace.
+ *
+ * Proč až tady: `number` je sekvenční čítač. Když ho nastavoval každý draft
+ * už při vzniku, dva PR připravené tutéž noc si oba sáhly pro `max+1` — a to
+ * na stejný řádek articles.json. První PR šel zmergovat, druhý spadl do
+ * konfliktu, a když se konflikt vyřešil „vezmi obojí", vznikly dva články se
+ * stejným číslem (v korpusu jich takhle přibylo 18, než se to podchytilo).
+ *
+ * Publikace je naopak sériová — cron pouští nejvýš jeden článek denně, takže
+ * v tomhle bodě o číslo nikdo nesoupeří. Draft `number` prostě nemá a dostane
+ * ho tady.
+ *
+ * Články, které číslo už mají (celý stávající korpus i drafty připravené před
+ * touhle změnou), se nepřečíslovávají.
+ *
+ * @param {object} article    záznam vybraný k publikaci (mutuje se in-place)
+ * @param {Array<object>} all všechny záznamy z articles.json
+ * @returns {number|null}     přidělené číslo, nebo null když už nějaké měl
+ */
+export function assignPublicationNumber(article, all) {
+  if (article.number != null && article.number !== '') return null;
+  const used = (all ?? [])
+    .map((a) => Number(a.number))
+    .filter((n) => Number.isFinite(n));
+  const next = used.length ? Math.max(...used) + 1 : 1;
+  article.number = next;
+  return next;
+}
+
+/**
  * Přepíše HTML publikovaného článku do konzistentního stavu:
  *   - <meta article:audit-status> `draft` → `review-pending`
  *   - <meta robots> na `index, follow` (draft mohl být noindex)
@@ -283,6 +313,7 @@ async function main() {
   winner.published = true;
   winner.date = today; // článek se zveřejní s dnešním datem (pravidlo 06:00)
   const promoted = promoteStatusForPublish(winner); // draft → review-pending
+  const assignedNumber = assignPublicationNumber(winner, data.articles); // sériově → bez kolizí
   changed = true;
 
   // HTML do konzistentního publikovaného stavu (status + robots).
@@ -302,6 +333,7 @@ async function main() {
   console.log(`[${today}] Publikováno 1 článek/ů (${candidates.length} kandidát/ů ve frontě):`);
   console.log(`  - ${winner.slug} :: ${winner.title} — ${reasonText}`);
   if (promoted) console.log(`    audit-status → ${promoted} (publikováno s bannerem „čeká na ověření")`);
+  if (assignedNumber) console.log(`    number → #${assignedNumber} (přiděleno až při publikaci)`);
   if (htmlChanges.length) console.log(`    HTML: ${htmlChanges.join(', ')}`);
 
   // Náhledová grafika se generuje až teď — s aktuálním datem publikace.
