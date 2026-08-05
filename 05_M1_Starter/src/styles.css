@@ -19248,48 +19248,53 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 }
 .vd-myth-fact { margin: 0; font-size: .94rem; line-height: 1.55; }
 
-/* Embedy */
-.vd-embed-warning {
-  font-size: .86rem;
-  border: 1px dashed var(--rule);
-  border-radius: 3px;
-  padding: 10px 14px;
-  max-width: 68ch;
-}
-.vd-embed-group-h { margin: 28px 0 14px; font-size: 1.05rem; }
-.vd-embed-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-}
-.vd-embed { margin: 0; }
-.vd-embed-frame {
+/* Ilustrace — celoplošná deska mezi sekcemi */
+.vd-plate { margin: 28px 0; }
+.vd-plate img {
+  display: block;
   width: 100%;
-  max-width: 100%;
+  height: auto;
   border: 1px solid var(--rule);
   border-radius: 3px;
-  display: block;
-  background: var(--paper, #fff);
 }
-.vd-embed figcaption {
+.vd-plate figcaption {
   margin-top: 8px;
-  font-size: .86rem;
-  color: var(--ink-soft, inherit);
+  font-size: .88rem;
+  color: var(--ink-mut, inherit);
+  max-width: 68ch;
 }
+.vd-plate-hero { margin: 0 0 8px; }
+
+/* Tematický blok: text vlevo, ilustrace vpravo. Řeší i to, že text je
+   omezený na 68ch — bez druhého sloupce zůstávala vpravo od odstavců
+   prázdná půlka stránky, zatímco tabulky pod nimi šly přes celou šířku. */
+.vd-topic-head { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 900px) {
+  .vd-topic-head { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 32px; }
+}
+.vd-topic-text > :first-child { margin-top: 0; }
+.vd-topic-figure { margin: 0; }
+.vd-topic-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+/* Odkazy na původní materiály */
+.vd-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.vd-link { border-top: 2px solid var(--ink); padding-top: 12px; max-width: 78ch; }
+.vd-link > a { font-weight: 600; }
+.vd-link p { margin: 6px 0 0; font-size: .92rem; line-height: 1.55; }
 
 .vd-sources .vd-list li { margin-bottom: 12px; }
 
 /* Tisk: nouzová vrstva a text ano, embedy ne — vytištěný iframe je
    prázdný rámeček, který jen ukrojí papír. */
 @media print {
-  .vd-embed-grid,
-  .vd-embed-warning { display: none; }
+  .vd-plate, .vd-topic-figure { display: none; }
   .vd-emergency { border-width: 1px; }
   .vd-rules, .vd-risk-grid, .vd-myths { display: block; }
   .vd-rule, .vd-myth, .vd-risk { break-inside: avoid; margin-bottom: 10px; }
 }
-
-/* Záložní odkaz pod embedem — když se iframe nenačte (blokovač trackerů,
-   výpadek Meta), nesmí po něm zůstat slepý prázdný rámeček. */
-.vd-embed-fallback { font-size: .84rem; }
-@media print { .vd-embed-fallback { display: none; } }
