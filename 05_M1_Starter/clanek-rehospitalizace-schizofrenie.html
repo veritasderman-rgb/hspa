@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(DRAFT) Otáčivé dveře psychiatrie: každá sedmá hospitalizace se schizofrenií se do měsíce opakuje · HSPA Monitor</title>
+<meta name="description" content="V roce 2021 se 15,6 % hospitalizací pacientů se schizofrenií do 30 dnů od propuštění opakovalo — a podíl od roku 2017 roste, přestože reforma psychiatrické péče slibovala opak. Nový HSPA indikátor z otevřených dat MZ ČR a analýza mezery mezi lůžkem a ambulancí.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Otáčivé dveře psychiatrie: každá sedmá hospitalizace se schizofrenií se do měsíce opakuje">
+<meta property="og:description" content="Rehospitalizace do 30 dnů u schizofrenie klesly z 20,2 % (2010) na 12,1 % (2017) — a pak začaly znovu růst, na 15,6 % v roce 2021. Co se pokazilo v návaznosti péče?">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-06">
+<meta property="article:section" content="Duševní zdraví">
+<!--
+  audit:
+    last_reviewed: 2026-08-06
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: article-write (nový indikátor rehospitalizace_schizofrenie_30d z otevřených dat MZ ČR)
+    notes: "Nový HSPA indikátor: rehospitalizace do 30 dnů po propuštění u schizofrenie (F20). PRIMÁRNÍ DATA: MZ ČR otevřená data, indikátor č. 17 Re-hospitalizace lidí s duševním onemocněním (CSV: data.mzcr.cz/data/distribuce/269/dusevni-onemocneni-rehospitalizace.csv, NZIP datová sada 119, zdroj NRHZS/ÚZIS, řada 2010–2021). Hodnoty ověřeny výpočtem z CSV 2026-08-06: F20 30d podíl 2010=20,18 %, 2013=13,84 %, 2015=13,39 %, 2017=12,07 %, 2019=13,24 %, 2020=14,09 %, 2021=15,60 % (797 z 5 108); F20 7d 2010=7,58 %, 2017=4,65 %, 2021=6,30 %; jakákoliv F-dg 30d 2010=15,14 %, 2017=10,45 %, 2021=11,83 % (5 650 z 47 774); 2021 podle diagnóz: poruchy osobnosti 17,54 %, schizoafektivní 13,99 %, bipolární 12,17 %, alkohol (F10 skupina) 11,68 %, poruchy nálady 10,73 %. NÁVAZNÁ PÉČE: indikátor č. 22 Pokrytí návaznou péčí (CSV: distribuce/267/pokryti-navaznou-peci.csv) — F20–F29 kontakt s ambulantním psychiatrem do 7 dnů: 2010=66,7 % (5 897/8 844), 2015=66,2 %, 2021=65,4 % (4 764/7 280); do 30 dnů 2021=84,1 %. BENCHMARK: OECD Making Mental Health Count (2014, doi 10.1787/9789264208445-en) — neplánované rehospitalizace do 30 dnů u schizofrenie ≈ 13 % (data 2011, ~15 zemí, převážně same-hospital metodika → česká any-hospital hodnota je metodicky přísnější). SIGNÁL: warn (lower_is_better, 15,6 vs 13, thresholds good:10/warn:25 → adjusted −20 % → warn). Hodnoty v textu sladěny s data/indicators.json (value 15,6 %). DRAFT, published:false, noindex — před publikací ověřit, zda MZ ČR nezveřejnilo řadu za 2022+ (psychiatrie.uzis.cz byl při tvorbě nedostupný) a aktuální počet fungujících CDZ."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Duševní zdraví</span>
+        <span class="article-tag article-tag-muted">schizofrenie · rehospitalizace · reforma psychiatrie · komunitní péče · CDZ</span>
+      </div>
+      <h1 class="article-title">Otáčivé dveře psychiatrie: každá sedmá hospitalizace se schizofrenií se do měsíce opakuje — a je to horší než před reformou slibovaným cílem</h1>
+      <p class="article-deck">
+        Když reforma psychiatrické péče v roce 2017 startovala, měl jeden ukazatel ukázat, že funguje: podíl pacientů, kteří se po propuštění rychle vracejí na akutní lůžko. Do roku 2017 klesl u schizofrenie z 20,2 % na 12,1 %. Jenže pak se trend obrátil — v roce 2021 se do 30 dnů opakovalo <strong>15,6 %</strong> hospitalizací, 797 z 5 108. Nový indikátor HSPA Monitoru postavený na otevřených datech Ministerstva zdravotnictví a analýza mezery mezi lůžkem a ambulancí, do které pacienti padají.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Panu Markovi je čtyřiatřicet a z psychiatrické nemocnice odcházel po šesti týdnech potřetí za pět let. V ruce recept na měsíc léků a doporučení „objednat se k ambulantnímu psychiatrovi&quot;. Jeho psychiatr měl nejbližší volný termín za sedm týdnů, centrum duševního zdraví v okrese neexistuje a z nemocnice si nikdo neověřil, jestli se k lékaři vůbec dostal. Po třech týdnech doma přestal léky brát, přestal spát; rodina nakonec volala záchranku. Do třiceti dnů od propuštění byl zpět na stejném oddělení. V psychiatrii se tomu říká efekt otáčivých dveří — a česká data o něm poprvé mluví v číslech, která si může kdokoli stáhnout.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Rehospitalizace do 30 dnů u schizofrenie — reforma v datech couvá</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="15.6" data-decimals="1">15,6</span>
+            <span class="av-counter-label">% hospitalizací se schizofrenií se do 30 dnů opakovalo (2021)</span>
+            <span class="av-counter-foot">797 z 5 108 ukončených hospitalizací · zhruba každá sedmá</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="12.1" data-decimals="1">12,1</span>
+            <span class="av-counter-label">% — minimum řady v roce 2017, kdy reforma startovala</span>
+            <span class="av-counter-foot">od té doby podíl roste: 13,2 % (2019) → 14,1 % (2020) → 15,6 % (2021)</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="13" data-decimals="0">13</span>
+            <span class="av-counter-label">% — orientační průměr OECD (neplánované readmise do 30 dnů)</span>
+            <span class="av-counter-foot">OECD Making Mental Health Count; česká metodika je přísnější (readmise kamkoli)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="65.4" data-decimals="1">65,4</span>
+            <span class="av-counter-label">% propuštěných s psychózou se do 7 dnů setkalo s ambulantním psychiatrem</span>
+            <span class="av-counter-foot">2021; v roce 2010 to bylo 66,7 % — za dekádu reformy beze změny</span>
+          </div>
+        </div>
+        <p class="av-figure-note">Zdroj: MZ ČR — otevřená data, indikátory č. 17 (re-hospitalizace) a č. 22 (pokrytí návaznou péčí); Národní registr hospitalizovaných (NRHZS), zpracování ÚZIS. OECD (2014): Making Mental Health Count.</p>
+      </figure>
+
+      <h3>Co indikátor měří — a proč je to nejtvrdší test reformy</h3>
+      <p>
+        Nový indikátor HSPA Monitoru sleduje podíl případů psychiatrické hospitalizace pacientů se schizofrenií (diagnóza F20), po kterých byl tentýž pacient do 30 dnů od propuštění znovu hospitalizován. Data pocházejí z Národního registru hospitalizovaných (NRHZS): protože registr propojuje záznamy na úrovni pacienta napříč všemi poskytovateli, zachytí i návrat do jiného zařízení, než ze kterého pacient odešel. Ministerstvo zdravotnictví řadu publikuje jako otevřená data v rámci Národního informačního systému péče o duševní zdraví — kdokoli si ji může stáhnout jako CSV a čísla v tomto článku přepočítat.
+      </p>
+      <p>
+        Rehospitalizace do 30 dnů je pro psychiatrii to, co je <a href="indikator-readmise_30d_ami.html">30denní readmise po infarktu</a> pro kardiologii: mezinárodně uznávaný procesní ukazatel kvality, který neměří nemoc, ale systém. Relaps schizofrenie nepřichází z hodiny na hodinu — typicky mu předchází vysazení medikace a týdny bez kontaktu s lékařem. Rychlý návrat na lůžko proto většinou znamená, že v přechodu mezi nemocnicí a domovem něco selhalo: pacient nedostal včasný ambulantní termín, nikdo ho aktivně nekontaktoval, komunitní služba v místě neexistuje. A u schizofrenie, nejtěžšího duševního onemocnění s celoživotním průběhem, každý takový relaps zhoršuje dlouhodobou prognózu — a stojí systém řádově víc než fungující péče v terénu.
+      </p>
+
+      <h3>Stav v Česku: křivka ve tvaru U</h3>
+      <p>
+        Česká řada má nezvyklý a o to výmluvnější tvar. V roce 2010 se do 30 dnů opakovalo <strong>20,2 %</strong> hospitalizací se schizofrenií — každá pátá. Pak následoval sedm let trvající pokles až na <strong>12,1 %</strong> v roce 2017: období, kdy vznikala strategie reformy psychiatrické péče, posilovala ambulantní síť a téma duševního zdraví se poprvé dostalo do politického popředí. Jenže právě v roce, kdy reforma oficiálně startovala a začala stavět první centra duševního zdraví, se křivka otočila. V roce 2019 činil podíl 13,2 %, v pandemickém roce 2020 už 14,1 % a v roce 2021 dosáhl <strong>15,6 %</strong> — nejvyšší hodnoty od roku 2012.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Podíl rehospitalizací do 30 dnů od propuštění (schizofrenie F20, ČR)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Rehospitalizace do 30 dnů</th>
+                <th scope="col" class="av-num">Rehospitalizace do 7 dnů</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2010</th><td class="av-num">20,2 %</td><td class="av-num">7,6 %</td></tr>
+              <tr><th scope="row">2013</th><td class="av-num">13,8 %</td><td class="av-num">5,3 %</td></tr>
+              <tr><th scope="row">2015</th><td class="av-num">13,4 %</td><td class="av-num">5,0 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2017 (start reformy)</th><td class="av-num">12,1 %</td><td class="av-num">4,7 %</td></tr>
+              <tr><th scope="row">2019</th><td class="av-num">13,2 %</td><td class="av-num">5,0 %</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">14,1 %</td><td class="av-num">6,0 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2021</th><td class="av-num">15,6 %</td><td class="av-num">6,3 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: MZ ČR — otevřená data, indikátor č. 17 „Re-hospitalizace lidí s duševním onemocněním&quot; (NRHZS/ÚZIS). Publikovaná řada zatím končí rokem 2021.</p>
+      </figure>
+
+      <p>
+        Stejný obrat vykazuje celá psychiatrie, jen v mírnější podobě: napříč všemi duševními onemocněními klesl podíl třicetidenních rehospitalizací z 15,1 % (2010) na 10,5 % (2017) a do roku 2021 se vrátil na 11,8 % — 5 650 rychlých návratů ze 47 774 ukončených hospitalizací. Schizofrenie přitom není nejrizikovější skupinou: u poruch osobnosti se do měsíce opakovalo 17,5 % hospitalizací. Následují schizoafektivní porucha (14,0 %), bipolární porucha (12,2 %), poruchy spojené s alkoholem (11,7 %) a poruchy nálady (10,7 %). Že jde o systémový jev, a ne o zvláštnost jedné diagnózy, je podstatné pro interpretaci: otáčivé dveře se netočí kvůli „těžkým pacientům&quot;, ale kvůli tomu, co je — respektive není — za nimi.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Kdo se vrací nejčastěji: rehospitalizace do 30 dnů podle diagnózy (2021)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" %" data-max="20">
+          <li class="av-bar-row" data-value="17.5" data-label="Poruchy osobnosti (F60–F69)"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="15.6" data-label="Schizofrenie (F20)"></li>
+          <li class="av-bar-row" data-value="14.0" data-label="Schizoafektivní porucha (F25)"></li>
+          <li class="av-bar-row" data-value="12.2" data-label="Bipolární afektivní porucha"></li>
+          <li class="av-bar-row" data-value="11.7" data-label="Poruchy spojené s alkoholem"></li>
+          <li class="av-bar-row" data-value="10.7" data-label="Poruchy nálady celkem"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: MZ ČR — otevřená data, indikátor č. 17 (NRHZS/ÚZIS), rok 2021. Schizofrenie — diagnóza nového indikátoru — zvýrazněna.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: nad kotvou OECD, s jednou důležitou výhradou</h3>
+      <p>
+        Mezinárodní srovnání rehospitalizací v psychiatrii je ošidnější než u somatických oborů, protože země měří různě. Nejcitovanější kotvou zůstává analýza OECD <em>Making Mental Health Count</em>: neplánované rehospitalizace do 30 dnů u schizofrenie dosahovaly napříč zhruba patnácti sledovanými zeměmi v průměru kolem <strong>13 %</strong>. Česko je s hodnotou 15,6 % nad touto úrovní. Jedna výhrada ale hraje v český prospěch: většina zemí OECD počítá jen návraty <em>do téhož zařízení</em>, zatímco český registr díky propojení záznamů zachytí návrat kamkoli. Česká metodika je tedy přísnější a skutečný odstup od průměru OECD je menší, než ukazuje prosté srovnání čísel — proto indikátor nese signál „varování&quot;, nikoli „špatné&quot;.
+      </p>
+      <p>
+        Sousedé srovnatelnou veřejnou řadu nenabízejí — Německo, Rakousko, Polsko ani Slovensko národní third-party ukazatel psychiatrických readmisí nepublikují, což je samo o sobě výmluvné: Česko patří v otevřenosti dat o duševním zdraví k lepší části Evropy. O to důležitější je číst domácí číslo poctivě. Nízký podíl rehospitalizací totiž není automaticky známkou kvality — lze ho „koupit&quot; i tím, že pacienty prostě nepropouštíte. Česká <a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html">průměrná psychiatrická hospitalizace trvá 43 dní</a>, více než dvojnásobek průměru OECD (19 dní). Systém, který drží pacienty na lůžku dvakrát déle než okolní svět, a přesto se mu vracejí častěji, selhává na obou koncích zároveň — a přesně tuhle kombinaci česká data ukazují.
+      </p>
+
+      <h3>Strukturální analýza: mezera mezi lůžkem a ambulancí</h3>
+      <p>
+        Proč se dveře znovu roztočily? Nejsilnější vysvětlení nabízí druhý indikátor z téže datové sady: <strong>pokrytí návaznou péčí</strong>. Mezinárodní doporučení i česká reformní strategie se shodují, že propuštěný pacient s psychotickým onemocněním má mít kontakt s ambulantním psychiatrem do sedmi dnů — právě první týdny rozhodují o tom, zda medikace pokračuje a krize se zachytí včas. V roce 2021 se to povedlo u <strong>65,4 %</strong> propuštěných s diagnózami F20–F29; do 30 dnů se k psychiatrovi dostalo 84,1 %. Samo o sobě by to nebylo špatné číslo. Zarážející je trend — přesněji jeho absence: v roce 2010 činil sedmidenní podíl 66,7 %. <strong>Za celou dekádu, včetně let reformy, se návaznost péče nezlepšila ani o procentní bod.</strong> Zhruba třetina nejzranitelnějších pacientů odchází z lůžka do vzduchoprázdna dnes stejně jako před reformou.
+      </p>
+      <p>
+        Druhý faktor je <strong>kapacita a rozložení komunitní péče</strong>. Centra duševního zdraví — vlajková loď reformy, multidisciplinární týmy, které mají pacienta se závažným onemocněním po propuštění aktivně vyhledat a doprovázet v terénu — vznikla zatím zhruba tři desítky, <a href="indikator-centra_dusevniho_zdravi_per_100k.html">0,28 na 100 tisíc obyvatel</a>, a pokrývají jen část okresů. Financování center po skončení evropských projektů navíc zůstává nejisté; tam, kde CDZ není, závisí návaznost na přetížené ambulantní síti. A ta je faktorem třetím: <a href="indikator-psychiatri_per_100k.html">počet psychiatrů</a> sice v čase mírně roste, ale termíny ambulancí se počítají v týdnech až měsících. Pacient bez aktivního předání mezitím „vypadne&quot; — přesně jako pan Marek z úvodu.
+      </p>
+      <p>
+        Čtvrtý faktor je procesní: <strong>propouštění bez plánu</strong>. V řadě systémů je standardem, že první ambulantní termín domlouvá lůžkové zařízení ještě před propuštěním a součástí propouštěcí zprávy je krizový plán i kontakt na komunitní tým. V Česku takový standard není vymahatelný ani úhradově bonifikovaný — jestli pacient odchází s termínem, nebo jen s doporučením, závisí na dobré vůli konkrétního oddělení. A pátý faktor připomněla pandemie: roky 2020–2021, kdy zhoršení akcelerovalo, byly zároveň roky omezeného provozu ambulancí, přerušených terénních služeb a odkládané péče. Pandemie ale křivku neotočila — rostla už od roku 2017. COVID-19 obnažil křehkost návaznosti, kterou reforma nestihla zpevnit.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="66.7" data-decimals="1">66,7</span>
+          <span class="av-counter-label">% propuštěných s psychózou vidělo ambulantního psychiatra do 7 dnů — v roce 2010</span>
+          <span class="av-counter-foot">V roce 2021: 65,4 %. Dekáda reformy psychiatrické péče návaznost péče nezměnila — a právě tudy vedou otáčivé dveře.</span>
+        </div>
+      </aside>
+
+      <h3>Politická páka: tři kroky s jasnými majiteli</h3>
+      <p>
+        Na rozdíl od ukazatelů, které vyžadují generační změnu, má tenhle konkrétní a dosažitelné páky. <strong>První: dokončit a stabilizovat síť center duševního zdraví.</strong> Reformní plány počítaly s postupným pokrytím celé republiky; realita se zastavila u třech desítek center s financováním závislým na projektových penězích. Převod CDZ do standardní úhrady ze zdravotního a sociálního pojištění je rozhodnutí Ministerstva zdravotnictví, Ministerstva práce a sociálních věcí a pojišťoven — a je to jediná cesta, jak zajistit, aby „aktivní vyhledání pacienta po propuštění&quot; nebylo pilotním projektem, ale službou dostupnou v každém okrese.
+      </p>
+      <p>
+        <strong>Druhá: úhradově bonifikovaný standard propouštění.</strong> První ambulantní kontakt domluvený do 7 dnů ještě před odchodem z lůžka, krizový plán a předání komunitnímu týmu jako podmínka plné úhrady hospitalizačního případu — analogicky k bonifikačním mechanismům, které úhradová vyhláška zná ze somatické medicíny. Data pro vyhodnocení systém už sbírá; indikátor pokrytí návaznou péčí stačí povýšit z popisné statistiky na smluvní ukazatel. <strong>A třetí: transparentnost.</strong> Rehospitalizace se dnes publikují jako národní průměr do roku 2021. Zveřejnění aktuální řady v krajském členění a podle typu zařízení — jako veřejný ukazatel kvality, ne interní statistika — by umožnilo cílit intervence tam, kde se dveře točí nejrychleji. Že to jde, ukazuje sama existence otevřené datové sady, ze které vznikl tento indikátor.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        Reforma psychiatrické péče si za cíl dala přesunout těžiště péče z ústavů do komunity — a rehospitalizace do 30 dnů jsou nejpoctivější metr, jaký na ten slib existuje. Křivka ve tvaru U říká dvě věci najednou. Že to jde: mezi lety 2010 a 2017 podíl rychlých návratů klesl o osm procentních bodů. A že úspěch není samospád: jakmile se rozvoj návazné péče zadrhl, křivka se během čtyř let vrátila o dekádu zpět. Hodnota 15,6 % není katastrofa — je to varování, že systém umí pacienta propustit, ale neumí ho udržet.
+      </p>
+      <p>
+        Pro pana Marka z úvodu je rozdíl mezi 12 a 16 procenty abstraktní. Konkrétní je pro něj tohle: kdyby při propuštění odcházel s termínem u psychiatra do týdne — nebo kdyby v Bruntále existoval tým, který by mu ve středu zavolal, že se nedostavil — třetí hospitalizace nemusela mít čtvrté pokračování. Data, která by systému řekla, kde takoví pacienti padají mezerou, už existují a jsou veřejná. Teď je řada na tom, aby se podle nich systém začal řídit — protože otáčivé dveře se nezastaví tím, že je přestaneme počítat po roce 2021.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-rehospitalizace_schizofrenie_30d.html"><strong>Rehospitalizace do 30 dnů — schizofrenie (F20)</strong></a> — 15,6 % (2021), po poklesu na 12,1 % (2017) opět roste · signál warn — nový indikátor, nejtvrdší test návaznosti péče po reformě</li>
+        <li><a href="indikator-psychiatrie_prumerna_delka_hospitalizace.html"><strong>Průměrná délka psychiatrické hospitalizace</strong></a> — 43 dní (2022) vs. OECD 19 · signál bad — dlouhá lůžková fáze, a přesto časté návraty</li>
+        <li><a href="indikator-centra_dusevniho_zdravi_per_100k.html"><strong>Centra duševního zdraví na 100 tis. obyvatel</strong></a> — komunitní síť, která má otáčivé dveře zastavit, pokrývá jen část okresů</li>
+        <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 tis. obyvatel</strong></a> — kapacita ambulantní sítě, na které návaznost péče stojí</li>
+        <li><a href="indikator-vydaje_dusevni_zdravi_pct.html"><strong>Výdaje na duševní zdraví (% výdajů na zdravotnictví)</strong></a> — finanční rámec, ve kterém se reforma odehrává</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — rehospitalizace a návazná péče</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — otevřená data: Re-hospitalizace lidí s duševním onemocněním (indikátor č. 17)</strong> — roční řada 2010–2021, počty a podíly rehospitalizací do 7 a 30 dnů podle diagnostických skupin; zdroj NRHZS, zpracování ÚZIS. <a href="https://data.mzcr.cz/data/distribuce/269/dusevni-onemocneni-rehospitalizace.csv" target="_blank" rel="noopener">data.mzcr.cz — CSV ke stažení ↗</a> · <a href="https://www.nzip.cz/datova-sada/119" target="_blank" rel="noopener">NZIP — katalogový záznam datové sady ↗</a></li>
+          <li><strong>MZ ČR — otevřená data: Pokrytí návaznou péčí (indikátor č. 22)</strong> — podíl propuštěných, kteří se do 7/30 dnů setkali s ambulantním psychiatrem, 2010–2021. <a href="https://data.mzcr.cz/data/distribuce/267/pokryti-navaznou-peci.csv" target="_blank" rel="noopener">data.mzcr.cz — CSV ke stažení ↗</a></li>
+          <li><strong>Národní portál psychiatrické péče (ÚZIS)</strong> — analytická zpráva „Indikátory psychiatrické péče&quot; s metodikou obou indikátorů a dalšími ukazateli reformy. <a href="https://psychiatrie.uzis.cz/cs/psychiatrie-v-datech/psychiatricka-pece-v-cr/indikatory/" target="_blank" rel="noopener">psychiatrie.uzis.cz — indikátory ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní srovnání a kontext reformy</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD (2014): Making Mental Health Count — The Social and Economic Costs of Neglecting Mental Health Care</strong> — mezinárodní srovnání neplánovaných rehospitalizací do 30 dnů u schizofrenie (průměr ≈ 13 %, data 2011). <a href="https://doi.org/10.1787/9789264208445-en" target="_blank" rel="noopener">doi.org — OECD Publishing ↗</a></li>
+          <li><strong>MZ ČR: Strategie reformy psychiatrické péče</strong> — cíle reformy včetně rozvoje center duševního zdraví a posílení návazné komunitní péče. <a href="https://www.reformapsychiatrie.cz/" target="_blank" rel="noopener">reformapsychiatrie.cz ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 15,6 % (podíl rehospitalizací do 30 dnů od ukončení hospitalizace s dg. F20, ČR, 2021; 797 z 5 108 případů) i celá časová řada pocházejí z otevřené datové sady MZ ČR (indikátor č. 17, NRHZS/ÚZIS) a jsou sladěny s kanonickou hodnotou v data/indicators.json; redakce je ověřila vlastním přepočtem ze zdrojového CSV. Údaje o návazné péči (65,4 % do 7 dnů, 2021) pocházejí z indikátoru č. 22 téže sady. Benchmark OECD ≈ 13 % je z publikace Making Mental Health Count (data 2011) a je orientační — většina zemí OECD počítá jen readmise do téhož zařízení, česká metodika zachycuje readmisi kamkoli, takže je přísnější. Publikovaná česká řada končí rokem 2021. <strong>Článek je rozpracovaný draft</strong> — před publikací ověřit, zda MZ ČR/ÚZIS nezveřejnily novější řadu, a aktuální počet fungujících center duševního zdraví.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
