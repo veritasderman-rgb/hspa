@@ -37,7 +37,14 @@ on:
       - '05_M1_Starter/clanek-*.html'
       - '05_M1_Starter/src/styles.css'
       - '05_M1_Starter/scripts/build-*.js'
+      - '05_M1_Starter/scripts/lib/**'
       - '05_M1_Starter/scripts/minify-css.mjs'
+      # Nástrojová vrstva: build:generated je definovaný v package.json
+      # a minifikace CSS jede na verzi esbuildu z lockfilu. Bez těchhle dvou
+      # by upgrade závislosti změnil výstup v PR CI, ale na mainu by
+      # styles.min.css zůstal postavený starým řetězcem.
+      - '05_M1_Starter/package.json'
+      - '05_M1_Starter/package-lock.json'
   workflow_dispatch:
 
 # Dva rychle po sobě zmergované PR nesmí přepisovat main současně.
@@ -94,6 +101,25 @@ jobs:
           Generováno automaticky (.github/workflows/regenerate-artifacts.yml).
           Obsahové PR tyhle soubory nemění — viz CLAUDE.md, sekce
           Generované artefakty."
-          # Mezitím mohl přijít jiný merge nebo publikační cron.
-          git pull --rebase origin main
-          git push origin HEAD:main
+          # Push s retry: concurrency group serializuje jen běhy TOHOHLE
+          # workflow. Do main mezitím může commitnout kterýkoli jiný cron
+          # (GA4, newsletter, social, awareness) — a protože ty většinou
+          # nesahají na vstupy builderů, žádný další běh regenerace by se
+          # nespustil a artefakty by zůstaly zastaralé až do příští
+          # kvalifikované změny. Odmítnutý push proto zkoušíme znovu.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "Push prošel na pokus $attempt."
+              exit 0
+            fi
+            echo "Pokus $attempt neprošel (nejspíš souběžný push). Rebasuji na origin/main…"
+            git fetch origin main
+            if ! git rebase origin/main; then
+              echo "Rebase konfliktuje — končím."
+              git rebase --abort || true
+              exit 1
+            fi
+            sleep $((attempt * 2))
+          done
+          echo "Push neprošel ani po 5 pokusech."
+          exit 1

@@ -62,11 +62,17 @@ jobs:
           set -o pipefail
           npm run ingest 2>&1 | tee /tmp/ingest.log
 
-      - name: Build souvislosti graph
-        # Znalostní graf indikátorů (BAR6): slije čerstvé indicators.json
+      - name: Build generated artifacts
+        # Znalostní graf indikátorů (BAR6) slije čerstvé indicators.json
         # s kurátorovanými datasety (system-model, legislativa, articles,
         # claims, barometr) do data/souvislosti.json pro blok „Souvislosti".
-        run: npm run build:souvislosti
+        # Pouštíme rovnou build:generated, protože čerstvá indicators.json
+        # mění i diagnoza-index (křížové vazby).
+        #
+        # Regeneraci nelze nechat na regenerate-artifacts.yml — ten běží na
+        # `push` do main, jenže tenhle job pushuje s výchozím GITHUB_TOKEN
+        # a GitHub pro takové pushe další workflow běhy potlačuje.
+        run: npm run build:generated
 
       - name: Generate RSS feed
         run: npm run generate:feed
@@ -127,6 +133,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 05_M1_Starter/data/ 05_M1_Starter/feed.xml 05_M1_Starter/sitemap.xml 05_M1_Starter/index.html
+          # styles.min.css leží mimo data/ — bez tohohle by ho build:generated
+          # přegeneroval, ale commit by ho minul.
+          git add 05_M1_Starter/src/styles.min.css
           # -A + quoted pathspec: git (ne shell) expanduje glob, takže se
           # zastageují i SMAZANÉ indikátorové stránky (odstraněný/přejmenovaný
           # indikátor) — jinak by stará stránka zůstala v repu i na webu.
