@@ -220,19 +220,39 @@ npm run serve             # Lokální HTTP server
 | `data/souvislosti.json` | `npm run build:souvislosti` |
 | `src/styles.min.css` | `npm run build:css` |
 
-Protože je přepisuje skoro každý obsahový PR i denní publikační cron,
-konfliktovaly prakticky pokaždé, když se sešly dvě větve. Kořenový
-`.gitattributes` je proto značí `merge=generated` — merge/rebase se na nich
-nezastaví a vezme aktuální stranu.
+### 🚫 V PR je NEcommituj
 
-**Po každém merge/rebase, který se jich dotkl, spusť `npm run build:generated`.**
-Výsledek merge je jen mezistav; přegenerování z něj udělá pravdu. Zapomenout
-nejde — drift testy (`tests/generated-artifacts.test.js`, `diagnoza-index`,
-`css-min`) selžou, když soubor neodpovídá zdrojům.
+**Obsahový PR tyhle čtyři soubory nemění.** Neupravuj je ručně, nespouštěj kvůli
+nim `build:generated` před commitem a nedávej je do `git add`. Když omylem
+skončí v diffu, vyndej je:
 
-Merge driver git nepřenáší klonem, nastaví ho `npm run setup:git` (spouští se
-sám z `postinstall`). Buildery zapisují idempotentně — když se změní jen
-`generated_at`, soubor na disku nechají být.
+```bash
+git checkout origin/main -- \
+  05_M1_Starter/data/search-index.json \
+  05_M1_Starter/data/diagnoza-index.json \
+  05_M1_Starter/data/souvislosti.json \
+  05_M1_Starter/src/styles.min.css
+```
+
+Regeneraci obstará až `.github/workflows/regenerate-artifacts.yml` nad
+zmergovaným mainem a výsledek commitne bot.
+
+**Proč:** přepisoval je skoro každý PR i cron, takže se dvě větve na nich potkaly
+prakticky vždycky. Kořenový `.gitattributes` je značí `merge=generated`, což
+spraví **lokální** rebase — ale **GitHub merge drivery neumí**. Server-side merge
+je ignoruje, hlásí konflikt a zablokuje tlačítko, i když `git rebase` na stroji
+proběhne bez jediného zásahu. Jediná cesta, jak to odstranit úplně, je nemít ty
+soubory v diffu.
+
+`.gitattributes` zůstává jako pojistka pro cesty, které je měnit musí (publikační
+cron commituje `search-index.json` přímo na main).
+
+**Testy tím netrpí.** `deploy-check.yml` i `visual-a11y.yml` pouštějí
+`build:generated` v runneru před testy, takže drift testy běží nad čerstvým
+výstupem a rozbitý builder shodí CI stejně jako dřív. Commit z toho nevzniká.
+
+**Lokálně** po změně obsahu drift testy selžou (artefakty jsou zastaralé) —
+`npm run build:generated` je srovná, jen ten výsledek necommituj.
 
 ⚠️ Do `merge=generated` patří JEN artefakty, které `build:generated` umí
 přegenerovat offline a deterministicky. Nikdy tam nedávej něco taženého ze

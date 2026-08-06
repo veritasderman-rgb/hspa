@@ -20,6 +20,30 @@ jobs:
         working-directory: 05_M1_Starter
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Generated artifacts must stay out of the diff
+        # Kontroluje se diff PROTI BÁZI, ne pracovní strom — build:generated
+        # níž ho stejně přepíše. Když tyhle soubory v PR jsou, GitHub na nich
+        # při každém dalším merge nahlásí konflikt (merge drivery neumí),
+        # i když lokální rebase projde bez zásahu.
+        run: |
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- \
+            05_M1_Starter/data/search-index.json \
+            05_M1_Starter/data/diagnoza-index.json \
+            05_M1_Starter/data/souvislosti.json \
+            05_M1_Starter/src/styles.min.css)
+          if [ -n "$CHANGED" ]; then
+            echo "::error::Generované artefakty nepatří do PR — regeneruje je regenerate-artifacts.yml nad mainem."
+            echo "$CHANGED" | sed 's/^/  /'
+            echo ""
+            echo "Vyndej je z diffu:"
+            echo "  git checkout origin/${{ github.base_ref }} -- $(echo $CHANGED | tr '\n' ' ')"
+            exit 1
+          fi
+          echo "OK — generované artefakty v diffu nejsou."
+        working-directory: .
 
       - uses: actions/setup-node@v5
         with:
@@ -29,6 +53,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Build generated artifacts
+        # Obsahové PR generované artefakty NEcommitují (viz
+        # regenerate-artifacts.yml) — jinak konfliktují prakticky pokaždé,
+        # když se sejdou dvě větve, protože GitHub neumí merge drivery
+        # z .gitattributes. V PR je proto přegenerujeme jen tady v runneru:
+        # drift testy tak běží nad čerstvým výstupem a zároveň se na každém
+        # PR ověří, že buildery vůbec fungují. Commit z toho nevzniká.
+        run: npm run build:generated
 
       - name: Run tests
         run: npm test

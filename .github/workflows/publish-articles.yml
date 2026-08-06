@@ -48,8 +48,16 @@ jobs:
       - name: Regenerate sitemap
         run: npm run generate:sitemap
 
-      - name: Regenerate search index
-        run: npm run build:search-index
+      - name: Regenerate generated artifacts
+        # VŠECHNY čtyři, ne jen search-index: publikace článku mění i
+        # diagnoza-index (křížové vazby) a souvislosti (znalostní graf).
+        #
+        # Regeneraci nelze nechat na regenerate-artifacts.yml — ten se spouští
+        # na `push` do main, jenže tenhle job pushuje s výchozím GITHUB_TOKEN
+        # a GitHub pro takové pushe další workflow běhy záměrně potlačuje.
+        # Kdyby se na něj spoléhalo, zůstaly by po každé denní publikaci dva
+        # indexy zastaralé.
+        run: npm run build:generated
 
       - name: Configure git
         run: |
@@ -62,7 +70,8 @@ jobs:
             echo "No changes to articles.json — nothing to commit."
             exit 0
           fi
-          git add feed.xml sitemap.xml data/search-index.json
+          git add feed.xml sitemap.xml
+          git add data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css
           # Extract published list for commit message
           PUBLISHED=$(grep -E '^  - ' /tmp/publish-out.txt || echo "")
           DATE=$(date -u +%Y-%m-%d)
