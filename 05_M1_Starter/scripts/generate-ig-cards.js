@@ -534,6 +534,8 @@ const MANIFEST = {
   'clanek-prevalence-dusevnich-poruch': { kicker: 'Duševní zdraví · prevalence', signal: 'bad', stat: '27,2', statSuffix: '%', barPct: 27, claim: 'dospělých Čechů má aktuální duševní poruchu (2022).', context: '61 až 93 % z nich se nikdy neléčí.' },
   'clanek-nadumrtnost-cesko': { kicker: 'Odolnost systému · nadúmrtnost', signal: 'good', stat: '2,6', statSuffix: '%', claim: 'nadúmrtnost Česka v roce 2024 — pod průměrem EU (3,6 %).', context: 'V roce 2021 to bylo 26,3 % — mezi nejhoršími na světě.' },
   'clanek-nahrada-kolenniho-kloubu': { kicker: 'Ortopedie · objem péče', signal: 'neutral', stat: '212,4', claim: 'náhrad kolenního kloubu na 100 000 obyvatel (2024) — nad průměrem EU.', context: 'Za tři roky víc než dvojnásobek (2021: 103,4).' },
+  'clanek-spalnicky-usa-2026': { kicker: 'Vakcinace · spalničky', signal: 'bad', stat: '2 371', claim: 'případů spalniček v USA k 30. 7. 2026 — nejvíc od roku 1991.', context: 'Proočkovanost MMR před školou 92,5 %. Práh imunity je 95 %.' },
+  'clanek-podil-prakticti-lekari': { kicker: 'Dostupnost · primární péče', signal: 'bad', stat: '16,9', statSuffix: '%', barPct: 17, claim: 'lékařů v Česku jsou praktici — průměr OECD je kolem 23 %.', context: 'Lékařů má Česko dost (4,2 na 1 000). Chybí generalisté.' },
 };
 
 function escapeXml(s) {
