@@ -1,0 +1,99 @@
+name: Regenerate artifacts
+
+# Generované artefakty (data/search-index.json, data/diagnoza-index.json,
+# data/souvislosti.json, src/styles.min.css) se NEcommitují v obsahových PR.
+#
+# Proč: přepisoval je skoro každý PR i cron, takže se dvě větve na nich potkaly
+# prakticky vždycky. Kořenový .gitattributes je sice značí `merge=generated`,
+# což vyřeší LOKÁLNÍ rebase — jenže GitHub merge drivery neumí. Server-side
+# merge je ignoruje, hlásí konflikt a blokuje tlačítko, i když `git rebase`
+# na stroji proběhne bez jediného zásahu.
+#
+# Jediná cesta, jak to odstranit úplně: ať se ty soubory v PR vůbec nemění.
+# Když v diffu nejsou, není na čem konfliktovat. Regenerace proto běží až tady,
+# nad zmergovaným mainem, a výsledek commitne bot.
+#
+# Konzistence deploye: Vercel staví ze stavu mainu, takže mezi merge obsahu
+# a doběhnutím tohohle jobu existuje krátké okno, kdy je index o jeden článek
+# pozadu. Řádově desítky sekund a týká se to jen vyhledávání a křížových
+# odkazů — ne obsahu samotné stránky.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Vstupy builderů. Když se nezmění, není co přegenerovat.
+      - '05_M1_Starter/data/articles.json'
+      - '05_M1_Starter/data/indicators.json'
+      - '05_M1_Starter/data/system-model.json'
+      - '05_M1_Starter/data/legislativa.json'
+      - '05_M1_Starter/data/claims.json'
+      - '05_M1_Starter/data/barometr.json'
+      - '05_M1_Starter/data/levers.json'
+      - '05_M1_Starter/data/vyhlaska-hra.json'
+      - '05_M1_Starter/data/personal-checks.json'
+      - '05_M1_Starter/data/prevention.json'
+      - '05_M1_Starter/data/regions.json'
+      - '05_M1_Starter/clanek-*.html'
+      - '05_M1_Starter/src/styles.css'
+      - '05_M1_Starter/scripts/build-*.js'
+      - '05_M1_Starter/scripts/minify-css.mjs'
+  workflow_dispatch:
+
+# Dva rychle po sobě zmergované PR nesmí přepisovat main současně.
+# cancel-in-progress: false — každý běh musí doběhnout, jinak by poslední
+# merge zůstal bez regenerace.
+concurrency:
+  group: regenerate-artifacts
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Bot commituje s [skip regen] v hlavičce; bez téhle podmínky by si vlastní
+    # push spustil další běh (ten by sice nic nezměnil, ale zbytečně by točil CI).
+    if: "!contains(github.event.head_commit.message, '[skip regen]')"
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build generated artifacts
+        run: npm run build:generated
+
+      - name: Verify artifacts match sources
+        # Drift testy nad PRÁVĚ přegenerovanými soubory. Když tady spadnou,
+        # je rozbitý builder — ne zapomenutý commit.
+        run: node --test tests/generated-artifacts.test.js tests/diagnoza-index.test.js tests/css-min.test.js
+
+      - name: Commit + push if changed
+        run: |
+          if git diff --quiet -- data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css; then
+            echo "Artefakty jsou v syncu — nic ke commitu."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/search-index.json data/diagnoza-index.json data/souvislosti.json src/styles.min.css
+          git commit -m "chore(artefakty): přegenerováno po merge [skip regen]
+
+          Generováno automaticky (.github/workflows/regenerate-artifacts.yml).
+          Obsahové PR tyhle soubory nemění — viz CLAUDE.md, sekce
+          Generované artefakty."
+          # Mezitím mohl přijít jiný merge nebo publikační cron.
+          git pull --rebase origin main
+          git push origin HEAD:main

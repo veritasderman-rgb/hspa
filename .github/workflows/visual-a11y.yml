@@ -55,6 +55,13 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build generated artifacts
+        # E2E servíruje repo tak, jak leží. Obsahové PR generované artefakty
+        # necommitují (viz regenerate-artifacts.yml), takže styles.min.css
+        # a indexy je potřeba dogenerovat tady — jinak by vizuální snímky
+        # běžely nad starým CSS.
+        run: npm run build:generated
+
       # Ruční režim: přegeneruj baseline na runneru a commitni ho. Snapshoty
       # vzniklé v tomto prostředí jsou jediné, které pak v CI projdou.
       - name: Update baseline (manual)
