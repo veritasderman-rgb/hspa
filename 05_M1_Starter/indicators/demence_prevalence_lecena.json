@@ -1,0 +1,61 @@
+{
+  "id": "demence_prevalence_lecena",
+  "name": "Léčená prevalence demence (65+)",
+  "area": "Výsledky",
+  "domain": "Zátěž nemocí",
+  "subdomain": "Neurodegenerativní onemocnění",
+  "definition": "Počet unikátních pacientů léčených pro demenci — Alzheimerovu nemoc (dg. G30 dle MKN-10) a ostatní/neurčené demence (F00–F03) — vykázaných v daném roce do systému veřejného zdravotního pojištění, přepočtený na 1 000 obyvatel ve věku 65 a více let. Ukazatel vychází z Národního registru hrazených zdravotních služeb (NRHZS), který spravuje ÚZIS a Ministerstvo zdravotnictví publikuje jako otevřenou datovou sadu 'Alzheimerova nemoc a neurčené demence'. Jmenovatel (populace 65+) pochází ze středního stavu obyvatel ČSÚ. Jde o tzv. registrovanou (léčenou) prevalenci — zachycuje jen ty pacienty, kteří se dostali do kontaktu se zdravotním systémem a mají vykázanou péči; skutečná prevalence demence v populaci je vyšší (část případů zůstává nediagnostikována).",
+  "unit": "na 1 000 obyvatel 65+",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "nzip_opendata",
+      "endpoint": "https://data.mzcr.cz/data/distribuce/64/Otevrena-data-OIS-04-02-alzheimerova-nemoc-neurcene-demence.csv",
+      "dataset": "Ministerstvo zdravotnictví ČR / ÚZIS — otevřená data 'Alzheimerova nemoc a neurčené demence' (OIS 04-02), odvozeno z Národního registru hrazených zdravotních služeb (NRHZS). Roční počty unikátních léčených pacientů podle roku, kraje bydliště, pohlaví, věkové skupiny (50+) a příznaku Alzheimerovy nemoci. Časové pokrytí 2010–2024.",
+      "dimensions": ["rok", "kraj bydliště", "pohlaví", "věková skupina (50+)", "Alzheimerova nemoc vs. ostatní demence"],
+      "note": "Národní součet léčených pacientů (Alzheimer + ostatní demence) z CSV: 2010 = 61 317, 2015 = 92 036, 2020 = 111 158, 2021 = 112 942, 2022 = 120 039, 2023 = 128 400, 2024 = 135 722. Z toho Alzheimerova nemoc (G30): 2024 = 84 641. Přepočet na 1 000 obyvatel 65+ (střední stav ČSÚ): 2010 ≈ 37,5 · 2015 ≈ 47,6 · 2020 ≈ 52,1 · 2024 ≈ 60,2.",
+      "_dev_notes": [
+        "Primární strukturovaný zdroj: MZ ČR otevřená data, sada OIS 04-02 'Alzheimerova nemoc a neurčené demence' (NZIP katalog č. 2057), CSV + JSON-schema. Zdrojová data: NRHZS, zpracování ÚZIS.",
+        "Headline 2024: 135 722 léčených pacientů s demencí (z toho 84 641 s Alzheimerovou nemocí), tj. ≈ 60,2 na 1 000 obyvatel ve věku 65+.",
+        "Jmenovatel 65+ (ČSÚ, konec roku): 2010 ≈ 1,636 mil. · 2015 ≈ 1,932 mil. · 2020 ≈ 2,132 mil. · 2024 ≈ 2,256 mil. Rate = léčení pacienti ÷ populace 65+ × 1000.",
+        "Benchmark: OECD (2026) 'Policies for people with dementia across OECD countries' (Health Working Paper č. 190), Figure 1.1 — registrovaná/odhadovaná prevalence demence na 1 000 obyvatel 65+, průměr 19 zemí (OECD19) = 61 (rok 2023). Odhadovaná (nikoli registrovaná) prevalence pro ČR dle OECD Health at a Glance 2023 = 17,2 na 1 000 obyvatel CELKEM (2021), s projekcí 27,7 do roku 2040.",
+        "Detekční mezera: OECD odhaduje pro ČR ≈ 17,2/1000 obyvatel celkem (2021) → ≈ 180 tis. lidí s demencí; v NRHZS bylo v roce 2021 evidováno 112 942 léčených → zhruba 62 % odhadované prevalence je diagnostikováno/léčeno.",
+        "Signál neutral: direction context_dependent — vzestup registrované prevalence odráží zároveň stárnutí populace, lepší záchyt i reálný nárůst nemocnosti; hodnotu nelze jednoznačně číst jako 'dobrou' či 'špatnou'. CZ (60,2) je navíc prakticky na průměru OECD19 (61)."
+      ]
+    },
+    "fallback": {
+      "type": "oecd_health_at_a_glance",
+      "url": "https://www.oecd.org/en/publications/health-at-a-glance-2023_7a7afb35-en/full-report/dementia_d36fa970.html"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "dementia_prevalence_65plus",
+    "dataset": "OECD (2026): Policies for people with dementia across OECD countries, OECD Health Working Papers No. 190, Figure 1.1 'Estimated and registered prevalence of dementia' — na 1 000 obyvatel ve věku 65+, rok 2023 nebo poslední dostupný. Průměr 19 zemí (OECD19) = 61 na 1 000 obyvatel 65+; rozpětí od 24 (Kolumbie) po 123 (Japonsko). ČR je ve skupině zemí s registrovanou (nikoli odhadovanou) prevalencí. Pozor na srovnatelnost: část zemí uvádí odhadovanou prevalenci, část registrovanou z dat plátců, definice demence se liší.",
+    "value": 61,
+    "url": "https://www.oecd.org/en/publications/policies-for-people-with-dementia-across-oecd-countries_e41e6eaa-en.html"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR — Národní registr hrazených zdravotních služeb (NRHZS), Národní zdravotnický informační systém",
+    "Ministerstvo zdravotnictví ČR — Národní akční plán pro Alzheimerovu nemoc a obdobná onemocnění",
+    "NÚDZ — Národní ústav duševního zdraví (odborný garant plánu)"
+  ],
+  "method_notes": "V roce 2024 bylo v Česku léčeno pro demenci 135 722 unikátních pacientů, z toho 84 641 s diagnózou Alzheimerovy nemoci (dg. G30). Přepočteno na populaci 65+ (2,256 mil. dle ČSÚ) jde o přibližně 60,2 léčeného pacienta na 1 000 obyvatel ve věku 65 a více let. Počet léčených pacientů narostl z 61 317 v roce 2010 na 135 722 v roce 2024, tedy o 121 % za čtrnáct let; přepočtená míra stoupla ze zhruba 37,5 na 60,2 na 1 000 obyvatel 65+. Signál je nastaven na 'neutral', protože direction je context_dependent: rostoucí registrovaná prevalence odráží zároveň stárnutí populace, lepší diagnostický záchyt i reálný nárůst nemocnosti a nelze ji jednoznačně číst jako zlepšení či zhoršení. Česká hodnota (60,2) je přitom prakticky na průměru 19 zemí OECD (61 na 1 000 obyvatel 65+, rok 2023). Klíčové sdělení leží pod povrchem čísla: OECD odhaduje skutečnou prevalenci demence v ČR na ≈ 17,2 na 1 000 obyvatel celkem (2021, Health at a Glance 2023), což odpovídá zhruba 180 tisícům lidí — proti 113 tisícům evidovaných v témže roce, tedy zhruba 62 % odhadované prevalence je diagnostikováno a léčeno. Origin = seed: hodnoty jsou zaneseny pro vývojové prostředí, ostrá data tečou z otevřené sady MZ ČR/ÚZIS (OIS 04-02) a OECD.",
+  "limitations": "(1) Ukazatel měří registrovanou (léčenou) prevalenci, ne skutečnou prevalenci v populaci — zachycuje jen pacienty s vykázanou péčí; podle odhadů OECD zůstává zhruba třetina až polovina lidí s demencí v ČR nediagnostikována. (2) Přepočtená míra je redakční výpočet: čitatel (léčení pacienti) pochází z NRHZS, jmenovatel (populace 65+) ze středního stavu ČSÚ; malá část léčených pacientů je mladší 65 let (2 518 osob ve věku 50–59 a 9 495 ve věku 60–69 v roce 2024), takže míra na 1 000 obyvatel 65+ mírně nadhodnocuje čistě seniorskou prevalenci. (3) Mezinárodní srovnatelnost je omezená: OECD kombinuje země s odhadovanou i registrovanou prevalencí a různými definicemi demence, takže hodnotu 'CZ 60,2 vs. OECD 61' čtěte jako řádovou, nikoli přesnou. (4) Rostoucí trend nelze bez dalšího rozkladu přičíst jediné příčině — mísí se v něm demografie (stárnutí), zlepšování záchytu i skutečný vývoj nemocnosti. (5) Rok českého údaje (2024) a benchmarku OECD (2023) se liší.",
+  "determinants": [
+    "Stárnutí populace — prevalence demence strmě roste s věkem; podíl obyvatel 65+ v ČR vzrostl z ~15,5 % (2010) na ~21 % (2024) a poroste dál k ~29 % do poloviny století, což samo o sobě zvyšuje počet nemocných.",
+    "Diagnostický záchyt — zhruba jen 62 % odhadované prevalence je v ČR evidováno; časná diagnóza (screening kognice v primární péči, dostupnost neurologů, psychiatrů a paměťových ambulancí) rozhoduje o tom, kolik pacientů se do statistiky vůbec dostane a jak brzy.",
+    "Ovlivnitelná rizika — až ~40 % případů demence souvisí s ovlivnitelnými faktory (hypertenze, obezita, kouření, fyzická nečinnost, nízké vzdělání, sluchové postižení, sociální izolace, znečištění ovzduší); prevence v průběhu života může incidenci reálně snížit.",
+    "Dostupnost návazné a dlouhodobé péče — kapacita lůžek dlouhodobé péče, mobilních týmů, odlehčovacích a pobytových služeb a podpora pečujících rodin rozhoduje o kvalitě života nemocných i o zátěži systému.",
+    "Národní politika — Národní akční plán pro Alzheimerovu nemoc a obdobná onemocnění (MZ ČR + NÚDZ), koordinace zdravotní a sociální péče, financování paměťových ambulancí a dementia-friendly opatření určují, jak systém na nárůst reaguje."
+  ],
+  "importance": "Demence je jednou z nejrychleji rostoucích zátěží českého zdravotnictví a přitom v dashboardu dosud zcela chyběla — soubor sleduje multimorbiditu, dlouhodobou péči i duševní zdraví, ale žádný ukazatel neurodegenerativních onemocnění. Léčená prevalence demence tuto mezeru zaplňuje a propojuje tři osy, které HSPA sleduje odděleně: zdravotní stav stárnoucí populace, kapacitu dlouhodobé a návazné péče a kvalitu diagnostického záchytu. Indikátor má konkrétní politickou páku — Česko přijalo Národní akční plán pro Alzheimerovu nemoc a obdobná onemocnění a rozhoduje o financování paměťových ambulancí, časné diagnostiky a dlouhodobé péče. Měřit léčenou prevalenci proto znamená měřit, jak dobře systém zachytává, eviduje a doprovází rostoucí počet lidí s demencí — a odhalit detekční mezeru mezi tím, kolik lidí demenci pravděpodobně má, a kolik jich systém skutečně vidí.",
+  "patient_story": "Třebíč, podzim 2024. Paní Věře je 78 a poslední dva roky se z ní vytrácela postupně — nejdřív zapomenutý sporák, pak jména vnoučat, nakonec cesta domů z místa, kam chodila čtyřicet let. Praktický lékař to dlouho odbýval slovy „to víte, věk\". Diagnózu Alzheimerovy nemoci dostala až po roce, když se ztratila ve městě a našla ji policie. Její dcera Lenka od té doby dojíždí každý druhý den, protože nejbližší volné místo v zařízení dlouhodobé péče je za dva roky. Věra je jednou ze 135 722 lidí, kteří byli v roce 2024 v Česku léčeni pro demenci — a jednou z 84 641, kterým lékaři diagnostikovali přímo Alzheimerovu nemoc.\n\nČísla kreslí obraz tiché epidemie. V roce 2024 dosáhla léčená prevalence demence 60,2 pacienta na 1 000 obyvatel ve věku 65 a více let. To Česko staví prakticky na průměr devatenácti zemí OECD (61 na 1 000 obyvatel 65+, rok 2023), takže na první pohled nijak nevybočujeme. Vzestup je ale strmý: počet léčených pacientů narostl z 61 317 v roce 2010 na 135 722 v roce 2024 — o 121 % za čtrnáct let, tedy rychleji, než rostla samotná seniorská populace. Signál je proto nastaven jako neutrální: rostoucí číslo je zároveň zprávou o stárnutí, o lepším záchytu i o reálném nárůstu nemocnosti a nelze ho jednoduše označit za dobré, nebo špatné.\n\nStrukturálně za tím stojí trojí souběh. Prvním je demografie: podíl lidí nad 65 let v Česku stoupl z 15,5 % (2010) na téměř 21 % (2024) a poroste dál — a právě s věkem riziko demence strmě roste. Druhým je diagnostický záchyt: OECD odhaduje skutečnou prevalenci demence v ČR na zhruba 180 tisíc lidí (17,2 na 1 000 obyvatel celkem, 2021), zatímco systém jich v témže roce evidoval jen 113 tisíc — tedy asi 62 % odhadované prevalence. Případ paní Věry ukazuje, kudy ta mezera vede: bez časného rozpoznání v primární péči se diagnóza často dostaví až v pokročilé fázi, kdy už léčba průběh nemoci téměř neovlivní. Třetím faktorem je kapacita návazné a dlouhodobé péče, na kterou nárůst dopadá plnou vahou.\n\nPolitická páka je konkrétní. Česko přijalo Národní akční plán pro Alzheimerovu nemoc a obdobná onemocnění, který připravilo Ministerstvo zdravotnictví s Národním ústavem duševního zdraví; jeho aktualizace se očekává v roce 2026. Logické kroky jsou tři: časný záchyt kognitivních poruch v ordinacích praktiků a dostupné paměťové ambulance, provázání zdravotní a sociální péče včetně kapacit dlouhodobé a odlehčovací péče, a prevence v průběhu života cílená na ovlivnitelná rizika, která podle odhadů stojí až za 40 % případů. Kompetenci sdílejí Ministerstvo zdravotnictví, Ministerstvo práce a sociálních věcí, zdravotní pojišťovny a kraje. Pro paní Věru a její dceru Lenku je rozdíl jednoduchý: systém, který demenci zachytí včas a nabídne oporu doma, promění roky strachu v roky s důstojností.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
