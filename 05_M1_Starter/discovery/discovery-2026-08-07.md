@@ -25,7 +25,7 @@
   ve výzvě).
   - **Strojové ověření v SÚKL open-data MR feedu** (opendata.sukl.cz/soubory/MR/mr.zip,
     staženo 7. 8. 2026, soubor generován 6. 8. 2026 22:15, platnost 07.08.2026):
-    10 kódů SÚKL KVENTIAX PROLONG (Krka) s posledním platným hlášením **ukončení**
+    10 kódů SÚKL KVENTIAX PROLONG s posledním platným hlášením **ukončení**
     dodávek s platností 23. 7.–10. 8. 2026 (hlášeno 14. 7. a 23. 7.); 16 kódů XR
     s aktivním **přerušením** (DERIN PROLONG → obnovení 1. 12. 2026, QUESTAX PROLONG
     → 28. 2. 2027, QUETIAPIN TEVA RETARD → 30. 9./31. 12. 2026, QUETIAPINE VIATRIS
@@ -33,9 +33,9 @@
     formálně bez hlášení výpadku (caveat: hlášení ≠ faktická dostupnost; autoritou
     nedostupnosti je výzva SÚKL). IR formy (okamžité uvolňování) zůstávají vesměs
     dodávané (Kventiax, Neuraxpharm, Polpharma obnovení/zahájení 2025–2026).
-  - **EMA (ema.europa.eu, shortage entry „Quetiapine", aktualizace 5. 4. 2026,
+  - **EMA (ema.europa.eu, shortage entry „Quetiapine", aktualizace 4. 5. 2026,
     poprvé publikováno 11. 3. 2025)**: celoevropský výpadek XR forem 50–400 mg,
-    21 členských států vč. Česka; příčina = nárůst poptávky + výrobní problém
+    22 členských států vč. Česka; příčina = nárůst poptávky + výrobní problém
     u výrobce dodávajícího XR formu více firmám v EU; očekávané trvání do 2Q 2027;
     doporučení převádět pacienty na IR formy nebo alternativy dle národních pokynů.
   - **WHO ATC/DDD (atcddd.fhi.no)**: kvetiapin N05AH04, DDD 0,4 g perorálně

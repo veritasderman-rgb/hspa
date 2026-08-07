@@ -34,8 +34,8 @@
     2024–2026); Quetiapine Viatris IR částečně přerušen (25 mg do 31. 10. 2026,
     300 mg do 31. 12. 2026)
 - **EMA** — shortage entry „Quetiapine — supply shortage" (ema.europa.eu,
-  poprvé publikováno 11. 3. 2025, aktualizace 5. 4. 2026, ověřeno 7. 8. 2026):
-  výpadek XR 50–400 mg; **21 členských států vč. Česka**; příčina = nárůst
+  poprvé publikováno 11. 3. 2025, aktualizace 4. 5. 2026, ověřeno 7. 8. 2026):
+  výpadek XR 50–400 mg; **22 členských států vč. Česka**; příčina = nárůst
   poptávky + výrobní problém výrobce, který XR formu dodává více firmám v EU;
   očekávané trvání **do 2. čtvrtletí 2027**; doporučení: dle národních pokynů
   zvážit převod na IR formy nebo alternativy
@@ -52,7 +52,7 @@
   souhlasu MZ ČR
 
 ## Mezinárodní kontext
-- EMA (viz výše): celoevropský výpadek, 21 států, do 2Q 2027
+- EMA (viz výše): celoevropský výpadek, 22 států, do 2Q 2027
 - Methodology caveat: DDD z výzvy SÚKL = odhad potřeby pro SLP v ČR, nikoli
   celková spotřeba kvetiapinu v ČR (ta zahrnuje i IR formy — v článku
   nesměšovat); DDD ≠ počet pacientů (dávky se individuálně liší)
