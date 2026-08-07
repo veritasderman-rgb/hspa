@@ -536,6 +536,8 @@ const MANIFEST = {
   'clanek-nahrada-kolenniho-kloubu': { kicker: 'Ortopedie · objem péče', signal: 'neutral', stat: '212,4', claim: 'náhrad kolenního kloubu na 100 000 obyvatel (2024) — nad průměrem EU.', context: 'Za tři roky víc než dvojnásobek (2021: 103,4).' },
   'clanek-spalnicky-usa-2026': { kicker: 'Vakcinace · spalničky', signal: 'bad', stat: '2 371', claim: 'případů spalniček v USA k 30. 7. 2026 — nejvíc od roku 1991.', context: 'Proočkovanost MMR před školou 92,5 %. Práh imunity je 95 %.' },
   'clanek-podil-prakticti-lekari': { kicker: 'Dostupnost · primární péče', signal: 'bad', stat: '16,9', statSuffix: '%', barPct: 17, claim: 'lékařů v Česku jsou praktici — průměr OECD je kolem 23 %.', context: 'Lékařů má Česko dost (4,2 na 1 000). Chybí generalisté.' },
+  'clanek-detska-psychiatrie-akutni-luzka': { kicker: 'Duševní zdraví · děti', signal: 'neutral', stat: '4 067', claim: 'akutních psychiatrických hospitalizací dětí do 19 let (2023).', context: 'Téměř dvojnásobek proti roku 2013. Chybí ambulance, ne lůžka.' },
+  'clanek-szu-pripominky-nivz': { kicker: 'Reforma veřejného zdraví', signal: 'warn', stat: '11', claim: 'okruhů výhrad poslal SZÚ k reformě, která ho má pohltit.', context: 'Sedm zůstává bez odezvy, jedna se vyvinula přesně opačně.' },
 };
 
 function escapeXml(s) {
