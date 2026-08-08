@@ -1,0 +1,54 @@
+{
+  "id": "fyzioterapeuti_per_100k",
+  "name": "Praktikující fyzioterapeuti / 100 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Rehabilitační péče",
+  "definition": "Počet praktikujících fyzioterapeutů vztažený na 100 000 obyvatel. Praktikující = fyzioterapeut, který v daném roce skutečně poskytoval péči pacientům (nikoli jen držitel odborné způsobilosti). Měří kapacitu rehabilitační péče — profesní skupiny, na které stojí léčebná rehabilitace po cévních mozkových příhodách, úrazech, ortopedických operacích i péče o chronickou bolest a křehké seniory. Zdrojem českých dat je Národní registr zdravotnických pracovníků (NRZP, ÚZIS ČR); mezinárodní srovnání harmonizuje Eurostat v datasetu hlth_rs_prs2 (kategorie Physiotherapists, koncept practising).",
+  "unit": "/ 100 000",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrzp",
+      "format": "web_table",
+      "endpoint": "https://uzis.cz/index.php?id=8463&pg=record",
+      "dataset": "Zdravotnictví ČR: Personální kapacity a odměňování (NZIS report, roční řada) — zdrojem je Národní registr zdravotnických pracovníků (NRZP) v propojení s Národním registrem hrazených zdravotních služeb (NRHZS)",
+      "dimensions": {
+        "country": "CZ",
+        "profession": "fyzioterapeut (odbornost 902/918, zákon č. 96/2004 Sb.)",
+        "year": "annual"
+      },
+      "note": "ÚZIS reportuje harmonizované počty praktikujících fyzioterapeutů do společného sběru Eurostat/OECD/WHO; strukturovaná časová řada je proto dostupná přes Eurostat API (hlth_rs_prs2, med_spec=PHYSIO, wstatus=PRACT, unit=P_HTHAB i NR)."
+    },
+    "fallback": {
+      "type": "eurostat",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table",
+      "note": "Eurostat hlth_rs_prs2 — Health personnel (Physiotherapists, practising, per hundred thousand inhabitants). Roční řada pro ČR 2014–2024 a srovnání s EU-27 a sousedy; dostupné i přes JSON API dissemination endpoint."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_rs_prs2",
+    "dataset": "Eurostat hlth_rs_prs2 — praktikující fyzioterapeuti na 100 000 obyvatel. EU-27 průměr 147,5 (2023, poslední dostupný agregát); Německo 245,5 (2024), Rakousko 182,1 (2024), Polsko 169,8 (2024), Slovensko 46,7 (2024). ČR s 86 na 100 000 (2024) dosahuje zhruba 58 % průměru EU a za dekádu 2014–2024 vzrostla jen o 9 %, zatímco průměr EU o 29 %.",
+    "value": 147.5,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr zdravotnických pracovníků)",
+    "MZ ČR (odbor ošetřovatelství a nelékařských povolání)",
+    "UNIFY ČR (Unie fyzioterapeutů České republiky)",
+    "Eurostat (harmonizace mezinárodního sběru)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 86 praktikujících fyzioterapeutů na 100 000 obyvatel (přesně 86,01), tj. 9 379 osob (Eurostat hlth_rs_prs2, národní data ÚZIS/NRZP). Časová řada 2014–2024: 78,8 → 83,2 (2016) → 86,6 (2018) → 89,1 (2020) → vrchol 93,9 (2021) → 87,8 (2022) → 83,9 (2023) → 86,0 (2024). Skok dolů mezi lety 2021 a 2022 souvisí s revizí metodiky NRZP (přechod na propojení s výkazy hrazených služeb — očištění o osoby, které fakticky nepraktikují), nikoli s reálným odlivem tisíců fyzioterapeutů; řadu je proto třeba číst jako dlouhodobou stagnaci kolem 80–90 na 100 000. Koncept „practising“ zahrnuje fyzioterapeuty ve zdravotnictví bez ohledu na segment (lůžková rehabilitace, ambulance, lázně, domácí péče). EU-27 agregát je za rok 2023 (za 2024 dosud nepublikován).",
+  "limitations": "Mezinárodní srovnatelnost je slabší než u lékařů a sester: země se liší v tom, koho do kategorie fyzioterapeut počítají (např. maséry či ergoterapeuty ne/zahrnují), a některé řady mají zlomy — Polsko po zavedení profesní komory KIF skokově „našlo“ desetitisíce fyzioterapeutů (2021→2022: 90 → 152 na 100 000), Rakousko změnilo metodiku v roce 2019. Hustota na 100 000 obyvatel neříká nic o regionálním rozložení (fyzioterapie se koncentruje do měst a lázeňských oblastí), o poměru veřejného a čistě soukromého (nesmluvního) sektoru, ani o skutečné dostupnosti — tu určují i úvazky, čekací doby a struktura úhrad. Indikátor je veden jako seed z Eurostat/ÚZIS řady do napojení na živý fetcher.",
+  "determinants": "Českou hodnotu drží nízko tři strukturální faktory. **První je úhradová politika:** ambulantní rehabilitace (odbornost 902) patří dlouhodobě k nejhůře placeným segmentům — hodnota práce fyzioterapeuta v úhradové vyhlášce roste pomaleji než mzdy v ekonomice, takže smluvní ambulance obtížně konkurují čistě soukromým pracovištím i zahraničí. **Druhý je vzdělávací hrdlo:** bakalářské a magisterské programy fyzioterapie mají omezené kapacity a vysoký převis poptávky; absolventi navíc často míří do soukromého sektoru mimo smlouvy s pojišťovnami, nebo do Německa a Rakouska, kde je poptávka i mzda výrazně vyšší. **Třetí je chybějící koordinace rehabilitace:** ČR jako jedna z posledních zemí EU nemá zákon o koordinované rehabilitaci (věcný záměr se připravuje od 90. let), takže poptávka po fyzioterapii není systémově řízena — pacient po iktu se k terapii dostává podle místa bydliště a štěstí, ne podle klinické potřeby. Poptávkovou stranu přitom žene demografie: přibývá seniorů, endoprotéz, iktů i chronických bolestí zad.",
+  "importance": "Rehabilitace je podle WHO (iniciativa Rehabilitation 2030) jednou z pěti základních funkcí zdravotního systému vedle prevence, léčby, podpory zdraví a paliace — a fyzioterapeuti jsou její páteřní profesí. Kapacita rehabilitace rozhoduje o tom, jestli se pacient po cévní mozkové příhodě vrátí k chůzi a do práce, jestli endoprotéza splní svůj účel a jestli křehký senior po zlomenině krčku zůstane doma, nebo skončí v dlouhodobé ústavní péči. Česko přitom investuje do akutní fáze (iktová centra, endoprotetika patří k evropské špičce), ale kapacita následné rehabilitace za akutní medicínou zaostává — s 86 fyzioterapeuty na 100 000 obyvatel má ČR zhruba polovinu evropského průměru a třetinu Německa. Z pohledu HSPA jde o klasický strukturní deficit: výsledky akutní péče se ztrácejí v následné fázi, kterou systém neměří a nekoordinuje. Stárnutí populace tenhle rozdíl dál prohloubí — poptávka po rehabilitaci poroste rychleji než populace fyzioterapeutů, pokud se nezmění úhrady a vzdělávací kapacity.",
+  "patient_story": "Paní Jarmile je šedesát osm a v březnu ji v třebíčské nemocnici zachránili po cévní mozkové příhodě. Trombektomie proběhla učebnicově, za devět dní šla domů — s ochrnutou levou rukou a doporučením „intenzivní ambulantní fyzioterapie“. Pak začalo kolečko telefonátů: první smluvní rehabilitace měla volný termín za sedm týdnů, druhá nebrala nové pacienty vůbec, soukromá fyzioterapeutka bez smlouvy měla termín hned — za 900 korun na hodinu. Jenže právě první týdny po iktu jsou okno, kdy se mozek učí nejvíc. Zatímco akutní medicína odvedla špičkový výkon, na ten navazující už systém kapacitu neměl.\n\nData říkají, že Jarmilin příběh není smůla, ale pravidlo. V Česku připadá 86 praktikujících fyzioterapeutů na 100 000 obyvatel (2024, celkem 9 379 osob) — zhruba 58 % průměru EU, který činí 147,5. Německo má 245, Rakousko 182, Polsko 170; hůř je na tom ze sousedů jen Slovensko. A rozdíl se prohlubuje: za dekádu 2014–2024 vzrostla česká hustota fyzioterapeutů o 9 %, evropský průměr o 29 %. Signál indikátoru je proto „špatný“ — nejde o mírné zaostávání, ale o strukturní deficit v profesi, na které stojí návrat pacientů do života.\n\nPříčiny jsou tři a všechny jsou systémové. Ambulantní rehabilitace patří k nejhůř placeným segmentům úhradové vyhlášky, takže smluvní pracoviště nedokážou zaplatit terapeuty, kteří odcházejí do soukromých ordinací bez smluv — tam se pacient dostane hned, ale za hotové. Vzdělávací kapacity fyzioterapie jsou poddimenzované a část absolventů míří rovnou do Německa či Rakouska, kde si vydělají násobky. A Česko jako jedna z posledních zemí EU nemá zákon o koordinované rehabilitaci: věcný záměr se na ministerstvech přepisuje od 90. let, takže o tom, kdo a kdy rehabilitaci dostane, nerozhoduje klinická potřeba, ale místo bydliště a vytrvalost rodiny.\n\nPáky jsou známé a mají konkrétní adresáty. Ministerstvo zdravotnictví a pojišťovny drží úhradovou vyhlášku — cílené navýšení hodnoty práce v odbornosti 902 je nejrychlejší nástroj, jak udržet fyzioterapeuty ve smluvní síti. MŠMT a fakulty mohou rozšířit studijní kapacity, jejichž převis poptávky je dlouhodobě prokázaný. A vláda může konečně dotáhnout zákon o koordinované rehabilitaci, ke kterému se hlásí i WHO iniciativou Rehabilitation 2030; prvním krokem na sociálně-zdravotním pomezí je zákon č. 38/2025 Sb. Pro paní Jarmilu by to znamenalo jediné: že by po špičkové trombektomii nemusela sedm týdnů čekat, až se na ni dostane řada.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
