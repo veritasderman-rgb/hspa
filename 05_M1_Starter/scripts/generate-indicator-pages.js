@@ -59,10 +59,14 @@ function resolveStatus(ind) {
 
 function benchmarkRows(ind) {
   const b = ind.benchmark || {};
+  // Volitelné `benchmark_years` v seedu: benchmark z jiného roku než česká
+  // hodnota dostane rok přímo do popisku řádku (např. „EU ⌀ (2023)“).
+  const by = ind.benchmark_years || {};
+  const yr = (key) => by[key] != null && by[key] !== ind.year ? ` (${by[key]})` : '';
   const rows = [['Česko', ind.value]];
-  if (b.oecd != null) rows.push(['OECD ⌀', b.oecd]);
-  if (b.eu != null) rows.push(['EU ⌀', b.eu]);
-  if (b.oecd_best != null) rows.push(['OECD nejlepší', b.oecd_best]);
+  if (b.oecd != null) rows.push([`OECD ⌀${yr('oecd')}`, b.oecd]);
+  if (b.eu != null) rows.push([`EU ⌀${yr('eu')}`, b.eu]);
+  if (b.oecd_best != null) rows.push([`OECD nejlepší${yr('oecd_best')}`, b.oecd_best]);
   return rows.map(([label, val]) =>
     `<tr><th scope="row">${esc(label)}</th><td>${cz(val)} ${esc(ind.unit || '')}</td></tr>`
   ).join('');
