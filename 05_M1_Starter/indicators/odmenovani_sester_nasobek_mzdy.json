@@ -1,0 +1,56 @@
+{
+  "id": "odmenovani_sester_nasobek_mzdy",
+  "name": "Odměňování nemocničních sester (násobek průměrné mzdy)",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Odměňování",
+  "definition": "Hrubý roční příjem nemocničních sester v zaměstnaneckém poměru vyjádřený jako násobek průměrné roční mzdy v celé ekonomice (OECD Health Statistics, ukazatel „Remuneration of hospital nurses, ratio to average wage\"). Příjem zahrnuje vedle základního platu či mzdy i příplatky za směnnost, přesčasy a mimořádné odměny. Hodnota 1,48 znamená, že nemocniční sestra si v Česku vydělá zhruba 1,5násobek průměrné mzdy. Ukazatel měří relativní finanční atraktivitu profese — klíčový strukturální faktor náboru a retence ošetřovatelského personálu. Česká data do sběru OECD dodává ÚZIS ČR z výkazů E (MZ) o zaměstnancích a odměňování.",
+  "unit": "násobek prům. mzdy",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_sdmx2",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_REAC_EMP@DF_REMUN,1.1/",
+      "dataset": "OECD Health Statistics — Health workforce remuneration (DSD_HEALTH_REAC_EMP@DF_REMUN)",
+      "dimensions": {
+        "MEASURE": "AI (Annual income)",
+        "UNIT_MEASURE": "FCTR_WG_A_SAL_A (Factor of average annual wage)",
+        "HEALTH_PROF": "RINF (Hospital nurses)",
+        "WORKER_STATUS": "ICSE93_1 (Employees)",
+        "SEX": "_T",
+        "PRICE_BASE": "V"
+      },
+      "note": "Ověřeno živě 2026-08-09 přes repo parser (oecd_sdmx2): CZ 1,48 (2024); řada 2019–2024: 1,42 → 1,67 → 1,76 → 1,54 → 1,48 → 1,48; OECD průměr (mean 20 členských zemí reportujících za 2024) = 1,2. Zdrojem českých dat v OECD je ÚZIS ČR (výkazy E o odměňování)."
+    },
+    "fallback": {
+      "type": "uzis_report",
+      "url": "https://www.uzis.cz/res/f/008468/odmenovani-2024.pdf",
+      "note": "ÚZIS ČR: Odměňování pracovníků ve zdravotnictví 2024 (NZIS report, roční řada od 2010). Národní detail: průměrný měsíční plat všeobecných a dětských sester a porodních asistentek 61 747 Kč, mzda 53 117 Kč (2024, všichni poskytovatelé); v akutní lůžkové péči plat 62 988 Kč, mzda 56 559 Kč."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DSD_HEALTH_REAC_EMP@DF_REMUN / FCTR_WG_A_SAL_A / RINF",
+    "dataset": "OECD Health Statistics — Remuneration of hospital nurses, ratio to average wage. Benchmark 1,2 je průměr 20 členských zemí OECD s údajem za rok 2024 (mean, konvence pipeline oecd_sdmx2). Pro srovnání 2024: Polsko 1,66, Maďarsko 1,40, Slovensko 1,34, Španělsko 1,34, Nizozemsko 1,23, USA 1,22, Švédsko 0,99, Velká Británie 0,86; Německo 1,17 (2022, novější údaj nereportuje), Rakousko nereportuje vůbec.",
+    "value": 1.2,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_EMP%40DF_REMUN"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (výkazy E o zaměstnancích a odměňování, reporting do OECD/Eurostat/WHO)",
+    "MZ ČR (platové tabulky příspěvkových organizací, úhradová vyhláška)",
+    "OECD Health Division (harmonizace ukazatele Remuneration of nurses)",
+    "ČAS — Česká asociace sester (profesní zastoupení)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 1,48násobek průměrné mzdy (OECD, kategorie hospital nurses / employees). Časová řada ukazuje tři fáze: pozvolný růst do roku 2019 (1,35 v 2018, 1,42 v 2019 — efekt vládních navýšení tarifů po krizi „Děkujeme, odcházíme\" a náborové krizi sester 2017–2019), covidový vrchol 2020–2021 (1,67 → 1,76, mimořádné odměny až 75 tis. Kč a stabilizační příplatky), a následný sestup s ustálením (1,54 → 1,48 → 1,48). V paritě kupní síly činil roční příjem české nemocniční sestry 58 747 USD PPP (2024) — méně než v Polsku (75 568), Německu (74 288, 2022) či Nizozemsku (96 590), více než na Slovensku (49 900) a v Maďarsku (50 008). Národní detail ÚZIS (Odměňování 2024, Graf 5): průměrný plat sester (státní a příspěvkový sektor) 61 747 Kč měsíčně, průměrná mzda (soukromý sektor) 53 117 Kč — rozdíl obou režimů odměňování ~14 % trvá celou dekádu. OECD hodnota je vyšší než tabulkový plat, protože zahrnuje příplatky za směny, přesčasy a odměny a vztahuje se k lůžkové péči. Origin = seed s hodnotami identickými s výstupem živého fetcheru (ověřeno parserem repa); mapping oecd_sdmx2_codes.json zajistí týdenní aktualizaci.",
+  "limitations": "Poměr k průměrné mzdě má dva pohyblivé členy — zlepšení může nastat i poklesem reálných mezd v ekonomice, a naopak: pokles poměru z 1,76 (2021) na 1,48 (2024) je z velké části dán rychlým růstem jmenovatele (průměrné mzdy) po odeznění covidových odměn, ne poklesem nominálních platů sester. Kategorie „hospital nurses\" pokrývá jen sestry v lůžkové péči v zaměstnaneckém poměru; nezahrnuje ambulantní a domácí péči, kde jsou mzdy nižší. Mezinárodní srovnatelnost oslabují rozdíly v tom, co země do příjmu počítají (přesčasy, 13. platy) — Německo reportuje naposledy za 2022, Rakousko chybí úplně. Ukazatel neříká nic o rozptylu (kraje, segmenty), o pracovní zátěži na úvazek, ani o nemzdových podmínkách, které retenci ovlivňují stejně silně. Vyšší relativní odměna sester v ČR částečně odráží i nižší úroveň průměrné mzdy v ekonomice, nikoli vysokou absolutní odměnu — v paritě kupní síly česká sestra zůstává pod západní Evropou.",
+  "determinants": "Poměr určují tři politické mechanismy. **Platové tabulky:** většina nemocničních sester je odměňována platem podle nařízení vlády o platových poměrech zaměstnanců ve veřejných službách — každoroční rozhodnutí vlády o valorizaci tarifů přímo hýbe čitatelem. **Úhradová vyhláška:** soukromé a akciové nemocnice platí sestry mzdou z úhrad pojišťoven; personální náklady tvoří přes polovinu nákladů lůžkové péče, takže tempo růstu úhrad determinuje tempo růstu mezd. **Trh práce:** konkurence ostatních odvětví o středoškolsky a vysokoškolsky vzdělané ženy, možnost odchodu do Německa a Rakouska (kde je absolutní příjem v PPP stále vyšší) a věková struktura profese (odchody do důchodu) tlačí na udržení relativní prémie. Sekundárně působí struktura příplatků (směnnost, noční, víkendy) — sestry v nepřetržitém provozu si k tarifu přidávají až čtvrtinu příjmu.",
+  "importance": "Odměňování je nejsilnější jednotlivá páka, kterou stát drží nad stabilitou ošetřovatelské profese — a Česko je vzácný příklad země, kde tato páka prokazatelně zafungovala. Po náborové krizi 2017–2019 a covidových letech se relativní příjem nemocničních sester zvedl z 1,18násobku průměrné mzdy (2011) na dnešních zhruba 1,5násobek, což řadí ČR nad průměr OECD i nad většinu západní Evropy v relativním vyjádření. Jenže kapacitní ukazatele se nepohnuly: praktikujících sester je stále 9 na 1 000 obyvatel a stagnují, věková struktura profese dál stárne a absolventů nepřibývá dost. HSPA čtení je proto dvojité — dobrá hodnota poměru je nutná, ne postačující podmínka: bez ní by krize byla hlubší, s ní samotnou se ale personální deficit nevyřeší. Pokles poměru od roku 2021 je varovný signál, že mzdová prémie profese se v tichosti rozpouští v inflaci a růstu mezd jinde — a s ní i hlavní argument, proč do ošetřovatelství vstupovat.",
+  "patient_story": "Renata slouží šestnáct let na interním oddělení okresní nemocnice na Vysočině. Dvanáctihodinové směny, noční, víkendy, k tomu dvě děti. V roce 2021 jí na výplatní pásce přistálo přes sedmdesát tisíc — tarif, směnové příplatky, covidové odměny. Poprvé v životě měla pocit, že její práce je zaplacená. Letos v létě si pásku prohlížela znovu: nominálně bere víc než tehdy, ale nájem, energie a nákupy rostou rychleji. Její švagrová, účetní v soukromé firmě bez jediné noční, ji mezitím v příjmu skoro dohnala. Renata neodchází — zatím. Ale mladší kolegyně, která loni dokončila školu, nastoupila rovnou do Rakouska.\n\nČísla Renatin pocit potvrzují. Nemocniční sestra si v Česku v roce 2024 vydělala 1,48násobek průměrné mzdy — to je nad průměrem OECD (1,2) a víc než ve Švédsku (0,99), Británii (0,86) či Německu (1,17). Signál indikátoru je „dobrý\": relativní mzdová prémie české sestry patří k nejvyšším v Evropě. Jenže trend míří dolů. Z covidového vrcholu 1,76 (2021) poměr klesl na 1,54 (2022) a dvě poslední léta stojí na 1,48. A sousedé zrychlují: Polsko po zákonem garantovaných minimálních mzdách ve zdravotnictví vyskočilo na 1,66 a v paritě kupní síly (75 568 USD ročně) českou sestru (58 747 USD) předstihlo o víc než čtvrtinu.\n\nProč poměr klesá, když nominální platy rostou? Protože jmenovatel běží rychleji. Průměrná mzda v ekonomice po roce 2021 rostla dvouciferným tempem, zatímco tarify sester valorizovala vláda opatrněji a mimořádné covidové odměny zmizely úplně. Průměrný plat sestry ve státní nemocnici činil 61 747 Kč (2024), mzda v soukromé nemocnici 53 117 Kč — čtrnáctiprocentní rozdíl mezi oběma režimy odměňování se drží celou dekádu a činí z převodů nemocnic na akciové společnosti i mzdovou otázku. Relativní prémie profese, pracně vybudovaná po náborové krizi let 2017–2019, se tak v tichosti rozpouští — přesně v době, kdy sester je stále 9 na 1 000 obyvatel, profese stárne a poptávka po péči s ní.\n\nPáka je v tomto případě výjimečně přímá. Vláda každý rok rozhoduje nařízením o platových tabulkách veřejného sektoru — jedno číslo v příloze určuje tarify většiny nemocničních sester. Ministerstvo zdravotnictví píše úhradovou vyhlášku, z níž mzdy v soukromých nemocnicích tečou, a může — po polském vzoru — vázat část úhrad na garantovaný růst mezd sester, podobně jako v minulosti cílila na stabilizační příplatky za směnnost. A pojišťovny s nemocnicemi drží třetí nástroj: strukturu směnových příplatků, které tvoří až čtvrtinu příjmu. Pro Renatu je rozdíl mezi 1,48 a klesající křivkou jednoduchý: rozhodne o tom, jestli za pět let bude mít kdo sloužit noční na interně — v Pelhřimově, Znojmě i kdekoli jinde.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
