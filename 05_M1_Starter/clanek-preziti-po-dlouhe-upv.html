@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-09
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-08-09
+    creation_phase: discovery+evergreen-write
+    primary_sources_count: 2
+    visual_elements_count: 5
+    notes: "EVERGREEN-WRITE (backlog priorita 8, preziti-po-dlouhe-upv). Centrální KPI: přežití 1 rok po příjmu na ARO s UPV ≥ 2 dny 51,2 % (zemřelo 15 279 z 31 294 pacientů 18+; souhrn kohort 2022+2023) — replikováno 9. 8. 2026 přímo z PDF analytické studie ÚZIS/NRIP 'Pilotní přehled vybraných indikátorů intenzivní péče a anesteziologie 2010–2024' (NZIP dataset 2708, publ. 7. 4. 2026, zdroj NRHZS). Věkový gradient (48,5 / 34,7 / 16,9 %), trajektorie (doma bez PnP 37,3 %; doma s PnP 9,1 %; lůžková/pobytová péče 4,8 %), case-based řada (hospitalizační mortalita 30,8 → 17,0 %; roční mortalita 54,3 → 40,1 %) a objemové trendy (65–84 +81,1 %; 85+ −16,9 %) — vše z téže studie, ověřeno proti extrakci PDF. Sekundární indikátor: luzka_jip_per_100k 44,61/100k vs OECD 18 (OECD Health Statistics, origin live, verified). V rámci téhož běhu opraven kotevní indikátor preziti_1rok_po_upv_2d_pct (rok 2024 → 2023/kohorty 2022+2023, zdroj NZIP 2708, odstraněn neověřitelný trend z metodické karty). Methodology caveats (patient-based vs case-based, 2024 bez follow-upu, PnP jako proxy) v caveat callout. Status: review-pending — čeká na ruční schválení redakce. published:false, scheduled_for 2026-08-10 (viz routing-2026-08-09.md)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rok po dlouhé plicní ventilaci žije polovina pacientů. ÚZIS poprvé ukázal, co je s nimi dál · HSPA Monitor</title>
+<meta name="description" content="Z 31 294 dospělých, kteří v letech 2022–2023 strávili na ARO dva a více dnů na umělé plicní ventilaci, byla rok po příjmu naživu polovina (51,2 %). Analytická studie ÚZIS z registru NRHZS poprvé ukazuje i to, co s přeživšími je: 37 % všech pacientů je doma bez příspěvku na péči, 9 % doma se závislostí na pomoci, 5 % zůstává v lůžkové či pobytové péči. A věkový gradient je strmý — nad 85 let přežívá rok jen 16,9 %.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rok po dlouhé plicní ventilaci žije polovina pacientů. ÚZIS poprvé ukázal, co je s nimi dál">
+<meta property="og:description" content="Přežití 1 rok po příjmu na ARO s ventilací ≥ 2 dny: 51,2 % (kohorty 2022+2023, 18+). Nad 85 let jen 16,9 %. Studie ÚZIS/NRIP poprvé mapuje i trajektorie přeživších — domů bez pomoci se vrací 37 % pacientů.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-10">
+<meta property="article:section" content="Kvalita péče">
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kvalita péče</span>
+        <span class="article-tag article-tag-muted">Intenzivní péče · ARO · umělá plicní ventilace · outcome</span>
+      </div>
+      <h1 class="article-title">Rok po dlouhé plicní ventilaci žije polovina pacientů. ÚZIS poprvé ukázal, co je s nimi dál</h1>
+      <p class="article-deck">
+        Z 31 294 dospělých, kteří byli v letech 2022–2023 přijati na ARO a strávili dva a více dnů na umělé plicní ventilaci, byla rok po příjmu naživu polovina — <strong>51,2 %</strong>. Analytická studie ÚZIS nad registrem hrazených služeb (NRHZS) přitom poprvé systematicky ukazuje nejen přežití, ale i to, co s přeživšími je: <strong>37,3 %</strong> všech pacientů je rok po příjmu doma bez příspěvku na péči, 9,1 % doma se závislostí na pomoci druhých a 4,8 % zůstává v lůžkové či pobytové sociální péči. A věkový gradient je strmý: zatímco pacienti 65–74 let mají roční přežití 48,5 %, nad 85 let přežívá jen <strong>16,9 %</strong>.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">10. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">7 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Intenzivní péče je nejdražší a technologicky nejnáročnější patro nemocnice — a zároveň patro, o jehož dlouhodobých výsledcích se v Česku dosud vědělo nejméně. Nemocnice sledovaly, kdo přežil pobyt na lůžku; co se s pacientem dělo po propuštění, statistika neviděla. To se změnilo letos v dubnu, kdy ÚZIS publikoval pilotní přehled indikátorů intenzivní péče a anesteziologie z Národního registru intenzivní péče (NRIP): propojením dat o hospitalizacích, úmrtích a příspěvcích na péči poprvé vzniká celorepublikový obraz toho, co dlouhá umělá plicní ventilace znamená rok poté. Tento článek ta data rozbaluje — včetně míst, kde je třeba číst opatrně.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avUpvHeroH">
+        <figcaption class="av-figure-h" id="avUpvHeroH">Přežití 1 rok po příjmu na ARO s umělou plicní ventilací ≥ 2 dny (pacienti 18+, kohorty 2022+2023)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="51.2" data-decimals="1" data-suffix=" %">51,2 %</span>
+            <span class="av-counter-label">roční přežití — všichni dospělí (18+)</span>
+            <span class="av-counter-foot">31 294 pacientů, z toho 15 279 do roka zemřelo</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="48.5" data-decimals="1" data-suffix=" %">48,5 %</span>
+            <span class="av-counter-label">roční přežití ve věku 65–74 let</span>
+            <span class="av-counter-foot">10 511 pacientů, zemřelo 5 408 (51,5 %)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="34.7" data-decimals="1" data-suffix=" %">34,7 %</span>
+            <span class="av-counter-label">roční přežití ve věku 75–84 let</span>
+            <span class="av-counter-foot">7 488 pacientů, zemřelo 4 890 (65,3 %)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="16.9" data-decimals="1" data-suffix=" %">16,9 %</span>
+            <span class="av-counter-label">roční přežití ve věku 85 a více let</span>
+            <span class="av-counter-foot">1 154 pacientů, zemřelo 959 (83,1 %)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS / NRIP — Pilotní přehled vybraných indikátorů intenzivní péče a anesteziologie 2010–2024 (NZIP dataset 2708), sekce „Trajektorie pacientů: stav rok po příjmu"; zdroj dat NRHZS, zpracováno k 1. 2. 2026, publikováno 7. 4. 2026. PDF staženo a hodnoty replikovány 9. 8. 2026.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak číst tato čísla">
+        <p class="article-callout-h">Caveat — jak číst tato čísla</p>
+        <p><strong>1. Přežití není známka za kvalitu oddělení.</strong> Na dlouhou ventilaci se dostávají nejtěžší pacienti — čím závažnější case-mix pracoviště, tím nižší přežití, i kdyby péče byla vynikající. Číslo popisuje realitu prodloužené kritické péče, ne žebříček nemocnic.</p>
+        <p><strong>2. Dvě různé metriky v jedné studii.</strong> Hlavní hodnota (51,2 %) počítá <em>pacienty</em> 18+ z kohort 2022+2023 a jejich stav rok po příjmu. Časové řady v druhé polovině článku počítají <em>hospitalizační případy</em> všech věkových skupin — jmenovatele se liší a čísla nelze mezi sebou odečítat. U každého grafu proto uvádíme, kterou metriku ukazuje.</p>
+        <p><strong>3. Rok 2024 v ročních ukazatelích chybí záměrně.</strong> Pacienti přijatí v roce 2024 ještě neměli v době zpracování (k 1. 2. 2026) kompletní roční sledování — studie proto roční mortalitu za 2024 nepublikuje a my také ne.</p>
+        <p><strong>4. „Doma bez příspěvku na péči" neznamená „zdráv".</strong> Příspěvek na péči (PnP) je administrativní proxy závislosti na pomoci druhých, ne klinické měřítko. O kvalitě života přeživších — svalové slabosti, kognitivních a psychických následcích — data registru nevypovídají.</p>
+      </aside>
+
+      <h3>Polovina. A co ta polovina, která přežije?</h3>
+
+      <p>
+        Nejcennější na dubnové studii není samotné číslo přežití — je to trajektorie. Česká data dosud uměla říct, kolik pacientů zemřelo; teď poprvé říkají, <em>kde</em> a <em>v jakém stavu závislosti</em> jsou ti, kteří žijí. Z 31 294 dospělých s ventilací dva a více dnů je rok po příjmu <strong>11 683 (37,3 %) doma bez příspěvku na péči</strong> — tedy bez úředně uznané závislosti na pomoci. Dalších 1 549 (4,9 %) je doma s příspěvkem I.–II. stupně a 1 302 (4,2 %) doma s těžkou závislostí III.–IV. stupně. V nemocnici nebo pobytové sociální službě zůstává 1 481 pacientů (4,8 %). A 15 279 (48,8 %) zemřelo.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTrajektorieH">
+        <figcaption class="av-figure-h" id="avTrajektorieH">Stav rok po příjmu na ARO — pacienti 18+ s UPV ≥ 2 dny (kohorty 2022+2023, N = 31 294)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Stav rok po příjmu</th>
+                <th scope="col">Počet pacientů</th>
+                <th scope="col">Podíl</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Doma, bez příspěvku na péči</th>
+                <td>11 683</td>
+                <td>37,3 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Doma, příspěvek na péči I.–II. stupně</th>
+                <td>1 549</td>
+                <td>4,9 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Doma, příspěvek na péči III.–IV. stupně</th>
+                <td>1 302</td>
+                <td>4,2 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Hospitalizace / pobytová sociální služba, bez PnP nebo PnP I.–II.</th>
+                <td>1 024</td>
+                <td>3,3 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Hospitalizace / pobytová sociální služba, PnP III.–IV.</th>
+                <td>457</td>
+                <td>1,5 %</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Zemřel</th>
+                <td>15 279</td>
+                <td>48,8 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS / NRIP — Pilotní přehled indikátorů IP a anesteziologie 2010–2024 (NZIP 2708), „Trajektorie pacientů: stav rok po příjmu", souhrn kohort 2022+2023. PnP = příspěvek na péči (proxy závislosti, ne klinický stav). Součet 100,0 %.</p>
+      </figure>
+
+      <p>
+        Pro srovnání: mezi <em>všemi</em> dospělými pacienty ARO — tedy včetně těch, kteří ventilaci nepotřebovali vůbec nebo jen krátce — je roční úmrtnost 36,8 % a domů bez příspěvku na péči se vrací polovina (50,7 % z 56 177 pacientů). Dlouhá ventilace tedy posouvá celé rozdělení: méně návratů domů, více úmrtí, a mezi přeživšími vyšší podíl závislosti.
+      </p>
+
+      <h3>Věk je nejsilnější osa</h3>
+
+      <p>
+        Souhrnná hodnota 51,2 % je průměr přes věkové skupiny s dramaticky odlišnou prognózou. U pacientů 65–74 let přežívá rok necelá polovina (48,5 %), v pásmu 75–84 let třetina (34,7 %) a nad 85 let jen šestina — <strong>16,9 %</strong>. U nejstarších pacientů na ARO je přitom vysoká roční úmrtnost i bez dlouhé ventilace: ze všech pacientů 85+ přijatých na ARO zemře do roka 70,8 %; s ventilací ≥ 2 dny je to 83,1 %.
+      </p>
+
+      <figure class="av-bar-compare" data-max="60" data-unit=" %" aria-labelledby="avVekH">
+        <figcaption class="av-bar-compare-h" id="avVekH">Roční přežití po UPV ≥ 2 dny podle věku (pacienti, kohorty 2022+2023)</figcaption>
+        <ol class="av-bar-compare-list">
+          <li class="av-bar-row" data-value="51.2" data-label="Všichni dospělí (18+)"></li>
+          <li class="av-bar-row" data-value="48.5" data-label="65–74 let"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="34.7" data-label="75–84 let"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="16.9" data-label="85+ let" data-note="přežívá ~1 ze 6"></li>
+        </ol>
+        <p class="av-bar-compare-note"><strong>Zdroj:</strong> ÚZIS / NRIP (NZIP 2708), trajektorie pacientů, Σ kohort 2022+2023. Přežití = doplněk podílu zemřelých do 1 roku od příjmu na ARO.</p>
+      </figure>
+
+      <p>
+        Tahle čísla nejsou argument pro plošné omezování péče o seniory — jsou argument pro <strong>informované rozhodování</strong>. Šestnáct procent přeživších v pásmu 85+ znamená, že dlouhá ventilace ani u nejstarších není marná automaticky; znamená ale také, že pravděpodobnost, o kterou se opírá souhlas pacienta a rodiny s invazivní léčbou, je řádově jiná než u šedesátníka. Přesně pro tento typ rozhovoru — dřív, než akutní stav nastane — vznikl koncept dříve vysloveného přání a plánování péče předem; česká data pro něj nyní poprvé dodávají domácí podklad.
+      </p>
+
+      <h3>Dobrá zpráva z časové řady: umírá se méně</h3>
+
+      <p>
+        Druhá část studie sleduje hospitalizační případy s ventilací ≥ 2 dny v čase — a trend je nečekaně pozitivní. <strong>Hospitalizační mortalita klesla z 30,8 % v roce 2010 na 17,0 % v roce 2024</strong>, tedy téměř na polovinu. Mortalita do tří měsíců od příjmu klesla ze 47,1 % (2010) na 32,5 % (2023) a roční mortalita z 54,3 % na 40,1 % (2023, poslední rok s úplným sledováním). Zlepšení se týká i nejdelších ventilací: u případů s UPV ≥ 11 dnů klesla roční mortalita z 64,5 % (2010) na 51,3 % (2023).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRadaH">
+        <figcaption class="av-figure-h" id="avRadaH">Mortalita hospitalizačních případů s UPV ≥ 2 dny — vývoj 2010 → 2023/2024 (všechny věkové skupiny)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Ukazatel (case-based)</th>
+                <th scope="col">2010</th>
+                <th scope="col">2019</th>
+                <th scope="col">Poslední rok</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Hospitalizační mortalita</th>
+                <td>30,8 %</td>
+                <td>20,9 %</td>
+                <td><strong>17,0 %</strong> (2024)</td>
+              </tr>
+              <tr>
+                <th scope="row">Mortalita do 3 měsíců od příjmu</th>
+                <td>47,1 %</td>
+                <td>41,8 %</td>
+                <td><strong>32,5 %</strong> (2023)</td>
+              </tr>
+              <tr>
+                <th scope="row">Mortalita do 1 roku od příjmu</th>
+                <td>54,3 %</td>
+                <td>51,2 %</td>
+                <td><strong>40,1 %</strong> (2023)</td>
+              </tr>
+              <tr>
+                <th scope="row">Mortalita do 1 roku — UPV ≥ 11 dnů</th>
+                <td>64,5 %</td>
+                <td>57,9 %</td>
+                <td><strong>51,3 %</strong> (2023)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS / NRIP (NZIP 2708), mortalita hospitalizačních případů s pobytem na ARO a UPV ≥ 2 dny, resp. ≥ 11 dnů; NRHZS. Case-based metrika (hospitalizační případy, všechny věkové skupiny) — definičně odlišná od patient-based přežití 51,2 % v úvodu článku. Roční mortalita za rok 2024 není publikována (neúplné sledování). Kohorta 2021 je ovlivněna covidovou vlnou (23 814 případů, roční mortalita 52,0 %).</p>
+      </figure>
+
+      <p>
+        K poklesu je třeba jedna poctivá výhrada: časová řada nekoriguje na složení pacientů. Objem ventilovaných případů za stejné období vzrostl (z 13 661 v roce 2010 na 21 922 v roce 2024) — pokud se na ventilaci dnes dostávají i pacienti, kteří by ji dřív nedostali nebo nepřežili transport, může část zlepšení jít za změnou skladby, ne jen za kvalitou léčby. Studie je pilotní a sama avizuje, že metodika se bude upřesňovat; směr trendu je ale konzistentní napříč všemi třemi horizonty i délkami ventilace.
+      </p>
+
+      <h3>Koho ventilujeme: těžiště se posouvá k seniorům</h3>
+
+      <p>
+        Demografie ventilovaných se za patnáct let výrazně proměnila. Počet hospitalizačních případů s UPV ≥ 2 dny ve věku <strong>65–84 let vzrostl z 5 970 (2010) na 10 810 (2024), tedy o 81 %</strong> — dnes tvoří polovinu všech ventilovaných. Případů v produktivním věku 19–64 let přibylo o třetinu (5 681 → 7 524). A skupina 85+ jako jediná klesla: ze 721 na 599 případů (−16,9 %), s propadem během covidových let (526 případů v roce 2021). Intenzivní péče tak stárne se společností — a otázka, jak vypadá rok po ventilaci, se tím posouvá z okraje statistiky do jejího středu.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="81.1" data-decimals="1" data-prefix="+" data-suffix=" %">+81,1 %</span>
+          <span class="av-counter-label">nárůst případů s UPV ≥ 2 dny ve věku 65–84 let, 2010 → 2024 (5 970 → 10 810)</span>
+          <span class="av-counter-foot">ÚZIS / NRIP (NZIP 2708), hospitalizační případy, NRHZS</span>
+        </div>
+      </aside>
+
+      <h3>Hustá síť, mladá data</h3>
+
+      <p>
+        Strukturální kontext: Česko provozuje jednu z nejhustších sítí intenzivní péče v OECD — <a href="indikator-luzka_jip_per_100k.html">44,6 lůžka intenzivní péče pro dospělé na 100 000 obyvatel</a> proti průměru OECD kolem 18 (OECD Health Statistics 2023; definice „intenzivního lůžka" se napříč zeměmi liší, srovnání je orientační). Kapacita tedy není úzké hrdlo. Úzkým hrdlem byla dosud <em>zpětná vazba</em>: systém, který ventiluje přes dvacet tisíc případů ročně, neměl standardní národní indikátor toho, co s pacienty je rok poté. Pilotní přehled NRIP je první krok; navazuje na širší snahu o měření kvality, kterou v článku <a href="clanek-nikez-jak-funguje-2026.html">Kdo je NIKEZ a jak funguje</a> popisujeme jako institucionální novinku roku 2026.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Z dat plynou tři praktické důsledky. <strong>Za prvé, měřit dál a jemněji:</strong> pilotní indikátory potřebují pokračování — stratifikaci podle tíže stavu při příjmu a standardizaci case-mixu, bez níž nelze srovnávat pracoviště; to je agenda ÚZIS, NIKEZ a odborné společnosti ČSARIM, které studie uvádí jako garanty. <strong>Za druhé, plánování péče předem:</strong> strmý věkový gradient (16,9 % ročního přežití u 85+) je nejsilnější domácí argument pro systematické rozhovory o cílech péče a dříve vyslovená přání dřív, než krize nastane — a pro dostupnou <a href="clanek-mobilni-paliativni-tymy.html">paliativní alternativu</a> tam, kde invazivní léčba nenabízí realistický přínos. <strong>Za třetí, post-ICU vrstva:</strong> 13,9 % pacientů z kohort je rok po příjmu naživu se závislostí na pomoci nebo v ústavní péči — trajektorie po propuštění (rehabilitace, <a href="clanek-luzka-dlouhodobe-pece.html">následná a dlouhodobá péče</a>) je součást výsledku intenzivní medicíny, ne cizí resort. Česko teď poprvé má číslo, od kterého se dá tahle debata odrazit.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-preziti_1rok_po_upv_2d_pct.html"><strong>Přežití 1 rok po UPV delší než 2 dny</strong></a> — 51,2 % (pacienti 18+, souhrn kohort 2022+2023; ÚZIS NRIP/NRHZS, NZIP 2708). Metadata indikátoru opravena v rámci tohoto vydání: hodnota nově replikována přímo z primární studie, období opraveno z „2024" na kohorty 2022+2023</li>
+        <li><a href="indikator-luzka_jip_per_100k.html"><strong>Lůžka intenzivní péče (JIP/ARO) pro dospělé</strong></a> — 44,61 / 100 000 obyvatel (2023, OECD Health Statistics; <code>origin: live</code>, ověřeno); OECD průměr ~18, definice se napříč zeměmi liší</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — ÚZIS / NRIP</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS — Pilotní přehled vybraných indikátorů intenzivní péče a anesteziologie 2010–2024</strong> (Národní registr intenzivní péče / NISAP; zdroj dat NRHZS, zpracováno k 1. 2. 2026, publikováno 7. 4. 2026). Landing page datasetu: <a href="https://www.nzip.cz/data/2708-indikatory-intenzivni-pece-anesteziologie-2010-2024-analyticka-studie" target="_blank" rel="noopener">nzip.cz/data/2708 ↗</a></li>
+          <li><strong>Tatáž studie — PDF</strong> (sekce „Mortalita u HP s pobytem na ARO a UPV ≥ 2/5/11 dnů", „Trajektorie pacientů: stav rok po příjmu", „Dlouhodobý trend v objemu akutní lůžkové péče"). <a href="https://www.nzip.cz/data/nrip/analyticke-studie/indikatory-ip-ap-2024/indikatory-ip-ap-2024.pdf" target="_blank" rel="noopener">nzip.cz — PDF, 1,7 MB ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD Health Statistics — ICU beds (adult intensive care)</strong> (lůžka intenzivní péče pro dospělé na 100 000 obyvatel; ČR 44,61, rok 2023). <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_ICU" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-nikez-jak-funguje-2026</strong> — instituce, která má v Česku měřit kvalitu péče. <a href="clanek-nikez-jak-funguje-2026.html">clanek-nikez-jak-funguje-2026.html</a></li>
+          <li><strong>clanek-mobilni-paliativni-tymy</strong> — paliativní alternativa a její dostupnost po okresech. <a href="clanek-mobilni-paliativni-tymy.html">clanek-mobilni-paliativni-tymy.html</a></li>
+          <li><strong>clanek-luzka-dlouhodobe-pece</strong> — kam se z akutního lůžka odchází: kapacity následné a dlouhodobé péče. <a href="clanek-luzka-dlouhodobe-pece.html">clanek-luzka-dlouhodobe-pece.html</a></li>
+          <li><strong>clanek-hospitalizujeme-nejvic</strong> — česká lůžková péče v mezinárodním srovnání objemů. <a href="clanek-hospitalizujeme-nejvic.html">clanek-hospitalizujeme-nejvic.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla v článku pocházejí z jediné primární publikace — analytické studie ÚZIS/NRIP „Pilotní přehled vybraných indikátorů intenzivní péče a anesteziologie 2010–2024" (NZIP dataset 2708); hodnoty byly 9. 8. 2026 replikovány přímo z PDF. Studie kombinuje dvě definičně odlišné metriky: patient-based trajektorie (pacienti 18+, souhrn kohort 2022+2023 — hlavní hodnota 51,2 %) a case-based časové řady (hospitalizační případy, všechny věkové skupiny, po letech) — článek je nesměšuje a u každého grafu uvádí, kterou používá. Roční mortalita kohorty 2024 není publikována (neúplné sledování k datu zpracování). Příspěvek na péči je administrativní proxy závislosti, ne klinický ukazatel. Přežití po UPV odráží case-mix i kvalitu péče a bez standardizace neumožňuje srovnávat pracoviště; studie je pilotní a její metodika se může upřesňovat. Mezinárodní srovnání hustoty lůžek intenzivní péče (OECD) je orientační — definice „intenzivního lůžka" není napříč zeměmi sjednocena.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
