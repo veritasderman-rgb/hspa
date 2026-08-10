@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-10
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-10
+    creation_phase: scheduled-indicator-routine
+    primary_sources_count: 3
+    visual_elements_count: 5
+    notes: "Nový HSPA indikátor medikacni_pochybeni_hlasena z otevřených dat MZ ČR/ÚZIS (SHNU, sada SSS-06-01, distribuce 360). Všechna česká čísla replikována 10. 8. 2026 přímo z CSV: 2023 = 829 NU kategorie R33S01 / 2 174 155 hospitalizovaných pacientů = 0,38 na 1 000; řada 2018–2023 (974/0,44 · 844/0,36 · 777/0,40 · 635/0,33 · 726/0,33 · 829/0,38); celkem NU 2023 = 117 185, medikace = 0,7 %; kategorie 2023: fakultní 309/0,37, ostatní akutní 351/0,32, specializovaná centra 81/1,12, následná péče a LDN 39/1,09, psychiatrické 26/0,78. Mezinárodní kontext: OECD Health WP č. 147 (2022) — až 1 z 10 hospitalizací z medikační události, až 1 z 5 hospitalizovaných s poškozením, náklady >54 mld USD; WHO Medication Without Harm — 42 mld USD; NHS England LFPSE >2,5 mil. hlášení ročně, medikace ~1/10 hlášení; UK studie 2,7–8 % příjmů kvůli lékovému poškození. Status: draft — čeká na ruční schválení redakce, published:false."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Osm set hlášení ročně. Chyby při podávání léků jsou nejtišší kapitola bezpečnosti českých nemocnic · HSPA Monitor</title>
+<meta name="description" content="České nemocnice nahlásily v roce 2023 do národního systému 829 pochybení při podávání léků — 0,38 na 1 000 hospitalizovaných. Podle OECD přitom medikační událost stojí za až jednou z deseti hospitalizací. Nízké číslo tedy neměří bezpečí, ale kulturu hlášení. Nový HSPA indikátor z otevřených dat MZ ČR/ÚZIS otevírá lékovou bezpečnost.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Osm set hlášení ročně. Chyby při podávání léků jsou nejtišší kapitola bezpečnosti českých nemocnic">
+<meta property="og:description" content="829 hlášených medikačních pochybení za rok 2023 = 0,38 na 1 000 hospitalizovaných. V anglické NHS tvoří medikace desetinu z 2,5 milionu hlášení ročně, v Česku 0,7 %. Rozdíl neměří kvalitu péče, ale ochotu o chybách mluvit.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Bezpečnost péče">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Bezpečnost péče</span>
+        <span class="article-tag article-tag-muted">Léková bezpečnost · SHNU · kultura hlášení · klinická farmacie</span>
+      </div>
+      <h1 class="article-title">Osm set hlášení ročně. Chyby při podávání léků jsou nejtišší kapitola bezpečnosti českých nemocnic</h1>
+      <p class="article-deck">
+        České nemocnice nahlásily v roce 2023 do národního Systému hlášení nežádoucích událostí <strong>829 pochybení při podávání léků</strong> — 0,38 na 1 000 hospitalizovaných pacientů. Z více než 117 tisíc všech hlášených nežádoucích událostí tvoří medikace pouhých <strong>0,7 %</strong>. Mezinárodní evidence přitom říká, že medikační událost může stát za až <strong>jednou z deseti hospitalizací</strong> a poškození související s léky zažije až každý pátý hospitalizovaný. Nízké české číslo tedy neměří bezpečí — měří, kolik toho o vlastních chybách víme. Nový HSPA indikátor z otevřených dat MZ ČR a ÚZIS otevírá oblast lékové bezpečnosti.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Podání léku je nejčastější zdravotnická intervence vůbec: v českých nemocnicích se odehraje mnohokrát denně u každého z více než dvou milionů hospitalizovaných pacientů ročně. Každé z těch podání je řetěz kroků — předepsání, přepsání do dokumentace, příprava, naředění, identifikace pacienta, samotné podání — a každý článek řetězu může selhat. Světová zdravotnická organizace proto v globální výzvě <em>Medication Without Harm</em> označila medikační chyby za nejčastější odvratitelnou příčinu poškození pacienta ve zdravotnictví. Jak si stojí Česko? Poctivá odpověď zní: nevíme — a právě to je zjištění. Jediná celostátní strukturovaná data, která o chybách při podávání léků existují, ukazují především to, jak málo se o nich hlásí.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMedHeroH">
+        <figcaption class="av-figure-h" id="avMedHeroH">Hlášená pochybení při podávání léků v lůžkové péči (SHNU, 2023)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0.38" data-decimals="2" data-suffix="">0,38</span>
+            <span class="av-counter-label">hlášených medikačních událostí na 1 000 hospitalizovaných</span>
+            <span class="av-counter-foot">829 událostí / 2 174 155 pacientů v zapojených zařízeních</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0.7" data-decimals="1" data-suffix=" %">0,7 %</span>
+            <span class="av-counter-label">podíl medikace na všech hlášených nežádoucích událostech</span>
+            <span class="av-counter-foot">829 ze 117 185 hlášení; v anglické NHS je to zhruba desetina</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="10" data-decimals="0" data-prefix="až 1 z ">až 1 z 10</span>
+            <span class="av-counter-label">hospitalizací v zemích OECD může být důsledkem medikační události</span>
+            <span class="av-counter-foot">OECD, The Economics of Medication Safety (2022)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="54" data-decimals="0" data-prefix="&gt; " data-suffix=" mld USD">&gt; 54 mld USD</span>
+            <span class="av-counter-label">roční náklady odvratitelných medikačních poškození v OECD</span>
+            <span class="av-counter-foot">odvratitelné příjmy + prodloužené hospitalizace</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR / ÚZIS — otevřená data „Přehled hlášených nežádoucích událostí v lůžkové péči“ (SSS-06-01), kategorie R33S01 Medikace / i.v. roztoky; hodnoty replikovány z CSV 10. 8. 2026. OECD Health Working Paper č. 147 (2022).</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak číst tento indikátor">
+        <p class="article-callout-h">Caveat — jak číst tento indikátor</p>
+        <p><strong>1. Nižší číslo neznamená bezpečnější nemocnici.</strong> Indikátor počítá <em>hlášené</em> události, ne skutečné chyby. Observační studie, které sledují podávání léků přímo u lůžka, nacházejí chybu u jednotek až desítek procent podání — hlášená míra 0,38 na 1 000 pacientů je zlomkem reality. Pracoviště, které hlásí víc, o svých rizicích typicky víc ví.</p>
+        <p><strong>2. Proto je signál indikátoru neutrální.</strong> Růst hodnoty může znamenat lepší kulturu hlášení i horší praxi; pokles totéž naopak. Indikátor vedeme jako context_dependent — jeho hodnota je teploměr kultury bezpečí, ne žebříček kvality.</p>
+        <p><strong>3. Mezinárodní čísla nejsou benchmark.</strong> Anglická NHS hlásí řádově víc, protože hlášení je povinné a systém běží přes dvacet let. Rozdíl vypovídá o vyspělosti systému hlášení, ne o tom, že by anglické nemocnice chybovaly víc než české.</p>
+      </aside>
+
+      <h3>Co česká data ukazují — a co zamlčují</h3>
+
+      <p>
+        Systém hlášení nežádoucích událostí (SHNU) spravovaný ÚZIS sbírá od roku 2018 hlášení z lůžkových zařízení — dobrovolně zapojených, ale pokrývajících dlouhodobě zhruba devět desetin akutní lůžkové kapacity. Ministerstvo zdravotnictví publikuje roční agregáty jako otevřená data: podle kategorie poskytovatele a šestnácti typů události, včetně počtu hospitalizovaných pacientů jako jmenovatele. Kategorie „Medikace / i.v. roztoky“ zahrnuje předepsání nesprávného léku nebo dávky, nevhodnou sílu přípravku, chybnou přípravu či naředění a podání v nesprávnou dobu.
+      </p>
+
+      <p>
+        Řada 2018–2023 se drží v úzkém pásmu: od 974 hlášení (0,44 na 1 000 pacientů) v roce 2018 přes covidové minimum 635 (0,33) v roce 2021 zpět k 829 (0,38) v roce 2023. Žádný trend zlepšování ani zhoršování — spíš rovnovážný stav systému, do kterého se hlásí stále zhruba stejně málo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMedTrendH">
+        <figcaption class="av-figure-h" id="avMedTrendH">Hlášené medikační události v lůžkové péči, 2018–2023</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Hlášených událostí</th>
+                <th scope="col" class="av-num">Hospitalizovaných pacientů</th>
+                <th scope="col" class="av-num">Na 1 000 pacientů</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2018</th><td class="av-num">974</td><td class="av-num">2 229 988</td><td class="av-num">0,44</td></tr>
+              <tr><th scope="row">2019</th><td class="av-num">844</td><td class="av-num">2 346 006</td><td class="av-num">0,36</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">777</td><td class="av-num">1 942 669</td><td class="av-num">0,40</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">635</td><td class="av-num">1 950 243</td><td class="av-num">0,33</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">726</td><td class="av-num">2 179 429</td><td class="av-num">0,33</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2023</th><td class="av-num">829</td><td class="av-num">2 174 155</td><td class="av-num">0,38</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: MZ ČR otevřená data SSS-06-01 (SHNU/ÚZIS), kategorie R33S01; vážený poměr přes všechny kategorie poskytovatelů. Jmenovatelem jsou pacienti v zařízeních reportujících daný typ události.</p>
+      </figure>
+
+      <p>
+        Výmluvnější než trend je ale struktura hlášení. Ze všech 117 185 nežádoucích událostí nahlášených za rok 2023 tvoří 44 % dekubity a 29 % pády — dvě kategorie, které mají v českém ošetřovatelství dlouhou tradici sledování, standardizované metodiky a povinné prevalenční audity. Medikace, kterou mezinárodní literatura řadí mezi nejčastější typy pochybení vůbec, je s 0,7 % až na devátém místě — za technickými problémy i „chováním osob“. To není obraz výjimečně bezpečné farmakoterapie; to je obraz systému, který se naučil hlásit to, co se sleduje dlouho a bez stigmatu, a mlčet tam, kde hlášení může vypadat jako přiznání osobního selhání.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMedKatH">
+        <figcaption class="av-figure-h" id="avMedKatH">Kdo hlásí a kdo mlčí: medikační události na 1 000 pacientů podle typu zařízení (2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="1.3">
+          <li class="av-bar-row" data-value="1.12" data-label="Specializované nemocnice a centra"></li>
+          <li class="av-bar-row" data-value="1.09" data-label="Nemocnice následné péče a LDN"></li>
+          <li class="av-bar-row" data-value="0.78" data-label="Psychiatrické nemocnice"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="0.38" data-label="Lůžková péče celkem"></li>
+          <li class="av-bar-row" data-value="0.37" data-label="Fakultní a velké nemocnice akutní péče"></li>
+          <li class="av-bar-row" data-value="0.32" data-label="Ostatní nemocnice akutní péče"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: MZ ČR otevřená data SSS-06-01, rok 2023. Absolutně: ostatní akutní nemocnice 351, fakultní a velké nemocnice 309, specializovaná centra 81, následná péče a LDN 39, psychiatrické nemocnice 26 hlášení. Trojnásobný rozdíl mezi typy zařízení nelze vysvětlit trojnásobně bezpečnější farmakoterapií — odráží rozdílnou kulturu hlášení.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: propast, která neměří kvalitu, ale upřímnost</h3>
+
+      <p>
+        Přímý mezinárodní benchmark míry hlášení neexistuje — systémy se liší povinností, definicemi i tradicí. O to důležitější je kontext toho, co o medikačních chybách víme z výzkumu. OECD ve zprávě <em>The Economics of Medication Safety</em> (2022) shrnuje: medikační událost může stát za až jednou z deseti hospitalizací v zemích OECD, poškození související s léky zažije během pobytu až každý pátý hospitalizovaný a náklady odvratitelných medikačních poškození přesahují 54 miliard USD ročně — zhruba desetinu z toho jde připsat prodlouženým hospitalizacím. Britské studie odhadují, že 2,7–8 % příjmů do nemocnic souvisí s poškozením z léků. WHO při vyhlášení kampaně <em>Medication Without Harm</em> vyčíslila globální náklady medikačních chyb na 42 miliard USD ročně a dala systémům cíl: snížit závažná odvratitelná poškození o polovinu.
+      </p>
+
+      <p>
+        A hlášení? Anglická NHS, která incidenty sbírá povinně a celostátně od roku 2003, přijme do systému LFPSE (dříve NRLS) přes 2,5 milionu hlášení bezpečnostních událostí ročně — na populaci pětkrát větší než česká je to řádově čtyřicetkrát víc hlášení než v celém SHNU. Medikační incidenty z toho dlouhodobě tvoří zhruba desetinu, tedy stovky tisíc hlášení ročně proti českým 829. Německo a Rakousko provozují dobrovolné systémy CIRS postavené na anonymitě a lokálním učení; Polsko a Slovensko celostátní veřejná data tohoto typu nepublikují vůbec — Česko je tedy se svými otevřenými daty SHNU ve středoevropském srovnání paradoxně napřed, i když absolutní čísla ukazují hlavně mlčení.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMedIntH">
+        <figcaption class="av-figure-h" id="avMedIntH">Podíl medikace na všech hlášených bezpečnostních událostech</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" %" data-max="12">
+          <li class="av-bar-row" data-value="10" data-label="Anglie (NHS LFPSE/NRLS, dlouhodobě)"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="0.7" data-label="Česko (SHNU, 2023)"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: NHS England (patient safety data; medikace ~1/10 hlášení), MZ ČR otevřená data SSS-06-01 (829 ze 117 185 hlášení). Srovnání ilustruje rozdíl v kultuře a povinnosti hlášení, ne rozdíl ve skutečné chybovosti.</p>
+      </figure>
+
+      <h3>Proč se v Česku nehlásí</h3>
+
+      <p>
+        Za nízkými čísly nejsou horší sestry ani lajdáčtí lékaři — je za nimi systém, který hlášení nedělá snadným ani bezpečným. První bariéra je kulturní: tam, kde se hlášení chyby může obrátit proti tomu, kdo ji nahlásil, se hlásit nebude. Bezpečnostní věda tomu říká punitivní kultura a její protiklad — <em>just culture</em>, spravedlivá kultura, v níž se rozlišuje systémové selhání od hazardu jednotlivce — je první podmínkou fungujícího systému. Trojnásobný rozdíl v míře hlášení mezi specializovanými centry (1,12) a běžnými akutními nemocnicemi (0,32–0,37) ukazuje, že rozhoduje vedení nemocnice, ne typ medicíny.
+      </p>
+
+      <p>
+        Druhá bariéra je technologická. Významná část českých nemocnic stále předepisuje na papír nebo v systémech bez kontroly dávek a interakcí; elektronická preskripce s podporou rozhodování (CPOE), která v zahraničí prokazatelně snižuje chyby v předepsání, je standardem jen části velkých zařízení. Národní eRecept přitom ukázal, že plošná elektronizace preskripce je v Česku proveditelná — v ambulantní sféře funguje povinně od roku 2018; nemocniční medikační proces ale zůstal mimo.
+      </p>
+
+      <p>
+        Třetí bariéra je personální. Klinický farmaceut — specialista, který kontroluje medikaci pacienta při příjmu, hlídá interakce a rekonciliaci léků při překladech — je v českých nemocnicích stále vzácností soustředěnou do fakultních zařízení; menší okresní nemocnice si úvazek klinického farmaceuta často nemohou dovolit, přestože právě tam leží většina hospitalizací. A konečně: přetížená sestra, která večer rozváží léky pro třicet pacientů, nemá čas ani motivaci vyplňovat hlášení o skoro-chybě, kterou sama zachytila — přitom právě near-miss hlášení jsou v bezpečných systémech nejcennější surovinou učení.
+      </p>
+
+      <h3>Politická páka: od resortního cíle k učícímu se systému</h3>
+
+      <p>
+        Česko nezačíná od nuly. Bezpečnost při používání léčiv je od roku 2010 jedním z Resortních bezpečnostních cílů Ministerstva zdravotnictví (RBC 4 — bezpečnost vysoce rizikových léčiv, mezi něž patří koncentrované elektrolyty, antikoagulancia či inzulin) a vyhláška č. 102/2012 Sb. dělá z interního sledování nežádoucích událostí podmínku hodnocení kvality a bezpečí lůžkové péče. Infrastruktura tedy existuje — SHNU běží, otevřená data se publikují. Co chybí, je tah na branku ve třech konkrétních krocích, z nichž každý má jasného nositele kompetence.
+      </p>
+
+      <p>
+        <strong>Zaprvé, rozšířit klinickou farmacii z výsad fakultních nemocnic do standardu.</strong> Výkony klinického farmaceuta jsou v seznamu výkonů; o jejich úhradě a rozsahu se rozhoduje v dohodovacím řízení a úhradové vyhlášce — tedy přímo v rukou ministerstva a pojišťoven. <strong>Zadruhé, dotáhnout elektronizaci nemocniční medikace.</strong> Zákon o elektronizaci zdravotnictví a evropský prostor zdravotních dat (EHDS) dávají rámec; investice do nemocničních informačních systémů s kontrolou preskripce jsou přesně typ projektu pro evropské fondy, kterým resort disponuje. <strong>Zatřetí, vrátit data do hry.</strong> SHNU dnes slouží hlavně interním reportům pro poskytovatele; veřejný roční rozbor medikačních událostí s poučeními — jak ho dělá anglická NHS — by z pasivní evidence udělal nástroj učení. Tento indikátor bude měřit, jestli se to daří: v učícím se systému by hlášení medikačních událostí měla léta <em>růst</em>, ne stagnovat u osmi set ročně.
+      </p>
+
+      <p>
+        Bezpečnost pacienta se pozná podle toho, jak systém zachází s vlastními chybami. České nemocnice zatím o chybách při podávání léků mlčí — a 0,38 hlášené události na 1 000 hospitalizovaných je především číslo o tom mlčení. Dobrá zpráva je, že jde o jednu z nejlevnějších oblastí zlepšování v celém zdravotnictví: nevyžaduje nové nemocnice ani stovky lékařů, jen vedení, které řekne, že nahlášená chyba je dar, a resort, který to podpoří úhradou, technologií a veřejnými daty.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-medikacni_pochybeni_hlasena.html"><strong>Hlášená pochybení při podávání léků v lůžkové péči</strong></a> — 0,38 na 1 000 hospitalizovaných (2023) · signál neutral — nový indikátor, první ukazatel lékové bezpečnosti v dashboardu</li>
+        <li><a href="indikator-bezpecnost_padu_nemocnice.html"><strong>Pády pacientů v nemocnici</strong></a> — nejhlášenější „ošetřovatelská“ nežádoucí událost s dlouhou tradicí sledování; kontrast ke skoro nehlášené medikaci</li>
+        <li><a href="indikator-dekubity_hospitalizace.html"><strong>Dekubity získané během hospitalizace</strong></a> — 44 % všech hlášení SHNU; druhá kategorie se zavedeným sledováním</li>
+        <li><a href="indikator-infekce_nosokomialni.html"><strong>Prevalence nemocničních infekcí</strong></a> — třetí pilíř bezpečnosti péče v dashboardu</li>
+        <li><a href="indikator-polypragmazie_65plus.html"><strong>Polypragmazie u seniorů 65+</strong></a> — čím víc léků současně, tím větší prostor pro medikační chybu; ambulantní strana téhož rizika</li>
+        <li><a href="indikator-benzodiazepiny_seniori_65plus.html"><strong>Benzodiazepiny u seniorů</strong></a> — riziková preskripce jako systémový problém lékové bezpečnosti</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — hlášené nežádoucí události</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR otevřená data — Přehled hlášených nežádoucích událostí v lůžkové péči (SSS-06-01)</strong> — roční CSV z SHNU: 16 typů událostí × 7 kategorií poskytovatelů, počty událostí, hospitalizovaných pacientů a relativní míry, 2018–2023. <a href="https://data.mzcr.cz/data/distribuce/360/Otevrena-data-SSS-06-01-nezadouci-udalosti-luzkova-pece-2024-01.csv" target="_blank" rel="noopener">data.mzcr.cz — CSV distribuce ↗</a></li>
+          <li><strong>ÚZIS — metodický popis datové sady (NZIP)</strong> — definice všech 16 kategorií nežádoucích událostí včetně R33S01 Medikace / i.v. roztoky. <a href="https://www.nzip.cz/data/nshnu/metodicke-popisy/1754-nezadouci-udalosti-nshnu-zakladni-prehled.pdf" target="_blank" rel="noopener">nzip.cz — metodický popis (PDF) ↗</a></li>
+          <li><strong>Národní portál SHNU (ÚZIS)</strong> — metodiky hlášení, taxonomie WHO, reporty pro poskytovatele. <a href="https://shnu.uzis.cz/" target="_blank" rel="noopener">shnu.uzis.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní kontext — rozsah a náklady medikačních poškození</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD — The Economics of Medication Safety (Health Working Paper č. 147, 2022)</strong> — až 1 z 10 hospitalizací z medikační události, až 1 z 5 hospitalizovaných s lékovým poškozením, náklady &gt; 54 mld USD ročně v OECD. <a href="https://www.oecd.org/en/publications/the-economics-of-medication-safety_9a933261-en.html" target="_blank" rel="noopener">oecd.org — report ↗</a></li>
+          <li><strong>WHO — Medication Without Harm (Global Patient Safety Challenge)</strong> — globální náklady medikačních chyb 42 mld USD ročně; cíl snížit závažná odvratitelná poškození o 50 %. <a href="https://www.who.int/initiatives/medication-without-harm" target="_blank" rel="noopener">who.int — iniciativa ↗</a></li>
+          <li><strong>NHS England — Patient safety data (LFPSE/NRLS)</strong> — přes 2,5 milionu hlášení bezpečnostních událostí ročně; oficiální statistiky a metodika systému. <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/patient-safety-data/" target="_blank" rel="noopener">england.nhs.uk — statistiky ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna česká čísla (829 událostí; 0,38 na 1 000 hospitalizovaných; řada 2018–2023: 0,44 · 0,36 · 0,40 · 0,33 · 0,33 · 0,38; 117 185 nežádoucích událostí celkem, podíl medikace 0,7 %; rozpad podle typu zařízení) redakce replikovala 10. 8. 2026 přímo z CSV distribuce otevřených dat MZ ČR (SSS-06-01). Jmenovatelem jsou hospitalizovaní pacienti v zařízeních zapojených do SHNU, která reportují daný typ události — nikoli všechna lůžková zařízení v ČR. Mezinárodní hodnoty (OECD „až 1 z 10 hospitalizací“, „až 1 z 5 pacientů“, &gt; 54 mld USD; WHO 42 mld USD; NHS &gt; 2,5 mil. hlášení ročně, medikace ~1/10) pocházejí z citovaných primárních publikací a popisují skutečnou incidenci či jiné systémy hlášení — nejsou přímým benchmarkem české hlášené míry.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
