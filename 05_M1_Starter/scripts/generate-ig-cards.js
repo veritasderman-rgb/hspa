@@ -538,6 +538,8 @@ const MANIFEST = {
   'clanek-podil-prakticti-lekari': { kicker: 'Dostupnost · primární péče', signal: 'bad', stat: '16,9', statSuffix: '%', barPct: 17, claim: 'lékařů v Česku jsou praktici — průměr OECD je kolem 23 %.', context: 'Lékařů má Česko dost (4,2 na 1 000). Chybí generalisté.' },
   'clanek-detska-psychiatrie-akutni-luzka': { kicker: 'Duševní zdraví · děti', signal: 'neutral', stat: '4 067', claim: 'akutních psychiatrických hospitalizací dětí do 19 let (2023).', context: 'Téměř dvojnásobek proti roku 2013. Chybí ambulance, ne lůžka.' },
   'clanek-szu-pripominky-nivz': { kicker: 'Reforma veřejného zdraví', signal: 'warn', stat: '11', claim: 'okruhů výhrad poslal SZÚ k reformě, která ho má pohltit.', context: 'Sedm zůstává bez odezvy, jedna se vyvinula přesně opačně.' },
+  'clanek-klistova-encefalitida': { kicker: 'Prevence · nákazy z klíšťat', signal: 'bad', stat: '670', claim: 'hlášených případů klíšťové encefalitidy za rok 2024 — nejvíc v celé EU.', context: '6,1 na 100 tisíc obyvatel proti průměru EU/EEA 0,81. Očkováno je 17 % Čechů.' },
+  'clanek-deti-ambulantni-psychiatrie': { kicker: 'Duševní zdraví · děti', signal: 'neutral', stat: '65 000', claim: 'dětí do 19 let ročně projde psychiatrickou ambulancí (2023).', context: 'Na neakutní vyšetření se čeká typicky 6 měsíců. Psychiatrů pro děti je 157–200.' },
 };
 
 function escapeXml(s) {
