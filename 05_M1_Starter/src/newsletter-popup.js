@@ -86,9 +86,10 @@ export function initNewsletterPopup() {
 
   window.setTimeout(() => {
     if (!shouldShowPopup(readState(), Date.now(), readSession())) return;
-    // Priorita: běží-li „Týden zdraví" popup (aktivní awareness-týden),
-    // newsletter tuto návštěvu přeskočí, aby nevyskočily dva popupy.
-    if (window.__awPopupActive) return;
+    // Priorita: běží-li „Týden zdraví" popup (aktivní awareness-týden) nebo
+    // sezónní vedra popup, newsletter tuto návštěvu přeskočí, aby nevyskočily
+    // dva popupy.
+    if (window.__awPopupActive || window.__vedraPopupActive) return;
     // Uživatel právě u patičky vidí stejný formulář inline — popup by ho jen
     // překryl. Nabídku už tedy zaregistroval, tuto stránku přeskočíme.
     if (footerNewsletterVisible()) return;

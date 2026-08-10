@@ -17,10 +17,13 @@ test('awareness-weeks.json prochází validátorem', () => {
   assert.equal(validateAwarenessWeeks(), true);
 });
 
-test('data: pilot Světový týden kojení je ready a sedí na 1.–7. 8.', () => {
+test('data: pilot Světový týden kojení existuje, sedí na 1.–7. 8. a prošel review', () => {
   const wbw = reg.weeks.find(w => w.id === 'svetovy-tyden-kojeni-2026');
   assert.ok(wbw, 'pilot chybí');
-  assert.equal(wbw.status, 'ready');
+  // Status je živý lifecycle (awareness-rotate.js): před týdnem 'ready',
+  // po doběhnutí ho cron přepne na 'archived'. Test nesmí být časovaná
+  // bomba — hlídá jen, že pilot nezůstal draftem a termín se nerozjel.
+  assert.ok(['ready', 'archived'].includes(wbw.status), `nečekaný status ${wbw.status}`);
   assert.equal(wbw.start, '2026-08-01');
   assert.equal(wbw.end, '2026-08-07');
 });
@@ -54,8 +57,14 @@ test('helper: upcomingWeeks řadí budoucí dle startu, archived vynechává', (
 });
 
 test('helper: resolveWeek — ?id override, jinak aktivní, jinak nejbližší příští', () => {
+  // Fixture pro „aktivní" větev — živý registr statusy v čase mění
+  // (ready → archived po doběhnutí), test na něm nesmí stát.
+  const fixture = [
+    { id: 'akt', status: 'ready', start: '2026-08-01', end: '2026-08-07' },
+    { id: 'pak', status: 'ready', start: '2026-10-05', end: '2026-10-11' },
+  ];
+  assert.equal(resolveWeek(fixture, '2026-08-03').id, 'akt', 'aktivní');
   const weeks = reg.weeks;
-  assert.equal(resolveWeek(weeks, '2026-08-03').id, 'svetovy-tyden-kojeni-2026', 'aktivní');
   assert.equal(resolveWeek(weeks, '2026-06-01', 'svetovy-antibioticky-tyden-2026').id, 'svetovy-antibioticky-tyden-2026', 'override');
   // mimo aktivní → nejbližší příští (nejdřívější start po dni)
   const r = resolveWeek(weeks, '2026-06-01');
