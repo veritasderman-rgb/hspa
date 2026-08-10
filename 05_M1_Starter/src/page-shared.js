@@ -4,6 +4,7 @@ import { getSiteStats, applyDataStats } from './site-stats.js';
 import { initSiteSearch } from './search.js';
 import { initNewsletterPopup } from './newsletter-popup.js';
 import { initAwarenessPopup } from './awareness-popup.js';
+import { initVedraPopup } from './vedra-popup.js';
 import { submitNewsletterSignup } from './newsletter-signup.js';
 
 /* ── Dark mode: brzká inicializace tématu ───────────────────────────────
@@ -519,8 +520,11 @@ export function renderBrandMark() {
 }
 
 export function renderModuleNav(activeId) {
-  initAwarenessPopup();   // Týden zdraví má prioritu; nastaví __awPopupActive
-  initNewsletterPopup();  // spustí se jen mimo aktivní awareness-týden
+  // Priorita popupů: Týden zdraví > vedra (sezónní servis) > newsletter.
+  // Awareness nastaví __awPopupActive, vedra __vedraPopupActive; newsletter
+  // (odložený ~10 s) mlčí, když je aktivní kterýkoli z nich.
+  initAwarenessPopup().then((tookOver) => { if (!tookOver) initVedraPopup(); });
+  initNewsletterPopup();
   renderBrandMark();
   injectOrgSchema();
   const path = window.location.pathname;
