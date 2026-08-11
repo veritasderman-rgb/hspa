@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-11
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-08-11
+    creation_phase: discovery+article-write
+    primary_sources_count: 3
+    visual_elements_count: 6
+    notes: "ARTICLE-WRITE z discovery 11. 8. 2026: Věstník MZ ČR — NIKEZ, částka 1/2026, vydán 10. 8. 2026 (první věstník NIKEZ s operativními doporučeními). PDF primárního zdroje (mzd.gov.cz, 2,67 MB) staženo a plnotextově vytěženo 11. 8. 2026 — všechna čísla v článku replikována z extrakce (8 dokumentů; screening sluchu: 4 OD, cut-off tabulka senz./spec. 92,0/89,0 audiometrie, 86,1/67,3 šepot, 86,1/60,1 HHIA-CZ, 91,7/68,6 kombinace, >2/3 osob 60+ se sluchovým postižením, vyhl. 70/2012 Sb. á 2 roky, GRADE úrovně; CMP/TIA: JIP 24–48 h, po rekanalizaci ≥48 h, mRS 4–5 výjimka; FDG PET ca ledviny: 6 OD, ~120 pacientů/rok, ~0,4 % PET produkce, primostaging < 1/2 indikací; ortopedie: spektrum + rizikové faktory; úhradové adaptace: 6+1 typů výstupu, přílohy FLS/anémie/bpMRI/PSA 50–69 á 2–4 roky/hipoterapie). Interní data z data/indicators.json: mortalita_inhosp_cmp 9,9 % (2024, OECD 7,7/EU 8,5), hospitalizace_acsc 592/100k (2022), screening_prostata 53,3 % (2024). Status: review-pending — čeká na ruční schválení redakce. published:false, scheduled_for 2026-08-12 (viz routing-2026-08-11.md). Fáze 5 (nezávislý audit, 2026-08-11): všech ~40 hodnot re-verifikováno proti extrakci PDF; 7 audit-fix nálezů — (1) titulek/deck/OG/lead 'první věstník' upřesněno na 'první klinický věstník' (věstníky NIKEZ 1–2/2025 existují, jsou metodické — konzistence s clanek-nikez-jak-funguje-2026), (2) odstraněno neověřené 'levnější' u bpMRI (věstník cenu netvrdí), (3) odstraněno historické tvrzení 'od 90. let' bez zdroje, (4) změkčeno 'první nové plošné preventivní vyšetření od…' (neověřitelný primát), (5) NICE/USPSTF věta přeformulována na doložitelnou vazbu (NG128 a Feltner 2021 věstník cituje), (6) 63→64 stran (pdfinfo), (7) nikez.mzcr.cz bez hyperlinku — TLS handshake z prostředí redakce selhává (exit 35), adresy guideline 128/496/338/244 ponechány jako textová citace z věstníku s poznámkou. Odkazy ověřeny HTTP 200: mzd.gov.cz landing + PDF, e-sbirka.cz/sb/2012/70; interní cíle (3 indikátory, 4 články) existují. AV počítadla bez anti-patternu (data-value numerické: 8, 4, 92, 0.4 s prefix ~; žádný range/datum). 10. 8. 2026 = pondělí (ověřeno)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>První klinický věstník NIKEZ: vyšetření sluchu od padesáti má nově platit pojišťovna — a seznam vyšetření, která se dělat nemají · HSPA Monitor</title>
+<meta name="description" content="Národní institut kvality a excelence zdravotnictví vydal 10. srpna 2026 věstník, kterým poprvé přechází od metodik ke konkrétním klinickým doporučením. Doporučuje zavést screening sluchu pro všechny od 50 let při preventivních prohlídkách a hradit ho z pojištění, standardizuje pobyt na iktové JIP na 24–48 hodin a u karcinomu ledviny říká, kdy FDG PET nedělat. Poprvé také popisuje, jak se z odborného doporučení má stát úhradová změna.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="První klinický věstník NIKEZ: vyšetření sluchu od padesáti má nově platit pojišťovna — a seznam vyšetření, která se dělat nemají">
+<meta property="og:description" content="Osm dokumentů věstníku NIKEZ 1/2026 (10. 8. 2026): screening sluchu 50+ při preventivních prohlídkách s úhradou z pojištění, iktová JIP 24–48 hodin, de-implementace FDG PET u karcinomu ledviny a mechanismus, jak se z doporučení stane úhradová změna.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-12">
+<meta property="article:section" content="Kvalita péče">
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Kvalita péče</span>
+        <span class="article-tag article-tag-muted">NIKEZ · operativní doporučení · screening sluchu · úhradové mechanismy</span>
+      </div>
+      <h1 class="article-title">První klinický věstník NIKEZ: vyšetření sluchu od padesáti má nově platit pojišťovna — a seznam vyšetření, která se dělat nemají</h1>
+      <p class="article-deck">
+        Národní institut kvality a excelence zdravotnictví vydal 10. srpna 2026 věstník, kterým poprvé přechází od metodik ke konkrétním klinickým doporučením s mezinárodní klasifikací GRADE — <strong>8 dokumentů</strong> v částce 1/2026. Nejviditelnější novinka: panel NIKEZ doporučuje zavést <strong>screening sluchu pro všechny od 50 let</strong> v rámci preventivních prohlídek u praktického lékaře a hradit ho z veřejného zdravotního pojištění. Věstník také standardizuje pobyt na iktové JIP po mozkové příhodě na 24–48 hodin, u karcinomu ledviny vyjmenovává situace, kdy se PET vyšetření dělat <em>nemá</em> — a poprvé popisuje úřední cestu, kterou se z odborného doporučení stane změna v sazebníku výkonů.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">12. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Když jsme v červnu <a href="clanek-nikez-jak-funguje-2026.html">popisovali, kdo je NIKEZ a jak funguje</a>, byla to instituce metodik: 41 klinických doporučených postupů, datový trojúhelník s ÚZIS a Kanceláří zdravotního pojištění, první národní indikátor kvality. Chyběl produkt, který by z metodického centra udělal aktéra s vlivem na každodenní praxi — a na to, co pojišťovny platí. Ten produkt vyšel v pondělí 10. srpna: Věstník NIKEZ, částka 1/2026 — po dvou metodických částkách z roku 2025 první, jejímž obsahem jsou konkrétní doporučení pro praxi. Není to sbírka přání odborných společností. Každé doporučení v něm nese formální klasifikaci jistoty důkazů a síly doporučení podle mezinárodní metodiky GRADE, odkaz do centrální evidence NIKEZ — a u témat s úhradovým dopadem i explicitní požadavek, aby na doporučení navázala změna úhrad.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avNikezHeroH">
+        <figcaption class="av-figure-h" id="avNikezHeroH">Věstník NIKEZ, částka 1/2026 v číslech (vydáno 10. 8. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="8">8</span>
+            <span class="av-counter-label">dokumentů: 1 návrh úhradových adaptací + 7 operativních doporučení a baterií</span>
+            <span class="av-counter-foot">neurologie · ORL · psychiatrie · onkologie · ortopedie</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="4">4</span>
+            <span class="av-counter-label">silná doporučení ke screeningu sluchu dospělých od 50 let</span>
+            <span class="av-counter-foot">včetně úhrady z veřejného zdravotního pojištění</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="92" data-decimals="0" data-suffix=" %">92 %</span>
+            <span class="av-counter-label">senzitivita screeningové tónové audiometrie — nejpřesnější z doporučených metod</span>
+            <span class="av-counter-foot">specificita 89 %, dle cut-off tabulky věstníku</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0.4" data-decimals="1" data-prefix="~" data-suffix=" %">~0,4 %</span>
+            <span class="av-counter-label">podíl karcinomu ledviny na všech PET vyšetřeních v ČR — a přesto dostal 6 doporučení, kdy PET nedělat</span>
+            <span class="av-counter-foot">cca 120 pacientů ročně</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR — NIKEZ, částka 1/2026, vydáno 10. 8. 2026 (mzd.gov.cz/vestniky). PDF staženo a hodnoty replikovány 11. 8. 2026.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — co věstník je a co není">
+        <p class="article-callout-h">Caveat — co věstník je a co není</p>
+        <p><strong>1. Doporučení ≠ nárok.</strong> Operativní doporučení NIKEZ je odborný standard, ne právní předpis. Screening sluchu se nestane součástí preventivních prohlídek dnem vydání věstníku — vyžaduje navazující proces: registrační list výkonu, jednání se zdravotními pojišťovnami a promítnutí do úhradových předpisů. Věstník tento proces sám popisuje, ale nespouští automaticky.</p>
+        <p><strong>2. Síla doporučení a jistota důkazů jsou dvě různé věci.</strong> Panel NIKEZ vydal k úhradě screeningu sluchu <em>silné</em> doporučení při <em>velmi nízké</em> jistotě důkazů (GRADE ⊕⊖⊖⊖ ↑↑) — a ve věstníku výslovně vysvětluje proč: přímé studie financování screeningu v preventivních prohlídkách chybí, ale bez úhrady by screening nebyl proveditelný a rizika nefinancování (pozdní záchyt) převažují. Je to legitimní postup dle GRADE, čtenář by ale měl vědět, že ekonomický dopad opřený o tvrdá data zatím není.</p>
+        <p><strong>3. Čísla přesnosti metod pocházejí z cut-off tabulky věstníku.</strong> Věstník je uvádí jako preferované nastavení prahů dle ORL panelu; senzitivita a specificita se při jiném nastavení prahů mění.</p>
+      </aside>
+
+      <h3>Od metodik k medicíně: proč je částka 1/2026 milník</h3>
+
+      <p>
+        Věstníky NIKEZ existovaly už v roce 2025 — dvě částky, obě metodické (jak se doporučené postupy tvoří a aktualizují). Částka 1/2026 je první, která metodiku použila: sedm klinických dokumentů pokrývá neurologii, ORL, psychiatrii, onkologickou diagnostiku a ortopedii, osmý dokument popisuje, jak z doporučení udělat úhradovou změnu. Každý dokument má formát „stručného shrnutí pro rychlé rozhodování" s odkazem na plnou verzi v centrální evidenci na nikez.mzcr.cz a s tabulkami GRADE: čtyři stupně jistoty důkazů (od ⊕⊕⊕⊕ po ⊕⊖⊖⊖) a čtyři síly doporučení (od „doporučeno udělat" ↑↑ po „doporučeno nedělat" ↓↓). Je to jazyk, kterým jsou psány i zahraniční podklady, z nichž jednotlivá doporučení věstníku vycházejí — od guidelinu britského NICE u iktové péče po systematické přehledy pro americkou USPSTF u screeningu sluchu.
+      </p>
+
+      <h3>Screening sluchu od 50 let: nový kandidát do preventivních prohlídek</h3>
+
+      <p>
+        Nejdále jde baterie čtyř operativních doporučení ke sluchu. Výchozí fakt z věstníku: určitou formou sluchového postižení trpí <strong>více než dvě třetiny osob starších 60 let</strong> — a neřešená ztráta sluchu podle citovaných přehledů podporuje sociální stažení, snižuje pracovní výkon a je spojena s horším kognitivním výkonem a vyšším rizikem demence. Panel NIKEZ proto doporučuje (GRADE ⊕⊕⊕⊖, silné doporučení): <strong>vyšetřovat sluch všem od 50 let při preventivních prohlídkách u praktického lékaře, ve dvouletém intervalu</strong> podle vyhlášky č. 70/2012 Sb., o preventivních prohlídkách. Pozitivní záchyt má putovat k ORL specialistovi na tónovou audiometrii; potvrzená porucha vede k dispenzarizaci a případné korekci sluchu, negativní nález zpět do běžných prohlídek.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSluchMetodyH">
+        <figcaption class="av-figure-h" id="avSluchMetodyH">Čtyři doporučené screeningové metody a jejich přesnost (preferované nastavení cut-off dle ORL panelu)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Metoda</th>
+                <th scope="col">Cut-off</th>
+                <th scope="col">Senzitivita</th>
+                <th scope="col">Specificita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Screeningová tónová audiometrie</th>
+                <td>≥ 2 frekvence</td>
+                <td><strong>92,0 %</strong></td>
+                <td><strong>89,0 %</strong></td>
+              </tr>
+              <tr>
+                <th scope="row">Kombinace dotazníku HHIA-CZ a šepotu</th>
+                <td>HHIA-CZ ≥ 14 a ≤ 4 slyšená slova</td>
+                <td>91,7 %</td>
+                <td>68,6 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Test rozpoznávání šepotu</th>
+                <td>≤ 5 slyšených slov</td>
+                <td>86,1 %</td>
+                <td>67,3 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Standardizovaný dotazník HHIA-CZ</th>
+                <td>≥ 8 bodů</td>
+                <td>86,1 %</td>
+                <td>60,1 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník NIKEZ 1/2026, str. 25–26 — baterie 4 operativních doporučení „Screening sluchu dospělých od 50 let věku" (doporučení 2, GRADE ⊕⊕⊖⊖ ↑↑). Evidence: AAO-HNS Clinical Practice Guideline Age-Related Hearing Loss (2024), systematické review pro USPSTF (Feltner et al., 2021). Plná verze: nikez.mzcr.cz, centrální evidence, guideline 128.</p>
+      </figure>
+
+      <p>
+        Zbývající dvě doporučení baterie určují, kdo a za čí peníze. Vyšetření má provádět <strong>vyškolený zdravotnický pracovník</strong>, ne samovyšetření pacientem (⊕⊕⊕⊕ na základě nepřímého důkazu, silné doporučení) — a screening u praktika i navazující audiometrie u ORL mají být <strong>plně hrazeny z veřejného zdravotního pojištění</strong>, cestou připravovaného registračního listu výkonu (obojí ⊕⊖⊖⊖ na základě nepřímého důkazu, přesto silné doporučení — viz caveat výše). Pokud se to prosadí, zařadí se vyšetření sluchu po bok organizovaných populačních screeningů, jejichž rodinu Česko naposledy rozšířilo <a href="clanek-prostata-screening-pilot.html">pilotem screeningu karcinomu prostaty</a> — a příznačně: přesně ten věstník doporučuje v příloze úhradového dokumentu i PSA screening mužů 50–69 let každé 2 až 4 roky (⊕⊕⊕⊕ ↑↑).
+      </p>
+
+      <h3>Mozková příhoda: 24 až 48 hodin na iktové jednotce, ne na standardním lůžku</h3>
+
+      <p>
+        Druhý dokument s přímým dopadem na nemocnice standardizuje, kde má ležet pacient po akutní ischemické cévní mozkové příhodě nebo vysoce rizikové tranzitorní ischemické atace. Panel NIKEZ doporučuje (⊕⊕⊕⊖ ↑↑) <strong>monitoraci na jednotce intenzivní péče pro pacienty s iktem po dobu 24–48 hodin</strong> u konzervativně léčených; u pacientů po rekanalizační léčbě minimálně 48 hodin. Důvod vzniku doporučení je pozoruhodně upřímný: věstník uvádí „výraznou heterogenitu v poskytování intenzivní péče mezi centry", která deformuje výpočet nákladů na hospitalizační případy a znemožňuje férové srovnávání poskytovatelů. Standard tedy není jen klinický — je to podmínka, aby se kvalita iktové péče dala vůbec měřit a spravedlivě platit. Doporučení má i druhou půlku: pacienti s těžkým premorbidním postižením (mRS 4–5) či pokročilou demencí, u nichž je namístě paliativní přístup, patří na standardní neurologické lůžko — intenzivní monitorace u nich není automatická povinnost.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="9.9" data-decimals="1" data-suffix=" %">9,9 %</span>
+          <span class="av-counter-label">nemocniční úmrtnost po cévní mozkové příhodě v ČR (2024) — proti 7,7 % v OECD a 8,5 % v EU</span>
+          <span class="av-counter-foot">ÚZIS · NRH, datový kontrakt HSPA Monitoru; kontext, proč se standardizace iktové péče řeší</span>
+        </div>
+      </aside>
+
+      <h3>Kdy vyšetření nedělat: de-implementace u karcinomu ledviny</h3>
+
+      <p>
+        Šest operativních doporučení k FDG PET u karcinomu ledviny je první českou ukázkou žánru, kterému se ve světě říká de-implementace: rušení postupů, které nepřinášejí hodnotu. Věstník projde šest klinických situací a v pěti z nich PET s fluorodeoxyglukózou rutinně <em>nedoporučuje</em> — v primární diagnostice (⊕⊕⊕⊖ ↓?), lokálním stagingu (⊕⊕⊕⊕ ↓?), stagingu metastáz, kontrole efektu terapie i sledování asymptomatických pacientů; jedinou situací, kde PET „navrhuje provádět", je detekce rekurence. Objemově jde o okraj systému — věstník kvantifikuje zhruba <strong>120 pacientů ročně, asi 0,4 % celkové PET produkce v ČR</strong>, přičemž primostaging tvoří méně než polovinu indikací. Význam je ale v precedentu: doporučení „nedělat" s oporou v GRADE je přesně ten typ dokumentu, který v systému platícím za objem výkonů dosud neměl kdo vydávat.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPetH">
+        <figcaption class="av-figure-h" id="avPetH">FDG PET u karcinomu ledviny — co panel NIKEZ v jednotlivých situacích říká</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Klinická situace</th>
+                <th scope="col">Verdikt panelu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Primární diagnóza</th>
+                <td>navrženo neprovádět</td>
+              </tr>
+              <tr>
+                <th scope="row">Lokální staging</th>
+                <td>navrženo neprovádět</td>
+              </tr>
+              <tr>
+                <th scope="row">Staging metastáz</th>
+                <td>navrženo neprovádět (vyjma specifických situací)</td>
+              </tr>
+              <tr>
+                <th scope="row">Kontrola efektu terapie</th>
+                <td>navrženo neprovádět (po ablaci, nefrektomii a imunoterapii, vyjma specifických situací)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Detekce rekurence (lokální nebo systémové)</th>
+                <td><strong>navrženo provádět</strong></td>
+              </tr>
+              <tr>
+                <th scope="row">Sledování asymptomatických pacientů</th>
+                <td>navrženo neprovádět</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník NIKEZ 1/2026, str. 48 — přehledová tabulka 6 operativních doporučení „FDG PET v diagnostice a sledování léčby karcinomu ledviny". Evidence mj. guideline Evropské urologické asociace (2025) a německý S3-Leitlinie (2024). Plná verze: nikez.mzcr.cz, centrální evidence, guideline 338.</p>
+      </figure>
+
+      <h3>Od doporučení k platbě: poprvé popsaná cesta</h3>
+
+      <p>
+        Nejméně nápadný, ale systémově nejdůležitější je první dokument věstníku — návrh adaptací úhradových mechanismů. Odpovídá na otázku, na které dosud česká kvalita péče pravidelně uvázla: co se má stát, když odborné doporučení vyžaduje, aby něco nového platila pojišťovna. Dokument klasifikuje šest typů výstupů (nový výkon, nový zdravotnický prostředek, změna indikačních omezení, změna organizace péče, změna klasifikace DRG/MKN, změna úhradového mechanismu — plus jejich kombinace) a rozepisuje role: odborné společnosti navrhují, ÚZIS a Národní screeningové centrum dodávají data, pojišťovny a ministerstvo posuzují a rozhodují.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Jak se z operativního doporučení stane úhradová změna (dle Věstníku NIKEZ 1/2026, dokument 1)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">1. Operativní doporučení s GRADE</h4>
+            <p class="av-flow-desc">Panel NIKEZ s odbornou společností formuluje doporučení a jistotu důkazů.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">2. Klasifikace výstupu</h4>
+            <p class="av-flow-desc">Nový výkon? Změna indikací, organizace péče, DRG/MKN, úhradového mechanismu?</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">3. Podklady a posouzení</h4>
+            <p class="av-flow-desc">Registrační list výkonu, data ÚZIS/NSC, jednání s pojišťovnami a MZ.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">4. Implementace a měření</h4>
+            <p class="av-flow-desc">Promítnutí do sazebníku a úhrad; indikátory kvality sledují, zda se praxe mění.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník NIKEZ 1/2026, str. 3–18 — „Návrh adaptací úhradových mechanismů" (verze 1.3, 30. 4. 2026; autoři Klugar, Klugarová, Pavlíková, Troch, Pavlík, Černý). Schematické zjednodušení redakce podle kapitol 2–3 dokumentu.</p>
+      </figure>
+
+      <p>
+        Že to není teorie, ukazují přílohy dokumentu — pět vzorových posudků. Nejsilnější doporučení dostal <strong>celopopulační program FLS</strong> (fracture liaison service: koordinátor, který po osteoporotické zlomenině dovede pacienta k vyšetření kostní denzity a léčbě) — GRADE ⊕⊕⊕⊕, silné doporučení, s indikátorem kvality „zachytit aspoň 50 % pacientů po zlomenině". Vedle něj stojí včasná detekce a léčba předoperační anémie u operací s krevní ztrátou nad 500 ml, přednostní použití biparametrické MRI u podezření na karcinom prostaty a už zmíněný PSA screening. Nejslabší kus přehlídky je hipoterapie u dětí (⊕⊖⊖⊖, jen podmíněný návrh) — i to je ale informace: úhradový posudek s GRADE dává rozhodovateli najevo, jak pevnou půdu pod nohama má.
+      </p>
+
+      <h3>Psychiatrie a jednodenní ortopedie: zbytek částky</h3>
+
+      <p>
+        Tři dokumenty se věnují agresivnímu chování na akutních psychiatrických lůžkách: doporučují standardizované hodnocení rizika při příjmu, plány prevence a zvládání incidentů podporované vedením nemocnic, evidenci incidentů napojenou na Národní systém hlášení nežádoucích událostí a standardizovaný vzdělávací program včetně deeskalačních technik s pravidelným vyhodnocováním dopadu. Poslední baterie tří doporučení vymezuje ortopedické výkony vhodné pro <strong>jednodenní medicínu</strong> — operativa ruky a nohy, artroskopie včetně základních rekonstrukcí, měkkotkáňové výkony na šlachách, povrchové biopsie a z páteřní chirurgie lumbální mikrodiskektomie a vertebroplastiky (⊕⊖⊖⊖ ↑?) — a rizikové faktory, které vyžadují individuální posouzení: vyšší ASA skóre, spánková apnoe, věk nad 80 let, obezita, kouření. U obou témat platí, že jde o podmíněné návrhy s nižší jistotou důkazů; jejich váha je organizační — dávají nemocnicím a pojišťovnám společný referenční bod.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Pro čtenáře dashboardu jsou na věstníku podstatné tři věci. <strong>Za prvé, vznikl mechanismus.</strong> Úhradové změny dosud neměly standardizovaný odborný podklad s explicitně vyjádřenou jistotou důkazů; teď existuje formát, kde doporučení takovou klasifikaci nese — a rovnou říká, jaký typ úhradové změny vyžaduje. <strong>Za druhé, sledovat implementaci, ne vydání.</strong> Testem věstníku nebude publikace, ale to, zda se screening sluchu objeví v registračních listech a úhradových předpisech a zda iktová centra sjednotí vykazování JIP — obojí budeme sledovat v linii <a href="clanek-data-leci-cesko-2026.html">Kvalita péče</a>, kde už dnes Česko měří <a href="indikator-mortalita_inhosp_cmp.html">nemocniční úmrtnost po CMP</a> (9,9 % proti 7,7 % OECD) nebo <a href="indikator-hospitalizace_acsc.html">odvratitelné hospitalizace</a> (592 na 100 000 obyvatel proti 473 v OECD). <strong>Za třetí, de-implementace je nový žánr.</strong> Doporučení „nedělat" u FDG PET je malé objemem, ale otevírá dveře: systém, který chce platit za hodnotu, musí umět říct nejen co přidat, ale i co vypustit. První věstník NIKEZ umí obojí — teď se ukáže, jestli to umí i systém kolem něj.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-mortalita_inhosp_cmp.html"><strong>Nemocniční úmrtnost po cévní mozkové příhodě</strong></a> — 9,9 % (2024; ÚZIS · NRH), OECD 7,7 % / EU 8,5 % — kontext doporučení o iktové JIP</li>
+        <li><a href="indikator-hospitalizace_acsc.html"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 / 100 000 obyvatel (2022; ÚZIS · NRH), OECD 473 / EU 510 — kontext měření kvality péče</li>
+        <li><a href="indikator-screening_prostata.html"><strong>Screening karcinomu prostaty — pokrytí PSA testováním (muži 50–69)</strong></a> — 53,3 % (2024; Eur Urol Open Sci 2026) — PSA screening 50–69 á 2–4 roky doporučuje i příloha V úhradového dokumentu věstníku</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroj — Věstník NIKEZ</h5>
+        <ul class="article-sources-list">
+          <li><strong>Věstník MZ ČR — NIKEZ, částka 1/2026</strong> (vydáno 10. 8. 2026; 8 dokumentů, 64 stran). Landing page: <a href="https://mzd.gov.cz/vestnik/vestnik-nikez-1-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · PDF: <a href="https://mzd.gov.cz/wp-content/uploads/2026/08/Vestnik_NIKEZ_01-2026.pdf" target="_blank" rel="noopener">mzd.gov.cz — PDF, 2,7 MB ↗</a>. Staženo a plnotextově vytěženo 11. 8. 2026.</li>
+          <li><strong>Centrální evidence NIKEZ</strong> — plné verze operativních doporučení na nikez.mzcr.cz: screening sluchu (guideline 128), CMP/TIA a JIP (guideline 496), FDG PET u karcinomu ledviny (guideline 338), jednodenní ortopedie (guideline 244). Adresy uvádí věstník; dostupnost webu centrální evidence se 11. 8. 2026 nepodařilo z prostředí redakce ověřit, proto bez přímého odkazu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativní rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Vyhláška č. 70/2012 Sb., o preventivních prohlídkách</strong> — rámec, do kterého panel NIKEZ navrhuje screening sluchu zařadit (obsah a časové rozmezí prohlídek u praktického lékaře). <a href="https://www.e-sbirka.cz/sb/2012/70" target="_blank" rel="noopener">e-sbirka.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Interní data dashboardu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Datový kontrakt HSPA Monitoru</strong> — mortalita_inhosp_cmp 9,9 % (2024), hospitalizace_acsc 592/100k (2022), screening_prostata 53,3 % (2024); hodnoty a zdroje viz karty indikátorů odkazované v databoxu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-nikez-jak-funguje-2026</strong> — kdo je NIKEZ, jak je organizovaný a co stihl do léta 2026. <a href="clanek-nikez-jak-funguje-2026.html">clanek-nikez-jak-funguje-2026.html</a></li>
+          <li><strong>clanek-data-leci-cesko-2026</strong> — konference Data léčí Česko a datový trojúhelník NIKEZ + ÚZIS + KZP. <a href="clanek-data-leci-cesko-2026.html">clanek-data-leci-cesko-2026.html</a></li>
+          <li><strong>clanek-prostata-screening-pilot</strong> — první výsledky pilotu screeningu prostaty, na který příloha věstníku navazuje. <a href="clanek-prostata-screening-pilot.html">clanek-prostata-screening-pilot.html</a></li>
+          <li><strong>clanek-pooperacni-sepse-2026</strong> — první národní indikátor kvality s časovou osou. <a href="clanek-pooperacni-sepse-2026.html">clanek-pooperacni-sepse-2026.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla a formulace doporučení v článku pocházejí z jediného primárního zdroje — Věstníku MZ ČR (NIKEZ) částka 1/2026, jehož PDF bylo 11. 8. 2026 staženo z mzd.gov.cz a plnotextově vytěženo; hodnoty senzitivity/specificity jsou z cut-off tabulky věstníku (str. 25–26) a platí pro preferované nastavení prahů. Kontextové hodnoty indikátorů (úmrtnost po CMP, odvratitelné hospitalizace, screening prostaty) pocházejí z datového kontraktu HSPA Monitoru a jejich primární zdroje jsou uvedeny na kartách indikátorů. Operativní doporučení NIKEZ nejsou právní předpis — úhradové změny z nich vzniknou až navazujícím procesem (registrační listy, jednání s pojišťovnami, úhradové předpisy), jehož výsledek není předem daný. Tvrzení o vlivu neřešené ztráty sluchu na kognici a riziko demence je převzato z úvodu věstníku, který se opírá o citované mezinárodní přehledy (AAO-HNS 2024, USPSTF 2021); dashboard je samostatně neověřoval.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
