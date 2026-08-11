@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-11
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-11
+    creation_phase: scheduled-indicator-routine
+    primary_sources_count: 5
+    visual_elements_count: 4
+    notes: "Nový HSPA indikátor porodni_asistentky_per_100k z Eurostat hlth_rs_prs2 (med_spec=MWS, wstatus=PRACT). Všechna čísla replikována 11. 8. 2026 přímo z API Eurostatu: CZ 2024 = 42,84 na 100 000 (4 672 praktikujících osob); řada 2014–2024 (40,76 · 40,72 · 36,95 · 37,43 · 38,66 · 38,84 · 40,10 · 41,21 · 42,03 · 42,08 · 42,84); absolutně 4 290 (2014) · 3 904 (2016) · 4 110 (2018) · 4 248 (2020) · 4 486 (2022) · 4 672 (2024); DE 33,53 · AT 31,31 · PL 78,85 (2024); nevážený průměr 33 reportujících zemí (poslední rok 2022–2025) = 41,1; extrémy IS 83,05 · IE 80,27 · SE 79,08 · RO 14,62 · PT 17,23 · SI 19,70; SK nereportuje. ÚZIS Personální kapacity a odměňování 2023: porodní asistentka § 6 = 3 833 úvazků (Tab. 11, replikováno z PDF). ČSÚ pohyb obyvatelstva 2024: 84 311 živě narozených (historické minimum) → 4 672/84,3 tis. ≈ 55 na 1 000 živě narozených. MZ ČR (tisková zpráva, říjen 2025): od 1. 1. 2026 celostátní nárok na tři hrazené návštěvy PA v šestinedělí pro všechny pojištěnky (úprava úhradových podmínek porodních výkonů), žádanka při propuštění z porodnice, povinnost pojišťoven zajistit síť, dosud službu využívala ~2 % žen. VZP (aktualita ke konci roku 2025): implementace — zapojeno 64 z 84 porodnic, ~400 nasmlouvaných gynekologických ambulancí, vyčleněno až 80 mil. Kč. Status: draft — čeká na ruční schválení redakce, published:false."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Porodních asistentek má Česko víc než Německo i Rakousko. K ženám v šestinedělí se přesto dostaly dvě ze sta · HSPA Monitor</title>
+<meta name="description" content="Česko má 42,8 praktikujících porodních asistentek na 100 000 obyvatel — nad evropským průměrem a víc než Německo či Rakousko. Skoro všechny ale pracují v porodnicích: hrazenou návštěvu v šestinedělí doma využívala jen 2 % žen. Od ledna 2026 má nárok na tři návštěvy každá. Nový HSPA indikátor otevírá téma porodní asistence.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Porodních asistentek má Česko víc než Německo i Rakousko. K ženám v šestinedělí se přesto dostaly dvě ze sta">
+<meta property="og:description" content="42,8 praktikujících porodních asistentek na 100 000 obyvatel je mírně nad evropským průměrem. Kapacita ale pracuje téměř výhradně v porodnicích — komunitní péči v šestinedělí využívala 2 % žen. Od 1. 1. 2026 platí nárok na tři hrazené návštěvy doma.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Perinatální péče">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Perinatální péče</span>
+        <span class="article-tag article-tag-muted">Porodní asistence · šestinedělí · komunitní péče · pracovní síla</span>
+      </div>
+      <h1 class="article-title">Porodních asistentek má Česko víc než Německo i Rakousko. K ženám v šestinedělí se přesto dostaly dvě ze sta</h1>
+      <p class="article-deck">
+        Česko má <strong>42,8 praktikujících porodních asistentek na 100 000 obyvatel</strong> (2024) — mírně nad evropským průměrem a víc než Německo i Rakousko. Jenže téměř všechny pracují v porodnicích. Jakmile žena odejde domů, systém ji do letoška pouštěl z dohledu: hrazenou návštěvu porodní asistentky v šestinedělí využívala <strong>zhruba 2 % žen</strong>. Od 1. ledna 2026 má poprvé každá žena nárok na tři hrazené návštěvy doma. Nový HSPA indikátor z dat Eurostatu a ÚZIS otevírá otázku, jestli nadprůměrná kapacita profese začne pracovat i mimo porodnici.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Šestinedělí je z pohledu zdravotního systému zvláštní slepá skvrna. V porodnici je rodička obklopena personálem nepřetržitě; čtvrtý den po propuštění je doma sama s novorozencem, hojící se jizvou, rozjíždějící se laktací — a nejbližším kontaktem se systémem bývá až objednaná poradna. Přitom profese, která je přesně pro tuto situaci vyškolená, v Česku nechybí. Porodních asistentek je na počet obyvatel víc než v Německu nebo Rakousku a jejich počet deset let roste. Nový indikátor HSPA Monitoru měří kapacitu této profese — a příběh, který za číslem stojí, je příběh o tom, jak systém dokáže mít lidi, a nevyužít je.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaHeroH">
+        <figcaption class="av-figure-h" id="avPaHeroH">Porodní asistence v číslech (Eurostat 2024, VZP 2025/2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="42.8" data-decimals="1" data-suffix="">42,8</span>
+            <span class="av-counter-label">praktikujících porodních asistentek na 100 000 obyvatel (2024)</span>
+            <span class="av-counter-foot">evropský průměr 41,1 · Německo 33,5 · Rakousko 31,3</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="4672" data-decimals="0" data-suffix="">4 672</span>
+            <span class="av-counter-label">praktikujících porodních asistentek celkem</span>
+            <span class="av-counter-foot">nejvíc v řadě 2014–2024; na 1 000 živě narozených ≈ 55</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="2" data-decimals="0" data-prefix="~" data-suffix=" %">~2 %</span>
+            <span class="av-counter-label">žen využívalo hrazenou návštěvu porodní asistentky v šestinedělí (do 2025)</span>
+            <span class="av-counter-foot">VZP; komunitní péče byla bez plošného nároku a smluv</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="3" data-decimals="0" data-suffix="">3</span>
+            <span class="av-counter-label">hrazené návštěvy porodní asistentky doma pro každou ženu od 1. 1. 2026</span>
+            <span class="av-counter-foot">nárok u všech pojišťoven (MZ ČR); žádanku vydává porodnice při propuštění</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat hlth_rs_prs2 (Midwives, practising; hodnoty replikovány z API 11. 8. 2026), VZP ČR (prosinec 2025). Přepočet na porody: ČSÚ, 84 311 živě narozených v roce 2024.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak číst tento indikátor">
+        <p class="article-callout-h">Caveat — jak číst tento indikátor</p>
+        <p><strong>1. Head count, ne úvazky.</strong> Eurostat počítá praktikující osoby. ÚZIS paralelně vykazuje přepočtené úvazky — 3 833 v roce 2023 — protože část asistentek pracuje na částečný úvazek. Kapacita v úvazcích je tedy o pětinu nižší než počet osob.</p>
+        <p><strong>2. Kapacita ≠ dostupnost.</strong> Indikátor měří, kolik porodních asistentek v systému je — ne kde pracují. Dobrá hodnota na 100 000 obyvatel koexistuje s téměř nedostupnou komunitní péčí, protože drtivá většina profese pracuje v lůžkových zařízeních.</p>
+        <p><strong>3. Mezinárodní definice se liší v kompetencích.</strong> Polsko či severské země vykazují vysoké počty i proto, že jejich porodní asistentky mají širší samostatné kompetence a systém s nimi počítá jako s nosnou profesí porodní péče. Srovnání počtů je řádové, srovnání rolí je podstatnější.</p>
+      </aside>
+
+      <h3>Stav v ČR: kapacita roste, porody klesají — a profese zůstává za zdmi porodnic</h3>
+
+      <p>
+        Praktikujících porodních asistentek bylo v Česku v roce 2024 celkem 4 672, tedy 42,8 na 100 000 obyvatel. Řada z Eurostatu (kam hodnoty reportuje ÚZIS z Národního registru zdravotnických pracovníků) ukazuje po metodické revizi v roce 2016 setrvalý růst: z 37,0 na 100 000 (2016) přes 40,1 (2020) na dnešních 42,8. Do toho porodnost padá — 84 311 živě narozených dětí v roce 2024 je historické minimum ČSÚ. Výsledkem je, že na 1 000 porodů připadá zhruba 55 praktikujících porodních asistentek, nejvíc v novodobé historii. Čistě aritmeticky nebyla nikdy lepší příležitost dát každé rodičce víc času kvalifikované péče.
+      </p>
+
+      <p>
+        Jenže česká porodní asistence je téměř celá zaměstnanecká a téměř celá nemocniční: porodní sály, oddělení šestinedělí, prenatální ambulance porodnic. Samostatná komunitní praxe — porodní asistentka, která zná ženu z těhotenství, přijde k ní domů v šestinedělí, pomůže s kojením a pozná začínající komplikaci dřív, než skončí na pohotovosti — byla do letoška ekonomickou raritou. Výkony odbornosti 921 (porodní asistentka) měly omezenou úhradu, smluv s pojišťovnami bylo málo a bez smlouvy si návštěvu platila žena sama. Výsledek shrnula VZP na konci roku 2025 jediným číslem: hrazenou návštěvu porodní asistentky v šestinedělí využívala zhruba 2 % žen.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaTrendH">
+        <figcaption class="av-figure-h" id="avPaTrendH">Praktikující porodní asistentky v ČR, 2014–2024</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Praktikujících osob</th>
+                <th scope="col" class="av-num">Na 100 000 obyvatel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2014</th><td class="av-num">4 290</td><td class="av-num">40,8</td></tr>
+              <tr><th scope="row">2016</th><td class="av-num">3 904</td><td class="av-num">37,0</td></tr>
+              <tr><th scope="row">2018</th><td class="av-num">4 110</td><td class="av-num">38,7</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">4 248</td><td class="av-num">40,1</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">4 486</td><td class="av-num">42,0</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2024</th><td class="av-num">4 672</td><td class="av-num">42,8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note">Zdroj: Eurostat hlth_rs_prs2 (med_spec = MWS, wstatus = PRACT). Pokles mezi lety 2014 a 2016 je metodická revize národního registru (očištění o nepraktikující osoby), nikoli reálný odliv. ÚZIS („Personální kapacity a odměňování 2023“) vykazuje k roku 2023 přepočtených 3 833 úvazků porodních asistentek.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: nejde o počty, ale o roli</h3>
+
+      <p>
+        V evropském žebříčku hustoty porodních asistentek stojí Česko lehce nad průměrem — 42,8 na 100 000 obyvatel proti neváženému průměru 41,1 z 33 reportujících zemí. Přebíjí Německo (33,5), Rakousko (31,3) i Nizozemsko (26,1), výrazně zaostává za Islandem (83,1), Irskem (80,3), Švédskem (79,1) a Polskem (78,9). Slovensko kategorii do Eurostatu nereportuje. Kdyby počty rozhodovaly, česká rodička by patřila k nejlépe doprovázeným v Evropě.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPaIntH">
+        <figcaption class="av-figure-h" id="avPaIntH">Praktikující porodní asistentky na 100 000 obyvatel (poslední dostupný rok)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="90">
+          <li class="av-bar-row" data-value="83.1" data-label="Island"></li>
+          <li class="av-bar-row" data-value="80.3" data-label="Irsko"></li>
+          <li class="av-bar-row" data-value="79.1" data-label="Švédsko"></li>
+          <li class="av-bar-row" data-value="78.9" data-label="Polsko"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="42.8" data-label="Česko"></li>
+          <li class="av-bar-row" data-value="41.1" data-label="Evropský průměr (33 zemí)"></li>
+          <li class="av-bar-row" data-value="33.5" data-label="Německo"></li>
+          <li class="av-bar-row" data-value="31.3" data-label="Rakousko"></li>
+          <li class="av-bar-row" data-value="26.1" data-label="Nizozemsko"></li>
+          <li class="av-bar-row" data-value="14.6" data-label="Rumunsko"></li>
+        </ol>
+        <p class="av-figure-note">Zdroj: Eurostat hlth_rs_prs2, koncept practising; hodnoty za rok 2024 (Rakousko 2025: 32,4; zde 2024 pro srovnatelnost). Eurostat pro tuto kategorii nepublikuje oficiální agregát EU27 — průměr je nevážený přes 33 reportujících zemí, poslední dostupný rok 2022–2025.</p>
+      </figure>
+
+      <p>
+        Pořadí v tabulce ale vypovídá míň než to, co porodní asistentky v jednotlivých zemích smějí a mají dělat. Nizozemsko s podprůměrnou hustotou staví na porodních asistentkách celý model fyziologického porodnictví — vedou samostatně péči o nerizikové těhotné a po porodu navazuje týdenní domácí péče (kraamzorg) hrazená ze zákona. V Německu má každá žena zákonný nárok na hrazené návštěvy porodní asistentky (Hebamme) v šestinedělí — standardně jich čerpá řadu týdnů; nedostatek hebammen je tam velké politické téma právě proto, že na nich poporodní péče stojí. Britská NHS staví na komunitních porodních asistentkách rutinní poporodní kontroly v domácnostech. A Cochranův přehled modelů kontinuální péče vedené porodní asistentkou shrnuje evidenci: ženy v této péči mají méně předčasných porodů, méně instrumentálních intervencí a vyšší spokojenost — při stejné bezpečnosti pro dítě. Česko má tedy evropsky nadprůměrný počet asistentek zapojených do systému, který s nimi mimo porodnici dosud nepočítal.
+      </p>
+
+      <h3>Proč nadprůměrná kapacita nepracovala tam, kde chybí</h3>
+
+      <p>
+        První důvod je historický model. České porodnictví se po roce 1948 plně centralizovalo do porodnic pod vedením lékařů; porodní asistentka („ženská sestra“) se stala nemocniční zaměstnankyní a profese ztratila samostatnou územní praxi, na které stojí v Nizozemsku či Skandinávii. Druhý důvod jsou peníze: bez plošné úhrady a smluv se samostatná komunitní praxe neuživila, takže absolventky bakalářských programů porodní asistence logicky mířily na porodní sály — nebo do Německa a Rakouska, kde komunitní role existuje a je zaplacená. Třetí důvod jsou kompetence: část činností, které jinde porodní asistentky vykonávají samostatně, je v Česku vázána na lékaře, a profese tak nemůže nabídnout celé spektrum péče, pro které je vzdělaná.
+      </p>
+
+      <p>
+        Že nejde o okrajový problém, konstatovaly i oficiální instituce. Rada vlády pro rovnost žen a mužů uzavřela, že „systém zdravotní péče nevyužívá potenciálu porodních asistentek“ a podpora kojení v porodnicích je nedostatečná; veřejná ochránkyně práv doložila výrazné regionální nerovnosti v dostupnosti hrazené péče porodních asistentek. HSPA Monitor přitom dlouhodobě sleduje výsledkovou stranu téže mince: podíl císařských řezů, epiziotomií i závažných porodních poranění a kojení při propuštění — indikátory, na které má silnější role porodní asistence podle mezinárodní evidence přímý vliv.
+      </p>
+
+      <h3>Politická páka: nárok od ledna 2026 — a co musí následovat</h3>
+
+      <p>
+        Zlom přišel s rokem 2026. Každá žena, která porodí od 1. ledna 2026, má nárok na tři návštěvy porodní asistentky v šestinedělí plně hrazené z veřejného zdravotního pojištění — Ministerstvo zdravotnictví to zavedlo úpravou úhradových podmínek porodních výkonů, takže nárok platí u všech zdravotních pojišťoven a pojišťovny mají povinnost zajistit síť smluvních porodních asistentek ve všech regionech. Mechanismus je jednoduchý: porodnice při propuštění vydá žádanku, žena si vybere asistentku ze seznamu smluvních poskytovatelů a návštěvy proběhnou u ní doma. Největší pojišťovna VZP hlásí zapojených 64 z 84 českých porodnic, zhruba 400 nasmlouvaných gynekologických ambulancí vedle samostatných praxí a na první rok vyčlenila až 80 milionů korun. Návštěva není povinná; kdo žádanku nevyužije, o nic dalšího nepřichází.
+      </p>
+
+      <p>
+        Nárok na papíře ale systém nezmění sám. První test je kapacitní: má-li službu čerpat většina z ~84 tisíc rodiček ročně místo dosavadních 2 %, musí vzniknout stovky komunitních úvazků — a ty se nezhmotní, dokud bude komunitní práce pro asistentku ekonomicky horší volbou než směny na porodním sále. Klíčová slova jsou úhradová vyhláška a síť smluv v odbornosti 921, obojí v rukou Ministerstva zdravotnictví a pojišťoven. Druhý test je kompetenční: novela zákona č. 96/2004 Sb. a prováděcích vyhlášek může rozšířit samostatné činnosti porodních asistentek (dispenzarizace fyziologického šestinedělí, laktační podpora, předpis vybraných pomůcek), aby tři návštěvy nebyly jen kontrolou, ale plnohodnotnou péčí. Třetí test je informační: využití nároku by mělo být veřejně sledované číslo — jinak se za tři roky nedozvíme, jestli 80 milionů korun změnilo systém, nebo jen rozpočtovou položku.
+      </p>
+
+      <p>
+        Indikátor praktikujících porodních asistentek bude v dashboardu měřit vstupní podmínku celé reformy: profese s 4 672 lidmi a rostoucí řadou je kapacita, ze které lze komunitní péči postavit. Jestli se to povede, uvidíme nejdřív na struktuře úvazků — a nakonec na výsledkových indikátorech porodní péče, od kojení při propuštění po porodní poranění. Šestinedělí přestává být slepou skvrnou na papíře; teď jde o to, aby přestalo být slepou skvrnou i doma u rodiček.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-porodni_asistentky_per_100k.html"><strong>Praktikující porodní asistentky / 100 000 obyvatel</strong></a> — 42,8 (2024) · signál good — nový indikátor, první ukazatel porodní asistence v dashboardu</li>
+        <li><a href="indikator-kojeni_pri_propusteni.html"><strong>Kojení při propuštění z porodnice</strong></a> — výsledek, na který má komunitní laktační podpora porodních asistentek přímý vliv</li>
+        <li><a href="indikator-cezarsky_rez_pct.html"><strong>Podíl porodů císařským řezem</strong></a> — intervenční porodnictví; modely péče vedené porodní asistentkou intervence snižují</li>
+        <li><a href="indikator-epiziotomie_pct.html"><strong>Podíl porodů s epiziotomií</strong></a> — rutinní intervence, jejíž míra s rolí porodní asistence úzce souvisí</li>
+        <li><a href="indikator-poraneni_hraze_3_4_stupen.html"><strong>Porodní poranění hráze 3.–4. stupně</strong></a> — bezpečnostní výsledek intrapartum péče</li>
+        <li><a href="indikator-sestry_per_1000.html"><strong>Sestry na 1 000 obyvatel</strong></a> — širší kontext nelékařských profesí, do něhož porodní asistence patří</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — kapacita profese</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Health personnel (hlth_rs_prs2), kategorie Midwives, practising</strong> — harmonizovaná řada 2014–2024 pro ČR a evropské srovnání; národním zdrojem je ÚZIS (NRZP). <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table" target="_blank" rel="noopener">ec.europa.eu — databrowser ↗</a></li>
+          <li><strong>ÚZIS — Zdravotnictví ČR: Personální kapacity a odměňování 2023</strong> — přepočtené úvazky podle povolání: porodní asistentka § 6 = 3 833 úvazků (2023), tab. 11. <a href="https://www.uzis.cz/res/f/008452/nzis-rep-2023-e04-personalni-kapacity-odmenovani-2023.pdf" target="_blank" rel="noopener">uzis.cz — NZIS report (PDF) ↗</a></li>
+          <li><strong>ČSÚ — Pohyb obyvatelstva, rok 2024</strong> — 84 311 živě narozených, historické minimum; jmenovatel přepočtu na porody. <a href="https://csu.gov.cz/rychle-informace/pohyb-obyvatelstva-4-ctvrtleti-2024" target="_blank" rel="noopener">csu.gov.cz — rychlá informace ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Politika a evidence — komunitní porodní asistence</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — Od ledna 2026 budou mít ženy po porodu nárok na tři návštěvy porodní asistentky v domácnosti hrazené ze zdravotního pojištění</strong> — celostátní nárok pro všechny pojištěnky (úprava úhradových podmínek porodních výkonů), mechanismus žádanky při propuštění, povinnost pojišťoven zajistit síť; dosavadní využití ~2 % žen. <a href="https://mzd.gov.cz/tiskove-centrum-mz/od-ledna-2026-budou-mit-zeny-po-porodu-narok-na-tri-navstevy-porodni-asistentky-v-domacnosti-hrazene-ze-zdravotniho-pojisteni/" target="_blank" rel="noopener">mzd.gov.cz — tisková zpráva ↗</a></li>
+          <li><strong>VZP ČR — Nárok na porodní asistentku bude mít od ledna každá žena po porodu</strong> — implementace u největší pojišťovny: 64 z 84 porodnic, ~400 smluvních ambulancí, až 80 mil. Kč na rok 2026. <a href="https://www.vzp.cz/o-nas/aktuality/narok-na-porodni-asistentku-bude-mit-od-ledna-kazda-zena-po-porodu" target="_blank" rel="noopener">vzp.cz — aktualita ↗</a></li>
+          <li><strong>Rada vlády pro rovnost žen a mužů (2023)</strong> — „Systém zdravotní péče nevyužívá potenciálu porodních asistentek a podpora kojení v porodnicích je nedostatečná“. <a href="https://vlada.gov.cz/cz/ppov/rovne-prilezitosti-zen-a-muzu/system-zdravotni-pece-nevyuziva-potencialu-porodnich-asistentek-a-podpora-kojeni-v-porodnicich-je-nedostatecna-169268/" target="_blank" rel="noopener">vlada.gov.cz ↗</a></li>
+          <li><strong>Cochrane — Midwife‑led continuity models of care (Sandall et al.)</strong> — systematický přehled: méně předčasných porodů a intervencí, srovnatelná bezpečnost, vyšší spokojenost žen. <a href="https://doi.org/10.1002/14651858.CD004667.pub5" target="_blank" rel="noopener">doi.org — review ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna česká a srovnávací čísla (42,8 na 100 000 obyvatel; 4 672 praktikujících osob; řada 2014–2024; Německo 33,5 · Rakousko 31,3 · Polsko 78,9 · Island 83,1 · Irsko 80,3 · Švédsko 79,1 · Nizozemsko 26,1 · Rumunsko 14,6; nevážený průměr 33 zemí 41,1) redakce replikovala 11. 8. 2026 přímo z API Eurostatu (hlth_rs_prs2, med_spec = MWS, wstatus = PRACT). Úvazky (3 833, rok 2023) pocházejí z PDF reportu ÚZIS; počet živě narozených (84 311, rok 2024) z rychlé informace ČSÚ. Nárok na tři hrazené návštěvy od 1. 1. 2026 je celostátní a platí u všech zdravotních pojišťoven (MZ ČR, tisková zpráva — úprava úhradových podmínek porodních výkonů; pojišťovny mají povinnost zajistit regionální síť). Implementační čísla (64 z 84 porodnic, ~400 smluvních ambulancí, až 80 mil. Kč) pocházejí z aktuality VZP ČR (konec roku 2025) a popisují největší pojišťovnu; dosavadní využití ~2 % žen uvádějí shodně MZ ČR i VZP. Evropský průměr je nevážený přes reportující země — Eurostat oficiální agregát EU27 pro porodní asistentky nepublikuje.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
