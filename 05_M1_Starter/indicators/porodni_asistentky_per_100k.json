@@ -1,0 +1,59 @@
+{
+  "id": "porodni_asistentky_per_100k",
+  "name": "Praktikující porodní asistentky / 100 000 obyvatel",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Porodní asistence",
+  "definition": "Počet praktikujících porodních asistentek vztažený na 100 000 obyvatel. Praktikující = porodní asistentka, která v daném roce skutečně poskytovala péči (nikoli jen držitelka odborné způsobilosti podle § 6 zákona č. 96/2004 Sb.). Měří kapacitu profese, která doprovází ženu těhotenstvím, porodem a šestinedělím — v porodnicích i v komunitní (terénní) péči. Zdrojem českých dat je Národní registr zdravotnických pracovníků (NRZP, ÚZIS ČR); mezinárodní srovnání harmonizuje Eurostat v datasetu hlth_rs_prs2 (kategorie Midwives, koncept practising).",
+  "unit": "/ 100 000",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_rs_prs2?format=JSON&med_spec=MWS&wstatus=PRACT&unit=P_HTHAB&geo=CZ",
+      "dataset": "Eurostat hlth_rs_prs2 — Health personnel, kategorie MWS „Midwives (EU recognised qualification)“, koncept practising, na 100 000 obyvatel. Národním zdrojem harmonizovaného sběru je ÚZIS ČR (Národní registr zdravotnických pracovníků v propojení s Národním registrem hrazených zdravotních služeb).",
+      "dimensions": {
+        "med_spec": "MWS — porodní asistentky",
+        "wstatus": "PRACT — praktikující",
+        "unit": "P_HTHAB — na 100 000 obyvatel",
+        "geo": "CZ (mezinárodní srovnání DE, AT, PL + evropský průměr)"
+      },
+      "note": "Řada 2014–2024 bez přerušení; hodnoty za ČR reportuje ÚZIS do společného sběru Eurostat/OECD/WHO. Absolutní počet praktikujících porodních asistentek v ČR 2024: 4 672 osob (unit=NR)."
+    },
+    "fallback": {
+      "type": "uzis_nrzp",
+      "url": "https://www.uzis.cz/res/f/008452/nzis-rep-2023-e04-personalni-kapacity-odmenovani-2023.pdf",
+      "note": "ÚZIS „Zdravotnictví ČR: Personální kapacity a odměňování“ (roční NZIS report) uvádí přepočtené úvazky: porodní asistentka § 6 = 3 833 úvazků (2023). Úvazky (FTE) jsou nižší než head count praktikujících osob z Eurostatu (4 672 v 2024) — část asistentek pracuje na částečné úvazky."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_rs_prs2",
+    "dataset": "Eurostat hlth_rs_prs2 nepublikuje pro porodní asistentky agregát EU27; benchmarkem je proto nevážený průměr 33 evropských zemí reportujících kategorii Midwives/practising (poslední dostupný rok 2022–2025, převážně 2024): 41,1 na 100 000 obyvatel. Rozpětí je široké — Island 83,1, Irsko 80,3, Švédsko 79,1, Polsko 78,9 na horním konci; Rumunsko 14,6, Portugalsko 17,2, Slovinsko 19,7 na dolním. Sousední Německo 33,5 a Rakousko 31,3 (2024); Slovensko kategorii nereportuje.",
+    "value": 41.1,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_prs2/default/table"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (Národní registr zdravotnických pracovníků)",
+    "MZ ČR (odbor ošetřovatelství a nelékařských povolání)",
+    "Eurostat (harmonizace mezinárodního sběru)",
+    "Česká komora porodních asistentek / UNIPA (profesní organizace)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 42,8 praktikujících porodních asistentek na 100 000 obyvatel (přesně 42,84), tj. 4 672 osob (Eurostat hlth_rs_prs2). Časová řada 2014–2024: 40,8 → pokles na 37,0 (2016, revize metodiky NRZP) → postupný růst 38,7 (2018) → 40,1 (2020) → 42,0 (2022) → 42,8 (2024). Head count praktikujících osob; ÚZIS paralelně vykazuje přepočtené úvazky (3 833 FTE v roce 2023) — rozdíl odráží částečné úvazky. Vztažení na populaci je mezinárodní standard (Eurostat); protože počet živě narozených v ČR klesá (84 311 v roce 2024, historické minimum ČSÚ), kapacita na 1 000 porodů roste ještě rychleji než na obyvatele: z ~38 (2014) na ~55 praktikujících asistentek na 1 000 živě narozených (2024).",
+  "limitations": "Head count neodráží skutečné úvazky ani rozložení mezi segmenty: drtivá většina českých porodních asistentek pracuje v lůžkové péči (porodní sály, oddělení šestinedělí), zatímco komunitní péče — návštěvy v šestinedělí, laktační poradenství, kontinuální komunitní praxe — zůstává okrajová (do konce roku 2025 využívala hrazenou návštěvu porodní asistentky v šestinedělí jen ~2 % žen; VZP). Indikátor tedy měří celkovou kapacitu profese, nikoli její alokaci — dobrá hodnota na 100 000 obyvatel může koexistovat s prakticky nedostupnou komunitní péčí. Mezinárodní definice se mírně liší (některé země zahrnují midwifery associate professionals); Polsko a severské země část rozdílu vysvětlují širším rozsahem samostatných kompetencí porodních asistentek.",
+  "determinants": [
+    "Model porodní péče centralizovaný do porodnic s vedoucí rolí lékaře: porodní asistentky pracují téměř výhradně jako zaměstnankyně nemocnic, samostatná komunitní praxe je výjimkou.",
+    "Úhradová politika: výkony porodní asistentky (odbornost 921) byly do roku 2025 hrazeny jen omezeně a smluv s pojišťovnami bylo málo — samostatná praxe nebyla ekonomicky udržitelná.",
+    "Kompetenční rámec: část činností, které v Nizozemsku, Švédsku či Velké Británii vykonávají porodní asistentky samostatně (vedení fyziologického porodu, předpis vybraných léčiv), je v ČR vyhrazena lékařům.",
+    "Vzdělávací kapacita: bakalářské programy porodní asistence produkují nízké stovky absolventek ročně a část z nich odchází do zahraničí nebo mimo obor."
+  ],
+  "importance": "Porodní asistence je podle WHO a mezinárodní evidence (Cochrane review kontinuální péče vedené porodní asistentkou) profese s prokazatelným vlivem na výsledky: kontinuita péče porodní asistentky snižuje počet předčasných porodů i intervencí a zvyšuje spokojenost žen, aniž zhoršuje bezpečnost. Česko má porodních asistentek na obyvatele mírně nad evropským průměrem — kapacita tedy není hlavní bariéra. Klíčová je alokace: téměř všechny pracují v porodnicích a systém jejich potenciál v komunitní péči nevyužívá (konstatuje to i Rada vlády pro rovnost žen a mužů). Od 1. 1. 2026 mají všechny ženy poprvé nárok na tři hrazené návštěvy porodní asistentky v šestinedělí — indikátor bude sledovat, jestli se profese, její úvazky a struktura přizpůsobí této historické změně.",
+  "patient_story": "Benešov, únor 2026. Klára (31) je čtvrtý den doma s prvním dítětem. Kojení bolí, jizva po nástřihu se špatně hojí a poradna dětského lékaře je objednaná až za týden. Při propuštění z porodnice ale dostala papír, který její matka ani starší kamarádky neznají: doporučení k návštěvě porodní asistentky doma. Stačilo zavolat na číslo ze seznamu — a druhý den u ní doma seděla porodní asistentka, zkontrolovala jizvu i dělohu, srovnala přisátí miminka a nechala na stole telefonní číslo pro noční krizi. Hrazeno pojišťovnou, bez doplatku. Do konce roku 2025 tuhle službu využívala zhruba 2 % českých žen.\n\nNa počtu porodních asistentek to přitom nestojí. Česko má 42,8 praktikujících porodních asistentek na 100 000 obyvatel (Eurostat, 2024; celkem 4 672 osob) — mírně nad evropským průměrem 41,1 a víc než Německo (33,5) i Rakousko (31,3); Polsko vykazuje 78,9. Signál indikátoru je proto dobrý a řada od roku 2016 (37,0) setrvale roste. A protože porodů ubývá — 84 311 živě narozených v roce 2024 je historické minimum — na 1 000 porodů dnes připadá zhruba 55 praktikujících asistentek, nejvíc v novodobé historii.\n\nProblém je strukturální: téměř všechny české porodní asistentky pracují v porodnicích, na porodních sálech a odděleních šestinedělí. Jakmile žena projde branou porodnice ven, systém ji až na výjimky pouštěl z dohledu — komunitní porodní asistence, běžná v Nizozemsku, Británii nebo Skandinávii, u nás neměla úhradu, smlouvy ani kompetenční prostor. Rada vlády pro rovnost žen a mužů konstatovala, že systém zdravotní péče potenciál porodních asistentek nevyužívá; ombudsmanka doložila regionální nerovnosti v dostupnosti hrazené péče.\n\nPolitická páka se právě pohnula. Od 1. ledna 2026 má každá žena nárok na tři hrazené návštěvy porodní asistentky v šestinedělí; doporučení vydává porodnice při propuštění (zapojilo se 64 z 84 porodnic) a VZP na to vyčlenila až 80 milionů korun. Další kroky mají jasné nositele: Ministerstvo zdravotnictví (kompetenční novela zákona č. 96/2004 Sb., rozšíření samostatných činností), zdravotní pojišťovny (síť smluv s komunitními asistentkami v odbornosti 921) a vzdělávací systém (kapacity bakalářských programů). Indikátor bude měřit, jestli mírně nadprůměrná kapacita profese začne pracovat i tam, kde byla Klára čtvrtý den sama.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
