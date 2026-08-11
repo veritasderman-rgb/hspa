@@ -33,13 +33,17 @@ test.beforeEach(async ({ page }) => {
   // Awareness popup (Týden zdraví) se od PR #898 zobrazuje takřka okamžitě
   // (300 ms) jako centrovaný modal s podkladem přes celou stránku — během
   // kampaně by překryl KAŽDÝ snapshot (~85 % pixelů diff) a mimo kampaň by
-  // zmizel, takže baseline by nebyla stabilní. Pro vizuální regresi oba
-  // popupy deterministicky vypneme přes idempotentní guard flagy modulů
-  // (awareness-popup.js / newsletter-popup.js kontrolují window.__*PopupInit
+  // zmizel, takže baseline by nebyla stabilní. Totéž platí pro sezonní popup
+  // „průvodce vedry" (vedra-popup.js, okno 1. 6. – 31. 8.), který od
+  // 10. 8. 2026 přebíral přednost, jakmile je awareness vypnutý, a překryl
+  // každý snapshot. Pro vizuální regresi všechny tři popupy deterministicky
+  // vypneme přes idempotentní guard flagy modulů (awareness-popup.js /
+  // newsletter-popup.js / vedra-popup.js kontrolují window.__*PopupInit
   // a s nastaveným flagem se vůbec neinicializují).
   await page.addInitScript(() => {
     window.__awPopupInit = true;
     window.__nlPopupInit = true;
+    window.__vdPopupInit = true;
   });
 });
 
