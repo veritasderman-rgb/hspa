@@ -28,9 +28,26 @@ test('extractUrlsFromJson: hranaté závorky v URL přežijí (OECD Data Explore
   assert.equal(u, 'https://data-explorer.oecd.org/vis?fs[0]=Topic&df[id]=DSD_X');
 });
 
-test('extractUrlsFromJson: koncová interpunkce se ořízne, kulatá závorka URL ukončí', () => {
+test('extractUrlsFromJson: koncová interpunkce a nepárová závorka se oříznou', () => {
   assert.deepEqual(extractUrlsFromJson('zdroj: https://szu.gov.cz/a,'), ['https://szu.gov.cz/a']);
   assert.deepEqual(extractUrlsFromJson('(https://szu.gov.cz/b)'), ['https://szu.gov.cz/b']);
+  assert.deepEqual(extractUrlsFromJson('(viz https://szu.gov.cz/c).'), ['https://szu.gov.cz/c']);
+});
+
+test('extractUrlsFromJson: vyvážené závorky uvnitř URL přežijí (Lancet)', () => {
+  const lancet = 'https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00199-2/fulltext';
+  assert.deepEqual(extractUrlsFromJson(`viz (${lancet}).`), [lancet]);
+});
+
+test('isRecentlyLinkChecked: budoucí ani kalendářně nevalidní razítko neumlčuje', () => {
+  assert.equal(isRecentlyLinkChecked('f', TODAY, { f: '2027-08-01' }), false);
+  assert.equal(isRecentlyLinkChecked('f', TODAY, { f: '2026-99-99' }), false);
+});
+
+test('scanDraftLinks: bez capu — draft s >12 odkazy nese úplnou sadu', () => {
+  const items = scanDraftLinks(TODAY, { skipChecked: false, log: {} });
+  const max = Math.max(0, ...items.map(i => i.urls.length));
+  assert.ok(max > 12, `očekáván draft s >12 URL (max=${max}) — cap z findExternalLinks nesmí platit`);
 });
 
 test('isRecentlyLinkChecked: < 14 dní přeskočit, starší ne, rozbité datum ne', () => {

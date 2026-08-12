@@ -478,22 +478,23 @@ function findPassedDates(text, today, pubDate) {
 /**
  * Inventář externích odkazů (http/https), s prioritou pro legislativní domény.
  */
-function findExternalLinks(html) {
+function findExternalLinks(html, { cap = MAX_EXT_LINKS } = {}) {
   const links = [];
   const re = /<a[^>]+href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+  const scanLimit = Number.isFinite(cap) ? cap * 3 : Infinity;
   let m;
   while ((m = re.exec(html)) !== null) {
     const url = m[1];
     const label = stripTags(m[2]).slice(0, 80);
     const priority = PRIORITY_LINK_HINTS.some(h => url.includes(h));
     links.push({ url, label, priority });
-    if (links.length >= MAX_EXT_LINKS * 3) break;
+    if (links.length >= scanLimit) break;
   }
   // dedup podle url, priority napřed
   const seen = new Set();
   const dedup = links.filter(l => { if (seen.has(l.url)) return false; seen.add(l.url); return true; });
   dedup.sort((a, b) => (b.priority - a.priority));
-  return dedup.slice(0, MAX_EXT_LINKS);
+  return Number.isFinite(cap) ? dedup.slice(0, cap) : dedup;
 }
 
 function monthsSince(iso, today) {
@@ -645,11 +646,19 @@ export function loadLinkCheckLog(path = LINK_CHECK_LOG) {
 // Posbírá http(s) URL ze všech string hodnot JSON objektu (rekurzivně).
 export function extractUrlsFromJson(node, out = []) {
   if (typeof node === 'string') {
-    // Hranaté závorky v URL nechat (OECD Data Explorer: ?fs[0]=…), kulaté ne
-    // (v próze URL často končí „…)."). Koncovou interpunkci ořízne replace níž.
-    const re = /https?:\/\/[^\s"'<>)]+/g;
+    // Závorky jsou v URL legální (Lancet: …(22)00199-2/fulltext; OECD: ?fs[0]=…).
+    // Proto je v matchi necháváme a až dodatečně odřezáváme koncovou interpunkci
+    // a NEPÁROVOU pravou závorku — tedy „(https://…)" v próze přijde o závěr,
+    // ale vyvážené závorky uvnitř URL přežijí (heuristika běžných autolinkerů).
+    const re = /https?:\/\/[^\s"'<>]+/g;
     let m;
-    while ((m = re.exec(node)) !== null) out.push(m[0].replace(/[.,;]$/, ''));
+    while ((m = re.exec(node)) !== null) {
+      let u = m[0].replace(/[.,;:]+$/, '');
+      while (u.endsWith(')') && (u.split('(').length - 1) < (u.split(')').length - 1)) {
+        u = u.slice(0, -1).replace(/[.,;:]+$/, '');
+      }
+      out.push(u);
+    }
   } else if (Array.isArray(node)) {
     for (const v of node) extractUrlsFromJson(v, out);
   } else if (node && typeof node === 'object') {
@@ -662,7 +671,10 @@ export function extractUrlsFromJson(node, out = []) {
 export function isRecentlyLinkChecked(relPath, today, log = {}) {
   const stamp = log[relPath];
   if (!stamp || !/^\d{4}-\d{2}-\d{2}$/.test(stamp)) return false;
-  return daysBetween(stamp, today) < REVIEW_SKIP_DAYS;
+  // Budoucí razítko (překlep roku) ani kalendářně nevalidní datum (2026-99-99,
+  // daysBetween → null) nesmí soubor umlčet — chceme konečný nezáporný věk.
+  const age = daysBetween(stamp, today);
+  return Number.isFinite(age) && age >= 0 && age < REVIEW_SKIP_DAYS;
 }
 
 export function scanCardLinks(today, { skipChecked = true, log = loadLinkCheckLog(), dir = INDICATOR_CARDS_DIR } = {}) {
@@ -686,7 +698,9 @@ export function scanDraftLinks(today, { skipChecked = true, log = loadLinkCheckL
   const items = [];
   for (const f of readdirSync(dir).filter(f => f.startsWith('clanek-') && f.endsWith('.html')).sort()) {
     const rel = `drafts/${f}`;
-    const links = findExternalLinks(readFileSync(resolve(dir, f), 'utf8'));
+    // Bez capu: sidecar log značí zkontrolovaný CELÝ soubor, takže worklist
+    // musí nést úplnou deduplikovanou sadu odkazů (drafty mívají přes 12 URL).
+    const links = findExternalLinks(readFileSync(resolve(dir, f), 'utf8'), { cap: Infinity });
     if (!links.length) continue;
     const priority = links.filter(l => l.priority).map(l => l.url);
     const skipped = skipChecked && isRecentlyLinkChecked(rel, today, log);
