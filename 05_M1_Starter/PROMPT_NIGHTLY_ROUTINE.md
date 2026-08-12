@@ -122,6 +122,14 @@ Commit: `fix(clanky): noční auto-fix — covery, odkazy, alt (N článků)`
 
 Pro každý článek s `date-passed` nebo `check-sources` (do stropu z fáze 1):
 
+> **Mimo články (#931):** report má i sekci „Mimo články — metodické karty a
+> drafty" (`indicators/*.json`, `drafts/`). Každou noc z ní vezmi **2–3 soubory**
+> (prioritní odkazy napřed), zkontroluj jejich URL stejně jako v 3.1 a po
+> skutečné kontrole zapiš `{"<cesta>": "YYYY-MM-DD"}` do
+> `data/link-check-log.json` → `checks` — skener pak soubor 14 dní vynechává.
+> Mrtvý odkaz v kartě oprav rovnou (auto-fix pravidla FÁZE 2 platí i tady);
+> u draftu oprav draft, ať se chyba nepublikuje.
+
 ### 3.1 Ověř posun
 - Otevři prioritní odkazy z reportu přes **WebFetch** (zákon, EUR-Lex/ELI, sněmovní
   tisk, TZ MZ, dataset ÚZIS/OECD/Eurostat).

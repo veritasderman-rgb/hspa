@@ -39,7 +39,7 @@
 //   node scripts/nightly-scan.js --slug=clanek-foo.html   # jen jeden článek
 //   node scripts/nightly-scan.js --no-skip-reviewed       # vč. recentně auditovaných
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -50,6 +50,12 @@ const INDICATORS_JSON = resolve(ROOT, 'data/indicators.json');
 const CLAIMS_JSON = resolve(ROOT, 'data/claims.json');
 const COVERS_DIR = resolve(ROOT, 'assets/covers');
 const REPORTS_DIR = resolve(ROOT, 'reports');
+const INDICATOR_CARDS_DIR = resolve(ROOT, 'indicators');
+const DRAFTS_DIR = resolve(ROOT, 'drafts');
+// Sidecar log kontrol odkazů mimo články (#931): karty a drafty nemají
+// auditní datum v articles.json, takže „kdy naposledy zkontrolováno" žije
+// tady. Rutina po kontrole souboru zapíše { "<relativní cesta>": "YYYY-MM-DD" }.
+const LINK_CHECK_LOG = resolve(ROOT, 'data/link-check-log.json');
 
 const STALE_MONTHS = 12;        // publikováno dávno → připomenout revizi
 const MAX_DATE_HITS = 6;        // strop zmínek dat na článek (proti šumu)
@@ -472,22 +478,23 @@ function findPassedDates(text, today, pubDate) {
 /**
  * Inventář externích odkazů (http/https), s prioritou pro legislativní domény.
  */
-function findExternalLinks(html) {
+function findExternalLinks(html, { cap = MAX_EXT_LINKS } = {}) {
   const links = [];
   const re = /<a[^>]+href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+  const scanLimit = Number.isFinite(cap) ? cap * 3 : Infinity;
   let m;
   while ((m = re.exec(html)) !== null) {
     const url = m[1];
     const label = stripTags(m[2]).slice(0, 80);
     const priority = PRIORITY_LINK_HINTS.some(h => url.includes(h));
     links.push({ url, label, priority });
-    if (links.length >= MAX_EXT_LINKS * 3) break;
+    if (links.length >= scanLimit) break;
   }
   // dedup podle url, priority napřed
   const seen = new Set();
   const dedup = links.filter(l => { if (seen.has(l.url)) return false; seen.add(l.url); return true; });
   dedup.sort((a, b) => (b.priority - a.priority));
-  return dedup.slice(0, MAX_EXT_LINKS);
+  return Number.isFinite(cap) ? dedup.slice(0, cap) : dedup;
 }
 
 function monthsSince(iso, today) {
@@ -619,6 +626,112 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
   return item;
 }
 
+// ============================================================
+// Sweep mimo články (#931): metodické karty a drafty.
+// Článek-centrický scanArticle odkazy v indicators/*.json a drafts/
+// nevidí — mrtvý zdroj v kartě se tak opravoval jen náhodou. Tenhle
+// sweep vyrábí worklist pro FÁZI check-sources noční rutiny; místo
+// auditního data článku rozhoduje sidecar data/link-check-log.json.
+// ============================================================
+
+export function loadLinkCheckLog(path = LINK_CHECK_LOG) {
+  try {
+    const raw = JSON.parse(readFileSync(path, 'utf8'));
+    // Soubor má obálku { _doc, checks: {...} }; tolerujeme i plochý tvar.
+    const log = raw && typeof raw === 'object' ? (raw.checks ?? raw) : {};
+    return log && typeof log === 'object' ? log : {};
+  } catch { return {}; }
+}
+
+// Posbírá http(s) URL ze všech string hodnot JSON objektu (rekurzivně).
+export function extractUrlsFromJson(node, out = []) {
+  if (typeof node === 'string') {
+    // Závorky jsou v URL legální (Lancet: …(22)00199-2/fulltext; OECD: ?fs[0]=…).
+    // Proto je v matchi necháváme a až dodatečně odřezáváme koncovou interpunkci
+    // a NEPÁROVOU pravou závorku — tedy „(https://…)" v próze přijde o závěr,
+    // ale vyvážené závorky uvnitř URL přežijí (heuristika běžných autolinkerů).
+    const re = /https?:\/\/[^\s"'<>]+/g;
+    let m;
+    while ((m = re.exec(node)) !== null) {
+      let u = m[0].replace(/[.,;:]+$/, '');
+      while (u.endsWith(')') && (u.split('(').length - 1) < (u.split(')').length - 1)) {
+        u = u.slice(0, -1).replace(/[.,;:]+$/, '');
+      }
+      out.push(u);
+    }
+  } else if (Array.isArray(node)) {
+    for (const v of node) extractUrlsFromJson(v, out);
+  } else if (node && typeof node === 'object') {
+    for (const v of Object.values(node)) extractUrlsFromJson(v, out);
+  }
+  return [...new Set(out)];
+}
+
+// Má se soubor přeskočit? (čistá — zrcadlí REVIEW_SKIP_DAYS u článků)
+export function isRecentlyLinkChecked(relPath, today, log = {}) {
+  const stamp = log[relPath];
+  if (!stamp || !/^\d{4}-\d{2}-\d{2}$/.test(stamp)) return false;
+  // Budoucí razítko (překlep roku) ani kalendářně nevalidní datum (2026-99-99,
+  // daysBetween → null) nesmí soubor umlčet — chceme konečný nezáporný věk.
+  const age = daysBetween(stamp, today);
+  return Number.isFinite(age) && age >= 0 && age < REVIEW_SKIP_DAYS;
+}
+
+export function scanCardLinks(today, { skipChecked = true, log = loadLinkCheckLog(), dir = INDICATOR_CARDS_DIR } = {}) {
+  if (!existsSync(dir)) return [];
+  const items = [];
+  for (const f of readdirSync(dir).filter(f => f.endsWith('.json')).sort()) {
+    const rel = `indicators/${f}`;
+    let urls = [];
+    try { urls = extractUrlsFromJson(JSON.parse(readFileSync(resolve(dir, f), 'utf8'))); }
+    catch { items.push({ file: rel, error: 'invalid-json', urls: [], priority: [] }); continue; }
+    if (!urls.length) continue;
+    const priority = urls.filter(u => PRIORITY_LINK_HINTS.some(h => u.includes(h)));
+    const skipped = skipChecked && isRecentlyLinkChecked(rel, today, log);
+    items.push({ file: rel, urls, priority, skipped });
+  }
+  return items;
+}
+
+export function scanDraftLinks(today, { skipChecked = true, log = loadLinkCheckLog(), dir = DRAFTS_DIR } = {}) {
+  if (!existsSync(dir)) return [];
+  const items = [];
+  for (const f of readdirSync(dir).filter(f => f.startsWith('clanek-') && f.endsWith('.html')).sort()) {
+    const rel = `drafts/${f}`;
+    // Bez capu: sidecar log značí zkontrolovaný CELÝ soubor, takže worklist
+    // musí nést úplnou deduplikovanou sadu odkazů (drafty mívají přes 12 URL).
+    const links = findExternalLinks(readFileSync(resolve(dir, f), 'utf8'), { cap: Infinity });
+    if (!links.length) continue;
+    const priority = links.filter(l => l.priority).map(l => l.url);
+    const skipped = skipChecked && isRecentlyLinkChecked(rel, today, log);
+    items.push({ file: rel, urls: links.map(l => l.url), priority, skipped });
+  }
+  return items;
+}
+
+function buildOffArticleSection(cards, drafts) {
+  const lines = [];
+  const worklist = [...cards, ...drafts].filter(i => !i.skipped && !i.error);
+  const skipped = [...cards, ...drafts].filter(i => i.skipped).length;
+  const broken = [...cards, ...drafts].filter(i => i.error);
+  lines.push('## Mimo články — metodické karty a drafty (`check-sources-cards`)');
+  lines.push('');
+  if (!worklist.length && !broken.length) {
+    lines.push('Žádný soubor ke kontrole.' + (skipped ? ` (${skipped} přeskočeno — kontrolováno < ${REVIEW_SKIP_DAYS} dní dle data/link-check-log.json.)` : ''));
+    lines.push('');
+    return lines.join('\n');
+  }
+  lines.push(`Soubory s externími odkazy ke kontrole (po kontrole zapiš datum do \`data/link-check-log.json\`):`);
+  lines.push('');
+  for (const i of worklist) {
+    lines.push(`- \`${i.file}\` — ${i.urls.length} URL${i.priority.length ? ` (${i.priority.length} prioritních)` : ''}`);
+  }
+  for (const i of broken) lines.push(`- \`${i.file}\` — ⚠️ nevalidní JSON`);
+  if (skipped) lines.push(`\n> ℹ️ ${skipped} souborů přeskočeno — kontrolováno < ${REVIEW_SKIP_DAYS} dní.`);
+  lines.push('');
+  return lines.join('\n');
+}
+
 function buildReport(items, today) {
   const withFlags = items.filter(i => i.flags.length);
   const byType = {};
@@ -726,7 +839,10 @@ function main() {
   if (slugArg) articles = articles.filter(a => a.slug === slugArg || a.id === slugArg);
 
   const items = articles.map(a => scanArticle(a, today, { skipReviewed }));
-  const report = buildReport(items, today);
+  // #931: sweep mimo články — metodické karty a drafty (link-check worklist)
+  const cards = scanCardLinks(today, { skipChecked: skipReviewed });
+  const drafts = scanDraftLinks(today, { skipChecked: skipReviewed });
+  const report = buildReport(items, today) + '\n' + buildOffArticleSection(cards, drafts);
 
   const withFlags = items.filter(i => i.flags.length);
   const counts = { 'auto-fix': 0, review: 0, low: 0 };
@@ -738,7 +854,7 @@ function main() {
     const mdPath = resolve(REPORTS_DIR, `nightly-audit-${today}.md`);
     const jsonPath = resolve(REPORTS_DIR, `nightly-audit-${today}.json`);
     writeFileSync(mdPath, report);
-    writeFileSync(jsonPath, JSON.stringify({ generated_at: new Date().toISOString(), today, items: withFlags }, null, 2) + '\n');
+    writeFileSync(jsonPath, JSON.stringify({ generated_at: new Date().toISOString(), today, items: withFlags, off_article: { cards: cards.filter(c => !c.skipped), drafts: drafts.filter(d => !d.skipped) } }, null, 2) + '\n');
     console.log(`Report: reports/nightly-audit-${today}.md (+ .json)`);
   } else {
     console.log(report);
@@ -746,7 +862,8 @@ function main() {
   const skipNote = skipReviewed && skippedCS
     ? ` | check-sources přeskočeno (auditováno <${REVIEW_SKIP_DAYS} d): ${skippedCS}`
     : '';
-  console.log(`Skenováno ${items.length} článků | flagů: auto-fix ${counts['auto-fix']}, review ${counts.review}, low ${counts.low}${skipNote}`);
+  const offArticle = [...cards, ...drafts].filter(i => !i.skipped).length;
+  console.log(`Skenováno ${items.length} článků | flagů: auto-fix ${counts['auto-fix']}, review ${counts.review}, low ${counts.low}${skipNote} | mimo články (karty+drafty) ke kontrole: ${offArticle}`);
 }
 
 // Spusť jen při přímém spuštění (node scripts/nightly-scan.js), ne při importu z testu.
