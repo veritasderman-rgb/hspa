@@ -1,0 +1,57 @@
+{
+  "id": "substitucni_lecba_pokryti",
+  "name": "Pokrytí substituční léčbou opioidové závislosti",
+  "area": "Procesy",
+  "domain": "Duševní zdraví",
+  "subdomain": "Léčba závislostí",
+  "definition": "Podíl odhadovaného počtu lidí užívajících rizikově opioidy (LOR), kteří jsou registrováni v léčbě opioidními agonisty (substituční léčbě metadonem nebo buprenorfinem) v Národním registru léčby uživatelů drog (NRLUD). Čitatel: pacienti v substituční léčbě hlášení do NRLUD k danému roku. Jmenovatel: národní prevalenční odhad počtu lidí užívajících rizikově opioidy (NMS, multiplikační metoda z dat nízkoprahových programů).",
+  "unit": "% rizikových uživatelů opioidů",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "national_report",
+      "endpoint": "https://vlada.gov.cz/assets/ppov/zavislosti/vyrocni-zpravy/Zprava-nelegalni-drogy-2024_web-opr-250722.pdf",
+      "dataset": "NMS — Zpráva o nelegálních drogách v ČR 2024: kap. 9.8.5 (Dostupnost léčby opioidními agonisty a podíl uživatelů opioidů v léčbě — publikovaná hodnota 20,4 % za r. 2023, 21,4 % za r. 2020), graf 9-8 (pacienti v substituci hlášení do NRLUD 2014–2023), tabulka 3-12 (prevalenční odhady rizikového užívání opioidů 2014–2023).",
+      "dimensions": {
+        "numerator": "NRLUD (ÚZIS) — pacienti v léčbě opioidními agonisty, ČR celkem",
+        "denominator": "NMS prevalenční odhad LOR (multiplikační metoda, data nízkoprahových programů)",
+        "geo": "CZ (odhady LOR existují i po krajích)"
+      },
+      "note": "Řada pokrytí 2014–2023 je podíl dvou publikovaných řad z téže zprávy: NRLUD pacienti (2 314 · 2 248 · 2 266 · 2 249 · 2 312 · 2 347 · 2 372 · 2 061 · 1 947 · 1 893) / odhad LOR (8 300 · 9 500 · 9 200 · 9 600 · 10 200 · 10 500 · 11 100 · 10 200 · 9 300 · 9 300). Kotevní roky 2020 (21,4 %) a 2023 (20,4 %) publikuje NMS přímo — výpočet na nich sedí beze zbytku."
+    },
+    "fallback": {
+      "type": "uzis_registry",
+      "url": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-lecby-uzivatelu-drog",
+      "note": "NRLUD (ÚZIS) — primární registr čitatele; roční počty pacientů v substituci přebírá NZIP a výroční zprávy NMS (drogy-info.cz, vlada.gov.cz — Rada vlády pro koordinaci politiky v oblasti závislostí)."
+    }
+  },
+  "benchmark_source": {
+    "type": "international_report",
+    "code": "EUDA_EDR_OAT",
+    "dataset": "EUDA European Drug Report 2025 — Opioid agonist treatment: v EU bylo v r. 2023 v léčbě opioidními agonisty odhadem 511 000 klientů, tj. přibližně polovina (~50 %) odhadovaného počtu vysoce rizikových uživatelů opioidů. WHO/UNODC/UNAIDS považují za minimální doporučené pokrytí 40 %; řada zemí západní Evropy (Francie, Rakousko, Německo) se pohybuje nad polovinou.",
+    "value": 50,
+    "url": "https://www.euda.europa.eu/publications/european-drug-report/2025/opioid-agonist-treatment_en"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Národní monitorovací středisko pro drogy a závislosti (Úřad vlády ČR)",
+    "ÚZIS ČR (Národní registr léčby uživatelů drog)"
+  ],
+  "method_notes": "Hodnota 20,4 % (2023) je přímo publikovaná NMS: 1 893 pacientů v NRLUD proti odhadu 9 300 lidí užívajících rizikově opioidy. Registr přitom skutečný počet léčených podhodnocuje: substituci vykazují i psychiatrické ambulance mimo registr (1 629 pacientů v r. 2023) a podle šetření Lékaři ČR 2022 předepisovalo substituční přípravky odhadem 721 praktických lékařů zhruba 5 400 pacientům, přičemž 24,4 % lékařů poskytujících substituci přiznává, že do NRLUD nehlásí. NMS proto celkové pokrytí odhaduje v širokém intervalu 20–40 %. Indikátor záměrně sleduje spodní, registrovou kotvu — je jediná každoročně publikovaná, metodicky stabilní a mezinárodně srovnatelná (EUDA počítá pokrytí ze stejného typu dat). I horní hranice intervalu (40 %) je pod průměrem EU (~50 %) a teprve na minimu doporučovaném WHO.",
+  "limitations": "Čitatel závisí na hlásné kázni poskytovatelů, která podle NMS klesá — část poklesu po r. 2020 může být artefakt hlášení, ne reálný odchod pacientů z léčby. Jmenovatel je prevalenční odhad multiplikační metodou s intervalem spolehlivosti (9,1–9,6 tis. pro r. 2023) a je citlivý na hodnotu multiplikátoru. Pokrytí nezachycuje kvalitu ani udržení v léčbě (retenci), pouze registrovaný kontakt. Mezinárodní srovnání EUDA agreguje země s různou metodikou odhadu vysoce rizikových uživatelů.",
+  "determinants": [
+    "Stagnující až klesající počet a kapacita specializovaných (metadonových) center — metadon smí vydávat jen ta; nová prakticky nevznikají",
+    "Finanční dostupnost buprenorfinu — kompozitní přípravky (buprenorfin+naloxon) jsou od r. 2022 hrazeny s minimálním doplatkem, jen pokud je předepíše psychiatr nebo adiktolog; do r. 2021 si je pacienti platili plně sami",
+    "Vysoký práh programů: podmínky přijetí a setrvání, denní docházka do center, čekací listiny v regionech bez služeb",
+    "Ve věznicích poskytuje léčbu opioidními agonisty jen 5 věznic (182 osob, jen metadon) — přerušení léčby při nástupu trestu",
+    "Hlásná kázeň poskytovatelů do NRLUD (24,4 % předepisujících praktiků nehlásí)"
+  ],
+  "importance": "Léčba opioidními agonisty je podle WHO nejúčinnější intervence u opioidové závislosti: snižuje úmrtnost na předávkování o polovinu i více, přenos HIV a hepatitid, kriminalitu i náklady systému. Pokrytí je proto standardní procesní indikátor HSPA i EUDA. Česko s registrovým pokrytím kolem pětiny rizikových uživatelů zaostává za evropskou polovinou — a počet úmrtí na předávkování v ČR zvolna roste (77 v r. 2023 proti 57 v r. 2015).",
+  "patient_story": "Kamila je jednapadesát. Heroin brala od dvaceti, od pětatřiceti drží na Subutexu — patří ke generaci, která dnes tvoří přes 60 % klientů substituce: lidé 40–49 let, stárnoucí spolu s programem. Bydlí v Chebu. Nejbližší specializované centrum, které smí vydávat metadon, je v Plzni; dojíždění dvě hodiny tam a dvě zpátky nejde skloubit s prací uklízečky, kterou si díky substituci udržela. Zůstává tedy na buprenorfinu od psychiatričky, ke které se před třemi lety dostala po půl roce čekání.\n\nKamila je v datech jedna z 1 893 pacientů, které v roce 2023 vykázal Národní registr léčby uživatelů drog. Lidí užívajících rizikově opioidy přitom Národní monitorovací středisko odhaduje 9 300 — registrované pokrytí substituční léčbou je tedy 20,4 % a deset let zvolna klesá (21,4 % v roce 2020, 27,9 % v roce 2014). Evropská unie je jinde: podle EUDA je v léčbě opioidními agonisty přibližně polovina vysoce rizikových uživatelů opioidů, WHO považuje za minimum 40 %. Ani horní hranice českého odhadu (20–40 % včetně nehlášených pacientů u praktiků) na evropský průměr nedosáhne.\n\nProč to tak je, není záhada. Metadonových center je pár a nová nevznikají, takže mimo velká města léčba stojí a padá s ochotou jednotlivých psychiatrů a praktiků. Buprenorfin s naloxonem je teprve od roku 2022 hrazený s minimálním doplatkem — a jen když ho předepíše psychiatr nebo adiktolog, kterých je v pohraničí nejméně. Ve věznicích podává opioidní agonisty 5 věznic ze všech, jen metadon, pro 182 osob — kdo nastoupí trest na buprenorfinu, platí si ho sám, nebo o léčbu přijde.\n\nPolitická páka je konkrétní a levná: rozšířit úhradu buprenorfinu i na předpis proškoleného praktického lékaře (model Francie, kde primární péče nese většinu substituce a pokrytí přesahuje 80 %), smluvně zajistit alespoň jedno nízkoprahové substituční pracoviště v každém kraji, zavést substituci plošně do věznic a vyžadovat hlášení do NRLUD jako podmínku úhrady. Každý procentní bod pokrytí navíc jsou desítky lidí jako Kamila — s prací, bez infekce a bez předávkování.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
