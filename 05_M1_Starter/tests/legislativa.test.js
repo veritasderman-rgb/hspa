@@ -453,10 +453,11 @@ test('plan_items z reálného datasetu: stavy a typy mají UI labely, overdue od
   const soho = data.plan_items.find(p => p.id === 'plan-zakon-latky-lidskeho-puvodu');
   assert.ok(soho);
   assert.equal(isPlanItemOverdue(soho, now), false);
-  // Pitná voda: plán duben 2026, ale stav 'vlada' už není overdue-eligible → ne po termínu
+  // Pitná voda: plán duben 2026, ale stav 'parlament' už není overdue-eligible → ne po termínu
+  // (návrh je od 27. 7. 2026 v PSP jako sněmovní tisk 274)
   const voda = data.plan_items.find(p => p.id === 'plan-novela-ochrana-verejneho-zdravi-pitna-voda');
   assert.ok(voda);
-  assert.equal(voda.stav, 'vlada');
+  assert.equal(voda.stav, 'parlament');
   assert.equal(isPlanItemOverdue(voda, now), false);
   // EHDS: plán červen 2026, v červenci stále v připomínkovém řízení → po termínu
   const ehds = data.plan_items.find(p => p.id === 'plan-adaptace-ehds');
