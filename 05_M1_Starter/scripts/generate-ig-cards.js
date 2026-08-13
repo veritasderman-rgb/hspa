@@ -555,6 +555,7 @@ const MANIFEST = {
   'clanek-k-index-nemocnic': { kicker: 'Governance · transparentnost', signal: 'warn', stat: '13', claim: 'zdravotnických institucí jsme srovnali indexem rizik smluvní praxe.', context: 'Jediné A má holding Pardubice, nejhorší známku ministerstvo.' },
   'clanek-pohlavni-nemoci-2025': { kicker: 'Prevence · pohlavní nemoci', signal: 'warn', stat: '1 239', claim: 'případů syfilis za rok 2025 — nejvíc od roku 2001.', context: 'Kapavka naopak klesla o 13 % na 2 663 případů. Téměř 80 % nemocných jsou muži.' },
   'clanek-tuberkuloza-cr-2025': { kicker: 'Prevence · nákazy', signal: 'good', stat: '435', claim: 'onemocnění tuberkulózou za rok 2025 — 3,99 na 100 tisíc obyvatel.', context: 'Průměr EU/EHP byl v roce 2024 dvojnásobný. 52,4 % se narodilo mimo ČR.' },
+  'clanek-regionalni-nuzky-nadeje-doziti': { kicker: 'Nerovnosti · kraje a okresy', signal: 'bad', stat: '3,8', claim: 'roku dělí naději dožití mužů v Praze a v Ústeckém kraji.', context: 'Praha 79,2 vs Ústecký 75,4. Mezi okresy je rozdíl 5,5 roku — a nezavírá se.' },
 };
 
 function escapeXml(s) {
