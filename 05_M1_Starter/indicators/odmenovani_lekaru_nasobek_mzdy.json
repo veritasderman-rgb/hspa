@@ -1,0 +1,56 @@
+{
+  "id": "odmenovani_lekaru_nasobek_mzdy",
+  "name": "Odměňování lékařů-specialistů (násobek průměrné mzdy)",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Odměňování",
+  "definition": "Hrubý roční příjem lékařů-specialistů v zaměstnaneckém poměru vyjádřený jako násobek průměrné roční mzdy v celé ekonomice (OECD Health Statistics, ukazatel „Remuneration of specialists, ratio to average wage\"). Příjem zahrnuje vedle základního platu či mzdy i příplatky za služby, přesčasy a mimořádné odměny. Hodnota 2,74 znamená, že zaměstnaný lékař-specialista si v Česku vydělá zhruba 2,7násobek průměrné mzdy. Ukazatel měří relativní finanční atraktivitu lékařské profese — klíčový strukturální faktor retence lékařů v systému a jejich ochoty sloužit přesčasy, na nichž nepřetržitý provoz nemocnic stojí. Česká data do sběru OECD dodává ÚZIS ČR z výkazů E (MZ) o zaměstnancích a odměňování.",
+  "unit": "násobek prům. mzdy",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "oecd_sdmx2",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_REAC_EMP@DF_REMUN,1.1/",
+      "dataset": "OECD Health Statistics — Health workforce remuneration (DSD_HEALTH_REAC_EMP@DF_REMUN)",
+      "dimensions": {
+        "MEASURE": "AI (Annual income)",
+        "UNIT_MEASURE": "FCTR_WG_A_SAL_A (Factor of average annual wage)",
+        "HEALTH_PROF": "EMPLSPMP (Specialist medical practitioners)",
+        "WORKER_STATUS": "ICSE93_1 (Employees)",
+        "SEX": "_T",
+        "PRICE_BASE": "V"
+      },
+      "note": "Ověřeno živě 2026-08-13 přes repo parser (oecd_sdmx2): CZ 2,74 (2024); řada 2019–2024: 2,40 → 2,65 → 2,77 → 2,54 → 2,45 → 2,74; OECD průměr (mean 21 členských zemí reportujících za 2024) = 2,76 → pipeline zaokrouhluje na 2,8. Zdrojem českých dat v OECD je ÚZIS ČR (výkazy E o odměňování). Řada pro ČR sahá do roku 2000 (1,70)."
+    },
+    "fallback": {
+      "type": "uzis_report",
+      "url": "https://www.uzis.cz/res/f/008468/odmenovani-2024.pdf",
+      "note": "ÚZIS ČR: Odměňování pracovníků ve zdravotnictví 2024 (NZIS report, roční řada od 2010). Národní detail: v akutní lůžkové péči 2024 průměrný měsíční plat lékařů a zubních lékařů 126 723 Kč (státní a příspěvkový sektor), průměrná mzda 129 900 Kč (soukromý sektor) — u lékařů, na rozdíl od sester, mzdový režim plat mírně převyšuje."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DSD_HEALTH_REAC_EMP@DF_REMUN / FCTR_WG_A_SAL_A / EMPLSPMP",
+    "dataset": "OECD Health Statistics — Remuneration of specialists (employees), ratio to average wage. Benchmark 2,8 je průměr 21 členských zemí OECD s údajem za rok 2024 (mean 2,76, konvence pipeline oecd_sdmx2). Pro srovnání 2024: Maďarsko 4,41, Irsko 4,24, Nizozemsko 3,45, Německo 3,12, Slovensko 2,91, Polsko 2,86, Itálie 2,79, Španělsko 2,66, Finsko 2,57, Dánsko 2,38, Švédsko 2,17, Norsko 1,87; Francie 2,29 (2023), Rakousko nereportuje vůbec.",
+    "value": 2.8,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_EMP%40DF_REMUN"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (výkazy E o zaměstnancích a odměňování, reporting do OECD/Eurostat/WHO)",
+    "MZ ČR (platové tabulky příspěvkových organizací, úhradová vyhláška)",
+    "OECD Health Division (harmonizace ukazatele Remuneration of doctors)",
+    "ČLK — Česká lékařská komora a Sekce mladých lékařů (profesní zastoupení)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 2,74násobek průměrné mzdy (OECD, kategorie specialists / employees — zaměstnaní lékaři-specialisté, tedy především nemocniční lékaři). Časová řada od roku 2000 (1,70) ukazuje čtyři fáze: pozvolný růst do roku 2010 (1,95), skok po akci „Děkujeme, odcházíme\" (2011: 2,20) a plateau kolem 2,4 (2014–2019), covidový vrchol (2020: 2,65, 2021: 2,77 — odměny za nasazení v epidemii), pokles 2022–2023 (2,54 → 2,45) a nový skok 2024 na 2,74 — otisk dohody vlády s lékaři z prosince 2023 po přesčasovém protestu, která do odměn lékařů poslala 9,8 mld. Kč. V paritě kupní síly činil roční příjem českého zaměstnaného specialisty 108 788 USD PPP (2024) — méně než polovina německého (223 649), méně než v Polsku (130 586) či Maďarsku (157 693), prakticky stejně jako na Slovensku (108 723); průměr 26 reportujících zemí je 142 244. OECD publikuje pro ČR i zaměstnané praktické lékaře: 2,15násobek průměrné mzdy (2024, průměr 12 reportujících zemí 2,21). Národní detail ÚZIS (Odměňování 2024): v akutní lůžkové péči průměrný měsíční plat lékařů 126 723 Kč, mzda 129 900 Kč — u lékařů mzdový a platový režim prakticky splývají. OECD hodnota zahrnuje příplatky za služby, přesčasy a odměny — právě přesčasová složka tvoří u nemocničních lékařů významnou část příjmu. Origin = seed s hodnotami identickými s výstupem živého fetcheru (ověřeno parserem repa); mapping oecd_sdmx2_codes.json zajistí týdenní aktualizaci.",
+  "limitations": "Poměr k průměrné mzdě má dva pohyblivé členy — skok v roce 2024 je kombinací růstu odměn lékařů (dohoda z prosince 2023) a zpomalení růstu mezd v ekonomice; samotná hodnota nerozliší, který člen se pohnul. Kategorie „specialists / employees\" pokrývá jen zaměstnané specialisty — nezahrnuje ambulantní specialisty-podnikatele (OSVČ), jejichž příjmy jsou v ČR reportovány jen útržkovitě (naposledy 2007–2008, tehdy ~3,0–3,4násobek). Příjem zahrnuje přesčasy: část „vysokého\" poměru je odměnou za objem práce nad zákonný fond pracovní doby, ne za hodinovou cenu práce — lékař s 2,74násobkem průměrné mzdy může pracovat 1,3násobek běžného úvazku. Mezinárodní srovnatelnost oslabují rozdíly v tom, co země do příjmu počítají; Rakousko nereportuje vůbec, Francie a Belgie mají velkou část specialistů v režimu self-employed, který se do této řady nepočítá. Ukazatel neříká nic o rozptylu mezi odbornostmi (anesteziolog vs. patolog), regiony ani o nemzdových podmínkách (počet služeb, možnost vzdělávání), které retenci ovlivňují souběžně.",
+  "determinants": "Poměr určují tři politické mechanismy. **Platové tabulky:** lékaři ve státních, krajských a fakultních nemocnicích (příspěvkové organizace) jsou odměňováni platem podle nařízení vlády č. 341/2017 Sb. — každoroční rozhodnutí vlády o valorizaci tarifů a o zvláštních příplatcích přímo hýbe čitatelem. **Úhradová vyhláška:** akciové a soukromé nemocnice platí lékaře mzdou z úhrad pojišťoven; dohoda z prosince 2023 byla do systému poslána právě úhradovou vyhláškou na rok 2024 (9,8 mld. Kč vázaných na navýšení odměn zdravotníků). **Přesčasová regulace:** novela zákoníku práce (§ 93a, „další dohodnutá práce přesčas\") a její limity určují, kolik přesčasových hodin — a tedy přesčasového příjmu — systém od lékařů legálně odebírá; přesčasy tvoří významnou část rozdílu mezi tarifem a skutečným příjmem. Sekundárně působí konkurence zahraničních systémů (Německo a Rakousko s více než dvojnásobným příjmem v PPP) a slibovaný zákon o odměňování zdravotníků, který má tarify obou režimů sjednotit a navázat na průměrnou mzdu.",
+  "importance": "Odměňování lékařů je vedle odměňování sester druhá polovina největší nákladové i nejcitlivější politické položky českého zdravotnictví — personálních nákladů. Na rozdíl od sester ale u lékařů poměr k průměrné mzdě nikdy nebyl stabilizační úspěch, nýbrž opakovaný zdroj konfliktu: akce „Děkujeme, odcházíme\" (2011) i přesčasový protest „Lékaři jsou jenom lidi\" (2023) vznikly z rozporu mezi oficiálním tarifem a příjmem realizovaným přes přesčasy. HSPA čtení: hodnota 2,74 je těsně pod průměrem reportujících zemí OECD (2,8) — signál „warn\" — a skok z 2,45 (2023) ukazuje, že prosincová dohoda peníze skutečně doručila. Zůstávají ale dvě strukturální rizika: příjem stojí na přesčasech, které mladí lékaři odmítají sloužit v dosavadním objemu, a v paritě kupní síly zůstává český specialista na necelé polovině německého — emigrace absolventů tedy dál dává ekonomický smysl. Indikátor doplňuje odměňování sester a uzavírá tak mzdovou dvojici, bez níž nelze číst kapacitní ukazatele pracovní síly (lékaři na 1 000 obyvatel, podíl lékařů 55+, absolventi).",
+  "patient_story": "Jakub je čtvrtým rokem internista v krajské nemocnici. Papírově má tarif kolem sedmdesáti tisíc; skutečnou výplatu mu ale dělají služby — šest až osm nočních a víkendových měsíčně, k tomu přesčasy, které nikdo jiný nevezme, protože na oddělení chybějí dva lékaři. Na podzim 2023 podepsal výpověď z přesčasů jako šest tisíc kolegů: ne kvůli konkrétní částce, ale kvůli systému, který jeho příjem legálně skládá z hodin nad zákonný limit. Když vláda v prosinci 2023 podepsala s lékaři dohodu a poslala do odměn 9,8 miliardy, Jakubova výplata poprvé viditelně poskočila. Otázka, kterou si klade dnes, zní: bylo to narovnání — nebo jednorázový úplatek za klid?\n\nData říkají obojí. Zaměstnaný lékař-specialista si v Česku v roce 2024 vydělal 2,74násobek průměrné mzdy — historicky nejvíc, více než kolegové ve Španělsku (2,66), Finsku (2,57) či Švédsku (2,17), a skok z 2,45 (2023) je v celé pětadvacetileté řadě druhý největší mimo covid. Přesto je hodnota těsně pod průměrem reportujících zemí OECD (2,8) a signál indikátoru zůstává „varovný\": Německo je na 3,12, Slovensko na 2,91, Polsko na 2,86 a Maďarsko po plošném zvednutí lékařských platů na 4,41. V paritě kupní síly je rozdíl syrovější — český specialista bere 108 788 USD ročně, německý 223 649. Za hranicemi, kam Jakub dojede za dvě hodiny, stojí jeho práce dvojnásobek.\n\nProč se křivka hýbe skokově a vždy po konfliktu? Protože český systém nemá pravidlo, jen vyjednávání. Tarify v příspěvkových nemocnicích určuje vláda nařízením o platových tabulkách, mzdy v akciových nemocnicích tečou z úhradové vyhlášky — a ani jeden mechanismus není navázán na vývoj mezd v ekonomice. Výsledkem je cyklus: poměr několik let taje (2021–2023 z 2,77 na 2,45), napětí roste, přijde protest — „Děkujeme, odcházíme\" v roce 2011, přesčasová krize v roce 2023 — a vláda skokově dorovnává. Mezitím příjem drží přesčasy: významná část rozdílu mezi tarifem a skutečnou výplatou vzniká z hodin, které novela zákoníku práce (§ 93a) umožňuje „dohodnout navíc\" — tedy z modelu, proti kterému mladí lékaři protestovali.\n\nPáka je pojmenovaná a leží na stole: zákon o odměňování zdravotníků, který vláda lékařům v prosincové dohodě přislíbila — tarify navázané na průměrnou mzdu by cyklus konflikt–skok–tání nahradily předvídatelným pravidlem, jako to zákonem z roku 2017 udělalo Polsko. Druhou páku drží ministerstvo v úhradové vyhlášce: může, jako v roce 2024, vázat úhrady na prokazatelné navýšení odměn. A třetí je přesčasová: každé zpřísnění limitů § 93a bez růstu tarifů příjem lékařů reálně sníží — a křivku indikátoru pošle dolů právě ve chvíli, kdy generace Jakubů rozhoduje, zda zůstat. Pro ně je 2,74 proti 2,8 jednoduchá otázka: je tohle země, kde se vyplatí sloužit noční?",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
