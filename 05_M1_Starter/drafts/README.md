@@ -6,7 +6,6 @@ Tato složka obsahuje obsah, který je v redakční přípravě. **Není načít
 |---|---|
 | `clanek-*.html` (článek) | (1) Přesunout do rootu `05_M1_Starter/` (sourozenec `index.html`), (2) přidat záznam do `data/articles.json`, (3) odebrat `<meta name="robots" content="noindex, nofollow">` z `<head>`. |
 | `explainer-*.json` | (1) Aktualizovat `verified_at` a `verification_status: "ok"`, (2) zkopírovat objekt (bez pole `_draft_note`) do `data/explainers.json` jako další položku v poli `explainers`, (3) propojit s odpovídajícími indikátory v `linked_indicators`. |
-| `newsletter-YYYY-MM-DD.{spec.json,html}` | Vydání připravené ručně, které se nepodařilo naplánovat v Brevu (chybějící `BREVO_API_KEY` v prostředí). (1) Založit kampaň v Brevu z přiloženého HTML podle `PROMPT_NEWSLETTER_ROUTINE.md` kroku D, (2) doplnit záznam do `data/newsletter-log.json`, (3) smazat oba soubory. Znovu sestavit lze `node scripts/newsletter-build.js drafts/newsletter-YYYY-MM-DD.spec.json`. |
 
 ## Aktuální drafty (10. 5. 2026)
 
