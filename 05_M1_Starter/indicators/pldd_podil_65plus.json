@@ -1,0 +1,55 @@
+{
+  "id": "pldd_podil_65plus",
+  "name": "Podíl praktických lékařů pro děti a dorost ve věku 65+",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Primární péče o děti a dorost",
+  "definition": "Podíl aktivních praktických lékařů pro děti a dorost (PLDD) ve věku 65 a více let na celkovém počtu aktivních lékařů této odbornosti (v %). Měří generační udržitelnost sítě dětské primární péče — jediného segmentu, který registruje děti, provádí povinná očkování a preventivní prohlídky a hlídá vývoj dítěte od narození do 19 let. Zdrojem jsou registry NZIS: Národní registr zdravotnických pracovníků (NR-ZP; aktivní lékaři se specializací PLDD/pediatr působící v ordinacích PLDD) a Národní registr poskytovatelů zdravotních služeb (NRPZS; síť míst poskytování).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nrzp",
+      "format": "web_table",
+      "endpoint": "https://www.zdravotnickeodbory.cz/wp-content/uploads/2023/09/personalni-kapacity-ve-zdravotnictvi-prof.-dusek-uzis-cr.pdf",
+      "dataset": "ÚZIS ČR — analytické studie programu Zdraví 2030: Kapacita a stav sítě PLDD (Národní registr zdravotnických pracovníků, Národní registr poskytovatelů zdravotních služeb)",
+      "dimensions": {
+        "country": "CZ",
+        "specialty": "praktický lékař pro děti a dorost (PLDD)",
+        "age_group": "65+",
+        "year": "annual"
+      },
+      "note": "ÚZIS publikuje věkovou strukturu PLDD v analytických prezentacích programu Zdraví 2030 (NR-ZP, stav k 31. 12. daného roku) a v podkladech pro MZ ČR; průběžné aktualizace vycházejí z NRPZS. Definice: všichni aktivní lékaři se specializací pediatr nebo PLDD a/nebo lékaři pracující v samostatné ordinaci PLDD."
+    },
+    "fallback": {
+      "type": "press_analysis",
+      "url": "https://www.zdravotnickydenik.cz/2025/04/praktici-pro-dospele-obraceji-kormidlo-pediatrie-je-vsak-stale-v-cervenych-cislech/",
+      "note": "Analýza dat NRPZS (extrakce k 25. 10. 2024) publikovaná Zdravotnickým deníkem — zdroj hodnoty 34,6 % za rok 2023 a potvrzení, že věková kategorie 60+ tvoří nadpoloviční většinu odbornosti."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Přímý mezinárodní benchmark věkové struktury pediatrů primární péče neexistuje — OECD i Eurostat publikují věkovou strukturu jen za lékaře celkem (ČR: 41 % lékařů 55+, viz indikátor podil_lekaru_55plus; OECD průměr 34 %). Kontext hustoty: Eurostat (hlth_rs_spec, kategorie General paediatricians, 2020) udává ČR 14,5 pediatra na 100 000 obyvatel, Německo 17,7, Rakousko 16,8, Polsko 14,5 (2017); země s primární péčí o děti postavenou na všeobecných prakticích (Nizozemsko, skandinávské země) vykazují jednotky pediatrů na 100 000 a srovnání s nimi nedává smysl. Česká hodnota 65+ je proto hodnocena proti vlastní časové řadě a proti věkové struktuře českého lékařského sboru celkem.",
+    "value": null,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_spec/default/table?lang=en"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (NR-ZP, NRPZS)",
+    "MZ ČR (rezidenční místa, vzdělávání)",
+    "Odborná společnost praktických dětských lékařů ČLS JEP (OSPDL)",
+    "Sdružení praktických lékařů pro děti a dorost ČR"
+  ],
+  "method_notes": "Hodnota za rok 2023: 34,6 % aktivních PLDD ve věku 65+ (analýza dat NRPZS, extrakce k 25. 10. 2024, publikováno 4/2025). Časová řada: 2021: 31,9 % (tamtéž), 2022: 32,5 % (NR-ZP k 31. 12. 2022, analytická studie ÚZIS programu Zdraví 2030, 9/2023 — definice: aktivní lékaři se specializací pediatr/PLDD a/nebo pracující v samostatné ordinaci PLDD; týž zdroj udává průměrný věk 56 let a podíl 60+ 47,1 %). Doprovodné ukazatele z téže studie: 2 131 aktivních lékařů, 1 870 úvazků, 2 168 míst poskytování (2022); bilance míst poskytování PLDD 2018–2022: −62, −60, −79, −49, −86, celkem −336; cca 182 tisíc dětí bez vykázané kapitace u PLDD a dalších cca 90 tisíc vykázáno v péči praktiků pro dospělé; problém s dostupností péče má cca 18 % dětské populace; odchodem do důchodu je v horizontu 5–7 let ohroženo 700–900 úvazků. Indikátor je veden jako seed/ilustrativní do napojení na pravidelný výstup ÚZIS (NR-ZP open data / oborové statistiky).",
+  "limitations": "Hodnoty 2021 a 2023 vycházejí z analýz NRPZS, hodnota 2022 z NR-ZP — definice „aktivního PLDD“ se mezi registry mírně liší (NR-ZP zahrnuje i pediatry vypomáhající v ordinacích PLDD), takže řada není plně homogenní; meziroční srovnání je orientační, trend je však konzistentní napříč zdroji. Podíl 65+ je hrubý ukazatel: nezachycuje výši úvazku (lékaři v důchodovém věku často ordinují na částečný úvazek, takže kapacitní dopad je větší, než podíl hlav naznačuje) ani regionální rozdíly (riziko je koncentrováno mimo velká města). Věk sám o sobě neměří kvalitu péče — indikátor vypovídá o riziku výpadku kapacit, ne o výkonu jednotlivých lékařů. Přímé mezinárodní srovnání neexistuje kvůli odlišné organizaci primární péče o děti (pediatrický vs. všeobecně-praktický model).",
+  "determinants": "Stárnutí odbornosti určují tři strukturální faktory. **První je vzdělávací zlom:** samostatný atestační obor praktické lékařství pro děti a dorost byl novelou zákona č. 95/2004 Sb. (zákonem č. 67/2017 Sb.) k 1. 7. 2017 zrušen a sloučen do společného oboru pediatrie — příprava nových lékařů pro primární péči tak vede přes nemocniční kmen a jen zhruba polovina čerstvě atestovaných pediatrů skutečně zamíří do ordinací PLDD (z 292 zaměstnaných absolventů 2016–2022 nastoupilo 153 do samostatné ordinace PLDD). **Druhý je ekonomika předávání praxí:** venkovské a periferní praxe s menším kapitačním kmenem se obtížně prodávají i přebírají, takže odcházející lékaři často ordinaci prostě zavřou — síť míst poskytování se za roky 2018–2022 zmenšila o 336. **Třetí je demografie samotné profese:** silné ročníky pediatrů z 70. a 80. let odcházejí do důchodu najednou, zatímco pediatrický kmen dorůstá pomalu (cca 250 nově zařazených ročně) a nové lékařky častěji pracují na částečné úvazky v městských aglomeracích.",
+  "importance": "PLDD je vstupní brána celé dětské medicíny: registruje prakticky každé dítě v zemi, provádí povinná očkování (hexavakcína, MMR), preventivní prohlídky, screening vývoje i posudkovou činnost. Výpadek této sítě se proto neprojeví jen frontami — rozpadá se jím preventivní systém, který dashboard sleduje v indikátorech proočkovanosti a prevence. Z pohledu HSPA framework (Struktury → Pracovní síla) jde o nejrizikovější personální ukazatel českého zdravotnictví: zatímco u praktiků pro dospělé se věková struktura začíná zlepšovat, u PLDD se dále zhoršuje a ÚZIS označuje problém za akutní a plošný. Indikátor doplňuje obecný ukazatel podílu lékařů 55+ o segment, kde je generační riziko nejkoncentrovanější a kde má stát nejkonkrétnější nástroje (rezidenční místa, úhradové bonifikace, organizace vzdělávání).",
+  "patient_story": "Tereza z Kraslic na Sokolovsku obvolala po narozeni syna čtyři ordinace dětských praktiků. První dvě to vzdaly rovnou: nabíráme jen sourozence. Ve třetí zvedla telefon sestra s omluvou, že paní doktorka v prosinci končí — je jí sedmdesát a náhradu za ni pojišťovna hledá třetím rokem. Až čtvrtá ordinace, dvacet kilometrů daleko, novorozence zapsala. Terezin syn tak má svou lékařku — jen k ní rodina jezdí přes kopec do vedlejšího města a v čekárně potkává rodiče, kteří dojíždějí ještě dál.\n\nTerezina zkušenost je přesný otisk čísla, které tento indikátor měří. V roce 2023 bylo 34,6 % praktických lékařů pro děti a dorost ve věku 65 a více let — o tři procentní body víc než v roce 2021 (31,9 %) a řádově víc, než činí podíl 65+ v celé české populaci lékařů. Téměř polovina dětských praktiků už překročila šedesátku a průměrný věk odbornosti je 56 let. Síť se přitom už tenčí: mezi roky 2018 a 2022 ubylo 336 míst poskytování a zhruba 182 tisíc dětí nemá vykázanou kapitaci u žádného dětského praktika. ÚZIS odhaduje, že v příštích pěti až sedmi letech je odchodem do důchodu ohroženo 700 až 900 úvazků — víc než třetina dnešní kapacity.\n\nProč síť stárne rychleji, než dorůstá? V roce 2017 stát zrušil samostatný atestační obor praktického dětského lékařství a sloučil ho do nemocniční pediatrie — nový pediatr se od té doby školí především u lůžka a do primární péče jich nakonec zamíří jen polovina. Odcházející lékaři na venkově navíc často nemají komu praxi předat: malý kapitační kmen se nevyplatí koupit, a tak ordinace prostě zavře. A silné ročníky pediatrů, které nastoupily v sedmdesátých a osmdesátých letech, odcházejí do důchodu všechny najednou.\n\nPáku drží stát a pojišťovny. Ministerstvo zdravotnictví může navyšovat dotovaná rezidenční místa pro přípravu v primární péči a dotáhnout úpravu vzdělávání, aby cesta z fakulty do dětské ordinace byla kratší a jistější. Zdravotní pojišťovny umějí bonifikovat převzetí praxe v ohrožených oblastech a kraje nabízejí náborové příspěvky. Nic z toho nezabere přes noc — výchova dětského praktika trvá pět let. Právě proto je potřeba sledovat tento indikátor dnes: každý rok, o který se řešení odloží, znamená další ročník ordinací, které zavřou bez náhrady, a další rodiče, kteří jako Tereza obvolávají okres, aby jejich dítě vůbec někdo zapsal.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}
