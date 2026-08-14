@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-14
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-08-14
+    creation_phase: discovery+article-write
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "ARTICLE-WRITE z discovery 14. 8. 2026: probíhající vlna veder (výstrahy ČHMÚ) + ÚZIS týž den publikoval aktualitu 'Vysoké teploty a mortalita' (aid=8757) o nedostupnosti real-time dat o úmrtnosti. Centrální KPI: 1. 8. 1994 = 420 zemřelých/den, +45 % nad sezónní základnu — vlastní reprodukovatelný výpočet redakce z otevřeného datasetu ÚZIS NR-06-33 (data.mzcr.cz distribuce 467, CSV 1994–2024, Last-Modified 24. 11. 2025, CC BY 4.0, staženo a plně zparsováno 14. 8. 2026; 326 524 řádků; roční úhrny sedí: 1994 = 117 373, 2024 = 112 211). Sezónní základna = průměr ±7 dní × ±3 okolní roky. Okna: 23. 7.–8. 8. 1994 +855 (+17,4 %); 25. 6.–3. 7. 1994 +429 (+15,9 %); 3.–16. 8. 2015 +771 (+19,7 %); 16.–22. 6. 2013 +440 (+23,0 %); 30. 7.–9. 8. 2018 +452 (+14,2 %); 10.–18. 7. 2010 +314 (+12,6 %); léto 2024 průměr 290,7/den, max 337 (10. 7.). 1. 8. 1994: 234/420 (56 %) oběhová soustava. Jen 3 letní dny ≥400 zemřelých v celé řadě (27. 6., 29. 6., 1. 8. 1994). Eurostat demo_r_mwk_ts: CZ W27/2026 = 2 299 (provisional), refresh 13. 8. 2026, W28–W31 prázdné (API pull 14. 8. 2026). Literatura přes PubMed MCP 14. 8. 2026: Kyselý & Kříž 2003 (PMID 12931347), Urban et al. 2017 (DOI 10.3390/ijerph14121562), Kyselý & Kříž 2008 (DOI 10.1007/s00484-008-0166-3), Urban et al. 2020 (DOI 10.1016/j.scitotenv.2020.137093). Clim4Cast teplotní index ověřen WebFetch 14. 8. 2026. Methodology caveat v článku (jednoduchá základna ≠ GAM literatury, mortality displacement ~50 % dle Kyselý 2003, ne kauzální atribuce). Datový rámec: discovery/data-frame-vedra-umrtnost-data.md. Status: review-pending — čeká na ruční schválení redakce. published:false, scheduled_for 2026-08-15 (viz routing-2026-08-14.md)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nejsmrtelnější den českých veder: 1. srpna 1994 zemřelo 420 lidí. Kolik zabíjí dnešní vlna, data řeknou nejdřív za rok · HSPA Monitor</title>
+<meta name="description" content="Otevřená data ÚZIS o denních úmrtích 1994–2024 ukazují, co vedra dělají s českou úmrtností: nejhorší den 1. 8. 1994 přinesl 420 zemřelých (+45 % nad sezónní průměr), hlavní vlna 2015 celkem 771 úmrtí nad základnu. Jenže poslední den v datech je 31. prosinec 2024 — a ÚZIS v den letošní vlny veder přiznává, že data o zemřelých v reálném čase nemá.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nejsmrtelnější den českých veder: 1. srpna 1994 zemřelo 420 lidí. Kolik zabíjí dnešní vlna, data řeknou nejdřív za rok">
+<meta property="og:description" content="Vlastní výpočet z otevřených dat ÚZIS (denní úmrtí 1994–2024): peak 1. 8. 1994 = 420 zemřelých (+45 %), vlna 2015 = +771 úmrtí (+19,7 %). Real-time data o úmrtnosti ale Česko nemá — nejnovější denní údaj je přes 19 měsíců starý a týdenní čísla Eurostatu končí začátkem července.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-15">
+<meta property="article:section" content="Zdraví populace">
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Životní prostředí</span>
+        <span class="article-tag article-tag-muted">vedra · úmrtnost · otevřená data · surveillance</span>
+      </div>
+      <h1 class="article-title">Nejsmrtelnější den českých veder: 1. srpna 1994 zemřelo 420 lidí. Kolik zabíjí dnešní vlna, data řeknou nejdřív za rok</h1>
+      <p class="article-deck">
+        Česko prožívá další vlnu veder s výstrahami před extrémní tepelnou zátěží — a ÚZIS ve stejný den vysvětluje, že data o zemřelých dostává jednou ročně a v reálném čase je nemá. Stáhli jsme proto otevřený dataset denních úmrtí 1994–2024 a spočítali, co horko s českou úmrtností skutečně dělá: nejhorší den v celé řadě, <strong>1. srpna 1994, zemřelo 420 lidí</strong> — o 45 procent víc, než je pro přelom července a srpna obvyklé. Hlavní vlna veder v srpnu 2015 si vyžádala zhruba <strong>771 úmrtí nad sezónní úroveň</strong>. Kolik lidí zemřelo kvůli horku letos, se z českých dat dozvíme nejdřív na podzim příštího roku.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">15. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Kolik lidí zabíjejí vedra? Je to otázka, kterou si při každé vlně horka klade veřejnost i novináři — a na kterou český systém neumí odpovědět dřív než s mnohaměsíčním zpožděním. Ústav zdravotnických informací a statistiky (ÚZIS) to 14. srpna, uprostřed probíhající vlny veder, řekl nezvykle otevřeně: <em>„Data o zemřelých osobách dostává ÚZIS v pravidelném jednoročním intervalu. V současné chvíli tak nejsou k dispozici data v reálném čase."</em> Co k dispozici je, jsou otevřená data o denních úmrtích za roky 1994 až 2024 — a ta vyprávějí velmi konkrétní příběh o tom, co horko s úmrtností dělá. Prošli jsme je den po dni.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avVedraHeroH">
+        <figcaption class="av-figure-h" id="avVedraHeroH">Co vedra dělají s českou úmrtností — a jak staré je naše vědění</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="420">420</span>
+            <span class="av-counter-label">zemřelých 1. srpna 1994 — nejhorší letní den v řadě 1994–2024</span>
+            <span class="av-counter-foot">sezónní úroveň pro ten den: ~289 úmrtí</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="45" data-prefix="+" data-suffix=" %">+45 %</span>
+            <span class="av-counter-label">nad obvyklou úroveň přelomu července a srpna</span>
+            <span class="av-counter-foot">56 % úmrtí toho dne: nemoci oběhové soustavy</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="771" data-prefix="+">+771</span>
+            <span class="av-counter-label">úmrtí nad sezónní úroveň za hlavní vlnu veder 3.–16. 8. 2015</span>
+            <span class="av-counter-foot">+19,7 % nad sezónní úroveň — v absolutním počtu nejvíc od roku 1994</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="19" data-prefix="přes " data-suffix=" měsíců">přes 19 měsíců</span>
+            <span class="av-counter-label">stáří nejnovějšího denního údaje o úmrtích (31. 12. 2024)</span>
+            <span class="av-counter-foot">týdenní čísla Eurostatu končí týdnem do 5. 7. 2026</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> výpočet redakce z otevřených dat ÚZIS <code>NR-06-33</code> „Denní úmrtí — věk, pohlaví, příčina" (data.mzcr.cz, 1. 1. 1994 – 31. 12. 2024, publikováno 26. 11. 2025, CC BY 4.0; staženo 14. 8. 2026). Sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Eurostat <code>demo_r_mwk_ts</code>, API pull 14. 8. 2026.</p>
+      </figure>
+
+      <h3>Tři dny nad čtyři sta — všechny z léta 1994</h3>
+
+      <p>
+        V celé jednatřicetileté řadě denních úmrtí překročily hranici 400 zemřelých jen tři letní dny — a všechny tři patří roku 1994: 27. června (420 zemřelých), 29. června (416) a 1. srpna (420). Léto 1994 zasáhly Česko dvě mimořádné vlny veder a otevřená data ukazují obě: na přelomu června a července zemřelo za devět dní zhruba o 429 lidí víc, než odpovídá sezóně (+15,9 %), a mezi 23. červencem a 8. srpnem dalších zhruba 855 lidí nad obvyklou úroveň (+17,4 %). Nejde přitom o statistickou kuriozitu z dávné historie — právě léto 1994 je dodnes referenčním bodem české odborné literatury o horku a úmrtnosti.
+      </p>
+
+      <p>
+        Že vedra zabíjejí především přes srdce a cévy, je v datech vidět přímo: 1. srpna 1994 připadlo 234 z 420 úmrtí — 56 procent — na nemoci oběhové soustavy. Průkopnická analýza Kyselého a Kříže, publikovaná v časopise Epidemiologie, mikrobiologie, imunologie, došla nad tehdejšími daty k závěru, že ve špičkách vln veder denní počty zemřelých přesahují obvyklou úroveň o více než 100 úmrtí (přes 30 procent) a že nadúmrtnost na kardiovaskulární příčiny roste ještě strměji než celková. Pro červnovou vlnu 1994 (17.–30. 6.) vyčíslili nadúmrtnost na 456 zemřelých, tedy +10,3 procenta.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avVedraTblH">
+        <figcaption class="av-figure-h" id="avVedraTblH">Šest vln veder v denních datech o úmrtích (výpočet redakce, NR-06-33)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Období</th>
+                <th scope="col">Zemřelí celkem</th>
+                <th scope="col">Sezónní úroveň</th>
+                <th scope="col">Nad úroveň</th>
+                <th scope="col">Relativně</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>23. 7. – 8. 8. 1994</td>
+                <td>5 770</td>
+                <td>≈ 4 915</td>
+                <td><strong>+855</strong></td>
+                <td>+17,4 %</td>
+              </tr>
+              <tr>
+                <td>25. 6. – 3. 7. 1994</td>
+                <td>3 122</td>
+                <td>≈ 2 693</td>
+                <td><strong>+429</strong></td>
+                <td>+15,9 %</td>
+              </tr>
+              <tr>
+                <td>3. – 16. 8. 2015</td>
+                <td>4 677</td>
+                <td>≈ 3 906</td>
+                <td><strong>+771</strong></td>
+                <td><strong>+19,7 %</strong></td>
+              </tr>
+              <tr>
+                <td>16. – 22. 6. 2013</td>
+                <td>2 353</td>
+                <td>≈ 1 913</td>
+                <td><strong>+440</strong></td>
+                <td><strong>+23,0 %</strong></td>
+              </tr>
+              <tr>
+                <td>30. 7. – 9. 8. 2018</td>
+                <td>3 640</td>
+                <td>≈ 3 188</td>
+                <td><strong>+452</strong></td>
+                <td>+14,2 %</td>
+              </tr>
+              <tr>
+                <td>10. – 18. 7. 2010</td>
+                <td>2 795</td>
+                <td>≈ 2 481</td>
+                <td><strong>+314</strong></td>
+                <td>+12,6 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> výpočet redakce z ÚZIS <code>NR-06-33</code> (staženo 14. 8. 2026). Okna vymezena redakcí kolem dnů s nejvyšší odchylkou; sezónní úroveň = průměr ±7 dní × ±3 okolní roky. Odborné studie s přesnějšími modely docházejí k jiným (zpravidla nižším) číslům — viz caveat níže.</p>
+      </figure>
+
+      <h3>Rok 2015: nejdelší zátěž, senioři v hlavní roli</h3>
+
+      <p>
+        Druhým referenčním létem je rok 2015. V našich číslech vychází hlavní srpnová vlna (3.–16. 8.) na zhruba 771 úmrtí nad sezónní úroveň, relativně +19,7 procenta — v absolutním počtu nadúmrtí nejvíc ze všech vln po roce 1994 (relativní rekord drží krátká, intenzivní červnová vlna 2013 s +23,0 procenta). Recenzovaná analýza téhož léta (Urban a kol., 2017) dodává kontext, který z prostých počtů nevyčtete: léto 2015 bylo rekordní v celkové délce vln veder i v kumulativní tepelné zátěži a relativní nadúmrtnost jeho hlavní vlny překonala i rok 1994. A zatímco v roce 1994 zasáhla nadúmrtnost mladší ročníky i seniory srovnatelně, v roce 2015 už výrazně silněji dopadla na osoby 65+.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="23" data-prefix="+" data-suffix=" %">+23 %</span>
+          <span class="av-counter-label">nadúmrtnost během jediného týdne veder 16.–22. 6. 2013</span>
+          <span class="av-counter-foot">výpočet redakce z NR-06-33; krátká, ale intenzivní vlna</span>
+        </div>
+      </aside>
+
+      <p>
+        Dlouhodobý obrázek shrnuje navazující studie stejného týmu (2020): průměrný dopad jednoho dne vlny veder na nadúmrtnost v Česku mezi lety 1994 a 2017 klesal zhruba o 2–3 procenta za dekádu — populace se adaptovala, zlepšila se zdravotní péče a funguje biometeorologická předpověď. Jenže tento pokles se v poslední sledované dekádě zastavil, a protože vln veder přibývá a jsou intenzivnější, celkový počet úmrtí spojených s horkem navzdory adaptaci roste. Nejzranitelnější skupinou jsou přitom stále starší lidé — těžiště rizika se posunulo k mužům nad 70 a ženám nad 75 let. Česko se přitom může učit i z vlastní historie: slabší dopad extrémně horkého léta 2003 připisuje literatura mimo jiné právě včasnému varování a větší informovanosti veřejnosti.
+      </p>
+
+      <h3>Proč odpověď dorazí až za rok</h3>
+
+      <p>
+        Teď to podstatné: všechna čísla výše končí 31. prosincem 2024. Novější denní data o úmrtích neexistují — respektive existují, ale zatím ne ve statistice. Cesta jednoho úmrtí do otevřených dat vede přes List o prohlídce zemřelého, matriku a roční zpracování v ÚZIS; dataset denních úmrtí s příčinami se aktualizuje jednou ročně (naposledy 26. listopadu 2025, o data za rok 2024). Rychlejší kanály existují, ale mají své limity: týdenní počty zemřelých bez příčin publikuje ČSÚ a přebírá je Eurostat — jenže k 14. srpnu 2026 končí česká řada týdnem do 5. července. Probíhající vlna veder v nich zkrátka ještě není.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avVedraTimelineH">
+        <figcaption class="av-figure-h" id="avVedraTimelineH">Jak dlouho putuje úmrtí do statistiky (stav k 14. 8. 2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">Den 0</time>
+            <h4 class="av-timeline-title">Úmrtí a List o prohlídce zemřelého</h4>
+            <p class="av-timeline-desc">Prohlížející lékař vyplní List o prohlídce zemřelého — prvotní záznam, ze kterého statistika úmrtnosti vychází.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">~5–6 týdnů</time>
+            <h4 class="av-timeline-title">Týdenní počty zemřelých (bez příčin)</h4>
+            <p class="av-timeline-desc">ČSÚ publikuje týdenní počty zemřelých, přebírá je Eurostat (<code>demo_r_mwk_ts</code>). K 14. 8. 2026 poslední dostupný týden: do 5. 7. 2026 (2 299 zemřelých, předběžný údaj).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">~11 měsíců po konci roku</time>
+            <h4 class="av-timeline-title">Denní otevřená data s příčinami (NR-06-33)</h4>
+            <p class="av-timeline-desc">ÚZIS zveřejní denní úmrtí podle věku, pohlaví a kapitol MKN-10 za celý uzavřený rok. Data za rok 2024 vyšla 26. 11. 2025; data za rok 2025 dosud publikována nejsou.</p>
+          </li>
+          <li class="av-timeline-item">
+            <time class="av-timeline-date">Roky poté</time>
+            <h4 class="av-timeline-title">Atribuční studie</h4>
+            <p class="av-timeline-desc">Odborné analýzy s modelovanou základnou a definicí vln veder vyčíslí, kolik úmrtí lze horku skutečně přičíst. Poslední velké české práce pokrývají období do roku 2017.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — aktualita „Vysoké teploty a mortalita" (14. 8. 2026) a metodika datasetu <code>NR-06-33</code>; Eurostat <code>demo_r_mwk_ts</code> (API pull 14. 8. 2026); Urban et al. 2020 (rozsah studií).</p>
+      </figure>
+
+      <p>
+        ÚZIS sám v aktualitě z poloviny srpna přiznává, že mu chybějí údaje odrážející probíhající situaci, a odkazuje čtenáře na tři rychlejší, byť nepřímé stopy: týdenní zemřelé na webu ČSÚ, otevřená data o denních úmrtích na portálu NZIP a předpověď teplotního indexu projektu Clim4Cast. Hospitalizační data a výjezdy záchranné služby mají podle ústavu menší zpoždění než data o zemřelých — ani ta ale nejsou k dispozici v reálném čase.
+      </p>
+
+      <h3>Co se dá sledovat už dnes</h3>
+
+      <p>
+        Pro aktuální rozhodování — kdy varovat, kdy posílit služby, kdy otevřít chlazená centra — tak Česko nemá úmrtnostní data, ale předpovědní nástroje. Vedle výstrah ČHMÚ před tepelnou zátěží běží středoevropský projekt Clim4Cast (Interreg Central Europe), který nad modelem ECMWF publikuje desetidenní předpověď „zdánlivé teploty" — teplotního indexu kombinujícího teplotu a vlhkost, tedy to, jak horko tělo skutečně pociťuje. Právě na něj ÚZIS v aktualitě odkazuje. Co horko dělá s organismem a proč jsou nejohroženější senioři s chronickými nemocemi, jsme popsali v článku <a href="clanek-vedro-a-telo.html">Co s vámi dělá vedro</a>; jak zátěž dopadá na provoz nemocnic, v článku <a href="clanek-nemocnice-v-horku.html">Nemocnice v tropickém dni</a>.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak číst naše výpočty">
+        <p class="article-callout-h">Caveat — jak číst naše výpočty</p>
+        <p>
+          Čísla označená jako „výpočet redakce" jsou prostá odchylka denních počtů zemřelých od sezónní úrovně (průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky), spočtená z otevřeného datasetu NR-06-33; výpočet je plně reprodukovatelný, ale <strong>není to kauzální atribuce horku</strong>. Odborné studie pracují s modelovanou základnou (GAM), explicitní definicí vlny veder a vyloučením epidemií — proto docházejí k jiným číslům (např. pro červen 1994 uvádí Kyselý a Kříž +456 úmrtí v okně 17.–30. 6., náš jednodušší výpočet +429 v okně 25. 6.–3. 7.). Část nadúmrtnosti navíc tvoří tzv. mortality displacement: úmrtí lidí v natolik křehkém stavu, že by nastala v řádu dnů až týdnů i bez horka — podle Kyselého a Kříže šlo v roce 1994 až o polovinu obětí. A srovnání napříč dekádami nese i strukturální posun: populace stárne, takže stejná vlna dnes potkává křehčí populaci než v roce 1994.
+        </p>
+      </aside>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Nabízejí se dva závěry. Ten datový: Česko má výjimečně kvalitní <em>retrospektivní</em> data — denní úmrtí s příčinami za 31 let, volně ke stažení pod otevřenou licencí — ale žádnou <em>průběžnou</em> úmrtnostní surveillance, která by uměla říct, co se děje teď. ÚZIS to nezastírá; roční interval předání dat o zemřelých je systémové nastavení, ne selhání úřadu. Debata o rychlejším hlášení úmrtí — celá úmrtnostní statistika stojí na Listu o prohlídce zemřelého, jehož data mají na NZIP vlastní sekci otevřených datových sad — je proto legitimním pokračováním této vlny veder. A ten praktický: dokud rychlejší data nejsou, platí, že prevence se řídí předpovědí, ne statistikou. Literatura je v tom konzistentní — tam, kde fungovalo včasné varování a informovanost, byl dopad veder měřitelně slabší. Až data za léto 2026 na podzim 2027 dorazí, dozvíme se, kolik letošní vlny stály. Do té doby je nejlepší dostupnou odpovědí na otázku „kolik lidí zabíjejí vedra" právě historie: v nejhorších dnech stovka úmrtí navíc denně.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-nadumrtnost.html"><strong>Nadúmrtnost (excess mortality)</strong></a> — 2,7 % nad základnou 2016–2019 (Eurostat, 2025)</li>
+        <li><a href="indikator-mortalita_kardiovaskularni.html"><strong>Mortalita na kardiovaskulární nemoci</strong></a> — 463,75 na 100 000 ob. standardizovaně (Eurostat, 2023); právě oběhová úmrtí při vedrech rostou nejstrměji</li>
+        <li><a href="indikator-multimorbidita_65plus.html"><strong>Multimorbidita seniorů (65+)</strong></a> — 65 % seniorů se dvěma a více chronickými nemocemi (SHARE, 2022); nejzranitelnější skupina při vlnách veder</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data — primární zdroje</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — „Vysoké teploty a mortalita" (aktualita, 14. 8. 2026)</strong> — vyjádření o ročním intervalu předání dat o zemřelých a odkazy na rychlejší kanály. <a href="https://www.uzis.cz/index.php?pg=aktuality&amp;aid=8757" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>ÚZIS / NZIP — Počet denních úmrtí podle věku, pohlaví a příčin smrti (<code>NR-06-33</code>)</strong> — denní úmrtí 1. 1. 1994 – 31. 12. 2024 podle kapitol MKN-10, CSV, licence CC BY 4.0, publikováno 26. 11. 2025; zdroj všech výpočtů redakce v tomto článku. <a href="https://www.nzip.cz/data/2516-denni-umrti-vek-pohlavi-pricina-otevrena-data" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>ČSÚ — týdenní počty zemřelých (DataStat, tab. OBY04ZEM03T01)</strong> — nejrychlejší domácí kanál úmrtnostních dat (bez příčin). <a href="https://data.csu.gov.cz/datastat/data/VYBER/OBY04ZEM03T01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
+          <li><strong>Eurostat — Deaths by week (<code>demo_r_mwk_ts</code>)</strong> — týdenní zemřelí ČR; k 14. 8. 2026 poslední týden 2026-W27 (do 5. 7., 2 299 zemřelých, předběžné). <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_mwk_ts/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Kyselý J, Kříž B (2003): Vysoké letní teploty a úmrtnost v ČR 1982–2000</strong> — Epidemiol Mikrobiol Imunol 52(3):105–116; špičky vln +100 úmrtí/den (+30 %), červen 1994 +456 úmrtí (+10,3 %), mortality displacement ~50 %. <a href="https://pubmed.ncbi.nlm.nih.gov/12931347/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Urban A, Hanzlíková H, Kyselý J, Plavcová E (2017): Impacts of the 2015 Heat Waves on Mortality in the Czech Republic</strong> — Int J Environ Res Public Health 14(12):1562; léto 2015 rekordní v délce i tepelné zátěži, silnější dopad na 65+. <a href="https://doi.org/10.3390/ijerph14121562" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Kyselý J, Kříž B (2008): Decreased impacts of the 2003 heat waves on mortality in the Czech Republic</strong> — Int J Biometeorol 52(8):733–745; roli sehrála adaptace, informovanost a biometeorologická předpověď. <a href="https://doi.org/10.1007/s00484-008-0166-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Urban A, Kyselý J, Plavcová E, Hanzlíková H, Štěpánek P (2020): Temporal changes in years of life lost associated with heat waves</strong> — Sci Total Environ 716:137093; pokles průměrného dopadu ~2–3 %/dekádu se zastavil, kumulativní zátěž roste, riziko se posouvá k 70+/75+. <a href="https://doi.org/10.1016/j.scitotenv.2020.137093" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Nástroje pro aktuální situaci</h5>
+        <ul class="article-sources-list">
+          <li><strong>Clim4Cast — teplotní index (zdánlivá teplota)</strong> — desetidenní předpověď pro střední Evropu nad modelem ECMWF; projekt Interreg Central Europe, na který odkazuje ÚZIS. <a href="https://clim4cast.eu/cs/teplotni-index/" target="_blank" rel="noopener">clim4cast.eu ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Čísla označená „výpočet redakce" (420 / +45 % / +855 / +771 / +440 / +452 / +429 / +314, sezónní úrovně a roční úhrny) jsou spočtena 14. 8. 2026 z plného CSV datasetu <code>NR-06-33</code> (326 524 řádků); sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Nejde o kauzální atribuci horku — viz caveat v textu. Údaje z recenzované literatury byly dohledány přes PubMed 14. 8. 2026 a jsou citovány s DOI. Týdenní data Eurostatu (<code>demo_r_mwk_ts</code>) stažena přes dissemination API 14. 8. 2026; hodnota za týden 2026-W27 je předběžná.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
