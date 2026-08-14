@@ -3,7 +3,7 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-08-13
+    last_reviewed: 2026-08-14
     reviewer: claude-code-agent
     status: review-pending
     nightly_2026-08-13: "NOČNÍ REVIZE (FÁZE 3.2) — článek je stále ve frontě (published:false) a jeho ústřední děj se mezitím posunul. ZDROJ (primární): MZ ČR, TZ 'Situace s tamoxifenem se stabilizuje. Do Česka míří dalších více než 10 tisíc balení' (vytvořeno i aktualizováno 12. 8. 2026, staženo a přečteno v plném znění 13. 8. 2026) + re-verifikace SÚKL MR feedu (opendata.sukl.cz/soubory/MR/mr.zip, staženo 13. 8. 2026, soubor generován 12. 8. 2026 22:15, mr_hlaseni_platnost.csv PLATNOST=13.08.2026). NOVÁ ČÍSLA (všechna z TZ 12. 8., doslovně): přes 10 000 balení míří do ČR 'v těchto a následujících dnech'; dodávky zajištěny i na podzim, kdy má množství trh 'plně saturovat'; MZ již nepřijímá nové žádosti o zvláštní léčebný program, dříve vydané souhlasy platí dál; SÚKL zveřejnil FAQ pro pacientky. Citace Vojtěcha přepsána doslovně z TZ. ZMĚNĚNO: deck, meta description + og:description, úvodní odstavec ('mezi 3. a 7. srpnem' → 'od 3. srpna'), AV flow rozšířen o 5. krok, dva nové odstavce (aktualizace 12. 8. + explicitní odstavec 'co se nezměnilo'), figure-note flow, zdroj MR feedu, sekce Zdroje o TZ 12. 8. NEZMĚNĚNO A ZNOVU OVĚŘENO: centrální teze — 0058701 (10 mg) preruseni PLATNOST_OD 16.06.2025 / TERMIN_OBNOVENI 15.07.2027 / Výrobní důvody / POSLEDNI_PLATNE_HLASENI=ANO; 0058702 (20 mg) preruseni 08.12.2025 / 15.07.2027 / Výrobní důvody / ANO; 0289384 Orifarm obnoveni 28.07.2026 / ANO. Tabulka i termín 15. 7. 2027 tedy platí beze změny; stabilizace stojí na dovozu, ne na návratu registrované dodávky — doplněno do textu, aby TZ nevyzněla jako konec výpadku. Status zůstává review-pending, published zůstává false."
@@ -12,16 +12,17 @@
     primary_sources_count: 7
     visual_elements_count: 5
     revision_2026_08_08: "ARTICLE-REVISE z discovery 2026-08-08: MZ TZ 7. 8. 2026 — do lékáren míří téměř 6 000 balení neregistrovaného tamoxifenu (dodávka převyšuje obvyklou týdenní spotřebu), další dodávka v tomto týdnu pokryje dvouměsíční léčbu pro 1 250 pacientek; citace Vojtěch. Doplněno do deck, ZLP sekce, flow kroku 4 a zdrojů. Re-verifikace MR feedu (staženo 8. 8., soubor generován 7. 8. 2026 22:15, platnost 08.08.2026): 0058701 preruseni 16.06.2025 obnoveni 15.07.2027 vyrobni ANO; 0058702 preruseni 08.12.2025 obnoveni 15.07.2027 vyrobni ANO; 0289384 Orifarm obnoveni 28.07.2026 ANO — centrální teze beze změny, tabulka platí."
+    nightly_2026-08-14: "NOČNÍ REVIZE (FÁZE 3.2) — claims-drift dotažen. Skener hlásil rozpor mezi tvrzením v článku (1 329 aktivních výpadků, stav 3. 8. 2026) a dashboardovým indikátorem vypadky_leciv_aktivni, který mezitím proběhl živým ingestem (fetched_at 2026-08-10T07:20:13Z, origin: live, verification_status: verified): value 1 369, řada 2021 1 078 / 2022 1 229 / 2023 1 306 / 2024 1 456 / 2025 1 553. Nezávislé ověření primárního zdroje: SÚKL open data MR feed (opendata.sukl.cz/soubory/MR/mr.zip) stažen a agregován 2026-08-14 00:26 UTC → 1 382 aktivních výpadků z 22 290 LP; feed žije a směr růstu potvrzen. Do článku zapsána hodnota datového kontraktu (1 369, stav 10. 8. 2026), ne dnešní průběžná — aby text souhlasil s tím, co web na stránce indikátoru zobrazuje. Změněno: deck/meta/og/JSON-LD 1 329→1 369; věta o růstu řady 1 080→1 078 a 1 555→1 553, datace 'k srpnu' zpřesněna na 'k 10. srpnu 2026'; AV bar-compare hodnoty i šířky přepočteny na maximum 1 553 (2021 69.4 %, 2022 79.1 %, 2023 84.1 %, 2024 93.8 %, 2025 100 %, srpen 2026 88.2 %); figcaption a blok zdrojů srovnány. Věcná tvrzení o tamoxifenu (přerušení obou přípravků do 15. 7. 2027, ZLP, dodávky 7. a 12. 8.) BEZ ZMĚNY. Drift plyne z deduplikační logiky MR feedu, která zpětně reviduje starší roky — není to oprava chyby v původní rešerši. Registr tvrzení data/claims.json srovnán současně. DOPLNĚK po review na PR #985: první průchod hledal jen tvar '1 329' s mezerou, takže minul tři místa se slitým zápisem nebo jen datem — hero counter av-counter data-value=\"1329\", jeho popisek '(srpen 2026)' a figure-note '(SÚKL, stav 3. 8. 2026)' v téže figuře, plus perex v data/articles.json (odtud ho bere homepage i RSS). Všechna tři srovnána na 1 369 / stav 10. 8. 2026; po opravě už v souboru ani v articles.json žádný výskyt 1329 mimo historické audit komentáře nezůstal."
     notes: "ARTICLE-WRITE z discovery 2026-08-05 (HOT: MZ ČR spustilo 3. 8. zvláštní léčebný program na tamoxifen, SÚKL 4. 8. podmínky individuální přípravy). Centrální KPI: oba registrované přípravky Tamoxifen Ebewe (10 mg + 20 mg) mají přerušené dodávky s výrobcem hlášeným termínem obnovení 15. 7. 2027 — VŠE strojově ověřeno v SÚKL open-data MR feedu (opendata.sukl.cz/soubory/MR/mr.zip, staženo 2026-08-05, soubor generován 2026-08-04 22:15): 0058701 (10mg) preruseni PLATNOST_OD 16.06.2025 TERMIN_OBNOVENI 15.07.2027 Výrobní důvody POSLEDNI_PLATNE_HLASENI=ANO; 0058702 (20mg) preruseni PLATNOST_OD 08.12.2025 TERMIN_OBNOVENI 15.07.2027 Výrobní důvody ANO; 0289384 Orifarm 20mg zahajeni 20.01.2026, preruseni 08.06-13.07.2026 kapacitní, obnoveni 28.07.2026. Sekundární: dashboard vypadky_leciv_aktivni 1329 aktivních výpadků (verified, řada 2019-2025), incidence_prsu 133/100k, prezit_karcinom_prsu_5let 81,4%, screening_mamograficky 54,5%. ZvLP mechanismus + citace (Vojtěch, Boráň, Krebs) z MZ TZ 3.8. + SÚKL 4.8. Tamoxifen definice z ČOS/linkos slovníček. Metodická výhrada: § zákona 378/2007 Sb. NECITUJEME (e-sbirka strojově nečitelná, zakonyprolidi 403). Proxy nedostupnost SÚKL registru výpadků → nahrazeno primárnějším MR feedem. Status: review-pending — čeká na ruční schválení redakce. published:false, konec fronty (scheduled_for 2026-08-06)."
 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů · HSPA Monitor</title>
-<meta name="description" content="Oba registrované přípravky tamoxifenu — základního hormonálního léku u karcinomu prsu — hlásí SÚKL jako přerušené s termínem obnovení dodávek 15. 7. 2027 (výrobní důvody). Ministerstvo 3. 8. 2026 spustilo zvláštní léčebný program: lékárny skládají nová balení z neporušených blistrů dovezených léků na zhruba dva měsíce léčby. První dodávky už tečou: 7. 8. zamířilo do lékáren téměř 6 000 balení, 12. 8. přibylo přes 10 000 dalších. Tamoxifen je jen jeden z 1 329 aktivních výpadků, které SÚKL k srpnu 2026 eviduje.">
+<meta name="description" content="Oba registrované přípravky tamoxifenu — základního hormonálního léku u karcinomu prsu — hlásí SÚKL jako přerušené s termínem obnovení dodávek 15. 7. 2027 (výrobní důvody). Ministerstvo 3. 8. 2026 spustilo zvláštní léčebný program: lékárny skládají nová balení z neporušených blistrů dovezených léků na zhruba dva měsíce léčby. První dodávky už tečou: 7. 8. zamířilo do lékáren téměř 6 000 balení, 12. 8. přibylo přes 10 000 dalších. Tamoxifen je jen jeden z 1 369 aktivních výpadků, které SÚKL k srpnu 2026 eviduje.">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů">
-<meta property="og:description" content="Oba registrované přípravky tamoxifenu hlásí SÚKL jako přerušené do 15. 7. 2027. Ministerstvo spustilo zvláštní léčebný program — lékárny skládají balení z blistrů dovezených léků; 7. 8. zamířilo do lékáren prvních téměř 6 000 balení, 12. 8. přes 10 000 dalších. Tamoxifen je jeden z 1 329 aktivních výpadků.">
+<meta property="og:description" content="Oba registrované přípravky tamoxifenu hlásí SÚKL jako přerušené do 15. 7. 2027. Ministerstvo spustilo zvláštní léčebný program — lékárny skládají balení z blistrů dovezených léků; 7. 8. zamířilo do lékáren prvních téměř 6 000 balení, 12. 8. přes 10 000 dalších. Tamoxifen je jeden z 1 369 aktivních výpadků.">
 <meta property="og:locale" content="cs_CZ">
 <meta property="article:published_time" content="2026-08-13">
 <meta property="article:section" content="Léková politika">
@@ -47,7 +48,7 @@
       "@type": "NewsArticle",
       "@id": "https://skorezdravotnictvi.cz/clanek-tamoxifen-vypadek#article",
       "headline": "Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů",
-      "description": "Oba registrované přípravky tamoxifenu — základního hormonálního léku u karcinomu prsu — hlásí SÚKL jako přerušené s termínem obnovení dodávek 15. 7. 2027 (výrobní důvody). Ministerstvo 3. 8. 2026 spustilo zvláštní léčebný program: lékárny skládají balení z neporušených blistrů dovezených léků na zhruba dva měsíce léčby. První dodávky už tečou — 7. 8. zamířilo do lékáren téměř 6 000 balení a další dodávka pokrývající dvouměsíční léčbu 1 250 pacientek. Tamoxifen je jen jeden z 1 329 aktivních výpadků.",
+      "description": "Oba registrované přípravky tamoxifenu — základního hormonálního léku u karcinomu prsu — hlásí SÚKL jako přerušené s termínem obnovení dodávek 15. 7. 2027 (výrobní důvody). Ministerstvo 3. 8. 2026 spustilo zvláštní léčebný program: lékárny skládají balení z neporušených blistrů dovezených léků na zhruba dva měsíce léčby. První dodávky už tečou — 7. 8. zamířilo do lékáren téměř 6 000 balení a další dodávka pokrývající dvouměsíční léčbu 1 250 pacientek. Tamoxifen je jen jeden z 1 369 aktivních výpadků.",
       "inLanguage": "cs-CZ",
       "image": [
         "https://skorezdravotnictvi.cz/assets/covers/clanek-tamoxifen-vypadek.png"
@@ -136,7 +137,7 @@
       </div>
       <h1 class="article-title">Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů</h1>
       <p class="article-deck">
-        Oba přípravky s tamoxifenem registrované v Česku — Tamoxifen Ebewe 10 mg i 20 mg — hlásí Státní ústav pro kontrolu léčiv jako přerušené s termínem obnovení dodávek, který výrobce posunul až na <strong>15. července 2027</strong> (důvod: výrobní). Tamoxifen je přitom základní hormonální lék, který ženy s karcinomem prsu užívají v tabletách dlouhodobě, běžně pět let. Ministerstvo zdravotnictví proto 3. srpna 2026 spustilo <strong>zvláštní léčebný program</strong>: lékárny smějí skládat nová balení z neporušených blistrů léků dovezených ze zahraničí, každé zhruba na dva měsíce léčby. První dodávky už tečou — 7. srpna ministerstvo oznámilo, že do lékáren postupně míří téměř <strong>6 000 balení</strong> a téhož dne vyrazila další dodávka pokrývající dvouměsíční léčbu pro 1 250 pacientek; 12. srpna přibylo dalších <strong>přes 10 000 balení</strong> a resort přestal přijímat nové žádosti o program. Přerušení registrovaných dodávek do léta 2027 tím ale zrušeno není. A tamoxifen není výjimka — je to jeden z <strong>1 329</strong> aktivních výpadků, které SÚKL k srpnu 2026 eviduje.
+        Oba přípravky s tamoxifenem registrované v Česku — Tamoxifen Ebewe 10 mg i 20 mg — hlásí Státní ústav pro kontrolu léčiv jako přerušené s termínem obnovení dodávek, který výrobce posunul až na <strong>15. července 2027</strong> (důvod: výrobní). Tamoxifen je přitom základní hormonální lék, který ženy s karcinomem prsu užívají v tabletách dlouhodobě, běžně pět let. Ministerstvo zdravotnictví proto 3. srpna 2026 spustilo <strong>zvláštní léčebný program</strong>: lékárny smějí skládat nová balení z neporušených blistrů léků dovezených ze zahraničí, každé zhruba na dva měsíce léčby. První dodávky už tečou — 7. srpna ministerstvo oznámilo, že do lékáren postupně míří téměř <strong>6 000 balení</strong> a téhož dne vyrazila další dodávka pokrývající dvouměsíční léčbu pro 1 250 pacientek; 12. srpna přibylo dalších <strong>přes 10 000 balení</strong> a resort přestal přijímat nové žádosti o program. Přerušení registrovaných dodávek do léta 2027 tím ale zrušeno není. A tamoxifen není výjimka — je to jeden z <strong>1 369</strong> aktivních výpadků, které SÚKL k srpnu 2026 eviduje.
       </p>
       <div class="article-meta">
         <span class="article-meta-date">13. srpna 2026</span>
@@ -172,12 +173,12 @@
             <span class="av-counter-foot">zvláštní léčebný program MZ ČR, podmínky SÚKL 4. 8. 2026</span>
           </div>
           <div class="av-counter-block av-counter-block-warn">
-            <span class="av-counter" data-value="1329">1329</span>
-            <span class="av-counter-label">aktivních výpadků léčiv celkem (srpen 2026)</span>
+            <span class="av-counter" data-value="1369">1369</span>
+            <span class="av-counter-label">aktivních výpadků léčiv celkem (stav 10. 8. 2026)</span>
             <span class="av-counter-foot">dashboardový indikátor SÚKL — tamoxifen je jeden z nich</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL — Hlášení o uvedení/přerušení/ukončení/obnovení dodávek léčivého přípravku na trh (otevřená data, soubor <code>mr.zip</code> generovaný 7. 8. 2026, staženo 8. 8. 2026); počet aktivních výpadků = dashboardový indikátor <code>vypadky_leciv_aktivni</code> (SÚKL, stav 3. 8. 2026). Podmínky zvláštního léčebného programu: MZ ČR a SÚKL, 3.–4. 8. 2026.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL — Hlášení o uvedení/přerušení/ukončení/obnovení dodávek léčivého přípravku na trh (otevřená data, soubor <code>mr.zip</code> generovaný 7. 8. 2026, staženo 8. 8. 2026); počet aktivních výpadků = dashboardový indikátor <code>vypadky_leciv_aktivni</code> (SÚKL, stav 10. 8. 2026). Podmínky zvláštního léčebného programu: MZ ČR a SÚKL, 3.–4. 8. 2026.</p>
       </figure>
 
       <h3>Co přesně vypadlo — a co k tomu najdete v datech</h3>
@@ -235,7 +236,7 @@
         <p class="article-callout-h">Caveat — co hlášení znamená a co ne</p>
         <p><strong>1. „Termín obnovení" je hlášení výrobce, ne záruka.</strong> Datum 15. 7. 2027 je hodnota, kterou do registru zapsal držitel registrace jako předpokládané obnovení dodávek. Může se posunout dřív i později; není to úřední rozhodnutí o délce výpadku.</p>
         <p><strong>2. Přerušení dodávek na trh ≠ okamžitě prázdné lékárny.</strong> Mezi hlášením a faktickým nedostatkem stojí skladové zásoby distributorů a lékáren. Zvláštní léčebný program je nástroj právě pro fázi, kdy zásoby registrovaného léku docházejí.</p>
-        <p><strong>3. Počet hlášených výpadků je proxy.</strong> Indikátor 1 329 aktivních výpadků sčítá přípravky bez ohledu na klinickou závažnost — výpadek s dostupnou náhradou i výpadek jediného léku s danou účinnou látkou se počítají stejně. Tamoxifen patří do té druhé, klinicky citlivé kategorie.</p>
+        <p><strong>3. Počet hlášených výpadků je proxy.</strong> Indikátor 1 369 aktivních výpadků sčítá přípravky bez ohledu na klinickou závažnost — výpadek s dostupnou náhradou i výpadek jediného léku s danou účinnou látkou se počítají stejně. Tamoxifen patří do té druhé, klinicky citlivé kategorie.</p>
       </aside>
 
       <h3>Zvláštní léčebný program: balení skládaná z blistrů</h3>
@@ -306,7 +307,7 @@
       </p>
 
       <p>
-        A tamoxifen není ojedinělý. Dashboardový indikátor aktivních výpadků léčiv ukazuje setrvalý růst: z 1 080 přípravků v roce 2021 na 1 555 v roce 2025; k srpnu 2026 jich SÚKL eviduje 1 329. Evropská agentura pro léčivé přípravky přitom hlásí zhruba čtyřnásobný nárůst počtu hlášení o výpadcích mezi lety 2018 a 2024. Přímé srovnání zemí je kvůli rozdílným ohlašovacím povinnostem zavádějící — ale směr je stejný napříč Evropou.
+        A tamoxifen není ojedinělý. Dashboardový indikátor aktivních výpadků léčiv ukazuje setrvalý růst: z 1 078 přípravků v roce 2021 na 1 553 v roce 2025; k 10. srpnu 2026 jich SÚKL eviduje 1 369. Evropská agentura pro léčivé přípravky přitom hlásí zhruba čtyřnásobný nárůst počtu hlášení o výpadcích mezi lety 2018 a 2024. Přímé srovnání zemí je kvůli rozdílným ohlašovacím povinnostem zavádějící — ale směr je stejný napříč Evropou.
       </p>
 
       <figure class="av-figure av-figure-wide" aria-labelledby="avTmxBarH">
@@ -314,36 +315,36 @@
         <div class="av-bar-compare">
           <div class="av-bar-row">
             <span class="av-bar-label">2021</span>
-            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:69.5%"></div></div>
-            <span class="av-bar-value">1 080</span>
+            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:69.4%"></div></div>
+            <span class="av-bar-value">1 078</span>
           </div>
           <div class="av-bar-row">
             <span class="av-bar-label">2022</span>
-            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:79.2%"></div></div>
-            <span class="av-bar-value">1 231</span>
+            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:79.1%"></div></div>
+            <span class="av-bar-value">1 229</span>
           </div>
           <div class="av-bar-row">
             <span class="av-bar-label">2023</span>
-            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:84.2%"></div></div>
-            <span class="av-bar-value">1 309</span>
+            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-neutral" style="width:84.1%"></div></div>
+            <span class="av-bar-value">1 306</span>
           </div>
           <div class="av-bar-row">
             <span class="av-bar-label">2024</span>
             <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-warn" style="width:93.8%"></div></div>
-            <span class="av-bar-value">1 458</span>
+            <span class="av-bar-value">1 456</span>
           </div>
           <div class="av-bar-row">
             <span class="av-bar-label">2025</span>
             <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-bad" style="width:100%"></div></div>
-            <span class="av-bar-value">1 555</span>
+            <span class="av-bar-value">1 553</span>
           </div>
           <div class="av-bar-row av-bar-row-benchmark">
             <span class="av-bar-label">srpen 2026 (aktuální)</span>
-            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-warn" style="width:85.5%"></div></div>
-            <span class="av-bar-value">1 329</span>
+            <div class="av-bar-track"><div class="av-bar-fill av-bar-fill-warn" style="width:88.2%"></div></div>
+            <span class="av-bar-value">1 369</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL, MR feed — dashboardový indikátor <code>vypadky_leciv_aktivni</code> (deduplikace na poslední platné hlášení typu „přerušení" bez následného obnovení; trvalá ukončení dodávek se nepočítají). Šířka pruhů je poměrná k maximu řady (1 555 v roce 2025). Roční hodnoty jsou konce let, srpnová hodnota je průběžný stav.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL, MR feed — dashboardový indikátor <code>vypadky_leciv_aktivni</code> (deduplikace na poslední platné hlášení typu „přerušení" bez následného obnovení; trvalá ukončení dodávek se nepočítají). Šířka pruhů je poměrná k maximu řady (1 553 v roce 2025). Roční hodnoty jsou konce let, srpnová hodnota je průběžný stav k 10. 8. 2026.</p>
       </figure>
 
       <h3>Co s tím</h3>
@@ -358,7 +359,7 @@
       <div class="ed-kicker">Data v tomto článku</div>
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
-        <li><a href="indikator-vypadky_leciv_aktivni.html"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 329 přípravků (stav 3. 8. 2026, <code>origin: live</code>); řada 2021: 1 080 → 2025: 1 555. Tamoxifen je jeden z nich.</li>
+        <li><a href="indikator-vypadky_leciv_aktivni.html"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 369 přípravků (stav 10. 8. 2026, <code>origin: live</code>); řada 2021: 1 078 → 2025: 1 553. Tamoxifen je jeden z nich.</li>
         <li><a href="indikator-incidence_prsu.html"><strong>Incidence karcinomu prsu (ženy)</strong></a> — 133 / 100 000 žen (věk. std., 2022; EU Country Cancer Profile 2025). Nejčastější onkologická diagnóza žen, u níž je tamoxifen základní hormonální léčbou.</li>
         <li><a href="indikator-prezit_karcinom_prsu_5let.html"><strong>Pětileté přežití po karcinomu prsu</strong></a> — 81,4 % (CONCORD/OECD; OECD 84,3 %). Dostupnost hormonální léčby je součástí této péče.</li>
         <li><a href="indikator-screening_mamograficky.html"><strong>Pokrytí mamografickým screeningem (50–69)</strong></a> — 54,5 % (2024, ÚZIS; OECD 68 %). Včasný záchyt vede k léčbě, jejíž součástí tamoxifen bývá.</li>
