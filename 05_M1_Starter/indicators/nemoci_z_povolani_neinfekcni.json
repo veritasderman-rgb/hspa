@@ -1,0 +1,55 @@
+{
+  "id": "nemoci_z_povolani_neinfekcni",
+  "name": "Neinfekční nemoci z povolání na 100 tisíc pojištěnců",
+  "area": "Výsledky",
+  "domain": "Zátěž nemocí",
+  "subdomain": "Nemoci z povolání",
+  "definition": "Počet hlášených nemocí z povolání bez onemocnění přenosných a parazitárních (kapitoly I–IV a VI Seznamu nemocí z povolání: nemoci způsobené chemickými látkami, fyzikálními faktory, nemoci dýchacích cest, kožní nemoci a nemoci způsobené ostatními faktory) na 100 tisíc nemocensky pojištěných zaměstnanců v civilním sektoru. Zdrojem je Národní registr nemocí z povolání (NRNP), který od roku 1991 eviduje všechna onemocnění uznaná za nemoc z povolání postupem podle nařízení vlády č. 290/1995 Sb. Kapitola V (přenosné a parazitární nemoci) je z indikátoru vyloučena, protože od roku 2021 je řada zcela deformována dohlašovanými případy covidu-19 mezi zdravotníky — infekční nemoci tvořily v roce 2024 přes 90 % všech hlášení a překrývají vývoj klasických profesionálních poškození z práce.",
+  "unit": "případů / 100 tis. pojištěnců",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "szu_nrnp",
+      "format": "pdf_tables",
+      "endpoint": "https://szu.gov.cz/wp-content/uploads/2025/06/Hlaseni-NzP-2024.pdf",
+      "dataset": "SZÚ — Nemoci z povolání v České republice v roce 2024 (Národní registr nemocí z povolání), tab. 2.1.1 a 2.1.2: vývoj počtu hlášených případů 2015–2024 absolutně a na 100 tisíc nemocensky pojištěných osob, v členění po kapitolách seznamu nemocí z povolání",
+      "dimensions": {
+        "country": "CZ",
+        "chapters": "I + II + III + IV + VI (bez kapitoly V — přenosné a parazitární)",
+        "denominator": "nemocensky pojištění zaměstnanci v civilním sektoru (zákon č. 187/2006 Sb.), průměr 1. pololetí",
+        "year": "annual"
+      },
+      "note": "Roční zprávy „Nemoci z povolání v České republice“ publikuje SZÚ (Centrum hygieny práce a pracovního lékařství) každoročně v květnu–červnu za předchozí rok na stránce https://szu.gov.cz/publikace-szu/data/registr-nemoci-z-povolani/nemoci-z-povolani-v-ceske-republice/. Hodnota indikátoru je součtem publikovaných incidencí kapitol I, II, III, IV a VI z tab. 2.1.2 (na 100 tis. pojištěnců)."
+    },
+    "fallback": {
+      "type": "nzip_datove_souhrny",
+      "url": "https://www.nzip.cz/clanek/63-registr-nemoci-z-povolani",
+      "note": "Datové souhrny Národního registru nemocí z povolání na portálu NZIP (správcem registru je ÚZIS ČR, zpracovatelem SZÚ)."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Počty uznaných nemocí z povolání nejsou mezinárodně srovnatelné: každá země má vlastní seznam nemocí, posuzovací kritéria a pojistný systém, a harmonizovaný evropský sběr (Eurostat — European Occupational Diseases Statistics) byl ukončen. Rozptyl je řádový: Německo v roce 2023 uznalo 72 747 nemocí z povolání (DGUV; zahrnuje mj. rakovinu kůže z UV záření a covid-19), Polsko 3 002 (Instytut Medycyny Pracy, z toho 1 084 případů covidu-19), Česko 6 937 (NRNP, z toho drtivá většina covid-19). Rozdíly vypovídají víc o šíři seznamů a přísnosti uznávání než o skutečném zdraví pracujících. Česká hodnota se proto hodnotí proti vlastní časové řadě; pokles může znamenat jak lepší prevenci a útlum rizikových odvětví, tak přísnější uznávání — proto je směr context_dependent a signál neutral.",
+    "value": null,
+    "url": "https://www.dguv.de/de/zahlen-fakten/bk-geschehen/index.jsp"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ (Centrum hygieny práce a pracovního lékařství — zpracovatel NRNP)",
+    "ÚZIS ČR (správce Národního registru nemocí z povolání)",
+    "MZ ČR (Seznam nemocí z povolání — nařízení vlády č. 290/1995 Sb.)",
+    "Krajské hygienické stanice (ověřování podmínek vzniku onemocnění)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 10,1 případu na 100 tis. pojištěnců — součet incidencí kapitol I (0,16), II (6,54), III (1,93), IV (1,42) a VI (0,02) z tab. 2.1.2 zprávy SZÚ; absolutně 490 případů z 5 240 všech hlášených nemocí z povolání. Časová řada (na 100 tis. pojištěnců / absolutně): 2015: 20,5 / 918; 2016: 22,8 / 1 037; 2017: 23,9 / 1 107; 2018: 22,7 / 1 069; 2019: 18,5 / 874; 2020: 15,8 / 741; 2021: 11,0 / 518; 2022: 12,1 / 569; 2023: 11,2 / 532; 2024: 10,1 / 490. Nejčastější neinfekční diagnózou je syndrom karpálního tunelu (2024: 106 případů z přetěžování končetin + 79 z vibrací). Celková incidence všech profesionálních onemocnění včetně infekčních byla v roce 2024 108,7 na 100 tis. pojištěnců (covid-19: 4 607 případů — hlášení se opožďují, většina covidových případů z roku 2024 vznikla v letech 2020–2023). Vedle nemocí z povolání bylo hlášeno 50 případů ohrožení nemocí z povolání. Novela seznamu (nařízení vlády č. 506/2021 Sb.) přidala s účinností od 1. 1. 2023 položku II.11 — chronické onemocnění bederní páteře z přetěžování těžkou fyzickou prací; první a jediný případ byl uznán v roce 2024. Indikátor je veden jako seed/ilustrativní do napojení na pravidelný roční výstup SZÚ.",
+  "limitations": "Indikátor měří uznaná onemocnění, ne skutečný výskyt poškození zdraví z práce — hodnota je průsečíkem expozice, ochoty hlásit a přísnosti uznávacího procesu. Pokles řady proto nelze číst jednoznačně: zčásti odráží reálný útlum rizikových expozic (hornictví, těžký průmysl, hluk), zčásti přísná posuzovací kritéria a podhlášenost (zaměstnanci nemoc nehlásí z obavy o místo, OSVČ do systému nespadají vůbec). SZÚ sám ve zprávě za rok 2024 upozorňuje, že klinická kritéria u chronického onemocnění bederní páteře „se zdají velmi přísná“, zatímco kritéria pro covid-19 byla naopak mírná. Součet kapitol I–IV a VI je odvozený ukazatel (v tabulkách SZÚ publikován po kapitolách, nikoli jako jeden řádek) — jde o prostý součet publikovaných hodnot. Srovnatelnost v čase mírně narušují novely seznamu nemocí z povolání (2011, 2015, 2023) a od roku 2021 nedostupnost přesného počtu pojištěnců za celý rok (SZÚ používá průměr 1. pololetí). Mezinárodní benchmark neexistuje (viz benchmark_source).",
+  "determinants": "Úroveň a vývoj indikátoru určují tři skupiny faktorů. **První je struktura ekonomiky a expozic:** útlum těžby uhlí a těžkého průmyslu odstranil část klasických expozic (prach s křemičitanem, hluk, vibrace) — pneumokonióz ze SiO2 ubylo z 111 případů (2015) na 54 (2024); práci s vibrujícími nástroji a přetěžování končetin ale průmysl montoven udržuje (nejčastější diagnózou zůstává syndrom karpálního tunelu u montážních dělníků, svářečů i prodavaček). **Druhou je přísnost uznávacího řetězce:** nemoc musí odpovídat položce Seznamu nemocí z povolání (nařízení vlády č. 290/1995 Sb.), klinickým kritériím střediska nemocí z povolání a hygienickému ověření expozice krajskou hygienickou stanicí; každý z těchto filtrů část případů zastaví — chronické onemocnění bederní páteře prošlo za dva roky platnosti položky jediné. **Třetí je motivace aktérů:** odškodnění platí zaměstnavatel (povinné pojištění odpovědnosti), takže má ekonomický zájem uznání rozporovat; část zaměstnanců nemoc nehlásí z obavy o pracovní místo; a chybná kategorizace prací zaměstnavatelem (v roce 2024 vzniklo 12 z 50 ohrožení nemocí z povolání při pracích formálně zařazených jako nerizikové) podhodnocuje evidovanou expozici.",
+  "importance": "Nemoci z povolání jsou jediný systémový ukazatel, kterým české zdravotnictví měří zdravotní daň za práci — a dashboard dosud pracovní zdraví nepokrýval vůbec. Registr NRNP je zároveň zpětná vazba pro celý řetězec ochrany zdraví při práci: kategorizaci prací, pracovnělékařské služby, dozor hygienických stanic i odškodňování. Klesající křivka uznaných případů je politicky pohodlná, ale bez rozlišení, kolik z poklesu je prevence a kolik neuznávání, může maskovat přesun nákladů na nemocné pracovníky a veřejné rozpočty (nemocenská, invalidní důchody). Z pohledu HSPA jde o výsledkový ukazatel zátěže nemocí s přímou vazbou na spravedlnost (OSVČ a agenturní pracovníci stojí mimo systém) a na konkrétní regulatorní páky státu — seznam nemocí z povolání, posuzovací kritéria a kontrolu kategorizace prací.",
+  "patient_story": "Marek, dvaapadesátiletý zedník z Karvinska, nosil třicet let pytle, míchačky a palety po lešení. Když mu ortoped řekl, že jeho bederní páteř vypadá „jako po kariéře vzpěrače“, poradila mu revizní lékařka zkusit uznání nemoci z povolání — od ledna 2023 je chronické onemocnění bederní páteře z těžké fyzické práce na seznamu. Marek obešel středisko nemocí z povolání, doložil pracovní historii a čekal na ověření expozice hygienickou stanicí. Po roce přišlo zamítnutí: jeho zátěž prý nenaplnila předepsaná kritéria. V celém Česku prošel za první dva roky platnosti nové položky jediný člověk — stavební dělník uznaný v roce 2024.\n\nMarkův příběh je otisk čísla, které tento indikátor měří. V roce 2024 bylo v Česku uznáno jen 490 neinfekčních nemocí z povolání, tedy 10,1 případu na 100 tisíc pojištěných zaměstnanců — polovina stavu z roku 2015 (20,5) a historické minimum. Nejčastější diagnózou je syndrom karpálního tunelu montážních dělníků a svářečů. Vedle toho statistiku zaplavily dohlašované covidy zdravotníků: infekční kapitola tvořila přes 90 % všech hlášení, takže celková incidence 108,7 na 100 tisíc vypovídá o epidemii papírování, ne o stavu práce.\n\nProč křivka klesá? Část poklesu je skutečné zlepšení — doly zavřely, hlučné a prašné provozy zmizely, pneumokonióz ubylo na polovinu. Část je ale filtr: nemoc musí sedět na položku vládního seznamu, projít klinickými kritérii a hygienickým ověřením, a každý stupeň část případů zastaví. Sám SZÚ píše, že kritéria u bederní páteře „se zdají velmi přísná“. Zaměstnavatel, který odškodnění platí ze svého pojištění, má důvod se bránit — a OSVČ, kterých pracuje přes milion, do systému nespadají vůbec.\n\nPáku drží vláda a ministerstvo zdravotnictví: seznam nemocí z povolání i posuzovací kritéria jsou nařízení vlády a metodika, které lze změnit bez parlamentu. Krajské hygienické stanice mohou důsledněji kontrolovat kategorizaci prací — v roce 2024 vzniklo 12 z 50 ohrožení nemocí z povolání na místech, která zaměstnavatel formálně vedl jako neriziková. A třicet let odkládaná reforma úrazového pojištění by odškodňování zbavila konfliktu zájmů. Dokud se to nestane, bude tenhle indikátor měřit obojí najednou: jak bezpečná je česká práce — a jak ochotný je stát její následky přiznávat.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
