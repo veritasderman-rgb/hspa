@@ -31,10 +31,15 @@ Zbytek dokumentu tuhle věc už neřeší.
 
 # [A] CROSS-CHECK KAPITOLY 1.4
 
-Ověřováno proti `data/indicators.json` (190 indikátorů), proti korpusu článků
+Ověřováno proti `data/indicators.json` (204 indikátorů), proti korpusu článků
 (238 článků, z toho ~30 přímo k tématu) a proti primárním zdrojům (Eurostat, ČSÚ SHA,
 NERV, MGI). Značení: ✅ sedí · ⚠️ nesedí nebo zastaralé · 🔶 sedí, ale je to metodicky
 napadnutelné.
+
+> **Pozn. k číslům z dashboardu.** Tam, kde se seed v `data/indicators.json` rozchází
+> s auditovanou hodnotou v publikovaném článku, platí článek — seedy nesou i hodnoty,
+> které redakce už nahradila. Týká se to zejména ACSC (592, ne 580) a průměrné délky
+> hospitalizace (viz A3.5).
 
 ## A1. Co sedí a je to použitelné
 
@@ -42,7 +47,7 @@ napadnutelné.
 |---|---|
 | „jedna z nejnižších měr proočkovanosti seniorů" | ✅ Chřipka 65+: **24,5 %** (ČR) vs. **49 %** (EU), cíl WHO/ECDC 75 %. Pneumokoky 65+: **5 %**. Klíšťová encefalitida: 17 % při nejvyšší incidenci v EU. Indikátory `vakcinace_chripka_65`, `vakcinace_pneumokok_65`. |
 | „vysoká míra kouření, nadváhy a konzumace alkoholu" | ✅ Alkohol **10,6 l** čistého lihu na osobu 15+ vs. OECD 8,4. Nadváha+obezita dospělých **60 %** vs. EU 52,7. Jaterní mortalita o **43 %** nad evropským průměrem. |
-| „v nemocnicích poskytujeme více péče než zbytek Evropy" | ✅ Hospitalizovanost **17 990 / 100 tis.** obyvatel — nejvyšší v OECD (OECD 14 600). Průměrná délka akutní hospitalizace 7,0 dne vs. OECD 6,5. Odvratitelné hospitalizace (ACSC) 580 vs. OECD 473. |
+| „v nemocnicích poskytujeme více péče než zbytek Evropy" | ✅ Hospitalizovanost **17 990 / 100 tis.** obyvatel — nejvyšší v OECD (OECD 14 600). Odvratitelné hospitalizace (ACSC) **592** vs. OECD 473 (OECD HAAG 2025). Průměrnou délku hospitalizace k tomu **nepoužívat** — viz A3.5. |
 | „neúměrně vysoký počet kontaktů pacienta s lékařem" | ✅ Doloženo, ČR patří k nejvyšším v OECD. |
 | „složka pojistného placeného zaměstnavateli patří mezi nejvyšší" | ✅ 9 % zaměstnavatel + 4,5 % zaměstnanec; celkové zdanění práce u nízkých příjmů skutečně v čele OECD. |
 | Struktura financování ~85 % veřejné / 15 % soukromé | ✅ Konzistentní s `platba_z_kapsy_pct` = 13,6 % (EU 15, OECD 18). |
@@ -162,14 +167,23 @@ definicí a odkazem na stranu v NERV.
 
 ### 🔶 2. „denně přes 182 tisíc lidí v pracovní neschopnosti"
 
-Číslo je správné, ale jako důkaz **nemocnosti** nefunguje: skok roku 2024 je z velké části
-**legislativní**, ne zdravotní — od 1. 1. 2024 vstoupily do nemocenského pojištění dohody
-(DPP/DPČ) a naplno se projevila e-neschopenka. Roste tak evidovaná, ne prožitá nemocnost.
-Oponent tohle vytáhne během jedné věty.
+Formulace „každý ušetřený den je výkon navíc" čte absenci jako ukazatel **nemocnosti**.
+Tak ho číst nelze — je to z velké části ukazatel **nastavení zákona**.
 
-**Oprava:** buď použít **procento** dočasné pracovní neschopnosti (4,5 %) s explicitní
-poznámkou o zlomu řady, nebo argument nahradit letitou strukturální veličinou
-(např. ztracené roky v produktivním věku, kde má PEER vlastní číslo 62 %).
+Rozhodující zlom je rok **2019, zrušení třídenní karenční doby**: před ním se průměrné
+procento DPN pohybovalo řádově kolem 3–4 %, od té doby je trvale výš. Dnešní hodnota je
+přitom **klesající** — 5,5 % (2020 a 2021) → 5,3 % (2022) → 4,6 % (2023) → **4,5 % (2024)**,
+tedy zhruba 214 tis. lidí denně podle ČSÚ. Žádný nedávný skok, který by šlo použít jako
+důkaz zhoršujícího se zdraví, v datech není.
+
+A je tu druhá strana, kterou PEER nezmiňuje: karenční doba se rušila mimo jiné proto,
+aby nemocní nechodili do práce nakažliví. Vyšší absence je tu zčásti **zamýšlený** efekt,
+ne selhání.
+
+**Oprava:** nepoužívat počet dnů jako proxy nemocnosti. Buď uvést procento DPN s poznámkou
+o zlomu 2019 a klesajícím trendu, nebo argument nahradit strukturální veličinou — např.
+ztracenými roky v produktivním věku, kde má PEER vlastní číslo (62 %) a nehrozí, že mu
+oponent ukáže klesající řadu.
 
 ### 🔶 3. „250–300 tisíc pečujících, podle některých odhadů až jeden milion"
 
@@ -189,6 +203,17 @@ předražený, je poddimenzovaný, a vy ho chcete škrtat.*
 **Toto číslo v kapitole být musí** — ne proto, že podpírá, ale proto, že se bez odpovědi
 na něj argumentace neobejde. Odpověď existuje a je silná: nejde o to, kolik dáváme, ale
 že u výsledků (léčitelná mortalita, HLY) jsme hůř, než odpovídá i těm 8,6 %.
+
+### 🔶 5. Průměrnou délku hospitalizace k argumentu nepoužívat
+
+Dashboard nese hodnotu 7,0 dne proti OECD 6,5 — vypadá to jako další doklad „ležíme dlouho".
+Jenže **ta dvě čísla nejsou srovnatelná**: audit článku `hospitalizujeme-nejvic` uvádí, že
+dashboardová sedmička nejspíš agreguje akutní i následnou péči, zatímco OECD benchmark je
+acute care ALOS. Harmonizovaný český údaj ČSÚ za 2024 je **5,5 dne** (z 6,6 v roce 2010) —
+tedy **pod** průměrem OECD, opačné znaménko.
+
+Argument o nadužívání lůžek stojí na **počtu** hospitalizací a na jejich skladbě
+(17 990 / 100 tis., ACSC 592), ne na jejich délce. Délku vynechat.
 
 ## A4. Vnitřní rozpor — bonus za životní styl vs. vlastní závěr kapitoly
 
@@ -292,9 +317,9 @@ ale je dobré to vědět předem.
 **Teze.** Česko drží nemocniční kapacitu, kterou z velké části nevyužívá — **akutní lůžka
 jsou obsazena z 56 %** — a přitom hospitalizuje **nejvíc v OECD** (17 990 / 100 tis. vs.
 14 600). To není spor o to, jestli zavřít nemocnice. Je to spor o to, co se v nich dělá:
-**580 odvratitelných hospitalizací na 100 tis.** (OECD 473) jsou lidé, které jinde zvládne
-ambulance. Článek ukazuje, kde konkrétně ten přesun jde — a férově i tu podmínku, kterou
-sám PEER uvádí: bez kapacit na druhé straně se úspora jen přesune jinam.
+**592 odvratitelných hospitalizací na 100 tis.** (OECD 473, HAAG 2025) jsou lidé, které
+jinde zvládne ambulance. Článek ukazuje, kde konkrétně ten přesun jde — a férově i tu
+podmínku, kterou sám PEER uvádí: bez kapacit na druhé straně se úspora jen přesune jinam.
 
 Součástí je metodická poznámka o číslech 40 / 46,5 / 55,9 % (viz A3.1) a doporučení
 navázat cíl na hospitalizovanost, ne na účetní podíl.
@@ -302,8 +327,11 @@ navázat cíl na hospitalizovanost, ne na účetní podíl.
 **V repu:** `prazdna-luzka-efektivita` (publ.), `hospitalizujeme-nejvic` (publ.),
 `vyhnutelne-hospitalizace`, `financovani-sha` (publ., ověřená SHA 2024).
 
-**Indikátory:** `hospitalizace_na_100k`, `podil_vydaje_luzkova_pece`,
-`hospitalizace_acsc`, `prumerna_delka_hospitalizace`
+**Indikátory:** `hospitalizace_na_100k`, `podil_vydaje_luzkova_pece`, `hospitalizace_acsc`
+(v článku uvádět **592**, ne seedovaných 580)
+
+⚠️ **Nepoužívat `prumerna_delka_hospitalizace`** — viz A3.5, srovnání není harmonizované
+a otáčí znaménko.
 
 ---
 
@@ -314,14 +342,15 @@ navázat cíl na hospitalizovanost, ne na účetní podíl.
 
 **Teze.** Debata o zdravotnictví se vede v miliardách. Existuje ale ukazatel, který měří,
 co za ně systém skutečně dodá: **léčitelná mortalita** — úmrtí, kterým šlo zabránit včasnou
-a kvalitní léčbou. Česko jich má **o čtvrtinu víc** než evropský průměr. To je odpověď na
+a kvalitní léčbou. Česko jich má **107,2 na 100 tis. proti unijním 86,8** — o necelou
+čtvrtinu víc (u preventovatelné mortality 173,9 vs. 150,9). To je odpověď na
 nejsilnější námitku proti celé kapitole: ano, dáváme na zdravotnictví méně než EU
 (8,6 vs. 10,4 % HDP) — ale ztrácíme víc, než i těm 8,6 % odpovídá. Problém není jen
 v objemu peněz, ale v tom, co za ně systém dodá.
 
 **V repu:** `lecitelna-mortalita` (publ.), `vydaje-zdravotnictvi` (publ.).
 
-**Indikátory:** `lecitelna_mortalita`, `preventabilni_mortalita`, `vydaje_zdravotnictvi_hdp`
+**Indikátory:** `mortalita_lecitelna`, `mortalita_preventabilni`, `vydaje_zdravotnictvi_hdp`
 
 **Proč vysoko:** je to jediný článek ze série, který **doplňuje chybějící argument** místo
 aby vylepšoval existující. Podle A5.1 je to největší nevyužitá munice v kapitole.
@@ -366,10 +395,11 @@ rozpočtu horší). A hlavně: **regresivita**. Spotřební daň dopadá tvrděj
 a právě proto je účelové vázání výnosu do prevence jediná odpověď, která tuhle námitku
 skutečně vyvrací. To je argument, který PEER má, ale nerozvíjí.
 
-**V repu:** série `napoje-1` až `napoje-6` (publ., 6 dílů — `napoje-6-dan-regulace` je
-přímo o regulaci), `jaterni-mortalita-alkohol` (publ.), `alkohol-adolescenti` (draft).
+**V repu:** šestidílná série o nápojích od `napoje-1-tekuty-cukr` po `napoje-6-dan-regulace`
+(publ.; poslední díl je přímo o regulaci), `jaterni-mortalita-alkohol` (publ.),
+`alkohol-adolescenti` (draft).
 
-**Indikátory:** `alkohol_spotreba`, `jaterni_mortalita`, `deti_obezita_cosi`
+**Indikátory:** `alkohol_spotreba`, `mortalita_jaterni_chronicka`, `deti_obezita_cosi`
 
 ---
 
