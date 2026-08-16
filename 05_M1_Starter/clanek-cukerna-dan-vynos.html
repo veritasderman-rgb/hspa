@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 12
+    visual_elements_count: 5
+    notes: "PEER-BATCH-WRITE, návrh článku č. 5 z PLAN-PEER-CLANKY.md část B. Téma: rozklad agregovaného čísla '10-15 mld Kč/rok' z hospodářské strategie PEER (srpen 2026) po složkách. OVĚŘENÁ DATA (websearch 16. 8. 2026): (1) SAZBY spotřební daně 2025 (finance.cz): líh 39 100 Kč/hl etanolu, šumivé víno a meziprodukty 2 340 Kč/hl, tiché víno 0 Kč/hl, pivo 16-32 Kč/hl/° podle velikosti pivovaru. (2) INKASO 2025 (predikce MF, kurzy.cz/Celní správa): líh >10 mld, pivo ~5 mld, víno ~0,5 mld => báze ~15,5 mld Kč. Celkem spotřební + energetické daně 170 mld (Celní správa, tisková zpráva 2026). (3) NERV tiché víno: sazba 23,40 Kč/l = sazba šumivých, odhad 'až 5 mld' resp. 'asi 4 mld' (irozhlas 2022, echo24 22. 6. 2026); Institut pro společnost a politiku (2019, via Ekonomický deník): 5,1 mld na objemu 2018, tichá vína 93 % objemu trhu s vínem. (4) ČSÚ Spotřeba potravin 2024: víno 19,5 l/os (z 20,5 v 2023). (5) Obyvatel ČR 10,896 mil (31. 3. 2026, ČSÚ). (6) PAQ Research (Komárek, Prokop, Šoltés, 17. 10. 2023): polský model 3,4 Kč/l při 50 g/l + 0,35 Kč/l za každých dalších 10 g/l + 1 Kč/l u sladidel; ČISTÝ výnos 2,7 mld Kč po započtení propadu DPH a nákladů výběru; pokles spotřeby 10-20 %; daň explicitně označena za regresivní s návrhem kompenzací. (7) Polsko opłata cukrowa: 1 492,9 mil PLN (2024); 1,47 (2021), 1,65 (2022), 1,50 (2023); 96,5 % do NFZ, 3,5 % rozpočet; sazba 0,50 PLN/l + 0,05 PLN/g nad 5 g/100 ml, strop 1,20 PLN/l. (8) UK SDIL: původní odhad 500 mil GBP/rok (2016) -> 300 mil (11/2017) -> 240 mil (4/2018); skutečnost 355 mil (2022/23), 338 mil (2023/24), 327 mil (2024/25 předběžné, HMRC 30. 1. 2026). Reformulace: celkový cukr v nealko -35,4 % 2015-2019 (135 500 -> 87 600 t), prodejně vážený obsah cukru -43,7 % (5,7 -> 2,2 g/100 ml) — Institute for Government, akt. 10. 7. 2024; tamtéž: výnos se z původního účelového vázání postupně rozpustil v obecném rozpočtu. (9) ČR líh: sazby +10 % (2024), +10 % (2025), +5 % (2026); MF čekala ~+1 mld/rok; inkaso 2023 = 8,972 mld; 2024 o 7 mil NÍŽ, 2025 o 100 mil NÍŽ (e15, 20. 5. 2026); predikce 2026 snížena o 0,9 mld líh / 0,4 tabák / 0,2 pivo (Echo24, 7. 7. 2026). (10) Kurzy ČNB 14. 8. 2026: 1 GBP = 28,339 Kč; PLN ~5,82 Kč. (11) Populace: UK ~69,3 mil (ONS mid-2024), PL 37,49 mil (GUS, konec 2024). (12) ČSÚ SHA 2024: celkové výdaje na zdravotnictví 696,7 mld Kč = 8,6 % HDP.
+      PUBMED (citace vč. DOI v sekci Zdroje): Andreyeva T, Marple K, Marinello S, Moore TE, Powell LM. Outcomes Following Taxation of Sugar-Sweetened Beverages. JAMA Netw Open 2022;5(6):e2215276, doi:10.1001/jamanetworkopen.2022.15276 — pass-through 82 % (95% CI 66-98), cenová elasticita poptávky -1,59 (95% CI -2,11 až -1,08), průměrný pokles prodejů 15 % (95% CI -20 až -9), reformulace u pásmových daní, bez důkazu o substituci k nezdaněným nápojům. Wagenaar AC, Salois MJ, Komro KA. Addiction 2009;104(2):179-90, doi:10.1111/j.1360-0443.2008.02438.x — průměrné elasticity: pivo -0,46, víno -0,69, lihoviny -0,80. Quiroz-Reyes JA et al. PLoS One 2025;20(3):e0319922, doi:10.1371/journal.pone.0319922 — mexické daně na SSB/NEDF: daň zaplacená jako podíl výdajů je vyšší u nízkopříjmových domácností, ale ty zároveň snížily spotřebu víc, což regresivní dopad částečně vyvažuje.
+      VLASTNÍ PŘEPOČTY (v článku označené jako vlastní odhad, plné předpoklady v tabulce): víno statický výnos 2,125 mil hl celkem x podíl tichých 75-93 % = 1,59-1,98 mil hl x 2 340 Kč/hl = 3,7-4,6 mld; po reakci poptávky (zdražení ~12-18 % u lahve 100-150 Kč, elasticita -0,69 => -8 až -12 % objemu) 3,3-4,3 mld. SSB per capita: UK 327 mil GBP / 69,3 mil = 4,72 GBP = 133,7 Kč/os; PL 1 492,9 mil PLN / 37,49 mil = 39,8 PLN = 231,7 Kč/os; PAQ 2,7 mld / 10,896 mil = 248 Kč/os. Přepočet na ČR: UK-ekvivalent 1,46 mld, PL-ekvivalent 2,53 mld. Celkem 5-8 mld proti PEER 10-15 mld. Fond prevence: 40 % z 5-8 mld = 2,0-3,2 mld (ne 4-6); prevence dnes 2,74 % běžných výdajů, tj. řádově 18-19 mld Kč (2,7 % z ~700 mld ČSÚ SHA 2024), takže 2-3 mld = nárůst o zhruba desetinu až šestinu a podíl blízko OECD 3,2 %.
+      OTEVŘENÉ BODY PRO RUČNÍ AUDIT: (a) podíl tichých vín na objemu trhu — v článku vědomě ponechán jako rozpětí 75-93 %, protože je to největší jednotlivá nejistota celého výpočtu; ČSÚ tento rozpad nepublikuje. (b) Konkrétní znění a čísla strategie PEER (srpen 2026) nebyla ověřena proti primárnímu dokumentu — vychází ze zadání a z PLAN-PEER-CLANKY.md; před publikací ověřit citaci kapitoly a formulaci '10-15 mld' a '40 % do Fondu prevence'. (c) NEZAŘAZENO pro nedostatečné ověření: konkrétní výnos mexické daně (rok 2026 je zkreslen změnou sazby a MS ve fotbale), velikost českého trhu se slazenými nápoji v litrech/korunách (ČSÚ publikuje jen agregát 232,7 l/os vč. minerálních vod), aktuální sazba DPH na slazené nápoje (zdroje si protiřečí). (d) NÁLEZ K JINÉMU ČLÁNKU: clanek-vydaje-prevence.html uvádí absolutní objem prevence '35-40 miliard korun ročně', což neodpovídá 2,7 % z ~700 mld ani jím uváděným 0,2 % HDP (~16 mld) — doporučeno prověřit samostatně. Tento článek proto uvádí vlastní přepočet ~18-19 mld a označuje ho jako odhad. (e) Studie 20% daně z ledna 2026 je dílem think-tanku Ministr zdraví, ne Ministerstva zdravotnictví — clanek-napoje-6-dan-regulace.html ji atribuuje MZ ČR; zde atribuována správně, doporučeno sladit."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deset až patnáct miliard: co vydrží spočítat na cukerné a alkoholové dani · HSPA Monitor</title>
+<meta name="description" content="Nová hospodářská strategie PEER slibuje z daně ze slazených nápojů, zdanění tichého vína a úpravy daně z alkoholu 10–15 miliard korun ročně a nejméně 40 % z toho do Fondu prevence. Rozebrali jsme to číslo po složkách: co nese víno, co nese cukr, co dělá elasticita a proč zdravotní a rozpočtový cíl táhnou proti sobě.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deset až patnáct miliard: co vydrží spočítat na cukerné a alkoholové dani">
+<meta property="og:description" content="Rozklad slibovaného výnosu daňového balíčku po složkách: tiché víno, slazené nápoje, alkohol. Na sazbách, které jsou dnes na stole, vychází 5–8 miliard — a čím líp daň funguje zdravotně, tím míň vynese.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Legislativa a reforma">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body data-article-slug="clanek-cukerna-dan-vynos.html">
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">spotřební daně · slazené nápoje · alkohol · Fond prevence</span>
+      </div>
+      <h1 class="article-title">Deset až patnáct miliard: co vydrží spočítat na cukerné a alkoholové dani</h1>
+      <p class="article-deck">
+        Nová hospodářská strategie PEER navrhuje tři fiskální kroky najednou — spotřební daň ze slazených nápojů, zrušení nulové sazby u tichého vína a úpravu daně z alkoholu — a slibuje z nich <strong>10 až 15 miliard korun ročně</strong> „i po zohlednění poklesu spotřeby“, z toho nejméně 40 % účelově vázaných do Fondu prevence. Takhle agregované číslo padá v rozpravě jako první a jako první se také rozebírá. Rozebrali jsme ho tedy sami: po složkách, s otevřenými předpoklady a s tou nepříjemností, kterou návrh zatím nepřiznává — čím líp daň funguje zdravotně, tím míň vynese.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Zdravotní argument pro obě daně je v českých datech dobře podložený a tenhle web ho popsal opakovaně. Spotřeba alkoholu je <strong>10,6 litru</strong> čistého lihu na osobu 15+ proti průměru OECD 8,4. Úmrtnost na chronická onemocnění jater je <strong>19,5 na 100 tisíc</strong> obyvatel proti unijním 13,7. Nadváhu nebo obezitu má <strong>26,3 %</strong> českých dětí ve věku 6–9 let. Spor tedy dávno není o tom, jestli je tu co řešit. Spor je o tom, kolik takový balíček skutečně vynese — protože právě na výnosu se politicky rozhoduje, a právě výnos je v návrhu uveden jako jedno číslo bez výpočtu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCukHeroH">
+        <figcaption class="av-figure-h" id="avCukHeroH">Čtyři čísla, mezi kterými se návrh pohybuje</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="10.6" data-decimals="1" data-suffix=" l">10,6 l</span>
+            <span class="av-counter-label">čistého lihu na osobu 15+ a rok (2024)</span>
+            <span class="av-counter-foot">průměr OECD: 8,4 l</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="19.5" data-decimals="1">19,5</span>
+            <span class="av-counter-label">úmrtí na chronická onemocnění jater na 100 000 obyvatel (2023)</span>
+            <span class="av-counter-foot">průměr EU: 13,7 — o 43 % méně</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="26.3" data-decimals="1" data-suffix=" %">26,3 %</span>
+            <span class="av-counter-label">dětí 6–9 let má nadváhu nebo obezitu (WHO COSI)</span>
+            <span class="av-counter-foot">průměr EU: 29,8 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="15.5" data-decimals="1" data-suffix=" mld">15,5 mld</span>
+            <span class="av-counter-label">korun ročně vybere stát na spotřebních daních z alkoholu dnes</span>
+            <span class="av-counter-foot">líh přes 10 mld, pivo ~5 mld, víno ~0,5 mld (predikce MF na 2025)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> indikátory HSPA Monitoru (OECD Health Statistics, Eurostat, SZÚ/WHO COSI); inkaso spotřebních daní podle predikce Ministerstva financí a statistik Celní správy ČR. Plné citace v sekci Zdroje.</p>
+      </figure>
+
+      <p>
+        Poslední z těch čtyř čísel je pro celou debatu klíčové a v návrhu chybí. <strong>Celé dnešní inkaso spotřebních daní z alkoholu je zhruba 15,5 miliardy korun ročně.</strong> Slib „10 až 15 miliard navíc“ tedy znamená, že by daňový výnos z alkoholu a nově i z nápojů měl vzrůst zhruba na dvojnásobek. To není nemožné — ale je to řádově jiná ambice, než jak návrh vyznívá, a zaslouží si rozpočet po složkách.
+      </p>
+
+      <h3>(a) Tiché víno: jediný alkohol s nulovou sazbou</h3>
+
+      <p>
+        Tady je návrh nejsilnější, protože nenavrhuje nic nového — jen odstraňuje výjimku. Česko zdaňuje líh sazbou <strong>39 100 Kč na hektolitr etanolu</strong>, pivo podle stupňovitosti a velikosti pivovaru, šumivé víno a meziprodukty <strong>2 340 Kč na hektolitr</strong> nápoje. Tiché víno má sazbu <strong>nula</strong>. Sklenka prosecca je zdaněná, sklenka veltlínu ne, přestože obsahuje zhruba stejné množství alkoholu.
+      </p>
+
+      <p>
+        Návrh srovnat tichému vínu sazbu se šumivým — tedy 23,40 Kč na litr — je na stole opakovaně. Národní ekonomická rada vlády ho doporučila už v roce 2022 s odhadem <strong>„až pět miliard“</strong> ročně, respektive zhruba čtyř miliard. Analýza Institutu pro společnost a politiku spočítala na objemu roku 2018 dokonce 5,1 miliardy a upozornila, že tichá vína tvořila 93 % objemu trhu s vínem, ale jen 0,24 % celého inkasa spotřebních daní. Politicky návrh dosud vždy padl: naposledy vypadl z konsolidačního balíčku, letos v červnu ho veřejně podpořil premiér i předseda rozpočtového výboru — a stejně vzápětí narazil na moravský blok napříč stranami.
+      </p>
+
+      <p>
+        Kolik by to bylo dnes? Spotřeba vína v Česku klesá: podle ČSÚ z 20,5 na <strong>19,5 litru na obyvatele</strong> v roce 2024. Při 10,90 milionu obyvatel je to zhruba 2,13 milionu hektolitrů veškerého vína. Kolik z toho je tiché, ČSÚ nerozpadá — a právě tenhle podíl je největší jednotlivá nejistota celého výpočtu. Při konzervativních 75 % vychází statický výnos <strong>3,7 miliardy</strong>, při 93 % z citované analýzy <strong>4,6 miliardy</strong>. To je horní mez: předpokládá, že se spotřeba nezmění.
+      </p>
+
+      <p>
+        Nezmění se ale. U lahve za 100 až 150 korun znamená 23,40 Kč na litr zdražení o 12 až 18 procent. Meta-analýza 112 studií vlivu ceny alkoholu na spotřebu (Wagenaar a kol., <em>Addiction</em> 2009) uvádí průměrnou cenovou elasticitu poptávky po víně <strong>−0,69</strong>. Z toho plyne pokles objemu o 8 až 12 procent a reálný výnos <strong>3,3 až 4,3 miliardy korun.</strong> Odhad NERV „až pět miliard“ tedy nebyl přehnaný — jen byl statický a stál na větší spotřebě, než jaká je dnes.
+      </p>
+
+      <h3>(b) Daň ze slazených nápojů: kolik vynáší jinde</h3>
+
+      <p>
+        U slazených nápojů nemusíme odhadovat vůbec — stačí se podívat, kolik daň vybírá v zemích, které ji mají, a přepočíst to na obyvatele. Dvě srovnání jsou pro Česko relevantní. <strong>Polsko</strong> má od roku 2021 „opłatę cukrową“ vázanou na obsah cukru (0,50 zł za litr plus 0,05 zł za každý gram cukru nad 5 g na 100 ml, strop 1,20 zł/l). V roce 2024 vybralo <strong>1,49 miliardy zlotých</strong> — a výnos je od začátku pozoruhodně stabilní: 1,47 (2021), 1,65 (2022), 1,50 (2023), 1,49 (2024). <strong>Velká Británie</strong> má od roku 2018 pásmovou daň podle obsahu cukru a vybrala v rozpočtovém roce 2024/25 <strong>327 milionů liber</strong>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCukPerCapH">
+        <figcaption class="av-figure-h" id="avCukPerCapH">Výnos daně ze slazených nápojů na obyvatele a rok (v korunách)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="280" data-unit=" Kč">
+          <li class="av-bar-row av-bar-row-highlight" data-value="248" data-label="ČR — odhad PAQ Research" data-note="2,7 mld Kč čistého výnosu při polském modelu (2023)"></li>
+          <li class="av-bar-row" data-value="232" data-label="Polsko (2024)" data-note="1,49 mld zł; 96,5 % jde do Národního fondu zdraví"></li>
+          <li class="av-bar-row" data-value="134" data-label="Velká Británie (2024/25)" data-note="327 mil. £; po masivní reformulaci receptur"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje a přepočet:</strong> polský výnos 1 492,9 mil. zł na 37,49 mil. obyvatel; britský 327 mil. £ na ~69,3 mil. obyvatel; přepočteno kurzem ČNB k 14. 8. 2026 (1 GBP = 28,34 Kč, 1 PLN ≈ 5,82 Kč). Český odhad je čistý výnos ze studie PAQ Research (2023) dělený 10,90 mil. obyvatel. Vlastní přepočet HSPA Monitoru.</p>
+      </figure>
+
+      <p>
+        Přepočteno na české poměry: britská úroveň by v Česku znamenala <strong>1,5 miliardy</strong>, polská <strong>2,5 miliardy</strong>. A přesně mezi to padá i jediný domácí propočet, který existuje. Studie PAQ Research z října 2023 (Komárek, Prokop, Šoltés) navrhla pro Česko polský model a spočítala <strong>čistý výnos 2,7 miliardy korun ročně</strong> — už po odečtení propadu DPH z nižší spotřeby i nákladů na výběr daně. Ta konvergence tří nezávislých cest je silná indicie: <strong>daň ze slazených nápojů v české velikosti a při sazbách, jaké dnes fungují v Evropě, dá 1,5 až 2,7 miliardy korun.</strong> Ne víc.
+      </p>
+
+      <h3>Britská lekce: čím líp daň funguje, tím míň vynese</h3>
+
+      <p>
+        Britský případ je v celé debatě nejdůležitější a zároveň nejčastěji citovaný špatně. Když se v roce 2016 <em>Soft Drinks Industry Levy</em> ohlašovala, ministerstvo financí počítalo s výnosem <strong>500 milionů liber ročně</strong>. Ještě před tím, než daň vůbec začala platit, snížilo odhad na 300 a pak na 240 milionů. Důvod nebyl žádný výpadek — byl to úspěch. Výrobci dostali dva roky na to, aby se sazbě vyhnuli, a využili je: <strong>celkové množství cukru prodaného v nealkoholických nápojích kleslo mezi lety 2015 a 2019 o 35,4 %</strong> (ze 135 500 na 87 600 tun) a prodejně vážený obsah cukru se propadl o 43,7 % (z 5,7 na 2,2 g na 100 ml). Daň nezdražila limonády — přeformulovala je.
+      </p>
+
+      <p>
+        Z hlediska zdraví je to nejlepší možný výsledek. Z hlediska rozpočtu je to zklamání: výnos se drží kolem tří set milionů liber a navíc pomalu klesá (355 mil. v roce 2022/23, 338 v 2023/24, 327 v 2024/25). <strong>Toto je jádro celého problému a návrh PEER to zatím nepřiznává:</strong> zdravotní a fiskální cíl táhnou proti sobě. Daň, která zdravotně zafunguje, vybere méně. Daň, která spolehlivě vybere hodně, znamená, že se spotřeba nezměnila. Formulace „10–15 miliard i po zohlednění poklesu spotřeby“ se tváří, jako by šlo mít obojí — a nejde.
+      </p>
+
+      <h3>(c) Elasticita není teorie. Česko si ji právě vyzkoušelo na lihu</h3>
+
+      <p>
+        Jak silná ta reakce je, se dá změřit. Nejnovější systematický přehled realizovaných daní ze slazených nápojů (Andreyeva a kol., <em>JAMA Network Open</em> 2022, 86 studií) našel průměrnou <strong>cenovou elasticitu poptávky −1,59</strong> (95% interval spolehlivosti −2,11 až −1,08), promítnutí daně do ceny na 82 procentech a <strong>průměrný pokles prodejů zdaněných nápojů o 15 %</strong>. Substituci k nezdaněným nápojům studie nenašla, zato u pásmových daní opakovaně dokládá reformulaci receptur. Poptávka po slazených nápojích je tedy elastická: každé procento zdražení srazí prodeje o víc než procento.
+      </p>
+
+      <p>
+        A Česko má vlastní, čerstvý a ještě přesvědčivější důkaz — u lihu. Ministerstvo financí zvedlo sazbu spotřební daně z lihu o 10 % v roce 2024, o dalších 10 % v roce 2025 a o 5 % letos, s očekáváním zhruba miliardy navíc ročně. Skutečnost: inkaso roku 2023 činilo <strong>8,97 miliardy korun</strong>; v roce 2024 bylo o sedm milionů <strong>nižší</strong> a v roce 2025 o sto milionů nižší než v roce 2023. Po kumulativním zvýšení sazby o víc než pětinu vybral stát z lihu méně než předtím. Ministerstvo to vysvětluje klesající spotřebou u mladší generace, předzásobením a přeshraničními nákupy — a pro rok 2026 predikci inkasa raději snížilo (o 0,9 miliardy u lihu, 0,4 u tabáku, 0,2 u piva).
+      </p>
+
+      <p>
+        Pro posuzovaný návrh z toho plyne jediné: položka „úprava daně z alkoholu“ je fiskálně nejslabší z celé trojice. Na stávající základně kolem 15,5 miliardy může další zvýšení sazeb přinést <strong>nula až jednu miliardu</strong> — a to je při optimistickém předpokladu, že se opakuje trend z let 2024–2025, ne že se prohloubí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCukTabH">
+        <figcaption class="av-figure-h" id="avCukTabH">Rozklad slibovaných 10–15 miliard po složkách (vlastní odhad HSPA Monitoru)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Složka</th>
+                <th scope="col" class="av-num">Statický výnos</th>
+                <th scope="col" class="av-num">Po reakci poptávky</th>
+                <th scope="col">Klíčové předpoklady</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Tiché víno, sazba 23,40 Kč/l</th>
+                <td class="av-num">3,7–4,6 mld</td>
+                <td class="av-num">3,3–4,3 mld</td>
+                <td>19,5 l vína na obyvatele (ČSÚ 2024); tichá vína 75–93 % objemu; elasticita −0,69</td>
+              </tr>
+              <tr>
+                <th scope="row">Slazené nápoje, polský model</th>
+                <td class="av-num">~3 mld</td>
+                <td class="av-num">1,5–2,7 mld</td>
+                <td>doložený výnos na obyvatele v Polsku a UK; čistý odhad PAQ po propadu DPH</td>
+              </tr>
+              <tr>
+                <th scope="row">Úprava daně z alkoholu (líh, pivo)</th>
+                <td class="av-num">1–1,5 mld</td>
+                <td class="av-num av-bad">0–1 mld</td>
+                <td>česká zkušenost 2024–2026: +21 % sazby u lihu = inkaso pod úrovní 2023</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Celkem</th>
+                <td class="av-num">8–9 mld</td>
+                <td class="av-num">5–8 mld</td>
+                <td>všechny tři kroky zavedené současně</td>
+              </tr>
+              <tr>
+                <th scope="row">Slib v návrhu PEER</th>
+                <td class="av-num av-mut">—</td>
+                <td class="av-num">10–15 mld</td>
+                <td>„i po zohlednění poklesu spotřeby“; bez uvedeného výpočtu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Metodika:</strong> vlastní propočet HSPA Monitoru z veřejných zdrojů uvedených níže. Statický výnos = objem × sazba beze změny chování. „Po reakci poptávky“ aplikuje publikované cenové elasticity (víno −0,69; slazené nápoje −1,59) a u alkoholu doloženou českou zkušenost. Rozpětí odráží nejistotu vstupů, ne přesnost metody — čísla jsou řádová.</p>
+      </figure>
+
+      <h3>(d) Regresivita — a proč na ni odpovídá až účelové vázání</h3>
+
+      <p>
+        Nejsilnější námitka proti oběma daním není fiskální, ale sociální, a je věcně správná: <strong>spotřební daně jsou regresivní.</strong> Nízkopříjmová domácnost vydá za slazené nápoje a levný alkohol menší absolutní částku než bohatá, ale <em>větší podíl</em> svého rozpočtu — takže ji stejná daň zatíží víc. Domácí studie PAQ Research to explicitně přiznává a navrhuje kompenzaci mimo daň samotnou (progresivnější zdanění práce, přídavky na děti, nižší DPH na základní potraviny).
+      </p>
+
+      <p>
+        Mexická zkušenost tuhle úvahu komplikuje. Analýza národního šetření příjmů a výdajů (Quiroz-Reyes a kol., <em>PLoS One</em> 2025) potvrdila, že zaplacená daň tvoří u nízkopříjmových domácností větší podíl výdajů — a zároveň zjistila, že tytéž domácnosti snížily spotřebu zdaněných nápojů a potravin výrazněji, protože jsou citlivější na cenu. Regresivní zátěž se tím částečně vyváží a zdravotní přínos připadá nejvíc těm, kdo nesou nejvyšší riziko. Jen částečně — a zbytek je otázka, co stát udělá s vybranými penězi.
+      </p>
+
+      <p>
+        A přesně tady má návrh PEER svůj nejsilnější prvek, který sám nerozvíjí: <strong>účelové vázání minimálně 40 % výnosu do Fondu prevence.</strong> Prevence je totiž jediný typ výdaje, který nízkopříjmové skupiny čerpají relativně nejvíc — a jehož absence je dnes měřitelná. Česko dává na organizovanou prevenci <strong>2,74 % běžných výdajů na zdravotnictví</strong> proti průměru OECD 3,2 %; při celkových zdravotních výdajích 696,7 miliardy korun (ČSÚ, 2024) jde řádově o 18 až 19 miliard ročně. Čtyřicet procent z realistického výnosu 5–8 miliard znamená <strong>2,0 až 3,2 miliardy</strong> — tedy ne slibovaných 4–6, ale pořád dost na to, aby se objem prevence zvedl zhruba o desetinu až šestinu a její podíl se přiblížil průměru OECD. To je z celého balíčku měřitelně nejcennější efekt.
+      </p>
+
+      <p>
+        Že to není samozřejmost, ukazují oba evropské precedenty. <strong>Polsko</strong> posílá <strong>96,5 % výnosu cukerné daně přímo do Národního fondu zdraví</strong> — vázání funguje a je zákonné. <strong>Velká Británie</strong> naopak výnos zpočátku směrovala do programů proti dětské obezitě a školního sportu, ale po prvním roce se peníze postupně rozpustily v obecném rozpočtu. Pokud má být účelové vázání odpovědí na regresivitu, musí být napsané tak, aby vydrželo víc než jeden rozpočtový rok — jinak zůstane jen rétorickou figurou v důvodové zprávě.
+      </p>
+
+      <h3>Co by muselo platit, aby 10–15 miliard vyšlo</h3>
+
+      <p>
+        Číslo z návrhu není nesmyslné. Jen předpokládá věci, které v něm nejsou napsané — a stojí za to je vyslovit nahlas, protože každá z nich má cenu:
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCukFlowH">
+        <figcaption class="av-figure-h" id="avCukFlowH">Čtyři podmínky, za kterých slibovaná částka vychází</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Víno zdaněné podle alkoholu, ne podle objemu</h4>
+            <p class="av-flow-desc">Sazba srovnaná s lihem na gram etanolu je zhruba dvojnásobek sazby šumivých vín. Politicky mnohem těžší než „srovnáme to s prosseccem“.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Cukerná daň výrazně nad polskou úrovní</h4>
+            <p class="av-flow-desc">Polský model dá v české velikosti kolem 2,5 mld. Dvojnásobný výnos vyžaduje víc než dvojnásobnou sazbu — elasticita ukrajuje.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Spotřeba reaguje málo</h4>
+            <p class="av-flow-desc">Nejtvrdší podmínka: horní hranice výnosu předpokládá, že lidé pijí dál skoro stejně. Pak ale daň neplní zdravotní cíl, kvůli kterému vznikla.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Bez erozí základu</h4>
+            <p class="av-flow-desc">Žádné výjimky pro malé vinaře, žádné odplouvání nákupů za hranice, nízké náklady výběru. Zkušenost s lihem ukazuje, že tohle není zadarmo.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Pozn.:</strong> Podmínky se navzájem nevylučují, ale třetí jde proti smyslu opatření. Schéma shrnuje předpoklady odvozené z rozkladu v tabulce výše.</p>
+      </figure>
+
+      <p>
+        Poslední věc, kterou stojí za to říct: <strong>rozpočtový a zdravotní argument se dají oddělit — a měly by být.</strong> Je-li cílem konsolidace, je zdanění tichého vína nejpřímější a nejlépe spočitatelný krok z trojice; při schodku, o kterém se u příštího rozpočtu mluví ve stovkách miliard, jsou tři až čtyři miliardy z odstranění jediné výjimky reálné peníze a nikdo je nemusí obhajovat zdravím. Je-li cílem zdraví, je nejlepší volbou pásmová daň ze slazených nápojů podle obsahu cukru — protože její hlavní účinek, jak ukázala Británie, není ve výběru, ale v přepsaných recepturách. A je-li cílem obojí najednou, je poctivé napsat, že se ty dva cíle částečně vylučují, a rozhodnout, který má přednost.
+      </p>
+
+      <p>
+        Naše odpověď na otázku z titulku tedy zní: <strong>na sazbách, které jsou dnes v Evropě běžné, vydrží spočítat pět až osm miliard korun ročně, ne deset až patnáct.</strong> Je to skoro poloviční číslo — a přesto je to dobrá zpráva pro návrh samotný. Pět až osm miliard z opatření, které navíc srazí spotřebu cukru a alkoholu, je smysluplná politika. Deset až patnáct miliard bez výpočtu je číslo, které v prvním kole rozpravy někdo rozebere — a strhne s sebou i tu část návrhu, která obstojí.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=alkohol_spotreba"><strong>Spotřeba alkoholu (čistý alkohol, 15+)</strong></a> — 10,6 l na osobu a rok (2024; OECD Health Statistics), OECD 8,4 l</li>
+        <li><a href="indicator.html?id=mortalita_jaterni_chronicka"><strong>Úmrtnost na chronická onemocnění jater</strong></a> — 19,5 na 100 000 obyvatel (2023; Eurostat), EU 13,7</li>
+        <li><a href="indicator.html?id=deti_obezita_cosi"><strong>Nadváha a obezita u dětí 6–9 let (WHO COSI)</strong></a> — 26,3 % (2019; SZÚ · WHO COSI), EU 29,8 %</li>
+        <li><a href="indicator.html?id=vydaje_prevence_pct"><strong>Výdaje na prevenci (% běžných výdajů na zdravotnictví)</strong></a> — 2,74 % (2023; OECD SHA, funkce HC.6), OECD 3,2 %</li>
+        <li><a href="indicator.html?id=bmi_dospeli"><strong>Nadváha a obezita dospělých (BMI ≥ 25)</strong></a> — 60 % (2019; Eurostat), EU 52,7 %</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn.:</strong> Rozklad výnosu v tabulce je vlastní propočet redakce z veřejných zdrojů, ne oficiální fiskální odhad. Rozpětí vyjadřují nejistotu vstupů — zejména podílu tichých vín na spotřebě vína, který ČSÚ samostatně nepublikuje, a velikosti trhu se slazenými nápoji. Čísla jsou řádová a mají sloužit ke kontrole, ne k nahrazení dopadové studie.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si tvrzení sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — recenzovaná literatura (PubMed)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Andreyeva T, Marple K, Marinello S, Moore TE, Powell LM. Outcomes Following Taxation of Sugar-Sweetened Beverages: A Systematic Review and Meta-analysis. JAMA Network Open. 2022;5(6):e2215276.</strong> — 86 studií realizovaných daní; promítnutí daně do ceny 82 % (95% CI 66–98), cenová elasticita poptávky −1,59 (95% CI −2,11 až −1,08), průměrný pokles prodejů 15 % (95% CI −20 až −9); bez důkazu o substituci k nezdaněným nápojům, doložená reformulace u pásmových daní. <a href="https://doi.org/10.1001/jamanetworkopen.2022.15276" target="_blank" rel="noopener">doi.org/10.1001/jamanetworkopen.2022.15276 ↗</a></li>
+          <li><strong>Wagenaar AC, Salois MJ, Komro KA. Effects of beverage alcohol price and tax levels on drinking: a meta-analysis of 1003 estimates from 112 studies. Addiction. 2009;104(2):179–190.</strong> — průměrné cenové elasticity poptávky: pivo −0,46, víno −0,69, lihoviny −0,80. <a href="https://doi.org/10.1111/j.1360-0443.2008.02438.x" target="_blank" rel="noopener">doi.org/10.1111/j.1360-0443.2008.02438.x ↗</a></li>
+          <li><strong>Quiroz-Reyes JA, Morales-Ríos JE, Vargas-Flores A, Sánchez-Ortiz NA, Colchero MA. Are taxes to sugar-sweetened beverages and non-essential energy dense food implemented in Mexico regressive? PLoS ONE. 2025;20(3):e0319922.</strong> — daň zaplacená jako podíl výdajů je vyšší u nízkopříjmových domácností, ty ale zároveň snížily spotřebu víc než bohaté, což regresivní dopad částečně vyvažuje. <a href="https://doi.org/10.1371/journal.pone.0319922" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0319922 ↗</a></li>
+        </ul>
+        <p style="font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); margin: 8px 0 0;">Citace recenzovaných článků vycházejí z databáze PubMed (National Library of Medicine, USA).</p>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česko — sazby, inkaso, odhady</h5>
+        <ul class="article-sources-list">
+          <li><strong>Celní správa ČR — spotřební daně</strong> — sazby a statistiky inkasa; v roce 2025 vybrala Celní správa na spotřebních a energetických daních 170 mld Kč. <a href="https://celnisprava.gov.cz/cz/dane/WebSPD/Stranky/default.aspx" target="_blank" rel="noopener">celnisprava.gov.cz ↗</a></li>
+          <li><strong>Sazby spotřební daně z alkoholu (2025)</strong> — líh 39 100 Kč/hl etanolu, šumivé víno a meziprodukty 2 340 Kč/hl, tiché víno 0 Kč/hl. <a href="https://www.finance.cz/clanky/552751-jak-je-danen-alkohol-v-cesku-kolik-zaplatite-statu-za-sklenicku-piva-vina-ci-lihoviny/" target="_blank" rel="noopener">finance.cz ↗</a></li>
+          <li><strong>PAQ Research — Jak na zdanění slazených nápojů (Komárek, Prokop, Šoltés, 17. 10. 2023)</strong> — návrh polského modelu pro ČR: 3,4 Kč/l při 50 g cukru na litr, 0,35 Kč/l za každých dalších 10 g/l, 1 Kč/l u sladidel; čistý výnos 2,7 mld Kč ročně po započtení propadu DPH a nákladů výběru; očekávaný pokles spotřeby 10–20 %; daň označena za regresivní s návrhem kompenzací. <a href="https://www.paqresearch.cz/post/daneni-slazenych-napoju/" target="_blank" rel="noopener">paqresearch.cz ↗</a></li>
+          <li><strong>NERV — zdanění tichého vína</strong> — návrh sazby 23,40 Kč/l (úroveň šumivých vín), odhad „až 5 mld Kč“ ročně, resp. zhruba 4 mld; politický stav k červnu 2026. <a href="https://m.echo24.cz/a/HBCWZ/zpravy-ekonomika-babis-mluvi-o-spotrebni-dani-na-tiche-vino-rozpocet-to-potrebuje-pikora-motoriste" target="_blank" rel="noopener">echo24.cz ↗</a></li>
+          <li><strong>Zvyšování daně z lihu 2024–2026 a skutečné inkaso</strong> — sazba +10 % (2024), +10 % (2025), +5 % (2026); inkaso 2023 8,97 mld Kč, 2024 o 7 mil. níž, 2025 o 100 mil. níž. <a href="https://www.e15.cz/domaci/politika/vyssi-dani-z-lihu-si-stat-nepomohl-inkaso-se-propada-mladi-pry-holduji-alkoholu-mene-1432926" target="_blank" rel="noopener">e15.cz ↗</a></li>
+          <li><strong>ČSÚ — Spotřeba potravin 2024</strong> — spotřeba vína 19,5 l na obyvatele (z 20,5 l v roce 2023); nealkoholické nápoje a minerální vody 232,7 l. <a href="https://csu.gov.cz/produkty/spotreba-potravin-2024" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Zdravotnické účty (SHA) 2024</strong> — celkové výdaje na zdravotnictví 696,7 mld Kč, 8,6 % HDP; použito pro přepočet objemu prevence. <a href="https://csu.gov.cz/" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Zahraniční výnosy a evaluace</h5>
+        <ul class="article-sources-list">
+          <li><strong>HMRC — Soft Drinks Industry Levy statistics</strong> — inkaso 355 mil. £ (2022/23), 338 mil. £ (2023/24), 327 mil. £ (2024/25, předběžné; vydáno 30. 1. 2026). <a href="https://www.gov.uk/government/statistics/soft-drinks-industry-levy-statistics" target="_blank" rel="noopener">gov.uk ↗</a></li>
+          <li><strong>Institute for Government — Sugar tax</strong> — celkový cukr prodaný v nealkoholických nápojích klesl mezi 2015 a 2019 o 35,4 % (135 500 → 87 600 tun), prodejně vážený obsah cukru o 43,7 % (5,7 → 2,2 g/100 ml); výnos byl zpočátku vázán na programy proti dětské obezitě, později se rozpustil v obecném rozpočtu. <a href="https://www.instituteforgovernment.org.uk/explainer/sugar-tax" target="_blank" rel="noopener">instituteforgovernment.org.uk ↗</a></li>
+          <li><strong>Polská „opłata cukrowa“ — výnos a rozdělení</strong> — 1 492,9 mil. zł v roce 2024 (1,47 / 1,65 / 1,50 mld zł v letech 2021–2023); 96,5 % výnosu jde Národnímu fondu zdraví (NFZ), 3,5 % státnímu rozpočtu; sazba 0,50 zł/l + 0,05 zł za gram cukru nad 5 g/100 ml, strop 1,20 zł/l. <a href="https://www.agroberichtenbuitenland.nl/actueel/nieuws/2025/04/02/sugar-tax-in-poland.-companies-contributions-in-2024" target="_blank" rel="noopener">agroberichtenbuitenland.nl ↗</a></li>
+          <li><strong>ČNB — kurzovní lístek</strong> — kurz použitý pro přepočty (14. 8. 2026: 1 GBP = 28,34 Kč). <a href="https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/" target="_blank" rel="noopener">cnb.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Daň, etikety, automaty: co na slazené nápoje opravdu platí</strong> — nástroje regulace slazených nápojů a jejich doložené efekty; hlavní opora tohoto textu. <a href="clanek-napoje-6-dan-regulace.html">clanek-napoje-6-dan-regulace.html</a></li>
+          <li><strong>Tekutý cukr</strong> — proč cukr v nápoji škodí jinak než cukr v jídle. <a href="clanek-napoje-1-tekuty-cukr.html">clanek-napoje-1-tekuty-cukr.html</a></li>
+          <li><strong>Jaterní mortalita a alkohol</strong> — ukazatel, který nejtvrději měří český vztah k alkoholu. <a href="clanek-jaterni-mortalita-alkohol.html">clanek-jaterni-mortalita-alkohol.html</a></li>
+          <li><strong>Alkohol u adolescentů</strong> — cenová dostupnost alkoholu a rizikové vzorce pití u šestnáctiletých. <a href="clanek-alkohol-adolescenti.html">clanek-alkohol-adolescenti.html</a></li>
+          <li><strong>Výdaje na prevenci</strong> — proč je českých 2,7 % běžných výdajů pod průměrem OECD. <a href="clanek-vydaje-prevence.html">clanek-vydaje-prevence.html</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k hodnotám:</strong> Tabulka rozkladu výnosu je vlastní propočet redakce HSPA Monitoru, ne oficiální fiskální odhad; všechny vstupy i použité elasticity jsou uvedeny přímo u výpočtu. Statický výnos u tichého vína předpokládá podíl tichých vín na objemu 75–93 % — ČSÚ tento rozpad nepublikuje a jde o největší jednotlivou nejistotu celé kalkulace. Přepočty zahraničních výnosů na obyvatele používají kurz ČNB k 14. 8. 2026 a mění se s ním. Údaje o návrzích a legislativním stavu jsou platné ke dni vydání.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
