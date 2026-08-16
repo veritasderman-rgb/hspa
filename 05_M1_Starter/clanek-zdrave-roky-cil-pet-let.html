@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 4
+    visual_elements_count: 6
+    notes: "PEER-BATCH-WRITE 16. 8. 2026 (návrh č. 1 z PLAN-PEER-CLANKY.md, část B): ukotvení cíle 'prodloužit délku života ve zdraví o 5 let během jedné generace' z hospodářské strategie PEER (srpen 2026), kapitola 1.4. Navazuje na clanek-zdrave-roky-dve-metriky (metodická část dvou metrik) a clanek-nadeje-doziti-zdravi (květnový článek). PRIMÁRNÍ DATA: všechna čísla stažena 16. 8. 2026 přímými dotazy na Eurostat REST API (statistics/1.0/data + sdmx/2.1 SDMX-CSV kvůli OBS_FLAG), dataset hlth_hlye (updated 17. 7. 2026, sex=T, unit=YR) a hlth_silc_17 (updated 25. 6. 2026, sex=T, unit=YR). hlth_hlye HLY_Y0: CZ 2015-2024 = 63,0 / 63,3 / 61,4 / 62,7 / 62,0 / 61,6 / 62,0 / 61,8 / 62,0 / 62,4; SE = 72,7 (2015) ... 73,3 (2019) / 72,7 (2020) / 68,4 (2021, OBS_FLAG=b) / 66,5 (2022) / 66,2 (2023) / 67,5 (2024); EU27_2020 = 64,6 (2019) / 64,0 (2020) / 63,6 (2021) / 62,6 (2022, flag b) / 63,1 (2023, flag bep) / 65,2 (2024). LE_Y0 CZ 2015 78,7 → 2024 80,1; EU27 2024 81,5. HLY_Y65 CZ 2015 8,3 → 2024 8,0; EU27 2024 10,3. LE_Y65 CZ 18,9 / EU27 20,2. Žebříček HLY_Y0 2024 (sex=T): IT 73,4 / MT 70,6 / EL 69,9 / BG 69,1 / ES 68,6 / SI 67,5 / SE 67,5 / IE 66,9 / EU27 65,2 / ... / CZ 62,4 (shodně DK a DE) / AT 60,4 / NL 59,5 / FI 57,3 / SK 57,1 / LV 52,5. hlth_silc_17 HE_Y0: CZ 2024 73,8 (2021 71,9 / 2022 73,2 / 2023 73,5), EU27 75,5, SE 78,0; HE_Y65: CZ 14,6, EU27 16,2, SE 19,1. ODVOZENÉ (derived, dopočteno v článku): rozdíl metrik CZ při narození 73,8−62,4 = 11,4; po 65 14,6−8,0 = 6,6; ztráta na EU u HLY_Y0 −2,8 vs. u LE_Y0 −1,4 (poměr 2×); desetiletá změna CZ HLY_Y0 2015→2024 = −0,6 při +1,4 u LE_Y0; tříletý průměr CZ HLY_Y0 2022–2024 = (61,8+62,0+62,4)/3 = 62,07 ≈ 62,1; cíl +5 od tříletého průměru = 67,1, od hodnoty 2024 = 67,4; odstup 67,4 od EU27 2024 (65,2) = +2,2; tempo 5/25 = 0,2 roku ročně, 5/30 ≈ 0,17; švédský skok 2020→2021 = 72,7−68,4 = 4,3 roku; mezera CZ 2024 vs. SE 2020 (před revizí) = 10,3 roku vs. skutečná mezera CZ–SE 2024 = 5,1 roku, tedy nafouknutí o 5,2 roku. KONZISTENCE s datovým kontraktem ověřena: nadeje_doziti_zdravi_65 = 8,0 / 2024 / EU 10,3 / trend 7,5-7,6-7,4-7,7-8,0 shoda; nadeje_doziti_total = 80,1 / 2024 / EU 81,5 shoda; subjektivni_zdravi = 67 % / 2025 / EU 67,9 shoda. TÓN: článek posuzuje CÍL a jeho měřitelnost, ne stranu; cíl je hodnocen jako správně zvolený, problém je v ukotvení metriky. Zlom švédské řady je vysvětlen věcně jako obecná past mezinárodních srovnání HLY (doloženo OBS_FLAG=b u SE 2021), NIKDE se netvrdí, že Švédsko je dnes nejlepší v EU — nejvyšší HLY_Y0 2024 má Itálie (73,4), Švédsko je s 67,5 na úrovni Slovinska. AV počítadla bez anti-patternu (data-value čistě numerické: 62.4, 2.8, 11.4, 0.6, 4.3; žádný rozsah ani datum; záporné hodnoty přes data-prefix). Status: draft — čeká na ruční schválení redakce. published:false."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pět let navíc. Cíl na zdravé stárnutí je dobře zvolený — zatím ale jde splnit i výměnou otázky v dotazníku · HSPA Monitor</title>
+<meta name="description" content="Prodloužit délku života ve zdraví o pět let během jedné generace — nový cíl z hospodářské strategie PEER míří na správný ukazatel. Jenže „zdravé roky" mají dnes dvě oficiální definice, které se pro Česko liší o 11,4 roku při narození. Cíl bez ukotveného metru lze splnit i tím, že se změní otázka v dotazníku. Jak ho ukotvit: jeden dataset, jeden výchozí rok, jedno číslo.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pět let navíc. Cíl na zdravé stárnutí je dobře zvolený — zatím ale jde splnit i výměnou otázky v dotazníku">
+<meta property="og:description" content="Česko má 62,4 zdravého roku při narození (Eurostat, 2024) a za deset let se to číslo nepohnulo. Cíl „+5 let ve zdraví za generaci" je proto ambiciózní a dobře zvolený — potřebuje ale metr, který nejde ohnout: jeden dataset, jeden výchozí rok, jedno číslo.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Zdraví populace">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita a zátěž nemocí</span>
+        <span class="article-tag article-tag-muted">zdravé stárnutí · HLY · cíle politik · metodika · Eurostat</span>
+      </div>
+      <h1 class="article-title">Pět let navíc. Cíl na zdravé stárnutí je dobře zvolený — zatím ale jde splnit i výměnou otázky v dotazníku</h1>
+      <p class="article-deck">
+        Nová hospodářská strategie Pirátské expertní ekonomické rady (PEER) staví zdravotní kapitolu na jediném čísle: <strong>prodloužit délku života ve zdraví o pět let během jedné generace</strong>. Je to dobře zvolený cíl — míří přesně na ukazatel, ve kterém Česko zaostává nejvíc, a odolá námitce, že jde jen o víc peněz. Má ale slabé místo, které s politikou nesouvisí: „zdravé roky" mají dnes dvě oficiální evropské definice a pro Česko se liší o <strong>11,4 roku</strong> při narození. Dokud cíl neurčí, kterou z nich měří, jde splnit i tím, že se v dotazníku vymění otázka.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Cíle zdravotní politiky se obvykle píšou v korunách, lůžkách nebo počtech prohlídek. Cíl „prodloužit délku života ve zdraví" je jiného druhu: měří, co z celého systému lidem nakonec zbude. Právě takový cíl postavila do středu své zdravotní kapitoly hospodářská strategie PEER zveřejněná v srpnu 2026 — a je to volba, kterou stojí za to ocenit dřív, než se začne rozebírat. Zdravé roky se totiž nedají vylepšit stavbou pavilonu ani navýšením úhrady; jsou to hodiny, kdy člověk zvládne běžný den. Problém, kterému se tento článek věnuje, je proto čistě technický, zato zásadní: <strong>cíl zatím nemá metr</strong>. A metr, který nemá jednu definici, jeden výchozí rok a jedno číslo, se za generaci vyhodnotit nedá.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCilHeroH">
+        <figcaption class="av-figure-h" id="avCilHeroH">Čtyři čísla, která rozhodují o tom, jestli je cíl měřitelný (Eurostat, obě pohlaví)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="62.4" data-decimals="1" data-suffix=" let">62,4 let</span>
+            <span class="av-counter-label">zdravých let při narození v ČR (HLY, 2024)</span>
+            <span class="av-counter-foot">průměr EU27: 65,2 · Itálie 73,4</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="2.8" data-decimals="1" data-prefix="−" data-suffix=" roku">−2,8 roku</span>
+            <span class="av-counter-label">ztráta na EU ve zdravých letech — u délky života jen 1,4 roku</span>
+            <span class="av-counter-foot">Česko ztrácí na zdraví dvakrát víc než na životě</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="11.4" data-decimals="1" data-suffix=" roku">11,4 roku</span>
+            <span class="av-counter-label">rozdíl mezi dvěma oficiálními metrikami zdravých let při narození</span>
+            <span class="av-counter-foot">62,4 (omezení v činnostech) vs. 73,8 (subjektivní zdraví)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="0.6" data-decimals="1" data-prefix="−" data-suffix=" roku">−0,6 roku</span>
+            <span class="av-counter-label">změna českých zdravých let za deset let (2015 → 2024)</span>
+            <span class="av-counter-foot">délka života přitom vzrostla o 1,4 roku</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_hlye</code> (aktualizace 17.&nbsp;7.&nbsp;2026) a <code>hlth_silc_17</code> (aktualizace 25.&nbsp;6.&nbsp;2026), rok 2024, obě pohlaví; staženo přes Eurostat REST API 16.&nbsp;8.&nbsp;2026. Rozdíly a desetiletá změna dopočteny z uvedených řad.</p>
+      </figure>
+
+      <h3>Proč je zrovna tenhle cíl dobře zvolený</h3>
+
+      <p>
+        Zdravé roky (<em>Healthy Life Years</em>, HLY) jsou počet let, které člověk podle úmrtnostních tabulek prožije bez výrazného omezení v běžných činnostech. Jsou tedy syntézou dvou věcí najednou — jak dlouho žijeme a v jaké kondici — a nedají se vylepšit přesunem peněz mezi kapitolami rozpočtu. Pro Česko je to navíc přesně ten ukazatel, kde je zaostávání největší. Při narození má český novorozenec <strong>62,4 zdravého roku</strong> proti unijním 65,2; naděje dožití je přitom 80,1 roku proti 81,5. Jinak řečeno: <strong>Česko ztrácí na zdravých letech dvakrát víc než na letech samotných</strong> (−2,8 vs. −1,4 roku). Po pětašedesátce je poměr stejný — 8,0 zdravého roku proti unijním 10,3, při naději dožití 18,9 proti 20,2.
+      </p>
+
+      <p>
+        Tenhle rozdíl je zároveň nejlepší odpověď na námitku, která se proti každé zdravotní reformě používá první: <em>Česko dává na zdravotnictví méně než Evropa, takže výsledky nemohou být lepší.</em> Ztráta ve zdravých letech je dvojnásobná proti ztrátě v délce života — a to není otázka objemu peněz, ale toho, co za ně systém dodá. Podrobněji jsme tuhle asymetrii rozebrali v článku o <a href="clanek-nadeje-doziti-zdravi.html">naději dožití ve zdraví po pětašedesátce</a> a v analýze <a href="clanek-lecitelna-mortalita.html">odvratitelných úmrtí</a>. Cíl formulovaný ve zdravých letech tedy míří tam, kde problém skutečně je.
+      </p>
+
+      <p>
+        A ještě jedna věc pro něj mluví: je nepříjemně ambiciózní. Česká řada zdravých let při narození se za posledních deset let <strong>nepohnula</strong> — 63,0 roku v roce 2015, 62,4 roku v roce 2024, s ročními výkyvy v pásmu 61,4 až 63,3. Naděje dožití za stejnou dobu vzrostla o 1,4 roku. Přidaných let přibývá, zdravých ne. Cíl „+5 let" tedy neznamená pokračovat v trendu rychleji; znamená trend otočit.
+      </p>
+
+      <h3>Jenže co přesně se má o pět let prodloužit</h3>
+
+      <p>
+        Tady začíná potíž, která s politikou nesouvisí. „Zdravé roky" nejsou jedna veličina, ale dvě — a Evropa mezi nimi letos přepnula. Eurostat počítá vedle sebe dvě řady ze stejného šetření EU-SILC:
+      </p>
+
+      <p>
+        <strong>Healthy Life Years (HLY)</strong> stojí na otázce GALI: <em>jste kvůli zdravotnímu problému omezen/a v činnostech, které lidé obvykle dělají?</em> Kdo hlásí omezení trvající aspoň šest měsíců, tomu se rok do zdravých let nepočítá. Je to metrika <em>fungování</em>. <strong>Zdravá délka života podle subjektivního zdraví</strong> (dataset <code>hlth_silc_17</code>) stojí na otázce <em>jaké je vaše zdraví celkově?</em> a za zdravé roky počítá ty, které lidé prožijí se zdravím hodnoceným jako dobré nebo velmi dobré. Je to metrika <em>prožitku</em>. Rozdíl mezi nimi jsme rozebrali v samostatném článku <a href="clanek-zdrave-roky-dve-metriky.html">Osm let, nebo čtrnáct a půl?</a> — a v české optice je obrovský.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCilMetrikyH">
+        <figcaption class="av-figure-h" id="avCilMetrikyH">Kolik zdravých let má Čech před sebou — podle toho, na co se ho zeptáte (2024, roky)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="80" data-unit=" let">
+          <li class="av-bar-row" data-value="80.1" data-label="Naděje dožití při narození" data-note="celkový rámec — EU 81,5"></li>
+          <li class="av-bar-row" data-value="73.8" data-label="Zdravé roky — subjektivní zdraví" data-note="nová metrika monitoringu SDG · EU 75,5"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="62.4" data-label="Zdravé roky — bez omezení (HLY)" data-note="dosavadní standard · EU 65,2"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_hlye</code> (HLY, naděje dožití) a <code>hlth_silc_17</code> (subjektivní zdraví), Česko, rok 2024, obě pohlaví; staženo přes REST API 16.&nbsp;8.&nbsp;2026. Rozdíl mezi oběma metrikami zdravých let činí 11,4 roku.</p>
+      </figure>
+
+      <p>
+        A teď to podstatné: <strong>Eurostat letos v monitoringu cílů udržitelného rozvoje jednu metriku vyměnil za druhou.</strong> Do edice 2025 se ve výkladní skříni evropského zdravého stárnutí ukazovaly zdravé roky podle omezení v činnostech; od edice 2026 tam stojí zdravá délka života podle subjektivního zdraví. Nešlo o skryté rozhodnutí — Eurostat ho vysvětlil v metodické poznámce — ale mělo skokový efekt: číslo, kterým se Evropa poměřuje, se přes noc „zlepšilo" o víc než deset let.
+      </p>
+
+      <p>
+        Pro cíl formulovaný jako „+5 let během jedné generace" to znamená konkrétní zranitelnost. Kdyby se výchozí stav odečetl ze staré metriky (62,4 roku) a splnění se za dvacet let vyhodnotilo z metriky nové (dnes 73,8), byl by cíl splněn okamžitě — a ještě by zbylo 6,4 roku rezervy. Nikdo takový úmysl nemá; jenže cíl, který lze splnit administrativně, nemá nad politikou žádnou disciplinární sílu. A jak ukazuje letošní výměna, není to hypotetická obava: statistická konvence se během jedné generace mění, i když se nikdo neptá.
+      </p>
+
+      <h3>Druhá past: řady, které se lámou</h3>
+
+      <p>
+        Výměna metriky je jen nápadnější verze obecnějšího problému. Zdravé roky vznikají z odpovědí lidí v dotazníku, a když se otázka přeformuluje, řada se zlomí — hodnota před zlomem a po něm nejsou srovnatelné, i když se ukazatel jmenuje stejně. Eurostat takový zlom nezastírá: označí příslušný rok příznakem <em>break in time series</em>. Kdo si příznaky nevšimne, dostane rozdíl, který v realitě neexistuje.
+      </p>
+
+      <p>
+        Nejnázornější případ v celém datasetu je Švédsko. Do roku 2020 patřilo se 72,7 zdravého roku při narození k evropské špičce. V roce 2021 se v EU-SILC revidovalo znění otázky GALI a švédská hodnota spadla na 68,4 roku — Eurostat ten rok označuje příznakem zlomu řady. Následovalo 66,5 (2022), 66,2 (2023) a 67,5 roku v roce 2024. Švédové v roce 2021 náhle neonemocněli; změnila se otázka.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="4.3" data-decimals="1" data-suffix=" roku">4,3 roku</span>
+          <span class="av-counter-label">skok ve švédské řadě zdravých let mezi roky 2020 a 2021 — po revizi otázky GALI</span>
+          <span class="av-counter-foot">Eurostat <code>hlth_hlye</code>, rok 2021 označen příznakem „break in time series"</span>
+        </div>
+      </aside>
+
+      <p>
+        Důsledek pro mezinárodní srovnání je nepříjemný. Postaví-li se vedle sebe české číslo <em>po</em> revizi (62,4) a švédské <em>před</em> revizí (72,7), vyjde mezera 10,3 roku. Skutečná mezera mezi Českem a Švédskem v roce 2024 je <strong>5,1 roku</strong>. Rozdíl mezi obojím — 5,2 roku — je zhruba velikost celého cíle. Tabulka mezinárodního srovnání v hospodářské strategii PEER pracuje u Švédska s hodnotami kolem 71 a 72,7 roku, tedy s předrevizní řadou; není to výtka autorům, nýbrž past, do které v tomhle datasetu spadne skoro každý, kdo čísla přebírá ze starších přehledů. Ověřit se to dá v <code>hlth_hlye</code> za tři minuty — a přesně to je důvod, proč se takové srovnání do argumentace nevyplácí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCilZlomH">
+        <figcaption class="av-figure-h" id="avCilZlomH">Zdravé roky při narození (HLY): česká řada bez zlomu, švédská se zlomem v roce 2021</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">2019</th>
+                <th scope="col" class="av-num">2020</th>
+                <th scope="col" class="av-num">2021</th>
+                <th scope="col" class="av-num">2022</th>
+                <th scope="col" class="av-num">2023</th>
+                <th scope="col" class="av-num">2024</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Česko</th>
+                <td class="av-num">62,0</td>
+                <td class="av-num">61,6</td>
+                <td class="av-num">62,0</td>
+                <td class="av-num">61,8</td>
+                <td class="av-num">62,0</td>
+                <td class="av-num">62,4</td>
+              </tr>
+              <tr>
+                <th scope="row">Švédsko</th>
+                <td class="av-num">73,3</td>
+                <td class="av-num">72,7</td>
+                <td class="av-num av-bad">68,4 <sup>b</sup></td>
+                <td class="av-num">66,5</td>
+                <td class="av-num">66,2</td>
+                <td class="av-num">67,5</td>
+              </tr>
+              <tr>
+                <th scope="row">Průměr EU27</th>
+                <td class="av-num">64,6</td>
+                <td class="av-num">64,0</td>
+                <td class="av-num">63,6</td>
+                <td class="av-num av-mut">62,6 <sup>b</sup></td>
+                <td class="av-num av-mut">63,1 <sup>bep</sup></td>
+                <td class="av-num">65,2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_hlye</code>, ukazatel HLY při narození, obě pohlaví; staženo přes SDMX API 16.&nbsp;8.&nbsp;2026 včetně příznaků pozorování. <sup>b</sup> break in time series (zlom řady) · <sup>bep</sup> zlom řady, odhad, předběžné. Česká řada v tomto období žádný příznak zlomu nenese.</p>
+      </figure>
+
+      <p>
+        Se stejnou opatrností je namístě číst i pořadí zemí. Nejvyšší počet zdravých let při narození má v roce 2024 <strong>Itálie (73,4)</strong>, následují Malta (70,6), Řecko (69,9) a Bulharsko (69,1); Švédsko je s 67,5 roku na úrovni Slovinska. Že Bulharsko předstihne Nizozemsko (59,5) nebo Finsko (57,3), není důkazem lepšího bulharského zdravotnictví — je to připomínka, že HLY vzniká ze sebehodnocení a promítá se do něj kulturní laťka, na které lidé měří, co ještě je a co už není omezení. Pro sledování jedné země v čase je ukazatel použitelný a robustní; pro tvrzení „nejlepší v Evropě" nikoli.
+      </p>
+
+      <h3>Kolik vlastně je pět let</h3>
+
+      <p>
+        Když se cíl přepočte na jedinou dostupnou tvrdou řadu, dostane konkrétní obrys. Z hodnoty <strong>62,4 roku</strong> (2024) by pět let navíc znamenalo <strong>67,4 roku</strong> — tedy úroveň, kde je dnes Slovinsko a Švédsko, a o 2,2 roku nad dnešním průměrem EU. Při generaci chápané jako 25 let vychází potřebné tempo na <strong>0,2 roku zdravého života ročně</strong>, po tři desetiletí zhruba 0,17. Proti desetiletí, v němž česká hodnota klesla o 0,6 roku, je to obrat, ne extrapolace.
+      </p>
+
+      <p>
+        To není argument proti cíli — je to argument pro to říct jeho náročnost nahlas. Cíl, u kterého je předem jasné, kolik ročního zlepšení vyžaduje, se dá po pěti letech poctivě zkontrolovat a případně obhájit i ve chvíli, kdy se neplní. Cíl bez čísla se po pěti letech jen přeformuluje.
+      </p>
+
+      <h3>Jak cíl ukotvit</h3>
+
+      <p>
+        Ukotvení nevyžaduje nová data ani nové šetření. Stačí čtyři rozhodnutí, která se vejdou do jedné věty programového dokumentu.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCilFlowH">
+        <figcaption class="av-figure-h" id="avCilFlowH">Čtyři rozhodnutí, po kterých je cíl „+5 let ve zdraví" měřitelný</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jeden dataset</h4>
+            <p class="av-flow-desc">Eurostat <code>hlth_hlye</code>, ukazatel zdravé roky při narození, obě pohlaví. Ne „zdravá délka života" obecně — konkrétní kód řady.</p>
+            <span class="av-flow-tag">HLY, GALI</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jeden výchozí bod</h4>
+            <p class="av-flow-desc">Roční výkyvy dosahují až jednoho roku, proto tříletý průměr 2022–2024: <strong>62,1 roku</strong>. Jedna hodnota, jedno datum, žádné dohadování.</p>
+            <span class="av-flow-tag">baseline 62,1</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jedno cílové číslo</h4>
+            <p class="av-flow-desc">67,1 roku v roce 2050. Vedle toho průběžná meta — polovina cesty do roku 2037 — aby se plnění dalo kontrolovat dřív než po generaci.</p>
+            <span class="av-flow-tag">cíl 67,1</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Pravidlo pro zlom řady</h4>
+            <p class="av-flow-desc">Když Eurostat změní otázku, přepočítá se <strong>výchozí hodnota</strong>, ne cíl. Bez tohoto pravidla by se metodický zlom vykázal jako úspěch — nebo jako selhání.</p>
+            <span class="av-flow-tag">ochrana proti výměně metru</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Poznámka:</strong> Výchozí hodnota 62,1 je tříletý průměr českých hodnot 2022–2024 (61,8 · 62,0 · 62,4) z datasetu <code>hlth_hlye</code>; cíl 67,1 = baseline + 5 let. Návrh redakce HSPA Monitoru, ne oficiální metodika.</p>
+      </figure>
+
+      <p>
+        Pátý bod je dobrovolný, ale užitečný: reportovat vedle hlavního čísla i tři doprovodné řady — naději dožití (aby bylo vidět, jestli zdravé roky rostou spolu s životem, nebo místo něj), zdravé roky po 65. narozeninách (tam se rozhoduje o potřebě dlouhodobé péče) a metriku subjektivního zdraví (protože právě ji Evropa nově vystavuje). Reportovat je <em>vedle</em>, nikdy <em>místo</em>. Míchání obou definic do jedné časové řady je nejčastější chyba, kterou v téhle oblasti lze udělat.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Co ukazatel neuhlídá">
+        <p class="article-callout-h">Co ani dobře ukotvený metr neuhlídá</p>
+        <p><strong>1. Je to sebehodnocení.</strong> HLY nevzniká z klinického vyšetření, ale z odpovědi člověka tazateli. Do mezinárodních rozdílů se promítá kulturní laťka; srovnání zemí na desetiny roku nedává smysl, srovnání jedné země v čase ano.</p>
+        <p><strong>2. Šetření vynechává instituce.</strong> EU-SILC se ptá pouze lidí v soukromých domácnostech. Senioři v pobytových zařízeních — tedy ti s největším omezením — v datech nejsou, takže obě metriky zdravé roky spíše nadhodnocují.</p>
+        <p><strong>3. I evropský průměr se láme.</strong> Agregát EU27 nese za rok 2022 příznak zlomu řady a za rok 2023 navíc příznaky odhadu a předběžnosti; skok z 63,1 na 65,2 roku mezi lety 2023 a 2024 proto nelze číst jako reálné zlepšení evropského zdraví. Cíl navázaný na <em>rozdíl</em> vůči průměru EU by kolísal spolu s metodikou v jiných zemích — proto je čistší cílovat absolutní hodnotu.</p>
+        <p><strong>4. Ukazatel se hýbe pomalu.</strong> Mezi opatřením a jeho projevem ve zdravých letech jsou roky až desetiletí. Cíl na generaci proto potřebuje průběžné ukazatele s rychlejší odezvou — <a href="clanek-lecitelna-mortalita.html">léčitelnou mortalitu</a>, záchyt chronických nemocí v primární péči, <a href="clanek-vydaje-prevence.html">výdaje na prevenci</a> — jinak se dvacet let neví, jestli se jde správným směrem.</p>
+      </aside>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé: cíl formulovaný ve zdravých letech je správná volba a je dobré, že se objevil.</strong> Míří na ukazatel, ve kterém je české zaostávání dvojnásobné proti zaostávání v délce života, a nedá se splnit přesunem peněz mezi kapitolami. <strong>Za druhé: bez ukotvení metriky je zatím nevymahatelný.</strong> Dvě evropské definice zdravých let se pro Česko liší o 11,4 roku při narození a Eurostat mezi nimi letos přepnul — cíl, který neuvádí dataset, výchozí rok a číslo, jde splnit administrativně. <strong>Za třetí: ukotvení je levné.</strong> Čtyři věty — <code>hlth_hlye</code>, baseline 62,1 roku (průměr 2022–2024), cíl 67,1 roku v roce 2050, pravidlo pro přepočet při zlomu řady — proměňují politickou ambici v číslo, které si za dvacet let může každý ověřit sám. A protože ta samá čísla ukazují, že se česká hodnota deset let nepohnula, je ukotvení zároveň jediný způsob, jak z cíle udělat závazek místo přání.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-nadeje_doziti_zdravi_65.html"><strong>Naděje dožití ve zdraví (65 let)</strong></a> — 8,0 roku vs. EU 10,3 (HLY/GALI, Eurostat <code>hlth_hlye</code>, 2024); trend 7,4 → 7,7 → 8,0 za roky 2022–2024</li>
+        <li><a href="indikator-nadeje_doziti_total.html"><strong>Naděje dožití při narození</strong></a> — 80,1 roku vs. EU 81,5 (Eurostat, 2024)</li>
+        <li><a href="indikator-subjektivni_zdravi.html"><strong>Subjektivní hodnocení zdraví (16+)</strong></a> — 67 % hodnotí své zdraví jako dobré nebo velmi dobré vs. EU 67,9 % (Eurostat EU-SILC, 2025)</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k indikátoru:</strong> Dashboard vede zdravé roky v metrice HLY (omezení v běžných činnostech, GALI), a to i po letošní výměně ukazatele v monitoringu SDG — pro plánování dlouhodobé péče a soběstačnosti je omezení v činnostech užitečnější signál než celkový pocit ze zdraví. Hodnoty 73,8 a 14,6 roku (subjektivní zdraví, <code>hlth_silc_17</code>) jsou v článku uvedeny pro srovnání obou optik; obě čísla pocházejí ze stejného šetření EU-SILC, ale odpovídají na jinou otázku a nelze je spojit do jedné časové řady.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — Eurostat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Healthy life years by sex (<code>hlth_hlye</code>)</strong> — zdravé roky bez omezení (HLY/GALI) a naděje dožití při narození i při 65 letech; řady ČR, Švédska a EU27 za roky 2015–2024, aktualizace datasetu 17. 7. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_hlye/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a>. Staženo 16. 8. 2026 přes REST API a SDMX API (kvůli příznakům pozorování).</li>
+          <li><strong>Eurostat — Healthy life expectancy based on self-perceived health (<code>hlth_silc_17</code>)</strong> — zdravá délka života podle subjektivního zdraví; ČR 73,8 roku při narození a 14,6 roku po 65 (2024), aktualizace 25. 6. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_17/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a>. Staženo 16. 8. 2026.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — SDG 3 „Good health and well-being" (Statistics Explained)</strong> — doklad výměny ukazatele zdravé délky života v monitoringu cílů udržitelného rozvoje od edice 2026. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=SDG_3_-_Good_health_and_well-being" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+          <li><strong>Eurostat — Healthy life years statistics (Statistics Explained)</strong> — znění otázky GALI, způsob výpočtu, limity mezinárodní srovnatelnosti a význam příznaků zlomu řady. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Healthy_life_years_statistics" target="_blank" rel="noopener">ec.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Posuzovaný dokument</h5>
+        <ul class="article-sources-list">
+          <li><strong>PEER — Hospodářská strategie, kapitola 1.4 „Zdraví a soběstačnost přinesou silnější ekonomiku"</strong> (Pirátská expertní ekonomická rada, srpen 2026) — zdroj cíle „prodloužit délku života ve zdraví o 5 let během jedné generace" a tabulky mezinárodního srovnání, ke které se vztahuje pasáž o zlomu švédské řady.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-zdrave-roky-dve-metriky</strong> — metodické srovnání obou definic zdravých let, otázka GALI vs. subjektivní zdraví, rozklad podle pohlaví. <a href="clanek-zdrave-roky-dve-metriky.html">clanek-zdrave-roky-dve-metriky.html</a></li>
+          <li><strong>clanek-nadeje-doziti-zdravi</strong> — zdravé roky po pětašedesátce a asymetrie mezi délkou života a délkou zdraví. <a href="clanek-nadeje-doziti-zdravi.html">clanek-nadeje-doziti-zdravi.html</a></li>
+          <li><strong>clanek-lecitelna-mortalita</strong> — odvratitelná úmrtí jako průběžný ukazatel s rychlejší odezvou než zdravé roky. <a href="clanek-lecitelna-mortalita.html">clanek-lecitelna-mortalita.html</a></li>
+          <li><strong>clanek-vydaje-prevence</strong> — kolik Česko dává na prevenci a jak se to promítá do zdraví populace. <a href="clanek-vydaje-prevence.html">clanek-vydaje-prevence.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny hodnoty Eurostatu v článku byly staženy 16.&nbsp;8.&nbsp;2026 přímými dotazy na Eurostat REST API a SDMX API (obě pohlaví, jednotka roky, není-li uvedeno jinak). Dopočtené hodnoty: rozdíly mezi metrikami a vůči průměru EU, desetiletá změna české řady, tříletý průměr 2022–2024 (62,1 roku), cílová hodnota 67,1 roku a potřebné roční tempo. Příznaky pozorování (<em>b</em> = zlom řady, <em>bep</em> = zlom řady / odhad / předběžné) pocházejí přímo z Eurostatu; česká řada zdravých let v období 2018–2024 žádný příznak zlomu nenese. Návrh na ukotvení cíle (baseline, cílové číslo, pravidlo pro zlom řady) je redakční doporučení HSPA Monitoru, nikoli oficiální metodika.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
