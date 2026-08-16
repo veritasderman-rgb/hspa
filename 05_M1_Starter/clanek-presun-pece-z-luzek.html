@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 6
+    visual_elements_count: 6
+    notes: "PEER-BATCH-WRITE (návrh článku č. 2 z PLAN-PEER-CLANKY.md, část B). Aktualita: Hospodářská strategie PEER (Pirátská expertní ekonomická rada), srpen 2026, kapitola 1.4 — návrh 2 'Přesuneme péči z lůžek' s cílem snížit podíl nemocniční péče na výdajích ze 46,5 % k evropskému průměru 36,4 % do roku 2035. TEZE: věcné jádro sedí, zvolená metrika cíle je past. OVĚŘENÁ ČÍSLA: (1) obložnost standardních akutních lůžek 56,0 % a následných 84,2 % (2024, ÚZIS NRHZS SSS-05-03), kapacita 42 309 standardních akutních lůžek (SSS-05-02), ekvivalent ~18 600 průměrně prázdných lůžek — vše převzato z auditovaného clanek-prazdna-luzka-efektivita; (2) hospitalizovanost 17 989,8 / 100 tis. (2024, ÚZIS NRH, indikátor hospitalizace_na_100k, origin live, verification_status verified, verified_at 2026-06-01), OECD 14 600; (3) ACSC 592 / 100 tis. vs OECD 473 (OECD Health at a Glance 2025, ref. rok 2021/22, age-sex standardizováno) — v článku VŽDY 592, NIKDY seedovaných 580 z data/indicators.json (seed je zastaralý, platí auditovaná hodnota z clanek-vyhnutelne-hospitalizace a clanek-hospitalizujeme-nejvic); (4) SHA HP.1 nemocnice ~40 % celkových výdajů vs OECD ~36 % (ČSÚ Zdravotnické účty 2024, řádový profil poskytovatelů — převzato z auditovaného clanek-financovani-sha); (5) podíl výdajů ZP na lůžkovou péči 55,9 % (2023, indikátor podil_vydaje_luzkova_pece, benchmark EU 32); (6) katarakta ambulantně 98,7 % vs OECD 94,5 % (2022, indikátor jednodenni_chirurgie_katarakta, origin live, verified); (7) akutní lůžka 4,0 / 1 000 vs OECD 3,5 (2023, postele_akutni_per_1000, live verified); (8) celkové výdaje 696,7 mld Kč / 8,6 % HDP (2024, ČSÚ SHA). PŘÍSNÝ ZÁKAZ DODRŽEN: srovnání průměrné délky hospitalizace 7,0 vs OECD 6,5 NENÍ v článku použito jako argument — délka je zmíněna výhradně v metodickém caveat callout s vysvětlením, že dashboardová sedmička agreguje akutní i následnou péči, zatímco harmonizovaný údaj ČSÚ 2024 pro akutní péči je 5,5 dne, tedy POD průměrem OECD (viz PLAN-PEER-CLANKY.md A3.5 a audit clanek-hospitalizujeme-nejvic z 2026-06-18). Číslo 46,5 % / 36,4 % je v článku vždy atribuováno PEER/NERV jako jejich údaj, nikdy jako ověřená hodnota dashboardu — článek explicitně uvádí, že se nepodařilo ukotvit v žádné standardní klasifikaci (PLAN-PEER-CLANKY.md A3.1). Poměr úvazků 48/12/4 tis. (pobytové/terénní/ambulantní) je atribuován jako údaj PEER. Pozice: nestranické posouzení opatření — článek fandí věcnému jádru a opravuje metriku, nikoli podpora programu strany (PLAN-PEER-CLANKY.md sekce 0). Status: draft — čeká na ruční schválení redakce. published:false."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Přesun péče z lůžek dává smysl. Cíl minus deset procentních bodů ale měří něco jiného, než se má změnit · HSPA Monitor</title>
+<meta name="description" content="Hospodářská strategie PEER navrhuje snížit podíl nemocniční péče na výdajích ze 46,5 % k evropskému průměru 36,4 % do roku 2035. Věcné jádro sedí: akutní lůžka jsou obsazena z 56 %, Česko hospitalizuje 17 990 lidí na 100 tisíc obyvatel (OECD 14 600) a 592 hospitalizací na 100 tisíc měla zvládnout ambulance. Zvolená metrika cíle je ale past — podíl nemocniční péče se podle klasifikace pohybuje mezi 40 a 55,9 procenty a jde ho splnit přeúčtováním.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Přesun péče z lůžek dává smysl. Cíl minus deset procentních bodů ale měří něco jiného, než se má změnit">
+<meta property="og:description" content="Akutní lůžka obsazená z 56 %, 17 990 hospitalizací na 100 tisíc obyvatel, 592 odvratitelných. Věcné jádro návrhu PEER sedí — ale cíl navázaný na „podíl nemocniční péče“ jde splnit přeúčtováním ambulancí, aniž by se pacientovi změnilo cokoli.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Nemocniční péče">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-presun-pece-z-luzek.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Přesun péče z lůžek dává smysl. Cíl minus deset procentních bodů ale měří něco jiného, než se má změnit" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-presun-pece-z-luzek.png" data-cover-injected="1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nemocniční péče</span>
+        <span class="article-tag article-tag-muted">efektivita · struktura výdajů · jednodenní chirurgie · měřitelnost cílů</span>
+      </div>
+      <h1 class="article-title">Přesun péče z lůžek dává smysl. Cíl minus deset procentních bodů ale měří něco jiného, než se má změnit</h1>
+      <p class="article-deck">
+        Hospodářská strategie <strong>PEER</strong> navrhuje snížit podíl nemocniční péče na výdajích ze 46,5 % k evropskému průměru 36,4 % do roku 2035 přesunem do jednodenní, ambulantní a domácí péče. Věcné jádro toho návrhu je z dat dobře podepřené: akutní lůžka jsou v Česku obsazena z <strong>56 %</strong>, hospitalizovanost <strong>17 990 na 100 tisíc obyvatel</strong> je nejvyšší v OECD (průměr 14 600) a <strong>592 hospitalizací na 100 tisíc</strong> patří mezi ty, které měla zvládnout ambulance. Problém je metrika samotného cíle: „podíl nemocniční péče" se podle použité klasifikace pohybuje mezi 40 a 55,9 procenty — a dá se snížit přeúčtováním, aniž by se v systému změnilo cokoli.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Pirátská expertní ekonomická rada (PEER) zveřejnila v srpnu 2026 hospodářskou strategii, jejíž zdravotní kapitola obsahuje mimo jiné návrh, který v české debatě není nový, ale málokdy má číselný cíl: přesunout péči z lůžek do jednodenní, ambulantní a domácí péče a snížit podíl nemocniční péče na výdajích ze 46,5 % k evropskému průměru 36,4 % do roku 2035. HSPA Monitor politické programy nehodnotí; hodnotí opatření a metriky, kterými se dají měřit. A u tohoto návrhu vychází nezvyklá kombinace: <strong>diagnóza je jedna z nejlépe doložených v celé české zdravotní politice, zatímco navržený teploměr ukazuje jinam, než kam se míří</strong>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPresunHeroH">
+        <figcaption class="av-figure-h" id="avPresunHeroH">Čtyři čísla, mezi kterými se návrh pohybuje</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="56" data-decimals="1" data-suffix=" %">56,0 %</span>
+            <span class="av-counter-label">obložnost standardních akutních lůžek (2024)</span>
+            <span class="av-counter-foot">následná lůžka ve stejném roce 84,2 % · ÚZIS NRHZS</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="17990">17 990</span>
+            <span class="av-counter-label">hospitalizací na 100 000 obyvatel (2024) — nejvíc ze zemí OECD</span>
+            <span class="av-counter-foot">průměr OECD 14 600 · ÚZIS NRH, ověřený živý indikátor</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="592">592</span>
+            <span class="av-counter-label">odvratitelných hospitalizací (ACSC) na 100 000 obyvatel</span>
+            <span class="av-counter-foot">průměr OECD 473 · OECD Health at a Glance 2025, ref. 2021/22</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="40">40</span>
+            <span class="av-counter-label">procent výdajů na zdravotnictví jde nemocnicím podle klasifikace SHA</span>
+            <span class="av-counter-foot">PEER počítá s 46,5 % · výdaje pojišťoven na lůžkovou péči dávají 55,9 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> ÚZIS — NRHZS, datové souhrny obložnosti a kapacit lůžkového fondu (stav k 31. 12. 2024); ÚZIS — Národní registr hospitalizovaných (2024); OECD Health at a Glance 2025 (avoidable hospital admissions, referenční rok 2021/2022, age-sex standardizováno); ČSÚ — Výsledky zdravotnických účtů (SHA), referenční rok 2024; datový kontrakt HSPA Monitoru.</p>
+      </figure>
+
+      <h3>Věcné jádro: kapacita stojí a přitom se hospitalizuje nejvíc v OECD</h3>
+
+      <p>
+        Začněme tím, co v návrhu drží. Česko má nadprůměrně velký lůžkový fond, který využívá podprůměrně. Standardní akutní lůžka měla v roce 2024 obložnost <strong>56,0 %</strong>, lůžka intenzivní péče 62,0 % — zatímco následná lůžka byla obsazena z 84,2 %. Při 42 309 nasmlouvaných standardních akutních lůžkách to odpovídá ekvivalentu zhruba 18 600 průměrně prázdných postelí, které někdo platí a které vážou personál. Podrobně jsme to rozebrali v článku o tom, <a href="clanek-prazdna-luzka-efektivita.html">proč je česká akutní kapacita poloprázdná, zatímco následná praská ve švech</a>.
+      </p>
+
+      <p>
+        Druhá polovina obrazu je zdánlivě protichůdná: přestože lůžka stojí, hospitalizuje se u nás víc než kdekoli jinde v OECD. Míra hospitalizací dosáhla v roce 2024 <strong>17 990 na 100 000 obyvatel</strong> proti průměru OECD kolem 14 600 — je to jeden z mála indikátorů dashboardu, který má ověřený živý zdroj (ÚZIS, Národní registr hospitalizovaných). Souvislost mezi oběma čísly není paradox, ale popis modelu: systém, který <a href="clanek-hospitalizujeme-nejvic.html">řeší velkou část péče přijetím na lůžko</a>, potřebuje hodně lůžek, na kterých se ale leží krátce a nepravidelně, takže průměrné využití zůstává nízké. Akutních lůžek má proto Česko 4,0 na tisíc obyvatel oproti 3,5 v průměru OECD.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPresunBarH">
+        <figcaption class="av-figure-h" id="avPresunBarH">Míra hospitalizací na 100 000 obyvatel — Česko a mezinárodní referenční hodnoty</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="19000">
+          <li class="av-bar-row av-bar-row-highlight" data-value="17990" data-label="Česko (2024)" data-note="ÚZIS NRH, ověřený živý indikátor"></li>
+          <li class="av-bar-row" data-value="15200" data-label="Průměr EU" data-note="benchmark datového kontraktu"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="14600" data-label="Průměr OECD" data-note="cílová referenční hodnota"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> datový kontrakt HSPA Monitoru, indikátor <em>hospitalizace_na_100k</em> (ÚZIS — Národní registr hospitalizovaných, referenční rok 2024, ověřeno 1. 6. 2026), benchmarky OECD a EU. Rozdíl Česko–OECD odpovídá zhruba 3 400 hospitalizacím na 100 000 obyvatel ročně.</p>
+      </figure>
+
+      <h3>592 hospitalizací, které měla zvládnout ambulance</h3>
+
+      <p>
+        Nejsilnější číslo celého návrhu ale není objem, nýbrž skladba. Odvratitelné hospitalizace — v mezinárodní terminologii <em>ambulatory care sensitive conditions</em>, ACSC — měří přijetí na lůžko u pěti chronických diagnóz dospělých (diabetes, chronická obstrukční plicní nemoc, srdeční selhání, nekomplikovaná hypertenze, astma), kterým dobře vedená ambulantní péče dokáže předejít. Česko jich vykazuje <strong>592 na 100 000 obyvatel</strong> proti průměru OECD 473, tedy zhruba o čtvrtinu víc. To nejsou statistické artefakty, ale konkrétní lidé: dekompenzovaný diabetik, neseřízená medikace u srdečního selhání, astmatik bez protizánětlivé léčby. Proč se to děje a kde přesně se péče trhá, popisuje článek o <a href="clanek-vyhnutelne-hospitalizace.html">hospitalizacích, kterým šlo předejít</a>.
+      </p>
+
+      <p>
+        Tady je věcné jádro PEER nejsilnější a zároveň nejméně kontroverzní: <strong>přesunout tyto pacienty z lůžka do ambulance není škrt, je to lepší péče</strong>. Hospitalizace pro dekompenzovaný diabetes je pro pacienta horší výsledek než tři dobře vedené kontroly u praktika. Úspora je až druhotný efekt.
+      </p>
+
+      <h3>Jenže co přesně je „46,5 procenta"?</h3>
+
+      <p>
+        A tady začíná problém. Číslo, na kterém návrh staví cíl — 46,5 % nemocniční péče v Česku proti 36,4 % v EU27, s odkazem na materiál NERV z roku 2024 — se nepodařilo ukotvit v žádné klasifikaci, kterou tento dashboard sleduje. Existují dvě standardní metriky, které se běžně používají, a obě dávají jiná čísla i jinou mezeru.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPresunTabH">
+        <figcaption class="av-figure-h" id="avPresunTabH">Tři různá čísla pro „podíl nemocniční péče" — a tři různě velké mezery vůči Evropě</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Metrika</th>
+                <th scope="col" class="av-num">ČR</th>
+                <th scope="col" class="av-num">Srovnání</th>
+                <th scope="col" class="av-num">Mezera</th>
+                <th scope="col">Zdroj</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Podíl nemocnic (HP.1) na celkových výdajích na zdravotnictví</th>
+                <td class="av-num">~40 %</td>
+                <td class="av-num">OECD ~36 %</td>
+                <td class="av-num av-mut">~4 p. b.</td>
+                <td>ČSÚ, Zdravotnické účty (SHA), 2024</td>
+              </tr>
+              <tr>
+                <th scope="row">Podíl výdajů zdravotních pojišťoven na lůžkovou péči</th>
+                <td class="av-num">55,9 %</td>
+                <td class="av-num">EU ~32 %</td>
+                <td class="av-num av-bad">~24 p. b.</td>
+                <td>ÚZIS NRHZS, 2023 (indikátor dashboardu)</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">„Podíl nemocniční péče" podle PEER</th>
+                <td class="av-num">46,5 %</td>
+                <td class="av-num">EU27 36,4 %</td>
+                <td class="av-num">10,1 p. b.</td>
+                <td>PEER 2026, s odkazem na NERV 2024</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> ČSÚ — Výsledky zdravotnických účtů v ČR (klasifikace poskytovatelů HP, referenční rok 2024; řádový profil, detailní rozpad předběžná vlna nezveřejnila); datový kontrakt HSPA Monitoru, indikátor <em>podil_vydaje_luzkova_pece</em> (55,9 %, referenční rok 2023, benchmark EU 32 %); PEER, Hospodářská strategie, kapitola 1.4 (srpen 2026). Metriky nejsou zaměnitelné — liší se čitatelem (nemocnice jako poskytovatel × lůžková péče jako typ služby) i jmenovatelem (všechny výdaje na zdravotnictví × výdaje veřejného zdravotního pojištění).</p>
+      </figure>
+
+      <p>
+        Rozdíl není akademický. Na metrice, kterou má tento dashboard ověřenou — SHA, klasifikace poskytovatelů — je česká mezera vůči OECD zhruba <strong>čtyři procentní body</strong>, ne deset. Cíl „minus deset procentních bodů do roku 2035" tedy může být mimo o faktor dva, podle toho, jakou definici si pro měření nakonec zvolí ten, kdo bude plnění vyhodnocovat. Vysvětlení, jak se stejná koruna zároveň eviduje ve třech různých klasifikacích SHA a proč se čísla o „podílu nemocnic" tak liší, nabízí <a href="clanek-financovani-sha.html">anatomie financování českého zdravotnictví</a>: v roce 2024 systémem prošlo 696,7 miliardy korun, tedy 8,6 % HDP, a to, kolik z toho „jde nemocnicím", je odpověď na tři různě položené otázky.
+      </p>
+
+      <h3>Horší past: cíl jde splnit přeúčtováním</h3>
+
+      <p>
+        Druhý problém je vážnější než nejistota o výchozí hodnotě. Klasifikace SHA řadí poskytovatele podle typu organizace, ne podle typu péče. <strong>Ambulantní péče poskytnutá v nemocniční ambulanci se proto účtuje poskytovateli HP.1 — nemocnicím.</strong> Cíl formulovaný jako „snížit podíl nemocniční péče" jde tedy splnit organizační změnou, která se pacienta nedotkne.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPresunFlowH">
+        <figcaption class="av-figure-h" id="avPresunFlowH">Jak splnit cíl bez jediné přesunuté hospitalizace</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Výchozí stav</h4>
+            <p class="av-flow-desc">Nemocniční ambulance jsou součástí nemocnice. Jejich výkony statistika řadí k poskytovateli HP.1 — nemocnicím.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Organizační krok</h4>
+            <p class="av-flow-desc">Nemocnice vyčlení ambulance do dceřiné společnosti s vlastním IČO. Táž ordinace, týž lékař, týž pacient, tatáž budova.</p>
+            <span class="av-flow-tag">Beze změny péče</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Výsledek ve statistice</h4>
+            <p class="av-flow-desc">Podíl HP.1 klesne, podíl ambulantních poskytovatelů vzroste. Cíl je splněn. Počet hospitalizací, počet lůžek ani obložnost se nezmění.</p>
+            <span class="av-flow-tag">Cíl splněn účetně</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Metodický podklad:</strong> klasifikace poskytovatelů SHA 2011 (OECD/Eurostat/WHO), kategorie HP.1 zahrnuje veškerou péči poskytnutou nemocnicí včetně ambulantní. Schéma popisuje strukturální vlastnost ukazatele, ne konkrétní záměr nebo probíhající praxi.</p>
+      </figure>
+
+      <p>
+        Vyčleňování ambulancí a komplementu do dceřiných společností přitom není hypotetická konstrukce — je to běžný nástroj řízení nemocnic, který se používá z důvodů, jež s tímto cílem nemají nic společného. Právě proto je nebezpečné na takové čísle stavět politický závazek: <strong>cíl, který lze splnit účetně, přestane po několika letech měřit to, kvůli čemu vznikl</strong>. A protože se plnění bude vyhodnocovat až po roce 2030, nikdo v době přijetí nepozná, kterou cestou se k němu došlo.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodická poznámka k délce hospitalizace">
+        <p class="article-callout-h">Proč v tomto článku nenajdete „ležíme déle než OECD"</p>
+        <p>
+          Do argumentace o nadužívání lůžek se běžně přidává průměrná délka hospitalizace: dashboard nese pro Česko 7,0 dne proti 6,5 dne v průměru OECD. <strong>Ta dvě čísla ale nejsou srovnatelná.</strong> Česká hodnota podle auditu z června 2026 agreguje akutní i následnou péči, zatímco benchmark OECD se týká výhradně akutní péče. Harmonizovaný český údaj ČSÚ za rok 2024 činí pro akutní péči <strong>5,5 dne</strong> (z 6,6 dne v roce 2010) — tedy pod průměrem OECD, s opačným znaménkem, než jaké by naivní srovnání naznačovalo. Argument o nadužívání lůžek stojí na <em>počtu</em> hospitalizací a jejich skladbě, ne na jejich délce; proto tu délku nepoužíváme.
+        </p>
+      </aside>
+
+      <h3>Metr, který nejde ohnout</h3>
+
+      <p>
+        Oprava je přitom levná a záměru návrhu neubližuje — naopak ho dělá vymahatelným. Stačí cíl navázat na veličiny, které popisují skutečnou péči, a nikoli na to, jaké IČO ji vykázalo. Dashboard takové veličiny sleduje tři a u všech tří existuje referenční hodnota.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avPresunCileH">
+        <figcaption class="av-figure-h" id="avPresunCileH">Čtyři kandidáti na cílovou metriku — a jestli je lze splnit přeúčtováním</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Metrika</th>
+                <th scope="col" class="av-num">Dnes</th>
+                <th scope="col" class="av-num">Reference</th>
+                <th scope="col">Jde splnit účetně?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Míra hospitalizací / 100 tis. obyvatel</th>
+                <td class="av-num">17 990 (2024)</td>
+                <td class="av-num">OECD 14 600</td>
+                <td class="av-good">Ne — počítá pacienty, ne účty</td>
+              </tr>
+              <tr>
+                <th scope="row">Odvratitelné hospitalizace (ACSC) / 100 tis.</th>
+                <td class="av-num">592</td>
+                <td class="av-num">OECD 473</td>
+                <td class="av-good">Ne — diagnózy jsou dané mezinárodní definicí</td>
+              </tr>
+              <tr>
+                <th scope="row">Podíl výkonů provedených v jednodenním režimu</th>
+                <td class="av-num">katarakta 98,7 % (2022)</td>
+                <td class="av-num">OECD 94,5 %</td>
+                <td class="av-good">Ne — ale koš výkonů je nutné nejdřív definovat</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Podíl nemocniční péče na výdajích</th>
+                <td class="av-num">40–55,9 % dle klasifikace</td>
+                <td class="av-num">36–36,4 %</td>
+                <td class="av-bad">Ano — vyčleněním ambulancí</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> datový kontrakt HSPA Monitoru — indikátory <em>hospitalizace_na_100k</em> (ÚZIS NRH 2024), <em>hospitalizace_acsc</em> (OECD Health at a Glance 2025, ref. 2021/22), <em>jednodenni_chirurgie_katarakta</em> (OECD Health Statistics, 2022), <em>podil_vydaje_luzkova_pece</em> (ÚZIS NRHZS 2023); ČSÚ Zdravotnické účty 2024; PEER 2026.</p>
+      </figure>
+
+      <p>
+        Třetí řádek zaslouží poznámku, protože ukazuje, jak konkrétní taková práce musí být. U operace šedého zákalu Česko cíl už dávno splnilo: <a href="clanek-jednodenni-chirurgie-katarakta.html">98,7 % kataraktových výkonů se provádí ambulantně</a>, proti 94,5 % v průměru OECD. Potenciál je jinde — u kýl, artroskopií, žlučníků, gynekologických a ORL výkonů, kde ale Česko harmonizovaný mezinárodně srovnatelný ukazatel nemá. <strong>Jestli má cíl „přesuneme péči do jednodenní chirurgie" znamenat něco měřitelného, první úkol není stanovit procento, ale definovat koš výkonů a začít ho vykazovat.</strong> To je práce na dva roky, ne na jednu tabulku ve strategii — a je to práce, bez které zůstane celý návrh nekontrolovatelný.
+      </p>
+
+      <h3>Podmínka, kterou PEER uvádí sám: nejdřív ruce, pak lůžka</h3>
+
+      <p>
+        Poslední věc je férové ocenění toho, co v návrhu je a co bývá v podobných materiálech vynecháno. PEER si sám ukládá podmínku, že kapacity terénní a domácí péče musejí růst souběžně s poklesem lůžek, a dokládá ji poměrem úvazků v sociálních službách: zhruba 48 tisíc v pobytových službách proti 12 tisícům v terénních a 4 tisícům v ambulantních. To je klíčové, protože přesun péče z lůžka není přesun mezi rozpočtovými kolonkami, ale přesun práce mezi lidmi — a ti lidé musí existovat dřív, než se lůžko zavře.
+      </p>
+
+      <p>
+        Data dashboardu tuhle podmínku podpírají z druhé strany. Následná lůžka jsou obsazena z <strong>84,2 %</strong>, tedy prakticky plná; <a href="clanek-luzka-dlouhodobe-pece.html">lůžek dlouhodobé péče má Česko v přepočtu na seniory pod evropským průměrem</a>. Přijímací strana přesunu je tedy dnes vytíženější než ta odesílající. Když se za této situace lůžka zredukují dřív, než vzniknou kapacity v terénu, péče nezmizí ani nezlevní — jen se přesune tam, kde se nevykazuje a nic nestojí: <strong>do rodin</strong>. Tomu chce návrh sám zabránit, což je jeho silná stránka; jenže sekvencování je zároveň jediná část plánu, kterou nelze urychlit rozhodnutím, a proto rozhodne o tom, jestli z návrhu bude reforma, nebo úspora přesunutá na neformální pečující.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé: diagnóza obstojí a je dobře doložená.</strong> Poloprázdná akutní kapacita, nejvyšší hospitalizovanost v OECD a o čtvrtinu vyšší počet odvratitelných hospitalizací než evropský průměr — to jsou tři nezávislé ukazatele, které říkají totéž a stojí na ověřených zdrojích. Návrh přesunout péči z lůžek nepotřebuje obhajobu, potřebuje nástroje.
+      </p>
+
+      <p>
+        <strong>Za druhé: cíl je třeba přeformulovat, ne zmírnit.</strong> Ambice snížit nemocniční těžiště systému je legitimní, ale „podíl nemocniční péče na výdajích" je pro ni špatný teploměr — je nejednoznačný (40 versus 46,5 versus 55,9 procenta podle definice) a jde ho splnit přeúčtováním. Věcnými cíli jsou hospitalizovanost na 100 tisíc obyvatel, odvratitelné hospitalizace a podíl výkonů v jednodenním režimu; procentní podíl výdajů má zůstat ilustrací s přesnou definicí, ne závazkem.
+      </p>
+
+      <p>
+        <strong>Za třetí: bez kapacit na druhé straně to není reforma, ale přesun zátěže.</strong> Podmínku, že terénní a domácí péče musí růst dřív, formuluje sám návrh — a je to podmínka, kterou nelze splnit rozpočtovým opatřením, protože jde o lidi, jejichž počet se dá zvýšit až za několik let. Sekvence tedy není detail implementace; je to hlavní riziko celého záměru, a proto by měla být v cíli napsaná stejně přesně jako to procento.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=hospitalizace_na_100k"><strong>Míra hospitalizací (všechna onemocnění)</strong></a> — 17 990 na 100 000 obyvatel (2024; ÚZIS NRH, ověřený živý zdroj), OECD 14 600 / EU 15 200</li>
+        <li><a href="indicator.html?id=hospitalizace_acsc"><strong>Odvratitelné hospitalizace (ACSC)</strong></a> — 592 na 100 000 obyvatel (OECD Health at a Glance 2025, ref. 2021/22), OECD 473</li>
+        <li><a href="indicator.html?id=podil_vydaje_luzkova_pece"><strong>Podíl výdajů ZP na lůžkovou péči</strong></a> — 55,9 % (2023; ÚZIS NRHZS), EU ~32 %</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Posuzovaný dokument</h5>
+        <ul class="article-sources-list">
+          <li><strong>PEER (Pirátská expertní ekonomická rada) — Hospodářská strategie, kapitola 1.4</strong> (srpen 2026). Zdroj návrhu na přesun péče z lůžek, cíle 46,5 % → 36,4 % do roku 2035 i podmínky souběžného růstu terénních kapacit a poměru úvazků 48 / 12 / 4 tisíce. Hodnota 46,5 % je v dokumentu uvedena s odkazem na materiál NERV z roku 2024.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — Národní registr hospitalizovaných (NRH)</strong> — míra hospitalizací 17 990 / 100 000 obyvatel za rok 2024; hodnota v datovém kontraktu dashboardu je z živého zdroje a ověřená. <a href="https://www.uzis.cz/" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>ÚZIS ČR — Národní registr hrazených zdravotních služeb (NRHZS)</strong> — datové souhrny obložnosti lůžek a kapacit lůžkového fondu, stav k 31. 12. 2024: standardní akutní lůžka 56,0 % / 42 309 lůžek, intenzivní 62,0 %, následná 84,2 %. <a href="https://www.uzis.cz/index.php?pg=vystupy--statistika-zdravotnich-sluzeb--luzkova-pece" target="_blank" rel="noopener">uzis.cz — lůžková péče ↗</a></li>
+          <li><strong>OECD — Health at a Glance 2025</strong> — avoidable hospital admissions (ACSC): Česko 592 / 100 000 proti průměru OECD 473, referenční rok 2021/2022, age-sex standardizováno; definice pěti diagnóz podle OECD HCQI. <a href="https://www.oecd.org/en/publications/health-at-a-glance-2025_ceb2f61e-en.html" target="_blank" rel="noopener">oecd.org ↗</a></li>
+          <li><strong>ČSÚ — Výsledky zdravotnických účtů ČR (SHA)</strong> — celkové výdaje 696,7 mld. Kč a 8,6 % HDP za rok 2024; klasifikace poskytovatelů HP, kde nemocnice (HP.1) tvoří kolem 40 % výdajů proti průměru OECD kolem 36 %. <a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>OECD Health Statistics — surgical procedures</strong> — podíl kataraktových výkonů provedených ambulantně: Česko 98,7 % (2022) proti průměru OECD 94,5 %. <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>ČSÚ — Zdravotnictví (délka hospitalizace)</strong> — harmonizovaný údaj o průměrné délce hospitalizace v akutní péči 5,5 dne za rok 2024 (z 6,6 dne v roce 2010), použitý v metodické poznámce. <a href="https://csu.gov.cz/healthcare" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-prazdna-luzka-efektivita</strong> — obložnost akutních, intenzivních a následných lůžek 2024 a odvození ekvivalentu prázdné kapacity. <a href="clanek-prazdna-luzka-efektivita.html">clanek-prazdna-luzka-efektivita.html</a></li>
+          <li><strong>clanek-hospitalizujeme-nejvic</strong> — proč Česko hospitalizuje nejvíc ze zemí OECD, včetně metodických výhrad k lůžkovým ukazatelům. <a href="clanek-hospitalizujeme-nejvic.html">clanek-hospitalizujeme-nejvic.html</a></li>
+          <li><strong>clanek-vyhnutelne-hospitalizace</strong> — co se skrývá za hodnotou ACSC 592 a kde se péče o chronické pacienty trhá. <a href="clanek-vyhnutelne-hospitalizace.html">clanek-vyhnutelne-hospitalizace.html</a></li>
+          <li><strong>clanek-financovani-sha</strong> — tři klasifikace SHA a proč se čísla o „podílu nemocnic" liší podle položené otázky. <a href="clanek-financovani-sha.html">clanek-financovani-sha.html</a></li>
+          <li><strong>clanek-jednodenni-chirurgie-katarakta</strong> — jednodenní chirurgie v Česku na příkladu operace šedého zákalu. <a href="clanek-jednodenni-chirurgie-katarakta.html">clanek-jednodenni-chirurgie-katarakta.html</a></li>
+          <li><strong>clanek-luzka-dlouhodobe-pece</strong> — kapacita následné a dlouhodobé péče v přepočtu na seniory. <a href="clanek-luzka-dlouhodobe-pece.html">clanek-luzka-dlouhodobe-pece.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 46,5 % (a evropských 36,4 %) je údaj posuzovaného dokumentu PEER, nikoli hodnota ověřená tímto dashboardem — článek na ni proto odkazuje vždy s atribucí. Podíl výdajů zdravotních pojišťoven na lůžkovou péči (55,9 %) je indikátor s referenčním rokem 2023 a statickým zdrojem; podíl nemocnic v klasifikaci SHA je řádový dlouhodobý profil, protože předběžná vlna zdravotnických účtů za rok 2024 detailní rozpad podle poskytovatelů nezveřejnila. Průměrná délka hospitalizace není v článku použita jako argument, protože česká dashboardová hodnota a benchmark OECD nemají shodné vymezení — důvod je vysvětlen v metodické poznámce v textu.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
