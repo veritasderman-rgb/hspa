@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "PEER-BATCH-WRITE 16. 8. 2026 (návrh článku č. 6 z PLAN-PEER-CLANKY.md, část B): očkování dospělých jako nejrychleji dostupná rezerva prevence. AKTUALITA: hospodářská strategie PEER (srpen 2026), kapitola 1.4 'Zdraví a soběstačnost přinesou silnější ekonomiku' — proočkovanost seniorů zmíněna jednou větou mezi rizikovými faktory; s textem kapitoly pracovala redakce, dokument nemá veřejné URL, proto je citován jako dokument, ne odkazem. INTERNÍ DATA (data/indicators.json, staženo 16. 8. 2026): vakcinace_chripka_65 = 24,5 % (2025, sezóna 2024/25; OECD 47, EU 49, signal bad); vakcinace_pneumokok_65 = 5,5 % (2023; OECD 50, EU 17, bad); klistova_encefalitida = 6,1 na 100 tis. (2024; EU/EEA 0,81, bad); vydaje_prevence_pct = 2,736 % (2023; OECD 3,2); prohlidka_prakticky_lekar = 52,6 % (2023); lekarny_per_100k = 25,01 (2026); farmaceuti_per_100k = 76 (2023; OECD 86). POZOR: v textu je 24,5 % popsáno jako 'zhruba polovina EU' (24,5/49) — sladěno s clanek-ockovani-v-lekarnach a clanek-vakcinace. Číslo 17 % (plná ochrana proti KE) NENÍ indikátor — pochází z aktuality SZÚ 2. 4. 2026 (dispenzární evidence pojišťoven) a je tak i označeno; převzato z clanek-klistova-encefalitida-proockovanost-2026. LEGISLATIVA: novela zák. č. 258/2000 Sb., nový § 47aa (čj. MZDR 15867/2026, čj. OVA 618/26, VeKLEP PID ALBSDUUFQ5OR, verze pro jednání vlády vložena 10. 8. 2026) — všechny detaily (kdo smí očkovat, kurz farmaceuta s 5letou platností osvědčení, vybavení lékárny dle tezí vyhlášky, seznam nemocí zprvu chřipka + covid-19, ROZPOR s ČLK neakceptovaný, počty hrazených očkování 642 172 / 354,9 mil. Kč za 2024 a 659 286 / 398,0 mil. Kč za 2025) převzaty z clanek-ockovani-v-lekarnach.html, kde jsou doloženy plnotextovou extrakcí dokumentů z odok.gov.cz (15. 8. 2026); tento článek je nepřepočítává ani nerozšiřuje. ZAHRANIČÍ (websearch 16. 8. 2026): Anglie — NHS/UKHSA proočkovanost 65+ 74,9 % (1. 9. 2024–28. 2. 2025); Community Pharmacy England: 4 066 585 dávek podaných lékárnami 2024/25 vs. 1 431 538 v 2018/19 (řada 2016/17–2024/25). Portugalsko — Teixeira Rodrigues A, Guerreiro J, Romano S, Moura S, Paulino E: The Impact of Portuguese Community Pharmacies on Influenza Vaccination Accessibility and Coverage, Eur J Public Health 2024: proočkovanost 65+ 72,1 % (2023/24) vs. 72,2 % (2022/23); 844 míst NHS + 2 487 lékáren; průměrná vzdálenost k nejbližšímu místu 2,4 → 1,2 km (−50,5 %); horní decil obcí +1,3 p. b., dolní decil −4,5 p. b. Francie — plošné lékárenské očkování od sezóny 2019/20 (čl. 61 zákona o financování soc. zabezpečení na rok 2019); Santé publique France: proočkovanost 65+ 49,8 % (2023/24), 47 % u 65–74 a 61 % u 75+; Liard F. et al., Int J Pharm Pract 2022;30(3):253 — z rizikových osob očkovaných v lékárně v sezóně 2019/20 nebylo 15,7 % (N=74; 12,4–19,0 %) očkováno předchozí sezónu. Meta-analýza: Abd Rahim MH et al., J Pharm Policy Pract 2024, DOI 10.1080/20523211.2023.2285955 — souhrnný RR 1,51 (1,28–1,77) pro zapojení farmaceuta, RR 2,09 (1,42–3,07) v roli advokáta. DOPAD: ECDC, tisková zpráva a analýza z 16. 12. 2025 — očkovací programy v EU/EHP odvrátily 26–41 % hospitalizací s chřipkou u osob 65+ v sezóně 2024/25 (5. 8. 2024 – 1. 6. 2025), předpoklad účinnosti 60 % proti hospitalizaci. ČR: SZÚ, sezóna 2024/2025 celkem 470 pacientů s chřipkou na ARO/JIP, 128 zemřelo (předchozí sezóna 436 a 107) — převzato ČTK, ČeskéNoviny.cz 23. 2. 2026. VĚDOMÉ ROZHODNUTÍ: článek NEPOČÍTÁ vlastní model odvrácených hospitalizací pro ČR — v otevřených datech není sezónní počet hospitalizací s chřipkou u 65+ (SZÚ vykazuje jen těžké případy v intenzivní péči), argument zůstává směrový a je to v textu explicitně napsáno (sekce 'Kolik by to bylo hospitalizací'). Odhad ~1 500 úmrtí ročně spojených s chřipkou (ČTK/SZÚ) nepoužit — nedohledán primární zdroj. Indikátor hospitalizace_acsc (seed 580) použit jen jako odkaz bez citace hodnoty — viz pozn. v PLAN-PEER-CLANKY.md A3 (auditovaná hodnota 592 vs. seed 580). ODKAZY ověřeny 16. 8. 2026 (curl, UA ZdraveCesko-HSPA/1.0): HTTP 200 — szu.gov.cz (KE i chřipková sezóna), ceskenoviny.cz, odok.cz, e-sbirka.cz, ecdc.europa.eu, cpe.org.uk, pmc.ncbi.nlm.nih.gov (PMC11517979 i PMC10775721), santepubliquefrance.fr. HTTP 403 z bota (kanonická adresa ověřena jiným kanálem, v prohlížeči funguje): academic.oup.com/ijpp (Liard 2022). Metaanalýza Abd Rahim 2024 odkazována přes PMC mirror místo tandfonline.com (Cloudflare 403). Interní cíle ověřeny: 6 indikátorových stránek a 8 článků existuje. Status: draft — čeká na ruční schválení redakce. published:false. AV počítadla bez anti-patternu (data-value numerické: 24.5, 5.5, 17, 75, 659286, 41; žádný range/datum)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dvacet čtyři procenta. Nejrychleji dostupná rezerva české prevence je hotová, hrazená — a nevyužitá · HSPA Monitor</title>
+<meta name="description" content="Hospodářská strategie PEER zmiňuje nízkou proočkovanost seniorů jednou větou. Přitom je to jediné preventivní opatření, které je už hotové: vakcína existuje, pojišťovny ji hradí, síť stojí. Proti chřipce je v Česku očkováno 24,5 % lidí nad 65 let proti 49 % v EU a cíli WHO a ECDC 75 %; proti pneumokokům 5,5 %; plnou ochranu proti klíšťové encefalitidě má 17 % lidí při nejvyšším počtu případů v EU. Novela, která má očkování otevřít lékárníkům a zubařům, leží na vládě s otevřeným rozporem s lékařskou komorou.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dvacet čtyři procenta. Nejrychleji dostupná rezerva české prevence je hotová, hrazená — a nevyužitá">
+<meta property="og:description" content="Proočkovanost seniorů proti chřipce je v ČR 24,5 % proti 49 % v EU a cíli 75 %, proti pneumokokům 5,5 %. Vakcíny přitom pojišťovny hradí — chybí dostupnost a aktivní nabídka. Co ukazuje zkušenost Anglie, Portugalska a Francie s očkováním v lékárnách a co se z ní vyčíst nedá.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Vakcinace">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Vakcinace</span>
+        <span class="article-tag article-tag-muted">očkování dospělých · senioři · dostupnost · mezinárodní srovnání</span>
+      </div>
+      <h1 class="article-title">Dvacet čtyři procenta. Nejrychleji dostupná rezerva české prevence je hotová, hrazená — a nevyužitá</h1>
+      <p class="article-deck">
+        Hospodářská strategie <strong>PEER</strong>, kterou expertní rada zveřejnila v srpnu 2026, zmiňuje nízkou proočkovanost seniorů jednou větou — mezi kouřením, nadváhou a alkoholem. Přitom je to jediné opatření z celého jejího seznamu, které je už <strong>hotové</strong>: vakcína existuje, pojišťovny ji seniorům hradí, síť poskytovatelů stojí. Chybí jen to poslední — dostupnost a aktivní nabídka. Proti chřipce je v Česku očkováno <strong>24,5 %</strong> lidí nad 65 let proti 49 % v Evropské unii a cíli WHO a ECDC 75 procent, proti pneumokokům <strong>5,5 %</strong>. Novela, která má očkování dospělých otevřít lékárníkům a zubařům, leží na vládě s otevřeným rozporem s lékařskou komorou.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Většina opatření, která se v debatě o českém zdravotnictví nabízejí, potřebuje nejdřív něco postavit. Daň ze slazených nápojů potřebuje zákon. Přesun péče z lůžek do ambulancí potřebuje kapacity, které dnes nejsou. Krátké intervence u alkoholu a kouření potřebují úhradovou vyhlášku, která je zaplatí. Očkování dospělých je v tomto seznamu výjimka: vakcíny jsou registrované, zdravotní pojišťovny je rizikovým skupinám hradí a lékařská i lékárenská síť pokrývá celou republiku hustěji než ve většině Evropy. Přesto je jeho využití jedno z nejnižších v Unii. To je nezvyklá situace — rezerva, u které nejde spočítat, kolik by stálo ji „zavést", protože zavedená už je.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avOckoRezervaHeroH">
+        <figcaption class="av-figure-h" id="avOckoRezervaHeroH">Čtyři čísla, o která v tomto textu jde</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="24.5" data-decimals="1" data-suffix=" %">24,5 %</span>
+            <span class="av-counter-label">proočkovanost proti chřipce u osob 65+ (sezóna 2024/25)</span>
+            <span class="av-counter-foot">EU 49 % · OECD 47 % · cíl WHO a ECDC 75 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="5.5" data-decimals="1" data-suffix=" %">5,5 %</span>
+            <span class="av-counter-label">proočkovanost proti pneumokokům u osob 65+ (2023)</span>
+            <span class="av-counter-foot">EU 17 % · OECD 50 % · vakcína je pro seniory hrazená</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="17" data-suffix=" %">17 %</span>
+            <span class="av-counter-label">obyvatel má plnou ochranu proti klíšťové encefalitidě (SZÚ, duben 2026)</span>
+            <span class="av-counter-foot">při nejvyšším počtu případů v EU/EEA · Rakousko ~80 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="75" data-suffix=" %">75 %</span>
+            <span class="av-counter-label">cílová proočkovanost seniorů proti chřipce podle WHO a ECDC</span>
+            <span class="av-counter-foot">v EU ji v poslední sezóně splnily tři země</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> datový kontrakt HSPA Monitoru — indikátory <a href="indikator-vakcinace_chripka_65.html">vakcinace_chripka_65</a> (ÚZIS/NZIS, sezóna 2024/25; benchmarky OECD) a <a href="indikator-vakcinace_pneumokok_65.html">vakcinace_pneumokok_65</a> (2023; benchmark Eurostat EHIS a OECD). Údaj o klíšťové encefalitidě: Státní zdravotní ústav, aktualita z 2. 4. 2026 (dispenzární evidence zdravotních pojišťoven) — <strong>není</strong> indikátor dashboardu. Cíl 75 % podle metodické karty indikátoru (WHO, ECDC).</p>
+      </figure>
+
+      <h3>Tři nemoci, tři čísla, jeden vzorec</h3>
+
+      <p>
+        Začněme chřipkou, protože je z těch tří nejlépe změřená. Indikátor <a href="indikator-vakcinace_chripka_65.html"><strong>proočkovanosti proti chřipce u osob 65+</strong></a> stojí v sezóně 2024/25 na <strong>24,5 procenta</strong>. To je zhruba polovina evropského průměru (49 %) a třetina cíle, na který míří Světová zdravotnická organizace i Evropské středisko pro prevenci a kontrolu nemocí (ECDC) — tedy 75 procent. Mezera vůči cíli je padesát procentních bodů, což je v této doméně jedna z největších v celé Unii.
+      </p>
+
+      <p>
+        U pneumokoků je propad ještě hlubší. Indikátor <a href="indikator-vakcinace_pneumokok_65.html"><strong>vakcinace proti pneumokokům u seniorů</strong></a> ukazuje <strong>5,5 procenta</strong> (2023) proti 17 % v EU a zhruba 50 % v průměru zemí OECD. Proč je to zvlášť absurdní, jsme rozebrali v článku o tom, <a href="clanek-vakcinace-pneumokok-seniori.html">proč je Česko v očkování seniorů proti pneumokokům na chvostu Evropy</a>: vakcína je pro seniory plně hrazená, mluvíme o bakterii, která patří k hlavním původcům těžkých zápalů plic a sepsí u starých lidí, a přesto se za čtyři roky od rozšíření úhrady proočkovanost zvedla o jeden a půl procentního bodu.
+      </p>
+
+      <p>
+        Třetí případ je specificky český. Klíšťová encefalitida je nemoc, kterou lze očkováním prakticky vyloučit — a Česko v ní drží dlouhodobě nejvyšší absolutní počet případů v celé EU a Evropském hospodářském prostoru. Indikátor <a href="indikator-klistova_encefalitida.html"><strong>incidence klíšťové encefalitidy</strong></a> stojí na <strong>6,1 případu na 100 000 obyvatel</strong> (2024) proti evropskému průměru 0,81. Plnou ochranu — tedy tři základní dávky i první posilovací — má podle dubnové aktuality Státního zdravotního ústavu jen <strong>17 % lidí</strong>; podrobně jsme to popsali v článku o tom, <a href="clanek-klistova-encefalitida-proockovanost-2026.html">proč většina Čechů očkování proti klíšťové encefalitidě nedokončí</a>. Rakousko, které řeší stejná klíšťata ve stejných lesích, má proočkovanost kolem 80 procent a třetinovou incidenci.
+      </p>
+
+      <p>
+        Ta tři čísla mají společný vzorec, a právě ten je pro debatu o prevenci důležitý: <strong>vakcína existuje, veřejné pojištění ji rizikové skupině hradí, a přesto ji drtivá většina cílové populace nedostane.</strong> To není selhání vědy ani rozpočtu. Je to selhání poslední stovky metrů — toho místa, kde se hrazená služba potkává s konkrétním člověkem.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTriNemociH">
+        <figcaption class="av-figure-h" id="avTriNemociH">Tři očkování dospělých, která Česko má a nevyužívá</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Očkování</th>
+                <th scope="col">Proočkovanost v ČR</th>
+                <th scope="col">Srovnání / cíl</th>
+                <th scope="col">Hradí veřejné pojištění?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Chřipka, osoby 65+</th>
+                <td><strong>24,5 %</strong> (2024/25)</td>
+                <td>EU 49 % · OECD 47 % · cíl WHO a ECDC 75 %</td>
+                <td>ano, pro seniory a rizikové skupiny</td>
+              </tr>
+              <tr>
+                <th scope="row">Pneumokoky, osoby 65+</th>
+                <td><strong>5,5 %</strong> (2023)</td>
+                <td>EU 17 % · OECD ~50 % · Británie a Dánsko přes 70 %</td>
+                <td>ano, pro seniory</td>
+              </tr>
+              <tr>
+                <th scope="row">Klíšťová encefalitida (plné schéma)</th>
+                <td><strong>17 %</strong> populace (2026)</td>
+                <td>Rakousko ~80 % · ČR má nejvíc případů v EU/EEA</td>
+                <td>ano, pro pojištěnce nad 50 let od 1. 1. 2022</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> proočkovanost proti chřipce a pneumokokům — datový kontrakt HSPA Monitoru (indikátory <em>vakcinace_chripka_65</em>, <em>vakcinace_pneumokok_65</em>; primární zdroje ÚZIS/NZIS, Eurostat EHIS, OECD Health Statistics). Klíšťová encefalitida — SZÚ, aktualita z 2. 4. 2026; incidence z indikátoru <em>klistova_encefalitida</em> (SZÚ/ISIN 2024, benchmark ECDC 2022). Úhrady podle § 30 zákona č. 48/1997 Sb., o veřejném zdravotním pojištění.</p>
+      </figure>
+
+      <h3>Tohle není spor o peníze</h3>
+
+      <p>
+        Zvyk české debaty je začít u rozpočtu. Tady ale rozpočet překážkou není. Zákon o veřejném zdravotním pojištění hradí chřipkové očkování seniorům a rizikovým skupinám, pneumokokovou vakcínu lidem nad 65 let a od ledna 2022 i očkování proti klíšťové encefalitidě pojištěncům nad padesát. Řádová velikost celé položky je z pohledu zdravotnictví malá: podle důvodové zprávy k připravované novele vykázaly zdravotní pojišťovny za rok 2025 <strong>659 286 hrazených očkování proti chřipce v celkové hodnotě 398 milionů korun</strong>.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="659286">659 286</span>
+          <span class="av-counter-label">hrazených očkování proti chřipce vykázaly pojišťovny za rok 2025 — v hodnotě 398 mil. Kč</span>
+          <span class="av-counter-foot">důvodová zpráva k novele zák. č. 258/2000 Sb., data výkaznictví ZP</span>
+        </div>
+      </aside>
+
+      <p>
+        Peníze tedy nejsou to, co celou věc blokuje. Co jí brání, ukazují dva jiné indikátory. Prvním je <a href="indikator-vydaje_prevence_pct.html"><strong>podíl výdajů na prevenci</strong></a>: Česko na ni dává <strong>2,74 % běžných výdajů na zdravotnictví</strong> proti 3,2 % v průměru OECD — což není katastrofa, ale ukazuje, že prevence je zbytková položka, ne rozpočtová priorita. Druhým je <a href="indikator-prohlidka_prakticky_lekar.html"><strong>pokrytí preventivní prohlídkou u praktického lékaře</strong></a>, které stojí na <strong>52,6 %</strong> (2023). Skoro polovina lidí tedy ordinací praktika v příslušném intervalu vůbec neprojde — a u té druhé poloviny není nabídka očkování standardizovaná: závisí na tom, jestli konkrétní lékař vakcínu drží skladem, jestli na ni pomyslí a jestli má čas ji vysvětlit.
+      </p>
+
+      <p>
+        Zbývají tedy dvě věci: <strong>dostupnost</strong> (kde a jak snadno se dá k vakcíně přijít) a <strong>aktivní nabídka</strong> (kdo a kdy člověku sám řekne, že na ni má nárok). Na obojí míří dva různé nástroje — a shodou okolností jsou oba právě teď na stole.
+      </p>
+
+      <h3>Co leží na vládě</h3>
+
+      <p>
+        Prvním nástrojem je novela zákona č. 258/2000 Sb., o ochraně veřejného zdraví. Vkládá do zákona nový <strong>§ 47aa</strong>, který zavádí kategorii „vybraných očkování na žádost osoby starší 18 let" — a ta bude smět indikovat a provést <strong>lékař kterékoli odbornosti, zubní lékař i farmaceut</strong> po absolvování certifikovaného kurzu. Podle tezí prováděcí vyhlášky půjde zprvu o očkování proti chřipce a covidu-19. Verze pro jednání vlády byla do systému VeKLEP vložena 10. srpna 2026 a nese jeden vykřičník: zásadní připomínku České lékařské komory ministerstvo neakceptovalo, takže návrh jde na vládu s otevřeným rozporem. Celý obsah novely, argumenty komory i jejich vypořádání jsme rozebrali v samostatném článku o tom, <a href="clanek-ockovani-v-lekarnach.html">jak má chřipkovou vakcínu nově píchnout i lékárník nebo zubař</a>.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Co novela je a co není">
+        <p class="article-callout-h">Čtyři poznámky, aby se novela nečetla jako hotová věc</p>
+        <p><strong>1.</strong> Je to <strong>návrh, ne platné právo</strong> — čeká ho vláda a parlament, a vláda musí nejdřív rozhodnout rozpor s lékařskou komorou.</p>
+        <p><strong>2.</strong> <strong>Seznam nemocí určí až vyhláška.</strong> Zákon je nevyjmenovává; podle tezí je zatím shoda na chřipce a covidu-19. Přísně nastavená vyhláška může efekt novely fakticky vypnout.</p>
+        <p><strong>3.</strong> <strong>Úhradu novela neřeší.</strong> Kdo očkování zaplatí, upravuje zákon č. 48/1997 Sb. a smlouvy pojišťoven — nový nárok tady nevzniká.</p>
+        <p><strong>4.</strong> <strong>Novela řeší dostupnost, ne nabídku.</strong> Otevírá další místa, kde se lze očkovat. Nezavádí systém, který by lidem sám řekl, že na očkování mají nárok — a to je druhá polovina problému.</p>
+      </aside>
+
+      <p>
+        Kapacitní rozměr přitom novela nese s sebou. Česko má hustou lékárenskou síť — <a href="indikator-lekarny_per_100k.html"><strong>25 lékáren na 100 000 obyvatel</strong></a> — ale <a href="clanek-farmaceuti-pracovni-sila.html">málo lékárníků, kteří v nich stojí</a>: 76 praktikujících farmaceutů na 100 000 obyvatel proti 86 v průměru OECD. Očkování je pro lékárnu nová činnost navrch k výdeji léků a rostoucí administrativě, a bude na každém provozovateli, zda se mu investice do kurzu, vybavení a elektronické dokumentace vyplatí.
+      </p>
+
+      <h3>Co ukazuje zahraničí — a co z něj vyčíst nelze</h3>
+
+      <p>
+        Lékárenské očkování není experiment. V Evropě běží řadu let a lze u něj měřit, co se skutečně stalo. Odpověď je dobrá zpráva pro novelu i varování před přehnaným očekáváním.
+      </p>
+
+      <p>
+        <strong>Anglie</strong> je případ, který se cituje nejčastěji. Lékárny tam podávají chřipkovou vakcínu v rámci národní služby NHS a jejich objem rostl z <strong>1,43 milionu dávek v sezóně 2018/19 na 4,07 milionu v sezóně 2024/25</strong> (Community Pharmacy England). Proočkovanost osob 65+ dosáhla v poslední sezóně <strong>74,9 %</strong> — tedy prakticky na cíli. <strong>Portugalsko</strong> je zajímavější, protože jeho evaluace měří přesně to, co novela slibuje. V kampani 2023/24 se vedle 844 míst veřejného systému zapojilo <strong>2 487 lékáren</strong>; průměrná vzdálenost k nejbližšímu očkovacímu místu klesla z 2,4 na 1,2 kilometru. V desetině obcí, kde se vzdálenost zkrátila nejvíc, proočkovanost proti předchozí sezóně <strong>vzrostla o 1,3 procentního bodu</strong> — zatímco v desetině obcí s nejmenším zkrácením o 4,5 bodu klesla. Celostátně skončilo Portugalsko na 72,1 % u seniorů.
+      </p>
+
+      <p>
+        A pak je tu <strong>Francie</strong>, která je v této sérii nutnou brzdou. Lékárenské očkování proti chřipce tam funguje plošně od sezóny 2019/20, tedy sedm sezón. Proočkovanost osob 65+ přesto v sezóně 2023/24 stála na <strong>49,8 %</strong> — daleko od cíle. Francouzská studie z prvního roku plošného provozu navíc zjistila, že z rizikových pacientů naočkovaných v lékárně <strong>jen 15,7 procenta nebylo očkováno předchozí sezónu</strong>; drtivá většina byli lidé, kteří by se dali očkovat tak jako tak, jen si vybrali pohodlnější kanál. To je přesně ta hranice, kterou je poctivé přiznat: <strong>lékárna je distribuční kanál, ne kampaň.</strong> Zvyšuje dostupnost — a dostupnost je v Česku prokazatelně jedna z bariér — ale sama o sobě sedmdesátipětiprocentní cíl nedodá.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avOckoBenchH">
+        <figcaption class="av-figure-h" id="avOckoBenchH">Proočkovanost proti chřipce u osob 65+ — Česko proti zemím s lékárenským očkováním</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="80" data-unit=" %">
+          <li class="av-bar-row" data-value="75" data-label="Cíl WHO / ECDC" data-note="pro osoby 65+"></li>
+          <li class="av-bar-row" data-value="74.9" data-label="Anglie (2024/25)" data-note="lékárny podaly 4,07 mil. dávek"></li>
+          <li class="av-bar-row" data-value="72.1" data-label="Portugalsko (2023/24)" data-note="zapojeno 2 487 lékáren"></li>
+          <li class="av-bar-row" data-value="49.8" data-label="Francie (2023/24)" data-note="lékárny plošně od 2019/20"></li>
+          <li class="av-bar-row" data-value="49" data-label="Průměr EU" data-note="OECD Health Statistics"></li>
+          <li class="av-bar-row av-bar-row-now" data-value="24.5" data-label="Česko (2024/25)" data-note="signál bad"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Česko a průměr EU — datový kontrakt HSPA Monitoru, indikátor <em>vakcinace_chripka_65</em> (ÚZIS/NZIS; benchmark OECD). Anglie — NHS England / UKHSA, sezónní přehled proočkovanosti 1. 9. 2024 – 28. 2. 2025; objemy lékáren Community Pharmacy England. Portugalsko — Teixeira Rodrigues a kol., <em>European Journal of Public Health</em> 2024. Francie — Santé publique France, bilance proočkovanosti 2024 (sezóna 2023/24). Roky sezón se u jednotlivých zemí liší, srovnání je proto orientační.</p>
+      </figure>
+
+      <p>
+        Souhrnná evidence to potvrzuje v obou směrech. Metaanalýza publikovaná v <em>Journal of Pharmaceutical Policy and Practice</em> (2024) našla u zapojení farmaceuta do očkování konzistentní, ale ne zázračný efekt: souhrnné relativní riziko <strong>1,51</strong> proti obvyklé praxi, přičemž nejsilnější efekt měl farmaceut v roli toho, kdo očkování aktivně nabízí a doporučuje, ne jen aplikuje. Jinými slovy: účinná je kombinace obojího — otevřít další místa <em>a</em> nechat je aktivně zvát.
+      </p>
+
+      <h3>Kolik by to bylo hospitalizací — a proč tady vlastní číslo nedostanete</h3>
+
+      <p>
+        Nejlákavější věta, kterou by tenhle článek mohl mít, zní: „proočkovanost na evropské úrovni by ročně ušetřila X tisíc hospitalizací seniorů." Tu větu tady nenajdete, protože ji na veřejných českých datech nelze poctivě spočítat. Státní zdravotní ústav vykazuje ze sezóny jen <strong>těžké případy v intenzivní péči</strong> — za sezónu 2024/2025 to bylo <strong>470 pacientů s chřipkou na ARO či JIP, z nichž 128 zemřelo</strong> (předchozí sezóna 436 a 107). To je špička ledovce, ne celkový počet hospitalizací s chřipkou u lidí nad 65 let; ten v otevřených datech ÚZIS v sezónním členění není. Model postavený na chybějícím jmenovateli by vypadal přesvědčivě a nebyl by k ničemu.
+      </p>
+
+      <p>
+        Co doložit lze, je řádový efekt očkování na hospitalizace jako takový. ECDC v analýze zveřejněné 16. prosince 2025 odhaduje, že očkovací programy v zemích EU a Evropského hospodářského prostoru odvrátily v sezóně 2024/25 <strong>26 až 41 procent hospitalizací s chřipkou u osob starších 65 let</strong> (při předpokládané účinnosti vakcíny 60 % proti hospitalizaci). Rozpětí je široké právě proto, že se země liší proočkovaností — a Česko je v té distribuci u spodního okraje.
+      </p>
+
+      <aside class="av-aside av-aside-left">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="41" data-suffix=" %">41 %</span>
+          <span class="av-counter-label">horní odhad podílu hospitalizací s chřipkou u osob 65+, kterým v EU/EHP zabránily očkovací programy (sezóna 2024/25); dolní odhad 26 %</span>
+          <span class="av-counter-foot">ECDC, analýza z 16. 12. 2025 · předpoklad účinnosti 60 % proti hospitalizaci</span>
+        </div>
+      </aside>
+
+      <p>
+        Směrový argument tedy zní takto a dál nesahá: za tutéž hrazenou vakcínu si země u evropského průměru kupují zhruba dvojnásobný objem ochrany než Česko a země u cíle WHO třikrát větší. Přesná česká čísla by šla dopočítat — potřebovaly by ale sezónní data o hospitalizacích s chřipkou podle věku z <a href="indikator-hospitalizace_acsc.html">Národního registru hospitalizovaných</a>, publikovaná v otevřené podobě. To je mimochodem samo o sobě doporučení: dokud takový výstup neexistuje, nemá česká debata o prevenci jak ukázat, co se vyplatí. <a href="clanek-vyhnutelne-hospitalizace.html">Odvratitelné hospitalizace</a> přitom sledujeme jako samostatný indikátor a Česko <a href="clanek-hospitalizujeme-nejvic.html">hospitalizuje nejvíc ze zemí OECD</a> — spojnice mezi prevencí a zátěží lůžek je pro celý systém zásadní a chybějící data ji dělají neviditelnou.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé: očkování dospělých je jediná položka prevence, u které se dá výsledek změnit během jedné sezóny.</strong> Nepotřebuje novou daň, nový úhradový mechanismus ani nové kapacity. Potřebuje jen, aby se hrazená služba dostala k lidem, kteří na ni mají nárok — a proto patří v každém programu o prevenci nahoru, ne do jedné věty mezi rizikovými faktory. <strong>Za druhé: dostupnost a aktivní nabídka jsou dvě různé věci a Česko zatím neřeší ani jednu celou.</strong> Novela o očkování v lékárnách je odpovědí na první z nich a stojí za to ji dotáhnout — ale portugalská i francouzská zkušenost ukazuje, že sama o sobě posune proočkovanost o jednotky procentních bodů, ne o desítky. Druhou polovinu musí dodat systémové zvaní: pojišťovny mají data o věku i diagnózách svých pojištěnců a mohou je oslovit adresně, stejně jako to dělají u onkologických screeningů. <strong>Za třetí: chybějící data jsou samostatný problém.</strong> Dokud nebude veřejně dostupný sezónní počet hospitalizací s chřipkou u seniorů, bude se o návratnosti očkování mluvit dojmy — a dojmy prohrávají s rozpočtovými tabulkami. Zveřejnění jednoho datasetu je levnější než jakákoli kampaň a je předpokladem obojího.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-vakcinace_chripka_65.html"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,5 % (sezóna 2024/25; ÚZIS/NZIS), OECD 47 % / EU 49 %, cíl WHO a ECDC ≥ 75 %</li>
+        <li><a href="indikator-vakcinace_pneumokok_65.html"><strong>Vakcinace pneumokoků (65+)</strong></a> — 5,5 % (2023), EU 17 % / OECD 50 %</li>
+        <li><a href="indikator-klistova_encefalitida.html"><strong>Incidence klíšťové encefalitidy</strong></a> — 6,1 na 100 000 obyvatel (2024; SZÚ/ISIN), EU/EEA 0,81 (ECDC 2022)</li>
+        <li><a href="indikator-vydaje_prevence_pct.html"><strong>Výdaje na prevenci</strong></a> — 2,74 % běžných výdajů na zdravotnictví (2023), OECD 3,2 %</li>
+        <li><a href="indikator-prohlidka_prakticky_lekar.html"><strong>Pokrytí preventivní prohlídkou u praktického lékaře</strong></a> — 52,6 % (2023; ÚZIS/NZIS)</li>
+        <li><a href="indikator-lekarny_per_100k.html"><strong>Hustota lékáren / 100 000 obyvatel</strong></a> — 25,01 (2026; SÚKL, otevřená data)</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Aktualita, ze které článek vychází</h5>
+        <ul class="article-sources-list">
+          <li><strong>PEER — Hospodářská strategie, kapitola 1.4 „Zdraví a soběstačnost přinesou silnější ekonomiku"</strong> (srpen 2026). Dokument uvádí nízkou proočkovanost seniorů jednou větou mezi rizikovými faktory české populace. Redakce pracovala s textem kapitoly; dokument v době psaní nemá veřejnou strojově dohledatelnou adresu, proto je citován bez odkazu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje — česká data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Státní zdravotní ústav — aktualita k očkování proti klíšťové encefalitidě</strong> (2. 4. 2026): podíl osob s dokončeným základním schématem a první posilovací dávkou (17 %), zdrojem je dispenzární evidence zdravotních pojišťoven. <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/a-z-infekce/k/klistova-encefalitida/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+          <li><strong>Státní zdravotní ústav — chřipková sezóna 2024/2025</strong>: týdenní hlášení akutních respiračních infekcí a evidence těžkých případů v intenzivní péči (470 pacientů na ARO/JIP, 128 úmrtí za celou sezónu; předchozí sezóna 436 a 107). Údaje ústavu převzala ČTK, publikováno 23. 2. 2026. <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/a-z-infekce/ch/chripka/zprava-o-chripkove-aktivite-hlaseni-a-vysledky-laboratornich-vysetreni/chripkova-sezona-2024-2025/" target="_blank" rel="noopener">szu.gov.cz ↗</a> · <a href="https://www.ceskenoviny.cz/zpravy/chripka-v-cesku-ustupuje-nemocnych-ubylo-ve-vetsine-vekovych-skupin/2790395" target="_blank" rel="noopener">ceskenoviny.cz (ČTK) ↗</a></li>
+          <li><strong>Návrh novely zákona č. 258/2000 Sb., o ochraně veřejného zdraví</strong> (čj. MZDR 15867/2026, čj. OVA 618/26; VeKLEP PID ALBSDUUFQ5OR, verze pro jednání vlády z 10. 8. 2026) — nový § 47aa, teze prováděcí vyhlášky, vypořádání připomínek včetně rozporu s ČLK a údaje o počtu a nákladech hrazených očkování proti chřipce. <a href="https://odok.cz/portal/veklep/material/ALBSDUUFQ5OR/" target="_blank" rel="noopener">odok.cz — VeKLEP ↗</a></li>
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 30 (hrazená očkování: chřipka a pneumokoky u osob 65+, klíšťová encefalitida u pojištěnců nad 50 let od 1. 1. 2022). <a href="https://www.e-sbirka.cz/sb/1997/48" target="_blank" rel="noopener">e-sbirka.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje — mezinárodní</h5>
+        <ul class="article-sources-list">
+          <li><strong>ECDC — analýza dopadu očkování proti chřipce a covidu-19 v sezóně 2024/25</strong> (zveřejněno 16. 12. 2025): očkovací programy odvrátily v EU/EHP 26–41 % hospitalizací s chřipkou u osob 65+ v období 5. 8. 2024 – 1. 6. 2025, při předpokládané účinnosti 60 % proti hospitalizaci. <a href="https://www.ecdc.europa.eu/en/news-events/new-analysis-indicates-vaccines-greatly-reduce-hospitalisations-flu-and-covid-19" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>Community Pharmacy England — Flu Vaccination Service statistics</strong>: počty dávek podaných lékárnami v Anglii po sezónách (2018/19: 1 431 538 · 2024/25: 4 066 585). <a href="https://cpe.org.uk/national-pharmacy-services/advanced-services/flu-vaccination-service/flu-vaccination-statistics/" target="_blank" rel="noopener">cpe.org.uk ↗</a></li>
+          <li><strong>Teixeira Rodrigues A., Guerreiro J., Romano S., Moura S., Paulino E.: The Impact of Portuguese Community Pharmacies on Influenza Vaccination Accessibility and Coverage</strong>, <em>European Journal of Public Health</em>, 2024 — proočkovanost 65+ 72,1 % (2023/24), 2 487 zapojených lékáren, zkrácení průměrné vzdálenosti z 2,4 na 1,2 km, rozdíl +1,3 vs. −4,5 procentního bodu mezi krajními decily obcí. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11517979/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Santé publique France — Vaccination en France. Bilan de la couverture vaccinale en 2024</strong>: proočkovanost proti chřipce u osob 65+ 49,8 % v sezóně 2023/24 (47 % u 65–74 let, 61 % u 75+). <a href="https://www.santepubliquefrance.fr/vaccination/bulletin-national/vaccination-en-france-bilan-de-la-couverture-vaccinale-en-2024" target="_blank" rel="noopener">santepubliquefrance.fr ↗</a></li>
+          <li><strong>Liard F. a kol.: Seasonal influenza vaccination in pharmacy in France</strong>, <em>International Journal of Pharmacy Practice</em> 30(3), 2022 — z rizikových osob očkovaných v lékárně v sezóně 2019/20 nebylo 15,7 % (95% interval 12,4–19,0) očkováno v předchozí sezóně. <a href="https://academic.oup.com/ijpp/article/30/3/253/6553126" target="_blank" rel="noopener">academic.oup.com ↗</a></li>
+          <li><strong>Abd Rahim M. H. a kol.: Impact of pharmacist interventions on immunisation uptake — a systematic review and meta-analysis</strong>, <em>Journal of Pharmaceutical Policy and Practice</em>, 2024 — souhrnné relativní riziko 1,51 (1,28–1,77) pro zapojení farmaceuta, 2,09 (1,42–3,07) v roli aktivně doporučující. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10775721/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Interní data dashboardu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Datový kontrakt HSPA Monitoru</strong> — vakcinace_chripka_65 24,5 % (sezóna 2024/25), vakcinace_pneumokok_65 5,5 % (2023), klistova_encefalitida 6,1 na 100 tis. (2024), vydaje_prevence_pct 2,74 % (2023), prohlidka_prakticky_lekar 52,6 % (2023), lekarny_per_100k 25,01 (2026), farmaceuti_per_100k 76 (2023); hodnoty, primární zdroje a metodika viz karty indikátorů odkazované v databoxu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-ockovani-v-lekarnach</strong> — obsah novely § 47aa, podmínky pro farmaceuty a rozpor s Českou lékařskou komorou. <a href="clanek-ockovani-v-lekarnach.html">clanek-ockovani-v-lekarnach.html</a></li>
+          <li><strong>clanek-vakcinace-pneumokok-seniori</strong> — proč je Česko v očkování seniorů proti pneumokokům na chvostu Evropy. <a href="clanek-vakcinace-pneumokok-seniori.html">clanek-vakcinace-pneumokok-seniori.html</a></li>
+          <li><strong>clanek-klistova-encefalitida-proockovanost-2026</strong> — 51 % Čechů očkování začne, 17 % ho dokončí. <a href="clanek-klistova-encefalitida-proockovanost-2026.html">clanek-klistova-encefalitida-proockovanost-2026.html</a></li>
+          <li><strong>clanek-klistova-encefalitida</strong> — nejvyšší počet případů v EU/EEA a co měří nový indikátor. <a href="clanek-klistova-encefalitida.html">clanek-klistova-encefalitida.html</a></li>
+          <li><strong>clanek-vakcinace</strong> — co populační očkování v Česku ztratilo. <a href="clanek-vakcinace.html">clanek-vakcinace.html</a></li>
+          <li><strong>clanek-farmaceuti-pracovni-sila</strong> — hodně lékáren, málo lékárníků: kapacitní kontext sítě. <a href="clanek-farmaceuti-pracovni-sila.html">clanek-farmaceuti-pracovni-sila.html</a></li>
+          <li><strong>clanek-vyhnutelne-hospitalizace</strong> — hospitalizace, kterým by ambulantní péče a prevence předešly. <a href="clanek-vyhnutelne-hospitalizace.html">clanek-vyhnutelne-hospitalizace.html</a></li>
+          <li><strong>clanek-hospitalizujeme-nejvic</strong> — proč Česko leží v nemocnicích nejvíc ze zemí OECD. <a href="clanek-hospitalizujeme-nejvic.html">clanek-hospitalizujeme-nejvic.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Proočkovanost v Česku, výdaje na prevenci a hustota lékáren pocházejí z datového kontraktu HSPA Monitoru; primární zdroje a metodika jsou na kartách jednotlivých indikátorů. Údaj o 17% plné ochraně proti klíšťové encefalitidě není indikátorem dashboardu — jde o hodnotu z aktuality SZÚ. Obsah novely a čísla o hrazených očkováních jsou převzata z dokumentů materiálu VeKLEP ALBSDUUFQ5OR (verze pro jednání vlády z 10. 8. 2026); jde o návrh, jehož konečná podoba se může změnit. Zahraniční proočkovanosti pocházejí z národních zdrojů uvedených výše a vztahují se k různým sezónám, srovnání je proto orientační. <strong>Článek vědomě neuvádí vlastní odhad počtu hospitalizací, kterým by vyšší proočkovanost v Česku zabránila</strong> — sezónní počet hospitalizací s chřipkou podle věku není ve veřejných datech dostupný a publikovaný odhad pro Českou republiku se redakci nepodařilo dohledat. Uvedený podíl 26–41 % je odhad ECDC pro celý prostor EU/EHP, ne pro Česko.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
