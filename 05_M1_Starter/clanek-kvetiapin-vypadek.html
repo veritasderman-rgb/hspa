@@ -3,10 +3,11 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-08-07
+    last_reviewed: 2026-08-16
     reviewer: claude-code-agent
     status: review-pending
     created_at: 2026-08-07
+    nightly_2026-08-16: "NOČNÍ SKEN — oprava v draftu před publikací. Databox uváděl u indikátoru lpod_share_critical hodnotu '5,4 % přípravků (2026, SÚKL; EU ≈ 4,5 %)', tedy ilustrativní číslo s atribucí primárnímu zdroji. Kontrolou zdroje 16. 8. 2026: záznam v data/indicators.json má source.origin 'seed' a prázdné source.url; otevřený MR feed SÚKL (opendata.sukl.cz/soubory/MR/mr.zip, staženo 16. 8. 2026, platnost exportu 16. 8. 2026) neobsahuje sloupec s příznakem LPOD ani se stavem registrace, takže podíl LPOD z něj strojově odvodit nelze. Hodnota z databoxu odstraněna a nahrazena popisem indikátoru s explicitním označením 'ilustrativní' — stejně, jako ji označuje stránka indikátoru ('Stav ověření: Ilustrativní'). Ostatní tři indikátory v databoxu (vypadky_leciv_aktivni origin: live, psychiatri_per_100k, rehospitalizace_schizofrenie_30d) beze změny. Metodická karta indicators/lpod_share_critical.json opravena týmž během (mrtvé endpointy + popis schématu + limitations)."
     creation_phase: discovery+article-write
     primary_sources_count: 4
     visual_elements_count: 6
@@ -288,7 +289,7 @@
       <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
       <ul class="article-databox-list">
         <li><a href="indikator-vypadky_leciv_aktivni.html"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 369 přípravků (stav 10. 8. 2026, <code>origin: live</code>); řada 2021: 1 078 → 2025: 1 553. Kvetiapin XR je jednou z položek.</li>
-        <li><a href="indikator-lpod_share_critical.html"><strong>Podíl léčiv s omezenou dostupností (LPOD)</strong></a> — 5,4 % přípravků (2026, SÚKL; EU ≈ 4,5 %). Strukturální míra zranitelnosti trhu.</li>
+        <li><a href="indikator-lpod_share_critical.html"><strong>Podíl léčiv s omezenou dostupností (LPOD)</strong></a> — strukturální míra zranitelnosti trhu. Indikátor je zatím veden jako <strong>ilustrativní</strong> (<code>origin: seed</code>): otevřený MR feed SÚKL příznak LPOD nenese, takže podíl z něj zatím nelze strojově odvodit. Konkrétní hodnotu proto neuvádíme, dokud indikátor nedostane ověřený primární zdroj.</li>
         <li><a href="indikator-psychiatri_per_100k.html"><strong>Psychiatři na 100 000 obyvatel</strong></a> — 13 (2024, ÚZIS NRZP; OECD 17,3). Kapacita, na kterou dopadá každé přestavování medikace.</li>
         <li><a href="indikator-rehospitalizace_schizofrenie_30d.html"><strong>Rehospitalizace do 30 dnů — schizofrenie</strong></a> — 15,6 % (2021, MZ ČR otevřená data / NRHZS; OECD 13 %). Ukazatel kontinuity péče, kterou výpadky léků podrývají.</li>
       </ul>
