@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "PEER-BATCH-WRITE 16. 8. 2026, návrh článku č. 7 z 05_M1_Starter/PLAN-PEER-CLANKY.md (sekce A4 + A2.5 + část B). Téma: návrh PEER (Hospodářská strategie, kap. 1.4) navázat část zdravotního pojistného na doloženou péči o vlastní zdraví „po vzoru Nizozemska\", pilotně a povinně pro ročníky do 40 let. Článek cíl nezpochybňuje, opravuje nástroj.
+      PRIMÁRNÍ OVĚŘENÍ (websearch + fetch 16. 8. 2026):
+      (1) NL — Zorgverzekeringswet (BWBR0018450): art. 3 acceptatieplicht (verbatim fetch wetten.overheid.nl: 'Een zorgverzekeraar is verplicht ... desgevraagd een zorgverzekering te sluiten'); art. 17 odst. 1–2 grondslag van de premie (verbatim fetch: 'De grondslag van de premie is gelijk voor varianten die wat betreft de te verzekeren prestaties ... niet van elkaar verschillen'); art. 20 premiekorting jen za dobrovolný eigen risico. Rijksoverheid (acceptatieplicht Q&A): pojistitel nesmí odmítnout ani požadovat vyšší pojistné podle věku či zdraví. Risicoverevening — Zorginstituut Nederland. Collectiviteitskorting (max 5 %) zrušena k 1. 1. 2023 (wetsvoorstel 35872, Eerste Kamer) — ověřeno sekundárně (Eerste Kamer dossier + odborné shrnutí), důvod: narušovala solidaritu.
+      (2) DE — § 65a SGB V: struktura Abs. 1 / 1a / 2 / 3 ověřena fetchem sozialgesetzbuch-sgb.de (gesetze-im-internet.de vrátil 503). Abs. 3 verbatim: 'Die Aufwendungen für Maßnahmen nach Absatz 1a müssen mittelfristig aus Einsparungen und Effizienzsteigerungen, die durch diese Maßnahmen erzielt werden, finanziert werden'; tříletý výkaz dozorovému úřadu. Objem 260,7 mil. EUR (2016) na bonusprogramy dle § 65a — SEKUNDÁRNÍ (rešerše vědecké služby Bundestagu WD 9-090/20; přímý fetch PDF se nezdařil, hodnota převzata ze search snippetu). Účast 20,2 % / vzdělanostní gradient 1,3–1,5× — SEKUNDÁRNÍ (Spektrum.de referuje analýzu S. Jordan, RKI, na datech GEDA; abstrakt Das Gesundheitswesen 10.1055/s-0034-1396808 vrátil HTTP 403).
+      (3) RCT — Song & Baicker, JAMA 2019;321(15):1491–1501: abstrakt PRIMÁRNĚ ověřen (PMC6484807, verbatim): 32 974 zaměstnanců, 160 pracovišť (20 intervenčních / 140 kontrolních), 18 měsíců; pravidelný pohyb 69,8 vs 61,9 %, rozdíl 8,3 p.b. (95% CI 3,9–12,8; P = ,03); aktivní práce s hmotností 69,2 vs 54,7 %, rozdíl 13,6 p.b. (95% CI 7,1–20,2; P = ,02); bez efektu 27 self-reported + 10 klinických + 38 spending/utilization + 3 employment = 78 ukazatelů; 29+10+38+3 = 80 celkem, tedy 2 z 80. Jones, Molitor & Reif, QJE 2019;134(4):1747–1791: NBER project page (primární stránka autorů/NBER): 4 834 randomizovaných (3 300 intervence / 1 534 kontrola); žádné signifikantní kauzální efekty na výdaje, biometrii, diagnózy, chování ani subjektivní zdraví ve 12 a 24 měsících; vzrostla účast na screeningu a podíl s praktickým lékařem (92,2 vs 86,1 %); CI vylučují 84 % dřívějších odhadů u výdajů a absencí; účastníci měli PŘED intervencí nižší výdaje a zdravější chování (selekce). Verbatim abstrakt QJE se nepodařilo stáhnout (Oxford Academic vrací jen navigaci) — čísla z NBER project page a NBER WP 24229.
+      (4) ČR — fond prevence: zákon 551/1991 Sb. § 7 odst. 2 (až 5 ‰ pojistného po přerozdělení z minulého roku ze ZFZP; pokuty/přirážky/penále nejvýše 0,3 % objemu výnosu pojistného po přerozdělení), vyhláška 418/2003 Sb. — ověřeno sekundárně (podnikatel.cz úplné znění + slv.cz), doporučeno při auditu překontrolovat proti e-Sbírce. VZP: fond prevence 2026 = 2,26 mld Kč (+6 %), 2025 vyplaceno přes 1,8 mld Kč při více než 1,6 mil. žádostí, 1. pololetí 2026 téměř 1 mld Kč / téměř 900 tis. žádostí — primárně z aktuality VZP z 12. 8. 2026.
+      (5) Ústavní rámec — čl. 31, čl. 41 odst. 1, čl. 4 odst. 4 Listiny; Pl. ÚS 14/02; zákon 592/1992 Sb. (sazba 13,5 %). Převzato z auditovaného clanek-narok-pojistence-1-co-to-je (status verified), neopakuje se zde vlastní právní rozbor nad rámec série.
+      (6) Indikátory dashboardu: platba_z_kapsy_pct 13,6 % (2024), vydaje_prevence_pct 2,7 % (2023, OECD 3,2), zdravotni_gramotnost_omezena 47 % (2020, EU 46), nadeje_doziti_vzdelani_gap_muzi 13 let (2018, EU 7), pohybova_aktivita_dospeli 25,1 % (2019, EU 32,7).
+      NEJISTOTY K RUČNÍMU AUDITU: (a) dokument PEER není veřejně publikovaný — citace kapitoly 1.4 vychází z výtisku v držení redakce a z interního cross-checku PLAN-PEER-CLANKY.md; ověřit znění před publikací; (b) německý objem 260,7 mil. EUR je za rok 2016, novější souhrnná statistika se nepodařila dohledat — v textu je proto rámováno jako řádový údaj s rokem; (c) přenos evidence z pracovištních wellness programů na zákonné bonusy pojišťoven má meze — v textu je to explicitně přiznáno v metodickém callboxu, nesmí se z něj škrtnout; (d) § 7 zákona 551/1991 Sb. ověřen jen sekundárně.
+      TÓN: článek NENÍ útok na PEER; cíl (odměnit zapojení, ne zdravotní stav) je v textu opakovaně označen za legitimní. Psáno tak, aby ho mohl citovat navrhovatel i odpůrce. Žádný article-review-banner. published:false, robots noindex."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>„Po vzoru Nizozemska" znamená přesný opak. Bonus za péči o zdraví patří do fondu prevence, ne do pojistného · HSPA Monitor</title>
+<meta name="description" content="Nová hospodářská strategie PEER chce navázat část zdravotního pojistného na doloženou péči o vlastní zdraví — „po vzoru Nizozemska". Jenže nizozemský zákon diferenciaci pojistného výslovně zakazuje, randomizované studie bonusových programů nacházejí efekt blízký nule a rizikové chování je v Česku silně sociálně podmíněné. Cíl je legitimní. Nástroj je vadný — a existuje funkční náhrada: německý § 65a SGB V a české fondy prevence.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="„Po vzoru Nizozemska" znamená přesný opak. Bonus za péči o zdraví patří do fondu prevence, ne do pojistného">
+<meta property="og:description" content="Nizozemsko diferenciaci pojistného zakazuje, randomizované studie nacházejí efekt blízký nule a rizikové chování je sociálně podmíněné. Cíl návrhu PEER je legitimní, nástroj vadný — a náhrada existuje: § 65a SGB V a fondy prevence.">
+<meta property="og:image" content="assets/covers/clanek-bonus-za-zdravi-pojistne.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bonus za péči o zdraví patří do fondu prevence, ne do pojistného">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">pojistné · prevence · mezinárodní srovnání · nerovnosti</span>
+      </div>
+      <h1 class="article-title">„Po vzoru Nizozemska" znamená přesný opak. Bonus za péči o zdraví patří do fondu prevence, ne do pojistného</h1>
+      <p class="article-deck">
+        Nová hospodářská strategie navrhuje navázat část zdravotního pojistného na doloženou péči o vlastní zdraví — pohyb, nekouření, střídmost, práci s hmotností. Cíl je legitimní a v Česku zoufale potřebný: odměnit zapojení, ne zdravotní stav. Nástroj má ale čtyři nezávislé vady. Země, na kterou se návrh odvolává, diferenciaci pojistného <strong>zákonem zakazuje</strong>. Nejlepší randomizované studie takových programů nacházejí efekt <strong>blízký nule</strong>. Protože je rizikové chování silně sociálně podmíněné, bonus podle chování je v očekávané hodnotě <strong>transferem od chudších k bohatším</strong>. A české pojistné je veřejnoprávní platba, u níž by rozlišování podle chování muselo obstát před testem rovnosti. Existuje ale varianta, která dělá skoro totéž, stojí na reálné evropské předloze a v Česku už má právní tělo.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Kapitola o zdraví v nové hospodářské strategii PEER (Pirátská expertní ekonomická rada, srpen 2026) je z velké části dobře postavená: opírá se o čísla, která sedí, a míří na problémy, které Česko skutečně má. V jednom bodě ale sáhne po nástroji, který ji může celou strhnout. Návrh zní <em>navázat část zdravotního pojistného na doložitelnou péči o vlastní zdraví</em> — konkrétně na pohyb, nekouření, střídmost v alkoholu a práci s hmotností — a zavést ho <em>„pilotně a povinně" pro ročníky do 40 let, po vzoru Nizozemska</em>. Tenhle text není proti záměru. Záměr — odměnit <strong>zapojení</strong>, ne zdravotní stav — je legitimní a dá se udělat. Jen ne přes pojistné. Následující čtyři oddíly ukazují proč, pátý ukazuje jak.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBonusHeroH">
+        <figcaption class="av-figure-h" id="avBonusHeroH">Čtyři čísla, která rámují celý spor</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="13.5" data-decimals="1" data-suffix=" %">13,5 %</span>
+            <span class="av-counter-label">zákonná sazba pojistného na veřejné zdravotní pojištění — stejná pro každého plátce</span>
+            <span class="av-counter-foot">zákon č. 592/1992 Sb.; 9 % zaměstnavatel + 4,5 % zaměstnanec</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="78">78</span>
+            <span class="av-counter-label">z 80 sledovaných ukazatelů se v největší randomizované studii wellness programu nezměnilo</span>
+            <span class="av-counter-foot">Song &amp; Baicker, JAMA 2019 — 32 974 zaměstnanců, 18 měsíců</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="13" data-suffix=" let">13 let</span>
+            <span class="av-counter-label">rozdíl v naději dožití českých mužů podle dosaženého vzdělání</span>
+            <span class="av-counter-foot">EU průměr 7 let · ČSÚ / Hamplová &amp; Katrňák</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="2.26" data-decimals="2" data-suffix=" mld Kč">2,26 mld Kč</span>
+            <span class="av-counter-label">rozpočet fondu prevence VZP na rok 2026 — nástroj, který už existuje</span>
+            <span class="av-counter-foot">v roce 2025 vyplaceno přes 1,8 mld Kč na více než 1,6 mil. žádostí</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> zákon č. 592/1992 Sb.; Song &amp; Baicker, <em>JAMA</em> 2019;321(15):1491–1501; datový kontrakt HSPA Monitoru (indikátor <em>nadeje_doziti_vzdelani_gap_muzi</em>); VZP ČR, tisková informace k fondu prevence z 12. 8. 2026.</p>
+      </figure>
+
+      <h3>Vada první: předloha, která zakazuje přesně to, co se od ní odvozuje</h3>
+
+      <p>
+        Nizozemský <strong>Zorgverzekeringswet</strong> (zákon o zdravotním pojištění, účinný od roku 2006) je postavený na dvou pilířích, které jdou proti sobě jen zdánlivě. Prvním je <em>akceptační povinnost</em> (<em>acceptatieplicht</em>): podle čl. 3 je pojistitel povinen uzavřít pojištění s každým, kdo o ně požádá a bydlí v jeho působnosti. Druhým je <em>zákaz diferenciace pojistného</em> (<em>verbod op premiedifferentiatie</em>), který zákon technicky formuluje v čl. 17: základ pojistného (<em>grondslag van de premie</em>) musí být <strong>stejný pro všechny varianty, které se neliší rozsahem pojištěného plnění</strong>. Přeloženo do praxe — a přesně takhle to vysvětluje i informační servis nizozemské vlády: pojistitel nesmí nikoho odmítnout ani po nikom chtít vyšší pojistné kvůli věku, pohlaví, příjmu nebo zdravotnímu stavu. Kdo má stejnou smlouvu u stejného pojistitele, platí stejně.
+      </p>
+
+      <p>
+        Aby systém unesl to, že si nemocné klienty nemůže vybírat, existuje třetí prvek — <strong>risk-adjustment</strong> (<em>risicovereveningssysteem</em>), který spravuje Zorginstituut Nederland: pojistitelé dostávají kompenzaci podle rizikového profilu svého kmene, takže starší a nemocnější pojištěnec pro ně není obchodní ztrátou. Jediná sleva, kterou zákon na základním balíčku připouští, je <em>premiekorting</em> za dobrovolně zvolenou vyšší spoluúčast (<em>eigen risico</em>) podle čl. 20 — tedy sleva za převzetí finančního rizika, ne za chování.
+      </p>
+
+      <p>
+        A trend je opačný, než by návrh potřeboval. Poslední zbytek plošné cenové diferenciace — <strong>kolektivní sleva</strong> (<em>collectiviteitskorting</em>), sražená nejprve na maximálně 5 % — byla k <strong>1. lednu 2023</strong> zrušena úplně. Důvod uváděný v legislativním procesu: narušovala solidaritu mezi pojištěnci, protože ti bez kolektivu ve výsledku doplatili na slevu těch v kolektivu. Nizozemsko tedy v posledních letech diferenciaci pojistného nezavádí — <strong>odbourává ji</strong>.
+      </p>
+
+      <p>
+        To není jen chybná citace. Je to citace, která tvrdí opak toho, co zdroj říká — a v rozpravě ji oponent najde během jednoho odpoledne. Přitom oprava je snadná, protože země s tím, co PEER popisuje, opravdu existuje.
+      </p>
+
+      <h3>Skutečná předloha je Německo — a nejde přes pojistné</h3>
+
+      <p>
+        Nástroj, o kterém návrh mluví, má v Evropě jasnou adresu: <strong>§ 65a německého SGB V</strong>, „bonus za zdraví uvědomělé chování" (<em>Bonus für gesundheitsbewusstes Verhalten</em>). Zákon rozlišuje dvě větve. Podle <strong>odstavce 1</strong> stanoví zdravotní pojišťovna ve svých stanovách podmínky, za nichž má pojištěnec nárok na bonus, když využije služby k záchytu zdravotních rizik a včasnému odhalení nemocí (§§ 25, 25a, 26) nebo ochranné očkování (§ 20i). Podle <strong>odstavce 1a</strong> má pojišťovna stejným způsobem odměnit pravidelné využívání služeb behaviorální prevence podle § 20 odst. 5 nebo srovnatelných kvalitativně zajištěných programů podpory zdraví — tedy přesně tu kategorii, kterou PEER popisuje jako „pohyb, nekouření, střídmost, práci s hmotností". <strong>Odstavec 2</strong> přidává podnikovou podporu zdraví: bonus dostane zaměstnavatel i účastnící se pojištěnec.
+      </p>
+
+      <p>
+        Podstatné je, co v § 65a <em>není</em>: pojistné. Bonus je plnění vyplácené <strong>vedle</strong> pojistného, z prostředků pojišťovny. Sazba pojistného zůstává jednotná — pro pojištěnce téže pokladny stejná bez ohledu na to, jestli bonus čerpá. Německý zákonodárce k tomu navíc přidal tvrdou rozpočtovou pojistku. <strong>Odstavec 3</strong> stanoví, že výdaje na opatření podle odstavce 1a musí být „střednědobě financovány z úspor a zvýšení efektivity, kterých se těmito opatřeními dosáhne"; pojišťovny to musí každé tři roky doložit dozorovému úřadu, a pokud úspory nevznikly, bonus vyplácet nesmějí. Jinými slovy: Německo bonus za životní styl má, ale <strong>podmiňuje ho průkazem, že se vyplatí</strong>.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avBonusTabH">
+        <figcaption class="av-figure-h" id="avBonusTabH">Tři modely vedle sebe: co se odměňuje, čím se odměňuje a co se s pojistným děje</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Parametr</th>
+                <th scope="col">Nizozemsko (Zvw, 2006)</th>
+                <th scope="col">Německo (§ 65a SGB V)</th>
+                <th scope="col">Návrh PEER (2026)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Může se pojistné lišit podle osoby?</th>
+                <td class="av-bad"><strong>Ne</strong> — zákaz diferenciace (čl. 17)</td>
+                <td class="av-bad"><strong>Ne</strong> — sazba je jednotná</td>
+                <td class="av-mut">Ano, to je jádro návrhu</td>
+              </tr>
+              <tr>
+                <th scope="row">Musí pojistitel přijmout každého?</th>
+                <td class="av-good">Ano — akceptační povinnost (čl. 3)</td>
+                <td class="av-good">Ano</td>
+                <td>Ano (nezpochybňováno)</td>
+              </tr>
+              <tr>
+                <th scope="row">Existuje odměna za prevenci?</th>
+                <td>Jen mimo základní balíček (dobrovolné připojištění)</td>
+                <td class="av-good"><strong>Ano</strong> — bonus dle stanov, vedle pojistného</td>
+                <td>Ano, formou nižšího pojistného</td>
+              </tr>
+              <tr>
+                <th scope="row">Čím se rozdíly v riziku vyrovnávají?</th>
+                <td class="av-good">Risk-adjustment (<em>risicoverevening</em>)</td>
+                <td class="av-good">Morbiditní přerozdělení</td>
+                <td class="av-mut">Neřešeno</td>
+              </tr>
+              <tr>
+                <th scope="row">Podmínka měřitelného efektu</th>
+                <td>—</td>
+                <td class="av-good"><strong>Ano</strong> — § 65a odst. 3: financovat z úspor, výkaz každé 3 roky</td>
+                <td class="av-mut">Neuvedena</td>
+              </tr>
+              <tr>
+                <th scope="row">Účast</th>
+                <td>—</td>
+                <td>Dobrovolná</td>
+                <td class="av-bad">„Pilotně a povinně" pro ročníky do 40 let</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Zorgverzekeringswet (BWBR0018450), čl. 3, 17 a 20; Rijksoverheid — informace k akceptační povinnosti; Zorginstituut Nederland — risicovereveningssysteem; § 65a SGB V, odst. 1, 1a, 2 a 3; PEER, <em>Hospodářská strategie</em>, kap. 1.4 (srpen 2026). Poslední sloupec popisuje návrh tak, jak je formulován v dokumentu.</p>
+      </figure>
+
+      <h3>Vada druhá: evidence, která programům tohoto typu nepřeje</h3>
+
+      <p>
+        Bonusy za zdravý životní styl nejsou nevyzkoušená myšlenka. Naopak — patří k nejlépe testovaným nástrojům zdravotní politiky vůbec, protože je desítky let ve velkém provozují američtí zaměstnavatelé. A od roku 2019 o nich máme dvě velké <strong>randomizované</strong> studie, tedy nejsilnější dostupný typ důkazu.
+      </p>
+
+      <p>
+        <strong>Illinois Workplace Wellness Study</strong> (Jones, Molitor a Reif, <em>Quarterly Journal of Economics</em> 2019) postavila kompletní wellness program pro velkého zaměstnavatele a náhodně rozdělila <strong>4 834 zaměstnanců</strong> do skupiny s nárokem na program a finanční pobídku (3 300 lidí) a do kontrolní skupiny (1 534 lidí). Po dvanácti i po čtyřiadvaceti měsících autoři <strong>nenašli žádný statisticky významný kauzální efekt</strong> na celkové zdravotní výdaje, na biometrické ukazatele, na počet diagnóz, na zdravotní chování ani na subjektivně hodnocené zdraví. Program prokazatelně zvedl jen dvě věci: účast na screeningových prohlídkách a podíl lidí, kteří uvádějí svého praktického lékaře (92,2 % proti 86,1 %). Intervaly spolehlivosti byly přitom tak úzké, že vyloučily <strong>84 % dosavadních publikovaných odhadů</strong> úspor na výdajích a absencích — tedy většinu literatury, o kterou se marketing těchto programů opíral.
+      </p>
+
+      <p>
+        Klíčový nález ale nebyl v efektu, nýbrž ve <strong>výběru</strong>: lidé, kteří se do programu přihlásili, měli <em>už rok před jeho spuštěním</em> nižší zdravotní výdaje a zdravější chování než ti, kdo se nepřihlásili. Program tedy fungoval hlavně jako síto. Autoři z toho vyvozují nepříjemný důsledek: zaměstnavatel na takovém programu může vydělat i tehdy, když nikoho neuzdraví — prostě tím, že mu přitáhne a udrží levnější zaměstnance.
+      </p>
+
+      <p>
+        Druhá studie (<strong>Song a Baicker</strong>, <em>JAMA</em> 2019) testovala vícesložkový program v řetězci BJ's Wholesale Club na <strong>32 974 zaměstnancích</strong> ve <strong>160 provozovnách</strong>, z nichž 20 bylo náhodně vylosováno do intervence a 140 sloužilo jako kontrola. Po 18 měsících se zlepšily dvě věci, obě sebehodnocené: podíl lidí, kteří uvádějí pravidelný pohyb (69,8 % proti 61,9 %; rozdíl 8,3 procentního bodu, 95% CI 3,9–12,8) a podíl těch, kdo aktivně pracují s hmotností (69,2 % proti 54,7 %; rozdíl 13,6 p. b., 95% CI 7,1–20,2). Ostatních <strong>78 předem definovaných ukazatelů</strong> — 27 dalších sebehodnocených, <strong>10 klinických</strong> (BMI, krevní tlak, cholesterol), <strong>38 nákladových</strong> a 3 zaměstnanecké (absence, setrvání v zaměstnání, výkon) — se nezměnilo.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="20.2" data-decimals="1" data-suffix=" %">20,2 %</span>
+          <span class="av-counter-label">německých pojištěnců je zapojeno do bonusového programu — lidé se středním a vyšším vzděláním 1,3× až 1,5× častěji než lidé v prekérní situaci</span>
+          <span class="av-counter-foot">analýza S. Jordan (Robert Koch-Institut) na datech šetření GEDA</span>
+        </div>
+      </aside>
+
+      <p>
+        Německá zkušenost s § 65a míří stejným směrem, jen z jiného úhlu. Analýza německého Institutu Roberta Kocha na datech populačního šetření GEDA ukazuje, že do bonusových programů je zapojena zhruba <strong>pětina pojištěnců</strong> — a že lidé se středním a vyšším vzděláním je využívají <strong>1,3× až 1,5× častěji</strong> než lidé z prekérních poměrů. Bonus tedy typicky odměňuje toho, kdo by se hýbal a nekouřil i bez něj, a míjí toho, u koho by změna přinesla nejvíc. Objem, o který jde, není zanedbatelný: jen v roce 2016 vyplatily německé pokladny na bonusy podle § 65a zhruba <strong>261 milionů eur</strong>.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodická poznámka k přenositelnosti důkazů">
+        <p class="article-callout-h">Poctivá výhrada: co tyto studie nedokazují</p>
+        <p>
+          Obě randomizované studie testovaly <strong>zaměstnavatelské</strong> wellness programy v USA, ne zákonné bonusy zdravotních pojišťoven — a už vůbec ne diferenciaci veřejného pojistného. Přenos není automatický: jiná země, jiná pobídka, jiný horizont. Osmnáct až čtyřiadvacet měsíců je navíc krátká doba na to, aby se změna chování promítla do biomarkerů, natož do nákladů. Co z nich <strong>plyne</strong>, je opatrnější tvrzení: u nástrojů tohoto typu se opakovaně ukazuje, že dokážou zvýšit <em>účast</em> a <em>deklarované</em> chování, ale zatím se nepodařilo doložit, že mění zdraví nebo výdaje — a že se do nich přednostně hlásí lidé, kteří už zdraví jsou. Kdo takový nástroj navrhuje, nese důkazní břemeno. Právě proto je německá doložka „financovat z prokázaných úspor" chytřejší než jakýkoli slib.
+        </p>
+      </aside>
+
+      <h3>Vada třetí: kdo by to v Česku doopravdy zaplatil</h3>
+
+      <p>
+        Třetí problém je ten, který si strategie PEER vytvořila sama — a v téže kapitole. V oddílu „Co nám to přinese?" text správně píše, že dnešní zdravotní rizika jsou <strong>silně sociálně podmíněná</strong>, a odkazuje na PAQ Research, SYRI a mezinárodní šetření HBSC: u dětí z chudších rodin začíná nerovnost u obezity a končí u depresí. Slibovaným přínosem je „spravedlivější přístup ke zdraví". O dvě strany dřív ale tentýž dokument navrhuje odstupňovat pojistné podle chování.
+      </p>
+
+      <p>
+        Obojí zároveň platit nemůže. Pokud je chování sociálně podmíněné, pak bonus za chování v očekávané hodnotě <strong>proudí k lidem s vyšším vzděláním a příjmem</strong> — a malus, tedy vyšší pojistné pro ty, kdo podmínky nesplní, dopadá na ty ostatní. Česká data ten gradient neukazují nesměle. Rozdíl v naději dožití mužů podle vzdělání je u nás <a href="indicator.html?id=nadeje_doziti_vzdelani_gap_muzi"><strong>13 let</strong></a> proti sedmi letům v evropském průměru — <a href="clanek-nadeje-doziti-vzdelani.html">třináct let života navíc za diplom</a>. Skoro <a href="indicator.html?id=zdravotni_gramotnost_omezena"><strong>47 % dospělých</strong></a> má <a href="clanek-zdravotni-gramotnost.html">omezenou zdravotní gramotnost</a>, tedy potíže porozumět informacím o vlastním zdraví a jednat podle nich. A doporučenou dávku pohybu splňuje jen <a href="indicator.html?id=pohybova_aktivita_dospeli"><strong>25,1 % Čechů</strong></a> proti 32,7 % v EU; <a href="clanek-pohyb.html">jak se ten podíl měří a proč si připadáme aktivnější, než jsme</a>, jsme rozebírali jinde. To nejsou vedlejší okolnosti — jsou to veličiny, které určují, kudy peníze v takovém schématu potečou.
+      </p>
+
+      <p>
+        Do toho vstupuje praktická otázka, kterou návrh vůbec neotevírá: <strong>čím se péče o vlastní zdraví doloží?</strong> Pohyb z náramku, nekouření z čestného prohlášení, „střídmost" z čeho? Každá odpověď buď vytvoří novou administrativní zátěž a nový sběr citlivých údajů o chování občanů, nebo se scvrkne na razítko za docházku — což je přesně ta „preventivní prohlídka jako cíl místo vstupního bodu", kterou strategie na jiném místě správně kritizuje. A doložení je vždycky snazší pro toho, kdo má stabilní zaměstnání, chytrý telefon a čas.
+      </p>
+
+      <h3>Vada čtvrtá, právní: pojistné není cena za produkt</h3>
+
+      <p>
+        Pojistné na veřejné zdravotní pojištění je <strong>veřejnoprávní platba</strong> stanovená zákonem č. 592/1992 Sb.: sazba 13,5 % z vyměřovacího základu, jednotná pro všechny, dělená mezi zaměstnavatele (9 %) a zaměstnance (4,5 %). Není to cena za komerční produkt, u níž by pojistitel mohl kalkulovat rizikovou přirážku — a české právo mu to ani neumožňuje.
+      </p>
+
+      <p>
+        Ústavní ukotvení popisuje podrobně první díl naší série o nároku pojištěnce: <a href="clanek-narok-pojistence-1-co-to-je.html">čl. 31 Listiny zaručuje občanům právo na bezplatnou zdravotní péči na základě veřejného pojištění „za podmínek, které stanoví zákon"</a>. Zákonodárce má tedy širokou diskreci — Ústavní soud u sociálních práv uplatňuje měkčí <em>test racionality</em> podle čl. 41 odst. 1 Listiny, ne klasický test proporcionality. To hraje spíš pro navrhovatele než proti němu. Jenže diskrece má dvě hranice, které tenhle konkrétní návrh trefuje obě. První je čl. 4 odst. 4 Listiny — povinnost šetřit podstaty a smyslu základních práv, tedy nevyprázdnit jádro nároku. Druhou je <strong>rovnost</strong>: jakékoli rozlišování mezi pojištěnci musí mít legitimní cíl a být přiměřené. A právě tady se sečtou předchozí dva oddíly. Kritérium, u něhož víme, že (a) v randomizovaných studiích nemění zdravotní výsledky a (b) systematicky zvýhodňuje vzdělanější a bohatší, se před testem racionality obhajuje mimořádně těžko — protože racionalita se poměřuje k deklarovanému účelu, a účel „zlepšit zdraví" tu evidence nepodpírá.
+      </p>
+
+      <p>
+        K tomu se přidává starší judikatorní mez: v nálezu <strong>Pl. ÚS 14/02</strong> Ústavní soud odmítl dělení péče na levnější „základní" a dražší „nadstandardní" podle vhodnosti a účinnosti léčby. Bonus za chování sice necílí na rozsah péče, ale na cenu vstupu do téhož systému — a otevírá příbuznou otázku: smí být přístup k ústavně garantovanému plnění zlevňován podle podmínky, kterou pojištěnec nemusí mít plně ve své moci?
+      </p>
+
+      <p>
+        Zbývá formulace samotná. <strong>„Pilotně a povinně" je oxymóron.</strong> Pilot je zásah v omezeném rozsahu, s kontrolní skupinou a s předem definovaným kritériem úspěchu — má zjistit, jestli opatření funguje, než se rozšíří. Povinnost pro celý ročníkový pás do čtyřiceti let není pilot; je to plošné zavedení s testovacím názvem. A věková hranice zakládá další otázku rovného zacházení, na kterou dokument odpověď nenabízí. Mezi <a href="clanek-narok-pojistence-3-co-s-tim.html">reformními směry, které nárok pojištěnce udrží udržitelným</a>, jsme diferenciaci pojistného z těchto důvodů neuváděli.
+      </p>
+
+      <h3>Co udělat místo toho — a proč je to skoro totéž</h3>
+
+      <p>
+        Tady článek přestává být kritikou. Chování systému, které chce PEER vyvolat — aby se lidem vyplatilo hýbat se, nekouřit a chodit na prevenci —, se dá vyvolat <strong>bez ústavního rizika, bez rozporu s vlastním závěrem kapitoly a s reálnou mezinárodní předlohou</strong>. Nástroj v Česku už existuje a jmenuje se <strong>fond prevence</strong>.
+      </p>
+
+      <p>
+        Právní tělo má pevné: podle § 7 zákona č. 551/1991 Sb. (a obdobně podle zákona č. 280/1992 Sb. u zaměstnaneckých pojišťoven) může pojišťovna do fondu prevence převést až <strong>5 promile</strong> pojistného po přerozdělení z minulého roku, plus výnos z pokut, přirážek a penále nejvýše do <strong>0,3 %</strong> objemu pojistného po přerozdělení; podrobnosti stanoví vyhláška č. 418/2003 Sb. Z fondu lze nad rámec hrazených služeb platit zdravotní služby s prokazatelným preventivním, diagnostickým nebo léčebným efektem a programy podporující zdravý způsob života. Objem není symbolický: <strong>VZP má na rok 2026 ve fondu prevence 2,26 miliardy korun</strong> (o 6 % víc než loni), v roce 2025 z něj vyplatila přes 1,8 miliardy na více než 1,6 milionu žádostí a jen za první pololetí 2026 téměř miliardu. Nejžádanější položky — příspěvky na pohyb a dentální hygienu — jsou přesně ty, o kterých strategie mluví.
+      </p>
+
+      <p>
+        Aby z toho byla politika, a ne marketing, musí splnit čtyři podmínky — a všechny čtyři jde uložit zákonem, po vzoru § 65a SGB V. První dvě dnešní fondy prevence splňují jen zčásti, druhé dvě vůbec.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avBonusFlowH">
+        <figcaption class="av-figure-h" id="avBonusFlowH">Jak postavit bonus za péči o zdraví tak, aby vydržel právní i evidenční test</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Jednotný zákonný katalog</h4>
+            <p class="av-flow-desc">Zákon vymezí, co se odměňuje a v jakém rozpětí — dnes si to každá ze sedmi pojišťoven určuje sama. Katalog dělá z bonusu politiku, ne marketing.</p>
+            <span class="av-flow-tag">§ 65a odst. 1 a 1a</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Dobrovolnost místo povinnosti</h4>
+            <p class="av-flow-desc">Bonus se vyplácí vedle pojistného, nikdy z něj. Kdo se nezapojí, nepřijde o nic, na co má nárok ze zákona — tím padá ústavní problém i malus.</p>
+            <span class="av-flow-tag">bez zásahu do 592/1992 Sb.</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Povinná evaluace a doložka úspor</h4>
+            <p class="av-flow-desc">Pravidelný výkaz dozorovému orgánu: co se vyplatilo, komu a s jakým efektem. Německá podmínka „financovat z prokázaných úspor" je nejpřísnější dostupný filtr proti utrácení bez výsledku.</p>
+            <span class="av-flow-tag">§ 65a odst. 3</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Měření dopadu na nerovnosti</h4>
+            <p class="av-flow-desc">Sledovat, kdo bonus čerpá podle vzdělání, příjmu a regionu. Bez toho hrozí, že se veřejné peníze budou přesouvat k těm, kdo je potřebují nejméně — což je přesně to, čemu se návrh chtěl vyhnout.</p>
+            <span class="av-flow-tag">chybí i v německém modelu</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> § 65a SGB V; zákon č. 551/1991 Sb. § 7 a zákon č. 280/1992 Sb.; vyhláška č. 418/2003 Sb. Krok 4 jde nad rámec německé úpravy — je odpovědí na doložený vzdělanostní gradient v čerpání.</p>
+      </figure>
+
+      <p>
+        Financování má strategie vyřešené sama: navrhuje směřovat <strong>40 % výnosu z cukerné daně</strong> právě do fondů prevence. To je koherentní návrh, který navíc odpovídá na nejsilnější námitku proti spotřebním daním — jejich regresivitu. Daň dopadá tvrději na nízké příjmy; účelové vázání výnosu do prevence je jediná odpověď, která tuhle námitku skutečně vyvrací. Podrobněji jsme to rozebírali v <a href="clanek-napoje-6-dan-regulace.html">článku o zdanění a regulaci slazených nápojů</a>.
+      </p>
+
+      <p>
+        A prostor pro to je. Česko dává na prevenci <a href="indicator.html?id=vydaje_prevence_pct"><strong>2,7 % běžných výdajů</strong></a> na zdravotnictví proti 3,2 % v průměru OECD — <a href="clanek-vydaje-prevence.html">pětinu pod průměrem</a>. Přímé platby pacientů jsou naopak <a href="indicator.html?id=platba_z_kapsy_pct"><strong>13,6 %</strong></a>, tedy pod evropským průměrem (15 %) i pod OECD (18 %); finanční bariéra vstupu do systému je v Česku nízká a je to jedna z mála věcí, ve kterých jsme jednoznačně dobří. Bonus/malus v pojistném by tuhle přednost načal jako první. Bonus z fondu prevence ji nechává být.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé: cíl obstojí, nástroj ne.</strong> Odměnit zapojení do péče o vlastní zdraví je legitimní a v zemi, která <a href="clanek-hospitalizujeme-nejvic.html">hospitalizuje nejvíc ze zemí OECD</a>, i potřebné. Diferenciace veřejného pojistného ale není nástroj, který ten cíl unese — a odvolávka na Nizozemsko ho nepodepře, protože nizozemský zákon dělá pravý opak. <strong>Za druhé: opravou není škrt, ale přesun.</strong> Přepsat návrh z „nižší pojistné" na „bonus z fondu prevence podle jednotného zákonného katalogu" zachová prakticky celý zamýšlený účinek, odstraní ústavní riziko i vnitřní rozpor kapitoly a nahradí chybnou zahraniční referenci správnou — německým § 65a SGB V. <strong>Za třetí: pilot ať je pilotem.</strong> Dobrovolný, časově a rozsahem omezený, s kontrolní skupinou a s předem vyhlášeným kritériem úspěchu — včetně toho, jak se pozná, že bonus nečerpají jen ti, kdo by prevenci absolvovali tak jako tak. Evidence u tohoto typu opatření je slabá; to není důvod ho nezkoušet, ale je to důvod ho <strong>měřit</strong>, než se z něj stane povinnost pro celou generaci.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadeje_doziti_vzdelani_gap_muzi"><strong>Rozdíl v naději dožití mužů podle vzdělání</strong></a> — 13 let (2018; ČSÚ / Hamplová &amp; Katrňák), EU 7 let. Míra sociální podmíněnosti zdraví, na které stojí distribuční námitka.</li>
+        <li><a href="indicator.html?id=zdravotni_gramotnost_omezena"><strong>Omezená zdravotní gramotnost dospělých</strong></a> — 47 % (2020; SZÚ, HLS19-CZ), EU 46 %. Kdo nerozumí informacím o svém zdraví, hůř doloží péči o ně.</li>
+        <li><a href="indicator.html?id=pohybova_aktivita_dospeli"><strong>Doporučená pohybová aktivita (15+)</strong></a> — 25,1 % (2019; Eurostat EHIS), EU 32,7 %. Chování, které má návrh odměňovat.</li>
+        <li><a href="indicator.html?id=vydaje_prevence_pct"><strong>Výdaje na prevenci</strong></a> — 2,7 % běžných výdajů na zdravotnictví (2023; OECD SHA), OECD 3,2 %. Prostor, do kterého by bonus z fondu prevence patřil.</li>
+        <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby pacientů</strong></a> — 13,6 % zdravotních výdajů (2024; ČSÚ SHA), EU 15 % / OECD 18 %. Nízká finanční bariéra, kterou by diferenciace pojistného načala jako první.</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si to sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Nizozemsko — zákaz diferenciace pojistného</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zorgverzekeringswet (BWBR0018450)</strong> — čl. 3 (akceptační povinnost), čl. 17 (základ pojistného je stejný pro varianty, které se neliší rozsahem plnění), čl. 20 (sleva jen za dobrovolnou spoluúčast). <a href="https://wetten.overheid.nl/BWBR0018450/" target="_blank" rel="noopener">wetten.overheid.nl ↗</a></li>
+          <li><strong>Rijksoverheid — akceptační povinnost a jednotné pojistné</strong>: pojistitel nesmí odmítnout ani požadovat vyšší pojistné kvůli věku či zdravotnímu stavu. <a href="https://www.rijksoverheid.nl/onderwerpen/zorgverzekering/vraag-en-antwoord/acceptatieplicht-zorgverzekering" target="_blank" rel="noopener">rijksoverheid.nl ↗</a></li>
+          <li><strong>Zorginstituut Nederland — risicovereveningssysteem</strong>: popis systému vyrovnávání rizik, který akceptační povinnost ekonomicky umožňuje. <a href="https://www.zorginstituutnederland.nl/financiering" target="_blank" rel="noopener">zorginstituutnederland.nl ↗</a></li>
+          <li><strong>Zrušení kolektivní slevy k 1. 1. 2023</strong> — legislativní dossier 35872 Eerste Kamer; sleva (max. 5 %) zrušena jako narušující solidaritu. <a href="https://www.eerstekamer.nl/wetsvoorstel/35872_afschaffen" target="_blank" rel="noopener">eerstekamer.nl ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Německo — § 65a SGB V</h5>
+        <ul class="article-sources-list">
+          <li><strong>§ 65a SGB V — Bonus für gesundheitsbewusstes Verhalten</strong>, odst. 1 (prevence, screening, očkování), 1a (behaviorální prevence dle § 20 odst. 5), 2 (podniková podpora zdraví), 3 (střednědobé financování z úspor, výkaz dozorovému úřadu každé tři roky). <a href="https://www.gesetze-im-internet.de/sgb_5/__65a.html" target="_blank" rel="noopener">gesetze-im-internet.de ↗</a></li>
+          <li><strong>Vědecká služba Německého spolkového sněmu — Bonusprogramme der gesetzlichen Krankenkassen (WD 9-090/20)</strong>: přehled právní úpravy a objemu plnění (260,7 mil. eur v roce 2016). <a href="https://www.bundestag.de/resource/blob/815980/d72d4a8d7efb2c0657d0d547f1fb4cb8/WD-9-090-20-pdf-data.pdf" target="_blank" rel="noopener">bundestag.de ↗</a></li>
+          <li><strong>Robert Koch-Institut (S. Jordan a kol.) — účast v bonusových programech</strong> na datech populačního šetření GEDA: zapojena zhruba pětina pojištěnců, vzdělanostní gradient 1,3–1,5×. Referováno v <a href="https://www.spektrum.de/news/bonusprogramme-gesundheit-vor-allem-fuer-gesunde/1886113" target="_blank" rel="noopener">Spektrum der Wissenschaft ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Randomizované studie bonusových a wellness programů</h5>
+        <ul class="article-sources-list">
+          <li><strong>Song Z., Baicker K. — Effect of a Workplace Wellness Program on Employee Health and Economic Outcomes: A Randomized Clinical Trial.</strong> <em>JAMA</em> 2019;321(15):1491–1501. 32 974 zaměstnanců, 160 pracovišť; 2 z 80 předem definovaných ukazatelů se zlepšily. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6484807/" target="_blank" rel="noopener">PMC6484807 ↗</a></li>
+          <li><strong>Jones D., Molitor D., Reif J. — What Do Workplace Wellness Programs Do? Evidence from the Illinois Workplace Wellness Study.</strong> <em>Quarterly Journal of Economics</em> 2019;134(4):1747–1791. 4 834 randomizovaných zaměstnanců; bez signifikantních kauzálních efektů, silná selekce zdravějších. <a href="https://www.nber.org/programs-projects/projects-and-centers/workplace-wellness/illinois-workplace-wellness-results" target="_blank" rel="noopener">NBER — výsledky studie ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">České právo a fondy prevence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 592/1992 Sb., o pojistném na veřejné zdravotní pojištění</strong> — sazba 13,5 % z vyměřovacího základu, jednotná pro všechny plátce. <a href="https://www.zakonyprolidi.cz/cs/1992-592" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 551/1991 Sb., o VZP ČR, § 7</strong> (a zákon č. 280/1992 Sb. pro zaměstnanecké pojišťovny) — tvorba a použití fondu prevence; strop 5 ‰ pojistného po přerozdělení a 0,3 % u výnosu z pokut a přirážek. Prováděcí předpis: <strong>vyhláška č. 418/2003 Sb.</strong> <a href="https://www.zakonyprolidi.cz/cs/1991-551" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Listina základních práv a svobod (úst. zák. č. 2/1993 Sb.)</strong> — čl. 31 (právo na bezplatnou péči za podmínek stanovených zákonem), čl. 41 odst. 1 (mez vymahatelnosti sociálních práv), čl. 4 odst. 4 (šetření podstaty a smyslu). Judikatura: nález <strong>Pl. ÚS 14/02</strong>. <a href="https://www.zakonyprolidi.cz/cs/1993-2" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>VZP ČR — fond prevence 2026</strong>: rozpočet 2,26 mld Kč (+6 %); v roce 2025 vyplaceno přes 1,8 mld Kč na více než 1,6 mil. žádostí, za první pololetí 2026 téměř 1 mld Kč. <a href="https://www.vzp.cz/o-nas/aktuality/fond-prevence-vzp-uz-letos-vyplatil-temer-miliardu-korun-zajmu-vevodi-prispevky-na-pohyb-a-dentalni-hygienu" target="_blank" rel="noopener">vzp.cz ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Posuzovaný dokument</h5>
+        <ul class="article-sources-list">
+          <li><strong>PEER (Pirátská expertní ekonomická rada) — <em>Hospodářská strategie</em>, kapitola 1.4 „Zdraví a soběstačnost přinesou silnější ekonomiku"</strong> (srpen 2026). Návrh 4 (pojistné navázané na doloženou péči o vlastní zdraví, „po vzoru Nizozemska", pilotně a povinně pro ročníky do 40 let), oddíl „Co nám to přinese?" (sociální podmíněnost rizik dle PAQ Research, SYRI a HBSC) a návrh směřovat 40 % výnosu cukerné daně do fondů prevence. Dokument v době psaní není veřejně publikován; citace vychází z výtisku v držení redakce.</li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-narok-pojistence-1-co-to-je</strong> — ústavní anatomie nároku: čl. 31 Listiny, test racionality, esenciální jádro. <a href="clanek-narok-pojistence-1-co-to-je.html">clanek-narok-pojistence-1-co-to-je.html</a></li>
+          <li><strong>clanek-narok-pojistence-3-co-s-tim</strong> — pět reformních směrů, které nárok udrží udržitelným. <a href="clanek-narok-pojistence-3-co-s-tim.html">clanek-narok-pojistence-3-co-s-tim.html</a></li>
+          <li><strong>clanek-presna-medicina-solidarita</strong> — kde leží hranice solidárního pojištění, když se péče individualizuje. <a href="clanek-presna-medicina-solidarita.html">clanek-presna-medicina-solidarita.html</a></li>
+          <li><strong>clanek-platba-za-vysledek-vzp</strong> — jak VZP zkouší přejít od plateb za výkon k platbám za výsledek. <a href="clanek-platba-za-vysledek-vzp.html">clanek-platba-za-vysledek-vzp.html</a></li>
+          <li><strong>clanek-nadeje-doziti-vzdelani</strong> — třináct let života navíc za diplom: sociální gradient českého zdraví. <a href="clanek-nadeje-doziti-vzdelani.html">clanek-nadeje-doziti-vzdelani.html</a></li>
+          <li><strong>clanek-zdravotni-gramotnost</strong> — proč skoro každý druhý Čech nerozumí informacím o svém zdraví. <a href="clanek-zdravotni-gramotnost.html">clanek-zdravotni-gramotnost.html</a></li>
+          <li><strong>clanek-vydaje-prevence</strong> — 2,74 % na prevenci a co to o systému říká. <a href="clanek-vydaje-prevence.html">clanek-vydaje-prevence.html</a></li>
+          <li><strong>clanek-pohyb</strong> — čtvrtina Čechů splňuje doporučení WHO k pohybu. <a href="clanek-pohyb.html">clanek-pohyb.html</a></li>
+          <li><strong>clanek-napoje-6-dan-regulace</strong> — zdanění slazených nápojů, regresivita a účelové vázání výnosu. <a href="clanek-napoje-6-dan-regulace.html">clanek-napoje-6-dan-regulace.html</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Právní texty (Zorgverzekeringswet, § 65a SGB V, zákony č. 592/1992 Sb. a 551/1991 Sb.) jsou citovány podle znění účinného v srpnu 2026; údaj o objemu německých bonusových programů (261 mil. eur) je za rok 2016 a novější souhrnná statistika nebyla dohledána. Obě randomizované studie testovaly zaměstnavatelské wellness programy v USA, nikoli zákonné bonusy zdravotních pojišťoven — přenos na český kontext má meze, které text výslovně uvádí. Dokument PEER není v době psaní veřejně publikován, citace vychází z výtisku v držení redakce. Tento článek nezpochybňuje cíl návrhu, pouze zvolený nástroj.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
