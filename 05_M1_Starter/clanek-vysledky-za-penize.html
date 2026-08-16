@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-16
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-16
+    creation_phase: peer-batch-write
+    primary_sources_count: 4
+    visual_elements_count: 5
+    notes: "PEER-BATCH-WRITE 16. 8. 2026, návrh č. 3 z PLAN-PEER-CLANKY.md (sekce A3.4 + A5 bod 1). Teze: ani „systém je podfinancovaný“, ani „systém je neefektivní, nejdřív šetřit“ neobstojí v čisté podobě; obě strany míjejí výsledkový ukazatel (léčitelná mortalita). PRIMÁRNÍ DATA — všechna stažena 16. 8. 2026 přímými dotazy na Eurostat REST API (statistics/1.0/data), surové odpovědi ve scratchpadu (trt_all.json, prv_all.json, sha_all.json, shapps.json): (1) hlth_cd_apr, mortalit=TRT, unit=RT, sex=T, icd10=TOTAL, 2023 — CZ 107,19 / EU27_2020 86,81 / SI 66,98 / PT 74,24 / IT 61,85 / EL 84,11 / CY 62,94 / ES 60,18 / MT 74,33 / DE 83,32 / AT 68,46 / PL 132,71 / SK 161,14 / EE 115,79 / HU 172,31; dataset updated 17. 3. 2026, rok 2024 zatím nepublikován (dotaz na time=2024 vrací prázdnou množinu) → celé srovnání je vědomě ukotveno na rok 2023. (2) hlth_cd_apr, mortalit=PRVT, 2023 — CZ 173,86 / EU27 150,85 / SI 167,60 / PT 125,94 / IT 98,44 / EL 136,91 / CY 89,70. (3) hlth_sha11_hf, icha11_hf=TOT_HF, unit=PC_GDP, 2023 — CZ 8,38 / EU27 9,94 / SI 9,29 / PT 9,95 / IT 8,37 / EL 8,41 / CY 7,77 / DE 11,64 / AT 11,18 / PL 7,14 / SK 7,37; dataset updated 13. 8. 2026. (4) hlth_sha11_hf, unit=PPS_HAB, 2023 — CZ 2 965,76 / EU27 3 826,07 / SI 3 124,44 / PT 3 016,91 / IT 3 082,39 / EL 2 186,83 / CY 2 792,88 / MT 3 593,37 / ES 3 164,64 / DE 5 380,74 / AT 4 989,61 / PL 2 236,98 / SK 2 100,04. ODVOZENÉ (přepočteno z hodnot výše): CZ vs EU27 PPS 2965,76/3826,07 = −22,5 %; CZ vs EU27 léčitelná 107,19/86,81 = +23,5 %; PT/CZ výdaje +1,7 %, léčitelná −30,7 %; SI/CZ výdaje +5,4 %, léčitelná −37,5 %; IT/CZ výdaje +3,9 %, léčitelná −42,3 %; EL/CZ výdaje −26,3 % (ČR dává o 35,6 % víc), léčitelná −21,5 %; CY/CZ výdaje −5,8 %, léčitelná −41,3 %; SI preventovatelná 167,60 vs CZ 173,86 = −3,6 %. VLASTNÍ VÝPOČET (explicitně označen v textu i v metodické poznámce): log-log regrese léčitelné mortality na výdaje v PPS/obyv. přes 27 zemí EU, sklon −1,03, R² 0,70; ČR má 107,2 proti modelem očekávaným 93,3 → +15 %. Je to pomocný, ne kauzální výpočet — v textu tak označen. METODICKÉ VÝHRADY V TEXTU: (a) 8,6 % HDP (ČSÚ 2024, celkové výdaje) a EU 10,4 % (benchmark dashboardu, OECD definice včetně kapitálových výdajů) NEJSOU apples-to-apples ani rokem, ani definicí — harmonizovaně Eurostat 2023 CZ 8,38 vs EU27 9,94 (mezera 1,56 p.b., ne 1,8); (b) % HDP není objem peněz — chudší země s vyšším podílem může dávat absolutně míň, proto je hlavní srovnání vedeno v PPS na obyvatele; (c) léčitelná mortalita je citlivá na praxi kódování základní příčiny úmrtí (List o prohlídce zemřelého); (d) srovnání je asociace, ne kauzalita. AKTUALITA: hospodářská strategie PEER (Pirátská expertní ekonomická rada, srpen 2026), kapitola 1.4 „Zdraví a soběstačnost přinesou silnější ekonomiku“ — dokument v době psaní nemá dohledatelnou veřejnou trvalou URL, redakce pracovala s jeho textem; v sekci Zdroje uveden bez odkazu a s touto poznámkou. Tón: arbitr mezi dvěma tábory, nestranické — článek je stejně kritický k „jen přidat“ i k „jen škrtat“. published:false, audit-status draft — čeká na ruční schválení redakce."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Podfinancované, nebo neefektivní? Česko dává na zdravotnictví míň než Evropa — a ztrácí víc, než i tomu odpovídá · HSPA Monitor</title>
+<meta name="description" content="Česko dává na zdravotnictví 8,6 % HDP proti unijním 10,4 a na hlavu o 22,5 % méně než průměr EU. Ztrácí ale o 23,5 % víc životů, kterým šlo zabránit léčbou (107,2 vs. 86,8 na 100 tisíc). Portugalsko, Slovinsko a Itálie dávají na obyvatele skoro přesně tolik co Česko — a ztrácejí o třetinu až dvě pětiny míň. Proč spor „přidat, nebo šetřit“ míjí ukazatel, který měří výsledek.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Podfinancované, nebo neefektivní? Česko dává na zdravotnictví míň než Evropa — a ztrácí víc, než i tomu odpovídá">
+<meta property="og:description" content="Portugalsko dává na obyvatele o 1,7 % víc než Česko a ztrácí o 30 % míň životů, kterým šlo zabránit léčbou. Slovinsko o 5,4 % víc a o 37 % míň. Spor o to, jestli přidat, nebo šetřit, míjí ukazatel, který měří, co systém za peníze skutečně dodá.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-16">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">výsledky za peníze · léčitelná mortalita · mezinárodní srovnání · Eurostat</span>
+      </div>
+      <h1 class="article-title">Podfinancované, nebo neefektivní? Česko dává na zdravotnictví míň než Evropa — a ztrácí víc, než i tomu odpovídá</h1>
+      <p class="article-deck">
+        V české debatě o zdravotnictví stojí proti sobě dvě teze. Jedna říká, že systém je podfinancovaný — <strong>8,6 procenta HDP</strong> proti unijním 10,4. Druhá, na které staví srpnová hospodářská strategie Pirátské expertní ekonomické rady (PEER), říká, že je především neefektivní a šetřit se má dřív, než se přidá. Data nepodporují ani jednu čistou verzi. Česko skutečně dává méně: na obyvatele o <strong>22,5 procenta</strong> pod unijním průměrem. Zároveň ale ztrácí <strong>o 23,5 procenta víc</strong> životů, kterým šlo zabránit včasnou a kvalitní léčbou — a země, které na hlavu utrácejí skoro přesně tolik co Česko, jich ztrácejí o třetinu až dvě pětiny míň.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">16. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Spor o české zdravotnictví má dvě ustálené repliky a obě se dají vyslovit jedním číslem. „Dáváme 8,6 procenta HDP, Evropa 10,4 — systém je poddimenzovaný, nemá se škrtat, má se přidat.“ Proti tomu: „Hospitalizujeme nejvíc ze zemí OECD, chodíme k lékaři nejčastěji, ležíme na lůžkách, která jinde nepotřebují — nejdřív se má uklidit, pak se může přidávat.“ Obě věty jsou postavené na skutečných datech a obě dokážou tu druhou přebít, protože každá měří něco jiného: první objem vstupů, druhá objem výkonů. Ani jedna neměří to, o co v systému nakonec jde — <strong>co za ty peníze pacient dostane</strong>. Ukazatel, který přesně tohle měří, existuje a je v evropské statistice dostupný pro všechny členské země. V české debatě se objevuje minimálně a v <a href="strategie.html">reformních programech</a> obvykle vůbec.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avVzpHeroH">
+        <figcaption class="av-figure-h" id="avVzpHeroH">Čtyři čísla, mezi kterými se spor odehrává</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="8.6" data-decimals="1" data-suffix=" % HDP">8,6 % HDP</span>
+            <span class="av-counter-label">výdaje ČR na zdravotnictví (ČSÚ 2024, předběžné)</span>
+            <span class="av-counter-foot">benchmark dashboardu: EU 10,4 % · OECD 9,3 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="2966" data-suffix=" PPS">2 966 PPS</span>
+            <span class="av-counter-label">výdaje na obyvatele v paritě kupní síly (2023)</span>
+            <span class="av-counter-foot">EU27 3 826 → ČR je o 22,5 % níž</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="107.2" data-decimals="1">107,2</span>
+            <span class="av-counter-label">léčitelná mortalita ČR na 100 000 obyvatel (2023)</span>
+            <span class="av-counter-foot">EU27 86,8 → ČR je o 23,5 % výš</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="66.98" data-decimals="1">67,0</span>
+            <span class="av-counter-label">totéž ve Slovinsku, které dává na obyvatele o 5,4 % víc než ČR</span>
+            <span class="av-counter-foot">rozdíl proti ČR: o 37,5 % míň úmrtí</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> výdaje ČR za 2024 — ČSÚ <em>Zdravotnické účty</em> (předběžné údaje); výdaje na obyvatele v PPS a léčitelná mortalita — Eurostat <em>hlth_sha11_hf</em> a <em>hlth_cd_apr</em>, referenční rok 2023, staženo 16. 8. 2026 přes Eurostat REST API. PPS = standard kupní síly, jednotka očištěná o cenovou hladinu.</p>
+      </figure>
+
+      <h3>Co má každý tábor pravdu — a kde mu číslo utíká</h3>
+
+      <p>
+        Začněme tím, co na tezi o podfinancování sedí. Sedí víc, než jak se s ní obvykle zachází. Podíl na HDP je totiž pro debatu o penězích ošidná veličina: říká, jak velký krajíc si země ze svého bochníku ukrojí, ne jak velký ten krajíc je. Chudší země může mít vyšší podíl a přitom dávat absolutně míň. Poctivější metrika je <strong>výdaj na obyvatele v paritě kupní síly</strong> (PPS), tedy objem péče očištěný o to, že hodina práce sestry i krabička léků stojí v každé zemi jinak. A v ní Česko vychází hůř, ne líp: <strong>2 966 PPS na obyvatele</strong> proti unijnímu průměru 3 826 — tedy o <strong>22,5 procenta méně</strong> (Eurostat, 2023). Kdo tvrdí, že do systému teče málo peněz, má pro to doklad, který je silnější než ten, kterým obvykle argumentuje.
+      </p>
+
+      <p>
+        A teď co sedí na tezi opačné. Kdyby platilo, že výsledky jsou prostě funkcí peněz, mělo by Česko výsledky odpovídající té pětině pod průměrem — o něco horší, ne dramaticky. Jenže v ukazateli, který měří, kolik lidí systém neuzdraví, je česká ztráta <strong>větší, než jak velká je mezera v penězích</strong>: <a href="indicator.html?id=mortalita_lecitelna">léčitelná mortalita</a> činí 107,2 úmrtí na 100 000 obyvatel proti unijním 86,8 — o 23,5 procenta výš. Podfinancování tedy nevysvětluje všechno. Část ztráty visí na tom, jak je systém uspořádaný.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodická poznámka k číslům o výdajích">
+        <p class="article-callout-h">Pozor na dvojici „8,6 versus 10,4“</p>
+        <p>
+          Tahle dvě čísla se v debatě uvádějí vedle sebe, ale <strong>nejsou apples-to-apples</strong> ani rokem, ani definicí. Hodnota <strong>8,6 %</strong> je ČSÚ za rok 2024 (celkové výdaje, předběžné údaje). Hodnota <strong>10,4 %</strong> je unijní benchmark, který dashboard i většina policy dokumentů přebírá z OECD, kde definice zahrnuje i kapitálové výdaje. Když se obě čísla srovnají na jednom zdroji a jednom roce — Eurostat, běžné výdaje na zdravotnictví, 2023 —, vychází <strong>ČR 8,4 % a EU27 9,9 %</strong>. Mezera je tedy <strong>1,6 procentního bodu</strong>, ne 1,8. Je pořád reálná a v tomtéž směru; jen je menší, než jak se cituje. Pro srovnání mezi zeměmi používá tento článek dále výhradně harmonizovaná data Eurostatu za rok 2023, protože to je poslední rok, pro který jsou dostupné výdaje i mortalita současně.
+        </p>
+      </aside>
+
+      <h3>Ukazatel, který obě strany míjejí</h3>
+
+      <p>
+        Léčitelná (anglicky <em>treatable</em>) mortalita počítá předčasná úmrtí do 75 let na diagnózy, u nichž by včasná a kvalitní zdravotní péče smrti zabránila — cévní mozkovou příhodu, část ischemické choroby srdeční, kolorektální karcinom, karcinom prsu, zápal plic, komplikace porodu. Její sesterský ukazatel, <a href="indicator.html?id=mortalita_preventabilni">preventovatelná mortalita</a>, počítá úmrtí, kterým by zabránila prevence <em>dřív</em>, než nemoc vznikne: tabáková a alkoholová politika, screening, očkování, kontrola tlaku. Dohromady tvoří odvratitelnou úmrtnost; oddělené měří dvě různé věci a ukazují na dvě různá selhání. Podrobně jsme ukazatel rozebrali v článku <a href="clanek-lecitelna-mortalita.html">Co dokáže systém vyléčit</a>.
+      </p>
+
+      <p>
+        Česko je nad unijním průměrem v obou: léčitelná 107,2 proti 86,8, preventovatelná <strong>173,9 proti 150,9</strong> (Eurostat, 2023). To je důležité pro férovost: část české ztráty je opravdu o životním stylu a prevenci, ne o nemocnicích. Ale ta druhá část je o léčbě — a právě tu obě strany sporu přehlížejí. Zastánci přidávání ji přehlížejí proto, že by musela vysvětlit, proč peníze samy nestačí. Zastánci škrtání proto, že ukazuje na místa, kde se naopak investovat musí.
+      </p>
+
+      <h3>Poctivé srovnání: co za srovnatelné peníze dostanou jiní</h3>
+
+      <p>
+        Nejtvrdší test na obě teze je jednoduchý: najít země, které dávají na obyvatele zhruba tolik co Česko, a podívat se, kolik lidí neuzdraví. Ve výdajích v PPS na obyvatele jsou Česku nejblíž <strong>Portugalsko</strong> (3 017 PPS, o 1,7 procenta víc), <strong>Itálie</strong> (3 082, o 3,9 procenta víc) a <strong>Slovinsko</strong> (3 124, o 5,4 procenta víc). O kus pod Českem leží <strong>Kypr</strong> (2 793, o 5,8 procenta míň) a výrazně pod ním <strong>Řecko</strong> (2 187, tedy o 26 procent míň; obráceně řečeno, Česko dává o 35,6 procenta víc než Řecko). Všech pět má léčitelnou mortalitu nižší než Česko. Ne o kousek.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avVzpBarH">
+        <figcaption class="av-figure-h" id="avVzpBarH">Léčitelná mortalita v zemích se srovnatelnými výdaji na obyvatele (na 100 000 ob., 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="115" data-unit="">
+          <li class="av-bar-row av-bar-row-highlight" data-value="107.2" data-label="Česko" data-note="2 966 PPS na obyvatele"></li>
+          <li class="av-bar-row" data-value="86.8" data-label="Průměr EU27" data-note="3 826 PPS · o 29 % víc než ČR"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="84.1" data-label="Řecko" data-note="2 187 PPS · o 26 % míň než ČR"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="74.2" data-label="Portugalsko" data-note="3 017 PPS · o 1,7 % víc než ČR"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="67.0" data-label="Slovinsko" data-note="3 124 PPS · o 5,4 % víc než ČR"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="62.9" data-label="Kypr" data-note="2 793 PPS · o 5,8 % míň než ČR"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="61.9" data-label="Itálie" data-note="3 082 PPS · o 3,9 % víc než ČR"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> léčitelná mortalita — Eurostat <em>hlth_cd_apr</em> (dimenze <em>treatable</em>, standardizovaná míra, předčasná úmrtí do 75 let, obě pohlaví, 2023); výdaje — Eurostat <em>hlth_sha11_hf</em> (běžné výdaje na zdravotnictví, všechny schémata financování, PPS na obyvatele, 2023). Staženo 16. 8. 2026 přes Eurostat REST API. Vybrány země, jejichž výdaje na obyvatele leží nejblíž českým, plus Řecko jako případ výrazně nižších výdajů.</p>
+      </figure>
+
+      <p>
+        Čísla jsou v tomhle srovnání nepříjemně jednoznačná. <strong>Portugalsko</strong> dává na obyvatele o necelá dvě procenta víc než Česko a ztrácí o <strong>30,7 procenta</strong> míň životů, kterým šlo zabránit léčbou. <strong>Slovinsko</strong> o pět procent víc a o <strong>37,5 procenta</strong> míň. <strong>Itálie</strong> o čtyři procenta víc a o <strong>42,3 procenta</strong> míň. A <strong>Řecko</strong>, které za sebou má patnáct let rozpočtových škrtů a dává na obyvatele o čtvrtinu míň než Česko, má léčitelnou mortalitu o <strong>21,5 procenta</strong> nižší. Rozdíly ve výsledcích mnohonásobně převyšují rozdíly ve výdajích — což je přesně ta věc, kterou samotné podfinancování vysvětlit nedokáže.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avVzpTabH">
+        <figcaption class="av-figure-h" id="avVzpTabH">Výsledky za peníze — Česko a země s podobnou úrovní výdajů (Eurostat, 2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col">Výdaje PPS / obyv.</th>
+                <th scope="col">Rozdíl vs. ČR</th>
+                <th scope="col">Výdaje % HDP</th>
+                <th scope="col">Léčitelná mortalita</th>
+                <th scope="col">Preventovatelná mortalita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">Česko</th>
+                <td>2 966</td>
+                <td>—</td>
+                <td>8,4</td>
+                <td class="av-bad"><strong>107,2</strong></td>
+                <td class="av-bad"><strong>173,9</strong></td>
+              </tr>
+              <tr>
+                <th scope="row">Řecko</th>
+                <td>2 187</td>
+                <td>−26,3 %</td>
+                <td>8,4</td>
+                <td>84,1</td>
+                <td>136,9</td>
+              </tr>
+              <tr>
+                <th scope="row">Kypr</th>
+                <td>2 793</td>
+                <td>−5,8 %</td>
+                <td>7,8</td>
+                <td class="av-good">62,9</td>
+                <td class="av-good">89,7</td>
+              </tr>
+              <tr>
+                <th scope="row">Portugalsko</th>
+                <td>3 017</td>
+                <td>+1,7 %</td>
+                <td>10,0</td>
+                <td class="av-good">74,2</td>
+                <td class="av-good">125,9</td>
+              </tr>
+              <tr>
+                <th scope="row">Itálie</th>
+                <td>3 082</td>
+                <td>+3,9 %</td>
+                <td>8,4</td>
+                <td class="av-good">61,9</td>
+                <td class="av-good">98,4</td>
+              </tr>
+              <tr>
+                <th scope="row">Slovinsko</th>
+                <td>3 124</td>
+                <td>+5,4 %</td>
+                <td>9,3</td>
+                <td class="av-good">67,0</td>
+                <td>167,6</td>
+              </tr>
+              <tr>
+                <th scope="row">Průměr EU27</th>
+                <td>3 826</td>
+                <td>+29,0 %</td>
+                <td>9,9</td>
+                <td>86,8</td>
+                <td>150,9</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Eurostat <em>hlth_sha11_hf</em> (výdaje, PPS na obyvatele a % HDP, běžné výdaje, 2023) a <em>hlth_cd_apr</em> (mortalita, standardizovaná míra na 100 000 obyvatel, do 75 let, 2023). Staženo 16. 8. 2026 přes Eurostat REST API; sloupec „rozdíl vs. ČR“ je přepočet z hodnot v PPS ve stejném řádku. Hodnota za ČR v % HDP je za rok 2023 (harmonizovaná s ostatními zeměmi); podle ČSÚ činila v roce 2024 už 8,6 %.</p>
+      </figure>
+
+      <h3>Slovinský test: rozdíl není v tom, jak žijeme</h3>
+
+      <p>
+        Nejčastější obrana proti takovému srovnání zní: Češi kouří, pijí a mají nadváhu, takže do léčby vstupují v horším stavu — za to systém nemůže. Je to legitimní námitka a částečně platí. Data ji ale umí otestovat, protože vedle léčitelné mortality existuje i ta preventovatelná, která právě rizikové chování a prevenci zachycuje.
+      </p>
+
+      <p>
+        A test má jasný výsledek. <strong>Slovinsko má preventovatelnou mortalitu prakticky stejnou jako Česko</strong> — 167,6 proti 173,9, tedy jen o 3,6 procenta nižší. Rizikové chování, alkohol i následky, které za tím stojí, tam tíží populaci srovnatelně. Přesto je slovinská léčitelná mortalita o <strong>37,5 procenta</strong> nižší než česká. Rozdíl tedy nevzniká v tom, s čím pacienti do systému přicházejí, ale v tom, co s nimi systém udělá potom.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avVzpSiH">
+        <figcaption class="av-figure-h" id="avVzpSiH">Česko a Slovinsko: stejná výchozí pozice, jiný výsledek léčby (na 100 000 ob., 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="180" data-unit="">
+          <li class="av-bar-row av-bar-row-highlight" data-value="173.9" data-label="Preventovatelná — Česko" data-note="prevence a rizikové chování"></li>
+          <li class="av-bar-row" data-value="167.6" data-label="Preventovatelná — Slovinsko" data-note="o 3,6 % níž — prakticky shodné"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="107.2" data-label="Léčitelná — Česko" data-note="kvalita a včasnost léčby"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="67.0" data-label="Léčitelná — Slovinsko" data-note="o 37,5 % níž"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <em>hlth_cd_apr</em>, dimenze <em>preventable</em> a <em>treatable</em>, standardizovaná míra, 2023. Staženo 16. 8. 2026. Slovinsko dává na obyvatele o 5,4 % víc než Česko (3 124 vs. 2 966 PPS).</p>
+      </figure>
+
+      <h3>Kde se ta ztráta v Česku odehrává</h3>
+
+      <p>
+        Léčitelná mortalita je souhrn, ale nerozkládá se rovnoměrně. Dvě oblasti v ní váží nejvíc a v obou má Česko dohledatelný příběh. První je <strong>akutní kardiovaskulární a iktová péče</strong> — a je to příběh úspěchu. Právě budování sítě kardiocenter a iktových center za posledních patnáct let stojí za tím, že česká hodnota klesla ze <strong>147,7 v roce 2011 na 107,2 v roce 2023</strong>, tedy o víc než čtvrtinu, navzdory pandemickému výkyvu (125,9 v roce 2021). Ten pokles nepřišel proto, že by se do systému nalily peníze plošně; přišel proto, že se konkrétní typ péče <em>centralizoval a zrychlil</em>. Je to nejlepší dostupný důkaz, že organizace hýbe výsledkem — a je to zároveň argument proti oběma zjednodušením naráz.
+      </p>
+
+      <p>
+        Druhá oblast je <strong>onkologie</strong> a tam se příběh láme. U léčitelných nádorů rozhoduje o přežití stadium v okamžiku diagnózy, takže se do čísla propisuje účast na screeningu, rychlost návaznosti mezi záchytem a zahájením léčby a to, jak daleko má pacient do centra, které umí komplexní léčbu odvést v dostatečném objemu. Třetí vrstvou je <strong>regionální nerovnost</strong>: kde je delší dojezd a řidší síť, tam roste riziko, že léčitelná diagnóza skončí špatně. A pod tím vším leží technická výhrada, kterou je poctivé zmínit — hodnota ukazatele je citlivá na praxi vyplňování Listu o prohlídce zemřelého, takže část mezinárodního rozdílu může být metodická, ne klinická.
+      </p>
+
+      <h3>Co z toho plyne pro obě teze</h3>
+
+      <p>
+        <strong>Pro tábor „nejdřív přidat“.</strong> Objem peněz je reálný problém — 22,5 procenta pod unijním průměrem na obyvatele není detail a při stárnutí populace a nákladných inovacích se ta mezera sama nezavře. Jenže peníze samy nekoupí výsledek: Portugalsko, Itálie a Slovinsko dodávají za skoro shodný rozpočet na hlavu o třetinu až dvě pětiny lepší výsledek. Kdo chce přidávat, musí umět říct, na co konkrétně — a musí přijmout, že se to bude měřit.
+      </p>
+
+      <p>
+        <strong>Pro tábor „nejdřív šetřit“</strong>, do kterého patří i zdravotní kapitola srpnové strategie PEER. Diagnóza neefektivity sedí a je doložitelná — <a href="clanek-hospitalizujeme-nejvic.html">Česko hospitalizuje nejvíc ze zemí OECD</a> a část těch pobytů má <a href="clanek-vyhnutelne-hospitalizace.html">jinde zvládnout ambulance</a>. Jenže z čísel neplyne, že v systému je přebytek, který stačí odčerpat. Plyne z nich, že jsou v něm <em>špatně alokované</em> peníze, kterých je zároveň málo. To je jiné zadání: ne škrtnout, ale přesunout — a v místech, kde se ztrácí nejvíc odvratitelných úmrtí, spíš přidat. Strategie, která by z ukazatele udělala jen úsporový argument, by ho použila proti jeho vlastnímu obsahu.
+      </p>
+
+      <p>
+        <strong>Pro obě strany společně.</strong> Nejdůležitější důsledek je metrický. Cíl formulovaný jako účetní podíl — „snížit podíl nemocniční péče o deset procentních bodů“, „dostat výdaje na deset procent HDP“ — jde splnit přeúčtováním nebo jmenovatelem, aniž by se pro pacienta cokoli změnilo. Cíl formulovaný jako <a href="indicator.html?id=mortalita_lecitelna">léčitelná mortalita</a> nebo jako <a href="indicator.html?id=nadeje_doziti_zdravi_65">roky prožité ve zdraví</a> ohnout nejde: buď lidí umírá na léčitelné nemoci míň, nebo ne. Dorovnat unijní úroveň by v českých podmínkách znamenalo řádově tisíce odvrácených úmrtí ročně — to je metr, na kterém se dá reformní program změřit bez ohledu na to, kdo ho předložil.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodické výhrady ke srovnání">
+        <p class="article-callout-h">Co toto srovnání neumí</p>
+        <p>
+          Tři výhrady, bez kterých by čísla slibovala víc, než unesou. <strong>Za prvé</strong>, jde o asociaci, ne o kauzalitu: nižší léčitelná mortalita v Portugalsku nebo Itálii má vedle organizace péče i jiné příčiny — jinou skladbu populace, jiné stravovací návyky, jinou míru chudoby. <strong>Za druhé</strong>, ukazatel je citlivý na praxi kódování základní příčiny úmrtí, která se mezi zeměmi liší; část rozdílu proto může být statistická. <strong>Za třetí</strong>, srovnání stojí na jednom roce (2023 je poslední, pro který Eurostat publikuje výdaje i mortalitu současně), takže nezachycuje, kterým směrem se která země právě pohybuje — česká křivka přitom klesá.
+        </p>
+        <p>
+          Pro kontrolu jsme si totéž ověřili i souhrnně: proložením závislosti léčitelné mortality na výdajích v PPS na obyvatele přes všech 27 zemí Unie (log-log, sklon −1,03, R² 0,70) vychází pro českou úroveň výdajů očekávaná hodnota <strong>93,3</strong> úmrtí na 100 000 obyvatel. Skutečná je 107,2, tedy zhruba o <strong>15 procent výš</strong>. Je to pomocný výpočet redakce, ne model — ukazuje stejným směrem jako přímé srovnání se sousedy v tabulce výše a nemá sloužit k ničemu jinému.
+        </p>
+      </aside>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Česká debata o zdravotnictví se dvacet let vede v jednotkách, které nikoho nezajímají: v procentech HDP, v miliardách úhradové vyhlášky, v podílech segmentů. Za tu dobu se v ní obě strany naučily bránit své číslo a nikdo neobhajuje výsledek. Přitom právě výsledek je jediná veličina, u které se dá poznat, jestli měl pravdu ten, kdo chtěl přidat, nebo ten, kdo chtěl přeuspořádat — a obvykle se ukáže, že je potřeba obojí, jen jinde, než obě strany tvrdily. Úroveň <a href="clanek-vydaje-zdravotnictvi.html">8,6 procenta HDP</a> přitom stačí na kvalitní solidární systém, pokud je alokace efektivní; <strong>107,2</strong> je zároveň důkaz, že dnešní alokace efektivní není. Obě věty platí současně a teprve dohromady dávají zadání.
+      </p>
+
+      <p>
+        Pro čtenáře z toho plyne jednoduchý test na jakýkoli reformní program, ať přichází odkudkoli: <em>na jakém čísle se pozná, že fungoval?</em> Pokud je odpověď „na podílu výdajů“ nebo „na počtu lůžek“, je to cíl, který jde splnit tabulkou. Pokud zní „na tom, o kolik klesne léčitelná mortalita a o kolik vzrostou roky prožité ve zdraví“, je to cíl, který se splnit nedá jinak než tím, že se pacientům povede líp.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=mortalita_lecitelna"><strong>Léčitelná mortalita</strong></a> — 107,2 na 100 000 obyvatel (2023; Eurostat), benchmark EU27 86,8 → signál <em>bad</em>; dlouhodobě klesá ze 147,7 (2011)</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — 173,9 na 100 000 obyvatel (2023; Eurostat), benchmark EU27 150,9 → signál <em>bad</em></li>
+        <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,6 % (2024; ČSÚ Zdravotnické účty, předběžné), benchmark OECD 9,3 % / EU 10,4 %; harmonizovaně Eurostat 2023: ČR 8,4 % vs. EU27 9,9 %</li>
+      </ul>
+      <p class="article-databox-disclaimer" style="font-family: var(--sans); font-size: 13px; color: var(--ink-mut); margin-top: 14px; padding: 12px; background: var(--paper); border-left: 2px solid var(--rule);">
+        <strong>Pozn. k údajům:</strong> Mezinárodní srovnání v článku je vedeno výhradně na harmonizovaných datech Eurostatu za rok 2023 — to je poslední rok, pro který jsou k dispozici výdaje i odvratitelná úmrtnost současně (rok 2024 pro <em>hlth_cd_apr</em> zatím publikován není). Výdaje jsou uváděny v PPS na obyvatele, tedy v jednotce očištěné o cenovou hladinu; podíl na HDP měří jinou věc a mezi zeměmi s různou ekonomickou úrovní se s ním srovnávat nedá. Léčitelná i preventovatelná mortalita jsou standardizované míry na 100 000 obyvatel pro předčasná úmrtí do 75 let podle společného seznamu OECD a Eurostatu.
+      </p>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje — harmonizovaná evropská data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Avoidable mortality (<em>hlth_cd_apr</em>)</strong> — léčitelná i preventovatelná mortalita podle zemí, standardizovaná míra na 100 000 obyvatel, předčasná úmrtí do 75 let; referenční rok 2023 (aktualizace datasetu 17. 3. 2026). Zdroj všech hodnot mortality v článku. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_apr/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a> — staženo 16. 8. 2026 přes REST API.</li>
+          <li><strong>Eurostat — Health care expenditure by financing scheme (<em>hlth_sha11_hf</em>)</strong> — běžné výdaje na zdravotnictví v PPS na obyvatele a v % HDP, všechna schémata financování, referenční rok 2023 (aktualizace datasetu 13. 8. 2026). Zdroj všech hodnot výdajů v mezinárodním srovnání. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hf/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a> — staženo 16. 8. 2026 přes REST API.</li>
+          <li><strong>Eurostat — Preventable and treatable mortality statistics (Statistics Explained)</strong> — definice odvratitelné úmrtnosti, seznam diagnóz a metodika srovnatelnosti napříč zeměmi. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Preventable_and_treatable_mortality_statistics" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>ČSÚ — Zdravotnické účty ČR, předběžné údaje za rok 2024</strong> — český údaj 8,6 % HDP (696,7 mld. Kč), publikováno 11. 6. 2026. <a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Dokument, na který článek reaguje</h5>
+        <ul class="article-sources-list">
+          <li><strong>PEER (Pirátská expertní ekonomická rada) — Hospodářská strategie, kapitola 1.4 „Zdraví a soběstačnost přinesou silnější ekonomiku“ (srpen 2026)</strong> — zdroj teze, že prioritou je efektivita systému. Dokument v době psaní článku nemá dohledatelnou veřejnou trvalou adresu; redakce pracovala s jeho textem. Článek jeho návrhy neodmítá ani nepodporuje — testuje jejich datový podklad stejným metrem jako protistranu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-lecitelna-mortalita</strong> — co ukazatel měří, jak se liší od preventovatelné mortality a jaké jsou české strukturální příčiny. <a href="clanek-lecitelna-mortalita.html">clanek-lecitelna-mortalita.html</a></li>
+          <li><strong>clanek-vydaje-zdravotnictvi</strong> — anatomie českých výdajů: 8,6 % HDP, struktura financování, tlaky příští dekády. <a href="clanek-vydaje-zdravotnictvi.html">clanek-vydaje-zdravotnictvi.html</a></li>
+          <li><strong>clanek-hospitalizujeme-nejvic</strong> — proč Česko hospitalizuje nejvíc ze zemí OECD. <a href="clanek-hospitalizujeme-nejvic.html">clanek-hospitalizujeme-nejvic.html</a></li>
+          <li><strong>clanek-vyhnutelne-hospitalizace</strong> — hospitalizace pro stavy, které má zvládnout ambulantní péče. <a href="clanek-vyhnutelne-hospitalizace.html">clanek-vyhnutelne-hospitalizace.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny mezinárodní hodnoty (léčitelná a preventovatelná mortalita, výdaje v PPS na obyvatele i v % HDP) byly staženy 16. 8. 2026 přímými dotazy na Eurostat REST API pro referenční rok 2023; procentní rozdíly mezi zeměmi jsou přepočteny z těchto hodnot. Český údaj 8,6 % HDP pochází z předběžných dat ČSÚ za rok 2024 a s hodnotami Eurostatu za rok 2023 není přímo srovnatelný — rozdíl v roce i v definici je vyznačen přímo u čísla. Souhrnný přepočet očekávané léčitelné mortality pro českou úroveň výdajů (93,3) je vlastní pomocný výpočet redakce nad daty Eurostatu, ne publikovaný odhad; jeho metoda je uvedena v textu.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
