@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-17
+    reviewer: claude-code-agent
+    status: review-pending
+    created_at: 2026-08-17
+    creation_phase: discovery+evergreen-write
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "EVERGREEN-WRITE z backlogu 17. 8. 2026 (položka disponibilni-prijem-zdravi, priorita 12; položka 10 přeskočena jako redundantní, položka 11 ponechána — kotva lpod neověřitelná, SÚKL 503). PRIMÁRNÍ DATA: všechna čísla stažena 17. 8. 2026 přímými dotazy na Eurostat REST API (statistics/1.0/data), surové JSON v scratchpadu, přehled v discovery/data-frame-prijem-a-zdravi.md. hlth_silc_10 (updated 27. 7. 2026, 16+, sex T) VG_G 2025: CZ Q1 53,1 / Q2 57,3 / Q3 64,5 / Q4 75,2 / Q5 83,1 / TOTAL 67,0 (shoda s indikátorem subjektivni_zdravi=67 ✓); EU27 Q1 57,3 / Q2 61,1 / Q3 67,8 / Q4 73,2 / Q5 79,3 / TOTAL 67,9. Rozdíl Q5−Q1: CZ 30,0 p. b., EU 22,0 p. b. B_VB 2025: CZ Q1 16,8 / Q5 2,3 (poměr 7,3×), EU Q1 14,7 / Q5 4,0 (3,7×). Trend rozdílu CZ: 2022 39,5 (85,9−46,4) / 2023 35,2 (83,0−47,8) / 2024 28,0 (82,1−54,1) / 2025 30,0. ilc_li02 (AROP B_60 MED_EI PC) 2025: CZ 9,6 = nejnižší ze všech 27 členů EU (ověřeno výpisem, 2. BE 10,9), EU27 16,3; THS_PER CZ 2025: 1011. hlth_silc_08 (TXP_TFAR_WLIST) 2025: CZ TOTAL 0,3 / Q1 0,6 / Q5 0,2; EU 2,4 / 3,7 / 1,4; TXP: CZ TOTAL 0,0 (jediná nenulová Q2 0,1), EU 1,0 (Q1 2,0). hlth_silc_09 (TXP_TFAR_WLIST) 2025: CZ Q1 2,1 / Q5 0,3 / TOTAL 1,0 (poměr 7×), EU Q1 6,1 / TOTAL 3,3. hlth_silc_12 (updated 22. 7. 2026) SM_SEV 2025: CZ Q1 39,7 / Q5 13,8 / TOTAL 27,0 (rozdíl 25,9), EU Q1 33,5 / Q5 15,4 / TOTAL 24,2 (rozdíl 18,1); SEV CZ Q1 11,6 / Q5 2,1. Odvozené výpočty: 30,0=83,1−53,1; 22,0=79,3−57,3; 7,3=16,8/2,3; 3,7=14,7/4,0; 7×=2,1/0,3; 25,9=39,7−13,8; 18,1=33,5−15,4. Methodology caveats v textu (subjektivní míra, národní kvintily, vlna 2025 = příjmy 2024, EU agregát). Křížové odkazy nesou vlastní tvrzení cílových článků (13 let za diplom, 4 roky Ústecko vs Praha, každý druhý gramotnost, 21 % katastrofické výdaje u nejchudších) — převzato z korpusu, ne nově tvrzeno. Status: review-pending — čeká na ruční schválení redakce. published:false, scheduled_for 2026-08-18 (konec fronty, viz routing-2026-08-17.md)."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Třicet bodů mezi pětinami. Chudoby má Česko nejméně v Evropě — zdraví přesto dělí příjem víc než v průměru EU · HSPA Monitor</title>
+<meta name="description" content="Dobré zdraví si přiznává 53,1 % nejchudší a 83,1 % nejbohatší příjmové pětiny Čechů — rozdíl 30 procentních bodů, o osm víc než průměr EU (Eurostat EU-SILC, 2025). A to přesto, že Česko má nejnižší míru příjmové chudoby v Unii (9,6 %) a cena péče tu od lékaře prakticky nikoho neodrazuje. Analýza příjmového gradientu zdraví.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Třicet bodů mezi pětinami. Chudoby má Česko nejméně v Evropě — zdraví přesto dělí příjem víc než v průměru EU">
+<meta property="og:description" content="Mezi nejchudší a nejbohatší pětinou Čechů leží 30 procentních bodů v podílu lidí s dobrým zdravím — strmější spád než v EU. Přitom chudoby má Česko nejméně z Unie a finanční bariéry péče prakticky neexistují. Kde se rozdíl bere?">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-18">
+<meta property="article:section" content="Sociální determinanty">
+<meta name="article:audit-status" content="review-pending">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Sociální determinanty</span>
+        <span class="article-tag article-tag-muted">příjem · nerovnosti · subjektivní zdraví · EU-SILC</span>
+      </div>
+      <h1 class="article-title">Třicet bodů mezi pětinami. Chudoby má Česko nejméně v Evropě — zdraví přesto dělí příjem víc než v průměru EU</h1>
+      <p class="article-deck">
+        Dobré nebo velmi dobré zdraví si přiznává <strong>53,1 %</strong> lidí z nejchudší a <strong>83,1 %</strong> z nejbohatší příjmové pětiny Česka — rozdíl <strong>30 procentních bodů</strong>, o osm víc, než je průměr EU (Eurostat EU-SILC, 2025). A to přesto, že Česko má nejnižší míru příjmové chudoby v celé Unii (9,6 %) a cena od návštěvy lékaře prakticky nikoho neodrazuje. Příjmový gradient zdraví u nás nevzniká v čekárně — vzniká dřív, než se pacient k lékaři vůbec vypraví. Analýza dat EU-SILC o tom, co univerzální pojištění umí a co ne.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">18. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Česká debata o nerovnostech ve zdraví se vede skoro výhradně o přístupu k péči: kde chybí praktik, jak dlouho se čeká na magnetickou rezonanci, kolik se doplácí u zubaře. Data evropského šetření životních podmínek EU-SILC ale ukazují, že ta největší nerovnost leží jinde. V zemi s nejnižší mírou příjmové chudoby v EU a s prakticky nulovými finančními bariérami péče se nejchudší a nejbohatší pětina populace liší v hodnocení vlastního zdraví o třicet procentních bodů — víc, než činí evropský průměr. Bohatí Češi se cítí zdravější než bohatí Evropané; chudí Češi se cítí hůř než chudí Evropané. Tenhle článek prochází, kde přesně se české nůžky rozevírají, kde prokazatelně ne — a co z toho plyne pro systém, který umí zaplatit léčbu, ale ne podmínky, ve kterých nemoc vzniká.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avPrijemHeroH">
+        <figcaption class="av-figure-h" id="avPrijemHeroH">Příjem a zdraví v Česku — čtyři čísla, která rámují analýzu (EU-SILC, 2025)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="30" data-suffix=" b.">30 b.</span>
+            <span class="av-counter-label">o kolik procentních bodů častěji hodnotí své zdraví jako dobré nejbohatší pětina proti nejchudší (53,1 % vs. 83,1 %)</span>
+            <span class="av-counter-foot">průměr EU: 22 bodů (57,3 % vs. 79,3 %)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="9.6" data-decimals="1" data-suffix=" %">9,6 %</span>
+            <span class="av-counter-label">míra ohrožení příjmovou chudobou — nejnižší ze všech 27 zemí EU (2025)</span>
+            <span class="av-counter-foot">průměr EU: 16,3 % · druhá nejnižší Belgie: 10,9 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="0.0" data-decimals="1" data-suffix=" %">0,0 %</span>
+            <span class="av-counter-label">lidí starších 16 let uvádí, že se k lékařskému vyšetření nedostali kvůli ceně (2025)</span>
+            <span class="av-counter-foot">průměr EU: 1,0 % · v nejchudší pětině EU: 2,0 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="7.3" data-decimals="1" data-suffix="×">7,3×</span>
+            <span class="av-counter-label">kolikrát častěji hlásí špatné nebo velmi špatné zdraví nejchudší pětina proti nejbohatší (16,8 % vs. 2,3 %)</span>
+            <span class="av-counter-foot">průměr EU: 3,7× (14,7 % vs. 4,0 %)</span>
+          </div>
+        </div>
+      </figure>
+
+      <h3>Gradient, který systém nevidí</h3>
+
+      <p>
+        EU-SILC se každý rok ptá desetitisíců domácností na příjmy a mimo jiné na jednoduchou otázku: <em>Jak celkově hodnotíte své zdraví?</em> Odpovědi seřazené podle příjmu domácnosti kreslí v každé evropské zemi schodiště — čím vyšší příjmová pětina, tím větší podíl lidí, kteří odpovídají „dobře" nebo „velmi dobře". Rozdíl je v tom, jak strmé to schodiště je. České je strmější než evropský průměr: mezi první a pátou pětinou leží 30,0 procentního bodu, v průměru EU 22,0.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avKvintilyH">
+        <figcaption class="av-figure-h" id="avKvintilyH">Podíl osob hodnotících své zdraví jako dobré či velmi dobré podle příjmové pětiny (16+, 2025, %)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Příjmová pětina</th>
+                <th scope="col">Česko</th>
+                <th scope="col">EU27</th>
+                <th scope="col">rozdíl ČR − EU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1. (nejchudší)</th>
+                <td>53,1</td>
+                <td>57,3</td>
+                <td>−4,2</td>
+              </tr>
+              <tr>
+                <th scope="row">2.</th>
+                <td>57,3</td>
+                <td>61,1</td>
+                <td>−3,8</td>
+              </tr>
+              <tr>
+                <th scope="row">3.</th>
+                <td>64,5</td>
+                <td>67,8</td>
+                <td>−3,3</td>
+              </tr>
+              <tr>
+                <th scope="row">4.</th>
+                <td>75,2</td>
+                <td>73,2</td>
+                <td>+2,0</td>
+              </tr>
+              <tr>
+                <th scope="row">5. (nejbohatší)</th>
+                <td><strong>83,1</strong></td>
+                <td>79,3</td>
+                <td>+3,8</td>
+              </tr>
+              <tr>
+                <th scope="row">celkem</th>
+                <td>67,0</td>
+                <td>67,9</td>
+                <td>−0,9</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <em>hlth_silc_10</em> (Self-perceived health by income quintile), vlna 2025, osoby 16+, obě pohlaví; dataset aktualizován 27. 7. 2026, staženo 17. 8. 2026 přes REST API. Rozdíly v posledním sloupci vypočteny z uvedených hodnot.</p>
+      </figure>
+
+      <p>
+        Tabulka říká víc než souhrnný průměr, ve kterém Česko vypadá jako evropský standard (67,0 % vs. 67,9 %). Horní dvě pětiny českého rozdělení se cítí <strong>lépe</strong> než jejich evropské protějšky; dolní tři <strong>hůř</strong>. Průměr ty dva příběhy smíchá do nenápadného čísla — a přesně proto ho karta indikátoru na dashboardu nese jen se signálem „warn", zatímco skutečný problém je schovaný v rozkladu.
+      </p>
+
+      <p>
+        Na spodním konci škály je kontrast ještě ostřejší. Špatné nebo velmi špatné zdraví hlásí <strong>16,8 %</strong> nejchudší pětiny, ale jen <strong>2,3 %</strong> té nejbohatší — poměr 7,3násobku, zatímco evropský průměr je 3,7násobek. Česko tedy nemá nadprůměrně nemocnou populaci; má nadprůměrně <em>rozdělenou</em> populaci.
+      </p>
+
+      <h3>V čekárně rozdíl nevzniká</h3>
+
+      <p>
+        První podezřelý je po ruce: nedostávají se chudší lidé k péči? Data říkají poměrně jednoznačně, že tady české nůžky nevznikají. Neuspokojenou potřebu lékařského vyšetření — kvůli ceně, vzdálenosti nebo čekací listině — uvádí v Česku <strong>0,3 %</strong> lidí starších 16 let, osmkrát méně než průměr EU (2,4 %). A co je pro tenhle článek podstatnější: gradient uvnitř toho čísla je plochý. V nejchudší pětině hlásí neuspokojenou potřebu 0,6 %, v nejbohatší 0,2 % — rozdíl necelého půl bodu, zatímco v evropském průměru dělí pětiny 2,3 bodu (3,7 % vs. 1,4 %). Důvod „bylo to na mě příliš drahé" pak v Česku volí zaokrouhleně <strong>0,0 %</strong> respondentů — včetně nejchudší pětiny.
+      </p>
+
+      <aside class="av-aside" aria-label="Výjimka: zubní péče">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="7" data-suffix="×">7×</span>
+          <span class="av-counter-label">častěji odkládá zubní vyšetření nejchudší pětina (2,1 %) než nejbohatší (0,3 %; 2025) — kde vstupují přímé platby, gradient se objeví okamžitě; <a href="clanek-nesplnena-potreba-zubni-pece.html">psali jsme o něm podrobně</a></span>
+          <span class="av-counter-foot">Eurostat hlth_silc_09, staženo 17. 8. 2026 · EU: 6,1 % vs. 1,2 %</span>
+        </div>
+      </aside>
+
+      <p>
+        Univerzální zdravotní pojištění s nízkými doplatky tedy dělá přesně to, co slibuje: drží dveře ordinací otevřené bez ohledu na příjem. Jak jsme ukázali v analýzách <a href="clanek-platba-z-kapsy.html">přímých plateb</a> a <a href="clanek-katastroficke-vydaje-zdravi.html">katastrofických výdajů</a>, finanční ochrana českých domácností patří k nejsilnějším v Evropě — byť u nejchudší pětiny už doplatky umí bolet. Jenže třicetibodová propast v subjektivním zdraví existuje <em>navzdory</em> téhle ochraně. Kdo chce vysvětlit české nerovnosti ve zdraví, musí hledat mimo systém zdravotní péče.
+      </p>
+
+      <h3>Kde se rozdíl bere</h3>
+
+      <p>
+        EU-SILC nabízí ještě jeden úhel: otázku, zda zdravotní problémy člověka omezují v běžných činnostech. Odpovědi kopírují příjmové schodiště stejně věrně — a strměji než v Evropě.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avOmezeniH">
+        <figcaption class="av-figure-h" id="avOmezeniH">Podíl osob s omezením běžných činností ze zdravotních důvodů (některé nebo závažné; 16+, 2025, %)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="50" data-unit=" %">
+          <li class="av-bar-row av-bar-row-highlight" data-value="39.7" data-label="Česko — nejchudší pětina" data-note="závažné omezení: 11,6 %"></li>
+          <li class="av-bar-row" data-value="33.5" data-label="EU27 — nejchudší pětina"></li>
+          <li class="av-bar-row" data-value="15.4" data-label="EU27 — nejbohatší pětina"></li>
+          <li class="av-bar-row" data-value="13.8" data-label="Česko — nejbohatší pětina" data-note="závažné omezení: 2,1 %"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <em>hlth_silc_12</em> (Level of activity limitation by income quintile), vlna 2025, osoby 16+; dataset aktualizován 22. 7. 2026, staženo 17. 8. 2026 přes REST API. Rozdíl mezi pětinami: ČR 25,9 bodu, EU27 18,1 bodu.</p>
+      </figure>
+
+      <p>
+        Čtyřicet procent nejchudší pětiny s omezením v běžných činnostech není „pocit" — je to popis každodenního fungování. A směr příčinnosti tu běží oběma směry: nižší příjem znamená fyzicky náročnější a hůř chráněnou práci, horší bydlení a vyšší chronický stres, které zdraví podlamují — a podlomené zdraví zpětně sráží výdělek a drží člověka v dolní pětině. Korpus HSPA Monitoru už jednotlivé vrstvy tohoto mechanismu zmapoval: <a href="clanek-nadeje-doziti-vzdelani.html">vysokoškolák žije o třináct let déle než muž se základním vzděláním</a>, <a href="clanek-regionalni-nuzky-nadeje-doziti.html">muž z Ústecka umírá skoro o čtyři roky dřív než Pražan</a> a <a href="clanek-zdravotni-gramotnost.html">skoro každý druhý Čech nerozumí informacím o svém zdraví</a> — přičemž vzdělání, region i gramotnost se s příjmem těsně překrývají. Příjmová pětina je jen nejhrubší řez toutéž strukturou.
+      </p>
+
+      <h3>Dobrá zpráva v trendu — a její křehkost</h3>
+
+      <p>
+        Jedna věc se v datech zlepšuje. Ještě v roce 2022 činil rozdíl mezi krajními pětinami <strong>39,5 bodu</strong> (46,4 % vs. 85,9 %); od té doby se zúžil na 30,0. Táhne to spodek rozdělení: podíl nejchudší pětiny s dobrým zdravím vzrostl ze 46,4 na 53,1 procenta, zatímco horní pětina se drží nad 83 procenty. Opatrnost je ale na místě — EU-SILC je výběrové šetření a hodnota mezi lety kolísá (rozdíl 2024: 28,0 bodu; 2025: 30,0 bodu), takže tempo zužování neumíme spolehlivě oddělit od statistického šumu. Směr je nicméně konzistentní čtyři vlny po sobě a stojí za sledování: pokud vydrží, začne se české schodiště podobat evropskému.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodická poznámka">
+        <p class="article-callout-h">Metodika: co ta čísla měří a co ne</p>
+        <p>
+          Subjektivní zdraví je <strong>sebehodnocení</strong> — validovaný prediktor úmrtnosti a spotřeby péče, ale i odraz očekávání a kulturních norem vykazování; mezinárodní rozdíly proto interpretujeme jako řádové, ne přesné. Příjmové pětiny se počítají z <strong>ekvivalizovaného disponibilního příjmu domácnosti</strong> a jsou národní: česká první pětina má jinou kupní sílu než německá. Vlna 2025 zachycuje příjmy roku 2024. Průměr EU27 je populačně vážený mix všech členských zemí. A srovnání v celém článku pochází výhradně z Eurostatu (EU-SILC), takže čísla jsou souměřitelná — od hodnot národních šetření ČSÚ se mohou drobně lišit.
+        </p>
+      </aside>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé: nečekat řešení od pojišťoven.</strong> Systém zdravotní péče své minimum splnil — finanční bariéry přístupu prakticky odstranil a data to potvrzují napříč pětinami. Třicetibodová propast se ale rodí v práci, bydlení, vzdělání a životním stylu, tedy v resortech, které se za zdravotní politiku nepovažují. <strong>Za druhé: cílit, ne plošně přisypávat.</strong> Nejchudší pětina nese 16,8 % špatného zdraví a 39,7 % omezení — prevence, screeningy a programy podpory zdraví doručované plošně dopadají nejméně právě tam, kde je potenciál největší; adresné doručení do nízkopříjmových skupin je nejlevnější dostupný zisk zdravých let. <strong>Za třetí: hlídat výjimky, kde gradient prosakuje do péče.</strong> Zubní péče ukazuje, jak rychle se přímé platby promění v sedminásobný rozdíl mezi pětinami — každé rozšiřování spoluúčasti je proto potřeba testovat právě na dolní pětině rozdělení, ne na průměrném pojištěnci. Česko má nejmenší chudobu v Evropě; kdyby k ní přidalo evropsky plochý gradient zdraví, byl by to větší zisk zdravých let než většina reforem, o kterých se vede hlasitější debata.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-subjektivni_zdravi.html"><strong>Subjektivní hodnocení zdraví (16+)</strong></a> — 67 % (2025; Eurostat EU-SILC), EU 67,9 %</li>
+        <li><a href="indikator-ohrozeni_chudobou.html"><strong>Míra ohrožení příjmovou chudobou</strong></a> — 9,6 % (2025; Eurostat EU-SILC), EU 16,3 %</li>
+        <li><a href="indikator-prijem_disponibilni.html"><strong>Čistý disponibilní důchod domácností</strong></a> — 295 000 Kč/obyv./rok (2023; ČSÚ, EU-SILC)</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje — Eurostat (EU-SILC)</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Self-perceived health by income quintile (hlth_silc_10)</strong> — subjektivní zdraví podle příjmových pětin, osoby 16+; vlna 2025 pro ČR i EU27, trend 2022–2025 pro ČR. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_10/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a>. Staženo 17. 8. 2026 přes REST API.</li>
+          <li><strong>Eurostat — At-risk-of-poverty rate (ilc_li02)</strong> — míra ohrožení příjmovou chudobou (60 % mediánu), 2025, všech 27 členů EU. <a href="https://ec.europa.eu/eurostat/databrowser/view/ilc_li02/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a>. Staženo 17. 8. 2026.</li>
+          <li><strong>Eurostat — Unmet needs for medical examination (hlth_silc_08)</strong> — neuspokojená potřeba lékařského vyšetření podle důvodu a příjmové pětiny, vlna 2025. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_08/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a>. Staženo 17. 8. 2026.</li>
+          <li><strong>Eurostat — Unmet needs for dental examination (hlth_silc_09)</strong> — neuspokojená potřeba zubního vyšetření podle příjmové pětiny, vlna 2025. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_09/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a>. Staženo 17. 8. 2026.</li>
+          <li><strong>Eurostat — Level of activity limitation by income quintile (hlth_silc_12)</strong> — omezení běžných činností ze zdravotních důvodů podle příjmové pětiny, vlna 2025. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_silc_12/default/table?lang=en" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a>. Staženo 17. 8. 2026.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Interní data dashboardu</h5>
+        <ul class="article-sources-list">
+          <li><strong>Datový kontrakt HSPA Monitoru</strong> — subjektivni_zdravi 67 % (2025, shoduje se s hlth_silc_10), ohrozeni_chudobou 9,6 % (2025, shoduje se s ilc_li02), prijem_disponibilni 295 000 Kč/obyv./rok (2023; ČSÚ); metodika viz karty indikátorů odkazované v databoxu.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Křížové odkazy v korpusu</h5>
+        <ul class="article-sources-list">
+          <li><strong>clanek-nadeje-doziti-vzdelani</strong> — vzdělanostní gradient: třináct let života mezi vysokoškolákem a mužem se základním vzděláním. <a href="clanek-nadeje-doziti-vzdelani.html">clanek-nadeje-doziti-vzdelani.html</a></li>
+          <li><strong>clanek-regionalni-nuzky-nadeje-doziti</strong> — krajské rozdíly v naději dožití a jejich socioekonomické pozadí. <a href="clanek-regionalni-nuzky-nadeje-doziti.html">clanek-regionalni-nuzky-nadeje-doziti.html</a></li>
+          <li><strong>clanek-zdravotni-gramotnost</strong> — zdravotní gramotnost jako skrytá vrstva nerovností. <a href="clanek-zdravotni-gramotnost.html">clanek-zdravotni-gramotnost.html</a></li>
+          <li><strong>clanek-platba-z-kapsy</strong> — přímé platby domácností: proč je česká finanční ochrana silná. <a href="clanek-platba-z-kapsy.html">clanek-platba-z-kapsy.html</a></li>
+          <li><strong>clanek-katastroficke-vydaje-zdravi</strong> — katastrofické výdaje: kde finanční ochrana končí u nejchudších. <a href="clanek-katastroficke-vydaje-zdravi.html">clanek-katastroficke-vydaje-zdravi.html</a></li>
+          <li><strong>clanek-nesplnena-potreba-zubni-pece</strong> — zubní péče: jediný segment, kde příjem viditelně rozhoduje o přístupu. <a href="clanek-nesplnena-potreba-zubni-pece.html">clanek-nesplnena-potreba-zubni-pece.html</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla v článku pocházejí z uvedených datasetů Eurostatu (EU-SILC, vlna 2025) a byla stažena 17. 8. 2026 přímými dotazy na Eurostat REST API; rozdíly a poměry mezi pětinami jsou vypočteny z těchto hodnot (30,0 = 83,1 − 53,1; 7,3× = 16,8 / 2,3; 25,9 = 39,7 − 13,8). Subjektivní zdraví je sebehodnocení, příjmové pětiny jsou národní a vlna 2025 odráží příjmy roku 2024 — všechny výhrady jsou uvedeny v metodické poznámce. Tvrzení převzatá z jiných článků korpusu (gradient podle vzdělání, krajů a gramotnosti) nesou vlastní zdrojování v odkazovaných textech.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
