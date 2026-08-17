@@ -55,9 +55,21 @@ silc09.json, silc12.json, li02.json, li02_all.json).
 - Důvod „příliš drahé" (TXP): ČR 0,0 % celkem (Q1 0,0; jediná nenulová Q2 0,1);
   EU27 1,0 % (Q1 2,0)
 
-### hlth_silc_09 — neuspokojená potřeba zubní péče (TXP_TFAR_WLIST, 16+, 2025)
-- ČR: Q1 2,1 % vs. Q5 0,3 % (poměr 7×); celkem 1,0 %
-- EU27: Q1 6,1 % vs. Q5 1,2 %; celkem 3,3 %
+### hlth_silc_09 — neuspokojená potřeba zubní péče (16+, 2025)
+- Composite TXP_TFAR_WLIST — ČR: Q1 2,1 % vs. Q5 0,3 %; celkem 1,0 %;
+  EU27: Q1 6,1 % vs. Q5 1,2 %; celkem 3,3 %
+- **Jen důvod „too expensive" (TXP; v článku použito — codex P2)** — ČR: Q1
+  1,2 % / Q2 0,7 % / Q3 0,1 % / Q4 0,2 % / Q5 0,0 %; celkem 0,4 %;
+  EU27: Q1 5,5 % / Q5 0,8 %; celkem 2,8 % (staženo 17. 8. 2026)
+
+### hlth_silc_10 — subjektivní zdraví podle věkových pásem (ČR, VG_G, 2025; codex P2)
+| pásmo | Q1 | Q5 | rozdíl |
+|---|---|---|---|
+| 16–44 | 86,1 | 94,4 | 8,3 |
+| 45–64 | 44,9 | 78,9 | 34,0 |
+| 65+ | 20,9 | 50,3 | 29,4 |
+→ gradient přetrvává uvnitř věkových pásem, největší v předdůchodovém věku;
+souhrn 16+ není věkově standardizovaný (výhrada v metodické poznámce článku)
 
 ### hlth_silc_12 — omezení obvyklých činností ze zdravotních důvodů (SM_SEV = některé nebo závažné, 16+, 2025)
 - ČR: Q1 39,7 % vs. Q5 13,8 % (rozdíl 25,9 p. b.); celkem 27,0 %
