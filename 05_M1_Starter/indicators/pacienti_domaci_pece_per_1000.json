@@ -1,0 +1,55 @@
+{
+  "id": "pacienti_domaci_pece_per_1000",
+  "name": "Pacienti domácí zdravotní péče na 1 000 obyvatel",
+  "area": "Procesy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Domácí péče",
+  "definition": "Počet pacientů, kterým byla v daném kalendářním roce poskytnuta domácí zdravotní péče (odbornost 925 — ošetřovatelská péče ve vlastním sociálním prostředí pacienta, indikovaná lékařem a hrazená z veřejného zdravotního pojištění), přepočtený na 1 000 obyvatel. Zdrojem je roční statistický výkaz A (MZ) 1-01: domácí zdravotní péče (A089), který ÚZIS ČR sbírá od všech poskytovatelů domácí zdravotní péče bez ohledu na zřizovatele; každý pacient je započítán jedenkrát. Indikátor měří reálné využití terénní zdravotní péče v domácím prostředí — segmentu, který má podle Koncepce domácí péče MZ ČR (2020) přebírat rostoucí část péče o chronicky nemocné a seniory z lůžkových zařízení.",
+  "unit": "pacientů / 1 000 obyv.",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_report",
+      "endpoint": "https://www.uzis.cz/res/f/008403/nzis-rep-2021-k31-a089-domaci-zdravotni-pece-2020.pdf",
+      "dataset": "ÚZIS ČR — NZIS Report č. K/31 (08/2021): Stručný přehled činnosti oboru domácí zdravotní péče za období 2007–2020, výkaz A (MZ) 1-01 (A089). Přílohy obsahují absolutní i standardizované počty pacientů (celkem, podle věku a pohlaví, na 1 000 obyvatel) v časové řadě 2007–2020 a regionální srovnání za rok 2020.",
+      "dimensions": {
+        "country": "CZ",
+        "unit": "pacientů na 1 000 obyvatel",
+        "age_groups": "0–19, 20–64, 65+",
+        "region": "kraje (podle sídla poskytovatele)",
+        "year": "annual 2007–2020"
+      },
+      "note": "Sběr výkazu A089 pokračuje (formulář je v programu statistických zjišťování i pro rok 2023), ÚZIS však po reportu za rok 2020 přestal vydávat samostatný oborový přehled — novější agregovaná data o domácí péči nejsou veřejně publikována. Přehled zdrojové stránky: https://www.uzis.cz/index.php?pg=vystupy--statistika-zdravotnich-sluzeb--domaci-zdravotni-pece"
+    },
+    "fallback": {
+      "type": "eurostat_ehis",
+      "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_am7e/default/table",
+      "note": "Eurostat hlth_ehis_am7e (šetření EHIS, v ČR provádí ÚZIS): podíl osob 65+, které v posledních 12 měsících využily profesionální domácí péči. ČR 2019: 9,8 % — jediný mezinárodně srovnatelný pohled na tentýž segment, byť s širší definicí (zahrnuje i pomoc v domácnosti) a self-reportem."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Registrový počet pacientů domácí zdravotní péče na 1 000 obyvatel se mezinárodně nepublikuje v jednotné metodice — OECD i Eurostat sledují domácí péči přes šetření EHIS (self-report, širší definice včetně pomoci v domácnosti). EHIS 2019 (hlth_ehis_am7e, osoby 65+): ČR 9,8 %, EU-27 10,5 %, Německo 15,4 %, Rakousko 13,2 %, Polsko 7,7 %, Slovensko 5,4 %. Česko je tedy pod průměrem EU a výrazně za Německem a Rakouskem, byť před Polskem a Slovenskem. Kvůli odlišné metodice se EHIS hodnota nepoužívá pro výpočet signálu.",
+    "value": null,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_am7e/default/table"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR (výkaz A (MZ) 1-01: domácí zdravotní péče, NZIS Report č. K/31)",
+    "Ministerstvo zdravotnictví ČR — odbor ošetřovatelství a nelékařských povolání (Koncepce domácí péče 2020)",
+    "Asociace domácí péče ČR / Charita Česká republika (největší poskytovatelé)",
+    "zdravotní pojišťovny (úhrady odbornosti 925, dohodovací řízení — segment domácí péče)"
+  ],
+  "method_notes": "Hodnota za rok 2020: 13,63 pacienta na 1 000 obyvatel (absolutně 145 796 pacientů). Časová řada na 1 000 obyvatel: 2007: 13,02; 2008: 13,13; 2009: 13,84; 2010: 13,64; 2011: 14,01; 2012: 14,08; 2013: 13,92; 2014: 13,39; 2015: 12,86; 2016: 13,38; 2017: 13,06; 2018: 13,16; 2019: 13,49; 2020: 13,63. Řada je čtrnáct let prakticky plochá (minimum 12,86 v roce 2015, maximum 14,08 v roce 2012), zatímco podíl obyvatel 65+ vzrostl ze zhruba 14 % na více než 20 %. Pacienti 65+ tvořili v roce 2020 celkem 123 443 osob (85 % všech pacientů; 11,54 na 1 000 obyvatel celé populace) — přepočteno na 1 000 seniorů jde o pokles ze zhruba 71 (2007) na zhruba 57 (2020), tedy o pětinu (redakční přepočet podle věkové struktury ČSÚ). Ženy dlouhodobě tvoří 61 % pacientů. Objem péče: 575 návštěv na 1 000 obyvatel (2020), tj. zhruba 6,2 milionu návštěv ročně a v průměru asi 42 návštěv na pacienta. Regionální rozdíly (2020, podle sídla poskytovatele): Praha 9,95 vs. Královéhradecký kraj 22,72 a Pardubický kraj 21,34 pacienta na 1 000 obyvatel — více než dvojnásobný rozdíl.",
+  "limitations": "Vyplněnost výkazu A089 byla v roce 2020 pouze 72,4 % zpravodajských jednotek (500 z 690), skutečný počet pacientů je proto podhodnocen — nemocnice a velká zařízení hlásí kompletně, malé agentury domácí péče nejméně. Regionální srovnání je vedeno podle sídla poskytovatele, ne bydliště pacienta. Řada končí rokem 2020: sběr výkazu pokračuje, ale ÚZIS samostatný oborový přehled po roce 2021 nevydal, takže vývoj po roce 2020 (včetně dopadů růstu úhrad po protestech sester domácí péče v roce 2019) nelze z veřejných dat ověřit. Indikátor počítá pacienty, ne objem ani intenzitu péče — nárůst návštěv na pacienta se v počtu pacientů neprojeví. Mezinárodní benchmark existuje jen přes EHIS s odlišnou metodikou (self-report, širší definice domácí péče).",
+  "determinants": "Počet pacientů domácí péče určují čtyři faktory. **Indikace a informovanost:** domácí zdravotní péči musí předepsat praktický lékař nebo ošetřující lékař při propuštění z nemocnice — kde chybí zvyk indikovat, pacienti do systému nevstoupí. **Kapacita sester:** domácí péče je čistě sesterský segment (vedoucím týmu odbornosti 925 je všeobecná sestra); nedostatek sester a jejich odměňování v terénu proti nemocnicím je hlavní kapacitní brzda. **Úhrady:** hodnotu bodu a objem úhrad odbornosti 925 stanovuje každoročně úhradová vyhláška po dohodovacím řízení — segment dlouhodobě patřil k nejhůře placeným, což vyústilo v protesty sester domácí péče v roce 2019. **Demografie a struktura systému:** stárnutí populace a tlak na zkracování hospitalizací poptávku zvyšují; bez rostoucí domácí péče se péče o seniory přelévá do LDN a pobytových zařízení.",
+  "importance": "Domácí zdravotní péče je klíčový, ale dosud neměřený segment dashboardu: stojí přesně na rozhraní mezi nemocnicí, dlouhodobou péčí a umíráním doma — tedy mezi indikátory délky hospitalizace, kapacit dlouhodobé péče a podílu úmrtí doma či v hospici. Koncepce domácí péče MZ ČR (2020) i Strategický rámec Zdraví 2030 deklarují přesun péče do vlastního sociálního prostředí pacienta jako prioritu; tento indikátor měří, jestli se to skutečně děje. Čtrnáct let plochá křivka při rychle stárnoucí populaci ukazuje, že relativní dostupnost domácí péče pro seniory klesá — a že deklarovaná deinstitucionalizace zatím zůstává na papíře. Zároveň indikátor dokumentuje datovou mezeru: stát segment, který má být pilířem péče o stárnoucí populaci, od roku 2020 veřejně nepočítá.",
+  "patient_story": "Paní Věra (84) z Pardubicka se v listopadu vrátila z nemocnice po zlomenině krčku. Operace se povedla, ale doma zůstala sama s převazy, injekcemi a rehabilitačním cvičením, na které si netroufala. Její praktická lékařka jí předepsala domácí zdravotní péči: sestra z místní agentury k ní od té doby jezdí třikrát týdně — převáže ránu, píchne injekci, zkontroluje tlak a chůzi s chodítkem. Bez ní by paní Věra ležela v LDN. Právě tahle tichá, málo viditelná služba drží desetitisíce seniorů doma — a paní Věra měla štěstí i na adresu: Pardubický a Královéhradecký kraj mají domácí péči nejdostupnější v zemi, přes 21 pacientů na 1 000 obyvatel, zatímco Praha necelých 10.\n\nCelkově využilo v roce 2020 domácí zdravotní péči 145 796 lidí, tedy 13,63 pacienta na 1 000 obyvatel. Osmdesát pět procent z nich byli senioři 65+. Sestry vykonaly zhruba 6,2 milionu návštěv — v průměru asi 42 na pacienta. Na první pohled solidní čísla. Jenže křivka je čtrnáct let plochá: v roce 2007 měla domácí péče 13,02 pacienta na 1 000 obyvatel, v roce 2020 skoro totéž — zatímco seniorů mezitím přibylo o polovinu. Přepočteno na 1 000 obyvatel 65+ klesl počet pacientů ze zhruba 71 na zhruba 57, o celou pětinu. V evropském šetření EHIS 2019 využilo profesionální domácí péči 9,8 % českých seniorů — méně než průměr EU (10,5 %) a hluboko za Německem (15,4 %) i Rakouskem (13,2 %).\n\nPříčiny jsou strukturální. Domácí péče je čistě sesterský segment a sester je málo — a ty, které v terénu jsou, dlouho patřily k nejhůře odměňovaným ve zdravotnictví; v roce 2019 to dohnalo sestry domácí péče až k protestům. Objem segmentu určuje každý rok úhradová vyhláška po dohodovacím řízení, kde domácí péče vyjednává z nejslabší pozice. A přestože Koncepce domácí péče MZ ČR z roku 2020 slibuje posílení role sester, stabilní financování i měření kvality, stát zároveň přestal segment veřejně počítat: poslední oborový přehled ÚZIS končí rokem 2020, novější agregovaná data neexistují.\n\nPolitická páka je přitom konkrétní a levná. Zaprvé: vrátit domácí péči do veřejné statistiky — výkaz A089 se sbírá dál, stačí ho zase publikovat. Zadruhé: v úhradové vyhlášce narovnat odměňování odbornosti 925 tak, aby sestra v terénu nevydělávala méně než v nemocnici — jinak kapacita dál poroste pomaleji než poptávka. Zatřetí: naplnit tři strategické cíle vlastní Koncepce domácí péče (role sester, financování, kvalita), které si ministerstvo v roce 2020 samo uložilo. Každý pacient, který smí stonat doma jako paní Věra, je levnější a spokojenější než tentýž pacient na lůžku — systém to ví dvacet let, jen podle toho zatím neplatí a neměří.",
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
