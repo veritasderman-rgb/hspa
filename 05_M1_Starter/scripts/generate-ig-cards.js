@@ -559,6 +559,16 @@ const MANIFEST = {
   'clanek-tamoxifen-vypadek': { kicker: 'Léková politika · výpadky', signal: 'bad', stat: '1 369', claim: 'aktivních výpadků léčiv eviduje SÚKL — tamoxifen je jeden z nich.', context: 'Lék na rakovinu prsu je přerušený do 15. 7. 2027.' },
   'clanek-erecept-v-cislech': { kicker: 'Digitalizace · eRecept', signal: 'warn', stat: '56', claim: 'milionů notifikačních SMS rozeslal SÚKL za rok 2024 — za 33 milionů korun.', context: 'Téměř pětina provozních výdajů úřadu. V roce 2020 jich bylo 28,5 mil.' },
   'clanek-vedra-umrtnost-data': { kicker: 'Vedra · úmrtnost', signal: 'bad', stat: '420', claim: 'lidí zemřelo 1. srpna 1994 — nejsmrtelnější letní den české řady dat.', context: 'O 45 % nad sezónní úrovní. Srdce a cévy: 56 % těch úmrtí.' },
+  'clanek-preziti-po-dlouhe-upv': { kicker: 'Intenzivní péče · přežití', signal: 'warn', stat: '51,2', statSuffix: '%', barPct: 51, claim: 'pacientů po dlouhé umělé plicní ventilaci je rok po příjmu naživu.', context: 'Z 31 294 dospělých na ARO. Nad 85 let přežije rok 16,9 %.' },
+  'clanek-zdrave-roky-cil-pet-let': { kicker: 'Zdravé stárnutí · cíl', signal: 'neutral', stat: '11,4', claim: 'roku dělí dvě evropské definice „zdravých let".', context: 'Cíl „pět let navíc" splní i jiný dotazník v šetření.' },
+  'clanek-vysledky-za-penize': { kicker: 'Financování · efektivita', signal: 'bad', stat: '22,5', statSuffix: '%', barPct: 23, claim: 'o tolik míň než unijní průměr dává Česko na zdravotnictví na obyvatele.', context: 'A ztrácí o 23,5 % víc úmrtí, kterým šlo zabránit léčbou.' },
+  'clanek-sestry-vazajici-podminka': { kicker: 'Pracovní síla · terénní péče', signal: 'warn', stat: '48', claim: 'tisíc úvazků drží pobytové služby — v terénu jich je 12 tisíc.', context: 'Přesun z lůžek i rozšíření terénu potřebují stejné lidi.' },
+  'clanek-presun-pece-z-luzek': { kicker: 'Nemocniční péče · hospitalizace', signal: 'bad', stat: '17 990', claim: 'hospitalizací na 100 tisíc obyvatel — průměr OECD je 14 600.', context: 'Akutní lůžka jsou obsazena z 56 %.' },
+  'clanek-ockovani-dospelych-rezerva': { kicker: 'Vakcinace · senioři', signal: 'bad', stat: '24,5', statSuffix: '%', barPct: 25, claim: 'českých seniorů je očkováno proti chřipce. V EU 49 %.', context: 'Cíl WHO a ECDC je 75 %. Proti pneumokokům 5,5 %.' },
+  'clanek-kratke-intervence-uhrady': { kicker: 'Prevence · krátká intervence', signal: 'warn', stat: '66', statSuffix: '%', barPct: 66, claim: 'o tolik zvyšuje krátká intervence míru odvykání kouření (Cochrane).', context: 'U alkoholu −20 g týdně. Zákon je ukládá 9 let, úhrada nevznikla.' },
+  'clanek-cukerna-dan-vynos': { kicker: 'Legislativa · daně', signal: 'neutral', stat: '10–15', claim: 'miliard korun ročně slibuje daňový balíček na cukr a alkohol.', context: 'Rozklad po složkách dává 5–8 mld. Do prevence 40 %.' },
+  'clanek-bonus-za-zdravi-pojistne': { kicker: 'Financování · pojistné', signal: 'warn', headline: 'Bonus za péči o zdraví „po vzoru Nizozemska"? Nizozemský zákon ho zakazuje.' },
+  'clanek-kvetiapin-vypadek': { kicker: 'Léková politika · výpadky', signal: 'bad', stat: '5', claim: 'sil kvetiapinu s prodlouženým uvolňováním — dostupná není žádná.', context: 'SÚKL poptává 1 252 000 denních dávek. EMA: 22 zemí EU do 2027.' },
 };
 
 function escapeXml(s) {
