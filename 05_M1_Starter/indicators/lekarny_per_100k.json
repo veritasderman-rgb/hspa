@@ -11,9 +11,9 @@
     "primary": {
       "type": "sukl_opendata",
       "format": "csv_zip",
-      "endpoint": "https://opendata.sukl.cz/soubory/LEKARNY{YYYYMMDD}.zip",
+      "endpoint": "https://opendata.sukl.cz/?q=katalog/seznam-lekaren",
       "schema_url": "https://opendata.sukl.cz/soubory/LEKARNY_datove_rozhrani20230401.csv",
-      "note": "SÚKL zveřejňuje měsíční ZIP s tabulkou lekarny_seznam (sloupce NAZEV, KOD_PRACOVISTE, MESTO, ULICE, PSC, TYP_LEKARNY, ERP, POHOTOVOST). Kraj se odvozuje z PSČ. Aktivní lékárna = nezrušený záznam v aktuálním měsíčním exportu. Fetcher čte aktuální měsíční ZIP (URL se zjišťuje z katalogové stránky — SÚKL ho měsíčně přesouvá do /soubory/SOD{datum}/), extrahuje lekarny_seznam.csv a agreguje per kraj.",
+      "note": "SÚKL zveřejňuje měsíční ZIP s tabulkou lekarny_seznam (sloupce NAZEV, KOD_PRACOVISTE, MESTO, ULICE, PSC, TYP_LEKARNY, ERP, POHOTOVOST). Kraj se odvozuje z PSČ. Aktivní lékárna = nezrušený záznam v aktuálním měsíčním exportu. Fetcher čte aktuální měsíční ZIP (URL se zjišťuje z katalogové stránky — SÚKL ho měsíčně přesouvá do /soubory/SOD{YYYYMMDD}/LEKARNY{YYYYMMDD}.zip), extrahuje lekarny_seznam.csv a agreguje per kraj. Pozn.: plochá cesta /soubory/LEKARNY{YYYYMMDD}.zip už neexistuje (ověřeno 18. 8. 2026 — 404 pro všechna testovaná data); jako endpoint proto slouží katalogová stránka, ze které si fetcher aktuální odkaz zjistí sám (discoverLekarnyUrl v ingest/fetchers/sukl.js). Poslední ověřený soubor: /soubory/SOD20260729/LEKARNY20260729.zip (HTTP 200, 18. 8. 2026).",
       "license": "Veřejně přístupná data SÚKL, bez registrace"
     },
     "fallback": {
