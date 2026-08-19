@@ -45,11 +45,25 @@ jobs:
       - run: npm ci
 
       - name: Průzkumný běh
+        # Vstupy jdou přes env, NIKOLI přes ${{ }} přímo do skriptu: GitHub
+        # dosazuje interpolaci textově před tím, než ji uvidí bash, takže
+        # vstup typu `$(…)` by se na runneru spustil jako příkaz.
+        env:
+          PROBE_IDS: ${{ inputs.ids }}
+          PROBE_SCAN: ${{ inputs.scan }}
         run: |
-          ARGS=""
-          if [ -n "${{ inputs.ids }}" ];  then ARGS="$ARGS --ids ${{ inputs.ids }}"; fi
-          if [ -n "${{ inputs.scan }}" ]; then ARGS="$ARGS --scan ${{ inputs.scan }}"; fi
-          node ingest/probe/ppo-probe.js --out probe-out $ARGS 2>&1 | tee probe-out.log
+          set -euo pipefail
+          # Pojistka v hloubce: pustíme dál jen čísla, čárky a pomlčku.
+          if [ -n "${PROBE_IDS}" ] && ! printf '%s' "${PROBE_IDS}" | grep -Eq '^[0-9]+(,[0-9]+)*$'; then
+            echo "::error::Neplatné 'ids' — očekáván seznam čísel oddělených čárkou."; exit 2
+          fi
+          if [ -n "${PROBE_SCAN}" ] && ! printf '%s' "${PROBE_SCAN}" | grep -Eq '^[0-9]+-[0-9]+$'; then
+            echo "::error::Neplatný 'scan' — očekáván rozsah tvaru 1-260."; exit 2
+          fi
+          ARGS=()
+          [ -n "${PROBE_IDS}" ]  && ARGS+=(--ids "${PROBE_IDS}")
+          [ -n "${PROBE_SCAN}" ] && ARGS+=(--scan "${PROBE_SCAN}")
+          node ingest/probe/ppo-probe.js --out probe-out "${ARGS[@]}" 2>&1 | tee probe-out.log
         continue-on-error: true
 
       - name: Přilož výstup
