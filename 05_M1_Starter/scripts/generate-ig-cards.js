@@ -569,6 +569,7 @@ const MANIFEST = {
   'clanek-cukerna-dan-vynos': { kicker: 'Legislativa · daně', signal: 'neutral', stat: '10–15', claim: 'miliard korun ročně slibuje daňový balíček na cukr a alkohol.', context: 'Rozklad po složkách dává 5–8 mld. Do prevence 40 %.' },
   'clanek-bonus-za-zdravi-pojistne': { kicker: 'Financování · pojistné', signal: 'warn', headline: 'Bonus za péči o zdraví „po vzoru Nizozemska"? Nizozemský zákon ho zakazuje.' },
   'clanek-kvetiapin-vypadek': { kicker: 'Léková politika · výpadky', signal: 'bad', stat: '5', claim: 'sil kvetiapinu s prodlouženým uvolňováním — dostupná není žádná.', context: 'SÚKL poptává 1 252 000 denních dávek. EMA: 22 zemí EU do 2027.' },
+  'clanek-prostata-screening-pilot': { kicker: 'Screening prostaty · pilot', signal: 'warn', stat: '67,2', statSuffix: '%', barPct: 67, claim: 'mužů se zvýšeným PSA došlo do půl roku k urologovi.', context: 'Ve Švédsku 98–100 %. Nabídku screeningu přijalo 99 % oslovených.' },
 };
 
 function escapeXml(s) {
