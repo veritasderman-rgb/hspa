@@ -1,0 +1,64 @@
+name: PPO probe (průzkum portálu poradních orgánů)
+
+# JEDNORÁZOVÝ PRŮZKUM, spouští se jen ručně. Nic necommituje a nesahá na
+# datový kontrakt — zjišťuje, co Portál poradních orgánů, pracovních skupin
+# a odborných komisí MZd (ppo.mzcr.cz) reálně publikuje, aby šlo odhadnout,
+# jestli má smysl stavět plnohodnotný fetcher.
+#
+# Proč přes Actions: ppo.mzcr.cz je z prostředí agenta nedosažitelný
+# (DNS resolvuje, spojení neprojde — issue #1003), zatímco runner na české
+# vládní zdroje běžně dosáhne (refresh.yml tahá živá data z ÚZIS, ČSÚ, SÚKL).
+#
+# Výstup: artifact `ppo-probe` s report.json a staženými HTML stránkami.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ids:
+        description: 'ID skupin oddělená čárkou (prázdné = výchozí vzorek)'
+        required: false
+        default: ''
+      scan:
+        description: 'Rozsahový sken ID, např. 1-260 (prázdné = přeskočit)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: 05_M1_Starter
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 05_M1_Starter/package-lock.json
+
+      - run: npm ci
+
+      - name: Průzkumný běh
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.ids }}" ];  then ARGS="$ARGS --ids ${{ inputs.ids }}"; fi
+          if [ -n "${{ inputs.scan }}" ]; then ARGS="$ARGS --scan ${{ inputs.scan }}"; fi
+          node ingest/probe/ppo-probe.js --out probe-out $ARGS 2>&1 | tee probe-out.log
+        continue-on-error: true
+
+      - name: Přilož výstup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppo-probe
+          path: |
+            05_M1_Starter/probe-out/
+            05_M1_Starter/probe-out.log
+          retention-days: 14
+          if-no-files-found: warn
