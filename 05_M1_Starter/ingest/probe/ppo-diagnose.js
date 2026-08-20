@@ -83,17 +83,23 @@ async function main() {
 
   console.log('3) TCP — projde holé spojení?');
   out.tcp = [];
-  const addrs = Array.isArray(out.dns.A) ? out.dns.A : [];
   for (const port of [443, 80]) {
-    const r = await tcpTry('ppo.mzcr.cz', port);
+    const r = { family: 'hostname', ...(await tcpTry('ppo.mzcr.cz', port)) };
     out.tcp.push(r);
     console.log(`   :${String(port).padEnd(4)} ${r.ok ? '✓' : '✗'} ${r.verdict}  (${r.ms} ms)`);
   }
-  for (const ip of addrs.slice(0, 2)) {
-    const r = await tcpTry(ip, 443);
+  // Přímo na IP, a to OBOU rodin. Spojení na hostname může tiše spadnout zpět
+  // na fungující rodinu a rozbitou AAAA cestu tím zamaskovat.
+  const byFamily = [
+    ...(Array.isArray(out.dns.A) ? out.dns.A.slice(0, 2).map(ip => ['IPv4', ip]) : []),
+    ...(Array.isArray(out.dns.AAAA) ? out.dns.AAAA.slice(0, 2).map(ip => ['IPv6', ip]) : []),
+  ];
+  for (const [family, ip] of byFamily) {
+    const r = { family, ...(await tcpTry(ip, 443)) };
     out.tcp.push(r);
-    console.log(`   ${ip}:443 ${r.ok ? '✓' : '✗'} ${r.verdict}  (${r.ms} ms)`);
+    console.log(`   ${family} ${ip}:443 ${r.ok ? '✓' : '✗'} ${r.verdict}  (${r.ms} ms)`);
   }
+  if (!byFamily.some(([f]) => f === 'IPv6')) console.log('   IPv6 — žádný AAAA záznam, cesta po IPv6 neexistuje');
   console.log();
 
   console.log('4) UA — mění se chování podle User-Agentu?');
@@ -104,17 +110,35 @@ async function main() {
   console.log();
 
   console.log('5) ARCHIV — má Wayback snímky portálu?');
-  out.wayback = await httpTry(
-    'http://web.archive.org/cdx/search/cdx?url=ppo.mzcr.cz*&output=json&limit=40&collapse=urlkey&fl=timestamp,original,statuscode',
-    UA_BOT, 'wayback CDX');
+  // Jeden dotaz, tři možné výsledky: snímky / prokazatelně žádné / nedostupné.
+  // Splynutí posledních dvou by z výpadku archivu udělalo definitivní "nemá",
+  // což je přesně ta chyba, kvůli které tahle diagnostika vznikla.
+  const CDX = 'http://web.archive.org/cdx/search/cdx?url=ppo.mzcr.cz*&output=json&limit=40&collapse=urlkey&fl=timestamp,original,statuscode';
+  out.wayback = { state: 'unknown' };
   try {
-    const res = await fetch('http://web.archive.org/cdx/search/cdx?url=ppo.mzcr.cz*&output=json&limit=40&collapse=urlkey&fl=timestamp,original,statuscode',
-      { headers: { 'User-Agent': UA_BOT } });
-    const rows = await res.json();
-    out.wayback_rows = rows;
-    console.log(`   snímků v archivu: ${Math.max(0, rows.length - 1)}`);
-    for (const r of rows.slice(1, 21)) console.log(`     ${r[0]}  ${r[2] || '---'}  ${r[1]}`);
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), TIMEOUT);
+    const res = await fetch(CDX, { headers: { 'User-Agent': UA_BOT }, signal: ctrl.signal });
+    clearTimeout(t);
+    const text = await res.text();
+    if (!res.ok) {
+      out.wayback = { state: 'unavailable', status: res.status };
+      console.log(`   archiv neodpověděl použitelně: HTTP ${res.status}`);
+    } else {
+      let rows;
+      try { rows = JSON.parse(text); } catch { rows = null; }
+      if (!Array.isArray(rows)) {
+        out.wayback = { state: 'unavailable', status: res.status, reason: 'odpověď není JSON' };
+        console.log('   archiv vrátil neparsovatelnou odpověď');
+      } else {
+        const snaps = Math.max(0, rows.length - 1);
+        out.wayback = { state: 'ok', snapshots: snaps, rows };
+        console.log(`   snímků v archivu: ${snaps}`);
+        for (const r of rows.slice(1, 21)) console.log(`     ${r[0]}  ${r[2] || '---'}  ${r[1]}`);
+      }
+    }
   } catch (e) {
+    out.wayback = { state: 'unavailable', reason: e.message };
     console.log(`   archiv nedostupný: ${e.message}`);
   }
 
@@ -122,18 +146,39 @@ async function main() {
   if (!controlOk) {
     console.log('Runner nedosáhl ani na kontrolní weby — o portálu to nevypovídá nic.');
   } else {
-    const tcp443 = out.tcp.find(t => t.port === 443);
-    if (tcp443?.ok) {
-      console.log('TCP na :443 projde, ale HTTP ne → blok je na úrovni aplikace/WAF (IP nebo UA).');
+    const tcp443 = out.tcp.find(t => t.port === 443 && t.family === 'hostname');
+    const okStatus = r => r.status >= 200 && r.status < 400;
+    const botOk = out.ua.filter(r => r.label.startsWith('bot')).some(okStatus);
+    const browserOk = out.ua.filter(r => r.label.startsWith('prohlížečový')).some(okStatus);
+
+    // Nejdřív HTTP: když něco prošlo, je jedno, co říká TCP.
+    if (botOk && browserOk) {
+      console.log('HTTP prošlo oběma User-Agenty → portál je dosažitelný; první selhání bylo nejspíš dočasné. Fetcher lze stavět.');
+    } else if (browserOk && !botOk) {
+      console.log('HTTP prošlo JEN s prohlížečovým UA → server filtruje podle User-Agentu. Řešitelné hlavičkou, ale je to signál o postoji provozovatele.');
+    } else if (botOk && !browserOk) {
+      console.log('HTTP prošlo jen s botím UA → neobvyklé; zopakovat, může jít o výkyv.');
+    } else if (tcp443?.ok) {
+      console.log('TCP na :443 projde, ale žádné HTTP neuspělo → blok je na úrovni aplikace/WAF, ne sítě.');
     } else if (tcp443?.code === 'ECONNREFUSED') {
       console.log('Spojení aktivně odmítnuto → služba na portu neběží (portál může být mimo provoz).');
     } else {
       console.log('TCP timeout při funkční kontrole → provoz z cloudu je filtrován (blok IP rozsahů).');
     }
-    const snaps = Array.isArray(out.wayback_rows) ? Math.max(0, out.wayback_rows.length - 1) : 0;
-    console.log(snaps
-      ? `Wayback má ${snaps} snímků → strukturu stránky lze odvodit z archivu i bez živého přístupu.`
-      : 'Wayback nemá snímky → archiv jako náhradní zdroj odpadá.');
+
+    const v4 = out.tcp.filter(t => t.family === 'IPv4');
+    const v6 = out.tcp.filter(t => t.family === 'IPv6');
+    if (v6.length && v6.every(t => !t.ok) && v4.some(t => t.ok)) {
+      console.log('Po IPv4 to jde, po IPv6 ne → rozbitá AAAA cesta, řešitelné vynucením IPv4.');
+    }
+
+    if (out.wayback.state === 'ok') {
+      console.log(out.wayback.snapshots
+        ? `Wayback má ${out.wayback.snapshots} snímků → strukturu stránky lze odvodit z archivu i bez živého přístupu.`
+        : 'Wayback prokazatelně nemá snímky → archiv jako náhradní zdroj odpadá.');
+    } else {
+      console.log('Wayback se nepodařilo dotázat → o archivu NEVÍME nic; nelze z toho usoudit, že snímky nejsou.');
+    }
   }
 
   console.log('\n' + JSON.stringify(out).slice(0, 20));
