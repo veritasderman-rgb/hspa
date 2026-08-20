@@ -59,7 +59,10 @@ async function main() {
   const out = { at: new Date().toISOString() };
 
   console.log('1) Má archiv snímky detailů pracovních skupin?\n');
-  const q = 'output=json&collapse=urlkey&fl=timestamp,original,statuscode,mimetype&limit=400';
+  // filter=statuscode:200 musí být PŘED collapse: CDX sbaluje podle urlkey,
+  // takže u URL s 301 i 200 může zůstat jen ta 301 a klientské filtrování
+  // by pak hlásilo "nic tu není", i když použitelný snímek existuje.
+  const q = 'output=json&filter=statuscode:200&collapse=urlkey&fl=timestamp,original,statuscode,mimetype&limit=400';
   const detail = await cdx(`url=ppo.mzcr.cz/workGroup*&matchType=prefix&${q}`, '/workGroup* (prefix)');
   const root = await cdx(`url=ppo.mzcr.cz&${q}&limit=60`, 'kořen portálu');
   out.detail = detail; out.root = root;
@@ -101,8 +104,11 @@ async function main() {
     const url = `http://web.archive.org/web/${ts}id_/https://ppo.mzcr.cz/workGroup/${id}`;
     const r = await getText(url);
     if (!r.ok || !r.body) {
-      console.log(`   ✗ #${id} (${ts}) — nestaženo (HTTP ${r.status})`);
-      out.samples.push({ id, ts, ok: false, status: r.status });
+      // Timeout, 429 nebo 5xx z Waybacku je DOČASNÁ nedostupnost přehrávače,
+      // ne důkaz, že snímek nemá obsah — index ho právě potvrdil.
+      const retryable = r.status === 0 || r.status === 429 || r.status >= 500;
+      console.log(`   ${retryable ? '~' : '✗'} #${id} (${ts}) — nestaženo (HTTP ${r.status}${r.error ? ', ' + r.error : ''})${retryable ? ' — dočasné, zopakovat' : ''}`);
+      out.samples.push({ id, ts, ok: false, status: r.status, retryable });
       await sleep(1500); continue;
     }
     const a = analyse(r.body, url);
@@ -119,14 +125,24 @@ async function main() {
   console.log('\n=== ZÁVĚR ===');
   const good = out.samples.filter(s => s.ok);
   const withNames = good.filter(s => s.names >= 3);
-  if (!good.length) {
-    console.log('Snímky jsou v indexu, ale nejde je stáhnout → archiv jako zdroj nepoužitelný.');
+  const retryable = out.samples.filter(s => !s.ok && s.retryable);
+  const sampled = out.samples.length;
+
+  if (!good.length && retryable.length) {
+    console.log(`Index snímky POTVRDIL (${ids.size} skupin), ale přehrávač je teď nedostupný (${retryable.length}/${sampled} dočasných chyb).`);
+    console.log('Archiv tím NENÍ vyloučen — jen neověřen. Zopakovat později.');
+  } else if (!good.length) {
+    console.log('Snímky jsou v indexu, ale žádný nešlo stáhnout (trvalé chyby) → archiv jako zdroj nepoužitelný.');
   } else if (withNames.length) {
     console.log(`${withNames.length}/${good.length} stažených snímků obsahuje jmenné složení → rejstřík lze postavit z archivu.`);
     console.log(`Pokrytí: ${ids.size} skupin, roky ${years.join('/')}. POZOR: archiv je historický řez, ne živá data —`);
     console.log('aktuálnost by se musela doplňovat jinou cestou (ruční export nebo žádosti dle zák. 106/1999 Sb.).');
   } else {
-    console.log(`Snímky se stahují, ale jmenné složení v nich není (${good.length} zkoušených) → archiv sám na rejstřík nestačí.`);
+    // Vzorek je z definice malý; z jeho prázdnoty nelze usuzovat na celý archiv.
+    console.log(`NEPRŮKAZNÉ: ve vzorku ${good.length} z ${ids.size} skupin jmenné složení nenalezeno.`);
+    console.log('Neznamená to, že v archivu není — složení může být u jiných skupin a heuristika hledá');
+    console.log('jména podle akademických titulů, takže seznam bez titulů mine. Pustit na širším vzorku');
+    console.log(`(--sample ${Math.min(ids.size, 40)}) a teprve pak soudit.`);
   }
   console.log('\n' + JSON.stringify({ ids: out.unique_ids.length, years, samples: out.samples.length }));
 }
