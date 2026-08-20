@@ -1,0 +1,57 @@
+{
+  "id": "objednani_k_lekari_online",
+  "name": "Objednání k lékaři přes internet",
+  "area": "Procesy",
+  "domain": "Dostupnost péče",
+  "subdomain": "Digitální přístup k péči",
+  "definition": "Podíl osob ve věku 16–74 let, které si v posledních třech měsících před šetřením objednaly termín u lékaře přes webovou stránku nebo aplikaci (např. ordinace, nemocnice nebo zdravotního centra). Data pocházejí z harmonizovaného evropského šetření o využívání ICT v domácnostech a mezi jednotlivci, které v Česku provádí ČSÚ (Využívání informačních a komunikačních technologií v domácnostech a mezi osobami, VŠIT); Eurostat řadu publikuje v datasetu isoc_ci_ac_i pod kódem I_IUMAPP (Internet use: making an appointment with a practitioner via a website). Indikátor měří reálně využívaný digitální vstup do zdravotního systému — nikoli deklarovanou připravenost, ale skutečné transakce pacientů. Otázka se v šetření objevuje ve dvouletém cyklu (sudé roky).",
+  "unit": "% osob 16–74",
+  "direction": "higher_is_better",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "format": "json-stat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/isoc_ci_ac_i?indic_is=I_IUMAPP&unit=PC_IND&ind_type=IND_TOTAL&geo=CZ&geo=EU27_2020&format=JSON",
+      "dataset": "Eurostat isoc_ci_ac_i — Individuals: internet activities, položka I_IUMAPP (objednání termínu u lékaře přes web), % osob 16–74, dvouletá řada od 2012",
+      "dimensions": {
+        "country": "CZ",
+        "eu": "EU27_2020",
+        "indic_is": "I_IUMAPP",
+        "unit": "PC_IND (% osob)",
+        "ind_type": "IND_TOTAL (všechny osoby 16–74)",
+        "year": "biennial (sudé roky)"
+      },
+      "note": "Indikátor je namapován v ingest/mapping/eurostat_codes.json — po nejbližším týdenním ingest běhu se hodnota i EU benchmark načítají živě z Eurostat API. Ověřeno živě 2026-08-20: CZ 19,62 (2024), EU27 39,77; sousedé 2024: DE 34,73, SK 28,58, AT 27,51, PL 22,46."
+    },
+    "fallback": {
+      "type": "csu_vsit",
+      "url": "https://csu.gov.cz/produkty/vyuzivani-informacnich-a-komunikacnich-technologii-v-domacnostech-a-mezi-osobami-2024",
+      "note": "ČSÚ — Využívání informačních a komunikačních technologií v domácnostech a mezi osobami (roční publikace s kapitolou o internetu v oblasti zdraví; národní členění podle věku, vzdělání a krajů, populace 16+, hodnoty se proto mírně liší od harmonizované řady 16–74). Nabídkovou stranu doplňuje ČSÚ statistika ICT ve zdravotnictví (data ÚZIS): v roce 2024 umožňovalo online objednání 27 % ordinací."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "isoc_ci_ac_i / I_IUMAPP",
+    "dataset": "EU-27 průměr téže řady (% osob 16–74, které si v posledních 3 měsících objednaly termín u lékaře přes web nebo aplikaci). 2024: EU 39,8 — dvojnásobek Česka (19,6). Sousedé: Německo 34,7, Slovensko 28,6, Rakousko 27,5, Polsko 22,5 — Česko je poslední v celém sousedství. Špička EU 2024: Finsko 63,8, Španělsko 61,4, Dánsko 59,1.",
+    "value": 39.8,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/isoc_ci_ac_i/default/table"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "biennial",
+  "stewards": [
+    "ČSÚ — šetření Využívání ICT v domácnostech a mezi osobami (sběr dat za ČR)",
+    "Eurostat — harmonizovaná publikace isoc_ci_ac_i (EU ICT survey)",
+    "MZ ČR — elektronizace zdravotnictví (zákon č. 325/2021 Sb., aplikace EZKarta)",
+    "Zdravotní pojišťovny — bonifikace objednávkových systémů (úhradová vyhláška, VZP PLUS)"
+  ],
+  "method_notes": "Hodnota za rok 2024: 19,6 % osob 16–74 (Eurostat, ověřeno API 2026-08-20: 19,62). Časová řada CZ: 2012: 5,4; 2014: 9,1; 2016: 8,8; 2018: 9,5; 2020: 9,3; 2022: 16,1; 2024: 19,6. Řada je dvouletá (otázka běží v sudých letech). Klíčový zlom 2020→2022 (9,3 → 16,1) odráží covidové zavedení rezervačních systémů (očkovací portál, testovací rezervace) — jde o největší skok celé řady; tempo 2022→2024 (+3,5 p. b.) ale nestačí tempu EU (+6,3 p. b.), takže se odstup od průměru EU dál rozevírá (2022: −17,4 p. b.; 2024: −20,2 p. b.). Signál je počítán proti EU průměru (39,8): odchylka −50,7 % → bad. Nabídkovou stranu dokládá ČSÚ/ÚZIS statistika ICT ve zdravotnictví za rok 2024: online objednání umožňovalo 27 % ordinací — gynekologové 41,5 %, praktičtí lékaři pro dospělé 40,7 %, PLDD 39,9 %, ambulantní specialisté 24,3 %, zubaři 10,3 %; elektronickou žádost o recept nabízelo 38 % ordinací, web mělo 55 % ordinací, čistě elektronickou dokumentaci vedlo 13,6 %.",
+  "limitations": "Výběrové šetření (v ČR cca 8–9 tis. domácností) — hodnoty mají výběrovou chybu v řádu desetin až jednotek p. b., meziroční pohyby do ~2 p. b. nelze přeceňovat. Ukazatel míchá nabídku a poptávku: nízká hodnota může znamenat, že ordinace online objednání nenabízejí, i to, že ho pacienti nevyužívají — pro ČR nabídkové statistiky (27 % ordinací s online objednáním) ukazují, že limitem je primárně nabídka. Referenční období „poslední 3 měsíce“ podhodnocuje osoby, které k lékaři chodí zřídka; srovnání mezi zeměmi to ale nezkresluje. Populace 16–74 nezahrnuje nejstarší seniory, kteří jsou nejčastějšími pacienty a zároveň nejméně digitálně zdatnými — skutečný podíl objednávek přes internet ze všech objednávek je proto nižší. Národní publikace ČSÚ pracuje s populací 16+, hodnoty se od harmonizované řady mírně liší.",
+  "determinants": "Rozhodující je nabídková strana: pacient se online objedná jen tam, kde ordinace rezervační systém provozuje — a to v roce 2024 umožňovalo jen 27 % českých ordinací, u zubařů dokonce 10,3 %. Druhou vrstvou je fragmentace: český systém nemá jednotnou národní objednávkovou platformu (vzor Dánsko — sundhed.dk), takže si každá ordinace pořizuje komerční systém sama, bez standardu a bez povinnosti. Třetí vrstvou jsou úhradové pobídky — úhradová vyhláška bonifikuje objednávkový systém jen měkce (stačí objednávání na pevně stanovenou dobu alespoň dva dny v týdnu a systém nemusí být elektronický) a bonifikace je vázána na balík dalších podmínek, takže netlačí na skutečnou digitalizaci. Čtvrtou vrstvou je digitální gramotnost poptávky: mezi mladšími ročníky a vysokoškoláky je využití násobně vyšší, mezi seniory minimální — s rostoucí nabídkou ale využití roste ve všech skupinách, jak ukázal skok po roce 2020.",
+  "importance": "Objednání k lékaři je nejčastější transakce mezi občanem a zdravotním systémem — a jediná, kterou většina zdravých lidí za rok udělá. Je to proto lakmusový papírek celé elektronizace: měří, jestli digitalizace došla z registrů a strategií až k pacientovi. Telefonické objednávání navíc není jen nepohodlí — nedovolatelnost je reálná bariéra přístupu (opakované volání v pracovní době, obsazené linky, sestra vytížená telefonem místo péče) a strukturovaný online rozvrh zkracuje čekání v čekárnách i no-show. Dashboard dosud digitalizaci měřil ze strany infrastruktury (eHealth index, kybernetická bezpečnost) a informací (vyhledávání informací o zdraví); tento indikátor přidává transakční vrstvu — skutečné digitální využití péče. Česko je v něm na polovině průměru EU a poslední mezi všemi sousedy, přestože poptávka prokazatelně existuje: kdykoli se nabídka objevila (covidové rezervace), využití skokově vzrostlo.",
+  "patient_story": "Je úterý ráno a Marcela, osmatřicetiletá účetní z Kladna, potřebuje objednat syna k praktické lékařce a sebe na preventivní prohlídku. Letenku, kadeřníka i servis auta vyřídila večer z mobilu za pět minut. U lékařky to nejde: ordinace má jen telefon, a ten zvedá sestra mezi odběry — Marcela to zkouší mezi poradami, šestkrát obsazeno, posedmé se dozví, že má zavolat zítra. Nakonec si vezme půl dne dovolené a jede se objednat osobně. Není výjimka: online objednání umožňuje jen 27 % českých ordinací — a u zubařů pouhých 10,3 %.\n\nPřesně tohle měří nový indikátor. Termín u lékaře si v Česku přes internet objednalo 19,6 % lidí ve věku 16–74 let (2024) — průměr EU je 39,8 %, tedy dvojnásobek. Ze všech sousedů je Česko poslední: Německo 34,7 %, Slovensko 28,6 %, Rakousko 27,5 %, i Polsko 22,5 %. Řada přitom ukazuje, že poptávka existuje: když covid přinesl rezervační systémy na testy a očkování, využití skočilo z 9,3 % (2020) na 16,1 % (2022). Jenže EU od té doby zrychlila víc a náskok se dál rozevírá.\n\nDůvod není na straně pacientů, ale nabídky. Českému systému chybí jednotná objednávková platforma — každá ordinace si rezervační systém pořizuje sama, bez standardu a bez povinnosti. Úhradová vyhláška sice objednávkový systém bonifikuje, ale měkce: stačí objednávání na pevně stanovenou dobu dva dny v týdnu a systém nemusí být elektronický, takže pobídka na skutečnou digitalizaci netlačí. A tam, kde systém není, platí všichni: pacient dovolenou a frontou, sestra hodinami u telefonu, ordinace přeplněnou čekárnou a no-show termíny.\n\nPáky jsou přitom konkrétní a levné. Ministerstvo zdravotnictví může v úhradové vyhlášce bonifikaci svázat se skutečným elektronickým objednáním, ne s telefonem; zákon č. 325/2021 Sb. o elektronizaci zdravotnictví a aplikace EZKarta dávají státu infrastrukturu, na kterou lze národní objednávání navěsit; a evropský prostor pro zdravotní data (EHDS) udělá z digitálního přístupu pacienta ke službám evropskou povinnost. Finsko a Španělsko, kde se online objednává přes 60 % lidí, ukazují cíl: aby objednání k lékaři nebylo těžší než objednání ke kadeřníkovi.",
+  "framework": "hspa",
+  "dimension": "dostupnost"
+}

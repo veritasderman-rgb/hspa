@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(DRAFT) K lékaři se objednáváme online dvakrát méně než zbytek Evropy. Nechybí pacienti, chybí systém · HSPA Monitor</title>
+<meta name="description" content="Termín u lékaře si přes internet objednalo 19,6 % Čechů ve věku 16–74 let — průměr EU je 39,8 %, tedy dvojnásobek, a Česko je poslední mezi všemi svými sousedy. Online objednání přitom umožňuje jen 27 % českých ordinací a u zubařů 10,3 %. Nový indikátor HSPA Monitoru měří nejčastější transakci mezi občanem a zdravotnictvím — a ukazuje, že limitem není poptávka pacientů, ale nabídka systému.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K lékaři se objednáváme online dvakrát méně než zbytek Evropy. Nechybí pacienti, chybí systém">
+<meta property="og:description" content="19,6 % Čechů si objednalo termín u lékaře přes internet; průměr EU je 39,8 % a všichni sousedé Česka jsou napřed. Když covid přinesl rezervační systémy, využití skokově vzrostlo — poptávka existuje, chybí nabídka: online objednání umožňuje jen 27 % ordinací. Co říká nový indikátor HSPA Monitoru.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-20">
+<meta property="article:section" content="Digitalizace">
+<!--
+  audit:
+    last_reviewed: 2026-08-20
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: article-write (nový indikátor objednani_k_lekari_online z ČSÚ/Eurostat šetření o ICT)
+    notes: "Nový HSPA indikátor: objednání k lékaři přes internet (Procesy / Dostupnost péče / Digitální přístup k péči, dimenze dostupnost). PRIMÁRNÍ DATA: Eurostat isoc_ci_ac_i, položka I_IUMAPP (making an appointment with a practitioner via a website), % osob 16–74, poslední 3 měsíce; ověřeno živě přes API 2026-08-20: CZ řada 2012–2024 (sudé roky): 5,4/9,1/8,8/9,5/9,3/16,1/19,6; EU27 2024: 39,8 (řada 7,4→39,8); sousedé 2024: DE 34,7 (2022: 18,6), SK 28,6, AT 27,5, PL 22,5; špička FI 63,8, ES 61,4, DK 59,1. Odstup CZ od EU: 2022 −17,4 p. b. → 2024 −20,2 p. b. Sběr v ČR: ČSÚ, šetření VŠIT (populace 16+, mírně odlišné hodnoty). NABÍDKOVÁ STRANA: ČSÚ — ICT ve zdravotnictví (data ÚZIS), rok 2024: online objednání 27 % ordinací (gynekologové 41,5 %, VPL 40,7 %, PLDD 39,9 %, ambulantní specialisté 24,3 %, zubaři 10,3 %); el. žádost o recept 38 %; web 55 %; čistě el. dokumentace 13,6 %. POLITICKÝ KONTEXT: úhradová vyhláška č. 314/2024 Sb. (příloha 3) — bonifikace objednávkového systému v balíku podmínek (30 ord. hodin / 5 dní, 1× týdně do 18 h, objednání na pevný čas ≥2 dny v týdnu; systém nemusí být elektronický); zákon č. 325/2021 Sb. o elektronizaci zdravotnictví; EZKarta (MZ + DIA + ÚZIS); Portál lékaře a pacienta + eŽádanky od 1/2026; Národní strategie elektronického zdravotnictví 2025–2035 (schválena vládou 10/2025); nařízení (EU) 2025/327 o EHDS. Hodnoty v textu sladěny s data/indicators.json (value 19.6, year 2024, trend 7 bodů, benchmark eu 39.8, signal bad). Mapping pro živý Eurostat fetch připraven (ingest/mapping/eurostat_codes.json). DRAFT, published:false, noindex — před publikací ověřit, zda nevyšla novější vlna šetření (2026 se sbírá) a stav bonifikací v úhradové vyhlášce na 2027."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Digitalizace</span>
+        <span class="article-tag article-tag-muted">eHealth · primární péče · úhradová vyhláška · EZKarta</span>
+      </div>
+      <h1 class="article-title">K lékaři se objednáváme online dvakrát méně než zbytek Evropy. Nechybí pacienti, chybí systém</h1>
+      <p class="article-deck">
+        Termín u lékaře si přes internet objednalo <strong>19,6 %</strong> Čechů ve věku 16–74 let — průměr EU je 39,8 %, tedy dvojnásobek, a Česko je poslední mezi všemi svými sousedy včetně Polska. Přitom kdykoli se objednávací systémy objevily, lidé je okamžitě začali používat: po covidových rezervacích využití skočilo téměř na dvojnásobek. Nový indikátor HSPA Monitoru měří nejčastější transakci mezi občanem a zdravotnictvím — a ukazuje, že úzkým hrdlem není poptávka pacientů, ale nabídka: online objednání dnes umožňuje jen 27 % českých ordinací.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">draft — čeká na redakční schválení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Marcela (38) z Kladna potřebuje objednat syna k praktické lékařce a sebe na preventivní prohlídku. Letenku, kadeřníka i servis auta vyřídila večer z mobilu za pět minut. U lékařky to nejde: ordinace má jen telefon, který zvedá sestra mezi odběry. Marcela volá mezi poradami — šestkrát obsazeno, posedmé se dozví, ať zavolá zítra. Nakonec si vezme půl dne volna a jede se objednat osobně. Není to smůla na jednu ordinaci, je to systémový stav: zatímco vyhledávat informace o zdraví online umí a chce nadprůměr Čechů, ve chvíli, kdy má digitální cesta vést ke skutečné transakci — objednanému termínu —, končí Česko na polovině evropského průměru. Přesně tuhle mezeru měří nový indikátor HSPA Monitoru.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Objednání k lékaři přes internet — 2024 v číslech</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="19.6" data-decimals="1">19,6</span>
+            <span class="av-counter-label">procent Čechů (16–74 let) si v posledních třech měsících objednalo termín u lékaře přes web či aplikaci</span>
+            <span class="av-counter-foot">průměr EU-27: 39,8 % — Česko je na polovině a poslední mezi všemi sousedy</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="27" data-decimals="0">27</span>
+            <span class="av-counter-label">procent českých ordinací umožňovalo v roce 2024 online objednání</span>
+            <span class="av-counter-foot">u zubařů jen 10,3 % — přitom právě k zubaři se shání termín nejhůř</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="16.1" data-decimals="1">16,1</span>
+            <span class="av-counter-label">procent v roce 2022 — skok z 9,3 % (2020), když covid přinesl první masové rezervační systémy</span>
+            <span class="av-counter-foot">poptávka existuje: jakmile se nabídka objevila, využití téměř zdvojnásobilo</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="20.2" data-decimals="1">20,2</span>
+            <span class="av-counter-label">procentního bodu činil v roce 2024 odstup Česka od průměru EU — a rozevírá se</span>
+            <span class="av-counter-foot">2022: −17,4 p. b.; EU zrychluje (+6,3 p. b. za dva roky), Česko přidalo jen +3,5</span>
+          </div>
+        </div>
+        <p class="av-figure-note">Zdroj: Eurostat — isoc_ci_ac_i, položka I_IUMAPP (šetření o využívání ICT, v ČR sbírá ČSÚ), osoby 16–74 let, referenční období poslední 3 měsíce; nabídková strana: ČSÚ — ICT ve zdravotnictví (data ÚZIS), 2024.</p>
+      </figure>
+
+      <h3>Co indikátor měří — a proč patří do dashboardu</h3>
+      <p>
+        Indikátor sleduje podíl osob ve věku 16–74 let, které si v posledních třech měsících před šetřením objednaly termín u lékaře přes webovou stránku nebo aplikaci — třeba rezervační systém ordinace, nemocnice nebo zdravotního centra. Data pocházejí z harmonizovaného evropského šetření o využívání informačních a komunikačních technologií, které v Česku každoročně provádí ČSÚ na vzorku domácností; otázka na objednání k lékaři běží ve dvouletém cyklu, takže řada má body v sudých letech od roku 2012. Eurostat ji publikuje pro všechny země EU pod kódem I_IUMAPP, díky čemuž jde o jedno z mála plně srovnatelných měřítek digitálního zdravotnictví.
+      </p>
+      <p>
+        Proč měřit zrovna objednávání? Protože je to nejčastější kontakt občana se zdravotním systémem — a jediný, který skoro každý zdravý člověk za rok udělá. Dashboard dosud digitalizaci sledoval ze strany infrastruktury (eHealth index, kybernetické incidenty) a informací (vyhledávání informací o zdraví online, kde je Česko s 68,4 % nad průměrem EU). Tento indikátor přidává třetí, transakční vrstvu: měří, jestli digitalizace prošla z registrů, strategií a tiskových zpráv až k pacientovi, který ve středu večer potřebuje termín. A telefonické objednávání není jen otázka pohodlí — nedovolatelnost je reálná bariéra přístupu k péči: opakované volání v pracovní době, obsazené linky a sestra, která místo odběrů drží sluchátko. Strukturovaný online rozvrh naopak prokazatelně zkracuje čekání a snižuje počet propadlých termínů.
+      </p>
+
+      <h3>Stav v Česku: poptávka skočila, jakmile se objevila nabídka</h3>
+      <p>
+        Česká řada má jeden klíčový zlom. Deset let se vlekla pod deseti procenty: 5,4 % (2012), 9,1 % (2014), 9,5 % (2018), 9,3 % (2020) — stagnace, kterou nešlo svést na pacienty, protože titíž lidé v témže období masově přešli na internetbanking a e-shopy. Pak přišel covid a s ním první celostátní rezervační systémy na testy a očkování — a využití mezi lety 2020 a 2022 skočilo z 9,3 % na 16,1 %, nejvíc v historii řady. Lidé se online objednávat umějí a chtějí; do té doby prostě většinou neměli kde.
+      </p>
+      <p>
+        Jenže co vypadá jako úspěch, je při pohledu na zbytek Evropy zaostávání. Průměr EU rostl ve stejném období ještě rychleji — z 20,8 % (2020) na 33,5 % (2022) a 39,8 % (2024). Česko přidalo mezi lety 2022 a 2024 jen 3,5 procentního bodu na konečných 19,6 %, zatímco EU 6,3 bodu; odstup od průměru se tak rozevřel ze 17,4 na 20,2 procentního bodu. Covidový impuls vyprchal — rezervační systémy na očkování skončily, ale do běžných ordinací se objednávání nepropsalo.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Objednání k lékaři přes internet 2012–2024 — řada indikátoru</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Česko (%)</th>
+                <th scope="col" class="av-num">EU-27 (%)</th>
+                <th scope="col">Kontext</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2012</td>
+                <td class="av-num">5,4</td>
+                <td class="av-num">7,4</td>
+                <td>výchozí bod řady; odstup od EU jen 2 body</td>
+              </tr>
+              <tr>
+                <td>2016</td>
+                <td class="av-num">8,8</td>
+                <td class="av-num">12,8</td>
+                <td>jediný meziroční pokles české řady</td>
+              </tr>
+              <tr>
+                <td>2020</td>
+                <td class="av-num">9,3</td>
+                <td class="av-num">20,8</td>
+                <td>dekáda stagnace pod 10 %; EU už dvojnásobná</td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td class="av-num">16,1</td>
+                <td class="av-num">33,5</td>
+                <td>covidový skok: rezervace na testy a očkování</td>
+              </tr>
+              <tr>
+                <td><strong>2024</strong></td>
+                <td class="av-num"><strong>19,6</strong></td>
+                <td class="av-num"><strong>39,8</strong></td>
+                <td>aktuální hodnota indikátoru; odstup −20,2 p. b. je největší v historii řady</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat — isoc_ci_ac_i (I_IUMAPP), % osob 16–74. Vybrané roky dvouleté řady; plná řada je v metodické kartě indikátoru.</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: poslední mezi sousedy, poloviční proti EU</h3>
+      <p>
+        V roce 2024 si termín u lékaře objednalo online 19,6 % Čechů — proti 39,8 % v průměru EU. Ze sousedů je nejdál Německo s 34,7 %, které se mezi lety 2022 a 2024 téměř zdvojnásobilo z 18,6 %; ještě v roce 2022 přitom bylo prakticky na české úrovni. Slovensko je na 28,6 %, Rakousko na 27,5 % a i Polsko s 22,5 % Česko předstihlo. Na špici Evropy se online objednává většina populace: Finsko 63,8 %, Španělsko 61,4 %, Dánsko 59,1 %.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Objednání k lékaři přes internet, 2024 (% osob 16–74)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="70" data-unit="%">
+          <li class="av-bar-row" data-value="63.8" data-label="Finsko" data-note="národní portál veřejných e-služeb včetně zdravotnictví"></li>
+          <li class="av-bar-row" data-value="39.8" data-label="Průměr EU-27" data-note="referenční hodnota; od 2012 vzrostl pětinásobně"></li>
+          <li class="av-bar-row" data-value="34.7" data-label="Německo" data-note="skok z 18,6 % (2022) — z české úrovně na dvojnásobek za dva roky"></li>
+          <li class="av-bar-row" data-value="28.6" data-label="Slovensko" data-note="před Českem o 9 procentních bodů"></li>
+          <li class="av-bar-row" data-value="27.5" data-label="Rakousko" data-note="před Českem o 8 procentních bodů"></li>
+          <li class="av-bar-row" data-value="22.5" data-label="Polsko" data-note="i Polsko předstihlo Česko"></li>
+          <li class="av-bar-row av-bar-row-now" data-value="19.6" data-label="Česko" data-note="polovina průměru EU, poslední v celém sousedství"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat — isoc_ci_ac_i (I_IUMAPP), 2024. Hodnoty ověřeny přes Eurostat API 20. 8. 2026.</p>
+      </figure>
+
+      <p>
+        Německý skok stojí za pozornost: ukazuje, že pořadí není dané kulturou ani věkovou strukturou, ale nabídkou. Když se objednávání stane běžnou součástí ordinační praxe — a pojišťovny i stát ho aktivně tlačí —, populace se přizpůsobí během jediné vlny šetření. Česko takový impuls zažilo jen jednou, uměle a dočasně: v covidových rezervačních systémech.
+      </p>
+
+      <h3>Strukturální analýza: proč se Česko objednává telefonem</h3>
+      <p>
+        <strong>První vrstva: nabídka ordinací.</strong> Pacient se online objedná jen tam, kde ordinace rezervační systém provozuje — a to je v Česku menšina. Podle statistiky ICT ve zdravotnictví umožňovalo v roce 2024 online objednání 27 % ordinací. Nejdál jsou gynekologové (41,5 %), praktičtí lékaři pro dospělé (40,7 %) a praktici pro děti a dorost (39,9 %); ambulantní specialisté jsou na 24,3 % a zubaři — obor s nejhůře dostupnými termíny — na pouhých 10,3 %. Web měla v roce 2024 jen 55 % ordinací a čistě elektronickou dokumentaci vedlo 13,6 %. Digitální mezera tedy nezačíná u pacienta; začíná u dveří ordinace.
+      </p>
+      <p>
+        <strong>Druhá vrstva: fragmentace.</strong> Českému systému chybí jednotná objednávková vrstva. Každá ordinace si rezervační systém pořizuje sama od komerčních dodavatelů, bez datového standardu, bez propojení a bez povinnosti; pacient s třemi lékaři může potřebovat tři různé aplikace a čtvrtého lékaře stejně musí prozvánět. Země na špici žebříčku šly opačnou cestou: jednotný národní vstup (finská či dánská portálová infrastruktura veřejných služeb), do kterého se poskytovatelé připojují. Česko svou národní infrastrukturu — Portál lékaře a pacienta, aplikaci EZKarta, od ledna 2026 eŽádanky — teprve rozjíždí a objednávání v ní zatím hraje vedlejší roli.
+      </p>
+      <p>
+        <strong>Třetí vrstva: měkké pobídky.</strong> Úhradová vyhláška objednávkový systém bonifikuje, ale v balíku s dalšími podmínkami (rozsah ordinačních hodin, ordinace do 18 hodin) a hlavně měkce: stačí, aby se pojištěnci mohli objednat na pevně stanovenou dobu alespoň dva dny v týdnu — a systém nemusí být elektronický. Bonifikaci tak splní i papírový diář a telefon. Pobídka, která neodlišuje online rezervaci od obsazené linky, digitalizaci nepohne; odměňuje stav, který indikátor právě měří jako problém.
+      </p>
+      <p>
+        <strong>Čtvrtá vrstva: digitální propast poptávky.</strong> Využití online objednání je násobně vyšší mezi mladšími ročníky, vysokoškoláky a ve velkých městech; mezi seniory — nejčastějšími pacienty — je minimální. Část rozdílu je dovednostní, část ale opět nabídková: senior se nenaučí používat systém, který jeho ordinace nemá. Zkušenost z covidových rezervací, kdy se online objednávaly i statisíce seniorů (často rukama dětí a vnoučat), ukazuje, že propast se překlenout dá — pokud je co používat a telefon zůstává jako záloha.
+      </p>
+
+      <h3>Politická páka: tři kroky, které na sebe navazují</h3>
+      <p>
+        <strong>První: narovnat bonifikaci.</strong> Nejrychlejší nástroj drží Ministerstvo zdravotnictví v úhradové vyhlášce už dnes. Stačí bonifikaci objednávkového systému rozdělit: základní sazbu za objednávání na pevný čas, vyšší za skutečný elektronický rezervační systém dostupný pacientům nepřetržitě. Náklady jsou minimální — rezervační systémy jsou běžně dostupná komerční služba, kterou dnes provozují čtyři z deseti praktiků — a vyhláška se novelizuje každý rok, takže změna může platit od příštího ledna.
+      </p>
+      <p>
+        <strong>Druhá: dát objednávání národní vrstvu.</strong> Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví vybudoval základ — kmenové registry, Portál lékaře a pacienta, aplikaci EZKarta, od ledna 2026 eŽádanky. Národní strategie elektronického zdravotnictví 2025–2035, kterou vláda schválila loni v říjnu, počítá s pacientem „digitálním asistentem". Objednání termínu je přesně ta služba, která má v této infrastruktuře být: jednotné místo, kde pacient vidí volné kapacity připojených poskytovatelů, s telefonem jako plnohodnotnou zálohou pro ty, kdo digitálně nemohou nebo nechtějí. Německá zkušenost ukazuje, že jde o největší jednotlivý skok, jaký může země v tomto ukazateli udělat.
+      </p>
+      <p>
+        <strong>Třetí: měřit a vymáhat evropský závazek.</strong> Nařízení o evropském prostoru pro zdravotní data (EHDS), platné od března 2025, dělá z digitálního přístupu občanů ke zdravotním službám evropskou povinnost s termíny — primární využití dat náběhne během několika let a Česko bude muset vykazovat pokrok. Tento indikátor je přirozený měřič: dvouletá harmonizovaná řada, plně srovnatelná napříč EU. Vláda si může dát jednoduchý, kontrolovatelný cíl — dotáhnout do roku 2030 průměr EU. Znamená to zdvojnásobit dnešní hodnotu; přesně to zvládlo Německo za pouhé dva roky.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        Indikátor objednání k lékaři přes internet vstupuje do dashboardu s hodnotou <strong>19,6 %</strong> (2024), signálem bad a odstupem 20,2 procentního bodu od průměru EU, který se dál rozevírá. Snadné čtení zní: Češi si na digitální zdravotnictví nezvykli. Data říkají opak: kdykoli dostali funkční rezervační systém, použili ho okamžitě a masově — od covidových očkování po internetbanking. Nezvykl si systém. Tři čtvrtiny ordinací online objednání nenabízejí, úhradová vyhláška odměňuje papírový diář stejně jako rezervační software a národní eHealth infrastruktura zatím objednávání neumí. Je to vzácný druh problému: levný na vyřešení, s okamžitým dopadem na každodenní zkušenost milionů lidí — a s hotovým vzorem za hranicemi. Tenhle indikátor bude každé dva roky měřit, jestli se ho někdo chopil.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-objednani_k_lekari_online.html"><strong>Objednání k lékaři přes internet</strong></a> — 19,6 % (2024), EU 39,8 % · signál bad — nový indikátor, dvouletá řada ČSÚ/Eurostat od 2012</li>
+        <li><a href="indikator-zdravotni_info_online.html"><strong>Vyhledávání zdravotních informací online</strong></a> — 68,4 % (2024), EU 58,2 % · signál good — informační vrstva digitálního zdraví, kde Česko naopak vede</li>
+        <li><a href="indikator-ehealth_adoption.html"><strong>eHealth index — míra adopce</strong></a> — 62 b. (2024), EU 68 · signál bad — infrastrukturní kontext elektronizace</li>
+        <li><a href="indikator-cekaci_doby_specialist.html"><strong>Čekací doba na specialistu (medián)</strong></a> — 28 dní (2024), EU 22 · signál bad — dostupnost, kterou lepší objednávání zpřehledňuje</li>
+        <li><a href="indikator-podil_prakticti_lekari.html"><strong>Podíl praktických lékařů mezi všemi lékaři</strong></a> — 16,9 % (2023), OECD 23 % · signál bad — kapacita primární péče, jejíž čas telefonování ukrajuje</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data — využití a nabídka online objednání</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Individuals: internet activities (isoc_ci_ac_i)</strong> — položka I_IUMAPP (making an appointment with a practitioner via a website), % osob 16–74, dvouletá řada 2012–2024 pro všechny země EU; zdroj hodnoty indikátoru i všech mezinárodních srovnání v článku. <a href="https://ec.europa.eu/eurostat/databrowser/view/isoc_ci_ac_i/default/table" target="_blank" rel="noopener">ec.europa.eu — isoc_ci_ac_i ↗</a></li>
+          <li><strong>ČSÚ — Využívání informačních a komunikačních technologií v domácnostech a mezi osobami 2024</strong> — národní publikace šetření, ze kterého harmonizovaná řada vychází (v ČR populace 16+, členění podle věku, vzdělání a krajů). <a href="https://csu.gov.cz/produkty/vyuzivani-informacnich-a-komunikacnich-technologii-v-domacnostech-a-mezi-osobami-2024" target="_blank" rel="noopener">csu.gov.cz — VŠIT 2024 ↗</a></li>
+          <li><strong>ČSÚ — ICT ve zdravotnictví (data ÚZIS)</strong> — nabídková strana: podíl ordinací umožňujících online objednání (2024: 27 %; gynekologové 41,5 %, VPL 40,7 %, PLDD 39,9 %, ambulantní specialisté 24,3 %, zubaři 10,3 %), elektronickou žádost o recept (38 %), web (55 %) a čistě elektronickou dokumentaci (13,6 %). <a href="https://csu.gov.cz/ict-ve-zdravotnictvi" target="_blank" rel="noopener">csu.gov.cz — ICT ve zdravotnictví ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Politický a legislativní kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>Vyhláška č. 314/2024 Sb. (úhradová vyhláška)</strong> — příloha č. 3: bonifikační podmínky pro praktické lékaře včetně objednávkového systému (objednání na pevně stanovenou dobu alespoň dva dny v týdnu). <a href="https://www.zakonyprolidi.cz/cs/2024-314" target="_blank" rel="noopener">zakonyprolidi.cz — 314/2024 Sb. ↗</a></li>
+          <li><strong>Zákon č. 325/2021 Sb. o elektronizaci zdravotnictví</strong> — právní rámec národní eHealth infrastruktury (kmenové registry, portálové služby), na kterou lze národní objednávání navázat. <a href="https://www.zakonyprolidi.cz/cs/2021-325" target="_blank" rel="noopener">zakonyprolidi.cz — 325/2021 Sb. ↗</a></li>
+          <li><strong>MZ ČR — Národní strategie elektronického zdravotnictví 2025–2035</strong> — vládou schválená strategie (10/2025): digitální služby pro pacienty, Portál lékaře a pacienta, EZKarta, eŽádanky od ledna 2026. <a href="https://mzd.gov.cz/wp-content/uploads/2025/10/MZ_strategie_EZ_2025-2035.pdf" target="_blank" rel="noopener">mzd.gov.cz — strategie (PDF) ↗</a></li>
+          <li><strong>Nařízení (EU) 2025/327 o evropském prostoru pro zdravotní data (EHDS)</strong> — evropská povinnost digitálního přístupu občanů ke zdravotním datům a službám, platné od března 2025. <a href="https://eur-lex.europa.eu/eli/reg/2025/327/oj" target="_blank" rel="noopener">eur-lex.europa.eu — EHDS ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota indikátoru (19,6 % osob 16–74, rok 2024) i všechny mezinárodní hodnoty pocházejí z Eurostat isoc_ci_ac_i (I_IUMAPP) a byly ověřeny přes Eurostat API 20. 8. 2026; jde o výběrové šetření s referenčním obdobím „poslední 3 měsíce", takže podíl podhodnocuje osoby, které lékaře navštěvují zřídka. Národní publikace ČSÚ pracuje s populací 16+, hodnoty se proto od harmonizované řady mírně liší. Údaje o nabídce ordinací (27 % s online objednáním a členění podle oborů, 2024) pocházejí ze statistiky ICT ve zdravotnictví ČSÚ, jejímž zdrojem jsou data ÚZIS. Odstupy od EU v procentních bodech jsou redakční výpočet z týchž řad. <strong>Článek je rozpracovaný draft</strong> — před publikací ověřit, zda nevyšla novější vlna šetření a zda úhradová vyhláška na rok 2027 podmínky bonifikace objednávkového systému nezměnila.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
