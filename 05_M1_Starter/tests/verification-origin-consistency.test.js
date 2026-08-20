@@ -87,6 +87,17 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   // stav jako precedens 2026-07-17 (nesplnena_potreba_zubni_pece); odblokuje
   // ho příští úspěšný live fetch — pak odeber.
   'unmet_need_medical',
+  // 2026-08-20: dva indikátory ověřené RUČNĚ proti primárnímu PDF zdroje
+  // (protokol §4 kompletní v metodické kartě), ale bez automatického fetcheru,
+  // takže kontrakt nese origin: seed — stejný případ jako ÚZIS NRH extrakty výše.
+  // nemoci_z_povolani_neinfekcni: SZÚ „Nemoci z povolání v ČR v roce 2025“,
+  //   tab. 2.1.1 a 2.1.2 (součet kapitol I+II+III+IV+VI); hodnota 14,4 / 2025.
+  // zijici_darci_ledvin_pmp: KST „Transplantační aktivita v ČR 2006–2025“
+  //   (řádek ověřen kontrolním součtem celkem = kadaverózní + žijící) dělený
+  //   populací z Eurostat demo_pjan; hodnota 3,6 / 2025.
+  // Odeber, jakmile pro ně vznikne živý feed.
+  'nemoci_z_povolani_neinfekcni',
+  'zijici_darci_ledvin_pmp',
 ]);
 
 test('verification_status: verified v kartě ⇒ source.origin: live v kontraktu (kromě známých výjimek)', () => {
