@@ -444,6 +444,43 @@ function windowAround(text, idx, len = 0) {
 // Dopředná formulace v okolí data → výrok byl psán jako budoucí.
 const FORWARD_RE = /\b(od|do|účinnost|účinn\w*|nabýv\w*|nabýt|vstoup\w*|platnost\w*|plánuj\w*|plánován\w*|očekáv\w*|měl[aoy]?\s+by|mají\s+|spustí\w*|spuštěn\w*|zaveden\w*|zavede|termín\w*|deadline|bude|budou|chystá\w*|připravuj\w*|projednáv\w*|schválen\w*|má\s+nabýt|má\s+vstoupit|do\s+roku)\b/i;
 
+// Kolik znaků VLEVO od data se zkoumá na razítko. Krátké okno schválně:
+// razítko stojí těsně před datem („staženo 14. 8. 2026"), zatímco dopředná
+// formulace může být kdekoli v širším okolí.
+const STAMP_LOOKBEHIND = 48;
+
+/**
+ * Razítko pořízení dat, nikoli slíbená událost. Datum stažení, ověření,
+ * aktualizace nebo „stav k" je popis toho, KDY redakce zdroj četla — takové
+ * datum je v článku vždy pozdější než publikace a vždy už uplynulo, takže
+ * `findPassedDates` ho jinak hlásí donekonečna. A protože FORWARD_RE stačí
+ * jediné „od"/„do" kdekoli v okolí (a v české větě u datového zdroje je
+ * skoro vždy), spustí se to prakticky u každé zdrojové poznámky.
+ *
+ * Praktický důsledek: po každé noční revizi, která do článku zapíše datum
+ * kontroly, se článek příští noc vrátí do fronty `date-passed` — a protože
+ * `date-passed` obchází přeskočení recentně auditovaných článků, vytlačuje
+ * z 3–5 revizí za noc skutečnou práci. (Nalezeno review botem na PR #1013.)
+ *
+ * Co veto NEŘEŠÍ (a řešit nemá): datum konce datového pokrytí („řada končí
+ * týdnem do 5. 7. 2026"). To razítko není a někdy jde o skutečný signál
+ * („data se čekala do…"). Když takové datum leží až po publikaci článku,
+ * flag dál vzniká — správně, protože zaslouží lidské oko.
+ */
+const STAMP_RE = /\b(stažen\w*|ověřen\w*|re-?verifik\w*|verifikován\w*|zkontrolován\w*|kontrol\w*|aktualizac\w*|aktualizován\w*|doplněno|refresh\w*|pull|publikován\w*|generován\w*|vydáno|naposledy|přečten\w*|dotaz\w*|stav\s+k|data\s+k|k\s+datu|updated|as\s+of|soubor\s+z|feed\s+z)\b/i;
+
+/**
+ * Je datum na pozici `idx` jen razítkem pořízení dat?
+ * Zkoumá se úzké okno vlevo — razítko datu předchází („staženo 14. 8. 2026",
+ * „refresh datové sady z 19. 8. 2026"); text vpravo o povaze data nevypovídá.
+ * Okno je schválně krátké: čím delší, tím větší riziko, že se razítkem umlčí
+ * skutečný slib stojící o větu vedle.
+ */
+export function isSourceStamp(text, idx) {
+  const left = text.slice(Math.max(0, idx - STAMP_LOOKBEHIND), idx);
+  return STAMP_RE.test(left);
+}
+
 /**
  * Najde konkrétní data D. M. RRRR, která byla v době psaní BUDOUCÍ (po datu
  * publikace článku), DNES už ale uplynula, a v jejichž okolí je dopředná
@@ -467,6 +504,7 @@ function findPassedDates(text, today, pubDate) {
     if (pubDate && iso < pubDate) continue; // historické datum — ne signál
     const ctx = windowAround(text, m.index, whole.length);
     if (!FORWARD_RE.test(ctx)) continue;    // bez dopředné formulace = ne signál
+    if (isSourceStamp(text, m.index)) continue; // razítko pořízení dat, ne slib
     if (seen.has(iso)) continue;
     seen.add(iso);
     hits.push({ date: iso, raw: whole.replace(/\s+/g, ' ').trim(), context: ctx.slice(0, 220) });

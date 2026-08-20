@@ -53,6 +53,39 @@ test('REVIEW_SKIP_DAYS je 14 (sladěno s rutinou)', () => {
   assert.equal(REVIEW_SKIP_DAYS, 14);
 });
 
+// --- date-passed: razítka pořízení dat nejsou sliby ---
+//
+// Datum stažení / ověření / aktualizace je v článku vždy pozdější než
+// publikace a vždy už uplynulé. Bez tohoto veta se článek po každé noční
+// revizi, která do něj zapíše datum kontroly, vrací do fronty date-passed —
+// a protože date-passed obchází přeskočení recentně auditovaných článků,
+// vytlačuje z 3–5 revizí za noc skutečnou práci. (Nález review bota, PR #1013.)
+
+test('isSourceStamp: pozná razítko pořízení dat, mlčí u slibu', async () => {
+  const { isSourceStamp } = await import('../scripts/nightly-scan.js');
+  const at = (t, needle) => isSourceStamp(t, t.indexOf(needle));
+  assert.ok(at('Staženo 16. 8. 2026 přes REST API', '16.'), 'staženo');
+  assert.ok(at('Aktualizace 13. 8. 2026: resort ohlásil posun', '13.'), 'aktualizace');
+  assert.ok(at('platnou úpravou zatím není (ověřeno 12. 8. 2026)', '12.'), 'ověřeno');
+  assert.ok(at('refresh datové sady z 19. 8. 2026 nic nepřinesl', '19.'), 'refresh + vsuvka');
+  assert.ok(at('čísla vycházejí z odhadů k datu vydání (8. 5. 2026)', '8. 5.'), 'k datu vydání');
+  assert.ok(!at('Novela nabývá účinnosti od 1. 2. 2026', '1. 2.'), 'slib není razítko');
+  assert.ok(!at('Vláda návrh projedná 3. 6. 2026', '3. 6.'), 'projednání není razítko');
+});
+
+test('date-passed: razítka pořízení dat se neflagují', () => {
+  const item = scanArticle(fx('source-stamp-datepassed'), TODAY, { skipReviewed: true });
+  const passed = item.flags.filter(f => f.type === 'date-passed');
+  assert.deepEqual(passed, [], `žádné date-passed, dostal ${JSON.stringify(passed)}`);
+});
+
+test('date-passed: razítko v článku neumlčí skutečný slib jinde', () => {
+  const item = scanArticle(fx('stamp-and-promise'), TODAY, { skipReviewed: true });
+  const passed = item.flags.filter(f => f.type === 'date-passed');
+  assert.equal(passed.length, 1, 'právě jeden flag — slib ano, razítko ne');
+  assert.equal(passed[0].date, '2026-02-01');
+});
+
 // --- indicator-drift (článek ↔ datový kontrakt) ---
 
 test('valueVariants: generuje české zápisy hodnoty vč. tisícových mezer', async () => {
