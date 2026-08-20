@@ -94,9 +94,13 @@ const INTERNAL_PROCESS_MARKERS = [
   // Vzory níž jsou schválně sebereferenční — mluví o TOMTO textu a jeho vydání,
   // takže neplácnou článek, který píše o cizím draftu zákona nebo o auditu NKÚ.
   /(?:článek|text)\s+je\s+(?:rozpracovan\w+|pracovní)\s+draft/i,
-  /před\s+publikací\s+(?:ověřit|ověřte|doplnit|doplň|vyžádat|nahradit|zvážit|budou|se\s+ověřuj)/i,
+  // Kmeny, ne celé tvary — enumerace tvarů minula budoucí trpný rod
+  // („před publikací SE OVĚŘÍ", nalezeno review v PR #1021 ve dvou už
+  // publikovaných článcích). Kmen pokryje ověřit/ověřte/ověří/ověřuje,
+  // doplnit/doplní, dohledat/dohledá i budoucí a zvratné varianty.
+  /před\s+publikací\s+(?:se\s+)?(?:ověř|prověř|dohled|dopln|doplň|vyžád|nahra|zváž|aktualiz|budou)/i,
   /je\s+bod(?:em)?\s+před\s+publikací/i,
-  /čeká\s+na\s+redakční\s+(?:ověření|schválení)/i,
+  /čeká\s+na\s+redakční\s+(?:ověřen|schválen|revi|kontrol)/i,
   /v\s+tomto\s+draftu/i,
   /tento\s+draft\s+(?:\w+\s+){0,2}uvádí/i,
 ];
@@ -308,4 +312,8 @@ function validate() {
   console.log('\nOK: všechny články prošly publikační hygienou.');
 }
 
-validate();
+// validate() jen při přímém spuštění — aby import z testů (kvůli
+// findInternalProcessNotes) nespouštěl celou validaci a neshodil proces.
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  validate();
+}
