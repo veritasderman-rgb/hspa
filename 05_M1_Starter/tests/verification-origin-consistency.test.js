@@ -63,6 +63,13 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   'hospitalizace_na_100k',
   'mortalita_inhosp_ami',
   'mortalita_inhosp_cmp',
+  // KST (Koordinační středisko transplantací) — zemřelí i žijící dárci orgánů.
+  // KST publikuje jen roční PDF („Dárci orgánů dle TC"), automatický fetcher
+  // proto neexistuje a hodnoty se udržují ručním extraktem. Obě karty byly
+  // 2026-08-20 ověřeny §4 protokolem přímo proti těmto PDF (a u zemřelých dárců
+  // proti tiskovým zprávám KST), takže verified je oprávněné, ale kontrakt nese
+  // origin: seed. Odeber, jakmile vznikne živý KST feed.
+  'zemreli_darci_organu_pmp',
   // SÚKL DIS-13 (dodávky distribuovaných humánních LP) — hodnoty primárně
   // ověřeny 2026-07-23 (Vlna A: „ŽIVĚ+OVĚŘENO" ze SÚKL opendata DIS-13,
   // výpočet DDD/1000/den, komunitní sektor), ale automatický DIS-13 fetcher
