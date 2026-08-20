@@ -21,7 +21,8 @@
 //   node ingest/probe/ppo-probe.js --out probe-out # kam uložit report a HTML
 
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as cheerio from 'cheerio';
 
 const BASE = 'https://ppo.mzcr.cz';
@@ -58,7 +59,7 @@ async function get(url) {
 const TITLE_RE = /\b(MUDr|MVDr|MDDr|PharmDr|prof|doc|Ing|Mgr|Bc|JUDr|PhDr|RNDr|PaedDr|Ph\.D|CSc|DrSc|DiS|MBA|MHA|MPH)\b\.?/;
 const DATE_RE = /\b(\d{1,2}\s*\.\s*\d{1,2}\s*\.\s*\d{4}|\d{4}-\d{2}-\d{2})\b/g;
 
-function analyse(html, url) {
+export function analyse(html, url) {
   const $ = cheerio.load(html);
   const text = $('body').text().replace(/\s+/g, ' ').trim();
 
@@ -201,4 +202,8 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+// main() jen při přímém spuštění — bez téhle pojistky spustí každý import
+// (např. z ppo-archive.js kvůli analyse()) celý dvouminutový průzkum.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(e => { console.error(e); process.exit(1); });
+}
