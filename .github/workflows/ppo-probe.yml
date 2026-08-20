@@ -66,6 +66,12 @@ jobs:
           node ingest/probe/ppo-probe.js --out probe-out "${ARGS[@]}" 2>&1 | tee probe-out.log
         continue-on-error: true
 
+      - name: Diagnostika dosažitelnosti
+        run: |
+          set -uo pipefail
+          node ingest/probe/ppo-diagnose.js 2>&1 | tee -a probe-out.log
+        continue-on-error: true
+
       - name: Přilož výstup
         if: always()
         uses: actions/upload-artifact@v4
