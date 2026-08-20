@@ -3,9 +3,10 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-08-14
+    last_reviewed: 2026-08-20
     reviewer: claude-code-agent
     status: review-pending
+    nightly_2026-08-20: "NOČNÍ REVIZE (FÁZE 3.1/3.2) — date-passed (13. 8. 2026). ZDROJ (primární): SÚKL open data, MR feed (opendata.sukl.cz/soubory/MR/mr.zip, staženo 20. 8. 2026, mr_hlaseni_platnost.csv PLATNOST=20.08.2026). VÝSLEDEK KONTROLY: centrální teze článku beze změny — 0058701 (10 mg) preruseni PLATNOST_OD 16.06.2025 / TERMIN_OBNOVENI 15.07.2027 / Výrobní důvody / POSLEDNI_PLATNE_HLASENI=ANO; 0058702 (20 mg) preruseni 08.12.2025 / 15.07.2027 / Výrobní důvody / ANO (NAHRAZUJICI_LP nyní 0289384, 0296808); 0289384 Tamoxifen Orifarm obnoveni 28.07.2026 / ANO. Termín 15. 7. 2027 ani tabulka se tedy nemění. ZMĚNĚNO: datace re-verifikace v odstavci „co se nezměnilo" (13. 8. → 20. 8., feed s platností 20. 08. 2026) a ve figure-note tabulky. NEZMĚNĚNO: všechna čísla o dodávkách (10 000 balení, 6 000 balení, 1 250 pacientek), 1 369 aktivních výpadků, citace i ZLP mechanismus. NEOVĚŘENO: tiskové centrum MZ (mzd.gov.cz/tiskove-centrum-mz/) vrátilo HTTP 404, novější TZ než z 12. 8. se tedy z prostředí agenta dohledat nepodařilo — dosavadní TZ v článku ale zůstávají citované s vlastními URL a jejich obsah se nemění. Status zůstává review-pending."
     nightly_2026-08-13: "NOČNÍ REVIZE (FÁZE 3.2) — článek je stále ve frontě (published:false) a jeho ústřední děj se mezitím posunul. ZDROJ (primární): MZ ČR, TZ 'Situace s tamoxifenem se stabilizuje. Do Česka míří dalších více než 10 tisíc balení' (vytvořeno i aktualizováno 12. 8. 2026, staženo a přečteno v plném znění 13. 8. 2026) + re-verifikace SÚKL MR feedu (opendata.sukl.cz/soubory/MR/mr.zip, staženo 13. 8. 2026, soubor generován 12. 8. 2026 22:15, mr_hlaseni_platnost.csv PLATNOST=13.08.2026). NOVÁ ČÍSLA (všechna z TZ 12. 8., doslovně): přes 10 000 balení míří do ČR 'v těchto a následujících dnech'; dodávky zajištěny i na podzim, kdy má množství trh 'plně saturovat'; MZ již nepřijímá nové žádosti o zvláštní léčebný program, dříve vydané souhlasy platí dál; SÚKL zveřejnil FAQ pro pacientky. Citace Vojtěcha přepsána doslovně z TZ. ZMĚNĚNO: deck, meta description + og:description, úvodní odstavec ('mezi 3. a 7. srpnem' → 'od 3. srpna'), AV flow rozšířen o 5. krok, dva nové odstavce (aktualizace 12. 8. + explicitní odstavec 'co se nezměnilo'), figure-note flow, zdroj MR feedu, sekce Zdroje o TZ 12. 8. NEZMĚNĚNO A ZNOVU OVĚŘENO: centrální teze — 0058701 (10 mg) preruseni PLATNOST_OD 16.06.2025 / TERMIN_OBNOVENI 15.07.2027 / Výrobní důvody / POSLEDNI_PLATNE_HLASENI=ANO; 0058702 (20 mg) preruseni 08.12.2025 / 15.07.2027 / Výrobní důvody / ANO; 0289384 Orifarm obnoveni 28.07.2026 / ANO. Tabulka i termín 15. 7. 2027 tedy platí beze změny; stabilizace stojí na dovozu, ne na návratu registrované dodávky — doplněno do textu, aby TZ nevyzněla jako konec výpadku. Status zůstává review-pending, published zůstává false."
     created_at: 2026-08-05
     creation_phase: discovery+article-write+article-revise
@@ -229,7 +230,7 @@
             </tbody>
           </table>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL, MR feed (sloupce TYP_OZNAMENI, PLATNOST_OD, TERMIN_OBNOVENI, DUVOD_PRERUSENI_UKONCENI, POSLEDNI_PLATNE_HLASENI), soubor z 7. 8. 2026 (re-verifikováno 8. 8. 2026, hodnoty beze změny proti 4. 8.). Přípravek Orifarm je dovážený v režimu specifického léčebného programu a v čase generování feedu vedený jako obnovený — proto stát řeší situaci nad rámec běžné distribuce.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL, MR feed (sloupce TYP_OZNAMENI, PLATNOST_OD, TERMIN_OBNOVENI, DUVOD_PRERUSENI_UKONCENI, POSLEDNI_PLATNE_HLASENI), soubor z 7. 8. 2026 (re-verifikováno 8., 13. a naposledy 20. 8. 2026 — feed s <code>PLATNOST</code> 20. 08. 2026 nese u všech tří přípravků tytéž hodnoty jako 4. 8.). Přípravek Orifarm je dovážený v režimu specifického léčebného programu a v čase generování feedu vedený jako obnovený — proto stát řeší situaci nad rámec běžné distribuce.</p>
       </figure>
 
       <aside class="article-callout article-callout-caveat" aria-label="Caveat — jak číst hlášení o výpadcích">
@@ -285,7 +286,7 @@
       </p>
 
       <p>
-        Co se&nbsp;tím <em>nezměnilo</em>, je jádro problému. Otevřená data SÚKL k&nbsp;13. srpnu 2026 (feed generovaný 12. 8. ve&nbsp;22:15) u&nbsp;obou registrovaných přípravků Tamoxifen Ebewe stále vedou jako poslední platné hlášení přerušení dodávek z&nbsp;výrobních důvodů s&nbsp;termínem obnovení <strong>15. července 2027</strong> — beze změny proti stavu ze&nbsp;4. i&nbsp;7. srpna. Stabilizace, o&nbsp;níž ministerstvo mluví, tedy stojí na&nbsp;dovozu neregistrovaných balení a&nbsp;na&nbsp;dováženém přípravku Tamoxifen Orifarm, ne na&nbsp;návratu tuzemské registrované dodávky.
+        Co se&nbsp;tím <em>nezměnilo</em>, je jádro problému. Otevřená data SÚKL k&nbsp;20. srpnu 2026 (feed s&nbsp;platností 20.&nbsp;08.&nbsp;2026) u&nbsp;obou registrovaných přípravků Tamoxifen Ebewe stále vedou jako poslední platné hlášení přerušení dodávek z&nbsp;výrobních důvodů s&nbsp;termínem obnovení <strong>15. července 2027</strong> — beze změny proti stavu ze&nbsp;4., 7. i&nbsp;13. srpna. Stabilizace, o&nbsp;níž ministerstvo mluví, tedy stojí na&nbsp;dovozu neregistrovaných balení a&nbsp;na&nbsp;dováženém přípravku Tamoxifen Orifarm, ne na&nbsp;návratu tuzemské registrované dodávky.
       </p>
 
       <p>
