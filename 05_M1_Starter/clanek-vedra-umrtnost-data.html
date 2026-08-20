@@ -3,10 +3,11 @@
 <head>
 <!--
   audit:
-    last_reviewed: 2026-08-14
+    last_reviewed: 2026-08-20
     reviewer: claude-code-agent
     status: review-pending
     created_at: 2026-08-14
+    nightly_2026-08-20: "NOČNÍ REVIZE (FÁZE 3.2) — topical-expired (topical_until 2026-08-20). ZDROJ (primární): Eurostat dissemination API, demo_r_mwk_ts, geo=CZ, sinceTimePeriod=2026-W20, pull 20. 8. 2026 — pole `updated` datové sady = 2026-08-19T23:00:00+0200, poslední neprázdný český týden stále 2026-W27 = 2 299 (W28–W32 prázdné). Tedy: klíčové tvrzení článku (týdenní řada končí týdnem do 5. 7. 2026) platí i po šesti dnech a po novém refreshi Eurostatu; zpoždění povyrostlo z pěti na téměř sedm týdnů (46 dní). ZMĚNĚNO: doplněna věta s kontrolou k 20. 8. v odstavci o rychlejších kanálech, timeline „~5–6 týdnů“ → „~5–7 týdnů“ + kontrolní datum, tři figcaption/zdrojové poznámky a položka Eurostatu ve zdrojích. NEZMĚNĚNO: všechna čísla vlastního výpočtu z NR-06-33 (420 / +45 % / +855 / +771 / …) a literatura — nic z toho se ověřením nedotklo. topical_until 2026-08-20 → 2026-09-30 (téma zůstává aktuální, dokud se řada nepohne). ČSÚ DataStat (OBY04ZEM03T01) nebylo z prostředí agenta strojově čitelné (JS-only), Eurostat je jeho přebírající zdroj. Status zůstává review-pending."
     creation_phase: discovery+article-write
     primary_sources_count: 6
     visual_elements_count: 5
@@ -172,10 +173,10 @@
           <div class="av-counter-block av-counter-block-warn">
             <span class="av-counter" data-value="19" data-prefix="přes " data-suffix=" měsíců">přes 19 měsíců</span>
             <span class="av-counter-label">stáří nejnovějšího denního údaje o úmrtích (31. 12. 2024)</span>
-            <span class="av-counter-foot">týdenní čísla Eurostatu končí týdnem do 5. 7. 2026</span>
+            <span class="av-counter-foot">týdenní čísla Eurostatu končí týdnem do 5. 7. 2026 — beze změny i po refreshi 19. 8. 2026</span>
           </div>
         </div>
-        <p class="av-figure-note"><strong>Zdroj:</strong> výpočet redakce z otevřených dat ÚZIS <code>NR-06-33</code> „Denní úmrtí — věk, pohlaví, příčina" (data.mzcr.cz, 1. 1. 1994 – 31. 12. 2024, publikováno 26. 11. 2025, CC BY 4.0; staženo 14. 8. 2026). Sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Eurostat <code>demo_r_mwk_ts</code>, API pull 14. 8. 2026.</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> výpočet redakce z otevřených dat ÚZIS <code>NR-06-33</code> „Denní úmrtí — věk, pohlaví, příčina" (data.mzcr.cz, 1. 1. 1994 – 31. 12. 2024, publikováno 26. 11. 2025, CC BY 4.0; staženo 14. 8. 2026). Sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Eurostat <code>demo_r_mwk_ts</code>, API pull 14. 8. 2026, kontrolní pull 20. 8. 2026 (dataset naposledy aktualizován 19. 8. 2026, česká řada stále končí týdnem 2026-W27).</p>
       </figure>
 
       <h3>Tři dny nad čtyři sta — všechny z léta 1994</h3>
@@ -271,7 +272,7 @@
       <h3>Proč odpověď dorazí až za rok</h3>
 
       <p>
-        Teď to podstatné: všechna čísla výše končí 31. prosincem 2024. Novější denní data o úmrtích neexistují — respektive existují, ale zatím ne ve statistice. Cesta jednoho úmrtí do otevřených dat vede přes List o prohlídce zemřelého, matriku a roční zpracování v ÚZIS; dataset denních úmrtí s příčinami se aktualizuje jednou ročně (naposledy 26. listopadu 2025, o data za rok 2024). Rychlejší kanály existují, ale mají své limity: týdenní počty zemřelých bez příčin publikuje ČSÚ a přebírá je Eurostat — jenže k 14. srpnu 2026 končí česká řada týdnem do 5. července. Probíhající vlna veder v nich zkrátka ještě není.
+        Teď to podstatné: všechna čísla výše končí 31. prosincem 2024. Novější denní data o úmrtích neexistují — respektive existují, ale zatím ne ve statistice. Cesta jednoho úmrtí do otevřených dat vede přes List o prohlídce zemřelého, matriku a roční zpracování v ÚZIS; dataset denních úmrtí s příčinami se aktualizuje jednou ročně (naposledy 26. listopadu 2025, o data za rok 2024). Rychlejší kanály existují, ale mají své limity: týdenní počty zemřelých bez příčin publikuje ČSÚ a přebírá je Eurostat — jenže k 14. srpnu 2026 končí česká řada týdnem do 5. července. Probíhající vlna veder v nich zkrátka ještě není. <em>Doplněno 20. 8. 2026:</em> po dalších šesti dnech a po refreshi datové sady 19. srpna 2026 je poslední český týden v Eurostatu pořád ten do 5. července — týdny W28 až W32 zůstávají prázdné. Zpoždění se tedy během vlny veder nezkrátilo, naopak povyrostlo z pěti na téměř sedm týdnů (46 dní od konce posledního pokrytého týdne).
       </p>
 
       <figure class="av-figure" aria-labelledby="avVedraTimelineH">
@@ -283,9 +284,9 @@
             <p class="av-timeline-desc">Prohlížející lékař vyplní List o prohlídce zemřelého — prvotní záznam, ze kterého statistika úmrtnosti vychází.</p>
           </li>
           <li class="av-timeline-item av-timeline-item-done">
-            <time class="av-timeline-date">~5–6 týdnů</time>
+            <time class="av-timeline-date">~5–7 týdnů</time>
             <h4 class="av-timeline-title">Týdenní počty zemřelých (bez příčin)</h4>
-            <p class="av-timeline-desc">ČSÚ publikuje týdenní počty zemřelých, přebírá je Eurostat (<code>demo_r_mwk_ts</code>). K 14. 8. 2026 poslední dostupný týden: do 5. 7. 2026 (2 299 zemřelých, předběžný údaj).</p>
+            <p class="av-timeline-desc">ČSÚ publikuje týdenní počty zemřelých, přebírá je Eurostat (<code>demo_r_mwk_ts</code>). K 14. 8. 2026 i k 20. 8. 2026 poslední dostupný týden: do 5. 7. 2026 (2 299 zemřelých, předběžný údaj) — refresh datové sady z 19. 8. 2026 novější český týden nepřinesl.</p>
           </li>
           <li class="av-timeline-item av-timeline-item-done">
             <time class="av-timeline-date">~11 měsíců po konci roku</time>
@@ -298,7 +299,7 @@
             <p class="av-timeline-desc">Odborné analýzy s modelovanou základnou a definicí vln veder vyčíslí, kolik úmrtí lze horku skutečně přičíst. Poslední velké české práce pokrývají období do roku 2017.</p>
           </li>
         </ol>
-        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — aktualita „Vysoké teploty a mortalita" (14. 8. 2026) a metodika datasetu <code>NR-06-33</code>; Eurostat <code>demo_r_mwk_ts</code> (API pull 14. 8. 2026); Urban et al. 2020 (rozsah studií).</p>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS — aktualita „Vysoké teploty a mortalita" (14. 8. 2026) a metodika datasetu <code>NR-06-33</code>; Eurostat <code>demo_r_mwk_ts</code> (API pull 14. 8. 2026, kontrolní pull 20. 8. 2026); Urban et al. 2020 (rozsah studií).</p>
       </figure>
 
       <p>
@@ -345,7 +346,7 @@
           <li><strong>ÚZIS ČR — „Vysoké teploty a mortalita" (aktualita, 14. 8. 2026)</strong> — vyjádření o ročním intervalu předání dat o zemřelých a odkazy na rychlejší kanály. <a href="https://www.uzis.cz/index.php?pg=aktuality&amp;aid=8757" target="_blank" rel="noopener">uzis.cz ↗</a></li>
           <li><strong>ÚZIS / NZIP — Počet denních úmrtí podle věku, pohlaví a příčin smrti (<code>NR-06-33</code>)</strong> — denní úmrtí 1. 1. 1994 – 31. 12. 2024 podle kapitol MKN-10, CSV, licence CC BY 4.0, publikováno 26. 11. 2025; zdroj všech výpočtů redakce v tomto článku. <a href="https://www.nzip.cz/data/2516-denni-umrti-vek-pohlavi-pricina-otevrena-data" target="_blank" rel="noopener">nzip.cz ↗</a></li>
           <li><strong>ČSÚ — týdenní počty zemřelých (DataStat, tab. OBY04ZEM03T01)</strong> — nejrychlejší domácí kanál úmrtnostních dat (bez příčin). <a href="https://data.csu.gov.cz/datastat/data/VYBER/OBY04ZEM03T01" target="_blank" rel="noopener">data.csu.gov.cz ↗</a></li>
-          <li><strong>Eurostat — Deaths by week (<code>demo_r_mwk_ts</code>)</strong> — týdenní zemřelí ČR; k 14. 8. 2026 poslední týden 2026-W27 (do 5. 7., 2 299 zemřelých, předběžné). <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_mwk_ts/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
+          <li><strong>Eurostat — Deaths by week (<code>demo_r_mwk_ts</code>)</strong> — týdenní zemřelí ČR; k 14. 8. 2026 i ke kontrole 20. 8. 2026 poslední týden 2026-W27 (do 5. 7., 2 299 zemřelých, předběžné); datová sada naposledy aktualizována 19. 8. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_mwk_ts/default/table?lang=en" target="_blank" rel="noopener">eurostat databrowser ↗</a></li>
         </ul>
       </div>
       <div class="sources-group">
@@ -364,7 +365,7 @@
         </ul>
       </div>
       <p class="article-sources-disclaimer">
-        <strong>Pozn. k údajům:</strong> Čísla označená „výpočet redakce" (420 / +45 % / +855 / +771 / +440 / +452 / +429 / +314, sezónní úrovně a roční úhrny) jsou spočtena 14. 8. 2026 z plného CSV datasetu <code>NR-06-33</code> (326 524 řádků); sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Nejde o kauzální atribuci horku — viz caveat v textu. Údaje z recenzované literatury byly dohledány přes PubMed 14. 8. 2026 a jsou citovány s DOI. Týdenní data Eurostatu (<code>demo_r_mwk_ts</code>) stažena přes dissemination API 14. 8. 2026; hodnota za týden 2026-W27 je předběžná.
+        <strong>Pozn. k údajům:</strong> Čísla označená „výpočet redakce" (420 / +45 % / +855 / +771 / +440 / +452 / +429 / +314, sezónní úrovně a roční úhrny) jsou spočtena 14. 8. 2026 z plného CSV datasetu <code>NR-06-33</code> (326 524 řádků); sezónní úroveň dne = průměr téhož kalendářního okna ±7 dní v okolních letech ±3 roky. Nejde o kauzální atribuci horku — viz caveat v textu. Údaje z recenzované literatury byly dohledány přes PubMed 14. 8. 2026 a jsou citovány s DOI. Týdenní data Eurostatu (<code>demo_r_mwk_ts</code>) stažena přes dissemination API 14. 8. 2026 a znovu ověřena 20. 8. 2026 (dataset aktualizován 19. 8. 2026, česká řada beze změny končí týdnem 2026-W27); hodnota za týden 2026-W27 je předběžná.
       </p>
     </section>
 
