@@ -10,6 +10,9 @@
 //      "audit-status" → fail.
 //   3. Článek s audit-status=draft/flagged/draft-flagged MUSÍ mít
 //      published: false v articles.json.
+//   4. Interní procesní poznámky ve VIDITELNÉM textu kdekoli v <main>
+//      (nejen v hlavičce) — viz INTERNAL_PROCESS_MARKERS. U publikovaného
+//      článku fail, u draftu warning.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -82,9 +85,23 @@ const INTERNAL_PROCESS_MARKERS = [
   /\breview-pending\b/i,
   /\bdraft-flagged\b/i,
   /\b(?:TODO|FIXME|XXX):/,
+  // 2026-08-20: předpublikační formulace, které dosavadní vzory míjely.
+  // Dávka 24 zadržených článků nesla věty typu „Článek je rozpracovaný draft —
+  // před publikací ověřit …" přímo v .article-sources-disclaimer, tedy v TĚLE
+  // článku. Kontrola bannerů kouká jen do <header class="article-header">,
+  // takže je nezachytila, a chyběl i vzor pro „rozpracovaný" (existující
+  // /pracovn[íi]\s+draft/ sedí na „pracovní draft", ne na „rozpracovaný draft").
+  // Vzory níž jsou schválně sebereferenční — mluví o TOMTO textu a jeho vydání,
+  // takže neplácnou článek, který píše o cizím draftu zákona nebo o auditu NKÚ.
+  /(?:článek|text)\s+je\s+(?:rozpracovan\w+|pracovní)\s+draft/i,
+  /před\s+publikací\s+(?:ověřit|ověřte|doplnit|doplň|vyžádat|nahradit|zvážit|budou|se\s+ověřuj)/i,
+  /je\s+bod(?:em)?\s+před\s+publikací/i,
+  /čeká\s+na\s+redakční\s+(?:ověření|schválení)/i,
+  /v\s+tomto\s+draftu/i,
+  /tento\s+draft\s+(?:\w+\s+){0,2}uvádí/i,
 ];
 
-function findInternalProcessNotes(html) {
+export function findInternalProcessNotes(html) {
   const visible = html.replace(/<!--[\s\S]*?-->/g, ' ');
   const body = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(visible)?.[1] ?? visible;
   const text = body.replace(/<[^>]+>/g, ' ');
