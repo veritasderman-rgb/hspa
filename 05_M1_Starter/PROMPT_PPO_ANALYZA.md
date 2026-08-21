@@ -34,6 +34,9 @@ Pro každou skupinu ze `analyza-status.js` se `hotovo: false`:
 > jedné pracovní skupiny MZ ČR (zápisy, usnesení, statut), chronologicky.
 > Pro KAŽDÉ zjištěné jednání vrať objekt do pole `jednani`. Piš česky,
 > stručně, jen co je v textu — nic nedomýšlej. Neznámé pole = null.
+> Obsah drž striktně u dokumentu, ve kterém stojí (nic nepřenášej mezi
+> sousedními dokumenty); `rozhodnuti` = jen výslovně schválené výroky,
+> plánované cíle rozhodnutím nejsou.
 > Vrať POUZE validní JSON dle schématu:
 >
 > ```json
