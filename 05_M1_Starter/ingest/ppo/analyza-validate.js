@@ -34,10 +34,11 @@ function checkFile(f) {
   if (!Number.isInteger(j.group_id)) errs.push('group_id chybí');
   if (!isArr(j.jednani)) errs.push('jednani musí být pole');
   else j.jednani.forEach((x, i) => checkJednani(x, errs, i));
-  if (j.pravidla !== undefined && j.pravidla !== null) {
+  if (!('pravidla' in j)) errs.push('pravidla chybí (musí být objekt, nebo explicitní null)');
+  else if (j.pravidla !== null) {
     if (typeof j.pravidla !== 'object' || Array.isArray(j.pravidla)) errs.push('pravidla musí být objekt|null');
     else for (const k of ['jmenovani', 'rozhodovani', 'kvorum', 'stret_zajmu', 'zverejnovani', 'kadence'])
-      if (!optStr(j.pravidla[k] ?? null)) errs.push(`pravidla.${k} musí být string|null`);
+      if (!(k in j.pravidla) || !optStr(j.pravidla[k])) errs.push(`pravidla.${k} chybí nebo není string|null`);
   }
   if (j.profil !== undefined && j.profil !== null) {
     const p = j.profil;

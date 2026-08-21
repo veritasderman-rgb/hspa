@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const ANA = path.join(DIR, 'analyza');
 const PART = path.join(ANA, 'partial');
+fs.mkdirSync(PART, { recursive: true });
 
 const byGid = new Map();
 for (const f of fs.readdirSync(PART).sort()) {

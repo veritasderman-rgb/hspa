@@ -26,6 +26,11 @@ if (!gid) { console.error('Užití: node korpus-slice.js <group_id> [rok] [cast/
 const PLNE = new Set(['zapis', 'usneseni', 'statut', 'jednaci_rad']);
 const ZKRACENE = new Set(['stanovisko', 'program']);
 const TRUNC = 1200;
+// Strop i pro primární dokumenty: v korpusu jsou OCR přílohy k zápisům
+// o stovkách tisíc znaků (skupina 199: 610k / 532k) — samotné by přerostly
+// kontext agenta a stránkování je nedělí. Meritum jednání je v úvodu,
+// přílohy (kompiláty podkladů) se za stropem uříznou s explicitní značkou.
+const PLNE_MAX = 100_000;
 
 const text = zlib.gunzipSync(fs.readFileSync(path.join(SRC, 'ppo_korpus_full.jsonl.gz'))).toString('utf8');
 let docs = text.split('\n').filter(Boolean).map(l => JSON.parse(l))
@@ -35,7 +40,7 @@ let docs = text.split('\n').filter(Boolean).map(l => JSON.parse(l))
 
 const readableChars = d => {
   if (Number(d.chars) <= 50) return 0;
-  if (PLNE.has(d.doctype)) return Number(d.chars);
+  if (PLNE.has(d.doctype)) return Math.min(Number(d.chars), PLNE_MAX);
   if (ZKRACENE.has(d.doctype)) return Math.min(Number(d.chars), TRUNC);
   return 0;
 };
@@ -61,9 +66,9 @@ for (const d of docs) {
   console.log(`titul: ${d.title}\ndatum: ${d.date ?? '?'}\ntyp: ${d.doctype}\nurl: ${d.url.startsWith('http') ? d.url : 'https://ppo.mzcr.cz' + d.url}`);
   if (rc > 0) {
     const t = d.text.trim();
-    const zkraceno = !PLNE.has(d.doctype) && t.length > TRUNC;
+    const limit = PLNE.has(d.doctype) ? PLNE_MAX : TRUNC;
     console.log('--- text ---');
-    console.log(zkraceno ? t.slice(0, TRUNC) + `\n[… zkráceno, celkem ${d.chars} znaků]` : t);
+    console.log(t.length > limit ? t.slice(0, limit) + `\n[… zkráceno, celkem ${d.chars} znaků]` : t);
     tokensEst += rc / 3.2;
   } else {
     console.log(`(text vynechán — typ ${d.doctype}, ${d.chars} znaků)`);
