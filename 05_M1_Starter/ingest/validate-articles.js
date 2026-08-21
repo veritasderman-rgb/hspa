@@ -13,6 +13,8 @@
 //   4. Interní procesní poznámky ve VIDITELNÉM textu kdekoli v <main>
 //      (nejen v hlavičce) — viz INTERNAL_PROCESS_MARKERS. U publikovaného
 //      článku fail, u draftu warning.
+//   5. Publikovaný článek nesmí mít <meta name="robots" content="noindex …">
+//      — draftový noindex ho vyřadí ze sitemapy i z vyhledávačů.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,9 +36,29 @@ const REDACTION_PATTERNS = [
 
 const NON_PUBLISHABLE_STATUSES = new Set(['draft', 'flagged', 'draft-flagged']);
 
+// Obsah <meta name="…"> nezávisle na pořadí a počtu atributů. Naivní
+// „name hned za ním content" regex vrací null u zápisu, který prohlížeč
+// respektuje (<meta content="noindex, follow" name="robots">, nebo cokoli
+// vloženého mezi oba atributy) — kontrola by pak tiše prošla nad stránkou,
+// která je fakticky noindex.
+function metaContent(html, name) {
+  const wanted = name.toLowerCase();
+  for (const [tag] of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const attrs = {};
+    for (const m of tag.matchAll(/([a-zA-Z_:][-\w:.]*)\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+)/g)) {
+      attrs[m[1].toLowerCase()] = m[2].replace(/^["']|["']$/g, '');
+    }
+    if ((attrs.name ?? '').trim().toLowerCase() === wanted) return attrs.content ?? null;
+  }
+  return null;
+}
+
 function extractMeta(html) {
-  const m = /<meta\s+name=["']article:audit-status["']\s+content=["']([^"']+)["']/i.exec(html);
-  return m ? m[1] : null;
+  return metaContent(html, 'article:audit-status');
+}
+
+export function extractRobots(html) {
+  return metaContent(html, 'robots');
 }
 
 function extractHeaderBlock(html) {
@@ -241,6 +263,16 @@ function validate() {
       if (a.published !== false) {
         errors.push(`${a.id}: audit-status="${auditStatus}" v HTML, ale published !== false v articles.json (musí být false)`);
       }
+    }
+
+    // Publikovaný článek nesmí zůstat na draftovém `robots: noindex` — jinak
+    // vypadne ze sitemapy i z vyhledávačů, ačkoli na webu normálně visí.
+    // Publikace (scripts/publish-scheduled.js → applyPublishToHtml) robots
+    // srovnává na `index, follow`; články vydané mimo tuhle cestu tam ale
+    // noindex nechávaly (v korpusu jich takhle bylo 7, než to hlídal validátor).
+    const robots = extractRobots(html);
+    if (robots && /noindex/i.test(robots) && a.published !== false) {
+      errors.push(`${a.id} (${a.slug}): publikovaný článek má robots="${robots}" — musí být "index, follow" (noindex ho vyřadí ze sitemapy i z vyhledávačů)`);
     }
 
     // Detekce redakčních bannerů v publikovaných článcích
