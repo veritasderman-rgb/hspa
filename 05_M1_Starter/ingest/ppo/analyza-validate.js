@@ -19,7 +19,7 @@ function checkJednani(j, errs, i) {
   if (!optStr(j.datum)) errs.push(`${p}.datum musí být string|null`);
   if (j.datum && !/^20\d{2}(-\d{2}-\d{2})?$/.test(j.datum)) errs.push(`${p}.datum formát`);
   for (const k of ['temata', 'rozhodnuti', 'aktivni_osoby', 'zminene_organizace',
-                   'zminene_dokumenty', 'odkazy_na_jine_skupiny', 'citace'])
+                   'zminene_dokumenty', 'odkazy_na_jine_skupiny', 'citace', 'stret_zajmu'])
     if (!isArr(j[k])) errs.push(`${p}.${k} musí být pole`);
   if (!isArr(j.ukoly)) errs.push(`${p}.ukoly musí být pole`);
   else j.ukoly.forEach((u, k) => { if (!isStr(u.co)) errs.push(`${p}.ukoly[${k}].co chybí`); });
@@ -34,6 +34,11 @@ function checkFile(f) {
   if (!Number.isInteger(j.group_id)) errs.push('group_id chybí');
   if (!isArr(j.jednani)) errs.push('jednani musí být pole');
   else j.jednani.forEach((x, i) => checkJednani(x, errs, i));
+  if (j.pravidla !== undefined && j.pravidla !== null) {
+    if (typeof j.pravidla !== 'object' || Array.isArray(j.pravidla)) errs.push('pravidla musí být objekt|null');
+    else for (const k of ['jmenovani', 'rozhodovani', 'kvorum', 'stret_zajmu', 'zverejnovani', 'kadence'])
+      if (!optStr(j.pravidla[k] ?? null)) errs.push(`pravidla.${k} musí být string|null`);
+  }
   if (j.profil !== undefined && j.profil !== null) {
     const p = j.profil;
     if (!isStr(p.co_dela)) errs.push('profil.co_dela chybí');
