@@ -21,8 +21,13 @@ Pro každou skupinu ze `analyza-status.js` se `hotovo: false`:
 
 1. Orchestrátor spustí `node ingest/ppo/korpus-slice.js <gid>` → soubor
    `/tmp/ppo-slice-<gid>.txt`. Stderr hlásí odhad tokenů; **> 60 k tokenů
-   ⇒ dělit po letech** (`korpus-slice.js <gid> <rok>`), dávky zpracovat
-   postupně a výsledky sloučit.
+   ⇒ dělit po letech** (`korpus-slice.js <gid> <rok>`); rok, který je sám
+   > 60 k tokenů, se stránkuje třetím argumentem `cast/celkem`
+   (`korpus-slice.js <gid> <rok> 2/5`). Dávky zpracovat postupně (nebo
+   paralelně do `analyza/partial/skupina-<gid>-<značka>.json`)
+   a deterministicky sloučit do `analyza/skupina-<gid>.json`
+   (konkatenace `jednani` dle datumu, dedup dle doc_id, první ne-null
+   `statut_shrnuti`/`pravidla`).
 2. Sonnet subagent dostane výřez + tento úkol:
 
 > Jsi analytik české zdravotní politiky. Dostáváš úplné texty dokumentů
@@ -44,11 +49,25 @@ Pro každou skupinu ze `analyza-status.js` se `hotovo: false`:
 >     "zminene_organizace": ["..."],
 >     "zminene_dokumenty": ["vyhlášky, novely, koncepce..."],
 >     "odkazy_na_jine_skupiny": ["název jiné PS/komise, je-li zmíněna"],
+>     "stret_zajmu": ["zmínky o střetu zájmů/podjatosti na TOMTO jednání (deklarace, námitka, vyloučení z hlasování) — stručně, věcně; prázdné pole, když nic"],
 >     "citace": ["max 2 krátké doslovné citace s uvedením kontextu"]
 >   }],
->   "statut_shrnuti": "2–4 věty, jen pokud výřez obsahuje statut/jednací řád, jinak null"
+>   "statut_shrnuti": "2–4 věty, jen pokud výřez obsahuje statut/jednací řád, jinak null",
+>   "pravidla": {
+>     "jmenovani": "kdo jmenuje členy | null",
+>     "rozhodovani": "konsensus/hlasování + většina | null",
+>     "kvorum": "text | null",
+>     "stret_zajmu": "co statut/jednací řád říká o střetu zájmů (deklarace? vyloučení?) | null",
+>     "zverejnovani": "co říká o zveřejňování zápisů/výstupů | null",
+>     "kadence": "deklarovaná frekvence zasedání | null"
+>   }
 > }
 > ```
+>
+> Pole `pravidla` vyplň JEN z dokumentů typu statut/jednaci_rad ve výřezu
+> (jinak celé `pravidla: null`). Stanoviska a programy jsou ve výřezu
+> ZKRÁCENÉ na úvod — nevytvářej z nich záznamy `jednani`, slouží jen jako
+> kontext (co skupina posuzuje → témata, zmíněné dokumenty).
 
 3. Výstup ulož do `ingest/ppo/analyza/skupina-<gid>.json` — zatím bez
    pole `profil` (doplní krok 2). Po každé skupině spusť
