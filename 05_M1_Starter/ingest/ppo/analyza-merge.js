@@ -10,6 +10,9 @@
 //       · dokumenty s bajtově shodným textem (tentýž zápis pod více doc_id)
 //         se dedupují dle sha1 hashe textu — vyhrává první dle (datum, doc_id)
 //   - statut_shrnuti / pravidla: první ne-null hodnota
+//   - normalizace klíčů: LLM agenti občas napíšou klíč s diakritikou
+//     („rozhodnutí", „termín") — deterministicky se přejmenují na kanonické
+//     ASCII klíče schématu, aby merged výstup nikdy nenesl obě varianty
 // Spuštění: node ingest/ppo/analyza-merge.js
 
 import fs from 'node:fs';
@@ -42,6 +45,22 @@ const korpusIdx = new Map();
   }
 }
 
+// Kanonizace klíčů s diakritikou (Codex review PR #1038). Alias se přejmenuje
+// jen pokud kanonický klíč chybí; jinak se zahodí (kanonický vyhrává).
+const KEY_ALIASES = new Map([['rozhodnutí', 'rozhodnuti'], ['termín', 'termin'], ['úkoly', 'ukoly']]);
+function canonKeys(v) {
+  if (Array.isArray(v)) return v.map(canonKeys);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const [k, val] of Object.entries(v)) {
+      const canon = KEY_ALIASES.get(k) ?? k;
+      if (!(canon in out)) out[canon] = canonKeys(val);
+    }
+    return out;
+  }
+  return v;
+}
+
 const byGid = new Map();
 for (const f of fs.readdirSync(PART).sort()) {
   const m = /^skupina-(\d+)-.+\.json$/.exec(f);
@@ -58,7 +77,7 @@ for (const [gid, files] of [...byGid.entries()].sort((a, b) => a[0] - b[0])) {
   let statut = null, pravidla = null, vyrazeno = 0, errs = [];
   for (const f of files) {
     let j;
-    try { j = JSON.parse(fs.readFileSync(f, 'utf8')); }
+    try { j = canonKeys(JSON.parse(fs.readFileSync(f, 'utf8'))); }
     catch (e) { errs.push(`${path.basename(f)}: nevalidní JSON (${e.message})`); continue; }
     for (const x of j.jednani ?? []) {
       if (!x?.doc_id || seen.has(x.doc_id)) continue;
