@@ -570,6 +570,14 @@ const MANIFEST = {
   'clanek-bonus-za-zdravi-pojistne': { kicker: 'Financování · pojistné', signal: 'warn', headline: 'Bonus za péči o zdraví „po vzoru Nizozemska"? Nizozemský zákon ho zakazuje.' },
   'clanek-kvetiapin-vypadek': { kicker: 'Léková politika · výpadky', signal: 'bad', stat: '5', claim: 'sil kvetiapinu s prodlouženým uvolňováním — dostupná není žádná.', context: 'SÚKL poptává 1 252 000 denních dávek. EMA: 22 zemí EU do 2027.' },
   'clanek-prostata-screening-pilot': { kicker: 'Screening prostaty · pilot', signal: 'warn', stat: '67,2', statSuffix: '%', barPct: 67, claim: 'mužů se zvýšeným PSA došlo do půl roku k urologovi.', context: 'Ve Švédsku 98–100 %. Nabídku screeningu přijalo 99 % oslovených.' },
+  'clanek-nikez-vestnik-1-2026': { kicker: 'Kvalita péče · NIKEZ', signal: 'good', stat: '8', claim: 'klinických doporučení v první „ostré" částce věstníku NIKEZ.', context: 'Screening sluchu od 50 let má hradit pojištění. Iktová JIP 24–48 h.' },
+  'clanek-zdrave-roky-dve-metriky': { kicker: 'Zdravé stárnutí · metodika', signal: 'warn', stat: '14,6', claim: 'roku zdravého života po 65 — nebo 8,0. Podle položené otázky.', context: 'Eurostat 2024, stejné Česko. Monitoring SDG právě přepnul metriku.' },
+  'clanek-presna-medicina-vs-verejne-zdravi-spor': { kicker: 'Přesná medicína · díl 1', signal: 'neutral', headline: 'Přesná medicína a veřejné zdraví soupeří o tutéž obálku. U nás se ten spor nevede nahlas.' },
+  'clanek-presna-medicina-tri-konfigurace': { kicker: 'Přesná medicína · díl 2', signal: 'neutral', stat: '3', claim: 'konfigurace se skrývají pod jedním jménem „přesná medicína".', context: 'Studie programů All of Us a 100 000 genomů. Volba mezi nimi je politická.' },
+  'clanek-precizni-verejne-zdravi': { kicker: 'Přesná medicína · díl 3', signal: 'neutral', headline: '„Precizní veřejné zdraví" pomůže populaci jen tehdy, když nezůstane u jednotlivců.' },
+  'clanek-co-urcuje-zdravi-naroda': { kicker: 'Determinanty · díl 4', signal: 'neutral', headline: 'Většina zdraví populace vzniká mimo ordinace a nemocnice.' },
+  'clanek-presna-medicina-solidarita': { kicker: 'Financování · díl 5', signal: 'warn', stat: '6 000', claim: 'vzácných diagnóz — každá vzácná, dohromady ne.', context: 'Odhad; týkají se řádově statisíců Čechů. Cílená léčba: miliony na pacienta.' },
+  'clanek-presna-medicina-ceska-cesta': { kicker: 'Přesná medicína · díl 6', signal: 'neutral', stat: '6', claim: 'kroků, jak dělat přesnou medicínu přesně a přitom spravedlivě.', context: 'Reprezentativní data, HTA se spravedlností, prevence jako protiváha.' },
 };
 
 function escapeXml(s) {
