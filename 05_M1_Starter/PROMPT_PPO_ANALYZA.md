@@ -41,7 +41,7 @@ Pro každou skupinu ze `analyza-status.js` se `hotovo: false`:
 >   "group_id": <int>,
 >   "jednani": [{
 >     "doc_id": "<z hlavičky DOKUMENT>",
->     "datum": "YYYY-MM-DD | null",
+>     "datum": "YYYY-MM-DD | null — datum KONÁNÍ z textu zápisu; hlavičkové datum dokumentu jen jako fallback (bývá to datum stránky/přílohy)",
 >     "temata": ["3–8 krátkých štítků"],
 >     "rozhodnuti": ["výroky, o nichž bylo rozhodnuto/doporučeno"],
 >     "ukoly": [{"co": "...", "kdo": "jméno/instituce | null", "termin": "text | null"}],
