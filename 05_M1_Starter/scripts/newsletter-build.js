@@ -25,7 +25,14 @@
 //       "badge": "Z archivu",          // volitelné — zelený proužek místo červeného
 //       "cta": "Prohlédnout radar →"   // volitelné — text odkazu (default „Číst článek →")
 //     }
-//   ]
+//   ],
+//   "promo": {                         // volitelné — blok MIMO redakční obsah
+//     "kicker": "Mimo redakci",        // jediné místo ve specu, kde smí být
+//     "title": "…",                    // odkaz mimo skorezdravotnictvi.cz;
+//     "text": "…",                     // renderuje se vizuálně oddělený od
+//     "url": "https://…",              // článků, aby si ho čtenář nespletl
+//     "cta": "…"                       // s redakčním doporučením
+//   }                                  // (default CTA „Otevřít →")
 // }
 //
 // Odhlašovací odkaz je Brevo merge tag {{ unsubscribe }} — nechat beze změny.
@@ -52,6 +59,16 @@ for (const a of spec.articles) {
   }
   if (!/^https:\/\/skorezdravotnictvi\.cz\//.test(a.url)) {
     console.error(`Spec: url musí mířit na skorezdravotnictvi.cz — ${a.url}`);
+    process.exit(1);
+  }
+}
+
+if (spec.promo) {
+  for (const f of ['kicker', 'title', 'text', 'url']) {
+    if (!spec.promo[f]) { console.error(`Spec: promo bez pole "${f}"`); process.exit(1); }
+  }
+  if (!/^https:\/\//.test(spec.promo.url)) {
+    console.error(`Spec: promo.url musí být absolutní https odkaz — ${spec.promo.url}`);
     process.exit(1);
   }
 }
@@ -89,6 +106,22 @@ function listCard(a, last) {
           <p style="margin:0 0 8px;${SANS}font-size:14px;line-height:1.5;color:#3a332a;">${esc(a.annotation)}</p>
           <a href="${a.url}" style="${SANS}font-size:13.5px;font-weight:700;color:#b8361e;text-decoration:underline;">${esc(a.cta || 'Číst článek →')}</a>
         </td></tr></table>`;
+}
+
+// Blok mimo redakční obsah — inkoustový přerušovaný rám místo červené linky
+// článků, aby se opticky oddělil. Jako jediný smí odkazovat mimo portál.
+function promoBlock(p) {
+  return `
+      <tr><td class="nl-pad" style="padding:22px 34px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fbf8f1;border:1px dashed rgba(31,26,20,.34);">
+          <tr><td style="padding:18px 22px;">
+            <div style="${SANS}font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#8a8072;margin-bottom:8px;">${esc(p.kicker)}</div>
+            <div style="${SERIF}font-size:18px;line-height:1.25;color:#1f1a14;font-weight:700;margin-bottom:7px;">${esc(p.title)}</div>
+            <p style="margin:0 0 11px;${SANS}font-size:14px;line-height:1.55;color:#3a332a;">${esc(p.text)}</p>
+            <a href="${p.url}" style="${SANS}font-size:13.5px;font-weight:700;color:#1f1a14;text-decoration:underline;">${esc(p.cta || 'Otevřít →')}</a>
+          </td></tr>
+        </table>
+      </td></tr>`;
 }
 
 const [hero, ...rest] = spec.articles;
@@ -145,6 +178,7 @@ ${rest.map((a, i) => listCard(a, i === rest.length - 1)).join('\n')}
           <a href="https://skorezdravotnictvi.cz/clanky.html" style="display:inline-block;padding:13px 26px;${SANS}font-size:14px;font-weight:700;color:#fbf8f1;text-decoration:none;letter-spacing:.02em;">Všechny články na portálu →</a>
         </td></tr></table>
       </td></tr>
+${spec.promo ? promoBlock(spec.promo) : ''}
 
       <tr><td class="nl-pad" style="padding:24px 34px 30px;border-top:1px solid rgba(31,26,20,.16);">
         <p style="margin:0 0 8px;${SANS}font-size:12.5px;line-height:1.6;color:#6b6253;">

@@ -70,6 +70,21 @@ rohlík" z úvodního vydání — max 1 takový vtip na vydání), žádné vyk
 žádné AI klišé („v dnešní uspěchané době", „pojďme se podívat"), čísla vždy
 se zdrojem a rokem.
 
+### Blok mimo redakci (volitelné pole `promo`)
+
+Odkaz mimo portál — vlastní projekt provozovatele, partnerská akce apod. —
+**nesmí jít do karty článku**: builder u článků vynucuje doménu
+`skorezdravotnictvi.cz` právě proto, aby se komerční odkaz nedal vydávat za
+redakční doporučení. Pro takový obsah je pole `promo`, které se renderuje
+až za tlačítkem „Všechny články", v přerušovaném inkoustovém rámu místo
+červené linky článků.
+
+Pravidla: nejvýše jeden blok na vydání; `kicker` musí obsahovat slovo
+„mimo redakci"; text píše redakce v běžném hlase, ale **ne v první osobě
+Florence** — ta mluví za portál, ne za inzerci. Tvrzení o cizím webu si
+před odesláním ověř (že slibovaný návod tam opravdu je), stejně jako u
+každého jiného čísla v newsletteru.
+
 ## Krok C — Jazyková kontrola (b)
 
 Projdi celý text (úvod + anotace + subject + preheader) checklist em:
