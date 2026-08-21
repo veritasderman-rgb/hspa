@@ -27,7 +27,7 @@
 //     }
 //   ],
 //   "promo": {                         // volitelné — blok MIMO redakční obsah
-//     "kicker": "Mimo redakci",        // jediné místo ve specu, kde smí být
+//     "kicker": "Mimo redakci",        // POVINNĚ obsahuje „mimo redakci“;
 //     "title": "…",                    // odkaz mimo skorezdravotnictvi.cz;
 //     "text": "…",                     // renderuje se vizuálně oddělený od
 //     "url": "https://…",              // článků, aby si ho čtenář nespletl
@@ -69,6 +69,12 @@ if (spec.promo) {
   }
   if (!/^https:\/\//.test(spec.promo.url)) {
     console.error(`Spec: promo.url musí být absolutní https odkaz — ${spec.promo.url}`);
+    process.exit(1);
+  }
+  // Disclosure „mimo redakci" je jediné, co čtenáři odliší tenhle blok od
+  // redakčního doporučení — proto se vynucuje tady, ne jen v runbooku.
+  if (!/mimo\s+redakci/i.test(spec.promo.kicker)) {
+    console.error(`Spec: promo.kicker musí obsahovat „mimo redakci" — ${spec.promo.kicker}`);
     process.exit(1);
   }
 }
