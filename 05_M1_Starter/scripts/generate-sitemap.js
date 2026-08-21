@@ -49,6 +49,7 @@ export const STATIC_PAGES = [
   { loc: '/hspa-prehled.html', priority: '0.9', changefreq: 'weekly' },
   { loc: '/tematicke-linie.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/kraje.html', priority: '0.8', changefreq: 'weekly' },
+  { loc: '/pracovni-skupiny.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/pojistenci.html', priority: '0.7', changefreq: 'weekly' },
   { loc: '/prevence.html', priority: '0.8', changefreq: 'weekly' },
   { loc: '/vedra.html', priority: '0.7', changefreq: 'weekly' },
@@ -91,7 +92,7 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [] } = {}) {
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [], ppoGroups = [] } = {}) {
   // Pozn.: isIndexable() čte robots meta z HTML, proto mu předáváme `.html` loc;
   // do sitemapy ale zapisujeme kanonickou (clean) URL přes canonicalPath().
   const staticEntries = STATIC_PAGES
@@ -123,6 +124,16 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
       changefreq: w.end && w.end < today ? 'yearly' : 'weekly',
       priority: '0.5',
     }));
+  // Pracovní skupiny MZ: každá skupina má trvalou stránku /pracovni-skupina?id=…
+  // (data/ppo.json; „vynechano" builder do datasetu vůbec nepouští).
+  const ppoEntries = ppoGroups
+    .filter(g => g.id != null)
+    .map(g => urlEntry({
+      loc: `/pracovni-skupina?id=${g.id}`,
+      lastmod: g.posledni_aktivita || today,
+      changefreq: 'monthly',
+      priority: '0.4',
+    }));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -131,6 +142,7 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
     ...articleEntries,
     ...indicatorEntries,
     ...awarenessEntries,
+    ...ppoEntries,
     '</urlset>',
     '',
   ].join('\n');
@@ -148,7 +160,10 @@ function main() {
     .map(i => `/indikator-${i.id}.html`)
     .filter(loc => existsSync(resolve(ROOT, loc.replace(/^\//, ''))));
   const awarenessWeeks = JSON.parse(readFileSync(resolve(ROOT, 'data/awareness-weeks.json'), 'utf8')).weeks ?? [];
-  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks });
+  const ppoGroups = existsSync(resolve(ROOT, 'data/ppo.json'))
+    ? (JSON.parse(readFileSync(resolve(ROOT, 'data/ppo.json'), 'utf8')).skupiny ?? [])
+    : [];
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks, ppoGroups });
   if (stdout) {
     console.log(xml);
     return;

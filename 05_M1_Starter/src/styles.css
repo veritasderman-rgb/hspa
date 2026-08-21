@@ -19363,3 +19363,132 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
   .vd-rules, .vd-risk-grid, .vd-myths { display: block; }
   .vd-rule, .vd-myth, .vd-risk { break-inside: avoid; margin-bottom: 10px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PPO — sekce „Pracovní skupiny MZ" (pracovni-skupiny.html + pracovni-skupina.html)
+   Datové soubory: data/ppo.json, data/ppo-osoby.json (ingest/ppo/build-web.js).
+   Monochromní editorial: identitu shluků nese pozice + popisek, velikost uzlu
+   propojenost, červená JEN pro výběr/aktivní stav interakce.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── síť: layout mapa + boční panel ─────────────────────────────────── */
+.ppo-net-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+@media (max-width: 960px) { .ppo-net-layout { grid-template-columns: 1fr; } }
+
+.ppo-net-wrap { border: 1px solid var(--rule); background: var(--paper); position: relative; }
+.ppo-net-svg { display: block; width: 100%; height: auto; }
+
+.ppo-net-svg .ppo-edge { stroke: var(--ink); fill: none; }
+.ppo-net-svg .ppo-edge-hl { stroke: var(--red); }
+.ppo-net-svg .ppo-node { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; cursor: pointer; }
+.ppo-net-svg .ppo-node-aktivni { fill: var(--ink); }
+.ppo-net-svg .ppo-node:hover { stroke-width: 2.4; }
+.ppo-net-svg .ppo-node-sel { stroke: var(--red); stroke-width: 2.6; }
+.ppo-net-svg .ppo-node-dim { opacity: 0.18; }
+.ppo-net-svg .ppo-cluster-lbl {
+  font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.08em; fill: var(--ink); opacity: 0.72; text-anchor: middle;
+  pointer-events: none; text-transform: uppercase;
+  paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
+}
+.ppo-net-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center;
+  padding: 8px 12px; border-top: 1px solid var(--rule);
+  font-size: 12.5px; color: var(--ink-mut);
+}
+.ppo-net-legend .ppo-leg-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 1.4px solid var(--ink); vertical-align: -1px; margin-right: 5px; }
+.ppo-net-legend .ppo-leg-dot-full { background: var(--ink); }
+.ppo-net-controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 0 0 10px; }
+
+/* boční panel vybrané skupiny */
+.ppo-panel { border: 1px solid var(--rule); background: var(--paper2); padding: 16px 18px; position: sticky; top: 12px; }
+.ppo-panel-kicker { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--ink-mut); margin-bottom: 6px; }
+.ppo-panel h3 { margin: 0 0 8px; font-size: 17px; line-height: 1.25; }
+.ppo-panel-meta { font-size: 13px; color: var(--ink-mut); margin: 0 0 10px; }
+.ppo-panel-stats { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 12px; }
+.ppo-panel-stat b { display: block; font-size: 19px; font-variant-numeric: tabular-nums; }
+.ppo-panel-stat span { font-size: 11.5px; color: var(--ink-mut); }
+.ppo-panel-links { margin: 0; padding: 0; list-style: none; }
+.ppo-panel-links li { padding: 6px 0; border-top: 1px solid var(--rule); font-size: 13.5px; display: flex; justify-content: space-between; gap: 10px; }
+.ppo-panel-links a { color: inherit; }
+.ppo-panel-links .ppo-vaha { color: var(--ink-mut); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ppo-panel-cta { display: inline-block; margin-top: 12px; font-weight: 700; font-size: 13.5px; color: var(--red); }
+
+/* ── spojky (žebříčky osob) ─────────────────────────────────────────── */
+.ppo-spojky-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.ppo-spojky-col { border: 1px solid var(--rule); background: var(--paper); padding: 16px 18px; }
+.ppo-spojky-col h3 { margin: 0 0 4px; font-size: 15.5px; }
+.ppo-spojky-col .ppo-spojky-sub { font-size: 12.5px; color: var(--ink-mut); margin: 0 0 12px; }
+.ppo-spojka { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 10px; padding: 8px 0; border-top: 1px solid var(--rule); }
+.ppo-spojka-name { font-weight: 700; font-size: 13.5px; }
+.ppo-spojka-aff { grid-column: 1 / -1; font-size: 12px; color: var(--ink-mut); }
+.ppo-spojka-num { font-variant-numeric: tabular-nums; font-size: 13.5px; white-space: nowrap; }
+.ppo-spojka-bar { grid-column: 1 / -1; height: 5px; background: var(--rule); position: relative; }
+.ppo-spojka-bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink); border-radius: 0 3px 3px 0; }
+
+/* ── heatmapa jednání (rok × měsíc) ─────────────────────────────────── */
+.ppo-heat { overflow-x: auto; }
+.ppo-heat table { border-collapse: collapse; font-size: 12px; }
+.ppo-heat th { font-weight: 400; color: var(--ink-mut); padding: 2px 5px; text-align: center; }
+.ppo-heat th[scope="row"] { text-align: right; font-variant-numeric: tabular-nums; }
+.ppo-heat td { padding: 0; }
+.ppo-heat .ppo-cell {
+  width: 26px; height: 20px; margin: 2px; display: block; border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) calc(var(--a, 0) * 100%), var(--paper2));
+}
+.ppo-heat .ppo-cell[data-n]:hover { outline: 2px solid var(--red); outline-offset: -2px; }
+
+/* ── tabulka skupin ─────────────────────────────────────────────────── */
+.ppo-table-wrap { overflow-x: auto; border: 1px solid var(--rule); }
+.ppo-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.ppo-table th { text-align: left; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-mut); padding: 9px 12px; border-bottom: 2px solid var(--ink); white-space: nowrap; }
+.ppo-table td { padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.ppo-table td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ppo-table a { color: inherit; font-weight: 700; }
+.ppo-table .ppo-gesce { color: var(--ink-mut); font-size: 12px; white-space: nowrap; }
+.ppo-stav { display: inline-block; font-size: 11px; letter-spacing: 0.05em; padding: 1px 7px; border: 1px solid var(--rule); border-radius: 9px; white-space: nowrap; color: var(--ink-mut); }
+.ppo-stav-aktivni { border-color: var(--good); color: var(--good); }
+.ppo-stav-utlum { border-color: var(--warn); color: var(--warn); }
+
+/* izolované skupiny */
+.ppo-iso-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ppo-iso-chips a { font-size: 12.5px; border: 1px solid var(--rule); border-radius: 11px; padding: 3px 10px; color: var(--ink-mut); text-decoration: none; }
+.ppo-iso-chips a:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── detail skupiny ─────────────────────────────────────────────────── */
+.ppo-d-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13.5px; color: var(--ink-mut); margin: 6px 0 0; }
+.ppo-d-grid { columns: 3 300px; column-gap: 18px; }
+.ppo-d-card { border: 1px solid var(--rule); background: var(--paper); padding: 16px 18px; break-inside: avoid; margin: 0 0 18px; }
+.ppo-d-card h3 { margin: 0 0 10px; font-size: 15.5px; }
+.ppo-d-note { font-size: 12.5px; color: var(--ink-mut); }
+
+/* jednání po letech — sloupce */
+.ppo-years { display: flex; align-items: flex-end; gap: 6px; height: 90px; }
+.ppo-year { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; min-width: 26px; }
+.ppo-year i { width: 100%; background: var(--ink); border-radius: 3px 3px 0 0; min-height: 2px; }
+.ppo-year b { font-size: 11px; font-weight: 400; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ppo-year span { font-size: 10.5px; color: var(--ink-mut); }
+
+/* profese — vodorovné pruhy */
+.ppo-prof { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 5px 10px; align-items: center; font-size: 13px; }
+.ppo-prof .ppo-prof-bar { height: 9px; background: var(--rule); position: relative; }
+.ppo-prof .ppo-prof-bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink); border-radius: 0 3px 3px 0; }
+.ppo-prof .num { font-variant-numeric: tabular-nums; }
+
+/* napojené skupiny */
+.ppo-links-list { margin: 0; padding: 0; list-style: none; }
+.ppo-links-list li { border-top: 1px solid var(--rule); padding: 9px 0; }
+.ppo-links-list .ppo-link-head { display: flex; justify-content: space-between; gap: 12px; font-size: 13.5px; }
+.ppo-links-list .ppo-link-head a { font-weight: 700; color: inherit; }
+.ppo-links-list .ppo-link-people { font-size: 12.5px; color: var(--ink-mut); margin-top: 2px; }
+
+/* členové */
+.ppo-members { columns: 2; column-gap: 26px; font-size: 13.5px; margin: 0; padding: 0; list-style: none; }
+@media (max-width: 720px) { .ppo-members { columns: 1; } }
+.ppo-members li { break-inside: avoid; padding: 4px 0; border-bottom: 1px dotted var(--rule); }
+.ppo-members .ppo-role { color: var(--ink-mut); font-size: 12px; }
+
+@media print {
+  .ppo-net-layout { display: block; }
+  .ppo-panel, .ppo-net-controls { display: none; }
+}

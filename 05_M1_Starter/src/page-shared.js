@@ -591,6 +591,7 @@ export function renderModuleNav(activeId) {
       children: [
         { id: 'strategie-cr',  label: 'Strategie českého zdravotnictví', href: 'strategie.html',   match: ['strategie.html'] },
         { id: 'legislativa',   label: 'Legislativní radar',              href: 'legislativa.html', match: ['legislativa.html'] },
+        { id: 'ppo',           label: 'Pracovní skupiny MZ',             href: 'pracovni-skupiny.html', match: ['pracovni-skupiny.html', 'pracovni-skupina.html'] },
       ],
     },
     { id: 'barometr',    label: 'Barometr',                href: 'barometr.html',           match: ['barometr.html'] },

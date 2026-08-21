@@ -18,6 +18,8 @@ zdrave-cesko.cz/
 ├── /prevence               prevence.html           (Vakcinace + screeningy)
 ├── /strategie              strategie.html          (Národní strategie)
 ├── /legislativa            legislativa.html        (Legislativní radar — VeKLEP)
+├── /pracovni-skupiny       pracovni-skupiny.html   (Pracovní skupiny MZ — síť PPO)
+├── /pracovni-skupina?id=…  pracovni-skupina.html   (detail jedné skupiny)
 ├── /barometr               barometr.html           (Barometr politických prohlášení)
 ├── /glosar                 glosar.html             (110 termínů)
 ├── /o-projektu             o-projektu.html         (O projektu)
@@ -129,6 +131,17 @@ zdrave-cesko.cz/
 | **Fetchuje** | `data/strategies.json`, `data/explainers.json`, `data/articles.json` |
 | **JS moduly** | `src/strategies.js` → `strategy-policy-views`, `strategy-links`, `page-shared` |
 | **CSS namespace** | `.strategy-*`, `.timeline-*`, `.rm-*` (responsibility matrix), `.gantt-*` |
+
+### `pracovni-skupiny.html` + `pracovni-skupina.html` — Pracovní skupiny MZ
+
+| | |
+|---|---|
+| **Účel** | Mapa pracovních a poradních orgánů MZ (data z ppo.mzcr.cz): SVG síť skupin propojených sdílenými členy (layout předpočítaný builderem), žebříčky „spojek" (osoby ve více skupinách — s úředníky a bez nich), heatmapa doložených jednání po měsících, filtrovatelný katalog. Detail (?id=N): účel, složení, profese, jednání po letech, napojené skupiny se jmény sdílených členů, odkaz na primární zdroj. |
+| **Cílový uživatel** | Novinář, policy maker, odborná veřejnost — „kdo připravuje rozhodnutí a kdo sedí u kterých stolů". |
+| **Fetchuje** | `data/ppo.json` (hub i detail), `data/ppo-osoby.json` (jen detail) |
+| **JS moduly** | `src/ppo.js` (hub), `src/ppo-detail.js` (detail, importuje helpery z ppo.js) → `page-shared` |
+| **CSS namespace** | `.ppo-*` (síť, panel, spojky, heat, tabulka, detail karty); reuse `.ed-hero*`, `.filters-row`, `.level-nav`, `.related-*`, `.leg-source-note` |
+| **Builder** | `ingest/ppo/build-web.js` (FÁZE 3; `npm run build:ppo`) z FÁZE 1 výstupů `ingest/ppo/out/*` — deterministický vč. layoutu sítě; testy `tests/ppo.test.js` |
 
 ### `legislativa.html` — Legislativní radar
 
