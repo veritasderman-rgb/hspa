@@ -23,6 +23,20 @@ test('extractRobots čte obsah meta robots', () => {
   assert.equal(extractRobots('<meta name="description" content="x">'), null);
 });
 
+test('extractRobots nezávisí na pořadí ani počtu atributů', () => {
+  // Prohlížeč tyhle zápisy respektuje stejně — kontrola je tedy musí vidět taky.
+  const cases = [
+    '<meta content="noindex, follow" name="robots">',
+    "<meta name='robots' data-x='1' content='noindex'>",
+    '<meta name="robots" data-injected content="noindex, follow">',
+    '<meta   name = "ROBOTS"   content = "noindex" >',
+    '<meta name="description" content="x"><meta name="robots" content="noindex">',
+  ];
+  for (const html of cases) {
+    assert.match(extractRobots(html) ?? '', /noindex/i, `neodhaleno: ${html}`);
+  }
+});
+
 test('žádný publikovaný článek nemá robots noindex', () => {
   const { articles } = JSON.parse(
     fs.readFileSync(path.join(ROOT, 'data', 'articles.json'), 'utf8'),

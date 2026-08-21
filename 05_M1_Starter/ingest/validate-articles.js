@@ -36,14 +36,29 @@ const REDACTION_PATTERNS = [
 
 const NON_PUBLISHABLE_STATUSES = new Set(['draft', 'flagged', 'draft-flagged']);
 
+// Obsah <meta name="…"> nezávisle na pořadí a počtu atributů. Naivní
+// „name hned za ním content" regex vrací null u zápisu, který prohlížeč
+// respektuje (<meta content="noindex, follow" name="robots">, nebo cokoli
+// vloženého mezi oba atributy) — kontrola by pak tiše prošla nad stránkou,
+// která je fakticky noindex.
+function metaContent(html, name) {
+  const wanted = name.toLowerCase();
+  for (const [tag] of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const attrs = {};
+    for (const m of tag.matchAll(/([a-zA-Z_:][-\w:.]*)\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+)/g)) {
+      attrs[m[1].toLowerCase()] = m[2].replace(/^["']|["']$/g, '');
+    }
+    if ((attrs.name ?? '').trim().toLowerCase() === wanted) return attrs.content ?? null;
+  }
+  return null;
+}
+
 function extractMeta(html) {
-  const m = /<meta\s+name=["']article:audit-status["']\s+content=["']([^"']+)["']/i.exec(html);
-  return m ? m[1] : null;
+  return metaContent(html, 'article:audit-status');
 }
 
 export function extractRobots(html) {
-  const m = /<meta\s+name=["']robots["']\s+content=["']([^"']*)["']/i.exec(html);
-  return m ? m[1] : null;
+  return metaContent(html, 'robots');
 }
 
 function extractHeaderBlock(html) {
