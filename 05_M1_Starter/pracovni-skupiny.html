@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pracovní skupiny MZ · HSPA Monitor</title>
+<meta name="description" content="Mapa pracovních a poradních orgánů Ministerstva zdravotnictví: přes sto skupin, stovky osob a síť vazeb přes sdílené členy. Kdo sedí ve více skupinách, kde se jedná a kde ne — z veřejných dat portálu ppo.mzcr.cz.">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/pracovni-skupiny">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/pracovni-skupiny">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pracovní skupiny MZ — kdo připravuje česká zdravotnická rozhodnutí">
+<meta property="og:description" content="Síť poradních orgánů ministerstva zdravotnictví: skupiny, lidé a vazby přes sdílené členy. Z veřejných dat ppo.mzcr.cz.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Pracovní a poradní orgány Ministerstva zdravotnictví ČR — síť skupin a členství",
+  "description": "Strukturovaná extrakce z veřejného portálu ppo.mzcr.cz: pracovní skupiny a komise MZ ČR, jejich členové, doložená jednání a vazby mezi skupinami přes sdílené členy.",
+  "url": "https://skorezdravotnictvi.cz/pracovni-skupiny",
+  "inLanguage": "cs-CZ",
+  "creator": { "@type": "Organization", "name": "HSPA Monitor", "url": "https://skorezdravotnictvi.cz/" },
+  "isBasedOn": "https://ppo.mzcr.cz/"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Pracovní skupiny MZ</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="ppoHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Pracovní skupiny MZ</div>
+      <h1 class="ed-hero-headline" id="ppoHeroHeadline">Než ministr rozhodne, jedná pracovní skupina. Tohle je jejich mapa.</h1>
+      <p class="ed-hero-lead">
+        Seznam zdravotních výkonů, screeningové programy, reforma hygieny, elektronizace — skoro každé
+        odborné rozhodnutí ministerstva zdravotnictví se rodí v některém z jeho pracovních a poradních
+        orgánů. Ministerstvo je od roku 2024 zveřejňuje na portálu <strong>ppo.mzcr.cz</strong>: složení,
+        statuty, zápisy z jednání.
+      </p>
+      <p class="ed-hero-lead">
+        My jsme ta data poskládali do jednoho obrazu. Ukazuje se v něm věc, kterou z jednotlivých stránek
+        portálu nevyčtete: skupiny nejsou izolované ostrovy. Spojuje je <strong>síť sdílených členů</strong>
+        — a malá skupina lidí, která sedí téměř všude.
+      </p>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla sekce">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="statSkupin">—</span> <span class="ed-stat-unit">orgánů</span></div>
+        <div class="ed-stat-lbl">Skupin a komisí na portálu</div>
+        <div class="ed-stat-meta">z toho <span id="statAktivnich">—</span> aktivních</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="statOsob">—</span> <span class="ed-stat-unit">osob</span></div>
+        <div class="ed-stat-lbl">Jmen v členských seznamech</div>
+        <div class="ed-stat-meta">bez hostů jednání</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="statJednani">—</span> <span class="ed-stat-unit">jednání</span></div>
+        <div class="ed-stat-lbl">Doložených zápisem</div>
+        <div class="ed-stat-meta"><span id="statVazeb">—</span> vazeb přes sdílené členy</div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ── 1 · síť ──────────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="ppoNetHeading">
+    <div class="section-title">
+      <div class="ed-kicker">Síť skupin</div>
+      <h2 id="ppoNetHeading">Kdo s kým sdílí členy</h2>
+    </div>
+    <p class="section-lead">
+      Každý kruh je jedna skupina — čím větší, tím víc vazeb na ostatní. Čára znamená společné členy;
+      silnější čára, víc společných jmen. Skupiny jsou seskupené podle sekcí ministerstva, které je
+      zřizují. Kliknutím na kruh zobrazíte detail a sousedy.
+    </p>
+    <div class="ppo-net-controls" role="group" aria-label="Filtr síly vazeb">
+      <nav class="level-nav" aria-label="Minimální počet sdílených členů">
+        <button data-minw="3" class="active">Silné vazby (3+ osob)</button>
+        <button data-minw="2">Střední (2+)</button>
+        <button data-minw="1">Všechny vazby</button>
+      </nav>
+    </div>
+    <div class="ppo-net-layout">
+      <figure class="ppo-net-wrap" aria-label="Síťová mapa pracovních skupin">
+        <div id="ppoNetMount"></div>
+        <figcaption class="ppo-net-legend">
+          <span><span class="ppo-leg-dot ppo-leg-dot-full" aria-hidden="true"></span>aktivní skupina</span>
+          <span><span class="ppo-leg-dot" aria-hidden="true"></span>spící / v útlumu / bez dokumentů</span>
+          <span>velikost = počet vazeb na jiné skupiny</span>
+          <span>popisky = sekce MZ</span>
+        </figcaption>
+      </figure>
+      <aside class="ppo-panel" id="ppoPanel" aria-live="polite"></aside>
+    </div>
+    <p class="ppo-d-note" id="ppoIsoNote"></p>
+    <div class="ppo-iso-chips" id="ppoIsoChips"></div>
+  </section>
+
+  <!-- ── 2 · spojky ───────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="ppoSpojkyHeading">
+    <div class="section-title">
+      <div class="ed-kicker">Spojky</div>
+      <h2 id="ppoSpojkyHeading">Lidé, kteří sedí ve více skupinách</h2>
+    </div>
+    <p class="section-lead">
+      Síť drží pohromadě překvapivě málo jmen. Levý sloupec počítá všechny — vede úřednictvo ministerstva,
+      což dává smysl: sekce své skupiny obsluhují. Zajímavější je pravý sloupec: <strong>kdo propojuje
+      skupiny zvenčí</strong> — za pojišťovny, poskytovatele a odborné společnosti. Členství jsou veřejný
+      údaj z portálu ppo.mzcr.cz; počty zahrnují role člen, místopředseda i předseda.
+    </p>
+    <div class="ppo-spojky-grid" id="ppoSpojky"></div>
+  </section>
+
+  <!-- ── 3 · aktivita ─────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="ppoHeatHeading">
+    <div class="section-title">
+      <div class="ed-kicker">Aktivita v čase</div>
+      <h2 id="ppoHeatHeading">Kdy se jedná — a kdy je ticho</h2>
+    </div>
+    <p class="section-lead">
+      Každá buňka je jeden měsíc; tmavší buňka, víc doložených jednání napříč všemi skupinami.
+      Počítáme jen jednání doložená zveřejněným zápisem — prázdný měsíc tedy může znamenat
+      „nejednalo se", ale i „zápis nebyl zveřejněn".
+    </p>
+    <figure class="ppo-heat" id="ppoHeat" aria-label="Heatmapa počtu jednání po měsících"></figure>
+  </section>
+
+  <!-- ── 4 · všechny skupiny ──────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="ppoTableHeading">
+    <div class="section-title">
+      <div class="ed-kicker">Katalog</div>
+      <h2 id="ppoTableHeading">Všechny skupiny</h2>
+    </div>
+    <div class="filters-row">
+      <nav class="level-nav" aria-label="Filtr podle stavu">
+        <button data-stav="all" class="active">Vše</button>
+        <button data-stav="aktivni">Aktivní</button>
+        <button data-stav="spici">Spící</button>
+        <button data-stav="utlum">V útlumu</button>
+        <button data-stav="bez_dokumentu">Bez dokumentů</button>
+      </nav>
+      <div class="filters-actions">
+        <select id="ppoSekceFilter" class="search-box" aria-label="Filtr podle sekce MZ"></select>
+        <input type="search" id="ppoSearch" class="search-box" placeholder="Hledat skupinu…" aria-label="Vyhledat skupinu">
+        <span class="badge" id="ppoCount">0</span>
+      </div>
+    </div>
+    <div class="ppo-table-wrap" id="ppoTableWrap"></div>
+    <div class="empty-state hidden" id="ppoEmpty">Žádná skupina neodpovídá filtru.</div>
+  </section>
+
+  <section class="leg-source-note" aria-label="Zdroj dat a metodika">
+    <p>
+      Zdroj: <a href="https://ppo.mzcr.cz/" target="_blank" rel="noopener">ppo.mzcr.cz — portál pracovních a poradních orgánů MZ ČR</a>
+      (veřejná data: složení orgánů, statuty, zápisy). Stav dat: <span id="ppoStavK">—</span>.
+      Metodika: členství bez hostů jednání; „jednání" = dokument typu zápis s uvedeným datem, počty jsou
+      proto dolním odhadem; vazba mezi skupinami = alespoň jeden sdílený člen. Jedna komise je na žádost
+      vlastníka portálu z přehledu vynechána. Jména a role jsou veřejné údaje o působení ve veřejných
+      poradních orgánech; případné opravy hlaste redakci.
+    </p>
+  </section>
+
+  <!-- ── Příbuzné sekce ───────────────────────────────────────────────── -->
+  <section class="section related-section" aria-labelledby="relatedHeading">
+    <div class="section-title"><h3 id="relatedHeading">Příbuzné sekce</h3></div>
+    <div class="related-grid">
+      <a class="related-card" href="legislativa.html">
+        <div class="related-card-kicker">Co skupiny připravují</div>
+        <h4 class="related-card-title">Legislativní radar</h4>
+        <p class="related-card-desc">Výstupy pracovních skupin končí jako návrhy zákonů a vyhlášek — radar je sleduje ve VeKLEP.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="strategie.html">
+        <div class="related-card-kicker">Zadání shora</div>
+        <h4 class="related-card-title">Strategie zdravotnictví</h4>
+        <p class="related-card-desc">Strategické dokumenty určují, co mají skupiny řešit — a podle čeho měřit úspěch.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="clanek-institut-verejneho-zdravi.html">
+        <div class="related-card-kicker">Případová studie</div>
+        <h4 class="related-card-title">Reforma veřejného zdraví</h4>
+        <p class="related-card-desc">Jak vypadá práce jedné skupiny zblízka: zápisy PS pro reformu hygienické služby čteme průběžně.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="related-card" href="model-systemu.html">
+        <div class="related-card-kicker">Souvislosti</div>
+        <h4 class="related-card-title">Model systému</h4>
+        <p class="related-card-desc">Kauzální mapa českého zdravotnictví — kde poradní orgány drží páky.</p>
+        <span class="related-card-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/ppo.js"></script>
+
+</body>
+</html>

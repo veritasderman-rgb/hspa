@@ -90,6 +90,8 @@ git push -u origin claude/<branch>
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
 ├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
 ├── redakce.html                ← Redakční tým a procesy
+├── pracovni-skupiny.html       ← Pracovní skupiny MZ (síť PPO, spojky, kalendář)
+├── pracovni-skupina.html       ← Detail jedné skupiny (?id=...)
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
 │
@@ -110,6 +112,7 @@ git push -u origin claude/<branch>
 │   ├── explainers.js           ← Explainery (samostatné kontextové texty)
 │   ├── explainer-policy-views.js, strategy-policy-views.js, strategy-links.js
 │   ├── indicator.js            ← Detail indikátoru (?id=...)
+│   ├── ppo.js + ppo-detail.js  ← Pracovní skupiny MZ (síť, spojky, heatmapa; detail)
 │   ├── search.js               ← Globální fulltextové vyhledávání
 │   ├── themes.js               ← Tematické linie
 │   ├── redakce.js              ← Stránka redakce
@@ -132,6 +135,7 @@ git push -u origin claude/<branch>
 │   ├── pojistenci-d5-*.json    ← OIS 11-47 (ZP × kraj × okres)
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
 │   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
+│   ├── ppo.json + ppo-osoby.json ← Pracovní skupiny MZ (builder ingest/ppo/build-web.js z ingest/ppo/out/)
 │   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
 │   ├── tags.json               ← Řízený slovník tagů článků + aliasy (validované)
 │   ├── series.json             ← Registr článkových sérií (členství = zdroj pravdy)
