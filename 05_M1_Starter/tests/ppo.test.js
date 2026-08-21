@@ -61,6 +61,32 @@ test('ppo: hrany a uzly referencují existující skupiny, layout je v plátně'
   }
 });
 
+test('ppo: stupen uzlu = počet incidentních hran (ne bipartitní stupeň)', () => {
+  // Nález Codex review PR #1034: sit.json má ve stupni počet členů skupiny;
+  // web musí ukazovat počet vazeb skupina–skupina.
+  const deg = new Map();
+  for (const h of ppo.sit.hrany) {
+    deg.set(h.a, (deg.get(h.a) ?? 0) + 1);
+    deg.set(h.b, (deg.get(h.b) ?? 0) + 1);
+  }
+  for (const u of ppo.sit.uzly) {
+    assert.equal(u.stupen, deg.get(u.id), `uzel ${u.id}: stupen ${u.stupen} ≠ hrany ${deg.get(u.id)}`);
+  }
+});
+
+test('ppo: jednání skupin jsou kompletně z kalendáře (počet, roky, poslední)', () => {
+  let soucet = 0;
+  for (const s of ppo.skupiny) {
+    const data = ppo.kalendar.po_skupine[s.id] ?? [];
+    assert.equal(s.jednani_celkem, data.length, `skupina ${s.id}: jednani_celkem ≠ kalendář`);
+    const rokySum = Object.values(s.jednani_roky ?? {}).reduce((a, b) => a + b, 0);
+    assert.equal(rokySum, s.jednani_celkem, `skupina ${s.id}: součet jednani_roky nesedí`);
+    assert.equal(s.posledni_aktivita, data.at(-1) ?? null, `skupina ${s.id}: posledni_aktivita ≠ poslední zápis`);
+    soucet += data.length;
+  }
+  assert.equal(soucet, ppo.kalendar.jednani_celkem, 'součet jednání skupin ≠ jednani_celkem');
+});
+
 test('ppo: hrana skutečně odpovídá sdíleným členstvím v ppo-osoby.json', () => {
   const byId = new Map(osoby.osoby.map(p => [p.id, p]));
   for (const h of ppo.sit.hrany.slice(0, 40)) {

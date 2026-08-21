@@ -142,20 +142,40 @@ function main() {
   // datovaného zápisu má null a UI píše „bez doloženého jednání".
   const skupiny = skupinyOut.skupiny
     .filter(s => s.stav !== 'vynechano')
-    .map(s => ({
-      ...s,
-      posledni_aktivita: kalendarOut.po_skupine[s.id]?.at(-1) ?? null,
-    }))
+    .map(s => {
+      // jednání KOMPLETNĚ z kalendáře datovaných zápisů — jediný zdroj pravdy
+      // pro počet, roky i poslední aktivitu (nález Codex review PR #1034:
+      // jednani_celkem/jednani_roky ze skupiny.json se s kalendářem rozcházely)
+      const data = kalendarOut.po_skupine[s.id] ?? [];
+      const roky = {};
+      for (const d of data) roky[d.slice(0, 4)] = (roky[d.slice(0, 4)] ?? 0) + 1;
+      return {
+        ...s,
+        jednani_celkem: data.length,
+        jednani_roky: roky,
+        posledni_aktivita: data.at(-1) ?? null,
+      };
+    })
     .sort((a, b) => a.id - b.id);
   const skupinyById = new Map(skupiny.map(s => [s.id, s]));
   const gids = new Set(skupiny.map(s => s.id));
 
-  // síť: jen uzly existujících skupin; hrany mezi nimi
-  const uzlyIn = sitOut.skupiny.filter(u => gids.has(u.id));
-  const { uzly, shluky } = layoutNetwork(uzlyIn, skupinyById);
+  // síť: hrany mezi existujícími skupinami; stupeň uzlu = počet INCIDENTNÍCH
+  // HRAN skupina–skupina (legenda „velikost = počet vazeb na jiné skupiny").
+  // Pozor: sit.json má ve `stupen` bipartitní stupeň (počet členů) — ten se
+  // sem nesmí propsat (nález Codex review PR #1034).
   const hrany = sitOut.hrany_skupina_skupina
     .filter(h => gids.has(h.a) && gids.has(h.b))
     .map(h => ({ a: h.a, b: h.b, vaha: h.vaha, osoby: h.osoby }));
+  const deg = new Map();
+  for (const h of hrany) {
+    deg.set(h.a, (deg.get(h.a) ?? 0) + 1);
+    deg.set(h.b, (deg.get(h.b) ?? 0) + 1);
+  }
+  const uzlyIn = sitOut.skupiny
+    .filter(u => gids.has(u.id) && deg.has(u.id))
+    .map(u => ({ id: u.id, stupen: deg.get(u.id) }));
+  const { uzly, shluky } = layoutNetwork(uzlyIn, skupinyById);
 
   // spojky — tři pohledy (methodika FÁZE 1: bez hostů)
   const osobyById = new Map(osobyOut.osoby.map(p => [p.id, p]));
