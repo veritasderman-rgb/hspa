@@ -12,6 +12,19 @@ const ANA = path.join(DIR, 'analyza');
 const isStr = v => typeof v === 'string' && v.length > 0;
 const isArr = Array.isArray;
 const optStr = v => v === null || typeof v === 'string';
+const UKOL_KEYS = new Set(['co', 'kdo', 'termin']);
+
+// Všechny klíče schématu jsou ASCII — klíč s diakritikou („termín") je slip
+// LLM agenta, který by konzumentům tiše schoval hodnoty (Codex review PR #1038).
+function checkAsciiKeys(v, errs, cesta) {
+  if (isArr(v)) { v.forEach((x, i) => checkAsciiKeys(x, errs, `${cesta}[${i}]`)); return; }
+  if (v && typeof v === 'object') {
+    for (const [k, val] of Object.entries(v)) {
+      if (/[^\x20-\x7E]/.test(k)) errs.push(`${cesta}.${k}: klíč není ASCII`);
+      checkAsciiKeys(val, errs, `${cesta}.${k}`);
+    }
+  }
+}
 
 function checkJednani(j, errs, i) {
   const p = `jednani[${i}]`;
@@ -22,7 +35,11 @@ function checkJednani(j, errs, i) {
                    'zminene_dokumenty', 'odkazy_na_jine_skupiny', 'citace', 'stret_zajmu'])
     if (!isArr(j[k])) errs.push(`${p}.${k} musí být pole`);
   if (!isArr(j.ukoly)) errs.push(`${p}.ukoly musí být pole`);
-  else j.ukoly.forEach((u, k) => { if (!isStr(u.co)) errs.push(`${p}.ukoly[${k}].co chybí`); });
+  else j.ukoly.forEach((u, k) => {
+    if (!u || typeof u !== 'object' || !isStr(u.co)) { errs.push(`${p}.ukoly[${k}].co chybí`); return; }
+    for (const kk of Object.keys(u))
+      if (!UKOL_KEYS.has(kk)) errs.push(`${p}.ukoly[${k}]: neznámý klíč '${kk}' (schéma zná co/kdo/termin)`);
+  });
   if (isArr(j.citace) && j.citace.length > 2) errs.push(`${p}.citace > 2`);
 }
 
@@ -32,6 +49,7 @@ function checkFile(f) {
   try { j = JSON.parse(fs.readFileSync(f, 'utf8')); }
   catch (e) { return [`nevalidní JSON: ${e.message}`]; }
   if (!Number.isInteger(j.group_id)) errs.push('group_id chybí');
+  checkAsciiKeys(j, errs, '');
   if (!isArr(j.jednani)) errs.push('jednani musí být pole');
   else j.jednani.forEach((x, i) => checkJednani(x, errs, i));
   if (!('pravidla' in j)) errs.push('pravidla chybí (musí být objekt, nebo explicitní null)');
