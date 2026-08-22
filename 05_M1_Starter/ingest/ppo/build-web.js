@@ -194,6 +194,38 @@ export function mergeExterni(osoby, externi) {
   return osoby;
 }
 
+// Kurátorské korekce kategorizace osob (osoby-externi.json, pole `korekce`):
+// FÁZE 1 kategorizuje z jmenných seznamů portálu a u části osob vyjde
+// `neuvedeno` — když je ale funkce ověřená (např. politický náměstek MZ),
+// patří osoba do správné kategorie i žebříčků. Korekce se aplikuje PŘED
+// stavbou spojek: přepíše kategorii/afiliaci a osobu s kategorií
+// `mz_urednik` vyřadí z žebříčků bez úředníků, se `statni_instituce`
+// z žebříčku bez úředníků a státních institucí (zrcadlí filtr FÁZE 1).
+export function applyKorekce(osobyOut, reg) {
+  if (!reg) return;
+  const byId = new Map(osobyOut.osoby.map(p => [p.id, p]));
+  for (const e of reg.osoby ?? []) {
+    if (!e.korekce) continue;
+    const p = byId.get(e.id);
+    if (!p) throw new Error(`osoby-externi korekce: id ${e.id} v osobách není`);
+    if (!p.jmeno.includes(e.jmeno)) {
+      throw new Error(`osoby-externi korekce: id ${e.id} — jméno „${p.jmeno}" neobsahuje „${e.jmeno}"`);
+    }
+    if (e.korekce.kat) p.afiliace_kategorie = e.korekce.kat;
+    if (e.korekce.afiliace) {
+      p.afiliace = [...e.korekce.afiliace, ...(p.afiliace ?? []).filter(a => !e.korekce.afiliace.includes(a))];
+    }
+    if (e.korekce.kat === 'mz_urednik') {
+      for (const key of ['bez_uredniku', 'bez_uredniku_a_statnich']) {
+        osobyOut.zebricky[key] = osobyOut.zebricky[key].filter(pid => pid !== e.id);
+      }
+    } else if (e.korekce.kat === 'statni_instituce') {
+      osobyOut.zebricky.bez_uredniku_a_statnich =
+        osobyOut.zebricky.bez_uredniku_a_statnich.filter(pid => pid !== e.id);
+    }
+  }
+}
+
 /* ---------- FÁZE 4b: kurátorované souvislosti skupin se zbytkem webu ----- */
 // ingest/ppo/skupiny-souvislosti.json drží ručně vybrané odkazy (články,
 // stránky, indikátory) k vybraným skupinám. Guardy: id musí existovat,
@@ -224,6 +256,10 @@ function main() {
   const skupinyOut = readOut('skupiny.json');
   const sitOut = readOut('sit.json');
   const osobyOut = readOut('osoby.json');
+  const externiPath = path.join(__dirname, 'osoby-externi.json');
+  const externiReg = fs.existsSync(externiPath)
+    ? JSON.parse(fs.readFileSync(externiPath, 'utf8')) : null;
+  applyKorekce(osobyOut, externiReg);
   const kalendarOut = readOut('kalendar.json');
 
   // „vynechano" (Přístrojová komise, rozhodnutí vlastníka — PLAN-PPO.md §4.4)
@@ -344,9 +380,7 @@ function main() {
       clenstvi: p.clenstvi.filter(c => gids.has(c.g)),
     })).sort((a, b) => a.id - b.id),
   };
-  const externiPath = path.join(__dirname, 'osoby-externi.json');
-  mergeExterni(osoby.osoby,
-    fs.existsSync(externiPath) ? JSON.parse(fs.readFileSync(externiPath, 'utf8')) : null);
+  mergeExterni(osoby.osoby, externiReg);
 
   for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby]]) {
     const p = path.join(DATA, name);

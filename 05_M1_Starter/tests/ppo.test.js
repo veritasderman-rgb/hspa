@@ -8,10 +8,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS } from '../src/ppo.js';
+import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } from '../src/ppo.js';
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti } from '../ingest/ppo/build-web.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -313,6 +313,48 @@ test('ppo helpery: mergeSouvislosti hlídá id, existenci cíle i publikaci čl�
   assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 9, odkazy: [] }] }, opts), /v datech není/);
   assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 1, odkazy: [{ nazev: 'x', url: 'neexistuje-xyz.html' }] }] }, opts), /v repu není/);
   assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 1, odkazy: [{ nazev: 'x', url: 'clanek-veto-platcu-szv-2026.html' }] }] }, opts), /není publikovaný|v repu není/);
+});
+
+/* ── kurátorské korekce kategorizace (osoby-externi.json `korekce`) ── */
+
+test('ppo korekce: žebříčky bez úředníků neobsahují osoby s korekcí mz_urednik', () => {
+  const kor = externiReg.osoby.filter(e => e.korekce);
+  assert.ok(kor.length >= 2, 'čekám aspoň korekce Karen + Šmucler');
+  for (const e of kor) {
+    assert.ok(KAT_LABELS[e.korekce.kat], `korekce ${e.id}: neznámá kategorie '${e.korekce.kat}'`);
+    assert.ok(e.korekce.duvod, `korekce ${e.id}: chybí duvod`);
+    for (const key of ['bez_uredniku', 'bez_uredniku_a_statnich']) {
+      if (e.korekce.kat === 'mz_urednik') {
+        assert.ok(!ppo.spojky[key].some(r => r.id === e.id),
+          `${key}: osoba ${e.id} s korekcí mz_urednik nesmí být v žebříčku`);
+      }
+    }
+    const p = osoby.osoby.find(x => x.id === e.id);
+    assert.equal(p.kat, e.korekce.kat, `osoba ${e.id}: kat v datech nenese korekci`);
+    if (e.korekce.afiliace) {
+      assert.equal(p.afiliace[0], e.korekce.afiliace[0], `osoba ${e.id}: afiliace nenese korekci`);
+    }
+  }
+});
+
+test('ppo helpery: applyKorekce přepíše kategorii a vyřadí ze správných žebříčků', () => {
+  const mk = () => ({
+    osoby: [{ id: 7, jmeno: 'MUDr. Jan Novák', afiliace_kategorie: 'neuvedeno', afiliace: [] }],
+    zebricky: { celkovy: [7], bez_uredniku: [7], bez_uredniku_a_statnich: [7] },
+  });
+  const outA = mk();
+  applyKorekce(outA, { osoby: [{ id: 7, jmeno: 'Jan Novák',
+    korekce: { kat: 'mz_urednik', afiliace: ['náměstek'] } }] });
+  assert.equal(outA.osoby[0].afiliace_kategorie, 'mz_urednik');
+  assert.deepEqual(outA.osoby[0].afiliace, ['náměstek']);
+  assert.deepEqual(outA.zebricky.bez_uredniku, []);
+  assert.deepEqual(outA.zebricky.bez_uredniku_a_statnich, []);
+  assert.deepEqual(outA.zebricky.celkovy, [7], 'celkový žebříček zůstává');
+  const outB = mk();
+  applyKorekce(outB, { osoby: [{ id: 7, jmeno: 'Jan Novák', korekce: { kat: 'statni_instituce' } }] });
+  assert.deepEqual(outB.zebricky.bez_uredniku, [7], 'statni_instituce v bez_uredniku zůstává');
+  assert.deepEqual(outB.zebricky.bez_uredniku_a_statnich, []);
+  assert.throws(() => applyKorekce(mk(), { osoby: [{ id: 7, jmeno: 'Petr Dvořák', korekce: { kat: 'komora' } }] }), /neobsahuje/);
 });
 
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */
