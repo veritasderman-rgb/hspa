@@ -419,6 +419,13 @@ test('ppo parseTermin: české formulace termínů → ISO datum, jinak null', (
   assert.equal(parseTermin('prosinec 2019'), '2019-12-31');
   assert.equal(parseTermin('do příštího jednání'), null);
   assert.equal(parseTermin('co nejdříve'), null);
+  assert.equal(parseTermin('cca 14 dnů před jednáním PS 24. 11. 2016'), null,
+    'datum ukotvené relativní vazbou není termín');
+  assert.equal(parseTermin('od 1. 9. 2025'), null, 'datum počátku není termín');
+  assert.equal(parseTermin('na příštím jednání (21. 11. 2018)'), '2018-11-21',
+    'datum příštího jednání termínem je');
+  assert.equal(parseTermin('ideálně do 15.5.2026 (alespoň 14 dní před dalším jednáním)'), '2026-05-15',
+    'relativní vazba až ZA datem normalizaci neblokuje');
   assert.equal(parseTermin('45. 13. 2025'), null, 'nevalidní den/měsíc se odmítá');
   assert.equal(parseTermin(null), null);
 });

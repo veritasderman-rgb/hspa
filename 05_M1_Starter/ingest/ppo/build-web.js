@@ -304,18 +304,22 @@ const konecMesice = (y, m) => iso(y, m, new Date(Number(y), Number(m), 0).getDat
 export function parseTermin(s) {
   if (!s) return null;
   const t = deacc(s);
+  // Datum, před nímž stojí relativní vazba („cca 14 dnů PŘED jednáním PS
+  // 24. 11. 2016", „OD obdržení…"), termín jen ukotvuje — skutečná lhůta je
+  // relativní a normalizované datum by lhalo. Takový termín zůstává textem.
+  const relativni = m => /(^|\s)(pred|po|od)(\s|$)/.test(t.slice(0, m.index));
   let m;
-  if ((m = t.match(/(\d{4})-(\d{2})-(\d{2})/))) return iso(m[1], m[2], m[3]);
-  if ((m = t.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})/))) return iso(m[3], m[2], m[1]);
-  if ((m = t.match(new RegExp(`(\\d{1,2})\\.\\s*(${MESIC_RE})\\s+(\\d{4})`)))) {
-    return iso(m[3], MESICE[m[2]], m[1]);
+  if ((m = /(\d{4})-(\d{2})-(\d{2})/.exec(t))) return relativni(m) ? null : iso(m[1], m[2], m[3]);
+  if ((m = /(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})/.exec(t))) return relativni(m) ? null : iso(m[3], m[2], m[1]);
+  if ((m = new RegExp(`(\\d{1,2})\\.\\s*(${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
+    return relativni(m) ? null : iso(m[3], MESICE[m[2]], m[1]);
   }
-  if ((m = t.match(/do konce roku (\d{4})/))) return iso(m[1], 12, 31);
-  if ((m = t.match(new RegExp(`do konce (${MESIC_RE})\\s+(\\d{4})`)))) {
+  if ((m = /do konce roku (\d{4})/.exec(t))) return iso(m[1], 12, 31);
+  if ((m = new RegExp(`do konce (${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
     return konecMesice(m[2], MESICE[m[1]]);
   }
-  if ((m = t.match(new RegExp(`(?:^|\\s)(${MESIC_RE})\\s+(\\d{4})`)))) {
-    return konecMesice(m[2], MESICE[m[1]]);
+  if ((m = new RegExp(`(?:^|\\s)(${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
+    return relativni(m) ? null : konecMesice(m[2], MESICE[m[1]]);
   }
   return null;
 }
