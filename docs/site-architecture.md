@@ -136,12 +136,12 @@ zdrave-cesko.cz/
 
 | | |
 |---|---|
-| **Účel** | Mapa pracovních a poradních orgánů MZ (data z ppo.mzcr.cz): SVG síť skupin propojených sdílenými členy (layout předpočítaný builderem), žebříčky „spojek" (osoby ve více skupinách — s úředníky a bez nich), heatmapa doložených jednání po měsících, filtrovatelný katalog. Detail (?id=N): účel, složení, profese, jednání po letech, napojené skupiny se jmény sdílených členů, odkaz na primární zdroj. |
+| **Účel** | Mapa pracovních a poradních orgánů MZ (data z ppo.mzcr.cz): SVG síť skupin propojených sdílenými členy (layout předpočítaný builderem), žebříčky „spojek" (osoby ve více skupinách — s úředníky a bez nich), heatmapa doložených jednání po měsících, sekce „Co říkají zápisy" (zjištění z LLM analýzy zápisů s doklady na primární dokumenty), filtrovatelný katalog. Detail (?id=N): účel, složení, profese, jednání po letech, napojené skupiny se jmény sdílených členů, a z analýzy zápisů profil „Co skupina reálně dělá", hlavní témata se stavem, doložená jednání s rozhodnutími a úkoly (rozbalovací, s odkazem na zdrojový zápis) a transparentnost/praxe střetu zájmů. |
 | **Cílový uživatel** | Novinář, policy maker, odborná veřejnost — „kdo připravuje rozhodnutí a kdo sedí u kterých stolů". |
-| **Fetchuje** | `data/ppo.json` (hub i detail), `data/ppo-osoby.json` (jen detail) |
+| **Fetchuje** | `data/ppo.json` (hub i detail), `data/ppo-osoby.json` (jen detail), `data/ppo-analyza/{id}.json` (jen detail, líně — jen skupiny s analýzou) |
 | **JS moduly** | `src/ppo.js` (hub), `src/ppo-detail.js` (detail, importuje helpery z ppo.js) → `page-shared` |
-| **CSS namespace** | `.ppo-*` (síť, panel, spojky, heat, tabulka, detail karty); reuse `.ed-hero*`, `.filters-row`, `.level-nav`, `.related-*`, `.leg-source-note` |
-| **Builder** | `ingest/ppo/build-web.js` (FÁZE 3; `npm run build:ppo`) z FÁZE 1 výstupů `ingest/ppo/out/*` — deterministický vč. layoutu sítě; testy `tests/ppo.test.js` |
+| **CSS namespace** | `.ppo-*` (síť, panel, spojky, heat, tabulka, detail karty; `.ppo-a-*` analýza, `.ppo-zjisteni` hub); reuse `.ed-hero*`, `.filters-row`, `.level-nav`, `.related-*`, `.leg-source-note` |
+| **Builder** | `ingest/ppo/build-web.js` (FÁZE 3; `npm run build:ppo`) z FÁZE 1 výstupů `ingest/ppo/out/*` a FÁZE 2 analýzy `ingest/ppo/analyza/*` (profily, jednání, synteza.json → `zjisteni`) — deterministický vč. layoutu sítě; testy `tests/ppo.test.js` |
 
 ### `legislativa.html` — Legislativní radar
 

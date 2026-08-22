@@ -43,6 +43,70 @@ const $ = id => document.getElementById(id);
 
 function osobaWord(n) { return n === 1 ? 'osoba' : n < 5 ? 'osoby' : 'osob'; }
 
+/* ── FÁZE 2 analýza zápisů (data/ppo-analyza/{id}.json, líně) ─────── */
+
+/** COI události napříč jednáními (nejnovější první, jak jdou v datech). */
+export function coiEvents(jednani) {
+  return (jednani ?? []).flatMap(j =>
+    (j.stret_zajmu ?? []).map(s => ({ datum: j.datum, url: j.url, text: s })));
+}
+
+const STAV_TEMA = stav =>
+  /^rozhodnuto/.test(stav) ? 'ok' : /^usnulo/.test(stav) ? 'off' : 'run';
+
+function renderAnalyza(a) {
+  const p = a.profil ?? {};
+  const parts = [];
+
+  if (p.co_dela) {
+    parts.push(`<div class="ppo-a-prose">${String(p.co_dela).split(/\n{2,}/)
+      .map(t => `<p>${escapeHtml(t)}</p>`).join('')}</div>`);
+  }
+
+  const grid = [];
+  if (p.hlavni_temata?.length) {
+    grid.push(`<div class="ppo-d-card"><h3>Hlavní témata</h3>
+      <ul class="ppo-a-temata">${p.hlavni_temata.map(t => `<li>
+        <span class="ppo-a-stav ppo-a-stav-${STAV_TEMA(String(t.stav ?? ''))}">${escapeHtml(t.stav ?? '?')}</span>
+        <strong>${escapeHtml(t.tema)}</strong>${t.obdobi ? ` <i>${escapeHtml(t.obdobi)}</i>` : ''}
+      </li>`).join('')}</ul></div>`);
+  }
+  if (p.co_se_pripravuje?.length) {
+    grid.push(`<div class="ppo-d-card"><h3>Co se připravuje</h3>
+      <ul class="ppo-a-list">${p.co_se_pripravuje.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul></div>`);
+  }
+  const coi = coiEvents(a.jednani);
+  if (p.transparentnost?.hodnoceni || p.stret_zajmu_procesni || coi.length) {
+    const t = p.transparentnost ?? {};
+    grid.push(`<div class="ppo-d-card"><h3>Transparentnost a střet zájmů</h3>
+      ${t.hodnoceni ? `<p class="ppo-a-p">${escapeHtml(t.hodnoceni)}</p>` : ''}
+      ${p.stret_zajmu_procesni ? `<p class="ppo-a-p">${escapeHtml(p.stret_zajmu_procesni)}</p>` : ''}
+      ${coi.length ? `<ul class="ppo-a-list ppo-a-coi">${coi.slice(0, 8).map(e =>
+        `<li><b>${escapeHtml(fmtDate(e.datum))}</b> ${escapeHtml(e.text)}</li>`).join('')}</ul>
+        ${coi.length > 8 ? `<p class="ppo-d-note">…a ${coi.length - 8} dalších záznamů v zápisech.</p>` : ''}` : ''}
+    </div>`);
+  }
+  if (grid.length) parts.push(`<div class="ppo-d-grid">${grid.join('')}</div>`);
+
+  const jed = (a.jednani ?? []).filter(j => j.temata.length || j.rozhodnuti.length);
+  if (jed.length) {
+    parts.push(`<h3 class="ppo-a-h">Doložená jednání <span class="ppo-a-count">${jed.length}</span></h3>
+      <div class="ppo-a-jednani">${jed.map(j => `<details>
+        <summary><b>${escapeHtml(fmtDate(j.datum))}</b>
+          <span>${escapeHtml(j.temata.slice(0, 3).join(' · ') || '—')}${j.temata.length > 3 ? ' …' : ''}</span></summary>
+        ${j.rozhodnuti.length ? `<p class="ppo-a-sub">Rozhodnutí a závěry</p>
+          <ul class="ppo-a-list">${j.rozhodnuti.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>` : ''}
+        ${j.ukoly.length ? `<p class="ppo-a-sub">Uložené úkoly</p>
+          <ul class="ppo-a-list">${j.ukoly.map(u => `<li>${escapeHtml(u.co)}${u.kdo ? ` <i>(${escapeHtml(u.kdo)})</i>` : ''}${u.termin ? ` — ${escapeHtml(u.termin)}` : ''}</li>`).join('')}</ul>` : ''}
+        ${j.url ? `<p class="ppo-a-src"><a href="${escapeHtml(j.url)}" target="_blank" rel="noopener">Zdrojový zápis na ppo.mzcr.cz ↗</a></p>` : ''}
+      </details>`).join('')}</div>`);
+  }
+
+  if (!parts.length) return;
+  $('ppoAnalyza').innerHTML = parts.join('');
+  $('ppoAnalyzaSec').hidden = false;
+}
+
 function render(PPO, OS, s) {
   const skupinyById = new Map(PPO.skupiny.map(x => [x.id, x]));
   const osobyById = new Map(OS.osoby.map(p => [p.id, p]));
@@ -152,6 +216,15 @@ async function init() {
       return;
     }
     render(PPO, OS, s);
+    // analýza zápisů (FÁZE 2) se dotahuje líně a její výpadek stránku nerozbije
+    if (s.analyza) {
+      try {
+        const aRes = await fetch(`data/ppo-analyza/${s.id}.json`);
+        if (aRes.ok) renderAnalyza(await aRes.json());
+      } catch (err) {
+        console.error('ppo-analyza load failed:', err);
+      }
+    }
   } catch (err) {
     console.error('ppo-detail load failed:', err);
     document.querySelector('main').insertAdjacentHTML('afterbegin',

@@ -273,6 +273,21 @@ function wireTable() {
 }
 
 /* ── init ────────────────────────────────────────────────────────────── */
+function renderZjisteni() {
+  const zj = PPO.zjisteni ?? [];
+  if (!zj.length) return;
+  $('ppoZjisteni').innerHTML = zj.map(z => {
+    const skup = z.skupiny.map(g =>
+      `<a href="pracovni-skupina.html?id=${g}">${escapeHtml(skupinyById.get(g)?.nazev ?? String(g))}</a>`);
+    const dok = z.doklady.map((d, i) =>
+      `<a href="${escapeHtml(d.url)}" target="_blank" rel="noopener" title="${escapeHtml(d.titul ?? '')}">dokument ${i + 1} ↗</a>`);
+    return `<li>${escapeHtml(z.teze)}
+      <span class="ppo-zj-meta">${skup.join(' · ')}${dok.length ? ` — doklady: ${dok.join(', ')}` : ''}</span>
+    </li>`;
+  }).join('');
+  $('ppoZjisteniSec').hidden = false;
+}
+
 async function init() {
   renderModuleNav('strategies');
   renderMastheadDate();
@@ -296,6 +311,7 @@ async function init() {
     renderIso();
     renderSpojky();
     renderHeat();
+    renderZjisteni();
     wireTable();
     renderTable();
   } catch (err) {
