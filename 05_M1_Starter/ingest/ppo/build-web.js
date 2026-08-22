@@ -226,6 +226,33 @@ export function applyKorekce(osobyOut, reg) {
   }
 }
 
+// FÁZE 4d — dvojrole: orgány s úhradovým/regulačním dosahem (název-based,
+// stejná heuristika jako redakční analýza „Židle a živnost").
+export const UHRADOVY_ORGAN = /seznamu zdravotních výkonů|kategorizac|úhrad|cen(ov|y|ám)|dohodovac|poskytovatelů|léčiv|lékov|farmak|antibiotik/i;
+
+// Z registru (osoby s polem firmy) staví data/ppo-dvojrole.json — čistě
+// faktickou tabulku osoba → orgány → firemní angažmá dle obchodního
+// rejstříku (Hlídač státu). Řadí: úhradové orgány první, pak počet firem.
+export function buildDvojrole(externiReg, osobyById, skupinyById, gids) {
+  if (!externiReg) return [];
+  return externiReg.osoby
+    .filter(e => e.firmy?.length)
+    .map(e => {
+      const p = osobyById.get(e.id);
+      const skupiny = p.clenstvi
+        .filter(c => gids.has(c.g))
+        .map(c => ({ g: c.g, role: c.role, nazev: skupinyById.get(c.g).nazev,
+          uhradovy: UHRADOVY_ORGAN.test(skupinyById.get(c.g).nazev) }));
+      return { id: e.id, jmeno: p.jmeno,
+        url: e.odkazy.find(o => o.url.startsWith('https://www.hlidacstatu.cz/'))?.url ?? null,
+        statni_zakazky: !!e.statni_zakazky, firmy: e.firmy, skupiny };
+    })
+    .filter(x => x.skupiny.length)
+    .sort((a, b) =>
+      (b.skupiny.some(s => s.uhradovy) - a.skupiny.some(s => s.uhradovy))
+      || b.firmy.length - a.firmy.length || a.id - b.id);
+}
+
 /* ---------- FÁZE 4b: kurátorované souvislosti skupin se zbytkem webu ----- */
 // ingest/ppo/skupiny-souvislosti.json drží ručně vybrané odkazy (články,
 // stránky, indikátory) k vybraným skupinám. Guardy: id musí existovat,
@@ -382,7 +409,19 @@ function main() {
   };
   mergeExterni(osoby.osoby, externiReg);
 
-  for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby]]) {
+  const dvojrole = {
+    version: '1.0',
+    zdroj: 'ppo.mzcr.cz (členství) + hlidacstatu.cz / obchodní rejstřík (firemní angažmá)',
+    overeno: externiReg?.overeno ?? null,
+    pozn: 'Čistě faktický přehled: osoby s ověřeným profilem na Hlídači státu, jejich angažmá '
+      + 've firmách a spolcích dle veřejných rejstříků a členství v orgánech MZ. Angažmá neurčuje '
+      + 'velikost podílu; statni_zakazky = firmy z profilu mají smlouvy v registru smluv. '
+      + 'Členství zástupců je u řady orgánů deklarovaným mandátem.',
+    osoby: buildDvojrole(externiReg, osobyById, skupinyById, gids),
+  };
+  dvojrole.pocet = dvojrole.osoby.length;
+
+  for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby], ['ppo-dvojrole.json', dvojrole]]) {
     const p = path.join(DATA, name);
     fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n');
     console.log(`✓ data/${name} (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`);

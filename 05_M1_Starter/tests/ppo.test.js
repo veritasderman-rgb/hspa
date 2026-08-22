@@ -11,7 +11,8 @@ import { fileURLToPath } from 'node:url';
 import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } from '../src/ppo.js';
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce } from '../ingest/ppo/build-web.js';
+import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -357,10 +358,54 @@ test('ppo helpery: applyKorekce přepíše kategorii a vyřadí ze správných �
   assert.throws(() => applyKorekce(mk(), { osoby: [{ id: 7, jmeno: 'Petr Dvořák', korekce: { kat: 'komora' } }] }), /neobsahuje/);
 });
 
+/* ── Kdo je kdo + dvojrole (pracovni-osoby.html, data/ppo-dvojrole.json) ── */
+
+const dvojrole = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-dvojrole.json'), 'utf8'));
+
+test('ppo dvojrole: dataset sedí na registr, skupiny i heuristiku úhradových orgánů', () => {
+  assert.equal(dvojrole.pocet, dvojrole.osoby.length);
+  assert.ok(dvojrole.pocet >= 250, `podezřele málo osob (${dvojrole.pocet})`);
+  const regFirmy = new Map(externiReg.osoby.filter(e => e.firmy?.length).map(e => [e.id, e]));
+  const gById = new Map(ppo.skupiny.map(g => [g.id, g]));
+  for (const o of dvojrole.osoby) {
+    const e = regFirmy.get(o.id);
+    assert.ok(e, `osoba ${o.id} není v registru s firmami`);
+    assert.deepEqual(o.firmy, e.firmy, `osoba ${o.id}: firmy nesedí na registr`);
+    if (o.url) assert.ok(o.url.startsWith('https://www.hlidacstatu.cz/osoba/'), `osoba ${o.id}: podezřelá url`);
+    assert.ok(o.skupiny.length >= 1, `osoba ${o.id}: bez skupin`);
+    for (const sk of o.skupiny) {
+      const g = gById.get(sk.g);
+      assert.ok(g, `osoba ${o.id}: skupina ${sk.g} neexistuje`);
+      assert.equal(sk.uhradovy, UHRADOVY_ORGAN.test(g.nazev), `osoba ${o.id}: uhradovy flag u ${sk.g}`);
+    }
+  }
+  // úhradové orgány řadí builder na začátek
+  const prvniBezUhr = dvojrole.osoby.findIndex(o => !o.skupiny.some(s => s.uhradovy));
+  if (prvniBezUhr >= 0) {
+    assert.ok(!dvojrole.osoby.slice(prvniBezUhr).some(o => o.skupiny.some(s => s.uhradovy)),
+      'osoby s úhradovým orgánem nejsou seřazené první');
+  }
+});
+
+test('ppo helpery: normText, prijmeniKey, filterOsoby (adresář Kdo je kdo)', () => {
+  assert.equal(normText('Šmucler Ž'), 'smucler z');
+  assert.equal(prijmeniKey('doc. MUDr. Roman Šmucler, CSc.'), 'smucler');
+  assert.equal(prijmeniKey('prof. MUDr. Vladimír Černý, Ph.D., FCCM'), 'cerny');
+  const os = [
+    { id: 1, jmeno: 'MUDr. Igor Karen', kat: 'mz_urednik', afiliace: ['náměstek'], clenstvi: [], externi: { funkce: [], odkazy: [] } },
+    { id: 2, jmeno: 'Jan Černý', kat: 'pojistovna', afiliace: ['VZP'], clenstvi: [] },
+  ];
+  assert.equal(filterOsoby(os, { q: 'karen' }).length, 1);
+  assert.equal(filterOsoby(os, { q: 'cerny' })[0].id, 2, 'hledání bez diakritiky');
+  assert.equal(filterOsoby(os, { kat: 'pojistovna' }).length, 1);
+  assert.equal(filterOsoby(os, { jenOverene: true })[0].id, 1);
+  assert.equal(filterOsoby(os, { q: 'vzp' }).length, 1, 'hledá i v afiliaci');
+});
+
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */
 
 test('ppo: stránky sekce existují a mají robots index', () => {
-  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js'], ['pracovni-osoba.html', 'src/ppo-osoba.js']]) {
+  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js'], ['pracovni-osoba.html', 'src/ppo-osoba.js'], ['pracovni-osoby.html', 'src/ppo-osoby.js']]) {
     const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
     assert.ok(html.includes(mod), `${page} nenačítá ${mod}`);
     assert.match(html, /name="robots" content="index, follow"/, `${page}: chybí robots index`);
