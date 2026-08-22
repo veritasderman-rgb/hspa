@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS } from '../src/ppo.js';
-import { membersOf, edgesOf, ROLE_ORDER } from '../src/ppo-detail.js';
+import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
 import { clusterKey, layoutNetwork, spojkaRow, VIEW } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -146,6 +146,61 @@ test('ppo builder: spojkaRow počítá jen viditelné skupiny a předsednictví'
   assert.equal(r.skupin, 2);
   assert.equal(r.predsednictvi, 1);
   assert.deepEqual(r.skupiny, [1, 2]);
+});
+
+/* ── analýza zápisů (FÁZE 2 → data/ppo-analyza) ────────────────────── */
+
+test('ppo analýza: souhrn v ppo.json ↔ soubory data/ppo-analyza/ 1:1', () => {
+  const dir = path.join(ROOT, 'data', 'ppo-analyza');
+  const files = new Set(fs.readdirSync(dir).filter(f => /^\d+\.json$/.test(f)));
+  for (const s of ppo.skupiny) {
+    if (s.analyza) {
+      assert.ok(files.has(`${s.id}.json`), `skupina ${s.id} má souhrn, ale chybí soubor`);
+      const a = JSON.parse(fs.readFileSync(path.join(dir, `${s.id}.json`), 'utf8'));
+      assert.equal(a.group_id, s.id, `${s.id}.json: group_id nesedí`);
+      assert.equal(a.jednani.length, s.analyza.jednani, `skupina ${s.id}: počet jednání nesedí`);
+      files.delete(`${s.id}.json`);
+    }
+  }
+  assert.deepEqual([...files], [], 'soubory bez souhrnu v ppo.json');
+});
+
+test('ppo analýza: jednání nejnovější první, URL vedou na portál MZ', () => {
+  const dir = path.join(ROOT, 'data', 'ppo-analyza');
+  for (const f of fs.readdirSync(dir).filter(f => /^\d+\.json$/.test(f))) {
+    const a = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    for (let i = 1; i < a.jednani.length; i++) {
+      assert.ok(String(a.jednani[i - 1].datum ?? '') >= String(a.jednani[i].datum ?? ''),
+        `${f}: jednání nejsou seřazena sestupně (${a.jednani[i - 1].datum} < ${a.jednani[i].datum})`);
+    }
+    for (const j of a.jednani) {
+      if (j.url) assert.ok(j.url.startsWith('https://ppo.mzcr.cz'), `${f}: podezřelé url ${j.url}`);
+      for (const k of ['temata', 'rozhodnuti', 'ukoly', 'stret_zajmu', 'citace'])
+        assert.ok(Array.isArray(j[k]), `${f}: jednani.${k} není pole`);
+    }
+  }
+});
+
+test('ppo zjisteni: teze s doklady na portálu a existujícími skupinami', () => {
+  const gids = new Set(ppo.skupiny.map(s => s.id));
+  assert.ok(ppo.zjisteni.length >= 10, `podezřele málo zjištění (${ppo.zjisteni.length})`);
+  for (const z of ppo.zjisteni) {
+    assert.ok(z.teze?.length > 40, 'zjištění bez teze');
+    assert.ok(z.skupiny.length >= 1, `zjištění bez skupin: ${z.teze.slice(0, 40)}`);
+    for (const g of z.skupiny) assert.ok(gids.has(g), `zjištění odkazuje na neexistující skupinu ${g}`);
+    assert.ok(z.doklady.length >= 1, `zjištění bez dokladu: ${z.teze.slice(0, 40)}`);
+    for (const d of z.doklady)
+      assert.ok(d.url.startsWith('https://ppo.mzcr.cz'), `doklad mimo portál: ${d.url}`);
+  }
+});
+
+test('ppo helpery: coiEvents skládá COI napříč jednáními s datem a zdrojem', () => {
+  const ev = coiEvents([
+    { datum: '2026-01-01', url: 'https://x', stret_zajmu: ['a', 'b'] },
+    { datum: '2025-01-01', url: null, stret_zajmu: [] },
+  ]);
+  assert.equal(ev.length, 2);
+  assert.deepEqual(ev[0], { datum: '2026-01-01', url: 'https://x', text: 'a' });
 });
 
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */

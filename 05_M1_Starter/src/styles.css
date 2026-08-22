@@ -19488,7 +19488,43 @@ a.bar-chip:hover { border-color: var(--red); color: var(--red); }
 .ppo-members li { break-inside: avoid; padding: 4px 0; border-bottom: 1px dotted var(--rule); }
 .ppo-members .ppo-role { color: var(--ink-mut); font-size: 12px; }
 
+/* analýza zápisů (FÁZE 2) — detail skupiny + zjištění na hubu */
+.ppo-a-prose { max-width: 760px; }
+.ppo-a-prose p { margin: 0 0 12px; font-size: 14px; line-height: 1.62; }
+.ppo-a-p { margin: 0 0 10px; font-size: 13.5px; line-height: 1.55; }
+.ppo-a-temata { margin: 0; padding: 0; list-style: none; }
+.ppo-a-temata li { border-top: 1px solid var(--rule); padding: 8px 0; font-size: 13.5px; line-height: 1.5; }
+.ppo-a-temata i { color: var(--ink-mut); font-style: normal; font-size: 12.5px; white-space: nowrap; }
+.ppo-a-stav { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px;
+  margin-right: 7px; vertical-align: 1px; color: var(--ink-mut); }
+.ppo-a-stav-ok { border-color: currentColor; color: var(--ink); }
+.ppo-a-stav-off { opacity: .6; }
+.ppo-a-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; }
+.ppo-a-list li { margin: 0 0 6px; }
+.ppo-a-list i { color: var(--ink-mut); }
+.ppo-a-coi li b { font-variant-numeric: tabular-nums; }
+.ppo-a-h { font-size: 15px; margin: 26px 0 10px; }
+.ppo-a-count { font-weight: 400; color: var(--ink-mut); font-size: 13px; }
+.ppo-a-jednani details { border-top: 1px solid var(--rule); }
+.ppo-a-jednani summary { cursor: pointer; padding: 9px 0; font-size: 13.5px; display: flex; gap: 12px; }
+.ppo-a-jednani summary b { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ppo-a-jednani summary span { color: var(--ink-mut); }
+.ppo-a-jednani details[open] summary span { color: inherit; }
+.ppo-a-jednani details > *:not(summary) { margin-left: 14px; }
+.ppo-a-sub { margin: 6px 0 4px; font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--ink-mut); }
+.ppo-a-src { margin: 8px 0 12px; font-size: 12.5px; }
+.ppo-zjisteni { margin: 0; padding: 0; list-style: none; counter-reset: zj; }
+.ppo-zjisteni li { border-top: 1px solid var(--rule); padding: 12px 0 12px 40px; position: relative;
+  font-size: 13.5px; line-height: 1.58; counter-increment: zj; }
+.ppo-zjisteni li::before { content: counter(zj); position: absolute; left: 0; top: 12px;
+  font-weight: 800; font-size: 17px; color: var(--ink-mut); font-variant-numeric: tabular-nums; }
+.ppo-zjisteni .ppo-zj-meta { display: block; margin-top: 5px; font-size: 12.5px; color: var(--ink-mut); }
+.ppo-zjisteni .ppo-zj-meta a { color: inherit; }
+
 @media print {
   .ppo-net-layout { display: block; }
   .ppo-panel, .ppo-net-controls { display: none; }
+  .ppo-a-jednani details { display: block; }
 }

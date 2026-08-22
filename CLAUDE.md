@@ -135,7 +135,7 @@ git push -u origin claude/<branch>
 │   ├── pojistenci-d5-*.json    ← OIS 11-47 (ZP × kraj × okres)
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
 │   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
-│   ├── ppo.json + ppo-osoby.json ← Pracovní skupiny MZ (builder ingest/ppo/build-web.js z ingest/ppo/out/)
+│   ├── ppo.json + ppo-osoby.json + ppo-analyza/ ← Pracovní skupiny MZ (builder ingest/ppo/build-web.js z ingest/ppo/out/ + ingest/ppo/analyza/)
 │   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
 │   ├── tags.json               ← Řízený slovník tagů článků + aliasy (validované)
 │   ├── series.json             ← Registr článkových sérií (členství = zdroj pravdy)
