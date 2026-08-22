@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS } from '../src/ppo.js';
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni } from '../ingest/ppo/build-web.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -267,6 +267,52 @@ test('ppo helpery: membershipRows řadí role dle ROLE_ORDER, vedeCount počít�
   assert.deepEqual(rows.map(x => x.s.id), [3, 2, 1], 'předseda první, pak členství abecedně; neznámá skupina ven');
   assert.equal(vedeCount(p), 1);
   assert.equal(vedeCount({ clenstvi: [{ g: 1, role: 'Místopředseda' }] }), 1);
+});
+
+/* ── FÁZE 4b: kurátorované souvislosti skupin ──────────────────────── */
+
+test('ppo souvislosti: cíle odkazů existují a články jsou publikované', () => {
+  const reg = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'ingest', 'ppo', 'skupiny-souvislosti.json'), 'utf8'));
+  const articles = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'articles.json'), 'utf8')).articles;
+  const published = new Set(articles.filter(a => a.published !== false).map(a => a.slug));
+  const byId = new Map(ppo.skupiny.map(s => [s.id, s]));
+  assert.ok(reg.skupiny.length >= 5, 'podezřele málo kurátorovaných skupin');
+  for (const r of reg.skupiny) {
+    const s = byId.get(r.id);
+    assert.ok(s, `souvislosti: skupina ${r.id} v datech není`);
+    assert.deepEqual(s.souvislosti, r.odkazy, `skupina ${r.id}: data nekopírují registr`);
+    for (const o of r.odkazy) {
+      assert.ok(o.nazev && o.url, `skupina ${r.id}: odkaz bez názvu/url`);
+      if (!/^https?:/.test(o.url)) {
+        const file = o.url.split(/[?#]/)[0];
+        assert.ok(fs.existsSync(path.join(ROOT, file)), `skupina ${r.id}: cíl ${file} neexistuje`);
+        if (/^clanek-.*\.html$/.test(file)) {
+          assert.ok(published.has(file), `skupina ${r.id}: článek ${file} není publikovaný`);
+        }
+      }
+    }
+  }
+  // skupiny bez záznamu v registru souvislosti nemají
+  const regIds = new Set(reg.skupiny.map(r => r.id));
+  for (const s of ppo.skupiny) {
+    if (!regIds.has(s.id)) assert.equal(s.souvislosti, undefined, `skupina ${s.id} má souvislosti mimo registr`);
+  }
+});
+
+test('ppo helpery: mergeSouvislosti hlídá id, existenci cíle i publikaci článku', () => {
+  const mk = () => new Map([[1, { id: 1 }]]);
+  const opts = { rootDir: ROOT, publishedSlugs: new Set(['clanek-vakcinace.html']) };
+  const byId = mk();
+  mergeSouvislosti(byId, { skupiny: [{ id: 1, odkazy: [
+    { nazev: 'a', url: 'prevence.html' },
+    { nazev: 'b', url: 'clanek-vakcinace.html' },
+    { nazev: 'c', url: 'https://example.org/x' },
+  ] }] }, opts);
+  assert.equal(byId.get(1).souvislosti.length, 3);
+  assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 9, odkazy: [] }] }, opts), /v datech není/);
+  assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 1, odkazy: [{ nazev: 'x', url: 'neexistuje-xyz.html' }] }] }, opts), /v repu není/);
+  assert.throws(() => mergeSouvislosti(mk(), { skupiny: [{ id: 1, odkazy: [{ nazev: 'x', url: 'clanek-veto-platcu-szv-2026.html' }] }] }, opts), /není publikovaný|v repu není/);
 });
 
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */

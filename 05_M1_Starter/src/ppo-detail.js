@@ -182,6 +182,14 @@ function render(PPO, OS, s) {
       ${edges.length > 10 ? `<p class="ppo-d-note">…a dalších ${edges.length - 10} skupin se slabší vazbou.</p>` : ''}</div>`);
   }
 
+  // kurátorované souvislosti se zbytkem webu (FÁZE 4b, skupiny-souvislosti.json)
+  if (s.souvislosti?.length) {
+    cards.push(`<div class="ppo-d-card"><h3>Souvislosti na webu</h3>
+      <ul class="ppo-links-list">${s.souvislosti.map(o => `<li>
+        <div class="ppo-link-head"><a href="${escapeHtml(o.url)}">${escapeHtml(o.nazev)}</a></div>
+      </li>`).join('')}</ul></div>`);
+  }
+
   // dokumenty na portálu
   const doky = Object.entries(s.dokumenty_typy ?? {}).filter(([k]) => k !== 'jine').sort((a, b) => b[1] - a[1]);
   cards.push(`<div class="ppo-d-card"><h3>Na portálu ministerstva</h3>
@@ -198,7 +206,9 @@ function render(PPO, OS, s) {
     const aff = p.afiliace?.[0] ?? (p.kat && p.kat !== 'neuvedeno' ? KAT_LABELS[p.kat] : null);
     const role = c.role === 'Členové' ? null : c.role;
     const sub = [role, aff].filter(Boolean).join(' · ');
-    return `<li><strong><a href="pracovni-osoba.html?id=${p.id}">${escapeHtml(p.jmeno)}</a></strong>${sub ? ` <span class="ppo-role">${escapeHtml(sub)}</span>` : ''}</li>`;
+    // ověřený veřejný profil (FÁZE 4a kurátorský registr) — malý externí odkaz
+    const hs = p.externi?.odkazy?.find(o => o.url.startsWith('https://www.hlidacstatu.cz/'));
+    return `<li><strong><a href="pracovni-osoba.html?id=${p.id}">${escapeHtml(p.jmeno)}</a></strong>${sub ? ` <span class="ppo-role">${escapeHtml(sub)}</span>` : ''}${hs ? ` <a class="ppo-hs" href="${escapeHtml(hs.url)}" target="_blank" rel="noopener" title="Ověřený veřejný profil na Hlídači státu">Hlídač&nbsp;↗</a>` : ''}</li>`;
   }).join('');
 }
 
