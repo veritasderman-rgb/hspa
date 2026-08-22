@@ -167,11 +167,14 @@ function render(PPO, OS, s) {
   if (edges.length) {
     const items = edges.slice(0, 10).map(e => {
       const t = skupinyById.get(e.gid);
-      const names = (e.osoby ?? []).map(pid => osobyById.get(pid)?.jmeno).filter(Boolean);
+      const names = (e.osoby ?? [])
+        .map(pid => ({ pid, jmeno: osobyById.get(pid)?.jmeno }))
+        .filter(x => x.jmeno);
       return `<li>
         <div class="ppo-link-head"><a href="pracovni-skupina.html?id=${e.gid}">${escapeHtml(t?.nazev ?? String(e.gid))}</a>
           <span class="ppo-vaha">${e.vaha}&nbsp;${osobaWord(e.vaha)}</span></div>
-        ${names.length ? `<div class="ppo-link-people">${escapeHtml(names.join(' · '))}</div>` : ''}
+        ${names.length ? `<div class="ppo-link-people">${names.map(n =>
+          `<a href="pracovni-osoba.html?id=${n.pid}">${escapeHtml(n.jmeno)}</a>`).join(' · ')}</div>` : ''}
       </li>`;
     }).join('');
     cards.push(`<div class="ppo-d-card"><h3>Sdílí členy se skupinami</h3>
@@ -195,7 +198,7 @@ function render(PPO, OS, s) {
     const aff = p.afiliace?.[0] ?? (p.kat && p.kat !== 'neuvedeno' ? KAT_LABELS[p.kat] : null);
     const role = c.role === 'Členové' ? null : c.role;
     const sub = [role, aff].filter(Boolean).join(' · ');
-    return `<li><strong>${escapeHtml(p.jmeno)}</strong>${sub ? ` <span class="ppo-role">${escapeHtml(sub)}</span>` : ''}</li>`;
+    return `<li><strong><a href="pracovni-osoba.html?id=${p.id}">${escapeHtml(p.jmeno)}</a></strong>${sub ? ` <span class="ppo-role">${escapeHtml(sub)}</span>` : ''}</li>`;
   }).join('');
 }
 

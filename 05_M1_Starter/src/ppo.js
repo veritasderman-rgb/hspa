@@ -198,7 +198,7 @@ function spojkyCol(title, sub, rows) {
   const max = Math.max(...rows.map(r => r.skupin), 1);
   const items = rows.map(r => `
     <div class="ppo-spojka">
-      <span class="ppo-spojka-name">${escapeHtml(r.jmeno)}</span>
+      <a class="ppo-spojka-name" href="pracovni-osoba.html?id=${r.id}">${escapeHtml(r.jmeno)}</a>
       <span class="ppo-spojka-num">${r.skupin}×${r.predsednictvi ? ` · ${r.predsednictvi}× (místo)předseda` : ''}</span>
       <span class="ppo-spojka-aff">${escapeHtml(r.afiliace ?? KAT_LABELS[r.kat] ?? r.kat)}</span>
       <span class="ppo-spojka-bar" aria-hidden="true"><i style="width:${(r.skupin / max * 100).toFixed(0)}%"></i></span>

@@ -92,6 +92,7 @@ git push -u origin claude/<branch>
 ├── redakce.html                ← Redakční tým a procesy
 ├── pracovni-skupiny.html       ← Pracovní skupiny MZ (síť PPO, spojky, kalendář)
 ├── pracovni-skupina.html       ← Detail jedné skupiny (?id=...)
+├── pracovni-osoba.html         ← Profil osoby (?id=...): členství + externí odkazy (Hlídač státu)
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
 │

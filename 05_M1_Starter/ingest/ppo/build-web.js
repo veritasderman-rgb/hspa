@@ -5,8 +5,10 @@
 //   data/ppo.json             ← hub + detail: skupiny, síť s předpočítaným
 //                               layoutem, žebříčky „spojek", kalendář jednání,
 //                               zjištění ze syntézy (lehký souhrn analýzy)
-//   data/ppo-osoby.json       ← jen detail skupiny: 994 osob s členstvími
-//                               (načítá se líně, hub ho nepotřebuje)
+//   data/ppo-osoby.json       ← detail skupiny + profil osoby: 994 osob
+//                               s členstvími; u kurátorovaných osob navíc
+//                               veřejné funkce a externí odkazy (FÁZE 4a,
+//                               ingest/ppo/osoby-externi.json)
 //   data/ppo-analyza/{id}.json ← jen detail skupiny: profil z analýzy zápisů
 //                               + doložená jednání s rozhodnutími (líně,
 //                               jen skupiny s dostupnou analýzou)
@@ -169,6 +171,29 @@ export function analyzaWebFile(a, docIdx) {
   return { group_id: a.group_id, profil: a.profil ?? null, jednani };
 }
 
+/* ---------- FÁZE 4a: kurátorované veřejné funkce a externí odkazy -------- */
+// ingest/ppo/osoby-externi.json drží ručně ověřené veřejné funkce osob
+// (Hlídač státu, tiskové zprávy). Merge je přísný: neexistující id nebo
+// jméno, které kurátorskému neodpovídá (posun id po nové FÁZE 1 extrakci),
+// build shodí — tichý mismatch by připsal funkce cizí osobě.
+export function mergeExterni(osoby, externi) {
+  if (!externi) return osoby;
+  const byId = new Map(osoby.map(p => [p.id, p]));
+  for (const e of externi.osoby ?? []) {
+    const p = byId.get(e.id);
+    if (!p) throw new Error(`osoby-externi: id ${e.id} (${e.jmeno}) v osobách není`);
+    if (!p.jmeno.includes(e.jmeno)) {
+      throw new Error(`osoby-externi: id ${e.id} — jméno v datech „${p.jmeno}" neobsahuje kurátorské „${e.jmeno}" (posun id po nové extrakci?)`);
+    }
+    p.externi = {
+      funkce: e.funkce ?? [],
+      odkazy: e.odkazy ?? [],
+      overeno: externi.overeno ?? null,
+    };
+  }
+  return osoby;
+}
+
 function main() {
   const skupinyOut = readOut('skupiny.json');
   const sitOut = readOut('sit.json');
@@ -283,6 +308,9 @@ function main() {
       clenstvi: p.clenstvi.filter(c => gids.has(c.g)),
     })).sort((a, b) => a.id - b.id),
   };
+  const externiPath = path.join(__dirname, 'osoby-externi.json');
+  mergeExterni(osoby.osoby,
+    fs.existsSync(externiPath) ? JSON.parse(fs.readFileSync(externiPath, 'utf8')) : null);
 
   for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby]]) {
     const p = path.join(DATA, name);
