@@ -30,6 +30,11 @@ fs.mkdirSync(PART, { recursive: true });
 // deterministický orchestrální skript — korpus číst smí (zákaz platí
 // pro hlavní LLM smyčku).
 const JEDNANI_TYPY = new Set(['zapis', 'usneseni']);
+// Přílohy zápisů (metodiky, podklady, podněty s návrhy usnesení) nesou
+// v korpusu doctype zapis/usneseni (70 dokumentů), ale nejsou to záznamy
+// jednání — poznají se podle názvu (Codex review PR #1041). Název má tvar
+// „stránka / soubor", příloha se pozná v kterémkoli segmentu.
+const isPriloha = t => String(t ?? '').split('/').some(s => /^příloh/i.test(s.trim()));
 const korpusIdx = new Map();
 {
   const gz = path.join(DIR, 'source', 'ppo_korpus_full.jsonl.gz');
@@ -40,6 +45,7 @@ const korpusIdx = new Map();
     korpusIdx.set(r.doc_id, {
       chars: Number(r.chars) || 0,
       doctype: r.doctype,
+      priloha: isPriloha(r.title),
       textHash: crypto.createHash('sha1').update(r.text ?? '').digest('hex'),
     });
   }
@@ -82,7 +88,7 @@ for (const [gid, files] of [...byGid.entries()].sort((a, b) => a[0] - b[0])) {
     for (const x of j.jednani ?? []) {
       if (!x?.doc_id || seen.has(x.doc_id)) continue;
       const meta = korpusIdx.get(x.doc_id);
-      if (!meta || meta.chars <= 50 || !JEDNANI_TYPY.has(meta.doctype)) { vyrazeno++; continue; }
+      if (!meta || meta.chars <= 50 || !JEDNANI_TYPY.has(meta.doctype) || meta.priloha) { vyrazeno++; continue; }
       seen.add(x.doc_id);
       jednani.push(x);
     }
