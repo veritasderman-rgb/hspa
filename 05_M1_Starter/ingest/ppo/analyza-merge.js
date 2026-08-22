@@ -109,7 +109,15 @@ for (const [gid, files] of [...byGid.entries()].sort((a, b) => a[0] - b[0])) {
   jednani.length = 0;
   jednani.push(...unikatni);
   const out = { group_id: gid, jednani, statut_shrnuti: statut, pravidla };
-  fs.writeFileSync(path.join(ANA, `skupina-${gid}.json`), JSON.stringify(out, null, 1) + '\n');
+  // REDUCE 1 (profil skupiny) běží až nad merged souborem — díly ho nenesou.
+  // Re-merge proto existující profil přenáší, jinak by ho tiše smazal
+  // (a build:ppo by pak z webu odstranil sekci „Co skupina reálně dělá").
+  const dest = path.join(ANA, `skupina-${gid}.json`);
+  if (fs.existsSync(dest)) {
+    const prev = JSON.parse(fs.readFileSync(dest, 'utf8'));
+    if (prev.profil != null) out.profil = prev.profil;
+  }
+  fs.writeFileSync(dest, JSON.stringify(out, null, 1) + '\n');
   ok++;
   console.log(`✓ skupina-${gid}.json (${jednani.length} jednání z ${files.length} dílů${vyrazeno ? `, ${vyrazeno} vyřazeno filtry` : ''})`);
 }
