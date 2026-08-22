@@ -92,7 +92,7 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [], ppoGroups = [] } = {}) {
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [], ppoGroups = [], ppoOsoby = [] } = {}) {
   // Pozn.: isIndexable() čte robots meta z HTML, proto mu předáváme `.html` loc;
   // do sitemapy ale zapisujeme kanonickou (clean) URL přes canonicalPath().
   const staticEntries = STATIC_PAGES
@@ -134,6 +134,16 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
       changefreq: 'monthly',
       priority: '0.4',
     }));
+  // Osoby (/pracovni-osoba?id=…): jen spojky (≥2 členství) a osoby
+  // s kurátorovanými externími odkazy — ne všech ~1 000 tenkých profilů.
+  const ppoOsobyEntries = ppoOsoby
+    .filter(p => p.id != null && ((p.clenstvi ?? []).length >= 2 || p.externi))
+    .map(p => urlEntry({
+      loc: `/pracovni-osoba?id=${p.id}`,
+      lastmod: today,
+      changefreq: 'monthly',
+      priority: '0.3',
+    }));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -143,6 +153,7 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
     ...indicatorEntries,
     ...awarenessEntries,
     ...ppoEntries,
+    ...ppoOsobyEntries,
     '</urlset>',
     '',
   ].join('\n');
@@ -163,7 +174,10 @@ function main() {
   const ppoGroups = existsSync(resolve(ROOT, 'data/ppo.json'))
     ? (JSON.parse(readFileSync(resolve(ROOT, 'data/ppo.json'), 'utf8')).skupiny ?? [])
     : [];
-  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks, ppoGroups });
+  const ppoOsoby = existsSync(resolve(ROOT, 'data/ppo-osoby.json'))
+    ? (JSON.parse(readFileSync(resolve(ROOT, 'data/ppo-osoby.json'), 'utf8')).osoby ?? [])
+    : [];
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks, ppoGroups, ppoOsoby });
   if (stdout) {
     console.log(xml);
     return;

@@ -10,7 +10,8 @@ import { fileURLToPath } from 'node:url';
 
 import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS } from '../src/ppo.js';
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW } from '../ingest/ppo/build-web.js';
+import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -203,10 +204,75 @@ test('ppo helpery: coiEvents skládá COI napříč jednáními s datem a zdroje
   assert.deepEqual(ev[0], { datum: '2026-01-01', url: 'https://x', text: 'a' });
 });
 
+/* ── FÁZE 4a: kurátorované externí odkazy + profil osoby ───────────── */
+
+const externiReg = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'ingest', 'ppo', 'osoby-externi.json'), 'utf8'));
+
+test('ppo osoby-externi: registr sedí na data a odkazy vedou na https zdroje', () => {
+  assert.match(externiReg.overeno, /^\d{4}-\d{2}-\d{2}$/, 'overeno není ISO datum');
+  const byId = new Map(osoby.osoby.map(p => [p.id, p]));
+  for (const e of externiReg.osoby) {
+    const p = byId.get(e.id);
+    assert.ok(p, `kurátorovaná osoba ${e.id} (${e.jmeno}) v datech není`);
+    assert.ok(p.jmeno.includes(e.jmeno), `id ${e.id}: jméno „${p.jmeno}" neobsahuje „${e.jmeno}"`);
+    assert.ok(e.odkazy.length >= 1, `id ${e.id}: bez odkazů`);
+    assert.ok(e.odkazy.some(o => o.url.startsWith('https://www.hlidacstatu.cz/osoba/')),
+      `id ${e.id}: chybí odkaz na Hlídač státu`);
+    for (const o of e.odkazy) {
+      assert.ok(o.nazev, `id ${e.id}: odkaz bez názvu`);
+      assert.ok(o.url.startsWith('https://'), `id ${e.id}: nešifrovaný odkaz ${o.url}`);
+    }
+    assert.ok(e.identita, `id ${e.id}: chybí zdůvodnění identity (identita)`);
+  }
+  // dokumentovaná zamítnutí odkazují na skutečné osoby a nekolidují s propojenými
+  const linked = new Set(externiReg.osoby.map(e => e.id));
+  for (const n of externiReg.nepropojeno ?? []) {
+    assert.ok(byId.has(n.id), `nepropojeno: osoba ${n.id} v datech není`);
+    assert.ok(!linked.has(n.id), `nepropojeno: osoba ${n.id} je zároveň propojená`);
+    assert.ok(n.duvod, `nepropojeno: osoba ${n.id} bez důvodu`);
+  }
+});
+
+test('ppo osoby: externi v datech přesně kopíruje registr (bez interních polí)', () => {
+  const s = osoby.osoby.filter(p => p.externi);
+  assert.equal(s.length, externiReg.osoby.length, 'počet osob s externi nesedí na registr');
+  const regById = new Map(externiReg.osoby.map(e => [e.id, e]));
+  for (const p of s) {
+    const e = regById.get(p.id);
+    assert.deepEqual(p.externi, { funkce: e.funkce, odkazy: e.odkazy, overeno: externiReg.overeno },
+      `id ${p.id}: externi v datech neodpovídá registru`);
+  }
+});
+
+test('ppo helpery: mergeExterni hlídá neexistující id i posun jména', () => {
+  const mk = () => [{ id: 7, jmeno: 'MUDr. Jan Novák' }];
+  const merged = mergeExterni(mk(), {
+    overeno: '2026-08-22',
+    osoby: [{ id: 7, jmeno: 'Jan Novák', funkce: ['f'], odkazy: [{ nazev: 'n', url: 'https://x' }] }],
+  });
+  assert.deepEqual(merged[0].externi,
+    { funkce: ['f'], odkazy: [{ nazev: 'n', url: 'https://x' }], overeno: '2026-08-22' });
+  assert.throws(() => mergeExterni(mk(), { osoby: [{ id: 8, jmeno: 'Jan Novák' }] }), /v osobách není/);
+  assert.throws(() => mergeExterni(mk(), { osoby: [{ id: 7, jmeno: 'Petr Dvořák' }] }), /neobsahuje kurátorské/);
+  assert.equal(mergeExterni(mk(), null)[0].externi, undefined, 'bez registru se nic nemerguje');
+});
+
+test('ppo helpery: membershipRows řadí role dle ROLE_ORDER, vedeCount počítá předsednictví', () => {
+  const skupinyById = new Map([
+    [1, { id: 1, nazev: 'Béčko' }], [2, { id: 2, nazev: 'Áčko' }], [3, { id: 3, nazev: 'Céčko' }],
+  ]);
+  const p = { clenstvi: [{ g: 1, role: 'Členové' }, { g: 2, role: 'Členové' }, { g: 3, role: 'Předseda' }, { g: 99, role: 'Členové' }] };
+  const rows = membershipRows(p, skupinyById);
+  assert.deepEqual(rows.map(x => x.s.id), [3, 2, 1], 'předseda první, pak členství abecedně; neznámá skupina ven');
+  assert.equal(vedeCount(p), 1);
+  assert.equal(vedeCount({ clenstvi: [{ g: 1, role: 'Místopředseda' }] }), 1);
+});
+
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */
 
 test('ppo: stránky sekce existují a mají robots index', () => {
-  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js']]) {
+  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js'], ['pracovni-osoba.html', 'src/ppo-osoba.js']]) {
     const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
     assert.ok(html.includes(mod), `${page} nenačítá ${mod}`);
     assert.match(html, /name="robots" content="index, follow"/, `${page}: chybí robots index`);

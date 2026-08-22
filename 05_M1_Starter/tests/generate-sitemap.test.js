@@ -45,3 +45,15 @@ test('buildSitemap: noindex stránky se přes isIndexable vyřadí', () => {
   assert.ok(xml.includes(`${SITE_BASE}/clanek-a`), 'indexovatelný článek zůstává');
   assert.ok(!xml.includes('clanek-b'), 'noindex článek vyřazen');
 });
+
+test('buildSitemap: osoby jen se ≥2 členstvími nebo externími odkazy', () => {
+  const ppoOsoby = [
+    { id: 1, clenstvi: [{ g: 1 }, { g: 2 }] },
+    { id: 2, clenstvi: [{ g: 1 }] },
+    { id: 3, clenstvi: [], externi: { odkazy: [] } },
+  ];
+  const xml = buildSitemap(arts, { today: '2026-06-10', ppoOsoby });
+  assert.ok(xml.includes(`${SITE_BASE}/pracovni-osoba?id=1`), 'spojka (2 členství) patří do sitemapy');
+  assert.ok(xml.includes(`${SITE_BASE}/pracovni-osoba?id=3`), 'kurátorovaná osoba patří do sitemapy');
+  assert.ok(!xml.includes('pracovni-osoba?id=2'), 'osoba s 1 členstvím bez externi do sitemapy nepatří');
+});
