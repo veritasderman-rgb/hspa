@@ -194,6 +194,32 @@ export function mergeExterni(osoby, externi) {
   return osoby;
 }
 
+/* ---------- FÁZE 4b: kurátorované souvislosti skupin se zbytkem webu ----- */
+// ingest/ppo/skupiny-souvislosti.json drží ručně vybrané odkazy (články,
+// stránky, indikátory) k vybraným skupinám. Guardy: id musí existovat,
+// interní cíl (.html) musí být v repu a odkazovaný článek publikovaný —
+// mrtvý nebo draftový odkaz shodí build, ne až čtenáře.
+export function mergeSouvislosti(skupinyById, reg, { rootDir, publishedSlugs }) {
+  if (!reg) return;
+  for (const r of reg.skupiny ?? []) {
+    const s = skupinyById.get(r.id);
+    if (!s) throw new Error(`skupiny-souvislosti: skupina ${r.id} v datech není`);
+    for (const o of r.odkazy ?? []) {
+      if (!o.nazev || !o.url) throw new Error(`skupiny-souvislosti: skupina ${r.id} — odkaz bez názvu nebo url`);
+      if (!/^https?:/.test(o.url)) {
+        const file = o.url.split(/[?#]/)[0];
+        if (!fs.existsSync(path.join(rootDir, file))) {
+          throw new Error(`skupiny-souvislosti: skupina ${r.id} — cíl ${file} v repu není`);
+        }
+        if (/^clanek-.*\.html$/.test(file) && !publishedSlugs.has(file)) {
+          throw new Error(`skupiny-souvislosti: skupina ${r.id} — článek ${file} není publikovaný`);
+        }
+      }
+    }
+    s.souvislosti = r.odkazy;
+  }
+}
+
 function main() {
   const skupinyOut = readOut('skupiny.json');
   const sitOut = readOut('sit.json');
@@ -231,6 +257,16 @@ function main() {
     .sort((a, b) => a.id - b.id);
   const skupinyById = new Map(skupiny.map(s => [s.id, s]));
   const gids = new Set(skupiny.map(s => s.id));
+
+  // FÁZE 4b: kurátorované souvislosti (guard proti mrtvým a draftovým odkazům)
+  const souvPath = path.join(__dirname, 'skupiny-souvislosti.json');
+  if (fs.existsSync(souvPath)) {
+    const rootDir = path.resolve(__dirname, '..', '..');
+    const articles = JSON.parse(fs.readFileSync(path.join(DATA, 'articles.json'), 'utf8')).articles ?? [];
+    const publishedSlugs = new Set(articles.filter(a => a.published !== false).map(a => a.slug));
+    mergeSouvislosti(skupinyById, JSON.parse(fs.readFileSync(souvPath, 'utf8')),
+      { rootDir, publishedSlugs });
+  }
 
   // síť: jen uzly existujících skupin; hrany mezi nimi
   const uzlyIn = sitOut.skupiny.filter(u => gids.has(u.id));
