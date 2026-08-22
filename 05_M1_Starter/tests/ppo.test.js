@@ -12,7 +12,8 @@ import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } f
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
 import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN } from '../ingest/ppo/build-web.js';
+import { formatDatumCz, formatOd, filterUkoly } from '../src/ppo-ukoly.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN, parseTermin, buildUkoly } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -402,10 +403,74 @@ test('ppo helpery: normText, prijmeniKey, filterOsoby (adresář Kdo je kdo)', (
   assert.equal(filterOsoby(os, { q: 'vzp' }).length, 1, 'hledá i v afiliaci');
 });
 
+/* ── úkoly z jednání (pracovni-ukoly.html, data/ppo-ukoly.json) ────── */
+
+const ukolyData = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-ukoly.json'), 'utf8'));
+
+test('ppo parseTermin: české formulace termínů → ISO datum, jinak null', () => {
+  assert.equal(parseTermin('2026-03-02'), '2026-03-02');
+  assert.equal(parseTermin('21. 2. 2025'), '2025-02-21');
+  assert.equal(parseTermin('15.8.2025'), '2025-08-15');
+  assert.equal(parseTermin('6.11.24'), '2024-11-06');
+  assert.equal(parseTermin('do 15. 11. 2024'), '2024-11-15');
+  assert.equal(parseTermin('20. února 2020'), '2020-02-20');
+  assert.equal(parseTermin('do konce roku 2023'), '2023-12-31');
+  assert.equal(parseTermin('do konce listopadu 2018'), '2018-11-30');
+  assert.equal(parseTermin('prosinec 2019'), '2019-12-31');
+  assert.equal(parseTermin('do příštího jednání'), null);
+  assert.equal(parseTermin('co nejdříve'), null);
+  assert.equal(parseTermin('45. 13. 2025'), null, 'nevalidní den/měsíc se odmítá');
+  assert.equal(parseTermin(null), null);
+});
+
+test('ppo ukoly: dataset je přegenerovatelný z analýz a sedí na skupiny', () => {
+  // drift test: builder nad analýzami v repu musí dát přesně committed dataset
+  const ANA = path.join(ROOT, 'ingest', 'ppo', 'analyza');
+  const analyzy = new Map();
+  for (const f of fs.readdirSync(ANA)) {
+    const m = /^skupina-(\d+)\.json$/.exec(f);
+    if (m) analyzy.set(Number(m[1]), JSON.parse(fs.readFileSync(path.join(ANA, f), 'utf8')));
+  }
+  const gids = new Set(ppo.skupiny.map(s => s.id));
+  const rebuilt = buildUkoly(analyzy, gids);
+  assert.deepEqual(rebuilt.ukoly, ukolyData.ukoly, 'ukoly nesedí na builder (spusť npm run build:ppo)');
+  assert.deepEqual(rebuilt.otevrene, ukolyData.otevrene, 'otevrene nesedí na builder');
+  assert.equal(ukolyData.pocty.ukoly, ukolyData.ukoly.length);
+  assert.equal(ukolyData.pocty.otevrene, ukolyData.otevrene.length);
+
+  const gById = new Map(ppo.skupiny.map(g => [g.id, g]));
+  const gsInData = new Set([...ukolyData.ukoly, ...ukolyData.otevrene].map(u => u.g));
+  assert.deepEqual(ukolyData.skupiny.map(s => s.g), [...gsInData].sort((a, b) => a - b),
+    'seznam skupin nekryje přesně skupiny s úkoly');
+  for (const s of ukolyData.skupiny) assert.equal(s.nazev, gById.get(s.g)?.nazev, `skupina ${s.g}: název nesedí`);
+  for (const u of ukolyData.ukoly) {
+    assert.ok(u.co, 'úkol bez textu');
+    if (u.datum) assert.match(u.datum, /^\d{4}-\d{2}-\d{2}$/);
+    if (u.datum) assert.ok(u.datum >= '2004-01-01' && u.datum <= '2027-12-31', `podezřelé datum jednání ${u.datum}`);
+    assert.equal(u.t, parseTermin(u.termin), 'pole t nesedí na parseTermin(termin)');
+  }
+});
+
+test('ppo ukoly helpery: formatDatumCz, formatOd, filterUkoly', () => {
+  assert.equal(formatDatumCz('2025-09-04'), '4. září 2025');
+  assert.equal(formatDatumCz(null), '');
+  assert.equal(formatOd('2026-06'), 'od června 2026');
+  const nazvy = new Map([[4, 'PS k seznamu zdravotních výkonů'], [199, 'Komise pro výživu']]);
+  const list = [
+    { g: 4, datum: '2025-06-05', co: 'Opravit registrační listy', kdo: 'ČUS ČLS JEP' },
+    { g: 199, datum: '2024-03-01', co: 'Dodat podklady ke kojení', kdo: 'tajemnice' },
+  ];
+  assert.equal(filterUkoly(list, { q: 'registracni' }, nazvy).length, 1, 'hledání bez diakritiky');
+  assert.equal(filterUkoly(list, { q: 'vyzivu' }, nazvy)[0].g, 199, 'hledá i v názvu skupiny');
+  assert.equal(filterUkoly(list, { g: '4' }, nazvy).length, 1);
+  assert.equal(filterUkoly(list, { rok: '2024' }, nazvy)[0].g, 199);
+  assert.equal(filterUkoly(list, {}, nazvy).length, 2);
+});
+
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */
 
 test('ppo: stránky sekce existují a mají robots index', () => {
-  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js'], ['pracovni-osoba.html', 'src/ppo-osoba.js'], ['pracovni-osoby.html', 'src/ppo-osoby.js']]) {
+  for (const [page, mod] of [['pracovni-skupiny.html', 'src/ppo.js'], ['pracovni-skupina.html', 'src/ppo-detail.js'], ['pracovni-osoba.html', 'src/ppo-osoba.js'], ['pracovni-osoby.html', 'src/ppo-osoby.js'], ['pracovni-ukoly.html', 'src/ppo-ukoly.js']]) {
     const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
     assert.ok(html.includes(mod), `${page} nenačítá ${mod}`);
     assert.match(html, /name="robots" content="index, follow"/, `${page}: chybí robots index`);

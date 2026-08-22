@@ -94,6 +94,7 @@ git push -u origin claude/<branch>
 ├── pracovni-skupina.html       ← Detail jedné skupiny (?id=...)
 ├── pracovni-osoba.html         ← Profil osoby (?id=...): členství + externí odkazy (Hlídač státu)
 ├── pracovni-osoby.html         ← Kdo je kdo: adresář osob + dvojrole (firmy dle rejstříku)
+├── pracovni-ukoly.html         ← Dashboard úkolů z jednání orgánů MZ (hledání, termíny, časová osa)
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
 │

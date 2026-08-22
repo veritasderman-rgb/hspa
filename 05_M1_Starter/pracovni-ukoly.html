@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Úkoly z jednání · Pracovní skupiny MZ · HSPA Monitor</title>
+<meta name="description" content="Prohledávatelný dashboard úkolů zadaných na jednáních pracovních a poradních orgánů Ministerstva zdravotnictví: co, kdo a dokdy — podle zveřejněných zápisů z ppo.mzcr.cz. Časová osa po letech, filtry podle orgánu, otevřené úkoly z profilů skupin.">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="src/styles.min.css">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/pracovni-ukoly" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/pracovni-ukoly" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Pracovní skupiny MZ</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="ukHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker"><a href="pracovni-skupiny.html">Pracovní skupiny MZ</a> · Úkoly z jednání</div>
+      <h1 class="ed-hero-headline" id="ukHeadline">Co si orgány ministerstva uložily</h1>
+      <p class="ed-hero-lead">Každé jednání poradního orgánu končí úkoly: kdo má co dodat, dopracovat, zaslat —
+        a dokdy. Tenhle dashboard je skládá ze všech zveřejněných zápisů na jednom místě: hledejte v nich,
+        filtrujte podle orgánu a procházejte časovou osu po letech.</p>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sUkolu">—</span> <span class="ed-stat-unit">úkolů</span></div>
+        <div class="ed-stat-lbl">Zadaných na jednáních dle zápisů</div>
+        <div class="ed-stat-meta">zveřejněné zápisy, portál ppo.mzcr.cz</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sOtevrene">—</span> <span class="ed-stat-unit">úkolů</span></div>
+        <div class="ed-stat-lbl">Aktuálně otevřených dle profilů skupin</div>
+        <div class="ed-stat-meta">syntéza analýzy zápisů</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sSkupin">—</span> <span class="ed-stat-unit">orgánů</span></div>
+        <div class="ed-stat-lbl">S úkoly doloženými v zápisech</div>
+        <div class="ed-stat-meta">z orgánů s analyzovanými zápisy</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section" aria-labelledby="ukFiltersH">
+    <div class="section-title">
+      <div class="ed-kicker">Vyhledávání</div>
+      <h2 id="ukFiltersH">Najít úkol</h2>
+    </div>
+    <div class="filters-row">
+      <div class="filters-actions">
+        <input type="search" id="ukSearch" class="search-box" placeholder="Hledat v úkolech: co, kdo, orgán…" aria-label="Vyhledat úkol">
+        <select id="ukSkupina" class="search-box" aria-label="Filtr podle orgánu"></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ukOpenH">
+    <div class="section-title">
+      <div class="ed-kicker">Otevřené úkoly</div>
+      <h2 id="ukOpenH">Co je právě rozpracované <span class="ppo-a-count" id="ukOpenCount">—</span></h2>
+    </div>
+    <p class="ppo-spojky-sub">Úkoly, které podle analýzy zápisů zůstávají otevřené — s uvedením, od kdy se
+      o nich naposledy jednalo. Vyhledávání a filtr orgánu výše platí i tady.</p>
+    <p id="ukOpenEmpty" class="ppo-d-note hidden">Žádný otevřený úkol neodpovídá filtru.</p>
+    <ul class="ppo-uk-list" id="ukOpen"></ul>
+  </section>
+
+  <section class="section" aria-labelledby="ukListH">
+    <div class="section-title">
+      <div class="ed-kicker">Časová osa</div>
+      <h2 id="ukListH">Všechny úkoly ze zápisů <span class="ppo-a-count" id="ukCount">—</span></h2>
+    </div>
+    <p class="ppo-spojky-sub">Úkoly tak, jak je zápisy zaznamenaly při zadání — od nejnovějších jednání.
+      Kliknutím na rok zobrazíte jen úkoly z jednání daného roku.</p>
+    <div class="ppo-uk-roky" id="ukRoky" role="group" aria-label="Filtr podle roku jednání"></div>
+    <p id="ukEmpty" class="ppo-d-note hidden">Žádný úkol neodpovídá filtru.</p>
+    <ul class="ppo-uk-list" id="ukList"></ul>
+    <button type="button" class="ppo-uk-more hidden" id="ukMore">Zobrazit další</button>
+    <p class="ppo-d-note">Zápisy zachycují <strong>zadání</strong> úkolu — jeho splnění z dat odvodit nelze.
+      Termíny jsou uvedeny tak, jak stojí v zápisu (včetně formulací typu „do příštího jednání").
+      Orgány bez zveřejněných či analyzovaných zápisů v přehledu nejsou.</p>
+  </section>
+
+  <section class="leg-source-note" aria-label="Zdroj dat">
+    <p>
+      Zdroj: zveřejněné zápisy z jednání na <a href="https://ppo.mzcr.cz/" target="_blank" rel="noopener">ppo.mzcr.cz — portálu pracovních a poradních orgánů MZ ČR</a>,
+      zpracované analýzou zápisů HSPA Monitoru. Podrobnosti o jednotlivých orgánech najdete
+      v <a href="pracovni-skupiny.html">přehledu pracovních skupin</a>.
+    </p>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/ppo-ukoly.js"></script>
+
+</body>
+</html>
