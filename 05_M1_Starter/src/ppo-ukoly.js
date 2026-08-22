@@ -64,6 +64,9 @@ function renderRoky() {
     const r = (u.datum ?? '').slice(0, 4);
     if (r) counts.set(r, (counts.get(r) ?? 0) + 1);
   }
+  // Zvolený rok zůstává viditelný i s nulou zásahů — jinak by aktivní filtr
+  // po zúžení hledání zmizel z UI a nešel vypnout (skrytý prázdný výsledek).
+  if (fRok !== 'all' && !counts.has(fRok)) counts.set(fRok, 0);
   const roky = [...counts.keys()].sort();
   $('ukRoky').innerHTML = roky.map(r =>
     `<button type="button" class="ppo-uk-rok${fRok === r ? ' is-active' : ''}" data-rok="${r}">${r} <span>${counts.get(r)}</span></button>`
