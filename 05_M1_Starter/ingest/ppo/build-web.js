@@ -1,11 +1,15 @@
 // FÁZE 3 — webové datasety sekce „Pracovní skupiny MZ" (PLAN-PPO.md §5).
-// Čte deterministické výstupy FÁZE 1 (ingest/ppo/out/*.json) a skládá z nich
-// dva soubory datového kontraktu:
+// Čte deterministické výstupy FÁZE 1 (ingest/ppo/out/*.json) a LLM analýzu
+// FÁZE 2 (ingest/ppo/analyza/*.json) a skládá z nich datový kontrakt:
 //
-//   data/ppo.json        ← hub + detail: skupiny, síť s předpočítaným layoutem,
-//                          žebříčky „spojek", kalendář jednání
-//   data/ppo-osoby.json  ← jen detail skupiny: 994 osob s členstvími
-//                          (načítá se líně, hub ho nepotřebuje)
+//   data/ppo.json             ← hub + detail: skupiny, síť s předpočítaným
+//                               layoutem, žebříčky „spojek", kalendář jednání,
+//                               zjištění ze syntézy (lehký souhrn analýzy)
+//   data/ppo-osoby.json       ← jen detail skupiny: 994 osob s členstvími
+//                               (načítá se líně, hub ho nepotřebuje)
+//   data/ppo-analyza/{id}.json ← jen detail skupiny: profil z analýzy zápisů
+//                               + doložená jednání s rozhodnutími (líně,
+//                               jen skupiny s dostupnou analýzou)
 //
 // Vše deterministické: layout sítě je čistá funkce vstupních dat (žádný
 // Math.random, žádné Date.now) — stejné vstupy ⇒ bajtově stejný výstup.
@@ -13,10 +17,12 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(__dirname, 'out');
+const ANA = path.join(__dirname, 'analyza');
 const DATA = path.resolve(__dirname, '..', '..', 'data');
 
 const readOut = name => JSON.parse(fs.readFileSync(path.join(OUT, name), 'utf8'));
@@ -127,6 +133,42 @@ export function spojkaRow(p, viditelneGids) {
   };
 }
 
+/* ---------- FÁZE 2 analýza: profil skupiny + jednání pro web -------------- */
+// Index doc_id → { url, titul } z korpusu (absolutní URL na ppo.mzcr.cz),
+// aby doložená jednání i doklady zjištění vedly na primární dokument.
+export function korpusUrlIndex(gzPath) {
+  const idx = new Map();
+  if (!fs.existsSync(gzPath)) return idx;
+  const text = zlib.gunzipSync(fs.readFileSync(gzPath)).toString('utf8');
+  for (const line of text.split('\n')) {
+    if (!line) continue;
+    const r = JSON.parse(line);
+    idx.set(r.doc_id, {
+      url: r.url?.startsWith('http') ? r.url : `https://ppo.mzcr.cz${r.url ?? ''}`,
+      titul: r.title ?? null,
+    });
+  }
+  return idx;
+}
+
+// Z analyza/skupina-<gid>.json vyrobí webový soubor: profil beze změny tvaru,
+// jednání nejnovější první a jen s poli, která detail vykresluje (aktivní
+// osoby a výčty organizací/dokumentů zůstávají v ingest vrstvě).
+export function analyzaWebFile(a, docIdx) {
+  const jednani = (a.jednani ?? [])
+    .map(x => ({
+      datum: x.datum ?? null,
+      url: docIdx.get(x.doc_id)?.url ?? null,
+      temata: x.temata ?? [],
+      rozhodnuti: x.rozhodnuti ?? [],
+      ukoly: x.ukoly ?? [],
+      stret_zajmu: x.stret_zajmu ?? [],
+      citace: x.citace ?? [],
+    }))
+    .sort((x, y) => String(y.datum ?? '').localeCompare(String(x.datum ?? '')));
+  return { group_id: a.group_id, profil: a.profil ?? null, jednani };
+}
+
 function main() {
   const skupinyOut = readOut('skupiny.json');
   const sitOut = readOut('sit.json');
@@ -140,11 +182,26 @@ function main() {
   // „2042" — roky z těl dokumentů). Web proto bere výhradně poslední DATOVANÝ
   // ZÁPIS z kalendáře (autoritativní zdroj: kalendar.po_skupine); skupina bez
   // datovaného zápisu má null a UI píše „bez doloženého jednání".
+  // FÁZE 2 analýza (pokud je v repu): merged soubory + syntéza
+  const analyzy = new Map();
+  if (fs.existsSync(ANA)) {
+    for (const f of fs.readdirSync(ANA)) {
+      const m = /^skupina-(\d+)\.json$/.exec(f);
+      if (m) analyzy.set(Number(m[1]), JSON.parse(fs.readFileSync(path.join(ANA, f), 'utf8')));
+    }
+  }
+  const syntezaPath = path.join(ANA, 'synteza.json');
+  const synteza = fs.existsSync(syntezaPath) ? JSON.parse(fs.readFileSync(syntezaPath, 'utf8')) : null;
+  const docIdx = korpusUrlIndex(path.join(__dirname, 'source', 'ppo_korpus_full.jsonl.gz'));
+
   const skupiny = skupinyOut.skupiny
     .filter(s => s.stav !== 'vynechano')
     .map(s => ({
       ...s,
       posledni_aktivita: kalendarOut.po_skupine[s.id]?.at(-1) ?? null,
+      analyza: analyzy.has(s.id)
+        ? { jednani: (analyzy.get(s.id).jednani ?? []).length }
+        : null,
     }))
     .sort((a, b) => a.id - b.id);
   const skupinyById = new Map(skupiny.map(s => [s.id, s]));
@@ -200,6 +257,17 @@ function main() {
     },
     spojky,
     kalendar,
+    // zjištění ze syntézy FÁZE 2 — teze s doklady (odkazy na primární
+    // dokumenty portálu) a odkazy na skupiny; hub je vykresluje jako
+    // redakční sekci „Co říkají zápisy"
+    zjisteni: (synteza?.zjisteni ?? []).map(z => ({
+      teze: z.teze,
+      skupiny: (z.skupiny ?? []).filter(g => gids.has(g)),
+      doklady: (z.doklad_doc_ids ?? [])
+        .map(d => docIdx.get(d))
+        .filter(Boolean)
+        .map(d => ({ url: d.url, titul: d.titul })),
+    })),
   };
 
   const osoby = {
@@ -220,6 +288,22 @@ function main() {
     const p = path.join(DATA, name);
     fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n');
     console.log(`✓ data/${name} (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`);
+  }
+
+  // per-group analýzy pro detail (líně načítané) — adresář se přegenerovává
+  // celý, aby v něm nezůstaly soubory skupin, které z analýzy vypadly
+  if (analyzy.size) {
+    const ANAWEB = path.join(DATA, 'ppo-analyza');
+    fs.rmSync(ANAWEB, { recursive: true, force: true });
+    fs.mkdirSync(ANAWEB, { recursive: true });
+    let kb = 0;
+    for (const [gid, a] of [...analyzy.entries()].sort((x, y) => x[0] - y[0])) {
+      if (!gids.has(gid)) continue;
+      const p = path.join(ANAWEB, `${gid}.json`);
+      fs.writeFileSync(p, JSON.stringify(analyzaWebFile(a, docIdx), null, 1) + '\n');
+      kb += fs.statSync(p).size / 1024;
+    }
+    console.log(`✓ data/ppo-analyza/*.json (${analyzy.size} skupin, ${kb.toFixed(0)} kB celkem)`);
   }
 }
 
