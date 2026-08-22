@@ -279,6 +279,89 @@ export function mergeSouvislosti(skupinyById, reg, { rootDir, publishedSlugs }) 
   }
 }
 
+/* ---------- FÁZE 5: dashboard úkolů z jednání ---------------------------- */
+// Zápisy zachycují ZADÁNÍ úkolů (co, kdo, termín) — jejich splnění z dat
+// odvodit nelze; „otevřené úkoly" jsou syntézou analýzy profilu skupiny.
+// parseTermin převádí volné české formulace termínů na ISO datum, pokud to
+// jde bez hádání; jinak vrací null a UI zobrazí termín jako text.
+
+const MESICE = {
+  leden: 1, ledna: 1, unor: 2, unora: 2, brezen: 3, brezna: 3, duben: 4, dubna: 4,
+  kveten: 5, kvetna: 5, cerven: 6, cervna: 6, cervenec: 7, cervence: 7,
+  srpen: 8, srpna: 8, zari: 9, rijen: 10, rijna: 10, listopad: 11, listopadu: 11,
+  prosinec: 12, prosince: 12,
+};
+const MESIC_RE = Object.keys(MESICE).join('|');
+const deacc = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const iso = (y, m, d) => {
+  y = Number(y); m = Number(m); d = Number(d);
+  if (y < 100) y += 2000;
+  if (y < 2000 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return null;
+  return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+};
+const konecMesice = (y, m) => iso(y, m, new Date(Number(y), Number(m), 0).getDate());
+
+export function parseTermin(s) {
+  if (!s) return null;
+  const t = deacc(s);
+  // Datum, před nímž stojí relativní vazba („cca 14 dnů PŘED jednáním PS
+  // 24. 11. 2016", „OD obdržení…"), termín jen ukotvuje — skutečná lhůta je
+  // relativní a normalizované datum by lhalo. Takový termín zůstává textem.
+  const relativni = m => /(^|\s)(pred|po|od)(\s|$)/.test(t.slice(0, m.index));
+  let m;
+  if ((m = /(\d{4})-(\d{2})-(\d{2})/.exec(t))) return relativni(m) ? null : iso(m[1], m[2], m[3]);
+  if ((m = /(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})/.exec(t))) return relativni(m) ? null : iso(m[3], m[2], m[1]);
+  if ((m = new RegExp(`(\\d{1,2})\\.\\s*(${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
+    return relativni(m) ? null : iso(m[3], MESICE[m[2]], m[1]);
+  }
+  if ((m = /do konce roku (\d{4})/.exec(t))) return iso(m[1], 12, 31);
+  if ((m = new RegExp(`do konce (${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
+    return konecMesice(m[2], MESICE[m[1]]);
+  }
+  if ((m = new RegExp(`(?:^|\\s)(${MESIC_RE})\\s+(\\d{4})`).exec(t))) {
+    return relativni(m) ? null : konecMesice(m[2], MESICE[m[1]]);
+  }
+  return null;
+}
+
+// Datum jednání z FÁZE 2 může nést špatně vyparsovaný rok z těla dokumentu
+// („2065" — stejný problém jako posledni_aktivita). Mimo věrohodný rozsah
+// portálu (2004 až příští rok) se datum zahazuje — úkol zůstává jako nedatovaný.
+const datumOk = d => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d ?? '')) return false;
+  const y = Number(d.slice(0, 4));
+  return y >= 2004 && y <= new Date().getFullYear() + 1;
+};
+
+// Z analýz FÁZE 2 poskládá plochý seznam úkolů zadaných na jednáních
+// (jen skupiny přítomné ve webových datech) + otevřené úkoly z profilů.
+export function buildUkoly(analyzy, gids) {
+  const ukoly = [];
+  const otevrene = [];
+  for (const [gid, a] of [...analyzy.entries()].sort((x, y) => x[0] - y[0])) {
+    if (!gids.has(gid)) continue;
+    for (const j of a.jednani ?? []) {
+      for (const u of j.ukoly ?? []) {
+        ukoly.push({
+          g: gid,
+          datum: datumOk(j.datum) ? j.datum : null,
+          co: u.co,
+          kdo: u.kdo ?? null,
+          termin: u.termin ?? null,
+          t: parseTermin(u.termin),
+        });
+      }
+    }
+    for (const u of a.profil?.otevrene_ukoly ?? []) {
+      otevrene.push({ g: gid, co: u.co, kdo: u.kdo ?? null, od: u.od ?? null });
+    }
+  }
+  // nejnovější jednání první; bez data na konec — stabilně podle skupiny
+  ukoly.sort((a, b) => (b.datum ?? '').localeCompare(a.datum ?? '') || a.g - b.g);
+  otevrene.sort((a, b) => (b.od ?? '').localeCompare(a.od ?? '') || a.g - b.g);
+  return { ukoly, otevrene };
+}
+
 function main() {
   const skupinyOut = readOut('skupiny.json');
   const sitOut = readOut('sit.json');
@@ -421,7 +504,23 @@ function main() {
   };
   dvojrole.pocet = dvojrole.osoby.length;
 
-  for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby], ['ppo-dvojrole.json', dvojrole]]) {
+  const ukolyData = buildUkoly(analyzy, gids);
+  const ukoly = {
+    version: '1.0',
+    zdroj: 'zápisy z jednání na ppo.mzcr.cz (analýza FÁZE 2)',
+    pozn: 'Úkoly zadané na jednáních dle zveřejněných zápisů (co, kdo, termín). Zápisy '
+      + 'zachycují zadání — splnění úkolu z dat odvodit nelze. „Otevřené úkoly" jsou '
+      + 'syntézou analýzy profilu skupiny k datu poslední analýzy. Pole t = termín '
+      + 'převedený na ISO datum, pokud je formulace jednoznačná; jinak null.',
+    skupiny: [...new Set([...ukolyData.ukoly, ...ukolyData.otevrene].map(u => u.g))]
+      .sort((a, b) => a - b)
+      .map(g => ({ g, nazev: skupinyById.get(g).nazev })),
+    ukoly: ukolyData.ukoly,
+    otevrene: ukolyData.otevrene,
+    pocty: { ukoly: ukolyData.ukoly.length, otevrene: ukolyData.otevrene.length },
+  };
+
+  for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby], ['ppo-dvojrole.json', dvojrole], ['ppo-ukoly.json', ukoly]]) {
     const p = path.join(DATA, name);
     fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n');
     console.log(`✓ data/${name} (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`);
