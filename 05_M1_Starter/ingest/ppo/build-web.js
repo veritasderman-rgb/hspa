@@ -585,6 +585,14 @@ function main() {
     },
   };
 
+  // Teasery „Prozkoumat dál" na hubu čtou počty a ukázku ze souhrn —
+  // hub tak nemusí kvůli třem číslům stahovat celé ppo-ukoly.json (~740 kB)
+  ppo.souhrn.dvojroli = dvojrole.pocet;
+  ppo.souhrn.vice_organu = osoby.osoby.filter(o => o.clenstvi.length >= 4).length;
+  ppo.souhrn.ukoly = { ...ukoly.pocty };
+  ppo.souhrn.ukoly_ukazka = ukolyData.ukoly.slice(0, 2)
+    .map(u => ({ co: u.co, g: u.g, datum: u.datum ?? null }));
+
   for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby], ['ppo-dvojrole.json', dvojrole], ['ppo-ukoly.json', ukoly]]) {
     const p = path.join(DATA, name);
     fs.writeFileSync(p, JSON.stringify(data, null, 1) + '\n');
