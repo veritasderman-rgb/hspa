@@ -267,3 +267,11 @@ aditivní (železné pravidlo #5). Postup:
 - Doplňuje **denní** ([`../PROMPT_DAILY_ROUTINE.md`](../PROMPT_DAILY_ROUTINE.md)) a
   **noční** ([`PROMPT_NIGHTLY_ROUTINE.md`](PROMPT_NIGHTLY_ROUTINE.md)) rutinu —
   ty tvoří/auditují obsah, tahle ho distribuuje.
+
+## Věstníky MZ jako zdroj postů
+
+Při skládání fronty zkontroluj i `data/vestniky.json` (archiv Věstníků MZ):
+částka s `datum` za poslední týden je kandidát na věcný post — co v ní vyšlo
+(standard, cenový předpis, výzva pro centra) a odkaz na
+`https://skorezdravotnictvi.cz/vestniky-mz`. Piš podle copywriting manuálu;
+neposílej post o částce, o které už fronta post má.
