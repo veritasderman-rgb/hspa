@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Úřední tempo. Od úkolu v komisi k doloženému splnění uběhne typicky 84 dní · HSPA Monitor</title>
+<meta name="description" content="Změřili jsme rychlost poradních orgánů Ministerstva zdravotnictví: z 1 878 úkolů zadaných v zápisech 47 komisí a pracovních skupin má 644 písemně doložené splnění — a medián od zadání k dokladu je 84 dní. Nejrychlejší orgán to stíhá za 37 dní, nejpomalejší za 140. Data, metodika i extrémy včetně úkolu splněného po 5,7 letech.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Úřední tempo. Od úkolu v komisi k doloženému splnění uběhne typicky 84 dní">
+<meta property="og:description" content="1 878 úkolů ze zápisů 47 poradních orgánů ministerstva zdravotnictví, 644 doložených splnění, medián 84 dní. První měření úředního tempa českého zdravotnictví — po orgánech, s metodikou a extrémy.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:section" content="Legislativa a reforma">
+<!--
+  audit:
+    last_reviewed: 2026-08-23
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-23
+    creation_phase: vestniky-archiv-program
+    primary_sources_count: 3
+    visual_elements_count: 4
+    notes: "Datový článek nad data/ppo-ukoly.json (stav po FÁZI 6a–6c, PR #1044–#1063: sledování osudu úkolů s doslovnými doklady z pozdějších zápisů, chronologie podle data jednání). Všechna čísla přepočtena skriptem přímo z datasetu 23. 8. 2026: 1 878 úkolů z 47 orgánů (2010-11 až 2026-06); 644 splněno s dokladem, 307 pokračuje, 927 bez dokladu; 881/1878 = 47 % úkolů s termínem; medián zadání→doklad 84 dní (Q1 55, Q3 139, n=644); distribuce: ≤30 d 84 (13 %), 31–60 d 121 (19 %), 61–90 d 140 (22 %), 91–180 d 201 (31 %), 181–365 d 72 (11 %), >365 d 26 (4 %); do 180 dní 546/644 = 85 %; per-orgán mediány (jen n≥15): g4 37 d/103, g121 42/29, g155 56/28, g171 56/26, g103 70/58, g197 70/44, g199 76/53, g205 77/33, g65 91/37, g11 103/23, g191 105/18, g194 140/34; extrém: g148 first respondeři 2020-06-10 → 2026-02-23 = 2 084 dní; 9 úkolů doloženo externě (Věstník/VeKLEP, primy:true); případ g196 mamografie 13 měsíců viz jak-se-rozhoduje.html. Metodická poctivost: 84 dní = zadání→první PÍSEMNÝ doklad (horní odhad, limitován frekvencí jednání); bez dokladu ≠ nesplněno. Čísla se s dalším sběrem zápisů posunou — formulace 'k srpnu 2026'."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">Poradní orgány MZ · Úkoly ze zápisů · Datová analýza</span>
+      </div>
+      <h1 class="article-title">Úřední tempo. Od úkolu v komisi k doloženému splnění uběhne typicky 84 dní</h1>
+      <p class="article-deck">
+        Komise a pracovní skupiny ministerstva zdravotnictví zadávají v zápisech úkoly: připravit metodiku,
+        obeslat pracoviště, spočítat kalkulaci. Nikdo ale dosud neměřil, jak dlouho trvá, než se úkol
+        skutečně splní. Prošli jsme 1 878 úkolů ze zápisů 47 poradních orgánů a u 644 z nich našli
+        v pozdějším zápise písemný doklad o splnění. Výsledek: medián 84 dní — a rozdíly mezi orgány
+        až čtyřnásobné.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">23. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">6 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Když ministr slíbí nový screening nebo úpravu úhrad, skutečná práce se odehraje v poradních
+        orgánech: komise zadá úkol, někdo ho odpracuje a na některém z dalších jednání se výsledek
+        objeví v zápise. Právě ty zápisy jsme strojově přečetli — všech 47 orgánů, jejichž dokumenty
+        ministerstvo zveřejňuje, úkoly od listopadu 2010 do června 2026. Vznikla z toho první datová
+        odpověď na otázku, jakým tempem česká zdravotnická byrokracie skutečně pracuje. Odpověď zní:
+        typický úkol je doloženě hotový za necelé tři měsíce, čtvrtina úkolů do 55 dní — ale patnáct
+        procent doložených splnění trvalo přes půl roku a rekordman se vlekl bezmála šest let.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTmpHeroH">
+        <figcaption class="av-figure-h" id="avTmpHeroH">Úkoly z poradních orgánů MZ v číslech (2010 — červen 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="1878" data-suffix="">1 878</span>
+            <span class="av-counter-label">úkolů zadaných v zápisech 47 orgánů</span>
+            <span class="av-counter-foot">strojově vytěženo ze zveřejněných zápisů</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="644" data-suffix="">644</span>
+            <span class="av-counter-label">úkolů s písemným dokladem splnění</span>
+            <span class="av-counter-foot">doslovná citace z pozdějšího zápisu</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="84" data-suffix=" dní">84 dní</span>
+            <span class="av-counter-label">medián od zadání k doloženému splnění</span>
+            <span class="av-counter-foot">polovina případů mezi 55 a 139 dny</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="47" data-suffix=" %">47 %</span>
+            <span class="av-counter-label">úkolů dostane v zápise termín</span>
+            <span class="av-counter-foot">881 z 1 878 — zbytek bez lhůty</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zápisy poradních orgánů MZ (ppo.mzcr.cz), strojová analýza HSPA Monitoru (data k 23. 8. 2026). Splnění počítáme jen tam, kde ho výslovně dokládá pozdější zápis.</p>
+      </figure>
+
+      <h3>Tři měsíce jako norma, půl roku není výjimka</h3>
+
+      <p>
+        Rozložení doložených případů ukazuje, že „úřední kvartál" je reálná jednotka času: zhruba
+        85 % úkolů (546 z 644) je doloženě hotových do půl roku a nejsilnější pásmo leží mezi
+        třemi a šesti měsíci. Bleskové vyřízení do měsíce je vzácnější (13 %) — a na opačném konci
+        zůstává 4 % úkolů, jejichž doklad přišel až po více než roce.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTmpDistH">
+        <figcaption class="av-figure-h" id="avTmpDistH">Jak dlouho trvá od zadání k doloženému splnění (644 případů)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="201" data-unit=" úkolů">
+          <li class="av-bar-row" data-value="84" data-label="do 30 dní" data-note="13 % případů"></li>
+          <li class="av-bar-row" data-value="121" data-label="31–60 dní" data-note="19 % případů"></li>
+          <li class="av-bar-row" data-value="140" data-label="61–90 dní" data-note="22 % případů"></li>
+          <li class="av-bar-row" data-value="201" data-label="91–180 dní" data-note="31 % případů — nejsilnější pásmo"></li>
+          <li class="av-bar-row" data-value="72" data-label="181–365 dní" data-note="11 % případů"></li>
+          <li class="av-bar-row av-bar-row-muted" data-value="26" data-label="déle než rok" data-note="4 % případů; rekord 2 084 dní"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zápisy poradních orgánů MZ, 644 úkolů s doloženým splněním a daty obou jednání. Čas měříme od jednání, kde byl úkol zadán, k jednání, jehož zápis splnění dokládá.</p>
+      </figure>
+
+      <h3>Nejrychlejší je komise, která rozhoduje o penězích</h3>
+
+      <p>
+        Mezi orgány s dostatkem doložených případů jsou rozdíly až čtyřnásobné. Nejrychleji jede
+        <a href="pracovni-skupina.html?id=4">Pracovní skupina k seznamu zdravotních výkonů</a>
+        (medián 37 dní, 103 doložených případů) — orgán s pevným procesním rytmem, kde se úkoly typu
+        „přepracovat kalkulaci výkonu" vyřizují z jednání na jednání. Hned za ní je komise pro
+        kategorizaci zdravotnických prostředků (42 dní). Na opačném konci stojí screeningové komise:
+        příprava programu časného záchytu karcinomu prostaty má medián 140 dní. Screeningovým komisím
+        obecně trvá doložené splnění nejdéle — úkoly typu „připravit standard" nebo „obeslat pracoviště"
+        se táhnou přes několik jednání a orgány se navíc scházejí jen párkrát do roka.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTmpOrgH">
+        <figcaption class="av-figure-h" id="avTmpOrgH">Medián dní od zadání k doloženému splnění podle orgánu (jen orgány s ≥ 15 doloženými případy)</figcaption>
+        <div class="av-table-wrap">
+          <table class="av-table">
+            <thead><tr><th>Orgán</th><th>Medián</th><th>Doložených případů</th></tr></thead>
+            <tbody>
+              <tr><td>PS k seznamu zdravotních výkonů</td><td><strong>37 dní</strong></td><td>103</td></tr>
+              <tr><td>Komise pro kategorizaci zdravotnických prostředků</td><td>42 dní</td><td>29</td></tr>
+              <tr><td>PS pro dětskou a dorostovou psychiatrii</td><td>56 dní</td><td>28</td></tr>
+              <tr><td>PS k dostupnosti psychoterapie</td><td>56 dní</td><td>26</td></tr>
+              <tr><td>PS pro koncepční řešení domácí péče</td><td>70 dní</td><td>58</td></tr>
+              <tr><td>Komise pro screening kolorektálního karcinomu</td><td>70 dní</td><td>44</td></tr>
+              <tr><td>Komise pro výživu kojenců a malých dětí</td><td>76 dní</td><td>53</td></tr>
+              <tr><td>PS pro institucionální stravování</td><td>77 dní</td><td>33</td></tr>
+              <tr><td>Rada pro duchovní péči ve zdravotnictví</td><td>91 dní</td><td>37</td></tr>
+              <tr><td>Národní imunizační komise (NIKO)</td><td>103 dní</td><td>23</td></tr>
+              <tr><td>Komise pro screening aneurysmatu abdominální aorty</td><td>105 dní</td><td>18</td></tr>
+              <tr><td>Komise pro screening karcinomu prostaty</td><td><strong>140 dní</strong></td><td>34</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zápisy poradních orgánů MZ, doložená splnění k 23. 8. 2026. Orgány s méně než 15 doloženými případy vynecháváme — medián by stál na příliš malém vzorku.</p>
+      </figure>
+
+      <h3>Co číslo 84 dní ve skutečnosti měří</h3>
+
+      <div class="article-callout article-callout-info">
+        <p><strong>Poctivá poznámka k metodice.</strong> Měříme čas od jednání, kde byl úkol zadán,
+        k jednání, jehož zápis splnění <em>výslovně dokládá</em> — s doslovnou citací. To je horní odhad:
+        úkol mohl být hotový dřív a jen čekal, až se komise znovu sejde a zapíše to. Tempo orgánu tak
+        zčásti odráží i frekvenci jeho jednání. Platí to i obráceně: 927 úkolů žádný písemný doklad nemá —
+        což neznamená, že splněny nebyly. Mohly být vyřízeny bez zmínky v zápise, nebo příslušný zápis
+        ministerstvo nezveřejnilo. Dalších 307 úkolů má doklad, že se na nich <em>dál pracuje</em>.
+        Bez dokladu proto u nás neznamená nesplněno — znamená nedoloženo.</p>
+      </div>
+
+      <p>
+        I s těmito výhradami je to nejtvrdší dostupné měřítko: stojí výhradně na tom, co si orgány
+        samy zapsaly. A umí zachytit i extrémy. Rekord drží úkol pracovní skupiny pro metodické řízení
+        záchranných služeb „terminologicky upravit metodický pokyn pro first respondery" — zadaný
+        v červnu 2020, doloženě uzavřený až v únoru 2026, po <strong>2 084 dnech</strong>. Devět úkolů
+        má naopak doklad nejsilnějšího druhu: výsledek vyšel přímo jako úřední dokument ve
+        <a href="vestniky-mz.html">Věstníku MZ</a> nebo v legislativním procesu. A jak vypadá celá
+        trasa od zadání k vydané částce Věstníku krok za krokem, ukazujeme na doloženém případu
+        aktualizace mamografického standardu (13 měsíců) v průvodci
+        <a href="jak-se-rozhoduje.html">Jak se rozhoduje v českém zdravotnictví</a>.
+      </p>
+
+      <p>
+        Všech 1 878 úkolů — včetně 191 otevřených s termínem — si můžete projít v našem
+        <a href="pracovni-ukoly.html">dashboardu úkolů</a>: hledáním, podle orgánu, podle termínu,
+        s časovou osou a doslovnými citacemi dokladů. Dataset se aktualizuje s každou novou dávkou
+        zveřejněných zápisů.
+      </p>
+
+      <aside class="article-related" aria-labelledby="related-h">
+        <h4 id="related-h">Související obsah</h4>
+        <ul class="article-related-list">
+          <li><a href="pracovni-ukoly.html">→ Dashboard úkolů z jednání orgánů MZ</a> — všech 1 878 úkolů s hledáním a časovou osou</li>
+          <li><a href="jak-se-rozhoduje.html">→ Jak se rozhoduje v českém zdravotnictví</a> — pět kolejí rozhodování s doloženým případem</li>
+          <li><a href="pracovni-skupiny.html">→ Pracovní skupiny MZ</a> — 47 orgánů, jejich síť a zápisy</li>
+          <li><a href="clanek-co-ridi-vestnik-mz.html">→ Co všechno řídí Věstník</a> — kam úkoly komisí ústí: 28 ročníků úředního kanálu</li>
+        </ul>
+      </aside>
+
+      <aside class="article-sources" aria-labelledby="sources-h">
+        <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+        <ul class="article-sources-list">
+          <li><a href="https://ppo.mzcr.cz/" rel="external noopener">Poradní a pracovní orgány MZ (ppo.mzcr.cz) — primární zdroj všech zápisů</a></li>
+          <li><a href="pracovni-ukoly.html">Dashboard úkolů na HSPA Monitoru — strojově zpracovaná data tohoto článku, včetně citací dokladů</a></li>
+          <li><a href="pracovni-skupiny.html">Přehled poradních orgánů MZ na HSPA Monitoru — profily, zápisy, síť členství</a></li>
+        </ul>
+        <p class="article-sources-disclaimer">
+          Všechna čísla článku jsou spočtena skriptem přímo z datasetu úkolů (stav k 23. 8. 2026);
+          dataset vzniká strojovou analýzou zveřejněných zápisů a každý stav „splněno" či „pokračuje"
+          nese doslovnou citaci z pozdějšího zápisu s odkazem na PDF. Chybějící doklad neznamená
+          nesplněný úkol. Čísla se s dalšími zveřejněnými zápisy průběžně posouvají.
+        </p>
+      </aside>
+
+    </div>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="footer-copy">Data: OECD, ÚZIS, ČSÚ, SÚKL, SZÚ · CC BY 4.0 · <a href="https://github.com/veritasderman-rgb/hspa" rel="external noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
