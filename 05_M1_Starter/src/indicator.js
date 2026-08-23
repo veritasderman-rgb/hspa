@@ -353,7 +353,7 @@ async function loadVestnikRamec(id) {
     if (!section || !body) return;
     const lis = hits.slice(0, 6).map(h =>
       `<li><a href="${escapeHtml(h.url)}" target="_blank" rel="noopener">${escapeHtml(h.t)}</a>
-        <span class="suv-meta">${escapeHtml(h.titul)}${h.datum ? ` · ${escapeHtml(h.datum.slice(0, 4))}` : ''}</span></li>`).join('');
+        <span class="suv-meta">${escapeHtml(h.titul)}</span></li>`).join('');
     body.insertAdjacentHTML('beforeend',
       `<div class="suv-group"><h4>Úřední rámec — Věstník MZ</h4><ul class="suv-list">${lis}</ul>
        <p class="suv-more"><a href="vestniky-mz.html">Archiv Věstníků MZ →</a></p></div>`);

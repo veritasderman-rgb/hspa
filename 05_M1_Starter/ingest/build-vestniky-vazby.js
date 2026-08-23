@@ -19,13 +19,15 @@ export function buildVazby(vestniky, mapping, skupinyNazvy) {
   const polozky = [];
   for (const c of vestniky.castky) {
     for (const o of c.obsah) {
-      polozky.push({ c: c.id, titul: c.titul, datum: c.datum, url: c.url, pdf: c.pdf, t: o.t });
+      // rok/číslo nesou chronologii — c.datum je u starých ročníků datum
+      // migrace na web MZ, ne datum vydání částky
+      polozky.push({ c: c.id, titul: c.titul, rok: c.rok, cislo: c.cislo, url: c.url, pdf: c.pdf, t: o.t });
     }
   }
   const match = rules => Object.fromEntries(rules.map(r => {
     const re = new RegExp(r.re, 'i');
     const hits = polozky.filter(p => re.test(p.t))
-      .sort((a, b) => (b.datum ?? '').localeCompare(a.datum ?? ''))
+      .sort((a, b) => (b.rok ?? 0) - (a.rok ?? 0) || (b.cislo ?? 0) - (a.cislo ?? 0))
       .slice(0, MAX_NA_KLIC);
     return [r.g ?? r.id, hits];
   }).filter(([, hits]) => hits.length));

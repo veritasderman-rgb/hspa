@@ -297,7 +297,7 @@ function render(PPO, OS, s) {
     cards.push(`<div class="ppo-d-card"><h3>Ve Věstníku MZ</h3>
       <ul class="ppo-links-list">${s.vestnik.map(o => `<li>
         <div class="ppo-link-head"><a href="${escapeHtml(o.url)}" target="_blank" rel="noopener">${escapeHtml(o.t)}</a></div>
-        <div class="ppo-link-sub">${escapeHtml(o.titul)}${o.datum ? ` · ${fmtDate(o.datum)}` : ''}</div>
+        <div class="ppo-link-sub">${escapeHtml(o.titul)}</div>
       </li>`).join('')}</ul>
       ${s.vestnik_celkem > s.vestnik.length ? `<p class="ppo-d-note">…a ${s.vestnik_celkem - s.vestnik.length} dalších položek.</p>` : ''}
       <a class="ppo-panel-cta" href="vestniky-mz.html">Archiv Věstníků MZ →</a></div>`);

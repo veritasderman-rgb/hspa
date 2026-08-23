@@ -275,11 +275,13 @@ export function mergeVestnik(skupinyById, vestniky, mapping, max = 8) {
     const hits = [];
     for (const c of vestniky?.castky ?? []) {
       for (const o of c.obsah) {
-        if (re.test(o.t)) hits.push({ t: o.t, titul: c.titul, url: c.url, datum: c.datum });
+        // POZOR: c.datum je datum záznamu na webu MZ (u starých ročníků datum
+        // migrace) — chronologii nese rok/číslo částky, ne datum
+        if (re.test(o.t)) hits.push({ t: o.t, titul: c.titul, url: c.url, rok: c.rok, cislo: c.cislo });
       }
     }
     if (hits.length) {
-      hits.sort((a, b) => (b.datum ?? '').localeCompare(a.datum ?? ''));
+      hits.sort((a, b) => (b.rok ?? 0) - (a.rok ?? 0) || (b.cislo ?? 0) - (a.cislo ?? 0));
       s.vestnik = hits.slice(0, max);
       s.vestnik_celkem = hits.length;
     }

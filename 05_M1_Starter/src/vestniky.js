@@ -45,13 +45,28 @@ export function zkratNazev(nazev) {
   return out.length > 42 ? `${out.slice(0, 41)}…` : out;
 }
 
+/** Stopwords fulltextového indexu — MUSÍ být identické s STOPWORDS
+ *  v ingest/lib/vestniky-fulltext.js (paritu hlídá test). Bez nich by dotaz
+ *  „mamografie podle věku" selhal: „podle" v indexu není a AND průnik
+ *  by vrátil prázdno. */
+const FT_STOPWORDS = new Set([
+  'jsou', 'bude', 'budou', 'byla', 'bylo', 'byly', 'jako', 'jeho', 'jeji',
+  'jejich', 'ktery', 'ktera', 'ktere', 'kterych', 'kterym', 'kterou', 'nebo',
+  'podle', 'pouze', 'take', 'tato', 'tento', 'teto', 'tomto', 'tohoto',
+  'aby', 'vsak', 'pokud', 'musi', 'muze', 'mohou', 'byt', 'dle', 'odst',
+  'pism', 'zakona', 'ceske', 'ceska', 'republiky', 'republice',
+  'zdravotnictvi', 'ministerstva', 'ministerstvo', 'ministerstvem',
+  'vestnik', 'vestniku', 'castka', 'castky', 'strana', 'rocnik',
+]);
+
 /** Tokenizace dotazu pro fulltextový index — MUSÍ být identická s
  *  ingest/lib/vestniky-fulltext.js (paritu hlídá test): bez diakritiky,
- *  lowercase, termy 4–24 znaků, prefix-stemming na 8 znaků. */
+ *  lowercase, termy 4–24 znaků, stopwords, prefix-stemming na 8 znaků. */
 export function queryTermsFt(q) {
   const out = new Set();
   for (const m of normText(q).matchAll(/[a-z][a-z0-9]{3,23}/g)) {
     const t = m[0];
+    if (FT_STOPWORDS.has(t)) continue;
     out.add(t.length > 8 ? t.slice(0, 8) : t);
   }
   return [...out];

@@ -185,14 +185,17 @@ test('vestniky vazby: data/vestniky-vazby.json je drift-konzistentní', () => {
 test('vestniky vazby: mergeVestnik plní kartu skupiny (nejnovější první, cap)', () => {
   const skupiny = new Map([[9, { id: 9 }], [10, { id: 10 }]]);
   const vest = { castky: [
-    { id: 1, titul: 'V 1/2020', datum: '2020-01-01', url: 'u1', obsah: [{ t: 'Program screeningu XYZ' }] },
-    { id: 2, titul: 'V 2/2024', datum: '2024-01-01', url: 'u2', obsah: [{ t: 'Aktualizace programu screeningu XYZ' }, { t: 'Jiné téma' }] },
+    // datum je záměrně PROTI chronologii částek (u starých ročníků je to datum
+    // migrace na web MZ) — řadit se musí podle rok/číslo
+    { id: 1, titul: 'V 1/2020', rok: 2020, cislo: 1, datum: '2025-12-01', url: 'u1', obsah: [{ t: 'Program screeningu XYZ' }] },
+    { id: 2, titul: 'V 2/2024', rok: 2024, cislo: 2, datum: '2024-01-01', url: 'u2', obsah: [{ t: 'Aktualizace programu screeningu XYZ' }, { t: 'Jiné téma' }] },
   ] };
   mergeVestnik(skupiny, vest, { skupiny: [{ g: 9, re: 'screeningu XYZ' }, { g: 10, re: 'nikde-nic' }] }, 8);
   const s = skupiny.get(9);
   assert.equal(s.vestnik.length, 2);
   assert.equal(s.vestnik_celkem, 2);
-  assert.equal(s.vestnik[0].titul, 'V 2/2024', 'nejnovější první');
+  assert.equal(s.vestnik[0].titul, 'V 2/2024', 'řadí rok/číslo částky, ne datum záznamu na webu');
+  assert.equal(s.vestnik[0].rok, 2024, 'zásah nese rok částky');
   assert.equal(skupiny.get(10).vestnik, undefined, 'skupina bez zásahu pole nedostane');
   // drift: g v datech ⇒ skupina má kartu v ppo.json
   const ppo = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo.json'), 'utf8'));
@@ -214,7 +217,8 @@ import { queryTermsFt, fulltextIds } from '../src/vestniky.js';
 
 test('vestniky fulltext: tokenizace frontendová = ingestová (parita)', () => {
   const vzorky = ['Mamografického screeningu', 'úhrada zdravotních VÝKONŮ č. 89312',
-    'kolorektální karcinom — Doporučený postup', 'x', 'a1b2c3d4e5f6'];
+    'kolorektální karcinom — Doporučený postup', 'x', 'a1b2c3d4e5f6',
+    'mamografie podle věku', 'úhrady dle zákona České republiky', 'tento Věstník bude'];
   for (const v of vzorky) {
     assert.deepEqual(queryTermsFt(v).sort(), queryTerms(v).sort(), `parita selhala pro: ${v}`);
   }
