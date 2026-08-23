@@ -36,10 +36,11 @@ export function skupinaFromSearch(search, validIds) {
   return raw != null && validIds.has(Number(raw)) ? String(Number(raw)) : 'all';
 }
 
-/** Osud úkolu pro filtr: doložené splnění počítá i externí rešerši (vydáno). */
+/** Osud úkolu pro filtr. Externí „vydáno" je doložené splnění JEN s primy:
+ *  true — publikace navazujícího výstupu neprokazuje provedení mezikroku. */
 export function osudMatch(u, stav) {
   if (stav === 'all') return true;
-  if (stav === 'splneno') return u.stav === 'splneno' || u.ext?.stav === 'vydano';
+  if (stav === 'splneno') return u.stav === 'splneno' || (u.ext?.stav === 'vydano' && u.ext.primy);
   if (stav === 'pokracuje') return u.stav === 'pokracuje';
   return !u.stav && !u.ext; // 'bez' — zápisy i rešerše mlčí
 }
@@ -62,8 +63,10 @@ export function osudChips(u, esc) {
   } else if (u.stav === 'pokracuje') {
     chips.push(`<span class="ppo-uk-run"${u.dk ? ` title="${esc(u.dk)}"` : ''}>pokračuje${u.sd ? ` (${esc(formatDatumCz(u.sd))})` : ''}</span>`);
   }
-  if (u.ext?.stav === 'vydano') {
+  if (u.ext?.stav === 'vydano' && u.ext.primy) {
     chips.push(`<span class="ppo-uk-ok">✓ vydáno${u.ext.datum ? ` ${esc(formatDatumCz(u.ext.datum))}` : ''}${u.ext.url ? ` <a href="${esc(u.ext.url)}" target="_blank" rel="noopener">${esc(u.ext.nazev ?? 'dokument')} ↗</a>` : ''}</span>`);
+  } else if (u.ext?.stav === 'vydano') {
+    chips.push(`<span class="ppo-uk-run" title="výsledek navazujícího procesu — nedokládá provedení tohoto konkrétního úkolu">→ výstup vydán${u.ext.datum ? ` ${esc(formatDatumCz(u.ext.datum))}` : ''}${u.ext.url ? ` <a href="${esc(u.ext.url)}" target="_blank" rel="noopener">${esc(u.ext.nazev ?? 'dokument')} ↗</a>` : ''}</span>`);
   } else if (u.ext?.stav === 'v_procesu') {
     chips.push(`<span class="ppo-uk-run">v legislativním procesu${u.ext.url ? ` <a href="${esc(u.ext.url)}" target="_blank" rel="noopener">↗</a>` : ''}</span>`);
   }
