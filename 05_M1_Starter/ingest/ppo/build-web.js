@@ -368,14 +368,22 @@ export function loadUkolyRegistry(dir, legPath) {
 }
 
 // Pole osudu jednoho úkolu z jednání: stav/sd/dk/du (sledování) + ext (rešerše).
-function osudUkolu(docId, i, { stavy, legJ, docIdx }) {
+function osudUkolu(docId, i, { stavy, legJ, docIdx, jednaniDatum }) {
   const out = {};
   const st = stavy?.get(`${docId}:${i}`);
   if (st && st.stav !== 'bez_dokladu') {
-    out.stav = st.stav;
-    out.sd = st.doklad_datum ?? null;
-    out.dk = st.doklad ?? null;
-    out.du = docIdx?.get(st.doklad_doc_id)?.url ?? null;
+    // Chronologie podle data JEDNÁNÍ (ne data uploadu dokumentu v korpusu):
+    // doklad z jednání, které nepředchází zadání, splnění doložit nemůže.
+    const td = jednaniDatum?.get(docId);
+    const dd = jednaniDatum?.get(st.doklad_doc_id);
+    if (td && dd && dd <= td) {
+      console.warn(`⚠ osud ${docId}:${i}: doklad z jednání ${dd} nenásleduje po zadání ${td} — ignorován`);
+    } else {
+      out.stav = st.stav;
+      out.sd = st.doklad_datum ?? null;
+      out.dk = st.doklad ?? null;
+      out.du = docIdx?.get(st.doklad_doc_id)?.url ?? null;
+    }
   }
   const ext = legJ?.get(`${docId}:${i}`);
   if (ext?.vysledek && ext.vysledek.stav !== 'nedohledano') out.ext = ext.vysledek;
@@ -558,8 +566,14 @@ function main() {
   };
   dvojrole.pocet = dvojrole.osoby.length;
 
+  // mapa doc_id → datum jednání ze VŠECH analýz (pro chronologickou
+  // validaci dokladů v osudUkolu — datum uploadu v korpusu nestačí)
+  const jednaniDatum = new Map();
+  for (const a of analyzy.values()) {
+    for (const j of a.jednani ?? []) if (j.doc_id && j.datum) jednaniDatum.set(j.doc_id, j.datum);
+  }
   const registry = { ...loadUkolyRegistry(path.join(__dirname, 'ukoly-stav'),
-    path.join(__dirname, 'ukoly-legislativa.json')), docIdx };
+    path.join(__dirname, 'ukoly-legislativa.json')), docIdx, jednaniDatum };
   const ukolyData = buildUkoly(analyzy, gids, registry);
   const ukoly = {
     version: '1.1',
