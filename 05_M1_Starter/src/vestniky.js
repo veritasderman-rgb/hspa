@@ -22,6 +22,7 @@ export const KAT_LABELS = {
   vzdelavani: 'vzdělávání',
   spravni: 'správní',
   dotace: 'dotace',
+  oznameni: 'oznámení a sdělení',
   ostatni: 'ostatní',
 };
 
@@ -118,7 +119,7 @@ export function filterCastky(castky, { q = '', rok = 'all', kat = 'all', ftIds =
 
 const $ = id => document.getElementById(id);
 const KROK = 30;
-let DATA = null, GNAZVY = {}, FTIDX = null, ftLoading = null;
+let DATA = null, GNAZVY = {}, FTIDX = null, ftLoading = null, CASTKA_URL = new Map();
 let fQ = '', fRok = 'all', fKat = 'all', fFt = false, limit = KROK;
 
 /** Lazy-load fulltextového indexu (jen po zaškrtnutí — ~1 MB gzip). */
@@ -132,6 +133,17 @@ function nactiFtIndex() {
 
 function aktualniFtIds() {
   return fFt && FTIDX && fQ.trim() ? fulltextIds(FTIDX, fQ) : null;
+}
+
+const REF_AKCE = { rusi: 'ruší', meni: 'mění', odkazuje: 'odkazuje na' };
+
+/** Chip odkazu na jinou částku: „ruší částku 9/2024" s odkazem, když je v archivu. */
+function refChip(r) {
+  const label = `${REF_AKCE[r.akce] ?? 'odkazuje na'} částku ${r.cislo}/${r.rok}`;
+  const cil = r.c != null ? CASTKA_URL.get(r.c) : null;
+  return cil
+    ? `<a class="vst-ref vst-ref-${r.akce}" href="${escapeHtml(cil)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`
+    : `<span class="vst-ref vst-ref-${r.akce}">${escapeHtml(label)}</span>`;
 }
 
 function katChip(kat) {
@@ -168,7 +180,8 @@ function renderList() {
       ? `<ol class="vst-obsah">${c.obsah.map(o => {
         const gs = (o.g ?? []).filter(g => GNAZVY[g]).map(g =>
           `<a class="vst-g" href="pracovni-skupina.html?id=${g}" title="${escapeHtml(GNAZVY[g])}">→ ${escapeHtml(zkratNazev(GNAZVY[g]))}</a>`).join(' ');
-        return `<li>${escapeHtml(o.t)} ${katChip(o.kat)}${gs ? ` ${gs}` : ''}</li>`;
+        const refs = (o.ref ?? []).map(r => refChip(r)).join(' ');
+        return `<li>${escapeHtml(o.t)} ${katChip(o.kat)}${refs ? ` ${refs}` : ''}${gs ? ` ${gs}` : ''}</li>`;
       }).join('')}</ol>`
       : '<p class="vst-noobsah">Obsah se nepodařilo strojově přečíst — otevřete PDF.</p>';
     html.push(`<li class="vst-castka">
@@ -197,6 +210,7 @@ async function init() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     DATA = await res.json();
     if (resV?.ok) GNAZVY = (await resV.json())?.skupiny_nazvy ?? {};
+    CASTKA_URL = new Map(DATA.castky.map(c => [c.id, c.url]));
 
     $('sCastek').textContent = String(DATA.pocty.castky);
     $('sPolozek').textContent = String(DATA.pocty.polozky);
