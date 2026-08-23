@@ -111,8 +111,11 @@ export const KATEGORIE = [
   ['centra', /centr(um|a|um)? vysoce specializ|onkologick(á|é) péče|\bHOC\b|\bKOC\b|\bIKTOV|traumacentr|perinatolog/i],
   ['leciva', /léčiv|antiinfektiv|\bSEAI\b|lékov|opiát|omamn|psychotropn/i],
   ['cenove', /cenov(ý|é|á)|maximální cen|regulace cen|úhrad|bodov(é|á) hodnot/i],
-  ['standardy', /standard|doporučen|metodick(ý|é|á)|metodika|metodyck|guidelines|postup(y|u)? (pro|při|péče)|péče o pacient|klinick/i],
+  // vzdělávání MUSÍ předcházet standardům: vzdělávací termíny jsou specifické,
+  // kdežto standardy chytají i obecná slova (metodick-, klinick-) — „Vzdělávací
+  // program Dětská klinická psychologie" je vzdělávání, ne standard
   ['vzdelavani', /vzdělávac|specializační|akreditac|atestac|kmen(e|ů)?\b|rezidenčn|kvalifikačn/i],
+  ['standardy', /standard|doporučen|metodick(ý|é|á)|metodika|metodyck|guidelines|postup(y|u)? (pro|při|péče)|péče o pacient|klinick/i],
   ['spravni', /oprávněn|osvědčen|jmenován|statut|jednací řád|komise|výběrov(é|á) řízení|seznam (osob|subjekt|soudních|poskytovatel|pracoviš|center|znalc)/i],
   ['dotace', /dotač|dotace|program podpory|grantov/i],
   ['oznameni', /oznámení|sdělení|informace o/i],
@@ -155,8 +158,10 @@ export function anotujOdkazy(castky) {
         const cid = byCisloRok.get(`${cislo}/${rok}`) ?? null;
         if (cid === c.id) continue; // zmínka vlastní částky není odkaz
         if (refs.some(r => r.cislo === cislo && r.rok === rok)) continue;
+        // meni chytá i Úpravu/Opravu/Dodatek — „oprav" bez diakritiky nekoliduje
+        // s „oprávněn" (á ≠ a), „dodat(e)k" nechytne „dodatečné informace"
         const akce = /zrušen|ruší/i.test(o.t) ? 'rusi'
-          : /změn|mění|novel|aktualizac|doplň/i.test(o.t) ? 'meni' : 'odkazuje';
+          : /změn|mění|novel|aktualizac|doplň|úprav|oprav|dodat(ek|k)/i.test(o.t) ? 'meni' : 'odkazuje';
         refs.push({ c: cid, cislo, rok, akce });
       }
       if (refs.length) { o.ref = refs.slice(0, 4); n++; } else { delete o.ref; }
