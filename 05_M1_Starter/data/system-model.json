@@ -1,1869 +1,1985 @@
 {
-  "version": "1.0",
-  "generated_at": "2026-07-07T12:00:00Z",
-  "_doc": "Kauzální model českého zdravotnictví (PLAN-SYSTEM-MODEL.md). Uzly = oblasti/páky ve 4 vrstvách HSPA, hrany = doložené kauzální vazby. Layout kurátorovaný (x,y = střed uzlu ve viewBox 1000×768). Obsah syntetizován z korpusu článků a indikátorů, každý uzel i hrana nese doklad. Perspektivy (Tři židle): každý uzel nese pohled pacient/lekar/reditel (visibility clear|fog, alt_label, note); hrany s conflict:true označují doložený střet zájmů rolí (conflict_note). Viz PLAN-TRI-ZIDLE.md.",
-  "nodes": [
-    {
-      "id": "financovani_systemu",
-      "label": "Financování systému",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 105,
-      "y": 64,
-      "desc": "Zdroje veřejného zdravotního pojištění: pojistné ze mzdy a platba státu za 5,9 mil. státních pojištěnců (~155 mld. Kč, ~28 % příjmů systému v 2026). Celkové výdaje na zdravotnictví dosáhly 8,6 % HDP (696,7 mld. Kč, 2024), pod průměrem OECD 9,3 %.",
-      "indicators": [
-        "vydaje_zdravotnictvi_hdp",
-        "uhrada_zp_per_pojistenec",
-        "podil_vydaje_luzkova_pece",
-        "podil_vydaje_ambulantni_pece",
-        "vydaje_prevence_pct"
-      ],
-      "articles": [
-        "clanek-financovani-sha.html",
-        "clanek-vydaje-zdravotnictvi.html",
-        "clanek-platba-statu-statni-pojistenci.html",
-        "clanek-financovani-segmenty-2026.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Odkud se berou peníze",
-          "note": "Pojistné z výplaty odchází neviditelně; kolik systém má a nemá, pacient pozná až frontou nebo doplatkem."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Rozpočet, o kterém nerozhoduji",
-          "note": "Lékař vidí jen důsledky: kolik času a vybavení si oddělení může dovolit na jednoho pacienta."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Strop mých příjmů",
-          "note": "Zdravotně pojistné plány pojišťoven čte ředitel dřív než noviny — odsud teče každá koruna úhrad."
-        }
-      }
+ "version": "1.0",
+ "generated_at": "2026-07-07T12:00:00Z",
+ "_doc": "Kauzální model českého zdravotnictví (PLAN-SYSTEM-MODEL.md). Uzly = oblasti/páky ve 4 vrstvách HSPA, hrany = doložené kauzální vazby. Layout kurátorovaný (x,y = střed uzlu ve viewBox 1000×768). Obsah syntetizován z korpusu článků a indikátorů, každý uzel i hrana nese doklad. Perspektivy (Tři židle): každý uzel nese pohled pacient/lekar/reditel (visibility clear|fog, alt_label, note); hrany s conflict:true označují doložený střet zájmů rolí (conflict_note). Viz PLAN-TRI-ZIDLE.md.",
+ "nodes": [
+  {
+   "id": "financovani_systemu",
+   "label": "Financování systému",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 105,
+   "y": 64,
+   "desc": "Zdroje veřejného zdravotního pojištění: pojistné ze mzdy a platba státu za 5,9 mil. státních pojištěnců (~155 mld. Kč, ~28 % příjmů systému v 2026). Celkové výdaje na zdravotnictví dosáhly 8,6 % HDP (696,7 mld. Kč, 2024), pod průměrem OECD 9,3 %.",
+   "indicators": [
+    "vydaje_zdravotnictvi_hdp",
+    "uhrada_zp_per_pojistenec",
+    "podil_vydaje_luzkova_pece",
+    "podil_vydaje_ambulantni_pece",
+    "vydaje_prevence_pct"
+   ],
+   "articles": [
+    "clanek-financovani-sha.html",
+    "clanek-vydaje-zdravotnictvi.html",
+    "clanek-platba-statu-statni-pojistenci.html",
+    "clanek-financovani-segmenty-2026.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Odkud se berou peníze",
+     "note": "Pojistné z výplaty odchází neviditelně; kolik systém má a nemá, pacient pozná až frontou nebo doplatkem."
     },
-    {
-      "id": "uhradovy_mechanismus",
-      "label": "Úhradový mechanismus",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 220,
-      "y": 142,
-      "desc": "Úhradová vyhláška každoročně stanoví hodnoty bodu, kapitace a DRG paušály (pro 2026 vyhláška č. 432/2025 Sb.); předchází jí dohodovací řízení ZP se segmenty — pro 2027 dohoda ve 12 z 15 segmentů, nedohodnuté lůžkové segmenty ale drží většinu nákladů. VZP ohlásila pilotní přechod od platby za výkon k platbě za výsledek (piloty kardiologie a ortopedie od září 2026).",
-      "indicators": [
-        "podfinancovani_oblastni_interna_cm",
-        "uhrada_zp_per_pojistenec",
-        "podil_vydaje_luzkova_pece",
-        "podil_vydaje_ambulantni_pece"
-      ],
-      "articles": [
-        "clanek-uhradova-vyhlaska.html",
-        "clanek-dohodovaci-rizeni-2027-vysledek.html",
-        "clanek-platba-za-vysledek-vzp.html",
-        "clanek-financovani-segmenty-2026.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Proč mě nechtějí vzít",
-          "note": "Body, kapitace a DRG pacient nevidí — jen to, že se některý výkon „nedělá“ a jinde je fronta."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Co se vyplatí dělat",
-          "note": "Hodnota bodu a limity určují, které výkony si ordinace může dovolit — medicína naráží na sazebník."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Z čeho platím výplaty",
-          "note": "Úhradová vyhláška je pro ředitele rozpočtový zákon: rozhoduje o platech, službách i investicích."
-        }
-      }
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Rozpočet, o kterém nerozhoduji",
+     "note": "Lékař vidí jen důsledky: kolik času a vybavení si oddělení může dovolit na jednoho pacienta."
     },
-    {
-      "id": "financni_ochrana",
-      "label": "Finanční ochrana pacientů",
-      "layer": "Výstupy",
-      "kind": "flow",
-      "x": 860,
-      "y": 478,
-      "desc": "Přímé platby pacientů (OOP) tvořily 14,6 % zdravotních výdajů (2023) — zhruba průměr EU (~15 %) a pod OECD (~18 %); nenaplněná potřeba péče je výjimečně nízká (0,3 % vs. EU 2,4 %). Skutečná zátěž domácností je podle SHA vyšší (neformální platby a suplementy indikátor nezachycuje).",
-      "indicators": [
-        "platba_z_kapsy_pct",
-        "katastroficke_vydaje_zdravi",
-        "unmet_need_medical"
-      ],
-      "articles": [
-        "clanek-platba-z-kapsy.html",
-        "clanek-nadstandardy-3-cesky-narok.html",
-        "clanek-financovani-sha.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Kolik platím z kapsy",
-          "note": "Doplatky a soukromé platby — jediná část financí systému, kterou pacient zná do koruny."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Co si pacient může dovolit",
-          "note": "Lékař to vidí jen nepřímo: pacient, který kvůli doplatkům nedobere léky nebo odkládá zubaře."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Platby mimo pojišťovnu",
-          "note": "Pro rozpočet nemocnice okrajová položka; sociální dopad plateb ředitel neřeší."
-        }
-      }
-    },
-    {
-      "id": "udrzitelnost_financi",
-      "label": "Udržitelnost financí",
-      "layer": "Výsledky",
-      "kind": "outcome",
-      "x": 860,
-      "y": 634,
-      "desc": "Systém veřejného pojištění je v 2026 v deficitu 12,2–19 mld. Kč (VZP samostatně −12,7 mld.); rezervy pojišťoven (~32 mld. Kč koncem 2025) se bez systémového opatření vyčerpají v horizontu jednotek let. Strukturální příčiny: demografické stárnutí, nákladné inovace a slabá prevence.",
-      "indicators": [
-        "vydaje_zdravotnictvi_hdp",
-        "uhrada_zp_per_pojistenec",
-        "vydaje_leky_hdp",
-        "vydaje_dlouhodoba_pece_hdp"
-      ],
-      "articles": [
-        "clanek-deficit-pojisteni-2026.html",
-        "clanek-vydaje-zdravotnictvi.html",
-        "clanek-platba-statu-statni-pojistenci.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Bude na péči i za deset let?",
-          "note": "Deficit systému je pro pacienta abstrakce — dokud se nepromění v doplatky a fronty."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Bilance, kterou neléčím",
-          "note": "Dlouhodobou udržitelnost lékař v ordinaci nevidí; pozná až její důsledky v úhradách."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Přežije moje nemocnice?",
-          "note": "Deficit pojištění znamená tlak na úhrady — a ředitel je první, kdo ho pocítí."
-        }
-      }
-    },
-    {
-      "id": "pracovni_sila",
-      "label": "Pracovní síla",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 340,
-      "y": 64,
-      "desc": "Hlavový počet je nad průměrem (lékaři 4,2/1000 vs. OECD 3,9) nebo kolem něj (sestry 9,0 vs. 9,2), ale skrytým problémem je věk a distribuce: 41 % lékařů je 55+, průměrná všeobecná sestra má 47 let (ÚZIS NRZP 2022) a do 12 let je třeba doplnit přes 30 tisíc úvazků sester. Reálný nedostatek je hlavně problém regionální distribuce, úzkých kompetencí sester a nedotažené postgraduální výchovy, ne celkového počtu hlav.",
-      "indicators": [
-        "lekari_per_1000",
-        "sestry_per_1000",
-        "podil_lekaru_55plus",
-        "absolventi_lekarstvi_per_100k",
-        "osetrovaci_dny_na_uvazek_sestry"
-      ],
-      "articles": [
-        "clanek-pracovni-sila.html",
-        "clanek-starnuti-lekaru.html",
-        "clanek-osetrovatelstvi-generacni-propast-2026.html",
-        "clanek-ja-heroes-workforce-2026.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Kdo se o mě stará",
-          "note": "Nedostatek sester pacient pozná až přetíženou směnou a zrušeným termínem, ne ve statistice úvazků."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Kolik nás slouží",
-          "note": "Přesčasy, neobsazené služby a stárnoucí kolegové — realita každé porady oddělení."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Koho seženu a udržím",
-          "note": "Personál je největší nákladová položka i největší riziko: jedna hromadná výpověď zavře oddělení."
-        }
-      }
-    },
-    {
-      "id": "sit_kapacity",
-      "label": "Síť a kapacity",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 575,
-      "y": 64,
-      "desc": "Česko má hustou lůžkovou síť (akutní lůžka 4,0/1000 vs. OECD 3,5; JIP cca 40/100k vs. cca 17 OECD dle ESICM), ale okresní nemocnice ztrácejí personální i ekonomickou podstatu (Pelhřimov, Znojmo 2026). Souběžně probíhá centralizace vysoce specializované péče: onkochirurgie slinivky, jater a jícnu od 2027 jen do 13+6 center; gama nůž a protonové centrum existují v republice po jednom.",
-      "indicators": [
-        "postele_akutni_per_1000",
-        "luzka_jip_per_100k",
-        "obloznost_interna_standard_pct",
-        "ct_per_milion",
-        "mri_per_milion",
-        "dojezd_zzs"
-      ],
-      "articles": [
-        "clanek-okresni-nemocnice-personalni-krize.html",
-        "clanek-centralizace-chirurgie-2027.html",
-        "clanek-dostupnost-radioterapie-2026.html",
-        "clanek-hospitalizujeme-nejvic.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Jak daleko to mám",
-          "note": "Vzdálenost k porodnici, pohotovosti nebo iktovému centru — to je pro pacienta celá „síť“."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Mapa, kterou nekreslím",
-          "note": "Jednotlivý lékař síť nezmění; pozná ji, když okolní oddělení zavře a pacienti přetečou k němu."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Která oddělení udržím",
-          "note": "Držet, sdílet, nebo zavřít ztrátové oddělení — nejtěžší rozhodnutí ředitelského mandátu."
-        }
-      }
-    },
-    {
-      "id": "objem_struktura_pece",
-      "label": "Objem a struktura péče",
-      "layer": "Výstupy",
-      "kind": "flow",
-      "x": 400,
-      "y": 478,
-      "desc": "Česko hospitalizuje nejvíce v OECD: necelých 18 000 akutních hospitalizací na 100 000 obyvatel oproti 14 600 v průměru OECD, s ALOS kolem 6–7 dní podle metodiky. Systém je dlouhodobě nemocnice-centrický — část lůžkového objemu by v systémech s jednodenní chirurgií a silnější primární péčí vůbec nevznikla.",
-      "indicators": [
-        "hospitalizace_na_100k",
-        "prumerna_delka_hospitalizace",
-        "hospitalizace_acsc",
-        "jednodenni_chirurgie_katarakta",
-        "ambulantni_kontakty_per_capita",
-        "podil_senioru_na_internich_hospitalizacich"
-      ],
-      "articles": [
-        "clanek-hospitalizujeme-nejvic.html",
-        "clanek-centralizace-chirurgie-2027.html",
-        "clanek-okresni-nemocnice-personalni-krize.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Kde se léčí nejvíc",
-          "note": "Že se v ČR hospitalizuje výrazně víc než jinde, pacient nevidí — pro něj je pobyt v nemocnici „normální“."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Lůžko vs. ambulance",
-          "note": "Lékař denně vidí pacienty, kteří na akutním lůžku být nemuseli — kdyby bylo kam je poslat."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Obložnost platí provoz",
-          "note": "Prázdné lůžko je pro systém dobrá zpráva a pro rozpočet nemocnice ztráta — přesně tudy vede konflikt."
-        }
-      }
-    },
-    {
-      "id": "prevence_screeningy",
-      "label": "Prevence a screeningy",
-      "layer": "Procesy",
-      "kind": "lever",
-      "x": 340,
-      "y": 254,
-      "desc": "Organizovaná preventivní péče: preventivní prohlídky (chodí jen 48 % dospělých), populační onkologické screeningy (mamograf ~60 %, kolorektální ~31 %, cervix 65,7 %) a vakcinace (MMR do 2 let 83,7 % — pod prahem kolektivní imunity 95 %, chřipka 65+ 24,5 %). Účast dlouhodobě stagnuje pod průměrem OECD a rozhoduje o časnosti záchytu nemocí.",
-      "indicators": [
-        "screening_mamograficky",
-        "screening_kolorektalni",
-        "screening_cervix",
-        "prohlidka_prakticky_lekar",
-        "vakcinace_mmr_deti",
-        "vakcinace_chripka_65"
-      ],
-      "articles": [
-        "clanek-preventivni-prohlidka.html",
-        "clanek-vakcinace.html",
-        "clanek-mamograf-rakovina-prsu.html",
-        "clanek-rakovina-tlusteho-streva.html",
-        "clanek-cervix-hpv.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Pozvánky, na které nejdu",
-          "note": "Screening je jediný krok cesty systémem, který má pacient plně ve svých rukou."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Záchyt, dokud je čas",
-          "note": "Praktik zve, vysvětluje a uklidňuje — prevence je jeho nejlevnější účinný nástroj."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Pacienti, kteří nepřijdou",
-          "note": "Prevence šetří systému, ne nemocnici — v ředitelově rozvaze se neobjeví."
-        }
-      }
-    },
-    {
-      "id": "rizikove_chovani",
-      "label": "Rizikové chování",
-      "layer": "Výsledky",
-      "kind": "flow",
-      "x": 140,
-      "y": 634,
-      "desc": "Zátěž behaviorálních rizikových faktorů populace: denní kouření 16,4 % dospělých (celkem 22 % kuřáků tabáku, prudce roste vapování u mladých), spotřeba alkoholu 11,2 l čistého alkoholu/os. 15+ (OECD 8,5), 60 % dospělých s BMI ≥ 25 a každé čtvrté dítě 6–9 let s nadváhou. Po alkoholu a tabáku jde o největší ovlivnitelná rizika v systému.",
-      "indicators": [
-        "kuractvi_denni",
-        "alkohol_spotreba",
-        "bmi_dospeli",
-        "obezita_prevalence",
-        "deti_obezita_cosi",
-        "pohybova_aktivita_dospeli"
-      ],
-      "articles": [
-        "clanek-koureni.html",
-        "clanek-alkohol-spotreba.html",
-        "clanek-bmi-obezita.html",
-        "clanek-obezita-jidelny-reforma.html",
-        "clanek-jaterni-mortalita-alkohol.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Moje cigarety, můj cukr",
-          "note": "Rizika, která pacient žije — a která zdravotnictví samo nezmění."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Co si pacienti přinášejí",
-          "note": "Velká část chronické medicíny má kořeny v životním stylu — lékař to vidí v každé anamnéze."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Odkud se berou diagnózy",
-          "note": "Prevalence rizik určuje budoucí pacienty nemocnice, ale do ročního rozpočtu se nepropisuje."
-        }
-      }
-    },
-    {
-      "id": "akutni_pece",
-      "label": "Akutní péče",
-      "layer": "Procesy",
-      "kind": "flow",
-      "x": 575,
-      "y": 254,
-      "desc": "Řetězec neodkladné péče: ZZS, mimonemocniční zástava srdce (OHCA) a nemocniční síť pro akutní infarkt (primární PCI) a cévní mozkovou příhodu (trombolýza, trombektomie). Akutní kardiologie je česká špička (30denní mortalita AMI 5,2 % vs. OECD 6,5 %), zatímco přežití OHCA (9,4 %) a mortalita po CMP (9,9 % vs. 7,7 %) zaostávají kvůli předhospitální a následné vrstvě.",
-      "indicators": [
-        "mortalita_inhosp_ami",
-        "mortalita_inhosp_cmp",
-        "preziti_ohca_30d",
-        "dojezd_zzs",
-        "readmise_30d_ami",
-        "luzka_jip_per_100k"
-      ],
-      "articles": [
-        "clanek-akutni-infarkt.html",
-        "clanek-cmp-iktova-centra.html",
-        "clanek-ohca-zachrana-srdce.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Když jde o minuty",
-          "note": "Záchranka, urgent, iktové centrum — moment, kdy pacient systém potřebuje celý a hned."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Služba v plném provozu",
-          "note": "Akutní medicína je výkladní skříň systému — a nejtvrdší test personálního obsazení."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Služby, které musím obsadit",
-          "note": "ER 24/7 neodpustí neobsazenou službu; akutní provoz je ředitelova noční můra i vizitka."
-        }
-      }
-    },
-    {
-      "id": "kvalita_bezpecnost",
-      "label": "Kvalita a bezpečnost péče",
-      "layer": "Procesy",
-      "kind": "flow",
-      "x": 810,
-      "y": 254,
-      "desc": "Bezpečnost hospitalizované péče: nemocniční (nosokomiální) infekce, pooperační sepse, pády, readmise a antimikrobiální rezistence. HAI prevalence v ČR 6,5 % (ECDC PPS), pooperační sepse 0,84 % (přes 5 000 případů/rok, první národní indikátor 2024). Klíčové páky jsou hygiena rukou, antibiotic stewardship, poměr sestra-pacient, surveillance a kultura hlášení; NIKEZ/INDIKO začíná kvalitu systematicky měřit.",
-      "indicators": [
-        "infekce_nosokomialni",
-        "bezpecnost_padu_nemocnice",
-        "rezistence_antibiotik_ecoli",
-        "spotreba_antibiotik",
-        "readmise_30d_ami",
-        "hospitalizace_acsc"
-      ],
-      "articles": [
-        "clanek-nosokomialni-infekce.html",
-        "clanek-pooperacni-sepse-2026.html",
-        "clanek-rezistence-antibiotik.html",
-        "clanek-spotreba-antibiotik.html",
-        "clanek-nikez-jak-funguje-2026.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Jak dobře mě léčí",
-          "note": "Pacient kvalitu nezměří — pozná vlídnost a čekání, ne reoperace či infekce. Přesně proto existují indikátory."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Standardy a komplikace",
-          "note": "Checklisty, hlášení nežádoucích událostí, morbiditní konference — kvalita je denní řemeslo."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Akreditace a reputace",
-          "note": "Ředitel kvalitu vidí přes akreditace, žebříčky a stížnosti — a přes soudní spory, když selže."
-        }
-      }
-    },
-    {
-      "id": "primarni_pece",
-      "label": "Primární péče",
-      "layer": "Procesy",
-      "kind": "lever",
-      "x": 105,
-      "y": 254,
-      "desc": "Síť cca 5 500 PLD a 2 050 PLDD, převážně jednolékařských soukromých praxí, hrazená hybridně (kapitace + výkon + P4P bonifikace dle ÚV 2026). Systému chybí gatekeeping a praktik má úzké kompetence — Češi mají 11,2 ambulantního kontaktu ročně vs. 6,8 OECD a účast na preventivní prohlídce jen ~48 %. Věková krize sítě: každý třetí PLD je nad 60 let, roční bilance −110 až −180 PLD.",
-      "indicators": [
-        "prohlidka_prakticky_lekar",
-        "ambulantni_kontakty_per_capita",
-        "hospitalizace_acsc",
-        "lekari_per_1000",
-        "kontrola_hypertenze"
-      ],
-      "articles": [
-        "clanek-reforma-primarni-pece-2027.html",
-        "clanek-ambulantni-kontakty.html",
-        "clanek-preskripce-praktici-2026.html",
-        "clanek-vyhnutelne-hospitalizace.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Můj praktik",
-          "note": "První dveře do systému — pokud v okolí nějaké ordinace přijímají."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Vrátný systému",
-          "note": "Gatekeeping drží specialisty i nemocnice nad vodou — bez silných praktiků se systém hroutí odshora."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Péče před branou nemocnice",
-          "note": "Silní praktici jsou pro nemocnici neviditelný spojenec: drží pacienty mimo lůžka."
-        }
-      }
-    },
-    {
-      "id": "chronicka_koordinace",
-      "label": "Koordinace péče o chroniky",
-      "layer": "Procesy",
-      "kind": "flow",
-      "x": 220,
-      "y": 332,
-      "desc": "Dispenzární péče o diabetiky, hypertoniky, pacienty s CHOPN a srdečním selháním je v ČR roztříštěná mezi praktika a paralelně vedené specialisty (6–8 ordinací u pokročilého diabetu) s omezenou výměnou informací. Odvratitelné hospitalizace (ACSC) jsou 592/100 000 vs. 473 OECD (+25 %); důsledkem fragmentace u multimorbidních seniorů je polypragmazie a medikační konflikty.",
-      "indicators": [
-        "hospitalizace_acsc",
-        "kontrola_hypertenze",
-        "prevalence_diabetu",
-        "polypragmazie_65plus",
-        "multimorbidita_65plus"
-      ],
-      "articles": [
-        "clanek-vyhnutelne-hospitalizace.html",
-        "clanek-reforma-primarni-pece-2027.html",
-        "clanek-preskripce-praktici-2026.html",
-        "clanek-ambulantni-kontakty.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Kdo mě vede nemocí",
-          "note": "Chronik pozná koordinaci podle toho, kolikrát musí vyprávět tentýž příběh znovu."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Předávání pacienta",
-          "note": "Dispenzarizace a mezioborová komunikace — tam, kde selže, přijede pacient sanitkou."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Pacienti mezi institucemi",
-          "note": "Koordinace se odehrává mezi ordinacemi mimo nemocnici; ředitel vidí až její selhání na urgentu."
-        }
-      }
-    },
-    {
-      "id": "dostupnost_pece",
-      "label": "Dostupnost péče",
-      "layer": "Výstupy",
-      "kind": "flow",
-      "x": 170,
-      "y": 478,
-      "desc": "Objektivní čekací doby jsou nad průměrem OECD: medián čekání na ambulantního specialistu 28 dní vs. 18, na TEP kyčle ~118 dní vs. 85 (orientační odhad — ČR čekací doby systematicky nemonitoruje a jako jediná ze srovnávaných zemí nemá vymahatelný waiting-time nástroj). Dostupnost je silně regionální (deficitní okresy 0,55 PLD/1 000 obyv. vs. Praha 0,75) a u zubní péče příjmově podmíněná (nesplněná potřeba 1,3 %, u nejchudšího kvintilu 2,5 % vs. 0,5 % u nejbohatšího).",
-      "indicators": [
-        "cekaci_doby_specialist",
-        "cekaci_doba_kycel",
-        "unmet_need_medical",
-        "nesplnena_potreba_zubni_pece",
-        "dojezd_zzs"
-      ],
-      "articles": [
-        "clanek-cekani-specialista.html",
-        "clanek-cekaci-doby-kycel.html",
-        "clanek-nesplnena-potreba-zubni-pece.html",
-        "clanek-reforma-pohotovosti-290-2025.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Jak dlouho čekám",
-          "note": "Čekání je pacientova nejhmatatelnější zkušenost se systémem — a hlavní měna jeho důvěry."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Plný diář",
-          "note": "Objednací kniha je lékařův barometr dostupnosti — a zdroj každodenních dilemat koho předběhnout."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Čekací listiny mé nemocnice",
-          "note": "Dostupnost je věc, kterou řediteli měří kraj, pojišťovna i místní facebook."
-        }
-      }
-    },
-    {
-      "id": "zkusenost_pacienta",
-      "label": "Zkušenost pacienta",
-      "layer": "Výstupy",
-      "kind": "flow",
-      "x": 630,
-      "y": 478,
-      "desc": "Subjektivní zkušenost se od objektivní dostupnosti rozchází: Češi hlásí nesplněnou potřebu lékařské péče jen 0,3 % (vs. 2,4 % OECD), přestože čekají déle — očekávání formuje vysoká frekvence kontaktů a naučené obcházení systému (známosti, doplatky, samoplátci). Pacient platí časem: fragmentované krátké návštěvy, obíhání specialisty kvůli receptu a hodiny v čekárnách ročně.",
-      "indicators": [
-        "spokojenost_pece",
-        "spokojenost_informovani",
-        "unmet_need_medical",
-        "ambulantni_kontakty_per_capita"
-      ],
-      "articles": [
-        "clanek-cekani-specialista.html",
-        "clanek-ambulantni-kontakty.html",
-        "clanek-preskripce-praktici-2026.html",
-        "clanek-nesplnena-potreba-zubni-pece.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Jak se mnou mluví",
-          "note": "Důstojnost, informace, čas — to, co si pacient pamatuje, i když dopadlo všechno dobře."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Jak to prožívá pacient",
-          "note": "V provozu na prožívání nezbývá prostor; dotazníky spokojenosti čte někdo jiný."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Stížnosti na mém stole",
-          "note": "Ředitel vidí špičku ledovce: stížnosti a děkovné dopisy. Většina zkušenosti pacientů zůstává pod hladinou."
-        }
-      }
-    },
-    {
-      "id": "dusevni_zdravi_sluzby",
-      "label": "Péče o duševní zdraví",
-      "layer": "Procesy",
-      "kind": "lever",
-      "x": 455,
-      "y": 332,
-      "desc": "Reforma psychiatrie běží od roku 2013 a přesouvá těžiště z velkých psychiatrických nemocnic do komunitní péče. Koncem 2025 fungovalo 50 center duševního zdraví (39 pro dospělé) z cílových 100, průměrná psychiatrická hospitalizace trvá 43 dní (OECD 19) a v dětské psychiatrii se 157 lékaři se na neakutní vyšetření čeká 4–8 měsíců.",
-      "indicators": [
-        "centra_dusevniho_zdravi_per_100k",
-        "psychiatri_per_100k",
-        "psychiatrie_prumerna_delka_hospitalizace",
-        "sebevrazdy_per_100k",
-        "pouzivani_antidepresiv",
-        "vydaje_dusevni_zdravi_pct"
-      ],
-      "articles": [
-        "clanek-centra-dusevniho-zdravi.html",
-        "clanek-reforma-psychiatrie-13-let.html",
-        "clanek-detska-psychiatrie-krize.html",
-        "clanek-psychiatricke-hospitalizace-reforma-2026.html",
-        "clanek-sebevrazdy-dusevni-zdravi.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Kde hledat pomoc",
-          "note": "Měsíce čekání na psychiatra či psychologa — dostupnost duševní péče pacient zažívá nejtvrději."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Kam odeslat duši",
-          "note": "Nejtěžší odeslání v systému: kapacity nejsou a praktik zůstává s pacientem sám."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Péče mimo můj areál",
-          "note": "Reforma míří do komunitních center mimo nemocnice; ředitel akutní nemocnice ji sleduje zpovzdálí."
-        }
-      }
-    },
-    {
-      "id": "dlouhodoba_paliativni",
-      "label": "Dlouhodobá a paliativní péče",
-      "layer": "Procesy",
-      "kind": "lever",
-      "x": 690,
-      "y": 332,
-      "desc": "Dvojkolejný systém rozdělený mezi zdravotní a sociální gesci (zákony 372/2011 a 108/2006 Sb., sjednocování startuje novela 38/2025 Sb.) s podprůměrnými kapacitami: 2,5 pracovníka formální dlouhodobé péče na 100 seniorů (OECD 5,6), 5,0 hospicových lůžek na 100 tis. obyvatel (doporučení EAPC 8) a 4,6 mobilního paliativního týmu na milion (EAPC 10). Doma nebo v hospici umírá jen 26,2 % lidí proti 32 % v OECD.",
-      "indicators": [
-        "luzka_dlouhodobe_pece_65plus",
-        "pracovnici_ltc_per_100_65plus",
-        "vydaje_dlouhodoba_pece_hdp",
-        "hospicova_pece_luzka",
-        "mobilni_paliativni_tymy_per_milion",
-        "umrti_doma_nebo_hospici_pct"
-      ],
-      "articles": [
-        "clanek-reforma-dlouhodobe-pece-2026.html",
-        "clanek-dlouhodoba-pece-vydaje.html",
-        "clanek-socialne-zdravotni-pomezi-2026.html",
-        "clanek-hospicova-pece.html",
-        "clanek-mobilni-paliativni-tymy.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Kam s mámou",
-          "note": "Shánění lůžka následné péče či hospicu je práce na plný úvazek — obvykle pro rodinu."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Kam propustit pacienta",
-          "note": "Doléčený pacient bez navazující péče blokuje akutní lůžko — denní realita interny."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Ucpaná lůžka",
-          "note": "Chybějící následná péče drží pacienty na drahých akutních lůžkách — a kazí DRG kalkulaci."
-        }
-      }
-    },
-    {
-      "id": "lekova_politika",
-      "label": "Léková politika",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 690,
-      "y": 142,
-      "desc": "Úhradové rozhodování SÚKL, generická a biosimilární substituce a řešení výpadků léčiv. Generika tvoří 62,8 % objemu spotřebovaných léčiv (OECD průměr 56 %), ale jen 19,5 % hodnoty — budoucí úspory se hrají u drahých biologik. Od ledna 2025 vstupuje do hodnocení nových léků evropské Joint Clinical Assessment (nařízení EU 2021/2282).",
-      "indicators": [
-        "podil_generik_objem",
-        "podil_vydaje_leky",
-        "vydaje_leky_hdp",
-        "vypadky_leciv_aktivni",
-        "polypragmazie_65plus"
-      ],
-      "articles": [
-        "clanek-generika-biosimilars-uspora.html",
-        "clanek-hta-jca-eu-2026.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Proč doplácím zrovna já",
-          "note": "Úhrady a revize cen léků jsou pro pacienta černá skříňka — vidí až cenovku v lékárně."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Co smím předepsat",
-          "note": "Preskripční omezení, revize úhrad a pozitivní listy — lékárník a sazebník za ramenem každého receptu."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Centrové rozpočty",
-          "note": "Centrová léčba se řeší ve fakultních nemocnicích; okresního ředitele míjí — i s penězi."
-        }
-      }
-    },
-    {
-      "id": "digitalizace_data",
-      "label": "Digitalizace a datová páteř",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 810,
-      "y": 64,
-      "desc": "Index adopce digitálního zdravotnictví je 62 vs. 70 v OECD: eRecept funguje, ale sdílení dokumentace mezi pracovišti, pacientský portál a interoperabilita chybí (66,4 % lékařů Patient Summary nepoužilo). Novela 236/2025 Sb. přidává od 1. 1. 2026 eŽádanky, eOčkovací průkaz a centrální registr preventivních vyšetření; rozvoj brzdí vendor lock-in a kontrolní zjištění NKÚ (cca 159 mil. Kč).",
-      "indicators": [
-        "ehealth_adoption",
-        "kyberneticke_incidenty_zdravotnictvi",
-        "spokojenost_informovani",
-        "prohlidka_prakticky_lekar"
-      ],
-      "articles": [
-        "clanek-ehealth.html",
-        "clanek-ezkarta-ehealth.html",
-        "clanek-novela-elektronizace-2026.html",
-        "clanek-datova-patere-lock-in.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Proč všude vyprávím znovu",
-          "note": "Nesdílená dokumentace je pro pacienta jen déjà vu v každé nové čekárně."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Systémy, do kterých klikám",
-          "note": "Administrativa a nekompatibilní systémy ukusují z ordinační doby — digitalizace je slib i zátěž."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "IT, které musím zaplatit",
-          "note": "Nemocniční systém, kyberbezpečnost, vendor lock-in — položky, které v úhradách nikdo nevidí."
-        }
-      }
-    },
-    {
-      "id": "governance_legislativa",
-      "label": "Governance a legislativa",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 455,
-      "y": 142,
-      "desc": "Schopnost systému stanovit cíle, nezávisle měřit výsledky a rozhodovat podle nich. Česko sbírá obří objemy dat, ale smyčka cíl → měření → report → rozhodnutí je rozpojená; chybí nezávislý měřič po vzoru belgického modelu (KCE/Sciensano). Běží reforma hygienické služby — sloučení 14 KHS, SZÚ a 2 zdravotních ústavů do Institutu veřejného zdraví k 1. 1. 2028.",
-      "indicators": [
-        "mortalita_preventabilni",
-        "nadeje_doziti_total",
-        "vydaje_zdravotnictvi_hdp",
-        "vakcinace_mmr_deti",
-        "vydaje_prevence_pct"
-      ],
-      "articles": [
-        "clanek-rizeni-podle-vysledku.html",
-        "clanek-governance-nezavislost.html",
-        "clanek-institut-verejneho-zdravi.html",
-        "clanek-ukazatele-dashboard.html",
-        "clanek-posledni-mile-implementace.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Kdo to celé řídí",
-          "note": "Zákony a vyhlášky pacient nevidí — pozná až jejich důsledky u lékaře a v lékárně."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Pravidla shora",
-          "note": "Novelu lékař obvykle pozná podle nového povinného formuláře."
-        },
-        "reditel": {
-          "visibility": "clear",
-          "alt_label": "Vyhlášky, které musím splnit",
-          "note": "Personální vyhláška, věstníky, kontroly — governance je ředitelův každodenní mantinel."
-        }
-      }
-    },
-    {
-      "id": "socialni_determinanty",
-      "label": "Sociální determinanty",
-      "layer": "Struktury",
-      "kind": "lever",
-      "x": 905,
-      "y": 142,
-      "desc": "Vzdělání, příjem, zdravotní gramotnost a prostředí jako kořenové determinanty zdraví. 47 % dospělých má omezenou zdravotní gramotnost (HLS19/SZÚ) a vzdělanostní gradient se koncentruje regionálně (Ústecko, Karlovarsko, Moravskoslezsko) — znevýhodnění se sčítají u týchž lidí.",
-      "indicators": [
-        "zdravotni_gramotnost_omezena",
-        "ohrozeni_chudobou",
-        "prijem_disponibilni",
-        "pm25_expozice"
-      ],
-      "articles": [
-        "clanek-zdravotni-gramotnost.html",
-        "clanek-nadeje-doziti-vzdelani.html",
-        "clanek-medikalizace-verejneho-zdravi.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Co se zdravím zdánlivě nesouvisí",
-          "note": "Největší vliv na zdraví — vzdělání, práce, bydlení — pacient nevnímá jako zdravotní téma."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Co vidím v anamnéze",
-          "note": "Sociální gradient lékař potkává denně — a nemá na něj recept."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Spádová demografie",
-          "note": "Sociální skladba spádu určuje case-mix nemocnice, ale ředitel ji nezmění."
-        }
-      }
-    },
-    {
-      "id": "odvratitelna_mortalita",
-      "label": "Odvratitelná úmrtnost",
-      "layer": "Výsledky",
-      "kind": "outcome",
-      "x": 380,
-      "y": 634,
-      "desc": "Předčasná úmrtí do 75 let, kterým lze předejít prevencí nebo léčbou — v ČR o 19 % nad EU (2022): preventabilní 195/100k vs. 168, léčitelná 113 vs. 90 (2023: 107,2 vs. 86,8 EU27). Rozdíl táhne hlavně kardiovaskulární mortalita (463,75 vs. 312,95 EU-27, +48 %, primárně IHD).",
-      "indicators": [
-        "mortalita_preventabilni",
-        "mortalita_lecitelna",
-        "pyll_potencialne_ztracene_roky",
-        "mortalita_kardiovaskularni",
-        "mortalita_onkologicka"
-      ],
-      "articles": [
-        "clanek-pyll.html",
-        "clanek-lecitelna-mortalita.html",
-        "clanek-kardiovaskularni-mortalita.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Úmrtí, která nemusela být",
-          "note": "Populační vzorec jednotlivec neuvidí — proto ho musí hlídat data."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Případy vs. vzorec",
-          "note": "Jednotlivé případy lékař zná jménem; systémový vzorec odvratitelných úmrtí vidí jen registry."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Výsledek, který nikdo nevlastní",
-          "note": "Odvratitelná úmrtnost nemá v systému jedinou odpovědnou židli — a přesně to je problém."
-        }
-      }
-    },
-    {
-      "id": "delka_kvalita_zivota",
-      "label": "Délka a kvalita života",
-      "layer": "Výsledky",
-      "kind": "outcome",
-      "x": 620,
-      "y": 634,
-      "desc": "Naděje dožití při narození 80,3 let vs. EU 81,7 (2024) — kvantita se k EU přibližuje. Kvalita posledních let zaostává výrazněji: naděje dožití ve zdraví po 65. roce je 7,7 let vs. EU 9,4 (Eurostat 2023), rozdíl 1,7 roku v samostatnosti a kondici seniorů.",
-      "indicators": [
-        "nadeje_doziti_total",
-        "nadeje_doziti_zdravi_65",
-        "nadeje_doziti_zeny",
-        "subjektivni_zdravi",
-        "multimorbidita_65plus"
-      ],
-      "articles": [
-        "clanek-nadeje-doziti-zdravi.html",
-        "clanek-pyll.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "clear",
-          "alt_label": "Moje roky ve zdraví",
-          "note": "Jediný ukazatel systému, který pacient nečte, ale žije."
-        },
-        "lekar": {
-          "visibility": "fog",
-          "alt_label": "Horizont za ordinací",
-          "note": "Léta života ve zdraví se rozhodují z většiny mimo ordinaci — prevencí, prostředím, politikou."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Za horizontem rozpočtu",
-          "note": "Dlouhodobé populační výsledky se do ročního hospodaření nemocnice nepropisují."
-        }
-      }
-    },
-    {
-      "id": "nerovnosti",
-      "label": "Nerovnosti ve zdraví",
-      "layer": "Výsledky",
-      "kind": "outcome",
-      "x": 500,
-      "y": 712,
-      "desc": "Muž s VŠ se v ČR dožívá o 13 let víc než muž se ZŠ — druhý největší vzdělanostní rozdíl ve sledované Evropě (po Maďarsku). Katastrofické zdravotní výdaje zasáhly 21 % nejchudší pětiny domácností (2023, nárůst ze 14 % v 2018) proti 6 % průměru; zubní kaz dětí (KPE ~1,9 vs. 0,5 v Německu) kopíruje sociální gradient přístupu k péči.",
-      "indicators": [
-        "nadeje_doziti_vzdelani_gap_muzi",
-        "katastroficke_vydaje_zdravi",
-        "ohrozeni_chudobou",
-        "nesplnena_potreba_zubni_pece",
-        "kazivost_chrupu_12let"
-      ],
-      "articles": [
-        "clanek-nadeje-doziti-vzdelani.html",
-        "clanek-katastroficke-vydaje-zdravi.html",
-        "clanek-zubni-kaz-deti.html",
-        "clanek-zdravotni-gramotnost.html"
-      ],
-      "perspectives": {
-        "pacient": {
-          "visibility": "fog",
-          "alt_label": "Jinde je to jinak",
-          "note": "Pacient srovnává s čekárnou vedle, ne s jiným krajem — nerovnosti vidí jen statistika."
-        },
-        "lekar": {
-          "visibility": "clear",
-          "alt_label": "Praha není pohraničí",
-          "note": "Rozdíl mezi praxí v centru a v periferii zná lékař z vlastních štací — v kapacitách i v pacientech."
-        },
-        "reditel": {
-          "visibility": "fog",
-          "alt_label": "Nerovnost jako kontext",
-          "note": "Krajské rozdíly ředitel zná, ale řeší jen svůj spád; vyrovnávání je role státu."
-        }
-      }
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Strop mých příjmů",
+     "note": "Zdravotně pojistné plány pojišťoven čte ředitel dřív než noviny — odsud teče každá koruna úhrad."
     }
-  ],
-  "edges": [
+   },
+   "rozhoduje": [
     {
-      "id": "governance_legislativa__financovani_systemu",
-      "from": "governance_legislativa",
-      "to": "financovani_systemu",
-      "polarity": "plus",
-      "mechanism": "Zákonná valorizace vyměřovacího základu státních pojištěnců (§ 3c zák. 592/1992 Sb., vzorec CPI + ½ růstu reálných mezd; mimořádná valorizace +21 mld. schválena vládou 8. 6. 2026) přímo určuje objem příjmů systému.",
-      "strength": "strong",
-      "articles": [
-        "clanek-platba-statu-statni-pojistenci.html",
-        "clanek-dohodovaci-rizeni-2027-vysledek.html"
-      ]
+     "kdo": "Parlament",
+     "pozn": "sazby pojistného a platba za státní pojištěnce jsou dané zákonem (č. 592/1992 Sb., č. 48/1997 Sb.)"
     },
     {
-      "id": "financovani_systemu__udrzitelnost_financi",
-      "from": "financovani_systemu",
-      "to": "udrzitelnost_financi",
-      "polarity": "plus",
-      "mechanism": "Růst příjmů (pojistné navázané na mzdy, valorizovaná platba státu za 5,9 mil. pojištěnců) doplňuje bilanci pojišťoven a odsouvá vyčerpání rezerv; zamrznutí platby státu (2010–2016) naopak deficity prohlubovalo.",
-      "strength": "strong",
-      "articles": [
-        "clanek-platba-statu-statni-pojistenci.html",
-        "clanek-deficit-pojisteni-2026.html"
-      ]
-    },
-    {
-      "id": "uhradovy_mechanismus__udrzitelnost_financi",
-      "from": "uhradovy_mechanismus",
-      "to": "udrzitelnost_financi",
-      "polarity": "minus",
-      "mechanism": "Meziroční růsty úhrad dohodnuté v dohodovacím řízení a přiznané úhradovou vyhláškou zvyšují výdaje pojišťoven rychleji než příjmy — dohody pro 2027 platí jen díky mimořádné valorizaci platby státu o 21 mld. Kč.",
-      "strength": "strong",
-      "articles": [
-        "clanek-dohodovaci-rizeni-2027-vysledek.html",
-        "clanek-deficit-pojisteni-2026.html",
-        "clanek-uhradova-vyhlaska.html"
-      ]
-    },
-    {
-      "id": "financovani_systemu__financni_ochrana",
-      "from": "financovani_systemu",
-      "to": "financni_ochrana",
-      "polarity": "plus",
-      "mechanism": "Vysoký podíl veřejných zdrojů a jednotný hrazený standard drží přímé platby pacientů na 14,6 % výdajů (pod průměrem OECD) a chrání domácnosti před katastrofickými výdaji.",
-      "strength": "strong",
-      "articles": [
-        "clanek-platba-z-kapsy.html",
-        "clanek-financovani-sha.html",
-        "clanek-nadstandardy-3-cesky-narok.html"
-      ]
-    },
-    {
-      "id": "financovani_systemu__dostupnost_pece",
-      "from": "financovani_systemu",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Široký veřejně hrazený nárok bez plateb v místě péče drží nenaplněnou potřebu péče z finančních důvodů na 0,3 % oproti průměru EU 2,4 %.",
-      "strength": "strong",
-      "articles": [
-        "clanek-nadstandardy-3-cesky-narok.html",
-        "clanek-platba-z-kapsy.html"
-      ]
-    },
-    {
-      "id": "uhradovy_mechanismus__objem_struktura_pece",
-      "from": "uhradovy_mechanismus",
-      "to": "objem_struktura_pece",
-      "polarity": "minus",
-      "mechanism": "Platba za výkon a paušální úhrady lůžkové péče motivují k vyššímu objemu výkonů a konzervují strukturální převahu lůžkové péče (56 % výdajů ZP do nemocnic, 28 % do ambulancí) oproti průměru OECD.",
-      "strength": "strong",
-      "articles": [
-        "clanek-uhradova-vyhlaska.html",
-        "clanek-financovani-segmenty-2026.html",
-        "clanek-platba-za-vysledek-vzp.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Platba za výkon a obložnost živí nemocnici (ředitel), ale drží pacienty na lůžkách, kde být nemusí (pacient, systém)."
-    },
-    {
-      "id": "uhradovy_mechanismus__kvalita_bezpecnost",
-      "from": "uhradovy_mechanismus",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Ohlášený přechod VZP k platbě za výsledek (value-based care) váže úhradu na výsledkové ukazatele typu nemocniční mortalita a 30denní readmise, čímž vytváří finanční motivaci ke zlepšování kvality.",
-      "strength": "weak",
-      "articles": [
-        "clanek-platba-za-vysledek-vzp.html"
-      ]
-    },
-    {
-      "id": "uhradovy_mechanismus__sit_kapacity",
-      "from": "uhradovy_mechanismus",
-      "to": "sit_kapacity",
-      "polarity": "minus",
-      "mechanism": "Úhrady nastavené pod reálné náklady některých oborů (rozdíl úhrady a nákladu u interny v oblastních nemocnicích) ekonomicky destabilizují regionální lůžkové kapacity.",
-      "strength": "weak",
-      "articles": [
-        "clanek-uhradova-vyhlaska.html",
-        "clanek-financovani-segmenty-2026.html",
-        "clanek-okresni-nemocnice-personalni-krize.html"
-      ]
-    },
-    {
-      "id": "udrzitelnost_financi__financni_ochrana",
-      "from": "udrzitelnost_financi",
-      "to": "financni_ochrana",
-      "polarity": "minus",
-      "mechanism": "Deficit a vyčerpávající se rezervy tlačí na politické nástroje typu vyšší spoluúčasti či připlácení (nadstandardy), které by přesunuly část nákladů na pacienty a erodovaly jednotný nárok.",
-      "strength": "weak",
-      "articles": [
-        "clanek-deficit-pojisteni-2026.html",
-        "clanek-nadstandardy-3-cesky-narok.html"
-      ]
-    },
-    {
-      "id": "prevence_screeningy__udrzitelnost_financi",
-      "from": "prevence_screeningy",
-      "to": "udrzitelnost_financi",
-      "polarity": "plus",
-      "mechanism": "Slabá prevence je jednou ze tří strukturálních příčin růstu nákladů systému (vedle demografie a inovací) — silnější prevence snižuje budoucí náklady na léčbu odvratitelných onemocnění.",
-      "strength": "weak",
-      "articles": [
-        "clanek-deficit-pojisteni-2026.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Prevence šetří celému systému, ale žádné židli jednotlivě — nemocnici ubírá výkony, proto ji nikdo „nevlastní“."
-    },
-    {
-      "id": "pracovni_sila__sit_kapacity",
-      "from": "pracovni_sila",
-      "to": "sit_kapacity",
-      "polarity": "plus",
-      "mechanism": "Dostatek a věková struktura personálu podmiňuje provozuschopnost lůžkové sítě — hromadná výpověď 11 z 12 internistů v Pelhřimově (únor 2026) ochromila celé oddělení a odmítání přesčasů sester by ve většině okresních nemocnic zastavilo provoz během dní.",
-      "strength": "strong",
-      "articles": [
-        "clanek-okresni-nemocnice-personalni-krize.html",
-        "clanek-osetrovatelstvi-generacni-propast-2026.html",
-        "clanek-starnuti-lekaru.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__dostupnost_pece",
-      "from": "pracovni_sila",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Regionální rozložení a generační obměna lékařů rozhoduje o místní dostupnosti — když praktik 67+ v periferním okrese zavře ordinaci bez nástupce, pacienti čekají týdny až měsíce nebo dojíždějí o dva okresy dál.",
-      "strength": "strong",
-      "articles": [
-        "clanek-starnuti-lekaru.html",
-        "clanek-pracovni-sila.html"
-      ]
-    },
-    {
-      "id": "sit_kapacity__objem_struktura_pece",
-      "from": "sit_kapacity",
-      "to": "objem_struktura_pece",
-      "polarity": "minus",
-      "mechanism": "Nadprůměrná hustota akutních a intenzivních lůžek (4,0/1000 vs. OECD 3,5; JIP cca 40 vs. 17/100k) indukuje nadměrný lůžkový objem — dostupná kapacita se plní hospitalizacemi, které by jinde proběhly ambulantně nebo jednodenně.",
-      "strength": "strong",
-      "articles": [
-        "clanek-hospitalizujeme-nejvic.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Hustá lůžková síť je pro ředitele příjem a jistota, pro systém neefektivita, kterou OECD Česku vytýká."
-    },
-    {
-      "id": "sit_kapacity__kvalita_bezpecnost",
-      "from": "sit_kapacity",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Struktura sítě určuje kvalitu přes vztah objem–výsledek: 90denní mortalita po resekci jater je v nízkoobjemových nemocnicích 11,76 % oproti 6,15 % ve velkoobjemových centrech, což je důvod centralizace onkochirurgie do 13+6 center od 2027.",
-      "strength": "strong",
-      "articles": [
-        "clanek-centralizace-chirurgie-2027.html",
-        "clanek-dostupnost-radioterapie-2026.html"
-      ]
-    },
-    {
-      "id": "sit_kapacity__dostupnost_pece",
-      "from": "sit_kapacity",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Geografické rozmístění kapacit určuje rovný přístup — jediný gama nůž a jediné protonové centrum v Praze znamenají, že přístup pacienta z Ostravy či Jihlavy závisí na indikačních pravidlech a dojezdu; kolaps okresní interny zase ruší nejbližší lůžkovou péči.",
-      "strength": "strong",
-      "articles": [
-        "clanek-dostupnost-radioterapie-2026.html",
-        "clanek-okresni-nemocnice-personalni-krize.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Zavření ztrátového oddělení uleví rozpočtu ředitele — a prodlouží cestu pacienta o desítky minut."
-    },
-    {
-      "id": "governance_legislativa__pracovni_sila",
-      "from": "governance_legislativa",
-      "to": "pracovni_sila",
-      "polarity": "plus",
-      "mechanism": "Stát ovlivňuje pracovní sílu vzdělávací a kompetenční legislativou: vládní program 2026–2037 má přivést 13 mld. Kč do nelékařského vzdělávání a navýšit kapacity škol o pětinu, strategie Zdraví 2035 zakotvila plánování personálu; efekt je ale pomalý (roky až dekáda).",
-      "strength": "weak",
-      "articles": [
-        "clanek-osetrovatelstvi-generacni-propast-2026.html",
-        "clanek-ja-heroes-workforce-2026.html",
-        "clanek-pracovni-sila.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__pracovni_sila",
-      "from": "digitalizace_data",
-      "to": "pracovni_sila",
-      "polarity": "plus",
-      "mechanism": "Datový rámec a projekční model nabídky a poptávky z projektu JA HEROES (ÚZIS, NCO NZO, UK) umožňují poprvé kvantitativně plánovat, kolik personálu bude systém potřebovat v letech 2030–2040, a včas dimenzovat vzdělávací kapacity.",
-      "strength": "weak",
-      "articles": [
-        "clanek-ja-heroes-workforce-2026.html"
-      ]
-    },
-    {
-      "id": "primarni_pece__objem_struktura_pece",
-      "from": "primarni_pece",
-      "to": "objem_struktura_pece",
-      "polarity": "plus",
-      "mechanism": "Silnější primární péče a ambulantní alternativy (jednodenní chirurgie) odkloní část péče mimo lůžka — systémy s nižší mírou hospitalizací se opírají o primární péči, která řeší chronické pacienty dřív, než skončí jako odvratitelná hospitalizace (ACSC).",
-      "strength": "strong",
-      "articles": [
-        "clanek-hospitalizujeme-nejvic.html"
-      ]
-    },
-    {
-      "id": "objem_struktura_pece__udrzitelnost_financi",
-      "from": "objem_struktura_pece",
-      "to": "udrzitelnost_financi",
-      "polarity": "minus",
-      "mechanism": "Nemocnice-centrický objem péče (18 000 hospitalizací/100k vs. 14 600 OECD) váže prostředky v nejdražším segmentu systému a zmenšuje prostor pro financování ambulantní péče, prevence a dlouhodobé péče.",
-      "strength": "weak",
-      "articles": [
-        "clanek-hospitalizujeme-nejvic.html"
-      ]
-    },
-    {
-      "id": "financovani_systemu__prevence_screeningy",
-      "from": "financovani_systemu",
-      "to": "prevence_screeningy",
-      "polarity": "plus",
-      "mechanism": "Podíl výdajů na prevenci (HC.6) — v ČR 2,7 % běžných výdajů vs. 3,2 % OECD — určuje kapacitu screeningových programů, adresného zvaní a očkovacích kampaní; strukturální podfinancování prevence se propisuje do nízké účasti.",
-      "strength": "strong",
-      "articles": [
-        "clanek-vydaje-prevence.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__prevence_screeningy",
-      "from": "governance_legislativa",
-      "to": "prevence_screeningy",
-      "polarity": "plus",
-      "mechanism": "Organizace populačních programů (adresné zvaní u kolorektálního screeningu, povinný očkovací kalendář, opatření typu italského Lorenzin law) je administrativně-legislativní páka, která přímo zvedá účast — česká reforma screeningu se vleče a proočkovanost klesá.",
-      "strength": "strong",
-      "articles": [
-        "clanek-rakovina-tlusteho-streva.html",
-        "clanek-vakcinace.html",
-        "clanek-institut-verejneho-zdravi.html"
-      ]
-    },
-    {
-      "id": "primarni_pece__prevence_screeningy",
-      "from": "primarni_pece",
-      "to": "prevence_screeningy",
-      "polarity": "plus",
-      "mechanism": "Praktický lékař je vstupní branou prevence — provádí preventivní prohlídky, distribuuje FIT testy a odesílá na screeningy; půlhodinová konzultace, kterou absolvuje jen 48 % dospělých, koncentruje záchyt rizik a vstup do dispenzární péče.",
-      "strength": "strong",
-      "articles": [
-        "clanek-preventivni-prohlidka.html",
-        "clanek-rakovina-tlusteho-streva.html"
-      ]
-    },
-    {
-      "id": "socialni_determinanty__prevence_screeningy",
-      "from": "socialni_determinanty",
-      "to": "prevence_screeningy",
-      "polarity": "minus",
-      "mechanism": "Nižší vzdělání, nejisté zaměstnání a život v regionech s vyšší nezaměstnaností snižují účast na preventivní péči — sociální gradient v účasti na prevenci je v ČR ostřejší než ve Skandinávii či Nizozemsku, přestože tato skupina má vyšší zdravotní rizika.",
-      "strength": "strong",
-      "articles": [
-        "clanek-preventivni-prohlidka.html",
-        "clanek-zdravotni-gramotnost.html",
-        "clanek-nadeje-doziti-vzdelani.html"
-      ]
-    },
-    {
-      "id": "prevence_screeningy__odvratitelna_mortalita",
-      "from": "prevence_screeningy",
-      "to": "odvratitelna_mortalita",
-      "polarity": "plus",
-      "mechanism": "Časný záchyt zvyšuje šanci na vyléčení — u rakoviny prsu bylo díky běžícímu screeningu téměř 80 % případů zachyceno ve stadiu I–II, zatímco nízká účast v kolorektálním screeningu drží pětileté přežití na 56 % vs. 62 % OECD; propad proočkovanosti MMR pod 95 % vrací nemoci, kterým se dvacet let předcházelo.",
-      "strength": "strong",
-      "articles": [
-        "clanek-mamograf-rakovina-prsu.html",
-        "clanek-rakovina-tlusteho-streva.html",
-        "clanek-cervix-hpv.html"
-      ]
-    },
-    {
-      "id": "prevence_screeningy__rizikove_chovani",
-      "from": "prevence_screeningy",
-      "to": "rizikove_chovani",
-      "polarity": "plus",
-      "mechanism": "Preventivní prohlídka u praktika je hlavní systémová příležitost ke krátkým intervencím a časnému záchytu rizik (kouření, alkohol, BMI, hypertenze) a nabídce odvykací léčby — nízká účast (48 %) tuto páku oslabuje.",
-      "strength": "weak",
-      "articles": [
-        "clanek-preventivni-prohlidka.html",
-        "clanek-koureni.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__rizikove_chovani",
-      "from": "governance_legislativa",
-      "to": "rizikove_chovani",
-      "polarity": "plus",
-      "mechanism": "Cenové a regulační páky prokazatelně snižují rizikové chování: 10% zvýšení ceny cigaret snižuje spotřebu o ~4 % (u mladistvých víc), minimální cena alkoholu ve Skotsku snížila spotřebu nejtěžších pijáků, reforma spotřebního koše školních jídelen (vyhláška 310/2025 Sb.) mění stravovací prostředí 2 milionů dětí — nevyužité páky (nízká daň z piva, měkká regulace reklamy) naopak drží spotřebu vysoko.",
-      "strength": "strong",
-      "articles": [
-        "clanek-koureni.html",
-        "clanek-alkohol-spotreba.html",
-        "clanek-jaterni-mortalita-alkohol.html"
-      ]
-    },
-    {
-      "id": "socialni_determinanty__rizikove_chovani",
-      "from": "socialni_determinanty",
-      "to": "rizikove_chovani",
-      "polarity": "minus",
-      "mechanism": "Rizikové chování kopíruje socioekonomický gradient — v EU mělo v roce 2022 nadváhu 57 % lidí s nižším vzděláním oproti 43 % vysokoškoláků; kvalitní strava je relativně dražší tam, kde chybějí peníze i čas, což gradient dále prohlubuje.",
-      "strength": "strong",
-      "articles": [
-        "clanek-obezita-jidelny-reforma.html",
-        "clanek-bmi-obezita.html",
-        "clanek-nadeje-doziti-vzdelani.html"
-      ]
-    },
-    {
-      "id": "rizikove_chovani__odvratitelna_mortalita",
-      "from": "rizikove_chovani",
-      "to": "odvratitelna_mortalita",
-      "polarity": "minus",
-      "mechanism": "Kouření, alkohol a obezita přímo generují preventabilní úmrtí (kardiovaskulární nemoci, nádory, diabetes, jaterní cirhóza): úmrtnost na chronická onemocnění jater je v ČR 19,5/100 000 — o ~43 % nad EU27 — a každé procento prevalence kouření se přepočítává na desítky předčasných úmrtí ročně.",
-      "strength": "strong",
-      "articles": [
-        "clanek-jaterni-mortalita-alkohol.html",
-        "clanek-koureni.html",
-        "clanek-alkohol-spotreba.html"
-      ]
-    },
-    {
-      "id": "rizikove_chovani__delka_kvalita_zivota",
-      "from": "rizikove_chovani",
-      "to": "delka_kvalita_zivota",
-      "polarity": "minus",
-      "mechanism": "Vysoká zátěž rizikových faktorů (obezita, kouření, alkohol) se přepisuje do kardiovaskulární úmrtnosti, kratší naděje dožití i menšího počtu let prožitých ve zdraví — obezita je tichý ukazatel, na kterém Česko v mezinárodním srovnání dlouhodobě propadá.",
-      "strength": "strong",
-      "articles": [
-        "clanek-obezita-jidelny-reforma.html",
-        "clanek-bmi-obezita.html"
-      ]
-    },
-    {
-      "id": "sit_kapacity__akutni_pece",
-      "from": "sit_kapacity",
-      "to": "akutni_pece",
-      "polarity": "plus",
-      "mechanism": "Celorepubliková síť kardiocenter a třístupňová síť iktových center s pokrytím 24/7 zajišťuje rychlou akutní intervenci (primární PCI, trombolýzu a trombektomii) v terapeutickém okně.",
-      "strength": "strong",
-      "articles": [
-        "clanek-akutni-infarkt.html",
-        "clanek-cmp-iktova-centra.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__akutni_pece",
-      "from": "governance_legislativa",
-      "to": "akutni_pece",
-      "polarity": "plus",
-      "mechanism": "Statut center vysoce specializované kardiovaskulární a cerebrovaskulární péče formalizoval organizaci a koncentraci akutního řetězce a vynutil reportování procesních dat do registrů.",
-      "strength": "strong",
-      "articles": [
-        "clanek-akutni-infarkt.html",
-        "clanek-cmp-iktova-centra.html"
-      ]
-    },
-    {
-      "id": "akutni_pece__odvratitelna_mortalita",
-      "from": "akutni_pece",
-      "to": "odvratitelna_mortalita",
-      "polarity": "plus",
-      "mechanism": "Kvalitní a rychlá akutní kardiologická a iktová péče snižuje léčitelnou mortalitu na infarkt a CMP a záchranu po zástavě srdce.",
-      "strength": "strong",
-      "articles": [
-        "clanek-akutni-infarkt.html",
-        "clanek-cmp-iktova-centra.html",
-        "clanek-ohca-zachrana-srdce.html"
-      ]
-    },
-    {
-      "id": "rizikove_chovani__akutni_pece",
-      "from": "rizikove_chovani",
-      "to": "akutni_pece",
-      "polarity": "minus",
-      "mechanism": "Vyšší zátěž rizikových faktorů (nekontrolovaná hypertenze, kouření, alkohol, obezita, fibrilace síní) zhoršuje vstupní stav pacientů a rozsah příhody, čímž snižuje výsledky akutní péče přes lepší organizaci.",
-      "strength": "weak",
-      "articles": [
-        "clanek-cmp-iktova-centra.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__kvalita_bezpecnost",
-      "from": "pracovni_sila",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Dostatečný poměr sestra-pacient, zejména na jednotkách intenzivní péče, umožňuje dodržet hygienické a preventivní postupy a snižuje výskyt nemocničních infekcí a pádů.",
-      "strength": "strong",
-      "articles": [
-        "clanek-nosokomialni-infekce.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Úspora na směnách a přesčasy šetří rozpočet ředitele; účet platí bezpečnost pacienta a zdraví lékařů."
-    },
-    {
-      "id": "governance_legislativa__kvalita_bezpecnost",
-      "from": "governance_legislativa",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Systematické měření kvality (NIKEZ/INDIKO, PUK, veřejný indikátor pooperačních sepsí) a veřejný reporting výkonnosti poskytovatelů vytváří tlak na zlepšování bezpečnosti péče.",
-      "strength": "strong",
-      "articles": [
-        "clanek-nikez-jak-funguje-2026.html",
-        "clanek-pooperacni-sepse-2026.html"
-      ]
-    },
-    {
-      "id": "lekova_politika__kvalita_bezpecnost",
-      "from": "lekova_politika",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Racionální antibiotická politika a nemocniční antibiotic stewardship omezují nadužívání širokospektrých antibiotik, čímž snižují antimikrobiální rezistenci a riziko klostridiové kolitidy.",
-      "strength": "strong",
-      "articles": [
-        "clanek-spotreba-antibiotik.html",
-        "clanek-rezistence-antibiotik.html",
-        "clanek-nosokomialni-infekce.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__kvalita_bezpecnost",
-      "from": "digitalizace_data",
-      "to": "kvalita_bezpecnost",
-      "polarity": "plus",
-      "mechanism": "Kontinuální surveillance, registry a funkční systém hlášení nežádoucích událostí umožňují zachytit a zpětně analyzovat infekce a pochybení a strukturálně jim předcházet.",
-      "strength": "weak",
-      "articles": [
-        "clanek-nosokomialni-infekce.html",
-        "clanek-nikez-jak-funguje-2026.html"
-      ]
-    },
-    {
-      "id": "kvalita_bezpecnost__odvratitelna_mortalita",
-      "from": "kvalita_bezpecnost",
-      "to": "odvratitelna_mortalita",
-      "polarity": "plus",
-      "mechanism": "Prevence nemocničních infekcí, pooperačních sepsí a rezistence snižuje úmrtnost spojenou s hospitalizací (HAI v EU/EEA ~33 000 úmrtí ročně, zhruba polovina preventabilní).",
-      "strength": "strong",
-      "articles": [
-        "clanek-nosokomialni-infekce.html",
-        "clanek-pooperacni-sepse-2026.html",
-        "clanek-rezistence-antibiotik.html"
-      ]
-    },
-    {
-      "id": "kvalita_bezpecnost__objem_struktura_pece",
-      "from": "kvalita_bezpecnost",
-      "to": "objem_struktura_pece",
-      "polarity": "minus",
-      "mechanism": "Nemocniční infekce, sepse a další komplikace prodlužují hospitalizace a zvyšují readmise, čímž navyšují objem lůžkové péče.",
-      "strength": "weak",
-      "articles": [
-        "clanek-nosokomialni-infekce.html",
-        "clanek-pooperacni-sepse-2026.html"
-      ]
-    },
-    {
-      "id": "uhradovy_mechanismus__primarni_pece",
-      "from": "uhradovy_mechanismus",
-      "to": "primarni_pece",
-      "polarity": "plus",
-      "mechanism": "Kapitace, hodnota bodu a nově institucionalizovaná P4P bonifikace (ÚV 2026, dohodovací řízení 2027) určují ekonomiku praxí a přímo motivují praktiky k prevenci, dispenzarizaci chroniků a kontinuitě péče.",
-      "strength": "strong",
-      "articles": [
-        "clanek-reforma-primarni-pece-2027.html",
-        "clanek-vyhnutelne-hospitalizace.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__primarni_pece",
-      "from": "pracovni_sila",
-      "to": "primarni_pece",
-      "polarity": "minus",
-      "mechanism": "Věková krize praktiků (33 % PLD nad 60 let, roční úbytek −110 až −180 PLD, nízká atraktivita oboru pro mediky) zmenšuje síť primární péče a zvyšuje počet pojištěnců na ordinaci, zejména v deficitních okresech.",
-      "strength": "strong",
-      "articles": [
-        "clanek-reforma-primarni-pece-2027.html",
-        "clanek-reforma-pohotovosti-290-2025.html"
-      ]
-    },
-    {
-      "id": "lekova_politika__primarni_pece",
-      "from": "lekova_politika",
-      "to": "primarni_pece",
-      "polarity": "plus",
-      "mechanism": "Zrušení preskripčního omezení „E“ u více než 1 200 léčiv (od 1. 7. 2026) přesouvá obnovu stabilní chronické medikace ke praktikovi, ruší zbytné preskripční kontakty u specialistů a posiluje roli praktika jako průvodce pacienta.",
-      "strength": "strong",
-      "articles": [
-        "clanek-preskripce-praktici-2026.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__primarni_pece",
-      "from": "digitalizace_data",
-      "to": "primarni_pece",
-      "polarity": "plus",
-      "mechanism": "eRecept s automatickým prodloužením, e-Žádanka a hrazené telekonzultace praktik–specialista by odstranily administrativní kontakty a umožnily gatekeeping; jejich nedotažení dnes primární péči brzdí (eHealth adoption 62 vs. 70 OECD).",
-      "strength": "weak",
-      "articles": [
-        "clanek-ambulantni-kontakty.html",
-        "clanek-cekani-specialista.html",
-        "clanek-reforma-primarni-pece-2027.html"
-      ]
-    },
-    {
-      "id": "primarni_pece__chronicka_koordinace",
-      "from": "primarni_pece",
-      "to": "chronicka_koordinace",
-      "polarity": "plus",
-      "mechanism": "Praktik s dostatečnými kompetencemi, časem a P4P motivací drží chroniky ve strukturované dispenzární péči a koordinuje jejich medikaci; slabá primární péče naopak nechává chroniky rozptýlené mezi paralelními specialisty.",
-      "strength": "strong",
-      "articles": [
-        "clanek-vyhnutelne-hospitalizace.html",
-        "clanek-reforma-primarni-pece-2027.html",
-        "clanek-preskripce-praktici-2026.html"
-      ]
-    },
-    {
-      "id": "primarni_pece__dostupnost_pece",
-      "from": "primarni_pece",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Silná primární péče s gatekeepingem filtruje čekací listiny specialistů — bez ní se na ně dostávají i případy řešitelné praktikem, což prodlužuje čekání (28 vs. 18 dní) a přetěžuje specializované ambulance.",
-      "strength": "strong",
-      "articles": [
-        "clanek-cekani-specialista.html",
-        "clanek-ambulantni-kontakty.html",
-        "clanek-reforma-primarni-pece-2027.html"
-      ]
-    },
-    {
-      "id": "primarni_pece__akutni_pece",
-      "from": "primarni_pece",
-      "to": "akutni_pece",
-      "polarity": "plus",
-      "mechanism": "Funkční lékařská pohotovostní služba (mimo ordinační hodiny) odkloní podle expertního odhadu 30–40 % výjezdů ZZS na ambulantní ošetření a snižuje zbytný nápor na urgentní příjmy.",
-      "strength": "weak",
-      "articles": [
-        "clanek-reforma-pohotovosti-290-2025.html"
-      ]
-    },
-    {
-      "id": "chronicka_koordinace__objem_struktura_pece",
-      "from": "chronicka_koordinace",
-      "to": "objem_struktura_pece",
-      "polarity": "plus",
-      "mechanism": "Funkční dispenzarizace zachytí a stabilizuje dekompenzace diabetu, CHOPN, srdečního selhání, hypertenze a astmatu ambulantně — snižuje odvratitelné hospitalizace (ACSC 592 vs. 473/100k) a celkový hospitalizační objem.",
-      "strength": "strong",
-      "articles": [
-        "clanek-vyhnutelne-hospitalizace.html",
-        "clanek-ambulantni-kontakty.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__dostupnost_pece",
-      "from": "governance_legislativa",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Legislativní nástroje definují vymahatelnost dostupnosti: vyhláška 99/2012 Sb. o dojezdové době, zákon 290/2025 Sb. přenášející organizaci pohotovostí na pojišťovny, a chybějící národní waiting-time guarantee, kterou země jako UK, SE, NO a DK používají ke zkracování čekání.",
-      "strength": "strong",
-      "articles": [
-        "clanek-cekaci-doby-kycel.html",
-        "clanek-reforma-pohotovosti-290-2025.html",
-        "clanek-reforma-primarni-pece-2027.html"
-      ]
-    },
-    {
-      "id": "financni_ochrana__dostupnost_pece",
-      "from": "financni_ochrana",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Kde pojištění kryje péči jen v základním rozsahu a dominují platby z kapsy (stomatologie), stává se dostupnost funkcí příjmu — dobrá finanční ochrana bariéru ceny odstraňuje, jak ukazuje téměř nulový příjmový rozdíl u lékařské péče.",
-      "strength": "strong",
-      "articles": [
-        "clanek-nesplnena-potreba-zubni-pece.html"
-      ]
-    },
-    {
-      "id": "socialni_determinanty__dostupnost_pece",
-      "from": "socialni_determinanty",
-      "to": "dostupnost_pece",
-      "polarity": "minus",
-      "mechanism": "Nízký příjem domácnosti vede k odkládání péče s doplatky: nesplněná potřeba zubní péče je u nejchudšího kvintilu 2,5 % proti 0,5 % u nejbohatšího (poměr 5 : 1, EU-SILC 2024).",
-      "strength": "strong",
-      "articles": [
-        "clanek-nesplnena-potreba-zubni-pece.html"
-      ]
-    },
-    {
-      "id": "dostupnost_pece__zkusenost_pacienta",
-      "from": "dostupnost_pece",
-      "to": "zkusenost_pacienta",
-      "polarity": "plus",
-      "mechanism": "Čekací doby, dojezdové vzdálenosti a cenové bariéry přímo formují pacientovu zkušenost se systémem; vnímání je ale tlumeno očekáváními — Češi delší čekání považují za normální, takže self-report unmet need zůstává nízký.",
-      "strength": "strong",
-      "articles": [
-        "clanek-cekani-specialista.html",
-        "clanek-nesplnena-potreba-zubni-pece.html",
-        "clanek-cekaci-doby-kycel.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__dusevni_zdravi_sluzby",
-      "from": "pracovni_sila",
-      "to": "dusevni_zdravi_sluzby",
-      "polarity": "plus",
-      "mechanism": "Počet a věková struktura psychiatrů limitují kapacitu služeb — ČR má 157 dětských a dorostových psychiatrů (47 % může do 5 let odejít do důchodu) a podle NKÚ chybí v centrech duševního zdraví přes polovinu potřebných specialistů.",
-      "strength": "strong",
-      "articles": [
-        "clanek-detska-psychiatrie-krize.html",
-        "clanek-centra-dusevniho-zdravi.html"
-      ]
-    },
-    {
-      "id": "financovani_systemu__dusevni_zdravi_sluzby",
-      "from": "financovani_systemu",
-      "to": "dusevni_zdravi_sluzby",
-      "polarity": "plus",
-      "mechanism": "Podíl výdajů na duševní zdraví a stabilita zdrojů určují rozvoj sítě — centra duševního zdraví vznikala z časově omezených dotací (407 mil. Kč) a jejich sociální složka nemá podle NKÚ udržitelné financování.",
-      "strength": "strong",
-      "articles": [
-        "clanek-centra-dusevniho-zdravi.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__dusevni_zdravi_sluzby",
-      "from": "governance_legislativa",
-      "to": "dusevni_zdravi_sluzby",
-      "polarity": "plus",
-      "mechanism": "Politická stabilita a legislativní ukotvení určují tempo reformy psychiatrie — změny vlád opakovaně narušovaly její průběh (Winkler a kol. 2026) a NKÚ označil legislativu ke komunitní péči za neúčinnou.",
-      "strength": "strong",
-      "articles": [
-        "clanek-reforma-psychiatrie-13-let.html",
-        "clanek-centra-dusevniho-zdravi.html"
-      ]
-    },
-    {
-      "id": "dusevni_zdravi_sluzby__objem_struktura_pece",
-      "from": "dusevni_zdravi_sluzby",
-      "to": "objem_struktura_pece",
-      "polarity": "plus",
-      "mechanism": "Rozvoj komunitních center duševního zdraví přesouvá péči z lůžek do terénu — počet dlouhodobě hospitalizovaných psychiatrických pacientů klesl z 30 300 (2018) na 25 300 (2022), průměrná psychiatrická hospitalizace ale zůstává 43 dní proti 19 v OECD.",
-      "strength": "strong",
-      "articles": [
-        "clanek-psychiatricke-hospitalizace-reforma-2026.html",
-        "clanek-centra-dusevniho-zdravi.html"
-      ]
-    },
-    {
-      "id": "dusevni_zdravi_sluzby__dostupnost_pece",
-      "from": "dusevni_zdravi_sluzby",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Hustota sítě služeb se přímo propisuje do čekacích dob a nenaplněné potřeby — na neakutní dětské psychiatrické vyšetření se čeká 4–8 měsíců a centra duševního zdraví chybí v dosažitelné vzdálenosti.",
-      "strength": "strong",
-      "articles": [
-        "clanek-detska-psychiatrie-krize.html",
-        "clanek-sebevrazdy-dusevni-zdravi.html"
-      ]
-    },
-    {
-      "id": "dusevni_zdravi_sluzby__odvratitelna_mortalita",
-      "from": "dusevni_zdravi_sluzby",
-      "to": "odvratitelna_mortalita",
-      "polarity": "plus",
-      "mechanism": "Dostupná péče o duševní zdraví snižuje sebevražednost, která je součástí odvratitelné mortality — ČR má cca 12,5 sebevražd na 100 tis. proti ~10,5 v OECD, přičemž se předepisují léky, ale nedostává systematická péče.",
-      "strength": "weak",
-      "articles": [
-        "clanek-sebevrazdy-dusevni-zdravi.html"
-      ]
-    },
-    {
-      "id": "sit_kapacity__dlouhodoba_paliativni",
-      "from": "sit_kapacity",
-      "to": "dlouhodoba_paliativni",
-      "polarity": "plus",
-      "mechanism": "Lůžková kapacita hospiců a zařízení dlouhodobé péče určuje, kolik lidí se do péče dostane — ČR má 5,0 hospicových lůžek na 100 tis. obyvatel proti doporučení EAPC 8 a EU průměru 7,4.",
-      "strength": "strong",
-      "articles": [
-        "clanek-hospicova-pece.html",
-        "clanek-reforma-dlouhodobe-pece-2026.html"
-      ]
-    },
-    {
-      "id": "uhradovy_mechanismus__dlouhodoba_paliativni",
-      "from": "uhradovy_mechanismus",
-      "to": "dlouhodoba_paliativni",
-      "polarity": "plus",
-      "mechanism": "Existence úhradového kódu rozhoduje o rozvoji terénních služeb — mobilní specializovaná paliativní péče historicky úhradový kód neměla a do úhrad pojišťoven vstoupila až po pilotech VZP, kapacita (4,6 týmu na milion) přesto zůstává pod polovinou doporučení EAPC.",
-      "strength": "strong",
-      "articles": [
-        "clanek-umrti-doma-hospic.html",
-        "clanek-mobilni-paliativni-tymy.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__dlouhodoba_paliativni",
-      "from": "pracovni_sila",
-      "to": "dlouhodoba_paliativni",
-      "polarity": "plus",
-      "mechanism": "Pečující personál je hlavní úzké hrdlo dlouhodobé péče — ČR má 2,5 pracovníka formální dlouhodobé péče na 100 seniorů proti 5,6 v OECD, takže ani průměrné výdaje nelze proměnit v reálnou kapacitu.",
-      "strength": "strong",
-      "articles": [
-        "clanek-dlouhodoba-pece-vydaje.html",
-        "clanek-socialne-zdravotni-pomezi-2026.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__dlouhodoba_paliativni",
-      "from": "governance_legislativa",
-      "to": "dlouhodoba_paliativni",
-      "polarity": "plus",
-      "mechanism": "Dvojkolejná gesce MZ a MPSV (zákony 372/2011 a 108/2006 Sb.) fragmentuje vstup pacienta, financování i regulaci dlouhodobé péče; zákon 38/2025 Sb. začíná sociálně-zdravotní pomezí sjednocovat (etapy 2025, 2026, 2029).",
-      "strength": "strong",
-      "articles": [
-        "clanek-reforma-dlouhodobe-pece-2026.html",
-        "clanek-socialne-zdravotni-pomezi-2026.html"
-      ]
-    },
-    {
-      "id": "dlouhodoba_paliativni__objem_struktura_pece",
-      "from": "dlouhodoba_paliativni",
-      "to": "objem_struktura_pece",
-      "polarity": "plus",
-      "mechanism": "Fungující následná a terénní péče uvolňuje akutní lůžka — bez ní zůstávají doléčení senioři týdny na akutních interních odděleních a přes 70 % lidí umírá v nemocnici či léčebně místo doma.",
-      "strength": "strong",
-      "articles": [
-        "clanek-socialne-zdravotni-pomezi-2026.html",
-        "clanek-umrti-doma-hospic.html"
-      ],
-      "conflict": true,
-      "conflict_note": "Doléčený pacient bez návazné péče drží řediteli obloženost akutního lůžka — a pacientovi krade týdny rehabilitace."
-    },
-    {
-      "id": "dlouhodoba_paliativni__zkusenost_pacienta",
-      "from": "dlouhodoba_paliativni",
-      "to": "zkusenost_pacienta",
-      "polarity": "plus",
-      "mechanism": "Dostupnost domácí a hospicové paliativní péče rozhoduje o naplnění preferencí v závěru života — zhruba 70 % Čechů si přeje zemřít doma nebo v hospici, daří se to jen 26,2 % (OECD 32 %).",
-      "strength": "strong",
-      "articles": [
-        "clanek-umrti-doma-hospic.html",
-        "clanek-hospicova-pece.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__digitalizace_data",
-      "from": "governance_legislativa",
-      "to": "digitalizace_data",
-      "polarity": "plus",
-      "mechanism": "Legislativa (zákon 325/2021 Sb. a novela 236/2025 Sb.) a governance zadávání IT zakázek určují, jaká datová infrastruktura vznikne — estonská lekce ukazuje, že digitalizace je otázka governance, ne technologie, a špatné zadávání vede k vendor lock-inu.",
-      "strength": "strong",
-      "articles": [
-        "clanek-novela-elektronizace-2026.html",
-        "clanek-datova-patere-lock-in.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__governance_legislativa",
-      "from": "digitalizace_data",
-      "to": "governance_legislativa",
-      "polarity": "plus",
-      "mechanism": "Funkční, sdílená a důvěryhodná data jsou tvrdý předpoklad řízení podle výsledků a nezávislého měření kvality — bez datové páteře nelze uzavřít smyčku cíl → měření → rozhodnutí.",
-      "strength": "strong",
-      "articles": [
-        "clanek-rizeni-podle-vysledku.html",
-        "clanek-datova-patere-lock-in.html",
-        "clanek-ukazatele-dashboard.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__lekova_politika",
-      "from": "governance_legislativa",
-      "to": "lekova_politika",
-      "polarity": "plus",
-      "mechanism": "Nařízení EU 2021/2282 a národní legislativní rámec definují, jak SÚKL hodnotí a úhradově rozhoduje o nových lécích; společné klinické hodnocení (JCA) sjednocuje vstup inovací pro 27 trhů.",
-      "strength": "strong",
-      "articles": [
-        "clanek-hta-jca-eu-2026.html"
-      ]
-    },
-    {
-      "id": "governance_legislativa__uhradovy_mechanismus",
-      "from": "governance_legislativa",
-      "to": "uhradovy_mechanismus",
-      "polarity": "plus",
-      "mechanism": "Aby JCA výstupy reálně působily, musí se HTA kritéria propsat do dohodovacího řízení a úhradové vyhlášky (např. pro centrově hrazená léčiva) — jinak zůstává evropské hodnocení paralelní byrokracií.",
-      "strength": "weak",
-      "articles": [
-        "clanek-hta-jca-eu-2026.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__prevence_screeningy",
-      "from": "digitalizace_data",
-      "to": "prevence_screeningy",
-      "polarity": "plus",
-      "mechanism": "Centrální registr preventivních vyšetření a elektronický očkovací průkaz (účinnost od 1. 1. 2026) dávají systému přehled o účasti na prevenci a proočkovanosti a umožňují adresné zvaní.",
-      "strength": "weak",
-      "articles": [
-        "clanek-novela-elektronizace-2026.html"
-      ]
-    },
-    {
-      "id": "digitalizace_data__chronicka_koordinace",
-      "from": "digitalizace_data",
-      "to": "chronicka_koordinace",
-      "polarity": "plus",
-      "mechanism": "Sdílení zdravotní dokumentace mezi pracovišti (Patient Summary, pacientský portál) je podmínkou návaznosti péče o chroniky — v ČR tato vrstva chybí, takže se vyšetření duplikují a informace se mezi poskytovateli ztrácejí.",
-      "strength": "strong",
-      "articles": [
-        "clanek-ehealth.html",
-        "clanek-ezkarta-ehealth.html"
-      ]
-    },
-    {
-      "id": "lekova_politika__udrzitelnost_financi",
-      "from": "lekova_politika",
-      "to": "udrzitelnost_financi",
-      "polarity": "plus",
-      "mechanism": "Generická a biosimilární substituce snižuje lékové výdaje: u klasických generik systém šetří téměř automaticky po vypršení patentu, u drahých biologik se o úsporu musí aktivně přičinit pravidla úhrad a substituce (Německo má objemový podíl o víc než 20 bodů vyšší).",
-      "strength": "strong",
-      "articles": [
-        "clanek-generika-biosimilars-uspora.html"
-      ]
-    },
-    {
-      "id": "lekova_politika__dostupnost_pece",
-      "from": "lekova_politika",
-      "to": "dostupnost_pece",
-      "polarity": "plus",
-      "mechanism": "Rychlost národního úhradového rozhodování o nových terapiích (onkologika, ATMP, centrová léčba) a zvládání výpadků léčiv určují, jak rychle a spolehlivě se pacienti k lékům dostanou.",
-      "strength": "strong",
-      "articles": [
-        "clanek-hta-jca-eu-2026.html",
-        "clanek-generika-biosimilars-uspora.html"
-      ]
-    },
-    {
-      "id": "pracovni_sila__digitalizace_data",
-      "from": "pracovni_sila",
-      "to": "digitalizace_data",
-      "polarity": "plus",
-      "mechanism": "Adopce eHealth se rozhoduje na poslední míli u kliniků: přetížený personál s change fatigue nástroje nepřijme (66,4 % lékařů Patient Summary nepoužilo, 72,1 % neví o napojení svého systému na národní kontaktní bod), dostatečná kapacita a motivace adopci umožňují.",
-      "strength": "strong",
-      "articles": [
-        "clanek-posledni-mile-implementace.html",
-        "clanek-ezkarta-ehealth.html"
-      ]
-    },
-    {
-      "id": "socialni_determinanty__nerovnosti",
-      "from": "socialni_determinanty",
-      "to": "nerovnosti",
-      "polarity": "minus",
-      "mechanism": "Vzdělanostní a příjmový gradient se přímo promítá do 13letého rozdílu v naději dožití mužů a do koncentrace katastrofických výdajů a zubního kazu u nízkopříjmových skupin — vzdělání působí jako kořenová determinanta předurčující expozici ostatním rizikům.",
-      "strength": "strong",
-      "articles": [
-        "clanek-nadeje-doziti-vzdelani.html",
-        "clanek-katastroficke-vydaje-zdravi.html",
-        "clanek-zubni-kaz-deti.html"
-      ]
-    },
-    {
-      "id": "odvratitelna_mortalita__delka_kvalita_zivota",
-      "from": "odvratitelna_mortalita",
-      "to": "delka_kvalita_zivota",
-      "polarity": "minus",
-      "mechanism": "Předčasná úmrtí do 75 let (o 19 % nad EU) přímo zkracují naději dožití — ČR je ~1,4 roku pod průměrem EU při narození; PYLL sčítá potenciálně ztracené roky života.",
-      "strength": "strong",
-      "articles": [
-        "clanek-pyll.html",
-        "clanek-nadeje-doziti-zdravi.html",
-        "clanek-lecitelna-mortalita.html"
-      ]
-    },
-    {
-      "id": "chronicka_koordinace__delka_kvalita_zivota",
-      "from": "chronicka_koordinace",
-      "to": "delka_kvalita_zivota",
-      "polarity": "plus",
-      "mechanism": "Zvládání multimorbidity seniorů a integrace dlouhodobé péče po vzoru Skandinávie/NL prodlužuje roky prožité ve zdraví — český deficit se projevuje 1,7 roku ztráty HLY po 65. roce oproti EU (7,7 vs. 9,4).",
-      "strength": "weak",
-      "articles": [
-        "clanek-nadeje-doziti-zdravi.html"
-      ]
-    },
-    {
-      "id": "financni_ochrana__nerovnosti",
-      "from": "financni_ochrana",
-      "to": "nerovnosti",
-      "polarity": "plus",
-      "mechanism": "Silná finanční ochrana tlumí nerovnosti; její drolení v ČR — doplatky na ambulantní léky u nejchudších a stomatologie zcela mimo ochranný limit § 16b — koncentruje katastrofické výdaje v nejchudší pětině (21 % vs. 6 % průměr) a prohlubuje nerovný přístup k péči.",
-      "strength": "strong",
-      "articles": [
-        "clanek-katastroficke-vydaje-zdravi.html",
-        "clanek-zubni-kaz-deti.html"
-      ]
+     "kdo": "Vláda",
+     "pozn": "nařízením valorizuje vyměřovací základ platby za státní pojištěnce"
     }
-  ]
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus",
+   "label": "Úhradový mechanismus",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 220,
+   "y": 142,
+   "desc": "Úhradová vyhláška každoročně stanoví hodnoty bodu, kapitace a DRG paušály (pro 2026 vyhláška č. 432/2025 Sb.); předchází jí dohodovací řízení ZP se segmenty — pro 2027 dohoda ve 12 z 15 segmentů, nedohodnuté lůžkové segmenty ale drží většinu nákladů. VZP ohlásila pilotní přechod od platby za výkon k platbě za výsledek (piloty kardiologie a ortopedie od září 2026).",
+   "indicators": [
+    "podfinancovani_oblastni_interna_cm",
+    "uhrada_zp_per_pojistenec",
+    "podil_vydaje_luzkova_pece",
+    "podil_vydaje_ambulantni_pece"
+   ],
+   "articles": [
+    "clanek-uhradova-vyhlaska.html",
+    "clanek-dohodovaci-rizeni-2027-vysledek.html",
+    "clanek-platba-za-vysledek-vzp.html",
+    "clanek-financovani-segmenty-2026.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Proč mě nechtějí vzít",
+     "note": "Body, kapitace a DRG pacient nevidí — jen to, že se některý výkon „nedělá“ a jinde je fronta."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Co se vyplatí dělat",
+     "note": "Hodnota bodu a limity určují, které výkony si ordinace může dovolit — medicína naráží na sazebník."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Z čeho platím výplaty",
+     "note": "Úhradová vyhláška je pro ředitele rozpočtový zákon: rozhoduje o platech, službách i investicích."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Dohodovací řízení",
+     "url": "dohodovaci-rizeni.html",
+     "pozn": "poskytovatelé × pojišťovny vyjednávají úhrady dle § 17 zákona č. 48/1997 Sb."
+    },
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "pozn": "úhradová vyhláška — rozhodne, když dohoda není nebo odporuje veřejnému zájmu"
+    },
+    {
+     "kdo": "PS k seznamu zdravotních výkonů",
+     "url": "pracovni-skupina.html?id=4",
+     "pozn": "projednává změny Seznamu výkonů (vyhláška č. 134/1998 Sb.)"
+    }
+   ]
+  },
+  {
+   "id": "financni_ochrana",
+   "label": "Finanční ochrana pacientů",
+   "layer": "Výstupy",
+   "kind": "flow",
+   "x": 860,
+   "y": 478,
+   "desc": "Přímé platby pacientů (OOP) tvořily 14,6 % zdravotních výdajů (2023) — zhruba průměr EU (~15 %) a pod OECD (~18 %); nenaplněná potřeba péče je výjimečně nízká (0,3 % vs. EU 2,4 %). Skutečná zátěž domácností je podle SHA vyšší (neformální platby a suplementy indikátor nezachycuje).",
+   "indicators": [
+    "platba_z_kapsy_pct",
+    "katastroficke_vydaje_zdravi",
+    "unmet_need_medical"
+   ],
+   "articles": [
+    "clanek-platba-z-kapsy.html",
+    "clanek-nadstandardy-3-cesky-narok.html",
+    "clanek-financovani-sha.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Kolik platím z kapsy",
+     "note": "Doplatky a soukromé platby — jediná část financí systému, kterou pacient zná do koruny."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Co si pacient může dovolit",
+     "note": "Lékař to vidí jen nepřímo: pacient, který kvůli doplatkům nedobere léky nebo odkládá zubaře."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Platby mimo pojišťovnu",
+     "note": "Pro rozpočet nemocnice okrajová položka; sociální dopad plateb ředitel neřeší."
+    }
+   }
+  },
+  {
+   "id": "udrzitelnost_financi",
+   "label": "Udržitelnost financí",
+   "layer": "Výsledky",
+   "kind": "outcome",
+   "x": 860,
+   "y": 634,
+   "desc": "Systém veřejného pojištění je v 2026 v deficitu 12,2–19 mld. Kč (VZP samostatně −12,7 mld.); rezervy pojišťoven (~32 mld. Kč koncem 2025) se bez systémového opatření vyčerpají v horizontu jednotek let. Strukturální příčiny: demografické stárnutí, nákladné inovace a slabá prevence.",
+   "indicators": [
+    "vydaje_zdravotnictvi_hdp",
+    "uhrada_zp_per_pojistenec",
+    "vydaje_leky_hdp",
+    "vydaje_dlouhodoba_pece_hdp"
+   ],
+   "articles": [
+    "clanek-deficit-pojisteni-2026.html",
+    "clanek-vydaje-zdravotnictvi.html",
+    "clanek-platba-statu-statni-pojistenci.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Bude na péči i za deset let?",
+     "note": "Deficit systému je pro pacienta abstrakce — dokud se nepromění v doplatky a fronty."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Bilance, kterou neléčím",
+     "note": "Dlouhodobou udržitelnost lékař v ordinaci nevidí; pozná až její důsledky v úhradách."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Přežije moje nemocnice?",
+     "note": "Deficit pojištění znamená tlak na úhrady — a ředitel je první, kdo ho pocítí."
+    }
+   }
+  },
+  {
+   "id": "pracovni_sila",
+   "label": "Pracovní síla",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 340,
+   "y": 64,
+   "desc": "Hlavový počet je nad průměrem (lékaři 4,2/1000 vs. OECD 3,9) nebo kolem něj (sestry 9,0 vs. 9,2), ale skrytým problémem je věk a distribuce: 41 % lékařů je 55+, průměrná všeobecná sestra má 47 let (ÚZIS NRZP 2022) a do 12 let je třeba doplnit přes 30 tisíc úvazků sester. Reálný nedostatek je hlavně problém regionální distribuce, úzkých kompetencí sester a nedotažené postgraduální výchovy, ne celkového počtu hlav.",
+   "indicators": [
+    "lekari_per_1000",
+    "sestry_per_1000",
+    "podil_lekaru_55plus",
+    "absolventi_lekarstvi_per_100k",
+    "osetrovaci_dny_na_uvazek_sestry"
+   ],
+   "articles": [
+    "clanek-pracovni-sila.html",
+    "clanek-starnuti-lekaru.html",
+    "clanek-osetrovatelstvi-generacni-propast-2026.html",
+    "clanek-ja-heroes-workforce-2026.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Kdo se o mě stará",
+     "note": "Nedostatek sester pacient pozná až přetíženou směnou a zrušeným termínem, ne ve statistice úvazků."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Kolik nás slouží",
+     "note": "Přesčasy, neobsazené služby a stárnoucí kolegové — realita každé porady oddělení."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Koho seženu a udržím",
+     "note": "Personál je největší nákladová položka i největší riziko: jedna hromadná výpověď zavře oddělení."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "pozn": "specializační vzdělávání, akreditace, rezidenční místa (zák. č. 95/2004 a 96/2004 Sb.); vzdělávací programy vycházejí ve Věstníku"
+    }
+   ]
+  },
+  {
+   "id": "sit_kapacity",
+   "label": "Síť a kapacity",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 575,
+   "y": 64,
+   "desc": "Česko má hustou lůžkovou síť (akutní lůžka 4,0/1000 vs. OECD 3,5; JIP cca 40/100k vs. cca 17 OECD dle ESICM), ale okresní nemocnice ztrácejí personální i ekonomickou podstatu (Pelhřimov, Znojmo 2026). Souběžně probíhá centralizace vysoce specializované péče: onkochirurgie slinivky, jater a jícnu od 2027 jen do 13+6 center; gama nůž a protonové centrum existují v republice po jednom.",
+   "indicators": [
+    "postele_akutni_per_1000",
+    "luzka_jip_per_100k",
+    "obloznost_interna_standard_pct",
+    "ct_per_milion",
+    "mri_per_milion",
+    "dojezd_zzs"
+   ],
+   "articles": [
+    "clanek-okresni-nemocnice-personalni-krize.html",
+    "clanek-centralizace-chirurgie-2027.html",
+    "clanek-dostupnost-radioterapie-2026.html",
+    "clanek-hospitalizujeme-nejvic.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Jak daleko to mám",
+     "note": "Vzdálenost k porodnici, pohotovosti nebo iktovému centru — to je pro pacienta celá „síť“."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Mapa, kterou nekreslím",
+     "note": "Jednotlivý lékař síť nezmění; pozná ji, když okolní oddělení zavře a pacienti přetečou k němu."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Která oddělení udržím",
+     "note": "Držet, sdílet, nebo zavřít ztrátové oddělení — nejtěžší rozhodnutí ředitelského mandátu."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Zdravotní pojišťovny",
+     "pozn": "smluvní síť; výběrová řízení dle § 46 zákona č. 48/1997 Sb. vedou kraje a MZ"
+    },
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "url": "vestniky-mz.html",
+     "pozn": "statuty center vysoce specializované péče vyhlašuje ve Věstníku"
+    }
+   ]
+  },
+  {
+   "id": "objem_struktura_pece",
+   "label": "Objem a struktura péče",
+   "layer": "Výstupy",
+   "kind": "flow",
+   "x": 400,
+   "y": 478,
+   "desc": "Česko hospitalizuje nejvíce v OECD: necelých 18 000 akutních hospitalizací na 100 000 obyvatel oproti 14 600 v průměru OECD, s ALOS kolem 6–7 dní podle metodiky. Systém je dlouhodobě nemocnice-centrický — část lůžkového objemu by v systémech s jednodenní chirurgií a silnější primární péčí vůbec nevznikla.",
+   "indicators": [
+    "hospitalizace_na_100k",
+    "prumerna_delka_hospitalizace",
+    "hospitalizace_acsc",
+    "jednodenni_chirurgie_katarakta",
+    "ambulantni_kontakty_per_capita",
+    "podil_senioru_na_internich_hospitalizacich"
+   ],
+   "articles": [
+    "clanek-hospitalizujeme-nejvic.html",
+    "clanek-centralizace-chirurgie-2027.html",
+    "clanek-okresni-nemocnice-personalni-krize.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Kde se léčí nejvíc",
+     "note": "Že se v ČR hospitalizuje výrazně víc než jinde, pacient nevidí — pro něj je pobyt v nemocnici „normální“."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Lůžko vs. ambulance",
+     "note": "Lékař denně vidí pacienty, kteří na akutním lůžku být nemuseli — kdyby bylo kam je poslat."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Obložnost platí provoz",
+     "note": "Prázdné lůžko je pro systém dobrá zpráva a pro rozpočet nemocnice ztráta — přesně tudy vede konflikt."
+    }
+   }
+  },
+  {
+   "id": "prevence_screeningy",
+   "label": "Prevence a screeningy",
+   "layer": "Procesy",
+   "kind": "lever",
+   "x": 340,
+   "y": 254,
+   "desc": "Organizovaná preventivní péče: preventivní prohlídky (chodí jen 48 % dospělých), populační onkologické screeningy (mamograf ~60 %, kolorektální ~31 %, cervix 65,7 %) a vakcinace (MMR do 2 let 83,7 % — pod prahem kolektivní imunity 95 %, chřipka 65+ 24,5 %). Účast dlouhodobě stagnuje pod průměrem OECD a rozhoduje o časnosti záchytu nemocí.",
+   "indicators": [
+    "screening_mamograficky",
+    "screening_kolorektalni",
+    "screening_cervix",
+    "prohlidka_prakticky_lekar",
+    "vakcinace_mmr_deti",
+    "vakcinace_chripka_65"
+   ],
+   "articles": [
+    "clanek-preventivni-prohlidka.html",
+    "clanek-vakcinace.html",
+    "clanek-mamograf-rakovina-prsu.html",
+    "clanek-rakovina-tlusteho-streva.html",
+    "clanek-cervix-hpv.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Pozvánky, na které nejdu",
+     "note": "Screening je jediný krok cesty systémem, který má pacient plně ve svých rukou."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Záchyt, dokud je čas",
+     "note": "Praktik zve, vysvětluje a uklidňuje — prevence je jeho nejlevnější účinný nástroj."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Pacienti, kteří nepřijdou",
+     "note": "Prevence šetří systému, ne nemocnici — v ředitelově rozvaze se neobjeví."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Screeningové komise MZ",
+     "url": "pracovni-skupiny.html",
+     "pozn": "doporučují standardy programů a statuty pracovišť"
+    },
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "url": "vestniky-mz.html",
+     "pozn": "vyhlašuje metodiky a výzvy ve Věstníku MZ"
+    }
+   ]
+  },
+  {
+   "id": "rizikove_chovani",
+   "label": "Rizikové chování",
+   "layer": "Výsledky",
+   "kind": "flow",
+   "x": 140,
+   "y": 634,
+   "desc": "Zátěž behaviorálních rizikových faktorů populace: denní kouření 16,4 % dospělých (celkem 22 % kuřáků tabáku, prudce roste vapování u mladých), spotřeba alkoholu 11,2 l čistého alkoholu/os. 15+ (OECD 8,5), 60 % dospělých s BMI ≥ 25 a každé čtvrté dítě 6–9 let s nadváhou. Po alkoholu a tabáku jde o největší ovlivnitelná rizika v systému.",
+   "indicators": [
+    "kuractvi_denni",
+    "alkohol_spotreba",
+    "bmi_dospeli",
+    "obezita_prevalence",
+    "deti_obezita_cosi",
+    "pohybova_aktivita_dospeli"
+   ],
+   "articles": [
+    "clanek-koureni.html",
+    "clanek-alkohol-spotreba.html",
+    "clanek-bmi-obezita.html",
+    "clanek-obezita-jidelny-reforma.html",
+    "clanek-jaterni-mortalita-alkohol.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Moje cigarety, můj cukr",
+     "note": "Rizika, která pacient žije — a která zdravotnictví samo nezmění."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Co si pacienti přinášejí",
+     "note": "Velká část chronické medicíny má kořeny v životním stylu — lékař to vidí v každé anamnéze."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Odkud se berou diagnózy",
+     "note": "Prevalence rizik určuje budoucí pacienty nemocnice, ale do ročního rozpočtu se nepropisuje."
+    }
+   }
+  },
+  {
+   "id": "akutni_pece",
+   "label": "Akutní péče",
+   "layer": "Procesy",
+   "kind": "flow",
+   "x": 575,
+   "y": 254,
+   "desc": "Řetězec neodkladné péče: ZZS, mimonemocniční zástava srdce (OHCA) a nemocniční síť pro akutní infarkt (primární PCI) a cévní mozkovou příhodu (trombolýza, trombektomie). Akutní kardiologie je česká špička (30denní mortalita AMI 5,2 % vs. OECD 6,5 %), zatímco přežití OHCA (9,4 %) a mortalita po CMP (9,9 % vs. 7,7 %) zaostávají kvůli předhospitální a následné vrstvě.",
+   "indicators": [
+    "mortalita_inhosp_ami",
+    "mortalita_inhosp_cmp",
+    "preziti_ohca_30d",
+    "dojezd_zzs",
+    "readmise_30d_ami",
+    "luzka_jip_per_100k"
+   ],
+   "articles": [
+    "clanek-akutni-infarkt.html",
+    "clanek-cmp-iktova-centra.html",
+    "clanek-ohca-zachrana-srdce.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Když jde o minuty",
+     "note": "Záchranka, urgent, iktové centrum — moment, kdy pacient systém potřebuje celý a hned."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Služba v plném provozu",
+     "note": "Akutní medicína je výkladní skříň systému — a nejtvrdší test personálního obsazení."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Služby, které musím obsadit",
+     "note": "ER 24/7 neodpustí neobsazenou službu; akutní provoz je ředitelova noční můra i vizitka."
+    }
+   }
+  },
+  {
+   "id": "kvalita_bezpecnost",
+   "label": "Kvalita a bezpečnost péče",
+   "layer": "Procesy",
+   "kind": "flow",
+   "x": 810,
+   "y": 254,
+   "desc": "Bezpečnost hospitalizované péče: nemocniční (nosokomiální) infekce, pooperační sepse, pády, readmise a antimikrobiální rezistence. HAI prevalence v ČR 6,5 % (ECDC PPS), pooperační sepse 0,84 % (přes 5 000 případů/rok, první národní indikátor 2024). Klíčové páky jsou hygiena rukou, antibiotic stewardship, poměr sestra-pacient, surveillance a kultura hlášení; NIKEZ/INDIKO začíná kvalitu systematicky měřit.",
+   "indicators": [
+    "infekce_nosokomialni",
+    "bezpecnost_padu_nemocnice",
+    "rezistence_antibiotik_ecoli",
+    "spotreba_antibiotik",
+    "readmise_30d_ami",
+    "hospitalizace_acsc"
+   ],
+   "articles": [
+    "clanek-nosokomialni-infekce.html",
+    "clanek-pooperacni-sepse-2026.html",
+    "clanek-rezistence-antibiotik.html",
+    "clanek-spotreba-antibiotik.html",
+    "clanek-nikez-jak-funguje-2026.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Jak dobře mě léčí",
+     "note": "Pacient kvalitu nezměří — pozná vlídnost a čekání, ne reoperace či infekce. Přesně proto existují indikátory."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Standardy a komplikace",
+     "note": "Checklisty, hlášení nežádoucích událostí, morbiditní konference — kvalita je denní řemeslo."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Akreditace a reputace",
+     "note": "Ředitel kvalitu vidí přes akreditace, žebříčky a stížnosti — a přes soudní spory, když selže."
+    }
+   }
+  },
+  {
+   "id": "primarni_pece",
+   "label": "Primární péče",
+   "layer": "Procesy",
+   "kind": "lever",
+   "x": 105,
+   "y": 254,
+   "desc": "Síť cca 5 500 PLD a 2 050 PLDD, převážně jednolékařských soukromých praxí, hrazená hybridně (kapitace + výkon + P4P bonifikace dle ÚV 2026). Systému chybí gatekeeping a praktik má úzké kompetence — Češi mají 11,2 ambulantního kontaktu ročně vs. 6,8 OECD a účast na preventivní prohlídce jen ~48 %. Věková krize sítě: každý třetí PLD je nad 60 let, roční bilance −110 až −180 PLD.",
+   "indicators": [
+    "prohlidka_prakticky_lekar",
+    "ambulantni_kontakty_per_capita",
+    "hospitalizace_acsc",
+    "lekari_per_1000",
+    "kontrola_hypertenze"
+   ],
+   "articles": [
+    "clanek-reforma-primarni-pece-2027.html",
+    "clanek-ambulantni-kontakty.html",
+    "clanek-preskripce-praktici-2026.html",
+    "clanek-vyhnutelne-hospitalizace.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Můj praktik",
+     "note": "První dveře do systému — pokud v okolí nějaké ordinace přijímají."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Vrátný systému",
+     "note": "Gatekeeping drží specialisty i nemocnice nad vodou — bez silných praktiků se systém hroutí odshora."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Péče před branou nemocnice",
+     "note": "Silní praktici jsou pro nemocnici neviditelný spojenec: drží pacienty mimo lůžka."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "pozn": "koncepce primární péče, kompetence praktiků"
+    },
+    {
+     "kdo": "Zdravotní pojišťovny",
+     "pozn": "smluvní a bonifikační politika"
+    }
+   ]
+  },
+  {
+   "id": "chronicka_koordinace",
+   "label": "Koordinace péče o chroniky",
+   "layer": "Procesy",
+   "kind": "flow",
+   "x": 220,
+   "y": 332,
+   "desc": "Dispenzární péče o diabetiky, hypertoniky, pacienty s CHOPN a srdečním selháním je v ČR roztříštěná mezi praktika a paralelně vedené specialisty (6–8 ordinací u pokročilého diabetu) s omezenou výměnou informací. Odvratitelné hospitalizace (ACSC) jsou 592/100 000 vs. 473 OECD (+25 %); důsledkem fragmentace u multimorbidních seniorů je polypragmazie a medikační konflikty.",
+   "indicators": [
+    "hospitalizace_acsc",
+    "kontrola_hypertenze",
+    "prevalence_diabetu",
+    "polypragmazie_65plus",
+    "multimorbidita_65plus"
+   ],
+   "articles": [
+    "clanek-vyhnutelne-hospitalizace.html",
+    "clanek-reforma-primarni-pece-2027.html",
+    "clanek-preskripce-praktici-2026.html",
+    "clanek-ambulantni-kontakty.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Kdo mě vede nemocí",
+     "note": "Chronik pozná koordinaci podle toho, kolikrát musí vyprávět tentýž příběh znovu."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Předávání pacienta",
+     "note": "Dispenzarizace a mezioborová komunikace — tam, kde selže, přijede pacient sanitkou."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Pacienti mezi institucemi",
+     "note": "Koordinace se odehrává mezi ordinacemi mimo nemocnici; ředitel vidí až její selhání na urgentu."
+    }
+   }
+  },
+  {
+   "id": "dostupnost_pece",
+   "label": "Dostupnost péče",
+   "layer": "Výstupy",
+   "kind": "flow",
+   "x": 170,
+   "y": 478,
+   "desc": "Objektivní čekací doby jsou nad průměrem OECD: medián čekání na ambulantního specialistu 28 dní vs. 18, na TEP kyčle ~118 dní vs. 85 (orientační odhad — ČR čekací doby systematicky nemonitoruje a jako jediná ze srovnávaných zemí nemá vymahatelný waiting-time nástroj). Dostupnost je silně regionální (deficitní okresy 0,55 PLD/1 000 obyv. vs. Praha 0,75) a u zubní péče příjmově podmíněná (nesplněná potřeba 1,3 %, u nejchudšího kvintilu 2,5 % vs. 0,5 % u nejbohatšího).",
+   "indicators": [
+    "cekaci_doby_specialist",
+    "cekaci_doba_kycel",
+    "unmet_need_medical",
+    "nesplnena_potreba_zubni_pece",
+    "dojezd_zzs"
+   ],
+   "articles": [
+    "clanek-cekani-specialista.html",
+    "clanek-cekaci-doby-kycel.html",
+    "clanek-nesplnena-potreba-zubni-pece.html",
+    "clanek-reforma-pohotovosti-290-2025.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Jak dlouho čekám",
+     "note": "Čekání je pacientova nejhmatatelnější zkušenost se systémem — a hlavní měna jeho důvěry."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Plný diář",
+     "note": "Objednací kniha je lékařův barometr dostupnosti — a zdroj každodenních dilemat koho předběhnout."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Čekací listiny mé nemocnice",
+     "note": "Dostupnost je věc, kterou řediteli měří kraj, pojišťovna i místní facebook."
+    }
+   }
+  },
+  {
+   "id": "zkusenost_pacienta",
+   "label": "Zkušenost pacienta",
+   "layer": "Výstupy",
+   "kind": "flow",
+   "x": 630,
+   "y": 478,
+   "desc": "Subjektivní zkušenost se od objektivní dostupnosti rozchází: Češi hlásí nesplněnou potřebu lékařské péče jen 0,3 % (vs. 2,4 % OECD), přestože čekají déle — očekávání formuje vysoká frekvence kontaktů a naučené obcházení systému (známosti, doplatky, samoplátci). Pacient platí časem: fragmentované krátké návštěvy, obíhání specialisty kvůli receptu a hodiny v čekárnách ročně.",
+   "indicators": [
+    "spokojenost_pece",
+    "spokojenost_informovani",
+    "unmet_need_medical",
+    "ambulantni_kontakty_per_capita"
+   ],
+   "articles": [
+    "clanek-cekani-specialista.html",
+    "clanek-ambulantni-kontakty.html",
+    "clanek-preskripce-praktici-2026.html",
+    "clanek-nesplnena-potreba-zubni-pece.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Jak se mnou mluví",
+     "note": "Důstojnost, informace, čas — to, co si pacient pamatuje, i když dopadlo všechno dobře."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Jak to prožívá pacient",
+     "note": "V provozu na prožívání nezbývá prostor; dotazníky spokojenosti čte někdo jiný."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Stížnosti na mém stole",
+     "note": "Ředitel vidí špičku ledovce: stížnosti a děkovné dopisy. Většina zkušenosti pacientů zůstává pod hladinou."
+    }
+   }
+  },
+  {
+   "id": "dusevni_zdravi_sluzby",
+   "label": "Péče o duševní zdraví",
+   "layer": "Procesy",
+   "kind": "lever",
+   "x": 455,
+   "y": 332,
+   "desc": "Reforma psychiatrie běží od roku 2013 a přesouvá těžiště z velkých psychiatrických nemocnic do komunitní péče. Koncem 2025 fungovalo 50 center duševního zdraví (39 pro dospělé) z cílových 100, průměrná psychiatrická hospitalizace trvá 43 dní (OECD 19) a v dětské psychiatrii se 157 lékaři se na neakutní vyšetření čeká 4–8 měsíců.",
+   "indicators": [
+    "centra_dusevniho_zdravi_per_100k",
+    "psychiatri_per_100k",
+    "psychiatrie_prumerna_delka_hospitalizace",
+    "sebevrazdy_per_100k",
+    "pouzivani_antidepresiv",
+    "vydaje_dusevni_zdravi_pct"
+   ],
+   "articles": [
+    "clanek-centra-dusevniho-zdravi.html",
+    "clanek-reforma-psychiatrie-13-let.html",
+    "clanek-detska-psychiatrie-krize.html",
+    "clanek-psychiatricke-hospitalizace-reforma-2026.html",
+    "clanek-sebevrazdy-dusevni-zdravi.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Kde hledat pomoc",
+     "note": "Měsíce čekání na psychiatra či psychologa — dostupnost duševní péče pacient zažívá nejtvrději."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Kam odeslat duši",
+     "note": "Nejtěžší odeslání v systému: kapacity nejsou a praktik zůstává s pacientem sám."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Péče mimo můj areál",
+     "note": "Reforma míří do komunitních center mimo nemocnice; ředitel akutní nemocnice ji sleduje zpovzdálí."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "pozn": "reforma psychiatrické péče; mezirezortně Rada vlády pro duševní zdraví"
+    }
+   ]
+  },
+  {
+   "id": "dlouhodoba_paliativni",
+   "label": "Dlouhodobá a paliativní péče",
+   "layer": "Procesy",
+   "kind": "lever",
+   "x": 690,
+   "y": 332,
+   "desc": "Dvojkolejný systém rozdělený mezi zdravotní a sociální gesci (zákony 372/2011 a 108/2006 Sb., sjednocování startuje novela 38/2025 Sb.) s podprůměrnými kapacitami: 2,5 pracovníka formální dlouhodobé péče na 100 seniorů (OECD 5,6), 5,0 hospicových lůžek na 100 tis. obyvatel (doporučení EAPC 8) a 4,6 mobilního paliativního týmu na milion (EAPC 10). Doma nebo v hospici umírá jen 26,2 % lidí proti 32 % v OECD.",
+   "indicators": [
+    "luzka_dlouhodobe_pece_65plus",
+    "pracovnici_ltc_per_100_65plus",
+    "vydaje_dlouhodoba_pece_hdp",
+    "hospicova_pece_luzka",
+    "mobilni_paliativni_tymy_per_milion",
+    "umrti_doma_nebo_hospici_pct"
+   ],
+   "articles": [
+    "clanek-reforma-dlouhodobe-pece-2026.html",
+    "clanek-dlouhodoba-pece-vydaje.html",
+    "clanek-socialne-zdravotni-pomezi-2026.html",
+    "clanek-hospicova-pece.html",
+    "clanek-mobilni-paliativni-tymy.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Kam s mámou",
+     "note": "Shánění lůžka následné péče či hospicu je práce na plný úvazek — obvykle pro rodinu."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Kam propustit pacienta",
+     "note": "Doléčený pacient bez navazující péče blokuje akutní lůžko — denní realita interny."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Ucpaná lůžka",
+     "note": "Chybějící následná péče drží pacienty na drahých akutních lůžkách — a kazí DRG kalkulaci."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "MZ a MPSV",
+     "pozn": "zdravotně-sociální pomezí — kompetence dělené mezi dva resorty"
+    }
+   ]
+  },
+  {
+   "id": "lekova_politika",
+   "label": "Léková politika",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 690,
+   "y": 142,
+   "desc": "Úhradové rozhodování SÚKL, generická a biosimilární substituce a řešení výpadků léčiv. Generika tvoří 62,8 % objemu spotřebovaných léčiv (OECD průměr 56 %), ale jen 19,5 % hodnoty — budoucí úspory se hrají u drahých biologik. Od ledna 2025 vstupuje do hodnocení nových léků evropské Joint Clinical Assessment (nařízení EU 2021/2282).",
+   "indicators": [
+    "podil_generik_objem",
+    "podil_vydaje_leky",
+    "vydaje_leky_hdp",
+    "vypadky_leciv_aktivni",
+    "polypragmazie_65plus"
+   ],
+   "articles": [
+    "clanek-generika-biosimilars-uspora.html",
+    "clanek-hta-jca-eu-2026.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Proč doplácím zrovna já",
+     "note": "Úhrady a revize cen léků jsou pro pacienta černá skříňka — vidí až cenovku v lékárně."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Co smím předepsat",
+     "note": "Preskripční omezení, revize úhrad a pozitivní listy — lékárník a sazebník za ramenem každého receptu."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Centrové rozpočty",
+     "note": "Centrová léčba se řeší ve fakultních nemocnicích; okresního ředitele míjí — i s penězi."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "SÚKL",
+     "pozn": "správní řízení o cenách a úhradách léčiv (část šestá zákona č. 48/1997 Sb.); odvolacím orgánem MZ"
+    },
+    {
+     "kdo": "Komise pro kategorizaci ZP",
+     "url": "pracovni-skupina.html?id=121",
+     "pozn": "úhradové skupiny zdravotnických prostředků (příloha č. 3 zákona)"
+    }
+   ]
+  },
+  {
+   "id": "digitalizace_data",
+   "label": "Digitalizace a datová páteř",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 810,
+   "y": 64,
+   "desc": "Index adopce digitálního zdravotnictví je 62 vs. 70 v OECD: eRecept funguje, ale sdílení dokumentace mezi pracovišti, pacientský portál a interoperabilita chybí (66,4 % lékařů Patient Summary nepoužilo). Novela 236/2025 Sb. přidává od 1. 1. 2026 eŽádanky, eOčkovací průkaz a centrální registr preventivních vyšetření; rozvoj brzdí vendor lock-in a kontrolní zjištění NKÚ (cca 159 mil. Kč).",
+   "indicators": [
+    "ehealth_adoption",
+    "kyberneticke_incidenty_zdravotnictvi",
+    "spokojenost_informovani",
+    "prohlidka_prakticky_lekar"
+   ],
+   "articles": [
+    "clanek-ehealth.html",
+    "clanek-ezkarta-ehealth.html",
+    "clanek-novela-elektronizace-2026.html",
+    "clanek-datova-patere-lock-in.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Proč všude vyprávím znovu",
+     "note": "Nesdílená dokumentace je pro pacienta jen déjà vu v každé nové čekárně."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Systémy, do kterých klikám",
+     "note": "Administrativa a nekompatibilní systémy ukusují z ordinační doby — digitalizace je slib i zátěž."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "IT, které musím zaplatit",
+     "note": "Nemocniční systém, kyberbezpečnost, vendor lock-in — položky, které v úhradách nikdo nevidí."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "ÚZIS",
+     "pozn": "NZIS a zdravotnické registry (zákon č. 372/2011 Sb.)"
+    },
+    {
+     "kdo": "Ministerstvo zdravotnictví",
+     "pozn": "elektronizace zdravotnictví (zákon č. 325/2021 Sb.)"
+    }
+   ]
+  },
+  {
+   "id": "governance_legislativa",
+   "label": "Governance a legislativa",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 455,
+   "y": 142,
+   "desc": "Schopnost systému stanovit cíle, nezávisle měřit výsledky a rozhodovat podle nich. Česko sbírá obří objemy dat, ale smyčka cíl → měření → report → rozhodnutí je rozpojená; chybí nezávislý měřič po vzoru belgického modelu (KCE/Sciensano). Běží reforma hygienické služby — sloučení 14 KHS, SZÚ a 2 zdravotních ústavů do Institutu veřejného zdraví k 1. 1. 2028.",
+   "indicators": [
+    "mortalita_preventabilni",
+    "nadeje_doziti_total",
+    "vydaje_zdravotnictvi_hdp",
+    "vakcinace_mmr_deti",
+    "vydaje_prevence_pct"
+   ],
+   "articles": [
+    "clanek-rizeni-podle-vysledku.html",
+    "clanek-governance-nezavislost.html",
+    "clanek-institut-verejneho-zdravi.html",
+    "clanek-ukazatele-dashboard.html",
+    "clanek-posledni-mile-implementace.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Kdo to celé řídí",
+     "note": "Zákony a vyhlášky pacient nevidí — pozná až jejich důsledky u lékaře a v lékárně."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Pravidla shora",
+     "note": "Novelu lékař obvykle pozná podle nového povinného formuláře."
+    },
+    "reditel": {
+     "visibility": "clear",
+     "alt_label": "Vyhlášky, které musím splnit",
+     "note": "Personální vyhláška, věstníky, kontroly — governance je ředitelův každodenní mantinel."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Parlament a vláda",
+     "url": "legislativa.html",
+     "pozn": "zákony a novely — sledujeme v Legislativním radaru (VeKLEP)"
+    },
+    {
+     "kdo": "Poradní orgány MZ",
+     "url": "pracovni-skupiny.html",
+     "pozn": "103 komisí a skupin připravuje podklady rozhodnutí"
+    }
+   ]
+  },
+  {
+   "id": "socialni_determinanty",
+   "label": "Sociální determinanty",
+   "layer": "Struktury",
+   "kind": "lever",
+   "x": 905,
+   "y": 142,
+   "desc": "Vzdělání, příjem, zdravotní gramotnost a prostředí jako kořenové determinanty zdraví. 47 % dospělých má omezenou zdravotní gramotnost (HLS19/SZÚ) a vzdělanostní gradient se koncentruje regionálně (Ústecko, Karlovarsko, Moravskoslezsko) — znevýhodnění se sčítají u týchž lidí.",
+   "indicators": [
+    "zdravotni_gramotnost_omezena",
+    "ohrozeni_chudobou",
+    "prijem_disponibilni",
+    "pm25_expozice"
+   ],
+   "articles": [
+    "clanek-zdravotni-gramotnost.html",
+    "clanek-nadeje-doziti-vzdelani.html",
+    "clanek-medikalizace-verejneho-zdravi.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Co se zdravím zdánlivě nesouvisí",
+     "note": "Největší vliv na zdraví — vzdělání, práce, bydlení — pacient nevnímá jako zdravotní téma."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Co vidím v anamnéze",
+     "note": "Sociální gradient lékař potkává denně — a nemá na něj recept."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Spádová demografie",
+     "note": "Sociální skladba spádu určuje case-mix nemocnice, ale ředitel ji nezmění."
+    }
+   },
+   "rozhoduje": [
+    {
+     "kdo": "Vláda, MPSV, kraje",
+     "pozn": "většina pák leží mimo resort zdravotnictví"
+    }
+   ]
+  },
+  {
+   "id": "odvratitelna_mortalita",
+   "label": "Odvratitelná úmrtnost",
+   "layer": "Výsledky",
+   "kind": "outcome",
+   "x": 380,
+   "y": 634,
+   "desc": "Předčasná úmrtí do 75 let, kterým lze předejít prevencí nebo léčbou — v ČR o 19 % nad EU (2022): preventabilní 195/100k vs. 168, léčitelná 113 vs. 90 (2023: 107,2 vs. 86,8 EU27). Rozdíl táhne hlavně kardiovaskulární mortalita (463,75 vs. 312,95 EU-27, +48 %, primárně IHD).",
+   "indicators": [
+    "mortalita_preventabilni",
+    "mortalita_lecitelna",
+    "pyll_potencialne_ztracene_roky",
+    "mortalita_kardiovaskularni",
+    "mortalita_onkologicka"
+   ],
+   "articles": [
+    "clanek-pyll.html",
+    "clanek-lecitelna-mortalita.html",
+    "clanek-kardiovaskularni-mortalita.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Úmrtí, která nemusela být",
+     "note": "Populační vzorec jednotlivec neuvidí — proto ho musí hlídat data."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Případy vs. vzorec",
+     "note": "Jednotlivé případy lékař zná jménem; systémový vzorec odvratitelných úmrtí vidí jen registry."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Výsledek, který nikdo nevlastní",
+     "note": "Odvratitelná úmrtnost nemá v systému jedinou odpovědnou židli — a přesně to je problém."
+    }
+   }
+  },
+  {
+   "id": "delka_kvalita_zivota",
+   "label": "Délka a kvalita života",
+   "layer": "Výsledky",
+   "kind": "outcome",
+   "x": 620,
+   "y": 634,
+   "desc": "Naděje dožití při narození 80,3 let vs. EU 81,7 (2024) — kvantita se k EU přibližuje. Kvalita posledních let zaostává výrazněji: naděje dožití ve zdraví po 65. roce je 7,7 let vs. EU 9,4 (Eurostat 2023), rozdíl 1,7 roku v samostatnosti a kondici seniorů.",
+   "indicators": [
+    "nadeje_doziti_total",
+    "nadeje_doziti_zdravi_65",
+    "nadeje_doziti_zeny",
+    "subjektivni_zdravi",
+    "multimorbidita_65plus"
+   ],
+   "articles": [
+    "clanek-nadeje-doziti-zdravi.html",
+    "clanek-pyll.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "clear",
+     "alt_label": "Moje roky ve zdraví",
+     "note": "Jediný ukazatel systému, který pacient nečte, ale žije."
+    },
+    "lekar": {
+     "visibility": "fog",
+     "alt_label": "Horizont za ordinací",
+     "note": "Léta života ve zdraví se rozhodují z většiny mimo ordinaci — prevencí, prostředím, politikou."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Za horizontem rozpočtu",
+     "note": "Dlouhodobé populační výsledky se do ročního hospodaření nemocnice nepropisují."
+    }
+   }
+  },
+  {
+   "id": "nerovnosti",
+   "label": "Nerovnosti ve zdraví",
+   "layer": "Výsledky",
+   "kind": "outcome",
+   "x": 500,
+   "y": 712,
+   "desc": "Muž s VŠ se v ČR dožívá o 13 let víc než muž se ZŠ — druhý největší vzdělanostní rozdíl ve sledované Evropě (po Maďarsku). Katastrofické zdravotní výdaje zasáhly 21 % nejchudší pětiny domácností (2023, nárůst ze 14 % v 2018) proti 6 % průměru; zubní kaz dětí (KPE ~1,9 vs. 0,5 v Německu) kopíruje sociální gradient přístupu k péči.",
+   "indicators": [
+    "nadeje_doziti_vzdelani_gap_muzi",
+    "katastroficke_vydaje_zdravi",
+    "ohrozeni_chudobou",
+    "nesplnena_potreba_zubni_pece",
+    "kazivost_chrupu_12let"
+   ],
+   "articles": [
+    "clanek-nadeje-doziti-vzdelani.html",
+    "clanek-katastroficke-vydaje-zdravi.html",
+    "clanek-zubni-kaz-deti.html",
+    "clanek-zdravotni-gramotnost.html"
+   ],
+   "perspectives": {
+    "pacient": {
+     "visibility": "fog",
+     "alt_label": "Jinde je to jinak",
+     "note": "Pacient srovnává s čekárnou vedle, ne s jiným krajem — nerovnosti vidí jen statistika."
+    },
+    "lekar": {
+     "visibility": "clear",
+     "alt_label": "Praha není pohraničí",
+     "note": "Rozdíl mezi praxí v centru a v periferii zná lékař z vlastních štací — v kapacitách i v pacientech."
+    },
+    "reditel": {
+     "visibility": "fog",
+     "alt_label": "Nerovnost jako kontext",
+     "note": "Krajské rozdíly ředitel zná, ale řeší jen svůj spád; vyrovnávání je role státu."
+    }
+   }
+  }
+ ],
+ "edges": [
+  {
+   "id": "governance_legislativa__financovani_systemu",
+   "from": "governance_legislativa",
+   "to": "financovani_systemu",
+   "polarity": "plus",
+   "mechanism": "Zákonná valorizace vyměřovacího základu státních pojištěnců (§ 3c zák. 592/1992 Sb., vzorec CPI + ½ růstu reálných mezd; mimořádná valorizace +21 mld. schválena vládou 8. 6. 2026) přímo určuje objem příjmů systému.",
+   "strength": "strong",
+   "articles": [
+    "clanek-platba-statu-statni-pojistenci.html",
+    "clanek-dohodovaci-rizeni-2027-vysledek.html"
+   ]
+  },
+  {
+   "id": "financovani_systemu__udrzitelnost_financi",
+   "from": "financovani_systemu",
+   "to": "udrzitelnost_financi",
+   "polarity": "plus",
+   "mechanism": "Růst příjmů (pojistné navázané na mzdy, valorizovaná platba státu za 5,9 mil. pojištěnců) doplňuje bilanci pojišťoven a odsouvá vyčerpání rezerv; zamrznutí platby státu (2010–2016) naopak deficity prohlubovalo.",
+   "strength": "strong",
+   "articles": [
+    "clanek-platba-statu-statni-pojistenci.html",
+    "clanek-deficit-pojisteni-2026.html"
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus__udrzitelnost_financi",
+   "from": "uhradovy_mechanismus",
+   "to": "udrzitelnost_financi",
+   "polarity": "minus",
+   "mechanism": "Meziroční růsty úhrad dohodnuté v dohodovacím řízení a přiznané úhradovou vyhláškou zvyšují výdaje pojišťoven rychleji než příjmy — dohody pro 2027 platí jen díky mimořádné valorizaci platby státu o 21 mld. Kč.",
+   "strength": "strong",
+   "articles": [
+    "clanek-dohodovaci-rizeni-2027-vysledek.html",
+    "clanek-deficit-pojisteni-2026.html",
+    "clanek-uhradova-vyhlaska.html"
+   ]
+  },
+  {
+   "id": "financovani_systemu__financni_ochrana",
+   "from": "financovani_systemu",
+   "to": "financni_ochrana",
+   "polarity": "plus",
+   "mechanism": "Vysoký podíl veřejných zdrojů a jednotný hrazený standard drží přímé platby pacientů na 14,6 % výdajů (pod průměrem OECD) a chrání domácnosti před katastrofickými výdaji.",
+   "strength": "strong",
+   "articles": [
+    "clanek-platba-z-kapsy.html",
+    "clanek-financovani-sha.html",
+    "clanek-nadstandardy-3-cesky-narok.html"
+   ]
+  },
+  {
+   "id": "financovani_systemu__dostupnost_pece",
+   "from": "financovani_systemu",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Široký veřejně hrazený nárok bez plateb v místě péče drží nenaplněnou potřebu péče z finančních důvodů na 0,3 % oproti průměru EU 2,4 %.",
+   "strength": "strong",
+   "articles": [
+    "clanek-nadstandardy-3-cesky-narok.html",
+    "clanek-platba-z-kapsy.html"
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus__objem_struktura_pece",
+   "from": "uhradovy_mechanismus",
+   "to": "objem_struktura_pece",
+   "polarity": "minus",
+   "mechanism": "Platba za výkon a paušální úhrady lůžkové péče motivují k vyššímu objemu výkonů a konzervují strukturální převahu lůžkové péče (56 % výdajů ZP do nemocnic, 28 % do ambulancí) oproti průměru OECD.",
+   "strength": "strong",
+   "articles": [
+    "clanek-uhradova-vyhlaska.html",
+    "clanek-financovani-segmenty-2026.html",
+    "clanek-platba-za-vysledek-vzp.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Platba za výkon a obložnost živí nemocnici (ředitel), ale drží pacienty na lůžkách, kde být nemusí (pacient, systém)."
+  },
+  {
+   "id": "uhradovy_mechanismus__kvalita_bezpecnost",
+   "from": "uhradovy_mechanismus",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Ohlášený přechod VZP k platbě za výsledek (value-based care) váže úhradu na výsledkové ukazatele typu nemocniční mortalita a 30denní readmise, čímž vytváří finanční motivaci ke zlepšování kvality.",
+   "strength": "weak",
+   "articles": [
+    "clanek-platba-za-vysledek-vzp.html"
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus__sit_kapacity",
+   "from": "uhradovy_mechanismus",
+   "to": "sit_kapacity",
+   "polarity": "minus",
+   "mechanism": "Úhrady nastavené pod reálné náklady některých oborů (rozdíl úhrady a nákladu u interny v oblastních nemocnicích) ekonomicky destabilizují regionální lůžkové kapacity.",
+   "strength": "weak",
+   "articles": [
+    "clanek-uhradova-vyhlaska.html",
+    "clanek-financovani-segmenty-2026.html",
+    "clanek-okresni-nemocnice-personalni-krize.html"
+   ]
+  },
+  {
+   "id": "udrzitelnost_financi__financni_ochrana",
+   "from": "udrzitelnost_financi",
+   "to": "financni_ochrana",
+   "polarity": "minus",
+   "mechanism": "Deficit a vyčerpávající se rezervy tlačí na politické nástroje typu vyšší spoluúčasti či připlácení (nadstandardy), které by přesunuly část nákladů na pacienty a erodovaly jednotný nárok.",
+   "strength": "weak",
+   "articles": [
+    "clanek-deficit-pojisteni-2026.html",
+    "clanek-nadstandardy-3-cesky-narok.html"
+   ]
+  },
+  {
+   "id": "prevence_screeningy__udrzitelnost_financi",
+   "from": "prevence_screeningy",
+   "to": "udrzitelnost_financi",
+   "polarity": "plus",
+   "mechanism": "Slabá prevence je jednou ze tří strukturálních příčin růstu nákladů systému (vedle demografie a inovací) — silnější prevence snižuje budoucí náklady na léčbu odvratitelných onemocnění.",
+   "strength": "weak",
+   "articles": [
+    "clanek-deficit-pojisteni-2026.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Prevence šetří celému systému, ale žádné židli jednotlivě — nemocnici ubírá výkony, proto ji nikdo „nevlastní“."
+  },
+  {
+   "id": "pracovni_sila__sit_kapacity",
+   "from": "pracovni_sila",
+   "to": "sit_kapacity",
+   "polarity": "plus",
+   "mechanism": "Dostatek a věková struktura personálu podmiňuje provozuschopnost lůžkové sítě — hromadná výpověď 11 z 12 internistů v Pelhřimově (únor 2026) ochromila celé oddělení a odmítání přesčasů sester by ve většině okresních nemocnic zastavilo provoz během dní.",
+   "strength": "strong",
+   "articles": [
+    "clanek-okresni-nemocnice-personalni-krize.html",
+    "clanek-osetrovatelstvi-generacni-propast-2026.html",
+    "clanek-starnuti-lekaru.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__dostupnost_pece",
+   "from": "pracovni_sila",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Regionální rozložení a generační obměna lékařů rozhoduje o místní dostupnosti — když praktik 67+ v periferním okrese zavře ordinaci bez nástupce, pacienti čekají týdny až měsíce nebo dojíždějí o dva okresy dál.",
+   "strength": "strong",
+   "articles": [
+    "clanek-starnuti-lekaru.html",
+    "clanek-pracovni-sila.html"
+   ]
+  },
+  {
+   "id": "sit_kapacity__objem_struktura_pece",
+   "from": "sit_kapacity",
+   "to": "objem_struktura_pece",
+   "polarity": "minus",
+   "mechanism": "Nadprůměrná hustota akutních a intenzivních lůžek (4,0/1000 vs. OECD 3,5; JIP cca 40 vs. 17/100k) indukuje nadměrný lůžkový objem — dostupná kapacita se plní hospitalizacemi, které by jinde proběhly ambulantně nebo jednodenně.",
+   "strength": "strong",
+   "articles": [
+    "clanek-hospitalizujeme-nejvic.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Hustá lůžková síť je pro ředitele příjem a jistota, pro systém neefektivita, kterou OECD Česku vytýká."
+  },
+  {
+   "id": "sit_kapacity__kvalita_bezpecnost",
+   "from": "sit_kapacity",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Struktura sítě určuje kvalitu přes vztah objem–výsledek: 90denní mortalita po resekci jater je v nízkoobjemových nemocnicích 11,76 % oproti 6,15 % ve velkoobjemových centrech, což je důvod centralizace onkochirurgie do 13+6 center od 2027.",
+   "strength": "strong",
+   "articles": [
+    "clanek-centralizace-chirurgie-2027.html",
+    "clanek-dostupnost-radioterapie-2026.html"
+   ]
+  },
+  {
+   "id": "sit_kapacity__dostupnost_pece",
+   "from": "sit_kapacity",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Geografické rozmístění kapacit určuje rovný přístup — jediný gama nůž a jediné protonové centrum v Praze znamenají, že přístup pacienta z Ostravy či Jihlavy závisí na indikačních pravidlech a dojezdu; kolaps okresní interny zase ruší nejbližší lůžkovou péči.",
+   "strength": "strong",
+   "articles": [
+    "clanek-dostupnost-radioterapie-2026.html",
+    "clanek-okresni-nemocnice-personalni-krize.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Zavření ztrátového oddělení uleví rozpočtu ředitele — a prodlouží cestu pacienta o desítky minut."
+  },
+  {
+   "id": "governance_legislativa__pracovni_sila",
+   "from": "governance_legislativa",
+   "to": "pracovni_sila",
+   "polarity": "plus",
+   "mechanism": "Stát ovlivňuje pracovní sílu vzdělávací a kompetenční legislativou: vládní program 2026–2037 má přivést 13 mld. Kč do nelékařského vzdělávání a navýšit kapacity škol o pětinu, strategie Zdraví 2035 zakotvila plánování personálu; efekt je ale pomalý (roky až dekáda).",
+   "strength": "weak",
+   "articles": [
+    "clanek-osetrovatelstvi-generacni-propast-2026.html",
+    "clanek-ja-heroes-workforce-2026.html",
+    "clanek-pracovni-sila.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__pracovni_sila",
+   "from": "digitalizace_data",
+   "to": "pracovni_sila",
+   "polarity": "plus",
+   "mechanism": "Datový rámec a projekční model nabídky a poptávky z projektu JA HEROES (ÚZIS, NCO NZO, UK) umožňují poprvé kvantitativně plánovat, kolik personálu bude systém potřebovat v letech 2030–2040, a včas dimenzovat vzdělávací kapacity.",
+   "strength": "weak",
+   "articles": [
+    "clanek-ja-heroes-workforce-2026.html"
+   ]
+  },
+  {
+   "id": "primarni_pece__objem_struktura_pece",
+   "from": "primarni_pece",
+   "to": "objem_struktura_pece",
+   "polarity": "plus",
+   "mechanism": "Silnější primární péče a ambulantní alternativy (jednodenní chirurgie) odkloní část péče mimo lůžka — systémy s nižší mírou hospitalizací se opírají o primární péči, která řeší chronické pacienty dřív, než skončí jako odvratitelná hospitalizace (ACSC).",
+   "strength": "strong",
+   "articles": [
+    "clanek-hospitalizujeme-nejvic.html"
+   ]
+  },
+  {
+   "id": "objem_struktura_pece__udrzitelnost_financi",
+   "from": "objem_struktura_pece",
+   "to": "udrzitelnost_financi",
+   "polarity": "minus",
+   "mechanism": "Nemocnice-centrický objem péče (18 000 hospitalizací/100k vs. 14 600 OECD) váže prostředky v nejdražším segmentu systému a zmenšuje prostor pro financování ambulantní péče, prevence a dlouhodobé péče.",
+   "strength": "weak",
+   "articles": [
+    "clanek-hospitalizujeme-nejvic.html"
+   ]
+  },
+  {
+   "id": "financovani_systemu__prevence_screeningy",
+   "from": "financovani_systemu",
+   "to": "prevence_screeningy",
+   "polarity": "plus",
+   "mechanism": "Podíl výdajů na prevenci (HC.6) — v ČR 2,7 % běžných výdajů vs. 3,2 % OECD — určuje kapacitu screeningových programů, adresného zvaní a očkovacích kampaní; strukturální podfinancování prevence se propisuje do nízké účasti.",
+   "strength": "strong",
+   "articles": [
+    "clanek-vydaje-prevence.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__prevence_screeningy",
+   "from": "governance_legislativa",
+   "to": "prevence_screeningy",
+   "polarity": "plus",
+   "mechanism": "Organizace populačních programů (adresné zvaní u kolorektálního screeningu, povinný očkovací kalendář, opatření typu italského Lorenzin law) je administrativně-legislativní páka, která přímo zvedá účast — česká reforma screeningu se vleče a proočkovanost klesá.",
+   "strength": "strong",
+   "articles": [
+    "clanek-rakovina-tlusteho-streva.html",
+    "clanek-vakcinace.html",
+    "clanek-institut-verejneho-zdravi.html"
+   ]
+  },
+  {
+   "id": "primarni_pece__prevence_screeningy",
+   "from": "primarni_pece",
+   "to": "prevence_screeningy",
+   "polarity": "plus",
+   "mechanism": "Praktický lékař je vstupní branou prevence — provádí preventivní prohlídky, distribuuje FIT testy a odesílá na screeningy; půlhodinová konzultace, kterou absolvuje jen 48 % dospělých, koncentruje záchyt rizik a vstup do dispenzární péče.",
+   "strength": "strong",
+   "articles": [
+    "clanek-preventivni-prohlidka.html",
+    "clanek-rakovina-tlusteho-streva.html"
+   ]
+  },
+  {
+   "id": "socialni_determinanty__prevence_screeningy",
+   "from": "socialni_determinanty",
+   "to": "prevence_screeningy",
+   "polarity": "minus",
+   "mechanism": "Nižší vzdělání, nejisté zaměstnání a život v regionech s vyšší nezaměstnaností snižují účast na preventivní péči — sociální gradient v účasti na prevenci je v ČR ostřejší než ve Skandinávii či Nizozemsku, přestože tato skupina má vyšší zdravotní rizika.",
+   "strength": "strong",
+   "articles": [
+    "clanek-preventivni-prohlidka.html",
+    "clanek-zdravotni-gramotnost.html",
+    "clanek-nadeje-doziti-vzdelani.html"
+   ]
+  },
+  {
+   "id": "prevence_screeningy__odvratitelna_mortalita",
+   "from": "prevence_screeningy",
+   "to": "odvratitelna_mortalita",
+   "polarity": "plus",
+   "mechanism": "Časný záchyt zvyšuje šanci na vyléčení — u rakoviny prsu bylo díky běžícímu screeningu téměř 80 % případů zachyceno ve stadiu I–II, zatímco nízká účast v kolorektálním screeningu drží pětileté přežití na 56 % vs. 62 % OECD; propad proočkovanosti MMR pod 95 % vrací nemoci, kterým se dvacet let předcházelo.",
+   "strength": "strong",
+   "articles": [
+    "clanek-mamograf-rakovina-prsu.html",
+    "clanek-rakovina-tlusteho-streva.html",
+    "clanek-cervix-hpv.html"
+   ]
+  },
+  {
+   "id": "prevence_screeningy__rizikove_chovani",
+   "from": "prevence_screeningy",
+   "to": "rizikove_chovani",
+   "polarity": "plus",
+   "mechanism": "Preventivní prohlídka u praktika je hlavní systémová příležitost ke krátkým intervencím a časnému záchytu rizik (kouření, alkohol, BMI, hypertenze) a nabídce odvykací léčby — nízká účast (48 %) tuto páku oslabuje.",
+   "strength": "weak",
+   "articles": [
+    "clanek-preventivni-prohlidka.html",
+    "clanek-koureni.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__rizikove_chovani",
+   "from": "governance_legislativa",
+   "to": "rizikove_chovani",
+   "polarity": "plus",
+   "mechanism": "Cenové a regulační páky prokazatelně snižují rizikové chování: 10% zvýšení ceny cigaret snižuje spotřebu o ~4 % (u mladistvých víc), minimální cena alkoholu ve Skotsku snížila spotřebu nejtěžších pijáků, reforma spotřebního koše školních jídelen (vyhláška 310/2025 Sb.) mění stravovací prostředí 2 milionů dětí — nevyužité páky (nízká daň z piva, měkká regulace reklamy) naopak drží spotřebu vysoko.",
+   "strength": "strong",
+   "articles": [
+    "clanek-koureni.html",
+    "clanek-alkohol-spotreba.html",
+    "clanek-jaterni-mortalita-alkohol.html"
+   ]
+  },
+  {
+   "id": "socialni_determinanty__rizikove_chovani",
+   "from": "socialni_determinanty",
+   "to": "rizikove_chovani",
+   "polarity": "minus",
+   "mechanism": "Rizikové chování kopíruje socioekonomický gradient — v EU mělo v roce 2022 nadváhu 57 % lidí s nižším vzděláním oproti 43 % vysokoškoláků; kvalitní strava je relativně dražší tam, kde chybějí peníze i čas, což gradient dále prohlubuje.",
+   "strength": "strong",
+   "articles": [
+    "clanek-obezita-jidelny-reforma.html",
+    "clanek-bmi-obezita.html",
+    "clanek-nadeje-doziti-vzdelani.html"
+   ]
+  },
+  {
+   "id": "rizikove_chovani__odvratitelna_mortalita",
+   "from": "rizikove_chovani",
+   "to": "odvratitelna_mortalita",
+   "polarity": "minus",
+   "mechanism": "Kouření, alkohol a obezita přímo generují preventabilní úmrtí (kardiovaskulární nemoci, nádory, diabetes, jaterní cirhóza): úmrtnost na chronická onemocnění jater je v ČR 19,5/100 000 — o ~43 % nad EU27 — a každé procento prevalence kouření se přepočítává na desítky předčasných úmrtí ročně.",
+   "strength": "strong",
+   "articles": [
+    "clanek-jaterni-mortalita-alkohol.html",
+    "clanek-koureni.html",
+    "clanek-alkohol-spotreba.html"
+   ]
+  },
+  {
+   "id": "rizikove_chovani__delka_kvalita_zivota",
+   "from": "rizikove_chovani",
+   "to": "delka_kvalita_zivota",
+   "polarity": "minus",
+   "mechanism": "Vysoká zátěž rizikových faktorů (obezita, kouření, alkohol) se přepisuje do kardiovaskulární úmrtnosti, kratší naděje dožití i menšího počtu let prožitých ve zdraví — obezita je tichý ukazatel, na kterém Česko v mezinárodním srovnání dlouhodobě propadá.",
+   "strength": "strong",
+   "articles": [
+    "clanek-obezita-jidelny-reforma.html",
+    "clanek-bmi-obezita.html"
+   ]
+  },
+  {
+   "id": "sit_kapacity__akutni_pece",
+   "from": "sit_kapacity",
+   "to": "akutni_pece",
+   "polarity": "plus",
+   "mechanism": "Celorepubliková síť kardiocenter a třístupňová síť iktových center s pokrytím 24/7 zajišťuje rychlou akutní intervenci (primární PCI, trombolýzu a trombektomii) v terapeutickém okně.",
+   "strength": "strong",
+   "articles": [
+    "clanek-akutni-infarkt.html",
+    "clanek-cmp-iktova-centra.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__akutni_pece",
+   "from": "governance_legislativa",
+   "to": "akutni_pece",
+   "polarity": "plus",
+   "mechanism": "Statut center vysoce specializované kardiovaskulární a cerebrovaskulární péče formalizoval organizaci a koncentraci akutního řetězce a vynutil reportování procesních dat do registrů.",
+   "strength": "strong",
+   "articles": [
+    "clanek-akutni-infarkt.html",
+    "clanek-cmp-iktova-centra.html"
+   ]
+  },
+  {
+   "id": "akutni_pece__odvratitelna_mortalita",
+   "from": "akutni_pece",
+   "to": "odvratitelna_mortalita",
+   "polarity": "plus",
+   "mechanism": "Kvalitní a rychlá akutní kardiologická a iktová péče snižuje léčitelnou mortalitu na infarkt a CMP a záchranu po zástavě srdce.",
+   "strength": "strong",
+   "articles": [
+    "clanek-akutni-infarkt.html",
+    "clanek-cmp-iktova-centra.html",
+    "clanek-ohca-zachrana-srdce.html"
+   ]
+  },
+  {
+   "id": "rizikove_chovani__akutni_pece",
+   "from": "rizikove_chovani",
+   "to": "akutni_pece",
+   "polarity": "minus",
+   "mechanism": "Vyšší zátěž rizikových faktorů (nekontrolovaná hypertenze, kouření, alkohol, obezita, fibrilace síní) zhoršuje vstupní stav pacientů a rozsah příhody, čímž snižuje výsledky akutní péče přes lepší organizaci.",
+   "strength": "weak",
+   "articles": [
+    "clanek-cmp-iktova-centra.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__kvalita_bezpecnost",
+   "from": "pracovni_sila",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Dostatečný poměr sestra-pacient, zejména na jednotkách intenzivní péče, umožňuje dodržet hygienické a preventivní postupy a snižuje výskyt nemocničních infekcí a pádů.",
+   "strength": "strong",
+   "articles": [
+    "clanek-nosokomialni-infekce.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Úspora na směnách a přesčasy šetří rozpočet ředitele; účet platí bezpečnost pacienta a zdraví lékařů."
+  },
+  {
+   "id": "governance_legislativa__kvalita_bezpecnost",
+   "from": "governance_legislativa",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Systematické měření kvality (NIKEZ/INDIKO, PUK, veřejný indikátor pooperačních sepsí) a veřejný reporting výkonnosti poskytovatelů vytváří tlak na zlepšování bezpečnosti péče.",
+   "strength": "strong",
+   "articles": [
+    "clanek-nikez-jak-funguje-2026.html",
+    "clanek-pooperacni-sepse-2026.html"
+   ]
+  },
+  {
+   "id": "lekova_politika__kvalita_bezpecnost",
+   "from": "lekova_politika",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Racionální antibiotická politika a nemocniční antibiotic stewardship omezují nadužívání širokospektrých antibiotik, čímž snižují antimikrobiální rezistenci a riziko klostridiové kolitidy.",
+   "strength": "strong",
+   "articles": [
+    "clanek-spotreba-antibiotik.html",
+    "clanek-rezistence-antibiotik.html",
+    "clanek-nosokomialni-infekce.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__kvalita_bezpecnost",
+   "from": "digitalizace_data",
+   "to": "kvalita_bezpecnost",
+   "polarity": "plus",
+   "mechanism": "Kontinuální surveillance, registry a funkční systém hlášení nežádoucích událostí umožňují zachytit a zpětně analyzovat infekce a pochybení a strukturálně jim předcházet.",
+   "strength": "weak",
+   "articles": [
+    "clanek-nosokomialni-infekce.html",
+    "clanek-nikez-jak-funguje-2026.html"
+   ]
+  },
+  {
+   "id": "kvalita_bezpecnost__odvratitelna_mortalita",
+   "from": "kvalita_bezpecnost",
+   "to": "odvratitelna_mortalita",
+   "polarity": "plus",
+   "mechanism": "Prevence nemocničních infekcí, pooperačních sepsí a rezistence snižuje úmrtnost spojenou s hospitalizací (HAI v EU/EEA ~33 000 úmrtí ročně, zhruba polovina preventabilní).",
+   "strength": "strong",
+   "articles": [
+    "clanek-nosokomialni-infekce.html",
+    "clanek-pooperacni-sepse-2026.html",
+    "clanek-rezistence-antibiotik.html"
+   ]
+  },
+  {
+   "id": "kvalita_bezpecnost__objem_struktura_pece",
+   "from": "kvalita_bezpecnost",
+   "to": "objem_struktura_pece",
+   "polarity": "minus",
+   "mechanism": "Nemocniční infekce, sepse a další komplikace prodlužují hospitalizace a zvyšují readmise, čímž navyšují objem lůžkové péče.",
+   "strength": "weak",
+   "articles": [
+    "clanek-nosokomialni-infekce.html",
+    "clanek-pooperacni-sepse-2026.html"
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus__primarni_pece",
+   "from": "uhradovy_mechanismus",
+   "to": "primarni_pece",
+   "polarity": "plus",
+   "mechanism": "Kapitace, hodnota bodu a nově institucionalizovaná P4P bonifikace (ÚV 2026, dohodovací řízení 2027) určují ekonomiku praxí a přímo motivují praktiky k prevenci, dispenzarizaci chroniků a kontinuitě péče.",
+   "strength": "strong",
+   "articles": [
+    "clanek-reforma-primarni-pece-2027.html",
+    "clanek-vyhnutelne-hospitalizace.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__primarni_pece",
+   "from": "pracovni_sila",
+   "to": "primarni_pece",
+   "polarity": "minus",
+   "mechanism": "Věková krize praktiků (33 % PLD nad 60 let, roční úbytek −110 až −180 PLD, nízká atraktivita oboru pro mediky) zmenšuje síť primární péče a zvyšuje počet pojištěnců na ordinaci, zejména v deficitních okresech.",
+   "strength": "strong",
+   "articles": [
+    "clanek-reforma-primarni-pece-2027.html",
+    "clanek-reforma-pohotovosti-290-2025.html"
+   ]
+  },
+  {
+   "id": "lekova_politika__primarni_pece",
+   "from": "lekova_politika",
+   "to": "primarni_pece",
+   "polarity": "plus",
+   "mechanism": "Zrušení preskripčního omezení „E“ u více než 1 200 léčiv (od 1. 7. 2026) přesouvá obnovu stabilní chronické medikace ke praktikovi, ruší zbytné preskripční kontakty u specialistů a posiluje roli praktika jako průvodce pacienta.",
+   "strength": "strong",
+   "articles": [
+    "clanek-preskripce-praktici-2026.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__primarni_pece",
+   "from": "digitalizace_data",
+   "to": "primarni_pece",
+   "polarity": "plus",
+   "mechanism": "eRecept s automatickým prodloužením, e-Žádanka a hrazené telekonzultace praktik–specialista by odstranily administrativní kontakty a umožnily gatekeeping; jejich nedotažení dnes primární péči brzdí (eHealth adoption 62 vs. 70 OECD).",
+   "strength": "weak",
+   "articles": [
+    "clanek-ambulantni-kontakty.html",
+    "clanek-cekani-specialista.html",
+    "clanek-reforma-primarni-pece-2027.html"
+   ]
+  },
+  {
+   "id": "primarni_pece__chronicka_koordinace",
+   "from": "primarni_pece",
+   "to": "chronicka_koordinace",
+   "polarity": "plus",
+   "mechanism": "Praktik s dostatečnými kompetencemi, časem a P4P motivací drží chroniky ve strukturované dispenzární péči a koordinuje jejich medikaci; slabá primární péče naopak nechává chroniky rozptýlené mezi paralelními specialisty.",
+   "strength": "strong",
+   "articles": [
+    "clanek-vyhnutelne-hospitalizace.html",
+    "clanek-reforma-primarni-pece-2027.html",
+    "clanek-preskripce-praktici-2026.html"
+   ]
+  },
+  {
+   "id": "primarni_pece__dostupnost_pece",
+   "from": "primarni_pece",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Silná primární péče s gatekeepingem filtruje čekací listiny specialistů — bez ní se na ně dostávají i případy řešitelné praktikem, což prodlužuje čekání (28 vs. 18 dní) a přetěžuje specializované ambulance.",
+   "strength": "strong",
+   "articles": [
+    "clanek-cekani-specialista.html",
+    "clanek-ambulantni-kontakty.html",
+    "clanek-reforma-primarni-pece-2027.html"
+   ]
+  },
+  {
+   "id": "primarni_pece__akutni_pece",
+   "from": "primarni_pece",
+   "to": "akutni_pece",
+   "polarity": "plus",
+   "mechanism": "Funkční lékařská pohotovostní služba (mimo ordinační hodiny) odkloní podle expertního odhadu 30–40 % výjezdů ZZS na ambulantní ošetření a snižuje zbytný nápor na urgentní příjmy.",
+   "strength": "weak",
+   "articles": [
+    "clanek-reforma-pohotovosti-290-2025.html"
+   ]
+  },
+  {
+   "id": "chronicka_koordinace__objem_struktura_pece",
+   "from": "chronicka_koordinace",
+   "to": "objem_struktura_pece",
+   "polarity": "plus",
+   "mechanism": "Funkční dispenzarizace zachytí a stabilizuje dekompenzace diabetu, CHOPN, srdečního selhání, hypertenze a astmatu ambulantně — snižuje odvratitelné hospitalizace (ACSC 592 vs. 473/100k) a celkový hospitalizační objem.",
+   "strength": "strong",
+   "articles": [
+    "clanek-vyhnutelne-hospitalizace.html",
+    "clanek-ambulantni-kontakty.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__dostupnost_pece",
+   "from": "governance_legislativa",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Legislativní nástroje definují vymahatelnost dostupnosti: vyhláška 99/2012 Sb. o dojezdové době, zákon 290/2025 Sb. přenášející organizaci pohotovostí na pojišťovny, a chybějící národní waiting-time guarantee, kterou země jako UK, SE, NO a DK používají ke zkracování čekání.",
+   "strength": "strong",
+   "articles": [
+    "clanek-cekaci-doby-kycel.html",
+    "clanek-reforma-pohotovosti-290-2025.html",
+    "clanek-reforma-primarni-pece-2027.html"
+   ]
+  },
+  {
+   "id": "financni_ochrana__dostupnost_pece",
+   "from": "financni_ochrana",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Kde pojištění kryje péči jen v základním rozsahu a dominují platby z kapsy (stomatologie), stává se dostupnost funkcí příjmu — dobrá finanční ochrana bariéru ceny odstraňuje, jak ukazuje téměř nulový příjmový rozdíl u lékařské péče.",
+   "strength": "strong",
+   "articles": [
+    "clanek-nesplnena-potreba-zubni-pece.html"
+   ]
+  },
+  {
+   "id": "socialni_determinanty__dostupnost_pece",
+   "from": "socialni_determinanty",
+   "to": "dostupnost_pece",
+   "polarity": "minus",
+   "mechanism": "Nízký příjem domácnosti vede k odkládání péče s doplatky: nesplněná potřeba zubní péče je u nejchudšího kvintilu 2,5 % proti 0,5 % u nejbohatšího (poměr 5 : 1, EU-SILC 2024).",
+   "strength": "strong",
+   "articles": [
+    "clanek-nesplnena-potreba-zubni-pece.html"
+   ]
+  },
+  {
+   "id": "dostupnost_pece__zkusenost_pacienta",
+   "from": "dostupnost_pece",
+   "to": "zkusenost_pacienta",
+   "polarity": "plus",
+   "mechanism": "Čekací doby, dojezdové vzdálenosti a cenové bariéry přímo formují pacientovu zkušenost se systémem; vnímání je ale tlumeno očekáváními — Češi delší čekání považují za normální, takže self-report unmet need zůstává nízký.",
+   "strength": "strong",
+   "articles": [
+    "clanek-cekani-specialista.html",
+    "clanek-nesplnena-potreba-zubni-pece.html",
+    "clanek-cekaci-doby-kycel.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__dusevni_zdravi_sluzby",
+   "from": "pracovni_sila",
+   "to": "dusevni_zdravi_sluzby",
+   "polarity": "plus",
+   "mechanism": "Počet a věková struktura psychiatrů limitují kapacitu služeb — ČR má 157 dětských a dorostových psychiatrů (47 % může do 5 let odejít do důchodu) a podle NKÚ chybí v centrech duševního zdraví přes polovinu potřebných specialistů.",
+   "strength": "strong",
+   "articles": [
+    "clanek-detska-psychiatrie-krize.html",
+    "clanek-centra-dusevniho-zdravi.html"
+   ]
+  },
+  {
+   "id": "financovani_systemu__dusevni_zdravi_sluzby",
+   "from": "financovani_systemu",
+   "to": "dusevni_zdravi_sluzby",
+   "polarity": "plus",
+   "mechanism": "Podíl výdajů na duševní zdraví a stabilita zdrojů určují rozvoj sítě — centra duševního zdraví vznikala z časově omezených dotací (407 mil. Kč) a jejich sociální složka nemá podle NKÚ udržitelné financování.",
+   "strength": "strong",
+   "articles": [
+    "clanek-centra-dusevniho-zdravi.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__dusevni_zdravi_sluzby",
+   "from": "governance_legislativa",
+   "to": "dusevni_zdravi_sluzby",
+   "polarity": "plus",
+   "mechanism": "Politická stabilita a legislativní ukotvení určují tempo reformy psychiatrie — změny vlád opakovaně narušovaly její průběh (Winkler a kol. 2026) a NKÚ označil legislativu ke komunitní péči za neúčinnou.",
+   "strength": "strong",
+   "articles": [
+    "clanek-reforma-psychiatrie-13-let.html",
+    "clanek-centra-dusevniho-zdravi.html"
+   ]
+  },
+  {
+   "id": "dusevni_zdravi_sluzby__objem_struktura_pece",
+   "from": "dusevni_zdravi_sluzby",
+   "to": "objem_struktura_pece",
+   "polarity": "plus",
+   "mechanism": "Rozvoj komunitních center duševního zdraví přesouvá péči z lůžek do terénu — počet dlouhodobě hospitalizovaných psychiatrických pacientů klesl z 30 300 (2018) na 25 300 (2022), průměrná psychiatrická hospitalizace ale zůstává 43 dní proti 19 v OECD.",
+   "strength": "strong",
+   "articles": [
+    "clanek-psychiatricke-hospitalizace-reforma-2026.html",
+    "clanek-centra-dusevniho-zdravi.html"
+   ]
+  },
+  {
+   "id": "dusevni_zdravi_sluzby__dostupnost_pece",
+   "from": "dusevni_zdravi_sluzby",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Hustota sítě služeb se přímo propisuje do čekacích dob a nenaplněné potřeby — na neakutní dětské psychiatrické vyšetření se čeká 4–8 měsíců a centra duševního zdraví chybí v dosažitelné vzdálenosti.",
+   "strength": "strong",
+   "articles": [
+    "clanek-detska-psychiatrie-krize.html",
+    "clanek-sebevrazdy-dusevni-zdravi.html"
+   ]
+  },
+  {
+   "id": "dusevni_zdravi_sluzby__odvratitelna_mortalita",
+   "from": "dusevni_zdravi_sluzby",
+   "to": "odvratitelna_mortalita",
+   "polarity": "plus",
+   "mechanism": "Dostupná péče o duševní zdraví snižuje sebevražednost, která je součástí odvratitelné mortality — ČR má cca 12,5 sebevražd na 100 tis. proti ~10,5 v OECD, přičemž se předepisují léky, ale nedostává systematická péče.",
+   "strength": "weak",
+   "articles": [
+    "clanek-sebevrazdy-dusevni-zdravi.html"
+   ]
+  },
+  {
+   "id": "sit_kapacity__dlouhodoba_paliativni",
+   "from": "sit_kapacity",
+   "to": "dlouhodoba_paliativni",
+   "polarity": "plus",
+   "mechanism": "Lůžková kapacita hospiců a zařízení dlouhodobé péče určuje, kolik lidí se do péče dostane — ČR má 5,0 hospicových lůžek na 100 tis. obyvatel proti doporučení EAPC 8 a EU průměru 7,4.",
+   "strength": "strong",
+   "articles": [
+    "clanek-hospicova-pece.html",
+    "clanek-reforma-dlouhodobe-pece-2026.html"
+   ]
+  },
+  {
+   "id": "uhradovy_mechanismus__dlouhodoba_paliativni",
+   "from": "uhradovy_mechanismus",
+   "to": "dlouhodoba_paliativni",
+   "polarity": "plus",
+   "mechanism": "Existence úhradového kódu rozhoduje o rozvoji terénních služeb — mobilní specializovaná paliativní péče historicky úhradový kód neměla a do úhrad pojišťoven vstoupila až po pilotech VZP, kapacita (4,6 týmu na milion) přesto zůstává pod polovinou doporučení EAPC.",
+   "strength": "strong",
+   "articles": [
+    "clanek-umrti-doma-hospic.html",
+    "clanek-mobilni-paliativni-tymy.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__dlouhodoba_paliativni",
+   "from": "pracovni_sila",
+   "to": "dlouhodoba_paliativni",
+   "polarity": "plus",
+   "mechanism": "Pečující personál je hlavní úzké hrdlo dlouhodobé péče — ČR má 2,5 pracovníka formální dlouhodobé péče na 100 seniorů proti 5,6 v OECD, takže ani průměrné výdaje nelze proměnit v reálnou kapacitu.",
+   "strength": "strong",
+   "articles": [
+    "clanek-dlouhodoba-pece-vydaje.html",
+    "clanek-socialne-zdravotni-pomezi-2026.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__dlouhodoba_paliativni",
+   "from": "governance_legislativa",
+   "to": "dlouhodoba_paliativni",
+   "polarity": "plus",
+   "mechanism": "Dvojkolejná gesce MZ a MPSV (zákony 372/2011 a 108/2006 Sb.) fragmentuje vstup pacienta, financování i regulaci dlouhodobé péče; zákon 38/2025 Sb. začíná sociálně-zdravotní pomezí sjednocovat (etapy 2025, 2026, 2029).",
+   "strength": "strong",
+   "articles": [
+    "clanek-reforma-dlouhodobe-pece-2026.html",
+    "clanek-socialne-zdravotni-pomezi-2026.html"
+   ]
+  },
+  {
+   "id": "dlouhodoba_paliativni__objem_struktura_pece",
+   "from": "dlouhodoba_paliativni",
+   "to": "objem_struktura_pece",
+   "polarity": "plus",
+   "mechanism": "Fungující následná a terénní péče uvolňuje akutní lůžka — bez ní zůstávají doléčení senioři týdny na akutních interních odděleních a přes 70 % lidí umírá v nemocnici či léčebně místo doma.",
+   "strength": "strong",
+   "articles": [
+    "clanek-socialne-zdravotni-pomezi-2026.html",
+    "clanek-umrti-doma-hospic.html"
+   ],
+   "conflict": true,
+   "conflict_note": "Doléčený pacient bez návazné péče drží řediteli obloženost akutního lůžka — a pacientovi krade týdny rehabilitace."
+  },
+  {
+   "id": "dlouhodoba_paliativni__zkusenost_pacienta",
+   "from": "dlouhodoba_paliativni",
+   "to": "zkusenost_pacienta",
+   "polarity": "plus",
+   "mechanism": "Dostupnost domácí a hospicové paliativní péče rozhoduje o naplnění preferencí v závěru života — zhruba 70 % Čechů si přeje zemřít doma nebo v hospici, daří se to jen 26,2 % (OECD 32 %).",
+   "strength": "strong",
+   "articles": [
+    "clanek-umrti-doma-hospic.html",
+    "clanek-hospicova-pece.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__digitalizace_data",
+   "from": "governance_legislativa",
+   "to": "digitalizace_data",
+   "polarity": "plus",
+   "mechanism": "Legislativa (zákon 325/2021 Sb. a novela 236/2025 Sb.) a governance zadávání IT zakázek určují, jaká datová infrastruktura vznikne — estonská lekce ukazuje, že digitalizace je otázka governance, ne technologie, a špatné zadávání vede k vendor lock-inu.",
+   "strength": "strong",
+   "articles": [
+    "clanek-novela-elektronizace-2026.html",
+    "clanek-datova-patere-lock-in.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__governance_legislativa",
+   "from": "digitalizace_data",
+   "to": "governance_legislativa",
+   "polarity": "plus",
+   "mechanism": "Funkční, sdílená a důvěryhodná data jsou tvrdý předpoklad řízení podle výsledků a nezávislého měření kvality — bez datové páteře nelze uzavřít smyčku cíl → měření → rozhodnutí.",
+   "strength": "strong",
+   "articles": [
+    "clanek-rizeni-podle-vysledku.html",
+    "clanek-datova-patere-lock-in.html",
+    "clanek-ukazatele-dashboard.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__lekova_politika",
+   "from": "governance_legislativa",
+   "to": "lekova_politika",
+   "polarity": "plus",
+   "mechanism": "Nařízení EU 2021/2282 a národní legislativní rámec definují, jak SÚKL hodnotí a úhradově rozhoduje o nových lécích; společné klinické hodnocení (JCA) sjednocuje vstup inovací pro 27 trhů.",
+   "strength": "strong",
+   "articles": [
+    "clanek-hta-jca-eu-2026.html"
+   ]
+  },
+  {
+   "id": "governance_legislativa__uhradovy_mechanismus",
+   "from": "governance_legislativa",
+   "to": "uhradovy_mechanismus",
+   "polarity": "plus",
+   "mechanism": "Aby JCA výstupy reálně působily, musí se HTA kritéria propsat do dohodovacího řízení a úhradové vyhlášky (např. pro centrově hrazená léčiva) — jinak zůstává evropské hodnocení paralelní byrokracií.",
+   "strength": "weak",
+   "articles": [
+    "clanek-hta-jca-eu-2026.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__prevence_screeningy",
+   "from": "digitalizace_data",
+   "to": "prevence_screeningy",
+   "polarity": "plus",
+   "mechanism": "Centrální registr preventivních vyšetření a elektronický očkovací průkaz (účinnost od 1. 1. 2026) dávají systému přehled o účasti na prevenci a proočkovanosti a umožňují adresné zvaní.",
+   "strength": "weak",
+   "articles": [
+    "clanek-novela-elektronizace-2026.html"
+   ]
+  },
+  {
+   "id": "digitalizace_data__chronicka_koordinace",
+   "from": "digitalizace_data",
+   "to": "chronicka_koordinace",
+   "polarity": "plus",
+   "mechanism": "Sdílení zdravotní dokumentace mezi pracovišti (Patient Summary, pacientský portál) je podmínkou návaznosti péče o chroniky — v ČR tato vrstva chybí, takže se vyšetření duplikují a informace se mezi poskytovateli ztrácejí.",
+   "strength": "strong",
+   "articles": [
+    "clanek-ehealth.html",
+    "clanek-ezkarta-ehealth.html"
+   ]
+  },
+  {
+   "id": "lekova_politika__udrzitelnost_financi",
+   "from": "lekova_politika",
+   "to": "udrzitelnost_financi",
+   "polarity": "plus",
+   "mechanism": "Generická a biosimilární substituce snižuje lékové výdaje: u klasických generik systém šetří téměř automaticky po vypršení patentu, u drahých biologik se o úsporu musí aktivně přičinit pravidla úhrad a substituce (Německo má objemový podíl o víc než 20 bodů vyšší).",
+   "strength": "strong",
+   "articles": [
+    "clanek-generika-biosimilars-uspora.html"
+   ]
+  },
+  {
+   "id": "lekova_politika__dostupnost_pece",
+   "from": "lekova_politika",
+   "to": "dostupnost_pece",
+   "polarity": "plus",
+   "mechanism": "Rychlost národního úhradového rozhodování o nových terapiích (onkologika, ATMP, centrová léčba) a zvládání výpadků léčiv určují, jak rychle a spolehlivě se pacienti k lékům dostanou.",
+   "strength": "strong",
+   "articles": [
+    "clanek-hta-jca-eu-2026.html",
+    "clanek-generika-biosimilars-uspora.html"
+   ]
+  },
+  {
+   "id": "pracovni_sila__digitalizace_data",
+   "from": "pracovni_sila",
+   "to": "digitalizace_data",
+   "polarity": "plus",
+   "mechanism": "Adopce eHealth se rozhoduje na poslední míli u kliniků: přetížený personál s change fatigue nástroje nepřijme (66,4 % lékařů Patient Summary nepoužilo, 72,1 % neví o napojení svého systému na národní kontaktní bod), dostatečná kapacita a motivace adopci umožňují.",
+   "strength": "strong",
+   "articles": [
+    "clanek-posledni-mile-implementace.html",
+    "clanek-ezkarta-ehealth.html"
+   ]
+  },
+  {
+   "id": "socialni_determinanty__nerovnosti",
+   "from": "socialni_determinanty",
+   "to": "nerovnosti",
+   "polarity": "minus",
+   "mechanism": "Vzdělanostní a příjmový gradient se přímo promítá do 13letého rozdílu v naději dožití mužů a do koncentrace katastrofických výdajů a zubního kazu u nízkopříjmových skupin — vzdělání působí jako kořenová determinanta předurčující expozici ostatním rizikům.",
+   "strength": "strong",
+   "articles": [
+    "clanek-nadeje-doziti-vzdelani.html",
+    "clanek-katastroficke-vydaje-zdravi.html",
+    "clanek-zubni-kaz-deti.html"
+   ]
+  },
+  {
+   "id": "odvratitelna_mortalita__delka_kvalita_zivota",
+   "from": "odvratitelna_mortalita",
+   "to": "delka_kvalita_zivota",
+   "polarity": "minus",
+   "mechanism": "Předčasná úmrtí do 75 let (o 19 % nad EU) přímo zkracují naději dožití — ČR je ~1,4 roku pod průměrem EU při narození; PYLL sčítá potenciálně ztracené roky života.",
+   "strength": "strong",
+   "articles": [
+    "clanek-pyll.html",
+    "clanek-nadeje-doziti-zdravi.html",
+    "clanek-lecitelna-mortalita.html"
+   ]
+  },
+  {
+   "id": "chronicka_koordinace__delka_kvalita_zivota",
+   "from": "chronicka_koordinace",
+   "to": "delka_kvalita_zivota",
+   "polarity": "plus",
+   "mechanism": "Zvládání multimorbidity seniorů a integrace dlouhodobé péče po vzoru Skandinávie/NL prodlužuje roky prožité ve zdraví — český deficit se projevuje 1,7 roku ztráty HLY po 65. roce oproti EU (7,7 vs. 9,4).",
+   "strength": "weak",
+   "articles": [
+    "clanek-nadeje-doziti-zdravi.html"
+   ]
+  },
+  {
+   "id": "financni_ochrana__nerovnosti",
+   "from": "financni_ochrana",
+   "to": "nerovnosti",
+   "polarity": "plus",
+   "mechanism": "Silná finanční ochrana tlumí nerovnosti; její drolení v ČR — doplatky na ambulantní léky u nejchudších a stomatologie zcela mimo ochranný limit § 16b — koncentruje katastrofické výdaje v nejchudší pětině (21 % vs. 6 % průměr) a prohlubuje nerovný přístup k péči.",
+   "strength": "strong",
+   "articles": [
+    "clanek-katastroficke-vydaje-zdravi.html",
+    "clanek-zubni-kaz-deti.html"
+   ]
+  }
+ ]
 }

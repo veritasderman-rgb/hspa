@@ -146,3 +146,18 @@ test('konflikty: označené hrany existují, mají poznámku a je jich rozumně'
     assert.ok(e.conflict_note?.length > 30, `${e.id}: conflict_note chybí/krátká`);
   }
 });
+
+test('rozhoduje: páky nesou „kdo o tom rozhoduje" a interní odkazy existují', () => {
+  const levers = model.nodes.filter(n => n.kind === 'lever');
+  const sRozhoduje = levers.filter(n => n.rozhoduje?.length);
+  assert.ok(sRozhoduje.length >= 10, `podezřele málo pák s polem rozhoduje (${sRozhoduje.length}/${levers.length})`);
+  for (const n of model.nodes) {
+    for (const r of n.rozhoduje ?? []) {
+      assert.ok(r.kdo, `${n.id}: rozhoduje bez kdo`);
+      if (r.url && !/^https?:/.test(r.url)) {
+        const file = r.url.split('?')[0];
+        assert.ok(fs.existsSync(path.join(ROOT, file)), `${n.id}: cíl ${file} v repu není`);
+      }
+    }
+  }
+});
