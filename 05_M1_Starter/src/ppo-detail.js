@@ -59,6 +59,79 @@ export function ukolySouhrn(a) {
   };
 }
 
+/** Řádky časové osy úkolů (čistá funkce): jen úkoly s datovaným zadáním
+ *  a termínem či dokladem osudu — graf nesmí předstírat znalost, kterou nemá. */
+export function ganttData(a, limit = 30) {
+  const rows = [];
+  for (const j of a.jednani ?? []) {
+    if (!j.datum) continue;
+    for (const u of j.ukoly ?? []) {
+      const t = u.t && u.t > j.datum ? u.t : null;
+      const rawSd = u.sd ?? u.ext?.datum ?? null;
+      const sd = rawSd && rawSd > j.datum ? rawSd : null;
+      if (!sd && !t) continue;
+      rows.push({
+        co: u.co,
+        start: j.datum,
+        t,
+        sd,
+        stav: u.ext?.stav === 'vydano' ? 'splneno' : (u.stav ?? null),
+      });
+    }
+  }
+  rows.sort((x, y) => y.start.localeCompare(x.start) || x.co.localeCompare(y.co, 'cs'));
+  const shown = rows.slice(0, limit);
+  const dates = shown.flatMap(r => [r.start, r.t, r.sd].filter(Boolean));
+  return {
+    rows: shown,
+    total: rows.length,
+    min: dates.length ? dates.reduce((a2, b) => (a2 < b ? a2 : b)) : null,
+    max: dates.length ? dates.reduce((a2, b) => (a2 > b ? a2 : b)) : null,
+  };
+}
+
+/** SVG časové osy úkolů (zadáno → termín/doklad splnění). */
+function renderGantt(g) {
+  const W = 1000, LAB = 360, ROW = 24, TOP = 20;
+  const day = d => Date.parse(d);
+  const span = Math.max(day(g.max) - day(g.min), 86400000 * 60);
+  const x = d => LAB + ((day(d) - day(g.min)) / span) * (W - LAB - 14);
+  const H = TOP + g.rows.length * ROW + 8;
+
+  // roční gridlines
+  const y0 = Number(g.min.slice(0, 4)) + 1, y1 = Number(g.max.slice(0, 4));
+  let grid = '';
+  for (let y = y0; y <= y1; y++) {
+    const gx = x(`${y}-01-01`);
+    grid += `<line class="ppo-g-grid" x1="${gx.toFixed(1)}" y1="${TOP - 6}" x2="${gx.toFixed(1)}" y2="${H - 4}"/>`
+      + `<text class="ppo-g-year" x="${gx.toFixed(1)}" y="${TOP - 9}">${y}</text>`;
+  }
+
+  const rows = g.rows.map((r, i) => {
+    const y = TOP + i * ROW + ROW / 2;
+    const sx = x(r.start);
+    const parts = [
+      `<text class="ppo-g-lab" x="0" y="${y + 3.5}">${escapeHtml(r.co.length > 52 ? r.co.slice(0, 51) + '…' : r.co)}<title>${escapeHtml(r.co)}</title></text>`,
+      `<circle class="ppo-g-start" cx="${sx.toFixed(1)}" cy="${y}" r="3"/>`,
+    ];
+    if (r.sd) {
+      parts.push(`<line class="ppo-g-bar${r.stav === 'pokracuje' ? ' ppo-g-dash' : ''}" x1="${sx.toFixed(1)}" y1="${y}" x2="${x(r.sd).toFixed(1)}" y2="${y}"/>`);
+      parts.push(`<circle class="${r.stav === 'splneno' ? 'ppo-g-done' : 'ppo-g-runend'}" cx="${x(r.sd).toFixed(1)}" cy="${y}" r="${r.stav === 'splneno' ? 4.5 : 3}"/>`);
+    }
+    if (r.t) {
+      if (!r.sd) parts.push(`<line class="ppo-g-plan" x1="${sx.toFixed(1)}" y1="${y}" x2="${x(r.t).toFixed(1)}" y2="${y}"/>`);
+      parts.push(`<line class="ppo-g-tick" x1="${x(r.t).toFixed(1)}" y1="${y - 5}" x2="${x(r.t).toFixed(1)}" y2="${y + 5}"><title>termín dle zápisu</title></line>`);
+    }
+    return parts.join('');
+  }).join('');
+
+  return `<svg class="ppo-gantt" viewBox="0 0 ${W} ${H}" role="img"
+    aria-label="Časová osa úkolů: zadání, termíny a doložená splnění">${grid}${rows}</svg>
+  <p class="ppo-g-legend"><span><svg width="26" height="10"><circle cx="5" cy="5" r="3" class="ppo-g-start"/><line class="ppo-g-plan" x1="8" y1="5" x2="20" y2="5"/><line class="ppo-g-tick" x1="20" y1="0" x2="20" y2="10"/></svg> zadáno → termín</span>
+    <span><svg width="26" height="10"><line class="ppo-g-bar" x1="2" y1="5" x2="18" y2="5"/><circle class="ppo-g-done" cx="20" cy="5" r="4"/></svg> doložené splnění</span>
+    <span><svg width="26" height="10"><line class="ppo-g-bar ppo-g-dash" x1="2" y1="5" x2="18" y2="5"/><circle class="ppo-g-runend" cx="20" cy="5" r="3"/></svg> pokračuje (poslední stopa)</span></p>`;
+}
+
 const STAV_TEMA = stav =>
   /^rozhodnuto/.test(stav) ? 'ok' : /^usnulo/.test(stav) ? 'off' : 'run';
 
@@ -104,6 +177,15 @@ function renderAnalyza(a) {
     </div>`);
   }
   if (grid.length) parts.push(`<div class="ppo-d-grid">${grid.join('')}</div>`);
+
+  const gantt = ganttData(a);
+  if (gantt.rows.length >= 3) {
+    parts.push(`<h3 class="ppo-a-h">Časová osa úkolů <span class="ppo-a-count">${gantt.rows.length}${gantt.total > gantt.rows.length ? ` z ${gantt.total}` : ''}</span></h3>
+      <div class="ppo-gantt-wrap">${renderGantt(gantt)}</div>
+      <p class="ppo-d-note">Jen úkoly s datovaným zadáním a termínem či doloženým osudem${gantt.total > gantt.rows.length ? ` (${gantt.rows.length} nejnovějších z ${gantt.total})` : ''};
+      splnění značíme výhradně tam, kde ho pozdější zápis nebo externí zdroj výslovně zachycuje —
+      úkol bez značky není nesplněný. Vše ostatní v <a href="pracovni-ukoly.html?skupina=${a.group_id}">dashboardu úkolů</a>.</p>`);
+  }
 
   const jed = (a.jednani ?? []).filter(j => j.temata.length || j.rozhodnuti.length);
   if (jed.length) {

@@ -96,6 +96,12 @@
       <div class="filters-actions">
         <input type="search" id="ukSearch" class="search-box" placeholder="Hledat v úkolech: co, kdo, orgán…" aria-label="Vyhledat úkol">
         <select id="ukSkupina" class="search-box" aria-label="Filtr podle orgánu"></select>
+        <select id="ukStav" class="search-box" aria-label="Filtr podle osudu úkolu">
+          <option value="all">Osud: vše</option>
+          <option value="splneno">jen doložené splnění</option>
+          <option value="pokracuje">jen pokračující</option>
+          <option value="bez">bez dokladu v zápisech</option>
+        </select>
       </div>
     </div>
   </section>
@@ -122,9 +128,11 @@
     <p id="ukEmpty" class="ppo-d-note hidden">Žádný úkol neodpovídá filtru.</p>
     <ul class="ppo-uk-list" id="ukList"></ul>
     <button type="button" class="ppo-uk-more hidden" id="ukMore">Zobrazit další</button>
-    <p class="ppo-d-note">Zápisy zachycují <strong>zadání</strong> úkolu — jeho splnění z dat odvodit nelze.
-      Termíny jsou uvedeny tak, jak stojí v zápisu (včetně formulací typu „do příštího jednání").
-      Orgány bez zveřejněných či analyzovaných zápisů v přehledu nejsou.</p>
+    <p class="ppo-d-note">Osud úkolu dokládáme jen citací: chip „✓ doloženo" znamená, že pozdější
+      zápis splnění výslovně zachycuje (citace v bublině, odkaz vede na zápis); „✓ vydáno" je externě
+      dohledaný výsledek legislativního úkolu (Věstník MZ, VeKLEP, Sbírka). Úkol <strong>bez chipu
+      není nesplněný</strong> — zápisy o jeho osudu prostě mlčí. Termíny jsou uvedeny tak, jak stojí
+      v zápisu. Orgány bez zveřejněných či analyzovaných zápisů v přehledu nejsou.</p>
   </section>
 
   <section class="leg-source-note" aria-label="Zdroj dat">
