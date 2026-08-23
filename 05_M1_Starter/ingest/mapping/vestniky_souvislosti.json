@@ -1,0 +1,28 @@
+{
+  "_doc": "Deterministická pravidla prolinkování archivu Věstníků MZ (data/vestniky.json) se zbytkem webu. Regex (case-insensitive) se pouští na text položky obsahu částky. skupiny → pole g na položce + karta „Ve Věstníku MZ' na detailu orgánu (build-web.js); indikatory → data/vestniky-vazby.json a box „Úřední rámec' na detailu indikátoru (build-vestniky-vazby.js). Pozor: texty ze starých PDF mají rozbité mezery (např. „výkon ů') — pravidla s tím počítají. Každé pravidlo bylo před zápisem ověřeno proti korpusu (nenulové, bez zjevných falešných zásahů).",
+  "skupiny": [
+    { "g": 4, "re": "seznamu? zdravotních výkon|bodov(ým|ých)i? hodnot" },
+    { "g": 7, "re": "transfuz|dárc(ů|e) krve|krevní deriváty" },
+    { "g": 11, "re": "očkov|vakcin|imunizac" },
+    { "g": 121, "re": "zdravotnick(ých|é|ými) prostředk" },
+    { "g": 191, "re": "aneurysmat" },
+    { "g": 192, "re": "děložního hrdla|cervikáln" },
+    { "g": 193, "re": "karcinomu plic" },
+    { "g": 194, "re": "karcinomu prostaty" },
+    { "g": 196, "re": "mamograf|karcinomu prsu" },
+    { "g": 197, "re": "kolorektáln" },
+    { "g": 198, "re": "štítné žlázy" },
+    { "g": 199, "re": "kojen(c|í|eck)|mateřského mléka|počáteční a pokračovací výživ" },
+    { "g": 205, "re": "nutriční péč|institucionální(ho)? stravování" }
+  ],
+  "indikatory": [
+    { "id": "screening_mamograficky", "re": "mamograf|karcinomu prsu" },
+    { "id": "screening_kolorektalni", "re": "kolorektáln" },
+    { "id": "incidence_kolorektalni", "re": "kolorektáln" },
+    { "id": "screening_cervix", "re": "děložního hrdla|cervikáln" },
+    { "id": "screening_plicni", "re": "karcinomu plic" },
+    { "id": "screening_prostata", "re": "karcinomu prostaty" },
+    { "id": "vakcinace_chripka_65", "re": "chřipk" },
+    { "id": "vakcinace_pneumokok_65", "re": "pneumokok" }
+  ]
+}

@@ -292,6 +292,17 @@ function render(PPO, OS, s) {
       </li>`).join('')}</ul></div>`);
   }
 
+  // agenda orgánu ve Věstníku MZ (deterministický match z archivu věstníků)
+  if (s.vestnik?.length) {
+    cards.push(`<div class="ppo-d-card"><h3>Ve Věstníku MZ</h3>
+      <ul class="ppo-links-list">${s.vestnik.map(o => `<li>
+        <div class="ppo-link-head"><a href="${escapeHtml(o.url)}" target="_blank" rel="noopener">${escapeHtml(o.t)}</a></div>
+        <div class="ppo-link-sub">${escapeHtml(o.titul)}${o.datum ? ` · ${fmtDate(o.datum)}` : ''}</div>
+      </li>`).join('')}</ul>
+      ${s.vestnik_celkem > s.vestnik.length ? `<p class="ppo-d-note">…a ${s.vestnik_celkem - s.vestnik.length} dalších položek.</p>` : ''}
+      <a class="ppo-panel-cta" href="vestniky-mz.html">Archiv Věstníků MZ →</a></div>`);
+  }
+
   // dokumenty na portálu
   const doky = Object.entries(s.dokumenty_typy ?? {}).filter(([k]) => k !== 'jine').sort((a, b) => b[1] - a[1]);
   cards.push(`<div class="ppo-d-card"><h3>Na portálu ministerstva</h3>

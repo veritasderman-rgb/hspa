@@ -135,3 +135,74 @@ test('vestniky: mergePrev doplní prázdný čerstvý běh z předchozího výst
   assert.deepEqual(mergePrev(plna, prevRec), plna, 'čerstvá data mají přednost');
   assert.deepEqual(mergePrev(prazdna, undefined), prazdna, 'bez předchozího záznamu beze změny');
 });
+
+/* ── prolinkování (mapping → badge, vazby, karta skupiny) ───────────── */
+
+import { anotujSkupiny } from '../ingest/fetchers/vestniky.js';
+import { buildVazby } from '../ingest/build-vestniky-vazby.js';
+import { mergeVestnik } from '../ingest/ppo/build-web.js';
+import { zkratNazev } from '../src/vestniky.js';
+
+const MAPPING = JSON.parse(fs.readFileSync(
+  path.join(ROOT, 'ingest', 'mapping', 'vestniky_souvislosti.json'), 'utf8'));
+
+test('vestniky vazby: mapping pravidla jsou validní regexy a mají zásahy v datech', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky.json'), 'utf8'));
+  for (const r of [...MAPPING.skupiny, ...MAPPING.indikatory]) {
+    const re = new RegExp(r.re, 'i'); // vyhodí při nevalidním regexu
+    const n = d.castky.reduce((s, c) => s + c.obsah.filter(o => re.test(o.t)).length, 0);
+    assert.ok(n >= 1, `pravidlo ${r.g ?? r.id} nemá v korpusu žádný zásah`);
+  }
+});
+
+test('vestniky vazby: anotace g v data/vestniky.json odpovídá pravidlům (drift)', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky.json'), 'utf8'));
+  const kopie = JSON.parse(JSON.stringify(d.castky));
+  for (const c of kopie) for (const o of c.obsah) delete o.g;
+  anotujSkupiny(kopie, MAPPING);
+  assert.deepEqual(kopie, d.castky, 'pole g nesedí na pravidla — spusť npm run fetch:vestniky');
+  const n = d.castky.reduce((s, c) => s + c.obsah.filter(o => o.g).length, 0);
+  assert.ok(n >= 50, `podezřele málo anotací (${n})`);
+});
+
+test('vestniky vazby: data/vestniky-vazby.json je drift-konzistentní', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky.json'), 'utf8'));
+  const committed = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky-vazby.json'), 'utf8'));
+  const rebuilt = buildVazby(d, MAPPING, committed.skupiny_nazvy);
+  assert.deepEqual(rebuilt, committed, 'vazby nesedí — spusť npm run fetch:vestniky');
+  const ind = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const ids = new Set(ind.indicators.map(x => x.id));
+  for (const id of Object.keys(committed.indikatory)) {
+    assert.ok(ids.has(id), `vazby: indikátor ${id} v indicators.json není`);
+  }
+  const ppo = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo.json'), 'utf8'));
+  const gids = new Set(ppo.skupiny.map(s => s.id));
+  for (const g of Object.keys(committed.skupiny_nazvy)) {
+    assert.ok(gids.has(Number(g)), `vazby: skupina ${g} v ppo.json není`);
+  }
+});
+
+test('vestniky vazby: mergeVestnik plní kartu skupiny (nejnovější první, cap)', () => {
+  const skupiny = new Map([[9, { id: 9 }], [10, { id: 10 }]]);
+  const vest = { castky: [
+    { id: 1, titul: 'V 1/2020', datum: '2020-01-01', url: 'u1', obsah: [{ t: 'Program screeningu XYZ' }] },
+    { id: 2, titul: 'V 2/2024', datum: '2024-01-01', url: 'u2', obsah: [{ t: 'Aktualizace programu screeningu XYZ' }, { t: 'Jiné téma' }] },
+  ] };
+  mergeVestnik(skupiny, vest, { skupiny: [{ g: 9, re: 'screeningu XYZ' }, { g: 10, re: 'nikde-nic' }] }, 8);
+  const s = skupiny.get(9);
+  assert.equal(s.vestnik.length, 2);
+  assert.equal(s.vestnik_celkem, 2);
+  assert.equal(s.vestnik[0].titul, 'V 2/2024', 'nejnovější první');
+  assert.equal(skupiny.get(10).vestnik, undefined, 'skupina bez zásahu pole nedostane');
+  // drift: g v datech ⇒ skupina má kartu v ppo.json
+  const ppo = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo.json'), 'utf8'));
+  const s196 = ppo.skupiny.find(x => x.id === 196);
+  assert.ok(s196.vestnik?.length >= 3, 'g196 (mamografie) má mít kartu Ve Věstníku MZ');
+});
+
+test('vestniky vazby: zkratNazev ořeže úvodní floskule', () => {
+  assert.equal(zkratNazev('Komise pro program screeningu karcinomu prsu'), 'Screeningu karcinomu prsu');
+  assert.equal(zkratNazev('Pracovní skupina k seznamu zdravotních výkonů s bodovými hodnotami'),
+    'Seznamu zdravotních výkonů s bodovými hod…');
+  assert.equal(zkratNazev(null), '');
+});
