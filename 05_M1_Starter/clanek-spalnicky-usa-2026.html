@@ -4,6 +4,7 @@
 <!--
   audit:
     last_reviewed: 2026-08-23
+    codex_2026-08-23: "CODEX REVIEW (PR #1053): dateModified v JSON-LD zůstávalo 2026-08-04, ačkoli statická description i čísla v textu už nesou vlnu CDC k 20. 8. 2026. Do data/articles.json doplněn blok audit.last_reviewed = 2026-08-23, ze kterého dateModified odvozuje ingest/scripts/inject-article-seo.js (dosud záznam žádný audit blok neměl, takže by injektor staré datum zakonzervoval), a hodnota v JSON-LD srovnána na 2026-08-23. Žádné číslo ani formulace se touto opravou nemění."
     reviewer: claude-code-agent
     status: review-pending
     nightly_2026-08-23: "NOČNÍ REVIZE (FÁZE 3.2) — nová vlna dat CDC. ZDROJ (primární): CDC, Measles Cases and Outbreaks (https://www.cdc.gov/measles/data-research/index.html, staženo 23. 8. 2026, hlavička „Updated: August 21, 2026\"). Doslovně: 'As of August 20, 2026, 2,777 confirmed* measles cases were reported in the United States in 2026.' — 'Among these, 2,761 measles cases were reported by 47 jurisdictions' + 'A total of 16 measles cases were reported among international visitors' — 'There have been 36 new outbreaks** reported in 2026, and 94% of confirmed cases (2,614 of 2,777) are outbreak-associated (1,239 from outbreaks starting in 2026 and 1,375 from outbreaks that started in 2025)'. ZMĚNĚNO proti stavu k 13. 8. 2026: 2 566 → 2 777 případů; 2 550 → 2 761 hlášeno jurisdikcemi; 38 → 36 ohnisek (CDC kumulativní počet revidoval DOLŮ — v textu explicitně vysvětleno jako zpětná revize, nikoli jako pokles nákazy); 2 407/2 566 → 2 614/2 777 při nezměněných 94 %; nově doplněn rozpad ohniskových případů 1 239 (ohniska 2026) / 1 375 (ohniska 2025). Srovnáno: meta description, og:description, JSON-LD description, perex, av-counter (data-value i popisek), obě figure-note, řádek tabulky, věta v historické perspektivě („dva a půl tisíce\" → „necelé tři tisíce\"), blok Zdroje; dále perex a cover_viz v data/articles.json (max osy 2500 → 2800, aby sloupec 2 777 nepřetékal) a claim spalnicky-usa-2026--01 v data/claims.json; cover přegenerován. NEZMĚNĚNO: 47 jurisdikcí a 16 zahraničních návštěvníků (beze změny), titulek, 2025 = 2 289, proočkovanost 92,5 %, kanadská, evropská i česká data — u těch se zdroj nezměnil. Pozn. k síti: cdc.gov odmítá curl (Akamai), načteno přes WebFetch; kontrolní dotaz na doslovné znění proveden zvlášť a čísla se shodovala. Status review-pending, published zůstává true."
@@ -72,7 +73,7 @@
         "@id": "https://skorezdravotnictvi.cz/clanek-spalnicky-usa-2026"
       },
       "datePublished": "2026-08-04",
-      "dateModified": "2026-08-04",
+      "dateModified": "2026-08-23",
       "author": {
         "@type": "Organization",
         "name": "HSPA Monitor",
