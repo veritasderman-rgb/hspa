@@ -16,6 +16,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { CONFIG } from '../config.js';
 import { fetchWithRetry } from '../lib/http.js';
@@ -325,6 +326,49 @@ export async function fetchVestniky(opts = {}) {
       console.warn(`⚠ vestniky-vazby: ${err.message}`);
     }
   }
+  // inkrementální fulltext: nové částky s PDF se dotáhnou do committed indexu
+  // (max 10 na běh — drží čas týdenního cronu; bulk staví build:vestniky:fulltext)
+  try {
+    const ftPath = path.join(ROOT, 'data', 'vestniky-fulltext.json');
+    if (fs.existsSync(ftPath)) {
+      const { pridejDoIndexu } = await import('../lib/vestniky-fulltext.js');
+      const idx = JSON.parse(fs.readFileSync(ftPath, 'utf8'));
+      const zprac = new Set(idx.zpracovano);
+      const textDir = path.join(CACHE_DIR, 'text');
+      ensureDir(textDir);
+      let added = 0;
+      for (const c of castky.filter(x => x.pdf && !zprac.has(x.id)).slice(0, 10)) {
+        const textFile = path.join(textDir, `${c.id}.txt.gz`);
+        let text = null;
+        if (fs.existsSync(textFile)) {
+          text = zlib.gunzipSync(fs.readFileSync(textFile)).toString('utf8');
+        } else {
+          const tmp = path.join(textDir, '_tmp.pdf');
+          try {
+            const buf = await fetchWithRetry(c.pdf, { headers: UA, parse: 'buffer', timeoutMs: 120_000 });
+            fs.writeFileSync(tmp, Buffer.from(buf));
+            const items = await extractTextItems(tmp);
+            if (items) {
+              text = items.map(x => x.text).join(' ').replace(/\s+/g, ' ');
+              fs.writeFileSync(textFile, zlib.gzipSync(text));
+            }
+            await sleep(DELAY_MS);
+          } finally {
+            try { fs.unlinkSync(tmp); } catch { /* tmp neexistuje */ }
+          }
+        }
+        if (text && pridejDoIndexu(idx, c.id, text)) added++;
+      }
+      if (added) {
+        idx.zpracovano.sort((a, b) => a - b);
+        fs.writeFileSync(ftPath, JSON.stringify(idx) + '\n');
+        console.log(`✓ data/vestniky-fulltext.json — doplněno ${added} částek (celkem ${idx.zpracovano.length})`);
+      }
+    }
+  } catch (err) {
+    console.warn(`⚠ vestniky-fulltext inkrement: ${err.message}`);
+  }
+
   return out;
 }
 

@@ -206,3 +206,52 @@ test('vestniky vazby: zkratNazev ořeže úvodní floskule', () => {
     'Seznamu zdravotních výkonů s bodovými hod…');
   assert.equal(zkratNazev(null), '');
 });
+
+/* ── fulltextový index PDF ──────────────────────────────────────────── */
+
+import { tokenize, queryTerms, novyIndex, pridejDoIndexu } from '../ingest/lib/vestniky-fulltext.js';
+import { queryTermsFt, fulltextIds } from '../src/vestniky.js';
+
+test('vestniky fulltext: tokenizace frontendová = ingestová (parita)', () => {
+  const vzorky = ['Mamografického screeningu', 'úhrada zdravotních VÝKONŮ č. 89312',
+    'kolorektální karcinom — Doporučený postup', 'x', 'a1b2c3d4e5f6'];
+  for (const v of vzorky) {
+    assert.deepEqual(queryTermsFt(v).sort(), queryTerms(v).sort(), `parita selhala pro: ${v}`);
+  }
+});
+
+test('vestniky fulltext: pridejDoIndexu + fulltextIds (AND průnik)', () => {
+  const idx = novyIndex();
+  pridejDoIndexu(idx, 1, 'Mamografický screening a úhrady výkonů');
+  pridejDoIndexu(idx, 2, 'Kolorektální screening bez úhrad');
+  assert.ok(!pridejDoIndexu(idx, 1, 'duplicitně'), 'zpracovaná částka se nepřidá znovu');
+  assert.deepEqual([...fulltextIds(idx, 'screening')].sort(), [1, 2]);
+  assert.deepEqual([...fulltextIds(idx, 'screening mamografický')], [1], 'AND průnik');
+  assert.deepEqual([...fulltextIds(idx, 'neexistujícíslovo')], [], 'neznámý term = prázdno');
+  assert.equal(fulltextIds(idx, ''), null, 'prázdný dotaz = žádný fulltext filtr');
+});
+
+test('vestniky fulltext: data/vestniky-fulltext.json — obal, pokrytí, reálný dotaz', () => {
+  const p = path.join(ROOT, 'data', 'vestniky-fulltext.json');
+  assert.ok(fs.existsSync(p), 'index chybí — spusť npm run build:vestniky:fulltext');
+  const idx = JSON.parse(fs.readFileSync(p, 'utf8'));
+  assert.ok(idx.zpracovano.length >= 250, `podezřele malé pokrytí (${idx.zpracovano.length})`);
+  const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky.json'), 'utf8'));
+  const ids = new Set(d.castky.map(c => c.id));
+  for (const id of idx.zpracovano) assert.ok(ids.has(id), `index obsahuje neznámou částku ${id}`);
+  const hits = fulltextIds(idx, 'mamografie');
+  assert.ok(hits.size >= 5, `„mamografie" má mít zásahy v plných textech (${hits.size})`);
+});
+
+test('vestniky fulltext: filterCastky s ftIds přidá částku s příznakem ft', () => {
+  const castky = [
+    { id: 1, rok: 2020, titul: 'Věstník č. 1/2020', obsah: [{ t: 'Jiné téma', kat: 'ostatni' }] },
+    { id: 2, rok: 2021, titul: 'Věstník č. 2/2021', obsah: [{ t: 'Screening plic', kat: 'screening' }] },
+  ];
+  const rows = filterCastky(castky, { q: 'screening', ftIds: new Set([1]) });
+  assert.equal(rows.length, 2);
+  assert.ok(rows.find(r => r.id === 1).ft, 'fulltext-only zásah nese příznak ft');
+  assert.ok(!rows.find(r => r.id === 2).ft, 'obsahový zásah příznak nemá');
+  assert.equal(filterCastky(castky, { q: 'screening', ftIds: new Set([1]), kat: 'screening' }).length, 1,
+    'kategorie filtruje ft-only zásah bez položek dané kategorie');
+});
