@@ -62,6 +62,13 @@ jobs:
           set -o pipefail
           npm run ingest 2>&1 | tee /tmp/ingest.log
 
+      - name: Rebuild PPO web data
+        # Karty „Ve Věstníku MZ" na detailech skupin (mergeVestnik) se plní
+        # z čerstvého data/vestniky.json až při build:ppo — bez tohoto kroku
+        # by nové částky dorazily do archivu a indikátorů, ale karty orgánů
+        # by zůstaly stát. Commit kroku níže bere celý data/ adresář.
+        run: npm run build:ppo
+
       - name: Build generated artifacts
         # Znalostní graf indikátorů (BAR6) slije čerstvé indicators.json
         # s kurátorovanými datasety (system-model, legislativa, articles,

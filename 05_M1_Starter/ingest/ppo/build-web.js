@@ -21,6 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
+import { cmpCastkyDesc } from '../lib/vestniky-sort.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(__dirname, 'out');
@@ -275,12 +276,15 @@ export function mergeVestnik(skupinyById, vestniky, mapping, max = 8) {
     const hits = [];
     for (const c of vestniky?.castky ?? []) {
       for (const o of c.obsah) {
-        if (re.test(o.t)) hits.push({ t: o.t, titul: c.titul, url: c.url, datum: c.datum });
+        // POZOR: c.datum je datum záznamu na webu MZ (u starých ročníků datum
+        // migrace) — chronologii nese rok/číslo částky UVNITŘ řady; napříč
+        // řadami (NIKEZ) řadí komparátor podle data (ingest/lib/vestniky-sort.js)
+        if (re.test(o.t)) hits.push({ t: o.t, titul: c.titul, url: c.url, rok: c.rok, cislo: c.cislo, datum: c.datum });
       }
     }
     if (hits.length) {
-      hits.sort((a, b) => (b.datum ?? '').localeCompare(a.datum ?? ''));
-      s.vestnik = hits.slice(0, max);
+      hits.sort(cmpCastkyDesc);
+      s.vestnik = hits.slice(0, max).map(({ datum, ...rest }) => rest);
       s.vestnik_celkem = hits.length;
     }
   }
