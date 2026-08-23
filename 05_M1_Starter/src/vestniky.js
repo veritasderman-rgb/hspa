@@ -35,6 +35,16 @@ export function fmtDatum(d) {
   return `${Number(m[3])}. ${MESICE[Number(m[2]) - 1]} ${m[1]}`;
 }
 
+/** Zkrácený název orgánu pro badge: bez úvodních „Komise pro (přípravu)
+ *  programu / Pracovní skupina k…" — v badge stačí jádro názvu. */
+export function zkratNazev(nazev) {
+  const s = String(nazev ?? '')
+    .replace(/^(Komise pro (přípravu )?(program(u)? )?|Pracovní skupina (pro|k) |Meziresortní pracovní skupina pro |Národní )/i, '')
+    .trim();
+  const out = s.charAt(0).toUpperCase() + s.slice(1);
+  return out.length > 42 ? `${out.slice(0, 41)}…` : out;
+}
+
 /** Filtr částek (čistá funkce — testovatelná).
  *  q hledá v titulu částky i položkách obsahu; kat/rok filtrují částky,
  *  jejichž obsah kategorii obsahuje. Vrací částky s už zúženým obsahem:
@@ -61,7 +71,7 @@ export function filterCastky(castky, { q = '', rok = 'all', kat = 'all' } = {}) 
 
 const $ = id => document.getElementById(id);
 const KROK = 30;
-let DATA = null;
+let DATA = null, GNAZVY = {};
 let fQ = '', fRok = 'all', fKat = 'all', limit = KROK;
 
 function katChip(kat) {
@@ -95,8 +105,11 @@ function renderList() {
       c.pdf ? `<a href="${escapeHtml(c.pdf)}" target="_blank" rel="noopener">PDF ↗</a>` : '',
     ].filter(Boolean).join(' · ');
     const obsah = c.obsah.length
-      ? `<ol class="vst-obsah">${c.obsah.map(o =>
-        `<li>${escapeHtml(o.t)} ${katChip(o.kat)}</li>`).join('')}</ol>`
+      ? `<ol class="vst-obsah">${c.obsah.map(o => {
+        const gs = (o.g ?? []).filter(g => GNAZVY[g]).map(g =>
+          `<a class="vst-g" href="pracovni-skupina.html?id=${g}" title="${escapeHtml(GNAZVY[g])}">→ ${escapeHtml(zkratNazev(GNAZVY[g]))}</a>`).join(' ');
+        return `<li>${escapeHtml(o.t)} ${katChip(o.kat)}${gs ? ` ${gs}` : ''}</li>`;
+      }).join('')}</ol>`
       : '<p class="vst-noobsah">Obsah se nepodařilo strojově přečíst — otevřete PDF.</p>';
     html.push(`<li class="vst-castka">
       <p class="vst-castka-h"><strong>${escapeHtml(c.titul)}</strong>
@@ -116,9 +129,13 @@ async function init() {
   renderModuleNav('strategies');
   renderMastheadDate();
   try {
-    const res = await fetch('data/vestniky.json');
+    const [res, resV] = await Promise.all([
+      fetch('data/vestniky.json'),
+      fetch('data/vestniky-vazby.json').catch(() => null),
+    ]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     DATA = await res.json();
+    if (resV?.ok) GNAZVY = (await resV.json())?.skupiny_nazvy ?? {};
 
     $('sCastek').textContent = String(DATA.pocty.castky);
     $('sPolozek').textContent = String(DATA.pocty.polozky);

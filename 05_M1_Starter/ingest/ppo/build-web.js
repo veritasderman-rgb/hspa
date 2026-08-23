@@ -264,6 +264,28 @@ export function buildDvojrole(externiReg, osobyById, skupinyById, gids) {
 // stránky, indikátory) k vybraným skupinám. Guardy: id musí existovat,
 // interní cíl (.html) musí být v repu a odkazovaný článek publikovaný —
 // mrtvý nebo draftový odkaz shodí build, ne až čtenáře.
+/** Karta „Ve Věstníku MZ": na záznam skupiny přidá položky obsahu věstníků,
+ *  které deterministicky matchují její agendu (vestniky_souvislosti.json).
+ *  Nejnovější první, max 8 na skupinu; skupiny bez zásahu pole nedostanou. */
+export function mergeVestnik(skupinyById, vestniky, mapping, max = 8) {
+  for (const r of mapping?.skupiny ?? []) {
+    const s = skupinyById.get(r.g);
+    if (!s) continue;
+    const re = new RegExp(r.re, 'i');
+    const hits = [];
+    for (const c of vestniky?.castky ?? []) {
+      for (const o of c.obsah) {
+        if (re.test(o.t)) hits.push({ t: o.t, titul: c.titul, url: c.url, datum: c.datum });
+      }
+    }
+    if (hits.length) {
+      hits.sort((a, b) => (b.datum ?? '').localeCompare(a.datum ?? ''));
+      s.vestnik = hits.slice(0, max);
+      s.vestnik_celkem = hits.length;
+    }
+  }
+}
+
 export function mergeSouvislosti(skupinyById, reg, { rootDir, publishedSlugs }) {
   if (!reg) return;
   for (const r of reg.skupiny ?? []) {
@@ -474,6 +496,16 @@ function main() {
     const publishedSlugs = new Set(articles.filter(a => a.published !== false).map(a => a.slug));
     mergeSouvislosti(skupinyById, JSON.parse(fs.readFileSync(souvPath, 'utf8')),
       { rootDir, publishedSlugs });
+  }
+
+  // karta „Ve Věstníku MZ" — deterministický match obsahu archivu věstníků
+  // na agendu orgánu (pravidla ingest/mapping/vestniky_souvislosti.json)
+  const vestPath = path.join(DATA, 'vestniky.json');
+  const vestMapPath = path.resolve(__dirname, '..', 'mapping', 'vestniky_souvislosti.json');
+  if (fs.existsSync(vestPath) && fs.existsSync(vestMapPath)) {
+    mergeVestnik(skupinyById,
+      JSON.parse(fs.readFileSync(vestPath, 'utf8')),
+      JSON.parse(fs.readFileSync(vestMapPath, 'utf8')));
   }
 
   // síť: jen uzly existujících skupin; hrany mezi nimi

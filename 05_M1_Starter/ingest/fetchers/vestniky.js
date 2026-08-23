@@ -121,6 +121,21 @@ export function kategorie(polozka) {
   return 'ostatni';
 }
 
+/** Anotace položek obsahu skupinami MZ podle deterministických pravidel
+ *  (ingest/mapping/vestniky_souvislosti.json) — pole g na položce vykresluje
+ *  archiv jako badge s odkazem na orgán. Čistá funkce, mutuje castky in-place. */
+export function anotujSkupiny(castky, mapping) {
+  const rules = (mapping?.skupiny ?? []).map(r => ({ g: r.g, re: new RegExp(r.re, 'i') }));
+  let n = 0;
+  for (const c of castky) {
+    for (const o of c.obsah) {
+      const gs = rules.filter(r => r.re.test(o.t)).map(r => r.g);
+      if (gs.length) { o.g = gs; n++; } else { delete o.g; }
+    }
+  }
+  return n;
+}
+
 /** Doplní do částky data z předchozího výstupu, když čerstvý běh nic nemá:
  *  obsah částky je neměnný, takže výpadek stránky MZ či nečitelné PDF nesmí
  *  přepsat dřív získaná data prázdnem. Čistá funkce. */
@@ -265,6 +280,15 @@ export async function fetchVestniky(opts = {}) {
   }
 
   castky.sort((a, b) => (b.rok ?? 0) - (a.rok ?? 0) || (b.cislo ?? 0) - (a.cislo ?? 0));
+
+  // prolinkování se skupinami MZ (badge v archivu) — deterministická pravidla
+  let mapping = null;
+  try {
+    mapping = JSON.parse(fs.readFileSync(path.join(ROOT, 'ingest', 'mapping', 'vestniky_souvislosti.json'), 'utf8'));
+    anotujSkupiny(castky, mapping);
+  } catch (err) {
+    console.warn(`⚠ vestniky_souvislosti mapping: ${err.message}`);
+  }
   const out = {
     version: '1.0',
     zdroj: 'mzd.gov.cz — Věstníky Ministerstva zdravotnictví (WP REST API + PDF)',
@@ -284,6 +308,23 @@ export async function fetchVestniky(opts = {}) {
   fs.writeFileSync(OUT_FILE, JSON.stringify(out, null, 1) + '\n');
   console.log(`✓ data/vestniky.json — ${out.pocty.castky} částek, ${out.pocty.polozky} položek obsahu, `
     + `${zPdf} z PDF, ${bezObsahu} bez strojového obsahu`);
+
+  // vazby na indikátory + názvy skupin pro badge — malý soubor pro lazy-load
+  // (drží se v kroku fetch, aby ho týdenní cron aktualizoval spolu s archivem)
+  if (mapping) {
+    try {
+      const { buildVazby } = await import('../build-vestniky-vazby.js');
+      const ppo = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo.json'), 'utf8'));
+      const gids = new Set((mapping.skupiny ?? []).map(r => r.g));
+      const nazvy = Object.fromEntries(ppo.skupiny.filter(s => gids.has(s.id)).map(s => [s.id, s.nazev]));
+      const vaz = buildVazby(out, mapping, nazvy);
+      const vp = path.join(ROOT, 'data', 'vestniky-vazby.json');
+      fs.writeFileSync(vp, JSON.stringify(vaz, null, 1) + '\n');
+      console.log(`✓ data/vestniky-vazby.json (${(fs.statSync(vp).size / 1024).toFixed(0)} kB)`);
+    } catch (err) {
+      console.warn(`⚠ vestniky-vazby: ${err.message}`);
+    }
+  }
   return out;
 }
 
