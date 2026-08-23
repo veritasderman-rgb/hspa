@@ -304,6 +304,7 @@ function renderPanel(nodeId) {
       })() : ''}
       ${leverBtn}
       ${leverSummary}
+      ${node.rozhoduje?.length ? `<h4>Kdo o tom rozhoduje</h4><ul class="msys-rozhoduje">${node.rozhoduje.map(r => `<li><strong>${r.url ? `<a href="${escapeHtml(r.url)}">${escapeHtml(r.kdo)}</a>` : escapeHtml(r.kdo)}</strong>${r.pozn ? ` — ${escapeHtml(r.pozn)}` : ''}</li>`).join('')}</ul>` : ''}
       ${inds ? `<h4>Co to měří na dashboardu</h4><div class="msys-ind-list">${inds}</div>` : ''}
       ${outgoing.length ? `<h4>Ovlivňuje</h4><ul class="msys-panel-edges">${outgoing.map(e => edgeLine(e, 'out')).join('')}</ul>` : ''}
       ${incoming.length ? `<h4>Je ovlivněno</h4><ul class="msys-panel-edges">${incoming.map(e => edgeLine(e, 'in')).join('')}</ul>` : ''}
