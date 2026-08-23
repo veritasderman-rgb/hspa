@@ -45,34 +45,79 @@ export function zkratNazev(nazev) {
   return out.length > 42 ? `${out.slice(0, 41)}…` : out;
 }
 
+/** Tokenizace dotazu pro fulltextový index — MUSÍ být identická s
+ *  ingest/lib/vestniky-fulltext.js (paritu hlídá test): bez diakritiky,
+ *  lowercase, termy 4–24 znaků, prefix-stemming na 8 znaků. */
+export function queryTermsFt(q) {
+  const out = new Set();
+  for (const m of normText(q).matchAll(/[a-z][a-z0-9]{3,23}/g)) {
+    const t = m[0];
+    out.add(t.length > 8 ? t.slice(0, 8) : t);
+  }
+  return [...out];
+}
+
+/** Id částek, jejichž plný text obsahuje VŠECHNY termy dotazu (AND). */
+export function fulltextIds(index, q) {
+  const terms = queryTermsFt(q);
+  if (!terms.length || !index?.termy) return null;
+  let ids = null;
+  for (const t of terms) {
+    const post = index.termy[t];
+    if (!post) return new Set();
+    ids = ids ? new Set(post.filter(id => ids.has(id))) : new Set(post);
+  }
+  return ids;
+}
+
 /** Filtr částek (čistá funkce — testovatelná).
  *  q hledá v titulu částky i položkách obsahu; kat/rok filtrují částky,
  *  jejichž obsah kategorii obsahuje. Vrací částky s už zúženým obsahem:
- *  při aktivním hledání/kategorii se ukážou jen odpovídající položky. */
-export function filterCastky(castky, { q = '', rok = 'all', kat = 'all' } = {}) {
+ *  při aktivním hledání/kategorii se ukážou jen odpovídající položky.
+ *  ftIds (Set) rozšiřuje zásah o částky se shodou v plném textu PDF —
+ *  ty nesou příznak ft (v UI chip „shoda v plném textu"). */
+export function filterCastky(castky, { q = '', rok = 'all', kat = 'all', ftIds = null } = {}) {
   const nq = normText(q.trim());
   const out = [];
   for (const c of castky) {
     if (rok !== 'all' && String(c.rok) !== rok) continue;
     let obsah = c.obsah;
+    let ft = false;
     if (kat !== 'all') obsah = obsah.filter(o => o.kat === kat);
     if (nq) {
       const titulHit = normText(c.titul).includes(nq);
       const oHits = obsah.filter(o => normText(o.t).includes(nq));
-      if (!titulHit && !oHits.length) continue;
-      obsah = oHits.length ? oHits : obsah;
+      if (!titulHit && !oHits.length) {
+        if (!(ftIds?.has(c.id)) || (kat !== 'all' && !obsah.length)) continue;
+        ft = true;
+      } else {
+        obsah = oHits.length ? oHits : obsah;
+      }
     } else if (kat !== 'all' && !obsah.length) {
       continue;
     }
-    out.push({ ...c, obsah });
+    out.push({ ...c, obsah, ...(ft ? { ft: true } : {}) });
   }
   return out;
 }
 
 const $ = id => document.getElementById(id);
 const KROK = 30;
-let DATA = null, GNAZVY = {};
-let fQ = '', fRok = 'all', fKat = 'all', limit = KROK;
+let DATA = null, GNAZVY = {}, FTIDX = null, ftLoading = null;
+let fQ = '', fRok = 'all', fKat = 'all', fFt = false, limit = KROK;
+
+/** Lazy-load fulltextového indexu (jen po zaškrtnutí — ~1 MB gzip). */
+function nactiFtIndex() {
+  ftLoading ??= fetch('data/vestniky-fulltext.json')
+    .then(r => (r.ok ? r.json() : null))
+    .then(j => { FTIDX = j; })
+    .catch(() => { FTIDX = null; });
+  return ftLoading;
+}
+
+function aktualniFtIds() {
+  return fFt && FTIDX && fQ.trim() ? fulltextIds(FTIDX, fQ) : null;
+}
 
 function katChip(kat) {
   return `<span class="vst-kat vst-kat-${kat}">${escapeHtml(KAT_LABELS[kat] ?? kat)}</span>`;
@@ -80,7 +125,7 @@ function katChip(kat) {
 
 function renderRoky() {
   const counts = new Map();
-  for (const c of filterCastky(DATA.castky, { q: fQ, kat: fKat })) {
+  for (const c of filterCastky(DATA.castky, { q: fQ, kat: fKat, ftIds: aktualniFtIds() })) {
     if (c.rok) counts.set(String(c.rok), (counts.get(String(c.rok)) ?? 0) + 1);
   }
   if (fRok !== 'all' && !counts.has(fRok)) counts.set(fRok, 0);
@@ -91,7 +136,7 @@ function renderRoky() {
 }
 
 function renderList() {
-  const rows = filterCastky(DATA.castky, { q: fQ, rok: fRok, kat: fKat });
+  const rows = filterCastky(DATA.castky, { q: fQ, rok: fRok, kat: fKat, ftIds: aktualniFtIds() });
   $('vstCount').textContent = String(rows.length);
   $('vstEmpty').classList.toggle('hidden', rows.length > 0);
   const shown = rows.slice(0, limit);
@@ -114,6 +159,7 @@ function renderList() {
     html.push(`<li class="vst-castka">
       <p class="vst-castka-h"><strong>${escapeHtml(c.titul)}</strong>
         ${c.datum ? `<span class="vst-datum">${escapeHtml(fmtDatum(c.datum))}</span>` : ''}
+        ${c.ft ? '<span class="vst-ft-chip" title="Dotaz se nenašel v obsahu, ale v plném textu PDF částky">shoda v plném textu PDF</span>' : ''}
         <span class="vst-links">${links}</span></p>
       ${obsah}
     </li>`);
@@ -149,6 +195,11 @@ async function init() {
 
     $('vstSearch').addEventListener('input', e => { fQ = e.target.value; limit = KROK; rerender(); });
     $('vstKat').addEventListener('change', e => { fKat = e.target.value; limit = KROK; rerender(); });
+    $('vstFt').addEventListener('change', async e => {
+      fFt = e.target.checked;
+      if (fFt && !FTIDX) { await nactiFtIndex(); }
+      limit = KROK; rerender();
+    });
     $('vstRoky').addEventListener('click', e => {
       const b = e.target.closest('button[data-rok]');
       if (!b) return;
