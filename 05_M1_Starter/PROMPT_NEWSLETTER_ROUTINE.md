@@ -155,3 +155,9 @@ vybraný indikátor, čas odeslání, odkaz na kampaň v Brevu a připomínka, �
 - Žádná čísla bez zdroje a roku — platí i pro úvod Florence.
 - Pokud Brevo vrátí chybu (IP autorizace, limit free plánu 300 e-mailů/den),
   nic neopakuj naslepo — reportuj uživateli přesnou chybu.
+
+## Věstníky MZ v newsletteru
+
+Do sekce novinek přidej krátkou zmínku, pokud od minulého vydání vyšla nová
+částka Věstníku MZ (`data/vestniky.json`, pole `datum`): jedna věta co
+obsahuje + odkaz na archiv `/vestniky-mz`. Bez nové částky sekci vynech.
