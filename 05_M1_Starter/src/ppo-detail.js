@@ -183,7 +183,7 @@ function renderAnalyza(a) {
 
   const gantt = ganttData(a);
   if (gantt.rows.length >= 3) {
-    parts.push(`<h3 class="ppo-a-h">Časová osa úkolů <span class="ppo-a-count">${gantt.rows.length}${gantt.total > gantt.rows.length ? ` z ${gantt.total}` : ''}</span></h3>
+    parts.push(`<h3 class="ppo-a-h" id="ukTimeline">Časová osa úkolů <span class="ppo-a-count">${gantt.rows.length}${gantt.total > gantt.rows.length ? ` z ${gantt.total}` : ''}</span></h3>
       <div class="ppo-gantt-wrap">${renderGantt(gantt)}</div>
       <p class="ppo-d-note">Jen úkoly s datovaným zadáním a termínem či doloženým osudem${gantt.total > gantt.rows.length ? ` (${gantt.rows.length} nejnovějších z ${gantt.total})` : ''};
       splnění značíme výhradně tam, kde ho pozdější zápis nebo externí zdroj výslovně zachycuje —

@@ -12,7 +12,7 @@ import { filterHrany, heatRows, fmtDate, nodeRadius, ukazkaHtml, STAV_LABELS, KA
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents, ukolySouhrn } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
 import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
-import { formatDatumCz, formatOd, filterUkoly, skupinaFromSearch, osudMatch, osudChips } from '../src/ppo-ukoly.js';
+import { formatDatumCz, formatOd, filterUkoly, skupinaFromSearch, osudMatch, osudChips, mapaSkupin } from '../src/ppo-ukoly.js';
 import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN, parseTermin, buildUkoly, loadUkolyRegistry, korpusUrlIndex } from '../ingest/ppo/build-web.js';
 import { ganttData } from '../src/ppo-detail.js';
 
@@ -611,4 +611,16 @@ test('ppo: ukazkaHtml escapuje a skládá řádky, prázdný vstup dá prázdno'
   assert.ok(!html.includes('<a '), 'uvnitř karty-odkazu nesmí být vnořený odkaz');
   assert.equal(ukazkaHtml([], nazvy, esc, fmtDate), '');
   assert.equal(ukazkaHtml(undefined, nazvy, esc, fmtDate), '');
+});
+
+test('ppo úkoly: mapaSkupin agreguje osud po orgánu a řadí podle počtu', () => {
+  const rows = mapaSkupin([
+    { g: 4, stav: 'splneno' }, { g: 4, stav: 'pokracuje' }, { g: 4 },
+    { g: 7, ext: { stav: 'vydano', primy: true } },
+    { g: 7, ext: { stav: 'vydano', primy: false } },
+  ]);
+  assert.deepEqual(rows.map(r => r.g), [4, 7]);
+  assert.deepEqual(rows[0], { g: 4, total: 3, spl: 1, pok: 1, bez: 1 });
+  assert.equal(rows[1].spl, 1, 'primy ext se počítá jako doložené splnění');
+  assert.equal(rows[1].bez, 1, 'ne-primy ext není splnění (spadá do zbytku)');
 });

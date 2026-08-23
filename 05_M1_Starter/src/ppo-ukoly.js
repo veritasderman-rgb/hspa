@@ -73,13 +73,65 @@ export function osudChips(u, esc) {
   return chips.join(' ');
 }
 
+/** Mapa orgánů pro rozcestník: souhrn osudu úkolů po skupině, seřazeno
+ *  podle počtu úkolů. spl počítá doložené splnění včetně primy ext
+ *  (stejná definice jako filtr „jen doložené splnění"). Čistá funkce. */
+export function mapaSkupin(ukoly) {
+  const m = new Map();
+  for (const u of ukoly) {
+    let r = m.get(u.g);
+    if (!r) { r = { g: u.g, total: 0, spl: 0, pok: 0 }; m.set(u.g, r); }
+    r.total++;
+    if (osudMatch(u, 'splneno')) r.spl++;
+    else if (u.stav === 'pokracuje') r.pok++;
+  }
+  return [...m.values()].map(r => ({ ...r, bez: r.total - r.spl - r.pok }))
+    .sort((a, b) => b.total - a.total || a.g - b.g);
+}
+
 const $ = id => document.getElementById(id);
 const KROK = 150;
+const MAPA_TOP = 12;
 let DATA = null, NAZVY = new Map();
 let fQ = '', fG = 'all', fRok = 'all', fStav = 'all', limit = KROK;
+let mapaVse = false;
 
 function skupinaLink(g) {
   return `<a href="pracovni-skupina.html?id=${g}">${escapeHtml(NAZVY.get(g) ?? `skupina ${g}`)}</a>`;
+}
+
+function renderMapa() {
+  const rows = mapaSkupin(DATA.ukoly);
+  const max = rows[0]?.total || 1;
+  const shown = mapaVse ? rows : rows.slice(0, MAPA_TOP);
+  $('ukMapa').innerHTML = shown.map(r => {
+    const w = seg => `${(seg / max * 100).toFixed(1)}%`;
+    const nazev = NAZVY.get(r.g) ?? `skupina ${r.g}`;
+    const tip = `${nazev}: ${r.total} úkolů — ${r.spl} doloženě splněno, ${r.pok} pokračuje, ${r.bez} bez dokladu v zápisech`;
+    return `<div class="ppo-um-row">
+      <div class="ppo-um-head">
+        <button type="button" class="ppo-um-name" data-g="${r.g}" title="Filtrovat dashboard na tento orgán">${escapeHtml(nazev)}</button>
+        <span class="ppo-um-n">${r.total}</span>
+      </div>
+      <button type="button" class="ppo-um-bar" data-g="${r.g}" title="${escapeHtml(tip)}" aria-label="${escapeHtml(tip)}">
+        ${r.spl ? `<i class="ppo-um-spl" style="width:${w(r.spl)}"></i>` : ''}${r.pok ? `<i class="ppo-um-pok" style="width:${w(r.pok)}"></i>` : ''}${r.bez ? `<i class="ppo-um-bez" style="width:${w(r.bez)}"></i>` : ''}
+      </button>
+      <p class="ppo-um-meta">${r.spl ? `<span class="ppo-um-t-spl">${r.spl} doloženě splněno</span>` : ''}${r.pok ? ` · ${r.pok} pokračuje` : ''}${r.bez ? ` · ${r.bez} bez dokladu` : ''}
+        <a href="pracovni-skupina.html?id=${r.g}#ukTimeline">detail a časová osa ↗</a></p>
+    </div>`;
+  }).join('');
+  const btn = $('ukMapaMore');
+  btn.classList.toggle('hidden', rows.length <= MAPA_TOP);
+  btn.textContent = mapaVse ? 'Zobrazit jen největší' : `Zobrazit všech ${rows.length} orgánů`;
+}
+
+function vyberSkupinu(g) {
+  fG = String(g);
+  fRok = 'all';
+  limit = KROK;
+  $('ukSkupina').value = fG;
+  renderOtevrene(); renderRoky(); renderList();
+  document.getElementById('ukListH')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderOtevrene() {
@@ -126,6 +178,15 @@ function renderList() {
 
 function rerender() { renderOtevrene(); renderRoky(); renderList(); }
 
+function wireMapa() {
+  renderMapa();
+  $('ukMapa').addEventListener('click', e => {
+    const b = e.target.closest('button[data-g]');
+    if (b) vyberSkupinu(b.dataset.g);
+  });
+  $('ukMapaMore').addEventListener('click', () => { mapaVse = !mapaVse; renderMapa(); });
+}
+
 async function init() {
   renderModuleNav('strategies');
   renderMastheadDate();
@@ -158,6 +219,7 @@ async function init() {
     });
     $('ukMore').addEventListener('click', () => { limit += KROK; renderList(); });
 
+    wireMapa();
     rerender();
   } catch (err) {
     console.error('ppo-ukoly load failed:', err);
