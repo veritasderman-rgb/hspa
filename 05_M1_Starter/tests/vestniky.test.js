@@ -50,6 +50,9 @@ test('vestniky: kategorie deterministicky a s fallbackem ostatni', () => {
   assert.equal(kategorie('Cenový předpis 1/2026/OLZP o regulaci cen'), 'cenove');
   assert.equal(kategorie('Seznam esenciálních antiinfektiv (SEAI)'), 'leciva');
   assert.equal(kategorie('Statut a jednací řád komise'), 'spravni');
+  assert.equal(kategorie('Vzdělávací program Dětská klinická psychologie'), 'vzdelavani',
+    'vzdělávací termíny mají přednost před obecným klinick- ve standardech');
+  assert.equal(kategorie('Klinický doporučený postup pro léčbu CHOPN'), 'standardy');
   assert.equal(kategorie('Úplně jiné téma'), 'ostatni');
   assert.ok(Object.keys(KAT_LABELS).includes(kategorie('cokoliv')), 'fallback má label');
 });
@@ -203,6 +206,35 @@ test('vestniky vazby: mergeVestnik plní kartu skupiny (nejnovější první, ca
   assert.ok(s196.vestnik?.length >= 3, 'g196 (mamografie) má mít kartu Ve Věstníku MZ');
 });
 
+test('vestniky vazby: souběžné řady (NIKEZ) se řadí datem, ne číslem napříč řadami', async () => {
+  const { cmpCastkyDesc, serieVestniku } = await import('../ingest/lib/vestniky-sort.js');
+  assert.equal(serieVestniku('Věstník NIKEZ č. 4/2025'), 'nikez');
+  assert.equal(serieVestniku('Věstník č. 17/2025'), 'mz');
+  // reálný případ z korpusu: NIKEZ 4/2025 (18. 12.) je NOVĚJŠÍ než Věstník
+  // 17/2025 (22. 10.), přestože má nižší číslo částky — porovnání čísel napříč
+  // řadami by ho řadilo za něj
+  const nikez = { titul: 'Věstník NIKEZ č. 4/2025', rok: 2025, cislo: 4, datum: '2025-12-18' };
+  const mz17 = { titul: 'Věstník č. 17/2025', rok: 2025, cislo: 17, datum: '2025-10-22' };
+  const mz16 = { titul: 'Věstník č. 16/2025', rok: 2025, cislo: 16, datum: '2025-10-01' };
+  const st = [mz16, nikez, mz17].sort(cmpCastkyDesc);
+  assert.deepEqual(st.map(x => x.titul), ['Věstník NIKEZ č. 4/2025', 'Věstník č. 17/2025', 'Věstník č. 16/2025']);
+  // uvnitř jedné řady dál rozhoduje rok/číslo (datum starých ročníků je migrace)
+  const a = { titul: 'V 9/2000', rok: 2000, cislo: 9, datum: '2009-05-05' };
+  const b = { titul: 'V 10/2000', rok: 2000, cislo: 10, datum: '2000-10-01' };
+  assert.equal([a, b].sort(cmpCastkyDesc)[0].titul, 'V 10/2000');
+  // mergeVestnik: NIKEZ zásah nesmí vypadnout z capu kvůli nízkému číslu
+  const skupiny = new Map([[9, { id: 9 }]]);
+  const vest = { castky: [
+    { id: 1, titul: 'Věstník č. 17/2025', rok: 2025, cislo: 17, datum: '2025-10-22', url: 'u1', obsah: [{ t: 'téma ABC' }] },
+    { id: 2, titul: 'Věstník NIKEZ č. 4/2025', rok: 2025, cislo: 4, datum: '2025-12-18', url: 'u2', obsah: [{ t: 'téma ABC podruhé' }] },
+  ] };
+  mergeVestnik(skupiny, vest, { skupiny: [{ g: 9, re: 'téma ABC' }] }, 1);
+  const s = skupiny.get(9);
+  assert.equal(s.vestnik.length, 1);
+  assert.equal(s.vestnik[0].titul, 'Věstník NIKEZ č. 4/2025', 'cap zachová nejnovější napříč řadami');
+  assert.equal(s.vestnik[0].datum, undefined, 'datum je jen pro řazení, do výstupu nepatří');
+});
+
 test('vestniky vazby: zkratNazev ořeže úvodní floskule', () => {
   assert.equal(zkratNazev('Komise pro program screeningu karcinomu prsu'), 'Screeningu karcinomu prsu');
   assert.equal(zkratNazev('Pracovní skupina k seznamu zdravotních výkonů s bodovými hodnotami'),
@@ -271,14 +303,18 @@ test('vestniky: anotujOdkazy najde a klasifikuje odkazy, přeskočí sebe-refere
       { t: 'Ministerstvo ruší v plném rozsahu výzvy zveřejněné ve Věstníku MZ ČR částka 9/2024' },
       { t: 'Oprava překlepu ve Věstníku částka 12/2024' },
       { t: 'Aktualizace metodiky dle částky 3/2020' },
+      { t: 'Úprava Věstníku MZD částka 9/2024' },
+      { t: 'Dodatek č. 1 k metodickému pokynu uveřejněnému ve Věstníku MZ částka 9/2024' },
     ] },
   ];
   const n = anotujOdkazy(castky);
-  assert.equal(n, 2, 'dvě položky s odkazem');
-  const [rusi, sebe, meni] = castky[1].obsah;
+  assert.equal(n, 4, 'čtyři položky s odkazem');
+  const [rusi, sebe, meni, uprava, dodatek] = castky[1].obsah;
   assert.deepEqual(rusi.ref, [{ c: 10, cislo: 9, rok: 2024, akce: 'rusi' }]);
   assert.equal(sebe.ref, undefined, 'zmínka vlastní částky není odkaz');
   assert.deepEqual(meni.ref, [{ c: null, cislo: 3, rok: 2020, akce: 'meni' }], 'cíl mimo archiv → c null');
+  assert.equal(uprava.ref[0].akce, 'meni', 'Úprava je změna, ne pouhý odkaz');
+  assert.equal(dodatek.ref[0].akce, 'meni', 'Dodatek je změna, ne pouhý odkaz');
 });
 
 test('vestniky: ref anotace v datech je drift-konzistentní a cíle existují', () => {
