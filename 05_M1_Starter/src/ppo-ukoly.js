@@ -36,19 +36,44 @@ export function skupinaFromSearch(search, validIds) {
   return raw != null && validIds.has(Number(raw)) ? String(Number(raw)) : 'all';
 }
 
+/** Osud úkolu pro filtr: doložené splnění počítá i externí rešerši (vydáno). */
+export function osudMatch(u, stav) {
+  if (stav === 'all') return true;
+  if (stav === 'splneno') return u.stav === 'splneno' || u.ext?.stav === 'vydano';
+  if (stav === 'pokracuje') return u.stav === 'pokracuje';
+  return !u.stav && !u.ext; // 'bez' — zápisy i rešerše mlčí
+}
+
 /** Filtr úkolů (čistá funkce — testovatelná). rok filtruje podle roku jednání. */
-export function filterUkoly(list, { q = '', g = 'all', rok = 'all' } = {}, nazvy = new Map()) {
+export function filterUkoly(list, { q = '', g = 'all', rok = 'all', stav = 'all' } = {}, nazvy = new Map()) {
   const nq = normText(q.trim());
   return list.filter(u =>
     (g === 'all' || u.g === Number(g))
     && (rok === 'all' || (u.datum ?? '').slice(0, 4) === rok)
+    && osudMatch(u, stav)
     && (!nq || normText(`${u.co} ${u.kdo ?? ''} ${nazvy.get(u.g) ?? ''}`).includes(nq)));
+}
+
+/** HTML chipů osudu úkolu (doložené splnění / pokračuje / externí výsledek). */
+export function osudChips(u, esc) {
+  const chips = [];
+  if (u.stav === 'splneno') {
+    chips.push(`<span class="ppo-uk-ok"${u.dk ? ` title="${esc(u.dk)}"` : ''}>✓ doloženo${u.sd ? ` ${esc(formatDatumCz(u.sd))}` : ''}${u.du ? ` <a href="${esc(u.du)}" target="_blank" rel="noopener">zápis ↗</a>` : ''}</span>`);
+  } else if (u.stav === 'pokracuje') {
+    chips.push(`<span class="ppo-uk-run"${u.dk ? ` title="${esc(u.dk)}"` : ''}>pokračuje${u.sd ? ` (${esc(formatDatumCz(u.sd))})` : ''}</span>`);
+  }
+  if (u.ext?.stav === 'vydano') {
+    chips.push(`<span class="ppo-uk-ok">✓ vydáno${u.ext.datum ? ` ${esc(formatDatumCz(u.ext.datum))}` : ''}${u.ext.url ? ` <a href="${esc(u.ext.url)}" target="_blank" rel="noopener">${esc(u.ext.nazev ?? 'dokument')} ↗</a>` : ''}</span>`);
+  } else if (u.ext?.stav === 'v_procesu') {
+    chips.push(`<span class="ppo-uk-run">v legislativním procesu${u.ext.url ? ` <a href="${esc(u.ext.url)}" target="_blank" rel="noopener">↗</a>` : ''}</span>`);
+  }
+  return chips.join(' ');
 }
 
 const $ = id => document.getElementById(id);
 const KROK = 150;
 let DATA = null, NAZVY = new Map();
-let fQ = '', fG = 'all', fRok = 'all', limit = KROK;
+let fQ = '', fG = 'all', fRok = 'all', fStav = 'all', limit = KROK;
 
 function skupinaLink(g) {
   return `<a href="pracovni-skupina.html?id=${g}">${escapeHtml(NAZVY.get(g) ?? `skupina ${g}`)}</a>`;
@@ -60,13 +85,13 @@ function renderOtevrene() {
   $('ukOpenEmpty').classList.toggle('hidden', rows.length > 0);
   $('ukOpen').innerHTML = rows.map(u => `<li class="ppo-uk-item">
     <p class="ppo-uk-co">${escapeHtml(u.co)}</p>
-    <p class="ppo-uk-meta">${skupinaLink(u.g)}${u.kdo ? ` · ${escapeHtml(u.kdo)}` : ''}${u.od ? ` <span class="ppo-uk-t">${escapeHtml(formatOd(u.od))}</span>` : ''}</p>
+    <p class="ppo-uk-meta">${skupinaLink(u.g)}${u.kdo ? ` · ${escapeHtml(u.kdo)}` : ''}${u.od ? ` <span class="ppo-uk-t">${escapeHtml(formatOd(u.od))}</span>` : ''} ${osudChips(u, escapeHtml)}</p>
   </li>`).join('');
 }
 
 function renderRoky() {
   const counts = new Map();
-  for (const u of filterUkoly(DATA.ukoly, { q: fQ, g: fG }, NAZVY)) {
+  for (const u of filterUkoly(DATA.ukoly, { q: fQ, g: fG, stav: fStav }, NAZVY)) {
     const r = (u.datum ?? '').slice(0, 4);
     if (r) counts.set(r, (counts.get(r) ?? 0) + 1);
   }
@@ -77,7 +102,7 @@ function renderRoky() {
 }
 
 function renderList() {
-  const rows = filterUkoly(DATA.ukoly, { q: fQ, g: fG, rok: fRok }, NAZVY);
+  const rows = filterUkoly(DATA.ukoly, { q: fQ, g: fG, rok: fRok, stav: fStav }, NAZVY);
   $('ukCount').textContent = String(rows.length);
   $('ukEmpty').classList.toggle('hidden', rows.length > 0);
   const shown = rows.slice(0, limit);
@@ -88,7 +113,7 @@ function renderList() {
     if (r !== lastRok) { html.push(`<li class="ppo-uk-year" aria-hidden="true">${escapeHtml(r)}</li>`); lastRok = r; }
     html.push(`<li class="ppo-uk-item">
       <p class="ppo-uk-co">${escapeHtml(u.co)}</p>
-      <p class="ppo-uk-meta">${skupinaLink(u.g)}${u.datum ? ` · jednání ${escapeHtml(formatDatumCz(u.datum))}` : ''}${u.kdo ? ` · ${escapeHtml(u.kdo)}` : ''}${u.termin ? ` <span class="ppo-uk-t" title="termín dle zápisu">termín: ${escapeHtml(u.termin)}</span>` : ''}</p>
+      <p class="ppo-uk-meta">${skupinaLink(u.g)}${u.datum ? ` · jednání ${escapeHtml(formatDatumCz(u.datum))}` : ''}${u.kdo ? ` · ${escapeHtml(u.kdo)}` : ''}${u.termin ? ` <span class="ppo-uk-t" title="termín dle zápisu">termín: ${escapeHtml(u.termin)}</span>` : ''} ${osudChips(u, escapeHtml)}</p>
     </li>`);
   }
   $('ukList').innerHTML = html.join('');
@@ -120,6 +145,7 @@ async function init() {
 
     $('ukSearch').addEventListener('input', e => { fQ = e.target.value; limit = KROK; rerender(); });
     $('ukSkupina').addEventListener('change', e => { fG = e.target.value; fRok = 'all'; limit = KROK; rerender(); });
+    $('ukStav').addEventListener('change', e => { fStav = e.target.value; limit = KROK; rerender(); });
     $('ukRoky').addEventListener('click', e => {
       const b = e.target.closest('button[data-rok]');
       if (!b) return;

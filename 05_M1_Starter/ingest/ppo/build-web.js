@@ -156,14 +156,20 @@ export function korpusUrlIndex(gzPath) {
 // Z analyza/skupina-<gid>.json vyrobí webový soubor: profil beze změny tvaru,
 // jednání nejnovější první a jen s poli, která detail vykresluje (aktivní
 // osoby a výčty organizací/dokumentů zůstávají v ingest vrstvě).
-export function analyzaWebFile(a, docIdx) {
+export function analyzaWebFile(a, docIdx, registry = {}) {
   const jednani = (a.jednani ?? [])
     .map(x => ({
       datum: x.datum ?? null,
       url: docIdx.get(x.doc_id)?.url ?? null,
       temata: x.temata ?? [],
       rozhodnuti: x.rozhodnuti ?? [],
-      ukoly: x.ukoly ?? [],
+      // úkoly nesou i osud z FÁZE 6 (t = normalizovaný termín, stav/sd/dk/du,
+      // ext) — detail skupiny z nich staví časovou osu úkolů bez dalšího fetch
+      ukoly: (x.ukoly ?? []).map((u, i) => ({
+        ...u,
+        t: parseTermin(u.termin),
+        ...osudUkolu(x.doc_id, i, registry),
+      })),
       stret_zajmu: x.stret_zajmu ?? [],
       citace: x.citace ?? [],
     }))
@@ -333,15 +339,59 @@ const datumOk = d => {
   return y >= 2004 && y <= new Date().getFullYear() + 1;
 };
 
+/* ---------- FÁZE 6: osud úkolů (sledování napříč zápisy + rešerše) ------- */
+// ingest/ppo/ukoly-stav/skupina-{gid}.json — LLM sledování: pro každý úkol
+// (klíč doc_id + index v jednání) stav splneno/pokracuje/bez_dokladu
+// s DOSLOVNÝM dokladem z pozdějšího zápisu; citace jsou před commitem strojově
+// ověřeny proti korpusu. ingest/ppo/ukoly-legislativa.json — kurátorská externí
+// rešerše legislativních úkolů (Věstník MZ, VeKLEP, Sbírka). bez_dokladu se do
+// webových dat nepropisuje (absence polí = zápisy mlčí).
+
+export function loadUkolyRegistry(dir, legPath) {
+  const stavy = new Map();
+  if (fs.existsSync(dir)) {
+    for (const f of fs.readdirSync(dir)) {
+      if (!/^skupina-\d+\.json$/.test(f)) continue;
+      const d = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+      for (const u of d.ukoly ?? []) stavy.set(`${u.doc_id}:${u.i}`, u);
+    }
+  }
+  const leg = fs.existsSync(legPath) ? JSON.parse(fs.readFileSync(legPath, 'utf8')) : null;
+  const legJ = new Map();
+  const legO = new Map();
+  for (const e of leg?.zaznamy ?? []) {
+    if (e.typ === 'jednani') legJ.set(`${e.doc_id}:${e.i}`, e);
+    else if (e.typ === 'otevreny') legO.set(`${e.g}|${e.co}`, e);
+    else throw new Error(`ukoly-legislativa: neznámý typ '${e.typ}'`);
+  }
+  return { stavy, legJ, legO };
+}
+
+// Pole osudu jednoho úkolu z jednání: stav/sd/dk/du (sledování) + ext (rešerše).
+function osudUkolu(docId, i, { stavy, legJ, docIdx }) {
+  const out = {};
+  const st = stavy?.get(`${docId}:${i}`);
+  if (st && st.stav !== 'bez_dokladu') {
+    out.stav = st.stav;
+    out.sd = st.doklad_datum ?? null;
+    out.dk = st.doklad ?? null;
+    out.du = docIdx?.get(st.doklad_doc_id)?.url ?? null;
+  }
+  const ext = legJ?.get(`${docId}:${i}`);
+  if (ext?.vysledek && ext.vysledek.stav !== 'nedohledano') out.ext = ext.vysledek;
+  return out;
+}
+
 // Z analýz FÁZE 2 poskládá plochý seznam úkolů zadaných na jednáních
-// (jen skupiny přítomné ve webových datech) + otevřené úkoly z profilů.
-export function buildUkoly(analyzy, gids) {
+// (jen skupiny přítomné ve webových datech) + otevřené úkoly z profilů,
+// obohacený o osud úkolu z registrů FÁZE 6 (pokud existují).
+export function buildUkoly(analyzy, gids, registry = {}) {
   const ukoly = [];
   const otevrene = [];
   for (const [gid, a] of [...analyzy.entries()].sort((x, y) => x[0] - y[0])) {
     if (!gids.has(gid)) continue;
     for (const j of a.jednani ?? []) {
-      for (const u of j.ukoly ?? []) {
+      (j.ukoly ?? []).forEach((u, i) => {
         ukoly.push({
           g: gid,
           datum: datumOk(j.datum) ? j.datum : null,
@@ -349,11 +399,15 @@ export function buildUkoly(analyzy, gids) {
           kdo: u.kdo ?? null,
           termin: u.termin ?? null,
           t: parseTermin(u.termin),
+          ...osudUkolu(j.doc_id, i, registry),
         });
-      }
+      });
     }
     for (const u of a.profil?.otevrene_ukoly ?? []) {
-      otevrene.push({ g: gid, co: u.co, kdo: u.kdo ?? null, od: u.od ?? null });
+      const row = { g: gid, co: u.co, kdo: u.kdo ?? null, od: u.od ?? null };
+      const ext = registry.legO?.get(`${gid}|${u.co}`);
+      if (ext?.vysledek && ext.vysledek.stav !== 'nedohledano') row.ext = ext.vysledek;
+      otevrene.push(row);
     }
   }
   // nejnovější jednání první; bez data na konec — stabilně podle skupiny
@@ -504,20 +558,31 @@ function main() {
   };
   dvojrole.pocet = dvojrole.osoby.length;
 
-  const ukolyData = buildUkoly(analyzy, gids);
+  const registry = { ...loadUkolyRegistry(path.join(__dirname, 'ukoly-stav'),
+    path.join(__dirname, 'ukoly-legislativa.json')), docIdx };
+  const ukolyData = buildUkoly(analyzy, gids, registry);
   const ukoly = {
-    version: '1.0',
-    zdroj: 'zápisy z jednání na ppo.mzcr.cz (analýza FÁZE 2)',
-    pozn: 'Úkoly zadané na jednáních dle zveřejněných zápisů (co, kdo, termín). Zápisy '
-      + 'zachycují zadání — splnění úkolu z dat odvodit nelze. „Otevřené úkoly" jsou '
-      + 'syntézou analýzy profilu skupiny k datu poslední analýzy. Pole t = termín '
-      + 'převedený na ISO datum, pokud je formulace jednoznačná; jinak null.',
+    version: '1.1',
+    zdroj: 'zápisy z jednání na ppo.mzcr.cz (analýza FÁZE 2 + sledování osudu FÁZE 6)',
+    pozn: 'Úkoly zadané na jednáních dle zveřejněných zápisů (co, kdo, termín). Pole '
+      + 't = termín převedený na ISO datum, pokud je formulace jednoznačná. Osud úkolu: '
+      + 'stav splneno/pokracuje jen s DOSLOVNÝM dokladem z pozdějšího zápisu (sd = datum '
+      + 'dokladu, dk = citace, du = odkaz na zápis); absence stavu znamená, že zápisy '
+      + 'o osudu úkolu mlčí — NEJDE o tvrzení, že úkol nebyl splněn. Pole ext = externě '
+      + 'dohledaný výsledek legislativních úkolů (Věstník MZ, VeKLEP, Sbírka). „Otevřené '
+      + 'úkoly" jsou syntézou analýzy profilu skupiny k datu poslední analýzy.',
     skupiny: [...new Set([...ukolyData.ukoly, ...ukolyData.otevrene].map(u => u.g))]
       .sort((a, b) => a - b)
       .map(g => ({ g, nazev: skupinyById.get(g).nazev })),
     ukoly: ukolyData.ukoly,
     otevrene: ukolyData.otevrene,
-    pocty: { ukoly: ukolyData.ukoly.length, otevrene: ukolyData.otevrene.length },
+    pocty: {
+      ukoly: ukolyData.ukoly.length,
+      otevrene: ukolyData.otevrene.length,
+      splneno: ukolyData.ukoly.filter(u => u.stav === 'splneno').length,
+      pokracuje: ukolyData.ukoly.filter(u => u.stav === 'pokracuje').length,
+      ext: [...ukolyData.ukoly, ...ukolyData.otevrene].filter(u => u.ext).length,
+    },
   };
 
   for (const [name, data] of [['ppo.json', ppo], ['ppo-osoby.json', osoby], ['ppo-dvojrole.json', dvojrole], ['ppo-ukoly.json', ukoly]]) {
@@ -536,7 +601,7 @@ function main() {
     for (const [gid, a] of [...analyzy.entries()].sort((x, y) => x[0] - y[0])) {
       if (!gids.has(gid)) continue;
       const p = path.join(ANAWEB, `${gid}.json`);
-      fs.writeFileSync(p, JSON.stringify(analyzaWebFile(a, docIdx), null, 1) + '\n');
+      fs.writeFileSync(p, JSON.stringify(analyzaWebFile(a, docIdx, registry), null, 1) + '\n');
       kb += fs.statSync(p).size / 1024;
     }
     console.log(`✓ data/ppo-analyza/*.json (${analyzy.size} skupin, ${kb.toFixed(0)} kB celkem)`);

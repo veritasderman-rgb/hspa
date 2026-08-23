@@ -12,8 +12,9 @@ import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } f
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents, ukolySouhrn } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
 import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
-import { formatDatumCz, formatOd, filterUkoly, skupinaFromSearch } from '../src/ppo-ukoly.js';
-import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN, parseTermin, buildUkoly } from '../ingest/ppo/build-web.js';
+import { formatDatumCz, formatOd, filterUkoly, skupinaFromSearch, osudMatch, osudChips } from '../src/ppo-ukoly.js';
+import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN, parseTermin, buildUkoly, loadUkolyRegistry, korpusUrlIndex } from '../ingest/ppo/build-web.js';
+import { ganttData } from '../src/ppo-detail.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -439,7 +440,10 @@ test('ppo ukoly: dataset je přegenerovatelný z analýz a sedí na skupiny', ()
     if (m) analyzy.set(Number(m[1]), JSON.parse(fs.readFileSync(path.join(ANA, f), 'utf8')));
   }
   const gids = new Set(ppo.skupiny.map(s => s.id));
-  const rebuilt = buildUkoly(analyzy, gids);
+  const registry = { ...loadUkolyRegistry(path.join(ROOT, 'ingest', 'ppo', 'ukoly-stav'),
+    path.join(ROOT, 'ingest', 'ppo', 'ukoly-legislativa.json')),
+    docIdx: korpusUrlIndex(path.join(ROOT, 'ingest', 'ppo', 'source', 'ppo_korpus_full.jsonl.gz')) };
+  const rebuilt = buildUkoly(analyzy, gids, registry);
   assert.deepEqual(rebuilt.ukoly, ukolyData.ukoly, 'ukoly nesedí na builder (spusť npm run build:ppo)');
   assert.deepEqual(rebuilt.otevrene, ukolyData.otevrene, 'otevrene nesedí na builder');
   assert.equal(ukolyData.pocty.ukoly, ukolyData.ukoly.length);
@@ -489,6 +493,63 @@ test('ppo ukoly helpery: formatDatumCz, formatOd, filterUkoly', () => {
   assert.equal(filterUkoly(list, { g: '4' }, nazvy).length, 1);
   assert.equal(filterUkoly(list, { rok: '2024' }, nazvy)[0].g, 199);
   assert.equal(filterUkoly(list, {}, nazvy).length, 2);
+});
+
+test('ppo osud úkolů (FÁZE 6): join, chipy, filtr a časová osa', () => {
+  // builder join: stav s dokladem se propíše, bez_dokladu se nepropisuje
+  const analyzy = new Map([[7, {
+    group_id: 7,
+    jednani: [
+      { doc_id: 'aaa', datum: '2025-01-10', ukoly: [{ co: 'Dodat analýzu' }, { co: 'Zaslat návrh' }] },
+      { doc_id: 'bbb', datum: '2025-06-01', ukoly: [{ co: 'Vydat věstník', termin: 'do 30. 9. 2025' }] },
+    ],
+    profil: { otevrene_ukoly: [{ co: 'Vydat věstník', kdo: 'MZ', od: '2025-06' }] },
+  }]]);
+  const stavy = new Map([
+    ['aaa:0', { stav: 'splneno', doklad: 'analýza byla předložena', doklad_doc_id: 'bbb', doklad_datum: '2025-06-01' }],
+    ['aaa:1', { stav: 'bez_dokladu', doklad: null, doklad_doc_id: null, doklad_datum: null }],
+  ]);
+  const legJ = new Map([['bbb:0', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15' } }]]);
+  const legO = new Map([['7|Vydat věstník', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15' } }]]);
+  const docIdx = new Map([['bbb', { url: 'https://ppo.mzcr.cz/zapis-bbb' }]]);
+  const r = buildUkoly(analyzy, new Set([7]), { stavy, legJ, legO, docIdx });
+  const dodat = r.ukoly.find(u => u.co === 'Dodat analýzu');
+  assert.equal(dodat.stav, 'splneno');
+  assert.equal(dodat.sd, '2025-06-01');
+  assert.equal(dodat.du, 'https://ppo.mzcr.cz/zapis-bbb');
+  assert.equal(r.ukoly.find(u => u.co === 'Zaslat návrh').stav, undefined, 'bez_dokladu se nepropisuje');
+  assert.equal(r.ukoly.find(u => u.co === 'Vydat věstník').ext.nazev, 'Věstník 9/2025');
+  assert.equal(r.otevrene[0].ext.stav, 'vydano', 'otevřený úkol páruje ext přes (g, co)');
+
+  // filtr osudu
+  assert.ok(osudMatch({ stav: 'splneno' }, 'splneno'));
+  assert.ok(osudMatch({ ext: { stav: 'vydano' } }, 'splneno'), 'externí vydáno = doložené splnění');
+  assert.ok(osudMatch({}, 'bez'));
+  assert.ok(!osudMatch({ stav: 'pokracuje' }, 'bez'));
+
+  // chipy: escapují a nesou odkazy
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const html = osudChips({ stav: 'splneno', sd: '2025-06-01', dk: 'citace "x"', du: 'https://z' }, esc);
+  assert.ok(html.includes('doloženo') && html.includes('https://z') && html.includes('&quot;x&quot;'));
+  assert.equal(osudChips({}, esc), '');
+
+  // časová osa: jen datované úkoly s termínem/dokladem; termín před zadáním se zahodí
+  const web = {
+    group_id: 7,
+    jednani: [
+      { datum: '2025-01-10', ukoly: [
+        { co: 'A', t: '2025-03-01' },
+        { co: 'B', t: null },
+        { co: 'C', stav: 'splneno', sd: '2025-06-01' },
+        { co: 'D', t: '2024-01-01' },
+      ] },
+      { datum: null, ukoly: [{ co: 'E', t: '2025-05-01' }] },
+    ],
+  };
+  const gtt = ganttData(web);
+  assert.deepEqual(gtt.rows.map(x => x.co).sort(), ['A', 'C'], 'B bez termínu, D termín před zadáním, E bez data jednání');
+  assert.equal(gtt.min, '2025-01-10');
+  assert.equal(gtt.max, '2025-06-01');
 });
 
 /* ── stránky existují a odkazují na moduly ─────────────────────────── */
