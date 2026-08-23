@@ -593,6 +593,7 @@ export function renderModuleNav(activeId) {
         { id: 'legislativa',   label: 'Legislativní radar',              href: 'legislativa.html', match: ['legislativa.html'] },
         { id: 'ppo',           label: 'Pracovní skupiny MZ',             href: 'pracovni-skupiny.html', match: ['pracovni-skupiny.html', 'pracovni-skupina.html'] },
         { id: 'vestniky',      label: 'Věstníky MZ',                     href: 'vestniky-mz.html', match: ['vestniky-mz.html'] },
+        { id: 'rozhodovani',   label: 'Jak se rozhoduje',                href: 'jak-se-rozhoduje.html', match: ['jak-se-rozhoduje.html'] },
       ],
     },
     { id: 'barometr',    label: 'Barometr',                href: 'barometr.html',           match: ['barometr.html'] },

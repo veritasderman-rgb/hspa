@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jak se rozhoduje v českém zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Průvodce rozhodováním o českém zdravotnictví: pět kolejí (výkony, léky, zdravotnické prostředky, screeningy, úhrady) — kdo navrhuje, kdo rozhoduje a kde se to vyhlašuje. Doložený případ od zadání k Věstníku, mapa aktérů a skutečné úřední tempo z 640+ doložených úkolů.">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/jak-se-rozhoduje">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/jak-se-rozhoduje">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Jak se rozhoduje</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="rozHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker"><a href="strategie.html">Strategie</a> · Jak se rozhoduje</div>
+      <h1 class="ed-hero-headline" id="rozHeadline">Jak se rozhoduje v českém zdravotnictví</h1>
+      <p class="ed-hero-lead">Kdo určuje, které výkony se hradí, kolik stojí léky, kdo dostane
+        sluchadlo na poukaz a kdy máte nárok na screening? Rozhodnutí se rodí v komisích a
+        pracovních skupinách ministerstva, ve správních řízeních SÚKL a v dohodovacím řízení —
+        a vyhlašují se vyhláškou, Věstníkem nebo úředním seznamem. Tahle stránka je mapa: pět
+        kolejí, po kterých rozhodnutí jezdí, jeden doložený případ krok za krokem a skutečné
+        tempo úředního rozhodování spočítané ze zápisů.</p>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sTempoMedian">—</span> <span class="ed-stat-unit">dní</span></div>
+        <div class="ed-stat-lbl">Medián od zadání úkolu k doloženému splnění</div>
+        <div class="ed-stat-meta">z <span id="sTempoN">—</span> doložených úkolů poradních orgánů</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num">5 <span class="ed-stat-unit">kolejí</span></div>
+        <div class="ed-stat-lbl">Výkony · léky · prostředky · programy · úhrady</div>
+        <div class="ed-stat-meta">každá s vlastními pravidly hry</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sTempoIqr">—</span> <span class="ed-stat-unit">dní</span></div>
+        <div class="ed-stat-lbl">Prostřední polovina úkolů (25.–75. percentil)</div>
+        <div class="ed-stat-meta">syntéza analýzy zveřejněných zápisů</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section" aria-labelledby="rozKolejeH">
+    <div class="section-title">
+      <div class="ed-kicker">Pět kolejí</div>
+      <h2 id="rozKolejeH">Kdo navrhuje, kdo rozhoduje, kde se to vyhlašuje</h2>
+    </div>
+    <p class="ppo-spojky-sub">Každá oblast má svou vlastní trasu. Klikněte na orgán a prohlédněte si,
+      kdo v něm sedí, o čem jedná a jak plní úkoly.</p>
+    <div class="roz-koleje" id="rozKoleje"></div>
+  </section>
+
+  <section class="section" aria-labelledby="rozPripadH">
+    <div class="section-title">
+      <div class="ed-kicker">Sledujte skutečný případ</div>
+      <h2 id="rozPripadH"><span id="rozPripadTitul">—</span></h2>
+    </div>
+    <p class="ppo-spojky-sub" id="rozPripadUvod"></p>
+    <ol class="roz-pripad" id="rozPripad"></ol>
+    <p class="ppo-d-note" id="rozPripadPata"></p>
+  </section>
+
+  <section class="section" aria-labelledby="rozSankeyH">
+    <div class="section-title">
+      <div class="ed-kicker">Mapa aktérů</div>
+      <h2 id="rozSankeyH">Kdo sedí u rozhodovacích stolů</h2>
+    </div>
+    <p class="ppo-spojky-sub">Vlevo kategorie aktérů (podle afiliace uvedené na portálu ppo.mzcr.cz),
+      vpravo orgány s úhradovým či programovým dosahem. Šířka stuhy = počet osob. Jedna osoba může
+      sedět ve více orgánech.</p>
+    <figure class="roz-sankey-wrap" id="rozSankey" aria-label="Diagram: kategorie aktérů → rozhodovací orgány"></figure>
+    <p class="ppo-d-note">Podrobněji: <a href="pracovni-osoby.html">Kdo je kdo — adresář osob a dvojrole</a>
+      · <a href="pracovni-skupiny.html">síť pracovních skupin</a>.</p>
+  </section>
+
+  <section class="section" aria-labelledby="rozTempoH">
+    <div class="section-title">
+      <div class="ed-kicker">Úřední tempo</div>
+      <h2 id="rozTempoH">Jak dlouho trvá, než se úkol doloženě splní</h2>
+    </div>
+    <p class="ppo-spojky-sub">Rozdělení doby od zadání úkolu na jednání poradního orgánu k okamžiku,
+      kdy pozdější zápis jeho splnění výslovně doloží. Počítáme jen doložené případy — úkoly, o jejichž
+      osudu zápisy mlčí, v grafu nejsou.</p>
+    <div class="roz-tempo" id="rozTempo" role="img" aria-label="Histogram počtu úkolů podle doby do doloženého splnění (koše po 60 dnech)"></div>
+    <p class="ppo-d-note">Osa: dny od zadání (koše po 60 dnech). Zdroj:
+      <a href="pracovni-ukoly.html">dashboard úkolů z jednání</a> — sledování osudu úkolů napříč zápisy.</p>
+  </section>
+
+  <section class="leg-source-note" aria-label="Zdroj dat">
+    <p>
+      Trasy kolejí vycházejí ze zákona č. 48/1997 Sb., vyhlášky č. 134/1998 Sb. a jednacích dokumentů
+      orgánů MZ; počty osob a tempo z dat portálu <a href="https://ppo.mzcr.cz/" target="_blank" rel="noopener">ppo.mzcr.cz</a>
+      zpracovaných HSPA Monitorem. Stránka je orientační průvodce, ne právní výklad.
+    </p>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/jak-se-rozhoduje.js"></script>
+
+</body>
+</html>
