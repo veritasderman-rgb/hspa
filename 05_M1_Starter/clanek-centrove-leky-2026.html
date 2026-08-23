@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Čtyřicet miliard za naději. Centrové léky jsou nejrychleji rostoucí lékový účet českého zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Za centrové léky — biologickou léčbu, moderní onkologika a genové terapie vázané na specializovaná centra — zaplatily pojišťovny v roce 2024 už 39,8 miliardy korun, o čtvrtinu víc než před dvěma lety. Necelých 150 tisíc pacientů čerpá bezmála 8 % prostředků systému. Analýza datového souhrnu ÚZIS a mezinárodního srovnání EFPIA W.A.I.T.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Čtyřicet miliard za naději. Centrové léky jsou nejrychleji rostoucí lékový účet českého zdravotnictví">
+<meta property="og:description" content="V roce 2024 zaplatily zdravotní pojišťovny za centrové léky 39,8 miliardy korun — o čtvrtinu víc než v roce 2022. Kam peníze tečou, proč účet poroste dál a proč český pacient přesto čeká na moderní léčbu 659 dní, zatímco v Německu je plně dostupných 93 % nových molekul.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-23">
+<meta property="article:section" content="Léková politika">
+<!--
+  audit:
+    last_reviewed: 2026-08-23
+    reviewer: claude-code-agent
+    status: draft
+    creation_phase: nový indikátor naklady_centrove_leky_total (scheduled routine — rozšíření dashboardu z českých veřejných zdrojů)
+    notes: "Všechna klíčová čísla spočtena PŘÍMO z primárních XLSX ÚZIS (staženo 23. 8. 2026): (1) úhrady 2022 = 31,71 mld / 2023 = 35,90 mld / 2024 = 39,81 mld Kč = součet sloupců 'Úhrady v tis. Kč' přes 7 ZP × 18 terapeutických oblastí listu 'Rok 2022-2024 Segment' souhrnu OIS-11-06 (edice 2025-02, zdroj NRHZS); (2) tabulka terapeutických oblastí = tytéž součty po řádcích, průměr na pacienta = úhrady / unikátní pacienti dané oblasti (v rámci oblasti je součet unikátních pacientů přes pojišťovny validní — pojištěnec má jednu ZP); (3) součet unikátních pacientů přes oblasti a ZP 2024 = 148 831 — HORNÍ odhad počtu osob (pacient může čerpat ve více oblastech), v textu proto 'necelých 150 tisíc' s vysvětlením; (4) podíl 7,9 % = 35,90 / 456,1 mld Kč; jmenovatel = součet úhrad za rok 2023 ze souhrnu OIS-11-24 Náklady ZP dle segmentů péče (bez dvojzápočtu segmentu 1.7.1 dle metodiky listu Metodika); (5) W.A.I.T. čísla ověřena z primárního PDF EFPIA/IQVIA Patients W.A.I.T. Indicator 2025 (May 2026): Czechia full 6 % / limited 33 % / individual 11 % / privately 13 % / not available 38 % (slide 14); Germany full 93 %; Austria full 57 %; Slovakia full 7 %, not available 79 %; Poland full 6 %, limited 40 %, individual 11 %; EU27 average 45 % available (76/168), full 28 %, average time 597 days (578 v 2024; slide 19 exec summary); (6) ČR 659 dní od registrace EMA k úhradě = AIFP dle W.A.I.T. 2025 (ČTK/Protext 57623, HN 67881550) — v primárním PDF je hodnota v grafu bez strojově čitelného textu, proto citováno přes AIFP; (7) '43 % nákladů na léky' = AIFP (vyjádření ředitele, aifp.cz), sekundární zdroj, v textu atribuováno; (8) § 39da zák. 48/1997 Sb. (orphan proces od 1. 1. 2022), § 16 individuální úhrady, EU HTA nařízení 2021/2282 účinné pro onkologika a ATMP od 12. 1. 2025 — legislativní fakta. Hodnoty v patient_story metodické karty literálně odpovídají data/indicators.json (39,8; 31,7; audit-patient-stories OK)."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-centrove-leky-2026.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">Centrová léčba · Financování · Vzácná onemocnění</span>
+      </div>
+      <h1 class="article-title">Čtyřicet miliard za naději. Centrové léky jsou nejrychleji rostoucí lékový účet českého zdravotnictví</h1>
+      <p class="article-deck">
+        Biologická léčba roztroušené sklerózy, moderní onkologika, genová terapie pro děti se svalovou atrofií —
+        léky, které smí předepsat jen specializované centrum, stály v roce 2024 zdravotní pojišťovny
+        <strong>39,8 miliardy korun</strong>. O čtvrtinu víc než před dvěma lety. Necelých 150 tisíc pacientů,
+        zhruba 1,4 % pojištěnců, tak čerpá bezmála 8 % prostředků celého systému. Prošli jsme datový souhrn ÚZIS
+        z Národního registru hrazených zdravotních služeb: kam peníze tečou, proč účet poroste dál — a proč český
+        pacient přesto čeká na novou léčbu v průměru 659 dní, zatímco v Německu je plně dostupných 93 % nových molekul.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">23. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V čekárně centra pro roztroušenou sklerózu se jednou za měsíc potkávají lidé, které spojuje jediné:
+        jejich léčbu neplatí recept z ordinace praktika, ale zvláštní režim veřejného pojištění zvaný
+        centrová péče. Účetní, která díky infuzím biologické léčby stále pracuje a řídí auto. Rodiče kojence
+        se spinální svalovou atrofií, jehož terapie patří k nejdražším, jaké české zdravotnictví kdy hradilo.
+        Dohromady je takových pacientů necelých 150 tisíc — a jejich účet roste výrazně rychleji než
+        náklady systému jako celku.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCentroveHeroH">
+        <figcaption class="av-figure-h" id="avCentroveHeroH">Centrové léky v číslech (NRHZS, 2022–2024)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="39.8" data-decimals="1" data-suffix=" mld Kč">39,8 mld Kč</span>
+            <span class="av-counter-label">úhrady zdravotních pojišťoven za centrové léky v roce 2024</span>
+            <span class="av-counter-foot">ÚZIS, datový souhrn OIS-11-06 (NRHZS)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="25" data-prefix="+" data-suffix=" %">+25 %</span>
+            <span class="av-counter-label">růst za dva roky — z 31,7 mld Kč (2022) na 39,8 mld Kč (2024)</span>
+            <span class="av-counter-foot">nominální úhrady, bez očištění o inflaci</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="150" data-suffix=" tis.">~150 tis.</span>
+            <span class="av-counter-label">pacientů v centrové péči (2024) — asi 1,4 % všech pojištěnců</span>
+            <span class="av-counter-foot">horní odhad; součet unikátních pacientů přes oblasti a pojišťovny = 148 831</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="7.9" data-decimals="1" data-suffix=" %">7,9 %</span>
+            <span class="av-counter-label">podíl centrových léků na celkových nákladech pojišťoven (2023)</span>
+            <span class="av-counter-foot">35,9 mld z 456,1 mld Kč; dopočet ze souhrnů OIS-11-06 a OIS-11-24</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR — Datová podpora dohodovacího řízení, datové souhrny OIS-11-06 (Centrové léky) a OIS-11-24 (Náklady ZP dle segmentů péče); primární data Národní registr hrazených zdravotních služeb. Vlastní výpočet, staženo 23. 8. 2026.</p>
+      </figure>
+
+      <h3>Co je centrový lék</h3>
+
+      <p>
+        Když Státní ústav pro kontrolu léčiv přizná léku úhradu se symbolem <strong>S</strong>, znamená to,
+        že ho pojišťovna proplatí jen tehdy, podá-li ho <strong>specializované centrum</strong> — pracoviště,
+        s nímž má zvláštní smlouvu. Do tohoto režimu míří prakticky všechna moderní biologická léčiva,
+        inovativní onkologika, léky na vzácná onemocnění i genové terapie. Logika je dvojí: soustředit
+        nákladnou léčbu k odborníkům, kteří s ní umí zacházet, a udržet kontrolu nad tím, kdo přesně ji
+        dostává. Vedlejším efektem je, že centrové léky tvoří v účetnictví systému samostatný, dobře
+        viditelný segment — a právě jeho dynamiku nově sleduje indikátor
+        <a href="indicator.html?id=naklady_centrove_leky_total">Úhrady za centrové léky</a> na tomto dashboardu.
+      </p>
+
+      <p>
+        Čísla pocházejí z datového souhrnu, který ÚZIS publikuje z Národního registru hrazených zdravotních
+        služeb jako podklad pro dohodovací řízení o úhradách: úhrady, počty unikátních pacientů
+        a pacientoměsíce v 18 terapeutických oblastech, po jednotlivých pojišťovnách, za roky 2022 až 2024.
+        Součet za celý systém: <strong>31,7 miliardy Kč v roce 2022, 35,9 miliardy v roce 2023
+        a 39,8 miliardy v roce 2024</strong>. Meziroční tempo přes 10 % — zhruba dvakrát rychlejší, než jakým
+        ve stejném období rostly celkové náklady pojišťoven. Podle Asociace inovativního farmaceutického
+        průmyslu už centrové léky tvoří 43 % všech nákladů na léky hrazené z veřejného pojištění.
+      </p>
+
+      <h3>Kam peníze tečou</h3>
+
+      <p>
+        Největší položkou je onkologie. Léčba solidních nádorů stála v roce 2024 téměř 11 miliard korun
+        a proti roku 2022 vyrostla o 47 % — nejrychleji ze všech velkých oblastí. S krevními nádory dohromady
+        jde na protinádorovou léčbu 17 miliard, více než 40 % celého centrového účtu. Následuje roztroušená
+        skleróza, trávicí soustava (Crohnova choroba, ulcerózní kolitida) a revmatologie:
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCentroveTableH">
+        <figcaption class="av-figure-h" id="avCentroveTableH">Terapeutické oblasti centrové léčby (2024, řazeno podle úhrad)</figcaption>
+        <div class="av-data-table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Terapeutická oblast</th>
+                <th scope="col">Úhrady 2024</th>
+                <th scope="col">Úhrady 2022</th>
+                <th scope="col">Pacientů 2024</th>
+                <th scope="col">Průměr na pacienta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Onkologie — solidní nádory</td><td>10,87 mld Kč</td><td>7,40 mld Kč</td><td>24 637</td><td>441 tis. Kč</td></tr>
+              <tr><td>Hemato(onko)logie</td><td>6,18 mld Kč</td><td>5,37 mld Kč</td><td>12 748</td><td>485 tis. Kč</td></tr>
+              <tr><td>Roztroušená skleróza</td><td>4,17 mld Kč</td><td>3,71 mld Kč</td><td>18 411</td><td>227 tis. Kč</td></tr>
+              <tr><td>Trávicí soustava (IBD)</td><td>2,56 mld Kč</td><td>2,02 mld Kč</td><td>12 208</td><td>210 tis. Kč</td></tr>
+              <tr><td>Infekce (HIV, hepatitidy)</td><td>2,39 mld Kč</td><td>2,16 mld Kč</td><td>8 316</td><td>287 tis. Kč</td></tr>
+              <tr><td>Revmatologie</td><td>2,29 mld Kč</td><td>1,94 mld Kč</td><td>17 142</td><td>134 tis. Kč</td></tr>
+              <tr><td>Dermatologie (psoriáza)</td><td>1,93 mld Kč</td><td>1,22 mld Kč</td><td>8 630</td><td>224 tis. Kč</td></tr>
+              <tr><td>Spinální svalová atrofie</td><td>1,74 mld Kč</td><td>1,61 mld Kč</td><td>240</td><td>7,25 mil. Kč</td></tr>
+              <tr><td>Oftalmologie (VPMD)</td><td>1,58 mld Kč</td><td>1,62 mld Kč</td><td>26 862</td><td>59 tis. Kč</td></tr>
+              <tr><td>Cystická fibróza</td><td>1,28 mld Kč</td><td>1,07 mld Kč</td><td>464</td><td>2,76 mil. Kč</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS, datový souhrn OIS-11-06 Centrové léky (NRHZS), list „Rok 2022-2024 Segment"; vlastní součty přes 7 zdravotních pojišťoven, výběr 10 z 18 oblastí. Průměr na pacienta = úhrady / unikátní pacienti dané oblasti v roce 2024.</p>
+      </figure>
+
+      <p>
+        Tabulka ukazuje dva zcela odlišné světy, které se do jednoho segmentu vešly jen účetní konvencí.
+        Na jedné straně <strong>velké chronické populace</strong>: oftalmologie léčí biologiky přes 26 tisíc
+        pacientů s věkem podmíněnou makulární degenerací za průměrných 59 tisíc korun ročně, revmatologie
+        17 tisíc pacientů za 134 tisíc. Na druhé straně <strong>vzácná onemocnění</strong>: 240 pacientů se
+        spinální svalovou atrofií stojí 1,74 miliardy — v průměru přes 7 milionů korun na jednoho, třicetkrát
+        víc než průměrný onkologický pacient. Cystická fibróza s 464 pacienty a 2,8 milionu na hlavu je
+        podobný případ. Právě u vzácných onemocnění je růst nejcitlivější politickou otázkou: jednotková cena
+        je extrémní, ale pacientů je hrstka a alternativa často neexistuje.
+      </p>
+
+      <h3>Platíme víc, dostáváme později</h3>
+
+      <p>
+        Čtyřicet miliard je hodně peněz — a přesto to na plný přístup k inovacím nestačí. Evropská federace
+        farmaceutického průmyslu (EFPIA) s analytiky IQVIA každoročně měří, kolik z inovativních léků
+        registrovaných Evropskou lékovou agenturou se v jednotlivých zemích skutečně dostane k pacientům.
+        Výsledek pro Česko v edici 2025 (molekuly registrované 2021–2024, stav k lednu 2026): z centrálně
+        registrovaných 168 léčiv je v ČR hrazena <strong>polovina — ale jen 6 % plně, bez omezení</strong>.
+        Dalších 33 % má indikační či preskripční limity nad rámec registrace, 11 % je dostupných výhradně
+        individuálně (typicky přes § 16) a 13 % si lze koupit jen soukromě. Na zařazení do úhrad se podle
+        AIFP čeká v průměru <strong>659 dní od evropské registrace</strong> — přes průměr EU27 (597 dní)
+        a víc než jedenáctinásobek Německa.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avWaitBarH">
+        <figcaption class="av-figure-h" id="avWaitBarH">Podíl inovativních léků 2021–2024 plně hrazených bez omezení (%)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="100" data-unit="%">
+          <li class="av-bar-row" data-value="93" data-label="Německo" data-note="nejrychlejší vstup do úhrad v Evropě"></li>
+          <li class="av-bar-row" data-value="57" data-label="Rakousko"></li>
+          <li class="av-bar-row" data-value="28" data-label="Průměr EU27" data-note="45 % molekul dostupných aspoň částečně"></li>
+          <li class="av-bar-row" data-value="7" data-label="Slovensko" data-note="79 % molekul nedostupných"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="6" data-label="Česko" data-note="dalších 44 % hrazeno s omezeními či individuálně"></li>
+          <li class="av-bar-row" data-value="6" data-label="Polsko" data-note="s omezeními ale hradí víc molekul než ČR (57 % celkem)"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> EFPIA/IQVIA Patients W.A.I.T. Indicator 2025 (květen 2026), 168 molekul s centrální registrací EMA 2021–2024, stav úhrad k 5. 1. 2026.</p>
+      </figure>
+
+      <p>
+        Srovnání se sousedy vyznívá smíšeně. Proti Slovensku, kde je 79 % nových molekul nedostupných,
+        je na tom český pacient výrazně lépe; Polsko sice plně hradí stejně málo jako ČR, ale s omezeními
+        zpřístupňuje celkem 57 % molekul — víc než Česko s 50 %. Rakousko a Německo hrají jinou ligu.
+        Německý model — lék je hrazen okamžikem uvedení na trh a o ceně se jedná až zpětně — je ovšem
+        také nejdražší v Evropě; česká cesta „nejdřív vyjednat, pak hradit" šetří peníze výměnou za čas
+        pacientů. Podstatné je, že obě strany té výměny jsou nyní měřitelné: kolik platíme, ukazuje NRHZS,
+        jak dlouho čekáme, ukazuje W.A.I.T.
+      </p>
+
+      <h3>Proč účet poroste dál</h3>
+
+      <p>
+        Růst o čtvrtinu za dva roky není jednorázový výkyv, ale strukturální trend se čtyřmi motory.
+        Za prvé, <strong>příliv inovací</strong>: nové molekuly vstupují do úhrad téměř výhradně centrovým
+        režimem a už hrazeným lékům se rozšiřují indikace na další skupiny pacientů. Za druhé,
+        <strong>ceny</strong>: genové a buněčné terapie posouvají jednotkové náklady do řádů milionů
+        až desítek milionů korun. Za třetí — a to je dobrá zpráva — <strong>úspěch léčby</strong>:
+        pacienti s roztroušenou sklerózou, HIV nebo cystickou fibrózou dnes žijí s nemocí desítky let,
+        takže léčených přibývá rychleji, než přibývá nových diagnóz. A za čtvrté <strong>demografie</strong>:
+        onkologických diagnóz s věkem populace přibývá a biologická léčba se stává standardem
+        ve stále časnějších liniích.
+      </p>
+
+      <p>
+        Oficiální úhrady navíc nejsou totéž co skutečné ceny. Značná část centrových léků vstupuje do systému
+        s neveřejnými <strong>risk-sharingovými smlouvami</strong>: výrobce část úhrad zpětně vrací pojišťovně,
+        případně nese náklady, pokud léčba nezabere. Skutečný čistý účet systému je tedy o něco nižší, než
+        vykázaných 39,8 miliardy — o kolik, veřejná data neříkají. Pro hodnocení efektivity je to slepé místo:
+        systém utrácí osminu prostředků v segmentu, jehož reálné ceny zná jen úzký okruh vyjednavačů.
+      </p>
+
+      <h3>Politická páka: rychlost, cena, transparentnost</h3>
+
+      <p>
+        Centrová léčba je vzácný případ, kdy je politická páka konkrétní a vícestupňová. <strong>Rychlost
+        vstupu</strong> řídí správní řízení SÚKL o ceně a úhradě; pro léky na vzácná onemocnění platí od
+        roku 2022 zvláštní proces podle § 39da zákona č. 48/1997 Sb., v němž o úhradě spolurozhoduje
+        ministerstvo po slyšení pacientů, odborných společností a pojišťoven. Od ledna 2025 navíc běží
+        <strong>společné evropské hodnocení</strong> klinické účinnosti onkologik a genových terapií
+        (nařízení EU 2021/2282) — členské státy si přestávají duplikovat práci a ČR může zkrátit
+        oněch 659 dní, aniž sleví z nároků na doložený přínos.
+      </p>
+
+      <p>
+        <strong>Cenu</strong> drží na uzdě vyjednávání pojišťoven a konkurence: po vypršení patentů dokážou
+        biosimilars srazit náklady o desítky procent — jak rychle je systém nasazuje, sleduje indikátor
+        <a href="indicator.html?id=podil_generik_objem">podílu generik a biosimilars</a>. A konečně
+        <strong>transparentnost</strong>: dokud jsou risk-sharingové smlouvy tajné a § 16 funguje jako
+        neplánovaná úniková cesta pro léky mimo standardní úhradu, nemůže veřejnost posoudit, zda systém
+        za osminu svých prostředků nakupuje maximum zdraví. Zveřejnění datového souhrnu OIS-11-06, z něhož
+        vychází tento článek, je krok správným směrem — poprvé lze růst centrového účtu sledovat po
+        terapeutických oblastech z veřejného zdroje.
+      </p>
+
+      <h3>Co z toho plyne</h3>
+
+      <ul>
+        <li><strong>39,8 miliardy v roce 2024, +25 % za dva roky.</strong> Centrové léky rostou zhruba dvakrát rychleji než celkové náklady systému a tvoří už bezmála 8 % jeho výdajů.</li>
+        <li><strong>Dva světy v jednom segmentu.</strong> Velké chronické populace (oftalmologie, revmatologie) za desítky až stovky tisíc na pacienta — a vzácná onemocnění za miliony (SMA: 240 pacientů, průměrně 7,25 mil. Kč).</li>
+        <li><strong>Platíme víc, dostáváme později.</strong> Jen 6 % inovativních molekul je v ČR hrazeno bez omezení a na úhradu se čeká 659 dní; Německo hradí plně 93 % molekul, průměr EU je 597 dní.</li>
+        <li><strong>Páky existují:</strong> evropské společné HTA od roku 2025, orphanový proces § 39da, risk-sharing, rychlejší vstup biosimilars — a transparentnost skutečných cen jako podmínka veřejné kontroly.</li>
+      </ul>
+
+      <aside class="article-related" aria-labelledby="related-h">
+        <h4 id="related-h">Související obsah</h4>
+        <ul class="article-related-list">
+          <li><a href="indicator.html?id=naklady_centrove_leky_total">→ Indikátor: Úhrady za centrové léky</a> — metodika, trend a limity nového indikátoru</li>
+          <li><a href="indicator.html?id=podil_vydaje_leky">→ Indikátor: Podíl výdajů na léky</a> — kontext celého lékového segmentu úhrad</li>
+          <li><a href="indicator.html?id=podil_generik_objem">→ Indikátor: Generika a biosimilars</a> — protiváha růstu cen po vypršení patentů</li>
+          <li><a href="clanek-financovani-segmenty-2026.html">→ Kam plyne 459 miliard</a> — struktura financování zdravotnictví po segmentech</li>
+        </ul>
+      </aside>
+
+      <aside class="article-sources" aria-labelledby="sources-h">
+        <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+        <ul class="article-sources-list">
+          <li><a href="https://www.nzip.cz/data/2367-centrove-leky-datovy-souhrn" rel="external noopener">ÚZIS · NZIP — datový souhrn OIS-11-06 Centrové léky (NRHZS, roky 2022–2024)</a></li>
+          <li><a href="https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-06-centrove-leky-2025-02.xlsx" rel="external noopener">Primární XLSX souhrnu OIS-11-06 (edice 2025-02) — úhrady, pacienti a pacientoměsíce po oblastech a pojišťovnách</a></li>
+          <li><a href="https://www.nzip.cz/data/dohodovaci-rizeni/metodicke-popisy/Datovy-souhrn-OIS-11-06-centrove-leky-2025-02.pdf" rel="external noopener">Metodický popis souhrnu OIS-11-06 (ÚZIS)</a></li>
+          <li><a href="https://www.nzip.cz/data/dohodovaci-rizeni/datove-souhrny/Datovy-souhrn-OIS-11-24-naklady-zdravotni-pojistovny-segmenty-2026-01.xlsx" rel="external noopener">Datový souhrn OIS-11-24 — náklady zdravotních pojišťoven dle segmentů péče (jmenovatel podílu 7,9 %)</a></li>
+          <li><a href="https://www.efpia.eu/media/mnfdwzax/efpia-patients-wait-indicator-2025.pdf" rel="external noopener">EFPIA/IQVIA Patients W.A.I.T. Indicator 2025 — dostupnost a rychlost úhrady inovativních léků ve 36 zemích (PDF)</a></li>
+          <li><a href="https://www.ceskenoviny.cz/zpravy/zive-cesi-na-moderni-lecbu-cekaji-stale-dele-nova-data-wait-indicator/2825808" rel="external noopener">AIFP k datům W.A.I.T. 2025 pro ČR — 659 dní od registrace k úhradě (ČTK)</a></li>
+          <li><a href="https://www.zakonyprolidi.cz/cs/1997-48#p39da" rel="external noopener">§ 39da zákona č. 48/1997 Sb. — úhrada léčivých přípravků pro vzácná onemocnění</a></li>
+        </ul>
+        <p class="article-sources-disclaimer">
+          Součty úhrad (31,7 / 35,9 / 39,8 mld Kč), tabulka terapeutických oblastí i podíl 7,9 % jsou vlastní
+          výpočty z primárních XLSX souhrnů ÚZIS (staženo 23. 8. 2026); postup je popsán v metodické kartě
+          indikátoru. Počet ~150 tisíc pacientů je horní odhad — součet unikátních pacientů přes terapeutické
+          oblasti a pojišťovny (148 831), jeden pacient může čerpat léčbu ve více oblastech. Úhrady jsou nominální,
+          před zohledněním neveřejných zpětných plateb výrobců. Stav k 23. 8. 2026.
+        </p>
+      </aside>
+
+    </div>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="footer-copy">Data: OECD, ÚZIS, ČSÚ, SÚKL, SZÚ · CC BY 4.0 · <a href="https://github.com/veritasderman-rgb/hspa" rel="external noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
