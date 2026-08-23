@@ -155,6 +155,15 @@ zdrave-cesko.cz/
 | **CSS namespace** | `.vst-*` (částka, obsah, kategorie chip); reuse `.ed-hero*`, `.filters-row`, `.ppo-uk-roky/-year/-list/-more`, `.leg-source-note` |
 | **Data** | `data/vestniky.json` — staví `ingest/fetchers/vestniky.js` (`npm run fetch:vestniky`, součást `npm run ingest`): WP REST API `mzd.gov.cz/wp-json/wp/v2/vestnik` (351 částek; u novějších content = obsah) + u starších (hlavně 2006–2011) extrakce OBSAHu z prvních stran PDF přes pdfjs-dist. Cache `ingest/cache/vestniky/`. Síťový dataset — NEPATŘÍ do build:generated ani merge=generated. Testy `tests/vestniky.test.js`. **Prolinkování**: deterministická pravidla `ingest/mapping/vestniky_souvislosti.json` anotují položky obsahu skupinami MZ (pole `g` → badge v archivu), `data/vestniky-vazby.json` (staví fetch krok, `npm run build:vestniky:vazby`) nese vazby na indikátory (box „Úřední rámec" na detailu indikátoru) a názvy skupin; `build-web.js` (`mergeVestnik`) plní kartu „Ve Věstníku MZ" na detailu orgánu. |
 
+### `jak-se-rozhoduje.html` — Jak se rozhoduje v českém zdravotnictví
+
+| | |
+|---|---|
+| **Účel** | Průvodce rozhodováním: pět kolejí (výkony, léky, prostředky, screeningy, úhrady — kdo navrhuje/rozhoduje/kde se vyhlašuje, s odkazy na orgány a stránky webu), doložený případ „od zadání k Věstníku" (mamografický standard 2023–2024, drift test hlídá soulad s analýzou zápisů), sankey mapa aktérů (kategorie afiliací → rozhodovací orgány, z ppo-osoby.json) a histogram úředního tempa (dny zadání→doložené splnění z ppo-ukoly.json; medián v hero). |
+| **JS moduly** | `src/jak-se-rozhoduje.js` → `page-shared`, `ppo.js` (KAT_LABELS) |
+| **CSS namespace** | `.roz-*` (koleje, případ-timeline, sankey, tempo histogram) |
+| **Data** | `data/rozhodovani.json` (kurátorský: koleje + případ + konfigurace sankey; fakta dle zák. 48/1997 Sb. a vyhl. 134/1998 Sb.) + `data/ppo-osoby.json` + `data/ppo-ukoly.json`. Testy `tests/jak-se-rozhoduje.test.js`. |
+
 ### `legislativa.html` — Legislativní radar
 
 | | |
