@@ -111,10 +111,14 @@ export const KATEGORIE = [
   ['centra', /centr(um|a|um)? vysoce specializ|onkologick(á|é) péče|\bHOC\b|\bKOC\b|\bIKTOV|traumacentr|perinatolog/i],
   ['leciva', /léčiv|antiinfektiv|\bSEAI\b|lékov|opiát|omamn|psychotropn/i],
   ['cenove', /cenov(ý|é|á)|maximální cen|regulace cen|úhrad|bodov(é|á) hodnot/i],
-  ['standardy', /standard|doporučen(ý|ého|é) postup|metodick(ý|é|á)|metodika|guidelines/i],
+  // vzdělávání MUSÍ předcházet standardům: vzdělávací termíny jsou specifické,
+  // kdežto standardy chytají i obecná slova (metodick-, klinick-) — „Vzdělávací
+  // program Dětská klinická psychologie" je vzdělávání, ne standard
   ['vzdelavani', /vzdělávac|specializační|akreditac|atestac|kmen(e|ů)?\b|rezidenčn|kvalifikačn/i],
-  ['spravni', /oprávnění|osvědčen|jmenován|statut|jednací řád|komise|výběrov(é|á) řízení|seznam (soudních )?znalc/i],
+  ['standardy', /standard|doporučen|metodick(ý|é|á)|metodika|metodyck|guidelines|postup(y|u)? (pro|při|péče)|péče o pacient|klinick/i],
+  ['spravni', /oprávněn|osvědčen|jmenován|statut|jednací řád|komise|výběrov(é|á) řízení|seznam (osob|subjekt|soudních|poskytovatel|pracoviš|center|znalc)/i],
   ['dotace', /dotač|dotace|program podpory|grantov/i],
+  ['oznameni', /oznámení|sdělení|informace o/i],
 ];
 
 export function kategorie(polozka) {
@@ -132,6 +136,35 @@ export function anotujSkupiny(castky, mapping) {
     for (const o of c.obsah) {
       const gs = rules.filter(r => r.re.test(o.t)).map(r => r.g);
       if (gs.length) { o.g = gs; n++; } else { delete o.g; }
+    }
+  }
+  return n;
+}
+
+/** Odkazy mezi částkami: položka zmiňující „částku X/YYYY" dostane pole
+ *  ref [{c, cislo, rok, akce}] — c je id cílové částky (null, když v archivu
+ *  není), akce rusi|meni|odkazuje podle sloves v textu. Mutuje in-place. */
+export function anotujOdkazy(castky) {
+  const RE = /(?:částk\w+|věstník\w*)(?:\s+MZ(?:D|\s*ČR)?)?\s*(?:č\.?\s*)?(\d{1,2})\s*[/]\s*(\d{4})/gi;
+  const byCisloRok = new Map(castky.map(c => [`${c.cislo}/${c.rok}`, c.id]));
+  let n = 0;
+  for (const c of castky) {
+    for (const o of c.obsah) {
+      const refs = [];
+      for (const m of o.t.matchAll(RE)) {
+        const cislo = Number(m[1]);
+        const rok = Number(m[2]);
+        if (rok < 1990 || rok > 2100) continue;
+        const cid = byCisloRok.get(`${cislo}/${rok}`) ?? null;
+        if (cid === c.id) continue; // zmínka vlastní částky není odkaz
+        if (refs.some(r => r.cislo === cislo && r.rok === rok)) continue;
+        // meni chytá i Úpravu/Opravu/Dodatek — „oprav" bez diakritiky nekoliduje
+        // s „oprávněn" (á ≠ a), „dodat(e)k" nechytne „dodatečné informace"
+        const akce = /zrušen|ruší/i.test(o.t) ? 'rusi'
+          : /změn|mění|novel|aktualizac|doplň|úprav|oprav|dodat(ek|k)/i.test(o.t) ? 'meni' : 'odkazuje';
+        refs.push({ c: cid, cislo, rok, akce });
+      }
+      if (refs.length) { o.ref = refs.slice(0, 4); n++; } else { delete o.ref; }
     }
   }
   return n;
@@ -290,6 +323,7 @@ export async function fetchVestniky(opts = {}) {
   } catch (err) {
     console.warn(`⚠ vestniky_souvislosti mapping: ${err.message}`);
   }
+  anotujOdkazy(castky);
   const out = {
     version: '1.0',
     zdroj: 'mzd.gov.cz — Věstníky Ministerstva zdravotnictví (WP REST API + PDF)',

@@ -50,6 +50,9 @@ test('vestniky: kategorie deterministicky a s fallbackem ostatni', () => {
   assert.equal(kategorie('Cenový předpis 1/2026/OLZP o regulaci cen'), 'cenove');
   assert.equal(kategorie('Seznam esenciálních antiinfektiv (SEAI)'), 'leciva');
   assert.equal(kategorie('Statut a jednací řád komise'), 'spravni');
+  assert.equal(kategorie('Vzdělávací program Dětská klinická psychologie'), 'vzdelavani',
+    'vzdělávací termíny mají přednost před obecným klinick- ve standardech');
+  assert.equal(kategorie('Klinický doporučený postup pro léčbu CHOPN'), 'standardy');
   assert.equal(kategorie('Úplně jiné téma'), 'ostatni');
   assert.ok(Object.keys(KAT_LABELS).includes(kategorie('cokoliv')), 'fallback má label');
 });
@@ -287,4 +290,44 @@ test('vestniky fulltext: filterCastky s ftIds přidá částku s příznakem ft'
   assert.ok(!rows.find(r => r.id === 2).ft, 'obsahový zásah příznak nemá');
   assert.equal(filterCastky(castky, { q: 'screening', ftIds: new Set([1]), kat: 'screening' }).length, 1,
     'kategorie filtruje ft-only zásah bez položek dané kategorie');
+});
+
+/* ── odkazy mezi částkami (ruší/mění) ───────────────────────────────── */
+
+import { anotujOdkazy } from '../ingest/fetchers/vestniky.js';
+
+test('vestniky: anotujOdkazy najde a klasifikuje odkazy, přeskočí sebe-referenci', () => {
+  const castky = [
+    { id: 10, cislo: 9, rok: 2024, obsah: [{ t: 'Výzva k podání žádosti' }] },
+    { id: 11, cislo: 12, rok: 2024, obsah: [
+      { t: 'Ministerstvo ruší v plném rozsahu výzvy zveřejněné ve Věstníku MZ ČR částka 9/2024' },
+      { t: 'Oprava překlepu ve Věstníku částka 12/2024' },
+      { t: 'Aktualizace metodiky dle částky 3/2020' },
+      { t: 'Úprava Věstníku MZD částka 9/2024' },
+      { t: 'Dodatek č. 1 k metodickému pokynu uveřejněnému ve Věstníku MZ částka 9/2024' },
+    ] },
+  ];
+  const n = anotujOdkazy(castky);
+  assert.equal(n, 4, 'čtyři položky s odkazem');
+  const [rusi, sebe, meni, uprava, dodatek] = castky[1].obsah;
+  assert.deepEqual(rusi.ref, [{ c: 10, cislo: 9, rok: 2024, akce: 'rusi' }]);
+  assert.equal(sebe.ref, undefined, 'zmínka vlastní částky není odkaz');
+  assert.deepEqual(meni.ref, [{ c: null, cislo: 3, rok: 2020, akce: 'meni' }], 'cíl mimo archiv → c null');
+  assert.equal(uprava.ref[0].akce, 'meni', 'Úprava je změna, ne pouhý odkaz');
+  assert.equal(dodatek.ref[0].akce, 'meni', 'Dodatek je změna, ne pouhý odkaz');
+});
+
+test('vestniky: ref anotace v datech je drift-konzistentní a cíle existují', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vestniky.json'), 'utf8'));
+  const kopie = JSON.parse(JSON.stringify(d.castky));
+  for (const c of kopie) for (const o of c.obsah) delete o.ref;
+  anotujOdkazy(kopie);
+  assert.deepEqual(kopie, d.castky, 'ref nesedí na anotátor — spusť npm run fetch:vestniky');
+  const ids = new Set(d.castky.map(c => c.id));
+  let n = 0;
+  for (const c of d.castky) for (const o of c.obsah) for (const r of o.ref ?? []) {
+    n++;
+    if (r.c != null) assert.ok(ids.has(r.c), `ref na neznámou částku ${r.c}`);
+  }
+  assert.ok(n >= 15, `podezřele málo odkazů (${n})`);
 });
