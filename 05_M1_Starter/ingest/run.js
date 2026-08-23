@@ -19,6 +19,7 @@ import { fetchSuklMr } from './fetchers/sukl_mr.js';
 import { fetchPuk } from './fetchers/puk.js';
 import { fetchIndiko } from './fetchers/indiko.js';
 import { fetchEcdcAtlas } from './fetchers/ecdc_atlas.js';
+import { fetchVestniky } from './fetchers/vestniky.js';
 import { transform } from './transform.js';
 import { transformClinicalQuality } from './transform_clinical_quality.js';
 import { summarize } from './verify-freshness.js';
@@ -74,6 +75,7 @@ async function run() {
     { name: 'PUK (klinická kvalita)', fn: fetchPuk },
     { name: 'INDIKO (cesta onko pacienta)', fn: fetchIndiko },
     { name: 'ECDC Surveillance Atlas (AMR)', fn: fetchEcdcAtlas },
+    { name: 'Věstníky MZ (archiv obsahu)', fn: fetchVestniky },
   ];
 
   for (const step of fetchers) {

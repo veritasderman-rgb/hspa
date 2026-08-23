@@ -95,6 +95,7 @@ git push -u origin claude/<branch>
 ├── pracovni-osoba.html         ← Profil osoby (?id=...): členství + externí odkazy (Hlídač státu)
 ├── pracovni-osoby.html         ← Kdo je kdo: adresář osob + dvojrole (firmy dle rejstříku)
 ├── pracovni-ukoly.html         ← Dashboard úkolů z jednání orgánů MZ (hledání, termíny, časová osa)
+├── vestniky-mz.html            ← Archiv obsahu Věstníků MZ 1998→ (fulltext, rok × kategorie, PDF odkazy)
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
 │
