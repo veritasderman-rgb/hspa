@@ -121,6 +121,19 @@ export function kategorie(polozka) {
   return 'ostatni';
 }
 
+/** Doplní do částky data z předchozího výstupu, když čerstvý běh nic nemá:
+ *  obsah částky je neměnný, takže výpadek stránky MZ či nečitelné PDF nesmí
+ *  přepsat dřív získaná data prázdnem. Čistá funkce. */
+export function mergePrev(castka, prevRec) {
+  if (!prevRec) return castka;
+  const out = { ...castka };
+  if (!out.obsah.length && prevRec.obsah?.length) {
+    out.obsah = prevRec.obsah.map(o => ({ t: o.t, kat: kategorie(o.t) }));
+  }
+  if (!out.pdf && prevRec.pdf) out.pdf = prevRec.pdf;
+  return out;
+}
+
 /** Sestaví záznam částky pro data/vestniky.json. */
 export function buildCastka(rec, obsah, pdfUrl) {
   const { cislo, rok } = parseCisloRok(rec.title?.rendered, rec.slug);
@@ -186,7 +199,9 @@ async function fetchPdfObsah(rec, pdfUrl, opts) {
     fs.writeFileSync(file, Buffer.from(buf));
     await sleep(DELAY_MS);
   }
-  const items = await extractTextItems(file);
+  // OBSAH je na prvních stranách — celé PDF (u starých částek i stovky stran)
+  // se číst nemusí; šetří to čas týdenního cronu na čerstvém runneru
+  const items = await extractTextItems(file, { maxPages: 3 });
   if (!items) return []; // pdfjs-dist není k dispozici
   // řádky prvních 3 stran v pořadí čtení (y klesá, x roste)
   const lines = [];
@@ -212,27 +227,41 @@ export async function fetchVestniky(opts = {}) {
   const zaznamy = await fetchApiZaznamy(opts);
   console.log(`API: ${zaznamy.length} částek`);
 
+  // Předchozí výstup: obsah částky je neměnný, takže co už jednou máme, se
+  // znovu nestahuje (týdenní cron na čerstvém runneru tak řeší jen novinky)
+  // a výpadek jedné stránky MZ nepřepíše dřív získaná data prázdnem.
+  let prev = new Map();
+  try {
+    const p = JSON.parse(fs.readFileSync(OUT_FILE, 'utf8'));
+    prev = new Map((p.castky ?? []).map(c => [c.id, c]));
+  } catch { /* první běh — žádný předchozí výstup */ }
+
   const castky = [];
   let zPdf = 0, bezObsahu = 0;
   for (const rec of zaznamy) {
-    let obsah = parseObsahHtml(rec.content?.rendered);
-    let pdfUrl = null;
-    try {
-      const html = await cachedFetch(rec.link, `html-${rec.slug}.html`, { ...opts, parse: 'text', ttlDays: 30 });
-      pdfUrl = extractPdfUrl(html);
-    } catch (err) {
-      console.warn(`⚠ HTML ${rec.slug}: ${err.message}`);
+    const prevRec = opts.force ? null : prev.get(rec.id);
+    const apiObsah = parseObsahHtml(rec.content?.rendered);
+    let obsah = apiObsah;
+    let pdfUrl = prevRec?.pdf ?? null;
+    if (!pdfUrl) {
+      try {
+        const html = await cachedFetch(rec.link, `html-${rec.slug}.html`, { ...opts, parse: 'text', ttlDays: 30 });
+        pdfUrl = extractPdfUrl(html);
+      } catch (err) {
+        console.warn(`⚠ HTML ${rec.slug}: ${err.message}`);
+      }
     }
-    if (!obsah.length && pdfUrl) {
+    if (!obsah.length && pdfUrl && !prevRec?.obsah?.length) {
       try {
         obsah = await fetchPdfObsah(rec, pdfUrl, opts);
-        if (obsah.length) zPdf++;
       } catch (err) {
         console.warn(`⚠ PDF ${rec.slug}: ${err.message}`);
       }
     }
-    if (!obsah.length) bezObsahu++;
-    castky.push(buildCastka(rec, obsah, pdfUrl));
+    const c = mergePrev(buildCastka(rec, obsah, pdfUrl), prevRec);
+    if (!apiObsah.length && c.obsah.length) zPdf++;
+    if (!c.obsah.length) bezObsahu++;
+    castky.push(c);
   }
 
   castky.sort((a, b) => (b.rok ?? 0) - (a.rok ?? 0) || (b.cislo ?? 0) - (a.cislo ?? 0));

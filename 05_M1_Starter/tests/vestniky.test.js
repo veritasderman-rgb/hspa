@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { parseCisloRok, parseObsahHtml, parseObsahPdf, kategorie, extractPdfUrl, buildCastka }
+import { parseCisloRok, parseObsahHtml, parseObsahPdf, kategorie, extractPdfUrl, buildCastka, mergePrev }
   from '../ingest/fetchers/vestniky.js';
 import { filterCastky, fmtDatum, normText, KAT_LABELS } from '../src/vestniky.js';
 
@@ -122,4 +122,16 @@ test('vestniky: stránka existuje, načítá modul a je v sitemap i navigaci', (
   assert.ok(sitemap.includes('skorezdravotnictvi.cz/vestniky-mz'), 'chybí v sitemap.xml');
   const shared = fs.readFileSync(path.join(ROOT, 'src', 'page-shared.js'), 'utf8');
   assert.ok(shared.includes('vestniky-mz.html'), 'chybí v module nav');
+});
+
+test('vestniky: mergePrev doplní prázdný čerstvý běh z předchozího výstupu', () => {
+  const prevRec = { obsah: [{ t: 'Cenový předpis o regulaci cen', kat: 'cenove' }], pdf: 'https://x.cz/v.pdf' };
+  const prazdna = { obsah: [], pdf: null };
+  const m = mergePrev(prazdna, prevRec);
+  assert.equal(m.obsah.length, 1, 'obsah převzat z minula');
+  assert.equal(m.obsah[0].kat, 'cenove', 'kategorie se přepočítá deterministicky');
+  assert.equal(m.pdf, 'https://x.cz/v.pdf');
+  const plna = { obsah: [{ t: 'Nový obsah', kat: 'ostatni' }], pdf: 'https://y.cz/n.pdf' };
+  assert.deepEqual(mergePrev(plna, prevRec), plna, 'čerstvá data mají přednost');
+  assert.deepEqual(mergePrev(prazdna, undefined), prazdna, 'bez předchozího záznamu beze změny');
 });

@@ -32,7 +32,7 @@ const ZPP_SEGMENTS = JSON.parse(
  * @param {string} filePath
  * @returns {Promise<Array<{text: string, x: number, y: number, page: number}>|null>}
  */
-export async function extractTextItems(filePath) {
+export async function extractTextItems(filePath, { maxPages } = {}) {
   let pdfjs;
   try {
     pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
@@ -42,7 +42,8 @@ export async function extractTextItems(filePath) {
   const data = new Uint8Array(fs.readFileSync(filePath));
   const doc = await pdfjs.getDocument({ data, useSystemFonts: true, disableFontFace: true }).promise;
   const items = [];
-  for (let p = 1; p <= doc.numPages; p++) {
+  const last = maxPages ? Math.min(doc.numPages, maxPages) : doc.numPages;
+  for (let p = 1; p <= last; p++) {
     const page = await doc.getPage(p);
     const content = await page.getTextContent();
     for (const item of content.items) {
