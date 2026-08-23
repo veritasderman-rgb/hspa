@@ -9,10 +9,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } from '../src/ppo.js';
-import { membersOf, edgesOf, ROLE_ORDER, coiEvents } from '../src/ppo-detail.js';
+import { membersOf, edgesOf, ROLE_ORDER, coiEvents, ukolySouhrn } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
 import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
-import { formatDatumCz, formatOd, filterUkoly } from '../src/ppo-ukoly.js';
+import { formatDatumCz, formatOd, filterUkoly, skupinaFromSearch } from '../src/ppo-ukoly.js';
 import { clusterKey, layoutNetwork, spojkaRow, VIEW, mergeExterni, mergeSouvislosti, applyKorekce, UHRADOVY_ORGAN, parseTermin, buildUkoly } from '../ingest/ppo/build-web.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -456,6 +456,23 @@ test('ppo ukoly: dataset je přegenerovatelný z analýz a sedí na skupiny', ()
     if (u.datum) assert.ok(u.datum >= '2004-01-01' && u.datum <= '2027-12-31', `podezřelé datum jednání ${u.datum}`);
     assert.equal(u.t, parseTermin(u.termin), 'pole t nesedí na parseTermin(termin)');
   }
+});
+
+test('ppo ukoly na detailu: ukolySouhrn + deep-link skupinaFromSearch', () => {
+  const a = {
+    group_id: 4,
+    profil: { otevrene_ukoly: [{ co: 'Dodat analýzu', kdo: 'SZP ČR' }] },
+    jednani: [{ ukoly: [{ co: 'a' }, { co: 'b' }] }, { ukoly: [] }, { ukoly: [{ co: 'c' }] }],
+  };
+  assert.deepEqual(ukolySouhrn(a), { otevrene: a.profil.otevrene_ukoly, zadanych: 3 });
+  assert.deepEqual(ukolySouhrn({ group_id: 9 }), { otevrene: [], zadanych: 0 });
+
+  const ids = new Set([4, 199]);
+  assert.equal(skupinaFromSearch('?skupina=4', ids), '4');
+  assert.equal(skupinaFromSearch('?skupina=04', ids), '4', 'normalizace čísla');
+  assert.equal(skupinaFromSearch('?skupina=999', ids), 'all', 'neznámé id se ignoruje');
+  assert.equal(skupinaFromSearch('?skupina=abc', ids), 'all');
+  assert.equal(skupinaFromSearch('', ids), 'all');
 });
 
 test('ppo ukoly helpery: formatDatumCz, formatOd, filterUkoly', () => {
