@@ -578,6 +578,8 @@ const MANIFEST = {
   'clanek-co-urcuje-zdravi-naroda': { kicker: 'Determinanty · díl 4', signal: 'neutral', headline: 'Většina zdraví populace vzniká mimo ordinace a nemocnice.' },
   'clanek-presna-medicina-solidarita': { kicker: 'Financování · díl 5', signal: 'warn', stat: '6 000', claim: 'vzácných diagnóz — každá vzácná, dohromady ne.', context: 'Odhad; týkají se řádově statisíců Čechů. Cílená léčba: miliony na pacienta.' },
   'clanek-presna-medicina-ceska-cesta': { kicker: 'Přesná medicína · díl 6', signal: 'neutral', stat: '6', claim: 'kroků, jak dělat přesnou medicínu přesně a přitom spravedlivě.', context: 'Reprezentativní data, HTA se spravedlností, prevence jako protiváha.' },
+  'clanek-absolventi-osetrovatelstvi': { kicker: 'Pracovní síla · sestry', signal: 'warn', stat: '16,1', claim: 'plně kvalifikované sestry na 100 tisíc obyvatel ročně promuje Česko.', context: 'Průměr OECD je 34,8. Souhrn 38,76 počítá i nižší úrovně.' },
+  'clanek-ecigarety-adolescenti': { kicker: 'Prevence · mládež', signal: 'warn', stat: '21,4', statSuffix: '%', barPct: 21, claim: 'třinácti- až patnáctiletých užilo e-cigaretu v posledních 30 dnech.', context: 'V roce 2016 to bylo 11,2 %. Tabáku užívá 16,4 %. GYTS 2022, SZÚ.' },
 };
 
 function escapeXml(s) {
