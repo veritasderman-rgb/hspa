@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { filterHrany, heatRows, fmtDate, nodeRadius, STAV_LABELS, KAT_LABELS } from '../src/ppo.js';
+import { filterHrany, heatRows, fmtDate, nodeRadius, ukazkaHtml, STAV_LABELS, KAT_LABELS } from '../src/ppo.js';
 import { membersOf, edgesOf, ROLE_ORDER, coiEvents, ukolySouhrn } from '../src/ppo-detail.js';
 import { membershipRows, vedeCount } from '../src/ppo-osoba.js';
 import { normText, prijmeniKey, filterOsoby } from '../src/ppo-osoby.js';
@@ -571,4 +571,32 @@ test('ppo: stránky sekce existují a mají robots index', () => {
     assert.match(html, /name="robots" content="index, follow"/, `${page}: chybí robots index`);
     assert.ok(fs.existsSync(path.join(ROOT, mod)), `${mod} neexistuje`);
   }
+});
+
+/* ── teasery „Prozkoumat dál" na hubu ───────────────────────────────── */
+
+test('ppo: souhrn teaserů sedí na zdrojové datasety (drift-check)', () => {
+  const ukolyData = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-ukoly.json'), 'utf8'));
+  const dvojrole = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-dvojrole.json'), 'utf8'));
+  assert.deepEqual(ppo.souhrn.ukoly, ukolyData.pocty, 'souhrn.ukoly ≠ ppo-ukoly.pocty');
+  assert.equal(ppo.souhrn.dvojroli, dvojrole.pocet, 'souhrn.dvojroli ≠ ppo-dvojrole.pocet');
+  assert.equal(ppo.souhrn.vice_organu,
+    osoby.osoby.filter(o => o.clenstvi.length >= 4).length, 'souhrn.vice_organu ≠ přepočet z osob');
+  assert.deepEqual(ppo.souhrn.ukoly_ukazka,
+    ukolyData.ukoly.slice(0, 2).map(u => ({ co: u.co, g: u.g, datum: u.datum ?? null })),
+    'ukoly_ukazka ≠ nejnovější úkoly');
+  const gids = new Set(ppo.skupiny.map(s => s.id));
+  for (const u of ppo.souhrn.ukoly_ukazka) assert.ok(gids.has(u.g), `ukázka odkazuje neznámou skupinu ${u.g}`);
+});
+
+test('ppo: ukazkaHtml escapuje a skládá řádky, prázdný vstup dá prázdno', () => {
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const nazvy = new Map([[7, 'Komise <X>']]);
+  const html = ukazkaHtml([{ co: 'Zaslat A & B', g: 7, datum: '2026-06-01' }], nazvy, esc, fmtDate);
+  assert.ok(html.includes('Zaslat A &amp; B'), 'obsah úkolu escapovaný');
+  assert.ok(html.includes('Komise &lt;X&gt;'), 'název skupiny escapovaný');
+  assert.ok(html.includes('1. 6. 2026') || html.includes('2026'), 'datum zformátované');
+  assert.ok(!html.includes('<a '), 'uvnitř karty-odkazu nesmí být vnořený odkaz');
+  assert.equal(ukazkaHtml([], nazvy, esc, fmtDate), '');
+  assert.equal(ukazkaHtml(undefined, nazvy, esc, fmtDate), '');
 });

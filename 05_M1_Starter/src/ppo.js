@@ -215,6 +215,30 @@ function renderSpojky() {
       sp.bez_uredniku_a_statnich ?? []);
 }
 
+/* ── teasery „Prozkoumat dál" ────────────────────────────────────────── */
+
+/** Ukázka úkolů pro teaser: HTML řádků z souhrn.ukoly_ukazka. Čistá funkce.
+ *  Karta je celá <a>, takže řádky jsou neinteraktivní text (bez vnořených odkazů). */
+export function ukazkaHtml(ukazka, nazvy, esc, fmt) {
+  if (!ukazka?.length) return '';
+  const rows = ukazka.map(u => `<span class="ppo-more-row">${esc(u.co)}
+    <small>${esc(nazvy.get(u.g) ?? `skupina ${u.g}`)}${u.datum ? ` · ${esc(fmt(u.datum))}` : ''}</small></span>`);
+  return `<span class="ppo-more-sample-h">Z posledních jednání</span>${rows.join('')}`;
+}
+
+function renderMore() {
+  const so = PPO.souhrn;
+  const num = n => (typeof n === 'number' ? n.toLocaleString('cs-CZ') : '—');
+  $('ppoMoreOsob').textContent = num(so.osob);
+  $('ppoMoreVice').textContent = num(so.vice_organu);
+  $('ppoMoreDvoj').textContent = num(so.dvojroli);
+  $('ppoMoreUkolu').textContent = num(so.ukoly?.ukoly);
+  $('ppoMoreSplneno').textContent = num(so.ukoly?.splneno);
+  $('ppoMoreOtevrene').textContent = num(so.ukoly?.otevrene);
+  const nazvy = new Map(PPO.skupiny.map(s => [s.id, s.nazev]));
+  $('ppoMoreUkazka').innerHTML = ukazkaHtml(so.ukoly_ukazka, nazvy, escapeHtml, fmtDate);
+}
+
 /* ── heatmapa ────────────────────────────────────────────────────────── */
 function renderHeat() {
   const rows = heatRows(PPO.kalendar.mesice);
@@ -310,6 +334,7 @@ async function init() {
     wireNet();
     renderIso();
     renderSpojky();
+    renderMore();
     renderHeat();
     renderZjisteni();
     wireTable();
