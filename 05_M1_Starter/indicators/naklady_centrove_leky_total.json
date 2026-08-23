@@ -1,0 +1,54 @@
+{
+  "id": "naklady_centrove_leky_total",
+  "name": "Úhrady za centrové léky",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Centrová léčba",
+  "definition": "Roční úhrady zdravotních pojišťoven za centrové léky v miliardách Kč. Centrové léky jsou léčivé přípravky, jejichž úhrada je podle rozhodnutí SÚKL vázána na podávání ve specializovaných centrech (tzv. symbol S) — typicky biologická léčba, moderní onkologika, léky na vzácná onemocnění a genové terapie. Indikátor měří objem prostředků veřejného zdravotního pojištění směřující do nejnákladnějšího a nejrychleji rostoucího lékového segmentu. Liší se od indikátoru podil_vydaje_leky (podíl všech léků na úhradách ZP) i vydaje_leky_hdp (farmaceutické výdaje k HDP) — centrové léky jsou podmnožinou lékových výdajů s vlastní dynamikou: rostou výrazně rychleji než zbytek systému a koncentrují se u malého počtu pacientů.",
+  "unit": "mld Kč / rok",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "nzip_dohodovaci_rizeni",
+      "endpoint": "https://www.nzip.cz/data/2367-centrove-leky-datovy-souhrn",
+      "dataset": "ÚZIS ČR — Datová podpora dohodovacího řízení, datový souhrn OIS-11-06 Centrové léky (zdroj: Národní registr hrazených zdravotních služeb, NRHZS)",
+      "note": "Hodnoty spočteny z primárního XLSX (edice 2025-02, zpracováno ÚZIS 31. 10. 2025, staženo a ověřeno 23. 8. 2026): součet sloupců 'Úhrady v tis. Kč' přes všech 7 zdravotních pojišťoven (kódy 111–213) a všech 18 terapeutických oblastí listu 'Rok 2022-2024 Segment'. Výsledek: 2022 = 31,71 mld Kč; 2023 = 35,90 mld Kč; 2024 = 39,81 mld Kč. Terapeutické oblasti jsou disjunktní, součet úhrad je proto validní; součet unikátních pacientů přes oblasti a pojišťovny (2024: 148 831) je horní odhad počtu léčených osob — jeden pacient může čerpat léčbu ve více oblastech. Podíl na celkových nákladech systému: 7,9 % (2023; jmenovatel 456,1 mld Kč spočten ze souhrnu OIS-11-24 Náklady zdravotních pojišťoven dle segmentů péče, součet přes segmenty bez dvojzápočtu 1.7.1).",
+      "dimensions": {
+        "terapeuticka_oblast": "18 oblastí (onkologie — solidní nádory, hemato(onko)logie, roztroušená skleróza, revmatologie, trávicí soustava, SMA, cystická fibróza, …)",
+        "pojistovna": "7 zdravotních pojišťoven (111, 201, 205, 207, 209, 211, 213)",
+        "metrika": "úhrady v tis. Kč, počet unikátních pacientů, počet pacientoměsíců",
+        "obdobi": "roky 2022–2024 v jedné edici souboru"
+      }
+    },
+    "fallback": {
+      "type": "narrative_only",
+      "url": "https://www.efpia.eu/media/mnfdwzax/efpia-patients-wait-indicator-2025.pdf",
+      "note": "Kontext dostupnosti inovativních léků poskytuje EFPIA/IQVIA Patients W.A.I.T. Indicator 2025: z 168 inovativních molekul registrovaných EMA v letech 2021–2024 je v ČR hrazena polovina (6 % plně, 33 % s indikačními omezeními, 11 % jen individuálně), zatímco v Německu je plně dostupných 93 % a průměr EU27 činí 45 % dostupných molekul a 597 dní od registrace k úhradě."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Přímý číselný benchmark objemu úhrad za centrové léky neexistuje — 'centrový' režim (symbol S) je česká úhradová konstrukce a mezinárodní statistiky OECD zachycují jen maloobchodní (lékárenské) výdaje na léky, do nichž nemocniční a centrová léčba typicky nespadá. Mezinárodní kontext proto poskytuje EFPIA/IQVIA W.A.I.T. Indicator 2025 (dostupnost a rychlost úhrady inovativních molekul: ČR 50 % dostupných, jen 6 % bez omezení, 659 dní od registrace EMA k úhradě dle AIFP; Německo 93 % plně dostupných; průměr EU27 45 % a 597 dní).",
+    "value": null,
+    "url": "https://www.efpia.eu/media/mnfdwzax/efpia-patients-wait-indicator-2025.pdf"
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 10
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Ministerstvo zdravotnictví ČR (úhradová vyhláška, segmentace rozpočtu v.z.p.)",
+    "SÚKL (cenová a úhradová regulace, hodnocení nákladové efektivity, symbol S)",
+    "zdravotní pojišťovny (smlouvy se specializovanými centry, risk-sharingové smlouvy, § 16)",
+    "ÚZIS ČR (NRHZS, datové souhrny pro dohodovací řízení)"
+  ],
+  "method_notes": "Hodnota je součet úhrad všech zdravotních pojišťoven za léčivé přípravky vykázané v režimu centrové péče za kalendářní rok, v mld Kč (zaokrouhleno na 1 desetinné místo). Časová řada 2022 = 31,7, 2023 = 35,9, 2024 = 39,8 mld Kč pochází z datového souhrnu OIS-11-06 (NRHZS) — jde o administrativní data úhrad, nikoli odhad (origin: seed — hodnoty spočteny z primárního XLSX 23. 8. 2026, soubor nemá strojově čitelné API). Signál je neutral: direction je context_dependent — růst úhrad znamená současně lepší přístup pacientů k moderní léčbě (žádoucí) i rostoucí fiskální tlak na systém (rizikový), a číselný mezinárodní benchmark neexistuje. Indikátor proto slouží jako kontextový monitoring dynamiky segmentu, ne jako pass/fail hodnocení.",
+  "limitations": "1. **Krátká veřejná časová řada** — datový souhrn OIS-11-06 pokrývá roky 2022–2024; delší srovnání (např. s rokem 2010) existují jen v sekundárních analýzách (AIFP Inovace pro život). 2. **Nominální hodnoty** — úhrady nejsou očištěny o inflaci ani o růst celkových výdajů; část růstu je cenový efekt. Pro relativní pohled slouží dopočet podílu na nákladech systému (7,9 % v roce 2023). 3. **Unikátní pacienti nelze sčítat** — součet přes terapeutické oblasti a pojišťovny (148 831 v roce 2024) je horní odhad počtu osob. 4. **Skutečné ceny jsou nižší než vykázané úhrady** — část prostředků se vrací přes neveřejné risk-sharingové smlouvy (zpětné platby výrobců), které NRHZS nezachycuje. 5. **Definiční hranice segmentu** — o zařazení léku mezi centrové rozhoduje SÚKL (symbol S); přesuny léků mezi režimy mohou ovlivnit meziroční srovnání.",
+  "determinants": "**Příliv nových molekul.** Mezi lety 2021 a 2024 získalo centrální registraci EMA 168 inovativních léčiv; nová onkologika, genové terapie a léky na vzácná onemocnění vstupují do úhrad téměř výhradně centrovým režimem. Souběžně se rozšiřují indikace už hrazených léků na další skupiny pacientů.\n\n**Ceny inovací.** Moderní biologická a genová léčba má řádově vyšší jednotkové ceny než klasická farmakoterapie — u spinální svalové atrofie připadá na 240 léčených pacientů 1,74 mld Kč ročně, tedy v průměru přes 7 milionů korun na pacienta.\n\n**Prodlužující se přežití.** Úspěch léčby znamená, že pacienti v centrové péči zůstávají déle — prevalence léčených roste rychleji než incidence onemocnění. To je žádoucí klinický výsledek s kumulativním nákladovým dopadem.\n\n**Úhradová regulace a její obcházení.** Vstup do úhrad řídí SÚKL (nákladová efektivita, dopad do rozpočtu) a od roku 2022 zvláštní proces pro orphany (§ 39da zákona č. 48/1997 Sb.). Co neprojde standardní cestou, doléhá na systém přes § 16 (individuální úhrady) — méně predikovatelně a bez sjednaných podmínek.\n\n**Koncentrace do center.** Síť specializovaných center drží kvalitu a kontrolu preskripce, zároveň ale vytváří regionální bariéry dostupnosti a posiluje vyjednávací pozici velkých nemocnic při smlouvání s pojišťovnami.",
+  "importance": "Centrové léky jsou nejrychleji rostoucí položkou úhrad veřejného zdravotního pojištění: mezi lety 2022 a 2024 vzrostly o čtvrtinu, výrazně rychleji než celkové náklady systému. Necelých 150 tisíc pacientů (přibližně 1,4 % pojištěnců) čerpá téměř 8 % prostředků systému — a projekce SÚKL i pojišťoven počítají s dalším zrychlením s nástupem genových terapií.\n\nZ pohledu HSPA jde o průsečík tří dimenzí: **efektivita** (alokace omezených zdrojů tam, kde přinášejí největší zdravotní užitek — nákladová efektivita jednotlivých terapií se pohybuje v širokém rozmezí), **dostupnost** (ČR hradí plně jen 6 % inovativních molekul z let 2021–2024 a na úhradu se čeká 659 dní — pacient s onemocněním léčitelným v Německu může v ČR čekat roky) a **udržitelnost financování** (mandatorní výdaj rostoucí o 4 mld Kč ročně vytěsňuje jiné segmenty péče).\n\nIndikátor má jasnou politickou páku: proces stanovení úhrad (SÚKL, § 39da), risk-sharingové smlouvy pojišťoven, podporu vstupu biosimilars po vypršení patentů a evropské společné hodnocení zdravotnických technologií (nařízení EU 2021/2282, pro onkologika a genové terapie účinné od ledna 2025), které může zkrátit český odstup za průměrem EU.",
+  "patient_story": "Brno, podzim 2024. Paní Lence je čtyřicet dva a s roztroušenou sklerózou žije jedenáct let. Každé čtyři týdny jezdí do MS centra fakultní nemocnice na infuzi biologické léčby — díky ní pořád pracuje jako účetní a dceru vozí na volejbal autem, které sama řídí. Ve stejné čekárně sedí rodiče půlročního Tondy se spinální svalovou atrofií: jeho léčba patří k nejdražším, jaké české zdravotnictví hradí — na 240 pacientů se SMA připadá 1,74 miliardy korun ročně, v průměru přes 7 milionů na jednoho. Lenka i Tonda jsou 'centroví' pacienti: jejich léky smí předepsat jen specializované centrum a jejich účet neplatí oni, ale systém veřejného pojištění.\n\nTen účet roste výrazně rychleji než celkové náklady systému. V roce 2024 zaplatily zdravotní pojišťovny za centrové léky 39,8 miliardy korun — o čtvrtinu víc než 31,7 miliardy v roce 2022. Necelých 150 tisíc pacientů, zhruba 1,4 % pojištěnců, tak čerpá bezmála 8 % všech prostředků systému (7,9 % v roce 2023). Největší položkou je onkologie solidních nádorů (10,9 mld Kč), následují krevní nádory, roztroušená skleróza a revmatologie.\n\nProč to roste? Do úhrad vstupují desítky nových molekul — moderní onkologika, genové terapie, léky na vzácná onemocnění — a úspěšná léčba prodlužuje život, takže pacientů v centrech přibývá rychleji, než ubývá. Zároveň ale ČR nehradí zdaleka všechno: podle EFPIA/IQVIA W.A.I.T. 2025 je z 168 inovativních molekul registrovaných v EU v letech 2021–2024 v Česku plně hrazeno jen 6 %, polovina je dostupná aspoň s omezeními a na úhradu se čeká v průměru 659 dní — Německo má plně dostupných 93 %. Kdo se do standardní úhrady nevejde, zkouší § 16, individuální výjimku bez sjednaných podmínek.\n\nPolitická páka je konkrétní. Rychlost a podmínky vstupu léků řídí SÚKL a od roku 2022 zvláštní orphanový proces (§ 39da zákona č. 48/1997 Sb.), na cenách se dá vyjednávat risk-sharingovými smlouvami pojišťoven, po vypršení patentů šetří rychlý vstup biosimilars — a od ledna 2025 běží společné evropské hodnocení onkologik a genových terapií (EU HTA), které může český odstup za Evropou zkrátit. Otázka pro ministerstvo i pojišťovny nezní, zda 39,8 miliardy je moc — ale zda za ně systém nakupuje co nejvíc zdraví a zda na léčbu, kterou už hradí Němcům, nemá český pacient čekat dva roky.",
+  "framework": "monitoring",
+  "dimension": "efektivita"
+}
