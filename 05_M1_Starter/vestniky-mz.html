@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Věstníky MZ · Archiv obsahu · HSPA Monitor</title>
+<meta name="description" content="Prohledávatelný archiv Věstníků Ministerstva zdravotnictví od roku 1998: co je v které částce — metodiky, standardy, cenové předpisy, centra péče, screeningy. Hledání napříč obsahem, filtry podle roku a kategorie, odkazy na PDF.">
+<meta name="robots" content="index, follow">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/vestniky-mz">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/vestniky-mz">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Věstníky MZ</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero" aria-labelledby="vstHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker"><a href="strategie.html">Strategie</a> · Věstníky MZ</div>
+      <h1 class="ed-hero-headline" id="vstHeadline">Co je ve kterém Věstníku</h1>
+      <p class="ed-hero-lead">Věstník Ministerstva zdravotnictví je úřední kanál, kterým resort vyhlašuje
+        metodiky, standardy péče, cenové předpisy, výzvy pro centra vysoce specializované péče nebo
+        pravidla screeningů. Vychází desítky let jako PDF — tenhle archiv je skládá do jednoho
+        prohledávatelného seznamu: co vyšlo, kdy a v které částce.</p>
+    </div>
+    <aside class="ed-hero-stats" aria-label="Klíčová čísla">
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sCastek">—</span> <span class="ed-stat-unit">částek</span></div>
+        <div class="ed-stat-lbl">Vydání Věstníku MZ v archivu</div>
+        <div class="ed-stat-meta">zdroj mzd.gov.cz</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sPolozek">—</span> <span class="ed-stat-unit">položek</span></div>
+        <div class="ed-stat-lbl">Dokumentů v obsazích částek</div>
+        <div class="ed-stat-meta">strojově extrahováno z webu a PDF</div>
+      </div>
+      <div class="ed-stat ed-stat-static">
+        <div class="ed-stat-num"><span id="sRozsah">—</span></div>
+        <div class="ed-stat-lbl">Pokryté roky</div>
+        <div class="ed-stat-meta">od nejstarší zveřejněné částky</div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section" aria-labelledby="vstFiltersH">
+    <div class="section-title">
+      <div class="ed-kicker">Vyhledávání</div>
+      <h2 id="vstFiltersH">Najít téma</h2>
+    </div>
+    <div class="filters-row">
+      <div class="filters-actions">
+        <input type="search" id="vstSearch" class="search-box" placeholder="Hledat v obsazích: screening, úhrady, standard…" aria-label="Vyhledat v obsazích věstníků">
+        <select id="vstKat" class="search-box" aria-label="Filtr podle kategorie"></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="vstListH">
+    <div class="section-title">
+      <div class="ed-kicker">Archiv</div>
+      <h2 id="vstListH">Částky a jejich obsah <span class="ppo-a-count" id="vstCount">—</span></h2>
+    </div>
+    <p class="ppo-spojky-sub">Od nejnovějších. Kliknutím na rok zobrazíte jen částky daného roku;
+      při hledání nebo filtru kategorie se u částky ukazují jen odpovídající položky obsahu.</p>
+    <div class="ppo-uk-roky" id="vstRoky" role="group" aria-label="Filtr podle roku vydání"></div>
+    <p id="vstEmpty" class="ppo-d-note hidden">Žádná částka neodpovídá filtru.</p>
+    <ul class="ppo-uk-list" id="vstList"></ul>
+    <button type="button" class="ppo-uk-more hidden" id="vstMore">Zobrazit další</button>
+    <p class="ppo-d-note">Obsahy novějších částek přebíráme ze stránek MZ, u starších (zhruba
+      2006–2011) je čteme strojově z prvních stran PDF. Částka bez vypsaného obsahu <strong>není
+      prázdná</strong> — jen se její obsah nepodařilo strojově přečíst; odkaz na PDF platí vždy.
+      Kategorie jsou orientační (deterministická klíčová slova).</p>
+  </section>
+
+  <section class="leg-source-note" aria-label="Zdroj dat">
+    <p>
+      Zdroj: <a href="https://mzd.gov.cz/vestniky/" target="_blank" rel="noopener">Věstníky Ministerstva
+      zdravotnictví na mzd.gov.cz</a>. Archiv se aktualizuje automaticky s datovým pipeline.
+      Úřední znění je vždy v PDF částky; tento přehled je navigační pomůcka, ne právní zdroj.
+    </p>
+  </section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/vestniky.js"></script>
+
+</body>
+</html>

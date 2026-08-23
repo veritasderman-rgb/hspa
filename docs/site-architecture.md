@@ -146,6 +146,15 @@ zdrave-cesko.cz/
 | **CSS namespace** | `.ppo-*` (síť, panel, spojky, heat, tabulka, detail karty; `.ppo-a-*` analýza, `.ppo-zjisteni` hub, `.ppo-o-*` osoba) ; reuse `.ed-hero*`, `.filters-row`, `.level-nav`, `.related-*`, `.leg-source-note` |
 | **Builder** | `ingest/ppo/build-web.js` (FÁZE 3; `npm run build:ppo`) z FÁZE 1 výstupů `ingest/ppo/out/*` a FÁZE 2 analýzy `ingest/ppo/analyza/*` (profily, jednání, synteza.json → `zjisteni`); FÁZE 4a merguje kurátorský registr `ingest/ppo/osoby-externi.json` (veřejné funkce + odkazy, guard na id×jméno; sekce `nepropojeno` dokumentuje zamítnuté kandidáty z Hlídače státu) do `ppo-osoby.json` — deterministický vč. layoutu sítě; testy `tests/ppo.test.js` |
 
+### `vestniky-mz.html` — Věstníky MZ (archiv obsahu)
+
+| | |
+|---|---|
+| **Účel** | Prohledávatelný HTML archiv Věstníků Ministerstva zdravotnictví (1998→): co je ve které částce. Fulltext bez diakritiky přes položky obsahu, filtr rok × kategorie (deterministická klíčová slova: screening, očkování, centra péče, léčiva, ceny a úhrady, standardy, vzdělávání, správní, dotace), seznam od nejnovějších s odkazy na stránku MZ i PDF. Poctivost: částka bez strojově přečteného obsahu ≠ prázdná částka (viditelná poznámka + odkaz na PDF). |
+| **JS moduly** | `src/vestniky.js` → `page-shared` |
+| **CSS namespace** | `.vst-*` (částka, obsah, kategorie chip); reuse `.ed-hero*`, `.filters-row`, `.ppo-uk-roky/-year/-list/-more`, `.leg-source-note` |
+| **Data** | `data/vestniky.json` — staví `ingest/fetchers/vestniky.js` (`npm run fetch:vestniky`, součást `npm run ingest`): WP REST API `mzd.gov.cz/wp-json/wp/v2/vestnik` (351 částek; u novějších content = obsah) + u starších (hlavně 2006–2011) extrakce OBSAHu z prvních stran PDF přes pdfjs-dist. Cache `ingest/cache/vestniky/`. Síťový dataset — NEPATŘÍ do build:generated ani merge=generated. Testy `tests/vestniky.test.js`. |
+
 ### `legislativa.html` — Legislativní radar
 
 | | |
