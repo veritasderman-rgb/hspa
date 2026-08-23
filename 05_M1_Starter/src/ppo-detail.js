@@ -51,6 +51,14 @@ export function coiEvents(jednani) {
     (j.stret_zajmu ?? []).map(s => ({ datum: j.datum, url: j.url, text: s })));
 }
 
+/** Souhrn úkolů skupiny pro kartu na detailu (čistá funkce — testovatelná). */
+export function ukolySouhrn(a) {
+  return {
+    otevrene: a.profil?.otevrene_ukoly ?? [],
+    zadanych: (a.jednani ?? []).reduce((n, j) => n + (j.ukoly ?? []).length, 0),
+  };
+}
+
 const STAV_TEMA = stav =>
   /^rozhodnuto/.test(stav) ? 'ok' : /^usnulo/.test(stav) ? 'off' : 'run';
 
@@ -74,6 +82,15 @@ function renderAnalyza(a) {
   if (p.co_se_pripravuje?.length) {
     grid.push(`<div class="ppo-d-card"><h3>Co se připravuje</h3>
       <ul class="ppo-a-list">${p.co_se_pripravuje.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul></div>`);
+  }
+  const uk = ukolySouhrn(a);
+  if (uk.otevrene.length || uk.zadanych) {
+    grid.push(`<div class="ppo-d-card"><h3>Otevřené úkoly</h3>
+      ${uk.otevrene.length ? `<ul class="ppo-a-list">${uk.otevrene.slice(0, 6).map(u => `<li>${escapeHtml(u.co)}${u.kdo ? ` <i>(${escapeHtml(u.kdo)})</i>` : ''}</li>`).join('')}</ul>
+        ${uk.otevrene.length > 6 ? `<p class="ppo-d-note">…a ${uk.otevrene.length - 6} dalších otevřených úkolů.</p>` : ''}`
+        : '<p class="ppo-a-p">Analýza zápisů žádný otevřený úkol neeviduje.</p>'}
+      <p class="ppo-a-src"><a href="pracovni-ukoly.html?skupina=${a.group_id}">Všech ${uk.zadanych} úkolů zadaných na jednáních — v dashboardu úkolů →</a></p>
+    </div>`);
   }
   const coi = coiEvents(a.jednani);
   if (p.transparentnost?.hodnoceni || p.stret_zajmu_procesni || coi.length) {

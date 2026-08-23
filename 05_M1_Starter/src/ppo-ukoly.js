@@ -30,6 +30,12 @@ export function formatOd(od) {
   return `od ${nom} ${m[1]}`;
 }
 
+/** Deep-link ?skupina=N → hodnota filtru orgánu; neznámé id se ignoruje. */
+export function skupinaFromSearch(search, validIds) {
+  const raw = new URLSearchParams(search).get('skupina');
+  return raw != null && validIds.has(Number(raw)) ? String(Number(raw)) : 'all';
+}
+
 /** Filtr úkolů (čistá funkce — testovatelná). rok filtruje podle roku jednání. */
 export function filterUkoly(list, { q = '', g = 'all', rok = 'all' } = {}, nazvy = new Map()) {
   const nq = normText(q.trim());
@@ -107,6 +113,10 @@ async function init() {
 
     $('ukSkupina').innerHTML = '<option value="all">Všechny orgány</option>'
       + DATA.skupiny.map(s => `<option value="${s.g}">${escapeHtml(s.nazev)}</option>`).join('');
+
+    // deep-link z detailu skupiny (pracovni-ukoly.html?skupina=N)
+    fG = skupinaFromSearch(window.location.search, new Set(DATA.skupiny.map(s => s.g)));
+    $('ukSkupina').value = fG;
 
     $('ukSearch').addEventListener('input', e => { fQ = e.target.value; limit = KROK; rerender(); });
     $('ukSkupina').addEventListener('change', e => { fG = e.target.value; fRok = 'all'; limit = KROK; rerender(); });
