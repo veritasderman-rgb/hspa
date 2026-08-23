@@ -80,10 +80,15 @@ export function mapaSkupin(ukoly) {
   const m = new Map();
   for (const u of ukoly) {
     let r = m.get(u.g);
-    if (!r) { r = { g: u.g, total: 0, spl: 0, pok: 0 }; m.set(u.g, r); }
+    if (!r) { r = { g: u.g, total: 0, spl: 0, pok: 0, osa: 0 }; m.set(u.g, r); }
     r.total++;
     if (osudMatch(u, 'splneno')) r.spl++;
     else if (u.stav === 'pokracuje') r.pok++;
+    // řádek časové osy — STEJNÁ podmínka jako ganttData na detailu skupiny:
+    // datované zadání + termín či doklad striktně pozdější než zadání
+    const extPrimy = u.ext?.stav === 'vydano' && u.ext.primy;
+    const sd = u.sd ?? (extPrimy ? u.ext.datum : null);
+    if (u.datum && ((u.t && u.t > u.datum) || (sd && sd > u.datum))) r.osa++;
   }
   return [...m.values()].map(r => ({ ...r, bez: r.total - r.spl - r.pok }))
     .sort((a, b) => b.total - a.total || a.g - b.g);
@@ -117,7 +122,9 @@ function renderMapa() {
         ${r.spl ? `<i class="ppo-um-spl" style="width:${w(r.spl)}"></i>` : ''}${r.pok ? `<i class="ppo-um-pok" style="width:${w(r.pok)}"></i>` : ''}${r.bez ? `<i class="ppo-um-bez" style="width:${w(r.bez)}"></i>` : ''}
       </button>
       <p class="ppo-um-meta">${r.spl ? `<span class="ppo-um-t-spl">${r.spl} doloženě splněno</span>` : ''}${r.pok ? ` · ${r.pok} pokračuje` : ''}${r.bez ? ` · ${r.bez} bez dokladu` : ''}
-        <a href="pracovni-skupina.html?id=${r.g}#ukTimeline">detail a časová osa ↗</a></p>
+        ${r.osa >= 3
+          ? `<a href="pracovni-skupina.html?id=${r.g}#ukTimeline">detail a časová osa ↗</a>`
+          : `<a href="pracovni-skupina.html?id=${r.g}">detail skupiny ↗</a>`}</p>
     </div>`;
   }).join('');
   const btn = $('ukMapaMore');

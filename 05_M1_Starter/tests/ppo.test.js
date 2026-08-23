@@ -615,12 +615,20 @@ test('ppo: ukazkaHtml escapuje a skládá řádky, prázdný vstup dá prázdno'
 
 test('ppo úkoly: mapaSkupin agreguje osud po orgánu a řadí podle počtu', () => {
   const rows = mapaSkupin([
-    { g: 4, stav: 'splneno' }, { g: 4, stav: 'pokracuje' }, { g: 4 },
+    { g: 4, stav: 'splneno', datum: '2025-01-01', sd: '2025-03-01' }, { g: 4, stav: 'pokracuje' }, { g: 4 },
     { g: 7, ext: { stav: 'vydano', primy: true } },
     { g: 7, ext: { stav: 'vydano', primy: false } },
   ]);
   assert.deepEqual(rows.map(r => r.g), [4, 7]);
-  assert.deepEqual(rows[0], { g: 4, total: 3, spl: 1, pok: 1, bez: 1 });
+  assert.deepEqual(rows[0], { g: 4, total: 3, spl: 1, pok: 1, osa: 1, bez: 1 });
   assert.equal(rows[1].spl, 1, 'primy ext se počítá jako doložené splnění');
   assert.equal(rows[1].bez, 1, 'ne-primy ext není splnění (spadá do zbytku)');
+  assert.equal(rows[1].osa, 0, 'ext bez data zadání není řádek časové osy');
+  // osa zrcadlí podmínku ganttData: termín/doklad musí být POZDĚJŠÍ než zadání
+  const o = mapaSkupin([
+    { g: 1, datum: '2025-05-01', t: '2025-06-01' },
+    { g: 1, datum: '2025-05-01', t: '2025-04-01' },
+    { g: 1, t: '2025-06-01' },
+  ]);
+  assert.equal(o[0].osa, 1, 'jen termín pozdější než datované zadání');
 });
