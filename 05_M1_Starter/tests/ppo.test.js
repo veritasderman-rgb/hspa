@@ -509,8 +509,8 @@ test('ppo osud úkolů (FÁZE 6): join, chipy, filtr a časová osa', () => {
     ['aaa:0', { stav: 'splneno', doklad: 'analýza byla předložena', doklad_doc_id: 'bbb', doklad_datum: '2025-06-01' }],
     ['aaa:1', { stav: 'bez_dokladu', doklad: null, doklad_doc_id: null, doklad_datum: null }],
   ]);
-  const legJ = new Map([['bbb:0', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15' } }]]);
-  const legO = new Map([['7|Vydat věstník', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15' } }]]);
+  const legJ = new Map([['bbb:0', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15', primy: true } }]]);
+  const legO = new Map([['7|Vydat věstník', { vysledek: { stav: 'vydano', nazev: 'Věstník 9/2025', url: 'https://mzd.gov.cz/x', datum: '2025-09-15', primy: true } }]]);
   const docIdx = new Map([['bbb', { url: 'https://ppo.mzcr.cz/zapis-bbb' }]]);
   const r = buildUkoly(analyzy, new Set([7]), { stavy, legJ, legO, docIdx });
   const dodat = r.ukoly.find(u => u.co === 'Dodat analýzu');
@@ -521,11 +521,17 @@ test('ppo osud úkolů (FÁZE 6): join, chipy, filtr a časová osa', () => {
   assert.equal(r.ukoly.find(u => u.co === 'Vydat věstník').ext.nazev, 'Věstník 9/2025');
   assert.equal(r.otevrene[0].ext.stav, 'vydano', 'otevřený úkol páruje ext přes (g, co)');
 
-  // filtr osudu
+  // filtr osudu: externí vydáno je splnění JEN s primy (publikace navazujícího
+  // výstupu neprokazuje provedení mezikroku — nález Codex #1059)
   assert.ok(osudMatch({ stav: 'splneno' }, 'splneno'));
-  assert.ok(osudMatch({ ext: { stav: 'vydano' } }, 'splneno'), 'externí vydáno = doložené splnění');
+  assert.ok(osudMatch({ ext: { stav: 'vydano', primy: true } }, 'splneno'));
+  assert.ok(!osudMatch({ ext: { stav: 'vydano', primy: false } }, 'splneno'), 'navazující výstup není doklad splnění');
+  assert.ok(!osudMatch({ ext: { stav: 'vydano', primy: false } }, 'bez'), 'ale ani „bez dokladu" — výstup existuje');
   assert.ok(osudMatch({}, 'bez'));
   assert.ok(!osudMatch({ stav: 'pokracuje' }, 'bez'));
+  const nprimy = osudChips({ ext: { stav: 'vydano', datum: '2025-09-01', nazev: 'X', url: 'https://y', primy: false } },
+    s => String(s));
+  assert.ok(nprimy.includes('výstup vydán') && !nprimy.includes('✓ vydáno'), 'ne-primy chip značí navazující výstup');
 
   // chipy: escapují a nesou odkazy
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
@@ -542,12 +548,16 @@ test('ppo osud úkolů (FÁZE 6): join, chipy, filtr a časová osa', () => {
         { co: 'B', t: null },
         { co: 'C', stav: 'splneno', sd: '2025-06-01' },
         { co: 'D', t: '2024-01-01' },
+        { co: 'F', ext: { stav: 'vydano', datum: '2025-04-01', primy: false } },
+        { co: 'G', ext: { stav: 'vydano', datum: '2025-04-01', primy: true } },
       ] },
       { datum: null, ukoly: [{ co: 'E', t: '2025-05-01' }] },
     ],
   };
   const gtt = ganttData(web);
-  assert.deepEqual(gtt.rows.map(x => x.co).sort(), ['A', 'C'], 'B bez termínu, D termín před zadáním, E bez data jednání');
+  assert.deepEqual(gtt.rows.map(x => x.co).sort(), ['A', 'C', 'G'],
+    'B bez termínu, D termín před zadáním, E bez data jednání, F ne-primy výstup není doklad');
+  assert.equal(gtt.rows.find(x => x.co === 'G').stav, 'splneno');
   assert.equal(gtt.min, '2025-01-10');
   assert.equal(gtt.max, '2025-06-01');
 });

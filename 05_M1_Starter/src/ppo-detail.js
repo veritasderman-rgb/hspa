@@ -67,7 +67,10 @@ export function ganttData(a, limit = 30) {
     if (!j.datum) continue;
     for (const u of j.ukoly ?? []) {
       const t = u.t && u.t > j.datum ? u.t : null;
-      const rawSd = u.sd ?? u.ext?.datum ?? null;
+      // externí výsledek je dokladem splnění jen s primy (publikace navazujícího
+      // výstupu neprokazuje provedení mezikroku)
+      const extPrimy = u.ext?.stav === 'vydano' && u.ext.primy;
+      const rawSd = u.sd ?? (extPrimy ? u.ext.datum : null) ?? null;
       const sd = rawSd && rawSd > j.datum ? rawSd : null;
       if (!sd && !t) continue;
       rows.push({
@@ -75,7 +78,7 @@ export function ganttData(a, limit = 30) {
         start: j.datum,
         t,
         sd,
-        stav: u.ext?.stav === 'vydano' ? 'splneno' : (u.stav ?? null),
+        stav: extPrimy ? 'splneno' : (u.stav ?? null),
       });
     }
   }
