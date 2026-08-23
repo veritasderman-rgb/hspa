@@ -518,6 +518,18 @@ test('ppo osud úkolů (FÁZE 6): join, chipy, filtr a časová osa', () => {
   assert.equal(dodat.sd, '2025-06-01');
   assert.equal(dodat.du, 'https://ppo.mzcr.cz/zapis-bbb');
   assert.equal(r.ukoly.find(u => u.co === 'Zaslat návrh').stav, undefined, 'bez_dokladu se nepropisuje');
+
+  // chronologie podle data JEDNÁNÍ: doklad z jednání, které nenásleduje po
+  // zadání, se ignoruje — datum uploadu dokumentu v korpusu nestačí
+  // (nález Codex #1062: doklad z 9. 2. u úkolu z 12. 2. prošel přes upload 19. 3.)
+  const jednaniDatum = new Map([['aaa', '2025-01-10'], ['bbb', '2024-12-01']]);
+  const r2 = buildUkoly(analyzy, new Set([7]), { stavy, legJ, legO, docIdx, jednaniDatum });
+  assert.equal(r2.ukoly.find(u => u.co === 'Dodat analýzu').stav, undefined,
+    'doklad z dřívějšího jednání se nepropisuje');
+  const r3 = buildUkoly(analyzy, new Set([7]),
+    { stavy, legJ, legO, docIdx, jednaniDatum: new Map([['aaa', '2025-01-10'], ['bbb', '2025-06-01']]) });
+  assert.equal(r3.ukoly.find(u => u.co === 'Dodat analýzu').stav, 'splneno',
+    'správná chronologie projde');
   assert.equal(r.ukoly.find(u => u.co === 'Vydat věstník').ext.nazev, 'Věstník 9/2025');
   assert.equal(r.otevrene[0].ext.stav, 'vydano', 'otevřený úkol páruje ext přes (g, co)');
 
