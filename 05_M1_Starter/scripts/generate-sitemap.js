@@ -38,9 +38,24 @@ export function isIndexablePage(loc) {
   return !NOINDEX_RE.test(readFileSync(file, 'utf8'));
 }
 
-// Kurátorovaný seznam statických (sekčních) stránek. `indicator.html`,
-// `rubrika.html`, `embed.html` a `404.html` se NEuvádějí — jsou to šablony
-// plněné query parametrem nebo neindexovatelné stránky.
+// Stránky, které do sitemap ZÁMĚRNĚ nepatří, s důvodem. Hlídá test
+// `sitemap: každá indexovatelná stránka je v STATIC_PAGES nebo ve výjimkách`,
+// aby nová sekční stránka nemohla tiše vypadnout z indexace (stalo se
+// u vestniky-mz a jak-se-rozhoduje: byly ručně v sitemap.xml, ale ne tady,
+// takže je týdenní cron při přegenerování zahodil).
+export const SITEMAP_EXCLUDED = {
+  '/indicator.html': 'šablona plněná ?id= — statické varianty jsou indikator-*.html',
+  '/rubrika.html': 'šablona plněná ?id=',
+  '/pracovni-skupina.html': 'šablona plněná ?id=',
+  '/pracovni-osoba.html': 'šablona plněná ?id=',
+  '/embed.html': 'vkládaný widget, ne samostatná stránka',
+  '/404.html': 'chybová stránka',
+  '/konference.html': 'noindex — akce, ne evergreen obsah',
+  '/konference-prezentace.html': 'noindex — podklad k prezentaci',
+  '/tiskovazprava.html': 'noindex — jednorázový podklad pro média',
+};
+
+// Kurátorovaný seznam statických (sekčních) stránek.
 // priority: relativní důležitost; changefreq: orientační frekvence změny.
 // Exportováno — sdílené jako jediný zdroj pravdy se section-page SEO injektorem.
 export const STATIC_PAGES = [
@@ -73,6 +88,18 @@ export const STATIC_PAGES = [
   { loc: '/cesta-pacienta.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/model-systemu.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/kolonoskopie.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: '/vestniky-mz.html', priority: '0.7', changefreq: 'weekly' },
+  { loc: '/jak-se-rozhoduje.html', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/kompas.html', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/diagnoza.html', priority: '0.6', changefreq: 'weekly' },
+  { loc: '/pro-pacienty.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-novinare.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-badatele.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-politiku.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/vyhlaska.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/simulator.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/kviz.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: '/autor-florence.html', priority: '0.4', changefreq: 'monthly' },
 ];
 
 const TODAY = new Date().toISOString().slice(0, 10);

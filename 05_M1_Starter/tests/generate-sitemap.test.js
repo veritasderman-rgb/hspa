@@ -1,8 +1,13 @@
 // Testy generátoru sitemap.xml (scripts/generate-sitemap.js).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildSitemap } from '../scripts/generate-sitemap.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buildSitemap, STATIC_PAGES, SITEMAP_EXCLUDED, isIndexablePage } from '../scripts/generate-sitemap.js';
 import { SITE_BASE } from '../scripts/generate-feed.js';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const arts = [
   { slug: 'clanek-a.html', title: 'Á <test>', date: '2026-06-01', tag: 'Prevence' },
@@ -56,4 +61,33 @@ test('buildSitemap: osoby jen se ≥2 členstvími nebo externími odkazy', () =
   assert.ok(xml.includes(`${SITE_BASE}/pracovni-osoba?id=1`), 'spojka (2 členství) patří do sitemapy');
   assert.ok(xml.includes(`${SITE_BASE}/pracovni-osoba?id=3`), 'kurátorovaná osoba patří do sitemapy');
   assert.ok(!xml.includes('pracovni-osoba?id=2'), 'osoba s 1 členstvím bez externi do sitemapy nepatří');
+});
+
+test('sitemap: každá indexovatelná stránka je v STATIC_PAGES nebo ve výjimkách', () => {
+  // Pojistka proti tiché de-indexaci: nová sekční stránka musí být buď
+  // v STATIC_PAGES, nebo výslovně ve výjimkách s důvodem. Bez toho stránka
+  // sice existuje, ale týdenní cron ji při přegenerování sitemapy zahodí
+  // (přesně to potkalo vestniky-mz.html a jak-se-rozhoduje.html).
+  const listed = new Set(STATIC_PAGES.map(p => p.loc));
+  const excluded = new Set(Object.keys(SITEMAP_EXCLUDED));
+  const stranky = fs.readdirSync(ROOT)
+    .filter(f => f.endsWith('.html') && !/^(clanek|indikator)-/.test(f));
+
+  const chybi = [];
+  for (const f of stranky) {
+    const loc = f === 'index.html' ? '/' : `/${f}`;
+    if (listed.has(loc) || excluded.has(loc)) continue;
+    if (!isIndexablePage(loc)) continue; // noindex stránky do sitemapy nepatří
+    chybi.push(loc);
+  }
+  assert.deepEqual(chybi, [],
+    `indexovatelné stránky mimo STATIC_PAGES i SITEMAP_EXCLUDED: ${chybi.join(', ')}`);
+
+  // Výjimky musí mít neprázdný důvod a odpovídat existujícímu souboru.
+  for (const [loc, duvod] of Object.entries(SITEMAP_EXCLUDED)) {
+    assert.ok(duvod && duvod.length > 5, `${loc}: výjimka bez důvodu`);
+    assert.ok(fs.existsSync(path.join(ROOT, loc.replace(/^\//, ''))),
+      `${loc}: výjimka pro neexistující soubor`);
+    assert.ok(!listed.has(loc), `${loc}: nemůže být zároveň ve výjimkách i v STATIC_PAGES`);
+  }
 });
