@@ -83,11 +83,21 @@ test('sitemap: každá indexovatelná stránka je v STATIC_PAGES nebo ve výjimk
   assert.deepEqual(chybi, [],
     `indexovatelné stránky mimo STATIC_PAGES i SITEMAP_EXCLUDED: ${chybi.join(', ')}`);
 
-  // Výjimky musí mít neprázdný důvod a odpovídat existujícímu souboru.
-  for (const [loc, duvod] of Object.entries(SITEMAP_EXCLUDED)) {
+  // Výjimky musí mít typ i důvod a odpovídat existujícímu souboru.
+  for (const [loc, { typ, duvod } = {}] of Object.entries(SITEMAP_EXCLUDED)) {
     assert.ok(duvod && duvod.length > 5, `${loc}: výjimka bez důvodu`);
+    assert.ok(['sablona', 'noindex'].includes(typ), `${loc}: neznámý typ výjimky "${typ}"`);
     assert.ok(fs.existsSync(path.join(ROOT, loc.replace(/^\//, ''))),
       `${loc}: výjimka pro neexistující soubor`);
     assert.ok(!listed.has(loc), `${loc}: nemůže být zároveň ve výjimkách i v STATIC_PAGES`);
+    // Výjimka typu noindex platí jen po dobu, kdy je stránka opravdu noindex.
+    // Jinak by publikovaná stránka (robots → index) prošla první smyčkou přes
+    // `excluded` a tiše zůstala mimo sitemapu — přesně ta regrese, kterou má
+    // tenhle test chytat.
+    if (typ === 'noindex') {
+      assert.ok(!isIndexablePage(loc),
+        `${loc}: výjimka je zdůvodněná noindexem, ale stránka je indexovatelná `
+        + '— buď vrať robots na noindex, nebo ji zapiš do STATIC_PAGES');
+    }
   }
 });
