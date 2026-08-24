@@ -38,9 +38,29 @@ export function isIndexablePage(loc) {
   return !NOINDEX_RE.test(readFileSync(file, 'utf8'));
 }
 
-// Kurátorovaný seznam statických (sekčních) stránek. `indicator.html`,
-// `rubrika.html`, `embed.html` a `404.html` se NEuvádějí — jsou to šablony
-// plněné query parametrem nebo neindexovatelné stránky.
+// Stránky, které do sitemap ZÁMĚRNĚ nepatří, s důvodem. Hlídá test
+// `sitemap: každá indexovatelná stránka je v STATIC_PAGES nebo ve výjimkách`,
+// aby nová sekční stránka nemohla tiše vypadnout z indexace (stalo se
+// u vestniky-mz a jak-se-rozhoduje: byly ručně v sitemap.xml, ale ne tady,
+// takže je týdenní cron při přegenerování zahodil).
+// `typ: 'noindex'` znamená „nepatří sem, DOKUD je stránka noindex" — test
+// ověřuje, že takový soubor noindex skutečně má. Kdyby ho někdo publikoval
+// (robots → index), výjimka přestane platit a test si vyžádá zápis do
+// STATIC_PAGES. `typ: 'sablona'` je trvalé: šablony plněné query parametrem
+// do sitemapy nepatří ani jako indexovatelné.
+export const SITEMAP_EXCLUDED = {
+  '/indicator.html': { typ: 'sablona', duvod: 'šablona plněná ?id= — statické varianty jsou indikator-*.html' },
+  '/rubrika.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/pracovni-skupina.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/pracovni-osoba.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/embed.html': { typ: 'sablona', duvod: 'vkládaný widget, ne samostatná stránka' },
+  '/404.html': { typ: 'sablona', duvod: 'chybová stránka' },
+  '/konference.html': { typ: 'noindex', duvod: 'akce, ne evergreen obsah' },
+  '/konference-prezentace.html': { typ: 'noindex', duvod: 'podklad k prezentaci' },
+  '/tiskovazprava.html': { typ: 'noindex', duvod: 'jednorázový podklad pro média' },
+};
+
+// Kurátorovaný seznam statických (sekčních) stránek.
 // priority: relativní důležitost; changefreq: orientační frekvence změny.
 // Exportováno — sdílené jako jediný zdroj pravdy se section-page SEO injektorem.
 export const STATIC_PAGES = [
@@ -73,6 +93,18 @@ export const STATIC_PAGES = [
   { loc: '/cesta-pacienta.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/model-systemu.html', priority: '0.6', changefreq: 'monthly' },
   { loc: '/kolonoskopie.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: '/vestniky-mz.html', priority: '0.7', changefreq: 'weekly' },
+  { loc: '/jak-se-rozhoduje.html', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/kompas.html', priority: '0.7', changefreq: 'monthly' },
+  { loc: '/diagnoza.html', priority: '0.6', changefreq: 'weekly' },
+  { loc: '/pro-pacienty.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-novinare.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-badatele.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/pro-politiku.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/vyhlaska.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/simulator.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: '/kviz.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: '/autor-florence.html', priority: '0.4', changefreq: 'monthly' },
 ];
 
 const TODAY = new Date().toISOString().slice(0, 10);
