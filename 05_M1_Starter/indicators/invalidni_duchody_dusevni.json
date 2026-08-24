@@ -1,0 +1,52 @@
+{
+  "id": "invalidni_duchody_dusevni",
+  "name": "Invalidní důchody pro duševní poruchy (vyplácené)",
+  "area": "Výsledky",
+  "domain": "Duševní zdraví",
+  "subdomain": "Invalidita a pracovní dopady",
+  "definition": "Počet vyplácených invalidních důchodů (1., 2. a 3. stupně), u nichž je příčinou invalidity duševní porucha nebo porucha chování (MKN-10 diagnózy F00–F99), stav k 31. 12. daného roku. Zdrojem jsou administrativní data České správy sociálního zabezpečení; časovou řadu publikuje ÚZIS ČR v Psychiatrické ročence.",
+  "unit": "vyplácených důchodů (k 31. 12.)",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "uzis_publication",
+      "endpoint": "https://www.uzis.cz/res/f/008442/psych2022.pdf",
+      "dataset": "ÚZIS ČR — Psychiatrická ročenka 2022, kapitola 5 „Vyplácené invalidní důchody k 31. 12. pro diagnózy F00–F99“, tabulky 5.1–5.3 (zdrojová data ČSSZ)",
+      "dimensions": {
+        "country": "CZ",
+        "diagnoses": "F00-F99",
+        "degree": "1.-3. stupeň invalidity",
+        "breakdown": "stupeň × skupina diagnóz × věk × pohlaví"
+      }
+    },
+    "fallback": {
+      "type": "cssz_opendata",
+      "url": "https://data.cssz.cz/",
+      "note": "ČSSZ — Statistická ročenka z oblasti důchodového pojištění (kap. 10 Invalidita: nově přiznané a vyplácené invalidní důchody podle skupin diagnóz WHO) a portál otevřených dat ČSSZ (sady „Invalidita“)."
+    }
+  },
+  "benchmark_source": {
+    "type": "narrative_only",
+    "code": "no_direct_benchmark",
+    "dataset": "Přímo srovnatelná mezinárodní hodnota neexistuje — invalidní důchody jsou definovány národní legislativou (nárok, stupně, posudková praxe) a OECD ani Eurostat nepublikují harmonizovaný počet invalidních důchodů pro duševní poruchy. Komparativně OECD (Fit Mind, Fit Job, 2015) uvádí, že duševní onemocnění stojí za 30–50 % nově přiznávaných invalidních dávek v zemích OECD (v průměru cca třetina); v Německu jsou duševní onemocnění dlouhodobě nejčastější příčinou nových důchodů pro sníženou výdělečnou schopnost (Deutsche Rentenversicherung, kolem 40 %). V ČR tvořily duševní poruchy v roce 2022 zhruba šestinu nově přiznaných (4 722 z cca 27 tisíc) a čtvrtinu všech vyplácených invalidních důchodů.",
+    "value": null,
+    "url": "https://www.oecd.org/en/publications/fit-mind-fit-job_9789264228283-en.html"
+  },
+  "signal_thresholds": {
+    "good": 2,
+    "warn": 5
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSSZ",
+    "ÚZIS ČR",
+    "MPSV",
+    "MZ ČR"
+  ],
+  "method_notes": "Ukazatel počítá důchody vyplácené k 31. 12. (stav, nikoli tok). V roce 2022: 30 161 důchodů 1. stupně, 15 387 důchodů 2. stupně a 61 059 důchodů 3. stupně. Ve vyplácených důchodech dominují diagnózy s časným začátkem a celoživotním průběhem — mentální retardace (F7, 24 897) a schizofrenie (F2, 23 179), obě nejčastěji ve 3. stupni. V nově přiznaných důchodech (4 722 v roce 2022) naopak převažují neurotické poruchy (F4) a deprese (F32–F33) — tedy stavy, které jsou při včasné léčbě a rehabilitaci často návratné. Doplňkové členění (stupeň × diagnóza × věk × pohlaví) publikuje ČSSZ ve Statistické ročence z oblasti důchodového pojištění (skupina diagnóz WHO č. 5).",
+  "limitations": "Administrativní ukazatel: hodnotu spoluurčuje nejen zdraví populace, ale i legislativní parametry invalidity, posudková praxe ČSSZ a ochota lidí o důchod žádat — proto směr context_dependent (růst může znamenat horší duševní zdraví populace i lepší dostupnost dávek, pokles může znamenat uzdravování i přísnější posuzování). Vymezení F00–F99 v Psychiatrické ročence ÚZIS se v řádu stovek případů liší od skupiny diagnóz WHO č. 5 v ročence ČSSZ (např. zařazení G30 — Alzheimerovy nemoci). Publikace ÚZIS vychází s cca dvouletým zpožděním; poslední dostupný rok je 2022. Ukazatel nezahrnuje osoby, které pro duševní nemoc nepracují, ale na invalidní důchod nedosáhnou (nesplněná doba pojištění).",
+  "importance": "Invalidní důchod pro duševní nemoc je nejtvrdší měřitelný societální dopad selhání péče o duševní zdraví: zachycuje moment, kdy nemoc člověka trvale vyřadí z trhu práce. Na rozdíl od prevalence duševních poruch (kolik lidí je nemocných) měří tento ukazatel, kolika lidem systém nedokázal pomoci vrátit se do života. Je proto přirozeným výsledkovým protějškem procesních a strukturálních indikátorů reformy psychiatrie (centra duševního zdraví, kapacity psychiatrů, výdaje na duševní zdraví).",
+  "patient_story": "Petře je čtyřicet tři, dvacet let pracovala jako účetní v Přerově. Po třetí atace těžké deprese strávila šest týdnů v psychiatrické nemocnici. Na ambulantního psychiatra čekala po propuštění tři měsíce, na hrazenou psychoterapii se v okrese nedostala vůbec. Když po roce marodění skončila pracovní neschopnost, poslal ji posudkový lékař do invalidního důchodu prvního stupně. „Úleva to nebyla,“ říká. „Bylo to razítko, že se nepočítá s tím, že se vrátím.“\n\nPetra je jednou ze 106 607 lidí, kterým Česko k 31. prosinci 2022 vyplácelo invalidní důchod kvůli duševní poruše — 30 161 v prvním, 15 387 ve druhém a 61 059 ve třetím stupni. Od roku 2010, kdy jich bylo 86 493, číslo vzrostlo o 23 procent a od roku 2011 roste bez přerušení, bez ohledu na ekonomický cyklus. Duševní poruchy dnes stojí zhruba za čtvrtinou všech vyplácených invalidních důchodů v zemi. Jen v roce 2022 přibylo 4 722 nově přiznaných — nejčastěji pro neurotické poruchy a deprese, tedy stavy, které jsou při včasné léčbě většinou návratné.\n\nStruktura čísla prozrazuje dvě různá selhání. Ve vyplácených důchodech dominují mentální retardace a schizofrenie ve třetím stupni — nemoci začínající v dětství a mladé dospělosti, kde invalidita často znamená celý produktivní život mimo trh práce; každé zlepšení včasné intervence u psychóz se tu projeví až za dekády. V nově přiznávaných důchodech ale převažují deprese a úzkostné poruchy — a tam je invalidizace z velké části obrazem systému: měsíce čekání na psychiatra i psychoterapii, žádná koordinace mezi léčbou, rehabilitací a zaměstnáváním, minimum programů podporovaného návratu do práce. OECD přitom uvádí, že duševní onemocnění stojí za 30–50 % nových invalidních dávek napříč vyspělými zeměmi — tlak, kterému čelí všichni, ale který lze zvládat lépe, nebo hůř.\n\nPáky jsou pojmenované, jen dlouho čekají na použití. Národní akční plán pro duševní zdraví 2020–2030 slibuje včasnou intervenci a komunitní péči; síť center duševního zdraví zůstává pod plánovanými počty. Zákon o koordinaci rehabilitace, který má propojit zdravotní, sociální a pracovní rehabilitaci, Česko odkládá přes deset let. Programy podporovaného zaměstnávání (IPS) fungují jen v pilotech, přestože u vážných duševních nemocí patří k nejlépe doloženým intervencím. Kompetence se dělí mezi ministerstvo zdravotnictví (péče), MPSV a ČSSZ (posudky, rehabilitace, dávky) — a přesně v té mezeře mezi resorty mizí lidé jako Petra.",
+  "framework": "monitoring",
+  "dimension": "zdravi"
+}
