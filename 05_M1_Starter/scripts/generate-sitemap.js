@@ -43,16 +43,21 @@ export function isIndexablePage(loc) {
 // aby nová sekční stránka nemohla tiše vypadnout z indexace (stalo se
 // u vestniky-mz a jak-se-rozhoduje: byly ručně v sitemap.xml, ale ne tady,
 // takže je týdenní cron při přegenerování zahodil).
+// `typ: 'noindex'` znamená „nepatří sem, DOKUD je stránka noindex" — test
+// ověřuje, že takový soubor noindex skutečně má. Kdyby ho někdo publikoval
+// (robots → index), výjimka přestane platit a test si vyžádá zápis do
+// STATIC_PAGES. `typ: 'sablona'` je trvalé: šablony plněné query parametrem
+// do sitemapy nepatří ani jako indexovatelné.
 export const SITEMAP_EXCLUDED = {
-  '/indicator.html': 'šablona plněná ?id= — statické varianty jsou indikator-*.html',
-  '/rubrika.html': 'šablona plněná ?id=',
-  '/pracovni-skupina.html': 'šablona plněná ?id=',
-  '/pracovni-osoba.html': 'šablona plněná ?id=',
-  '/embed.html': 'vkládaný widget, ne samostatná stránka',
-  '/404.html': 'chybová stránka',
-  '/konference.html': 'noindex — akce, ne evergreen obsah',
-  '/konference-prezentace.html': 'noindex — podklad k prezentaci',
-  '/tiskovazprava.html': 'noindex — jednorázový podklad pro média',
+  '/indicator.html': { typ: 'sablona', duvod: 'šablona plněná ?id= — statické varianty jsou indikator-*.html' },
+  '/rubrika.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/pracovni-skupina.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/pracovni-osoba.html': { typ: 'sablona', duvod: 'šablona plněná ?id=' },
+  '/embed.html': { typ: 'sablona', duvod: 'vkládaný widget, ne samostatná stránka' },
+  '/404.html': { typ: 'sablona', duvod: 'chybová stránka' },
+  '/konference.html': { typ: 'noindex', duvod: 'akce, ne evergreen obsah' },
+  '/konference-prezentace.html': { typ: 'noindex', duvod: 'podklad k prezentaci' },
+  '/tiskovazprava.html': { typ: 'noindex', duvod: 'jednorázový podklad pro média' },
 };
 
 // Kurátorovaný seznam statických (sekčních) stránek.
