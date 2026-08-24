@@ -324,3 +324,32 @@ test('nightly-scan-ignore.json: validní schéma a všechny páry mají důvod+d
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(e.added), `${e.article}/${e.indicator}: added je datum`);
   }
 });
+
+test('findExternalLinks dekóduje HTML entity v href', async () => {
+  const { findExternalLinks } = await import('../scripts/nightly-scan.js');
+  const html = `
+    <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=235">sněmovní tisk</a>
+    <a href="https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&amp;HealthTopic=4">ECDC atlas</a>
+    <a href="https://www.uzis.cz/">ÚZIS</a>`;
+  const urls = findExternalLinks(html).map(l => l.url);
+  assert.ok(!urls.some(u => u.includes('&amp;')), 'v žádné URL nezůstane &amp;');
+  assert.ok(urls.includes('https://www.psp.cz/sqw/historie.sqw?o=10&t=235'), 'psp.cz odkaz je dekódovaný');
+  assert.ok(urls.includes('https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4'), 'ECDC odkaz je dekódovaný');
+  assert.ok(urls.includes('https://www.uzis.cz/'), 'odkaz bez entit zůstává beze změny');
+});
+
+test('findExternalLinks dekóduje i číselné HTML entity a nesahá na cizí tvary', async () => {
+  const { findExternalLinks } = await import('../scripts/nightly-scan.js');
+  const html = `
+    <a href="https://example.org/a?x=1&#38;y=2">decimální &#38;</a>
+    <a href="https://example.org/b?x=1&#x26;y=2">hexadecimální &#x26;</a>
+    <a href="https://example.org/c?x=1&#X26;y=2">hexadecimální velké X</a>
+    <a href="https://example.org/d?sect=zdravi&kod=5">nejde o entitu</a>
+    <a href="https://example.org/e?q=a&nezname;b">neznámá entita zůstává</a>`;
+  const urls = findExternalLinks(html).map(l => l.url);
+  assert.ok(urls.includes('https://example.org/a?x=1&y=2'), '&#38; dekódováno');
+  assert.ok(urls.includes('https://example.org/b?x=1&y=2'), '&#x26; dekódováno');
+  assert.ok(urls.includes('https://example.org/c?x=1&y=2'), '&#X26; dekódováno');
+  assert.ok(urls.includes('https://example.org/d?sect=zdravi&kod=5'), 'parametr bez středníku není entita');
+  assert.ok(urls.includes('https://example.org/e?q=a&nezname;b'), 'neznámá pojmenovaná entita zůstává doslovně');
+});

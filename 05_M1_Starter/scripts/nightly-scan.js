@@ -513,6 +513,28 @@ function findPassedDates(text, today, pubDate) {
   return hits;
 }
 
+// Dekóduje HTML entity v hodnotě atributu href. V HTML se ampersand
+// v query stringu píše jako &amp; — bez dekódování by report nabízel
+// ke kontrole URL, která takhle neexistuje (např. psp.cz/…?o=10&amp;t=235).
+// Kromě pojmenovaných entit dekóduje i číselné odkazy (&#38; / &#x26;),
+// které serializátory HTML běžně produkují místo &amp;.
+const NAMED_ENTITIES = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ' };
+
+function decodeHref(href) {
+  return href.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z]+));/g, (match, dec, hex, name) => {
+    if (dec !== undefined) {
+      const code = Number(dec);
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+    }
+    if (hex !== undefined) {
+      const code = parseInt(hex, 16);
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+    }
+    const named = NAMED_ENTITIES[name.toLowerCase()];
+    return named === undefined ? match : named;
+  });
+}
+
 /**
  * Inventář externích odkazů (http/https), s prioritou pro legislativní domény.
  */
@@ -522,7 +544,7 @@ function findExternalLinks(html, { cap = MAX_EXT_LINKS } = {}) {
   const scanLimit = Number.isFinite(cap) ? cap * 3 : Infinity;
   let m;
   while ((m = re.exec(html)) !== null) {
-    const url = m[1];
+    const url = decodeHref(m[1]);
     const label = stripTags(m[2]).slice(0, 80);
     const priority = PRIORITY_LINK_HINTS.some(h => url.includes(h));
     links.push({ url, label, priority });
@@ -554,7 +576,7 @@ export function parseLastReviewed(html) {
   return m ? m[1] : null;
 }
 
-export { daysBetween, REVIEW_SKIP_DAYS, scanArticle };
+export { daysBetween, REVIEW_SKIP_DAYS, scanArticle, findExternalLinks };
 
 function scanArticle(article, today, { skipReviewed = true } = {}) {
   const slug = article.slug;
