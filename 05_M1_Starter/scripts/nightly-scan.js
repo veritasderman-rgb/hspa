@@ -516,13 +516,23 @@ function findPassedDates(text, today, pubDate) {
 // Dekóduje HTML entity v hodnotě atributu href. V HTML se ampersand
 // v query stringu píše jako &amp; — bez dekódování by report nabízel
 // ke kontrole URL, která takhle neexistuje (např. psp.cz/…?o=10&amp;t=235).
+// Kromě pojmenovaných entit dekóduje i číselné odkazy (&#38; / &#x26;),
+// které serializátory HTML běžně produkují místo &amp;.
+const NAMED_ENTITIES = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ' };
+
 function decodeHref(href) {
-  return href
-    .replace(/&(?:amp|AMP);/g, '&')
-    .replace(/&(?:quot|QUOT);/g, '"')
-    .replace(/&(?:apos|#39);/g, "'")
-    .replace(/&(?:lt|LT);/g, '<')
-    .replace(/&(?:gt|GT);/g, '>');
+  return href.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z]+));/g, (match, dec, hex, name) => {
+    if (dec !== undefined) {
+      const code = Number(dec);
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+    }
+    if (hex !== undefined) {
+      const code = parseInt(hex, 16);
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+    }
+    const named = NAMED_ENTITIES[name.toLowerCase()];
+    return named === undefined ? match : named;
+  });
 }
 
 /**
