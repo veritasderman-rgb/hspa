@@ -324,3 +324,16 @@ test('nightly-scan-ignore.json: validní schéma a všechny páry mají důvod+d
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(e.added), `${e.article}/${e.indicator}: added je datum`);
   }
 });
+
+test('findExternalLinks dekóduje HTML entity v href', async () => {
+  const { findExternalLinks } = await import('../scripts/nightly-scan.js');
+  const html = `
+    <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=235">sněmovní tisk</a>
+    <a href="https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&amp;HealthTopic=4">ECDC atlas</a>
+    <a href="https://www.uzis.cz/">ÚZIS</a>`;
+  const urls = findExternalLinks(html).map(l => l.url);
+  assert.ok(!urls.some(u => u.includes('&amp;')), 'v žádné URL nezůstane &amp;');
+  assert.ok(urls.includes('https://www.psp.cz/sqw/historie.sqw?o=10&t=235'), 'psp.cz odkaz je dekódovaný');
+  assert.ok(urls.includes('https://atlas.ecdc.europa.eu/public/index.aspx?Dataset=27&HealthTopic=4'), 'ECDC odkaz je dekódovaný');
+  assert.ok(urls.includes('https://www.uzis.cz/'), 'odkaz bez entit zůstává beze změny');
+});

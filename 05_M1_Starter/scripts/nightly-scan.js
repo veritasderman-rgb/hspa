@@ -513,6 +513,18 @@ function findPassedDates(text, today, pubDate) {
   return hits;
 }
 
+// Dekóduje HTML entity v hodnotě atributu href. V HTML se ampersand
+// v query stringu píše jako &amp; — bez dekódování by report nabízel
+// ke kontrole URL, která takhle neexistuje (např. psp.cz/…?o=10&amp;t=235).
+function decodeHref(href) {
+  return href
+    .replace(/&(?:amp|AMP);/g, '&')
+    .replace(/&(?:quot|QUOT);/g, '"')
+    .replace(/&(?:apos|#39);/g, "'")
+    .replace(/&(?:lt|LT);/g, '<')
+    .replace(/&(?:gt|GT);/g, '>');
+}
+
 /**
  * Inventář externích odkazů (http/https), s prioritou pro legislativní domény.
  */
@@ -522,7 +534,7 @@ function findExternalLinks(html, { cap = MAX_EXT_LINKS } = {}) {
   const scanLimit = Number.isFinite(cap) ? cap * 3 : Infinity;
   let m;
   while ((m = re.exec(html)) !== null) {
-    const url = m[1];
+    const url = decodeHref(m[1]);
     const label = stripTags(m[2]).slice(0, 80);
     const priority = PRIORITY_LINK_HINTS.some(h => url.includes(h));
     links.push({ url, label, priority });
@@ -554,7 +566,7 @@ export function parseLastReviewed(html) {
   return m ? m[1] : null;
 }
 
-export { daysBetween, REVIEW_SKIP_DAYS, scanArticle };
+export { daysBetween, REVIEW_SKIP_DAYS, scanArticle, findExternalLinks };
 
 function scanArticle(article, today, { skipReviewed = true } = {}) {
   const slug = article.slug;
