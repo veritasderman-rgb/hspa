@@ -23,7 +23,7 @@ Tohle není zelená louka. Před návrhem byla provedena inventura korpusu:
 | `kompas.html` | osobní profil → „co se týká právě vás" (prevence a screeningy podle věku/pohlaví) |
 | `pribeh-pacienta.html` | hra s personami, jedna z nich `prs_zena` |
 | `kolonoskopie.html` | hloubkový datový pohled na kolorektální screening |
-| Glosář | 246 pojmů, z toho **0 onkologických** ← díra |
+| Glosář | 246 pojmů, z toho **37 onko-relevantních** — už existují `KOC`, `MDT`, `NOR`, `kolorekt`, `neoadjuvantní`, `TOKS`, `LDCT`, `CONCORD-3`, `ČOS ČLS JEP`… Chybí ale **pacientská** vrstva (TNM, grading, R0 resekce, receptory, dispenzarizace, § 16) |
 
 **Závěr inventury:** klinická osa („co se bude dít s mojí nemocí") existuje.
 Chybí **systémová osa** („co teď dělat se systémem") — a to je přesně to, co
@@ -50,12 +50,28 @@ Tím se problém „nenahrazovat pacientské organizace" neřeší disclaimerem,
 strukturálně: obsazujeme místo, které nikdo jiný neobsadil, a na ostatní
 aktivně odkazujeme (vazba na Hlas pacientů/LINKOS už na webu existuje).
 
-**Vlajková ukázka, proč to má smysl:** Věstník 11/2025 ukládá komplexním
-onkologickým centrům „multidisciplinární posuzování klinických případů,
-včetně následného rozhodování o způsobu léčby a o jejím umístění v síti".
-Tedy každý pacient v KOC má mít případ projednaný komisí. Skoro nikdo to neví
-a nikdo se nezeptá — a je to v dokumentu, který jsme jako jediní zarchivovali
-a zpřístupnili k hledání. Přesně tenhle typ informace je důvod sekce.
+**Vlajková ukázka, proč to má smysl.** Věstník 11/2025 (čl. o požadavcích na
+organizaci onkologické péče) uvádí doslova:
+
+> „Multidisciplinární posuzování onkologických pacientů zakotvené jako
+> **povinná komponenta diagnostiky a léčby**, včetně reportingu kódu
+> posouzení pro zdravotní pojišťovny (zdravotní výkon **č. 51881** podle
+> vyhlášky č. 134/1998 Sb.)."
+
+Tedy: posouzení multidisciplinárním týmem není bonus, je to povinná součást —
+a **vykazuje se pojišťovně samostatným výkonem**, takže po něm zůstává stopa.
+Pro pacienta z toho plyne konkrétní, ověřitelná otázka („bylo moje posouzení
+v MDT vykázáno?"), pro web ověřitelná kotva. Skoro nikdo to neví a je to
+v dokumentu, který jsme jako jediní zarchivovali a zpřístupnili k hledání —
+přesně tenhle typ informace je důvod sekce.
+
+⚠️ **Před publikací ověřit rozsah**: citovaný odstavec je v seznamu požadavků
+na organizaci péče (kontext Regionálních onkologických skupin) a **neobsahuje
+výslovný kvantifikátor „u každého pacienta"**. Formulace v sekci musí zůstat
+u toho, co text říká („povinná komponenta diagnostiky a léčby" + vykazovaný
+výkon), ne u silnějšího „každý pacient musí projít komisí", dokud se
+nedohledá ustanovení, které okruh pacientů výslovně vymezuje. Nález Codexu
+na PR #1080 — zapsáno, aby se ta zkratka nevrátila do textu sekce.
 
 ## 2) Vstup: rozcestník podle fáze, ne podle diagnózy
 
@@ -135,8 +151,8 @@ Kurátorovaný soubor ve stejném duchu jako `data/rozhodovani.json`.
     "otazka": "Kam patřím a kdo o mně rozhoduje?",
     "shrnuti": "2–3 věty orientace, druhá osoba, bez čísel",
     "kroky": [{
-      "co": "Ověřte si, že váš případ jde do multidisciplinárního týmu",
-      "proc": "Věstník 11/2025 to ukládá komplexním onkologickým centrům",
+      "co": "Zeptejte se, zda vaše léčba prošla multidisciplinárním týmem",
+      "proc": "Věstník 11/2025: MDT posouzení je povinná komponenta diagnostiky a léčby a vykazuje se výkonem 51881",
       "doklad": { "typ": "vestnik", "rok": 2025, "cislo": 11, "url": "https://mzd.gov.cz/vestnik/vestnik-11-2025/" }
     }],
     "otazky_k_tisku": ["Byl můj případ projednán v MDT a co komise doporučila?"],
@@ -187,8 +203,13 @@ Validátor `ingest/validate-onko.js` (do `npm run validate:all`): každý krok m
   už v `styles.css` je) — lidé si je berou s sebou.
 - CSS namespace `.onk-*`; po úpravě `styles.css` vždy `npm run build:css`
   lokálně, ale **minifikát ani ostatní generované artefakty do PR nepatří**.
-- **Doplnit ~40 onko pojmů do glosáře** (dnes 0 z 246) — inline rozbalování
-  `glossary-inline.js` je pro tenhle obsah ideální.
+- **Glosář**: 37 onko-relevantních pojmů už existuje (`KOC`, `MDT`, `NOR`,
+  `neoadjuvantní`, `TOKS`, …). Úkolem tedy NENÍ psát je od nuly, ale
+  **auditovat je a doplnit chybějící pacientskou vrstvu** — termíny z nálezů
+  a nároku (TNM, grading, R0 resekce, receptory, dispenzarizace, § 16,
+  centrová léčba). Existující definice needitovat bez důvodu, aby nevznikly
+  dvě verze téhož. Inline rozbalování `glossary-inline.js` je pro tenhle
+  obsah ideální.
 
 ## 6) Co tam NEpatří
 
@@ -228,7 +249,7 @@ je adaptace jejich infografik s atribucí). Rozšířit ji:
 | 1 | Rozcestník 6 fází + karty otázek (P3) + mapa center (P1) + zdroje dál (P6) | 1–2 |
 | 2 | Nárok a § 16 (P2) + sociální nárok (práce, peníze) | 1 |
 | 3 | Statistika a co neříká (P4) + životospráva a pohyb (P5) | 1–2 |
-| 4 | Klinické studie + větev pro blízké + onko pojmy do glosáře | 1 |
+| 4 | Klinické studie + větev pro blízké + audit a doplnění onko pojmů v glosáři | 1 |
 
 Průřezově: vzájemné odkazy s `cesta-pacienta.html`, `kompas.html`,
 `prevence.html`, `vestniky-mz.html` a `jak-se-rozhoduje.html`.
