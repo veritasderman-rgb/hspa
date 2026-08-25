@@ -206,3 +206,29 @@ test('coi: souhrnný řez je lehký, bez osobních dat a konzistentní s plným 
   assert.ok(souhrn.metodika?.limity?.length >= 4);
   assert.match(souhrn.metodika.klicove_pravidlo, /není obvinění/);
 });
+
+test('coi: deklarace se hlásí třístavově — 0 bez analýzy není „nikdy nezaznělo"', async () => {
+  const { coiKarta } = await import('../src/ppo-detail.js');
+  const zaklad = { clenu: 10, clenu_overeno: 3, ma_statut_v_korpusu: true, ma_pravidlo_ve_statutu: false };
+  // zápisy jsme nečetli → nesmíme tvrdit, že nic nezaznělo
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 0, deklarace_v_zapisech: 0 }).stavDeklaraci, 'nevime');
+  // zápisy jsme četli a nic tam nebylo
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 12, deklarace_v_zapisech: 0 }).stavDeklaraci, 'zadna');
+  // deklarace zazněly
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 12, deklarace_v_zapisech: 3 }).stavDeklaraci, 'ma');
+});
+
+test('coi: počet deklarací je doložitelný odkazy na konkrétní jednání', () => {
+  const coi = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-coi-souhrn.json'), 'utf8'));
+  const sDeklaraci = coi.skupiny.filter(s => s.deklarace_v_zapisech > 0);
+  assert.ok(sDeklaraci.length >= 5, 'v datech mají být orgány s deklaracemi');
+  for (const s of sDeklaraci) {
+    assert.ok(s.deklarace_odkazy?.length, `g${s.g}: počet deklarací bez odkazů na jednání`);
+    assert.ok(s.deklarace_odkazy.every(o => o.url), `g${s.g}: doklad bez url`);
+    assert.ok(s.deklarace_odkazy.length <= s.deklarace_v_zapisech);
+    assert.ok(s.jednani_analyzovano >= s.deklarace_v_zapisech,
+      `g${s.g}: víc deklarací než analyzovaných jednání`);
+  }
+  // datum stavu musí být v datech, jinak ho karta nemá odkud vzít
+  assert.match(coi.stav_k, /^\d{4}-\d{2}-\d{2}$/);
+});
