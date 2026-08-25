@@ -62,10 +62,25 @@ export function klasifikujVazbu(nazev) {
   return 'jine';
 }
 
+// Působí subjekt ve zdravotnictví? Rozhoduje se podle NÁZVU — rejstříkové obory
+// (NACE) v našich datech nejsou. Vzor je záměrně PODinkluzivní: raději vazbu
+// neoznačit než označit falešně. Bez tohoto testu R4 označovalo za relevantní
+// i klub stolního tenisu nebo vodárnu (nález Codexu na PR #1085).
+const OBOR_ZDRAVOTNICTVI = /nemocnic|klinik|poliklinik|zdravot|zdrav\.|medic|\bmed\b|med\b|lékár|lekar|lékař|pharm|farmac|dent|stomatolog|labor|ambulan|ordinac|rehabilit|hospic|diagnost|léčeb|léceb|sanator|optik|protet|ortoped|radiolog|onkolog|psychiatr|gyneko|pediatr|záchran|transfuz|imunolog|biotech|vakcín|zdravotnick/i;
+
+/** Působí subjekt (podle názvu) ve zdravotnictví? */
+export function jeZdravotnicky(nazev) {
+  return OBOR_ZDRAVOTNICTVI.test(String(nazev ?? ''));
+}
+
 /* ── stupeň 2: relevance vůči předmětu orgánu ────────────────────────── */
 
 const AGENDA = {
-  uhrady: /úhrad|cen[aoěy]|bodov|zdravotních výkon|kategorizac|smluvní|financov|rozpočt|regulac/i,
+  // POZOR: obecné „financování", „rozpočet" či „regulace" sem NEPATŘÍ — jinak se
+  // jako úhradový orgán tváří i Národní rada elektronického zdravotnictví
+  // (predmet zmiňuje „včetně jeho financování") nebo Výbor pro umělou
+  // inteligenci. Vzor musí zachytit rozhodování o úhradách, cenách a alokaci.
+  uhrady: /úhrad|cen[aoěy]|cenov|bodov[éáý]|zdravotních výkon|seznam\w* výkon|kategorizac|smluvní politik|smluvní vztah|dohodovac[ií]|alokac/i,
   normy: /standard|doporučen|postup|metodik|vzdělávac|akreditac|screening|indikátor|kvalit/i,
   produkty: /léčiv|lék[oů]|zdravotnick\w* prostředk|očkov|vakcín|přípravk/i,
 };
@@ -97,9 +112,9 @@ export const PRAVIDLA = [
   },
   {
     id: 'R4',
-    popis: 'doložená vazba na obchodní společnost v orgánu rozhodujícím o penězích, lécích nebo prostředcích',
-    test: ({ typy, agenda }) =>
-      typy.has('obchodni') && (agenda.includes('uhrady') || agenda.includes('produkty')),
+    popis: 'doložená vazba na obchodní společnost působící ve zdravotnictví v orgánu rozhodujícím o úhradách, lécích nebo prostředcích',
+    test: ({ obchodniVeZdravotnictvi, agenda }) =>
+      obchodniVeZdravotnictvi && (agenda.includes('uhrady') || agenda.includes('produkty')),
   },
 ];
 
@@ -107,8 +122,12 @@ export const PRAVIDLA = [
 export function relevanceProSkupinu(osoba, skupina, vazby) {
   const agenda = agendaOrganu(skupina);
   if (!agenda.length) return null;
+  // Stupeň 2 je RELEVANTNÍ VAZBA — bez doložené vazby (stupeň 1 se zdrojem
+  // a datem) nesmí vzniknout. Kategorie členství sama o sobě vazba není.
+  if (!vazby.length) return null;
   const typy = new Set(vazby.map(v => v.typ_subjektu));
-  const ctx = { kat: osoba.kat, typy, agenda };
+  const obchodniVeZdravotnictvi = vazby.some(v => v.typ_subjektu === 'obchodni' && v.obor_zdravotnictvi);
+  const ctx = { kat: osoba.kat, typy, obchodniVeZdravotnictvi, agenda };
   const sedi = PRAVIDLA.filter(p => p.test(ctx));
   if (!sedi.length) return null;
   return {
@@ -157,6 +176,7 @@ export function buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani
       subjekt: f.nazev,
       ico: f.ico,
       typ_subjektu: klasifikujVazbu(f.nazev),
+      obor_zdravotnictvi: jeZdravotnicky(f.nazev),
       // rejstřík v našich datech NEUVÁDÍ typ role — netvrdíme ji
       role: 'vazba dle veřejného rejstříku, typ role není v datech uveden',
       zdroj_url: (ext.odkazy ?? [])[0]?.url ?? null,

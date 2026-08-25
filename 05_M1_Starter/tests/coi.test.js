@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { overIdentitu, klasifikujVazbu, agendaOrganu, relevanceProSkupinu, statutovaPravidla }
+import { overIdentitu, klasifikujVazbu, jeZdravotnicky, agendaOrganu, relevanceProSkupinu, statutovaPravidla }
   from '../ingest/ppo/build-coi.js';
 import { validateCoi } from '../ingest/validate-coi.js';
 
@@ -49,7 +49,7 @@ test('coi: agendaOrganu čte předmět orgánu, ne název osoby', () => {
 
 test('coi: relevance je konzervativní a vždy nese pravidlo i doklad', () => {
   const skupina = { id: 4, predmet: 'zařazování zdravotních výkonů a jejich úhrada', ucel: '' };
-  const vazby = [{ typ_subjektu: 'obchodni' }];
+  const vazby = [{ typ_subjektu: 'obchodni', obor_zdravotnictvi: true }];
   const r = relevanceProSkupinu({ kat: 'neuvedeno' }, skupina, vazby);
   assert.ok(r, 'obchodní vazba v úhradovém orgánu je relevantní (R4)');
   assert.equal(r.stupen, 2, 'fáze 1 nikdy netvrdí víc než stupeň 2');
@@ -58,6 +58,7 @@ test('coi: relevance je konzervativní a vždy nese pravidlo i doklad', () => {
 
   // orgán bez rozpoznané agendy → žádná relevance, i když vazby jsou
   assert.equal(relevanceProSkupinu({ kat: 'pojistovna' }, { id: 9, predmet: 'nic', ucel: '' }, vazby), null);
+  // obchodní vazba mimo zdravotnictví relevanci nezakládá (viz test R4 níže)
   // žádná vazba → žádná relevance
   assert.equal(relevanceProSkupinu({ kat: 'neuvedeno' }, skupina, []), null);
 });
@@ -106,4 +107,59 @@ test('coi: orgány s pravidlem ve statutu sedí na doložený sweep', () => {
   for (const s of coi.skupiny.filter(x => x.ma_pravidlo_ve_statutu)) {
     assert.ok(s.pravidlo_doklad?.url, `g${s.g}: pravidlo bez odkazu na dokument`);
   }
+});
+
+/* ── opravy nálezů z PR #1085 (nadhodnocená relevance) ───────────────── */
+
+test('coi: obecné financování ani regulace nedělá z orgánu úhradový', () => {
+  // Národní rada elektronického zdravotnictví — „včetně jeho financování"
+  // sama o sobě NENÍ rozhodování o úhradách
+  assert.deepEqual(
+    agendaOrganu({ predmet: 'vyjadřuje se k otázkám digitalizace zdravotnictví včetně jeho financování', ucel: '' }),
+    [], 'obecné financování není úhradová agenda');
+  // Výbor pro AI — regulace není úhradová agenda
+  assert.ok(!agendaOrganu({ predmet: 'koordinace a regulace umělé inteligence ve zdravotnictví', ucel: '' })
+    .includes('uhrady'));
+  assert.ok(!agendaOrganu({ predmet: 'schvaluje rozpočet sekretariátu', ucel: '' }).includes('uhrady'));
+  // skutečná úhradová agenda se pozná dál
+  assert.ok(agendaOrganu({ predmet: 'stanovení úhrad a bodových hodnot výkonů', ucel: '' }).includes('uhrady'));
+  assert.ok(agendaOrganu({ predmet: 'podklady pro dohodovací řízení', ucel: '' }).includes('uhrady'));
+});
+
+test('coi: jeZdravotnicky odliší obor podle názvu, raději podinkluzivně', () => {
+  assert.ok(jeZdravotnicky('Rokycanská nemocnice, a.s.'));
+  assert.ok(jeZdravotnicky('Brimstone Pharma s.r.o.'));
+  assert.ok(jeZdravotnicky('PSYCHIATRIE Dědina s.r.o.'));
+  // tyhle R4 dřív označovalo za relevantní vazbu — nesmí se to vrátit
+  assert.ok(!jeZdravotnicky('SKST Liberec, spol. s r.o.'), 'klub stolního tenisu není zdravotnický subjekt');
+  assert.ok(!jeZdravotnicky('VODÁRNA PLZEŇ a.s.'), 'vodárna není zdravotnický subjekt');
+  assert.ok(!jeZdravotnicky('Energie Jáchymov s.r.o.'));
+});
+
+test('coi: stupeň 2 nikdy nevznikne bez doložené vazby stupně 1', () => {
+  const uhradovy = { id: 4, predmet: 'stanovení úhrad zdravotních výkonů', ucel: '' };
+  // pojišťovna bez jediné doložené vazby → žádná relevance (kategorie není vazba)
+  assert.equal(relevanceProSkupinu({ kat: 'pojistovna' }, uhradovy, []), null);
+  assert.equal(relevanceProSkupinu({ kat: 'odborna_spolecnost' },
+    { id: 9, predmet: 'tvorba standardů péče', ucel: '' }, []), null);
+  // s vazbou už relevance vznikne
+  assert.ok(relevanceProSkupinu({ kat: 'pojistovna' }, uhradovy,
+    [{ typ_subjektu: 'jine', obor_zdravotnictvi: false }]));
+});
+
+test('coi: R4 vyžaduje obchodní vazbu působící ve zdravotnictví', () => {
+  const uhradovy = { id: 4, predmet: 'stanovení úhrad zdravotních výkonů', ucel: '' };
+  const nezdravotnicka = [{ typ_subjektu: 'obchodni', obor_zdravotnictvi: false }];
+  const r1 = relevanceProSkupinu({ kat: 'neuvedeno' }, uhradovy, nezdravotnicka);
+  assert.equal(r1, null, 'obchodní vazba mimo zdravotnictví R4 nespouští');
+  const zdravotnicka = [{ typ_subjektu: 'obchodni', obor_zdravotnictvi: true }];
+  assert.ok(relevanceProSkupinu({ kat: 'neuvedeno' }, uhradovy, zdravotnicka).pravidla.includes('R4'));
+});
+
+test('coi: v datech nezůstala relevance bez vazby ani R4 mimo zdravotnictví', () => {
+  const coi = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-coi.json'), 'utf8'));
+  assert.equal(coi.osoby.filter(o => o.relevance.length && !o.vazby.length).length, 0);
+  const spatneR4 = coi.osoby.filter(o => o.relevance.some(r => r.pravidla.includes('R4'))
+    && !o.vazby.some(v => v.typ_subjektu === 'obchodni' && v.obor_zdravotnictvi));
+  assert.equal(spatneR4.length, 0);
 });

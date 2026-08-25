@@ -34,6 +34,16 @@ export function validateCoi(coi, ppo) {
     if (!o.overeno && o.relevance.length) {
       chyby.push(`osoba ${o.id}: neověřená identita, ale nese relevanci`);
     }
+    // stupeň 2 je RELEVANTNÍ VAZBA — bez doložené vazby (stupeň 1) nesmí vzniknout
+    if (o.relevance.length && !o.vazby.length) {
+      chyby.push(`osoba ${o.id}: relevance (stupeň 2) bez jediné doložené vazby (stupeň 1)`);
+    }
+    // R4 stojí na obchodní vazbě VE ZDRAVOTNICTVÍ — jinak by označovalo
+    // vodárny a sportovní kluby (nález na PR #1085)
+    if (o.relevance.some(r => r.pravidla?.includes('R4'))
+      && !o.vazby.some(v => v.typ_subjektu === 'obchodni' && v.obor_zdravotnictvi)) {
+      chyby.push(`osoba ${o.id}: R4 bez obchodní vazby působící ve zdravotnictví`);
+    }
   }
 
   // statistiky musí sedět na data (žádné ručně dopsané číslo)
