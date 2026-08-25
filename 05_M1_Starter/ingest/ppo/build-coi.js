@@ -325,7 +325,24 @@ if (isMain) {
   const out = buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani, stavK });
   const p = path.join(DATA, 'ppo-coi.json');
   fs.writeFileSync(p, JSON.stringify(out, null, 1) + '\n');
-  console.log(`✓ data/ppo-coi.json (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`);
+
+  // Lehký řez pro detail skupiny — bez pole `osoby`. Detail potřebuje jen
+  // čísla svého orgánu a metodiku; stahovat kvůli tomu celý soubor (stovky kB)
+  // by bylo zbytečné (stejný důvod jako u ppo-ukoly.json v build-web.js).
+  const souhrn = {
+    version: out.version,
+    stav_k: out.stav_k,
+    zdroj: out.zdroj,
+    metodika: out.metodika,
+    pokryti: out.pokryti,
+    souhrn: out.souhrn,
+    skupiny: out.skupiny,
+  };
+  const ps = path.join(DATA, 'ppo-coi-souhrn.json');
+  fs.writeFileSync(ps, JSON.stringify(souhrn, null, 1) + '\n');
+
+  console.log(`✓ data/ppo-coi.json (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`
+    + ` + ppo-coi-souhrn.json (${(fs.statSync(ps).size / 1024).toFixed(0)} kB)`);
   console.log(`  ověřeno ${out.pokryti.identita_overena}/${out.pokryti.s_profilem} osob s profilem `
     + `(z ${out.pokryti.osob_celkem} členů celkem)`);
   console.log(`  orgánů s pravidlem ve statutu: ${out.souhrn.organu_s_pravidlem}/${out.souhrn.organu_se_statutem} `
