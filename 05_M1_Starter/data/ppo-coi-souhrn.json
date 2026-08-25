@@ -1,0 +1,1931 @@
+{
+ "version": "1.0",
+ "stav_k": "2026-08-22",
+ "zdroj": "data/ppo-osoby.json × ingest/ppo/osoby-externi.json × ingest/ppo/source/ppo_korpus_full.jsonl.gz",
+ "metodika": {
+  "zadani": "PROMPT_STRET_ZAJMU_ROUTINE.md",
+  "stupne": "1 vazba · 2 relevantní vazba · 3 potenciální střet · 4 doložený projev · 5 porušení pravidla",
+  "faze": "FÁZE 1 počítá stupně 1–2. Stupeň 3+ vyžaduje párování na konkrétní rozhodnutí (fáze 3).",
+  "klicove_pravidlo": "Střet zájmů není obvinění ani překážka členství. Vazba, o které se ví, se dá ošetřit; ta, o které se neví, ne. Data popisují stav, nikoli úmysl.",
+  "limity": [
+   "Ověřit šlo jen členy s profilem na Hlídači státu — všechny podíly se počítají z ověřené podmnožiny.",
+   "Veřejný rejstřík vidí jen formální vazby; zaměstnanecký poměr, poradenská smlouva ani honorář v něm nejsou. Absence vazby v datech neznamená, že vazba neexistuje.",
+   "Typ role ve firmě (statutární orgán × společník) v našich datech uveden není.",
+   "Zápisy neuvádějí jmenovité hlasování, jen souhrnný poměr — nelze tvrdit, jak hlasoval konkrétní člen.",
+   "U orgánů bez pravidla ve statutu není co porušit; chybějící pravidlo je výtka vůči ministerstvu, nikoli vůči členům."
+  ],
+  "pravidla_relevance": [
+   {
+    "id": "R1",
+    "popis": "člen za zdravotní pojišťovnu v orgánu rozhodujícím o úhradách nebo cenách"
+   },
+   {
+    "id": "R2",
+    "popis": "člen za poskytovatele nebo jejich asociaci v orgánu rozhodujícím o úhradách nebo cenách"
+   },
+   {
+    "id": "R3",
+    "popis": "vazba na odbornou společnost či komoru v orgánu tvořícím standardy, vzdělávání nebo screening"
+   },
+   {
+    "id": "R4",
+    "popis": "doložená vazba na obchodní společnost působící ve zdravotnictví v orgánu rozhodujícím o úhradách, lécích nebo prostředcích"
+   }
+  ],
+  "znaky_identity": {
+   "pozn": "Identita je ověřená, když kurátorská poznámka dokládá aspoň DVA nezávislé znaky (zadání §2).",
+   "tridy": [
+    "rocnik",
+    "organizace",
+    "role_obor",
+    "afiliace_shoda",
+    "unikatnost"
+   ]
+  }
+ },
+ "pokryti": {
+  "osob_celkem": 994,
+  "s_profilem": 328,
+  "identita_overena": 323,
+  "identita_neovereno": 5,
+  "bez_profilu": 666
+ },
+ "souhrn": {
+  "organu_celkem": 103,
+  "organu_se_statutem": 57,
+  "organu_s_pravidlem": 5,
+  "organu_bez_statutu": 46,
+  "organu_s_analyzovanymi_zapisy": 48,
+  "organu_s_deklaraci_v_zapisech": 8,
+  "osob_s_vazbou": 305,
+  "osob_s_relevantni_vazbou": 106,
+  "osob_se_statni_zakazkou": 112,
+  "relevanci_podle_pravidla": {
+   "R3": 122,
+   "R4": 19,
+   "R2": 3,
+   "R1": 1
+  },
+  "rozhodnuti_s_hlasovanim_v_organech_bez_pravidla": 111
+ },
+ "skupiny": [
+  {
+   "g": 1,
+   "clenu": 18,
+   "clenu_s_profilem": 10,
+   "clenu_overeno": 10,
+   "s_vazbou": 10,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 2,
+   "clenu": 23,
+   "clenu_s_profilem": 17,
+   "clenu_overeno": 16,
+   "s_vazbou": 15,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 38,
+   "deklarace_v_zapisech": 2,
+   "deklarace_odkazy": [
+    {
+     "datum": "2024-05-14",
+     "url": "https://ppo.mzcr.cz/upload/files/rada-poskytovatelu-mzcr-14-5-2024-zapis-rada-poskytovatelu-mzcr-14-5-2024-6669626ec4a82.pdf"
+    },
+    {
+     "datum": "2020-01-07",
+     "url": "https://ppo.mzcr.cz/upload/files/rada-poskytovatelu-mzcr-7-1-2020-zapis-rada-poskytovatelu-mzcr-7-1-2020-5ec65d2785432.docx"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 9
+  },
+  {
+   "g": 3,
+   "clenu": 26,
+   "clenu_s_profilem": 17,
+   "clenu_overeno": 17,
+   "s_vazbou": 17,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 29,
+   "deklarace_v_zapisech": 2,
+   "deklarace_odkazy": [
+    {
+     "datum": "2019-11-19",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-archiv-zapisy-vedecka-rada-2019-69d3a4ab4d6dd.zip"
+    },
+    {
+     "datum": "2018-12-10",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-archiv-zapisy-vedecka-rada-2018-69d39eb4c2b5e.zip"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 4,
+   "clenu": 25,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "uhrady"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 45,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 20
+  },
+  {
+   "g": 7,
+   "clenu": 15,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy",
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 7,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 8,
+   "clenu": 21,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 8,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 11,
+   "clenu": 11,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 33,
+   "deklarace_v_zapisech": 6,
+   "deklarace_odkazy": [
+    {
+     "datum": "2025-02-18",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-zapis-z-jednani-niko-18-2-2025-67cabbcb75c73.pdf"
+    },
+    {
+     "datum": "2022-06-16",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-zapis-z-jednani-niko-16-6-2022-62c6e4bd2c39d.pdf"
+    },
+    {
+     "datum": "2016-10-19",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-rok-2016-zapis-z-jednani-niko-19-10-2016-web-5f13577506b71.pdf"
+    },
+    {
+     "datum": "2012-10-10",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-rok-2012-zapis-ze-zasedani-niko-10-10-2012-web-5f135426e65a4.pdf"
+    },
+    {
+     "datum": "2011-06-01",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-rok-2011-zapis-ze-zasedani-niko-1-6-2011-5f1353f169f76.pdf"
+    },
+    {
+     "datum": "2011-03-31",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-rok-2011-zapis-ze-zasedani-niko-31-3-2011-pro-web-final-5f1353d59561f.pdf"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 9
+  },
+  {
+   "g": 12,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 14,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 16,
+   "clenu": 14,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": true,
+   "pravidlo_doklad": {
+    "titul": "Statut a jednací řád Koordinační skupiny",
+    "url": "https://ppo.mzcr.cz/upload/files/zrizovaci-dekret-ministra-c-13-2023-zdm-statut-a-jednaci-rad-koordinacni-skupiny-671b41280b3a6.pdf"
+   },
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 18,
+   "clenu": 25,
+   "clenu_s_profilem": 16,
+   "clenu_overeno": 16,
+   "s_vazbou": 16,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 20,
+   "clenu": 23,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 22,
+   "clenu": 19,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 3,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 4,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 23,
+   "clenu": 29,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 25,
+   "clenu": 22,
+   "clenu_s_profilem": 13,
+   "clenu_overeno": 13,
+   "s_vazbou": 13,
+   "s_relevantni_vazbou": 10,
+   "agenda": [
+    "uhrady",
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 32,
+   "clenu": 20,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 3,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 34,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 35,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 39,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 42,
+   "clenu": 15,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 44,
+   "clenu": 19,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 3,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 47,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 51,
+   "clenu": 14,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 4,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 52,
+   "clenu": 14,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 7,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 55,
+   "clenu": 24,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 57,
+   "clenu": 33,
+   "clenu_s_profilem": 13,
+   "clenu_overeno": 13,
+   "s_vazbou": 13,
+   "s_relevantni_vazbou": 11,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 59,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 60,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 64,
+   "clenu": 3,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 65,
+   "clenu": 8,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 4,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 29,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 4
+  },
+  {
+   "g": 71,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 72,
+   "clenu": 9,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 4,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 84,
+   "clenu": 11,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 86,
+   "clenu": 9,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 9,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 8
+  },
+  {
+   "g": 87,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 91,
+   "clenu": 25,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 4,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 98,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 103,
+   "clenu": 20,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 22,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 5
+  },
+  {
+   "g": 111,
+   "clenu": 9,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 3,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 112,
+   "clenu": 5,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 114,
+   "clenu": 21,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 8,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 3,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 121,
+   "clenu": 29,
+   "clenu_s_profilem": 11,
+   "clenu_overeno": 11,
+   "s_vazbou": 11,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "uhrady"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 38,
+   "deklarace_v_zapisech": 2,
+   "deklarace_odkazy": [
+    {
+     "datum": "2026-03-19",
+     "url": "https://ppo.mzcr.cz/upload/files/jednani-komise-dne-19-3-2026-zapis-z-jednani-komise-dne-19-3-2026-69d8ef7348be0.pdf"
+    },
+    {
+     "datum": "2023-10-05",
+     "url": "https://ppo.mzcr.cz/upload/files/15-jednani-komise-5-10-2023-zapis-z-15-jednani-komise-5-10-2023-zmena-terminu-dalsi-komise-65a822c461f06.pdf"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 8
+  },
+  {
+   "g": 131,
+   "clenu": 24,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 5,
+   "agenda": [
+    "uhrady",
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 141,
+   "clenu": 19,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 148,
+   "clenu": 8,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 4,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 155,
+   "clenu": 18,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 36,
+   "deklarace_v_zapisech": 1,
+   "deklarace_odkazy": [
+    {
+     "datum": "2024-11-21",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-zapis-z-jednani-ps-ddp-ze-dne-21-11-2024-6891d6d3615a8.docx"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 4
+  },
+  {
+   "g": 158,
+   "clenu": 37,
+   "clenu_s_profilem": 15,
+   "clenu_overeno": 15,
+   "s_vazbou": 15,
+   "s_relevantni_vazbou": 13,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 6,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 159,
+   "clenu": 34,
+   "clenu_s_profilem": 9,
+   "clenu_overeno": 8,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 164,
+   "clenu": 18,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 3,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 166,
+   "clenu": 18,
+   "clenu_s_profilem": 9,
+   "clenu_overeno": 8,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 3,
+   "agenda": [
+    "uhrady"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 14,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 171,
+   "clenu": 17,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 8,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 18,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 172,
+   "clenu": 2,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "uhrady",
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 173,
+   "clenu": 12,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 16,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 177,
+   "clenu": 15,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 182,
+   "clenu": 19,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 10,
+   "deklarace_v_zapisech": 1,
+   "deklarace_odkazy": [
+    {
+     "datum": "2024-04-23",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-jednani-zaznam-23-4-2024-6845e5fd998dd.docx"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 184,
+   "clenu": 9,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 185,
+   "clenu": 12,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 186,
+   "clenu": 30,
+   "clenu_s_profilem": 13,
+   "clenu_overeno": 13,
+   "s_vazbou": 13,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 9,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 8
+  },
+  {
+   "g": 187,
+   "clenu": 15,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "uhrady"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 188,
+   "clenu": 18,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 189,
+   "clenu": 14,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 5,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 191,
+   "clenu": 17,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 5,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 7,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 192,
+   "clenu": 15,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 7,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 3
+  },
+  {
+   "g": 193,
+   "clenu": 20,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 7,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 6,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 194,
+   "clenu": 19,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 12,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 2
+  },
+  {
+   "g": 196,
+   "clenu": 14,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 3,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 11,
+   "deklarace_v_zapisech": 1,
+   "deklarace_odkazy": [
+    {
+     "datum": "2024-12-12",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-zapis-z-jednani-komise-mamo-12-12-2024-6777c08d328b0.pdf"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 5
+  },
+  {
+   "g": 197,
+   "clenu": 17,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 6,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 18,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 17
+  },
+  {
+   "g": 198,
+   "clenu": 15,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 7,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 199,
+   "clenu": 34,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 5,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": true,
+   "pravidlo_doklad": {
+    "titul": "Přílohy k zápisu ze dne 3. prosince 2025 / Jednací řád Komise pro výživu kojenců a malých dětí.pdf",
+    "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-prilohy-k-zapisu-ze-dne-3-prosince-2025-69495ccdb4976.zip"
+   },
+   "jednani_analyzovano": 29,
+   "deklarace_v_zapisech": 15,
+   "deklarace_odkazy": [
+    {
+     "datum": "2025-12-03",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-zapis-ze-dne-3-12-2025-69495c94801e2.pdf"
+    },
+    {
+     "datum": "2025-09-24",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-zapis-ze-dne-24-zari-2025-68ecb5586a2b1.pdf"
+    },
+    {
+     "datum": "2025-06-10",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-zapis-ze-dne-10-cervna-2025-687a27ba3e6a1.pdf"
+    },
+    {
+     "datum": "2025-05-20",
+     "url": "https://ppo.mzcr.cz/upload/files/pracovni-skupina-ke-sberu-dat-a-ke-kontrole-realizace-programu-bfhi-zapis-ze-dne-20-kvetna-2025-687a2ad39aade.pdf"
+    },
+    {
+     "datum": "2025-04-01",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-zapis-ze-dne-1-dubna-2025-680f229399f66.pdf"
+    },
+    {
+     "datum": "2024-12-12",
+     "url": "https://ppo.mzcr.cz/upload/files/zapisy-z-jednani-komise-zapis-ze-dne-12-prosince-2024-6793784a3b687.pdf"
+    }
+   ],
+   "rozhodnuti_s_hlasovanim": 22
+  },
+  {
+   "g": 200,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 201,
+   "clenu": 15,
+   "clenu_s_profilem": 1,
+   "clenu_overeno": 1,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 202,
+   "clenu": 21,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 203,
+   "clenu": 12,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 1,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 204,
+   "clenu": 16,
+   "clenu_s_profilem": 9,
+   "clenu_overeno": 9,
+   "s_vazbou": 8,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 205,
+   "clenu": 13,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 4,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": true,
+   "pravidlo_doklad": {
+    "titul": "Statut a jednací řád MPS Strava",
+    "url": "https://ppo.mzcr.cz/upload/files/zakladni-dokumenty-statut-a-jednaci-rad-mps-strava-649afda8ecb8f.pdf"
+   },
+   "jednani_analyzovano": 13,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 206,
+   "clenu": 18,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 209,
+   "clenu": 12,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 210,
+   "clenu": 20,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 6,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 4,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 211,
+   "clenu": 28,
+   "clenu_s_profilem": 10,
+   "clenu_overeno": 10,
+   "s_vazbou": 10,
+   "s_relevantni_vazbou": 6,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": true,
+   "pravidlo_doklad": {
+    "titul": "Statut a jednací řád",
+    "url": "https://ppo.mzcr.cz/upload/files/zakladni-dokumenty-statut-a-jednaci-rad-6576fa7488880.pdf"
+   },
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 212,
+   "clenu": 14,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 213,
+   "clenu": 16,
+   "clenu_s_profilem": 5,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 214,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 218,
+   "clenu": 19,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 219,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 220,
+   "clenu": 18,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 6,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 1
+  },
+  {
+   "g": 221,
+   "clenu": 25,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 7,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 7,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 222,
+   "clenu": 21,
+   "clenu_s_profilem": 8,
+   "clenu_overeno": 8,
+   "s_vazbou": 6,
+   "s_relevantni_vazbou": 5,
+   "agenda": [
+    "uhrady",
+    "normy",
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 223,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 224,
+   "clenu": 26,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 7,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 7,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 225,
+   "clenu": 23,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 5,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 226,
+   "clenu": 6,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "produkty"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 2,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 227,
+   "clenu": 13,
+   "clenu_s_profilem": 3,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 6,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 228,
+   "clenu": 3,
+   "clenu_s_profilem": 2,
+   "clenu_overeno": 2,
+   "s_vazbou": 2,
+   "s_relevantni_vazbou": 1,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 229,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 230,
+   "clenu": 35,
+   "clenu_s_profilem": 12,
+   "clenu_overeno": 11,
+   "s_vazbou": 11,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": true,
+   "pravidlo_doklad": {
+    "titul": "23_2026_ZDM_Statut a jednací řád",
+    "url": "https://ppo.mzcr.cz/upload/files/zakladni-dokumenty-23-2026-zdm-statut-a-jednaci-rad-69ef7dbc2402b.pdf"
+   },
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 231,
+   "clenu": 2,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 1,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 232,
+   "clenu": 31,
+   "clenu_s_profilem": 13,
+   "clenu_overeno": 13,
+   "s_vazbou": 13,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 233,
+   "clenu": 14,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 7,
+   "s_vazbou": 7,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 234,
+   "clenu": 14,
+   "clenu_s_profilem": 6,
+   "clenu_overeno": 5,
+   "s_vazbou": 5,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 235,
+   "clenu": 6,
+   "clenu_s_profilem": 4,
+   "clenu_overeno": 3,
+   "s_vazbou": 3,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "uhrady",
+    "normy"
+   ],
+   "ma_statut_v_korpusu": true,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 236,
+   "clenu": 19,
+   "clenu_s_profilem": 7,
+   "clenu_overeno": 6,
+   "s_vazbou": 4,
+   "s_relevantni_vazbou": 2,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 237,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [
+    "normy"
+   ],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  },
+  {
+   "g": 238,
+   "clenu": 0,
+   "clenu_s_profilem": 0,
+   "clenu_overeno": 0,
+   "s_vazbou": 0,
+   "s_relevantni_vazbou": 0,
+   "agenda": [],
+   "ma_statut_v_korpusu": false,
+   "ma_pravidlo_ve_statutu": false,
+   "pravidlo_doklad": null,
+   "jednani_analyzovano": 0,
+   "deklarace_v_zapisech": 0,
+   "deklarace_odkazy": [],
+   "rozhodnuti_s_hlasovanim": 0
+  }
+ ]
+}

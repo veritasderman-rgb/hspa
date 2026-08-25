@@ -163,3 +163,72 @@ test('coi: v datech nezůstala relevance bez vazby ani R4 mimo zdravotnictví', 
     && !o.vazby.some(v => v.typ_subjektu === 'obchodni' && v.obor_zdravotnictvi));
   assert.equal(spatneR4.length, 0);
 });
+
+/* ── FÁZE 2: karta na detailu orgánu ─────────────────────────────────── */
+
+test('coi: coiKarta hlásí stav pravidla třístavově', async () => {
+  const { coiKarta } = await import('../src/ppo-detail.js');
+  // statut máme a pravidlo v něm je
+  assert.equal(coiKarta({ clenu: 10, clenu_overeno: 3, ma_statut_v_korpusu: true,
+    ma_pravidlo_ve_statutu: true }).stavPravidla, 'ma');
+  // statut máme, pravidlo v něm není → „není co porušit"
+  assert.equal(coiKarta({ clenu: 10, clenu_overeno: 3, ma_statut_v_korpusu: true,
+    ma_pravidlo_ve_statutu: false }).stavPravidla, 'nema');
+  // statut nemáme → nesmíme tvrdit, že pravidlo chybí
+  assert.equal(coiKarta({ clenu: 10, clenu_overeno: 3, ma_statut_v_korpusu: false,
+    ma_pravidlo_ve_statutu: false }).stavPravidla, 'nevime');
+});
+
+test('coi: coiKarta mlčí, když o orgánu nic nevíme', async () => {
+  const { coiKarta } = await import('../src/ppo-detail.js');
+  assert.equal(coiKarta(null), null);
+  assert.equal(coiKarta({ clenu: 12, clenu_overeno: 0, ma_statut_v_korpusu: false,
+    ma_pravidlo_ve_statutu: false, deklarace_v_zapisech: 0 }), null,
+  'bez ověřených členů, statutu i deklarací se karta nevykresluje');
+  // sám statut stačí — „pravidlo chybí" je taky sdělení
+  assert.ok(coiKarta({ clenu: 12, clenu_overeno: 0, ma_statut_v_korpusu: true,
+    ma_pravidlo_ve_statutu: false, deklarace_v_zapisech: 0 }));
+});
+
+test('coi: souhrnný řez je lehký, bez osobních dat a konzistentní s plným souborem', () => {
+  const p = path.join(ROOT, 'data', 'ppo-coi-souhrn.json');
+  assert.ok(fs.existsSync(p), 'chybí data/ppo-coi-souhrn.json — spusť npm run build:coi');
+  const souhrn = JSON.parse(fs.readFileSync(p, 'utf8'));
+  const plny = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-coi.json'), 'utf8'));
+  // detail skupiny nesmí kvůli číslům stahovat jmenné údaje
+  assert.equal(souhrn.osoby, undefined, 'souhrnný řez nesmí obsahovat pole osoby');
+  assert.ok(fs.statSync(p).size < 200 * 1024, 'souhrnný řez má zůstat malý');
+  // čísla musí sedět na plný soubor
+  assert.deepEqual(souhrn.skupiny, plny.skupiny);
+  assert.deepEqual(souhrn.souhrn, plny.souhrn);
+  assert.deepEqual(souhrn.pokryti, plny.pokryti);
+  // metodika (limity + klíčové pravidlo) jede s daty, ne zvlášť
+  assert.ok(souhrn.metodika?.limity?.length >= 4);
+  assert.match(souhrn.metodika.klicove_pravidlo, /není obvinění/);
+});
+
+test('coi: deklarace se hlásí třístavově — 0 bez analýzy není „nikdy nezaznělo"', async () => {
+  const { coiKarta } = await import('../src/ppo-detail.js');
+  const zaklad = { clenu: 10, clenu_overeno: 3, ma_statut_v_korpusu: true, ma_pravidlo_ve_statutu: false };
+  // zápisy jsme nečetli → nesmíme tvrdit, že nic nezaznělo
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 0, deklarace_v_zapisech: 0 }).stavDeklaraci, 'nevime');
+  // zápisy jsme četli a nic tam nebylo
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 12, deklarace_v_zapisech: 0 }).stavDeklaraci, 'zadna');
+  // deklarace zazněly
+  assert.equal(coiKarta({ ...zaklad, jednani_analyzovano: 12, deklarace_v_zapisech: 3 }).stavDeklaraci, 'ma');
+});
+
+test('coi: počet deklarací je doložitelný odkazy na konkrétní jednání', () => {
+  const coi = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'ppo-coi-souhrn.json'), 'utf8'));
+  const sDeklaraci = coi.skupiny.filter(s => s.deklarace_v_zapisech > 0);
+  assert.ok(sDeklaraci.length >= 5, 'v datech mají být orgány s deklaracemi');
+  for (const s of sDeklaraci) {
+    assert.ok(s.deklarace_odkazy?.length, `g${s.g}: počet deklarací bez odkazů na jednání`);
+    assert.ok(s.deklarace_odkazy.every(o => o.url), `g${s.g}: doklad bez url`);
+    assert.ok(s.deklarace_odkazy.length <= s.deklarace_v_zapisech);
+    assert.ok(s.jednani_analyzovano >= s.deklarace_v_zapisech,
+      `g${s.g}: víc deklarací než analyzovaných jednání`);
+  }
+  // datum stavu musí být v datech, jinak ho karta nemá odkud vzít
+  assert.match(coi.stav_k, /^\d{4}-\d{2}-\d{2}$/);
+});

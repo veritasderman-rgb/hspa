@@ -51,6 +51,78 @@ export function coiEvents(jednani) {
     (j.stret_zajmu ?? []).map(s => ({ datum: j.datum, url: j.url, text: s })));
 }
 
+/** Obsah karty „Vazby členů a pravidla" pro jeden orgán (čistá funkce).
+ *  Vrací null, když o orgánu nic nevíme — prázdná karta je horší než žádná.
+ *
+ *  ŽELEZNÉ PRAVIDLO (PROMPT_STRET_ZAJMU_ROUTINE.md §0/§6): jednotkou sdělení
+ *  je ORGÁN, ne člověk. Karta nikoho nejmenuje, nehodnotí a neobviňuje —
+ *  popisuje, kolik členů má doloženou vazbu a co s tím orgán (ne)dělá.
+ *  Každé číslo nese jmenovatel, protože ověřit šlo jen část členů. */
+export function coiKarta(c) {
+  if (!c) return null;
+  const znameCokoli = c.clenu_overeno > 0 || c.ma_statut_v_korpusu || c.deklarace_v_zapisech > 0;
+  if (!znameCokoli) return null;
+  return {
+    clenu: c.clenu,
+    overeno: c.clenu_overeno,
+    sVazbou: c.s_vazbou,
+    sRelevantni: c.s_relevantni_vazbou,
+    maPravidlo: c.ma_pravidlo_ve_statutu === true,
+    maStatut: c.ma_statut_v_korpusu === true,
+    pravidloUrl: c.pravidlo_doklad?.url ?? null,
+    deklarace: c.deklarace_v_zapisech ?? 0,
+    deklaraceOdkazy: c.deklarace_odkazy ?? [],
+    analyzovano: c.jednani_analyzovano ?? 0,
+    hlasovani: c.rozhodnuti_s_hlasovanim ?? 0,
+    // stejná logika jako u pravidla: 0 deklarací bez analyzovaných zápisů
+    // NENÍ „nikdy nezaznělo", ale „nevíme"
+    stavDeklaraci: (c.deklarace_v_zapisech ?? 0) > 0 ? 'ma'
+      : ((c.jednani_analyzovano ?? 0) > 0 ? 'zadna' : 'nevime'),
+    // stav pravidla se hlásí třístavově — „statut nemáme" NENÍ „pravidlo chybí"
+    stavPravidla: c.ma_pravidlo_ve_statutu ? 'ma'
+      : (c.ma_statut_v_korpusu ? 'nema' : 'nevime'),
+  };
+}
+
+const COI_PRAVIDLO_TEXT = {
+  ma: 'Statut nebo jednací řád orgánu střet zájmů výslovně upravuje.',
+  nema: 'Statut ani jednací řád orgánu o střetu zájmů nic neříká — není tedy pravidlo, které by šlo porušit.',
+  nevime: 'Statut orgánu nemáme ve strojově čitelné podobě, takže o jeho pravidlech nemůžeme nic tvrdit.',
+};
+
+function renderCoi(c, stavK) {
+  const k = coiKarta(c);
+  if (!k) return '';
+  const pomer = k.overeno
+    ? `<p class="ppo-a-p"><b>${k.sRelevantni}</b> z <b>${k.overeno}</b> ověřených členů má doloženou vazbu,
+       která se týká agendy tohoto orgánu${k.sVazbou !== k.sRelevantni
+        ? ` (nějakou doloženou vazbu má ${k.sVazbou} z nich)` : ''}.
+       Orgán má celkem ${k.clenu} ${osobaWord(k.clenu)}; ověřit šlo ${k.overeno}.</p>`
+    : `<p class="ppo-a-p">U tohoto orgánu nemáme ověřeného žádného člena, takže o vazbách jeho členů
+       nic netvrdíme. Orgán má ${k.clenu} ${osobaWord(k.clenu)}.</p>`;
+  return `<div class="ppo-d-card ppo-coi"><h3>Vazby členů a pravidla střetu zájmů</h3>
+    <p class="ppo-coi-lead">Vazba na vnější subjekt <b>není překážka členství</b> — odbornost ji nutně nese.
+      Smyslem je, aby se o ní vědělo a dala se ošetřit.</p>
+    ${pomer}
+    <p class="ppo-a-p ppo-coi-rule ppo-coi-rule-${k.stavPravidla}">${COI_PRAVIDLO_TEXT[k.stavPravidla]}
+      ${k.pravidloUrl ? `<a href="${escapeHtml(k.pravidloUrl)}" rel="external noopener">Dokument →</a>` : ''}</p>
+    <p class="ppo-a-p">${{
+    ma: `Střet zájmů zazněl na <b>${k.deklarace}</b> z ${k.analyzovano} analyzovaných jednání.`,
+    zadna: `Na žádném z ${k.analyzovano} analyzovaných jednání střet zájmů nezazněl.`,
+    nevime: 'Zápisy tohoto orgánu jsme neanalyzovali, takže o tom, zda na jednáních střet zájmů zazněl, nic netvrdíme.',
+  }[k.stavDeklaraci]}${k.hlasovani ? ` Hlasování je doloženo u ${k.hlasovani} rozhodnutí.` : ''}</p>
+    ${k.deklaraceOdkazy.length ? `<p class="ppo-coi-src">Doklady:
+      ${k.deklaraceOdkazy.filter(o => o.url).map(o =>
+    `<a href="${escapeHtml(o.url)}" rel="external noopener">${escapeHtml(fmtDate(o.datum))}</a>`).join(', ')}${
+  k.deklarace > k.deklaraceOdkazy.length ? ` a ${k.deklarace - k.deklaraceOdkazy.length} dalších` : ''}</p>` : ''}
+    <p class="ppo-d-note">Vazby dohledáváme jen u členů s veřejným profilem na Hlídači státu a jen ve
+      veřejných zdrojích; rejstřík vidí formální vazby, ne zaměstnání či honoráře — <b>chybějící vazba
+      v datech neznamená, že vazba neexistuje</b>. Zápisy neuvádějí jmenovité hlasování, takže o hlasování
+      jednotlivých členů nevypovídáme.${stavK ? ` Stav dat k ${escapeHtml(fmtDate(stavK))}; rejstříkové
+      údaje se mění, proto je uvádíme s datem.` : ''}</p>
+  </div>`;
+}
+
 /** Souhrn úkolů skupiny pro kartu na detailu (čistá funkce — testovatelná). */
 export function ukolySouhrn(a) {
   return {
@@ -342,6 +414,16 @@ async function init() {
       return;
     }
     render(PPO, OS, s);
+    // vazby členů a pravidla střetu zájmů — líně z lehkého řezu (bez pole osoby)
+    fetch('data/ppo-coi-souhrn.json')
+      .then(r => (r.ok ? r.json() : null))
+      .then(coi => {
+        const html = coi && renderCoi(coi.skupiny.find(x => x.g === s.id), coi.stav_k);
+        // #ppoDetGrid je stabilní kotva hlavního renderu; .ppo-d-grid vzniká
+        // jen u orgánů s analýzou zápisů, takže by karta u většiny zmizela
+        if (html) $('ppoDetGrid')?.insertAdjacentHTML('beforeend', html);
+      })
+      .catch(err => console.error('ppo-coi load failed:', err));
     // analýza zápisů (FÁZE 2) se dotahuje líně a její výpadek stránku nerozbije
     if (s.analyza) {
       try {

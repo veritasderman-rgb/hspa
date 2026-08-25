@@ -162,7 +162,7 @@ export function statutovaPravidla(dokumenty) {
 
 /* ── hlavní build ────────────────────────────────────────────────────── */
 
-export function buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani, stavK }) {
+export function buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani, analyzovano, stavK }) {
   const skupinyById = new Map(skupiny.map(s => [s.id, s]));
   const externiById = new Map(externi.map(e => [e.id, e]));
 
@@ -225,7 +225,12 @@ export function buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani
       ma_statut_v_korpusu: statut.seStatutem.has(s.id),
       ma_pravidlo_ve_statutu: statut.sPravidlem.has(s.id),
       pravidlo_doklad: statut.sPravidlem.get(s.id) ?? null,
-      deklarace_v_zapisech: deklarace.get(s.id) ?? 0,
+      // POZOR: 0 deklarací znamená něco jiného podle toho, kolik zápisů jsme
+      // vůbec analyzovali. Bez tohoto počtu by karta tvrdila „nikdy nezaznělo"
+      // i u orgánu, jehož zápisy nikdo nečetl (nález na PR #1086).
+      jednani_analyzovano: analyzovano?.get(s.id) ?? 0,
+      deklarace_v_zapisech: (deklarace.get(s.id) ?? []).length,
+      deklarace_odkazy: (deklarace.get(s.id) ?? []).slice(0, 6),
       rozhodnuti_s_hlasovanim: hlasovani.get(s.id) ?? 0,
     };
   });
@@ -273,6 +278,7 @@ export function buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani
       organu_se_statutem: skupinyOut.filter(s => s.ma_statut_v_korpusu).length,
       organu_s_pravidlem: skupinyOut.filter(s => s.ma_pravidlo_ve_statutu).length,
       organu_bez_statutu: skupinyOut.filter(s => !s.ma_statut_v_korpusu).length,
+      organu_s_analyzovanymi_zapisy: skupinyOut.filter(s => s.jednani_analyzovano > 0).length,
       organu_s_deklaraci_v_zapisech: skupinyOut.filter(s => s.deklarace_v_zapisech > 0).length,
       osob_s_vazbou: overeneOsoby.filter(o => o.vazby.length).length,
       osob_s_relevantni_vazbou: relevantniIds.size,
@@ -305,14 +311,20 @@ if (isMain) {
   // deklarace střetu zájmů v zápisech + rozhodnutí se stopou hlasování
   const deklarace = new Map();
   const hlasovani = new Map();
+  const analyzovano = new Map();
   const RE_HLAS = /\b(PRO|pro)\s*\d+\s*:\s*\d+\s*:\s*\d+|hlasován|jednomysln|per rollam|aklamac/i;
   const anaDir = path.join(DATA, 'ppo-analyza');
   for (const f of fs.readdirSync(anaDir)) {
     const a = JSON.parse(fs.readFileSync(path.join(anaDir, f), 'utf8'));
+    analyzovano.set(a.group_id, (a.jednani ?? []).length);
     for (const j of a.jednani ?? []) {
       const sz = j.stret_zajmu;
       const ma = Array.isArray(sz) ? sz.length > 0 : Boolean(sz && sz !== 'neuvedeno');
-      if (ma) deklarace.set(a.group_id, (deklarace.get(a.group_id) ?? 0) + 1);
+      if (ma) {
+        const seznam = deklarace.get(a.group_id) ?? [];
+        seznam.push({ datum: j.datum ?? null, url: j.url ?? null });
+        deklarace.set(a.group_id, seznam);
+      }
       for (const r of j.rozhodnuti ?? []) {
         if (RE_HLAS.test(typeof r === 'string' ? r : JSON.stringify(r))) {
           hlasovani.set(a.group_id, (hlasovani.get(a.group_id) ?? 0) + 1);
@@ -322,10 +334,27 @@ if (isMain) {
   }
 
   const stavK = externiRaw.overeno ?? cti('ppo.json').stav_k ?? null;
-  const out = buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani, stavK });
+  const out = buildCoi({ osoby, externi, skupiny, statut, deklarace, hlasovani, analyzovano, stavK });
   const p = path.join(DATA, 'ppo-coi.json');
   fs.writeFileSync(p, JSON.stringify(out, null, 1) + '\n');
-  console.log(`✓ data/ppo-coi.json (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`);
+
+  // Lehký řez pro detail skupiny — bez pole `osoby`. Detail potřebuje jen
+  // čísla svého orgánu a metodiku; stahovat kvůli tomu celý soubor (stovky kB)
+  // by bylo zbytečné (stejný důvod jako u ppo-ukoly.json v build-web.js).
+  const souhrn = {
+    version: out.version,
+    stav_k: out.stav_k,
+    zdroj: out.zdroj,
+    metodika: out.metodika,
+    pokryti: out.pokryti,
+    souhrn: out.souhrn,
+    skupiny: out.skupiny,
+  };
+  const ps = path.join(DATA, 'ppo-coi-souhrn.json');
+  fs.writeFileSync(ps, JSON.stringify(souhrn, null, 1) + '\n');
+
+  console.log(`✓ data/ppo-coi.json (${(fs.statSync(p).size / 1024).toFixed(0)} kB)`
+    + ` + ppo-coi-souhrn.json (${(fs.statSync(ps).size / 1024).toFixed(0)} kB)`);
   console.log(`  ověřeno ${out.pokryti.identita_overena}/${out.pokryti.s_profilem} osob s profilem `
     + `(z ${out.pokryti.osob_celkem} členů celkem)`);
   console.log(`  orgánů s pravidlem ve statutu: ${out.souhrn.organu_s_pravidlem}/${out.souhrn.organu_se_statutem} `
