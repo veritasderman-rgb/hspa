@@ -581,6 +581,7 @@ const MANIFEST = {
   'clanek-absolventi-osetrovatelstvi': { kicker: 'Pracovní síla · sestry', signal: 'warn', stat: '16,1', claim: 'plně kvalifikované sestry na 100 tisíc obyvatel ročně promuje Česko.', context: 'Průměr OECD je 34,8. Souhrn 38,76 počítá i nižší úrovně.' },
   'clanek-ecigarety-adolescenti': { kicker: 'Prevence · mládež', signal: 'warn', stat: '21,4', statSuffix: '%', barPct: 21, claim: 'třinácti- až patnáctiletých užilo e-cigaretu v posledních 30 dnech.', context: 'V roce 2016 to bylo 11,2 %. Tabáku užívá 16,4 %. GYTS 2022, SZÚ.' },
   'clanek-trombolyza-cmp': { kicker: 'Iktová péče · kvalita', signal: 'good', stat: '31,4', statSuffix: '%', barPct: 31, claim: 'ischemických mrtvic tu léčí trombolýza. V Evropě 17,1 %.', context: 'V nejhorších okresech ale šance klesá k devíti procentům.' },
+  'clanek-pojistne-plany-2026': { kicker: 'Financování · pojistné plány', signal: 'bad', stat: '14,9', claim: 'miliardy Kč schodku plánují pojišťovny na rok 2026.', context: 'Rezervy klesnou z 39,2 na 24,3 mld — o 38 % ke kritické hranici.' },
 };
 
 function escapeXml(s) {
