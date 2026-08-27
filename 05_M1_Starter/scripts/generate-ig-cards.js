@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-alkohol-adolescenti': {
+    kicker: 'Prevence · mládež', signal: 'bad',
+    stat: '56', statSuffix: '%', barPct: 56,
+    claim: 'českých šestnáctiletých pilo alkohol v posledních 30 dnech.',
+    context: 'Evropský průměr ESPAD je 42 %. V roce 2011 to bylo 79 %.',
+  },
+  'clanek-valorizace-statni-pojistenci-2027': {
+    kicker: 'Financování · státní pojištěnci', signal: 'warn',
+    stat: '21,6', statSuffix: ' mld.',
+    claim: 'korun je rozdíl mezi vzorcem v nařízení a slibem vlády.',
+    context: 'Nařízení přidá 2,4 miliardy, slib zněl na 24. Tisk 235 leží ve sněmovně.',
+  },
   'clanek-kojeni-obrat-porodnice': {
     kicker: 'Kojení · porodnice', signal: 'warn',
     stat: '44–96', statSuffix: '%',
