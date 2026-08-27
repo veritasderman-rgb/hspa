@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-08-27
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-08-27
+    creation_phase: indicator-discovery+article-write
+    primary_sources_count: 6
+    visual_elements_count: 6
+    notes: "Článek vznikl současně s novým indikátorem vydaje_sprava_systemu_pct (SHA 2011, funkce HC.7).
+      ZDROJ ČÍSEL — Eurostat dissemination API, dataset hlth_sha11_hc, staženo živě 2026-08-27 dvěma dotazy:
+      (a) icha11_hc=HC7&unit=PC_CHE&time=2023 pro všech 27 zemí EU + agregát EU27_2020;
+      (b) icha11_hc=HC7&unit=MIO_NAC&geo=CZ pro absolutní řadu 2010–2023.
+      Ověřené hodnoty (2023, % běžných výdajů na zdravotnictví): CZ 1,91 · EU27_2020 3,56 · FI 0,81 · LT 1,15 ·
+      SE 1,26 · EL 1,45 · BG 1,50 · EE 1,51 · IE 1,70 · IT 1,87 · PT 2,21 · CY 2,24 · HU 2,34 · LV 2,60 ·
+      SI 2,67 · HR 2,78 · ES 2,81 · MT 3,01 · NL 3,05 · BE 3,07 · RO 3,13 · PL 3,82 · LU 3,99 · AT 4,02 ·
+      DK 4,13 · DE 4,41 · SK 4,70 · FR 5,02. Pořadí ČR = 9. nejnižší z 27 (ověřeno seřazením celé řady).
+      Česká řada PC_CHE: 2016=2,42 · 2017=2,30 · 2018=2,28 · 2019=2,27 · 2020=2,06 · 2021=2,03 · 2022=1,99 · 2023=1,91.
+      Česká řada MIO_NAC (mil. Kč): 2010=8 632,56 · 2016=8 583,04 · 2019=10 002,38 · 2020=10 792,78 ·
+      2021=11 697,13 · 2022=11 863,24 · 2023=12 264,18.
+      DOPOČTY REDAKCE (uvedeny v textu jako výpočet, ne jako údaj zdroje): růst absolutních výdajů na správu
+      2016→2023 = 8 583,04 → 12 264,18 = +42,9 % (v textu +43 %); implikované běžné výdaje 2023 =
+      12 264,18 / 0,0191 = 642,1 mld. Kč; implikované běžné výdaje 2016 = 8 583,04 / 0,0242 = 354,7 mld. Kč;
+      růst jmenovatele 2016→2023 = +81 %; pokles podílu 2,42 → 1,91 = −0,51 p. b. = −21 % relativně;
+      dorovnání na průměr EU-27 = (3,56 − 1,91) % z 642,1 mld. = 10,6 mld. Kč/rok; na německou úroveň
+      (4,41 %) = 16,0 mld. Kč/rok.
+      KŘÍŽOVÁ KONTROLA JMENOVATELE: ČSÚ (csu.gov.cz/vydaje-na-zdravotni-peci, čteno 2026-08-27) uvádí celkové
+      výdaje na zdravotní péči 2023 ve výši cca 642 mld. Kč — shoduje se s dopočtem z Eurostatu (642,1 mld.).
+      Rok 2024 už ČSÚ publikuje (696,7 mld.), ale Eurostat pro CZ za 2024 HC.7 zatím nemá → indikátor drží 2023.
+      PRÁVNÍ RÁMEC: § 7 vyhlášky č. 418/2003 Sb. — limit nákladů na činnost ZP, vzorec L = (PC : 100) x koef.,
+      kde PC = příjmy z v. z. p. po přerozdělení a koeficient klesá s rostoucím počtem pojištěnců (znění
+      ověřeno na epravo.cz — zakonyprolidi.cz vrací pro agenta HTTP 403). POZOR: dostupné znění § 7 uvádí
+      v koeficientu konstantu 3,08, ale vyhláška byla od roku 2003 opakovaně novelizována (např. vyhláškou
+      č. 356/2007 Sb.) a redakce se z nezávislého zdroje neujistila, že jde o AKTUÁLNÍ hodnotu — konkrétní
+      číslo proto NENÍ v článku ani v kartě uvedeno a tvrdí se jen mechanismus (procento z příjmů po
+      přerozdělení, koeficient klesající s velikostí pojišťovny), který je napříč zněními stabilní.
+      Zákon č. 289/2025 Sb.:
+      od 1. 1. 2026 ruší rezervní fond a zavádí fond obecně prospěšných činností, alokace až 0,5 % vybraného
+      pojistného ≈ 2,5 mld. Kč ročně; VZP na 2026 rozpočtuje 205 mil. Kč (90 rezidenční místa, 30 pacientské
+      organizace, 17,6 ÚZIS/CZ-DRG, 67,1 referenční síť) — dle Zdravotnického deníku, 3. 11. 2025.
+      METODICKÁ PAST OŠETŘENA V TEXTU: HC.7 NENÍ totéž co 'provozní náklady zdravotních pojišťoven' ze ZPP
+      (tam 2,15 % výdajů ZP = 12,3 mld. Kč v plánu 2026, viz clanek-pojistne-plany-2026). Jiný obsah (HC.7
+      přidává správu vykonávanou státem) i jiný jmenovatel (všechny běžné výdaje vs. jen výdaje ZP). Obě čísla
+      vycházejí náhodou podobně; článek na to výslovně upozorňuje v caveat calloutu a nikde je nesčítá.
+      LIMITY PŘIZNANÉ V TEXTU: skoky v řadách PL (2020=1,12 → 2021=4,50) a SK (2020=4,25 → 2021=9,01) jsou
+      metodické zlomy, ne reálný vývoj — článek proto srovnává úrovně opatrně a neopírá tvrzení o jednotlivé
+      meziroční změny cizích zemí. Data mají zpoždění cca 2 roky.
+      NEOVĚŘENO — VĚDOMĚ VYNECHÁNO: Country Health Profile 2025 (OECD/Observatory) ani HSiT Czechia 2023 se
+      redakci nepodařilo strojově přečíst (PDF s CID fonty) → žádné tvrzení v článku se o ně neopírá a nejsou
+      citovány jako zdroj čísel. Rovněž není uveden odhad, kolik lidí pojišťovny na nákup péče skutečně mají —
+      redakce takový údaj z primárního zdroje nemá.
+      OPRAVY 2026-08-27 (Codex review, PR #1090, 3× P2): (1) 'osm let v řadě klesá' → 'sedm let v řadě' —
+      řada 2016–2023 má 8 bodů, ale jen 7 meziročních poklesů; hodnota za 2015 není k dispozici, takže
+      pokles v roce 2016 doložit nelze. Opraveno v meta description, og:description, mezititulku, v textu
+      i v perexu v articles.json (tělo článku už 'Za sedm let' uvádělo správně). (2) Do seed záznamu
+      v data/indicators.json doplněno verification_status: 'preliminary'. Bez něj resolveVerificationStatus()
+      v src/page-shared.js spadne na origin:'seed' → 'illustrative' a dashboard by u živě ověřeného
+      Eurostat měření zobrazil 'Ilustrativní — modelová hodnota, nepoužívat pro citace'. 'preliminary' je
+      normalizovaná podoba karty ('review-pending' → normalizeVerificationStatus → 'preliminary'), takže
+      hodnota v kontraktu odpovídá tomu, co po prvním ingestu zapíše transform. (3) V databoxu byl
+      vydaje_zdravotnictvi_hdp popsán jako 'jmenovatel, který podíl na správu tlačí dolů' — nepřesné:
+      jmenovatelem HC.7 jsou běžné výdaje v korunách, ne poměr k HDP (ten se hýbe i s růstem HDP samotného).
+      Přeformulováno.
+      published:false, robots noindex, žádný article-review-banner."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nejlacinější řízení v pojišťovenské Evropě. Česko utratí za správu zdravotnictví 1,9 % výdajů · HSPA Monitor</title>
+<meta name="description" content="Česko dává na řízení zdravotního systému 1,91 % běžných výdajů na zdravotnictví — proti průměru EU-27 3,56 %. Méně než Německo, Rakousko, Slovensko i Polsko, a to se sedmi konkurenčními pojišťovnami. Podíl navíc sedm let v řadě klesá. Je to úspornost, nebo chybějící kapacita nakupovat péči podle kvality?">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nejlacinější řízení v pojišťovenské Evropě. Česko utratí za správu zdravotnictví 1,9 % výdajů">
+<meta property="og:description" content="1,91 % proti 3,56 % v EU. Česko řídí zdravotnictví levněji než všechny srovnatelné pojišťovenské systémy — a podíl sedm let v řadě klesá. Nový indikátor HSPA Monitoru se ptá, co se za tou úsporou skrývá.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-08-27">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Zdravotnické účty · SHA 2011 · HC.7 · Nový indikátor</span>
+      </div>
+      <h1 class="article-title">Nejlacinější řízení v pojišťovenské Evropě. Česko utratí za správu zdravotnictví 1,9 % výdajů — a je otázka, jestli si to může dovolit</h1>
+      <p class="article-deck">
+        Existuje číslo, které se v české debatě o zdravotnictví neobjevuje skoro nikdy, ačkoli ho Eurostat
+        publikuje pro celou Evropu: kolik systém utratí sám za sebe. Za výběr pojistného, uzavírání smluv,
+        revizní lékaře, kontrolu kvality, ministerstvo, ÚZIS. V Česku je to 1,91 % běžných výdajů na
+        zdravotnictví. Průměr Evropské unie je 3,56 %. Pod námi je jen osm zemí — a ani jedna z nich nemá
+        sedm konkurujících si zdravotních pojišťoven. Přidáváme tenhle ukazatel na dashboard a ptáme se,
+        co vlastně měří: úspornost, nebo chybějící schopnost systém řídit.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">27. srpna 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Když se u nás mluví o penězích ve zdravotnictví, mluví se o tom, kolik jich chybí nemocnicím,
+        praktikům nebo na centrovou léčbu. Skoro nikdy se nemluví o peněžní položce, která rozhoduje
+        o tom, jak dobře se ty ostatní rozdělí — o nákladech na řízení systému samotného. Mezinárodní
+        metodika zdravotnických účtů (System of Health Accounts, SHA 2011) pro ni má vlastní kategorii
+        s označením HC.7: <em>governance a správa financování zdravotnictví</em>. Patří do ní chod
+        zdravotních pojišťoven i správa vykonávaná státem — ministerstvo zdravotnictví, ÚZIS, SÚKL,
+        krajské úřady. Nepatří do ní administrativa uvnitř nemocnic; ta je schovaná v ceně péče.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSpravaHeroH">
+        <figcaption class="av-figure-h" id="avSpravaHeroH">Výdaje na správu a řízení zdravotního systému, Česko 2023</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1.91" data-decimals="2" data-suffix=" %">1,91 %</span>
+            <span class="av-counter-label">běžných výdajů na zdravotnictví jde na řízení systému</span>
+            <span class="av-counter-foot">SHA funkce HC.7 — pojišťovny, ministerstvo, ÚZIS, SÚKL</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="3.56" data-decimals="2" data-suffix=" %">3,56 %</span>
+            <span class="av-counter-label">průměr Evropské unie (EU-27)</span>
+            <span class="av-counter-foot">česká hodnota je zhruba na polovině evropského průměru</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="12.3" data-decimals="1" data-suffix=" mld. Kč">12,3 mld. Kč</span>
+            <span class="av-counter-label">absolutní výdaje na správu a řízení v roce 2023</span>
+            <span class="av-counter-foot">přesně 12 264 mil. Kč z celkových zhruba 642 mld. Kč</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="9" data-suffix=". nejnižší">9. nejnižší</span>
+            <span class="av-counter-label">pozice Česka mezi 27 zeměmi Unie</span>
+            <span class="av-counter-foot">nejníže Finsko 0,81 %, nejvýše Francie 5,02 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, dataset <code>hlth_sha11_hc</code>, funkce HC7, jednotka PC_CHE a MIO_NAC; data za ČR předává Eurostatu ČSÚ ze zdravotnických účtů. Staženo z Eurostat dissemination API 27. 8. 2026.</p>
+      </figure>
+
+      <h3>Sedm let klesání, které nikdo nenaplánoval</h3>
+
+      <p>
+        První věc, která na české řadě zaujme, je její směr. V roce 2016 šlo na správu a řízení 2,42 %
+        běžných výdajů na zdravotnictví. Od té doby podíl klesal každý jediný rok: 2,30 · 2,28 · 2,27 ·
+        2,06 · 2,03 · 1,99 · 1,91. Za sedm let tedy o 0,51 procentního bodu, což je relativně pokles
+        o pětinu.
+      </p>
+
+      <p>
+        Bylo by lákavé číst to jako příběh o úsporách. Jenže tak to není. V korunách výdaje na správu
+        naopak rostly — z 8,58 miliardy v roce 2016 na 12,26 miliardy v roce 2023, tedy o 43 %. Podíl
+        klesl proto, že jmenovatel rostl rychleji: celkové běžné výdaje na zdravotnictví se za stejnou
+        dobu zvedly ze zhruba 355 na 642 miliard korun, o 81 %. Systém tedy za svou správu platí každý
+        rok víc, ale roste kolem ní tak rychle, že správa relativně zaostává. Nikdo takové rozhodnutí
+        nepřijal — je to aritmetický vedlejší produkt covidu, valorizací platby za státní pojištěnce
+        a růstu nákladů na centrovou léčbu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSpravaTrendH">
+        <figcaption class="av-figure-h" id="avSpravaTrendH">Podíl výdajů na správu a řízení klesá, přestože v korunách roste</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Výdaje na správu (mil. Kč)</th>
+                <th scope="col" class="av-num">Podíl na běžných výdajích</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2016</th><td class="av-num">8 583</td><td class="av-num">2,42 %</td></tr>
+              <tr><th scope="row">2017</th><td class="av-num">8 633</td><td class="av-num">2,30 %</td></tr>
+              <tr><th scope="row">2018</th><td class="av-num">9 188</td><td class="av-num">2,28 %</td></tr>
+              <tr><th scope="row">2019</th><td class="av-num">10 002</td><td class="av-num">2,27 %</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">10 793</td><td class="av-num">2,06 %</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">11 697</td><td class="av-num">2,03 %</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">11 863</td><td class="av-num">1,99 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2023</th><td class="av-num">12 264</td><td class="av-num">1,91 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_sha11_hc</code>, HC7, jednotky MIO_NAC a PC_CHE (staženo 27. 8. 2026). Řada podílů je pro ČR dostupná od roku 2016; absolutní řada sahá do roku 2010, kdy činila 8 633 mil. Kč — v běžných cenách tedy zhruba tolik co v roce 2017.</p>
+      </figure>
+
+      <h3>Sedm pojišťoven za cenu jedné</h3>
+
+      <p>
+        Druhá věc je mezinárodní srovnání, a to je zajímavější. Učebnicové pravidlo říká, že systémy
+        s více konkurujícími si plátci mají vyšší náklady na správu než systémy s jedním plátcem nebo
+        s daňovým financováním: každá pojišťovna potřebuje vlastní výběr pojistného, vlastní smluvní
+        oddělení, vlastní IT, vlastní marketing. Česko má sedm zdravotních pojišťoven a největší z nich
+        pojišťuje zhruba 57 % obyvatel.
+      </p>
+
+      <p>
+        Přesto je česká hodnota 1,91 % pod všemi srovnatelnými pojišťovenskými zeměmi Evropy — a to
+        s velkým odstupem. Německo dává na správu 4,41 %, Slovensko 4,70 %, Rakousko 4,02 %, Francie
+        5,02 %, Polsko 3,82 %. Nejblíž z bismarckovské rodiny jsou Nizozemsko (3,05 %) a Belgie (3,07 %),
+        pořád ale o dvě třetiny výš než Česko. A co je zvlášť názorné: Česko utratí za řízení menší podíl
+        než Dánsko (4,13 %), tedy země, která zdravotnictví financuje z daní a zdravotní pojišťovny vůbec
+        nemá — tam, kde by učebnice čekala nejlevnější správu.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSpravaBarH">
+        <figcaption class="av-figure-h" id="avSpravaBarH">Výdaje na správu a řízení systému, 2023 (% běžných výdajů na zdravotnictví)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="5.02" data-unit=" %">
+          <li class="av-bar-row" data-value="5.02" data-label="Francie" data-note="nejvyšší hodnota v EU"></li>
+          <li class="av-bar-row" data-value="4.70" data-label="Slovensko" data-note="pojišťovenský systém, tři plátci"></li>
+          <li class="av-bar-row" data-value="4.41" data-label="Německo" data-note="pojišťovenský systém, přes 90 pokladen"></li>
+          <li class="av-bar-row" data-value="4.13" data-label="Dánsko" data-note="daňově financovaný systém, bez pojišťoven"></li>
+          <li class="av-bar-row" data-value="4.02" data-label="Rakousko" data-note="pojišťovenský systém"></li>
+          <li class="av-bar-row" data-value="3.82" data-label="Polsko" data-note="jeden veřejný plátce (NFZ)"></li>
+          <li class="av-bar-row" data-value="3.56" data-label="Průměr EU-27" data-note="agregát Eurostatu"></li>
+          <li class="av-bar-row" data-value="3.05" data-label="Nizozemsko" data-note="regulovaná soutěž pojišťoven"></li>
+          <li class="av-bar-row" data-value="2.67" data-label="Slovinsko" data-note=""></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="1.91" data-label="Česko" data-note="sedm konkurujících si pojišťoven"></li>
+          <li class="av-bar-row" data-value="0.81" data-label="Finsko" data-note="nejnižší hodnota v EU"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_sha11_hc</code>, HC7, PC_CHE, rok 2023 (staženo 27. 8. 2026). Kompletní pořadí všech 27 zemí je v tabulce níže.</p>
+      </figure>
+
+      <p>
+        Celé pořadí Unie ukazuje, že Česko není v nějaké malé skupině výjimek — je zhruba na rozhraní
+        první a druhé třetiny odspodu, v sousedství Itálie (1,87 %), Irska (1,70 %) a Portugalska (2,21 %).
+        Tedy zemí s národními zdravotními službami, kde se správa dělá jinak a jinde.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSpravaTableH">
+        <figcaption class="av-figure-h" id="avSpravaTableH">Celé pořadí EU-27, rok 2023</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col" class="av-num">Pořadí</th>
+                <th scope="col">Země</th>
+                <th scope="col" class="av-num">% běžných výdajů</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="av-num">1.</td><th scope="row">Finsko</th><td class="av-num">0,81</td></tr>
+              <tr><td class="av-num">2.</td><th scope="row">Litva</th><td class="av-num">1,15</td></tr>
+              <tr><td class="av-num">3.</td><th scope="row">Švédsko</th><td class="av-num">1,26</td></tr>
+              <tr><td class="av-num">4.</td><th scope="row">Řecko</th><td class="av-num">1,45</td></tr>
+              <tr><td class="av-num">5.</td><th scope="row">Bulharsko</th><td class="av-num">1,50</td></tr>
+              <tr><td class="av-num">6.</td><th scope="row">Estonsko</th><td class="av-num">1,51</td></tr>
+              <tr><td class="av-num">7.</td><th scope="row">Irsko</th><td class="av-num">1,70</td></tr>
+              <tr><td class="av-num">8.</td><th scope="row">Itálie</th><td class="av-num">1,87</td></tr>
+              <tr class="av-row-highlight"><td class="av-num">9.</td><th scope="row">Česko</th><td class="av-num">1,91</td></tr>
+              <tr><td class="av-num">10.</td><th scope="row">Portugalsko</th><td class="av-num">2,21</td></tr>
+              <tr><td class="av-num">11.</td><th scope="row">Kypr</th><td class="av-num">2,24</td></tr>
+              <tr><td class="av-num">12.</td><th scope="row">Maďarsko</th><td class="av-num">2,34</td></tr>
+              <tr><td class="av-num">13.</td><th scope="row">Lotyšsko</th><td class="av-num">2,60</td></tr>
+              <tr><td class="av-num">14.</td><th scope="row">Slovinsko</th><td class="av-num">2,67</td></tr>
+              <tr><td class="av-num">15.</td><th scope="row">Chorvatsko</th><td class="av-num">2,78</td></tr>
+              <tr><td class="av-num">16.</td><th scope="row">Španělsko</th><td class="av-num">2,81</td></tr>
+              <tr><td class="av-num">17.</td><th scope="row">Malta</th><td class="av-num">3,01</td></tr>
+              <tr><td class="av-num">18.</td><th scope="row">Nizozemsko</th><td class="av-num">3,05</td></tr>
+              <tr><td class="av-num">19.</td><th scope="row">Belgie</th><td class="av-num">3,07</td></tr>
+              <tr><td class="av-num">20.</td><th scope="row">Rumunsko</th><td class="av-num">3,13</td></tr>
+              <tr><td class="av-num">21.</td><th scope="row">Polsko</th><td class="av-num">3,82</td></tr>
+              <tr><td class="av-num">22.</td><th scope="row">Lucembursko</th><td class="av-num">3,99</td></tr>
+              <tr><td class="av-num">23.</td><th scope="row">Rakousko</th><td class="av-num">4,02</td></tr>
+              <tr><td class="av-num">24.</td><th scope="row">Dánsko</th><td class="av-num">4,13</td></tr>
+              <tr><td class="av-num">25.</td><th scope="row">Německo</th><td class="av-num">4,41</td></tr>
+              <tr><td class="av-num">26.</td><th scope="row">Slovensko</th><td class="av-num">4,70</td></tr>
+              <tr><td class="av-num">27.</td><th scope="row">Francie</th><td class="av-num">5,02</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_sha11_hc</code>, funkce HC7, jednotka PC_CHE, rok 2023; agregát EU-27 činí 3,56 %. Staženo z dissemination API 27. 8. 2026 — dotaz i celá řada jsou veřejné a dohledatelné, odkaz najdete na konci článku.</p>
+      </figure>
+
+      <div class="article-callout-caveat" role="note">
+        <p><strong>Limity dat:</strong> Kategorie HC.7 je mezinárodně hůř srovnatelná než klinické části
+        zdravotnických účtů. Státy se liší v tom, kolik správy vykazují u pojišťoven, kolik u zřizovatelů
+        a kolik jí zůstane „utopené“ v ceně péče u poskytovatelů. Ukazují to skoky v řadách: Polsko vykázalo
+        v roce 2020 hodnotu 1,12 % a v roce 2021 rovnou 4,50 %, Slovensko 4,25 % a pak 9,01 %. Takové změny
+        nejsou reálným vývojem správy, ale metodickými zlomy — proto v článku srovnáváme <em>úrovně</em>
+        a nestavíme žádné tvrzení na jednotlivých meziročních změnách cizích zemí. Data mají navíc zpoždění
+        zhruba dvou let: rok 2023 vyšel v roce 2025.</p>
+      </div>
+
+      <div class="article-callout-caveat" role="note">
+        <p><strong>Nezaměňovat se dvěma podobnými čísly:</strong> HC.7 <em>není</em> totéž co „provozní
+        náklady zdravotních pojišťoven“, které se objevují ve zdravotně pojistných plánech (plán na rok 2026
+        s nimi počítá ve výši 2,15 % výdajů pojišťoven, viz náš <a href="clanek-pojistne-plany-2026.html">rozbor
+        sněmovního tisku 280</a>). HC.7 má širší obsah — přidává správu vykonávanou státem — a jiný jmenovatel:
+        počítá se ze všech běžných výdajů na zdravotnictví včetně přímých plateb domácností, ne jen z výdajů
+        pojišťoven. Obě čísla vycházejí shodou okolností kolem dvou procent svých jmenovatelů, ale nelze je
+        zaměňovat ani sčítat.</p>
+      </div>
+
+      <h3>Proč je to číslo tak nízké</h3>
+
+      <p>
+        Odpověď má tři vrstvy. První je právní. Kolik smějí pojišťovny utratit samy na sebe, není věc
+        jejich rozhodnutí — je to strop daný vyhláškou. Ustanovení § 7 vyhlášky č. 418/2003 Sb. stanoví
+        limit nákladů na činnost zdravotní pojišťovny vzorcem, v němž se procento počítá z příjmů
+        veřejného zdravotního pojištění po přerozdělení a příslušný koeficient klesá s rostoucím počtem
+        pojištěnců. Čím větší pojišťovna, tím menší relativní příděl na provoz.
+        Vyhlášku vydává ministerstvo financí v dohodě s ministerstvem zdravotnictví; je to tedy nástroj
+        exekutivy, ne parlamentu.
+      </p>
+
+      <p>
+        Druhá vrstva je jmenovatel, jak jsme viděli výše: i kdyby se na správě nic neměnilo, podíl bude
+        klesat, dokud budou celkové výdaje růst rychleji. Za posledních sedm let přesně to udělal.
+      </p>
+
+      <p>
+        Třetí vrstva je obsahová a je z nich nejdůležitější: záleží na tom, co všechno se od plátce
+        vlastně chce. Proplácet faktury podle sazebníku je levné. Nakupovat péči podle výsledků, hodnotit
+        nové technologie před tím, než je systém začne hradit, sledovat kvalitu u jednotlivých poskytovatelů,
+        vyjednávat ceny na základě dat — to je drahé, protože to dělají lidé, kteří tomu rozumějí. Rozdíl
+        mezi 1,91 % a evropskými 3,56 % je v českém měřítku zhruba 10,6 miliardy korun ročně; dostat se
+        na německou úroveň by stálo zhruba 16 miliard. To jsou peníze, které dnes v systému jsou a jdou
+        na péči — a zároveň peníze, za které se jinde kupuje schopnost rozhodnout, jaká péče to má být.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="10.6" data-decimals="1" data-suffix=" mld. Kč">10,6 mld. Kč</span>
+          <span class="av-counter-label">o tolik ročně víc by Česko dávalo na řízení systému při evropském průměru 3,56 %</span>
+          <span class="av-counter-foot">výpočet redakce z běžných výdajů 642 mld. Kč (2023); na německou úroveň 4,41 % by šlo o 16 mld. Kč</span>
+        </div>
+      </aside>
+
+      <h3>Indikátor, který nemá „správnou“ hodnotu</h3>
+
+      <p>
+        Právě proto zavádíme tenhle ukazatel na dashboard se směrem <em>context_dependent</em> a neutrálním
+        signálem. Většina indikátorů HSPA má jasnou orientaci: u naděje dožití je víc lépe, u kojenecké
+        úmrtnosti méně. Tady ne. Nízká hodnota může znamenat, že se stát a pojišťovny naučily řídit levně
+        a peníze míří k pacientům. Může ale taky znamenat, že plátce nemá s čím dělat práci, která by
+        systému vydělala jinde — a že proto jen proplácí, místo aby nakupoval. Indikátor sám mezi těmito
+        dvěma výklady nerozhodne; k tomu jsou potřeba ostatní čísla dashboardu.
+      </p>
+
+      <p>
+        A ta zrovna nekreslí obrázek systému, který by měl řízení pod kontrolou. Dohodovací řízení o úhradách
+        na rok 2026 skončilo dohodou jen ve třech z patnácti segmentů, zbytek určila úhradová vyhláška.
+        Sedm pojišťoven plánuje na rok 2026 schodek 14,9 miliardy korun a dvě z nich rovnou rozpočtují,
+        že poskytovatelům nezaplatí ve lhůtě splatnosti. To nejsou příznaky systému, který má nadbytek
+        analytické a vyjednávací kapacity.
+      </p>
+
+      <h3>Politická páka: dvě věci, které lze udělat</h3>
+
+      <p>
+        Obě jsou konkrétní a obě má v ruce exekutiva. První je samotný limit z vyhlášky č. 418/2003 Sb.
+        Nejde nutně o to zvednout ho plošně — plošné zvýšení stropu zaplatí i tiskopis navíc. Zajímavější
+        je ho strukturovat: vázat část přídělu na doložené kapacity, které systém potřebuje (analytika
+        nákupu péče, hodnocení technologií, sledování kvality u poskytovatelů), a nechat zbytek pod tvrdým
+        stropem. Vyhláška se mění běžně; v roce 2025 prošel předpisy o hospodaření pojišťoven další balík
+        novel.
+      </p>
+
+      <p>
+        Druhá páka je čerstvá a zatím se o ní mluví hlavně jako o dotačním titulu. Zákonem č. 289/2025 Sb.
+        byl k 1. lednu 2026 zrušen rezervní fond zdravotních pojišťoven a místo něj vznikl <strong>fond
+        obecně prospěšných činností</strong>. Pojišťovny do něj mohou ročně alokovat až 0,5 % vybraného
+        pojistného, dohromady zhruba 2,5 miliardy korun, a hradit z něj rezidenční místa, činnost
+        pacientských organizací nebo kultivaci klasifikačního systému CZ-DRG. VZP na rok 2026 rozpočtovala
+        205 milionů korun: 90 na rezidenční místa, 30 na pacientské organizace, 17,6 na práci ÚZIS
+        na CZ-DRG a 67,1 na referenční síť nemocnic. Je to poprvé, kdy má systém peníze na vlastní rozvoj
+        mimo provozní strop — a zároveň zkouška, jestli je umí utratit za řídicí kapacitu, nebo je rozpustí
+        v příspěvcích.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSpravaTimelineH">
+        <figcaption class="av-figure-h" id="avSpravaTimelineH">Co s tímhle číslem hýbe</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2003</time>
+            <h4 class="av-timeline-title">Vyhláška č. 418/2003 Sb. zavádí strop</h4>
+            <p class="av-timeline-desc">§ 7 určuje limit nákladů na činnost pojišťovny procentem z příjmů po přerozdělení; koeficient ve vzorci klesá s rostoucím počtem pojištěnců. Vyhláška byla od té doby opakovaně novelizována.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2016</time>
+            <h4 class="av-timeline-title">Nejvyšší hodnota dostupné řady: 2,42 %</h4>
+            <p class="av-timeline-desc">Od tohoto roku Eurostat publikuje pro ČR podíl HC.7 na běžných výdajích. Od té doby klesá bez přerušení.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2020–2022</time>
+            <h4 class="av-timeline-title">Covid a valorizace nafukují jmenovatel</h4>
+            <p class="av-timeline-desc">Běžné výdaje na zdravotnictví rostou nejrychleji v historii řady; podíl správy padá pod 2 % (2022: 1,99 %), přestože v korunách roste.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2023</time>
+            <h4 class="av-timeline-title">1,91 % — poslední publikovaný rok</h4>
+            <p class="av-timeline-desc">12 264 mil. Kč z běžných výdajů zhruba 642 mld. Kč. Devátá nejnižší hodnota v EU-27.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1. 1. 2026</time>
+            <h4 class="av-timeline-title">Zákon č. 289/2025 Sb.: nový fond</h4>
+            <p class="av-timeline-desc">Ruší se rezervní fond, vzniká fond obecně prospěšných činností — až 0,5 % vybraného pojistného (cca 2,5 mld. Kč) na rozvoj systému mimo provozní strop.</p>
+          </li>
+          <li class="av-timeline-item">
+            <time class="av-timeline-date">2027–2028</time>
+            <h4 class="av-timeline-title">Co bude vidět v datech</h4>
+            <p class="av-timeline-desc">Rok 2026 se ve zdravotnických účtech objeví až v roce 2028. Teprve tehdy půjde říct, jestli nový fond a růst výdajů podíl na správu srovnaly, nebo ne.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vyhláška č. 418/2003 Sb. (§ 7); zákon č. 289/2025 Sb.; Eurostat <code>hlth_sha11_hc</code>; ČSÚ — výdaje na zdravotní péči.</p>
+      </figure>
+
+      <h3>Co sledovat dál</h3>
+
+      <p>
+        Tři věci. Za prvé, jestli řada po roce 2023 pokračuje dolů: rok 2024 už ČSÚ zveřejnil v celkovém
+        objemu (696,7 miliardy korun), rozpad na funkce SHA včetně HC.7 ale Eurostat pro Česko zatím nemá.
+        Za druhé, co se skutečně zaplatí z fondu obecně prospěšných činností — rozpis VZP na rok 2026 dává
+        na rezidenční místa víc než na všechno ostatní dohromady, což je legitimní volba, ale není to nákup
+        řídicí kapacity. A za třetí, jestli se v úhradové vyhlášce objeví parametry vázané na kvalitu.
+        Bez lidí, kteří je umějí spočítat a ověřit, totiž takové parametry nemá kdo obsloužit — a přesně
+        na tyhle lidi se dívá číslo, které jsme dnes přidali na dashboard.
+      </p>
+
+      <aside class="article-related" aria-labelledby="related-h">
+        <h4 id="related-h">Související obsah</h4>
+        <ul class="article-related-list">
+          <li><a href="clanek-pojistne-plany-2026.html">→ Schodek podle plánu</a> — sedm pojišťoven, minus 14,9 miliardy a rezervy u kritické hranice</li>
+          <li><a href="clanek-financovani-segmenty-2026.html">→ Kam plyne 459 miliard</a> — struktura financování po segmentech</li>
+          <li><a href="clanek-valorizace-statni-pojistenci-2027.html">→ Valorizace 2027</a> — jak roste jmenovatel, ze kterého se podíl počítá</li>
+          <li><a href="clanek-platba-statu-statni-pojistenci.html">→ Platba za státní pojištěnce</a> — mechanika hlavního veřejného příjmu systému</li>
+        </ul>
+      </aside>
+
+      <aside class="article-databox" aria-labelledby="databox-h">
+        <div class="ed-kicker">Data v tomto článku</div>
+        <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+        <ul class="article-databox-list">
+          <li><a href="indicator.html?id=vydaje_sprava_systemu_pct"><strong>Výdaje na správu a řízení zdravotního systému</strong></a> — 1,91 % běžných výdajů (2023); EU-27 3,56 % · <em>nový indikátor</em></li>
+          <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,6 % (2024); jiný pohled na tytéž celkové výdaje. Pozor: <em>jmenovatelem</em> podílu na správu jsou běžné výdaje v korunách (642 mld. Kč za rok 2023), ne tento poměr k HDP — ten se hýbe i s růstem HDP samotného</li>
+          <li><a href="indicator.html?id=uhrada_zp_per_pojistenec"><strong>Úhrada zdravotních pojišťoven na pojištěnce</strong></a> — 42 226 Kč/rok (2023)</li>
+          <li><a href="indicator.html?id=podil_vydaje_ambulantni_pece"><strong>Podíl výdajů ZP na ambulantní péči</strong></a> — 28,5 % (2023)</li>
+          <li><a href="indicator.html?id=platba_z_kapsy_pct"><strong>Přímé platby domácností</strong></a> — část jmenovatele, ze kterého se podíl na správu počítá</li>
+        </ul>
+      </aside>
+
+      <aside class="article-sources" aria-labelledby="sources-h">
+        <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+        <ul class="article-sources-list">
+          <li><a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table" rel="external noopener">Eurostat — Health care expenditure by function (hlth_sha11_hc); vyberte funkci HC7 a jednotku „% of current health expenditure“</a></li>
+          <li><a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Healthcare_expenditure_statistics_by_function,_provider_and_financing_scheme" rel="external noopener">Eurostat Statistics Explained — Healthcare expenditure by function, provider and financing scheme (výklad kategorie HC.7)</a></li>
+          <li><a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" rel="external noopener">ČSÚ — Výdaje na zdravotní péči (zdravotnické účty ČR, SHA 2011): národní zdroj téhož čísla</a></li>
+          <li><a href="https://csu.gov.cz/docs/107508/3183dddf-79c3-3d97-07bf-0660173c563e/26000525.pdf?version=1.2" rel="external noopener">ČSÚ — Výsledky zdravotnických účtů v ČR v letech 2010–2023 (publikace 260005-25, PDF)</a></li>
+          <li><a href="https://www.zakonyprolidi.cz/cs/2003-418" rel="external noopener">Vyhláška č. 418/2003 Sb. — § 7 stanoví limit nákladů na činnost zdravotní pojišťovny</a></li>
+          <li><a href="https://www.zakonyprolidi.cz/cs/2025-289" rel="external noopener">Zákon č. 289/2025 Sb. — zrušení rezervního fondu a zavedení fondu obecně prospěšných činností od 1. 1. 2026</a></li>
+        </ul>
+        <p class="article-sources-disclaimer">
+          Všechny hodnoty podílů i absolutních částek pocházejí z Eurostatu, datasetu <code>hlth_sha11_hc</code>
+          (funkce HC7, jednotky PC_CHE a MIO_NAC); redakce je stáhla přímo z dissemination API 27. srpna 2026
+          a pořadí zemí sestavila seřazením celé řady za rok 2023. Data za Česko předává Eurostatu Český
+          statistický úřad ze zdravotnických účtů. Celková výše běžných výdajů za rok 2023 (cca 642 mld. Kč)
+          je nezávisle ověřena proti údaji ČSÚ. Přepočty označené v textu jako výpočet redakce (růst v procentech,
+          dorovnání na evropský průměr) vycházejí výhradně z těchto dvou řad.
+        </p>
+      </aside>
+
+    </div>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="footer-copy">Data: OECD, ÚZIS, ČSÚ, SÚKL, SZÚ · CC BY 4.0 · <a href="https://github.com/veritasderman-rgb/hspa" rel="external noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>

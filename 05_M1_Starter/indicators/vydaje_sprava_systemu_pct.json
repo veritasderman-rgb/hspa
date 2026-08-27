@@ -1,0 +1,68 @@
+{
+  "id": "vydaje_sprava_systemu_pct",
+  "name": "Výdaje na správu a řízení zdravotního systému",
+  "area": "Struktury",
+  "domain": "Financování zdravotnictví",
+  "subdomain": "Správa a řízení systému",
+  "definition": "Běžné výdaje na řízení zdravotního systému a správu jeho financování (funkce HC.7 podle System of Health Accounts 2011) jako podíl na celkových běžných výdajích na zdravotnictví. Zahrnuje chod zdravotních pojišťoven (výběr pojistného, uzavírání a kontrola smluv, revizní činnost, zpracování žádostí pojištěnců) i správu vykonávanou orgány veřejné správy — ministerstvo zdravotnictví, krajské úřady, ÚZIS, SÚKL a další instituce, které systém řídí, regulují a vyhodnocují. Nezahrnuje administrativu uvnitř nemocnic a ambulancí, která je součástí ceny péče u příslušného poskytovatele.",
+  "unit": "% běžných výdajů na zdravotnictví",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "eurostat_jsonstat",
+      "dataset": "hlth_sha11_hc",
+      "dimensions": ["geo", "icha11_hc", "unit", "time"],
+      "params": {
+        "geo": "CZ",
+        "icha11_hc": "HC7",
+        "unit": "PC_CHE"
+      },
+      "note": "Eurostat hlth_sha11_hc, funkce HC7 (Governance and health system and financing administration), jednotka PC_CHE (% of current health expenditure). Data ČR do Eurostatu předává ČSÚ ze zdravotnických účtů (společný dotazník OECD/Eurostat/WHO — SHA 2011). Ověřeno živě z Eurostat dissemination API 2026-08-27: CZ 1,91 % (2023), EU-27 3,56 %. Řada PC_CHE pro ČR začíná rokem 2016; absolutní řada (unit=MIO_NAC) sahá do roku 2010."
+    },
+    "fallback": {
+      "type": "csu",
+      "dataset": "ČSÚ — Výsledky zdravotnických účtů ČR (SHA 2011), publikace 260005, kategorie HC.7",
+      "url": "https://csu.gov.cz/vydaje-na-zdravotni-peci",
+      "note": "Národní zdroj téhož čísla. ČSÚ publikuje vlnu N zpravidla v září roku N+2; edice 2025 pokrývá roky 2010–2023. Používá se, pokud Eurostat řadu nezveřejní nebo ji restrukturalizuje."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat_jsonstat",
+    "code": "EU27_2020",
+    "dataset": "hlth_sha11_hc",
+    "value": 3.56,
+    "params": {
+      "geo": "EU27_2020",
+      "icha11_hc": "HC7",
+      "unit": "PC_CHE"
+    },
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_sha11_hc/default/table",
+    "note": "Průměr EU-27 za rok 2023 = 3,56 % ze stejné řady. Rozptyl v EU je velký: nejníže Finsko 0,81 %, nejvýše Francie 5,02 %. Česko je s 1,91 % devátou nejnižší zemí EU-27. Sousedé a ostatní pojišťovenské (bismarckovské) systémy jsou výrazně výše: Německo 4,41 %, Slovensko 4,70 %, Rakousko 4,02 %, Polsko 3,82 %, Nizozemsko 3,05 %, Belgie 3,07 %. OECD samostatný agregát pro HC.7 v podobě srovnatelné s touto řadou nepublikuje, benchmark je proto jen EU-27."
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 20
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ČSÚ",
+    "MZ ČR",
+    "MF ČR",
+    "Eurostat"
+  ],
+  "verification_status": "review-pending",
+  "method_notes": "Hodnota je podílem, nikoli hodnocením: SHA kategorie HC.7 měří, kolik systém utratí za vlastní řízení, ne jak dobře řídí. Směr je proto context_dependent a signál neutral — nízká hodnota může znamenat úspornou správu i chybějící kapacitu na řízení. Metodická past: číslo NENÍ totéž co „provozní náklady zdravotních pojišťoven“ ze zdravotně pojistných plánů. HC.7 má širší obsah (přidává správu vykonávanou státem) i jiný jmenovatel (všechny běžné výdaje na zdravotnictví včetně přímých plateb domácností, ne jen výdaje pojišťoven). Obě čísla se náhodou pohybují kolem 2 % svých jmenovatelů, ale nelze je zaměňovat ani odečítat. Hodnota za rok 2023 ověřena dvojím výpočtem: Eurostat udává 12 264,18 mil. Kč (unit=MIO_NAC) a zároveň 1,91 % (unit=PC_CHE), což implikuje běžné výdaje 642,1 mld. Kč — shodné s údajem ČSÚ o celkových výdajích na zdravotní péči v roce 2023 (cca 642 mld. Kč).",
+  "limitations": "1) Řada PC_CHE pro ČR začíná rokem 2016; starší srovnání vyžaduje dopočet z absolutní řady. 2) Mezinárodní srovnatelnost HC.7 je nižší než u klinických kategorií SHA — státy se liší v tom, kolik správy vykazují u zřizovatelů, kolik u pojišťoven a kolik nechávají „utopené“ v ceně péče u poskytovatelů; skokové změny v řadách Polska (1,12 % v roce 2020 → 4,50 % v roce 2021) nebo Slovenska (4,25 % → 9,01 %) jsou spíš metodickými zlomy než reálným vývojem, a české hodnotě proto slušel obezřetný výklad. 3) Podíl se mění i tehdy, když se výdaje na správu nezmění — stačí, aby rostl jmenovatel (což je přesně český případ let 2016–2023). 4) Ukazatel neříká nic o kvalitě správy: nerozliší analytika nákupu péče od tiskopisu navíc. 5) Data mají zpoždění zhruba dvou let (2023 publikováno 2025).",
+  "determinants": [
+    "Zákonný strop provozních nákladů pojišťoven (§ 7 vyhlášky č. 418/2003 Sb.) — limit se počítá procentem z příjmů po přerozdělení a koeficient ve vzorci klesá s rostoucím počtem pojištěnců, takže velké pojišťovny mají relativně nižší limit",
+    "Počet a velikost zdravotních pojišťoven (dnes sedm, VZP pojišťuje zhruba 57 % obyvatel)",
+    "Míra centralizace: co dělá stát (ÚZIS, SÚKL, MZ) a co pojišťovny",
+    "Rychlost růstu celkových výdajů na zdravotnictví — roste-li jmenovatel, podíl klesá sám od sebe",
+    "Rozsah úkolů svěřených pojišťovnám (revizní činnost, nákup péče podle kvality, hodnocení technologií, prevence)",
+    "Míra digitalizace agend (eRecept, eNeschopenka, elektronická komunikace s poskytovateli)"
+  ],
+  "importance": "Kolik systém utratí za vlastní řízení, rozhoduje o tom, jestli má kdo dělat práci, která nese úspory jinde: nakupovat péči podle výsledků místo podle historických objemů, hodnotit nové technologie před jejich úhradou, kontrolovat kvalitu, analyzovat data. HSPA proto sleduje správu jako parametr kapacity systému, ne jako položku k minimalizaci. Česká hodnota je zajímavá právě tím, že je nízká navzdory uspořádání (sedm konkurenčních plátců), které bývá na správu dražší — a nabízí tak otázku, zda jde o úspornost, nebo o chybějící řídicí kapacitu.",
+  "patient_story": "Zlín, podatelna krajské pobočky zdravotní pojišťovny. Paní Zdeňka (61) sem před pěti týdny podala žádost o úhradu léku podle § 16 zákona o veřejném zdravotním pojištění — o výjimce rozhoduje revizní lékař pojišťovny a Zdeňka pořád nemá odpověď. O dvě patra výš se ve stejné budově dojednává roční smlouva s krajskou nemocnicí: kolik zaplatit za jaký objem péče a podle jakých parametrů. Posouzení Zdeňčiny žádosti i vyjednávání té smlouvy dělají lidé placení ze stejného rozpočtu — z provozního fondu pojišťovny. A ten je v Česku menší než v kterékoli srovnatelné pojišťovenské zemi Evropy.\n\nVýdaje na správu a řízení zdravotního systému — chod pojišťoven, ministerstva, ÚZIS, SÚKL a dalších orgánů, které systém řídí — činí v Česku 1,91 % běžných výdajů na zdravotnictví (2023). Průměr EU-27 je 3,56 %, tedy skoro dvojnásobek. V korunách jde o 12,3 miliardy z celkových zhruba 642 miliard. Podíl přitom klesá: v roce 2016 byl 2,42 %, za sedm let spadl o pětinu. Ne proto, že by se na správě šetřilo — ta v korunách vzrostla o 43 % — ale proto, že celkové výdaje na zdravotnictví rostly ještě rychleji, o 81 %.\n\nČeská hodnota je nižší než v Německu (4,41 %), na Slovensku (4,70 %), v Rakousku (4,02 %) i v Polsku (3,82 %). Pozoruhodné je to proto, že Česko má sedm konkurujících si pojišťoven — uspořádání, které vychází na správu obvykle dráž než jeden plátce. Strop je částečně daný právem: § 7 vyhlášky č. 418/2003 Sb. určuje limit nákladů na činnost pojišťovny jako procento z příjmů pojistného po přerozdělení, přičemž koeficient ve vzorci klesá s rostoucím počtem pojištěnců — čím větší pojišťovna, tím menší relativní příděl na provoz. Úspora má ale druhou stranu. Nákup péče podle kvality, hodnocení technologií před úhradou nebo analýza dat nevzniknou samy — dělají je lidé, které je z něčeho třeba zaplatit. Tam, kde tato kapacita chybí, plátce nekupuje, jen proplácí.\n\nPáky jsou dvě a obě má v ruce stát. První je samotný limit z vyhlášky č. 418/2003 Sb.: ministerstva financí a zdravotnictví ho mohou nejen zvýšit, ale hlavně strukturovat — část stropu vázat na doložené analytické a nákupní kapacity místo plošného procenta. Druhá je čerstvá: zákonem č. 289/2025 Sb. byl od 1. ledna 2026 zrušen rezervní fond a vznikl fond obecně prospěšných činností, do kterého mohou pojišťovny ročně dát až 0,5 % vybraného pojistného, dohromady zhruba 2,5 miliardy korun, a hradit z něj rezidenční místa, pacientské organizace nebo kultivaci CZ-DRG. Je to poprvé, co mají peníze na rozvoj systému mimo provozní strop. Jestli se za ně koupí řídicí kapacita, nebo se rozpustí v dotačních titulech, ukáže právě tento indikátor — a to, co s ním udělá řada po roce 2026.",
+  "framework": "hspa",
+  "dimension": "efektivita"
+}
