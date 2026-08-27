@@ -105,9 +105,13 @@ Kontrola součtu redakcí: 387 + 30 + 575 + 598 + 273 + 2 246 = **4 109** ✔
   22. 10. 2025). Text stažen z mzd.gov.cz (Uhradova_vyhlaska_2026.pdf) a
   odečten přímo: koeficient centralizace `KC_CE,ij` se stanoví **ve výši
   1,03**, má-li poskytovatel alespoň v části hodnoceného období alespoň
-  1 status CVSP uvedený pro danou skupinu v příloze č. 10, částech C a E;
-  jinak ve výši uvedené v příloze č. 10. Hodnoty v příloze:
-  **HPB 0,85 · Rektum 0,85 · Jícen 0,85 · Uro 0,75 · Iktus 0,50.**
+  1 status CVSP uvedený pro danou skupinu v příloze č. 10 (koeficient je
+  v textu definován třikrát, pro části B, C, E, F i G); jinak ve výši uvedené
+  v příloze č. 10. Hodnoty pro obory dotčené touto reformou:
+  **HPB 0,85 · Rektum 0,85 · Jícen 0,85 · OnkoUro 0,75 · PneumoOnko 0,75 ·
+  OnkoGyn 0,50** (pro srovnání Iktus 0,50). Oprava 27. 8.: první zápis rámce
+  uváděl jen „Uro 0,75 · Iktus 0,50" — zkratka pro onkourologii je OnkoUro
+  a chyběly OnkoGyn i PneumoOnko, tedy přísnější sazby než u první vlny.
 - **Nález Ústavního soudu Pl. ÚS 7/25 z 22. 10. 2025** (usoud.cz, TZ 85/25,
   soudce zpravodaj Josef Fiala): skupina senátorů navrhla zrušit přílohy
   č. 1 a 10 vyhlášky č. 314/2024 Sb. (úhradová vyhláška pro rok 2025) kvůli
@@ -162,7 +166,12 @@ Kontrola součtu redakcí: 387 + 30 + 575 + 598 + 273 + 2 246 = **4 109** ✔
   z 15 jmenovitě známých center (Věstník 10/2026) čtyři nejmenší mají
   17 / 19 / 22 / 28 výkonů ročně (FN u sv. Anny v Brně, Nemocnice Nový Jičín,
   FN Ostrava, Fakultní Thomayerova nemocnice), zatímco FN Olomouc 100,
-  FN Královské Vinohrady 84, FN Motol a Homolka 72,5, FN Hradec Králové 70.
+  FN Královské Vinohrady 84, **FN Hradec Králové 72,5 a FN Motol a Homolka 70**
+  (oprava 27. 8. — v prvním zápisu rámce byla tato dvojice prohozená; párování
+  hodnot a popisků nezávisle potvrzeno souřadnicovou extrakcí slidu: popisek
+  „FN Hradec Králové" na y = 281,8 leží na řádku s hodnotou 72,5 na y = 281,3,
+  „FN Motol a Homolka" na y = 267,1 s hodnotou 70,0 na y = 266,5. Článek nese
+  správné hodnoty, chyba byla jen v tomto rámci).
   Kontrola: součet 15 center = 737,5 ≈ 738 = deklarovaný objem center. ✔
   Modelové rovnoměrné rozdělení (+12 výkonů na centrum) nejmenší centra nad
   práh 45/rok nedostane. **V článku formulovat jako model, ne jako predikci
