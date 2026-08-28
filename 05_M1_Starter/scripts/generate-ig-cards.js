@@ -594,6 +594,16 @@ const MANIFEST = {
   'clanek-ecigarety-adolescenti': { kicker: 'Prevence · mládež', signal: 'warn', stat: '21,4', statSuffix: '%', barPct: 21, claim: 'třinácti- až patnáctiletých užilo e-cigaretu v posledních 30 dnech.', context: 'V roce 2016 to bylo 11,2 %. Tabáku užívá 16,4 %. GYTS 2022, SZÚ.' },
   'clanek-trombolyza-cmp': { kicker: 'Iktová péče · kvalita', signal: 'good', stat: '31,4', statSuffix: '%', barPct: 31, claim: 'ischemických mrtvic tu léčí trombolýza. V Evropě 17,1 %.', context: 'V nejhorších okresech ale šance klesá k devíti procentům.' },
   'clanek-pojistne-plany-2026': { kicker: 'Financování · pojistné plány', signal: 'bad', stat: '14,9', claim: 'miliardy Kč schodku plánují pojišťovny na rok 2026.', context: 'Rezervy klesnou z 39,2 na 24,3 mld — o 38 % ke kritické hranici.' },
+  'clanek-umrti-na-silnicich': { kicker: 'Veřejné zdraví · silnice', signal: 'good', stat: '494', claim: 'lidí zemřelo v roce 2024 na silnicích — historické minimum.', context: 'Cíl vlastní strategie BESIP do roku 2030 je ale zhruba 308.' },
+  'clanek-zachranka-milion-pacientu': { kicker: 'Dostupnost · záchranka', signal: 'warn', stat: '1,05', statSuffix: ' mil.', claim: 'ošetření vykázala záchranka v roce 2024. O 52 % víc než 2010.', context: 'Populace mezitím vzrostla o necelá 4 %. Půlka pacientů je 65+.' },
+  'clanek-substitucni-lecba-opioidy': { kicker: 'Závislosti · léčba', signal: 'bad', stat: '20,4', statSuffix: '%', barPct: 20, claim: 'rizikových uživatelů opioidů má substituční léčbu.', context: 'EU je na polovině, WHO chce aspoň 40 %. Od 2014 klesáme.' },
+  'clanek-konopi-adolescenti': { kicker: 'Prevence · mládež', signal: 'bad', stat: '24', statSuffix: '%', barPct: 24, claim: 'českých šestnáctiletých zkusilo konopí — nejvíc v Evropě.', context: 'Evropský průměr je 12 %. ESPAD 2024, síť 37 zemí.' },
+  'clanek-koureni-v-tehotenstvi': { kicker: 'Prevence · těhotenství', signal: 'bad', stat: '49,5', statSuffix: '%', barPct: 50, claim: 'matek mladších 17 let kouřilo v těhotenství.', context: 'Celostátní průměr 10,4 % to schová. U 18–19 let je to 40 %.' },
+  'clanek-platy-lekaru': { kicker: 'Pracovní síla · odměňování', signal: 'warn', stat: '2,74', statSuffix: '×', claim: 'průměrné mzdy bere lékař-specialista. Nejvíc v historii.', context: 'Skok z 2,45 v roce 2023 po přesčasovém protestu. OECD 2,8.' },
+  'clanek-zobrazovaci-metody-ct-mri': { kicker: 'Dostupnost · přístroje', signal: 'bad', stat: '12', claim: 'magnetických rezonancí na milion lidí. OECD 16, EU 14,5.', context: 'CT je naopak 28 na milion — nad průměrem OECD (26).' },
+  'clanek-ldl-cholesterol': { kicker: 'Prevence · cholesterol', signal: 'good', stat: '2,98', claim: 'mmol/l LDL — poprvé pod prahem nízkého rizika.', context: 'V roce 2020 to bylo 3,18. Cíle dosáhne jen 18 % rizikových.' },
+  'clanek-rezistence-antibiotik-mapa': { kicker: 'Infekce · rezistence', signal: 'bad', stat: '44,1', statSuffix: '%', barPct: 44, claim: 'kmenů Klebsielly už odolává cefalosporinům.', context: 'Karbapenemy zatím drží: selhání u 2,2 % (EU 11,3 %).' },
+  'clanek-neformalni-pecujici': { kicker: 'Dlouhodobá péče · rodiny', signal: 'bad', stat: '278', statSuffix: ' tis.', claim: 'korun ročně ztratí pečující, který kvůli péči opustí práci.', context: 'Stát přijde o dalších až 272 tisíc na daních. Analýza CETA.' },
 };
 
 function escapeXml(s) {
