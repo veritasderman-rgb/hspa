@@ -127,13 +127,28 @@ není jen artefakt většího počtu vyšetření.
   Akční plány se podle SZÚ přijímají na **2–4leté** období a schvaluje je
   MZ ve spolupráci s MZe.
   <https://szu.gov.cz/temata-zdravi-a-bezpecnosti/narodni-antibioticky-program/>
-- Poslední **veřejně dohledatelný** akční plán NAP je **AP NAP 2019–2022**,
-  schválený usnesením vlády ze dne 28. 1. 2019 (archiv SZÚ,
-  szu.cz/tema/akcni-plan-nap-2019-2022). **Redakce k 29. 8. 2026
-  nedohledala navazující akční plán** — stránka MZ
+- Akční plány, které koordinátor programu (SZÚ) zveřejňuje na stránce
+  **Národní strategické dokumenty NAP**, jsou k 29. 8. 2026 právě dva:
+  **AP NAP 2019–2022** a AP NAP 2011–2013. Nic novějšího tam není.
+  <https://szu.gov.cz/tema/narodni-antibioticky-program/dokumenty-ke-stazeni/narodni-strategicke-dokumenty/>
+- **Usnesení vlády ČR ze dne 28. ledna 2019 č. 75** — PDF staženo
+  a strojově přečteno 29. 8. 2026, verbatim: *„Vláda I. schvaluje Akční
+  plán Národního antibiotického programu České republiky na období
+  2019-2022, obsažený v části III materiálu čj. 30/19 …; II. ukládá
+  ministru zdravotnictví zajistit ve spolupráci s ministrem zemědělství
+  realizaci úkolů uvedených v příloze 1 Akčního plánu."*
+  <https://szu.gov.cz/wp-content/uploads/2023/06/usneseni_vlady_AP_NAP_2019_2022.pdf>
+- **Redakce k 29. 8. 2026 nedohledala navazující akční plán** — stránka MZ
   `mzd.gov.cz/akcni-plan-narodniho-antibiotickeho-programu/` vrací 404,
-  ve VeKLEP není žádný materiál s tímto názvem. Článek to formuluje jako
+  ve VeKLEP není žádný materiál s tímto názvem, a na stránce strategických
+  dokumentů SZÚ nic novějšího než 2019–2022 není. Článek to formuluje jako
   **nedohledání, ne jako tvrzení, že plán neexistuje.**
+
+  > **Nález fáze 5.** První verze tohoto rámce opírala údaj o akčním plánu
+  > jen o snippet z vyhledávače nad stránkou `szu.cz/tema/akcni-plan-nap-2019-2022`,
+  > která je dnes 404; `web.archive.org` je z prostředí agenta blokovaný
+  > egress policy. Nezávislý průchod to zachytil jako porušení železného
+  > pravidla a dohledal živý primární zdroj (viz dva body výše).
 
 ## Metodické výhrady, které článek musí uvést
 
