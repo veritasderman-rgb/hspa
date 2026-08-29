@@ -99,6 +99,54 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-screening-sluchu-deti': {
+    kicker: 'Dětské zdraví · screening', signal: 'bad',
+    stat: '24,5', statSuffix: '%', barPct: 25,
+    claim: 'dětí prošlo v roce 2024 screeningem sluchu.',
+    context: '87 678 jich zůstalo bez vyšetření. Mezi okresy padesátinásobný rozdíl.',
+  },
+  'clanek-vydaje-sprava-zdravotnictvi': {
+    kicker: 'Financování · správa', signal: 'neutral',
+    stat: '1,91', statSuffix: '%', barPct: 2,
+    claim: 'běžných výdajů stojí správa českého zdravotnictví.',
+    context: 'Průměr EU-27 je 3,56 %. Míň než Německo, Rakousko, Slovensko i Polsko.',
+  },
+  'clanek-invalidni-duchody-dusevni': {
+    kicker: 'Duševní zdraví · invalidita', signal: 'bad',
+    stat: '106 607',
+    claim: 'invalidních důchodů pro duševní poruchy — o 23 % víc než v roce 2010.',
+    context: 'Od roku 2011 roste bez přerušení. Vedou deprese a úzkosti.',
+  },
+  'clanek-uredni-tempo-84-dni': {
+    kicker: 'Governance · poradní orgány', signal: 'neutral',
+    stat: '84', statSuffix: ' dní',
+    claim: 'trvá typicky cesta od úkolu v komisi k doloženému splnění.',
+    context: 'Z 1 878 úkolů má doklad 644. Rekordní se vlekl 2 084 dní.',
+  },
+  'clanek-co-ridi-vestnik-mz': {
+    kicker: 'Legislativa · Věstník MZ', signal: 'neutral',
+    stat: '1 955',
+    claim: 'dokumentů vyšlo ve Věstníku ministerstva od roku 1998.',
+    context: '351 částek, 28 ročníků. Rok 2025 přinesl 152 dokumentů — čtyřnásobek průměru.',
+  },
+  'clanek-centrove-leky-2026': {
+    kicker: 'Léková politika · centra', signal: 'warn',
+    stat: '39,8', statSuffix: ' mld.',
+    claim: 'korun stály centrové léky v roce 2024 — o čtvrtinu víc než předloni.',
+    context: 'Necelých 150 tisíc pacientů čerpá bezmála 8 % systému.',
+  },
+  'clanek-veto-platcu-szv-2026': {
+    kicker: 'Financování · sazebník výkonů', signal: 'warn',
+    stat: '15',
+    claim: 'návrhů do sazebníku zastavily v roce 2025 dva hlasy plátců.',
+    context: 'Jednací řád: neprojde, hlasují-li proti dva členové. Ty dva mají VZP a Svaz ZP.',
+  },
+  'clanek-stret-zajmu-poradni-organy-2026': {
+    kicker: 'Governance · střet zájmů', signal: 'bad',
+    stat: '52', statSuffix: ' z 57',
+    claim: 'statutů poradních orgánů ministerstva střet zájmů vůbec neřeší.',
+    context: 'Bez pravidel jsou i tělesa o sazebníku a lékové politice.',
+  },
   'clanek-alkohol-adolescenti': {
     kicker: 'Prevence · mládež', signal: 'bad',
     stat: '56', statSuffix: '%', barPct: 56,
@@ -197,7 +245,7 @@ const MANIFEST = {
   'clanek-dohodovaci-rizeni-2027-vysledek': {
     kicker: 'Financování · dohodovací řízení', signal: 'good',
     stat: '12/15', claim: 'segmentů se dohodlo na úhradách 2027. Loni jen 3 z 15.',
-    context: '3 finančně největší segmenty ale zůstaly bez dohody — rozhodne úhradová vyhláška do konce října.',
+    context: 'Tři největší segmenty zůstaly bez dohody — rozhodne vyhláška.',
   },
   'clanek-react-eu-nku-kontrola-2026': {
     kicker: 'Financování · kontrola', signal: 'warn',
@@ -549,7 +597,7 @@ const MANIFEST = {
   'clanek-spalnicky-usa-2026': { kicker: 'Vakcinace · spalničky', signal: 'bad', stat: '2 777', claim: 'případů spalniček v USA k 20. 8. 2026 — nejvíc od roku 1991.', context: 'Proočkovanost MMR před školou 92,5 %. Práh imunity je 95 %.' },
   'clanek-podil-prakticti-lekari': { kicker: 'Dostupnost · primární péče', signal: 'bad', stat: '16,9', statSuffix: '%', barPct: 17, claim: 'lékařů v Česku jsou praktici — průměr OECD je kolem 23 %.', context: 'Lékařů má Česko dost (4,2 na 1 000). Chybí generalisté.' },
   'clanek-detska-psychiatrie-akutni-luzka': { kicker: 'Duševní zdraví · děti', signal: 'neutral', stat: '4 067', claim: 'akutních psychiatrických hospitalizací dětí do 19 let (2023).', context: 'Téměř dvojnásobek proti roku 2013. Chybí ambulance, ne lůžka.' },
-  'clanek-szu-pripominky-nivz': { kicker: 'Reforma veřejného zdraví', signal: 'warn', stat: '11', claim: 'okruhů výhrad poslal SZÚ k reformě, která ho má pohltit.', context: 'Sedm zůstává bez odezvy, jedna se vyvinula přesně opačně.' },
+  'clanek-szu-pripominky-nivz': { kicker: 'Reforma veřejného zdraví', signal: 'warn', stat: '11', claim: 'okruhů výhrad poslal SZÚ k reformě, která ho má pohltit.', context: 'Čtyři zůstávají bez odpovědi, jedna se vyvinula přesně opačně.' },
   'clanek-klistova-encefalitida': { kicker: 'Prevence · nákazy z klíšťat', signal: 'bad', stat: '670', claim: 'hlášených případů klíšťové encefalitidy za rok 2024 — nejvíc v celé EU.', context: '6,1 na 100 tisíc obyvatel proti průměru EU/EEA 0,81. Očkováno je 17 % Čechů.' },
   'clanek-deti-ambulantni-psychiatrie': { kicker: 'Duševní zdraví · děti', signal: 'neutral', stat: '65 000', claim: 'dětí do 19 let ročně projde psychiatrickou ambulancí (2023).', context: 'Na neakutní vyšetření se čeká typicky 6 měsíců. Psychiatrů pro děti je 157–200.' },
   'clanek-pedopsychiatri-kapacita': { kicker: 'Duševní zdraví · kapacity', signal: 'bad', stat: '6,4', claim: 'úvazku dětských psychiatrů na 100 tisíc dětí — tak tenká je síť.', context: 'Obor stárne a nedoplňuje se, poptávka po pandemii strmě roste.' },
@@ -692,7 +740,13 @@ function buildStatCard(meta, L) {
     cursorY = barY + L.barH;
   }
   if (context) {
-    const ctxLines = wrap(context, L.ctxWrap || 40).slice(0, 2);
+    const ctxLines = wrap(context, L.ctxWrap || 40);
+    // Na kontext jsou v layoutu jen dva řádky. Dřív se přebytek tiše uřízl
+    // uprostřed věty a karta odešla do fronty s useknutou pointou — proto
+    // radši spadneme hned, ať se copy zkrátí v MANIFESTU.
+    if (ctxLines.length > 2) {
+      throw new Error(`Kontext se nevejde (>2 řádky): „${context}" — zkrať copy v MANIFESTU.`);
+    }
     const ctxStartY = cursorY + L.ctxGap;
     blocks.push(ctxLines
       .map((l, i) => `<text class="context" x="${L.M}" y="${ctxStartY + i * L.ctxLineH}">${escapeXml(l)}</text>`)
