@@ -1,7 +1,7 @@
 {
   "_doc": "Curated fronta evergreen témat pro denní rutinu (PROMPT_DAILY_ROUTINE.md, FÁZE 2 routing — větev 4 EVERGREEN-WRITE). Každá položka je předschválený analytický námět ukotvený v EXISTUJÍCÍCH indikátorech / datech dashboardu, který nepotřebuje dnešní news-trigger. Router vybírá top položku se status:ready (nejnižší priority číslo vyhrává). Platí stejné železné pravidlo jako u reaktivních článků: každé číslo musí mít primární strojově dohledatelný zdroj. status: ready | in_progress | done. Po napsání článku přepni položku na done a doplň slug. Redakce sem přidává nové náměty na konec.",
   "version": "1.0",
-  "updated_at": "2026-08-28",
+  "updated_at": "2026-08-29",
   "topics": [
     {
       "id": "zobrazovaci-metody-ct-mri",
@@ -209,7 +209,8 @@
       ],
       "section": "Datový mikroformát",
       "priority": 11,
-      "status": "ready"
+      "status": "skipped",
+      "note": "Přeskočeno a vyřazeno 2026-08-29. Routing 28. 8. doložil, že všechny čtyři kotevní indikátory už mají vlastní silný článek (mri_per_milion → zobrazovaci-metody-ct-mri, lpod_share_critical → esencialni-antiinfektiva, screening_kolorektalni → rakovina-tlusteho-streva, vakcinace_hpv → cervix-hpv). Ponechání ve stavu ready znamenalo, že ji každý běh znovu analyzuje a znovu zamítne. Formát „jeden indikátor, jeden graf, jedna páka\" zůstává použitelný — ale až pro indikátor, který článek opravdu nemá."
     },
     {
       "id": "disponibilni-prijem-zdravi",
@@ -253,8 +254,9 @@
       ],
       "section": "Kvalita péče",
       "priority": 13,
-      "status": "ready",
-      "note": "Zařazeno 2026-08-28 poté, co Codex review PR #1101 správně ukázal, že tři předchozí náměty duplikovaly existující články. Tenhle úhel v korpusu není a zároveň zapojuje 13 osiřelých indikátorů rezistence (jediné indikátory bez jakékoli článkové vazby)."
+      "status": "done",
+      "note": "Zařazeno 2026-08-28 poté, co Codex review PR #1101 správně ukázal, že tři předchozí náměty duplikovaly existující články. Tenhle úhel v korpusu není a zároveň zapojuje 13 osiřelých indikátorů rezistence (jediné indikátory bez jakékoli článkové vazby). | Zpracováno 2026-08-29. Metodická podmínka splněna: kombinovaná rezistence je v EARS-Net samostatně měřený ukazatel (populace Combined resistance v ECDC Surveillance Atlas má vlastní čitatel i jmenovatel), nic se nedopočítávalo.",
+      "slug": "clanek-amr-multirezistence-soubeh.html"
     },
     {
       "id": "npo-zdravotnictvi-bilance",
@@ -276,6 +278,25 @@
       "priority": 14,
       "status": "ready",
       "note": "Zařazeno 2026-08-28. Korpus zmiňuje NPO v osmi článcích, ale bilanci resortní alokace nemá žádný."
+    },
+    {
+      "id": "amr-kombinovana-rezistence-indikatory",
+      "title": "INDICATOR-ADD: kombinovaná rezistence jako čtyři nové indikátory datového kontraktu",
+      "angle": "Vyplynulo z práce na clanek-amr-multirezistence-soubeh (29. 8. 2026). ECDC Surveillance Atlas publikuje kombinovanou rezistenci jako samostatnou populaci se stejnou strukturou jako už napojené indikátory rezistence — stačí čtyři řádky do ingest/mapping/ecdc_atlas_codes.json a čtyři metodické karty. Measure ID (ověřeno 29. 8. 2026): KLEPNE.COMBINED.R.PROPORTION = 1146375, ESCCOL.COMBINED.R.PROPORTION = 1146444, PSEAER.COMBINED.R.PROPORTION = 1146551, ACISPP.COMBINED.R.PROPORTION = 1146403. Benchmark EU/EHP z ECDC AER 2024 tab. 9b: 18,8 / 5,5 / 10,0 / 27,0 %. Direction = lower_is_better. POZOR na Acinetobacter — český jmenovatel je jen 102 izolátů, karta musí nést výhradu o malém vzorku a indikátor by neměl mít signál založený na meziroční změně. Jde o samostatný INDICATOR-ADD flow, ne o článek.",
+      "anchor_indicators": [
+        "rezistence_klebsiella_3gc",
+        "rezistence_ecoli_3gc",
+        "rezistence_pseudomonas_karbapenem",
+        "rezistence_acinetobacter_karbapenem"
+      ],
+      "primary_sources": [
+        "ECDC Surveillance Atlas of Infectious Diseases — dataset 27 / health topic 4 (EARS-Net), REST API atlas.ecdc.europa.eu/public/AtlasService/rest/",
+        "ECDC — Antimicrobial resistance in the EU/EEA (EARS-Net), Annual Epidemiological Report for 2024 (Stockholm, listopad 2025), tabulka 9b"
+      ],
+      "section": "Kvalita péče",
+      "priority": 12,
+      "status": "ready",
+      "note": "Zařazeno 2026-08-29 při zpracování položky amr-multirezistence-soubeh. Fetcher ingest/fetchers/ecdc_atlas.js už umí přesně tento tvar dotazu, práce je proto malá."
     }
   ]
 }
