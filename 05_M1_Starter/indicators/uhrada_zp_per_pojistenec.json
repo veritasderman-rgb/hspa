@@ -1,28 +1,23 @@
 {
   "id": "uhrada_zp_per_pojistenec",
-  "name": "Úhrada zdravotních pojišťoven na pojištěnce",
+  "name": "Úhrada zdravotních pojišťoven na pojištěnce (ZFZP)",
   "area": "Struktury",
   "domain": "Financování zdravotnictví",
   "subdomain": "Výdaje veřejného zdravotního pojištění",
-  "definition": "Celková výše úhrad všech sedmi zdravotních pojišťoven (VZP, VoZP, ČPZP, OZP, ZP Škoda, ZPMV, RBP) za poskytnuté zdravotní služby v daném roce, vydělená počtem pojištěnců. Zahrnuje všechny segmenty péče (lůžková, ambulantní, léky, pomůcky, stomatologie, doprava, lázně). Neobsahuje samoplatbu pacientů ani připojištění.",
+  "definition": "Náklady na zdravotní služby čerpané ze základního fondu zdravotního pojištění (oddíl A) všech sedmi zdravotních pojišťoven v přepočtu na jednoho pojištěnce a rok, tak jak je publikuje MZ ČR v materiálu Hodnocení vývoje systému veřejného zdravotního pojištění (Tabulka č. 11). Neobsahuje přímé platby pacientů ani připojištění. Širší ukazatel „celkové náklady na zdravotní služby na 1 pojištěnce“ činil v roce 2024 46 856 Kč.",
   "unit": "Kč / pojištěnec / rok",
   "direction": "context_dependent",
   "data_source": {
     "primary": {
-      "type": "uzis_nrhzs",
-      "dataset": "OIS-11-24",
-      "endpoint": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn",
-      "note": "Národní registr hrazených zdravotních služeb (NRHZS), datový souhrn k dohodovacímu řízení. Aktualizováno 1× ročně, periodicita ÚZIS."
-    },
-    "fallback": {
-      "type": "csv",
-      "url": "https://www.nzip.cz/data/2394-naklady-zdravotni-pojistovny-segmenty-datovy-souhrn"
+      "type": "mzcr_report",
+      "dataset": "Hodnocení vývoje systému veřejného zdravotního pojištění",
+      "endpoint": "https://mzd.gov.cz/hodnoceni-vyvoje-systemu-verejneho-zdravotniho-pojisteni/",
+      "note": "Obdoba státního závěrečného účtu pro zdravotní pojišťovny; předkládá MZ ČR a MF vládě a Sněmovně, 1× ročně za uzavřený rok. Vydání za rok 2024: vz2024_hodnoceni.pdf, Tabulka č. 11."
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "HEALTH_STAT_HEALTHEXP",
-    "note": "Pro orientační srovnání. OECD měří total health expenditure per capita (veřejné + soukromé + OOP), tj. širší definici než jen ZP úhrada — přímé srovnání má omezenou výpovědní hodnotu."
+    "type": "none",
+    "note": "ODSTRANĚNO 2026-08-30. OECD měří výdaje na zdraví na obyvatele v paritě kupní síly a přes všechny zdroje financování (veřejné i soukromé); tento indikátor měří korunové náklady jednoho fondu na jednoho pojištěnce. Přímé srovnání nemá výpovědní hodnotu."
   },
   "signal_thresholds": {
     "good": 10,
@@ -30,13 +25,13 @@
   },
   "frequency": "yearly",
   "stewards": [
-    "ÚZIS",
     "MZ ČR",
+    "Ministerstvo financí",
     "zdravotní pojišťovny"
   ],
-  "method_notes": "Výpočet: Σ úhrady všech 7 ZP / počet pojištěnců ČR (≈ 10,87 mil. 2023). V úhradách jsou zohledněny regulace a dohadné položky (po vyrovnání). 2024 hodnota je předběžná — finalizace dat probíhá k 31. 12. následujícího roku.",
-  "limitations": "Per capita ukazatel nezohledňuje strukturu pojištěnců (věk, chronické diagnózy, regionální nerovnosti). VZP má vyšší podíl seniorů → vyšší per-capita úhradu. Srovnání s OECD je orientační (různá metodika).",
-  "patient_story": "Centrální registr pojištěnců, statistický roční přehled. Průměrná úhrada zdravotní pojišťovny na jednoho pojištěnce v ČR je 42 226 Kč ročně (2024). To je celkový součet: ambulantní péče, lůžková péče, léky, zdravotnické pomůcky, lázně, doprava — pro každého občana ČR statisticky.\n\nÚhrada zdravotní pojišťovny per pojištěnec v ČR je 42 226 Kč/rok (SZP, 2024). OECD průměr cca 50 000 Kč, EU cca 47 000 Kč — Česko signal neutral, mírně pod průměry. Trend rostoucí (2015: 28 000; 2024: 42 226). Distribuce je asymetrická: 80 % výdajů jde na 20 % pojištěnců (Pareto pattern); senioři 65+ spotřebovávají průměrně 110 000 Kč/rok; mladí 18–35 cca 18 000 Kč/rok.\n\nStrukturálně český systém má veřejné zdravotní pojištění s monopolním inkasem (7 pojišťoven), přerozdělovací fond kompenzuje asymetrické rizikové profily (VZP má vyšší podíl chronických pacientů než SZP). Stát platí za státní pojištěnce (děti, důchodci, OSVČ minimální, ženy na MD/RD) paušál, který je dlouhodobě nedostatečný — chronický rozpočtový tlak.\n\nÚhrada per pojištěnec roste rychleji než průměrná mzda (zdravotní inflace), což vytváří dlouhodobý finanční tlak na systém. Politické páky: valorizace platby státu za státní pojištěnce (politicky citlivá agenda — viz clanek-platba-statu-statni-pojistenci); reforma přerozdělování (parametrizace podle PCG — Pharmacy-based Cost Groups); rozšíření hodnotové úhrady (DRG v3, P4P pro vybrané indikátory); transparentní reporting struktury úhrad per nemocnice a per pojišťovna. Indikátor v HSPA dashboardu sleduje úhradu per pojištěnec jako klíčový kontextový parametr financování systému.",
+  "method_notes": "Hodnoty přebírány přímo z Tabulky č. 11 materiálu MZ ČR, nikoli dopočítávány. Řada 2019–2024: 29 499 / 34 024 / 38 340 / 38 527 / 42 011 / 46 529 Kč. Jmenovatelem je průměrný roční počet pojištěnců (2024: 10,84 mil.; 2023: 10,87 mil.). Revize 2026-08-30: předchozí hodnota 42 226 Kč za rok 2023 byla dopočítána z nadhodnoceného součtu NRHZS (dvojí započtení podsegmentu 1.7.1) a z neuvedeného počtu pojištěnců; nahrazena publikovanou řadou MZ ČR.",
+  "limitations": "Per capita ukazatel nezohledňuje strukturu pojistného kmene (věk, chronické diagnózy, regionální rozdíly) — VZP s vyšším podílem seniorů vykázala v roce 2024 47 998 Kč, zaměstnanecké pojišťovny v průměru 44 604 Kč. Není srovnatelný s mezinárodními ukazateli výdajů na zdraví na obyvatele.",
+  "patient_story": "Náklady na zdravotní služby ze základního fondu zdravotního pojištění vyšly v roce 2024 na 46 529 Kč na jednoho pojištěnce a rok. V širší definici, tedy z celkových nákladů na zdravotní služby, je to 46 856 Kč. Je to statistický průměr napříč novorozenci, dospělými, seniory, zdravými i chronicky nemocnými — ne částka, kterou by kdokoli konkrétní „vyčerpal“.\n\nŘada, kterou MZ ČR publikuje od roku 2019, jde 29 499 → 34 024 → 38 340 → 38 527 → 42 011 → 46 529 Kč. Meziroční nárůst 2023 → 2024 byl 10,8 %, tedy zhruba čtyřapůlnásobek inflace (ČSÚ: 2,4 %) a dvojnásobek nominálního růstu HDP (+5,3 %). Systém přitom v roce 2024 hospodařil s deficitem 7,5 mld Kč a poprvé po letech přebytků se do minusu dostala i VZP.\n\nRozdíly mezi pojišťovnami odrážejí strukturu pojistných kmenů, ne efektivitu nákupu péče: VZP s vyšším podílem seniorů vykázala 47 998 Kč na pojištěnce, zaměstnanecké pojišťovny v průměru 44 604 Kč. Na příjmové straně je pořadí stejné (VZP 47 663 Kč, ZZP 43 672 Kč) — přerozdělovací mechanismus tedy rozdíl v rizikovém profilu do značné míry, byť ne úplně, kompenzuje.\n\nPozor na srovnávání se zahraničím: OECD měří výdaje na zdraví na obyvatele v paritě kupní síly a přes všechny zdroje financování (veřejné i soukromé, včetně přímých plateb pacientů). Tento indikátor měří korunové náklady jednoho fondu na jednoho pojištěnce. Přímé srovnání obou čísel nemá výpovědní hodnotu a benchmark byl proto z indikátoru odstraněn (revize 2026-08-30). Politické páky zůstávají na příjmové straně: valorizace platby státu za státní pojištěnce (viz clanek-valorizace-statni-pojistenci-2027) a parametrizace přerozdělování. Souvisejícím textem je clanek-financovani-segmenty-2026.html.",
   "framework": "monitoring",
   "dimension": "efektivita"
 }

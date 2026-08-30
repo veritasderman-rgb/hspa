@@ -1,7 +1,7 @@
 {
   "_doc": "Curated fronta evergreen témat pro denní rutinu (PROMPT_DAILY_ROUTINE.md, FÁZE 2 routing — větev 4 EVERGREEN-WRITE). Každá položka je předschválený analytický námět ukotvený v EXISTUJÍCÍCH indikátorech / datech dashboardu, který nepotřebuje dnešní news-trigger. Router vybírá top položku se status:ready (nejnižší priority číslo vyhrává). Platí stejné železné pravidlo jako u reaktivních článků: každé číslo musí mít primární strojově dohledatelný zdroj. status: ready | in_progress | done. Po napsání článku přepni položku na done a doplň slug. Redakce sem přidává nové náměty na konec.",
   "version": "1.0",
-  "updated_at": "2026-08-29",
+  "updated_at": "2026-08-30",
   "topics": [
     {
       "id": "zobrazovaci-metody-ct-mri",
@@ -297,6 +297,64 @@
       "priority": 12,
       "status": "indicator-add",
       "note": "Zařazeno 2026-08-29 při zpracování položky amr-multirezistence-soubeh. Fetcher ingest/fetchers/ecdc_atlas.js už umí přesně tento tvar dotazu, práce je proto malá. POZOR: tohle NENÍ námět na článek a evergreen router (FÁZE 2) ho nesmí vybrat — proto status 'indicator-add', ne 'ready'. Router bere jen položky se status:ready. Pole priority slouží jen k pořadí v rámci INDICATOR-ADD flow, který je podle PROMPT_DAILY_ROUTINE.md samostatný expanzní prompt.",
+      "flow": "INDICATOR-ADD"
+    },
+    {
+      "id": "nemocnicni-ambulance-64-miliard",
+      "title": "Nemocniční ambulance: 64,6 miliardy, které se počítají jako lůžková péče",
+      "angle": "Vyplynulo z auditu clanek-financovani-segmenty-2026 (30. 8. 2026). Podsegment 2.1.1 ZPP — ambulantní péče poskytovaná lůžkovými zařízeními — spolkl v roce 2024 64,6 mld Kč, tedy 12,8 % všech úhrad veřejného pojištění, a v účetnictví se vede jako „lůžková péče“. Text má odpovědět, co v tom objemu je (poradny fakultních nemocnic, jednodenní výkony, follow-up po hospitalizaci), proč roste rychleji než samostatný ambulantní sektor a co to dělá s debatou o „přesunu péče z lůžek do ambulance“ — peníze se přesouvají, ale ke stejným poskytovatelům se stejnými fixními náklady. Metoda: rozpad OIS-11-24 na podsegmenty 2.1.1 vs. segment 1 za roky 2023 a 2024, doplnit produkčními daty z OIS-11-33 (jednodenní péče) a personálními kapacitami. POZOR: okresní řez existuje jen za rok 2023.",
+      "anchor_indicators": [
+        "podil_vydaje_luzkova_pece",
+        "podil_vydaje_ambulantni_pece",
+        "postele_akutni_per_1000"
+      ],
+      "primary_sources": [
+        "ÚZIS — datový souhrn NRHZS OIS-11-24 (nzip.cz/data/2394)",
+        "ÚZIS — datový souhrn OIS-11-33, produkce výkonů jednodenní péče",
+        "MZ ČR — Hodnocení vývoje systému v. z. p. v roce 2024, Tabulka č. 3"
+      ],
+      "section": "Financování",
+      "priority": 15,
+      "status": "ready",
+      "note": "Zařazeno 2026-08-30 při fallback-auditu. Korpus tenhle podsegment nikde nepojmenovává, přitom je to druhá největší položka po vlastní akutní lůžkové péči."
+    },
+    {
+      "id": "centrova-leciva-37-miliard",
+      "title": "Centrová léčiva: 37,5 miliardy, které oficiální projekce výdajů nepočítá",
+      "angle": "Vyplynulo z auditu clanek-financovani-segmenty-2026 (30. 8. 2026). Rozpad centrových léčiv JE veřejně dohledatelný — podsegment 2.1.4 (lůžkoví poskytovatelé) a 1.7.1 (ambulantní specialisté) v OIS-11-24: 33,8 mld Kč v roce 2023, 37,5 mld v roce 2024 (+11 %, tedy zhruba tempem celého systému, který rostl o 10,7 % — POZOR, netvrdit, že jde o nejrychleji rostoucí položku; rychleji rostly péče v zařízeních sociálních služeb +28,9 %, laboratorní a radiodiagnostické služby +20,9 % a praktičtí lékaři +16,1 %). Nosná teze je jinde: ÚZIS centrová léčiva ve své predikci výdajů do roku 2040 modeluje ZVLÁŠŤ a základní varianta je nezahrnuje — oficiální projekce +98 % tedy celkový růst podhodnocuje o celou tuto položku. Text má spojit tři věci: objem a tempo z NRHZS, rozhodovací mechanismus (§ 39d zákona 48/1997 Sb., vysoce inovativní přípravky, specializovaná centra) a to, co ta konstrukce dělá s předvídatelností rozpočtu pojišťoven. Delší řadu nabízí OIS-11-06 (2022–2024).",
+      "anchor_indicators": [
+        "podil_vydaje_leky",
+        "podil_vydaje_luzkova_pece",
+        "uhrada_zp_per_pojistenec"
+      ],
+      "primary_sources": [
+        "ÚZIS — datový souhrn NRHZS OIS-11-24, podsegmenty 2.1.4 a 1.7.1",
+        "ÚZIS — datový souhrn OIS-11-06, centrové (nákladové) léky, řada 2022–2024",
+        "ÚZIS — Predikce výdajů z veřejného zdravotního pojištění (kap. 10, model centrových léčiv)",
+        "SÚKL — seznamy cen a úhrad, § 39d zákona č. 48/1997 Sb."
+      ],
+      "section": "Financování",
+      "priority": 16,
+      "status": "ready",
+      "note": "Zařazeno 2026-08-30 při fallback-auditu. Původní verze článku o segmentech tvrdila, že tento rozpad veřejně není — je, a to přímo v citované sadě."
+    },
+    {
+      "id": "ois-11-24-podsegmenty-indikatory",
+      "title": "INDICATOR-ADD: akutní lůžková péče a centrová léčiva jako samostatné indikátory struktury úhrad",
+      "angle": "Vyplynulo z auditu clanek-financovani-segmenty-2026 (30. 8. 2026). Stávající indikátor podil_vydaje_luzkova_pece měří bundle (segment 2 ZPP) a je proto pro strukturální otázky málo užitečný. OIS-11-24 nese podsegmenty, ze kterých jdou udělat dva čisté indikátory: podíl vlastní akutní lůžkové péče (2.1.2 = 29,7 % úhrad 2024) a podíl centrových léčiv (2.1.4 + 1.7.1 = 7,4 % úhrad 2024). Oba mají direction context_dependent a NESMÍ dostat benchmark OECD — mezinárodní srovnání pro tuto doménu vede výhradně přes SHA, ne přes segmenty ZPP (viz benchmark_source v metodických kartách). POZOR: řada je zatím dvouletá (2023 a 2024) — edice 2025-01 i 2026-01 obsahují jen tyto roky.",
+      "anchor_indicators": [
+        "podil_vydaje_luzkova_pece",
+        "podil_vydaje_ambulantni_pece",
+        "podil_vydaje_leky"
+      ],
+      "primary_sources": [
+        "ÚZIS — datový souhrn NRHZS OIS-11-24, verze 2026-01",
+        "MZ ČR — Hodnocení vývoje systému v. z. p. v roce 2024, Tabulka č. 3 (číselník segmentů ZPP)"
+      ],
+      "section": "Financování",
+      "priority": 17,
+      "status": "indicator-add",
+      "note": "Zařazeno 2026-08-30. NENÍ námět na článek — evergreen router (FÁZE 2) bere jen položky se status:ready.",
       "flow": "INDICATOR-ADD"
     }
   ]
