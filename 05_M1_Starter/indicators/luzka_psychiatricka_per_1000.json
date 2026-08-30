@@ -1,0 +1,56 @@
+{
+  "id": "luzka_psychiatricka_per_1000",
+  "name": "Lůžka psychiatrické péče (na 1 000 obyvatel)",
+  "area": "Struktury",
+  "domain": "Nemocniční infrastruktura",
+  "subdomain": "Lůžková psychiatrická péče",
+  "definition": "Počet lůžek určených pro psychiatrickou péči na 1 000 obyvatel. Zahrnuje lůžka v samostatných psychiatrických nemocnicích (dříve léčebnách) i lůžka na psychiatrických odděleních všeobecných nemocnic, akutní i následná. Měří, jak velkou část kapacity systému péče o duševní zdraví tvoří ústavní lůžko — tedy nejrestriktivnější a nejnákladnější forma péče.",
+  "unit": "lůžek / 1 000 ob.",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "uzis_nzis",
+      "endpoint": "https://psychiatrie.uzis.cz/cs/psychiatrie-v-datech/psychiatricka-pece-v-cr/luzkova-psychiatricka-pece/",
+      "dataset": "ÚZIS ČR — Národní portál psychiatrické péče, oddíl „Lůžková psychiatrická péče“; podkladem je roční výkaz o lůžkovém fondu (L (MZ) 1-02) a publikační řada „Psychiatrická péče“ (NZIS).",
+      "dimensions": ["rok", "typ zařízení (psychiatrická nemocnice / oddělení nemocnice)", "akutní vs. následná lůžka", "kraj"],
+      "note": "ÚZIS je zdrojem, ze kterého se český údaj hlásí do OECD/Eurostat Joint Questionnaire on Non-Monetary Health Care Statistics. Portál publikuje absolutní počty lůžek; přepočet na 1 000 obyvatel používá střední stav populace dle ČSÚ."
+    },
+    "fallback": {
+      "type": "oecd_sdmx2",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC,1.0/all",
+      "dataset": "OECD Health Statistics — Hospital beds by function of health care, CARE_TYPE = PSY (Psychiatric care), HEALTH_FUNCTION = _T, UNIT_MEASURE = 10P3HB",
+      "note": "Harmonizovaná řada pro ČR i pro všechny srovnávané země. Hodnota indikátoru i celá časová řada 2013–2023 jsou převzaty odsud, protože OECD publikuje ČR i benchmark v jedné, metodicky sjednocené sadě."
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd_sdmx2",
+    "code": "DSD_HEALTH_REAC_HOSP@DF_BEDS_FUNC",
+    "dataset": "OECD Health Statistics — Hospital beds by function of health care (CARE_TYPE = PSY). Průměr 35 členských zemí OECD s dostupným údajem za rok 2023 = 0,65 lůžka / 1 000 ob.; průměr 25 zemí EU = 0,69. Medián OECD 0,62.",
+    "value": 0.65,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_REAC_HOSP%40DF_BEDS_FUNC&df[ag]=OECD.ELS.HD"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "ÚZIS ČR — Národní zdravotnický informační systém, Národní portál psychiatrické péče",
+    "Ministerstvo zdravotnictví ČR — odbor zdravotní péče, tým reformy psychiatrické péče",
+    "Rada vlády pro duševní zdraví",
+    "OECD — Health Statistics (Joint Questionnaire on Non-Monetary Health Care Statistics)"
+  ],
+  "method_notes": "Indikátor záměrně počítá VŠECHNA psychiatrická lůžka dohromady — akutní i následná, v psychiatrických nemocnicích i na odděleních všeobecných nemocnic — protože jen tak je srovnatelný s harmonizovanou definicí OECD (CARE_TYPE = PSY). Směr „méně je lépe“ je editorial rozhodnutí opřené o explicitní cíl české veřejné politiky: Strategie reformy psychiatrické péče (2013) i Národní akční plán pro duševní zdraví 2020–2030 stavějí na přesunu těžiště péče z velkých ústavů do komunity. Není to univerzální pravda — proto se indikátor NESMÍ číst samostatně. Jeho protiváhou v dashboardu jsou centra_dusevniho_zdravi_per_100k (komunitní kapacita, signál bad) a psychiatrie_prumerna_delka_hospitalizace (jak dlouho se na lůžku leží, signál bad). Teprve trojice dohromady říká, jestli se péče přesouvá, nebo jen ubývá. Samotné snížení počtu lůžek bez růstu komunitních služeb by systém zhoršilo, ne zlepšilo.",
+  "limitations": "1. Agregát skrývá strukturu: dvě země se stejným počtem lůžek na obyvatele mohou mít zcela odlišný model. Německo má lůžek víc než Česko (1,33), ale převážně na akutních odděleních všeobecných nemocnic s krátkou hospitalizací; české lůžko je typicky následné, v samostatné psychiatrické nemocnici, s podstatně delším pobytem. Bez ukazatele průměrné ošetřovací doby je proto srovnání neúplné. 2. OECD definice zahrnuje i lůžka pro léčbu závislostí a část gerontopsychiatrie; národní členění se mezi zeměmi liší. 3. Lůžka v sociálních službách (domovy se zvláštním režimem), kde v ČR žije významná část lidí s vážným duševním onemocněním, se do zdravotnického lůžkového fondu nepočítají — mezinárodní srovnání proto podhodnocuje míru institucionalizace v zemích, které tuto péči vytlačily do sociálního systému. 4. Řada OECD končí rokem 2023 (stav k srpnu 2026); novější údaj publikuje ÚZIS, ale bez harmonizovaného benchmarku. 5. Přepočet na obyvatele nezachycuje geografickou dostupnost — lůžka jsou koncentrována do několika velkých zařízení.",
+  "determinants": [
+    "Historické dědictví ústavní péče — síť velkých psychiatrických nemocnic vznikla v 19. a 20. století a její budovy dodnes určují kapacitu",
+    "Úhradová politika — sazba za ošetřovací den na následném lůžku je pro zařízení předvídatelnější příjem než komunitní služba",
+    "Kapacita komunitních služeb — bez center duševního zdraví, krizových služeb a chráněného bydlení nemá pacient kam být propuštěn",
+    "Personální kapacita — psychiatři, psychiatrické sestry a peer konzultanti pro komunitní týmy",
+    "Rozhraní zdravotního a sociálního systému — dvojí financování CDZ (zdravotní pojištění + dotace na sociální část) brzdí vznik nových center"
+  ],
+  "importance": "Počet psychiatrických lůžek je nejpřímější měřitelný ukazatel toho, jestli reforma psychiatrické péče — vyhlášená v roce 2013 a od roku 2020 vedená Národním akčním plánem pro duševní zdraví — skutečně mění tvar systému, nebo jen přidává nové služby vedle nezměněného ústavního jádra. Mezinárodní i domácí důkazy se shodují, že u většiny vážných duševních onemocnění vede komunitní péče k lepšímu zotavení, nižší míře opětovných hospitalizací a vyšší kvalitě života než dlouhodobý pobyt v ústavu. Česko přitom drží šestou nejvyšší lůžkovou kapacitu mezi zeměmi EU a zároveň jednu z nejnižších hustot komunitních center. Indikátor tak měří rozdíl mezi tím, co si stát předsevzal, a tím, co se za dvanáct let reformy skutečně stalo.",
+  "patient_story": "Pavel M., čtyřiatřicet let, vyučený automechanik z Havlíčkova Brodu. Po třetí atace schizofrenie ho záchranka odvezla do psychiatrické nemocnice na kraji města. Zůstal tam sedm týdnů — dva týdny trvalo, než se stav stabilizoval, zbytek byl čekání. Ne na léčbu, na místo, kam ho propustit. Byt po babičce byl v exekuci, matka ho zpátky nechtěla a nejbližší centrum duševního zdraví, které by za ním docházelo domů, v jeho okrese nebylo. Lůžko v nemocnici tak fungovalo jako to, čím být nemělo: jako bydlení, protože nic jiného nezbylo.\n\nČesko má 0,87 lůžka psychiatrické péče na 1 000 obyvatel — v absolutních číslech 9 435 lůžek (OECD Health Statistics, rok 2023, zdrojem českého údaje je ÚZIS). Průměr zemí OECD je 0,65, průměr Evropské unie 0,69; Česko je tedy zhruba o třetinu nad OECD a mezi 25 zeměmi EU, které údaj do OECD hlásí, je šesté nejvybavenější — nad ním jsou jen Belgie (1,40), Německo (1,33), Lotyšsko (1,05), Chorvatsko (0,93) a Rumunsko (0,88). Ze sousedů má víc lůžek jen Německo, zatímco Slovensko je na 0,80, Rakousko na 0,71 a Polsko na 0,63. Trend je klesající, ale mírně: z 0,96 v roce 2013, kdy reforma psychiatrické péče začínala, na dnešních 0,87 — za deset let necelá desetina. Signál indikátoru je proto červený.\n\nStrukturálně je podstatné, že sám počet lůžek nic neříká, dokud se nepřipojí druhá otázka: jak dlouho se na nich leží. Německo má lůžek víc než Česko, ale jsou to převážně akutní lůžka na odděleních běžných nemocnic, kde hospitalizace trvá dny až týdny. České lůžko je typicky následné, v jedné z velkých psychiatrických nemocnic, a průměrná psychiatrická hospitalizace u nás trvá 43 dnů proti 19 dnům v průměru OECD. K tomu jde na péči o duševní zdraví jen kolem 4 % výdajů na zdravotnictví, zatímco evropská úroveň je kolem 7 %, a komunitní síť má hustotu 0,37 centra duševního zdraví na 100 000 obyvatel. Vznikla tak asymetrie, kterou Pavel pocítil přesně: lůžko bylo k dispozici hned, služba, která ho měla podchytit doma, neexistovala.\n\nPolitické páky jsou pojmenované a mají konkrétního vlastníka. Národní akční plán pro duševní zdraví 2020–2030, schválený vládou a řízený Radou vlády pro duševní zdraví, stojí na transformačních plánech jednotlivých psychiatrických nemocnic — ty určují, kolik následných lůžek se ruší a čím se nahrazují. Druhou pákou je úhradová vyhláška ministerstva zdravotnictví: dokud je ošetřovací den na následném lůžku pro zařízení jistější příjem než komunitní tým, ekonomika reformu brzdí. Třetí je financování center duševního zdraví, kterých je dnes zhruba čtyřicet pro dospělé a sedm dětských, zatímco cílová síť počítá s podstatně vyšším počtem; jejich vznik dnes drží kombinace evropských dotací a rozpočtu ministerstva, ne stabilní úhrada. A čtvrtou je personální kapacita — bez psychiatrických sester, klinických psychologů a peer konzultantů se lůžko zavřít nedá. Klíčová podmínka platí ve všech čtyřech případech stejně: ubrat lůžka má smysl jen tehdy, když komunitní kapacita roste rychleji, než ta ústavní mizí. Jinak se z Pavla nestane pacient v péči, ale člověk bez ní.",
+  "framework": "hspa",
+  "dimension": "kvalita"
+}
