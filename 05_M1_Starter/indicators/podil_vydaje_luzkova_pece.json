@@ -4,7 +4,7 @@
   "area": "Struktury",
   "domain": "Financování zdravotnictví",
   "subdomain": "Struktura úhrad podle segmentů",
-  "definition": "Podíl úhrad zdravotních pojišťoven směřujících do segmentu lůžkové péče (segment 2 dle Zdravotně pojistného plánu — zahrnuje akutní lůžkovou, následnou, dlouhodobou, ozdravovny a centrové léky podávané v hospitalizaci) z celkových úhrad ZP.",
+  "definition": "Podíl úhrad zdravotních pojišťoven směřujících do segmentu 2 Zdravotně pojistného plánu z celkových úhrad ZP. POZOR na obsah segmentu: kromě akutní lůžkové péče (podsegment 2.1.2) zahrnuje i ambulance provozované lůžkovými poskytovateli (2.1.1), centrová léčiva podávaná u lůžkových poskytovatelů (2.1.4) a následnou, dlouhodobou a hospicovou péči (2.2). Není to tedy podíl výdajů na hospitalizace.",
   "unit": "%",
   "direction": "context_dependent",
   "data_source": {
@@ -16,9 +16,8 @@
     }
   },
   "benchmark_source": {
-    "type": "oecd",
-    "code": "HEALTH_PROC_INPATIENT_SHARE",
-    "note": "OECD měří podíl výdajů na kurativní lůžkovou péči (inpatient curative + rehabilitative) — průměr OECD ≈ 28 %. CZ má strukturálně více lůžek a hospitalizací než průměr OECD."
+    "type": "none",
+    "note": "ODSTRANĚNO 2026-08-30 jako metodicky neplatné. Předchozí benchmark srovnával podíl úhrad veřejného zdravotního pojištění do segmentu ZPP (jmenovatel = jen úhrady ZP) s podílem funkční kategorie SHA na CELKOVÝCH běžných výdajích na zdraví (jmenovatel zahrnuje i přímé platby, státní rozpočet, kraje a připojištění). Různé čitatele i jmenovatele. Mezinárodní srovnání pro tuto doménu je nutné dělat přímo nad SHA (OECD dataflow DSD_SHA@DF_SHA), ne nad segmenty ZPP; hodnoty pro ČR 2023: lůžková kurativní péče 25,9 % vs. ⌀ OECD 24,2 %, ambulantní kurativní 26,7 % vs. 26,4 %, lůžková dlouhodobá 10,7 % vs. 8,7 %."
   },
   "signal_thresholds": {
     "good": 5,
@@ -29,9 +28,9 @@
     "ÚZIS",
     "MZ ČR"
   ],
-  "method_notes": "Výpočet: úhrady segmentu 2 (lůžková péče) / celkové úhrady všech 7 ZP × 100. Segment 2 v ZPP zahrnuje sub-segmenty 2.1 (akutní lůžková), 2.2 (následná) a další. Vysoký podíl lůžkové péče v ČR souvisí s nadprůměrným počtem lůžek (6,5/1 000 obyv. vs. OECD 4,3) a nižší rolí ambulantní péče.",
-  "limitations": "Nezahrnuje hodnocení kvality péče. Vyšší podíl lůžkové péče může znamenat jak nedostatek ambulantní péče (špatný signál), tak vysokou specializaci centralizovaných nemocnic (dobrý signál). Interpretace vyžaduje kontext.",
-  "patient_story": "Krajská nemocnice, internistické oddělení, 50 lůžek z toho 33 obsazených seniory. Lůžková péče je v Česku dominantní vrstvou zdravotního systému — 55,9 procenta všech výdajů zdravotního pojištění míří do nemocnic. To je téměř dvojnásobek průměru OECD (30 %). Dědictví socialistické organizace zdravotnictví.\n\nPodíl výdajů na lůžkovou péči v ČR je 55,9 % všech zdravotnických výdajů (ÚZIS SHA, 2023). OECD průměr 30 %, EU 32 % — Česko signal neutral (kontextová hodnota). V absolutní hodnotě cca 257 mld. Kč ročně. Trend pomalu klesající (2010: 60 %, 2023: 55,9 %), ale tempo nedostatečné na dosažení OECD struktury.\n\nStrukturálně český systém má vysoký počet akutních lůžek (4,1 na 1 000 obyvatel — viz indikátor postele_akutni_per_1000) a vysokou hospitalizační aktivitu (18 800 hospitalizací na 100 000 — viz hospitalizace_na_100k). Některé výkony, které jsou v Nizozemsku nebo UK ambulantní, vyžadují v ČR hospitalizaci 2–4 dnů. Dominance lůžkové péče je historická — ale finančně neudržitelná v dlouhodobém horizontu (lůžkový den ~10× dražší než ambulantní kontakt).\n\nStrukturální transformace systému je dlouhodobá agenda. Politické páky: rozšíření jednodenní chirurgie (UK Day Surgery Best Practice Tariffs); rozšíření ambulantní specializované péče (model nizozemské Tweedelijn); reforma okresních nemocnic (clanek-okresni-nemocnice-personalni-krize); konverze nadbytečných akutních lůžek na LDN, paliativní a rehabilitační (kde poptávka roste). Indikátor v HSPA dashboardu sleduje podíl lůžkové péče jako klíčový strukturální parametr — Česko by mělo do 2035 dosáhnout cca 40 %.",
+  "method_notes": "Výpočet: úhrady segmentu 2 / celkové úhrady všech 7 ZP × 100, obojí bez podsegmentu 1.7.1. Rozpad segmentu 2 za rok 2024 (v % z celkových úhrad 504,8 mld Kč): akutní lůžková péče 2.1.2 = 29,7 %, ambulance lůžkových zařízení 2.1.1 = 12,8 %, centrová léčiva 2.1.4 = 6,8 %, následná a dlouhodobá péče 2.2 = 6,4 %, nerozčleněno na úrovni 2.1 = 0,6 %. Revize 2026-08-30 (fallback-audit denní rutiny). Součty z OIS-11-24 se počítají BEZ podsegmentu 1.7.1 — metodický popis sady jej vede jako „z toho“ uvnitř segmentu 1.7 a zakazuje jeho opětovné sečtení. Předchozí hodnoty tuto výhradu nerespektovaly (celek 2023 byl o 2,955 mld Kč nadhodnocený). Kontrola správnosti: opravený součet 2023 = 456,07 mld Kč vs. 456,454 mld Kč, které MZ ČR nezávisle publikuje pro ZFZP oddíl A (rozdíl 0,08 %). Řada 2019–2022 byla seed bez doložitelného zdroje a byla odstraněna — datový souhrn OIS-11-24 (edice 2025-01 i 2026-01) obsahuje pouze roky 2023 a 2024.",
+  "limitations": "Hodnota NENÍ mezinárodně srovnatelná — viz benchmark_source. Pro srovnání se zahraničím použij SHA (podíl kurativní lůžkové péče na celkových výdajích na zdraví). Vysoká hodnota tohoto indikátoru vypovídá o tom, kolik peněz protéká lůžkovými poskytovateli, ne o tom, kolik péče se odehrává na lůžku. Rok 2024 je z pololetní dodávky pojišťoven (označení 2024_pol) s vyšším podílem dohadných položek; kontrolní součet se od nezávislého čísla MZ ČR liší o 0,04 %.",
+  "patient_story": "Do segmentu, kterému úhradové tabulky říkají lůžková péče, míří 56,3 % všech úhrad veřejného zdravotního pojištění — za rok 2024 je to 284,2 miliardy korun. To číslo se běžně cituje jako doklad toho, že Česko dává do nemocnic dvojnásobek proti vyspělým zemím. Není to pravda a rozdíl je vidět v samotných datech: vlastní akutní lůžková péče je z toho 150,0 mld Kč, tedy 29,7 % úhrad. Zbytek jsou nemocniční ambulance (64,6 mld), centrová léčiva podávaná v nemocnici (34,2 mld) a následná a dlouhodobá péče (32,3 mld).\n\nNa mezinárodně srovnatelné metodice (SHA, referenční rok 2023) dává Česko na lůžkovou kurativní péči 25,9 % celkových výdajů na zdraví proti průměru OECD 24,2 %. Nadprůměr, ale rozdíl 1,7 procentního bodu.\n\nKde je odchylka skutečně velká, je kapacita: 6,4 nemocničního lůžka na 1 000 obyvatel proti průměru OECD 4,3 a nizozemským 2,3 (2023). Česko drží nadbytečnou lůžkovou kapacitu, ale platí za ni relativně málo. To jsou dvě různé diagnózy a každá potřebuje jinou léčbu: kapacitní přebytek se řeší konverzí a deinvesticí lůžek, ne škrtem v úhradách za hospitalizace.\n\nSouvisející text: clanek-financovani-segmenty-2026.html.",
   "framework": "monitoring",
   "dimension": "efektivita"
 }
