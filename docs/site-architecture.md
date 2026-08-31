@@ -149,6 +149,12 @@ zdrave-cesko.cz/
   Prázdný výpis by uživateli neodpověděl na to, proč přišel.
 - **Poloha se nikam neposílá.** Geokódování obce běží v prohlížeči nad
   `obce-gps.json`; souřadnice z `navigator.geolocation` neopustí zařízení.
+  Pozor na `vercel.json`: globální `Permissions-Policy` geolokaci vypíná, takže
+  `/pohotovosti` má vlastní pravidlo s `geolocation=(self)` a catch-all ji
+  vyjímá. Vercel bere hlavičky z prvního odpovídajícího pravidla, proto jsou
+  v něm ostatní bezpečnostní hlavičky zopakované. Do `vercel.json` se to
+  vysvětlit nedá — schéma Vercelu odmítá i pomocné klíče jako `_comment`,
+  takže odůvodnění i hlídací test žijí v `tests/pohotovosti-data.test.js`.
 - **Přesnost polohy je viditelná.** `geo_source: 'obec'` znamená střed obce,
   ne budovu — u takového výsledku to stránka napíše.
 - **Porovnání se zákonem.** Zveřejněná ordinační doba se porovnává s minimem

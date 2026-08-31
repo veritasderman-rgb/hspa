@@ -390,9 +390,18 @@ test('data/obce-gps.json pokrývá obce ČR', () => {
 // ─────────────────────────────────────────────────────────────────────────
 
 test('vercel.json povoluje geolokaci právě na stránce pohotovostí', () => {
-  // Regrese: globální `Permissions-Policy: geolocation=()` platila i na
-  // pohotovosti, takže tlačítko „Moje poloha“ na produkci vždy spadlo do
-  // chybové větve — funkce vypadala rozbitě, aniž by to šlo poznat lokálně.
+  // Proč tohle pravidlo v vercel.json vůbec je (do samotného souboru se to
+  // napsat nedá — JSON komentáře neumí a schéma Vercelu odmítá i pomocné
+  // klíče jako `_comment`):
+  //
+  // Globální `Permissions-Policy: geolocation=()` platila i na pohotovosti,
+  // takže prohlížeč geolokaci zakázal dřív, než se stihl zeptat uživatele.
+  // Tlačítko „Moje poloha“ na produkci vždy spadlo do chybové větve —
+  // a lokálně to nešlo poznat, `http-server` ty hlavičky neposílá.
+  //
+  // Pravidlo pro /pohotovosti proto opakuje všechny bezpečnostní hlavičky
+  // a mění jen geolokaci: Vercel bere hlavičky z prvního odpovídajícího
+  // pravidla, takže vynechaná hlavička by tu prostě chyběla, ne zdědila se.
   const cfg = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'vercel.json'), 'utf8'));
   const policyOf = (rule) => rule.headers.find(h => h.key === 'Permissions-Policy')?.value ?? null;
 
@@ -413,5 +422,23 @@ test('vercel.json povoluje geolokaci právě na stránce pohotovostí', () => {
   // Bezpečnostní hlavičky se v novém pravidle nesmí ztratit.
   for (const key of ['X-Content-Type-Options', 'X-Frame-Options', 'Referrer-Policy', 'Content-Security-Policy']) {
     assert.ok(pohotovosti.headers.some(h => h.key === key), `pravidlo pro /pohotovosti postrádá ${key}`);
+  }
+});
+
+test('vercel.json používá jen klíče, které schéma Vercelu zná', () => {
+  // Regrese: pravidlo pro /pohotovosti mělo `_comment` s vysvětlením, proč
+  // existuje. Vercel na to spadl při validaci schématu („should NOT have
+  // additional property `_comment`“) a nasazení se zastavilo. Komentáře
+  // patří sem do testu, ne do konfigurace.
+  const cfg = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'vercel.json'), 'utf8'));
+
+  const ALLOWED_RULE_KEYS = new Set(['source', 'headers', 'has', 'missing']);
+  for (const rule of cfg.headers ?? []) {
+    const unknown = Object.keys(rule).filter(k => !ALLOWED_RULE_KEYS.has(k));
+    assert.deepEqual(unknown, [], `pravidlo ${rule.source}: schéma Vercelu nezná klíč(e) ${unknown.join(', ')}`);
+    for (const header of rule.headers ?? []) {
+      assert.deepEqual(Object.keys(header).sort(), ['key', 'value'],
+        `hlavička v pravidle ${rule.source} smí mít jen key a value`);
+    }
   }
 });
