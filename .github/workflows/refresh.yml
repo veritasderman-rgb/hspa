@@ -40,7 +40,7 @@ env:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     defaults:
       run:
         working-directory: 05_M1_Starter
@@ -61,6 +61,21 @@ jobs:
         run: |
           set -o pipefail
           npm run ingest 2>&1 | tee /tmp/ingest.log
+
+      - name: Refresh emergency services (pohotovosti)
+        # Vlastní pipeline mimo `npm run ingest`: tahá ze seznamu VZP
+        # (~300 stránek s pauzou mezi požadavky), z NRPZS a ze čtyř krajských
+        # otevřených dat. Trvá kolem deseti minut, proto má job timeout 35 min.
+        #
+        # continue-on-error ZÁMĚRNĚ: zdrojem hodin je scrapované HTML VZP.
+        # Když jim spadne web nebo změní šablonu, nesmí to zablokovat refresh
+        # všech ostatních dat. Fetcher v takovém případě skončí chybou (má
+        # prahovou kontrolu MIN_EXPECTED), v repu zůstane poslední platná
+        # verze a `validate:all` níž ověří, že je pořád v pořádku. Datum
+        # poslední aktualizace stránka čtenáři ukazuje, takže zastaralost
+        # není neviditelná.
+        continue-on-error: true
+        run: npm run data:pohotovosti
 
       - name: Rebuild PPO web data
         # Karty „Ve Věstníku MZ" na detailech skupin (mergeVestnik) se plní

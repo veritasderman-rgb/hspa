@@ -36,6 +36,7 @@ const PAGES = [
   'kraje.html',
   'pojistenci.html',
   'prevence.html',
+  'pohotovosti.html',
   'strategie.html',
   'glosar.html',
   'jak-funguje.html',

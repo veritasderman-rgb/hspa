@@ -85,6 +85,7 @@ git push -u origin claude/<branch>
 ├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
 ├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
 ├── prevence.html               ← Vakcinace + screeningy
+├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď)
 ├── strategie.html              ← Národní strategické dokumenty
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
@@ -112,6 +113,7 @@ git push -u origin claude/<branch>
 │   ├── kraje.js + cz-map.js    ← Mapa krajů + krajský dashboard
 │   ├── pojistenci.js           ← OIS 11-47 dashboard
 │   ├── prevence.js             ← Prevence dashboard
+│   ├── pohotovosti.js + pohotovosti-engine.js ← Pohotovosti (render + jádro: svátky, otevřeno teď, vzdálenost)
 │   ├── strategies.js           ← Strategie + explainery
 │   ├── explainers.js           ← Explainery (samostatné kontextové texty)
 │   ├── explainer-policy-views.js, strategy-policy-views.js, strategy-links.js
@@ -135,6 +137,9 @@ git push -u origin claude/<branch>
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
+│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje)
+│   ├── pohotovosti-akutni.json ← Urgentní příjmy, akutní chirurgie a základny ZZS z NRPZS (líný load)
+│   ├── obce-gps.json           ← Gazetteer 6 256 obcí ČR pro vyhledávání podle města
 │   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
 │   ├── pojistenci-d5-*.json    ← OIS 11-47 (ZP × kraj × okres)
 │   ├── freshness.json          ← Stav čerstvosti dat na indikátor
@@ -211,6 +216,7 @@ npm run build:css         # Minifikace styles.css → styles.min.css (NUTNÉ po 
 npm run build:generated   # Přegeneruje VŠECHNY generované artefakty (po každém merge/rebase)
 npm run setup:git         # Merge driver pro generované soubory (běží i sám po `npm install`)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
+npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
@@ -282,6 +288,7 @@ Aktuálně běží další vlny vývoje:
 | Krajský dashboard + OIS 11-47 pojištěnci | ✅ |
 | Animation system (count-up, bar fill, IntersectionObserver) | ✅ |
 | Brand mark „HSPA Kompas" (logo, favicon, cover, pattern) | ✅ |
+| Pohotovosti — celostátní vyhledávání „kde má teď otevřeno" | ✅ |
 
 ## Brand — HSPA Kompas
 

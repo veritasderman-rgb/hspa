@@ -871,6 +871,102 @@ agreguje typované vazby napříč datasety:
 
 Konzumuje `barometr.html` a blok „Souvislosti" na detailu indikátoru.
 
+## 21. `data/pohotovosti.json` — pohotovostní služba (generovaný)
+
+**Negeneruj ručně** — vzniká z `ingest/transform_pohotovosti.js`
+(`npm run data:pohotovosti`). Slévá tři zdroje, z nichž žádný sám nestačí:
+
+| Zdroj | Co dodává | Co nemá |
+|---|---|---|
+| VZP — `pohotovosti.vzp.cz` (scrape) | ordinační doba po dnech, typ služby, telefon, celá ČR | souřadnice, napojení na registr |
+| ÚZIS NRPZS (open data CSV) | souřadnice, přesná adresa, urgentní příjmy, základny ZZS | ordinační dobu nevede vůbec |
+| Otevřená data krajů (4 ze 14) | popis místa v areálu, krajské souřadnice, rozpisy zubních služeb | pokrývá jen čtvrtinu republiky |
+
+**Proč zrovna VZP:** zákonem č. 290/2025 Sb. přešla od 1. 1. 2026 odpovědnost
+za pohotovostní službu z krajů na zdravotní pojišťovny. Krajské přehledy tím
+přestaly být primárním zdrojem a slouží už jen jako doplněk a kontrola.
+
+**Proč se joinuje přes adresu:** kód místa u VZP je `{IČZ}_{typ}` — IČZ je
+interní číslo zařízení u pojišťovny. Na IČO ani na kód místa poskytování
+v NRPZS nesedí ani jednou z 283 položek. Jediné společné pole je adresa
+(`ingest/lib/pohotovosti-geo.js`); 272 z 283 se spáruje na úroveň domu,
+zbytek spadne na střed obce a nese `geo_source: 'obec'`.
+
+### Schéma
+
+```json
+{
+  "version": "1.0",
+  "generated_at": "2026-08-31T10:00:00Z",
+  "legal": {
+    "law":    { "title": "Zákon č. 290/2025 Sb. …", "effective_from": "2026-01-01" },
+    "decree": { "title": "Vyhláška č. 380/2025 Sb. …", "url": "…", "minimum_scope": { "lps_dospeli": "§ 2 odst. 1: …" } }
+  },
+  "sources": [{ "id": "vzp", "name": "…", "url": "…", "role": "…", "fetched_at": "…" }],
+  "coverage": { "places_total": 283, "places_with_hours": 283, "geo_sources": { "nrpzs": 272, "obec": 11 }, "by_kraj": {}, "by_category": {} },
+  "categories": { "lps_dospeli": "Lékařská pohotovostní služba pro dospělé" },
+  "regions": [{ "kraj_code": "CZ041", "has_open_data": true, "open_data_url": "…", "web": "…" }],
+  "places": [{
+    "id": "vzp-01003726_1",
+    "name": "Nemocnice Na Františku",
+    "workplace": "Lékařská pohotovostní služba",
+    "category": "lps_dospeli | lps_deti | zubni | lekarna",
+    "kraj_code": "CZ010", "okres": "…", "obec": "Praha 1",
+    "address": "Na Františku 847/8, 11000 Praha 1",
+    "lat": 50.0912, "lon": 14.4245,
+    "geo_source": "nrpzs | kraj | obec",
+    "phone": "+420222801343", "web": null, "detail_url": "…",
+    "hours": { "kind": "weekly", "week": { "mon": [["17:00","22:00"]], "…": [], "holiday": [] } },
+    "hours_source": "vzp",
+    "meets_minimum": true,
+    "minimum_checks": [{ "rule": "§ 2/3 odst. 1 písm. a) …", "ok": true, "detail": "…" }]
+  }],
+  "rotations": [{
+    "id": "rotace-283", "kraj_code": "CZ031", "category": "zubni",
+    "index_url": "…", "dates": ["2026-09-05"],
+    "practices": [{ "name": "…", "hours": { "kind": "rotation", "shifts": [{ "from": "2026-09-05", "to": "2026-09-05", "ranges": [["08:00","12:00"]] }] } }]
+  }]
+}
+```
+
+**Provozní doba** má dva tvary, oba definované v `ingest/lib/pohotovosti-hours.js`:
+
+- `kind: 'weekly'` — sedm dnů plus `holiday`; svátek je samostatný den, protože
+  o Velikonočním pondělí platí nedělní režim, ne pondělní.
+- `kind: 'rotation'` — služba se střídá mezi ordinacemi (v devíti krajích zubní,
+  v osmi lékárenská); platí jen v uvedené termíny.
+
+Interval s koncem menším než začátek (`["15:30","07:00"]`) je platný zápis noční
+služby přesahující půlnoc, ne chyba. `[["00:00","24:00"]]` je nepřetržitý provoz.
+
+### `data/pohotovosti-akutni.json`
+
+Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií
+a výjezdové základny ZZS. Ordinační dobu registr nevede, takže `hours` chybí.
+`evidence` u každé kategorie rozlišuje `registr` (registr to tak přímo
+pojmenovává) a `odvozeno` (dovodili jsme z druhu zařízení, formy péče a oborů) —
+chirurgická kategorie je vždy odvozená. Stránka to čtenáři říká.
+
+### `data/obce-gps.json`
+
+Gazetteer 6 256 obcí ČR pro převod názvu města na souřadnice. Kompaktní formát
+`[name, lat, lon, okres, lau]`, 4 desetinná místa (~11 m). Zdroj Wikidata
+(třída Q5153359), kód LAU odkazuje zpět do RÚIAN. Není to zdravotnická data —
+je to převodník, díky kterému vyhledávání běží v prohlížeči a poloha uživatele
+nikam neodchází.
+
+### Validace
+
+`npm run validate:pohotovosti` — souřadnice uvnitř ČR, časy ve tvaru `HH:MM`,
+data termínů `YYYY-MM-DD`, telefon v mezinárodním tvaru, NUTS-3 kód kraje,
+všech 14 krajů v registru zdrojů, a prahové kontroly (min. 150 míst, ≥ 80 %
+s ordinační dobou, ≥ 80 % s přesnou polohou, ≥ 5 000 obcí v gazetteeru).
+Prahy jsou tam proto, že zdrojem hodin je scrapované HTML: kdyby VZP změnila
+šablonu, transform doběhne bez chyby a vydá prázdno.
+
+`meets_minimum: false` bez `minimum_checks` je chyba — je to tvrzení
+o konkrétním poskytovateli a bez rozpisu by ho stránka nemohla doložit.
+
 ## Vztahy mezi datasety
 
 ```
@@ -948,6 +1044,7 @@ Konzumuje `barometr.html` a blok „Souvislosti" na detailu indikátoru.
 | `npm run validate:legislation` | `legislativa.json` ENUM fází/typů (radar) + ENUM typů/stavů (plán), FK na indikátory + články + self-FK `radar_id` |
 | `npm run validate:system-model` | `system-model.json` enumy, FK, bez osiřelých uzlů/self-loops |
 | `npm run validate:claims` | `claims.json` schéma, FK, invarianty + quote-verifikace proti HTML |
+| `npm run validate:pohotovosti` | `pohotovosti.json` + `obce-gps.json`: souřadnice v ČR, tvar časů, prahy pokrytí |
 | `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
 

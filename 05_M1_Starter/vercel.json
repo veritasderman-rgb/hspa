@@ -10,7 +10,7 @@
   },
   "headers": [
     {
-      "source": "/((?!embed$|embed\\.html$).*)",
+      "source": "/((?!embed$|embed\\.html$|pohotovosti$|pohotovosti\\.html$).*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -27,6 +27,41 @@
         {
           "key": "Permissions-Policy",
           "value": "geolocation=(), microphone=(), camera=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://*.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'"
+        }
+      ]
+    },
+    {
+      "_comment": [
+        "Stránka pohotovostí je jediná, která smí sáhnout na geolokaci —",
+        "bez toho by tlačítko „Moje poloha“ na produkci vždy spadlo do chybové",
+        "větve (globální politika níž geolokaci vypíná úplně). Souřadnice se",
+        "zpracují v prohlížeči a nikam se neodesílají; mikrofon a kamera",
+        "zůstávají zakázané i tady.",
+        "Ostatní hlavičky jsou schválně zopakované — Vercel bere hlavičky",
+        "z prvního odpovídajícího pravidla, takže vynechaná hlavička by tu",
+        "prostě chyběla."
+      ],
+      "source": "/pohotovosti(\\.html)?",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(self), microphone=(), camera=()"
         },
         {
           "key": "Content-Security-Policy",
