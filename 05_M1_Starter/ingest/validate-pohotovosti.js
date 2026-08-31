@@ -264,20 +264,18 @@ function validateObce() {
 function validateAcute() {
   const acute = readJson('data/pohotovosti-akutni.json');
   if (!acute) return;
-  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'denni_ambulance', 'zzs'];
-  let denni = 0;
+  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'zzs'];
   for (const p of acute.places ?? []) {
     if (!p.id || !p.name) fail(`akutní pracoviště bez id nebo názvu: ${JSON.stringify(p).slice(0, 80)}`);
     if (p.lat != null && !(p.lat >= 48.4 && p.lat <= 51.2)) fail(`akutní pracoviště ${p.id}: šířka mimo ČR`);
     for (const c of p.categories ?? []) {
       if (!ACUTE_CATEGORIES.includes(c)) fail(`akutní pracoviště ${p.id}: neznámá kategorie „${c}“`);
     }
-    if ((p.categories ?? []).includes('denni_ambulance')) denni += 1;
   }
-  // Denní ambulance jsou odpověď na „kam v ordinační době“. Kdyby je
-  // klasifikátor přestal chytat, stránka by v pracovní den zase nabízela
-  // jen vzdálené nepřetržité pohotovosti.
-  if (denni < 100) fail(`jen ${denni} nemocničních denních ambulancí (čekáno přes 100) — klasifikátor se rozpadl`);
+  // Urgentní příjem je jediné pracoviště, u kterého registr přímo dokládá
+  // neobjednanou akutní péči — stránka na něj v ordinační době odkazuje.
+  const urgent = (acute.places ?? []).filter(p => (p.categories ?? []).includes('urgentni_prijem')).length;
+  if (urgent < 20) fail(`jen ${urgent} urgentních příjmů (čekáno přes 20) — klasifikátor se rozpadl`);
 }
 
 function main() {

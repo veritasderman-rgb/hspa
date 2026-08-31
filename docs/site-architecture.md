@@ -144,8 +144,11 @@ zdrave-cesko.cz/
 - **Odpověď se mění podle hodiny.** Pohotovost ze zákona slouží až PO
   ordinačních hodinách, takže v pracovní den dopoledne nemá otevřeno skoro
   nic. Blok „Co dělat teď“ (`careAdvice()` v enginu) v takové chvíli
-  nenabízí vzdálenou nepřetržitou pohotovost, ale praktika, krajskou online
-  pohotovost a nejbližší chirurgickou ambulanci nemocnice. Bez toho stránka
+  nenabízí vzdálenou nepřetržitou pohotovost, ale lékaře, u kterého je člověk
+  registrovaný, krajskou online pohotovost a nejbližší doložené neobjednané
+  pracoviště (urgentní příjem, nebo to, které samo provozuje pohotovost).
+  Bez polohy nenabízí konkrétní místo vůbec — bez ní nelze říct „nejbližší“.
+  Bez toho stránka
   posílala uživatele z Mariánských Lázní do Prahy, 115 km daleko, zatímco
   nemocnice s chirurgickou ambulancí stála 470 metrů od něj a její vlastní
   LPS otevírala v 15:30.

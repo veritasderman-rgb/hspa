@@ -286,7 +286,7 @@ export function buildDataset(input) {
   // ── Doplňková vrstva z registru: urgentní příjmy, ZZS, akutní chirurgie ──
   // Nejsou to pohotovosti podle vyhlášky, ale na otázku „kam když je zavřeno“
   // odpovídají — a registr u nich má souřadnice i kontakt.
-  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'denni_ambulance', 'zzs'];
+  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'zzs'];
   const acute = (nrpzs?.places ?? [])
     .filter(p => p.categories.some(c => ACUTE_CATEGORIES.includes(c)))
     .map(p => ({
@@ -404,7 +404,6 @@ export function buildDataset(input) {
       rotations_total: rotations.length,
       rotation_practices: rotations.reduce((n, r) => n + r.practices.length, 0),
       acute_total: acute.length,
-      denni_ambulance_total: acute.filter(a => a.categories.includes('denni_ambulance')).length,
       online_services: (input.online?.services ?? []).length,
       regions_total: sources?.kraje?.length ?? 14,
       regions_with_open_data: regionsWithOpenData,

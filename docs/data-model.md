@@ -961,16 +961,15 @@ o pohotovostech.
 
 ### `data/pohotovosti-akutni.json`
 
-Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií,
-**denní chirurgické a úrazové ambulance nemocnic** a výjezdové základny ZZS.
-Ordinační dobu registr nevede, takže `hours` chybí.
+Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií
+a výjezdové základny ZZS. Ordinační dobu registr nevede, takže `hours` chybí.
 
-Kategorie `denni_ambulance` (169 pracovišť, všech 14 krajů) je odpověď na „kam
-v ordinační době, když pohotovost ještě neslouží“. Je omezená na nemocnice
-(druh 101–105) schválně: „chirurgie + ambulantní péče“ samo o sobě sedí i na
-soukromou laserovou kliniku, kam se s úrazem bez objednání nechodí. Liší se od
-`chirurgicka` tím, že nevyžaduje akutní lůžka — Nemocnice Mariánské Lázně má
-chirurgickou ambulanci i LPS, ale jen následnou lůžkovou péči.
+⚠️ **Slepá ulička, kterou tu nehledejte:** kategorie „denní úrazová ambulance“
+odvozená z „nemocnice + chirurgický obor + ambulantní péče“ vypadá lákavě, ale
+vybere i Revmatologický ústav, Masarykův onkologický ústav nebo Ústav pro péči
+o matku a dítě. Registr nerozliší ambulanci, kam se chodí neobjednaně, od té na
+objednání. Denní alternativu proto stránka bere jen z doloženého: urgentní
+příjem, nebo pracoviště, které samo provozuje pohotovost.
 `evidence` u každé kategorie rozlišuje `registr` (registr to tak přímo
 pojmenovává) a `odvozeno` (dovodili jsme z druhu zařízení, formy péče a oborů) —
 chirurgická kategorie je vždy odvozená. Stránka to čtenáři říká.

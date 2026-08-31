@@ -447,41 +447,30 @@ test('vercel.json používá jen klíče, které schéma Vercelu zná', () => {
 // Online pohotovosti a denní ambulance
 // ─────────────────────────────────────────────────────────────────────────
 
-test('classifyPlace · nemocniční chirurgická ambulance i bez akutních lůžek', () => {
-  // Regrese: Nemocnice Mariánské Lázně má chirurgickou ambulanci a vlastní LPS,
-  // ale nemá AKUTNÍ lůžka (jen následnou a dlouhodobou péči). Do kategorie
-  // `chirurgicka` proto nespadla a v ordinační době stránka nabídla uživateli
-  // v Mariánských Lázních pohotovost v Praze, 115 km daleko, místo nemocnice
-  // 470 metrů od něj.
+test('classifyPlace · z nemocnice s ambulantní chirurgií nedělá úrazovou ambulanci', () => {
+  // Slepá ulička, kterou zachytilo review: „nemocnice + chirurgický obor +
+  // ambulantní péče“ vypadá jako definice denní úrazové ambulance, ale
+  // vybralo to i Revmatologický ústav, Masarykův onkologický ústav nebo
+  // Ústav pro péči o matku a dítě. Registr neumí rozlišit ambulanci, kam se
+  // chodí neobjednaně, od ambulance na objednání — takže se to neodvozuje.
   const res = classifyPlace(nrpzsRow({
-    ZZ_druh_kod: '105',
-    ZZ_druh_nazev: 'Nemocnice následné péče',
-    ZZ_obor_pece: 'chirurgie, vnitřní lékařství, gastroenterologie',
-    ZZ_forma_pece: 'ambulantní péče, následná lůžková péče - standardní',
-  }));
-  assert.equal(res.denni_ambulance, 'odvozeno');
-  assert.equal(res.chirurgicka, undefined, 'bez akutních lůžek to není akutní nemocnice');
-});
-
-test('classifyPlace · soukromá chirurgická ordinace není denní ambulance', () => {
-  // „chirurgie + ambulantní péče“ sedí i na laserovou kliniku nebo ordinaci
-  // jednoho chirurga — tam se s úrazem bez objednání nechodí.
-  const res = classifyPlace(nrpzsRow({
-    ZZ_druh_kod: '324',
-    ZZ_druh_nazev: 'Samostatná ordinace lékaře specialisty',
-    ZZ_obor_pece: 'chirurgie',
+    ZZ_druh_kod: '103',
+    ZZ_druh_nazev: 'Specializovaná nemocnice',
+    ZZ_nazev: 'Masarykův onkologický ústav',
+    ZZ_obor_pece: 'chirurgie, klinická onkologie',
     ZZ_forma_pece: 'ambulantní péče',
   }));
-  assert.equal(res.denni_ambulance, undefined);
+  assert.deepEqual(res, {}, 'onkologický ústav není místo, kam se jde s úrazem');
 });
 
-test('data/pohotovosti-akutni.json · denní ambulance pokrývají všechny kraje', () => {
+test('data/pohotovosti-akutni.json · jen doložitelné kategorie', () => {
   const acute = readData('pohotovosti-akutni.json');
-  const denni = acute.places.filter(p => p.categories.includes('denni_ambulance'));
-  assert.ok(denni.length > 100, `jen ${denni.length} denních ambulancí`);
-  assert.equal(new Set(denni.map(p => p.kraj_code)).size, 14, 'musí být ve všech 14 krajích');
-  assert.ok(denni.some(p => /Mariánské Lázně/.test(p.obec ?? '')),
-    'Nemocnice Mariánské Lázně je konkrétní případ, kvůli kterému kategorie vznikla');
+  const allowed = new Set(['urgentni_prijem', 'chirurgicka', 'zzs']);
+  for (const p of acute.places) {
+    for (const c of p.categories) assert.ok(allowed.has(c), `${p.id}: neznámá kategorie ${c}`);
+  }
+  const urgent = acute.places.filter(p => p.categories.includes('urgentni_prijem'));
+  assert.ok(urgent.length >= 20, `jen ${urgent.length} urgentních příjmů`);
 });
 
 test('data/pohotovosti.json · online pohotovosti mají doložené podmínky', () => {
