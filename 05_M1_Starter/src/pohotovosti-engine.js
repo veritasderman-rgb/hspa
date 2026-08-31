@@ -344,3 +344,94 @@ export function nextRotationDate(rotation, now = new Date()) {
   const today = isoDate(now);
   return (rotation?.dates ?? []).find(d => d >= today) ?? null;
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// Ve kterém kraji uživatel stojí
+//
+// Potřebuje to sekce rotace: v devíti krajích se zubní pohotovost střídá
+// a rozpis z druhého konce republiky je uživateli k ničemu.
+//
+// Původně se kraj bral podle nejbližší pohotovosti — což u hranice krajů
+// selže. Bezuchov (okres Přerov, Olomoucký kraj) má nejblíž pracoviště
+// v Bystřici pod Hostýnem (Zlínský kraj, 8,6 km), takže by se ukázal
+// zlínský rozpis a olomoucký, který pro Bezuchov platí, by se skryl.
+//
+// Dvě spolehlivé cesty podle toho, odkud výchozí bod přišel:
+//   • z našeptávače obcí → známe okres, mapa okres → kraj je přesná
+//   • z geolokace        → bod v polygonu kraje (data/cz-regions.geojson)
+// ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * Leží bod uvnitř prstence? Ray casting (even-odd rule).
+ * @param {Array<[number,number]>} ring — pole [lon, lat]
+ */
+export function pointInRing(ring, lon, lat) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    const intersects = (yi > lat) !== (yj > lat)
+      && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
+/** Bod uvnitř Polygon/MultiPolygon geometrie (díry se odečítají). */
+export function pointInGeometry(geometry, lon, lat) {
+  const polygons = geometry?.type === 'MultiPolygon'
+    ? geometry.coordinates
+    : geometry?.type === 'Polygon' ? [geometry.coordinates] : [];
+
+  for (const polygon of polygons) {
+    const [outer, ...holes] = polygon;
+    if (!outer || !pointInRing(outer, lon, lat)) continue;
+    if (holes.some(h => pointInRing(h, lon, lat))) continue;
+    return true;
+  }
+  return false;
+}
+
+/**
+ * NUTS-3 kód kraje, ve kterém bod leží.
+ *
+ * Geojson je zjednodušený, takže bod těsně u hranice (nebo u státní hranice)
+ * nemusí padnout do žádného polygonu. V takovém případě vrátíme kraj
+ * s nejbližším těžištěm — pořád je to blíž pravdě než kraj náhodné
+ * nejbližší nemocnice.
+ *
+ * @param {object} geojson — data/cz-regions.geojson
+ * @returns {string|null} např. 'CZ071'
+ */
+export function regionCodeAt(geojson, lat, lon) {
+  const features = geojson?.features ?? [];
+  if (!features.length || !Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+
+  for (const f of features) {
+    if (pointInGeometry(f.geometry, lon, lat)) return f.properties?.code ?? null;
+  }
+
+  let best = null;
+  let bestDist = Infinity;
+  for (const f of features) {
+    const c = geometryCentroid(f.geometry);
+    if (!c) continue;
+    const d = haversineKm({ lat, lon }, c);
+    if (d != null && d < bestDist) { bestDist = d; best = f.properties?.code ?? null; }
+  }
+  return best;
+}
+
+/** Hrubé těžiště geometrie — stačí na výběr nejbližšího kraje. */
+function geometryCentroid(geometry) {
+  const polygons = geometry?.type === 'MultiPolygon'
+    ? geometry.coordinates
+    : geometry?.type === 'Polygon' ? [geometry.coordinates] : [];
+  let sumLat = 0;
+  let sumLon = 0;
+  let n = 0;
+  for (const polygon of polygons) {
+    for (const [lon, lat] of polygon[0] ?? []) { sumLon += lon; sumLat += lat; n += 1; }
+  }
+  return n ? { lat: sumLat / n, lon: sumLon / n } : null;
+}

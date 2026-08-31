@@ -24,7 +24,6 @@ import {
 } from './page-shared.js';
 import {
   evaluateStatus,
-  haversineKm,
   formatDistance,
   formatRange,
   searchObce,
@@ -32,6 +31,7 @@ import {
   rotationDuty,
   nextRotationDate,
   dayKeyFor,
+  regionCodeAt,
 } from './pohotovosti-engine.js';
 
 const PAGE_SIZE = 8;
@@ -68,6 +68,7 @@ const state = {
   shown: PAGE_SIZE,
   rows: [],
   chart: null,
+  geojson: null,
 };
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -86,6 +87,13 @@ async function ensureObce() {
   const payload = await loadJson('data/obce-gps.json');
   state.obce = payload.obce ?? [];
   return state.obce;
+}
+
+/** Hranice krajů — sdílené mapou a určením kraje výchozího bodu. */
+async function ensureRegions() {
+  if (state.geojson) return state.geojson;
+  state.geojson = await loadJson('data/cz-regions.geojson');
+  return state.geojson;
 }
 
 /** Akutní vrstva z registru — také líně, jde o dalších 190 kB. */
@@ -128,6 +136,22 @@ function renderTypeChips() {
 // Vyhledání výchozího bodu
 // ─────────────────────────────────────────────────────────────────────────
 
+/**
+ * Dohledá kraj výchozího bodu z hranic krajů. Běží až po prvním vykreslení —
+ * výpis pohotovostí na kraji nezávisí a nemá na co čekat; dotčená je jen
+ * sekce rotace, která se překreslí, jakmile je odpověď na světě.
+ */
+async function resolveOriginRegion(origin) {
+  try {
+    const geojson = await ensureRegions();
+    if (state.origin !== origin) return; // uživatel mezitím hledal odjinud
+    origin.krajCode = regionCodeAt(geojson, origin.lat, origin.lon);
+    renderRotationSection();
+  } catch {
+    // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj.
+  }
+}
+
 function setOrigin(origin) {
   state.origin = origin;
   state.shown = PAGE_SIZE;
@@ -140,6 +164,7 @@ function setOrigin(origin) {
     if (reset) reset.addEventListener('click', () => { setOrigin(null); update(); });
   }
   update();
+  if (origin) resolveOriginRegion(origin);
 }
 
 function closeSuggest() {
@@ -455,7 +480,7 @@ async function renderMap() {
 
   if (!state.chart) {
     try {
-      const geojson = await loadJson('data/cz-regions.geojson');
+      const geojson = await ensureRegions();
       echarts.registerMap('cz-regions-poh', geojson);
       state.chart = echarts.init(host);
       state.chart.on('click', (params) => {
@@ -532,14 +557,19 @@ async function renderMap() {
 // Rotace
 // ─────────────────────────────────────────────────────────────────────────
 
-/** Kraj, ve kterém uživatel hledá — podle nejbližší pohotovosti. */
+/**
+ * Kraj, ve kterém uživatel hledá — z hranic krajů, ne z nejbližší pohotovosti.
+ *
+ * Nejbližší pracoviště u hranice krajů leží často za ní: Bezuchov (okres
+ * Přerov, Olomoucký kraj) má nejblíž Bystřici pod Hostýnem ve Zlínském kraji.
+ * Rozpis rotace by pak ukázal cizí kraj a ten správný skryl. Bod v polygonu
+ * sedí na všech 6 251 obcích, u kterých se dá výsledek ověřit proti okresu.
+ *
+ * Než se hranice krajů načtou, vrací null — sekce rotace pak ukáže rozpisy
+ * ze všech krajů, což je horší, ale ne zavádějící.
+ */
 function currentKrajCode() {
-  if (!state.origin) return null;
-  const nearest = (state.data?.places ?? [])
-    .filter(p => p.lat != null)
-    .map(p => ({ p, d: haversineKm(state.origin, p) }))
-    .sort((a, b) => a.d - b.d)[0];
-  return nearest?.p.kraj_code ?? null;
+  return state.origin?.krajCode ?? null;
 }
 
 function renderRotationSection() {

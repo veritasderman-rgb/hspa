@@ -384,3 +384,34 @@ test('data/obce-gps.json pokrývá obce ČR', () => {
   const mimo = g.obce.filter(([, lat, lon]) => lat < 48.4 || lat > 51.2 || lon < 12 || lon > 18.9);
   assert.equal(mimo.length, 0, 'gazetteer nesmí mít obce mimo ČR');
 });
+
+// ─────────────────────────────────────────────────────────────────────────
+// Nasazení
+// ─────────────────────────────────────────────────────────────────────────
+
+test('vercel.json povoluje geolokaci právě na stránce pohotovostí', () => {
+  // Regrese: globální `Permissions-Policy: geolocation=()` platila i na
+  // pohotovosti, takže tlačítko „Moje poloha“ na produkci vždy spadlo do
+  // chybové větve — funkce vypadala rozbitě, aniž by to šlo poznat lokálně.
+  const cfg = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'vercel.json'), 'utf8'));
+  const policyOf = (rule) => rule.headers.find(h => h.key === 'Permissions-Policy')?.value ?? null;
+
+  // Pozor: catch-all pravidlo má „pohotovosti“ taky — v negativním lookaheadu.
+  // Hledáme to, které na /pohotovosti přímo míří.
+  const pohotovosti = cfg.headers.find(r => r.source.startsWith('/pohotovosti'));
+  assert.ok(pohotovosti, 'chybí pravidlo hlaviček pro /pohotovosti');
+  assert.match(policyOf(pohotovosti), /geolocation=\(self\)/);
+  assert.match(policyOf(pohotovosti), /microphone=\(\)/, 'mikrofon musí zůstat zakázaný');
+  assert.match(policyOf(pohotovosti), /camera=\(\)/, 'kamera musí zůstat zakázaná');
+
+  // Catch-all pravidlo musí pohotovosti vynechat, jinak by se hlavičky
+  // překrývaly a záleželo by na pořadí.
+  const catchAll = cfg.headers.find(r => r.source.startsWith('/((?!'));
+  assert.ok(catchAll.source.includes('pohotovosti'), 'catch-all musí /pohotovosti vyjmout');
+  assert.match(policyOf(catchAll), /geolocation=\(\)/, 'jinde geolokace zakázaná zůstává');
+
+  // Bezpečnostní hlavičky se v novém pravidle nesmí ztratit.
+  for (const key of ['X-Content-Type-Options', 'X-Frame-Options', 'Referrer-Policy', 'Content-Security-Policy']) {
+    assert.ok(pohotovosti.headers.some(h => h.key === key), `pravidlo pro /pohotovosti postrádá ${key}`);
+  }
+});

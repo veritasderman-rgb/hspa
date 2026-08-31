@@ -24,7 +24,15 @@ import {
   rankPlaces,
   rotationDuty,
   nextRotationDate,
+  pointInRing,
+  pointInGeometry,
+  regionCodeAt,
 } from '../src/pohotovosti-engine.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const week = (over = {}) => ({
   mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [], holiday: [], ...over,
@@ -205,4 +213,76 @@ test('rotationDuty a nextRotationDate čtou rozpis střídavé služby', () => {
   assert.deepEqual(duty.map(d => d.practice.name), ['Ordinace A']);
   assert.equal(nextRotationDate(rotation, new Date(2026, 8, 7)), '2026-09-12');
   assert.equal(nextRotationDate(rotation, new Date(2026, 8, 30)), null);
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Určení kraje výchozího bodu
+// ─────────────────────────────────────────────────────────────────────────
+
+const SQUARE = {
+  type: 'Polygon',
+  coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]],
+};
+
+test('pointInRing / pointInGeometry — základní geometrie', () => {
+  assert.equal(pointInRing(SQUARE.coordinates[0], 5, 5), true);
+  assert.equal(pointInRing(SQUARE.coordinates[0], 15, 5), false);
+  assert.equal(pointInGeometry(SQUARE, 5, 5), true);
+  assert.equal(pointInGeometry(SQUARE, -1, 5), false);
+  assert.equal(pointInGeometry(null, 5, 5), false);
+});
+
+test('pointInGeometry odečítá díry v polygonu', () => {
+  const withHole = {
+    type: 'Polygon',
+    coordinates: [
+      [[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]],
+      [[4, 4], [6, 4], [6, 6], [4, 6], [4, 4]],
+    ],
+  };
+  assert.equal(pointInGeometry(withHole, 1, 1), true);
+  assert.equal(pointInGeometry(withHole, 5, 5), false, 'bod v díře je venku');
+});
+
+test('regionCodeAt určí kraj z hranic, ne z nejbližší pohotovosti', () => {
+  // Regrese: kraj se dřív bral podle nejbližšího pracoviště. Bezuchov (okres
+  // Přerov, Olomoucký kraj) má nejblíž Bystřici pod Hostýnem ve Zlínském kraji
+  // (8,6 km), takže se ukazoval zlínský rozpis rotace a olomoucký se skrýval.
+  const geojson = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'cz-regions.geojson'), 'utf8'));
+  assert.equal(regionCodeAt(geojson, 49.4627, 17.6088), 'CZ071', 'Bezuchov je Olomoucký kraj');
+  assert.equal(regionCodeAt(geojson, 50.0755, 14.4378), 'CZ010', 'Praha');
+  assert.equal(regionCodeAt(geojson, 49.1951, 16.6068), 'CZ064', 'Brno');
+  assert.equal(regionCodeAt(geojson, 49.8209, 18.2625), 'CZ080', 'Ostrava');
+  assert.equal(regionCodeAt(geojson, 49.9639, 14.0721), 'CZ020', 'Beroun');
+});
+
+test('regionCodeAt souhlasí s okresem u všech obcí gazetteeru', () => {
+  // Hranice krajů v geojsonu jsou zjednodušené — tenhle test hlídá, že to
+  // zjednodušení nikde neposune obec do sousedního kraje.
+  const geojson = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'cz-regions.geojson'), 'utf8'));
+  const gazetteer = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'obce-gps.json'), 'utf8'));
+  const dataset = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'pohotovosti.json'), 'utf8'));
+
+  const norm = (s) => String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  // Pravda o příslušnosti okresu ke kraji plyne z pohotovostí — každá nese
+  // okres i NUTS-3 kód kraje ze stejného zdroje.
+  const krajByOkres = new Map(dataset.places.filter(p => p.okres && p.kraj_code).map(p => [norm(p.okres), p.kraj_code]));
+
+  let checked = 0;
+  const mismatches = [];
+  for (const [name, lat, lon, okres] of gazetteer.obce) {
+    const expected = krajByOkres.get(norm(okres));
+    if (!expected) continue;
+    checked += 1;
+    const got = regionCodeAt(geojson, lat, lon);
+    if (got !== expected) mismatches.push(`${name} (okres ${okres}): ${got} místo ${expected}`);
+  }
+  assert.ok(checked > 3000, `ověřeno jen ${checked} obcí`);
+  assert.deepEqual(mismatches.slice(0, 5), [], `${mismatches.length} obcí spadlo do jiného kraje`);
+});
+
+test('regionCodeAt se nezasekne na prázdném nebo neplatném vstupu', () => {
+  assert.equal(regionCodeAt(null, 50, 14), null);
+  assert.equal(regionCodeAt({ features: [] }, 50, 14), null);
+  assert.equal(regionCodeAt({ features: [{ geometry: SQUARE, properties: { code: 'X' } }] }, NaN, 14), null);
 });
