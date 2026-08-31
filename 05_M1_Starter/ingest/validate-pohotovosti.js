@@ -20,7 +20,12 @@ import { DAY_KEYS } from './lib/pohotovosti-hours.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
+// Pohotovostní služby podle vyhlášky č. 380/2025 Sb. — jen u nich se posuzuje
+// zákonné minimum a jen jich se týkají prahy pokrytí.
 const CATEGORIES = ['lps_dospeli', 'lps_deti', 'zubni', 'lekarna'];
+// Kurátorovaná vrstva: běžné nemocniční ambulance s ručně ověřenou provozní
+// dobou. Ve výpisu jsou vedle pohotovostí, ale vyhláška se na ně nevztahuje.
+const PLACE_CATEGORIES = [...CATEGORIES, 'ambulance_denni'];
 const GEO_SOURCES = ['nrpzs', 'kraj', 'obec'];
 
 /** Prahy „tohle už není hubený výsledek, ale rozbitý ingest“. */
@@ -99,13 +104,15 @@ function checkHours(hours, where) {
 
 function validatePlaces(data) {
   const places = data.places ?? [];
-  if (places.length < MIN_PLACES) {
-    fail(`jen ${places.length} pohotovostí (minimum ${MIN_PLACES}) — ingest nejspíš spadl na změněné šabloně zdroje`);
+  const pohotovosti = places.filter(p => p.category !== 'ambulance_denni');
+  if (pohotovosti.length < MIN_PLACES) {
+    fail(`jen ${pohotovosti.length} pohotovostí (minimum ${MIN_PLACES}) — ingest nejspíš spadl na změněné šabloně zdroje`);
   }
 
   const seenIds = new Set();
   let withHours = 0;
   let exactGeo = 0;
+  let counted = 0;
 
   for (const p of places) {
     const where = `pohotovost ${p.id ?? '(bez id)'}`;
@@ -116,7 +123,7 @@ function validatePlaces(data) {
     if (seenIds.has(p.id)) fail(`${where}: duplicitní id`);
     seenIds.add(p.id);
 
-    if (p.category && !CATEGORIES.includes(p.category)) {
+    if (p.category && !PLACE_CATEGORIES.includes(p.category)) {
       fail(`${where}: neznámá kategorie „${p.category}“`);
     }
     if (p.kraj_code && !/^CZ0\d{2}$/.test(p.kraj_code)) {
@@ -133,8 +140,6 @@ function validatePlaces(data) {
     if (p.geo_source && !GEO_SOURCES.includes(p.geo_source)) {
       fail(`${where}: neznámý geo_source „${p.geo_source}“`);
     }
-    if (p.geo_source && p.geo_source !== 'obec') exactGeo += 1;
-
     if (p.phone && !/^\+\d{9,15}$/.test(p.phone)) {
       fail(`${where}: telefon „${p.phone}“ není v mezinárodním tvaru`);
     }
@@ -143,7 +148,14 @@ function validatePlaces(data) {
     }
 
     checkHours(p.hours, where);
-    if (p.hours) withHours += 1;
+    // Prahy pokrytí se počítají jen z pohotovostí. Devět ručně ověřených
+    // ambulancí by je jinak zředilo a poměr by přestal měřit to, kvůli čemu
+    // vznikl — jestli se ingest VZP nerozpadl.
+    if (p.category !== 'ambulance_denni') {
+      counted += 1;
+      if (p.hours) withHours += 1;
+      if (p.geo_source && p.geo_source !== 'obec') exactGeo += 1;
+    }
 
     if (p.meets_minimum != null && typeof p.meets_minimum !== 'boolean') {
       fail(`${where}: meets_minimum musí být boolean nebo null`);
@@ -158,12 +170,12 @@ function validatePlaces(data) {
     }
   }
 
-  if (places.length) {
-    const hoursRatio = withHours / places.length;
+  if (counted) {
+    const hoursRatio = withHours / counted;
     if (hoursRatio < MIN_WITH_HOURS_RATIO) {
       fail(`ordinační dobu má jen ${Math.round(hoursRatio * 100)} % míst (minimum ${MIN_WITH_HOURS_RATIO * 100} %)`);
     }
-    const geoRatio = exactGeo / places.length;
+    const geoRatio = exactGeo / counted;
     if (geoRatio < MIN_EXACT_GEO_RATIO) {
       fail(`přesnou polohu má jen ${Math.round(geoRatio * 100)} % míst (minimum ${MIN_EXACT_GEO_RATIO * 100} %) — adresní join na registr se rozpadl`);
     }
@@ -240,6 +252,67 @@ function validateOnline(data) {
   }
 }
 
+function validatePractical(data) {
+  const pr = data.practical;
+  if (!pr) { fail('chybí sekce `practical` (poplatek a co si vzít s sebou)'); return; }
+
+  const fee = pr.fee;
+  if (!fee) {
+    fail('practical: chybí blok `fee` (regulační poplatek)');
+  } else {
+    // Výše poplatku je právní fakt, který se mění novelou — bez zdroje
+    // a data ověření by na stránce tiše zastaral a lidé by podle něj
+    // počítali s jinou částkou, než jakou u přepážky zaplatí.
+    if (!(fee.amount_czk > 0 && fee.amount_czk < 10_000)) fail('practical.fee: amount_czk je mimo rozumný rozsah');
+    if (!fee.text) fail('practical.fee: chybí text');
+    if (!fee.source?.url) fail('practical.fee: chybí odkaz na zdroj výše poplatku');
+    if (!ISO_DATE_RE.test(String(fee.verified_at ?? ''))) fail('practical.fee: verified_at není YYYY-MM-DD');
+    if (!Array.isArray(fee.exemptions) || !fee.exemptions.length) fail('practical.fee: chybí výjimky z poplatku');
+  }
+
+  const steps = pr.before_you_go ?? [];
+  if (steps.length < 4) fail(`practical.before_you_go: jen ${steps.length} položek (čekány aspoň 4)`);
+  const ids = new Set();
+  for (const s of steps) {
+    const where = `practical.before_you_go/${s.id ?? '(bez id)'}`;
+    if (!s.id) fail(`${where}: chybí id`);
+    if (ids.has(s.id)) fail(`${where}: duplicitní id`);
+    ids.add(s.id);
+    if (!s.title) fail(`${where}: chybí title`);
+    if (!s.text) fail(`${where}: chybí text`);
+  }
+  // „Zavolejte předem“ je pointa celé sekce — kdyby vypadla, zbyde
+  // z rady checklist na doklady.
+  if (!ids.has('zavolejte')) fail('practical.before_you_go: chybí krok `zavolejte` (zavolat předem)');
+}
+
+function validateAmbulance(data) {
+  const rows = (data.places ?? []).filter(p => p.category === 'ambulance_denni');
+  if (!rows.length) { warn('žádná denní nemocniční ambulance — v ordinační době nemá stránka co nabídnout'); return; }
+
+  for (const p of rows) {
+    const where = `denní ambulance ${p.id}`;
+    // Publikovaná provozní doba nemocniční ambulance nevzniká ze strojového
+    // čtení, ale z toho, že ji člověk přepsal ze stránky nemocnice. Bez
+    // citátu, odkazu a data ověření by při revizi nešlo poznat, jestli se
+    // zdroj mezitím změnil — a číslo by tiše zastaralo.
+    if (!p.quote) fail(`${where}: chybí doslovný citát ze zdroje`);
+    if (!p.detail_url) fail(`${where}: chybí odkaz na zdrojovou stránku`);
+    if (!ISO_DATE_RE.test(String(p.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+    if (!p.hours) fail(`${where}: chybí provozní doba — bez ní je záznam k ničemu`);
+    if (!['ano', 'neuvedeno'].includes(String(p.walk_in))) fail(`${where}: walk_in musí být „ano“ nebo „neuvedeno“`);
+    if (p.lat == null || p.lon == null) fail(`${where}: chybí souřadnice (join na registr selhal?)`);
+    if (p.geo_source !== 'nrpzs') fail(`${where}: poloha není z registru (${p.geo_source})`);
+    // Běžná ambulance nespadá pod vyhlášku o pohotovostních službách —
+    // „nesplňuje minimum“ by u ní bylo obvinění z něčeho, co po ní nikdo nechce.
+    if (p.meets_minimum !== null) fail(`${where}: meets_minimum musí být null (vyhláška se na běžnou ambulanci nevztahuje)`);
+  }
+
+  if (data.coverage?.pohotovosti_total == null) {
+    fail('coverage: chybí pohotovosti_total — hero by tvrdilo, že denní ambulance jsou pohotovosti');
+  }
+}
+
 function validateLegal(data) {
   const decree = data.legal?.decree;
   if (!decree?.url || !decree?.title) {
@@ -285,6 +358,8 @@ function main() {
     validateRegions(data);
     validateRotations(data);
     validateOnline(data);
+    validatePractical(data);
+    validateAmbulance(data);
     validateLegal(data);
   }
   validateObce();
@@ -296,8 +371,9 @@ function main() {
     for (const e of errors) console.error(`  ✗ ${e}`);
     process.exit(1);
   }
-  const n = data?.places?.length ?? 0;
-  console.log(`[validate-pohotovosti] OK — ${n} pohotovostí, ${warnings.length} varování`);
+  const all = data?.places ?? [];
+  const amb = all.filter(p => p.category === 'ambulance_denni').length;
+  console.log(`[validate-pohotovosti] OK — ${all.length - amb} pohotovostí + ${amb} denních ambulancí, ${warnings.length} varování`);
 }
 
 main();

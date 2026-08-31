@@ -134,7 +134,8 @@ zdrave-cesko.cz/
 | **Cílový uživatel** | Člověk v nouzi, typicky na mobilu, večer nebo o víkendu. Sekundárně novinář a analytik (systémový kontext dole). |
 | **Fetchuje** | `data/pohotovosti.json` (včetně krajských online pohotovostí); líně `data/obce-gps.json` (až uživatel začne psát), `data/pohotovosti-akutni.json` (filtr nemocničních ambulancí, nebo automaticky v ordinační době) a `data/cz-regions.geojson` (mapa + určení kraje) |
 | **JS moduly** | `src/pohotovosti.js` (render) → `src/pohotovosti-engine.js` (jádro bez DOM) → `page-shared` |
-| **CSS namespace** | `.poh-*` (triage, finder, chip, card, badge, rot, stat, table) |
+| **CSS namespace** | `.poh-*` (triage, finder, chip, card, badge, rot, stat, table, before, online, quote) |
+| **Vstup z webu** | Pás `.home-urgent` na `index.html` hned za hero (samostatně, ne jako karta v rozcestníku „kdo jste“ — kdo v devět večer hledá pohotovost pro dítě, si personu nevybírá), odkaz v kartě „Pacient & laik“, nav pod „Co s tím můžu dělat já“, `related-tools`. |
 
 **Co dělá jinak než ostatní stránky**
 
@@ -145,8 +146,11 @@ zdrave-cesko.cz/
   ordinačních hodinách, takže v pracovní den dopoledne nemá otevřeno skoro
   nic. Blok „Co dělat teď“ (`careAdvice()` v enginu) v takové chvíli
   nenabízí vzdálenou nepřetržitou pohotovost, ale lékaře, u kterého je člověk
-  registrovaný, krajskou online pohotovost a nejbližší doložené neobjednané
-  pracoviště (urgentní příjem, nebo to, které samo provozuje pohotovost).
+  registrovaný, **otevřenou denní úrazovou ambulanci nemocnice** (kategorie
+  `ambulance_denni`, ručně ověřená provozní doba), krajskou online pohotovost
+  a nejbližší doložené neobjednané pracoviště (urgentní příjem, nebo to, které
+  samo provozuje pohotovost). Zavřená denní ambulance se nenabízí vůbec —
+  „otevře zítra v sedm“ je v deset dopoledne jen další adresa, kam nejít.
   Bez polohy nenabízí konkrétní místo vůbec — bez ní nelze říct „nejbližší“.
   Bez toho stránka
   posílala uživatele z Mariánských Lázní do Prahy, 115 km daleko, zatímco
@@ -170,6 +174,19 @@ zdrave-cesko.cz/
   ne budovu — u takového výsledku to stránka napíše.
 - **Porovnání se zákonem.** Zveřejněná ordinační doba se porovnává s minimem
   podle vyhlášky č. 380/2025 Sb.; nesplnění je vždy doložené rozpisem kontrol.
+  U kategorie `ambulance_denni` se neposuzuje — vyhláška se na běžnou
+  nemocniční ambulanci nevztahuje.
+- **Denní ambulance nesou doklad.** Provozní dobu nemocničních ambulancí nevede
+  žádný registr, takže u každé je vidět doslovný citát ze zdrojové stránky
+  a datum ověření (`quote`, `verified_at`). Kandidáty pro rozšíření hledá
+  `npm run scan:ambulance-hodiny`, publikuje se až po přečtení člověkem.
+- **Online pohotovosti vidí každý.** Sekce s krajskými telemedicínskými
+  pohotovostmi se zobrazuje bez ohledu na to, odkud návštěvník hledá — že je
+  mají dva kraje ze čtrnácti, je samo o sobě zjištění. Kdo je z kraje bez ní,
+  dostane to napsané.
+- **„Než vyrazíte“.** Sekce s regulačním poplatkem (se zdrojem, mění se
+  novelou) a checklistem, co si vzít. První krok je „zavolejte předem“ —
+  ordinační doba se mění rychleji, než ji tahle stránka stihne zaznamenat.
 
 ### `strategie.html` — Národní strategie
 

@@ -137,7 +137,7 @@ git push -u origin claude/<branch>
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
-│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje)
+│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 9 denních nemocničních ambulancí (ruční ověření), online pohotovosti, poplatek
 │   ├── pohotovosti-akutni.json ← Urgentní příjmy, akutní chirurgie a základny ZZS z NRPZS (líný load)
 │   ├── obce-gps.json           ← Gazetteer 6 256 obcí ČR pro vyhledávání podle města
 │   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
@@ -217,6 +217,7 @@ npm run build:generated   # Přegeneruje VŠECHNY generované artefakty (po kaž
 npm run setup:git         # Merge driver pro generované soubory (běží i sám po `npm install`)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
+npm run scan:ambulance-hodiny # Projde weby nemocnic a najde KANDIDÁTY na provozní dobu denních ambulancí (~10 min, nepublikuje se)
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
@@ -289,6 +290,7 @@ Aktuálně běží další vlny vývoje:
 | Animation system (count-up, bar fill, IntersectionObserver) | ✅ |
 | Brand mark „HSPA Kompas" (logo, favicon, cover, pattern) | ✅ |
 | Pohotovosti — celostátní vyhledávání „kde má teď otevřeno" | ✅ |
+| Pohotovosti — denní nemocniční ambulance, online pohotovosti, „než vyrazíte" | ✅ |
 
 ## Brand — HSPA Kompas
 

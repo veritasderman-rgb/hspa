@@ -524,6 +524,7 @@ export function careAdvice(input = {}) {
     nearestOpen = null,
     nearestLps = null,
     nearestUrgent = null,
+    nearestAmbulance = null,
     farThresholdKm = 40,
   } = input;
 
@@ -535,6 +536,11 @@ export function careAdvice(input = {}) {
   const open = hasOrigin ? nearestOpen : null;
   const lps = hasOrigin ? nearestLps : null;
   const urgent = hasOrigin ? nearestUrgent : null;
+  // Denní úrazová ambulance je jediná odpověď, která v ordinační době někam
+  // pošle — pohotovost v tu dobu ze zákona neslouží. Nabízí se jen když má
+  // právě teď otevřeno; „otevře v sedm ráno“ nikomu v deset dopoledne
+  // nepomůže a mezi kroky by to bylo jen další místo, kam nejít.
+  const ambulance = hasOrigin && nearestAmbulance?.status?.state === 'open' ? nearestAmbulance : null;
 
   // Denní alternativa je jen pro lékařskou péči. Kdo v deset dopoledne hledá
   // zubní pohotovost, patří ke svému zubaři — ne do úrazové ambulance, která
@@ -543,16 +549,21 @@ export function careAdvice(input = {}) {
 
   if (working) {
     steps.push({ kind: 'prvni_kontakt', priority: 1, contact: kontakt });
-    if (online && medicalFlow) steps.push({ kind: 'online', priority: 2, service: online });
-    if (medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 3, ...urgent });
+    if (ambulance && medicalFlow) steps.push({ kind: 'ambulance_denni', priority: 2, ...ambulance });
+    if (online && medicalFlow) steps.push({ kind: 'online', priority: 3, service: online });
+    if (medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 4, ...urgent });
     // Jedna karta, ne dvě: totéž pracoviště říká „přes den tu je běžná
     // ambulance, zavolejte“ i „pohotovost tu otevírá v…“.
-    if (lps) steps.push({ kind: 'lps_pozdeji', priority: 4, daytimeHint: medicalFlow, ...lps });
+    if (lps) steps.push({ kind: 'lps_pozdeji', priority: 5, daytimeHint: medicalFlow, ...lps });
   } else {
     if (open) steps.push({ kind: 'lps_otevrena', priority: 1, ...open });
-    if (online && medicalFlow) steps.push({ kind: 'online', priority: 2, service: online });
-    if (!open && lps) steps.push({ kind: 'lps_pozdeji', priority: 3, ...lps });
-    if (!open && medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 4, ...urgent });
+    // Mimo ordinační dobu je pohotovost hlavní odpověď; ambulance s noční
+    // nebo víkendovou dobou (úrazová pohotovost nemocnice) se hodí jen když
+    // pohotovost otevřená není.
+    if (!open && ambulance && medicalFlow) steps.push({ kind: 'ambulance_denni', priority: 2, ...ambulance });
+    if (online && medicalFlow) steps.push({ kind: 'online', priority: 3, service: online });
+    if (!open && lps) steps.push({ kind: 'lps_pozdeji', priority: 4, ...lps });
+    if (!open && medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 5, ...urgent });
   }
 
   if (!hasOrigin) steps.push({ kind: 'zadejte_polohu', priority: 9 });

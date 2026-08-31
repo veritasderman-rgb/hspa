@@ -959,6 +959,51 @@ za „Není pro …“, takže musí být v akuzativu (hlídá test).
 Vedle služeb jsou tu `infolines` — krajské nepřetržité informační linky
 o pohotovostech.
 
+### Denní nemocniční ambulance — kategorie `ambulance_denni`
+
+Kurátorovaný registr `ingest/mapping/nemocnicni-ambulance.json`; transform ho
+joinuje na NRPZS (přes **IČO + obec**, ne přes IČO samotné — jeden poskytovatel
+má míst víc a `poskytovatel_ICO` míří na libovolné z nich) a přidává výsledek
+mezi `places`.
+
+**Proč to v datech je:** pohotovost podle vyhlášky slouží až PO ordinačních
+hodinách. V pondělí v deset dopoledne proto nemá otevřeno skoro nic a stránka
+odpovídala „nejbližší otevřená je 115 km daleko“ — pravdivě, ale na jinou
+otázku, než jakou člověk s naraženou rukou položil.
+
+**Proč ručně:** provozní dobu nemocničních ambulancí nevede žádná celostátní
+otevřená data. Distribuce NRPZS NR-01-06 je v celé sérii jediná a hodiny nemá;
+REST API `nrpzs.uzis.cz`, které je podle dokumentace u vybraných zařízení vrací,
+je dlouhodobě nedostupné. Zbývají weby nemocnic — a ty se strojově číst nedají:
+průchod 135 nemocnicemi (`npm run scan:ambulance-hodiny`) vytáhl mezi
+„ordinačními hodinami“ i polední pauzy, návštěvní dobu na lůžkovém oddělení
+a poradny „pouze pro objednané“. Crawler proto hledá jen **kandidáty** do
+`ingest/cache/ambulance_kandidati.json` a publikovaný záznam vzniká až tím,
+že člověk zdrojovou stránku přečte.
+
+Záznam navíc oproti pohotovosti nese:
+
+| Pole | Význam |
+|---|---|
+| `walk_in` | `'ano'` jen když to zdroj říká výslovně, jinak `'neuvedeno'` (UI pak radí zavolat předem) |
+| `quote` | doslovný úryvek ze zdroje, podle kterého byly hodiny zapsané |
+| `source_name` + `detail_url` + `verified_at` | odkud a kdy — bez toho by údaj tiše zastaral |
+| `hours_source` | vždy `'web_nemocnice'` |
+| `meets_minimum` | vždy `null` — vyhláška o pohotovostních službách se na běžnou ambulanci nevztahuje a „nesplňuje minimum“ by bylo obvinění z něčeho, co po ní zákon nechce |
+
+`coverage.pohotovosti_total` počítá jen pohotovosti, `coverage.ambulance_denni`
+jen ambulance. Hero a statistika berou první z nich — jinak by stránka tvrdila
+„292 pohotovostí“ o čísle, ve kterém je devět běžných ambulancí. Prahy pokrytí
+ve validátoru se rovněž počítají jen z pohotovostí.
+
+### Praktické informace — `practical`
+
+Kurátorovaný `ingest/mapping/pohotovosti_prakticke.json`: výše regulačního
+poplatku i s výjimkami (`fee`, povinně `source.url` + `verified_at`, protože se
+mění novelou) a checklist `before_you_go`. Krok `zavolejte` je povinný —
+zveřejněná ordinační doba se mění dovolenými a zástupy rychleji, než ji kdokoli
+stihne aktualizovat, tuhle stránku včetně.
+
 ### `data/pohotovosti-akutni.json`
 
 Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií

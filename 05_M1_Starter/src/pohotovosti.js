@@ -45,6 +45,7 @@ const TYPE_FILTERS = [
   { id: 'lps_deti', label: 'Děti', title: 'Lékařská pohotovostní služba pro děti a dorost' },
   { id: 'zubni', label: 'Zubní', title: 'Pohotovostní služba v oboru zubní lékařství' },
   { id: 'lekarna', label: 'Lékárna', title: 'Lékárenská pohotovostní služba' },
+  { id: 'ambulance_denni', label: 'Denní ambulance', title: 'Úrazové a chirurgické ambulance nemocnic s ručně ověřenou provozní dobou — kam jít v ordinační době, kdy pohotovost ze zákona neslouží' },
   { id: 'akutni', label: 'Urgentní příjem a chirurgie', title: 'Urgentní příjmy, nemocnice s akutní chirurgií a základny záchranné služby z registru ÚZIS — nejde o pohotovostní službu podle vyhlášky a registr u nich nevede provozní dobu' },
 ];
 
@@ -58,6 +59,7 @@ const CATEGORY_COLORS = {
   lps_deti: '#0f9d58',
   zubni: '#b4531f',
   lekarna: '#7b3fb8',
+  ambulance_denni: '#0b7285',
   akutni: '#b3261e',
 };
 
@@ -151,6 +153,9 @@ async function resolveOriginRegion(origin) {
     origin.krajCode = regionCodeAt(geojson, origin.lat, origin.lon);
     renderRotationSection();
     renderAdvice(); // online pohotovost a infolinka závisí na kraji
+    // Celostátní přehled online pohotovostí se tím nezúží — jen vytáhne
+    // službu vlastního kraje dopředu a tomu, kdo ji nemá, to napíše.
+    renderOnlineSection();
   } catch {
     // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj.
   }
@@ -325,6 +330,12 @@ function placeCard(row, index) {
   if (isAcute && p.derived_note) {
     flags.push(`<span class="poh-flag">${escapeHtml(p.derived_note)}</span>`);
   }
+  if (p.category === 'ambulance_denni') {
+    flags.push(p.walk_in === 'ano'
+      ? '<span class="poh-flag poh-flag-ok" title="Nemocnice na svém webu uvádí, že sem pacienti chodí i bez objednání.">i bez objednání</span>'
+      : '<span class="poh-flag" title="Nemocnice neuvádí, zda ošetří i neobjednané — zavolejte předem.">zavolejte předem</span>');
+    flags.push('<span class="poh-flag" title="Není to pohotovostní služba podle vyhlášky č. 380/2025 Sb., ale běžná ambulance nemocnice — proto se u ní zákonné minimum neposuzuje.">běžná ambulance, ne pohotovost</span>');
+  }
 
   return `
   <li class="poh-card" id="${cardId}">
@@ -350,6 +361,16 @@ function placeCard(row, index) {
     </div>
 
     ${p.hours ? `<details class="poh-card-hours"><summary>Celý rozpis</summary>${hoursTable(p.hours)}</details>` : ''}
+    ${p.quote ? `
+      <details class="poh-card-hours">
+        <summary>Podle čeho je doba zapsaná</summary>
+        <blockquote class="poh-quote">${escapeHtml(p.quote)}</blockquote>
+        <p class="poh-quote-src">
+          <a href="${escapeHtml(p.detail_url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(p.source_name ?? 'zdroj')}</a>${
+            p.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(p.verified_at))}` : ''}.
+          Provozní dobu nemocničních ambulancí nevede žádný registr — tenhle údaj přepsal člověk ze stránky nemocnice.
+        </p>
+      </details>` : ''}
     ${Array.isArray(p.minimum_checks) && p.minimum_checks.length ? `
       <details class="poh-card-hours">
         <summary>Proč je pod minimem</summary>
@@ -495,6 +516,21 @@ function nearestUrgent() {
   return hits[0] ?? null;
 }
 
+/**
+ * Nejbližší denní úrazová ambulance nemocnice. Na rozdíl od `nearestUrgent`
+ * u ní známe provozní dobu, takže se dá říct „má teď otevřeno“, ne jen
+ * „existuje“.
+ */
+function nearestAmbulance() {
+  if (!state.origin) return null;
+  return rankPlaces(state.data?.places ?? [], {
+    origin: state.origin,
+    categories: ['ambulance_denni'],
+    openOnly: false,
+    now: new Date(),
+  })[0] ?? null;
+}
+
 /** Kategorie, podle které se řídí první kontakt v ordinační době. */
 function primaryCategory() {
   for (const c of ['lps_dospeli', 'lps_deti', 'zubni', 'lekarna']) {
@@ -524,6 +560,7 @@ function renderAdvice() {
     nearestOpen: lpsRows.find(r => r.status.state === 'open') ?? null,
     nearestLps: lpsRows[0] ?? null,
     nearestUrgent: nearestUrgent(),
+    nearestAmbulance: nearestAmbulance(),
   });
 
   const infoline = infolineForOrigin();
@@ -621,6 +658,22 @@ function adviceStepHtml(step) {
           ${sv.not_for ? `<em>Není pro ${escapeHtml(sv.not_for)}.</em>` : ''}
         </span>
         <a class="poh-action poh-action-primary" href="${escapeHtml(sv.url)}" target="_blank" rel="noopener">Otevřít ${escapeHtml(sv.name)}</a>
+      </li>`;
+  }
+
+  if (step.kind === 'ambulance_denni') {
+    const p = step.place;
+    const walkIn = p.walk_in === 'ano'
+      ? 'Nemocnice uvádí, že sem pacienti chodí i bez objednání.'
+      : 'Jestli sem chodí i neobjednaní, nemocnice neuvádí — zavolejte předem.';
+    return `
+      <li class="poh-advice-step poh-advice-step-ambulance">
+        <span class="poh-advice-what">${escapeHtml(p.name)}${p.workplace ? ` — ${escapeHtml(p.workplace)}` : ''}${step.distanceKm != null ? ` · ${escapeHtml(formatDistance(step.distanceKm))}` : ''}</span>
+        <span class="poh-advice-why">
+          Denní úrazová a chirurgická ambulance nemocnice, teď otevřeno${step.status?.until ? ` do ${escapeHtml(step.status.until)}` : ''}.
+          ${escapeHtml(walkIn)} ${escapeHtml(p.address ?? '')}
+        </span>
+        ${p.phone ? `<a class="poh-action poh-action-primary" href="tel:${escapeHtml(p.phone)}">Zavolat ${escapeHtml(formatPhone(p.phone))}</a>` : ''}
       </li>`;
   }
 
@@ -838,6 +891,144 @@ function renderRotationSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
+// Než vyrazíte
+//
+// Druhá půlka odpovědi. Otevírací doba se mění dovolenými a zástupy rychleji,
+// než ji kdokoli stihne zveřejnit, takže „zavolejte předem“ není zdvořilostní
+// fráze, ale oprava chyby, kterou tahle stránka sama nedokáže odstranit.
+// ─────────────────────────────────────────────────────────────────────────
+
+function renderBeforeYouGo() {
+  const host = document.getElementById('pohBefore');
+  const pr = state.data?.practical;
+  if (!host || !pr) return;
+
+  const steps = (pr.before_you_go ?? []).map(s => `
+    <li class="poh-before-item${s.emphasis ? ' poh-before-item-key' : ''}">
+      <span class="poh-before-title">${escapeHtml(s.title)}</span>
+      <span class="poh-before-text">${escapeHtml(s.text)}</span>
+    </li>`).join('');
+
+  const fee = pr.fee;
+  const feeHtml = fee ? `
+    <div class="poh-fee">
+      <p class="poh-fee-lead">
+        <strong>${escapeHtml(fee.label ?? 'Poplatek')}: ${escapeHtml(String(fee.amount_czk))} Kč.</strong>
+        ${escapeHtml(fee.text ?? '')}
+      </p>
+      <p class="poh-fee-ex">Neplatí ho ten, u koho platí některá z výjimek: ${
+        (fee.exemptions ?? []).map(e => escapeHtml(e)).join('; ')}.</p>
+      ${fee.note ? `<p class="poh-fee-note">${escapeHtml(fee.note)}</p>` : ''}
+      <p class="poh-fee-src">
+        Zdroj: <a href="${escapeHtml(fee.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(fee.source?.name ?? 'zdroj')}</a>${
+          fee.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(fee.verified_at))}` : ''}.
+      </p>
+    </div>` : '';
+
+  host.innerHTML = `<ol class="poh-before-list">${steps}</ol>${feeHtml}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Online pohotovosti — celostátní přehled
+//
+// Sekce se ukazuje všem, ne jen návštěvníkovi z kraje, který službu má.
+// Že ji dva kraje provozují a dvanáct ne, je zjištění o systému; kdyby ji
+// stránka schovala každému, kdo bydlí jinde, nikdo by se o ní nedozvěděl.
+// ─────────────────────────────────────────────────────────────────────────
+
+function serviceCardHtml(sv, { mine = false } = {}) {
+  const facts = [
+    sv.availability === 'nonstop' ? 'nepřetržitě' : sv.availability,
+    sv.response_minutes ? `lékař do ${sv.response_minutes} minut` : null,
+    (sv.channels ?? []).length ? (sv.channels ?? []).join(' nebo ') : null,
+    sv.doctor ? `ošetří ${sv.doctor}` : null,
+  ].filter(Boolean);
+
+  return `
+    <article class="poh-online-card${mine ? ' poh-online-card-mine' : ''}">
+      ${mine ? '<span class="poh-online-badge">Ve vašem kraji</span>' : ''}
+      <h3 class="poh-online-name">${escapeHtml(sv.name)}</h3>
+      <p class="poh-online-kraj">${escapeHtml(sv.kraj)}${sv.since ? ` · od ${escapeHtml(formatSince(sv.since))}` : ''}</p>
+      <ul class="poh-online-facts">${facts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+      <p class="poh-online-free"><strong>Zdarma pro</strong> ${escapeHtml(sv.free_for)}.</p>
+      <p class="poh-online-good"><strong>Vhodné na</strong> ${escapeHtml(sv.good_for)}.</p>
+      ${sv.not_for ? `<p class="poh-online-not">Není pro ${escapeHtml(sv.not_for)}.</p>` : ''}
+      ${(sv.can_issue ?? []).length ? `<p class="poh-online-issue">Lékař může vystavit: ${escapeHtml((sv.can_issue ?? []).join(', '))}.</p>` : ''}
+      <a class="poh-action poh-action-primary" href="${escapeHtml(sv.url)}" target="_blank" rel="noopener">Otevřít ${escapeHtml(sv.name)}</a>
+      <p class="poh-online-src">
+        Zdroj: <a href="${escapeHtml(sv.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(sv.source?.name ?? 'zdroj')}</a>${
+          sv.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(sv.verified_at))}` : ''}.
+      </p>
+    </article>`;
+}
+
+/** „2024“ nebo „2025-03-01“ → čitelné datum, bez hádání dne u pouhého roku. */
+function formatSince(since) {
+  const s = String(since ?? '');
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) ? formatCzDate(s) : s;
+}
+
+function renderOnlineSection() {
+  const host = document.getElementById('pohOnline');
+  const online = state.data?.online;
+  if (!host || !online) return;
+
+  const mineCode = currentKrajCode();
+  const services = [...(online.services ?? [])].sort((a, b) => {
+    if (a.kraj_code === mineCode) return -1;
+    if (b.kraj_code === mineCode) return 1;
+    return String(a.kraj).localeCompare(String(b.kraj), 'cs');
+  });
+
+  const parts = [];
+
+  if (mineCode && !services.some(sv => sv.kraj_code === mineCode)) {
+    const kraj = (state.data.regions ?? []).find(r => r.kraj_code === mineCode)?.kraj;
+    const planned = (online.not_available?.planned ?? []).find(p => p.kraj_code === mineCode);
+    parts.push(`
+      <p class="poh-online-mine-none">
+        <strong>${escapeHtml(kraj ?? 'Váš kraj')}</strong> online pohotovost neprovozuje.${
+          planned ? ` ${escapeHtml(planned.note)}` : ''}
+        Služby níže jsou zdarma jen pro obyvatele svých krajů — jinému je mohou odmítnout nebo zpoplatnit.
+      </p>`);
+  }
+
+  parts.push(`<div class="poh-online-grid">${
+    services.map(sv => serviceCardHtml(sv, { mine: sv.kraj_code === mineCode })).join('')}</div>`);
+
+  const na = online.not_available;
+  if (na) {
+    const planned = (na.planned ?? []).map(p => `<li><strong>${escapeHtml(p.kraj)}</strong> — ${escapeHtml(p.note)}</li>`).join('');
+    parts.push(`
+      <div class="poh-online-rest">
+        <h3 class="poh-h3">Zbytek republiky</h3>
+        ${planned ? `<ul class="poh-online-planned">${planned}</ul>` : ''}
+        ${na.declined_note ? `<p class="poh-online-declined">${escapeHtml(na.declined_note)}</p>` : ''}
+        <p class="poh-online-src">
+          Zdroj: <a href="${escapeHtml(na.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(na.source?.name ?? 'zdroj')}</a>${
+            na.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(na.verified_at))}` : ''}.
+        </p>
+      </div>`);
+  }
+
+  const lines = online.infolines ?? [];
+  if (lines.length) {
+    parts.push(`
+      <div class="poh-online-rest">
+        <h3 class="poh-h3">Krajské informační linky o pohotovostech</h3>
+        <ul class="poh-infoline-list">${lines.map(l => `
+          <li>
+            <strong>${escapeHtml(l.kraj)}</strong> —
+            <a href="tel:${escapeHtml(l.phone)}">${escapeHtml(formatPhone(l.phone))}</a>.
+            ${escapeHtml(l.description ?? '')}
+          </li>`).join('')}</ul>
+      </div>`);
+  }
+
+  host.innerHTML = parts.join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
 // Kontext a metodika
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -847,8 +1038,10 @@ function renderContext() {
 
   const heroStats = document.getElementById('pohHeroStats');
   if (heroStats) {
-    heroStats.innerHTML = `Sledujeme <strong>${c.places_total}</strong> pohotovostí ve všech 14 krajích — `
-      + `u <strong>${c.places_with_hours}</strong> z nich známe ordinační dobu.`;
+    const poh = c.pohotovosti_total ?? c.places_total;
+    heroStats.innerHTML = `Sledujeme <strong>${poh}</strong> pohotovostí ve všech 14 krajích`
+      + `${c.ambulance_denni ? ` a <strong>${c.ambulance_denni}</strong> denních nemocničních ambulancí` : ''}`
+      + ` — u <strong>${c.places_with_hours}</strong> z nich známe provozní dobu.`;
   }
 
   const statRow = document.getElementById('pohContextStats');
@@ -856,7 +1049,7 @@ function renderContext() {
     const assessed = Object.values(c.by_category).reduce((n, v) => n + v.assessed, 0);
     const meets = Object.values(c.by_category).reduce((n, v) => n + v.meets_minimum, 0);
     const stats = [
-      [c.places_total, 'pohotovostí v celé ČR', 'Lékařské pro dospělé i děti, zubní a lékárenské dohromady.'],
+      [c.pohotovosti_total ?? c.places_total, 'pohotovostí v celé ČR', 'Lékařské pro dospělé i děti, zubní a lékárenské dohromady.'],
       [`${c.regions_with_open_data} ze ${c.regions_total}`, 'krajů má otevřená data', 'Zbytek zveřejňuje jen webovou stránku, kterou nelze strojově číst.'],
       [assessed ? `${Math.round((meets / assessed) * 100)} %` : '—', 'splňuje zákonné minimum', `Podle zveřejněné doby: ${meets} z ${assessed} posuzovaných.`],
       [c.rotation_practices, 'ordinací ve střídavé službě', `V ${c.rotations_total} krajských rozpisech, hlavně u zubní pohotovosti.`],
@@ -879,6 +1072,9 @@ function renderContext() {
 
   const countEl = document.getElementById('pohOpenDataCount');
   if (countEl) countEl.textContent = String(c.regions_with_open_data);
+
+  const ambCount = document.getElementById('pohAmbCount');
+  if (ambCount) ambCount.textContent = String(c.ambulance_denni ?? 0);
 
   const approx = document.getElementById('pohApproxCount');
   if (approx) approx.textContent = String(c.geo_sources?.obec ?? 0);
@@ -998,6 +1194,8 @@ async function init() {
 
   renderTypeChips();
   renderContext();
+  renderBeforeYouGo();
+  renderOnlineSection();
   wireForm();
   wireGeolocation();
   setOrigin(null);
