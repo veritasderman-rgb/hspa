@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-amr-multirezistence-soubeh': {
+    kicker: 'Kvalita péče · rezistence', signal: 'bad',
+    stat: '26,6', statSuffix: '%', barPct: 27,
+    claim: 'českých klebsiell odolá třem třídám antibiotik naráz.',
+    context: '470 z 1 767 izolátů. Nezávislé selhávání by dalo 5,4 %.',
+  },
+  'clanek-npo-motol-termin-2026': {
+    kicker: 'Financování · plán obnovy', signal: 'warn',
+    stat: '91', statSuffix: ' dní',
+    claim: 'o tolik se posunul termín onkologického centra v Motole.',
+    context: 'Projekt za 4,07 miliardy. Změna přišla čtyři dny před koncem lhůty.',
+  },
   'clanek-screening-sluchu-deti': {
     kicker: 'Dětské zdraví · screening', signal: 'bad',
     stat: '24,5', statSuffix: '%', barPct: 25,
