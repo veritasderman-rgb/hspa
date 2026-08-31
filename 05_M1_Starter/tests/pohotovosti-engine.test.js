@@ -395,3 +395,87 @@ test('careAdvice · na prázdném vstupu nespadne', () => {
   assert.deepEqual(advice.steps.map(s => s.kind), ['prvni_kontakt', 'zadejte_polohu']);
   assert.equal(advice.openIsFar, false);
 });
+
+// ── Denní nemocniční ambulance v radě „Co dělat teď“ ─────────────────────
+
+const AMBULANCE = {
+  place: {
+    id: 'amb-x',
+    name: 'Nemocnice X',
+    workplace: 'Chirurgická ambulance',
+    category: 'ambulance_denni',
+    walk_in: 'ano',
+    address: 'Nemocniční 1, Město',
+    phone: '+420111222333',
+  },
+  distanceKm: 4.2,
+};
+
+test('careAdvice · v ordinační době nabídne otevřenou denní ambulanci hned za praktikem', () => {
+  // Pondělí 10:00. Přesně ta hodina, kdy pohotovost ze zákona neslouží
+  // a stránka dřív poslala člověka z Mariánských Lázní 115 km do Prahy.
+  const advice = careAdvice({
+    now: new Date('2026-09-07T10:00:00'),
+    hasOrigin: true,
+    category: 'lps_dospeli',
+    nearestAmbulance: { ...AMBULANCE, status: { state: 'open', until: '15:00' } },
+    nearestLps: { place: { name: 'Pohotovost daleko' }, distanceKm: 115, status: { state: 'closed', next: '16:00' } },
+  });
+
+  assert.equal(advice.mode, 'ordinacni_doba');
+  const kinds = advice.steps.map(s => s.kind);
+  assert.equal(kinds[0], 'prvni_kontakt');
+  assert.equal(kinds[1], 'ambulance_denni', 'otevřená denní ambulance patří hned za praktika');
+  assert.ok(kinds.indexOf('ambulance_denni') < kinds.indexOf('lps_pozdeji'));
+});
+
+test('careAdvice · zavřenou denní ambulanci nenabízí vůbec', () => {
+  // „Otevře zítra v sedm“ v deset dopoledne nikomu nepomůže — byla by to
+  // jen další adresa, kam právě teď nejít.
+  const advice = careAdvice({
+    now: new Date('2026-09-07T10:00:00'),
+    hasOrigin: true,
+    category: 'lps_dospeli',
+    nearestAmbulance: { ...AMBULANCE, status: { state: 'closed', next: '07:00' } },
+  });
+  assert.ok(!advice.steps.some(s => s.kind === 'ambulance_denni'));
+});
+
+test('careAdvice · denní ambulanci nenabízí bez polohy ani u zubů a lékárny', () => {
+  const open = { ...AMBULANCE, status: { state: 'open', until: '15:00' } };
+
+  const bezPolohy = careAdvice({
+    now: new Date('2026-09-07T10:00:00'),
+    hasOrigin: false,
+    category: 'lps_dospeli',
+    nearestAmbulance: open,
+  });
+  assert.ok(!bezPolohy.steps.some(s => s.kind === 'ambulance_denni'),
+    'bez polohy nevíme, co je „nejbližší“');
+
+  for (const category of ['zubni', 'lekarna']) {
+    const advice = careAdvice({
+      now: new Date('2026-09-07T10:00:00'),
+      hasOrigin: true,
+      category,
+      nearestAmbulance: open,
+    });
+    assert.ok(!advice.steps.some(s => s.kind === 'ambulance_denni'),
+      `${category}: chirurgická ambulance o zubech ani lécích nic neví`);
+  }
+});
+
+test('careAdvice · mimo ordinační dobu má přednost otevřená pohotovost', () => {
+  // Úterý 19:00. Když má pohotovost otevřeno, je to hlavní odpověď —
+  // úrazová ambulance nemocnice je až náhradník.
+  const advice = careAdvice({
+    now: new Date('2026-09-08T19:00:00'),
+    hasOrigin: true,
+    category: 'lps_dospeli',
+    nearestOpen: { place: { name: 'LPS Město' }, distanceKm: 3, status: { state: 'open', until: '21:00' } },
+    nearestAmbulance: { ...AMBULANCE, status: { state: 'open', until: '22:00' } },
+  });
+  const kinds = advice.steps.map(s => s.kind);
+  assert.equal(kinds[0], 'lps_otevrena');
+  assert.ok(!kinds.includes('ambulance_denni'));
+});

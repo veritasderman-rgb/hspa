@@ -149,6 +149,37 @@
     <div class="poh-fallback" id="pohFallback" hidden></div>
   </section>
 
+  <!-- ── NEŽ VYRAZÍTE ─────────────────────────────────────────────── -->
+  <!--
+    Druhá půlka odpovědi. „Kde má otevřeno“ je k ničemu, když člověk dorazí
+    ve chvíli, kdy tam zrovna zastupuje někdo jiný, nebo bez seznamu léků.
+    Obsah se renderuje z dat (`practical`), protože výše poplatku je právní
+    fakt se zdrojem a datem ověření.
+  -->
+  <section class="poh-before" aria-labelledby="pohBeforeH">
+    <div class="ed-kicker">Než vyrazíte</div>
+    <h2 class="ed-areas-h" id="pohBeforeH">Zavolejte tam předem — a vezměte si tohle</h2>
+    <div class="poh-before-body" id="pohBefore"></div>
+  </section>
+
+  <!-- ── ONLINE POHOTOVOSTI (celostátní přehled) ──────────────────── -->
+  <!--
+    Sekce je vidět vždycky, ne jen návštěvníkovi z kraje, který online
+    pohotovost má. Že ji dva kraje provozují a dvanáct ne, je samo o sobě
+    zjištění — a čtenář z Prahy má právo vědět, co jinde funguje.
+  -->
+  <section class="poh-online" aria-labelledby="pohOnlineH">
+    <div class="ed-kicker">Pohotovost, kam se nejezdí</div>
+    <h2 class="ed-areas-h" id="pohOnlineH">Online pohotovost: dva kraje ji mají, dvanáct ne</h2>
+    <p class="poh-online-lead">
+      Fyzická pohotovost ze zákona slouží až po ordinačních hodinách. Online (telemedicínská)
+      pohotovost běží nepřetržitě, spojí vás s lékařem přes chat nebo videohovor a nikam se kvůli ní
+      nejezdí — pro lehčí akutní potíže je v denní době často ta správná odpověď.
+      Zdarma je ale jen pro obyvatele kraje, který ji platí.
+    </p>
+    <div class="poh-online-body" id="pohOnline"></div>
+  </section>
+
   <!-- ── ROTACE (kraje, kde se zubní služba střídá) ────────────────── -->
   <section class="poh-rotation" id="pohRotationSection" aria-labelledby="pohRotationH" hidden>
     <div class="ed-kicker">Střídavá služba</div>
@@ -238,6 +269,10 @@
       <li>Nabídnout krajskou <strong>online pohotovost</strong> tam, kde existuje — v Jihočeském
         a Karlovarském kraji běží nepřetržitě a zdarma, takže je použitelná i v hodinách,
         kdy fyzická pohotovost nemá otevřeno.</li>
+      <li>Ukázat <strong>denní úrazové a chirurgické ambulance nemocnic</strong> u
+        <span id="pohAmbCount">několika</span> nemocnic — s provozní dobou přepsanou ručně
+        z webu nemocnice, protože žádný registr ji nevede. U každé je vidět doslovný citát
+        ze zdroje a datum ověření.</li>
     </ul>
 
     <h3 class="poh-h3">Co stránka neumí</h3>
@@ -250,10 +285,17 @@
       <li>U <span id="pohApproxCount">několika</span> míst se nepodařilo najít přesnou adresu v registru —
         u nich ukazujeme střed obce a je to u výsledku napsané.</li>
       <li>Vedeme seznam VZP. Menší pojišťovny mohou mít smlouvu i s pracovištěm, které tu není.</li>
-      <li><strong>Neumíme najít „ambulanci, kam se chodí bez objednání“.</strong> Registr ÚZIS
+      <li><strong>Denní ambulance máme jen u části nemocnic.</strong> Provozní dobu nemocničních
+        ambulancí nevede žádná celostátní otevřená data: distribuce NRPZS má adresu, GPS
+        a obory, hodiny ne, a rozhraní ÚZIS, které je podle dokumentace u vybraných zařízení
+        vrací, je dlouhodobě nedostupné. Zbývají weby nemocnic — a ty se strojově číst nedají
+        spolehlivě: náš průchod 135 nemocnicemi vytáhl mezi „ordinačními hodinami“ i polední
+        pauzy, návštěvní dobu na lůžkovém oddělení a poradny „pouze pro objednané“. Publikujeme
+        proto jen to, co člověk přečetl ve zdroji. Seznam roste, není a nebude úplný.</li>
+      <li><strong>Neumíme obecně najít „ambulanci, kam se chodí bez objednání“.</strong> Registr ÚZIS
         nerozliší neobjednanou ambulanci od té na objednání — pokus to odvodit z oborů vybral
-        i onkologický ústav. Jako denní alternativu proto nabízíme jen to, co je doložené:
-        urgentní příjem a pracoviště, které samo provozuje pohotovost. I u nich říkáme
+        i onkologický ústav. Mimo ručně ověřené denní ambulance proto nabízíme jen to, co je
+        doložené: urgentní příjem a pracoviště, které samo provozuje pohotovost. I u nich říkáme
         „zavolejte“, ne „přijďte“.</li>
       <li><strong>Hranice ordinační doby je odhad</strong> (pracovní den 7:00–16:00), ne rozvrh
         konkrétní ordinace. Vychází z toho, že vyhláška předepisuje pohotovost až v okně

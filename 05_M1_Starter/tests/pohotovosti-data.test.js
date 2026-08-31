@@ -504,3 +504,77 @@ test('data/pohotovosti.json · „not_for“ sedí do věty „Není pro …“'
       `${sv.id}: „${sv.not_for}“ nesedí do věty „Není pro …“`);
   }
 });
+
+// ── Denní nemocniční ambulance ───────────────────────────────────────────
+
+test('data/pohotovosti.json · každá denní ambulance nese doklad, podle čeho vznikla', () => {
+  // Provozní dobu nemocničních ambulancí nevede žádný registr — je to ruční
+  // přepis z webu nemocnice. Bez citátu, odkazu a data ověření by při revizi
+  // nešlo poznat, jestli se zdroj mezitím změnil, a číslo by tiše zastaralo.
+  const d = readData('pohotovosti.json');
+  const rows = d.places.filter(p => p.category === 'ambulance_denni');
+  assert.ok(rows.length >= 5, `čekáno aspoň pět denních ambulancí, je ${rows.length}`);
+
+  for (const p of rows) {
+    assert.ok(p.quote, `${p.id}: chybí doslovný citát ze zdroje`);
+    assert.match(p.detail_url ?? '', /^https?:\/\//, `${p.id}: chybí odkaz na zdroj`);
+    assert.match(p.verified_at ?? '', /^\d{4}-\d{2}-\d{2}$/, `${p.id}: chybí datum ověření`);
+    assert.ok(p.hours, `${p.id}: bez provozní doby je záznam k ničemu`);
+    assert.equal(p.hours_source, 'web_nemocnice');
+    assert.ok(['ano', 'neuvedeno'].includes(p.walk_in), `${p.id}: walk_in „${p.walk_in}“`);
+    // Poloha je z registru — ručně opsané souřadnice by nikdo neuhlídal.
+    assert.equal(p.geo_source, 'nrpzs', `${p.id}: poloha není z registru`);
+    assert.ok(p.lat != null && p.lon != null, `${p.id}: chybí souřadnice`);
+  }
+});
+
+test('data/pohotovosti.json · běžná ambulance se neposuzuje podle vyhlášky', () => {
+  // Vyhláška č. 380/2025 Sb. předepisuje minimum pohotovostní službě.
+  // „Nesplňuje minimum“ u běžné nemocniční ambulance by bylo obvinění
+  // z něčeho, co po ní zákon vůbec nechce.
+  const d = readData('pohotovosti.json');
+  for (const p of d.places.filter(x => x.category === 'ambulance_denni')) {
+    assert.equal(p.meets_minimum, null, `${p.id}: meets_minimum musí být null`);
+    assert.ok(!p.minimum_checks, `${p.id}: nemá mít rozpis kontrol podle vyhlášky`);
+  }
+});
+
+test('data/pohotovosti.json · počet pohotovostí nemíchá denní ambulance', () => {
+  // Hero i statistika říkají „X pohotovostí“. Kdyby se do toho čísla
+  // připočetlo devět běžných ambulancí, stránka by tvrdila nepravdu.
+  const d = readData('pohotovosti.json');
+  const amb = d.places.filter(p => p.category === 'ambulance_denni').length;
+  assert.equal(d.coverage.pohotovosti_total, d.places.length - amb);
+  assert.equal(d.coverage.ambulance_denni, amb);
+  assert.ok(d.coverage.pohotovosti_total >= 150);
+});
+
+// ── Praktické informace (poplatek, než vyrazíte) ──────────────────────────
+
+test('data/pohotovosti.json · poplatek má zdroj a datum ověření', () => {
+  // Výše regulačního poplatku se mění novelou. Bez zdroje by na stránce
+  // tiše zastarala a lidé by u přepážky platili jinak, než jsme napsali.
+  const d = readData('pohotovosti.json');
+  const fee = d.practical?.fee;
+  assert.ok(fee, 'chybí blok o regulačním poplatku');
+  assert.ok(fee.amount_czk > 0 && fee.amount_czk < 10_000);
+  assert.match(fee.source?.url ?? '', /^https?:\/\//);
+  assert.match(fee.verified_at ?? '', /^\d{4}-\d{2}-\d{2}$/);
+  assert.ok(Array.isArray(fee.exemptions) && fee.exemptions.length >= 2,
+    'poplatek bez výjimek by tvrdil, že ho platí úplně každý');
+});
+
+test('data/pohotovosti.json · „než vyrazíte“ začíná telefonem, ne dokladem', () => {
+  // Pointa sekce je, že zveřejněná ordinační doba se mění rychleji, než ji
+  // kdokoli stihne aktualizovat — tahle stránka včetně. Kdyby krok vypadl,
+  // zbyl by z rady checklist na kartičku pojišťovny.
+  const d = readData('pohotovosti.json');
+  const steps = d.practical?.before_you_go ?? [];
+  assert.ok(steps.length >= 4, `čekány aspoň čtyři kroky, je ${steps.length}`);
+  const call = steps.find(s => s.id === 'zavolejte');
+  assert.ok(call, 'chybí krok „zavolejte předem“');
+  assert.equal(call.emphasis, true, 'krok „zavolejte předem“ musí být zvýrazněný');
+  for (const s of steps) {
+    assert.ok(s.id && s.title && s.text, `krok ${s.id ?? '?'} je neúplný`);
+  }
+});

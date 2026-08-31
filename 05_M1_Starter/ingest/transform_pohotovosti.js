@@ -33,7 +33,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CATEGORIES } from './fetchers/nrpzs_pohotovosti.js';
 import { evaluateMinimum, makeHours } from './lib/pohotovosti-hours.js';
-import { geocodeAddress } from './lib/pohotovosti-geo.js';
+import { geocodeAddress, parseWktPoint } from './lib/pohotovosti-geo.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -45,6 +45,8 @@ const OUT_FILE = path.resolve(ROOT, 'data', 'pohotovosti.json');
 const OUT_ACUTE_FILE = path.resolve(ROOT, 'data', 'pohotovosti-akutni.json');
 const SOURCES_FILE = path.resolve(__dirname, 'mapping', 'pohotovosti_zdroje.json');
 const ONLINE_FILE = path.resolve(__dirname, 'mapping', 'pohotovosti_online.json');
+const PRACTICAL_FILE = path.resolve(__dirname, 'mapping', 'pohotovosti_prakticke.json');
+const AMBULANCE_FILE = path.resolve(__dirname, 'mapping', 'nemocnicni-ambulance.json');
 
 /** Kraje podle názvu → NUTS-3, ať se dá joinovat napříč zdroji. */
 export const KRAJ_CODE_BY_NAME = {
@@ -171,6 +173,71 @@ function cleanWeb(raw) {
  *   geoIndex?: object, sources: object, now?: string
  * }} input
  */
+/**
+ * Denní úrazové a chirurgické ambulance nemocnic — kurátorovaná vrstva.
+ *
+ * Poloha a adresa se berou z registru (join přes IČO + obec, protože jeden
+ * poskytovatel má míst víc a `poskytovatel_ICO` sám o sobě míří na libovolné
+ * z nich); provozní dobu, telefon a doslovný citát nese ručně ověřený záznam.
+ * Když se místo v registru nenajde, záznam se zahodí a `run()` to nahlásí —
+ * tiše zmizet nesmí.
+ */
+export function buildAmbulancePlaces(ambulance, nrpzsRows) {
+  const out = [];
+  const skipped = [];
+  const byKey = new Map();
+  for (const r of nrpzsRows ?? []) {
+    const key = `${String(r.poskytovatel_ICO ?? '').trim()}|${norm(r.ZZ_obec)}`;
+    if (!byKey.has(key)) byKey.set(key, r);
+  }
+
+  for (const a of ambulance?.places ?? []) {
+    const row = byKey.get(`${a.ico}|${norm(a.obec)}`);
+    if (!row) { skipped.push(a.id); continue; }
+    const gps = parseWktPoint(row.ZZ_GPS);
+    const addr = [row.ZZ_ulice, row.ZZ_cislo_domovni_orientacni].filter(Boolean).join(' ').trim();
+    const week = a.hours?.nonstop
+      ? Object.fromEntries(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'holiday']
+        .map(d => [d, [['00:00', '24:00']]]))
+      : a.hours?.week ?? null;
+
+    out.push({
+      id: a.id,
+      name: a.name,
+      workplace: a.workplace ?? null,
+      category: ambulance.category,
+      category_label: ambulance.category_label,
+      kraj_code: row.ZZ_kraj_kod ? `CZ0${String(row.ZZ_kraj_kod).slice(-2)}` : krajCode(row.ZZ_kraj_nazev),
+      kraj: row.ZZ_kraj_nazev || null,
+      okres: row.ZZ_okres_nazev || null,
+      obec: a.obec,
+      address: [addr, [row.ZZ_PSC, a.obec].filter(Boolean).join(' ')].filter(Boolean).join(', ') || null,
+      psc: String(row.ZZ_PSC ?? '').trim() || null,
+      lat: gps?.lat ?? null,
+      lon: gps?.lon ?? null,
+      geo_source: gps ? 'nrpzs' : null,
+      place_note: null,
+      phone: normalizePhone(a.phone) ?? normalizePhone(row.poskytovatel_telefon) ?? null,
+      web: cleanWeb(a.source?.url) ?? null,
+      hours: week ? makeHours({ kind: 'weekly', week, note: a.hours?.note ?? null }) : null,
+      hours_source: 'web_nemocnice',
+      detail_url: a.source?.url ?? null,
+      icz: null,
+      // Vyhláškové minimum se posuzuje u pohotovostí, ne u běžné ambulance —
+      // ta pod ni nespadá a „nesplňuje“ by tu bylo obvinění z něčeho, co
+      // po ní zákon nechce.
+      meets_minimum: null,
+      // Doklad, podle kterého byly hodiny zapsané. Bez něj by při revizi
+      // nešlo poznat, jestli se zdrojová stránka mezitím změnila.
+      walk_in: a.walk_in ?? 'neuvedeno',
+      quote: a.quote ?? null,
+      source_name: a.source?.name ?? null,
+      verified_at: a.verified_at ?? null,
+    });
+  }
+  return { places: out, skipped };
+}
+
 export function buildDataset(input) {
   const { vzp, nrpzs, kraje, obce, geoIndex = {}, sources, now = new Date().toISOString() } = input;
 
@@ -244,6 +311,13 @@ export function buildDataset(input) {
       // 260 míst by to byl balast, který nikdo nerozklikne.
       minimum_checks: minimum.meets === false ? minimum.checks : undefined,
     });
+  }
+
+  // Denní ambulance nemocnic — jediná odpověď na „co teď“ v ordinační době.
+  const ambulance = buildAmbulancePlaces(input.ambulance, input.nrpzsRows);
+  for (const p of ambulance.places) {
+    geoStats[p.geo_source ?? 'none'] += 1;
+    places.push(p);
   }
 
   places.sort((a, b) => (a.kraj_code ?? '').localeCompare(b.kraj_code ?? '', 'cs')
@@ -398,6 +472,10 @@ export function buildDataset(input) {
 
     coverage: {
       places_total: places.length,
+      // Pohotovosti podle vyhlášky zvlášť od denních ambulancí — jinak by
+      // stránka tvrdila „292 pohotovostí“ o čísle, ve kterém je devět
+      // běžných nemocničních ambulancí.
+      pohotovosti_total: places.filter(p => p.category !== 'ambulance_denni').length,
       places_with_hours: places.filter(p => p.hours).length,
       places_with_exact_geo: places.filter(p => p.geo_source && p.geo_source !== 'obec').length,
       geo_sources: geoStats,
@@ -405,18 +483,26 @@ export function buildDataset(input) {
       rotation_practices: rotations.reduce((n, r) => n + r.practices.length, 0),
       acute_total: acute.length,
       online_services: (input.online?.services ?? []).length,
+      ambulance_denni: ambulance.places.length,
       regions_total: sources?.kraje?.length ?? 14,
       regions_with_open_data: regionsWithOpenData,
       by_kraj: byKraj,
       by_category: byCategory,
     },
 
-    categories: CATEGORIES,
+    categories: { ...CATEGORIES, [input.ambulance?.category ?? 'ambulance_denni']: input.ambulance?.category_label ?? 'Denní úrazová a chirurgická ambulance' },
 
     // Krajské online pohotovosti. Pro denní hodiny, kdy fyzická pohotovost
     // ze zákona neslouží, je tohle často jediná odpověď, která nevyžaduje
     // cestu — proto jde do hlavního souboru, ne do líně načítané vrstvy.
     online: input.online ?? { services: [], infolines: [], not_available: null },
+
+    // Praktická část odpovědi: poplatek, co si vzít, proč zavolat předem.
+    // „Kde má otevřeno“ je jen půlka — druhá půlka rozhoduje o tom, jestli
+    // cesta k něčemu byla.
+    practical: input.practical ?? null,
+
+    __ambulanceSkipped: ambulance.skipped,
 
     regions: (sources?.kraje ?? []).map(k => ({
       kraj_code: k.kraj_code,
@@ -442,12 +528,24 @@ export function run() {
   const geoIndex = readCache('nrpzs_geo_index.json') ?? {};
   const sources = JSON.parse(fs.readFileSync(SOURCES_FILE, 'utf8'));
   const online = JSON.parse(fs.readFileSync(ONLINE_FILE, 'utf8'));
+  const ambulance = JSON.parse(fs.readFileSync(AMBULANCE_FILE, 'utf8'));
+  const nrpzsRaw = readCache('nrpzs_raw.json');
+  const nrpzsRows = nrpzsRaw ? (Array.isArray(nrpzsRaw) ? nrpzsRaw : Object.values(nrpzsRaw)) : [];
+  const practical = JSON.parse(fs.readFileSync(PRACTICAL_FILE, 'utf8'));
   const obce = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'obce-gps.json'), 'utf8'));
 
   if (!vzp) throw new Error('[pohotovosti] chybí ingest/cache/vzp_pohotovosti.json — spusť `npm run fetch:pohotovosti-vzp`');
   if (!nrpzs) throw new Error('[pohotovosti] chybí ingest/cache/pohotovosti_places.json — spusť `npm run fetch:pohotovosti-nrpzs`');
 
-  const { dataset, acute } = buildDataset({ vzp, nrpzs, kraje: kraje ?? { places: [] }, obce, geoIndex, sources, online });
+  const { dataset, acute } = buildDataset({ vzp, nrpzs, kraje: kraje ?? { places: [] }, obce, geoIndex, sources, online, practical, ambulance, nrpzsRows });
+
+  // Ručně ověřená ambulance, kterou se nepodařilo najít v registru, by ze
+  // stránky tiše zmizela — proto se hlásí dřív, než se cokoli zapíše.
+  const skipped = dataset.__ambulanceSkipped ?? [];
+  delete dataset.__ambulanceSkipped;
+  if (skipped.length) {
+    console.warn(`  [pohotovosti] ⚠ ${skipped.length} denních ambulancí není v registru (IČO+obec nesedí): ${skipped.join(', ')}`);
+  }
   // Kompaktní JSON: soubor otevírá člověk, který někoho veze k lékaři —
   // 400 kB odsazení navíc je tady cítit.
   fs.writeFileSync(OUT_FILE, `${JSON.stringify(dataset)}\n`);
@@ -455,6 +553,7 @@ export function run() {
 
   const c = dataset.coverage;
   console.log(`  [pohotovosti] ${c.places_total} pohotovostí (${c.places_with_hours} s ordinační dobou, ${c.places_with_exact_geo} s přesnou polohou)`);
+  console.log(`  [pohotovosti] ${c.ambulance_denni ?? 0} denních ambulancí nemocnic (ručně ověřená provozní doba)`);
   console.log(`  [pohotovosti] ${c.rotations_total} krajských rozpisů rotace (${c.rotation_practices} ordinací), ${c.acute_total} akutních pracovišť z registru`);
   console.log('  [pohotovosti] → data/pohotovosti.json + data/pohotovosti-akutni.json');
   return dataset;

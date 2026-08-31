@@ -1,0 +1,518 @@
+{
+  "_comment": [
+    "Denní úrazové a chirurgické ambulance nemocnic — ručně ověřená provozní doba.",
+    "",
+    "PROČ TO EXISTUJE: pohotovost podle vyhlášky č. 380/2025 Sb. slouží až PO",
+    "ordinačních hodinách. V pondělí v deset dopoledne proto nemá otevřeno skoro",
+    "nic a stránka odpovídala „nejbližší otevřená je 115 km daleko“ — pravdivě,",
+    "ale na jinou otázku, než jakou člověk s naraženou rukou položil. Denní",
+    "úrazová ambulance je ta správná odpověď a bez ní stránka v půlce dne mlčí.",
+    "",
+    "PROČ RUČNĚ: provozní dobu nemocničních ambulancí nevede žádný celostátní",
+    "registr. NRPZS má adresu, GPS, telefon a obory — hodiny ne (jediná otevřená",
+    "distribuce NR-01-06 je nemá a REST API ÚZIS je dlouhodobě nedostupné).",
+    "Zbývají weby nemocnic, a ty se strojově číst nedají spolehlivě: v testovacím",
+    "běhu crawleru (ingest/fetchers/ambulance_hodiny.js) se mezi nálezy míchaly",
+    "polední pauzy, návštěvní hodiny na lůžkovém oddělení a ambulance „pouze pro",
+    "objednané“. Crawler proto hledá jen KANDIDÁTY a publikovaný záznam vzniká",
+    "až tím, že člověk zdrojovou stránku přečte.",
+    "",
+    "CO SEM PATŘÍ: pracoviště, kam se s akutním úrazem nebo chirurgickým problémem",
+    "chodí v ordinační době. NE odborné poradny „pouze pro objednané“, NE plánovaná",
+    "chirurgie, NE specializované ústavy.",
+    "",
+    "POVINNÁ POLE: `quote` je doslovný úryvek ze zdrojové stránky, podle kterého",
+    "byly hodiny zapsány — aby šlo při revizi poznat, jestli se web mezitím změnil.",
+    "`walk_in` je „ano“ jen tam, kde to zdroj říká výslovně; jinak „neuvedeno“",
+    "a stránka doporučí zavolat předem.",
+    "",
+    "STAV: první dávka. Kandidáti pro další rozšíření jsou v",
+    "ingest/cache/ambulance_kandidati.json po spuštění crawleru."
+  ],
+  "version": "1.0",
+  "category": "ambulance_denni",
+  "category_label": "Denní úrazová a chirurgická ambulance",
+  "places": [
+    {
+      "id": "amb-fnhk",
+      "ico": "00179906",
+      "obec": "Hradec Králové",
+      "name": "Fakultní nemocnice Hradec Králové",
+      "workplace": "Akutní chirurgická a interní ambulance",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "nonstop": true
+      },
+      "quote": "Ve stejné lokalitě jsou zároveň umístěny akutní ambulance interní a chirurgické, které pracují nepřetržitě.",
+      "phone": "+420495833250",
+      "source": {
+        "name": "FN Hradec Králové — Lékařská pohotovost",
+        "url": "https://www.fnhk.cz/pacient-a-jeho-blizci-lekarska-pohotovost"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-klatovy",
+      "ico": "26360527",
+      "obec": "Klatovy",
+      "name": "Klatovská nemocnice",
+      "workplace": "Úrazová pohotovost",
+      "walk_in": "ano",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "15:30",
+              "07:00"
+            ]
+          ],
+          "tue": [
+            [
+              "15:30",
+              "07:00"
+            ]
+          ],
+          "wed": [
+            [
+              "15:30",
+              "07:00"
+            ]
+          ],
+          "thu": [
+            [
+              "15:30",
+              "07:00"
+            ]
+          ],
+          "fri": [
+            [
+              "15:30",
+              "07:00"
+            ]
+          ],
+          "sat": [
+            [
+              "00:00",
+              "24:00"
+            ]
+          ],
+          "sun": [
+            [
+              "00:00",
+              "24:00"
+            ]
+          ],
+          "holiday": [
+            [
+              "00:00",
+              "24:00"
+            ]
+          ]
+        },
+        "note": "Ordinace je v prostorách chirurgické ambulance; v pracovní den do 15:30 ošetřuje úrazy tatáž chirurgická ambulance."
+      },
+      "quote": "Ordinační doba pohotovosti pondělí až pátek 15:30 - 07:00, sobota, neděle a svátky nepřetržitě",
+      "phone": "+420376335106",
+      "source": {
+        "name": "Klatovská nemocnice — Úrazová pohotovost",
+        "url": "https://klatovy.nemocnicepk.cz/urazova-pohotovost/"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-horovice",
+      "ico": "27872963",
+      "obec": "Hořovice",
+      "name": "Nemocnice Hořovice (NH Hospital)",
+      "workplace": "Lékařská příjmová a pohotovostní ambulance",
+      "walk_in": "ano",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "sat": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "sun": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "holiday": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ]
+        },
+        "note": "Nemocnice zároveň uvádí, že provoz pohotovostní příjmové ambulance je zajištěn 24 hodin denně — mimo uvedené hodiny proto raději zavolejte."
+      },
+      "quote": "Pacienti přicházejí sami nebo na základě doporučení svého praktického či jiného ošetřujícího lékaře. […] Lékařská příjmová ambulance Po–Pá 7:00 – 15:30 […] 15:30 – 19:00 […] 7:00 – 19:00",
+      "phone": "+420311559111",
+      "source": {
+        "name": "Nemocnice Hořovice — Lékařská příjmová a pohotovostní ambulance",
+        "url": "https://www.nemocnice-horovice.cz/oddeleni/centralni-prijem/o/lekarska-prijmova-a-pohotovostni-ambulance"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-cesky-tesin",
+      "ico": "25897551",
+      "obec": "Český Těšín",
+      "name": "Nemocnice AGEL Český Těšín",
+      "workplace": "Chirurgická ambulance",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        },
+        "note": "Příjem pacientů nejpozději hodinu před koncem ordinačních hodin, tedy do 14:00."
+      },
+      "quote": "Ordinační hodiny, provozní doba Pondělí: 7:00 - 15:00 […] Pátek: 7:00 - 15:00. Příjem pacientů nejpozději do 60 min. před ukončením ordinačních hodin, tj. do 14:00.",
+      "phone": "+420558769211",
+      "source": {
+        "name": "Nemocnice AGEL Český Těšín — Chirurgická ambulance",
+        "url": "https://nemocniceceskytesin.agel.cz/pracoviste/ambulance/chirurgicka.html"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-hustopece",
+      "ico": "04212029",
+      "obec": "Hustopeče",
+      "name": "Nemocnice Hustopeče",
+      "workplace": "Chirurgická ambulance",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        }
+      },
+      "quote": "ORDINAČNÍ DOBA CHIRURGICKÉ AMBULANCE […] Po – Pá: 7.00 – 15.30",
+      "phone": "+420519407367",
+      "source": {
+        "name": "Nemocnice Hustopeče — Chirurgická ambulance",
+        "url": "https://www.nemhu.cz/ambulance-chirurgicka-ambulance"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-melnik",
+      "ico": "27958639",
+      "obec": "Mělník",
+      "name": "Nemocnice Mělník (Mělnická zdravotní)",
+      "workplace": "Chirurgická ambulance",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "15:00"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        },
+        "note": "Od 28. 8. 2026 je ambulance v budově P — poliklinika, 2. NP, křídlo A."
+      },
+      "quote": "Od 28. 8. 2026 je Chirurgická ambulance přesunuta do budovy P- polikliniky, 2NP, křídlo A. Ordinační doba zůstává beze změny: Po-Pá 7:00-15:00.",
+      "phone": "+420315639111",
+      "source": {
+        "name": "Nemocnice Mělník — aktuality",
+        "url": "https://www.nemocnice-melnik.cz/"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-vrchlabi",
+      "ico": "64827232",
+      "obec": "Vrchlabí",
+      "name": "Nemocnice Vrchlabí",
+      "workplace": "Chirurgická ambulance ANSA",
+      "walk_in": "ano",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "08:00",
+              "12:00"
+            ],
+            [
+              "12:30",
+              "16:00"
+            ]
+          ],
+          "tue": [],
+          "wed": [
+            [
+              "08:00",
+              "12:00"
+            ],
+            [
+              "12:30",
+              "16:00"
+            ]
+          ],
+          "thu": [],
+          "fri": [
+            [
+              "08:00",
+              "12:00"
+            ],
+            [
+              "12:30",
+              "16:00"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        },
+        "note": "Ordinuje v pondělí, středu a pátek."
+      },
+      "quote": "Ordinační hodiny Chirurgická ambulance - PO, ST, PÁ. Po, St 08:00 - 12:00 - bez objednání, 12:30 - 16:00 - bez objednání",
+      "phone": "+420499429439",
+      "source": {
+        "name": "Nemocnice Vrchlabí — ANSA chirurgie",
+        "url": "https://www.pentahospitals.cz/nemocnice-vrchlabi/oddeleni/ansa-chirurgie/"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-vn-olomouc",
+      "ico": "60800691",
+      "obec": "Olomouc",
+      "name": "Vojenská nemocnice Olomouc",
+      "workplace": "Ambulance všeobecné chirurgie",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "15:30"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "14:30"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        }
+      },
+      "quote": "AMBULANCE všeobecné chirurgie […] Ordinační hodiny Po - Čt 7:00 - 15:30, Pá 7:00 - 14:30",
+      "phone": "+420973407126",
+      "source": {
+        "name": "Vojenská nemocnice Olomouc — Chirurgické oddělení",
+        "url": "https://vnol.cz/index.php/cs/oddeleni/chirurgicke-oddeleni"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "amb-frydek-mistek",
+      "ico": "00534188",
+      "obec": "Frýdek-Místek",
+      "name": "Nemocnice Frýdek-Místek",
+      "workplace": "Chirurgicko-traumatologická ambulance",
+      "walk_in": "neuvedeno",
+      "hours": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "06:30",
+              "14:30"
+            ]
+          ],
+          "tue": [
+            [
+              "06:30",
+              "14:30"
+            ]
+          ],
+          "wed": [
+            [
+              "06:30",
+              "14:30"
+            ]
+          ],
+          "thu": [
+            [
+              "06:30",
+              "14:30"
+            ]
+          ],
+          "fri": [
+            [
+              "06:30",
+              "14:30"
+            ]
+          ],
+          "sat": [],
+          "sun": [],
+          "holiday": []
+        },
+        "note": "Nemocnice provozuje několik chirurgických ambulancí s různým rozpisem dnů; uvedená doba je společný rámec pracovního dne."
+      },
+      "quote": "Chirurgicko-traumatologická ambulance […] ordinační hodiny Pondělí 6:30–14:30 […] Pátek 6:30–14:30",
+      "phone": "+420558415650",
+      "source": {
+        "name": "Nemocnice Frýdek-Místek — Ambulance",
+        "url": "https://www.nemfm.cz/ambulance/"
+      },
+      "verified_at": "2026-08-31"
+    }
+  ]
+}
