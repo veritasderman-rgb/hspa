@@ -43,6 +43,7 @@ export const CATEGORIES = {
   urgentni_prijem: 'Urgentní příjem nemocnice',
   lekarna: 'Lékárenská pohotovostní služba',
   zzs: 'Zdravotnická záchranná služba (výjezdová základna)',
+  denni_ambulance: 'Chirurgická nebo úrazová ambulance nemocnice',
 };
 
 /** Diakritiku a velikost písmen z porovnávání pryč — registr je psaný nejednotně. */
@@ -123,6 +124,8 @@ export function classifyPlace(r) {
     /lekarsk\w* pohotov|pohotovostni sluzb|pohotovsotni|lspp/.test(rozsah)
     && !lekarenskaPohotovost;
 
+  const chirurgickeObory = ['chirurgie', 'detska chirurgie', 'traumatologie', 'ortopedie a traumatologie pohyboveho ustroji', 'urazova chirurgie'];
+
   const dentalOnly = obory.length > 0 && obory.every(o => o === OBOR_ZUBNI);
   const maZubniObor = obory.includes(OBOR_ZUBNI);
   const maDetskyObor = OBORY_DETSKE.some(o => obory.includes(o));
@@ -159,8 +162,28 @@ export function classifyPlace(r) {
   // ── Chirurgická / úrazová akutní péče ────────────────────────────────
   // Vždy odvozená: nemocnice, která má akutní lůžka a chirurgický obor, drží
   // nepřetržitou úrazovou ambulanci. Registr to takhle nepojmenovává.
-  const chirurgickeObory = ['chirurgie', 'detska chirurgie', 'traumatologie', 'ortopedie a traumatologie pohyboveho ustroji', 'urazova chirurgie'];
   if (akutniLuzka && chirurgickeObory.some(o => obory.includes(o))) mark('chirurgicka', 'odvozeno');
+
+  // ── Denní chirurgická / úrazová ambulance nemocnice ──────────────────
+  // Kdo tohle potřebuje: pohotovost podle zákona slouží až PO ordinačních
+  // hodinách, takže v pondělí dopoledne nemá otevřeno. S naraženou rukou
+  // se tehdy chodí do chirurgické ambulance nemocnice — a ta v seznamu
+  // pohotovostí není, protože pohotovost to formálně není.
+  //
+  // Konkrétní případ, který to odhalil: Nemocnice Mariánské Lázně má
+  // chirurgickou ambulanci i LPS, ale NEMÁ akutní lůžka, takže do kategorie
+  // `chirurgicka` (akutní nemocnice) nespadá. Uživateli v Mariánských Lázních
+  // pak stránka v deset dopoledne nabídla nejbližší otevřenou pohotovost
+  // v Praze, 115 km daleko, místo nemocnice 470 metrů od něj.
+  //
+  // Omezeno na NEMOCNICE (druh 101–105) schválně: „chirurgie + ambulantní
+  // péče“ samo o sobě sedí i na soukromou laserovou kliniku nebo ordinaci
+  // jednoho chirurga, kam se s úrazem bez objednání nechodí.
+  const nemocnice = ['101', '102', '103', '105'].includes(String(r.ZZ_druh_kod ?? '').trim());
+  const ambulantni = /ambulantni pece/.test(forma);
+  if (nemocnice && ambulantni && chirurgickeObory.some(o => obory.includes(o))) {
+    mark('denni_ambulance', 'odvozeno');
+  }
 
   // ── Zdravotnická záchranná služba ────────────────────────────────────
   if (/zdravotnicka zachranna sluzba/.test(druhPece) || /vyjezdova skupina zachranne/.test(druh)) {

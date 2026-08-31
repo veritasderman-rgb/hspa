@@ -435,3 +435,93 @@ function geometryCentroid(geometry) {
   }
   return n ? { lat: sumLat / n, lon: sumLon / n } : null;
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// Časová triáž: „kam teď“ není totéž co „která pohotovost má otevřeno“
+//
+// Pohotovostní služba je ze zákona (§ 7a zákona č. 372/2011 Sb.) péče
+// poskytovaná MIMO ordinační hodiny ambulantních poskytovatelů. Vyhláška
+// č. 380/2025 Sb. tomu odpovídá: v pracovní den předepisuje minimum až
+// v okně 16:00–22:00. V pondělí v deset dopoledne tedy pohotovost neslouží
+// — a nemá sloužit.
+//
+// Stránka se na to napřed neptala a odpovídala doslovně: „nejbližší otevřená
+// pohotovost“ pro Mariánské Lázně byla v deset dopoledne v PRAZE, 115 km
+// daleko, protože jediná otevřená místa v republice byla nepřetržitá.
+// Přitom 470 metrů od uživatele stojí nemocnice s chirurgickou ambulancí
+// a její vlastní LPS otevírá v 15:30.
+//
+// Odsud tenhle blok: podle hodiny se liší, co je správná odpověď.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Začátek a konec běžných ordinačních hodin (minuty od půlnoci). */
+const ORDINACNI_OD = 7 * 60;
+const ORDINACNI_DO = 16 * 60;
+
+/**
+ * Je teď běžná ordinační doba, kdy pohotovost ještě neslouží?
+ *
+ * Pracovní den 7:00–16:00. Konec je v 16:00 schválně — vyhláška po
+ * poskytovateli chce tři hodiny nepřetržitě v okně 16:00–22:00, takže
+ * dřív pohotovost obecně nenajede. Je to hranice, ne přesný rozvrh
+ * konkrétní ordinace; stránka podle ní radí, ne tvrdí.
+ */
+export function isWorkingHours(date = new Date()) {
+  if (isCzechHoliday(date)) return false;
+  const day = date.getDay();
+  if (day === 0 || day === 6) return false;
+  const minutes = date.getHours() * 60 + date.getMinutes();
+  return minutes >= ORDINACNI_OD && minutes < ORDINACNI_DO;
+}
+
+/**
+ * Sestaví doporučení „kam teď“ podle hodiny a podle toho, co je v okolí.
+ *
+ * Vrací strukturu, ne text — formulace patří do renderu. Pole `steps` je
+ * seřazené od toho, co má člověk zkusit nejdřív.
+ *
+ * @param {{
+ *   now?: Date,
+ *   online?: object|null,          // krajská online pohotovost, když v kraji je
+ *   nearestOpen?: {place: object, distanceKm: number|null}|null,
+ *   nearestLps?: {place: object, status: object, distanceKm: number|null}|null,
+ *   nearestAmbulance?: {place: object, distanceKm: number|null}|null,
+ *   farThresholdKm?: number,
+ * }} input
+ * @returns {{ mode: 'ordinacni_doba'|'pohotovost', headline: string, steps: Array<object> }}
+ */
+export function careAdvice(input = {}) {
+  const {
+    now = new Date(),
+    online = null,
+    nearestOpen = null,
+    nearestLps = null,
+    nearestAmbulance = null,
+    farThresholdKm = 40,
+  } = input;
+
+  const working = isWorkingHours(now);
+  const steps = [];
+
+  if (working) {
+    // V ordinační době je první odpověď praktik, ne pohotovost.
+    steps.push({ kind: 'praktik', priority: 1 });
+    if (online) steps.push({ kind: 'online', priority: 2, service: online });
+    if (nearestAmbulance) steps.push({ kind: 'ambulance', priority: 3, ...nearestAmbulance });
+    if (nearestLps) steps.push({ kind: 'lps_pozdeji', priority: 4, ...nearestLps });
+  } else {
+    if (nearestOpen) steps.push({ kind: 'lps_otevrena', priority: 1, ...nearestOpen });
+    if (online) steps.push({ kind: 'online', priority: 2, service: online });
+    if (!nearestOpen && nearestLps) steps.push({ kind: 'lps_pozdeji', priority: 3, ...nearestLps });
+  }
+
+  // Když je nejbližší otevřená pohotovost přes půl republiky daleko, není to
+  // odpověď — je to ukázka, že v tuhle hodinu žádná otevřená prostě není.
+  const openIsFar = nearestOpen?.distanceKm != null && nearestOpen.distanceKm > farThresholdKm;
+
+  return {
+    mode: working ? 'ordinacni_doba' : 'pohotovost',
+    openIsFar,
+    steps,
+  };
+}

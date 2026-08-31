@@ -1,0 +1,95 @@
+{
+  "_comment": [
+    "Online (telemedicínské) pohotovosti provozované kraji.",
+    "",
+    "PROČ TO NA STRÁNCE JE: fyzická pohotovost ze zákona slouží až PO ordinačních",
+    "hodinách. V pondělí v deset dopoledne tedy nemá otevřeno skoro nic a odpověď",
+    "„nejbližší otevřená je 115 km daleko“ je sice pravdivá, ale k ničemu. Online",
+    "pohotovost běží 24/7, je zdarma a nikam se kvůli ní nejezdí — pro lehčí akutní",
+    "potíže je to v denní době často ta správná odpověď.",
+    "",
+    "PROČ RUČNĚ: jde o dva kraje, žádný registr to nevede a podmínky (kdo, zdarma,",
+    "do kdy) se dají ověřit jen čtením zdroje. Každý záznam proto nese `source` a",
+    "`verified_at`; při revizi se ověřuje znovu.",
+    "",
+    "STAV V OSTATNÍCH KRAJÍCH je v `not_available` — mlčet o něm by vypadalo, že",
+    "službu prostě nemáme zmapovanou."
+  ],
+  "version": "1.0",
+  "services": [
+    {
+      "id": "online-jihocesky",
+      "kraj_code": "CZ031",
+      "kraj": "Jihočeský kraj",
+      "name": "Online Jihočeská pohotovost",
+      "url": "https://www.jihoceskapohotovost.cz/",
+      "app": "Meddi",
+      "since": "2024",
+      "availability": "nonstop",
+      "response_minutes": 30,
+      "channels": ["chat", "videohovor"],
+      "free_for": "obyvatele s trvalým bydlištěm v Jihočeském kraji",
+      "doctor": "lékař",
+      "can_issue": ["eRecept", "doporučení"],
+      "good_for": "lehčí akutní potíže — například viróza, bolest zad, trávicí potíže",
+      "not_for": "chronická onemocnění ani opakované předepisování eReceptů",
+      "note": "První krajská online pohotovost v ČR.",
+      "source": {
+        "name": "Jihočeský kraj — Online Jihočeská pohotovost",
+        "url": "https://www.kraj-jihocesky.cz/cs/jihocesky-kraj-spousti-pro-jihocechy-lekarskou-pohotovost-online"
+      },
+      "verified_at": "2026-08-31"
+    },
+    {
+      "id": "online-karlovarsky",
+      "kraj_code": "CZ041",
+      "kraj": "Karlovarský kraj",
+      "name": "Karlovarská pohotovost",
+      "url": "https://www.karlovarskapohotovost.cz/",
+      "app": "MEDDI.app",
+      "since": "2025-03-01",
+      "availability": "nonstop",
+      "response_minutes": 30,
+      "channels": ["chat", "videohovor"],
+      "free_for": "obyvatele s trvalým pobytem v Karlovarském kraji, děti i dospělé",
+      "doctor": "praktický lékař nebo pediatr",
+      "can_issue": ["eRecept", "lékařská zpráva e-mailem"],
+      "good_for": "méně závažné akutní potíže — například záněty horních či dolních cest dýchacích, potíže s močovými cestami, alergické reakce, kožní problémy",
+      "not_for": "léčbu ani předepisování receptů u chronických onemocnění",
+      "note": null,
+      "source": {
+        "name": "Karlovarská krajská nemocnice — Karlovarský kraj spustil 1. března on-line pohotovost",
+        "url": "https://nemkv.cz/pohotovost"
+      },
+      "verified_at": "2026-08-31"
+    }
+  ],
+  "infolines": [
+    {
+      "kraj_code": "CZ041",
+      "kraj": "Karlovarský kraj",
+      "phone": "+420354222502",
+      "description": "Nepřetržitá informační linka Krajského úřadu Karlovarského kraje o místě a provozní době pohotovostí v kraji.",
+      "source": {
+        "name": "Karlovarský kraj — Lékařská a lékárenská pohotovostní služba",
+        "url": "https://www.kr-karlovarsky.cz/temata/zdravotnictvi/lekarska-lekarenska-pohotovostni-sluzba"
+      },
+      "verified_at": "2026-08-31"
+    }
+  ],
+  "not_available": {
+    "planned": [
+      {
+        "kraj_code": "CZ010",
+        "kraj": "Hlavní město Praha",
+        "note": "Připravuje pilotní projekt vzdálených konzultací ve spolupráci se zdravotnickou záchrannou službou."
+      }
+    ],
+    "declined_note": "Vysočina, Zlínský kraj a kraje východních Čech zavedení online pohotovosti zatím odmítly.",
+    "source": {
+      "name": "Echo24 — Čeští lékaři léčí přes videohovory. On-line pohotovost chystá i Praha",
+      "url": "https://www.echo24.cz/a/HiGbg/zpravy-domov-online-lekarska-pohotovost-jizni-cechy-praha"
+    },
+    "verified_at": "2026-08-31"
+  }
+}

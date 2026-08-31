@@ -44,6 +44,7 @@ const OUT_FILE = path.resolve(ROOT, 'data', 'pohotovosti.json');
 // návštěv nepotřebuje. Stránka si je dotáhne, až když o ně uživatel požádá.
 const OUT_ACUTE_FILE = path.resolve(ROOT, 'data', 'pohotovosti-akutni.json');
 const SOURCES_FILE = path.resolve(__dirname, 'mapping', 'pohotovosti_zdroje.json');
+const ONLINE_FILE = path.resolve(__dirname, 'mapping', 'pohotovosti_online.json');
 
 /** Kraje podle názvu → NUTS-3, ať se dá joinovat napříč zdroji. */
 export const KRAJ_CODE_BY_NAME = {
@@ -285,14 +286,15 @@ export function buildDataset(input) {
   // ── Doplňková vrstva z registru: urgentní příjmy, ZZS, akutní chirurgie ──
   // Nejsou to pohotovosti podle vyhlášky, ale na otázku „kam když je zavřeno“
   // odpovídají — a registr u nich má souřadnice i kontakt.
+  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'denni_ambulance', 'zzs'];
   const acute = (nrpzs?.places ?? [])
-    .filter(p => p.categories.some(c => ['urgentni_prijem', 'chirurgicka', 'zzs'].includes(c)))
+    .filter(p => p.categories.some(c => ACUTE_CATEGORIES.includes(c)))
     .map(p => ({
       id: p.id,
       name: p.name,
-      categories: p.categories.filter(c => ['urgentni_prijem', 'chirurgicka', 'zzs'].includes(c)),
+      categories: p.categories.filter(c => ACUTE_CATEGORIES.includes(c)),
       evidence: Object.fromEntries(Object.entries(p.evidence)
-        .filter(([c]) => ['urgentni_prijem', 'chirurgicka', 'zzs'].includes(c))),
+        .filter(([c]) => ACUTE_CATEGORIES.includes(c))),
       kraj_code: p.kraj_code,
       kraj: p.kraj,
       okres: p.okres,
@@ -379,6 +381,13 @@ export function buildDataset(input) {
         fetched_at: kraje?.generated_at ?? null,
       },
       {
+        id: 'online',
+        name: 'Krajské online pohotovosti',
+        url: 'https://www.jihoceskapohotovost.cz/',
+        role: 'Telemedicínská pohotovost dvou krajů — ručně ověřené podmínky, každý záznam nese vlastní zdroj a datum ověření.',
+        fetched_at: null,
+      },
+      {
         id: 'obce',
         name: 'Wikidata — obce ČR',
         url: 'https://query.wikidata.org/sparql',
@@ -395,6 +404,8 @@ export function buildDataset(input) {
       rotations_total: rotations.length,
       rotation_practices: rotations.reduce((n, r) => n + r.practices.length, 0),
       acute_total: acute.length,
+      denni_ambulance_total: acute.filter(a => a.categories.includes('denni_ambulance')).length,
+      online_services: (input.online?.services ?? []).length,
       regions_total: sources?.kraje?.length ?? 14,
       regions_with_open_data: regionsWithOpenData,
       by_kraj: byKraj,
@@ -402,6 +413,12 @@ export function buildDataset(input) {
     },
 
     categories: CATEGORIES,
+
+    // Krajské online pohotovosti. Pro denní hodiny, kdy fyzická pohotovost
+    // ze zákona neslouží, je tohle často jediná odpověď, která nevyžaduje
+    // cestu — proto jde do hlavního souboru, ne do líně načítané vrstvy.
+    online: input.online ?? { services: [], infolines: [], not_available: null },
+
     regions: (sources?.kraje ?? []).map(k => ({
       kraj_code: k.kraj_code,
       kraj: k.kraj,
@@ -425,12 +442,13 @@ export function run() {
   const kraje = readCache('kraje_pohotovosti.json');
   const geoIndex = readCache('nrpzs_geo_index.json') ?? {};
   const sources = JSON.parse(fs.readFileSync(SOURCES_FILE, 'utf8'));
+  const online = JSON.parse(fs.readFileSync(ONLINE_FILE, 'utf8'));
   const obce = JSON.parse(fs.readFileSync(path.resolve(ROOT, 'data', 'obce-gps.json'), 'utf8'));
 
   if (!vzp) throw new Error('[pohotovosti] chybí ingest/cache/vzp_pohotovosti.json — spusť `npm run fetch:pohotovosti-vzp`');
   if (!nrpzs) throw new Error('[pohotovosti] chybí ingest/cache/pohotovosti_places.json — spusť `npm run fetch:pohotovosti-nrpzs`');
 
-  const { dataset, acute } = buildDataset({ vzp, nrpzs, kraje: kraje ?? { places: [] }, obce, geoIndex, sources });
+  const { dataset, acute } = buildDataset({ vzp, nrpzs, kraje: kraje ?? { places: [] }, obce, geoIndex, sources, online });
   // Kompaktní JSON: soubor otevírá člověk, který někoho veze k lékaři —
   // 400 kB odsazení navíc je tady cítit.
   fs.writeFileSync(OUT_FILE, `${JSON.stringify(dataset)}\n`);

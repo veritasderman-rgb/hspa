@@ -27,6 +27,8 @@ import {
   pointInRing,
   pointInGeometry,
   regionCodeAt,
+  isWorkingHours,
+  careAdvice,
 } from '../src/pohotovosti-engine.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -285,4 +287,65 @@ test('regionCodeAt se nezasekne na prázdném nebo neplatném vstupu', () => {
   assert.equal(regionCodeAt(null, 50, 14), null);
   assert.equal(regionCodeAt({ features: [] }, 50, 14), null);
   assert.equal(regionCodeAt({ features: [{ geometry: SQUARE, properties: { code: 'X' } }] }, NaN, 14), null);
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Časová triáž „kam teď“
+// ─────────────────────────────────────────────────────────────────────────
+
+test('isWorkingHours zná hranici, za kterou pohotovost teprve nastupuje', () => {
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 10, 0)), true, 'pondělí dopoledne');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 15, 59)), true, 'těsně před 16:00');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 16, 0)), false, 'v 16:00 začíná okno vyhlášky');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 6, 59)), false, 'před sedmou');
+  assert.equal(isWorkingHours(new Date(2026, 8, 5, 10, 0)), false, 'sobota');
+  assert.equal(isWorkingHours(new Date(2026, 8, 6, 10, 0)), false, 'neděle');
+  assert.equal(isWorkingHours(new Date(2026, 11, 24, 10, 0)), false, 'Štědrý den je svátek, ne pracovní den');
+});
+
+const advicePlace = (over) => ({ id: 'x', name: 'Nemocnice', category: 'lps_dospeli', ...over });
+
+test('careAdvice · v ordinační době neposílá na pohotovost, ale k praktikovi', () => {
+  // Regrese: v pondělí v deset ukazovala stránka jako „nejbližší otevřenou“
+  // pohotovost v Praze, 115 km od Mariánských Lázní, protože jediná otevřená
+  // místa v republice byla nepřetržitá.
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 10, 0),
+    online: { name: 'Karlovarská pohotovost', kraj_code: 'CZ041' },
+    nearestOpen: { place: advicePlace({ name: 'Praha' }), distanceKm: 115 },
+    nearestLps: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'closed', next: '15:30' }, distanceKm: 0.47 },
+    nearestAmbulance: { place: advicePlace({ name: 'Nemocnice Mariánské Lázně' }), distanceKm: 0.47 },
+  });
+
+  assert.equal(advice.mode, 'ordinacni_doba');
+  assert.deepEqual(advice.steps.map(s => s.kind), ['praktik', 'online', 'ambulance', 'lps_pozdeji']);
+  assert.ok(!advice.steps.some(s => s.kind === 'lps_otevrena'),
+    'vzdálenou otevřenou pohotovost v ordinační době nenabízíme jako řešení');
+});
+
+test('careAdvice · mimo ordinační dobu vede na otevřenou pohotovost', () => {
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 18, 0),
+    online: { name: 'Karlovarská pohotovost' },
+    nearestOpen: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'open', until: '21:00' }, distanceKm: 0.47 },
+    nearestLps: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'open' }, distanceKm: 0.47 },
+  });
+  assert.equal(advice.mode, 'pohotovost');
+  assert.equal(advice.steps[0].kind, 'lps_otevrena');
+  assert.equal(advice.openIsFar, false);
+});
+
+test('careAdvice · označí, když je nejbližší otevřená přes půl republiky', () => {
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 23, 0),
+    nearestOpen: { place: advicePlace(), status: { state: 'open' }, distanceKm: 115 },
+  });
+  assert.equal(advice.openIsFar, true, '115 km není odpověď, je to důkaz, že nic blízko nemá otevřeno');
+});
+
+test('careAdvice · bez online služby a bez ambulance nespadne', () => {
+  const advice = careAdvice({ now: new Date(2026, 8, 7, 10, 0) });
+  assert.equal(advice.mode, 'ordinacni_doba');
+  assert.deepEqual(advice.steps.map(s => s.kind), ['praktik']);
+  assert.equal(advice.openIsFar, false);
 });

@@ -442,3 +442,76 @@ test('vercel.json používá jen klíče, které schéma Vercelu zná', () => {
     }
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────
+// Online pohotovosti a denní ambulance
+// ─────────────────────────────────────────────────────────────────────────
+
+test('classifyPlace · nemocniční chirurgická ambulance i bez akutních lůžek', () => {
+  // Regrese: Nemocnice Mariánské Lázně má chirurgickou ambulanci a vlastní LPS,
+  // ale nemá AKUTNÍ lůžka (jen následnou a dlouhodobou péči). Do kategorie
+  // `chirurgicka` proto nespadla a v ordinační době stránka nabídla uživateli
+  // v Mariánských Lázních pohotovost v Praze, 115 km daleko, místo nemocnice
+  // 470 metrů od něj.
+  const res = classifyPlace(nrpzsRow({
+    ZZ_druh_kod: '105',
+    ZZ_druh_nazev: 'Nemocnice následné péče',
+    ZZ_obor_pece: 'chirurgie, vnitřní lékařství, gastroenterologie',
+    ZZ_forma_pece: 'ambulantní péče, následná lůžková péče - standardní',
+  }));
+  assert.equal(res.denni_ambulance, 'odvozeno');
+  assert.equal(res.chirurgicka, undefined, 'bez akutních lůžek to není akutní nemocnice');
+});
+
+test('classifyPlace · soukromá chirurgická ordinace není denní ambulance', () => {
+  // „chirurgie + ambulantní péče“ sedí i na laserovou kliniku nebo ordinaci
+  // jednoho chirurga — tam se s úrazem bez objednání nechodí.
+  const res = classifyPlace(nrpzsRow({
+    ZZ_druh_kod: '324',
+    ZZ_druh_nazev: 'Samostatná ordinace lékaře specialisty',
+    ZZ_obor_pece: 'chirurgie',
+    ZZ_forma_pece: 'ambulantní péče',
+  }));
+  assert.equal(res.denni_ambulance, undefined);
+});
+
+test('data/pohotovosti-akutni.json · denní ambulance pokrývají všechny kraje', () => {
+  const acute = readData('pohotovosti-akutni.json');
+  const denni = acute.places.filter(p => p.categories.includes('denni_ambulance'));
+  assert.ok(denni.length > 100, `jen ${denni.length} denních ambulancí`);
+  assert.equal(new Set(denni.map(p => p.kraj_code)).size, 14, 'musí být ve všech 14 krajích');
+  assert.ok(denni.some(p => /Mariánské Lázně/.test(p.obec ?? '')),
+    'Nemocnice Mariánské Lázně je konkrétní případ, kvůli kterému kategorie vznikla');
+});
+
+test('data/pohotovosti.json · online pohotovosti mají doložené podmínky', () => {
+  const d = readData('pohotovosti.json');
+  assert.ok(d.online.services.length >= 2, 'čekány aspoň dvě krajské online pohotovosti');
+
+  const kraje = new Set(d.regions.map(r => r.kraj_code));
+  for (const sv of d.online.services) {
+    assert.ok(kraje.has(sv.kraj_code), `${sv.id}: kraj ${sv.kraj_code} není v registru`);
+    assert.match(sv.url, /^https:\/\//);
+    // Podmínky (kdo, zdarma, na co) jsou tvrzení o cizí službě — stránka je
+    // bez zdroje a data ověření nemá jak obhájit.
+    assert.match(sv.source.url, /^https?:\/\//, `${sv.id}: chybí odkaz na zdroj`);
+    assert.match(sv.verified_at, /^\d{4}-\d{2}-\d{2}$/, `${sv.id}: chybí datum ověření`);
+    assert.ok(sv.free_for && sv.good_for, `${sv.id}: chybí, pro koho a na co služba je`);
+  }
+
+  for (const line of d.online.infolines ?? []) {
+    assert.match(line.phone, /^\+\d{9,15}$/);
+    assert.match(line.source.url, /^https?:\/\//);
+  }
+});
+
+test('data/pohotovosti.json · „not_for“ sedí do věty „Není pro …“', () => {
+  // Text se v kartě vypisuje za „Není pro“, takže musí být v akuzativu.
+  // Dřív z toho vycházelo „Není pro léčba a předepisování receptů“.
+  const d = readData('pohotovosti.json');
+  for (const sv of d.online.services) {
+    if (!sv.not_for) continue;
+    assert.ok(!/^(léčba|předepisování|chronická onemocnění a)\b/.test(sv.not_for),
+      `${sv.id}: „${sv.not_for}“ nesedí do věty „Není pro …“`);
+  }
+});
