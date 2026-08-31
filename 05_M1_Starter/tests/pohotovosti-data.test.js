@@ -442,3 +442,65 @@ test('vercel.json používá jen klíče, které schéma Vercelu zná', () => {
     }
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────
+// Online pohotovosti a denní ambulance
+// ─────────────────────────────────────────────────────────────────────────
+
+test('classifyPlace · z nemocnice s ambulantní chirurgií nedělá úrazovou ambulanci', () => {
+  // Slepá ulička, kterou zachytilo review: „nemocnice + chirurgický obor +
+  // ambulantní péče“ vypadá jako definice denní úrazové ambulance, ale
+  // vybralo to i Revmatologický ústav, Masarykův onkologický ústav nebo
+  // Ústav pro péči o matku a dítě. Registr neumí rozlišit ambulanci, kam se
+  // chodí neobjednaně, od ambulance na objednání — takže se to neodvozuje.
+  const res = classifyPlace(nrpzsRow({
+    ZZ_druh_kod: '103',
+    ZZ_druh_nazev: 'Specializovaná nemocnice',
+    ZZ_nazev: 'Masarykův onkologický ústav',
+    ZZ_obor_pece: 'chirurgie, klinická onkologie',
+    ZZ_forma_pece: 'ambulantní péče',
+  }));
+  assert.deepEqual(res, {}, 'onkologický ústav není místo, kam se jde s úrazem');
+});
+
+test('data/pohotovosti-akutni.json · jen doložitelné kategorie', () => {
+  const acute = readData('pohotovosti-akutni.json');
+  const allowed = new Set(['urgentni_prijem', 'chirurgicka', 'zzs']);
+  for (const p of acute.places) {
+    for (const c of p.categories) assert.ok(allowed.has(c), `${p.id}: neznámá kategorie ${c}`);
+  }
+  const urgent = acute.places.filter(p => p.categories.includes('urgentni_prijem'));
+  assert.ok(urgent.length >= 20, `jen ${urgent.length} urgentních příjmů`);
+});
+
+test('data/pohotovosti.json · online pohotovosti mají doložené podmínky', () => {
+  const d = readData('pohotovosti.json');
+  assert.ok(d.online.services.length >= 2, 'čekány aspoň dvě krajské online pohotovosti');
+
+  const kraje = new Set(d.regions.map(r => r.kraj_code));
+  for (const sv of d.online.services) {
+    assert.ok(kraje.has(sv.kraj_code), `${sv.id}: kraj ${sv.kraj_code} není v registru`);
+    assert.match(sv.url, /^https:\/\//);
+    // Podmínky (kdo, zdarma, na co) jsou tvrzení o cizí službě — stránka je
+    // bez zdroje a data ověření nemá jak obhájit.
+    assert.match(sv.source.url, /^https?:\/\//, `${sv.id}: chybí odkaz na zdroj`);
+    assert.match(sv.verified_at, /^\d{4}-\d{2}-\d{2}$/, `${sv.id}: chybí datum ověření`);
+    assert.ok(sv.free_for && sv.good_for, `${sv.id}: chybí, pro koho a na co služba je`);
+  }
+
+  for (const line of d.online.infolines ?? []) {
+    assert.match(line.phone, /^\+\d{9,15}$/);
+    assert.match(line.source.url, /^https?:\/\//);
+  }
+});
+
+test('data/pohotovosti.json · „not_for“ sedí do věty „Není pro …“', () => {
+  // Text se v kartě vypisuje za „Není pro“, takže musí být v akuzativu.
+  // Dřív z toho vycházelo „Není pro léčba a předepisování receptů“.
+  const d = readData('pohotovosti.json');
+  for (const sv of d.online.services) {
+    if (!sv.not_for) continue;
+    assert.ok(!/^(léčba|předepisování|chronická onemocnění a)\b/.test(sv.not_for),
+      `${sv.id}: „${sv.not_for}“ nesedí do věty „Není pro …“`);
+  }
+});

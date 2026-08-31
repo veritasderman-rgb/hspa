@@ -32,6 +32,9 @@ import {
   nextRotationDate,
   dayKeyFor,
   regionCodeAt,
+  haversineKm,
+  careAdvice,
+  isWorkingHours,
 } from './pohotovosti-engine.js';
 
 const PAGE_SIZE = 8;
@@ -42,7 +45,7 @@ const TYPE_FILTERS = [
   { id: 'lps_deti', label: 'Děti', title: 'Lékařská pohotovostní služba pro děti a dorost' },
   { id: 'zubni', label: 'Zubní', title: 'Pohotovostní služba v oboru zubní lékařství' },
   { id: 'lekarna', label: 'Lékárna', title: 'Lékárenská pohotovostní služba' },
-  { id: 'akutni', label: 'Urgentní příjem a chirurgie', title: 'Nemocniční urgentní příjmy a pracoviště akutní chirurgie z registru ÚZIS — nejde o pohotovostní službu podle vyhlášky' },
+  { id: 'akutni', label: 'Urgentní příjem a chirurgie', title: 'Urgentní příjmy, nemocnice s akutní chirurgií a základny záchranné služby z registru ÚZIS — nejde o pohotovostní službu podle vyhlášky a registr u nich nevede provozní dobu' },
 ];
 
 const DAY_LABELS = [
@@ -147,6 +150,7 @@ async function resolveOriginRegion(origin) {
     if (state.origin !== origin) return; // uživatel mezitím hledal odjinud
     origin.krajCode = regionCodeAt(geojson, origin.lat, origin.lon);
     renderRotationSection();
+    renderAdvice(); // online pohotovost a infolinka závisí na kraji
   } catch {
     // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj.
   }
@@ -164,7 +168,12 @@ function setOrigin(origin) {
     if (reset) reset.addEventListener('click', () => { setOrigin(null); update(); });
   }
   update();
-  if (origin) resolveOriginRegion(origin);
+  if (origin) {
+    resolveOriginRegion(origin);
+    // V ordinační době je nejbližší urgentní příjem součástí odpovědi,
+    // takže se akutní vrstva dotáhne i bez zapnutého filtru.
+    if (isWorkingHours()) ensureAcute().then(() => { renderAdvice(); }).catch(() => {});
+  }
 }
 
 function closeSuggest() {
@@ -411,6 +420,7 @@ function update() {
       .slice(0, 5);
   }
 
+  renderAdvice();
   renderList();
   renderMap();
   renderRotationSection();
@@ -448,6 +458,216 @@ function renderList() {
     more.hidden = state.rows.length <= state.shown;
     more.textContent = `Zobrazit další (zbývá ${state.rows.length - state.shown})`;
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Co dělat teď
+//
+// Nejdůležitější blok stránky. Bez něj odpovídala doslovně na „která
+// pohotovost má otevřeno“ — a v pondělí dopoledne, kdy pohotovost ze zákona
+// neslouží, poslala uživatele z Mariánských Lázní do Prahy, 115 km daleko.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Online pohotovost kraje, ve kterém uživatel hledá (když v něm nějaká je). */
+function onlineForOrigin() {
+  const code = currentKrajCode();
+  if (!code) return null;
+  return (state.data?.online?.services ?? []).find(sv => sv.kraj_code === code) ?? null;
+}
+
+/** Infolinka kraje, ve kterém uživatel hledá. */
+function infolineForOrigin() {
+  const code = currentKrajCode();
+  if (!code) return null;
+  return (state.data?.online?.infolines ?? []).find(l => l.kraj_code === code) ?? null;
+}
+
+/**
+ * Nejbližší urgentní příjem — jediné pracoviště, u kterého registr přímo
+ * dokládá neobjednanou akutní péči.
+ */
+function nearestUrgent() {
+  if (!state.origin || !state.acute) return null;
+  const hits = state.acute
+    .filter(a => a.categories.includes('urgentni_prijem') && a.lat != null)
+    .map(a => ({ place: acuteAsPlace(a), distanceKm: haversineKm(state.origin, a) }))
+    .sort((x, y) => (x.distanceKm ?? Infinity) - (y.distanceKm ?? Infinity));
+  return hits[0] ?? null;
+}
+
+/** Kategorie, podle které se řídí první kontakt v ordinační době. */
+function primaryCategory() {
+  for (const c of ['lps_dospeli', 'lps_deti', 'zubni', 'lekarna']) {
+    if (state.categories.has(c)) return c;
+  }
+  return 'lps_dospeli';
+}
+
+function renderAdvice() {
+  const host = document.getElementById('pohAdvice');
+  if (!host) return;
+
+  const now = new Date();
+  const category = primaryCategory();
+  const lpsRows = rankPlaces(state.data?.places ?? [], {
+    origin: state.origin,
+    categories: [category],
+    openOnly: false,
+    now,
+  });
+
+  const advice = careAdvice({
+    now,
+    hasOrigin: Boolean(state.origin),
+    category,
+    online: onlineForOrigin(),
+    nearestOpen: lpsRows.find(r => r.status.state === 'open') ?? null,
+    nearestLps: lpsRows[0] ?? null,
+    nearestUrgent: nearestUrgent(),
+  });
+
+  const infoline = infolineForOrigin();
+  const parts = [];
+
+  if (advice.mode === 'ordinacni_doba') {
+    parts.push(`
+      <p class="poh-advice-lead">
+        <strong>Teď je běžná ordinační doba — pohotovost ještě neslouží.</strong>
+        Pohotovostní služba ze zákona nastupuje až po ordinačních hodinách
+        (v pracovní den zpravidla od 16:00). Do té doby patří akutní potíže
+        k lékaři, u kterého jste registrovaní.
+      </p>`);
+  } else {
+    parts.push(`
+      <p class="poh-advice-lead">
+        <strong>Teď je čas pohotovosti.</strong> Ordinace mají zavřeno, takže
+        s potížemi, které nepočkají do rána, jděte na pohotovost níže.
+      </p>`);
+  }
+
+  parts.push('<ol class="poh-advice-steps">');
+  for (const step of advice.steps) parts.push(adviceStepHtml(step));
+  parts.push('</ol>');
+
+  if (advice.openIsFar && advice.mode === 'pohotovost') {
+    const km = formatDistance(advice.steps.find(s => s.kind === 'lps_otevrena')?.distanceKm);
+    parts.push(`
+      <p class="poh-advice-warn">
+        Nejbližší otevřená pohotovost je ${escapeHtml(km ?? 'daleko')} od vás. Než se
+        vydáte na cestu, zavolejte tam — a při zhoršení stavu volejte
+        <a href="tel:155">155</a>.
+      </p>`);
+  }
+
+  if (infoline) {
+    parts.push(`
+      <p class="poh-advice-infoline">
+        <strong>${escapeHtml(infoline.kraj)}</strong> provozuje nepřetržitou informační linku
+        o pohotovostech: <a href="tel:${escapeHtml(infoline.phone)}">${escapeHtml(formatPhone(infoline.phone))}</a>.
+      </p>`);
+  }
+
+  host.innerHTML = parts.join('');
+}
+
+/** Text prvního kontaktu podle toho, co uživatel hledá. */
+const PRVNI_KONTAKT_TEXT = {
+  praktik: {
+    what: 'Zavolejte svému praktickému lékaři',
+    why: 'V ordinační době je to první adresa. Praktik vás objedná na akutní vyšetření nebo poradí po telefonu.',
+  },
+  detsky_lekar: {
+    what: 'Zavolejte dětskému lékaři',
+    why: 'V ordinační době řeší akutní potíže dítěte praktický lékař pro děti a dorost, u kterého je registrované.',
+  },
+  zubar: {
+    what: 'Zavolejte svému zubaři',
+    why: 'S akutní bolestí zubu vás vlastní zubař zpravidla vezme mimo objednané pacienty. Zubní pohotovost slouží až mimo ordinační hodiny — a ve většině krajů jen o víkendech a svátcích.',
+  },
+  lekarna: {
+    what: 'Zajděte do kterékoli otevřené lékárny',
+    why: 'V ordinační době mají běžné lékárny otevřeno. Lékárenská pohotovost je režim pro večery, noci a svátky.',
+  },
+};
+
+function adviceStepHtml(step) {
+  if (step.kind === 'prvni_kontakt') {
+    const t = PRVNI_KONTAKT_TEXT[step.contact] ?? PRVNI_KONTAKT_TEXT.praktik;
+    return `
+      <li class="poh-advice-step">
+        <span class="poh-advice-what">${escapeHtml(t.what)}</span>
+        <span class="poh-advice-why">${escapeHtml(t.why)}</span>
+      </li>`;
+  }
+
+  if (step.kind === 'zadejte_polohu') {
+    return `
+      <li class="poh-advice-step">
+        <span class="poh-advice-what">Zadejte obec nebo použijte polohu</span>
+        <span class="poh-advice-why">Bez ní nedokážeme říct, co je k vám nejblíž — a hádat to nebudeme.</span>
+      </li>`;
+  }
+
+  if (step.kind === 'online') {
+    const sv = step.service;
+    return `
+      <li class="poh-advice-step poh-advice-step-online">
+        <span class="poh-advice-what">${escapeHtml(sv.name)} — online, ${escapeHtml(sv.availability === 'nonstop' ? 'nepřetržitě' : sv.availability)}</span>
+        <span class="poh-advice-why">
+          Zdarma pro ${escapeHtml(sv.free_for)}. Spojení s lékařem
+          ${sv.response_minutes ? `do ${sv.response_minutes} minut ` : ''}přes
+          ${escapeHtml((sv.channels ?? []).join(' nebo '))}, nikam se nejezdí.
+          Vhodné na ${escapeHtml(sv.good_for)}.
+          ${sv.not_for ? `<em>Není pro ${escapeHtml(sv.not_for)}.</em>` : ''}
+        </span>
+        <a class="poh-action poh-action-primary" href="${escapeHtml(sv.url)}" target="_blank" rel="noopener">Otevřít ${escapeHtml(sv.name)}</a>
+      </li>`;
+  }
+
+  if (step.kind === 'urgent') {
+    const p = step.place;
+    return `
+      <li class="poh-advice-step">
+        <span class="poh-advice-what">${escapeHtml(p.name)}${step.distanceKm != null ? ` — ${escapeHtml(formatDistance(step.distanceKm))}` : ''}</span>
+        <span class="poh-advice-why">
+          Urgentní příjem nemocnice. Přijímá i bez objednání a bez ohledu na hodinu.
+          Je pro vážné stavy, ne pro to, co počká na ordinační hodiny.
+          ${escapeHtml(p.address ?? '')}
+        </span>
+        ${p.phone ? `<a class="poh-action" href="tel:${escapeHtml(p.phone)}">Zavolat ${escapeHtml(formatPhone(p.phone))}</a>` : ''}
+      </li>`;
+  }
+
+  if (step.kind === 'lps_otevrena') {
+    const p = step.place;
+    return `
+      <li class="poh-advice-step">
+        <span class="poh-advice-what">${escapeHtml(p.name)}${step.distanceKm != null ? ` — ${escapeHtml(formatDistance(step.distanceKm))}` : ''}</span>
+        <span class="poh-advice-why">${escapeHtml(p.category_label ?? '')}, teď otevřeno${step.status?.until ? ` do ${escapeHtml(step.status.until)}` : ''}. ${escapeHtml(p.address ?? '')}</span>
+        ${p.phone ? `<a class="poh-action poh-action-primary" href="tel:${escapeHtml(p.phone)}">Zavolat ${escapeHtml(formatPhone(p.phone))}</a>` : ''}
+      </li>`;
+  }
+
+  if (step.kind === 'lps_pozdeji') {
+    const p = step.place;
+    const when = step.status?.next
+      ? `${relativeDay(step.status.nextDate ?? '')} ${step.status.next}`
+      : 'podle rozpisu';
+    // Tohle pracoviště prokazatelně přijímá lidi bez objednání — provozuje
+    // pohotovost. Že tam přes den funguje i běžná ambulance, je pravděpodobné,
+    // ale registr to nepotvrzuje, takže se říká „zeptejte se“, ne „přijďte“.
+    const hint = step.daytimeHint && p.phone
+      ? ' Zavolejte tam i teď — bývá tu přes den běžná ambulance téhož zařízení.'
+      : '';
+    return `
+      <li class="poh-advice-step">
+        <span class="poh-advice-what">${escapeHtml(p.name)}${step.distanceKm != null ? ` — ${escapeHtml(formatDistance(step.distanceKm))}` : ''}</span>
+        <span class="poh-advice-why">Nejbližší pohotovost od vás. Otevírá ${escapeHtml(when)}.${escapeHtml(hint)} ${escapeHtml(p.address ?? '')}</span>
+        ${p.phone ? `<a class="poh-action" href="tel:${escapeHtml(p.phone)}">Zavolat ${escapeHtml(formatPhone(p.phone))}</a>` : ''}
+      </li>`;
+  }
+
+  return '';
 }
 
 /** Nejbližší zavřené, když je otevřených málo — s časem, kdy otevřou. */

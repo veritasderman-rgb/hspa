@@ -132,7 +132,7 @@ zdrave-cesko.cz/
 |---|---|
 | **Účel** | Servisní stránka pro jednu otázku: „kde je nejbližší pohotovost, která má teď otevřeno?“ Jediné celostátní vyhledávání napříč lékařskou, dětskou, zubní a lékárenskou pohotovostí. |
 | **Cílový uživatel** | Člověk v nouzi, typicky na mobilu, večer nebo o víkendu. Sekundárně novinář a analytik (systémový kontext dole). |
-| **Fetchuje** | `data/pohotovosti.json`; líně `data/obce-gps.json` (až uživatel začne psát) a `data/pohotovosti-akutni.json` (až zapne filtr urgentních příjmů); `data/cz-regions.geojson` pro mapu |
+| **Fetchuje** | `data/pohotovosti.json` (včetně krajských online pohotovostí); líně `data/obce-gps.json` (až uživatel začne psát), `data/pohotovosti-akutni.json` (filtr nemocničních ambulancí, nebo automaticky v ordinační době) a `data/cz-regions.geojson` (mapa + určení kraje) |
 | **JS moduly** | `src/pohotovosti.js` (render) → `src/pohotovosti-engine.js` (jádro bez DOM) → `page-shared` |
 | **CSS namespace** | `.poh-*` (triage, finder, chip, card, badge, rot, stat, table) |
 
@@ -141,6 +141,17 @@ zdrave-cesko.cz/
 - **Triáž nad vším ostatním.** První blok stránky posílá na 155 při ohrožení
   života. Pohotovost není náhrada záchranky a stránka to říká dřív, než
   cokoli nabídne.
+- **Odpověď se mění podle hodiny.** Pohotovost ze zákona slouží až PO
+  ordinačních hodinách, takže v pracovní den dopoledne nemá otevřeno skoro
+  nic. Blok „Co dělat teď“ (`careAdvice()` v enginu) v takové chvíli
+  nenabízí vzdálenou nepřetržitou pohotovost, ale lékaře, u kterého je člověk
+  registrovaný, krajskou online pohotovost a nejbližší doložené neobjednané
+  pracoviště (urgentní příjem, nebo to, které samo provozuje pohotovost).
+  Bez polohy nenabízí konkrétní místo vůbec — bez ní nelze říct „nejbližší“.
+  Bez toho stránka
+  posílala uživatele z Mariánských Lázní do Prahy, 115 km daleko, zatímco
+  nemocnice s chirurgickou ambulancí stála 470 metrů od něj a její vlastní
+  LPS otevírala v 15:30.
 - **Rozlišuje „zavřeno“ a „nevíme“.** Chybějící ordinační doba se zobrazí jako
   „provozní doba neuvedena“, nikdy jako „zavřeno“. Filtr „jen otevřené“ taková
   místa proto nechává ve výpisu.

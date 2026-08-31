@@ -123,6 +123,8 @@ export function classifyPlace(r) {
     /lekarsk\w* pohotov|pohotovostni sluzb|pohotovsotni|lspp/.test(rozsah)
     && !lekarenskaPohotovost;
 
+  const chirurgickeObory = ['chirurgie', 'detska chirurgie', 'traumatologie', 'ortopedie a traumatologie pohyboveho ustroji', 'urazova chirurgie'];
+
   const dentalOnly = obory.length > 0 && obory.every(o => o === OBOR_ZUBNI);
   const maZubniObor = obory.includes(OBOR_ZUBNI);
   const maDetskyObor = OBORY_DETSKE.some(o => obory.includes(o));
@@ -156,10 +158,19 @@ export function classifyPlace(r) {
   if (/urgentni prijem|urgent typu|urgentniho prijmu/.test(rozsah)) mark('urgentni_prijem', 'registr');
   else if (obory.includes('urgentni medicina') && akutniLuzka) mark('urgentni_prijem', 'odvozeno');
 
+  // POZOR, SLEPÁ ULIČKA: „nemocnice + chirurgický obor + ambulantní péče“
+  // vypadá jako dobrá definice denní úrazové ambulance, ale není. Do 169
+  // takto vybraných míst spadly Revmatologický ústav, Masarykův onkologický
+  // ústav, Ústav pro péči o matku a dítě nebo gynekologická klinika — nikam
+  // z toho se s naraženou rukou bez objednání nechodí. Registr prostě
+  // nerozliší „ambulance, kam se chodí neobjednaně“ od „ambulance, kam se
+  // chodí na objednání“. Denní alternativu proto stránka nebere z domněnky,
+  // ale z důkazu: urgentní příjem, nebo pracoviště, které samo provozuje
+  // pohotovost (viz `careAdvice` v src/pohotovosti-engine.js).
+
   // ── Chirurgická / úrazová akutní péče ────────────────────────────────
   // Vždy odvozená: nemocnice, která má akutní lůžka a chirurgický obor, drží
   // nepřetržitou úrazovou ambulanci. Registr to takhle nepojmenovává.
-  const chirurgickeObory = ['chirurgie', 'detska chirurgie', 'traumatologie', 'ortopedie a traumatologie pohyboveho ustroji', 'urazova chirurgie'];
   if (akutniLuzka && chirurgickeObory.some(o => obory.includes(o))) mark('chirurgicka', 'odvozeno');
 
   // ── Zdravotnická záchranná služba ────────────────────────────────────

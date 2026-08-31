@@ -204,6 +204,42 @@ function validateRotations(data) {
   }
 }
 
+function validateOnline(data) {
+  const online = data.online;
+  if (!online) { fail('chybí sekce `online` (krajské online pohotovosti)'); return; }
+
+  for (const sv of online.services ?? []) {
+    const where = `online služba ${sv.id ?? '(bez id)'}`;
+    for (const field of ['id', 'kraj_code', 'name', 'url', 'free_for', 'good_for']) {
+      if (!sv[field]) fail(`${where}: chybí povinné pole ${field}`);
+    }
+    if (sv.kraj_code && !/^CZ0\d{2}$/.test(sv.kraj_code)) fail(`${where}: kraj_code není NUTS-3`);
+    if (sv.url && !/^https?:\/\//.test(sv.url)) fail(`${where}: url nemá schéma http(s)`);
+    // Podmínky služby jsou tvrzení o cizí službě — bez zdroje a data ověření
+    // je stránka nemá kde obhájit a zastarají tiše.
+    if (!sv.source?.url) fail(`${where}: chybí odkaz na zdroj podmínek`);
+    if (!ISO_DATE_RE.test(String(sv.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+    if (sv.response_minutes != null && !(sv.response_minutes > 0 && sv.response_minutes <= 240)) {
+      fail(`${where}: response_minutes ${sv.response_minutes} je mimo rozumný rozsah`);
+    }
+    if (!Array.isArray(sv.channels) || !sv.channels.length) fail(`${where}: chybí způsob spojení (channels)`);
+  }
+
+  for (const line of online.infolines ?? []) {
+    const where = `infolinka ${line.kraj_code ?? '?'}`;
+    if (!/^\+\d{9,15}$/.test(String(line.phone ?? ''))) fail(`${where}: telefon není v mezinárodním tvaru`);
+    if (!line.source?.url) fail(`${where}: chybí odkaz na zdroj`);
+    if (!ISO_DATE_RE.test(String(line.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+  }
+
+  // Služba musí patřit kraji, který v registru zdrojů existuje — jinak by ji
+  // stránka nikomu nenabídla a nikdo by si toho nevšiml.
+  const known = new Set((data.regions ?? []).map(r => r.kraj_code));
+  for (const sv of online.services ?? []) {
+    if (sv.kraj_code && !known.has(sv.kraj_code)) fail(`online služba ${sv.id}: kraj ${sv.kraj_code} není v registru krajů`);
+  }
+}
+
 function validateLegal(data) {
   const decree = data.legal?.decree;
   if (!decree?.url || !decree?.title) {
@@ -228,10 +264,18 @@ function validateObce() {
 function validateAcute() {
   const acute = readJson('data/pohotovosti-akutni.json');
   if (!acute) return;
+  const ACUTE_CATEGORIES = ['urgentni_prijem', 'chirurgicka', 'zzs'];
   for (const p of acute.places ?? []) {
     if (!p.id || !p.name) fail(`akutní pracoviště bez id nebo názvu: ${JSON.stringify(p).slice(0, 80)}`);
     if (p.lat != null && !(p.lat >= 48.4 && p.lat <= 51.2)) fail(`akutní pracoviště ${p.id}: šířka mimo ČR`);
+    for (const c of p.categories ?? []) {
+      if (!ACUTE_CATEGORIES.includes(c)) fail(`akutní pracoviště ${p.id}: neznámá kategorie „${c}“`);
+    }
   }
+  // Urgentní příjem je jediné pracoviště, u kterého registr přímo dokládá
+  // neobjednanou akutní péči — stránka na něj v ordinační době odkazuje.
+  const urgent = (acute.places ?? []).filter(p => (p.categories ?? []).includes('urgentni_prijem')).length;
+  if (urgent < 20) fail(`jen ${urgent} urgentních příjmů (čekáno přes 20) — klasifikátor se rozpadl`);
 }
 
 function main() {
@@ -240,6 +284,7 @@ function main() {
     validatePlaces(data);
     validateRegions(data);
     validateRotations(data);
+    validateOnline(data);
     validateLegal(data);
   }
   validateObce();

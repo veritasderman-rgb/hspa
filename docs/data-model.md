@@ -939,10 +939,37 @@ zbytek spadne na střed obce a nese `geo_source: 'obec'`.
 Interval s koncem menším než začátek (`["15:30","07:00"]`) je platný zápis noční
 služby přesahující půlnoc, ne chyba. `[["00:00","24:00"]]` je nepřetržitý provoz.
 
+### Online (telemedicínské) pohotovosti — `online`
+
+Kurátorovaný registr `ingest/mapping/pohotovosti_online.json`, transform ho
+kopíruje do `pohotovosti.json` pod klíč `online`.
+
+Proč to v datech je: fyzická pohotovost slouží až po ordinačních hodinách, takže
+v pracovní den dopoledne je online pohotovost často jediná odpověď, která
+nevyžaduje cestu. Dva kraje ji provozují nepřetržitě a zdarma pro své obyvatele
+(Jihočeský, Karlovarský), Praha ji připravuje, Vysočina a Zlínský kraj ji
+odmítly — `not_available` to říká otevřeně, aby to nevypadalo jako mezera
+v mapování.
+
+Každá služba nese `free_for`, `good_for`, `not_for`, `response_minutes`,
+`channels` — a povinně `source.url` + `verified_at`. Jsou to tvrzení o cizí
+službě; bez zdroje a data ověření by zastarala tiše. `not_for` se v UI vypisuje
+za „Není pro …“, takže musí být v akuzativu (hlídá test).
+
+Vedle služeb jsou tu `infolines` — krajské nepřetržité informační linky
+o pohotovostech.
+
 ### `data/pohotovosti-akutni.json`
 
 Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií
 a výjezdové základny ZZS. Ordinační dobu registr nevede, takže `hours` chybí.
+
+⚠️ **Slepá ulička, kterou tu nehledejte:** kategorie „denní úrazová ambulance“
+odvozená z „nemocnice + chirurgický obor + ambulantní péče“ vypadá lákavě, ale
+vybere i Revmatologický ústav, Masarykův onkologický ústav nebo Ústav pro péči
+o matku a dítě. Registr nerozliší ambulanci, kam se chodí neobjednaně, od té na
+objednání. Denní alternativu proto stránka bere jen z doloženého: urgentní
+příjem, nebo pracoviště, které samo provozuje pohotovost.
 `evidence` u každé kategorie rozlišuje `registr` (registr to tak přímo
 pojmenovává) a `odvozeno` (dovodili jsme z druhu zařízení, formy péče a oborů) —
 chirurgická kategorie je vždy odvozená. Stránka to čtenáři říká.

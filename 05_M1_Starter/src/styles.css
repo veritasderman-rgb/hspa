@@ -20180,3 +20180,94 @@ a.vst-ref:hover { color: var(--ink); border-color: var(--ink); }
   color: var(--ink-mut);
 }
 .poh-fallback .poh-list { margin-top: 12px; }
+
+/* Blok „Co dělat teď“ — mění se podle hodiny. Vizuálně nejvýraznější část
+   stránky hned po triáži na 155, protože odpovídá na otázku, se kterou sem
+   člověk přišel; samotný výpis pohotovostí je až důsledek. */
+.poh-advice-section { margin: 0 0 32px; }
+.poh-advice {
+  padding: 18px 20px;
+  border: 1px solid var(--rule2);
+  border-left: 4px solid var(--red);
+  border-radius: 5px;
+  background: var(--paper);
+}
+.poh-advice-lead {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 68ch;
+}
+.poh-advice-steps {
+  list-style: none;
+  counter-reset: poh-step;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.poh-advice-step {
+  counter-increment: poh-step;
+  position: relative;
+  padding: 12px 14px 12px 46px;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: var(--paper2);
+}
+.poh-advice-step::before {
+  content: counter(poh-step);
+  position: absolute;
+  left: 13px;
+  top: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poh-advice-step-online::before { background: var(--good); }
+.poh-advice-what {
+  display: block;
+  font-family: var(--sans);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.poh-advice-why {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-mut);
+}
+.poh-advice-step .poh-action { margin-top: 10px; }
+.poh-advice-warn {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--warn);
+  border-radius: 4px;
+  background: var(--surface-warn);
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+}
+.poh-advice-infoline {
+  margin: 12px 0 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-mut);
+}
+
+@media (max-width: 640px) {
+  .poh-advice { padding: 14px; }
+  .poh-advice-step { padding-left: 42px; }
+}

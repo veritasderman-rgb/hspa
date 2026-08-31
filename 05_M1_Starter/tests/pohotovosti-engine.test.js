@@ -27,6 +27,8 @@ import {
   pointInRing,
   pointInGeometry,
   regionCodeAt,
+  isWorkingHours,
+  careAdvice,
 } from '../src/pohotovosti-engine.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -285,4 +287,111 @@ test('regionCodeAt se nezasekne na prázdném nebo neplatném vstupu', () => {
   assert.equal(regionCodeAt(null, 50, 14), null);
   assert.equal(regionCodeAt({ features: [] }, 50, 14), null);
   assert.equal(regionCodeAt({ features: [{ geometry: SQUARE, properties: { code: 'X' } }] }, NaN, 14), null);
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Časová triáž „kam teď“
+// ─────────────────────────────────────────────────────────────────────────
+
+test('isWorkingHours zná hranici, za kterou pohotovost teprve nastupuje', () => {
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 10, 0)), true, 'pondělí dopoledne');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 15, 59)), true, 'těsně před 16:00');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 16, 0)), false, 'v 16:00 začíná okno vyhlášky');
+  assert.equal(isWorkingHours(new Date(2026, 8, 7, 6, 59)), false, 'před sedmou');
+  assert.equal(isWorkingHours(new Date(2026, 8, 5, 10, 0)), false, 'sobota');
+  assert.equal(isWorkingHours(new Date(2026, 8, 6, 10, 0)), false, 'neděle');
+  assert.equal(isWorkingHours(new Date(2026, 11, 24, 10, 0)), false, 'Štědrý den je svátek, ne pracovní den');
+});
+
+const advicePlace = (over) => ({ id: 'x', name: 'Nemocnice', category: 'lps_dospeli', ...over });
+
+test('careAdvice · v ordinační době neposílá na vzdálenou pohotovost', () => {
+  // Regrese: v pondělí v deset ukazovala stránka jako „nejbližší otevřenou“
+  // pohotovost v Praze, 115 km od Mariánských Lázní, protože jediná otevřená
+  // místa v republice byla nepřetržitá.
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 10, 0),
+    hasOrigin: true,
+    online: { name: 'Karlovarská pohotovost' },
+    nearestOpen: { place: advicePlace({ name: 'Praha' }), distanceKm: 115 },
+    nearestLps: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'closed', next: '15:30' }, distanceKm: 0.47 },
+  });
+
+  assert.equal(advice.mode, 'ordinacni_doba');
+  assert.equal(advice.steps[0].kind, 'prvni_kontakt');
+  assert.ok(!advice.steps.some(s => s.kind === 'lps_otevrena'),
+    'vzdálenou otevřenou pohotovost v ordinační době nenabízíme jako řešení');
+  assert.ok(advice.steps.some(s => s.kind === 'lps_pozdeji' && s.daytimeHint),
+    'místní pohotovost se nabídne s poznámkou, že tam přes den bývá běžná ambulance');
+});
+
+test('careAdvice · bez polohy nenabízí žádné konkrétní místo', () => {
+  // Regrese: bez zadané obce řadí rankPlaces podle stavu a názvu, takže první
+  // položka je libovolné pracoviště kdekoli v republice. Nabídnout ho jako
+  // „nejbližší od vás“ by byl výmysl.
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 10, 0),
+    hasOrigin: false,
+    nearestOpen: { place: advicePlace({ name: 'Někde daleko' }), distanceKm: null },
+    nearestLps: { place: advicePlace({ name: 'Někde daleko' }), status: {}, distanceKm: null },
+    nearestUrgent: { place: advicePlace({ name: 'Někde daleko' }), distanceKm: null },
+  });
+  assert.deepEqual(advice.steps.map(s => s.kind), ['prvni_kontakt', 'zadejte_polohu']);
+  assert.equal(advice.openIsFar, false, 'bez polohy se vzdálenost neposuzuje');
+});
+
+test('careAdvice · první kontakt odpovídá tomu, co uživatel hledá', () => {
+  const at = (category) => careAdvice({
+    now: new Date(2026, 8, 7, 10, 0), hasOrigin: true, category,
+    nearestUrgent: { place: advicePlace(), distanceKm: 3 },
+    nearestLps: { place: advicePlace(), status: {}, distanceKm: 1 },
+  });
+  assert.equal(at('lps_dospeli').steps[0].contact, 'praktik');
+  assert.equal(at('lps_deti').steps[0].contact, 'detsky_lekar');
+  assert.equal(at('zubni').steps[0].contact, 'zubar');
+  assert.equal(at('lekarna').steps[0].contact, 'lekarna');
+});
+
+test('careAdvice · zubní a lékárenský dotaz nevede na úrazové pracoviště', () => {
+  // Kdo v deset dopoledne hledá zubní pohotovost, patří ke svému zubaři —
+  // ne na urgentní příjem, který o zubech nic neví.
+  for (const category of ['zubni', 'lekarna']) {
+    const advice = careAdvice({
+      now: new Date(2026, 8, 7, 10, 0), hasOrigin: true, category,
+      online: { name: 'Krajská online pohotovost' },
+      nearestUrgent: { place: advicePlace({ name: 'Urgent' }), distanceKm: 3 },
+      nearestLps: { place: advicePlace(), status: {}, distanceKm: 1 },
+    });
+    assert.ok(!advice.steps.some(s => s.kind === 'urgent'), `${category}: urgentní příjem tu nemá co dělat`);
+    assert.ok(!advice.steps.some(s => s.kind === 'online'), `${category}: online pohotovost řeší lékařské potíže, ne zuby a léky`);
+  }
+});
+
+test('careAdvice · mimo ordinační dobu vede na otevřenou pohotovost', () => {
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 18, 0),
+    hasOrigin: true,
+    online: { name: 'Karlovarská pohotovost' },
+    nearestOpen: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'open', until: '21:00' }, distanceKm: 0.47 },
+    nearestLps: { place: advicePlace({ name: 'Mariánské Lázně' }), status: { state: 'open' }, distanceKm: 0.47 },
+  });
+  assert.equal(advice.mode, 'pohotovost');
+  assert.equal(advice.steps[0].kind, 'lps_otevrena');
+  assert.equal(advice.openIsFar, false);
+});
+
+test('careAdvice · označí, když je nejbližší otevřená přes půl republiky', () => {
+  const advice = careAdvice({
+    now: new Date(2026, 8, 7, 23, 0),
+    hasOrigin: true,
+    nearestOpen: { place: advicePlace(), status: { state: 'open' }, distanceKm: 115 },
+  });
+  assert.equal(advice.openIsFar, true, '115 km není odpověď, je to důkaz, že nic blízko nemá otevřeno');
+});
+
+test('careAdvice · na prázdném vstupu nespadne', () => {
+  const advice = careAdvice({ now: new Date(2026, 8, 7, 10, 0) });
+  assert.equal(advice.mode, 'ordinacni_doba');
+  assert.deepEqual(advice.steps.map(s => s.kind), ['prvni_kontakt', 'zadejte_polohu']);
+  assert.equal(advice.openIsFar, false);
 });
