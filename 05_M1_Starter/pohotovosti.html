@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kde je nejbližší pohotovost, která má otevřeno · HSPA Monitor</title>
+<meta name="description" content="Napište město nebo použijte polohu a najděte nejbližší lékařskou, dětskou, zubní nebo lékárenskou pohotovost — včetně toho, jestli má právě teď otevřeno. Celá ČR na jednom místě, z veřejných dat VZP a registru ÚZIS.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kde je nejbližší pohotovost, která má otevřeno">
+<meta property="og:description" content="Jedno vyhledávací pole pro celou ČR: nejbližší lékařská, dětská, zubní nebo lékárenská pohotovost — a jestli má právě teď otevřeno.">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script src="assets/vendor/echarts.min.js" defer></script>
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/pohotovosti" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/pohotovosti" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Hodnocení výkonnosti zdravotního systému ČR</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <!-- ── TRIÁŽ: první, co musí být vidět ──────────────────────────── -->
+  <aside class="poh-triage" role="note" aria-label="Kdy volat záchrannou službu">
+    <p class="poh-triage-lead">
+      <strong>Jde o život?</strong> Bezvědomí, dušnost, silná bolest na hrudi, křeče, silné krvácení,
+      podezření na mrtvici nebo infarkt, úraz s velkou silou&nbsp;— <strong>nehledejte pohotovost</strong>
+      a volejte <a href="tel:155" class="poh-triage-call">155</a> (nebo <a href="tel:112">112</a>).
+      Záchranná služba jezdí nepřetržitě a je zdarma.
+    </p>
+    <p class="poh-triage-sub">
+      Pohotovost je pro potíže, které nepočkají do rána nebo do pondělí, ale nejsou ohrožením života.
+      Nenahrazuje praktického lékaře ani specialistu.
+    </p>
+  </aside>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────── -->
+  <section class="ed-hero ed-hero-slim" aria-labelledby="pohHeroHeadline">
+    <div class="ed-hero-content">
+      <div class="ed-kicker">Servisní stránka · Pohotovosti</div>
+      <h1 class="ed-hero-headline" id="pohHeroHeadline">Kde je nejbližší pohotovost, která má teď otevřeno</h1>
+      <p class="ed-hero-lead">
+        Napište město nebo použijte polohu telefonu. Vyhledávání pokrývá celou republiku a u každého
+        místa počítá, jestli má <em>právě teď</em> otevřeno — včetně svátků a nočních služeb
+        přesahujících půlnoc.
+      </p>
+      <p class="poh-hero-note" id="pohHeroStats">Načítám data o pohotovostech…</p>
+    </div>
+  </section>
+
+  <!-- ── VYHLEDÁVÁNÍ ──────────────────────────────────────────────── -->
+  <section class="poh-finder" aria-labelledby="pohFinderH">
+    <h2 class="sr-only" id="pohFinderH">Vyhledání pohotovosti</h2>
+
+    <form class="poh-form" id="pohForm" role="search" autocomplete="off">
+      <div class="poh-field">
+        <label class="poh-label" for="pohQuery">Odkud hledáte?</label>
+        <div class="poh-input-wrap">
+          <input class="poh-input" type="search" id="pohQuery" name="obec"
+                 placeholder="Např. Beroun, Přerov, Praha 4…"
+                 aria-describedby="pohQueryHelp"
+                 role="combobox" aria-expanded="false" aria-controls="pohSuggest" aria-autocomplete="list">
+          <button class="poh-geo-btn" type="button" id="pohGeoBtn">
+            <span aria-hidden="true">◎</span> Moje poloha
+          </button>
+        </div>
+        <ul class="poh-suggest" id="pohSuggest" role="listbox" aria-label="Návrhy obcí" hidden></ul>
+        <p class="poh-help" id="pohQueryHelp">
+          Poloha se zpracuje jen ve vašem prohlížeči — nikam ji neposíláme a nikde ji neukládáme.
+        </p>
+      </div>
+
+      <fieldset class="poh-types">
+        <legend class="poh-label">Jakou pohotovost hledáte?</legend>
+        <div class="poh-chip-row" id="pohTypes"></div>
+      </fieldset>
+
+      <div class="poh-toggles">
+        <label class="poh-toggle">
+          <input type="checkbox" id="pohOpenNow" checked>
+          <span>Jen ty, které mají teď otevřeno</span>
+        </label>
+      </div>
+    </form>
+
+    <p class="poh-origin" id="pohOrigin" role="status"></p>
+  </section>
+
+  <!-- ── VÝSLEDKY ─────────────────────────────────────────────────── -->
+  <section class="poh-results" aria-labelledby="pohResultsH">
+    <h2 class="ed-areas-h" id="pohResultsH">Nejbližší pohotovosti</h2>
+    <ol class="poh-list" id="pohList"></ol>
+    <p class="poh-empty" id="pohEmpty" hidden></p>
+    <button class="poh-more" type="button" id="pohMore" hidden>Zobrazit další</button>
+    <div class="poh-fallback" id="pohFallback" hidden></div>
+  </section>
+
+  <!-- ── ROTACE (kraje, kde se zubní služba střídá) ────────────────── -->
+  <section class="poh-rotation" id="pohRotationSection" aria-labelledby="pohRotationH" hidden>
+    <div class="ed-kicker">Střídavá služba</div>
+    <h2 class="ed-areas-h" id="pohRotationH">Zubní pohotovost se ve vašem kraji střídá</h2>
+    <p class="poh-rotation-lead" id="pohRotationLead"></p>
+    <div id="pohRotationBody"></div>
+  </section>
+
+  <!-- ── MAPA ─────────────────────────────────────────────────────── -->
+  <section class="poh-map-section" aria-labelledby="pohMapH">
+    <div class="ed-kicker">Mapa</div>
+    <h2 class="ed-areas-h" id="pohMapH">Pohotovosti na mapě republiky</h2>
+    <p class="poh-map-lead">
+      Každý bod je jedno pracoviště. Barva rozlišuje typ služby; body zobrazené podle zvoleného filtru.
+      Kliknutím na bod se posunete na jeho kartu ve výpisu.
+    </p>
+    <div class="poh-map" id="pohMap" role="img" aria-label="Mapa pohotovostí v České republice"></div>
+    <p class="poh-map-fallback" id="pohMapFallback" hidden>
+      Mapa se nenačetla. Výpis nahoře funguje i bez ní.
+    </p>
+  </section>
+
+  <!-- ── SYSTÉMOVÝ KONTEXT ────────────────────────────────────────── -->
+  <section class="poh-context" aria-labelledby="pohContextH">
+    <div class="ed-kicker">Proč to bylo tak těžké najít</div>
+    <h2 class="ed-areas-h" id="pohContextH">Pohotovosti od roku 2026 neorganizují kraje, ale pojišťovny</h2>
+
+    <p class="poh-context-p">
+      Do konce roku 2025 zajišťovaly pohotovostní službu kraje. <strong>Od 1. ledna 2026</strong> ji podle
+      zákona č. 290/2025 Sb. (novela zákona o zdravotních službách) organizují <strong>zdravotní
+      pojišťovny</strong>. Prováděcí vyhláška č. 380/2025 Sb. k tomu poprvé stanovila, kolik hodin musí
+      pohotovost minimálně sloužit.
+    </p>
+    <p class="poh-context-p">
+      Změna má praktický důsledek, na který narazí každý, kdo v sobotu večer hledá, kam jet: krajské
+      přehledy zůstaly stát, jednotný celostátní registr pohotovostí s provozní dobou <strong>neexistuje</strong>
+      a informace se rozpadla mezi weby pojišťoven, nemocnic a krajů. Tahle stránka je slepuje zpátky.
+    </p>
+
+    <div class="poh-stat-row" id="pohContextStats"></div>
+
+    <h3 class="poh-h3">Zákonné minimum podle vyhlášky č. 380/2025 Sb.</h3>
+    <p class="poh-context-p">
+      Vyhláška platí od 1. 1. 2026 a stanoví, kolik hodin musí pohotovost sloužit nejméně. U každé
+      pohotovosti níže porovnáváme <em>zveřejněnou</em> ordinační dobu s tímto minimem.
+    </p>
+    <ul class="poh-minimum-list" id="pohMinimumList"></ul>
+
+    <h3 class="poh-h3">Otevřená data podle krajů</h3>
+    <p class="poh-context-p">
+      V Národním katalogu otevřených dat zveřejňují pohotovosti ve strojově čitelné podobě
+      <strong id="pohOpenDataCount">…</strong> kraje ze čtrnácti. Ostatní mají jen webovou stránku,
+      kterou nelze automaticky číst ani ověřovat.
+    </p>
+    <div class="poh-table-wrap">
+      <table class="poh-table" id="pohRegionTable">
+        <caption class="sr-only">Pokrytí pohotovostmi a otevřenými daty podle krajů</caption>
+        <thead>
+          <tr>
+            <th scope="col">Kraj</th>
+            <th scope="col" class="poh-num">Pohotovostí</th>
+            <th scope="col" class="poh-num">Splňuje minimum</th>
+            <th scope="col">Otevřená data</th>
+            <th scope="col">Stránka kraje</th>
+          </tr>
+        </thead>
+        <tbody id="pohRegionRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── METODIKA ─────────────────────────────────────────────────── -->
+  <section class="poh-method" aria-labelledby="pohMethodH">
+    <div class="ed-kicker">Metodika a hranice</div>
+    <h2 class="ed-areas-h" id="pohMethodH">Odkud data jsou a co tahle stránka neumí</h2>
+
+    <h3 class="poh-h3">Co stránka umí</h3>
+    <ul class="poh-list-plain">
+      <li>Najít nejbližší pohotovost ze všech krajů podle napsané obce nebo polohy prohlížeče.</li>
+      <li>Spočítat, jestli má <em>právě teď</em> otevřeno — včetně státních svátků, Velikonoc
+        a služeb přesahujících půlnoc.</li>
+      <li>Porovnat zveřejněnou ordinační dobu se zákonným minimem podle vyhlášky č. 380/2025 Sb.</li>
+      <li>Ukázat, kde se zubní pohotovost střídá mezi ordinacemi a kdo slouží v nejbližší termín.</li>
+    </ul>
+
+    <h3 class="poh-h3">Co stránka neumí</h3>
+    <ul class="poh-list-plain">
+      <li><strong>Není to živý provozní stav.</strong> Pracujeme se zveřejněnou ordinační dobou.
+        Mimořádné uzavření, nemoc sloužícího lékaře ani přeplněná čekárna se sem nepropíšou.
+        <strong>Před cestou zavolejte.</strong></li>
+      <li><strong>Vzdálenost je vzdušnou čarou</strong>, ne po silnici. V hornatém terénu je skutečná
+        cesta výrazně delší.</li>
+      <li>U <span id="pohApproxCount">několika</span> míst se nepodařilo najít přesnou adresu v registru —
+        u nich ukazujeme střed obce a je to u výsledku napsané.</li>
+      <li>Vedeme seznam VZP. Menší pojišťovny mohou mít smlouvu i s pracovištěm, které tu není.</li>
+    </ul>
+
+    <h3 class="poh-h3">Zdroje</h3>
+    <ul class="poh-sources" id="pohSources"></ul>
+
+    <p class="poh-updated" id="pohUpdated"></p>
+    <p class="poh-disclaimer">
+      Tohle není stránka Ministerstva zdravotnictví ani zdravotní pojišťovny. Připravilo ji Zdravé Česko
+      (skorezdravotnictvi.cz) z veřejně zveřejněných dat. Nenahrazuje lékařskou péči; při stavech
+      ohrožujících život volejte <a href="tel:155">155</a>.
+    </p>
+  </section>
+
+  <section class="related-tools" id="toolSiblings" aria-label="Další nástroje"></section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/pohotovosti.js"></script>
+</body>
+</html>

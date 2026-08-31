@@ -16,6 +16,7 @@ zdrave-cesko.cz/
 ├── /dohodovaci-rizeni      dohodovaci-rizeni.html  (Datová podpora dohod. řízení — 44 sad)
 ├── /pojistenci             pojistenci.html         (OIS 11-47 — atlas, dětská stránka výše)
 ├── /prevence               prevence.html           (Vakcinace + screeningy)
+├── /pohotovosti            pohotovosti.html        (Nejbližší pohotovost — hledání podle obce/polohy, otevřeno teď)
 ├── /strategie              strategie.html          (Národní strategie)
 ├── /legislativa            legislativa.html        (Legislativní radar — VeKLEP)
 ├── /pracovni-skupiny       pracovni-skupiny.html   (Pracovní skupiny MZ — síť PPO)
@@ -124,6 +125,34 @@ zdrave-cesko.cz/
 | **Fetchuje** | `data/prevention.json`, `data/indicators.json`, `data/strategies.json`, `data/articles.json` |
 | **JS moduly** | `src/prevence.js` → `page-shared` |
 | **CSS namespace** | `.prevention-*`, `.action-*` (action-day-tag, action-card), `.vakc-*`, `.cml-*` |
+
+### `pohotovosti.html` — Nejbližší pohotovost
+
+| | |
+|---|---|
+| **Účel** | Servisní stránka pro jednu otázku: „kde je nejbližší pohotovost, která má teď otevřeno?“ Jediné celostátní vyhledávání napříč lékařskou, dětskou, zubní a lékárenskou pohotovostí. |
+| **Cílový uživatel** | Člověk v nouzi, typicky na mobilu, večer nebo o víkendu. Sekundárně novinář a analytik (systémový kontext dole). |
+| **Fetchuje** | `data/pohotovosti.json`; líně `data/obce-gps.json` (až uživatel začne psát) a `data/pohotovosti-akutni.json` (až zapne filtr urgentních příjmů); `data/cz-regions.geojson` pro mapu |
+| **JS moduly** | `src/pohotovosti.js` (render) → `src/pohotovosti-engine.js` (jádro bez DOM) → `page-shared` |
+| **CSS namespace** | `.poh-*` (triage, finder, chip, card, badge, rot, stat, table) |
+
+**Co dělá jinak než ostatní stránky**
+
+- **Triáž nad vším ostatním.** První blok stránky posílá na 155 při ohrožení
+  života. Pohotovost není náhrada záchranky a stránka to říká dřív, než
+  cokoli nabídne.
+- **Rozlišuje „zavřeno“ a „nevíme“.** Chybějící ordinační doba se zobrazí jako
+  „provozní doba neuvedena“, nikdy jako „zavřeno“. Filtr „jen otevřené“ taková
+  místa proto nechává ve výpisu.
+- **Náhradní výpis.** Když v okolí nemá otevřeno skoro nic (typicky dopoledne),
+  ukáže se pod výsledky blok nejbližších zavřených i s časem, kdy otevřou.
+  Prázdný výpis by uživateli neodpověděl na to, proč přišel.
+- **Poloha se nikam neposílá.** Geokódování obce běží v prohlížeči nad
+  `obce-gps.json`; souřadnice z `navigator.geolocation` neopustí zařízení.
+- **Přesnost polohy je viditelná.** `geo_source: 'obec'` znamená střed obce,
+  ne budovu — u takového výsledku to stránka napíše.
+- **Porovnání se zákonem.** Zveřejněná ordinační doba se porovnává s minimem
+  podle vyhlášky č. 380/2025 Sb.; nesplnění je vždy doložené rozpisem kontrol.
 
 ### `strategie.html` — Národní strategie
 
@@ -235,6 +264,7 @@ materiálem radaru, nese `radar_id` (FK na `legislativa.items[].id`).
 | `kraje.js` | `kraje.html` | 292 |
 | `pojistenci.js` | `pojistenci.html` | 1255 |
 | `prevence.js` | `prevence.html` | 321 |
+| `pohotovosti.js` + `pohotovosti-engine.js` | `pohotovosti.html` | 640 |
 | `strategies.js` | `strategie.html` | 357 |
 | `explainers.js` | `jak-funguje.html` | 403 |
 | `glosar.js` | `glosar.html` | 107 |

@@ -102,6 +102,7 @@ git push -u origin claude/<branch-name>
 | `.clinical-*` | (plánováno) clinical-quality vizuálky | kvalita-pece.html |
 | `.timeline-*` | Časová osa (HSPA, projekt) | o-projektu.html |
 | `.dlz-*` | Doložka (klikatelné doložky tvrzení, panel, badge) | clanek-*.html, redakce.html |
+| `.poh-*` | Pohotovosti (triáž, vyhledávání, karty, mapa, kontext) | pohotovosti.html |
 
 ---
 
