@@ -1180,3 +1180,27 @@ Frontend by měl odmítnout dataset s neočekávaným major version.
 
 ---
 *Verze 1.0 · květen 2026*
+
+
+## 22. `data/zdravi2035-plneni.json` — plnění Zdraví 2035 (kurátorovaný)
+
+Ručně kurátorovaný přepis Strategického rámce Zdraví 2035 (usnesení vlády
+č. 862/25, 12. 11. 2025) + redakční mapování na indikátory kontraktu.
+Validuje `ingest/validate-zdravi2035.js` (`npm run validate:zdravi2035`,
+součást `validate:all`); konzumuje `zdravi-2035.html` (`src/zdravi2035.js`).
+
+Struktura: 3 `strategic_goals` → 12 `cile` (SC). Každý SC nese `dilci_cile`
+(číslované úkoly z návrhové části dokumentu, str. 73–150) a `doc_indicators`
+(vlastní indikátory dokumentu z kap. 4.2 s výchozí hodnotou k 31. 12. 2023
+a cílem 2035, doslova včetně podivností — nic se nedopočítává).
+
+Klíčové enumy:
+
+| Pole | Hodnoty | Význam |
+|---|---|---|
+| `doc_indicators[].mapping.match` | `primo` / `proxy` / `chybi` | kontrakt měří stejný jev / příbuzný jev s jinou metodikou (povinná `note`, proč se hodnoty nesmí srovnávat) / neměří vůbec |
+| `dilci_cile[].mereni` | `primo` / `proxy` / `proces` | úkol má populační indikátor(y) v `indikatory` / má proxy / je organizační krok bez populačního indikátoru |
+
+Aktuální hodnoty indikátorů se v souboru NEduplikují — stránka je bere za
+běhu z `data/indicators.json`, takže nemůžou zastarat. Čipy odkazují na
+statické `indikator-*.html`; test hlídá, že každá odkazovaná stránka existuje.

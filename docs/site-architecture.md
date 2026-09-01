@@ -205,6 +205,28 @@ zdrave-cesko.cz/
 | **JS moduly** | `src/pohotovost-okres.js` — jen progresivní vylepšení (nav, patička, živé „teď otevřeno“ z `data-hours`); bez JS stránka plně funguje. |
 | **CSS namespace** | `.pokr-*` |
 
+### `zdravi-2035.html` — Plní se Zdraví 2035?
+
+| | |
+|---|---|
+| **Účel** | Hlavní strategie zdravotnictví rozložená po kapitolách a úkolech: 12 specifických cílů, 113 dílčích cílů, 68 indikátorů dokumentu — každý provázaný s živým indikátorem kontraktu, nebo s poctivým „neměříme“. Jádro mise HSPA: na čem je vidět, jestli se strategie plní. |
+| **Cílový uživatel** | Novinář, policy maker, úředník MZ; sekundárně poučený občan. |
+| **Fetchuje** | `data/zdravi2035-plneni.json` + `data/indicators.json` (živé hodnoty a signály) |
+| **JS moduly** | `src/zdravi2035.js` → `page-shared` |
+| **CSS namespace** | `.z35-*` |
+
+**Co dělá jinak**
+
+- **Badge poctivosti u všeho**: `měříme přímo` / `proxy` (s poznámkou, v čem se
+  metodiky liší — hodnoty se pak nesmí srovnávat, jen směr) / `neměříme` /
+  `procesní úkol`. Že 56 ze 113 dílčích cílů je procesních a 42 z 68
+  indikátorů dokumentu nikdo veřejně neměří, je hlavní zjištění stránky.
+- **Hodnoty dokumentu doslova** — včetně cíle nižšího než výchozí stav
+  (výdaje na prevenci) a dvou hodnot nečitelných v PDF (přiznáno s odkazem
+  na stranu). Aktuální hodnoty jdou živě z kontraktu, ne z kopie.
+- **Vstupy**: nav skupina Strategie („Plní se Zdraví 2035?“), zvýrazněný odkaz
+  z detailu strategie (`plneni_url` v strategies.json), related-tools, sitemap.
+
 ### `strategie.html` — Národní strategie
 
 | | |

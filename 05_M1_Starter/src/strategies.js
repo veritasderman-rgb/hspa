@@ -162,6 +162,14 @@ function renderDetail(id) {
       <p>${escapeHtml(tldr)}</p>
     </section>
 
+    ${s.plneni_url ? `
+      <section class="detail-section detail-plneni">
+        <a class="detail-plneni-link" href="${escapeHtml(s.plneni_url)}">
+          Plnění po kapitolách a úkolech: každý cíl strategie provázaný s indikátory →
+        </a>
+      </section>
+    ` : ''}
+
     ${(s.linked_indicators ?? []).length ? `
       <section class="detail-section">
         <h3>Sledované indikátory</h3>
