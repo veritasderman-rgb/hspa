@@ -127,7 +127,7 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   ].filter(Boolean).join('\n');
 }
 
-export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [], ppoGroups = [], ppoOsoby = [] } = {}) {
+export function buildSitemap(articles, { today = TODAY, isIndexable = () => true, indicatorPages = [], awarenessWeeks = [], ppoGroups = [], ppoOsoby = [], pohotovostOkresy = [] } = {}) {
   // Pozn.: isIndexable() čte robots meta z HTML, proto mu předáváme `.html` loc;
   // do sitemapy ale zapisujeme kanonickou (clean) URL přes canonicalPath().
   const staticEntries = STATIC_PAGES
@@ -180,12 +180,26 @@ export function buildSitemap(articles, { today = TODAY, isIndexable = () => true
       priority: '0.3',
     }));
 
+  // Okresní stránky pohotovostí (pohotovost-<okres>.html) — generuje je
+  // scripts/build-pohotovosti-okresy.js, seznam nese manifest
+  // data/pohotovosti-okresy.json. Landing pages pro dotazy typu
+  // „pohotovost Klatovy“ — přesně ty se hledají ve chvíli potřeby.
+  const pohotovostEntries = pohotovostOkresy
+    .filter(o => o.slug)
+    .map(o => urlEntry({
+      loc: canonicalPath(`/pohotovost-${o.slug}.html`),
+      lastmod: today,
+      changefreq: 'weekly',
+      priority: '0.6',
+    }));
+
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...staticEntries,
     ...articleEntries,
     ...indicatorEntries,
+    ...pohotovostEntries,
     ...awarenessEntries,
     ...ppoEntries,
     ...ppoOsobyEntries,
@@ -212,7 +226,10 @@ function main() {
   const ppoOsoby = existsSync(resolve(ROOT, 'data/ppo-osoby.json'))
     ? (JSON.parse(readFileSync(resolve(ROOT, 'data/ppo-osoby.json'), 'utf8')).osoby ?? [])
     : [];
-  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks, ppoGroups, ppoOsoby });
+  const pohotovostOkresy = existsSync(resolve(ROOT, 'data/pohotovosti-okresy.json'))
+    ? (JSON.parse(readFileSync(resolve(ROOT, 'data/pohotovosti-okresy.json'), 'utf8')).okresy ?? [])
+    : [];
+  const xml = buildSitemap(articles, { isIndexable: isIndexablePage, indicatorPages, awarenessWeeks, ppoGroups, ppoOsoby, pohotovostOkresy });
   if (stdout) {
     console.log(xml);
     return;

@@ -75,7 +75,17 @@ jobs:
         # poslední aktualizace stránka čtenáři ukazuje, takže zastaralost
         # není neviditelná.
         continue-on-error: true
-        run: npm run data:pohotovosti
+        # Před transformem běží drift-check ručně ověřených hodin denních
+        # ambulancí (citáty vs. živé weby nemocnic) — výsledek se propíše do
+        # data/pohotovosti.json jako `hours_check` a stránka umí říct „zdroj
+        # se od ověření změnil“. `|| true`: drift je redakční úkol, ne důvod
+        # zastavit refresh; nedostupný web nemocnice tím spíš.
+        run: |
+          npm run verify:ambulance-drift || true
+          npm run data:pohotovosti
+          # Okresní landing pages se přepisují jen při skutečné změně obsahu
+          # (builder porovnává), takže commit nebobtná o nezměněné soubory.
+          npm run build:pohotovosti-okresy
 
       - name: Rebuild PPO web data
         # Karty „Ve Věstníku MZ" na detailech skupin (mergeVestnik) se plní
@@ -162,6 +172,11 @@ jobs:
           # zastageují i SMAZANÉ indikátorové stránky (odstraněný/přejmenovaný
           # indikátor) — jinak by stará stránka zůstala v repu i na webu.
           git add -A -- '05_M1_Starter/indikator-*.html'
+          # Okresní stránky pohotovostí regeneruje build:pohotovosti-okresy
+          # výš — bez stagingu by cron commitnul čerstvá data a sitemapu,
+          # ale veřejné statické stránky by dál ukazovaly staré rozpisy.
+          # -A kvůli případně zaniklému okresu (smazaný soubor).
+          git add -A -- '05_M1_Starter/pohotovost-*.html'
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0

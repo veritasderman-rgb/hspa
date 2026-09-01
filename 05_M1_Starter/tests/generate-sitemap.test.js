@@ -70,8 +70,10 @@ test('sitemap: každá indexovatelná stránka je v STATIC_PAGES nebo ve výjimk
   // (přesně to potkalo vestniky-mz.html a jak-se-rozhoduje.html).
   const listed = new Set(STATIC_PAGES.map(p => p.loc));
   const excluded = new Set(Object.keys(SITEMAP_EXCLUDED));
+  // clanek-/indikator-/pohotovost- mají vlastní dynamické sady v buildSitemap
+  // (články, indikátorové stránky, okresní stránky pohotovostí z manifestu).
   const stranky = fs.readdirSync(ROOT)
-    .filter(f => f.endsWith('.html') && !/^(clanek|indikator)-/.test(f));
+    .filter(f => f.endsWith('.html') && !/^(clanek|indikator|pohotovost)-/.test(f));
 
   const chybi = [];
   for (const f of stranky) {

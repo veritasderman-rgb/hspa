@@ -37,6 +37,8 @@ const PAGES = [
   'pojistenci.html',
   'prevence.html',
   'pohotovosti.html',
+  // Reprezentant 75 generovaných okresních stránek (stejná šablona).
+  'pohotovost-klatovy.html',
   'strategie.html',
   'glosar.html',
   'jak-funguje.html',

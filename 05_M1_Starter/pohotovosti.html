@@ -202,6 +202,59 @@
     </p>
   </section>
 
+  <!-- ── DOJEZDOVÁ ANALÝZA ────────────────────────────────────────── -->
+  <!--
+    Kam síť pohotovostí nedosáhne. Počty pracovišť jsou statistika; tady se
+    měří dostupnost: vzdálenost každé obce k nejbližší OTEVŘENÉ pohotovosti
+    ve třech referenčních časech. Data z transformu (`dojezdy` v hlavním
+    souboru), mapa obcí líně z data/dojezdy.json.
+  -->
+  <section class="poh-dojezd" aria-labelledby="pohDojezdH">
+    <div class="ed-kicker">Analýza dostupnosti</div>
+    <h2 class="ed-areas-h" id="pohDojezdH">Kam síť pohotovostí nedosáhne</h2>
+    <p class="poh-dojezd-lead" id="pohDojezdLead"></p>
+    <div class="poh-stat-row" id="pohDojezdStats"></div>
+
+    <div class="poh-dojezd-controls">
+      <label class="poh-dojezd-ctl">Referenční čas
+        <select id="pohDojezdScenario"></select>
+      </label>
+      <label class="poh-dojezd-ctl">Pohotovost
+        <select id="pohDojezdCategory">
+          <option value="lps_dospeli">pro dospělé</option>
+          <option value="lps_deti">pro děti a dorost</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="poh-map poh-dojezd-map" id="pohDojezdMap" role="img"
+         aria-label="Mapa obcí ČR obarvená podle vzdálenosti k nejbližší otevřené pohotovosti"></div>
+    <p class="poh-dojezd-legend" id="pohDojezdLegend"></p>
+
+    <h3 class="poh-h3">Okresy s nejhorším dojezdem</h3>
+    <div class="poh-table-wrap">
+      <table class="poh-table" id="pohDojezdTable">
+        <thead>
+          <tr>
+            <th scope="col">Okres</th>
+            <th scope="col" class="poh-num">Medián dojezdu</th>
+            <th scope="col" class="poh-num">Nejhorší obec</th>
+            <th scope="col" class="poh-num">Obcí dál než 20 km</th>
+          </tr>
+        </thead>
+        <tbody id="pohDojezdRows"></tbody>
+      </table>
+    </div>
+    <details class="poh-dojezd-all">
+      <summary>Všechny okresy</summary>
+      <div class="poh-table-wrap">
+        <table class="poh-table"><tbody id="pohDojezdRowsAll"></tbody></table>
+      </div>
+    </details>
+
+    <p class="poh-dojezd-method" id="pohDojezdMethod"></p>
+  </section>
+
   <!-- ── SYSTÉMOVÝ KONTEXT ────────────────────────────────────────── -->
   <section class="poh-context" aria-labelledby="pohContextH">
     <div class="ed-kicker">Proč to bylo tak těžké najít</div>
@@ -311,6 +364,17 @@
       (skorezdravotnictvi.cz) z veřejně zveřejněných dat. Nenahrazuje lékařskou péči; při stavech
       ohrožujících život volejte <a href="tel:155">155</a>.
     </p>
+  </section>
+
+  <!-- ── ROZCESTNÍK OKRESŮ ────────────────────────────────────────── -->
+  <!-- Interní odkazy na generované okresní stránky (SEO landing pages
+       z scripts/build-pohotovosti-okresy.js) — bez nich by je crawler
+       neměl kudy najít. -->
+  <section class="poh-okres-index" aria-labelledby="pohOkresH">
+    <details>
+      <summary id="pohOkresH">Pohotovosti podle okresů — přehled na jedné stránce pro každý okres</summary>
+      <ul class="poh-okres-links" id="pohOkresLinks"></ul>
+    </details>
   </section>
 
   <section class="related-tools" id="toolSiblings" aria-label="Další nástroje"></section>

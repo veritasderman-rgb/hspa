@@ -578,3 +578,41 @@ test('data/pohotovosti.json · „než vyrazíte“ začíná telefonem, ne dokl
     assert.ok(s.id && s.title && s.text, `krok ${s.id ?? '?'} je neúplný`);
   }
 });
+
+// ── Dojezdová analýza v datech ───────────────────────────────────────────
+
+test('data/pohotovosti.json · dojezdy nesou všechny scénáře a poctivou poznámku', () => {
+  const d = readData('pohotovosti.json');
+  const dj = d.dojezdy;
+  assert.ok(dj, 'chybí blok dojezdy');
+  assert.equal(dj.scenarios.length, 3);
+  assert.deepEqual(dj.categories, ['lps_dospeli', 'lps_deti']);
+  for (const sc of dj.scenarios) {
+    for (const cat of dj.categories) {
+      const n = dj.national[sc.id][cat];
+      assert.ok(n.open > 0, `${sc.id}/${cat}: žádné otevřené pracoviště — rozbitý výpočet`);
+      assert.ok(n.median > 0 && n.median < 150, `${sc.id}/${cat}: medián ${n.median} km mimo realitu`);
+      assert.ok(n.max >= n.median);
+    }
+  }
+  // Sanity příběhu: v sobotu v poledne (pevné vyhláškové okno) je síť
+  // nejhustší; v noci slouží jen nepřetržitá pracoviště.
+  assert.ok(dj.national.sobota_12.lps_dospeli.open > dj.national.sobota_23.lps_dospeli.open);
+  // Vzdušná čára a ilustrativnost hranice musí být přiznané přímo v datech.
+  assert.match(dj.poznamka, /vzdušnou čarou/i);
+  assert.match(dj.poznamka, /žádná norma/i);
+  assert.ok(dj.okresy.length >= 70, `jen ${dj.okresy.length} okresů`);
+});
+
+test('data/dojezdy.json · per-obec mapa sedí na gazetteer', () => {
+  const d = readData('dojezdy.json');
+  const obce = readData('obce-gps.json');
+  assert.ok(d.obci_total >= 6000, `jen ${d.obci_total} obcí`);
+  assert.equal(d.obce.length, (obce.obce ?? []).length,
+    'mapa dojezdů musí pokrývat celý gazetteer — join běží po jménu a okresu');
+  // Šest hodnot na obec (3 scénáře × 2 kategorie), v desetinách km.
+  for (const [name, , dists] of d.obce.slice(0, 50)) {
+    assert.equal(dists.length, 6, `${name}: čekáno 6 vzdáleností`);
+    for (const v of dists) assert.ok(v === null || (v >= 0 && v < 2000), `${name}: ${v}`);
+  }
+});
