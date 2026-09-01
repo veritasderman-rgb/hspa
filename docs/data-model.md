@@ -1186,7 +1186,7 @@ Frontend by měl odmítnout dataset s neočekávaným major version.
 
 Ručně kurátorovaný přepis Strategického rámce Zdraví 2035 (usnesení vlády
 č. 862/25, 12. 11. 2025) + redakční mapování na indikátory kontraktu.
-Validuje `ingest/validate-zdravi2035.js` (`npm run validate:zdravi2035`,
+Validuje `ingest/validate-plneni.js` (`npm run validate:plneni`,
 součást `validate:all`); konzumuje `zdravi-2035.html` (`src/zdravi2035.js`).
 
 Struktura: 3 `strategic_goals` → 12 `cile` (SC). Každý SC nese `dilci_cile`

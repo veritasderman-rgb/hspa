@@ -137,7 +137,7 @@ git push -u origin claude/<branch>
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
 │   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
-│   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:zdravi2035)
+│   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:plneni)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn)

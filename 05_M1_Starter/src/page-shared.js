@@ -588,7 +588,7 @@ export function renderModuleNav(activeId) {
         { id: 'rubrika-digitalizace',  label: 'Digitalizace',          href: 'rubrika.html?id=digitalizace',  match: [] },
       ],
     },
-    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html', 'zdravi-2035.html'],
+    { id: 'strategies',  label: 'Strategie',               href: 'strategie.html',          match: ['strategie.html', 'zdravi-2035.html', 'plneni-onko-2030.html', 'plneni-kv-2035.html', 'plneni-amr.html', 'plneni-dusevni-zdravi.html', 'plneni-zdravi-2030.html'],
       children: [
         { id: 'strategie-cr',  label: 'Strategie českého zdravotnictví', href: 'strategie.html',   match: ['strategie.html'] },
         { id: 'zdravi2035',    label: 'Plní se Zdraví 2035?',            href: 'zdravi-2035.html', match: ['zdravi-2035.html'] },
