@@ -22,11 +22,14 @@ import {
 
 const state = { plneni: null, indicators: new Map() };
 
+// Hodnotící, ne poziční: „nad/pod benchmarkem“ by u ukazatelů, kde je
+// méně lépe (kuřáctví, mortalita), tvrdilo opak dat. Signál z kontraktu
+// už směr zohledňuje — popisek ho jen nesmí překroutit.
 const SIGNAL_LABEL = {
-  good: 'nad benchmarkem',
+  good: 'lepší než benchmark',
   warn: 'kolem benchmarku',
-  bad: 'pod benchmarkem',
-  neutral: 'bez benchmarku',
+  bad: 'horší než benchmark',
+  neutral: 'bez porovnání s benchmarkem',
 };
 
 const MATCH_BADGE = {
