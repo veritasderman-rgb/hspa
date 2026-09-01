@@ -68,6 +68,16 @@ export function norm(s) {
 }
 
 /** HTML → holý text (bez skriptů a stylů), se zachovanými mezerami. */
+const NAMED_ENTITIES = {
+  nbsp: ' ', quot: '"', apos: "'", lt: '<', gt: '>',
+  ndash: '–', mdash: '—', hellip: '…',
+  aacute: 'á', eacute: 'é', iacute: 'í', oacute: 'ó', uacute: 'ú', yacute: 'ý',
+  Aacute: 'Á', Eacute: 'É', Iacute: 'Í', Oacute: 'Ó', Uacute: 'Ú', Yacute: 'Ý',
+  scaron: 'š', Scaron: 'Š', zcaron: 'ž', Zcaron: 'Ž', ccaron: 'č', Ccaron: 'Č',
+  rcaron: 'ř', Rcaron: 'Ř', ecaron: 'ě', Ecaron: 'Ě', dcaron: 'ď', tcaron: 'ť',
+  ncaron: 'ň', uring: 'ů', Uring: 'Ů',
+};
+
 export function stripHtml(html) {
   return String(html ?? '')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
@@ -75,7 +85,11 @@ export function stripHtml(html) {
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<(br|\/p|\/div|\/li|\/tr|\/h[1-6])[^>]*>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
+    // Entity: nejdřív číselné a pojmenované, `&amp;` až úplně nakonec —
+    // jinak by se z `&amp;scaron;` stalo `š`, což autor nenapsal.
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
+    .replace(/&([a-zA-Z]+);/g, (m, name) => NAMED_ENTITIES[name] ?? m)
     .replace(/&amp;/g, '&')
     .replace(/[ \t]+/g, ' ')
     .replace(/\n\s*\n+/g, '\n')
@@ -223,17 +237,72 @@ async function getHtml(url, { timeoutMs = 20_000, fetchImpl = globalThis.fetch }
   }
 }
 
-/** Projde jednu nemocnici: homepage → nejslibnější podstránky → kandidáti. */
+/**
+ * URL ze sitemap.xml, které vypadají na stránku akutní ambulance.
+ *
+ * PROČ: první běh crawleru skončil u 74 nemocnic na „stránky prošly, hodiny
+ * nenalezeny“ — homepage na úrazovou ambulanci často vůbec neodkazuje,
+ * schovaná bývá dvě úrovně hluboko v „Oddělení“. Sitemap ty stránky
+ * vyjmenuje přímo, bez klikací archeologie.
+ */
+export function sitemapCandidates(xml, baseUrl, { limit = 6 } = {}) {
+  const out = [];
+  const seen = new Set();
+  const re = /<loc>\s*([^<\s]+)\s*<\/loc>/gi;
+  let m;
+  while ((m = re.exec(String(xml ?? ''))) !== null) {
+    const url = m[1];
+    if (!LINK_RE.test(norm(url))) continue;
+    if (/\.(pdf|jpg|jpeg|png|gif|xml)$/i.test(url)) continue;
+    try {
+      if (new URL(url).hostname !== new URL(baseUrl).hostname) continue;
+    } catch { continue; }
+    if (seen.has(url)) continue;
+    seen.add(url);
+    // Konkrétní „úrazová/pohotovost“ před obecným „ambulance“.
+    const score = /(urazov|traumatolog|pohotovost|urgent)/.test(norm(url)) ? 2 : 1;
+    out.push({ url, score });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, limit).map(x => x.url);
+}
+
+/** Projde jednu nemocnici: homepage + sitemap → podstránky (2 úrovně) → kandidáti. */
 export async function crawlHospital(target, opts = {}) {
-  const { maxPages = 4, fetchImpl, timeoutMs } = opts;
+  const { maxPages = 8, fetchImpl, timeoutMs } = opts;
   const home = await getHtml(target.web, { fetchImpl, timeoutMs });
   if (home.error) return { ...target, stav: 'web nedostupny', detail: home.error, nalezy: [] };
 
+  // Fronta kandidátních URL: odkazy z homepage + sitemap. Sitemap jde první
+  // na řadu jen svými nejlépe skórovanými URL — kandidáti z homepage bývají
+  // přesnější (kotví je text odkazu, ne jen slug).
+  const queue = [];
+  const queued = new Set([home.url]);
+  const enqueue = (url) => {
+    if (!url || queued.has(url)) return;
+    queued.add(url);
+    queue.push(url);
+  };
+  for (const link of candidateLinks(home.html, home.url)) enqueue(link.url);
+  try {
+    const sitemapUrl = new URL('/sitemap.xml', home.url).href;
+    const sitemap = await getHtml(sitemapUrl, { fetchImpl, timeoutMs });
+    if (!sitemap.error) for (const url of sitemapCandidates(sitemap.html, home.url)) enqueue(url);
+  } catch { /* web bez sitemapy je normální stav */ }
+
   const pages = [{ url: home.url, html: home.html }];
-  for (const link of candidateLinks(home.html, home.url).slice(0, maxPages - 1)) {
-    const page = await getHtml(link.url, { fetchImpl, timeoutMs });
+  let fetched = 0;
+  while (queue.length && fetched < maxPages - 1) {
+    const url = queue.shift();
+    const page = await getHtml(url, { fetchImpl, timeoutMs });
+    fetched += 1;
     if (page.error) continue;
     pages.push({ url: page.url, html: page.html });
+    // Druhá úroveň: z kandidátní stránky už jen ty NEJKONKRÉTNĚJŠÍ odkazy
+    // (skóre 2 = úrazová/pohotovost/urgent) — jinak by fronta bobtnala
+    // rozcestníky „všechna oddělení“.
+    for (const link of candidateLinks(page.html, page.url)) {
+      if (link.score >= 2) enqueue(link.url);
+    }
   }
 
   const nalezy = [];
@@ -255,7 +324,7 @@ export async function crawlHospital(target, opts = {}) {
  * Není součástí `npm run ingest` — pouští se ručně při redakční revizi.
  */
 export async function fetchAmbulanceHodiny(opts = {}) {
-  const { force = false, limit = 0, concurrency = 4, ttlHours = 24 * 30 } = opts;
+  const { force = false, limit = 0, concurrency = 8, ttlHours = 24 * 30 } = opts;
   if (!force) {
     const cached = readCacheIfFresh(OUT_CACHE, ttlHours);
     if (cached) return cached;

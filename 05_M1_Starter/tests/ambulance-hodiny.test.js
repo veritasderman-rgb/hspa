@@ -13,6 +13,7 @@ import {
   candidateLinks,
   extractHourCandidates,
   hospitalTargets,
+  sitemapCandidates,
 } from '../ingest/fetchers/ambulance_hodiny.js';
 
 test('stripHtml · vyhodí skripty a styly, zachová text', () => {
@@ -119,4 +120,21 @@ test('extractHourCandidates · nezacyklí se na textu s více rozsahy', () => {
     (_, i) => `Úrazová ambulance ${i}. Ordinační doba 7:0${i % 10} - 15:00.`).join(' ');
   const hits = extractHourCandidates(text);
   assert.ok(hits.length > 0 && hits.length <= 12);
+});
+
+test('sitemapCandidates · vybere relevantní URL ze sitemapy, cizí doménu zahodí', () => {
+  const xml = `<?xml version="1.0"?><urlset>
+    <loc>https://nemocnice.cz/oddeleni/urazova-ambulance/</loc>
+    <loc>https://nemocnice.cz/oddeleni/kuchyne/</loc>
+    <loc>https://nemocnice.cz/pro-pacienty/pohotovost</loc>
+    <loc>https://jinyweb.cz/pohotovost</loc>
+    <loc>https://nemocnice.cz/mapa.pdf</loc>
+  </urlset>`;
+  const urls = sitemapCandidates(xml, 'https://nemocnice.cz/');
+  assert.ok(urls.includes('https://nemocnice.cz/oddeleni/urazova-ambulance/'));
+  assert.ok(urls.includes('https://nemocnice.cz/pro-pacienty/pohotovost'));
+  assert.ok(!urls.some(u => u.includes('jinyweb.cz')), 'cizí doména hodiny nemocnice nezná');
+  assert.ok(!urls.some(u => u.includes('kuchyne')));
+  // Konkrétní „úrazová“ se řadí před obecné.
+  assert.equal(urls[0], 'https://nemocnice.cz/oddeleni/urazova-ambulance/');
 });

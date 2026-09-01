@@ -35,6 +35,7 @@ import {
   haversineKm,
   careAdvice,
   isWorkingHours,
+  okresSlug,
 } from './pohotovosti-engine.js';
 
 const PAGE_SIZE = 8;
@@ -335,6 +336,11 @@ function placeCard(row, index) {
       ? '<span class="poh-flag poh-flag-ok" title="Nemocnice na svém webu uvádí, že sem pacienti chodí i bez objednání.">i bez objednání</span>'
       : '<span class="poh-flag" title="Nemocnice neuvádí, zda ošetří i neobjednané — zavolejte předem.">zavolejte předem</span>');
     flags.push('<span class="poh-flag" title="Není to pohotovostní služba podle vyhlášky č. 380/2025 Sb., ale běžná ambulance nemocnice — proto se u ní zákonné minimum neposuzuje.">běžná ambulance, ne pohotovost</span>');
+    // Týdenní drift-check: když se zdrojová stránka od ověření změnila,
+    // hodiny mohou být zastaralé — a stránka to musí říct dřív, než někdo vyrazí.
+    if (p.hours_check?.status === 'drift') {
+      flags.push('<span class="poh-flag poh-flag-warn" title="Automatická týdenní kontrola zjistila, že se stránka nemocnice od našeho ověření změnila. Hodiny níže mohou být zastaralé — před cestou zavolejte.">zdroj se změnil — ověřte telefonicky</span>');
+    }
   }
 
   return `
@@ -369,6 +375,7 @@ function placeCard(row, index) {
           <a href="${escapeHtml(p.detail_url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(p.source_name ?? 'zdroj')}</a>${
             p.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(p.verified_at))}` : ''}.
           Provozní dobu nemocničních ambulancí nevede žádný registr — tenhle údaj přepsal člověk ze stránky nemocnice.
+          ${p.hours_check ? hoursCheckLine(p.hours_check) : ''}
         </p>
       </details>` : ''}
     ${Array.isArray(p.minimum_checks) && p.minimum_checks.length ? `
@@ -379,6 +386,18 @@ function placeCard(row, index) {
         </ul>
       </details>` : ''}
   </li>`;
+}
+
+/**
+ * Věta o poslední automatické kontrole citátu. „Nedostupné“ se nehlásí jako
+ * problém — o driftu v tu chvíli nevíme nic a falešný poplach by devalvoval
+ * ten skutečný.
+ */
+function hoursCheckLine(check) {
+  const when = check.checked_at ? ` ${escapeHtml(formatCzDate(check.checked_at))}` : '';
+  if (check.status === 'ok') return `Automatická kontrola${when}: citát na stránce nemocnice stále je.`;
+  if (check.status === 'drift') return `<strong>Automatická kontrola${when}: stránka nemocnice se změnila — hodiny mohou být zastaralé.</strong>`;
+  return '';
 }
 
 function formatPhone(phone) {
@@ -1029,6 +1048,228 @@ function renderOnlineSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
+// Dojezdová analýza — kam síť nedosáhne
+//
+// Počty pracovišť jsou statistika; tady se měří dostupnost: vzdálenost každé
+// obce k nejbližší pohotovosti, která má v referenční čas podle zveřejněné
+// doby otevřeno. Souhrn jede z hlavního souboru; mapa všech ~6 250 obcí se
+// (i s gazetteerem) dotahuje líně, až když čtenář sekci skutečně otevře —
+// dohromady je to přes 600 kB, které nesmí zdržovat člověka, co jen hledá,
+// kam teď zajít.
+// ─────────────────────────────────────────────────────────────────────────
+
+const DOJEZD_BANDS = [
+  { max: 10, label: 'do 10 km', color: '#0f9d58' },
+  { max: 20, label: '10–20 km', color: '#e8a13c' },
+  { max: 30, label: '20–30 km', color: '#d95f02' },
+  { max: Infinity, label: 'přes 30 km', color: '#b3261e' },
+];
+
+// Ve 3. pádě — vypisuje se za „k nejbližší otevřené …“.
+const DOJEZD_CATEGORY_LABEL = {
+  lps_dospeli: 'pohotovosti pro dospělé',
+  lps_deti: 'pohotovosti pro děti a dorost',
+};
+
+const dojezdState = { scenario: 'streda_20', category: 'lps_dospeli', chart: null, perObec: null };
+
+async function ensureDojezdy() {
+  if (dojezdState.perObec) return dojezdState.perObec;
+  dojezdState.perObec = await loadJson('data/dojezdy.json');
+  return dojezdState.perObec;
+}
+
+function dojezdIndex(dj) {
+  return dj.scenarios.findIndex(s => s.id === dojezdState.scenario) * dj.categories.length
+    + dj.categories.indexOf(dojezdState.category);
+}
+
+function renderDojezdSection() {
+  const dj = state.data?.dojezdy;
+  const host = document.getElementById('pohDojezdLead');
+  if (!dj || !host) return;
+
+  // Titulní zjištění se počítá z dat — kdyby ho někdo napsal do HTML natvrdo,
+  // příští refresh by z něj udělal lež.
+  const st = dj.national.streda_20;
+  const so = dj.national.sobota_12;
+  const noc = dj.national.sobota_23;
+  const obciTotal = dj.okresy.reduce((n, o) => n + o.obci, 0);
+  const pct = (n) => `${Math.round((n / obciTotal) * 100)} %`;
+  host.innerHTML = `
+    Vyhláška předepisuje pohotovostní službu ve všední den v okně 16:00–22:00 — a přesto je ve
+    <strong>středu ve 20:00</strong> dál než 20&nbsp;km od nejbližší otevřené pohotovosti pro dospělé
+    <strong>${st.lps_dospeli.over20.toLocaleString('cs-CZ')} obcí</strong> (${pct(st.lps_dospeli.over20)});
+    u pohotovosti pro děti je to <strong>${st.lps_deti.over20.toLocaleString('cs-CZ')} obcí</strong>
+    (${pct(st.lps_deti.over20)}). Nejhustší je síť v sobotu v poledne
+    (medián ${String(so.lps_dospeli.median).replace('.', ',')}&nbsp;km), v noci slouží jen
+    <strong>${noc.lps_dospeli.open}</strong> nepřetržitých pracovišť pro dospělé
+    a <strong>${noc.lps_deti.open}</strong> pro děti v celé republice.`;
+
+  const statRow = document.getElementById('pohDojezdStats');
+  if (statRow) {
+    const stats = [
+      [`${st.lps_dospeli.open}`, 'pohotovostí otevřeno ve středu ve 20:00', 'Pro dospělé, v okně, které vyhláška předepisuje.'],
+      [pct(st.lps_deti.over20), 'obcí je večer dál než 20 km od dětské', `${st.lps_deti.over20.toLocaleString('cs-CZ')} obcí z ${obciTotal.toLocaleString('cs-CZ')}.`],
+      [`${noc.lps_dospeli.open}`, 'pohotovostí slouží v sobotu ve 23:00', 'Noc je územím urgentních příjmů — vyhláška ji nepředepisuje.'],
+      [`${String(dj.national[dojezdState.scenario][dojezdState.category].max).replace('.', ',')} km`, 'má to nejhůř položená obec', 'Ve zvoleném čase, vzdušnou čarou.'],
+    ];
+    statRow.innerHTML = stats.map(([value, label, note]) => `
+      <div class="poh-stat">
+        <span class="poh-stat-value">${escapeHtml(String(value))}</span>
+        <span class="poh-stat-label">${escapeHtml(label)}</span>
+        <span class="poh-stat-note">${escapeHtml(note)}</span>
+      </div>`).join('');
+  }
+
+  const scenarioSel = document.getElementById('pohDojezdScenario');
+  if (scenarioSel && !scenarioSel.options.length) {
+    scenarioSel.innerHTML = dj.scenarios.map(sc =>
+      `<option value="${escapeHtml(sc.id)}">${escapeHtml(sc.label)}</option>`).join('');
+    scenarioSel.value = dojezdState.scenario;
+    scenarioSel.addEventListener('change', () => {
+      dojezdState.scenario = scenarioSel.value;
+      renderDojezdSection();
+      renderDojezdMap();
+    });
+    const catSel = document.getElementById('pohDojezdCategory');
+    catSel?.addEventListener('change', () => {
+      dojezdState.category = catSel.value;
+      renderDojezdSection();
+      renderDojezdMap();
+    });
+  }
+
+  renderDojezdTable(dj);
+
+  const method = document.getElementById('pohDojezdMethod');
+  if (method) {
+    method.textContent = `${dj.poznamka} Referenční časy: ${dj.scenarios.map(s => s.label).join(', ')} — konkrétní datum nehraje roli, týdenní rozpisy na něm nezávisí.`;
+  }
+}
+
+function renderDojezdTable(dj) {
+  const cell = `${dojezdState.scenario}|${dojezdState.category}`;
+  const rows = dj.okresy
+    .map(o => ({ okres: o.okres, obci: o.obci, ...o.stats[cell] }))
+    .filter(r => r.median != null)
+    .sort((a, b) => b.median - a.median);
+
+  const fmt = (r) => `
+    <tr>
+      <th scope="row">${escapeHtml(r.okres)}</th>
+      <td class="poh-num">${String(r.median).replace('.', ',')} km</td>
+      <td class="poh-num">${String(r.max).replace('.', ',')} km</td>
+      <td class="poh-num">${r.over20} z ${r.obci}</td>
+    </tr>`;
+  const top = document.getElementById('pohDojezdRows');
+  if (top) top.innerHTML = rows.slice(0, 12).map(fmt).join('');
+  const all = document.getElementById('pohDojezdRowsAll');
+  if (all) all.innerHTML = rows.map(fmt).join('');
+}
+
+async function renderDojezdMap() {
+  const host = document.getElementById('pohDojezdMap');
+  const dj = state.data?.dojezdy;
+  if (!host || !dj || typeof echarts === 'undefined') return;
+
+  let perObec;
+  let gazetteer;
+  try {
+    [perObec, gazetteer] = await Promise.all([ensureDojezdy(), ensureObce()]);
+    const geojson = await ensureRegions();
+    echarts.registerMap('cz-regions-poh', geojson);
+  } catch {
+    return; // sekce funguje i bez mapy — tabulka a čísla zůstávají
+  }
+
+  if (!dojezdState.chart) {
+    dojezdState.chart = echarts.init(host);
+    window.addEventListener('resize', () => dojezdState.chart?.resize());
+  }
+
+  // Join po jménu + okresu: dojezdy.json nenosí souřadnice (jsou už
+  // v gazetteeru, který stránka stejně používá pro vyhledávání).
+  const coord = new Map(gazetteer.map(([name, lat, lon, okres]) => [`${name}|${okres}`, [lon, lat]]));
+  const idx = dojezdIndex(perObec);
+  const bandData = DOJEZD_BANDS.map(() => []);
+  for (const [name, okres, dists] of perObec.obce) {
+    const v = dists[idx];
+    if (v == null) continue;
+    const km = v / 10;
+    const pos = coord.get(`${name}|${okres}`);
+    if (!pos) continue;
+    const band = DOJEZD_BANDS.findIndex(b => km <= b.max);
+    bandData[band].push({ name, value: [...pos, km], obec: name, okres });
+  }
+
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  dojezdState.chart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'item',
+      formatter: (p) => `<strong>${escapeHtml(p.data?.obec ?? '')}</strong> (${escapeHtml(p.data?.okres ?? '')})<br>${String(p.data?.value?.[2] ?? '').replace('.', ',')} km k nejbližší otevřené`,
+    },
+    geo: {
+      map: 'cz-regions-poh',
+      roam: false,
+      silent: true,
+      itemStyle: {
+        areaColor: dark ? '#22262b' : '#f3f1ec',
+        borderColor: dark ? '#555' : '#bbb',
+      },
+    },
+    series: DOJEZD_BANDS.map((band, i) => ({
+      name: band.label,
+      type: 'scatter',
+      coordinateSystem: 'geo',
+      geoIndex: 0,
+      symbolSize: 3.2,
+      itemStyle: { color: band.color, opacity: 0.75 },
+      data: bandData[i],
+    })),
+  }, true);
+
+  const legend = document.getElementById('pohDojezdLegend');
+  if (legend) {
+    legend.innerHTML = 'Každá tečka je obec: '
+      + DOJEZD_BANDS.map((b, i) =>
+        `<span class="poh-dojezd-band"><span class="poh-chip-dot" style="background:${b.color}" aria-hidden="true"></span>${escapeHtml(b.label)} (${bandData[i].length.toLocaleString('cs-CZ')})</span>`).join(' · ')
+      + ` — vzdálenost k nejbližší otevřené ${escapeHtml(DOJEZD_CATEGORY_LABEL[dojezdState.category])}.`;
+  }
+}
+
+/** Mapa (620 kB dat) se načte, až když se sekce blíží do viewportu. */
+function wireDojezdLazyLoad() {
+  const section = document.querySelector('.poh-dojezd');
+  if (!section || !state.data?.dojezdy) return;
+  if (typeof IntersectionObserver === 'undefined') {
+    renderDojezdMap();
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some(e => e.isIntersecting)) {
+      io.disconnect();
+      renderDojezdMap();
+    }
+  }, { rootMargin: '400px' });
+  io.observe(section);
+}
+
+/**
+ * Rozcestník na generované okresní stránky. Odkazy se skládají ze stejného
+ * slugu jako builder (okresSlug v enginu) — jediná definice tvaru URL.
+ */
+function renderOkresIndex() {
+  const host = document.getElementById('pohOkresLinks');
+  if (!host) return;
+  const okresy = [...new Set((state.data?.places ?? []).map(p => p.okres).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'cs'));
+  host.innerHTML = okresy.map(o =>
+    `<li><a href="pohotovost-${escapeHtml(okresSlug(o))}.html">${escapeHtml(o)}</a></li>`).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
 // Kontext a metodika
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -1196,6 +1437,9 @@ async function init() {
   renderContext();
   renderBeforeYouGo();
   renderOnlineSection();
+  renderDojezdSection();
+  wireDojezdLazyLoad();
+  renderOkresIndex();
   wireForm();
   wireGeolocation();
   setOrigin(null);

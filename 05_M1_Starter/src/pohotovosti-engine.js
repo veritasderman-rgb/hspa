@@ -574,3 +574,19 @@ export function careAdvice(input = {}) {
 
   return { mode: working ? 'ordinacni_doba' : 'pohotovost', openIsFar, steps };
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// Slug okresu — sdílené mezi builderem okresních stránek
+// (scripts/build-pohotovosti-okresy.js) a odkazy na ně. Jediná definice,
+// aby vygenerovaný soubor a odkaz nemohly skončit každý s jiným tvarem.
+// ─────────────────────────────────────────────────────────────────────────
+
+export function okresSlug(name) {
+  return String(name ?? '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/hlavni mesto praha/, 'praha')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}

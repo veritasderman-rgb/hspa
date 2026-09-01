@@ -306,6 +306,17 @@ function validateAmbulance(data) {
     // Běžná ambulance nespadá pod vyhlášku o pohotovostních službách —
     // „nesplňuje minimum“ by u ní bylo obvinění z něčeho, co po ní nikdo nechce.
     if (p.meets_minimum !== null) fail(`${where}: meets_minimum musí být null (vyhláška se na běžnou ambulanci nevztahuje)`);
+    // Drift-check: strojově víme jen, ŽE se zdroj změnil — proto warning,
+    // ne fail. Údaj zůstává na stránce s viditelným varováním, dokud ho
+    // člověk nepřeověří (a nezvedne verified_at).
+    if (p.hours_check) {
+      if (!['ok', 'drift', 'nedostupne'].includes(p.hours_check.status)) {
+        fail(`${where}: neznámý stav drift-checku „${p.hours_check.status}“`);
+      }
+      if (p.hours_check.status === 'drift') {
+        warn(`${where}: zdrojová stránka se od ověření (${p.verified_at}) změnila — hodiny přeověřit`);
+      }
+    }
   }
 
   if (data.coverage?.pohotovosti_total == null) {

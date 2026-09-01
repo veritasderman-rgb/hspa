@@ -187,6 +187,23 @@ zdrave-cesko.cz/
 - **„Než vyrazíte“.** Sekce s regulačním poplatkem (se zdrojem, mění se
   novelou) a checklistem, co si vzít. První krok je „zavolejte předem“ —
   ordinační doba se mění rychleji, než ji tahle stránka stihne zaznamenat.
+- **Dojezdová analýza.** Sekce „Kam síť pohotovostí nedosáhne“: vzdálenost
+  každé obce k nejbližší OTEVŘENÉ LPS ve třech referenčních časech, mapa obcí
+  po pásmech, okresní tabulka. Titulní čísla se počítají z dat za běhu —
+  natvrdo zapsaná by po příštím refreshi lhala. Mapa (dojezdy.json +
+  gazetteer, přes 600 kB) se dotahuje líně přes IntersectionObserver.
+- **Drift-check.** U denních ambulancí týdenní kontrola, že citát ze zdroje
+  na webu nemocnice pořád je (`hours_check`); drift = viditelné varování
+  na kartě a warning ve validátoru.
+
+### `pohotovost-*.html` — okresní landing pages (75, generované)
+
+| | |
+|---|---|
+| **Účel** | Landing page pro dotazy typu „pohotovost Klatovy“ — člověk v nouzi hledá Google, ne dashboard. Statický výpis pracovišť okresu (adresy, telefony, rozpisy přímo v HTML) + JSON-LD s `openingHoursSpecification`. |
+| **Generuje** | `scripts/build-pohotovosti-okresy.js` z `data/pohotovosti.json`; manifest `data/pohotovosti-okresy.json` → sitemap + rozcestník na `pohotovosti.html`. Týdenní cron regeneruje po transformu, přepisují se jen změněné soubory. |
+| **JS moduly** | `src/pohotovost-okres.js` — jen progresivní vylepšení (nav, patička, živé „teď otevřeno“ z `data-hours`); bez JS stránka plně funguje. |
+| **CSS namespace** | `.pokr-*` |
 
 ### `strategie.html` — Národní strategie
 

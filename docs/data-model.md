@@ -1004,6 +1004,45 @@ mění novelou) a checklist `before_you_go`. Krok `zavolejte` je povinný —
 zveřejněná ordinační doba se mění dovolenými a zástupy rychleji, než ji kdokoli
 stihne aktualizovat, tuhle stránku včetně.
 
+### Drift-check citátů — `hours_check`
+
+`ingest/verify-ambulance-drift.js` (`npm run verify:ambulance-drift`, týdně
+v refresh.yml před transformem) stáhne zdrojové stránky všech denních ambulancí
+a ověří, že `quote` je na nich pořád doslovně dohledatelný (normalizace bílých
+znaků a pomlček; `[…]` dělí citát na fragmenty, které musí být všechny
+a v pořadí). Výsledek jde do `ingest/cache/ambulance_drift.json` a transform ho
+propíše jako `hours_check: { status: 'ok' | 'drift' | 'nedostupne', checked_at }`.
+`drift` = stránka se změnila a hodiny musí přeověřit člověk (validátor warning,
+karta ukazuje „zdroj se změnil — ověřte telefonicky“); `nedostupne` ≠ drift —
+o změně nevíme nic a falešný poplach by devalvoval ten skutečný.
+
+### Dojezdová analýza — `dojezdy` + `data/dojezdy.json`
+
+`ingest/lib/dojezdy.js` (volá transform) spočítá pro všech ~6 250 obcí
+vzdálenost k nejbližší pohotovosti OTEVŘENÉ ve třech referenčních časech
+(středa 20:00 — vyhláškové okno; sobota 12:00 — pevná víkendová doba;
+sobota 23:00 — noc, kterou vyhláška nepředepisuje). Počítá se jen LPS pro
+dospělé a děti se známou dobou a polohou — ne urgentní příjmy, denní ambulance
+ani ZZS (měří se síť pohotovostí podle vyhlášky), a ne zubní/lékárenská
+(v části krajů rotují ke konkrétním datům, „typická sobota“ by byla fikce).
+Souhrn (národní čísla + 77 okresů: medián/max/počet přes 20 km) je v hlavním
+souboru pod `dojezdy`; per-obec vzdálenosti v líně načítaném `data/dojezdy.json`
+(join na gazetteer po jménu + okresu, hodnoty v desetinách km). Vzdušná čára,
+hranice 20 km ilustrativní — poznámka je přímo v datech a test ji vyžaduje.
+
+## 21b. `data/pohotovosti-okresy.json` + `pohotovost-*.html` — okresní stránky
+
+`scripts/build-pohotovosti-okresy.js` (`npm run build:pohotovosti-okresy`)
+generuje z `data/pohotovosti.json` statickou landing page pro každý okres
+s aspoň jedním pracovištěm (75 stránek): výpis s adresou, telefonem a rozpisem
+hodin přímo v HTML (crawler nespouští JS) + JSON-LD `ItemList`
+s `MedicalClinic`/`Dentist`/`Pharmacy` a `openingHoursSpecification`. Živý stav
+„teď otevřeno“ dokresluje `src/pohotovost-okres.js` z `data-hours` atributu.
+Manifest `data/pohotovosti-okresy.json` čte sitemap generátor a rozcestník na
+`pohotovosti.html`. Regeneruje se v týdenním cronu po transformu; builder
+přepisuje jen soubory, jejichž obsah se změnil. NENÍ v `build:generated` —
+jsou to obsahové stránky jako `clanek-*.html`, jen je píše skript.
+
 ### `data/pohotovosti-akutni.json`
 
 Doplňková vrstva z NRPZS: urgentní příjmy, nemocnice s akutní chirurgií

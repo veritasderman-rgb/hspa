@@ -85,7 +85,8 @@ git push -u origin claude/<branch>
 ├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
 ├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
 ├── prevence.html               ← Vakcinace + screeningy
-├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď)
+├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď, dojezdová analýza)
+├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
 ├── strategie.html              ← Národní strategické dokumenty
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
@@ -137,7 +138,9 @@ git push -u origin claude/<branch>
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
-│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 9 denních nemocničních ambulancí (ruční ověření), online pohotovosti, poplatek
+│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn)
+│   ├── dojezdy.json            ← Dojezdová mapa: vzdálenost každé obce k nejbližší otevřené LPS ve 3 referenčních časech (líný load)
+│   ├── pohotovosti-okresy.json ← Manifest 75 generovaných okresních stránek pohotovost-*.html (sitemap + rozcestník)
 │   ├── pohotovosti-akutni.json ← Urgentní příjmy, akutní chirurgie a základny ZZS z NRPZS (líný load)
 │   ├── obce-gps.json           ← Gazetteer 6 256 obcí ČR pro vyhledávání podle města
 │   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
@@ -218,6 +221,8 @@ npm run setup:git         # Merge driver pro generované soubory (běží i sám
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
 npm run scan:ambulance-hodiny # Projde weby nemocnic a najde KANDIDÁTY na provozní dobu denních ambulancí (~10 min, nepublikuje se)
+npm run verify:ambulance-drift # Ověří, že citáty u denních ambulancí jsou pořád na webech nemocnic (týdně v cronu; drift = přeověřit)
+npm run build:pohotovosti-okresy # Přegeneruje okresní stránky pohotovost-*.html z data/pohotovosti.json (přepisuje jen změněné)
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
@@ -291,6 +296,7 @@ Aktuálně běží další vlny vývoje:
 | Brand mark „HSPA Kompas" (logo, favicon, cover, pattern) | ✅ |
 | Pohotovosti — celostátní vyhledávání „kde má teď otevřeno" | ✅ |
 | Pohotovosti — denní nemocniční ambulance, online pohotovosti, „než vyrazíte" | ✅ |
+| Pohotovosti — dojezdová analýza bílých míst, drift-check citátů, 75 okresních stránek | ✅ |
 
 ## Brand — HSPA Kompas
 
