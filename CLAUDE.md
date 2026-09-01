@@ -88,6 +88,7 @@ git push -u origin claude/<branch>
 ├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď, dojezdová analýza)
 ├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
 ├── strategie.html              ← Národní strategické dokumenty
+├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
 ├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
@@ -136,6 +137,7 @@ git push -u origin claude/<branch>
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
 │   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
+│   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:zdravi2035)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn)
@@ -297,6 +299,7 @@ Aktuálně běží další vlny vývoje:
 | Pohotovosti — celostátní vyhledávání „kde má teď otevřeno" | ✅ |
 | Pohotovosti — denní nemocniční ambulance, online pohotovosti, „než vyrazíte" | ✅ |
 | Pohotovosti — dojezdová analýza bílých míst, drift-check citátů, 75 okresních stránek | ✅ |
+| Zdraví 2035 — plnění strategie po kapitolách a úkolech provázané s indikátory | ✅ |
 
 ## Brand — HSPA Kompas
 

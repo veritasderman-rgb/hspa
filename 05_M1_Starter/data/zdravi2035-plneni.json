@@ -1,0 +1,1955 @@
+{
+ "version": "1.0",
+ "strategy_id": "zdravi_2035",
+ "_doc": [
+  "Plnění Strategického rámce Zdraví 2035 — provázání kapitol a úkolů dokumentu",
+  "s indikátory datového kontraktu (data/indicators.json).",
+  "",
+  "ZDROJ: Strategický rámec rozvoje péče o zdraví v ČR do roku 2035, schválený",
+  "vládou 12. 11. 2025 usnesením č. 862/25. Struktura (3 strategické cíle,",
+  "12 specifických cílů, dílčí cíle, tabulky indikátorů s výchozími hodnotami",
+  "k 31. 12. 2023 a cíli 2035) je přepsaná z PDF — návrhová část str. 73–150,",
+  "indikátory kap. 4.2 str. 154–165.",
+  "",
+  "MAPOVÁNÍ je redakční práce, ne strojová: u každého indikátoru dokumentu",
+  "říkáme, jestli ho kontrakt měří PŘÍMO (match: primo — stejný jev, srovnatelná",
+  "metodika), jen PROXY (match: proxy — příbuzný jev nebo jiná metodika, srovnávat",
+  "směr, ne hodnoty; poznámka říká proč), nebo VŮBEC (match: chybi). U dílčích",
+  "cílů `mereni: proces` znamená, že jde o organizační/legislativní úkol bez",
+  "populačního indikátoru — to není mezera měření, ale povaha úkolu.",
+  "",
+  "POCTIVOST HODNOT: výchozí a cílové hodnoty jsou z dokumentu doslova, včetně",
+  "podivností (cíl nižší než výchozí stav u výdajů na prevenci; poměr návštěv",
+  "s vyšším cílem; DRG 1 → 1). Kde byla hodnota v tabulce PDF nečitelná,",
+  "je null a poznámka říká, kde ji v PDF hledat. Nic nedopočítáváme.",
+  "",
+  "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu",
+  "z data/indicators.json — tady se NEduplikují, aby nemohly zastarat."
+ ],
+ "document": {
+  "title": "Strategický rámec rozvoje péče o zdraví v České republice do roku 2035",
+  "approved": "2025-11-12",
+  "approval": "usnesení vlády ČR č. 862/25",
+  "url": "https://mzd.gov.cz/wp-content/uploads/2025/12/Strategicky-ramec-rozvoje-pece-o-zdravi-v-Ceske-republice-do-roku-2035.pdf",
+  "web": "https://mzd.gov.cz/zdravi-2035/",
+  "zastresujici_cil": "Zdraví všech skupin obyvatel se zlepšuje (Strategický rámec ČR 2030)"
+ },
+ "extracted_at": "2026-09-01",
+ "strategic_goals": [
+  {
+   "id": "sg1",
+   "num": "1",
+   "title": "Ochrana a zlepšení zdraví obyvatel"
+  },
+  {
+   "id": "sg2",
+   "num": "2",
+   "title": "Optimalizace zdravotnického systému"
+  },
+  {
+   "id": "sg3",
+   "num": "3",
+   "title": "Podpora vědy a výzkumu"
+  }
+ ],
+ "ramcove_indikatory": [
+  {
+   "name": "Délka života ve zdraví při narození",
+   "baseline": {
+    "value": "muži 62,7 / ženy 64,0 let",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "muži 65,7 / ženy 66,0 let"
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "nadeje_doziti_zdravi_65",
+    "note": "Kontrakt měří naději dožití ve zdraví v 65 letech; dokument při narození."
+   }
+  },
+  {
+   "name": "Dlouhodobé omezení aktivit (GALI) podle příjmových kvintilů",
+   "baseline": {
+    "value": "25–64: 23,2 % (nejnižší kvintil) / 12,0 % (nejvyšší); 65+: 53,5 % / 35,9 %",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "25–64: 19 % / 10 %; 65+: 43 % / 29 %"
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "GALI po kvintilech kontrakt nesleduje; sociální gradient měří rozdílem naděje dožití podle vzdělání."
+   }
+  },
+  {
+   "name": "Průměrný věk praktických lékařů",
+   "baseline": {
+    "value": "56 let",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "50 let"
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "podil_lekaru_55plus",
+    "note": "Kontrakt neměří průměrný věk, ale podíl lékařů 55+ — stejný jev z druhé strany."
+   }
+  },
+  {
+   "name": "Veřejné výdaje na prevenci",
+   "baseline": {
+    "value": "2,7 %",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "4,5 %"
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "vydaje_prevence_pct",
+    "note": "Kontrakt měří prevenci jako % běžných výdajů na zdravotnictví; dokument jako podíl na celkových veřejných výdajích — jiný jmenovatel."
+   }
+  },
+  {
+   "name": "Podíl osob s rizikovou konzumací alkoholu",
+   "baseline": {
+    "value": "14,9 %",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "6,5 % rizikové / 5,5 % škodlivé pití"
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "alkohol_spotreba",
+    "note": "Dokument měří binge drinking; kontrakt spotřebu čistého alkoholu na osobu."
+   }
+  },
+  {
+   "name": "Podíl denních kuřáků",
+   "baseline": {
+    "value": "21,5 %",
+    "year": 2017
+   },
+   "target_2035": {
+    "value": "15 %"
+   },
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "kuractvi_denni"
+   }
+  }
+ ],
+ "cile": [
+  {
+   "sc": "1.1",
+   "goal": "sg1",
+   "title": "Primární prevence a ochrana veřejného zdraví",
+   "garant": "MZD — sekce ochrany veřejného zdraví a hlavní hygienik ČR",
+   "naklady_mil_czk": 1634,
+   "dilci_cile": [
+    {
+     "num": "1.1.1",
+     "text": "Prevence vzniku a šíření infekčních onemocnění a nástroje pro řízení krizových situací",
+     "indikatory": [
+      "spalnicky",
+      "pertuse_incidence",
+      "tuberkuloza",
+      "hepatitida_bc_chronicka",
+      "hiv_nove_diagnozy"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.2",
+     "text": "Národní očkovací strategie a organizační řízení očkování",
+     "indikatory": [
+      "vakcinace_mmr_deti",
+      "vakcinace_hexa_deti",
+      "vakcinace_chripka_65",
+      "vakcinace_hpv",
+      "vakcinace_pneumokok_65"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.3",
+     "text": "Ochrana zdraví v kontextu environmentálních rizik (chemické látky, hluk, změna klimatu)",
+     "indikatory": [
+      "pm25_expozice",
+      "klistova_encefalitida"
+     ],
+     "mereni": "proxy",
+     "note": "Z environmentálních rizik kontrakt měří expozici PM2.5 a klimaticky citlivou klíšťovou encefalitidu; hluk a chemické látky neměří."
+    },
+    {
+     "num": "1.1.4",
+     "text": "Prevence užívání návykových látek, screening a krátké intervence závislostního chování",
+     "indikatory": [
+      "kuractvi_denni",
+      "alkohol_spotreba",
+      "alkohol_adolescenti",
+      "konopi_adolescenti",
+      "umrtnost_predavkovani_drogy",
+      "substitucni_lecba_pokryti"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.5",
+     "text": "Národní program zdravotní gramotnosti, monitoring pohybové aktivity a primární prevence neinfekčních nemocí",
+     "indikatory": [
+      "zdravotni_gramotnost_omezena",
+      "pohybova_aktivita_dospeli",
+      "konzumace_ovoce_zeleniny",
+      "mortalita_preventabilni"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.6",
+     "text": "Vybudování a rozvoj center prevence ve zdravotnických zařízeních",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.7",
+     "text": "Vybudování a rozvoj Národního zdravotnického informačního portálu",
+     "indikatory": [
+      "zdravotni_info_online"
+     ],
+     "mereni": "proxy",
+     "note": "Návštěvnost NZIP kontrakt neměří; podíl lidí hledajících zdravotní informace online je nejbližší kontext."
+    },
+    {
+     "num": "1.1.8",
+     "text": "Připravenost orgánů ochrany veřejného zdraví na krize národního a mezinárodního významu",
+     "indikatory": [
+      "nadumrtnost"
+     ],
+     "mereni": "proxy",
+     "note": "Připravenost se přímo měřit nedá; nadúmrtnost je zpětné zrcadlo zvládnutí krize."
+    },
+    {
+     "num": "1.1.9",
+     "text": "Rozvoj orgánů ochrany veřejného zdraví z pohledu ochrany zdraví při práci",
+     "indikatory": [
+      "nemoci_z_povolani_neinfekcni",
+      "docasna_pracovni_neschopnost_pct"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.10",
+     "text": "Modernizace technického a administrativního zázemí orgánů ochrany veřejného zdraví",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.11",
+     "text": "Zvýšení potenciálu samoléčby",
+     "indikatory": [
+      "zdravotni_gramotnost_omezena"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Podíl veřejných výdajů na prevenci",
+     "level": "dopad",
+     "baseline": {
+      "value": "5,2 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "4,5 %"
+     },
+     "gestor": "ÚZIS, MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "vydaje_prevence_pct",
+      "note": "Kontrakt měří prevenci jako % běžných výdajů na zdravotnictví; dokument jako podíl na celkových veřejných výdajích na zdraví — jiný jmenovatel."
+     },
+     "note": "Cílová hodnota je v dokumentu NIŽŠÍ než výchozí (5,2 → 4,5 %); Tabulka 3 přitom uvádí výchozí 2,7 % (2017) → 4,5 %. Rozpor necháváme tak, jak je v dokumentu."
+    },
+    {
+     "name": "Podíl osob s rizikovou konzumací alkoholu",
+     "level": "dopad",
+     "baseline": {
+      "value": "8,3 % rizikové, 6,3 % škodlivé pití",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "6,5 % rizikové, 5,5 % škodlivé pití"
+     },
+     "gestor": "SZÚ",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "alkohol_spotreba",
+      "note": "Dokument měří binge drinking (6+ sklenic při jedné příležitosti měsíčně); kontrakt spotřebu čistého alkoholu na osobu."
+     }
+    },
+    {
+     "name": "Podíl denních kuřáků (15+)",
+     "level": "dopad",
+     "baseline": {
+      "value": "15,9 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "15 %"
+     },
+     "gestor": "SZÚ",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "kuractvi_denni"
+     }
+    },
+    {
+     "name": "Podíl dospělých osob s obezitou (BMI ≥ 30)",
+     "level": "dopad",
+     "baseline": {
+      "value": "19,3 %",
+      "year": 2019
+     },
+     "target_2035": {
+      "value": "17 %"
+     },
+     "gestor": "SZÚ",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "obezita_prevalence"
+     }
+    },
+    {
+     "name": "Podíl dětí a mladistvých (do 18 let) s obezitou",
+     "level": "dopad",
+     "baseline": {
+      "value": "16,4 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "15 %"
+     },
+     "gestor": "SZÚ",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "deti_obezita_cosi",
+      "note": "Kontrakt měří nadváhu a obezitu dětí 6–9 let (WHO COSI); dokument obezitu do 18 let."
+     }
+    },
+    {
+     "name": "Podíl osob s pravidelnou pohybovou aktivitou",
+     "level": "dopad",
+     "baseline": {
+      "value": "20 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "60 %"
+     },
+     "gestor": "NSA",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "pohybova_aktivita_dospeli",
+      "note": "Dokument čerpá z šetření NSA (1× za 5 let); kontrakt z EHIS — jiná metodika, srovnávat jen směr."
+     }
+    },
+    {
+     "name": "Vybudování a návštěvnost Národního zdravotnického informačního portálu",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi",
+      "note": "Návštěvnost NZIP není veřejně publikovaný indikátor."
+     }
+    },
+    {
+     "name": "Počet osob podpořených programy podpory zdraví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet koncepcí podpory zdraví na municipální a regionální úrovni",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "mortalita_preventabilni",
+    "prevalence_koureni_adolescenti",
+    "ecigarety_adolescenti",
+    "spotreba_antibiotik"
+   ]
+  },
+  {
+   "sc": "1.2",
+   "goal": "sg1",
+   "title": "Sekundární prevence a screeningové programy",
+   "garant": "MZD",
+   "naklady_mil_czk": 1577,
+   "dilci_cile": [
+    {
+     "num": "1.2.1",
+     "text": "Metodické a personální zázemí sekundární prevence a její řídící struktura",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.2.2",
+     "text": "Datové a analytické zázemí pro podporu sekundární prevence",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.2.3",
+     "text": "Podpora zavedených organizovaných screeningů vč. očkování proti HPV a zavádění celoplošných programů",
+     "indikatory": [
+      "screening_kolorektalni",
+      "screening_mamograficky",
+      "screening_cervix",
+      "vakcinace_hpv"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.4",
+     "text": "Realizace pilotních projektů časného záchytu onemocnění",
+     "indikatory": [
+      "screening_plicni",
+      "screening_prostata",
+      "screening_sluchu_5let"
+     ],
+     "mereni": "primo",
+     "note": "Pilotní programy časného záchytu, které kontrakt už sleduje: karcinom plic, karcinom prostaty, screening sluchu v 5 letech."
+    },
+    {
+     "num": "1.2.5",
+     "text": "Nástroje elektronizace zdravotnictví v oblasti prevence",
+     "indikatory": [
+      "objednani_k_lekari_online"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.2.6",
+     "text": "Mezinárodní spolupráce a vědecké zázemí sekundární prevence",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.2.7",
+     "text": "Vzdělávací aktivity a informovanost o sekundární prevenci",
+     "indikatory": [
+      "zdravotni_gramotnost_omezena"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.2.8",
+     "text": "Vybudování vzorového centra prevence ve vybraném zdravotnickém zařízení",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.2.9",
+     "text": "Časný záchyt ve všech oblastech prevence a správný management onemocnění",
+     "indikatory": [
+      "prohlidka_prakticky_lekar",
+      "kontrola_hypertenze",
+      "ucast_preventivni_prohlidky_stomatolog"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Pokrytí populace screeningem kolorektálního karcinomu",
+     "level": "dopad",
+     "baseline": {
+      "value": "40 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "45 %"
+     },
+     "gestor": "ÚZIS ČR",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "screening_kolorektalni"
+     }
+    },
+    {
+     "name": "Počet osob oslovených do programu časného záchytu karcinomu plic",
+     "level": "dopad",
+     "baseline": {
+      "value": "25 406 osob",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "100 000 osob"
+     },
+     "gestor": "ÚZIS ČR",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "screening_plicni",
+      "note": "Dokument počítá oslovené osoby; kontrakt pokrytí cílové populace v procentech."
+     }
+    },
+    {
+     "name": "Pokrytí populace screeningem časného záchytu karcinomu prostaty",
+     "level": "dopad",
+     "baseline": {
+      "value": "program spuštěn 2024",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "30 %"
+     },
+     "gestor": "ÚZIS ČR",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "screening_prostata"
+     }
+    },
+    {
+     "name": "Počet zavedených programů časného záchytu onemocnění",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet registrů ke screeningu a datový portál",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet nových nástrojů e-zdravotnictví pro podporu screeningů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "incidence_kolorektalni",
+    "incidence_prsu",
+    "prezit_rakoviny_5let",
+    "prezit_karcinom_prsu_5let",
+    "prezit_karcinom_plic_5let",
+    "mortalita_onkologicka",
+    "kazivost_chrupu_12let"
+   ]
+  },
+  {
+   "sc": "1.3",
+   "goal": "sg1",
+   "title": "Léková politika a zvýšení dostupnosti léčiv",
+   "garant": "MZD — sekce ekonomiky a lékové politiky",
+   "naklady_mil_czk": 60600,
+   "dilci_cile": [
+    {
+     "num": "1.3.1",
+     "text": "Implementace unijních předpisů a stabilizace řízení zásob léčiv",
+     "indikatory": [
+      "vypadky_leciv_aktivni"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.3.2",
+     "text": "Zavedení systému monitoringu léčiv",
+     "indikatory": [
+      "lpod_share_critical"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.3.3",
+     "text": "Zvýšení aktivního zapojení stakeholderů",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.3.4",
+     "text": "Modernizace způsobů výdeje léčiv",
+     "indikatory": [
+      "lekarny_per_100k"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.3.5",
+     "text": "Zvýšení hospodářské podpory výroby léčiv",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.3.6",
+     "text": "Stabilizace finanční udržitelnosti lékové politiky",
+     "indikatory": [
+      "vydaje_leky_hdp",
+      "podil_vydaje_leky",
+      "podil_generik_objem"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "1.3.7",
+     "text": "Rozvoj kapacit správních úřadů v oblasti lékové politiky",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet ohlášených výpadků léčiv",
+     "level": "dopad",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "vypadky_leciv_aktivni"
+     },
+     "note": "Dokument v tabulce indikátorů číselné hodnoty pro výpadky neuvádí."
+    },
+    {
+     "name": "Počet skupin léčivých přípravků v systému rezervací SSHR",
+     "level": "vystup",
+     "baseline": {
+      "value": "0",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "200 ATC skupin"
+     },
+     "gestor": "SSHR",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Provedení zátěžového a funkčního testu systému rezerv",
+     "level": "vystup",
+     "baseline": {
+      "value": "0",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "3"
+     },
+     "gestor": "SSHR/MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet centrálně nakoupených léčivých přípravků",
+     "level": "vystup",
+     "baseline": {
+      "value": "0",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "30 ATC skupin"
+     },
+     "gestor": "SZP/VZP",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "naklady_centrove_leky_total",
+    "farmaceuti_per_100k",
+    "spotreba_antibiotik",
+    "podil_access_antibiotik"
+   ]
+  },
+  {
+   "sc": "2.1",
+   "goal": "sg2",
+   "title": "Reforma primární péče",
+   "garant": "MZD — sekce zdravotní péče",
+   "naklady_mil_czk": 40240,
+   "dilci_cile": [
+    {
+     "num": "2.1.1",
+     "text": "Posílení kompetencí praktických lékařů a sester, koordinační role u chronických pacientů, multidisciplinární týmy",
+     "indikatory": [
+      "hospitalizace_acsc"
+     ],
+     "mereni": "proxy",
+     "note": "Odvratitelné hospitalizace jsou standardní mezinárodní měřítko toho, jak primární péče zvládá chronické pacienty."
+    },
+    {
+     "num": "2.1.2",
+     "text": "Úplné odstranění preskripčních omezení pro praktické lékaře",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.3",
+     "text": "Zavedení standardizace vybavení ordinací",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.4",
+     "text": "Zvýšení kvality a dostupnosti primární péče — podpora týmových praxí",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.5",
+     "text": "Zvyšování kvality péče včetně sledování indikátorů kvality",
+     "indikatory": [
+      "hospitalizace_acsc"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.1.6",
+     "text": "Změna systému financování — posílení výkonové složky při fixované kapitaci",
+     "indikatory": [
+      "podil_vydaje_ambulantni_pece"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.1.7",
+     "text": "Motivační faktory pro praxe na venkově a v obtížně obsaditelných oblastech",
+     "indikatory": [
+      "unmet_need_medical"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.1.8",
+     "text": "Navýšení počtu lékařů primární péče, rozšíření rezidenčních míst",
+     "indikatory": [
+      "podil_prakticti_lekari",
+      "podil_lekaru_55plus",
+      "pldd_podil_65plus"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.1.9",
+     "text": "Efektivní postupy v managementu chronických neinfekčních onemocnění",
+     "indikatory": [
+      "kontrola_hypertenze",
+      "prevalence_diabetu",
+      "amputace_dk_diabetici",
+      "spotreba_hypolipidemik"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.1.10",
+     "text": "Zvýšení podílu obyvatel využívajících pravidelné preventivní prohlídky",
+     "indikatory": [
+      "prohlidka_prakticky_lekar"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.1.11",
+     "text": "Vybudování rovnoměrné sítě urgentních příjmů a pohotovostní služby (cca 1 pro každý okres)",
+     "mereni": "proces",
+     "note": "Kontrakt síť neměří indikátorem, ale web ji měří přímo: dojezdová analýza na stránce Pohotovosti počítá vzdálenost každé obce k nejbližší otevřené pohotovosti a okresní pokrytí."
+    },
+    {
+     "num": "2.1.12",
+     "text": "Návaznost lékařské pohotovostní služby na urgentní příjmy",
+     "mereni": "proces",
+     "note": "Viz stránka Pohotovosti — mapuje LPS i urgentní příjmy včetně provozní doby."
+    },
+    {
+     "num": "2.1.13",
+     "text": "Investice do týmových praxí primární péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.14",
+     "text": "Rozvoj a modernizace přístrojového vybavení primární péče",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Průměrný věk praktických lékařů",
+     "level": "dopad",
+     "baseline": {
+      "value": "55 let",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "50 let"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "podil_lekaru_55plus",
+      "note": "Kontrakt neměří průměrný věk, ale podíl lékařů 55+ — stejný jev z druhé strany."
+     }
+    },
+    {
+     "name": "Poměr návštěv u ambulantních specialistů k návštěvám u praktických lékařů",
+     "level": "dopad",
+     "baseline": {
+      "value": "4,9 : 3,4",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "6,5 : 3,6"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "ambulantni_kontakty_per_capita",
+      "note": "Kontrakt měří celkové ambulantní kontakty, ne poměr specialista:praktik."
+     },
+     "note": "Cílový poměr v dokumentu je vyšší než výchozí — ponecháno tak, jak tabulka uvádí."
+    },
+    {
+     "name": "Podíl obyvatel s preventivní prohlídkou u praktického lékaře za 2 roky",
+     "level": "dopad",
+     "baseline": {
+      "value": "59,8 %",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "74,1 %"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "prohlidka_prakticky_lekar"
+     }
+    },
+    {
+     "name": "Počet ordinací naplňujících standard praxe",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených urgentních příjmů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt počet neměří; síť urgentních příjmů ale mapuje stránka Pohotovosti z registru ÚZIS."
+     }
+    },
+    {
+     "name": "Počet osob podpořených rezidenčními programy pro praktiky",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "lekari_per_1000",
+    "cekaci_doby_specialist",
+    "dojezd_zzs"
+   ]
+  },
+  {
+   "sc": "2.2",
+   "goal": "sg2",
+   "title": "Personální stabilizace resortu zdravotnictví",
+   "garant": "MZD",
+   "naklady_mil_czk": 3913,
+   "dilci_cile": [
+    {
+     "num": "2.2.1",
+     "text": "Dlouhodobá strategie stabilizace a rozvoje personálních zdrojů do roku 2035",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.2",
+     "text": "Proces a instituce pro strategické řízení a plánování personálních kapacit",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.3",
+     "text": "Zlepšení organizace a průchodnosti postgraduálního vzdělávání",
+     "indikatory": [
+      "absolventi_lekarstvi_per_100k",
+      "absolventi_osetrovatelstvi_per_100k"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.2.4",
+     "text": "Koordinované přístupy v celoživotním vzdělávání zdravotníků",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.5",
+     "text": "Návaznost kvalifikace na systém finančního ohodnocení",
+     "indikatory": [
+      "odmenovani_lekaru_nasobek_mzdy",
+      "odmenovani_sester_nasobek_mzdy"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.2.6",
+     "text": "Národní informační základna pro monitoring a plánování personálních kapacit",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.7",
+     "text": "Posílení postavení nelékařských zdravotnických pracovníků a jejich kompetencí",
+     "indikatory": [
+      "sestry_per_1000",
+      "osetrovaci_dny_na_uvazek_sestry"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.2.8",
+     "text": "Prevence dopadů psychické a fyzické zátěže pracovníků (psychosociální podpora, supervize)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.9",
+     "text": "Personální posílení nedostatečně obsazených oborů",
+     "indikatory": [
+      "pedopsychiatri_per_100k_deti",
+      "psychiatri_per_100k",
+      "porodni_asistentky_per_100k"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.2.10",
+     "text": "Personální posílení orgánů ochrany veřejného zdraví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.11",
+     "text": "Motivační faktory pro praxe na venkově a v méně atraktivních oblastech",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.12",
+     "text": "Doporučené postupy a národní standardizované ošetřovatelské protokoly",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.13",
+     "text": "Podpora slaďování osobního a pracovního života pracovníků",
+     "indikatory": [
+      "gender_pay_gap_zdravotnictvi"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Průměrný věk praktických lékařů",
+     "level": "dopad",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "podil_lekaru_55plus",
+      "note": "Kontrakt neměří průměrný věk, ale podíl lékařů 55+ — stejný jev z druhé strany."
+     },
+     "note": "Stejný indikátor jako u SC 2.1 — dokument ho uvádí u obou cílů."
+    },
+    {
+     "name": "Počet zdravotnických pracovníků (vč. sester) na 1 000 obyvatel",
+     "level": "dopad",
+     "baseline": {
+      "value": "23",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "32"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "lekari_per_1000",
+      "note": "Dokument počítá všechny zdravotníky dohromady (23 → 32 na 1 000); kontrakt je vede odděleně — lékaři a sestry."
+     }
+    },
+    {
+     "name": "Počet absolventů specializačního vzdělávání (atestovaných) za rok",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Saldo odchodů a příchodů pracovníků do zdravotnictví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet absolventů směřujících po absolutoriu do praxe v ČR",
+     "level": "vystup",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "absolventi_lekarstvi_per_100k",
+      "note": "Kontrakt měří počet absolventů na 100 000 obyvatel, ne podíl těch, kdo zůstávají v praxi v ČR."
+     }
+    },
+    {
+     "name": "Dostupné personální údaje z kritické systemizace míst dle DRG",
+     "level": "vystup",
+     "baseline": {
+      "value": "ANO",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "ANO"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "sestry_per_1000",
+    "stomatologove_per_1000",
+    "fyzioterapeuti_per_100k",
+    "farmaceuti_per_100k"
+   ]
+  },
+  {
+   "sc": "2.3",
+   "goal": "sg2",
+   "title": "Digitalizace zdravotnictví",
+   "garant": "MZD — NCEZ",
+   "naklady_mil_czk": 15586,
+   "dilci_cile": [
+    {
+     "num": "2.3.1",
+     "text": "Koncepce digitalizace zdravotnictví a institucionalizace elektronického zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.2",
+     "text": "Centrální infrastruktura pro sdílení dokumentace a bezpečnou výměnu informací",
+     "indikatory": [
+      "kyberneticke_incidenty_zdravotnictvi"
+     ],
+     "mereni": "proxy",
+     "note": "Bezpečnost infrastruktury se pozná i na počtu incidentů hlášených NÚKIB."
+    },
+    {
+     "num": "2.3.3",
+     "text": "Systém autoritativních údajů a resortních registrů",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.4",
+     "text": "Rozvoj Národního zdravotnického informačního systému",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.5",
+     "text": "Správa systému s katalogem služeb elektronického zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.6",
+     "text": "Standardizace a interoperabilita nástrojů elektronického zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.7",
+     "text": "Digitální technologie v personalizované medicíně, domácí a integrované péči",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.8",
+     "text": "Podpora využití umělé inteligence ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.9",
+     "text": "Vědeckovýzkumná a znalostní základna digitálního zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.10",
+     "text": "Modely bezpečného sdílení záznamů (blockchain, big data)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.11",
+     "text": "Podpora telemedicíny a mobilního zdravotnictví (mHealth)",
+     "indikatory": [
+      "objednani_k_lekari_online"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.3.12",
+     "text": "Platformy pro koordinaci veřejné správy, průmyslu a akademické sféry",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.13",
+     "text": "Programy digitální gramotnosti pracovníků ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.14",
+     "text": "Budování důvěry ve služby digitálního zdravotnictví",
+     "indikatory": [
+      "zdravotni_info_online"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet portálových řešení elektronického zdravotnictví (NPEZ + EZkarta)",
+     "level": "dopad",
+     "baseline": {
+      "value": "0",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "1"
+     },
+     "gestor": "MZD — NCEZ",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "ehealth_adoption",
+      "note": "Existenci portálu kontrakt neměří; eHealth index měří adopci digitálního zdravotnictví šířeji."
+     }
+    },
+    {
+     "name": "Počet zavedených interoperabilních sdílených služeb",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet zavedených digitálních služeb ve zdravotnictví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet telemedicínských řešení a mHealth technologií",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet registrovaných/autorizovaných uživatelů portálů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "objednani_k_lekari_online",
+    "zdravotni_info_online",
+    "kyberneticke_incidenty_zdravotnictvi"
+   ]
+  },
+  {
+   "sc": "2.4",
+   "goal": "sg2",
+   "title": "Optimalizace systému úhrad ve zdravotnictví",
+   "garant": "MZD — CAU (Centrum pro analýzy úhrad)",
+   "naklady_mil_czk": 1270,
+   "dilci_cile": [
+    {
+     "num": "2.4.1",
+     "text": "Informační základna na meziresortní integraci zdravotních a sociálních dat",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.2",
+     "text": "Nová koncepce úhrad následné, dlouhodobé a domácí péče; predikce příjmů a výdajů v. z. p.",
+     "indikatory": [
+      "luzka_dlouhodobe_pece_65plus",
+      "pacienti_domaci_pece_per_1000"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.4.3",
+     "text": "Rozvoj, optimalizace a udržitelnost úhrad akutní lůžkové péče (CZ-DRG)",
+     "indikatory": [
+      "podfinancovani_oblastni_interna_cm"
+     ],
+     "mereni": "proxy",
+     "note": "Rozdíl úhrady a nákladů u interny oblastních nemocnic měří přesně to, co má optimalizace DRG srovnat."
+    },
+    {
+     "num": "2.4.4",
+     "text": "Optimalizace úhrad v primární péči s motivačními složkami",
+     "indikatory": [
+      "podil_vydaje_ambulantni_pece"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.4.5",
+     "text": "Klasifikace a standardizace úhrad zdravotních výkonů",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.6",
+     "text": "Modely hodnocení ekonomických a klinických dopadů nových technologií",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.7",
+     "text": "Modely udržitelného financování integrované a sociálně-zdravotní péče",
+     "indikatory": [
+      "vydaje_dlouhodoba_pece_hdp"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.4.8",
+     "text": "Optimalizace úhrad léčiv podmíněných použitím na specializovaném pracovišti",
+     "indikatory": [
+      "naklady_centrove_leky_total"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Podíl bezchybně zaklasifikovaných hospitalizací dle CZ-DRG",
+     "level": "dopad",
+     "baseline": {
+      "value": "1",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "1"
+     },
+     "gestor": "MZD — CAU",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Tabulka dokumentu uvádí výchozí i cílovou hodnotu 1 — ponecháno beze změny."
+    },
+    {
+     "name": "Počet datových sad / datových modelů",
+     "level": "dopad",
+     "baseline": {
+      "value": "4",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "46"
+     },
+     "gestor": "ÚZIS ČR",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet modelů optimalizujících úhrady péče",
+     "level": "dopad",
+     "baseline": {
+      "value": "3",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "15"
+     },
+     "gestor": "MZD — CAU",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet metodik a legislativně garantovaných postupů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet a velikost referenčních sítí poskytovatelů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "uhrada_zp_per_pojistenec",
+    "podil_vydaje_luzkova_pece",
+    "vydaje_zdravotnictvi_hdp",
+    "platba_z_kapsy_pct",
+    "katastroficke_vydaje_zdravi"
+   ]
+  },
+  {
+   "sc": "2.5",
+   "goal": "sg2",
+   "title": "Sociálně-zdravotní péče",
+   "garant": "MZD / MPSV",
+   "naklady_mil_czk": 7200,
+   "dilci_cile": [
+    {
+     "num": "2.5.1",
+     "text": "Systémové nástroje pro podporu a standardizaci integrované zdravotní a sociální péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.5.2",
+     "text": "Regionálně specifické modely integrované zdravotní a sociální (dlouhodobé) péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.5.3",
+     "text": "Posílení role praktických lékařů v poskytování integrované péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.5.4",
+     "text": "Zvýšení dostupnosti integrovaných zdravotních a sociálních služeb",
+     "indikatory": [
+      "pracovnici_ltc_per_100_65plus"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.5.5",
+     "text": "Zvýšení kvality života pacientů s dlouhodobým chronickým onemocněním",
+     "indikatory": [
+      "multimorbidita_65plus",
+      "subjektivni_zdravi"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.5.6",
+     "text": "Optimalizace lůžkového fondu a dostupnost následné a dlouhodobé péče",
+     "indikatory": [
+      "luzka_dlouhodobe_pece_65plus"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.5.7",
+     "text": "Posílení péče poskytované v domácím prostředí pacientů",
+     "indikatory": [
+      "pacienti_domaci_pece_per_1000"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.5.8",
+     "text": "Dostupnost paliativní péče ve všech formách (konziliární, mobilní, domácí, hospicová)",
+     "indikatory": [
+      "hospicova_pece_luzka",
+      "mobilni_paliativni_tymy_per_milion",
+      "umrti_doma_nebo_hospici_pct"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.5.9",
+     "text": "Podpora rodinných příslušníků a laických pečovatelů v dlouhodobé péči",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet lůžek následné a dlouhodobé péče (na 1 000 obyvatel)",
+     "level": "dopad",
+     "baseline": {
+      "value": "2,6 na 1 000 obyv.",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "3,3 na 1 000 obyv."
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "luzka_dlouhodobe_pece_65plus",
+      "note": "Dokument počítá lůžka na 1 000 obyvatel, kontrakt na 1 000 obyvatel 65+ — směr srovnatelný, hodnoty ne."
+     }
+    },
+    {
+     "name": "Počet pacientů léčených v domácí péči (na 1 000 obyvatel)",
+     "level": "dopad",
+     "baseline": {
+      "value": "15,2 na 1 000 obyv.",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "19,6 na 1 000 obyv."
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "pacienti_domaci_pece_per_1000"
+     }
+    },
+    {
+     "name": "Počet podpořených poskytovatelů v systému sociálně-zdravotních služeb",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet podpořených poskytovatelů paliativní péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "mobilni_paliativni_tymy_per_milion",
+      "note": "Kontrakt měří kapacitu mobilní specializované paliativní péče, ne počet podpořených poskytovatelů."
+     }
+    },
+    {
+     "name": "Počet regionálních modelů integrované péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "vydaje_dlouhodoba_pece_hdp",
+    "podil_senioru_na_internich_hospitalizacich",
+    "prumerna_delka_hospitalizace"
+   ]
+  },
+  {
+   "sc": "2.6",
+   "goal": "sg2",
+   "title": "Péče o duševní zdraví",
+   "garant": "MZD — Rada vlády pro duševní zdraví",
+   "naklady_mil_czk": 6366,
+   "dilci_cile": [
+    {
+     "num": "2.6.1",
+     "text": "Řízení péče o duševní zdraví vedené spolehlivými informacemi",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.2",
+     "text": "Srovnatelné šance na duševní zdraví v průběhu celého života",
+     "indikatory": [
+      "prevalence_dusevni_poruchy_dospeli"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.6.3",
+     "text": "Respekt k lidským právům osob s obtížemi v oblasti duševního zdraví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.4",
+     "text": "Plná dostupnost služeb duševního zdraví v čase, místě, kapacitě i ceně",
+     "indikatory": [
+      "centra_dusevniho_zdravi_per_100k",
+      "psychiatri_per_100k",
+      "pedopsychiatri_per_100k_deti"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.6.5",
+     "text": "Koordinace s ostatními sektory, rovný přístup k somatické péči, návrat do společnosti",
+     "indikatory": [
+      "invalidni_duchody_dusevni"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.6.6",
+     "text": "Systémová opatření pro lidi s intelektovým znevýhodněním a náročným chováním",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.7",
+     "text": "Prevence sebevražd a sebepoškozování jako součást veřejného zdraví",
+     "indikatory": [
+      "sebevrazdy_per_100k",
+      "sebevrazdy_mladistvi_15_19"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.6.8",
+     "text": "Dostupné krizové služby a dobrá praxe předávání klientů",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.9",
+     "text": "Sebepoškozování a prevence ve vzdělávání profesí a osvětě",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.10",
+     "text": "Prevence sebevražd vycházející ze spolehlivých informací",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.11",
+     "text": "Doporučené postupy a síť služeb pro diagnostiku a léčbu demence",
+     "indikatory": [
+      "demence_prevalence_lecena"
+     ],
+     "mereni": "proxy",
+     "note": "Léčená prevalence roste s lepším záchytem — u demence je vyšší hodnota známkou fungující sítě, ne horšího zdraví."
+    },
+    {
+     "num": "2.6.12",
+     "text": "Vzdělávání v oblasti demence",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.13",
+     "text": "Epidemiologie a výzkum v oblasti demence",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.14",
+     "text": "Povědomí o demenci a prevence",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.6.15",
+     "text": "Ochrana práv osob žijících s demencí",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet rehospitalizací po psychiatrické hospitalizaci (do 30 dnů)",
+     "level": "dopad",
+     "baseline": {
+      "value": "99,8 na 1 000 hospitalizací",
+      "year": 2023
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "rehospitalizace_schizofrenie_30d",
+      "note": "Kontrakt sleduje rehospitalizace jen u schizofrenie (F20), dokument u všech psychiatrických hospitalizací."
+     },
+     "note": "Cílovou hodnotu se z tabulky dokumentu nepodařilo spolehlivě přečíst — viz PDF, str. 160."
+    },
+    {
+     "name": "Míra sebevražednosti do 61 dnů od psychiatrické hospitalizace",
+     "level": "dopad",
+     "baseline": {
+      "value": "muži 2,6 / ženy 1,3 na 1 000 hospitalizací",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "1,2 na 1 000 hospitalizací"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "sebevrazdy_per_100k",
+      "note": "Kontrakt měří celopopulační sebevražednost, ne sebevraždy navázané na hospitalizaci."
+     }
+    },
+    {
+     "name": "Počet systémů reportování a monitorování kvality péče o duševní zdraví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet regionálních center domácí péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "luzka_psychiatricka_per_1000",
+    "psychiatrie_prumerna_delka_hospitalizace",
+    "pouzivani_antidepresiv",
+    "deti_ambulantni_psychiatrie",
+    "hospitalizace_deti_psychiatrie_akutni",
+    "benzodiazepiny_seniori_65plus",
+    "substitucni_lecba_pokryti"
+   ]
+  },
+  {
+   "sc": "2.7",
+   "goal": "sg2",
+   "title": "Specializovaná zdravotní péče",
+   "garant": "MZD — sekce zdravotní péče",
+   "naklady_mil_czk": 39700,
+   "dilci_cile": [
+    {
+     "num": "2.7.1",
+     "text": "Podpora geriatrické péče",
+     "indikatory": [
+      "multimorbidita_65plus",
+      "polypragmazie_65plus",
+      "benzodiazepiny_seniori_65plus",
+      "operace_zlomenina_kycle_48h"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.7.2",
+     "text": "Prevence kardiovaskulárních onemocnění a rozvoj kardiologické péče",
+     "indikatory": [
+      "mortalita_kardiovaskularni",
+      "mortalita_inhosp_ami",
+      "mortalita_inhosp_cmp",
+      "trombolyza_ischemicka_cmp",
+      "pci_koronarni_intervence_100k",
+      "kontrola_hypertenze",
+      "ldl_cholesterol_dospeli"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.7.3",
+     "text": "Zvýšení dostupnosti a kvality léčebně rehabilitační péče",
+     "indikatory": [
+      "fyzioterapeuti_per_100k"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.7.4",
+     "text": "Prevence a léčba obezity",
+     "indikatory": [
+      "obezita_prevalence",
+      "deti_obezita_cosi",
+      "bmi_dospeli"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.7.5",
+     "text": "Podpora onkologické péče",
+     "indikatory": [
+      "mortalita_onkologicka",
+      "prezit_rakoviny_5let",
+      "prezit_karcinom_prsu_5let",
+      "prezit_karcinom_plic_5let"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.7.6",
+     "text": "Rozvoj pediatrické péče",
+     "indikatory": [
+      "mortalita_kojenecka",
+      "pldd_podil_65plus",
+      "pedopsychiatri_per_100k_deti"
+     ],
+     "mereni": "proxy"
+    },
+    {
+     "num": "2.7.7",
+     "text": "Multidisciplinární péče o těhotné, rodičky, novorozence a jejich rodiny",
+     "indikatory": [
+      "perinatalni_umrtnost",
+      "cezarsky_rez_pct",
+      "epiziotomie_pct",
+      "poraneni_hraze_3_4_stupen",
+      "centralizace_velmi_predcasnych_porodu",
+      "kojeni_pri_propusteni",
+      "porodni_asistentky_per_100k"
+     ],
+     "mereni": "primo"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Naděje dožití při narození a ve věku 65 let",
+     "level": "dopad",
+     "baseline": {
+      "value": "muži 76,9 / ženy 82,8 let",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "muži 78–80 / ženy 84,5–85,5 let při narození; 20 / 23 let ve věku 65"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "nadeje_doziti_total"
+     }
+    },
+    {
+     "name": "Přežití pacientů s nádorovými onemocněními (pětileté relativní)",
+     "level": "dopad",
+     "baseline": {
+      "value": "C18–C20: 61,2 %; C25: 8,7 %; C33–34: 16,9 %; C50: 90,2 %; C61: 96,3 %",
+      "year": 2023
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "prezit_rakoviny_5let",
+      "note": "Kontrakt vede pětileté přežití zvlášť pro kolorektum, prs a plíce — dokument uvádí sadu diagnóz."
+     },
+     "note": "Cílové hodnoty přežití jsou v tabulce dokumentu nečitelné (rozpadlé sloupce) — viz PDF, str. 161."
+    },
+    {
+     "name": "Nárůst počtu poskytovatelů geriatrické péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Procento populace na systematických preventivních prohlídkách",
+     "level": "vystup",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "prohlidka_prakticky_lekar"
+     }
+    },
+    {
+     "name": "Snížení prevalence obezity v dětské a dospělé populaci",
+     "level": "vystup",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "obezita_prevalence"
+     }
+    },
+    {
+     "name": "Transformace akutní lůžkové pediatrické péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet podpořených center porodní asistence",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "nadeje_doziti_zeny",
+    "nadeje_doziti_zdravi_65",
+    "mortalita_lecitelna",
+    "nizka_porodna_hmotnost_pct",
+    "predcasne_porody_pct",
+    "transplantace_per_milion"
+   ]
+  },
+  {
+   "sc": "2.8",
+   "goal": "sg2",
+   "title": "Zvýšení kvality poskytovaných zdravotních služeb",
+   "garant": "MZD — sekce zdravotní péče",
+   "naklady_mil_czk": 26,
+   "dilci_cile": [
+    {
+     "num": "2.8.1",
+     "text": "Rozvoj dobrovolnictví ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.8.2",
+     "text": "Národní hodnocení spokojenosti pacientů a jeho implementace",
+     "indikatory": [
+      "spokojenost_pece",
+      "spokojenost_informovani"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří spokojenost z evropských šetření; NHSP je národní projekt s vlastní metodikou."
+    },
+    {
+     "num": "2.8.3",
+     "text": "Národní síť nemocnic a zařízení bez tabáku (GNTH)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.8.4",
+     "text": "Národní síť nemocnic podporujících zdraví (HPH)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.8.5",
+     "text": "Zapojení pacientských organizací a participace občanů",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.8.6",
+     "text": "Posílení partnerského přístupu v poskytování zdravotní péče",
+     "indikatory": [
+      "spokojenost_informovani"
+     ],
+     "mereni": "proxy"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet dobrovolníků ve zdravotnictví",
+     "level": "dopad",
+     "baseline": {
+      "value": "3 185",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "4 000"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet poskytovatelů s programem dobrovolnictví",
+     "level": "dopad",
+     "baseline": {
+      "value": "129",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "150"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet členů v národní síti HPH (nemocnice podporující zdraví)",
+     "level": "dopad",
+     "baseline": {
+      "value": "11",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "více než 11"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet členů v národní síti GNTH (zařízení bez tabáku)",
+     "level": "dopad",
+     "baseline": {
+      "value": "14",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "více než 15"
+     },
+     "gestor": "MZD",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet poskytovatelů v Národním hodnocení spokojenosti — lůžková péče",
+     "level": "dopad",
+     "baseline": {
+      "value": "36",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "více než 46"
+     },
+     "gestor": "MZD, ÚZIS",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet poskytovatelů v Národním hodnocení spokojenosti — ambulantní péče",
+     "level": "dopad",
+     "baseline": {
+      "value": "5",
+      "year": 2023
+     },
+     "target_2035": {
+      "value": "více než 14"
+     },
+     "gestor": "MZD, ÚZIS",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "spokojenost_pece",
+    "spokojenost_informovani",
+    "bezpecnost_padu_nemocnice",
+    "dekubity_hospitalizace",
+    "infekce_nosokomialni",
+    "medikacni_pochybeni_hlasena"
+   ]
+  },
+  {
+   "sc": "3.1",
+   "goal": "sg3",
+   "title": "Zapojení vědy a výzkumu do řešení prioritních úkolů zdravotnictví",
+   "garant": "MZD / AZV ČR",
+   "naklady_mil_czk": null,
+   "dilci_cile": [],
+   "dilci_cile_note": "Specifický cíl 3.1 nemá ve Strategickém rámci číslované dílčí cíle — naplňuje se prostřednictvím Koncepce zdravotnického výzkumu do roku 2030 a programů účelové podpory AZV; rámec vyjmenovává prioritní výzkumné oblasti.",
+   "doc_indicators": [
+    {
+     "name": "Počet vytvořených programů podpory výzkumu",
+     "level": "dopad",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Zvýšení kvality zdravotnického výzkumu (citační ohlas, podíl publikací v Q1)",
+     "level": "dopad",
+     "mapping": {
+      "match": "chybi",
+      "note": "Bibliometrie kontrakt neměří — je to resortní výzkumná metrika, ne populační zdraví."
+     }
+    },
+    {
+     "name": "Počet přihlášených výsledků aplikovaného výzkumu (patenty, prototypy…)",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet a objem mezinárodních spoluprací",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Podíl žen a mužů v projektech a hodnotitelském procesu",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Jediný specifický cíl bez jediného populačního indikátoru v našem kontraktu — HSPA měří výkon zdravotního systému, ne výkon vědy. Že se plnění tohoto cíle nedá sledovat na zdraví populace, je vlastnost cíle, ne mezera měření."
+  }
+ ]
+}
