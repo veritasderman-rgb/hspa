@@ -20613,6 +20613,126 @@ a.vst-ref:hover { color: var(--ink); border-color: var(--ink); }
 /* ── Zdraví 2035: strategie × indikátory (zdravi-2035.html) ────────────── */
 
 /* Legenda čtení */
+/* ── Vyhodnocení v kostce (scoreboard) ──
+   Barvy nesou stav, nikdy samy: segmenty i legenda mají počty a text,
+   „na cestě" navíc šrafuru (statusové barvy jsou pro CVD nerozlišitelné). */
+.z35-scorebox {
+  padding: 26px var(--content-pad, 24px) 6px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.z35-score-lead { font-size: 1.02rem; line-height: 1.55; margin: 8px 0 14px; max-width: 62ch; }
+.z35-score-lead strong { font-size: 1.15em; }
+.z35-score-note { display: block; font-size: 0.8rem; color: var(--ink-mut); margin-top: 4px; }
+.z35-score-sub { font-size: 0.92rem; margin: 20px 0 8px; color: var(--ink-mut); }
+.z35-stack {
+  display: flex;
+  gap: 2px;
+  height: 30px;
+  margin: 0 0 8px;
+}
+.z35-stack-thin { height: 12px; }
+.z35-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4px;
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+}
+.z35-seg-splneno { background: var(--good); }
+.z35-seg-na-ceste {
+  background: repeating-linear-gradient(45deg, var(--good) 0 5px, color-mix(in srgb, var(--good) 55%, var(--paper)) 5px 9px);
+}
+.z35-seg-beze-zmeny { background: var(--warn); }
+.z35-seg-opacny-smer { background: var(--red); }
+.z35-seg-sledujeme { background: color-mix(in srgb, var(--ink) 30%, var(--paper)); color: var(--ink); }
+.z35-seg-nemerime { background: transparent; border: 1px dashed var(--ink-mut); color: var(--ink-mut); }
+.z35-seg-mereni { background: color-mix(in srgb, var(--ink) 55%, var(--paper)); }
+.z35-seg-proces { background: color-mix(in srgb, var(--ink) 14%, var(--paper)); }
+.z35-stack-legend {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-mut);
+}
+.z35-stack-legend li { display: flex; align-items: center; gap: 6px; }
+.z35-stack-legend strong { color: var(--ink); }
+.z35-seg-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+/* verdiktové chipy (v tabulkách a hlavičkách SC) */
+.z35-verdict {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.z35-verdict-splneno { background: var(--good); color: var(--paper); }
+.z35-verdict-na-ceste { background: var(--good); color: var(--paper); }
+.z35-verdict-beze-zmeny { background: var(--warn); color: var(--paper); }
+.z35-verdict-opacny-smer { background: var(--red); color: var(--paper); }
+.z35-verdict-nelze { background: transparent; color: var(--ink-mut); border: 1px dashed var(--ink-mut); }
+.z35-mini {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0 6px;
+  border-radius: 999px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.z35-mini-splneno, .z35-mini-na-ceste { background: var(--good); color: var(--paper); }
+.z35-mini-beze-zmeny { background: var(--warn); color: var(--paper); }
+.z35-mini-opacny-smer { background: var(--red); color: var(--paper); }
+
+/* trajektorie výchozí stav → cíl v buňce mapování */
+.z35-meter { display: block; max-width: 250px; margin: 7px 0 2px; }
+.z35-meter-track {
+  display: block;
+  height: 7px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  overflow: hidden;
+}
+.z35-meter-fill { display: block; height: 100%; border-radius: 4px; }
+.z35-meter-good { background: var(--good); }
+.z35-meter-warn { background: var(--warn); }
+.z35-meter-bad { background: var(--red); }
+.z35-meter-ends {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--ink-mut);
+  margin-top: 2px;
+}
+
+/* sparkline trendu vedle hodnoty */
+.z35-spark { color: color-mix(in srgb, var(--ink) 38%, transparent); vertical-align: middle; margin-left: 8px; }
+.z35-spark-dot { fill: var(--rule2); }
+.z35-spark-good { fill: var(--good); }
+.z35-spark-warn { fill: var(--warn); }
+.z35-spark-bad { fill: var(--red); }
+.z35-nase-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
+
 .z35-legend { margin: 22px 0 0; }
 .z35-legend-list {
   margin: 0; padding: 0; list-style: none;

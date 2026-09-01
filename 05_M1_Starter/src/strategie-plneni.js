@@ -22,8 +22,14 @@ import {
   escapeHtml,
   renderErrorState,
 } from './page-shared.js';
+import {
+  evaluateDocIndicator,
+  aggregateScore,
+  VERDICT_LABEL,
+  BUCKET_ORDER,
+} from './plneni-eval.js';
 
-const state = { plneni: null, indicators: new Map(), targetLabel: 'Cíl' };
+const state = { plneni: null, indicators: new Map(), targetLabel: 'Cíl', score: null };
 
 // Hodnotící, ne poziční: „nad/pod benchmarkem" by u ukazatelů, kde je
 // méně lépe (kuřáctví, mortalita), tvrdilo opak dat. Signál z kontraktu
@@ -74,20 +80,87 @@ function indChip(id) {
     ${signalDot(i)}${escapeHtml(i.name)}</a>`;
 }
 
-/** Řádek mapování: naše hodnota + rok + badge shody. */
-function mappingCell(mapping) {
+/**
+ * Sparkline z trendu kontraktu (dekorativní — čísla jsou v textu vedle).
+ * 2px linka v tlumeném inkoustu, poslední bod v signální barvě.
+ */
+function sparklineHtml(i) {
+  const pts = [...(i.trend ?? [])];
+  if (i.year != null && i.value != null && !pts.some(p => p.year === i.year)) {
+    pts.push({ year: i.year, value: i.value });
+  }
+  const clean = pts.filter(p => p.year != null && typeof p.value === 'number')
+    .sort((a, b) => a.year - b.year);
+  if (clean.length < 3) return '';
+  const W = 64, H = 20, PAD = 3;
+  const ys = clean.map(p => p.value);
+  const min = Math.min(...ys), max = Math.max(...ys);
+  const spanY = max - min || 1;
+  const x = (k) => PAD + (k / (clean.length - 1)) * (W - 2 * PAD);
+  const y = (v) => H - PAD - ((v - min) / spanY) * (H - 2 * PAD);
+  const path = clean.map((p, k) => `${x(k).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+  const last = clean[clean.length - 1];
+  const sig = i.signal ?? 'neutral';
+  return `<svg class="z35-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">
+    <polyline points="${path}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle class="z35-spark-dot z35-spark-${sig}" cx="${x(clean.length - 1).toFixed(1)}" cy="${y(last.value).toFixed(1)}" r="2.6"/>
+  </svg>`;
+}
+
+/** Textový verdikt — vždy slova, nikdy jen barva (CVD). */
+function verdictChip(bucket, traj) {
+  const label = VERDICT_LABEL[bucket] ?? bucket;
+  const pct = traj?.progressPct;
+  const extra = bucket === 'na-ceste' && pct != null ? ` (${pct} % cesty)`
+    : bucket === 'opacny-smer' && pct != null ? '' : '';
+  return `<span class="z35-verdict z35-verdict-${bucket}">${escapeHtml(label + extra)}</span>`;
+}
+
+/**
+ * Trajektorie výchozí stav → cíl: kde jsme dnes. Jen primo + číselně
+ * srovnatelné; pozice ≠ predikce. Směr „méně je cíl" řeší normalizace
+ * v computeTrajectory (cíl je vždy vpravo).
+ */
+function meterHtml(traj, di) {
+  if (!traj || traj.progressPct == null) return '';
+  const p = Math.max(0, Math.min(1, traj.progressPct / 100));
+  const cls = traj.status === 'opacny-smer' ? 'bad' : traj.status === 'beze-zmeny' ? 'warn' : 'good';
+  const b = di.baseline?.value ?? '—';
+  const tg = (di.target_2035 ?? di.target)?.value ?? '—';
+  return `<span class="z35-meter" role="img" aria-label="${escapeHtml(`Pozice mezi výchozím stavem (${b}) a cílem (${tg}): ${traj.progressPct} % cesty`)}">
+    <span class="z35-meter-track"><span class="z35-meter-fill z35-meter-${cls}" style="width:${(p * 100).toFixed(0)}%"></span></span>
+    <span class="z35-meter-ends" aria-hidden="true"><span>${escapeHtml(String(b))}</span><span>cíl ${escapeHtml(String(tg))}</span></span>
+  </span>`;
+}
+
+/** Řádek mapování: naše hodnota + trend + verdikt + badge shody. */
+function mappingCell(mapping, di) {
   const badge = MATCH_BADGE[mapping?.match] ?? '';
   if (!mapping || mapping.match === 'chybi' || !mapping.indicator_id) {
     return `<td class="z35-nase">${badge}${mapping?.note ? `<span class="z35-map-note">${escapeHtml(mapping.note)}</span>` : ''}</td>`;
   }
   const i = ind(mapping.indicator_id);
   if (!i) return `<td class="z35-nase">${badge}</td>`;
+  // Vyhodnocení: trajektorie jen u primo s číselně srovnatelnými hodnotami;
+  // proxy dostane trend vlastního indikátoru, ale nikdy pozici vůči cíli.
+  let verdictHtml = '';
+  let meter = '';
+  if (di) {
+    const ev = evaluateDocIndicator(di, i);
+    if (ev.trajectory && ev.trajectory.progressPct != null && ev.bucket !== 'sledujeme') {
+      meter = meterHtml(ev.trajectory, di);
+      verdictHtml = verdictChip(ev.bucket, ev.trajectory);
+    } else if (mapping.match === 'primo' && ev.trajectory?.reason) {
+      verdictHtml = `<span class="z35-verdict z35-verdict-nelze" title="${escapeHtml(ev.trajectory.reason)}">${escapeHtml(VERDICT_LABEL.nelze)}</span>`;
+    }
+  }
   return `<td class="z35-nase">
-    ${badge}
+    <span class="z35-nase-top">${badge}${verdictHtml}</span>
     <a class="z35-nase-val" href="indikator-${encodeURIComponent(mapping.indicator_id)}.html">
-      ${signalDot(i)}${escapeHtml(fmtValue(i))} <span class="z35-rok">(${i.year ?? '?'})</span>
+      ${signalDot(i)}${escapeHtml(fmtValue(i))} <span class="z35-rok">(${i.year ?? '?'})</span>${sparklineHtml(i)}
     </a>
     <span class="z35-nase-name">${escapeHtml(i.name)}</span>
+    ${meter}
     ${mapping.note ? `<span class="z35-map-note">${escapeHtml(mapping.note)}</span>` : ''}
   </td>`;
 }
@@ -130,7 +203,7 @@ function renderRamec() {
         <th scope="row">${escapeHtml(r.name)}${r.note ? `<span class="z35-map-note">${escapeHtml(r.note)}</span>` : ''}</th>
         <td>${escapeHtml(b)}</td>
         <td>${escapeHtml(t)}</td>
-        ${mappingCell(r.mapping)}
+        ${mappingCell(r.mapping, r)}
       </tr>`;
   }).join('');
   host.innerHTML = `
@@ -168,7 +241,7 @@ function docIndicatorRows(sc) {
         </th>
         <td>${escapeHtml(b)}</td>
         <td>${escapeHtml(t)}</td>
-        ${mappingCell(d.mapping)}
+        ${mappingCell(d.mapping, d)}
       </tr>`;
   }).join('');
 }
@@ -213,12 +286,18 @@ function renderCile() {
       if (sc.garant) facts.push(`<strong>Garant:</strong> ${escapeHtml(sc.garant)}`);
       if (naklady) facts.push(`<strong>Předpokládané náklady:</strong> ${escapeHtml(naklady)}`);
 
+      const local = state.score?.perSc.get(sc.sc);
+      const miniChips = local ? BUCKET_ORDER
+        .filter(b => local[b] > 0 && b !== 'sledujeme' && b !== 'nemerime')
+        .map(b => `<span class="z35-mini z35-mini-${BUCKET_META[b].cls}">${local[b]} ${VERDICT_LABEL[b === 'splneno' ? 'splneno' : b]}</span>`)
+        .join('') : '';
       parts.push(`
         <details class="z35-sc" id="sc-${escapeHtml(String(sc.sc).replaceAll('.', '-'))}">
           <summary class="z35-sc-summary">
             <span class="z35-sc-num">${escapeHtml(String(sc.sc))}</span>
             <span class="z35-sc-title">${escapeHtml(sc.title)}</span>
             <span class="z35-sc-meta">
+              ${miniChips}
               ${st.total ? `indikátory dokumentu: sledujeme ${st.covered} z ${st.total}` : 'bez indikátorů dokumentu'}
               · úkoly: ${st.dcTotal ? `${st.dcTotal} (${st.dcTotal - st.proces} měřitelných, ${st.proces} procesních)` : 'viz poznámka'}
             </span>
@@ -257,6 +336,72 @@ function renderCile() {
     }
   }
   host.innerHTML = parts.join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Scoreboard — vyhodnocení v kostce
+// ─────────────────────────────────────────────────────────────────────────
+
+// Barvy nesou stav, ale nikdy samy: každý segment i řádek legendy má text
+// s počtem (statusové barvy webu jsou pro barvoslepé čtenáře nerozlišitelné,
+// „na cestě" proto navíc nese šrafuru jako sekundární kanál).
+const BUCKET_META = {
+  splneno: { cls: 'splneno', legend: 'cíl už splněn' },
+  'na-ceste': { cls: 'na-ceste', legend: 'míří k cíli' },
+  'beze-zmeny': { cls: 'beze-zmeny', legend: 'zatím beze změny' },
+  'opacny-smer': { cls: 'opacny-smer', legend: 'vzdaluje se od cíle' },
+  sledujeme: { cls: 'sledujeme', legend: 'sledujeme, ale číselně nesrovnatelné (proxy, složené hodnoty)' },
+  nemerime: { cls: 'nemerime', legend: 'nikdo veřejně neměří' },
+};
+
+function stackHtml(counts, total, ariaPrefix) {
+  if (!total) return '';
+  const segs = BUCKET_ORDER.filter(b => counts[b] > 0).map(b => {
+    const w = (counts[b] / total) * 100;
+    return `<span class="z35-seg z35-seg-${BUCKET_META[b].cls}" style="flex-grow:${counts[b]}" title="${escapeHtml(`${BUCKET_META[b].legend}: ${counts[b]}`)}">${w >= 7 ? counts[b] : ''}</span>`;
+  }).join('');
+  const desc = BUCKET_ORDER.filter(b => counts[b] > 0).map(b => `${counts[b]} ${BUCKET_META[b].legend}`).join(', ');
+  return `<div class="z35-stack" role="img" aria-label="${escapeHtml(`${ariaPrefix}: ${desc}`)}">${segs}</div>`;
+}
+
+function renderScoreboard() {
+  const host = document.getElementById('z35Score');
+  if (!host || !state.score) return;
+  const { counts, total } = state.score;
+  if (!total) {
+    // dokument nemá vlastní indikátory (např. AP NAP měří aktivity kritérii)
+    const box = host.closest('.z35-scorebox');
+    if (box) box.hidden = true; else host.hidden = true;
+    return;
+  }
+  const measurable = counts.splneno + counts['na-ceste'] + counts['beze-zmeny'] + counts['opacny-smer'];
+  const positive = counts.splneno + counts['na-ceste'];
+
+  const legend = BUCKET_ORDER.filter(b => counts[b] > 0).map(b => `
+    <li><span class="z35-seg-swatch z35-seg-${BUCKET_META[b].cls}" aria-hidden="true"></span>
+      <strong>${counts[b]}</strong> ${escapeHtml(BUCKET_META[b].legend)}</li>`).join('');
+
+  // Dílčí cíle: měřitelné vs. procesní (druhý, tenčí pruh)
+  const dcs = (state.plneni.cile ?? []).flatMap(c => c.dilci_cile ?? []);
+  const proces = dcs.filter(d => d.mereni === 'proces').length;
+  const dcStack = dcs.length ? `
+    <p class="z35-score-sub">…a z <strong>${dcs.length}</strong> dílčích cílů má <strong>${dcs.length - proces}</strong> populační indikátor;
+    <strong>${proces}</strong> jsou procesní kroky, jejichž splnění na zdraví populace vidět nebude.</p>
+    <div class="z35-stack z35-stack-thin" role="img" aria-label="${escapeHtml(`Dílčí cíle: ${dcs.length - proces} s populačním indikátorem, ${proces} procesních`)}">
+      <span class="z35-seg z35-seg-mereni" style="flex-grow:${dcs.length - proces}" title="s populačním indikátorem"></span>
+      <span class="z35-seg z35-seg-proces" style="flex-grow:${proces}" title="procesní"></span>
+    </div>
+    <ul class="z35-stack-legend"><li><span class="z35-seg-swatch z35-seg-mereni" aria-hidden="true"></span><strong>${dcs.length - proces}</strong> s populačním indikátorem</li>
+    <li><span class="z35-seg-swatch z35-seg-proces" aria-hidden="true"></span><strong>${proces}</strong> procesních</li></ul>` : '';
+
+  host.innerHTML = `
+    <p class="z35-score-lead">Z <strong>${total}</strong> indikátorů, kterými dokument sám měří své plnění,
+    umíme <strong>${measurable}</strong> číselně vyhodnotit proti jeho výchozím stavům a cílům —
+    a <strong>${positive}</strong> z nich k cíli míří, nebo ho už splnilo.
+    <span class="z35-score-note">Pozice na trajektorii ≠ predikce: říká, kde jsme dnes, ne jestli tempo do cílového roku vydrží.</span></p>
+    ${stackHtml(counts, total, 'Vyhodnocení indikátorů dokumentu')}
+    <ul class="z35-stack-legend">${legend}</ul>
+    ${dcStack}`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -325,6 +470,7 @@ export async function initPlneni(cfg) {
     ]);
     state.plneni = plneni;
     state.indicators = new Map(indicators.indicators.map(i => [i.id, i]));
+    state.score = aggregateScore(plneni, state.indicators);
   } catch (err) {
     const host = document.getElementById('z35Cile');
     if (host) host.innerHTML = renderErrorState('Data o plnění strategie se nepodařilo načíst.', err);
@@ -332,6 +478,7 @@ export async function initPlneni(cfg) {
   }
 
   renderHeroStats();
+  renderScoreboard();
   renderRamec();
   renderCile();
   renderDocLinks();
