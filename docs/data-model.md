@@ -1182,7 +1182,33 @@ Frontend by měl odmítnout dataset s neočekávaným major version.
 *Verze 1.0 · květen 2026*
 
 
-## 22. `data/zdravi2035-plneni.json` — plnění Zdraví 2035 (kurátorovaný)
+## 22. Datasety plnění strategií — `data/zdravi2035-plneni.json` + `data/plneni-*.json` (kurátorované)
+
+Rodina šesti souborů se stejným schématem — každý rozkládá jeden strategický
+dokument na cíle → dílčí cíle/úkoly → vlastní indikátory dokumentu a mapuje je
+na kontrakt. Sdílený renderer `src/strategie-plneni.js` (stránky `zdravi-2035.html`
+přes `src/zdravi2035.js`, `plneni-*.html` přes `src/plneni-page.js` a data-atributy
+na `<body>`); validuje `ingest/validate-plneni.js` (`npm run validate:plneni`,
+součást `validate:all`); testy `tests/plneni.test.js` (+ `tests/zdravi2035.test.js`).
+
+| Soubor | Dokument | Stránka |
+|---|---|---|
+| `zdravi2035-plneni.json` | Zdraví 2035 (3 SG × 12 SC × 113 dílčích × 68 ind.) | `zdravi-2035.html` |
+| `plneni-onko-2030.json` | Národní onkologický plán 2030 (16 SC, 51 dílčích, 78+15 ind.) | `plneni-onko-2030.html` |
+| `plneni-kv-2035.json` | Národní KV plán 2025–2035 (16 SC, 101 dílčích, 126 bodů) | `plneni-kv-2035.html` |
+| `plneni-amr.json` | AP NAP 2019–2022 (6 cílů, 30 aktivit; bez nástupce) | `plneni-amr.html` |
+| `plneni-dusevni-zdravi.json` | Strategie reformy psychiatrie 2013 + NAPDZ 2020–2030 | `plneni-dusevni-zdravi.html` |
+| `plneni-zdravi-2030.json` | Zdraví 2030 retrospektivně + oficiální Zpráva 2023–2024 | `plneni-zdravi-2030.html` |
+
+Odchylky novějších souborů od zdravi2035 (renderer i validátor čtou obojí):
+klíč `target` (s volitelným `year`) místo `target_2035`; `level` u doc_indicators
+volitelný; aktivity mohou nést `gestor`/`termin`/`kriterium` (AP NAP); cíl může
+nést `hodnoceni` `{text, zdroj}` s oficiálním hodnocením plnění (Zdraví 2030 —
+výhradně citace ze zdrojové zprávy s odkazem na stranu); druhý zdrojový dokument
+jde do `document_b`. Baseline bez roku je povolená jen s notou, proč rok neuvádí
+sám dokument.
+
+### Původní popis Zdraví 2035 (platí dál)
 
 Ručně kurátorovaný přepis Strategického rámce Zdraví 2035 (usnesení vlády
 č. 862/25, 12. 11. 2025) + redakční mapování na indikátory kontraktu.

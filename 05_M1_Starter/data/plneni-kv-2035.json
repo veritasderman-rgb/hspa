@@ -1,0 +1,1912 @@
+{
+  "version": "1.0",
+  "strategy_id": "narodni_kvplan_2035",
+  "_doc": [
+    "Plnění Národního kardiovaskulárního plánu ČR 2025–2035 (NKVP) — provázání",
+    "strategických a specifických cílů dokumentu s indikátory datového kontraktu",
+    "(data/indicators.json).",
+    "",
+    "ZDROJ: Národní kardiovaskulární plán České republiky na období 2025–2035,",
+    "verze 4.0 (2024), schválený vládou ČR 11. 12. 2024 (dle titulní karty",
+    "dokumentu). Struktura: 4 strategické cíle → 16 specifických cílů → dílčí",
+    "cíle (SEZNAM DÍLČÍCH CÍLŮ) a indikátory (INDIKÁTORY) — strategická část",
+    "str. 30–79 PDF, implementace str. 80–87.",
+    "",
+    "KLÍČOVÉ ZJIŠTĚNÍ O MĚŘITELNOSTI: hlavní text NKVP na rozdíl od Zdraví 2035",
+    "NEOBSAHUJE tabulku indikátorů s výchozími a cílovými hodnotami. Indikátory",
+    "u specifických cílů jsou převážně kvalitativní monitorovací body (počty",
+    "kampaní, „vytvoření systému“, „vznik center“) bez čísel. Str. 85 odkazuje na",
+    "„základní indikátory se stanovenou počáteční a cílovou hodnotou“ v příloze",
+    "č. 2, zatímco seznam příloh (str. 87) je vede jako PŘÍLOHU 1 — přílohy",
+    "nejsou součástí publikovaného hlavního dokumentu, hodnoty tedy nejsou",
+    "k dispozici. Proto baseline/target = null až na několik kapacitních cílů",
+    "zapsaných přímo v textu (1.3.2, 1.3.3, 3.2.2, 3.2.4, 4.1.2). Neměřitelnost",
+    "velké části plánu je zjištění, ne vada extrakce.",
+    "",
+    "MAPOVÁNÍ je redakční práce, ne strojová: u každého indikátoru dokumentu",
+    "říkáme, jestli ho kontrakt měří PŘÍMO (match: primo — stejný jev,",
+    "srovnatelná metodika), jen PROXY (match: proxy — příbuzný jev nebo jiná",
+    "metodika, srovnávat směr, ne hodnoty; poznámka říká proč), nebo VŮBEC",
+    "(match: chybi). U dílčích cílů `mereni: proces` znamená organizační,",
+    "legislativní nebo kapacitně-budovací krok bez populačního indikátoru — to",
+    "není mezera měření, ale povaha úkolu.",
+    "",
+    "POCTIVOST HODNOT: co dokument uvádí, přebíráme doslova včetně podivností",
+    "(kolonka Forma schválení odkazuje na usnesení vlády z června 2022; vize má",
+    "být naplněna „do roku 2033“ při horizontu 2035; akční plány pokrývají",
+    "období „do roku 2034“; minimální cíl 5 ambulancí/100 tis. u 3.2.2 je pod",
+    "průměrem 6/100 tis. z analytické části a jiný než cíl 7 míst u 1.3.2).",
+    "Nečitelná místa přiznáváme s odkazem na stranu PDF. Nic nedopočítáváme.",
+    "",
+    "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu",
+    "z data/indicators.json — tady se NEduplikují, aby nemohly zastarat."
+  ],
+  "document": {
+    "title": "Národní kardiovaskulární plán České republiky na období 2025–2035",
+    "doc_version": "Verze 4.0 (2024)",
+    "approved": "2024-12-11",
+    "approval": "vláda ČR — titulní karta dokumentu uvádí schvalovatele „Vláda ČR“ a datum schválení 11. prosince 2024",
+    "approval_note": "Kolonka „Forma schválení“ v témže dokumentu uvádí „Usnesení vlády č. 541 ze dne 22. června 2022“ a „Poslední aktualizace: červen 2022“ (str. 5 PDF) — zjevný pozůstatek šablony, který nesedí k datu schválení 11. 12. 2024. Ponecháno doslova, neopravujeme.",
+    "url": "https://mzd.gov.cz/wp-content/uploads/2025/01/Narodni-kardiovaskularni-plan-CR-na-obdobi-2025-2035.pdf",
+    "web": "https://mzd.gov.cz/narodni-kardiovaskularni-plan-cr-na-obdobi-2025-2035/",
+    "horizon": { "from": 2025, "to": 2035 },
+    "budget": "odhadovaný rozpočet implementace 8 mld. Kč (str. 5 a 87 PDF)",
+    "vision": "Zajistit každému obyvateli České republiky možnost prevence vzniku kardiovaskulárního onemocnění a v případě jeho rozvoje zajistit nejvyšší možnou kvalitu péče a života bez ohledu na geografickou polohu či stadium nemoci."
+  },
+  "extracted_at": "2026-09-01",
+  "strategic_goals": [
+    {
+      "id": "sg1",
+      "num": "1",
+      "title": "Efektivita prevence kardiovaskulárních onemocnění se zvyšuje a pomáhá předcházet vzniku onemocnění"
+    },
+    {
+      "id": "sg2",
+      "num": "2",
+      "title": "Dostupnost a organizace péče orientované na pacienta vede k zajištění maximálně možné kvality jeho života, a to během nemoci, po vyléčení či v terminálním stadiu"
+    },
+    {
+      "id": "sg3",
+      "num": "3",
+      "title": "Poskytování moderní zdravotní péče je zajištěno kvalifikovaným personálem, moderním diagnostickým a léčebným zázemím a inovativními postupy"
+    },
+    {
+      "id": "sg4",
+      "num": "4",
+      "title": "Věda a výzkum kardiovaskulárních onemocnění jsou prováděny na vysoké úrovni integrující poslední poznatky medicíny a v kontextu mezinárodní spolupráce"
+    }
+  ],
+  "ramcove_indikatory": [],
+  "cile": [
+    {
+      "sc": "1.1",
+      "goal": "sg1",
+      "title": "Zvýšení pozitivní motivace ke změně životního stylu obyvatel, zvýšení zdravotní gramotnosti a zlepšení prevence kardiovaskulárních onemocnění",
+      "garant": "MŠMT, MZd, SZÚ, ÚZIS",
+      "dilci_cile": [
+        {
+          "num": "1.1.1",
+          "text": "Medializace zdravotních rizik a přínosů změny životního stylu",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.2",
+          "text": "Zvýšení povědomí o škodlivosti užívání tabákových a jiných nikotinových výrobků a alkoholu a o jejich vlivu na vznik kardiovaskulárních onemocnění (kampaně, Dny zdraví, krátké intervence, poradny odvykání)",
+          "indikatory": [
+            "kuractvi_denni",
+            "prevalence_koureni_adolescenti",
+            "ecigarety_adolescenti",
+            "alkohol_spotreba",
+            "alkohol_adolescenti"
+          ],
+          "mereni": "proxy",
+          "note": "Povědomí se přímo neměří; prevalence kuřáctví a spotřeba alkoholu jsou zpětné zrcadlo intervencí."
+        },
+        {
+          "num": "1.1.3",
+          "text": "Zvýšení povědomí o škodlivosti nadměrné konzumace soli, cukru a nasycených tuků, podpora nutriční gramotnosti, zdravého pracovního prostředí a preventivních principů v institucionálním stravování",
+          "indikatory": [
+            "konzumace_ovoce_zeleniny",
+            "bmi_dospeli"
+          ],
+          "mereni": "proxy",
+          "note": "Příjem soli ani nutriční gramotnost kontrakt neměří; konzumace ovoce a zeleniny a BMI dospělých jsou nejbližší stravovací zrcadlo."
+        },
+        {
+          "num": "1.1.4",
+          "text": "Implementace programu na snižování množství soli (intervence u produktů a pokrmů, informovanost, edukace gastronomických pracovníků, kontrola doporučení)",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.5",
+          "text": "Zvýšení povědomí o významu zdravého stravování, zdraví prospěšné pohybové aktivity a duševního zdraví pro prevenci kardiovaskulárních onemocnění",
+          "indikatory": [
+            "pohybova_aktivita_dospeli",
+            "konzumace_ovoce_zeleniny"
+          ],
+          "mereni": "proxy",
+          "note": "Povědomí se neměří; podíl osob s doporučenou pohybovou aktivitou a konzumací ovoce/zeleniny je výsledkové zrcadlo."
+        },
+        {
+          "num": "1.1.6",
+          "text": "Zvýšení povědomí o důležitosti pravidelného spánku a dobrého duševního zdraví, podpora spánkové hygieny a resilience vůči zátěžovým situacím",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.7",
+          "text": "Zvýšení povědomí o škodlivosti užívání dalších návykových látek (kratom, léky aj.) a o dávkování léků v seniorském věku",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.8",
+          "text": "Využití informačního portálu NZIP pro laickou veřejnost ve vztahu ke zdravotním rizikům životního stylu a včasnému odhalení geneticky podmíněných kardiovaskulárních rizikových faktorů",
+          "indikatory": [
+            "zdravotni_info_online"
+          ],
+          "mereni": "proxy",
+          "note": "Návštěvnost NZIP kontrakt neměří; podíl lidí hledajících zdravotní informace online je nejbližší kontext."
+        },
+        {
+          "num": "1.1.9",
+          "text": "Pravidelné sledování kardiovaskulárního zdraví běžné populace (prevalence rizikových faktorů, kardiovaskulární riziko, zdravotní gramotnost) a antropologického vývoje dětí včetně nadváhy a obezity",
+          "indikatory": [
+            "kuractvi_denni",
+            "alkohol_spotreba",
+            "pohybova_aktivita_dospeli",
+            "konzumace_ovoce_zeleniny",
+            "cholesterol_prumer_dospeli",
+            "ldl_cholesterol_dospeli",
+            "kontrola_hypertenze",
+            "obezita_prevalence",
+            "deti_obezita_cosi",
+            "zdravotni_gramotnost_omezena"
+          ],
+          "mereni": "primo"
+        },
+        {
+          "num": "1.1.10",
+          "text": "Zdokonalování a rozšiřování portfolia pobídek pro pojištěnce k účasti na preventivních prohlídkách a programech",
+          "indikatory": [
+            "prohlidka_prakticky_lekar"
+          ],
+          "mereni": "proxy",
+          "note": "Pobídky samotné kontrakt neměří; účast na preventivních prohlídkách je jejich výsledkové zrcadlo."
+        },
+        {
+          "num": "1.1.11",
+          "text": "Systematický program pro prevenci obezity na školách",
+          "indikatory": [
+            "deti_obezita_cosi"
+          ],
+          "mereni": "proxy",
+          "note": "Existenci programu kontrakt neměří; prevalence nadváhy a obezity dětí 6–9 let (WHO COSI) je výsledkové zrcadlo."
+        },
+        {
+          "num": "1.1.12",
+          "text": "Implementace univerzálního screeningu familiární hypercholesterolemie v dětském věku",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.13",
+          "text": "Zavedení systematické výuky první pomoci a znalosti příznaků cévní mozkové příhody a akutního koronárního syndromu ve školách",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.14",
+          "text": "Implementace populačního programu screeningu aneurysmatu abdominální aorty",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.15",
+          "text": "Podpora aktualizace státem garantovaných nutričních doporučení založených na potravinách (doporučené postupy EFSA/WHO)",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.16",
+          "text": "Zvýšení povědomí o vlivu klimatických změn na kardiovaskulární zdraví (extrémní teploty, vlny veder)",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.17",
+          "text": "Podpora prevence a kontroly neinfekčních nemocí s využitím osvědčených postupů WHO („Best Buys“) — tabák, alkohol, nezdravá strava, nedostatek fyzické aktivity, znečištění ovzduší",
+          "indikatory": [
+            "kuractvi_denni",
+            "alkohol_spotreba",
+            "pohybova_aktivita_dospeli",
+            "pm25_expozice"
+          ],
+          "mereni": "proxy",
+          "note": "Počet implementovaných opatření kontrakt neměří; prevalence hlavních rizikových faktorů, na které Best Buys cílí, je zrcadlo dopadu."
+        },
+        {
+          "num": "1.1.18",
+          "text": "Podpora rozvoje politik a právních předpisů zaměřených na širší determinanty zdraví včetně sociálních a komerčních determinant",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.1.19",
+          "text": "Podpora zavádění zdravého životního prostředí, zejména pro mladší a starší osoby, způsobem snižujícím nerovnosti v oblasti zdraví",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "1.1.1 Monitorované mediální výstupy preventivních kampaní",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.2 Monitorování prevalence užívání tabákových výrobků v populaci 15+ a užívání alternativ tabáku",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "kuractvi_denni",
+            "note": "Kontrakt měří denní kuřáctví 15+; užívání alternativ tabáku (e-cigarety, zahřívaný tabák) u dospělých neměří."
+          }
+        },
+        {
+          "name": "1.1.2.1 Počet kampaní, preventivních programů a jiných aktivit v prevenci užívání tabákových a nikotinových výrobků a konzumace alkoholu",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.2.2 Monitorování spotřeby čistého alkoholu na osobu a rok",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "alkohol_spotreba",
+            "note": "Kontrakt měří spotřebu čistého alkoholu na osobu 15+ (OECD metodika); dokument věkový základ neupřesňuje."
+          }
+        },
+        {
+          "name": "1.1.2.3 Monitorování prevalence rizikového a škodlivého pití",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "chybi",
+            "note": "Prevalenci rizikového a škodlivého pití kontrakt neměří; sleduje jen celkovou spotřebu alkoholu (jiný jev)."
+          }
+        },
+        {
+          "name": "1.1.3 Počet kampaní na podporu zdravé výživy",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.4 Metodické postupy pro snižování soli v pokrmech a ozdravění jídelníčku",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.5 Počet institucí zapojených v programu „Podnik podporující zdraví“ a škol a školských zařízení v programu „Škola podporující zdraví“",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.5.1 Úroveň zdravotní gramotnosti v populaci",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "primo",
+            "indicator_id": "zdravotni_gramotnost_omezena",
+            "note": "Týž jev z týchž šetření (HLS); kontrakt jej vykazuje obráceně jako podíl osob s omezenou gramotností."
+          }
+        },
+        {
+          "name": "1.1.5.2 Počet kampaní, preventivních intervenčních programů a jiných programů na podporu pohybové aktivity ve všech věkových skupinách",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.6 Počet mediálních výstupů informujících o významu zdravého spánku a duševního zdraví ve vztahu ke kardiovaskulárním chorobám",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.7 Počet mediálních výstupů a informačních zdrojů informujících o riziku návykových látek pro kardiovaskulární systém",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.8 Monitorování návštěvnosti Národního zdravotnického informačního portálu, periodické reprezentativní průzkumy zdravotní gramotnosti",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "zdravotni_info_online",
+            "note": "Návštěvnost NZIP kontrakt neměří; podíl lidí hledajících zdravotní informace online je nejbližší kontext."
+          }
+        },
+        {
+          "name": "1.1.9 Prevalence nejdůležitějších rizikových faktorů v běžné populaci (kouření, alkohol, fyzická aktivita, stravovací návyky); prevalence a znalost hypertenze, dyslipidémie a diabetu; průměrné populační hodnoty krevního tlaku, lipidového spektra a glykovaného hemoglobinu/glykémie u dospělých",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "cholesterol_prumer_dospeli",
+            "note": "Složený ukazatel — kontrakt měří jednotlivé složky (kuractvi_denni, alkohol_spotreba, pohybova_aktivita_dospeli, konzumace_ovoce_zeleniny, cholesterol vč. LDL, kontrola_hypertenze, obezita_prevalence), glykémii/HbA1c ne; mapujeme na průměrný cholesterol jako reprezentativní laboratorní složku."
+          }
+        },
+        {
+          "name": "1.1.10 Procento populace participující na systematických preventivních prohlídkách u VPL",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "primo",
+            "indicator_id": "prohlidka_prakticky_lekar"
+          }
+        },
+        {
+          "name": "1.1.11 Prevalence nadváhy a obezity u dětí, pravidelné hodnocení času stráveného pohybovou aktivitou (za týden) u dětí i dospělých",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "deti_obezita_cosi",
+            "note": "Kontrakt měří nadváhu/obezitu jen u dětí 6–9 let (WHO COSI); týdenní čas pohybové aktivity dětí neměří, u 15+ jen podíl s doporučenou aktivitou."
+          }
+        },
+        {
+          "name": "1.1.12 Počet zachycených nositelů familiární hypercholesterolemie",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.13 Sledování času mezi vznikem CMP/AKS a zavoláním ZZS a ochoty provádět telefonicky asistovanou resuscitaci; zařazení výuky první pomoci do RVP ZŠ a SŠ",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.14 Počet zachycených aneurysmat abdominální aorty v rámci screeningového programu",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.15 Publikovaná doporučení",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.16 Počet kampaní zaměřených na klimatické změny a zdraví",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.16.1 Úroveň povědomí veřejnosti o rizicích spojených s vlnami veder",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.17 Množství implementovaných opatření (kampaní, politik, programů) doporučených v rámci WHO „Best Buys“",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.18 Množství implementovaných opatření cílených na širší determinanty zdraví a snižování nerovností ve zdraví",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.1.19 Množství implementovaných opatření cílených na podporu zdravého prostředí (školy, pracoviště, veřejné instituce)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "mortalita_kardiovaskularni",
+        "mortalita_preventabilni",
+        "nadeje_doziti_total",
+        "nadeje_doziti_zdravi_65",
+        "obezita_prevalence",
+        "bmi_dospeli"
+      ]
+    },
+    {
+      "sc": "1.2",
+      "goal": "sg1",
+      "title": "Zvýšení efektivity a využití systému preventivních prohlídek, primární péče a gynekologické péče",
+      "garant": "zdravotní pojišťovny, MZd, ÚZIS",
+      "dilci_cile": [
+        {
+          "num": "1.2.1",
+          "text": "Revize struktury preventivních prohlídek, zvýšení flexibility, zavedení posuzování kardiovaskulárních rizik do systému pracovnělékařských prohlídek",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.2.2",
+          "text": "Nastavení valorizace úhrad preventivních prohlídek a léčebné péče VPL a PLDD",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.2.3",
+          "text": "Rozšíření a udržení stávajících pozitivních motivačních prvků k účasti na prevenci",
+          "indikatory": [
+            "prohlidka_prakticky_lekar"
+          ],
+          "mereni": "proxy",
+          "note": "Motivační prvky kontrakt neměří; účast na preventivních prohlídkách je jejich výsledkové zrcadlo."
+        },
+        {
+          "num": "1.2.4",
+          "text": "Propagace zdravotních prohlídek",
+          "indikatory": [
+            "prohlidka_prakticky_lekar"
+          ],
+          "mereni": "proxy",
+          "note": "Propagace se neměří; účast na prohlídkách je výsledkové zrcadlo."
+        },
+        {
+          "num": "1.2.5",
+          "text": "Zajištění navazující péče u vysoce rizikových nebo manifestně nemocných pacientů",
+          "indikatory": [
+            "kontrola_hypertenze",
+            "ldl_cholesterol_dospeli",
+            "spotreba_hypolipidemik"
+          ],
+          "mereni": "proxy",
+          "note": "Návaznost péče se přímo neměří; kontrola hypertenze, hladiny LDL a spotřeba hypolipidemik jsou výsledkové zrcadlo intervence rizikových faktorů."
+        },
+        {
+          "num": "1.2.6",
+          "text": "Systematizace péče o ženy v těhotenství, harmonizace vyšetření cílících na odhalení preeklampsie a vrozených (srdečních) vad plodu, kardiovaskulární prevence v rámci prohlídek u gynekologa",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.2.7",
+          "text": "Podpora a zajištění vakcinace proti chřipce a dalším závažným virovým onemocněním (RS virus, SARS-CoV-2 atd.)",
+          "indikatory": [
+            "vakcinace_chripka_65",
+            "vakcinace_pneumokok_65"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří proočkovanost proti chřipce a pneumokokům jen u 65+; dokument cílí šířeji na primární i sekundární prevenci včetně RSV a covidu."
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "1.2.1 Procento účastníků preventivních prohlídek v jednotlivých věkových kategoriích, podíl se stanovenými hodnotami cholesterolu a glykémie a vyšetřením dalších biomarkerů",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "prohlidka_prakticky_lekar",
+            "note": "Kontrakt měří celkové pokrytí preventivní prohlídkou; věkový rozpad ani podíl s laboratorním vyšetřením nemá."
+          }
+        },
+        {
+          "name": "1.2.2 Schválený valorizační systém úhrad preventivních prohlídek s dlouhodobým výhledem nad rámec úhradové vyhlášky MZd",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.2.3a Procento účastníků preventivních zdravotních prohlídek",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "primo",
+            "indicator_id": "prohlidka_prakticky_lekar"
+          }
+        },
+        {
+          "name": "1.2.3b Procento účastníků preventivních zdravotních prohlídek u pojištěnců jednotlivých ZP",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "prohlidka_prakticky_lekar",
+            "note": "Rozpad podle jednotlivých zdravotních pojišťoven kontrakt nemá; měří jen celostátní pokrytí."
+          }
+        },
+        {
+          "name": "1.2.3c Podíl pojištěnců s realizovanou prohlídkou vůči počtu zaslaných upozornění na tuto prohlídku",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.2.4a Procento účastníků preventivních zdravotních prohlídek",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "primo",
+            "indicator_id": "prohlidka_prakticky_lekar"
+          },
+          "note": "Dokument uvádí týž ukazatel u dílčích cílů 1.2.3 i 1.2.4 (str. 39) — duplicitu ponecháváme."
+        },
+        {
+          "name": "1.2.4b Procento účastníků preventivních zdravotních prohlídek u pojištěnců jednotlivých ZP",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "prohlidka_prakticky_lekar",
+            "note": "Rozpad podle jednotlivých zdravotních pojišťoven kontrakt nemá; duplicitní s 1.2.3b."
+          }
+        },
+        {
+          "name": "1.2.5 Podíl pacientů identifikovaných na základě preventivních prohlídek s nově zavedenou léčbou nebo odeslaných k dalšímu odbornému vyšetření / ošetření",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.2.5.1 Počet kuřáků léčených v centrech pro léčbu závislosti na tabáku a vytvoření systému sběru dat o kouření a dalších závislostech v rámci digitalizace sdílené zdravotnické dokumentace",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "chybi",
+            "note": "Kontrakt měří prevalenci kuřáctví, ne počet léčených v centrech; analytická část uvádí, že léčba je poskytována jen 0,5 promile kuřáků (str. 23)."
+          }
+        },
+        {
+          "name": "1.2.6 Podíl žen absolvujících doporučené komplexní prenatální vyšetření (vstupní prohlídka mezi 8. a 10., nejpozději do 14. týdne těhotenství); podíl indikací k vyšetření vrozených srdečních vad plodu",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.2.7 Proočkovanost populace proti chřipce a dalším závažným virovým onemocněním (RS virus, SARS-CoV-2 atd.) v primární a sekundární prevenci",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "vakcinace_chripka_65",
+            "note": "Kontrakt měří proočkovanost proti chřipce jen u 65+ (a proti pneumokokům 65+); celou cílovou populaci primární a sekundární prevence ani RSV/covid neměří."
+          }
+        }
+      ],
+      "kontext_indikatory": [
+        "prevalence_diabetu",
+        "kontrola_hypertenze",
+        "koureni_v_tehotenstvi"
+      ]
+    },
+    {
+      "sc": "1.3",
+      "goal": "sg1",
+      "title": "Zvýšení efektivity včasné diagnostiky rizikových faktorů kardiovaskulárních onemocnění. Nastavení systému navazující péče pro vysoce rizikové pacienty",
+      "garant": "MZd, ÚZIS, zdravotní pojišťovny, kardiovaskulární centra",
+      "dilci_cile": [
+        {
+          "num": "1.3.1",
+          "text": "Udržení a rozvoj dostupné vysoce specializované péče",
+          "indikatory": [
+            "pci_koronarni_intervence_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Dostupnost vysoce specializované péče kontrakt přímo neměří; objem koronárních intervencí je hrubé výkonové zrcadlo."
+        },
+        {
+          "num": "1.3.2",
+          "text": "Dosažení vyvážené regionální dostupnosti kardiologických a angiologických, případně cévně chirurgických ambulancí",
+          "indikatory": [
+            "cekaci_doby_specialist"
+          ],
+          "mereni": "proxy",
+          "note": "Hustotu specializovaných ambulancí kontrakt neměří; čekací doba na specialistu je nepřímé zrcadlo dostupnosti."
+        },
+        {
+          "num": "1.3.3",
+          "text": "Dosažení regionální dostupnosti specializovaných ambulancí pro intervenci rizikových faktorů (lipidologie, arteriální hypertenze, léčba závislosti na tabáku, obezitologie, diabetologie)",
+          "indikatory": [
+            "kontrola_hypertenze",
+            "spotreba_hypolipidemik"
+          ],
+          "mereni": "proxy",
+          "note": "Síť specializovaných ambulancí kontrakt neměří; kontrola hypertenze a spotřeba hypolipidemik jsou výsledkové zrcadlo intervence rizikových faktorů."
+        },
+        {
+          "num": "1.3.4",
+          "text": "Rozšíření nebo zachování dostupnosti laboratorních a instrumentálních vyšetření (natriuretické peptidy, dlouhodobé monitorace EKG, zátěžové a zobrazovací metody u ambulantních specialistů)",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.3.5",
+          "text": "Systematizace screeningu vrozených kritických srdečních vad ve spolupráci oborů gynekologie a porodnictví a dětské kardiologie",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.3.6",
+          "text": "Systematizace péče o nemocné s tromboembolickou plicní hypertenzí po prodělané akutní plicní embolii",
+          "mereni": "proces"
+        },
+        {
+          "num": "1.3.7",
+          "text": "Zvýšení dostupnosti genetických vyšetření u kardiovaskulárních chorob, extenze indikačního oprávnění pro jednotlivé specializace",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "1.3.1 Udržení a rozvoj dostupné návazné akutní i ambulantní vysoce specializované péče v kardiovaskulárních centrech (intervenční koronární výkony, intervenční léčba arytmií, strukturální intervence, ambulance srdečního selhání a vrozených vad v dospělosti, kardiochirurgická a cévně chirurgická péče)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "pci_koronarni_intervence_100k",
+            "note": "Souhrnný popisný ukazatel bez metriky; kontrakt z něj měří jen objem perkutánních koronárních intervencí."
+          }
+        },
+        {
+          "name": "1.3.2 Zajištění dostupnosti odborné kardiologické péče — počet míst poskytování ambulantní péče na 100 tisíc obyvatel ve všech krajích",
+          "baseline": {
+            "value": "6 míst poskytování ambulantní kardiologické péče na 100 tis. obyvatel (průměr ČR; rozpětí od 3,8 v Jihočeském kraji po 11 v Praze)",
+            "year": null
+          },
+          "target": {
+            "value": "optimálně 7 míst ambulantní kardiologické péče, 1 místo dětské kardiologické péče a minimálně 3 místa ambulantní angiologické péče na 100 tisíc obyvatel"
+          },
+          "mapping": {
+            "match": "chybi",
+            "note": "Hustotu specializovaných ambulancí kontrakt neměří; nejbližší nepřímé zrcadlo je čekací doba na specialistu (cekaci_doby_specialist)."
+          },
+          "note": "Výchozí hodnota je z analytické části (str. 23 PDF), rok jejího stanovení dokument neuvádí. Cílový rok rovněž není uveden."
+        },
+        {
+          "name": "1.3.3 Zajištění regionální dostupnosti specializovaných ambulancí pro intervenci rizikových faktorů (lipidologie, arteriální hypertenze, léčba závislosti na tabáku, obezitologie)",
+          "baseline": null,
+          "target": {
+            "value": "minimálně 2 místa poskytování péče na 100 tisíc obyvatel"
+          },
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.3.4 Zajištění úhrady specializovaných laboratorních vyšetření (natriuretické peptidy aj.) i pro vybrané další specializace a dostupnosti návazné specializované péče (dlouhodobé monitorace EKG, zátěžová vyšetření, zobrazovací metody)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.3.5 Proporce prenatálně diagnostikovaných kritických vrozených srdečních vad",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.3.6 Počet pacientů s CTEPH léčených ve specializovaném centru",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "1.3.7 Dostupnost genetických vyšetření a rozsah jejich indikačních omezení",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "cholesterol_prumer_dospeli",
+        "ldl_cholesterol_dospeli",
+        "prevalence_diabetu"
+      ]
+    },
+    {
+      "sc": "2.1",
+      "goal": "sg2",
+      "title": "Zajištění dostupnosti všech forem následné, dlouhodobé a paliativní péče. Péče je moderní a efektivní",
+      "garant": "MZd, kardiovaskulární centra, ZP, samosprávy, pacientská sdružení, centra ambulantní kardiologické rehabilitace",
+      "dilci_cile": [
+        {
+          "num": "2.1.1",
+          "text": "Dostupnost paliativních týmů v kardiovaskulárních a cerebrovaskulárních centrech",
+          "indikatory": [
+            "mobilni_paliativni_tymy_per_milion",
+            "umrti_doma_nebo_hospici_pct"
+          ],
+          "mereni": "proxy",
+          "note": "Paliativní týmy v KV centrech kontrakt neměří; celostátní kapacita mobilní specializované paliativní péče a podíl zemřelých doma či v hospici jsou nejbližší zrcadlo."
+        },
+        {
+          "num": "2.1.2",
+          "text": "Dostupnost strukturované kardiorehabilitace a pre-rehabilitace pod vedením fyzioterapeuta, lůžkové rehabilitace po CMP včetně neurorehabilitačních kapacit a lůžek následné péče (LDN, NIP, DIOP)",
+          "indikatory": [
+            "fyzioterapeuti_per_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Kapacity kardiorehabilitace ani neurorehabilitace kontrakt neměří; počet fyzioterapeutů je jen hrubé personální zrcadlo."
+        },
+        {
+          "num": "2.1.3",
+          "text": "Dostupnost a čerpání sociálních služeb (podpůrných prostředků k udržení mobility)",
+          "indikatory": [
+            "vydaje_dlouhodoba_pece_hdp"
+          ],
+          "mereni": "proxy",
+          "note": "Čerpání podpůrných prostředků kontrakt neměří; výdaje na dlouhodobou péči jsou hrubé systémové zrcadlo."
+        },
+        {
+          "num": "2.1.4",
+          "text": "Zajištění podpůrné psychologické, klinicko-psychologické a psychiatrické péče",
+          "indikatory": [
+            "psychiatri_per_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Referování kardiovaskulárních pacientů do psychologické a psychiatrické péče kontrakt neměří; kapacita psychiatrů je hrubé zrcadlo dostupnosti."
+        },
+        {
+          "num": "2.1.5",
+          "text": "Zajištění programů strukturované kardiorehabilitace a rehabilitace po prodělaných mozkových příhodách",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.1.6",
+          "text": "Zapojení pacientských sdružení a neformálních pečovatelů do systému péče o chronicky nemocné a zajištění jejich adekvátní edukace a materiálního zabezpečení",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.1.7",
+          "text": "Zajištění ochrany zranitelných osob (senioři, chronicky nemocní) během extrémních teplot, úprava prostor v zařízeních zdravotní a sociální péče",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.1.1 Trajektorie pacientů v posledním roce života (počty hospitalizací, náklady na léčbu, využití paliativní léčby), dostupnost paliativní léčby a sociální podpory",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "umrti_doma_nebo_hospici_pct",
+            "note": "Kontrakt měří podíl zemřelých doma nebo v hospici v celé populaci; trajektorie kardiovaskulárních pacientů v posledním roce života neměří."
+          }
+        },
+        {
+          "name": "2.1.2 Počty rehospitalizací a počty pacientů čerpajících prostředky domácí péče",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "pacienti_domaci_pece_per_1000",
+            "note": "Kontrakt měří pacienty domácí zdravotní péče celkem (ne kardiovaskulární) a rehospitalizace jen po infarktu (readmise_30d_ami)."
+          }
+        },
+        {
+          "name": "2.1.3 Počty pacientů čerpajících podpůrné prostředky k udržení mobility",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.1.4 Počty pacientů referovaných do odborné psychologické, klinicko-psychologické a psychiatrické péče",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.1.5 Počet dní čekání indikovaného pacienta v KV/CV centru před překladem k včasné rehabilitaci a k následné péči; počty pacientů v programech strukturované kardiorehabilitace",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.1.6 Zapojení pacientských sdružení u jednotlivých diagnostických skupin a jejich adekvátní podpora a materiální zabezpečení",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.1.7 Počet zařízení s implementovanými opatřeními na ochranu před vedry",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.1.7.1 Počet zranitelných osob využívajících prostory upravené tak, aby zamezovaly vysokým teplotám během vln veder",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "hospicova_pece_luzka",
+        "luzka_dlouhodobe_pece_65plus",
+        "multimorbidita_65plus"
+      ]
+    },
+    {
+      "sc": "2.2",
+      "goal": "sg2",
+      "title": "Zajištění rovnoměrné dostupnosti a pokrytí službami zdravotnické záchranné služby a systémy přímé komunikace a transportu pacientů s oběhovými onemocněními přímo do kardiovaskulárních center",
+      "garant": "MZd, samosprávy, kardiovaskulární centra, ZP",
+      "dilci_cile": [
+        {
+          "num": "2.2.1",
+          "text": "Udržení systému ZZS s dostatečně krátkými dojezdovými časy maximálně pokrývajícími území všech regionů, systém transportu kriticky nemocných dětských pacientů, vybavení ZZS metodami pro automatickou nepřímou srdeční masáž",
+          "indikatory": [
+            "dojezd_zzs"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří podíl výjezdů ZZS do 20 minut; transport kriticky nemocných dětí ani vybavení pro automatickou masáž neměří."
+        },
+        {
+          "num": "2.2.2",
+          "text": "Kultivace systému přímé komunikace ZZS s kardiovaskulárními a cerebrovaskulárními centry pro přímý transport pacientů bez mezistupně v jiných nemocnicích",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.2.3",
+          "text": "Udržení funkční sítě kardiovaskulárních a cerebrovaskulárních center s nepřetržitým provozem ve všech krajích ČR s podporou materiálního vybavení a lidských zdrojů",
+          "indikatory": [
+            "pci_koronarni_intervence_100k",
+            "mortalita_inhosp_ami",
+            "mortalita_inhosp_cmp"
+          ],
+          "mereni": "proxy",
+          "note": "Funkčnost sítě center kontrakt přímo neměří; objem PCI a nemocniční úmrtnost po infarktu a CMP jsou výsledkové zrcadlo."
+        },
+        {
+          "num": "2.2.4",
+          "text": "Zajištění širokého materiálního vybavení pro diagnostiku a léčbu (invazivní i neinvazivní metody, CT, MR, nukleární medicína, sály) a dostatečného počtu lůžek resuscitační a intenzivní péče",
+          "indikatory": [
+            "luzka_jip_per_100k",
+            "ct_per_milion",
+            "mri_per_milion"
+          ],
+          "mereni": "proxy",
+          "note": "Vybavení kardiovaskulárních center kontrakt neměří; celostátní kapacita lůžek intenzivní péče a zobrazovací techniky je hrubé zrcadlo."
+        },
+        {
+          "num": "2.2.5",
+          "text": "Rozvoj center specializovaných na péči o pacienty po srdeční zástavě a center pro nemocné s refrakterní srdeční zástavou schopných využití oběhových podpor",
+          "indikatory": [
+            "preziti_ohca_30d"
+          ],
+          "mereni": "proxy",
+          "note": "Vznik a vybavení center kontrakt neměří; 30denní přežití po mimonemocniční srdeční zástavě je výsledkové zrcadlo."
+        },
+        {
+          "num": "2.2.6",
+          "text": "Centralizace komplexních endovaskulárních a cévně chirurgických výkonů u závažných onemocnění aorty",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.2.1 Pokrytí území službami ZZS, dojezdové časy, transportní časy do kardiovaskulárních center",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "dojezd_zzs",
+            "note": "Kontrakt měří podíl výjezdů ZZS do 20 minut; transportní časy do kardiovaskulárních center neměří."
+          }
+        },
+        {
+          "name": "2.2.2 Implementace systémů přímé komunikace ZZS s kardiovaskulárními a cerebrovaskulárními centry",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.2.3 Pokrytí území centry pro koronární intervence s nepřetržitým provozem a centry pro trombolýzu a trombektomii ischemické CMP — sledování logistických časových parametrů léčby (onset-to-door, door-in-door-out, door-to-needle, door-to-imaging aj.)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "trombolyza_ischemicka_cmp",
+            "note": "Logistické časové parametry kontrakt neměří; podíl ischemických CMP léčených trombolýzou je výsledkové zrcadlo dostupnosti rekanalizační léčby."
+          }
+        },
+        {
+          "name": "2.2.4 Materiální vybavení kardiovaskulárních a cerebrovaskulárních center odpovídající podmínkám výzvy MZd pro udělení statutu centra vysoce specializované péče",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.2.5 Počet přijatých pacientů přímo z terénu; procento (počet) přežívajících bez neurologického deficitu; počet dárců orgánů (Centra pro nemocné po srdeční zástavě i pro nemocné s refrakterní zástavou)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "preziti_ohca_30d",
+            "note": "Kontrakt měří 30denní přežití po mimonemocniční zástavě; přežití bez neurologického deficitu ani počty dárců orgánů z center neměří."
+          }
+        },
+        {
+          "name": "2.2.6 Ustavení funkčních vaskulárních center v rámci kardiovaskulárních center a v odůvodněných případech i mimo ně",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "pacienti_osetreni_zzs",
+        "mortalita_inhosp_ami"
+      ]
+    },
+    {
+      "sc": "2.3",
+      "goal": "sg2",
+      "title": "Zajištění regionální dostupnosti specializované a ambulantní péče ve všech regionech ČR",
+      "garant": "MZd, kardiovaskulární centra, lékařské fakulty",
+      "dilci_cile": [
+        {
+          "num": "2.3.1",
+          "text": "Zlepšení dostupnosti ambulantní kardiologické péče",
+          "indikatory": [
+            "cekaci_doby_specialist"
+          ],
+          "mereni": "proxy",
+          "note": "Hustotu kardiologických ambulancí kontrakt neměří; čekací doba na specialistu je nepřímé zrcadlo dostupnosti."
+        },
+        {
+          "num": "2.3.2",
+          "text": "Zlepšení dostupnosti specializované angiologické a cévně chirurgické péče",
+          "indikatory": [
+            "cekaci_doby_specialist"
+          ],
+          "mereni": "proxy",
+          "note": "Angiologickou kapacitu kontrakt neměří; čekací doba na specialistu je jen hrubé nepřímé zrcadlo."
+        },
+        {
+          "num": "2.3.3",
+          "text": "Zajištění specializovaných ambulancí srdečního selhání v rámci kardiocenter, nemocnic mimo kardiocentra i vybraných kardiologických ambulancí, včetně jednodenních stacionářů pro intravenózní léčbu",
+          "indikatory": [
+            "hospitalizace_acsc"
+          ],
+          "mereni": "proxy",
+          "note": "Síť ambulancí srdečního selhání kontrakt neměří; odvratitelné hospitalizace (zahrnují srdeční selhání) jsou výsledkové zrcadlo fungující ambulantní péče."
+        },
+        {
+          "num": "2.3.4",
+          "text": "Zajištění specializovaných ambulancí srdečního selhání a ambulancí pro vrozené srdeční vady v dospělosti k poskytování ambulantní péče",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.3.5",
+          "text": "Podpora a vznik dalších specializovaných ambulancí zaměřených na péči o nemocné se srdečním selháním a vrozenými srdečními vadami v dospělosti",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.3.6",
+          "text": "Přehodnocení úhrad za ambulantní výkony u komplikovaných pacientů (srdeční selhání, komplexní poruchy rytmu, vrozené srdeční vady, vysoce rizikoví nemocní s ICHS)",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.3.7",
+          "text": "Podpora vzniku cerebrovaskulárních ambulancí",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.3.1 Regionální distribuce míst poskytování ambulantní kardiologické péče a počtu úvazků v ambulancích",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.2 Regionální distribuce míst poskytování ambulantní angiologické péče a počtu úvazků v ambulancích",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.3 Počty komplexně ambulantně ošetřených pacientů se srdečním selháním; vybavení ambulancí denními stacionáři; zavedení programů přechodu z hospitalizační do ambulantní nebo následné péče",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.4 Počty pacientů s vrozenými srdečními vadami v dospělosti ošetřených v dedikovaných ambulancích",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.5 Vznik specializovaných ambulancí pro srdeční selhání účastnících se bonifikačních programů zdravotních pojišťoven a ambulancí pro vrozené srdeční vady v dospělosti",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.6 Ohodnocení ambulantních vyšetření komplikovaných pacientů v poměru k instrumentálním vyšetřením",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.3.7 Počet dostupných cerebrovaskulárních ambulancí",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "ambulantni_kontakty_per_capita"
+      ]
+    },
+    {
+      "sc": "2.4",
+      "goal": "sg2",
+      "title": "Zajištění změny úhrad ambulantní kardiologické, angiologické a primární péče ve prospěch edukace a spolupráce s pacientem",
+      "garant": "ZP, odborné společnosti",
+      "dilci_cile": [
+        {
+          "num": "2.4.1",
+          "text": "Identifikace diagnóz se zvýšenými nároky na edukaci a spolupráci s pacienty (srdeční selhání, komplexní poruchy rytmu, chlopenní a vrozené vady, dědičné aortopatie, léčba závislosti na tabáku, obezitologie, familiární hypercholesterolémie)",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.4.2",
+          "text": "Zvýšení úhrad ambulantních vyšetření komplikovaných pacientů se zvýšenými nároky na edukaci za definovaných podmínek",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.4.3",
+          "text": "Implementace edukačních nástrojů s validovaným obsahem",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.4.4",
+          "text": "Zapojení metod e-health do péče o vybrané diagnózy",
+          "indikatory": [
+            "ehealth_adoption"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří obecnou adopci elektronického zdravotnictví (eHealth index), ne zapojení e-health u kardiovaskulárních diagnóz."
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.4.1 Přehodnocení úhradového systému ambulantní kardiologické péče",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.4.2 Snížení hospitalizační péče u vybraných diagnóz",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "hospitalizace_acsc",
+            "note": "Rozpad hospitalizací podle kardiovaskulárních diagnóz kontrakt nemá; odvratitelné hospitalizace (zahrnují srdeční selhání a hypertenzi) jsou nejbližší zrcadlo."
+          }
+        },
+        {
+          "name": "2.4.3 Funkční edukační portál s validovanými informacemi pro pacienty",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.4.4 Implementace telemonitorace a metod e-health do péče o vybrané diagnózy",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "ehealth_adoption",
+            "note": "Kontrakt měří souhrnný index adopce e-health, ne telemonitoraci u vybraných kardiovaskulárních diagnóz."
+          }
+        }
+      ],
+      "kontext_indikatory": [
+        "prumerna_delka_hospitalizace"
+      ]
+    },
+    {
+      "sc": "2.5",
+      "goal": "sg2",
+      "title": "Racionalizace centralizované péče o pacienty s kardiovaskulárním onemocněním prostřednictvím sítě center vysoce specializované kardiovaskulární péče",
+      "garant": "ZP, MZd, kardiovaskulární centra",
+      "dilci_cile": [
+        {
+          "num": "2.5.1",
+          "text": "Udržení funkční sítě kardiovaskulárních center v rámci platného procesu udělení statutu dle § 112 zákona o zdravotních službách",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.5.2",
+          "text": "Vznik nebo rozvoj stávajících pracovišť centralizované péče pro vybrané diagnostické skupiny (vzácná onemocnění: plicní hypertenze, kardiomyopatie, srdeční amyloidóza, M. Fabry, vrozené srdeční vady, aortopatie, vaskulární transplantace, vzácné cerebrální vaskulopatie; vážné formy častých onemocnění: lipidologie, arteriální hypertenze, závislost na tabáku, obezitologie, onkovaskulární problematika, chlopenní vady, cévní přístupy, cerebrovaskulární poradny)",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.5.3",
+          "text": "Rozšíření péče o nemocné s pokročilým a těžkým akutním srdečním selháním extenzí center poskytujících střednědobé a dlouhodobé oběhové podpory u pacientů bez indikace k srdeční transplantaci (destination therapy)",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.5.4",
+          "text": "Dvoustupňový, na sebe navazující systém centralizace péče v oboru cévní chirurgie, vaskulární intervenční radiologie a intervenční radiologie",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.5.1a Výstupy procesu znovuudělení statutu centrům vysoce specializované kardiovaskulární péče a centrům vysoce specializované komplexní kardiovaskulární péče dle § 112 zákona o zdravotních službách",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.5.1b Indikátory kvality péče kardiovaskulárních center uvedené v akreditační vyhlášce",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.5.2 Vznik nebo udržení pracovišť poskytujících centralizovanou péči o vybrané diagnózy",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.5.3 Zvýšení dostupnosti nefarmakologické léčby pro vybrané nemocné se srdečním selháním mimo centra provádějící srdeční transplantace",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.5.4 Vznik a pravidelné reportování do národních registrů vzácných kardiologických onemocnění",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.5.5 Funkční dvoustupňový, na sebe navazující systém centralizace péče v oboru cévní chirurgie a vaskulární intervenční radiologie",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "pci_koronarni_intervence_100k",
+        "transplantace_per_milion"
+      ],
+      "poznamka": "Číslování indikátorů (2.5.1a, 2.5.1b, 2.5.2–2.5.5) nesedí jedna ku jedné na čtyři dílčí cíle 2.5.1–2.5.4 — indikátor 2.5.4 (registry) nemá vlastní dílčí cíl a bullet 2.5.5 odpovídá dílčímu cíli 2.5.4. Ponecháno dle dokumentu (str. 57)."
+    },
+    {
+      "sc": "2.6",
+      "goal": "sg2",
+      "title": "Nastavení provázanosti péče v systému kardiovaskulární péče",
+      "garant": "MZd, ÚZIS, ZP, odborné společnosti",
+      "dilci_cile": [
+        {
+          "num": "2.6.1",
+          "text": "Vytvoření systému snazšího provázání dalších specializací podílejících se na komplexní péči o pacienty s kardiovaskulárními chorobami",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.6.2",
+          "text": "Sdílení informací a výsledků vyšetření (včetně pracovnělékařských služeb) napříč specializacemi",
+          "indikatory": [
+            "ehealth_adoption"
+          ],
+          "mereni": "proxy",
+          "note": "Podíl sdílených výsledků kontrakt neměří; index adopce e-health je souhrnné zrcadlo digitalizace."
+        },
+        {
+          "num": "2.6.3",
+          "text": "Uvolnění preskripce na praktické lékaře obecně pro všechny léčivé přípravky se symbolem „L“ (vyjma přípravků s omezením v souhrnu údajů o přípravku)",
+          "mereni": "proces",
+          "note": "Dokument uvádí, že k uvolnění došlo „novelizací ustanovení § 33 vyhlášky č. 3 /2011 Sb., s účinností od 1. . 2024“ — číslo vyhlášky i přesné datum účinnosti jsou v PDF zkomolené/nečitelné (str. 58–59). Neopravujeme, přiznáváme."
+        },
+        {
+          "num": "2.6.4",
+          "text": "Posílení role všeobecných praktických lékařů v systému integrované řízené péče",
+          "indikatory": [
+            "podil_prakticti_lekari"
+          ],
+          "mereni": "proxy",
+          "note": "Integrovanou řízenou péči kontrakt neměří; podíl praktických lékařů mezi všemi lékaři je hrubé strukturní zrcadlo posílení primární péče."
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.6.1 Vytvoření celonárodního systému sdílení laboratorních a klinických dat",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "ehealth_adoption",
+            "note": "Existenci celonárodního systému sdílení dat kontrakt neměří; index adopce e-health je souhrnné zrcadlo digitalizace."
+          }
+        },
+        {
+          "name": "2.6.2 Rozšíření portfolia preskripce pro VPL",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.6.3 Zavedení systému integrované řízené péče",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "hospitalizace_acsc"
+      ],
+      "poznamka": "Tři indikátory (2.6.1–2.6.3) nesedí číslem na čtyři dílčí cíle 2.6.1–2.6.4 — indikátor 2.6.2 (preskripce) odpovídá dílčímu cíli 2.6.3 a indikátor 2.6.3 (integrovaná péče) dílčímu cíli 2.6.4. Ponecháno dle dokumentu (str. 59)."
+    },
+    {
+      "sc": "2.7",
+      "goal": "sg2",
+      "title": "Zlepšení plánování a zvýšení dostupnosti péče",
+      "garant": "MZd, IPVZ, kardiovaskulární centra, lékařské fakulty, vysoké školy vzdělávající biomedicínské inženýry",
+      "dilci_cile": [
+        {
+          "num": "2.7.1",
+          "text": "Podpora zavádění nových technologií a léčebných postupů ve vysoce specializovaných centrech pro specifické diagnózy",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.7.2",
+          "text": "Podpora rozšíření péče o pacienty se srdečním selháním, poruchami srdečního rytmu a komplexními srdečními vadami v dospělosti",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.7.3",
+          "text": "Podpora regionální dostupnosti péče ve specializovaných ambulancích (kardiologie, angiologie)",
+          "indikatory": [
+            "cekaci_doby_specialist"
+          ],
+          "mereni": "proxy",
+          "note": "Regionální dostupnost specializovaných ambulancí kontrakt neměří; čekací doba na specialistu je nepřímé zrcadlo."
+        },
+        {
+          "num": "2.7.4",
+          "text": "Podpora změn ve vzdělávacím systému — angiologie jako specializační obor, změny v nástavbových oborech (intervenční kardiologie, strukturální intervence, vaskulární intervenční radiologie), vznik arytmologie, vzdělávání v péči o vrozené srdeční vady v dospělosti a v léčbě závislosti na tabáku",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.7.5",
+          "text": "Podpora vzdělávání biomedicínských inženýrů, všeobecných sester, sester pro intenzivní péči, adiktologů a lékařů",
+          "indikatory": [
+            "absolventi_osetrovatelstvi_per_100k",
+            "absolventi_lekarstvi_per_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří absolventy medicíny a ošetřovatelství souhrnně; biomedicínské inženýry a adiktology neměří."
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.7.1 Zavádění nových technologií a léčebných postupů včetně ambulantně prováděných intervencí ve vysoce specializovaných centrech ve srovnání s výchozími hodnotami před platností NKVP",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.7.2 Vznik nových specializovaných center pro srdeční selhání, ambulancí pro vrozené srdeční vady v dospělosti a rozšíření počtu výkonů v oblasti arytmologie",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.7.3 Vyrovnání dostupnosti ambulantní kardiologické péče mezi regiony, zvýšení dostupnosti angiologické péče",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "cekaci_doby_specialist",
+            "note": "Regionální hustotu ambulancí kontrakt neměří; čekací doba na specialistu je nepřímé zrcadlo dostupnosti."
+          }
+        },
+        {
+          "name": "2.7.4 Změny ve vzdělávacím systému ve vyjmenovaných oborech",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.7.5 Zvýšení počtu absolventů ve vyjmenovaných oborech",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "absolventi_lekarstvi_per_100k",
+            "note": "Kontrakt měří absolventy všeobecného lékařství a ošetřovatelství souhrnně, ne po vyjmenovaných oborech (biomedicínské inženýrství, adiktologie ap.)."
+          }
+        }
+      ],
+      "kontext_indikatory": [
+        "hospitalizace_na_100k"
+      ]
+    },
+    {
+      "sc": "2.8",
+      "goal": "sg2",
+      "title": "Zajištění přístupu k inovativním postupům a udržení vysoké kvality v kardiovaskulární péči",
+      "garant": "držitelé rozhodnutí o registraci léčivého přípravku, SÚKL, ZP, poskytovatelé, ÚZIS, KZP",
+      "dilci_cile": [
+        {
+          "num": "2.8.1",
+          "text": "Dosažení rychlé dostupnosti inovativních léčivých přípravků, minimalizace preskripčních a úhradových omezení nad rámec indikací schválených EMA, zavedení sledování efektivity inovativní léčby (sdílení klinických dat)",
+          "indikatory": [
+            "naklady_centrove_leky_total"
+          ],
+          "mereni": "proxy",
+          "note": "Rychlost vstupu inovací ani rozsah preskripčních omezení kontrakt neměří; úhrady za centrové léky jsou hrubé zrcadlo penetrace inovativní léčby."
+        },
+        {
+          "num": "2.8.2",
+          "text": "Optimalizace zahájení úhrady inovativních léčivých přípravků z prostředků veřejného zdravotního pojištění",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.8.3",
+          "text": "Podpora centralizace péče o vzácná nebo méně častá onemocnění, racionalizace centralizované péče s možným přechodem dispenzarizace mimo centra",
+          "mereni": "proces"
+        },
+        {
+          "num": "2.8.4",
+          "text": "Provázání systémů sledování pohybu nemocného zdravotnickým systémem, unifikace programů sledujících optimální léčbu a bonifikaci ošetřujících lékařů (modely VZP plus) napříč ZP",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "2.8.1 Procento nově uváděných inovativních léčivých přípravků a stupeň omezení jejich úhrady nad rámec schválené indikace EMA; dosažení možnosti delegované preskripce pro všeobecné praktické lékaře",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.8.2 Míra efektivity léčby sledovaná na datech reálných pacientů u vysoce nákladných léčivých přípravků",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.8.3 Doba od registrace k úhradě léčivých přípravků s potvrzenou efektivitou z prostředků veřejného zdravotního pojištění",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "2.8.4 Pokrytí potřeb ČR centry vysoce specializované péče pro vzácná nebo méně častá onemocnění",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" },
+          "note": "Dokument u tohoto indikátoru odkazuje „viz rovněž 4.2.2“ (str. 63), kde je ale sdílený zdravotní záznam pro prevenci a screening — odkaz nesedí, ponecháno."
+        },
+        {
+          "name": "2.8.5 Realizace systémů sledování pohybu nemocného zdravotnickým systémem, unifikace programů sledujících optimální léčbu pacientů a bonifikaci ošetřujících lékařů (modely VZP plus) napříč ZP",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "naklady_centrove_leky_total",
+        "vypadky_leciv_aktivni"
+      ],
+      "poznamka": "Nadpis specifického cíle je v PDF zkomolený: „SPECIFICKÝ CÍL 2. Zajištění přístupu k inovativním postupům a udržení vysoké kvality v kardiovaskulární péči kardiovaskulární péči“ — chybí číslice 8 a poslední slova jsou zdvojená (str. 61). Číslo 2.8 plyne z hierarchie cílů na str. 31. Pět indikátorů nesedí číslem na čtyři dílčí cíle."
+    },
+    {
+      "sc": "3.1",
+      "goal": "sg3",
+      "title": "Zajištění dostatečného počtu kvalitního, kvalifikovaného a motivovaného zdravotnického personálu v oblasti kardiovaskulární medicíny",
+      "garant": "lékařské fakulty, IPVZ, MZd, vysoké školy s obory biomedicínského inženýrství, odborné společnosti, MŠMT, zdravotnická zařízení",
+      "dilci_cile": [
+        {
+          "num": "3.1.1",
+          "text": "Zvýšení počtů atestujících v jednotlivých oborech, sledování demografického vývoje jednotlivých specializací",
+          "indikatory": [
+            "lekari_per_1000",
+            "podil_lekaru_55plus"
+          ],
+          "mereni": "proxy",
+          "note": "Počty atestací po oborech kontrakt neměří; celkový počet lékařů a podíl lékařů 55+ jsou hrubé zrcadlo personální situace."
+        },
+        {
+          "num": "3.1.2",
+          "text": "Podpora změn ve vzdělávacím systému — angiologie jako základní obor, změny v nástavbových atestacích a certifikovaných kurzech (intervenční kardiologie, strukturální intervence, vaskulární intervenční radiologie, arytmologie, vrozené srdeční vady v dospělosti, léčba závislosti na tabáku)",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.1.3",
+          "text": "Podpora vzdělávání v oborech s perspektivním zvýšením potřeb absolventů v praxi (biomedicínské inženýrství, všeobecné sestry, sestry intenzivní péče, adiktologové, lékaři)",
+          "indikatory": [
+            "absolventi_lekarstvi_per_100k",
+            "absolventi_osetrovatelstvi_per_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří absolventy jen souhrnně za všeobecné lékařství a ošetřovatelství, ne po vyjmenovaných oborech."
+        },
+        {
+          "num": "3.1.4",
+          "text": "Změna vzdělávání v oboru angiologie, posílení oboru cévní chirurgie, podpora vzdělávání v oboru vaskulární intervenční radiologie",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.1.5",
+          "text": "Podpora vzdělávání v oboru dětská kardiologie",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.1.6",
+          "text": "Zvýšení počtu absolventů oborů biomedicínského inženýrství, zvýšení zaměření na potřeby kardiologie (arytmologie, intervenční kardiologie)",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.1.7",
+          "text": "Zvýšení počtu sester absolventek, nutričních terapeutů a fyzioterapeutů, zdravotnických pracovníků s kurzem v oblasti kardiovaskulárních onemocnění; příprava certifikovaného kurzu pro všeobecné sestry se zvláštní odbornou způsobilostí pro ošetřovatelskou péči o pacienty se srdečním selháním",
+          "indikatory": [
+            "absolventi_osetrovatelstvi_per_100k",
+            "sestry_per_1000",
+            "fyzioterapeuti_per_100k"
+          ],
+          "mereni": "proxy",
+          "note": "Kontrakt měří celkové počty sester, absolventů ošetřovatelství a fyzioterapeutů, ne jejich specializaci na kardiovaskulární péči."
+        },
+        {
+          "num": "3.1.8",
+          "text": "Ochrana zdravotnického personálu během extrémních teplot (úprava pracovních prostor, hydratace, přestávky)",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "3.1.1 Počty atestujících v jednotlivých oborech, sledování demografického vývoje specializací v angiologii, kardiologii, kardiochirurgii",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "podil_lekaru_55plus",
+            "note": "Atestace podle oborů kontrakt neměří; stárnutí lékařského sboru (podíl lékařů 55+) je hrubé zrcadlo demografického vývoje specializací."
+          }
+        },
+        {
+          "name": "3.1.2 Změny ve vzdělávacím schématu jednotlivých oborů, zejména v angiologii, kardiologii, kardiochirurgii",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.3 Zvýšení počtu absolventů ve vyjmenovaných oborech",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "absolventi_lekarstvi_per_100k",
+            "note": "Kontrakt měří absolventy všeobecného lékařství a ošetřovatelství souhrnně, ne po vyjmenovaných oborech."
+          }
+        },
+        {
+          "name": "3.1.4 Počty lékařů se specializací poskytujících péči v oborech angiologie, cévní chirurgie a vaskulární intervenční radiologie",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.5 Zvýšení počtu lékařů se specializací v oboru dětské kardiologie",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.6 Počty absolventů oborů biomedicínského inženýrství, zařazení v provozu kardiovaskulárních center",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.7 Počty sester absolventek, nutričních terapeutů a fyzioterapeutů, zdravotnických pracovníků s kurzem v oblasti kardiovaskulárních onemocnění a počty těchto odborníků v kardiocentrech a kardiologických ambulancích",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "absolventi_osetrovatelstvi_per_100k",
+            "note": "Kontrakt měří absolventy ošetřovatelství celkem; nutriční terapeuty, KV specializaci ani zařazení v kardiocentrech neměří."
+          }
+        },
+        {
+          "name": "3.1.7.1 Integrace vybraných nelékařských profesí (sester specialistek, biomedicínských inženýrů) do léčebného procesu",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.7.2 Vytvoření a podpora vzdělávání zdravotnických pracovníků s absolvovaným kurzem v oblasti kardiovaskulárních onemocnění",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.8 Počet zdravotnických zařízení s implementovanými opatřeními na ochranu personálu před horkem",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.1.8.1 Spokojenost zdravotnického personálu s pracovními podmínkami během veder",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "lekari_per_1000",
+        "sestry_per_1000",
+        "podil_lekaru_55plus"
+      ]
+    },
+    {
+      "sc": "3.2",
+      "goal": "sg3",
+      "title": "Zlepšení stavu infrastruktury jednotlivých poskytovatelů kardiovaskulární péče",
+      "garant": "MZd, kardiovaskulární centra",
+      "dilci_cile": [
+        {
+          "num": "3.2.1",
+          "text": "Podpora rozvoje, obnovy a sledování stavu výbavy míst poskytování ambulantní kardiologické a angiologické péče",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.2",
+          "text": "Podpora vybavení specializovaných ambulancí v regionech s nedostatkem míst poskytování ambulantní specializované péče, adekvátní úhrada instrumentálních vyšetření",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.3",
+          "text": "Aktualizace podmínek pro centra vysoce specializované kardiovaskulární péče (revize věstníku 13/2020) a cerebrovaskulární centra (věstník 2/2010) v pravidelných intervalech",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.4",
+          "text": "Podpora vybavení kardiovaskulárních center pro léčbu specifických diagnóz (plicní hypertenze, kardiomyopatie, srdeční amyloidóza, vrozené srdeční vady, aortopatie) — zobrazovací a laboratorní metody včetně genetiky",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.5",
+          "text": "Vybavení center s rozsáhlým programem péče o srdeční selhání k poskytování dlouhodobých oběhových podpor u pacientů bez indikace k transplantaci",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.6",
+          "text": "Vybavení kardiovaskulárních center pro moderní arytmologickou péči, intervenční terapii a intenzivní kardiologickou péči",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.2.7",
+          "text": "Podpora rozvoje stacionářů k poskytování ambulantní intravenózní terapie (chronické srdeční selhání, kardiomyopatie) v rámci kardiovaskulárních center i mimo ně",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "3.2.1 Komplexnost vybavení, stáří přístrojů a stupeň amortizace",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.2.2 Narovnání regionálních rozdílů v počtu míst poskytování ambulantní specializované péče",
+          "baseline": null,
+          "target": {
+            "value": "minimálně 5, optimálně 7–8 míst poskytování ambulantní kardiologické péče a 4 vaskulární specialisté na 100 000 obyvatel"
+          },
+          "mapping": {
+            "match": "chybi",
+            "note": "Hustotu specializovaných ambulancí kontrakt neměří; nejbližší nepřímé zrcadlo je čekací doba na specialistu."
+          },
+          "note": "Podivnost dokumentu: minimální cíl 5/100 000 je NIŽŠÍ než průměr 6/100 000 uvedený v analytické části (str. 23) a jiný než cíl „optimálně 7 míst“ u indikátoru 1.3.2. Ponecháno tak, jak stojí v dokumentu (str. 69)."
+        },
+        {
+          "name": "3.2.3 Aktualizace věstníku 13/2020 a 2/2010 podle pravidelných výzev MZd",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.2.4 Vybavení komplexních kardiovaskulárních center hybridními sály",
+          "baseline": null,
+          "target": {
+            "value": "hybridní sály ve všech komplexních kardiovaskulárních centrech",
+            "year": 2027
+          },
+          "mapping": { "match": "chybi" },
+          "note": "Dokument: „v nejzazším horizontu 2027“ (str. 69)."
+        },
+        {
+          "name": "3.2.5 Vybavení vysoce specializovaných center poskytujících péči o vybrané diagnózy adekvátními technologiemi (nukleární medicína, zobrazovací metody, kardiogenetika)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.2.6 Vybavení center pro moderní arytmologickou péči (nové ablační techniky), intervenční péči (OCT, IVUS, funkční posouzení stenóz) a intenzivní kardiologickou péči (hemodynamická monitorace, krátkodobé mechanické podpory oběhu)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.2.7 Počet stacionářů k poskytování intravenózní kardiovaskulární terapie v ambulantním režimu",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "ct_per_milion",
+        "mri_per_milion",
+        "luzka_jip_per_100k"
+      ]
+    },
+    {
+      "sc": "3.3",
+      "goal": "sg3",
+      "title": "Nastavení sledování kvality péče u jednotlivých poskytovatelů kardiovaskulární péče",
+      "garant": "MZd, ÚZIS, ZP",
+      "dilci_cile": [
+        {
+          "num": "3.3.1",
+          "text": "Vytvoření efektivního systému externího sledování vybraných parametrů kvality (u AKS, kardiochirurgie, srdečního selhání, arytmií, vrozených vad, srdečních zástav, cévních onemocnění a CMP) a procesu jejich pravidelného hodnocení",
+          "mereni": "proces"
+        },
+        {
+          "num": "3.3.2",
+          "text": "Vytvoření informačního portálu pro benchmarking poskytovatelů — využití Portálu ukazatelů kvality KZP (puk.kancelarzp.cz) s výstupy z administrativních dat ZP a registru NRKI",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "3.3.1 Indikátory kvality péče u akutních koronárních syndromů (dojezdové časy ZZS; procento intervenčně řešených případů; time to needle; délka hospitalizace; mortalita hospitalizační, 30 a 90 dnů; procento pacientů s dosaženou cílovou hodnotou LDL, TK, HbA1c; odeslání do center pro léčbu závislosti na tabáku a k rehabilitaci)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "mortalita_inhosp_ami",
+            "note": "Ze svazku ukazatelů kontrakt měří nemocniční úmrtnost po AIM a 30denní readmise (readmise_30d_ami); časové parametry, podíl intervencí ani dosahování cílových hodnot neměří."
+          }
+        },
+        {
+          "name": "3.3.2 Indikátory kvality péče u pacientů se srdečním onemocněním léčeným kardiochirurgickým operačním výkonem (30denní mortalita u izolovaného CABG, izolované náhrady aortální chlopně a operací akutní disekce ascendentní aorty)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.3.3 Indikátory kvality péče u srdečního selhání a ICHS (léčba dle doporučení, délky hospitalizací, hospitalizační mortalita, rehospitalizace, cílové hodnoty rizikových faktorů, vakcinace proti chřipce, přechodová péče, implantace ICD při EF pod 35 %)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "readmise_30d_ami",
+            "note": "Kontrakt měří 30denní readmise jen po akutním infarktu; rehospitalizace pro srdeční selhání, podíl léčby dle doporučení ani implantace ICD neměří."
+          }
+        },
+        {
+          "name": "3.3.4 Indikátory kvality péče u poruch srdečního rytmu (léčba dle doporučení, podíl intervenčně léčených, délky hospitalizací, hospitalizační mortalita, rehospitalizace)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.3.5 Indikátory kvality péče u vrozených srdečních vad (podíl intervenčně a chirurgicky léčených, délky hospitalizací, hospitalizační a pozdní mortalita)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.3.6 Indikátory kvality péče u pacientů po srdeční zástavě nebo s refrakterní srdeční zástavou (počty přijatých z terénu i ze zdravotnických zařízení, procento dlouhodobě přežívajících bez neurologického deficitu, počet dárců orgánů)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "preziti_ohca_30d",
+            "note": "Kontrakt měří 30denní přežití po mimonemocniční zástavě; přežití bez neurologického deficitu ani dárcovství orgánů neměří."
+          }
+        },
+        {
+          "name": "3.3.7 Indikátory kvality péče u pacientů s cévním onemocněním (léčba dle doporučení, podíl intervenčně léčených, délky hospitalizací, procento amputací u ICHDK, hospitalizační mortalita, rehospitalizace, cílové hodnoty rizikových faktorů)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "amputace_dk_diabetici",
+            "note": "Z balíku ukazatelů kontrakt měří jen amputace dolních končetin, a to pouze u diabetiků; ostatní ukazatele cévní péče neměří."
+          }
+        },
+        {
+          "name": "3.3.8 Indikátory kvality péče u pacientů s cévním onemocněním léčeným cévně-chirurgickým operačním zákrokem (30denní mortalita u elektivních výkonů na břišní aortě a operací karotid, výskyt CMP u operací karotid, časné infekce protetických rekonstrukcí)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "3.3.9 Indikátory kvality a výkonnosti KCC (počty hospitalizovaných pro CMP, standardizovaná 5/30/90denní mortalita, dny doma z prvních 90 dnů, mRS, podíl na JIP, podíl trombolyzovaných, DNT, sekundární prevence, vyplněnost RES-Q, ukazatele mechanické rekanalizace)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "mortalita_inhosp_cmp",
+            "note": "Kontrakt měří nemocniční úmrtnost po CMP a podíl trombolyzovaných (trombolyza_ischemicka_cmp); DNT/DIT, mRS, dny doma ani vyplněnost RES-Q neměří."
+          }
+        },
+        {
+          "name": "3.3.10 Indikátory kvality a výkonnosti IC (tytéž ukazatele jako KCC včetně mediánu času do odjezdu do KCC u pacientů indikovaných k mechanické rekanalizaci)",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "trombolyza_ischemicka_cmp",
+            "note": "Kontrakt měří podíl ischemických CMP léčených trombolýzou; procesní ukazatele iktových center neměří."
+          }
+        },
+        {
+          "name": "3.3.11 Indikátory kvality rehabilitační péče u pacientů s hlavní diagnózou CMP (počty na akutních rehabilitačních lůžkách, léčba spasticity botulotoxinem, rozšířený Barthelové index při přijetí a propuštění, dny od CMP k přijetí na rehabilitační lůžko, struktura propuštění)",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "mortalita_inhosp_ami",
+        "mortalita_inhosp_cmp",
+        "readmise_30d_ami",
+        "trombolyza_ischemicka_cmp",
+        "preziti_ohca_30d"
+      ],
+      "poznamka": "Specifický cíl 3.3 má jen 2 dílčí cíle, ale 11 indikátorů — indikátory 3.3.1–3.3.11 jsou svazky ukazatelů kvality po diagnostických skupinách definované v obsahu cíle (str. 71–74), ne protějšky dílčích cílů."
+    },
+    {
+      "sc": "4.1",
+      "goal": "sg4",
+      "title": "Podpora výzkumu a mezinárodní spolupráce v oblasti kardiovaskulární medicíny",
+      "garant": "MZd, MŠMT, vysoké školy, kardiovaskulární centra",
+      "dilci_cile": [
+        {
+          "num": "4.1.1",
+          "text": "Nastavení meziuniverzitní a multicentrické spolupráce v kardiovaskulární a cerebrovaskulární problematice, navýšení institucionální podpory, podpora výzkumné sítě STROCZECH",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.1.2",
+          "text": "Zajištění financování a organizace cílených epidemiologických šetření v české populaci (modely podobné projektu POST-MONICA)",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.1.3",
+          "text": "Podpora multicentrických projektů napříč kardiovaskulárními a cerebrovaskulárními centry a dalšími institucemi",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.1.4",
+          "text": "Zajištění lepší podpory pro žadatele z ČR v rámci evropských konsorcií usilujících o granty EU",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.1.5",
+          "text": "Zajištění datových podkladů pro monitoraci epidemiologie, diagnostiky a léčby vzácných kardiovaskulárních a cerebrovaskulárních onemocnění — vznik a podpora dedikovaných registrů v rámci NKIS",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "4.1.1 Statistika publikačních aktivit v oblasti kardiologie, intenzivní medicíny, kardiovaskulární chirurgie, angiologie a cerebrovaskulární neurologie v rámci ČR",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.1.2 Realizace epidemiologických šetření v české populaci",
+          "baseline": null,
+          "target": {
+            "value": "alespoň 1–2 šetření za plánované období"
+          },
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.1.3 Financování vědy přes AZV — objem prostředků panelu 02 a objem prostředků přidělených projektům v oblasti cerebrovaskulární medicíny",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.1.4 Statistika účasti českých center v konsorciích čerpajících granty EU",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.1.5 Vznik registrů pacientů se vzácnými kardiovaskulárními a cerebrovaskulárními onemocněními a pravidelné zveřejňování výstupů z nich",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": []
+    },
+    {
+      "sc": "4.2",
+      "goal": "sg4",
+      "title": "Využití přínosů digitalizace a telemedicíny",
+      "garant": "ÚZIS, MZd, ZP",
+      "dilci_cile": [
+        {
+          "num": "4.2.1",
+          "text": "Zavedení sdílení laboratorních výsledků mezi všemi poskytovateli zdravotní péče, zavedení tzv. trojcestné laboratorní žádanky",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.2.2",
+          "text": "Zavedení sdíleného zdravotního záznamu v oblasti prevence a screeningu",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.2.3",
+          "text": "Podpora sdílení zobrazovacích metod (DICOM apod.), EKG křivek, případně jiných diagnostických výstupů",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.2.4",
+          "text": "Vytvoření legislativního rámce a podpora certifikačních procesů pro metody telemedicíny a telerehabilitace",
+          "mereni": "proces"
+        },
+        {
+          "num": "4.2.5",
+          "text": "Vyhodnocení efektivity zavedení metod e-health do praxe se zaměřením na úsporu nákladů při sdílení dat",
+          "mereni": "proces"
+        }
+      ],
+      "doc_indicators": [
+        {
+          "name": "4.2.1 Procento laboratorních hodnot sdílených elektronicky mezi více poskytovateli zdravotní péče",
+          "baseline": null,
+          "target": null,
+          "mapping": {
+            "match": "proxy",
+            "indicator_id": "ehealth_adoption",
+            "note": "Podíl elektronicky sdílených laboratorních hodnot kontrakt neměří; index adopce e-health je souhrnné zrcadlo digitalizace."
+          }
+        },
+        {
+          "name": "4.2.2 Podíl poskytovatelů zapojených do sdíleného zdravotního záznamu pro prevenci a screening",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.2.3 Procento poskytovatelů zapojených do sdílení zobrazovacích metod, případně dalších diagnostických výstupů",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.2.4 Rozsah certifikovaných prostředků pro telemonitorace pacientů, rozsah využití telemonitorace",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        },
+        {
+          "name": "4.2.5 Vyhodnocení ekonomické bilance sdílení dat a telemedicíny, počty pacientů podílejících se na telerehabilitaci",
+          "baseline": null,
+          "target": null,
+          "mapping": { "match": "chybi" }
+        }
+      ],
+      "kontext_indikatory": [
+        "ehealth_adoption",
+        "objednani_k_lekari_online"
+      ]
+    }
+  ]
+}

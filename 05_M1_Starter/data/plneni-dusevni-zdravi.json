@@ -1,0 +1,1068 @@
+{
+ "version": "1.0",
+ "strategy_id": "reforma_dusevni_zdravi",
+ "_doc": [
+  "Plnění reformy psychiatrické péče — provázání dvou dokumentů reformy",
+  "s indikátory datového kontraktu (data/indicators.json).",
+  "",
+  "ZDROJE: (A) Strategie reformy psychiatrické péče (MZ ČR, verze 1.0, schválena",
+  "7. 10. 2013, vydána 8. 10. 2013, doba realizace 2014–2023) — zakládající dokument",
+  "reformy se 7 strategickými cíli; (B) Národní akční plán pro duševní zdraví",
+  "2020–2030 (NAPDZ, leden 2020) — navazující akční plán s 5 strategickými",
+  "a 21 specifickými cíli a 60 opatřeními.",
+  "",
+  "CHARAKTER STRÁNKY: částečná RETROSPEKTIVA. Ptáme se, co reforma v roce 2013",
+  "slíbila (síť CDZ, deinstitucionalizace, personál, finance) a kde jsou dnešní",
+  "hodnoty kontraktu; NAPDZ 2020–2030 je platná prospektivní část s horizontem 2030.",
+  "",
+  "STRUKTURA: strategic_goals mají dvě skupiny — 'strategie2013' (cíle A1–A7,",
+  "strategické cíle Strategie 2013) a 'napdz' (cíle B1.1–B5.3, specifické cíle",
+  "NAPDZ). Klíč `target` (místo `target_2035` u Zdraví 2035) nese `year` tam,",
+  "kde dokument horizont uvádí.",
+  "",
+  "MAPOVÁNÍ je redakční práce, ne strojová: u každého indikátoru dokumentu říkáme,",
+  "jestli ho kontrakt měří PŘÍMO (match: primo — stejný jev, srovnatelná metodika;",
+  "prostý přepočet absolutního počtu na počet na obyvatele za změnu metodiky",
+  "nepovažujeme, poznámka to vždy říká), jen PROXY (match: proxy — příbuzný jev",
+  "nebo jiná metodika, srovnávat směr, ne hodnoty; poznámka říká proč), nebo VŮBEC",
+  "(match: chybi). U dílčích cílů `mereni: proces` znamená organizační, legislativní",
+  "nebo pilotní úkol bez populačního indikátoru v kontraktu — to není mezera měření,",
+  "ale povaha úkolu.",
+  "",
+  "POCTIVOST HODNOT: výchozí a cílové hodnoty jsou z dokumentů doslova, včetně",
+  "podivností (nesedící součty lůžek ve Strategii 2013; rozpor „snížení o 2/3“ vs.",
+  "indikátor „méně než 4 100 lůžek“ v NAPDZ). Nic nedopočítáváme a neopravujeme —",
+  "rozpory pojmenovávají poznámky. Strategie 2013 sama označuje své počty",
+  "specialistů, lůžek a zařízení za „expertní odhad … ideální doporučení“ (str. 35).",
+  "",
+  "ZÁSADNÍ ZJIŠTĚNÍ O MĚŘITELNOSTI: Strategie 2013 nemá tabulku indikátorů",
+  "s výchozími a cílovými hodnotami. Objektivní indikátory (kap. 4.3) jsou projektové",
+  "ukazatele operačních programů EU (kapacity podpořených služeb) a subjektivní",
+  "indikátory (kvalita života QoLMet, stigmatizace StigMet, spokojenost USat) měly",
+  "teprve vzniknout ve Fázi 1 (2014–2015). NAPDZ je měřitelnější: opatření mají",
+  "gestora, termín, rozpočet a indikátor — většina indikátorů je ale procesních",
+  "(existence dokumentu, počty proškolených), kvantitativních cílů je menšina.",
+  "",
+  "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu",
+  "z data/indicators.json — tady se NEduplikují, aby nemohly zastarat."
+ ],
+ "document": {
+  "title": "Strategie reformy psychiatrické péče",
+  "approved": "2013-10-07",
+  "approval": "schválení Pracovní skupinou 4. 9. 2013, po interním připomínkovém řízení podpis ministra zdravotnictví (MUDr. Martin Holcát, MBA) 7. 10. 2013; vydáno 8. 10. 2013 jako verze 1.0",
+  "url": "https://www.reformapsychiatrie.cz/sites/default/files/2021-03/Strategie%20reformy%20psychiatrick%C3%A9%20p%C3%A9%C4%8De.pdf",
+  "web": "https://www.reformapsychiatrie.cz/",
+  "horizon": {
+   "from": 2013,
+   "to": 2023
+  },
+  "note": "Doba realizace 2014–2023 (Fáze 1 „Iniciace a zajištění podmínek“ 2014–2015, Fáze 2 „Realizace a provoz“ 2016–2023, Fáze 3 „Vyhodnocení“ na konci Fáze 2). Globální cíl: zvýšit kvalitu života lidem s duševním onemocněním. Indikativní rozpočet cca 6 mld. Kč (2 950 mil. měkké aktivity + 3 085 mil. investice), zdroje ESIF + státní rozpočet + Norské fondy."
+ },
+ "document_b": {
+  "title": "Národní akční plán pro duševní zdraví 2020–2030",
+  "approved": "2020-01-27",
+  "url": "https://mzd.gov.cz/wp-content/uploads/2020/01/N%C3%A1rodn%C3%AD-ak%C4%8Dn%C3%AD-pl%C3%A1n-pro-du%C5%A1evn%C3%AD-zdrav%C3%AD-2020-2030.pdf",
+  "horizon": {
+   "from": 2020,
+   "to": 2030
+  },
+  "note": "Datum schválení vládou (27. 1. 2020) v PDF uvedeno není — dokument nese jen „Vydáno: leden 2020“; číslo usnesení vlády proto neuvádíme. Vlastníkem plánu je vzhledem k nadrezortnosti premiér ČR, koordinaci má Rada vlády pro duševní zdraví. NAPDZ je implementačním dokumentem Strategie reformy psychiatrické péče 2013, Strategického rámce ČR 2030 a Zdraví 2030; problematiku demencí a prevence sebevražd neřeší — odkazuje na souběžné plány NAPAN+ a NAPPS."
+ },
+ "extracted_at": "2026-09-01",
+ "strategic_goals": [
+  {
+   "id": "strategie2013",
+   "num": "A",
+   "title": "Strategie reformy psychiatrické péče (2013)"
+  },
+  {
+   "id": "napdz",
+   "num": "B",
+   "title": "Národní akční plán pro duševní zdraví 2020–2030"
+  }
+ ],
+ "ramcove_indikatory": [
+  {
+   "name": "Síť Center duševního zdraví (CDZ)",
+   "baseline": {
+    "value": "0 center — pilíř CDZ v roce 2013 neexistoval",
+    "year": 2013
+   },
+   "target": {
+    "value": "Strategie 2013: 1 CDZ na cca 100 000 obyvatel (v některých regionech 1 na 80 000); NAPDZ: 30 CDZ do roku 2022 z projektů ESIF, cílově síť 100 CDZ",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "centra_dusevniho_zdravi_per_100k",
+    "note": "Tentýž jev — počet CDZ; kontrakt síť přepočítává na 100 000 obyvatel, dokumenty ji uvádějí absolutně (100 CDZ) i relativně (1/100 000). Strategie 2013 počty sama označuje za expertní odhad (str. 35)."
+   }
+  },
+  {
+   "name": "Lůžka následné psychiatrické péče (deinstitucionalizace)",
+   "baseline": {
+    "value": "8 490 lůžek u poskytovatelů následné lůžkové péče v oboru psychiatrie (k 31. 8. 2018)",
+    "year": 2018
+   },
+   "target": {
+    "value": "snížení o 2/3 oproti stávajícímu stavu; indikátor NAPDZ: v roce 2030 méně než 4 100 lůžek",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "luzka_psychiatricka_per_1000",
+    "note": "Kontrakt měří celkový psychiatrický lůžkový fond (akutní i následná lůžka) na 1 000 obyvatel, ne samostatně lůžka následné péče — srovnávat směr, ne hodnoty."
+   },
+   "note": "Vnitřní rozpor NAPDZ (opatření 4.2.3): snížení o 2/3 z 8 490 by znamenalo cca 2 800 zbývajících lůžek, indikátor opatření ale říká „nižší než 4 100“, což odpovídá snížení zhruba o polovinu. Přepisujeme obojí doslova, neopravujeme."
+  },
+  {
+   "name": "Akutní psychiatrická lůžka",
+   "baseline": {
+    "value": "dostupnost akutní péče extrémně nízká — u schizofrenie jen 27 % pacientů přijato na lůžka akutní péče, 73 % přímo na lůžka následné péče (NRHOSP 2007–2015)",
+    "year": 2018
+   },
+   "target": {
+    "value": "cca 2 800 lůžek akutní péče pro všechny cílové skupiny včetně dětské populace, rovnoměrně regionálně rozložených (NAPDZ, opatření 4.2.1)",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Kontrakt akutní lůžka samostatně neměří; v celkovém fondu (luzka_psychiatricka_per_1000) se růst akutní kapacity a redukce následné vzájemně překrývají."
+   }
+  },
+  {
+   "name": "Psychiatři na 100 000 obyvatel",
+   "target": {
+    "value": "25 / 100 000 obyvatel (Strategie 2013, obecná doporučení — součet standardů všech pilířů)"
+   },
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "psychiatri_per_100k",
+    "note": "Tentýž jev i jednotka. Dokument hodnotu označuje za expertní odhad / ideální doporučení, ne definitivní stav (str. 35)."
+   }
+  },
+  {
+   "name": "Podíl výdajů na duševní zdraví",
+   "baseline": {
+    "value": "2,91 % výdajů na zdravotnictví (0,26 % HDP); ostatní členské země EU 5–10 %",
+    "year": 2011
+   },
+   "target": {
+    "value": "Strategie 2013: zvýšit na úroveň průměru zemí EU; NAPDZ: min. 15 mld. Kč z v.z.p. pro psychiatrii a poměr komunitní : lůžková péče 60 : 40 v roce 2029",
+    "year": 2029
+   },
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "vydaje_dusevni_zdravi_pct",
+    "note": "Procentní cíl Strategie 2013 je tentýž jev jako kontrakt (podíl výdajů na duševní zdraví na výdajích na zdravotnictví; výchozí hodnota WHO 2011 cit. Winkler 2013, str. 15–16 dokumentu). Cíl NAPDZ v absolutních mld. Kč z v.z.p. a vnitřní poměr komunitní/lůžkové péče jsou vůči kontraktu jen proxy."
+   }
+  },
+  {
+   "name": "Deinstitucionalizace do roku 2022 (předběžná podmínka ESIF)",
+   "target": {
+    "value": "přesunout cca 30 % dlouhodobě hospitalizovaných pacientů s převahou sociálních potřeb do komunity a snížit lůžka následné péče o 1 200 do roku 2022 (závazek ČR vůči EK citovaný v NAPDZ, str. 10)",
+    "year": 2022
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "luzka_psychiatricka_per_1000",
+    "note": "Kontrakt měří celkový lůžkový fond na 1 000 obyvatel, ne samostatně následná lůžka ani počty přesunutých pacientů — srovnávat jen směr."
+   }
+  }
+ ],
+ "cile": [
+  {
+   "sc": "A1",
+   "goal": "strategie2013",
+   "title": "Zvýšit kvalitu psychiatrické péče systémovou změnou organizace jejího poskytování",
+   "dilci_cile": [
+    {
+     "num": "A1.1",
+     "text": "Vybudovat Centra duševního zdraví jako nový pilíř péče — regionální síť 1 CDZ na cca 100 000 obyvatel (v některých regionech 1 na 80 000), provoz 24/7, dojezd do 30 minut veřejnou dopravou",
+     "indikatory": [
+      "centra_dusevniho_zdravi_per_100k"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "A1.2",
+     "text": "Dobudovat síť psychiatrických a klinickopsychologických ambulancí, rozšířit je o nelékařské pracovníky a zvýšit časový fond na jednoho pacienta",
+     "indikatory": [
+      "psychiatri_per_100k"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří všechny psychiatry na 100 000 obyvatel, ne jen ambulantní síť a její personální skladbu (dokument pro ambulance žádá 12 psychiatrů/100 000)."
+    },
+    {
+     "num": "A1.3",
+     "text": "Dobudovat síť psychiatrických oddělení nemocnic pro akutní péči (40 lůžek/100 000 obyvatel včetně všech specializací) a restrukturalizovat lůžkovou péči",
+     "indikatory": [
+      "luzka_psychiatricka_per_1000"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří jen celkový psychiatrický lůžkový fond na 1 000 obyvatel; akutní lůžka na odděleních nemocnic samostatně nerozlišuje."
+    },
+    {
+     "num": "A1.4",
+     "text": "Celkově zvýšit finanční toky do psychiatrické péče včetně prostředků z veřejného zdravotního pojištění na úroveň průměru zemí EU",
+     "indikatory": [
+      "vydaje_dusevni_zdravi_pct"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "A1.5",
+     "text": "Vytvořit nový model financování psychiatrické péče a prosadit ho dohodou se zdravotními pojišťovnami",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Síť Center duševního zdraví",
+     "target": {
+      "value": "1 CDZ na cca 100 000 obyvatel (v některých regionech 1 CDZ na 80 000), režim 24/7, dojezd 30 minut veřejnou dopravou"
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "centra_dusevniho_zdravi_per_100k",
+      "note": "Tentýž jev i jednotka (centra na 100 000 obyvatel). Dokument počty výslovně označuje za expertní odhad / ideální doporučení k další diskusi (str. 35)."
+     }
+    },
+    {
+     "name": "Psychiatři celkem",
+     "target": {
+      "value": "25 / 100 000 obyvatel"
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "psychiatri_per_100k",
+      "note": "Tentýž jev i jednotka. Cíl je součtem standardů pilířů (ambulance 12, oddělení nemocnic 6, léčebny 5, CDZ 1–2 na 100 000 obyvatel)."
+     }
+    },
+    {
+     "name": "Specialisté v oboru dětská a dorostová psychiatrie",
+     "target": {
+      "value": "4,5 / 100 000 obyvatel"
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "pedopsychiatri_per_100k_deti",
+      "note": "Jiný jmenovatel: dokument počítá na 100 000 obyvatel, kontrakt na 100 000 dětí (0–19 let) — srovnávat jen směr."
+     }
+    },
+    {
+     "name": "Akutní psychiatrická lůžka na odděleních nemocnic",
+     "target": {
+      "value": "40 lůžek / 100 000 obyvatel zahrnujících veškeré specializace; k tomu 2 lůžka/100 000 pro intenzivní psychiatrickou péči a gerontopsychiatrické stanice 10 lůžek/100 000"
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt měří jen celkový psychiatrický lůžkový fond (luzka_psychiatricka_per_1000), akutní lůžka samostatně ne."
+     }
+    },
+    {
+     "name": "Lůžka dětské a dorostové psychiatrie",
+     "target": {
+      "value": "4,2 lůžka / 100 000 obyvatel"
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt lůžkový fond dětské psychiatrie neměří; měří počty hospitalizací dětí (hospitalizace_deti_psychiatrie_akutni), což je jiný jev."
+     }
+    },
+    {
+     "name": "Podíl výdajů na duševní zdraví v rámci zdravotnictví",
+     "baseline": {
+      "value": "2,91 % (0,26 % HDP)",
+      "year": 2011
+     },
+     "target": {
+      "value": "úroveň průměru zemí EU (ostatní členské země 5–10 %)"
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "vydaje_dusevni_zdravi_pct",
+      "note": "Tentýž jev — podíl výdajů na duševní zdraví na výdajích na zdravotnictví; výchozí hodnota WHO 2011 cit. Winkler (2013), str. 15–16 dokumentu."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Explicitní počty specialistů, lůžek a zařízení dokument sám označuje za „expertní odhad … ideální doporučení, která jsou primárně určena k další diskusi“ a „nedeterminují vlastní úspěšnost reformy“ (str. 35). Strategie nemá tabulku indikátorů s výchozími a cílovými hodnotami — objektivní indikátory (kap. 4.3) jsou projektové ukazatele operačních programů EU, subjektivní indikátory měly teprve vzniknout ve Fázi 1."
+  },
+  {
+   "sc": "A2",
+   "goal": "strategie2013",
+   "title": "Omezit stigmatizaci duševně nemocných a oboru psychiatrie obecně",
+   "dilci_cile": [
+    {
+     "num": "A2.1",
+     "text": "Vytvořit metodiku měření stigmatizace (StigMet) a periodicky měřit stigmatizaci před, během a po implementaci Strategie",
+     "mereni": "proces"
+    },
+    {
+     "num": "A2.2",
+     "text": "Realizovat celoplošné destigmatizační kampaně a vzdělávací programy pro laickou i odbornou veřejnost a zaměstnance veřejné správy",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Úroveň stigmatizace duševně nemocných (vlastní metodika StigMet)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt stigmatizaci neměří. Strategie počítala s vlastní metodikou StigMet, která měla vzniknout ve Fázi 1 (2014–2015) — dokument sám žádnou výchozí ani cílovou hodnotu neuvádí."
+     }
+    }
+   ],
+   "kontext_indikatory": []
+  },
+  {
+   "sc": "A3",
+   "goal": "strategie2013",
+   "title": "Zvýšit spokojenost uživatelů a jejich rodin s poskytovanou psychiatrickou péčí",
+   "dilci_cile": [
+    {
+     "num": "A3.1",
+     "text": "Definovat metody měření spokojenosti uživatelů péče a jejich rodin (USat) a spokojenost periodicky vyhodnocovat",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Spokojenost uživatelů péče a jejich rodin (vlastní metodika USat)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt spokojenost uživatelů psychiatrické péče neměří; metodika USat měla vzniknout ve Fázi 1, dokument neuvádí výchozí ani cílovou hodnotu."
+     }
+    }
+   ],
+   "kontext_indikatory": []
+  },
+  {
+   "sc": "A4",
+   "goal": "strategie2013",
+   "title": "Zvýšit efektivitu psychiatrické péče včasnou diagnostikou a identifikací skryté psychiatrické nemocnosti",
+   "dilci_cile": [
+    {
+     "num": "A4.1",
+     "text": "Zvýšit podíl léčené populace — ověřovat longitudinálními epidemiologickými studiemi (prvotní sběr dat plánován na rok 2014, opětovný na rok 2019)",
+     "indikatory": [
+      "prevalence_dusevni_poruchy_dospeli"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří celkovou prevalenci duševních onemocnění u dospělých (populační studie), ne podíl léčených; skrytá nemocnost je rozdíl mezi prevalencí a léčenými — indikátor je jen kontextové zrcadlo téhož terénu, směr nelze číst mechanicky."
+    },
+    {
+     "num": "A4.2",
+     "text": "Vzdělávat praktické lékaře a sestry k rozpoznávání příznaků duševních nemocí a koordinaci se specializovanými psychiatrickými službami",
+     "mereni": "proces"
+    },
+    {
+     "num": "A4.3",
+     "text": "Uplatňovat konsiliární psychiatrii (týmy) ve všeobecných nemocnicích k identifikaci skryté nemocnosti na somatických odděleních",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "pouzivani_antidepresiv",
+    "deti_ambulantni_psychiatrie"
+   ]
+  },
+  {
+   "sc": "A5",
+   "goal": "strategie2013",
+   "title": "Zvýšit úspěšnost plnohodnotného začleňování duševně nemocných do společnosti (zejména zlepšením podmínek pro zaměstnanost, vzdělávání a bydlení)",
+   "dilci_cile": [
+    {
+     "num": "A5.1",
+     "text": "Zlepšit podmínky zaměstnávání — chráněná pracovní místa, finanční pobídky pro sociální podnikání (meziresortně s MPSV a MF)",
+     "indikatory": [
+      "invalidni_duchody_dusevni"
+     ],
+     "mereni": "proxy",
+     "note": "Zaměstnanost lidí s duševním onemocněním kontrakt neměří; počet vyplácených invalidních důchodů pro duševní poruchy je jen nepřímé zrcadlo pracovního vyloučení — jiný jev a důchod je zároveň legitimní ochrana, směr číst opatrně."
+    },
+    {
+     "num": "A5.2",
+     "text": "Rozšířit chráněné a sociální bydlení a transformovat pobytové sociální služby (MPSV, MMR)",
+     "mereni": "proces"
+    },
+    {
+     "num": "A5.3",
+     "text": "Rozšířit inkluzivní přístup a integraci žáků s duševním onemocněním do běžných škol (MŠMT)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": []
+  },
+  {
+   "sc": "A6",
+   "goal": "strategie2013",
+   "title": "Zlepšit provázanost zdravotních, sociálních a dalších návazných služeb",
+   "dilci_cile": [
+    {
+     "num": "A6.1",
+     "text": "Nastavit efektivní spolupráci mezi resorty (MPSV, MV, MMR, MSp, MŠMT) a územními samosprávami a koordinaci péče v regionech",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Strategie u tohoto cíle žádný kvantitativní indikátor nestanovila; koordinaci mezi pilíři měla zajišťovat ambulance primární psychiatrické péče s podporou CDZ."
+  },
+  {
+   "sc": "A7",
+   "goal": "strategie2013",
+   "title": "Humanizovat psychiatrickou péči",
+   "dilci_cile": [
+    {
+     "num": "A7.1",
+     "text": "Redukovat lůžkovou kapacitu psychiatrických nemocnic/léčeben jako přirozený důsledek rozvinuté extramurální péče (bez číselného cíle v dokumentu)",
+     "indikatory": [
+      "luzka_psychiatricka_per_1000"
+     ],
+     "mereni": "primo",
+     "note": "Tentýž jev — psychiatrický lůžkový fond (zdroj ÚZIS); kontrakt ho přepočítává na 1 000 obyvatel, dokument uvádí absolutní počty. Dokument číselný cíl redukce nestanovil."
+    },
+    {
+     "num": "A7.2",
+     "text": "Investovat do zlepšení prostředí psychiatrických nemocnic/léčeben a oddělení (projekt SKVP; rekonstrukce s cílem max. 2lůžkových pokojů na odděleních, max. 3lůžkových v léčebnách)",
+     "mereni": "proces"
+    },
+    {
+     "num": "A7.3",
+     "text": "Zvýšit zaměření léčeben na následnou péči, snížit objem akutní péče a diferencovat psychiatrické nemocnice/léčebny",
+     "indikatory": [
+      "psychiatrie_prumerna_delka_hospitalizace"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří průměrnou délku psychiatrické hospitalizace — ta klesá jak diferenciací péče, tak deinstitucionalizací; vazba na tento konkrétní úkol je volná."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Lůžkový fond psychiatrických léčeben/nemocnic (výchozí stav)",
+     "baseline": {
+      "value": "18 léčeben pro dospělé s 8 847 lůžky + 3 dětské léčebny s 250 lůžky (konec 2012); psychiatrická oddělení nemocnic 1 268 lůžek; dokument uvádí celkem 9 254 psychiatrických lůžek, z toho 260 pedopsychiatrických",
+      "year": 2012
+     },
+     "target": {
+      "value": "bez číselného cíle — redukce lůžkové kapacity jako přirozený důsledek rozvoje extramurální péče"
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "luzka_psychiatricka_per_1000",
+      "note": "Tentýž jev (lůžkový fond psychiatrie, zdroj ÚZIS), kontrakt přepočítává na 1 000 obyvatel."
+     },
+     "note": "Součty v dokumentu nesedí: 8 847 + 250 + 1 268 = 10 365, dokument přesto na str. 18 uvádí celkem 9 254 lůžek; podíl oddělení nemocnic „14,4 % z celkového počtu“ neodpovídá ani jednomu součtu. Přepisujeme doslova, neopravujeme."
+    }
+   ],
+   "kontext_indikatory": [
+    "rehospitalizace_schizofrenie_30d"
+   ],
+   "poznamka": "Rozpočet humanizačních investic: ambulance 85 mil., psychiatrická oddělení nemocnic 690 mil., psychiatrické nemocnice/léčebny 460 mil. Kč (str. 60)."
+  },
+  {
+   "sc": "B1.1",
+   "goal": "napdz",
+   "title": "Zajistit koordinaci mezirezortní veřejné politiky duševního zdraví prostřednictvím funkčního nadrezortního koordinačního systému",
+   "garant": "ÚV ČR (spolupráce MZd, MPSV, MŠMT, MMR, MSp, MV, MF)",
+   "dilci_cile": [
+    {
+     "num": "1.1.1",
+     "text": "Zřídit Radu vlády pro duševní zdraví s premiérem jako předsedou (ustavení do 1/2020, existence trvale) a zapojit uživatele péče do řízení",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (1.1.1–1.1.2); uvádíme 1. Druhé (mezirezortní koordinační tým na jednotlivých rezortech) je rovněž procesní — indikátorem jsou zápisy z jednání."
+  },
+  {
+   "sc": "B1.2",
+   "goal": "napdz",
+   "title": "Zajistit efektivní koordinaci a řízení služeb péče o duševní zdraví na regionální a lokální úrovni",
+   "garant": "MZd, MPSV (spolupráce MMR, kraje, MŠMT)",
+   "dilci_cile": [
+    {
+     "num": "1.2.1",
+     "text": "Pilotovat model řízení péče o duševní zdraví na regionální úrovni ve 3 krajích s cílem propojit zdravotně-sociální pomezí (realizace pilotů do 6/2024)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (1.2.1–1.2.2); uvádíme 1. Druhé (promítnutí poznatků z pilotů do organizace, financí a legislativy — návrh vládě 6/2025) je rovněž procesní."
+  },
+  {
+   "sc": "B1.3",
+   "goal": "napdz",
+   "title": "Vytvořit nástroje koordinovaného poskytování služeb v oblasti péče o duševní zdraví a přechodu od institucionální péče ke komunitní",
+   "garant": "MZd, MŠMT, MPSV",
+   "dilci_cile": [
+    {
+     "num": "1.3.1",
+     "text": "Zajistit financování přechodné (transformační) fáze reformy s plánovaným úbytkem následných lůžek — modelace nákladů a jejich rozdělení mezi státní rozpočet a veřejné zdravotní pojištění (průběžně do 1/2025)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 3 opatření (1.3.1–1.3.3); uvádíme 1. Zbylá 2 (revize vzdělávání všech odborností k práci v komunitě do 1/2024; strategie efektivního využívání lidských zdrojů do 1/2022) jsou rovněž procesní."
+  },
+  {
+   "sc": "B1.4",
+   "goal": "napdz",
+   "title": "Zavést kvalitu péče jako důležitý aspekt v řízení sítě služeb v oblasti duševního zdraví",
+   "garant": "MZd, MPSV, MSp",
+   "dilci_cile": [
+    {
+     "num": "1.4.1",
+     "text": "Nastavit monitorování kvality péče o duševní zdraví ve vazbě na vynakládané prostředky — doplnit kritéria kvality na úrovni služeb (mezo-úroveň) a zavést jejich reportování (do 1/2026)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "rehospitalizace_schizofrenie_30d"
+   ],
+   "poznamka": "Cíl má v dokumentu 1 opatření (1.4.1); uvádíme ho. Kvalitu psychiatrických služeb kontrakt zachycuje jen nepřímo (rehospitalizace po propuštění)."
+  },
+  {
+   "sc": "B1.5",
+   "goal": "napdz",
+   "title": "Zavést metodiku pro výzkum a hodnocení politiky a služeb v oblasti duševního zdraví",
+   "garant": "MZd (spolupráce MPSV, ÚZIS, zdravotní pojišťovny)",
+   "dilci_cile": [
+    {
+     "num": "1.5.1",
+     "text": "Zavést systém výzkumu a hodnocení politik a služeb — metodika, indikátory, periodická zpráva o stavu systému péče o duševní zdraví každých 5 let (metodika do 12/2020)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 5 opatření (1.5.1–1.5.5); uvádíme 1. Zbylá 4 (informační systém pro sledované oblasti péče do 1/2025; datová základna zdravotních i sociálních služeb do 12/2030; informační systém nákladovosti péče do 12/2025; posílení NZIP pro zdravotní gramotnost do 6/2021) jsou rovněž procesní."
+  },
+  {
+   "sc": "B1.6",
+   "goal": "napdz",
+   "title": "Umožnit pilotování inovativních metod v poskytování péče v oblasti duševního zdraví",
+   "garant": "MZd, MPSV, MŠMT, MMR",
+   "dilci_cile": [
+    {
+     "num": "1.6.2",
+     "text": "Pilotně otestovat modely bydlení s různou mírou podpory (Recovery house, Housing first, Dům na půl cesty) — 5 modelů ve vybraných krajích (pilot do 1/2025)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 5 opatření (1.6.1–1.6.5); uvádíme 1. Zbylá 4 (variantní návrh integrovaného zdravotně-sociálního rozpočtu do 1/2025; pilotní „škola zotavení“ Recovery College; jednotka pro matku a dítě do 1/2023; podpora dalších inovativních projektů) jsou rovněž procesně-pilotní."
+  },
+  {
+   "sc": "B2.1",
+   "goal": "napdz",
+   "title": "Zvýšit podíl financí plynoucích do oblasti péče o duševní zdraví s cílem rozvoje komunitního systému péče a prevence chudoby lidí s duševním onemocněním",
+   "garant": "MZd, MPSV (spolupráce VZP, SZP, MF)",
+   "dilci_cile": [
+    {
+     "num": "2.1.1",
+     "text": "Navyšovat prostředky z veřejného zdravotního pojištění do psychiatrické péče o cca 250 mil. Kč ročně; v roce 2029 min. 15 mld. Kč a poměr komunitní : lůžková péče 60 : 40",
+     "indikatory": [
+      "vydaje_dusevni_zdravi_pct"
+     ],
+     "mereni": "proxy",
+     "note": "Dokument cílí absolutní objem úhrad z v.z.p. a vnitřní poměr komunitní/lůžkové péče; kontrakt měří podíl výdajů na duševní zdraví na celkových výdajích na zdravotnictví — směr srovnatelný, hodnoty nepřevoditelné."
+    },
+    {
+     "num": "2.1.4",
+     "text": "Systémově snižovat nezaměstnanost osob s duševním onemocněním (aktivní politika zaměstnanosti, metoda IPS); u osob se závažným duševním onemocněním nezaměstnanost v roce 2024 nejméně o 5 % nižší oproti výchozímu průzkumu",
+     "indikatory": [
+      "invalidni_duchody_dusevni"
+     ],
+     "mereni": "proxy",
+     "note": "Nezaměstnanost lidí s duševním onemocněním kontrakt neměří; počet vyplácených invalidních důchodů pro duševní poruchy je jen hrubé zrcadlo pracovního vyloučení — jiný jev, směr číst opatrně."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Objem úhrad psychiatrické péče z veřejného zdravotního pojištění",
+     "baseline": {
+      "value": "13,7 mld. Kč, tj. cca 4,08 % rozpočtu na zdravotní péči (evropský průměr 7 %)",
+      "year": 2015
+     },
+     "target": {
+      "value": "min. 15 mld. Kč; poměr financí v komunitní vs. lůžkové péči 60 : 40",
+      "year": 2029
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "vydaje_dusevni_zdravi_pct",
+      "note": "Kontrakt měří podíl výdajů na duševní zdraví na celkových výdajích na zdravotnictví (jiný jmenovatel než rozpočet v.z.p. a jiná jednotka než absolutní mld. Kč) — srovnávat směr, ne hodnoty."
+     }
+    },
+    {
+     "name": "Nezaměstnanost osob se závažným duševním onemocněním",
+     "baseline": {
+      "value": "nezaměstnanost lidí propuštěných z lůžkové péče přesahuje 75 %; přesný výchozí stav měl teprve stanovit reprezentativní průzkum"
+     },
+     "target": {
+      "value": "nejméně o 5 % nižší oproti výchozímu stavu z provedeného průzkumu",
+      "year": 2024
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt nezaměstnanost osob s duševním onemocněním neměří."
+     },
+     "note": "Baseline bez roku záměrně: NAPDZ přesný výchozí stav nedatuje — uvádí jen, že nezaměstnanost propuštěných z lůžkové péče přesahuje 75 %, a výchozí hodnotu měl teprve stanovit reprezentativní průzkum."
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 4 opatření (2.1.1–2.1.4); uvádíme 2. Zbylá 2 (analýza mechanismu posuzování invalidity — 2.1.2; revize kritérií příspěvku na péči — 2.1.3) jsou analyticko-legislativní, jejich indikátory jsou existence analýz a právních úprav."
+  },
+  {
+   "sc": "B2.2",
+   "goal": "napdz",
+   "title": "Vytvořit funkční systém primární prevence a včasné intervence v oblasti duševního zdraví pokrývající celý životní cyklus od narození až do seniorského věku",
+   "garant": "MZd, MPSV, MŠMT",
+   "dilci_cile": [
+    {
+     "num": "2.2.1",
+     "text": "Vytvořit a pilotně ověřit systém včasné identifikace/depistáže dětí v psychosociálním ohrožení a model včasného záchytu žen v těhotenství a po porodu (pilot a evaluace do 12/2023)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "sebevrazdy_per_100k",
+    "sebevrazdy_mladistvi_15_19"
+   ],
+   "poznamka": "Cíl má v dokumentu 5 opatření (2.2.1–2.2.5); uvádíme 1. Zbylá 4 (programy rodičovských dovedností Triple P; psychologické poradenství na vysokých školách; duševní zdraví v agendě BOZP; prevence a časná intervence u seniorů) jsou rovněž pilotně-procesní. Prevenci sebevražd NAPDZ neřeší — odkazuje na souběžný Národní akční plán prevence sebevražd (NAPPS); sebevražednost proto vedeme jen jako kontext."
+  },
+  {
+   "sc": "B2.3",
+   "goal": "napdz",
+   "title": "Zajistit podporu dětského duševního zdraví ve vzdělávacím systému",
+   "garant": "MŠMT (spolupráce MZd, MPSV)",
+   "dilci_cile": [
+    {
+     "num": "2.3.3",
+     "text": "Zrevidovat zařazení psychosociální gramotnosti do rámcových vzdělávacích programů (MŠ, ZŠ, SŠ) a vytvořit a ověřit program podpory psychosociální výchovy na základních školách (do 1/2023)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "sebevrazdy_mladistvi_15_19"
+   ],
+   "poznamka": "Cíl má v dokumentu 4 opatření (2.3.1–2.3.4); uvádíme 1. Zbylá 3 (psychosociální výchova v pregraduální přípravě pedagogů; DVPP a 14 metodicky vedených krajských koordinátorů; program managementu žákovského chování ověřený na 42 školách ve 14 krajích do 1/2026) jsou rovněž procesní — jejich indikátory jsou počty proškolených a zapojených škol, které kontrakt neměří."
+  },
+  {
+   "sc": "B2.4",
+   "goal": "napdz",
+   "title": "Realizovat celostátní destigmatizační iniciativu",
+   "garant": "MZd, MŠMT, MPSV (odborný garant NÚDZ)",
+   "dilci_cile": [
+    {
+     "num": "2.4.1",
+     "text": "Pokračovat v celostátní destigmatizační kampani, rozšířit programy na další cílové skupiny (novináři, policisté, pedagogové, vězeňská služba, politici, zaměstnavatelé) a zajistit udržitelnost do 2030",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Absolventi ověřených destigmatizačních programů",
+     "target": {
+      "value": "3 000 lidí z definovaných cílových skupin; existence zprávy z měření změny vnímání/stigmatu v ČR",
+      "year": 2025
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt stigmatizaci ani destigmatizační programy neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (2.4.1–2.4.2); uvádíme 1. Druhé (100 certifikovaných ambasadorů z řad lidí s duševním onemocněním, vyškolených pod vedením NÚDZ) je rovněž procesní."
+  },
+  {
+   "sc": "B3.1",
+   "goal": "napdz",
+   "title": "Systematicky upravit společenské prostředí tak, aby byla možná implementace závazků plynoucích pro ČR z mezinárodních dokumentů v oblasti kvality a lidských práv",
+   "garant": "MZd, MPSV, MSp, MŠMT, MV",
+   "dilci_cile": [
+    {
+     "num": "3.1.2",
+     "text": "Navrhnout a realizovat komplexní strategii prevence a snižování používání omezovacích prostředků, včetně sjednocení evidence a pravidelného vyhodnocování (do 6/2021)",
+     "mereni": "proces",
+     "note": "Výchozí mapování dokumentu (Příloha 6): zkušenost s nějakou formou omezení mělo za sledovaných 6 měsíců 2 616 pacientů/klientů."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (3.1.1–3.1.2); uvádíme 1. Druhé (legislativní analýza a odstranění překážek implementace mezinárodních závazků, zejm. CRPD, do 1/2026) je rovněž procesní. Používání omezovacích prostředků kontrakt neměří."
+  },
+  {
+   "sc": "B3.2",
+   "goal": "napdz",
+   "title": "Zavést oblast lidských práv jako integrální součást hodnocení kvality poskytované péče o duševní zdraví",
+   "garant": "MZd, MPSV, MŠMT",
+   "dilci_cile": [
+    {
+     "num": "3.2.1",
+     "text": "Implementovat oblast lidských práv do systému hodnocení kvality péče ve zdravotním, sociálním i školském systému (do 1/2025; veřejné evaluační zprávy à 5 let)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (3.2.1–3.2.2); uvádíme 1. Druhé (zapojení 30 uživatelů péče a blízkých osob do systému hodnocení kvality do 1/2024) je rovněž procesní."
+  },
+  {
+   "sc": "B3.3",
+   "goal": "napdz",
+   "title": "Zohlednit rovné příležitosti mužů a žen v oblasti duševního zdraví",
+   "garant": "MZd, ÚV ČR",
+   "dilci_cile": [
+    {
+     "num": "3.3.1",
+     "text": "Zpracovat analýzu genderových aspektů duševního zdraví a potřeb znevýhodněných uživatelů a uživatelek péče, včetně doporučení (do 6/2024)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "sebevrazdy_per_100k"
+   ],
+   "poznamka": "Cíl má v dokumentu 2 opatření (3.3.1–3.3.2); uvádíme 1. Druhé (metodické nástroje a vzdělávací programy — 50 vyškolených pracovníků/pracovnic a 50 distribuovaných metodik do 12/2025) je rovněž procesní. Kontext dokumentu: z cca 1 400 dokonaných sebevražd ročně v ČR připadá 1 100 na muže."
+  },
+  {
+   "sc": "B4.1",
+   "goal": "napdz",
+   "title": "Na základě evaluace realizovaných pilotních projektů rozvinout do roku 2030 multidisciplinární týmy jako stěžejní služby zajišťující potřebnou péči v komunitě",
+   "garant": "MZd, MPSV, MSp (spolupráce VZP, SZP, MŠMT, ASZ)",
+   "dilci_cile": [
+    {
+     "num": "4.1.2",
+     "text": "Ke stávajícím 30 CDZ pro lidi se závažným duševním onemocněním a 3 týmům pro děti a pro závislosti založit dalších 70 Center duševního zdraví — síť 100 CDZ rovnoměrně rozložených po celé ČR (průběžně do 2030)",
+     "indikatory": [
+      "centra_dusevniho_zdravi_per_100k"
+     ],
+     "mereni": "primo",
+     "note": "Tentýž jev — počet CDZ; dokument počítá absolutní síť (100 center), kontrakt ji přepočítává na 100 000 obyvatel."
+    },
+    {
+     "num": "4.1.1",
+     "text": "Ukotvit multidisciplinární týmy (CDZ) pro všechny cílové skupiny v zákonech č. 372/2011 Sb., 48/1997 Sb., 108/2006 Sb., 95/2004 Sb., 96/2004 Sb. a prováděcích předpisech (CDZ pro SMI od 12/2020, ostatní od 1/2026)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Síť Center duševního zdraví",
+     "baseline": {
+      "value": "30 CDZ pro závažně duševně nemocné + 3 multidisciplinární týmy pro děti a pro pacienty se závislostní problematikou (vznikají z projektů ESIF do roku 2022)",
+      "year": 2022
+     },
+     "target": {
+      "value": "100 CDZ rovnoměrně rozložených po celé ČR",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "centra_dusevniho_zdravi_per_100k",
+      "note": "Tentýž jev — počet CDZ; kontrakt síť přepočítává na 100 000 obyvatel."
+     }
+    },
+    {
+     "name": "Pacienti v péči multidisciplinárních týmů",
+     "target": {
+      "value": "min. 7 500 pacientů se závažným duševním onemocněním (SMI) v péči CDZ; min. 700 dětí a 700 pacientů se závislostní problematikou v péči multidisciplinárních týmů",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt měří počet CDZ, ne počty pacientů v jejich péči."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "psychiatrie_prumerna_delka_hospitalizace",
+    "rehospitalizace_schizofrenie_30d"
+   ],
+   "poznamka": "Cíl má v dokumentu 3 opatření (4.1.1–4.1.3); uvádíme 2. Třetí (gerontopsychiatrické komunitní týmy pro osoby s demencí) NAPDZ deleguje na NAPAN+ — indikátorem je zpráva o plnění NAPAN+."
+  },
+  {
+   "sc": "B4.2",
+   "goal": "napdz",
+   "title": "Do roku 2030 realizovat další fázi deinstitucionalizace jako postupný přechod od velkých zařízení následné lůžkové péče v oboru psychiatrie k péči komunitní, včetně rozvoje kapacit pro akutní péči v psychiatrických a pediatrických odděleních všeobecných nemocnic",
+   "garant": "MZd, MPSV (spolupráce VZP, SZP, kraje, MF)",
+   "dilci_cile": [
+    {
+     "num": "4.2.3",
+     "text": "Snížit počet lůžek následné péče u poskytovatelů zdravotních služeb následné lůžkové péče v oboru psychiatrie o 2/3 oproti stávajícímu stavu 8 490 lůžek (k 31. 8. 2018); indikátor dokumentu: v roce 2030 méně než 4 100 lůžek",
+     "indikatory": [
+      "luzka_psychiatricka_per_1000"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří celkový psychiatrický lůžkový fond (akutní i následná lůžka) na 1 000 obyvatel — srovnávat směr, ne hodnoty. Pozor na vnitřní rozpor dokumentu: snížení o 2/3 z 8 490 by znamenalo cca 2 800 zbývajících lůžek, indikátor opatření ale říká „nižší než 4 100“ (snížení zhruba o polovinu); přepisujeme obojí, neopravujeme."
+    },
+    {
+     "num": "4.2.1",
+     "text": "Zajistit efektivní využití a rozvoj kapacit akutních psychiatrických lůžek k cílovému stavu cca 2 800 lůžek pro všechny cílové skupiny včetně dětské populace, rovnoměrně regionálně rozložených a propojených s multidisciplinárními týmy",
+     "indikatory": [
+      "luzka_psychiatricka_per_1000"
+     ],
+     "mereni": "proxy",
+     "note": "Akutní lůžka kontrakt samostatně neměří; v celkovém fondu na 1 000 obyvatel se růst akutní kapacity a redukce následné vzájemně překrývají — jen hrubý kontext."
+    },
+    {
+     "num": "4.2.4",
+     "text": "Rozvinout ambulance s rozšířenou péčí (ARP) — 200 ARP, z toho 20 adiktologických krajských ambulancí; pilotovat konziliární péči; rozvoj psychiatrických ambulancí pro děti a dorost",
+     "mereni": "proces",
+     "note": "Dokument má číselný cíl (200 ARP do 2029), síť ARP ale kontrakt neměří — vedeme jako budování sítě služeb; dětskou větev zrcadlí kontextově deti_ambulantni_psychiatrie."
+    },
+    {
+     "num": "4.2.6",
+     "text": "Vytvořit mechanismus prevence umísťování dětí s duševním onemocněním do zařízení institucionální výchovy a prioritizovat naplnění potřeb dětí v přirozeném sociálním prostředí",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Lůžka následné péče v oboru psychiatrie",
+     "baseline": {
+      "value": "8 490 lůžek (k 31. 8. 2018)",
+      "year": 2018
+     },
+     "target": {
+      "value": "snížení o 2/3; indikátor opatření: méně než 4 100 lůžek",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "luzka_psychiatricka_per_1000",
+      "note": "Kontrakt měří celkový lůžkový fond (akutní + následná) na 1 000 obyvatel — srovnávat směr, ne hodnoty."
+     },
+     "note": "Rozpor v dokumentu: 2/3 z 8 490 je cca 5 660 (zbývalo by cca 2 800 lůžek), indikátor ale připouští až 4 100 lůžek. Necháváme doslova."
+    },
+    {
+     "name": "Akutní psychiatrická lůžka",
+     "baseline": {
+      "value": "u schizofrenie jen 27 % pacientů přijato na lůžka akutní péče, 73 % přímo na lůžka následné péče (NRHOSP 2007–2015)",
+      "year": 2018
+     },
+     "target": {
+      "value": "cca 2 800 lůžek akutní péče pro dospělou i dětskou a dorostovou psychiatrii",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt akutní lůžka samostatně neměří — celkový fond (luzka_psychiatricka_per_1000) směšuje akutní a následnou kapacitu."
+     }
+    },
+    {
+     "name": "Ambulance s rozšířenou péčí (ARP)",
+     "target": {
+      "value": "200 ARP, z toho 20 adiktologických krajských ambulancí pro dospělé",
+      "year": 2029
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt síť ARP neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "psychiatrie_prumerna_delka_hospitalizace",
+    "hospitalizace_deti_psychiatrie_akutni",
+    "deti_ambulantni_psychiatrie",
+    "substitucni_lecba_pokryti"
+   ],
+   "poznamka": "Cíl má v dokumentu 6 opatření (4.2.1–4.2.6); uvádíme 4. Zbylá 2 (síť sociálních služeb v komunitě — 14 krajských akčních plánů rozvoje, opatření 4.2.2; mapování klientů s duševním onemocněním v DZR a DOZP, kde je aktuálně 14 354 lůžek, opatření 4.2.5) jsou rovněž procesní."
+  },
+  {
+   "sc": "B4.3",
+   "goal": "napdz",
+   "title": "Realizovat rozvoj dalších potřebných komunitních služeb podporujících deinstitucionalizaci",
+   "garant": "MZd, MPSV (spolupráce ÚV, ADSKC, VZP, SZP)",
+   "dilci_cile": [
+    {
+     "num": "4.3.1",
+     "text": "Posílit krizová centra a služby — min. 14 krizových center pro dospělé regionálně rozložených, 4 pilotní centra pro děti s komplexním traumatem (průběžně do 2030)",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.3.3",
+     "text": "Rozvinout síť ambulancí klinických psychologů a dětských klinických psychologů a zajistit dostupnost široké škály psychoterapie (legislativní ukotvení vzdělávání v systematické psychoterapii od 1/2020)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Krizová centra",
+     "target": {
+      "value": "min. 14 krizových center pro dospělou populaci; počet obsloužených osob min. 18 000 ročně",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt síť krizových center ani jejich výkony neměří."
+     }
+    },
+    {
+     "name": "Ambulance klinických psychologů",
+     "target": {
+      "value": "700 ambulancí klinických psychologů (rozpočet 840 mil. Kč z v.z.p.)"
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt počet ambulancí klinických psychologů ani dostupnost psychoterapie neměří."
+     }
+    },
+    {
+     "name": "Stacionární programy",
+     "target": {
+      "value": "60 nových stacionárních programů na úrovni všech krajů",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt stacionární péči neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "sebevrazdy_per_100k"
+   ],
+   "poznamka": "Cíl má v dokumentu 3 opatření (4.3.1–4.3.3); uvádíme 2. Třetí (rozvoj stacionární péče pro dětskou i dospělou populaci — pilot u min. 3 poskytovatelů, cílově 60 nových programů) je rovněž procesní a jeho číselný cíl vedeme v doc_indicators."
+  },
+  {
+   "sc": "B4.4",
+   "goal": "napdz",
+   "title": "Zavést systém pro zapojování pacientů/klientů a rodinných příslušníků, který umožňuje a podporuje rozvoj přirozených zdrojů pacientů/klientů k jejich zotavení, včetně podpory peer konzultantů a svépomocných skupin",
+   "garant": "MZd, MPSV (spolupráce kraje)",
+   "dilci_cile": [
+    {
+     "num": "4.4.2",
+     "text": "Zakotvit peer konzultanty v systému péče o duševní zdraví — typové pozice v Národní soustavě povolání a kvalifikací, úprava zákonů č. 108/2006, 372/2011, 95/2004 a 96/2004 Sb. (do 1/2023; vzdělávání 8 peer konzultantů ročně)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 2 opatření (4.4.1–4.4.2); uvádíme 1. Druhé (dotační program MZd pro uživatelské a rodičovské organizace od 1/2020, platformy pro zapojování uživatelů ve všech krajích) je rovněž procesní."
+  },
+  {
+   "sc": "B5.1",
+   "goal": "napdz",
+   "title": "Systémově (mezirezortně) vyřešit problematiku ochranného léčení (ústavní, ambulantní, komunitní)",
+   "garant": "MZd, MSp, MPSV (spolupráce VZP, SZP)",
+   "dilci_cile": [
+    {
+     "num": "5.1.3",
+     "text": "Rozvinout lůžkovou, komunitní a ambulantní péči o pacienty se soudně nařízenou ochrannou léčbou — síť oddělení stratifikovaná dle rizikovosti, forenzní multidisciplinární týmy, hodnocení rizika (průběžně do 2030)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Kapacity systému ochranného léčení",
+     "target": {
+      "value": "cca 1 000 lůžek pro ochranné léčení stratifikovaných dle úrovní rizikovosti, regionálně rozložených, a 13 multidisciplinárních týmů; definovaná síť ambulantních služeb",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt oblast ochranného léčení neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 3 opatření (5.1.1–5.1.3); uvádíme 1. Zbylá 2 (koncepce péče o pacienty s ochranným léčením včetně implementačního plánu do 1/2025; analýza a novelizace zákonů o ochranném léčení — platné novely do 1/2025) jsou rovněž procesní."
+  },
+  {
+   "sc": "B5.2",
+   "goal": "napdz",
+   "title": "Zapojit kraje a obce do tvorby a realizace efektivní sítě péče o duševní zdraví",
+   "garant": "MMR, MPSV, MZd (spolupráce Svaz měst a obcí, kraje, obce)",
+   "dilci_cile": [
+    {
+     "num": "5.2.3",
+     "text": "Vytvořit systém bydlení pro duševně nemocné ve standardní civilní zástavbě (sociální bydlení, housing first) propojený na terénní komunitní týmy — 3 000 míst v roce 2029",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Bydlení pro lidi s duševním onemocněním v civilní zástavbě",
+     "target": {
+      "value": "3 000 míst v bytech v civilní zástavbě po celé ČR",
+      "year": 2029
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt kapacity bydlení pro lidi s duševním onemocněním neměří."
+     }
+    },
+    {
+     "name": "Chráněné bydlení",
+     "target": {
+      "value": "1 chráněné bydlení v každém regionu 100 000 obyvatel, s celkovou kapacitou 800 lůžek",
+      "year": 2029
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt chráněné bydlení neměří."
+     }
+    },
+    {
+     "name": "Case manageři (koordinátoři péče) na obcích",
+     "target": {
+      "value": "300 case managerů pro oblast péče o duševní zdraví",
+      "year": 2029
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt case management neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Cíl má v dokumentu 3 opatření (5.2.1–5.2.3); uvádíme 1 jako dílčí cíl a číselné cíle všech tří vedeme v doc_indicators (300 case managerů — 5.2.1; chráněné bydlení 800 lůžek — 5.2.2; 3 000 míst v civilní zástavbě — 5.2.3)."
+  },
+  {
+   "sc": "B5.3",
+   "goal": "napdz",
+   "title": "Zajistit efektivní koordinaci péče o duševní a somatické zdraví",
+   "garant": "MZd (spolupráce VZP, SZP)",
+   "dilci_cile": [
+    {
+     "num": "5.3.1",
+     "text": "Integrovat péči o duševní zdraví do primární péče praktických lékařů — screening příznaků, sdílená péče o stabilizované pacienty, konziliární služby, péče o psychosomaticky nemocné (průběžně do 2030)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Praktičtí lékaři s akreditovaným vzděláváním v oblasti duševního zdraví",
+     "target": {
+      "value": "500 praktických lékařů",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt vzdělání praktických lékařů v oblasti duševního zdraví neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "pouzivani_antidepresiv"
+   ],
+   "poznamka": "Cíl má v dokumentu 1 opatření (5.3.1); uvádíme ho. Součástí je i zrušení indikačních omezení u definovaných farmak v léčbě úzkostných a depresivních poruch — spotřebu antidepresiv proto vedeme jako kontext."
+  }
+ ]
+}
