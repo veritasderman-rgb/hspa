@@ -175,7 +175,7 @@ git push -u origin claude/<branch>
 ## Datový tok
 
 ```
-GitHub Actions (týdně, pondělí 06:00 UTC)
+GitHub Actions (kvartálně, 1. den čtvrtletí 06:00 UTC)
   ↓ npm run ingest
 ingest/fetchers/* → ingest/cache/*
   ↓ npm run transform
@@ -223,7 +223,7 @@ npm run setup:git         # Merge driver pro generované soubory (běží i sám
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
 npm run scan:ambulance-hodiny # Projde weby nemocnic a najde KANDIDÁTY na provozní dobu denních ambulancí (~10 min, nepublikuje se)
-npm run verify:ambulance-drift # Ověří, že citáty u denních ambulancí jsou pořád na webech nemocnic (týdně v cronu; drift = přeověřit)
+npm run verify:ambulance-drift # Ověří, že citáty u denních ambulancí jsou pořád na webech nemocnic (kvartálně v cronu; drift = přeověřit)
 npm run build:pohotovosti-okresy # Přegeneruje okresní stránky pohotovost-*.html z data/pohotovosti.json (přepisuje jen změněné)
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
@@ -472,13 +472,13 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - **Framework Preset:** Other (statický web)
 - **Build Command:** *(prázdné)*
 - Po každém push do `main` Vercel automaticky rebuildne
-- GitHub Actions cron (pondělí 06:00 UTC) commituje čerstvá data → Vercel rebuild
+- GitHub Actions cron (kvartálně, 1. den čtvrtletí 06:00 UTC) commituje čerstvá data → Vercel rebuild
 
 ## Bezpečnostní pravidla
 
 - Všechna data jsou agregovaná — žádné PII
 - `User-Agent: ZdraveCesko-HSPA/1.0` ve všech HTTP požadavcích
-- Cron nejvýše jednou denně (rate limit ÚZIS); datový refresh běží týdně (pondělí)
+- Cron nejvýše jednou denně (rate limit ÚZIS); datový refresh běží kvartálně (1. den čtvrtletí), denně jen monitoring legislativy a publikační fronta
 - Žádné API klíče — vše veřejné zdroje
 
 ## Další dokumentace
