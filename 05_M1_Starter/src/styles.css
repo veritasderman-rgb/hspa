@@ -20631,6 +20631,103 @@ a.vst-ref:hover { color: var(--ink); border-color: var(--ink); }
 .z35-badge-primo  { background: var(--good); color: #fff; }
 .z35-badge-proxy  { background: var(--warn); color: #fff; }
 .z35-badge-chybi  { background: transparent; color: var(--ink-mut); border: 1px solid var(--rule2); }
+/* ── O projektu: „Proč tenhle web dělá AI" (.oai-*) ─────────────────────
+   Plnoformátová sekce s ekonomikou projektu: stat dlaždice, mzdová tabulka,
+   sloupcové srovnání nákladů. Sloupce jsou záměrně inkoustové — červená
+   patří jen hrotu střelky kompasu (brand pravidlo). */
+.oai-section {
+  padding: 48px 24px;
+  max-width: 1120px;
+  margin: 0 auto;
+  border-top: 3px solid var(--ink);
+}
+.oai-cols {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 40px;
+  margin: 24px 0 8px;
+}
+.oai-text p { margin: 0 0 1em; }
+.oai-stats {
+  border-left: 3px solid var(--ink);
+  padding-left: 20px;
+  align-self: start;
+}
+.oai-stats-caption {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mut);
+  margin: 0 0 10px;
+}
+.oai-stat {
+  font-size: 0.95rem;
+  padding: 5px 0;
+  border-bottom: 1px dotted var(--rule, var(--ink-mut));
+}
+.oai-stat:last-child { border-bottom: 0; }
+.oai-stat strong {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  margin-right: 6px;
+}
+.oai-h4 {
+  font-size: 1.05rem;
+  margin: 32px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.oai-table th[scope="row"] { font-weight: 600; }
+.oai-table-total td, .oai-table-total th { border-top: 2px solid var(--ink); }
+.oai-chart { margin: 24px 0; }
+.oai-bar-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr minmax(90px, auto);
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+.oai-bar-track { display: block; }
+.oai-bar {
+  display: block;
+  height: 22px;
+  background: var(--ink);
+}
+.oai-bar-min { min-width: 3px; }
+.oai-bar-value {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.oai-chart figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-mut);
+  margin-top: 6px;
+}
+.oai-fair {
+  border-left: 3px solid var(--ink);
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  margin: 24px 0;
+}
+.oai-method {
+  font-size: 0.8rem;
+  color: var(--ink-mut);
+  line-height: 1.55;
+}
+.oai-method-h { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+@media (max-width: 760px) {
+  .oai-cols { grid-template-columns: 1fr; gap: 24px; }
+  .oai-bar-row { grid-template-columns: 1fr; gap: 4px; }
+  .oai-bar-row .oai-bar-value { margin-top: -4px; }
+}
+
+@media print {
+  .oai-bar { background: #000; }
+}
+
 .card-plneni {
   font-size: 0.68rem;
   padding: 0.1rem 0.45rem;
