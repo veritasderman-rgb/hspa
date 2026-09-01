@@ -96,14 +96,18 @@ function sparklineHtml(i) {
   const ys = clean.map(p => p.value);
   const min = Math.min(...ys), max = Math.max(...ys);
   const spanY = max - min || 1;
-  const x = (k) => PAD + (k / (clean.length - 1)) * (W - 2 * PAD);
+  // x podle roku, ne indexu — nepravidelné řady (2013, 2015, 2022) by jinak
+  // kreslily dvouletou a sedmiletou mezeru stejně široké a lhaly o tempu.
+  const minYear = clean[0].year, maxYear = clean[clean.length - 1].year;
+  const spanX = maxYear - minYear || 1;
+  const x = (yr) => PAD + ((yr - minYear) / spanX) * (W - 2 * PAD);
   const y = (v) => H - PAD - ((v - min) / spanY) * (H - 2 * PAD);
-  const path = clean.map((p, k) => `${x(k).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+  const path = clean.map(p => `${x(p.year).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
   const last = clean[clean.length - 1];
   const sig = i.signal ?? 'neutral';
   return `<svg class="z35-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">
     <polyline points="${path}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle class="z35-spark-dot z35-spark-${sig}" cx="${x(clean.length - 1).toFixed(1)}" cy="${y(last.value).toFixed(1)}" r="2.6"/>
+    <circle class="z35-spark-dot z35-spark-${sig}" cx="${x(last.year).toFixed(1)}" cy="${y(last.value).toFixed(1)}" r="2.6"/>
   </svg>`;
 }
 
