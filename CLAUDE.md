@@ -89,6 +89,7 @@ git push -u origin claude/<branch>
 ├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
 ├── strategie.html              ← Národní strategické dokumenty
 ├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
+├── plneni-*.html               ← 5 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
 ├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
@@ -138,6 +139,7 @@ git push -u origin claude/<branch>
 │   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:plneni)
+│   ├── plneni-*.json           ← Datasety plnění dalších strategií (onko-2030, kv-2035, amr, dusevni-zdravi, zdravi-2030) — stejné schéma, validate:plneni
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn)
