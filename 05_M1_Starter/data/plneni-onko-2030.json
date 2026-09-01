@@ -1,0 +1,1521 @@
+{
+ "version": "1.0",
+ "strategy_id": "narodni_onkologicky_plan_2030",
+ "_doc": [
+  "Plnění Národního onkologického plánu ČR 2030 (NOPL ČR 2030) — provázání cílů",
+  "a indikátorů dokumentu s indikátory datového kontraktu (data/indicators.json).",
+  "",
+  "ZDROJ: Národní onkologický plán České republiky 2030, schválený vládou",
+  "22. 6. 2022 usnesením č. 541. Struktura (4 strategické cíle, 16 specifických",
+  "cílů, 51 dílčích cílů, indikátory u karet specifických cílů a Tabulka 3",
+  "základních indikátorů s výchozími hodnotami a cíli 2030, str. 67–69) je",
+  "přepsaná z PDF — strategická část str. 19–60, implementace str. 62–71.",
+  "",
+  "MAPOVÁNÍ je redakční práce, ne strojová: u každého indikátoru dokumentu",
+  "říkáme, jestli ho kontrakt měří PŘÍMO (match: primo — stejný jev, srovnatelná",
+  "metodika), jen PROXY (match: proxy — příbuzný jev nebo jiná metodika, srovnávat",
+  "směr, ne hodnoty; poznámka říká proč), nebo VŮBEC (match: chybi). U dílčích",
+  "cílů `mereni: proces` znamená, že jde o organizační/legislativní úkol bez",
+  "populačního indikátoru — to není mezera měření, ale povaha úkolu. Většina",
+  "indikátorů NOPL jsou procesní ukazatele (počty koncepcí, podíly KOC",
+  "s programem), které veřejně nikdo nereportuje — match: chybi u nich je",
+  "legitimní zjištění, ne vada mapování.",
+  "",
+  "POCTIVOST HODNOT: výchozí a cílové hodnoty jsou z dokumentu doslova, včetně",
+  "podivností (jeden cíl 65 % pro tři screeningové programy; cíl 42 poskytovatelů",
+  "MSPP v Tabulce 3 vs. 1 poskytovatel na 100–150 tis. obyvatel u téhož tématu",
+  "na str. 35; indikátor s výchozí i cílovou hodnotou N/A; hrubá vs.",
+  "standardizovaná úmrtnost). Nic nedopočítáváme, podivnosti popisují noty.",
+  "",
+  "ODCHYLKY SCHÉMATU proti zdravi2035-plneni.json: cílové hodnoty nesou klíč",
+  "`target` ({value, year}) místo `target_2035`; doc_indicators mají `num`",
+  "(číslo dílčího cíle, pod nímž je dokument uvádí); ramcove_indikatory",
+  "(Tabulka 3, str. 67–69) mají `goal` (strategický cíl, k němuž patří),",
+  "volitelné `vymezeni` (sloupec „Bližší vymezení a jednotka“) a volitelné",
+  "`sledovan_na_urovni` (sloupec „Sledován na úrovni strategického dokumentu“).",
+  "",
+  "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu",
+  "z data/indicators.json — tady se NEduplikují, aby nemohly zastarat."
+ ],
+ "document": {
+  "title": "Národní onkologický plán České republiky 2030 (NOPL ČR 2030)",
+  "approved": "2022-06-22",
+  "approval": "usnesení vlády ČR č. 541 ze dne 22. června 2022",
+  "url": "https://mzd.gov.cz/wp-content/uploads/2022/06/Narodni-onkologicky-plan-Ceske-republiky-2030.pdf",
+  "web": "https://mzd.gov.cz/akcni-plan-implementace-narodniho-onkologickeho-planu-2025-2027/",
+  "horizon": {
+   "from": 2022,
+   "to": 2030
+  },
+  "vize": "Zajistit každému obyvateli České republiky možnost prevence vzniku onkologického onemocnění a v případě jeho rozvoje zajistit nejvyšší možnou kvalitu péče a života bez ohledu na geografickou polohu či stadium nemoci.",
+  "note": "Odhadovaný rozpočet implementace 18 mld. Kč (str. 5); dominantním zdrojem má být komponenta 6.2 Národního plánu obnovy (cca 10,3 mld. Kč, str. 71). Implementace probíhá přes tříleté akční plány (2022–2024, 2025–2027, 2028–2030); závěrečná ex-post evaluace je plánována na rok 2031."
+ },
+ "extracted_at": "2026-09-01",
+ "strategic_goals": [
+  {
+   "id": "sg1",
+   "num": "1",
+   "title": "Efektivita všech fází prevence se zvyšuje a předchází vzniku onkologického onemocnění"
+  },
+  {
+   "id": "sg2",
+   "num": "2",
+   "title": "Péče orientovaná na pacienta vede k zajištění maximálně možné kvality jeho života, a to během nemoci, po vyléčení, jakož i v terminálním stadiu"
+  },
+  {
+   "id": "sg3",
+   "num": "3",
+   "title": "Koordinace celého systému boje s rakovinou je moderní, efektivní, vychází vstříc poskytovatelům péče i potřebám pacientů"
+  },
+  {
+   "id": "sg4",
+   "num": "4",
+   "title": "Boj s rakovinou je veden ve vysokém standardu, v souladu s pokrokem ve vědě a v nových technologiích"
+  }
+ ],
+ "ramcove_indikatory": [
+  {
+   "goal": "sg1",
+   "name": "Podíl dívek ve věku 13 let očkovaných proti lidskému papilomaviru (HPV)",
+   "baseline": {
+    "value": "63,9 %",
+    "year": 2019
+   },
+   "target": {
+    "value": "90 %",
+    "year": 2030
+   },
+   "sledovan_na_urovni": "Europe's Beating Cancer Plan",
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "vakcinace_hpv"
+   }
+  },
+  {
+   "goal": "sg1",
+   "name": "Pokrytí cílové populace screeningem kolorektálního karcinomu",
+   "baseline": {
+    "value": "29,5 %",
+    "year": 2019
+   },
+   "target": {
+    "value": "60 %",
+    "year": 2030
+   },
+   "sledovan_na_urovni": "Národní plán obnovy",
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "screening_kolorektalni"
+   }
+  },
+  {
+   "goal": "sg1",
+   "name": "Mamografický screening; cervikální screening; plošný screening karcinomu plic (od 2022)",
+   "baseline": {
+    "value": "mamografický 58,7 % (2019); cervikální 57,1 % (2019); plicní 0 % (začátek od 2022)"
+   },
+   "target": {
+    "value": "65 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "screening_mamograficky",
+    "note": "Tabulka slévá tři programy do jednoho řádku s jediným cílem 65 %; kontrakt je měří odděleně (screening_mamograficky, screening_cervix, screening_plicni) — id je zástupné, srovnávat po programech."
+   },
+   "note": "Podivnost dokumentu: jeden cílový stav 65 % pro tři různé programy s různými výchozími hodnotami; u plicního screeningu je výchozí hodnota 0 % (program startoval až v roce 2022)."
+  },
+  {
+   "goal": "sg1",
+   "name": "Podíl pacientů splňujících kritéria (vybrané diagnózy), kteří jsou sledováni v souladu s příslušným doporučením (dle lékaře provádějícího dispenzarizaci)",
+   "baseline": null,
+   "target": null,
+   "mapping": {
+    "match": "chybi",
+    "note": "Dispenzarizaci podle doporučení nikdo veřejně neměří."
+   },
+   "note": "Výchozí i cílová hodnota jsou v dokumentu N/A; poznámka pod čarou (str. 67) říká, že indikátor bude rozpracován až v implementačním plánu na soubor dílčích indikátorů."
+  },
+  {
+   "goal": "sg2",
+   "name": "Počet lůžek dlouhodobé a následné péče",
+   "vymezeni": "Počet lůžek dlouhodobé péče na 1 000 obyvatel",
+   "baseline": {
+    "value": "2,7",
+    "year": 2017
+   },
+   "target": {
+    "value": "3,3",
+    "year": 2030
+   },
+   "sledovan_na_urovni": "Zdraví 2030",
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "luzka_dlouhodobe_pece_65plus",
+    "note": "Kontrakt měří lůžka dlouhodobé péče v pobytových zařízeních na 1 000 obyvatel 65+; dokument na 1 000 obyvatel celkem — jiný jmenovatel, srovnávat směr."
+   }
+  },
+  {
+   "goal": "sg2",
+   "name": "Počet poskytovatelů mobilní specializované paliativní péče",
+   "baseline": null,
+   "target": {
+    "value": "42",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "mobilni_paliativni_tymy_per_milion",
+    "note": "Dokument počítá poskytovatele absolutně, kontrakt na milion obyvatel (42 poskytovatelů ≈ 4 týmy/mil.) — týž jev, jiná jednotka."
+   },
+   "note": "Podivnost dokumentu: cíl 42 poskytovatelů do 2030 neodpovídá indikátoru dílčího cíle 2.2.2 (str. 35): „1 poskytovatel MSPP na 100 000 až 150 000 obyvatel do 2027“ by znamenal cca 70–105 poskytovatelů; „přibližně jeden okres“ by odpovídalo ~76. Výchozí hodnota je v tabulce N/A."
+  },
+  {
+   "goal": "sg2",
+   "name": "Podíl KOC s fungující pacientskou radou",
+   "baseline": null,
+   "target": {
+    "value": "100 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Existenci pacientských rad při KOC nikdo veřejně nereportuje."
+   },
+   "note": "Výchozí hodnota je v tabulce N/A; indikátor 2.3.2 (str. 37) žádá vznik rad při každém KOC už do roku 2025."
+  },
+  {
+   "goal": "sg3",
+   "name": "Podíl onkologických diagnóz s vytvořenými národními šablonami doporučených cest pacienta systémem v návaznosti na klinické doporučené postupy / EBM doporučení",
+   "baseline": {
+    "value": "0 %"
+   },
+   "target": {
+    "value": "80 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Šablony cest pacienta nikdo veřejně nesleduje."
+   },
+   "note": "Výchozí hodnota 0 % je bez uvedení roku (dokument je z roku 2022)."
+  },
+  {
+   "goal": "sg3",
+   "name": "Podíl pacientů, kteří byli v daném roce poprvé léčeni pro solidní zhoubný novotvar v některém KOC a zároveň měli vykázaný výkon konzultace multidisciplinárního týmu",
+   "baseline": {
+    "value": "55,7 %",
+    "year": 2020
+   },
+   "target": {
+    "value": "80 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "ÚZIS tento podíl umí spočítat z NRHZS (dokument hodnotu cituje), kontrakt ho ale nesleduje."
+   }
+  },
+  {
+   "goal": "sg3",
+   "name": "Počet krajů s vypracovaným zdravotním plánem obsahujícím implementaci onkologického plánu se zaměřením na regionální potřeby",
+   "baseline": {
+    "value": "0"
+   },
+   "target": {
+    "value": "14",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Krajské zdravotní plány nikdo centrálně nereportuje."
+   }
+  },
+  {
+   "goal": "sg4",
+   "name": "Počet absolventů specializačního vzdělávání v oblasti onkologie a hematologie pro všeobecné sestry a dětské sestry",
+   "baseline": {
+    "value": "0"
+   },
+   "target": {
+    "value": "40",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Specializační obor pro sestry v onkologii a hematologii teprve vzniká (dílčí cíl 4.1.3); absolventy nikdo veřejně nereportuje."
+   },
+   "note": "Sloupec „Sledován na úrovni strategického dokumentu“ je u tohoto řádku v tabulce prázdný."
+  },
+  {
+   "goal": "sg4",
+   "name": "Podíl pacientů z Karlovarského kraje léčených pro solidní ZN pouze mimo KOC",
+   "baseline": {
+    "value": "56,7 % (souhrn za období 2016–2020)"
+   },
+   "target": {
+    "value": "30 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Podíl léčby mimo KOC po krajích ÚZIS analyticky sleduje, kontrakt ho nemá."
+   },
+   "note": "Poznámka pod čarou dokumentu (str. 69): „Aktuálně je % podíl v ČR 31,7 %.“ Karlovarský kraj nemá vlastní KOC."
+  },
+  {
+   "goal": "sg4",
+   "name": "Snížit incidenci pozdně zachycených zhoubných národů prsu, tlustého střeva, konečníku, hrdla děložního",
+   "baseline": {
+    "value": "viz Příloha 1, slide č. 59, 60, 61, 62, 63, 64"
+   },
+   "target": {
+    "value": "5 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Podíl pozdně zachycených stadií podle diagnóz nikdo z veřejných zdrojů průběžně nereportuje; kontrakt měří jen screeningová pokrytí a přežití."
+   },
+   "note": "Podivnosti dokumentu: v názvu je překlep „národů“ místo „nádorů“ (přepsáno doslova); výchozí hodnota je jen odkazem na slidy analytické přílohy, v hlavním dokumentu číslo není; cílová hodnota „5 %“ neříká, zda jde o cílový podíl pozdních záchytů, nebo o snížení o 5 procentních bodů."
+  },
+  {
+   "goal": "sg4",
+   "name": "Národní onkologický registr plně napojený na elektronické hlášení záznamů z nemocničních informačních systémů",
+   "baseline": {
+    "value": "0"
+   },
+   "target": {
+    "value": "1",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "Binární milník digitalizace NOR bez populačního indikátoru."
+   },
+   "note": "Indikátor 4.6.2 (str. 60) žádá plný přechod na elektronické hlášení už do roku 2025; Tabulka 3 má cílový stav k roku 2030."
+  },
+  {
+   "goal": "sg4",
+   "name": "Úmrtnost na zhoubné nádory",
+   "vymezeni": "Počet úmrtí na 100 000 obyvatel",
+   "baseline": {
+    "value": "258",
+    "year": 2017
+   },
+   "target": {
+    "value": "240",
+    "year": 2030
+   },
+   "sledovan_na_urovni": "Zdraví 2030",
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "mortalita_onkologicka",
+    "note": "Dokument pracuje s hrubou mírou (258/100 000 odpovídá cca 27–28 tis. úmrtí ročně; poznámka pod čarou: kalkulováno pro všechny diagnózy ZN dle trendů NOR); kontrakt měří úmrtnost standardizovanou — hodnoty nejsou přímo srovnatelné, srovnávat trend."
+   }
+  }
+ ],
+ "cile": [
+  {
+   "sc": "1.1",
+   "goal": "sg1",
+   "title": "Zvýšení pozitivní motivace ke změně životního stylu obyvatel, zvýšení zdravotní gramotnosti a prevence rakoviny způsobené infekcemi",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "1.1.1",
+     "text": "Snížení závislosti na škodlivých návykových látkách a zvýšení dostupnosti léčby závislostí",
+     "indikatory": [
+      "kuractvi_denni",
+      "alkohol_spotreba",
+      "prevalence_koureni_adolescenti"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří populační míry užívání (denní kuřáctví 15+, spotřebu alkoholu, kouření dospívajících), ne závislost ani dostupnost odvykací léčby."
+    },
+    {
+     "num": "1.1.2",
+     "text": "Zefektivnění nástrojů primární prevence a zvyšování zdravotní gramotnosti obyvatel",
+     "indikatory": [
+      "zdravotni_gramotnost_omezena",
+      "prohlidka_prakticky_lekar"
+     ],
+     "mereni": "proxy",
+     "note": "Efektivitu nástrojů primární prevence přímo nikdo neměří; kontrakt sleduje podíl osob s omezenou zdravotní gramotností a pokrytí preventivními prohlídkami jako nejbližší výsledkové ukazatele."
+    },
+    {
+     "num": "1.1.3",
+     "text": "Zvýšení efektivity preventivních vakcinačních programů proti vzniku onkologických onemocnění",
+     "indikatory": [
+      "vakcinace_hpv"
+     ],
+     "mereni": "proxy",
+     "note": "Kontrakt měří proočkovanost HPV jen u dívek (kohorta 13 let); dokument cílí i na chlapce a na očkování proti hepatitidě B."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "1.1.1",
+     "name": "Podíl aktivních kuřáků v populaci",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "kuractvi_denni",
+      "note": "Dokument mluví o aktivních kuřácích (zahrnuje i příležitostné); kontrakt měří denní kuřáctví 15+ — užší definice."
+     }
+    },
+    {
+     "num": "1.1.1",
+     "name": "Podíl aktivních kuřáků, kteří podstoupili odvykací terapeutickou kúru",
+     "mapping": {
+      "match": "chybi",
+      "note": "Účast v odvykací léčbě nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "1.1.2",
+     "name": "Podíl obyvatel, kteří v průběhu předchozích dvou let absolvovali preventivní prohlídku u praktického lékaře pro dospělé",
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "prohlidka_prakticky_lekar"
+     }
+    },
+    {
+     "num": "1.1.3",
+     "name": "Podíl dívek a chlapců ve věku 13 let očkovaných proti lidskému papilomaviru (HPV)",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "vakcinace_hpv",
+      "note": "Kontrakt sleduje jen dívky (kohorta 13 let); proočkovanost chlapců (hrazena od 2024) neměří."
+     }
+    },
+    {
+     "num": "1.1.3",
+     "name": "Podíl osob očkovaných proti viru hepatitidy typu B",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "vakcinace_hexa_deti",
+      "note": "Kontrakt měří proočkovanost dětí hexavakcínou, jejíž součástí je složka proti hepatitidě B; podíl očkovaných osob v celé populaci neměří nikdo."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "obezita_prevalence",
+    "bmi_dospeli",
+    "pohybova_aktivita_dospeli",
+    "konzumace_ovoce_zeleniny",
+    "alkohol_adolescenti"
+   ],
+   "poznamka": "Kapitoly specifických cílů 1.1 a 1.2 mají v PDF (str. 21–22 a 24–25) doslova shodný text „Důvodu zařazení“ i „Obsahu návrhu“ (oba věnované sekundární prevenci a screeningům) — liší se až seznamy dílčích cílů a indikátorů. Životnímu stylu, gramotnosti a vakcinaci, které má cíl 1.1 v názvu, se popisný text nevěnuje."
+  },
+  {
+   "sc": "1.2",
+   "goal": "sg1",
+   "title": "Zvýšení efektivity včasného záchytu nádorů",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "1.2.1",
+     "text": "Zvýšení efektivity stávajících populačních screeningů včetně využití inovativních přístupů",
+     "indikatory": [
+      "screening_mamograficky",
+      "screening_kolorektalni",
+      "screening_cervix"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.2",
+     "text": "Úspěšné zavedení programu časného záchytu karcinomu plic",
+     "indikatory": [
+      "screening_plicni"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.3",
+     "text": "Postupné zavádění nových ověřených screeningových programů a programů časného záchytu onkologických onemocnění",
+     "indikatory": [
+      "screening_prostata"
+     ],
+     "mereni": "proxy",
+     "note": "Dokument počítá zavedené nové programy; kontrakt měří pokrytí PSA testováním u karcinomu prostaty — jednoho z kandidátských programů, o jehož pilotní přípravě dokument mluví."
+    },
+    {
+     "num": "1.2.4",
+     "text": "Vytvoření zvláštních preventivních onkologických programů pro rizikové pacienty (autoimunitní choroby, pacienti s HIV, pacienti na dlouhodobé imunosupresivní léčbě po transplantaci selhávajících orgánů, vrozené a získané choroby/stavy s vyšším rizikem vzniku solidních nádorů a hematoonkologického onemocnění)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "1.2.1",
+     "name": "Pokrytí cílové populace populačními screeningovými programy",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "screening_mamograficky",
+      "note": "Dokument míní všechny populační programy souhrnně; kontrakt je měří odděleně (screening_mamograficky, screening_kolorektalni, screening_cervix, screening_plicni) — id je zástupné, srovnávat po programech."
+     }
+    },
+    {
+     "num": "1.2.1",
+     "name": "Úmrtnost na zhoubné nádory cílené populačními screeningovými programy",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "mortalita_onkologicka",
+      "note": "Kontrakt měří standardizovanou úmrtnost na všechny zhoubné novotvary, ne jen na diagnózy cílené screeningem."
+     }
+    },
+    {
+     "num": "1.2.2",
+     "name": "Počet účastníků v novém programu včasného záchytu karcinomu plic",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "screening_plicni",
+      "note": "Dokument počítá účastníky absolutně, kontrakt měří pokrytí cílové populace v procentech — týž program, jiná metrika."
+     }
+    },
+    {
+     "num": "1.2.3",
+     "name": "Počet zavedených nových organizovaných programů screeningu nebo časného záchytu nádorů (populační programy)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počet zavedených programů je procesní milník bez veřejného reportingu."
+     }
+    },
+    {
+     "num": "1.2.4",
+     "name": "Počet zavedených nových organizovaných programů screeningu nebo časného záchytu nádorů (rizikoví jedinci)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Programy pro rizikové skupiny nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "incidence_kolorektalni",
+    "incidence_prsu",
+    "prezit_rakoviny_5let",
+    "prezit_karcinom_prsu_5let",
+    "prezit_karcinom_plic_5let"
+   ]
+  },
+  {
+   "sc": "1.3",
+   "goal": "sg1",
+   "title": "Zvýšení efektivity terciární onkologické prevence",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "1.3.1",
+     "text": "Nastavení plošně dostupného systému dispenzarizace včetně zapojení lékařů primární péče (mj. prevence následných onkologických onemocnění u již léčených či vyléčených onkologických pacientů)",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.3.2",
+     "text": "Vytvořit a implementovat programy péče o skupiny pacientů s vysokým rizikem vzniku dalších primárních nádorů po ukončené léčbě malignit",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.3.3",
+     "text": "Zajištění kontinuálního a dlouhodobého sledování následků protinádorové léčby",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.3.4",
+     "text": "Posílení pravidelného systematického monitorování nemocných s cílem včasného záchytu ev. relapsu choroby",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "1.3.1",
+     "name": "Počet diagnóz nádorů s vypracovaným klinickým doporučeným postupem / EBM doporučením pro dispenzarizaci",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty doporučených postupů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "1.3.1",
+     "name": "Podíl pacientů splňujících kritéria (vybrané diagnózy), kteří jsou sledovaní v souladu s příslušným doporučením (dle lékaře provádějícího dispenzarizaci)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Dispenzarizaci podle doporučení nikdo veřejně neměří."
+     },
+     "note": "Tentýž indikátor figuruje i v Tabulce 3 základních indikátorů (str. 67), tam s výchozí i cílovou hodnotou N/A."
+    },
+    {
+     "num": "1.3.2",
+     "name": "Počet vytvořených a implementovaných programů péče o skupiny pacientů s vysokým rizikem vzniku dalších primárních nádorů po ukončené léčbě malignit",
+     "mapping": {
+      "match": "chybi",
+      "note": "Procesní počet programů bez veřejného reportingu."
+     }
+    },
+    {
+     "num": "1.3.3",
+     "name": "Podíl KOC s programem zajištění kontinuálního a dlouhodobého sledování následků protinádorové léčby",
+     "mapping": {
+      "match": "chybi",
+      "note": "Programy KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "1.3.4",
+     "name": "Podíl KOC s programem systematického monitorování nemocných s cílem včasného záchytu ev. relapsu choroby",
+     "mapping": {
+      "match": "chybi",
+      "note": "Programy KOC nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Kontext dokumentu (str. 12): následné primární novotvary tvořily v období 2011–2020 téměř 20 % roční incidence (průměrně 11 316 případů ročně) — proti 8,5 % v letech 1991–2000."
+  },
+  {
+   "sc": "2.1",
+   "goal": "sg2",
+   "title": "Zajištění časové a místní dostupnosti léčebně rehabilitační a následné péče pro onkologické pacienty ve všech stadiích nemoci",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "2.1.1",
+     "text": "Zajištění dostupnosti následné a léčebně rehabilitační péče (vč. sociálních služeb) pro onkologické pacienty",
+     "indikatory": [
+      "pacienti_domaci_pece_per_1000",
+      "fyzioterapeuti_per_100k"
+     ],
+     "mereni": "proxy",
+     "note": "Onkologicky specifickou dostupnost následné a rehabilitační péče nikdo veřejně neměří; kontrakt sleduje jen obecnou kapacitu domácí péče a fyzioterapeutů."
+    },
+    {
+     "num": "2.1.2",
+     "text": "Zvýšení dostupnosti psychosociální podpory a sociálních služeb ve všech stadiích nemoci",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.3",
+     "text": "Zvýšení dostupnosti sociálních služeb po ukončení onkologické léčby",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "2.1.1",
+     "name": "Počet onkologických pacientů úspěšně léčených v rámci léčebně rehabilitační péče nebo úspěšně předaných do zdravotně-sociální péče",
+     "mapping": {
+      "match": "chybi",
+      "note": "Předávání onkologických pacientů do rehabilitační a zdravotně-sociální péče nikdo veřejně nereportuje; „úspěšně“ dokument nedefinuje."
+     }
+    },
+    {
+     "num": "2.1.2",
+     "name": "Zavedení sociální a psychosociální podpory jako standardu do kritérií pro akreditaci KOC; počet KOC s personálně a kapacitně zajištěnou sociální a psychosociální podporou",
+     "mapping": {
+      "match": "chybi",
+      "note": "Akreditační kritéria KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "2.1.3",
+     "name": "Počet onkologických pacientů s plynule zajištěnou sociální podporou po ukončení léčby",
+     "mapping": {
+      "match": "chybi",
+      "note": "„Plynule zajištěnou sociální podporu“ nikdo veřejně neměří ani nedefinuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "luzka_dlouhodobe_pece_65plus"
+   ]
+  },
+  {
+   "sc": "2.2",
+   "goal": "sg2",
+   "title": "Zajištění dostupnosti všech forem paliativní péče",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "2.2.1",
+     "text": "Vznik Národní strategie paliativní péče a péče o pacienty v závěru života (end-of-life-care)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.2",
+     "text": "Rozvoj obecné paliativní péče u poskytovatelů lůžkové péče, domácí péče i u lékařů primární péče",
+     "indikatory": [
+      "umrti_doma_nebo_hospici_pct"
+     ],
+     "mereni": "proxy",
+     "note": "Rozvoj obecné paliativní péče přímo nikdo neměří; podíl úmrtí doma nebo v hospici je nepřímý výsledkový ukazatel toho, zda systém umí doprovodit pacienta mimo akutní lůžko."
+    },
+    {
+     "num": "2.2.3",
+     "text": "Zvýšení dostupnosti specializované paliativní péče (včetně týmů pro mobilní specializovanou péči – MSPP)",
+     "indikatory": [
+      "mobilni_paliativni_tymy_per_milion",
+      "hospicova_pece_luzka"
+     ],
+     "mereni": "primo"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "2.2.1",
+     "name": "Vytvořena národní strategie paliativní péče",
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární milník bez populačního indikátoru."
+     }
+    },
+    {
+     "num": "2.2.2",
+     "name": "Do roku 2027 1 poskytovatel MSPP na 100 000 až 150 000 obyvatel (podle hustoty osídlení, odpovídá přibližně jednomu okresu)",
+     "target": {
+      "value": "1 poskytovatel MSPP na 100 000 až 150 000 obyvatel",
+      "year": 2027
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "mobilni_paliativni_tymy_per_milion",
+      "note": "Kontrakt počítá tentýž jev na milion obyvatel; 1 poskytovatel na 100–150 tis. odpovídá cca 6,7–10 týmům/mil."
+     },
+     "note": "Podivnosti dokumentu: indikátor je zařazen pod dílčí cíl 2.2.2 (obecná paliativní péče), ačkoli MSPP je péče specializovaná (jíž patří cíl 2.2.3); cílová hodnota se navíc neshoduje s Tabulkou 3 základních indikátorů, kde je cíl 42 poskytovatelů do roku 2030 (str. 68)."
+    },
+    {
+     "num": "2.2.2",
+     "name": "Do roku 2027 kapacita lůžek hospicového typu 5 na 100 000 obyvatel (tj. 500 až 550 na celou ČR, aktuální kapacita je 4,5 na 100 000 obyvatel)",
+     "baseline": {
+      "value": "4,5 na 100 000 obyvatel"
+     },
+     "target": {
+      "value": "5 na 100 000 obyvatel (500 až 550 lůžek)",
+      "year": 2027
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "hospicova_pece_luzka"
+     },
+     "note": "„Aktuální kapacita“ je bez uvedení roku (dokument je z roku 2022); i tento indikátor je číslován pod obecnou paliativní péčí (2.2.2), ač jde o specializovanou lůžkovou kapacitu."
+    },
+    {
+     "num": "2.2.3",
+     "name": "Podíl nemocných s nádorovými onemocněními (vybrané diagnózy) zařazených před úmrtím na zhoubný nádor do specializované paliativní péče",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "umrti_doma_nebo_hospici_pct",
+      "note": "Kontrakt měří místo úmrtí všech zemřelých, ne zařazení onkologických pacientů do specializované paliativní péče — srovnávat jen směr."
+     }
+    },
+    {
+     "num": "2.2.3",
+     "name": "Podíl nemocných s nádorovými onemocněními (vybrané diagnózy) hospitalizovaných v posledních 30 dnech života (před úmrtím na zhoubný nádor) na jednotce intenzivní péče",
+     "mapping": {
+      "match": "chybi",
+      "note": "Intenzita péče na konci života se z veřejných zdrojů sledovat nedá."
+     }
+    },
+    {
+     "num": "2.2.3",
+     "name": "Podíl nemocných s nádorovými onemocněními (vybrané diagnózy) s podanou chemoterapií v posledních 2 týdnech života (před úmrtím na zhoubný nádor)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Chemoterapii na konci života nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "spotreba_opioidu"
+   ]
+  },
+  {
+   "sc": "2.3",
+   "goal": "sg2",
+   "title": "Zvýšení zapojení pacientů a pacientských organizací",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "2.3.1",
+     "text": "Zvýšení míry zapojení pacienta do spolurozhodování",
+     "indikatory": [
+      "spokojenost_informovani"
+     ],
+     "mereni": "proxy",
+     "note": "Míru spolurozhodování pacientů nikdo veřejně neměří; spokojenost pacientů s informováním je nejbližší kontext."
+    },
+    {
+     "num": "2.3.2",
+     "text": "Vznik a fungování pacientských rad při KOC",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "2.3.1",
+     "name": "Podíl KOC s vybudovaným organizovaným systémem informování a vzdělávání pacientů (pacientské informační centrum, strategie vzdělávání a informování pacientů apod.)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Vnitřní systémy KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "2.3.1",
+     "name": "Podíl KOC provádějících organizované šetření spokojenosti pacientů nebo šetření výsledků léčby z pohledu pacientů (PREM/PROM)",
+     "mapping": {
+      "match": "chybi",
+      "note": "PREM/PROM šetření po centrech nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "2.3.2",
+     "name": "Do roku 2025 zajistit vznik a provoz pacientské rady při každém KOC",
+     "target": {
+      "value": "pacientská rada při každém KOC",
+      "year": 2025
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Existenci pacientských rad nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "spokojenost_pece"
+   ]
+  },
+  {
+   "sc": "2.4",
+   "goal": "sg2",
+   "title": "Nastavení systému celoživotní péče o vyléčené dětské pacienty a o mladší nemocné s hematoonkologickými malignitami",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "2.4.1",
+     "text": "Kontinuální, dlouhodobé sledování pacientů po léčbě nádorového onemocnění v dětství a mladších hematoonkologických nemocných, včetně následků protinádorové léčby a včasné léčebné intervence s cílem jejich minimalizace",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "2.4.1",
+     "name": "Počet významných diagnóz nádorů dětského věku s vypracovaným klinickým doporučeným postupem / EBM doporučením pro dlouhodobé sledování",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty doporučených postupů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "2.4.1",
+     "name": "Podíl pacientů s nádory dětského věku v minulosti, splňujících kritéria (vybrané diagnózy), kteří jsou sledovaní v souladu s příslušným doporučením",
+     "mapping": {
+      "match": "chybi",
+      "note": "Dlouhodobé sledování vyléčených dětských pacientů nikdo veřejně neměří."
+     }
+    },
+    {
+     "num": "2.4.1",
+     "name": "Počet klinických doporučených postupů pro sledování mladších nemocných po ukončené hematoonkologické terapii",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty doporučených postupů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "2.4.1",
+     "name": "Počet dlouhodobě sledovaných mladších nemocných po ukončené hematoonkologické terapii",
+     "mapping": {
+      "match": "chybi",
+      "note": "Dispenzarizaci hematoonkologických pacientů nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Podivnosti dokumentu: název cíle se liší mezi hierarchií cílů (str. 20: jen „…o vyléčené dětské pacienty“) a kapitolou (str. 38: navíc „a o mladší nemocné s hematoonkologickými malignitami“) — použit je delší název z kapitoly. Text „Důvodu zařazení“ i „Obsahu návrhu“ je doslova shodný s cílem 3.1 (str. 38 vs. 40–41) a o dětských pacientech fakticky nemluví; jejich specifika popisuje jen odkaz v SC 2.1."
+  },
+  {
+   "sc": "3.1",
+   "goal": "sg3",
+   "title": "Nastavení integrace systémů prevence, protinádorové péče a návazné péče",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "3.1.1",
+     "text": "Podpora efektivní spolupráce mezi praktickými lékaři, screeningovými centry, KOC a HOC a členy ROS a návaznými službami, dispenzarizace onkologických pacientů",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.1.2",
+     "text": "Posilování smluvní spolupráce nemocnic k ustavování regionálních a meziregionálních sítí poskytování protinádorové terapie",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.1.3",
+     "text": "Nastavení doporučených cest pacienta systémem, definování a implementace komplexních standardizovaných postupů posilujících včasnou dostupnost péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.1.4",
+     "text": "Podpora tvorby a aktualizace klinických doporučených postupů v relevantních oblastech",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.1.5",
+     "text": "Vybudování center prevence při KOC",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "3.1.1",
+     "name": "Podíl KOC s vypracovanou koncepcí regionální onkologické skupiny / komplexní onkologické sítě",
+     "mapping": {
+      "match": "chybi",
+      "note": "Koncepce ROS nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.1.2",
+     "name": "Podíl KOC s vypracovanou písemnou dohodou o spolupráci s dalšími poskytovateli v rámci regionální onkologické skupiny / komplexní onkologické sítě",
+     "mapping": {
+      "match": "chybi",
+      "note": "Smluvní dohody KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.1.3",
+     "name": "Počet onkologických diagnóz s vytvořenými národními šablonami doporučených cest pacienta systémem v návaznosti na klinické doporučené postupy / EBM doporučení",
+     "mapping": {
+      "match": "chybi",
+      "note": "Šablony cest pacienta nikdo veřejně nesleduje; týž ukazatel je v Tabulce 3 (0 % → 80 %)."
+     }
+    },
+    {
+     "num": "3.1.3",
+     "name": "Podíl KOC s ustaveným procesem správy a monitoringu doporučených cest pacienta v rámci příslušné regionální onkologické skupiny / komplexní onkologické sítě",
+     "mapping": {
+      "match": "chybi",
+      "note": "Procesy KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.1.4",
+     "name": "Počet onkologických diagnóz s vytvořenými národními klinickými doporučenými postupy / EBM doporučeními",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty doporučených postupů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.1.5",
+     "name": "Podíl KOC s vybudovaným centrem prevence",
+     "mapping": {
+      "match": "chybi",
+      "note": "Centra prevence při KOC nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Text „Důvodu zařazení“ a většina „Obsahu návrhu“ tohoto cíle je v PDF doslova shodná s cílem 2.4 (str. 40–41 vs. 38) — viz poznámka u cíle 2.4."
+  },
+  {
+   "sc": "3.2",
+   "goal": "sg3",
+   "title": "Zajištění rozvoje personalizované medicíny",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "3.2.1",
+     "text": "Podpora multidisciplinárního přístupu, včetně zajištění dostupnosti klinických hodnocení (i akademických)",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.2.2",
+     "text": "Zvýšení kapacity pokročilých molekulárně biologických metod umožňujících personalizovanou cílenou terapii",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.2.3",
+     "text": "Zvýšení dostupnosti cílené personalizované léčby, pokročilých metod radioterapie a pokročilých chirurgických metod, včetně miniinvazivní chirurgie",
+     "indikatory": [
+      "naklady_centrove_leky_total"
+     ],
+     "mereni": "proxy",
+     "note": "Dostupnost cílené léčby přímo nikdo neměří; úhrady za centrové léky jsou nepřímý objemový ukazatel rozšiřujícího se přístupu k moderní terapii (dokument sám uvádí 23 tis. léčených pacientů a 8,6 mld. Kč za rok 2021)."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "3.2.1",
+     "name": "Počet pacientů (vybrané diagnózy), kteří absolvují multidisciplinární posouzení v rámci KOC/ROS",
+     "mapping": {
+      "match": "chybi",
+      "note": "Konzultace MDT umí ÚZIS spočítat z výkazů (Tabulka 3 cituje 55,7 % pacientů KOC za 2020), kontrakt je ale nesleduje."
+     }
+    },
+    {
+     "num": "3.2.2",
+     "name": "Počet KOC s vypracovanou strategií pro nasazení pokročilých molekulárně biologických metod umožňujících personalizovanou cílenou terapii",
+     "mapping": {
+      "match": "chybi",
+      "note": "Strategie KOC nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.2.3",
+     "name": "Počet diagnóz nádorů s vypracovaným klinickým doporučeným postupem / EBM doporučením zahrnujícím cílenou personalizovanou léčbu, pokročilé metody chirurgie nebo radioterapie",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty doporučených postupů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "3.2.3",
+     "name": "Podíl pacientů splňujících kritéria (vybrané diagnózy), kteří jsou léčeni v souladu s doporučením zahrnujícím cílenou personalizovanou léčbu, pokročilé metody chirurgie nebo radioterapie",
+     "mapping": {
+      "match": "chybi",
+      "note": "Soulad léčby s doporučeními nikdo veřejně neměří."
+     }
+    }
+   ],
+   "kontext_indikatory": []
+  },
+  {
+   "sc": "3.3",
+   "goal": "sg3",
+   "title": "Zlepšení plánování a zvýšení dostupnosti péče",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "3.3.1",
+     "text": "Vytvoření a zavedení plánovacích mechanismů z pohledu regionálních potřeb péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "3.3.2",
+     "text": "Racionalizace plánování nákladů na onkologickou diagnostiku a léčbu (optimalizace úhradových mechanismů)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "3.3.1",
+     "name": "Počet krajů s vypracovaným zdravotním plánem obsahujícím implementaci onkologického plánu se zaměřením na regionální potřeby",
+     "mapping": {
+      "match": "chybi",
+      "note": "Krajské zdravotní plány nikdo centrálně nereportuje; týž ukazatel je v Tabulce 3 (0 → 14)."
+     }
+    },
+    {
+     "num": "3.3.2",
+     "name": "Navržen systém pro racionalizaci plánování nákladů na onkologickou diagnostiku a léčbu",
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární procesní milník."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "naklady_centrove_leky_total",
+    "vydaje_zdravotnictvi_hdp"
+   ]
+  },
+  {
+   "sc": "4.1",
+   "goal": "sg4",
+   "title": "Zajištění dostatečného počtu kvalitního, kvalifikovaného a motivovaného lidského kapitálu v oblasti onkologie",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.1.1",
+     "text": "Zajištění vysoké kvality odborného vzdělávání – pregraduální",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.1.2",
+     "text": "Zajištění vysoké kvality a dostupnosti odborného vzdělávání – specializační a celoživotní vzdělávání",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.1.3",
+     "text": "Zvyšování kompetencí sester",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.1.4",
+     "text": "Edukace zdravotnických pracovníků pečujících o pacienty s onkologickými onemocněními ve speciálních dovednostech – nutrice, psychoonkologie, paliativní péče, etika, psychosociální dovednosti, multidisciplinární konsenzus, klinická farmacie a další",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.1.5",
+     "text": "Zlepšení pracovních podmínek včetně umožnění slaďování pracovního a rodinného života, snižování fluktuace do méně exponovaných oborů",
+     "indikatory": [
+      "odmenovani_lekaru_nasobek_mzdy",
+      "odmenovani_sester_nasobek_mzdy"
+     ],
+     "mereni": "proxy",
+     "note": "Pracovní podmínky a fluktuaci v onkologii nikdo veřejně neměří; kontrakt sleduje odměňování lékařů a sester v celém zdravotnictví."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.1.1",
+     "name": "Podíl zavedených nových moderních výukových metod pro obory podílející se na multidisciplinární péči o onkologické pacienty, implementace simulační výuky zejména u urgentních stavů a u invazivních výkonů",
+     "mapping": {
+      "match": "chybi",
+      "note": "Výukové metody nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.1",
+     "name": "Počet změněných učebních plánů zakotvených do vzdělávacích programů v návaznosti na implementaci simulační výuky medicíny",
+     "mapping": {
+      "match": "chybi",
+      "note": "Učební plány nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.1",
+     "name": "Počet absolventů jednotlivých zdravotnických oborů naplánovaný na základě potřeb rozvoje o onkologické pacienty",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "absolventi_lekarstvi_per_100k",
+      "note": "Kontrakt měří absolventy všeobecného lékařství (a ošetřovatelství) celkem, ne plánování podle potřeb onkologie."
+     },
+     "note": "Formulace „potřeb rozvoje o onkologické pacienty“ je doslovný přepis dokumentu (gramaticky neúplná věta)."
+    },
+    {
+     "num": "4.1.2",
+     "name": "Evidence o prostupu postgraduálních studentů vzděláváním",
+     "mapping": {
+      "match": "chybi",
+      "note": "Evidence prostupu vzděláváním veřejně neexistuje."
+     }
+    },
+    {
+     "num": "4.1.2",
+     "name": "Podíl změn prokazatelně usnadňujících a urychlujících absolvování specializovaných částí vzdělávacího programu, prostupnost napříč příbuznými obory",
+     "mapping": {
+      "match": "chybi",
+      "note": "Kvalitativní procesní ukazatel bez veřejného reportingu."
+     }
+    },
+    {
+     "num": "4.1.2",
+     "name": "Podíl doktorandů se zaměřením na nové metody a nové léčebné postupy onkologicky nemocných založené na biologických a imunologických vlastnostech nádorů",
+     "mapping": {
+      "match": "chybi",
+      "note": "Zaměření doktorandů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.3",
+     "name": "Počet absolventů specializačního vzdělávání v oblasti onkologie a hematologie pro všeobecné sestry a dětské sestry",
+     "mapping": {
+      "match": "chybi",
+      "note": "Obor teprve vzniká; absolventy nikdo veřejně nereportuje."
+     },
+     "note": "Tentýž indikátor je v Tabulce 3 základních indikátorů s cílem 40 absolventů do roku 2030."
+    },
+    {
+     "num": "4.1.3",
+     "name": "Počet absolventů nelékařských zdravotnických profesí v certifikovaných kurzech zaměřených na podpůrnou péči – nutriční, paliativní atd.",
+     "mapping": {
+      "match": "chybi",
+      "note": "Certifikované kurzy nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.4",
+     "name": "Podíl absolventů směřujících v postgraduálním vzdělávání do oblasti multidisciplinární onkologické péče",
+     "mapping": {
+      "match": "chybi",
+      "note": "Směřování absolventů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.5",
+     "name": "Podíl odlivu nelékařských zdravotnických pracovníků z oblasti onkologie do jiných oblastí zdravotnictví",
+     "mapping": {
+      "match": "chybi",
+      "note": "Fluktuaci po oborech nikdo veřejně neměří."
+     }
+    },
+    {
+     "num": "4.1.5",
+     "name": "Podíl odlivu nelékařských zdravotnických pracovníků ze zdravotnictví",
+     "mapping": {
+      "match": "chybi",
+      "note": "Odchody ze zdravotnictví nikdo veřejně průběžně nereportuje."
+     }
+    },
+    {
+     "num": "4.1.5",
+     "name": "Podíl zařízení implementujících speciální program podpory pracovníků ve zvlášť obtížném prostředí (psychosociální podpora zdravotníkům, periodické preventivní prohlídky zdravotníků, lázeňská rehabilitace pro zdravotníky, krizová intervence při akutní stresové reakci…)",
+     "mapping": {
+      "match": "chybi",
+      "note": "Programy podpory zaměstnanců nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "lekari_per_1000",
+    "sestry_per_1000",
+    "podil_lekaru_55plus",
+    "absolventi_osetrovatelstvi_per_100k"
+   ]
+  },
+  {
+   "sc": "4.2",
+   "goal": "sg4",
+   "title": "Zlepšení stavu infrastruktury jednotlivých poskytovatelů onkologické a hematoonkologické péče",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.2.1",
+     "text": "Podpora rozvoje infrastruktury a vybavení KOC a HOC (pro dospělé i dětské pacienty)",
+     "indikatory": [
+      "pet_skenery_per_milion"
+     ],
+     "mereni": "proxy",
+     "note": "Vybavení KOC/HOC kontrakt neměří; celostátní hustota PET skenerů je nejbližší onkologicky specifický přístrojový ukazatel."
+    },
+    {
+     "num": "4.2.2",
+     "text": "Podpora rozvoje infrastruktury regionálních poskytovatelů péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.2.3",
+     "text": "Zvýšení dostupnosti onkologické péče ve specifických regionech",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.2.1",
+     "name": "Počet realizovaných projektů obnovy",
+     "mapping": {
+      "match": "chybi",
+      "note": "Investiční projekty nikdo souhrnně veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.1",
+     "name": "Počet rekonstrukcí či rozšíření či technologických inovací infrastruktury vysoce specializovaných center v oblasti onkologie",
+     "mapping": {
+      "match": "chybi",
+      "note": "Rekonstrukce center nikdo souhrnně veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.1",
+     "name": "Počet a rozmístění inovativní přístrojové techniky",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "pet_skenery_per_milion",
+      "note": "Kontrakt měří celostátní hustotu vybraných přístrojů (PET, CT, MRI), ne počty a rozmístění inovativní techniky v centrech."
+     }
+    },
+    {
+     "num": "4.2.2",
+     "name": "Počet vzniklých specializovaných pracovišť v regionech nedisponujících KOC",
+     "mapping": {
+      "match": "chybi",
+      "note": "Vznik pracovišť nikdo souhrnně veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.2",
+     "name": "Počet vzniklých specializovaných pracovišť s celonárodním přesahem",
+     "mapping": {
+      "match": "chybi",
+      "note": "Vznik pracovišť nikdo souhrnně veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.3",
+     "name": "Počet modernizací, rekonstrukcí či rozšíření či technologických inovací infrastruktury členů regionálních onkologických skupin",
+     "mapping": {
+      "match": "chybi",
+      "note": "Investice členů ROS nikdo souhrnně veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.3",
+     "name": "Procentuální zvýšení kapacit členů regionálních onkologických skupin",
+     "mapping": {
+      "match": "chybi",
+      "note": "Kapacity ROS nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.2.3",
+     "name": "Podíl pacientů léčených mimo KOC v jednotlivých krajích",
+     "mapping": {
+      "match": "chybi",
+      "note": "ÚZIS tento podíl analyticky sleduje (dokument cituje 10 % pro Prahu a téměř 57 % pro Karlovarský kraj za období 2016–2020), kontrakt ho nemá."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "ct_per_milion",
+    "mri_per_milion"
+   ]
+  },
+  {
+   "sc": "4.3",
+   "goal": "sg4",
+   "title": "Sledování kvality péče u jednotlivých poskytovatelů onkologické péče",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.3.1",
+     "text": "Aktualizovat a pravidelně validovat sady indikátorů onkologické péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.3.2",
+     "text": "Zavést standardizované hodnocení ze strany pacientských organizací",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.3.1",
+     "name": "Vytvoření resortních referenčních statistik pro všechny oblasti Národního onkologického plánu, zejména pro systém hodnocení dostupnosti a kvality péče",
+     "mapping": {
+      "match": "chybi",
+      "note": "Procesní milník tvorby statistik."
+     }
+    },
+    {
+     "num": "4.3.1",
+     "name": "Zlepšení v klíčových populačních ukazatelích (pokrytí populace léčbou ve specializovaných centrech, včasný záchyt onemocnění) a klinických indikátorech (5leté relativní přežití)",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "prezit_rakoviny_5let",
+      "note": "Kontrakt měří pětileté přežití u tří diagnóz (kolorektum — prezit_rakoviny_5let, prs — prezit_karcinom_prsu_5let, plíce — prezit_karcinom_plic_5let); pokrytí léčbou v centrech ani podíl časných záchytů neměří. Id je zástupné."
+     }
+    },
+    {
+     "num": "4.3.2",
+     "name": "Ustavení pacientských rad při všech centrech vysoce specializované péče v onkologii a implementace pravidelných ročních hodnocení z pohledu pacientů",
+     "mapping": {
+      "match": "chybi",
+      "note": "Pacientské rady a jejich hodnocení nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "prezit_karcinom_prsu_5let",
+    "prezit_karcinom_plic_5let",
+    "mortalita_onkologicka"
+   ]
+  },
+  {
+   "sc": "4.4",
+   "goal": "sg4",
+   "title": "Zajištění přístupu k inovativním postupům a udržení vysoké kvality v onkologické péči",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.4.1",
+     "text": "Zrychlení implementace inovativních postupů (vč. kategorie vynálezů) do diagnostiky a léčby",
+     "indikatory": [
+      "naklady_centrove_leky_total"
+     ],
+     "mereni": "proxy",
+     "note": "Rychlost implementace inovací nikdo veřejně neměří; úhrady za centrové léky jsou nepřímý objemový ukazatel vstupu inovativní léčby do praxe."
+    },
+    {
+     "num": "4.4.2",
+     "text": "Rozšíření hodnocení nákladové efektivity nových technologií (HTA) i na nelékové inovace a technologie",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.4.3",
+     "text": "Posílení implementace systému DRG, exaktního ocenění nákladovosti protinádorové terapie a cílených mechanismů úhrady péče (platba dle nákladů – úhradové tarify)",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.4.1",
+     "name": "Významné zkrácení času do implementace inovativních postupů a nových indikací léčiv do klinické praxe",
+     "mapping": {
+      "match": "chybi",
+      "note": "Čas do implementace inovací nikdo veřejně neměří; „významné zkrácení“ dokument nekvantifikuje."
+     }
+    },
+    {
+     "num": "4.4.1",
+     "name": "Plošná implementace prediktivních modelů a standardů „horizon scanningu“ pro přípravu finančních zdrojů, infrastruktury a postupů nutných pro rychlou implementaci inovací v klinické praxi",
+     "mapping": {
+      "match": "chybi",
+      "note": "Procesní milník bez veřejného reportingu."
+     }
+    },
+    {
+     "num": "4.4.2",
+     "name": "Vznik a implementace koncepce a národní metodiky pro standardizaci HTA v oblasti zdravotnických prostředků; počet provedených a obhájených HTA analýz",
+     "mapping": {
+      "match": "chybi",
+      "note": "HTA analýzy nelékových technologií nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.4.3",
+     "name": "Do roku 2025 dosáhnout úplného výkaznictví CZ-DRG markerů při 100% pokrytí segmentu akutní lůžkové péče",
+     "target": {
+      "value": "úplné výkaznictví CZ-DRG markerů, 100% pokrytí akutní lůžkové péče",
+      "year": 2025
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Výkaznictví DRG markerů nikdo veřejně nereportuje."
+     }
+    },
+    {
+     "num": "4.4.3",
+     "name": "Podíl onkologicky relevantních DRG bází hrazených dle exaktních nákladů podle systému CZ-DRG formou úhradových tarifů",
+     "mapping": {
+      "match": "chybi",
+      "note": "Strukturu úhrad po DRG bázích nikdo veřejně nereportuje."
+     }
+    }
+   ],
+   "kontext_indikatory": []
+  },
+  {
+   "sc": "4.5",
+   "goal": "sg4",
+   "title": "Podpora výzkumu a mezinárodní spolupráce v oblasti onkologie",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.5.1",
+     "text": "Excelentní výzkum a vývoj, včetně akademického výzkumu a akademických klinických studií s cílem zkvalitnit diagnosticko-léčebný proces v onkologii",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.5.2",
+     "text": "Definování vzácných nádorů a přístupu k mezinárodnímu klinickému a základnímu výzkumu ve spolupráci s EU",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.5.3",
+     "text": "Mezinárodní kooperace a harmonizace výzkumu a péče v rámci EU a WHO",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.5.1",
+     "name": "Celkový počet pacientů přijatých do prospektivních intervenčních klinických studií v indexovaném roce jako procento pacientů nově léčených v onkologickém centru/instituci",
+     "mapping": {
+      "match": "chybi",
+      "note": "Zapojení pacientů do klinických studií nikdo veřejně souhrnně nereportuje."
+     }
+    },
+    {
+     "num": "4.5.2",
+     "name": "Počet pacientů s diagnózou rakoviny zahrnutých do prospektivních klinických studií fáze 1, 2 a 3, obsahujících jednu nebo více intervencí v diagnostice, léčbě, sledování nebo rehabilitaci",
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty pacientů ve studiích nikdo veřejně souhrnně nereportuje; dokument v poznámce pod čarou (str. 58) podrobně vymezuje, kdo se do procenta počítá."
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "poznamka": "Dílčí cíl 4.5.3 v dokumentu nemá přiřazený žádný indikátor — tabulka indikátorů cíle 4.5 obsahuje jen položky k 4.5.1 a 4.5.2."
+  },
+  {
+   "sc": "4.6",
+   "goal": "sg4",
+   "title": "Využití přínosů digitalizace",
+   "garant": "MZd",
+   "dilci_cile": [
+    {
+     "num": "4.6.1",
+     "text": "Zapojení oblasti onkologické péče v rámci implementace eHealth a telemedicíny",
+     "indikatory": [
+      "ehealth_adoption"
+     ],
+     "mereni": "proxy",
+     "note": "Onkologicky specifickou digitalizaci nikdo neměří; kontrakt sleduje celkový index adopce elektronického zdravotnictví."
+    },
+    {
+     "num": "4.6.2",
+     "text": "Podpora rozvoje parametrické datové základny, zejména Národního onkologického registru a souvisejících datových zdrojů NZIS",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.6.3",
+     "text": "Vytvoření, rozvoj a využívání elektronické dokumentace pro lepší interoperabilitu a multidisciplinární spolupráci",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.6.4",
+     "text": "Vytvoření informačního systému meziresortní integrace ekonomických dat pro potřeby predikce a validace transparentního systému úhrad v oblasti onkologie a pro zavádění inovací",
+     "mereni": "proces"
+    },
+    {
+     "num": "4.6.5",
+     "text": "Zajištění širokého sdílení sekundárních dat s právnickými osobami, které mají oprávněný zájem na přístup k datům na základě legitimních cílů plynoucích z jejich postavení v systému či z právních či jiných předpisů",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "num": "4.6.1",
+     "name": "Vytvoření elektronické verze dokumentace onkologického pacienta a její vydání jako národního standardu",
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární procesní milník."
+     }
+    },
+    {
+     "num": "4.6.2",
+     "name": "Do roku 2025 plný přechod Národního onkologického registru na elektronické hlášení záznamů z nemocničních informačních systémů",
+     "target": {
+      "value": "plný přechod NOR na elektronické hlášení",
+      "year": 2025
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární procesní milník; týž ukazatel je v Tabulce 3 (0 → 1), tam s cílovým rokem 2030."
+     }
+    },
+    {
+     "num": "4.6.3",
+     "name": "Vytvoření a publikování komunikačních a obsahových standardů elektronické dokumentace pro hlavní onkologické diagnózy",
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární procesní milník."
+     }
+    },
+    {
+     "num": "4.6.4",
+     "name": "Plná implementace informačního systému integrujícího dostupné centrální datové zdroje o personálních kapacitách, platech a mzdách, ekonomice a provozu poskytovatelů",
+     "mapping": {
+      "match": "chybi",
+      "note": "Binární procesní milník."
+     }
+    },
+    {
+     "num": "4.6.5",
+     "name": "Metodika a pravidla pro sdílení sekundárních dat; počet otevřených datových sad publikovaných v Národním katalogu otevřených dat (10 do roku 2030)",
+     "target": {
+      "value": "10 otevřených datových sad v Národním katalogu otevřených dat",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Otevřené datové sady resortu by šly dohledat v NKOD, kontrakt je ale nesleduje."
+     }
+    }
+   ],
+   "kontext_indikatory": []
+  }
+ ]
+}

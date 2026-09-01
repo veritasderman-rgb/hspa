@@ -127,9 +127,11 @@ function validateDataset(cfg) {
       if (!cfg.levelRequired && di.level != null && !LEVELS.includes(di.level)) fail(`${dw}: neznámý level „${di.level}“`);
       checkMapping(di.mapping, dw);
       // Hodnota bez roku by vypadala jako aktuální — dokumenty měří
-      // k pevnému datu.
-      if (di.baseline && di.baseline.value != null && !di.baseline.year) {
-        fail(`${dw}: baseline bez roku`);
+      // k pevnému datu. Když ale rok neuvádí sám dokument („aktuální
+      // kapacita je…"), je poctivé ho nevymýšlet — pak to musí vysvětlit
+      // nota u indikátoru.
+      if (di.baseline && di.baseline.value != null && !di.baseline.year && !di.note) {
+        fail(`${dw}: baseline bez roku (a bez noty, proč rok chybí)`);
       }
     }
 
