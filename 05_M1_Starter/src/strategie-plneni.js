@@ -188,6 +188,8 @@ function dilciCilHtml(d) {
         ${badge}
       </div>
       ${chips ? `<div class="z35-chip-row">${chips}</div>` : ''}
+      ${d.kriterium ? `<p class="z35-dc-note"><strong>Kritérium plnění dle dokumentu:</strong> ${escapeHtml(d.kriterium)}</p>` : ''}
+      ${d.gestor || d.termin ? `<p class="z35-dc-note">${d.gestor ? `<strong>Gestor:</strong> ${escapeHtml(d.gestor)}` : ''}${d.gestor && d.termin ? ' · ' : ''}${d.termin ? `<strong>Termín:</strong> ${escapeHtml(d.termin)}` : ''}</p>` : ''}
       ${d.note ? `<p class="z35-dc-note">${escapeHtml(d.note)}</p>` : ''}
     </li>`;
 }
