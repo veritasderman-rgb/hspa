@@ -205,6 +205,18 @@ zdrave-cesko.cz/
 | **JS moduly** | `src/pohotovost-okres.js` — jen progresivní vylepšení (nav, patička, živé „teď otevřeno“ z `data-hours`); bez JS stránka plně funguje. |
 | **CSS namespace** | `.pokr-*` |
 
+### `plneni-*.html` — plnění dalších strategií (sdílená šablona)
+
+Pět stránek nad sdíleným rendererem `src/strategie-plneni.js` (bootstrap
+`src/plneni-page.js`, konfigurace data-atributy na `<body>`, CSS `.z35-*`):
+`plneni-onko-2030.html` (NOP 2030), `plneni-kv-2035.html` (KV plán 2025–2035),
+`plneni-amr.html` (AP NAP 2019–2022 — vypršel bez nástupce, což je hlavní
+zjištění stránky), `plneni-dusevni-zdravi.html` (Strategie 2013 + NAPDZ),
+`plneni-zdravi-2030.html` (retrospektiva s oficiálním hodnocením ze Zprávy
+2023–2024 — bloky `hodnoceni` citují zprávu se stranou). Datasety
+`data/plneni-*.json`, viz data-model §22. Vstupy ze `strategie.html` (badge
+„plnění ⤳ indikátory" na kartě + zvýrazněný odkaz v detailu přes `plneni_url`).
+
 ### `zdravi-2035.html` — Plní se Zdraví 2035?
 
 | | |
@@ -212,7 +224,7 @@ zdrave-cesko.cz/
 | **Účel** | Hlavní strategie zdravotnictví rozložená po kapitolách a úkolech: 12 specifických cílů, 113 dílčích cílů, 68 indikátorů dokumentu — každý provázaný s živým indikátorem kontraktu, nebo s poctivým „neměříme“. Jádro mise HSPA: na čem je vidět, jestli se strategie plní. |
 | **Cílový uživatel** | Novinář, policy maker, úředník MZ; sekundárně poučený občan. |
 | **Fetchuje** | `data/zdravi2035-plneni.json` + `data/indicators.json` (živé hodnoty a signály) |
-| **JS moduly** | `src/zdravi2035.js` → `page-shared` |
+| **JS moduly** | `src/zdravi2035.js` → `src/strategie-plneni.js` → `page-shared` |
 | **CSS namespace** | `.z35-*` |
 
 **Co dělá jinak**

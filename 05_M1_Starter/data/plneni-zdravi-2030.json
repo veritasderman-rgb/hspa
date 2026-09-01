@@ -1,0 +1,1332 @@
+{
+ "version": "1.0",
+ "strategy_id": "zdravi_2030",
+ "_doc": [
+  "Plnění Strategického rámce Zdraví 2030 — RETROSPEKTIVA. Rozklad revokované",
+  "verze rámce (2020) na strategické cíle, specifické cíle, dílčí cíle a indikátory",
+  "dokumentu, mapovaný na datový kontrakt (data/indicators.json), a doplněný",
+  "o oficiální hodnocení plnění ze Zprávy o průběhu realizace 2023–2024.",
+  "",
+  "ZDROJ A: Strategický rámec rozvoje péče o zdraví v ČR do roku 2030 (Zdraví 2030),",
+  "schválený vládou 18. 11. 2019 usnesením č. 817/2019, aktualizovaný (revokace)",
+  "13. 7. 2020 po pandemii COVID-19 — číslo revokačního usnesení dokument neuvádí.",
+  "Struktura: 3 strategické cíle, 7 specifických cílů (1.1, 1.2, 2.1–2.4, 3.1),",
+  "71 dílčích cílů (SC 3.1 dílčí cíle nemá — plní ho Koncepce zdravotnického",
+  "výzkumu). Karty specifických cílů: kap. 3, str. 52–92; indikátorová soustava",
+  "s výchozími hodnotami (2017) a cíli 2030: kap. 4.2, str. 94–96.",
+  "",
+  "ZDROJ B: Zpráva o průběhu realizace Zdraví 2030 v letech 2023–2024 (MZD, 2025,",
+  "verze po vypořádání připomínek) — oficiální průběžné hodnocení, ze kterého",
+  "pochází klíč `hodnoceni` u každého specifického cíle (parafráze věrná zprávě,",
+  "s citacemi a číslem strany) a hodnoty indikátorů za roky 2023/2024 v `note`",
+  "u indikátorů dokumentu. Hodnocení plnění NIKDY nedomýšlíme — jen co zpráva",
+  "skutečně říká.",
+  "",
+  "MAPOVÁNÍ je redakční práce, ne strojová: u každého indikátoru dokumentu říkáme,",
+  "jestli ho kontrakt měří PŘÍMO (match: primo — stejný jev, srovnatelná metodika),",
+  "jen PROXY (match: proxy — příbuzný jev nebo jiná metodika, srovnávat směr, ne",
+  "hodnoty; poznámka říká proč), nebo VŮBEC (match: chybi). U dílčích cílů",
+  "`mereni: proces` znamená organizační/legislativní úkol bez populačního",
+  "indikátoru — to není mezera měření, ale povaha úkolu.",
+  "",
+  "POCTIVOST HODNOT: výchozí a cílové hodnoty jsou z dokumentu doslova, včetně",
+  "podivností (pokrytí screeningem s výchozí hodnotou 0 %, kterou zpráva 2023–2024",
+  "později uvádí jako 34,7 %; poměr návštěv s výchozí 7,4:3,1 v rámci, ale 4,7:3,1",
+  "v tabulce zprávy; citační ohlas 90 000 popsaný poznámkou dokumentu jako",
+  "„medián citovanosti“). Nic neopravujeme ani nedopočítáváme.",
+  "",
+  "VAZBA NA ZDRAVÍ 2035: Zdraví 2030 je přímý předchůdce Strategického rámce",
+  "Zdraví 2035 (data/zdravi2035-plneni.json). Zpráva 2023–2024 sama ohlašuje",
+  "prolongaci do roku 2035 a novou strukturu 12 specifických cílů (str. 104):",
+  "SC 1.2 se dělí na primární a sekundární prevenci, SC 2.1 na péči na sociálně",
+  "zdravotním pomezí, duševní zdraví a specializovanou péči; nově přibývají léková",
+  "politika (1.3) a podpora kvality (2.8).",
+  "",
+  "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu",
+  "z data/indicators.json — tady se NEduplikují, aby nemohly zastarat."
+ ],
+ "document": {
+  "title": "Strategický rámec rozvoje péče o zdraví v České republice do roku 2030 (Zdraví 2030)",
+  "approved": "2019-11-18",
+  "approval": "usnesení vlády ČR č. 817/2019 ze dne 18. 11. 2019; poslední aktualizace (revokace po COVID-19) 13. 7. 2020 — číslo revokačního usnesení dokument neuvádí",
+  "url": "https://databaze.strategie.gov.cz/wp-content/uploads/2026/02/revokace-zdravi2030_final.pdf",
+  "web": "https://mzd.gov.cz/category/programy-a-strategie/zdravi-2030/",
+  "horizon": {
+   "from": 2021,
+   "to": 2030
+  },
+  "zastresujici_cil": "Zdraví všech skupin obyvatel se zlepšuje (Strategický rámec ČR 2030)"
+ },
+ "document_b": {
+  "title": "Zpráva o průběhu realizace Strategického rámce rozvoje péče o zdraví v ČR do roku 2030 (Zdraví 2030) v letech 2023–2024",
+  "url": "https://databaze.strategie.gov.cz/wp-content/uploads/2026/02/zprava-o-prubehu-realizace-zdravi-2030-v-letech-2023-2024_po-vpr.pdf",
+  "note": "Oficiální průběžné hodnocení plnění (MZD, 2025), verze po vypořádání připomínek; navazuje na monitorovací zprávu předloženou vládě v červnu 2023."
+ },
+ "extracted_at": "2026-09-01",
+ "strategic_goals": [
+  {
+   "id": "sg1",
+   "num": "1",
+   "title": "Ochrana a zlepšení zdraví obyvatel"
+  },
+  {
+   "id": "sg2",
+   "num": "2",
+   "title": "Optimalizace zdravotnického systému"
+  },
+  {
+   "id": "sg3",
+   "num": "3",
+   "title": "Podpora vědy a výzkumu"
+  }
+ ],
+ "ramcove_indikatory": [
+  {
+   "name": "Délka života ve zdraví při narození",
+   "baseline": {
+    "value": "62,7 (muži) / 64,0 (ženy) let",
+    "year": 2017
+   },
+   "target": {
+    "value": "65,7 (muži) / 66,0 (ženy) let",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "nadeje_doziti_zdravi_65",
+    "note": "Kontrakt měří naději dožití ve zdraví v 65 letech; dokument při narození."
+   },
+   "note": "Tytéž výchozí i cílové hodnoty později převzal Strategický rámec Zdraví 2035 (cíl posunut z 2030 na 2035)."
+  },
+  {
+   "name": "Předčasná (preventabilní) úmrtí",
+   "baseline": {
+    "value": "256,8 na 100 000 obyvatel",
+    "year": 2017
+   },
+   "target": {
+    "value": "228,9 na 100 000 obyvatel",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "primo",
+    "indicator_id": "mortalita_preventabilni"
+   },
+   "note": "Dokument: „Definice podle metodik EUROSTAT, číselné nastavení odpovídá současným trendům a mezinárodně publikovaným datům“ (str. 96)."
+  },
+  {
+   "name": "Dlouhodobé omezení aktivit — GALI (Global Activity Limitation Indicator) podle příjmových kvintilů",
+   "baseline": {
+    "value": "25–64: 23,2 % (nejnižší kvintil) / 12,0 % (nejvyšší); 65+: 53,5 % / 35,9 %",
+    "year": 2017
+   },
+   "target": {
+    "value": "25–64: 19 % / 10 %; 65+: 43 % / 29 %",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "chybi",
+    "note": "GALI po příjmových kvintilech kontrakt nesleduje; sociální gradient měří rozdílem naděje dožití podle vzdělání (nadeje_doziti_vzdelani_gap_muzi)."
+   }
+  },
+  {
+   "name": "Úmrtnost na zhoubné nádory",
+   "baseline": {
+    "value": "258 úmrtí na 100 000 obyvatel",
+    "year": 2017
+   },
+   "target": {
+    "value": "240 úmrtí na 100 000 obyvatel",
+    "year": 2030
+   },
+   "mapping": {
+    "match": "proxy",
+    "indicator_id": "mortalita_onkologicka",
+    "note": "Dokument uvádí počet úmrtí na 100 000 obyvatel kalkulovaný z dat Národního onkologického registru (hrubá míra); kontrakt standardizovanou míru — srovnávat směr, ne hodnoty."
+   }
+  }
+ ],
+ "cile": [
+  {
+   "sc": "1.1",
+   "goal": "sg1",
+   "title": "Reforma primární péče",
+   "garant": "MZ (zpracovatel: sekce zdravotní péče MZ)",
+   "dilci_cile": [
+    {
+     "num": "1.1.1",
+     "text": "Posílení kompetencí praktických lékařů a vymezení kompetencí ve vztahu ke specialistům, zlepšení koordinace činnosti primární péče a služeb ambulantních specialistů",
+     "indikatory": [
+      "hospitalizace_acsc"
+     ],
+     "mereni": "proxy",
+     "note": "Kompetence a koordinaci primární péče kontrakt přímo neměří; odvratitelné hospitalizace (ACSC) jsou uznávané zpětné zrcadlo její síly."
+    },
+    {
+     "num": "1.1.2",
+     "text": "Snížení počtu preskripčních omezení",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.3",
+     "text": "Zavedení standardizace vybavení ordinací",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.4",
+     "text": "Zvýšení dostupnosti primární péče – podpora sdružených praxí",
+     "indikatory": [
+      "unmet_need_medical",
+      "podil_prakticti_lekari"
+     ],
+     "mereni": "proxy",
+     "note": "Počet sdružených praxí kontrakt nesleduje; dostupnost primární péče aproximuje nesplněnou potřebou lékařské péče a podílem praktiků mezi lékaři."
+    },
+    {
+     "num": "1.1.5",
+     "text": "Zvyšování kvality péče včetně sledování indikátorů kvality",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.6",
+     "text": "Změna systému financování s důrazem na posílení výkonové složky při fixované kapitaci",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.7",
+     "text": "Zavedení motivačních faktorů pro zabezpečení praxe na venkově, v obtížně obsaditelných a méně atraktivních oblastech",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.8",
+     "text": "Optimalizace využívání programů rezidenčních míst a vytvoření modelu vzdělávání (zvláště PLDD a registrující poskytovatelé ambulantních služeb)",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.1.9",
+     "text": "Nastavení efektivních postupů v managementu chronických neinfekčních onemocnění",
+     "indikatory": [
+      "kontrola_hypertenze",
+      "hospitalizace_acsc",
+      "amputace_dk_diabetici"
+     ],
+     "mereni": "proxy",
+     "note": "Postupy disease managementu kontrakt neměří; jejich výsledky ano — kontrolu hypertenze, odvratitelné hospitalizace a amputace u diabetiků."
+    },
+    {
+     "num": "1.1.10",
+     "text": "Zvýšení podílu obyvatel využívajících pravidelné preventivní prohlídky",
+     "indikatory": [
+      "prohlidka_prakticky_lekar",
+      "ucast_preventivni_prohlidky_stomatolog"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.1.11",
+     "text": "Vybudování rovnoměrné sítě urgentních příjmů a pohotovostní služby (cca jedna pro každý okres)",
+     "indikatory": [
+      "dojezd_zzs"
+     ],
+     "mereni": "proxy",
+     "note": "Síť urgentních příjmů a pohotovostí kontrakt nesleduje; dojezdový čas ZZS je nejbližší ukazatel dostupnosti akutní péče. Poznámka dokumentu: týká se i lékárenských pohotovostních služeb."
+    },
+    {
+     "num": "1.1.12",
+     "text": "Zajištění návaznosti lékařské pohotovostní služby na urgentní příjmy, u vybraných poskytovatelů na nízkoprahové urgentní příjmy",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Průměrný věk praktických lékařů",
+     "level": "dopad",
+     "baseline": {
+      "value": "56 let",
+      "year": 2017
+     },
+     "target": {
+      "value": "50 let",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "podil_lekaru_55plus",
+      "note": "Průměrný věk praktiků kontrakt neměří; nejbližší je podíl všech lékařů ve věku 55+ — sledovat směr stárnutí, ne hodnotu."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 55 let (str. 5). Podle OECD profilu citovaného zprávou je medián věku praktiků 56 let a bez dalších zásahů hrozí do roku 2030 pokles jejich počtu o 25 % (str. 6)."
+    },
+    {
+     "name": "Poměr návštěv u ambulantních specialistů k návštěvám u praktických lékařů",
+     "level": "dopad",
+     "baseline": {
+      "value": "7,4 : 3,1",
+      "year": 2017
+     },
+     "target": {
+      "value": "6,5 : 3,6",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "ambulantni_kontakty_per_capita",
+      "note": "Dokument měří strukturu návštěv (specialisté : praktici); kontrakt jen celkový počet ambulantních kontaktů na osobu — sleduje celkovou konzumaci péče, ne její rozdělení."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 4,9 : 3,4 (str. 5) — a zároveň v tabulce dílčího cíle 1.1.1 uvádí výchozí hodnotu 4,7 : 3,1 místo 7,4 : 3,1 z rámce (str. 9). Rozpor necháváme tak, jak je v dokumentech."
+    },
+    {
+     "name": "Podíl obyvatel, kteří v průběhu předchozích dvou let absolvovali preventivní prohlídku u praktického lékaře",
+     "level": "dopad",
+     "baseline": {
+      "value": "63,2 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "74,1 %",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "prohlidka_prakticky_lekar"
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 61,7 % a 2024: 62,0 % (str. 5 a 19); tabulka dílčího cíle 1.1.10 přitom uvádí výchozí hodnotu 56,4 % místo 63,2 % z rámce. Rozpor necháváme tak, jak je."
+    },
+    {
+     "name": "Počet vytvořených sdružených praxí",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet ordinací naplňujících standard praxe",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených urgentních příjmů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Zpráva 2023–2024 uvádí k roku 2024: 17 vytvořených/modernizovaných urgentních příjmů 1. typu a 79 urgentních příjmů 2. typu (str. 20)."
+    },
+    {
+     "name": "Počet osob podpořených rezidenčními programy pro praktiky",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Zpráva 2023–2024: 182 (2023) a 154 (2024) podpořených rezidentů VPL; 135 (2023) a 98 (2024) rezidentů PLDD (str. 16)."
+    }
+   ],
+   "kontext_indikatory": [
+    "pldd_podil_65plus",
+    "podil_prakticti_lekari",
+    "stomatologove_per_1000",
+    "cekaci_doby_specialist"
+   ],
+   "hodnoceni": {
+    "text": "Zpráva shrnuje, že reforma se zaměřuje na kompetence, dostupnost, síť a elektronizaci primární péče: „V roce 2023 došlo ke snížení průměrného věku praktických lékařů na 55 let a ke zlepšení poměru návštěv u specialistů k návštěvám u praktických lékařů. Novela vyhlášky č. 376/2011 Sb. rozšířila kompetence praktických lékařů v oblasti preskripce léčiv od 1. července 2024.“ Primární péče je podle citovaného profilu OECD široce dostupná, ale lokální nedostatek praktiků a stárnutí pracovní síly ohrožují budoucí dostupnost v některých regionech; s mediánem věku 56 let se odhaduje, že bez dalších zásahů by se počet praktických lékařů mohl do roku 2030 snížit o 25 %, u pediatrů (průměrný věk nad 60 let) hrozí do roku 2035 pokles o více než 50 %. Účast na preventivních prohlídkách (61,7 % v roce 2023) zaostává za cílem 74,1 %. Připravena byla reforma pohotovostí: novela zákona o zdravotních službách a vyhláška č. 135/2025 Sb. s účinností od 1. 1. 2026, výzvy IROP na urgentní příjmy s až 5 mld. Kč pro až 97 nemocnic.",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 4–7, 19–20"
+   }
+  },
+  {
+   "sc": "1.2",
+   "goal": "sg1",
+   "title": "Prevence nemocí, podpora a ochrana zdraví; zvyšování zdravotní gramotnosti",
+   "garant": "MZ (zpracovatel: ÚZIS ČR a sekce MZ)",
+   "dilci_cile": [
+    {
+     "num": "1.2.1",
+     "text": "Prevence vzniku a šíření infekčních nemocí a nastavení podpůrných informačních opatření pro systém managementu krizových situací",
+     "indikatory": [
+      "spalnicky",
+      "pertuse_incidence",
+      "tuberkuloza",
+      "hepatitida_bc_chronicka",
+      "hiv_nove_diagnozy"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.2",
+     "text": "Ochrana zdraví obyvatel ČR v kontextu environmentálních rizik (chemické látky, nadměrná hluková zátěž, projevy změny klimatu apod.)",
+     "indikatory": [
+      "pm25_expozice",
+      "klistova_encefalitida"
+     ],
+     "mereni": "proxy",
+     "note": "Z environmentálních rizik kontrakt měří expozici PM2.5 a klimaticky citlivou klíšťovou encefalitidu; hluk a chemické látky neměří."
+    },
+    {
+     "num": "1.2.3",
+     "text": "Prevence užívání návykových látek a realizace screeningu, časné diagnostiky a krátké intervence v oblasti závislostního chování",
+     "indikatory": [
+      "kuractvi_denni",
+      "alkohol_spotreba",
+      "alkohol_adolescenti",
+      "konopi_adolescenti",
+      "umrtnost_predavkovani_drogy",
+      "substitucni_lecba_pokryti"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.4",
+     "text": "Tvorba Národního programu zvyšování úrovně zdravotní gramotnosti, realizace dílčích programů a monitoring zdravotní gramotnosti",
+     "indikatory": [
+      "zdravotni_gramotnost_omezena"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.5",
+     "text": "Vybudování a rozvoj center prevence ve zdravotnických zařízeních",
+     "mereni": "proces"
+    },
+    {
+     "num": "1.2.6",
+     "text": "Vybudování a rozvoj Národního zdravotnického informačního portálu",
+     "indikatory": [
+      "zdravotni_info_online"
+     ],
+     "mereni": "proxy",
+     "note": "Návštěvnost NZIP kontrakt neměří; podíl lidí hledajících zdravotní informace online je nejbližší kontext."
+    },
+    {
+     "num": "1.2.7",
+     "text": "Posilování časného záchytu nemocí a rizikových faktorů ve všech segmentech péče a zavádění nových programů časného záchytu",
+     "indikatory": [
+      "screening_plicni",
+      "screening_prostata",
+      "screening_sluchu_5let"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "1.2.8",
+     "text": "Rozvoj institucionálního zázemí pro optimalizaci sekundární prevence a zvyšování kvality stávajících populačních screeningových programů",
+     "indikatory": [
+      "screening_kolorektalni",
+      "screening_mamograficky",
+      "screening_cervix"
+     ],
+     "mereni": "primo"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Podíl veřejných výdajů na prevenci",
+     "level": "dopad",
+     "baseline": {
+      "value": "2,7 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "4,5 %",
+      "year": 2030
+     },
+     "gestor": "podle dokumentu cílová úroveň odpovídá vyspělým severským státům Evropy či UK",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "vydaje_prevence_pct",
+      "note": "Kontrakt měří prevenci jako % běžných výdajů na zdravotnictví; dokument jako podíl na celkových veřejných výdajích na zdraví — jiný jmenovatel."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: „X“ — nevyplněno (str. 22). Pozdější Zdraví 2035 uvádí u téhož indikátoru výchozí 5,2 % (2023) a cíl 4,5 % — tedy cíl NIŽŠÍ než výchozí stav."
+    },
+    {
+     "name": "Podíl osob s rizikovou konzumací alkoholu",
+     "level": "dopad",
+     "baseline": {
+      "value": "14,9 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "7,5 %",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "alkohol_spotreba",
+      "note": "Dokument měří binge drinking (6+ alkoholických nápojů při jedné příležitosti alespoň jednou měsíčně); kontrakt spotřebu čistého alkoholu na osobu."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 8,3 % rizikové pití, 6,3 % škodlivé pití (str. 22); za rok 2024 uvádí 7,4 % rizikové pití a 7,4 % škodlivé pití — obě hodnoty shodné (str. 27). Necháváme doslova."
+    },
+    {
+     "name": "Podíl denních kuřáků",
+     "level": "dopad",
+     "baseline": {
+      "value": "21,5 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "15 %",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "kuractvi_denni"
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 15,90 % a 2024: 16,4 % — meziroční nárůst (str. 22 a 27)."
+    },
+    {
+     "name": "Pokrytí populace screeningovým programem",
+     "level": "dopad",
+     "baseline": {
+      "value": "0 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "40 %",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "screening_kolorektalni",
+      "note": "Dokument vymezuje pokrytí TOKS ve dvouletém intervalu pro věkovou skupinu 55–69 let; kontrakt měří pokrytí kolorektálním screeningem 50–75 let — jiné věkové vymezení."
+     },
+     "note": "Výchozí hodnota 0 % je v rámci doslova (str. 95), přestože TOKS v roce 2017 běžel; zpráva 2023–2024 u téhož indikátoru uvádí výchozí hodnotu 34,7 % a hodnotu 2023: 40,00 % (str. 22). Rozpor necháváme tak, jak je."
+    },
+    {
+     "name": "Počet podpořených osob",
+     "level": "dopad",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených center prevence",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Podle zprávy 2023–2024 byl dílčí cíl přehodnocen na vybudování vzorového centra onkologické prevence v MOÚ Brno (str. 31)."
+    },
+    {
+     "name": "Vybudování a návštěvnost Národního zdravotnického informačního portálu",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi",
+      "note": "Návštěvnost NZIP není veřejně publikovaný indikátor kontraktu."
+     },
+     "note": "Zpráva 2023–2024: „Tento dílčí cíl již byl splněn“ — portál nzip.cz je dostupný, do konce 2023 publikováno 1 657 původních článků (str. 31)."
+    },
+    {
+     "name": "Počet vytvořených inovativních programů zdravotního screeningu",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Zpráva 2023–2024: 9 (2023) a 14 (2024) vytvořených programů časného záchytu onemocnění (str. 34)."
+    },
+    {
+     "name": "Počet osob podpořených programy podpory zdraví a programy screeningu",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet koncepcí podpory zdraví na municipální a regionální úrovni",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "mortalita_preventabilni",
+    "obezita_prevalence",
+    "bmi_dospeli",
+    "vakcinace_chripka_65",
+    "prevalence_koureni_adolescenti"
+   ],
+   "hodnoceni": {
+    "text": "Zpráva shrnuje: „Ve sledovaném období došlo k poklesu podílu denních kuřáků a osob s rizikovou konzumací alkoholu. Screening kolorektálního karcinomu dosáhl 40% pokrytí populace“ — čímž byla dosažena cílová hodnota indikátoru už v roce 2023. „Národní zdravotnický informační portál (nzip.cz) je plně funkční a etablován jako zdroj validních informací pro veřejnost.“ Zaváděny jsou nové programy časného záchytu (karcinom prostaty od 2024, karcinom plic, novorozenecký screening SMA/SCID od 2024 součástí standardu). Zároveň zpráva konstatuje, že naděje dožití 79,9 let (2023) je o 1,5 roku pod průměrem EU, a u dílčích tabulek uvádí za rok 2024 nárůst podílu denních kuřáků na 16,4 %. Do aktualizace se cíl rozdělí na primární prevenci a ochranu veřejného zdraví (1.1) a sekundární prevenci a screeningy (1.2).",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 21–23, 27, 34–36"
+   }
+  },
+  {
+   "sc": "2.1",
+   "goal": "sg2",
+   "title": "Implementace modelů integrované péče, integrace zdravotní a sociální péče, reforma péče o duševní zdraví",
+   "garant": "MZ (zpracovatel: sekce zdravotní péče MZ)",
+   "dilci_cile_note": "Dílčí cíle 2.1.1–2.1.10 patří do oblasti integrované a zdravotně sociální péče, 2.1.11–2.1.15 do oblasti péče o duševní zdraví (návaznost na NAPDZ).",
+   "dilci_cile": [
+    {
+     "num": "2.1.1",
+     "text": "Vytvoření konsensuální strategie rozvoje zdravotně sociální péče, standardizace doporučených postupů a metodik posilujících funkčnost zdravotně-sociálních služeb",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.2",
+     "text": "Implementace specifických a regionálně specifických modelů integrované péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.3",
+     "text": "Role praktických lékařů v dlouhodobé péči a v modelech integrované péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.4",
+     "text": "Zvýšení dostupnosti integrovaných zdravotních a sociálních služeb a integrace zdravotní, pracovní a sociální rehabilitace",
+     "indikatory": [
+      "pracovnici_ltc_per_100_65plus",
+      "vydaje_dlouhodoba_pece_hdp"
+     ],
+     "mereni": "proxy",
+     "note": "Integrovanost služeb kontrakt neměří; kapacitu dlouhodobé péče aproximuje počtem pracovníků formální dlouhodobé péče a výdaji na dlouhodobou péči."
+    },
+    {
+     "num": "2.1.5",
+     "text": "Zvýšení kvality života pacientů s chronickými a nevyléčitelnými chorobami",
+     "indikatory": [
+      "umrti_doma_nebo_hospici_pct"
+     ],
+     "mereni": "proxy",
+     "note": "Kvalitu života kontrakt přímo neměří; podíl zemřelých doma nebo v hospici je nejbližší výsledkový ukazatel péče v závěru života."
+    },
+    {
+     "num": "2.1.6",
+     "text": "Optimalizace lůžkového fondu a zvýšení dostupnosti následné a dlouhodobé péče",
+     "indikatory": [
+      "luzka_dlouhodobe_pece_65plus",
+      "postele_akutni_per_1000"
+     ],
+     "mereni": "proxy",
+     "note": "Dokument míří na restrukturalizaci lůžkového fondu jako celku; kontrakt sleduje akutní lůžka na 1 000 obyvatel a lůžka dlouhodobé péče na 1 000 obyvatel 65+ zvlášť."
+    },
+    {
+     "num": "2.1.7",
+     "text": "Posílení péče poskytované v domácím prostředí pacientů",
+     "indikatory": [
+      "pacienti_domaci_pece_per_1000"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.1.8",
+     "text": "Programy optimalizace a zvyšování dostupnosti paliativní péče ve všech formách (konziliární paliativní péče v nemocnicích, mobilní specializovaná PP, domácí péče, hospicová péče)",
+     "indikatory": [
+      "mobilni_paliativni_tymy_per_milion",
+      "hospicova_pece_luzka",
+      "umrti_doma_nebo_hospici_pct"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.1.9",
+     "text": "Programy posilující roli rodinných příslušníků a jiných laických pečovatelů v dlouhodobé péči",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.10",
+     "text": "Posílení segmentu pacientských organizací a organizací zaměřených na pomoc pacientům",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.11",
+     "text": "Zlepšení řízení a poskytování péče v oblasti duševního zdraví vedené spolehlivými informacemi a vědomostmi",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.12",
+     "text": "Zajištění, aby každý člověk měl srovnatelnou příležitost na duševní zdraví v průběhu celého svého života, především ti nejvíce zranitelní nebo v riziku",
+     "indikatory": [
+      "sebevrazdy_per_100k",
+      "sebevrazdy_mladistvi_15_19"
+     ],
+     "mereni": "proxy",
+     "note": "Rovnost příležitostí v duševním zdraví se přímo měřit nedá; míra sebevražd (celková i u mladistvých) je zpětné zrcadlo selhání systému."
+    },
+    {
+     "num": "2.1.13",
+     "text": "Zajištění, aby lidská práva osob s obtížemi v oblasti duševního zdraví byla plně respektována, chráněna a podporována",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.1.14",
+     "text": "Zajištění plné dostupnosti služeb v oblasti duševního zdraví v čase, místě, kapacitě i ceně, zajištění jejich dostupnosti v komunitě podle potřeby",
+     "indikatory": [
+      "centra_dusevniho_zdravi_per_100k",
+      "psychiatri_per_100k",
+      "pedopsychiatri_per_100k_deti"
+     ],
+     "mereni": "primo"
+    },
+    {
+     "num": "2.1.15",
+     "text": "Budování systémů péče o duševní zdraví pracujících v dobře koordinované partnerské spolupráci s ostatními sektory, včetně rovného přístupu k péči o somatické zdraví a začlenění/návratu do společnosti",
+     "indikatory": [
+      "rehospitalizace_schizofrenie_30d"
+     ],
+     "mereni": "proxy",
+     "note": "Meziresortní koordinaci kontrakt neměří; rehospitalizace do 30 dnů po propuštění se schizofrenií je nejbližší ukazatel návaznosti péče v komunitě."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet lůžek následné a dlouhodobé péče",
+     "level": "dopad",
+     "baseline": {
+      "value": "2,7 na 1 000 obyvatel",
+      "year": 2017
+     },
+     "target": {
+      "value": "3,3 na 1 000 obyvatel",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "luzka_dlouhodobe_pece_65plus",
+      "note": "Dokument počítá lůžka dlouhodobé péče na 1 000 obyvatel celkem; kontrakt lůžka v pobytových zařízeních na 1 000 obyvatel 65+ — jiný jmenovatel i vymezení."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 2,6 — tedy POD výchozí hodnotou 2,7 (str. 37)."
+    },
+    {
+     "name": "Počet pacientů léčených v domácí péči",
+     "level": "dopad",
+     "baseline": {
+      "value": "13,6 na 1 000 obyvatel",
+      "year": 2017
+     },
+     "target": {
+      "value": "19,6 na 1 000 obyvatel",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "primo",
+      "indicator_id": "pacienti_domaci_pece_per_1000"
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 15,2 (str. 37)."
+    },
+    {
+     "name": "Počet podpořených poskytovatelů v nově nastaveném systému zdravotně sociálních služeb",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet podpořených poskytovatelů paliativní péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet realizovaných programů prevence zaměřených na duševní zdraví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet realizovaných programů posilujících roli pečovatelů v dlouhodobé péči",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených regionálních modelů integrované péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "multimorbidita_65plus",
+    "demence_prevalence_lecena",
+    "luzka_psychiatricka_per_1000",
+    "psychiatrie_prumerna_delka_hospitalizace",
+    "invalidni_duchody_dusevni",
+    "deti_ambulantni_psychiatrie"
+   ],
+   "hodnoceni": {
+    "text": "Zpráva přiznává zpoždění: „Pandemická krize na určité období zbrzdila činnosti v oblastech, které představovaly méně akutní okruhy problémů, a proto nedošlo ani v tomto implementačním plánu ke startu řešení plánovaných opatření v daných termínech a rozsahu.“ Nyní podle ní probíhá intenzivní realizace: s MPSV se připravilo systémové ukotvení sociálně-zdravotní péče (úhrada přes ošetřovací den, novela v Poslanecké sněmovně, vyhlášky č. 115/2025 a 116/2025 Sb.), rozvíjejí se centra duševního zdraví a komunitní služby, roste podpora peer pracovníků a destigmatizace. Indikátory přesto zaostávají: lůžka dlouhodobé a následné péče klesla na 2,6 na 1 000 obyvatel (pod výchozích 2,7, cíl 3,3), domácí péče 15,2 (cíl 19,6); center duševního zdraví bylo 45 v roce 2023 a 43 v roce 2024 z cílových 70. Do aktualizace se cíl rozdělí na tři: péči na sociálně zdravotním pomezí, péči o duševní zdraví a specializovanou zdravotní péči.",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 36–38, 59"
+   }
+  },
+  {
+   "sc": "2.2",
+   "goal": "sg2",
+   "title": "Personální stabilizace resortu zdravotnictví",
+   "garant": "MZ (zpracovatel: sekce MZ — NM, NZ, NE, ST)",
+   "dilci_cile": [
+    {
+     "num": "2.2.1",
+     "text": "Vytvoření dlouhodobé strategie stabilizace a rozvoje personálních zdrojů ve zdravotnictví do roku 2030",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.2",
+     "text": "Zlepšení organizace a průchodnosti postgraduálního vzdělávání lékařských povolání",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.3",
+     "text": "Podpora koordinovaných přístupů v oblasti celoživotního vzdělávání zdravotnických pracovníků",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.4",
+     "text": "Definování návaznosti prohlubování a zvyšování vzdělání zdravotnických pracovníků na systém finančního ohodnocení",
+     "indikatory": [
+      "odmenovani_lekaru_nasobek_mzdy",
+      "odmenovani_sester_nasobek_mzdy"
+     ],
+     "mereni": "proxy",
+     "note": "Vazbu vzdělávání na odměňování kontrakt neměří; sleduje úroveň odměňování lékařů a sester vůči průměrné mzdě."
+    },
+    {
+     "num": "2.2.5",
+     "text": "Vybudování národního informačního systému pro monitoring stávajících a plánování potřebných personálních kapacit ve zdravotnictví na celostátní, regionální i místní úrovni",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.6",
+     "text": "Posílení postavení nelékařských zdravotnických pracovníků v systému zdravotní péče, podpora jejich vzdělávání a vyšování kompetencí v jejich samostatných rolích",
+     "indikatory": [
+      "sestry_per_1000"
+     ],
+     "mereni": "proxy",
+     "note": "Kompetence a postavení sester kontrakt přímo neměří; hustota praktikujících sester je nejbližší kapacitní ukazatel. Překlep „vyšování“ je v dokumentu."
+    },
+    {
+     "num": "2.2.7",
+     "text": "Zlepšení prevence negativních dopadů psychické a fyzické zátěže pro pracovníky ve zdravotnictví např. prostřednictvím psychosociální podpory a supervize",
+     "indikatory": [
+      "osetrovaci_dny_na_uvazek_sestry"
+     ],
+     "mereni": "proxy",
+     "note": "Psychosociální podporu kontrakt neměří; zátěž aproximuje ošetřovacími dny na jeden úvazek sestry."
+    },
+    {
+     "num": "2.2.8",
+     "text": "Personální posílení nedostatečně obsazených oborů lékařského personálu",
+     "indikatory": [
+      "lekari_per_1000",
+      "podil_lekaru_55plus"
+     ],
+     "mereni": "proxy",
+     "note": "Obsazenost jednotlivých oborů kontrakt nesleduje; celkovou hustotu lékařů a stárnutí lékařského sboru ano."
+    },
+    {
+     "num": "2.2.9",
+     "text": "Personální posílení orgánů ochrany veřejného zdraví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.10",
+     "text": "Zavedení motivačních faktorů pro zabezpečení praxe na venkově, v obtížně obsaditelných a méně atraktivních oblastech",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.2.11",
+     "text": "Zvýšení podílu doporučených klinických postupů, kompetencí a vzdělávacích plánů přizpůsobených aktuálním podmínkám a rozvoji oboru",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Průměrný věk praktických lékařů",
+     "level": "dopad",
+     "baseline": {
+      "value": "56 let",
+      "year": 2017
+     },
+     "target": {
+      "value": "50 let",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "podil_lekaru_55plus",
+      "note": "Průměrný věk praktiků kontrakt neměří; nejbližší je podíl všech lékařů 55+ — sledovat směr stárnutí, ne hodnotu."
+     },
+     "note": "Indikátor dokument uvádí u SC 1.1 i SC 2.2 (str. 74, 94). Zpráva 2023–2024: hodnota 2023 = 55 let (str. 62)."
+    },
+    {
+     "name": "Počet lékařů/zdravotnických pracovníků (všeobecných sester, nelékařů atp.) na 1 000 000 obyvatel na územně samosprávný celek",
+     "level": "dopad",
+     "baseline": {
+      "value": "29 na 1 000 obyvatel",
+      "year": 2017
+     },
+     "target": {
+      "value": "32 na 1 000 obyvatel",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "lekari_per_1000",
+      "note": "Dokument sčítá lékaře i nelékaře dohromady (29 → 32 na 1 000 obyvatel); kontrakt sleduje lékaře a sestry zvlášť — srovnávat jen směr."
+     },
+     "note": "Karta cíle uvádí jednotku „na 1 000 000 obyvatel“, tabulka indikátorů v kap. 4.2 „na 1000 obyvatel“ — necháváme obojí doslova (str. 74, 95). Poznámky dokumentu: mezi zdravotnické profesionály nejsou zahrnuti farmaceuti; u sester jde o přepočtené plné úvazky a cílová hodnota kalkuluje s 10% navýšením. Zpráva 2023–2024: hodnota 2023 = 28 — pod výchozí hodnotou (str. 62)."
+    },
+    {
+     "name": "Počet absolventů specializačního vzdělávání (počet atestovaných) za rok",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Saldo odchodu a příchodu různých skupin pracovníků do zdravotnictví. Počet vytvořených klinických postupů, kompetencí a vzdělávacích plánů přizpůsobených aktuálním podmínkám a rozvoji oboru",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "V dokumentu jsou obě věty uvedeny jako jedna odrážka (str. 74) — necháváme doslova."
+    },
+    {
+     "name": "Počet absolventů lékařských fakult a zdravotnických středních škol, kteří směřují po absolutoriu do praxe v ČR",
+     "level": "vystup",
+     "mapping": {
+      "match": "proxy",
+      "indicator_id": "absolventi_lekarstvi_per_100k",
+      "note": "Kontrakt počítá absolventy všeobecného lékařství na 100 000 obyvatel, nikoli podíl absolventů směřujících do praxe v ČR."
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "absolventi_osetrovatelstvi_per_100k",
+    "farmaceuti_per_100k",
+    "porodni_asistentky_per_100k",
+    "gender_pay_gap_zdravotnictvi",
+    "pracovnici_ltc_per_100_65plus"
+   ],
+   "hodnoceni": {
+    "text": "Podle zprávy se hustota pracovní síly ve zdravotnictví přiblížila průměru EU, systém se ale „nadále potýká s rostoucí poptávkou poháněnou stárnutím populace“. „Aby se zvýšila atraktivita a udržení zdravotnických pracovníků, byly zavedeny významné úpravy platů… V roce 2024 byly platové tarify lékařů výrazně zvýšeny přibližně o 25 %, přičemž mladší lékaři obdrželi v průměru vyšší procentuální nárůst.“ V roce 2022 činila průměrná mzda lékaře v nemocnici 2,4násobek průměrné mzdy v ČR. MZD zřídilo Strategickou skupinu pro personální zajištění resortu; zpráva zároveň upozorňuje, že dopady opatření se projeví až s letitým zpožděním. Indikátory za rok 2023: průměrný věk praktických lékařů 55 let (cíl 50), počet zdravotnických pracovníků 28 na 1 000 obyvatel — pod výchozí hodnotou 29 i cílem 32. Dlouhodobá personální strategie (dílčí cíl 2.2.1) zůstávala ve fázi analytických prací a sběru podnětů.",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 61–63"
+   }
+  },
+  {
+   "sc": "2.3",
+   "goal": "sg2",
+   "title": "Digitalizace zdravotnictví",
+   "garant": "MZ (zpracovatel: sekce zdravotní péče MZ)",
+   "dilci_cile": [
+    {
+     "num": "2.3.1",
+     "text": "Rozvoj a implementace koncepce digitalizace zdravotnictví, institucionalizace elektronického zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.2",
+     "text": "Rozvoj centrální infrastruktury pro sdílení zdravotnické dokumentace, zaručenou a bezpečnou komunikaci a výměnu informací ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.3",
+     "text": "Rozvoj systému poskytování služeb autoritativních údajů, resortních autoritativních registrů a modelu zaručených dat",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.4",
+     "text": "Rozvoj Národního zdravotnického informačního systému",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.5",
+     "text": "Rozvoj Národního zdravotnického informačního portálu",
+     "indikatory": [
+      "zdravotni_info_online"
+     ],
+     "mereni": "proxy",
+     "note": "Návštěvnost NZIP kontrakt neměří; podíl lidí hledajících zdravotní informace online je nejbližší kontext."
+    },
+    {
+     "num": "2.3.6",
+     "text": "Správa systému s rozvojem katalogu služeb elektronického zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.7",
+     "text": "Podpora využívání a standardizace nástrojů elektronického zdravotnictví (nástroje pro standardizaci prostředí digitálního zdravotnictví, interoperabilní prostředí pro uživatele společných sdílených elektronických služeb ve zdravotnictví)",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.8",
+     "text": "Podpora využití nových digitálních technologií a postupů v oblasti personalizované medicíny, domácí péče, integrované péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.9",
+     "text": "Podpora využití umělé inteligence ve zdravotnictví a implementace na ní založených služeb",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.10",
+     "text": "Rozvoj vědeckovýzkumné a inovační základny pro digitalizaci zdravotnictví a rozvoj znalostní základny digitálního zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.11",
+     "text": "Praktické aplikace modelů bezpečného sdílení zdravotních záznamů, uplatnění technologie Blockchain a navazujících konceptů, využití konceptů z oblasti Big Data",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.12",
+     "text": "Podpora technologií mobilního zdravotnictví (mHealth) a telemedicíny na všech úrovních poskytování zdravotní péče, zejména u koncových uživatelů (nemocnice, ambulance, pacienti)",
+     "indikatory": [
+      "objednani_k_lekari_online"
+     ],
+     "mereni": "proxy",
+     "note": "Telemedicínu kontrakt přímo neměří; podíl lidí objednávajících se k lékaři online je nejbližší ukazatel digitálního kontaktu se systémem."
+    },
+    {
+     "num": "2.3.13",
+     "text": "Rozvoj platforem pro komunikaci a koordinaci veřejné správy, průmyslu a akademické sféry pro účely rozvoje digitálních služeb ve zdravotnictví a v péči o zdraví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.14",
+     "text": "Programy rozvoje obecné i specifické digitální gramotnosti pracovníků ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.3.15",
+     "text": "Programy posilující budování důvěry ve služby digitálního zdravotnictví mezi občany i zdravotníky",
+     "indikatory": [
+      "ehealth_adoption"
+     ],
+     "mereni": "proxy",
+     "note": "Důvěru v digitální zdravotnictví kontrakt neměří; index adopce eHealth odráží, nakolik se služby reálně používají."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Počet vytvořených portálových řešení elektronického zdravotnictví (elektronické zdravotní záznamy)",
+     "level": "dopad",
+     "baseline": {
+      "value": "0",
+      "year": 2017
+     },
+     "target": {
+      "value": "1",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Počty portálových řešení kontrakt nesleduje; míru digitalizace měří indexem adopce eHealth (ehealth_adoption)."
+     },
+     "note": "Poznámka dokumentu: v rámci resortu je plánován pouze jeden garantovaný portál NZIP, který zastřešuje veškeré informační zdroje resortu (str. 96). Zpráva 2023–2024 uvádí hodnotu 2023: „X“ — nevyplněno (str. 81)."
+    },
+    {
+     "name": "Počet zavedených interoperabilních sdílených služeb",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet zavedených digitálních služeb ve zdravotnictví",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených modernizovaných systémů elektronického zdravotnictví s novými funkcemi",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet podpořených systémů s pokročilými funkcemi",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet vytvořených telemedicínských řešení a technologií mobilního zdravotnictví (mHealth)",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet registrovaných/autorizovaných uživatelů portálů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "ehealth_adoption",
+    "objednani_k_lekari_online",
+    "zdravotni_info_online",
+    "kyberneticke_incidenty_zdravotnictvi"
+   ],
+   "hodnoceni": {
+    "text": "Zpráva konstatuje: „I když investice ČR do zdravotnických informačních a komunikačních technologií (ICT) historicky zaostávaly za průměrem EU, od začátku pandemie zaznamenaly značný nárůst, což signalizuje postupný pokrok v rozvoji digitálních zdravotnických kapacit.“ Realizace dílčích cílů podle zprávy „probíhá dle harmonogramu“ z národních a hlavně evropských zdrojů (OPZ+, IROP II, Národní plán obnovy) — běží projekty Národního centra elektronického zdravotnictví (z alokace 108 mil. Kč čerpáno 42 mil.), centrální infrastruktury pro sdílení dokumentace a rozvoje NZIS a nzip.cz; výstupy pro koncové uživatele portálových projektů byly plánovány až na rok 2025. ČR nemá specializovanou strategii AI pro zdravotnictví, první nástroje s certifikací MDR (Aireen, Kardi AI) ale přecházejí do klinické praxe. Hodnota jediného rámcového indikátoru za rok 2023 je ve zprávě nevyplněná („X“).",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 81–83"
+   }
+  },
+  {
+   "sc": "2.4",
+   "goal": "sg2",
+   "title": "Optimalizace systému úhrad ve zdravotnictví",
+   "garant": "MZ (zpracovatel: ÚZIS ČR a sekce MZ — NE, NZ)",
+   "dilci_cile": [
+    {
+     "num": "2.4.1",
+     "text": "Vytvoření informačního systému postaveného na meziresortní integraci ekonomických dat vztahujících se ke všem relevantním dimenzím příjmů a výdajů veřejného zdravotního pojištění",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.2",
+     "text": "Vytvoření a aplikace nové resortní koncepce úhrad všech segmentů zdravotní péče, která posílí transparentnost, verifikovatelnost a plánovitou udržitelnost systému financování zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.3",
+     "text": "Validace a optimalizace predikcí příjmů a nákladů veřejného zdravotního pojištění se základem ve srovnávacím modelu různých systémů úhrad",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.4",
+     "text": "Zajištění rozvoje, optimalizace a udržitelnosti systému úhrad akutní lůžkové péče založeném na DRG",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.5",
+     "text": "V návaznosti na výstupy aktivit naplňujících SC 1.1 optimalizace systému úhrad v primární péči s důrazem na motivační, výkon podporující složky a vytvoření modelů nastavujících vyváženost úhrad v různých segmentech ambulantní péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.6",
+     "text": "Vytvoření klasifikace a systému umožňujících standardizaci a optimalizaci systému úhrad zdravotních výkonů",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.7",
+     "text": "Připravení a v praxi aplikování modelů predikce ekonomických dopadů nových technologií a zavádění inovací ve zdravotnictví",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.8",
+     "text": "Sestavení modelů hodnocení a optimalizace nákladů zdravotních a sociálních služeb, ekonomika zdravotně–sociálního pomezí systému",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.9",
+     "text": "Vytvoření modelů udržitelného financování systémů integrované péče, komunitní psychiatrické péče a domácí péče",
+     "mereni": "proces"
+    },
+    {
+     "num": "2.4.10",
+     "text": "Rozšíření hodnocení nákladové efektivity nových technologií (HTA) i na nelékové inovace a technologie",
+     "mereni": "proces"
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Podíl bezchybně zaklasifikovaných hospitalizačních případů podle modelu CZ DRG, přijatých pojišťovnami k úhradě",
+     "level": "dopad",
+     "baseline": {
+      "value": "0 %",
+      "year": 2017
+     },
+     "target": {
+      "value": "90 %",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kvalitu DRG klasifikace kontrakt nesleduje — je to interní ukazatel úhradového systému."
+     },
+     "note": "Zpráva 2023–2024 uvádí hodnotu 2023: 100 — cíl překročen (str. 92)."
+    },
+    {
+     "name": "Počet datových sad/datových modelů",
+     "level": "dopad",
+     "baseline": {
+      "value": "0",
+      "year": 2017
+     },
+     "target": {
+      "value": "5",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Poznámka dokumentu: výchozí hodnotou je systém CZ-DRG ve verzi 1.0 (2019), cílovými hodnotami pokročilejší verze a modely pro ambulantní a dlouhodobou/následnou péči (str. 96). Zpráva 2023–2024: hodnota 2023 = 4 (str. 92)."
+    },
+    {
+     "name": "Počet modelů optimalizujících úhrady péče",
+     "level": "dopad",
+     "baseline": {
+      "value": "1",
+      "year": 2017
+     },
+     "target": {
+      "value": "4",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Zpráva 2023–2024: hodnota 2023 = 1, tedy beze změny proti výchozímu stavu (str. 92). Indikátor je v dokumentu uveden na úrovni dopadu i výstupů — necháváme doslova."
+    },
+    {
+     "name": "Počet metodik, normativních a legislativně garantovaných postupů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet modelů optimalizujících úhrady péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Duplicitní položka — dokument ji uvádí na úrovni dopadu i výstupů (str. 86–87)."
+    },
+    {
+     "name": "Počet a velikost referenčních sítí poskytovatelů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet osob podpořených edukačními aktivitami zaměřenými na kódování zdravotních služeb, výkaznictví služeb pro úhrady a optimalizace ekonomického managementu poskytovatelů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet návštěvníků preventivních programů podporovaných vzniklým systémem úhrad primární péče",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [
+    "vydaje_zdravotnictvi_hdp",
+    "platba_z_kapsy_pct",
+    "uhrada_zp_per_pojistenec",
+    "podil_vydaje_luzkova_pece",
+    "podfinancovani_oblastni_interna_cm",
+    "naklady_centrove_leky_total"
+   ],
+   "hodnoceni": {
+    "text": "Podle zprávy „probíhají kroky k integraci ekonomických dat, tvorbě nových koncepcí úhrad, optimalizaci systému DRG pro akutní lůžkovou péči a podpoře úhrad v primární péči s důrazem na motivační prvky… Výsledky jsou průběžně monitorovány a indikátory naplňovány.“ Podíl bezchybně zaklasifikovaných případů CZ DRG dosáhl v roce 2023 hodnoty 100 (cíl 90 — splněno), datových sad/modelů byly 4 z cílových 5; modelů optimalizujících úhrady zůstal 1 z cílových 4. Zpráva zároveň cituje kontext: ČR měla v roce 2023 6,4 nemocničních lůžek na 1 000 obyvatel (průměr EU 5,1) při obložnosti jen 62 % (EU 69 %) a po odstranění stropů úhrad elektivních výkonů se zařadila mezi země EU s nejvyššími objemy ortopedické chirurgie. Meziresortní integraci zdravotních a sociálních dat legislativně ukotvila novela zákona č. 108/2006 Sb. (§ 71a, 71b).",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 92–93"
+   }
+  },
+  {
+   "sc": "3.1",
+   "goal": "sg3",
+   "title": "Zapojení vědy a výzkumu do řešení prioritních úkolů zdravotnictví",
+   "garant": "MZ (zpracovatel: sekce zdravotní péče MZ; realizace přes Agenturu pro zdravotnický výzkum)",
+   "dilci_cile": [],
+   "doc_indicators": [
+    {
+     "name": "Počet vytvořených programů podpory výzkumu",
+     "level": "dopad",
+     "baseline": {
+      "value": "1",
+      "year": 2017
+     },
+     "target": {
+      "value": "3",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Publikační výsledky — pětileté období: odborné články",
+     "level": "dopad",
+     "baseline": {
+      "value": "17 056",
+      "year": 2017
+     },
+     "target": {
+      "value": "22 000",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Poznámka dokumentu: číselné nastavení vychází ze statistik publikačních výstupů domácích grantových agentur (GAČR, TAČR, AZV), celkově pro kategorii „lékařské vědy“ (str. 96)."
+    },
+    {
+     "name": "Publikační výsledky — pětileté období: citační ohlas",
+     "level": "dopad",
+     "baseline": {
+      "value": "90 000",
+      "year": 2017
+     },
+     "target": {
+      "value": "170 000",
+      "year": 2030
+     },
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Poznámka dokumentu: „Kalkulováno jako medián citovanosti za pětileté období“ (str. 96) — hodnota 90 000 jako medián je podivná, necháváme doslova."
+    },
+    {
+     "name": "Počet publikací v impaktových časopisech",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet alokovaných grantů (poměr realizovaných projektů k počtu podaných žádostí)",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "počet úspěšně ukončených grantů",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     },
+     "note": "Malé počáteční písmeno je v dokumentu (str. 92) — necháváme doslova."
+    },
+    {
+     "name": "Počet vytvořených/zmapovaných sítí vytvořených výzkumnými organizacemi a podniky",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    },
+    {
+     "name": "Počet výsledků uplatněných v klinických doporučených postupech v ČR",
+     "level": "vystup",
+     "mapping": {
+      "match": "chybi"
+     }
+    }
+   ],
+   "kontext_indikatory": [],
+   "hodnoceni": {
+    "text": "Zpráva připomíná, že SC 3.1 nemá implementační plán — plní ho Koncepce zdravotnického výzkumu do roku 2030, schválená vládou 14. 12. 2022 a navazující na Národní politiku VaVaI 2021+. „V roce 2023 byla veřejná soutěž vyhlášena již v rámci nového programu účelové podpory (Program na podporu zdravotnického aplikovaného výzkumu na léta 2024–2030, resp. 2032)“; v roce 2023 proběhla i aktualizace Metodiky hodnocení výzkumných organizací. „V roce 2024 byl program účelové podpory doplněn o podprogram Evropská partnerství v oblasti zdraví“ (zapojení do Horizon Europe) a proběhlo „první plné hodnocení výzkumných organizací podle metodiky M14+, tj. hodnocení ve všech modulech“ (rámec přitom mluví o Metodice 17+ — necháváme, jak to píše zpráva). Výše účelové podpory je každoročně cca 1 mld. Kč, institucionální podpory cca 690–700 mil. Kč; rámcové indikátory (programy, publikace, citace) zpráva nevyhodnocuje.",
+    "zdroj": "Zpráva o průběhu realizace 2023–2024, str. 102–103"
+   },
+   "poznamka": "Jediný specifický cíl bez dílčích cílů a bez jediného populačního indikátoru v našem kontraktu — místo implementačního plánu ho provádí Koncepce zdravotnického výzkumu (do 2022, poté do roku 2030) a programy účelové podpory AZV. HSPA měří výkon zdravotního systému, ne výkon vědy; že se plnění nedá sledovat na zdraví populace, je vlastnost cíle, ne mezera měření."
+  }
+ ]
+}

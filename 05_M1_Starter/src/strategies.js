@@ -107,6 +107,7 @@ function renderCard(s) {
         <span class="status-pill ${status.cls}">${escapeHtml(status.label)}</span>
         ${horizon ? `<span class="card-horizon">${escapeHtml(horizon)}</span>` : ''}
         <span class="acct-badge acct-${escapeHtml(acctStatus)}" title="${escapeHtml(acctTitle)}">${escapeHtml(acctText)}</span>
+        ${s.plneni_url ? '<span class="card-plneni" title="Strategie je rozložená po kapitolách a úkolech, každý provázaný s indikátory">plnění ⤳ indikátory</span>' : ''}
       </div>
       <h4>${escapeHtml(s.title)}</h4>
       ${s.subtitle ? `<div class="card-sub">${escapeHtml(s.subtitle)}</div>` : ''}

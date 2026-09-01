@@ -15,7 +15,8 @@
 // Algoritmus:
 //   1. Stáhnout CSV (zatím přes přímý CSV endpoint, ZIP extrakce viz lekárny —
 //      přidá se v navazujícím milníku, jakmile bude dostupná nativní unzip lib).
-//   2. Pro každý KOD_SUKL si vzít POSLEDNI_PLATNE_HLASENI (= aktuální stav).
+//   2. Pro každý KOD_SUKL si vzít řádek s POSLEDNI_PLATNE_HLASENI=ANO (= aktuální
+//      stav podle feedu); DATUM_HLASENI jen jako tiebreaker/fallback (#1120).
 //   3. Spočítat:
 //        - active_disruptions = řádky kde TYP_OZNAMENI ∈ {P, K} a (TERMIN_OBNOVENI
 //          je v budoucnu nebo prázdný)
@@ -29,6 +30,7 @@
 // daný KOD_SUKL je P nebo K bez následného O. Tato deduplikace je logikou tohoto
 // fetcheru, nikoli SÚKL.
 
+import { createHash } from 'node:crypto';
 import { fetchWithRetry } from '../lib/http.js';
 import { unzipEntry } from './sukl.js';
 import { readCacheIfFresh, writeCache } from '../lib/cache.js';
@@ -135,13 +137,23 @@ export function parseMrCsv(csvText) {
  * }}
  */
 export function aggregateMr(rows, now = new Date()) {
-  // Krok 1: dedup — pro každý KOD_SUKL drž jen nejnovější hlášení.
+  // Krok 1: dedup — pro každý KOD_SUKL drž aktuální stav. Autoritativní je
+  // sloupec POSLEDNI_PLATNE_HLASENI=ANO, kterým feed sám označuje platné
+  // hlášení; DATUM_HLASENI slouží jen jako tiebreaker (a fallback pro LP bez
+  // řádku ANO). Ostré porovnání dat samo o sobě nestačí: 232 LP mívá na
+  // maximálním datu víc řádků (101 s konfliktními typy) a o výsledku by pak
+  // rozhodovalo pořadí řádků v CSV — viz #1120.
   const latest = new Map();
   for (const r of rows) {
     const prev = latest.get(r.kod_sukl);
-    if (!prev || r.datum_hlaseni > prev.datum_hlaseni) {
-      latest.set(r.kod_sukl, r);
+    if (!prev) { latest.set(r.kod_sukl, r); continue; }
+    const rAno = r.posledni_platne === 'ANO';
+    const pAno = prev.posledni_platne === 'ANO';
+    if (rAno !== pAno) {
+      if (rAno) latest.set(r.kod_sukl, r);
+      continue;
     }
+    if (r.datum_hlaseni > prev.datum_hlaseni) latest.set(r.kod_sukl, r);
   }
 
   // Krok 2: filtrace aktivních výpadků.
@@ -258,13 +270,23 @@ export async function fetchSuklMr(opts = {}) {
     const url = endpoint ?? 'https://opendata.sukl.cz/soubory/MR/mr.zip';
     try {
       console.log(`  [sukl-mr] stahuji ${url}`);
+      let feedMeta = {};
       if (url.endsWith('.zip')) {
         const buf = await fetchWithRetry(url, { fetchImpl, parse: 'buffer' });
         raw = unzipEntry(buf, /mr_hlaseni\.csv$/i);
+        // Dohledatelnost běhu (#1120): hash ZIPu + PLATNOST feedu do cache,
+        // aby šla každá zaingestovaná hodnota zpětně spárovat s konkrétním dumpem.
+        feedMeta.zip_sha256 = createHash('sha256').update(buf).digest('hex');
+        try {
+          const platnostCsv = unzipEntry(buf, /mr_hlaseni_platnost\.csv$/i);
+          const m = /(\d{2})\.(\d{2})\.(\d{4})/.exec(platnostCsv);
+          if (m) feedMeta.feed_platnost = `${m[3]}-${m[2]}-${m[1]}`;
+        } catch { /* starší dumpy soubor platnosti nemají */ }
+        console.log(`  [sukl-mr] feed PLATNOST=${feedMeta.feed_platnost ?? '?'} sha256=${feedMeta.zip_sha256.slice(0, 12)}…`);
       } else {
         raw = await fetchWithRetry(url, { fetchImpl, parse: 'text' });
       }
-      writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), csv: raw });
+      writeCache(RAW_CACHE, { url, fetched_at: new Date().toISOString(), ...feedMeta, csv: raw });
     } catch (err) {
       console.warn(`  [sukl-mr] ${url} failed: ${err.message}`);
       console.warn(`  [sukl-mr] all endpoints failed; agregát se nezmění`);

@@ -1,8 +1,15 @@
 name: Refresh data
 
-# Spouští se v pondělí 06:00 UTC. Provede ingest pipeline,
-# validuje výsledek a commitne změny v data/ (+ nový snapshot)
-# zpět do repa. Vercel se po pushi sám rebuildne.
+# Spouští se kvartálně — 1. den ledna, dubna, července a října v 06:00 UTC.
+# Provede ingest pipeline, validuje výsledek a commitne změny v data/
+# (+ nový snapshot) zpět do repa. Vercel se po pushi sám rebuildne.
+#
+# PROČ KVARTÁLNĚ, NE TÝDNĚ (změna 2026-09-01, rozhodnutí redakce):
+# Zdroje publikují ročně až čtvrtletně a týdenní běhy generovaly víc šumu
+# (flipy live→seed při výpadku zdroje, drift-issues) než nových hodnot.
+# Redakce proto přepnula datový refresh na čtvrtletní rytmus; denní zůstává
+# jen monitoring legislativy (denní rutina) a publikační fronta. Pro cílený
+# doběh při známé publikaci zdroje je tu workflow_dispatch.
 #
 # PROČ TÝDNĚ, NE DENNĚ (změna 2026-07-29):
 # Zdroje (OECD, Eurostat, ČSÚ, ÚZIS) publikují ročně až čtvrtletně, ne denně.
@@ -21,8 +28,8 @@ name: Refresh data
 
 on:
   schedule:
-    - cron: '0 6 * * 1'   # pondělí 06:00 UTC
-  workflow_dispatch:  # ruční doběh, když zdroj vydá novou vlnu mimo pondělí
+    - cron: '0 6 1 1,4,7,10 *'   # kvartálně: 1. ledna/dubna/července/října 06:00 UTC
+  workflow_dispatch:  # ruční doběh, když zdroj vydá novou vlnu mimo kvartál
 
 permissions:
   contents: write  # potřeba pro commit do data/

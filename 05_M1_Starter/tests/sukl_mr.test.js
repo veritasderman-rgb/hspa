@@ -68,6 +68,27 @@ test('aggregateMr: deduplikace — pro KOD_SUKL bere nejnovější hlášení', 
   assert.equal(agg.active_disruptions, 1, 'aktivní pouze ASPIRIN, PARALEN obnoven');
 });
 
+test('aggregateMr: POSLEDNI_PLATNE_HLASENI=ANO má přednost před pozdějším datem (#1120)', () => {
+  // Feed sám označuje platné hlášení; řádek ANO vyhrává i proti novějšímu datu.
+  const rows = [
+    { kod_sukl: '0001', nazev: 'X', atc: 'N02BE01', typ: 'P', datum_hlaseni: '2026-02-01', termin_obnoveni: '', nahrazujici_lp: '', posledni_platne: 'ANO' },
+    { kod_sukl: '0001', nazev: 'X', atc: 'N02BE01', typ: 'O', datum_hlaseni: '2026-03-01', termin_obnoveni: '', nahrazujici_lp: '', posledni_platne: 'NE' },
+  ];
+  const agg = aggregateMr(rows, new Date('2026-05-01T00:00:00Z'));
+  assert.equal(agg.active_disruptions, 1, 'platné hlášení (ANO) je přerušení → aktivní výpadek');
+});
+
+test('aggregateMr: deduplikace nezávisí na pořadí řádků v CSV (#1120)', () => {
+  // Dva řádky na stejném maximálním datu s konfliktními typy — o výsledku
+  // rozhoduje sloupec ANO, ne to, který řádek je v souboru dřív.
+  const a = { kod_sukl: '0002', nazev: 'Y', atc: 'C09AA01', typ: 'P', datum_hlaseni: '2026-04-01', termin_obnoveni: '', nahrazujici_lp: '', posledni_platne: 'ANO' };
+  const b = { kod_sukl: '0002', nazev: 'Y', atc: 'C09AA01', typ: 'O', datum_hlaseni: '2026-04-01', termin_obnoveni: '', nahrazujici_lp: '', posledni_platne: 'NE' };
+  const agg1 = aggregateMr([a, b], new Date('2026-05-01T00:00:00Z'));
+  const agg2 = aggregateMr([b, a], new Date('2026-05-01T00:00:00Z'));
+  assert.equal(agg1.active_disruptions, agg2.active_disruptions);
+  assert.equal(agg1.active_disruptions, 1, 'ANO řádek je přerušení → aktivní, bez ohledu na pořadí');
+});
+
 test('aggregateMr: termín obnovení v minulosti = výpadek se uzavřel', () => {
   const rows = [
     // Tento výpadek by měl mít termín obnovení v minulosti, takže není aktivní.

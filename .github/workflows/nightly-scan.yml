@@ -1,7 +1,12 @@
 name: Nightly scan
 
-# Spouští se každý den v 02:00 UTC. Pustí deterministický (offline) noční
-# skener `scripts/nightly-scan.js` + report o čerstvosti dat
+# Spouští se kvartálně — 2. den ledna, dubna, července a října v 02:00 UTC
+# (den po kvartálním refresh.yml, aby skenoval čerstvě zaingestovaná data).
+# Do 2026-09-01 běžel denně; kvartální rytmus je rozhodnutí redakce — denní
+# sken generoval víc drift-issues, než kolik jich redakce stíhala řešit,
+# a hodnoty kontraktu se mění nejvýš kvartálně (viz refresh.yml).
+# Pustí deterministický (offline) skener `scripts/nightly-scan.js`
+# + report o čerstvosti dat
 # (`verify:freshness:report`). Oba výstupy se uloží do gitignorované složky
 # `reports/` a přiloží jako build artifact.
 #
@@ -16,7 +21,7 @@ name: Nightly scan
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 2 1,4,7,10 *'   # kvartálně, den po refresh.yml
   workflow_dispatch:  # umožní manuální spuštění z GitHub UI
 
 permissions:
