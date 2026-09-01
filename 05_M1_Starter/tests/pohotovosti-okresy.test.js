@@ -74,3 +74,25 @@ test('okresy · sitemap zná všechny okresní stránky', () => {
     assert.ok(xml.includes(`/pohotovost-${o.slug}<`), `sitemap: chybí pohotovost-${o.slug}`);
   }
 });
+
+test('okresy · drift z týdenní kontroly se propíše i na statickou kartu', async () => {
+  // Hlavní vyhledávání u driftu varuje; člověk z Googlu přistane rovnou na
+  // okresní stránce a stejné varování si zaslouží tím spíš.
+  const { placeHtml } = await import('../scripts/build-pohotovosti-okresy.js');
+  const base = {
+    name: 'Nemocnice X', workplace: 'Chirurgická ambulance',
+    category: 'ambulance_denni', category_label: 'Denní ambulance',
+    address: 'Ulice 1', phone: '+420111222333', walk_in: 'ano',
+    hours: { week: { mon: [['07:00', '15:00']] } },
+  };
+  const sDrift = placeHtml({ ...base, hours_check: { status: 'drift', checked_at: '2026-09-01' } });
+  assert.match(sDrift, /pokr-drift/);
+  assert.match(sDrift, /se od našeho ověření změnila/);
+  assert.match(sDrift, /zavolejte/i);
+
+  const sOk = placeHtml({ ...base, hours_check: { status: 'ok', checked_at: '2026-09-01' } });
+  assert.ok(!sOk.includes('pokr-drift'), '„ok“ nesmí strašit varováním');
+  // Nedostupný web ≠ drift — o změně nevíme nic.
+  const sUnreach = placeHtml({ ...base, hours_check: { status: 'nedostupne' } });
+  assert.ok(!sUnreach.includes('pokr-drift'));
+});

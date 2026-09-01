@@ -101,15 +101,23 @@ function jsonLd(okres, slug, places) {
   };
 }
 
-function placeHtml(p) {
+export function placeHtml(p) {
   const flags = [];
   if (p.category === 'ambulance_denni') {
     flags.push('běžná ambulance nemocnice, ne pohotovostní služba podle vyhlášky');
     flags.push(p.walk_in === 'ano' ? 'nemocnice uvádí příjem bez objednání' : 'zavolejte předem');
   }
   if (p.geo_source === 'obec') flags.push('poloha jen orientačně (střed obce)');
+  // Drift-check: hlavní vyhledávání u změněného zdroje varuje — a člověk,
+  // který přišel z Googlu rovnou sem, si stejné varování zaslouží tím spíš.
+  // Stránky se regenerují týdně po drift-checku, takže stav sem doteče.
+  const drift = p.hours_check?.status === 'drift'
+    ? `<p class="pokr-drift"><strong>⚠ Stránka nemocnice se od našeho ověření změnila${
+        p.hours_check.checked_at ? ` (zjištěno ${esc(p.hours_check.checked_at)})` : ''} —
+      rozpis níže může být zastaralý. Před cestou zavolejte.</strong></p>`
+    : '';
   return `
-  <article class="pokr-place" data-hours="${esc(JSON.stringify(p.hours ?? null))}">
+  <article class="pokr-place" data-hours="${esc(JSON.stringify(p.hours ?? null))}">${drift}
     <h3 class="pokr-place-h">${esc(p.name)}${p.workplace ? ` <span class="pokr-workplace">${esc(p.workplace)}</span>` : ''}</h3>
     <p class="pokr-type">${esc(p.category_label ?? '')} <span class="pokr-live" hidden></span></p>
     ${p.address ? `<p class="pokr-addr">${esc(p.address)}</p>` : ''}

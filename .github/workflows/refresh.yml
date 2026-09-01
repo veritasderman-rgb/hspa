@@ -172,6 +172,11 @@ jobs:
           # zastageují i SMAZANÉ indikátorové stránky (odstraněný/přejmenovaný
           # indikátor) — jinak by stará stránka zůstala v repu i na webu.
           git add -A -- '05_M1_Starter/indikator-*.html'
+          # Okresní stránky pohotovostí regeneruje build:pohotovosti-okresy
+          # výš — bez stagingu by cron commitnul čerstvá data a sitemapu,
+          # ale veřejné statické stránky by dál ukazovaly staré rozpisy.
+          # -A kvůli případně zaniklému okresu (smazaný soubor).
+          git add -A -- '05_M1_Starter/pohotovost-*.html'
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0
