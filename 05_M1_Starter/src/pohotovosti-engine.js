@@ -511,6 +511,7 @@ const PRVNI_KONTAKT = {
  *   nearestOpen?: {place: object, distanceKm: number|null}|null,
  *   nearestLps?: {place: object, status: object, distanceKm: number|null}|null,
  *   nearestUrgent?: {place: object, distanceKm: number|null}|null,
+ *   adviceLine?: object|null,      // neakutní poradní linka ZZS kraje, když ji kraj má
  *   farThresholdKm?: number,
  * }} input
  * @returns {{ mode: 'ordinacni_doba'|'pohotovost', openIsFar: boolean, steps: Array<object> }}
@@ -525,6 +526,7 @@ export function careAdvice(input = {}) {
     nearestLps = null,
     nearestUrgent = null,
     nearestAmbulance = null,
+    adviceLine = null,
     farThresholdKm = 40,
   } = input;
 
@@ -547,8 +549,16 @@ export function careAdvice(input = {}) {
   // o zubech nic neví; kdo hledá lékárnu, do kterékoli otevřené lékárny.
   const medicalFlow = category === 'lps_dospeli' || category === 'lps_deti';
 
+  // Neakutní poradní linka záchranné služby (kde ji kraj provozuje) patří
+  // hned za první kontakt: odpovídá na „nevím, jestli s tím někam jít“,
+  // což je otázka, kterou tahle stránka sama zodpovědět nesmí. Nabízí se
+  // jen u lékařské péče a jen tomu, o kom víme, z jakého kraje hledá —
+  // linka jiného kraje by mu neporadila.
+  const poradna = hasOrigin && medicalFlow && adviceLine ? adviceLine : null;
+
   if (working) {
     steps.push({ kind: 'prvni_kontakt', priority: 1, contact: kontakt });
+    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna });
     if (ambulance && medicalFlow) steps.push({ kind: 'ambulance_denni', priority: 2, ...ambulance });
     if (online && medicalFlow) steps.push({ kind: 'online', priority: 3, service: online });
     if (medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 4, ...urgent });
@@ -557,6 +567,7 @@ export function careAdvice(input = {}) {
     if (lps) steps.push({ kind: 'lps_pozdeji', priority: 5, daytimeHint: medicalFlow, ...lps });
   } else {
     if (open) steps.push({ kind: 'lps_otevrena', priority: 1, ...open });
+    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna });
     // Mimo ordinační dobu je pohotovost hlavní odpověď; ambulance s noční
     // nebo víkendovou dobou (úrazová pohotovost nemocnice) se hodí jen když
     // pohotovost otevřená není.
@@ -573,6 +584,48 @@ export function careAdvice(input = {}) {
   const openIsFar = open?.distanceKm != null && open.distanceKm > farThresholdKm;
 
   return { mode: working ? 'ordinacni_doba' : 'pohotovost', openIsFar, steps };
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Hlášení změny — sdílené hlavní stránkou (src/pohotovosti.js) a builderem
+// okresních stránek (scripts/build-pohotovosti-okresy.js), aby hlášení
+// vypadala stejně a šla třídit podle štítku.
+//
+// Nejčastější důvod, proč tahle stránka lže, je, že se zdroj změnil
+// a nikdo nám to neřekl. Člověk, který právě zjistil, že telefon nefunguje,
+// je nejlepší detektor, jaký máme — a nesmí ho to stát víc než kliknutí.
+// ─────────────────────────────────────────────────────────────────────────
+
+export const FEEDBACK_ISSUES_URL = 'https://github.com/veritasderman-rgb/hspa/issues/new';
+
+function formatPhoneCz(phone) {
+  const m = /^\+420(\d{3})(\d{3})(\d{3})$/.exec(String(phone ?? ''));
+  return m ? `${m[1]} ${m[2]} ${m[3]}` : String(phone ?? '');
+}
+
+/**
+ * Předvyplněné GitHub issue k jednomu pracovišti.
+ * @param {object} place  záznam z data/pohotovosti.json
+ * @param {{base?: string, labels?: string[], generatedDay?: string, page?: string}} opts
+ */
+export function feedbackIssueUrl(place, { base = FEEDBACK_ISSUES_URL, labels = [], generatedDay = '', page = 'pohotovosti.html' } = {}) {
+  const p = place ?? {};
+  const title = `Pohotovosti: změna u „${p.name ?? '?'}“${p.okres ? ` (${p.okres})` : ''}`;
+  const body = [
+    `**Pracoviště:** ${p.workplace ? `${p.name} — ${p.workplace}` : p.name ?? '?'} (id \`${p.id ?? '?'}\`)`,
+    `**Typ:** ${p.category_label ?? p.category ?? ''}`,
+    p.address ? `**Adresa v datech:** ${p.address}` : null,
+    p.phone ? `**Telefon v datech:** ${formatPhoneCz(p.phone)}` : null,
+    '',
+    '**Co je jinak:** (telefon / adresa / ordinační doba / zrušeno / jiné)',
+    '',
+    '**Jak jste to ověřili:** (telefonát dne …, web pracoviště, na místě)',
+    '',
+    `_Data k ${generatedDay || '?'}, stránka ${page}._`,
+  ].filter(line => line != null).join('\n');
+  const params = new URLSearchParams({ title, body });
+  for (const label of labels) params.append('labels', label);
+  return `${base}?${params}`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────

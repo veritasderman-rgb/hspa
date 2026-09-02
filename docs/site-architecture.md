@@ -195,13 +195,29 @@ zdrave-cesko.cz/
 - **Drift-check.** U denních ambulancí týdenní kontrola, že citát ze zdroje
   na webu nemocnice pořád je (`hours_check`); drift = viditelné varování
   na kartě a warning ve validátoru.
+- **Rozcestník „Kam s tím?“ a poradní linky ZZS.** `practical.triage`
+  odpovídá na „kam patřím“ tlačítky (zavolat/vyhledat/otevřít), ne vlastním
+  úsudkem — každý řádek je přepis oficiálního zdroje. Tytéž otázky a
+  odpovědi tvoří FAQPage JSON-LD v hlavičce `pohotovosti.html`, který
+  `build-pohotovosti-okresy.js` z `triage` znovu generuje při každém běhu.
+  Krajské neakutní poradní linky záchranek (`online.advice_lines`) se
+  nabízí jako krok „Co dělat teď“ hned za prvním kontaktem, jen s vyplněnou
+  polohou.
+- **English · Українська.** Sekce `practical.intl.{en,uk}` se stejnými fakty
+  a zdroji jako česká verze, jen přeloženým textem — pro čtenáře, kteří
+  na stránce hledají hlavně jedno číslo na zavolání.
+- **Offline.** Service worker `sw-pohotovosti.js` (network-first, jen na
+  cestách pod `/pohotovost`) drží poslední stažená data, takže vyhledávání
+  funguje i bez signálu; banner o tom čtenáře informuje. Karta pracoviště
+  nese předvyplněné „Nahlásit změnu“ (`feedbackIssueUrl()`) — nejrychlejší
+  způsob, jak se dozvědět, že se telefon nebo hodiny mezitím změnily.
 
 ### `pohotovost-*.html` — okresní landing pages (75, generované)
 
 | | |
 |---|---|
-| **Účel** | Landing page pro dotazy typu „pohotovost Klatovy“ — člověk v nouzi hledá Google, ne dashboard. Statický výpis pracovišť okresu (adresy, telefony, rozpisy přímo v HTML) + JSON-LD s `openingHoursSpecification`. |
-| **Generuje** | `scripts/build-pohotovosti-okresy.js` z `data/pohotovosti.json`; manifest `data/pohotovosti-okresy.json` → sitemap + rozcestník na `pohotovosti.html`. Týdenní cron regeneruje po transformu, přepisují se jen změněné soubory. |
+| **Účel** | Landing page pro dotazy typu „pohotovost Klatovy“ — člověk v nouzi hledá Google, ne dashboard. Statický výpis pracovišť okresu (adresy, telefony, rozpisy přímo v HTML) + JSON-LD s `openingHoursSpecification`, kompaktní rozcestník „Kam s tím?“ (telefonní řádky z `practical.triage` + poradní linka kraje) a patička s hlášením změny u každého pracoviště. |
+| **Generuje** | `scripts/build-pohotovosti-okresy.js` z `data/pohotovosti.json`; manifest `data/pohotovosti-okresy.json` → sitemap + rozcestník na `pohotovosti.html`. Stejný běh přepisuje i blok FAQPage JSON-LD v `pohotovosti.html` (z `practical.triage`). Týdenní cron regeneruje po transformu, přepisují se jen změněné soubory. |
 | **JS moduly** | `src/pohotovost-okres.js` — jen progresivní vylepšení (nav, patička, živé „teď otevřeno“ z `data-hours`); bez JS stránka plně funguje. |
 | **CSS namespace** | `.pokr-*` |
 

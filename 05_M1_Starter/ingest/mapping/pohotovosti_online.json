@@ -13,7 +13,15 @@
     "`verified_at`; při revizi se ověřuje znovu.",
     "",
     "STAV V OSTATNÍCH KRAJÍCH je v `not_available` — mlčet o něm by vypadalo, že",
-    "službu prostě nemáme zmapovanou."
+    "službu prostě nemáme zmapovanou.",
+    "",
+    "PORADNÍ LINKY ZZS (`advice_lines`): čtyři krajské záchranné služby provozují",
+    "vedle 155 i linku pro neakutní stavy. Průchod webů všech 14 ZZS 1. 9. 2026:",
+    "JMK (jediná se zveřejněnou provozní dobou), Středočeský, Královéhradecký,",
+    "Pardubický. Kde web dobu neuvádí, je `hours_unknown: true` a stránka to říká —",
+    "nevymýšlí se. Moravskoslezský kraj má na webu jen rozpracovanou stránku",
+    "„Infolinka“ bez čísla → neuvádí se. Každý záznam nese doslovný `quote`,",
+    "`source` a `verified_at`."
   ],
   "version": "1.0",
   "services": [
@@ -27,10 +35,16 @@
       "since": "2024",
       "availability": "nonstop",
       "response_minutes": 30,
-      "channels": ["chat", "videohovor"],
+      "channels": [
+        "chat",
+        "videohovor"
+      ],
       "free_for": "obyvatele s trvalým bydlištěm v Jihočeském kraji",
       "doctor": "lékař",
-      "can_issue": ["eRecept", "doporučení"],
+      "can_issue": [
+        "eRecept",
+        "doporučení"
+      ],
       "good_for": "lehčí akutní potíže — například viróza, bolest zad, trávicí potíže",
       "not_for": "chronická onemocnění ani opakované předepisování eReceptů",
       "note": "První krajská online pohotovost v ČR.",
@@ -50,10 +64,16 @@
       "since": "2025-03-01",
       "availability": "nonstop",
       "response_minutes": 30,
-      "channels": ["chat", "videohovor"],
+      "channels": [
+        "chat",
+        "videohovor"
+      ],
       "free_for": "obyvatele s trvalým pobytem v Karlovarském kraji, děti i dospělé",
       "doctor": "praktický lékař nebo pediatr",
-      "can_issue": ["eRecept", "lékařská zpráva e-mailem"],
+      "can_issue": [
+        "eRecept",
+        "lékařská zpráva e-mailem"
+      ],
       "good_for": "méně závažné akutní potíže — například záněty horních či dolních cest dýchacích, potíže s močovými cestami, alergické reakce, kožní problémy",
       "not_for": "léčbu ani předepisování receptů u chronických onemocnění",
       "note": null,
@@ -77,6 +97,82 @@
       "verified_at": "2026-08-31"
     }
   ],
+  "advice_lines": [
+    {
+      "id": "poradna-jmk",
+      "kraj_code": "CZ064",
+      "kraj": "Jihomoravský kraj",
+      "name": "Neakutní poradní linka ZZS JMK",
+      "phone": "+420800140155",
+      "hours": "denně 7:00–19:00 včetně víkendů a svátků",
+      "text": "Poradí s dostupností lékáren, lékařských pohotovostí, sociální a paliativní péče a dalšími neakutními situacemi. Urgentní případy patří dál na 155.",
+      "since": "2026-02-02",
+      "quote": "Neakutní poradní linka má číslo 800 140 155 a v provozu je každý den (včetně víkendů a svátků) od 7 do 19 hodin.",
+      "source": {
+        "name": "ZZS Jihomoravského kraje — Neakutní poradní linka",
+        "url": "https://www.zzsjmk.cz/neakutni-poradni-linka"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "poradna-sck",
+      "kraj_code": "CZ020",
+      "kraj": "Středočeský kraj",
+      "name": "Call centrum ZZS Středočeského kraje",
+      "phone": "+420800888155",
+      "hours": null,
+      "hours_unknown": true,
+      "text": "Zdravotní rady — třeba co dělat s teplotou — a informace, které lékárny a zdravotnická zařízení mají o víkendu otevřeno; otázky zdravotnického nebo psychosociálního charakteru. Zřízeno pro občany kraje.",
+      "since": "2009",
+      "quote": "Na tísňovou linku volají často lidé, kteří nepotřebují akutní přednemocniční péči, tedy zásah záchranné služby, ale chtějí například jen poradit po zdravotní stránce, volají, co mají dělat s teplotou nebo se chtějí informovat, které lékárny mají o víkendu otevřeno. Právě pro tyto případy slouží naše call centrum. Volejte pro radu call centrum 800 888 155",
+      "source": {
+        "name": "ZZS Středočeského kraje — Zdravotnické operační středisko (Call centrum)",
+        "url": "https://www.zachranka.cz/zdravotnicke-operacni-stredisko/"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "poradna-khk",
+      "kraj_code": "CZ052",
+      "kraj": "Královéhradecký kraj",
+      "name": "Informační zdravotnické centrum ZZS KHK",
+      "phone": "+420841155155",
+      "hours": null,
+      "hours_unknown": true,
+      "text": "Telefonické konzultace u stavů s nejnižší naléhavostí.",
+      "quote": "Rovněž je provozována linka Informačního zdravotnického centra – 841 155 155, kde jsou operátorem poskytovány především telefonické konzultace v případě stavů s nejnižší naléhavostí.",
+      "source": {
+        "name": "ZZS Královéhradeckého kraje — Krajské zdravotnické operační středisko",
+        "url": "https://www.zzskhk.cz/kzos/"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "poradna-pak",
+      "kraj_code": "CZ053",
+      "kraj": "Pardubický kraj",
+      "name": "Linka pro odkladné stavy ZZS Pardubického kraje",
+      "phone": "+420469666666",
+      "phone_alt": "+420469666999",
+      "hours": null,
+      "hours_unknown": true,
+      "text": "Pro neakutní stavy — teploty, chřipka, zvracení, průjem, chronické bolesti. Operátoři záchranné služby stav vyhodnotí a doporučí praktika, pohotovost, svépomoc, nebo v naléhavém případě transport do nemocnice.",
+      "quote": "Linku pro odkladné stavy lze využít v případě neakutního stavu, tedy stavu, který nevyžaduje neodkladnou péči. Jako jsou například teploty, chřipka, zažívací potíže (zvracení, průjem), chronické bolesti aj. Na lince pro odkladné stavy pracují operátoři Záchranné služby, kteří stav vyhodnotí a doporučí řešení cestou praktického lékaře, LSPP, svépomocí nebo je stav vyhodnocen jako neodkladný s nutným transportem do nemocničního zařízení k dalšímu vyšetření.",
+      "source": {
+        "name": "ZZS Pardubického kraje — Nejčastější dotazy",
+        "url": "https://www.zzspak.cz/informace/nejcastejsi-dotazy"
+      },
+      "verified_at": "2026-09-01"
+    }
+  ],
+  "advice_lines_note": {
+    "text": "V ostatních deseti krajích záchranné služby na svých webech žádnou poradní linku neuvádějí (průchod webů všech čtrnácti ZZS k 1. 9. 2026; ZZS Moravskoslezského kraje má stránku „Infolinka“ rozpracovanou bez čísla). Tam platí, co říká ministerstvo: na 155 je správné zavolat i tehdy, když si závažností stavu nejste jistí — operátoři jsou zdravotníci a pomohou situaci vyřešit.",
+    "source": {
+      "name": "NZIP — Zdravotnická záchranná služba: tísňová linka 155 nebo 112 (MZ ČR)",
+      "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+    },
+    "verified_at": "2026-09-01"
+  },
   "not_available": {
     "planned": [
       {

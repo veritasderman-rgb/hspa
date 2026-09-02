@@ -20610,6 +20610,170 @@ a.vst-ref:hover { color: var(--ink); border-color: var(--ink); }
   color: var(--ink);
 }
 
+/* ── Rozcestník „Kam s tím?“ (pohotovosti.html) ─────────────────────────
+   Karty jsou přepis oficiálních zdrojů, ne triáž — proto u každé zdroj.
+   Ohrožení života má červený levý okraj jako triážní pruh nahoře. */
+.poh-roz { margin: 40px 0 0; }
+.poh-roz-lead {
+  margin: 10px 0 0;
+  max-width: 72ch;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-mut);
+}
+.poh-roz-grid {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.poh-roz-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--rule2);
+  border-radius: 5px;
+  background: var(--surface);
+}
+.poh-roz-card-urgent { border-color: var(--bad); border-left-width: 4px; }
+.poh-roz-title { margin: 0; font-family: var(--sans); font-size: 16px; font-weight: 700; color: var(--ink); }
+.poh-roz-ex { margin: 3px 0 0; font-family: var(--sans); font-size: 13px; color: var(--ink-mut); }
+.poh-roz-text {
+  margin: 8px 0 0;
+  flex: 1 1 auto;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.poh-roz-actions { margin: 12px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.poh-roz-hint { flex-basis: 100%; font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); }
+.poh-roz-src { margin: 10px 0 0; font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+
+/* Tiché akce na kartě (SMS, sdílet, tisk) — nesmí konkurovat „Zavolat“. */
+.poh-action-quiet { border-style: dashed; }
+.poh-card-foot { margin: 10px 0 0; font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); }
+
+/* Poradní linky záchranek */
+.poh-poradny { margin: 28px 0 0; }
+.poh-poradna-list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.poh-poradna {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule2);
+  border-radius: 5px;
+  background: var(--surface);
+  font-family: var(--sans);
+}
+.poh-poradna.is-mine { border-color: var(--good); border-width: 2px; }
+.poh-poradna-kraj { font-size: 13px; color: var(--ink-mut); }
+.poh-poradna-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.poh-poradna .poh-action { align-self: flex-start; margin-top: 4px; }
+.poh-poradna-hours { font-size: 13px; color: var(--ink); }
+.poh-poradna-text { font-size: 13.5px; line-height: 1.5; color: var(--ink-mut); }
+.poh-poradna-src { font-size: 12px; color: var(--ink-mut); }
+.poh-poradna-note { margin: 12px 0 0; font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--ink-mut); }
+
+/* English · Українська */
+.poh-intl { margin: 28px 0 0; border: 1px solid var(--rule2); border-radius: 5px; background: var(--surface); }
+.poh-intl summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.poh-intl-body {
+  padding: 0 16px 16px;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.poh-intl-h { margin: 8px 0 0; font-family: var(--sans); font-size: 16px; font-weight: 700; color: var(--ink); }
+.poh-intl-lead { margin: 6px 0 0; font-family: var(--sans); font-size: 14px; line-height: 1.55; color: var(--ink-mut); }
+.poh-intl-list { margin: 10px 0 0; font-family: var(--sans); }
+.poh-intl-list dt { margin: 10px 0 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+.poh-intl-list dd { margin: 3px 0 0; font-size: 14px; line-height: 1.55; color: var(--ink); }
+.poh-intl-list dd .poh-action { margin: 6px 6px 0 0; }
+.poh-intl-src { margin: 12px 0 0; font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+
+/* Co vás na pohotovosti čeká (v sekci Než vyrazíte) */
+.poh-expect { margin: 22px 0 0; }
+.poh-expect-list { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.poh-expect-list li {
+  padding: 10px 14px;
+  border-left: 3px solid var(--rule2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.poh-expect-src { margin-left: 6px; font-size: 12.5px; color: var(--ink-mut); }
+
+/* „Co dělat teď“: nápověda bez praktika + krok poradní linky */
+.poh-advice-hint { display: block; margin-top: 6px; font-family: var(--sans); font-size: 13px; color: var(--ink-mut); }
+.poh-advice-step-poradna::before { background: var(--ink-mut); }
+
+/* Offline pruh, nástroje výpisu, odkazy v heru */
+.poh-offline {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--warn);
+  border-radius: 4px;
+  background: var(--surface-warn);
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+}
+.poh-results-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; }
+.poh-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+.poh-hero-links { margin: 10px 0 0; font-family: var(--sans); font-size: 14px; color: var(--ink-mut); }
+
+/* Okresní stránky: kompaktní rozcestník čísel + patička karty */
+.pokr-roz {
+  margin: 0 0 22px;
+  padding: 12px 16px;
+  border: 1px solid var(--rule2);
+  border-radius: 5px;
+  background: var(--surface);
+  font-family: var(--sans);
+}
+.pokr-roz-h { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink); }
+.pokr-roz-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.pokr-roz-list li { font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+.pokr-roz-list a { font-weight: 700; }
+.pokr-roz-more { margin: 8px 0 0; font-size: 13px; color: var(--ink-mut); }
+.pokr-foot { margin: 8px 0 0; font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); }
+
+/* Tisk: jen to, co si člověk bere s sebou — triáž na 155, výpis, „než vyrazíte“. */
+@media print {
+  .poh-offline, .poh-tools, .poh-hero-links, .poh-roz, .poh-online, .poh-dojezd, .poh-context,
+  .poh-method, .poh-okres-index, .poh-card-foot, .poh-action-quiet, .topbar, .masthead-strip,
+  .bottom { display: none !important; }
+  .poh-roz-card, .poh-before-item { break-inside: avoid; }
+}
+
 /* ── Zdraví 2035: strategie × indikátory (zdravi-2035.html) ────────────── */
 
 /* Legenda čtení */

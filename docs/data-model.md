@@ -959,6 +959,44 @@ za „Není pro …“, takže musí být v akuzativu (hlídá test).
 Vedle služeb jsou tu `infolines` — krajské nepřetržité informační linky
 o pohotovostech.
 
+**Poradní linky ZZS — `advice_lines`.** Neakutní poradní linky krajských
+záchranných služeb: telefonní číslo pro „nevím, jestli s tím někam jít“, na
+rozdíl od tísňové linky 155. Nejvýš jedna na kraj (validátor odmítne druhou);
+`tests/pohotovosti-practical.test.js` navíc čeká aspoň dvě linky v poli.
+
+| Pole | Typ | Význam |
+|---|---|---|
+| `id` | string | unikátní v celém poli |
+| `kraj_code` | string | NUTS-3, musí být v `regions` |
+| `kraj` | string | název kraje |
+| `name` | string | název linky/služby |
+| `phone` | string | mezinárodní tvar (`+420…`); **nikdy** `+420155` ani `+420112` — to jsou tísňové linky, ne poradní |
+| `phone_alt` | string? | nepovinné druhé číslo (stejný tvar; render ho zobrazí jako druhé tlačítko) |
+| `hours` | string? | provozní doba textem — povinná, pokud není `hours_unknown` |
+| `hours_unknown` | bool? | `true`, když web záchranky provozní dobu neuvádí — render (`adviceLineHours()` v `src/pohotovosti.js`, builder okresních stránek) pak poctivě píše „provozní dobu web záchranky neuvádí, ověříte při zavolání“. `hours` a `hours_unknown` zároveň validátor odmítne |
+| `quote` | string | doslovný citát ze zdroje (povinný — stejný princip jako u denních ambulancí: při revizi jde poznat, že se zdroj změnil) |
+| `text` | string? | nepovinný doplňující text |
+| `since` | string? | odkdy linka funguje (rok nebo `YYYY-MM-DD`) |
+| `source` | `{name, url}` | povinné — tvrzení o cizí službě |
+| `verified_at` | string | `YYYY-MM-DD` |
+
+Stav k 1. 9. 2026 (průchod webů všech 14 ZZS): linku mají čtyři kraje —
+Jihomoravský (jediný se zveřejněnou provozní dobou), Středočeský,
+Královéhradecký a Pardubický (`hours_unknown: true`). Moravskoslezský kraj má
+na webu jen rozpracovanou stránku „Infolinka“ bez čísla, proto v datech není.
+
+`advice_lines_note` (nepovinné): `{text, source: {name, url}}` — poznámka
+o krajích, které poradní linku neprovozují; když je přítomná, `source.url`
+je povinné.
+
+Frontend: `renderAdviceLines()` v `src/pohotovosti.js` vykresluje celostátní
+přehled (sekce se ukazuje všem, ne jen z kraje, který linku má — viz „Online
+pohotovosti vidí každý“ výše) a zvýrazní kraj podle polohy uživatele. V bloku
+„Co dělat teď“ přidává `careAdvice()` (`src/pohotovosti-engine.js`) krok
+`{kind: 'poradna', line}` hned za první kontakt — jen s vyplněnou polohou
+a jen u lékařské péče (`lps_dospeli`/`lps_deti`); zubní a lékárenská pohotovost
+poradnu nenabízí.
+
 ### Denní nemocniční ambulance — kategorie `ambulance_denni`
 
 Kurátorovaný registr `ingest/mapping/nemocnicni-ambulance.json`; transform ho
@@ -1004,6 +1042,98 @@ mění novelou) a checklist `before_you_go`. Krok `zavolejte` je povinný —
 zveřejněná ordinační doba se mění dovolenými a zástupy rychleji, než ji kdokoli
 stihne aktualizovat, tuhle stránku včetně.
 
+#### Rozcestník „Kam s tím?“ — `practical.triage`
+
+Odpovídá na otázku, kterou vyhledávání samo zodpovědět nesmí: „kam vlastně
+patřím?“. Každý řádek je proto přepis oficiálního zdroje (NZIP, záchranná
+služba, ministerstvo) se zdrojem a datem ověření — stránka jen převádí
+odpověď na tlačítko. Validátor (`validatePractical`) čeká aspoň 6 řádků;
+první musí volat 155 (ohrožení života) a nést `urgent: true` — to hlídá
+`tests/pohotovosti-practical.test.js`, ne samotný validátor.
+
+| Pole | Typ | Význam |
+|---|---|---|
+| `id` | string | unikátní v poli |
+| `situation` | string | nadpis karty (např. „Ohrožení života“) |
+| `examples` | string? | typické příklady, nepovinné |
+| `text` | string | vysvětlující text |
+| `urgent` | bool? | první řádek ho má — červený okraj karty |
+| `action` | objekt | viz níže |
+| `secondary` | objekt? | druhé tlačítko, stejný tvar jako `action` |
+| `faq` | `{q, a}` | otázka/odpověď pro FAQPage JSON-LD (`q` končí otazníkem, `a` ≥ 40 znaků — hlídá test) |
+| `source` | `{name, url}` | povinné |
+| `sources` | pole? | další zdroje `{name, url}`, když řádek opírá víc tvrzení o víc dokumentů (render je vypíše za hlavním zdrojem) |
+| `verified_at` | string | `YYYY-MM-DD` |
+
+`action`/`secondary` — tlačítko rozcestníku, `kind` je jeden z
+`tel | find | href | anchor | poradna` (jiný druh renderer tiše nevykreslí):
+
+| `kind` | Povinná pole | Vykreslí se jako |
+|---|---|---|
+| `tel` | `label`, `phone` (mezinárodní tvar, nebo tísňové/harmonizované číslo `1xx`/`116xxx`) | `<a href="tel:…">` |
+| `href` | `label`, `url` (http/https) | odkaz do nové karty |
+| `anchor` | `label`, `href` (musí začínat `#`) | odkaz na kotvu na téže stránce |
+| `find` | `label`, `categories[]` — jen z `lps_dospeli, lps_deti, zubni, lekarna, ambulance_denni, akutni` | tlačítko, které přepne filtr typu ve vyhledávání a odscrolluje tam uživatele |
+| `poradna` | `label` | tlačítko se vykreslí podle kraje uživatele ze `online.advice_lines` (`poradnaActionHtml()` v `src/pohotovosti.js`); bez zjištěného kraje odkáže na přehled linek |
+
+Frontend: `renderTriage()` v `src/pohotovosti.js`. Klik na `find` mění
+`state.categories`, posílá uživatele zpět k výsledkům (s polohou rovnou
+na „Co dělat teď“, bez ní do pole pro obec).
+
+#### Co vás na pohotovosti čeká — `practical.expectations`
+
+Triáž podle závažnosti, čekání, co pohotovost neudělá — přepis oficiálního
+zdroje. Aspoň 2 položky, každá `id`, `title`, `text`, `source{name,url}`,
+`verified_at`. Vykresluje `renderBeforeYouGo()` pod checklistem
+`before_you_go`.
+
+#### Bez praktického lékaře — `practical.no_gp`
+
+Jeden blok (ne pole): `title`, `short` (krátká věta, použije se přímo v kroku
+„Zavolejte praktikovi“ v `careAdvice()`), `text`, `links[{label, url}]`
+(aspoň jeden), `source{name,url}`, `verified_at`.
+
+#### English · Українська — `practical.intl.{en,uk}`
+
+Fakta (čísla, poplatek, pojištění) nesou stejné zdroje jako česká verze,
+přeložený je jen text. Povinné pro oba jazyky `en` i `uk` (validátor selže,
+když jeden z bloků chybí):
+
+| Pole | Typ | Význam |
+|---|---|---|
+| `title` | string | nadpis bloku |
+| `lead` | string? | úvodní odstavec |
+| `items` | pole, ≥ 5 | `{q, a, tel?, tel_label?, url?, url_label?}` — aspoň jedna položka s `tel: '155'` nebo `'112'` |
+| `sources` | pole, ≥ 1 s `url` | `{name, url}` |
+| `sources_label` | string? | popisek nad zdroji (fallback v UI: „Sources“) |
+| `verified_label` | string? | popisek u data ověření (fallback: „verified“) |
+| `verified_at` | string | `YYYY-MM-DD` |
+
+`sources_label` a `verified_label` validátor nekontroluje — jsou to jen
+popisky pro UI s výchozí anglickou hodnotou, když chybí. Ukrajinský blok musí
+být opravdu v cyrilici, ne anglický text pod jiným klíčem (hlídá test).
+Frontend: `renderIntl()` v `src/pohotovosti.js`, jazykové sekce nesou
+`lang="en"`/`lang="uk"`.
+
+#### Aplikace — `practical.apps` (nepovinné)
+
+Pole existuje jen když má stránka co nabídnout (Záchranka); když je
+přítomné, každá položka nese `id`, `name`, `url` (http/https), `text`,
+volitelně `features[]`, a povinně `source{name,url}` + `verified_at`.
+
+#### Zpětná vazba — `practical.feedback`
+
+```json
+{ "issues_new_url": "https://github.com/<owner>/<repo>/issues/new", "labels": [] }
+```
+
+`issues_new_url` musí být přesně tvar GitHub „…/issues/new“ (bez query
+stringu — ten se doplňuje až za běhu). Z tohoto bloku skládá
+`feedbackIssueUrl()` (`src/pohotovosti-engine.js`) předvyplněné issue
+(pracoviště, typ, adresa/telefon z dat, datum generování dat, štítky) — sdílí
+ho hlavní stránka i každá okresní stránka, aby hlášení vypadala stejně
+a šla třídit podle štítku.
+
 ### Drift-check citátů — `hours_check`
 
 `ingest/verify-ambulance-drift.js` (`npm run verify:ambulance-drift`, týdně
@@ -1042,6 +1172,31 @@ Manifest `data/pohotovosti-okresy.json` čte sitemap generátor a rozcestník na
 `pohotovosti.html`. Regeneruje se v týdenním cronu po transformu; builder
 přepisuje jen soubory, jejichž obsah se změnil. NENÍ v `build:generated` —
 jsou to obsahové stránky jako `clanek-*.html`, jen je píše skript.
+
+Každá okresní stránka nese i kompaktní verzi rozcestníku: blok `.pokr-roz`
+s telefonními řádky z `practical.triage` (jen ty s `action.kind === 'tel'`)
+plus poradní linku kraje, a odkaz na celý rozcestník na `pohotovosti.html`.
+Patička `.pokr-foot` u každého pracoviště nese datum dat a předvyplněné
+„Nahlásit změnu“ ze stejné `feedbackIssueUrl()` jako hlavní stránka.
+
+Stejný běh navíc přepíše blok **FAQPage JSON-LD přímo v `pohotovosti.html`**,
+mezi značkami `<!-- poh-faq:start -->`/`<!-- poh-faq:end -->` (funkce
+`faqJsonLd()` + `writeFaqIntoPage()`): obsah se vždy odvozuje z
+`practical.triage[].faq`, takže statická hlavička nemůže tvrdit něco jiného
+než živá sekce rozcestníku. `tests/pohotovosti-practical.test.js` porovnává
+obsah hlavičky s `faqJsonLd(practical)` na bit — po ruční úpravě `triage`
+je nutné spustit `npm run build:pohotovosti-okresy` znovu, jinak test spadne.
+
+**Offline cache — `sw-pohotovosti.js`.** Service worker v kořeni webu, scope
+`/pohotovost` (registruje ho `registerOffline()` v `src/pohotovosti.js`, běží
+tedy nad `pohotovosti.html` i nad všemi `pohotovost-*.html`). Network-first:
+dokud síť odpovídá, bere se vždy čerstvá odpověď a jen se jí obnoví cache;
+z cache se čte až po výpadku sítě. Zasahuje jen do bílé listiny cest (stránky
+pohotovostí, jejich data, skripty, styly, značka) — články, indikátory
+a zbytek webu jím neprochází vůbec. Navigace na okresní stránku bez uložené
+kopie spadne zpátky na `/pohotovosti`, které má data a umí okres najít i tak.
+Nic neodesílá, nic nesbírá; při změně chování se zvedá `VERSION` v souboru,
+což při aktivaci smaže starší cache.
 
 ### `data/pohotovosti-akutni.json`
 

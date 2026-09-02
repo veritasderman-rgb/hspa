@@ -19,11 +19,13 @@
 // Výstupy:
 //   pohotovost-<slug>.html            (75 stránek)
 //   data/pohotovosti-okresy.json      manifest pro sitemap + rozcestník
+//   pohotovosti.html                  jen blok FAQPage JSON-LD mezi značkami
+//                                     poh-faq:start/end (z practical.triage)
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { okresSlug } from '../src/pohotovosti-engine.js';
+import { okresSlug, feedbackIssueUrl } from '../src/pohotovosti-engine.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -48,6 +50,8 @@ const SCHEMA_TYPE = {
 const esc = (s) => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
+
+const fmtPhone = (phone) => String(phone ?? '').replace(/^\+420(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
 
 function hoursTableHtml(hours) {
   if (!hours?.week) return '<p class="pokr-hours-none">Rozpis po dnech viz celostátní vyhledávání.</p>';
@@ -101,7 +105,11 @@ function jsonLd(okres, slug, places) {
   };
 }
 
-export function placeHtml(p) {
+/**
+ * @param {object} p       pracoviště z data/pohotovosti.json
+ * @param {{generatedAt?: string, feedback?: object}} ctx  datum dat a konfigurace hlášení změn
+ */
+export function placeHtml(p, ctx = {}) {
   const flags = [];
   if (p.category === 'ambulance_denni') {
     flags.push('běžná ambulance nemocnice, ne pohotovostní služba podle vyhlášky');
@@ -130,10 +138,87 @@ export function placeHtml(p) {
       ${p.web ? `<a class="poh-action" href="${esc(p.web)}" target="_blank" rel="noopener">Web</a>` : ''}
     </p>
     ${hoursTableHtml(p.hours)}
+    ${footHtml(p, ctx)}
   </article>`;
 }
 
-function pageHtml({ okres, slug, kraj, places, generatedAt, hasRotation }) {
+/** Patička karty: stáří dat a odkaz na hlášení změny (stejný tvar jako na hlavní stránce). */
+function footHtml(p, { generatedAt, feedback } = {}) {
+  const day = String(generatedAt ?? '').slice(0, 10);
+  if (!day) return '';
+  const url = feedbackIssueUrl(p, {
+    base: feedback?.issues_new_url,
+    labels: feedback?.labels ?? [],
+    generatedDay: day,
+    page: `pohotovost-${okresSlug(p.okres)}.html`,
+  });
+  const stamp = p.verified_at ? `Ověřeno člověkem ${esc(p.verified_at)}` : `Data k ${esc(day)}`;
+  return `<p class="pokr-foot">${stamp} · <a href="${esc(url)}" target="_blank" rel="noopener" title="Otevře předvyplněné hlášení na GitHubu (vyžaduje účet GitHub)">Nahlásit změnu</a></p>`;
+}
+
+/**
+ * Kompaktní rozcestník čísel pro okresní stránku: řádky rozcestníku
+ * s telefonem (155, otrava, krize…) a poradní linka záchranky kraje, když
+ * ji kraj má. Plný rozcestník s tlačítky „najít“ je na hlavní stránce.
+ */
+export function rozcestnikHtml(practical, adviceLine) {
+  const rows = (practical?.triage ?? []).filter(r => r.action?.kind === 'tel');
+  if (!rows.length && !adviceLine) return '';
+  const items = rows.map(r =>
+    `      <li><strong>${esc(r.situation)}</strong> — <a href="tel:${esc(r.action.phone)}">${esc(r.action.label)}</a></li>`);
+  if (adviceLine) {
+    const hours = adviceLine.hours ?? (adviceLine.hours_unknown ? 'provozní dobu web záchranky neuvádí' : '');
+    items.push(`      <li><strong>${esc(adviceLine.name)}</strong> (${esc(adviceLine.kraj)}${hours ? `, ${esc(hours)}` : ''}) — <a href="tel:${esc(adviceLine.phone)}">${esc(fmtPhone(adviceLine.phone))}</a>${
+      adviceLine.phone_alt ? ` / <a href="tel:${esc(adviceLine.phone_alt)}">${esc(fmtPhone(adviceLine.phone_alt))}</a>` : ''}${
+      adviceLine.text ? `: ${esc(adviceLine.text)}` : ''} Není to tísňová linka.</li>`);
+  }
+  return `
+  <section class="pokr-roz" aria-labelledby="pokrRozH">
+    <h2 class="pokr-roz-h" id="pokrRozH">Kam s tím? Nejdůležitější čísla</h2>
+    <ul class="pokr-roz-list">
+${items.join('\n')}
+    </ul>
+    <p class="pokr-roz-more">Celý rozcestník (zub, dítě, psychická krize, bez praktika, <span lang="en">English</span>, <span lang="uk">Українська</span>):
+      <a href="pohotovosti.html#pohRozH">Kam s tím?</a> — podle oficiálních zdrojů, s odkazem a datem ověření u každého řádku.</p>
+  </section>`;
+}
+
+/** FAQPage JSON-LD z rozcestníku — tytéž otázky a odpovědi, které stránka ukazuje. */
+export function faqJsonLd(practical) {
+  const rows = (practical?.triage ?? []).filter(r => r.faq?.q && r.faq?.a);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: rows.map(r => ({
+      '@type': 'Question',
+      name: r.faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: r.faq.a },
+    })),
+  };
+}
+
+const FAQ_START = '<!-- poh-faq:start';
+const FAQ_END = '<!-- poh-faq:end -->';
+
+/**
+ * Přepíše blok FAQPage JSON-LD v pohotovosti.html mezi značkami
+ * poh-faq:start/end. Vrací true, když se soubor změnil.
+ */
+export function writeFaqIntoPage(practical, file = path.resolve(ROOT, 'pohotovosti.html')) {
+  const html = fs.readFileSync(file, 'utf8');
+  const a = html.indexOf(FAQ_START);
+  const b = html.indexOf(FAQ_END);
+  if (a < 0 || b < 0 || b < a) return false;
+  const markerEnd = html.indexOf('-->', a) + 3;
+  const json = JSON.stringify(faqJsonLd(practical), null, 1).replace(/</g, '\\u003c');
+  const block = `${html.slice(a, markerEnd)}\n<script type="application/ld+json" id="pohFaqLd">\n${json}\n</script>\n`;
+  const next = html.slice(0, a) + block + html.slice(b);
+  if (next === html) return false;
+  fs.writeFileSync(file, next);
+  return true;
+}
+
+function pageHtml({ okres, slug, kraj, places, generatedAt, hasRotation, practical, adviceLine }) {
   const title = `Pohotovost ${okres} — kde má teď otevřeno`;
   const desc = `Lékařská, dětská, zubní a lékárenská pohotovost v okrese ${okres}: adresy, telefony a ordinační doba ${places.length === 1 ? 'jednoho pracoviště' : `${places.length} pracovišť`}. Z veřejných dat VZP a registru ÚZIS.`;
   const CATEGORY_ORDER = ['lps_dospeli', 'lps_deti', 'zubni', 'lekarna', 'ambulance_denni'];
@@ -185,7 +270,7 @@ ${JSON.stringify(jsonLd(okres, slug, sorted), null, 1)}
       a volejte <a href="tel:155" class="poh-triage-call">155</a> (nebo <a href="tel:112">112</a>).
     </p>
   </aside>
-
+${rozcestnikHtml(practical, adviceLine)}
   <section class="ed-hero ed-hero-slim" aria-labelledby="pokrH">
     <div class="ed-hero-content">
       <div class="ed-kicker">Servisní stránka · Pohotovosti · ${esc(kraj)}</div>
@@ -203,7 +288,7 @@ ${JSON.stringify(jsonLd(okres, slug, sorted), null, 1)}
   </section>
 
   <section class="pokr-list" aria-label="Pracoviště v okrese">
-${sorted.map(placeHtml).join('\n')}
+${sorted.map(p => placeHtml(p, { generatedAt, feedback: practical?.feedback })).join('\n')}
   </section>
 
   <section class="poh-method" aria-labelledby="pokrMetH">
@@ -236,6 +321,7 @@ export function build() {
     byOkres.get(p.okres).push(p);
   }
   const rotationKraje = new Set((data.rotations ?? []).map(r => r.kraj_code));
+  const adviceByKraj = new Map((data.online?.advice_lines ?? []).map(l => [l.kraj_code, l]));
 
   const manifest = [];
   let written = 0;
@@ -246,6 +332,8 @@ export function build() {
       okres, slug, kraj, places,
       generatedAt: data.generated_at,
       hasRotation: rotationKraje.has(places[0].kraj_code),
+      practical: data.practical,
+      adviceLine: adviceByKraj.get(places[0].kraj_code) ?? null,
     });
     const file = path.resolve(ROOT, `pohotovost-${slug}.html`);
     // Přepis jen při skutečné změně — týdenní cron commituje data a stránky
@@ -265,7 +353,9 @@ export function build() {
   fs.writeFileSync(path.resolve(ROOT, 'data', 'pohotovosti-okresy.json'),
     `${JSON.stringify(manifestPayload, null, 1)}\n`);
 
-  console.log(`[pohotovosti-okresy] ${manifest.length} okresů, ${written} stránek přepsáno → pohotovost-*.html + data/pohotovosti-okresy.json`);
+  const faqChanged = writeFaqIntoPage(data.practical);
+  console.log(`[pohotovosti-okresy] ${manifest.length} okresů, ${written} stránek přepsáno → pohotovost-*.html + data/pohotovosti-okresy.json${
+    faqChanged ? '; FAQPage JSON-LD v pohotovosti.html obnoveno' : ''}`);
   return manifestPayload;
 }
 

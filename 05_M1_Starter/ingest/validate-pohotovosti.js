@@ -37,6 +37,12 @@ const MIN_OBCE = 5000;
 
 const TIME_RE = /^([01]\d|2[0-4]):[0-5]\d$/;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+// Telefon: mezinárodní tvar, nebo krátké tísňové / evropské harmonizované
+// číslo (155, 112, 116 123) — ta se nikdy nepíší s předvolbou.
+const PHONE_RE = /^(\+\d{9,15}|1\d{2}|116\d{3})$/;
+/** Druhy tlačítek v rozcestníku; renderer jiný druh tiše nevykreslí. */
+const ACTION_KINDS = ['tel', 'find', 'href', 'anchor', 'poradna'];
+const FIND_CATEGORIES = [...PLACE_CATEGORIES, 'akutni'];
 
 const errors = [];
 const warnings = [];
@@ -250,6 +256,53 @@ function validateOnline(data) {
   for (const sv of online.services ?? []) {
     if (sv.kraj_code && !known.has(sv.kraj_code)) fail(`online služba ${sv.id}: kraj ${sv.kraj_code} není v registru krajů`);
   }
+
+  // Neakutní poradní linky záchranných služeb. Telefonní číslo, na které
+  // stránka posílá lidi „když nevíte, jestli s tím někam jít“, je tvrzení
+  // o cizí službě — bez zdroje, data ověření a provozní doby by nešlo
+  // poznat, že linka mezitím zanikla nebo změnila číslo.
+  const seenKraj = new Set();
+  for (const line of online.advice_lines ?? []) {
+    const where = `poradní linka ${line.id ?? line.kraj_code ?? '?'}`;
+    for (const field of ['id', 'kraj_code', 'kraj', 'name', 'phone']) {
+      if (!line[field]) fail(`${where}: chybí povinné pole ${field}`);
+    }
+    // Provozní dobu buď zdroj uvádí, nebo se poctivě přizná, že ji neuvádí —
+    // třetí možnost („nějaká bude“) stránka nesmí tvrdit.
+    if (!line.hours && line.hours_unknown !== true) fail(`${where}: chybí hours (nebo hours_unknown: true, když ji web ZZS neuvádí)`);
+    if (line.hours && line.hours_unknown) fail(`${where}: hours a hours_unknown si odporují`);
+    if (!/^\+\d{9,15}$/.test(String(line.phone ?? ''))) fail(`${where}: telefon není v mezinárodním tvaru`);
+    if (line.phone_alt != null && !/^\+\d{9,15}$/.test(String(line.phone_alt))) fail(`${where}: phone_alt není v mezinárodním tvaru`);
+    if (!line.quote) fail(`${where}: chybí doslovný citát ze zdroje (drift-check)`);
+    // 155 a 112 jsou tísňové linky — poradní linka je z definice jiné číslo.
+    if (/^\+420(155|112)$/.test(String(line.phone ?? ''))) fail(`${where}: tísňové číslo není poradní linka`);
+    if (!line.source?.url) fail(`${where}: chybí odkaz na zdroj`);
+    if (!ISO_DATE_RE.test(String(line.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+    if (line.kraj_code && !known.has(line.kraj_code)) fail(`${where}: kraj ${line.kraj_code} není v registru krajů`);
+    if (seenKraj.has(line.kraj_code)) fail(`${where}: kraj ${line.kraj_code} má víc poradních linek — stránka nabízí jednu`);
+    seenKraj.add(line.kraj_code);
+  }
+  if (online.advice_lines_note && !online.advice_lines_note.source?.url) {
+    fail('online.advice_lines_note: poznámka o krajích bez linky potřebuje zdroj');
+  }
+}
+
+/** Blok s tvrzením o cizí službě musí mít zdroj a datum ověření. */
+function checkSourced(obj, where) {
+  if (!obj?.source?.url) fail(`${where}: chybí odkaz na zdroj`);
+  if (!ISO_DATE_RE.test(String(obj?.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+}
+
+function checkAction(a, where) {
+  if (!a || !ACTION_KINDS.includes(a.kind)) { fail(`${where}: action.kind musí být ${ACTION_KINDS.join('/')}`); return; }
+  if (!a.label) fail(`${where}: tlačítko bez popisku`);
+  if (a.kind === 'tel' && !PHONE_RE.test(String(a.phone ?? ''))) fail(`${where}: tel bez platného čísla`);
+  if (a.kind === 'href' && !/^https?:\/\//.test(String(a.url ?? ''))) fail(`${where}: href bez URL se schématem`);
+  if (a.kind === 'anchor' && !/^#\w/.test(String(a.href ?? ''))) fail(`${where}: anchor musí mířit na kotvu (#id)`);
+  if (a.kind === 'find') {
+    const cats = a.categories ?? [];
+    if (!cats.length || cats.some(c => !FIND_CATEGORIES.includes(c))) fail(`${where}: find s neznámou kategorií (${cats.join(',') || 'žádná'})`);
+  }
 }
 
 function validatePractical(data) {
@@ -284,6 +337,89 @@ function validatePractical(data) {
   // „Zavolejte předem“ je pointa celé sekce — kdyby vypadla, zbyde
   // z rady checklist na doklady.
   if (!ids.has('zavolejte')) fail('practical.before_you_go: chybí krok `zavolejte` (zavolat předem)');
+
+  // ── Rozcestník „Kam s tím?“ ──
+  // Stránka na „kam patřím“ nesmí odpovídat vlastním úsudkem. Každý řádek
+  // je proto přepis oficiálního zdroje se zdrojem a datem ověření; otázka
+  // a odpověď pro FAQPage JSON-LD jsou součástí řádku, aby statická
+  // hlavička a živá sekce nemohly říkat každá něco jiného.
+  const triage = pr.triage ?? [];
+  if (triage.length < 6) fail(`practical.triage: jen ${triage.length} řádků (čekáno aspoň 6)`);
+  const tids = new Set();
+  let hasLife = false;
+  for (const r of triage) {
+    const where = `practical.triage/${r.id ?? '(bez id)'}`;
+    if (!r.id) fail(`${where}: chybí id`);
+    if (tids.has(r.id)) fail(`${where}: duplicitní id`);
+    tids.add(r.id);
+    if (!r.situation) fail(`${where}: chybí situation`);
+    if (!r.text) fail(`${where}: chybí text`);
+    checkAction(r.action, where);
+    if (r.secondary) checkAction(r.secondary, `${where}/secondary`);
+    if (!r.faq?.q || !r.faq?.a) fail(`${where}: chybí faq.q / faq.a (FAQPage JSON-LD)`);
+    if (!String(r.faq?.q ?? '').endsWith('?')) fail(`${where}: faq.q má být otázka (končí otazníkem)`);
+    checkSourced(r, where);
+    for (const sr of r.sources ?? []) if (!sr?.url) fail(`${where}: položka v sources bez url`);
+    if (r.action?.kind === 'tel' && r.action.phone === '155') hasLife = true;
+  }
+  if (!hasLife) fail('practical.triage: chybí řádek s voláním 155 (ohrožení života)');
+
+  // ── Co vás na pohotovosti čeká ──
+  const expectations = pr.expectations ?? [];
+  if (expectations.length < 2) fail(`practical.expectations: jen ${expectations.length} položek (čekány aspoň 2)`);
+  const eids = new Set();
+  for (const e of expectations) {
+    const where = `practical.expectations/${e.id ?? '(bez id)'}`;
+    if (!e.id || !e.title || !e.text) fail(`${where}: chybí id/title/text`);
+    if (eids.has(e.id)) fail(`${where}: duplicitní id`);
+    eids.add(e.id);
+    checkSourced(e, where);
+  }
+
+  // ── Bez praktika ──
+  if (!pr.no_gp) {
+    fail('practical: chybí blok `no_gp` (co dělat bez praktického lékaře)');
+  } else {
+    if (!pr.no_gp.title || !pr.no_gp.short || !pr.no_gp.text) fail('practical.no_gp: chybí title/short/text');
+    const links = pr.no_gp.links ?? [];
+    if (!links.length) fail('practical.no_gp: chybí odkaz, kam jít');
+    for (const l of links) if (!l.label || !/^https?:\/\//.test(String(l.url ?? ''))) fail('practical.no_gp: odkaz bez popisku nebo URL');
+    checkSourced(pr.no_gp, 'practical.no_gp');
+  }
+
+  // ── English · Українська ──
+  // Přeložený je text; fakta (čísla, poplatek, pojištění) nesou tytéž
+  // zdroje jako česká verze. Tísňové číslo v každé jazykové verzi je
+  // minimum, bez kterého blok nemá smysl.
+  const intl = pr.intl ?? {};
+  for (const lang of ['en', 'uk']) {
+    const b = intl[lang];
+    const where = `practical.intl.${lang}`;
+    if (!b) { fail(`${where}: chybí`); continue; }
+    if (!b.title) fail(`${where}: chybí title`);
+    const items = b.items ?? [];
+    if (items.length < 5) fail(`${where}: jen ${items.length} položek (čekáno aspoň 5)`);
+    for (const it of items) {
+      if (!it.q || !it.a) fail(`${where}: položka bez q/a`);
+      if (it.tel && !PHONE_RE.test(String(it.tel))) fail(`${where}: tel „${it.tel}“ není platné číslo`);
+      if (it.url && !/^https?:\/\//.test(String(it.url))) fail(`${where}: url bez schématu`);
+    }
+    if (!items.some(it => it.tel === '155' || it.tel === '112')) fail(`${where}: chybí položka s tísňovým číslem`);
+    if (!(b.sources ?? []).some(sr => sr.url)) fail(`${where}: chybí zdroje`);
+    if (!ISO_DATE_RE.test(String(b.verified_at ?? ''))) fail(`${where}: verified_at není YYYY-MM-DD`);
+  }
+
+  // ── Zpětná vazba ──
+  if (pr.feedback && !/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new$/.test(String(pr.feedback.issues_new_url ?? ''))) {
+    fail('practical.feedback.issues_new_url musí být GitHub „…/issues/new“');
+  }
+
+  // ── Aplikace (Záchranka) — nepovinné, ale když jsou, se zdrojem ──
+  for (const a of pr.apps ?? []) {
+    const where = `practical.apps/${a.id ?? '(bez id)'}`;
+    if (!a.id || !a.name || !/^https?:\/\//.test(String(a.url ?? '')) || !a.text) fail(`${where}: chybí id/name/url/text`);
+    checkSourced(a, where);
+  }
 }
 
 function validateAmbulance(data) {
