@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-centralizace-onkochirurgie-2030': {
+    kicker: 'Onkologie · centralizace', signal: 'neutral',
+    stat: '4 109',
+    claim: 'operací se do roku 2030 přesune do center.',
+    context: 'Ze 17 096 ročních výkonů. První vlna běží od 1. září.',
+  },
+  'clanek-syfilis-navrat': {
+    kicker: 'Prevence · pohlavní nemoci', signal: 'bad',
+    stat: '1 239',
+    claim: 'případů syfilis v roce 2025 — nejvíc od roku 2001.',
+    context: '11,4 na 100 tisíc obyvatel. Čtyři děti se narodily nakažené.',
+  },
   'clanek-amr-multirezistence-soubeh': {
     kicker: 'Kvalita péče · rezistence', signal: 'bad',
     stat: '26,6', statSuffix: '%', barPct: 27,
@@ -280,7 +292,8 @@ const MANIFEST = {
   'clanek-ai-act-zdravotnictvi-srpen-2026': {
     kicker: 'Digitalizace · regulace', signal: 'neutral',
     stat: '64', statSuffix: '%', barPct: 64,
-    claim: 'nemocnic už používá AI. Od 2. 8. platí evropský AI Act.',
+    claim: 'nemocnic už používá AI. Hlavní povinnosti platí od 12/2027.',
+    context: 'Digital Omnibus odložil termín z 2. 8. 2026.',
   },
   'clanek-nikez-jak-funguje-2026': {
     kicker: 'Kvalita péče',
