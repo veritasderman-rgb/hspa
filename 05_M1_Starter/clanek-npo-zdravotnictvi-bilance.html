@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<!--
+  audit:
+    last_reviewed: 2026-09-02
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-02
+    creation_phase: discovery+evergreen-write
+    primary_sources_count: 12
+    visual_elements_count: 6
+    notes: "Vytvořeno 2. 9. 2026 v rámci EVERGREEN-WRITE (položka backlogu npo-zdravotnictvi-bilance,
+      priorita 14). Datový rámec: discovery/data-frame-npo-zdravotnictvi-bilance.md.
+      SPOUŠTĚČ: unijní lhůta RRF pro splnění milníků a cílů uplynula 31. 8. 2026; téhož dne ČR podala
+      sedmou (závěrečnou) žádost o platbu. CENTRÁLNÍ KPI: 12 847 511 000 Kč — součet aktuálně platných
+      alokací dvanácti výzev NPO v gesci MZ ČR (výpočet redakce ze dvanácti textů výzev).
+      ZDROJ ČÍSEL — redakce STÁHLA A STROJOVĚ PŘEČETLA aktuálně platné texty všech dvanácti výzev
+      (PDF přes pypdf, DOCX rozbalením word/document.xml, vše 2. 9. 2026): v1 3.0, v2 3.0, v3 3.0,
+      v4 2.0, v5 1.0, v6 5.0, v7 2.0, v8 4.0, v9 2.0, v10 2.0, v11 3.0, v12 2.0; u výzev 1, 4, 6, 7, 9,
+      10 a 12 navíc původní verzi 1.0 kvůli porovnání termínů a alokací. Dále devět XLSX seznamů
+      schválených dotací (výzvy 5–12) — sečteny listy 'Zcela poskytnuto' (u části souborů s překlepem
+      'Zcela posknuto') a 'Zčásti poskytnuto', sloupec 'Přidělená výše dotace Kč (100% RRF)'; listy
+      'Zcela zamítnuto' a 'Seznam náhradníků' se NESČÍTAJÍ.
+      LHŮTA OVĚŘENA VERBATIM na EUR-Lex (CELEX 32021R0241, staženo 2. 9. 2026) ve dvou článcích:
+      čl. 18 odst. 4 písm. i) 'envisaged milestones, targets and an indicative timetable for the
+      implementation of the reforms, and investments to be completed by 31 August 2026' a čl. 20 odst. 5
+      písm. d) 'the time limit, which should be no later than 31 August 2026, by which the final
+      milestones and targets for both investment projects and reforms must be completed'. Recitál 53
+      (platby do 31. 12. 2026) je v textu výslovně označen jako recitál.
+      DOPOČTY REDAKCE (v textu i ve figcaption označené jako výpočet): součet alokací 12 847 511 000 Kč;
+      po komponentách 6.1 = 4 120 206 000 Kč a 6.2 = 8 727 305 000 Kč; podíl 3. výzvy 31,7 %; podíl
+      předem definovaných projektů (výzvy 1–4) 52,9 %; u výzev 5–12 alokace 6 045 900 000 Kč, přiděleno
+      5 766 860 220 Kč = 95,4 %, nerozděleno 279 039 780 Kč, z toho 167 573 395 Kč u 7. výzvy
+      (77,4 % vyčerpání) a 53 483 070 Kč u 11. výzvy (66,3 %), dohromady 79 % zbytku; rozdíl součtu
+      alokací proti obálce 12 441 mil. Kč = +406 511 000 Kč (+3,3 %).
+      METODICKÉ PASTI OŠETŘENÉ V TEXTU: (1) národní 'datum ukončení realizace projektu' NENÍ totéž co
+      unijní lhůta pro milníky a cíle — RRF platí za splněné milníky, ne proti fakturám, text proto
+      NETVRDÍ, že posun znamená porušení nařízení ani ztrátu peněz; (2) 'přiděleno' jsou schválené
+      dotace v době rozhodnutí (2023–2024), ne proplacené výdaje; (3) u 11. výzvy MZ zveřejnilo seznamy
+      jen za kola k 15. 4. a 15. 7. 2024, ačkoli výzva počítala i s koly k 15. 10. 2024 a 15. 1. 2025 —
+      podíl 66,3 % je proto v textu označen jako DOLNÍ ODHAD; (4) u výzev 1–4 (předem definované
+      projekty) se neuvádí žádná vyčerpaná částka, protože ji MZ nezveřejnilo.
+      NEOVĚŘENO — VĚDOMĚ VYNECHÁNO: skutečně proplacené částky po výzvách (nezveřejňuje je MZ ani
+      planobnovy.gov.cz); znění milníků a cílů komponent 6.1 a 6.2 v prováděcím rozhodnutí Rady a to,
+      které z 38 milníků sedmé žádosti patří zdravotnictví; důvod posunů termínů (MZ ho neuvádí ani
+      v jednom z dvanácti oznámení); seznamy 11. výzvy za pozdější kola; vysvětlení rozdílu mezi
+      součtem alokací a obálkou 12 441 mil. Kč — vedeno jako otevřená otázka, NE jako tvrzení
+      o překročení rozpočtu.
+      DROBNÉ NESROVNALOSTI V PODKLADECH, které text nekomentuje jako tvrzení: text 2. výzvy v. 3.0 má
+      v záhlaví 'Platnost od 19. 6. 2025', ačkoli soubor leží v adresáři 2026/06 a oznámení MZ z
+      19. 6. 2026 uvádí platnost od 19. 6. 2026 (článek přebírá datum z oznámení); oznámení o změně
+      11. výzvy má v těle větu o '4. výzvě' (posun je ověřen i v textu výzvy v. 3.0); texty 5. a
+      6. výzvy mají v identifikační tabulce chybně 'Číslo výzvy 1.'.
+      Všech 17 externích odkazů ověřeno na HTTP 200 dne 2. 9. 2026.
+      published:false, robots noindex — publikační cron nastaví index,follow, povýší status a přidělí číslo."
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dvanáct výzev, deset posunutých termínů. Co plán obnovy nechal v českém zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Unijní lhůta plánu obnovy uplynula 31. srpna 2026. Dvanáct zdravotnických výzev má dnes v platných textech alokaci 12 847 511 000 Kč, deset z nich dostalo cestou nový termín a jedna — čtyřmiliardové Motolské onkologické centrum — má termín až na 30. listopadu. U soutěžních výzev zůstalo nerozděleno 279 milionů korun.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dvanáct výzev, deset posunutých termínů. Co plán obnovy nechal v českém zdravotnictví">
+<meta property="og:description" content="Bilance po 31. srpnu 2026: 12,85 miliardy korun ve dvanácti výzvách, deset posunutých termínů, jedna výzva za unijní lhůtou a 279 milionů, které si u soutěžních výzev nikdo nevzal.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-03">
+<meta property="article:section" content="Financování">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Národní plán obnovy · komponenty 6.1 a 6.2 · RRF · dotace</span>
+      </div>
+      <h1 class="article-title">Dvanáct výzev, deset posunutých termínů. Co plán obnovy nechal v českém zdravotnictví</h1>
+      <p class="article-deck">
+        V pondělí 31. srpna uplynula lhůta, kterou nařízení o Nástroji pro oživení a odolnost
+        stanovilo pro splnění milníků a cílů národních plánů obnovy. Téhož dne podala Česká
+        republika sedmou a závěrečnou žádost o platbu. Zdravotnická část plánu má dnes ve
+        dvanácti platných textech výzev alokaci <strong>12 847 511 000 korun</strong>. Deset
+        z těch dvanácti výzev dostalo cestou nový termín dokončení. Jedna — čtyřmiliardové
+        Motolské onkologické centrum — má termín až na 30. listopadu, tedy tři měsíce za
+        unijní lhůtou. A u soutěžních výzev zůstalo nerozděleno 279 milionů korun, ze
+        čtyř pětin ve dvou z nich.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">3. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Plán obnovy se v českém zdravotnictví neodehrával jako jeden velký projekt, ale jako
+        dvanáct dotačních výzev vyhlašovaných postupně mezi zářím 2022 a květnem 2024. Každá
+        má svůj text, svou alokaci, svůj termín a svou historii změn. Dokud lhůta běžela, dal
+        se každý posun číst jako provozní detail. Teď, když lhůta skončila, jde je poprvé
+        sečíst — a součet ukazuje něco jiného než jednotlivosti.
+      </p>
+
+      <p>
+        Redakce proto udělala to jediné, co u takového souboru dává smysl: stáhla
+        z webu ministerstva zdravotnictví <strong>aktuálně platné znění všech dvanácti výzev</strong>
+        (sedm ve formátu PDF, pět ve Wordu), u sedmi z nich i původní verzi z doby vyhlášení,
+        a k tomu devět tabulek se schválenými dotacemi. Všechna čísla níž pocházejí z těchto
+        dokumentů, ne z tiskových zpráv.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avNpoBilanceHeroH">
+        <figcaption class="av-figure-h" id="avNpoBilanceHeroH">Zdravotnická část plánu obnovy k 2. září 2026</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="12847511000" data-suffix=" Kč">12 847 511 000 Kč</span>
+            <span class="av-counter-label">součet alokací dvanácti výzev</span>
+            <span class="av-counter-foot">komponenty 6.1 (4,12 mld.) a 6.2 (8,73 mld.); výpočet redakce z platných textů výzev</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="10" data-suffix=" z 12">10 z 12</span>
+            <span class="av-counter-label">výzev dostalo nový termín dokončení</span>
+            <span class="av-counter-foot">doloženo oznámeními MZ „změnilo N. výzvu NPO“ z let 2023–2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="31.7" data-decimals="1" data-suffix=" %">31,7 %</span>
+            <span class="av-counter-label">balíku má termín za unijní lhůtou</span>
+            <span class="av-counter-foot">jediná taková výzva je 3. (Motol), 4 073 405 000 Kč, termín 30. 11. 2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="279039780" data-suffix=" Kč">279 039 780 Kč</span>
+            <span class="av-counter-label">nerozděleno u soutěžních výzev</span>
+            <span class="av-counter-foot">z alokace 6 045 900 000 Kč výzev 5–12; 79 % zbytku je v 7. a 11. výzvě</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví ČR — aktuálně platné texty výzev č. 1–12 Národního plánu obnovy a seznamy schválených dotací u výzev 5–12; redakce všechny dokumenty stáhla z mzd.gov.cz a strojově z nich vytáhla text 2. září 2026. Všechny čtyři hodnoty jsou součty nebo podíly redakce z těchto dokumentů; postup je popsán v textu.</p>
+      </figure>
+
+      <h3>Co je 31. srpna 2026 za datum</h3>
+
+      <p>
+        Nástroj pro oživení a odolnost — zdroj, ze kterého se plán obnovy financuje — má
+        v zakládajícím nařízení výslovnou koncovku, a to hned na dvou místech. Článek 18
+        odst. 4 písm. i) nařízení Evropského parlamentu a Rady (EU) 2021/241 požaduje, aby
+        plán obsahoval <em>„envisaged milestones, targets and an indicative timetable for the
+        implementation of the reforms, and investments to be completed by 31 August 2026“</em>.
+        Článek 20 odst. 5 písm. d) pak ukládá prováděcímu rozhodnutí Rady stanovit
+        <em>„the time limit, which should be no later than 31 August 2026, by which the final
+        milestones and targets for both investment projects and reforms must be completed“</em>.
+        Obě věty jsou v originálním znění nařízení; recitál 53 k tomu dodává, že platby členským
+        státům by měly proběhnout do 31. prosince 2026 — to je ale recitál, ne operativní článek.
+      </p>
+
+      <p>
+        Že to datum bylo skutečně tvrdé, ukázala i vláda: <strong>31. srpna</strong> podala
+        Česká republika sedmou žádost o platbu. Podle portálu Národního plánu obnovy při ní
+        splnila „dalších <strong>38 milníků a cílů</strong>“ a žádá o „zbývajících
+        <strong>11 %</strong>“ z celkové částky <strong>214,6 miliardy korun</strong>
+        (208,4 miliardy v grantech a 6,2 miliardy v půjčkách). Komise má splnění posoudit
+        a peníze uvolnit „na podzim letošního roku“. Vrchní ředitelka sekce fondů EU
+        ministerstva průmyslu a obchodu Jitka Opičková k tomu v tiskové zprávě uvedla:
+        <em>„České republice se podařilo naplnit cíle, ke kterým se zavázala v rámci Národního
+        plánu obnovy. Díky tomu můžeme dočerpat celkový balík peněz, který nám byl za splněné
+        milníky a cíle vyhrazen, a úspěšně tak celý projekt Národního plánu obnovy završit.“</em>
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="12441" data-suffix=" mil. Kč">12 441 mil. Kč</span>
+          <span class="av-counter-label">obálka pro pilíř „Zdraví a odolnost obyvatel“, kterou portál plánu obnovy uvádí dodnes</span>
+          <span class="av-counter-foot">komponenta 6.1 za 3 901 mil. a 6.2 za 8 540 mil. Kč</span>
+        </div>
+      </aside>
+
+      <h3>Dvanáct výzev na jednom místě</h3>
+
+      <p>
+        Ministerstvo zdravotnictví je vlastníkem dvou komponent plánu: <strong>6.1 Zvýšení
+        odolnosti systému zdravotní péče</strong> a <strong>6.2 Národní plán na posílení
+        onkologické prevence a péče</strong>. Do nich spadá dvanáct výzev, vyhlášených podle
+        § 14j zákona č. 218/2000 Sb., o rozpočtových pravidlech. Přehled, jak vypadají
+        v dnes platných verzích, nikde souhrnně publikovaný není — tabulka níž je proto
+        sestavená z dvanácti samostatných dokumentů.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avNpoTabH">
+        <figcaption class="av-figure-h" id="avNpoTabH">Všech dvanáct zdravotnických výzev plánu obnovy v aktuálně platném znění</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Výzva</th>
+                <th scope="col">Komp.</th>
+                <th scope="col">Předmět</th>
+                <th scope="col" class="av-num">Alokace (Kč)</th>
+                <th scope="col">Konec realizace</th>
+                <th scope="col">Verze / platnost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1.</th><td>6.2</td>
+                <td>Centrum onkologické prevence, Masarykův onkologický ústav</td>
+                <td class="av-num">826 000 000</td><td>30. 6. 2026</td><td>3.0 / 24. 4. 2026</td>
+              </tr>
+              <tr>
+                <th scope="row">2.</th><td>6.1</td>
+                <td>Centrum kardiovaskulární a transplantační medicíny (CKTCH Brno)</td>
+                <td class="av-num">1 280 856 000</td><td>31. 8. 2026</td><td>3.0 / 19. 6. 2026</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">3.</th><td>6.2</td>
+                <td>Český onkologický institut – Motolské onkologické centrum</td>
+                <td class="av-num">4 073 405 000</td><td><strong>30. 11. 2026</strong></td><td>3.0 / 27. 8. 2026</td>
+              </tr>
+              <tr>
+                <th scope="row">4.</th><td>6.1</td>
+                <td>Simulační centrum intenzivní medicíny (FN Motol)</td>
+                <td class="av-num">621 350 000</td><td>28. 2. 2026</td><td>2.0 / 1. 12. 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">5.</th><td>6.1</td>
+                <td>Zlepšení vzdělávání zdravotnických pracovníků (IPVZ)</td>
+                <td class="av-num">100 000 000</td><td>31. 12. 2025</td><td>1.0 / 20. 12. 2022</td>
+              </tr>
+              <tr>
+                <th scope="row">6.</th><td>6.1</td>
+                <td>Rehabilitace — síť pracovišť komplexní rehabilitace</td>
+                <td class="av-num">1 157 000 000</td><td>30. 6. 2026</td><td>5.0 / 31. 10. 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">7.</th><td>6.1</td>
+                <td>Rehabilitace — cerebrovaskulární a traumatologická centra I. typu</td>
+                <td class="av-num">743 000 000</td><td>30. 6. 2026</td><td>2.0 / 31. 10. 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">8.</th><td>6.2</td>
+                <td>Vysoce specializovaná hematoonkologická a onkologická péče</td>
+                <td class="av-num">3 556 900 000</td><td>31. 8. 2026</td><td>4.0 / 23. 6. 2026</td>
+              </tr>
+              <tr>
+                <th scope="row">9.</th><td>6.2</td>
+                <td>Informační zázemí screeningu nádorů (Národní screeningové centrum, ÚZIS)</td>
+                <td class="av-num">112 500 000</td><td>30. 4. 2026</td><td>2.0 / 15. 10. 2023</td>
+              </tr>
+              <tr>
+                <th scope="row">10.</th><td>6.1</td>
+                <td>Posílení a rozvoj kapacit simulačních center</td>
+                <td class="av-num">158 000 000</td><td>30. 6. 2026</td><td>2.0 / 31. 10. 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">11.</th><td>6.2</td>
+                <td>Screening kolorektálního karcinomu II</td>
+                <td class="av-num">158 500 000</td><td>max. 31. 3. 2026</td><td>3.0 / 30. 11. 2025</td>
+              </tr>
+              <tr>
+                <th scope="row">12.</th><td>6.1</td>
+                <td>Rehabilitace — popáleninová centra</td>
+                <td class="av-num">60 000 000</td><td>30. 6. 2026</td><td>2.0 / 31. 10. 2025</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row">Celkem</th><td colspan="2">6.1 = 4 120 206 000 Kč · 6.2 = 8 727 305 000 Kč</td>
+                <td class="av-num"><strong>12 847 511 000</strong></td><td colspan="2">míra podpory u všech výzev 100 %</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví ČR — texty výzev č. 1–12 Národního plánu obnovy v aktuálně platných verzích, staženo z mzd.gov.cz a strojově přečteno 2. září 2026. U 2. výzvy je datum platnosti převzato z oznámení ministerstva z 19. 6. 2026. Součty za komponenty i celkový součet jsou výpočet redakce.</p>
+      </figure>
+
+      <p>
+        Z tabulky je vidět první věc, kterou tiskové zprávy neříkají: <strong>tři výzvy nesou
+        69 procent všech peněz.</strong> Motolské onkologické centrum (4,07 miliardy),
+        hematoonkologie a onkologie (3,56 miliardy) a brněnské kardiovaskulární centrum
+        (1,28 miliardy) dohromady dělají 8,91 miliardy z 12,85. Když se k nim přidají zbylé
+        dva předem definované projekty — Masarykův onkologický ústav a simulační centrum
+        v Motole — vyjde, že <strong>52,9 procenta balíku šlo výzvami s jediným možným
+        žadatelem</strong>, u kterých se o peníze nesoutěžilo.
+      </p>
+
+      <h3>Termíny: deset posunů ve dvanácti výzvách</h3>
+
+      <p>
+        Druhá věc je časová. Původní verze výzev počítaly skoro bez výjimky s koncem
+        realizace k <strong>31. prosinci 2025</strong> — tak to má text 1., 4., 5., 6., 7.
+        i 10. výzvy ve verzi 1.0; 9. a 12. výzva měly 30. dubna 2026. Dnes takový termín drží
+        jediná výzva, ta pátá. Ostatní se posunuly, některé opakovaně.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avNpoTimelineH">
+        <figcaption class="av-figure-h" id="avNpoTimelineH">Kdy ministerstvo posouvalo termíny: vlny změn</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">27. 2. 2023</time>
+            <h4 class="av-timeline-title">5. výzva — jediná změna, která se termínu dokončení netýká</h4>
+            <p class="av-timeline-desc">Posunut jen termín pro příjem žádostí, z 28. 2. na 31. 3. 2023. Termín dokončení zůstává 31. 12. 2025 a zůstane jím dodnes.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">13. 10. 2023</time>
+            <h4 class="av-timeline-title">9. výzva — změna činností a navýšení alokace</h4>
+            <p class="av-timeline-desc">Alokace roste ze 105 000 000 na 112 500 000 Kč. Termín 30. 4. 2026 zůstává; jde o druhou ze dvou výzev, u kterých se datum dokončení nikdy neposunulo.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">30.–31. 10. 2025</time>
+            <h4 class="av-timeline-title">Čtyři výzvy najednou dostávají 30. červen 2026</h4>
+            <p class="av-timeline-desc">6., 7., 10. a 12. výzva. U 7. a 10. výzvy je to posun z 31. 12. 2025, tedy o půl roku; u 6. výzvy z 30. 4. 2026 a u 12. výzvy z 30. 4. 2026.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">30. 11. – 1. 12. 2025</time>
+            <h4 class="av-timeline-title">4. a 11. výzva na jaro 2026</h4>
+            <p class="av-timeline-desc">Simulační centrum intenzivní medicíny z 31. 12. 2025 na 28. 2. 2026, s alokací navýšenou z 564 750 000 na 621 350 000 Kč. Kolorektální screening z 31. 12. 2025 na 31. 3. 2026.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">23. 4. 2026</time>
+            <h4 class="av-timeline-title">1. výzva — posun z data, které už bylo pryč</h4>
+            <p class="av-timeline-desc">Centrum onkologické prevence v Brně dostává 30. 6. 2026. Oznámení ministerstva uvádí, že se posouvá „z 30. 4. 2025“ — tedy z termínu, který v tu chvíli uplynul skoro před rokem.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">19. a 23. 6. 2026</time>
+            <h4 class="av-timeline-title">2. a 8. výzva míří přesně na den unijní lhůty</h4>
+            <p class="av-timeline-desc">Obě dostávají 31. 8. 2026. U 2. výzvy (kardiovaskulární centrum v Brně) jde o posun z 30. 6. 2026; u 8. výzvy ministerstvo mluví o „úpravě možného termínu pro ukončení realizace projektů“.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">26. 8. 2026</time>
+            <h4 class="av-timeline-title">3. výzva jako jediná překračuje lhůtu</h4>
+            <p class="av-timeline-desc">Motolské onkologické centrum z 31. 8. na 30. 11. 2026. Změna platí od 27. srpna, tedy čtyři dny před původním termínem, a týká se 31,7 % celého resortního balíku.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví ČR — oznámení „Ministerstvo zdravotnictví změnilo N. výzvu NPO“ pro výzvy 1–12, mzd.gov.cz; data posunů i data platnosti změn jsou převzata z těchto oznámení a ověřena proti aktuálním textům výzev. Ověřeno 2. září 2026.</p>
+      </figure>
+
+      <p>
+        Vzorec je čitelný. Termíny se nehýbaly rovnoměrně, ale ve třech vlnách: na podzim 2025,
+        kdy šest výzev najednou dostalo nová data, v červnu 2026, kdy se dvě velké výzvy
+        srovnaly přesně na unijní lhůtu, a nakonec v posledním srpnovém týdnu, kdy jedna
+        z nich lhůtu překročila. Důvod ministerstvo neuvádí <strong>ani u jedné</strong>
+        z dvanácti změn — oznámení popisují, co se mění, ne proč.
+      </p>
+
+      <div class="article-callout-caveat">
+        <p>
+          <strong>Pozor na dvě různé lhůty.</strong> „Datum ukončení realizace projektu“
+          a „datum ukončení způsobilosti výdajů“ jsou parametry české dotační výzvy — říkají,
+          do kdy může příjemce utrácet a kdy má být hotovo podle národních pravidel. Unijní
+          lhůta 31. srpna 2026 se týká něčeho jiného: splnění <em>milníků a cílů</em>, na které
+          je vázána platba z Nástroje pro oživení a odolnost. RRF je výkonnostní nástroj —
+          Komise proplácí splněné milníky a cíle, ne jednotlivé faktury. Z toho, že jedna výzva
+          má národní termín po 31. srpnu, tedy <strong>neplyne</strong>, že by bylo porušeno
+          nařízení nebo že by Česko o peníze přišlo. Plyne z toho jen to, že u projektu za
+          skoro třetinu resortní alokace běží realizace dál i po dni, ke kterému vláda ohlásila
+          splnění cílů.
+        </p>
+      </div>
+
+      <h3>Kolik z peněz si někdo vzal</h3>
+
+      <p>
+        Osm výzev bylo soutěžních nebo průběžných — ucházelo se o ně víc žadatelů. U nich
+        ministerstvo zveřejnilo tabulky „Seznam žádostí o dotaci, u nichž se navrhuje dotaci
+        poskytnout“ s částkou u každého projektu. Sečteno dohromady: z alokace
+        <strong>6 045 900 000 Kč</strong> se rozdělilo <strong>5 766 860 220 Kč</strong> mezi
+        <strong>106 projektů</strong>, tedy 95,4 procenta. Zbylých
+        <strong>279 039 780 Kč</strong> ale není rozprostřeno rovnoměrně.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avNpoCerpaniH">
+        <figcaption class="av-figure-h" id="avNpoCerpaniH">Soutěžní a průběžné výzvy: kolik z alokace našlo příjemce</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Výzva</th>
+                <th scope="col" class="av-num">Alokace (Kč)</th>
+                <th scope="col" class="av-num">Přiděleno (Kč)</th>
+                <th scope="col" class="av-num">Podíl</th>
+                <th scope="col" class="av-num">Projektů</th>
+                <th scope="col" class="av-num">Nerozděleno (Kč)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">5. — vzdělávání (IPVZ)</th><td class="av-num">100 000 000</td><td class="av-num">99 967 508</td><td class="av-num">100,0 %</td><td class="av-num">1</td><td class="av-num">32 492</td></tr>
+              <tr><th scope="row">6. — síť rehabilitace</th><td class="av-num">1 157 000 000</td><td class="av-num">1 140 980 641</td><td class="av-num">98,6 %</td><td class="av-num">5</td><td class="av-num">16 019 359</td></tr>
+              <tr class="av-row-highlight"><th scope="row">7. — rehabilitace v centrech I. typu</th><td class="av-num">743 000 000</td><td class="av-num">575 426 605</td><td class="av-num"><strong>77,4 %</strong></td><td class="av-num">13</td><td class="av-num"><strong>167 573 395</strong></td></tr>
+              <tr><th scope="row">8. — hematoonkologie a onkologie</th><td class="av-num">3 556 900 000</td><td class="av-num">3 516 427 878</td><td class="av-num">98,9 %</td><td class="av-num">24</td><td class="av-num">40 472 122</td></tr>
+              <tr><th scope="row">9. — screening (ÚZIS)</th><td class="av-num">112 500 000</td><td class="av-num">111 367 992</td><td class="av-num">99,0 %</td><td class="av-num">1</td><td class="av-num">1 132 008</td></tr>
+              <tr><th scope="row">10. — simulační centra</th><td class="av-num">158 000 000</td><td class="av-num">157 672 667</td><td class="av-num">99,8 %</td><td class="av-num">8</td><td class="av-num">327 333</td></tr>
+              <tr class="av-row-highlight"><th scope="row">11. — kolorektální screening</th><td class="av-num">158 500 000</td><td class="av-num">105 016 930</td><td class="av-num"><strong>66,3 %</strong></td><td class="av-num">51</td><td class="av-num"><strong>53 483 070</strong></td></tr>
+              <tr><th scope="row">12. — popáleninová centra</th><td class="av-num">60 000 000</td><td class="av-num">60 000 000</td><td class="av-num">100,0 %</td><td class="av-num">3</td><td class="av-num">0</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><th scope="row">Celkem</th><td class="av-num"><strong>6 045 900 000</strong></td><td class="av-num"><strong>5 766 860 220</strong></td><td class="av-num"><strong>95,4 %</strong></td><td class="av-num"><strong>106</strong></td><td class="av-num"><strong>279 039 780</strong></td></tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví ČR — soubory „VYZVA N — Seznam projektů na web“ (XLSX) přiložené k oznámením o schválení žádostí, mzd.gov.cz; staženo a strojově přečteno 2. září 2026. Sečteny listy „Zcela poskytnuto“ a „Zčásti poskytnuto“, sloupec „Přidělená výše dotace Kč (100&nbsp;% RRF)“; listy „Zcela zamítnuto“ a „Seznam náhradníků“ se nezapočítávají. Alokace jsou z platných textů výzev. Podíly, rozdíly a součty jsou výpočet redakce. <strong>Přiděleno ≠ vyčerpáno:</strong> jde o schválené dotace v době rozhodnutí (2023–2024), ne o proplacené výdaje. U 11. výzvy jsou zveřejněná jen kola k 15. 4. a 15. 7. 2024, takže 66,3 % je dolní odhad (viz text). Výzvy 1–4 jsou předem definované projekty s jediným žadatelem a samostatný seznam k nim ministerstvo nezveřejnilo.</p>
+      </figure>
+
+      <p>
+        Dvě výzvy nesou <strong>79 procent</strong> celého nerozděleného zbytku. U
+        <strong>7. výzvy</strong> — vybavení jednotek intenzivní neurorehabilitace
+        a rehabilitačních jednotek v centrech vysoce specializované cerebrovaskulární
+        a traumatologické péče — zbylo 167,6 milionu, protože strop na jednoho žadatele byl
+        49,5 milionu a přihlásilo se třináct poskytovatelů. Peníze tam byly, žadatelé
+        do počtu ne.
+      </p>
+
+      <p>
+        U <strong>11. výzvy</strong> na screening kolorektálního karcinomu je obrázek jiný:
+        žadatelů bylo padesát jedna, ale šlo o drobné projekty (jeden dostal dva miliony, jiný
+        1,86 milionu), takže se dohromady rozdělilo jen 105 milionů ze 158,5. Tady je ale
+        potřeba být opatrný: výzva byla průběžná se čtyřmi hodnoticími koly až do ledna 2025,
+        a ministerstvo zveřejnilo seznamy jen za první dvě z nich. <strong>Podíl 66,3 procenta
+        je proto dolní odhad</strong>, ne konečné číslo — a to, že konečné číslo veřejně
+        dohledat nejde, je samo o sobě zjištění.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="49.5" data-decimals="1" data-suffix=" mil. Kč">49,5 mil. Kč</span>
+          <span class="av-counter-label">strop dotace na jednoho žadatele u 7. výzvy</span>
+          <span class="av-counter-foot">třináct schválených projektů vyčerpalo 77,4 % alokace; 167,6 mil. Kč na rehabilitaci po kritických stavech zůstalo nerozděleno</span>
+        </div>
+      </aside>
+
+      <h3>Jedno číslo, které nesedí</h3>
+
+      <p>
+        Portál Národního plánu obnovy dodnes uvádí u pilíře „Zdraví a odolnost obyvatel“
+        alokaci <strong>12 441 milionů korun</strong>, rozdělenou na komponentu 6.1 za
+        3 901 milionů a 6.2 za 8 540 milionů. Totéž číslo má i přehledová stránka ministerstva
+        zdravotnictví. Součet alokací dvanácti výzev, jak je dnes mají jejich platné texty, je
+        ale <strong>12 847 511 000 Kč</strong> — o 406,5 milionu, tedy o 3,3 procenta, víc.
+        Rozdíl je na obou komponentách (+219,2 milionu u 6.1, +187,3 milionu u 6.2).
+      </p>
+
+      <p>
+        Redakce z toho <strong>nevyvozuje</strong>, že se překročil rozpočet. Doložený kontext
+        je jiný: stránka ministerstva pochází z října 2021 s poslední aktualizací v dubnu 2022
+        a uvádí pro celou Českou republiku „cca 179 mld. Kč“, zatímco aktuální celková částka
+        je 214,6 miliardy — plán byl mezitím revidován a obálka na té stránce revizi předchází.
+        Proč tutéž původní částku dál zobrazuje i aktuálně provozovaný portál plánu obnovy,
+        z veřejných dokumentů nevyplývá. Je to otázka na ministerstvo, ne závěr.
+      </p>
+
+      <h3>Co z toho plyne pro systém</h3>
+
+      <p>
+        Plán obnovy byl pro české zdravotnictví jednorázová investiční vlna v objemu, který
+        se v resortu běžně neobjevuje: 12,85 miliardy korun je zhruba tolik, kolik stojí roční
+        provoz středně velké fakultní nemocnice. Šla skoro celá do <strong>staveb, přístrojů
+        a informačních systémů</strong> — do onkologických a kardiovaskulárních center,
+        rehabilitačních lůžek, simulační výuky a screeningových programů. Do provozu, tedy do
+        platů a úhrad, nešla ani koruna, protože na to RRF není.
+      </p>
+
+      <p>
+        Právě proto je bilance po lhůtě zajímavá i mimo účetnictví. Investice zvedají kapacitu,
+        ale kapacitu musí někdo zaplatit provozně — nová onkologická lůžka, neurorehabilitační
+        jednotky nebo screeningová endoskopická pracoviště se po dokončení projektu překlápějí
+        do systému veřejného zdravotního pojištění, který jede na 8,6 procenta HDP. Rozdíly,
+        které měly investice zmenšit, jsou přitom pořád velké: standardizovaná úmrtnost na
+        zhoubné novotvary je v Česku 250,4 na 100 000 obyvatel a kapacita akutních lůžek
+        4,0 na 1 000 obyvatel. Jestli se investiční vlna projeví v těchto číslech, se pozná
+        až za roky.
+      </p>
+
+      <h3>Co sledovat dál</h3>
+
+      <p>
+        Tři věci. Za prvé <strong>posouzení sedmé žádosti o platbu</strong> Komisí, které má
+        podle portálu plánu obnovy skončit uvolněním peněz na podzim — teprve tehdy bude jasné,
+        že se všechny milníky uznaly. Za druhé <strong>3. výzva</strong>: jestli se Motolské
+        onkologické centrum stihne do 30. listopadu a jak se pak vypořádá rozdíl mezi národním
+        termínem a unijní lhůtou. A za třetí <strong>osud nerozdělených 279 milionů</strong> —
+        u výzev, které skončily, se nevyčerpaná alokace nikam nepřevádí, ale to, jestli se
+        rehabilitační kapacita, na kterou byly určeny, dobuduje z jiných zdrojů, je otázka
+        pro rozpočet.
+      </p>
+
+      <p>
+        Pět věcí zůstává po veřejně dostupných dokumentech nezodpovězených a redakce je vede
+        jako otevřené: skutečně proplacené částky po jednotlivých výzvách (nezveřejňuje je
+        ministerstvo ani portál plánu obnovy, jehož sekce „Plnění NPO“ je vedena po milnících,
+        ne po penězích na resort); které z 38 milníků sedmé žádosti patří zdravotnictví; důvod
+        posunů termínů; výsledky pozdějších kol 11. výzvy; a onen rozdíl 406,5 milionu mezi
+        obálkou a součtem alokací. Na všech pět zná odpověď ministerstvo zdravotnictví;
+        z toho, co zveřejnilo, se vyčíst nedají.
+      </p>
+
+      <aside class="article-related" aria-labelledby="related-h">
+        <h4 id="related-h">Související obsah</h4>
+        <ul class="article-related-list">
+          <li><a href="clanek-npo-motol-termin-2026.html">→ Čtyři dny před koncem lhůty</a> — detail 3. výzvy a posunu termínu Motolského onkologického centra</li>
+          <li><a href="clanek-centrum-onkologicke-prevence-mou-2026.html">→ Centrum onkologické prevence za 1,12 miliardy</a> — jak dopadl brněnský projekt 1. výzvy</li>
+          <li><a href="clanek-pet-skenery.html">→ PET skenery</a> — diagnostická kapacita, kterou plán obnovy taky financoval</li>
+          <li><a href="clanek-ncez-financovani-2027.html">→ Financování elektronizace po roce 2026</a> — co bude s digitálními projekty, až plán obnovy skončí</li>
+        </ul>
+      </aside>
+
+      <aside class="article-databox" aria-labelledby="databox-h">
+        <div class="ed-kicker">Data v tomto článku</div>
+        <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+        <ul class="article-databox-list">
+          <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,6 % (2024); rámec, do kterého jednorázová investiční vlna 12,85 mld. Kč patří</li>
+          <li><a href="indicator.html?id=mortalita_onkologicka"><strong>Mortalita na zhoubné novotvary</strong></a> — 250,43 na 100 000 obyvatel (2023, standardizovaná); cíl komponenty 6.2</li>
+          <li><a href="indicator.html?id=postele_akutni_per_1000"><strong>Akutní lůžka na 1 000 obyvatel</strong></a> — 4,0 (2023); kapacita, kterou stavební část plánu rozšiřuje</li>
+          <li><a href="indicator.html?id=luzka_jip_per_100k"><strong>Lůžka intenzivní péče (JIP/ARO)</strong></a> — 44,61 na 100 000 obyvatel (2023); komponenta 6.1 míří na péči po kritických stavech</li>
+        </ul>
+      </aside>
+
+      <aside class="article-sources" aria-labelledby="sources-h">
+        <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+        <ul class="article-sources-list">
+          <li><a href="https://planobnovy.gov.cz/hlavni-pilire/zdravi-a-odolnost-obyvatel/" rel="external noopener">Národní plán obnovy — pilíř Zdraví a odolnost obyvatel: obálka 12 441 mil. Kč, komponenty 6.1 a 6.2</a></li>
+          <li><a href="https://planobnovy.gov.cz/cesko-podalo-zaverecnou-zadost-o-platbu-z-rrf/" rel="external noopener">Národní plán obnovy — Česko podalo závěrečnou žádost o platbu z RRF (31. 8. 2026): 38 milníků, 11 %, 214,6 mld. Kč</a></li>
+          <li><a href="https://mpo.gov.cz/cz/rozcestnik/pro-media/tiskove-zpravy/cesko-podalo-zaverecnou-zadost-o-platbu-z-nastroje-pro-oziveni-a-odolnost--294411/" rel="external noopener">MPO ČR — tisková zpráva k závěrečné žádosti o platbu (31. 8. 2026): struktura 208,4 mld. grantů a 6,2 mld. půjček</a></li>
+          <li><a href="https://mzd.gov.cz/podpora-zdravotnictvi-z-narodniho-planu-obnovy/" rel="external noopener">MZ ČR — Podpora zdravotnictví z Národního plánu obnovy: komponenty 6.1 a 6.2, aktivity, alokace</a></li>
+          <li><a href="https://eur-lex.europa.eu/eli/reg/2021/241/oj" rel="external noopener">EUR-Lex — nařízení (EU) 2021/241 o Nástroji pro oživení a odolnost: čl. 18 odst. 4 písm. i), čl. 20 odst. 5 písm. d) a recitál 53</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2026/04/1.-Text-vyzvy-c.-1_verze_3.0.pdf" rel="external noopener">MZ ČR — text 1. výzvy NPO, verze 3.0 (PDF): alokace 826 000 000 Kč, termín 30. 6. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2026/06/1-Text_-vyzvy-c.-2-CKTCH-verze-3.0.pdf" rel="external noopener">MZ ČR — text 2. výzvy NPO (CKTCH Brno), verze 3.0 (PDF): alokace 1 280 856 000 Kč, termín 31. 8. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2026/08/01_V_Text_-3_vyzvy_NP_MOC-3.0.pdf" rel="external noopener">MZ ČR — text 3. výzvy NPO (Motol), verze 3.0 (PDF): alokace 4 073 405 000 Kč, termín 30. 11. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/12/00_V_SIM_C_Text-vyzvy_2.0.docx" rel="external noopener">MZ ČR — text 4. výzvy NPO (simulační centrum), verze 2.0 (DOCX): navýšená alokace 621 350 000 Kč</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2022/12/Text_5._vyzvy-NPO-6.1-1.docx" rel="external noopener">MZ ČR — text 5. výzvy NPO (IPVZ), verze 1.0 (DOCX): alokace 100 000 000 Kč</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/10/Text_6._vyzvy-NPO-6.1.docx" rel="external noopener">MZ ČR — text 6. výzvy NPO, verze 5.0 (DOCX): alokace 1 157 000 000 Kč rozdělená na aktivity A a B</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/10/Text_7._vyzvy-NPO-6.1.docx" rel="external noopener">MZ ČR — text 7. výzvy NPO, verze 2.0 (DOCX): alokace 743 000 000 Kč, strop 49 500 000 Kč na žadatele</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2026/06/Text_8._vyzvy_NPO_6.2_4.0.pdf" rel="external noopener">MZ ČR — text 8. výzvy NPO, verze 4.0 (PDF): alokace 3 556 900 000 Kč po aktivitách A, B, C</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2023/10/Text_9._vyzvy-NPO-6.2-ZMENA.docx" rel="external noopener">MZ ČR — text 9. výzvy NPO, verze 2.0 (DOCX): navýšená alokace 112 500 000 Kč</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/10/00_V10_Text-vyzvy.docx" rel="external noopener">MZ ČR — text 10. výzvy NPO, verze 2.0 (DOCX): alokace 158 000 000 Kč, termín 30. 6. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/12/00_V11_Text-vyzvy-verze-3.0.docx" rel="external noopener">MZ ČR — text 11. výzvy NPO, verze 3.0 (DOCX): alokace 158 500 000 Kč, termín max. 31. 3. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2025/10/Text_12._vyzvy-NPO-6.1-F.docx" rel="external noopener">MZ ČR — text 12. výzvy NPO, verze 2.0 (DOCX): alokace 60 000 000 Kč, termín 30. 6. 2026</a></li>
+          <li><a href="https://mzd.gov.cz/wp-content/uploads/2024/03/VYZVA-7-Seznam-projektu-na-web.xlsx" rel="external noopener">MZ ČR — seznam schválených projektů 7. výzvy (XLSX): 13 projektů za 575 426 605 Kč</a></li>
+          <li><a href="https://mzd.gov.cz/ministerstvo-zdravotnictvi-schvalilo-51-zadosti-v-ramci-11-vyzvy-npo/" rel="external noopener">MZ ČR — schválení 51 žádostí v 11. výzvě (19. 11. 2024) se seznamy za kola k 15. 4. a 15. 7. 2024</a></li>
+          <li><a href="https://mzd.gov.cz/ministerstvo-zdravotnictvi-zmenilo-3-vyzvu-npo-3/" rel="external noopener">MZ ČR — oznámení o změně 3. výzvy NPO (26. 8. 2026): posun z 31. 8. na 30. 11. 2026</a></li>
+        </ul>
+        <p class="article-sources-disclaimer">
+          Alokace, termíny, verze a míra podpory u všech dvanácti výzev pocházejí výhradně z textů
+          výzev zveřejněných ministerstvem zdravotnictví; redakce stáhla aktuálně platnou verzi každého
+          dokumentu (u sedmi výzev navíc původní verzi 1.0 kvůli porovnání) a strojově z nich vytáhla
+          text 2. září 2026. Údaje o přidělených dotacích jsou z tabulek „Seznam žádostí o dotaci,
+          u nichž se navrhuje dotaci poskytnout“, které ministerstvo přikládá k oznámením o schválení
+          žádostí; sečteny jsou listy „Zcela poskytnuto“ a „Zčásti poskytnuto“. Znění čl. 18 odst. 4
+          písm. i) a čl. 20 odst. 5 písm. d) nařízení (EU) 2021/241 je ověřeno doslovně na EUR-Lex
+          (CELEX 32021R0241); údaj o platbách do 31. prosince 2026 pochází z recitálu 53 téhož nařízení,
+          nikoli z operativního článku. Citace Jitky Opičkové je z tiskové zprávy MPO a portálu
+          Národního plánu obnovy z 31. srpna 2026. Všechny přepočty označené v textu jako výpočet
+          redakce (součty alokací, podíly komponent a jednotlivých výzev, rozdíly mezi alokací
+          a přidělenou částkou, procenta vyčerpání) vycházejí výhradně z výše uvedených hodnot.
+          Hodnoty indikátorů v boxu „Data v tomto článku“ pocházejí z datového kontraktu HSPA Monitoru
+          (zdroje ČSÚ, Eurostat a OECD Health Statistics) a slouží jako systémový kontext, ne jako
+          měřítko úspěchu jednotlivých projektů.
+        </p>
+      </aside>
+
+    </div>
+
+  </article>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>HSPA Monitor · <a href="o-projektu.html">O projektu</a> · <a href="glosar.html">Glosář</a> · <a href="redakce.html">Redakce</a></p>
+    <p class="footer-copy">Data: OECD, ÚZIS, ČSÚ, SÚKL, SZÚ · CC BY 4.0 · <a href="https://github.com/veritasderman-rgb/hspa" rel="external noopener">GitHub</a></p>
+  </div>
+</footer>
+
+<script type="module" src="src/page-shared.js"></script>
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
