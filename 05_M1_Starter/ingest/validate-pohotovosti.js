@@ -38,8 +38,9 @@ const MIN_OBCE = 5000;
 const TIME_RE = /^([01]\d|2[0-4]):[0-5]\d$/;
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 // Telefon: mezinárodní tvar, nebo krátké tísňové / evropské harmonizované
-// číslo (155, 112, 116 123) — ta se nikdy nepíší s předvolbou.
-const PHONE_RE = /^(\+\d{9,15}|1\d{2}|116\d{3})$/;
+// číslo (155, 112, 116 123) — ta se nikdy nepíší s předvolbou. Krátká čísla
+// jen z výčtu: „123“ by regex `1\d{2}` propustil, a nikdo by ho nezvedl.
+const PHONE_RE = /^(\+\d{9,15}|112|150|155|158|116\d{3})$/;
 /** Druhy tlačítek v rozcestníku; renderer jiný druh tiše nevykreslí. */
 const ACTION_KINDS = ['tel', 'find', 'href', 'anchor', 'poradna'];
 const FIND_CATEGORIES = [...PLACE_CATEGORIES, 'akutni'];
@@ -291,6 +292,17 @@ function validateOnline(data) {
   }
 }
 
+let pageIdCache = null;
+/** id atributy v pohotovosti.html — cíl kotvy rozcestníku musí existovat. */
+function pageIds() {
+  if (!pageIdCache) {
+    const file = path.resolve(ROOT, 'pohotovosti.html');
+    const html = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+    pageIdCache = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]));
+  }
+  return pageIdCache;
+}
+
 /** Blok s tvrzením o cizí službě musí mít zdroj a datum ověření. */
 function checkSourced(obj, where) {
   if (!obj?.source?.url) fail(`${where}: chybí odkaz na zdroj`);
@@ -302,7 +314,11 @@ function checkAction(a, where) {
   if (!a.label) fail(`${where}: tlačítko bez popisku`);
   if (a.kind === 'tel' && !PHONE_RE.test(String(a.phone ?? ''))) fail(`${where}: tel bez platného čísla`);
   if (a.kind === 'href' && !/^https?:\/\//.test(String(a.url ?? ''))) fail(`${where}: href bez URL se schématem`);
-  if (a.kind === 'anchor' && !/^#\w/.test(String(a.href ?? ''))) fail(`${where}: anchor musí mířit na kotvu (#id)`);
+  if (a.kind === 'anchor') {
+    const id = String(a.href ?? '').replace(/^#/, '');
+    if (!id) fail(`${where}: anchor musí mířit na kotvu (#id)`);
+    else if (!pageIds().has(id)) fail(`${where}: kotva #${id} v pohotovosti.html neexistuje`);
+  }
   if (a.kind === 'find') {
     const cats = a.categories ?? [];
     if (!cats.length || cats.some(c => !FIND_CATEGORIES.includes(c))) fail(`${where}: find s neznámou kategorií (${cats.join(',') || 'žádná'})`);
@@ -362,6 +378,7 @@ function validatePractical(data) {
     if (r.secondary) checkAction(r.secondary, `${where}/secondary`);
     if (!r.faq?.q || !r.faq?.a) fail(`${where}: chybí faq.q / faq.a (FAQPage JSON-LD)`);
     if (!String(r.faq?.q ?? '').endsWith('?')) fail(`${where}: faq.q má být otázka (končí otazníkem)`);
+    if (String(r.faq?.a ?? '').length < 40) fail(`${where}: faq.a je moc krátká na odpověď (FAQPage)`);
     checkSourced(r, where);
     for (const sr of r.sources ?? []) if (!sr?.url) fail(`${where}: položka v sources bez url`);
     if (r.action?.kind === 'tel' && r.action.phone === '155') hasLife = true;

@@ -37,7 +37,6 @@ const PRECACHE = [
   '/pohotovosti.html',
   '/data/pohotovosti.json',
   '/data/obce-gps.json',
-  '/data/cz-regions.geojson',
   '/src/styles.min.css',
   '/src/pohotovosti.js',
   '/src/pohotovosti-engine.js',
@@ -76,10 +75,37 @@ function allowed(url) {
   return url.origin === self.location.origin && ALLOW.some(re => re.test(url.pathname));
 }
 
+/**
+ * Kopie odpovědi bez příznaku `redirected`. Vercel (`cleanUrls`) přesměruje
+ * `/pohotovosti.html` → `/pohotovosti`; odpověď uložená i s příznakem by
+ * prohlížeč při offline navigaci (redirect mode „manual“) odmítl použít
+ * a místo uložené stránky by ukázal chybu.
+ */
+function plainCopy(res) {
+  if (!res.redirected) return res.clone();
+  const copy = res.clone();
+  return new Response(copy.body, { status: copy.status, statusText: copy.statusText, headers: copy.headers });
+}
+
+/** Odpověď z cache označená hlavičkou, aby stránka poznala, že ukazuje uloženou kopii. */
+function fromCache(hit) {
+  const headers = new Headers(hit.headers);
+  headers.set('X-Poh-Cache', 'fallback');
+  return new Response(hit.body, { status: hit.status ?? 200, statusText: hit.statusText ?? '', headers });
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
-    await Promise.all(PRECACHE.map(url => cache.add(url).catch(() => {})));
+    await Promise.all(PRECACHE.map(async (url) => {
+      try {
+        const res = await fetch(url);
+        if (res && res.ok) await cache.put(url, plainCopy(res));
+      } catch {
+        // Lokální server nemá čisté URL, produkce nemá .html — jedna
+        // chybějící položka nesmí shodit instalaci.
+      }
+    }));
     await self.skipWaiting();
   })());
 });
@@ -104,16 +130,16 @@ self.addEventListener('fetch', (event) => {
     const cache = await caches.open(CACHE);
     try {
       const res = await fetch(req);
-      if (res && res.ok) cache.put(req, res.clone()).catch(() => {});
+      if (res && res.ok) cache.put(req, plainCopy(res)).catch(() => {});
       return res;
     } catch {
       const hit = await cache.match(req, { ignoreSearch: true });
-      if (hit) return hit;
+      if (hit) return fromCache(hit);
       // Navigace bez uložené kopie okresní stránky → aspoň hlavní vyhledávání,
       // které má data a umí najít i tenhle okres.
       if (req.mode === 'navigate') {
         const page = (await cache.match('/pohotovosti')) ?? (await cache.match('/pohotovosti.html'));
-        if (page) return page;
+        if (page) return fromCache(page);
       }
       return new Response('Jste offline a tahle část stránky ještě není uložená.', {
         status: 503,

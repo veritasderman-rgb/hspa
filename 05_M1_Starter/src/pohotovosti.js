@@ -95,6 +95,12 @@ const state = {
 async function loadJson(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+  // Service worker označí odpověď z cache — `navigator.onLine` lže za
+  // captive portálem i na mrtvých datech, tohle ne.
+  if (res.headers?.get?.('X-Poh-Cache') === 'fallback') {
+    state.fromCache = true;
+    syncOfflineBanner();
+  }
   return res.json();
 }
 
@@ -171,7 +177,11 @@ async function resolveOriginRegion(origin) {
     renderTriage();
     renderAdviceLines();
   } catch {
-    // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj.
+    // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj —
+    // rozcestník ale musí říct, že kraj nevíme, ne „zadejte obec“.
+    if (state.origin === origin) origin.krajUnknown = true;
+    renderTriage();
+    renderAdviceLines();
   }
 }
 
@@ -187,6 +197,11 @@ function setOrigin(origin) {
     if (reset) reset.addEventListener('click', () => { setOrigin(null); update(); });
   }
   update();
+  // Rozcestník a přehled poradních linek závisí na kraji — po „zrušit“
+  // nesmí zůstat linka předchozího kraje; po novém zadání se překreslí
+  // znovu, až se kraj dohledá.
+  renderTriage();
+  renderAdviceLines();
   if (origin) {
     resolveOriginRegion(origin);
     // V ordinační době je nejbližší urgentní příjem součástí odpovědi,
@@ -487,17 +502,19 @@ async function shareOrCopy(text, btn) {
     }
     await navigator.clipboard.writeText(`${text}\n${url}`);
     flashButton(btn, 'Zkopírováno');
-  } catch {
-    // Uživatel sdílení zavřel, nebo schránka není k dispozici — tlačítko
-    // zůstane, jak bylo; nic se nerozbilo.
+  } catch (err) {
+    // Zavřený dialog sdílení není chyba; chybějící schránka (http, starý
+    // prohlížeč) ano — a člověk má vědět, že se nic nezkopírovalo.
+    if (err?.name !== 'AbortError') flashButton(btn, 'Nepovedlo se');
   }
 }
 
 function flashButton(btn, label) {
-  if (!btn) return;
+  if (!btn || btn.dataset.flashing) return;
   const orig = btn.textContent;
+  btn.dataset.flashing = '1';
   btn.textContent = label;
-  setTimeout(() => { btn.textContent = orig; }, 1800);
+  setTimeout(() => { btn.textContent = orig; delete btn.dataset.flashing; }, 1800);
 }
 
 function wireShare() {
@@ -771,7 +788,7 @@ const PRVNI_KONTAKT_TEXT = {
   },
   zubar: {
     what: 'Zavolejte svému zubaři',
-    why: 'S akutní bolestí zubu vás vlastní zubař zpravidla vezme mimo objednané pacienty. Zubní pohotovost slouží až mimo ordinační hodiny — a ve většině krajů jen o víkendech a svátcích.',
+    why: 'S akutní bolestí zubu vás vlastní zubař zpravidla vezme mimo objednané pacienty. Zubní pohotovost slouží až mimo ordinační hodiny — kdy a kde, se kraj od kraje liší, někde jen o víkendech a svátcích.',
   },
   lekarna: {
     what: 'Zajděte do kterékoli otevřené lékárny',
@@ -802,7 +819,7 @@ function adviceStepHtml(step) {
     return `
       <li class="poh-advice-step poh-advice-step-poradna">
         <span class="poh-advice-what">${escapeHtml(l.name)} — ${escapeHtml(adviceLineHours(l))}${step.status?.state === 'open' && step.status.until ? `, teď otevřeno do ${escapeHtml(step.status.until)}` : ''}</span>
-        <span class="poh-advice-why">${escapeHtml(l.text ?? '')} Není to tísňová linka — při ohrožení života volejte 155.</span>
+        <span class="poh-advice-why">${escapeHtml(l.text ?? '')} Není to tísňová linka — při ohrožení života volejte 155.${l.note ? ` ${escapeHtml(l.note)}` : ''}</span>
         <a class="poh-action poh-action-primary" href="tel:${escapeHtml(l.phone)}">Zavolat ${escapeHtml(formatPhone(l.phone))}</a>
         ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">nebo ${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
       </li>`;
@@ -1105,7 +1122,8 @@ function renderBeforeYouGo() {
       <ul class="poh-expect-list">${expectations.map(e => `
         <li>
           <strong>${escapeHtml(e.title)}</strong> ${escapeHtml(e.text)}
-          ${e.source?.url ? `<a class="poh-expect-src" href="${escapeHtml(e.source.url)}" target="_blank" rel="noopener">${escapeHtml(e.source.name ?? 'zdroj')}</a>` : ''}
+          ${[e.source, ...(e.sources ?? [])].filter(sr => sr?.url).map(sr =>
+            `<a class="poh-expect-src" href="${escapeHtml(sr.url)}" target="_blank" rel="noopener">${escapeHtml(sr.name ?? 'zdroj')}</a>`).join(' ')}
         </li>`).join('')}
       </ul>
     </div>` : '';
@@ -1146,11 +1164,14 @@ function poradnaActionHtml(action, cls) {
     const closed = adviceLineStatus(line).state === 'closed';
     const live = adviceLineLive(line);
     return `<a class="${closed ? 'poh-action' : cls}" href="tel:${escapeHtml(line.phone)}">${escapeHtml(line.name)} · ${escapeHtml(formatPhone(line.phone))}</a>
-      <span class="poh-roz-hint">${escapeHtml(adviceLineHours(line))}${live ? ` — ${escapeHtml(live)}` : ''}</span>`;
+      <span class="poh-roz-hint">${escapeHtml(adviceLineHours(line))}${live ? ` — ${escapeHtml(live)}` : ''}${line.note ? ` · ${escapeHtml(line.note)}` : ''}</span>`;
   }
-  const hint = state.origin
-    ? 'Ve vašem kraji záchranná služba neakutní poradní linku neprovozuje — přehled krajů, kde je, níže.'
-    : 'Zadejte obec nahoře — poradní linku má jen část krajů.';
+  // Tři poctivé stavy: bez obce nevíme kraj; obec zadaná, kraj se teprve
+  // dohledává (nebo nešel zjistit); kraj známý a linku nemá.
+  let hint;
+  if (!state.origin) hint = 'Zadejte obec nahoře — poradní linku má jen část krajů.';
+  else if (!currentKrajCode()) hint = state.origin.krajUnknown ? 'Kraj se nepodařilo určit — přehled krajů, kde linka je, níže.' : 'Zjišťuji kraj…';
+  else hint = 'Ve vašem kraji záchranná služba neakutní poradní linku neprovozuje — přehled krajů, kde je, níže.';
   return `<a class="poh-action" href="#pohPoradny">${escapeHtml(action.label ?? 'Poradní linky podle krajů')}</a>
     <span class="poh-roz-hint">${escapeHtml(hint)}</span>`;
 }
@@ -1159,9 +1180,11 @@ function renderTriage() {
   const host = document.getElementById('pohTriageGrid');
   if (!host) return;
   const rows = state.data?.practical?.triage ?? [];
-  const section = host.closest('section');
-  if (!rows.length) { if (section) section.hidden = true; return; }
-  if (section) section.hidden = false;
+  // Skrývá se jen mřížka karet — poradní linky a EN/UK ve stejné sekci
+  // mají vlastní data a vlastní hosty.
+  const wrap = host.closest('.poh-roz-cards') ?? host;
+  if (!rows.length) { wrap.hidden = true; return; }
+  wrap.hidden = false;
 
   host.innerHTML = rows.map(r => `
     <li class="poh-roz-card${r.urgent ? ' poh-roz-card-urgent' : ''}" id="roz-${escapeHtml(r.id)}">
@@ -1192,6 +1215,24 @@ function renderTriage() {
   });
 }
 
+/** Aplikace (Záchranka) — z dat, se zdrojem; bez dat se blok nevykreslí. */
+function renderApps() {
+  const host = document.getElementById('pohApps');
+  if (!host) return;
+  const apps = state.data?.practical?.apps ?? [];
+  if (!apps.length) { host.hidden = true; return; }
+  host.hidden = false;
+  host.innerHTML = apps.map(a => `
+    <article class="poh-app">
+      <h3 class="poh-app-name">${escapeHtml(a.name)}</h3>
+      <p class="poh-app-text">${escapeHtml(a.text)}</p>
+      ${(a.features ?? []).length ? `<ul class="poh-app-features">${a.features.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>` : ''}
+      <a class="poh-action poh-action-primary" href="${escapeHtml(a.url)}" target="_blank" rel="noopener">Otevřít ${escapeHtml(a.name)}</a>
+      <p class="poh-app-src">Zdroj: <a href="${escapeHtml(a.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(a.source?.name ?? 'zdroj')}</a>${
+        a.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(a.verified_at))}` : ''}.</p>
+    </article>`).join('');
+}
+
 /** Celostátní přehled poradních linek záchranek — ukazuje se všem, jako online pohotovosti. */
 function renderAdviceLines() {
   const host = document.getElementById('pohPoradny');
@@ -1218,6 +1259,7 @@ function renderAdviceLines() {
         ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
         <span class="poh-poradna-hours">${escapeHtml(adviceLineHours(l))}${adviceLineLive(l) ? ` · ${escapeHtml(adviceLineLive(l))}` : ''}${l.since ? ` · od ${escapeHtml(formatSince(l.since))}` : ''}</span>
         ${l.text ? `<span class="poh-poradna-text">${escapeHtml(l.text)}</span>` : ''}
+        ${l.note ? `<span class="poh-poradna-text">${escapeHtml(l.note)}</span>` : ''}
         <span class="poh-poradna-src">Zdroj: <a href="${escapeHtml(l.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(l.source?.name ?? 'zdroj')}</a>${
           l.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(l.verified_at))}` : ''}.</span>
       </li>`).join('')}
@@ -1287,20 +1329,29 @@ function registerOffline() {
     }
   }
 
+  window.addEventListener('online', syncOfflineBanner);
+  window.addEventListener('offline', syncOfflineBanner);
+  syncOfflineBanner();
+}
+
+/** Pruh „jste offline“: podle sítě, nebo podle toho, že data přišla z cache SW. */
+function syncOfflineBanner() {
   const banner = document.getElementById('pohOffline');
   if (!banner) return;
-  const sync = () => {
-    const offline = navigator.onLine === false;
-    banner.hidden = !offline;
-    if (offline) {
-      const gen = generatedDay();
-      banner.innerHTML = `<strong>Jste offline.</strong> Ukazujeme naposledy stažená data${
-        gen ? ` (k ${escapeHtml(formatCzDate(gen))})` : ''}. Volání na <a href="tel:155">155</a> funguje i bez dat.`;
-    }
-  };
-  window.addEventListener('online', sync);
-  window.addEventListener('offline', sync);
-  sync();
+  const offline = (typeof navigator !== 'undefined' && navigator.onLine === false) || state.fromCache === true;
+  banner.hidden = !offline;
+  if (!offline) return;
+  const gen = generatedDay();
+  const why = navigator.onLine === false ? 'Jste offline.' : 'Síť neodpovídá.';
+  banner.innerHTML = `<strong>${why}</strong> Ukazujeme naposledy stažená data${
+    gen ? ` (k ${escapeHtml(formatCzDate(gen))})` : ''}. Volání na <a href="tel:155">155</a> funguje i bez dat.`;
+}
+
+/** Odkazy na EN/UK blok musí akordeon i otevřít — samotná kotva zavřený <details> nerozbalí. */
+function wireIntlLinks() {
+  document.querySelectorAll('a[href="#pohIntl"], a[href="#pohIntlBody"]').forEach(a => {
+    a.addEventListener('click', () => { const d = document.getElementById('pohIntl'); if (d) d.open = true; });
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -1792,8 +1843,10 @@ async function init() {
   renderTypeChips();
   renderContext();
   renderTriage();
+  renderApps();
   renderAdviceLines();
   renderIntl();
+  wireIntlLinks();
   renderBeforeYouGo();
   renderOnlineSection();
   renderDojezdSection();

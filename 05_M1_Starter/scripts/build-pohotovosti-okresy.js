@@ -52,6 +52,13 @@ const esc = (s) => String(s ?? '')
   .replace(/"/g, '&quot;');
 
 const fmtPhone = (phone) => String(phone ?? '').replace(/^\+420(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
+/** „2026-09-02“ → „2. 9. 2026“ (stejný tvar jako na hlavní stránce). */
+const fmtDate = (iso) => {
+  const [y, m, d] = String(iso ?? '').split('-').map(Number);
+  return Number.isFinite(d) ? `${d}. ${m}. ${y}` : String(iso ?? '');
+};
+/** JSON pro <script type="application/ld+json"> — `<` nesmí ukončit skript. */
+const ldJson = (obj) => JSON.stringify(obj, null, 1).replace(/</g, '\\u003c');
 
 function hoursTableHtml(hours) {
   if (!hours?.week) return '<p class="pokr-hours-none">Rozpis po dnech viz celostátní vyhledávání.</p>';
@@ -152,7 +159,7 @@ function footHtml(p, { generatedAt, feedback } = {}) {
     generatedDay: day,
     page: `pohotovost-${okresSlug(p.okres)}.html`,
   });
-  const stamp = p.verified_at ? `Ověřeno člověkem ${esc(p.verified_at)}` : `Data k ${esc(day)}`;
+  const stamp = p.verified_at ? `Ověřeno člověkem ${esc(fmtDate(p.verified_at))}` : `Data k ${esc(fmtDate(day))}`;
   return `<p class="pokr-foot">${stamp} · <a href="${esc(url)}" target="_blank" rel="noopener" title="Otevře předvyplněné hlášení na GitHubu (vyžaduje účet GitHub)">Nahlásit změnu</a></p>`;
 }
 
@@ -168,9 +175,11 @@ export function rozcestnikHtml(practical, adviceLine) {
     `      <li><strong>${esc(r.situation)}</strong> — <a href="tel:${esc(r.action.phone)}">${esc(r.action.label)}</a></li>`);
   if (adviceLine) {
     const hours = adviceLine.hours ?? (adviceLine.hours_unknown ? 'provozní dobu web záchranky neuvádí' : '');
+    // Jen první věta popisu — okresní blok je seznam čísel, ne vysvětlivka.
+    const brief = String(adviceLine.text ?? '').split(/(?<=\.)\s/)[0];
     items.push(`      <li><strong>${esc(adviceLine.name)}</strong> (${esc(adviceLine.kraj)}${hours ? `, ${esc(hours)}` : ''}) — <a href="tel:${esc(adviceLine.phone)}">${esc(fmtPhone(adviceLine.phone))}</a>${
       adviceLine.phone_alt ? ` / <a href="tel:${esc(adviceLine.phone_alt)}">${esc(fmtPhone(adviceLine.phone_alt))}</a>` : ''}${
-      adviceLine.text ? `: ${esc(adviceLine.text)}` : ''} Není to tísňová linka.</li>`);
+      brief ? ` — ${esc(brief)}` : ''}${adviceLine.note ? ` ${esc(adviceLine.note)}` : ''} Není to tísňová linka.</li>`);
   }
   return `
   <section class="pokr-roz" aria-labelledby="pokrRozH">
@@ -208,9 +217,12 @@ export function writeFaqIntoPage(practical, file = path.resolve(ROOT, 'pohotovos
   const html = fs.readFileSync(file, 'utf8');
   const a = html.indexOf(FAQ_START);
   const b = html.indexOf(FAQ_END);
-  if (a < 0 || b < 0 || b < a) return false;
+  if (a < 0 || b < 0 || b < a) {
+    console.warn('[pohotovosti-okresy] ⚠ pohotovosti.html: chybí značky poh-faq:start/end — FAQPage JSON-LD se neobnovilo');
+    return false;
+  }
   const markerEnd = html.indexOf('-->', a) + 3;
-  const json = JSON.stringify(faqJsonLd(practical), null, 1).replace(/</g, '\\u003c');
+  const json = ldJson(faqJsonLd(practical));
   const block = `${html.slice(a, markerEnd)}\n<script type="application/ld+json" id="pohFaqLd">\n${json}\n</script>\n`;
   const next = html.slice(0, a) + block + html.slice(b);
   if (next === html) return false;
@@ -242,7 +254,7 @@ function pageHtml({ okres, slug, kraj, places, generatedAt, hasRotation, practic
 <link rel="canonical" href="${SITE}/pohotovost-${slug}">
 <link rel="stylesheet" href="src/styles.min.css">
 <script type="application/ld+json">
-${JSON.stringify(jsonLd(okres, slug, sorted), null, 1)}
+${ldJson(jsonLd(okres, slug, sorted))}
 </script>
 </head>
 <body>

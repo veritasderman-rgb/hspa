@@ -127,7 +127,7 @@ test('pohotovosti.html · FAQPage JSON-LD je totéž, co rozcestník v datech', 
 });
 
 test('pohotovosti.html · hostitelské prvky nových sekcí a nástrojů existují', () => {
-  for (const id of ['pohTriageGrid', 'pohPoradny', 'pohIntl', 'pohIntlBody', 'pohOffline', 'pohTools', 'pohPrint', 'pohRozH']) {
+  for (const id of ['pohTriageGrid', 'pohApps', 'pohPoradny', 'pohIntl', 'pohIntlBody', 'pohOffline', 'pohTools', 'pohPrint', 'pohRozH']) {
     assert.ok(html.includes(`id="${id}"`), `chybí #${id}`);
   }
   assert.ok(html.includes('data-share-list'), 'chybí tlačítko sdílení výsledků');
@@ -214,7 +214,7 @@ test('okresy · karta nese patičku s datem dat a hlášením změny; bez data n
   const base = { id: 'x1', name: 'Nemocnice X', category: 'lps_dospeli', category_label: 'LPS', okres: 'Klatovy', phone: '+420111222333', hours: null };
   const s = placeHtml(base, { generatedAt: '2026-09-01T06:00:00Z', feedback: { issues_new_url: 'https://github.com/veritasderman-rgb/hspa/issues/new', labels: ['pohotovosti'] } });
   assert.match(s, /pokr-foot/);
-  assert.match(s, /Data k 2026-09-01/);
+  assert.match(s, /Data k 1\. 9\. 2026/, 'datum česky, stejně jako na hlavní stránce');
   assert.match(s, /Nahlásit změnu/);
   assert.match(s, /issues\/new\?/);
   assert.ok(!placeHtml(base).includes('pokr-foot'), 'bez kontextu se patička nevykreslí (starší volání)');
@@ -262,8 +262,9 @@ function loadServiceWorker() {
       clients: { claim: async () => {} },
     },
     caches: { open: async () => cache, keys: async () => ['pohotovosti-v0', 'other'], delete: async () => true },
-    fetch: async () => ({ ok: true, clone() { return this; } }),
-    Response: class { constructor(body, init) { this.body = body; this.status = init?.status; } },
+    fetch: async () => ({ ok: true, status: 200, redirected: false, headers: new Headers(), body: 'net', clone() { return { ...this }; } }),
+    Response: class { constructor(body, init) { this.body = body; this.status = init?.status; this.headers = init?.headers ?? new Headers(); this.init = init; } },
+    Headers,
     URL,
   };
   const context = vm.createContext(ctx);
@@ -296,7 +297,7 @@ test('sw-pohotovosti.js · precache pokrývá celý graf importů obou stránek'
     assert.ok(precache.includes(`/${mod}`), `PRECACHE v sw-pohotovosti.js postrádá /${mod} (import graf se změnil)`);
     assert.ok(allow.some(re => re.test(`/${mod}`)), `/${mod} není v bílé listině`);
   }
-  for (const must of ['/data/pohotovosti.json', '/data/obce-gps.json', '/data/cz-regions.geojson', '/src/styles.min.css', '/pohotovosti']) {
+  for (const must of ['/data/pohotovosti.json', '/data/obce-gps.json', '/src/styles.min.css', '/pohotovosti']) {
     assert.ok(precache.includes(must), `PRECACHE postrádá ${must}`);
   }
   // Každá precache položka existuje na disku (kromě čisté URL bez .html).
@@ -351,12 +352,36 @@ test('sw-pohotovosti.js · network-first: síť má přednost, cache až po selh
   ctx.fetch = async () => { throw new Error('offline'); };
   handlers.fetch({ request: req, respondWith: (p) => { out = p; } });
   const cached = await out;
-  assert.equal(cached, cacheStore.get(req.url), 'offline → kopie z cache');
+  assert.equal(cached.body, 'net', 'offline → kopie z cache');
+  assert.equal(cached.headers.get('X-Poh-Cache'), 'fallback', 'stránka pozná, že jde o uloženou kopii');
 
   // Navigace na neuloženou okresní stránku → hlavní vyhledávání, ne prázdno.
-  cacheStore.set('/pohotovosti', { page: true });
+  cacheStore.set('/pohotovosti', { body: 'page', status: 200, headers: new Headers() });
   handlers.fetch({ request: { method: 'GET', url: 'https://skorezdravotnictvi.cz/pohotovost-nikde', mode: 'navigate' }, respondWith: (p) => { out = p; } });
-  assert.deepEqual(await out, { page: true });
+  const page = await out;
+  assert.equal(page.body, 'page');
+  assert.equal(page.headers.get('X-Poh-Cache'), 'fallback');
+});
+
+test('sw-pohotovosti.js · přesměrovaná odpověď (Vercel cleanUrls) se ukládá bez příznaku redirected', async () => {
+  // `/pohotovosti.html` → 308 → `/pohotovosti`: kopie s `redirected: true` by
+  // při offline navigaci (redirect mode „manual“) skončila chybou prohlížeče.
+  const { handlers, cacheStore, ctx } = loadServiceWorker();
+  ctx.fetch = async () => ({ ok: true, status: 200, redirected: true, headers: new Headers(), body: 'html', clone() { return { ...this }; } });
+  await handlers.install({ waitUntil: (p) => { ctx.__install = p; } });
+  await ctx.__install;
+  const stored = cacheStore.get('/pohotovosti.html');
+  assert.ok(stored, 'precache uložil /pohotovosti.html');
+  assert.ok(stored instanceof ctx.Response, 'uložená je nová Response, ne syrová přesměrovaná odpověď');
+  assert.notEqual(stored.redirected, true);
+
+  // Totéž pro runtime cache.
+  let out;
+  handlers.fetch({ request: { method: 'GET', url: 'https://skorezdravotnictvi.cz/pohotovost-klatovy.html', mode: 'navigate' }, respondWith: (p) => { out = p; } });
+  await out;
+  await new Promise(r => setTimeout(r, 0));
+  const rt = cacheStore.get('https://skorezdravotnictvi.cz/pohotovost-klatovy.html');
+  assert.ok(rt instanceof ctx.Response && rt.redirected !== true);
 });
 
 test('offline · stránky registrují SW se scope /pohotovost a Vercel ho nekešuje', () => {
