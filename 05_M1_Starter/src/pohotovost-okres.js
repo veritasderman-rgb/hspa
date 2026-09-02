@@ -33,11 +33,25 @@ function liveBadges() {
   }
 }
 
+/** Offline: tentýž service worker jako hlavní stránka (sw-pohotovosti.js). */
+function registerOffline() {
+  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return;
+  try {
+    navigator.serviceWorker.register(
+      new URL('../sw-pohotovosti.js', import.meta.url).pathname,
+      { scope: new URL('../pohotovost', import.meta.url).pathname },
+    ).catch(() => {});
+  } catch {
+    // Bez service workeru stránka funguje dál, jen ne offline.
+  }
+}
+
 if (typeof window !== 'undefined') {
   renderModuleNav();
   renderMastheadDate();
   renderFooter();
   liveBadges();
+  registerOffline();
   // Přes půlnoc a přes hranici otevírací doby se stav mění i bez reloadu.
   setInterval(liveBadges, 60_000);
 }

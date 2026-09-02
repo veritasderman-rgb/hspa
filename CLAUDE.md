@@ -85,7 +85,7 @@ git push -u origin claude/<branch>
 ├── pojistenci.html             ← OIS 11-47 (pojištěnci podle ZP × kraj × okres)
 ├── glosar.html                 ← 110 odborných pojmů (definice + odkazy)
 ├── prevence.html               ← Vakcinace + screeningy
-├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď, dojezdová analýza)
+├── pohotovosti.html            ← Nejbližší pohotovost (vyhledávání podle obce/polohy, otevřeno teď, dojezdová analýza, rozcestník „Kam s tím?“, poradní linky ZZS, EN/UK, offline)
 ├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
 ├── strategie.html              ← Národní strategické dokumenty
 ├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
@@ -102,6 +102,7 @@ git push -u origin claude/<branch>
 ├── vestniky-mz.html            ← Archiv obsahu Věstníků MZ 1998→ (fulltext, rok × kategorie, PDF odkazy)
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
+├── sw-pohotovosti.js           ← Service worker offline cache jen pro /pohotovost* (network-first, bílá listina cest)
 │
 ├── src/                        ← Frontend ES modules (25 souborů, ~18 000 LOC)
 │   ├── app.js                  ← Homepage (hub matrix, dimensions, podcasts, ticker)
@@ -116,7 +117,7 @@ git push -u origin claude/<branch>
 │   ├── kraje.js + cz-map.js    ← Mapa krajů + krajský dashboard
 │   ├── pojistenci.js           ← OIS 11-47 dashboard
 │   ├── prevence.js             ← Prevence dashboard
-│   ├── pohotovosti.js + pohotovosti-engine.js ← Pohotovosti (render + jádro: svátky, otevřeno teď, vzdálenost)
+│   ├── pohotovosti.js + pohotovosti-engine.js ← Pohotovosti (render + jádro: svátky, otevřeno teď, vzdálenost, rozcestník „Kam s tím?“, poradní linky ZZS, EN/UK, offline registrace)
 │   ├── strategies.js           ← Strategie + explainery
 │   ├── explainers.js           ← Explainery (samostatné kontextové texty)
 │   ├── explainer-policy-views.js, strategy-policy-views.js, strategy-links.js
@@ -142,7 +143,7 @@ git push -u origin claude/<branch>
 │   ├── plneni-*.json           ← Datasety plnění dalších strategií (onko-2030, kv-2035, amr, dusevni-zdravi, zdravi-2030) — stejné schéma, validate:plneni
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
-│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn)
+│   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK
 │   ├── dojezdy.json            ← Dojezdová mapa: vzdálenost každé obce k nejbližší otevřené LPS ve 3 referenčních časech (líný load)
 │   ├── pohotovosti-okresy.json ← Manifest 75 generovaných okresních stránek pohotovost-*.html (sitemap + rozcestník)
 │   ├── pohotovosti-akutni.json ← Urgentní příjmy, akutní chirurgie a základny ZZS z NRPZS (líný load)

@@ -7,6 +7,7 @@
 //   data/pohotovosti.json        — pohotovosti, rotace, pokrytí, právní kontext
 //   data/obce-gps.json           — gazetteer obcí (líně, až uživatel začne psát)
 //   data/pohotovosti-akutni.json — urgentní příjmy a akutní chirurgie (líně)
+//   sw-pohotovosti.js            — offline cache (network-first, jen tahle stránka)
 //
 // Zásada, kterou tahle stránka drží nade vše: nikdy netvrdit víc, než zdroj
 // říká. Když ordinační doba chybí, je to „neuvedeno“, ne „zavřeno“. Když je
@@ -36,6 +37,9 @@ import {
   careAdvice,
   isWorkingHours,
   okresSlug,
+  feedbackIssueUrl,
+  FEEDBACK_ISSUES_URL,
+  adviceLineStatus,
 } from './pohotovosti-engine.js';
 
 const PAGE_SIZE = 8;
@@ -64,6 +68,13 @@ const CATEGORY_COLORS = {
   akutni: '#b3261e',
 };
 
+/**
+ * Kam vede „Nahlásit změnu“, když data nenesou vlastní konfiguraci
+ * (`practical.feedback`). Repo je veřejné; předvyplněné issue je jediný
+ * kanál zpětné vazby, který nevyžaduje provoz serveru ani sběr e-mailů.
+ */
+const FEEDBACK_FALLBACK_URL = FEEDBACK_ISSUES_URL;
+
 const state = {
   data: null,
   obce: null,
@@ -84,6 +95,12 @@ const state = {
 async function loadJson(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+  // Service worker označí odpověď z cache — `navigator.onLine` lže za
+  // captive portálem i na mrtvých datech, tohle ne.
+  if (res.headers?.get?.('X-Poh-Cache') === 'fallback') {
+    state.fromCache = true;
+    syncOfflineBanner();
+  }
   return res.json();
 }
 
@@ -153,12 +170,18 @@ async function resolveOriginRegion(origin) {
     if (state.origin !== origin) return; // uživatel mezitím hledal odjinud
     origin.krajCode = regionCodeAt(geojson, origin.lat, origin.lon);
     renderRotationSection();
-    renderAdvice(); // online pohotovost a infolinka závisí na kraji
+    renderAdvice(); // online pohotovost, infolinka a poradní linka závisí na kraji
     // Celostátní přehled online pohotovostí se tím nezúží — jen vytáhne
     // službu vlastního kraje dopředu a tomu, kdo ji nemá, to napíše.
     renderOnlineSection();
+    renderTriage();
+    renderAdviceLines();
   } catch {
-    // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj.
+    // Bez hranic krajů se sekce rotace prostě neomezí na jeden kraj —
+    // rozcestník ale musí říct, že kraj nevíme, ne „zadejte obec“.
+    if (state.origin === origin) origin.krajUnknown = true;
+    renderTriage();
+    renderAdviceLines();
   }
 }
 
@@ -174,6 +197,11 @@ function setOrigin(origin) {
     if (reset) reset.addEventListener('click', () => { setOrigin(null); update(); });
   }
   update();
+  // Rozcestník a přehled poradních linek závisí na kraji — po „zrušit“
+  // nesmí zůstat linka předchozího kraje; po novém zadání se překreslí
+  // znovu, až se kraj dohledá.
+  renderTriage();
+  renderAdviceLines();
   if (origin) {
     resolveOriginRegion(origin);
     // V ordinační době je nejbližší urgentní příjem součástí odpovědi,
@@ -364,7 +392,9 @@ function placeCard(row, index) {
       <a class="poh-action" href="${escapeHtml(mapsUrl(p))}" target="_blank" rel="noopener">Ukázat na mapě</a>
       ${p.web ? `<a class="poh-action" href="${escapeHtml(p.web)}" target="_blank" rel="noopener">Web pracoviště</a>` : ''}
       ${p.detail_url ? `<a class="poh-action" href="${escapeHtml(p.detail_url)}" target="_blank" rel="noopener">Záznam u VZP</a>` : ''}
+      ${shareActionsHtml(p, row)}
     </div>
+    <p class="poh-card-foot">${cardFootHtml(p)}</p>
 
     ${p.hours ? `<details class="poh-card-hours"><summary>Celý rozpis</summary>${hoursTable(p.hours)}</details>` : ''}
     ${p.quote ? `
@@ -403,6 +433,102 @@ function hoursCheckLine(check) {
 function formatPhone(phone) {
   const m = /^\+420(\d{3})(\d{3})(\d{3})$/.exec(String(phone ?? ''));
   return m ? `${m[1]} ${m[2]} ${m[3]}` : String(phone ?? '');
+}
+
+function generatedDay() {
+  return String(state.data?.generated_at ?? '').slice(0, 10);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Karta do ruky: SMS, sdílení, zpětná vazba
+//
+// Kdo pohotovost hledá, často pro někoho jiného — a ten, kdo pojede, chce
+// adresu a telefon v telefonu, ne otevřenou stránku. Text je záměrně holý:
+// jméno, typ, adresa, telefon, stav a datum dat, nic víc.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Text karty pro SMS a sdílení. */
+function shareTextFor(p, row) {
+  const st = row?.status;
+  const stateText = st?.state === 'open'
+    ? `teď otevřeno${st.until ? ` do ${st.until}` : ''}`
+    : st?.state === 'closed' ? `teď zavřeno${st.next ? `, otevírá ${st.next}` : ''}` : null;
+  const gen = generatedDay();
+  return [
+    p.workplace ? `${p.name} — ${p.workplace}` : p.name,
+    p.category_label,
+    p.address,
+    p.phone ? `Tel.: ${formatPhone(p.phone)}` : null,
+    stateText,
+    `skorezdravotnictvi.cz/pohotovosti${gen ? ` (data k ${formatCzDate(gen)})` : ''}`,
+  ].filter(Boolean).join('\n');
+}
+
+function shareActionsHtml(p, row) {
+  const text = shareTextFor(p, row);
+  // `sms:?&body=` čtou Android i iOS; samotné `?body=` iOS starších verzí ignoroval.
+  const sms = `sms:?&body=${encodeURIComponent(text)}`;
+  return `
+      <a class="poh-action poh-action-quiet" href="${escapeHtml(sms)}" title="Poslat adresu a telefon esemeskou — třeba tomu, kdo pojede">SMS</a>
+      <button type="button" class="poh-action poh-action-quiet" data-share-text="${escapeHtml(text)}" title="Sdílet nebo zkopírovat adresu a telefon">Sdílet</button>`;
+}
+
+/** Předvyplněné hlášení změny — sdílená definice v enginu. */
+function feedbackUrl(p) {
+  const fb = state.data?.practical?.feedback;
+  return feedbackIssueUrl(p, {
+    base: fb?.issues_new_url ?? FEEDBACK_FALLBACK_URL,
+    labels: fb?.labels ?? [],
+    generatedDay: generatedDay(),
+  });
+}
+
+/** Patička karty: jak stará data jsou a kam nahlásit, že už neplatí. */
+function cardFootHtml(p) {
+  const gen = generatedDay();
+  const stamp = p.verified_at
+    ? `ověřeno člověkem ${formatCzDate(p.verified_at)}`
+    : gen ? `data k ${formatCzDate(gen)}` : '';
+  return `${escapeHtml(stamp)}${stamp ? ' · ' : ''}<a href="${escapeHtml(feedbackUrl(p))}" target="_blank" rel="noopener" title="Otevře předvyplněné hlášení na GitHubu (vyžaduje účet GitHub)">Nahlásit změnu</a>`;
+}
+
+/** Sdílení: nativní dialog, kde je; jinak schránka. */
+async function shareOrCopy(text, btn) {
+  const url = `${location.origin}${location.pathname}`;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'Pohotovost', text, url });
+      return;
+    }
+    await navigator.clipboard.writeText(`${text}\n${url}`);
+    flashButton(btn, 'Zkopírováno');
+  } catch (err) {
+    // Zavřený dialog sdílení není chyba; chybějící schránka (http, starý
+    // prohlížeč) ano — a člověk má vědět, že se nic nezkopírovalo.
+    if (err?.name !== 'AbortError') flashButton(btn, 'Nepovedlo se');
+  }
+}
+
+function flashButton(btn, label) {
+  if (!btn || btn.dataset.flashing) return;
+  const orig = btn.textContent;
+  btn.dataset.flashing = '1';
+  btn.textContent = label;
+  setTimeout(() => { btn.textContent = orig; delete btn.dataset.flashing; }, 1800);
+}
+
+function wireShare() {
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-share-text]');
+    if (card) { shareOrCopy(card.dataset.shareText, card); return; }
+    const list = e.target.closest('[data-share-list]');
+    if (list) {
+      const rows = state.rows.slice(0, 3);
+      if (!rows.length) return;
+      shareOrCopy(rows.map(r => shareTextFor(r.place, r)).join('\n\n'), list);
+    }
+  });
+  document.getElementById('pohPrint')?.addEventListener('click', () => window.print());
 }
 
 /**
@@ -481,6 +607,8 @@ function renderList() {
       ? `Nejbližší pohotovosti od ${state.origin.label}`
       : 'Pohotovosti podle výběru';
   }
+  const tools = document.getElementById('pohTools');
+  if (tools) tools.hidden = !state.rows.length;
 
   if (empty) {
     const noResults = !state.rows.length && !state.fallbackRows?.length;
@@ -520,6 +648,27 @@ function infolineForOrigin() {
   const code = currentKrajCode();
   if (!code) return null;
   return (state.data?.online?.infolines ?? []).find(l => l.kraj_code === code) ?? null;
+}
+
+/** Provozní doba poradní linky, nebo poctivé „web ji neuvádí“. */
+function adviceLineHours(l) {
+  if (l?.hours) return l.hours;
+  return l?.hours_unknown ? 'provozní dobu web záchranky neuvádí, ověříte při zavolání' : '';
+}
+
+/** „teď otevřeno do 19:00“ / „teď zavřeno, otevírá 7:00“ — jen když je rozvrh známý. */
+function adviceLineLive(l, now = new Date()) {
+  const st = adviceLineStatus(l, now);
+  if (st.state === 'open') return `teď otevřeno${st.until ? ` do ${st.until}` : ''}`;
+  if (st.state === 'closed') return `teď zavřeno${st.next ? `, otevírá ${st.nextDate ? `${relativeDay(st.nextDate)} ` : ''}${st.next}` : ''}`;
+  return '';
+}
+
+/** Neakutní poradní linka záchranné služby kraje, ve kterém uživatel hledá. */
+function adviceLineForOrigin() {
+  const code = currentKrajCode();
+  if (!code) return null;
+  return (state.data?.online?.advice_lines ?? []).find(l => l.kraj_code === code) ?? null;
 }
 
 /**
@@ -580,6 +729,7 @@ function renderAdvice() {
     nearestLps: lpsRows[0] ?? null,
     nearestUrgent: nearestUrgent(),
     nearestAmbulance: nearestAmbulance(),
+    adviceLine: adviceLineForOrigin(),
   });
 
   const infoline = infolineForOrigin();
@@ -638,7 +788,7 @@ const PRVNI_KONTAKT_TEXT = {
   },
   zubar: {
     what: 'Zavolejte svému zubaři',
-    why: 'S akutní bolestí zubu vás vlastní zubař zpravidla vezme mimo objednané pacienty. Zubní pohotovost slouží až mimo ordinační hodiny — a ve většině krajů jen o víkendech a svátcích.',
+    why: 'S akutní bolestí zubu vás vlastní zubař zpravidla vezme mimo objednané pacienty. Zubní pohotovost slouží až mimo ordinační hodiny — kdy a kde, se kraj od kraje liší, někde jen o víkendech a svátcích.',
   },
   lekarna: {
     what: 'Zajděte do kterékoli otevřené lékárny',
@@ -649,10 +799,29 @@ const PRVNI_KONTAKT_TEXT = {
 function adviceStepHtml(step) {
   if (step.kind === 'prvni_kontakt') {
     const t = PRVNI_KONTAKT_TEXT[step.contact] ?? PRVNI_KONTAKT_TEXT.praktik;
+    // „Zavolejte praktikovi“ je k ničemu tomu, kdo žádného nemá — a takových
+    // lidí přibývá. Věta i odkaz jsou z dat (NZIP), ne z hlavy.
+    const noGp = state.data?.practical?.no_gp;
+    const noGpHtml = noGp && (step.contact === 'praktik' || step.contact === 'detsky_lekar')
+      ? `<span class="poh-advice-hint">${escapeHtml(noGp.short ?? noGp.title ?? '')} ${(noGp.links ?? [])
+          .map(l => `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.label)}</a>`).join(' · ')}</span>`
+      : '';
     return `
       <li class="poh-advice-step">
         <span class="poh-advice-what">${escapeHtml(t.what)}</span>
         <span class="poh-advice-why">${escapeHtml(t.why)}</span>
+        ${noGpHtml}
+      </li>`;
+  }
+
+  if (step.kind === 'poradna') {
+    const l = step.line;
+    return `
+      <li class="poh-advice-step poh-advice-step-poradna">
+        <span class="poh-advice-what">${escapeHtml(l.name)} — ${escapeHtml(adviceLineHours(l))}${step.status?.state === 'open' && step.status.until ? `, teď otevřeno do ${escapeHtml(step.status.until)}` : ''}</span>
+        <span class="poh-advice-why">${escapeHtml(l.text ?? '')} Není to tísňová linka — při ohrožení života volejte 155.${l.note ? ` ${escapeHtml(l.note)}` : ''}</span>
+        <a class="poh-action poh-action-primary" href="tel:${escapeHtml(l.phone)}">Zavolat ${escapeHtml(formatPhone(l.phone))}</a>
+        ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">nebo ${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
       </li>`;
   }
 
@@ -944,7 +1113,245 @@ function renderBeforeYouGo() {
       </p>
     </div>` : '';
 
-  host.innerHTML = `<ol class="poh-before-list">${steps}</ol>${feeHtml}`;
+  // Co člověka na místě čeká — triáž podle závažnosti, čekání, co pohotovost
+  // neudělá. Přepis oficiálního zdroje, každá položka s odkazem.
+  const expectations = pr.expectations ?? [];
+  const exHtml = expectations.length ? `
+    <div class="poh-expect">
+      <h3 class="poh-h3">Co vás na pohotovosti čeká</h3>
+      <ul class="poh-expect-list">${expectations.map(e => `
+        <li>
+          <strong>${escapeHtml(e.title)}</strong> ${escapeHtml(e.text)}
+          ${[e.source, ...(e.sources ?? [])].filter(sr => sr?.url).map(sr =>
+            `<a class="poh-expect-src" href="${escapeHtml(sr.url)}" target="_blank" rel="noopener">${escapeHtml(sr.name ?? 'zdroj')}</a>`).join(' ')}
+        </li>`).join('')}
+      </ul>
+    </div>` : '';
+
+  host.innerHTML = `<ol class="poh-before-list">${steps}</ol>${feeHtml}${exHtml}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Rozcestník „Kam s tím?“
+//
+// Vyhledávání odpovídá na „kde“, ne na „kam patřím“. To je druhá otázka —
+// a stránka na ni nesmí odpovídat vlastním úsudkem. Každý řádek je proto
+// přepis oficiálního zdroje (NZIP, záchranná služba, ministerstvo)
+// s odkazem a datem ověření; stránka jen převádí odpověď na tlačítko:
+// zavolat, vyhledat, otevřít. Bez dat se sekce nevykreslí vůbec.
+// ─────────────────────────────────────────────────────────────────────────
+
+function triageActionHtml(action, { primary = true } = {}) {
+  if (!action) return '';
+  const cls = `poh-action${primary ? ' poh-action-primary' : ''}`;
+  const label = escapeHtml(action.label ?? '');
+  if (action.kind === 'tel') return `<a class="${cls}" href="tel:${escapeHtml(action.phone)}">${label}</a>`;
+  if (action.kind === 'href') return `<a class="${cls}" href="${escapeHtml(action.url)}" target="_blank" rel="noopener">${label}</a>`;
+  if (action.kind === 'anchor') return `<a class="${cls}" href="${escapeHtml(action.href)}">${label}</a>`;
+  if (action.kind === 'find') {
+    return `<button type="button" class="${cls}" data-find="${escapeHtml((action.categories ?? []).join(','))}">${label}</button>`;
+  }
+  if (action.kind === 'poradna') return poradnaActionHtml(action, cls);
+  return '';
+}
+
+/** Poradní linka záchranky je krajská — tlačítko se mění podle toho, odkud uživatel hledá. */
+function poradnaActionHtml(action, cls) {
+  const line = adviceLineForOrigin();
+  if (line) {
+    // Zavřená linka není hlavní tlačítko — číslo zůstane (kvůli zítřku),
+    // ale bez důrazu a s tím, kdy otevírá.
+    const closed = adviceLineStatus(line).state === 'closed';
+    const live = adviceLineLive(line);
+    return `<a class="${closed ? 'poh-action' : cls}" href="tel:${escapeHtml(line.phone)}">${escapeHtml(line.name)} · ${escapeHtml(formatPhone(line.phone))}</a>
+      <span class="poh-roz-hint">${escapeHtml(adviceLineHours(line))}${live ? ` — ${escapeHtml(live)}` : ''}${line.note ? ` · ${escapeHtml(line.note)}` : ''}</span>`;
+  }
+  // Tři poctivé stavy: bez obce nevíme kraj; obec zadaná, kraj se teprve
+  // dohledává (nebo nešel zjistit); kraj známý a linku nemá.
+  let hint;
+  if (!state.origin) hint = 'Zadejte obec nahoře — poradní linku má jen část krajů.';
+  else if (!currentKrajCode()) hint = state.origin.krajUnknown ? 'Kraj se nepodařilo určit — přehled krajů, kde linka je, níže.' : 'Zjišťuji kraj…';
+  else hint = 'Ve vašem kraji záchranná služba neakutní poradní linku neprovozuje — přehled krajů, kde je, níže.';
+  return `<a class="poh-action" href="#pohPoradny">${escapeHtml(action.label ?? 'Poradní linky podle krajů')}</a>
+    <span class="poh-roz-hint">${escapeHtml(hint)}</span>`;
+}
+
+function renderTriage() {
+  const host = document.getElementById('pohTriageGrid');
+  if (!host) return;
+  const rows = state.data?.practical?.triage ?? [];
+  // Skrývá se jen mřížka karet — poradní linky a EN/UK ve stejné sekci
+  // mají vlastní data a vlastní hosty.
+  const wrap = host.closest('.poh-roz-cards') ?? host;
+  if (!rows.length) { wrap.hidden = true; return; }
+  wrap.hidden = false;
+
+  host.innerHTML = rows.map(r => `
+    <li class="poh-roz-card${r.urgent ? ' poh-roz-card-urgent' : ''}" id="roz-${escapeHtml(r.id)}">
+      <h3 class="poh-roz-title">${escapeHtml(r.situation)}</h3>
+      ${r.examples ? `<p class="poh-roz-ex">${escapeHtml(r.examples)}</p>` : ''}
+      <p class="poh-roz-text">${escapeHtml(r.text)}</p>
+      <p class="poh-roz-actions">${triageActionHtml(r.action)}${r.secondary ? ` ${triageActionHtml(r.secondary, { primary: false })}` : ''}</p>
+      ${r.source?.url ? `<p class="poh-roz-src">Podle: ${[r.source, ...(r.sources ?? [])]
+        .map(sr => `<a href="${escapeHtml(sr.url)}" target="_blank" rel="noopener">${escapeHtml(sr.name ?? 'zdroj')}</a>`).join('; ')}${
+        r.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(r.verified_at))}` : ''}.</p>` : ''}
+    </li>`).join('');
+
+  // „Najít“ přepne filtr typu a vrátí uživatele k vyhledávání — s polohou
+  // rovnou k odpovědi „Co dělat teď“, bez polohy do pole pro obec.
+  host.querySelectorAll('[data-find]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const cats = String(btn.dataset.find ?? '').split(',').filter(Boolean);
+      if (!cats.length) return;
+      state.categories = new Set(cats);
+      state.shown = PAGE_SIZE;
+      if (cats.includes('akutni')) await ensureAcute().catch(() => {});
+      renderTypeChips();
+      update();
+      const target = document.getElementById(state.origin ? 'pohAdviceH' : 'pohQuery');
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!state.origin) document.getElementById('pohQuery')?.focus({ preventScroll: true });
+    });
+  });
+}
+
+/** Aplikace (Záchranka) — z dat, se zdrojem; bez dat se blok nevykreslí. */
+function renderApps() {
+  const host = document.getElementById('pohApps');
+  if (!host) return;
+  const apps = state.data?.practical?.apps ?? [];
+  if (!apps.length) { host.hidden = true; return; }
+  host.hidden = false;
+  host.innerHTML = apps.map(a => `
+    <article class="poh-app">
+      <h3 class="poh-app-name">${escapeHtml(a.name)}</h3>
+      <p class="poh-app-text">${escapeHtml(a.text)}</p>
+      ${(a.features ?? []).length ? `<ul class="poh-app-features">${a.features.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>` : ''}
+      <a class="poh-action poh-action-primary" href="${escapeHtml(a.url)}" target="_blank" rel="noopener">Otevřít ${escapeHtml(a.name)}</a>
+      <p class="poh-app-src">Zdroj: <a href="${escapeHtml(a.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(a.source?.name ?? 'zdroj')}</a>${
+        a.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(a.verified_at))}` : ''}.</p>
+    </article>`).join('');
+}
+
+/** Celostátní přehled poradních linek záchranek — ukazuje se všem, jako online pohotovosti. */
+function renderAdviceLines() {
+  const host = document.getElementById('pohPoradny');
+  if (!host) return;
+  const lines = state.data?.online?.advice_lines ?? [];
+  if (!lines.length) { host.hidden = true; return; }
+  host.hidden = false;
+  const mine = currentKrajCode();
+  const note = state.data?.online?.advice_lines_note;
+
+  host.innerHTML = `
+    <h3 class="poh-h3" id="pohPoradnyH">Poradní linky záchranek: kam volat, když nejde o život</h3>
+    <p class="poh-roz-lead">
+      Část krajských záchranných služeb provozuje vedle tísňové linky 155 i linku pro
+      neakutní stavy — pro chvíle, kdy nevíte, jestli s tím někam jít. Nevolejte na ni
+      při ohrožení života; tam patří 155.
+    </p>
+    <ul class="poh-poradna-list">${lines.map(l => `
+      <li class="poh-poradna${l.kraj_code === mine ? ' is-mine' : ''}">
+        ${l.kraj_code === mine ? '<span class="poh-online-badge">Ve vašem kraji</span>' : ''}
+        <span class="poh-poradna-kraj">${escapeHtml(l.kraj)}</span>
+        <span class="poh-poradna-name">${escapeHtml(l.name)}</span>
+        <a class="poh-action poh-action-primary" href="tel:${escapeHtml(l.phone)}">${escapeHtml(formatPhone(l.phone))}</a>
+        ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
+        <span class="poh-poradna-hours">${escapeHtml(adviceLineHours(l))}${adviceLineLive(l) ? ` · ${escapeHtml(adviceLineLive(l))}` : ''}${l.since ? ` · od ${escapeHtml(formatSince(l.since))}` : ''}</span>
+        ${l.text ? `<span class="poh-poradna-text">${escapeHtml(l.text)}</span>` : ''}
+        ${l.note ? `<span class="poh-poradna-text">${escapeHtml(l.note)}</span>` : ''}
+        <span class="poh-poradna-src">Zdroj: <a href="${escapeHtml(l.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(l.source?.name ?? 'zdroj')}</a>${
+          l.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(l.verified_at))}` : ''}.</span>
+      </li>`).join('')}
+    </ul>
+    ${note?.text ? `<p class="poh-poradna-note">${escapeHtml(note.text)}${
+      note.source?.url ? ` <a href="${escapeHtml(note.source.url)}" target="_blank" rel="noopener">${escapeHtml(note.source.name ?? 'zdroj')}</a>` : ''}</p>` : ''}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// English · Українська
+//
+// Kdo nemluví česky, na téhle stránce hledá jednu věc: jaké číslo volat,
+// co je „pohotovost“, kolik se platí a co s pojištěním. Fakta jsou tatáž
+// jako v české verzi a nesou stejné zdroje; přeložený je jen text.
+// ─────────────────────────────────────────────────────────────────────────
+
+const INTL_LANGS = [['en', 'English'], ['uk', 'Українська']];
+
+function renderIntl() {
+  const host = document.getElementById('pohIntlBody');
+  if (!host) return;
+  const intl = state.data?.practical?.intl;
+  const langs = INTL_LANGS.filter(([code]) => intl?.[code]);
+  const wrap = host.closest('details');
+  if (!langs.length) { if (wrap) wrap.hidden = true; return; }
+  if (wrap) wrap.hidden = false;
+
+  host.innerHTML = langs.map(([code, label]) => {
+    const b = intl[code];
+    return `
+    <section class="poh-intl-block" lang="${code}" aria-label="${escapeHtml(label)}">
+      <h3 class="poh-intl-h">${escapeHtml(b.title)}</h3>
+      ${b.lead ? `<p class="poh-intl-lead">${escapeHtml(b.lead)}</p>` : ''}
+      <dl class="poh-intl-list">${(b.items ?? []).map(it => `
+        <dt>${escapeHtml(it.q)}</dt>
+        <dd>${escapeHtml(it.a)}
+          ${it.tel ? `<a class="poh-action poh-action-primary" href="tel:${escapeHtml(it.tel)}">${escapeHtml(it.tel_label ?? it.tel)}</a>` : ''}
+          ${it.url ? `<a class="poh-action" href="${escapeHtml(it.url)}" target="_blank" rel="noopener">${escapeHtml(it.url_label ?? it.url)}</a>` : ''}
+        </dd>`).join('')}
+      </dl>
+      ${(b.sources ?? []).length ? `<p class="poh-intl-src">${escapeHtml(b.sources_label ?? 'Sources')}: ${
+        b.sources.map(s => `<a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.name)}</a>`).join(', ')}${
+        b.verified_at ? ` (${escapeHtml(b.verified_label ?? 'verified')} ${escapeHtml(b.verified_at)})` : ''}.</p>` : ''}
+    </section>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Offline
+//
+// Kdo hledá pohotovost, má často jednu čárku signálu. Service worker
+// (sw-pohotovosti.js) drží poslední stažená data a skripty téhle stránky,
+// takže vyhledávání podle obce funguje i bez připojení — a stránka to
+// poctivě řekne, včetně toho, jak stará data ukazuje.
+// ─────────────────────────────────────────────────────────────────────────
+
+function registerOffline() {
+  if (typeof navigator === 'undefined') return;
+  if ('serviceWorker' in navigator) {
+    try {
+      // Cesty odvozené od umístění modulu, aby fungovaly i mimo kořen domény.
+      const sw = new URL('../sw-pohotovosti.js', import.meta.url).pathname;
+      const scope = new URL('../pohotovost', import.meta.url).pathname;
+      navigator.serviceWorker.register(sw, { scope }).catch(() => {});
+    } catch {
+      // Bez service workeru stránka funguje dál, jen ne offline.
+    }
+  }
+
+  window.addEventListener('online', syncOfflineBanner);
+  window.addEventListener('offline', syncOfflineBanner);
+  syncOfflineBanner();
+}
+
+/** Pruh „jste offline“: podle sítě, nebo podle toho, že data přišla z cache SW. */
+function syncOfflineBanner() {
+  const banner = document.getElementById('pohOffline');
+  if (!banner) return;
+  const offline = (typeof navigator !== 'undefined' && navigator.onLine === false) || state.fromCache === true;
+  banner.hidden = !offline;
+  if (!offline) return;
+  const gen = generatedDay();
+  const why = navigator.onLine === false ? 'Jste offline.' : 'Síť neodpovídá.';
+  banner.innerHTML = `<strong>${why}</strong> Ukazujeme naposledy stažená data${
+    gen ? ` (k ${escapeHtml(formatCzDate(gen))})` : ''}. Volání na <a href="tel:155">155</a> funguje i bez dat.`;
+}
+
+/** Odkazy na EN/UK blok musí akordeon i otevřít — samotná kotva zavřený <details> nerozbalí. */
+function wireIntlLinks() {
+  document.querySelectorAll('a[href="#pohIntl"], a[href="#pohIntlBody"]').forEach(a => {
+    a.addEventListener('click', () => { const d = document.getElementById('pohIntl'); if (d) d.open = true; });
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -1435,6 +1842,11 @@ async function init() {
 
   renderTypeChips();
   renderContext();
+  renderTriage();
+  renderApps();
+  renderAdviceLines();
+  renderIntl();
+  wireIntlLinks();
   renderBeforeYouGo();
   renderOnlineSection();
   renderDojezdSection();
@@ -1442,6 +1854,8 @@ async function init() {
   renderOkresIndex();
   wireForm();
   wireGeolocation();
+  wireShare();
+  registerOffline();
   setOrigin(null);
 }
 

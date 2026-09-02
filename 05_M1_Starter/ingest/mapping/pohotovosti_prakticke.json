@@ -11,7 +11,19 @@
     "",
     "PROČ RUČNĚ A SE ZDROJEM: jde o právní a provozní fakta (výše poplatku,",
     "kdo je od něj osvobozen), která se mění novelami. Každý blok proto nese",
-    "`source` a `verified_at` a validátor záznam bez nich odmítne."
+    "`source` a `verified_at` a validátor záznam bez nich odmítne.",
+    "",
+    "ROZCESTNÍK „KAM S TÍM?“ (`triage`): vyhledávání odpovídá na „kde“, tohle na",
+    "„kam patřím“. Stránka na to nesmí odpovídat vlastním úsudkem — každý řádek",
+    "je přepis oficiálního zdroje (NZIP, záchranná služba, ministerstvo, komora)",
+    "se `source` a `verified_at`; `faq` je totéž pro FAQPage JSON-LD v hlavičce",
+    "stránky (generuje scripts/build-pohotovosti-okresy.js). Tlačítko (`action`):",
+    "tel = zavolat, find = přepnout filtr vyhledávání, href = otevřít zdroj,",
+    "poradna = poradní linka ZZS podle kraje uživatele (online.advice_lines).",
+    "",
+    "`expectations`, `no_gp`, `apps`, `intl` (EN/UK) — totéž pravidlo: zdroj",
+    "a datum ověření, jinak validátor odmítne. Přeložený je jen text, fakta",
+    "jsou tatáž jako v češtině."
   ],
   "version": "1.0",
   "fee": {
@@ -63,5 +75,627 @@
       "title": "Počítejte s čekáním — nepořadí se podle příchodu",
       "text": "Pohotovost ošetřuje podle závažnosti, ne podle pořadí ve frontě. Když se stav během čekání zhorší, řekněte to sestře v triáži — a při dušnosti, bolesti na hrudi nebo poruše vědomí volejte 155."
     }
-  ]
+  ],
+  "feedback": {
+    "issues_new_url": "https://github.com/veritasderman-rgb/hspa/issues/new",
+    "labels": []
+  },
+  "apps": [
+    {
+      "id": "zachranka",
+      "name": "Aplikace Záchranka",
+      "url": "https://www.zachrankaapp.cz/",
+      "text": "Zdarma, provozuje ji nezisková organizace. Tlačítko SOS pošle dispečinku 155 vaši přesnou polohu a údaje z profilu a pak vytočí 155; funguje i bez internetu (poloha odejde šifrovanou SMS). Lokátor ukáže nejbližší pohotovost (z databáze VZP včetně ordinačních dob), lékárny (kompletně ze SÚKL), zubní pohotovost a nejbližší AED. Režim „Nemohu mluvit“ nabídne piktogramy a SMS chat přímo s operačním střediskem 155 nebo 112 — pro neslyšící i pro situace, kdy nejde mluvit.",
+      "features": [
+        "SOS 155 s přesnou polohou",
+        "funguje bez internetu",
+        "lokátor pohotovostí (VZP), lékáren (SÚKL), zubních pohotovostí a AED",
+        "režim „Nemohu mluvit“ — SMS chat s dispečinkem 155/112",
+        "v zahraničí: Slovensko, Rakousko, Maďarsko, Bavorsko, Finsko, Moldavsko, Trento"
+      ],
+      "quote": "V případě linky 155 dochází po stisku tlačítka SOS k odeslání nouzové zprávy s vaší přesnou polohou a dalšími údaji, které jste vyplnili ve svém profilu. Poté je nutné potvrdit volání na tísňové číslo 155.",
+      "source": {
+        "name": "Aplikace Záchranka — Často kladené dotazy",
+        "url": "https://www.zachrankaapp.cz/cs/faq"
+      },
+      "verified_at": "2026-09-01"
+    }
+  ],
+  "triage": [
+    {
+      "id": "zivot",
+      "urgent": true,
+      "situation": "Ohrožení života",
+      "examples": "bezvědomí, dušnost, silná bolest na hrudi, křeče, silné krvácení, mrtvice, těžký úraz",
+      "text": "Volejte 155 — vždy, když jde o náhlé a neočekávané zhoršení zdravotního stavu, těžký úraz nebo děj, který zřejmě povede k závažnému poškození zdraví. Volejte i tehdy, když si závažností nejste jistí: operátoři jsou zdravotníci a pomohou situaci posoudit. Linka 112 funguje v celé EU, i bez kreditu a SIM karty; obě linky přijímají i SMS.",
+      "action": {
+        "kind": "tel",
+        "phone": "155",
+        "label": "Volat 155"
+      },
+      "secondary": {
+        "kind": "href",
+        "url": "https://www.zachrankaapp.cz/",
+        "label": "Aplikace Záchranka: SOS s polohou"
+      },
+      "faq": {
+        "q": "Kdy volat záchrannou službu 155 a kdy jít na pohotovost?",
+        "a": "Záchrannou službu (155) volejte vždy při náhlém a neočekávaném zhoršení zdravotního stavu, těžkém úrazu nebo ději, který zřejmě povede k závažnému poškození zdraví — a také když si závažností stavu nejste jistí; operátoři jsou zdravotníci a pomohou situaci vyřešit. Pohotovost (lékařská pohotovostní služba) je pro potíže mimo ordinační hodiny, které nepočkají do rána, ale neohrožují život. Záchranná služba běžné léky nevozí ani nepředepisuje a není bezplatná doprava do nemocnice."
+      },
+      "source": {
+        "name": "NZIP — Zdravotnická záchranná služba: tísňová linka 155 nebo 112 (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "nevim",
+      "situation": "Nevíte, jestli s tím někam jít",
+      "examples": "teplota, chřipka, zvracení, průjem, bolest, která se nelepší",
+      "text": "V krajích, kde záchranná služba provozuje poradní linku pro neakutní stavy, zavolejte tam. Záběr se kraj od kraje liší — v Pardubickém kraji operátoři stav vyhodnotí a doporučí praktika, pohotovost, svépomoc nebo transport, v Jihomoravském poradí s dostupností lékáren, pohotovostí a další péče; co která linka dělá, je u ní níže. Jinde platí: když si nejste jistí, volejte 155.",
+      "action": {
+        "kind": "poradna",
+        "label": "Poradní linky záchranek podle krajů"
+      },
+      "faq": {
+        "q": "Kam zavolat, když nevím, jestli s potížemi někam jít?",
+        "a": "Čtyři krajské záchranné služby — Jihomoravský, Středočeský, Královéhradecký a Pardubický kraj — provozují vedle tísňové linky 155 i poradní linku pro neakutní stavy; jejich záběr se liší (v Pardubickém kraji operátoři stav vyhodnotí a doporučí praktického lékaře, pohotovost, svépomoc nebo transport, v Jihomoravském kraji radí s dostupností lékáren, pohotovostí, sociální a paliativní péče). V ostatních krajích platí, že na 155 je správné zavolat i tehdy, když si závažností stavu nejste zcela jisti — operátoři jsou zdravotníci."
+      },
+      "source": {
+        "name": "NZIP — Zdravotnická záchranná služba: tísňová linka 155 nebo 112 (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+      },
+      "sources": [
+        {
+          "name": "ZZS Pardubického kraje — Nejčastější dotazy",
+          "url": "https://www.zzspak.cz/informace/nejcastejsi-dotazy"
+        },
+        {
+          "name": "ZZS Jihomoravského kraje — Neakutní poradní linka",
+          "url": "https://www.zzsjmk.cz/neakutni-poradni-linka"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "otrava",
+      "situation": "Otrava, požití léků, chemikálie nebo hub",
+      "text": "Volejte Toxikologické informační středisko — nepřetržitě, pro veřejnost i zdravotníky. Dostanete pokyny k první pomoci a k dalšímu postupu. Při poruše vědomí, křečích nebo dušnosti volejte rovnou 155.",
+      "action": {
+        "kind": "tel",
+        "phone": "+420224919293",
+        "label": "TIS 224 919 293 (nonstop)"
+      },
+      "secondary": {
+        "kind": "tel",
+        "phone": "+420224915402",
+        "label": "224 915 402"
+      },
+      "faq": {
+        "q": "Kam volat při otravě nebo požití léků či chemikálie?",
+        "a": "Na Toxikologické informační středisko (TIS) Všeobecné fakultní nemocnice v Praze: 224 919 293 nebo 224 915 402, nepřetržitě 24 hodin denně, 7 dní v týdnu. Poskytuje telefonické konzultace při akutních otravách lidí i zvířat — zdravotníkům od roku 1962, veřejnosti od roku 1989. Při poruše vědomí, křečích nebo dušnosti volejte 155."
+      },
+      "source": {
+        "name": "Toxikologické informační středisko VFN — Co dělat při akutní otravě",
+        "url": "https://tis-cz.cz/"
+      },
+      "sources": [
+        {
+          "name": "VFN v Praze — Toxikologické informační středisko",
+          "url": "https://www.vfn.cz/pacienti/kliniky-ustavy/toxikologicke-informacni-stredisko-tis/"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "krize",
+      "situation": "Psychická krize, myšlenky na sebevraždu",
+      "text": "Linka první psychické pomoci 116 123 — nonstop, zdarma, anonymně, pro dospělé v krizi i jejich blízké, telefonem i chatem. Děti a mladí do 26 let: Linka bezpečí 116 111, nonstop a zdarma. Při bezprostředním ohrožení života volejte 155.",
+      "action": {
+        "kind": "tel",
+        "phone": "116123",
+        "label": "116 123 — dospělí"
+      },
+      "secondary": {
+        "kind": "tel",
+        "phone": "116111",
+        "label": "116 111 — do 26 let"
+      },
+      "faq": {
+        "q": "Kam se obrátit v psychické krizi?",
+        "a": "Dospělí: Linka první psychické pomoci 116 123 (Cesta z krize, z. ú.) — nonstop (v noci v režimu pohotovosti), zdarma, anonymně, telefonem i chatem. Děti a studenti do 26 let: Linka bezpečí 116 111 — nonstop a zdarma. Při bezprostředním ohrožení života volejte záchrannou službu 155."
+      },
+      "source": {
+        "name": "Linka první psychické pomoci 116 123 (Cesta z krize, z. ú.)",
+        "url": "https://linkapsychickepomoci.cz/"
+      },
+      "sources": [
+        {
+          "name": "Linka bezpečí 116 111 (Linka bezpečí, z.s.)",
+          "url": "https://www.linkabezpeci.cz/"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "dite",
+      "situation": "Nemocné dítě",
+      "examples": "horečka, zvracení, vyrážka, úraz",
+      "text": "V ordinační době volejte dětskému lékaři, u kterého je dítě registrované. Mimo ordinační hodiny je tu lékařská pohotovostní služba pro děti a dorost — najděte nejbližší otevřenou a před cestou tam zavolejte. Při dušnosti, poruše vědomí nebo křečích volejte 155.",
+      "action": {
+        "kind": "find",
+        "categories": [
+          "lps_deti"
+        ],
+        "label": "Najít dětskou pohotovost"
+      },
+      "faq": {
+        "q": "Kam s nemocným dítětem mimo ordinační hodiny?",
+        "a": "Na lékařskou pohotovostní službu pro děti a dorost — první kontakt se zdravotními službami v době mimo běžné ordinační hodiny, obvykle při nemocnici nebo záchranné službě; poskytne základní vyšetření a ošetření, případně zprostředkuje péči v nemocnici. V ordinační době patří akutní potíže dítěte k jeho registrujícímu praktickému lékaři pro děti a dorost. Při náhlém závažném zhoršení stavu volejte 155."
+      },
+      "source": {
+        "name": "NZIP — lékařská pohotovostní služba (rejstříkový pojem)",
+        "url": "https://www.nzip.cz/rejstrikovy-pojem/120"
+      },
+      "sources": [
+        {
+          "name": "NZIP — Zdravotnická záchranná služba: tísňová linka 155 nebo 112 (MZ ČR)",
+          "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "zub",
+      "situation": "Bolest zubu, vypadlá plomba, úraz zubu",
+      "text": "V ordinační době vlastní zubař. Mimo ordinační hodiny zubní pohotovost — kdy a kde slouží, se kraj od kraje liší: někde jen o víkendech a svátcích, někde se ordinace střídají podle rozpisu VZP. Nejbližší otevřenou najdete ve vyhledávání. Za ošetření se platí regulační poplatek 90 Kč.",
+      "action": {
+        "kind": "find",
+        "categories": [
+          "zubni"
+        ],
+        "label": "Najít zubní pohotovost"
+      },
+      "faq": {
+        "q": "Kde je zubní pohotovost a kolik stojí?",
+        "a": "Pohotovostní služba v oboru zubní lékařství slouží mimo ordinační hodiny zubařů; kdy a kde, se kraj od kraje liší a v některých krajích se ordinace střídají podle rozpisu zveřejněného VZP — nejbližší otevřenou najdete ve vyhledávání na této stránce. Za využití zubní pohotovosti se platí regulační poplatek 90 Kč; neplatí se, pokud ošetřující lékař shledá, že stav vyžaduje hospitalizaci."
+      },
+      "source": {
+        "name": "Ministerstvo zdravotnictví ČR — Základní typy regulačních poplatků",
+        "url": "https://mzd.gov.cz/zakladni-typy-regulacnich-poplatku/"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "lek",
+      "situation": "Došly léky, potřebujete recept",
+      "text": "Záchranná služba běžné léky nevozí ani nepředepisuje. Recept na dlouhodobou léčbu vystaví lékař, u kterého se léčíte — v ordinační době. Lékárenská pohotovost vydá léky na už vystavený recept: najděte nejbližší otevřenou lékárnu. Nonstop lékáren je v Česku jen 16.",
+      "action": {
+        "kind": "find",
+        "categories": [
+          "lekarna"
+        ],
+        "label": "Najít pohotovostní lékárnu"
+      },
+      "secondary": {
+        "kind": "href",
+        "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/",
+        "label": "16 nonstop lékáren (ČLnK)"
+      },
+      "faq": {
+        "q": "Kde seženu léky v noci nebo o víkendu?",
+        "a": "V lékárně s pohotovostní službou — nejbližší otevřenou najdete ve vyhledávání na této stránce. Lékáren s nepřetržitým provozem je v České republice jen 16 a víc než polovina z nich je v Praze; v některých krajích není ani jedna (seznam vede Česká lékárnická komora). Záchranná služba běžné léky nevozí ani nepředepisuje; recept na dlouhodobou léčbu vystaví lékař, u kterého se léčíte."
+      },
+      "source": {
+        "name": "Česká lékárnická komora — Lékárny s pohotovostní službou 24/7",
+        "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/"
+      },
+      "sources": [
+        {
+          "name": "NZIP — Zdravotnická záchranná služba: tísňová linka 155 nebo 112 (MZ ČR)",
+          "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "uraz",
+      "situation": "Úraz, řezná rána, podezření na zlomeninu",
+      "text": "V ordinační době úrazová nebo chirurgická ambulance nemocnice (denní ambulance ve vyhledávání), mimo ni pohotovost nebo urgentní příjem nemocnice — ten přijímá nepřetržitě, ale třídí podle naléhavosti, takže lehčí úraz čeká. Úraz s velkou silou, silné krvácení nebo porucha vědomí: 155.",
+      "action": {
+        "kind": "find",
+        "categories": [
+          "lps_dospeli",
+          "ambulance_denni",
+          "akutni"
+        ],
+        "label": "Najít pohotovost, úrazovou ambulanci a urgentní příjem"
+      },
+      "faq": {
+        "q": "Kam s úrazem — na pohotovost, nebo na urgentní příjem?",
+        "a": "Jednodušší případy řeší ordinace lékařské pohotovostní služby, složitější stavy vyžadující neodkladnou péči určené ambulance nemocnic; větší nemocnice mají urgentní příjem s nepřetržitým provozem. Urgentní příjem je určen přednostně pro pacienty přivážené záchrannou službou, bývá přetížený a recepce třídí podle naléhavosti — lehčí úraz tam čeká. Při těžkém úrazu, silném krvácení nebo poruše vědomí volejte 155."
+      },
+      "source": {
+        "name": "NZIP — Pohotovost (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/228-pohotovost"
+      },
+      "sources": [
+        {
+          "name": "NZIP — urgentní příjem (rejstříkový pojem)",
+          "url": "https://www.nzip.cz/rejstrikovy-pojem/1396"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "bez-praktika",
+      "situation": "Nemáte praktického lékaře",
+      "text": "Obraťte se na svou zdravotní pojišťovnu — podle zákona o veřejném zdravotním pojištění je povinna zajistit vám potřebnou péči u smluvních poskytovatelů (§ 40 odst. 3 zákona č. 48/1997 Sb.: místní i časová dostupnost). Akutní potíže mezitím řeší pohotovost mimo ordinační hodiny a při ohrožení života 155.",
+      "action": {
+        "kind": "href",
+        "url": "https://www.nzip.cz/clanek/268-nemuzete-najit-registrujiciho-lekare",
+        "label": "Co dělat bez praktika (NZIP)"
+      },
+      "faq": {
+        "q": "Co dělat, když nemám praktického lékaře a nikdo mě nebere?",
+        "a": "Obraťte se na svou zdravotní pojišťovnu: podle zákona o veřejném zdravotním pojištění (§ 40 odst. 3 zákona č. 48/1997 Sb.) je povinna zajistit svým pojištěncům místní a časovou dostupnost hrazených služeb prostřednictvím poskytovatelů, se kterými má smlouvu. Některé odborné společnosti a stavovské organizace, například Česká stomatologická komora, zveřejňují seznamy lékařů, kteří přijímají nové pacienty."
+      },
+      "source": {
+        "name": "NZIP — Nemůžete najít registrujícího lékaře? (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/268-nemuzete-najit-registrujiciho-lekare"
+      },
+      "sources": [
+        {
+          "name": "Zákon č. 48/1997 Sb., § 40 odst. 3 (zakonyprolidi.cz)",
+          "url": "https://www.zakonyprolidi.cz/cs/1997-48"
+        }
+      ],
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "navsteva",
+      "situation": "Nemocný, který se nedostane do ordinace",
+      "examples": "ležící pacient, senior, pooperační stav",
+      "text": "Registrující praktický lékař — i dětský — má ze zákona o zdravotních službách povinnost návštěvní služby u pacientů, kteří kvůli zdravotním obtížím nemohou přijít do ordinace; zavolejte do ordinace a domluvte návštěvu. V urgentních případech, při náhlém úrazu nebo ohrožení života volejte 155.",
+      "action": {
+        "kind": "href",
+        "url": "https://www.nzip.cz/clanek/1830-navstevni-sluzba-praktickeho-lekare",
+        "label": "Návštěvní služba praktika (NZIP)"
+      },
+      "faq": {
+        "q": "Co když se nemocný nedostane do ordinace?",
+        "a": "Součástí primární péče registrujících praktických lékařů pro dospělé i pro děti a dorost je podle § 7 zákona o zdravotních službách vždy návštěvní služba — u pacientů, kteří kvůli zdravotním obtížím nemohou zajít do ordinace. Domluvte ji telefonicky se svým praktikem. V urgentních případech, při náhlém úrazu nebo život ohrožujícím stavu je třeba zavolat záchrannou službu 155."
+      },
+      "source": {
+        "name": "NZIP — Návštěvní služba praktického lékaře (ÚZIS ČR)",
+        "url": "https://www.nzip.cz/clanek/1830-navstevni-sluzba-praktickeho-lekare"
+      },
+      "verified_at": "2026-09-01"
+    }
+  ],
+  "expectations": [
+    {
+      "id": "poradi",
+      "title": "Pořadí podle naléhavosti, ne podle příchodu.",
+      "text": "Přednost mají vždy ti, jejichž stav vyžaduje neodkladnou péči. Kdo přijde s dlouhodobými obtížemi bez náhlého zhoršení, čeká zpravidla velmi dlouho — a ministerstvo takové návštěvy pohotovosti nedoporučuje: patří do ordinační doby vašeho lékaře nebo ambulantního specialisty.",
+      "source": {
+        "name": "NZIP — Pohotovost (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/228-pohotovost"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "navaznost",
+      "title": "Pohotovost je první ošetření, ne léčba.",
+      "text": "Lékařská pohotovostní služba ošetřuje pacienty bez zjevného ohrožení životně důležitých funkcí. Na ošetření by měla v krátké lhůtě navázat kontrola u vašeho registrujícího praktického lékaře, který posoudí, jestli doporučený postup zabírá, a případně ho upraví nebo doplní.",
+      "source": {
+        "name": "NZIP — Pohotovost (MZ ČR)",
+        "url": "https://www.nzip.cz/clanek/228-pohotovost"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "urgent",
+      "title": "Urgentní příjem třídí na recepci.",
+      "text": "Urgentní příjem je nepřetržité nemocniční pracoviště pro náhle vzniklá závažná postižení zdraví a přímé ohrožení života; přednostně přijímá pacienty přivážené záchrannou službou. Bývá velmi přetížený — recepce určuje pořadí podle naléhavosti ve spolupráci s lékaři ve službě.",
+      "source": {
+        "name": "NZIP — urgentní příjem (rejstříkový pojem)",
+        "url": "https://www.nzip.cz/rejstrikovy-pojem/1396"
+      },
+      "verified_at": "2026-09-01"
+    },
+    {
+      "id": "poplatek",
+      "title": "Poplatek 90 Kč se platí na místě; neplatí se při hospitalizaci.",
+      "text": "Regulační poplatek za lékařskou a zubní pohotovost neplatí ten, u koho ošetřující lékař shledá, že stav vyžaduje hospitalizaci. O pohotovostní službu nejde, když je ošetření poskytnuto během pravidelné ordinační doby poskytovatele.",
+      "source": {
+        "name": "Ministerstvo zdravotnictví ČR — Základní typy regulačních poplatků",
+        "url": "https://mzd.gov.cz/zakladni-typy-regulacnich-poplatku/"
+      },
+      "verified_at": "2026-09-01",
+      "sources": [
+        {
+          "name": "NZIP — Pohotovost (MZ ČR)",
+          "url": "https://www.nzip.cz/clanek/228-pohotovost"
+        }
+      ]
+    }
+  ],
+  "no_gp": {
+    "title": "Nemáte praktického lékaře?",
+    "short": "Nemáte praktika? Pojišťovna vám ho ze zákona musí pomoci najít.",
+    "text": "Pokud nemůžete najít registrujícího lékaře, obraťte se na svou zdravotní pojišťovnu — podle zákona o veřejném zdravotním pojištění je povinna zajistit vám potřebnou péči prostřednictvím poskytovatelů, se kterými má smlouvu (§ 40 odst. 3 zákona č. 48/1997 Sb.: místní a časová dostupnost hrazených služeb). Některé odborné společnosti a komory zveřejňují seznamy lékařů, kteří přijímají nové pacienty.",
+    "links": [
+      {
+        "label": "NZIP: Nemůžete najít registrujícího lékaře?",
+        "url": "https://www.nzip.cz/clanek/268-nemuzete-najit-registrujiciho-lekare"
+      },
+      {
+        "label": "§ 40 zákona č. 48/1997 Sb.",
+        "url": "https://www.zakonyprolidi.cz/cs/1997-48"
+      }
+    ],
+    "quote": "Pokud nemůžete najít registrujícího lékaře, který by vás mohl vzít do péče, obraťte se na vaši zdravotní pojišťovnu, jež je podle zákona o veřejném zdravotním pojištění povinna zajistit vám potřebnou péči prostřednictvím poskytovatelů zdravotních služeb, s nimiž má uzavřené smluvní vztahy.",
+    "source": {
+      "name": "NZIP — Nemůžete najít registrujícího lékaře? (MZ ČR)",
+      "url": "https://www.nzip.cz/clanek/268-nemuzete-najit-registrujiciho-lekare"
+    },
+    "verified_at": "2026-09-01"
+  },
+  "intl": {
+    "en": {
+      "title": "Emergency and after-hours care in Czechia",
+      "lead": "\"Pohotovost\" — in full lékařská pohotovostní služba (LPS) — is the after-hours medical service for problems that cannot wait until your GP's surgery reopens but do not threaten life. This page finds the nearest one that is open right now: the search itself is in Czech, so type your town into the field \"Odkud hledáte?\" (\"Where are you searching from?\") or tap the button \"Moje poloha\" (\"My location\").",
+      "items": [
+        {
+          "q": "Someone's life is in danger — which number do I call?",
+          "a": "Call 155, the Czech emergency medical service; the call is free from any phone. You can also use the Europe-wide number 112, whose operators handle emergency calls in Czech, English and German and have software support for further languages if needed. Call 155 even when you are not sure how serious the condition is — the people answering are qualified medical staff who will help you judge it.",
+          "tel": "155",
+          "tel_label": "Call 155"
+        },
+        {
+          "q": "Is there an app that can call help for me?",
+          "a": "The Záchranka app is free to download and use. Its SOS button sends your exact GPS position and the details from your profile straight to the ambulance dispatch centre and then puts the call through to 155; it works without an internet connection, sending the position as an encrypted SMS. Its locator also shows the nearest after-hours service, pharmacy, dental emergency service and defibrillator (AED).",
+          "url": "https://www.zachrankaapp.cz/",
+          "url_label": "zachrankaapp.cz"
+        },
+        {
+          "q": "What exactly is a \"pohotovost\", and when should I go there?",
+          "a": "The LPS is the first point of contact with health services outside the regular hours of primary care doctors: it treats patients with no evident threat to vital functions, provides a basic examination and can refer you on to hospital care. More serious cases needing immediate care are handled by designated hospital departments — in larger hospitals, the emergency department (urgentní příjem). Always phone the service before you set out: opening hours change with holidays, leave and stand-in doctors faster than anyone can publish them, and the doctor on duty will tell you straight away whether your problem belongs there."
+        },
+        {
+          "q": "How much does a visit cost?",
+          "a": "A regulatory fee of CZK 90 is charged for a visit to the after-hours medical service or the dental emergency service, and you pay it on the spot. You do not pay it if the doctor on duty finds that your condition requires hospital admission. The ambulance service and the pharmacy emergency service do not charge this fee."
+        },
+        {
+          "q": "I need a dentist or a pharmacy outside surgery hours.",
+          "a": "The dental emergency service (zubní pohotovost) covers the hours outside regular dental surgeries, and the same CZK 90 fee applies to it; use the search on this page to find the nearest one that is open. Only 16 pharmacies in the whole country are open 24 hours a day, seven days a week, and more than half of them are in Prague — the Czech Chamber of Pharmacists publishes the list with addresses and phone numbers.",
+          "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/",
+          "url_label": "List of 24/7 pharmacies (lekarnici.cz)"
+        },
+        {
+          "q": "I have a European Health Insurance Card (EHIC) — what am I entitled to?",
+          "a": "With an EHIC, or the provisional certificate replacing it, from an EU, EEA, UK or Swiss insurer you are entitled to medically necessary care, judged by the nature of the illness and the expected length of your stay. Show the card: the provider bills a Czech health insurance company, which you choose from those it has a contract with. If you cannot produce any entitlement document, the provider may charge you directly — but the price should not exceed the maximum price set within the Czech public health insurance system.",
+          "url": "https://kancelarzp.cz/leceni-pojistence-ze-statu-eu-ehp-ci-svycarska/",
+          "url_label": "Centre for International Reimbursements (kancelarzp.cz)"
+        },
+        {
+          "q": "I have no insurance at all. What happens?",
+          "a": "You will be asked to pay in cash, and beyond the scope of necessary and urgent care the amounts can run high. Foreigners without permanent residence in Czechia who are not employed here cannot take part in the public health insurance system and in most cases have to take out commercial travel health insurance; staying in the country uninsured breaches Czech and European rules and is punishable.",
+          "url": "https://mzd.gov.cz/cestovni-zdravotni-pojisteni/",
+          "url_label": "Ministry of Health — travel health insurance"
+        },
+        {
+          "q": "I am from Ukraine and hold temporary protection.",
+          "a": "From the moment the temporary protection visa is granted you are a participant in the Czech public health insurance system with access to the full scope of care; when you register with VZP you receive a replacement insured person's card. The state pays your premium only for a limited protection period — 150 days if temporary protection was first granted in Czechia up to 10 February 2025, and 90 days if it was granted from 11 February 2025 onwards. After that the state no longer automatically pays for adults aged 18 to 64, but they remain participants in the system.",
+          "url": "https://cz.pomocukrajine.vzp.cz/registrace/",
+          "url_label": "VZP — registration (Help for Ukraine)"
+        },
+        {
+          "q": "Poisoning — a child has swallowed something, or there has been an overdose or a chemical accident.",
+          "a": "The Toxicological Information Centre (TIS) in Prague gives telephone advice on acute poisoning in people and animals around the clock, 24 hours a day, seven days a week, to the public as well as to health professionals. Call +420 224 919 293 or +420 224 915 402; they will tell you what first aid to give and how to proceed.",
+          "tel": "+420224919293",
+          "tel_label": "Call +420 224 919 293"
+        },
+        {
+          "q": "I am in a mental health crisis, or someone close to me is.",
+          "a": "The First Psychological Aid Line (Linka první psychické pomoci) on 116 123 is for adults and their families, free of charge and anonymous, and answers around the clock — at night in stand-by mode; it also runs a chat service at set hours. Children and students up to the age of 26 can call Linka bezpečí on 116 111, likewise free of charge and around the clock.",
+          "tel": "116123",
+          "tel_label": "Call 116 123"
+        }
+      ],
+      "sources": [
+        {
+          "name": "NZIP — Pohotovost (Ministry of Health of the Czech Republic)",
+          "url": "https://www.nzip.cz/clanek/228-pohotovost"
+        },
+        {
+          "name": "NZIP — Emergency medical service: line 155 or 112",
+          "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+        },
+        {
+          "name": "NZIP — glossary entry: lékařská pohotovostní služba",
+          "url": "https://www.nzip.cz/rejstrikovy-pojem/120"
+        },
+        {
+          "name": "Fire Rescue Service of the Czech Republic (archived) — the 112 line",
+          "url": "https://archiv.hzscr.gov.cz/clanek/kampan-bezpecne-cestovani-linka-112.aspx"
+        },
+        {
+          "name": "Prague Emergency Medical Service — FAQ",
+          "url": "https://www.zzshmp.cz/casto-kladene-dotazy-faq/"
+        },
+        {
+          "name": "Ministry of Health — basic types of regulatory fees",
+          "url": "https://mzd.gov.cz/zakladni-typy-regulacnich-poplatku/"
+        },
+        {
+          "name": "Ministry of Health — travel health insurance",
+          "url": "https://mzd.gov.cz/cestovni-zdravotni-pojisteni/"
+        },
+        {
+          "name": "Centre for International Reimbursements — treatment of insured persons from the EU, EEA and Switzerland",
+          "url": "https://kancelarzp.cz/leceni-pojistence-ze-statu-eu-ehp-ci-svycarska/"
+        },
+        {
+          "name": "VZP — Help for Ukraine: registration for public health insurance",
+          "url": "https://cz.pomocukrajine.vzp.cz/registrace/"
+        },
+        {
+          "name": "VZP — new conditions for paying refugees' health insurance",
+          "url": "https://www.vzp.cz/o-nas/aktuality/nove-podminky-uhrad-zdravotniho-pojisteni-uprchliku-stat-jej-uz-nebude-platit-vsem"
+        },
+        {
+          "name": "Toxicological Information Centre (TIS), General University Hospital in Prague",
+          "url": "https://tis-cz.cz/"
+        },
+        {
+          "name": "First Psychological Aid Line 116 123",
+          "url": "https://linkapsychickepomoci.cz/"
+        },
+        {
+          "name": "Linka bezpečí 116 111",
+          "url": "https://www.linkabezpeci.cz/"
+        },
+        {
+          "name": "Záchranka app",
+          "url": "https://www.zachrankaapp.cz/"
+        },
+        {
+          "name": "Czech Chamber of Pharmacists — pharmacies open 24/7",
+          "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/"
+        }
+      ],
+      "sources_label": "Sources",
+      "verified_label": "verified",
+      "verified_at": "2026-09-01"
+    },
+    "uk": {
+      "title": "Невідкладна та чергова медична допомога в Чехії",
+      "lead": "«Pohotovost», повною назвою lékařská pohotovostní služba (LPS), — це чергова лікарська служба для станів, які не можуть зачекати до відкриття ординації вашого лікаря, але не загрожують життю. Ця сторінка знаходить найближчу службу, відчинену просто зараз: сам пошук чеською, тож впишіть своє місто в поле «Odkud hledáte?» («Звідки шукаєте?») або натисніть кнопку «Moje poloha» («Моє місцезнаходження»).",
+      "items": [
+        {
+          "q": "Є загроза життю — на який номер телефонувати?",
+          "a": "Телефонуйте 155 — це чеська служба екстреної медичної допомоги; виклик безкоштовний з будь-якого телефону. Скористатися можна й загальноєвропейським номером 112: його оператори приймають виклики чеською, англійською та німецькою, а за потреби мають програмну підтримку й інших мов. На 155 варто телефонувати й тоді, коли ви не впевнені, наскільки серйозний стан, — там працюють кваліфіковані медичні працівники, які допоможуть його оцінити.",
+          "tel": "155",
+          "tel_label": "Телефонувати 155"
+        },
+        {
+          "q": "Чи є застосунок, який викличе допомогу замість мене?",
+          "a": "Застосунок Záchranka безкоштовний — і завантаження, і користування. Кнопка SOS надсилає вашу точну GPS-позицію та дані з профілю просто на диспетчерський пункт швидкої, а потім з'єднує вас із номером 155; працює й без інтернету, бо координати йдуть зашифрованою SMS. Локатор до того ж показує найближчу чергову службу, аптеку, стоматологічну чергову допомогу та дефібрилятор (AED).",
+          "url": "https://www.zachrankaapp.cz/",
+          "url_label": "zachrankaapp.cz"
+        },
+        {
+          "q": "Що таке «pohotovost» і коли туди їхати?",
+          "a": "LPS — це перший контакт зі службами охорони здоров'я поза звичайними годинами прийому лікарів первинної ланки: тут оглядають пацієнтів без явної загрози життєво важливим функціям, проводять базове обстеження і за потреби скеровують до лікарні. Складніші випадки, що потребують невідкладної допомоги, лікують визначені лікарняні амбулаторії — у більших лікарнях це відділення невідкладної допомоги (urgentní příjem). Перед виїздом обов'язково зателефонуйте: години роботи змінюються через свята, відпустки й заміни швидше, ніж їх устигають оприлюднити, а черговий лікар одразу скаже, чи з таким станом їхати саме сюди."
+        },
+        {
+          "q": "Скільки коштує візит?",
+          "a": "За візит до лікарської чергової служби або до стоматологічної чергової допомоги сплачується регуляційний збір 90 крон — на місці. Збір не платять, якщо черговий лікар визнає, що стан потребує госпіталізації. Служба екстреної медичної допомоги та чергова аптека цього збору не стягують."
+        },
+        {
+          "q": "Мені потрібен стоматолог або аптека поза годинами прийому.",
+          "a": "Стоматологічна чергова допомога (zubní pohotovost) працює поза звичайними годинами прийому стоматологів, і на неї поширюється той самий збір 90 крон; найближчу відчинену знайдете пошуком на цій сторінці. Цілодобово й щодня в усій Чехії працює лише 16 аптек, і більш ніж половина з них — у Празі; перелік з адресами та телефонами веде Чеська фармацевтична палата.",
+          "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/",
+          "url_label": "Перелік цілодобових аптек (lekarnici.cz)"
+        },
+        {
+          "q": "У мене є Європейська картка медичного страхування (EHIC) — на що я маю право?",
+          "a": "З EHIC або з тимчасовим свідоцтвом, яке її замінює, від страховика з ЄС, ЄЕП, Великої Британії чи Швейцарії ви маєте право на медично необхідну допомогу — з огляду на характер захворювання та передбачувану тривалість перебування. Покажіть картку: заклад виставить рахунок чеській страховій компанії, яку ви оберете з тих, із якими має договір. Якщо жодного документа про право на допомогу ви не подасте, заклад може виставити рахунок безпосередньо вам, однак ціна не повинна перевищувати максимальну ціну, встановлену в чеській системі загального медичного страхування.",
+          "url": "https://kancelarzp.cz/leceni-pojistence-ze-statu-eu-ehp-ci-svycarska/",
+          "url_label": "Бюро медичного страхування (kancelarzp.cz)"
+        },
+        {
+          "q": "Я взагалі не маю страхування. Що тоді?",
+          "a": "Оплату вимагатимуть готівкою, і понад межі необхідної та невідкладної допомоги суми можуть сягати високих значень. Іноземці без постійного проживання в Чехії, які тут не працевлаштовані, не можуть бути учасниками загального медичного страхування і здебільшого мусять укласти комерційне туристичне медичне страхування; перебування в країні без страхування порушує чеські та європейські приписи й загрожує санкціями.",
+          "url": "https://mzd.gov.cz/cestovni-zdravotni-pojisteni/",
+          "url_label": "Міністерство охорони здоров'я — туристичне медичне страхування"
+        },
+        {
+          "q": "Я з України і маю тимчасовий захист.",
+          "a": "З моменту надання візи тимчасового захисту ви стаєте учасником чеської системи загального медичного страхування з доступом до допомоги в повному обсязі; під час реєстрації у VZP вам видадуть тимчасове посвідчення застрахованої особи. Внесок за вас держава сплачує лише обмежений час — 150 днів, якщо тимчасовий захист уперше надано в Чехії до 10 лютого 2025 року, і 90 днів, якщо його надано від 11 лютого 2025 року. Після цього за дорослих віком від 18 до 64 років держава страхування автоматично вже не сплачує, але вони залишаються учасниками системи.",
+          "url": "https://cz.pomocukrajine.vzp.cz/registrace/",
+          "url_label": "VZP — реєстрація (Допомога Україні)"
+        },
+        {
+          "q": "Отруєння — дитина щось проковтнула, передозування ліків або хімікат.",
+          "a": "Токсикологічний інформаційний центр (TIS) у Празі цілодобово, 24 години на добу і сім днів на тиждень, консультує телефоном щодо гострих отруєнь людей і тварин — і населення, і медичних працівників. Телефонуйте на +420 224 919 293 або +420 224 915 402; вам пояснять, як надати першу допомогу і що робити далі.",
+          "tel": "+420224919293",
+          "tel_label": "Телефонувати +420 224 919 293"
+        },
+        {
+          "q": "У мене або в когось із близьких психічна криза.",
+          "a": "Лінія першої психологічної допомоги (Linka první psychické pomoci) на номері 116 123 працює для дорослих та їхніх близьких безкоштовно й анонімно, цілодобово — вночі в режимі чергування; окремо у визначені години діє чат. Діти та студенти віком до 26 років можуть телефонувати на Linka bezpečí — 116 111, так само безкоштовно й цілодобово.",
+          "tel": "116123",
+          "tel_label": "Телефонувати 116 123"
+        }
+      ],
+      "sources": [
+        {
+          "name": "NZIP — Pohotovost (Міністерство охорони здоров'я ЧР)",
+          "url": "https://www.nzip.cz/clanek/228-pohotovost"
+        },
+        {
+          "name": "NZIP — Служба екстреної медичної допомоги: лінія 155 або 112",
+          "url": "https://www.nzip.cz/clanek/205-zdravotnicka-zachranna-sluzba"
+        },
+        {
+          "name": "NZIP — словникове гасло: lékařská pohotovostní služba",
+          "url": "https://www.nzip.cz/rejstrikovy-pojem/120"
+        },
+        {
+          "name": "Пожежно-рятувальна служба ЧР (архів) — лінія 112",
+          "url": "https://archiv.hzscr.gov.cz/clanek/kampan-bezpecne-cestovani-linka-112.aspx"
+        },
+        {
+          "name": "Служба екстреної медичної допомоги м. Праги — часті запитання",
+          "url": "https://www.zzshmp.cz/casto-kladene-dotazy-faq/"
+        },
+        {
+          "name": "Міністерство охорони здоров'я — основні види регуляційних зборів",
+          "url": "https://mzd.gov.cz/zakladni-typy-regulacnich-poplatku/"
+        },
+        {
+          "name": "Міністерство охорони здоров'я — туристичне медичне страхування",
+          "url": "https://mzd.gov.cz/cestovni-zdravotni-pojisteni/"
+        },
+        {
+          "name": "Бюро медичного страхування — лікування застрахованих осіб із держав ЄС, ЄЕП і Швейцарії",
+          "url": "https://kancelarzp.cz/leceni-pojistence-ze-statu-eu-ehp-ci-svycarska/"
+        },
+        {
+          "name": "VZP — Допомога Україні: реєстрація в системі загального медичного страхування",
+          "url": "https://cz.pomocukrajine.vzp.cz/registrace/"
+        },
+        {
+          "name": "VZP — нові умови сплати медичного страхування біженців",
+          "url": "https://www.vzp.cz/o-nas/aktuality/nove-podminky-uhrad-zdravotniho-pojisteni-uprchliku-stat-jej-uz-nebude-platit-vsem"
+        },
+        {
+          "name": "Токсикологічний інформаційний центр (TIS), Загальна університетська лікарня в Празі",
+          "url": "https://tis-cz.cz/"
+        },
+        {
+          "name": "Лінія першої психологічної допомоги 116 123",
+          "url": "https://linkapsychickepomoci.cz/"
+        },
+        {
+          "name": "Linka bezpečí 116 111",
+          "url": "https://www.linkabezpeci.cz/"
+        },
+        {
+          "name": "Застосунок Záchranka",
+          "url": "https://www.zachrankaapp.cz/"
+        },
+        {
+          "name": "Чеська фармацевтична палата — аптеки з цілодобовою черговою службою",
+          "url": "https://lekarnici.cz/lekarny-s-pohotovostni-sluzbou-24-7/"
+        }
+      ],
+      "sources_label": "Джерела",
+      "verified_label": "перевірено",
+      "verified_at": "2026-09-01"
+    }
+  }
 }
