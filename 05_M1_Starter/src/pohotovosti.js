@@ -39,6 +39,7 @@ import {
   okresSlug,
   feedbackIssueUrl,
   FEEDBACK_ISSUES_URL,
+  adviceLineStatus,
 } from './pohotovosti-engine.js';
 
 const PAGE_SIZE = 8;
@@ -638,6 +639,14 @@ function adviceLineHours(l) {
   return l?.hours_unknown ? 'provozní dobu web záchranky neuvádí, ověříte při zavolání' : '';
 }
 
+/** „teď otevřeno do 19:00“ / „teď zavřeno, otevírá 7:00“ — jen když je rozvrh známý. */
+function adviceLineLive(l, now = new Date()) {
+  const st = adviceLineStatus(l, now);
+  if (st.state === 'open') return `teď otevřeno${st.until ? ` do ${st.until}` : ''}`;
+  if (st.state === 'closed') return `teď zavřeno${st.next ? `, otevírá ${st.nextDate ? `${relativeDay(st.nextDate)} ` : ''}${st.next}` : ''}`;
+  return '';
+}
+
 /** Neakutní poradní linka záchranné služby kraje, ve kterém uživatel hledá. */
 function adviceLineForOrigin() {
   const code = currentKrajCode();
@@ -792,7 +801,7 @@ function adviceStepHtml(step) {
     const l = step.line;
     return `
       <li class="poh-advice-step poh-advice-step-poradna">
-        <span class="poh-advice-what">${escapeHtml(l.name)} — ${escapeHtml(adviceLineHours(l))}</span>
+        <span class="poh-advice-what">${escapeHtml(l.name)} — ${escapeHtml(adviceLineHours(l))}${step.status?.state === 'open' && step.status.until ? `, teď otevřeno do ${escapeHtml(step.status.until)}` : ''}</span>
         <span class="poh-advice-why">${escapeHtml(l.text ?? '')} Není to tísňová linka — při ohrožení života volejte 155.</span>
         <a class="poh-action poh-action-primary" href="tel:${escapeHtml(l.phone)}">Zavolat ${escapeHtml(formatPhone(l.phone))}</a>
         ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">nebo ${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
@@ -1132,8 +1141,12 @@ function triageActionHtml(action, { primary = true } = {}) {
 function poradnaActionHtml(action, cls) {
   const line = adviceLineForOrigin();
   if (line) {
-    return `<a class="${cls}" href="tel:${escapeHtml(line.phone)}">${escapeHtml(line.name)} · ${escapeHtml(formatPhone(line.phone))}</a>
-      <span class="poh-roz-hint">${escapeHtml(adviceLineHours(line))}</span>`;
+    // Zavřená linka není hlavní tlačítko — číslo zůstane (kvůli zítřku),
+    // ale bez důrazu a s tím, kdy otevírá.
+    const closed = adviceLineStatus(line).state === 'closed';
+    const live = adviceLineLive(line);
+    return `<a class="${closed ? 'poh-action' : cls}" href="tel:${escapeHtml(line.phone)}">${escapeHtml(line.name)} · ${escapeHtml(formatPhone(line.phone))}</a>
+      <span class="poh-roz-hint">${escapeHtml(adviceLineHours(line))}${live ? ` — ${escapeHtml(live)}` : ''}</span>`;
   }
   const hint = state.origin
     ? 'Ve vašem kraji záchranná služba neakutní poradní linku neprovozuje — přehled krajů, kde je, níže.'
@@ -1203,7 +1216,7 @@ function renderAdviceLines() {
         <span class="poh-poradna-name">${escapeHtml(l.name)}</span>
         <a class="poh-action poh-action-primary" href="tel:${escapeHtml(l.phone)}">${escapeHtml(formatPhone(l.phone))}</a>
         ${l.phone_alt ? `<a class="poh-action" href="tel:${escapeHtml(l.phone_alt)}">${escapeHtml(formatPhone(l.phone_alt))}</a>` : ''}
-        <span class="poh-poradna-hours">${escapeHtml(adviceLineHours(l))}${l.since ? ` · od ${escapeHtml(formatSince(l.since))}` : ''}</span>
+        <span class="poh-poradna-hours">${escapeHtml(adviceLineHours(l))}${adviceLineLive(l) ? ` · ${escapeHtml(adviceLineLive(l))}` : ''}${l.since ? ` · od ${escapeHtml(formatSince(l.since))}` : ''}</span>
         ${l.text ? `<span class="poh-poradna-text">${escapeHtml(l.text)}</span>` : ''}
         <span class="poh-poradna-src">Zdroj: <a href="${escapeHtml(l.source?.url ?? '#')}" target="_blank" rel="noopener">${escapeHtml(l.source?.name ?? 'zdroj')}</a>${
           l.verified_at ? `, ověřeno ${escapeHtml(formatCzDate(l.verified_at))}` : ''}.</span>

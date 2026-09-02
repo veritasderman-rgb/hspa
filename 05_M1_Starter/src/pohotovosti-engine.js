@@ -516,6 +516,17 @@ const PRVNI_KONTAKT = {
  * }} input
  * @returns {{ mode: 'ordinacni_doba'|'pohotovost', openIsFar: boolean, steps: Array<object> }}
  */
+/**
+ * Stav poradní linky ZZS podle zveřejněného rozvrhu (`hours_spec`, stejný
+ * tvar jako u pohotovostí). Bez rozvrhu je stav `unknown` — linka se nabízí
+ * s poznámkou, že web dobu neuvádí; „zavřeno“ se tvrdí jen podle rozvrhu.
+ */
+export function adviceLineStatus(line, now = new Date()) {
+  if (!line?.hours_spec) return { state: 'unknown', until: null, next: null, nextDate: null };
+  const st = evaluateStatus(line.hours_spec, now);
+  return { state: st.state, until: st.until, next: st.next, nextDate: st.nextDate };
+}
+
 export function careAdvice(input = {}) {
   const {
     now = new Date(),
@@ -553,12 +564,14 @@ export function careAdvice(input = {}) {
   // hned za první kontakt: odpovídá na „nevím, jestli s tím někam jít“,
   // což je otázka, kterou tahle stránka sama zodpovědět nesmí. Nabízí se
   // jen u lékařské péče a jen tomu, o kom víme, z jakého kraje hledá —
-  // linka jiného kraje by mu neporadila.
-  const poradna = hasOrigin && medicalFlow && adviceLine ? adviceLine : null;
+  // linka jiného kraje by mu neporadila. A jen když podle zveřejněného
+  // rozvrhu právě běží: linka, kterou ve tři ráno nikdo nezvedne, není krok.
+  const poradnaStatus = adviceLine ? adviceLineStatus(adviceLine, now) : null;
+  const poradna = hasOrigin && medicalFlow && adviceLine && poradnaStatus.state !== 'closed' ? adviceLine : null;
 
   if (working) {
     steps.push({ kind: 'prvni_kontakt', priority: 1, contact: kontakt });
-    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna });
+    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna, status: poradnaStatus });
     if (ambulance && medicalFlow) steps.push({ kind: 'ambulance_denni', priority: 2, ...ambulance });
     if (online && medicalFlow) steps.push({ kind: 'online', priority: 3, service: online });
     if (medicalFlow && urgent) steps.push({ kind: 'urgent', priority: 4, ...urgent });
@@ -567,7 +580,7 @@ export function careAdvice(input = {}) {
     if (lps) steps.push({ kind: 'lps_pozdeji', priority: 5, daytimeHint: medicalFlow, ...lps });
   } else {
     if (open) steps.push({ kind: 'lps_otevrena', priority: 1, ...open });
-    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna });
+    if (poradna) steps.push({ kind: 'poradna', priority: 1.5, line: poradna, status: poradnaStatus });
     // Mimo ordinační dobu je pohotovost hlavní odpověď; ambulance s noční
     // nebo víkendovou dobou (úrazová pohotovost nemocnice) se hodí jen když
     // pohotovost otevřená není.

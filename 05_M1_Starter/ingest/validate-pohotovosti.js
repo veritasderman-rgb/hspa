@@ -271,6 +271,10 @@ function validateOnline(data) {
     // třetí možnost („nějaká bude“) stránka nesmí tvrdit.
     if (!line.hours && line.hours_unknown !== true) fail(`${where}: chybí hours (nebo hours_unknown: true, když ji web ZZS neuvádí)`);
     if (line.hours && line.hours_unknown) fail(`${where}: hours a hours_unknown si odporují`);
+    // Zveřejněná doba musí být i strojově čitelná — jinak by stránka linku
+    // nabízela i v noci, kdy ji nikdo nezvedne.
+    if (line.hours && !line.hours_spec) fail(`${where}: hours bez hours_spec (strojový rozvrh pro „otevřeno teď“)`);
+    if (line.hours_spec) checkHours(line.hours_spec, `${where}.hours_spec`);
     if (!/^\+\d{9,15}$/.test(String(line.phone ?? ''))) fail(`${where}: telefon není v mezinárodním tvaru`);
     if (line.phone_alt != null && !/^\+\d{9,15}$/.test(String(line.phone_alt))) fail(`${where}: phone_alt není v mezinárodním tvaru`);
     if (!line.quote) fail(`${where}: chybí doslovný citát ze zdroje (drift-check)`);

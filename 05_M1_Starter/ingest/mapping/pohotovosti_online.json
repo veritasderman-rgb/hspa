@@ -21,7 +21,11 @@
     "Pardubický. Kde web dobu neuvádí, je `hours_unknown: true` a stránka to říká —",
     "nevymýšlí se. Moravskoslezský kraj má na webu jen rozpracovanou stránku",
     "„Infolinka“ bez čísla → neuvádí se. Každý záznam nese doslovný `quote`,",
-    "`source` a `verified_at`."
+    "`source` a `verified_at`.",
+    "`hours_spec` = tentýž strojový rozvrh jako u pohotovostí (kind weekly, week",
+    "po dnech + holiday); stránka podle něj linku mimo provozní dobu nenabízí.",
+    "Kde je `hours` textem, musí být i `hours_spec` — jinak by se linka nabízela",
+    "i v noci, kdy ji nikdo nezvedne."
   ],
   "version": "1.0",
   "services": [
@@ -105,6 +109,59 @@
       "name": "Neakutní poradní linka ZZS JMK",
       "phone": "+420800140155",
       "hours": "denně 7:00–19:00 včetně víkendů a svátků",
+      "hours_spec": {
+        "kind": "weekly",
+        "week": {
+          "mon": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "tue": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "wed": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "thu": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "fri": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "sat": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "sun": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ],
+          "holiday": [
+            [
+              "07:00",
+              "19:00"
+            ]
+          ]
+        }
+      },
       "text": "Poradí s dostupností lékáren, lékařských pohotovostí, sociální a paliativní péče a dalšími neakutními situacemi. Urgentní případy patří dál na 155.",
       "since": "2026-02-02",
       "quote": "Neakutní poradní linka má číslo 800 140 155 a v provozu je každý den (včetně víkendů a svátků) od 7 do 19 hodin.",

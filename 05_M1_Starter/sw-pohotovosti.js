@@ -22,17 +22,35 @@
 const VERSION = 'v1';
 const CACHE = `pohotovosti-${VERSION}`;
 
-/** Co se uloží hned při instalaci (jednotlivě — jedna chybějící položka nesmí shodit instalaci). */
+/**
+ * Co se uloží hned při instalaci (jednotlivě — jedna chybějící položka nesmí
+ * shodit instalaci).
+ *
+ * Skripty: CELÝ graf statických importů obou stránek. Při první návštěvě se
+ * SW registruje až po načtení modulů, takže je runtime cache nezachytí —
+ * a `cache.add('/src/page-shared.js')` importy neprochází. Chybějící modul
+ * offline shodí inicializaci celé stránky. Seznam hlídá test
+ * (tests/pohotovosti-practical.test.js) proti skutečným importům v src/.
+ */
 const PRECACHE = [
   '/pohotovosti',
   '/pohotovosti.html',
   '/data/pohotovosti.json',
   '/data/obce-gps.json',
+  '/data/cz-regions.geojson',
   '/src/styles.min.css',
   '/src/pohotovosti.js',
   '/src/pohotovosti-engine.js',
-  '/src/page-shared.js',
+  '/src/pohotovost-okres.js',
   '/src/analytics.js',
+  '/src/page-shared.js',
+  '/src/site-stats.js',
+  '/src/search.js',
+  '/src/newsletter-popup.js',
+  '/src/newsletter-signup.js',
+  '/src/awareness-popup.js',
+  '/src/awareness-core.js',
+  '/src/vedra-popup.js',
   '/site.webmanifest',
 ];
 
@@ -44,6 +62,9 @@ const ALLOW = [
   /^\/data\/obce-gps\.json$/,
   /^\/data\/dojezdy\.json$/,
   /^\/data\/cz-regions\.geojson$/,
+  // Data, která si sdílené moduly (navigace, statistika, popupy) tahají
+  // při každém otevření — bez nich stránka funguje, ale hlásí chyby.
+  /^\/data\/(articles|indicators|glossary|awareness-weeks|vedra-popup)\.json$/,
   /^\/src\/[a-z0-9-]+\.js$/,
   /^\/src\/styles\.min\.css$/,
   /^\/assets\/brand\//,

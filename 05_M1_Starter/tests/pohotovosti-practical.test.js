@@ -13,7 +13,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
-import { careAdvice, feedbackIssueUrl } from '../src/pohotovosti-engine.js';
+import { careAdvice, feedbackIssueUrl, adviceLineStatus } from '../src/pohotovosti-engine.js';
 import { faqJsonLd, placeHtml, rozcestnikHtml } from '../scripts/build-pohotovosti-okresy.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -159,6 +159,39 @@ test('careAdvice · poradní linka ZZS je krok hned za prvním kontaktem, jen s 
   }
 });
 
+test('careAdvice · zavřená poradní linka se nenabízí; bez rozvrhu se nabízí s neznámým stavem', () => {
+  const spec = { kind: 'weekly', week: Object.fromEntries(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'holiday'].map(d => [d, [['07:00', '19:00']]])) };
+  const jmk = { id: 'jmk', kraj_code: 'CZ064', name: 'Neakutní poradní linka', phone: '+420800140155', hours: 'denně 7–19', hours_spec: spec };
+  const night = new Date(2026, 8, 7, 22, 0);   // pondělí 22:00 — linka zavřená, pohotovost otevřená
+  const morning = new Date(2026, 8, 7, 10, 0);
+
+  assert.equal(adviceLineStatus(jmk, night).state, 'closed');
+  assert.equal(adviceLineStatus(jmk, night).next, '7:00');
+  assert.equal(adviceLineStatus(jmk, morning).state, 'open');
+  assert.equal(adviceLineStatus(jmk, morning).until, '19:00');
+
+  const atNight = careAdvice({ now: night, hasOrigin: true, category: 'lps_dospeli', adviceLine: jmk });
+  assert.ok(!atNight.steps.some(s => s.kind === 'poradna'), 've 22:00 se linka 7–19 nesmí nabízet jako krok');
+  const inMorning = careAdvice({ now: morning, hasOrigin: true, category: 'lps_dospeli', adviceLine: jmk });
+  const step = inMorning.steps.find(s => s.kind === 'poradna');
+  assert.ok(step, 'v 10:00 se nabízí');
+  assert.equal(step.status.state, 'open');
+
+  // Linka bez zveřejněné doby: nevíme → nabízí se, stav unknown (stránka říká „web dobu neuvádí“).
+  const sck = { id: 'sck', kraj_code: 'CZ020', name: 'Call centrum', phone: '+420800888155', hours_unknown: true };
+  assert.equal(adviceLineStatus(sck, night).state, 'unknown');
+  assert.ok(careAdvice({ now: night, hasOrigin: true, adviceLine: sck }).steps.some(s => s.kind === 'poradna'));
+});
+
+test('online.advice_lines · zveřejněná doba je i strojově čitelná (hours ⇒ hours_spec)', () => {
+  for (const l of data.online.advice_lines) {
+    if (l.hours) assert.ok(l.hours_spec?.week, `${l.id}: hours bez hours_spec`);
+    if (l.hours_spec) for (const d of ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'holiday']) {
+      assert.ok(Array.isArray(l.hours_spec.week[d]), `${l.id}: hours_spec.week.${d}`);
+    }
+  }
+});
+
 test('feedbackIssueUrl · předvyplněné hlášení nese pracoviště, datum dat a štítek', () => {
   const url = feedbackIssueUrl(
     { id: 'vzp-123', name: 'Nemocnice Klatovy', workplace: 'LPS', okres: 'Klatovy', address: 'Plzeňská 929', phone: '+420376335111', category_label: 'LPS pro dospělé' },
@@ -233,9 +266,45 @@ function loadServiceWorker() {
     Response: class { constructor(body, init) { this.body = body; this.status = init?.status; } },
     URL,
   };
-  vm.runInContext(code, vm.createContext(ctx));
-  return { handlers, cacheStore, ctx };
+  const context = vm.createContext(ctx);
+  vm.runInContext(`${code}\n;this.__PRECACHE = PRECACHE; this.__ALLOW = ALLOW;`, context);
+  return { handlers, cacheStore, ctx, precache: context.__PRECACHE, allow: context.__ALLOW };
 }
+
+/** Tranzitivní graf statických importů (`import … from './x.js'`) od vstupního modulu. */
+function importGraph(entry) {
+  const seen = new Set();
+  const walk = (rel) => {
+    if (seen.has(rel)) return;
+    seen.add(rel);
+    const src = read(rel);
+    for (const m of src.matchAll(/^\s*import(?:[^;]*?from)?\s+['"](\.\/[^'"]+)['"]/gm)) {
+      walk(path.posix.join(path.posix.dirname(rel), m[1]));
+    }
+  };
+  walk(entry);
+  return [...seen];
+}
+
+test('sw-pohotovosti.js · precache pokrývá celý graf importů obou stránek', () => {
+  // Při první návštěvě se SW registruje až po načtení modulů, takže je
+  // runtime cache nezachytí; chybějící modul offline shodí celou stránku.
+  const { precache, allow } = loadServiceWorker();
+  const graph = [...new Set([...importGraph('src/pohotovosti.js'), ...importGraph('src/pohotovost-okres.js')])];
+  assert.ok(graph.length >= 10, `graf importů je podezřele malý (${graph.length})`);
+  for (const mod of graph) {
+    assert.ok(precache.includes(`/${mod}`), `PRECACHE v sw-pohotovosti.js postrádá /${mod} (import graf se změnil)`);
+    assert.ok(allow.some(re => re.test(`/${mod}`)), `/${mod} není v bílé listině`);
+  }
+  for (const must of ['/data/pohotovosti.json', '/data/obce-gps.json', '/data/cz-regions.geojson', '/src/styles.min.css', '/pohotovosti']) {
+    assert.ok(precache.includes(must), `PRECACHE postrádá ${must}`);
+  }
+  // Každá precache položka existuje na disku (kromě čisté URL bez .html).
+  for (const url of precache) {
+    const file = url === '/pohotovosti' ? 'pohotovosti.html' : url.slice(1);
+    assert.ok(fs.existsSync(path.resolve(ROOT, file)), `PRECACHE odkazuje na neexistující ${url}`);
+  }
+});
 
 test('sw-pohotovosti.js · registruje install/activate/fetch a zasahuje jen do bílé listiny', async () => {
   const { handlers } = loadServiceWorker();
@@ -252,12 +321,14 @@ test('sw-pohotovosti.js · registruje install/activate/fetch a zasahuje jen do b
   // Co mu patří:
   for (const p of ['/pohotovosti', '/pohotovosti.html', '/pohotovost-klatovy', '/pohotovost-brno-mesto.html',
     '/data/pohotovosti.json', '/data/pohotovosti-akutni.json', '/data/obce-gps.json', '/data/dojezdy.json',
-    '/src/pohotovosti.js', '/src/page-shared.js', '/src/styles.min.css', '/assets/brand/favicon.svg', '/site.webmanifest']) {
+    '/src/pohotovosti.js', '/src/page-shared.js', '/src/styles.min.css', '/assets/brand/favicon.svg', '/site.webmanifest',
+    // data sdílených modulů (navigace, statistika, popupy) — bez nich stránka offline hlásí chyby
+    '/data/articles.json', '/data/indicators.json', '/data/glossary.json']) {
     assert.ok(respond(p), `${p} má jít přes SW`);
   }
   // Co mu nepatří — zbytek webu musí běžet, jako by SW neexistoval:
-  for (const p of ['/', '/index.html', '/clanek-reforma-pohotovosti-290-2025.html', '/data/indicators.json',
-    '/data/search-index.json', '/data/articles.json', '/indikator-x.html', '/kraje.html']) {
+  for (const p of ['/', '/index.html', '/clanek-reforma-pohotovosti-290-2025.html', '/data/snapshot-2026-09-01.json',
+    '/data/search-index.json', '/data/regions.json', '/indikator-x.html', '/kraje.html', '/indicators/x.json']) {
     assert.ok(!respond(p), `${p} nesmí jít přes SW`);
   }
   // Ne-GET a cizí origin nikdy.
