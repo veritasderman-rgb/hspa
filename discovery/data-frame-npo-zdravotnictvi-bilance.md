@@ -124,9 +124,27 @@ listy *Zcela zamítnuto* a *Seznam náhradníků* se nesčítají). Sloupec
 Nerozdělený zbytek u výzev 5–12: **279 039 780 Kč**, z toho 167 573 395 Kč
 u 7. výzvy a 53 483 070 Kč u 11. výzvy — dohromady **79 %** celého zbytku.
 
-U výzev 1–4 jde o **předem definované projekty** (jeden oprávněný žadatel);
-MZ pro ně samostatný seznam schválených žádostí nezveřejnilo, takže se do
-tabulky nezahrnují. Jejich alokace je 6 801 611 000 Kč, tedy **52,9 %** balíku.
+**Oprava z nezávislého auditu (2. 9. 2026).** Předem definovaným projektem
+(jeden oprávněný žadatel) je podle textů výzev **šest** výzev, ne čtyři: kromě
+1.–4. i **5.** (IPVZ) a **9.** (ÚZIS) — obě mají v identifikační tabulce
+„Předem definovaný projekt“. Jejich souhrnná alokace je **7 014 111 000 Kč,
+tedy 54,6 %** balíku. Do bilance čerpání proto patří jen **šest soutěžních
+výzev** (6, 7, 8, 10, 11, 12): alokace **5 833 400 000 Kč**, přiděleno
+**5 555 524 721 Kč (95,2 %)** ve **104 projektech**, nerozděleno
+**277 875 280 Kč**, z toho **79,6 %** v 7. a 11. výzvě. Výzvy 5 a 9 mají
+zveřejněný seznam také (99 967 508 z 100 000 000 a 111 367 992 z 112 500 000),
+u výzev 1–4 MZ žádný seznam nezveřejnilo.
+
+**Ani jedna žádost nebyla zamítnuta.** Ve všech osmi zveřejněných sešitech jsou
+listy *Zcela zamítnuto* i *Seznam náhradníků* prázdné (obsahují jen nadpis
+a záhlaví). Jediné dělení je u 8. výzvy, kde 4 z 24 projektů dostaly dotaci
+zčásti (list *Zčásti poskytnuto*, 743 578 183 Kč). Nerozdělené peníze tedy
+nevznikly odmítnutím žadatelů.
+
+**Termíny příjmu žádostí u soutěžních výzev** (z textů výzev): 6. — 31. 5. 2023,
+7. — 16. 10. 2023, 8. — 30. 9. 2023, 10. — 30. 11. 2023, 12. — 15. 7. 2024,
+11. — průběžně s koly k 15. 4. / 15. 7. / 15. 10. 2024 a 15. 1. 2025. Nejzazší
+je tedy **15. 1. 2025**.
 
 Zdrojové soubory (mzd.gov.cz, staženo a strojově přečteno 2. 9. 2026):
 `2023/09/VYZVA-5-Seznam-projektu-na-web.xlsx`,
