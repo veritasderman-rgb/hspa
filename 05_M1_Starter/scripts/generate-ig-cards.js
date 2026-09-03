@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-akutni-psychiatricke-ambulance': {
+    kicker: 'Duševní zdraví · reforma psychiatrie', signal: 'warn',
+    stat: '8',
+    claim: 'žádostí přišlo na deset nabízených ambulancí.',
+    context: 'Podpořeno sedm zařízení, tři místa zůstala neobsazená.',
+  },
   'clanek-centralizace-onkochirurgie-2030': {
     kicker: 'Onkologie · centralizace', signal: 'neutral',
     stat: '4 109',
