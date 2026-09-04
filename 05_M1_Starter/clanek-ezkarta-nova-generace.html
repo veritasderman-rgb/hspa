@@ -77,7 +77,21 @@
       vydavatelský server SAGE blokuje automatizované dotazy — jako primární odkaz doplněn otevřený
       plný text v PubMed Central (PMC12961103, HTTP 200), DOI ponecháno jako citační identifikátor
       s vysvětlením. ANTI-PATTERNY data-value: žádný counter nenese datum, rozpětí ani znaménko;
-      prefix 'více než ' je textový, ne numerický."
+      prefix 'více než ' je textový, ne numerický.
+      REVIEW ROUND 2026-09-04 (Codex na PR #1150, dva nálezy, OBA PŘIJATY): (P2) poznámka
+      u řádku 'ČR 2020' tvrdila, že se odstup od EU 'během covidu zdvojnásobil' — přepočet
+      z hodnot v témže grafu to nepotvrzuje: 17,80 − 9,51 = 8,29 p. b. (2018) proti
+      20,76 − 9,28 = 11,48 p. b. (2020), tedy růst o zhruba 38 %, ne dvojnásobek. Poznámka
+      přepsána na doložený tvar 'odstup vzrostl z 8,3 p. b. v roce 2018 na 11,5 p. b.'.
+      (P1) 'scheduled_for' je v publish-scheduled.js jen dolní mez ('ne dřív než') a mezi
+      netopickými kandidáty vyhrává nejstarší 'ready_since' — článek by se tedy 5. 9.
+      nepublikoval, přestože ho tak datuje HTML i metadata. Ověřeno simulací nad reálným
+      modulem (včetně holdReason): 5. 9. by vyhrál clanek-centralizace-velmi-predcasnych-porodu
+      a tenhle článek byl sedmý ze sedmi kandidátů (jeho ready_since by se orazítkoval až
+      5. 9., tedy jako nejnovější). Protože jde o reaktivní text vázaný na událost z 3. 9.,
+      doplněno 'topical_until: 2026-09-30' — dokumentovaný mechanismus fronty pro témata
+      s omezenou aktuálností. Simulace po opravě: vítězem 5. 9. i 6. 9. je tento článek
+      (basis 'topical'), datum v HTML i metadatech tedy odpovídá skutečné frontě."
 -->
 <meta name="article:audit-status" content="draft">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -296,7 +310,7 @@
         <ol class="av-bar-compare av-bar-compare-list" data-max="45" data-unit=" %">
           <li class="av-bar-row" data-value="5.41" data-label="ČR 2012" data-note="EU27 téhož roku 7,41 % — odstup 2,0 procentního bodu"></li>
           <li class="av-bar-row" data-value="8.81" data-label="ČR 2016" data-note="EU27 12,82 %"></li>
-          <li class="av-bar-row" data-value="9.28" data-label="ČR 2020" data-note="EU27 20,76 % — odstup se během covidu zdvojnásobil"></li>
+          <li class="av-bar-row" data-value="9.28" data-label="ČR 2020" data-note="EU27 20,76 % — odstup vzrostl z 8,3 p. b. v roce 2018 na 11,5 p. b."></li>
           <li class="av-bar-row" data-value="16.09" data-label="ČR 2022" data-note="EU27 33,47 %"></li>
           <li class="av-bar-row av-bar-row-highlight" data-value="19.62" data-label="ČR 2024" data-note="aktuální hodnota indikátoru dashboardu"></li>
           <li class="av-bar-row av-bar-row-good" data-value="39.77" data-label="EU27 2024" data-note="dvojnásobek české hodnoty · odstup 20,2 procentního bodu"></li>
