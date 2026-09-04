@@ -99,6 +99,24 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-psychiatricka-luzka': {
+    kicker: 'Duševní zdraví · lůžkový fond', signal: 'bad',
+    stat: '612',
+    claim: 'lůžek ubylo za deset let reformy psychiatrie.',
+    context: 'Zbývá 9 435 postelí, 0,87 na 1 000 obyvatel — o třetinu nad OECD.',
+  },
+  'clanek-hazard-vs-adiktologicke-sluzby': {
+    kicker: 'Závislosti · hazard', signal: 'bad',
+    stat: '68', statSuffix: ' mld.',
+    claim: 'korun prohráli hráči v hazardu za rok 2025.',
+    context: 'Problémových hráčů 220–275 tisíc, v léčbě přes 4 tisíce ročně.',
+  },
+  'clanek-esencialni-antiinfektiva': {
+    kicker: 'Léková politika · dostupnost', signal: 'bad',
+    stat: '70', statSuffix: ' z 197',
+    claim: 'esenciálních antiinfektiv na trhu standardně nekoupíte.',
+    context: 'Dalších 63 položek drží jediný dodavatel (SEAI 2026).',
+  },
   'clanek-akutni-psychiatricke-ambulance': {
     kicker: 'Duševní zdraví · reforma psychiatrie', signal: 'warn',
     stat: '8',
