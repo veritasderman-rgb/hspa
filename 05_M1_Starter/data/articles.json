@@ -11887,6 +11887,71 @@
         "notes": "Doprovodný článek k novému indikátoru hospitalizace_pokus_o_sebevrazdu. Všechna česká čísla jsou vlastní agregát otevřené datové sady ÚZIS OIS-04-18 (NRHZS, MKN-10 X60–X84 + S00–T98, řada 2010–2024, CC BY 4.0), staženo 3. 9. 2026; jmenovatele Eurostat demo_pjan / demo_pjangroup / demo_r_pjangrp3. Klíčové hodnoty: 2024 = 3 569 hospitalizací = 32,7 na 100 tis.; řada 2010 = 24,1 · 2014 = 32,2 · 2019 = 25,9 · 2020 = 23,3 · 2021 = 24,7 · 2022 = 30,0 · 2023 = 29,6 · 2024 = 32,7. Věk 15–19: 2014 = 100,7 (483) · 2020 = 84,3 (403) · 2022 = 167,1 (841, vrchol řady) · 2023 = 155,4 (865) · 2024 = 160,1 (950, nejvyšší absolutní počet). Věk 20+: 2014 = 28,9 · 2020 = 20,5 · 2024 = 25,4 (tedy pod úrovní 2014). Podíl 15–19 na všech: 14,3 % (2014) → 16,2 % (2020) → 26,6 % (2024). Pohlaví 2024: Ž 2 125, M 1 444. Historie léčby duševního onemocnění v předchozích 5 letech (pole vyplněno od 2015): bez historie 1 408 = 39,5 %, s historií 2 161 = 60,5 %; 2015 = 44,4 %, 2020 = 43,0 %. Kraje 2024 na 100 tis.: Moravskoslezský 42,1 · Karlovarský 40,7 · Ústecký 34,5 · Středočeský 31,3 · Praha 31,1 · Jihomoravský 30,6 · Pardubický 18,7. Caveaty v textu i v kartě: měří jen hospitalizace (poměr k 1 561 dokonaným sebevraždám dle ČSÚ 2024 je 2,3 : 1), neobsahuje děti do 15 let, jednotkou je případ nikoli osoba, závislost na kódování vnější příčiny, skoky bilance obyvatel 2021 a 2023. Benchmark narrative_only — ověřeno dotazem na Eurostat API, že sada hlth_co_disch vylučuje vnější příčiny V00–Y98, OECD ukazatel nepublikuje; proto prázdný benchmark a neutrální signál. Mezinárodní kontext: PREP-kids (10 zemí), francouzská celostátní studie (+27,7 % u dospívajících dívek od ledna 2021), USA (+30 % dívky 15–19, +42 % dívky 10–14 mezi 2020 a 2022). Postava Kristýny je ilustrativní. published:false, robots noindex — publikační cron nastaví index,follow, povýší status a přidělí číslo."
       },
       "ready_since": "2026-09-03"
+    },
+    {
+      "id": "tuberkuloza-uspesnost-lecby",
+      "slug": "clanek-tuberkuloza-uspesnost-lecby.html",
+      "tag": "Infekční nemoci",
+      "rubric": "klinika",
+      "kind": "analysis",
+      "date": "2026-09-04",
+      "published": false,
+      "title": "Léčba tuberkulózy v Česku selhala u dvou pacientů ze 418. Šedesát se jich ale ztratilo",
+      "perex": "Z 418 nových a recidivujících případů tuberkulózy hlášených za rok 2023 doléčilo Česko úspěšně 295 — 70,6 % kohorty. Cíl WHO End TB Strategy je 90 %, sousední Slovensko dosahuje 89,9 %, průměr EU/EEA je 64 %. Rozdíl přitom nedělá účinnost léků: léčba selhala u dvou pacientů ze 418. Dělá ho 42 úmrtí během léčby (10,0 %) a šedesát pacientů ztracených ze sledování (14,4 %) — nejvyšší vykázaný podíl v celé Evropské unii. Nový indikátor HSPA Monitoru měří u tuberkulózy to, co rozhoduje: schopnost systému dotáhnout půlroční léčbu do konce u populace, která žije na jeho okraji.",
+      "linked_indicators": [
+        "tbc_uspesnost_lecby",
+        "tuberkuloza",
+        "hiv_nove_diagnozy",
+        "hepatitida_bc_chronicka",
+        "substitucni_lecba_pokryti",
+        "rezistence_mrsa",
+        "mortalita_lecitelna"
+      ],
+      "linked_prevention_themes": [],
+      "topics": [
+        "klinika",
+        "dostupnost",
+        "populace"
+      ],
+      "cover_viz": {
+        "type": "bar-compare",
+        "title": "Úspěšnost léčby tuberkulózy, kohorta 2023 (% kohorty)",
+        "unit": "%",
+        "max": 95,
+        "rows": [
+          {
+            "label": "Cíl WHO",
+            "value": 90
+          },
+          {
+            "label": "Slovensko",
+            "value": 89.9
+          },
+          {
+            "label": "Rakousko",
+            "value": 76.2
+          },
+          {
+            "label": "Česko",
+            "value": 70.6,
+            "accent": "warn"
+          },
+          {
+            "label": "EU/EEA",
+            "value": 64,
+            "accent": "bad"
+          }
+        ]
+      },
+      "audit-status": "draft",
+      "audit": {
+        "status": "draft",
+        "reviewer": "claude-code-agent",
+        "last_reviewed": "2026-09-04",
+        "creation_phase": "nový indikátor (tbc_uspesnost_lecby) + article-write",
+        "notes": "Doprovodný článek k novému indikátoru tbc_uspesnost_lecby. Primární data: WHO Global TB Programme, datová sada „TB treatment outcomes“ (extranet.who.int/tme, staženo 4. 9. 2026), proměnné newrel_coh / newrel_succ / newrel_died / newrel_fail / newrel_lost; za ČR hlásí ÚZIS ČR z Registru tuberkulózy. Klíčové hodnoty: kohorta 2023 = 418 případů, 295 úspěšně doléčeno = 70,6 %; zemřelo 42 = 10,0 %; ztraceno ze sledování 60 = 14,4 %; selhání léčby 2 = 0,5 %; nevyhodnoceno nebo pokračuje 19 = 4,5 %. Řada ČR: 2016 = 68,5 · 2017 = 68,9 · 2018 = 66,8 · 2019 = 73,8 · 2020 = 69,5 · 2021 = 67,5 · 2022 = 62,5 · 2023 = 70,6. Nezávislé ověření národním zdrojem: ročenka ÚZIS TBC 2024 uvádí u kohorty 2023 úspěšné ukončení u 318 z 455 hodnocených = 69,9 % (širší jmenovatel včetně dříve léčených); ročenka TBC 2023 uvádí u kohorty 2022 232 z 381 = 60,9 % a přerušenou/nedohledanou léčbu u 85 = 22,3 %, čímž je ověřeno, že ročenka roku N hodnotí kohortu roku N−1. Incidence a složení: 2024 hlášeno 455 onemocnění = 4,18 na 100 tis., z toho 220 cizinců = 48,4 % (Ukrajina 134); 2023 = 459 onemocnění, 227 cizinců = 49,5 %. Benchmark: zpráva WHO Europe + ECDC „Tuberculosis surveillance and monitoring in Europe 2026 – 2024 data“ (23. 3. 2026) — EU/EEA 64 %, cíl WHO End TB 90 %, MDR/RR-TB 3,5 % případů s úspěšností léčby 56 % proti cíli 80 %. Vlastní přepočet agregátu EU/EEA ze surových dat WHO dává 64,2 % (18 209 z 28 375) a pro kohortu 2022 reprodukuje publikovanou hodnotu ECDC 67,9 % přesně — metodika ověřena. Sousedé (kohorta 2023): Slovensko 89,9 % (n=198), Rakousko 76,2 % (n=404), Německo 67,4 % (n=4 148), Polsko od kohorty 2017 nevykazuje. Ztraceni ze sledování: ČR 14,4 % (nejvyšší v EU/EEA), Maďarsko 9,7 %, Rakousko 9,2 %, Německo 2,8 %, Slovensko 1,5 %, průměr EU/EEA 3,5 %. Úmrtí: ČR 10,0 % (7. nejvyšší), průměr EU/EEA 7,3 %; zpráva ECDC za kohortu 2022 uvádí ČR jmenovitě mezi zeměmi nad 10 % (11,9 %). Metodický caveat uvedený v textu i v kartě: srovnání kategorie „ztracen ze sledování“ je samo o sobě zavádějící, protože ČR vykazuje 14,4 % ztracených a jen 4,5 % nevyhodnocených, zatímco EU/EEA 3,5 % ztracených, ale 24,2 % nevyhodnocených; nízký evropský průměr srážejí země, které výsledek z velké části nevykazují (Lotyšsko 0 %, Francie 19,5 %, Dánsko 29,8 %). Signál: prahy vědomě kalibrovány na good = 20 % a warn = 10 % odchylky od benchmarku (místo výchozích 2/5), takže zelená začíná až na 76,8 % (úroveň Rakouska) a červená pod 57,6 %; při hodnotě 70,6 a benchmarku 64 vrací computeSignal warn. Kalibrace je nutná proto, že ingest/transform.js commitnutý signál ignoruje a počítá ho při každém běhu znovu z karty — s výchozími prahy 2/5 by další transform přepsal varování na zelenou. Postava pana Mykoly je ilustrativní. published:false, robots noindex — publikační cron nastaví index,follow, povýší status a přidělí číslo."
+      },
+      "ready_since": "2026-09-04"
     }
   ]
 }
