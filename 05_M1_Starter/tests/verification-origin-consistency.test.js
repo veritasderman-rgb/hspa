@@ -77,6 +77,14 @@ const KNOWN_SEED_VERIFIED_EXCEPTIONS = new Set([
   // živý SÚKL DIS-13 feed.
   'pouzivani_antidepresiv',
   'spotreba_opioidu',
+  // 2026-09-05: spotreba_antidiabetik — stejný případ jako dva řádky výše.
+  // Celá řada 2021–2025 je vlastním přepočtem z otevřených dat SÚKL DIS-13
+  // (ATC A10, komunitní sektor) a protokol §4 je v kartě doložen tím, že pro
+  // roky 2021–2024 reprodukuje kanonickou řadu OECD (HEALTH_PHMC, PHARMACEUTICAL=A10)
+  // s odchylkou nejvýše 1,1 %. Automatický DIS-13 fetcher ale stále není zapojen,
+  // takže kontrakt nese origin: seed. Odeber spolu s oběma řádky výše, jakmile
+  // vznikne živý SÚKL DIS-13 feed.
+  'spotreba_antidiabetik',
   // 2026-07-28: pět OECD indikátorů přechodně origin:seed. Refresh cyklu
   // 2026-07-27 (commit b2a9282) živý OECD fetch nedotáhl → transform ponechal
   // hodnoty (karty verified beze změny), origin spadl na seed. Stejný

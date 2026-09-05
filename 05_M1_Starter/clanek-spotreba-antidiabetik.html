@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Česko je v evropské špičce ve spotřebě léků na cukrovku. Na jednoho pacienta ale vychází jedna a třetina dávky · HSPA Monitor</title>
+<meta name="description" content="Česko vydá 113,2 definované denní dávky antidiabetik na 1 000 obyvatel a den — šesté nejvyšší číslo z třiceti zemí OECD. Přepočet na jednoho z 905 760 léčených pacientů ukazuje, že objem roste hlavně proto, že přibývá nemocných. Nový indikátor HSPA Monitoru z otevřených dat SÚKL a Národního diabetologického registru.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Česko je v evropské špičce ve spotřebě léků na cukrovku. Na jednoho pacienta ale vychází jedna a třetina dávky">
+<meta property="og:description" content="Vysoká česká spotřeba antidiabetik neměří štědrost systému, ale počet nemocných. Skutečná informace je ve struktuře: moderní léky chránící srdce a ledviny tvoří 19,3 % objemu, deriváty sulfonylurey pořád 13,5 %. Nový indikátor HSPA Monitoru.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-05">
+<meta property="article:section" content="Léková politika">
+<!--
+  audit:
+    last_reviewed: 2026-09-05
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-05
+    creation_phase: novy indikator (spotreba_antidiabetik) + article-write
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "Doprovodny clanek k novemu indikatoru spotreba_antidiabetik (Procesy · Pece o chronicky nemocne · Diabetes, framework hspa, dimension kvalita, direction context_dependent, signal neutral). PRIMARNI DATA CR: SUKL, otevrena data DIS-13 (hlaseni distributoru o dodavkach lecivych pripravku dle § 77 odst. 1 pism. f) zakona c. 378/2007 Sb.), 60 mesicnich CSV za roky 2021-2025, stazeno 5. 9. 2026 z https://opendata.sukl.cz/?q=katalog/dis-13. Filtr: ATC7 zacina A10, typ odberatele LEKARNA, cista spotreba D minus V, DDD na baleni primo ze sloupce 'Pocet definovanych dennich davek/baleni', jmenovatel 10 900 000 obyvatel x skutecny pocet dni roku. VYSLEDNA RADA (DDD/1000/den): 2021 = 96,4 · 2022 = 98,9 · 2023 = 101,3 · 2024 = 106,0 · 2025 = 113,2 (+17,4 % za ctyri roky). Absolutni objem: 2021 = 383 709 796 DDD · 2022 = 393 420 970 · 2023 = 402 992 788 · 2024 = 422 917 273 · 2025 = 450 519 004. Dodavky primo poskytovatelum zdravotnich sluzeb tvori u A10 zaokrouhlene 0,0 % objemu, indikator tedy pokryva prakticky cely tok. OVERENI METODIKY: OECD Health Statistics, dataflow HEALTH_PHMC@DF_PHMC_CONSUM, MEASURE=PH_CON, PHARMACEUTICAL=A10, UNIT_MEASURE=DDD_10P3HB, stazeno primym dotazem na verejne SDMX API OECD 5. 9. 2026. Rada CR dle OECD: 2021 = 97,5 · 2022 = 99,3 · 2023 = 100,8 · 2024 = 107,1. Odchylka vlastniho prepoctu od OECD: 1,1 % · 0,4 % · 0,5 % · 1,0 %, tedy shoda ve vsech ctyrech prekryvajicich se letech do 1,1 % — metodika overena. Rok 2025 OECD zatim nepublikuje. BENCHMARK z tehoz dotazu za rok 2024: nevazeny prumer 30 zemi OECD s dostupnym udajem = 94,2; nevazeny prumer 20 clenskych statu EU v datasetu = 92,7. CR (107,1) je 6. nejvyssi z 30. Zebricek 2024: Kanada 221,3 · Finsko 128,7 · Nemecko 112,6 · Francie 111,3 · Recko 108,0 · CESKO 107,1 · Dansko 106,4 · Spojene kralovstvi 104,6 · Polsko 100,4 · Norsko 100,1 · Spanelsko 99,7 · Svedsko 99,5 · Slovensko 89,1 · Madarsko 83,8 · Italie 74,5 · Rakousko 60,6 · Lotyssko 58,2. JMENOVATEL PACIENTU: UZIS CR, otevrena data Narodniho diabetologickeho registru, sada NR-18-01 (https://datanzis.uzis.gov.cz/data/NR-18-NDR/NR-18-01/Otevrena-data-NR-18-01-diabetes-mellitus.csv.gz, licence CC BY 4.0, rada 2010-2025, 16 027 845 radku typu pacient-rok), stazeno 5. 9. 2026. Osoby s diabetem: 2021 = 1 065 260 · 2022 = 1 083 686 · 2023 = 1 113 666 · 2024 = 1 134 033 · 2025 = 1 156 709 (10,6 % populace). Farmakologicky lecene osoby (priznak DM_antidiabetika): 2021 = 810 596 · 2022 = 833 884 · 2023 = 861 588 · 2024 = 884 521 · 2025 = 905 760 (+11,7 % za ctyri roky). ODVOZENA INTENZITA (DDD na leceneho pacienta a den): 2021 = 1,30 · 2022 = 1,29 · 2023 = 1,28 · 2024 = 1,31 · 2025 = 1,36 (+5,1 %). Klicove zjisteni clanku: rust celkove spotreby (+17,4 %) je z vetsi casti dan prirustkem lecenych osob (+11,7 %), nikoli intenzivnejsi lecbou jednotlivce (+5,1 %). ROZKLAD SKUPINY (podil na objemu komunitni spotreby): 2025 — metformin A10BA 25,9 % · sulfonylurea A10BB 13,5 % · glifloziny A10BK 12,0 % · dlouhodobe pusobici inzuliny A10AE 10,3 % · fixni kombinace A10BD 9,5 % · rychle pusobici inzuliny A10AB 9,4 % · GLP-1 A10BJ 7,3 % · gliptiny A10BH 5,0 % · glitazony A10BG 2,9 % · A10AD 2,1 % · ostatni A10BX 1,9 %. 2021 — metformin 31,3 % · sulfonylurea 18,4 % · A10AE 11,2 % · A10AB 10,9 % · A10BD 8,7 % · gliptiny 7,5 % · A10AD 2,8 % · glifloziny 2,8 % · GLP-1 2,5 % · glitazony 2,4 %. Glifloziny + GLP-1 dohromady: 5,3 % (2021) · 8,0 % (2022) · 11,4 % (2023) · 15,3 % (2024) · 19,3 % (2025). Inzuliny celkem A10A: 25,3 % (2021) · 23,1 % (2024) · 21,9 % (2025). Semaglutid A10BJ06 samostatne: 3,6 % (2024) · 5,5 % (2025). POLITICKY RAMEC: rozsireni uhrady empagliflozinu k 1. 6. 2024 (Ceska diabetologicka spolecnost CLS JEP) pridalo indikaci chronickeho onemocneni ledvin a odbornost nefrologie; preskripce s uhradou vymezena odbornostem E/DIA, END, INT, KAR, NEF — prakticky lekar mezi nimi u diabeticke indikace neni. Zmena vyhlasky o preskripcnich omezenich k 1. 7. 2024 (MZ CR) uvolnila praktikum zhruba tisicovku pripravku vyzadujicich dosud pisemne delegovani specialistou. Dalsi vlna k 1. 7. 2026 (tiskova zprava MZ CR na webu SUKL) presouva k praktikum pres 1 200 pripravku s omezenim 'E', mimo jine pro diabetologicka a metabolicka onemocneni; dopad bude v datech viditelny az za roky 2026-2027. Platna verze Narodniho diabetologickeho programu je z roku 2013, odborna spolecnost vola po samostatnem Narodnim diabetologickem akcnim planu. CAVEATY UVEDENE V TEXTU I V KARTE: DDD meri objem, ne pocet lecenych osob ani kompenzaci; DDD inzulinu je dle WHO 40 IU bez ohledu na typ, takze zmena rezimu meni hodnotu i pri nezmenene klinicke intenzite; DIS-13 zachycuje dodavky do lekaren, ne vydej pacientovi; semaglutid sdili kod A10BJ06 pro diabetickou i obezitologickou indikaci, takze podil GLP-1 je horni odhad lecby diabetu; mezinarodni srovnatelnost limituje ruzne pokryti nemocnicniho sektoru (kanadskych 221,3 je vice nez dvojnasobek medianu a spis metodicky rozdil); benchmark OECD je o rok starsi nez ceska hodnota, coz u kontextoveho indikatoru s neutralnim signalem nema vliv na hodnoceni; indikator nema krajsky rozpad; NDR v otevrenych datech neklasifikuje typ diabetu. Postava pani Zdenky je ilustrativni, nikoli konkretni pacientka. published:false, robots noindex — publikacni cron nastavi index,follow, povysi status a pridel cislo."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">diabetes · léková politika · úhrady · primární péče</span>
+      </div>
+      <h1 class="article-title">Česko je v evropské špičce ve spotřebě léků na cukrovku. Na jednoho pacienta ale vychází jedna a třetina dávky</h1>
+      <p class="article-deck">
+        Česko vydá <strong>113,2 definované denní dávky antidiabetik na 1 000 obyvatel a den</strong> — v roce 2024, kdy je k dispozici mezinárodní srovnání, to bylo šesté nejvyšší číslo z třiceti zemí OECD. Vypadá to jako země, která svým diabetikům léčbu nešetří. Přepočet na jednoho z 905 760 farmakologicky léčených pacientů ale ukazuje jen 1,36 dávky denně a růst objemu je ze dvou třetin dán tím, že nemocných přibývá. Nový indikátor HSPA Monitoru měří objem léčby mezi zjištěnou nemocí a její komplikací — a nejzajímavější věc na něm není součet, ale struktura.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">5. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Paní Zdeňce je čtyřiašedesát a diabetes 2. typu má devět let. Bere metformin a gliklazid, tedy kombinaci, kterou by jí předepsali i před patnácti lety. Loni ji hospitalizovali se srdečním selháním, ledvinné funkce má zhoršené. Podle doporučených postupů je přesně tím člověkem, u kterého by gliflozin nebyl volbou navíc, ale volbou první — kvůli srdci a ledvinám, nezávisle na hodnotě cukru. Její praktický lékař, u kterého je devět let dispenzarizována, jí ho ale u diabetické indikace s úhradou předepsat nemůže. Úhrada je vymezena odbornostem diabetologie, endokrinologie, vnitřní lékařství, kardiologie a nefrologie. Do diabetologické ambulance má paní Zdeňka objednáno za pět měsíců.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Antidiabetika v Česku: čtyři čísla, která spolu nesedí tak, jak by se čekalo</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="113.2" data-decimals="1">113,2</span>
+            <span class="av-counter-label">DDD na 1 000 obyvatel a den (2025)</span>
+            <span class="av-counter-foot">Za rok 2024 mělo Česko 107,1 — šesté nejvyšší číslo z 30 zemí OECD; průměr OECD 94,2, průměr EU 92,7</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="1.36" data-decimals="2">1,36</span>
+            <span class="av-counter-label">DDD na jednoho léčeného pacienta a den</span>
+            <span class="av-counter-foot">Zhruba jedna a třetina standardní denní dávky. Za čtyři roky vzrostla o 5,1 %, zatímco počet léčených o 11,7 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1156709">1 156 709</span>
+            <span class="av-counter-label">osob s diabetem v Česku (2025)</span>
+            <span class="av-counter-foot">10,6 % obyvatel; 905 760 z nich je léčeno léky. Za čtyři roky přibylo 95 164 léčených pacientů</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="19.3" data-decimals="1" data-suffix=" %">19,3 %</span>
+            <span class="av-counter-label">podíl gliflozinů a agonistů GLP-1 na objemu</span>
+            <span class="av-counter-foot">V roce 2021 to bylo 5,3 %. Deriváty sulfonylurey, které doporučení odsunula, drží pořád 13,5 %</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vlastní přepočet z otevřených dat SÚKL DIS-13 (60 měsíčních souborů za roky 2021–2025, ATC A10, komunitní sektor) a z otevřených dat Národního diabetologického registru ÚZIS (sada NR-18-01), staženo 5. 9. 2026. Mezinárodní srovnání: OECD Health Statistics, Pharmaceutical consumption.</p>
+      </figure>
+
+      <h3>Co ukazatel měří — a proč se dá tak snadno přečíst špatně</h3>
+      <p>
+        Spotřeba léků se ve zdravotnické statistice měří v <strong>definovaných denních dávkách</strong>, zkratkou DDD. Světová zdravotnická organizace přiřadí každé účinné látce typickou udržovací dávku pro hlavní indikaci u dospělého a spotřeba se pak dá sečíst napříč přípravky bez ohledu na jejich sílu a balení. Výsledek se vztáhne na tisíc obyvatel a den, takže číslo 113,2 doslova znamená: z každého tisíce Čechů má 113 lidí každý den k dispozici jednu standardní denní dávku léku na cukrovku.
+      </p>
+      <p>
+        A přesně tady začíná past. Číslo svádí ke dvěma závěrům, které z něj neplynou. Neříká, kolik lidí je léčeno — mohlo by jít o 113 lidí s jednou dávkou stejně jako o 57 lidí se dvěma. A neříká, jestli ta léčba funguje: DDD měří distribuovaný objem, ne dosaženou kompenzaci, ne adherenci a už vůbec ne to, jestli má pacient tu léčbu, kterou by mít měl. HSPA Monitor proto zařazuje indikátor do oblasti <strong>Procesy</strong> se směrem „kontextově závislý“ a neutrálním signálem: vyšší hodnota není sama o sobě ani dobrá, ani špatná.
+      </p>
+      <p>
+        Zato je to jediné číslo, které v celém řetězci péče o diabetes chybělo. HSPA Monitor dosud měřil, kolik lidí nemoc má (<a href="indicator.html?id=prevalence_diabetu">prevalence diabetu</a>) a s jakými komplikacemi končí (<a href="indicator.html?id=amputace_dk_diabetici">amputace dolních končetin u diabetiků</a>, viz článek <a href="clanek-diabeticke-amputace.html">Diabetická noha amputovaná</a>). Mezi tím byla díra: kolik léčby systém mezi diagnózou a komplikací skutečně dodá.
+      </p>
+
+      <h3>Stav v Česku: čtyři roky rovnoměrného růstu</h3>
+      <p>
+        Česká řada je krátká, ale hladká. Otevřená data SÚKL o dodávkách distributorů do lékáren začínají v květnu 2020, takže první úplný rok je 2021. Od té doby spotřeba antidiabetik roste každý rok: <strong>96,4 (2021) → 98,9 (2022) → 101,3 (2023) → 106,0 (2024) → 113,2 (2025)</strong>, tedy o 17,4 % za čtyři roky. Žádný skok, žádný propad — jen setrvalý tlak.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Spotřeba antidiabetik v Česku, 2021–2025 (DDD na 1 000 obyvatel a den)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="120">
+          <li class="av-bar-row" data-value="96.4" data-label="2021"></li>
+          <li class="av-bar-row" data-value="98.9" data-label="2022"></li>
+          <li class="av-bar-row" data-value="101.3" data-label="2023"></li>
+          <li class="av-bar-row" data-value="106" data-label="2024"></li>
+          <li class="av-bar-row" data-value="113.2" data-label="2025" data-accent="warn"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vlastní přepočet z otevřených dat SÚKL DIS-13 (ATC A10, typ odběratele LEKARNA, čistá spotřeba dodávka minus vratka, DDD na balení přímo ze sloupce datové sady), staženo 5. 9. 2026. Metodika je ověřena proti kanonické řadě OECD: pro roky 2021–2024 dává OECD za ČR 97,5 · 99,3 · 100,8 · 107,1, tedy shoda do 1,1 %.</p>
+      </figure>
+
+      <p>
+        Že je přepočet správný, se dá ukázat nezávisle. Tutéž skupinu léků publikuje OECD ve své databázi spotřeby léčiv a za Česko do ní hlásí právě SÚKL. Kanonická řada OECD zní 97,5 · 99,3 · 100,8 · 107,1 — vlastní přepočet z otevřených dat se od ní v žádném ze čtyř překrývajících se let neliší o víc než 1,1 %. To je důležité nejen pro důvěru v čísla, ale i prakticky: OECD publikuje s ročním zpožděním, zatímco česká otevřená data jsou k dispozici měsíc po měsíci. Hodnota za rok 2025 tedy předbíhá mezinárodní statistiku o celý rok.
+      </p>
+
+      <h3>Mezinárodní srovnání: šestí z třiceti, ale nikoli proto, že bychom byli štědří</h3>
+      <p>
+        Za rok 2024, kdy jde srovnávat, je Česko se 107,1 DDD <strong>šesté nejvyšší z třiceti zemí OECD</strong>, které údaj hlásí. Nad průměrem OECD 94,2 o 13,7 %, nad průměrem dvaceti zemí EU 92,7 o 15,5 %. Z okolních států je výš jen Německo (112,6); Polsko má 100,4, Slovensko 89,1 a Rakousko pouze 60,6 — méně než polovinu české hodnoty.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avIntH">
+        <figcaption class="av-figure-h" id="avIntH">Spotřeba antidiabetik ve vybraných zemích OECD, 2024 (DDD na 1 000 obyvatel a den)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="230">
+          <li class="av-bar-row" data-value="221.3" data-label="Kanada"></li>
+          <li class="av-bar-row" data-value="128.7" data-label="Finsko"></li>
+          <li class="av-bar-row" data-value="112.6" data-label="Německo"></li>
+          <li class="av-bar-row" data-value="107.1" data-label="Česko" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="104.6" data-label="Spojené království"></li>
+          <li class="av-bar-row" data-value="100.4" data-label="Polsko"></li>
+          <li class="av-bar-row" data-value="94.2" data-label="Průměr OECD (30 zemí)"></li>
+          <li class="av-bar-row" data-value="92.7" data-label="Průměr EU (20 zemí)"></li>
+          <li class="av-bar-row" data-value="89.1" data-label="Slovensko"></li>
+          <li class="av-bar-row" data-value="74.5" data-label="Itálie"></li>
+          <li class="av-bar-row" data-value="60.6" data-label="Rakousko"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> OECD Health Statistics, Pharmaceutical consumption (MEASURE PH_CON, PHARMACEUTICAL A10, jednotka DDD na 1 000 obyvatel a den), staženo přímým dotazem na veřejné SDMX rozhraní OECD 5. 9. 2026. Průměry jsou nevážené. Kanadská hodnota je více než dvojnásobek mediánu a je nutné ji číst spíš jako metodický rozdíl v pokrytí než jako obraz reality.</p>
+      </figure>
+
+      <p>
+        Tady se ale musí přijít s tím druhým číslem, jinak by srovnání lhalo. Podle Národního diabetologického registru mělo v roce 2025 v Česku diabetes <strong>1 156 709 osob</strong>, tedy 10,6 % obyvatel, a 905 760 z nich bralo léky. Když se roční objem dodaných dávek vydělí počtem léčených pacientů a dny roku, vyjde <strong>1,36 DDD na jednoho léčeného pacienta a den</strong> — tedy zhruba jedna a třetina standardní denní dávky. Nic mimořádného; typický diabetik 2. typu má dvojkombinaci, takže se to blíží spodní hranici očekávaného.
+      </p>
+      <p>
+        A hlavně: tenhle údaj skoro neroste. Za čtyři roky se zvedl z 1,30 na 1,36, tedy o 5,1 %. Zato počet farmakologicky léčených osob vzrostl z 810 596 na 905 760, tedy o 11,7 %. Růst celkové spotřeby o 17,4 % je tedy ze dvou třetin dán tím, že přibývá nemocných, a jen z třetiny tím, že se léčí intenzivněji. <strong>Česká pozice v horní šestině OECD měří především prevalenci diabetu, ne štědrost systému.</strong> Rakouských 60,6 nesvědčí o tom, že by tamní lékaři léčbu odpírali — svědčí hlavně o tom, že Rakousko má méně diabetiků.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTabH">
+        <figcaption class="av-figure-h" id="avTabH">Rozklad růstu: objem, pacienti a intenzita léčby, 2021–2025</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">DDD/1000/den</th>
+                <th scope="col" class="av-num">Osoby s diabetem</th>
+                <th scope="col" class="av-num">Léčeno léky</th>
+                <th scope="col" class="av-num">DDD na léčeného a den</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">2021</th>
+                <td class="av-num">96,4</td>
+                <td class="av-num">1 065 260</td>
+                <td class="av-num">810 596</td>
+                <td class="av-num">1,30</td>
+              </tr>
+              <tr>
+                <th scope="row">2022</th>
+                <td class="av-num">98,9</td>
+                <td class="av-num">1 083 686</td>
+                <td class="av-num">833 884</td>
+                <td class="av-num">1,29</td>
+              </tr>
+              <tr>
+                <th scope="row">2023</th>
+                <td class="av-num">101,3</td>
+                <td class="av-num">1 113 666</td>
+                <td class="av-num">861 588</td>
+                <td class="av-num">1,28</td>
+              </tr>
+              <tr>
+                <th scope="row">2024</th>
+                <td class="av-num">106,0</td>
+                <td class="av-num">1 134 033</td>
+                <td class="av-num">884 521</td>
+                <td class="av-num">1,31</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">2025</th>
+                <td class="av-num av-bad">113,2</td>
+                <td class="av-num av-bad">1 156 709</td>
+                <td class="av-num">905 760</td>
+                <td class="av-num">1,36</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> sloupec DDD/1000/den — vlastní přepočet z otevřených dat SÚKL DIS-13; sloupce s počty osob — otevřená data ÚZIS ČR, Národní diabetologický registr, sada NR-18-01 (16 027 845 řádků typu pacient-rok, licence CC BY 4.0). Poslední sloupec je podíl absolutního ročního objemu DDD a součinu počtu léčených osob a dní roku. Obojí staženo 5. 9. 2026.</p>
+      </figure>
+
+      <h3>Skutečná informace je ve struktuře</h3>
+      <p>
+        Jestli součet měří hlavně nemocnost, pak to zajímavé musí být uvnitř. A tam se za čtyři roky odehrála podstatná změna. Doporučené postupy — americká i evropská, a s nimi i Česká diabetologická společnost — od roku 2019 postupně přesunuly <strong>glifloziny</strong> (inhibitory SGLT2) a <strong>agonisty receptoru GLP-1</strong> z pozice léků třetí volby mezi léčbu, která se volí podle přítomnosti srdečního selhání, chronického onemocnění ledvin nebo aterosklerotického onemocnění, tedy nezávisle na hodnotě glykovaného hemoglobinu. Důvod je jednoduchý: u těchto tříd je doložený přínos pro srdce a ledviny, nejen pro cukr.
+      </p>
+      <p>
+        Česká spotřeba ten obrat kopíruje, ale se zpožděním a z velmi nízké základny. Podíl obou tříd dohromady na objemu byl <strong>5,3 % v roce 2021</strong>, pak 8,0 %, 11,4 %, 15,3 % a v roce 2025 <strong>19,3 %</strong>. Za čtyři roky tedy téměř čtyřnásobek. Zároveň klesl podíl inzulinů z 25,3 % na 21,9 %, podíl metforminu z 31,3 % na 25,9 % a — což je z hlediska kvality péče nejzajímavější — podíl derivátů sulfonylurey z 18,4 % na 13,5 %.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avStrH">
+        <figcaption class="av-figure-h" id="avStrH">Struktura spotřeby antidiabetik podle třídy, 2021 vs. 2025 (% objemu v DDD)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Třída (kód ATC)</th>
+                <th scope="col" class="av-num">2021</th>
+                <th scope="col" class="av-num">2025</th>
+                <th scope="col">Postavení v doporučených postupech</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Metformin (A10BA)</th>
+                <td class="av-num">31,3 %</td>
+                <td class="av-num">25,9 %</td>
+                <td>Základ léčby, beze změny</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Deriváty sulfonylurey (A10BB)</th>
+                <td class="av-num">18,4 %</td>
+                <td class="av-num av-bad">13,5 %</td>
+                <td>Odsunuty kvůli riziku hypoglykemie a chybějícímu kardiovaskulárnímu přínosu</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Glifloziny — inhibitory SGLT2 (A10BK)</th>
+                <td class="av-num">2,8 %</td>
+                <td class="av-num av-good">12,0 %</td>
+                <td>Preferovány u srdečního selhání a onemocnění ledvin</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Agonisté GLP-1 (A10BJ)</th>
+                <td class="av-num">2,5 %</td>
+                <td class="av-num av-good">7,3 %</td>
+                <td>Preferováni u aterosklerotického onemocnění a obezity</td>
+              </tr>
+              <tr>
+                <th scope="row">Gliptiny (A10BH)</th>
+                <td class="av-num">7,5 %</td>
+                <td class="av-num">5,0 %</td>
+                <td>Neutrální, bez doloženého orgánového přínosu</td>
+              </tr>
+              <tr>
+                <th scope="row">Fixní kombinace (A10BD)</th>
+                <td class="av-num">8,7 %</td>
+                <td class="av-num">9,5 %</td>
+                <td>Nástroj adherence</td>
+              </tr>
+              <tr>
+                <th scope="row">Inzuliny celkem (A10A)</th>
+                <td class="av-num">25,3 %</td>
+                <td class="av-num">21,9 %</td>
+                <td>Nezbytné u 1. typu, u 2. typu později než dřív</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vlastní přepočet z otevřených dat SÚKL DIS-13, podíl na objemu komunitní spotřeby v DDD. Zbytek do 100 % tvoří glitazony (A10BG, 2,4 % → 2,9 %) a ostatní přípravky (A10BX, A10AC, A10BF). Pozor: přípravky se semaglutidem sdílejí kód A10BJ06 pro diabetickou i obezitologickou indikaci, takže podíl agonistů GLP-1 je horním odhadem léčby diabetu; samotný semaglutid tvořil 3,6 % objemu v roce 2024 a 5,5 % v roce 2025.</p>
+      </figure>
+
+      <p>
+        Devatenáct procent zní jako úspěch, dokud se to nesrovná s tím, co ta čísla znamenají v ordinaci. Deriváty sulfonylurey pořád tvoří víc než osminu objemu — je to levná a účinná léčba na snížení cukru, ale u pacienta se srdečním selháním nebo poškozenými ledvinami už je to volba, kterou by doporučení nepodpořila. A moderní léčba, která by u něj měla přijít místo ní, se v Česku dostala teprve na dvanáct a sedm procent objemu.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="5.1" data-decimals="1" data-suffix=" %">5,1 %</span>
+          <span class="av-counter-label">o tolik vzrostla za čtyři roky intenzita léčby na jednoho pacienta</span>
+          <span class="av-counter-foot">Celková spotřeba přitom vzrostla o 17,4 % a počet léčených osob o 11,7 %. Systém nedává víc léčby stejným lidem — dává stejně léčby většímu počtu lidí.</span>
+        </div>
+      </aside>
+
+      <h3>Strukturální analýza: proč se moderní léčba prosazuje pomalu</h3>
+      <p>
+        Nejde o neznalost. Česká diabetologie patří k oborům, které doporučené postupy sledují a překládají do praxe rychle, a odborná společnost kardio-renální obrat aktivně prosazuje. Bariéra je jinde — v tom, <em>kdo</em> smí předepsat a <em>za jakých podmínek</em>.
+      </p>
+      <p>
+        Většina pacientů s diabetem 2. typu je dispenzarizována u praktického lékaře. Úhrada gliflozinů u diabetické indikace je ale vázána na kombinaci s metforminem, na nedostatečnou kompenzaci a na prokázaný efekt po šesti měsících — jinak končí. A preskripce s úhradou je vymezena odbornostem diabetologie, endokrinologie, vnitřní lékařství, kardiologie a, od rozšíření úhrady empagliflozinu k <strong>1. červnu 2024</strong>, nefrologie. Praktický lékař mezi nimi u této indikace není. Pacient jako paní Zdeňka tedy musí projít objednáním ke specialistovi, aby dostal lék, jehož indikace je z pohledu doporučení jednoznačná.
+      </p>
+      <p>
+        Druhá vrstva je cenová. Metformin a deriváty sulfonylurey jsou levné generikum a dohromady tvoří stále 39,4 % objemu. Glifloziny a agonisté GLP-1 jsou řádově dražší — a to je vedle klinických kritérií hlavní důvod restriktivních úhradových podmínek. Zároveň to znamená, že rostoucí podíl moderních tříd zvedá náklady mnohem rychleji, než naznačuje růst objemu v definovaných denních dávkách. Devatenáct procent objemu neodpovídá devatenácti procentům výdajů, ale výrazně vyššímu podílu.
+      </p>
+      <p>
+        Třetí vrstva je vstup do systému. Diabetes 2. typu je z velké části nemoc odvozená od hmotnosti, stravy a pohybu. Prevalence obezity u českých dospělých je 19,8 % proti 16,5 % v EU a právě tenhle přítok drží růst počtu léčených pacientů. Objem antidiabetik je proto v posledku ukazatel, jehož nejsilnější determinanty leží mimo zdravotnictví — a žádné rozhodnutí o úhradách jej nesníží.
+      </p>
+
+      <h3>Politická páka: tři rozhodnutí, z nichž dvě už padla</h3>
+      <p>
+        <strong>Zaprvé: preskripční omezení, a to už se hýbe.</strong> Změna vyhlášky k 1. červenci 2024 uvolnila praktickým lékařům zhruba tisícovku přípravků, které do té doby vyžadovaly písemné delegování specialistou. Další vlna k <strong>1. červenci 2026</strong> přesouvá k praktikům přes 1 200 přípravků s omezením „E“, výslovně mimo jiné pro diabetologická a metabolická onemocnění. Obě vlny míří přesně na úzké hrdlo, které tento indikátor měří (podrobně v článku <a href="clanek-preskripce-praktici-2026.html">Konec obíhání kvůli receptu</a>). Jejich dopad ale bude v datech vidět až za roky 2026 a 2027 — a právě proto má smysl indikátor sledovat: nabízí přirozený test, jestli uvolnění preskripce mění strukturu léčby, nebo jen její administrativu.
+      </p>
+      <p>
+        <strong>Zadruhé: indikační podmínky úhrady.</strong> Kompetenci má SÚKL ve správním řízení o výši a podmínkách úhrady. Rozhodnutí, které by u pacientů se srdečním selháním nebo chronickým onemocněním ledvin oddělilo úhradu gliflozinu od hodnoty glykovaného hemoglobinu, by odpovídalo tomu, co dnes říkají doporučené postupy — a je právě tím typem změny, kterou tento indikátor umí zachytit. Precedens existuje: rozšíření úhrady empagliflozinu z června 2024 přesně tohle udělalo pro renální indikaci a přidalo k předepisujícím odbornostem nefrologii.
+      </p>
+      <p>
+        <strong>Zatřetí: chybějící národní plán.</strong> Platná verze Národního diabetologického programu pochází z roku 2013. Nepočítá s Národním diabetologickým registrem, který dnes existuje a jehož otevřená data jsou podkladem poloviny čísel v tomto textu, ani s třídami léků, které dnes rozhodují o tom, jestli pacient skončí na dialýze. Odborná společnost dlouhodobě volá po samostatném Národním diabetologickém akčním plánu, který by propojil záchyt, léčbu a dlouhodobé sledování. Kompetenci má ministerstvo zdravotnictví a rozhodnutí nevyžaduje nový zákon.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        HSPA Monitor zařazuje spotřebu antidiabetik do oblasti <strong>Procesy</strong>, domény Péče o chronicky nemocné, s dimenzí kvality a s neutrálním signálem. Neutrální není alibismus — je to jediné poctivé hodnocení ukazatele, jehož vysoká hodnota může znamenat dobrou dostupnost léčby stejně jako špatné zdraví populace. V českém případě data ukazují, že jde převážně o druhé.
+      </p>
+      <p>
+        Zbývá dodat, co číslo nevidí. DDD měří objem, ne kompenzaci — o tom, kolik českých diabetiků dosahuje cílových hodnot, se z distribučních dat nedozvíme nic a systematicky se to v Česku nesbírá, což je samo o sobě zjištění. Definovaná denní dávka inzulinu je podle Světové zdravotnické organizace 40 mezinárodních jednotek bez ohledu na typ, takže změna inzulinového režimu mění indikátor i při nezměněné klinické intenzitě léčby. Přípravky se semaglutidem sdílejí jeden kód pro léčbu cukrovky i obezity, takže podíl agonistů GLP-1 je horním odhadem. A dodávky do lékáren nejsou totéž co výdej pacientovi — u chronické medikace se roční tok spotřebě blíží, což potvrzuje shoda s daty OECD do 1,1 %, ale pro měsíční čtení řada vhodná není.
+      </p>
+      <p>
+        Pro paní Zdeňku z toho všeho plyne jedna věta. Její léčba je v celostátní statistice započítaná stejně jako léčba člověka, který dostal to, co doporučení předepisují. Rozdíl mezi nimi součet nezachytí. Zachytí ho jenom struktura — a ta se za čtyři roky pohnula správným směrem, jen zdaleka ne tak rychle, aby se to stihlo do jejího příštího objednání.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=spotreba_antidiabetik"><strong>Spotřeba antidiabetik</strong></a> — 113,2 DDD/1000/den (ČR, 2025) · Procesy · kontextově závislý (neutrální signál; průměr OECD 94,2, EU 92,7 za rok 2024)</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — vstup do řetězce: kolik lidí nemoc má, než se řeší, jak se léčí</li>
+        <li><a href="indicator.html?id=amputace_dk_diabetici"><strong>Amputace dolních končetin u diabetiků</strong></a> — výstup téhož řetězce: kam vede diabetes, který se nepodařilo udržet pod kontrolou</li>
+        <li><a href="indicator.html?id=spotreba_hypolipidemik"><strong>Spotřeba hypolipidemik</strong></a> — sesterský ukazatel objemu léčby u druhého velkého kardiometabolického rizika</li>
+        <li><a href="indicator.html?id=obezita_prevalence"><strong>Prevalence obezity</strong></a> — hlavní determinant přítoku nových pacientů s diabetem 2. typu</li>
+        <li><a href="indicator.html?id=nefrologicka_pece_pred_dialyzou"><strong>Nefrologická péče před náhradou funkce ledvin</strong></a> — návaznost, kterou glifloziny u diabetiků s renálním postižením přímo ovlivňují</li>
+        <li><a href="indicator.html?id=podil_prakticti_lekari"><strong>Podíl praktických lékařů</strong></a> — kapacita segmentu, kterému se preskripce postupně uvolňuje</li>
+        <li><a href="indicator.html?id=podil_generik_objem"><strong>Podíl generik na objemu</strong></a> — cenový kontext, ve kterém se rozhoduje o úhradě moderních tříd</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroj</h5>
+        <ul class="article-sources-list">
+          <li><strong>SÚKL — DIS-13, hlášení distributorů o dodávkách léčivých přípravků</strong> — měsíční otevřená data v CSV podle § 77 odst. 1 písm. f) zákona č. 378/2007 Sb., o léčivech. Sada obsahuje sloupec „Počet definovaných denních dávek/balení“, takže převod na DDD nevyžaduje externí číselník. Z těchto souborů (60 měsíců, roky 2021–2025) jsou spočítány všechny české hodnoty spotřeby v tomto článku. <a href="https://opendata.sukl.cz/?q=katalog/dis-13" target="_blank" rel="noopener">opendata.sukl.cz · DIS-13 ↗</a></li>
+          <li><strong>ÚZIS ČR — Národní diabetologický registr, otevřená data (sada NR-18-01)</strong> — anonymizovaná data typu pacient-rok za období 2010–2025, licence CC BY 4.0; zdroj počtu osob s diabetem a počtu farmakologicky léčených, tedy jmenovatele pro přepočet na jednoho pacienta. <a href="https://www.nzip.cz/data/1768-diabetes-mellitus-epidemiologie-otevrena-data" target="_blank" rel="noopener">nzip.cz · datová sada ↗</a></li>
+          <li><strong>ÚZIS ČR — přímá distribuce datové sady NR-18-01</strong> — komprimované CSV, ze kterého je proveden přepočet (16 027 845 řádků). <a href="https://datanzis.uzis.gov.cz/data/NR-18-NDR/NR-18-01/Otevrena-data-NR-18-01-diabetes-mellitus.csv.gz" target="_blank" rel="noopener">datanzis.uzis.gov.cz · CSV ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní benchmark</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD Health Statistics — Pharmaceutical consumption</strong> — dataflow HEALTH_PHMC@DF_PHMC_CONSUM, ukazatel PH_CON, skupina A10 (Drugs used in diabetes), jednotka DDD na 1 000 obyvatel a den. Zdroj hodnot pro všechny země, průměrů OECD a EU i kanonické české řady, proti níž je ověřen vlastní přepočet. Za Česko do OECD hlásí SÚKL. <a href="https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&amp;df[id]=HEALTH_PHMC%40DF_PHMC_CONSUM&amp;df[ag]=OECD.ELS.HD" target="_blank" rel="noopener">data-explorer.oecd.org · Pharmaceutical consumption ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Politický rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Rozšíření úhrady empagliflozinu od 1. 6. 2024</strong> (Česká diabetologická společnost ČLS JEP) — oznámení o rozšíření úhrady na chronické onemocnění ledvin a o přidání odbornosti nefrologie mezi předepisující; zdroj výčtu odborností s úhradou. <a href="https://www.diab.cz/oznameni/rozsireni-uhrady-empagliflozinu-od-1-6-2024/" target="_blank" rel="noopener">diab.cz · oznámení ↗</a></li>
+          <li><strong>Změna preskripčních omezení od 1. 7. 2024</strong> (Ministerstvo zdravotnictví ČR) — zhruba tisícovka přípravků nově předepsatelných praktickými lékaři bez písemného delegování specialistou; mezi uvedenými oblastmi jsou léčiva na cukrovku. <a href="https://mzd.gov.cz/tiskove-centrum-mz/zmena-preskripcnich-omezeni/" target="_blank" rel="noopener">mzd.gov.cz · tisková zpráva ↗</a></li>
+          <li><strong>Více než 1 200 léků nově u praktického lékaře, od 1. 7. 2026</strong> (tisková zpráva MZ ČR zveřejněná SÚKL) — druhá vlna uvolnění preskripce, výslovně zmiňující diabetologická a metabolická onemocnění. <a href="https://sukl.gov.cz/media/tiskove-zpravy/tz-mz-cr-vice-nez-1-200-leku-nove-u-praktickeho-lekare-ministerstvo-zdravotnictvi-usnadnuje-pacientum-pristup-k-lecbe/" target="_blank" rel="noopener">sukl.gov.cz · tisková zpráva ↗</a></li>
+          <li><strong>Národní diabetologický program</strong> (Česká diabetologická společnost ČLS JEP) — platná verze z roku 2013; rámec, jehož nahrazení samostatným akčním plánem odborná společnost dlouhodobě žádá. <a href="https://www.diab.cz/narodni-diabetologicky-program" target="_blank" rel="noopener">diab.cz · Národní diabetologický program ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> České hodnoty spotřeby jsou vlastním přepočtem z otevřených dat SÚKL DIS-13 (staženo 5. 9. 2026): filtr ATC7 začínající „A10“, typ odběratele LEKARNA, čistá spotřeba jako dodávka minus vratka, jmenovatel 10 900 000 obyvatel a skutečný počet dní roku. Metodika je ověřena tím, že pro roky 2021–2024 reprodukuje kanonickou řadu OECD za ČR s odchylkou nejvýše 1,1 %. <strong>Indikátor měří objem, ne účinnost:</strong> DDD neříká, kolik pacientů je léčeno, jestli dosahují cílových hodnot ani jak jsou adherentní — proto je v HSPA Monitoru veden jako kontextově závislý s neutrálním signálem. Definovaná denní dávka inzulinu je podle WHO 40 mezinárodních jednotek bez ohledu na typ přípravku, takže změna inzulinového režimu mění hodnotu i při nezměněné klinické intenzitě. Přípravky se semaglutidem sdílejí kód A10BJ06 pro diabetickou i obezitologickou indikaci, takže podíl agonistů GLP-1 je horním odhadem léčby diabetu. DIS-13 zachycuje dodávky distributorů do lékáren, nikoli výdej pacientovi. Mezinárodní srovnání omezuje různé pokrytí nemocničního sektoru mezi zeměmi a to, že průměry OECD i EU jsou nevážené. Benchmark OECD je za rok 2024, česká hodnota za rok 2025; u kontextového ukazatele s neutrálním signálem to nemá vliv na hodnocení, ale při citaci rozdílu je to nutné uvést. Národní diabetologický registr v otevřených datech neklasifikuje typ diabetu, takže objem nelze rozdělit mezi 1. a 2. typ. Postava paní Zdeňky je ilustrativní, nikoli konkrétní pacientka.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
