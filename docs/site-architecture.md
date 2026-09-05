@@ -223,15 +223,23 @@ zdrave-cesko.cz/
 
 ### `plneni-*.html` — plnění dalších strategií (sdílená šablona)
 
-Pět stránek nad sdíleným rendererem `src/strategie-plneni.js` (bootstrap
+Sedm stránek nad sdíleným rendererem `src/strategie-plneni.js` (bootstrap
 `src/plneni-page.js`, konfigurace data-atributy na `<body>`, CSS `.z35-*`):
 `plneni-onko-2030.html` (NOP 2030), `plneni-kv-2035.html` (KV plán 2025–2035),
 `plneni-amr.html` (AP NAP 2019–2022 — vypršel bez nástupce, což je hlavní
 zjištění stránky), `plneni-dusevni-zdravi.html` (Strategie 2013 + NAPDZ),
 `plneni-zdravi-2030.html` (retrospektiva s oficiálním hodnocením ze Zprávy
-2023–2024 — bloky `hodnoceni` citují zprávu se stranou). Datasety
+2023–2024 — bloky `hodnoceni` citují zprávu se stranou), `plneni-socialni-sluzby.html`
+(Národní strategie rozvoje sociálních služeb 2026–2030, usnesení vlády č. 1006 —
+5 strategických cílů, 18 specifických, 56 opatření; 0 přímých mapování na
+kontrakt, 3 proxy indikátory dokumentu, 53 procesních opatření), `plneni-socialni-sluzby-2016-2025.html`
+(předchůdkyně 2016–2025, retrospektiva — 10 strategických cílů, 34 specifických,
+91 opatření; žádná z povinných výročních zpráv o plnění není veřejně dohledatelná,
+hodnocení proto cituje analytickou část nástupnické strategie). Datasety
 `data/plneni-*.json`, viz data-model §22. Vstupy ze `strategie.html` (badge
 „plnění ⤳ indikátory" na kartě + zvýrazněný odkaz v detailu přes `plneni_url`).
+Kalkulačka `kalkulacka-pece-2035.html` je s touto dvojicí provázaná (scénáře
+kapacit dlouhodobé péče do roku 2035).
 
 ### `zdravi-2035.html` — Plní se Zdraví 2035?
 
@@ -254,6 +262,33 @@ zjištění stránky), `plneni-dusevni-zdravi.html` (Strategie 2013 + NAPDZ),
   na stranu). Aktuální hodnoty jdou živě z kontraktu, ne z kopie.
 - **Vstupy**: nav skupina Strategie („Plní se Zdraví 2035?“), zvýrazněný odkaz
   z detailu strategie (`plneni_url` v strategies.json), related-tools, sitemap.
+
+### `kalkulacka-pece-2035.html` — Kdo se o nás postará v roce 2035?
+
+| | |
+|---|---|
+| **Účel** | Interaktivní model přerozdělení dlouhodobé péče o seniory (65+) v roce 2035 mezi pobytové služby, terénní služby a rodiny. Tři posuvníky (lůžka v pobytových službách, pečovatelé v terénních službách, podíl seniorů bez lůžka přesměrovaný do terénu) + čtyři přednastavené scénáře studie. Výstup: kolik seniorů zůstane bez pobytového místa, kolik úvazků odpracují rodiny navíc, roční náklad systému a investice do nových lůžek — srovnané s rokem 2024 a základním scénářem. |
+| **Cílový uživatel** | Novinář, policy maker, poučený občan (rodinný pečující, pracovník sociálních služeb). |
+| **Fetchuje** | `data/ltc-scenare.json` |
+| **Model** | `src/ltc-engine.js` — čistá funkce bez DOM (`paramsFromData`, `simulate`, `baseline`, `year2024`), testovaná proti čtyřem scénářům studie v `tests/ltc-engine.test.js`. |
+| **JS moduly** | `src/ltc-kalkulacka.js` (render, stav v URL hashi `#luzka=…&pecovatele=…&teren=…`) → `src/ltc-engine.js`, `page-shared` |
+| **CSS namespace** | `.ltc-*` |
+
+**Co dělá jinak**
+
+- **Stav v URL, ne v localStorage** — nastavení posuvníků jde sdílet odkazem;
+  `hashchange` synchronizuje posuvníky i výsledky zpět.
+- **Scénáře studie jako přednastavení** (`data/ltc-scenare.json → scenarios`):
+  základní scénář (demografie), zmrazení lůžek s růstem terénu, zmrazení všech
+  investic, „vše do pobytových služeb“ — každé tlačítko zvýrazněné, pokud mu
+  aktuální posuvníky přesně odpovídají.
+- **Model, ne predikce** — parametry (kapacity, klienti, jednotkové náklady,
+  přepočty) pocházejí ze studie Deloitte pro APSS ČR (červen 2026), každý
+  s citací a stranou v sekci Metodika; doporučení studie (vyšší úhrady,
+  deregulace) model nepřebírá, jen vstupní čísla.
+- **Vstupy**: `SITE_TOOLS` v `page-shared.js` (karta „Prozkoumejte dál“ na
+  ostatních nástrojích), odkazy z `plneni-socialni-sluzby.html` a série článků
+  „Kdo se o nás postará v roce 2035“ (`data/series.json`), sitemap.
 
 ### `strategie.html` — Národní strategie
 
