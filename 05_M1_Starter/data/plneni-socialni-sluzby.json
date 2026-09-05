@@ -1,0 +1,679 @@
+{
+ "version": "1.0",
+ "strategy_id": "narodni_strategie_socialni_sluzby_2030",
+ "_doc": [
+  "Plnění Národní strategie rozvoje sociálních služeb na období 2026–2030 (MPSV) — PLATNÝ dokument.",
+  "Rozklad na 5 strategických cílů (A–E), 18 specifických cílů a 56 opatření, mapovaný na datový",
+  "kontrakt (data/indicators.json).",
+  "",
+  "ZDROJ: Národní strategie rozvoje sociálních služeb na období 2026–2030, schválená usnesením vlády",
+  "ČR č. 1006 ze dne 10. 12. 2025 (bod 40 jednání vlády, materiál čj. 1057/25). Text opatření,",
+  "indikátorů, termínů a gestorů je přepsán z Tabulky č. 12 „Implementační tabulka“ (kap. 3",
+  "Implementační část, str. 105 dle obsahu dokumentu). Kde se znění opatření v narativní části",
+  "(kap. 2 Strategická část) mírně liší, řídíme se implementační tabulkou — ta je závazná pro plnění.",
+  "",
+  "PROČ JSOU doc_indicators TÉMĚŘ PRÁZDNÉ: strategie nemá indikátorovou soustavu s výchozími",
+  "a cílovými hodnotami. Její „indikátory“ jsou výstupní milníky (metodika, analýza, návrh zákona,",
+  "počet školení) s rokem splnění — přepisujeme je doslova do `note` u každého opatření, včetně",
+  "termínu a gestora. Jediné číselné závazky s rokem jsou tři milníky deinstitucionalizace (2033,",
+  "2035, 2040) uvedené u strategického cíle E; ty vedeme jako doc_indicators cíle E2.",
+  "",
+  "VAZBA NA AKČNÍ PLÁN: u specifických cílů E1 a E2 strategie sama říká, že „veškeré konkrétní",
+  "indikátory plnění a podrobné kroky pro realizaci jejích cílů jsou již komplexně stanoveny",
+  "a popsány v navazujícím vládním dokumentu, AP DI 2026–2028“ (Akční plán pro deinstitucionalizaci",
+  "sociálních služeb v ČR na období 2026–2028, usnesení vlády č. 722 ze dne 30. 9. 2025).",
+  "",
+  "ŽIVOTNOST DOKUMENTU: strategie sama uvádí, že bude v roce 2028 přepracována — novela zákona",
+  "o sociálních službách z července 2025 (účinnost od 1. 1. 2026) ukládá krajům pětiletý střednědobý",
+  "plán počínaje 1. 1. 2028 a MPSV navazující národní strategii na pět let od 1. 1. 2029.",
+  "",
+  "PŘEDCHŮDCE: Národní strategie rozvoje sociálních služeb na období 2016–2025 (usnesení vlády",
+  "č. 245/2016) — retrospektiva je v samostatném datasetu plneni-socialni-sluzby-2016-2025.json.",
+  "",
+  "Aktuální hodnoty a signály indikátorů kontraktu bere stránka za běhu z data/indicators.json."
+ ],
+ "document": {
+  "title": "Národní strategie rozvoje sociálních služeb na období 2026–2030",
+  "approved": "2025-12-10",
+  "approval": "usnesení vlády ČR č. 1006 ze dne 10. prosince 2025 (bod 40 jednání, materiál čj. 1057/25)",
+  "url": "https://mpsv.gov.cz/cms/documents/f3ff1032-63cf-e3ec-a438-cfc23bc58ea3/NSRSS26+_schv%C3%A1len%C3%BD%20materi%C3%A1l.docx",
+  "web": "https://mpsv.gov.cz/strategicke-a-analyticke-dokumenty-k-socialnim-sluzbam",
+  "horizon": {
+   "from": 2026,
+   "to": 2030
+  },
+  "gestor": "Ministerstvo práce a sociálních věcí (odbor 22 — Odbor koncepce sociálních služeb a sociální práce, oddělení 229)",
+  "zastresujici_cil": "Nastavit udržitelný systém dostupných sociálních služeb s důrazem na přirozené sociální prostředí. (globální cíl, kap. 2)",
+  "note": "Dokument je zveřejněn jako soubor DOCX („schválený materiál“) — MPSV k němu nevydalo PDF verzi. Nemá indikátorovou soustavu s výchozími a cílovými hodnotami; jeho indikátory jsou výstupní milníky s rokem splnění, přepsané do poznámek u jednotlivých opatření. Podle vlastního textu bude strategie v roce 2028 přepracována na pětileté období od 1. 1. 2029."
+ },
+ "document_b": {
+  "title": "Akční plán pro deinstitucionalizaci sociálních služeb v ČR na období 2026–2028",
+  "url": "https://mpsv.gov.cz/cms/documents/d2a29ea6-d1eb-ba98-1778-4a804615b6c5/AP%20DI%2026-28.docx",
+  "approved": "2025-09-30",
+  "approval": "usnesení vlády ČR č. 722 ze dne 30. září 2025",
+  "note": "Implementační nástroj strategie pro specifické cíle E1 a E2 (transformace a deinstitucionalizace). Nese konkrétní indikátory plnění, které samotná strategie u těchto cílů neuvádí. NEROZLOŽENO — tento dataset ho zatím jen odkazuje."
+ },
+ "extracted_at": "2026-09-05",
+ "strategic_goals": [
+  {
+   "id": "sgA",
+   "num": "A",
+   "title": "Síť sociálních služeb reaguje na nepříznivou sociální situaci obyvatel"
+  },
+  {
+   "id": "sgB",
+   "num": "B",
+   "title": "Efektivní systém financování sociálních služeb"
+  },
+  {
+   "id": "sgC",
+   "num": "C",
+   "title": "Rozvoj sociální práce v kontextu sociálních služeb"
+  },
+  {
+   "id": "sgD",
+   "num": "D",
+   "title": "Garantované podmínky poskytovaných sociální služeb"
+  },
+  {
+   "id": "sgE",
+   "num": "E",
+   "title": "Sociální služby lépe reagují na potřeby uživatelů a demografický vývoj"
+  }
+ ],
+ "cile": [
+  {
+   "sc": "A1",
+   "goal": "sgA",
+   "title": "Efektivní systém plánování sociálních služeb.",
+   "garant": "MPSV/22/229, MPSV/229",
+   "dilci_cile": [
+    {
+     "num": "A1.1",
+     "text": "Zajištění podpory a sjednocení procesů zjišťování potřeb zájemců/žadatelů o sociální služby a uživatelů sociálních služeb",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodika pro zjišťování potřeb uživatelů sociálních služeb a Metodika plánování a síťování sociálních služeb“ (termín 2029, gestor MPSV/22/229)."
+    },
+    {
+     "num": "A1.2",
+     "text": "Podpora krajů při sjednocování plánovacích období a sjednocení plánovacích období na krajské a národní úrovni",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh pro úpravu plánovacích období“ (termín 2028, gestor MPSV/22/229)."
+    },
+    {
+     "num": "A1.3",
+     "text": "Podpoření plánování sociálních služeb v rámci sociálních odborů obecních úřadů obcí s rozšířenou působností i jednotlivých obcí",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Poskytnutá podpora v plánování sociálních služeb v rámci sociálních odborů obecních úřadů ORP/obcí“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "A1.4",
+     "text": "Vymezení podmínek/kritérií pro síť sociálních služeb s celostátním/nadregionálním charakterem",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Definované podmínky/kritéria pro síť sociálních služeb s celostátním/nadregionálním charakterem“ (termín 2026, gestor MPSV/22/229)."
+    },
+    {
+     "num": "A1.5",
+     "text": "Návrh minimální úrovně zajištění sociálních služeb v území",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh“ (termín 2028, gestor MPSV/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "luzka_dlouhodobe_pece_65plus",
+    "pacienti_domaci_pece_per_1000"
+   ]
+  },
+  {
+   "sc": "B1",
+   "goal": "sgB",
+   "title": "Efektivní systém financování sociálních služeb.",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "B1.1",
+     "text": "Návrh na posílení spolufinancování sociálních služeb ze strany krajů a obcí",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh na posílení spolufinancování“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.2",
+     "text": "Sjednocení pravidel a metodiky financování sociálních služeb mezi státem a kraji",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaná kritéria uznatelných nákladů“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.3",
+     "text": "Sjednocení systému vydávání pověření SGEI a úprava výpočtu vyrovnávací platby",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaná kritéria vydávání pověření“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.4",
+     "text": "Navržení nástroje na bázi pojištění",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh pojišťovacího mechanismu pro financování sociálních služeb“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.5",
+     "text": "Navržení nástroje na posouzení komplexní situace klienta, tj. včetně finanční a majetkové situace klienta",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh metodiky posuzování, včetně vytvoření standardizovaného formuláře pro sběr údajů“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.6",
+     "text": "Návrh transformace systému financování: od ročních dotací k programovému modelu",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Analytické srovnání modelů a návrh víceletých rámců“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.7",
+     "text": "Revize systému směrných čísel s důrazem na vícefaktorový model a územní potřeby",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh výpočtového modelu“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B1.8",
+     "text": "Finanční podpora rozvoje a zkvalitňování materiálně-technické základny sociálních služeb",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvořená a schválená dokumentace programu, jsou vyhlašovány jednotlivé výzvy“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "vydaje_dlouhodoba_pece_hdp"
+   ]
+  },
+  {
+   "sc": "B2",
+   "goal": "sgB",
+   "title": "Systém financování sociálních služeb založen na základě objektivních dat.",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "B2.1",
+     "text": "Zavedení jednotného identifikátoru klienta",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvoření identifikátoru v rámci elektronického systému MPSV“ (termín 2028, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B2.2",
+     "text": "Zavedení normativu na lůžko a hodiny péče",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodika pro výpočet a aktualizaci normativů“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B2.3",
+     "text": "Zavedení bonifikace pro komunitní služby",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Stanovení bonifikačních kritérií a finančních nástrojů bonifikace“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "vydaje_dlouhodoba_pece_hdp"
+   ]
+  },
+  {
+   "sc": "B3",
+   "goal": "sgB",
+   "title": "Sjednocení monitoringu a vykazování dat",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "B3.1",
+     "text": "Analýza stávajících datových zdrojů",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Analýza datových zdrojů“ (termín 2026, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B3.2",
+     "text": "Vývoj jednotného datového standardu",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvořené datové sady“ (termín 2028, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B3.3",
+     "text": "Digitalizace a automatizace reportingových procesů",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Analýza funkčních a datových požadavků na jednotný informační systém“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "B3.4",
+     "text": "Systém sledování volných kapacit",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Systém pro evidenci žádostí“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "vydaje_dlouhodoba_pece_hdp"
+   ]
+  },
+  {
+   "sc": "C1",
+   "goal": "sgC",
+   "title": "Navýšení počtu pracovníků působících v sociálních službách.",
+   "garant": "MPSV/22/228",
+   "dilci_cile": [
+    {
+     "num": "C1.1",
+     "text": "Navržení odpovídajícího odměňování pracovníků v sociálních službách, sociálních pracovníků a technickohospodářských pracovníků prostřednictvím podpory kolektivního vyjednávání v oblasti zvýšení platů, legislativních návrhů na změnu příplatků a benefitů",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Podpora kolektivního vyjednávání, jednání s odbory a zaměstnavateli o návrzích na změny v oblasti odměňování. Zpracovaný návrh na změnu příplatků“ (termín 2030, gestor MPSV/22/228)."
+    },
+    {
+     "num": "C1.2",
+     "text": "Návrh legislativní změny upravující nároky na odbornou způsobilost pracovníků v sociálních službách a sociálních pracovníků",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh legislativní změny upravující nároky na odbornou způsobilost pracovníků v sociálních službách a sociálních pracovníků“ (termín 2030, gestor MPSV/22/228)."
+    },
+    {
+     "num": "C1.3",
+     "text": "Zajištění zvyšování prestiže povolání pracovníků v sociálních službách a sociálních pracovníků prostřednictvím osvěty a informování veřejnosti",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracován dokument \"Případy dobré praxe u povolání pracovníků v sociálních službách\". Počet realizovaných informačních kampaní nebo osvětových akcí (konference nebo workshopy např. Gratias, Hradecké dny atd.)“ (termín 2030, gestor MPSV/22/228)."
+    },
+    {
+     "num": "C1.4",
+     "text": "Zmapování výkonu činnosti sociálních pracovníků a pracovníků v sociálních službách, jejich zařazování na manažerské a THP pozice",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Provedena analýza ke zjištění, jak je využívána kapacita soc. pracovníků a pracovníků v soc. službách. V jaké míře vykonávají činnosti, které se neváží k náplni práce daného povolání“ (termín 2030, gestor MPSV/22/228)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "pracovnici_ltc_per_100_65plus"
+   ],
+   "poznamka": "Datový kontrakt nemá indikátor úrovně odměňování ani počtu pracovníků v sociálních službách; nejbližší je OECD ukazatel pracovníků formální dlouhodobé péče na 100 osob 65+. Vlastní čísla MPSV: 7 138 přepočtených úvazků sociálních pracovníků v sociálních službách v roce 2019 a 8 364 v roce 2023 (aplikace OK Služby – poskytovatel)."
+  },
+  {
+   "sc": "C2",
+   "goal": "sgC",
+   "title": "Rozvoj sociální práce ve veřejné správě.",
+   "garant": "MPSV/22/228",
+   "dilci_cile": [
+    {
+     "num": "C2.1",
+     "text": "Finanční podpora rozvoje sociální práce ve veřejné správě",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Předložení návrhu na sjednocení příloh č. 1 a 2 nařízení vlády č. 341/2017 Sb., o platových poměrech zaměstnanců ve veřejných službách a správě, a to ve spolupráci s odd. 522 mzdově právním“ (termín 2030, gestor MPSV/22/228)."
+    },
+    {
+     "num": "C2.2",
+     "text": "Odstranění bariér ve fungování koordinace na území obcí a její ukotvení v systému poskytování sociální ochrany",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Návrh doporučeného postupu ke koordinaci, aktualizace doporučeného postupu k realizaci činností sociální práce (č. 1/2018), podklady pro úpravu zákona o sociálních službách a zákona o sociálních pracovnících v oblasti koordinace“ (termín 2030, gestor MPSV/22/228)."
+    },
+    {
+     "num": "C2.3",
+     "text": "Síťování a rozvoj spolupráce subjektů sociální ochrany",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Analýza současného stavu spolupráce sociálních pracovníků, návrh opatření směřující k optimalizaci procesů sociální práce při meziresortní spolupráci, vytvoření Metodiky koordinované spolupráce sociálních pracovníků napříč institucemi“ (termín 2030, gestor MPSV/22/228)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "pracovnici_ltc_per_100_65plus"
+   ]
+  },
+  {
+   "sc": "D1",
+   "goal": "sgD",
+   "title": "Jednotný a efektivní systém registrace poskytovatelů sociálních služeb.",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "D1.1",
+     "text": "Návrh jednotného a efektivního systému registrace poskytovatelů sociálních služeb",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Věcná příprava návrhu jednotného registru“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "D1.2",
+     "text": "Aktualizace a zavedení závazné metodiky a pravidelné setkávání /školení pro pracovníky v oblasti registrace",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Aktualizace Doporučeného postupu k problematice registrace a registru poskytovatelů sociálních služeb. Školení pro pracovníky v oblasti registrace se koná 4x ročně“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": []
+  },
+  {
+   "sc": "D2",
+   "goal": "sgD",
+   "title": "Posílení ochrany práv klientů v sociálních službách.",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "D2.1",
+     "text": "Realizace systémové podpory v oblasti ochrany práv klientů v sociálních službách",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodický výklad v oblasti respektování a ochrany soukromí, důstojnost a integrity osob“ (termín 2029, gestor MPSV/22/229)."
+    },
+    {
+     "num": "D2.2",
+     "text": "Vytvoření indikátorů oblast kvality sociálních služeb",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Indikátor kvality“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": []
+  },
+  {
+   "sc": "D3",
+   "goal": "sgD",
+   "title": "Efektivnější systém inspekcí",
+   "garant": "MPSV/26",
+   "dilci_cile": [
+    {
+     "num": "D3.1",
+     "text": "Legislativní vymezení kvalifikačních požadavků na výkon profese inspektora",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Novela zákona č. 108/2006 Sb., o sociálních službách“ (termín 2026, gestor MPSV/26)."
+    },
+    {
+     "num": "D3.2",
+     "text": "Návrh udržitelného systému vstupního a průběžného vzdělávání inspektorů",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Věcná příprava návrhu systému vstupního a průběžného vzdělávání inspektorů“ (termín 2030, gestor MPSV/26)."
+    },
+    {
+     "num": "D3.3",
+     "text": "Návrh jednotného a transparentní procesu vedení a vyhodnocování inspekcí",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodika výkonu inspekce sociálních služeb“ (termín 2030, gestor MPSV/26)."
+    }
+   ],
+   "doc_indicators": [],
+   "poznamka": "Výchozí stav podle analytické části strategie: v roce 2024 provedlo MPSV 114 inspekcí poskytování sociálních služeb při cca 6 000 registrovaných službách — při této frekvenci by kolo inspekcí u všech služeb trvalo cca 50 let. Následné inspekce byly v roce 2024 tři."
+  },
+  {
+   "sc": "E1",
+   "goal": "sgE",
+   "title": "Lidé se zdravotním postižením mají přístup ke službám poskytovaným v domácím prostředí, rezidenčním službám a dalším službám komunitního charakteru, včetně osobní asistence, které jsou nezbytné pro nezávislý způsob života a začlenění do společnosti a zabraňují izolaci nebo segregaci (viz Úmluva čl.19b)",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "E1.1",
+     "text": "Zajištění a rozvoj sítě dostupných komunitních sociálních služeb pro osoby se zdravotním postižením (dětí i dospělých) a programů na podporu rodin, osob blízkých a osob se zdravotním postižením v komunitě a ukotvení systému využívání finančních zdrojů",
+     "mereni": "proxy",
+     "indikatory": [
+      "luzka_dlouhodobe_pece_65plus",
+      "pacienti_domaci_pece_per_1000"
+     ],
+     "note": "Rozvoj sítě komunitních služeb kontrakt přímo neměří. Nejblíže jsou lůžka dlouhodobé péče v pobytových zařízeních na 1 000 obyvatel 65+ (klesající pobytová kapacita = posun ke komunitě, ale měřeno na seniorech, ne na osobách se zdravotním postižením) a pacienti domácí zdravotní péče na 1 000 obyvatel (zdravotní, ne sociální služba). Vlastní indikátory tohoto opatření nese Akční plán pro deinstitucionalizaci 2026–2028. Indikátor dokumentu: „Veškeré konkrétní indikátory plnění a podrobné kroky pro realizaci jejích cílů jsou již komplexně stanoveny a popsány v navazujícím vládním dokumentu, AP DI 2026–2028“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E1.2",
+     "text": "Zvýšit informovanost veřejnosti a klíčových aktérů o přínosech deinstitucionalizace a transformace sociálních služeb a podpořit pozitivní vnímání osob se zdravotním postižením v komunitě",
+     "mereni": "proces",
+     "note": "Implementační tabulka u tohoto opatření indikátor neuvádí (termín 2030, gestor MPSV/22/229) — u cílů E1 a E2 je nese Akční plán pro deinstitucionalizaci 2026–2028."
+    },
+    {
+     "num": "E1.3",
+     "text": "Poskytování sociálních služeb je pro každého člověka s postižením plánované a koordinované na základě vyhodnocení jeho potřeb",
+     "mereni": "proces",
+     "note": "Implementační tabulka u tohoto opatření indikátor neuvádí (termín 2030, gestor MPSV/22/229) — u cílů E1 a E2 je nese Akční plán pro deinstitucionalizaci 2026–2028."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "luzka_dlouhodobe_pece_65plus",
+    "pacienti_domaci_pece_per_1000"
+   ],
+   "poznamka": "Indikátory a konkrétní kroky pro cíle E1 a E2 nese navazující Akční plán pro deinstitucionalizaci sociálních služeb v ČR na období 2026–2028 (usnesení vlády č. 722 ze dne 30. 9. 2025) — strategie na něj u obou cílů výslovně odkazuje."
+  },
+  {
+   "sc": "E2",
+   "goal": "sgE",
+   "title": "Lidé se zdravotním postižením mají možnost si zvolit, na rovnoprávném základě s ostatními, místo pobytu, kde a s kým budou žít, nejsou nuceni žít ve specifickém prostředí (viz Úmluva o právech osob se zdravotním postižením – článek 19a)",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "E2.1",
+     "text": "Všechny přímořízené organizace MPSV mají do roku 2027 (v souladu s principy deinstitucionalizace a Úmluvy o právech osob se zdravotním postižením) hotové plány transformace původních zařízení do mixu komunitních tj. terénních, ambulantních, případně komunitních pobytových služeb",
+     "mereni": "proxy",
+     "indikatory": [
+      "luzka_dlouhodobe_pece_65plus"
+     ],
+     "note": "Milník „hotové plány transformace do roku 2027“ je procesní, ale cíl za ním (odchod od ústavních kapacit) se v kontraktu zrcadlí jen v lůžkách dlouhodobé péče na 1 000 obyvatel 65+ — jiná cílová skupina i metodika. Konkrétní indikátory nese AP DI 2026–2028. Indikátor dokumentu: „Veškeré konkrétní indikátory plnění a podrobné kroky pro realizaci jejích cílů jsou již komplexně stanoveny a popsány v navazujícím vládním dokumentu, AP DI 2026–2028“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E2.2",
+     "text": "Všechna pobytová zařízení nekomunitního charakteru pro osoby se zdravotním postižením bez ohledu na zřizovatele mají do roku 2028 (v souladu s principy deinstitucionalizace a Úmluvy o právech osob se zdravotním postižením) jasnou vizi své úplné transformace do mixu komunitních terénních, ambulantních a případně pobytových služeb komunitního charakteru",
+     "mereni": "proces",
+     "note": "Implementační tabulka u tohoto opatření indikátor neuvádí (termín 2030, gestor MPSV/22/229) — u cílů E1 a E2 je nese Akční plán pro deinstitucionalizaci 2026–2028."
+    },
+    {
+     "num": "E2.3",
+     "text": "Implementace monitorovacího systému transformace a deinstitucionalizace v letech 2026–2028",
+     "mereni": "proces",
+     "note": "Implementační tabulka u tohoto opatření indikátor neuvádí (termín 2030, gestor MPSV/22/229) — u cílů E1 a E2 je nese Akční plán pro deinstitucionalizaci 2026–2028."
+    }
+   ],
+   "doc_indicators": [
+    {
+     "name": "Úplná transformace příspěvkových organizací, jejichž zřizovatelem je MPSV, na komunitní služby",
+     "target": {
+      "value": "úplná transformace",
+      "year": 2033
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt nemá indikátor podílu komunitních vs. ústavních sociálních služeb ani počtu transformovaných zařízení — plnění tohoto milníku z něj nelze číst."
+     },
+     "note": "Milník uvedený u strategického cíle E; strategie ho výslovně nerozpracovává do opatření, protože přesahuje její horizont i horizont AP DI 2026–2028."
+    },
+    {
+     "name": "Konec služeb nekomunitního charakteru pro děti s postižením do 18 let",
+     "target": {
+      "value": "nelze poskytovat",
+      "year": 2035
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt nesleduje pobytové sociální služby pro děti se zdravotním postižením."
+     },
+     "note": "Milník uvedený u strategického cíle E, mimo horizont strategie."
+    },
+    {
+     "name": "Konec služeb nekomunitního charakteru pro osoby s postižením (včetně osob s duševním onemocněním)",
+     "target": {
+      "value": "nelze poskytovat",
+      "year": 2040
+     },
+     "mapping": {
+      "match": "chybi",
+      "note": "Kontrakt měří jen lůžka psychiatrické péče a lůžka dlouhodobé péče pro seniory — ani jedno neodpovídá pobytovým sociálním službám pro osoby se zdravotním postižením."
+     },
+     "note": "Milník uvedený u strategického cíle E, mimo horizont strategie."
+    }
+   ],
+   "kontext_indikatory": [
+    "luzka_dlouhodobe_pece_65plus"
+   ],
+   "poznamka": "Strategie zde uvádí tři milníky, které přesahují její horizont a nejsou rozpracovány do opatření: úplná transformace příspěvkových organizací zřizovaných MPSV do roku 2033, od roku 2035 nemožnost poskytovat dětem s postižením do 18 let služby nekomunitního charakteru a od roku 2040 totéž pro dospělé osoby s postižením včetně osob s duševním onemocněním."
+  },
+  {
+   "sc": "E3",
+   "goal": "sgE",
+   "title": "Efektivní implementace nástrojů zacílených na koordinaci sociálně-zdravotních služeb a jejich průběžnou optimalizaci.",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "E3.1",
+     "text": "Zajištění metodické podpory aktérům v oblasti koordinace sociálně-zdravotních služeb prostřednictvím informovanosti a osvěty",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Existence vydaných metodických dokumentů (např. zveřejněné dotazy a odpovědi, doporučení, výkladová stanoviska apod.); Počet realizovaných informačních kampaní nebo osvětových akcí (semináře, webináře, konference)“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E3.2",
+     "text": "Průběžný přezkum účinnosti nové právní úpravy v oblasti dlouhodobé péče a zajistit její optimalizaci",
+     "mereni": "proxy",
+     "indikatory": [
+      "vydaje_dlouhodoba_pece_hdp",
+      "pacienti_domaci_pece_per_1000"
+     ],
+     "note": "Přezkum účinnosti nové právní úpravy dlouhodobé péče (zákon č. 300/2025 Sb.) kontrakt neměří přímo; jeho dopad se dlouhodobě projeví ve výdajích na dlouhodobou péči (% HDP) a v počtu pacientů domácí zdravotní péče. Sledovat směr, ne hodnotu. Indikátor dokumentu: „Provedené analýzy dopadů právní úpravy (např. dotazníková šetření, právní rozbor apod.); Počet konzultací s odbornou veřejností (např. kulaté stoly, pracovní skupiny, webináře)“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E3.3",
+     "text": "Vymezení pomoci při běžných úkonech péče o zdraví a vytvoření systému specializovaného vzdělávání",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vypracování definice pomoci při zvládání běžných úkonů péče o zdraví“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "vydaje_dlouhodoba_pece_hdp",
+    "pacienti_domaci_pece_per_1000",
+    "umrti_doma_nebo_hospici_pct",
+    "hospicova_pece_luzka"
+   ]
+  },
+  {
+   "sc": "E4",
+   "goal": "sgE",
+   "title": "Dostupné a efektivní výužívání asistivních technologií seniory a osobami se zdravotním postižením",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "E4.1",
+     "text": "Analýza možnosti využití AT v sociálních službách",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vypracovaný analytický dokument k využití AT v sociálních službách“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E4.2",
+     "text": "Návrh programů dotací a finanční podpory pro neziskové organizace a osoby se zdravotním postižením a seniory, které jim umožní zakoupit potřebné AT",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvoření cíleného dotačního programu MPSV“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E4.3",
+     "text": "Zvýšení povědomí o AT a jejich výhodách mezi profesionály v sociálních službách, neformálními pečujícími a širokou veřejností",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Počet realizovaných osvětových akcí (semináře, webináře, workshopy), informační kampaň“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "demence_prevalence_lecena",
+    "multimorbidita_65plus"
+   ]
+  },
+  {
+   "sc": "E5",
+   "goal": "sgE",
+   "title": "Efektivnější a kvalitnější poskytování sociálních služeb prostřednictvím integrace nástrojů umělé inteligence (AI)",
+   "garant": "MPSV/22/229",
+   "dilci_cile": [
+    {
+     "num": "E5.1",
+     "text": "Zkvalitnění přístupu uživatelů k informacím o sociálních službách pomocí AI",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvoření pilotního řešení - digitálního nástroje využívajícího AI pro přístup k informacím o sociálních službách“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E5.2",
+     "text": "Rozvoj péče o uživatele sociálních služeb prostřednictvím analýzy dat a prediktivních modelů",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvořená metodická doporučení pro využití AI v sociální péči (min. 2), počet proškolených pracovníků sociálních služeb“ (termín 2030, gestor MPSV/22/229)."
+    },
+    {
+     "num": "E5.3",
+     "text": "Podpora samostatnosti uživatelů a jejich schopnost zůstat v přirozeném prostředí za pomoci AI",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Počet realizovaných školení, počet proškolených zástupců CS pečujících osob“ (termín 2030, gestor MPSV/22/229)."
+    }
+   ],
+   "doc_indicators": []
+  },
+  {
+   "sc": "E6",
+   "goal": "sgE",
+   "title": "Sociální služby lépe reagují na potřeby osob bez domova a ohrožené ztrátou bydlení",
+   "garant": "MPSV/22/228",
+   "dilci_cile": [
+    {
+     "num": "E6.1",
+     "text": "Zmapování stavu, identifikace bariér a návrhy řešení při poskytování sociální služby azylový dům osobám bez přístřeší s komplexními potřebami",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Souhrnná zpráva z dotazníkového šetření“ (termín 2030, gestor MPSV/22/228)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "ohrozeni_chudobou"
+   ]
+  },
+  {
+   "sc": "E7",
+   "goal": "sgE",
+   "title": "Kvalitnější podpora neformálních pečujících.",
+   "garant": "MPSV/27",
+   "dilci_cile": [
+    {
+     "num": "E7.1",
+     "text": "Dostupné a srozumitelné informace pro neformálně pečující z oblasti služeb a dávek – landing page na webu MPSV, kampaň",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Vytvoření landing page na stránkách MPSV, realizace kampaně, evaluace těchto nástrojů“ (termín 2030, gestor MPSV/27)."
+    }
+   ],
+   "doc_indicators": [],
+   "kontext_indikatory": [
+    "demence_prevalence_lecena",
+    "pacienti_domaci_pece_per_1000"
+   ]
+  },
+  {
+   "sc": "E8",
+   "goal": "sgE",
+   "title": "Sociální služby jsou zaměřené na naplňování potřeb dětí a rodin v nepříznivé situaci",
+   "garant": "MPSV/27",
+   "dilci_cile": [
+    {
+     "num": "E8.1",
+     "text": "Rozvoj kompetencí pracovníků OSPOD a sociálních služeb k práci s cílovou skupinou děti do 18 let věku",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodický dokument na dané téma; online workshopy pro OSPOD na téma Vyhodnocení dětí s postižením, 10 denní výcvik pro pracovníky OSPOD a sociálních služeb na téma rodičovských kompetencí, včetně práce s dětmi a participace dětí“ (termín 2028, gestor MPSV/27)."
+    },
+    {
+     "num": "E8.2",
+     "text": "Návrh metodického doporučení pro pracovníky pobytových, případně dalších služeb sociální péče, jejichž klienty jsou děti, za účelem nastavení vhodných podmínek pro jejich vývoj, včetně přípravy dětí na samostatný život",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Metodické doporučení“ (termín 2028, gestor MPSV/27)."
+    }
+   ],
+   "doc_indicators": []
+  },
+  {
+   "sc": "E9",
+   "goal": "sgE",
+   "title": "Vymezení role a rozvoj služeb sociální prevence v oblasti podpory pracovního uplatnění osob se zdravotním postižením.",
+   "garant": "MPSV/22",
+   "dilci_cile": [
+    {
+     "num": "E9.1",
+     "text": "Připravit legislativní návrh změny zákona o sociálních službách a zákona o zaměstnanosti tak, aby došlo ke zřetelnému oddělení podmínek pro poskytování služeb sociální prevence podporujících pracovní uplatnění osob se zdravotním postižením a podmínek pro zaměstnávání osob se zdravotním postižením",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Zpracovaný návrh legislativní změny zákona o sociálních službách a zákona o zaměstnanosti“ (termín 2027, gestor MPSV/22)."
+    },
+    {
+     "num": "E9.2",
+     "text": "Provést revizi stávajících metodik v oblasti služeb sociální prevence a vytvořit metodiku reagující na legislativní změny realizované v rámci plnění opatření E.9.1",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Revidované metodické materiály“ (termín 2028, gestor MPSV/22)."
+    },
+    {
+     "num": "E9.3",
+     "text": "Poskytovat odpovídající metodickou podporu poskytovatelům dotčených služeb sociální prevence, s cílem správného nastavení poskytovaných základních činností a aktivit, aby v rámci dané služby nedocházelo k nežádoucímu faktickému zaměstnávání osob se zdravotním postižením",
+     "mereni": "proces",
+     "note": "Indikátor dokumentu: „Realizované metodické vedení (např. semináře, webináře, uveřejněná vyjádření, zveřejněné odpovědi na položené dotazy)“ (termín 2028, gestor MPSV/22)."
+    }
+   ],
+   "doc_indicators": []
+  }
+ ]
+}

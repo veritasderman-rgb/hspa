@@ -20,6 +20,8 @@ const DATASETS = [
   { file: 'data/plneni-amr.json', page: 'plneni-amr.html', strategy: 'nap_amr' },
   { file: 'data/plneni-dusevni-zdravi.json', page: 'plneni-dusevni-zdravi.html', strategy: 'reforma_dusevni_zdravi' },
   { file: 'data/plneni-zdravi-2030.json', page: 'plneni-zdravi-2030.html', strategy: 'zdravi_2030' },
+  { file: 'data/plneni-socialni-sluzby.json', page: 'plneni-socialni-sluzby.html', strategy: 'narodni_strategie_socialni_sluzby_2030' },
+  { file: 'data/plneni-socialni-sluzby-2016-2025.json', page: 'plneni-socialni-sluzby-2016-2025.html', strategy: 'narodni_strategie_socialni_sluzby_2025' },
 ];
 
 const indicators = new Set(read('data/indicators.json').indicators.map(i => i.id));

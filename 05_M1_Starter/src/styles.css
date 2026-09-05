@@ -6709,6 +6709,8 @@ a.series-toc-title:hover { color: var(--red); text-decoration: underline; }
   color: var(--red);
   margin-top: 2px;
 }
+/* 13px tučné na tmavém papíru: --red (#e0563a) dává 4,4:1, o vlásek pod AA — světlejší krok drží 5,6:1. */
+[data-theme="dark"] .tool-sibling-cta { color: #ec7157; }
 
 /* =================================================================
    /hspa-prehled.html — O HSPA stránka (per design V2 about.jsx)
@@ -20799,6 +20801,168 @@ a.vst-ref:hover { color: var(--ink); border-color: var(--ink); }
   .poh-method, .poh-okres-index, .poh-card-foot, .poh-action-quiet { display: none !important; }
   .poh-roz-card, .poh-before-item { break-inside: avoid; }
 }
+
+/* =================================================================
+   Kalkulačka „Kdo se o nás postará v roce 2035“ (kalkulacka-pece-2035.html)
+   namespace .ltc-*. Tokeny paper/ink/rule + signály; tři typy péče mají
+   kategorické barvy validované pro CVD na světlém i tmavém podkladu
+   (pořadí pobytová → terénní → rodiny drží odstup ΔE ≥ 9). Identita
+   segmentu je vždy i v popisku a tabulce, nikdy jen v barvě.
+   ================================================================= */
+:root {
+  --ltc-res: #216dca;
+  --ltc-ter: #eb6834;
+  --ltc-inf: #1baf7a;
+  /* popisek uvnitř segmentu: bílá na modré (5,1:1), inkoust na oranžové (5,4) a zelené (6,1) */
+  --ltc-label-res: #fff;
+  --ltc-label-ter: #1f1a14;
+  --ltc-label-inf: #1f1a14;
+}
+[data-theme="dark"] {
+  --ltc-res: #3987e5;
+  --ltc-ter: #e06430;
+  --ltc-inf: #199e70;
+  /* na tmavších krocích drží 4,5:1 jen inkoust (4,8 / 4,5 / 5,1) */
+  --ltc-label-res: #1f1a14;
+  --ltc-label-ter: #1f1a14;
+  --ltc-label-inf: #1f1a14;
+}
+.ltc-hero .ed-lead { max-width: 760px; }
+.ltc-disclaimer {
+  max-width: 760px;
+  margin: 14px 0 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--warn);
+  background: var(--paper2);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-mut);
+}
+.ltc-disclaimer strong { color: var(--ink); }
+.ltc-section { padding: 8px clamp(18px, 4vw, 48px) 20px; }
+.ltc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(18px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 900px) { .ltc-layout { grid-template-columns: 1fr; } }
+.ltc-h {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mut);
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.ltc-h3 { margin: 18px 0 6px; font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); }
+
+/* ── ovládání ── */
+.ltc-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.ltc-preset {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid var(--rule2);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.ltc-preset:hover { border-color: var(--ink); }
+.ltc-preset.is-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.ltc-lever { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.ltc-lever-label { display: block; font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); }
+.ltc-lever-desc { margin: 6px 0 12px; font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-mut); }
+.ltc-lever-control { display: flex; align-items: center; gap: 14px; }
+.ltc-slider { flex: 1 1 auto; min-width: 0; accent-color: var(--red); height: 24px; cursor: pointer; }
+.ltc-slider:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.ltc-lever-value { flex: 0 0 auto; min-width: 110px; text-align: right; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+.ltc-lever-scale { display: flex; justify-content: space-between; margin-top: 4px; font-family: var(--sans); font-size: 11.5px; color: var(--ink-mut); }
+.ltc-reset {
+  margin-top: 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.ltc-reset:hover { background: var(--ink); color: var(--paper); }
+
+/* ── výsledky ── */
+.ltc-results { min-width: 0; }
+.ltc-summary { margin: 0 0 16px; font-family: var(--serif); font-size: 17px; line-height: 1.55; color: var(--ink); }
+.ltc-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0 0 22px;
+}
+.ltc-kpi {
+  padding: 12px 14px;
+  border: 1px solid var(--rule2);
+  border-top: 3px solid var(--ink);
+  border-radius: 5px;
+  background: var(--surface, var(--paper2));
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ltc-kpi-bad { border-top-color: var(--bad); }
+.ltc-kpi-value { font-family: var(--sans); font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.ltc-kpi-bad .ltc-kpi-value { color: var(--bad); }
+.ltc-kpi-label { font-family: var(--sans); font-size: 13.5px; color: var(--ink); }
+.ltc-kpi-foot { font-family: var(--sans); font-size: 12px; color: var(--ink-mut); }
+
+.ltc-figure { margin: 0 0 20px; padding: 14px 16px; border: 1px solid var(--rule2); border-radius: 5px; background: var(--paper); }
+.ltc-figure-h { margin: 0 0 12px; font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-mut); }
+.ltc-figure-note { margin: 10px 0 0; font-family: var(--sans); font-size: 12.5px; color: var(--ink-mut); }
+.ltc-bars { display: grid; gap: 10px; }
+.ltc-bar-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 96px; gap: 10px; align-items: center; }
+@media (max-width: 560px) { .ltc-bar-row { grid-template-columns: 1fr; gap: 4px; } }
+.ltc-bar-label { font-family: var(--sans); font-size: 13px; color: var(--ink-mut); }
+.ltc-bar-row-mine .ltc-bar-label { color: var(--ink); font-weight: 700; }
+.ltc-bar { display: flex; height: 30px; width: 100%; gap: 2px; }
+.ltc-seg { display: flex; align-items: center; justify-content: center; height: 100%; min-width: 0; border-radius: 3px; overflow: hidden; }
+.ltc-seg-res { background: var(--ltc-res); }
+.ltc-seg-ter { background: var(--ltc-ter); }
+.ltc-seg-inf { background: var(--ltc-inf); }
+.ltc-seg-label { font-family: var(--sans); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.ltc-seg-res .ltc-seg-label { color: var(--ltc-label-res); }
+.ltc-seg-ter .ltc-seg-label { color: var(--ltc-label-ter); }
+.ltc-seg-inf .ltc-seg-label { color: var(--ltc-label-inf); }
+.ltc-bar-total { font-family: var(--sans); font-size: 13.5px; font-weight: 700; color: var(--ink); text-align: right; }
+.ltc-bar-total small { font-weight: 400; color: var(--ink-mut); }
+.ltc-bar-row-mine .ltc-bar { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 3px; }
+.ltc-legend { margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--sans); font-size: 12.5px; color: var(--ink); }
+.ltc-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.ltc-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+
+.ltc-table-wrap summary { cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+.ltc-table { width: 100%; margin-top: 10px; border-collapse: collapse; font-family: var(--sans); font-size: 13.5px; }
+.ltc-table th, .ltc-table td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: left; }
+.ltc-table th[scope="col"] { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-mut); }
+.ltc-table th[scope="row"] { font-weight: 500; color: var(--ink); }
+.ltc-table td:last-child { font-weight: 700; }
+
+/* ── metodika a souvislosti ── */
+.ltc-method details, .ltc-context { max-width: 820px; }
+.ltc-method summary { cursor: pointer; font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--ink); }
+.ltc-method p, .ltc-method li, .ltc-context p { font-family: var(--serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); }
+.ltc-method-list { padding-left: 22px; }
+.ltc-method-list li { margin: 6px 0; }
+.ltc-sources { margin: 8px 0 0; padding-left: 20px; }
+.ltc-sources li { margin: 6px 0; font-family: var(--sans) !important; font-size: 13px !important; line-height: 1.5; color: var(--ink-mut); }
+.ltc-sources q { color: var(--ink); }
+.ltc-src-page { white-space: nowrap; }
+.ltc-context h2 { font-family: var(--serif); font-size: 22px; margin: 18px 0 8px; }
 
 /* ── Zdraví 2035: strategie × indikátory (zdravi-2035.html) ────────────── */
 

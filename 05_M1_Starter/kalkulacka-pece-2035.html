@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kdo se o nás postará v roce 2035? Kalkulačka dlouhodobé péče · HSPA Monitor</title>
+<meta name="description" content="Nastavte, kolik lůžek v domovech pro seniory se do roku 2035 postaví a kolik pečovatelů bude v terénu — model ze studie Deloitte/APSS ukáže, kolik seniorů zůstane bez místa, kolik péče připadne rodinám a kolik to bude stát.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kdo se o nás postará v roce 2035? Kalkulačka dlouhodobé péče">
+<meta property="og:description" content="Lůžka, pečovatelé, rodiny: posuňte kapacity a uvidíte, kam se přelije péče o seniory v roce 2035 — a kolik to bude stát.">
+<meta property="og:locale" content="cs_CZ">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/kalkulacka-pece-2035" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/kalkulacka-pece-2035" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skorezdravotnictvi.cz/#organization",
+      "name": "HSPA Monitor",
+      "alternateName": "Skóre zdravotnictví",
+      "url": "https://skorezdravotnictvi.cz/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61590403735200",
+        "https://x.com/SkoreZdravko",
+        "https://www.instagram.com/skorezdravotnictvi/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skorezdravotnictvi.cz/#website",
+      "name": "HSPA Monitor — Zdravé Česko",
+      "url": "https://skorezdravotnictvi.cz/",
+      "inLanguage": "cs-CZ",
+      "publisher": {
+        "@id": "https://skorezdravotnictvi.cz/#organization"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#content">Přeskočit na hlavní obsah</a>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Hodnocení výkonnosti zdravotního systému ČR</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <section class="ed-hero ltc-hero">
+    <p class="ed-kicker">KALKULAČKA · DLOUHODOBÁ PÉČE 2035</p>
+    <h1>Kdo se o nás postará v roce 2035?</h1>
+    <p class="ed-lead">
+      V roce 2035 bude v Česku o <strong>284 tisíc lidí starších 75 let víc</strong> než dnes.
+      Péči o seniory drží tři pilíře: domovy, terénní služby a rodiny. Nastavte,
+      kolik lůžek se do té doby postaví a kolik pečovatelů bude v terénu — model
+      ukáže, <strong>kam se přelije zbytek</strong>. Spoiler: vždycky do rodin.
+    </p>
+    <p class="ltc-disclaimer" role="note">
+      <strong>Model, ne předpověď.</strong> Parametry pocházejí ze studie Deloitte
+      zpracované na zakázku Asociace poskytovatelů sociálních služeb (červen 2026);
+      model přebírá její kapacity, počty klientů a jednotkové náklady, ne její
+      doporučení. Každé číslo má v metodice dole citaci a stranu.
+    </p>
+  </section>
+
+  <section class="ltc-section" aria-label="Interaktivní kalkulačka">
+    <div class="ltc-layout">
+      <form class="ltc-controls" id="ltcControls" aria-label="Kapacity péče v roce 2035">
+        <h2 class="ltc-h">Nastavte kapacity roku 2035</h2>
+        <div class="ltc-presets" id="ltcPresets" role="group" aria-label="Scénáře studie"></div>
+        <div id="ltcSliders"></div>
+        <button type="reset" class="ltc-reset" id="ltcReset">Vrátit na základní scénář</button>
+      </form>
+
+      <div class="ltc-results" id="ltcResults" aria-live="polite" aria-label="Výsledek modelu">
+        <h2 class="ltc-h">Kde budou senioři v roce 2035</h2>
+        <p class="ltc-summary" id="ltcSummary"></p>
+        <div class="ltc-kpis" id="ltcKpis"></div>
+
+        <figure class="ltc-figure">
+          <figcaption class="ltc-figure-h">Osoby v péči podle typu (65+, klienti za rok)</figcaption>
+          <div class="ltc-bars" id="ltcBarsPersons"></div>
+          <p class="ltc-legend" id="ltcLegend" aria-hidden="true"></p>
+        </figure>
+
+        <figure class="ltc-figure">
+          <figcaption class="ltc-figure-h">Roční náklad systému podle typu péče (mld. Kč, reálné ceny)</figcaption>
+          <div class="ltc-bars" id="ltcBarsCost"></div>
+          <p class="ltc-figure-note">U neformální péče je „náklad“ jen příspěvek na péči — práce rodin v rozpočtu není.</p>
+        </figure>
+
+        <details class="ltc-table-wrap">
+          <summary>Všechna čísla v tabulce</summary>
+          <div class="poh-table-wrap" tabindex="0" role="region" aria-label="Tabulka výsledků modelu">
+            <table class="ltc-table" id="ltcTable"></table>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="ltc-section ltc-method">
+    <details id="ltcMethod">
+      <summary>Jak to počítáme (a co to neumí)</summary>
+      <p><strong>Tři pilíře, jedna poptávka.</strong> Studie odhaduje, že v roce 2035 bude
+      potřebovat péči zhruba 466 tisíc seniorů (klientů za rok): 135 tisíc v pobytových
+      službách, 141 tisíc v terénních a 190 tisíc v rodinách, pokud všechny typy péče
+      porostou podle demografie. Model tuto potřebu nemění — mění jen to, kdo ji ponese.</p>
+      <ol class="ltc-method-list">
+        <li><strong>Pobytové služby</strong> obslouží nejvýš tolik klientů, kolik unesou lůžka
+          (1,22 klienta na lůžko a rok — část pobytů je kratší než rok). Nad poptávku
+          základního scénáře mohou pohltit i přírůstek terénní a rodinné péče (scénář
+          studie „vše do pobytových služeb“).</li>
+        <li><strong>Kdo se do domova nevejde,</strong> jde nejdřív do terénních služeb — ale jen
+          část: studie uvádí nejvýš 40 %, zbytek má příliš vysokou závislost (demence,
+          IV. stupeň). A jen když na to terén má pečovatele (2,8 klienta na jeden úvazek,
+          poměr roku 2024).</li>
+        <li><strong>Všechno ostatní nesou rodiny.</strong> Osoby navíc se přepočítávají na pečující
+          dny (175 dnů na osobu a rok) a na ekvivalent plných úvazků (250 dnů na úvazek).
+          Tyhle úvazky nevznikají jako pracovní místa — projevují se odchody z práce
+          a zkrácenými úvazky, převážně u žen.</li>
+        <li><strong>Náklady</strong> = klienti × jednotkový náklad roku 2035 v reálných cenách
+          (domov pro seniory ~585 tis. Kč, domov se zvláštním režimem ~640 tis., terénní
+          péče ~155 tis., neformální ~175 tis., u osob navíc 190 tis. — u rodin je to jen
+          příspěvek na péči). Investice: 2 mil. Kč za nové lůžko nad stav roku 2024.</li>
+      </ol>
+      <p><strong>Meze.</strong> Model reprodukuje čtyři scénáře studie na tisíc osob a jednotky
+      miliard (hlídá test); mezi nimi interpoluje lineárně, což je zjednodušení. Nepočítá
+      s personálem pobytových služeb, s náklady zdravotního systému (delší hospitalizace,
+      když rodiny nestačí) ani s tím, co rodinná péče stojí v ušlých příjmech. Klienti za
+      rok nejsou totéž co lidé v péči v jeden okamžik.</p>
+      <p><strong>Kdo studii platil.</strong> Asociace poskytovatelů sociálních služeb — organizace
+      těch, kdo domovy provozují. Její doporučení (vyšší úhrady od klientů, deregulace,
+      soukromý kapitál) tu nepřebíráme; primární data ČSÚ, MPSV a ÚZIS, ze kterých studie
+      vychází, ověřujeme v seriálu <a href="clanky.html">Kdo se o nás postará v roce 2035</a>.</p>
+      <h3 class="ltc-h3">Parametry a citace</h3>
+      <ul id="ltcSources" class="ltc-sources"></ul>
+    </details>
+  </section>
+
+  <section class="ltc-section ltc-context">
+    <h2>Souvislosti</h2>
+    <p>Kalkulačka je součástí seriálu o dlouhodobé péči. Kontext k číslům: proč je systém
+    <a href="clanek-reforma-dlouhodobe-pece-2026.html">dvojkolejný a v tiché krizi</a>,
+    proč <a href="clanek-neformalni-pecujici.html">největší poskytovatel péče nemá IČO</a>,
+    kolik <a href="clanek-luzka-dlouhodobe-pece.html">lůžek dlouhodobé péče Česku chybí</a>
+    a kolik lidí se <a href="clanek-demence-prevalence.html">léčí s demencí</a>.
+    Živé indikátory: <a href="indikator-luzka_dlouhodobe_pece_65plus.html">lůžka dlouhodobé péče</a>,
+    <a href="indikator-pracovnici_ltc_per_100_65plus.html">pracovníci dlouhodobé péče</a>,
+    <a href="indikator-vydaje_dlouhodoba_pece_hdp.html">výdaje na dlouhodobou péči</a>.</p>
+  </section>
+
+  <section class="tool-siblings" id="toolSiblings" aria-label="Související nástroje"></section>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/ltc-kalkulacka.js"></script>
+</body>
+</html>
