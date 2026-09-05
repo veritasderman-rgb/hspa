@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-09-04T08:49:35.314Z",
+  "generated_at": "2026-09-05T08:16:12.570Z",
   "articles": [
     {
       "id": "ezkarta-nova-generace",
@@ -9,10 +9,10 @@
       "rubric": "digitalizace",
       "kind": "analysis",
       "date": "2026-09-05",
-      "published": false,
+      "published": true,
       "scheduled_for": "2026-09-05",
       "topical_until": "2026-09-30",
-      "audit-status": "draft",
+      "audit-status": "review-pending",
       "title": "Tři miliony stažení, čtyřiatřicet tisíc lidí denně. EZKarta dostala data, na která pilot čekal",
       "perex": "Ministerstvo zdravotnictví spustilo 3. září 2026 novou generaci mobilní aplikace EZKarta — s laboratorními výsledky, přehledem preventivních prohlídek a sdíleným zdravotním záznamem. Ve stejné tiskové zprávě poprvé zveřejnilo číslo o skutečném užívání: přibližně 3,1 milionu stažení a asi 34 tisíc uživatelů denně. Recenzovaná evaluace pilotu přitom loni zjistila, že 72 % uživatelů by aplikaci používalo, kdyby v ní viděli svá klinická data.",
       "linked_indicators": [
@@ -38,7 +38,7 @@
         "trend": "MZ ČR, 3. 9. 2026"
       },
       "audit": {
-        "status": "draft",
+        "status": "review-pending",
         "reviewer": "claude-code-agent",
         "last_reviewed": "2026-09-04",
         "creation_phase": "discovery+article-write",
@@ -46,7 +46,8 @@
         "audit_pass": "2026-09-04 nezávislý průchod (fáze 5). Strojově ověřeno proti staženým zdrojům: všech deset čísel z TZ (3,1 mil., 34 tis., 450 mil., 10 parametrů, 3 roky / 5 let, měsíční interval, 30+ nemocnic, 12 měsíců léčiv, očkování 2010–2022, ISIN od 1. 1. 2023) i všechny čtyři přebírané citace (Vojtěch, Dušek 2×, blok Otázek a odpovědí) dohledány v TZ doslova; znění § 35a, § 27 odst. 1 písm. h), § 34a odst. 1 a 3 i § 40 odst. 3 písm. j) a odst. 6 písm. b) dohledáno doslova v zákoně č. 325/2021 Sb.; vložení § 34a a § 35a body 58 a 59 čl. I a účinnost 1. 1. 2026 dle čl. XV dohledány v zákoně č. 236/2025 Sb.; hodnoty obou studií doslova v abstraktech PubMedu; celá řada Eurostatu ověřena proti API. Kontrola odkazů: 10 externích odkazů, 8× HTTP 200, 2× HTTP 203 (PubMed přes proxy, obsah doručen). Jediný nález: doi.org/10.1177/20552076261430059 vrací HTTP 403 (vydavatelský server SAGE blokuje automatizované dotazy) — nahrazeno primárním odkazem na otevřený plný text v PubMed Central (PMC12961103, HTTP 200), DOI ponecháno jako citační identifikátor s vysvětlením. Anti-patterny data-value: žádný counter nenese datum, rozpětí ani znaménko; prefix „více než \" je textový, ne numerický.",
         "review_round_2": "2026-09-04 reakce na automatické review (Codex, PR #1150), dva nálezy, oba přijaty. (P2) Poznámka u řádku „ČR 2020\" v grafu Eurostatu tvrdila, že se odstup od EU „během covidu zdvojnásobil\" — hodnoty v témže grafu to nepotvrzují: 17,80 − 9,51 = 8,29 p. b. (2018) proti 20,76 − 9,28 = 11,48 p. b. (2020), tedy růst o zhruba 38 %, ne dvojnásobek; ani rok 2016 jako základna dvojnásobek nedá (4,01 → 11,48 je téměř trojnásobek). Poznámka přepsána na doložený tvar „odstup vzrostl z 8,3 p. b. v roce 2018 na 11,5 p. b.\". (P1) scheduled_for je ve scripts/publish-scheduled.js jen dolní mez („ne dřív než\"); mezi kandidáty bez topical_until vyhrává nejstarší ready_since, takže by se článek 5. 9. nepublikoval, přestože ho tak datuje HTML, og:published_time i viditelná hlavička. Ověřeno simulací nad reálným modulem včetně holdReason: 5. 9. by vyhrál clanek-centralizace-velmi-predcasnych-porodu a tento článek byl sedmý ze sedmi kandidátů, protože jeho ready_since by se orazítkoval až 5. 9. Protože jde o reaktivní text vázaný na událost z 3. 9. 2026, doplněno topical_until 2026-09-30 — dokumentovaný mechanismus fronty pro témata s omezenou aktuálností (PROMPT_DAILY_ROUTINE.md, publikační fronta, pravidlo 1). Simulace po opravě: vítězem 5. 9. i 6. 9. je tento článek s basis „topical\", datum v HTML i v metadatech tedy odpovídá skutečné frontě."
       },
-      "ready_since": "2026-09-04"
+      "ready_since": "2026-09-04",
+      "number": 269
     },
     {
       "id": "npo-zdravotnictvi-bilance",
