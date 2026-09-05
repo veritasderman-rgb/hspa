@@ -151,6 +151,15 @@ function syncSliders() {
 
 // ── výsledky ──────────────────────────────────────────────────────────────
 
+/** Vstupy odpovídají základnímu scénáři (preset „zs“)? Jen tehdy smí shrnutí říkat „Základní scénář“. */
+function isBaseInputs(inputs) {
+  const zs = (state.data?.scenarios || []).find(sc => sc.id === 'zs')?.inputs;
+  if (!zs) return false;
+  return Math.round(inputs.beds) === Math.round(zs.beds)
+    && Math.round(inputs.fte) === Math.round(zs.fte)
+    && Math.abs(inputs.divertShare - zs.divertShare) < 1e-9;
+}
+
 function renderResults() {
   const r = simulate(state.inputs, state.P);
   const b = state.base;
@@ -169,8 +178,10 @@ function renderResults() {
       + `<strong>${tis(added)} připadne rodinám</strong> — nad rámec základního scénáře odpracují ekvivalent <strong>${tis(addedFte)} plných úvazků</strong>.`;
   } else if (extra > 0) {
     text = `Při ${fmtInt.format(r.inputs.beds)} lůžkách pohltí pobytové služby i část péče, kterou by jinak nesly terénní služby a rodiny: <strong>${tis(roundThousands(r.residential.served))} klientů</strong> ročně. Rodiny pečují o ${tis(roundThousands(r.neformalni.persons))} seniorů — o ${tis(roundThousands(b.neformalni.persons - r.neformalni.persons))} méně než v základním scénáři.`;
-  } else {
+  } else if (isBaseInputs(r.inputs)) {
     text = `Základní scénář: všechny typy péče rostou podle demografie. V roce 2035 bude <strong>${tis(roundThousands(r.residential.served))}</strong> klientů v pobytových službách, <strong>${tis(roundThousands(r.terenni.served))}</strong> v terénních a <strong>${tis(roundThousands(r.neformalni.persons))}</strong> v péči rodin — ty odpracují ekvivalent <strong>${tis(roundThousands(r.neformalni.fte))} plných úvazků</strong>.`;
+  } else {
+    text = `Při ${fmtInt.format(r.inputs.beds)} lůžkách a ${fmtInt.format(r.inputs.fte)} pečovatelích pokryjí pobytové služby poptávku: v roce 2035 bude <strong>${tis(roundThousands(r.residential.served))}</strong> klientů v pobytových službách, <strong>${tis(roundThousands(r.terenni.served))}</strong> v terénních a <strong>${tis(roundThousands(r.neformalni.persons))}</strong> v péči rodin — ty odpracují ekvivalent <strong>${tis(roundThousands(r.neformalni.fte))} plných úvazků</strong>.`;
   }
   if (r.terenni.shortfall > 500) {
     text += ` Terénním službám navíc chybí pečovatelé pro <strong>${tis(roundThousands(r.terenni.shortfall))} klientů</strong> základního scénáře — i ti zůstávají na rodinách.`;
@@ -303,7 +314,8 @@ async function init() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state.data = await res.json();
   } catch (err) {
-    renderErrorState('Parametry kalkulačky se nepodařilo načíst.', err);
+    const host = document.getElementById('ltcSummary') || document.querySelector('main');
+    if (host) host.innerHTML = renderErrorState('Parametry kalkulačky se nepodařilo načíst.', err);
     return;
   }
   state.P = paramsFromData(state.data);
