@@ -1,16 +1,16 @@
 {
   "version": "1.0",
-  "generated_at": "2026-09-05T14:06:03.681Z",
+  "generated_at": "2026-09-06T04:51:45.225Z",
   "_doc": "Souvislosti — build-time znalostní graf indikátorů. Generuje scripts/build-souvislosti.js z indicators + system-model + legislativa + articles + claims + barometr. NEEDITOVAT ručně (přepíše refresh pipeline). Mapa indicator_id → { model, legislativa[], articles[], claims[], barometr }.",
   "counts": {
-    "indicators_total": 219,
-    "indicators_with_links": 210,
+    "indicators_total": 222,
+    "indicators_with_links": 212,
     "sources": {
       "system_model_nodes": 24,
       "legislativa_items": 12,
       "legislativa_plan_items": 10,
       "articles_visible": 267,
-      "claims": 1694,
+      "claims": 1754,
       "barometr": true
     }
   },
@@ -24383,6 +24383,160 @@
           "rubric": "dostupnost"
         }
       ],
+      "claims": [],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
+    "neuspokojene_zadosti_pobytove_pece_seniori": {
+      "id": "neuspokojene_zadosti_pobytove_pece_seniori",
+      "name": "Neuspokojené žádosti o domov pro seniory a domov se zvláštním režimem (na 100 lůžek)",
+      "model": {
+        "node": {
+          "id": "dlouhodoba_paliativni",
+          "label": "Dlouhodobá a paliativní péče",
+          "kind": "lever",
+          "layer": "Procesy"
+        },
+        "incoming": [
+          {
+            "node_id": "sit_kapacity",
+            "label": "Síť a kapacity",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Lůžková kapacita hospiců a zařízení dlouhodobé péče určuje, kolik lidí se do péče dostane — ČR má 5,0 hospicových lůžek na 100 tis. obyvatel proti doporučení EAPC 8 a EU průměru 7,4."
+          },
+          {
+            "node_id": "uhradovy_mechanismus",
+            "label": "Úhradový mechanismus",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Existence úhradového kódu rozhoduje o rozvoji terénních služeb — mobilní specializovaná paliativní péče historicky úhradový kód neměla a do úhrad pojišťoven vstoupila až po pilotech VZP, kapacita (4,6 týmu na milion) přesto zůstává pod polovinou doporučení EAPC."
+          },
+          {
+            "node_id": "pracovni_sila",
+            "label": "Pracovní síla",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Pečující personál je hlavní úzké hrdlo dlouhodobé péče — ČR má 2,5 pracovníka formální dlouhodobé péče na 100 seniorů proti 5,6 v OECD, takže ani průměrné výdaje nelze proměnit v reálnou kapacitu."
+          },
+          {
+            "node_id": "governance_legislativa",
+            "label": "Governance a legislativa",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Dvojkolejná gesce MZ a MPSV (zákony 372/2011 a 108/2006 Sb.) fragmentuje vstup pacienta, financování i regulaci dlouhodobé péče; zákon 38/2025 Sb. začíná sociálně-zdravotní pomezí sjednocovat (etapy 2025, 2026, 2029)."
+          }
+        ],
+        "outgoing": [
+          {
+            "node_id": "objem_struktura_pece",
+            "label": "Objem a struktura péče",
+            "kind": "flow",
+            "layer": "Výstupy",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Fungující následná a terénní péče uvolňuje akutní lůžka — bez ní zůstávají doléčení senioři týdny na akutních interních odděleních a přes 70 % lidí umírá v nemocnici či léčebně místo doma."
+          },
+          {
+            "node_id": "zkusenost_pacienta",
+            "label": "Zkušenost pacienta",
+            "kind": "flow",
+            "layer": "Výstupy",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Dostupnost domácí a hospicové paliativní péče rozhoduje o naplnění preferencí v závěru života — zhruba 70 % Čechů si přeje zemřít doma nebo v hospici, daří se to jen 26,2 % (OECD 32 %)."
+          }
+        ]
+      },
+      "legislativa": [],
+      "articles": [],
+      "claims": [],
+      "barometr": {
+        "commitments": [],
+        "statements": []
+      }
+    },
+    "pecovatelska_sluzba_klienti_per_1000_65plus": {
+      "id": "pecovatelska_sluzba_klienti_per_1000_65plus",
+      "name": "Klienti pečovatelské služby (na 1 000 obyvatel 65+)",
+      "model": {
+        "node": {
+          "id": "dlouhodoba_paliativni",
+          "label": "Dlouhodobá a paliativní péče",
+          "kind": "lever",
+          "layer": "Procesy"
+        },
+        "incoming": [
+          {
+            "node_id": "sit_kapacity",
+            "label": "Síť a kapacity",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Lůžková kapacita hospiců a zařízení dlouhodobé péče určuje, kolik lidí se do péče dostane — ČR má 5,0 hospicových lůžek na 100 tis. obyvatel proti doporučení EAPC 8 a EU průměru 7,4."
+          },
+          {
+            "node_id": "uhradovy_mechanismus",
+            "label": "Úhradový mechanismus",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Existence úhradového kódu rozhoduje o rozvoji terénních služeb — mobilní specializovaná paliativní péče historicky úhradový kód neměla a do úhrad pojišťoven vstoupila až po pilotech VZP, kapacita (4,6 týmu na milion) přesto zůstává pod polovinou doporučení EAPC."
+          },
+          {
+            "node_id": "pracovni_sila",
+            "label": "Pracovní síla",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Pečující personál je hlavní úzké hrdlo dlouhodobé péče — ČR má 2,5 pracovníka formální dlouhodobé péče na 100 seniorů proti 5,6 v OECD, takže ani průměrné výdaje nelze proměnit v reálnou kapacitu."
+          },
+          {
+            "node_id": "governance_legislativa",
+            "label": "Governance a legislativa",
+            "kind": "lever",
+            "layer": "Struktury",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Dvojkolejná gesce MZ a MPSV (zákony 372/2011 a 108/2006 Sb.) fragmentuje vstup pacienta, financování i regulaci dlouhodobé péče; zákon 38/2025 Sb. začíná sociálně-zdravotní pomezí sjednocovat (etapy 2025, 2026, 2029)."
+          }
+        ],
+        "outgoing": [
+          {
+            "node_id": "objem_struktura_pece",
+            "label": "Objem a struktura péče",
+            "kind": "flow",
+            "layer": "Výstupy",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Fungující následná a terénní péče uvolňuje akutní lůžka — bez ní zůstávají doléčení senioři týdny na akutních interních odděleních a přes 70 % lidí umírá v nemocnici či léčebně místo doma."
+          },
+          {
+            "node_id": "zkusenost_pacienta",
+            "label": "Zkušenost pacienta",
+            "kind": "flow",
+            "layer": "Výstupy",
+            "polarity": "plus",
+            "strength": "strong",
+            "mechanism": "Dostupnost domácí a hospicové paliativní péče rozhoduje o naplnění preferencí v závěru života — zhruba 70 % Čechů si přeje zemřít doma nebo v hospici, daří se to jen 26,2 % (OECD 32 %)."
+          }
+        ]
+      },
+      "legislativa": [],
+      "articles": [],
       "claims": [],
       "barometr": {
         "commitments": [],
