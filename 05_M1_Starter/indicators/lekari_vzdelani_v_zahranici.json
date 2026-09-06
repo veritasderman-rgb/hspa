@@ -1,0 +1,62 @@
+{
+  "id": "lekari_vzdelani_v_zahranici",
+  "name": "Podíl lékařů se vzděláním získaným v zahraničí",
+  "area": "Struktury",
+  "domain": "Pracovní síla",
+  "subdomain": "Mezinárodní mobilita",
+  "definition": "Podíl aktivních lékařů v ČR, kteří získali základní lékařské vzdělání mimo Českou republiku, na celkovém počtu aktivních lékařů. Sleduje se místo vzdělání (training place), nikoli státní občanství — lékař s ukrajinským pasem, který vystudoval v Hradci Králové, se do čitatele nepočítá, zatímco Čech, který vystudoval na Slovensku, ano.",
+  "unit": "%",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "sdmx",
+      "endpoint": "https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_WFMI@DF_HEALTH_WFMI,/CZE.......?startPeriod=2015&dimensionAtObservation=AllDimensions&format=jsondata",
+      "dataset": "OECD Health Statistics — Health workforce migration (DSD_HEALTH_WFMI@DF_HEALTH_WFMI). Za Česko do sady vykazují Ministerstvo zdravotnictví a ÚZIS z Národního registru zdravotnických pracovníků (NRZP).",
+      "dimensions": {
+        "MEASURE": "HW (stav) / HW_AI (roční příliv)",
+        "UNIT_MEASURE": "PT_WR_PRF_HLTH (% pracovníků v téže profesi) / PS (osoby)",
+        "TRAINING_PLACE": "FOREIGN",
+        "HEALTH_PROF": "PHYS (lékaři)",
+        "ORIGIN": "W (svět celkem) + jednotlivé země vzdělání",
+        "TIME_PERIOD": "2015–2024"
+      }
+    },
+    "fallback": {
+      "type": "publication",
+      "url": "https://www.uzis.cz/res/f/008467/personalni-kapacity-2024.pdf"
+    }
+  },
+  "benchmark_source": {
+    "type": "oecd",
+    "code": "DSD_HEALTH_WFMI@DF_HEALTH_WFMI",
+    "dataset": "OECD Health Statistics — Health workforce migration, stav zahraničně vzdělaných lékařů v % lékařů téže profese, rok 2024 (31 zemí s údajem, z toho 21 členských států EU). Nevážený průměr 31 zemí činí 23,5 %, nevážený průměr 21 zemí EU 18,6 %. Rozdělení je ale extrémně zešikmené (Lucembursko 100 %, Kypr 92,7 % — státy prakticky bez vlastní lékařské fakulty; na druhém konci Litva 0,8 % a Itálie 1,2 %), takže vypovídající statistikou je medián: 14,7 % za všech 31 zemí a 8,6 % za 21 států EU. Česko s 8,6 % leží přesně na mediánu EU.",
+    "value": 23.5,
+    "url": "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_WFMI%40DF_HEALTH_WFMI&df[ag]=OECD.ELS.HD"
+  },
+  "signal_thresholds": {
+    "good": 0,
+    "warn": 0
+  },
+  "frequency": "annual",
+  "stewards": [
+    "Ministerstvo zdravotnictví ČR — odbor vědy a lékařských povolání (uznávání kvalifikací, aprobační zkoušky)",
+    "ÚZIS ČR — Národní registr zdravotnických pracovníků",
+    "IPVZ — Institut postgraduálního vzdělávání ve zdravotnictví (organizace aprobačních zkoušek)"
+  ],
+  "method_notes": "SMĚR A SIGNÁL: indikátor je kontextově závislý a signál je neutrální. Vyšší hodnota není sama o sobě lepší ani horší — vysoký podíl může znamenat otevřený systém, který si dokáže doplnit kapacity, stejně jako závislost na dovozu pracovní síly ze zemí, které si ji samy nemohou dovolit ztratit (rámec WHO Global Code of Practice). Nízká hodnota může znamenat soběstačnost stejně jako administrativní uzavřenost. Prahy good/warn jsou proto nulové a signál se nepočítá.\n\nČESKÁ ŘADA (OECD, stav k roku): 2015 = 6,1 · 2016 = 6,6 · 2017 = 7,1 · 2018 = 7,4 · 2019 = 7,4 · 2020 = 7,5 · 2021 = 7,6 · 2022 = 7,9 · 2023 = 8,2 · 2024 = 8,6 %. V absolutních číslech 4 076 zahraničně vzdělaných lékařů ze 47 414 aktivních lékařů (2024).\n\nKŘÍŽOVÁ KONTROLA JMENOVATELE: ÚZIS v publikaci „Personální kapacity ve zdravotnictví 2024\" (verze 1.2 z 28. 2. 2026, zdrojem NRZP + NRHZS) uvádí za rok 2024 celkem 47 131 lékařů jako fyzických osob. Jmenovatel OECD (47 414) se od něj liší o 0,6 %, což odpovídá mírně odlišnému vymezení aktivního lékaře (ÚZIS hodnotí kapacity lékařů z NRHZS podle smluvních míst hrazené péče, tedy bez poskytovatelů zcela mimo veřejné zdravotní pojištění). Řada je tím ověřená jako česká, jen harmonizovaná OECD.\n\nZEMĚ ZÍSKÁNÍ VZDĚLÁNÍ (2024, osoby): Slovensko 2 532 · Ukrajina 1 007 · Rusko 269 · Bělorusko 48 · Polsko 47 · Kazachstán 21 · Bulharsko 20 · Uzbekistán 15 · Německo 13 · Rumunsko 12 · Kyrgyzstán 9 · Bosna a Hercegovina 8 · Sýrie 7 · Rakousko 5; zbytek do 4 076 připadá na desítky dalších zemí s jednotkami osob. Samotné Slovensko tvoří 62 % všech zahraničně vzdělaných lékařů — jde o důsledek společného vzdělávacího prostoru a automatického uznávání v rámci EU, nikoli o migraci ze třetích zemí.\n\nROČNÍ PŘÍLIV (MEASURE = HW_AI, osoby): 2015 = 241 · 2016 = 258 · 2017 = 311 · 2018 = 250 · 2019 = 105 · 2020 = 148 · 2021 = 153 · 2022 = 186 · 2023 = 195 · 2024 = 296. Příliv se po propadu v roce 2019 vrátil na úroveň poloviny minulé dekády.\n\nSESTRY: stejná datová sada uvádí za Česko podíl zahraničně vzdělaných sester 0,016 % (2022 i 2023). Takový údaj není věrohodný jako popis skutečnosti — je to doklad toho, že místo získání vzdělání se u nelékařských povolání do mezinárodního reportingu prakticky nevykazuje. Indikátor se proto omezuje na lékaře.",
+  "limitations": "Řada pochází z harmonizované sady OECD, do níž Česko vykazuje; ÚZIS ani MZ nepublikují rozpad lékařů podle místa získání vzdělání jako samostatnou otevřenou datovou sadu, takže hodnotu nelze v českých otevřených datech přímo reprodukovat — ověřit jde jen jmenovatel. Indikátor sleduje místo vzdělání, nikoli občanství; obě čísla se běžně zaměňují a nejsou zaměnitelná. Zahrnuje pouze lékaře, ne zubní lékaře, farmaceuty ani nelékařská povolání (u sester není vykazování místa vzdělání použitelné). Mezinárodní srovnání je zatíženo velikostí země a existencí vlastních lékařských fakult — Lucembursko vykazuje 100 %, protože do roku 2020 nemělo vlastní úplné lékařské studium; průměr napříč zeměmi je proto málo vypovídající a čte se medián. Podíl neříká nic o tom, kde tito lékaři pracují (obor, kraj, typ poskytovatele), ani jak dlouho v systému zůstávají. Veřejná statistika úspěšnosti aprobačních zkoušek, která je hlavní vstupní branou pro absolventy mimo EU, není publikována, takže indikátor nelze rozložit na „kolik jich chtělo\" a „kolik jich prošlo\".",
+  "determinants": [
+    "Automatické uznávání kvalifikace v rámci EU (směrnice 2005/36/ES) — slovenští absolventi vstupují bez zkoušky",
+    "Aprobační zkouška podle zákona č. 95/2004 Sb. jako vstupní bariéra pro absolventy mimo EU (tři části v češtině + šestiměsíční praxe pod přímým vedením v akreditovaném zařízení)",
+    "Jazyková bariéra a dostupnost přípravných kurzů",
+    "Kapacita domácích lékařských fakult a počet absolventů",
+    "Mzdová atraktivita českého zdravotnictví vůči Německu a Rakousku (odliv) a vůči Ukrajině a zemím bývalého SSSR (příliv)",
+    "Válka na Ukrajině a režim dočasné ochrany (lex Ukrajina)"
+  ],
+  "importance": "Česko má stárnoucí lékařský sbor a chronicky nedosycená místa v periferních okresech i ve vybraných oborech. Zahraničně vzdělaní lékaři jsou jedna ze tří možných odpovědí (vedle zvýšení počtu domácích absolventů a lepší retence), a jediná, která umí zabrat v horizontu jednotek let — vyškolit vlastního lékaře trvá jedenáct až třináct let. Indikátor zároveň měří něco, co je politicky citlivé v obou směrech: příliš rychlý růst vyvolává obavy o kvalitu a bezpečnost, příliš pomalý znamená prázdné služby v okresních nemocnicích. Bez čísla se debata vede na anekdotách."
+  ,
+  "patient_story": "Na interním oddělení okresní nemocnice na severu Moravy slouží noční službu lékař, který medicínu vystudoval v Užhorodu. V Česku je tři roky, aprobační zkoušku složil napodruhé a rok pracoval pod přímým vedením atestovaného kolegy. Pacientka, která k němu v půl třetí ráno přijde s bolestí na hrudi, o tom neví nic — a nemá důvod vědět. Kdyby na oddělení nebyl, sloužil by tam někdo na svou třetí službu v týdnu, nebo by se pacientka vezla o čtyřicet kilometrů dál.\n\nTakových lékařů je v Česku 4 076, tedy 8,6 % ze 47 414 aktivních lékařů. Za devět let podíl stoupl ze 6,1 %. Většinu ale netvoří lidé z Užhorodu: 2 532 z nich vystudovalo na Slovensku a do systému vstoupilo automaticky, protože slovenský diplom platí v celé Evropské unii bez zkoušky. Z Ukrajiny jich je 1 007, z Ruska 269. Mezinárodně je 8,6 % přesně medián zemí Evropské unie: Německo má 15,7 %, Rakousko 7,8 %, Polsko 5,3 %. Česko tedy není ani zemí, která by si sbor dovážela, ani uzavřenou pevností.\n\nRozdíl mezi slovenským a ukrajinským lékařem přitom není v medicíně, ale v právu. Absolvent z členského státu EU nastupuje na základě automatického uznání kvalifikace. Absolvent mimo EU musí složit aprobační zkoušku podle zákona č. 95/2004 Sb.: dva písemné testy a ústní zkoušku v češtině plus šest měsíců praxe pod přímým vedením v akreditovaném zařízení. Kolik lidí se o zkoušku ročně pokusí a kolika projde, se z veřejných zdrojů nedozvíte — ministerstvo ani IPVZ tuto statistiku nepublikují. Bariéra, o jejíž výšce se roky vede spor, tedy nemá veřejně dostupné měřítko.\n\nPáky jsou tři a všechny leží na ministerstvu zdravotnictví. První je zveřejnit statistiku aprobačních zkoušek — počty přihlášených, úspěšných a čekacích dob podle oborů; bez ní se nedá říct, jestli je zkouška filtr kvality, nebo úzké hrdlo. Druhá je struktura zkoušky samotné, kterou naposledy měnil zákon č. 168/2024 Sb.: kde je hranice mezi ověřením kompetence a zbytečnou překážkou, je rozhodnutí, ne přírodní zákon. Třetí je domácí strana rovnice — vládní program zvedl roční počet nově zapsaných studentů medicíny z 1 680 na 2 220, což od konce dekády přinese přes 350 absolventů ročně navíc. Teprve tehdy bude jasné, jestli je 8,6 % číslo, které Česko potřebuje zvyšovat, nebo se s ním vyrovná."
+  ,
+  "framework": "monitoring",
+  "dimension": "dostupnost"
+}
