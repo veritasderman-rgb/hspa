@@ -9,6 +9,9 @@ import {
   parseMrCsv,
   aggregateMr,
   fetchSuklMr,
+  feedLagDays,
+  isUsableRawCache,
+  isImplausibleJump,
   ATC_GROUPS,
 } from '../ingest/fetchers/sukl_mr.js';
 
@@ -248,4 +251,117 @@ test('yearEndTrend: rekonstrukce aktivních přerušení k 31.12. z kumulativní
     { year: 2024, value: 2 },
     { year: 2025, value: 1 },
   ]);
+});
+
+// --- #1132: čerstvost dumpu, referenční datum a provenience cache ---
+
+/**
+ * Minimální ZIP se STORED (nekomprimovanými) položkami — unzipEntry čte
+ * lokální hlavičky sekvenčně, takže central directory není potřeba.
+ */
+function storedZip(entries) {
+  const parts = [];
+  for (const [name, content] of entries) {
+    const data = Buffer.from(content, 'latin1');
+    const nameBuf = Buffer.from(name, 'utf8');
+    const h = Buffer.alloc(30);
+    h.writeUInt32LE(0x04034b50, 0);
+    h.writeUInt16LE(20, 4);
+    h.writeUInt16LE(0, 6);
+    h.writeUInt16LE(0, 8);
+    h.writeUInt32LE(0, 14);
+    h.writeUInt32LE(data.length, 18);
+    h.writeUInt32LE(data.length, 22);
+    h.writeUInt16LE(nameBuf.length, 26);
+    h.writeUInt16LE(0, 28);
+    parts.push(h, nameBuf, data);
+  }
+  return Buffer.concat(parts);
+}
+
+function mrZip(platnost, csvRows) {
+  return storedZip([
+    ['mr_hlaseni.csv', [
+      'POSLEDNI_PLATNE_HLASENI;KOD_SUKL;NAZEV;ATC;TYP_OZNAMENI;PLATNOST_OD;DATUM_HLASENI;NAHRAZUJICI_LP;DUVOD_PRERUSENI_UKONCENI;TERMIN_OBNOVENI',
+      ...csvRows,
+    ].join('\n')],
+    ['mr_hlaseni_platnost.csv', `"PLATNOST"\n"${platnost}"\n`],
+  ]);
+}
+
+function zipFetch(buf) {
+  return async () => ({
+    ok: true, status: 200,
+    async arrayBuffer() { return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength); },
+    async text() { return ''; },
+    async json() { return null; },
+  });
+}
+
+test('feedLagDays: spočítá, o kolik dní je dump pozadu', () => {
+  assert.equal(feedLagDays('2026-08-07', new Date('2026-08-31T12:29:42Z')), 24);
+  assert.equal(feedLagDays('2026-09-06', new Date('2026-09-06T09:20:00Z')), 0);
+  assert.equal(feedLagDays('', new Date('2026-09-06T09:20:00Z')), null);
+  assert.equal(feedLagDays(null, new Date('2026-09-06T09:20:00Z')), null);
+});
+
+test('isUsableRawCache: odmítne testovací fixturu, cizí endpoint i starý dump (#1132)', () => {
+  const now = new Date('2026-09-06T09:00:00Z');
+  const bigCsv = 'x'.repeat(200_000);
+  const ok = { url: 'https://opendata.sukl.cz/soubory/MR/mr.zip', csv: bigCsv, feed_platnost: '2026-09-05' };
+  assert.equal(isUsableRawCache(ok, { url: 'https://opendata.sukl.cz/soubory/MR/mr.zip', now }), true);
+  // fixtura z unit testů (třířádkové CSV z example.test) — nesmí projít jako feed
+  assert.equal(isUsableRawCache(
+    { url: 'https://example.test/mr.csv', csv: 'KOD_SUKL;TYP_OZNAMENI\n0001;P' },
+    { url: 'https://opendata.sukl.cz/soubory/MR/mr.zip', now },
+  ), false);
+  assert.equal(isUsableRawCache({ ...ok, feed_platnost: '2026-08-07' },
+    { url: 'https://opendata.sukl.cz/soubory/MR/mr.zip', now }), false, 'dump 30 dní pozadu');
+  assert.equal(isUsableRawCache({ ...ok, url: 'https://example.test/mr.csv' },
+    { url: 'https://opendata.sukl.cz/soubory/MR/mr.zip', now }), false, 'jiný endpoint');
+});
+
+test('isImplausibleJump: skok, který za dané dny vzniknout nemohl (#1132)', () => {
+  assert.equal(isImplausibleJump(1336, 1418, 7), true, '−82 za týden neprojde');
+  assert.equal(isImplausibleJump(1418, 1376, 7), false, '+42 za týden je běžný pohyb');
+  assert.equal(isImplausibleJump(1550, 1404, 90), false, 'kvartální posun projde');
+  assert.equal(isImplausibleJump(1404, undefined, 7), false, 'bez minulého agregátu se nehlídá');
+});
+
+test('fetchSuklMr: zastaralý dump nepřepíše agregát (#1132)', async () => {
+  const buf = mrZip('07.08.2026', [
+    'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;31.08.2026',
+  ]);
+  const result = await fetchSuklMr({
+    force: true,
+    fetchImpl: zipFetch(buf),
+    endpoint: 'https://example.test/mr.zip',
+    now: new Date('2026-08-31T12:29:42Z'),
+  });
+  assert.equal(result.aggregated, null, 'starý dump se nesmí zaingestovat');
+  assert.match(result.error, /PLATNOST/);
+});
+
+test('fetchSuklMr: agreguje proti PLATNOSTI dumpu, ne proti systémovému času (#1132)', async () => {
+  // Hlášení s TERMIN_OBNOVENI 30. 9. — k platnosti dumpu (6. 9.) je výpadek
+  // aktivní. Se systémovým časem 20. 10. by ho stará implementace „uzavřela“.
+  const buf = mrZip('06.09.2026', [
+    'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;30.09.2026',
+    'ANO;0002;LP B;C09AA01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
+  ]);
+  const result = await fetchSuklMr({
+    force: true,
+    fetchImpl: zipFetch(buf),
+    endpoint: 'https://example.test/mr.zip',
+    now: new Date('2026-09-06T09:20:00Z'),
+  });
+  assert.equal(result.aggregated.active_disruptions, 2);
+
+  const { readFileSync } = await import('node:fs');
+  const { cachePath } = await import('../ingest/lib/cache.js');
+  const agg = JSON.parse(readFileSync(cachePath('sukl_mr_aggregated.json'), 'utf8'));
+  assert.equal(agg.feed_platnost, '2026-09-06');
+  assert.equal(agg.reference_date, '2026-09-06');
+  assert.ok(agg.fetched_at, 'fetched_at musí být v agregátu — transform.js ho čte odsud');
+  assert.equal(agg.rows_parsed, 2);
 });
