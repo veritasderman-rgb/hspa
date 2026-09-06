@@ -106,10 +106,14 @@ const MANIFEST = {
     context: 'Nová generace přidala 3. září laborky, prevenci a sdílený záznam.',
   },
   'clanek-centralizace-velmi-predcasnych-porodu': {
-    kicker: 'Perinatální péče · centralizace', signal: 'good',
+    // Signál je záměrně neutral — indikátor nemá srovnatelný benchmark
+    // (Euro-Peristat R17 počítá živě i mrtvě narozené, česká data jen živě
+    // narozené), viz method_notes v indicators/centralizace_velmi_predcasnych_porodu.json.
+    // Ze stejného důvodu drží claim jmenovatel „živě narozené děti", ne porody.
+    kicker: 'Perinatální péče · centralizace', signal: 'neutral',
     stat: '88,4', statSuffix: '%', barPct: 88,
-    claim: 'velmi předčasných porodů proběhne přímo v centru intenzivní péče.',
-    context: '749 z 847 dětí před 32. týdnem (2023).',
+    claim: 'živě narozených dětí před 32. týdnem přijde na svět přímo v centru intenzivní péče.',
+    context: '749 z 847 živě narozených (2023).',
   },
   'clanek-psychiatricka-luzka': {
     kicker: 'Duševní zdraví · lůžkový fond', signal: 'bad',
