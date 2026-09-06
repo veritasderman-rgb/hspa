@@ -1069,6 +1069,8 @@ export const SITE_TOOLS = [
     desc: 'Zadejte věk a kraj a zjistěte, co se v prevenci týká právě vás.', verb: 'Otevřít kompas' },
   { id: 'pohotovosti',   href: 'pohotovosti.html',   label: 'Nejbližší pohotovost',
     desc: 'Napište město a najděte pohotovost, která má právě teď otevřeno.', verb: 'Najít pohotovost' },
+  { id: 'kalkulacka-pece', href: 'kalkulacka-pece-2035.html', label: 'Kdo se o nás postará v roce 2035?',
+    desc: 'Nastavte lůžka a pečovatele — model ukáže, kolik péče o seniory připadne rodinám a co to bude stát.', verb: 'Otevřít kalkulačku' },
   { id: 'zdravi2035',    href: 'zdravi-2035.html',   label: 'Plní se Zdraví 2035?',
     desc: 'Hlavní strategie zdravotnictví po kapitolách — každý úkol s indikátorem, na kterém je vidět plnění.', verb: 'Otevřít plnění' },
   { id: 'barometr',      href: 'barometr.html',      label: 'Barometr politických prohlášení',

@@ -89,7 +89,8 @@ git push -u origin claude/<branch>
 ├── pohotovost-*.html           ← 75 generovaných okresních stránek (scripts/build-pohotovosti-okresy.js, statický výpis + JSON-LD)
 ├── strategie.html              ← Národní strategické dokumenty
 ├── zdravi-2035.html            ← Plní se Zdraví 2035? (strategie po kapitolách a úkolech, každý s indikátory)
-├── plneni-*.html               ← 5 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
+├── plneni-*.html               ← 7 dalších stránek plnění strategií (onko 2030, KV 2035, AMR, duševní zdraví, Zdraví 2030 retrospektivně, sociální služby 2026–2030, sociální služby 2016–2025 retrospektivně) — sdílený renderer src/strategie-plneni.js, datasety data/plneni-*.json
+├── kalkulacka-pece-2035.html   ← Kdo se o nás postará v roce 2035? (interaktivní model dlouhodobé péče: lůžka × pečovatelé v terénu × přesměrování do terénu → kolik seniorů zůstane bez místa, úvazky rodin, náklad systému; src/ltc-engine.js + src/ltc-kalkulacka.js, data/ltc-scenare.json)
 ├── o-projektu.html             ← O projektu, metodika
 ├── jak-funguje.html            ← Jak HSPA hodnocení funguje (vysvětlení)
 ├── model-systemu.html          ← Interaktivní kauzální mapa systému (páky, hrany, režim „Zatlačte na páku")
@@ -133,14 +134,15 @@ git push -u origin claude/<branch>
 │       + styles.min.css        ← Commitovaný minifikát — po úpravě styles.css VŽDY `npm run build:css`
 │
 ├── data/
-│   ├── indicators.json         ← Datový kontrakt HSPA (190 indikátorů: 131 HSPA + 59 monitoring)
+│   ├── indicators.json         ← Datový kontrakt HSPA (222 indikátorů: 150 HSPA + 72 monitoring)
 │   ├── articles.json           ← Metadata 212+ článků (audit, rubric, tag, linked_indicators)
 │   ├── glossary.json           ← 110 termínů (definice, odkazy)
 │   ├── dimensions.json         ← 6 dimenzí kvality (přístupnost, efektivita, …)
 │   ├── themes.json             ← 5 tematických linií (žít déle ve zdraví, najít nemoc dřív, …)
 │   ├── strategies.json         ← Národní strategické dokumenty
 │   ├── zdravi2035-plneni.json  ← Zdraví 2035 rozložené na 12 SC × 113 dílčích cílů × 68 indikátorů dokumentu, mapované na kontrakt (validate:plneni)
-│   ├── plneni-*.json           ← Datasety plnění dalších strategií (onko-2030, kv-2035, amr, dusevni-zdravi, zdravi-2030) — stejné schéma, validate:plneni
+│   ├── plneni-*.json           ← Datasety plnění dalších strategií (onko-2030, kv-2035, amr, dusevni-zdravi, zdravi-2030, socialni-sluzby, socialni-sluzby-2016-2025) — stejné schéma, validate:plneni
+│   ├── ltc-scenare.json        ← Parametry kalkulačky Kdo se o nás postará v roce 2035 (4 scénáře studie Deloitte pro APSS ČR, červen 2026, s citacemi stran; validuje tests/ltc-engine.test.js)
 │   ├── explainers.json         ← Kontextové texty (politika, reformy, koncepty)
 │   ├── prevention.json         ← Vakcinace + screeningy
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK

@@ -1339,7 +1339,7 @@ Frontend by měl odmítnout dataset s neočekávaným major version.
 
 ## 22. Datasety plnění strategií — `data/zdravi2035-plneni.json` + `data/plneni-*.json` (kurátorované)
 
-Rodina šesti souborů se stejným schématem — každý rozkládá jeden strategický
+Rodina osmi souborů se stejným schématem — každý rozkládá jeden strategický
 dokument na cíle → dílčí cíle/úkoly → vlastní indikátory dokumentu a mapuje je
 na kontrakt. Sdílený renderer `src/strategie-plneni.js` (stránky `zdravi-2035.html`
 přes `src/zdravi2035.js`, `plneni-*.html` přes `src/plneni-page.js` a data-atributy
@@ -1354,6 +1354,20 @@ součást `validate:all`); testy `tests/plneni.test.js` (+ `tests/zdravi2035.tes
 | `plneni-amr.json` | AP NAP 2019–2022 (6 cílů, 30 aktivit; bez nástupce) | `plneni-amr.html` |
 | `plneni-dusevni-zdravi.json` | Strategie reformy psychiatrie 2013 + NAPDZ 2020–2030 | `plneni-dusevni-zdravi.html` |
 | `plneni-zdravi-2030.json` | Zdraví 2030 retrospektivně + oficiální Zpráva 2023–2024 | `plneni-zdravi-2030.html` |
+| `plneni-socialni-sluzby.json` | Národní strategie rozvoje sociálních služeb 2026–2030 (5 SG × 18 SC, 56 opatření, 3 ind. dokumentu) | `plneni-socialni-sluzby.html` |
+| `plneni-socialni-sluzby-2016-2025.json` | Předchůdkyně 2016–2025 retrospektivně (10 SG × 34 SC, 91 opatření, 0 ind. dokumentu) | `plneni-socialni-sluzby-2016-2025.html` |
+
+**Dvojice sociálních služeb — specifika.** Žádný z obou dokumentů nemá
+indikátorovou soustavu s výchozími a cílovými hodnotami: opatření/dílčí cíle
+(`dilci_cile`) jsou skoro výhradně `mereni: "proces"` (2026–2030: 53 z 56,
+zbylé 3 `proxy`, 0 `primo`; 2016–2025: 86 z 91, zbylých 5 `proxy`, 0 `primo`).
+`doc_indicators` — jen tři milníky deinstitucionalizace u 2026–2030 (2033/2035/
+2040), u 2016–2025 žádné — mapují na kontrakt výhradně `chybi` (0 `primo`,
+0 `proxy`). U staršího dokumentu navíc žádná z povinných každoročních zpráv
+o plnění (usnesení vlády č. 245/2016 ukládalo předkládat je k 31. březnu) není
+veřejně dohledatelná — blok `hodnoceni` proto cituje analytickou část
+nástupnické strategie 2026–2030, ne oficiální hodnocení gestora vlastního
+plnění.
 
 Odchylky novějších souborů od zdravi2035 (renderer i validátor čtou obojí):
 klíč `target` (s volitelným `year`) místo `target_2035`; `level` u doc_indicators
@@ -1385,3 +1399,79 @@ Klíčové enumy:
 Aktuální hodnoty indikátorů se v souboru NEduplikují — stránka je bere za
 běhu z `data/indicators.json`, takže nemůžou zastarat. Čipy odkazují na
 statické `indikator-*.html`; test hlídá, že každá odkazovaná stránka existuje.
+
+## 23. `data/ltc-scenare.json` — parametry kalkulačky dlouhodobé péče
+
+Kurátorovaný přepis vstupních parametrů kalkulačky „Kdo se o nás postará
+v roce 2035?" (`kalkulacka-pece-2035.html`) — kolik lůžek, pečovatelů a
+neformálních pečujících dnes a v roce 2035 unese systém dlouhodobé péče
+o seniory (65+), a kolik co stojí. Zdroj: studie Deloitte Advisory pro
+Asociaci poskytovatelů sociálních služeb ČR (červen 2026), str. 58–66 —
+studii objednali poskytovatelé, proto model přebírá jen vstupní parametry,
+ne doporučení (viz `source.caveat`). Žádný samostatný validátor; hlídá ho
+`tests/ltc-engine.test.js` proti čtyřem scénářům studie s tolerancí
+zaokrouhlení. Model je čistá logika v `src/ltc-engine.js`, render
+v `src/ltc-kalkulacka.js`, CSS `.ltc-*`.
+
+### Schéma
+
+```json
+{
+  "version": "1.0",
+  "source": { "name": "...", "url": "...", "caveat": "studie na zakázku APSS ČR — model nepřebírá doporučení" },
+  "verified_at": "YYYY-MM-DD",
+  "baseline_2024": {
+    "residential": { "beds": 76000, "clients": { "ds": 40000, "dzr": 32000, "other": 20000 }, "quote": "...", "page": 58 },
+    "terenni":      { "fte": 34000, "clients": 96000, "quote": "...", "page": 58 },
+    "neformalni":   { "persons": 139000, "days": 24200000, "fte": 97000, "quote": "...", "page": 58 },
+    "unit_costs_tis_kc": { "ds": 495, "dzr": 540, "other": 495, "terenni": 130, "neformalni": 150 },
+    "system_cost_mld": 80
+  },
+  "base_2035": {
+    "residential": { "beds": 111000, "clients": { "ds": 43000, "dzr": 63000, "other": 29000 }, "quote": "...", "page": 58 },
+    "terenni":      { "fte": 55000, "clients": 141000, "quote": "...", "page": 58 },
+    "neformalni":   { "persons": 190000, "days": 34000000, "fte": 136000, "quote": "...", "page": 58 },
+    "unit_costs_tis_kc": { "ds": 585, "dzr": 640, "other": 585, "terenni": 155, "neformalni": 175 },
+    "unit_cost_neformalni_added_tis_kc": 190,
+    "system_cost_mld": 137,
+    "total_need_persons": 466000
+  },
+  "model": {
+    "clients_per_bed": 1.2162, "clients_per_fte": 2.82, "divert_share_max": 0.40,
+    "shortfall_split": { "ds": 3000, "dzr": 31000, "other": 9000 },
+    "extra_split": { "ds": 27000, "dzr": 52000, "other": 17000 },
+    "growth_terenni_2035": 45000, "growth_neformalni_2035": 51000,
+    "days_per_added_person": 175, "days_per_fte": 250,
+    "investment_per_bed_mil_kc": 2
+  },
+  "scenarios": [
+    { "id": "zs", "label": "Základní scénář (demografie)", "inputs": { "beds": 111000, "fte": 55000, "divertShare": 0.4 },
+      "expected": { "residential_clients": 135000, "terenni_clients": 141000, "neformalni_persons": 190000, "neformalni_fte": 136000, "cost_total_mld": 137 }, "page": "58–60" }
+  ],
+  "sliders": {
+    "beds": { "min": 76000, "max": 190000, "step": 1000, "default": 111000 },
+    "fte": { "min": 34000, "max": 70000, "step": 1000, "default": 55000 },
+    "divertShare": { "min": 0, "max": 0.4, "step": 0.05, "default": 0.4 }
+  }
+}
+```
+
+| Blok | Význam |
+|---|---|
+| `baseline_2024` / `base_2035` | Výchozí stav a predikovaná potřeba 2035 pro tři pilíře péče (`residential` = pobytové služby DS/DZR/ostatní, `terenni` = terénní služby, `neformalni` = rodiny); každý dílčí blok nese `quote` (doslovná citace studie) + `page`, aby šlo číslo dohledat. |
+| `model` | Přepočtové konstanty engine (kapacita na lůžko/úvazek, max. podíl přesměrovaný do terénu, rozdělení chybějících/přebytečných klientů mezi DS/DZR/ostatní, přírůstek 2024→2035, dny na pečující a na úvazek, cena nového lůžka) — každá s `..._quote` + `..._page`. |
+| `scenarios[]` | Čtyři scénáře studie (základní, zmrazení lůžek, zmrazení všech investic, vše do pobytových služeb) jako `{id, label, short, inputs, expected, page}` — `inputs` jsou přednastavení posuvníků, `expected` jsou hodnoty z tabulek studie, proti kterým `tests/ltc-engine.test.js` ověřuje `src/ltc-engine.js`. |
+| `sliders` | `{min, max, step, default}` pro tři ovládací prvky kalkulačky: `beds` (lůžka), `fte` (pečovatelé v terénu), `divertShare` (podíl seniorů bez lůžka, které zvládne terén). |
+
+### Model (`src/ltc-engine.js`)
+
+Čistá funkce bez DOM, tři kroky: (1) pobytová péče obslouží nejvýš `beds ×
+clients_per_bed` klientů — nad demografickou poptávku 2035 může pohltit
+přírůstek terénu a rodin; (2) kdo se nevejde, jde nejdřív do terénu, nejvýš
+`divertShare` (strop `divert_share_max`) a jen pokud na to terén má kapacitu
+(`fte × clients_per_fte`); (3) zbytek nesou rodiny — osoby se přepočítávají na
+pečující dny (`days_per_added_person`) a na ekvivalent úvazků
+(`days_per_fte`). Výstup kalkulačky (KPI dlaždice, skládané pruhy, tabulka)
+čte `simulate()` proti aktuálním posuvníkům a `baseline()` pro srovnání se
+základním scénářem; stav posuvníků žije v URL hashi
+(`#luzka=…&pecovatele=…&teren=…`), aby šel výsledek sdílet odkazem.

@@ -33,6 +33,8 @@ const DATASETS = [
   { file: 'plneni-amr.json' },
   { file: 'plneni-dusevni-zdravi.json' },
   { file: 'plneni-zdravi-2030.json' },
+  { file: 'plneni-socialni-sluzby.json' },
+  { file: 'plneni-socialni-sluzby-2016-2025.json' },
 ];
 
 const MATCHES = ['primo', 'proxy', 'chybi'];

@@ -1,0 +1,267 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-09-05",
+  "_comment": [
+    "Parametry kalkulačky „Kdo se o nás postará v roce 2035“ (kalkulacka-pece-2035.html).",
+    "",
+    "PROČ TO NA WEBU JE: studie Deloitte pro APSS ČR (červen 2026) je první ucelená",
+    "kvantifikace budoucnosti dlouhodobé péče o seniory v ČR — tři scénáře do roku",
+    "2035 s počty klientů, pečujících a náklady. Publikovala je jako tabulky; tady",
+    "z nich vzniká model, ve kterém si čtenář sám nastaví, kolik lůžek se postaví",
+    "a kolik pečovatelů bude v terénu, a vidí, kam se zbytek přelije — do rodin.",
+    "",
+    "PROČ SE ZDROJEM U KAŽDÉHO ČÍSLA: studii objednali poskytovatelé sociálních",
+    "služeb (APSS ČR), Deloitte data od zadavatele neověřoval a doporučení studie",
+    "hájí zájmy zadavatele. Model přebírá jen VSTUPNÍ parametry (kapacity, počty",
+    "klientů, jednotkové náklady, přepočty), ne doporučení. Kde se výstup modelu",
+    "liší od tabulky studie, říká to sekce Metodika na stránce a hlídá test",
+    "(tests/ltc-engine.test.js) s tolerancí.",
+    "",
+    "Výsledky modelu nejsou predikce: říkají, kam by se při daných kapacitách",
+    "přelila poptávka odvozená z demografie, ne co se stane."
+  ],
+  "source": {
+    "name": "Deloitte Advisory pro Asociaci poskytovatelů sociálních služeb ČR — Studie dlouhodobé sociální péče v ČR (červen 2026)",
+    "url": "https://www.apsscr.cz/media/sluzby/vydavame/odborna-publikacni-cinnost/2026-adv-apss-pece-o-seniory-brochure-a4-online-spreads.pdf",
+    "publisher": "Deloitte Advisory s.r.o. na zakázku APSS ČR",
+    "published": "2026-06",
+    "pages": "58–66 (kapitola Scénáře vývoje kapacity sociální péče k roku 2035)",
+    "commissioned_by": "Asociace poskytovatelů sociálních služeb ČR (zájmová organizace poskytovatelů)",
+    "caveat": "Studie vznikla na zakázku poskytovatelů sociálních služeb; podle vlastního prohlášení Deloitte nebyla přesnost a úplnost vstupních informací od zadavatele ověřována. Kalkulačka přebírá vstupní parametry, ne doporučení studie.",
+    "primary_data": "Deloitte uvádí jako podklad data ČSÚ, MPSV a ÚZIS (demografická projekce ČSÚ 2023, Vybrané údaje o sociálním zabezpečení, příspěvek na péči).",
+    "primary_check": {
+      "checked_at": "2026-09-05",
+      "note": "Ověření vstupů proti primárním zdrojům (ČSÚ Vybrané údaje o sociálním zabezpečení 2024, tabulky 5.9/5.10/5.13/4.5; OECD DF_HEALTH_LTCR_BED). Kalkulačka záměrně ponechává parametry studie, aby reprodukovala její scénáře; rozdíly jsou popsané na stránce a v seriálu.",
+      "items": [
+        {
+          "param": "baseline_2024.residential.beds",
+          "study": 76000,
+          "primary": 62485,
+          "primary_note": "DS 35 374 + DZR 27 111 lůžek k 31. 12. 2024 (ČSÚ tab. 5.10); OECD eviduje 78 568 lůžek LTC v zařízeních včetně lůžek následné zdravotní péče."
+        },
+        {
+          "param": "baseline_2024.unit_costs_tis_kc.ds",
+          "study": 495,
+          "primary": 665,
+          "primary_note": "Celkové výdaje DS 22 417,8 mil. Kč / 33 708 klientů k 31. 12. 2024 (ČSÚ tab. 5.13, 5.9).",
+          "unit": "tis. Kč / klient / rok"
+        },
+        {
+          "param": "baseline_2024.unit_costs_tis_kc.dzr",
+          "study": 540,
+          "primary": 728,
+          "primary_note": "Celkové výdaje DZR 18 586,6 mil. Kč / 25 517 klientů (ČSÚ tab. 5.13, 5.9).",
+          "unit": "tis. Kč / klient / rok"
+        },
+        {
+          "param": "pnp_65plus_2024",
+          "study": 300000,
+          "primary": 258279,
+          "primary_note": "Příjemci příspěvku na péči ve věku 65+ v prosinci 2024 (ČSÚ tab. 4.5); zdroj ÚZIS uváděný studií nedohledán."
+        }
+      ],
+      "url": "https://csu.gov.cz/produkty/vybrane-udaje-o-socialnim-zabezpeceni-2024"
+    }
+  },
+  "verified_at": "2026-09-05",
+  "baseline_2024": {
+    "residential": {
+      "beds": 76000,
+      "clients": {
+        "ds": 40000,
+        "dzr": 32000,
+        "other": 20000
+      },
+      "quote": "Kapacita pobytových služeb pro seniory je 76 tis. Z toho je v domovech pro seniory 36 tis. lůžek a 27 tis. lůžek v domovech se zvláštním režimem a ostatní pobytové služby pokrývají 15 tis. lůžek. […] Počet seniorů (65+), kteří využili pobytové sociálně zdravotní služby v roce 2024, je celkem 92 tis., z toho 40 tis. v domovech pro seniory, 32 tis. v domovech se zvláštním režimem a v ostatních pobytových službách 20 tis.",
+      "page": 58
+    },
+    "terenni": {
+      "fte": 34000,
+      "clients": 96000,
+      "quote": "Kapacita terénní (a ambulantní) sociální služby pro seniory je 34 tis. FTE pečovatelů. […] Počet osob ve věku 65+, které využily terénní sociální služby v roce 2024, je 96 tis.",
+      "page": 58
+    },
+    "neformalni": {
+      "persons": 139000,
+      "days": 24200000,
+      "fte": 97000,
+      "quote": "Počet osob ve věku 65+, které dostávaly neformální péči v roce 2024, je podle ÚZIS 139 tis. Objem neformální péče v roce 2024 je 24,2 mil. pečujících dnů, tzn. 173 pečujících dnů za rok na osobu. […] Počet neformálních pečujících je 97 tis. FTE.",
+      "page": 58
+    },
+    "unit_costs_tis_kc": {
+      "ds": 495,
+      "dzr": 540,
+      "other": 495,
+      "terenni": 130,
+      "neformalni": 150
+    },
+    "system_cost_mld": 80,
+    "quote_cost": "Systém celkem — Celková roční nákladovost ~80 mld. Kč (2024) / ~137 mld. Kč (2035, základní scénář ÚZIS).",
+    "page_cost": 60
+  },
+  "base_2035": {
+    "residential": {
+      "beds": 111000,
+      "clients": {
+        "ds": 43000,
+        "dzr": 63000,
+        "other": 29000
+      },
+      "quote": "Predikovaná potřebná kapacita pobytových služeb pro seniory narůstá na 111 tis. lůžek. Predikovaný počet klientů pobytových služeb je 135 tis.: 43 tis. v domovech pro seniory, 63 tis. v domovech se zvláštním režimem a v ostatních pobytových službách 29 tis.",
+      "page": 58
+    },
+    "terenni": {
+      "fte": 55000,
+      "clients": 141000,
+      "quote": "Predikovaná potřebná kapacita terénních sociálních služeb pro seniory je 55 tis. FTE pečovatelů. Predikovaný počet klientů terénních sociálních služeb je 141 tis.",
+      "page": 58
+    },
+    "neformalni": {
+      "persons": 190000,
+      "days": 34000000,
+      "fte": 136000,
+      "quote": "Predikovaný počet klientů neformální péče v roce 2035 je 190 tis. Predikovaný objem neformální péče je 34 mil. neformálních pečujících dnů. Predikovaný počet neformálních pečujících je 136 tis. FTE.",
+      "page": 58
+    },
+    "unit_costs_tis_kc": {
+      "ds": 585,
+      "dzr": 640,
+      "other": 585,
+      "terenni": 155,
+      "neformalni": 175
+    },
+    "unit_cost_neformalni_added_tis_kc": 190,
+    "quote_unit_costs": "Náklad / klient / rok: DS ~585 tis. Kč, DZR ~640 tis. Kč, ostatní pobytové ~585 tis. Kč, terénní ~155 tis. Kč, neformální ~175 tis. Kč (2035, základní scénář ÚZIS). […] Dodatečné přímé náklady rozpočtu za neformální péči tvoří pouze výši příspěvku na péči, která je uvažována na 190 tis. Kč / rok / osoba.",
+    "page_unit_costs": "60, 62",
+    "system_cost_mld": 137,
+    "total_need_persons": 466000,
+    "quote_total_need": "Celkový objem potřeby péče v roce 2035 je přitom shodný se základním scénářem ÚZIS (cca 466 tis. klientů podle typů péče), pouze se zásadně mění rozdělení mezi formy péče.",
+    "page_total_need": 65
+  },
+  "model": {
+    "clients_per_bed": 1.2162,
+    "clients_per_bed_note": "Engine si poměr odvozuje přesně jako 135 000 klientů / 111 000 lůžek v základním scénáři 2035 (2024: 92 000 / 76 000 = 1,21). Klientů za rok je víc než lůžek, protože část pobytů je kratší než rok (odlehčovací a přechodné pobyty, úmrtí).",
+    "clients_per_fte": 2.82,
+    "clients_per_fte_note": "96 000 klientů / 34 000 FTE (2024). Studie uvádí 2,7 až 2,9 klienta na jedno FTE (poznámka 11); pro rok 2035 počítá s vyšší pracností (141 000 / 55 000 = 2,56). Model používá poměr roku 2024, se kterým výstupy scénářů 1 a 1.1 studie sedí na tisíc osob.",
+    "divert_share_max": 0.4,
+    "divert_share_quote": "Do terénních a ambulantních sociálních služeb lze i za předpokladu odpovídajícího navýšení kapacit realisticky přesměrovat max. 40 % chybějících klientů, tj. 17 000 osob, protože zbytek má příliš vysokou závislost.",
+    "divert_share_page": 62,
+    "shortfall_split": {
+      "ds": 3000,
+      "dzr": 31000,
+      "other": 9000
+    },
+    "shortfall_split_note": "Rozdělení chybějících pobytových klientů při zmrazení lůžek (scénář 1, tabulka 4): DS −3 000, DZR −31 000, ostatní −9 000 z celkových −43 000. Model ho škáluje úměrně velikosti výpadku.",
+    "extra_split": {
+      "ds": 27000,
+      "dzr": 52000,
+      "other": 17000
+    },
+    "extra_split_note": "Rozdělení klientů navíc při plném pokrytí pobytovou péčí (scénář 2, tabulka 6): DS +27 000, DZR +52 000, ostatní +17 000 z +96 000.",
+    "growth_terenni_2035": 45000,
+    "growth_neformalni_2035": 51000,
+    "growth_note": "Přírůstek klientů terénní (141 − 96 = 45 tis.) a neformální (190 − 139 = 51 tis.) péče mezi 2024 a 2035 v základním scénáři — právě ten může ve scénáři 2 pohltit pobytová péče.",
+    "days_per_added_person": 175,
+    "days_per_added_person_note": "Scénář 1: +26 000 osob = +4,5 mil. dnů (173/os.); scénář 1.1: +88 000 osob = +15,5 mil. dnů (176/os.). Model používá 175.",
+    "days_per_fte": 250,
+    "days_per_fte_quote": "Vycházíme z předpokladu, že 1 FTE může poskytnout cca 250 pečujících dnů.",
+    "days_per_fte_page": 58,
+    "investment_per_bed_mil_kc": 2,
+    "investment_quote": "investiční kapacita ve výši 310 mld. Kč při navýšení péče v pobytových zařízeních o 155 lůžek [tis.] (při uvažované ceně 2 mil. Kč / lůžko)",
+    "investment_page": 66
+  },
+  "scenarios": [
+    {
+      "id": "zs",
+      "label": "Základní scénář (demografie)",
+      "short": "Všechny typy péče rostou podle demografie — 111 tis. lůžek, 55 tis. pečovatelů v terénu.",
+      "inputs": {
+        "beds": 111000,
+        "fte": 55000,
+        "divertShare": 0.4
+      },
+      "expected": {
+        "residential_clients": 135000,
+        "terenni_clients": 141000,
+        "neformalni_persons": 190000,
+        "neformalni_fte": 136000,
+        "cost_total_mld": 137
+      },
+      "page": "58–60"
+    },
+    {
+      "id": "s1",
+      "label": "Zmrazení lůžek, terén roste",
+      "short": "Lůžka zůstanou na 76 tis., terénní služby přidají 7 tis. pečovatelů nad základní scénář.",
+      "inputs": {
+        "beds": 76000,
+        "fte": 62000,
+        "divertShare": 0.4
+      },
+      "expected": {
+        "residential_clients": 92000,
+        "residential_shortfall": 43000,
+        "terenni_clients": 158000,
+        "neformalni_added": 26000,
+        "neformalni_added_fte": 18000,
+        "cost_total_mld": 121
+      },
+      "page": "62–63"
+    },
+    {
+      "id": "s11",
+      "label": "Zmrazení všech investic",
+      "short": "Lůžka i terénní kapacity zůstanou na úrovni 2024; celý přírůstek nesou rodiny.",
+      "inputs": {
+        "beds": 76000,
+        "fte": 34000,
+        "divertShare": 0.4
+      },
+      "expected": {
+        "residential_clients": 92000,
+        "terenni_clients": 96000,
+        "neformalni_added": 88000,
+        "neformalni_added_fte": 62000,
+        "cost_total_mld": 123
+      },
+      "page": "63–64"
+    },
+    {
+      "id": "s2",
+      "label": "Vše do pobytových služeb",
+      "short": "Celý přírůstek poptávky pohltí domovy — 231 tis. klientů, terén i rodiny na úrovni 2024.",
+      "inputs": {
+        "beds": 190000,
+        "fte": 55000,
+        "divertShare": 0.4
+      },
+      "expected": {
+        "residential_clients": 231000,
+        "terenni_clients": 96000,
+        "neformalni_persons": 139000,
+        "cost_total_mld": 180
+      },
+      "page": "65–66"
+    }
+  ],
+  "sliders": {
+    "beds": {
+      "min": 76000,
+      "max": 190000,
+      "step": 1000,
+      "default": 111000
+    },
+    "fte": {
+      "min": 34000,
+      "max": 70000,
+      "step": 1000,
+      "default": 55000
+    },
+    "divertShare": {
+      "min": 0,
+      "max": 0.4,
+      "step": 0.05,
+      "default": 0.4
+    }
+  }
+}
