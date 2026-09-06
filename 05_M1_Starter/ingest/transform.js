@@ -151,6 +151,14 @@ export function extractFromSukl(id) {
   if (id === 'vypadky_leciv_aktivni') {
     const cache = readCacheFile('sukl_mr_aggregated.json');
     if (cache?.active_disruptions == null) return null;
+    // Agregát označený `suspect` (skok, který za uplynulé dny vzniknout nemohl)
+    // se do kontraktu nepustí — v indikátoru zůstane poslední ověřená hodnota
+    // ze seedu a verify:freshness ji uvidí jako origin: seed. Bez toho stačí
+    // jeden zastaralý dump SÚKL a číslo se tiše propadne (#1132).
+    if (cache.suspect) {
+      console.warn('  [transform] sukl_mr_aggregated.json je označen suspect — vypadky_leciv_aktivni zůstává na seed hodnotě');
+      return null;
+    }
     const year = Number((cache.generated_at ?? '').slice(0, 4)) || new Date().getFullYear();
     return {
       value: cache.active_disruptions,
