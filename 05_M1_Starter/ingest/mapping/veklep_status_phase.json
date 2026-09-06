@@ -1,0 +1,19 @@
+{
+  "_doc": "Mapování stavu materiálu ve VeKLEP (pole stavMaterialuText z API Hlídače státu, dataset veklep) na fázi Legislativního radaru (VALID_PHASES v ingest/validate-legislation.js: pripominky | vyporadani | vlada | parlament | dokonceno). Tabulka vznikla z kódů, které radar dosud potkal (data/legislativa.json), a z rozhodnutí redakce k issue #1139. Pravidlo: fáze se mění jen na doložený stav registru; nejednoznačný kód zůstává v poslední bezpečné fázi a položka dostane phase_note. Kódy, které tu nejsou, se nepřekládají automaticky — noční rutina je má nahlásit jako issue.",
+  "updated_at": "2026-09-06",
+  "statuses": {
+    "1": { "text": "připomínkové řízení", "phase": "pripominky", "note": "Materiál je v meziresortním připomínkovém řízení (terminPripominekDoData v budoucnu)." },
+    "2": { "text": "připomínkové řízení", "phase": "pripominky", "note": "Kód pozorovaný u materiálů s běžícím termínem připomínek; význam totožný s 1." },
+    "3": { "text": "připomínkové řízení ukončeno", "phase": "vyporadani", "note": "Lhůta připomínek uplynula, předkladatel vypořádává připomínky; verze pro jednání vlády ještě není přijata Úřadem vlády." },
+    "4": { "text": "odmítnuta verze pro jednání vlády", "phase": "vyporadani", "note": "Předkladatel vložil verzi pro jednání vlády, ale Úřad vlády ji NEPŘIJAL do evidence (formální nebo věcné nedostatky) a vrátil ji k doplnění. Materiál tedy nemá datum schůze vlády a stojí mezi vypořádáním a vládou. Rozhodnutí redakce (issue #1139, 6. 9. 2026): zůstává ve fázi vyporadani; do fáze vlada přechází až s kódem 7 (zařazeno do evidence) nebo s vyplněným datumSchuzeVlady. Doklad: KORNDVEC8EF8 — verze pro jednání vlády autorizována 1. 9. 2026, stav 4, datumSchuzeVlady prázdné (dotaz Hlídač státu 6. 9. 2026)." },
+    "7": { "text": "zařazeno do evidence", "phase": "vlada", "note": "Úřad vlády přijal materiál do evidence pro jednání vlády — materiál čeká na zařazení na program schůze vlády." },
+    "9PK": { "text": "projednáno PK", "phase": "vyporadani", "note": "Projednáno pracovní komisí Legislativní rady vlády; fáze se nemění, dokud materiál není zařazen do evidence pro jednání vlády (7)." },
+    "A": { "text": "zapracovány změny", "phase": "dokonceno", "note": "Pozorováno u vyhlášek po vyhlášení ve Sbírce; fáze dokonceno platí jen tehdy, když je předpis vyhlášen (ověřit ve Sbírce) — jinak zůstává vlada." },
+    "B": { "text": "signováno", "phase": "parlament", "note": "Vládní návrh zákona signován a postoupen Poslanecké sněmovně (legislativniProcesPokracujeDo = PSP). U vyhlášek a nařízení bez parlamentní fáze znamená dokonceno po vyhlášení." }
+  },
+  "rules": [
+    "datumSchuzeVlady vyplněné → nejméně fáze vlada bez ohledu na kód.",
+    "cisloSnemovnihoTisku vyplněné → nejméně fáze parlament.",
+    "Kód 4 nikdy sám o sobě nezvyšuje fázi; radar ho zobrazuje s poznámkou, že verze pro vládu byla odmítnuta."
+  ]
+}

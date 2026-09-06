@@ -277,6 +277,7 @@ function renderRow(item) {
       <td class="leg-cell-phase">
         <span class="leg-phase-pill ${phase.cls}">${escapeHtml(phase.label)}</span>
         <div class="leg-status" title="Stav materiálu ve VeKLEP">${escapeHtml(item.veklep_status ?? '')}</div>
+        ${item.phase_note ? `<p class="leg-phase-note">${escapeHtml(item.phase_note)}</p>` : ''}
         ${comments}
       </td>
       <td class="leg-cell-date">${escapeHtml(formatDate(item.dates?.last_change))}</td>
