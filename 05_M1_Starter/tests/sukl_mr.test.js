@@ -5,6 +5,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
 import {
   parseMrCsv,
   aggregateMr,
@@ -12,8 +16,50 @@ import {
   feedLagDays,
   isUsableRawCache,
   isImplausibleJump,
+  readContractBaseline,
+  resolveBaseline,
+  baselineFloorDate,
+  isFeedRegression,
   ATC_GROUPS,
 } from '../ingest/fetchers/sukl_mr.js';
+import { cachePath, writeCache } from '../ingest/lib/cache.js';
+
+const AGG_CACHE = 'sukl_mr_aggregated.json';
+const AGG_SUSPECT_CACHE = 'sukl_mr_aggregated.suspect.json';
+// Kontrakt, který v testu neexistuje → baseline se neřeší z reálného
+// data/indicators.json (jinak by na něm visely výsledky celé sady).
+const NO_CONTRACT = path.join(os.tmpdir(), 'hspa-nonexistent-indicators.json');
+
+/** Nastaví (nebo smaže) poslední důvěryhodný agregát v cache. */
+function setAggCache(obj) {
+  if (obj == null) {
+    for (const name of [AGG_CACHE, AGG_SUSPECT_CACHE]) {
+      try { fs.rmSync(cachePath(name)); } catch { /* nebyl tam */ }
+    }
+    return;
+  }
+  writeCache(AGG_CACHE, obj);
+}
+
+function readCacheJson(name) {
+  try { return JSON.parse(fs.readFileSync(cachePath(name), 'utf8')); }
+  catch { return null; }
+}
+
+/** Dočasný datový kontrakt s jedním indikátorem. */
+function writeContract({ value, fetched_at, reference_date }) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hspa-contract-'));
+  const file = path.join(dir, 'indicators.json');
+  fs.writeFileSync(file, JSON.stringify({
+    version: '1.0',
+    indicators: [{
+      id: 'vypadky_leciv_aktivni',
+      value,
+      source: { name: 'SÚKL', url: '', fetched_at, ...(reference_date ? { reference_date } : {}), origin: 'live' },
+    }],
+  }));
+  return file;
+}
 
 // --- parseMrCsv ---
 
@@ -194,10 +240,14 @@ test('fetchSuklMr: úspěšný flow vrací aggregated', async () => {
     async json() { return null; },
   });
 
+  setAggCache(null);
   const result = await fetchSuklMr({
     force: true,
     fetchImpl: fakeFetch,
     endpoint: 'https://example.test/mr.csv',
+    // Bez baseline (prázdná cache + neexistující kontrakt) se plauzibilitní
+    // brána neuplatní — tenhle test kontroluje jen průchod fixturou.
+    contractFile: NO_CONTRACT,
   });
 
   assert.ok(result.aggregated, 'aggregated should be present');
@@ -349,11 +399,13 @@ test('fetchSuklMr: agreguje proti PLATNOSTI dumpu, ne proti systémovému času 
     'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;30.09.2026',
     'ANO;0002;LP B;C09AA01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
   ]);
+  setAggCache(null);
   const result = await fetchSuklMr({
     force: true,
     fetchImpl: zipFetch(buf),
     endpoint: 'https://example.test/mr.zip',
     now: new Date('2026-09-06T09:20:00Z'),
+    contractFile: NO_CONTRACT,
   });
   assert.equal(result.aggregated.active_disruptions, 2);
 
@@ -364,4 +416,138 @@ test('fetchSuklMr: agreguje proti PLATNOSTI dumpu, ne proti systémovému času 
   assert.equal(agg.reference_date, '2026-09-06');
   assert.ok(agg.fetched_at, 'fetched_at musí být v agregátu — transform.js ho čte odsud');
   assert.equal(agg.rows_parsed, 2);
+});
+
+// --- #1132 / Codex review PR #1160: baseline mimo cache, izolace podezřelého
+// agregátu a regrese PLATNOSTI ---
+
+test('readContractBaseline: baseline se čte z datového kontraktu (přežije čistý checkout)', () => {
+  const file = writeContract({ value: 1404, fetched_at: '2026-09-06T09:31:33Z' });
+  assert.deepEqual(readContractBaseline(file), {
+    active_disruptions: 1404,
+    reference_date: null,
+    fetched_date: '2026-09-06',
+    origin: 'contract',
+  });
+  const withRef = writeContract({ value: 1404, fetched_at: '2026-09-07T00:05:00Z', reference_date: '2026-09-06' });
+  assert.equal(readContractBaseline(withRef).reference_date, '2026-09-06');
+  assert.equal(readContractBaseline(NO_CONTRACT), null, 'chybějící soubor → null');
+  assert.equal(readContractBaseline(file, 'neexistujici_indikator'), null);
+});
+
+test('resolveBaseline: cache vyhrává, podezřelá nebo chybějící cache padá na kontrakt', () => {
+  const contractFile = writeContract({ value: 1404, fetched_at: '2026-09-06T09:31:33Z' });
+  const cache = { active_disruptions: 1410, reference_date: '2026-09-05', generated_at: '2026-09-05T06:00:00Z' };
+
+  assert.deepEqual(resolveBaseline({ cache, contractFile }), {
+    active_disruptions: 1410,
+    reference_date: '2026-09-05',
+    fetched_date: '2026-09-05',
+    origin: 'cache',
+  });
+  assert.equal(resolveBaseline({ cache: null, contractFile }).origin, 'contract', 'bez cache → kontrakt');
+  assert.equal(resolveBaseline({ cache: { ...cache, suspect: true }, contractFile }).origin, 'contract',
+    'podezřelý agregát se jako baseline nepoužije');
+  assert.equal(resolveBaseline({ cache: null, contractFile: NO_CONTRACT }), null);
+});
+
+test('baselineFloorDate + isFeedRegression: starší dump než poslední důvěryhodný stav neprojde', () => {
+  const withRef = { active_disruptions: 1404, reference_date: '2026-09-06', fetched_date: '2026-09-06', origin: 'cache' };
+  assert.equal(baselineFloorDate(withRef), '2026-09-06');
+  assert.equal(isFeedRegression('2026-09-05', withRef), true, 'včerejší dump po přijatém dnešním');
+  assert.equal(isFeedRegression('2026-09-06', withRef), false, 'stejný den je idempotentní běh');
+  assert.equal(isFeedRegression('2026-09-07', withRef), false);
+
+  // Baseline zná jen datum stažení → den tolerance (dump s PLATNOSTÍ D se
+  // stahuje D i D+1), aby se poctivý běh neodmítl.
+  const onlyFetched = { active_disruptions: 1404, reference_date: null, fetched_date: '2026-09-07', origin: 'contract' };
+  assert.equal(baselineFloorDate(onlyFetched), '2026-09-06');
+  assert.equal(isFeedRegression('2026-09-06', onlyFetched), false);
+  assert.equal(isFeedRegression('2026-09-05', onlyFetched), true);
+  assert.equal(isFeedRegression('2026-09-06', null), false, 'bez baseline se nic neodmítá');
+});
+
+test('fetchSuklMr: nepravděpodobný skok se uloží stranou a nepřepíše důvěryhodný agregát (Codex P2)', async () => {
+  setAggCache(null);
+  // Poslední důvěryhodný stav: 1 404 k 5. 9. 2026.
+  setAggCache({
+    generated_at: '2026-09-05T06:00:00Z',
+    fetched_at: '2026-09-05T06:00:00Z',
+    reference_date: '2026-09-05',
+    active_disruptions: 1404,
+    total_unique_lp: 22364,
+  });
+  const buf = mrZip('06.09.2026', [
+    'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
+    'ANO;0002;LP B;C09AA01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
+  ]);
+  const opts = {
+    force: true,
+    fetchImpl: zipFetch(buf),
+    endpoint: 'https://example.test/mr.zip',
+    now: new Date('2026-09-06T09:20:00Z'),
+    contractFile: NO_CONTRACT,
+  };
+
+  const first = await fetchSuklMr(opts);
+  assert.equal(first.suspect, true);
+  assert.equal(first.aggregated, null, 'podezřelá hodnota se nepustí dál');
+  assert.equal(readCacheJson(AGG_CACHE).active_disruptions, 1404, 'důvěryhodný agregát zůstal nedotčený');
+  const parked = readCacheJson(AGG_SUSPECT_CACHE);
+  assert.equal(parked.suspect, true);
+  assert.equal(parked.active_disruptions, 2);
+  assert.equal(parked.baseline_active_disruptions, 1404);
+  assert.equal(parked.baseline_reference_date, '2026-09-05');
+  assert.equal(parked.feed_platnost, '2026-09-06');
+
+  // Druhý běh nad TÝMŽ dumpem: kdyby se podezřelá hodnota zapsala jako agregát,
+  // porovnala by se teď sama se sebou (delta 0) a prošla by.
+  const second = await fetchSuklMr(opts);
+  assert.equal(second.suspect, true, 'skok se nesmí sám vyžehlit');
+  assert.equal(readCacheJson(AGG_CACHE).active_disruptions, 1404);
+});
+
+test('fetchSuklMr: baseline funguje i bez cache — z datového kontraktu (Codex P1)', async () => {
+  setAggCache(null); // cron startuje z čistého checkoutu, ingest/cache je prázdná
+  const contractFile = writeContract({ value: 1404, fetched_at: '2026-09-05T06:00:00Z' });
+  const buf = mrZip('06.09.2026', [
+    'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
+  ]);
+  const result = await fetchSuklMr({
+    force: true,
+    fetchImpl: zipFetch(buf),
+    endpoint: 'https://example.test/mr.zip',
+    now: new Date('2026-09-06T09:20:00Z'),
+    contractFile,
+  });
+  assert.equal(result.suspect, true, 'baseline z kontraktu musí skok zachytit i s prázdnou cache');
+  assert.equal(result.aggregated, null);
+  assert.equal(readCacheJson(AGG_CACHE), null, 'bez důvěryhodného agregátu se nic nezapíše');
+  assert.equal(readCacheJson(AGG_SUSPECT_CACHE).baseline_origin, 'contract');
+});
+
+test('fetchSuklMr: dump starší než poslední důvěryhodný stav se odmítne (Codex P2)', async () => {
+  setAggCache(null);
+  setAggCache({
+    generated_at: '2026-09-06T09:31:33Z',
+    fetched_at: '2026-09-06T09:31:33Z',
+    reference_date: '2026-09-06',
+    active_disruptions: 1404,
+    total_unique_lp: 22364,
+  });
+  // PLATNOST o den zpět — branou stáří (limit 3 dny) by prošla.
+  const buf = mrZip('05.09.2026', [
+    'ANO;0001;LP A;N02BE01;preruseni;01.08.2026;01.08.2026;;Výrobní důvody;',
+  ]);
+  const result = await fetchSuklMr({
+    force: true,
+    fetchImpl: zipFetch(buf),
+    endpoint: 'https://example.test/mr.zip',
+    now: new Date('2026-09-06T09:20:00Z'),
+    contractFile: NO_CONTRACT,
+  });
+  assert.equal(result.aggregated, null);
+  assert.match(result.error, /starší než poslední důvěryhodný stav/);
+  assert.equal(readCacheJson(AGG_CACHE).active_disruptions, 1404, 'kontrakt ani cache se nevrátí o snapshot zpět');
+  assert.equal(readCacheJson(AGG_SUSPECT_CACHE), null, 'odmítnutý dump se ani neparkuje');
 });

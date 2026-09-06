@@ -31,6 +31,8 @@
 // fetcheru, nikoli SÚKL.
 
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { fetchWithRetry } from '../lib/http.js';
 import { unzipEntry } from './sukl.js';
@@ -39,7 +41,19 @@ import { parseCsv } from '../lib/csv.js';
 
 const RAW_CACHE = 'sukl_mr_raw.json';
 const AGG_CACHE = 'sukl_mr_aggregated.json';
+// Podezřelý agregát se NIKDY nezapisuje do AGG_CACHE — jinak by se při dalším
+// běhu porovnával sám se sebou (delta 0 → suspect zmizí) a transform by špatné
+// číslo pustil do kontraktu. Ukládá se stranou, k ruční kontrole.
+const AGG_SUSPECT_CACHE = 'sukl_mr_aggregated.suspect.json';
 const MR_ZIP_URL = 'https://opendata.sukl.cz/soubory/MR/mr.zip';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Poslední důvěryhodná hodnota, která přežije čistý checkout: cron
+// (.github/workflows/refresh.yml) startuje s prázdnou `ingest/cache/`
+// (gitignored), takže baseline pro drift check musí umět přijít
+// z commitnutého datového kontraktu.
+const CONTRACT_FILE = path.resolve(__dirname, '..', '..', 'data', 'indicators.json');
+const CONTRACT_INDICATOR_ID = 'vypadky_leciv_aktivni';
 
 // #1132 — PROČ SE FEED NESMÍ BRÁT „JAK PŘIJDE":
 // SÚKL generuje mr.zip každý den znovu (PLATNOST v mr_hlaseni_platnost.csv),
@@ -303,6 +317,81 @@ function readCacheRaw(name) {
 }
 
 /**
+ * Poslední důvěryhodná hodnota z COMMITNUTÉHO datového kontraktu.
+ * Cron běží z čistého checkoutu a `ingest/cache/` je gitignored, takže cache
+ * jako jediný zdroj baseline v produkci nikdy neexistuje — kontrakt ano.
+ *
+ * @param {string} [file] cesta k data/indicators.json (override pro testy)
+ * @param {string} [id]   id indikátoru
+ * @returns {{active_disruptions:number, reference_date:string|null, fetched_date:string|null, origin:'contract'}|null}
+ */
+export function readContractBaseline(file = CONTRACT_FILE, id = CONTRACT_INDICATOR_ID) {
+  let json;
+  try { json = JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch { return null; }
+  const ind = (json?.indicators ?? []).find(i => i?.id === id);
+  if (!ind || !Number.isFinite(ind.value)) return null;
+  const fetched = typeof ind.source?.fetched_at === 'string' ? ind.source.fetched_at.slice(0, 10) : null;
+  return {
+    active_disruptions: ind.value,
+    reference_date: isIsoDate(ind.source?.reference_date) ? ind.source.reference_date : null,
+    fetched_date: isIsoDate(fetched) ? fetched : null,
+    origin: 'contract',
+  };
+}
+
+/**
+ * Baseline pro kontrolu driftu a regrese PLATNOSTI. Pořadí zdrojů:
+ *   1. poslední DŮVĚRYHODNÝ agregát v cache (podezřelý se do AGG_CACHE nikdy
+ *      nezapíše, ale kdyby tam po starší verzi zůstal, přeskočí se),
+ *   2. commitnutý datový kontrakt (jediný zdroj, který přežije čistý checkout).
+ */
+export function resolveBaseline({ cache, contractFile } = {}) {
+  if (cache && !cache.suspect && Number.isFinite(cache.active_disruptions)) {
+    const generated = typeof cache.generated_at === 'string' ? cache.generated_at.slice(0, 10) : null;
+    return {
+      active_disruptions: cache.active_disruptions,
+      reference_date: isIsoDate(cache.reference_date) ? cache.reference_date : null,
+      fetched_date: isIsoDate(generated) ? generated : null,
+      origin: 'cache',
+    };
+  }
+  return readContractBaseline(contractFile);
+}
+
+/**
+ * Nejstarší PLATNOST, kterou ještě smíme přijmout. Když baseline zná svoje
+ * `reference_date` (= PLATNOST dumpu, ze kterého vznikla), je to přesně ono;
+ * u starších záznamů, kde je jen datum stažení, se přidává den tolerance —
+ * dump s PLATNOSTÍ dne D se běžně stahuje D i D+1.
+ */
+export function baselineFloorDate(baseline) {
+  if (!baseline) return null;
+  if (isIsoDate(baseline.reference_date)) return baseline.reference_date;
+  if (isIsoDate(baseline.fetched_date)) return shiftIsoDate(baseline.fetched_date, -1);
+  return null;
+}
+
+/**
+ * Je stažený dump STARŠÍ než ten, ze kterého vznikla poslední důvěryhodná
+ * hodnota? Sama kontrola stáří proti dnešku to nechytí: dump starý 1–3 dny
+ * projde i poté, co už byl přijat novější, a přepsal by kontrakt zpět.
+ */
+export function isFeedRegression(feedPlatnost, baseline) {
+  const floor = baselineFloorDate(baseline);
+  if (!floor || !isIsoDate(feedPlatnost)) return false;
+  return feedPlatnost < floor;
+}
+
+function isIsoDate(v) {
+  return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v);
+}
+
+function shiftIsoDate(iso, days) {
+  return new Date(Date.parse(`${iso}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
+}
+
+/**
  * Rekonstruuje historický trend aktivních přerušení z kumulativního feedu:
  * pro 31. 12. každého roku přehraje hlášení do toho dne a spočítá aktivní P.
  * (Feed je kumulativní od 2007, takže jde o věrnou rekonstrukci, ne odhad.)
@@ -334,18 +423,25 @@ export function yearEndTrend(rows, fromYear, toYear) {
 /**
  * Hlavní vstupní bod fetcheru.
  *
- * Kontrakt (#1132): agregát se do cache zapíše jen tehdy, když je dump
- * prokazatelně čerstvý. Když je starý/nedostupný, funkce vrátí
- * `aggregated: null` a NEPŘEPÍŠE `sukl_mr_aggregated.json` — v datovém
- * kontraktu tak zůstane poslední ověřená hodnota (transform ji vezme jako
- * seed) místo tiše podstřeleného čísla.
+ * Kontrakt (#1132): `sukl_mr_aggregated.json` se přepíše jen tehdy, když je
+ * dump prokazatelně čerstvý (PLATNOST není starší než MAX_FEED_LAG_DAYS ani
+ * starší než poslední důvěryhodný stav) A výsledek je plauzibilní proti
+ * poslední důvěryhodné hodnotě. Jinak funkce vrátí `aggregated: null`; starý
+ * agregát zůstane nedotčený a podezřelý výsledek se odloží do
+ * `sukl_mr_aggregated.suspect.json` k ruční kontrole. V datovém kontraktu tak
+ * zůstane poslední ověřená hodnota místo tiše podstřeleného čísla.
  *
- * @param {{ force?: boolean, fetchImpl?: typeof fetch, endpoint?: string, now?: Date }} [opts]
+ * @param {{ force?: boolean, fetchImpl?: typeof fetch, endpoint?: string, now?: Date,
+ *   contractFile?: string }} [opts]
  */
 export async function fetchSuklMr(opts = {}) {
-  const { force = false, fetchImpl, endpoint, now = new Date() } = opts;
+  const { force = false, fetchImpl, endpoint, now = new Date(), contractFile } = opts;
   const url = endpoint ?? MR_ZIP_URL;
   const isZip = url.endsWith('.zip');
+
+  // Poslední důvěryhodná hodnota: cache, a když chybí (cron startuje z čistého
+  // checkoutu a ingest/cache je gitignored), commitnutý datový kontrakt.
+  const baseline = resolveBaseline({ cache: readCacheRaw(AGG_CACHE), contractFile });
 
   let cached = force ? null : readCacheIfFresh(RAW_CACHE);
   if (cached && !isUsableRawCache(cached, { url, now })) {
@@ -399,6 +495,16 @@ export async function fetchSuklMr(opts = {}) {
     return { fromCache, aggregated: null, error: msg };
   }
 
+  // Brána regrese: dump smí být i o den dva starší než dnešek, ale nikdy ne
+  // starší než ten, ze kterého vznikla poslední důvěryhodná hodnota. Jinak by
+  // stačilo, aby proxy jednou vrátila včerejší kopii, a kontrakt by se vrátil
+  // o snapshot zpátky (#1132, Codex P2).
+  if (isFeedRegression(feedMeta.feed_platnost, baseline)) {
+    const msg = `feed PLATNOST=${feedMeta.feed_platnost} je starší než poslední důvěryhodný stav (${baselineFloorDate(baseline)}, zdroj ${baseline.origin}) — agregát se nemění`;
+    console.warn(`  [sukl-mr] ${msg}`);
+    return { fromCache, aggregated: null, error: msg };
+  }
+
   if (!fromCache) {
     writeCache(RAW_CACHE, { url, fetched_at: fetchedAt, ...feedMeta, csv: raw });
   }
@@ -414,21 +520,7 @@ export async function fetchSuklMr(opts = {}) {
   const refYear = referenceDate.getUTCFullYear();
   aggregated.trend = yearEndTrend(rows, refYear - 7, refYear - 1);
 
-  // Plauzibilitní brána proti minulému agregátu — skok, který za uplynulé dny
-  // vzniknout nemohl, se označí `suspect` a transform ho ignoruje.
-  const previous = readCacheRaw(AGG_CACHE);
-  const prevRef = previous?.reference_date ?? (previous?.generated_at ?? '').slice(0, 10);
-  const daysSincePrev = prevRef ? feedLagDays(prevRef, referenceDate) : null;
-  const suspect = isImplausibleJump(
-    aggregated.active_disruptions,
-    previous?.active_disruptions,
-    daysSincePrev ?? 0,
-  );
-  if (suspect) {
-    console.warn(`  [sukl-mr] POZOR: ${previous.active_disruptions} → ${aggregated.active_disruptions} za ${daysSincePrev ?? '?'} dní překračuje očekávaný drift (${driftLimit(daysSincePrev ?? 0)}); agregát označen suspect`);
-  }
-
-  writeCache(AGG_CACHE, {
+  const provenance = {
     generated_at: new Date().toISOString(),
     // fetched_at MUSÍ být v agregátu — transform.js ho čte právě odsud a bez
     // něj razítkoval do kontraktu čas vlastního běhu (#1132).
@@ -438,14 +530,41 @@ export async function fetchSuklMr(opts = {}) {
     reference_date: toIsoDate(referenceDate),
     rows_parsed: rows.length,
     source: 'https://opendata.sukl.cz/?q=katalog/hlaseni-o-uvedeni-preruseni-ukonceni-obnoveni-dodavek-leciveho-pripravku-na-trh',
-    ...(suspect
-      ? { suspect: true, previous_active_disruptions: previous.active_disruptions }
-      : {}),
-    ...aggregated,
-  });
+  };
+
+  // Plauzibilitní brána proti POSLEDNÍ DŮVĚRYHODNÉ hodnotě (cache nebo kontrakt),
+  // ne proti poslednímu zápisu — jinak by se podezřelý dump při dalším běhu
+  // porovnal sám se sebou (delta 0) a prošel (#1132, Codex P2).
+  const baselineRef = baselineFloorDate(baseline);
+  const daysSinceBaseline = baselineRef ? feedLagDays(baselineRef, referenceDate) : null;
+  const suspect = isImplausibleJump(
+    aggregated.active_disruptions,
+    baseline?.active_disruptions,
+    daysSinceBaseline ?? 0,
+  );
+
+  if (suspect) {
+    const msg = `${baseline.active_disruptions} (${baseline.origin}, ${baselineRef}) → ${aggregated.active_disruptions} za ${daysSinceBaseline ?? '?'} dní překračuje očekávaný drift (${driftLimit(daysSinceBaseline ?? 0)})`;
+    console.warn(`  [sukl-mr] POZOR: ${msg}`);
+    console.warn(`  [sukl-mr] podezřelý agregát uložen do ${AGG_SUSPECT_CACHE}; ${AGG_CACHE} ani kontrakt se nemění`);
+    // ZÁMĚRNĚ mimo AGG_CACHE: kdyby se podezřelá hodnota zapsala jako platný
+    // agregát, byla by při dalším běhu sama baseline a chyba by se „vyžehlila".
+    writeCache(AGG_SUSPECT_CACHE, {
+      ...provenance,
+      suspect: true,
+      baseline_active_disruptions: baseline.active_disruptions,
+      baseline_reference_date: baselineRef,
+      baseline_origin: baseline.origin,
+      drift_limit: driftLimit(daysSinceBaseline ?? 0),
+      ...aggregated,
+    });
+    return { fromCache, aggregated: null, suspect: true, error: msg };
+  }
+
+  writeCache(AGG_CACHE, { ...provenance, ...aggregated });
 
   console.log(`  [sukl-mr] ${aggregated.active_disruptions} aktivních výpadků z ${aggregated.total_unique_lp} LP (${aggregated.active_share_pct} %) k ${toIsoDate(referenceDate)}`);
-  return { fromCache, aggregated, suspect };
+  return { fromCache, aggregated, suspect: false };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
