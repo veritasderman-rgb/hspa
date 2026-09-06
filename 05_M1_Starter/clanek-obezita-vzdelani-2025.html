@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obezita v Česku má vzdělání. Vysokoškoláci jsou na evropské normě, dvě třetiny země ne · HSPA Monitor</title>
+<meta name="description" content="Nová vlna Eurostatu za rok 2025 dává české obezitě 21,1 procenta proti 16,3 v EU. Odstup ale není rozprostřený: čeští vysokoškoláci mají 13,9 procenta proti 12,6 u evropských vysokoškoláků, zatímco střední vzdělanostní skupina — 65 procent českých dospělých — má 23,2 proti 17,7. Stejný tvar potvrzuje i nezávislé šetření EHIS 2019.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Obezita v Česku má vzdělání. Vysokoškoláci jsou na evropské normě, dvě třetiny země ne">
+<meta property="og:description" content="Eurostat vydal vlnu 2025: obezita dospělých v ČR 21,1 % proti 16,3 % v EU. Rozpad podle vzdělání ukazuje, že odstup od Evropy vzniká ve střední vzdělanostní skupině, ne u vysokoškoláků — a že vzdělanostní struktura země za ním nestojí.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-07">
+<meta property="article:section" content="Sociální determinanty">
+<!--
+  audit:
+    last_reviewed: 2026-09-06
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-06
+    creation_phase: discovery+article-write
+    primary_sources_count: 4
+    visual_elements_count: 6
+    notes: "Vytvořeno 6. 9. 2026 v rámci ARTICLE-WRITE. Datový rámec:
+      discovery/data-frame-obezita-vzdelani-2025.md, routing: discovery/routing-2026-09-06.md,
+      discovery: discovery/discovery-2026-09-06.md.
+      SPOUŠTĚČ: Eurostat vydal 4. 9. 2026 statistický článek 'Obesity rate in the EU: 16.3% in 2025'
+      nad datasety ilc_hch10 a sdg_02_10 (vlna EU-SILC 2025).
+      CENTRÁLNÍ KPI: obezita BMI >= 30 u dospělých 18+, ČR 21,1 % proti EU27 16,3 % (2025).
+      ZDROJ ČÍSEL — redakce NEPŘEBÍRÁ hodnoty z tiskového článku Eurostatu, ale STÁHLA JE
+      6. 9. 2026 PŘÍMO Z DISSEMINAČNÍHO API EUROSTATU (ilc_hch10, hlth_ehis_bm1e, edat_lfse_03),
+      včetně status flagů a timestampů aktualizace. Žádné číslo v textu nepochází z paměti modelu
+      ani ze sekundárního zdroje.
+      METODICKÉ PASTI OŠETŘENÉ V TEXTU:
+      (1) FLAG 'u' = LOW RELIABILITY. Eurostat jím značí VŠECHNY české buňky vlny 2025 plošně —
+      národní součet, všechny věkové skupiny i všechny vzdělanostní skupiny; totéž u vlny 2017,
+      vlna 2022 flag nemá. Článek to uvádí v caveat calloutu i v poznámce ke každé figuře a
+      titulkové číslo bez toho příznaku nikde nestojí.
+      (2) DVĚ ŠETŘENÍ, NE JEDNO. Kvůli flagu je jádro článku ověřeno proti nezávislému EHIS 2019
+      (hlth_ehis_bm1e) se STEJNOU věkovou bází 18+ (age=Y_GE18, ne TOTAL — TOTAL je 15+ a dává
+      pro ČR 19,3 místo 19,8, což by srovnání posunulo) a bez jediného status flagu. Obě šetření
+      dávají stejný tvar gradientu; to je jediné, na čem text staví závěr.
+      (3) SKUPINA 'ZŠ A MÉNĚ' JE NEKONZISTENTNÍ mezi šetřeními (+2,5 p. b. v EHIS 2019 proti
+      +7,5 p. b. v EU-SILC 2025), je nejmenší (8,5 % dospělých) a v EU-SILC flagovaná — článek
+      na ní VĚDOMĚ NESTAVÍ žádný závěr a rozpor výslovně pojmenovává.
+      (4) VLNA 2022 je v české řadě odlehlá dolů (17,8 proti 20,5 v 2017 a 21,1 v 2025);
+      text ji označuje jako odlehlou a nepoužívá dvojici 2022 -> 2025 jako 'nárůst o 3,3 bodu'.
+      (5) STANDARDIZACE JE DOPOČET REDAKCE s nesouhlasnou věkovou bází (míry 18+, váhy 18-64)
+      — v textu i ve figcaption označena jako ilustrativní rozklad, ne oficiální standardizovaná
+      hodnota; kontrolní přepočet (ČR míry × ČR váhy = 21,0 proti vykázaným 21,1) je uveden.
+      (6) ASOCIACE, NE KAUZALITA. Text nikde netvrdí, že vzdělání obezitu způsobuje.
+      DOPOČTY REDAKCE (v textu i ve figcaption označené jako dopočet): rozdíly ČR minus EU27 po
+      skupinách (+7,5 / +5,5 / +1,3 p. b. v 2025; +2,5 / +4,3 / +1,8 v EHIS 2019); vzdělanostní
+      rozpětí ZŠ minus VŠ (ČR 12,1 proti EU27 5,9 p. b., poměr 2,05×); pořadí ČR v rozpětí
+      (4. z 33 zemí datasetu, 3. mezi členy EU); přímá standardizace (ČR míry × EU váhy = 20,6 %,
+      efekt struktury 0,45 p. b. z 4,8 p. b. odstupu; kontrola na EHIS 2019 s váhami 2019 dává
+      0,37 p. b. z 3,3 p. b.).
+      NEOVĚŘENO — VĚDOMĚ VYNECHÁNO: vyhláška o spotřebním koši ve školních jídelnách (zmiňuje ji
+      publikovaný clanek-obezita-jidelny-reforma, ale zakonyprolidi.cz dnes vrací HTTP 403 a
+      e-sbirka.gov.cz obsah nevydala — norma proto v tomto článku citovaná NENÍ a odkaz vede jen
+      na související článek); účinnost konkrétních opatření (cukrová daň, Nutri-Score) — téma
+      publikovaného clanek-bmi-obezita, tady by šlo o nedoložený přesah; příčiny české odchylky
+      ve střední vzdělanostní skupině (data ukazují rozdíl, ne jeho mechanismus)."
+-->
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Sociální determinanty</span>
+        <span class="article-tag article-tag-muted">Obezita · Vzdělání · Eurostat · EU-SILC · EHIS</span>
+      </div>
+      <h1 class="article-title">Obezita v Česku má vzdělání. Vysokoškoláci jsou na evropské normě, dvě třetiny země ne</h1>
+      <p class="article-deck">
+        Eurostat zveřejnil vlnu 2025: obézních je <strong>21,1 % dospělých Čechů</strong> proti <strong>16,3 % v EU</strong>. To číslo se dá přečíst jako národní vlastnost — a bylo by to špatně. Rozpad podle vzdělání ukazuje, že čeští vysokoškoláci jsou prakticky na evropské normě (13,9 proti 12,6 %), zatímco střední vzdělanostní skupina, tedy <strong>65 % českých dospělých</strong>, má 23,2 proti 17,7 %. Stejný tvar dává i nezávislé šetření EHIS. A vzdělanostní struktura země za tím rozdílem nestojí.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">7. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Čtvrtého září zveřejnil Eurostat statistický článek s titulkem, který se dobře cituje: obezita v Evropské unii dosáhla v roce 2025 hodnoty 16,3 procenta. Česká hodnota v něm nefiguruje, ale v datové vrstvě pod ním je — a je vyšší. Takové číslo obvykle skončí ve zprávách jako věta o tom, jací jsme. Užitečnější je ale otevřít dataset a zeptat se, <em>kde v populaci</em> ten rozdíl proti Evropě vlastně sedí. Odpověď je nečekaně ostrá: skoro celý je v jedné vzdělanostní vrstvě, a shodou okolností je to ta, ve které žijí dvě třetiny dospělého Česka.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avObHeroH">
+        <figcaption class="av-figure-h" id="avObHeroH">Obezita (BMI ≥ 30) u dospělých 18+, Česko a EU27, rok 2025</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="21.1" data-decimals="1" data-suffix=" %">21,1 %</span>
+            <span class="av-counter-label">obézních dospělých v Česku</span>
+            <span class="av-counter-foot">EU27 = 16,3 %; sedmá nejvyšší hodnota mezi členskými státy</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="13.9" data-decimals="1" data-suffix=" %">13,9 %</span>
+            <span class="av-counter-label">čeští vysokoškoláci</span>
+            <span class="av-counter-foot">evropští vysokoškoláci 12,6 % — rozdíl 1,3 bodu</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="23.2" data-decimals="1" data-suffix=" %">23,2 %</span>
+            <span class="av-counter-label">čeští středoškoláci a vyučení</span>
+            <span class="av-counter-foot">evropský protějšek 17,7 % — rozdíl 5,5 bodu</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="65.4" data-decimals="1" data-suffix=" %">65,4 %</span>
+            <span class="av-counter-label">tolik je střední vzdělanostní skupina z dospělých 18–64 v ČR</span>
+            <span class="av-counter-foot">v EU27 je stejná skupina jen 46,3 % — proto na ní v Česku záleží víc</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, dataset <code>ilc_hch10</code> (modul zdraví v šetření EU-SILC), filtr <code>bmi=BMI_GE30, age=Y_GE18, sex=T</code>, vlna 2025; podíly vzdělanostních skupin z datasetu <code>edat_lfse_03</code>, <code>age=Y18-64</code>, rok 2025. Obojí staženo přímo z disseminačního API Eurostatu 6. 9. 2026. <strong>Pozor:</strong> všechny české buňky vlny 2025 nesou příznak kvality <code>u</code> = nízká spolehlivost — viz metodická výhrada níž.</p>
+      </figure>
+
+      <h3>Nejdřív příznak, teprve pak číslo</h3>
+
+      <p>
+        Poctivé čtení tohohle datasetu musí začít u něčeho nepříjemného. Eurostat u českých hodnot vlny 2025 uvádí příznak <code>u</code>, tedy <em>low reliability</em> — nízká spolehlivost. A neuvádí ho jen u drobných podskupin, kde by to bylo čekatelné. Nese ho <strong>každá česká buňka téhle vlny</strong>: národní součet, všechny věkové kategorie i všechny vzdělanostní skupiny. Stejný příznak má i česká vlna 2017. Vlna 2022 ho nemá. Eurostat sám ve své metodické dokumentaci k tomuto příznaku píše, že se má používat s krajní opatrností.
+      </p>
+
+      <p>
+        Kdyby tenhle text stál jen na EU-SILC, skončil by tady — jedno flagované číslo neunese titulek. Proto stojí na dvou nezávislých šetřeních. Druhým je <strong>European Health Interview Survey (EHIS)</strong>, samostatné evropské zdravotní šetření s vlnami 2014 a 2019, které Eurostat publikuje v datasetu <code>hlth_ehis_bm1e</code>. Při stejné věkové bázi 18 let a víc nenese ani jednu poznámku o spolehlivosti. A jak uvidíte za chvíli, říká o vzdělanostním rozdílu totéž.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co je EU-SILC, co je EHIS a proč to není totéž.</strong> Obě šetření zjišťují výšku a váhu <em>dotazem</em>, ne měřením — respondent se sám váží a sám hlásí. Sebehodnocené BMI bývá systematicky nižší než změřené, u obou šetření stejným směrem, takže srovnání mezi zeměmi to zkresluje méně než absolutní úroveň. EU-SILC (dataset <code>ilc_hch10</code>) přidává BMI jako modul zhruba jednou za tři roky — vlny 2017, 2022, 2025. EHIS (<code>hlth_ehis_bm1e</code>) je samostatné zdravotní šetření s vlnami 2014 a 2019. Jsou to <strong>jiné vzorky, jiné dotazníky a jiné roky</strong>; jejich hodnoty se proto nesčítají do jedné řady a v tomto článku se ani jednou nesečtou. Slouží tu k něčemu jinému a legitimnějšímu: k ověření, jestli obě nezávisle vidí stejný <em>tvar</em> rozdílu mezi vzdělanostními skupinami.
+      </div>
+
+      <p>
+        A ještě jedna past, kterou má smysl vyřknout dřív, než na ni někdo narazí sám. Česká řada v EU-SILC vypadá takhle: <strong>20,5 %</strong> (2017), <strong>17,8 %</strong> (2022), <strong>21,1 %</strong> (2025). Z posledních dvou bodů se dá udělat titulek o skoku o 3,3 bodu za tři roky. Ten titulek by byl nepoctivý: prostřední hodnota je v české řadě odlehlá dolů u <em>všech</em> skupin naráz a proti roku 2017 je dnešní hodnota vyšší jen o 0,6 bodu. Tenhle článek proto o „nárůstu“ nemluví. Mluví o rozdílu mezi skupinami uvnitř téže vlny — a ten je odolnější, protože všechny skupiny prošly stejným šetřením ve stejném roce.
+      </p>
+
+      <h3>Kde ten odstup od Evropy vlastně sedí</h3>
+
+      <p>
+        Česko má proti EU27 o 4,8 bodu vyšší podíl obézních dospělých. Kdyby ten rozdíl byl rovnoměrný, našli bychom ho ve všech vzdělanostních skupinách zhruba stejně velký. Není.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avObBarH">
+        <figcaption class="av-figure-h" id="avObBarH">Obezita podle nejvyššího dosaženého vzdělání, dospělí 18+, rok 2025 (%)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="30" data-unit=" %">
+          <li class="av-bar-row av-bar-row-now" data-value="26.0" data-label="ČR — základní a méně" data-note="rozdíl proti EU +7,5 bodu"></li>
+          <li class="av-bar-row av-bar-row-now" data-value="23.2" data-label="ČR — střední a vyučen" data-note="rozdíl proti EU +5,5 bodu"></li>
+          <li class="av-bar-row" data-value="18.5" data-label="EU27 — základní a méně" data-note="referenční hodnota"></li>
+          <li class="av-bar-row" data-value="17.7" data-label="EU27 — střední a vyučen" data-note="referenční hodnota"></li>
+          <li class="av-bar-row av-bar-row-now" data-value="13.9" data-label="ČR — vysokoškolské" data-note="rozdíl proti EU jen +1,3 bodu"></li>
+          <li class="av-bar-row" data-value="12.6" data-label="EU27 — vysokoškolské" data-note="referenční hodnota"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>ilc_hch10</code>, <code>bmi=BMI_GE30, age=Y_GE18, sex=T</code>, vlna 2025, staženo z API 6. 9. 2026. Rozdíly v poznámkách u řádků jsou dopočet redakce z hodnot v tomtéž grafu. Všechny české hodnoty nesou příznak <code>u</code> (nízká spolehlivost).</p>
+      </figure>
+
+      <p>
+        Čeští vysokoškoláci jsou v evropském srovnání <strong>obyčejní</strong>. Jejich 13,9 procenta je 1,3 bodu nad evropským vysokoškolským průměrem — v šetření, které samo sebe označuje za nespolehlivé, je to rozdíl na hranici čitelnosti. Kdyby celé Česko vypadalo jako jeho vysokoškolská část, nebylo by v tabulce obezity vidět.
+      </p>
+
+      <p>
+        Zajímavé to začíná být o patro níž. Skupina se středním vzděláním a výučním listem má 23,2 procenta proti 17,7 v Evropě, tedy o 5,5 bodu víc. Vzdálenost mezi českým vysokoškolákem a českým středoškolákem je <strong>9,3 bodu</strong>; mezi evropským vysokoškolákem a evropským středoškolákem jen 5,1 bodu. Celé vzdělanostní rozpětí — od základního vzdělání po vysokoškolské — je v Česku <strong>12,1 bodu</strong> proti 5,9 v EU27. Dvojnásobek. Ve srovnání všech 33 zemí, které dataset pokrývá, má Česko čtvrté nejširší rozpětí (za Maltou 15,1, Slovenskem 14,0 a Tureckem 13,0) a mezi členskými státy Unie třetí.
+      </p>
+
+      <p>
+        Skupina s nejnižším vzděláním je na tom podle téhle vlny nejhůř — 26,0 procenta. Na tomhle údaji ale tenhle článek vědomě nestaví, a je fér říct proč: je to nejmenší skupina české populace (8,5 procenta dospělých), nese příznak nízké spolehlivosti a druhé šetření pro ni dává výrazně jiný obrázek. K tomu se dostaneme hned.
+      </p>
+
+      <h3>Druhé šetření, jiný rok, stejný tvar</h3>
+
+      <p>
+        Kdyby vzdělanostní rozdíl existoval jen v EU-SILC 2025, byl by to pravděpodobně artefakt jedné vlny. Není. EHIS ho vidí v roce 2019 i v roce 2014.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avObTblH">
+        <figcaption class="av-figure-h" id="avObTblH">Odstup Česka od EU27 podle vzdělání ve třech vlnách dvou nezávislých šetření (obezita BMI ≥ 30, dospělí 18+, v procentních bodech)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Vzdělanostní skupina</th>
+                <th scope="col" class="av-num">EHIS 2014</th>
+                <th scope="col" class="av-num">EHIS 2019</th>
+                <th scope="col" class="av-num">EU-SILC 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Vysokoškolské (ISCED 5–8)</td><td class="av-num">+1,8</td><td class="av-num">+1,8</td><td class="av-num">+1,3</td></tr>
+              <tr><td>Střední a vyučen (ISCED 3–4)</td><td class="av-num"><strong>+5,1</strong></td><td class="av-num"><strong>+4,3</strong></td><td class="av-num"><strong>+5,5</strong></td></tr>
+              <tr><td>Základní a méně (ISCED 0–2)</td><td class="av-num">+3,2</td><td class="av-num">+2,5</td><td class="av-num">+7,5</td></tr>
+              <tr><td>Celá dospělá populace</td><td class="av-num">+3,9</td><td class="av-num">+3,3</td><td class="av-num">+4,8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>hlth_ehis_bm1e</code> (EHIS, vlny 2014 a 2019) a <code>ilc_hch10</code> (EU-SILC, vlna 2025), obojí <code>bmi=BMI_GE30, age=Y_GE18, sex=T</code>, staženo z API 6. 9. 2026. Hodnoty v tabulce jsou <strong>dopočet redakce</strong>: česká hodnota minus hodnota EU27 v téže vlně a téže skupině. Kladné číslo = Česko nad evropským průměrem. Buňky EHIS nenesou žádný příznak kvality, buňky EU-SILC 2025 pro ČR nesou příznak <code>u</code>. Šetření se navzájem nenahrazují a jejich hodnoty se nesčítají do jedné řady.</p>
+      </figure>
+
+      <p>
+        Tři vlny, dvě šetření, jedenáct let. Řádek s vysokoškolským vzděláním se drží mezi 1,3 a 1,8 bodu. Řádek se středním vzděláním mezi 4,3 a 5,5. To pořadí se ani jednou neobrátí. Pro doplnění: samotná česká vysokoškolská hodnota je napříč pěti měřeními pozoruhodně stabilní — 12,5 (EHIS 2014), 12,4 (EU-SILC 2017), 13,2 (EHIS 2019), 12,2 (EU-SILC 2022) a 13,9 procenta (EU-SILC 2025). Ať už měří kdokoli a jakkoli, česká vysokoškolská populace vychází kolem třinácti procent.
+      </p>
+
+      <p>
+        Řádek se základním vzděláním se naproti tomu chová divoce: dva až tři body nad Evropou v EHIS, sedm a půl v EU-SILC 2025. To je přesně ten rozpor, kvůli kterému o téhle skupině článek nic netvrdí. Vysvětlení je nejspíš prozaické — v Česku má nejvýš základní vzdělání jen 8,5 procenta dospělých proti 19,5 procenta v EU, takže v každém výběrovém šetření na ni připadá málo respondentů a odhad skáče. Není to detail bez důsledků: znamená to, že o zdraví nejhůř vzdělané české menšiny toho z evropských šetření spolehlivě nevíme skoro nic.
+      </p>
+
+      <h3>Není to tím, že bychom byli hůř vzdělaná země</h3>
+
+      <p>
+        Nabízí se pohodlné vysvětlení: obezita roste s klesajícím vzděláním, Česko má prostě jinou vzdělanostní strukturu, a tím to hasne. Ta úvaha se dá spočítat — a nevychází. Postup je standardní přímá standardizace: vezmou se české míry obezity po skupinách a přepočtou se váhami, jaké má vzdělanostní struktura Evropské unie.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="0.45" data-decimals="2" data-suffix=" p. b.">0,45 p. b.</span>
+          <span class="av-counter-label">tolik z celkového odstupu 4,8 bodu vysvětlí vzdělanostní struktura — dopočet redakce</span>
+          <span class="av-counter-foot">zbylých zhruba 4,4 bodu je v tom, že české skupiny mají vyšší míru než jejich evropské protějšky</span>
+        </div>
+      </aside>
+
+      <p>
+        S evropskou vzdělanostní strukturou by české obezitě vyšlo <strong>20,6 procenta</strong> místo 21,1. Rozdíl je necelé půl bodu z celkových 4,8. Kontrolní přepočet sedí: české míry s českými váhami dají 21,0 procenta proti vykázaným 21,1, tedy zaokrouhlovací odchylku. Stejný výpočet nad EHIS 2019 a váhami roku 2019 dává efekt struktury 0,37 bodu ze 3,3 — jinými slovy totéž.
+      </p>
+
+      <p>
+        Směr toho výsledku stojí za zdůraznění, protože je proti intuici. Česko má proti Evropě <strong>méně</strong> lidí s nejnižším vzděláním (8,5 proti 19,5 procenta) a jeho vzdělanostní struktura by ho tedy měla v tabulce obezity spíš zvýhodňovat. Neděje se to. Odstup od Evropy nevzniká tím, jak je populace poskládaná — vzniká uvnitř skupin. A protože ta prostřední skupina je v Česku 65,4 procenta dospělých ve věku 18–64 proti 46,3 procenta v EU, národní průměr táhne prakticky ona sama.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Jak číst tenhle dopočet.</strong> Míry obezity jsou za populaci 18 let a víc, váhy vzdělanostních skupin za populaci 18–64 let — Eurostat je v této podobě jiné bázi nenabízí. Věkové báze se tedy plně nepřekrývají a výsledek je <strong>ilustrativní rozklad, ne oficiální standardizovaná hodnota</strong>. Že se kontrolní přepočet (21,0 proti vykázaným 21,1) trefil na desetinu, naznačuje, že zkreslení z nesouhlasné báze je malé; nepřebíjí to ale povahu odhadu. A ještě podstatnější výhrada: tohle je <strong>asociace, ne příčina</strong>. Data ukazují, že se vzdělanostní skupiny liší. Neříkají, že vzdělání obezitu způsobuje — mezi obojím stojí příjem, typ práce, dostupnost potravin, čas, prostředí obce i to, že vzdělání samo souvisí se zdravím rodičů.
+      </div>
+
+      <h3>U žen je to rozpětí skoro patnáct bodů</h3>
+
+      <p>
+        Rozdělení podle pohlaví ukazuje, že „česká obezita“ není jeden jev, ale nejmíň dva. Mezi českými muži je obézních 22,7 procenta, mezi ženami 19,8. Národní čísla by tedy říkala, že problém je hlavně mužský. Rozpad podle vzdělání to obrátí naruby.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avObSexH">
+        <figcaption class="av-figure-h" id="avObSexH">Obezita podle vzdělání a pohlaví, dospělí 18+, rok 2025 (%)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Skupina</th>
+                <th scope="col" class="av-num">ČR ženy</th>
+                <th scope="col" class="av-num">EU27 ženy</th>
+                <th scope="col" class="av-num">ČR muži</th>
+                <th scope="col" class="av-num">EU27 muži</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Základní a méně</td><td class="av-num">26,3</td><td class="av-num">18,8</td><td class="av-num">25,2</td><td class="av-num">18,2</td></tr>
+              <tr><td>Střední a vyučen</td><td class="av-num">22,0</td><td class="av-num">16,4</td><td class="av-num">24,6</td><td class="av-num">19,0</td></tr>
+              <tr><td>Vysokoškolské</td><td class="av-num"><strong>11,4</strong></td><td class="av-num">11,0</td><td class="av-num">17,0</td><td class="av-num">14,4</td></tr>
+              <tr><td>Rozpětí (základní − vysokoškolské)</td><td class="av-num"><strong>14,9</strong></td><td class="av-num">7,8</td><td class="av-num">8,2</td><td class="av-num">3,8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat <code>ilc_hch10</code>, <code>bmi=BMI_GE30, age=Y_GE18</code>, vlna 2025, staženo z API 6. 9. 2026; řádek „rozpětí“ je dopočet redakce z hodnot v téže tabulce. Všechny české hodnoty nesou příznak <code>u</code> (nízká spolehlivost); u hodnot za jednotlivé kombinace pohlaví a vzdělání je proto namístě větší opatrnost než u národních souhrnů.</p>
+      </figure>
+
+      <p>
+        Česká vysokoškolačka má obezitu <strong>11,4 procenta</strong> — o čtyři desetiny bodu nad evropskou vysokoškolačkou, což je rozdíl bez obsahu. Zároveň je to nejnižší hodnota v celé tabulce, u obou pohlaví a všech skupin. Česká žena se základním vzděláním má 26,3 procenta. Mezi těmi dvěma je <strong>14,9 bodu</strong>, zatímco u evropských žen 7,8 a u českých mužů 8,2 bodu. Vzdělanostní nůžky jsou tedy v Česku podstatně širší u žen než u mužů — a české ženy s vysokoškolským vzděláním jsou skupina, kterou by evropské srovnání obezity vůbec nezaznamenalo.
+      </p>
+
+      <p>
+        Věkový rozpad dokresluje, kde se hmotnost hromadí: 7,8 procenta u lidí 16–24 let, 14,2 mezi 25 a 34 lety, 19,3 mezi 35 a 49, 24,9 mezi 50 a 64 a nejvíc, 26,9 procenta, ve věku 65–74 let. Evropský průběh má stejný tvar, jen posunutý níž (6,0 · 12,4 · 15,9 · 19,6 · 20,4). Odstup Česka od Evropy se s věkem rozevírá — z 1,8 bodu u nejmladších na 6,5 bodu u kategorie 65–74.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        Z tohohle rozdělení plyne jedna nepříjemně praktická věc. Většina nástrojů, kterými se u nás obezita „řeší“ — osvětové kampaně, aplikace na počítání kalorií, doporučení praktického lékaře na konci preventivní prohlídky, mediální obsah o výživě — má společnou vlastnost: nejlíp funguje na lidech, kteří informace aktivně vyhledávají a mají kapacitu je uplatnit. To je přesně ta skupina, která v datech <strong>problém nemá</strong>. Čeští vysokoškoláci jsou už dnes na evropské úrovni. Intervence mířená na ně nemá kam zlepšovat a v národním průměru se neprojeví, protože je to čtvrtina populace.
+      </p>
+
+      <p>
+        Skupina, ve které národní odchylka od Evropy skutečně leží, je dvoutřetinová většina se středním vzděláním a výučním listem. Ta se s prevencí nepotkává v aplikaci — potkává se s ní ve školní jídelně učiliště, v závodní kanceláři, v nabídce obchodu v okresním městě, v ceně potravin a v tom, kolik hodin denně stráví prací vestoje nebo vsedě. To nejsou zdravotnická opatření v úzkém smyslu a zdravotnictví je samo nezařídí. Ale je to místo, kam by měly mířit, pokud se má národní číslo hnout.
+      </p>
+
+      <p>
+        A pak je tu druhé zjištění, méně efektní, ale pro veřejnou statistiku podstatnější. O skupině s nejnižším vzděláním — té, kde bývá zdravotní zátěž nejtěžší — se z evropských šetření nedozvíme spolehlivě nic: dvě šetření dávají odhady vzdálené pět bodů a české buňky nesou příznak nízké spolehlivosti. Kdyby si někdo v Česku přál vědět, jak jsou na tom lidé na okraji, výběrové šetření o pár tisících respondentů to neunese. Musel by se změřit větší vzorek, nebo se rizikové faktory sledovat z rutinních dat péče. Zatím se neděje ani jedno — a analytická kapacita, kterou by to vyžadovalo, je přesně to, co má Česko v tabulce výdajů na prevenci dlouhodobě podprůměrné: 2,7 procenta běžných výdajů na zdravotnictví proti 3,2 procenta v průměru OECD.
+      </p>
+
+      <p>
+        Titulek „Češi jsou obézní“ tedy sedí jen zdálky. Zblízka to vypadá jinak: Česko má evropsky normální vysokoškolskou část a výrazně horší zbytek, přičemž ten zbytek je většina. Rozdíl mezi těmi dvěma větami je celý rozdíl mezi kampaní a politikou.
+      </p>
+
+    </div>
+
+    <aside class="article-databox">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=obezita_prevalence"><strong>Obezita (BMI ≥ 30, dospělí 18+)</strong></a> — 19,8 % (EHIS 2019), EU27 16,5 %; nová vlna EU-SILC 2025 dává 21,1 % proti 16,3 %</li>
+        <li><a href="indicator.html?id=bmi_dospeli"><strong>Nadváha a obezita (BMI ≥ 25, 18+)</strong></a> — 60 % (EHIS 2019), EU27 52,7 %; EU-SILC 2025 dává 60,4 % proti 51,7 %</li>
+        <li><a href="indicator.html?id=nadeje_doziti_vzdelani_gap_muzi"><strong>Rozdíl v naději dožití mužů podle vzdělání</strong></a> — 13 let (2018), EU 7 let</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % (2023), EU 7,5 %, OECD 7 %</li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci</strong></a> — 463,75 na 100 000 obyvatel (2023), EU27 312,95</li>
+        <li><a href="indicator.html?id=vydaje_prevence_pct"><strong>Výdaje na prevenci</strong></a> — 2,7 % běžných výdajů na zdravotnictví (2023), OECD 3,2 %</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-bmi-obezita.html">→ Šest z deseti dospělých Čechů má nadváhu nebo obezitu. Co tomu říká cukr</a></li>
+        <li><a href="clanek-obezita-jidelny-reforma.html">→ Obezita nás definuje. Rozhoduje talíř ve školní jídelně</a></li>
+        <li><a href="clanek-deti-obezita-cosi.html">→ Každé čtvrté dítě má nadváhu. Česko pod průměrem EU — trend jde špatným směrem</a></li>
+        <li><a href="clanek-nadeje-doziti-vzdelani.html">→ Třináct let života navíc za diplom</a></li>
+        <li><a href="clanek-prijem-a-zdravi.html">→ Třicet bodů mezi pětinami. Chudoby má Česko nejméně v Evropě — zdraví přesto dělí příjem víc než v průměru EU</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — vlna 2025</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — dataset <code>ilc_hch10</code>, „Person distribution by body mass index, educational attainment level, sex and age“ (EU-SILC)</strong> — odsud pochází všechny hodnoty za rok 2025: ČR 21,1 % a EU27 16,3 % celkem; rozpad podle vzdělání 26,0 / 23,2 / 13,9 (ČR) a 18,5 / 17,7 / 12,6 (EU27); rozpad podle pohlaví a vzdělání; věkový rozpad; řada 2017 a 2022; hodnoty BMI ≥ 25. Data stažena přímo z disseminačního API 6. 9. 2026, timestamp poslední aktualizace datasetu 8. 6. 2026, DOI 10.2908/ILC_HCH10. <a href="https://ec.europa.eu/eurostat/databrowser/view/ilc_hch10/default/table" target="_blank" rel="noopener">ec.europa.eu — databrowser ↗</a></li>
+          <li><strong>Eurostat — statistický článek „Obesity rate in the EU: 16.3% in 2025“ (4. 9. 2026)</strong> — spouštěč tohoto textu; uvádí evropský souhrn a pořadí zemí, českou hodnotu neobsahuje. <a href="https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20260904-1" target="_blank" rel="noopener">ec.europa.eu — Eurostat news ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Nezávislé ověření — EHIS</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — dataset <code>hlth_ehis_bm1e</code>, „Body mass index (BMI) by sex, age and educational attainment level“ (European Health Interview Survey)</strong> — vlny 2014 a 2019 při věkové bázi 18+: ČR celkem 19,3 a 19,8 %, EU27 15,4 a 16,5 %; rozpad podle vzdělání 22,6 / 20,5 / 12,5 (ČR 2014) a 22,8 / 21,4 / 13,2 (ČR 2019). Dataset nenese žádný příznak kvality, timestamp poslední aktualizace 3. 1. 2024. Data stažena z API 6. 9. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_ehis_bm1e/default/table" target="_blank" rel="noopener">ec.europa.eu — databrowser ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Váhy pro dopočet</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — dataset <code>edat_lfse_03</code>, „Population in private households by educational attainment level“</strong> — podíly vzdělanostních skupin ve věku 18–64: ČR 8,5 / 65,4 / 26,1 % a EU27 19,5 / 46,3 / 34,2 % za rok 2025; ČR 8,6 / 68,9 / 22,5 % a EU27 22,2 / 48,5 / 29,4 % za rok 2019. Timestamp poslední aktualizace 11. 6. 2026, staženo z API 6. 9. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_03/default/table" target="_blank" rel="noopener">ec.europa.eu — databrowser ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika příznaků</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Symbols and abbreviations</strong> — legenda příznaků kvality: <code>u</code> = low reliability, <code>e</code> = estimated value, <code>p</code> = provisional, <code>b</code> = break in time series, <code>d</code> = definition differs. U příznaku <code>u</code> Eurostat výslovně upozorňuje, že se má používat s krajní opatrností. <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Tutorial:Symbols_and_abbreviations" target="_blank" rel="noopener">ec.europa.eu — Statistics Explained ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Žádné číslo v tomto textu nepochází z tiskového shrnutí ani ze sekundárního zdroje — všechny hodnoty byly 6. 9. 2026 staženy přímo z disseminačního API Eurostatu včetně příznaků kvality. <strong>Všechny české buňky vlny EU-SILC 2025 nesou příznak <code>u</code> = nízká spolehlivost</strong>, a to plošně, včetně národního součtu; totéž platí pro vlnu 2017, vlna 2022 příznak nemá. Právě proto je jádro článku ověřeno proti nezávislému šetření EHIS při stejné věkové bázi 18+, které příznak nenese. <strong>EU-SILC a EHIS se nesčítají do jedné řady</strong> — jsou to jiné vzorky, jiné dotazníky a jiné roky; v článku slouží k porovnání tvaru vzdělanostního rozdílu, ne k sestavení časové řady. Obě šetření zjišťují výšku a váhu <strong>dotazem, ne měřením</strong>. O skupině „základní vzdělání a méně“ článek vědomě netvrdí nic: obě šetření se u ní rozcházejí o pět procentních bodů, jde o 8,5 % dospělých a v EU-SILC 2025 nese příznak nízké spolehlivosti. Vlna EU-SILC 2022 je v české řadě odlehlá dolů u všech skupin naráz, proto se z dvojice 2022 → 2025 v textu nedělá závěr o nárůstu. <strong>Přímá standardizace je dopočet redakce</strong> s nesouhlasnou věkovou bází (míry 18+, váhy 18–64) a je ilustrativním rozkladem, ne oficiální standardizovanou hodnotou; kontrolní přepočet je uveden v textu. Vztah mezi vzděláním a obezitou je v datech <strong>asociace, ne prokázaná příčina</strong>. Příčiny vyšší míry obezity ve střední vzdělanostní skupině, účinnost konkrétních opatření ani vývoj po roce 2025 z těchto dat vyčíst nelze a text je netvrdí.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
