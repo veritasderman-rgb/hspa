@@ -100,8 +100,9 @@ obezity než její evropský protějšek.
 
 Další dopočty:
 - Vzdělanostní rozpětí (ZŠ minus VŠ) 2025: ČR **12,1 p. b.**, EU27 5,9 p. b. → 2,05×
-- Pořadí rozpětí 2025 mezi 33 zeměmi v datasetu: Malta 15,1 · Slovensko 14,0 ·
-  Turecko 13,0 · **Česko 12,1** · Slovinsko 11,2 · Chorvatsko 11,2 →
+- Pořadí rozpětí 2025 mezi 30 zeměmi, které mají v datasetu obě krajní vzdělanostní
+  skupiny (33 geo položek minus tři agregáty EU27 / EA20 / EA21): Malta 15,1 ·
+  Slovensko 14,0 · Turecko 13,0 · **Česko 12,1** · Slovinsko 11,2 · Chorvatsko 11,2 →
   ČR je čtvrtá celkově a **třetí mezi členskými státy EU** (Turecko je země kandidátská)
 - Vzdělanostní rozpětí ČR napříč vlnami EU-SILC: 2017 = 13,5 · 2022 = 7,5 · 2025 = 12,1
 
