@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-ezkarta-nova-generace': {
+    kicker: 'Digitalizace · EZKarta', signal: 'neutral',
+    stat: '34 000',
+    claim: 'uživatelů denně otevře EZKartu — z 3,1 milionu stažení.',
+    context: 'Nová generace přidala 3. září laborky, prevenci a sdílený záznam.',
+  },
+  'clanek-centralizace-velmi-predcasnych-porodu': {
+    kicker: 'Perinatální péče · centralizace', signal: 'good',
+    stat: '88,4', statSuffix: '%', barPct: 88,
+    claim: 'velmi předčasných porodů proběhne přímo v centru intenzivní péče.',
+    context: '749 z 847 dětí před 32. týdnem (2023).',
+  },
   'clanek-psychiatricka-luzka': {
     kicker: 'Duševní zdraví · lůžkový fond', signal: 'bad',
     stat: '612',
