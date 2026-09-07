@@ -84,8 +84,14 @@ drží jednu definici.
   jen v rámci lékového účtu: segment 6 = léky na recept rostl 45,64 → 47,81 mld,
   tj. +4,8 %.)
 - Predikce ÚZIS pro rok 2025 (tab. 4, s. 43): epidemiologická predikce
-  40 215 453 tis. Kč + horizon scanning 2 119 780 tis. Kč = **40 759 689 tis. Kč
-  (40,76 mld)**, tj. +26,93 % proti reálným nákladům 2023.
+  40 215 453 tis. Kč, horizon scanning 2 119 780 tis. Kč, výsledná predikce
+  **40 759 689 tis. Kč (40,76 mld)**, tj. +26,93 % proti reálným nákladům 2023.
+  **Pozor — není to prostý součet** (40 215 + 2 120 = 42 335 tis. Kč, tedy o 1 576
+  tis. Kč víc): podle poznámky (2) pod tabulkou je na bazální epidemiologickou
+  predikci aplikována korekce na jednotkové ceny léčiv a vliv generifikace ve
+  skupinách, kde jednotková cena klesá. Poznámka (1) navíc uvádí, že hodnota
+  horizon scanningu je **teoretický maximální dopad** nových indikací, ne očekávaná
+  hodnota. Text to musí formulovat takto, ne jako sčítání. *(Nález auditu fáze 5.)*
 - Horizon scanning: nové indikace „jen v roce 2025 budou generovat více než
   **5,2 %** celkového objemu nákladů na centrovou péči" (s. 41).
 - Z predikce >40 mld Kč na rok 2025 má „téměř polovina" připadnout na onkologii

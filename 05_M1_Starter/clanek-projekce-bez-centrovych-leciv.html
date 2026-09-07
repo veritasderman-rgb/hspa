@@ -69,7 +69,24 @@
       ani Eurostatu, dvojice ČR vs OECD by párovala různé metodiky); dopad stropu z přílohy 15 na
       konkrétní objem úhrad v roce 2026 (vyhláška je účinná, data za rok 2026 zatím nejsou);
       názvy ostatních segmentů ZPP kromě obou podsegmentů centrových léčiv (veřejný číselník
-      s číslováním segmentů se nepodařilo dohledat, text proto jiné segmenty čísly nepojmenovává)."
+      s číslováním segmentů se nepodařilo dohledat, text proto jiné segmenty čísly nepojmenovává).
+      AUDIT 2026-09-07 (fáze 5, nezávislý průchod): všech 5 externích odkazů vrací HTTP 200
+      (uzis.cz PDF, 2x nzip.cz datový souhrn, 2x zakonyprolidi.cz); všech 12 interních cílů
+      (5 článků, 5 stránek indikátorů, clanky.html, index.html) existuje a názvy odkazovaných
+      článků byly srovnány s title v articles.json; prověřeno všech 13 počítadel data-value —
+      žádné nenese datum, rozpětí ani znaménko, jednotky jsou v data-suffix/data-unit; všechny
+      hodnoty přepočteny znovu z primárních souborů (XLSX agregace spuštěna podruhé nezávisle,
+      hodnoty PDF a obou předpisů dohledány v textu).
+      OPRAVENY 4 NÁLEZY: (1) predikce pro rok 2025 (40,76 mld) NENÍ prostým součtem epidemiologické
+      predikce (40 215 453 tis.) a horizon scanningu (2 119 780 tis.) — mezi nimi stojí korekce
+      na jednotkové ceny a generifikaci podle poznámky (2) pod tabulkou 4, a hodnota horizon
+      scanningu je podle poznámky (1) teoretický MAXIMÁLNÍ dopad; přeformulováno.
+      (2) výjimka pro pojištěnce do 18 let v bodě 2 přílohy č. 15 je PODMÍNĚNÁ (jen přípravky
+      hrazené podle § 16 nebo zařazené ve skupinách podle bodu 3), text ji uváděl jako plošnou —
+      doplněna podmínka. (3) poznámka u řádku Revmatologie tvrdila, že index cenové slevy 0,90 je
+      nejtvrdší; nejnižší ze všech 18 skupin má Dýchací soustava 2 s hodnotou 0,87 — opraveno.
+      (4) dva odkazy v bloku Související obsah nesly vymyšlené názvy článků místo skutečných
+      (narok-pojistence-2-demograficky-tlak, deficit-vzp-2026) — nahrazeny title z articles.json."
 -->
 <meta name="article:audit-status" content="draft">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -289,7 +306,7 @@
           <li class="av-flow-step av-flow-step-bad">
             <span class="av-flow-num"></span>
             <h4 class="av-flow-title">Spolehlivě jen na pár let</h4>
-            <p class="av-flow-desc">Pro rok 2025 model dává 40,8 miliardy korun, z toho 2,1 miliardy připadá na nové indikace a téměř polovina celku na onkologii a hematoonkologii (asi 19 miliard). Na horizontu roku 2040 už ústav takový odhad nedělá — a v dokumentu vysvětluje proč.</p>
+            <p class="av-flow-desc">Pro rok 2025 model dává po korekci na jednotkové ceny a generifikaci 40,8 miliardy korun; teoretický maximální dopad nových indikací je v něm vyčíslen na 2,1 miliardy a téměř polovina celku připadá na onkologii a hematoonkologii (asi 19 miliard). Na horizontu roku 2040 už ústav takový odhad nedělá — a v dokumentu vysvětluje proč.</p>
             <span class="av-flow-tag">Výsledek</span>
           </li>
         </ol>
@@ -326,7 +343,7 @@
           <li class="av-bar-row" data-value="1.55" data-label="Hepatologie" data-note="onemocnění jater a žlučových cest"></li>
           <li class="av-bar-row" data-value="1.34" data-label="Onkologie — solidní nádory" data-note="největší skupina objemem; index cenové slevy 0,96"></li>
           <li class="av-bar-row" data-value="1.27" data-label="Hematoonkologie" data-note="index cenové slevy 0,94"></li>
-          <li class="av-bar-row" data-value="1.15" data-label="Revmatologie" data-note="index cenové slevy 0,90 — nejtvrdší sleva spolu s trávicí soustavou"></li>
+          <li class="av-bar-row" data-value="1.15" data-label="Revmatologie" data-note="index cenové slevy 0,90; nejnižší ze všech skupin má Dýchací soustava 2 — 0,87"></li>
           <li class="av-bar-row" data-value="1.10" data-label="Neurologie 2 (roztroušená skleróza)" data-note="druhý nejnižší povolený růst"></li>
           <li class="av-bar-row" data-value="1.05" data-label="Oftalmologie" data-note="nejnižší povolený růst ze všech skupin"></li>
         </ol>
@@ -334,7 +351,7 @@
       </figure>
 
       <p>
-        Zajímavější než samotné indexy je ale to, co se z toho stropu vyjímá. Bod 2 přílohy říká, že do výpočtu <strong>nevstupují</strong> přípravky na HIV/AIDS, spinální svalovou atrofii, cystickou fibrózu a hereditární angioedém, profylaxe respiračního syncytiálního viru u dětí a všechny přípravky podané pojištěncům do osmnácti let. Ty se hradí v jednotkové ceně. Je to seznam, který zhruba odpovídá tomu, co je v centrové léčbě nejdražší na jednoho pacienta a nejméně nahraditelné — a zákonodárce ho vědomě vyvedl mimo strop. Rozpočtový nástroj tak dopadá na velké objemy s alternativami, ne na drahé výjimky.
+        Zajímavější než samotné indexy je ale to, co se z toho stropu vyjímá. Bod 2 přílohy říká, že do výpočtu <strong>nevstupují</strong> přípravky na HIV/AIDS, spinální svalovou atrofii, cystickou fibrózu a hereditární angioedém, profylaxe respiračního syncytiálního viru u dětí — a dále přípravky podané pojištěncům do osmnácti let, pokud jsou hrazené podle § 16 zákona nebo zařazené do některé ze skupin, na které strop jinak dopadá. Ty všechny se hradí v jednotkové ceně. Je to seznam, který zhruba odpovídá tomu, co je v centrové léčbě nejdražší na jednoho pacienta a nejméně nahraditelné — a zákonodárce ho vědomě vyvedl mimo strop. Rozpočtový nástroj tak dopadá na velké objemy s alternativami, ne na drahé výjimky.
       </p>
 
       <p>
@@ -378,8 +395,8 @@
       <ul class="article-related-list">
         <li><a href="clanek-centrove-leky-2026.html">→ Čtyřicet miliard za naději. Centrové léky jsou nejrychleji rostoucí lékový účet českého zdravotnictví</a></li>
         <li><a href="clanek-financovani-segmenty-2026.html">→ Kam plyne 508 miliard. Co o struktuře českého zdravotnictví říkají dohodovací řízení</a></li>
-        <li><a href="clanek-narok-pojistence-2-demograficky-tlak.html">→ Demografický tlak: kdo bude platit a kdo čerpat</a></li>
-        <li><a href="clanek-deficit-vzp-2026.html">→ Deficit VZP a co z něj plyne pro rozpočet systému</a></li>
+        <li><a href="clanek-narok-pojistence-2-demograficky-tlak.html">→ Nárok narazí na demografii. Proč bude do roku 2050 čekat dvakrát víc seniorů na péči, kterou systém slibuje</a></li>
+        <li><a href="clanek-deficit-vzp-2026.html">→ Miliardy, které chybí. Anatomie deficitu veřejného zdravotního pojištění 2026</a></li>
         <li><a href="clanek-presna-medicina-solidarita.html">→ Solidarita, nebo osobní účet? Přesná medicína a hranice pojištění</a></li>
       </ul>
     </section>
