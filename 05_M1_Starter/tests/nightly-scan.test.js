@@ -353,3 +353,20 @@ test('findExternalLinks dekóduje i číselné HTML entity a nesahá na cizí tv
   assert.ok(urls.includes('https://example.org/d?sect=zdravi&kod=5'), 'parametr bez středníku není entita');
   assert.ok(urls.includes('https://example.org/e?q=a&nezname;b'), 'neznámá pojmenovaná entita zůstává doslovně');
 });
+
+test('check-literature: odkazy na studie (DOI, PubMed) dostanou vlastní review flag', () => {
+  const item = scanArticle(fx('literature'), TODAY);
+  const f = item.flags.find(x => x.type === 'check-literature');
+  assert.ok(f, 'check-literature má být přítomné');
+  assert.equal(f.severity, 'review');
+  assert.deepEqual(f.links, ['https://doi.org/10.1000/xyz123', 'https://pubmed.ncbi.nlm.nih.gov/12345678/']);
+  assert.ok(!types(item).includes('check-sources'), 'bez prioritních legislativních odkazů nemá být check-sources');
+});
+
+test('check-literature se přeskočí u článku auditovaného < 14 dní (jako check-sources)', () => {
+  const item = scanArticle(fx('literature-reviewed'), TODAY);
+  assert.ok(!types(item).includes('check-literature'));
+  assert.equal(item.check_literature_skipped.count, 2);
+  const full = scanArticle(fx('literature-reviewed'), TODAY, { skipReviewed: false });
+  assert.ok(types(full).includes('check-literature'));
+});

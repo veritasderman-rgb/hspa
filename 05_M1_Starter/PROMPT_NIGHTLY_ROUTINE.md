@@ -72,7 +72,9 @@ ani nechodí na síť — vyrobí tříděný worklist. Ty podle něj jednáš. 
 
 Typy flagů: `missing-cover` (auto-fix), `date-passed` (review — datum bylo při
 publikaci budoucí, dnes uplynulo, v okolí dopředná formulace), `check-sources`
-(review — prioritní legislativní/EU odkazy ke kontrole), `topical-expired`,
+(review — prioritní legislativní/EU odkazy ke kontrole), `check-literature`
+(review — odkazy na studie: DOI, PubMed/PMC, časopisy, preprinty → ověření přes
+MCP `PubMed`, ne HTTP 200; viz 3.1), `topical-expired`,
 `missing-indicators` (review — článek bez `linked_indicators` je sirotek mimo
 sémantickou síť: doplň 1–3 vazby na indikátory; tag drž ve slovníku
 `data/tags.json`, drift metadat srovná `node scripts/normalize-article-metadata.js`),
@@ -90,8 +92,8 @@ PR zůstal recenzovatelný:
   s účinností, která nastala > nová vlna dat > drobnost). Zbytek nech ve frontě
   na další noc (report se generuje denně).
 - Články auditované < 14 dní (pole `audit.last_reviewed` v HTML komentáři) už
-  **skener přeskakuje sám** u `check-sources` — v reportu se objeví jen poznámka
-  „check-sources přeskočeno". `date-passed`/`topical-expired` se ale ukazují dál
+  **skener přeskakuje sám** u `check-sources` i `check-literature` — v reportu se
+  objeví jen poznámka „přeskočeno". `date-passed`/`topical-expired` se ale ukazují dál
   (nové časové signály). Plný worklist vč. recentně auditovaných: `--no-skip-reviewed`.
 
 ---
@@ -128,7 +130,7 @@ Commit: `fix(clanky): noční auto-fix — covery, odkazy, alt (N článků)`
 
 ## FÁZE 3 — Kontrola aktuálnosti a zdrojů (review — vyžaduje úsudek)
 
-Pro každý článek s `date-passed` nebo `check-sources` (do stropu z fáze 1):
+Pro každý článek s `date-passed`, `check-sources` nebo `check-literature` (do stropu z fáze 1):
 
 > **Mimo články (#931):** report má i sekci „Mimo články — metodické karty a
 > drafty" (`indicators/*.json`, `drafts/`). Každou noc z ní vezmi **2–3 soubory**
@@ -147,8 +149,8 @@ Pro každý článek s `date-passed` nebo `check-sources` (do stropu z fáze 1):
     blokovaná, **nehádej** — článek jen oflaguj k ruční kontrole (viz 3.3).
 - U `date-passed`: zjisti, **zda událost popsaná jako budoucí skutečně nastala**
   (norma vyhlášena/nabyla účinnosti? termín proběhl? vlna dat vyšla?).
-- **Odkazy na studie** (doi.org, pubmed.ncbi.nlm.nih.gov, PMC, časopisy) **neověřuj
-  WebFetchem** (HTTP 200 nic neříká o obsahu), ale přes MCP `PubMed`:
+- **Odkazy na studie** (flag `check-literature`: doi.org, pubmed.ncbi.nlm.nih.gov, PMC,
+  časopisy, preprinty) **neověřuj WebFetchem** (HTTP 200 nic neříká o obsahu), ale přes MCP `PubMed`:
   `get_article_metadata` (PMID) nebo `lookup_article_by_citation` (autor + rok +
   časopis) → shoda citace, DOI, **typ publikace** (retrakce, erratum, komentář,
   preprint) a to, že abstrakt (u open-access `get_full_text_article`) nese přesně

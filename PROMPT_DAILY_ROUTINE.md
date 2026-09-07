@@ -61,7 +61,7 @@ Co je **zakázáno**:
 | 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw (bez `?o=` — vždy aktuální volební období; archiv `o=9`, `o=10`…) | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
 | 12 | **Sbírka zákonů** | zakonyprolidi.cz/cs/aktualne | Nové normy v gesci MZ ČR |
 | 13 | **NÚKIB** | nukib.cz/cs/aktualni-informace | Bezpečnostní incidenty zdravotnictví, NIS2 implementace |
-| 14 | **Recenzovaná literatura ČR** | MCP `PubMed` → `search_articles` (`query`: `"Czech Republic"[Title/Abstract] AND (health services OR mortality OR screening OR …)`, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date`) | Nové domácí studie (PMID, DOI, časopis) |
+| 14 | **Recenzovaná literatura ČR** | MCP `PubMed` → `search_articles` (`query`: `("Czech Republic"[Title/Abstract] OR Czechia[Title/Abstract] OR "Czech Republic"[Affiliation] OR Czechia[Affiliation] OR Czech[Affiliation]) AND (health services OR mortality OR screening OR …)` — afiliace zachytí domácí práce, které ČR v názvu ani abstraktu nezmiňují, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date`) | Nové domácí studie (PMID, DOI, časopis) |
 | 15 | **Evidence k tématu dne** | MCP `Consensus` → `search` (`query` anglicky a konkrétně, `medical_mode: true`, `exclude_preprints: true`; u „co říká nejlepší evidence“ navíc `study_types: ["systematic review","meta-analysis","rct"]`) | Ke každé kauze z řádků 1–13, u níž článek bude tvrdit něco o účinnosti, riziku nebo dopadu: co říká souhrn recenzované literatury, ne jedna studie |
 
 ### Hlídač státu — doplňkový discovery kanál (transparentnost, legislativa v přípravě)
