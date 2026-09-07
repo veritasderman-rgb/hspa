@@ -15,7 +15,7 @@ export const meta = {
 // Argumenty (bez Date.now — datum přichází zvenčí, aby šel běh obnovit)
 // ---------------------------------------------------------------------------
 const cfg = Object.assign(
-  { articles: 12, indicators: 8, pubmedPerItem: 6, consensusPerItem: 2, adjudicatePubmed: 3 },
+  { articles: 12, indicators: 8, pubmedPerItem: 8, consensusPerItem: 2, adjudicatePubmed: 3 },
   (args && typeof args === 'object') ? args : {},
 )
 if (!cfg.today || !/^\d{4}-\d{2}-\d{2}$/.test(cfg.today)) {
