@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-nemocnicni-ambulance': {
+    kicker: 'Financování · segmentace úhrad', signal: 'warn',
+    stat: '65', statSuffix: ' mld',
+    claim: 'korun za nemocniční ambulance se počítá jako lůžková péče.',
+    context: '12,9 % všech úhrad roku 2024 leží v cizí kolonce.',
+  },
+  'clanek-kdo-se-o-nas-postara-2035': {
+    kicker: 'Dlouhodobá péče · rok 2035', signal: 'bad',
+    stat: '284 000',
+    claim: 'lidí nad 75 let přibude do roku 2035 — a do péče vedou jen tři cesty.',
+    context: 'Domov, terén, rodina. Přesně 283 746 osob.',
+  },
   'clanek-ezkarta-nova-generace': {
     kicker: 'Digitalizace · EZKarta', signal: 'neutral',
     stat: '34 000',
