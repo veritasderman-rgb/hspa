@@ -75,7 +75,7 @@ hotový, fronta ho znovu nenabídne, dokud se nezmění.
 | Krok | Model | Účel | Strop na položku |
 |---|---|---|---|
 | Fronta a dávka | skript (`scripts/evidence-audit-queue.js`) | deterministický výběr, žádné tokeny | — |
-| Rešerše | **Sonnet** (effort medium) | extrakce tvrzení, PubMed/Consensus, předběžný verdikt | ≤ 6 volání PubMed, ≤ 2 volání Consensus |
+| Rešerše | **Sonnet** (effort medium) | extrakce tvrzení, PubMed/Consensus, předběžný verdikt | ≤ 8 volání PubMed, ≤ 2 volání Consensus |
 | Adjudikace | **Opus** (effort high) | jen položky s `contradicted`, `unclear`, `partial` nebo s návrhem zásahu do textu | ≤ 3 dodatečná volání PubMed (plný text, related) |
 | Zápis | **Opus** u zásahů do obsahu, **Sonnet** u čistě registrového zápisu | registr, zdroje, claims, karta, flag, issue | 0 volání nástrojů literatury |
 | Kontrola | **Sonnet** (effort low) | validátory + testy; při chybě 1 oprava Opusem | — |
@@ -186,7 +186,7 @@ Pro článek:
 4. Jinak hledej: `search_articles` s anglickým dotazem v PubMed syntaxi, nejdřív filtry
    na sílu evidence (`systematic[sb]`, `"meta-analysis"[pt]`, `randomized controlled trial[pt]`),
    pak bez nich; při tématu ČR přidej `("Czech Republic"[Title/Abstract] OR Czechia[Title/Abstract] OR Czech[Affiliation])`.
-   Max 6 volání PubMed na položku včetně metadat. Consensus (`search`, `medical_mode: true`,
+   Max 8 volání PubMed na položku včetně metadat. Consensus (`search`, `medical_mode: true`,
    `exclude_preprints: true`) jen když PubMed nedal nic nebo jedinou studii; max 2 dotazy;
    každý použitý kandidát ověř v PubMed.
 5. Verdikt + `confidence` + `note` (co přesně abstrakt říká, čím se liší). Do `evidence`
@@ -342,7 +342,7 @@ na rešerši, Opus na zápis) — vhodné pro první zkušební dávku.
 ## Pojistky (hard limits)
 
 - Max **20 položek** na běh (12 + 8) bez výslovného navýšení redakcí; Consensus max
-  **2 dotazy na položku**, PubMed max **6 (+3 při adjudikaci)**.
+  **2 dotazy na položku**, PubMed max **8 (+3 při adjudikaci)**.
 - **Nikdy** `published`, `verified`, `flagged` u publikovaného článku, prose přepis,
   nové claims, generované artefakty.
 - Studie bez PMID/DOI ověřeného v PubMed nikam nepatří; preprint se označí `study_type:
