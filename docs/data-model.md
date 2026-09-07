@@ -1517,6 +1517,7 @@ smí dodat Consensus, ověření je vždy v PubMed) a verdikt. Zapisuje ho jen o
     }],
     "summary": { "supported": 0, "partial": 1, "contradicted": 0, "no_evidence": 0, "not_applicable": 0, "unclear": 0 },
     "actions": [{ "type": "source-added", "detail": "…", "ref": "" }],  // source-added | claim-note | card-note | flagged | issue | none
+    "followup": "co zůstalo neověřeno (volitelné; fronta položku vrátí jako stale)",
     "notes": ""
   }]
 }
@@ -1529,12 +1530,13 @@ smí dodat Consensus, ověření je vždy v PubMed) a verdikt. Zapisuje ho jen o
 - `summary` sedí na počty verdiktů (chybějící klíč = 0).
 - FK: článek existuje v `articles.json`, indikátor v `indicators.json`, `claim_id` v `claims.json`.
 - Provozní texty nástrojů (počítadla dotazů, výzvy k registraci, „podle Consensus“) registr odmítne.
+- `followup` (volitelný neprázdný řetězec) = audit sám přiznává, co v položce zůstalo neověřeno (vyčerpaný strop volání); fronta takovou položku hlásí jako `stale`, i když se obsah nezměnil.
 
 ### Fronta (`npm run evidence:queue`)
 
 `scripts/evidence-audit-queue.js` je odvozený artefakt (necommituje se, píše do `reports/`):
 viditelné články + všechny indikátory, priorita podle odkazů na studie, zmínek o studiích,
 ručně ověřovaných claims, HSPA frameworku a navázaných článků; stav `pending` → `stale`
-(`content_hash` se liší nebo kontrola starší než 365 dní) → `done`. `--batch` vrátí další
+(`content_hash` se liší, kontrola starší než 365 dní, nebo záznam nese `followup`) → `done`. `--batch` vrátí další
 dávku (default 12 článků + 8 indikátorů), `--hash <soubor>` spočítá hash pro zápis.
 

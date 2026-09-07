@@ -10,7 +10,8 @@
 // Stav položky:
 //   pending — v registru není (nikdy neověřeno)
 //   stale   — v registru je, ale obsah se od kontroly změnil (content_hash),
-//             nebo je kontrola starší než --max-age-days (default 365)
+//             kontrola je starší než --max-age-days (default 365), nebo má
+//             záznam pole `followup` (audit sám hlásí, co zůstalo neověřeno)
 //   done    — ověřeno a obsah beze změny
 //
 // Priorita (vyšší = dřív):
@@ -87,6 +88,7 @@ export function daysBetween(isoA, isoB) {
 /** Stav položky vůči registru. */
 export function itemStatus(entry, hash, today, maxAgeDays = DEFAULT_MAX_AGE_DAYS) {
   if (!entry) return 'pending';
+  if (entry.followup) return 'stale';          // explicitně nedokončeno → vrátit do fronty
   if (entry.content_hash !== hash) return 'stale';
   const age = daysBetween(entry.checked_at, today);
   if (age == null || age > maxAgeDays) return 'stale';
@@ -127,6 +129,11 @@ function reasonsIndicator(s, status, framework) {
   if (!s.has_literature) r.push('karta bez odkazu na literaturu');
   if (s.study_mentions) r.push(`${s.study_mentions}× zmínka o studii v kartě`);
   return r;
+}
+
+function withFollowup(reasons, entry) {
+  if (entry?.followup) reasons.unshift(`k doověření: ${entry.followup}`);
+  return reasons;
 }
 
 function sortItems(items) {
@@ -181,7 +188,7 @@ export function buildQueue({ root = DEFAULT_ROOT, today = new Date().toISOString
       id: a.slug, type: 'article', path: a.slug, title: a.title, date: a.date,
       kind: a.kind, rubric: a.rubric, audit_status: a['audit-status'],
       content_hash: hash, signals, priority: scoreArticle(signals, a.kind), status,
-      last_checked: entry?.checked_at ?? null, reasons: reasonsArticle(signals, status),
+      last_checked: entry?.checked_at ?? null, reasons: withFollowup(reasonsArticle(signals, status), entry),
     });
   }
 
@@ -207,7 +214,7 @@ export function buildQueue({ root = DEFAULT_ROOT, today = new Date().toISOString
       id, type: 'indicator', path: existsSync(cardPath) ? cardRel : null, indicator_id: i.id,
       title: i.name, area: i.area, domain: i.domain, framework: i.framework ?? null,
       content_hash: hash, signals, priority: scoreIndicator(signals, i), status,
-      last_checked: entry?.checked_at ?? null, reasons: reasonsIndicator(signals, status, i.framework),
+      last_checked: entry?.checked_at ?? null, reasons: withFollowup(reasonsIndicator(signals, status, i.framework), entry),
     });
   }
 

@@ -58,6 +58,9 @@ export function validateEvidenceAudit(data, { articleSlugs = new Set(), indicato
     if (it.checked_at && !ISO_DATE_RE.test(it.checked_at)) errors.push(`${tag}: checked_at must be YYYY-MM-DD`);
     if (it.content_hash && !SHA1_RE.test(it.content_hash)) errors.push(`${tag}: content_hash must be sha1 hex`);
     if (it.run_id && typeof it.run_id !== 'string') errors.push(`${tag}: run_id must be string`);
+    if (it.followup != null && !(typeof it.followup === 'string' && it.followup.trim())) {
+      errors.push(`${tag}: followup must be a non-empty string (co zůstalo neověřeno) nebo chybět`);
+    }
     if (it.tools && (typeof it.tools.pubmed !== 'boolean' || typeof it.tools.consensus !== 'boolean')) {
       errors.push(`${tag}: tools.pubmed / tools.consensus must be boolean`);
     }

@@ -170,7 +170,7 @@
       "type": "article",
       "checked_at": "2026-09-07",
       "run_id": "ea-2026-09-07-01",
-      "content_hash": "e5268ceccc610e72e63610f94f497887471b7963",
+      "content_hash": "4a1993cff329885116364e77096c24a801962933",
       "tools": {
         "pubmed": true,
         "consensus": true
@@ -339,18 +339,19 @@
         },
         {
           "type": "none",
-          "detail": "Žádný rozpor (0× contradicted) → žádný flag ani issue. Podle adjudikace ponechán audit-status „partial“, který článek už nese (na review-pending se nesnižuje); published, date, number ani audit.last_reviewed se nemění. Do hlavičky audit: a do articles.json → audit.notes připojena věta „evidence-audit 2026-09-07: 6 tvrzení, 4× supported, 2× partial; viz data/evidence-audit.json“. U partial tvrzení o rehabilitaci vložena do prose jediná upřesňující věta s citací Cochrane metaanalýzy (rozsah tvrzení byl očividně širší než evidence). Ke claims.json žádná akce — žádné z 12 tvrzení cmp-iktova-centra--01…--12 neodpovídá auditovaným větám (administrativní statistiky ÚZIS/OECD/Eurostat, které hlídá drift-check).",
+          "detail": "Žádný rozpor (0× contradicted) → žádný flag ani issue. Vložená upřesňující věta (partial, rehabilitace) → audit-status partial → review-pending podle pravidla FÁZE 4 (věta čeká na schválení redakce); published, date, number ani audit.last_reviewed se nemění.",
           "ref": ""
         }
       ],
-      "notes": "Administrativní/OECD-Eurostat/ÚZIS statistiky v claims.json (cmp-iktova-centra--01 až --12) nejsou odborná tvrzení dle protokolu — jde o datové srovnání ČR vs. benchmark, které hlídá drift-check. Vybráno 6 odborných tvrzení o klinické evidenci (ECASS III, DAWN, DEFUSE-3, HERMES meta-analýza, Helsinki Stroke Model, rehabilitace); vše, co článek cituje s DOI/PMID, ověřeno přes get_article_metadata (found_via: article), tituly i DOI se shodují přesně. Rešerše (Sonnet) vyčerpala strop 6 volání PubMed a použila 1 dotaz Consensus pro tvrzení o rehabilitaci; kandidát z Consensu se nepodařilo ověřit v PubMed (AMBIGUOUS), proto do registru žádná studie z tohoto vyhledávače nešla a verdikt zůstal unclear k adjudikaci. Adjudikace (Opus) přidala 3 volání PubMed (1× search_articles na stroke-unit / early-supported-discharge přehledy, 2× dávkové get_article_metadata) a rozhodla unclear → partial: dohledán chybějící pilíř evidence (Cochrane síťová metaanalýza PMID 32324916), která doslova dokládá snížení úmrtí i závislosti, ale pro organizovanou lůžkovou péči a při mediánu sledování jeden rok, ne pro intenzitu následné rehabilitace v horizontu 90 dnů — proto partial, ne supported. Contradicted nepřipadá v úvahu. Finální rozdělení: 4× supported, 2× partial, 0× contradicted / no-evidence / not-applicable / unclear. Ověřeny nulové retrakce a shoda typu publikace u všech pěti citovaných studií. Mimo rozsah auditu, k rozhodnutí redakce: (1) u položky Saver JL et al. (JAMA 2016) ve zdrojích chybí PMID 27673305 vedle DOI; (2) formulace „door-to-needle pod 20 minut“ v textu i v av-data-table by měla znít „na 20 minut“ / „kolem 20 minut“; (3) AcT trial (Menon 2022) a Meretoja 2013 Stroke zmíněné v textu bez DOI/PMID nebyly ověřovány (podpůrné citace, mimo strop volání) — zůstávají otevřeným bodem pro příští běh, protože položka se do fronty vrátí po změně obsahu."
+      "notes": "Administrativní/OECD-Eurostat/ÚZIS statistiky v claims.json (cmp-iktova-centra--01 až --12) nejsou odborná tvrzení dle protokolu — jde o datové srovnání ČR vs. benchmark, které hlídá drift-check. Vybráno 6 odborných tvrzení o klinické evidenci (ECASS III, DAWN, DEFUSE-3, HERMES meta-analýza, Helsinki Stroke Model, rehabilitace); vše, co článek cituje s DOI/PMID, ověřeno přes get_article_metadata (found_via: article), tituly i DOI se shodují přesně. Rešerše (Sonnet) vyčerpala strop 6 volání PubMed a použila 1 dotaz Consensus pro tvrzení o rehabilitaci; kandidát z Consensu se nepodařilo ověřit v PubMed (AMBIGUOUS), proto do registru žádná studie z tohoto vyhledávače nešla a verdikt zůstal unclear k adjudikaci. Adjudikace (Opus) přidala 3 volání PubMed (1× search_articles na stroke-unit / early-supported-discharge přehledy, 2× dávkové get_article_metadata) a rozhodla unclear → partial: dohledán chybějící pilíř evidence (Cochrane síťová metaanalýza PMID 32324916), která doslova dokládá snížení úmrtí i závislosti, ale pro organizovanou lůžkovou péči a při mediánu sledování jeden rok, ne pro intenzitu následné rehabilitace v horizontu 90 dnů — proto partial, ne supported. Contradicted nepřipadá v úvahu. Finální rozdělení: 4× supported, 2× partial, 0× contradicted / no-evidence / not-applicable / unclear. Ověřeny nulové retrakce a shoda typu publikace u všech pěti citovaných studií. Mimo rozsah auditu, k rozhodnutí redakce: (1) u položky Saver JL et al. (JAMA 2016) ve zdrojích chybí PMID 27673305 vedle DOI; (2) formulace „door-to-needle pod 20 minut“ v textu i v av-data-table by měla znít „na 20 minut“ / „kolem 20 minut“; (3) AcT trial (Menon 2022) a Meretoja 2013 Stroke zmíněné v textu bez DOI/PMID nebyly ověřovány (podpůrné citace, mimo strop volání) — zůstávají otevřeným bodem pro příští běh, protože položka se do fronty vrátí po změně obsahu.",
+      "followup": "Neověřeny podpůrné citace bez DOI/PMID: AcT trial (Menon 2022) a Meretoja 2013 (Stroke); ve zdrojích chybí PMID 27673305 u Saver JL et al. (JAMA 2016) — strop volání rešerše."
     },
     {
       "id": "clanek-ai-zdravotnictvi-1-vstricnost.html",
       "type": "article",
       "checked_at": "2026-09-07",
       "run_id": "ea-2026-09-07-01",
-      "content_hash": "9e6584a3198faa1adf11c0b8cb31019ac0deb9be",
+      "content_hash": "b8100bbeeed4e9e35c57a986b63ee7ef8e1b8542",
       "tools": {
         "pubmed": true,
         "consensus": true
@@ -361,7 +362,7 @@
         "write": "opus"
       },
       "calls": {
-        "pubmed": 10,
+        "pubmed": 14,
         "consensus": 2
       },
       "claims": [
@@ -517,10 +518,43 @@
             }
           ],
           "note": "Abstrakt doslova: „that for ChatGPT 3.5 was 59% (n=22) agree, 41% (n=15) unsafe, and 0% (n=0) too cautious“ a „The unsafe triage rate for ChatGPT 3.5 (41%) was significantly higher (P=.009) than that of Ada (14%)“. Formulace v článku („v jednom testu“) je přiměřená malému vzorku (40 pacientů urgentního příjmu, 37 případů s dostatečnými daty pro triáž), proto supported, ne partial — článek číslo nezobecňuje. Studie v sekci Zdroje chyběla, ačkoli článek z ní bere dvě čísla (41 % nebezpečných triáží u ChatGPT 3.5 a 14 % nebezpečných doporučení u aplikace Ada); doplněna jedinou položkou, která doloží obě."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--13",
+          "text": "Jiná studie, tentokrát na propouštěcích zprávách z urgentního příjmu, našla u jazykového modelu 42 procent halucinací a 47 procent opomenutí klinicky důležité informace.",
+          "location": "sekce o sumarizaci a překladu nálezů (prose + av-counter 42 %)",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40526634",
+              "doi": "10.1371/journal.pdig.0000899",
+              "title": "Evaluating large language models for drafting emergency department encounter summaries.",
+              "year": 2025,
+              "journal": "PLOS Digit Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38633805",
+              "doi": "10.1101/2024.04.03.24305088",
+              "title": "Evaluating Large Language Models for Drafting Emergency Department Discharge Summaries.",
+              "year": 2024,
+              "journal": "medRxiv",
+              "study_type": "preprint",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Doověřeno hlavní session po review (Codex) 2026-09-07, 4 volání PubMed (2× search_articles, 2× get_article_metadata). Abstrakt recenzované verze (PLOS Digit Health 2025, 100 náhodně vybraných návštěv ED UCSF 2012–2023, GPT-4 vs. GPT-3.5-turbo, dva nezávislí hodnotitelé) doslova: „42% of the summaries exhibited hallucinations and 47% omitted clinically relevant information“ — obě čísla i populace sedí. Terminologická poznámka: preprint mluvil o „discharge summaries“, recenzovaná verze o „encounter summaries“; článek říká propouštěcí zprávy, věcně jde o totéž shrnutí návštěvy. Průměrná škodlivost chyb byla nízká (0,57 ze 7), což článek neuvádí — nezkresluje, jen doplňuje kontext."
         }
       ],
       "summary": {
-        "supported": 6,
+        "supported": 7,
         "partial": 0,
         "contradicted": 0,
         "no_evidence": 0,
@@ -572,9 +606,19 @@
           "type": "claim-note",
           "detail": "Do audit: hlavičky článku a do data/articles.json → audit.notes připojena věta „evidence-audit 2026-09-07: 7 tvrzení, 6 supported, 1 unclear (FAccT mimo PubMed); doplněn zdroj Fraser 2023 (PMID 37788063); viz data/evidence-audit.json“. audit.last_reviewed i audit-status verified ponechány beze změny.",
           "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Williams CYK et al., PLOS Digit Health 2025;4(6):e0000899 (PMID 40526634, DOI 10.1371/journal.pdig.0000899) vložen do article-sources za Kernberg 2024, skupina „Primární — recenzovaná literatura“, k tvrzení 42 % halucinací / 47 % opomenutí; ověřeno v PubMed 7. 9. 2026.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--13"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--13 nahrazen doloženou citací (PMID:40526634 / DOI:10.1371/journal.pdig.0000899, ověřeno 2026-09-07; preprint PMID 38633805).",
+          "ref": "ai-zdravotnictvi-1-vstricnost--13"
         }
       ],
-      "notes": "Z 12 tvrzení článku v data/claims.json vybráno 7 nejsilnějších (effect/efficacy/measurement s číslem účinku): --03, --05, --06, --08, --09, --10, --11. Vynechána --01, --02 (popisné statistiky objemu nasazení), --04 (dotazníkový survey-item), --07 (duplicitní téma halucinací k --06, navíc s vlastní citací a DOI ve Zdrojích) a --13 (42 % halucinací v propouštěcích zprávách z urgentu) — ta zůstává neověřena kvůli rozpočtu volání. Vložením nové položky do Zdrojů se změnil content_hash souboru, položka se proto vrátí do fronty jako stale a --13 se doověří v dalším běhu. Text článku nebyl nijak přepsán (prose_change prázdný); poznámka pod grafem symptom checkerů („test obecného chatbota“) záměrně ponechána beze změny — pojmenování studie v prose je zásah pro redakci. Žádné contradicted ani partial → žádný flag, žádné issue, audit-status zůstává verified. Rozpočet nástrojů: PubMed 8 volání v rešerši (strop 6 překročen o 2 — dohledání skutečného zdroje čísla 41 % pro --11, které v článku nebylo citováno) + 2 v adjudikaci (dávkový get_article_metadata pro šest PMID; convert_article_ids pro DOI FAccT), celkem 10; Consensus 2 dotazy (v rámci stropu), bez rate-limitu."
+      "notes": "Z 12 tvrzení článku v data/claims.json vybráno 7 nejsilnějších (effect/efficacy/measurement s číslem účinku): --03, --05, --06, --08, --09, --10, --11. Vynechána --01, --02 (popisné statistiky objemu nasazení), --04 (dotazníkový survey-item), --07 (duplicitní téma halucinací k --06, navíc s vlastní citací a DOI ve Zdrojích) a --13 (42 % halucinací v propouštěcích zprávách z urgentu) — tu kvůli rozpočtu rešerše nezpracovala; doověřila ji hlavní session po review Codex téhož dne (supported, Williams 2025, viz claim). Text článku nebyl nijak přepsán (prose_change prázdný); poznámka pod grafem symptom checkerů („test obecného chatbota“) záměrně ponechána beze změny — pojmenování studie v prose je zásah pro redakci. Žádné contradicted ani partial → žádný flag, žádné issue, audit-status zůstává verified. Rozpočet nástrojů: PubMed 8 volání v rešerši (strop 6 překročen o 2 — dohledání skutečného zdroje čísla 41 % pro --11, které v článku nebylo citováno) + 2 v adjudikaci (dávkový get_article_metadata pro šest PMID; convert_article_ids pro DOI FAccT), celkem 10; Consensus 2 dotazy (v rámci stropu), bez rate-limitu."
     },
     {
       "id": "indicator:nizka_porodna_hmotnost_pct",

@@ -97,7 +97,7 @@ volba, vynechaná položka zůstane ve frontě.
 | Verdikt | Kdy | Důsledek |
 |---|---|---|
 | `supported` | Nejsilnější dostupná evidence tvrzení potvrzuje včetně směru a řádu velikosti | doplnit zdroj (PMID/DOI), pokud chybí; `source_note` u claims |
-| `partial` | Evidence potvrzuje směr, ale ne rozsah / populaci / číslo; nebo je smíšená | doplnit zdroj + `note` s výhradou; **prose beze změny**, jen audit poznámka; Opus může navrhnout jednu upřesňující větu → `review-pending` |
+| `partial` | Evidence potvrzuje směr, ale ne rozsah / populaci / číslo; nebo je smíšená | doplnit zdroj + `note` s výhradou; **prose beze změny**, jen audit poznámka; Opus může navrhnout jednu upřesňující větu → `review-pending` (i když článek byl `partial`) |
 | `contradicted` | Převaha kvalitní evidence říká opak, nebo citovaná studie je retrahovaná / neexistuje | **flag + issue**, text beze změny; `audit-status` → `partial` (pokud byl `verified` nebo `review-pending`) |
 | `no-evidence` | Hledáno podle protokolu, nic relevantního (ani pro, ani proti) | jen registr; `note` s použitými dotazy |
 | `not-applicable` | Tvrzení není odborné (viz výše) — vyřazeno až při rešerši | jen registr |
@@ -135,7 +135,9 @@ Každý verdikt nese `confidence` (`high` / `medium` / `low`) a `note` (u `parti
 
 - Přepisovat prose, měnit čísla, mazat věty. Jediná výjimka: Opus u `partial` smí
   přidat **jednu** upřesňující větu s citací, a to jen když je rozsah tvrzení očividně
-  širší než evidence; článek pak jde do `review-pending`.
+  širší než evidence; článek pak jde **vždy** do `review-pending` (`audit-status`
+  v `articles.json`, `audit.status` i `<meta name="article:audit-status">`), i když byl
+  předtím `partial` — nově vložená lékařská formulace čeká na schválení redakce.
 - Zakládat nové články, nové claims, nové indikátory.
 - Sahat na generované artefakty (`data/search-index.json`, `data/diagnoza-index.json`,
   `data/souvislosti.json`, `src/styles.min.css`).
@@ -228,7 +230,10 @@ souborů (`data/evidence-audit.json`, `data/claims.json`, `data/articles.json`).
 2. Spočítá `content_hash` **až po svých úpravách**:
    `node scripts/evidence-audit-queue.js --hash clanek-{slug}.html` (u indikátoru cesta karty).
 3. Zapíše záznam do `data/evidence-audit.json` (`items`, existující `id` nahradí) a
-   aktualizuje `generated_at`.
+   aktualizuje `generated_at`. Co zůstalo **neověřeno** (vyčerpaný strop volání, tvrzení
+   vynechané z rozpočtu, citace bez DOI), zapíše do pole `followup` — fronta pak položku
+   vrátí jako `stale` v příštím běhu. Bez `followup` platí položka za dokončenou; spoléhat
+   na to, že „se změnil hash“, nelze (hash se počítá až po úpravách).
 4. Vrátí seznam změněných souborů a provedených akcí.
 
 Registrový záznam:
@@ -262,12 +267,17 @@ Registrový záznam:
     { "type": "source-added", "detail": "Kaner 2018 do article-sources (Recenzovaná literatura)" },
     { "type": "claim-note", "detail": "source_note u kratke-intervence-uhrady--03", "ref": "kratke-intervence-uhrady--03" }
   ],
+  "followup": "claim --07 (relaps po 12 měsících) neověřen — strop volání",
   "notes": ""
 }
 ```
 
 Pole `summary` musí sedět na počty verdiktů (chybějící klíč = 0). `contradicted` bez
 akce `flagged` / `issue` validátor odmítne.
+
+**Poznámka v `audit.notes` / `audit:` komentáři uvádí jen skutečně auditovaná tvrzení**
+(počet a verdikty přesně podle registru); tvrzení vyřazená jako administrativní se
+nepočítají mezi ověřená.
 
 ### FÁZE 5 — Kontrola, report, PR (hlavní session)
 

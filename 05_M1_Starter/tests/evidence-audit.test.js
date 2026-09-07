@@ -16,6 +16,8 @@ test('itemStatus: pending → stale (hash / stáří) → done', () => {
   assert.equal(itemStatus({ content_hash: 'old', checked_at: '2026-09-01' }, 'abc', TODAY), 'stale');
   assert.equal(itemStatus({ content_hash: 'abc', checked_at: '2025-01-01' }, 'abc', TODAY, DEFAULT_MAX_AGE_DAYS), 'stale');
   assert.equal(itemStatus({ content_hash: 'abc', checked_at: 'bad' }, 'abc', TODAY), 'stale');
+  // explicitní followup vrací položku do fronty i při shodném hashi
+  assert.equal(itemStatus({ content_hash: 'abc', checked_at: '2026-09-01', followup: 'claim --13 neověřen' }, 'abc', TODAY), 'stale');
 });
 
 test('scoreArticle: odkazy na studie váží víc než zmínky, strop zmínek 10', () => {
@@ -110,6 +112,8 @@ test('validateEvidenceAudit: FK na články/indikátory a zákaz provozních tex
   assert.ok(validateEvidenceAudit({ version: '1', generated_at: 'x', items: [ghost] }, fk).some(e => e.includes('nenalezen v data/articles.json')));
   const ind = { ...validItem(), id: 'indicator:nadeje_doziti_total', type: 'indicator' };
   assert.deepEqual(validateEvidenceAudit({ version: '1', generated_at: 'x', items: [ind] }, fk), []);
+  const fu = { ...validItem(), followup: 42 };
+  assert.ok(validateEvidenceAudit({ version: '1', generated_at: 'x', items: [fu] }, fk).some(e => e.includes('followup must be')));
   const boiler = validItem();
   boiler.claims[0].note = 'You have 3 searches remaining, sign up for more.';
   assert.ok(validateEvidenceAudit({ version: '1', generated_at: 'x', items: [boiler] }, fk).some(e => e.includes('Provozní text')));
