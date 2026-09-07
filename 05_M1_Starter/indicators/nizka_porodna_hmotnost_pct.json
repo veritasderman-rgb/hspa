@@ -14,7 +14,10 @@
       "type": "uzis_rodicky",
       "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-reprodukcniho-zdravi--modul-rodicek",
       "dataset": "Rodičky a novorozenci (NRML)",
-      "dimensions": { "metric": "nizka_porodna_hmotnost", "uzemi": "CZ" }
+      "dimensions": {
+        "metric": "nizka_porodna_hmotnost",
+        "uzemi": "CZ"
+      }
     },
     "fallback": {
       "type": "oecd",
@@ -29,9 +32,15 @@
     "value": 6.8,
     "url": "https://stats.oecd.org/index.aspx?DataSetCode=HEALTH_STAT"
   },
-  "signal_thresholds": { "good": 5, "warn": 20 },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 20
+  },
   "frequency": "yearly",
-  "stewards": ["ÚZIS", "ČSÚ"],
+  "stewards": [
+    "ÚZIS",
+    "ČSÚ"
+  ],
   "method_notes": "Nízká porodní hmotnost (NPH) definována jako porodní hmotnost < 2 500 g u živě narozených. Data z ÚZIS Registru rodiček (NRML) — pokrývá 100 % porodů v ČR. OECD a Eurostat používají totožnou definici; mezinárodní srovnání je přímé a nesrovnatelnostní bias je minimální.",
   "limitations": "Agregovaná hodnota zahrnuje jak předčasné porody (gestační věk < 37 týdnů), tak novorozence s intrauterinní růstovou restrikcí (IUGR) při termínových porodech — tyto skupiny mají odlišné příčiny a vyžadují různé intervence. Česká republika má jednu z nejvyšších měr IVF léčby v Evropě (plně hrazeno ZP), vícečetná těhotenství po IVF jsou biologicky spojena s nižší porodní hmotností — část rozdílu oproti OECD průměru je tímto strukturálně podmíněna.",
   "determinants": [
@@ -44,6 +53,46 @@
   ],
   "importance": "Nízká porodní hmotnost je jedním z nejsilnějších prediktorů zdravotního stavu v dětství i dospělosti: vyšší riziko respiračních onemocnění, vývojových poruch, kardiovaskulárních onemocnění v dospělosti (fetální programování; Barker 1995). Je klíčovým ukazatelem efektivity prenatální péče a zdravotní rovnosti.",
   "patient_story": "Kamila, 32 let, Ostrava. Třetí těhotenství, tentokrát po IVF — přenos dvou embryí, protože porodnici neinformovala, že již prošla jedním neúspěšným cyklem. Dvojčata. Porod ve 34. týdnu gestace: holčička 1 980 g, chlapec 2 120 g. Obě děti s nízkou porodní hmotností. Tři týdny na novorozenecké JIP, desítky ošetřovatelských dnů v inkubátorech. Propuštění domů s váhou přes 2 400 g — reálný start života o tři týdny pozdější, než by bylo jinak.\n\nČeská republika eviduje přibližně 7,9 % živě narozených dětí s nízkou porodní hmotností (ÚZIS Registr rodiček / Rodičky a novorozenci, 2022). OECD průměr je 6,8 %, průměr zemí EU 6,9 % — Česko leží o 1,1 procentního bodu nad oběma. Absolutně to odpovídá přibližně 700–900 dětem ročně navíc oproti OECD průměru. Trend je mírně klesající (2018: 8,3 %; 2022: 7,9 %), ale pokles je pomalý. Signál v dashboardu: warn.\n\nZa českou hodnotou stojí několik strukturálních vrstev. Vícečetná těhotenství jsou biologicky spojena s nižší porodní hmotností a předčasným porodem — a ČR má jednu z nejvyšších měr IVF léčby v Evropě. V roce 2022 proběhlo přes 20 % IVF cyklů s přenosem dvou embryí, přestože guidelines ČLS JEP od roku 2020 doporučují selektivní přenos jednoho embrya (SET) jako standard první volby u žen do 38 let s euploidními embryi. Kouření matky v těhotenství je dalším faktorem: míra kouřících žen v těhotenství v ČR je kolem 7–9 %, zatímco ve skandinávských zemích pod 4 %. Třetí vrstvou jsou socioekonomické nerovnosti — děti matek bez středoškolského vzdělání nebo žijících v sociálně vyloučených lokalitách mají statisticky vyšší riziko NPH.\n\nPolitická páka existuje na třech konkrétních úrovních. Prvním je prenatální screening IUGR: posílení standardizace ultrazvukového sledování růstu plodu ve třetím trimestru (doporučený postup ČGPS), který umožňuje včas identifikovat ohrožená těhotenství. Druhým je intervence u kouření: krátká 5A intervence při prenatálních návštěvách u gynekologů a praktických lékařů je nákladově efektivní a snižuje NPH v randomizovaných studiích o 20–30 %. Třetím je implementace SET jako standardu IVF léčby: přechod od dvouembryonálních přenosů k selektivnímu přenosu jednoho embrya sníží míru vícečetných těhotenství a tím i NPH — bez dopadu na kumulativní úspěšnost cyklu.",
-  "framework": "hspa",
-  "dimension": "zdravi"
+  "literature": [
+    {
+      "pmid": "7613432",
+      "doi": "10.1136/bmj.311.6998.171",
+      "title": "Fetal origins of coronary heart disease.",
+      "year": 1995,
+      "journal": "BMJ",
+      "study_type": "review",
+      "note": "Citace „Barker 1995“ v poli importance. Narativní přehled: abstrakt doloží programování ischemické choroby srdeční, krevního tlaku, inzulinové odpovědi na glukózu, metabolismu cholesterolu a koagulace u osob s nízkou porodní hmotností. Respirační onemocnění ani vývojové poruchy, které karta téže citaci přiřazuje, abstrakt nedokládá; kauzalita je formulována jako hypotéza.",
+      "verified_at": "2026-09-07"
+    },
+    {
+      "pmid": "28196405",
+      "doi": "10.1002/14651858.CD001055.pub5",
+      "title": "Psychosocial interventions for supporting women to stop smoking in pregnancy.",
+      "year": 2017,
+      "journal": "Cochrane Database Syst Rev",
+      "study_type": "systematic review",
+      "note": "K tvrzení o intervenci u kouření v patient_story. 102 RCT, data od více než 28 000 žen: psychosociální intervence (poradenství, zpětná vazba, pobídky) snižují podíl novorozenců s nízkou porodní hmotností o 17 % a zvyšují průměrnou porodní hmotnost o 55,6 g (95% CI 29,8–81,4). Rozsah 20–30 %, protokol „5A“ ani nákladovou efektivitu abstrakt nedokládá.",
+      "verified_at": "2026-09-07"
+    },
+    {
+      "pmid": "22177461",
+      "doi": "10.1016/j.fertnstert.2011.11.033",
+      "title": "Elective single embryo transfer and perinatal outcomes: a systematic review and meta-analysis.",
+      "year": 2012,
+      "journal": "Fertil Steril",
+      "study_type": "systematic review / meta-analysis",
+      "note": "K tvrzení o SET v patient_story a k výhradě o IVF v limitations. 16 studií (8 RCT, 8 kohort): elektivní přenos jednoho embrya proti dvouembryonálnímu přenosu snižuje u jednočetných dětí riziko nízké porodní hmotnosti (RR 0,25; 95% CI 0,15–0,45 v RCT) i předčasného porodu (RR 0,37; 0,25–0,55). Kumulativní úspěšnost cyklu abstrakt neřeší.",
+      "verified_at": "2026-09-07"
+    },
+    {
+      "pmid": "41366714",
+      "doi": "10.1186/s41043-025-01181-x",
+      "title": "Economic evaluation of embryo transfer strategies in in vitro fertilization (IVF): a systematic review.",
+      "year": 2025,
+      "journal": "J Health Popul Nutr",
+      "study_type": "systematic review",
+      "note": "Kontext k páce SET: 16 ekonomických evaluací, SET a na něm postavené strategie jsou proti dvouembryonálnímu přenosu častěji nákladově efektivní, zvlášť u mladších žen; výsledek závisí na věku matky, kontextu systému a ochotě platit. Evidence z vysokopříjmových zemí, ne z ČR.",
+      "verified_at": "2026-09-07"
+    }
+  ]
 }

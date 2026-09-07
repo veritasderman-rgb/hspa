@@ -2,5 +2,727 @@
   "version": "1.0",
   "generated_at": "2026-09-07T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
-  "items": []
+  "items": [
+    {
+      "id": "clanek-ai-zdravotnictvi-2-lecba.html",
+      "type": "article",
+      "checked_at": "2026-09-07",
+      "run_id": "ea-2026-09-07-01",
+      "content_hash": "ce5faab4831290caeefce7c667caf4ba60265945",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--07",
+          "text": "AI-podpořené čtení zachytilo na plné kohortě 6,4 nádoru na tisíc žen oproti 5,0 u standardního postupu (tedy zhruba o 29 procent víc), a to bez nárůstu falešně pozitivních nálezů.",
+          "location": "prose — sekce „Korunním důkazem... MASAI\"",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39904652",
+              "doi": "10.1016/S2589-7500(24)00267-X",
+              "title": "Screening performance and characteristics of breast cancer detected in the Mammography Screening with Artificial Intelligence trial (MASAI): a randomised, controlled, parallel-group, non-inferiority, single-blinded, screening accuracy study.",
+              "year": 2025,
+              "journal": "Lancet Digit Health",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt (Hernström V et al., Lancet Digital Health 2025): cancer-detection rate 6,4/1000 (intervence) vs 5,0/1000 (kontrola), poměr 1,29 (95% CI 1,09–1,51; p=0,0021). Přesně odpovídá tvrzení i přepočtu na +29 %."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--08",
+          "text": "AI-podpořené čtení zachytilo na plné kohortě 6,4 nádoru na tisíc žen oproti 5,0 u standardního postupu.",
+          "location": "prose + obrázek (MASAI sloupcový graf)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39904652",
+              "doi": "10.1016/S2589-7500(24)00267-X",
+              "title": "Screening performance and characteristics of breast cancer detected in the Mammography Screening with Artificial Intelligence trial (MASAI): a randomised, controlled, parallel-group, non-inferiority, single-blinded, screening accuracy study.",
+              "year": 2025,
+              "journal": "Lancet Digit Health",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Stejný abstrakt jako u tvrzení 07 uvádí obě čísla doslova: 6,4 vs 5,0 na 1000 screenovaných."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--09",
+          "text": "čtecí zátěž radiologů klesla o 44 procent, protože druhý lidský odečet u většiny snímků nahradila AI",
+          "location": "prose — sekce MASAI",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37541274",
+              "doi": "10.1016/S1470-2045(23)00298-X",
+              "title": "Artificial intelligence-supported screen reading versus standard double reading in the Mammography Screening with Artificial Intelligence trial (MASAI): a clinical safety analysis...",
+              "year": 2023,
+              "journal": "Lancet Oncol",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39904652",
+              "doi": "10.1016/S2589-7500(24)00267-X",
+              "title": "Screening performance and characteristics of breast cancer detected in the Mammography Screening with Artificial Intelligence trial (MASAI)...",
+              "year": 2025,
+              "journal": "Lancet Digit Health",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Obě publikace MASAI potvrzují pokles čtecí zátěže o ~44 %: Lång 2023 doslova „screen-reading workload was reduced by 44,3 % using AI\", Hernström 2025 uvádí 44,2% snížení (61 248 vs 109 692 odečtů)."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--10",
+          "text": "Epic Sepsis Model... nezachytil 67 procent skutečně septických pacientů a zároveň spustil planý poplach u 18 procent všech hospitalizovaných; rozlišovací schopnost jen AUC 0,63.",
+          "location": "prose — sekce o Epic Sepsis Model",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34152373",
+              "doi": "10.1001/jamainternmed.2021.2626",
+              "title": "External Validation of a Widely Implemented Proprietary Sepsis Prediction Model in Hospitalized Patients.",
+              "year": 2021,
+              "journal": "JAMA Intern Med",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: hospitalization-level AUC 0,63 (95% CI 0,62–0,64); ESM „did not identify 1709 patients with sepsis (67%)\"; alerty pro 6971/38455 hospitalizací (18 %). Všechna tři čísla z článku odpovídají abstraktu."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--11",
+          "text": "Bakterie odolné vůči stávajícím lékům způsobily v roce 2019 odhadem 1,27 milionu úmrtí přímo a podílely se na dalších bezmála pěti milionech.",
+          "location": "prose — úvod sekce o antibiotikách",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35065702",
+              "doi": "10.1016/S0140-6736(21)02724-0",
+              "title": "Global burden of bacterial antimicrobial resistance in 2019: a systematic analysis.",
+              "year": 2022,
+              "journal": "Lancet",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt (Murray/AMR Collaborators, Lancet 2022): „1,27 million (95% UI 0,911–1,71) deaths attributable to bacterial AMR\" a „4,95 million ... deaths associated with bacterial AMR\" v roce 2019 — obě čísla z článku (1,27 mil. přímo, ~5 mil. celkem) přesně odpovídají."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-2-lecba--12",
+          "text": "Domácí systém Carebot na čtení rentgenů hrudníku... podle ministerstva zdravotnictví analyzoval přes 16 tisíc snímků v devíti nemocnicích a pomohl odhalit 56 nových nádorů.",
+          "location": "prose — sekce „Co se testuje a nasazuje v Česku\"",
+          "kind": "other",
+          "verdict": "not-applicable",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Číslo pochází z tiskových materiálů Ministerstva zdravotnictví ČR o provozním nasazení, ne z recenzované studie — v PubMed ani Consensu není indexováno a je mimo rozsah tohoto ověřovacího protokolu (administrativní/vládní zdroj, obdobně jako ČSÚ/ÚZIS statistiky, které se dle zadání neověřují)."
+        }
+      ],
+      "summary": {
+        "supported": 5,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "6 kandidátních tvrzení (relation: external, check: none) odpovídá počtu z article registru; claims 01–06 jsou administrativní ČR indikátory (check: auto, dashboard HSPA Monitoru) a dle zadání se neověřují. Všechny 4 studie citované článkem u tvrzení 07–11 (MASAI Lång 2023, MASAI Hernström 2025, Epic Sepsis Wong 2021, AMR Murray/Lancet 2022) byly nalezeny a ověřeny přes lookup_article_by_citation (1 dávkové volání, 4 citace) + get_article_metadata (1 dávkové volání, 4 PMID) = 2 volání PubMed celkem, žádná retrakce, typy publikací (RCT/systematic review/cohort) odpovídají tomu, co článek tvrdí, a čísla v abstraktech se doslova shodují s tvrzeními v textu. Consensus nebyl potřeba (PubMed dal přesné zásahy na první pokus u všech studií). Tvrzení 12 (Carebot ČR) je z tiskových materiálů MZ ČR, ne z recenzované literatury — mimo rozsah PubMed/Consensus ověřování, verdikt not-applicable."
+    },
+    {
+      "id": "clanek-cmp-iktova-centra.html",
+      "type": "article",
+      "checked_at": "2026-09-07",
+      "run_id": "ea-2026-09-07-01",
+      "content_hash": "e5268ceccc610e72e63610f94f497887471b7963",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 15,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "Trombolýza alteplázou se v Česku provádí podle evropských doporučení (ESO 2021 Guidelines on Intravenous Thrombolysis) v terapeutickém okně do 4,5 hodiny od počátku symptomů — doložená evropská opora vychází z randomizované studie ECASS III (Hacke et al., NEJM 2008), která prodloužila okno z původních 3 h.",
+          "location": "sekce „Co Česko v péči o CMP zvládá“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "18815396",
+              "doi": "10.1056/NEJMoa0804656",
+              "title": "Thrombolysis with alteplase 3 to 4.5 hours after acute ischemic stroke.",
+              "year": 2008,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: PubMed metadata sedí na citaci v článku (titul, DOI, NEJM 2008, RCT), studie testovala alteplázu podanou 3–4,5 h od vzniku symptomů — odborné jádro tvrzení (okno 4,5 h je opřené o randomizovanou evidenci) je doložené. Institucionální část věty („v Česku se provádí podle ESO 2021“) je citace doporučeného postupu, ne literární tvrzení — literaturou se neověřuje a verdikt se jí netýká. Bez zásahu, studie je ve zdrojích už uvedena včetně PMID."
+        },
+        {
+          "text": "Mechanická trombektomie u velkých uzávěrů má časové okno do 6 hodin v rámci standardní indikace a u vybraných pacientů s favorabilní perfuzní/DWI selekcí až 24 hodin (klíčové důkazy: DAWN trial, Nogueira et al., NEJM 2018).",
+          "location": "sekce „Co Česko v péči o CMP zvládá“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29129157",
+              "doi": "10.1056/NEJMoa1706442",
+              "title": "Thrombectomy 6 to 24 Hours after Stroke with a Mismatch between Deficit and Infarct.",
+              "year": 2018,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Titul studie sám nese populaci i okno (6–24 h od „last known well“) a selekci podle nesouladu klinického deficitu a rozsahu infarktu — přesně to, co článek uvádí jako „u vybraných pacientů až 24 hodin“. Článek okno nezobecňuje na všechny pacienty, formulace „u vybraných“ odpovídá designu studie. Bez zásahu."
+        },
+        {
+          "text": "DEFUSE-3 trial, Albers et al., NEJM 2018 — trombektomie 6–16 hodin s výběrem podle perfuzního zobrazení.",
+          "location": "sekce „Co Česko v péči o CMP zvládá“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29364767",
+              "doi": "10.1056/NEJMoa1713973",
+              "title": "Thrombectomy for Stroke at 6 to 16 Hours with Selection by Perfusion Imaging.",
+              "year": 2018,
+              "journal": "N Engl J Med",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Citace v článku (autor, časopis, rok, DOI) i obsahové zařazení („favorabilní perfuzní selekce“) odpovídají ověřeným metadatům; studie je v článku uvedena jako podpůrný důkaz k rozšířenému oknu, ne jako zdroj čísla 24 h. Bez zásahu."
+        },
+        {
+          "text": "Meta-analytická data ukazují měřitelnou ztrátu funkčního výsledku s každými dalšími zameškanými minutami od počátku symptomů (Saver JL et al., JAMA 2016, „time-to-treatment\" meta-analýza HERMES collaboration).",
+          "location": "sekce „Tři vrstvy, kde Česko ztrácí“ — „Pacient přichází pozdě“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "27673305",
+              "doi": "10.1001/jama.2016.13647",
+              "title": "Time to Treatment With Endovascular Thrombectomy and Outcomes From Ischemic Stroke: A Meta-analysis.",
+              "year": 2016,
+              "journal": "JAMA",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno v plném rozsahu, jak je tvrzení formulováno: článek uvádí jen směr a měřitelnost („měřitelná ztráta funkčního výsledku s každými dalšími minutami“), žádné konkrétní číslo, které by musel abstrakt doložit; IPD metaanalýza 5 RCT (n = 1287) pokles s časem od vzniku symptomů kvantifikuje (cOR 2,79 ve 3 h → 1,57 v 8 h). Ve zdrojích článku chybí u této položky PMID (uveden jen DOI) — doplnění je na redakci, audit citovanou studii nepřidává znovu."
+        },
+        {
+          "text": "Helsinki Stroke Model, popsaný Meretojou a kolektivem v Neurology 2012, optimalizoval každý krok od telefonátu na záchrannou službu po podání trombolytika a dosáhl mediánového „door-to-needle\" času pod 20 minut.",
+          "location": "sekce „Modely, které tyto vrstvy řeší“ (a shodně řádek av-data-table „Helsinki Stroke Model“)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22622858",
+              "doi": "10.1212/WNL.0b013e31825d6011",
+              "title": "Reducing in-hospital delay to 20 minutes in stroke thrombolysis.",
+              "year": 2012,
+              "journal": "Neurology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Studie existuje, není retrahovaná a DOI/PMID i bibliografie sedí (Neurology 2012;79(4):306–313); série intervencí zkracujících door-to-needle time v Helsinkách 1998–2011, výsledkem sledovaný roční medián DNT — směr i řád velikosti tvrzení jsou doložené. Doslovně dohledatelná hodnota je ale „to 20 minutes“ (dosažení 20 minut), nikoli „pod 20 minut“; číslo v podobě, jak ho článek uvádí, v dostupném abstraktu není, proto podle protokolu nejvýš partial. Doporučení redakci: v textu i v tabulce formulovat jako „na 20 minut“ / „kolem 20 minut“. Rozdíl je terminologický, ne věcný — audit prose nemění a neflaguje."
+        },
+        {
+          "text": "Mezinárodní data ukazují, že intenzivní strukturovaná rehabilitace v prvních týdnech a měsících po CMP výrazně snižuje invaliditu i mortalitu (do velké části hodnocenou v 90 dnech).",
+          "location": "sekce „Tři vrstvy, kde Česko ztrácí“ — „Rehabilitace v subakutní a chronické fázi pokulhává“",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "32324916",
+              "doi": "10.1002/14651858.CD000197.pub4",
+              "title": "Organised inpatient (stroke unit) care for stroke: network meta-analysis.",
+              "year": 2020,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "28365632",
+              "doi": "10.7861/clinmedicine.17-2-173",
+              "title": "Stroke unit care, inpatient rehabilitation and early supported discharge.",
+              "year": 2017,
+              "journal": "Clin Med (Lond)",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace mění rešeršní „unclear“ na partial — evidence pro směr existuje a je vysoké kvality, jen neodpovídá rozsahu tvrzení. Cochrane síťová metaanalýza (29 RCT, 5 902 pacientů) doslova dokládá, že organizovaná multidisciplinární lůžková péče o CMP snižuje úmrtí (OR 0,76; 95% CI 0,66–0,88), smrt nebo závislost (OR 0,75; 0,66–0,85) i špatný výsledek (OR 0,77), tedy invaliditu i mortalitu — v přepočtu 2 přeživší a 6 samostatně žijících navíc na 100 pacientů. Tři výhrady: (a) evidence se týká organizované lůžkové (stroke-unit) péče jako celku, ne intenzity následné rehabilitace v subakutní a chronické fázi, o níž odstavec mluví; (b) horizont hodnocení je medián jeden rok, nikoli „90 dnů“ v závorce — toto číslo abstrakt nedokládá; (c) systematické přehledy velmi časné a intenzivní mobilizace, na které narazila rešerše, ukazují přínos pro funkční výsledek, ale ne pro mortalitu (u mobilizace < 24 h dokonce nesignifikantní trend opačným směrem) — jde ale o jednu větev evidence bez převahy proti tvrzení, takže contradicted nepřipadá v úvahu. Rodgers & Price 2017 přidán jako kontext k části o návaznosti péče po propuštění (early supported discharge). Rozsah tvrzení je očividně širší než evidence, proto audit doplnil jednu upřesňující větu s citací; audit-status zůstává partial (článek jej už nese, na review-pending se nesnižuje)."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Langhorne P, Ramachandra S (Cochrane Database Syst Rev 2020;4(4):CD000197, PMID 32324916) doplněn do article-sources jako nová skupina „Recenzovaná literatura“ — k tvrzení o snížení invalidity a úmrtnosti strukturovanou multidisciplinární péčí po CMP. Studie, které článek už cituje (ECASS III, DAWN, DEFUSE-3, HERMES/Saver, Meretoja 2012), znovu přidány nebyly.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný rozpor (0× contradicted) → žádný flag ani issue. Podle adjudikace ponechán audit-status „partial“, který článek už nese (na review-pending se nesnižuje); published, date, number ani audit.last_reviewed se nemění. Do hlavičky audit: a do articles.json → audit.notes připojena věta „evidence-audit 2026-09-07: 6 tvrzení, 4× supported, 2× partial; viz data/evidence-audit.json“. U partial tvrzení o rehabilitaci vložena do prose jediná upřesňující věta s citací Cochrane metaanalýzy (rozsah tvrzení byl očividně širší než evidence). Ke claims.json žádná akce — žádné z 12 tvrzení cmp-iktova-centra--01…--12 neodpovídá auditovaným větám (administrativní statistiky ÚZIS/OECD/Eurostat, které hlídá drift-check).",
+          "ref": ""
+        }
+      ],
+      "notes": "Administrativní/OECD-Eurostat/ÚZIS statistiky v claims.json (cmp-iktova-centra--01 až --12) nejsou odborná tvrzení dle protokolu — jde o datové srovnání ČR vs. benchmark, které hlídá drift-check. Vybráno 6 odborných tvrzení o klinické evidenci (ECASS III, DAWN, DEFUSE-3, HERMES meta-analýza, Helsinki Stroke Model, rehabilitace); vše, co článek cituje s DOI/PMID, ověřeno přes get_article_metadata (found_via: article), tituly i DOI se shodují přesně. Rešerše (Sonnet) vyčerpala strop 6 volání PubMed a použila 1 dotaz Consensus pro tvrzení o rehabilitaci; kandidát z Consensu se nepodařilo ověřit v PubMed (AMBIGUOUS), proto do registru žádná studie z tohoto vyhledávače nešla a verdikt zůstal unclear k adjudikaci. Adjudikace (Opus) přidala 3 volání PubMed (1× search_articles na stroke-unit / early-supported-discharge přehledy, 2× dávkové get_article_metadata) a rozhodla unclear → partial: dohledán chybějící pilíř evidence (Cochrane síťová metaanalýza PMID 32324916), která doslova dokládá snížení úmrtí i závislosti, ale pro organizovanou lůžkovou péči a při mediánu sledování jeden rok, ne pro intenzitu následné rehabilitace v horizontu 90 dnů — proto partial, ne supported. Contradicted nepřipadá v úvahu. Finální rozdělení: 4× supported, 2× partial, 0× contradicted / no-evidence / not-applicable / unclear. Ověřeny nulové retrakce a shoda typu publikace u všech pěti citovaných studií. Mimo rozsah auditu, k rozhodnutí redakce: (1) u položky Saver JL et al. (JAMA 2016) ve zdrojích chybí PMID 27673305 vedle DOI; (2) formulace „door-to-needle pod 20 minut“ v textu i v av-data-table by měla znít „na 20 minut“ / „kolem 20 minut“; (3) AcT trial (Menon 2022) a Meretoja 2013 Stroke zmíněné v textu bez DOI/PMID nebyly ověřovány (podpůrné citace, mimo strop volání) — zůstávají otevřeným bodem pro příští běh, protože položka se do fronty vrátí po změně obsahu."
+    },
+    {
+      "id": "clanek-ai-zdravotnictvi-1-vstricnost.html",
+      "type": "article",
+      "checked_at": "2026-09-07",
+      "run_id": "ea-2026-09-07-01",
+      "content_hash": "9e6584a3198faa1adf11c0b8cb31019ac0deb9be",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 2
+      },
+      "claims": [
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--03",
+          "text": "Studie napříč šesti zdravotnickými systémy publikovaná v JAMA Network Open v roce 2025 zjistila, že po měsíci používání kleslo vyhoření lékařů z 51,9 na 38,8 procenta.",
+          "location": "sekce „Zapisovatel, který poslouchá: ambient AI scribes“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41037268",
+              "doi": "10.1001/jamanetworkopen.2025.34976",
+              "title": "Use of Ambient AI Scribes to Reduce Administrative Burden and Professional Burnout",
+              "year": 2025,
+              "journal": "JAMA Netw Open",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „After 30 days with the ambient AI scribe, the proportion of participants experiencing burnout decreased significantly from 51.9% to 38.8% (odds ratio, 0.26; 95% CI, 0.13-0.54)“; 263 ambulantních klinických lékařů v 6 akademických a komunitních systémech USA, sběr 1. 2.–31. 10. 2024. Typ publikace „Journal Article“, bez retrakce či errata. Design je quality-improvement pre/post dotazník bez kontrolní skupiny — článek ho jako RCT nevydává a sám v následujícím odstavci upozorňuje, že většina nadšených čísel pochází z pozorovacích projektů. Čísla, populace i horizont („po měsíci“) sedí doslova."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--05",
+          "text": "Když přišel první velký randomizovaný test (UCLA Health, 238 lékařů ve čtrnácti oborech, zveřejněný v NEJM AI v roce 2025), výsledek byl střízlivější: jeden z nástrojů zkrátil čas strávený v záznamu o 9,5 procenta, zatímco druhý žádnou statisticky významnou úsporu času nepřinesl.",
+          "location": "sekce „Zapisovatel, který poslouchá: ambient AI scribes“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41497288",
+              "doi": "10.1056/aioa2501000",
+              "title": "Ambient AI Scribes in Clinical Practice: A Randomized Trial",
+              "year": 2025,
+              "journal": "NEJM AI",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: pragmatická randomizovaná studie, 238 ambulantních lékařů ze 14 oborů, randomizace 1:1:1 (DAX Copilot / Nabla / obvyklá péče), 4. 11. 2024 – 3. 1. 2025; „Nabla users experienced a 9.5% (95% CI, −17.2% to −1.8%; P=0.02) decrease in time-in-note versus the control group, whereas DAX users exhibited no significant change versus the control group (−1.7%; 95% CI, −9.4% to +5.9%; P=0.66)“. Sedí i doplněk článku, že oba nástroje zlepšily vnímanou zátěž a pohodu (Mini-Z, PTL, PFI-WE). Typ publikace „Journal Article“, bez retrakce."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--06",
+          "text": "Akademická analýza jednoho velmi rozšířeného nástroje pro rozpoznávání řeči (publikovaná na konferenci ACM FAccT v roce 2024) zjistila, že zhruba jedno procento přepisů obsahovalo celé vymyšlené věty — a z nich asi 40 procent bylo potenciálně škodlivých.",
+          "location": "sekce „Zapisovatel, který poslouchá: ambient AI scribes“ (a databox „Vstřícná AI v číslech“)",
+          "kind": "measurement",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "doi": "10.1145/3630106.3658996",
+              "title": "Careless Whisper: Speech-to-Text Hallucination Harms",
+              "year": 2024,
+              "journal": "Proceedings of the 2024 ACM Conference on Fairness, Accountability, and Transparency (FAccT)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": false
+            }
+          ],
+          "note": "K posouzení redakcí. Ověření v PubMed je u tohoto zdroje strukturálně nemožné: převod DOI 10.1145/3630106.3658996 na PMID vrátil záznam bez PMID i PMCID — práce v PubMed indexována není, jde o recenzovaný sborník informatické konference ACM FAccT mimo biomedicínský záběr databáze. Železné pravidlo „abstrakt ověřený v PubMed“ tedy splnit nelze a verdikt supported nepřipadá v úvahu; zároveň nic neukazuje, že by tvrzení bylo chybné — článek studii korektně cituje s DOI přímo v sekci Zdroje a formulace („zhruba jedno procento“, „asi 40 procent“) je zaokrouhlená a hedgovaná. Není to contradicted ani no-evidence, ale nerozhodnutelné v rámci nástrojů auditu. Doporučení redakci: ponechat text beze změny a rozhodnout, zda pro recenzované konferenční sborníky mimo záběr PubMed (ACM/IEEE) zavést vlastní ověřovací cestu (ACM Digital Library / DOI resolver) jako doplněk protokolu."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--08",
+          "text": "Jeden pediatrický model zachytil 83 procent budoucích neúčastí při méně než 17 procentech planých poplachů.",
+          "location": "sekce „Pozvánka, která přijde ve správnou chvíli“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35444260",
+              "doi": "10.1038/s41746-022-00594-w",
+              "title": "Machine learning approaches to predicting no-shows in pediatric medical appointment",
+              "year": 2022,
+              "journal": "NPJ Digit Med",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „In an unobserved set of patients, our method correctly identified 83% of no-shows at the time of scheduling and led to a false alert rate less than 17%.“ Retrospektivní vývoj a validace prediktivního modelu (neuronová síť / logistická regrese) v akademické dětské nemocnici s 20% mírou neúčasti; sedí i navazující věta článku o nejsilnějším prediktoru („patients' past no-show record is the strongest predictor“). Typ publikace „Journal Article“, bez retrakce. Formulace „jeden pediatrický model“ správně omezuje platnost na jedno pracoviště."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--09",
+          "text": "V chilské dětské nemocnici spojili předpověď rizika s cíleným telefonátem nejohroženějším rodinám a neúčast klesla o 10,3 procentního bodu oproti kontrolní skupině.",
+          "location": "sekce „Pozvánka, která přijde ve správnou chvíli“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36707485",
+              "doi": "10.1007/s10729-022-09626-z",
+              "title": "Predicting no-show appointments in a pediatric hospital in Chile using machine learning",
+              "year": 2023,
+              "journal": "Health Care Manag Sci",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „An 8-week experimental design measured a decrease in no-shows of 10.3 percentage points when using our reminder strategy compared to a control group“ a „Using a prototype to call patients with the highest risk of no-shows resulted in a noticeable decrease in the overall no-show rate“ — sedí číslo i jednotka (procentní body), design (kontrolní skupina) i mechanismus (telefonát nejrizikovějším). Prostředí: Hospital Dr. Luis Calvo Mackenna, veřejná dětská nemocnice v Santiagu, 395 963 termínů 2015–2018. Bez retrakce. Přenositelnost na ČR článek netvrdí — jde o explicitně chilský příklad."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--10",
+          "text": "Velký audit 23 symptom checkerů publikovaný v BMJ už v roce 2015 zjistil, že správnou diagnózu na prvním místě nabídly jen ve 34 procentech a správnou míru naléhavosti (triáž) v 57 procentech případů.",
+          "location": "sekce „Chatbot u vchodu: triáž a její meze“",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26157077",
+              "doi": "10.1136/bmj.h3480",
+              "title": "Evaluation of symptom checkers for self diagnosis and triage: audit study",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „The 23 symptom checkers provided the correct diagnosis first in 34% (95% CI 31% to 37%) … and provided the appropriate triage advice in 57% (52% to 61%) of standardized patient evaluations.“ Design: audit study, 45 standardizovaných vinět, 770 diagnostických a 532 triážních hodnocení. Typ publikace „Evaluation Study / Journal Article“, bez retrakce. Článek nález správně datuje do roku 2015 a nevydává ho za dnešní stav trhu."
+        },
+        {
+          "claim_id": "ai-zdravotnictvi-1-vstricnost--11",
+          "text": "Obecný chatbot ChatGPT ve verzi 3.5 vykázal v jednom testu dokonce 41 procent nebezpečných triáží.",
+          "location": "sekce „Chatbot u vchodu: triáž a její meze“ (a poznámka pod grafem „Symptom checkery: přesnost zůstává nízká“)",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37788063",
+              "doi": "10.2196/49995",
+              "title": "Comparison of Diagnostic and Triage Accuracy of Ada Health and WebMD Symptom Checkers, ChatGPT, and Physicians for Patients in an Emergency Department: Clinical Data Analysis Study",
+              "year": 2023,
+              "journal": "JMIR Mhealth Uhealth",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „that for ChatGPT 3.5 was 59% (n=22) agree, 41% (n=15) unsafe, and 0% (n=0) too cautious“ a „The unsafe triage rate for ChatGPT 3.5 (41%) was significantly higher (P=.009) than that of Ada (14%)“. Formulace v článku („v jednom testu“) je přiměřená malému vzorku (40 pacientů urgentního příjmu, 37 případů s dostatečnými daty pro triáž), proto supported, ne partial — článek číslo nezobecňuje. Studie v sekci Zdroje chyběla, ačkoli článek z ní bere dvě čísla (41 % nebezpečných triáží u ChatGPT 3.5 a 14 % nebezpečných doporučení u aplikace Ada); doplněna jedinou položkou, která doloží obě."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Fraser H, et al. JMIR Mhealth Uhealth 2023;11:e49995 (PMID 37788063, DOI 10.2196/49995) vložen do article-sources, skupina „Primární — recenzovaná literatura (PubMed a konferenční)“, mezi Semigran BMJ 2015 a Fraser/Coiera/Wong Lancet 2018.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--11"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--11 nahrazen doloženou citací (PMID:37788063 / DOI:10.2196/49995, ověřeno 2026-09-07).",
+          "ref": "ai-zdravotnictvi-1-vstricnost--11"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--03 doplněn o PMID:41037268 / DOI:10.1001/jamanetworkopen.2025.34976, ověřeno 2026-09-07.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--03"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--05 doplněn o PMID:41497288 / DOI:10.1056/aioa2501000, ověřeno 2026-09-07.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--05"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--08 doplněn o PMID:35444260 / DOI:10.1038/s41746-022-00594-w, ověřeno 2026-09-07.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--08"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--09 doplněn o PMID:36707485 / DOI:10.1007/s10729-022-09626-z, ověřeno 2026-09-07.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--09"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--10 doplněn o PMID:26157077 / DOI:10.1136/bmj.h3480, ověřeno 2026-09-07.",
+          "ref": "ai-zdravotnictvi-1-vstricnost--10"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u ai-zdravotnictvi-1-vstricnost--06 doplněn o DOI:10.1145/3630106.3658996 s výslovnou poznámkou, že sborník ACM FAccT není v PubMed indexován a číslo tedy auditem ověřeno nebylo (bez slova „ověřeno“).",
+          "ref": "ai-zdravotnictvi-1-vstricnost--06"
+        },
+        {
+          "type": "claim-note",
+          "detail": "Do audit: hlavičky článku a do data/articles.json → audit.notes připojena věta „evidence-audit 2026-09-07: 7 tvrzení, 6 supported, 1 unclear (FAccT mimo PubMed); doplněn zdroj Fraser 2023 (PMID 37788063); viz data/evidence-audit.json“. audit.last_reviewed i audit-status verified ponechány beze změny.",
+          "ref": ""
+        }
+      ],
+      "notes": "Z 12 tvrzení článku v data/claims.json vybráno 7 nejsilnějších (effect/efficacy/measurement s číslem účinku): --03, --05, --06, --08, --09, --10, --11. Vynechána --01, --02 (popisné statistiky objemu nasazení), --04 (dotazníkový survey-item), --07 (duplicitní téma halucinací k --06, navíc s vlastní citací a DOI ve Zdrojích) a --13 (42 % halucinací v propouštěcích zprávách z urgentu) — ta zůstává neověřena kvůli rozpočtu volání. Vložením nové položky do Zdrojů se změnil content_hash souboru, položka se proto vrátí do fronty jako stale a --13 se doověří v dalším běhu. Text článku nebyl nijak přepsán (prose_change prázdný); poznámka pod grafem symptom checkerů („test obecného chatbota“) záměrně ponechána beze změny — pojmenování studie v prose je zásah pro redakci. Žádné contradicted ani partial → žádný flag, žádné issue, audit-status zůstává verified. Rozpočet nástrojů: PubMed 8 volání v rešerši (strop 6 překročen o 2 — dohledání skutečného zdroje čísla 41 % pro --11, které v článku nebylo citováno) + 2 v adjudikaci (dávkový get_article_metadata pro šest PMID; convert_article_ids pro DOI FAccT), celkem 10; Consensus 2 dotazy (v rámci stropu), bez rate-limitu."
+    },
+    {
+      "id": "indicator:nizka_porodna_hmotnost_pct",
+      "type": "indicator",
+      "checked_at": "2026-09-07",
+      "run_id": "ea-2026-09-07-01",
+      "content_hash": "1bc4b6f95d4cad3f728ccadbea4bc4a45d98267b",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 15,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Nízká porodní hmotnost je jedním z nejsilnějších prediktorů zdravotního stavu v dětství i dospělosti: vyšší riziko respiračních onemocnění, vývojových poruch, kardiovaskulárních onemocnění v dospělosti (fetální programování; Barker 1995).",
+          "location": "pole importance",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "7613432",
+              "doi": "10.1136/bmj.311.6998.171",
+              "title": "Fetal origins of coronary heart disease.",
+              "year": 1995,
+              "journal": "BMJ (Clinical research ed.)",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše. Barker 1995 (PMID 7613432) existuje, není retrahovaný, typ publikace Journal Article / Review — jde o narativní přehled, ne systematický. Abstrakt doslova doloží jen část tvrzení: muži a ženy s porodní hmotností při dolní hranici normy mají vyšší míru ischemické choroby srdeční, a programování se týká krevního tlaku, inzulinové odpovědi na glukózu, metabolismu cholesterolu a koagulace. Respirační onemocnění ani vývojové poruchy v abstraktu ani v MeSH nejsou — karta je stejné citaci přiřazuje neprávem. Sám autor formuluje fetální programování jako hypotézu („The fetal origins hypothesis states…“), takže kauzalita je v kartě podána silněji než ve zdroji. Jedna citace širšího rozsahu ale není rozpor s převahou evidence: verdikt zůstává partial, ne contradicted. Zbývající dvě položky výčtu (respirační, vývojové) jsou bez doloženého zdroje — k posouzení redakcí, zda citaci zúžit na kardiovaskulární/metabolické důsledky, nebo doplnit vlastní zdroj."
+        },
+        {
+          "text": "Krátká 5A intervence při prenatálních návštěvách u gynekologů a praktických lékařů je nákladově efektivní a snižuje NPH v randomizovaných studiích o 20–30 %.",
+          "location": "patient_story, odstavec o politických pákách",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28196405",
+              "doi": "10.1002/14651858.CD001055.pub5",
+              "title": "Psychosocial interventions for supporting women to stop smoking in pregnancy.",
+              "year": 2017,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše na základě přečteného abstraktu. Chamberlain 2017 (Cochrane, 102 RCT, 88 studií s daty od >28 000 žen, kvalita evidence střední až vysoká) doslova uvádí: ženy, které dostaly psychosociální intervenci, měly o 17 % nižší podíl novorozenců s nízkou porodní hmotností, vyšší průměrnou porodní hmotnost (MD 55,60 g; 95% CI 29,82–81,38) a o 22 % méně přijetí na novorozeneckou JIP. Směr tvrzení tedy sedí, ale (a) číslo 20–30 % v abstraktu není a je nad doloženou hodnotou, (b) hodnocenou intervencí je široká třída psychosociálních intervencí (poradenství, zpětná vazba, pobídky), ne strukturovaný protokol 5A, (c) nákladová efektivita není předmětem přehledu vůbec. Tvrzení s číslem mimo abstrakt → nejvýš partial; jde o zpřesnění rozsahu a specifikace intervence, ne o rozpor."
+        },
+        {
+          "text": "Třetím je implementace SET jako standardu IVF léčby: přechod od dvouembryonálních přenosů k selektivnímu přenosu jednoho embrya sníží míru vícečetných těhotenství a tím i NPH — bez dopadu na kumulativní úspěšnost cyklu.",
+          "location": "patient_story, odstavec o politických pákách (třetí páka); souvisí i s výhradou o IVF v poli limitations",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22177461",
+              "doi": "10.1016/j.fertnstert.2011.11.033",
+              "title": "Elective single embryo transfer and perinatal outcomes: a systematic review and meta-analysis.",
+              "year": 2012,
+              "journal": "Fertil Steril",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41366714",
+              "doi": "10.1186/s41043-025-01181-x",
+              "title": "Economic evaluation of embryo transfer strategies in in vitro fertilization (IVF): a systematic review.",
+              "year": 2025,
+              "journal": "J Health Popul Nutr",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32609023",
+              "doi": "10.1080/14647273.2020.1785643",
+              "title": "Pregnancy and birth outcomes of single versus multiple embryo transfer in gestational surrogacy arrangements: a systematic review and meta-analysis.",
+              "year": 2020,
+              "journal": "Hum Fertil (Camb)",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tvrzení rešerše neprošetřila (vyčerpaný strop), adjudikace ho doplnila v rámci limitu 3 tvrzení na indikátor. Perinatální polovina tvrzení je doložena: Grady 2012 (16 studií, z toho 8 RCT) uvádí, že jednočetné děti po elektivním SET mají proti dvouembryonálnímu přenosu nižší riziko nízké porodní hmotnosti (RR 0,25; 95% CI 0,15–0,45 podle RCT; 0,51; 0,29–0,91 podle kohort) i předčasného porodu (RR 0,37; 0,25–0,55). Doložka „bez dopadu na kumulativní úspěšnost cyklu“ ale v žádném z ověřených abstraktů není: Grady kumulativní živé porody neřeší a Attawet 2020 naopak nachází vyšší míru klinických těhotenství a živých porodů po přenosu více embryí (RR 1,29; 1,10–1,51) — jde ovšem o jiný kontext (náhradní mateřství) a o výsledek na jeden přenos, ne o kumulativní úspěšnost série cyklů, takže to tvrzení nevyvrací, jen ho nechává nedoloženo. Číslo/klauzule mimo abstrakt → partial. Doplněná evidence není domácí; přenositelnost na české IVF prostředí (plná úhrada, vysoký podíl dvouembryonálních přenosů) je předpoklad, ne doložený fakt."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "V kartě indicators/nizka_porodna_hmotnost_pct.json založeno pole \"literature\" (dosud chybělo) a vložen záznam Barker 1995 (PMID 7613432, DOI 10.1136/bmj.311.6998.171, BMJ, review) s poznámkou k citaci „Barker 1995“ v poli importance: abstrakt doloží programování ischemické choroby srdeční, krevního tlaku, inzulinové odpovědi na glukózu, metabolismu cholesterolu a koagulace, ale ne respirační onemocnění ani vývojové poruchy; kauzalita je ve zdroji formulována jako hypotéza.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen záznam Chamberlain 2017 (PMID 28196405, DOI 10.1002/14651858.CD001055.pub5, Cochrane Database Syst Rev, systematic review) k tvrzení o intervenci u kouření v patient_story: 102 RCT, data od více než 28 000 žen, pokles podílu novorozenců s nízkou porodní hmotností o 17 % a vyšší průměrná porodní hmotnost o 55,6 g (95% CI 29,8–81,4); rozsah 20–30 %, protokol „5A“ ani nákladovou efektivitu abstrakt nedokládá.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen záznam Grady 2012 (PMID 22177461, DOI 10.1016/j.fertnstert.2011.11.033, Fertil Steril, systematic review / meta-analysis) k tvrzení o SET v patient_story a k výhradě o IVF v limitations: 16 studií (8 RCT, 8 kohort), elektivní přenos jednoho embrya snižuje u jednočetných dětí riziko nízké porodní hmotnosti (RR 0,25; 95% CI 0,15–0,45 v RCT) i předčasného porodu (RR 0,37; 0,25–0,55); kumulativní úspěšnost cyklu abstrakt neřeší.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen kontextový záznam Kordi 2025 (PMID 41366714, DOI 10.1186/s41043-025-01181-x, J Health Popul Nutr, systematic review) k páce SET: 16 ekonomických evaluací, SET a na něm postavené strategie jsou proti dvouembryonálnímu přenosu častěji nákladově efektivní, zvlášť u mladších žen; evidence z vysokopříjmových zemí, ne z ČR.",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "Bez zásahu: karta indikátoru nemá záznamy v data/claims.json (registr claims vede tvrzení článků), takže žádný source_note se nedoplňuje.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Prose karty se nemění a nezakládá se flag ani issue: všechna tři tvrzení jsou partial (směr sedí, liší se rozsah/specifikace), nikoli contradicted. Poznámka do pole limitations se podle protokolu smí přidat jen u verdiktu kind=measurement — žádné z ověřených tvrzení tam nespadá (mechanism, effect, efficacy), proto zůstávají výhrady jen v poznámkách u položek literature a v registru. K posouzení redakcí: (a) v importance zúžit citaci Barker 1995 na kardiovaskulární a metabolické důsledky, nebo doplnit zdroj k respiračním onemocněním a vývojovým poruchám; (b) v patient_story uvést doložených 17 % místo 20–30 % a nemluvit specificky o „5A“, pokud pro něj není zdroj; (c) v patient_story doplnit zdroj k doložce „bez dopadu na kumulativní úspěšnost cyklu“ (kandidát: Cochrane přehled k počtu přenášených embryí), nebo doložku vypustit.",
+          "ref": ""
+        }
+      ],
+      "notes": "Karta indikátoru nemá pole `literature` ani žádné explicitní odkazy na literaturu v datech — jediná citace v prose je „Barker 1995“ v poli `importance`. Rešerše prošetřila 2 tvrzení (validita ukazatele jako HSPA měřítka je čistě metodická/administrativní: definice NPH < 2500 g je shodná s OECD/Eurostat, jde o datovou konvenci, ne o odborné tvrzení vyžadující literaturu); třetí kandidátní tvrzení o SET vs. dvouembryonální transfer u IVF nebylo v rešerši prošetřeno, protože strop 6 volání PubMed byl vyčerpán. Consensus nebyl použit (PubMed poskytl relevantní, ověřitelné studie). Všechny nalezené zdroje jsou existující, neretrahované recenzované práce — žádný rozpor s tvrzeními karty, jen dílčí nesoulad v rozsahu/čísle a v šíři citovaného mechanismu, proto verdikt `partial`, ne `contradicted`. | Adjudikace Opus, run ea-2026-09-07-01, datum běhu 2026-09-07. Volání PubMed: 6 v rešerši + 3 v adjudikaci (get_article_metadata pro 7613432 a 28196405; search_articles k SET vs. DET; get_article_metadata pro 22177461, 32609023, 41366714), adjudikační strop 3 dodržen. Consensus nepoužit, `tools.consensus` zůstává true jako dostupnost konektoru. Plný text nebylo třeba stahovat — všechny rozhodné údaje jsou v abstraktech.\n\nZměny proti rešerši: (1) u obou původních tvrzení potvrzen verdikt partial, u obou zvýšena confidence z medium na high, protože abstrakty byly přečteny přímo a nesoulad je jednoznačný a přesně lokalizovaný; (2) doplněno třetí tvrzení (SET jako páka v patient_story), které rešerše ponechala neprošetřené kvůli vyčerpanému stropu — strop 3 tvrzení na indikátor je tím naplněn.\n\nProč žádný contradicted: u Barkera jde o citaci přiřazenou k širšímu výčtu důsledků, ne o studii, která by tvrzení vyvracela (existuje, není retrahovaná, MeSH i typ publikace ověřeny). U 5A jde o rozdíl 17 % vs. 20–30 % ve stejném směru z jediného (byť vysoce kvalitního) přehledu. U SET je perinatální část tvrzení doložená a sporná je jen nedoložená doložka o kumulativní úspěšnosti; Attawet 2020 ji nevyvrací (náhradní mateřství, výsledek na jeden přenos).\n\nPřenositelnost: veškerá doložená evidence je zahraniční. Karta ji používá k odůvodnění pák pro české prostředí — u tvrzení o SET je to zvlášť podstatné, protože karta i patient_story staví na české specifičnosti (plná úhrada IVF, přes 20 % cyklů s přenosem dvou embryí). Domácí studie nebyla nalezena ani hledána nad rámec stropu; doporučení pro další dávku: cílené hledání českých perinatologických a IVF dat (NRRZ/ÚZIS, ČGPS) k SET a ke kouření v těhotenství.\n\nFormální poznámka k citaci Grady: PubMed vrací publication_date 2011-12-15 (elektronické zveřejnění), tištěné vydání je Fertil Steril. 2012;97(2):324-31 — v registru i v kartě uveden rok 2012 podle citace ročníku a čísla.\n\nZápis: prose karty beze změny (audit smí u indikátoru doplnit větu jen do `limitations` a jen u verdiktu kind=measurement; žádné z tvrzení tam nespadá), do karty přibylo jen nové pole `literature` se čtyřmi ověřenými položkami. Poznámka do data/articles.json se u indikátoru nepíše."
+    }
+  ]
 }
