@@ -154,6 +154,8 @@ FÁZE 5 audit A2) a v noční rutině (FÁZE 3.1).
   (počítadla, výzvy k registraci) kdekoli v repu, čísla, která nejsou v abstraktu
   ani v open-access plném textu, retrahované a neoznačené práce.
 
+**Plošné ověření korpusu** dělá evidence-audit (`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`): po dávkách projde všechny publikované články a indikátory, výsledky (studie + verdikt na tvrzení) drží `data/evidence-audit.json`. Rozpor s evidencí = flag + issue, nikdy tichý přepis.
+
 ### Scraped data
 
 Pokud data scrapnuté (např. plánované PUK, INDIKO), v UI **viditelný disclaimer**:

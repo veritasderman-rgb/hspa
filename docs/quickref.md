@@ -39,6 +39,8 @@ npm run serve                    # http://localhost:8080
 
 # Validace
 npm run validate:all             # všech 9 validátorů (indicators, strategies, explainers, prevention, articles, dohodovaci, legislation, financing, clinical-quality)
+npm run validate:evidence        # registr evidence-auditu (data/evidence-audit.json)
+npm run evidence:queue -- --status   # fronta evidence-auditu: kolik článků/indikátorů čeká na ověření v PubMed
 
 # Testy
 npm test                         # 731 testů, 0 failures
