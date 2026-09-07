@@ -133,6 +133,27 @@ V `<section class="article-sources">` minimálně:
 
 Žádné tvrzení v textu bez odkazu na primární zdroj.
 
+### Recenzovaná literatura (studie)
+
+Studie se cituje **sama** — ne nástroj, kterým byla nalezena, ne tisková zpráva
+o ní. Ověření běží přes MCP konektory rutin (`PubMed`, `Consensus`), protokol je
+v `PROMPT_DAILY_ROUTINE.md` (FÁZE 1 „Recenzovaná literatura — PubMed + Consensus“,
+FÁZE 5 audit A2) a v noční rutině (FÁZE 3.1).
+
+- **V textu**: *Autor et al.* (rok), *Časopis* + odkaz na `https://doi.org/…`
+  (nebo `https://pubmed.ncbi.nlm.nih.gov/{PMID}/`), `target="_blank" rel="noopener"`.
+- **V `article-sources`**: `Autor A, Autor B et al. Název. Časopis. Rok;roč(č):strany.
+  DOI. PMID.` + „ověřeno v PubMed {datum}“; typ studie (RCT, kohorta, metaanalýza…);
+  preprint výslovně označit.
+- **V `data/claims.json`**: `source_note` = `PMID:… / DOI:…, ověřeno {datum}`;
+  `relation: external`.
+- **Jedna studie ≠ evidence.** Tvrzení o účinnosti, riziku nebo dopadu stojí na
+  přehledu / metaanalýze, nebo je opatřeno výhradou; Consensus slouží k dohledání
+  a k ověření, že citovaná práce není odlehlá.
+- **Zakázáno**: „podle Consensus / podle PubMed“, provozní texty nástrojů
+  (počítadla, výzvy k registraci) kdekoli v repu, čísla, která nejsou v abstraktu
+  ani v open-access plném textu, retrahované a neoznačené práce.
+
 ### Scraped data
 
 Pokud data scrapnuté (např. plánované PUK, INDIKO), v UI **viditelný disclaimer**:

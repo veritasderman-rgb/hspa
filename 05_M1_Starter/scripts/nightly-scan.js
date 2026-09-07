@@ -72,6 +72,20 @@ const PRIORITY_LINK_HINTS = [
   'sukl.cz', 'uzis.cz', 'health.ec.europa.eu', 'ec.europa.eu',
 ];
 
+// Domény odkazů na recenzovanou literaturu (DOI, PubMed/PMC, časopisy,
+// preprinty). Vyrábějí samostatný flag `check-literature`: takový odkaz se
+// neověřuje jako HTTP 200, ale přes MCP PubMed (shoda citace, DOI, retrakce /
+// erratum, typ publikace) a u tvrzení z jediné studie přes Consensus — viz
+// PROMPT_NIGHTLY_ROUTINE.md FÁZE 3.1. Bez tohoto flagu by články, které citují
+// jen studie, do nočního worklistu nikdy nespadly (PR #1166, review).
+const LITERATURE_LINK_HINTS = [
+  'doi.org', 'pubmed.ncbi.nlm.nih.gov', 'ncbi.nlm.nih.gov/pmc', 'pmc.ncbi.nlm.nih.gov',
+  'europepmc.org', 'cochranelibrary.com', 'thelancet.com', 'nejm.org', 'bmj.com',
+  'jamanetwork.com', 'nature.com', 'sciencedirect.com', 'link.springer.com',
+  'onlinelibrary.wiley.com', 'academic.oup.com', 'frontiersin.org', 'mdpi.com',
+  'journals.plos.org', 'medrxiv.org', 'biorxiv.org', 'semanticscholar.org',
+];
+
 const MONTHS_CS = {
   'ledna': 1, 'leden': 1, 'února': 2, 'únor': 2, 'března': 3, 'březen': 3,
   'dubna': 4, 'duben': 4, 'května': 5, 'květen': 5, 'června': 6, 'červen': 6,
@@ -547,13 +561,15 @@ function findExternalLinks(html, { cap = MAX_EXT_LINKS } = {}) {
     const url = decodeHref(m[1]);
     const label = stripTags(m[2]).slice(0, 80);
     const priority = PRIORITY_LINK_HINTS.some(h => url.includes(h));
-    links.push({ url, label, priority });
+    const literature = !priority && LITERATURE_LINK_HINTS.some(h => url.includes(h));
+    links.push({ url, label, priority, literature });
     if (links.length >= scanLimit) break;
   }
   // dedup podle url, priority napřed
   const seen = new Set();
   const dedup = links.filter(l => { if (seen.has(l.url)) return false; seen.add(l.url); return true; });
-  dedup.sort((a, b) => (b.priority - a.priority));
+  // priority napřed, pak literatura, pak ostatní — aby strop cap neodřízl studie
+  dedup.sort((a, b) => (b.priority - a.priority) || (b.literature - a.literature));
   return Number.isFinite(cap) ? dedup.slice(0, cap) : dedup;
 }
 
@@ -576,7 +592,7 @@ export function parseLastReviewed(html) {
   return m ? m[1] : null;
 }
 
-export { daysBetween, REVIEW_SKIP_DAYS, scanArticle, findExternalLinks };
+export { daysBetween, REVIEW_SKIP_DAYS, scanArticle, findExternalLinks, LITERATURE_LINK_HINTS };
 
 function scanArticle(article, today, { skipReviewed = true } = {}) {
   const slug = article.slug;
@@ -678,6 +694,19 @@ function scanArticle(article, today, { skipReviewed = true } = {}) {
             links: prio.map(l => l.url) });
         }
       }
+      // Odkazy na studie (DOI/PubMed/PMC/časopisy) → check-literature: ověření
+      // přes MCP PubMed (citace, retrakce), ne HTTP 200. Stejné 14denní pravidlo
+      // jako check-sources.
+      const lit = links.filter(l => l.literature);
+      if (lit.length) {
+        if (skipReviewed && recentlyReviewed) {
+          item.check_literature_skipped = { count: lit.length, last_reviewed: lastReviewed };
+        } else {
+          flags.push({ type: 'check-literature', severity: 'review',
+            note: `${lit.length} odkazů na studie (DOI/PubMed/časopis) k ověření přes MCP PubMed (shoda citace, DOI, retrakce); tvrzení z jediné studie → Consensus.`,
+            links: lit.map(l => l.url) });
+        }
+      }
     }
   } else {
     flags.push({ type: 'no-html', severity: 'review', note: 'HTML soubor článku nenalezen.' });
@@ -746,7 +775,7 @@ export function scanCardLinks(today, { skipChecked = true, log = loadLinkCheckLo
     try { urls = extractUrlsFromJson(JSON.parse(readFileSync(resolve(dir, f), 'utf8'))); }
     catch { items.push({ file: rel, error: 'invalid-json', urls: [], priority: [] }); continue; }
     if (!urls.length) continue;
-    const priority = urls.filter(u => PRIORITY_LINK_HINTS.some(h => u.includes(h)));
+    const priority = urls.filter(u => PRIORITY_LINK_HINTS.some(h => u.includes(h)) || LITERATURE_LINK_HINTS.some(h => u.includes(h)));
     const skipped = skipChecked && isRecentlyLinkChecked(rel, today, log);
     items.push({ file: rel, urls, priority, skipped });
   }
@@ -814,6 +843,7 @@ function buildReport(items, today) {
     'topical-expired': 'Revize: aktualizovat na „po události“',
     'date-passed': 'Revize: ověřit budoucí vs. minulý čas u data',
     'check-sources': 'Revize: zkontrolovat zdrojové odkazy (WebFetch)',
+    'check-literature': 'Revize: ověřit citace studií přes MCP PubMed (shoda, DOI, retrakce); jediná studie → Consensus',
     'indicator-drift': 'Revize: citace neodpovídá aktuální hodnotě indikátoru',
     'claims-drift': 'Revize: tvrzení z registru se rozešlo s hodnotou indikátoru',
     'claims-stale': 'Nízká: indikátor má novější rok než tvrzení',
@@ -831,6 +861,12 @@ function buildReport(items, today) {
   if (skipped.length) {
     lines.push(`> ℹ️ \`check-sources\` přeskočeno u **${skipped.length}** článků auditovaných ` +
                `< ${REVIEW_SKIP_DAYS} dní (\`last_reviewed\`). Plný worklist: \`--no-skip-reviewed\`.`);
+    lines.push('');
+  }
+  const skippedLit = items.filter(i => i.check_literature_skipped);
+  if (skippedLit.length) {
+    lines.push(`> ℹ️ \`check-literature\` přeskočeno u **${skippedLit.length}** článků auditovaných ` +
+               `< ${REVIEW_SKIP_DAYS} dní (\`last_reviewed\`).`);
     lines.push('');
   }
 
@@ -881,7 +917,7 @@ function buildReport(items, today) {
 function flagSeverity(type) {
   return ({
     'missing-cover': 'auto-fix', 'missing-indicators': 'review', 'topical-expired': 'review', 'date-passed': 'review',
-    'check-sources': 'review', 'no-html': 'review', 'year-past': 'low', 'stale-date': 'low',
+    'check-sources': 'review', 'check-literature': 'review', 'no-html': 'review', 'year-past': 'low', 'stale-date': 'low',
     'indicator-drift': 'review', 'claims-drift': 'review', 'claims-stale': 'low', 'claims-missing': 'low',
   })[type] || 'review';
 }
