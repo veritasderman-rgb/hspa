@@ -24,7 +24,7 @@ Primární zdroje:
 - **Domácí**: ÚZIS (NZIS, NRPZS, NOR, NRZP), NZIP, MZ ČR (věstníky, tiskové zprávy), VZP (ZPP, výroční zpráva), ČSÚ (DataStat, projekce), SZÚ (NAUTA, surveillance), SÚKL (registr výpadků, eRecept), NCEZ, KST, NÚKIB, ČKS, ČOS ČLS JEP
 - **Evropské/mezinárodní**: OECD (Health at a Glance, OECD.Stat, HCQI), Eurostat (hlth\_\* datasety), WHO (Mortality DB, Health Observatory, guidelines), IARC (Monographs), EU EUR-Lex (ELI permalink)
 - **Legislativa**: ASPI / Zákony pro lidi, PSP ČR (sněmovní tisky), Senát, eKLEP (meziresortní řízení), Sbírka zákonů, nalus.usoud.cz (judikatura ÚS)
-- **Recenzovaná literatura**: PubMed/MEDLINE (DOI), Cochrane Library
+- **Recenzovaná literatura**: PubMed/MEDLINE (PMID, DOI) přes MCP `PubMed` (`search_articles`, `get_article_metadata`, `lookup_article_by_citation`, `get_full_text_article` u open-access), Cochrane Library; **Consensus** přes MCP `Consensus` (`search` nad 220 mil. recenzovaných prací vč. PubMed, Scopus, Semantic Scholar) jako vyhledávač evidence — *nástroj, ne zdroj*: cituje se vždy nalezená práce (autoři, rok, časopis, DOI/PMID), nikdy „podle Consensus“. Protokol viz „Recenzovaná literatura — PubMed + Consensus“ ve FÁZI 1.
 - **Transparentnost/veřejné zakázky**: Hlídač státu (hlidacstatu.cz) přes MCP — VeKLEP (stav legislativy v přípravě), Registr smluv (`search_contracts`, `get_contract_detail`), rozhodnutí ÚOHS (`search_uohs_decisions`), K-Index smluvní praxe (`get_kindex_for_legal_entity`)
 
 Co je **zakázáno**:
@@ -61,7 +61,8 @@ Co je **zakázáno**:
 | 11 | **PSP ČR — sněmovní tisky (zdravotnictví)** | psp.cz/sqw/historie.sqw (bez `?o=` — vždy aktuální volební období; archiv `o=9`, `o=10`…) | Nový tisk, hlasování, schválení, vyhlášení ve Sbírce |
 | 12 | **Sbírka zákonů** | zakonyprolidi.cz/cs/aktualne | Nové normy v gesci MZ ČR |
 | 13 | **NÚKIB** | nukib.cz/cs/aktualni-informace | Bezpečnostní incidenty zdravotnictví, NIS2 implementace |
-| 14 | **Recenzovaná literatura ČR** | PubMed query: "Czech Republic" + healthcare keyword | Nové domácí studie |
+| 14 | **Recenzovaná literatura ČR** | MCP `PubMed` → `search_articles` (`query`: `"Czech Republic"[Title/Abstract] AND (health services OR mortality OR screening OR …)`, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date`) | Nové domácí studie (PMID, DOI, časopis) |
+| 15 | **Evidence k tématu dne** | MCP `Consensus` → `search` (`query` anglicky a konkrétně, `medical_mode: true`, `exclude_preprints: true`; u „co říká nejlepší evidence“ navíc `study_types: ["systematic review","meta-analysis","rct"]`) | Ke každé kauze z řádků 1–13, u níž článek bude tvrdit něco o účinnosti, riziku nebo dopadu: co říká souhrn recenzované literatury, ne jedna studie |
 
 ### Hlídač státu — doplňkový discovery kanál (transparentnost, legislativa v přípravě)
 
@@ -101,6 +102,38 @@ veřejných zdravotnických institucí.
    samostatnou session nebo v noční rutině. Výroky bez čísel a bez vazby na
    měřitelné indikátory do Ověřovny nepatří.
 
+### Recenzovaná literatura — PubMed + Consensus (protokol)
+
+Obě propojení jsou **MCP konektory rutiny** (nastavuje redakce v Routines; rutina
+je nevolá přes API klíče). Rozdělení rolí:
+
+| Potřeba | Nástroj | Jak |
+|---|---|---|
+| Ověřit konkrétní citaci (autor, rok, časopis, DOI/PMID z článku nebo z podkladu) | `PubMed` → `lookup_article_by_citation` (≥ 2–3 pole) nebo `get_article_metadata` (PMID) | Shoda názvu, autorů, roku a časopisu; z metadat vezmi DOI a **typ publikace** (retrakce, erratum, komentář ≠ studie) |
+| Zjistit, co studie skutečně tvrdí | `PubMed` → abstrakt z metadat; u open-access `get_full_text_article` | Tvrzení v článku musí být v abstraktu/plném textu **doslova doložitelné** (populace, období, velikost účinku, jednotka) |
+| Najít nové domácí studie | `PubMed` → `search_articles` (řádek 14 powerlistu) | Filtruj na ČR (`"Czech Republic"[Title/Abstract]` nebo `[Affiliation]`), poslední týden podle `edat` |
+| „Co říká evidence“ k tématu, dohledání nejsilnějších prací | `Consensus` → `search` | Anglický, konkrétní dotaz; `medical_mode` + `exclude_preprints`; pro souhrn preferuj systematické přehledy a metaanalýzy. Výsledek = kandidáti; každý, který použiješ, **ověř v PubMed** (PMID/DOI) |
+| Ověřit, že jedna citovaná studie není odlehlá | `Consensus` → `search` k témuž tvrzení | Když převaha kvalitní evidence říká opak, tvrzení nezveřejňuj na jedné studii — přepiš s výhradou a cituj přehled, nebo vynech |
+
+**Citační pravidla (závazná):**
+
+- V textu: „studie *Autor et al.* (rok) v *Časopis* …“ + odkaz na DOI (`https://doi.org/…`)
+  nebo PMID (`https://pubmed.ncbi.nlm.nih.gov/{PMID}/`); v `article-sources` položka
+  ve tvaru *Autor A, Autor B et al. Název. Časopis. Rok;roč(č):strany. DOI. PMID.*
+  s poznámkou „ověřeno v PubMed {datum}“. Preprint označ slovem **preprint**.
+- V `data/claims.json` u tvrzení ze studie: `source_note` = `PMID:… / DOI:…, ověřeno {datum}`.
+- Consensus i PubMed jsou **nástroje**. Do článku, coveru, claims ani PR nikdy nepatří
+  jejich provozní texty (počítadla dotazů, výzvy k registraci, „podle Consensus“).
+- Abstrakt ≠ důkaz čísla, které v něm není. Když číslo nenajdeš v abstraktu ani v
+  open-access plném textu, do článku nepatří (železné pravidlo).
+- Sekundární zpráva o studii (tisková zpráva univerzity, média) je jen stopa; citovat
+  se má studie samotná, ověřená v PubMed.
+
+**Když konektor chybí** (v seznamu nástrojů není `mcp__PubMed__*` / `mcp__Consensus__*`):
+krok přeskoč, napiš to do discovery reportu a do PR („PubMed/Consensus nedostupné —
+literatura neověřena“), a tvrzení opřená jen o studie **nepiš** (žádný WebSearch náhradou,
+žádná paměť modelu). Redakce konektor doplní v Routines.
+
 ### Výstup fáze 1 — Discovery report
 
 Vytvoř soubor `discovery/discovery-YYYY-MM-DD.md` s seznamem nálezů:
@@ -119,6 +152,9 @@ Vytvoř soubor `discovery/discovery-YYYY-MM-DD.md` s seznamem nálezů:
 ## Aktuální dění / kauzy s implikací pro zdravotnictví
 - Tisková zpráva MZ ČR z DD. MM. — XYZ
 - Mediální kauza XYZ (ČT24 / Zdravotnický deník — sekundární zdroj, vyžaduje primární verifikaci)
+
+## Recenzovaná literatura (PubMed / Consensus)
+- [PMID / DOI] — [autor, rok, časopis] — [co nového, relevance pro ČR] — [zdroj: search_articles / Consensus search]
 
 ## Aktualizace existujících dat (vlna)
 - ÚZIS NRH 2024 (data za 2023) publikováno DD. MM.
@@ -256,6 +292,10 @@ Než začneš psát, sestav **datový rámec článku** v dokumentu `discovery/d
 ## Mezinárodní kontext (pokud relevantní)
 - Stejnou metriku v {země} — hodnoty + zdroje
 - Methodology caveat: [shoda / rozdíl v metodice]
+
+## Evidence (pokud článek cituje studie)
+- [tvrzení] ← [Autor et al., rok, časopis, DOI, PMID] — ověřeno v PubMed [datum]; typ studie; co přesně abstrakt říká
+- Consensus kontrola: [dotaz] → převaha evidence [souhlasí / nesouhlasí / nejasná] — [odkaz na přehled/metaanalýzu, DOI]
 
 ## Interní křížové odkazy
 - Související články HSPA: [slugs]
@@ -509,6 +549,15 @@ Pro **každý** výrok obsahující číslo, jméno instituce, název zákona, d
    - **Zastaralé** → aktualizuj na nejnovější vlnu, uprav text
    - **Neověřitelné** → smaž, nebo přepiš s explicitní výhradou („podle dostupných odhadů…" + zdroj odhadu)
    - **Špatně interpretované** → přepiš podle skutečnosti primárního zdroje
+
+#### A2. Tvrzení opřená o studie (recenzovaná literatura)
+Pro **každé** „studie ukazuje“, „podle výzkumu“, „metaanalýza“, jmenovanou práci nebo odkaz na doi.org / pubmed.ncbi.nlm.nih.gov / PMC:
+
+1. Dohledej záznam přes MCP `PubMed` (`lookup_article_by_citation` nebo `get_article_metadata`): shoda autorů, roku, časopisu, názvu; DOI/PMID doplň do odkazu i do `article-sources`.
+2. Zkontroluj typ publikace: retrakce / erratum / komentář / dopis / preprint → tvrzení přepiš nebo vynech; preprint vždy označ.
+3. Ověř, že abstrakt (u OA plný text) nese **přesně to, co článek tvrdí** (populace, období, směr a velikost účinku, jednotka). Když ne → „Špatně interpretované“.
+4. Když se článek opírá o **jedinou** studii: `Consensus` → `search` k témuž tvrzení. Převaha kvalitní evidence proti → přepiš s výhradou a cituj přehled, nebo vynech. Souhlas → můžeš doplnit „v souladu s přehledem X (DOI)“.
+5. Bez dostupného konektoru se tvrzení neověřuje domněnkou: buď ho vynech, nebo článek přepni na `flagged` + issue.
 
 #### B. Odkazy (hyperlinks)
 
