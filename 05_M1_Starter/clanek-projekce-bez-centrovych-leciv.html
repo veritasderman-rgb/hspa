@@ -86,7 +86,23 @@
       doplněna podmínka. (3) poznámka u řádku Revmatologie tvrdila, že index cenové slevy 0,90 je
       nejtvrdší; nejnižší ze všech 18 skupin má Dýchací soustava 2 s hodnotou 0,87 — opraveno.
       (4) dva odkazy v bloku Související obsah nesly vymyšlené názvy článků místo skutečných
-      (narok-pojistence-2-demograficky-tlak, deficit-vzp-2026) — nahrazeny title z articles.json."
+      (narok-pojistence-2-demograficky-tlak, deficit-vzp-2026) — nahrazeny title z articles.json.
+      CODEX REVIEW 2026-09-07 (PR #1165, commit f576431) — 4 nálezy P2, všechny ověřeny proti textu
+      přílohy č. 15 vyhlášky č. 432/2025 Sb. a proti vlastním součtům, všechny OPRAVENY:
+      (5) parafráze vzorce říkala 'loňskou úroveň'; referenčním rokem je ale 2024, tedy rok o DVA
+      roky starší než hodnocený 2026 — přeformulováno na 'úroveň referenčního roku 2024' a doplněna
+      věta, že referenčním rokem není rok předchozí.
+      (6) v sekci Zdroje zůstala výjimka pro pojištěnce do 18 let popsaná jako plošná, ačkoli
+      v těle textu už byla opravena na podmíněnou — podmínka (§ 16 nebo skupiny podle bodu 3)
+      doplněna i tam, aby souhrn zdrojů nenesl širší tvrzení než výklad v článku.
+      (7) v sekci Co s tím stálo 'zhruba osminu systému'; osmina je 12,5 %, skutečný podíl je
+      39,81 / 504,80 = 7,9 % — opraveno na 'zhruba osm procent systému', tedy shodně s hodnotou
+      uvedenou dřív v textu.
+      (8) figcaption a poznámky u bar-compare popisovaly INU jako 'povolený růst úhrady'. INU je
+      ale jen jedním vstupem do vzorce stropu — kombinuje se s indexem cenové slevy a bere se
+      minimum ze dvou větví (např. onkologie 1,34 x ICS 0,96). Titulek figury i tři poznámky
+      u řádků přeformulovány na 'vstup do výpočtu stropu' a k dotčeným skupinám doplněna hodnota
+      indexu cenové slevy."
 -->
 <meta name="article:audit-status" content="draft">
 <link rel="stylesheet" href="src/styles.min.css">
@@ -328,24 +344,24 @@
       </p>
 
       <p>
-        Mechanismus je v jádru jednoduchý, i když zapsaný je vzorcem. Úhrada za rok 2026 se stanoví jako <strong>menší</strong> ze dvou hodnot: buď produkce z referenčního roku 2024 přenásobená indexem navýšení úhrady a indexem cenové slevy, nebo skutečná produkce roku 2026 přenásobená indexem cenové slevy a koeficientem změny produkce, který je sám zastropovaný na jedné. Jinými slovy: poskytovatel dostane zaplaceno buď loňskou úroveň zvýšenou o povolený index, nebo letošní realitu — podle toho, co je nižší.
+        Mechanismus je v jádru jednoduchý, i když zapsaný je vzorcem. Úhrada za rok 2026 se stanoví jako <strong>menší</strong> ze dvou hodnot: buď produkce z referenčního roku 2024 přenásobená indexem navýšení úhrady a indexem cenové slevy, nebo skutečná produkce roku 2026 přenásobená indexem cenové slevy a koeficientem změny produkce, který je sám zastropovaný na jedné. Jinými slovy: poskytovatel dostane zaplaceno buď úroveň referenčního roku 2024 upravenou o oba indexy, nebo skutečnou produkci roku 2026 — podle toho, co je nižší. Referenčním rokem tedy není rok předchozí, ale rok o dva roky starší než ten hodnocený.
       </p>
 
       <p>
-        Povolený index růstu se přitom liší podle diagnostické skupiny, a ty rozdíly jsou výmluvné.
+        Index navýšení úhrady, který do toho výpočtu vstupuje, se přitom liší podle diagnostické skupiny, a ty rozdíly jsou výmluvné. Sám o sobě neříká, o kolik smí úhrada vyrůst — ve vzorci se kombinuje s indexem cenové slevy a s minimem obou větví.
       </p>
 
       <figure class="av-figure av-figure-wide" aria-labelledby="avPredBarH">
-        <figcaption class="av-figure-h" id="avPredBarH">Index navýšení úhrady pro rok 2026 podle skupin centrových léčiv (kolikrát smí úhrada vyrůst proti referenčnímu roku 2024)</figcaption>
+        <figcaption class="av-figure-h" id="avPredBarH">Index navýšení úhrady pro rok 2026 podle skupin centrových léčiv — vstup do výpočtu stropu, ne povolený růst úhrady sám o sobě</figcaption>
         <ol class="av-bar-compare av-bar-compare-list" data-max="1.8" data-unit="×">
-          <li class="av-bar-row av-bar-row-highlight" data-value="1.70" data-label="Dýchací soustava 1 (astma, CHOPN)" data-note="nejvyšší povolený růst; index cenové slevy 1,00"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="1.70" data-label="Dýchací soustava 1 (astma, CHOPN)" data-note="nejvyšší index ze všech 18 skupin; index cenové slevy 1,00"></li>
           <li class="av-bar-row av-bar-row-highlight" data-value="1.62" data-label="Oběhový systém" data-note="plicní arteriální hypertenze, amyloidóza srdce"></li>
           <li class="av-bar-row" data-value="1.55" data-label="Hepatologie" data-note="onemocnění jater a žlučových cest"></li>
           <li class="av-bar-row" data-value="1.34" data-label="Onkologie — solidní nádory" data-note="největší skupina objemem; index cenové slevy 0,96"></li>
           <li class="av-bar-row" data-value="1.27" data-label="Hematoonkologie" data-note="index cenové slevy 0,94"></li>
           <li class="av-bar-row" data-value="1.15" data-label="Revmatologie" data-note="index cenové slevy 0,90; nejnižší ze všech skupin má Dýchací soustava 2 — 0,87"></li>
-          <li class="av-bar-row" data-value="1.10" data-label="Neurologie 2 (roztroušená skleróza)" data-note="druhý nejnižší povolený růst"></li>
-          <li class="av-bar-row" data-value="1.05" data-label="Oftalmologie" data-note="nejnižší povolený růst ze všech skupin"></li>
+          <li class="av-bar-row" data-value="1.10" data-label="Neurologie 2 (roztroušená skleróza)" data-note="druhý nejnižší index; index cenové slevy 0,98"></li>
+          <li class="av-bar-row" data-value="1.05" data-label="Oftalmologie" data-note="nejnižší index ze všech 18 skupin; index cenové slevy 0,99"></li>
         </ol>
         <p class="av-figure-note"><strong>Zdroj:</strong> vyhláška č. 432/2025 Sb., o stanovení hodnot bodu, výše úhrad hrazených služeb, výše záloh a regulačních omezení pro rok 2026, příloha č. 15, bod 4 (text ověřen ve Sbírce 7. 9. 2026). Zobrazeno je 8 z 18 skupin — ty s nejvyššími a nejnižšími hodnotami indexu. Index navýšení úhrady vstupuje do výpočtu stropu podle bodu 3 téže přílohy, ne do úhrady přímo.</p>
       </figure>
@@ -369,7 +385,7 @@
       </p>
 
       <p>
-        Praktický důsledek pro pojišťovny je konkrétní: dlouhodobě plánovat lze všechno kromě jedné položky, která dnes dělá zhruba osminu systému a jejíž vývoj závisí na správních řízeních o úhradě, na tom, kdy vyprší které patenty, a na tom, kolik nových indikací se v příštích letech schválí. Nástroje, které na to stát má — dočasná úhrada podle § 39d a roční strop v úhradové vyhlášce —, jsou obojí krátkodobé. To nemusí být špatně; je ale rozdíl mezi „máme to pod kontrolou" a „přepočítáváme to každý rok znovu, protože jinak to nejde".
+        Praktický důsledek pro pojišťovny je konkrétní: dlouhodobě plánovat lze všechno kromě jedné položky, která dnes dělá zhruba osm procent systému a jejíž vývoj závisí na správních řízeních o úhradě, na tom, kdy vyprší které patenty, a na tom, kolik nových indikací se v příštích letech schválí. Nástroje, které na to stát má — dočasná úhrada podle § 39d a roční strop v úhradové vyhlášce —, jsou obojí krátkodobé. To nemusí být špatně; je ale rozdíl mezi „máme to pod kontrolou" a „přepočítáváme to každý rok znovu, protože jinak to nejde".
       </p>
 
       <p>
@@ -424,7 +440,7 @@
         <h5 class="sources-group-h">Legislativa</h5>
         <ul class="article-sources-list">
           <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění, § 39d</strong> — „Zásady pro úhradu vysoce inovativních léčivých přípravků": SÚKL rozhoduje o výši a podmínkách <em>dočasné</em> úhrady vysoce inovativního přípravku, je-li to ve veřejném zájmu podle § 17 odst. 2. Text ověřen v aktuálním znění 7. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/1997-48#p39d" target="_blank" rel="noopener">zakonyprolidi.cz — § 39d ↗</a></li>
-          <li><strong>Vyhláška č. 432/2025 Sb., o stanovení hodnot bodu, výše úhrad hrazených služeb, výše záloh na úhradu hrazených služeb a regulačních omezení pro rok 2026, příloha č. 15</strong> — bod 1 vymezuje okruh přípravky označenými symbolem „S" podle § 39 odst. 1 vyhlášky č. 376/2011 Sb.; bod 2 obsahuje výjimky ze stropu (HIV/AIDS, spinální svalová atrofie, cystická fibróza, hereditární angioedém, profylaxe RSV u dětí, přípravky pro pojištěnce do 18 let); bod 3 stanoví vzorec stropu jako minimum ze dvou výrazů; bod 4 obsahuje tabulku indexu navýšení úhrady a indexu cenové slevy pro 18 skupin. Text přílohy ověřen 7. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2025-432" target="_blank" rel="noopener">zakonyprolidi.cz — vyhláška 432/2025 Sb. ↗</a></li>
+          <li><strong>Vyhláška č. 432/2025 Sb., o stanovení hodnot bodu, výše úhrad hrazených služeb, výše záloh na úhradu hrazených služeb a regulačních omezení pro rok 2026, příloha č. 15</strong> — bod 1 vymezuje okruh přípravky označenými symbolem „S" podle § 39 odst. 1 vyhlášky č. 376/2011 Sb.; bod 2 obsahuje výjimky ze stropu (HIV/AIDS, spinální svalová atrofie, cystická fibróza, hereditární angioedém, profylaxe RSV u dětí a — podmíněně — přípravky pro pojištěnce do 18 let, jsou-li hrazené podle § 16 zákona nebo zařazené do některé ze skupin podle bodu 3); bod 3 stanoví vzorec stropu jako minimum ze dvou výrazů; bod 4 obsahuje tabulku indexu navýšení úhrady a indexu cenové slevy pro 18 skupin. Text přílohy ověřen 7. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2025-432" target="_blank" rel="noopener">zakonyprolidi.cz — vyhláška 432/2025 Sb. ↗</a></li>
         </ul>
       </div>
 
