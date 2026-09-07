@@ -25,6 +25,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
 | Backlog, status auditu | [`BACKLOG.md`](BACKLOG.md), [`STATUS_AUDIT_*.md`](.) |
 | Denní rutina cronu | [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) |
+| Ověřit články a indikátory proti studiím (PubMed/Consensus) | [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) |
 
 ---
 
@@ -156,6 +157,7 @@ git push -u origin claude/<branch>
 │   ├── system-model.json       ← Model systému (uzly + kauzální hrany pro model-systemu.html)
 │   ├── ppo.json + ppo-osoby.json + ppo-analyza/ ← Pracovní skupiny MZ (builder ingest/ppo/build-web.js z ingest/ppo/out/ + ingest/ppo/analyza/)
 │   ├── claims.json             ← Registr kvantitativních tvrzení z článků (drift-check)
+│   ├── evidence-audit.json     ← Registr evidence-auditu: studie (PMID/DOI) a verdikty k tvrzením článků a indikátorů (PROMPT_EVIDENCE_AUDIT.md)
 │   ├── tags.json               ← Řízený slovník tagů článků + aliasy (validované)
 │   ├── series.json             ← Registr článkových sérií (členství = zdroj pravdy)
 │   ├── rubrics.json            ← 8 rubrik (primární osa článků, landing pages)
@@ -226,6 +228,8 @@ npm run build:css         # Minifikace styles.css → styles.min.css (NUTNÉ po 
 npm run build:generated   # Přegeneruje VŠECHNY generované artefakty (po každém merge/rebase)
 npm run setup:git         # Merge driver pro generované soubory (běží i sám po `npm install`)
 npm run validate:all      # Validuje indicators + strategies + explainers + prevention
+npm run validate:evidence # Registr evidence-auditu (studie k tvrzením článků a indikátorů)
+npm run evidence:queue    # Fronta evidence-auditu (--status | --batch --articles 12 --indicators 8 | --hash soubor)
 npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje → data/pohotovosti.json, ~10 min)
 npm run scan:ambulance-hodiny # Projde weby nemocnic a najde KANDIDÁTY na provozní dobu denních ambulancí (~10 min, nepublikuje se)
 npm run verify:ambulance-drift # Ověří, že citáty u denních ambulancí jsou pořád na webech nemocnic (kvartálně v cronu; drift = přeověřit)
@@ -520,6 +524,7 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - [`STATUS_AUDIT_2026-05-18.md`](STATUS_AUDIT_2026-05-18.md) — historický audit stavu
 - [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek); počítá s MCP konektory `hlidac_statu`, `PubMed` (ověření citací, nové domácí studie) a `Consensus` (vyhledávač evidence, nástroj — ne zdroj), viz protokol „Recenzovaná literatura“
 - [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`; odkazy na studie ověřuje přes MCP `PubMed` (citace, retrakce) a tvrzení z jedné studie přes `Consensus` (flag, ne přepis) — konektory nastavuje redakce v Routines
+- [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) — evidence-audit: ověření všech článků a indikátorů proti recenzované literatuře (PubMed ověřuje, Consensus hledá); orchestrace `.claude/workflows/evidence-audit.js` (Sonnet rešerše → Opus adjudikace → sériový zápis), fronta `npm run evidence:queue`, registr `data/evidence-audit.json` (`validate:evidence`); po dávkách 12 + 8, obnovitelné
 - [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md) — sociální rutina (1×/den): doplňuje frontu Bufferu na 10 postů/kanál podle aktuálnosti; Buffer = zdroj pravdy
 - [`05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md`](05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md) — týdenní rutina „Týdnů zdraví": agent připraví draft dalšího mezinárodního dne (`data/awareness-weeks.json`), cron `awareness-weekly.yml` (`scripts/awareness-rotate.js`) ho pak deterministicky přepne draft→ready a archivuje doběhnuté; microsite `tyden.html` + popup se aktivují podle data
 - [`05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md`](05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md) — týdenní newsletter (čtvrtek → pátek 11:00 přes Brevo): Florencin úvod + 3–4 neposlané články; evidence `data/newsletter-log.json`, builder `scripts/newsletter-build.js`

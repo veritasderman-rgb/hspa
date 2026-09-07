@@ -1310,6 +1310,7 @@ o konkrétním poskytovateli a bez rozpisu by ho stránka nemohla doložit.
 | `npm run validate:legislation` | `legislativa.json` ENUM fází/typů (radar) + ENUM typů/stavů (plán), FK na indikátory + články + self-FK `radar_id` |
 | `npm run validate:system-model` | `system-model.json` enumy, FK, bez osiřelých uzlů/self-loops |
 | `npm run validate:claims` | `claims.json` schéma, FK, invarianty + quote-verifikace proti HTML |
+| `npm run validate:evidence` | `evidence-audit.json` enumy verdiktů, PMID/DOI, FK na články/indikátory/claims, akce u rozporů, zákaz provozních textů nástrojů |
 | `npm run validate:pohotovosti` | `pohotovosti.json` + `obce-gps.json`: souřadnice v ČR, tvar časů, prahy pokrytí |
 | `npm run validate:all` | spustí všechny validátory |
 | `npm run verify:freshness` | aktualizuje `freshness.json`, fail při > 30 dní staré data |
@@ -1475,3 +1476,65 @@ pečující dny (`days_per_added_person`) a na ekvivalent úvazků
 čte `simulate()` proti aktuálním posuvníkům a `baseline()` pro srovnání se
 základním scénářem; stav posuvníků žije v URL hashi
 (`#luzka=…&pecovatele=…&teren=…`), aby šel výsledek sdílet odkazem.
+
+## 24. `data/evidence-audit.json` — registr evidence-auditu (kurátorovaný orchestrací)
+
+Výstup úkolu [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](../05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md):
+pro každý ověřený článek / indikátor seznam odborných tvrzení, studie z PubMed (kandidáty
+smí dodat Consensus, ověření je vždy v PubMed) a verdikt. Zapisuje ho jen orchestrace
+(Sonnet rešerše → Opus adjudikace → sériový zápis), mění se výhradně commitem.
+
+### Schéma
+
+```json
+{
+  "version": "1.0",
+  "generated_at": "2026-09-08T00:00:00Z",
+  "items": [{
+    "id": "clanek-kratke-intervence-uhrady.html",   // článek: slug souboru; indikátor: "indicator:{id}"
+    "type": "article",                               // article | indicator
+    "checked_at": "2026-09-08",
+    "run_id": "ea-2026-09-08-01",
+    "content_hash": "…sha1 souboru po úpravách…",     // fronta podle něj pozná změnu (stale)
+    "tools": { "pubmed": true, "consensus": true },
+    "models": { "search": "sonnet", "adjudicate": "opus", "write": "opus" },
+    "calls": { "pubmed": 5, "consensus": 1 },
+    "claims": [{
+      "claim_id": "kratke-intervence-uhrady--03",     // volitelná vazba na data/claims.json
+      "text": "doslovná věta z článku",
+      "location": "sekce / perex / databox",
+      "kind": "effect",                              // effect | efficacy | epidemiology | mechanism | measurement | policy | other
+      "verdict": "partial",                          // supported | partial | contradicted | no-evidence | not-applicable | unclear
+      "confidence": "medium",                        // high | medium | low
+      "evidence": [{
+        "pmid": "29476653", "doi": "10.1002/14651858.CD004148.pub4",
+        "title": "…", "year": 2018, "journal": "Cochrane Database Syst Rev", "study_type": "systematic review",
+        "found_via": "pubmed",                       // pubmed | consensus | article (článek už citoval)
+        "relation": "partial",                       // supports | partial | contradicts | context
+        "verified_in_pubmed": true                   // u found_via=consensus povinně true
+      }],
+      "note": "co abstrakt říká a čím se liší (povinné u partial / contradicted / unclear)"
+    }],
+    "summary": { "supported": 0, "partial": 1, "contradicted": 0, "no_evidence": 0, "not_applicable": 0, "unclear": 0 },
+    "actions": [{ "type": "source-added", "detail": "…", "ref": "" }],  // source-added | claim-note | card-note | flagged | issue | none
+    "notes": ""
+  }]
+}
+```
+
+### Invarianty (`npm run validate:evidence`)
+
+- `supported` / `partial` / `contradicted` mají ≥ 1 evidence; každá evidence má PMID nebo DOI.
+- `contradicted` v položce vyžaduje akci `flagged` nebo `issue` (rozpor se nikdy neopravuje potichu).
+- `summary` sedí na počty verdiktů (chybějící klíč = 0).
+- FK: článek existuje v `articles.json`, indikátor v `indicators.json`, `claim_id` v `claims.json`.
+- Provozní texty nástrojů (počítadla dotazů, výzvy k registraci, „podle Consensus“) registr odmítne.
+
+### Fronta (`npm run evidence:queue`)
+
+`scripts/evidence-audit-queue.js` je odvozený artefakt (necommituje se, píše do `reports/`):
+viditelné články + všechny indikátory, priorita podle odkazů na studie, zmínek o studiích,
+ručně ověřovaných claims, HSPA frameworku a navázaných článků; stav `pending` → `stale`
+(`content_hash` se liší nebo kontrola starší než 365 dní) → `done`. `--batch` vrátí další
+dávku (default 12 článků + 8 indikátorů), `--hash <soubor>` spočítá hash pro zápis.
+
