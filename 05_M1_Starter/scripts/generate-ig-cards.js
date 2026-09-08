@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-hypolipidemika-spotreba': {
+    kicker: 'Kardiovaskulární zdraví · statiny', signal: 'warn',
+    stat: '223,7',
+    claim: 'denní dávky léků na cholesterol na 1 000 obyvatel — třetí nejvíc v OECD.',
+    context: 'Průměr OECD je 150,3. Úmrtnost na srdce a cévy zůstává o polovinu nad EU.',
+  },
   'clanek-nemocnicni-ambulance': {
     kicker: 'Financování · segmentace úhrad', signal: 'warn',
     stat: '65', statSuffix: ' mld',
