@@ -1,0 +1,40 @@
+{
+  "id": "rezistence_acinetobacter_kombinovana",
+  "name": "Kombinovaná rezistence Acinetobacter spp. (karbapenemy + fluorochinolony + aminoglykosidy)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Acinetobacter spp. současně rezistentních na karbapenemy, fluorochinolony i aminoglykosidy (síť EARS-Net).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR, dataset 27 / health topic 4), measure ACISPP.COMBINED.R.PROPORTION (measureId 1146403, „R – resistant isolates, percentage“), populace „Acinetobacter spp.|Combined resistance (fluoroquinolones, aminoglycosides and carbapenems)“. Per-country % pro ČR ověřeno přes REST API AtlasService 2026-09-08: 2024 = 20,6 % (21 rezistentních ze 102 testovaných izolátů). Podíl zkontrolován proti samostatným measures *.COMBINED.R.COUNT a *.COMBINED.COUNT. Kontrakt nese hodnotu zatím jako seed (origin: seed) — mapping v ingest/mapping/ecdc_atlas_codes.json je zapojen, ale první živý běh ingest pipeline s tímto indikátorem ještě neproběhl. Proto verification_status: preliminary, přestože hodnota, definice i benchmark byly 2026-09-08 ověřeny přímo proti primárnímu zdroji. Po prvním úspěšném živém fetchi (origin: live) lze status povýšit na verified."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "note": "Benchmark ZÁMĚRNĚ NENÍ nastaven. EU/EEA populačně vážený průměr za rok 2024 je 27,0 % (ECDC EARS-Net AER 2024, Table 9b — doslova: „…increased (from 34.0% to 36.9% between 2020 and 2021) and then decreased to reach 27.0% in 2024“), ale český jmenovatel je jen 102 izolátů. 95% interval spolehlivosti kolem 20,6 % (21/102) sahá zhruba od 13 do 30 %, tedy unijní průměr leží uvnitř intervalu. Signál „good“ dopočtený z bodových odhadů by čtenáři tvrdil prokázaný náskok Česka, který data neunesou — indikátor proto zůstává bez benchmarku a se signálem neutral, stejně jako 22 z 26 ostatních indikátorů rezistence v kontraktu."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Ověřený nález z dat za rok 2024: kombinovaná rezistence je u českého Acinetobactera číselně totožná s rezistencí na aminoglykosidy — 21 ze 102 izolátů v obou případech, při stejném jmenovateli (karbapenemy 25,5 %, fluorochinolony 27,5 %). Protože kombinovaná rezistence je z definice shora omezená nejnižší jednotlivou rezistencí, znamená to, že každý aminoglykosid-rezistentní izolát byl zároveň rezistentní i na karbapenemy a fluorochinolony. Acinetobacter je navíc přirozeně rezistentní k řadě dalších antibiotik, takže u těchto izolátů zbývají prakticky jen záchranné režimy.",
+  "limitations": "Malý vzorek: 102 testovaných izolátů za rok 2024. Meziroční změny jsou proto z velké části šum — řada 2013–2024 kolísá mezi 0 % (2016, N = 57) a 50,8 % (2021, N = 122) a takové skoky nelze číst jako vývoj rezistence. Indikátor se má číst jako řádový profil, ne jako trendová metrika. ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "preliminary",
+  "verified_at": "2026-09-08"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_klebsiella_kombinovana",
+  "name": "Kombinovaná rezistence K. pneumoniae (3GC + fluorochinolony + aminoglykosidy)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Klebsiella pneumoniae současně rezistentních na cefalosporiny 3. generace, fluorochinolony i aminoglykosidy (síť EARS-Net).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR, dataset 27 / health topic 4), measure KLEPNE.COMBINED.R.PROPORTION (measureId 1146375, „R – resistant isolates, percentage“), populace „Klebsiella pneumoniae|Combined resistance (third-generation cephalosporin, fluoroquinolones and aminoglycoside)“. Per-country % pro ČR ověřeno přes REST API AtlasService 2026-09-08: 2024 = 26,6 % (470 rezistentních z 1 767 testovaných izolátů). Podíl zkontrolován proti samostatným measures *.COMBINED.R.COUNT a *.COMBINED.COUNT. Kontrakt nese hodnotu zatím jako seed (origin: seed) — mapping v ingest/mapping/ecdc_atlas_codes.json je zapojen, ale první živý běh ingest pipeline s tímto indikátorem ještě neproběhl. Proto verification_status: preliminary, přestože hodnota, definice i benchmark byly 2026-09-08 ověřeny přímo proti primárnímu zdroji. Po prvním úspěšném živém fetchi (origin: live) lze status povýšit na verified."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": 18.8,
+    "note": "EU/EEA populačně vážený průměr 18,8 % za rok 2024. Ověřeno doslova v ECDC EARS-Net AER 2024: „The EU/EEA population-weighted mean for combined resistance to fluoroquinolones, third-generation cephalosporins and aminoglycosides was 18.8% in 2024 and showed a statistically significant decreasing trend during the period 2020−2024“ (Table 9b)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Nejhorší z české čtveřice kombinovaných rezistencí: každý čtvrtý invazivní izolát klebsiely je současně rezistentní na tři nejběžnější skupiny volby. Česká řada přitom klesá (2020: 34,6 % → 2024: 26,6 %) — jenže unijní průměr klesá také, takže odstup zůstává. Kontext k nízké české karbapenemové rezistenci (indikátor rezistence_klebsiella_karbapenem, 2,2 % proti 11,3 % v EU): poslední rezerva zatím drží, ale řada před ní je z velké části vyčerpaná.",
+  "limitations": "ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "preliminary",
+  "verified_at": "2026-09-08"
+}
