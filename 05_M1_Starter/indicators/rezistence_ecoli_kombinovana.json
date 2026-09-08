@@ -1,0 +1,41 @@
+{
+  "id": "rezistence_ecoli_kombinovana",
+  "name": "Kombinovaná rezistence E. coli (3GC + fluorochinolony + aminoglykosidy)",
+  "area": "Procesy",
+  "domain": "Antimikrobiální rezistence",
+  "subdomain": "AMR surveillance",
+  "definition": "Podíl invazivních izolátů Escherichia coli současně rezistentních na cefalosporiny 3. generace, fluorochinolony i aminoglykosidy (síť EARS-Net).",
+  "unit": "%",
+  "direction": "lower_is_better",
+  "data_source": {
+    "primary": {
+      "type": "ecdc_atlas",
+      "note": "ECDC Surveillance Atlas (AMR, dataset 27 / health topic 4), measure ESCCOL.COMBINED.R.PROPORTION (measureId 1146444, „R – resistant isolates, percentage“), populace „Escherichia coli|Combined resistance (third-generation cephalosporin, fluoroquinolones and aminoglycoside)“. Per-country % pro ČR ověřeno přes REST API AtlasService 2026-09-08: 2024 = 4,8 % (204 rezistentních z 4 268 testovaných izolátů). Podíl zkontrolován proti samostatným measures *.COMBINED.R.COUNT a *.COMBINED.COUNT. Kontrakt nese hodnotu zatím jako seed (origin: seed) — mapping v ingest/mapping/ecdc_atlas_codes.json je zapojen, ale první živý běh ingest pipeline s tímto indikátorem ještě neproběhl. Proto verification_status: preliminary, přestože hodnota, definice i benchmark byly 2026-09-08 ověřeny přímo proti primárnímu zdroji. Po prvním úspěšném živém fetchi (origin: live) lze status povýšit na verified."
+    },
+    "fallback": {
+      "type": "szu",
+      "note": "SZÚ NRL pro antibiotika — národní EARS-Net uzel."
+    }
+  },
+  "benchmark_source": {
+    "type": "ecdc_ears_net",
+    "code": "AER-2024",
+    "value": 5.5,
+    "note": "EU/EEA populačně vážený průměr 5,5 % za rok 2024. Ověřeno doslova v ECDC EARS-Net AER 2024: „the percentage of combined resistance, measured as resistance to third-generation cephalosporins, fluoroquinolones and aminoglycosides, was 5.5% (EU/EEA population-weighted mean) with no statistically significant trend during the period 2020–2024“ (Table 9b)."
+  },
+  "signal_thresholds": {
+    "good": 5,
+    "warn": 15
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "SZÚ",
+    "ECDC"
+  ],
+  "method_notes": "Kombinovaná rezistence měří souběh — tedy izolát, u kterého selhávají všechny tři nejběžnější skupiny volby najednou. Součet ani průměr z jednotlivých indikátorů rezistence ji nahradit nemůže: jeden izolát rezistentní na tři skupiny se v každé z nich počítá znovu. E. coli je zároveň druh s nejvyšší incidencí invazivních infekcí v EU/EEA, takže i nízké procento znamená velký absolutní počet.",
+  "limitations": "Signál „good“ je těsný: 95% interval spolehlivosti kolem 4,8 % (204/4 268 izolátů) je zhruba 4,1–5,4 %, jeho horní mez tedy sahá prakticky k unijnímu průměru 5,5 %. Rozdíl proti EU/EEA nečti jako prokázaný náskok. ECDC k analýze kombinované rezistence uvádí: „The analysis of combined resistance excludes isolates with incomplete AST information for the antimicrobial groups covered.“ (AER 2024, kapitola Methods). Jmenovatel kombinované rezistence je proto jiný než jmenovatel jednotlivých skupin antibiotik a hodnoty mezi indikátory nelze poměřovat bez této výhrady. Pouze invazivní izoláty (hemokultura, mozkomíšní mok) — nezahrnuje komunitní ani ambulantní vzorky. Metodická poznámka ke srovnání: česká hodnota je prostý podíl rezistentních izolátů, zatímco unijní referenční hodnota je populačně vážený průměr národních procent (tak ji ECDC v AER publikuje a tak se v Table 9b staví vedle hodnot jednotlivých zemí). Rozdíl ČR − EU/EEA proto čti jako pozici proti evropskému průměru, ne jako rozdíl dvou stejně konstruovaných čísel.",
+  "framework": "hspa",
+  "dimension": "bezpecnost",
+  "verification_status": "preliminary",
+  "verified_at": "2026-09-08"
+}

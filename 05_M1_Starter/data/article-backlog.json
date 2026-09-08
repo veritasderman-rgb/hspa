@@ -1,7 +1,7 @@
 {
   "_doc": "Curated fronta evergreen témat pro denní rutinu (PROMPT_DAILY_ROUTINE.md, FÁZE 2 routing — větev 4 EVERGREEN-WRITE). Každá položka je předschválený analytický námět ukotvený v EXISTUJÍCÍCH indikátorech / datech dashboardu, který nepotřebuje dnešní news-trigger. Router vybírá top položku se status:ready (nejnižší priority číslo vyhrává). Platí stejné železné pravidlo jako u reaktivních článků: každé číslo musí mít primární strojově dohledatelný zdroj. status: ready | in_progress | done. Po napsání článku přepni položku na done a doplň slug. Redakce sem přidává nové náměty na konec.",
   "version": "1.0",
-  "updated_at": "2026-09-07",
+  "updated_at": "2026-09-08",
   "topics": [
     {
       "id": "zobrazovaci-metody-ct-mri",
@@ -296,8 +296,8 @@
       ],
       "section": "Kvalita péče",
       "priority": 12,
-      "status": "indicator-add",
-      "note": "Zařazeno 2026-08-29 při zpracování položky amr-multirezistence-soubeh. Fetcher ingest/fetchers/ecdc_atlas.js už umí přesně tento tvar dotazu, práce je proto malá. POZOR: tohle NENÍ námět na článek a evergreen router (FÁZE 2) ho nesmí vybrat — proto status 'indicator-add', ne 'ready'. Router bere jen položky se status:ready. Pole priority slouží jen k pořadí v rámci INDICATOR-ADD flow, který je podle PROMPT_DAILY_ROUTINE.md samostatný expanzní prompt.",
+      "status": "done",
+      "note": "Zařazeno 2026-08-29 při zpracování položky amr-multirezistence-soubeh. Fetcher ingest/fetchers/ecdc_atlas.js už umí přesně tento tvar dotazu, práce je proto malá. POZOR: tohle NENÍ námět na článek a evergreen router (FÁZE 2) ho nesmí vybrat — proto status 'indicator-add', ne 'ready'. Router bere jen položky se status:ready. Pole priority slouží jen k pořadí v rámci INDICATOR-ADD flow, který je podle PROMPT_DAILY_ROUTINE.md samostatný expanzní prompt. HOTOVO 2026-09-08 (denní rutina, INDICATOR-ADD — viz discovery/routing-2026-09-08.md). Přidány čtyři indikátory rezistence_{ecoli,klebsiella,pseudomonas,acinetobacter}_kombinovana, čtyři metodické karty a čtyři řádky do ingest/mapping/ecdc_atlas_codes.json. Všechny hodnoty i measure ID ověřeny 8. 9. 2026 znovu proti primárnímu zdroji (metadatový endpoint Atlasu, kontrola R.COUNT/COUNT, definice a benchmarky doslova z PDF ECDC AER 2024) — z backlogu nepřevzato nic. ODCHYLKA OD ZADÁNÍ: Acinetobacter benchmark NEDOSTAL. Při N=102 leží unijní průměr 27,0 % uvnitř intervalu spolehlivosti kolem české hodnoty 20,6 %, takže signál „good“ z bodových odhadů by tvrdil prokázaný náskok, který data neunesou; indikátor je bez benchmarku a neutral, hodnota EU/EEA je v kartě jako kontext. Článek nevznikl záměrně — clanek-amr-multirezistence-soubeh (30. 8. 2026) o kombinované rezistenci píše a sám v závěru doporučuje ji publikovat jako sledovaný ukazatel; nové indikátory jsou na něj navázány přes linked_indicators.",
       "flow": "INDICATOR-ADD"
     },
     {
@@ -359,6 +359,47 @@
       "status": "indicator-add",
       "note": "Zařazeno 2026-08-30. NENÍ námět na článek — evergreen router (FÁZE 2) bere jen položky se status:ready.",
       "flow": "INDICATOR-ADD"
+    },
+    {
+      "id": "enterokoky-gentamicin-rezistence",
+      "title": "Enterokok: bakterie, u které v Česku selhává i záložní kombinace",
+      "angle": "Čtyři indikátory enterokokové rezistence jsou v kontraktu sirotci — žádný článek na ně neukazuje. Přitom nesou nejsilnější signál v celé doméně: vysoká rezistence k gentamicinu (high-level) je u Enterococcus faecium 51,4 % a u E. faecalis 32,4 % (ČR, 2024), zatímco unijní populačně vážený průměr pro E. faecalis je 22,6 %. Gentamicin se u enterokoků nenasazuje sám — používá se v synergní kombinaci s aminopenicilinem u endokarditid a závažných infekcí; „high-level“ rezistence právě tuhle synergii ruší. Kontrast uvnitř rodu: u E. faecalis je rezistence k aminopenicilinům i vankomycinu 0,3 %, u E. faecium aminopeniciliny 94,9 % a vankomycin (VRE) 18,3 % proti unijnímu průměru 16,5 %. Článek má vysvětlit, proč dva druhy téhož rodu vypadají v datech tak různě a co z toho plyne pro empirickou léčbu.",
+      "anchor_indicators": [
+        "rezistence_efaecium_gentamicin",
+        "rezistence_efaecalis_gentamicin",
+        "rezistence_efaecalis_vankomycin",
+        "rezistence_efaecalis_aminopeniciliny",
+        "rezistence_efaecium_aminopeniciliny",
+        "rezistence_vre"
+      ],
+      "primary_sources": [
+        "ECDC Surveillance Atlas of Infectious Diseases — dataset 27 / health topic 4 (EARS-Net), REST API atlas.ecdc.europa.eu/public/AtlasService/rest/",
+        "ECDC — Antimicrobial resistance in the EU/EEA (EARS-Net), Annual Epidemiological Report for 2024, Table 9b",
+        "SZÚ NRL pro antibiotika — národní EARS-Net uzel"
+      ],
+      "section": "Kvalita péče",
+      "priority": 18,
+      "status": "ready",
+      "note": "Zařazeno 2026-09-08 (denní rutina). Kotevní hodnoty ověřeny při témže běhu: čtyři z nich jsou v kontraktu jako sirotci (linked_indicators je nikde neuvádí), unijní průměry 22,6 % (E. faecalis high-level gentamicin) a 16,5 % (E. faecium vankomycin) přečteny z Table 9b AER 2024. POZOR PŘI PSANÍ: hodnoty se musí znovu stáhnout z Atlasu, ne převzít odtud, a u každého druhu ověřit jmenovatel — u enterokoků bývá menší než u E. coli. DRUHÁ VÝHRADA, kterou musí text nést: ECDC v AER 2024 u E. faecalis uvádí, že „for each year more than one third of the countries reported that susceptibility to gentamicin was tested for <90% of isolates“ — unijní průměr u gentamicinu je tedy sám zatížen neúplným testováním a srovnání ČR vs EU se nesmí podat jako přesné. Pro E. faecium gentamicin unijní průměr v Table 9b vůbec není; nedopočítávat ho. Klinickou pasáž o synergii gentamicinu s aminopenicilinem doložit odbornou guideline (ESC/EUCAST), ne obecným tvrzením."
+    },
+    {
+      "id": "dve-cisla-o-jednom-roce-vintage",
+      "title": "Dvě čísla o jednom roce. Proč se u výdajů na zdravotnictví za 2024 liší ČSÚ a Eurostat o 15 miliard",
+      "angle": "Metodický explainer o tom, co je „vintage“ dat a proč jedna a táž veličina má současně dvě platné hodnoty. ČSÚ publikoval 11. 6. 2026 předběžná data zdravotnických účtů za rok 2024 (696,7 mld. Kč, 8,6 % HDP, 13,6 % z kapsy, údaje značené „P“); Eurostat vydal 2. 9. 2026 transmisi téhož SHA rámce s jinými čísly (681,5 mld. Kč, 8,46 % HDP, 14,06 % z kapsy). Rozdíl 15,2 mld. Kč není chyba ani spor — je to důsledek jiného okamžiku transmise a jiného vymezení (běžné výdaje vs. výdaje včetně investic). Čtenář dashboardu na to naráží pokaždé, když srovná dva články psané v různých měsících; explainer má dát pravidlo, které z čísel se kdy používá, a ukázat to na jedné konkrétní řadě.",
+      "anchor_indicators": [
+        "vydaje_zdravotnictvi_hdp",
+        "platba_z_kapsy_pct",
+        "vydaje_sprava_systemu_pct"
+      ],
+      "primary_sources": [
+        "Eurostat — hlth_sha11_hf / hlth_sha11_hc, REST API ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/",
+        "ČSÚ — Výdaje na zdravotní péči (zdravotnické účty), csu.gov.cz/vydaje-na-zdravotni-peci",
+        "OECD/Eurostat/WHO — System of Health Accounts 2011, metodická příručka"
+      ],
+      "section": "Financování",
+      "priority": 19,
+      "status": "ready",
+      "note": "Zařazeno 2026-09-08. Rozpor je doložený: clanek-financovani-sha nese od revize 5. 9. 2026 samostatný odstavec caveatu s oběma hodnotami a daty publikace — explainer z něj vychází, ale nesmí ho zdvojit: článek říká „která hodnota platí kde“, explainer má vysvětlit MECHANISMUS (vintage, revize zpětné řady, běžné výdaje vs. investice, populačně vážený agregát). Ověřeno 8. 9. 2026, že Eurostat od 2. 9. dál nic nezměnil a že rozpad HC/HP za rok 2024 pořád není publikován. PŘI PSANÍ znovu ověřit obě strany rozporu — ČSÚ může mezitím vydat definitivní vlnu a rozpor zmizí; pak námět zaniká a položka se zavře jako skipped."
     }
   ]
 }
