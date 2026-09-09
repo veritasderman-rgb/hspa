@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-npo-zdravotnictvi-bilance': {
+    kicker: 'Financování · plán obnovy', signal: 'warn',
+    stat: '10', statSuffix: '/12',
+    claim: 'výzev plánu obnovy ve zdravotnictví dostalo nový termín dokončení.',
+    context: 'Balík 12,8 mld Kč. Motol má termín za unijní lhůtou.',
+  },
   'clanek-hypolipidemika-spotreba': {
     kicker: 'Kardiovaskulární zdraví · statiny', signal: 'warn',
     stat: '223,7',
