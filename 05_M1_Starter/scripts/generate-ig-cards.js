@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-chripka-ockovani-chronicky-nemocni': {
+    kicker: 'Prevence · chřipka a diabetes', signal: 'bad',
+    stat: '22,3', statSuffix: '%', barPct: 22,
+    claim: 'diabetiků se v sezóně 2023/2024 nechalo očkovat proti chřipce.',
+    context: 'Cíl EU je 75 %. Ze 935 520 pacientů čtyři z pěti bez očkování.',
+  },
   'clanek-npo-zdravotnictvi-bilance': {
     kicker: 'Financování · plán obnovy', signal: 'warn',
     stat: '10', statSuffix: '/12',
