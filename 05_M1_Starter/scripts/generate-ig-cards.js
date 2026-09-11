@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-nefrolog-pred-dialyzou': {
+    kicker: 'Chronická péče · ledviny', signal: 'warn',
+    stat: '358',
+    claim: 'lidí ročně přijde k dialýze, aniž je viděl nefrolog.',
+    context: '28,9 % z 1 237 nových pacientů 50+ v roce 2024. Za šest let 2 443 lidí.',
+  },
   'clanek-chripka-ockovani-chronicky-nemocni': {
     kicker: 'Prevence · chřipka a diabetes', signal: 'bad',
     stat: '22,3', statSuffix: '%', barPct: 22,
