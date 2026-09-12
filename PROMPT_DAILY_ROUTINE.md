@@ -477,6 +477,9 @@ frontend stejně sortuje podle `date`):
    série (`data/series.json` — pokud ano, přidej slug do `parts` série) a
    jestli navazuje na tematickou linii (vazba jde automaticky přes
    `linked_indicators` × `themes.json`).
+6. **Perex ↔ popis v HTML**: při změně meta description / JSON-LD description
+   článku se stejně upraví `perex` v `data/articles.json` (hlídá
+   `tests/articles-perex-sync.test.js`) — zdrojem pravdy o popisu je HTML.
 
 **Konvence dat napříč souborem článku:**
 

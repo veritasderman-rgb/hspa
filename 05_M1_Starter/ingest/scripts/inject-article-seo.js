@@ -10,10 +10,13 @@
 //
 // Strukturovaná data jsou STATICKÁ v HTML (ne injektovaná JS za běhu), aby je
 // viděly i ne-JS crawlery a AI odpovědní enginy (GEO). Vstup je `data/articles.json`
-// — jediný zdroj pravdy o metadatech článku.
+// — s jednou výjimkou: `description` se bere z JSON-LD, který v HTML už je, a
+// `perex` z registru slouží jen jako fallback (rozhodnutí redakce k issue #1184
+// — zdrojem pravdy o popisu je HTML, protože rutiny editují přímo soubor).
 //
 // Vlastnosti:
 //   - Idempotentní — re-spuštění nevytvoří duplikáty (značka data-seo-injected)
+//     ani nevrátí zastaralý popis z registru (issue #1184)
 //   - Bezpečné — upraví jen článek s .article-page; drafty (published:false) skipne
 //
 // Použití:
@@ -28,6 +31,9 @@ import { SITE_BASE, canonicalPath } from '../../scripts/generate-feed.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const ARTICLES_JSON = resolve(ROOT, 'data/articles.json');
+
+/** Blok JSON-LD, který tenhle skript do článku vkládá. */
+const JSONLD_BLOCK_RE = /<script type="application\/ld\+json" data-seo-injected="1">\s*([\s\S]*?)<\/script>/;
 
 const PUBLISHER = {
   '@type': 'Organization',
@@ -45,8 +51,33 @@ function loadArticles() {
   return JSON.parse(readFileSync(ARTICLES_JSON, 'utf8')).articles ?? [];
 }
 
-/** Sestaví JSON-LD @graph (NewsArticle + BreadcrumbList) pro článek. */
-export function buildArticleJsonLd(article) {
+/**
+ * Vytáhne `description` z NewsArticle v už vloženém JSON-LD bloku HTML.
+ * Vrací null, když blok chybí, není validní JSON nebo je description prázdný.
+ */
+export function extractJsonLdDescription(html) {
+  const m = String(html || '').match(JSONLD_BLOCK_RE);
+  if (!m) return null;
+  let ld;
+  try { ld = JSON.parse(m[1]); } catch { return null; }
+  const graph = Array.isArray(ld?.['@graph']) ? ld['@graph'] : [];
+  const news = graph.find(n => n?.['@type'] === 'NewsArticle');
+  const desc = typeof news?.description === 'string' ? news.description.trim() : '';
+  return desc || null;
+}
+
+/**
+ * Sestaví JSON-LD @graph (NewsArticle + BreadcrumbList) pro článek.
+ *
+ * `existingDescription` (description z JSON-LD, který v HTML už je) má přednost
+ * před `article.perex`. PROČ (issue #1184): denní a noční rutiny editují meta
+ * description i JSON-LD přímo v HTML, zatímco `perex` v registru zůstával na
+ * původním znění — běh nad celým korpusem pak vracel články k zastaralému
+ * popisu (u jednoho článku dokonce k fázi projednávání, která už neplatila).
+ * Zdrojem pravdy je HTML; skript je tím idempotentní a nikdy popis nezhorší.
+ * Registr se s HTML srovnává zvlášť — hlídá to tests/articles-perex-sync.test.js.
+ */
+export function buildArticleJsonLd(article, existingDescription = null) {
   const slug = article.slug;
   const base = slug.replace(/\.html$/, '');
   const url = `${SITE_BASE}/${base}`;
@@ -59,7 +90,9 @@ export function buildArticleJsonLd(article) {
     '@type': 'NewsArticle',
     '@id': `${url}#article`,
     headline: article.title,
-    description: article.perex || undefined,
+    description: (typeof existingDescription === 'string' && existingDescription.trim())
+      || article.perex
+      || undefined,
     inLanguage: 'cs-CZ',
     image: [image],
     url,
@@ -136,11 +169,15 @@ export function processArticle(article) {
 
   const url = `${SITE_BASE}/${slug.replace(/\.html$/, "")}`;
 
+  // Popis ber z JSON-LD, které v souboru už je (issue #1184) — rutiny ho
+  // v HTML průběžně aktualizují, `perex` v registru může být zastaralý.
+  const existingDescription = extractJsonLdDescription(html);
+
   // Idempotence — odstraň předchozí injektáž (meta/link i JSON-LD blok).
   html = html.replace(/\n\s*<(?:link|meta)[^>]*data-seo-injected="1"[^>]*>/g, '');
   html = html.replace(/\n\s*<script type="application\/ld\+json" data-seo-injected="1">[\s\S]*?<\/script>/g, '');
 
-  const jsonLd = JSON.stringify(buildArticleJsonLd(article), null, 2);
+  const jsonLd = JSON.stringify(buildArticleJsonLd(article, existingDescription), null, 2);
   const block = `
   <link rel="canonical" href="${url}" data-seo-injected="1">
   <meta property="og:url" content="${url}" data-seo-injected="1">
