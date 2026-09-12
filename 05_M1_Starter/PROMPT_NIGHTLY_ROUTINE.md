@@ -178,6 +178,8 @@ Pro každý článek s `date-passed`, `check-sources` nebo `check-literature` (d
 - V `data/articles.json` ponech `published: true` (článek už je venku) — **měníš jen
   obsah, ne stav publikace**. Status na `review-pending` signalizuje redakci „prošlo
   noční revizí, zkontroluj".
+- Při změně meta description / JSON-LD description článku se stejně upraví `perex`
+  v `data/articles.json` (hlídá `tests/articles-perex-sync.test.js`).
 - Aplikuj **audit checklist A–F z denní rutiny** na změněné pasáže (čísla, odkazy
   HTTP 200, přesné označení zákona, konzistence mezinárodního srovnání, citace osob,
   anti-pattern `data-value`).

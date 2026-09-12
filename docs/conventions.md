@@ -178,6 +178,15 @@ V `data/{source}-scraping-log.json` auditní stopa každého běhu.
 4. Texty „pracovní draft", „auditní revizi", „TODO", „XXX", „FIXME" v hlavičce.
 5. `lorem ipsum` placeholders.
 
+### Perex ↔ meta description ↔ JSON-LD
+
+Zdrojem pravdy o popisu článku je **HTML** (rutiny editují meta description
+i JSON-LD přímo v souboru). Při změně meta description / JSON-LD description
+článku se stejně upraví `perex` v `data/articles.json` (hlídá
+`tests/articles-perex-sync.test.js`). `ingest/scripts/inject-article-seo.js`
+proto bere `description` z JSON-LD, které v HTML už je, a `perex` používá jen
+jako fallback — rozhodnutí redakce k issue #1184.
+
 ### Pravidlo „v 6:00 ráno"
 
 `isArticleVisible(article)` v `src/page-shared.js`:

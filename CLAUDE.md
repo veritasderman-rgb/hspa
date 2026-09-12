@@ -105,6 +105,7 @@ git push -u origin claude/<branch>
 ├── indicator.html              ← Stránka jednoho indikátoru (?id=...)
 ├── 404.html
 ├── sw-pohotovosti.js           ← Service worker offline cache jen pro /pohotovost* (network-first, bílá listina cest)
+├── dist-pohotovosti/           ← (gitignored) druhý výstup repa: samostatný web pohotovostí, `npm run build:pohotovosti-site` (PLAN-POHOTOVOSTI-DOMENA.md); nasazuje druhý Vercel projekt s vlastní doménou
 │
 ├── src/                        ← Frontend ES modules (25 souborů, ~18 000 LOC)
 │   ├── app.js                  ← Homepage (hub matrix, dimensions, podcasts, ticker)
@@ -120,6 +121,7 @@ git push -u origin claude/<branch>
 │   ├── pojistenci.js           ← OIS 11-47 dashboard
 │   ├── prevence.js             ← Prevence dashboard
 │   ├── pohotovosti.js + pohotovosti-engine.js ← Pohotovosti (render + jádro: svátky, otevřeno teď, vzdálenost, rozcestník „Kam s tím?“, poradní linky ZZS, EN/UK, offline registrace)
+│   ├── pohotovosti-shell.js    ← Odlehčený shell samostatného webu pohotovostí (v distu nahrazuje page-shared.js: bez navigace, newsletteru a popupů)
 │   ├── strategies.js           ← Strategie + explainery
 │   ├── explainers.js           ← Explainery (samostatné kontextové texty)
 │   ├── explainer-policy-views.js, strategy-policy-views.js, strategy-links.js
@@ -149,6 +151,7 @@ git push -u origin claude/<branch>
 │   ├── pohotovosti.json        ← 283 pohotovostí s ordinační dobou (VZP + NRPZS + 4 kraje) + 21 denních nemocničních ambulancí (ruční ověření + týdenní drift-check citátů), online pohotovosti, poplatek, dojezdová analýza (souhrn), rozcestník, poradní linky ZZS, EN/UK
 │   ├── dojezdy.json            ← Dojezdová mapa: vzdálenost každé obce k nejbližší otevřené LPS ve 3 referenčních časech (líný load)
 │   ├── pohotovosti-okresy.json ← Manifest 75 generovaných okresních stránek pohotovost-*.html (sitemap + rozcestník)
+│   ├── pohotovosti-site.json   ← Konfigurace samostatného webu pohotovostí (doména, název, odkazy zpět na HSPA, Plausible)
 │   ├── pohotovosti-akutni.json ← Urgentní příjmy, akutní chirurgie a základny ZZS z NRPZS (líný load)
 │   ├── obce-gps.json           ← Gazetteer 6 256 obcí ČR pro vyhledávání podle města
 │   ├── regions.json            ← Krajská data (multi-dataset, v2 formát)
@@ -234,6 +237,7 @@ npm run data:pohotovosti  # Celá pipeline pohotovostí (NRPZS + VZP + kraje →
 npm run scan:ambulance-hodiny # Projde weby nemocnic a najde KANDIDÁTY na provozní dobu denních ambulancí (~10 min, nepublikuje se)
 npm run verify:ambulance-drift # Ověří, že citáty u denních ambulancí jsou pořád na webech nemocnic (kvartálně v cronu; drift = přeověřit)
 npm run build:pohotovosti-okresy # Přegeneruje okresní stránky pohotovost-*.html z data/pohotovosti.json (přepisuje jen změněné)
+npm run build:pohotovosti-site   # Sestaví samostatný web pohotovostí do dist-pohotovosti/ (druhý Vercel projekt, PLAN-POHOTOVOSTI-DOMENA.md)
 npm run verify:freshness  # Kontrola stáří dat (warn > 7 dní, fail > 30 dní)
 npm run ingest            # Spustí celý ingest pipeline (seed v dev prostředí)
 npm run transform         # Jen transform krok
@@ -517,6 +521,7 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - [`05_M1_Starter/PLAN-TRI-ZIDLE.md`](05_M1_Starter/PLAN-TRI-ZIDLE.md) — plán herní trilogie „Tři židle" (ministr → ředitel nemocnice → pacient/lékař + perspektivy na Modelu systému)
 - [`05_M1_Starter/PLAN-PREHLEDNOST-OBJEVITELNOST.md`](05_M1_Starter/PLAN-PREHLEDNOST-OBJEVITELNOST.md) — plán přehlednosti a objevitelnosti článků (212+ článků: mobilní vyhledávání, taxonomie, kolekce/série, rubriky jako landing pages, fulltext index); **vstupní bod pro práci na navigaci a vyhledávání**
 - [`05_M1_Starter/PLAN-KRAJE-GRANULARITA.md`](05_M1_Starter/PLAN-KRAJE-GRANULARITA.md) — audit okresní/obecní granularity krajského dashboardu (42 datasetů, ČSÚ open-data API, okresní drill-down); **vstupní bod pro prohlubování krajských dat**
+- [`05_M1_Starter/PLAN-POHOTOVOSTI-DOMENA.md`](05_M1_Starter/PLAN-POHOTOVOSTI-DOMENA.md) — samostatná doména pro pohotovosti jako druhý výstup repa (`npm run build:pohotovosti-site` → `dist-pohotovosti/`, odlehčený shell `src/pohotovosti-shell.js`, konfigurace `data/pohotovosti-site.json`); **čeká na kroky mimo repo: doména, druhý Vercel projekt, přepnutí 301**
 - [`05_M1_Starter/PLAN-ONKO.md`](05_M1_Starter/PLAN-ONKO.md) — návrh sekce „Rakovina: co teď" (`rakovina.html` + `data/onko-navigace.json`): systémová osa nad klinickou `cesta-pacienta.html` — kam patřím, nárok a § 16, na co se ptát, čemu věřit; **čeká na schválení vlastníkem**
 - [`BACKLOG.md`](BACKLOG.md) — backlog (historický; aktuální vstupní bod je PLAN-PRACE.md)
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**

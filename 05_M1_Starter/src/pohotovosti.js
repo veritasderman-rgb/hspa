@@ -1321,8 +1321,12 @@ function registerOffline() {
   if ('serviceWorker' in navigator) {
     try {
       // Cesty odvozené od umístění modulu, aby fungovaly i mimo kořen domény.
-      const sw = new URL('../sw-pohotovosti.js', import.meta.url).pathname;
-      const scope = new URL('../pohotovost', import.meta.url).pathname;
+      // Na samostatném webu (window.POH_SITE.standalone, build
+      // scripts/build-pohotovosti-site.js) jsou stránky na `/` a `/<okres>`,
+      // takže SW řídí celý origin.
+      const standalone = window.POH_SITE?.standalone === true;
+      const sw = standalone ? '/sw-pohotovosti.js' : new URL('../sw-pohotovosti.js', import.meta.url).pathname;
+      const scope = standalone ? '/' : new URL('../pohotovost', import.meta.url).pathname;
       navigator.serviceWorker.register(sw, { scope }).catch(() => {});
     } catch {
       // Bez service workeru stránka funguje dál, jen ne offline.
