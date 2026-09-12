@@ -592,3 +592,11 @@ Pole `published: false` → článek se nezobrazí v hubu (`clanky.html`), ale j
 
 ---
 *Verze 1.0 · květen 2026 · zdroj pravdy pro AI agenty i lidi*
+
+## Samostatný web pohotovostí (druhý výstup)
+
+`scripts/build-pohotovosti-site.js` (`npm run build:pohotovosti-site`) sestaví z `pohotovosti.html`, `pohotovost-*.html`,
+`src/pohotovosti*.js`, dat pohotovostí a service workeru druhý výstupní adresář `dist-pohotovosti/` pro vlastní doménu
+(konfigurace `data/pohotovosti-site.json`). Stránky dostanou odlehčený shell (`src/pohotovosti-shell.js` místo
+`page-shared.js`), URL `/` a `/<okres>`, absolutní odkazy zpět na HSPA Monitor, vlastní sitemap, manifest a `vercel.json`.
+Nasazení a přepnutí 301: `05_M1_Starter/PLAN-POHOTOVOSTI-DOMENA.md`.

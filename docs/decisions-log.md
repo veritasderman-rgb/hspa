@@ -175,3 +175,17 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 **Účel**: nová Claude session přečte tento log a vyhne se 2 typům chyb:
 - Re-implementovat odstraněnou feature („přidám persona switcher")
 - Re-zavést opravenou chybu („v § 16b je 200 Kč limit")
+
+## 2026-09-12 — Pohotovosti jako druhý výstup repa (samostatná doména)
+
+**Rozhodnutí:** vyhledávání pohotovostí + 75 okresních stránek se vyvádí na vlastní doménu (výchozí
+`kdejepohotovost.cz`, konfigurace `data/pohotovosti-site.json`) jako druhý build téhož repa
+(`npm run build:pohotovosti-site` → `dist-pohotovosti/`, druhý Vercel projekt). Ne jako oddělený projekt —
+data, engine i okresní builder zůstávají jedny. HSPA Monitor si nechává analýzu (dojezd, pokrytí, minimum vyhlášky).
+
+**Proč:** uživatel pohotovostí je ve stresu a na mobilu; shell dashboardu (navigace, masthead, newsletter, popupy)
+mu škodí. Servisní značka bez watchdog kontextu se dá nabídnout krajům, ZZS a NZIP k odkazování.
+
+**Nevracet:** shell samostatného webu nesmí importovat `page-shared.js` (popupy, newsletter, sdílená data) —
+v distu ho nahrazuje `src/pohotovosti-shell.js` se stejnými exporty (hlídá `tests/pohotovosti-site.test.js`).
+Přesměrování 301 z HSPA Monitoru se zapne až samostatným PR po ověření, že doména odpovídá (PLAN-POHOTOVOSTI-DOMENA.md).

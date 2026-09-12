@@ -37,9 +37,12 @@ function liveBadges() {
 function registerOffline() {
   if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return;
   try {
+    // Samostatný web (window.POH_SITE.standalone): stránky jsou na `/` a
+    // `/<okres>`, SW proto řídí celý origin.
+    const standalone = window.POH_SITE?.standalone === true;
     navigator.serviceWorker.register(
-      new URL('../sw-pohotovosti.js', import.meta.url).pathname,
-      { scope: new URL('../pohotovost', import.meta.url).pathname },
+      standalone ? '/sw-pohotovosti.js' : new URL('../sw-pohotovosti.js', import.meta.url).pathname,
+      { scope: standalone ? '/' : new URL('../pohotovost', import.meta.url).pathname },
     ).catch(() => {});
   } catch {
     // Bez service workeru stránka funguje dál, jen ne offline.
