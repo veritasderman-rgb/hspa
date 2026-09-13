@@ -452,6 +452,12 @@ const MANIFEST = {
     stat: '6', statSuffix: '/10', claim: 'dospělých Čechů má nadváhu nebo obezitu.',
     context: 'Každé čtvrté dítě 6–9 let taky. Páka je školní jídelna.',
   },
+  'clanek-tuberkuloza-uspesnost-lecby': {
+    kicker: 'Zdravotní stav · tuberkulóza', signal: 'bad',
+    stat: '70,6', statSuffix: '%', barPct: 71,
+    claim: 'pacientů s tuberkulózou v ČR v kohortě 2023 úspěšně doléčeno.',
+    context: 'Cíl WHO je 90 %. 14,4 % ztraceno ze sledování — nejvíc v EU/EEA.',
+  },
   'clanek-ncez-financovani-2027': {
     kicker: 'Digitalizace · financování',
     headline: 'Dotace na e-zdravotnictví dojdou. Provoz od 2027 platí stát.',
