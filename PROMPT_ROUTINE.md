@@ -447,15 +447,17 @@ sémantické třídy `-good/-warn/-bad/-neutral`; density 3–6 prvků na člán
 
 ### 8.5 `data/articles.json` a publikační fronta
 
-Nový článek jde **na konec fronty** — nikdy ne stejný den. `next_slot` = max
-`scheduled_for` mezi `published: false` + 1 den (jinak zítřek):
+Nový článek jde **na konec fronty** — nikdy ne stejný den. `next_slot` = den po
+`max(nejzazší scheduled_for mezi published: false, dnešek)` — tj. vždy nejdřív zítřek,
+i když fronta obsahuje jen prošlá data (spouštěj z `05_M1_Starter/`):
 
 ```bash
 python3 -c "
 import json, datetime
-d = json.load(open('05_M1_Starter/data/articles.json'))
+d = json.load(open('data/articles.json'))
 s = [a['scheduled_for'] for a in d['articles'] if a.get('published') is False and a.get('scheduled_for')]
-last = max(datetime.date.fromisoformat(x) for x in s) if s else datetime.date.today()
+today = datetime.date.today()
+last = max([datetime.date.fromisoformat(x) for x in s] + [today])
 print((last + datetime.timedelta(days=1)).isoformat())
 "
 ```
@@ -666,9 +668,12 @@ evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen 
    stavu naplánováno, `recipients.lists = [2]`, `scheduledAt` sedí → nic nedělej, jen
    řádek do PR.
 2. Záznam chybí nebo kampaň neexistuje (workflow selhal) → **fallback runbook** jako kód
-   `node scripts/newsletter-run.js` (nejdřív `--dry-run`, zkontroluj výběr a HTML), pak
-   ostrý běh se `scheduledAt` = dnes 11:00 (aktuální offset Europe/Prague). Nikdy
-   neposílej hned. Log commitni v tomto PR (`content(newsletter): vydání RRRR-MM-DD`).
+   s **explicitním datem dneška** (bez něj by `nextFridayYmd()` skočil na příští pátek):
+   nejdřív `node scripts/newsletter-run.js --dry-run --friday=$(date +%F)` (zkontroluj
+   výběr, HTML a `scheduledAt`), pak ostrý běh `node scripts/newsletter-run.js
+   --friday=$(date +%F)` — skript nastaví `scheduledAt` = dnes 11:00 s aktuálním
+   offsetem Europe/Prague. Nikdy neposílej hned; je-li už po 10:00 místního času,
+   vydání přeskoč a zapiš to do PR (okno na lidskou kontrolu by nezbylo). Log commitni v tomto PR (`content(newsletter): vydání RRRR-MM-DD`).
    Pravidla obsahu: 3–4 dosud neposlané články (hero první, max 1 „Z archivu"), 1 indikátor
    ve Florencině úvodu (120–180 slov, čísla se zdrojem a rokem, žádné vykřičníky ani AI
    klišé), absolutní odkazy `skorezdravotnictvi.cz`, `{{ unsubscribe }}` beze změny,
