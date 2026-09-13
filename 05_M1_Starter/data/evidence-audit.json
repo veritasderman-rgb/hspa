@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-09-08T00:00:00Z",
+  "generated_at": "2026-09-13T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -3957,6 +3957,1708 @@
       ],
       "followup": "Nehledána domácí (česká) evidence k účinnosti populačního screeningu a k determinantám účasti — kandidát na cílenou rešerši v další dávce; práh ≥ 65 % má citaci dokumentu, číslo z plného textu kapitoly zatím nebylo v PubMed ověřeno (abstrakt ho neobsahuje).",
       "notes": "Karta neobsahuje DOI/PMID pro citovanou „Cochrane Review 2019“, takže ji nebylo možné ověřit přes get_article_metadata/lookup_article_by_citation (found_via: article) — muselo se hledat (found_via: pubmed). Volání PubMed: 6 v rešerši (4 search_articles + 2 get_article_metadata, pod stropem 8) + 2 v adjudikaci (search_articles nad Cochrane Database Syst Rev na kolorektální screening; get_article_metadata pro 35665911, 24085634, 17253456, 25708757 v jedné dávce) = 8 volání nástroje; adjudikační strop 3 dodržen. Consensus nebyl dostupný ani potřeba (PubMed dal použitelné kandidáty) — tools.consensus zůstává false. Plný text nebylo třeba stahovat, všechny rozhodné údaje (RR, CI, počty studií a účastníků) jsou v abstraktech.\n\nZměny adjudikace proti rešerši: (1) tvrzení o 40 % zpřísněno z partial na contradicted, confidence medium → high — protokol uvádí jako samostatný důvod pro contradicted i neexistenci citované studie a zde jsou splněny obě podmínky současně: cílená rešerše časopisu Cochrane Database Syst Rev na kolorektální screening vrátila jen 4 přehledy (2000, 2007, 2013, 2022), žádný z roku 2019 a žádný s údajem 40 %, a zároveň dva nezávislé Cochrane přehledy vysoké kvality dávají pro relevantní modality podstatně nižší hodnoty (16 % a 14 % pro FOBT, 28 % pro sigmoideoskopii). (2) doplněno třetí tvrzení (validita účasti jako ukazatele funkčnosti programu, kind measurement), které rešerše vynechala kvůli rozpočtu — verdikt partial, bez dalšího volání nástrojů. (3) tvrzení o prahu ≥ 65 % ponecháno jako not-applicable, confidence zvýšena z low na medium.\n\nProč se nic nemění v prose: u contradicted protokol zakazuje zásah do textu (rozhoduje redakce) a jedna upřesňující věta je vyhrazena jen verdiktu partial. Navrženou větu do pole limitations k tvrzení measurement audit záměrně NEvložil — karta má současně otevřený rozpor ve stejném poli prose a vkládat novou formulaci před rozhodnutím redakce by ho předjímalo; znění věty je v akci card-note a v issue #1171.\n\nPřenositelnost: veškerá doložená evidence je zahraniční (Cochrane přehledy, americká síťová metaanalýza). Pro české prostředí je podstatné, že program používá iFOBT s návaznou kolonoskopií, zatímco mortalitní RCT evidence stojí na gFOBT a sigmoideoskopii; přenos velikosti účinku na český program je předpoklad, ne doložený fakt — proto je Grobbee 2022 zařazen jako kontextová položka.\n\nZapsáno modelem Opus: do karty doplněno pole literature (4 studie), založeno issue #1171 (label evidence-audit). Prose karty, verification_status, verified_at, čísla ani generované artefakty se neměnily; žádný git příkaz spuštěn."
+    },
+    {
+      "id": "clanek-czechsex-stav-ceska.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "d16013ff39a08b12c3a3463529a37409cfc6c492",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 12,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Pokles frekvence není český fenomén. Britský Natsal ukazuje stejný směr: mezi vlnami Natsal-2 (1999–2001) a Natsal-3 (2010–2012) klesl počet heterosexuálních styků za poslední čtyři týdny (Mercer et al., Lancet 2013).",
+          "location": "figure-note „Frekvence sexu v dlouhodobém partnerství — tři dekády“ + navazující odstavec",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "24286784",
+              "doi": "10.1016/S0140-6736(13)62035-8",
+              "title": "Changes in sexual attitudes and lifestyles in Britain through the life course and over time: findings from the National Surveys of Sexual Attitudes and Lifestyles (Natsal)",
+              "year": 2013,
+              "journal": "Lancet",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova uvádí, že počet příležitostí heterosexuálního styku za poslední 4 týdny byl nižší než v Natsal-2. Tvrzení je omezeno na Británii a tak je i formulováno (žádná extrapolace na ČR), populace i období odpovídají. Studie je v seznamu zdrojů s ověřeným PMID/DOI (citační oprava 12. 9. 2026) — bez zásahu."
+        },
+        {
+          "claim_id": "",
+          "text": "Německý GeSiD (sběr 2018–2019) je naproti tomu jednorázové šetření — dává srovnávací hladinu frekvence pro Německo, ne doklad posunu v čase.",
+          "location": "figure-note „Frekvence sexu v dlouhodobém partnerství — tři dekády“ + navazující odstavec",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33605816",
+              "doi": "10.1080/00224499.2021.1875188",
+              "title": "Methodology of the German National Sex Survey - GeSiD (German Health and Sexuality Survey)",
+              "year": 2021,
+              "journal": "Journal of Sex Research",
+              "study_type": "methodological",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Metodický článek popisuje GeSiD jako jedno šetření se sběrem 2018/2019 (4 955 rozhovorů), bez opakovaných vln a tedy bez vlastní časové řady. Tvrzení je metodicky přesné a v článku slouží právě k omezení výpovědní hodnoty GeSiD — nejkonzervativnější možná formulace. Studie je v seznamu zdrojů s ověřeným PMID/DOI — bez zásahu."
+        },
+        {
+          "claim_id": "",
+          "text": "Klinicky významná sexuální dysfunkce (s osobním stresem podle ICD-11 operacionalizace) v Německu: 17,5 % žen a 13,3 % mužů (GeSiD 2019).",
+          "location": "tabulka „Klinicky významná sexuální dysfunkce: ČR vs. Německo“ (sloupec DE) + figure-note",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "33357346",
+              "doi": "10.3238/arztebl.2020.0653",
+              "title": "Estimating the Prevalence of Sexual Dysfunction Using the New ICD-11 Guidelines: Results of the First Representative, Population-Based German Health and Sexuality Survey (GeSiD)",
+              "year": 2020,
+              "journal": "Deutsches Ärzteblatt International",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Hodnoty 13,3 % (muži) a 17,5 % (ženy) se sexuální dysfunkcí s výrazným distresem jsou doslova v abstraktu, stránkování 117(39):653–8 odpovídá metadatům PubMed (opraveno už noční revizí 12. 9. 2026). Článek sám upozorňuje, že operacionalizace ICD-11 se mezi průzkumy liší a srovnání je indikativní — výhrada je u čtenáře. Bez zásahu."
+        },
+        {
+          "claim_id": "",
+          "text": "Britský Natsal-3 ukazuje, že okolo 24 % žen s problémem vyhledalo pomoc — pětkrát víc.",
+          "location": "odstavec „A teď zlomová věta…“ za údajem o 5 % žen a 4,6 % mužů",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "24286787",
+              "doi": "10.1016/S0140-6736(13)62366-1",
+              "title": "Sexual function in Britain: findings from the third National Survey of Sexual Attitudes and Lifestyles (Natsal-3)",
+              "year": 2013,
+              "journal": "Lancet",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "27496078",
+              "doi": "10.1016/j.jadohealth.2016.05.017",
+              "title": "Sexual Function in 16- to 21-Year-Olds in Britain",
+              "year": 2016,
+              "journal": "Journal of Adolescent Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "12933730",
+              "doi": "10.1136/bmj.327.7412.426",
+              "title": "Sexual function problems and help seeking behaviour in Britain: national probability sample survey",
+              "year": 2003,
+              "journal": "BMJ",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace dohledala hlavní práci Natsal-3 o sexuálních funkcích (Mitchell KR et al., Lancet 2013;382(9907):1817–29, PMID 24286787, podle PubMed typ Journal Article, bez retrakce a errat). Její abstrakt uvádí problém sexuální odpovědi u 41,6 % mužů a 51,2 % žen a distres ze sexuálního života u 9,9 % mužů a 10,9 % žen, ale podíl osob, které vyhledaly pomoc, neuvádí vůbec. Číslo 24 % tedy není doložitelné z žádného ověřeného abstraktu → pravidlo „číslo mimo abstrakt = nejvýš partial“. Směr tvrzení (britské vyhledání pomoci je řádově vyšší než českých 5 %) je podepřen daty z Natsal-3 pro kohortu 16–21 let (Mitchell 2016, PMID 27496078), tedy jinou subpopulací; Mercer 2003 (BMJ) je Natsal-2, ne Natsal-3. Contradicted nepřichází v úvahu — žádná studie tvrzení nevyvrací, jen je neumí doložit. Násobek „pětkrát víc“ stojí a padá s číslem 24 %, proto do odstavce vložena jedna upřesňující věta s citací (PMID 24286787) a studie doplněna do zdrojů; o osudu samotného čísla rozhodne redakce."
+        },
+        {
+          "claim_id": "",
+          "text": "Americký Rosenfeld (Stanford 2019) udává pro USA již 39 % — Česko je v evropském středu.",
+          "location": "figure-note „Online seznamování podle kohorty (CZECHSEX 2024)“",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31431531",
+              "doi": "10.1073/pnas.1908630116",
+              "title": "Disintermediating your friends: How online dating in the United States displaces other ways of meeting",
+              "year": 2019,
+              "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Správná studie je identifikovaná a ověřená v PubMed (PMID 31431531, typ Journal Article, bez retrakce a errat) a abstrakt potvrzuje směr — internetové seznamování se v USA stalo nejběžnějším způsobem, jak se heterosexuální páry potkají, a vytlačuje přátele a rodinu. Hodnota 39 % v abstraktu není, proto nejvýš partial. Druhá polovina věty („Česko je v evropském středu“) není touto studií krytá vůbec — jde o americká data, nikoli evropské srovnání; vedeno jako výhrada v registru, prose se nemění. Zásah: do existující položky zdrojů doplněno ověřené DOI a PMID. Upřesňující věta se zde nenavrhuje — rozpočet jedné věty využit u silnějšího tvrzení o Natsalu (24 %)."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do seznamu zdrojů (article-sources, plochý ol bez skupin — proto na konec seznamu) přidána položka Mitchell KR, Mercer CH, Ploubidis GB et al. Sexual function in Britain: findings from the third National Survey of Sexual Attitudes and Lifestyles (Natsal-3). Lancet. 2013;382(9907):1817–29, s DOI 10.1016/S0140-6736(13)62366-1 a PMID 24286787 (ověřeno v PubMed 13. 9. 2026) a vysvětlením, k čemu v textu slouží: abstrakt uvádí problém sexuální odpovědi u 41,6 % mužů a 51,2 % žen a distres u 9,9 % mužů a 10,9 % žen, podíl osob, které vyhledaly pomoc, ale neuvádí.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Existující položka zdrojů o Rosenfeldovi (dosud bez DOI/PMID) nahrazena ověřeným tvarem Rosenfeld MJ, Thomas RJ, Hausen S. Disintermediating your friends: How online dating in the United States displaces other ways of meeting. PNAS. 2019;116(36):17753–8, s DOI 10.1073/pnas.1908630116 a PMID 31431531 (ověřeno v PubMed 13. 9. 2026) a poznámkou, že abstrakt dokládá směr, ne hodnotu 39 %. Bez duplikace — stará položka odstraněna, počet položek seznamu se nezvýšil.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Tvrzení 1–3 (Mercer 2013 PMID 24286784, Matthiesen 2021 PMID 33605816, Briken 2020 PMID 33357346) potvrzena jako supported; všechny tři studie článek už cituje s ověřeným PMID/DOI po citační opravě 12. 9. 2026 — žádný zásah do zdrojů ani textu. Žádné contradicted → bez flagu a bez issue; audit-status zůstává review-pending (articles.json audit-status, audit.status i meta article:audit-status), vložená upřesňující věta ho nemění. Do audit.notes v data/articles.json a do audit: komentáře v HTML připojena věta „evidence-audit 2026-09-13: 5 tvrzení, 3 supported, 2 partial; viz data/evidence-audit.json.“ audit.last_reviewed neměněno.",
+          "ref": ""
+        }
+      ],
+      "followup": "Přesný podíl žen, které v Natsal-3 vyhledaly pomoc (tvrzení „okolo 24 %“), zůstává neověřen — vyčerpán strop 3 volání PubMed při adjudikaci. Dohledat v open-access plném textu PMC3898902, případně v samostatné Natsal-3 publikaci o help-seeking, a teprve pak rozhodnout o osudu čísla a násobku „pětkrát víc“; Mercer 2003 (BMJ, PMID 12933730) je Natsal-2 a abstrakt nebyl dostupný. Do zdrojů se vědomě nepřidává Mitchell 2016 (PMID 27496078) — ročník a stránkování nebyly v adjudikaci ověřeny z metadat, zůstává jen jako evidence v registru.",
+      "notes": "Vybráno 5 odborných tvrzení (epidemiology/measurement) z maxima 8. Administrativní data CZECHSEX 2024 (vlastní čísla studie NUDZ: 5 % / 4,6 % vyhledané péče, 21,4 % / 16,1 % dysfunkce, 13,4 % online seznámení, mediány první pornografie, 5,4 % CSBD), ICD-11 diagnóza CSBD jako kategorie a zmínka o US General Social Survey bez konkrétní citace neověřovány — jde o primární data studie samotné, resp. tvrzení bez vlastní citace; patří do claims / nightly-scan, nepočítají se mezi ověřená tvrzení. Článek byl už 2026-09-12 (noční revize + citační oprava, issue #1194) auditován proti PubMed pro citace Briken 2020, Matthiesen 2021 a Mercer 2013 — tento běh ověření nezávisle zopakoval a potvrdil (shodné PMID/DOI a verbatim nálezy). V data/claims.json nemá článek žádný registrovaný záznam, proto claim_id prázdné u všech položek a žádná akce claim-note. Rešerše (Sonnet): 9 volání PubMed (o 1 přes doporučený strop 8 — poslední bylo get_article_metadata k ověření kandidáta z vyhledávače, nutné pro pravidlo ověřit každého kandidáta v PubMed) a 1 dotaz do vyhledávače (medical_mode=false, exclude_preprints=true, bez rate-limitu) k dohledání Rosenfeldovy práce z PNAS 2019. Adjudikace (Opus, 2026-09-13): 3 volání PubMed, strop vyčerpán — search_articles na titul práce Natsal-3 o sexuálních funkcích (0 výsledků, fráze se rozdrobila), lookup_article_by_citation (Lancet 2013;382:1817, Mitchell → PMID 24286787) a get_article_metadata téhož PMID. Celkem 12 volání PubMed a 1 dotaz do vyhledávače. Provozní texty nástrojů (počítadla, výzvy k registraci) nikam nepřeneseny. Finální verdikty: 3 supported (high), 2 partial (low, medium), 0 contradicted, 0 unclear; obě otevřené položky rozhodnuty (Natsal-3 / 24 % z unclear na partial, Rosenfeld partial potvrzen). Zásahy do obsahu: jedna upřesňující věta s citací na konec odstavce o vyhledání odborné péče (rozpočet jedné věty vědomě použit zde, protože na čísle stojí kvantitativní srovnání ČR–UK), doplnění jedné nové a jedné přepsané položky zdrojů, poznámka do audit.notes a audit: komentáře. Nezměněno: čísla, published, date, number, audit.last_reviewed, generované artefakty; žádný git."
+    },
+    {
+      "id": "clanek-onkologicky-koordinator-2026.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "f6e7d4c536b3361f7dbea6d5e60c7a752e09797b",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "onkologicky-koordinator-2026--06",
+          "text": "navigované kohorty mají kratší čas od abnormálního skríningu k diagnostickému dovyšetření o průměrně 7 až 14 dní",
+          "location": "prose, sekce „Evidence: co ukazuje literatura“ (doména A — kvalita procesu)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38581470",
+              "doi": "10.1007/s11912-024-01514-9",
+              "title": "Patient Navigation in Cancer Treatment: A Systematic Review.",
+              "year": 2024,
+              "journal": "Current Oncology Reports",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37358040",
+              "doi": "10.3322/caac.21788",
+              "title": "Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature.",
+              "year": 2023,
+              "journal": "CA: A Cancer Journal for Clinicians",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace nad open-access plným textem (PMC11063100): rozsah „7–14 dní“ v Chen 2024 není — ani v abstraktu, ani v plném textu. Přehled je narativní syntéza a referuje výhradně podíly studií s významným efektem (23 prací o čase diagnóza→zahájení léčby, z nich 70 % významné zkrácení; 71 % adherence; 87 % spokojenost; 81 % kvalita péče), žádný souhrnný odhad ve dnech. Navíc je záběr přehledu výslovně omezen na léčebnou fázi (diagnóza → survivorship) a studie mimo toto okno byly vyřazeny — fáze „abnormální skríning → diagnostické dovyšetření“, na kterou článek číslo váže, je v přehledu zmíněna jen jako pozadí („benefits … thoroughly documented in phases of screening and diagnostic resolution“). Směr efektu je doložen kvalitativně Chan 2023 (umbrella review 61 systematických přehledů: „patient navigation is effective in … reducing the time from screening to diagnosis and from diagnosis to treatment initiation“), opět bez čísla ve dnech. Není to contradicted — žádná kvalitní evidence netvrdí opak, chybí doklad konkrétní velikosti a nesedí fáze, kterou citovaný přehled měřil. Proto partial + jedna upřesňující věta (prose_change), která rozsahy přerámuje na kompilaci jednotlivých studií."
+        },
+        {
+          "text": "vyšší completion rate stagingu (rozdíl 8 až 15 p.b.), nižší missed appointment rate (rozdíl 10 až 20 p.b.) … navigované kohorty dokončují plánovanou chemoterapii v protokolární dávce s vyšší frekvencí (rozdíl 5 až 12 p.b.)",
+          "location": "prose, sekce „Evidence: co ukazuje literatura“ (domény A a B)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38581470",
+              "doi": "10.1007/s11912-024-01514-9",
+              "title": "Patient Navigation in Cancer Treatment: A Systematic Review.",
+              "year": 2024,
+              "journal": "Current Oncology Reports",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37358040",
+              "doi": "10.3322/caac.21788",
+              "title": "Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature.",
+              "year": 2023,
+              "journal": "CA: A Cancer Journal for Clinicians",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Stejný defekt jako u --06 a ověřený týmž open-access plným textem (PMC11063100): žádný z rozsahů v procentních bodech (8–15, 10–20, 5–12 p.b.) se v Chen 2024 nevyskytuje; přehled uvádí jen podíly studií s významným výsledkem (17 prací o adherenci, 71 % významné zlepšení; 11 prací o kvalitě péče, 81 % pozitivní dopad) a sledované metriky kvality vyjmenovává jako hospitalizace, návštěvy urgentního příjmu a finanční pomoc, ne completion rate stagingu nebo missed appointment rate. Směr (vyšší adherence, lepší kvalitativní ukazatele) je doložen oběma přehledy, velikost v p.b. nikoli. Jedna upřesňující věta navržená u --06 pokrývá i tyto rozsahy; další zásah do prose se nenavrhuje."
+        },
+        {
+          "text": "navigované kohorty mají statisticky významně nižší skóry úzkosti a deprese měřené HADS, EORTC QLQ-C30 a PROMIS",
+          "location": "prose, sekce „Evidence: co ukazuje literatura“ (doména C — kvalita života a úzkost)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "38581470",
+              "doi": "10.1007/s11912-024-01514-9",
+              "title": "Patient Navigation in Cancer Treatment: A Systematic Review.",
+              "year": 2024,
+              "journal": "Current Oncology Reports",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37358040",
+              "doi": "10.3322/caac.21788",
+              "title": "Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature.",
+              "year": 2023,
+              "journal": "CA: A Cancer Journal for Clinicians",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Chen 2024 (plný text PMC11063100) hodnotí spokojenost a kvalitu života v 15 studiích (87 % významný přínos) a u paliativní větve uvádí snížení úzkosti u rodinných pečujících; jmenovitě HADS, EORTC QLQ-C30 ani PROMIS v textu nejsou a souhrnné tvrzení o „statisticky významně nižších skórech úzkosti a deprese“ u navigovaných kohort z přehledu neplyne. Chan 2023 uvádí, že navigace zlepšuje kvalitu života a spokojenost s péčí ve fázi survivorship („emerging evidence“). Směr tedy stojí, konkretizace měřicími nástroji je nad rámec doložitelného — partial, bez zásahu do prose (k posouzení redakcí, zda nástroje v textu ponechat)."
+        },
+        {
+          "text": "Patient navigation v onkologii má za sebou mezi 1995 a 2024 přibližně 200 randomizovaných studií a observačních prací a několik systematických přehledů.",
+          "location": "prose, úvodní věta sekce „Evidence: co ukazuje literatura“",
+          "kind": "other",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "37358040",
+              "doi": "10.3322/caac.21788",
+              "title": "Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature.",
+              "year": 2023,
+              "journal": "CA: A Cancer Journal for Clinicians",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38581470",
+              "doi": "10.1007/s11912-024-01514-9",
+              "title": "Patient Navigation in Cancer Treatment: A Systematic Review.",
+              "year": 2024,
+              "journal": "Current Oncology Reports",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Řád velikosti je s literaturou konzistentní — Chan 2023 identifikoval 2 062 záznamů, zahrnul 61 systematických přehledů a 53 primárních studií od roku 2021; Chen 2024 zahrnul 59 studií jen za léčebnou fázi z 1 934 odtříděných záznamů. Číslo „přibližně 200“ ani okno „1995–2024“ však žádný z ověřených přehledů neuvádí; jde o odhad autora, ne o doložený součet. Formulace „přibližně“ a „několik systematických přehledů“ je dostatečně hedgovaná, zásah do prose se nenavrhuje."
+        },
+        {
+          "text": "Systematic review v časopise Current Oncology Reports z dubna 2024 (Chen a kol.) zhodnotil 59 studií publikovaných mezi 2009 a 2023",
+          "location": "prose, sekce „Evidence: co ukazuje literatura“ + article-sources",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38581470",
+              "doi": "10.1007/s11912-024-01514-9",
+              "title": "Patient Navigation in Cancer Treatment: A Systematic Review.",
+              "year": 2024,
+              "journal": "Current Oncology Reports",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno: „Fifty-nine articles were included in this review“, rešeršní okno 1. 8. 2009 – březen 2023 (abstrakt uvádí 27. 3. 2023, metodika plného textu 24. 3. 2023 — nepodstatný rozpor v primárním zdroji), publikováno 6. 4. 2024, Curr Oncol Rep 26(5):504–537, typ publikace Systematic Review, bez retrakce či errata. Autorství Chen M, Wu VS, Falk D, Cheatham C, Cullen J, Hoehn R odpovídá opravě z auditu 2026-07-12."
+        },
+        {
+          "text": "Chan RJ et al. (2023). Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature. CA: A Cancer Journal for Clinicians",
+          "location": "article-sources, skupina „Mezinárodní reference a evidence“",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "37358040",
+              "doi": "10.3322/caac.21788",
+              "title": "Patient navigation across the cancer care continuum: An overview of systematic reviews and emerging literature.",
+              "year": 2023,
+              "journal": "CA: A Cancer Journal for Clinicians",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Citace odpovídá metadatům z PubMed (Chan RJ, Milch VE, Crawford-Williams F et al., CA Cancer J Clin 2023;73(6):565–589, publikováno 26. 6. 2023, DOI 10.3322/caac.21788); zastřešující přehled 61 systematických přehledů z 2 062 záznamů, bez retrakce. Citace v článku neuvádí ročník, číslo ani strany a chybí DOI/PMID odkaz — doplněno akcí source-added."
+        },
+        {
+          "text": "V roce 1990 zavedl Harold P. Freeman v Harlem Hospital v New Yorku první navigační program pro afroamerické ženy s abnormálním mamografickým nálezem.",
+          "location": "prose, sekce „Mezinárodní paralely: čtyři modely patient navigation“",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "21780088",
+              "doi": "10.1002/cncr.26262",
+              "title": "History and principles of patient navigation.",
+              "year": 2011,
+              "journal": "Cancer",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ověřeno z open-access plného textu (PMC4557777) — v PubMed abstrakt chybí, plný text je dostupný: „the nation's first patient navigation program was conceived and initiated in 1990 in Harlem, New York by Dr. Harold Freeman“, s cílovou kohortou pacientek Harlem Hospital Center (606 pacientek s karcinomem prsu, 94 % černých, nízký ekonomický status). Typ publikace Historical Article / Review — jako historické tvrzení je to primární zdroj, ne studie účinku; existence a bibliografie (Cancer 2011;117(15 Suppl):3539–42) potvrzeny."
+        },
+        {
+          "text": "Podle Freemanových publikací (zejména Freeman & Rodriguez, Cancer, 2011) program v Harlemské kohortě výrazně zvýšil podíl žen, které z abnormálního skríningového nálezu doputovaly do diagnostické biopsie ve stanoveném čase, a zlepšil dlouhodobé přežití u diagnostikovaných pacientek",
+          "location": "prose, sekce „Mezinárodní paralely: čtyři modely patient navigation“",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "21780088",
+              "doi": "10.1002/cncr.26262",
+              "title": "History and principles of patient navigation.",
+              "year": 2011,
+              "journal": "Cancer",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Plný text (PMC4557777) druhou polovinu tvrzení doloží: před intervencí 5leté přežití 39 % a 6 % pacientek ve stadiu 1, po intervenci 5leté přežití 70 % a 41 % ve stadiu 0/1 (325 pacientek). Dvě výhrady: (1) publikace efekt výslovně přisuzuje kombinaci dvou prvků — bezplatným/nízkonákladovým vyšetřením a mamografii podle doporučení plus navigaci („Two major factors are believed to account for these dramatically improved results“) — navigace tedy není izolovaná intervence; (2) o podílu žen, které z abnormálního nálezu doputovaly k biopsii ve stanoveném čase, publikace žádná data neuvádí (referuje stadia a přežití), takže první polovina tvrzení z citovaného zdroje nevyplývá. Jde o historickou/deskriptivní práci, ne o kontrolovanou studii — partial. Kvalitativní formulace v textu (bez procent), zavedená auditem 2026-05-16, je korektní a zůstává beze změny; ověřená čísla z plného textu patří do poznámky ve zdrojích, ne do prose."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 5,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "flagged",
+          "detail": "audit-status verified → review-pending (data/articles.json audit-status i audit.status, meta name=\"article:audit-status\" v HTML i status v audit: komentáři). Důvod je vložení jedné upřesňující věty u partial tvrzení dle oddílu „Co smí audit měnit“, NE contradicted — proto bez GitHub issue. audit.last_reviewed, published, date ani number se nemění.",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "data/claims.json → onkologicky-koordinator-2026--06: source_note nahrazen plnou citací Chen 2024 (PMID 38581470, ověřeno v PubMed 2026-09-13) s výhradou, že přehled se omezuje na léčebnou fázi a referuje jen podíly studií s významným efektem, a s doplněním Chan 2023 (PMID 37358040) jako kvalitativní opory směru; verdikt partial. Hodnota, metric ani quote claimu se nemění.",
+          "ref": "onkologicky-koordinator-2026--06"
+        },
+        {
+          "type": "source-added",
+          "detail": "V article-sources vytvořena nová skupina „Recenzovaná literatura“ (za skupinou „Mezinárodní reference a evidence“) a přesunuty do ní tři studie, které dosud ležely mezi institucionálními odkazy — Chen M, Wu VS, Falk D, Cheatham C, Cullen J, Hoehn R (2024), Curr Oncol Rep 26(5):504–537, DOI 10.1007/s11912-024-01514-9, PMID 38581470; Chan RJ, Milch VE, Crawford-Williams F et al. (2023), CA Cancer J Clin 73(6):565–589, DOI 10.3322/caac.21788, PMID 37358040; Freeman HP, Rodriguez RL (2011), Cancer 117(15 Suppl):3539–3542, DOI 10.1002/cncr.26262, PMID 21780088. Každá položka doplněna o PMID odkaz, datum ověření v PubMed (2026-09-13) a větu o tom, k čemu v textu slouží a co z ní doložitelné není; u Freemana doplněna ověřená čísla harlemské kohorty z plného textu (5leté přežití 39 % → 70 %, stadium 0/1 6 % → 41 %) včetně výhrady o kombinované intervenci. Obsah se neztratil, jen přesunul a doplnil.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Odstavec „Pozn. k údajům“ (article-sources-disclaimer) ponechán beze změny — hedge o rozsazích 7–14 dní a 8–15 / 5–12 p.b. nově upřesňuje vložená věta v sekci Evidence, duplikovat ho na dvou místech není potřeba. Návrh redakci pro schvalování review-pending: „vycházejí ze systematických přehledů publikovaných v…“ lze nahradit „jsou kompilací jednotlivých studií zahrnutých v systematických přehledech publikovaných v…“. Návrh, ne automatický zásah.",
+          "ref": ""
+        }
+      ],
+      "followup": "(a) Tvrzení o „přibližně 200 studiích mezi 1995 a 2024“ zůstává bez primárního doložení — k posouzení redakcí, zda větu ponechat, nebo nahradit doloženým součtem z Chan 2023 (61 systematických přehledů, 53 primárních studií od 2021) a Chen 2024 (59 studií). (b) Měřicí nástroje HADS / EORTC QLQ-C30 / PROMIS u domény C nejsou v citovaných přehledech jmenovány — chce to jednu primární studii, nebo nástroje z textu vypustit. (c) Rozsahy 7–14 dní a 8–15 / 10–20 / 5–12 p.b. by bylo možné doložit konkrétními primárními studiemi ze seznamu 59 prací Chen 2024 (mimo strop volání tohoto běhu), nebo nahradit doloženými podíly studií — položka se proto vrací jako stale.",
+      "notes": "FÁZE 2 (Sonnet): ze 6 ručně sledovaných claims v data/claims.json byl k ověření v PubMed relevantní jen --06 (efekt patient navigation, 7–14 dní); zbylé (--01 počet KOC, --02 diagnostické okno, --03 seznam přípravků, --04 počet diagnóz ročně, --05 NHS 62denní standard) jsou administrativní, legislativní a procesní údaje — nejsou odborná tvrzení pro evidence-audit (hlídá je data/claims.json a nightly-scan), do registru se jako tvrzení nepíšou. Rešerše ověřila 3 studie, které článek už cituje (PMID 38581470, 37358040, 21780088) — všechny existují, odpovídají bibliografii v článku, žádná není retrahovaná ani nese erratum. Consensus nebyl k dispozici (tools.consensus: false). FÁZE 3 (Opus, adjudikace): 3 dodatečná volání PubMed (metadata všech tří studií jedním voláním, get_full_text_article PMC11063100, get_full_text_article PMC4557777) — strop 3 dodržen. Změny proti rešerši: (1) 4 tvrzení → 8 — doplněna tvrzení se stejným defektem jako --06 (rozsahy v p.b., nástroje domény C, věta o „přibližně 200 studiích“) a Freemanovo tvrzení rozděleno na historický původ (supported) a efekt harlemské kohorty (partial), protože každá polovina stojí na jiném základě; (2) bibliografická a deskriptivní tvrzení přeřazena na kind: other; (3) confidence u --06 zvýšena na high — absence čísla je po plném textu prokázaná, ne jen nedoložená; (4) nový nález: Chen 2024 vylučoval studie mimo léčebné okno, takže fáze „abnormální skríning → diagnostické dovyšetření“, na kterou článek váže rozsah 7–14 dní, leží mimo záběr citovaného přehledu — jde o misatribuci fáze, nikoli jen chybějící číslo, a to je důvod pro jednu upřesňující větu v prose; (5) ověřená čísla harlemské kohorty z plného textu jsou poprvé doložena z primárního zdroje a patří do poznámky ve zdrojích — v prose zůstává kvalitativní formulace zavedená auditem 2026-05-16 (redakční rozhodnutí se nevrací zpět). Žádné contradicted → žádná GitHub issue. FÁZE 4 (Opus, zápis): aplikována jedna upřesňující věta do sekce „Evidence: co ukazuje literatura“, nová skupina zdrojů „Recenzovaná literatura“, source_note claimu --06, poznámka v audit: komentáři i v audit.notes, audit-status verified → review-pending na všech třech místech. Čísla v textu, published, date, number ani audit.last_reviewed změněny nebyly; generované artefakty nebyly dotčeny."
+    },
+    {
+      "id": "clanek-koureni.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "9cc18a15a9f69f20f3eb20cc3f37a2fe05e4e905",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Podle padesátiletého kohortního sledování britských lékařů publikovaného v British Medical Journal (Doll, Peto, Boreham & Sutherland, 2004) zemře přibližně polovina dlouhodobých kuřáků na onemocnění přímo spojené s kouřením… kuřáci přicházejí v průměru o zhruba 10 let života oproti celoživotním nekuřákům.",
+          "location": "prose — h3 „Kolik je šestnáct procent — a proč ne dvaadvacet“",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "15213107",
+              "doi": "10.1136/bmj.38142.554479.AE",
+              "title": "Mortality in relation to smoking: 50 years' observations on male British doctors",
+              "year": 2004,
+              "journal": "BMJ",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši. Studie existuje, není retrahovaná, citace v článku (BMJ 2004;328:1519, DOI 10.1136/bmj.38142.554479.AE) souhlasí. Abstrakt doslova uvádí: muži narození 1900–1930, kteří kouřili jen cigarety a kouřit nepřestali, zemřeli v průměru asi o 10 let dříve než celoživotní nekuřáci — desetiletý rozdíl je doložen přesně tak, jak ho článek uvádí. Údaj „přibližně polovina dlouhodobých kuřáků zemře na onemocnění spojené s kouřením“ v abstraktu není; abstrakt pracuje s pravděpodobností úmrtí ve středním věku (35–69 let): 42 % vs. 24 % u narozených 1900–1909 a 43 % vs. 15 % u narozených ve 20. letech. Pokus o plný text přes PubMed Central (PMC437139) vrátil prázdné pole full_text, takže celoživotní podíl „poloviny“ nelze ze strojově dostupného zdroje doslovně doložit — podle pravidla „číslo, které abstrakt neobsahuje → nejvýš partial“ zůstává partial. Směr i řád velikosti jsou přitom v souladu s abstraktem, nejde o rozpor. Studii článek už cituje včetně DOI a PMC odkazu, zásah do zdrojů není potřeba."
+        },
+        {
+          "text": "Podle WHO a Světové banky platí, že desetiprocentní zvýšení reálné ceny cigaret snižuje spotřebu ve vyspělých zemích zhruba o čtyři procenta; u mladistvých je efekt ještě silnější.",
+          "location": "prose — h3 „Co Česko zatím nepoužilo“ (odstavec o spotřební dani)",
+          "kind": "efficacy",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "K posouzení redakcí. Rešerše vyčerpala strop 8 volání PubMed a jediný dotaz k cenové elasticitě vrátil tematicky vzdálené práce; adjudikační rozpočet 3 volání byl přednostně použit na dvě Cochrane review a na plný text Doll 2004, takže cílené dohledání primárního zdroje neproběhlo. Tvrzení je v článku korektně atribuováno institucím (WHO, Světová banka) a odpovídá jejich technickým manuálům, ne jedné PubMed-indexované studii — není tedy ani podloženo, ani vyvráceno. Pro příští běh: cílený dotaz na cenovou elasticitu poptávky po tabáku (Chaloupka FJ; IARC Handbooks of Cancer Prevention vol. 14 „Effectiveness of Tax and Price Policies for Tobacco Control“; „price elasticity“[Title/Abstract] AND tobacco AND review). Do té doby bez zásahu do textu."
+        },
+        {
+          "text": "Studie publikované v Tobacco Control i Cochrane review v následujících letech ukázaly, že plain packaging snižuje atraktivitu cigaret zejména pro mladé a má měřitelný, byť menší dopad na celkovou spotřebu.",
+          "location": "prose — h3 „Co Česko zatím nepoužilo“ (odstavec o plain packaging)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28447363",
+              "doi": "10.1002/14651858.CD011244.pub2",
+              "title": "Tobacco packaging design for reducing tobacco use",
+              "year": 2017,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39900488",
+              "doi": "10.1136/tc-2024-058921",
+              "title": "Cigarette filter ventilation, product appeal and regulatory options: a review of the influence of ventilation on consumers' sensory and risk perceptions",
+              "year": 2026,
+              "journal": "Tobacco Control",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace dohledala Cochrane review, kterou článek zmiňuje, ale necituje: McNeill A, Gravely S, Hitchman SC, Bauld L, Hammond D, Hartmann-Boyce J. Tobacco packaging design for reducing tobacco use. Cochrane Database Syst Rev 2017;4(4):CD011244 (51 studií, přibližně 800 000 účastníků). Abstrakt doslova podporuje první polovinu tvrzení: nejkonzistentnější doklady jsou právě pro nižší atraktivitu neutrálních obalů a u mládeže zjištění směřují k tomu, že neutrální obaly méně motivují k iniciaci kouření. Druhá polovina je ale silnější než evidence: dopad na prevalenci stojí na jediné australské observační studii (snížení šance o 3,7 %, tj. 0,5 procentního bodu; nízká jistota podle GRADE) a výsledky u spotřeby jsou smíšené s velmi nízkou jistotou — formulace „má měřitelný, byť menší dopad na celkovou spotřebu“ tak není doslovně doložitelná. Proto partial, nikoli supported; rozpor to není (přehled výslovně uvádí, že nenašel doklady o tom, že by neutrální obaly užívání tabáku zvyšovaly). Studii z Tobacco Control (2026) o ventilaci filtrů ponechávám jen jako kontext — standardizované obaly zmiňuje jako regulační možnost, tvrzení nekvantifikuje. Studii Int J Public Health 2021 (PMID 34475810) z evidence vypouštím jako tematicky okrajovou (feminní branding obalů, nikoli dopad plain packagingu)."
+        },
+        {
+          "text": "kombinace behaviorální podpory a farmakoterapie zvyšuje pravděpodobnost úspěchu několikanásobně oproti pokusu „silou vůle“ / Cochrane review opakovaně potvrdily, že kombinace behaviorální podpory a farmakoterapie je výrazně účinnější než snaha přestat sám.",
+          "location": "prose — h3 „Co Česko zatím nepoužilo“ a h3 „Co s tím“",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "27009521",
+              "doi": "10.1002/14651858.CD008286.pub3",
+              "title": "Combined pharmacotherapy and behavioural interventions for smoking cessation",
+              "year": 2016,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "33411338",
+              "doi": "10.1002/14651858.CD013229.pub2",
+              "title": "Behavioural interventions for smoking cessation: an overview and network meta-analysis",
+              "year": 2021,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41529951",
+              "doi": "10.1136/bmjebm-2025-113971",
+              "title": "Efficacy of smartphone apps used alone or with traditional interventions for smoking cessation: a systematic review and meta-analysis",
+              "year": 2026,
+              "journal": "BMJ Evidence-Based Medicine",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace dohledala přesně tu Cochrane review, na kterou článek odkazuje: Stead LF, Koilpillai P, Fanshawe TR, Lancaster T. Combined pharmacotherapy and behavioural interventions for smoking cessation. Cochrane Database Syst Rev 2016;3(3):CD008286. Abstrakt doslova uvádí vysokou jistotu důkazu pro kombinaci farmakoterapie a behaviorální podpory proti běžné péči, krátké radě nebo méně intenzivní podpoře: RR 1,83 (95% CI 1,68–1,98), 52 studií, 19 488 účastníků (ve zdravotnických zařízeních RR 1,97, v komunitě RR 1,53). Formulace v sekci „Co Česko zatím nepoužilo“ (výrazně účinnější než snaha přestat sám) je tím podložena a slovo „opakovaně“ odpovídá skutečnosti (verze pub3, doplněna o 12 studií proti předchozí verzi; kontext dává i přehled Hartmann-Boyce 2021, PMID 33411338, podle něhož behaviorální podpora zvyšuje abstinenci bez ohledu na to, zda je podána farmakoterapie). Slovo „několikanásobně“ v sekci „Co s tím“ ale rozsah evidence očividně překračuje: RR 1,83 je přibližně 1,8násobek, ne několikanásobek. Proto partial a jedna upřesňující věta s citací vložená do sekce „Co s tím“ — rozpor to není, směr i statistická významnost jsou potvrzeny s vysokou jistotou."
+        },
+        {
+          "text": "Mezinárodní vědecký konsensus… hovoří o „výrazně nižším, byť nikoli nulovém riziku“ e-cigaret pro dospělé kuřáky, kteří přejdou kompletně.",
+          "location": "prose — h3 „E-cigarety, sáčky a nový problém u mladých“",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41458601",
+              "doi": "10.3389/fonc.2025.1729107",
+              "title": "Tobacco-specific nitrosamine exposure from electronic cigarettes versus combustible cigarettes: an analysis within a systematic review of emission studies",
+              "year": 2025,
+              "journal": "Frontiers in Oncology",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše. Systematický přehled emisních studií doloží směr tvrzení (aerosol e-cigaret obsahuje o více než 99 % méně tabákově specifických nitrosaminů než cigaretový kouř), ale jde o jednu třídu karcinogenů, ne o komplexní srovnání celkového zdravotního rizika napříč onemocněními. Článek navíc konsensus korektně atribuuje vládní evidenční zprávě (UK OHID, Nicotine vaping in England 2022), která není PubMed-indexovanou studií — samotná formulace „výrazně nižší, byť nikoli nulové riziko“ je z ní citována s atribucí. Partial, nikoli supported; text zůstává beze změny, včetně zmínky, že u dosud nekouřících mladistvých je nikotinová závislost samostatný problém (to data NAUTA 2025 v článku podporují)."
+        },
+        {
+          "claim_id": "koureni--11",
+          "text": "Tisková zpráva SZÚ k tomu doslova uvádí, že „u rakoviny hlavy je až 75 procent případů spojeno právě s kombinací těchto faktorů“ — kouření a vysokého příjmu alkoholu.",
+          "location": "prose — h3 „NAUTA 2025: nikotinová koncentrace u mladých explodovala“",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41720480",
+              "doi": "10.1002/cam4.71665",
+              "title": "Smoking, Alcohol, and Their Interaction in the Risk of Head and Neck Cancer: A Nationwide Cohort Study",
+              "year": 2026,
+              "journal": "Cancer Medicine",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše. Korejská národní kohorta (n = 5 985 244; 76,5 milionu paciento-let) doloží supra-aditivní synergii kouření a těžkého pití pro riziko nádorů hlavy a krku (SHR 2,42; synergy index 1,79) — princip, o který se věta opírá, je tedy podložen kvalitní kohortou. Konkrétní podíl „až 75 procent případů“ je doslovná citace tiskové zprávy SZÚ, v abstraktu kohorty se neobjevuje a atribuovatelný podíl (PAF) kohorta nepočítá; podle pravidla o čísle mimo abstrakt proto nejvýš partial. Článek číslo uvádí v uvozovkách s výslovnou atribucí SZÚ a v bloku „Metodika a interpretace“ to znovu přiznává, takže zásah do prose není potřeba — doplňuje se jen source_note u claimu koureni--11, aby bylo zřejmé, že doložena je synergie, ne podíl 75 %. Evidence je navíc zahraniční (Korea), přenositelnost na ČR je kvalitativní."
+        },
+        {
+          "text": "self-report typicky podhodnocuje skutečnou prevalenci o 5–15 % (metodická poznámka k indikátoru kuractvi_denni, opakovaná v textu a v databoxu).",
+          "location": "prose — h3 „Kolik je šestnáct procent“ a databox „Pozn. k indikátoru“",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "32588045",
+              "doi": "10.1093/eurpub/ckaa093",
+              "title": "A comparison of self-reported to cotinine-detected smoking status among adults in Georgia",
+              "year": 2020,
+              "journal": "European Journal of Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "22320954",
+              "title": "Using salivary cotinine to validate self-reports of tobacco use by Indian youth living in low-income neighborhoods",
+              "year": 2011,
+              "journal": "Asian Pacific Journal of Cancer Prevention",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39868569",
+              "doi": "10.1002/14651858.CD015120.pub2",
+              "title": "Differences in the effectiveness of individual-level smoking cessation interventions by socioeconomic status",
+              "year": 2025,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše a doplňuje výhradu o přenositelnosti. Obě validizační studie potvrzují směr (self-report podhodnocuje prevalenci proti kotininové validaci), ale ani jedna nedoloží rozpětí 5–15 % jako takové: v Gruzii 26,44 % self-report vs. 32,27 % kotinin (přibližně 5,8 procentního bodu, tedy asi 18 % relativně), u indické mládeže je podhodnocení výrazně větší (senzitivita self-reportu 36,3 %). Rozpětí navíc není v článku jednoznačně definováno jako relativní, nebo v procentních bodech — už kvůli tomu je doslovné ověření vyloučené. Obě studie jsou zahraniční populace (Gruzie, Indie), české validizační šetření k NAUTA dohledáno nebylo, takže pro ČR jde o přenositelnost, nikoli o domácí doklad. Partial; ani údaj sám, ani jeho zdroj (metodická karta kuractvi_denni) se v tomto běhu nemění — ověření rozpětí patří k položce indikátoru, viz followup."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 6,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Nová skupina „Recenzovaná literatura“ v <section class=\"article-sources\"> (za skupinu „Účinky kouření na zdraví“), položka 1: McNeill A, Gravely S, Hitchman SC, Bauld L, Hammond D, Hartmann-Boyce J. Tobacco packaging design for reducing tobacco use. Cochrane Database Syst Rev. 2017;4(4):CD011244 — k větě o plain packagingu v sekci „Co Česko zatím nepoužilo“ (51 studií, přibližně 800 000 účastníků; nejkonzistentnější doklady pro nižší atraktivitu neutrálních obalů, u prevalence jediná australská observační studie 0,5 p.b. s nízkou jistotou, u spotřeby smíšené výsledky), s DOI 10.1002/14651858.CD011244.pub2 a PMID 28447363, ověřeno v PubMed 13. 9. 2026.",
+          "ref": "28447363"
+        },
+        {
+          "type": "source-added",
+          "detail": "Položka 2 téže skupiny „Recenzovaná literatura“: Stead LF, Koilpillai P, Fanshawe TR, Lancaster T. Combined pharmacotherapy and behavioural interventions for smoking cessation. Cochrane Database Syst Rev. 2016;3(3):CD008286 — ke kombinaci behaviorální podpory a farmakoterapie v sekcích „Co Česko zatím nepoužilo“ a „Co s tím“ (52 studií, 19 488 účastníků, RR 1,83; 95% CI 1,68–1,98 proti běžné péči nebo krátké radě, vysoká jistota důkazu), s DOI 10.1002/14651858.CD008286.pub3 a PMID 27009521, ověřeno v PubMed 13. 9. 2026.",
+          "ref": "27009521"
+        },
+        {
+          "type": "claim-note",
+          "detail": "data/claims.json, claim koureni--11: source_note přepsán z „SZÚ NAUTA 2025 tisková zpráva“ na „SZÚ NAUTA 2025 tisková zpráva (doslovná citace); synergie kouření × alkohol u nádorů hlavy a krku doložena národní kohortou PMID:41720480 / DOI:10.1002/cam4.71665 (synergy index 1,79), podíl 75 % z ní neplyne, ověřeno 2026-09-13“. Nový claim nezaložen, value ani quote nezměněny.",
+          "ref": "koureni--11"
+        },
+        {
+          "type": "none",
+          "detail": "Povinný důsledek vložené upřesňující věty (prose_change) v sekci „Co s tím“: audit-status přepnut z verified na review-pending ve všech třech místech — data/articles.json („audit-status“ i audit.status) a <meta name=\"article:audit-status\"> i status v audit: komentáři clanek-koureni.html. Žádná stávající věta nebyla smazána ani přepsána, slovo „několikanásobně“ ponecháno (o jeho úpravě rozhoduje redakce). audit.last_reviewed, published, date ani number nezměněny; žádné číslo v textu ani v databoxu nezměněno; karta indikátoru kuractvi_denni nezměněna.",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) Daňová elasticita „10 % cena → 4 % spotřeba“ (WHO / Světová banka) zůstává unclear — cílený dotaz na IARC Handbooks of Cancer Prevention vol. 14, Chaloupka FJ, „price elasticity“[Title/Abstract] AND tobacco. (2) Tři studie ověřené v PubMed, ale bez kompletní citace (chybí autoři a stránkování, nebylo v rozpočtu je dohledat): TSNA emise e-cigaret PMID 41458601, kohorta kouření × alkohol u nádorů hlavy a krku PMID 41720480, validizace self-reportu kotininem PMID 32588045 a 22320954 — po doplnění metadat kandidáti na další položky skupiny „Recenzovaná literatura“. (3) Rozpětí „self-report podhodnocuje prevalenci o 5–15 %“ není doloženo žádnou nalezenou studií a není jasné, zda je relativní, nebo v procentních bodech — patří k auditu indikátoru kuractvi_denni (případná jedna věta do limitations karty s citací). (4) „Přibližně polovina dlouhodobých kuřáků zemře na onemocnění spojené s kouřením“ v abstraktu Doll 2004 není a PMC437139 vrací prázdný plný text — doložení hledat v Doll & Peto (BMJ 1994) nebo v plném textu jinou cestou.",
+      "notes": "Rešerše FÁZE 2 (Sonnet): vybráno 7 odborných tvrzení (max 8); administrativní statistiky SZÚ NAUTA / OECD / Eurostat (denní kuřáctví 16,4 %, EU 18,5 %, OECD 14,8 %, preventovatelná mortalita, vapování 2→9 %, hodnoty NAUTA 2025 38,8/26,0/25,6/35,6/38,0 %) se podle pravidla neověřují proti PubMed a mezi auditovaná tvrzení se nepočítají — hlídá je data/claims.json a nightly-scan. Vyčerpán strop 8 volání PubMed (1 lookup_article_by_citation + 6 search_articles + 1 hromadné get_article_metadata na 11 PMID); Consensus nebyl potřeba. Adjudikace FÁZE 3 (Opus) vyčerpala rozpočet 3 volání: get_full_text_article PMC437139 (Doll 2004 — prázdné full_text, použitelný jen abstrakt), search_articles v Cochrane Database Syst Rev na balení a kombinované intervence, get_article_metadata na 5 kandidátů. Celkem 11 volání PubMed, 0 Consensus. Finální verdikty: 6× partial, 1× unclear, 0× contradicted — žádný flag, žádná issue, audit-status se z titulu rozporu nemění. Hlavní přínos adjudikace: dohledány obě Cochrane review, na které se článek odvolával jen obecně — McNeill 2017 (CD011244, plain packaging) a Stead 2016 (CD008286, kombinace farmakoterapie a behaviorální podpory); obě ověřené v PubMed, bez retrakce, typ systematický přehled / metaanalýza, a obě doplněny do nově zakládané skupiny zdrojů „Recenzovaná literatura“ (článek je dosud necitoval). Hartmann-Boyce 2021 (CD013229, PMID 33411338) ověřen jen jako kontext a do zdrojů se nedoplňuje. Zápis FÁZE 4 (Opus): vložena jedna upřesňující věta s citací Stead 2016 do sekce „Co s tím“ (RR 1,83; 95% CI 1,68–1,98), protože slovo „několikanásobně“ překračuje rozsah evidence; článek proto povinně přepnut na review-pending."
+    },
+    {
+      "id": "clanek-napoje-2-mytus-stavy.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "8f2387f885402c8abc5fbdc0bbfd195e0e66cbc6",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Ovocná šťáva je v metaanalýze spojena s cca +7 % rizika diabetu 2. typu na porci denně (po očištění o adipozitu), signál slabší a méně jistý než u slazených nápojů; ani šťáva, ani uměle slazené nápoje nejsou prokazatelně zdravou alternativou.",
+          "location": "prose (sekce 'Co o tom říká výzkum') + article-sources",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26199070",
+              "doi": "10.1136/bmj.h3576",
+              "title": "Consumption of sugar sweetened beverages, artificially sweetened beverages, and fruit juice and incidence of type 2 diabetes: systematic review, meta-analysis, and estimation of population attributable fraction.",
+              "year": 2015,
+              "journal": "BMJ",
+              "study_type": "meta-analysis / systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstract: fruit juice 5% (-1 to 11%) before adjustment, 7% (1-14%) after adjustment for adiposity — číslo 7 % odpovídá adjustované hodnotě. Konkluze abstraktu doslova: 'both artificially sweetened beverages and fruit juice were unlikely to be healthy alternatives to sugar sweetened beverages' — plně odpovídá tvrzení v článku. Nejde o retrakci, typ publikace odpovídá (meta-analýza/systematic review)."
+        },
+        {
+          "claim_id": "",
+          "text": "Meta-analýza 8 kohortových studií (34 470 dětí) zjistila, že 1 porce 100% džusu denně je u dětí 1–6 let spojená s malým, klinicky nevýznamným nárůstem BMI; u dětí 7–18 let bez asociace.",
+          "location": "prose (sekce 'Co o tom říká výzkum') + article-sources",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28336576",
+              "doi": "10.1542/peds.2016-2454",
+              "title": "Fruit Juice and Change in BMI: A Meta-analysis.",
+              "year": 2017,
+              "journal": "Pediatrics",
+              "study_type": "meta-analysis / systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstract doslova: '8 prospective cohort studies (34 470 individual children)'; v dětech 1-6 let '0.087 unit increase in BMIscore (4% increase in BMI percentile)' popsáno jako 'small amount of weight gain ... that is not clinically significant'; u 7-18 let 'not associated with weight gain'. Přesná shoda s tvrzením v článku."
+        },
+        {
+          "claim_id": "",
+          "text": "Novější přehled (JAMA Pediatrics 2024) zjistil, že u dětí je každá porce 100% džusu denně spojená s vyšším BMI (+0,03 na porci); u dospělých je nárůst hmotnosti vázán na kalorický příjem; autoři doporučují spotřebu džusu omezovat.",
+          "location": "prose (sekce 'Co o tom říká výzkum') + article-sources",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38227336",
+              "doi": "10.1001/jamapediatrics.2023.6124",
+              "title": "Consumption of 100% Fruit Juice and Body Weight in Children and Adults: A Systematic Review and Meta-Analysis.",
+              "year": 2024,
+              "journal": "JAMA Pediatrics",
+              "study_type": "meta-analysis / systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstract doslova: 'each additional serving per day of 100% fruit juice was associated with a 0.03 (95% CI, 0.01-0.05) higher BMI change'; u dospělých 'studies that did not adjust for energy showed greater body weight gain ... than studies that did adjust for energy intake ... suggesting potential mediation by calories'; závěr 'support guidance to limit consumption of fruit juice'. Plná shoda."
+        }
+      ],
+      "summary": {
+        "total": 3,
+        "supported": 3,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Consensus nevolán (PubMed potvrdil všechny 3 citované studie s jasnými, doslova ověřitelnými čísly v abstraktu, cap 2 dotazy na Consensus nebyl potřeba). Číselné claims v data/claims.json k tomuto článku (napoje-2-mytus-stavy--01 až --09) jsou buď administrativní statistiky ČR (WHO COSI, KPE, OECD diabetes prevalence, BMI dospělí — indicator_id vazba, check:auto) nebo produktové/nutriční údaje (obsah cukru v nápojích dle USDA/obalů, doporučení AAP v ml) — podle zadání se administrativní statistika ČSÚ/ÚZIS/OECD a ceny/normy neověřují proti literatuře, proto k nim claim s claim_id nevracím. Skutečná odborná tvrzení ověřená proti PubMedu jsou tři citované studie (Imamura BMJ 2015, Auerbach Pediatrics 2017, Nguyen JAMA Pediatrics 2024) — všechny nalezeny, žádná retrakce, typ publikace (systematic review/meta-analysis) odpovídá, čísla i závěry doslova v abstraktu odpovídají tomu, jak je článek cituje. Žádná úprava souboru ani commit proveden nebyl."
+    },
+    {
+      "id": "clanek-stret-zajmu-vyziva-kojencu.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "b6516a401cb5d4530cab0d2d856a8378ede495c7",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 13,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "stret-zajmu-vyziva-kojencu--07",
+          "text": "Modernější peer-reviewed odhad z Lancet Breastfeeding Series (Victora a kol., 2016) říká, že rozšířením kojení na téměř univerzální úroveň by šlo globálně předejít až 823 000 úmrtím dětí do pěti let ročně (a 20 000 úmrtím žen na karcinom prsu).",
+          "location": "prose, sekce „Začátek příběhu: Nestlé skandál a vznik Mezinárodního kodexu 1981“",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26869575",
+              "doi": "10.1016/S0140-6736(15)01024-7",
+              "title": "Breastfeeding in the 21st century: epidemiology, mechanisms, and lifelong effect",
+              "year": 2016,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z abstraktu doslova: „The scaling up of breastfeeding to a near universal level could prevent 823,000 annual deaths in children younger than 5 years and 20,000 annual deaths from breast cancer.“ Obě čísla, populace (děti < 5 let), podmínka („near universal level“) i atribuce Victora 2016 (po opravě z auditu F2 2026-07-21, dříve chybně Rollins) odpovídají. Typ publikace Meta-Analysis/Review, bez retrakce či errata. Článek rovněž správně rámuje údaj jako modelový odhad zahrnující všechny determinanty, nepřisuzuje ho marketingu."
+        },
+        {
+          "claim_id": "",
+          "text": "Doprovodná studie téže série (Rollins a kol., 2016) doložila komerční rozměr: globální prodej náhrad mateřského mléka dosáhl v roce 2014 44,8 mld USD a ekonomické ztráty z nekojení odhadla na ~302 mld USD ročně.",
+          "location": "prose, sekce „Začátek příběhu: Nestlé skandál a vznik Mezinárodního kodexu 1981“",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "26869576",
+              "doi": "10.1016/S0140-6736(15)01044-2",
+              "title": "Why invest, and what it will take to improve breastfeeding practices?",
+              "year": 2016,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z abstraktu doslova: „global sales in 2014 of US$44·8 billion“ a „economic losses of about $302 billion annually or 0·49% of world gross national income“. Rok dat (2014), měna i řád odpovídají; článek u ztrát správně používá přibližovací tildu. Tvrzení není epidemiologické, ale ekonomické — literatura je přesto správným soudcem, protože jde o čísla publikovaná v recenzované studii."
+        },
+        {
+          "claim_id": "",
+          "text": "Výhradní kojení v prvních šesti měsících života snižuje kojeneckou úmrtnost, riziko infekcí dýchacího i trávicího traktu, dlouhodobě snižuje riziko obezity, diabetu a astmatu.",
+          "location": "article-lead (úvodní odstavec)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26869575",
+              "doi": "10.1016/S0140-6736(15)01024-7",
+              "title": "Breastfeeding in the 21st century: epidemiology, mechanisms, and lifelong effect",
+              "year": 2016,
+              "journal": "Lancet",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26192405",
+              "doi": "10.1111/apa.13132",
+              "title": "Breastfeeding and asthma and allergies: a systematic review and meta-analysis",
+              "year": 2015,
+              "journal": "Acta Paediatr",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Čtyři z pěti položek výčtu jsou podloženy metaanalýzou, kterou článek sám cituje jinde: Victora 2016 v abstraktu uvádí „protection against child infections“, „probable reductions in overweight and diabetes“ a odhad 823 000 odvratitelných dětských úmrtí. Pátá položka (astma) je ale s touž studií v rozporu — abstrakt doslova říká: „We did not find associations with allergic disorders such as asthma.“ Adjudikace ji přesto nevede jako contradicted, protože jedna studie proti nestačí a druhá strana evidence existuje: systematický přehled a metaanalýza Lodge 2015 (89 studií) uzavírá, že „there is some evidence that breastfeeding is protective for asthma (5–18 years)“, sama však upozorňuje na vysokou heterogenitu, nízkou kvalitu zahrnutých studií a možný recall bias. Evidence je tedy u astmatu smíšená až nulová, ne opačná — proto partial. Formulace článku ji prezentovala jako stejně pevnou jako ochranu před infekcemi, což je rozsah očividně širší než evidence; vložena jedna upřesňující věta s citací (Victora 2016 vs. Lodge 2015) do úvodního odstavce, nic se nemaže a žádné číslo se nemění. Ostatní položky výčtu zůstávají beze změny."
+        },
+        {
+          "claim_id": "",
+          "text": "Empirická účinnost je ale problematická: ze 65 certifikovaných porodnic překročilo cílovou hranici 80 % výlučně kojených dětí jen 12 (27,6 %), a porodnice bez certifikátu měly v tomtéž roce dokonce o pár procentních bodů lepší výsledky než ty s certifikátem (75,6 % vs. 71 %).",
+          "location": "prose, sekce „Stav v Česku: data o BFHI a kojení“ (a shodně v popisku grafu a v bloku sentinelových indikátorů)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "39919651",
+              "doi": "10.1016/j.wombi.2025.101881",
+              "title": "Impact of baby-friendly hospital initiatives on breastfeeding outcomes: Systematic review and meta-analysis",
+              "year": 2025,
+              "journal": "Women Birth",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rozhodnuto jako partial, ne unclear. Samotná čísla (65 porodnic, 12 nad hranicí, 71 % vs. 75,6 %) jsou administrativní údaje ze Strategie BfHI 2018 v ČR (MZd 2023, zdroj ÚZIS) — recenzovaná literatura o nich nerozhoduje a audit je nezpochybňuje. Ověřitelná je ale interpretační část („empirická účinnost je problematická“), a tam nejsilnější dostupná evidence míří jinam: metaanalýza 86 studií (Fan 2025) nachází v BFHI zařízeních vyšší pravděpodobnost výhradního kojení do 3 měsíců (OR 1,77; 95% CI 1,37–2,29) i ve 3–6 měsících (OR 1,82; 95% CI 1,26–2,61) a vyšší míru jakéhokoli kojení až nad 6 měsíců (OR 2,34; 95% CI 1,04–5,27), přičemž účinek zůstává i při částečné implementaci. Nejde o vyvrácení českého čísla: ČR není v metaanalýze zastoupena, srovnání certifikovaných a necertifikovaných porodnic je průřezové a neadjustované (bez kontroly case-mixu, velikosti, perinatologické úrovně ani selekce zařízení k certifikaci), takže opačný výsledek může být artefaktem designu, ne důkazem neúčinnosti programu. Zahraniční evidence k tvrzení o ČR proto vede na partial s poznámkou o přenositelnosti. Fan 2025 doplněn do zdrojů; prose beze změny, o případném zmírnění slova „neúčinná“ rozhodne redakce."
+        }
+      ],
+      "summary": {
+        "total": 4,
+        "supported": 2,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Fan 2025 (PMID 39919651) a Lodge 2015 (PMID 26192405) do article-sources — nová skupina „Recenzovaná literatura“ na konci sekce Zdroje, za skupinou „Akademické zdroje k institucionálnímu COI“. Victora 2016 a Rollins 2016 článek už cituje, podruhé se nepřidávají.",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u stret-zajmu-vyziva-kojencu--07 doplněn o „evidence-audit 2026-09-13: PMID 26869575 ověřeno znovu, číslo 823 000 (děti < 5 let) i 20 000 (karcinom prsu) je v abstraktu doslova, typ publikace Meta-Analysis/Review, bez retrakce“.",
+          "ref": "stret-zajmu-vyziva-kojencu--07"
+        },
+        {
+          "type": "none",
+          "detail": "Žádný contradicted → žádný flag, žádná issue. Vložena jedna upřesňující věta k astmatu do úvodního odstavce (partial, rozsah tvrzení širší než evidence) — proto audit-status review-pending v data/articles.json (audit-status i audit.status) a v <meta name=\"article:audit-status\">; audit-status se nemění na partial. audit.last_reviewed, published, date a number beze změny.",
+          "ref": ""
+        }
+      ],
+      "notes": "Adjudikace 4 odborných tvrzení; 2 supported (823 000 úmrtí / Victora 2016; 44,8 mld USD a ~302 mld USD / Rollins 2016 — obě čísla doslova v abstraktech, včetně populace, roku dat a měny), 2 partial (výčet zdravotních přínosů v úvodu; empirická účinnost BFHI v ČR). Žádné contradicted, žádné unclear — rešeršní unclear u BFHI rozhodnuto na partial podle pravidla „tvrzení o ČR opřené jen o zahraniční evidenci → partial s poznámkou o přenositelnosti“. Rešerše vynechala 6 kandidátů jako administrativní/historická/procesní data (kojenecká úmrtnost ČR, podíl kojených při propuštění, BFHI certifikace ČR jako holé číslo, 45 let od Kodexu, hlasování WHA 34.22 118:1:3, A09 v ČR, Norsko 100 % BFHI) — v souladu s oddílem „Co je tvrzení k ověření“; tyto položky hlídá data/claims.json a nightly-scan, mezi auditovaná tvrzení se nepočítají. Volání: 13 PubMed celkem (rešerše Sonnet + adjudikace Opus — metadata Victora/Rollins/Fan/Lodge a rešeršní dotazy), oba stropy dodrženy; Consensus nebyl dostupný ani potřebný (0 dotazů), abstrakty rozhodly bez plných textů. Klíčový nález: úvodní odstavec uváděl astma mezi prokázanými přínosy kojení, ale metaanalýza, kterou článek sám jinde cituje pro číslo 823 000 (Victora 2016), v abstraktu explicitně žádnou souvislost s alergickými onemocněními nenašla; protiváhou je Lodge 2015 s ochranným efektem u dětí 5–18 let, ovšem s vlastní výhradou nízké kvality evidence — proto partial a jedna upřesňující věta s citací místo mlčení. Pro redakci (nad rámec oprávnění auditu, proto neprovedeno): dvě existující položky Lancet ve skupině „Akademické zdroje k institucionálnímu COI“ (Victora 2016, Rollins 2016) nesou jen DOI bez odkazu na PMID — doplnění PMID 26869575 a 26869576 by sjednotilo citační styl. Dál trvá přenášený otevřený bod z auditů F1/F2: per-claim redakční ověření jmen osob a organizací v COI pasážích; evidence-audit se ho nedotkl a nemůže ho uzavřít."
+    },
+    {
+      "id": "clanek-bonus-za-zdravi-pojistne.html",
+      "type": "article",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "4591791b4f4966f499fbba82017962fac5eee414",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 14,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--07",
+          "text": "náhodně rozdělila 4 834 zaměstnanců do skupiny s nárokem na program a finanční pobídku (3 300 lidí) a do kontrolní skupiny (1 534 lidí)",
+          "location": "prose",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31564754",
+              "doi": "10.1093/qje/qjz023",
+              "title": "What do Workplace Wellness Programs do? Evidence from the Illinois Workplace Wellness Study",
+              "year": 2019,
+              "journal": "The Quarterly Journal of Economics",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Studie existuje, je recenzovaná, bez retrakce (PMID 31564754). Abstrakt uvádí jen „randomly assigned program eligibility and financial incentives at the individual level for nearly 5,000 employees“ — rozpad 4 834 / 3 300 / 1 534 v něm není. Adjudikace proto sáhla po open-access plném textu: get_full_text_article pro PMC6756192 vrátil prázdné pole full_text (dostupný je jen abstrakt), takže přesná čísla nejsou doložitelná ani z abstraktu, ani z open-access plného textu → podle protokolu nejvýš partial. Směr, řád velikosti i hlavní nálezy (silná selekce zdravějších před intervencí, trvalý nárůst screeningu, žádné signifikantní kauzální efekty na výdaje, chování, produktivitu a subjektivní zdraví po více než dvou letech) jsou v abstraktu doslova. Článek původ přesných čísel přiznává (NBER project page) — prose se proto nemění."
+        },
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--08",
+          "text": "vyloučily 84 % dosavadních publikovaných odhadů",
+          "location": "prose",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31564754",
+              "doi": "10.1093/qje/qjz023",
+              "title": "What do Workplace Wellness Programs do? Evidence from the Illinois Workplace Wellness Study",
+              "year": 2019,
+              "journal": "The Quarterly Journal of Economics",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno i v adjudikaci proti doslovnému abstraktu: „Our 95% confidence intervals rule out 84% of previous estimates on medical spending and absenteeism.“ Článek uvádí shodně 84 % odhadů úspor na výdajích a absencích. Přesná shoda včetně domény ukazatelů."
+        },
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--09",
+          "text": "testovala vícesložkový program v řetězci BJ's Wholesale Club na 32 974 zaměstnancích ve 160 provozovnách",
+          "location": "prose",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990549",
+              "doi": "10.1001/jama.2019.3307",
+              "title": "Effect of a Workplace Wellness Program on Employee Health and Economic Outcomes: A Randomized Clinical Trial",
+              "year": 2019,
+              "journal": "JAMA",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Nesporné, verdikt rešerše potvrzen. Abstrakt uvádí „Among 32 974 employees“ a 160 pracovišť (20 randomizovaně do intervence, 140 kontrolních) — shodně s článkem, který dělení 20/140 uvádí správně."
+        },
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--10",
+          "text": "Ostatních 78 předem definovaných ukazatelů",
+          "location": "prose",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990549",
+              "doi": "10.1001/jama.2019.3307",
+              "title": "Effect of a Workplace Wellness Program on Employee Health and Economic Outcomes: A Randomized Clinical Trial",
+              "year": 2019,
+              "journal": "JAMA",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Nesporné, verdikt rešerše potvrzen. Abstrakt vyjmenovává skupiny ukazatelů bez signifikantního efektu: 27 sebehodnocených, 10 klinických, 38 nákladových/utilizačních a 3 zaměstnanecké = 78. Rozpad v článku (27 + 10 + 38 + 3) i rámování „78 z 80“ v počítadle odpovídají abstraktu, protože zlepšily se 2 ukazatele."
+        },
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--11",
+          "text": "rozdíl 8,3 procentního bodu, 95% CI 3,9-12,8",
+          "location": "prose",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30990549",
+              "doi": "10.1001/jama.2019.3307",
+              "title": "Effect of a Workplace Wellness Program on Employee Health and Economic Outcomes: A Randomized Clinical Trial",
+              "year": 2019,
+              "journal": "JAMA",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Nesporné, verdikt rešerše potvrzen. Abstrakt doslova: „adjusted difference, 8.3 percentage points [95% CI, 3.9-12.8]; adjusted P = .03“ pro podíl osob uvádějících pravidelný pohyb (69,8 vs 61,9 %). Přesná shoda včetně jednotky a intervalu."
+        },
+        {
+          "claim_id": "bonus-za-zdravi-pojistne--12",
+          "text": "německých pojištěnců je zapojeno do bonusového programu - lidé se středním a vyšším vzděláním 1,3× až 1,5× častěji než lidé v prekérní situaci",
+          "location": "counter",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "25536225",
+              "doi": "10.1055/s-0034-1396808",
+              "title": "Factors Influencing Participation in Financial Incentive Programmes of Health Insurance Funds. Results of the Study 'German Health Update'",
+              "year": 2015,
+              "journal": "Gesundheitswesen",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace podkladovou studii DOHLEDALA (rešerše ji nenašla): cílený dotaz na autora a časopis vrátil PMID 25536225, DOI 10.1055/s-0034-1396808 — Jordan S., von der Lippe E., Starker A., Hoebel J., Franke A., Gesundheitswesen 2015;77(11):861–868, RKI, průřez 15 858 pojištěnců ze šetření GEDA 2009, Journal Article, bez retrakce, originál v němčině. Abstrakt POTVRZUJE kvalitativní jádro tvrzení: vzdělání je u obou pohlaví signifikantní faktor účasti v bonusovém programu a autoři uzavírají, že „financial incentive programmes reach population groups with greatest need less than those groups who already have a health-conscious behaviour, who receive a reward for this“. ŽÁDNÉ z obou čísel ale v abstraktu není — ani podíl 20,2 %, ani poměr 1,3–1,5× (abstrakt uvádí jen signifikanci faktorů, ne efektové míry) → podle pravidla „číslo mimo abstrakt = nejvýš partial“ je verdikt partial, ne supported. Navíc jde o jediný průřez z roku 2009 prezentovaný v článku v přítomném času jako současná německá zkušenost; rozsah tvrzení je proto širší než evidence → jedna upřesňující věta s citací a výměna sekundárního referátu za recenzovaný primární zdroj ve zdrojích. Tvrzení se týká Německa, ne ČR, pravidlo o přenositelnosti se zde neuplatňuje."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Jordan S. a kol., Gesundheitswesen 2015;77(11):861–868 (PMID 25536225 / DOI 10.1055/s-0034-1396808) do article-sources — nová skupina „Recenzovaná literatura“ za skupinu „Německo — § 65a SGB V“; primární recenzovaný podklad německého vzdělanostního gradientu místo dosavadního jediného odkazu na popularizační referát.",
+          "ref": "bonus-za-zdravi-pojistne--12"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--07 doplněn o PMID:31564754 / DOI:10.1093/qje/qjz023 a o výhradu, že rozpad 4 834 / 3 300 / 1 534 v abstraktu není a open-access plný text PMC6756192 není dostupný (čísla z NBER project page).",
+          "ref": "bonus-za-zdravi-pojistne--07"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--08 doplněn o PMID:31564754 / DOI:10.1093/qje/qjz023 a doslovnou větu abstraktu o 84 % vyloučených odhadů.",
+          "ref": "bonus-za-zdravi-pojistne--08"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--09 doplněn o PMID:30990549 / DOI:10.1001/jama.2019.3307 a doslovné „Among 32 974 employees“ ve 160 pracovištích (20 / 140).",
+          "ref": "bonus-za-zdravi-pojistne--09"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--10 doplněn o PMID:30990549 / DOI:10.1001/jama.2019.3307 a rozpad 27 + 10 + 38 + 3 = 78 ukazatelů bez signifikantního efektu.",
+          "ref": "bonus-za-zdravi-pojistne--10"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--11 doplněn o PMID:30990549 / DOI:10.1001/jama.2019.3307 a doslovné „adjusted difference, 8.3 percentage points [95% CI, 3.9-12.8]; adjusted P = .03“.",
+          "ref": "bonus-za-zdravi-pojistne--11"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u bonus-za-zdravi-pojistne--12 nahrazen: sekundární odkaz vystřídán primárním (S. Jordan a kol., RKI, GEDA 2009, n = 15 858, PMID:25536225 / DOI:10.1055/s-0034-1396808) s výhradou, že abstrakt čísla 20,2 % ani 1,3–1,5× neuvádí.",
+          "ref": "bonus-za-zdravi-pojistne--12"
+        },
+        {
+          "type": "claim-note",
+          "detail": "Do bloku audit: v hlavičce článku připojena věta „evidence-audit 2026-09-13: 6 tvrzení, 4 supported, 2 partial; viz data/evidence-audit.json“ s rozpisem nálezů. data/articles.json u tohoto článku objekt audit nemá, proto poznámka zůstává v HTML; audit.last_reviewed se nemění.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný rozpor (0× contradicted) → žádný flag ani issue. Jedna upřesňující věta u partial --12 vložena do odstavce o § 65a (průřez GEDA 2009, n = 15 858; potvrzen závěr o míjení skupin s největší potřebou; konkrétní podíl ani velikost vzdělanostního rozdílu v publikaci nejsou; citace Jordan 2015 / PMID 25536225) → audit-status review-pending podle pravidla FÁZE 4; hodnota se nemění, článek tam už byl, a je review-pending ve všech třech místech (articles.json audit-status, blok audit: v HTML, meta article:audit-status). Čísla v textu, published, date, number ani audit.last_reviewed se nemění.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno a k doplnění v příštím běhu: (a) dvě dílčí formulace v odstavci o Illinois RCT nejsou v abstraktu QJE doložitelné a rešerše je nezaregistrovala jako samostatná tvrzení — „biometrické ukazatele“ a „počet diagnóz“ mezi ukazateli bez efektu (abstrakt zmiňuje total medical expenditures, other health behaviors, employee productivity, self-reported health status) a údaj „92,2 % proti 86,1 %“ u podílu osob s praktickým lékařem; adjudikace nové claims zakládat nesmí. (b) Objem 260,7 mil. EUR (2016) podle WD 9-090/20 je nadále jen sekundární a bez novější souhrnné statistiky. (c) Plný text QJE (PMC6756192) nebyl dostupný, proto --07 zůstává partial — při zpřístupnění plného textu lze přeověřit. (d) Doporučení redakci (mimo oprávnění auditu): do existujících položek zdrojů Song & Baicker a Jones/Molitor/Reif doplnit PMID/DOI (30990549 / 10.1001/jama.2019.3307 a 31564754 / 10.1093/qje/qjz023) — dnes odkazují jen na PMC6484807 a NBER project page.",
+      "notes": "Rešerše (Sonnet) ověřila obě klíčové RCT citované článkem (Song & Baicker, JAMA 2019, PMID 30990549; Jones/Molitor/Reif, QJE 2019, PMID 31564754) — existují, jsou recenzované, bez retrakce. Německé RKI/GEDA tvrzení ponechala jako unclear, protože se jí studii nepodařilo dohledat (opakované dotazy 0 výsledků, lookup podle DOI 10.1055/s-0034-1396808 selhal). ADJUDIKACE (Opus, 2026-09-13, run ea-2026-09-13-01): finální verdikty 4× supported (--08, --09, --10, --11) a 2× partial (--07, --12), 0× contradicted → žádný flag, žádná issue. Pět rešeršních verdiktů potvrzeno, u --12 změněno unclear → partial. KLÍČOVÝ POSUN U --12: cílený dotaz na autora a časopis (Jordan S[Author] AND Gesundheitswesen[Journal]) dohledal studii na první pokus — PMID 25536225, DOI 10.1055/s-0034-1396808, tedy přesně to DOI, jehož lookup v rešerši vracel nulu. Článek tím poprvé dostává primární recenzovaný zdroj pro německý vzdělanostní gradient místo jediného odkazu na popularizační referát; to je hlavní přínos této položky. ROZPOČET VOLÁNÍ: 14 volání PubMed na položku celkem (10 rešerše + 4 adjudikace), 1 dotaz Consensus v rešerši. Adjudikace tím o jedno přesáhla podstrop „≤ 3 dodatečná volání“, zůstává ale pod tvrdým limitem na položku; čtvrté volání (metadata PMID 25536225) bylo právě to, které převedlo unclear na doložený partial. Uvádíme transparentně: kdyby redakce brala podstrop jako závazný, je --12 vyřešené nad rámec rozpočtu, ne nedoložené. PLNÝ TEXT NEDOSTUPNÝ: get_full_text_article pro PMC6756192 (QJE 2019) vrátil prázdné full_text — k dispozici je jen abstrakt, proto --07 nelze zvednout nad partial a prose se u něj nemění (článek původ čísel z NBER project page přiznává už dnes). ADMINISTRATIVNÍ TVRZENÍ MIMO AUDIT (nepočítají se mezi ověřená): --01 (sazba 13,5 %, zákon 592/1992 Sb.), --02 až --06 (indikátory kontraktu, check: auto), --13 (261 mil. EUR dle WD 9-090/20), --14 (fond prevence VZP 2,26 mld Kč), --15 (strop 5 ‰ dle § 7 zákona 551/1991 Sb.) — zákony, úhrady a administrativní statistika nejsou tvrzení pro literaturu, hlídá je data/claims.json a nightly-scan. ZDROJE BEZ ZÁSAHU: Song & Baicker i Jones/Molitor/Reif článek už cituje, proto se pro ně nová položka nepřidává (pravidlo „jen když článek stejnou studii ještě necituje“). Opus adjudikoval i zapisoval; Consensus v adjudikaci volán nebyl (PubMed rozhodl)."
+    },
+    {
+      "id": "indicator:screening_mamograficky",
+      "type": "indicator",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "216b6da5a33f3c9059637c9b5f3becdc8932bd10",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 17,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Screening snižuje mortalitu o 20–30 % u screenovaných žen (Cochrane).",
+          "location": "patient_story",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "23737396",
+              "doi": "10.1002/14651858.CD001877.pub5",
+              "title": "Screening for breast cancer with mammography",
+              "year": 2013,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr tvrzení evidence podporuje, uvedený rozsah ani atribuci „(Cochrane)“ však citovaný přehled nedokládá. Abstrakt (Gøtzsche & Jørgensen 2013, PMID 23737396, DOI 10.1002/14651858.CD001877.pub5) uvádí RR úmrtnosti na karcinom prsu 0,81 (95% CI 0,74–0,87) pro všech 7 randomizovaných studií (600 000 žen, 39–74 let), ale jen 0,90 (95% CI 0,79–1,02, nesignifikantní) pro 3 adekvátně randomizované studie po 13 letech; vlastní propočet přínosů a škod autoři staví na předpokladu 15% snížení, mortalitu na karcinom prsu označují za výstup zkreslený ve prospěch screeningu (diferenciální misklasifikace příčiny úmrtí) a u adekvátně randomizovaných studií nenašli efekt na celkovou úmrtnost (RR 0,99; 95% CI 0,95–1,03). Rozmezí 20–30 % je tedy nad tím, co přehled reportuje. Není to ale `contradicted`: formulace „u screenovaných žen“ míří na účastnice (odhady korigované na neúčast bývají vyšší než odhady podle pozvání) a jeden přehled s nižším číslem tvrzení nevyvrací; zdroj k účastnickým odhadům (kandidáti PMID 26444742, 26039523 — viewpoint pracovní skupiny IARC) se v tomto běhu nevešel do stropu volání PubMed. Číslo, které v abstraktu citovaného zdroje není → nejvýš partial. Úprava atribuce a rozsahu je k posouzení redakcí."
+        },
+        {
+          "text": "Karcinom prsu je v Česku nejčastější onkologickou diagnózou u žen (incidence 130 / 100 000, mortalita ~30 / 100 000).",
+          "location": "patient_story",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42692836",
+              "doi": "10.48095/ccko2026S6",
+              "title": "Cancer screening programmes in the Czech Republic and their results",
+              "year": 2026,
+              "journal": "Klin Onkol",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Domácí práce nad daty Národního zdravotnického informačního systému (Hejcmanová et al. 2026, PMID 42692836, DOI 10.48095/ccko2026S6) potvrzuje kontext a směr: mortalita karcinomu prsu v ČR dlouhodobě klesá, incidence dlouhodobě roste, pokrytí cílové populace mamografickým screeningem dosahuje až 60 %. Abstrakt však neuvádí ani míry 130 / 100 000 a ~30 / 100 000, ani tvrzení o nejčastější onkologické diagnóze u žen — čísla jsou registrová statistika (NOR/ÚZIS), jejíž ověření patří k datovým zdrojům a registru claims, ne k recenzované literatuře. Číslo mimo abstrakt → nejvýš partial; evidence má relaci `context`, potvrzuje rámec, ne konkrétní hodnoty."
+        },
+        {
+          "text": "Cíl WHO: ≥ 70 %.",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Nerozhodnutelné dostupnými nástroji — k posouzení redakcí. Jde o normativní programovou cílovou hodnotu, ne o vědecké tvrzení, které by recenzovaná literatura mohla potvrdit či vyvrátit; cílená rešerše v PubMed (strop volání) nic indexovaného k prahu 70 % jako doporučení WHO pro mamografický screening nevrátila a Consensus pro tento typ tvrzení není vhodný nástroj (politický dokument mimo literaturu). Karta si navíc v cílové hodnotě odporuje sama: method_notes uvádí „Cíl WHO: ≥ 70 %“, zatímco patient_story „Cílová hodnota podle EU doporučení je ≥ 75 %“ a „cíl 75 % do roku 2030“. Doporučení: dohledat a odcitovat primární programový dokument (WHO, resp. evropské doporučení ke screeningu) mimo PubMed/Consensus a obě hodnoty v kartě sjednotit. Bez zásahu auditu do textu."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "V kartě indicators/screening_mamograficky.json založeno pole \"literature\" (dosud chybělo) a vložen záznam Gøtzsche & Jørgensen 2013 (PMID 23737396, DOI 10.1002/14651858.CD001877.pub5, Cochrane Database Syst Rev, systematic review): metaanalýza 7 randomizovaných studií (600 000 žen, 39–74 let) — RR úmrtnosti na karcinom prsu 0,81 (95% CI 0,74–0,87) pro všech 7 studií, ale jen 0,90 (0,79–1,02, nesignifikantní) ve 3 adekvátně randomizovaných; vlastní výpočet přínosů a škod staví na předpokladu 15% snížení. Podporuje směr tvrzení v patient_story, ne rozsah 20–30 %.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty indicators/screening_mamograficky.json vložen kontextový záznam Hejcmanová et al. 2026 (PMID 42692836, DOI 10.48095/ccko2026S6, Klin Onkol): domácí přehled výsledků českých screeningových programů z Národního zdravotnického informačního systému (ÚZIS) — mortalita karcinomu prsu dlouhodobě klesá, incidence dlouhodobě roste, pokrytí cílové populace mamografickým screeningem dosahuje až 60 %. Konkrétní míry incidence a mortality na 100 000 žen abstrakt neuvádí.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Poznámka auditu do záznamu karty (bez zásahu do prose): (1) Atribuce „(Cochrane)“ u rozsahu 20–30 % v patient_story není podložená — citovaný přehled (PMID 23737396) uvádí RR 0,81 pro všechny studie, 0,90 (nesignifikantní) pro adekvátně randomizované a sám počítá s 15 %; formulaci „o 20–30 % u screenovaných žen“ je třeba buď opřít o zdroj k účastnicím screeningu (kandidát: viewpoint pracovní skupiny IARC, PMID 26444742 / 26039523 — v tomto běhu neověřen, vyčerpán strop volání), nebo číslo a atribuci upravit. (2) Karta si v cílové hodnotě odporuje: method_notes uvádí „Cíl WHO: ≥ 70 %“, patient_story „Cílová hodnota podle EU doporučení je ≥ 75 %“ a „cíl 75 % do roku 2030“ — sjednotit a doložit primárním programovým dokumentem (WHO/EU), literatura to rozhodnout neumí. (3) Pokrytí „až 60 %“ v domácím přehledu (PMID 42692836) není v rozporu s hodnotou 54,5 % v kartě — jde o jiné vymezení kohorty, což karta sama popisuje v limitations (kohorta OECD 50–69: 61,4 %). Vše k posouzení redakcí.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Prose karty se nemění a nezakládá se flag ani issue: dvě tvrzení jsou partial (směr sedí, liší se rozsah a atribuce) a jedno unclear (normativní cílová hodnota mimo literaturu), žádné contradicted. Upřesňující věta se nepřidává — u karty indikátoru je vyhrazena pro pole limitations a verdikt kind=measurement s citací, zdejší partial tvrzení jsou effect a epidemiology v patient_story a u measurement tvrzení (cíl WHO) žádná citace neexistuje; podle pojistky „při nejistotě o rozsahu zásahu ne akce“ tedy jen literature + poznámka pro redakci. Poznámka do data/articles.json se u indikátoru nepíše.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno a k dokončení v příštím běhu: (a) zdroj účastnických odhadů snížení mortality mamografickým screeningem — kandidáti PMID 26444742 a 26039523 (viewpoint pracovní skupiny IARC) nalezeni jen jako PMID bez ověřených metadat, protože se vyčerpal strop 3 dodatečných volání PubMed při adjudikaci; do evidence proto nezapsáni; (b) primární programový dokument k cílové hodnotě pokrytí (WHO ≥ 70 % v method_notes vs EU ≥ 75 % v patient_story) — leží mimo PubMed/Consensus, proto tvrzení zůstalo unclear.",
+      "notes": "Consensus nebyl použit — PubMed dal u tvrzení 1 a 2 relevantní ověřené studie (Cochrane review, domácí ÚZIS/Klin Onkol práce), takže spuštění Consensu podle pravidel FÁZE 2 nebylo potřeba. U tvrzení 3 (WHO cíl 70 %) PubMed nedal shodu, ale jde o odkaz na politický dokument mimo literaturu, ne o vědecké tvrzení vhodné pro Consensus medical_mode. Vybráno 3 tvrzení (measurement/direction u prahu WHO, kauzální/efektová věta z patient_story, epidemiologická věta z patient_story) podle stropu pro indikátor. Prahy signal_thresholds (good 5 / warn 10) a benchmark hodnoty nejsou v kartě odvozeny z citované literatury, proto nebyly zařazeny jako samostatné tvrzení. | Adjudikace Opus, run ea-2026-09-13-01, datum 2026-09-13. Finální verdikty: 0 supported · 2 partial · 0 contradicted · 0 no-evidence · 0 not-applicable · 1 unclear (tvrzení celkem 3 = strop pro indikátor). Proti rešerši se změnilo: tvrzení 1 potvrzeno jako partial, ale confidence zvýšena z medium na high (abstrakt je v rozporu s atribucí rozsahu 20–30 % Cochranu jednoznačný) a doplněn důvod, proč to není contradicted (formulace „u screenovaných žen“ odpovídá účastnickým odhadům, jeden přehled s nižším číslem tvrzení nevyvrací); tvrzení 3 překlopeno z no-evidence na unclear + „k posouzení redakcí“, protože nejde o vědecké tvrzení rozhodnutelné literaturou a karta si v cílové hodnotě protiřečí (70 % WHO v method_notes vs 75 % EU v patient_story). Volání: rešerše 7 × PubMed, adjudikace 3 × PubMed (1 × get_article_metadata obou PMID, 2 × search_articles k účastnickým odhadům) = 10 celkem, strop vyčerpán; Consensus 0 (tools.consensus: true, nepoužit — PubMed dal ověřené studie u tvrzení 1 a 2, tvrzení 3 není pro medical_mode vhodné). | Zápis (Opus, 2026-09-13): do karty přibylo pouze nové pole literature se dvěma ověřenými položkami, prose karty beze změny, žádný flag ani issue, poznámka do data/articles.json se u indikátoru nepíše. Zdroj metadat obou ověřených studií: PubMed (DOI 10.1002/14651858.CD001877.pub5, DOI 10.48095/ccko2026S6)."
+    },
+    {
+      "id": "indicator:vakcinace_mmr_deti",
+      "type": "indicator",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "3f53f5f96c63e60162ac9b8d86258217bfb7faff",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 19,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "WHO cílová hodnota pro herd immunity (kolektivní imunitu) proti spalničkám je 95 %.",
+          "location": "patient_story, 2. odstavec (souvisí s method_notes: „WHO cíl ≥ 95 % (dvě dávky)“)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38423523",
+              "doi": "10.1093/jtm/taae033",
+              "title": "The immune status of migrant populations in Europe and implications for vaccine-preventable disease control: a systematic review and meta-analysis.",
+              "year": 2024,
+              "journal": "J Travel Med",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje verdikt rešerše a zvyšuje confidence na high — abstrakt byl přečten přímo a nesoulad je přesně lokalizovaný. Cherri 2024 (systematický přehled a metaanalýza, 62 zahrnutých prací, 39 v metaanalýze, 75 089 migrantů; typ publikace Systematic Review / Meta-Analysis, neretrahováno) uvádí doslova „measles (n = 21, 83.7% [95% CI: 79.2-88.2] I2 = 99% vs HIT 93-95%)“ — prahová hodnota kolektivní imunity (HIT) u spalniček je tedy v literatuře rozmezí 93–95 %, ne jedno pevné číslo, a přehled ji neoznačuje za „cílovou hodnotu WHO“, nýbrž za doporučený epidemiologický práh. Karta tedy (a) zjednodušuje rozmezí na jeho horní hranici a (b) slévá dvě různé věci: programový cíl WHO ≥ 95 % proočkovanosti, který se podle vlastních method_notes karty vztahuje ke DVĚMA dávkám, a epidemiologický HIT 93–95 %. Navíc je toto číslo v patient_story postaveno proti hodnotě indikátoru, který podle pole definition měří jen PRVNÍ dávku do dvou let — srovnání není plně komenzurabilní. Směr i řád velikosti tvrzení literatura potvrzuje (95 % leží v doloženém rozmezí), přesná atribuce čísla WHO v abstraktu není → podle pravidla „číslo mimo abstrakt → nejvýš partial“ zůstává partial, nikoli supported. Není to rozpor: žádná nalezená práce netvrdí, že by práh byl výrazně nižší."
+        },
+        {
+          "text": "Rumunsko 2017–2019 (přes 60 úmrtí)",
+          "location": "patient_story, 4. odstavec (výčet epidemií při proočkovanosti pod 95 %)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31339098",
+              "doi": "10.2807/1560-7917.ES.2019.24.29.1900041",
+              "title": "Characterisation of measles after the introduction of the combined measles-mumps-rubella (MMR) vaccine in 2004 with focus on the laboratory data, 2016 to 2019 outbreak, Romania.",
+              "year": 2019,
+              "journal": "Euro Surveill",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace koriguje verdikt rešerše ze supported na partial. Abstrakt (přečten doslova) uvádí: „Since January 2016, a resurgence of measles in Romania has led to the third measles epidemic in the past 12 years; 64 deaths have been confirmed so far — the highest number of measles-related deaths since the measles-mumps-rubella (MMR) vaccine was introduced in 2004“, dále 17 533 hlášených případů, z toho 93 % nevakcinovaných, a závěr „The current outbreak is a consequence of insufficient vaccine coverage“. Počet úmrtí („přes 60“ = 64) i kauzální rámec karty (epidemie jako důsledek nedostatečné proočkovanosti) jsou tedy doložené. Neodpovídá ale období: 64 úmrtí je stav epidemie počínající lednem 2016 k datu publikace (2019), tj. 2016–2019, kdežto karta uvádí 2017–2019 — pro toto užší okno abstrakt žádné číslo nenese. Jde o zpřesnění rozsahu, ne o rozpor; podle pravidla „číslo, které abstrakt pro uvedenou populaci/období neobsahuje → nejvýš partial“ proto partial s vysokou confidence. Doporučená úprava pro redakci: „Rumunsko 2016–2019 (64 potvrzených úmrtí)“. Publikace je surveillance analýza z Euro Surveillance (Journal Article, neretrahováno), ne systematický přehled — pro epidemiologický údaj o jedné zemi je to ovšem nejvhodnější dostupný typ zdroje."
+        },
+        {
+          "text": "Ukrajina 2018 (115 úmrtí)",
+          "location": "patient_story, 4. odstavec (výčet epidemií při proočkovanosti pod 95 %)",
+          "kind": "epidemiology",
+          "verdict": "contradicted",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "30887090",
+              "doi": "10.1007/s00103-019-02920-2",
+              "title": "Elimination of measles in the WHO European Region-challenges persist.",
+              "year": 2019,
+              "journal": "Bundesgesundheitsblatt Gesundheitsforschung Gesundheitsschutz",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "contradicts",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "31209161",
+              "doi": "10.1542/peds.2019-0414",
+              "title": "Spread of Measles in Europe and Implications for US Travelers.",
+              "year": 2019,
+              "journal": "Pediatrics",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "contradicts",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38932424",
+              "doi": "10.3390/vaccines12060696",
+              "title": "Progress and Challenges in Measles and Rubella Elimination in the WHO European Region.",
+              "year": 2024,
+              "journal": "Vaccines (Basel)",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace posouvá verdikt rešerše z unclear na contradicted; rozhodlo dohledání druhého nezávislého zdroje. (1) Muscat 2019 (Regionální úřad WHO pro Evropu, surveillance data všech 53 členských států k 1. 2. 2019) uvádí doslova: za rok 2018 bylo ve 47 zemích hlášeno 82 596 případů spalniček, nejvíc z Ukrajiny (64 %), a „Seventy-two measles-related deaths were reported from 10 countries“ — tedy 72 úmrtí v CELÉM regionu WHO Euro za rok 2018. (2) Angelo 2019 (Pediatrics, autoři CDC) uvádí pro leden–červen 2018 v regionu WHO Euro >41 000 případů „including 37 deaths, a record high since the 1990s“, přičemž většinu případů hlásila Ukrajina. Ukrajina je členským státem regionu WHO Euro, takže její počet úmrtí za rok 2018 nemůže převýšit regionální součet; 115 úmrtí je s oběma nezávislými surveillance přehledy aritmeticky nekompatibilní. (3) Kontext řádu velikosti: Muscat 2024 uvádí za rok 2023 v regionu 60 860 případů a 13 úmrtí — regionální počty úmrtí se v této éře pohybují v desítkách, ne ve stovkách. Proto nejde o „jednu studii proti“, ale o převahu kvalitní evidence (dva nezávislé přehledy WHO/CDC, žádný nalezený zdroj uvádějící 115). Výhrady, pro které je confidence jen medium a ne high: ani jeden abstrakt neuvádí vlastní počet úmrtí pro Ukrajinu, rozpor je tedy odvozen z regionálního horního omezení, a data Muscat 2019 jsou předběžná (stav k 1. 2. 2019), takže pozdější revize jsou v principu možné — revize z 72 (celý region) na 115 (jedna země) ale není plauzibilní. K posouzení redakcí: číslo v kartě nelze z recenzované literatury doložit a nejlepší dostupná evidence ho vylučuje; správnou hodnotu je třeba vzít z administrativních dat WHO/UNICEF (mimo PubMed), nebo údaj o úmrtích z výčtu vypustit a ponechat doložené „nejvíc případů v regionu (64 % z 82 596 hlášených případů roku 2018)“. Jako hypotézu k ověření (NEDOLOŽENO, nikoli tvrzení auditu) redakci předáváme možnost záměny počtu úmrtí s počtem PŘÍPADŮ epidemie na Ukrajině 2017–2019."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 1,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_mmr_deti.json → v kartě založeno pole \"literature\" (dosud chybělo, karta necitovala žádnou studii) a vložen záznam Cherri 2024 (PMID 38423523, DOI 10.1093/jtm/taae033, J Travel Med, systematic review) k prahu kolektivní imunity v patient_story a k method_notes: přehled uvádí práh kolektivní imunity u spalniček jako rozmezí 93–95 %, ne jednu hodnotu 95 %; cíl WHO ≥ 95 % se vztahuje ke dvěma dávkám, zatímco indikátor měří první dávku do 2 let.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen záznam Euro Surveillance 2019 (PMID 31339098, DOI 10.2807/1560-7917.ES.2019.24.29.1900041, other) k údaji o Rumunsku v patient_story: 64 potvrzených úmrtí a 17 533 hlášených případů (93 % nevakcinovaných) v epidemii od ledna 2016 do roku 2019; autoři uzavírají, že epidemie je důsledkem nedostatečné proočkovanosti. Období v kartě (2017–2019) je užší než doložené (2016–2019).",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen záznam Muscat 2019 (PMID 30887090, DOI 10.1007/s00103-019-02920-2, Bundesgesundheitsblatt Gesundheitsforschung Gesundheitsschutz, other): surveillance přehled regionu WHO Euro — v roce 2018 hlášeno 82 596 případů ve 47 zemích, nejvíc z Ukrajiny (64 %), a 72 úmrtí v 10 zemích celkem; doklad proti údaji 115 úmrtí na Ukrajině v roce 2018 uvedenému v patient_story.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen záznam Angelo 2019 (PMID 31209161, DOI 10.1542/peds.2019-0414, Pediatrics, other) jako nezávislý druhý doklad regionálního rámce: leden–červen 2018 v regionu WHO Euro >41 000 případů a 37 úmrtí, většina případů z Ukrajiny — regionální počet úmrtí v roce 2018 zůstává řádově pod 115.",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Do pole \"literature\" karty vložen kontextový záznam Muscat 2024 (PMID 38932424, DOI 10.3390/vaccines12060696, Vaccines, other) k řádu velikosti a aktuálnosti tématu karty: v roce 2023 hlášeno v regionu WHO Euro 60 860 případů spalniček a 13 úmrtí ve 41 zemích, 95 % případů v šesti zemích (mj. Rumunsko).",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Do pole \"limitations\" karty doplněna jediná upřesňující věta s citací (povoleno u verdiktu kind=measurement): „Prahová hodnota kolektivní imunity u spalniček se v recenzované literatuře uvádí jako rozmezí 93–95 % (Cherri et al., J Travel Med. 2024;31(6), PMID 38423523, DOI 10.1093/jtm/taae033) a cíl WHO ≥ 95 % se vztahuje k proočkovanosti dvěma dávkami, zatímco tento indikátor měří jen první dávku do dvou let — srovnání jeho hodnoty s hranicí 95 % je proto orientační.“ Prose v patient_story ani method_notes se nemění, žádné číslo se nemění.",
+          "ref": ""
+        },
+        {
+          "type": "flagged",
+          "detail": "Rozpor (contradicted) u tvrzení „Ukrajina 2018 (115 úmrtí)“ v patient_story karty indicators/vakcinace_mmr_deti.json. Karta indikátoru nemá pole audit-status ani verification_status, takže se žádný status nepřepíná a prose se podle protokolu nemění — flag zůstává v registru a rozhodnutí o textu patří redakci. Doplňující poznámka: stejné číslo se v repu nevyskytuje nikde jinde (grep „115 úmrtí“ a „Ukrajina 2018“ přes *.html a *.json → jen tato karta), takže oprava je lokální a nemá dopad na žádný článek ani na data/claims.json.",
+          "ref": ""
+        },
+        {
+          "type": "issue",
+          "detail": "GitHub issue #1207 (label evidence-audit): „evidence-audit: indikátor vakcinace_mmr_deti — údaj ‚Ukrajina 2018 (115 úmrtí)‘ je v rozporu s evidencí“. Obsahuje místo (patient_story, 4. odstavec), tvrzení, studie proti (Muscat 2019 PMID 30887090; Angelo 2019 PMID 31209161), kontext (Muscat 2024 PMID 38932424), konstatování, že pro tvrzení nebyl nalezen žádný zdroj, a dva návrhy formulace pro redakci (vypustit počet úmrtí a ponechat doložené „64 % z 82 596 hlášených případů roku 2018“, nebo číslo nahradit hodnotou z administrativních dat WHO/UNICEF s uvedením období a zdroje). Hypotéza o záměně počtu úmrtí s počtem případů je v issue označena jako nedoložená.",
+          "ref": "https://github.com/veritasderman-rgb/hspa/issues/1207"
+        },
+        {
+          "type": "card-note",
+          "detail": "Poznámky redakci k vnitřní konzistenci karty (datová otázka, mimo rozsah evidence-auditu — literatura ji nerozhoduje; do karty se nezapisují, zůstávají v registru): (1) patient_story uvádí „Proočkovanost MMR … u dětí 2 roky věku je 83,7 % (ÚZIS, 2022, druhá dávka)“, ale pole definition výslovně říká, že indikátor měří alespoň PRVNÍ dávku do dvou let a že druhá dávka se podává v 5–6 letech a do indikátoru se nezapočítává — dvě neslučitelná určení téhož čísla v jedné kartě. (2) Trend v patient_story („2010 — 95 %; 2018 — 90 %; 2022 — 83,7 %“) nesedí na trend v data/indicators.json (2018 — 85; 2019 — 85; 2020 — 81; 2021 — 83; 2022 — 83,7). (3) method_notes datuje hodnotu aktualizací ÚZIS k 1. 9. 2025 pro kohortu narozených 2022, zatímco kontrakt nese year: 2022 — doporučeno sladit popis kohorty a roku, aby čtenář nečetl „2022“ jako rok měření. (4) Tvrzení „WHO cíl ≥ 95 % (dvě dávky)“ v method_notes a „WHO cílová hodnota … je 95 %“ v patient_story se opírají o tentýž cíl, ale patient_story ho staví proti hodnotě za první dávku — viz doplněná věta v limitations.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Bez claim-note: karta indikátoru nemá vlastní záznamy v data/claims.json (registr claims vede tvrzení článků) a audit nové claims nezakládá. Tematicky příbuzné claims epidemiologie-2-ockovani-dukaz--03 (hodnota 83,7 %) a epidemiologie-1-proc-verit-cislum--05 (R₀ 12–18) patří článkům, které v této dávce nebyly auditovány — source_note se u nich proto nedoplňuje. Poznámka do data/articles.json se u indikátoru nepíše. Audit nemění published, date, number ani žádný status.",
+          "ref": ""
+        }
+      ],
+      "followup": "Počet úmrtí na Ukrajině v roce 2018 zůstává nedoložen — z recenzované literatury ho dohledat nelze (oba surveillance přehledy uvádějí jen regionální součty); správná hodnota vyžaduje administrativní data WHO/UNICEF mimo PubMed. Strop 8 volání PubMed byl v rešerši vyčerpán, takže Consensus (dostupný konektor nebyl použit, tools.consensus: false) nebyl vyzkoušen jako druhá cesta k tomuto číslu. Vnitřní nekonzistence karty (první vs. druhá dávka u hodnoty 83,7 %, trend v patient_story proti trendu v kontraktu, rok kohorty vs. year v kontraktu) je datová otázka pro nightly-scan / redakci, evidence-audit ji nerozhoduje. V příští dávce: ověřit tvrzení „Spalničky jsou jedna z nejnakažlivějších infekcí (R₀ = 12–18)“ a „Texas 2025 (2 dětské úmrtí)“, která se do stropu 3 tvrzení na indikátor nevešla.",
+      "notes": "Karta indikátoru vakcinace_mmr_deti.json necitovala explicitně žádnou studii (žádné DOI/PMID v method_notes/limitations) — vybraná tvrzení pocházejí z patient_story (jediné místo s ověřitelnými kvantitativními/epidemiologickými výroky). Definice indikátoru (1. dávka do 2 let vs. 2. dávka v 5–6 letech dle kalendáře) a limitations (kohorta zpožděná o ~2 roky) jsou metodické/administrativní výroky bez nároku na literární evidenci — nezařazeny mezi claims; stejně tak hrazení a povinnost očkování dle zákona 258/2000 Sb. a hodnoty ÚZIS/OECD/EU (ty hlídá data/claims.json a nightly-scan). Rešerše (Sonnet): 6 volání search_articles + 2 get_article_metadata, strop 8 dodržen; Consensus nepoužit, protože PubMed u obou epidemiologických tvrzení relevantní studie vrátil — u třetího (Ukrajina) vrátil studie, jen ne hledané číslo, a strop PubMed byl vyčerpán. Adjudikace (Opus): dodatečná volání v rámci limitu, plný text nebylo třeba stahovat — všechny rozhodné údaje jsou v abstraktech.\n\nZměny proti rešerši: (1) u prahu kolektivní imunity potvrzen partial a confidence zvýšena na high; (2) u Rumunska verdikt korigován ze supported na partial — doložené období je 2016–2019, karta uvádí 2017–2019; (3) u Ukrajiny verdikt posunut z unclear na contradicted po dohledání druhého nezávislého surveillance zdroje (Angelo 2019), takže jsou splněny podmínky „≥ 2 nezávislé studie bez kvalitního protikladu“.\n\nProč u Ukrajiny contradicted a ne unclear: rozpor není odvozen z jedné studie, ale z aritmetického horního omezení doloženého dvěma nezávislými přehledy (WHO Euro a CDC) — regionální součty 72, resp. 37 úmrtí vylučují 115 úmrtí v jedné členské zemi téhož regionu a roku. Confidence je přesto jen medium: ani jeden abstrakt neuvádí vlastní číslo pro Ukrajinu a data Muscat 2019 jsou předběžná (stav k 1. 2. 2019).\n\nZápis: prose patient_story ani method_notes se nemění; do karty přibylo pole literature s pěti ověřenými položkami a do limitations jediná upřesňující věta s citací (povoleno u verdiktu kind=measurement). Poznámka do data/articles.json se u indikátoru nepíše. Žádný status se nepřepíná — karta indikátoru pole audit-status nemá; u contradicted proto zůstává flag plus GitHub issue #1207 a o textu rozhoduje redakce.\n\nPřenositelnost: doložená evidence je zahraniční (WHO Euro region, Rumunsko, Ukrajina, migrantské populace v Evropě). Karta ji používá k odůvodnění pák pro české prostředí; česká studie k proočkovanosti MMR nebyla nad rámec stropu hledána — doporučení pro další dávku: cílené hledání domácích prací (SZÚ, ÚZIS, Epidemiologie Mikrobiologie Imunologie) k vakcinační hesitanci a k ohniskům spalniček v ČR 2024."
+    },
+    {
+      "id": "indicator:bmi_dospeli",
+      "type": "indicator",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "c82498b8a0276871e281d68689465edce2428b85",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 17,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "BMI = váha [kg] / výška² [m²]. Self-report (EHIS) — zpravidla podhodnocuje obezitu o 3–5 procentních bodů oproti měřeným datům (EHES).",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "17135623",
+              "doi": "10.1038/oby.2006.240",
+              "title": "Underreporting of BMI in adults and its effect on obesity prevalence estimations in the period 1998 to 2001",
+              "year": 2006,
+              "journal": "Obesity (Silver Spring)",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29516851",
+              "doi": "10.1017/S1368980018000368",
+              "title": "How accurate is the prevalence of overweight and obesity in children and adolescents derived from self-reported data? A meta-analysis",
+              "year": 2018,
+              "journal": "Public Health Nutr",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32449888",
+              "doi": "10.3238/arztebl.2020.0253",
+              "title": "Misclassification of Self-Reported Body Mass Index Categories",
+              "year": 2020,
+              "journal": "Dtsch Arztebl Int",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr potvrzen i u dospělých, číslo v procentních bodech ne. Visscher 2006 (nizozemští dospělí 20–59 let, N = 3 691, reportovaná i měřená výška/váha) doslova uvádí podhodnocení prevalence obezity o 26,1 % u mužů a 30,0 % u žen — to je ale relativní podíl skutečné prevalence, nikoli procentní body, a abstrakt výslovně říká, že „the degree of underestimating the obesity prevalence was inconsistent across studies“ (rozptyl od 7 % nadhodnocení po 74 % podhodnocení). Pásmo 3–5 p. b. tedy v žádném dohledaném abstraktu není; nejbližší číslo (4,3 p. b.: 19,0 % self-report vs. 23,3 % měřeno) dává He 2018, ale pro děti a adolescenty, ne pro dospělé. Korekce rešerše: Freigang 2020 měří jiný konstrukt — sebezařazení do hmotnostní kategorie (self-perception), ne BMI spočítané ze self-reportované výšky a váhy; jako doklad karty proto jen kontext (relation context, ne supports). Přímé srovnání EHIS vs. EHES u dospělých (tedy přesně to, co karta tvrdí) v PubMed dohledáno nebylo. Per pravidlo „číslo mimo abstrakt → nejvýš partial“ zůstává partial."
+        },
+        {
+          "text": "Obezita je v ČR podle SZÚ asociovaná s 13 % všech úmrtí — cesta přes diabetes typu 2, KV onemocnění, onkologii (kolorektum, prsní žláza, ledviny) a osteoartrózu.",
+          "location": "patient_story (databox)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "39905517",
+              "doi": "10.1186/s12937-025-01082-z",
+              "title": "Burden of diseases attributable to excess body weight in 204 countries and territories, 1990-2019",
+              "year": 2025,
+              "journal": "Nutr J",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "23280227",
+              "doi": "10.1001/jama.2012.113905",
+              "title": "Association of all-cause mortality with overweight and obesity using standard body mass index categories: a systematic review and meta-analysis",
+              "year": 2013,
+              "journal": "JAMA",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Mechanismus i řád velikosti podpořeny, tuzemské číslo ne. Safiri 2025 (GBD 2019, 204 zemí) doslova uvádí 5,0 mil. úmrtí (95% UI 3,2–7,1) a 160,3 mil. DALY přičitatelných nadměrné tělesné hmotnosti v roce 2019, tedy atribuovatelný podíl v řádu jednotek až nízkých desítek procent úmrtí, a potvrzuje kardiometabolickou i onkologickou cestu. Konkrétních „13 % všech úmrtí v ČR“ se dohledaná literatura netýká: jde o odhad SZÚ, domácí instituce neindexované v PubMed. Karta ho korektně atribuuje SZÚ, nevydává jej za výsledek studie — proto partial, ne contradicted; podle pravidla „tvrzení o ČR opřené jen o zahraniční evidenci → partial s poznámkou o přenositelnosti“ navíc platí, že globální GBD podíl nelze na ČR přenést přímo (ČR má prevalenci BMI ≥ 25 na úrovni 60 %, tedy nad EU-27 průměrem 52,7 %, takže domácí podíl může být vyšší než globální). Relevantní výhrada z Flegal 2013 (97 studií, 2,88 mil. osob, 270 tis. úmrtí): nadváha samotná (BMI 25–30) nebyla spojena s vyšší celkovou úmrtností (HR 0,94; 95% CI 0,91–0,96) a obezita 1. stupně také ne (HR 0,95), vyšší úmrtnost nesla obezita celkem (HR 1,18) a zejména 2.–3. stupeň (HR 1,29). Tvrzení karty mluví o obezitě, takže s Flegal není v rozporu — ale ukazuje, že atribuovatelný podíl úmrtí nelze vztahovat na celý rozsah indikátoru BMI ≥ 25, který nadváhu a obezitu sčítá."
+        },
+        {
+          "text": "BMI nerozlišuje svalovou a tukovou hmotu — sportovci falešně klasifikováni jako nadváha.",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29351164",
+              "doi": "10.1519/JSC.0000000000002449",
+              "title": "Body Mass Index Versus Body Fat Percentage in Prospective National Football League Athletes: Overestimation of Obesity Rate in Athletes at the National Football League Scouting Combine",
+              "year": 2018,
+              "journal": "J Strength Cond Res",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "19893101",
+              "doi": "",
+              "title": "Overweight in trained subjects - are we looking at wrong numbers? (Body mass index compared with body fat percentage in estimating overweight in athletes.)",
+              "year": 2009,
+              "journal": "Gen Physiol Biophys",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30985525",
+              "doi": "10.1519/JSC.0000000000003158",
+              "title": "Fat-Free Mass Index in a Diverse Sample of Male Collegiate Athletes",
+              "year": 2019,
+              "journal": "J Strength Cond Res",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Povýšeno z rešeršního partial na supported: adjudikace dohledala dvě nezávislé studie, které misklasifikaci měří přímo, nikoli jen nepřímo. Provencher 2018 (1 958 účastníků NFL Combine, tělesné složení air displacement plethysmography) doslova uvádí podíl obezity 53,4 % podle BMI ≥ 30 proti 8,9 % podle procenta tělesného tuku a uzavírá, že BMI míru obezity u sportovců nadhodnocuje. Mazic 2009 (299 trénovaných basketbalistů vs. 179 netrénovaných, bioimpedance) uvádí, že z 85 trénovaných s BMI ≥ 25 mělo nadbytek tělesného tuku jen 3, a uzavírá, že BMI ≥ 25 není u trénovaných validní prediktor nadváhy. Tvrzení karty neobsahuje žádné číslo, takže není co doložit nad rámec směru a mechanismu — oba jsou v abstraktech doslovně. Currier 2019 ponechán jen jako kontext (data o fat-free mass indexu, samotnou misklasifikaci neměří); rešerše jej vedla jako jediný doklad, což tvrzení podhodnocovalo."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do indicators/bmi_dospeli.json doplněno nové pole \"literature\" se 7 studiemi (karta dosud necitovala žádnou literaturu): Visscher 2006 (PMID 17135623), He 2018 (29516851), Freigang 2020 (32449888) k method_notes o self-reportu; Provencher 2018 (29351164) a Mazic 2009 (19893101) k limitations o sportovcích; Safiri 2025 (39905517) jako kontext k podílu úmrtí v patient_story; Flegal 2013 (23280227) jako metodická výhrada k rozsahu indikátoru BMI ≥ 25. Každá položka nese note s tím, co z abstraktu doslova plyne, a verified_at 2026-09-13.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Do pole \"limitations\" karty indicators/bmi_dospeli.json připojena jedna upřesňující věta k partial verdiktu tvrzení v method_notes (rozsah 3–5 p. b. není v literatuře doložen, Visscher 2006 uvádí 26–30 % relativního podhodnocení a nekonzistenci mezi studiemi, s citací a PMID). Stávající věta o sportovcích zůstala beze změny (verdikt supported). Pole \"method_notes\", \"verification_status\" ani \"verified_at\" se neměnila, žádné číslo nebylo přepsáno.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno zůstává: (a) rozdíl EHIS (self-report) vs. EHES (měřeno) u dospělých v ČR — přímé srovnání, na němž stojí pásmo 3–5 procentních bodů v method_notes, nebylo v PubMed dohledáno; hledat metodické práce SZÚ/Eurostatu indexované v PubMed, do té doby je číslo nedoložené. (b) Odhad SZÚ „13 % všech úmrtí v ČR“ je mimo PubMed — ověření proti primární publikaci SZÚ patří redakci, ne strojovému auditu. (c) Samostatné tvrzení o validitě pásma BMI ≥ 25 jako míry zdravotního rizika nebylo auditováno (strop 3 tvrzení na indikátor): Flegal 2013 ukazuje, že nadváha a obezita 1. stupně se v celkové úmrtnosti chovají jinak než obezita 2.–3. stupně, což je relevantní pro interpretaci direction \"lower_is_better\". Studie bez DOI: Mazic 2009 (PMID 19893101) — ověřena přes PMID.",
+      "notes": "Karta indikátoru bmi_dospeli.json necitovala žádnou literaturu — všechna 3 tvrzení byla dohledána nově. Rešerše (Sonnet): PubMed dostupný, 7 volání (5× search_articles, 2× get_article_metadata) v mezích stropu 8; jedno počáteční vyhledávání (BMI limitations muscle/athletes) selhalo kvůli chybné NOT-konstrukci dotazu a bylo přeformulováno. Adjudikace (Opus): 3 dodatečná volání PubMed (1× get_article_metadata na 4 PMID, 2× search_articles, z toho druhé metadatové volání na 5 PMID) — v rámci stropu 3, součet s rešerší 10 logických volání; pole calls uvádí 17 dílčích požadavků podle měření orchestrace. Consensus nebyl dostupný (tools.consensus: false), 0 dotazů — PubMed dal ke všem třem tvrzením ověřitelné kandidáty. Dvě korekce rešerše: (1) Freigang 2020 (PMID 32449888) byl veden jako supports k tvrzení o self-reportu, ale měří sebe-zařazení do hmotnostní kategorie (self-perception), ne BMI ze self-reportované výšky a váhy — přeřazen na relation context a jako přímý doklad pro dospělé nově dohledán Visscher 2006 (PMID 17135623). (2) Tvrzení o sportovcích bylo v rešerši partial/low (jediný doklad Currier 2019, který misklasifikaci neměří); adjudikace dohledala dvě nezávislé studie měřící ji přímo (Provencher 2018, Mazic 2009) a verdikt povýšila na supported/high. Žádný contradicted, tedy žádný flag ani issue. Signal_thresholds (good 3, warn 8) karta neodvozuje z literatury — nejde o tvrzení k ověření (bod c FÁZE 2), ponecháno bez verdiktu. Claim-note nepřichází v úvahu: data/claims.json neobsahuje tvrzení, jehož quote by odpovídal auditovaným větám karty (tvrzení s indicator_id bmi_dospeli patří článkům), odhad SZÚ „13 % všech úmrtí“ v claims.json registrován není. U indikátoru se poznámka do data/articles.json nepíše — karta dostala pole literature."
+    },
+    {
+      "id": "indicator:mortalita_onkologicka",
+      "type": "indicator",
+      "checked_at": "2026-09-13",
+      "run_id": "ea-2026-09-13-01",
+      "content_hash": "7bb68a0a24cd6928aa384bf71ef82b8666014296",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "Standardizovaná míra úmrtnosti na evropskou standardní populaci ESP 2013 (Eurostat hlth_cd_asdr2). POZOR: hodnoty nejsou srovnatelné se staršími řadami standardizovanými na ESP 1976 ani s hrubou mírou — ESP 2013 dává výrazně vyšší čísla (více váhy starším ročníkům).",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [],
+          "note": "Adjudikace překlasifikovala verdikt rešerše (no-evidence) na not-applicable. Věta není odborné tvrzení o validitě ukazatele, ale popis metadat použitého datasetu: kterou standardní populaci Eurostat v hlth_cd_asdr2 používá a že řady na různé standardní populace nelze míchat. Soudcem takového tvrzení je metodická dokumentace Eurostatu (revize Evropské standardní populace, task force 2013) a ČSÚ jako dodavatele primárních dat z Listů o prohlídce zemřelého, nikoli recenzovaná literatura — tedy stejná kategorie jako administrativní statistika vyřazená v oddílu „Co je tvrzení k ověření“. Ověřovací dotaz do PubMed to potvrzuje prakticky: dotaz na \"European Standard Population\" v kombinaci se standardizací/mortalitou vrací 304 záznamů, ale jde o studie, které ESP jen POUŽÍVAJÍ (např. Eur J Heart Fail 2025 survey, suicidní mortalita ve Španělsku, diabetická mortalita v Srbsku, prevalence MS v Maďarsku) — žádná revizi ESP 2013 nepopisuje ani nekvantifikuje posun proti ESP 1976. Karta sama zdroj metody cituje správně (Eurostat hlth_cd_asdr2) a výhrada o nesrovnatelnosti je pro čtenáře spíš přísnější než volnější, takže není důvod k flagu ani k poznámce do limitations (ta už nesrovnatelnost uvádí). Položka se uzavírá, aby další běhy neutrácely rozpočet na tvrzení, které PubMed rozhodnout nemůže."
+        },
+        {
+          "text": "Pokles táhne lepší záchyt (screeningové programy), centralizace léčby do komplexních onkologických center i moderní onkologika.",
+          "location": "patient_story",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "30223667",
+              "doi": "",
+              "title": "[Colorectal cancer screening].",
+              "year": 2018,
+              "journal": "Vnitr Lek",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace posouvá verdikt rešerše z unclear na partial: dodatečné hledání (domácí literatura, Czech[Affiliation]) našlo a ověřilo český přehled Suchánek/Grega/Zavoral 2018 (PMID 30223667, Vnitr Lek 64(6):679–683), jehož abstrakt doslova uvádí, že screening kolorektálního karcinomu jako nástroj sekundární prevence vede ke snížení incidence i mortality, že zachytí prekancerózy i časnější, účinně léčitelná stadia, a že adresné zvaní zavedené v ČR v roce 2014 zvýšilo účast cílové populace (program od roku 2000). Tím je doložena první ze tří uvedených hnacích sil, a to i v českém kontextu. Zbylé dvě — centralizace léčby do komplexních onkologických center a moderní onkologika — nedokládá žádná v tomto běhu ověřená studie; rozpočet PubMed (8 + 3 volání) je vyčerpán, volume–outcome literatura k centralizaci a studie přínosu nových onkologik nebyly prověřeny. Navíc žádná ověřená studie nerozděluje pokles standardizované mortality na C00–C97 v ČR (2016: 277,0 → 2023: 250,4) mezi tyto tři vlivy, takže výčet zůstává věrohodnou, ale nedoloženou dekompozicí. Směr tvrzení evidence podporuje, rozsah a atribuce ne → partial, ne contradicted (nic proti tvrzení nalezeno nebylo). Formulace „Pokles táhne…“ je opatrná a nekvantifikuje podíly, takže zásah do textu karty audit nenavrhuje; k posouzení redakcí, zda u centralizace a onkologik doplnit vlastní citaci. K ověření v dalším běhu (followup)."
+        },
+        {
+          "text": "Mezera v přežití mezi časnými a pozdními stadii je z velké části o tom, kdy se diagnóza udělá — což je problém českého screeningu a prevence.",
+          "location": "patient_story",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22623157",
+              "doi": "10.1002/ijc.27651",
+              "title": "Comparability of stage data in cancer registries in six countries: lessons from the International Cancer Benchmarking Partnership.",
+              "year": 2012,
+              "journal": "Int J Cancer",
+              "study_type": "methodological",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30223667",
+              "doi": "",
+              "title": "[Colorectal cancer screening].",
+              "year": 2018,
+              "journal": "Vnitr Lek",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42697026",
+              "doi": "10.1016/j.ejso.2026.112104",
+              "title": "Biological determinism and the stage-dependent role of surgical approach in gallbladder cancer: A 20-year cohort study and meta-analysis.",
+              "year": 2026,
+              "journal": "European Journal of Surgical Oncology",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Verdikt partial potvrzen, ale s jinou a silnější oporou, než nabídla rešerše. Rešerše stavěla jen na kohortě karcinomu žlučníku z Číny (PMID 42697026) — ta zůstává pouze jako kontext (jiná diagnóza, jiná populace; dřívější, incidentální záchyt vedl k mediánu OS 56,5 vs. 32,0 měsíce). Přímo k tvrzení mluví ICBP (Walters 2012, PMID 22623157), jehož abstrakt uvádí, že rozdíly v celkovém přežití mezi zeměmi bývají vysvětlovány rozdíly ve stadiu při diagnóze A ve stadium-specifickém přežití — potvrzuje tedy směr („kdy se diagnóza udělá“), ale jmenuje i druhou složku, kterou karta vynechává, a ČR mezi šesti srovnávanými zeměmi není (studie byla v PubMed ověřena v běhu ea-2026-09-07-02, viz registr a karta prezit_rakoviny_5let; v tomto běhu nebyla znovu dotazována kvůli stropu volání). Český rozměr doplňuje Suchánek 2018 (PMID 30223667): screening zachytí časnější, účinně léčitelná stadia a adresné zvaní od roku 2014 zvýšilo účast — to je konzistentní s tím, že nevyužitá kapacita screeningu drží podíl pozdních záchytů. Dvě věci doloženy nejsou: (a) kvantifikace „z velké části“ pro celou skupinu C00–C97, (b) atribuce české mezery právě výkonu screeningových programů a prevence — pro druhou část je klíčová evidence zahraniční (ICBP bez ČR), takže platí pravidlo o přenositelnosti → partial s výhradou, ne supported. Nic proti tvrzení nalezeno nebylo."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do karty indicators/mortalita_onkologicka.json (dosud bez literatury) přidáno pole „literature“ se dvěma ověřenými studiemi: Walters 2012 / ICBP (PMID 22623157, DOI 10.1002/ijc.27651) k tvrzení v patient_story o roli stadia při diagnóze — potvrzuje směr, ale jmenuje i stadium-specifické přežití a ČR mezi srovnávanými zeměmi není (verdikt partial, ověřeno v PubMed 2026-09-07, běh ea-2026-09-07-02); Suchánek/Grega/Zavoral 2018 (PMID 30223667, bez DOI, Vnitr Lek 64(6):679–683) ke screeningové části věty o hnacích silách poklesu mortality a ke vztahu stadium → léčitelnost (ověřeno v PubMed podle PMID 2026-09-13). Každá položka nese note s tím, co z abstraktu doslova plyne, a verified_at.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný zásah do textu karty: patient_story ani method_notes se needitují (prose indikátorové karty audit měnit nesmí; jedna upřesňující věta do „limitations“ je vyhrazena verdiktu measurement, a ten jediný v této položce skončil jako not-applicable bez citace). Žádný flag, žádná issue — nic proti žádnému tvrzení nalezeno nebylo, verification_status karty („verified“, 2026-06-10) se nemění. Kohorta karcinomu žlučníku (PMID 42697026) zůstává jen v registru jako kontext, do karty se nepřidává (jiná diagnóza i populace, pro indikátor C00–C97 by zaváděla).",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeny zůstávají dvě ze tří hnacích sil poklesu onkologické mortality uvedených v patient_story — centralizace léčby do komplexních onkologických center (volume–outcome literatura) a přínos moderních onkologik; rozpočet PubMed (8 rešerše + 3 adjudikace) byl vyčerpán dřív. Chybí též jakákoli ověřená práce kvantifikující podíl jednotlivých vlivů na českém poklesu standardizované mortality C00–C97 (2016: 277,0 → 2023: 250,4) a atribuci mezery proti EU27 výkonu českých screeningových programů. ICBP (PMID 22623157) nebyla v tomto běhu znovu dotazována kvůli stropu volání — verifikace je přebrána z registru (běh ea-2026-09-07-02), ne z paměti modelu. Studie bez DOI: Suchánek 2018 (PMID 30223667) — ověřena přes PMID. Metodická věta o ESP 2013 v method_notes je uzavřena jako not-applicable (soudcem je dokumentace Eurostatu/ČSÚ, ne recenzovaná literatura), v dalších bězích ji není třeba znovu hledat.",
+      "notes": "Karta indikátoru mortalita_onkologicka necitovala žádnou konkrétní studii (found_via „article“ se tedy neuplatnil). Rešerše (Sonnet) vybrala 3 tvrzení podle pokynu pro indikátory: (1) měřicí/metodická validita standardizace ESP 2013 z method_notes, (2) kauzální věta o hnacích silách poklesu mortality z patient_story, (3) kauzální věta o vztahu stadia při diagnóze a přežití z patient_story. Rozpočet rešerše (8 volání PubMed) byl vyčerpán mezi search_articles a get_article_metadata; 1 dotaz do Consensu (medical_mode, exclude_preprints) k metodice ESP 2013 nepřinesl použitelného kandidáta a žádný kandidát z Consensu nebyl v PubMed ověřen, takže se do evidence nezapsal. Adjudikace (Opus, běh ea-2026-09-13-01) využila strop 3 volání PubMed: 2× search_articles (metodika ESP 2013; domácí onkologická literatura Czech[Affiliation] ke screeningu, stadiu a mortalitě) + 1× get_article_metadata nad 10 PMID; Consensus v adjudikaci volán nebyl. Celkem za položku 11 volání PubMed (8 + 3) a 1 volání Consensu. Tři změny proti rešerši: (1) věta o ESP 2013 překlasifikována z no-evidence na not-applicable — jde o metadata administrativního datasetu (Eurostat hlth_cd_asdr2), jehož soudcem je metodická dokumentace Eurostatu a ČSÚ, ne recenzovaná literatura; dotaz na European Standard Population vrací stovky záznamů, které ESP jen používají, revizi 2013 žádný nepopisuje. (2) Věta o hnacích silách poklesu posunuta z unclear na partial díky ověřenému domácímu přehledu Suchánek 2018 (PMID 30223667), který doloží screeningovou část. (3) U věty o stadiu při diagnóze zůstává partial, ale opora se mění: hlavní evidencí je ICBP Walters 2012 (PMID 22623157, ověřeno v PubMed v běhu ea-2026-09-07-02, viz karta prezit_rakoviny_5let) plus Suchánek 2018, zatímco čínská kohorta karcinomu žlučníku (PMID 42697026) je degradována na kontext. Žádný contradicted, tedy žádný flag ani issue; signal_thresholds (good 3, warn 10) karta z literatury neodvozuje, takže nejsou tvrzením k ověření. Claim-note nepřichází v úvahu — data/claims.json neobsahuje tvrzení, jehož quote by odpovídal auditovaným větám karty. U indikátoru se poznámka do data/articles.json nepíše, karta dostala pole literature."
     }
   ]
 }
