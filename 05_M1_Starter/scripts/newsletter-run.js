@@ -21,6 +21,9 @@
 // Flags:
 //   --dry-run   vše kromě Brevo zápisu a logu (Claude se volá)
 //   --offline   žádná API — canned texty; end-to-end test pipeline v CI/sandboxu
+//   --friday=YYYY-MM-DD  datum vydání místo „nejbližšího budoucího pátku" (fallback
+//               rutiny v pátek ráno: --friday=$(date +%F) naplánuje dnešních 11:00;
+//               jinak by nextFridayYmd() přeskočil na příští týden)
 //
 // Pojistky: min. 2 nové články jinak přeskočí týden; idempotence na pátek
 // (druhé spuštění týž týden nic nezaloží); duplicita je horší než vynechání.
@@ -37,6 +40,12 @@ const LIST_ID = Number(process.env.BREVO_LIST_ID || 2);
 const MODEL = process.env.NEWSLETTER_CLAUDE_MODEL || 'claude-sonnet-4-6';
 const DRY = process.argv.includes('--dry-run');
 const OFFLINE = process.argv.includes('--offline');
+const FRIDAY_OVERRIDE = process.argv.find(a => a.startsWith('--friday='))?.slice('--friday='.length) ?? null;
+if (FRIDAY_OVERRIDE !== null && (!/^\d{4}-\d{2}-\d{2}$/.test(FRIDAY_OVERRIDE) || Number.isNaN(Date.parse(`${FRIDAY_OVERRIDE}T11:00:00Z`))
+    || new Date(`${FRIDAY_OVERRIDE}T11:00:00Z`).toISOString().slice(0, 10) !== FRIDAY_OVERRIDE)) {
+  console.error(`--friday musí být YYYY-MM-DD, dostal jsem: ${FRIDAY_OVERRIDE}`);
+  process.exit(2);
+}
 
 const readJson = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
 
@@ -180,7 +189,7 @@ async function brevo(pathname, init = {}) {
 
 async function main() {
   const today = new Date().toISOString().slice(0, 10);
-  const fridayYmd = nextFridayYmd();
+  const fridayYmd = FRIDAY_OVERRIDE ?? nextFridayYmd();
   const scheduledAt = `${fridayYmd}T11:00:00.000${pragueOffset(fridayYmd)}`;
 
   const articlesData = readJson('data/articles.json');

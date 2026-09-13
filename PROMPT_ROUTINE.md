@@ -37,6 +37,9 @@ odzadu, ale **A (příprava), B (Buffer), C (discovery), E (obsah dne), K (audit
   (repo `veritasderman-rgb/hspa`, kód a data v `05_M1_Starter/`; cesty níže jsou
   relativní k němu, pokud není řečeno jinak). Přes 210 článků, přes 220 indikátorů
   (přesná čísla zjisti z `data/articles.json` a `data/indicators.json`, nikdy z paměti).
+- **Konvence cest**: všechny příkazy a snippety spouštěj z `05_M1_Starter/` (bloky A a L
+  tam přecházejí `cd`); v próze jsou cesty zkrácené (`data/…`, `scripts/…`), ve
+  snippetech relativní k tomuto adresáři. Z kořene repa je to `05_M1_Starter/data/…`.
 - **Před prvním krokem přečti** `CLAUDE.md`, `docs/quickref.md`, `docs/decisions-log.md`,
   `docs/traps.md`. Platí vše z nich (generované artefakty, JSON escaping, publikační hygiena).
 - **MCP konektory rutiny** (nastavuje vlastník v Routines; rutina nepoužívá API klíče):
@@ -175,7 +178,9 @@ npm run evidence:queue -- --status       # jen v neděli (blok I)
    `low` (jen když zbývá kapacita). Typy flagů: `missing-cover`, `date-passed`,
    `check-sources`, `check-literature`, `topical-expired`, `missing-indicators`,
    `stale-date`, `no-html`, `claims-drift`, `claims-stale`, `claims-missing`. Články
-   auditované < 14 dní (`audit.last_reviewed`) skener u zdrojů přeskakuje sám.
+   auditované < 14 dní (`audit.last_reviewed`) skener u zdrojů přeskakuje sám; plný
+   worklist vč. recentně auditovaných dá `node scripts/nightly-scan.js --no-skip-reviewed`
+   (použij v kvartálním okně, blok G).
 
 ---
 
@@ -201,6 +206,9 @@ doména v CTA `skorezdravotnictvi.cz`.
 7. Idempotence: plné fronty = nic nepřidávej, jen to nahlas.
 8. Žádné PII, žádné placené akce. **Nic necommituj** — stav drží Buffer.
 
+Cokoli, co by vyžadovalo porušení těchto pravidel (mazání, překročení limitu, okamžitá
+publikace), → **zastav se a nahlas to** místo provedení.
+
 **Grafika — vždy tmavá stat-hero karta** (`node scripts/generate-ig-cards.js`, manifest
 slugů ve skriptu). Světlý landscape cover (`assets/covers/`) je jen nouzový fallback.
 
@@ -224,21 +232,31 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
 
 **Postup**
 
-0. **Inventura** (Buffer = zdroj pravdy): per kanál `list_posts` `status: ["scheduled","sent"]`,
-   `sort dueAt asc`, `first: 100`. `deficit = 10 − scheduledCount` (≤ 0 → přeskoč).
-   `usedSlugs` = slugy z coveru v `assets` (`…/<slug>.png`) nebo z odkazu v textu; `sent`
-   jen mladší než 30 dní, `scheduled` vždy.
+0. **Inventura** (Buffer = zdroj pravdy): `get_account` → org ID a timezone;
+   `list_channels` → kanály, odpojené (`isDisconnected: true`) přeskoč. Per kanál
+   `list_posts` `status: ["scheduled","sent"]`, `sort dueAt asc`, `first: 100`.
+   `deficit = 10 − scheduledCount` (≤ 0 → přeskoč). `usedSlugs` = slugy z coveru
+   v `assets` (`…/<slug>.png`) nebo z odkazu `skorezdravotnictvi.cz/clanek-…` v textu;
+   `sent` jen mladší než 30 dní, `scheduled` vždy. Do fronty přispívá i pipeline
+   `social-publish.yml` (Notion → Buffer, pondělí 05:00 UTC): její příspěvky se počítají
+   do `scheduledCount` i do `usedSlugs` stejně jako tvoje.
 1. **Kandidáti**: články dle pravidla 6 s živou kartou, minus `usedSlugs`.
-2. **Priorita**: (1) news hook — `topical_until` ≥ dnes vzestupně, čerstvá agenda, indikátor
-   s čerstvou změnou signálu; (2) nejnovější dosud nepropagované podle `date` sestupně;
-   (3) evergreen `verified` mimo cooldown. Nová částka Věstníku MZ (`data/vestniky.json`,
-   `datum` za poslední týden) je kandidát na věcný post s odkazem na `/vestniky-mz`.
+2. **Priorita**: (1) news hook — `topical_until` ≥ dnes vzestupně (nejbližší expirace
+   nejdřív), čerstvá agenda (novela, vládní rozhodnutí, výročí, sezóna), indikátor
+   s čerstvou změnou (`data/freshness.json` „fresh") nebo překlopením signálu do
+   `bad`/`warn`; (2) nejnovější dosud nepropagované podle `date` sestupně; (3) evergreen
+   `verified` mimo cooldown, od nejdéle nepropagovaných / nejmladších. Nová částka
+   Věstníku MZ (`data/vestniky.json`, `datum` za poslední týden) je kandidát na věcný post
+   s odkazem na `/vestniky-mz` (ne, když už fronta post o té částce má).
 3. **Texty** — společné: CTA `https://skorezdravotnictvi.cz/<slug>`; `assets[0].image`
    + povinný `altText` („Čtvercová grafika článku … na portálu HSPA Monitor."); hashtagy
    3–6 (oborové + `#zdravícesko`); emoji 1–4. **Facebook** (`metadata.facebook.type: "post"`):
    hook + 2–4 věty + 1 číslo + klikací odkaz. **Instagram** (`metadata.instagram:
    { type:"post", shouldShareToFeed:true }`): caption, URL do textu ne, konec `🔗 odkaz
-   v biu`. **X** (`service: twitter`): max 280 znaků (odkaz = 23), 16:9 karta, 1–2 hashtagy.
+   v biu`. **X** (`service: twitter`): max 280 znaků (Free; ukáže-li `get_channel` placený
+   tier, limit povol vyšší; odkaz = 23), 16:9 karta, 1–2 hashtagy. `altText` podle
+   formátu: FB/IG „Čtvercová grafika článku … na portálu HSPA Monitor.", X „Grafika článku
+   …", Story „Vertikální grafika článku …".
 4. **Vertikální slot** (FB i IG po 1): jen články s živou `ig-story/` kartou, stejná
    priorita a cooldown (klíč = URL vertikální karty). Story = výchozí: IG
    `metadata.instagram = { type: "story", shouldShareToFeed: false, link: "<URL článku>" }`,
@@ -257,7 +275,8 @@ přeskočení s důvodem.
 ## 6. Blok C — Discovery
 
 **Cíl**: projít primární zdroje a zjistit, co se od posledního běhu změnilo. Tři paralelní
-subagenti (§ 1), každý vrátí seznam nálezů `{zdroj, co, URL, datum, relevance}`.
+subagenti (§ 1), každý vrátí seznam nálezů `{zdroj, co, URL, datum, relevance}`. Rozpočet
+30–60 minut celkem — subagent, který nestihne, vrátí, co má, a označí neprojité zdroje.
 
 ### 6.1 Powerlist (subagent 1: řádky 1–13; subagent 3: řádky 14–15)
 
@@ -273,7 +292,7 @@ subagenti (§ 1), každý vrátí seznam nálezů `{zdroj, co, URL, datum, relev
 | 8 | Eurostat — `hlth_*` | ec.europa.eu/eurostat/web/health/database | SILC, HLY, mortalita |
 | 9 | WHO Europe | who.int/europe/news-room | guidelines, statistiky |
 | 10 | SÚKL — výpadky | sukl.cz/farmaceuticky-trh/registr-vypadku-leciv | kritická léčiva |
-| 11 | PSP ČR — tisky | psp.cz/sqw/historie.sqw | nový tisk, hlasování, vyhlášení |
+| 11 | PSP ČR — tisky | psp.cz/sqw/historie.sqw (bez `?o=` = aktuální období; archiv `o=9`, `o=10`…) | nový tisk, hlasování, vyhlášení |
 | 12 | Sbírka zákonů | zakonyprolidi.cz/cs/aktualne | normy v gesci MZ |
 | 13 | NÚKIB | nukib.cz/cs/aktualni-informace | incidenty ve zdravotnictví, NIS2 |
 | 14 | Recenzovaná literatura ČR | `PubMed` → `search_articles`: `("Czech Republic"[Title/Abstract] OR Czechia[Title/Abstract] OR "Czech Republic"[Affiliation] OR Czechia[Affiliation] OR Czech[Affiliation]) AND (health services OR mortality OR screening OR …)`, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date` | nové domácí studie (PMID, DOI, časopis) |
@@ -331,7 +350,9 @@ viz `ingest/validate-legislation.js`), `veklep_pid` + `veklep_url` (povinné mim
 `nezahajeno`), `plneni_poznamka` (datum ověření, co se stalo, srovnání s `plan_termin` —
 **jen popis, nikdy hodnocení**: žádné „MZ plán neplní"). Nově zahájená položka bez záznamu
 v `items` → založ ho a dopiš `radar_id`. Položky `nezahajeno` s prošlým `plan_termin`
-kontroluj jen **v pondělí**; s budoucím termínem vůbec. Pak `npm run validate:legislation`.
+kontroluj jen **v pondělí**; s budoucím termínem vůbec. **I bez posunu** zapiš datum
+poslední kontroly do `plneni_poznamka`; u nedohledatelného/nejasného záznamu jen datum,
+pole jinak beze změny. Pak `npm run validate:legislation`.
 
 ### 7.3 Barometr — `data/barometr.json`
 
@@ -379,7 +400,7 @@ indikátorovou větev posuň na úterý (zapiš do PR).
 **Kadenční pojistka** (nadřazená stromu): spočítej dní od posledního **nového** článku
 (ARTICLE-WRITE / EVERGREEN-WRITE / INDICATOR-ADD; z `git log` nad `clanek-*.html` nebo
 z `creation_phase` v `data/articles.json`). **> 2 dny bez nového článku** → EVERGREEN-WRITE
-se vynutí (fallback se přeskočí). Týdenní kvóta **≥ 3 nové články** (po–ne): pod kvótou
+se vynutí, pokud reaktivní spouštěč nevyšel a backlog není prázdný (fallback se přeskočí). Týdenní kvóta **≥ 3 nové články** (po–ne): pod kvótou
 upřednostni psaní před auditem. Kvalita se nesnižuje.
 
 **Výběr při více HOT**: aktuálnost → dopadovost (zdravotní + finanční + počet dotčených)
@@ -387,7 +408,8 @@ upřednostni psaní před auditem. Kvalita se nesnižuje.
 
 **Evergreen backlog**: položka `ready` s nejnižší `priority` (shoda → pořadí v souboru);
 ověř, že není redundantní s publikovaným článkem (`anchor_indicators` ×
-`data/articles.json`); `anchor_indicators` + `primary_sources` jsou startovní rámec —
+`data/articles.json`) — redundantní položku označ `status: "done"` s poznámkou a vezmi
+další; `anchor_indicators` + `primary_sources` jsou startovní rámec —
 čísla stejně ověř z primárního zdroje; po dokončení `status: "done"` + `slug`. Prázdný
 backlog = signál redakci doplnit náměty (zapiš do PR).
 
@@ -407,7 +429,8 @@ Použij existující články jako vzor (`article-page` layout, `docs/workflows.
 
 - `<head>`: `<title>{Headline s KPI} · HSPA Monitor</title>`, `description`, `robots
   index, follow`, OG (`article`, `cs_CZ`), `article:published_time`, `article:section`,
-  `<meta name="article:audit-status" content="review-pending">`, `src/styles.css`.
+  `<meta name="article:audit-status" content="draft">` (u nového článku; publikace ho
+  povýší na `review-pending` spolu se záznamem v `articles.json`), `src/styles.css`.
 - Audit komentář hned za `<meta charset>`:
 
 ```html
@@ -415,7 +438,7 @@ Použij existující články jako vzor (`article-page` layout, `docs/workflows.
   audit:
     last_reviewed: RRRR-MM-DD
     reviewer: claude-code-agent
-    status: review-pending
+    status: draft                               # nový článek; revize publikovaného: review-pending
     created_at: RRRR-MM-DD
     creation_phase: rutina+article-write        # nebo evergreen-write / indicator-add / article-revise
     primary_sources_count: N
@@ -427,10 +450,17 @@ Použij existující články jako vzor (`article-page` layout, `docs/workflows.
 - Tělo: breadcrumb → `article-header` (tagy, `h2.article-title`, `p.article-deck` 3–5 vět
   s KPI a zdroji, `article-meta` datum/minuty/„redakce HSPA Monitoru") → `article-lead`
   → AV hero → sekce h3 (datový kontext · legislativní/institucionální rámec · mezinárodní
-  srovnání · co vývoj přináší · **Co s tím**) → `aside.article-databox` (indikátory,
-  ze kterých text vychází, `indicator.html?id=…`) → `section.article-sources` („Kde si
-  data sami ověříte", `target="_blank" rel="noopener"`) → `<script type="module"
+  srovnání · co vývoj přináší · **Co s tím**) → `aside.article-databox` (`ed-kicker`
+  „Data v tomto článku", `h4.article-databox-h` „Indikátory HSPA Monitoru, ze kterých text
+  vychází", položky `<li><a href="indicator.html?id=X"><strong>{Indikátor}</strong></a> —
+  {hodnota} {zdroj}</li>`) → `section.article-sources` (`ed-kicker` „Zdroje", h4 „Kde si
+  data sami ověříte", položky `<strong>{Zdroj}</strong> — {popis}. <a href="…"
+  target="_blank" rel="noopener">{doména} ↗</a>`) → `<script type="module"
   src="src/clanky.js">`.
+- **Design systém**: striktně komponenty z `src/styles.css` + `src/article-visuals.js`.
+  Chybí-li komponenta, přidej ji do design systému, ne inline do článku; po úpravě
+  `styles.css` spusť `npm run build:css` jen kvůli lokálním testům — `styles.min.css`
+  se **necommituje** (regeneruje bot po merge, blok L ho resetuje).
 - Rozsah: 1 200–2 000 slov; u INDICATOR-ADD min. 1 500 slov s mezinárodním srovnáním
   (CZ vs DE/AT/PL/SK + OECD/EU).
 - **Žádné redakční bannery** (`article-review-banner`, inline „Status:") — hlídá
@@ -440,22 +470,27 @@ Použij existující články jako vzor (`article-page` layout, `docs/workflows.
 
 Inventář: `.av-counter-grid` (max 4 KPI), `.av-counter` (`data-value` jen číslo;
 datum/range/„~"/„50+" → `data-prefix`/`data-suffix` nebo bez `data-value`),
-`.av-bar-compare` (ČR vs benchmark), `.av-data-table`, `.av-flow`, `.av-timeline`,
-`.av-aside` (max 1 na sekci), `.article-callout-caveat`, `.av-figure-wide`. Pravidla:
-žádný vizuál nepřinese nové číslo; každý `<figcaption>` = název + zdroj + datum/vlna;
-sémantické třídy `-good/-warn/-bad/-neutral`; density 3–6 prvků na článek.
+`.av-bar-compare` (ČR vs benchmark), `.av-data-table` (sortable preferred), `.av-flow`
+(kauzální řetězec, legislativní cesta), `.av-timeline` (milníky), `.av-aside` (max 1 na
+sekci; overflow do dalšího h3 řeší `.av-aside-clear`), `.article-callout-caveat` (limity
+dat), `.av-figure-wide` (hero). Pravidla: žádný vizuál nepřinese nové číslo; každý
+`<figcaption>` = název + zdroj + datum/vlna; sémantické třídy `-good/-warn/-bad/-neutral`
+podle směru; density 3–6 prvků na článek (hero counter + 1 aside + 1 flow/timeline +
+1 bar-compare nebo data-table).
 
 ### 8.5 `data/articles.json` a publikační fronta
 
-Nový článek jde **na konec fronty** — nikdy ne stejný den. `next_slot` = max
-`scheduled_for` mezi `published: false` + 1 den (jinak zítřek):
+Nový článek jde **na konec fronty** — nikdy ne stejný den. `next_slot` = den po
+`max(nejzazší scheduled_for mezi published: false, dnešek)` — tj. vždy nejdřív zítřek,
+i když fronta obsahuje jen prošlá data (spouštěj z `05_M1_Starter/`):
 
 ```bash
 python3 -c "
 import json, datetime
-d = json.load(open('05_M1_Starter/data/articles.json'))
+d = json.load(open('data/articles.json'))
 s = [a['scheduled_for'] for a in d['articles'] if a.get('published') is False and a.get('scheduled_for')]
-last = max(datetime.date.fromisoformat(x) for x in s) if s else datetime.date.today()
+today = datetime.date.today()
+last = max([datetime.date.fromisoformat(x) for x in s] + [today])
 print((last + datetime.timedelta(days=1)).isoformat())
 "
 ```
@@ -464,14 +499,17 @@ Záznam (na začátek pole; `number` **nepřiděluj** — dává ho publikace):
 
 ```json
 { "id": "{slug}", "slug": "clanek-{slug}.html", "tag": "{label z data/tags.json}",
-  "rubric": "{id z data/rubrics.json}", "kind": "article|analysis|explainer",
+  "rubric": "{id z data/rubrics.json}", "kind": "article|analysis|explainer|manifest",
   "date": "{next_slot}", "published": false, "scheduled_for": "{next_slot}",
+  "audit-status": "draft",
   "title": "…", "perex": "…", "linked_indicators": ["…"], "linked_prevention_themes": [],
   "topics": ["…"] }
 ```
 
 Kontrakt (hlídá `validate:articles`): `tag` = přesný label ze slovníku (chybí-li, přidej
-do `tags.json`); `rubric` z `rubrics.json`; `kind` z enumu; **≥ 1 `linked_indicators`**;
+do `tags.json`; historické varianty řeší `aliases` + `node scripts/normalize-article-metadata.js`);
+`rubric` z `rubrics.json`; `kind` z enumu; `audit-status: draft` (publikace povýší na
+`review-pending`); **≥ 1 `linked_indicators`**;
 zvaž sérii (`data/series.json` → `parts`); **perex = meta description = JSON-LD
 description** (`tests/articles-perex-sync.test.js`). Volitelné `topical_until` u témat
 vázaných na termín. Datum v HTML (`published_time`, `.article-meta-date` slovy) =
@@ -489,7 +527,8 @@ Uprav jen doložené pasáže (nová vlna → nová čísla, novela → nový st
 Priority: článek dotčený aktuální legislativou/kauzou → riziko nepřesnosti (konkrétní
 čísla → regionální rozdíly → legislativa → manifest) → nejstarší `audit.last_reviewed`
 (> 30 dní). Vše auditováno < 30 dní a nic zastaralé → blok E končí bez změny („all
-articles up-to-date"). Manifest: hodnotové soudy se neauditují, faktická tvrzení ano.
+articles up-to-date"). Manifest a politicky laděné texty: hodnotové soudy se neauditují,
+faktická tvrzení ano; jasně odděluj „toto je názor autora" od „toto je doložený fakt".
 
 Commit: `content(clanky): nový článek {slug}` / `content(clanky): revize {slug} — {co}`
 / `chore(audit): {slug} — verified | fixed | flagged`.
@@ -508,7 +547,7 @@ a `indicators/*.json` — **neopakuj, co už dashboard má** (kontroluj `id`, `d
 
 Zdroje: ÚZIS/NZIP (`nzip.cz/data` — NZIS, OIS, NRPZS, NRH, NRMD, NRKI, NOR, Registr
 hospitalizovaných, Registr rodiček, Registr lékařů; kvalitativní indikátory, dohodovací
-řízení), MZ ČR (open data, Věstníky, síťové obory, plány péče), ČSÚ (demografie, příčiny
+řízení), MZ ČR (open data `mzd.gov.cz/dokumenty`, Věstníky, síťové obory, plány péče), ČSÚ (demografie, příčiny
 úmrtí), SÚKL (spotřeba léčiv, výpadky, ATC), ČLS JEP (registry, guideliny — proxy
 kvality), SZÚ (EHIS, EHES, NAUTA, surveillance, prostředí), ÚZIS NRC (indikátory kvality
 nemocnic), NÚKIB (incidenty, NIS2), AZZS (krajské agregáty výjezdů), neziskovky se
@@ -517,8 +556,8 @@ Liga proti rakovině).
 
 Ke každému kandidátovi: název a co měří · přímá URL datasetu (ne homepage) · formát
 (CSV/JSON/XLSX/JSON-stat/SDMX/web tabulka) · frekvence · granularita (CZ/kraj/okres/
-poskytovatel/věk/pohlaví) · mezinárodní benchmark (OECD, Eurostat `hlth_*`, ECDC, WHO,
-EU-SILC, FRA, ENISA) · kontrola duplicity. **Vyluč**: bez stabilního zdroje (jednorázová
+poskytovatel/věk/pohlaví) · mezinárodní benchmark (OECD Health Statistics, Eurostat
+`hlth_*`, ECDC, WHO, EU-SILC, FRA EU surveys, ENISA, OECD Going Digital) · kontrola duplicity. **Vyluč**: bez stabilního zdroje (jednorázová
 studie — leda jako `monitoring`), jen mikrodata, neveřejné / paywall.
 
 ### 9.2 Výběr (scoring 0–3 za kritérium)
@@ -528,7 +567,9 @@ studie — leda jako `monitoring`), jen mikrodata, neveřejné / paywall.
 2. politická páka (úhradová vyhláška, legislativa, kapitační indikátor, dotační program,
    kampaň) · 3. mezinárodní benchmark (OECD/EU nebo ≥ 2 sousedé DE/AT/PL/SK) ·
 4. nová informace (neopakuje dashboard) · 5. kvalita dat (metodika, řada ≥ 3 body,
-   transparentní revize). Remíza → oblast **Procesy**. Matice jde do těla PR.
+   transparentní revize). Remíza → oblast **Procesy**. Do těla PR (sekce „Indikátor") jde
+   matice kandidátů, důvod výběru vítěze, klíčové hodnoty (CZ, OECD, EU, trend), odkazy na
+   primární zdroj + benchmark a test plan.
 
 ### 9.3 Doručení
 
@@ -568,7 +609,9 @@ Commit: `feat(indikator): {name} z {zdroj}`.
 Jen mechanické, nízkorizikové úpravy — **žádná změna čísla, tvrzení ani datace**:
 
 - `missing-cover`: `node ingest/scripts/generate-article-cover.js <slug>` +
-  `node ingest/scripts/inject-article-covers.js <slug>` (kompas přidá generátor sám).
+  `node ingest/scripts/inject-article-covers.js <slug>` (kompas přidá generátor sám;
+  publikace dává cover automaticky přes `scripts/publish-scheduled.js`, takže u
+  publikovaného článku je to výjimka — dořeš ji).
 - rozbité interní odkazy (`href="clanek-*.html"` na neexistující soubor) → správný slug
   nebo odstranit; chybějící `alt`, prázdné `aria-label`, zjevné překlepy v HTML; rozbitý
   `figcaption`/zdroj u AV figury.
@@ -587,17 +630,19 @@ s `date-passed`, `check-sources`, `check-literature`, `claims-drift`, `topical-e
   skutečně nastala.
 - **Odkazy na studie** (`check-literature`) neověřuj HTTP 200, ale přes `PubMed`
   (§ 2.1): shoda citace, DOI, typ publikace; retrakce/erratum = posun nastal → přepsat
-  s výhradou nebo odstranit, PMID + datum do `audit:`. Tvrzení o jediné studii →
+  s výhradou nebo odstranit, PMID + datum do `audit:`; nesoulad citace (autor/rok/časopis
+  nesedí) = bod do „K rozhodnutí". Tvrzení o jediné studii →
   `Consensus`; opak → nepřepisuj, bod do „K rozhodnutí" (issue) s DOI přehledů; souhlas
   → do `audit:` „Consensus {datum}: v souladu, přehled DOI…".
 - **Posun nastal + primární zdroj** → aktualizuj (budoucí čas → aktuální stav, výsledek,
   datum vyhlášení, ELI), `<figcaption>`/zdroje, `review-pending`, `audit:` `last_reviewed`
   + `notes`; `published` neměň; perex ↔ description; checklist K na změněné pasáže.
 - **Nejisté** → obsah beze změny, bod do „K rozhodnutí" (issue jen u publikovaného
-  článku s klíčovým tvrzením).
+  článku s klíčovým tvrzením); volitelně do `audit:` poznámka „sken: ke kontrole {datum}".
 - **Mimo články**: z reportové sekce „Mimo články" (metodické karty, `drafts/`) vezmi
-  2–3 soubory, zkontroluj URL (studie přes PubMed), mrtvý odkaz oprav, po kontrole zapiš
-  `{"<cesta>": "RRRR-MM-DD"}` do `data/link-check-log.json` → `checks`.
+  2–3 soubory, zkontroluj URL (studie přes PubMed), mrtvý odkaz oprav (u draftu oprav
+  draft, ať se chyba nepublikuje), po kontrole zapiš `{"<cesta>": "RRRR-MM-DD"}` do
+  `data/link-check-log.json` → `checks` — skener soubor pak 14 dní vynechává.
 - **Grafika** (jen když zbývá kapacita): článek s doloženými čísly bez AV figury → doplň
   z design systému (pravidla 8.4).
 
@@ -626,12 +671,15 @@ Postup: (1) ověř termín z oficiálního zdroje (WHO/WABA/organizace) → `obs
 po–ne), `theme`; (2) copy: `kicker`, `title`, `lead`, `popup { headline, body, cta }`,
 `microsite.sections[]` (`h`, `kind` ∈ articles|indicators|prevention|tools, `intro`),
 `context { why, affects[], cz }` (**povinné**; `cz` na datech kontraktu), volitelně
-`origin`, `celebrate[]`; (3) propoj: `linked_articles[]` (**aspoň jeden publikovaný**),
-`linked_indicators[]`, `linked_prevention_themes[]`, `linked_tools[]`; (4) ulož jako
+`origin`, `celebrate[]`; (3) propoj: `linked_articles[]`, `linked_indicators[]`,
+`linked_prevention_themes[]`, `linked_tools[]` — microsite nesmí být prázdná: **aspoň
+jeden publikovaný článek NEBO aspoň jeden indikátor** (chybí-li článek, opři se
+o indikátory, nebo článek připrav blokem E jako draft); (4) ulož jako
 `status: "draft"`; (5) `npm run validate:awareness-weeks` + `tests/awareness-weeks.test.js`
 (pozor na escaping `„…\"`). Kritéria `assessReadiness()`: existující cíle, vyplněný
 kontext a popup, microsite neprázdná. Chybí-li vhodný obsah, den přeskoč a poznamenej
-to v PR.
+to v PR. Archivace nic nemaže — archivovaný týden zůstává na `tyden.html?id=<id>`
+a v sitemapě jako stálý rozcestník.
 
 Commit: `content(tydny): draft {id} — {observance}`.
 
@@ -665,15 +713,39 @@ evidence `data/newsletter-log.json`. Rutina ho **neduplikuje** — v pátek jen 
    a v Brevu (`mcp__Brevo__email_campaign_management_get_email_campaign`) je kampaň ve
    stavu naplánováno, `recipients.lists = [2]`, `scheduledAt` sedí → nic nedělej, jen
    řádek do PR.
-2. Záznam chybí nebo kampaň neexistuje (workflow selhal) → **fallback runbook** jako kód
-   `node scripts/newsletter-run.js` (nejdřív `--dry-run`, zkontroluj výběr a HTML), pak
-   ostrý běh se `scheduledAt` = dnes 11:00 (aktuální offset Europe/Prague). Nikdy
-   neposílej hned. Log commitni v tomto PR (`content(newsletter): vydání RRRR-MM-DD`).
-   Pravidla obsahu: 3–4 dosud neposlané články (hero první, max 1 „Z archivu"), 1 indikátor
-   ve Florencině úvodu (120–180 slov, čísla se zdrojem a rokem, žádné vykřičníky ani AI
-   klišé), absolutní odkazy `skorezdravotnictvi.cz`, `{{ unsubscribe }}` beze změny,
-   blok `promo` jen s kickerem „mimo redakci"; méně než 2 nové články → vydání přeskoč.
-3. Chyba Breva (IP autorizace, limit 300/den) → neopakuj naslepo, přesnou chybu do PR.
+2. Záznam chybí nebo kampaň neexistuje (workflow selhal) → **fallback A**: spusť znovu
+   workflow `newsletter-weekly.yml` přes `mcp__github__actions_run_trigger` s inputem
+   `friday` = dnešní datum (workflow má klíče v secrets a předá `--friday=`; bez data by
+   `nextFridayYmd()` skočil na příští pátek). Po doběhu ověř bod 1 znovu. Lokálně jen
+   `node scripts/newsletter-run.js --offline --dry-run --friday=$(date +%F)` na kontrolu
+   výběru — rutina API klíče nemá, ostrý běh skriptu v session nespouštěj.
+3. Nejde-li workflow spustit → **fallback B, runbook přes MCP `Brevo`**: kandidáti =
+   publikované, viditelné články, jejichž slug není v žádné kampani logu; vyber 3–4
+   (nejnovější; max 1 „Z archivu" starší ~60 dní a nadčasový; první = hero); 1 indikátor
+   (čerstvý / zajímavý signál / ladí s hero; ne `featured_indicator` z posledních ~4
+   kampaní); méně než 2 nové články a žádný archivní → vydání přeskoč. Florencin úvod
+   120–180 slov, 2–4 odstavce (pozdrav a čím týden žije · hlavní článek s jedním číslem ·
+   indikátor lidskou řečí s benchmarkem a rokem · rozloučení), první osoba, bez
+   vykřičníků a AI klišé, čísla se zdrojem a rokem; anotace 1–3 věty vlastními slovy;
+   nová částka Věstníku MZ od minulého vydání → jedna věta + odkaz `/vestniky-mz`, jinak
+   sekci vynech; blok `promo` jen s kickerem „mimo redakci", ne v hlase Florence.
+   Jazykový checklist: české uvozovky „takto", pomlčka –, desetinná čárka a mezera
+   v tisících, % s mezerou, pevné mezery u jednotek, vykání, žádné anglicismy, subject
+   ≤ 65 znaků s hlavním sdělením v první polovině, preheader neopakuje subject. Spec JSON
+   → `node scripts/newsletter-build.js spec.json > newsletter.html` → vizuální kontrola
+   (headless screenshot, každý odkaz `curl -sIL` → 200, absolutní `skorezdravotnictvi.cz`,
+   `{{ unsubscribe }}` beze změny) → kampaň `mcp__Brevo__email_campaign_management_create_email_campaign`:
+   `name: HSPA newsletter — RRRR-MM-DD (pátek)`, `sender {"name":"HSPA Monitor · Skóre
+   zdravotnictví","email":"josef@josefpavlovic.cz"}`, `replyTo` tentýž, `recipients
+   {"listIds":[2]}`, subject + previewText ze specu, `scheduledAt` = dnes `11:00`
+   s aktuálním offsetem Europe/Prague, bez `tag` (Free plán) → zpětný GET: naplánováno,
+   `scheduledAt` sedí, `recipients.lists = [2]`, HTML obsahuje všechny články. Záznam do
+   `data/newsletter-log.json` → `campaigns[]` (`brevo_campaign_id, name, subject,
+   scheduled_for, articles[], featured_indicator`) commitni **hned po naplánování**
+   (duplicita je horší než vynechání — nejistota = ber článek jako už poslaný).
+4. Je-li už po 10:00 místního času, vydání přeskoč a zapiš to do PR (okno na lidskou
+   kontrolu by nezbylo). Nikdy neposílej hned.
+5. Chyba Breva (IP autorizace, limit 300/den) → neopakuj naslepo, přesnou chybu do PR.
 
 ---
 
@@ -745,12 +817,16 @@ git status --short                          # žádné generované artefakty, ž
 
 ### Verifikace
 - validate:all ✅ · npm test ✅ (N testů) · konektory: PubMed ✅ Consensus ✅ hlidac_statu ✅ Buffer ✅ Brevo —
+- Literatura: N citací ověřeno v PubMed (PMID/DOI), N tvrzení prošlo Consensus kontrolou (souhlas N / rozpor N / nejasné N), N neověřeno pro chybějící konektor
 
 <details><summary>Discovery</summary>
 … (šablona 6.3)
 </details>
 <details><summary>Routing a datový rámec</summary>
 …
+</details>
+<details><summary>Indikátor (jen INDICATOR-ADD)</summary>
+matice kandidátů (0–3 × 5 kritérií) · důvod výběru · klíčové hodnoty CZ / OECD / EU / trend · odkazy: primární dataset + benchmark · test plan (validate:data, audit-patient-stories, npm test)
 </details>
 <details><summary>Audit K</summary>
 {slug}: A ✅ A2 ✅ B ✅ C ✅ D ✅ E ✅ F ✅ — nálezy: …
@@ -807,9 +883,11 @@ Jedna Routine v Claude Code on the web (zakládá vlastník; přesný postup v
 | **Repo / větev** | `veritasderman-rgb/hspa`, `main` (rutina si větev zakládá sama) |
 
 Dřívější Routines (`HSPA - clánky`, `HSPA - indikatory`, `Social HSPA`, `Kontrola HSPA`,
-`HSPA Newsletter`) se **vypnou nebo smažou** — jejich prompt soubory už v repu nejsou.
-GitHub Actions crony (`publish-articles`, `refresh`, `nightly-scan` kvartálně,
-`awareness-weekly`, `newsletter-weekly`, `regenerate-artifacts`, `ga4-stats`) zůstávají —
+`HSPA Newsletter`) se **vypnou nebo smažou** — jejich prompt soubory byly z repa
+odstraněny (2026-09-13), tento soubor je jediný zdroj pravdy. GitHub Actions crony
+(`publish-articles`, `refresh`, `nightly-scan` kvartálně, `awareness-weekly`,
+`newsletter-weekly`, `social-generate` + `social-publish` (Notion pipeline, plní tutéž
+frontu Bufferu — blok B s tím počítá), `regenerate-artifacts`, `ga4-stats`) zůstávají —
 rutina na ně navazuje, nenahrazuje je.
 
 ## Cíl
