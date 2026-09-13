@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Automatický týdenní newsletter (PROMPT_NEWSLETTER_ROUTINE.md jako kód).
+// Automatický týdenní newsletter (pravidla: PROMPT_ROUTINE.md, blok J).
 // Spouští GitHub Actions každý čtvrtek (.github/workflows/newsletter-weekly.yml):
 //
 //   1. vybere 3–4 publikované články, které ještě nebyly v žádném vydání

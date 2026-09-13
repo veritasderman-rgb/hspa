@@ -1,6 +1,6 @@
 # Manuál: jak psát příspěvky na sociální sítě (HSPA Monitor)
 
-> Pro lidi i pro agenta v [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](../05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md).
+> Pro lidi i pro agenta v [`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) (blok B — fronta Bufferu).
 > Cíl: **věcně a doloženě, ale tak, aby to zaujalo a šířilo se.** Data jsou náš
 > hák — neprodáváme dojmy, prodáváme překvapivě konkrétní čísla.
 
@@ -74,8 +74,8 @@ Hák funguje napříč sítěmi — měň jen délku a CTA, ne sdělení.
 
 ### Vertikální Story / Reels (9:16)
 
-Denní „svislý" slot na FB i IG (viz [`PROMPT_SOCIAL_ROUTINE.md`](../05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md)
-Fáze 3b). Tady **hlavní práci dělá grafika** — celoobrazovkové číslo a claim
+Denní „svislý" slot na FB i IG (viz [`PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md)
+blok B, krok 4). Tady **hlavní práci dělá grafika** — celoobrazovkové číslo a claim
 z karty `assets/social/ig-story/<slug>.png`. Text proto drž na minimu:
 
 - **Caption = 1 věta háku**, ne opis grafiky. Grafika říká „17 %", caption

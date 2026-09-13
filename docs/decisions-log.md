@@ -6,6 +6,20 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-09-13 — Jedna rutina agenta (`PROMPT_ROUTINE.md`) místo šesti
+
+- **PR**: `claude/emergency-services-map-cz-1errdv` (konsolidace rutin)
+- **Co**: Sloučeny prompt soubory `PROMPT_DAILY_ROUTINE.md`, `05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`, `PROMPT_SOCIAL_ROUTINE.md`, `PROMPT_NEWSLETTER_ROUTINE.md`, `PROMPT_AWARENESS_ROUTINE.md` a prompt Routine „HSPA - indikatory" (žil jen v UI) do **jediného** `PROMPT_ROUTINE.md` v kořeni repa. Jedna Routine (`HSPA – rutina`, cron `0 1 * * *` UTC) projde bloky A–L s kalendářem uvnitř souboru (indikátor pondělí, evidence-audit neděle, newsletter kontrola pátek, revize korpusu jen 2.–8. den čtvrtletí, Týdny zdraví 42 dní dopředu). Staré soubory smazány, odkazy přesměrovány.
+- **Proč**: Šest paralelních běhů generovalo šum — až tři PR za noc, denní issues, a hlavně **272 zacommitovaných souborů** `discovery/*.md` (kořen + `05_M1_Starter/`) s discovery reporty, routingem, datovými rámci a auditními protokoly, které nikdo nečetl. Redakce chtěla ráno jednu věc ke schválení.
+- **Důsledek**:
+  - **NEVRACET** samostatné rutiny ani per-run soubory. Report běhu je **tělo PR** (`<details>` sekce); pracovní soubory jen v gitignored `reports/`. Adresáře `discovery/` jsou zmrazený archiv a jsou gitignored (nové soubory se nepřidají ani omylem).
+  - Šum má tvrdé stropy (§ 0 souboru): 1 větev `claude/rutina-RRRR-MM-DD`, ≤ 1 PR, ≤ 1 issue (existující `rutina …` issue mladší 7 dní se doplňuje komentářem), žádné komentáře na GitHubu.
+  - Nový indikátor **není denní** (dřív rutina „HSPA - indikatory" dodávala PR s indikátorem + článkem každý den): pondělí nebo reaktivně, když discovery najde nový dataset. Změna kadence = jeden řádek v § 3.
+  - Newsletter zůstává na GitHub Actions `newsletter-weekly.yml`; rutina v pátek jen ověřuje a má fallback. Kvartální `nightly-scan.yml` zůstává jako nezávislý reportér.
+  - Konvence commit zpráv rutiny: `content(clanky)`, `feat(indikator)`, `data(legislativa|barometr|evidence-audit)`, `fix(clanky)`, `chore(audit)`.
+
+---
+
 ## 2026-07-06 — Legacy OECD fetcher (`oecd.js`) retirován, konsolidace na `oecd_sdmx2.js`
 
 - **PR**: U4 (`claude/web-audit-roadmap-kmnl5r`)

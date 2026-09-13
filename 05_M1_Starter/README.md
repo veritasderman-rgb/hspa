@@ -206,7 +206,7 @@ v 06:00 UTC commitne aktualizovaná data → Vercel rebuild → uživatel vidí 
 - [`../docs/site-architecture.md`](../docs/site-architecture.md) — sitemap + per-page popis + CSS namespace průvodce + JS moduly map
 - [`../docs/visual-components.md`](../docs/visual-components.md) — AV designsystem + ostatní UI komponenty
 - [`../docs/data-model.md`](../docs/data-model.md) — schémata všech `data/*.json`
-- [`../PROMPT_DAILY_ROUTINE.md`](../PROMPT_DAILY_ROUTINE.md) — denní AI agent rutina
+- [`../PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md) — rutina AI agenta (jeden běh denně: discovery → článek, legislativa, údržba, indikátor, Buffer, newsletter, Týdny zdraví, evidence-audit)
 - [`../BACKLOG.md`](../BACKLOG.md), [`../STATUS_AUDIT_2026-05-18.md`](../STATUS_AUDIT_2026-05-18.md) — backlog a stav
 
 ---

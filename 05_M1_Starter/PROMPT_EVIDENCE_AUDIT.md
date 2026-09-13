@@ -29,7 +29,7 @@ Výsledek není přepis článků. Je to **registr evidence** + minimální, aud
 > neopravuje potichu — vede k flagu a issue, o textu rozhoduje redakce. Nikdy nepřepínáš
 > `published: true` ani `audit-status: verified`.
 
-Platí protokol **„Recenzovaná literatura — PubMed + Consensus“** z `PROMPT_DAILY_ROUTINE.md`
+Platí protokol **„PubMed + Consensus“** z `PROMPT_ROUTINE.md` (§ 2.1)
 (role nástrojů, citační pravidla, železné pravidlo abstraktu) a konvence
 „Recenzovaná literatura (studie)“ v `docs/conventions.md`. Zkráceně:
 
@@ -324,8 +324,10 @@ Opus adjudikace → sériový zápis → kontrola) a vrátí souhrn; hlavní ses
 FÁZI 5 (report, commit, push, PR, issues). Přerušený běh se obnoví
 `resumeFromRunId` — hotové agenty se neplatí znovu.
 
-**B. Routine (bez zásahu redakce).** Prompt Routine (kadence např. `0 2 * * 1,4`,
-konektory PubMed + Consensus + GitHub):
+**B. Routine (bez zásahu redakce).** Pravidelná malá dávka (6 článků + 4 indikátory)
+běží každou neděli jako blok I jediné rutiny agenta (`PROMPT_ROUTINE.md`) — samostatná
+Routine pro evidence-audit se nezakládá. Kdyby přesto bylo potřeba spustit dávku
+jako vlastní Routine, prompt zní:
 
 > Přečti `05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md` a proveď jeden běh evidence-auditu:
 > FÁZE 0 (větev, fronta), pak spusť workflow `evidence-audit` s dnešním datem

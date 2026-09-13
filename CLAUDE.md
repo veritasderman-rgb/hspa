@@ -24,7 +24,7 @@ Inspirováno belgickým modelem **Healthy Belgium**.
 | Sitemap, per-page mapa JS modulů | [`docs/site-architecture.md`](docs/site-architecture.md) |
 | Plán Kvalita péče (PUK + INDIKO) | [`05_M1_Starter/PLAN-KVALITA-PECE.md`](05_M1_Starter/PLAN-KVALITA-PECE.md) |
 | Backlog, status auditu | [`BACKLOG.md`](BACKLOG.md), [`STATUS_AUDIT_*.md`](.) |
-| Denní rutina cronu | [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) |
+| Rutina agenta (jeden běh denně: discovery → článek, legislativa, údržba, indikátor, Buffer, newsletter, Týdny zdraví, evidence-audit) | [`PROMPT_ROUTINE.md`](PROMPT_ROUTINE.md) |
 | Ověřit články a indikátory proti studiím (PubMed/Consensus) | [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) |
 
 ---
@@ -446,7 +446,7 @@ připravené články (včetně nově přidaných) a vybere jeden podle pravidla
    před tímto datem; prázdné pole = může jít ven hned.
 
 **Co je „připravené" (politika fronty).** Fronta stojí na pravidle „co je
-připraveno, jde ven": běžný `draft` z denní/noční rutiny je obsahově hotový a
+připraveno, jde ven": běžný `draft` z rutiny je obsahově hotový a
 cron ho **smí automaticky publikovat**. Zadrží se jen články se skutečným
 problémem — `audit-status` `flagged` / `draft-flagged` / `needs-rewrite`,
 `_review_note` v `articles.json`, nebo **viditelný blokátor** v HTML (`(DRAFT)`
@@ -527,12 +527,8 @@ přesné číslo ve fallbacku neprojde, a zaokrouhlení nesmí utéct od skuteč
 - [`05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md`](05_M1_Starter/PLAN-VERIFIKACE-INDIKATORU.md) — plán přepnutí indikátorů z „Ilustrativní" na „Ověřeno" (živé zdroje po dávkách); **samostatný vstupní bod pro tu práci**
 - [`05_M1_Starter/PLAN-DATA-NZIP-LIVE.md`](05_M1_Starter/PLAN-DATA-NZIP-LIVE.md) — NZIP/ÚZIS větev verifikace: živé indikátory z „Datového zpravodajství" + doplnění datasetů ke článkům, s **povinným ověřovacím protokolem dat** (kojení-proof); **samostatný vstupní bod pro tu práci**
 - [`STATUS_AUDIT_2026-05-18.md`](STATUS_AUDIT_2026-05-18.md) — historický audit stavu
-- [`PROMPT_DAILY_ROUTINE.md`](PROMPT_DAILY_ROUTINE.md) — denní rutina pro AI agenta (discovery → 1 článek); počítá s MCP konektory `hlidac_statu`, `PubMed` (ověření citací, nové domácí studie) a `Consensus` (vyhledávač evidence, nástroj — ne zdroj), viz protokol „Recenzovaná literatura“
-- [`05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`](05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md) — noční údržbová rutina (sweep korpusu: aktualizace, grafika, kontrola zdrojů); skener `npm run scan:nightly`; odkazy na studie ověřuje přes MCP `PubMed` (citace, retrakce) a tvrzení z jedné studie přes `Consensus` (flag, ne přepis) — konektory nastavuje redakce v Routines
+- [`PROMPT_ROUTINE.md`](PROMPT_ROUTINE.md) — **jediná rutina agenta** (jeden běh denně, jeden soubor, nejvýš jeden PR a jedna issue za běh, report = tělo PR, žádné soubory za běh v repu): discovery → 1 článek (routing vč. evergreen backlogu a kadenční pojistky), legislativa + Barometr (VeKLEP, `plan_items`, Ověřovna), údržba korpusu (auto-fix denně, obsahové revize jen v kvartálním okně 2.–8. den čtvrtletí), nový indikátor (pondělí / reaktivně), fronta Bufferu (10 postů/kanál + Story), newsletter (pátek kontrola, fallback), Týdny zdraví (draft 42 dní dopředu), evidence-audit (neděle 6 + 4), nezávislý audit A–F. Konektory `PubMed`, `Consensus`, `hlidac_statu`, `Buffer`, `Brevo`; nastavení Routine viz `docs/scheduled-sessions.md`. Nahradila rutiny denní, noční, indikátorovou, sociální, newsletterovou a Týdnů zdraví (2026-09-13)
 - [`05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md`](05_M1_Starter/PROMPT_EVIDENCE_AUDIT.md) — evidence-audit: ověření všech článků a indikátorů proti recenzované literatuře (PubMed ověřuje, Consensus hledá); orchestrace `.claude/workflows/evidence-audit.js` (Sonnet rešerše → Opus adjudikace → sériový zápis), fronta `npm run evidence:queue`, registr `data/evidence-audit.json` (`validate:evidence`); po dávkách 12 + 8, obnovitelné
-- [`05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md) — sociální rutina (1×/den): doplňuje frontu Bufferu na 10 postů/kanál podle aktuálnosti; Buffer = zdroj pravdy
-- [`05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md`](05_M1_Starter/PROMPT_AWARENESS_ROUTINE.md) — týdenní rutina „Týdnů zdraví": agent připraví draft dalšího mezinárodního dne (`data/awareness-weeks.json`), cron `awareness-weekly.yml` (`scripts/awareness-rotate.js`) ho pak deterministicky přepne draft→ready a archivuje doběhnuté; microsite `tyden.html` + popup se aktivují podle data
-- [`05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md`](05_M1_Starter/PROMPT_NEWSLETTER_ROUTINE.md) — týdenní newsletter (čtvrtek → pátek 11:00 přes Brevo): Florencin úvod + 3–4 neposlané články; evidence `data/newsletter-log.json`, builder `scripts/newsletter-build.js`
 - [`05_M1_Starter/PROMPT_STRET_ZAJMU_ROUTINE.md`](05_M1_Starter/PROMPT_STRET_ZAJMU_ROUTINE.md) — rutina „Střet zájmů v poradních orgánech MZ“ (`data/ppo-coi.json`): pětistupňový žebřík vazba → relevantní vazba → potenciální střet → doložený projev → porušení pravidla; ověření identity proti Hlídači státu, globální i per-orgán statistiky. **Střet zájmů není překážka — má se přiznat.** Čeká na schválení vlastníkem
 - [`docs/social-copywriting-manual.md`](docs/social-copywriting-manual.md) — jak psát příspěvky (hlavní věc do 1. věty, věcně ale poutavě, délky per síť, checklist)
 - [`docs/social-buffer-prvni-prispevky.md`](docs/social-buffer-prvni-prispevky.md) — hotové launch příspěvky (etalon tónu a struktury)

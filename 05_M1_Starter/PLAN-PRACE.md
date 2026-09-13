@@ -188,10 +188,10 @@ veřejná, citace verbatim, baseline zamrazená k datu slibu.
 
 #### BAR10 · Rutiny — živá údržba (sonnet) 🟠
 
-> **Prompt:** V repu hspa: rozšiř PROMPT_DAILY_ROUTINE.md o discovery výroků
+> **Prompt:** V repu hspa: rozšiř rutinu (dnes `PROMPT_ROUTINE.md`, blok C) o discovery výroků
 > pro Ověřovnu (tiskovky MZ, vyjádření k zdravotnictví — kandidáty jen
 > navrhnout jako draft záznam, verdikt vyžaduje plný postup metodiky) a
-> PROMPT_NIGHTLY_ROUTINE.md o přepočet stavů závazků (nová data indikátorů →
+> její blok D o přepočet stavů závazků (nová data indikátorů →
 > změna stavu dle metodiky → aktualizace stav_duvod + historie[]; posun
 > legislativa_ids fází). Připomeň: změna stavu závazku je redakční událost —
 > kandidát na článek/social post.

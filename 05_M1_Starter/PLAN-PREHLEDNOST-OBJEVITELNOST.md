@@ -194,7 +194,7 @@ indikátorů) by dal řádově přesnější příbuznost — a už se načítaj
   `rubric` ∈ 8 · `kind` ∈ výčet · `tag` ∈ `data/tags.json` (max 3) ·
   ≥1 `linked_indicators` (nebo explicitní `linked_indicators: []`
   s důvodem) · volitelně `series`/`theme`.
-- **Rutiny aktualizovat**: PROMPT_DAILY_ROUTINE a NIGHTLY doplnit o krok
+- **Rutinu aktualizovat**: PROMPT_ROUTINE.md (bloky E a G) doplnit o krok
   „zařaď do kolekce, ověř tagy proti slovníku, zvaž vazbu na existující
   sérii" — souvislosti vznikají při psaní, ne zpětně.
 - **Nightly sweep**: report sirotčích tagů, článků bez `linked_indicators`,

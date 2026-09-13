@@ -844,8 +844,8 @@ pravidla (enumy, rozhodovací algoritmy stavů a verdiktů) definuje
 ```
 
 Baseline je zamrazená k datu slibu (musí odpovídat bodu `trend` řady
-indikátoru). Stavy přepočítává noční rutina (PROMPT_NIGHTLY_ROUTINE § 3.6),
-kandidáty výroků sbírá denní rutina. Opravy jen přes `meta.changelog[]`.
+indikátoru). Stavy přepočítává rutina (`PROMPT_ROUTINE.md`, blok D),
+kandidáty výroků sbírá její discovery (blok C). Opravy jen přes `meta.changelog[]`.
 
 ### Výhled 2027–2029 (`plan_vyhled_meta` + `horizont`)
 
