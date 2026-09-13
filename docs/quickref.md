@@ -182,5 +182,5 @@ Valid `category`: `money | classification | actors | process | inspiration`.
 - `node_modules/`
 - `*.lock`
 - `data/snapshot-*.json` — denní snapshoty historie
-- `discovery/` — daily routine outputs
+- `discovery/` (kořen i `05_M1_Starter/`) — zmrazený archiv výstupů bývalé denní rutiny; nové běhy tam nepíší (report běhu = tělo PR, viz `PROMPT_ROUTINE.md` § 0), adresář je gitignored
 - `tests/__snapshots__/` (pokud existuje)

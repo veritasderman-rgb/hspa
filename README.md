@@ -78,7 +78,7 @@ Plný popis viz [`05_M1_Starter/CLAUDE.md`](CLAUDE.md) (pro AI agenty i lidi).
 | `06_…`, `07_…`, `08_…` | Plán redesignu, plán prevence, politický program |
 | `docs/` | Vývojářská dokumentace (site-architecture, visual-components, data-model) |
 | `AUDIT_*.md`, `STATUS_*.md`, `VISUAL_INVENTORY_*.md` | Auditní záznamy a inventáře (k datu) |
-| `BACKLOG.md`, `planUXDesign.md`, `PROMPT_DAILY_ROUTINE.md` | Aktivní pracovní dokumenty |
+| `BACKLOG.md`, `planUXDesign.md`, `PROMPT_ROUTINE.md` | Aktivní pracovní dokumenty (rutina agenta = jeden soubor, jeden běh denně) |
 
 ## Hlavní zdroje dat
 

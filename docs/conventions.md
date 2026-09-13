@@ -137,8 +137,8 @@ V `<section class="article-sources">` minimálně:
 
 Studie se cituje **sama** — ne nástroj, kterým byla nalezena, ne tisková zpráva
 o ní. Ověření běží přes MCP konektory rutin (`PubMed`, `Consensus`), protokol je
-v `PROMPT_DAILY_ROUTINE.md` (FÁZE 1 „Recenzovaná literatura — PubMed + Consensus“,
-FÁZE 5 audit A2) a v noční rutině (FÁZE 3.1).
+v `PROMPT_ROUTINE.md` (§ 2.1 „Protokol PubMed + Consensus“, blok G revize
+korpusu, blok K audit A2).
 
 - **V textu**: *Autor et al.* (rok), *Časopis* + odkaz na `https://doi.org/…`
   (nebo `https://pubmed.ncbi.nlm.nih.gov/{PMID}/`), `target="_blank" rel="noopener"`.

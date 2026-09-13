@@ -1,6 +1,6 @@
 // Noční triážní skener webu HSPA Monitor.
 //
-// Deterministická, OFFLINE část noční rutiny (viz PROMPT_NIGHTLY_ROUTINE.md):
+// Deterministická, OFFLINE část rutiny (viz PROMPT_ROUTINE.md, bloky A a G):
 // levně projde všechny PUBLIKOVANÉ články a vyrobí tříděný worklist, podle
 // kterého pak agent (Claude Code) jedná. Skener sám NIC needituje a nechodí
 // na síť — jen čte a reportuje. Akce (oprava, kontrola odkazu, flag) je na
@@ -30,7 +30,7 @@
 //
 // Respektování auditu: článek s `audit.last_reviewed` mladším než
 // REVIEW_SKIP_DAYS (14 dní) se ve `check-sources` PŘESKOČÍ (sladěno s triážním
-// pravidlem v PROMPT_NIGHTLY_ROUTINE.md — „přeskoč články auditované < 14 dní").
+// pravidlem v PROMPT_ROUTINE.md — „přeskoč články auditované < 14 dní").
 // `date-passed` a `topical-expired` se NEpřeskakují (nové časové signály).
 //
 // Použití:
@@ -61,7 +61,7 @@ const STALE_MONTHS = 12;        // publikováno dávno → připomenout revizi
 const MAX_DATE_HITS = 6;        // strop zmínek dat na článek (proti šumu)
 const MAX_EXT_LINKS = 12;       // strop externích odkazů na článek
 const REVIEW_SKIP_DAYS = 14;    // článek auditovaný < 14 dní → přeskoč check-sources
-                                // (sladěno s triážním pravidlem PROMPT_NIGHTLY_ROUTINE.md;
+                                // (sladěno s triážním pravidlem PROMPT_ROUTINE.md, blok A;
                                 // date-passed/topical-expired se NEpřeskakují — to jsou
                                 // nové časové signály, které review nemohla znát)
 
@@ -76,8 +76,8 @@ const PRIORITY_LINK_HINTS = [
 // preprinty). Vyrábějí samostatný flag `check-literature`: takový odkaz se
 // neověřuje jako HTTP 200, ale přes MCP PubMed (shoda citace, DOI, retrakce /
 // erratum, typ publikace) a u tvrzení z jediné studie přes Consensus — viz
-// PROMPT_NIGHTLY_ROUTINE.md FÁZE 3.1. Bez tohoto flagu by články, které citují
-// jen studie, do nočního worklistu nikdy nespadly (PR #1166, review).
+// PROMPT_ROUTINE.md blok G 10.2. Bez tohoto flagu by články, které citují
+// jen studie, do worklistu nikdy nespadly (PR #1166, review).
 const LITERATURE_LINK_HINTS = [
   'doi.org', 'pubmed.ncbi.nlm.nih.gov', 'ncbi.nlm.nih.gov/pmc', 'pmc.ncbi.nlm.nih.gov',
   'europepmc.org', 'cochranelibrary.com', 'thelancet.com', 'nejm.org', 'bmj.com',
@@ -910,7 +910,7 @@ function buildReport(items, today) {
   }
 
   lines.push('---');
-  lines.push('_Skener nic needituje ani nechodí na síť. Akce dle `PROMPT_NIGHTLY_ROUTINE.md`._');
+  lines.push('_Skener nic needituje ani nechodí na síť. Akce dle `PROMPT_ROUTINE.md` (blok G)._');
   return lines.join('\n') + '\n';
 }
 

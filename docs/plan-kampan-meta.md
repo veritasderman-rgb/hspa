@@ -5,8 +5,8 @@
 >
 > **Status:** návrh k odsouhlasení. Nic není v Meta založeno.
 > Navazuje na [`social-copywriting-manual.md`](social-copywriting-manual.md)
-> (tón, háky, délky) a [`../05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md`](../05_M1_Starter/PROMPT_SOCIAL_ROUTINE.md)
-> (organická distribuce přes Buffer).
+> (tón, háky, délky) a [`../PROMPT_ROUTINE.md`](../PROMPT_ROUTINE.md)
+> (blok B — organická distribuce přes Buffer).
 
 ---
 

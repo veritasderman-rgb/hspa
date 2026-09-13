@@ -6,7 +6,7 @@
 // Použití:
 //   node scripts/newsletter-build.js spec.json > newsletter.html
 //
-// Spec (viz PROMPT_NEWSLETTER_ROUTINE.md):
+// Spec (viz PROMPT_ROUTINE.md, blok J):
 // {
 //   "subject": "…",                    // jen pro kontrolu, do HTML se nevkládá
 //   "previewText": "…",                // preheader (skrytý první řádek)

@@ -338,9 +338,11 @@ Soubory jako [`PLAN-KVALITA-PECE.md`](../05_M1_Starter/PLAN-KVALITA-PECE.md), [`
 
 ---
 
-## Daily routine (cron 06:00 UTC)
+## Rutina agenta a datový refresh
 
-Spouští `npm run ingest` → `npm run transform` → commit dat. Pokud něco selže, výstup je v `discovery/discovery-YYYY-MM-DD.md` + `discovery/routing-YYYY-MM-DD.md`. Lokálně pro debug:
+**Rutina agenta** (`PROMPT_ROUTINE.md` v kořeni repa) běží jednou denně jako jediná Routine: discovery → 1 článek, legislativa + barometr, údržba korpusu (auto-fix denně, revize kvartálně), indikátor (pondělí), Buffer, newsletter (pátek kontrola), Týdny zdraví, evidence-audit (neděle). Výstup je jedna větev `claude/rutina-RRRR-MM-DD` a nejvýš jeden PR; report běhu je tělo PR, žádné soubory v repu. Nastavení Routine: `docs/scheduled-sessions.md`.
+
+**Datový refresh** dělá GitHub Actions `refresh.yml` (kvartálně, 1. den čtvrtletí 06:00 UTC): `npm run ingest` → `npm run transform` → commit dat. Lokálně pro debug:
 
 ```bash
 npm run ingest

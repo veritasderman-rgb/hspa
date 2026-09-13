@@ -271,12 +271,14 @@ se liší, patří to do posouzení kontextu.
 
 ## 5. Kdo a kdy stavy přepočítává
 
-- **Noční rutina** (viz `05_M1_Starter/PROMPT_NIGHTLY_ROUTINE.md`) přepočítává
-  stavy závazků, kdykoli do `data/indicators.json` přibudou nová data nebo se
-  posune fáze v `data/legislativa.json`. Změna stavu = aktualizace
+- **Rutina** (viz `PROMPT_ROUTINE.md`, blok D) přepočítává stavy závazků:
+  legislativní větev každý běh (posun fáze v `data/legislativa.json`),
+  indikátorovou větev den po kvartálním refreshi nebo po nové vlně dat
+  v `data/indicators.json`. Změna stavu = aktualizace
   `stav`, `stav_duvod`, `stav_od` + záznam v `historie[]`.
-- **Denní rutina** (viz `PROMPT_DAILY_ROUTINE.md`) navrhuje kandidáty na nové
-  výroky do Ověřovny; verdikt smí být přidělen až po plném postupu podle § 4.
+- Discovery téže rutiny (blok C) navrhuje kandidáty na nové výroky do
+  Ověřovny; verdikt (max 1 za běh, blok D) smí být přidělen až po plném
+  postupu podle § 4.
 - Změna stavu závazku nebo verdiktu je **redakční událost** — kandidát na
   článek či příspěvek na sítích.
 

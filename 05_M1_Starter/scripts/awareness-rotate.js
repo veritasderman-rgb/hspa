@@ -13,7 +13,7 @@
 //      včas. Za jeden běh se aktivuje nejvýše jeden týden.
 //
 // Obsah jednotlivých týdnů (copy, kontext, odkazy) připravuje člověk/agent
-// předem jako `draft` (viz PROMPT_AWARENESS_ROUTINE.md). Tenhle skript je jen
+// předem jako `draft` (viz PROMPT_ROUTINE.md, blok H). Tenhle skript je jen
 // „přepínač" — nikdy nepíše text a nikdy neaktivuje nekompletní draft.
 //
 // Spouští se přes .github/workflows/awareness-weekly.yml (týdně).
