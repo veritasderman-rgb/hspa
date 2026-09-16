@@ -39,7 +39,9 @@ test('ppo: „vynechano" se do webu nedostane; každá skupina má povinná pole
   for (const s of ppo.skupiny) {
     assert.notEqual(s.stav, 'vynechano', `skupina ${s.id} má stav vynechano`);
     assert.ok(s.nazev, `skupina ${s.id} bez názvu`);
-    assert.ok(s.url?.startsWith('https://ppo.mzcr.cz/'), `skupina ${s.id}: podezřelé url ${s.url}`);
+    // Portál se v září 2026 přestěhoval z ppo.mzcr.cz/group/<id> na
+    // ppo.mzd.gov.cz/work-groups/<id> se zachovanými ID (ověřeno 17. 9. 2026).
+    assert.ok(s.url?.startsWith('https://ppo.mzd.gov.cz/work-groups/'), `skupina ${s.id}: podezřelé url ${s.url}`);
     assert.ok(STAV_LABELS[s.stav], `skupina ${s.id}: stav '${s.stav}' bez české popisky`);
     assert.ok(Number.isInteger(s.pocet_clenu) && s.pocet_clenu >= 0, `skupina ${s.id}: pocet_clenu`);
   }

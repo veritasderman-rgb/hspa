@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // PRŮZKUMNÝ běh k Portálu poradních orgánů, pracovních skupin a odborných
-// komisí MZd (ppo.mzcr.cz). NIC nezapisuje do datového kontraktu — jen zjistí,
+// komisí MZd (ppo.mzd.gov.cz, dříve ppo.mzcr.cz). NIC nezapisuje do datového kontraktu — jen zjistí,
 // co portál reálně obsahuje, aby šlo odhadnout, jestli má smysl stavět fetcher.
 //
-// Proč samostatný skript a workflow: ppo.mzcr.cz je z prostředí agenta
+// Proč samostatný skript a workflow: portál je z prostředí agenta
 // nedosažitelný (DNS resolvuje, spojení neprojde — issue #1003), zatímco
 // runner GitHub Actions na české vládní zdroje běžně dosáhne (refresh.yml
 // tahá živá data z ÚZIS, ČSÚ i SÚKL). Průzkum proto musí proběhnout v CI.
@@ -25,7 +25,11 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as cheerio from 'cheerio';
 
-const BASE = 'https://ppo.mzcr.cz';
+// Portál se v září 2026 přestěhoval na ppo.mzd.gov.cz a přečísloval cesty:
+// /workGroup/<id> → /work-groups/<id>. ID skupin migrace zachovala (ověřeno
+// 17. 9. 2026: 43 skupin ze sekčního výpisu sedí 1:1 s data/ppo.json).
+// Starý host ppo.mzcr.cz míří na tutéž IP (193.16.104.41, ext-41.uzis.cz).
+const BASE = 'https://ppo.mzd.gov.cz';
 const UA = 'ZdraveCesko-HSPA/1.0 (+https://skorezdravotnictvi.cz; pruzkumny-beh)';
 const DELAY_MS = 1200;          // slušnost k cizímu serveru
 const TIMEOUT_MS = 20_000;
@@ -75,7 +79,7 @@ export function analyse(html, url) {
   })).get();
 
   const docs = links.filter(l => /\.(pdf|docx?|xlsx?)(\?|$)/i.test(l.href));
-  const groupLinks = [...new Set(links.filter(l => /\/workGroup\/\d+/.test(l.href)).map(l => l.href))];
+  const groupLinks = [...new Set(links.filter(l => /\/work-groups\/\d+/.test(l.href)).map(l => l.href))];
 
   // Kandidáti na jména členů: krátké řádky s akademickým titulem.
   const nameCandidates = [];
@@ -133,14 +137,14 @@ async function main() {
 
   // 1) Existuje přehledová stránka se seznamem skupin?
   console.log('→ zkouším přehledovou stránku…');
-  for (const path of ['/', '/workGroups', '/workGroup', '/home']) {
+  for (const path of ['/', '/work-groups', '/home']) {
     const r = await get(BASE + path);
     console.log(`   ${String(r.status).padEnd(4)} ${BASE + path}${r.error ? '  ' + r.error : ''}`);
     if (r.ok && r.body) {
       const a = analyse(r.body, BASE + path);
       writeFileSync(join(out, `index${path.replace(/\W+/g, '_')}.html`), r.body);
       report.index = { path, ...a };
-      console.log(`      → ${a.group_links_count} odkazů na /workGroup/…`);
+      console.log(`      → ${a.group_links_count} odkazů na /work-groups/…`);
       if (a.group_links_count > 0) break;
     }
     await sleep(DELAY_MS);
@@ -150,14 +154,14 @@ async function main() {
   const sample = ids || DEFAULT_IDS;
   console.log(`\n→ detail ${sample.length} skupin…`);
   for (const id of sample) {
-    const url = `${BASE}/workGroup/${id}`;
+    const url = `${BASE}/work-groups/${id}`;
     const r = await get(url);
     if (!r.ok) {
       console.log(`   ${String(r.status).padEnd(4)} ${url}${r.error ? '  ' + r.error : ''}`);
       report.pages.push({ url, id, status: r.status, error: r.error || null });
     } else {
       const a = analyse(r.body, url);
-      writeFileSync(join(out, `workGroup-${id}.html`), r.body);
+      writeFileSync(join(out, `work-group-${id}.html`), r.body);
       report.pages.push({ id, status: r.status, ...a });
       console.log(`   200  #${id}  „${a.h1 || a.title}“`);
       console.log(`        tabulky ${a.tables} · dokumenty ${a.doc_count} · kandidáti na jména ${a.name_candidate_count} · data ${a.dates_found.length}`);
@@ -171,7 +175,7 @@ async function main() {
     console.log(`\n→ sken rozsahu ${scan.from}–${scan.to}…`);
     const found = [];
     for (let id = scan.from; id <= scan.to; id++) {
-      const r = await get(`${BASE}/workGroup/${id}`);
+      const r = await get(`${BASE}/work-groups/${id}`);
       if (r.ok && r.body && r.body.length > 500) found.push(id);
       if (id % 20 === 0) console.log(`   …${id} (zatím ${found.length})`);
       await sleep(400);

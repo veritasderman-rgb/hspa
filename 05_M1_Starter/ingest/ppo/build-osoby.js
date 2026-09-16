@@ -47,6 +47,10 @@ for (const o of osobyCsv) {
     pocet_clenstvi: memberships.length,
     pocet_predsednictvi: memberships.filter(m => m.role === 'Předseda').length,
     vliv_role_score: Math.round(vlivScore * 10) / 10,
+    // POZOR: nový portál (ppo.mzd.gov.cz, září 2026) má u skupin cestu /work-groups/<id>,
+    // ale vzor pro detail osoby se nepodařilo ověřit (portál blokuje IP našeho prostředí).
+    // Tahle URL zůstává na starém tvaru ZÁMĚRNĚ: do publikovaných dat se nedostává
+    // (out/osoby.json → data/ppo-osoby.json ji zahazuje), takže na webu nic nerozbíjí.
     url: `https://ppo.mzcr.cz/person/${pid}`,
   });
   if (affCat === 'nezarazeno' || prof === 'bez_titulu') {

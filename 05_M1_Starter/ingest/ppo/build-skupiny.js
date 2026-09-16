@@ -104,14 +104,17 @@ for (const g of data.groups) {
       : mesicuOdAktivity <= 12 ? 'aktivni'
       : mesicuOdAktivity <= 24 ? 'utlum' : 'spici',
     analyzovano,
-    url: `https://ppo.mzcr.cz/group/${g.id}`,
+    // Portál se v září 2026 přestěhoval z ppo.mzcr.cz na ppo.mzd.gov.cz a změnil cestu
+    // z /group/<id> na /work-groups/<id>. ID skupin migrace ZACHOVALA — ověřeno 17. 9. 2026
+    // porovnáním 43 skupin ze sekčního výpisu portálu proti data/ppo.json (43/43 shoda ID i názvu).
+    url: `https://ppo.mzd.gov.cz/work-groups/${g.id}`,
   });
 }
 
 skupiny.sort((a, b) => b.jednani_celkem - a.jednani_celkem);
 writeOut('skupiny.json', {
   version: '1.0',
-  zdroj: 'https://ppo.mzcr.cz',
+  zdroj: 'https://ppo.mzd.gov.cz',
   korpus_pouzit: Boolean(korpus),
   pocet: skupiny.length,
   skupiny,

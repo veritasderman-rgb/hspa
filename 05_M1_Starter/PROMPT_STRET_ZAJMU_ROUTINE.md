@@ -81,7 +81,7 @@ zní: **„pravidlo neexistuje"**, nikoli „pravidlo nebylo dodrženo".
 
 **Povolené zdroje:** Hlídač státu (veřejné profily, registr smluv, dotace,
 sponzoring), veřejný rejstřík (justice.cz), statuty a zápisy orgánů
-(ppo.mzcr.cz), Věstník MZ, weby institucí a odborných společností.
+(ppo.mzd.gov.cz), Věstník MZ, weby institucí a odborných společností.
 
 **Identita je nejrizikovější krok celé rutiny.** Shoda jména není důkaz.
 

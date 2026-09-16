@@ -381,7 +381,7 @@ function render(PPO, OS, s) {
     <p style="margin:0 0 10px;font-size:13.5px">${doky.length
       ? doky.map(([k, n]) => `${n}× ${escapeHtml(k)}`).join(' · ')
       : 'bez kategorizovaných dokumentů'}${(s.dokumenty_typy?.jine ? ` · ${s.dokumenty_typy.jine}× ostatní` : '')}</p>
-    <a class="ppo-panel-cta" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">Primární zdroj: ppo.mzcr.cz ↗</a></div>`);
+    <a class="ppo-panel-cta" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">Primární zdroj: ppo.mzd.gov.cz ↗</a></div>`);
 
   $('ppoDetGrid').innerHTML = cards.join('');
 
