@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-17
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-17
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "Vytvořeno na přímé zadání vlastníka z 17. 9. 2026: zpracovat článek ze stránky
+      https://mzd.gov.cz/zprava-o-fungovani-systemu-stiznosti-a-zpetne-vazby-ve-zdravotnictvi-2026/
+      s odkazem na autorky studií i na samotnou stránku.
+      CENTRÁLNÍ KPI: rozdíl mezi zákonnou lhůtou a skutečnou délkou šetření (30/38, 90/172, 120/270 dní)
+      a věta MZ o vlastním systému: „zákonem stanovené lhůty pro vyřizování stížností jsou fakticky
+      neúčinné“ (Příloha č. 9, kap. 2.2).
+      PRIMÁRNÍ ZDROJE stažené curlem 17. 9. 2026 (všechny HTTP 200, text extrahován pdf-parse):
+      (1) stránka MZ ČR ze 15. 9. 2026 — anotace zprávy, čtyři okruhy problémů, seznam devíti příloh;
+      (2) Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026 (PDF, 34 stran,
+      Sekce zdravotní péče / Oddělení podpory práv pacientů) — kap. 1 (metodologie a velikosti vzorků),
+      kap. 2 (exekutivní shrnutí, čtyři okruhy, 33→75 ombudsosob, 1,65 úvazku na krajský úřad),
+      kap. 5 (praxe pacientů, poskytovatelů a krajských úřadů), kap. 7 (principy a směry revize);
+      (3) Příloha č. 9 — Analýza kontrolní a stížnostní agendy za léta 2020 až 2025: kap. 1 (1 500 kontrol:
+      1 012 plánovaných, 474 mimořádných, 14 následných; po letech 143/162/313/308/285/289), kap. 2
+      (počty vyřízených stížností 425/374/324/357/345/465, důvodné 56/43/57/75/71/64, nápravná opatření
+      36/26/27/45/37/37, krajské rozdíly 91,4 % vs 0 z 11), kap. 2.1 (71,7 % bez odborníka = 1 643 stížností,
+      ~4 % s komisí, jeden kraj odborník ve 43 % = 123 stížností, 4 kraje komisi nikdy), kap. 2.2 (lhůty
+      30/90/120 dní proti 38/172/270 dnům, ~40 % krajů ve lhůtě, nejrychlejší kraj 9 dní, extrém 395 dní);
+      (4) Příloha č. 3 — Stížnostní mechanismus ve zdravotnictví v praxi: kvalitativní studie pacientské
+      zkušenosti a institucionální odpovědi, Liga lidských práv 2026, autorka Mgr. Anna Indra Štefanides
+      (n = 16 formálních stížností + 40 dotazů poradny, 1. 1. 2025 – 30. 4. 2026; sedm tezí v kap. 2.6);
+      (5) Příloha č. 2 — Výzkumná zpráva z kvalitativního výzkumu: Proces stížností ve zdravotnictví,
+      zpracovala Michaela Holubec Birtusová pro Oddělení podpory práv pacientů (objednávka 0362/2025 OPP),
+      8 hloubkových rozhovorů, citace respondentů R1–R8 verbatim;
+      (6) Přílohy č. 6, 7 a 8 — vyhodnocení dotazníkových šetření v ambulantní péči (224 odpovědí,
+      19.–28. 11. 2025), lůžkové péči (150 odpovědí, 26. 2.–12. 3. 2026) a u ZZS (14 ze 14 poskytovatelů),
+      autorka Šárka Liolia, Oddělení podpory práv pacientů.
+      VÝPOČTY REDAKCE, v textu i v popiscích takto označené: 425+374+324+357+345+465 = 2 290 stížností;
+      56+43+57+75+71+64 = 366 důvodných = 16,0 % z 2 290; 36+26+27+45+37+37 = 208 nápravných opatření
+      = 56,8 % důvodných a 9,1 % všech; 270/120 = 2,25×, 172/90 = 1,91×, 38/30 = 1,27×; 1 012+474+14 = 1 500.
+      NESROVNALOST V PRIMÁRNÍM ZDROJI, v článku i v poznámce výslovně uvedená: Příloha č. 9 píše
+      „Mezi lety 2020 až 2024 bylo krajskými úřady vyřízeno celkem 2 290 stížností“, ale součet 2 290 sedí
+      až za roky 2020–2025 (za 2020–2024 je součet 1 825) a týž odstavec uvádí rok 2025 zvlášť jako
+      nejsilnější. Článek proto pracuje s obdobím 2020–2025.
+      VĚDOMĚ NEUVEDENO: (a) které krajské úřady stojí za krajními hodnotami — analýza je anonymizuje;
+      (b) procenta z dotazníkových šetření u poskytovatelů — v přílohách 1, 6 a 7 jsou jen jako grafy,
+      jejichž popisky nelze ze strojově extrahovaného textu spolehlivě spárovat s hodnotami, článek proto
+      z těchto šetření přebírá pouze čísla uvedená slovy v hlavní Zprávě; (c) kontaktní údaje autorek
+      uvedené v patičce Přílohy č. 2 — jde o osobní kontakt, do článku nepatří; (d) vlastní srovnání se
+      zahraničím — Zpráva žádné nepředkládá a redakce k němu nemá ověřený zdroj.
+      published:false, audit-status draft, čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zákonné lhůty na vyřízení stížnosti jsou „fakticky neúčinné“, píše ministerstvo o vlastním systému · HSPA Monitor</title>
+<meta name="description" content="Ministerstvo zdravotnictví zveřejnilo 15. září 2026 Zprávu o fungování systému stížností a zpětné vazby ve zdravotnictví. Vlastní analýza v ní konstatuje, že zákonné lhůty jsou fakticky neúčinné: šetření s odbornou komisí trvá v průměru 270 dní místo zákonných 120, s nezávislým odborníkem 172 místo 90. Krajské úřady vyřídily v letech 2020–2025 celkem 2 290 stížností, důvodných bylo 366 a nápravné opatření padlo ve 208 případech (výpočty redakce). Jeden krajský úřad neuložil za šest let ani jedno, přestože pochybení zjistil v jedenácti případech.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zákonné lhůty na vyřízení stížnosti jsou „fakticky neúčinné“, píše ministerstvo o vlastním systému">
+<meta property="og:description" content="Zpráva MZ o fungování systému stížností: odborná komise rozhoduje 270 dní místo 120, jeden krajský úřad neuložil za šest let ani jedno nápravné opatření. A pacienti podle výzkumů nevědí, kam se obrátit.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-17">
+<meta property="article:section" content="Nárok pojištěnce">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Nárok pojištěnce</span>
+        <span class="article-tag article-tag-muted">Práva pacientů · Stížnosti · Krajské úřady · MZ ČR · Zákon o zdravotních službách</span>
+      </div>
+      <h1 class="article-title">Zákonné lhůty na vyřízení stížnosti jsou „fakticky neúčinné“, píše ministerstvo o vlastním systému</h1>
+      <p class="article-deck">
+        Ministerstvo zdravotnictví zveřejnilo 15. září <strong>Zprávu o fungování systému stížností a zpětné vazby ve zdravotnictví 2026</strong> — první ucelené změření toho, co se stane, když si pacient stěžuje. Nejtvrdší věta nestojí v shrnutí, ale v datové příloze: <strong>„zákonem stanovené lhůty pro vyřizování stížností jsou fakticky neúčinné“</strong>. Šetření s nezávislou odbornou komisí trvá průměrně <strong>270 dní</strong> místo zákonných 120, jeden krajský úřad vykázal u šetření s nezávislým odborníkem průměr <strong>395 dní</strong>. Za šest let vyřídily krajské úřady <strong>2 290 stížností</strong>; důvodných bylo 366 a nápravné opatření padlo ve 208 případech — <strong>devět z každých sta podaných stížností</strong> (výpočty redakce). Jeden krajský úřad neuložil ani jedno, přestože pochybení zjistil v jedenácti případech.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">17. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Stížnost ve zdravotnictví je jediný nástroj, kterým pacient beze soudu a bez právníka řekne systému „tohle bylo špatně“. Jak ale ten nástroj doopravdy funguje, se dosud dalo odhadovat jen z jednotlivých příběhů. Ministerstvo zdravotnictví teď zveřejnilo zprávu, která si na to posvítilo daty od všech čtrnácti krajských úřadů, od 374 poskytovatelů a z rozhovorů s lidmi, kteří si stěžovali. Výsledek je nezvykle otevřený dokument: úřad v něm popisuje vlastní systém jako roztříštěný, pro pacienta nesrozumitelný a v lhůtách nevymahatelný. Stojí za to projít si, co přesně naměřil — a kdo ta čísla sesbíral.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avStizHeroH">
+        <figcaption class="av-figure-h" id="avStizHeroH">Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026 — co ukázala</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="2290" data-suffix=" stížností">2 290 stížností</span>
+            <span class="av-counter-label">vyřídily krajské úřady v letech 2020–2025</span>
+            <span class="av-counter-foot">druhý stupeň mechanismu; v roce 2025 jich bylo 465, nejvíc za celé období</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="16" data-suffix=" %">16 %</span>
+            <span class="av-counter-label">z nich úřad vyhodnotil jako důvodné</span>
+            <span class="av-counter-foot">366 z 2 290 (výpočet redakce); nápravné opatření padlo ve 208 případech</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="270" data-suffix=" dní">270 dní</span>
+            <span class="av-counter-label">trvá průměrně šetření s nezávislou odbornou komisí</span>
+            <span class="av-counter-foot">zákonná lhůta je 120 dní; u nezávislého odborníka 172 dní proti lhůtě 90</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="75" data-suffix=" poskytovatelů">75 poskytovatelů</span>
+            <span class="av-counter-label">lůžkové péče už má nemocniční ombudsosobu</span>
+            <span class="av-counter-foot">v roce 2022 jich bylo 33; zákon tu roli nijak nevymezuje</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> MZ ČR — <em>Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026</em> (PDF, 34 stran, kap. 2 a 5) a <em>Příloha č. 9 — Analýza kontrolní a stížnostní agendy vykonávané v rámci přenesené působnosti v oblasti zdravotnictví za léta 2020 až 2025</em> (PDF, kap. 2 a 2.2). Vše zveřejněno 15. 9. 2026, staženo 17. 9. 2026. Souhrn 2 290 stížností, podíl 16 % i počet 208 nápravných opatření jsou <strong>výpočty redakce</strong> ze šesti ročních hodnot uvedených v grafech 8 a 9 přílohy.</p>
+      </figure>
+
+      <h3>Co ministerstvo zveřejnilo — a kdo ta data sebral</h3>
+      <p>
+        Zpráva je hlavním výstupem analytické fáze revize <strong>části osmé zákona č. 372/2011 Sb., o zdravotních službách</strong>, tedy těch paragrafů (§ 93 a následující), které stížnostní mechanismus zakládají. Revizi si vláda naplánovala ve <em>Výhledu legislativních prací na léta 2027 až 2029</em> a ministerstvo si před psaním zákona nejdřív změřilo, co vlastně mění. Zveřejněním zprávy analytická fáze končí; následovat má fáze návrhová, do které chce úřad podle vlastních slov „aktivně zapojovat relevantní aktéry“.
+      </p>
+      <p>
+        Datový základ je na české poměry rozsáhlý a stojí za ním jmenovitě tři autorky. Tři dotazníková šetření mezi poskytovateli — <strong>224 odpovědí z ambulantní péče</strong> (sběr 19.–28. listopadu 2025), <strong>150 z lůžkové péče</strong> (26. února až 12. března 2026) a <strong>všech 14 poskytovatelů zdravotnické záchranné služby</strong> — vyhodnotila <strong>Šárka Liolia</strong> z Oddělení podpory práv pacientů; její jméno stojí na titulní straně všech tří příloh. Kvalitativní <strong>výzkumnou zprávu z osmi hloubkových rozhovorů</strong> s lidmi, kteří stížností prošli, zpracovala pro ministerstvo <strong>Michaela Holubec Birtusová</strong>. A <strong>kvalitativní studii 56 případů</strong> z právní poradny — 16 formálních stížností a 40 dotazů z období od ledna 2025 do dubna 2026 — napsala <strong>Mgr. Anna Indra Štefanides</strong> z organizace Liga lidských práv. Tvrdá čísla o druhém stupni mechanismu pak přinesla analýza agendy všech čtrnácti krajských úřadů za roky 2020 až 2025.
+      </p>
+      <p>
+        Ministerstvo samo upozorňuje na limity: kvalitativní části nejsou statisticky reprezentativní a dotazníky mezi poskytovateli byly dobrovolné. U krajských úřadů a záchranek je ale pokrytí stoprocentní — a právě odtud pochází většina čísel, která následují.
+      </p>
+
+      <h3>Lhůty, které platí na papíře</h3>
+      <p>
+        Zákon rozlišuje tři režimy podle náročnosti případu. Běžnou stížnost musí krajský úřad vyřídit <strong>do 30 dnů</strong>. Pokud jde o odborný postup nebo je namítáno ublížení na zdraví, ustaví <strong>nezávislého odborníka</strong> a lhůta se prodlužuje na 90 dnů. Když ani to nestačí — nebo pacient zemřel — jmenuje <strong>nezávislou odbornou komisi</strong> a má 120 dnů.
+      </p>
+      <p>
+        Realita se od těchto čísel liší soustavně a ve všech třech režimech stejným směrem. Nejmírněji u nejjednodušších případů: průměr 38 dnů proti lhůtě 30. U složitějších se rozdíl láme. Šetření s nezávislým odborníkem trvalo v průměru <strong>172 dnů</strong>, tedy skoro dvojnásobek lhůty, a s odbornou komisí <strong>270 dnů</strong> — dvaapůlnásobek. Ministerstvo z toho ve své analýze vyvozuje závěr, jaký se ve vlastních materiálech úřadů čte zřídka: <em>„Z výše uvedených dat tak vyplývá, že zákonem stanovené lhůty pro vyřizování stížností jsou fakticky neúčinné.“</em>
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avStizLhutyH">
+        <figcaption class="av-figure-h" id="avStizLhutyH">Zákonná lhůta proti skutečné délce šetření (průměr krajských úřadů, 2020–2025)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Režim šetření</th>
+                <th scope="col" class="av-num">Lhůta podle zákona</th>
+                <th scope="col" class="av-num">Skutečný průměr</th>
+                <th scope="col" class="av-num">Překročení</th>
+                <th scope="col" class="av-num">Podíl stížností</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Bez odborníka i komise</th><td class="av-num">30 dní</td><td class="av-num">38 dní</td><td class="av-num">1,27×</td><td class="av-num">71,7 %</td></tr>
+              <tr><th scope="row">S nezávislým odborníkem</th><td class="av-num">90 dní</td><td class="av-num">172 dní</td><td class="av-num">1,91×</td><td class="av-num">≈ 24 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">S nezávislou odbornou komisí</th><td class="av-num">120 dní</td><td class="av-num"><strong>270 dní</strong></td><td class="av-num"><strong>2,25×</strong></td><td class="av-num">≈ 4 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, <em>Příloha č. 9 — Analýza kontrolní a stížnostní agendy za léta 2020 až 2025</em>, kap. 2.1 a 2.2. Lhůty stanoví § 94 odst. 1 písm. a) zákona č. 372/2011 Sb. Podíl 71,7 % odpovídá 1 643 stížnostem vyřízeným bez odborného posouzení; podíl komise uvádí analýza jako „přibližně 4 %“ a zbytek do sta procent (≈ 24 %) je <strong>dopočet redakce</strong>. Sloupec „překročení“ je <strong>výpočet redakce</strong> jako podíl skutečného průměru a lhůty. Průměr 38 dnů drží jen menšina úřadů: ve třicetidenní lhůtě končí šetření průměrně <strong>40 % krajů</strong>, nejrychlejší vykázal průměr 9 dnů, zatímco jiné lhůtu překračují až dvojnásobně.</p>
+      </figure>
+
+      <p>
+        Krajní hodnoty ukazují, jak velký je mezi kraji rozptyl. Jeden krajský úřad vykázal u šetření s nezávislým odborníkem <strong>průměr 395 dnů</strong> — víc než čtyřnásobek devadesátidenní lhůty. Analýza ho neoznačuje jménem, kraje jsou v ní anonymizované. Pro pacienta to ale znamená, že o tom, jestli na odpověď čeká tři měsíce nebo víc než rok, spolurozhoduje adresa poskytovatele, proti kterému si stěžuje.
+      </p>
+      <p>
+        Nerovnoměrné je i samo sahání po odborném posouzení. Jeden krajský úřad ustavil nezávislého odborníka ve <strong>43 % případů</strong> (u 123 stížností), zatímco <strong>čtyři kraje</strong> neustavily nezávislou odbornou komisi za celých šest let ani jednou. Ministerstvo si tu všímá rozporu, který si samo neumí vysvětlit: krajské úřady uvádějí, že nejčastějším předmětem stížností jsou <em>odborné, klinické</em> otázky — ale statistika říká, že výrazná většina stížností se vyřídí bez jakéhokoli odborného posouzení. Buď je vyřizování odborných stížností tak náročné, že vytlačuje vnímání všeho ostatního, píše analýza, nebo je ustavování odborníků a komisí natolik komplikované, že k němu úřady nepřistupují ani tam, kde by měly — což by podle jejích vlastních slov poukazovalo „na zásadní nefunkčnost institutu nezávislých odborníků a nezávislých odborných komisí“.
+      </p>
+
+      <h3>Z 2 290 stížností skončilo opatřením 208</h3>
+      <p>
+        Počet stížností, které se dostanou ke krajskému úřadu, byl pět let stabilní a loni skokově vzrostl: 425 (2020), 374, 324, 357, 345 a <strong>465 v roce 2025</strong> — o 35 procent víc než rok předtím. Celkem <strong>2 290 stížností</strong> za šest let — v přepočtu zhruba 27 stížností ročně na jeden krajský úřad (výpočet redakce).
+      </p>
+      <p>
+        Podstatnější než objem je ale to, co z nich vyjde. Důvodných bylo <strong>366</strong> — šestnáct procent. A nápravné opatření uložil úřad <strong>ve 208 případech</strong>, tedy v 57 procentech těch důvodných a v <strong>devíti procentech všech podaných stížností</strong> (výpočty redakce ze šesti ročních hodnot). Podíl zjištěných pochybení přitom není stabilní: z 13,2 % v roce 2020 vystoupal na 20,6 % v roce 2024 a v roce 2025 spadl zpět na 13,7 %.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avStizRokyH">
+        <figcaption class="av-figure-h" id="avStizRokyH">Stížnosti u krajských úřadů po letech: kolik jich bylo, kolik důvodných, kolik skončilo opatřením</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Vyřízené stížnosti</th>
+                <th scope="col" class="av-num">Důvodné</th>
+                <th scope="col" class="av-num">Podíl důvodných</th>
+                <th scope="col" class="av-num">Uložené nápravné opatření</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2020</th><td class="av-num">425</td><td class="av-num">56</td><td class="av-num">13,2 %</td><td class="av-num">36</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">374</td><td class="av-num">43</td><td class="av-num">11,5 %</td><td class="av-num">26</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">324</td><td class="av-num">57</td><td class="av-num">17,6 %</td><td class="av-num">27</td></tr>
+              <tr><th scope="row">2023</th><td class="av-num">357</td><td class="av-num">75</td><td class="av-num">21,0 %</td><td class="av-num">45</td></tr>
+              <tr><th scope="row">2024</th><td class="av-num">345</td><td class="av-num">71</td><td class="av-num">20,6 %</td><td class="av-num">37</td></tr>
+              <tr><th scope="row">2025</th><td class="av-num"><strong>465</strong></td><td class="av-num">64</td><td class="av-num">13,7 %</td><td class="av-num">37</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Celkem</th><td class="av-num"><strong>2 290</strong></td><td class="av-num"><strong>366</strong></td><td class="av-num"><strong>16,0 %</strong></td><td class="av-num"><strong>208</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, <em>Příloha č. 9</em>, grafy 8 a 9 (kap. 2). Roční hodnoty jsou převzaty z grafů, <strong>součty a podíly dopočítala redakce</strong>; podíly za roky 2020, 2021, 2022, 2024 a 2025 souhlasí s procenty, která analýza uvádí slovy (13,2 / 11,5 / 17,6 / 20,6 / 13,7 %), rok 2023 analýza slovy neuvádí. <strong>Pozn. k období:</strong> text přílohy uvádí souhrn 2 290 stížností jako číslo „mezi lety 2020 až 2024“, součet ale sedí až za roky 2020–2025 (za pětiletí 2020–2024 je to 1 825) a týž odstavec uvádí rok 2025 zvlášť jako nejsilnější — jde tedy o nesrovnalost v primárním zdroji a článek pracuje s obdobím 2020–2025.</p>
+      </figure>
+
+      <p>
+        Jestli po zjištěném pochybení něco následuje, závisí opět na kraji. Analýza popisuje rozpětí, které se nedá vysvětlit jinak než odlišnou praxí úřadů: jeden krajský úřad uložil nápravné opatření v <strong>64 ze 70 případů</strong>, kdy zjistil pochybení (91,4 %), jiný v 78,3 procentech — a <strong>jeden úřad neuložil za celé šestileté období ani jedno, přestože pochybení konstatoval v jedenácti případech</strong>. K tomu se přidává druhá mezera: ze dvou úřadů, které opatření ukládají prakticky vždy, si jen jeden následně ověřuje, jestli je poskytovatel skutečně splnil. Ten druhý plnění nekontroluje nijak.
+      </p>
+      <p>
+        Kontrolní činnost, která se stížnostmi souvisí, ukazuje stejný vzorec. Za šest let provedly krajské úřady <strong>1 500 kontrol</strong> — 1 012 plánovaných, 474 mimořádných (typicky vyvolaných podnětem) a jen <strong>14 následných</strong>, tedy takových, které ověřují nápravu dřívějších zjištění. Čtrnáct následných kontrol za šest let na čtrnáct úřadů vychází na jednu kontrolu na úřad za celé období.
+      </p>
+      <p>
+        Vysvětlení nabízí zpráva sama a je prozaické: v roce 2025 zajišťovala celou stížnostní agendu na jednom krajském úřadu kapacita odpovídající <strong>1,65 plného úvazku</strong>. Ne jeden a půl člověka na kraj a případ, ale na všechno — příjem, šetření, komunikaci se stěžovatelem i s poskytovatelem, ustavování odborníků a sledování nápravných opatření.
+      </p>
+
+      <h3>„Kope za nemocnici.“ Jak to vidí pacienti</h3>
+      <p>
+        Kvantitativní část zprávy říká, jak dlouho a s jakým výsledkem. Kvalitativní část říká, proč do toho spousta lidí vůbec nejde. Osm hloubkových rozhovorů, které pro ministerstvo vedla Michaela Holubec Birtusová, popisuje tři bariéry, jež stojí <em>před</em> samotným podáním.
+      </p>
+      <p>
+        První je orientace. Respondenti nevěděli, že stížnost patří nejdřív poskytovateli, netušili o existenci nemocničního ombudsmana ani o možnosti eskalovat na kraj či magistrát. Informace si dohledávali metodou pokus–omyl: přes Google, facebookové skupiny, známé lékaře — a jedna respondentka podle zprávy i přes umělou inteligenci: <em>„Podívala jsem se umělou inteligencí, kam to podat… nevěděla jsem, že se to má dát nejdřív nemocnici.“</em>
+      </p>
+      <p>
+        Druhá je samotné sepsání. Respondenti ho shodně označili za nejtěžší krok celého procesu — časově náročný, kognitivně vyčerpávající a emočně zraňující, protože znamená znovu projít tím, co se stalo. <em>„Psala jsem to tři večery, nemohla jsem spát,“</em> říká jedna z nich; jiné trvalo sepsání dva týdny a doplnila je stovkou stran fotodokumentace.
+      </p>
+      <p>
+        Třetí je strach. Napříč rozhovory se objevuje obava, že si stěžovatel péči zhorší, že bude označen za „problémového“, že si to „odskáče“. Zpráva ho popisuje jako sdílený kulturní vzorec a cituje jednu respondentku přímo: <em>„Lidi se bojí si stěžovat.“</em>
+      </p>
+      <p>
+        Zvlášť ostře vychází z rozhovorů role nemocničního ombudsmana. Právě od ní lidé čekali nejvíc — a rozdíl mezi očekáváním a zkušeností byl proto největší. Respondenti ho popisovali jako někoho, kdo stížnost jen přeposílá dál, kdo je součástí nemocnice, ne nezávislou autoritou. <em>„Kope za nemocnici,“</em> shrnula to jedna z nich. Jiná dodala: <em>„Když se to jmenuje ombudsman, čekala jsem, že se mě někdo zastane.“</em> Součástí návrhů respondentů je i to, aby se pozice, pokud zůstane interní, raději přejmenovala na „oddělení stížností“ — neutrálněji, aby nebudila očekávání, která nemůže naplnit.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avStizCestaH">
+        <figcaption class="av-figure-h" id="avStizCestaH">Cesta stížnosti a kde z ní lidé odpadají</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Negativní zkušenost</h4>
+            <p class="av-flow-desc">Nejčastěji nejde jen o odbornou stránku, ale o komunikaci — necitlivý tón, ignorování žádostí, bagatelizování. Zpráva mluví o „mikro-zážitcích“, které eskalují.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Hledání, kam to podat</h4>
+            <p class="av-flow-desc">Pacienti neznají dvoustupňovost mechanismu ani kompetence institucí. Podání míří k nepříslušným orgánům; téměř všechny krajské úřady označily za pravidelnou zkušenost, že stížnost dostanou dřív než poskytovatel.</p>
+            <span class="av-flow-tag">Bariéra</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Sepsání a strach z následků</h4>
+            <p class="av-flow-desc">Nejtěžší krok procesu: dny až týdny práce, retraumatizace a obava ze zhoršení budoucí péče. Část lidí se tady zastaví.</p>
+            <span class="av-flow-tag">Bariéra</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">První fáze u poskytovatele</h4>
+            <p class="av-flow-desc">Lhůta 30 dní. Podle pacientů následuje „informační vakuum“ — týdny bez zprávy o tom, kdo případ řeší a v jaké je fázi.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přezkum krajským úřadem</h4>
+            <p class="av-flow-desc">Zákonná lhůta 30 / 90 / 120 dní, skutečnost 38 / 172 / 270 dní. Důvodných je 16 % stížností, nápravné opatření padne v 9 % všech podaných (výpočty redakce).</p>
+            <span class="av-flow-tag">270 dní</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> MZ ČR, <em>Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026</em>, kap. 5.1 a 5.3; <em>Příloha č. 2</em> (8 hloubkových rozhovorů, zpracovala Michaela Holubec Birtusová); <em>Příloha č. 9</em> (data krajských úřadů). Schéma zachycuje typický průběh popsaný ve zprávě, ne jediný možný postup — stížnost lze podat i souběžně profesní komoře, zdravotní pojišťovně nebo veřejnému ochránci práv.</p>
+      </figure>
+
+      <h3>Odpověď, která vysvětluje, ale nemění</h3>
+      <p>
+        Druhou kvalitativní sondu dodala Liga lidských práv. Anna Indra Štefanides v ní prošla 56 případů — 16 formálních stížností i s odpověďmi institucí a 40 dotazů právní poradny — a soustředila se na to, co dosud nikdo systematicky nezkoumal: <strong>jakou kvalitu mají odpovědi, které pacient dostane</strong>.
+      </p>
+      <p>
+        Její závěr je strukturální, ne osobní. Kvalita odpovědi podle studie nezávisí na tom, jak je dlouhá nebo propracovaná, ale jakou funkci v systému plní — a ta funkce je stabilizační. Studie to shrnuje do věty, která je nejsilnějším soudem v celém balíku příloh: stížnostní mechanismus <em>„funguje primárně jako nástroj vysvětlení a legitimizace postupu poskytovatelů, nikoli jako nástroj jeho systematické revize“</em>.
+      </p>
+      <p>
+        Mechanika, kterou k tomu popisuje, je konkrétní. Odpovědi <strong>převádějí konflikt do medicínského nebo právního rámce</strong> — spor o to, jak se s pacientem mluvilo, se přeloží do jazyka <em>lege artis</em>, indikace a rizika, čímž se prostor pro polemiku uzavře dřív, než začne. Pokud instituce pochybení uzná, týká se zpravidla <strong>„měkkých“ oblastí</strong>: komunikace, organizace, dokumentace — ne samotného rozhodnutí. A celé posuzování stojí na zdravotnické dokumentaci, což vytváří <strong>strukturální nevýhodu stěžovatele</strong>: to, co se do dokumentace nezapisuje — tón, chování, srozumitelnost poučení — se v případě sporu uzavírá jako neprokázané. Krajské úřady podle studie ve většině případů rámec poskytovatele spíš reprodukují než zpochybňují; korektivní funkce zůstává na procesní rovině.
+      </p>
+      <p>
+        Hlavní zpráva ministerstva tyhle závěry nezlehčuje — přebírá je. Mluví o „důkazní asymetrii“, o odpovědích, v nichž pacienti narážejí na „přísně úřednický či právnický jazyk“, který působí defenzivně, a o tom, že jádro stížnosti často zůstane nevypořádané, protože se odpověď soustředí na odbornou správnost. A dodává, co pacienti podle obou výzkumů doopravdy chtějí: vysvětlení, uznání pochybení, omluvu a jistotu, že se to samé nestane dalšímu. Peníze jsou v motivacích až daleko za tím.
+      </p>
+
+      <h3>Sedmdesát pět ombudsosob, které nemá kdo definovat</h3>
+      <p>
+        Jediné číslo ve zprávě, které jednoznačně roste, se týká nemocničních ombudsosob — zpráva používá právě tento souhrnný termín pro osobu i tým, který agendu zajišťuje. Mezi lety 2022 a 2026 se počet poskytovatelů lůžkové péče, kteří tuto roli zřídili, <strong>zdvojnásobil z 33 na 75</strong>. Impulzem byl metodický pokyn ministerstva z roku 2023, který roli poprvé systematicky popsal — a o jehož vzniku jsme psali v článku <a href="clanek-ombudsmani-ve-zdravotnictvi.html">Pět ombudsmanů, jeden pacient</a>.
+      </p>
+      <p>
+        Pod jedním označením ale fungují velmi různé věci. Liší se organizační zařazení (nejčastěji přímá podřízenost řediteli), rozsah kompetencí, kvalifikační požadavky i čas: plný vyčleněný úvazek je podle zprávy spíš výjimka, obvyklá je zkrácená, sdílená nebo vůbec neformalizovaná kapacita vedle jiné pracovní pozice. Zaškolení na odborně i psychicky náročnou roli probíhá často „za pochodu“. Zákon o zdravotních službách přitom tuto roli nijak neupravuje — celá její podoba závisí na rozhodnutí konkrétní nemocnice.
+      </p>
+      <p>
+        Zpráva zároveň popisuje, kam se role posouvá: od vyřizování formálních stížností k širší práci s pacientskou zkušeností, prevenci eskalace a zprostředkování komunikace. A právě v tom vidí poskytovatelé její největší hodnotu — spolu s tím, že ombudsosoba dokáže vedení nemocnice ukázat opakující se systémové problémy.
+      </p>
+
+      <h3>Ambulance versus nemocnice: dva různé světy</h3>
+      <p>
+        Šetření mezi poskytovateli ukázala rozdíl, který bude pro chystaný zákon zásadní. V <strong>ambulantní péči</strong> je stížnostní agenda převážně neformální: většina ordinací nemá písemnou směrnici, řeší ji vedoucí lékař nebo recepce a o možnosti stěžovat si informuje spíš reaktivně, až když konflikt nastane. V <strong>lůžkové péči a u záchranek</strong> je naopak proces ukotvený ve vnitřních předpisech a delegovaný na specializovaný útvar — oddělení kvality, právní oddělení, ombudsosobu.
+      </p>
+      <p>
+        Rozdíl ale není jen v přístupu, je i v objemu: zatímco ambulantní poskytovatel a menší nemocnice řeší nejčastěji do deseti stížností ročně, velké nemocnice jich mají desítky až stovky. Zpráva z toho vyvozuje, že na ambulantní sektor nelze mechanicky přenášet organizační modely velkých zařízení — a že právě tady bude přiměřenost požadavků nejcitlivější otázkou.
+      </p>
+      <p>
+        Společné oběma světům je dvojí. Za prvé nikdo tuhle agendu nedělá na plný úvazek — vykonává se kumulovaně, vedle jiných povinností, „za pochodu“. Za druhé je evidence stížností pozoruhodně nedigitalizovaná: nejčastěji sdílené disky, složky a kancelářské programy, u nezanedbatelné části zařízení včetně lůžkových i čistě listinná podoba. Specializovaný software je výjimkou. Data o tom, co pacienti hlásí, tak fakticky nelze agregovat ani napříč jedním zařízením, natož napříč systémem — a to je přesně to, co má podle zprávy sloužit řízení kvality.
+      </p>
+      <p>
+        Poslední nález z téhle části stojí za pozornost sám o sobě: zpětnou vazbu poskytovatelé sbírají a vyhodnocují, na jejím základě reálně mění provoz, objednávkové systémy i prostředí — ale <strong>zpátky pacientům se výsledek téměř nikdy nedostane</strong>. Systém je směrem k veřejnosti uzavřený, takže nemocnice přichází o jedinou příležitost ukázat, že hlas pacienta k něčemu byl.
+      </p>
+
+      <h3>Co z toho plyne pro chystaný zákon</h3>
+      <p>
+        Zpráva neformuluje paragrafy, vymezuje směry. Za zásadní přitom označuje, že samotná změna zákona nebude stačit — bez metodického vedení, vzdělávání a personálního posílení by nová pravidla dopadla na stejně tenkou kapacitu jako ta dnešní.
+      </p>
+      <p>
+        V legislativní rovině míří šesti směry: srozumitelnější a jednotnější <strong>informování pacientů</strong> o tom, kam a v jakém pořadí se obrátit; <strong>první fáze u poskytovatele</strong> pojatá jako prostor být vyslyšen a dostat vysvětlení, s minimálním procesním standardem; <strong>přezkum krajským úřadem</strong> jako skutečně funkční a časově předvídatelný — s výslovným požadavkem na „reálnější nastavení lhůt“ a efektivnější zajišťování nezávislých odborníků; <strong>legislativní ukotvení nemocničních ombudsosob</strong> včetně záruk nestrannosti a okruhu poskytovatelů, kde by role měla být povinná; silnější <strong>vazba mezi stížnostmi a řízením kvality</strong>; a <strong>přiměřenost</strong> požadavků podle segmentu péče.
+      </p>
+      <p>
+        Formulace o „reálnějším nastavení lhůt“ přitom stojí za rozbalení. Dá se naplnit dvěma opačnými způsoby: buď se lhůty prodlouží tak, aby odpovídaly praxi — tedy se papír srovná s realitou —, nebo se posílí kapacita a proces tak, aby se do lhůt vešly. Z 2 290 stížností za šest let, které vyřizuje 1,65 úvazku na kraj, je jasné, který z těch dvou postupů je levnější. Návrhová fáze teprve začíná a zpráva sama říká, že do ní chce ministerstvo zapojit ty, jejichž data v ní jsou. Až bude paragrafové znění na stole, tohle bude první věc, kterou má smysl v něm hledat.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ke kterým se zjištění vztahují</h4>
+      <ul class="article-databox-list">
+        <li><a href="indikator-spokojenost_informovani.html"><strong>Spokojenost pacientů s informováním</strong></a> — 72 % (2024); právě informovanost a srozumitelnost odpovědí zpráva označuje za jednu ze dvou hlavních bariér</li>
+        <li><a href="indikator-spokojenost_pece.html"><strong>Spokojenost s dostupností péče</strong></a> — 75 % (2024); obecná spokojenost, proti které stojí zkušenost té menšiny, která si stěžuje</li>
+        <li><a href="indikator-bezpecnost_padu_nemocnice.html"><strong>Pády pacientů v nemocnici</strong></a> — 2,1 na 1 000 hospitalizací (2024); typ události, kterou má interní systém kvality zachytit dřív než stížnost</li>
+        <li><a href="indikator-unmet_need_medical.html"><strong>Nesplněná potřeba lékařské péče</strong></a> — 0,3 % populace 16+ (2025); měřítko toho, kolik lidí do systému vůbec nedosáhne</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Zpráva ministerstva zdravotnictví (zveřejněna 15. 9. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — stránka <em>Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026</em></strong> (15. 9. 2026). Rozcestník se samotnou zprávou a všemi devíti přílohami; odsud pochází anotace, výčet čtyř okruhů problémů i směry další revize. <a href="https://mzd.gov.cz/zprava-o-fungovani-systemu-stiznosti-a-zpetne-vazby-ve-zdravotnictvi-2026/" target="_blank" rel="noopener">mzd.gov.cz · zpráva a přílohy ↗</a></li>
+          <li><strong>MZ ČR — <em>Zpráva o fungování systému stížností a zpětné vazby ve zdravotnictví 2026</em></strong> (PDF, 34 stran, Sekce zdravotní péče / Oddělení podpory práv pacientů). Kapitola 1 popisuje metodologii a velikosti vzorků, kapitola 2 exekutivní shrnutí včetně nárůstu ombudsosob z 33 na 75 a kapacity 1,65 úvazku na krajský úřad, kapitola 5 praxi pacientů, poskytovatelů a krajských úřadů, kapitola 7 principy a šest směrů legislativní revize. <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Zprava-o-fungovani-systemu-stiznosti-a-zpetne-vazby-ve-zdravotnictvi-2026.pdf" target="_blank" rel="noopener">Zpráva (PDF) ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Výzkumné přílohy a jejich autorky</h5>
+        <ul class="article-sources-list">
+          <li><strong>Mgr. Anna Indra Štefanides (Liga lidských práv, 2026) — <em>Stížnostní mechanismus ve zdravotnictví v praxi: kvalitativní studie pacientské zkušenosti a institucionální odpovědi</em></strong> (Příloha č. 3, PDF, 20 stran). Analýza 56 případů (16 formálních stížností a 40 dotazů právní poradny z období 1. 1. 2025 – 30. 4. 2026). Odsud pochází sedm tezí o kvalitě odpovědí i citovaný závěr, že mechanismus funguje „primárně jako nástroj vysvětlení a legitimizace postupu poskytovatelů“ (kap. 2.6). Studie vznikla ve spolupráci s organizací Juno Moneta, která poskytla část analyzovaných případů. <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-3-Pacientske-zkusenosti-a-odpovedi-instituci_kvalitativni-studie.pdf" target="_blank" rel="noopener">Příloha č. 3 (PDF) ↗</a></li>
+          <li><strong>Michaela Holubec Birtusová — <em>Výzkumná zpráva z kvalitativního výzkumu: Proces stížností ve zdravotnictví</em></strong> (Příloha č. 2, PDF, 15 stran; zpracováno pro Oddělení podpory práv pacientů MZ ČR, objednávka 0362/2025 OPP). Osm hloubkových polostrukturovaných rozhovorů s lidmi, kteří stížnost podali za sebe nebo za blízkého; zdroj všech citací respondentů R1–R8 v tomto článku i návrhu na přejmenování role ombudsmana. <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-2-Pacientska-zkusenost_hloubkove-rozhovory_vyzkumna-zprava.docx.pdf" target="_blank" rel="noopener">Příloha č. 2 (PDF) ↗</a></li>
+          <li><strong>Šárka Liolia (Oddělení podpory práv pacientů MZ ČR) — <em>Zpětnovazební procesy v ambulantní péči</em>, <em>… v lůžkové péči</em> a <em>… u zdravotnické záchranné služby</em></strong> (Přílohy č. 6, 7 a 8, PDF; 3/2026, 3/2026 a 5/2026). Vyhodnocení tří dotazníkových šetření: 224 odpovědí ambulantních poskytovatelů (sběr 19.–28. 11. 2025), 150 odpovědí poskytovatelů lůžkové péče (26. 2. – 12. 3. 2026) a všech 14 poskytovatelů ZZS. <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-6-Ambulantni-pece_zpetnovazebni-mechanismy.pdf" target="_blank" rel="noopener">Příloha č. 6 ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-7-Luzkova-pece_zpetnovazebni-mechanismy.pdf" target="_blank" rel="noopener">Příloha č. 7 ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-8-ZZS_zpetnovazebni-mechanismy.pdf" target="_blank" rel="noopener">Příloha č. 8 ↗</a></li>
+          <li><strong>MZ ČR — <em>Analýza kontrolní a stížnostní agendy vykonávané v rámci přenesené působnosti v oblasti zdravotnictví za léta 2020 až 2025</em></strong> (Příloha č. 9, PDF, 21 stran, Odbor zdravotní péče). Zdroj všech tvrdých čísel v tomto článku: počty vyřízených stížností, důvodných stížností a uložených nápravných opatření po letech (kap. 2), krajské rozdíly v ukládání opatření, podíly ustavených odborníků a komisí (kap. 2.1), délky šetření proti zákonným lhůtám včetně věty o jejich faktické neúčinnosti (kap. 2.2) a struktura 1 500 kontrol (kap. 1). <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Priloha-c.-9-Krajske-urady_analyza-kontrolni-a-stiznostni-agendy.pdf" target="_blank" rel="noopener">Příloha č. 9 (PDF) ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 372/2011 Sb., o zdravotních službách</strong> — část osmá: § 93 (právo podat stížnost a dvoustupňovost mechanismu), § 94 (lhůty 30, 90 a 120 dní a podmínky ustavení nezávislého odborníka či odborné komise), § 95 (složení nezávislé odborné komise) a § 96 (nápravná opatření). Právě tuto část zákona má chystaná revize změnit. <a href="https://www.zakonyprolidi.cz/cs/2011-372#p93" target="_blank" rel="noopener">zakonyprolidi.cz · § 93 ↗</a></li>
+          <li><strong>MZ ČR — <em>Metodický pokyn k vyřizování stížností podle části osmé zákona o zdravotních službách s využitím institutu nemocničního ombudsmana</em></strong> (Věstník MZ ČR, částka 8/2023). Dokument, který roli nemocniční ombudsosoby poprvé systematicky popsal a který zpráva označuje za hlavní impulz jejího rozšíření. <a href="https://mzd.gov.cz/wp-content/uploads/2023/06/Vestnik-MZ_08-2023.pdf" target="_blank" rel="noopener">Věstník MZ 8/2023 (PDF) ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla pocházejí ze zprávy ministerstva a jejích devíti příloh zveřejněných 15. 9. 2026 (staženo 17. 9. 2026). Jako <strong>výpočty redakce</strong> jsou v textu i v popiscích označeny: součet 2 290 vyřízených stížností, 366 důvodných a 208 uložených nápravných opatření za roky 2020–2025 ze šesti ročních hodnot v grafech 8 a 9 Přílohy č. 9; z nich odvozené podíly 16,0 % důvodných, 56,8 % opatření z důvodných a 9,1 % ze všech stížností; poměry skutečné délky šetření k zákonné lhůtě (38/30 = 1,27×, 172/90 = 1,91×, 270/120 = 2,25×); a dopočet podílu šetření s nezávislým odborníkem (≈ 24 %) do sta procent. <strong>Období 2020–2025:</strong> Příloha č. 9 uvádí souhrn 2 290 stížností slovy jako číslo „mezi lety 2020 až 2024“, součet ročních hodnot ale sedí až za šest let 2020–2025 (za pětiletí 2020–2024 je to 1 825) a týž odstavec označuje rok 2025 zvlášť za nejsilnější — jde o nesrovnalost v primárním zdroji, článek proto pracuje s obdobím 2020–2025 a rozpor uvádí. <strong>Co článek záměrně neuvádí:</strong> které krajské úřady stojí za krajními hodnotami (analýza je anonymizuje) a procenta z dotazníkových šetření mezi poskytovateli — ta jsou v přílohách dostupná jen jako grafy, jejichž popisky nelze ze strojově extrahovaného textu spolehlivě spárovat s hodnotami, takže z těchto šetření přebíráme pouze údaje, které hlavní zpráva uvádí slovy. Kvalitativní výzkumy (8 rozhovorů, 56 případů právní poradny) nejsou statisticky reprezentativní a jejich autorky na to samy upozorňují; citace respondentů jsou proto ilustrací typických vzorců, ne údajem o jejich četnosti v populaci.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+
+</body>
+</html>
