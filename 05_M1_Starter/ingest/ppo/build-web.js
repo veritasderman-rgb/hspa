@@ -541,7 +541,7 @@ function main() {
 
   const ppo = {
     version: '1.0',
-    zdroj: 'ppo.mzcr.cz — portál pracovních a poradních orgánů MZ ČR',
+    zdroj: 'ppo.mzd.gov.cz — portál pracovních a poradních orgánů MZ ČR',
     stav_k: stavK,
     pozn: 'FÁZE 1 extrakce (ingest/ppo): členství bez hostů; jednání = dokumenty typu zápis s datem. '
       + 'Přístrojová komise vynechána (PLAN-PPO.md §4.4). Layout sítě předpočítán deterministicky.',
