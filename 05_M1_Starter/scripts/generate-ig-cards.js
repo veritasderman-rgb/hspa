@@ -773,6 +773,9 @@ const MANIFEST = {
   'clanek-hazardni-hrani-mladistvych': { kicker: 'Závislosti · mladiství', signal: 'bad', stat: '27,6', statSuffix: '%', barPct: 28, claim: 'českých šestnáctiletých hrálo v posledním roce hazard.', context: 'Do 18 let zakázaný. Riziko problémového hráčství stouplo na 7,0 %.' },
   'clanek-nemoci-z-povolani-mizi': { kicker: 'Veřejné zdraví · práce', signal: 'warn', stat: '683', claim: 'neinfekčních nemocí z povolání za rok 2025 — po deseti letech poklesu.', context: 'O rok dřív 490. Dvě třetiny přírůstku: plíce horníků (54 → 172).' },
   'clanek-objednani-k-lekari-online': { kicker: 'Digitalizace · objednání', signal: 'bad', stat: '19,6', statSuffix: '%', barPct: 20, claim: 'Čechů si objednalo termín u lékaře přes internet.', context: 'Průměr EU 39,8 %. Online objednání nabízí jen 27 % ordinací.' },
+  'clanek-lex-kratom-2026': { kicker: 'Legislativa · kratom', signal: 'bad', stat: '50', statSuffix: '%', barPct: 50, claim: 'řešených otrav kratomem letos šlo o lidi mladší 19 let.', context: 'Vláda proto zvedla věkovou hranici nákupu z 18 na 21 let.' },
+  'clanek-cekani-na-kolonoskopii': { kicker: 'Onkologie · screening', signal: 'bad', stat: '84,2', claim: 'dní čeká pacient na kolonoskopii po pozitivním testu na krev ve stolici.', context: 'O 23 dní déle než v roce 2019. Normu EU 31 dní nesplnil žádný okres.' },
+  'clanek-hpv-zatez-miliarda': { kicker: 'Onkologie · zátěž HPV', signal: 'bad', stat: '112 543', claim: 'nových onemocnění spojených s HPV napočítala studie za tři roky.', context: 'Přímé náklady 1,06 mld. Kč. Proočkovanost dívek stagnuje na 69,8 %.' },
 };
 
 function escapeXml(s) {
