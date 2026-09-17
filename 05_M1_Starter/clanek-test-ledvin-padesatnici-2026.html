@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-17
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-17
+    creation_phase: rutina+article-write
+    primary_sources_count: 8
+    visual_elements_count: 6
+    notes: "Vytvořeno z discovery 2026-09-17. Spouštěč: tisková zpráva MZ ČR z 16. 9. 2026 „Ministerstvo
+      zdravotnictví posiluje časný záchyt onemocnění ledvin a srdce v primární péči“ + prezentace z tiskové
+      konference (PDF TK_Prevence-onemocneni-ledvin-a-srdce-v-primarni-peci.pdf, 31 stran, staženo 17. 9. 2026,
+      HTTP 200). CENTRÁLNÍ KPI: více než 530 tisíc osob s eGFR ve stadiu G3–G5 a více než 2,1 milionu s G2–G5
+      v roce 2024 (NRHZS — laboratorní data, slajd 8 prezentace MZ; kohorta osob s vyšetřeným eGFR, klasifikace
+      podle nejhorší hodnoty v roce, zahrnuje i akutní poklesy — caveat je v textu). Bench: globální prevalence CKD
+      13,4 % (Hill et al. 2016, PLoS One, PMID 27383068, meta-analýza 100 studií, 6 908 440 osob).
+      PRIMÁRNÍ ZDROJE (vše staženo 17. 9. 2026, HTTP 200): (1) TZ MZ ČR 16. 9. 2026 — citace Igora Karena, Ondřeje
+      Viklického, Štěpána Svačiny, Aleše Linharta a Petra Šonky verbatim; termín Věstníku 23. nebo 24. 9. 2026;
+      (2) prezentace z TK MZ 16. 9. 2026 — metodika 1× za 2 roky nad 50 let, 1× ročně u komorbidit (AH, HLP, ICHS,
+      ICHDK, PDM, DM2T; u DM2T nad 65 let 2× ročně), předoperační vyšetření; glifloziny do 30. 6. 2026 jen DIA/END/
+      KAR/NEFRO, od 1. 7. 2026 i VPL a PLDD, molekuly dapagliflozin, empagliflozin, kanagliflozin, ertugliflozin,
+      sjednocení podmínek úhrady dapa/empa od 1. 8. 2026; „přibližně jen 18 % pacientů s kardio-renálně
+      metabolickým onemocněním léčeno glifloziny“ (výpočet MZ z opendata.sukl.cz a IQVIA, odkazy navštíveny
+      1/2026); řada osob s G2–G5 na 100 000 obyvatel 13 360 (2020) → 16 470 → 17 626 → 18 259 → 19 567 (2024);
+      „oddálení HD v průměru o 7–13 let při včasném nasazení u 2. a 3. stupně“ = modelový příklad ze studie
+      DAPA-CKD (slajd 7) — v textu označeno jako tvrzení MZ z modelu, ne jako doložený výsledek;
+      (3) vyhláška č. 70/2012 Sb., o preventivních prohlídkách, aktuální znění od 1. 1. 2026 (verze 5, novela
+      č. 403/2025 Sb.), § 2 písm. h) body 4 a 5 — verbatim znění v textu (zakonyprolidi.cz, staženo s UA
+      Mozilla/5.0, HTTP 200; historie verzí ověřena na /cs/2012-70/historie); vyhláška sama stanoví dvouletý
+      interval i u diabetu, hypertenze a KV onemocnění — roční frekvenci u komorbidit přináší až metodický pokyn;
+      (4) ČNS ČLS JEP — Statistická ročenka dialyzační léčby v ČR 2023 (PDF force-download/1788, 28 stran):
+      113 středisek, 6 352 pacientů v pravidelné dialýze k 31. 12. 2023 (583 PMP), HD 6 335 / PD 250 (3,9 %),
+      domácí HD 89, 12 373 osob v programu náhrady funkce ledvin (1 135 PMP), 6 021 s funkčním štěpem,
+      488 transplantací, celková mortalita 16,4 %, zahájilo HD 2 403 a PD 101; (5) ÚZIS NZIS Open PPS-08-08 (CSV,
+      vlastní agregace): 1 237 osob 50+ zahájilo dialýzu 2024, 879 (71,1 %) s nefrologickým vyšetřením v roce před
+      startem; (6) ÚZIS/NZIP PPS-08-01 přes cache indikátoru prohlidka_prakticky_lekar: 52,6 % pojištěnců 18+
+      s preventivní prohlídkou v dvouletém intervalu (2023), řada 49,8 (2019) / 47,0 / 45,7 / 49,7 / 52,6;
+      (7) Eurostat demo_pjangroup (API, staženo 17. 9. 2026): ČR k 1. 1. 2025 celkem 10 909 500 obyvatel, ve věku
+      50 a více let 4 407 960; (8) Věstník MZ 11/2026 z 15. 9. 2026 ověřen (metodický pokyn v něm ještě není).
+      EVIDENCE (PubMed 8 dotazů, Consensus 1 dotaz, vše 17. 9. 2026): Hill NR et al. 2016 PLoS One 11(7):e0158765,
+      PMID 27383068, DOI 10.1371/journal.pone.0158765 (Meta-Analysis) — globální prevalence CKD 13,4 % (95% CI
+      11,7–15,1), stadia 3–5 10,6 %; Nuffield Department of Population Health Renal Studies Group & SGLT2 inhibitor
+      Meta-Analysis Cardio-Renal Trialists' Consortium 2022 Lancet 400(10365):1788-1801, PMID 36351458, DOI
+      10.1016/S0140-6736(22)02074-8 (Meta-Analysis, 13 studií, 90 413 osob) — progrese CKD RR 0,63 (0,58–0,69),
+      AKI RR 0,77, KV úmrtí nebo hospitalizace pro SS RR 0,77, shodně u lidí s diabetem i bez; Cusick MM et al.
+      2023 Ann Intern Med 176(6):788-797, PMID 37216661, DOI 10.7326/M22-3228 — jednorázový screening v 55 letech
+      ICER 86 300 USD/QALY, pokles incidence selhání ledvin o 0,29 p. b.; Cusick MM et al. 2024 JAMA Health Forum
+      5(11):e243892, PMID 39514193, DOI 10.1001/jamahealthforum.2024.3892 — start v 55 letech každých 5 let
+      128 400 USD/QALY, start v 35 či 45 letech přes 200 000 USD/QALY; Pouwels XGLV et al. 2024 EClinicalMedicine
+      68:102414, PMID 38299045, DOI 10.1016/j.eclinm.2023.102414 — domácí screening albuminurie 45–80 let v NL ICER
+      9 225 EUR/QALY, podskupina 45–64 let 7 946 EUR/QALY, 65–80 let 10 310 EUR/QALY; van Mil D et al. 2023 Lancet
+      402(10407):1052-1064, PMID 37597522, DOI 10.1016/S0140-6736(23)00876-0 (THOMAS, 15 074 pozvaných) — účast
+      59,4 % (odběrová sada) vs 44,3 % (aplikace), zvýšená albuminurie potvrzena u 3,3 %; Tangri N et al. 2025
+      Kidney Int Rep 10(4):1087-1100, PMID 40303204, DOI 10.1016/j.ekir.2025.01.020 — mikrosimulace 31 zemí,
+      screening populace 45+ dvěma eGFR a jedním UACR nákladově efektivní ve všech zemích; spoluautoři z AstraZeneca
+      (v textu uvedeno). Consensus (medical_mode, bez preprintů): 20 prací, převaha modelových studií nákladové
+      efektivity ve prospěch screeningu od 45–55 let, žádný nalezený přehled tvrzení článku nevyvrací; starší
+      kanadská analýza (Manns 2010, BMJ, PMID 21059726 — doplněno auditem K) zpochybňuje plošný screening samotným
+      eGFR bez léčby glifloziny — v textu jako výhrada.
+      VÝPOČTY REDAKCE, v textu takto označené: 530 000 / 6 352 = 83 (na jednoho dialyzovaného připadá zhruba
+      83 osob s G3–G5); 4 407 960 × 0,526 ≈ 2,3 milionu (ilustrace dosahu
+      při dnešní účasti — účast 52,6 % platí pro všechny pojištěnce 18+, ne jen pro 50+, což je v textu řečeno).
+      VĚDOMĚ NEUVEDENO: (a) rozhodnutí SÚKL, kterým se rozvolnilo preskripční omezení gliflozinů — nedohledáno
+      strojově, v textu jen s odkazem na MZ; (b) český odhad prevalence CKD z populační studie — neexistuje
+      publikovaný, používá se jen laboratorní kohorta MZ s výslovným caveatem; (c) ekonomické dopady srdečního
+      selhání ze slajdu 29 (7,0 a 14,8 mld. Kč) — bez definice, co která částka obsahuje; (d) porovnání se
+      sousedy DE/AT/PL/SK — plošný program vázaný na preventivní prohlídku jsme u nich nedohledali, text to říká
+      jako výsledek hledání, ne jako fakt o jejich systémech; (e) přesné znění metodického pokynu — vyjde až
+      23./24. 9. 2026, článek popisuje parametry z prezentace MZ.
+      Navazuje na clanek-nefrolog-pred-dialyzou.html (10. 9. 2026), jehož čísla o vstupu do dialýzy přebírá
+      odkazem; published:false, audit-status draft, čeká na schválení redakce."
+    audit_k_2026-09-17: "NEZÁVISLÝ AUDIT (blok K, jiná instance). OVĚŘENO PROTI PRIMÁRNÍM ZDROJŮM (staženo curlem
+      17. 9. 2026 s UA Mozilla/5.0, vše HTTP 200): TZ MZ ČR 16. 9. 2026 — všech pět výroků v uvozovkách (Karen,
+      Viklický, Šonka, formulace o metodickém pokynu, „podle odborných dat“ k oddálení HD o 7–13 let) sedí verbatim,
+      jména i funkce souhlasí, termín Věstníku 23./24. 9. 2026 potvrzen; prezentace z TK — PDF na URL z článku má
+      shodnou velikost (2 115 521 B) s lokálním extraktem, slajdy 4 (frekvence 1× za 2 roky nad 50 let, 1× ročně
+      u AH/HLP/ICHS/ICHDK/PDM/DM2T, 2× ročně u DM2T nad 65 let, předoperační vyšetření), 5 a 7 (DAPA-CKD jako modelový
+      příklad), 6 (18 % léčených), 8 (> 2,1 mil. G2–G5 a > 530 tis. G3–G5 za 2024) a 9 (řada 13 360 → 19 567 na 100 tis.
+      obyv., caveat o akutních poklesech), 13 (preskripce do 30. 6. / od 1. 7. 2026, molekuly, sjednocení úhrad od
+      1. 8. 2026) souhlasí; ČNS ročenka 2023 (force-download/1788, 1 425 253 B, shodná s lokální kopií) — 113 středisek,
+      6 352 pac. / 583 PMP, HD 6 335, PD 250 (3,9 %), domácí HD 89, KRT 12 373 / 1 135 PMP, 6 021 s funkčním štěpem,
+      488 transplantací, zahájilo HD 2 403 a PD 101, celková mortalita 16,4 % — vše literálně; ÚZIS PPS-08-08 (CSV z URL
+      v článku, vlastní agregace přes všechny kraje, pohlaví a věkové skupiny 50–59 až 80+ za rok 2024) dává 1 237
+      dialyzovaných a 879 s nefrologem = 71,06 %, tedy 71,1 % a 358 nepřipravených — sedí; Eurostat demo_pjangroup přes
+      API — součet Y50-54 až Y_GE85 k 1. 1. 2025 = 4 407 960 z 10 909 500, tedy 40 %, a 4 407 960 × 0,526 = 2,32 mil.;
+      Věstník 11/2026 opravdu pokyn neobsahuje. DATABOX: všech sedm indikátorů (prohlidka_prakticky_lekar 52,6 %/2023,
+      nefrologicka_pece_pred_dialyzou 71,1 %/2024, podil_peritonealni_dialyzy 3,9 %/2023 vs EU 8, prevalence_diabetu
+      9,5 %/2023 vs OECD 7, kontrola_hypertenze 68 %/2024 vs OECD 72, spotreba_antidiabetik 113,1/2025 vs OECD 94,2,
+      podil_prakticti_lekari 16,9 %/2023 vs OECD 23) sedí literálně s data/indicators.json; hodnoty v .av-bar-row
+      (49,8 / 47,0 / 45,7 / 49,7 / 52,6) se shodují s trendem indikátoru. ODKAZY: všech 17 externích i všech 10 interních
+      cílů ověřeno (doi.org vrací curlu 403 u M22-3228, jamahealthforum.2024.3892 a bmj.c5869 — formát DOI je správný).
+      PUBMED 17. 9. 2026 (3 dotazy): všech 7 PMID sedí v autorech, roce, časopise, ročníku i stranách, žádná retrakce ani
+      erratum; čísla v textu (Hill 13,4 % / 10,6 %, 100 studií, 6 908 440 osob; Nuffield 13 studií, 90 413 osob, RR 0,63
+      / 0,77 / 0,77; Cusick 2023 86 300 USD a 0,29 p. b.; Cusick 2024 128 400 USD a > 200 000 USD; Pouwels 9 225 /
+      7 946 / 10 310 EUR; Tangri 31 zemí, 45+, 2 eGFR + 1 UACR; AstraZeneca mezi spoluautory) odpovídají abstraktům.
+      NÁLEZY OPRAVENÉ AUDITEM (6): (1) legislativa — § 2 vyhlášky č. 70/2012 Sb. nemá číslované odstavce (jde o jeden
+      nečíslovaný odstavec s písmeny a)–j)), citace „§ 2 odst. 2 písm. h)“ byla nesprávná a je opravena na „§ 2 písm. h)“
+      v textu i v seznamu zdrojů (verbatim znění bodů 4 a 5 jinak souhlasí se zněním od 1. 1. 2026, verze 5, novela
+      403/2025 Sb. potvrzena na /cs/2012-70/historie); (2) THOMAS — 3,3 % potvrzené albuminurie platí jen pro rameno
+      s odběrovou sadou, rameno s aplikací mělo 5,1 %; text i zdroj doplněny o obě ramena; (3) Manns 2010 BMJ ověřen
+      v PubMed (PMID 21059726, BMJ 2010;341:c5869), poznámka „v PubMed samostatně neověřeno“ nahrazena ověřením
+      a interpretace upřesněna — práce nedoporučuje cílit na „rizikové skupiny“ obecně, nákladově efektivní byl jen
+      screening osob s diabetem (22 600 CAD/QALY), u osob bez diabetu 572 000 CAD/QALY; doplněno, že jde o ceny 2009
+      a o modelovou analýzu; (4) ročenka ČNS — 1 307 zemřelých je počet zemřelých v hemodialýze (v PD zemřelo 17),
+      formulace „1 307 dialyzovaných zemřelo“ upřesněna na „hemodialyzovaných“; (5) atribuce 82 % — číslo není dopočet
+      redakce, stojí přímo na slajdu 6 prezentace MZ („A co zbývajících 82 %?“); opraveno v textu, v popisku počítadla
+      i v poznámce k údajům; (6) řada na 100 tis. obyvatel je na slajdu 9 výslovně vymezena jako G2–G5, text ji označoval
+      jen jako „lidé se sníženou filtrací“ — doplněno vymezení stadií. NEOVĚŘENO / PONECHÁNO: rozhodnutí SÚKL o rozvolnění
+      preskripce gliflozinů (nedohledáno, v textu i v poznámce uvedeno jako údaj MZ); konečné znění metodického pokynu
+      (vyjde až 23./24. 9. 2026); tvrzení, že u DE/AT/PL/SK obdobný plošný program nebyl dohledán (v textu správně
+      formulováno jako výsledek hledání). HYGIENA: perex v articles.json je znakově shodný s meta description, JSON-LD
+      description i deckem; title, og:title a headline shodné; datum 18. 9. 2026 = scheduled_for; žádný review banner
+      ani inline „Status:“; data-value u všech počítadel obsahují jen číslo (> a jednotky v data-prefix/data-suffix);
+      rozsah prózy 1 983 → 1 992 slov, v pásmu 1 200–2 000. Audit-status ponechán draft (žádný rozpor s primárním
+      zdrojem, který by nešel opravit), published zůstává false.
+    audit_opus_2026-09-17: "DRUHÁ KONTROLA ORCHESTRÁTORA (po auditu K, 17. 9. 2026) — tři nepřesnosti, které audit K minul:
+      (1) periodicita SÚKL — text uváděl, že SÚKL zveřejňuje spotřebu léčiv čtvrtletně; podle metodické karty
+      indicators/spotreba_antidiabetik.json jsou otevřená data DIS-13 (hlášení distributorů podle § 77 odst. 1 písm. f)
+      zákona č. 378/2007 Sb.) měsíční s měsíční aktualizací — opraveno na „každý měsíc\" a upřesněno, že jde o hlášení
+      distributorů, ne o spotřebu z receptů; (2) ročenka ČNS 2023 vykazuje 2 403 pacientů, kteří „zahájili daný způsob
+      léčby\" (HD), což zahrnuje i přechody z peritoneální dialýzy nebo po selhání štěpu, ne jen incidentní pacienty —
+      formulace upřesněna, stejně tak „celková mortalita\" doplněna na mortalitu v dialyzační léčbě; (3) poměr 83 : 1
+      míchá laboratorní kohortu za rok 2024 s dialyzační ročenkou za rok 2023 — roky jsou nyní ve výpočtu uvedeny.
+      Dále doloženo: tvrzení o adresném zvaní u onkologického screeningu od ledna 2014 nemělo v článku zdroj — opatřeno
+      odkazem na clanek-mamograf-rakovina-prsu.html, kde je doloženo § 30 odst. 2 písm. b) zákona č. 48/1997 Sb.
+      Ověřeno bez nálezu: zařazení gliflozinů do ATC A10 odpovídá definici indikátoru spotreba_antidiabetik; přepočet
+      Hill et al. 10,6 % na 10 909 500 obyvatel dává 1,16 mil., text uvádí „zhruba 1,1 milionu\" a „dvojnásobek\"
+      (530 tis.) — v toleranci zaokrouhlení."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Půl milionu lidí s poškozenými ledvinami, dialýza pro 6 352. Test dostane každý padesátník · HSPA Monitor</title>
+<meta name="description" content="Ministerstvo zdravotnictví oznámilo 16. září 2026 metodický pokyn k časnému záchytu chronického onemocnění ledvin. Laboratorní data za rok 2024 ukazují více než 530 tisíc lidí s výrazně sníženou funkcí ledvin (stadia G3–G5) a přes 2,1 milionu s jakýmkoli poklesem; na dialýzu chodilo koncem roku 2023 6 352 lidí. Vyhláška č. 403/2025 Sb. od ledna 2026 přidala všem lidem nad padesát let vyšetření filtrace a albuminurie jednou za dva roky, od července smějí praktici předepisovat glifloziny. Úzké hrdlo zůstává: na preventivní prohlídku, kde se test dělá, chodí v dvouletém intervalu jen 52,6 % pojištěnců.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Půl milionu lidí s poškozenými ledvinami, dialýza pro 6 352. Test dostane každý padesátník">
+<meta property="og:description" content="Metodický pokyn MZ k časnému záchytu chronického onemocnění ledvin: 530 tisíc lidí ve stadiu G3–G5, vyhláška 403/2025 Sb. od ledna 2026, glifloziny u praktiků od července. Na prohlídku chodí 52,6 % pojištěnců.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-test-ledvin-padesatnici-2026.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-test-ledvin-padesatnici-2026.png">
+<meta property="article:published_time" content="2026-09-18T06:00:00+02:00">
+<meta property="article:section" content="Prevence">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-test-ledvin-padesatnici-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Půl milionu lidí s poškozenými ledvinami, dialýza pro 6 352. Test dostane každý padesátník",
+  "description": "Ministerstvo zdravotnictví oznámilo 16. září 2026 metodický pokyn k časnému záchytu chronického onemocnění ledvin. Laboratorní data za rok 2024 ukazují více než 530 tisíc lidí s výrazně sníženou funkcí ledvin (stadia G3–G5) a přes 2,1 milionu s jakýmkoli poklesem; na dialýzu chodilo koncem roku 2023 6 352 lidí. Vyhláška č. 403/2025 Sb. od ledna 2026 přidala všem lidem nad padesát let vyšetření filtrace a albuminurie jednou za dva roky, od července smějí praktici předepisovat glifloziny. Úzké hrdlo zůstává: na preventivní prohlídku, kde se test dělá, chodí v dvouletém intervalu jen 52,6 % pojištěnců.",
+  "datePublished": "2026-09-18T06:00:00+02:00",
+  "dateModified": "2026-09-17",
+  "inLanguage": "cs",
+  "articleSection": "Prevence",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-test-ledvin-padesatnici-2026.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-test-ledvin-padesatnici-2026.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-test-ledvin-padesatnici-2026.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Prevence</span>
+        <span class="article-tag article-tag-muted">Ledviny · Primární péče · Preventivní prohlídky · Glifloziny · MZ ČR</span>
+      </div>
+      <h1 class="article-title">Půl milionu lidí s poškozenými ledvinami, dialýza pro 6 352. Test dostane každý padesátník</h1>
+      <p class="article-deck">
+        Ministerstvo zdravotnictví oznámilo 16. září 2026 metodický pokyn k časnému záchytu chronického onemocnění ledvin. Laboratorní data za rok 2024 ukazují více než <strong>530 tisíc</strong> lidí s výrazně sníženou funkcí ledvin (stadia G3–G5) a přes <strong>2,1 milionu</strong> s jakýmkoli poklesem; na dialýzu chodilo koncem roku 2023 <strong>6 352</strong> lidí. Vyhláška č. 403/2025 Sb. od ledna 2026 přidala všem lidem nad padesát let vyšetření filtrace a albuminurie jednou za dva roky, od července smějí praktici předepisovat glifloziny. Úzké hrdlo zůstává: na preventivní prohlídku, kde se test dělá, chodí v dvouletém intervalu jen <strong>52,6 %</strong> pojištěnců.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">18. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Ledviny nebolí. Ztrácejí funkci roky, aniž o tom člověk ví, a první potíže se hlásí ve chvíli, kdy do dialýzy zbývají měsíce. Proto se o chronickém onemocnění ledvin nerozhoduje v nefrologické ambulanci, ale u praktického lékaře, ve zkumavce s krví a v kelímku s močí. Od ledna 2026 má na oba testy nárok každý, komu bylo padesát, jednou za dva roky. V září ministerstvo dodává návod, jak s výsledky naložit, a od července smějí praktici sami předepsat lék, který postup nemoci zpomaluje. Na papíře je řetěz kompletní. Otázka je, kolik lidí jím projde.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLedHeroH">
+        <figcaption class="av-figure-h" id="avLedHeroH">Ledviny v číslech: kdo je nemocný, kdo je léčený, kdo dojde k testu</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="530" data-decimals="0" data-prefix="> " data-suffix=" tis.">&gt; 530 tis.</span>
+            <span class="av-counter-label">osob s eGFR ve stadiu G3–G5 (výrazně snížená funkce ledvin) v roce 2024</span>
+            <span class="av-counter-foot">laboratorní data NRHZS, jen lidé s vyšetřeným eGFR, včetně akutních poklesů</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="6352" data-decimals="0" data-suffix="">6 352</span>
+            <span class="av-counter-label">pacientů v pravidelné dialyzační léčbě k 31. 12. 2023</span>
+            <span class="av-counter-foot">ČNS, Statistická ročenka dialyzační léčby 2023 · 583 na milion obyvatel</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="18" data-decimals="0" data-suffix=" %">18 %</span>
+            <span class="av-counter-label">pacientů s kardio-renálně-metabolickým onemocněním léčených glifloziny</span>
+            <span class="av-counter-foot">odhad MZ ČR z otevřených dat SÚKL a IQVIA, leden 2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="52.6" data-decimals="1" data-suffix=" %">52,6 %</span>
+            <span class="av-counter-label">pojištěnců 18+ absolvovalo preventivní prohlídku u praktika v dvouletém intervalu (2023)</span>
+            <span class="av-counter-foot">ÚZIS, NZIS Open PPS-08-01 · tady se test ledvin fyzicky dělá</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> MZ ČR, prezentace z tiskové konference 16. 9. 2026 (slajdy 6 a 8; laboratorní data Národního registru hrazených zdravotních služeb za rok 2024); Česká nefrologická společnost ČLS JEP, Statistická ročenka dialyzační léčby v ČR 2023; ÚZIS ČR, NZIS Open PPS-08-01, rok 2023.</p>
+      </figure>
+
+      <h3>Co se stalo: tři kroky během jednoho roku</h3>
+
+      <p>
+        Tisková zpráva ministerstva zdravotnictví z 16. září 2026 je na první pohled oznámením jednoho dokumentu. „Nový metodický pokyn Ministerstva zdravotnictví, vydaný ve Věstníku MZ, má sjednotit postup při vyhledávání pacientů s počínajícím onemocněním ledvin,“ píše ministerstvo. Ve skutečnosti pokyn uzavírá sérii tří změn, které se v primární péči sešly během devíti měsíců.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLedTimelineH">
+        <figcaption class="av-figure-h" id="avLedTimelineH">Časný záchyt onemocnění ledvin v primární péči: od vyhlášky k metodice</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item">
+            <span class="av-timeline-date">1. 1. 2026</span>
+            <span class="av-timeline-text"><strong>Vyhláška č. 403/2025 Sb.</strong> mění vyhlášku o preventivních prohlídkách: poměr albumin/kreatinin v moči, sérový kreatinin a odhad glomerulární filtrace u všech osob starších 50 let a u lidí s diabetem, hypertenzí nebo kardiovaskulárním onemocněním, vždy v dvouletých intervalech; nově též NT-proBNP u rizikových od 50 let.</span>
+          </li>
+          <li class="av-timeline-item">
+            <span class="av-timeline-date">1. 7. 2026</span>
+            <span class="av-timeline-text"><strong>Glifloziny (inhibitory SGLT2) smějí předepisovat praktičtí lékaři</strong> pro dospělé i pro děti a dorost, v rámci <a href="clanek-preskripce-praktici-2026.html">červencového rozvolnění preskripce více než 1 200 léčiv</a>. Do 30. června je podle MZ směli psát jen diabetologové, endokrinologové, kardiologové a nefrologové. Od 1. 8. 2026 se podle MZ sjednotily podmínky úhrady dapagliflozinu a empagliflozinu.</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-highlight">
+            <span class="av-timeline-date">16. 9. 2026</span>
+            <span class="av-timeline-text"><strong>Tisková konference MZ ČR:</strong> ministerstvo oznamuje metodický pokyn k záchytu chronického onemocnění ledvin a algoritmus pro časný záchyt srdečního selhání (NT-proBNP) připravený Českou kardiologickou společností a Společností všeobecného lékařství ČLS JEP.</span>
+          </li>
+          <li class="av-timeline-item">
+            <span class="av-timeline-date">23.–24. 9. 2026</span>
+            <span class="av-timeline-text"><strong>Metodický pokyn vychází ve Věstníku MZ</strong> (termín podle tiskové zprávy). Částka 11/2026 z 15. září ho ještě neobsahuje.</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> vyhláška č. 70/2012 Sb. ve znění vyhlášky č. 403/2025 Sb. (zakonyprolidi.cz, znění od 1. 1. 2026); MZ ČR, tisková zpráva a prezentace z 16. 9. 2026 (slajdy 4, 5, 13); Věstník MZ ČR, částka 11/2026.</p>
+      </figure>
+
+      <h3>Co říká vyhláška a co teprve dodá metodika</h3>
+
+      <p>
+        Právní základ testu je nenápadný odstavec. Vyhláška č. 70/2012 Sb., o preventivních prohlídkách, ve znění účinném od 1. ledna 2026 uvádí v § 2 písm. h) mezi preventivními vyšetřeními u praktického lékaře bod 4: „laboratorní vyšetření poměru albuminu a kreatininu v aktuální moči (ACR), laboratorní vyšetření sérového kreatininu a odhad glomerulární filtrace u pacientů trpících diabetem, hypertenzí nebo kardiovaskulárním onemocněním a u všech osob starších 50 let ve dvouletých intervalech.“ Bod 5 přidává vyšetření NT-proBNP „u osob s minimálně dvěma rizikovými faktory srdečního selhání v 50 letech a dále ve dvouletých intervalech, u osob s alespoň jedním rizikovým faktorem srdečního selhání v 60 letech“. Novelu č. 403/2025 Sb. dashboard popsal už v článku o <a href="clanek-nefrolog-pred-dialyzou.html">pozdním odesílání k nefrologovi</a>; tehdy šlo o rozhodnutí, dnes o provedení.
+      </p>
+
+      <p>
+        Vyhláška říká <em>co</em> a <em>jak často</em>. Neříká, co má praktik udělat s výsledkem, kdy má pacienta odeslat a kdy ho může léčit sám. To je role metodického pokynu. Podle prezentace, kterou ministerstvo na tiskové konferenci zveřejnilo, sleduje pokyn „parametry ledvinové kondice“ jednou za dva roky při preventivních prohlídkách nad 50 let, ale <strong>jednou ročně u pacientů s komorbiditami</strong>: s hypertenzí, poruchou lipidů, ischemickou chorobou srdeční, ischemickou chorobou dolních končetin, prediabetem a diabetem 2. typu, u diabetiků nad 65 let dokonce dvakrát ročně, a „standardně i u předoperačních vyšetření pro celkovou anestézii“. Tady se vyhláška a metodika rozcházejí v tempu: vyhláška ukládá u rizikových skupin interval dvouletý, metodický pokyn půjde nad její rámec. Právně vymahatelný je jen ten první; roční frekvence u komorbidit bude doporučením, jehož dodržování nikdo neuhlídá jinak než z vykázaných dat.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block">
+          <span class="av-counter" data-value="4407960" data-decimals="0" data-suffix="">4 407 960</span>
+          <span class="av-counter-label">lidí ve věku 50 a více let žilo v Česku k 1. 1. 2025, tedy 40 % obyvatel</span>
+          <span class="av-counter-foot">Eurostat, demo_pjangroup · nárok na test filtrace a albuminurie má každý z nich jednou za dva roky</span>
+        </div>
+      </aside>
+
+      <h3>Kolik lidí to je, a kde se řetěz trhá</h3>
+
+      <p>
+        Podle Eurostatu žilo k 1. lednu 2025 v Česku 4 407 960 lidí ve věku padesát let a více z celkových 10 909 500 obyvatel. Právě tolik lidí má od ledna nárok na oba testy. Jenže nárok se uplatňuje jen u toho, kdo na preventivní prohlídku přijde. Indikátor dashboardu <a href="indikator-prohlidka_prakticky_lekar.html">Pokrytí preventivní prohlídkou u praktického lékaře</a> ukazuje, že v doporučeném dvouletém intervalu ji v roce 2023 absolvovalo 52,6 % pojištěnců starších osmnácti let. Číslo platí pro všechny dospělé, ne jen pro padesátníky, a v roce 2023 bylo nejvyšší za pět let. Přesto říká to podstatné: zhruba polovina lidí se do ordinace, kde se test dělá, v předepsaném rytmu vůbec nedostane. Kdyby účast padesátníků odpovídala celostátnímu průměru, což je předpoklad, nikoli změřený fakt, dostal by se test za dva roky k asi 2,3 milionu z nich (výpočet redakce).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avLedProhlidkyH">
+        <figcaption class="av-figure-h" id="avLedProhlidkyH">Podíl pojištěnců 18+ s preventivní prohlídkou u praktika v dvouletém intervalu (ČR)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="100" data-unit=" %">
+          <li class="av-bar-row" data-value="49.8" data-label="2019" data-note="předcovidová úroveň"></li>
+          <li class="av-bar-row av-bar-row-warn" data-value="47.0" data-label="2020" data-note="omezení plánované péče"></li>
+          <li class="av-bar-row av-bar-row-warn" data-value="45.7" data-label="2021" data-note="nejnižší hodnota řady"></li>
+          <li class="av-bar-row" data-value="49.7" data-label="2022" data-note="návrat na úroveň 2019"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="52.6" data-label="2023" data-note="aktuální hodnota indikátoru · od roku 2026 se tady dělá i test ledvin"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NZIS Open, sada Preventivní prohlídky (PPS-08-01), mikrodata za pojištěnce 18+; hodnota = podíl osob s vykázanou prohlídkou v doporučeném dvouletém intervalu. Rok 2024 zatím není v otevřených datech k dispozici.</p>
+      </figure>
+
+      <p>
+        Druhé slabé místo je za testem. Dashboard sleduje, kolik lidí přichází k dialýze bez předchozí nefrologické péče: v roce 2024 mělo nefrologické vyšetření v roce před prvním napojením <a href="indikator-nefrologicka_pece_pred_dialyzou.html">71,1 %</a> z 1 237 lidí starších padesáti let, kteří chronickou dialýzu zahájili. Zbylých 358 přišlo nepřipraveno. Metodický pokyn míří přesně na tenhle bod, protože poprvé má existovat jednotné pravidlo, kdy má praktik pacienta s abnormálním nálezem odeslat. Hodnota 71,1 % je tak nultým měřením: pokud pokyn funguje, měla by v příštích letech stoupat.
+      </p>
+
+      <h3>Proč zrovna ledviny: půl milionu lidí, o kterých systém ví, a ti, o kterých neví</h3>
+
+      <p>
+        Na tiskové konferenci ukázalo ministerstvo číslo, které dosud v žádné veřejné statistice nebylo. Z laboratorních výsledků hlášených do Národního registru hrazených zdravotních služeb vyplývá, že v roce 2024 mělo <strong>více než 2,1 milionu osob</strong> odhadovanou glomerulární filtraci ve stadiu G2 až G5, tedy alespoň mírně sníženou, a <strong>více než 530 tisíc osob</strong> ve stadiu G3 až G5, tedy sníženou výrazně. Počet osob ve stadiích G2 až G5 na 100 tisíc obyvatel podle téhož zdroje stoupal z 13 360 v roce 2020 přes 16 470, 17 626 a 18 259 na 19 567 v roce 2024.
+      </p>
+
+      <p>
+        Číslo je třeba číst přesně. Ministerstvo samo připomíná, že jde o kohortu lidí, kterým byla filtrace vůbec vyšetřena, zařazených podle nejhorší hodnoty v daném roce, a že hodnota může odrážet i akutní selhání, například po otravě. Není to tedy prevalence chronického onemocnění ledvin v populaci a růst řady může být z podstatné části růstem počtu vyšetřených, ne nemocných. Pro srovnání: nejcitovanější celosvětový odhad, meta-analýza sta studií na 6,9 milionu osob z roku 2016 (Hill et al., <em>PLoS One</em>), udává globální prevalenci všech stadií 13,4 % a stadií 3 až 5 10,6 %. Kdyby platil pro Česko, znamenal by stadia 3 až 5 u zhruba 1,1 milionu lidí, dvojnásobku toho, co má systém v laboratořích. Právě ten rozdíl je důvodem pro plošný test. Český populační odhad prevalence chybí; laboratorní kohorta je zatím nejlepší dostupné číslo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avLedFlowH">
+        <figcaption class="av-figure-h" id="avLedFlowH">Od testu k léčbě: řetěz, který metodika spojuje</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step"><strong>Preventivní prohlídka</strong><span>každé 2 roky od 50 let · účast 52,6 % (18+, 2023)</span></li>
+          <li class="av-flow-step"><strong>eGFR z krve + ACR z moči</strong><span>vyhláška 403/2025 Sb. · od 1. 1. 2026</span></li>
+          <li class="av-flow-step av-flow-step-warn"><strong>Nález nad prahem</strong><span>metodický pokyn: kdy léčit u praktika, kdy odeslat</span></li>
+          <li class="av-flow-step"><strong>Glifloziny u praktika</strong><span>od 1. 7. 2026 · dnes léčeno 18 % pacientů (MZ)</span></li>
+          <li class="av-flow-step av-flow-step-bad"><strong>Nefrolog · dialýza</strong><span>71,1 % s nefrologem rok před dialýzou · 6 352 dialyzovaných</span></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> vyhláška č. 70/2012 Sb. ve znění od 1. 1. 2026; MZ ČR, prezentace 16. 9. 2026; ÚZIS ČR, NZIS Open PPS-08-01 a PPS-08-08; ČNS, ročenka 2023. Schéma redakce.</p>
+      </figure>
+
+      <p>
+        Na konci řetězu stojí dialýza, a ta je v Česku dobře změřená. Statistická ročenka České nefrologické společnosti za rok 2023 eviduje 113 dialyzačních středisek a 6 352 pacientů v pravidelné dialyzační léčbě k 31. prosinci, což je 583 na milion obyvatel. Hemodialýzou se léčilo 6 335 lidí, peritoneální, tedy domácí, dialýzou jen 250 (3,9 %), domácí hemodialýzou 89. Během roku 2023 zahájilo hemodialýzu jako svou metodu 2 403 pacientů, včetně přechodů z jiné metody, a 1 307 hemodialyzovaných zemřelo; celková mortalita v dialyzační léčbě byla 16,4 %. Započteme-li 6 021 lidí žijících s funkční transplantovanou ledvinou, bylo v programu náhrady funkce ledvin 12 373 osob. Na jednoho dialyzovaného tak připadá zhruba 83 lidí, u kterých laboratoř našla stadium G3 až G5 (výpočet redakce z čísel MZ za rok 2024 a ČNS za rok 2023). Ne každý z nich k dialýze dojde; ale právě mezi nimi se rozhoduje, kolik jich tam dojde v roce 2035.
+      </p>
+
+      <h3>Co říká evidence: test má smysl, když za ním následuje lék</h3>
+
+      <p>
+        Plošné testování ledvin bylo dlouho sporné. Kanadská analýza z roku 2010 (Manns et al., <em>BMJ</em>) vyšla modelem pro jednorázový screening samotnou filtrací v obecné populaci na 104 900 kanadských dolarů (ceny 2009) za rok života v plné kvalitě; efektivní byl jen cílený screening diabetiků (22 600 CAD). Co se od té doby změnilo, je léčba. Kolaborativní meta-analýza třinácti velkých placebem kontrolovaných studií na 90 413 účastnících (Nuffield Department of Population Health Renal Studies Group, <em>Lancet</em> 2022) ukázala, že glifloziny snižují riziko progrese onemocnění ledvin o 37 % (relativní riziko 0,63; 95% CI 0,58–0,69), riziko akutního poškození ledvin o 23 % a riziko kardiovaskulárního úmrtí nebo hospitalizace pro srdeční selhání také o 23 %, a to shodně u lidí s diabetem i bez něj. Ministerstvo z modelového příkladu studie DAPA-CKD odvozuje, že včasné nasazení ve druhém a třetím stadiu oddálí hemodialýzu v průměru o 7 až 13 let; to je tvrzení z modelu, ne změřený výsledek, a v tiskové zprávě stojí jako „podle odborných dat“ bez konkrétní citace.
+      </p>
+
+      <p>
+        S léčbou v ruce vychází i ekonomika testu jinak. Americký Markovův model (Cusick et al., <em>Annals of Internal Medicine</em> 2023) spočítal, že jednorázový screening albuminurie v 55 letech stojí 86 300 dolarů za získaný kvalitní rok života a snižuje výskyt selhání ledvin vyžadujícího dialýzu nebo transplantaci o 0,29 procentního bodu. Navazující práce téhož týmu (<em>JAMA Health Forum</em> 2024) porovnala věk zahájení: start v 55 letech s opakováním každých pět let vyšel na 128 400 dolarů za kvalitní rok, zatímco start ve 35 nebo 45 letech přesáhl 200 000 dolarů. Nizozemský model postavený na skutečné implementační studii (Pouwels et al., <em>EClinicalMedicine</em> 2024) vyšel pro domácí screening lidí ve věku 45 až 80 let na 9 225 eur za kvalitní rok, přičemž u lidí 45 až 64 let byl levnější (7 946 eur) než u lidí 65 až 80 let (10 310 eur). Mikrosimulace pro 31 zemí (Tangri et al., <em>Kidney International Reports</em> 2025; mezi spoluautory jsou zaměstnanci výrobce dapagliflozinu AstraZeneca) došla k tomu, že screening populace od 45 let dvěma měřeními filtrace a jedním měřením albuminurie je nákladově efektivní ve všech sledovaných zemích. Česká hranice padesáti let tedy leží uprostřed rozpětí, které evidence podporuje; horní věková hranice v české vyhlášce žádná není.
+      </p>
+
+      <p>
+        Jediná z těch prací, která měřila, kolik lidí na pozvání skutečně zareaguje, je nizozemská THOMAS (van Mil et al., <em>Lancet</em> 2023): z 15 074 pozvaných lidí ve věku 45 až 80 let se domácího odběru zúčastnilo 59,4 % těch, kdo dostali odběrovou sadu poštou, a 44,3 % těch, kdo měli použít aplikaci; zvýšená albuminurie se potvrdila u 3,3 % vyšetřených sadou a 5,1 % vyšetřených aplikací. Nizozemci test poslali lidem domů. Česko ho vložilo do preventivní prohlídky, na kterou dnes chodí polovina dospělých. To je zásadní rozdíl: český program nemá vlastní zvací mechanismus a spoléhá na ten, který má dnes díru na polovinu populace.
+      </p>
+
+      <h3>Mezinárodní srovnání s výhradou</h3>
+
+      <p>
+        Harmonizovaný ukazatel „podíl populace s vyšetřenou filtrací a albuminurií“ OECD ani Eurostat nesledují a program vázaný na zákonem definovanou preventivní prohlídku celé populace nad padesát let jsme u sousedů v Německu, Rakousku, Polsku ani na Slovensku nedohledali; to je výsledek našeho hledání, ne tvrzení o jejich systémech. Prahové hodnoty zahraničních modelů na české ceny testů a léků nepřeneseme. Přenést lze směr: test kolem padesátky se vyplatí tehdy, když na nález navazuje léčba, která postup nemoci zpomalí. Právě proto má 1. červenec 2026 pro program větší význam než samotná vyhláška.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="82" data-decimals="0" data-suffix=" %">82 %</span>
+          <span class="av-counter-label">pacientů s kardio-renálně-metabolickým onemocněním glifloziny nedostává</span>
+          <span class="av-counter-foot">slajd 6 prezentace MZ ČR („A co zbývajících 82 %?“); výpočet MZ z opendata.sukl.cz a IQVIA, leden 2026</span>
+        </div>
+      </aside>
+
+      <h3>Co vývoj přináší</h3>
+
+      <p>
+        Pro pacienta znamená sled tří změn, že cesta od podezření k léčbě může proběhnout v jedné ordinaci. „Možnost zahájit účinnou léčbu přímo v ordinaci praktického lékaře zkracuje dobu mezi záchytem rizikového pacienta a zahájením terapie,“ říká v tiskové zprávě předseda Sdružení praktických lékařů Petr Šonka. Přednosta Kliniky nefrologie IKEM Ondřej Viklický v téže zprávě dodává, že „pacienti s pokročilejšími stadii chronického onemocnění ledvin nadále patří do péče nefrologů, ale velkou část časného záchytu a péče o méně závažná stadia mohou zajistit praktičtí lékaři“. Pro systém to znamená, že úzké hrdlo se přesouvá: dříve chyběl test i lék, dnes chybí pacient v čekárně.
+      </p>
+
+      <p>
+        Ministerstvo na konferenci samo přiznalo, jak velký kus cesty zbývá: podle jeho výpočtu z otevřených dat SÚKL a dat IQVIA bylo v lednu 2026 glifloziny léčeno „přibližně jen 18 %“ pacientů s kardio-renálně-metabolickým onemocněním. Zbývajících 82 %, na která se slajd sám ptá, je populace, kterou má rozvolnění preskripce oslovit. Zda se to děje, půjde přečíst z hlášení distributorů, která SÚKL zveřejňuje v otevřených datech každý měsíc; dashboard už dnes sleduje <a href="indikator-spotreba_antidiabetik.html">spotřebu antidiabetik</a>, do níž glifloziny v ATC skupině A10 spadají.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé, měřit účast, ne nárok.</strong> Vyhláška dala nárok 4,4 milionu lidí; smysluplný ukazatel je podíl padesátníků, kteří mají v dvouletém okně vykázané eGFR i ACR. Data na to existují ve stejném registru, ze kterého ministerstvo vytáhlo laboratorní kohortu; publikovat je po krajích a věkových skupinách v NZIS Open by stálo méně než jakákoli kampaň. <strong>Za druhé, zvát.</strong> Nizozemská účast 59,4 % vznikla tím, že test přišel poštou domů. Český program zvací mechanismus nemá a účast na preventivní prohlídce, z níž žije, se drží kolem poloviny; <a href="clanek-mamograf-rakovina-prsu.html">adresné zvaní pojišťovnami, které u onkologického screeningu běží od ledna 2014</a>, je nejlevnější dostupná páka. <strong>Za třetí, uzavřít smyčku mezi laboratoří a ordinací.</strong> Nález nad prahem musí být signál, ne jen číslo v kartě; to je věc laboratorních informačních systémů, ne dalšího doporučení. <strong>Za čtvrté, vyhodnotit pokyn po roce.</strong> Tři čísla to umožní bez nové studie: účast na prohlídce, podíl lidí s nefrologem před dialýzou (dnes 71,1 %) a podíl léčených glifloziny (dnes 18 %). Pokud se za rok nepohne ani jedno, nebude chyba v metodice, ale v tom, že ji nikdo nedonesl k pacientovi.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-labelledby="databox-h">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=prohlidka_prakticky_lekar"><strong>Pokrytí preventivní prohlídkou u praktického lékaře</strong></a> — 52,6 % pojištěnců 18+ v dvouletém intervalu (2023), ÚZIS, NZIS Open PPS-08-01</li>
+        <li><a href="indicator.html?id=nefrologicka_pece_pred_dialyzou"><strong>Nefrologická péče před zahájením chronické dialýzy</strong></a> — 71,1 % osob 50+ (2024), ÚZIS, NZIS Open PPS-08-08</li>
+        <li><a href="indicator.html?id=podil_peritonealni_dialyzy"><strong>Podíl peritoneální (domácí) dialýzy</strong></a> — 3,9 % (2023), ČNS ČLS JEP, ročenka dialyzační léčby; evropský průměr 8 %</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % (2023), průměr OECD 7 %</li>
+        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrolovaná hypertenze</strong></a> — 68 % (2024), průměr OECD 72 %</li>
+        <li><a href="indicator.html?id=spotreba_antidiabetik"><strong>Spotřeba antidiabetik</strong></a> — 113,1 DDD na 1 000 obyvatel a den (2025), průměr OECD 94,2</li>
+        <li><a href="indicator.html?id=podil_prakticti_lekari"><strong>Podíl praktických lékařů mezi všemi lékaři</strong></a> — 16,9 % (2023), průměr OECD 23 %</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-nefrolog-pred-dialyzou.html">→ Tři sta padesát osm lidí ročně přijde k dialýze, aniž je předtím viděl nefrolog</a></li>
+        <li><a href="clanek-preskripce-praktici-2026.html">→ Konec obíhání kvůli receptu. Přes 1 200 léků smí od července předepsat i praktik</a></li>
+        <li><a href="clanek-peritonealni-dialyza.html">→ Dialýza doma: proč Česko domácí metodu opouští, když ji zbytek Evropy posiluje</a></li>
+        <li><a href="indikator-prohlidka_prakticky_lekar.html">→ Detail ukazatele Pokrytí preventivní prohlídkou u praktického lékaře</a></li>
+        <li><a href="indikator-nefrologicka_pece_pred_dialyzou.html">→ Detail ukazatele Nefrologická péče před zahájením chronické dialýzy</a></li>
+        <li><a href="prevence.html">→ Prevence: vakcinace a screeningy v Česku</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — Česko</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — tisková zpráva „Ministerstvo zdravotnictví posiluje časný záchyt onemocnění ledvin a srdce v primární péči“, 16. 9. 2026</strong> — oznámení metodického pokynu, termín vydání ve Věstníku 23. nebo 24. 9. 2026, citace Igora Karena, Ondřeje Viklického, Štěpána Svačiny, Aleše Linharta a Petra Šonky, rozvolnění preskripce gliflozinů od 1. 7. 2026. <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-posiluje-casny-zachyt-onemocneni-ledvin-a-srdce-v-primarni-peci/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>MZ ČR — prezentace z tiskové konference „Prevence onemocnění ledvin a srdce v primární péči“, 16. 9. 2026 (PDF, 31 stran)</strong> — parametry metodiky (slajd 4), oddálení dialýzy podle modelu DAPA-CKD (slajdy 5 a 7), podíl 18 % léčených glifloziny (slajd 6), laboratorní kohorta NRHZS: více než 2,1 mil. osob G2–G5 a 530 tis. G3–G5 v roce 2024 a řada na 100 tisíc obyvatel 2020–2024 (slajdy 8–9), preskripce do 30. 6. a od 1. 7. 2026, sjednocení úhrad od 1. 8. 2026 (slajd 13). <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/TK_Prevence-onemocneni-ledvin-a-srdce-v-primarni-peci.pdf" target="_blank" rel="noopener">mzd.gov.cz — PDF ↗</a></li>
+          <li><strong>Vyhláška č. 70/2012 Sb., o preventivních prohlídkách, ve znění vyhlášky č. 403/2025 Sb. (znění od 1. 1. 2026)</strong> — § 2 písm. h) body 4 a 5: ACR, sérový kreatinin a odhad glomerulární filtrace u osob starších 50 let a u pacientů s diabetem, hypertenzí nebo kardiovaskulárním onemocněním v dvouletých intervalech; NT-proBNP podle rizikových faktorů srdečního selhání. <a href="https://www.zakonyprolidi.cz/cs/2012-70" target="_blank" rel="noopener">zakonyprolidi.cz — aktuální znění ↗</a> · <a href="https://www.zakonyprolidi.cz/cs/2025-403" target="_blank" rel="noopener">zakonyprolidi.cz — novela 403/2025 Sb. ↗</a></li>
+          <li><strong>Česká nefrologická společnost ČLS JEP — Statistická ročenka dialyzační léčby v ČR 2023</strong> — 113 středisek, 6 352 pacientů v pravidelné dialyzační léčbě k 31. 12. 2023 (583 na milion obyvatel), HD 6 335, PD 250, domácí HD 89, 12 373 osob v programu náhrady funkce ledvin, 6 021 s funkčním štěpem, 2 403 nových hemodialyzovaných, mortalita 16,4 %. <a href="https://www.nefrol.cz/odbornici/dialyzacni-statistika" target="_blank" rel="noopener">nefrol.cz — dialyzační statistika ↗</a></li>
+          <li><strong>ÚZIS ČR — NZIS Open, Preventivní prohlídky (PPS-08-01)</strong> — podíl pojištěnců 18+ s preventivní prohlídkou u praktického lékaře v dvouletém intervalu, řada 2019–2023. <a href="https://www.nzip.cz/data/1781-preventivni-prohlidky-prakticti-lekari-stomatologove-otevrena-data" target="_blank" rel="noopener">nzip.cz — otevřená data ↗</a></li>
+          <li><strong>ÚZIS ČR — NZIS Open, Podíl osob vstupujících do chronické dialyzační léčby dle předchozího vyšetření nefrologem (PPS-08-08)</strong> — 1 237 osob 50+ zahájilo dialýzu v roce 2024, 879 z nich (71,1 %) s nefrologickým vyšetřením v roce před startem. <a href="https://datanzis.uzis.gov.cz/data/PPS-08-PREVENCE/PPS-08-08/Otevrena-data-PPS-08-08-chronicka-dialyzacni-lecba-podil-osob-nefrolog.csv" target="_blank" rel="noopener">datanzis.uzis.gov.cz — CSV ↗</a></li>
+          <li><strong>Věstník MZ ČR, částka 11/2026 (15. 9. 2026)</strong> — poslední vydaná částka před ohlášeným metodickým pokynem; pokyn v ní obsažen není. <a href="https://mzd.gov.cz/vestnik/vestnik-11-2026/" target="_blank" rel="noopener">mzd.gov.cz — Věstník 11/2026 ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní kontext a demografie</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Population on 1 January by age group and sex (demo_pjangroup)</strong> — ČR k 1. 1. 2025: 10 909 500 obyvatel celkem, 4 407 960 ve věku 50 a více let (součet skupin 50–54 až 85+). <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Hill NR, Fatoba ST, Oke JL et al. Global Prevalence of Chronic Kidney Disease – A Systematic Review and Meta-Analysis. <em>PLoS One</em>. 2016;11(7):e0158765. DOI 10.1371/journal.pone.0158765. PMID 27383068.</strong> Meta-analýza 100 studií (6 908 440 osob): prevalence CKD všech stadií 13,4 %, stadií 3–5 10,6 %. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1371/journal.pone.0158765" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence: léčba a screening</h5>
+        <ul class="article-sources-list">
+          <li><strong>Nuffield Department of Population Health Renal Studies Group; SGLT2 inhibitor Meta-Analysis Cardio-Renal Trialists' Consortium. Impact of diabetes on the effects of sodium glucose co-transporter-2 inhibitors on kidney outcomes: collaborative meta-analysis of large placebo-controlled trials. <em>Lancet</em>. 2022;400(10365):1788–1801. DOI 10.1016/S0140-6736(22)02074-8. PMID 36351458.</strong> 13 studií, 90 413 účastníků; progrese CKD RR 0,63 (0,58–0,69), akutní poškození ledvin RR 0,77, KV úmrtí nebo hospitalizace pro srdeční selhání RR 0,77. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(22)02074-8" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cusick MM, Tisdale RL, Chertow GM, Owens DK, Goldhaber-Fiebert JD. Population-Wide Screening for Chronic Kidney Disease: A Cost-Effectiveness Analysis. <em>Ann Intern Med</em>. 2023;176(6):788–797. DOI 10.7326/M22-3228. PMID 37216661.</strong> Jednorázový screening v 55 letech: 86 300 USD/QALY, pokles selhání ledvin o 0,29 p. b. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.7326/M22-3228" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cusick MM, Tisdale RL, Chertow GM, Owens DK, Goldhaber-Fiebert JD, Salomon JA. When to Start Population-Wide Screening for Chronic Kidney Disease: A Cost-Effectiveness Analysis. <em>JAMA Health Forum</em>. 2024;5(11):e243892. DOI 10.1001/jamahealthforum.2024.3892. PMID 39514193.</strong> Start v 55 letech každých 5 let 128 400 USD/QALY; start ve 35 či 45 letech přes 200 000 USD/QALY. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1001/jamahealthforum.2024.3892" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Pouwels XGLV, van Mil D, Kieneker LM et al. Cost-effectiveness of home-based screening of the general population for albuminuria to prevent progression of cardiovascular and kidney disease. <em>EClinicalMedicine</em>. 2024;68:102414. DOI 10.1016/j.eclinm.2023.102414. PMID 38299045.</strong> Nizozemsko, věk 45–80: 9 225 EUR/QALY; podskupina 45–64 let 7 946 EUR/QALY, 65–80 let 10 310 EUR/QALY. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1016/j.eclinm.2023.102414" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>van Mil D, Kieneker LM, Evers-Roeten B et al. Participation rate and yield of two home-based screening methods to detect increased albuminuria in the general population in the Netherlands (THOMAS): a prospective, randomised, open-label implementation study. <em>Lancet</em>. 2023;402(10407):1052–1064. DOI 10.1016/S0140-6736(23)00876-0. PMID 37597522.</strong> 15 074 pozvaných ve věku 45–80 let; účast 59,4 % (odběrová sada) vs 44,3 % (aplikace); zvýšená albuminurie potvrzena u 3,3 % v rameni s odběrovou sadou a u 5,1 % v rameni s aplikací. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(23)00876-0" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Tangri N, Oh KH, Choo JCJ et al. Inside CKD: Cost-Effectiveness of Multinational Screening for CKD. <em>Kidney Int Rep</em>. 2025;10(4):1087–1100. DOI 10.1016/j.ekir.2025.01.020. PMID 40303204.</strong> Mikrosimulace 31 zemí; screening populace 45+ dvěma eGFR a jedním UACR nákladově efektivní ve všech zemích. Mezi spoluautory zaměstnanci AstraZeneca. Ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1016/j.ekir.2025.01.020" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Manns B, Hemmelgarn B, Tonelli M et al. Population based screening for chronic kidney disease: cost effectiveness study. <em>BMJ</em>. 2010;341:c5869. DOI 10.1136/bmj.c5869. PMID 21059726.</strong> Kanadská cost-utility analýza: jednorázový screening samotnou filtrací v obecné populaci 104 900 CAD/QALY (ceny 2009); nákladově efektivní jen cílený screening osob s diabetem (22 600 CAD/QALY), u osob bez diabetu 572 000 CAD/QALY. Nalezeno přes Consensus, ověřeno v PubMed 17. 9. 2026. <a href="https://doi.org/10.1136/bmj.c5869" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Čísla „více než 2,1 milionu osob s eGFR G2–G5“ a „více než 530 tisíc osob s G3–G5“ pocházejí z prezentace MZ ČR ze 16. 9. 2026 a popisují kohortu osob, kterým byla filtrace v daném roce vyšetřena, zařazených podle nejhorší naměřené hodnoty; zahrnují i akutní poklesy funkce a nejsou odhadem prevalence chronického onemocnění ledvin v populaci. Podíl 18 % pacientů léčených glifloziny je výpočet MZ ČR z otevřených dat SÚKL a dat IQVIA (leden 2026); doplněk 82 % uvádí týž slajd. Tvrzení o oddálení hemodialýzy o 7 až 13 let je modelový příklad MZ ČR ze studie DAPA-CKD, nikoli změřený výsledek. Parametry metodického pokynu (roční frekvence u komorbidit, předoperační vyšetření) jsou převzaty z prezentace MZ; samotný pokyn má vyjít ve Věstníku 23. nebo 24. 9. 2026 a jeho konečné znění může být jiné. Rozhodnutí SÚKL o změně preskripčního omezení gliflozinů jsme strojově nedohledali; datum 1. 7. 2026 uvádíme podle MZ ČR. Účast 52,6 % na preventivní prohlídce platí pro všechny pojištěnce 18+, nikoli jen pro osoby 50+; odhad 2,3 milionu je ilustrace při stejné účasti. Součet 4 407 960 osob 50+ je součet pětiletých skupin Eurostatu od 50–54 let výše k 1. 1. 2025, zatímco vyhláška mluví o osobách „starších 50 let“. Hodnoty nákladové efektivity ze zahraničních modelů nelze přenášet na české ceny. Postavy ani pacienti v textu nejsou konkrétní osoby.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
