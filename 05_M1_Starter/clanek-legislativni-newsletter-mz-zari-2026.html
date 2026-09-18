@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-18
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-18
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "Vytvořeno na přímé zadání vlastníka z 18. 9. 2026: rozebrat stránku
+      https://mzd.gov.cz/legislativni-newsletter-zari-2026/ a dát ji do souvislostí v jednom článku.
+      CENTRÁLNÍ KPI: 26 resortních předpisů v pěti fázích podle zářijového vydání (12 zpracovává + 3 meziresortní PŘ
+      + 4 vláda/LRV + 5 tisků + 2 Sbírka) proti 7 materiálům MZ ve VeKLEP; 11 z 12 zpracovávaných bez stopy ve VeKLEP.
+      PRIMÁRNÍ ZDROJE (staženy 18. 9. 2026, všechny HTTP 200):
+      (1) stránka MZ ČR „Legislativní newsletter – září 2026“ (vytvořeno 1. 9. 2026, poslední aktualizace 7. 9. 2026)
+          + PDF Legislativni-newsletter-09-2026.pdf (11 stran, 880,50 KB; „Zdravé paragrafy“, vydání 11, 09/2026),
+          text extrahován pdfjs-dist; (2) PDF Legislativni-newsletter-08-2026.pdf (9 stran, vydání 10, 08/2026, stav
+          k 31. 7. 2026) pro meziměsíční srovnání; (3) psp.cz historie sněmovních tisků 274, 235, 153, 130 a 57
+          (10. období), stav projednávání ke dni 18. 9. 2026, dekódováno z windows-1250; (4) zakonyprolidi.cz:
+          vyhláška 153/2026 Sb. (platnost 27. 6. 2026, účinnost 1. 9. 2026), vyhláška 154/2026 Sb. (platnost 27. 8. 2026,
+          účinnost 11. 9. 2026), historie zákona 375/2022 Sb. (verze 5 od 16. 9. 2026 novelou 166/2026 Sb.);
+      (5) VeKLEP přes MCP hlidac_statu (dataset veklep, 18. 9. 2026): dotaz predkladatel:MZ od 1. 7. 2026 = 7 záznamů
+          (KORNDVL9Q4OE, ALBSDVLDLD32, KORNDVEC8EF8, ALBSDXRFYLM6, ALBSDUUFQ5OR, ALBSDRVH64TT, KORNDVAHEWJL);
+          klíčové dotazy na 12 zpracovávaných předpisů (látky lidského původu, nelékařská povolání, 361/2007, 55/2011,
+          31/2010, humánní léčivé přípravky, styk s vodou, ZUM, 48/1997) = jediná shoda ALBSDXRFYLM6 (úhradová vyhláška
+          2027, autorizace 9. 9. 2026, PŘ do 23. 9. 2026); vyhlášky s prázdným polem předkladatel: KORNDUAER3CU
+          (377/2022, poslední úprava 3. 8.), KORNDV37RXI3 (11/2023, poslední úprava 17. 9., proces pokračuje do SZ),
+          KORNDTKB9G50 (Administrace, → SZ), KORNDT6DNLSS (391/2013, → SZ); detaily ALBSDUUFQ5OR (2 verze, poslední
+          úprava 14. 9., schůze vlády 14. 9., tisk nepřidělen) a KORNDVEC8EF8 (3 verze, popis stále „pěti zákonů“);
+      (6) apps.odok.cz/djv-agenda?date=2026-09-14: bod 684/26 (167/1998) → usnesení č. 584/2026; bod 618/26 (258/2000)
+          bez odkazu na usnesení; záznam z jednání se stáhnout nepodařilo (HTTP 400);
+      (7) data/legislativa.json (registr legislativy HSPA Monitoru, verified_at 2026-09-17) — plan_items a plan_vyhled
+          z usnesení vlády č. 175 z 23. 3. 2026; (8) data/barometr.json — citace programového prohlášení vlády
+          z 5. 1. 2026, kap. 11; (9) data/indicators.json — hodnoty indikátorů v databoxu ověřeny literálně.
+      VÝPOČTY REDAKCE, v textu takto označené: 12+3+4+5+2 = 26; 5. 6. → 15. 9. 2026 = 102 dní; 1. 1. → 1. 9. 2026
+      = 8 měsíců; srpen→září: zpracovává 7→12, meziresortní 5→3, vláda/LRV 3→4, tisky 5→5, Sbírka 0→2.
+      VĚDOMĚ NEUVEDENO: (a) výsledek jednání vlády 14. 9. 2026 k bodu 618/26 — ODok usnesení neuvádí, VeKLEP přepnul
+      stav 8→7; článek to říká výslovně a nedomýšlí; (b) kadence newsletteru — index MZ zobrazuje jen jedno starší
+      vydání, tvrzení „měsíčník“ v textu není; (c) rozsah novely 55/2011 a NV 31/2010 — newsletter fázi neuvádí;
+      (d) reálné čtení srpnového dvousloupcového PDF u zákona o látkách lidského původu je u fáze nejednoznačné
+      (text mezi sloupci), článek proto pro srpen fázi této položky nesrovnává.
+      Rozpor známý z auditu clanek-lex-kratom-2026: newsletter i popis na ODok drží „pěti zákonů“, předkládací zpráva
+      k verzi pro vládu „devíti“ — v článku uvedeno s atribucí.
+      published:false, audit-status draft, čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví · HSPA Monitor</title>
+<meta name="description" content="Zářijové vydání Zdravých paragrafů, legislativního newsletteru ministerstva zdravotnictví, popisuje 26 resortních předpisů v pěti fázích: 12 se teprve zpracovává, 3 jsou po meziresortním připomínkovém řízení, 4 leží u vlády, 5 tisků čeká ve Sněmovně a 2 vyhlášky vyšly ve Sbírce. Jedenáct z dvanácti zpracovávaných předpisů nemá k 18. září žádnou stopu ve VeKLEP — newsletter je jediné veřejné okno do této fronty. Porovnali jsme ho s plánem legislativních prací vlády, s programovým prohlášením a s tím, co se od uzávěrky stalo: Sněmovna na 30. schůzi neprojednala ani jeden z pěti tisků, zákon o zdravotnických prostředcích vyšel 102 dní po podpisu prezidenta a úhradová vyhláška 2027 mezitím doputovala do připomínkového řízení.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví">
+<meta property="og:description" content="26 předpisů v pěti fázích, 11 bez stopy ve VeKLEP, 5 sněmovních tisků, na které nedošlo. Zářijové Zdravé paragrafy ministerstva zdravotnictví pod lupou a v souvislostech.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-18">
+<meta property="article:section" content="Legislativa a reforma">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-legislativni-newsletter-mz-zari-2026.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-legislativni-newsletter-mz-zari-2026.png" data-cover-injected="1">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026#article",
+      "headline": "Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví",
+      "description": "Zářijové vydání Zdravých paragrafů, legislativního newsletteru ministerstva zdravotnictví, popisuje 26 resortních předpisů v pěti fázích: 12 se teprve zpracovává, 3 jsou po meziresortním připomínkovém řízení, 4 leží u vlády, 5 tisků čeká ve Sněmovně a 2 vyhlášky vyšly ve Sbírce. Jedenáct z dvanácti zpracovávaných předpisů nemá k 18. září žádnou stopu ve VeKLEP — newsletter je jediné veřejné okno do této fronty. Porovnali jsme ho s plánem legislativních prací vlády, s programovým prohlášením a s tím, co se od uzávěrky stalo: Sněmovna na 30. schůzi neprojednala ani jeden z pěti tisků, zákon o zdravotnických prostředcích vyšel 102 dní po podpisu prezidenta a úhradová vyhláška 2027 mezitím doputovala do připomínkového řízení.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-legislativni-newsletter-mz-zari-2026.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026"
+      },
+      "datePublished": "2026-09-18",
+      "dateModified": "2026-09-18",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Legislativa a reforma"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví",
+          "item": "https://skorezdravotnictvi.cz/clanek-legislativni-newsletter-mz-zari-2026"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <img class="article-cover" src="assets/covers/clanek-legislativni-newsletter-mz-zari-2026.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Legislativa a reforma</span>
+        <span class="article-tag article-tag-muted">legislativní newsletter · VeKLEP · plán legislativních prací · sněmovní tisky</span>
+      </div>
+      <h1 class="article-title">Jedenáct předpisů, o kterých VeKLEP mlčí. Co prozrazuje legislativní newsletter ministerstva zdravotnictví</h1>
+      <p class="article-deck">
+        Zářijové vydání <strong>Zdravých paragrafů</strong>, legislativního newsletteru ministerstva zdravotnictví, popisuje <strong>26 resortních předpisů</strong> v pěti fázích: 12 se teprve zpracovává, 3 jsou po meziresortním připomínkovém řízení, 4 leží u vlády, 5 tisků čeká ve Sněmovně a 2 vyhlášky vyšly ve Sbírce. <strong>Jedenáct z dvanácti</strong> zpracovávaných předpisů nemá k 18. září žádnou stopu ve VeKLEP — newsletter je jediné veřejné okno do této fronty. Porovnali jsme ho s plánem legislativních prací vlády, s programovým prohlášením a s tím, co se od uzávěrky stalo: Sněmovna na 30. schůzi neprojednala ani jeden z pěti tisků, zákon o zdravotnických prostředcích vyšel <strong>102 dní</strong> po podpisu prezidenta a úhradová vyhláška 2027 mezitím doputovala do připomínkového řízení.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">18. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Ministerstvo zdravotnictví má vlastní legislativní newsletter. Jmenuje se Zdravé paragrafy, píše ho pětičlenná redakční rada Samostatného oddělení legislativy a jeho jedenácté vydání, datované 09/2026, popisuje stav k 31. srpnu 2026. Na jedenácti stranách eviduje 26 resortních předpisů v pěti fázích legislativního procesu. Veřejná knihovna legislativního procesu VeKLEP přitom za totéž období vede jen sedm materiálů ministerstva. Rozdíl dělá jediná rubrika — „Aktuálně se zpracovává“: dvanáct zákonů, vyhlášek a nařízení, které zatím existují jen uvnitř úřadu, a jedenáct z nich nemá ani k 18. září ve VeKLEP žádnou stopu. Přečetli jsme newsletter celý, položili ho vedle srpnového vydání, vedle plánu legislativních prací vlády a vedle našeho registru legislativy — a doplnili, co se od uzávěrky změnilo.
+      </p>
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Zářijové Zdravé paragrafy v číslech — stav k 31. 8. 2026 a co jsme k němu dopočítali</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="26">26</span>
+            <span class="av-counter-label">resortních předpisů v pěti fázích</span>
+            <span class="av-counter-foot">12 zpracovává + 3 meziresortní připomínky + 4 vláda a LRV + 5 sněmovních tisků + 2 ve Sbírce (součet redakce)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="11">11</span>
+            <span class="av-counter-label">zpracovávaných předpisů bez stopy ve VeKLEP</span>
+            <span class="av-counter-foot">z dvanácti; jediná výjimka je úhradová vyhláška 2027, která do VeKLEP vstoupila 9. 9. 2026</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">0 z 5</span>
+            <span class="av-counter-label">tisků projednaných na 30. schůzi Sněmovny</span>
+            <span class="av-counter-foot">newsletter všech pět uvádí jako „navrženo na pořad 30. schůze“; schůze 8.–10. 9. 2026 se k nim nedostala</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="102" data-suffix=" dní">102 dní</span>
+            <span class="av-counter-label">od podpisu prezidenta k vyhlášení zákona 166/2026 Sb.</span>
+            <span class="av-counter-foot">novela zákona o zdravotnických prostředcích, sněmovní tisk 57: podpis 5. 6., Sbírka 15. 9. 2026 (výpočet redakce)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Ministerstvo zdravotnictví ČR, Legislativní newsletter – září 2026 (Zdravé paragrafy, vydání 11, PDF, 11 stran; stránka vytvořena 1. 9. 2026, aktualizována 7. 9. 2026); VeKLEP přes Hlídač státu, dataset veklep, dotazy 18. 9. 2026; psp.cz, sněmovní tisky 274, 235, 153, 130 a 57, stav ke dni 18. 9. 2026.</p>
+      </figure>
+      <h3>Pět fází, jedna fronta</h3>
+      <p>
+        Newsletter řadí předpisy podle toho, kde v procesu právě jsou, a v každé rubrice uvádí počet za sledovaný měsíc. Webová stránka vydání zveřejňuje jen dva z těch počtů — čtyři materiály ve fázi projednání vládou nebo jejími pracovními komisemi a pět tisků v Poslanecké sněmovně a Senátu. Zbytek je až v příloze: tři předpisy v meziresortním připomínkovém řízení nebo jeho vypořádání, dvě vyhlášky vyhlášené ve Sbírce zákonů a dvanáct předpisů v rubrice „Aktuálně se zpracovává“, u nichž newsletter uvádí spolupracující útvary ministerstva a fázi vnitřního připomínkového řízení. Součet 26 je náš, ne ministerstva.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Legislativní fronta ministerstva zdravotnictví podle newsletteru — počty předpisů v jednotlivých fázích za srpen 2026</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Aktuálně se zpracovává</h4>
+            <p class="av-flow-desc">Věcná příprava a vnitřní připomínkové řízení uvnitř ministerstva. Mimo VeKLEP, mimo veřejnou kontrolu.</p>
+            <span class="av-flow-tag">12 předpisů</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Meziresortní připomínkové řízení</h4>
+            <p class="av-flow-desc">Materiál je ve VeKLEP; připomínková místa mají lhůtu, pak se připomínky vypořádávají.</p>
+            <span class="av-flow-tag">3 předpisy</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vláda a Legislativní rada vlády</h4>
+            <p class="av-flow-desc">Pracovní komise LRV, stanovisko, schůze vlády. U vyhlášek tady proces končí a jde se do Sbírky.</p>
+            <span class="av-flow-tag">4 materiály</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Poslanecká sněmovna a Senát</h4>
+            <p class="av-flow-desc">Sněmovní tisk, tři čtení, Senát, prezident. Nejpomalejší a nejméně předvídatelná fáze.</p>
+            <span class="av-flow-tag">5 tisků</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Vyšlo ve Sbírce zákonů</h4>
+            <p class="av-flow-desc">Vyhlášení, platnost, účinnost. V srpnu dvě vyhlášky, obě k administrativě vzdělávání a sportu.</p>
+            <span class="av-flow-tag">2 vyhlášky</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Legislativní newsletter – září 2026, rubriky „Aktuálně se zpracovává“ (s. 3–4), „V meziresortním připomínkovém řízení“ (s. 5), „Předáno vládě a LRV“ (s. 6), „V Poslanecké sněmovně a Senátu“ (s. 7) a „Vyšlo ve Sbírce zákonů“ (s. 8). Popis fází je zjednodušený výklad redakce podle Legislativních pravidel vlády, ne text newsletteru.</p>
+      </figure>
+      <p>
+        Pro čtenáře zvenčí má ten seznam jednu zásadní vlastnost. Fáze dvě až pět se dají nezávisle ověřit — ve VeKLEP, na psp.cz, ve Sbírce zákonů. Fáze jedna ne. Co ministerstvo „aktuálně zpracovává“, ví jen ministerstvo, a newsletter je jediné místo, kde to říká nahlas. Proto jsme začali právě tam.
+      </p>
+      <h3>Dvanáct předpisů, které vidí jen ministerstvo</h3>
+      <p>
+        Rubrika „Aktuálně se zpracovává“ se od srpnového vydání rozrostla ze sedmi položek na dvanáct. Sedm původních zůstalo a čtyři z nich se posunuly: obě novely zákona o ochraně veřejného zdraví a o veřejném zdravotním pojištění, které byly v srpnu „před vnitřním připomínkovým řízením“, jsou v září „ve vnitřním připomínkovém řízení“. Přibyla úhradová vyhláška pro rok 2027, novela nařízení vlády o ochraně zdraví při práci, prováděcí vyhláška k pitné vodě a dva předpisy o práci sester. Ověřili jsme všech dvanáct proti VeKLEP dotazem na klíčová slova, nejen na předkladatele — vyhlášky ministerstva totiž knihovna často vede s prázdným polem předkladatele. Shodu vrátila jediná položka.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTbl1H">
+        <figcaption class="av-figure-h" id="avTbl1H">Co ministerstvo „aktuálně zpracovává“ — dvanáct předpisů podle newsletteru a jejich stopa v plánu vlády a ve VeKLEP</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Předpis</th>
+                <th scope="col">Co řeší (podle newsletteru)</th>
+                <th scope="col">Fáze k 31. 8. 2026</th>
+                <th scope="col">Plán legislativních prací vlády</th>
+                <th scope="col">VeKLEP k 18. 9. 2026</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Novela zákona o veřejném zdravotním pojištění (I)</th><td>zdravotnické prostředky a zvlášť účtovaný materiál; správa seznamu zdravotních výkonů; nástroj „hledání vnitřních efektivit“</td><td>vnitřní připomínkové řízení</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela zákona o veřejném zdravotním pojištění (II)</th><td>„legislativní rámec, který potenciálně zlepší efektivitu systému“</td><td>vypořádání vnitřního obligatorního připomínkového řízení</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela zákona o léčivech</th><td>Rx online, systém rezervních zásob, farmaceutický balíček EU</td><td>před vnitřním připomínkovým řízením</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Zákon o humánních léčivých přípravcích</th><td>rozdělení regulace humánních a veterinárních léčiv podle farmaceutického balíčku</td><td>přípravné práce</td><td>výhled 2027–2029: vládě 1. čtvrtletí 2027</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Zákon o látkách lidského původu</th><td>nařízení (EU) 2024/1938 — krev, tkáně, buňky, mateřské mléko, střevní mikrobiom</td><td>vnitřní připomínkové řízení</td><td class="av-bad">plán 2026: vládě září 2026 (s RIA)</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela zákona o nelékařských zdravotnických povoláních</th><td>prostupnost kvalifikací; přenos činností na vysoce kvalifikovaný nelékařský personál</td><td>před vnitřním připomínkovým řízením</td><td class="av-good">výhled 2027–2029: vládě 1. čtvrtletí 2027 — v předstihu</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela vyhlášky č. 55/2011 Sb.</th><td>činnosti všeobecné a dětské sestry a nutričního terapeuta jako demonstrativní, ne taxativní výčet</td><td class="av-mut">fáze neuvedena</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela nařízení vlády č. 31/2010 Sb.</th><td>nové specializační vzdělání pro sestry, psychology ve zdravotnictví a adiktology</td><td class="av-mut">fáze neuvedena</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela zákona o ochraně veřejného zdraví</th><td>nařízení (EU) 2022/2371 a Mezinárodní zdravotnické předpisy — oznamování zdravotních hrozeb</td><td>vnitřní připomínkové řízení</td><td>plán 2026: vládě říjen 2026 (položka „městské odpadní vody, IHR“, s RIA)</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Novela nařízení vlády č. 361/2007 Sb.</th><td>limit olova v krvi podle směrnice (EU) 2024/869; regulace psychické zátěže při práci</td><td>před meziresortním připomínkovým řízením</td><td class="av-mut">mimo plán 2026</td><td class="av-bad">bez stopy</td></tr>
+              <tr><th scope="row">Vyhláška o výrobcích ve styku s vodou</th><td>prováděcí předpis ke sněmovnímu tisku 274 — zákon dosud neprošel prvním čtením</td><td>před souběžným vnitřním a meziresortním připomínkovým řízením</td><td>navazuje na plán 2026 (pitná voda, termín duben 2026)</td><td class="av-bad">bez stopy</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Úhradová vyhláška pro rok 2027</th><td>hodnoty bodu, výše úhrad a regulační omezení „respektující dohody uzavřené v dohodovacím řízení“</td><td>věcná příprava návrhu</td><td>každoroční předpis podle § 17 odst. 5 zákona č. 48/1997 Sb.</td><td class="av-good">ve VeKLEP od 9. 9. 2026, připomínky do 23. 9.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Legislativní newsletter – září 2026, s. 3–4 (předpis, obsah, fáze); Plán legislativních prací vlády na zbývající část roku 2026 a Výhled legislativních prací vlády na léta 2027 až 2029 (přílohy č. 1 a 2 k usnesení vlády ze dne 23. března 2026 č. 175), jak je vede <a href="legislativa.html">registr legislativy HSPA Monitoru</a>; VeKLEP přes Hlídač státu, dataset veklep, dotazy 18. 9. 2026 na předkladatele i na klíčová slova (látky lidského původu, nelékařská povolání, 361/2007, 55/2011, 31/2010, humánní léčivé přípravky, styk s vodou, zvlášť účtovaný materiál, 48/1997). „Bez stopy“ znamená, že dotaz nevrátil žádný materiál odpovídající popisu; materiál může existovat v neveřejné části knihovny eKLEP.</p>
+      </figure>
+      <p>
+        Nejzajímavější položky nejsou ty, které v plánu vlády jsou, ale ty, které v něm nejsou. Ministerstvo připravuje <strong>dvě různé novely zákona o veřejném zdravotním pojištění</strong>, které plán legislativních prací na rok 2026 vůbec neobsahuje. První má podle newsletteru řešit zdravotnické prostředky, zvlášť účtovaný materiál a správu seznamu zdravotních výkonů — tedy přesně ten sazebník, o jehož řízení jsme psali v textu <a href="clanek-veto-platcu-szv-2026.html">o tichém vetu pojišťoven nad seznamem výkonů</a> — a newsletter ji rámuje jako „jeden z nástrojů pro řešení klíčové priority vlády spočívající v hledání vnitřních efektivit v rámci systému veřejného zdravotního pojištění“. Druhou popisuje jednou větou o „legislativním rámci, který potenciálně zlepší efektivitu systému“, a nic víc. Obě jsou přitom už ve vnitřním připomínkovém řízení, druhá dokonce ve fázi vypořádání. To je v kontextu <a href="clanek-deficit-pojisteni-2026.html">strukturálního deficitu pojištění</a> a <a href="clanek-pojistne-plany-2026.html">pojistných plánů mířících k minusu 14,9 miliardy</a> podstatná informace, kterou zvenčí nikdo jiný neposkytuje.
+      </p>
+      <p>
+        Druhý shluk mimo plán se týká sester. Novela zákona o nelékařských zdravotnických povoláních měla podle výhledu vlády jít na stůl až v prvním čtvrtletí 2027; newsletter ji vede už před vnitřním připomínkovým řízením, a k ní přidává dva prováděcí předpisy, které plán nezná vůbec: vyhlášku o činnostech sester, jejíž výčet má být nově „demonstrativní, nýbrž nikoli taxativní“, a nařízení o nových specializacích. Kdo četl <a href="clanek-osetrovatelstvi-generacni-propast-2026.html">o generační propasti v ošetřovatelství</a> nebo <a href="clanek-pracovni-sila.html">o tom, že lékařů máme víc než OECD a sester méně</a>, ví, proč je to důležité: kompetence jsou vedle platů jediná páka, kterou stát na nedostatek sester má.
+      </p>
+      <h3>Plán versus šuplík</h3>
+      <p>
+        Plán legislativních prací vlády na zbývající část roku 2026 schválila vláda 23. března usnesením č. 175 a pro resort zdravotnictví v něm stanovila šest úkolů s termíny. Newsletter dovoluje poprvé zkontrolovat, jak se plní i ty, které ještě nedorazily do VeKLEP. Výsledek je smíšený. <strong>Zákon o látkách lidského původu</strong> měl být podle plánu předložen vládě v září 2026; k 31. srpnu byl teprve ve vnitřním připomínkovém řízení a po něm ho čeká ještě meziresortní řízení, takže zářijový termín nemůže stihnout. <strong>Adaptace evropského prostoru pro zdravotní údaje</strong> měla jít vládě v červnu; první etapu nese novela zákona o elektronizaci, jejíž meziresortní připomínky skončily 3. srpna a od té doby se vypořádávají — <a href="clanek-novela-elektronizace-2026.html">co novela obsahuje</a> a <a href="clanek-ehds-evropsky-prostor-zdravotni-data.html">co EHDS znamená</a>, jsme popsali dříve. <strong>Novela zákona o specifických zdravotních službách</strong>, plánovaná na září, je naopak v termínu: připomínky skončily 23. července a materiál je ve vypořádání; vedle posudků ke vzdělávání otevírá <a href="clanek-asistovana-reprodukce.html">asistovanou reprodukci</a> ženám bez mužského partnera.
+      </p>
+      <p>
+        Dvě položky výhledu na léta 2027–2029 už běží napřed — nelékařská povolání a nový zákon o humánních léčivých přípravcích, u něhož newsletter mluví o „přípravných pracích“. A dvě položky plánu v newsletteru chybějí: technická novela zákona o návykových látkách s termínem prosinec 2026 (místo ní ministerstvo předložilo mimo plán <a href="clanek-lex-kratom-2026.html">Lex Kratom</a>) a novela zákona o zdravotnické záchranné službě z výhledu. Nejnápadnější absencí je ale <strong>reforma hygienické služby</strong>. Výhled ji vede na první čtvrtletí 2027, ministerstvo o ní veřejně mluví jako o <a href="clanek-institut-verejneho-zdravi.html">největší reformě za sto let</a> a Státní zdravotní ústav k ní <a href="clanek-szu-pripominky-nivz.html">poslal jedenáct výhrad</a> — v newsletteru legislativního útvaru ale není ani v rubrice „zpracovává“.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter">7 → 12</span>
+          <span class="av-counter-label">položek „Aktuálně se zpracovává“ mezi srpnovým a zářijovým vydáním</span>
+          <span class="av-counter-foot">ostatní rubriky: meziresortní řízení 5 → 3, vláda a LRV 3 → 4, Sněmovna 5 → 5, Sbírka 0 → 2</span>
+        </div>
+      </aside>
+      <p>
+        Newsletter se dá číst i vedle programového prohlášení vlády z 5. ledna 2026, které v <a href="clanek-barometr-politickych-prohlaseni.html">Barometru politických prohlášení</a> držíme za slovo. Slib „robustních rezervních zásob a tvrdého postihu nedovolených reexportů“ má svůj legislativní stín v novele zákona o léčivech, která podle newsletteru „bude mimo jiné reflektovat na zavedení Rx online nebo na úpravu systému rezervních zásob“ — a je před vnitřním připomínkovým řízením, tedy ve stejné fázi jako v srpnu. Slib povinné e-žádanky a národního monitoringu kapacit stojí na novele elektronizace, která je po připomínkách. A slib, že „úhradová vyhláška má sloužit k potvrzení dohod“, se v newsletteru zrcadlí ve formulaci, že vyhláška pro rok 2027 má stanovit úhrady, „které respektují dohody uzavřené v dohodovacím řízení“. Jak to dopadlo v návrhu, který o devět dní později vstoupil do VeKLEP, jsme rozebrali v textu <a href="clanek-uhradova-vyhlaska-2027.html">o osmdesáti osmi celých čtyřech procentech</a>.
+      </p>
+      <div class="av-aside-clear"></div>
+      <h3>Pět tisků a schůze, na které nedošlo</h3>
+      <p>
+        Sněmovní rubrika newsletteru je za dva měsíce doslova stejná: pět tisků v srpnu, týchž pět v září. Čtyři z nich zářijové vydání uvádí se stavem „návrh zákona byl navržen na pořad 30. schůze (od 8. září 2026)“. Podle historie tisků na psp.cz, kterou jsme prošli 18. září, se 30. schůze ve dnech 8. až 10. září k žádnému z nich nedostala. Náš registr legislativy zaznamenal k 11. září, že schůze skončila se sedmi projednanými body a řádek „navrženo na pořad 30. schůze“ z historie tisků zmizel. Jediný, kdo dostal nový termín, je tisk 235 o platbě za státní pojištěnce — je navržen na pořad 31. schůze od 22. září.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTbl2H">
+        <figcaption class="av-figure-h" id="avTbl2H">Pět zdravotnických tisků — jak je viděl newsletter a kde jsou podle psp.cz k 18. 9. 2026</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Tisk</th>
+                <th scope="col">Předpis</th>
+                <th scope="col">Newsletter (stav k 31. 8.)</th>
+                <th scope="col">psp.cz (stav k 18. 9.)</th>
+                <th scope="col">Souvislosti na portálu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">235</th><td>novela zákona č. 592/1992 Sb. o pojistném — platba za státní pojištěnce, podle newsletteru +24 mld. Kč ročně od 1. 1. 2027</td><td>navrženo na 30. schůzi</td><td class="av-good">garanční výbor 4. 9. doporučil schválit (tisk 235/1); navrženo na 31. schůzi od 22. 9.</td><td><a href="clanek-valorizace-statni-pojistenci-2027.html">2,4 miliardy podle vzorce, 24 miliard podle slibu</a></td></tr>
+              <tr><th scope="row">153</th><td>novela zákona o regulaci reklamy — reklama na kojeneckou výživu, léčiva a zdravotnické prostředky; předkladatelem je ministerstvo průmyslu a obchodu</td><td>navrženo na 30. schůzi</td><td class="av-mut">garanční výbor 4. 9. doporučil schválit (tisk 153/1); na 31. schůzi nenavrženo</td><td><a href="clanek-stret-zajmu-vyziva-kojencu.html">Kdo radí o tom, čím krmit české novorozence</a></td></tr>
+              <tr><th scope="row">274</th><td>novela zákona č. 258/2000 Sb. — směrnice o jakosti pitné vody, azbest, očkování proti žluté zimnici</td><td>navrženo na 30. schůzi</td><td class="av-bad">bez pohybu od 7. 8. 2026; první čtení neproběhlo; na 31. schůzi nenavrženo</td><td>prováděcí vyhláška se už zpracovává (viz tabulka výše)</td></tr>
+              <tr><th scope="row">130</th><td>senátní návrh novely zákona č. 95/2004 Sb. — nový specializační obor „úrazová chirurgie“</td><td>navrženo na 30. schůzi</td><td class="av-bad">bez pohybu od 12. 4. 2026; první čtení neproběhlo ani po pěti měsících</td><td class="av-mut">—</td></tr>
+              <tr><th scope="row">57</th><td>novela zákona č. 375/2022 Sb. o zdravotnických prostředcích — adaptace nařízení (EU) 2024/1860</td><td>prezident podepsal 5. 6. 2026</td><td class="av-good">vyhlášen 15. 9. 2026 jako zákon č. 166/2026 Sb.; nové znění účinné od 16. 9. 2026</td><td>prováděcí vyhláška č. 377/2022 Sb. je u LRV (viz níže)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Legislativní newsletter – září 2026, s. 7 (obsah tisků, stav projednávání, odhad +24 mld. Kč u tisku 235); psp.cz, historie sněmovních tisků 235, 153, 274, 130 a 57, „stav projednávání ke dni 18. září 2026“; zakonyprolidi.cz, historie znění zákona č. 375/2022 Sb. (verze 5 od 16. 9. 2026, novela 166/2026 Sb.). Údaj o sedmi projednaných bodech 30. schůze přebíráme z registru legislativy HSPA Monitoru (kontrola psp.cz 11. 9. 2026, stav schůze k 10. 9. 2026, 18:10).</p>
+      </figure>
+      <p>
+        Tisk 57 je zvláštní případ, který newsletter vede ve sněmovní rubrice právem, ale z jiného důvodu, než by čtenář čekal. Zákon o zdravotnických prostředcích prošel Sněmovnou napodruhé — první pokus, tisk 927 z března 2025, spadl pod stůl s koncem volebního období. Napodruhé ho prezident podepsal 5. června 2026, a pak se sto dní nedělo nic. Podle historie tisku byl schválený zákon odeslán k publikaci ve Sbírce zákonů 14. září a vyhlášen 15. září 2026 v částce 166 pod číslem 166/2026 Sb.; zakonyprolidi.cz vede nové znění zákona č. 375/2022 Sb. od 16. září. Sto dva dny mezi podpisem a vyhlášením je výpočet redakce, vysvětlení pro prodlevu ve veřejných zdrojích není. Mezitím už ministerstvo mělo u Legislativní rady vlády prováděcí vyhlášku k témuž zákonu — a to je souvislost, ke které se hned vrátíme.
+      </p>
+      <p>
+        Tisk 130 ukazuje opačný extrém. Senátní návrh, který má mezi specializační obory lékařů zařadit úrazovou chirurgii, dorazil do Sněmovny 9. března 2026, vláda k němu 31. března zaujala souhlasné stanovisko a od 12. dubna je „další projednávání možné“. Newsletter ho už v srpnu komentoval slovy, že „lze očekávat, že materiál bude zařazen na pořad další řádné schůze“. Po pěti měsících první čtení stále neproběhlo.
+      </p>
+      <figure class="av-figure" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Co se stalo od uzávěrky newsletteru — od 31. 8. do 23. 9. 2026</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">31. 8. 2026</time>
+            <h4 class="av-timeline-title">Konec sledovaného období</h4>
+            <p class="av-timeline-desc">Stránka vydání vytvořena 1. 9., naposledy aktualizována 7. 9. 2026.</p>
+            <span class="av-timeline-tag">Newsletter</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">4. 9. 2026</time>
+            <h4 class="av-timeline-title">Výbor pro zdravotnictví doporučuje schválit tisky 235 a 153</h4>
+            <p class="av-timeline-desc">Usnesení garančního výboru rozeslána jako tisky 235/1 a 153/1.</p>
+            <span class="av-timeline-tag">Sněmovna</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done av-timeline-item-warn">
+            <time class="av-timeline-date">8.–10. 9. 2026</time>
+            <h4 class="av-timeline-title">30. schůze Sněmovny — bez zdravotnických tisků</h4>
+            <p class="av-timeline-desc">Sedm projednaných bodů; žádný z pěti tisků, které newsletter vedl jako „navrženo na pořad 30. schůze“.</p>
+            <span class="av-timeline-tag">Nedošlo</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">9. 9. 2026</time>
+            <h4 class="av-timeline-title">Úhradová vyhláška 2027 vstupuje do VeKLEP</h4>
+            <p class="av-timeline-desc">Materiál ALBSDXRFYLM6, připomínky do 23. 9. 2026. V newsletteru byla ještě ve „věcné přípravě“.</p>
+            <span class="av-timeline-tag">VeKLEP</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">14. 9. 2026</time>
+            <h4 class="av-timeline-title">Vláda: Lex Kratom schválen, očkování bez usnesení</h4>
+            <p class="av-timeline-desc">Bod 684/26 (novela zákona o návykových látkách) dostal usnesení č. 584/2026. U bodu 618/26 (novela zákona o ochraně veřejného zdraví, očkování dospělých) přehled jednání vlády žádné usnesení neuvádí.</p>
+            <span class="av-timeline-tag">Vláda</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">15. 9. 2026</time>
+            <h4 class="av-timeline-title">Zákon č. 166/2026 Sb. vyhlášen</h4>
+            <p class="av-timeline-desc">Novela zákona o zdravotnických prostředcích (tisk 57), 102 dní po podpisu prezidenta.</p>
+            <span class="av-timeline-tag">Sbírka</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">18. 9. 2026</time>
+            <h4 class="av-timeline-title">Stav k dnešku</h4>
+            <p class="av-timeline-desc">Tisk 235 navržen na 31. schůzi; tisky 274, 153 a 130 bez termínu; 11 zpracovávaných předpisů bez stopy ve VeKLEP.</p>
+            <span class="av-timeline-tag">Teď</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">22. 9. 2026</time>
+            <h4 class="av-timeline-title">31. schůze Sněmovny; uzávěrka přihlášek do oddělení legislativy</h4>
+            <p class="av-timeline-desc">Na pořad je navržen tisk 235 (platba za státní pojištěnce). Týž den končí lhůta pro přihlášky na dvě volná místa v oddělení, které newsletter vydává.</p>
+            <span class="av-timeline-tag">Čeká</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">23. 9. 2026</time>
+            <h4 class="av-timeline-title">Konec připomínek k úhradové vyhlášce 2027</h4>
+            <span class="av-timeline-tag">Čeká</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> psp.cz, historie tisků 235, 153, 274, 130 a 57 (18. 9. 2026); registr legislativy HSPA Monitoru (30. schůze, kontrola 11. 9. 2026); VeKLEP přes Hlídač státu (ALBSDXRFYLM6, ALBSDUUFQ5OR, KORNDVEC8EF8, 18. 9. 2026); apps.odok.cz, přehled jednání vlády 14. 9. 2026 (body 618/26 a 684/26, usnesení č. 584/2026); Legislativní newsletter – září 2026, s. 10 (termín přihlášek 22. 9. 2026).</p>
+      </figure>
+      <h3>Vláda a Legislativní rada: co odešlo a co uvízlo</h3>
+      <p>
+        Rubrika „Předáno vládě a LRV“ se během srpna vyměnila skoro celá. V červenci v ní byly tři vyhlášky; dvě z nich — o přístupu do systému Administrace vzdělávání a o zdravotní způsobilosti ke sportu — do konce srpna doputovaly do Sbírky, a to jsou ty dvě vyhlášky v rubrice „Vyšlo“. Vyhláška č. 153/2026 Sb. má platnost od 27. června a účinnost od 1. září 2026; systém Administrace, ke kterému upravuje přístupové údaje, byl podle newsletteru spuštěn 1. ledna 2026, takže vyhláška o tom, jak se do něj dostat, nabyla účinnosti osm měsíců po spuštění. Vyhláška č. 154/2026 Sb. platí od 27. srpna s účinností od 11. září a ruší lékařské posudky pro rekreační sport; posudek zůstává jen „sportovním profesionálům“. Zůstala novela vyhlášky č. 377/2022 Sb., k níž pracovní komise LRV doručila stanovisko 3. srpna. Právě ta je prováděcím předpisem k zákonu, který vyšel jako 166/2026 Sb.: stanoví náležitosti hlášení o přerušení nebo ukončení dodávek zdravotnických prostředků Státnímu ústavu pro kontrolu léčiv. Vyhláška tedy prošla komisí LRV šest týdnů předtím, než byl vůbec vyhlášen zákon, který ji zmocňuje.
+      </p>
+      <p>
+        Nově do rubriky přibyly dva zákony. Novelu zákona o ochraně veřejného zdraví, která má lékařům všech odborností, zubním lékařům a farmaceutům umožnit očkování dospělých — newsletter jmenuje chřipku, covid-19 a klíšťovou encefalitidu — projednala pracovní komise LRV 24. srpna. Vláda ji měla na programu 14. září jako bod 618/26. V přehledu jednání vlády na ODok u tohoto bodu k 18. září žádné usnesení není, zatímco sousední Lex Kratom ho má; VeKLEP navíc materiál po schůzi přepnul ze stavu „zařazeno na jednání vlády“ zpět na „zařazeno do evidence“. Co to znamená — přerušení, vrácení, nebo jen stav evidence — z veřejných zdrojů nevyplývá, a ministerstvo na rozdíl od kratomu výsledek tiskovou zprávou neoznámilo. Proč na té novele záleží, <a href="clanek-ockovani-v-lekarnach.html">jsme psali v srpnu</a>: proti chřipce je v Česku očkováno 24,5 % seniorů, v zemích OECD 47 %.
+      </p>
+      <p>
+        U Lex Kratomu newsletter v srpnu i v září píše o „novele pěti vzájemně provázaných zákonů“. Předkládací zpráva k verzi, která šla 14. září na vládu, mluví o devíti zákonech — popis na portálu ODok drží starší číslo a newsletter ho zřejmě přebírá. Není to chyba věcná, ale ukazuje, že newsletter čerpá z evidenčních popisů, ne z aktuálních verzí materiálů. Totéž platí pro úhradovou vyhlášku, kterou vydání z 1. září vedlo ve „věcné přípravě“, ačkoli o osm dní později už byla ve VeKLEP s lhůtou pro připomínky — vydání zachycuje srpen, ne září, a takhle je třeba ho číst.
+      </p>
+      <h3>Co v newsletteru není</h3>
+      <p>
+        Newsletter je resortní: v srpnu ho otevíral úvodník vedoucího oddělení Jana Knytla oslovením „Vážené kolegyně, vážení kolegové“, a i když je veřejně dostupný, jeho výběr sleduje agendu legislativního útvaru. Tři absence stojí za zmínku. Za prvé peníze: srpnové vydání ještě v rubrice neresortních návrhů mělo vyhlášku ministerstva financí č. 418/2003 Sb., která má pro rok 2027 navýšit prostředky na úhradu služeb — podle newsletteru transferem ze státního rozpočtu „s meziročním dopadem cca 21 mld. Kč“ a dalšími 3 miliardami ze snížení limitu nákladů na činnost pojišťoven o 0,5 procentního bodu. Zářijové vydání ji už nemá, přestože jde o tutéž operaci, kterou tisk 235 popisuje jako zvýšení příjmů systému „o cca 24 mld. Kč“. Za druhé, jak jsme uvedli, reforma hygienické služby, největší strukturální změna v gesci ministerstva, se v newsletteru neobjevuje. A za třetí novela zákona o zdravotních službách, na kterou se odvolává novela vyhlášky o předávání údajů do NZIS z našeho registru — o té newsletter mlčí také.
+      </p>
+      <p>
+        A jedna drobnost, která o kapacitě legislativního útvaru řekne víc než počty předpisů: rubrika „Pro informaci“ inzeruje v srpnu i v září tatáž dvě volná místa v oddělení legislativy, jedno na dobu určitou a jedno služební na dobu neurčitou. Srpnová uzávěrka přihlášek byla 12. srpna. Zářijová je 22. září. Oddělení, které má připravit dvanáct předpisů v šuplíku, tři v připomínkách a čtyři u vlády, shání druhý měsíc dva lidi.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity newsletteru jako zdroje">
+        <p class="article-callout-h">Jak newsletter číst — a co z něj nejde ověřit</p>
+        <p>
+          Fáze „vnitřní připomínkové řízení“ a „věcná příprava“ jsou interní stavy ministerstva; zvenčí je nelze potvrdit ani vyvrátit a přebíráme je tak, jak je newsletter uvádí. Počty v rubrikách jsou snímek za předchozí měsíc — vydání z 1. září popisuje srpen a k datu vydání už mohlo být leccos jinak, jak ukazuje úhradová vyhláška. Newsletter nevede sněmovní tisky, které ministerstvo nepředkládá, ale které zdravotnictví mění (například tisk 153 z ministerstva průmyslu a obchodu ano, poslanecké novely ne). A „bez stopy ve VeKLEP“ v našich tabulkách znamená, že veřejná knihovna na dotaz nic nevrátila; neveřejná část eKLEP může materiál obsahovat. Kadenci newsletteru jsme nezjišťovali — index na webu ministerstva zobrazoval 18. září jen jedno starší vydání.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, na které legislativa z newsletteru míří</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=ehealth_adoption"><strong>Elektronické zdravotnictví — míra adopce (eHealth index)</strong></a> — 62 bodů ze 100 (ČR, 2024) · Struktury · vyšší je lepší (signál špatný; OECD 70, EU 68) · cíl novely zákona o elektronizaci zdravotnictví</li>
+        <li><a href="indicator.html?id=vakcinace_chripka_65"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,5 % (ČR, 2025) · Procesy · vyšší je lepší (signál špatný; OECD 47, EU 49) · cíl novely o očkování v ordinacích a lékárnách</li>
+        <li><a href="indicator.html?id=lpod_share_critical"><strong>Podíl léčiv s omezenou dostupností (LPOD)</strong></a> — 5,4 % léčivých přípravků (ČR, 2026) · Výstupy · nižší je lepší (signál špatný; OECD 4, EU 4,5) · cíl novely zákona o léčivech (rezervní zásoby) a vyhlášky o hlášení výpadků prostředků</li>
+        <li><a href="indicator.html?id=sestry_per_1000"><strong>Praktikující sestry / 1 000 obyvatel</strong></a> — 9 (ČR, 2024) · Struktury · signál varovný (OECD 9,2, EU 8,5) · cíl novely zákona o nelékařských povoláních a vyhlášky o činnostech sester</li>
+        <li><a href="indicator.html?id=uhrada_zp_per_pojistenec"><strong>Úhrada zdravotních pojišťoven na pojištěnce</strong></a> — 46 529 Kč ročně (ČR, 2024) · Struktury · bez benchmarku · předmět úhradové vyhlášky 2027 a obou novel zákona o veřejném zdravotním pojištění</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Newsletter ministerstva</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo zdravotnictví ČR — Legislativní newsletter – září 2026</strong> (stránka vytvořena 1. 9. 2026, poslední aktualizace 7. 9. 2026; příloha Legislativni-newsletter-09-2026.pdf, 11 stran, 880,50 KB; „Zdravé paragrafy“, vydání 11, 09/2026). Zdroj všech položek, fází, počtů a citací z rubrik „Aktuálně se zpracovává“, „V meziresortním připomínkovém řízení“, „Předáno vládě a LRV“, „V Poslanecké sněmovně a Senátu“, „Vyšlo ve Sbírce zákonů“, „Zajímavé neresortní návrhy“ a „Pro informaci &amp; jiné“. Text PDF jsme extrahovali strojově 18. 9. 2026. <a href="https://mzd.gov.cz/legislativni-newsletter-zari-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Legislativni-newsletter-09-2026.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Legislativní newsletter – srpen 2026</strong> (příloha Legislativni-newsletter-08-2026.pdf, 9 stran; vydání 10, 08/2026, stav k 31. 7. 2026). Zdroj meziměsíčního srovnání, úvodníku Jana Knytla, položky o vyhlášce č. 418/2003 Sb. (21 mld. Kč, 3 mld. Kč, 0,5 procentního bodu) a srpnového termínu přihlášek 12. 8. 2026. <a href="https://mzd.gov.cz/legislativni-newsletter-srpen-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/08/Legislativni-newsletter-08-2026.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Legislativní proces — nezávislé ověření</h5>
+        <ul class="article-sources-list">
+          <li><strong>Poslanecká sněmovna PČR — historie sněmovních tisků 235, 153, 274, 130 a 57</strong> (10. volební období), stav projednávání ke dni 18. 9. 2026: data prvních čtení, usnesení garančního výboru ze 4. 9. 2026 (tisky 235/1 a 153/1), návrh na pořad 31. schůze od 22. 9. 2026, „další projednávání možné od“ 7. 8. 2026 (274) a 12. 4. 2026 (130), vyhlášení zákona č. 166/2026 Sb. dne 15. 9. 2026 v částce 166. <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=235" target="_blank" rel="noopener">tisk 235 ↗</a> · <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=153" target="_blank" rel="noopener">tisk 153 ↗</a> · <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=274" target="_blank" rel="noopener">tisk 274 ↗</a> · <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=130" target="_blank" rel="noopener">tisk 130 ↗</a> · <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=57" target="_blank" rel="noopener">tisk 57 ↗</a></li>
+          <li><strong>VeKLEP (Úřad vlády ČR) přes API Hlídače státu, dataset veklep</strong> — dotazy 18. 9. 2026: materiály Ministerstva zdravotnictví s datem od 1. 7. 2026 (7 záznamů); klíčová slova dvanácti zpracovávaných předpisů (jediná shoda ALBSDXRFYLM6, úhradová vyhláška 2027, autorizace 9. 9. 2026, připomínky do 23. 9. 2026); vyhlášky s prázdným polem předkladatele KORNDUAER3CU (377/2022 Sb.), KORNDV37RXI3 (11/2023 Sb.), KORNDTKB9G50 (Administrace) a KORNDT6DNLSS (391/2013 Sb.); detail ALBSDUUFQ5OR (očkování; 2 verze, poslední úprava 14. 9. 2026, schůze vlády 14. 9. 2026, sněmovní tisk nepřidělen) a KORNDVEC8EF8 (Lex Kratom; 3 verze, popis „pěti zákonů“). Při re-publikaci uvádíme zdroj hlidacstatu.cz. <a href="https://odok.cz/portal/veklep/" target="_blank" rel="noopener">odok.cz ↗</a> · <a href="https://www.hlidacstatu.cz/" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>Úřad vlády ČR — přehled jednání vlády dne 14. 9. 2026</strong> (apps.odok.cz): bod 684/26, návrh zákona, kterým se mění zákon č. 167/1998 Sb. — usnesení č. 584/2026; bod 618/26, návrh zákona, kterým se mění zákon č. 258/2000 Sb. — bez odkazu na usnesení (stav k 18. 9. 2026). Záznam z jednání se redakci stáhnout nepodařilo (HTTP 400). <a href="https://apps.odok.cz/djv-agenda?date=2026-09-14" target="_blank" rel="noopener">apps.odok.cz ↗</a></li>
+          <li><strong>Zákony pro lidi — vyhláška č. 153/2026 Sb.</strong> (platnost 27. 6. 2026, účinnost 1. 9. 2026), <strong>vyhláška č. 154/2026 Sb.</strong> (platnost 27. 8. 2026, účinnost 11. 9. 2026) a <strong>historie znění zákona č. 375/2022 Sb.</strong> (verze 5 od 16. 9. 2026 novelou č. 166/2026 Sb.; předchozí verze 4 od 1. 1. 2026 novelou č. 236/2025 Sb.). Ověřeno 18. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2026-153" target="_blank" rel="noopener">153/2026 ↗</a> · <a href="https://www.zakonyprolidi.cz/cs/2026-154" target="_blank" rel="noopener">154/2026 ↗</a> · <a href="https://www.zakonyprolidi.cz/cs/2022-375/historie" target="_blank" rel="noopener">375/2022 historie ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Plán vlády a programové prohlášení</h5>
+        <ul class="article-sources-list">
+          <li><strong>Plán legislativních prací vlády na zbývající část roku 2026</strong> (příloha č. 1 k usnesení vlády ze dne 23. března 2026 č. 175) a <strong>Výhled legislativních prací vlády na léta 2027 až 2029</strong> (příloha č. 2 k témuž usnesení) — termíny předložení vládě: látky lidského původu září 2026, specifické zdravotní služby září 2026, adaptace EHDS červen 2026, ochrana veřejného zdraví (odpadní vody, IHR) říjen 2026, technická novela návykových látek prosinec 2026, pitná voda duben 2026; výhled: nelékařská a lékařská povolání, humánní léčivé přípravky, zdravotnická záchranná služba a reforma hygienické služby, vše 1. čtvrtletí 2027. Jak je vede <a href="legislativa.html">registr legislativy HSPA Monitoru</a> (ověřeno 17. 9. 2026). <a href="https://vlada.gov.cz/assets/media-centrum/dulezite-dokumenty/1234_2026_priloha_c-_1.pdf" target="_blank" rel="noopener">plán 2026 ↗</a> · <a href="https://vlada.gov.cz/assets/media-centrum/dulezite-dokumenty/1234_2026_priloha_c-_2.pdf" target="_blank" rel="noopener">výhled 2027–2029 ↗</a></li>
+          <li><strong>Programové prohlášení vlády České republiky</strong> (schváleno 5. ledna 2026), kapitola 11 Zdravotnictví — citované závazky k dostupnosti léků, elektronizaci a povinné e-žádance a k roli úhradové vyhlášky, tak jak je sleduje <a href="clanek-barometr-politickych-prohlaseni.html">Barometr politických prohlášení</a>. <a href="https://vlada.gov.cz/cz/vlada/programove-prohlaseni/programove-prohlaseni-vlady-224629/" target="_blank" rel="noopener">vlada.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-lex-kratom-2026.html">Téměř polovina otrav kratomem u lidí do 19 let. Vláda schválila Lex Kratom</a> — včetně rozporu „pěti“ versus „devíti“ zákonů mezi popisem materiálu a předkládací zprávou.</li>
+          <li><a href="clanek-ockovani-v-lekarnach.html">Chřipkovou vakcínu nově píchne i lékárník nebo zubař</a>, <a href="clanek-uhradova-vyhlaska-2027.html">Osmdesát osm celých čtyři procenta. Úhradová vyhláška 2027</a>, <a href="clanek-valorizace-statni-pojistenci-2027.html">2,4 miliardy podle vzorce, 24 miliard podle slibu</a>, <a href="clanek-novela-elektronizace-2026.html">Elektronizace zdravotnictví míří dál</a>.</li>
+          <li><a href="clanek-co-ridi-vestnik-mz.html">Co všechno řídí Věstník</a> a <a href="clanek-uredni-tempo-84-dni.html">Úřední tempo</a> — dva starší texty o tom, jak ministerstvo komunikuje své úřední kanály a jak rychle plní vlastní úkoly.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Počet 26 předpisů je součet redakce z pěti rubrik zářijového newsletteru (12 + 3 + 4 + 5 + 2); newsletter sám na webové stránce uvádí jen počty 4 a 5. Fáze „vnitřní připomínkové řízení“, „před vnitřním připomínkovým řízením“, „věcná příprava“ a „přípravné práce“ jsou interní stavy ministerstva, které zvenčí nelze ověřit; přebíráme je z newsletteru bez úprav. „Bez stopy ve VeKLEP“ znamená, že dotazy do veřejné knihovny přes Hlídač státu 18. 9. 2026 nevrátily žádný odpovídající materiál — neveřejná část eKLEP může materiál obsahovat. Údaj o tom, že 30. schůze Sněmovny neprojednala žádný z pěti tisků, opíráme o historii tisků na psp.cz k 18. 9. 2026 (u žádného není záznam o čtení mezi 8. a 10. 9.) a o kontrolu přehledu schůze v našem registru legislativy z 11. 9. 2026; sedm projednaných bodů je údaj z téže kontroly. Výsledek jednání vlády 14. 9. 2026 k novele o očkování (bod 618/26) z veřejných zdrojů nevyplývá — uvádíme pouze, že přehled jednání na ODok k 18. 9. 2026 usnesení neuvádí a že VeKLEP změnil stav materiálu; nedomýšlíme, co to znamená. Sto dva dny mezi podpisem prezidenta (5. 6. 2026) a vyhlášením zákona č. 166/2026 Sb. (15. 9. 2026) a osm měsíců mezi spuštěním systému Administrace (1. 1. 2026) a účinností vyhlášky č. 153/2026 Sb. (1. 9. 2026) jsou výpočty redakce. Částky 21 mld. Kč a 3 mld. Kč u vyhlášky č. 418/2003 Sb. a 24 mld. Kč u tisku 235 přebíráme tak, jak je uvádí newsletter; jde o odhady předkladatelů s odlišnou metodikou a nesčítáme je ani neslaďujeme. U zákona o látkách lidského původu je srpnová fáze v dvousloupcovém PDF strojově nejednoznačná, proto ji meziměsíčně nesrovnáváme. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
