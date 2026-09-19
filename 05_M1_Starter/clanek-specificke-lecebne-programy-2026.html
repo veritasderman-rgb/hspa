@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-19
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-19
+    creation_phase: rutina+article-write
+    primary_sources_count: 7
+    visual_elements_count: 6
+    notes: "Vytvořeno z discovery 2026-09-19. Spouštěč: Věstník MZ ČR č. 11/2026 vydaný 15. 9. 2026
+      (PDF, 70 stran, 5 položek obsahu) zveřejnil podle § 2 odst. 3 vyhlášky č. 228/2008 Sb. seznam
+      specifických léčebných programů odsouhlasených ministerstvem v období duben–červen 2026.
+      Korpus dosud o institutu SLP neměl žádný článek.
+      CENTRÁLNÍ KPI: 16 odsouhlasených programů pokrývajících 21 léčivých přípravků; součet kolonky
+      Počet balení LP u všech 16 programů = 134 594 (jednotka není jednotná — u antidifterického séra
+      200 ampulek, u přípravku Pentacarinat 400 injekčních lahviček; jde o strop souhlasu, ne o dovezená
+      balení — caveat je v textu i v callout boxu).
+      PRIMÁRNÍ ZDROJE (vše staženo 19. 9. 2026, HTTP 200): (1) Věstník MZ ČR 11/2026, s. 5–15 — celá
+      sekce SLP vypsána do tabulky (přípravek, léčivá látka, léková forma, počet balení, výrobce a země,
+      distributor, předkladatel, cíl, pracoviště, platnost); (2) řada deseti starších částek Věstníku
+      nesoucích seznam SLP (1/2024, 5/2024, 9/2024, 13/2024, 1/2025, 6/2025, 12/2025, 17/2025, 1/2026,
+      5/2026) — vlastní počet programů podle výskytu kolonky Počet balení LP v sekci SLP; řada
+      14 / 11 / 9 / 10 / 21 / 14 / 7 / 6 / 19 / 11 / 16, celkem 138 programů v 11 čtvrtletích, průměr 12,5;
+      (3) zákon č. 378/2007 Sb., o léčivech, § 49 odst. 1 až 4 a 6 až 7 — verbatim ze zakonyprolidi.cz;
+      (4) vyhláška č. 228/2008 Sb., o registraci léčivých přípravků, § 2 odst. 1 až 3 — verbatim;
+      (5) SÚKL, otevřená data, hlášení o uvedení/přerušení/ukončení/obnovení dodávek (mr.zip, platnost
+      datové sady 19. 9. 2026, 83 294 řádků) — vlastní přepočet toutéž metodou jako indikátor
+      (poslední hlášení pro kód SÚKL podle data hlášení; aktivní přerušení = typ preruseni s termínem
+      obnovení prázdným nebo v budoucnu) dává 1 436 přípravků k 19. 9. 2026; (6) SÚKL, datové rozhraní
+      MR (MR_datove_rozhrani20230301.csv) — dokládá, že kód SÚKL se přiděluje i neregistrovanému
+      přípravku zařazenému do SLP, proto se přípravky z programů objevují v témže registru;
+      (7) data/indicators.json — vypadky_leciv_aktivni 1 404 LP (2026, SÚKL MR feed, fetched_at
+      2026-09-06, origin live) a spotreba_antibiotik 15 DDD na 1 000 obyvatel a den (2023, SZÚ NRL pro
+      antibiotika; OECD 16, EU 18,3).
+      NÁLEZ Z KŘÍŽOVÉ KONTROLY (vlastní výpočet redakce z MR feedu, v textu takto označený): tři
+      přípravky z nového seznamu samy hlásí aktivní přerušení dodávek — FIBROGAMMIN 250 od 31. 8. 2026
+      s obnovením 7. 10. 2026 (kapacitní a distribuční důvody), CICLOSERINĂ ATB 250 mg od 30. 4. 2026
+      s obnovením 10. 5. 2027 (výrobní důvody) a COLCHANOVA 0,5 mg od 4. 11. 2026 s obnovením
+      31. 12. 2026 (výrobní důvody). Řetěz haloperidolu: HALOPERIDOL-RICHTER 5 mg/ml injekční roztok
+      (registrovaný) měl přerušení 27. 1. 2023 a 15. 10. 2025 a ukončení dodávek s platností od
+      17. 3. 2026 z výrobních důvodů (hlášeno 13. 3. 2026); v dubnu 2026 MZ odsouhlasilo SLP pro
+      HALOPERIDOL SOPHARMA z Bulharska (26 400 balení) a v květnu pro HALOPERIDOL WZF z Polska
+      (8 000 balení), u nějž feed eviduje zahájení dodávek s platností od 29. 5. 2026.
+      EVIDENCE ověřená v PubMed 19. 9. 2026 (8 dotazů PubMed, 1 dotaz Consensus): Romano S,
+      Guerreiro JP, Teixeira Rodrigues A. 2022, J Am Pharm Assoc 62(3):791-799.e2, PMID 35115262,
+      DOI 10.1016/j.japh.2021.12.017 (Multicenter Study, Portugalsko, 22 830 dotazníků: 52,2 % pacientů
+      zažilo výpadek, 21,5 % muselo kvůli změně receptu k lékaři, 5,7 % přerušilo léčbu; dopad na
+      portugalskou NHS 35,3 až 43,8 mil. EUR); Turbucz B et al. 2022, Int J Environ Res Public Health
+      19(7):4102, PMID 35409787, DOI 10.3390/ijerph19074102 (Review, 6 zemí — v evropských zemích tvoří
+      kritické výpadky nadproporčně skupiny J a N); Vogler S. 2024, Health Policy 143:105030,
+      PMID 38484475, DOI 10.1016/j.healthpol.2024.105030 (Review, 38 zemí — 34 zemí vyžaduje hlášení
+      výpadků, 35 zemí má nástroj usnadňující dovoz alternativ, 20 zemí povinné zásoby);
+      Ravinetto R et al. 2026, Lancet Reg Health Eur 63:101616, PMID 41757222,
+      DOI 10.1016/j.lanepe.2026.101616 — typ publikace Review, tedy stanovisko, ne originální studie;
+      v textu je tak i označeno. Consensus (medical_mode, bez preprintů, 1 dotaz): 20 prací, převaha
+      v souladu, žádná nalezená práce tvrzení článku nevyvrací; práce z Consensu se necitují, protože
+      byl vyčerpán strop dotazů PubMed a neověřená citace do textu nepatří.
+      VĚDOMĚ NEUVEDENO: (a) unijní seznam kritických léčiv a Critical Medicines Act — stránka EMA
+      vrátila 19. 9. 2026 HTTP 404, mezinárodní kontext proto stojí jen na ověřené literatuře;
+      (b) stránka registru výpadků na sukl.gov.cz vrátila HTTP 404, pracuje se přímo s otevřenými daty,
+      která jsou primárním zdrojem indikátoru; (c) cena programů a to, kolik balení bylo skutečně
+      dovezeno — Věstník ani otevřená data to neuvádějí; (d) výklad kódu stavu registrace F v MR feedu —
+      číselník se nepodařilo strojově dohledat, proto se přípravky párují podle názvu, ne podle kódu;
+      (e) meziroční srovnání počtu balení mezi čtvrtletími — jednotky nejsou srovnatelné.
+      Navazuje na clanek-esencialni-antiinfektiva.html (Věstník 10/2026), clanek-kvetiapin-vypadek.html
+      a clanek-tamoxifen-vypadek.html; jejich obsah needupluje. published:false, audit-status draft,
+      čeká na schválení redakce.
+      NEZÁVISLÝ AUDIT 2026-09-19 (blok K): tabulka 16 programů ověřena položku po položce proti PDF
+      Věstníku 11/2026 (názvy, látky, balení, výrobci/země, platnost; součet 134 594 = 21 položek souhlasí);
+      řada 11 čtvrtletí přepočítána z PDF (14/11/9/10/21/14/7/6/19/11/16 = 138, souhlasí); § 49 zák. 378/2007 Sb.
+      a § 2 vyhl. 228/2008 Sb. ověřeny verbatim; mr.zip stažen znovu (platnost 19. 9. 2026, 83 294 řádků) —
+      haloperidol i tři přerušení souhlasí, přepočet indikátoru dává 1 436; 4 PMID ověřeny v PubMed (čísla sedí).
+      Opraveno 6 nepřesností: (a) „jediný přípravek“ → „jediný registrovaný přípravek“ (HALOPERIDOL WZF je v MR
+      feedu také); (b) „aktivní přerušení“ → „hlásily přerušení“, protože COLCHANOVA má přerušení až od 4. 11. 2026;
+      (c) § 2 odst. 3 vyhlášky uvádí velikost balení, ne počet balení (flow i prose); (d) Věstník uvádí počet balení
+      nad rámec výčtu vyhlášky — „ani víc, ani míň“ nahrazeno; (e) léková forma AMBISOME doplněna podle Věstníku;
+      (f) citace cíle haloperidolového programu srovnána doslova. published:false beze změny."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Injekční haloperidol vypadl z trhu v březnu, v dubnu ho stát povolil dovážet. Šestnáct takových výjimek za čtvrtletí · HSPA Monitor</title>
+<meta name="description" content="Věstník ministerstva zdravotnictví č. 11/2026 z 15. září zveřejnil šestnáct specifických léčebných programů odsouhlasených od dubna do června 2026 — výjimek, díky nimž se smí do Česka dovážet lék, který tu není registrovaný. Souhlasy znějí dohromady na 134 594 balení od výrobců ze třinácti zemí a deset ze šestnácti programů míří na infekce nebo na nervovou soustavu. Registrovaný injekční haloperidol ohlásil jeho držitel registrace jako ukončený s platností od 17. března 2026; v dubnu a květnu ministerstvo povolilo dovoz bulharské a polské náhrady. Tři přípravky z nového seznamu přitom samy hlásí přerušení dodávek a sedm ze šestnácti souhlasů vyprší do dvanácti měsíců. Aktivních přerušení dodávek eviduje SÚKL 1 404.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Injekční haloperidol vypadl z trhu v březnu, v dubnu ho stát povolil dovážet. Šestnáct takových výjimek za čtvrtletí">
+<meta property="og:description" content="Věstník MZ 11/2026 zveřejnil šestnáct specifických léčebných programů za duben až červen 2026: 134 594 balení, třináct zemí výroby, sedm souhlasů končí do roka. Tři přípravky ze seznamu samy hlásí výpadek.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-specificke-lecebne-programy-2026.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-specificke-lecebne-programy-2026.png">
+<meta property="article:published_time" content="2026-09-20">
+<meta property="article:section" content="Léková politika">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-specificke-lecebne-programy-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Injekční haloperidol vypadl z trhu v březnu, v dubnu ho stát povolil dovážet. Šestnáct takových výjimek za čtvrtletí",
+  "description": "Věstník ministerstva zdravotnictví č. 11/2026 z 15. září zveřejnil šestnáct specifických léčebných programů odsouhlasených od dubna do června 2026 — výjimek, díky nimž se smí do Česka dovážet lék, který tu není registrovaný. Souhlasy znějí dohromady na 134 594 balení od výrobců ze třinácti zemí a deset ze šestnácti programů míří na infekce nebo na nervovou soustavu. Registrovaný injekční haloperidol ohlásil jeho držitel registrace jako ukončený s platností od 17. března 2026; v dubnu a květnu ministerstvo povolilo dovoz bulharské a polské náhrady. Tři přípravky z nového seznamu přitom samy hlásí přerušení dodávek a sedm ze šestnácti souhlasů vyprší do dvanácti měsíců. Aktivních přerušení dodávek eviduje SÚKL 1 404.",
+  "datePublished": "2026-09-20T06:00:00+02:00",
+  "dateModified": "2026-09-19",
+  "inLanguage": "cs",
+  "articleSection": "Léková politika",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-specificke-lecebne-programy-2026.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-specificke-lecebne-programy-2026.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <img class="article-cover" src="assets/covers/clanek-specificke-lecebne-programy-2026.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">Výpadky léčiv · Věstník MZ · SÚKL · Neregistrované přípravky · Antiinfektiva</span>
+      </div>
+      <h1 class="article-title">Injekční haloperidol vypadl z trhu v březnu, v dubnu ho stát povolil dovážet. Šestnáct takových výjimek za čtvrtletí</h1>
+      <p class="article-deck">
+        Věstník ministerstva zdravotnictví č. 11/2026 z 15. září zveřejnil <strong>šestnáct</strong> specifických léčebných programů odsouhlasených od dubna do června 2026 — výjimek, díky nimž se smí do Česka dovážet lék, který tu není registrovaný. Souhlasy znějí dohromady na <strong>134 594</strong> balení od výrobců ze <strong>třinácti zemí</strong> a deset ze šestnácti programů míří na infekce nebo na nervovou soustavu. Registrovaný injekční haloperidol ohlásil jeho držitel registrace jako ukončený s platností od <strong>17. března 2026</strong>; v dubnu a květnu ministerstvo povolilo dovoz bulharské a polské náhrady. Tři přípravky z nového seznamu přitom samy hlásí přerušení dodávek a sedm ze šestnácti souhlasů vyprší do dvanácti měsíců. Aktivních přerušení dodávek eviduje SÚKL <strong>1 404</strong>.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">20. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">11 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Existuje jeden úřední dokument, který čtvrtletně vypisuje, co v české lékárně a na české klinice chybí tak naléhavě, že stát sáhl k výjimce. Nejmenuje se registr výpadků a nikdo ho tak nečte. Je to nenápadná sekce Věstníku ministerstva zdravotnictví nazvaná Specifické léčebné programy: seznam neregistrovaných léků, které se sem smějí dovézt, protože registrovaná varianta neexistuje nebo přestala chodit. Čtený pozpátku je to negativ českého lékového trhu — soupis toho, co z něj vypadlo.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSlpHeroH">
+        <figcaption class="av-figure-h" id="avSlpHeroH">Specifické léčebné programy duben–červen 2026 v číslech · Věstník MZ ČR, částka 11/2026, 15. 9. 2026</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="16" data-decimals="0">16</span>
+            <span class="av-counter-label">specifických léčebných programů odsouhlasilo ministerstvo od dubna do června 2026</span>
+            <span class="av-counter-foot">Věstník MZ ČR 11/2026, s. 5–15 · programy pokrývají 21 léčivých přípravků</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="134594" data-decimals="0">134 594</span>
+            <span class="av-counter-label">balení, ampulek a lahviček, na které souhlasy dohromady znějí</span>
+            <span class="av-counter-foot">součet kolonky „Počet balení LP“ · jde o strop souhlasu, ne o dovezené zboží</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="3" data-decimals="0">3</span>
+            <span class="av-counter-label">přípravky z nového seznamu samy hlásí SÚKL přerušení dodávek</span>
+            <span class="av-counter-foot">otevřená data SÚKL k 19. 9. 2026, vlastní výpočet redakce</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1404" data-decimals="0">1 404</span>
+            <span class="av-counter-label">léčivých přípravků má aktivní přerušení dodávek hlášené SÚKL</span>
+            <span class="av-counter-foot">indikátor HSPA Monitoru, hodnota k 6. 9. 2026 · SÚKL, otevřená data</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> Věstník MZ ČR, částka 11/2026 (vydáno 15. 9. 2026), sekce Specifické léčebné programy odsouhlasené MZD v období duben–červen 2026, s. 5–15; SÚKL, otevřená data — hlášení o uvedení, přerušení, ukončení a obnovení dodávek léčivého přípravku na trh (platnost datové sady 19. 9. 2026); data/indicators.json, indikátor <em>Aktivní výpadky léčiv hlášené SÚKL</em>.</p>
+      </figure>
+
+      <h3>Co v seznamu stojí</h3>
+
+      <p>
+        Sekce začíná jednou větou: ministerstvo „ve smyslu § 2 odst. 3 vyhlášky č. 228/2008 Sb., o registraci léčivých přípravků, ve znění pozdějších předpisů, zveřejňuje odsouhlasené specifické léčebné programy humánních léčivých přípravků“. Pak následuje šestnáct tabulek, vždy se stejnými řádky: název přípravku, počet balení, výrobce, distributor, předkladatel, cíl programu s uvedením pracovišť a doba platnosti souhlasu. Zveřejnění většiny z nich vyhláška ukládá — název, lékovou formu, obsah léčivých látek, velikost balení, výrobce, distributora, předkladatele, cíl, pracoviště a dobu platnosti; počet balení uvádí Věstník nad rámec toho výčtu. Cena v seznamu není, počet skutečně dovezených balení také ne.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSlpTableH">
+        <figcaption class="av-figure-h" id="avSlpTableH">Všech šestnáct programů odsouhlasených duben–červen 2026 · Věstník MZ ČR 11/2026, 15. 9. 2026</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Přípravek (léčivá látka)</th>
+                <th scope="col">Léková forma</th>
+                <th scope="col" class="av-num">Balení</th>
+                <th scope="col">Výrobce (země)</th>
+                <th scope="col">Souhlas platí</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">HALOPERIDOL SOPHARMA 5 mg/ml (haloperidol)</th>
+                <td>injekční roztok</td>
+                <td class="av-num">26 400</td>
+                <td>Sopharma AD (Bulharsko)</td>
+                <td>do 31. 3. 2028</td>
+              </tr>
+              <tr>
+                <th scope="row">FLUDROCORTISON 0,1 mg (fludrokortison-acetát)</th>
+                <td>tablety</td>
+                <td class="av-num">22 000</td>
+                <td>Haupt Pharma Amareg (Německo)</td>
+                <td>do 30. 4. 2028</td>
+              </tr>
+              <tr>
+                <th scope="row">FIBROGAMMIN 250 (koagulační faktor XIII)</th>
+                <td>prášek a rozpouštědlo pro injekční či infuzní roztok</td>
+                <td class="av-num">3 600</td>
+                <td>CSL Behring (Německo)</td>
+                <td>do 31. 5. 2028</td>
+              </tr>
+              <tr>
+                <th scope="row">AMBISOME 50 mg (amfotericin B)</th>
+                <td>prášek pro koncentrát pro infuzní disperzi</td>
+                <td class="av-num">1 800</td>
+                <td>Gilead Sciences Ireland (Irsko)</td>
+                <td>distribuce do 30. 4. 2027</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">CICLOSERINĂ ATB 250 mg (cykloserin)</th>
+                <td>tobolky</td>
+                <td class="av-num">50</td>
+                <td>Antibiotice SA (Rumunsko)</td>
+                <td class="av-bad">do 30. 9. 2026</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">COLCHANOVA a COLCAMEDIN 0,5 mg (kolchicin)</th>
+                <td>tablety</td>
+                <td class="av-num">13 000 + 13 000</td>
+                <td>Pharmaselect International (Rakousko)</td>
+                <td>distribuce do 28. 2. 2027</td>
+              </tr>
+              <tr>
+                <th scope="row">FOLINATO CÁLCICO NORMON 350 mg (kalcium-folinát)</th>
+                <td>prášek pro injekční roztok</td>
+                <td class="av-num">4 130</td>
+                <td>Laboratorios Normon (Španělsko)</td>
+                <td>do 31. 5. 2027</td>
+              </tr>
+              <tr>
+                <th scope="row">EREMFAT I.V. 600 mg (rifampicin), LAMPRENE 50 mg (klofazimin), VARITECT CP (imunoglobulin proti planým neštovicím)</th>
+                <td>infuzní roztok, měkké tobolky, infuzní roztok</td>
+                <td class="av-num">400 + 8 + 240</td>
+                <td>SW Pharma a Famar, Catalent, Biotest (Německo, Španělsko)</td>
+                <td>do 30. 4. 2030</td>
+              </tr>
+              <tr>
+                <th scope="row">ANTIDIPHTHERIA SERUM BUL BIO (imunosérum proti difterickému toxinu)</th>
+                <td>injekční roztok</td>
+                <td class="av-num">200 ampulek</td>
+                <td>BB-NCIPD (Bulharsko)</td>
+                <td>do 31. 5. 2030</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">HALOPERIDOL WZF 5 mg/ml (haloperidol)</th>
+                <td>injekční roztok</td>
+                <td class="av-num">8 000</td>
+                <td>Polpharma (Polsko)</td>
+                <td>distribuce do 31. 1. 2027</td>
+              </tr>
+              <tr>
+                <th scope="row">CLONAZEPAMUM TZF 1 mg/ml (klonazepam)</th>
+                <td>injekční roztok</td>
+                <td class="av-num">14 400</td>
+                <td>Polfa Tarchomin (Polsko)</td>
+                <td>do 31. 5. 2028</td>
+              </tr>
+              <tr>
+                <th scope="row">GLUCANTIME (meglumin-antimonát), PRIMAQUINE 15 mg (primachin-difosfát), PENTACARINAT 300 mg (pentamidin-diisetionát)</th>
+                <td>injekční roztok, tablety, prášek pro injekční či infuzní roztok</td>
+                <td class="av-num">120 + 120 + 400 lahviček</td>
+                <td>Haupt Pharma Livron a Famar, Sanofi-Aventis Canada, Sanofi (Francie, Španělsko, Kanada, Itálie)</td>
+                <td>do 31. 5. 2030</td>
+              </tr>
+              <tr>
+                <th scope="row">AUGTYRO 40 mg (repotrektinib)</th>
+                <td>tvrdé tobolky</td>
+                <td class="av-num">26</td>
+                <td>Bristol Myers Squibb (USA)</td>
+                <td>do 30. 6. 2027</td>
+              </tr>
+              <tr>
+                <th scope="row">ISOCOR 2,5 mg/ml (verapamil-hydrochlorid)</th>
+                <td>injekční či infuzní roztok</td>
+                <td class="av-num">10 500</td>
+                <td>Sopharma AD (Bulharsko)</td>
+                <td>od 1. 7. 2026 do 30. 6. 2029</td>
+              </tr>
+              <tr>
+                <th scope="row">SULCEF 2 g (cefoperazon a sulbaktam)</th>
+                <td>prášek pro injekční či infuzní roztok</td>
+                <td class="av-num">1 200</td>
+                <td>Medochemie (Kypr)</td>
+                <td>do 30. 6. 2028</td>
+              </tr>
+              <tr>
+                <th scope="row">LAGEVRIO 200 mg (molnupiravir)</th>
+                <td>tvrdé tobolky</td>
+                <td class="av-num">15 000</td>
+                <td>Merck Sharp &amp; Dohme (Nizozemsko)</td>
+                <td>do 30. 6. 2027</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR, částka 11/2026 (15. 9. 2026), s. 5–15. Zvýrazněny jsou programy, o nichž je řeč v textu. „Distribuce do“ znamená, že souhlas omezuje dobu distribuce; přípravky dodané do lékáren se podle Věstníku smějí vydávat po dobu jejich použitelnosti. Údaje o distributorech, předkladatelích a pracovištích jsou v tabulce vynechány, ve Věstníku jsou uvedeny u každého programu.</p>
+      </figure>
+
+      <h3>Jak se lék na seznam dostane</h3>
+
+      <p>
+        Právním základem je § 49 zákona č. 378/2007 Sb., o léčivech. Podle jeho prvního odstavce lze použití, distribuci a výdej neregistrovaného humánního léčivého přípravku umožnit tehdy, není-li „za situací jiné mimořádné potřeby“ pro účinnou léčbu, profylaxi nebo stanovení diagnózy dostupný registrovaný přípravek, a jde-li o stavy „závažně ohrožující zdraví lidí“. Návrh musí obsahovat konkrétní přípravek, výrobce, skupinu pacientů, způsob monitorování jakosti a bezpečnosti, pracoviště a zdůvodnění.
+      </p>
+
+      <p>
+        Návrh podává předkladatel — podle druhého odstavce „právnická nebo fyzická osoba“ — ministerstvu k souhlasu a SÚKL ke stanovisku. Ústav se ve stanovisku vyjadřuje zejména k podmínkám použití, distribuce, výdeje a k monitorování jakosti a bezpečnosti. Třetí odstavec pak říká věc, kterou je dobré si pamatovat: program lze uskutečnit <em>pouze</em> tehdy, pokud ministerstvo vydalo písemný souhlas; ten může být podmíněn povinností podávat zprávy o průběhu programu. Čtvrtý odstavec dává ministerstvu možnost souhlas odvolat a SÚKL možnost použití pozastavit, objeví-li se nové skutečnosti o nepříznivém poměru rizika a prospěšnosti. Není to tedy volný dovoz, ale pojmenovaná a odvolatelná výjimka.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSlpFlowH">
+        <figcaption class="av-figure-h" id="avSlpFlowH">Cesta neregistrovaného léku k pacientovi · § 49 zákona č. 378/2007 Sb. a § 2 vyhlášky č. 228/2008 Sb., znění k 19. 9. 2026</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Registrovaný lék chybí</h4>
+            <p class="av-flow-desc">Přípravek není v ČR registrován, nebo držitel registrace ohlásí SÚKL přerušení či ukončení dodávek.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Předkladatel podá návrh</h4>
+            <p class="av-flow-desc">Firma nebo nemocnice; návrh musí vymezit přípravek, výrobce, pacienty, monitorování a pracoviště (§ 49 odst. 1).</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">SÚKL vydá stanovisko</h4>
+            <p class="av-flow-desc">K podmínkám použití, distribuce, výdeje a k monitorování jakosti, bezpečnosti a účinnosti (§ 49 odst. 2).</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Ministerstvo vydá souhlas</h4>
+            <p class="av-flow-desc">Písemný, odvolatelný, na dobu určitou; SÚKL přidělí přípravku kód (§ 49 odst. 3, § 2 odst. 2 vyhlášky).</p>
+            <span class="av-flow-tag">Bez souhlasu nelze</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Zveřejnění ve Věstníku</h4>
+            <p class="av-flow-desc">Název, forma, obsah látek, velikost balení, výrobce, distributor, předkladatel, cíl, pracoviště, platnost (§ 2 odst. 3 vyhlášky).</p>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Distribuce a výdej</h4>
+            <p class="av-flow-desc">Po dobu platnosti souhlasu, jen na pracovištích uvedených v programu.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> zákon č. 378/2007 Sb., o léčivech, § 49 odst. 1 až 4 (zakonyprolidi.cz, znění k 19. 9. 2026); vyhláška č. 228/2008 Sb., o registraci léčivých přípravků, § 2 odst. 1 až 3. Schéma redakce.</p>
+      </figure>
+
+      <h3>Co seznam prozrazuje: haloperidol jako učebnicový případ</h3>
+
+      <p>
+        Nejvýmluvnější položka celého seznamu je hned ta první. HALOPERIDOL SOPHARMA v injekční formě, 26 400 balení z Bulharska, souhlas do 31. března 2028, cíl programu doslova: „zajištění léčivého přípravku s léčivou látkou haloperidol v lékové formě injekčního roztoku pro intramuskulární podání pro dospělé pacienty“ — mimo jiné k „léčbě rychlé kontroly těžké akutní psychomotorické agitovanosti“ a k „akutní léčbě deliria, pokud selhaly nefarmakologické způsoby léčby“. O měsíc později přibyl druhý program na tutéž látku: HALOPERIDOL WZF z Polska, 8 000 balení, distribuce do konce ledna 2027.
+      </p>
+
+      <p>
+        Proč dva programy na jednu starou, levnou a nenahraditelnou molekulu? Odpověď je v otevřených datech SÚKL. V registru hlášení o dodávkách figuruje u injekčního haloperidolu v síle 5 mg/ml jediný registrovaný přípravek: HALOPERIDOL-RICHTER (depotní HALOPERIDOL DECANOAT-RICHTER ohlásil ukončení dodávek už v únoru 2025, z obchodních a marketingových důvodů). Ten hlásil přerušení dodávek v lednu 2023, znovu na podzim 2025 — a 13. března 2026 jeho držitel registrace ohlásil <strong>ukončení dodávek s platností od 17. března 2026</strong>, jako důvod uvedl „výrobní důvody“. V dubnu ministerstvo odsouhlasilo bulharský program, v květnu polský; u polského přípravku registr eviduje zahájení dodávek s platností od 29. května 2026. Mezi tím, co z trhu odešlo, a tím, co se z Věstníku vrací, jsou tedy zhruba dva měsíce (analýza redakce z otevřených dat SÚKL k 19. 9. 2026).
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="7" data-decimals="0">7</span>
+          <span class="av-counter-label">ze šestnácti souhlasů vyprší do dvanácti měsíců (od 30. 9. 2026 do 30. 6. 2027)</span>
+          <span class="av-counter-foot">Věstník MZ ČR 11/2026 · nejkratší je cykloserin pro tuberkulózu po selhání léčby první volby: souhlas z dubna platí do konce září 2026</span>
+        </div>
+      </aside>
+
+      <p>
+        Druhá věc, kterou seznam ukazuje, je jeho <strong>terapeutické těžiště</strong>. Deset ze šestnácti programů má podle cíle uvedeného ve Věstníku indikaci buď v infekčních a parazitárních nemocech, nebo v nervové soustavě a psychiatrii: tuberkulóza (cykloserin, rifampicin v infuzi, klofazimin u kmenů rezistentních na isoniazid i rifampicin), systémové mykózy, záškrt, plané neštovice u novorozenců, leishmanióza, malárie, pneumocystová pneumonie, bakteriální infekce, covid-19 — a proti tomu akutní agitovanost, delirium a status epilepticus. To přesně odpovídá tomu, co o evropských výpadcích popsala srovnávací analýza šesti zemí (Turbucz et al., 2022, <em>International Journal of Environmental Research and Public Health</em>): v evropských registrech tvoří skupiny antiinfektiv pro systémové použití a léčiv na nervový systém nadproporční podíl kritických výpadků. Nejde tedy o českou zvláštnost, ale o evropský vzorec, který Věstník jen zviditelňuje. A není to o objemu spotřeby: indikátor dashboardu <a href="indicator.html?id=spotreba_antibiotik">Spotřeba antibiotik v ambulantním sektoru</a> ukazuje pro Česko 15 denních dávek na tisíc obyvatel a den (2023) proti průměru OECD 16 a EU 18,3. Chybí právě to, co se předepisuje zřídka; že se u takových přípravků na malém trhu registrace vyplatí nejméně, je ale výklad, ne doložený fakt.
+      </p>
+
+      <p>
+        Třetí čitelnou vrstvou je <strong>geografie</strong>. Výrobci stojí ve třinácti zemích: Bulharsko, Německo, Polsko, Španělsko, Irsko, Rumunsko, Rakousko, Francie, Itálie, Kypr, Nizozemsko, Kanada a USA. Dvě z nich, Kanada a Spojené státy, leží mimo EU a Evropský hospodářský prostor — jde o lék proti malárii a o onkologický přípravek, jehož celý cíl je pokračování léčby pacienta ze staršího programu. A u tří programů není předkladatelem farmaceutická firma, ale <strong>Všeobecná fakultní nemocnice v Praze</strong>; koordinaci má podle Věstníku na starosti její Toxikologické informační středisko, které drží pohotovostní zásobu antidifterického séra, hyperimunního imunoglobulinu proti planým neštovicím, antituberkulotik i léků na leishmaniózu, malárii a pneumocystózu. Tím, čemu se v odborné literatuře o přístupu k lékům na opomíjené tropické nemoci v Evropě říká „bricolage“ — provizorní řešení složené z darů, dovozů případ od případu a magistraliter přípravy (Ravinetto et al., 2026, <em>The Lancet Regional Health – Europe</em>; jde o stanovisko odborníků, ne o originální studii) —, se v Česku ukázalo jako jedno pražské pracoviště se skladem.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSlpQuarterH">
+        <figcaption class="av-figure-h" id="avSlpQuarterH">Kolik léčebných programů ministerstvo odsouhlasilo za čtvrtletí · vlastní počet z jedenácti částek Věstníku MZ ČR, 2024–2026</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Období</th>
+                <th scope="col">Věstník</th>
+                <th scope="col" class="av-num">Programů</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">říjen–prosinec 2023</th><td>1/2024</td><td class="av-num">14</td></tr>
+              <tr><th scope="row">prosinec 2023 (doplnění) a leden–březen 2024</th><td>5/2024</td><td class="av-num">11</td></tr>
+              <tr><th scope="row">duben–červen 2024</th><td>9/2024</td><td class="av-num">9</td></tr>
+              <tr><th scope="row">červenec–září 2024</th><td>13/2024</td><td class="av-num">10</td></tr>
+              <tr><th scope="row">říjen–prosinec 2024</th><td>1/2025</td><td class="av-num av-bad">21</td></tr>
+              <tr><th scope="row">leden–březen 2025</th><td>6/2025</td><td class="av-num">14</td></tr>
+              <tr><th scope="row">duben–červen 2025</th><td>12/2025</td><td class="av-num av-good">7</td></tr>
+              <tr><th scope="row">červenec–září 2025</th><td>17/2025</td><td class="av-num av-good">6</td></tr>
+              <tr><th scope="row">říjen–prosinec 2025</th><td>1/2026</td><td class="av-num av-bad">19</td></tr>
+              <tr><th scope="row">leden–březen 2026</th><td>5/2026</td><td class="av-num">11</td></tr>
+              <tr class="av-row-highlight"><th scope="row">duben–červen 2026</th><td>11/2026</td><td class="av-num">16</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> PDF jedenácti částek Věstníku MZ ČR, které nesou seznam SLP (staženo 19. 9. 2026). Počet programů = počet položek se samostatnou kolonkou „Počet balení LP“ v sekci Specifické léčebné programy, tedy bez zvláštních léčebných programů podle § 49 odst. 6 a 7 zákona o léčivech, které Věstník vypisuje odděleně. Celkem 138 programů v jedenácti čtvrtletích, průměr 12,5 na čtvrtletí, rozpětí 6 až 21.</p>
+      </figure>
+
+      <p>
+        Šestnáct programů je tedy nad průměrem, ale ne rekord: v posledním čtvrtletí roku 2024 jich ministerstvo odsouhlasilo dvacet jedna a na konci roku 2025 devatenáct. Co ta řada ukazuje spolehlivěji než jednotlivé číslo, je, že výjimka není výjimečná. Za jedenáct čtvrtletí prošlo tímto režimem sto třicet osm programů. Je to stálý, rutinní provoz náhradního zásobovacího kanálu.
+      </p>
+
+      <h3>Když vypadne i náhrada</h3>
+
+      <p>
+        Přípravky zařazené do léčebného programu dostávají podle § 2 odst. 2 vyhlášky kód SÚKL. Datové rozhraní registru hlášení o dodávkách to potvrzuje výslovně: kód se přiděluje i „neregistrovanému LP zařazenému do specifického léčebného programu“. To znamená, že i dovezená náhrada musí hlásit, když přestane chodit — a je tedy možné se podívat, jak si sám nový seznam vede.
+      </p>
+
+      <p>
+        K 19. září 2026 hlásily SÚKL přerušení dodávek tři přípravky z nové šestnáctky — dvě už probíhající, jedno ohlášené dopředu. FIBROGAMMIN 250, přípravek s koagulačním faktorem XIII pro pacienty s vrozeným deficitem tohoto faktoru, hlásí přerušení od 31. srpna 2026 s předpokládaným obnovením 7. října z „kapacitních a distribučních důvodů“. COLCHANOVA, jedna ze dvou kolchicinových položek, hlásí přerušení od 4. listopadu 2026 do konce roku z výrobních důvodů. A CICLOSERINĂ ATB, padesát balení cykloserinu pro léčbu tuberkulózy po selhání terapie první volby, má přerušení hlášené od 30. dubna 2026 s obnovením až <strong>10. května 2027</strong> — přičemž samotný souhlas ministerstva s programem platí jen do 30. září 2026. Pohotovostní zásoba, kterou má podle Věstníku držet Toxikologické informační středisko pražské Všeobecné fakultní nemocnice, tedy stojí na přípravku, který se do té doby nedodává a jehož program mezitím skončí (analýza redakce z otevřených dat SÚKL).
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — co seznam a čísla znamenají a co ne">
+        <p class="article-callout-h">Caveat — jak tato čísla číst</p>
+        <p><strong>1. Seznam jsou souhlasy, ne dovozy.</strong> Věstník zveřejňuje to, s čím ministerstvo souhlasilo, a údaj „počet balení LP“ je strop, na který souhlas zní. Kolik balení skutečně přišlo do Česka, seznam ani otevřená data neuvádějí.</p>
+        <p><strong>2. Součet 134 594 míchá jednotky.</strong> U většiny programů jde o balení, u antidifterického séra ale Věstník uvádí 200 ampulek a u přípravku Pentacarinat 400 injekčních lahviček „pro obě velikosti balení celkem“. Součet je proto orientační úhrn položek, ne homogenní počet balení, a mezi čtvrtletími ho nesrovnáváme.</p>
+        <p><strong>3. Jeden program není jeden lék.</strong> Šestnáct programů pokrývá jednadvacet léčivých přípravků: tři programy sdružují víc přípravků najednou (rifampicin s klofaziminem a imunoglobulinem; leishmanióza s malárií a pneumocystózou; dvě značky kolchicinu).</p>
+        <p><strong>4. Počet aktivních přerušení se mění den ode dne.</strong> Indikátor dashboardu drží hodnotu 1 404 přípravků k 6. září 2026. Týž výpočet nad daty s platností 19. září 2026 dává 1 436. Rozdíl není opravou, ale pohybem: hlášení průběžně vznikají i zanikají.</p>
+        <p><strong>5. Přípravky ze seznamu jsme s registrem hlášení párovali podle názvu.</strong> Kód stavu registrace, kterým SÚKL v otevřených datech odlišuje přípravky z léčebných programů, se nám nepodařilo strojově ověřit proti číselníku; nález o třech přerušených přípravcích proto stojí na shodě názvu, lékové formy a velikosti balení s Věstníkem.</p>
+      </aside>
+
+      <h3>Mezinárodní srovnání s výhradou</h3>
+
+      <p>
+        Počty léčebných programů se mezi zeměmi srovnávat nedají: každý stát má jinak vymezený institut, jinak nastavené hlášení a jiné zveřejňování. Srovnávat lze nástroje. Přehled vládních opatření proti výpadkům léčiv ve 38 zemích (Vogler, 2024, <em>Health Policy</em>) zjistil, že 34 zemí vyžaduje od firem hlášení chystaných výpadků do národního registru, 20 zemí ukládá povinné zásoby kriticky potřebných léků, 18 zemí zavedlo zákazy vývozu — a <strong>35 zemí má regulatorní nástroj, který usnadňuje dovoz a použití alternativních léčiv</strong>. Český specifický léčebný program je právě takový nástroj a v evropském srovnání není ničím neobvyklým; neobvyklé je, jak málo se čte to, co o trhu vypovídá.
+      </p>
+
+      <p>
+        O tom, co výpadky dělají s pacienty, existuje jen málo národních měření. Jedno z mála celostátních pochází z Portugalska: průřezová studie v lékárnách z dubna 2019 na 22 830 dotaznících (Romano et al., 2022, <em>Journal of the American Pharmacists Association</em>) zjistila, že <strong>52,2 %</strong> pacientů zažilo za posledních dvanáct měsíců výpadek léku, <strong>21,5 %</strong> muselo kvůli změně receptu znovu k lékaři a <strong>5,7 %</strong> uvedlo, že kvůli tomu léčbu přerušilo. Náklad samotných návštěv lékaře navíc autoři odhadli na 35,3 až 43,8 milionu eur ročně pro portugalský zdravotní systém. Česká obdoba takového měření neexistuje — dashboard sleduje jen nabídkovou stranu, tedy hlášení výrobců.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+
+      <p>
+        Pro pacienta znamená léčebný program dobrou zprávu i varování zároveň. Dobrou proto, že lék, který by jinak nebyl, je k dispozici legálně, s uvedeným výrobcem, distributorem i pracovištěm. Varování proto, že je k dispozici dočasně: sedm z šestnácti souhlasů vyprší do dvanácti měsíců a tři programy se souhlasem až do roku 2030 jsou podle Věstníku pohotovostní zásoby pro záškrt, plané neštovice u novorozenců, tuberkulózu a tropické nákazy. Kontinuita léčby přitom stojí a padá s tím, že někdo včas podá nový návrh — jako u přípravku FOLINATO CÁLCICO NORMON, který je podle Věstníku určen k „doprodeji balení přípravku dodaných do České republiky“ v rámci staršího programu, nebo u onkologického přípravku AUGTYRO, jehož celý cíl podle Věstníku zní: pokračování léčby pacienta s ROS1-pozitivním nemalobuněčným karcinomem plic, který ji zahájil ve starším programu. Dvacet šest balení, aby jedna rozběhnutá léčba nemusela skončit.
+      </p>
+
+      <p>
+        Pro systém je seznam levným diagnostickým nástrojem. Ukazuje, které molekuly nemají na českém trhu záložní zdroj — a kde by tedy výpadek jednoho výrobce znamenal rovnou nulu. Dashboard tenhle pohled zatím nabízí jen zprostředkovaně přes <a href="indicator.html?id=vypadky_leciv_aktivni">indikátor aktivních výpadků</a>; ten měří, kolik přípravků právě nechodí, ale ne, u kolika z nich neexistuje nic jiného.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé, publikovat seznam jako data, ne jako PDF.</strong> Sedm řádků na program ve třech až čtyřech částkách ročně je strojově čitelný dataset — ale dnes je zamčený v sazbě Věstníku. Stejná tabulka v otevřených datech SÚKL nebo ministerstva by umožnila spojit každý program s kódem přípravku, s registrem hlášení o dodávkách a s registrovanou alternativou, pokud existuje. <strong>Za druhé, hlídat konce souhlasů.</strong> Sedm souhlasů končí do roka a u cykloserinu končí dřív, než má skončit přerušení dodávek jeho jediného dodavatele. Kalendář expirací by měl být veřejný, ne jen interní. <strong>Za třetí, měřit i poptávkovou stranu.</strong> Portugalci vědí, kolik pacientů kvůli výpadku muselo znovu k lékaři a kolik léčbu přerušilo; Česko ví jen to, co nahlásili výrobci. Jedna otázka v pravidelném šetření mezi pojištěnci by ten rozdíl smazala. <strong>Za čtvrté, číst Věstník jako varovný systém.</strong> Sedm z šestnácti programů míří na infekce, tři na akutní psychiatrii a neurologii; kdyby z těchto tabulek vznikl průběžný seznam látek bez záložního zdroje na českém trhu, bylo by po dvou letech vidět, které díry se zacelují a které se opakují každé čtvrtletí. Dnes to musí sečíst čtenář sám.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-labelledby="databox-h">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=vypadky_leciv_aktivni"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 404 léčivých přípravků (2026), SÚKL, otevřená data — hlášení o dodávkách léčivých přípravků na trh</li>
+        <li><a href="indicator.html?id=spotreba_antibiotik"><strong>Spotřeba antibiotik (ambulantní sektor)</strong></a> — 15 DDD na 1 000 obyvatel a den (2023), SZÚ, NRL pro antibiotika; průměr OECD 16, EU 18,3</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-esencialni-antiinfektiva.html">→ Sedmdesát děr v seznamu nepostradatelných léků proti infekcím</a></li>
+        <li><a href="clanek-tamoxifen-vypadek.html">→ Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů</a></li>
+        <li><a href="clanek-kvetiapin-vypadek.html">→ Kvetiapin s prodlouženým uvolňováním vypadl celý. SÚKL shání náhradu za 1,25 milionu denních dávek</a></li>
+        <li><a href="clanek-nevydana-baleni-leku.html">→ Loni se předepsalo o 6,5 milionu balení léků víc, než lékárny vydaly</a></li>
+        <li><a href="clanek-co-ridi-vestnik-mz.html">→ Co všechno řídí Věstník. 28 ročníků úředního kanálu ministerstva v jednom archivu</a></li>
+        <li><a href="indicator.html?id=vypadky_leciv_aktivni">→ Detail ukazatele Aktivní výpadky léčiv hlášené SÚKL</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — Věstník a legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Věstník MZ ČR, částka 11/2026 (vydáno 15. 9. 2026), sekce „Specifické léčebné programy (SLP) odsouhlasené Ministerstvem zdravotnictví v období duben–červen 2026“, s. 5–15</strong> — všech šestnáct programů s přípravkem, počtem balení, výrobcem, distributorem, předkladatelem, cílem, pracovišti a platností souhlasu; sekci připravil Odbor léčiv a zdravotnických prostředků 3. 7. 2026. Částka má 70 stran a pět položek obsahu. <a href="https://mzd.gov.cz/vestnik/vestnik-11-2026/" target="_blank" rel="noopener">mzd.gov.cz — částka 11/2026 ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Vestnik-MZD_11-2026.pdf" target="_blank" rel="noopener">mzd.gov.cz — PDF ↗</a></li>
+          <li><strong>Věstník MZ ČR, částky 1/2024, 5/2024, 9/2024, 13/2024, 1/2025, 6/2025, 12/2025, 17/2025, 1/2026 a 5/2026</strong> — deset starších seznamů SLP, ze kterých je sestavena řada jedenácti čtvrtletí (14, 11, 9, 10, 21, 14, 7, 6, 19, 11 programů). <a href="https://mzd.gov.cz/vestnik/" target="_blank" rel="noopener">mzd.gov.cz — archiv Věstníku ↗</a></li>
+          <li><strong>Zákon č. 378/2007 Sb., o léčivech a o změnách některých souvisejících zákonů, § 49</strong> — Specifické léčebné programy s využitím neregistrovaných humánních léčivých přípravků: podmínky (odst. 1), předložení návrhu ministerstvu a stanovisko SÚKL (odst. 2), písemný souhlas ministerstva jako podmínka uskutečnění (odst. 3), odvolání souhlasu a pozastavení použití (odst. 4), zvláštní léčebný program (odst. 6 a 7). <a href="https://www.zakonyprolidi.cz/cs/2007-378" target="_blank" rel="noopener">zakonyprolidi.cz — aktuální znění ↗</a></li>
+          <li><strong>Vyhláška č. 228/2008 Sb., o registraci léčivých přípravků, § 2</strong> — obsah návrhu léčebného programu (odst. 1), stanovisko SÚKL, souhlas ministerstva a přidělení kódu přípravku (odst. 2), výčet údajů, které se o schváleném programu zveřejňují (odst. 3). <a href="https://www.zakonyprolidi.cz/cs/2008-228" target="_blank" rel="noopener">zakonyprolidi.cz — aktuální znění ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární — otevřená data SÚKL</h5>
+        <ul class="article-sources-list">
+          <li><strong>SÚKL — Hlášení o uvedení, přerušení, ukončení a obnovení dodávek léčivého přípravku na trh (otevřená data, soubor mr.zip)</strong> — kumulativní registr hlášení držitelů registrace; platnost datové sady použité v tomto článku je 19. 9. 2026. Z něj pochází historie přípravku HALOPERIDOL-RICHTER 5 mg/ml (přerušení 27. 1. 2023 a 15. 10. 2025, ukončení dodávek s platností od 17. 3. 2026 z výrobních důvodů), zahájení dodávek přípravku HALOPERIDOL WZF od 29. 5. 2026 a aktivní přerušení u přípravků FIBROGAMMIN 250, COLCHANOVA a CICLOSERINĂ ATB. <a href="https://opendata.sukl.cz/?q=katalog/hlaseni-o-uvedeni-preruseni-ukonceni-obnoveni-dodavek-leciveho-pripravku-na-trh" target="_blank" rel="noopener">opendata.sukl.cz — katalog ↗</a></li>
+          <li><strong>SÚKL — datové rozhraní téhož registru (MR_datove_rozhrani20230301.csv)</strong> — popis sloupců; dokládá, že kód SÚKL se přiděluje i neregistrovanému přípravku zařazenému do specifického léčebného programu, a vysvětluje hodnoty pole typu oznámení (zahajeni, preruseni, ukonceni, obnoveni). <a href="https://opendata.sukl.cz/soubory/MR_datove_rozhrani20230301.csv" target="_blank" rel="noopener">opendata.sukl.cz — datové rozhraní ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence: dopady výpadků a politiky států</h5>
+        <ul class="article-sources-list">
+          <li><strong>Romano S, Guerreiro JP, Teixeira Rodrigues A. Drug shortages in community pharmacies: Impact on patients and on the health system. <em>J Am Pharm Assoc (2003)</em>. 2022;62(3):791–799.e2. DOI 10.1016/j.japh.2021.12.017. PMID 35115262.</strong> Celostátní průřezová multicentrická studie v portugalských lékárnách (duben 2019, 22 830 dotazníků): 52,2 % pacientů zažilo výpadek za posledních 12 měsíců, 21,5 % muselo kvůli změně receptu k lékaři, 5,7 % přerušilo léčbu; odhadovaný dopad návštěv navíc 35,3 až 43,8 mil. EUR pro portugalský zdravotní systém. Ověřeno v PubMed 19. 9. 2026. <a href="https://doi.org/10.1016/j.japh.2021.12.017" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Turbucz B, Major M, Zelko R, Hanko B. Proposal for Handling of Medicine Shortages Based on a Comparison of Retrospective Risk Analysis. <em>Int J Environ Res Public Health</em>. 2022;19(7):4102. DOI 10.3390/ijerph19074102. PMID 35409787.</strong> Přehledová srovnávací analýza národních registrů výpadků v šesti zemích (Maďarsko, Belgie, Španělsko, Švýcarsko, Austrálie, USA): v evropských zemích tvoří skupiny antiinfektiv pro systémové použití a léčiv na nervový systém nadproporční podíl kritických výpadků. Autoři sami upozorňují, že registry nejsou harmonizované a srovnání vyžaduje korekce. Ověřeno v PubMed 19. 9. 2026. <a href="https://doi.org/10.3390/ijerph19074102" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Vogler S. Tackling medicine shortages during and after the COVID-19 pandemic: Compilation of governmental policy measures and developments in 38 countries. <em>Health Policy</em>. 2024;143:105030. DOI 10.1016/j.healthpol.2024.105030. PMID 38484475.</strong> Přehled opatření ve 38 zemích (2023): 34 zemí vyžaduje hlášení chystaných výpadků do národního registru, 20 zemí ukládá povinné zásoby, 18 zemí zákazy vývozu a 35 zemí má regulatorní nástroj usnadňující dovoz a použití alternativních léčiv. Ověřeno v PubMed 19. 9. 2026. <a href="https://doi.org/10.1016/j.healthpol.2024.105030" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Ravinetto R, Bottieau E, Fusco D et al. Inequitable access to medicines for neglected tropical diseases in Europe: health system vulnerabilities and a call for coordinated action. <em>Lancet Reg Health Eur</em>. 2026;63:101616. DOI 10.1016/j.lanepe.2026.101616. PMID 41757222.</strong> Typ publikace: Review, tedy odborné stanovisko, nikoli originální studie. Popisuje, že evropští kliničtí lékaři jsou u opomíjených tropických nemocí odkázáni na provizorní řešení („bricolage solutions“): dary od firem, dary přes WHO a její spolupracující centra, dovoz případ od případu a magistraliter přípravu. Ověřeno v PubMed 19. 9. 2026. <a href="https://doi.org/10.1016/j.lanepe.2026.101616" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Seznam ve Věstníku obsahuje souhlasy ministerstva, nikoli skutečně dovezená balení; údaj „počet balení LP“ je maximum, na které souhlas zní. Součet 134 594 sčítá položky v různých jednotkách (u antidifterického séra 200 ampulek, u přípravku Pentacarinat 400 injekčních lahviček pro obě velikosti balení celkem) a nelze ho srovnávat mezi čtvrtletími. Šestnáct programů pokrývá jednadvacet léčivých přípravků, protože tři programy sdružují víc přípravků. Počty programů za jednotlivá čtvrtletí jsou vlastní počet redakce z PDF Věstníků podle výskytu kolonky „Počet balení LP“ v sekci SLP; zvláštní léčebné programy podle § 49 odst. 6 a 7 zákona o léčivech, které Věstník vypisuje odděleně, se do nich nepočítají a částka 5/2024 navíc doplňuje prosinec 2023. Nález o třech přípravcích ze seznamu s aktivním přerušením dodávek i historie haloperidolu jsou vlastní analýzou redakce nad otevřenými daty SÚKL s platností datové sady 19. 9. 2026: pro každý kód SÚKL se bere poslední hlášení podle data hlášení a za aktivní přerušení se považuje hlášení typu „preruseni“ s prázdným termínem obnovení nebo s termínem v budoucnu — stejný postup, jakým se počítá indikátor dashboardu. Týž výpočet k 19. 9. 2026 dává 1 436 přípravků, zatímco indikátor drží hodnotu 1 404 k 6. 9. 2026; číslo se mění denně. Přípravky ze seznamu jsme s registrem hlášení párovali podle názvu, lékové formy a velikosti balení, protože číselník kódů stavu registrace se nepodařilo strojově ověřit. Unijní seznam kriticky důležitých léčiv v článku neuvádíme: stránka Evropské lékové agentury k němu vrátila 19. 9. 2026 chybu 404, a bez načteného primárního zdroje na portál nepatří. Stránka registru výpadků na sukl.gov.cz byla ve stejný den rovněž nedostupná, pracujeme proto přímo s otevřenými daty, která jsou primárním zdrojem indikátoru. Citované práce popisují situaci v Portugalsku, v šesti vybraných zemích a napříč 38 státy; jejich hodnoty nelze přenášet na český systém jako české údaje.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

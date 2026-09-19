@@ -776,6 +776,8 @@ const MANIFEST = {
   'clanek-lex-kratom-2026': { kicker: 'Legislativa · kratom', signal: 'bad', stat: '50', statSuffix: '%', barPct: 50, claim: 'řešených otrav kratomem letos šlo o lidi mladší 19 let.', context: 'Vláda schválila návrh: hranice nákupu z 18 na 21 let. Rozhodne Parlament.' },
   'clanek-cekani-na-kolonoskopii': { kicker: 'Onkologie · screening', signal: 'bad', stat: '84,2', claim: 'dní čeká pacient na kolonoskopii po pozitivním testu na krev ve stolici.', context: 'O 23 dní déle než v roce 2019. Norma EU zní 31 dnů, měří se ale od odeslání.' },
   'clanek-hpv-zatez-miliarda': { kicker: 'Onkologie · zátěž HPV', signal: 'bad', stat: '112 543', claim: 'nových onemocnění spojených s HPV napočítala studie za tři roky.', context: 'Přímé náklady 1,06 mld. Kč. Proočkovanost dívek stagnuje na 69,8 %.' },
+  'clanek-cdz-iv-vyzva-207-milionu': { kicker: 'Duševní zdraví · nová centra', signal: 'warn', stat: '207', statSuffix: ' mil.', claim: 'korun na patnáct nových center duševního zdraví.', context: 'Síť tak dosáhne 65 center ze 100 slíbených do roku 2030.' },
+  'clanek-test-ledvin-padesatnici-2026': { kicker: 'Prevence · ledviny', signal: 'bad', stat: '530', statSuffix: ' tis.', claim: 'lidí má výrazně sníženou funkci ledvin (G3–G5).', context: 'Na dialýze jich bylo 6 352. Test teď dostane každý padesátník.' },
 };
 
 function escapeXml(s) {
