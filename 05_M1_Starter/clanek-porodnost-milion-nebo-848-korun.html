@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-20
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-20
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 12
+    visual_elements_count: 7
+    notes: "Vytvořeno na přímé zadání vlastníka z 20. 9. 2026: napsat článek z příspěvku Jakuba Hlávky na X
+      (https://x.com/jakubhlavka/status/2099893393841107426, 15. 9. 2026 16:09 UTC; text i obrázek staženy přes
+      syndikační endpoint a fxtwitter API 20. 9. 2026 — obrázek = rámeček „Shrnutí našich doporučení“ z reportu).
+      CENTRÁLNÍ KPI: 848 Kč za „vyšetření a léčbu neplodnosti“ v ordinaci registrujícího gynekologa nejvýš dvakrát
+      za rok a šestkrát za život (vyhláška č. 432/2025 Sb., příloha č. 4, část C) — a tentýž limit beze změny
+      v návrhu úhradové vyhlášky pro rok 2027 (VeKLEP ALBSDXRFYLM6, materiál ma_, PŘ do 23. 9. 2026) — proti
+      premiérovu návrhu „milion za druhé dítě“ (13. 9. 2026) a proti 77,6 tis. narozených / 1,28 dítěte na ženu (ČSÚ 2025).
+      PRIMÁRNÍ ZDROJE (staženy 20. 9. 2026, HTTP 200 pokud není uvedeno jinak):
+      (1) Malý I., Tachezyová B. (2025). Proč máme rekordně nízkou porodnost a co s tím? ECON MUNI Policy Report
+          č. 2025-03, Brno: MU, prosinec 2025, DOI 10.60791/PR_MUNI_ECON_2025-03, CC BY 4.0, 14 stran; PDF z is.muni.cz
+          (napodruhé, první odpověď je meta-refresh), text přes pdfjs-dist; zpráva ECON MUNI o vydání 15. 12. 2025;
+      (2) vyhláška č. 432/2025 Sb. (úhradová vyhláška 2026), zakonyprolidi.cz: příloha č. 4 A) 118 Kč měsíční agregovaná
+          úhrada za registrovanou pojištěnku odb. 603; C) 848 Kč max 2×/rok, 6×/život; IVF 1 646 / 19 119 / 39 773 Kč;
+      (3) VeKLEP ALBSDXRFYLM6 (návrh ÚV 2027) přes MCP hlidac_statu — prostý text příloh ma_ (materiál, 583 616 znaků)
+          a zd_ (důvodová zpráva): 122 Kč; 848 Kč max 2×/rok 6×/život BEZE ZMĚNY; nové výkony 63935 (2 231 Kč) a 63936
+          (1 925 Kč) „Rozšířený management léčby neplodnosti poskytovatelem asistované reprodukce“; IVF rozděleno
+          22 954 + 12 400 + 6 128 (+ 3 000 KET + 500); spermiogram vyčleněn pro 603; DZ: „Dohoda … pokračuje
+          v úhradovém mechanismu zavedeném loňském roce“; DŘ 29. 1.–18. 6. 2026, dohoda v 11 z 15 segmentů vč.
+          gynekologie; stav „2 - v připomínkovém řízení“, autorizace 9. 9., PŘ do 23. 9., 1 připomínka (ČSK, doporučující);
+      (4) ČSÚ, tisková konference 31. 3. 2026 „Jak v Česku ubývá narozených dětí“ (PDF prezentace, 25 stran): řada
+          živě narozených 2016–2025 (112,7 / 114,4 / 114,0 / 112,2 / 110,2 / 111,8 / 101,3 / 91,1 / 84,3 / 77,6 tis.)
+          a úhrnné plodnosti (1,63 / 1,69 / 1,71 / 1,71 / 1,71 / 1,83 / 1,62 / 1,45 / 1,37 / 1,28); věk 30,6 / 29,2;
+          13 % dětí cizinkám; pokles všech pořadí „zhruba o 30 %“; ČSÚ produkt „Počet narozených byl loni nejnižší za
+          posledních 240 let“ (−8 %, −31 % proti 2021, 1,13 v 1999, 1,28 v 2005); Statistika a My 18. 5. 2026 (47 % mimo
+          manželství, od roku 1785);
+      (5) vlada.gov.cz — TZ 14. 5. 2026 „Premiér Babiš: Podpora rodin je klíčem…“ a stránka Odboru rovnosti žen a mužů
+          „Proč se v Česku rodí málo dětí: mezi přáním a realitou“ (konference 14. 5. 2026, Strakova akademie; citace
+          Mardešićová „až 10 % narozených dětí“, Prokop „až polovina poklesu … nedostupností bydlení“, Malý „Neexistuje
+          jedno opatření, které by porodnost výrazně zvýšilo.“); údaj „121 tisíc (2021)“ z téže stránky NEPOUŽIT —
+          ČSÚ vede 111,8 tis.;
+      (6) MPSV — „Fórum rodinné politiky 2026 hledalo cesty…“ (11. 9. 2026, Ústí nad Labem, 9. ročník; RILSA Zpráva
+          o rodině 2026: 80 % žen 18–49 ideál ≥ 2 děti, téměř dvě třetiny bezdětných 25–44 si dítě přejí, 34 % rodičů
+          má méně dětí než plánovalo; rodičovský příspěvek 400 tis. Kč; prevence 133 → 198 mil. Kč);
+      (7) Ekonomický deník 13. 9. 2026 (citace z nedělního videa, původ v Institutu Solvo, „my jsme se o tom nikdy pořádně
+          nebavili“); Peak.cz — L. Kovanda (30 tis. druhých dětí × 1 mil. = 30 mld; +10 % = 10 mil. za „nové“ dítě);
+          Echo24 — M. Hlaváček (NRR): ~30 + ~15 = min. 45 mld ročně, Maďarsko 1,59 → 1,31 (2020–2025); CNN Prima —
+          Křeček, Kovanda, Prokop (školky pro polovinu dětí do 3 let, 10 tis. obecních bytů ročně, sleva 40 tis. Kč),
+          Peterka; všechny odhady nákladů a zahraniční srovnání uváděny S ATRIBUCÍ, ne jako fakt redakce;
+      (8) recenzovaná literatura — PubMed 20. 9. 2026: Rahman et al. 2025 Lancet Reg Health West Pac (PMID 40585185),
+          Brydon et al. 2024 Soc Sci Med (PMID 39396395), Zhang et al. 2023 IJERPH (PMID 36981698), Fernandez-Barra
+          et al. 2026 Soc Sci Med (PMID 42241915); Consensus 20. 9. 2026 (1 dotaz): Bergsvik, Fauske, Hart 2021 Popul
+          Dev Rev DOI 10.1111/padr.12431 (Wiley vrací na DOI HTTP 403 kvůli bot-ochraně, záznam ověřen v Consensu),
+          Bokun 2024 Demogr Res DOI 10.4054/demres.2024.51.28, González & Trommlerová 2021 J Hum Resour
+          DOI 10.3368/jhr.59.1.0220-10725r2; Doepke & Kindermann 2019 AER a Pertold 2019 citovány TAK, JAK JE CITUJE
+          REPORT (redakce je samostatně neověřovala, v textu s atribucí „podle reportu“);
+      (9) data/indicators.json — hodnoty databoxu ověřeny literálně; (10) data/legislativa.json — položka
+          uhradova-vyhlaska-2027; (11) vlastní články portálu (asistovaná reprodukce, úhradová vyhláška 2027, dohodovací
+          řízení 2027, plodnost mladistvých, kdo se o nás postará 2035).
+      VÝPOČTY REDAKCE, v textu takto označené: (111,8 − 77,6) / 111,8 = 30,6 % (ČSÚ uvádí 31 %); 22 954 + 12 400 +
+      6 128 = 41 482 Kč (bez KET a zhodnocení); 2 × 848 = 1 696 Kč za rok; 1 635 / 38 = 43 ambulancí na jedno centrum.
+      VĚDOMĚ NEUVEDENO: (a) počet druhých dětí narozených v roce 2025 — ČSÚ ho v dostupných materiálech neuvádí
+      číslem, „zhruba 30 tisíc“ je odhad ekonoma a tak je atribuován; (b) maďarská úhrnná plodnost — převzata jen
+      s atribucí na Hlaváčka/Echo24, Eurostat 2025 k datu psaní nepublikoval; (c) obsah CZECHSEX a výroky M. Kreidla
+      — citovány podle reportu s atribucí, primární zdroj NUDZ redakce neotevírala; (d) „121 tisíc dětí v roce 2021“
+      ze stránky Úřadu vlády — rozpor s ČSÚ, vynecháno; (e) reakce ministra financí či MPSV na návrh Solvo — v dostupných
+      zdrojích nebyla.
+      published:false, audit-status draft, čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28 · HSPA Monitor</title>
+<meta name="description" content="Zdravotní ekonom Jakub Hlávka reagoval 15. září na premiérův návrh „milion za druhé dítě“ sedmi doporučeními z policy reportu MUNI ECON, který v květnu představili vládě. Přečetli jsme report, data ČSÚ i přehledovou literaturu o porodném a ověřili jeho hlavní zdravotnické tvrzení přímo v úhradové vyhlášce: gynekolog dostane za vyšetření a léčbu neplodnosti 848 korun nejvýš dvakrát ročně, zatímco kompletní cyklus IVF v centru stojí pojišťovnu 39 773 korun. Návrh vyhlášky pro rok 2027, který je do 23. září v připomínkách, tento limit nemění. Evidence přitom říká: peněžní bonusy mají dočasný efekt, školky a dostupná léčba neplodnosti po pětatřicítce trvalý. V roce 2025 se narodilo 77,6 tisíce dětí, nejméně od roku 1785.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28">
+<meta property="og:description" content="Premiér nabízí milion za druhé dítě. Úhradová vyhláška zaplatí gynekologovi léčbu neplodnosti dvakrát ročně po 848 korunách — a návrh na rok 2027 to nemění. Co říká report MUNI ECON, data ČSÚ a evidence o porodném.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-20">
+<meta property="article:section" content="Dostupnost péče">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-porodnost-milion-nebo-848-korun.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-porodnost-milion-nebo-848-korun.png" data-cover-injected="1">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun#article",
+      "headline": "Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28",
+      "description": "Zdravotní ekonom Jakub Hlávka reagoval 15. září na premiérův návrh „milion za druhé dítě“ sedmi doporučeními z policy reportu MUNI ECON, který v květnu představili vládě. Přečetli jsme report, data ČSÚ i přehledovou literaturu o porodném a ověřili jeho hlavní zdravotnické tvrzení přímo v úhradové vyhlášce: gynekolog dostane za vyšetření a léčbu neplodnosti 848 korun nejvýš dvakrát ročně, zatímco kompletní cyklus IVF v centru stojí pojišťovnu 39 773 korun. Návrh vyhlášky pro rok 2027, který je do 23. září v připomínkách, tento limit nemění. Evidence přitom říká: peněžní bonusy mají dočasný efekt, školky a dostupná léčba neplodnosti po pětatřicítce trvalý. V roce 2025 se narodilo 77,6 tisíce dětí, nejméně od roku 1785.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-porodnost-milion-nebo-848-korun.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun"
+      },
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-20",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Dostupnost péče"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28",
+          "item": "https://skorezdravotnictvi.cz/clanek-porodnost-milion-nebo-848-korun"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <img class="article-cover" src="assets/covers/clanek-porodnost-milion-nebo-848-korun.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Dostupnost péče</span>
+        <span class="article-tag article-tag-muted">porodnost · neplodnost · úhradová vyhláška · asistovaná reprodukce · rodinná politika</span>
+      </div>
+      <h1 class="article-title">Milion za druhé dítě, nebo 848 korun dvakrát ročně? Co může zdravotnictví udělat s porodností 1,28</h1>
+      <p class="article-deck">
+        Zdravotní ekonom Jakub Hlávka reagoval 15. září na premiérův návrh „milion za druhé dítě“ sedmi doporučeními z policy reportu MUNI ECON, který v květnu představili vládě. Přečetli jsme report, data ČSÚ i přehledovou literaturu o porodném a ověřili jeho hlavní zdravotnické tvrzení přímo v úhradové vyhlášce: gynekolog dostane za vyšetření a léčbu neplodnosti <strong>848 korun nejvýš dvakrát ročně</strong>, zatímco kompletní cyklus IVF v centru stojí pojišťovnu 39 773 korun. Návrh vyhlášky pro rok 2027, který je do 23. září v připomínkách, tento limit nemění. Evidence přitom říká: peněžní bonusy mají dočasný efekt, školky a dostupná léčba neplodnosti po pětatřicítce trvalý. V roce 2025 se narodilo <strong>77,6 tisíce dětí</strong>, nejméně od roku 1785.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">20. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">13 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Během jednoho týdne v září se česká debata o porodnosti odehrála ve třech dějstvích. V pátek 11. září zahájil premiér Andrej Babiš v Ústí nad Labem Fórum rodinné politiky slovy, že stát nemá lidem určovat rodinné plány, ale vytvářet podmínky, aby je mohli naplnit. V neděli 13. září v pravidelném videu nadhodil odměnu milion korun za druhé dítě a doživotní daňovou úlevu za třetí. A v úterý 15. září zveřejnil zdravotní ekonom Jakub Hlávka z Masarykovy univerzity krátký příspěvek: „Otázka klesající porodnosti je velmi komplexní a nenabízí se jednoduchá řešení.“ Připojil obrázek se sedmi doporučeními z policy reportu své fakulty, který podle něj dostal premiér na stůl už v květnu. Ten report jsme přečetli celý. Jeho nejkonkrétnější zjištění se netýká peněz pro rodiny, ale peněz pro gynekology — a dá se ověřit v úhradové vyhlášce, kterou právě teď ministerstvo zdravotnictví připomínkuje.
+      </p>
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Čtyři čísla, mezi kterými se debata o porodnosti pohybuje</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="77600">77 600</span>
+            <span class="av-counter-label">živě narozených dětí v roce 2025</span>
+            <span class="av-counter-foot">nejméně od začátku statistického zjišťování v roce 1785; o 8 % méně než v roce 2024 a o 31 % méně než v roce 2021 (ČSÚ)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1.28" data-decimals="2">1,28</span>
+            <span class="av-counter-label">dítěte na jednu ženu (úhrnná plodnost 2025)</span>
+            <span class="av-counter-foot">v roce 2021 to bylo 1,83; stejná hodnota jako v roce 2005, historické minimum 1,13 je z roku 1999 (ČSÚ)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="848" data-suffix=" Kč">848 Kč</span>
+            <span class="av-counter-label">za vyšetření a léčbu neplodnosti u registrujícího gynekologa</span>
+            <span class="av-counter-foot">nad rámec měsíční agregované úhrady, nejvýš dvakrát za rok a šestkrát za život pojištěnky — vyhláška č. 432/2025 Sb. i návrh pro rok 2027</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="30" data-suffix=" mld">30 mld</span>
+            <span class="av-counter-label">korun ročně — odhad nákladu „milionu za druhé dítě“</span>
+            <span class="av-counter-foot">ekonom Lukáš Kovanda: zhruba 30 tisíc druhých dětí ročně; Národní rozpočtová rada s daňovou úlevou za třetí dítě počítá nejméně 45 mld Kč ročně</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, tisková konference „Jak v Česku ubývá narozených dětí“ (31. 3. 2026) a produkt „Počet narozených byl loni nejnižší za posledních 240 let“; vyhláška č. 432/2025 Sb., příloha č. 4, část C (zakonyprolidi.cz, ověřeno 20. 9. 2026); návrh vyhlášky pro rok 2027, VeKLEP ALBSDXRFYLM6, příloha č. 4 (odok.cz přes Hlídač státu, 20. 9. 2026); odhady nákladů L. Kovanda (Peak.cz) a M. Hlaváček, Národní rozpočtová rada (Echo24) — jde o odhady, ne o vládní čísla.</p>
+      </figure>
+      <h3>Čtyři roky, o třetinu méně dětí</h3>
+      <p>
+        Čísla, na která všichni tři aktéři reagují, zveřejnil Český statistický úřad 31. března. V roce 2025 se v Česku živě narodilo 77,6 tisíce dětí — čtvrtý meziroční pokles za sebou, tentokrát o 8 procent, a nejnižší hodnota od roku 1785, kdy statistické zjišťování začalo. Proti roku 2021, kdy se narodilo 111,8 tisíce dětí a úhrnná plodnost dosáhla 1,83 dítěte na ženu, tedy nejvíc od roku 1992, jde o propad o 31 procent. Úhrnná plodnost klesla na 1,28 — stejně jako v roce 2005 a jen o patnáct setin výš než historické minimum 1,13 z roku 1999. Průměrný věk matky při narození prvního dítěte se zvýšil na 29,2 roku, při narození kteréhokoli dítěte na 30,6 roku. Podle ČSÚ klesly mezi lety 2021 a 2025 počty narozených i míry plodnosti u prvních, druhých i dalších dětí shodně zhruba o 30 procent — nejde tedy o to, že by rodiny přestaly mít druhé dítě, ale že se rodí méně dětí všech pořadí.
+      </p>
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Úhrnná plodnost v Česku 2021–2025 — počet dětí na jednu ženu</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="2" data-unit="">
+          <li class="av-bar-row" data-value="1.83" data-display="1,83" data-label="2021" data-note="nejvyšší hodnota od roku 1992; 111,8 tis. narozených"></li>
+          <li class="av-bar-row" data-value="1.62" data-display="1,62" data-label="2022" data-note="101,3 tis. narozených"></li>
+          <li class="av-bar-row" data-value="1.45" data-display="1,45" data-label="2023" data-note="91,1 tis. narozených"></li>
+          <li class="av-bar-row" data-value="1.37" data-display="1,37" data-label="2024" data-note="84,3 tis. narozených"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="1.28" data-display="1,28" data-label="2025" data-note="77,6 tis. narozených — nejméně v historii"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, prezentace k tiskové konferenci „Jak v Česku ubývá narozených dětí“, 31. 3. 2026, řada živě narozených a úhrnné plodnosti 2016–2025. Report MUNI ECON pracuje pro rok 2024 s předběžnou hodnotou 1,36; zde uvádíme aktuální údaj ČSÚ 1,37.</p>
+      </figure>
+      <p>
+        Že pokles není projevem nezájmu o děti, ukázala na zářijovém fóru Zpráva o rodině 2026 Výzkumného institutu práce a sociálních věcí: <strong>80 procent žen ve věku 18 až 49 let</strong> považuje za ideální mít alespoň dvě děti, téměř dvě třetiny bezdětných mezi 25 a 44 lety si dítě přejí — a <strong>34 procent rodičů</strong> uvádí, že má méně dětí, než původně plánovalo. Rozdíl mezi přáním a realitou je přesně ten prostor, o který se politika přetahuje.
+      </p>
+      <h3>Sedm doporučení, která premiér dostal v květnu</h3>
+      <p>
+        Report, na který Hlávka odkazuje, se jmenuje <em>Proč máme rekordně nízkou porodnost a co s tím?</em> Napsali ho Ivan Malý, docent katedry veřejné ekonomie a dlouholetý expert Evropské komise pro zdravotnictví a dlouhodobou péči, a datová analytička Barbora Tachezyová z Institutu pro zdravotní ekonomii, politiku a inovace, který Hlávka vede. Vyšel v prosinci 2025 jako ECON MUNI Policy Report č. 2025-03 a 14. května 2026 ho Malý prezentoval na konferenci „Proč se v Česku rodí málo dětí a co s tím?“, kterou ve Strakově akademii uspořádal Odbor rovnosti žen a mužů Úřadu vlády a zahájil ji premiér. Malý tam podle záznamu Úřadu vlády řekl větu, kterou Hlávka o čtyři měsíce později v podstatě zopakoval: „Neexistuje jedno opatření, které by porodnost výrazně zvýšilo.“
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblRecH">
+        <figcaption class="av-figure-h" id="avTblRecH">Sedm doporučení reportu MUNI ECON — kdo má páku a co o tom víme</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Doporučení</th>
+                <th scope="col">Znění reportu</th>
+                <th scope="col">Resort s pákou</th>
+                <th scope="col">Co o tom víme k 20. 9. 2026</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">1. Prevence</th><td>Podporovat prevenci a informovanost v souvislosti s rizikovými faktory ovlivňujícími plodnost.</td><td>zdravotnictví</td><td>report jmenuje zátěž prostředí, obezitu a odkládání mateřství; průměrný věk prvorodičky 29,2 roku (ČSÚ 2025)</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2. Úhrady 2027</th><td>Reflektovat doporučení odborné komunity v Úhradové vyhlášce pro rok 2027 a zachovat regionální dostupnost gynekologické péče a léčby neplodnosti.</td><td>zdravotnictví</td><td class="av-bad">návrh vyhlášky 2027 (VeKLEP od 9. 9., připomínky do 23. 9.) limit 848 Kč dvakrát ročně přebírá beze změny — viz níže</td></tr>
+              <tr><th scope="row">3. Školky</th><td>Zefektivnit investice do předškolní péče zohledněním regionálních demografických specifik namísto plošných řešení.</td><td>školství, obce</td><td>podle analýzy PAQ Research citované reportem klesne do roku 2027 potřeba míst v mateřských školách o zhruba 30 tisíc; 486 obcí bude řešit nadbytek, 343 nedostatek</td></tr>
+              <tr><th scope="row">4. Péče do tří let</th><td>Systémově podporovat rozvoj flexibilních forem péče (např. dětské skupiny) a cílit na celkové zvýšení dostupnosti služeb pro děti do tří let.</td><td>práce a sociální věci</td><td>děti do 3 let ve formální péči: 7,3 % v Česku proti 39,2 % v EU-27 (EU-SILC 2024, podle reportu)</td></tr>
+              <tr><th scope="row">5. Bydlení</th><td>Nastavit podmínky pro zdravý vývoj realitního a hypotečního trhu.</td><td>místní rozvoj, finance, ČNB</td><td>ceny nemovitostí 2015–2024 o téměř 163 % výš, reálné mzdy o 14 %; vlastní bydlení 2,3krát hůř dostupné než v roce 2015 (report z dat ČSÚ)</td></tr>
+              <tr><th scope="row">6. Úvazky</th><td>Podpořit flexibilní a zkrácené úvazky, které rodičům umožní sladit péči o děti s prací a zvýšit tak disponibilní příjem domácnosti.</td><td>práce a sociální věci</td><td>report: matky odpracují v domácnosti dvakrát víc hodin než otcové i při podobném příjmu a úvazku (podle Pertolda 2019)</td></tr>
+              <tr><th scope="row">7. Pobídky firmám</th><td>Zavést cílené daňové či finanční pobídky pro zaměstnavatele, kteří aktivně podporují rodiče.</td><td>finance</td><td>bez měřitelného ukazatele na portálu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Malý I., Tachezyová B. (2025). Proč máme rekordně nízkou porodnost a co s tím? ECON MUNI Policy Report č. 2025-03, s. 1 (shrnutí doporučení, doslovně) a s. 6–11 (podklady); přiřazení resortů je výklad redakce. Třetí sloupec: ČSÚ (31. 3. 2026), návrh úhradové vyhlášky 2027 (VeKLEP ALBSDXRFYLM6), a údaje, které report přebírá z PAQ Research, EU-SILC a ČSÚ.</p>
+      </figure>
+      <p>
+        Pět ze sedmi doporučení míří mimo zdravotnictví — na školky, bydlení, úvazky a daně. Report u nich staví na literatuře, kterou shrnuje jednou větou: opatření snižující zátěž péče o děti konkrétně pro matky „mohou být více než dvakrát účinnější než politiky typu porodného“ a jejich efekt je trvalý, zatímco navýšení peněžních dávek má účinek jen dočasný. Za nejsilnější tuzemský faktor označuje bydlení: podle vlastního modelu autorů na datech 32 evropských zemí z let 2003 až 2023 je nárůst podílu mladých lidí přetížených náklady na bydlení o 8,6 procentního bodu spojen s poklesem úhrnné plodnosti o 0,06 dítěte na ženu — a v Česku tento podíl u dvacátníků stoupl z 9,6 procenta v roce 2010 na 12,3 procenta v roce 2024. Sociolog Daniel Prokop na květnové konferenci odhadl, že nedostupností bydlení je vysvětlitelná až polovina poklesu porodnosti.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="7.3" data-decimals="1" data-suffix=" %">7,3 %</span>
+          <span class="av-counter-label">dětí do tří let ve formální péči v Česku</span>
+          <span class="av-counter-foot">v EU-27 je to 39,2 %; třicet a více hodin týdně: 2,2 % proti 24,8 % (EU-SILC 2024, podle reportu)</span>
+        </div>
+      </aside>
+      <h3>848 korun dvakrát ročně</h3>
+      <p>
+        Dvě doporučení ale patří zdravotnictví, a tady je report nejkonkrétnější. Od roku 2022 hradí veřejné pojištění asistovanou reprodukci ženám do 40 let, až čtyři cykly IVF; jak jsme psali v analýze <a href="clanek-asistovana-reprodukce.html">o českém prvenství v IVF</a>, provádí Česko 3 621 cyklů na milion obyvatel, více než dvojnásobek evropského průměru, a podle Nicole Mardešićové ze Sekce asistované reprodukce České gynekologické a porodnické společnosti se centra „podílí až na 10 % narozených dětí“. Report k tomu dodává podmínku, o které se mluví málo: účinnost hrazené léčby závisí na tom, jestli se problém včas zachytí v primární péči, tedy u registrujícího gynekologa. A právě tam podle autorů vyhláška pro rok 2026 vytvořila překážku.
+      </p>
+      <p>
+        Ověřili jsme to v textu vyhlášky č. 432/2025 Sb. Příloha č. 4 zavedla pro ambulantní gynekology odbornosti 603 „měsíční agregovanou úhradu za péči o registrovanou pojištěnku“ ve výši <strong>118 korun měsíčně</strong> — obdobu kapitace praktiků — do níž spadá většina péče včetně preventivních prohlídek. Nad ni vyhláška v části C stanoví úhradu <strong>848 korun</strong> „za hrazené služby v souvislosti s vyšetřením a léčbou neplodnosti, které zahrnují vyšetření ženy a jejího partnera, nastavení léčby a v případě neúspěchu předání do centra asistované reprodukce“, a hned dodává: pojišťovna ji uhradí „maximálně dvakrát za rok, maximálně šestkrát za život pojištěnky“. Report proti tomu staví doporučený postup České gynekologické a porodnické společnosti z roku 2021, podle něhož je pro správnou diagnózu třeba pacientku sledovat opakovaně během jednoho menstruačního cyklu — což dvě úhrady za rok neumožňují. Lékař podle autorů vyčerpá roční limit během prvního měsíce a každá další návštěva pro něj znamená práci nad rámec agregované platby. Vedle toho stojí paušál za kompletní cyklus IVF v centru: <strong>39 773 korun</strong>.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Cesta páru s poruchou plodnosti v úhradách — co pojišťovna zaplatí komu (vyhláška 2026 a návrh 2027)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Registrující gynekolog (odbornost 603)</h4>
+            <p class="av-flow-desc">Měsíční agregovaná úhrada 118 Kč za pojištěnku (2027: 122 Kč) na veškerou běžnou péči. Vyšetření a léčba neplodnosti navíc: 848 Kč, nejvýš dvakrát za rok a šestkrát za život.</p>
+            <span class="av-flow-tag">1 635 ambulancí</span>
+          </li>
+          <li class="av-flow-step av-flow-step-bad">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Předání do centra asistované reprodukce</h4>
+            <p class="av-flow-desc">Návrh 2027 nově platí centrům „rozšířený management léčby neplodnosti“: 2 231 Kč se spermiogramem, 1 925 Kč bez něj. Tedy diagnostická práce, kterou v ordinaci gynekologa limit stropuje.</p>
+            <span class="av-flow-tag">38 center</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Cyklus IVF v centru</h4>
+            <p class="av-flow-desc">2026: kompletní cyklus s transferem embryí 39 773 Kč. Návrh 2027 paušál rozděluje: stimulace a punkce 22 954 Kč, oplodnění a kultivace 12 400 Kč, embryotransfer 6 128 Kč.</p>
+            <span class="av-flow-tag">až 4 cykly do 40 let</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vyhláška č. 432/2025 Sb., příloha č. 4, části A a C (zakonyprolidi.cz, 20. 9. 2026); návrh vyhlášky o stanovení hodnot bodu … pro rok 2027, VeKLEP ALBSDXRFYLM6, materiál a důvodová zpráva (odok.cz přes Hlídač státu, 20. 9. 2026); počty ambulancí a center podle reportu MUNI ECON z Národního registru poskytovatelů zdravotních služeb (obr. 5); úhrada IVF do 40 let podle zákona č. 48/1997 Sb. ve znění od roku 2022 (viz <a href="clanek-asistovana-reprodukce.html">naše analýza</a>). Součet tří nových paušálů 41 482 Kč je výpočet redakce a nezahrnuje přípravu pro kryoembryotransfer (3 000 Kč) a zhodnocení (500 Kč).</p>
+      </figure>
+      <p>
+        Autoři z toho vyvozují, že systém „vytváří silnou finanční motivaci neprovádět léčbu v primární ambulanci a pacientky co nejdříve odeslat do center asistované reprodukce“ — a že to má regionální rozměr, protože center je podle Národního registru poskytovatelů 38 proti 1 635 gynekologickým ambulancím a soustředí se ve velkých městech. Pro páry z menších měst může nutnost dojíždět na základní monitoring zahájení léčby oddálit nebo znemožnit. Proto doporučení číslo dvě: reflektovat to v úhradové vyhlášce pro rok 2027.
+      </p>
+      <h3>Návrh na rok 2027 to nemění — a vysvětluje proč</h3>
+      <p>
+        Ministerstvo zdravotnictví vložilo návrh úhradové vyhlášky pro rok 2027 do VeKLEP 9. září, připomínky přijímá do 23. září a k 20. září u něj eviduje jedinou, doporučující připomínku České stomatologické komory. Prošli jsme materiál i důvodovou zprávu. Agregovaná úhrada gynekologům roste ze 118 na <strong>122 korun</strong>. Odstavec o neplodnosti je převzat slovo od slova: 848 korun, „maximálně dvakrát za rok, maximálně šestkrát za život pojištěnky“. Důvodová zpráva to nezastírá, naopak: „Dohoda uzavřená v dohodovacím řízení pokračuje v úhradovém mechanismu zavedeném loňském roce – měsíční agregované úhradě za péči o registrovanou pojištěnku.“ Gynekologové totiž patří k jedenácti segmentům z patnácti, které podle předkládací zprávy k vyhlášce uzavřely v <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">dohodovacím řízení pro rok 2027</a> plnou dohodu s pojišťovnami (červencová tisková zpráva ministerstva počítala dvanáct segmentů včetně jedné částečné dohody), a vyhláška dohodu jen přepisuje. Rok předtím se přitom dohodly jen tři segmenty — a gynekologie byla jedním z nich. Mechanismus, který report kritizuje, si tedy zástupci oboru dvakrát po sobě sami vyjednali.
+      </p>
+      <p>
+        Dvě věci se přesto mění, obě ve prospěch center. Návrh nově vyčleňuje kompletní spermiogram jako samostatně hrazený výkon i pro registrujícího gynekologa — to jde směrem, který report chce. Zároveň ale zavádí dva nové výkony pro poskytovatele asistované reprodukce, „rozšířený management léčby neplodnosti“ za 2 231 korun se spermiogramem a 1 925 korun bez něj. Diagnostická rozvaha, kterou v ordinaci gynekologa stropuje limit dvou návštěv, tak dostává vlastní cenu až v centru. Důvodová zpráva navíc počítá, že v segmentu gynekologie budou náklady vyšší, než plánují zdravotně pojistné plány, kvůli „vyššímu dopadu reformy“. Pokud má někdo doporučení reportu do vyhlášky prosadit, zbývá mu na to podle lhůty ve VeKLEP několik dní; jak ministerstvo s připomínkami nakládá, jsme popsali u <a href="clanek-uhradova-vyhlaska-2027.html">samotného návrhu pro rok 2027</a>.
+      </p>
+      <h3>Co říká evidence o milionu za druhé dítě</h3>
+      <p>
+        Premiérův návrh nevznikl na ministerstvu. V nedělním videu 13. září ho uvedl slovy „Například odměna milion korun za druhé dítě“ a „doživotní daňová úleva za třetí dítě, máme tady i podporu studujících rodičů, jesle, dětské skupiny“ s odkazem na think tank Institut Solvo, který v roce 2023 založila Ivana Tykač: „Některé ty závěry například toho institutu Solvo jsou zajímavé, my jsme se o tom nikdy pořádně nebavili.“ Není to tedy vládní materiál, ale podnět k diskusi — a diskuse přišla rychle. Hlavní ekonom Trinity Bank Lukáš Kovanda spočítal, že při zhruba třiceti tisících druhých dětí ročně by odměna stála kolem 30 miliard korun; kdyby zvýšila počet druhých dětí o desetinu, vyšlo by jedno dítě „navíc“ na deset milionů, protože stát by platil i rodinám, které by druhé dítě měly tak jako tak. Michal Hlaváček z Národní rozpočtové rady k tomu v Echo24 připočetl zhruba 15 miliard ročního výpadku z daňové úlevy, celkem tedy nejméně 45 miliard, a připomněl Maďarsko, kde podle něj úhrnná plodnost klesla mezi lety 2020 a 2025 z 1,59 na 1,31 navzdory podobným opatřením.
+      </p>
+      <p>
+        Recenzovaná literatura těmto výhradám dává za pravdu jen zčásti — a přesně v té části, na které stojí report. Systematický přehled <em>Bergsvik, Fauske a Hart</em> (2021), <em>Population and Development Review</em>, shrnul 35 experimentálních a kvaziexperimentálních studií z Evropy, USA, Kanady a Austrálie od roku 1970 a uzavřel: rozšíření kapacit péče o děti zvyšuje konečnou plodnost, zatímco zvýšení peněžních transferů má <strong>dočasné účinky</strong>; slibné je také dotování asistované reprodukce, které podle přehledu zvyšuje porodnost u žen nad 35 let. Přesně na tento přehled se report odvolává. Že jde o obecný vzorec, ukazují jednotlivé programy: ve Španělsku zvedlo zavedení univerzálního porodného porodnost o 3 procenta a jeho zrušení ji srazilo o 6 procent (<em>González a Trommlerová</em>, 2021, <em>Journal of Human Resources</em>); polské 500+ zvýšilo v krátkém období pravděpodobnost porodu o 1,5 procentního bodu, ale u žen do třiceti let ji snížilo (<em>Bokun</em>, 2024, <em>Demographic Research</em>).
+      </p>
+      <p>
+        Poctivost velí dodat, že literatura není jednohlasná. Přehled 61 studií <em>Rahman et al.</em> (2025) v <em>The Lancet Regional Health – Western Pacific</em> označil peněžní dávky za nejvlivnější typ pronatalitní politiky ve vyspělých zemích a modeloval, že Japonsko by zvýšením dávek na úroveň Maďarska či Francie mohlo pokles zvrátit — zároveň ale jmenoval úhradu asistované reprodukce mezi opatřeními s potenciálem. Scoping review <em>Brydon et al.</em> (2024) v <em>Social Science &amp; Medicine</em> našel mezi 37 studiemi vlivu peněžních transferů na plodnost 23 s nárůstem, což nedosáhlo statistické významnosti; u dávek na děti a rodinu byl podíl pozitivních výsledků vyšší než u transferů vázaných na zaměstnání. A analýza zemí OECD <em>Zhang et al.</em> (2023) v <em>International Journal of Environmental Research and Public Health</em>, kterou report cituje, došla k závěru, že rodinné politiky plodnost zvyšují dlouhodobě — ale že se tento efekt „oslabuje v zemích, kde plodnost zůstává pod 1,5“. Česko je na 1,28.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblEvH">
+        <figcaption class="av-figure-h" id="avTblEvH">Co říkají přehledy a kvaziexperimenty o peněžních pobídkách k porodnosti</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Studie</th>
+                <th scope="col">Design</th>
+                <th scope="col">Hlavní zjištění o penězích</th>
+                <th scope="col">Co funguje déle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight"><th scope="row">Bergsvik, Fauske, Hart 2021 (PDR)</th><td>systematický přehled, 35 (kvazi)experimentálních studií, 1970→</td><td class="av-bad">zvýšení peněžních transferů má dočasné účinky</td><td class="av-good">rozšíření péče o děti zvyšuje konečnou plodnost; dotace asistované reprodukce u žen nad 35 let</td></tr>
+              <tr><th scope="row">Rahman et al. 2025 (Lancet Reg Health WP)</th><td>systematický přehled 61 studií + model pro Japonsko</td><td class="av-good">peněžní dávky nejvlivnější typ politiky ve vyspělých zemích</td><td>úhrada asistované reprodukce má potenciál; dopad závisí na výši výdajů (nad 1,3 % HDP)</td></tr>
+              <tr><th scope="row">Brydon et al. 2024 (Soc Sci Med)</th><td>scoping review 164 studií o transferech a zdraví</td><td class="av-mut">23 z 37 studií nárůst plodnosti, statisticky nevýznamné</td><td>dávky na děti a rodinu častěji než transfery vázané na zaměstnání</td></tr>
+              <tr><th scope="row">Zhang et al. 2023 (IJERPH)</th><td>regrese a fsQCA, země OECD</td><td>rodinné politiky plodnost zvyšují dlouhodobě</td><td class="av-bad">efekt slábne v zemích s plodností trvale pod 1,5</td></tr>
+              <tr><th scope="row">González, Trommlerová 2021 (J Hum Resour)</th><td>kvaziexperiment, Španělsko, univerzální porodné</td><td>zavedení +3 % porodů, zrušení −6 %</td><td class="av-mut">část efektu je jen posun načasování</td></tr>
+              <tr><th scope="row">Bokun 2024 (Demogr Res)</th><td>regrese, Polsko, Rodina 500+</td><td>+1,5 procentního bodu pravděpodobnosti porodu krátkodobě</td><td class="av-mut">u žen 21–30 let pokles; reagují hlavně ženy 31–40 let</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> citace v sekci Zdroje. Rahman, Brydon a Zhang ověřeny v PubMed 20. 9. 2026 (autoři, rok, časopis, typ publikace, abstrakt); Bergsvik, González a Bokun vycházejí v časopisech, které PubMed neindexuje, a jsou ověřeny podle DOI a záznamu v databázi Consensus 20. 9. 2026. Jednotlivé kvaziexperimenty uvádíme jako ilustraci vzorce z přehledů, ne jako samostatný důkaz.</p>
+      </figure>
+      <p>
+        Ekonomové, kteří návrh kritizují, nabízejí i alternativy — a nápadně se kryjí se sedmi body reportu. Daniel Prokop na CNN Prima News spočítal, že za dvě třetiny ceny by šlo zajistit školky pro polovinu dětí do tří let, deset tisíc obecních bytů ročně a daňovou slevu 40 tisíc korun na dítě. Kovanda by peníze nasměroval do zlevňování bydlení, péče o malé děti a prevence ztráty kariérních vyhlídek. Hlavní ekonom BHS Štěpán Křeček byl smířlivější: „Opatření rozhodně neuškodí. Ze zahraničních příkladů ale vidíme, že výsledky jsou jiné než při původních záměrech.“ Ministerstvo práce mezitím na fóru oznámilo zvýšení rodičovského příspěvku na 400 tisíc korun a navýšení rozpočtu na primární prevenci pro rodiny ze 133 na 198 milionů korun.
+      </p>
+      <h3>Co zdravotnictví může — a co ne</h3>
+      <p>
+        Bylo by snadné z toho vyvodit, že zdravotnictví je v debatě o porodnosti vedlejší postava. Report i literatura říkají něco přesnějšího: zdravotnictví nerozhoduje o tom, jestli lidé děti chtějí, ale spolurozhoduje o tom, jestli je ti, kdo je chtějí, budou moci mít — a to v okamžiku, kdy průměrná prvorodička má 29 let a každý desátý porod přichází z centra asistované reprodukce. Dotace léčby neplodnosti je podle Bergsvikova přehledu jednou z mála pronatalitních politik s doloženým účinkem u žen nad 35 let, a Česko ji má nastavenou štědře. Co má nastavené protichůdně, je cesta k ní: úhradový mechanismus, který včasnou diagnostiku v ordinaci gynekologa oceňuje dvěma návštěvami za rok a všechno další posílá do 38 center. To není otázka miliard, ale jednoho odstavce v příloze č. 4 — a odbor, který ho může do 23. září změnit, o tom ví od prosince.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a odhadů">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Počet druhých dětí narozených v roce 2025 ČSÚ v dostupných materiálech neuvádí číslem; „zhruba 30 tisíc“ je odhad ekonoma Lukáše Kovandy a od něj se odvíjí i 30 miliard. Maďarskou plodnost 1,59 → 1,31 přebíráme z vyjádření Michala Hlaváčka pro Echo24, Eurostat údaj za rok 2025 k datu psaní nezveřejnil. Tvrzení o doporučeném postupu České gynekologické a porodnické společnosti a o počtech 38 center a 1 635 ambulancí přebíráme z reportu MUNI ECON, který cituje ČGPS 2021 a Národní registr poskytovatelů; redakce je samostatně neověřovala. Data průzkumu CZECHSEX, jimiž report vysvětluje část poklesu změnou partnerského chování, v textu neuvádíme, protože jsme neotevřeli primární zdroj. Report vznikl v projektu AGEING-CZ financovaném z evropských fondů a je licencován CC BY 4.0; příspěvek Jakuba Hlávky jsme četli přes veřejný syndikační výstup X, ne přes přihlášený účet.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s porodností souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=asistovana_reprodukce_cykly_mil"><strong>Cykly asistované reprodukce na milion obyvatel</strong></a> — 3 621 (ČR, 2019) · Procesy · nejvíc v Evropě; průměr EU 1 581 · hrazeno až 4 cykly do 40 let</li>
+        <li><a href="indicator.html?id=plodnost_mladistvych_15_19"><strong>Plodnost mladistvých (15–19 let)</strong></a> — 5,6 na 1 000 žen (ČR, 2024) · Výsledky · nižší je lepší (signál dobrý; EU 6,2) · za šest let na polovinu, viz <a href="clanek-plodnost-mladistvych.html">mapa chudoby</a></li>
+        <li><a href="indicator.html?id=nizka_porodna_hmotnost_pct"><strong>Novorozenci s nízkou porodní hmotností</strong></a> — 7,9 % (ČR, 2022) · Výsledky · nižší je lepší (signál varovný; OECD 6,8, EU 6,9) · souvisí s IVF a věkem matek</li>
+        <li><a href="indicator.html?id=perinatalni_umrtnost"><strong>Perinatální úmrtnost</strong></a> — 4,8 na 1 000 narozených (ČR, 2024) · Výsledky · nižší je lepší (signál dobrý; EU 5,4)</li>
+        <li><a href="indicator.html?id=pracovnici_ltc_per_100_65plus"><strong>Pracovníci formální dlouhodobé péče (na 100 osob 65+)</strong></a> — 2,5 (ČR, 2024) · Struktury · vyšší je lepší (signál špatný; OECD 5,6) · druhá strana téže demografie, viz <a href="clanek-kdo-se-o-nas-postara-2035.html">Kdo se o nás postará v roce 2035</a></li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Podnět a report</h5>
+        <ul class="article-sources-list">
+          <li><strong>Jakub Hlávka (@JakubHlavka), příspěvek na X z 15. 9. 2026, 18:09 SELČ</strong> — „Otázka klesající porodnosti je velmi komplexní a nenabízí se jednoduchá řešení. Je dobře, že nad tím @strakovka přemýšlí, a jsme rádi, že doporučení @veda_econmuni byla představena panu premiérovi v Praze v květnu.“ + odkaz na report a obrázek se shrnutím sedmi doporučení. Přečteno 20. 9. 2026 přes veřejný syndikační výstup. <a href="https://x.com/jakubhlavka/status/2099893393841107426" target="_blank" rel="noopener">x.com ↗</a></li>
+          <li><strong>Malý I., Tachezyová B. (2025). Proč máme rekordně nízkou porodnost a co s tím? ECON MUNI Policy Report č. 2025-03. Brno: Masarykova univerzita, prosinec 2025, 14 stran, CC BY 4.0.</strong> Zdroj sedmi doporučení, popisu úhradového mechanismu (s. 6–7), údajů o bydlení (s. 9–10), předškolní péči (s. 8), modelu nákladů bydlení (s. 12) a citací literatury (Bergsvik 2021, Doepke &amp; Kindermann 2019, Pertold 2019, Zhang 2023). DOI 10.60791/PR_MUNI_ECON_2025-03. Staženo 20. 9. 2026. <a href="https://is.muni.cz/publication/2539860/PR_MUNI_ECON_2025-03.pdf" target="_blank" rel="noopener">is.muni.cz (PDF) ↗</a> · <a href="https://www.econ.muni.cz/aktuality/novy-policy-report-proc-mame-rekordne-nizkou-porodnost-a-co-s-tim" target="_blank" rel="noopener">zpráva ECON MUNI, 15. 12. 2025 ↗</a></li>
+          <li><strong>Úřad vlády ČR — konference „Proč se v Česku rodí málo dětí a co s tím?“, Strakova akademie, 14. 5. 2026</strong> (Odbor rovnosti žen a mužů) — vystoupení I. Malého („Neexistuje jedno opatření, které by porodnost výrazně zvýšilo.“), N. Mardešićové („až na 10 % narozených dětí“) a D. Prokopa („až polovina poklesu porodnosti vysvětlitelná nedostupností bydlení“); tisková zpráva z téhož dne s citacemi premiéra. <a href="https://vlada.gov.cz/cz/ppov/rovne-prilezitosti-zen-a-muzu/aktuality/proc-se-v-cesku-rodi-malo-deti-mezi-pranim-a-realitou-227641/" target="_blank" rel="noopener">vlada.gov.cz ↗</a> · <a href="https://vlada.gov.cz/cz/media-centrum/tiskove-zpravy/premier-babis-podpora-rodin-je-klicem-k-reseni-nizke-porodnosti-227013/" target="_blank" rel="noopener">tisková zpráva ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Úhradové vyhlášky — primární texty</h5>
+        <ul class="article-sources-list">
+          <li><strong>Vyhláška č. 432/2025 Sb., o stanovení hodnot bodu, výše úhrad hrazených služeb, výše záloh na úhradu hrazených služeb a regulačních omezení pro rok 2026</strong> — příloha č. 4, část A (měsíční agregovaná úhrada 118 Kč za registrovanou pojištěnku, odbornost 603) a část C (848 Kč za vyšetření a léčbu neplodnosti, „maximálně dvakrát za rok, maximálně šestkrát za život pojištěnky“; kompletní IVF cyklus s transferem embryí 39 773 Kč). Ověřeno 20. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2025-432" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Návrh vyhlášky o stanovení hodnot bodu … pro rok 2027</strong> — VeKLEP, materiál ALBSDXRFYLM6, autorizace 9. 9. 2026, stav „2 – v připomínkovém řízení“, lhůta do 23. 9. 2026, k 20. 9. jedna doporučující připomínka (Česká stomatologická komora). Materiál: příloha č. 4 (122 Kč; 848 Kč max. 2× ročně a 6× za život beze změny; výkony 63935 a 63936 za 2 231 a 1 925 Kč; IVF 22 954 / 12 400 / 6 128 / 3 000 / 500 Kč). Důvodová zpráva: „Dohoda uzavřená v dohodovacím řízení pokračuje v úhradovém mechanismu zavedeném loňském roce“; dohoda v 11 z 15 segmentů; vyčlenění spermiogramu pro odbornost 603; očekávané vyšší náklady v segmentu gynekologie. Přečteno z prostého textu příloh přes API Hlídače státu 20. 9. 2026. <a href="https://odok.cz/portal/veklep/material/ALBSDXRFYLM6/" target="_blank" rel="noopener">odok.cz ↗</a> · <a href="https://www.hlidacstatu.cz/" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Demografická data a politický kontext</h5>
+        <ul class="article-sources-list">
+          <li><strong>ČSÚ — tisková konference „Jak v Česku ubývá narozených dětí“, 31. 3. 2026</strong> (prezentace, 25 stran): živě narození 2016–2025 (112,7 / 114,4 / 114,0 / 112,2 / 110,2 / 111,8 / 101,3 / 91,1 / 84,3 / 77,6 tis.), úhrnná plodnost (1,63 / 1,69 / 1,71 / 1,71 / 1,71 / 1,83 / 1,62 / 1,45 / 1,37 / 1,28), průměrný věk matky 30,6 a prvorodičky 29,2 roku, 13 % dětí narozených cizinkám, pokles všech pořadí „zhruba o 30 %“; ČSÚ „Počet narozených byl loni nejnižší za posledních 240 let“ (−8 %, −31 % proti 2021, minimum 1,13 v roce 1999); Statistika a My, 18. 5. 2026 (47 % dětí mimo manželství, od roku 1785). <a href="https://csu.gov.cz/docs/107508/2f1a5ef7-8a51-2ed8-6e5d-f41764898536/csu_tk260331_jak_v_cesku_ubyva_narozenych_deti_prezentace.pdf?version=1.1" target="_blank" rel="noopener">prezentace ČSÚ (PDF) ↗</a> · <a href="https://csu.gov.cz/produkty/pocet-narozenych-byl-loni-nejnizsi-za-poslednich-240-let" target="_blank" rel="noopener">csu.gov.cz ↗</a> · <a href="https://statistikaamy.csu.gov.cz/nejmene-narozenych-deti-v-historii" target="_blank" rel="noopener">Statistika a My ↗</a></li>
+          <li><strong>MPSV — Fórum rodinné politiky 2026, Ústí nad Labem, 11. 9. 2026</strong> — zahájení premiérem a ministrem práce, údaje ze Zprávy o rodině 2026 (RILSA): 80 % žen 18–49 let, téměř dvě třetiny bezdětných 25–44 let, 34 % rodičů; rodičovský příspěvek 400 tis. Kč; prevence 133 → 198 mil. Kč. <a href="https://mpsv.gov.cz/forum-rodinne-politiky-2026-hledalo-cesty-jak-odstranit-bariery-rodicovstvi" target="_blank" rel="noopener">mpsv.gov.cz ↗</a></li>
+          <li><strong>Premiérův návrh z 13. 9. 2026 a reakce</strong> — Ekonomický deník (citace z nedělního videa, původ v Institutu Solvo, „my jsme se o tom nikdy pořádně nebavili“); Peak.cz, L. Kovanda (30 tis. druhých dětí, 30 mld Kč, 10 mil. Kč za dítě navíc při +10 %); Echo24, M. Hlaváček, Národní rozpočtová rada (≈ 30 + 15 = nejméně 45 mld Kč ročně; Maďarsko 1,59 → 1,31) a J. Otradovcová; CNN Prima News, Š. Křeček, L. Kovanda, D. Prokop (školky pro polovinu dětí do 3 let, 10 tis. obecních bytů, sleva 40 tis. Kč), P. Peterka. Vše přečteno 20. 9. 2026; odhady nákladů jsou odhady jednotlivých ekonomů. <a href="https://ekonomickydenik.cz/babis-milion-druhe-dite-porodnost/" target="_blank" rel="noopener">Ekonomický deník ↗</a> · <a href="https://www.peak.cz/dalsi-babisuv-zarez-pro-statni-kasu-milion-za-druhe-dite-by-vysel-na-30-miliard-rocne/45301/" target="_blank" rel="noopener">Peak.cz ↗</a> · <a href="https://www.echo24.cz/a/HQDNW/zpravy-ekonomika-milion-korun-za-druhe-dite-dozivotni-uleva-za-treti-drahe-a-neefektivni-experti" target="_blank" rel="noopener">Echo24 ↗</a> · <a href="https://cnn.iprima.cz/milion-za-druhe-dite-s-populacni-politikou-neuspel-ani-mussolini-ani-orban-rika-ekonom-521732" target="_blank" rel="noopener">CNN Prima News ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Bergsvik J, Fauske A, Hart RK. Can Policies Stall the Fertility Fall? A Systematic Review of the (Quasi-)Experimental Literature. Popul Dev Rev. 2021;47(4):913–964.</strong> DOI 10.1111/padr.12431. Typ: systematický přehled, 35 studií. Časopis není indexován v PubMed; ověřeno podle DOI a záznamu v databázi Consensus 20. 9. 2026 (server vydavatele vrací na automatický dotaz HTTP 403). Citován reportem MUNI ECON. <a href="https://doi.org/10.1111/padr.12431" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Rahman MM, Sakamoto H, Sultana S, Sassa M, Alam MA, Shibuya K. Reversing fertility decline in Japan with foreign pro-natalist policies, 1990–2035: a systematic review and secondary data analysis. Lancet Reg Health West Pac. 2025;59:101596.</strong> DOI 10.1016/j.lanwpc.2025.101596. PMID 40585185. Systematický přehled 61 studií s modelovou analýzou. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/j.lanwpc.2025.101596" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Brydon R, Haseeb SB, Park GR et al. The effect of cash transfers on health in high-income countries: A scoping review. Soc Sci Med. 2024;362:117397.</strong> DOI 10.1016/j.socscimed.2024.117397. PMID 39396395. Scoping review, 164 studií, z toho 37 k plodnosti. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/j.socscimed.2024.117397" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Zhang TT, Cai XY, Shi XH, Zhu W, Shan SN. The Effect of Family Fertility Support Policies on Fertility, Their Contribution, and Policy Pathways to Fertility Improvement in OECD Countries. Int J Environ Res Public Health. 2023;20(6):4790.</strong> DOI 10.3390/ijerph20064790. PMID 36981698. Regresní analýza a fsQCA zemí OECD. Ověřeno v PubMed 20. 9. 2026. Citován reportem MUNI ECON. <a href="https://doi.org/10.3390/ijerph20064790" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>González L, Trommlerová SK. Cash Transfers and Fertility: How the Introduction and Cancellation of a Child Benefit Affected Births and Abortions. J Hum Resour. 2023;58(3):783–818 (online 2021).</strong> DOI 10.3368/jhr.59.1.0220-10725r2. Kvaziexperiment, Španělsko. Ověřeno podle DOI a záznamu Consensus 20. 9. 2026. <a href="https://doi.org/10.3368/jhr.59.1.0220-10725r2" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Bokun A. Cash transfers and fertility: Evidence from Poland’s Family 500+ Policy. Demogr Res. 2024;51:855–910.</strong> DOI 10.4054/demres.2024.51.28. Regresní analýza dat rozpočtových šetření 2010–2018. Ověřeno podle DOI a záznamu Consensus 20. 9. 2026. <a href="https://doi.org/10.4054/demres.2024.51.28" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-asistovana-reprodukce.html">Česko je evropská jednička v IVF. Za rekordem se skrývá odklad rodičovství</a> — úhradová pravidla asistované reprodukce a indikátor 3 621 cyklů na milion obyvatel.</li>
+          <li><a href="clanek-uhradova-vyhlaska-2027.html">Osmdesát osm celých čtyři procenta. Úhradová vyhláška 2027</a>, <a href="clanek-dohodovaci-rizeni-2027-vysledek.html">Dohoda ve 12 z 15 segmentů</a> a <a href="clanek-uhradova-vyhlaska.html">Vzorec, který rozdělí stovky miliard</a> — jak vyhláška vzniká a proč přepisuje dohody.</li>
+          <li><a href="clanek-plodnost-mladistvych.html">Dětem se rodí děti jen v některých krajích</a>, <a href="clanek-komise-porodnictvi.html">Šestnáct lidí bude přestavovat porodnictví</a>, <a href="clanek-kdo-se-o-nas-postara-2035.html">Kdo se o nás postará v roce 2035</a> — druhá strana téže demografické křivky.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Úhradové částky (118 a 122 Kč, 848 Kč, 39 773 Kč, 2 231 a 1 925 Kč, 22 954 / 12 400 / 6 128 Kč) jsou citovány přímo z textu vyhlášky č. 432/2025 Sb. a z materiálu návrhu vyhlášky pro rok 2027 ve VeKLEP; návrh je v připomínkovém řízení a může se změnit. Součet nových paušálů IVF (41 482 Kč) a poměr 43 ambulancí na jedno centrum jsou výpočty redakce. Číslo „zhruba 30 tisíc druhých dětí“ a z něj plynoucích 30 miliard je odhad L. Kovandy; 45 miliard odhad M. Hlaváčka; maďarská úhrnná plodnost 1,59 → 1,31 je převzata z jeho vyjádření pro Echo24 a redakce ji proti Eurostatu za rok 2025 ověřit nemohla. Údaje o dostupnosti bydlení, formální péči o děti do tří let, kapacitách školek, doporučeném postupu ČGPS a počtech center a ambulancí přebíráme z reportu MUNI ECON včetně jeho zdrojů (ČSÚ, EU-SILC, PAQ Research, ČGPS 2021, NRPZS); tvrzení Doepkeho a Kindermanna o více než dvojnásobné účinnosti služeb a Pertoldův údaj o německých školkách jsou citovány tak, jak je report cituje. Report pro rok 2024 uvádí předběžnou úhrnnou plodnost 1,36, ČSÚ nyní 1,37 — používáme ČSÚ. Údaj „121 tisíc dětí v roce 2021“ ze stránky Úřadu vlády nepoužíváme, protože ČSÚ vede 111,8 tisíce. Návrh „milion za druhé dítě“ je podle vyjádření premiéra podnět k diskusi z Institutu Solvo, ne vládní materiál; oficiální reakci ministerstva financí ani MPSV jsme k 20. 9. 2026 nedohledali. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
