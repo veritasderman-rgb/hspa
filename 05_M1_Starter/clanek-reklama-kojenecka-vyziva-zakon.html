@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-21
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-21
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 16
+    visual_elements_count: 7
+    notes: "Vytvořeno na přímé zadání vlastníka z 20. 9. 2026: z videa https://www.facebook.com/share/v/186iHnTTgE/ udělat
+      článek na téma reklama a zákon o regulaci reklamy v kontextu kojení. VIDEO: sdílený odkaz vede na video Royal
+      Institution č. 651466330467674 s titulkem „Is Diet Coke REALLY that healthy?“ a popiskem „Whilst its label might be
+      full of green indicators, how healthy are its raw ingredients? Will drinking Diet Coke help you lose weight? …
+      Chris van Tulleken explores the invention of Ultra Processed Foods.“ — jde o sestřih přednášky „Ultra-processed
+      people: The harsh reality of ultra-processed food“ (Royal Institution, 19. 9. 2023, rigb.org; záznam na YouTube
+      5QOTBreQaIk, název ověřen přes oEmbed). Redakce video NEPŘEPISOVALA (přepis ani titulky nebyly strojově dostupné);
+      z klipu přebírá jen titulek a oficiální popisek, věcný obsah opírá o publikované práce téhož autora ověřené
+      v PubMed a Consensu (BMJ 2018 k5056 — jen Consensus/DOI, PubMed záznam nenalezen; Lancet 2020 PMID 33038948;
+      BMJ 2024 PMID 39562036; Future Healthc J 2025 PMID 40692632; Lancet 2025 PMID 41270764) a o pokyn WHO k náhradním
+      sladidlům (15. 5. 2023).
+      CENTRÁLNÍ KPI: 32 bodů ze 100 pro Česko ve zprávě WHO/UNICEF „Marketing of breast-milk substitutes: national
+      implementation of the International Code, status report 2024“ (kategorie „Some provisions of the Code included“,
+      opatření z roku 2016; dílčí skóre 8 / 0 / 3 / 10 / 0 / 0 / 11 = rozsah / monitoring a vymáhání / informační
+      materiály / propagace veřejnosti / propagace ve zdravotnických zařízeních / vztahy se zdravotníky / označování;
+      stejných 32 bodů má Rakousko, Německo, Polsko, Slovensko, Francie, Itálie, Švédsko a další státy EU, UK 40,
+      Türkiye 39, Indie 78, Brazílie 83, Filipíny 85; globálně 146 ze 194 států má právní opatření, 33 „substantially
+      aligned“, 40 „moderately“, 73 „some provisions“, 48 bez opatření — vše přečteno z PDF zprávy, s. 12 a tabulky
+      příloh). Norsko má ve zprávě rovněž 32 bodů — v textu se Norskem neargumentuje.
+      PRIMÁRNÍ ZDROJE (staženy 20.–21. 9. 2026):
+      (1) zákon č. 40/1995 Sb. ve znění k 10. 10. 2025 (zakonyprolidi.cz): § 1 odst. 2 (definice reklamy), § 5d, § 5e,
+          § 5f, § 7 (dozor: RRTV, SÚKL, MZ, SZPI, krajské živnostenské úřady „v ostatních případech“), § 8 odst. 1
+          písm. k) (šiřitel FO — jen § 5e odst. 1), § 8a odst. 1 (šiřitel PO — § 5e), § 8a odst. 2 a 3 (zadavatel
+          a zpracovatel — jen § 5e odst. 1 a § 5f) → zákaz vzorků a dárků v § 5e odst. 3 nemá skutkovou podstatu pro
+          zadavatele/výrobce;
+      (2) nařízení Komise v přenesené pravomoci (EU) 2016/127, čl. 6, 8, 10 a 11 (EUR-Lex CS i EN): čl. 10 odst. 1
+          „Členské státy mohou takovou reklamu dále omezit nebo zakázat.“; použitelné od 22. 2. 2020;
+      (3) sněmovní tisk 153 (psp.cz, historie k 21. 9. 2026): vláda předložila 1. 4. 2026, rozesláno 2. 4. 2026,
+          zpravodajka MUDr. Zdenka Němečková Crkvenjaš, 1. čtení 24. 6. 2026 (24. schůze, usn. 220), garanční Výbor pro
+          zdravotnictví 4. 9. 2026 doporučil schválit (153/1); VeKLEP KORNDR9CY314 přes MCP Hlídače státu — prostý text
+          příloh: předkládací zpráva (zbytkový dozor ŽÚ, dohoda o SZPI 21. 2. 2024, jednání s výrobci 10. 10. 2023,
+          Expertní komise 6. 3. 2024, bez připomínkového řízení — povoleno 26. 1. 2026, „žádné věcné změny“ proti tisku
+          918 z minulého období), materiál (§ 5e a 5f zrušeny, nový § 5d odst. 4, § 7 písm. g) SZPI, § 8 odst. 1 písm. k),
+          odst. 5 písm. b) výrobce — čl. 10 odst. 3 nař. 2016/127, odst. 6 písm. d) pokuta do 2 000 000 Kč, čl. II
+          přechodná ustanovení 6 měsíců, účinnost 1. 1. 2027), důvodová zpráva („doplnění chybějících skutkových podstat
+          přestupků či přesun dozorové působnosti z krajských živnostenských úřadů na SZPI“), RIA (bez údajů o počtu
+          kontrol nebo pokut u kojenecké výživy); datum schůze vlády 9. 3. 2026 (VeKLEP);
+      (4) Doporučení Rady vlády pro rovnost žen a mužů ke 40. výročí přijetí Mezinárodního kodexu … (2. 3. 2023, PDF
+          13 stran, vlada.gov.cz): úkoly MPO (novela do 31. 12. 2023), MZ (metodický pokyn do 1. 7. 2024; analýza
+          NetCode do 31. 12. 2024 a pak každých 5 let); citace ÚZIS (95 % rodiček zahajuje kojení; odhad MZ výlučného
+          kojení v 6 měsících pod 20 %); zpráva WHO/UNICEF/IBFAN 2020: ČR 39/100; výčet mezer; dary neonatologickým
+          oddělením z registru smluv vč. „MilkBox“; partnerství ČNeoS s Nestlé (2021);
+      (5) TZ MZ a Úřadu vlády 27. 9. 2023 (usnesení vlády č. 719): citace „Komerční společnosti velmi sofistikovaně
+          zneužívají obav rodičů, aby jim prodaly svoje produkty.“ a „Vláda se rozhodla, že v souladu se svými
+          lidskoprávními závazky přistoupí k důslednému sladění české legislativy s požadavky Kodexu.“;
+      (6) RRTV — zápis z 9. zasedání 2017 (9. 5. 2017), bod 24, sp. zn. 2016/963/had/HER: HERO CZECH s.r.o., Sunar,
+          Prima COOL 6. 9. 2016 v 19:15:32, pokuta 50 000 Kč, § 5d odst. 2 písm. d) zákona a čl. 7 odst. 1 písm. c)
+          nař. (EU) 1169/2011, slogan „Bystrý mozek, imunita, poznávací funkce a mlsný jazýček. Po kom to má? Po Sunaru.“
+          (PDF zápisu rrtv.gov.cz; potvrzuje e15.cz 15. 5. 2017);
+      (7) WHO/UNICEF 22. 2. 2022 „How the marketing of formula milk influences our decisions on infant feeding“
+          (tisková zpráva who.int): 51 %, 8 500 rodičů a těhotných + 300 zdravotníků, 8 zemí, UK 84 %, Vietnam 92 %,
+          Čína 97 %, více než třetina žen: zdravotník doporučil konkrétní značku;
+      (8) WHO 15. 5. 2023 pokyn k náhradním sladidlům (tisková zpráva who.int): „does not confer any long-term benefit
+          in reducing body fat in adults or children“, podmíněné doporučení;
+      (9) recenzovaná literatura — PubMed 20.–21. 9. 2026: Rollins 2023 (PMID 36764314), Pérez-Escamilla 2023
+          (36764313), Baker 2023 (36764315), Topothai 2024 (39334400), Jones 2022 (35507274), Becker 2022 (35313063),
+          Cheng 2026 (42166183), Franco-Lares 2023 (36918217), van Tulleken 2020 (33038948), van Tulleken/Rollins/Coombes
+          2024 (39562036), van Tulleken 2025 (40692632), Baker 2025 (41270764); Consensus 21. 9. 2026 (1 dotaz):
+          van Tulleken 2018 BMJ DOI 10.1136/bmj.k5056, Godlee 2019 BMJ DOI 10.1136/bmj.l1279 (BMJ přestává otiskovat
+          reklamu na kojeneckou výživu);
+      (10) data/indicators.json — hodnoty databoxu ověřeny literálně; (11) vlastní články portálu (střet zájmů ve výživě
+          kojenců, plné kojení v porodnicích 73 % / obrat, rozdíly mezi porodnicemi, legislativní newsletter MZ září 2026,
+          slazené nápoje díl 6).
+      VÝPOČTY REDAKCE: žádné odvozené hodnoty kromě slovního shrnutí „nula bodů ve třech ze sedmi oblastí“ (dílčí skóre
+      0 / 0 / 0 u monitoringu, zdravotnických zařízení a zdravotníků).
+      VĚDOMĚ NEUVEDENO: (a) doslovné citace z videa — přepis nebyl k dispozici; (b) počty kontrol a pokut krajských
+      živnostenských úřadů — nezveřejňují se a RIA ani DZ je neuvádějí, v textu řečeno; (c) výsledek analýzy NetCode
+      a metodického pokynu MZ z usnesení 719 — zveřejnění redakce nedohledala, v textu řečeno takto; (d) číslo novely
+      z roku 2002, která § 5e a 5f vložila — v textu jen rok podle epravo.cz (26. 9. 2002); (e) skóre Norska 32/100 —
+      neargumentuje se jím; (f) údaje o 26 % / 13 % / 39 % kojení z podkladu Rady (ÚZIS 2017) — metodicky nejasné, vynecháno.
+      published:false, audit-status draft, čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta · HSPA Monitor</title>
+<meta name="description" content="Klip z přednášky lékaře Chrise van Tullekena v Royal Institution, který koluje po Facebooku, se ptá, jestli je dietní kola se zelenými semafory na etiketě opravdu zdravá. Tentýž autor v roce 2018 v BMJ popsal, jak výrobci kojenecké výživy rozšiřují trh přes nadměrnou diagnostiku alergie na bílkovinu kravského mléka. Vzali jsme jeho otázku vážně a přečetli český zákon o regulaci reklamy: u počáteční kojenecké výživy zakazuje reklamu mimo odborné publikace i vzorky a dárky matkám, dozor ale svěřuje krajským živnostenským úřadům jako „zbytkovému“ orgánu, pro výrobce, který rozdává vzorky, v něm chybí vlastní přestupek a WHO s UNICEF dávají českým pravidlům 32 bodů ze sta. Sněmovní tisk 153, který 4. září doporučil zdravotní výbor, přesouvá dozor na Státní zemědělskou a potravinářskou inspekci a doplňuje pokuty až 2 miliony korun od 1. ledna 2027. Batolecí mléka, dudlíky ani reklamu na sociálních sítích neřeší. Z porodnice dnes odchází plně kojeno 75,1 % dětí.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta">
+<meta property="og:description" content="Etiketa nelže, dojem regulovaný není. Co český zákon o regulaci reklamy zakazuje u kojenecké výživy, proč to hlídají živnostenské úřady, co změní sněmovní tisk 153 od roku 2027 — a proč WHO dává Česku 32 bodů ze sta.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-21">
+<meta property="article:section" content="Veřejné zdraví">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-reklama-kojenecka-vyziva-zakon.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-reklama-kojenecka-vyziva-zakon.png" data-cover-injected="1">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon#article",
+      "headline": "Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta",
+      "description": "Klip z přednášky lékaře Chrise van Tullekena v Royal Institution, který koluje po Facebooku, se ptá, jestli je dietní kola se zelenými semafory na etiketě opravdu zdravá. Tentýž autor v roce 2018 v BMJ popsal, jak výrobci kojenecké výživy rozšiřují trh přes nadměrnou diagnostiku alergie na bílkovinu kravského mléka. Vzali jsme jeho otázku vážně a přečetli český zákon o regulaci reklamy: u počáteční kojenecké výživy zakazuje reklamu mimo odborné publikace i vzorky a dárky matkám, dozor ale svěřuje krajským živnostenským úřadům jako „zbytkovému“ orgánu, pro výrobce, který rozdává vzorky, v něm chybí vlastní přestupek a WHO s UNICEF dávají českým pravidlům 32 bodů ze sta. Sněmovní tisk 153, který 4. září doporučil zdravotní výbor, přesouvá dozor na Státní zemědělskou a potravinářskou inspekci a doplňuje pokuty až 2 miliony korun od 1. ledna 2027. Batolecí mléka, dudlíky ani reklamu na sociálních sítích neřeší. Z porodnice dnes odchází plně kojeno 75,1 % dětí.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-reklama-kojenecka-vyziva-zakon.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon"
+      },
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-21",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Veřejné zdraví"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta",
+          "item": "https://skorezdravotnictvi.cz/clanek-reklama-kojenecka-vyziva-zakon"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <img class="article-cover" src="assets/covers/clanek-reklama-kojenecka-vyziva-zakon.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">reklama · kojenecká výživa · zákon č. 40/1995 Sb. · Mezinárodní kodex · SZPI · sněmovní tisk 153</span>
+      </div>
+      <h1 class="article-title">Zelené semafory na plechovce a vzorek mléka v porodnici: co zákon o regulaci reklamy hlídá u kojenecké výživy a proč má Česko 32 bodů ze sta</h1>
+      <p class="article-deck">
+        Klip z přednášky lékaře Chrise van Tullekena v Royal Institution, který koluje po Facebooku, se ptá, jestli je dietní kola se zelenými semafory na etiketě opravdu zdravá. Tentýž autor v roce 2018 v BMJ popsal, jak výrobci kojenecké výživy rozšiřují trh přes nadměrnou diagnostiku alergie na bílkovinu kravského mléka. Vzali jsme jeho otázku vážně a přečetli český zákon o regulaci reklamy: u počáteční kojenecké výživy zakazuje reklamu mimo odborné publikace i vzorky a dárky matkám, dozor ale svěřuje krajským živnostenským úřadům jako „zbytkovému“ orgánu, pro výrobce, který rozdává vzorky, v něm chybí vlastní přestupek a WHO s UNICEF dávají českým pravidlům <strong>32 bodů ze sta</strong>. Sněmovní tisk 153, který 4. září doporučil zdravotní výbor, přesouvá dozor na Státní zemědělskou a potravinářskou inspekci a doplňuje pokuty až 2 miliony korun od 1. ledna 2027. Batolecí mléka, dudlíky ani reklamu na sociálních sítích neřeší. Z porodnice dnes odchází plně kojeno <strong>75,1 % dětí</strong>.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">21. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">14 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Na plechovce dietní koly svítí v Británii zelené semafory: málo cukru, málo tuku, málo soli. Chris van Tulleken, infektolog z University College London a autor knihy Ultra-Processed People, se v přednášce v Royal Institution 19. září 2023 ptá, co ta zelená vlastně říká — a jestli vám dietní kola pomůže zhubnout. Krátký sestřih té pasáže teď Royal Institution šíří na Facebooku pod titulkem „Is Diet Coke REALLY that healthy?“. Na druhou otázku odpověděla Světová zdravotnická organizace v květnu 2023: náhradní sladidla podle jejího přehledu dlouhodobě nesnižují tělesný tuk u dospělých ani u dětí a WHO nedoporučuje používat je k regulaci hmotnosti. První otázka je zajímavější, protože není o kole. Etiketa nelže; každý údaj na ní je pravdivý a regulovaný. Dojem, který z těch údajů vznikne, regulovaný není. Na tomto rozdílu stojí i český zákon o regulaci reklamy — a nejvíc je to vidět tam, kde jde o spotřebitele, kteří si nic přečíst nemohou: v reklamě na kojeneckou výživu.
+      </p>
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Čtyři čísla, mezi kterými se pohybuje česká regulace reklamy na kojeneckou výživu</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="32">32</span>
+            <span class="av-counter-label">bodů ze sta — jak WHO a UNICEF hodnotí česká pravidla marketingu náhrad mateřského mléka</span>
+            <span class="av-counter-foot">kategorie „některá ustanovení Kodexu“; nula bodů za monitoring a vymáhání, za propagaci ve zdravotnických zařízeních i za vztahy se zdravotníky (status report 2024)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="51" data-suffix=" %">51 %</span>
+            <span class="av-counter-label">rodičů a těhotných žen v osmi zemích se setkalo s marketingem umělé výživy</span>
+            <span class="av-counter-foot">8 500 rodičů a těhotných a 300 zdravotníků; ve Spojeném království 84 %, v Číně 97 % (WHO/UNICEF, únor 2022)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="75.1" data-decimals="1" data-suffix=" %">75,1 %</span>
+            <span class="av-counter-label">novorozenců odchází z české porodnice plně kojeno (2024)</span>
+            <span class="av-counter-foot">dno 72,4 % v roce 2021, na začátku století kolem 90 %; mezi porodnicemi rozpětí od 44 do 96 % (ÚZIS, NRRZ)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="50000" data-suffix=" Kč">50 000 Kč</span>
+            <span class="av-counter-label">pokuta za televizní reklamu na Sunar, kterou v roce 2017 uložila Rada pro rozhlasové a televizní vysílání</span>
+            <span class="av-counter-foot">jediné rozhodnutí o pokutě za reklamu na kojeneckou výživu, které jsme veřejně dohledali; krajské živnostenské úřady, které dozorují všechno mimo vysílání, statistiku nezveřejňují</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO/UNICEF, Marketing of breast-milk substitutes: national implementation of the International Code, status report 2024 (tabulka dílčích skóre, řádek Czechia); WHO/UNICEF, tisková zpráva 22. 2. 2022 k reportu How the marketing of formula milk influences our decisions on infant feeding; ÚZIS ČR, Národní registr reprodukčního zdraví (indikátor HSPA Monitoru); RRTV, zápis z 9. zasedání 2017, bod 24 (sp. zn. 2016/963/had/HER).</p>
+      </figure>
+
+      <h3>Zákon hlídá tvrzení, ne dojem</h3>
+      <p>
+        Jediný český případ pokuty za reklamu na kojeneckou výživu, který se dá dohledat ve veřejných rozhodnutích, je vlastně o tomtéž, o čem je klip z Royal Institution. V září 2016 odvysílala Prima COOL spot na pokračovací mléko Sunar. Divák se v něm dozvěděl, že vitamin A přispívá ke správné funkci imunitního systému, kyselina alfa-linolenová k rozvoji mozku a železo k rozvoji poznávacích funkcí, a slogan to sečetl: „Bystrý mozek, imunita, poznávací funkce a mlsný jazýček. Po kom to má? Po Sunaru.“ Každá z těch vět je pravdivá a jde o schválená zdravotní tvrzení. Rada pro rozhlasové a televizní vysílání přesto 9. května 2017 uložila společnosti Hero Czech pokutu 50 000 Kč: obsah těchto látek je v pokračovací výživě povinný ze zákona, takže reklama, která je vydává za přednost jedné značky, uvádí spotřebitele v omyl o povaze výrobku. Rada se opřela o § 5d zákona o regulaci reklamy a o unijní nařízení o informacích o potravinách, které zakazuje vyvolávat dojem zvláštních vlastností tam, kde je mají všechny podobné potraviny.
+      </p>
+      <p>
+        Je to poučný případ právě proto, jak je výjimečný. Zákon č. 40/1995 Sb. definuje reklamu široce — jako oznámení, předvedení či jinou prezentaci šířenou zejména komunikačními médii, mající za cíl podporu podnikatelské činnosti — ale jeho nástroje jsou úzké: u vybraných komodit reklamu zakazuje nebo omezuje na určité kanály, předepisuje povinné texty, a u potravin odkazuje na evropský režim výživových a zdravotních tvrzení. Ten je přesný a doslovný. Slovo „light“ smí na výrobku být, jen když má nejméně o 30 procent méně energie nebo dané živiny než srovnatelný výrobek; „bez energie“ znamená nejvýš 4 kcal na 100 ml. Dietní kola obojí splňuje. Zelené semafory na britské etiketě jsou také pravdivé: v nápoji skutečně není cukr, tuk ani sůl. Co z těch pravd v hlavě vznikne — že jde o zdravý nápoj, nebo dokonce nápoj, který pomáhá hubnout — žádný paragraf neřeší. Van Tulleken tomu ve svých textech říká obchodní model: u ultra-zpracovaných potravin není zdravotní dojem vedlejší produkt marketingu, ale to, co se prodává. V loňské sérii časopisu Lancet o ultra-zpracovaných potravinách, jejímž je spoluautorem, autoři popisují i druhou stranu téhož modelu — koordinovanou politickou činnost výrobců proti regulaci, od lobbingu přes financování výzkumu po výrobu vědeckých pochybností.
+      </p>
+      <p>
+        A tady se od koly dostáváme k dětem. Van Tulleken se marketingu kojenecké výživy věnuje déle než ultra-zpracovaným potravinám. V prosinci 2018 publikoval v BMJ analýzu, podle níž má diagnóza alergie na bílkovinu kravského mléka v Británii několikanásobně vyšší výskyt v preskripci speciálních formulí než v epidemiologických studiích a autoři klinických doporučení k této diagnóze mají rozsáhlé vazby na výrobce těchto formulí. BMJ na to o několik měsíců později reagoval tím, že přestal reklamu na kojeneckou výživu otiskovat. V říjnu 2020 van Tulleken s kolegy v Lancetu upozornil, že výrobci využili nejistotu prvních měsíců pandemie k marketingu náhrad mateřského mléka, a v listopadu 2024 napsal s Nigelem Rollinsem z WHO editorial BMJ, který žádá nulovou toleranci střetu zájmů ve výživové politice. Otázka z klipu — co vám etiketa opravdu říká — má tedy u kojenecké výživy delší historii než u koly. A na rozdíl od koly na ni existuje mezinárodní odpověď stará 45 let.
+      </p>
+
+      <h3>Co český zákon o kojenecké výživě říká</h3>
+      <p>
+        Mezinárodní kodex marketingu náhrad mateřského mléka přijalo Světové zdravotnické shromáždění v roce 1981 a jeho logika je opačná než logika reklamního práva: nezkoumá, zda je tvrzení pravdivé, ale zakazuje propagaci jako takovou, protože žádná pravdivá reklama nedokáže nepůsobit proti kojení. Evropská unie z Kodexu převzala část, a to jen pro počáteční kojeneckou výživu, tedy mléko pro děti do šesti měsíců. Nařízení Komise 2016/127, které se používá od 22. února 2020, omezuje její reklamu na publikace specializované na péči o malé děti a na vědecké publikace, zakazuje reklamu v místě prodeje, vzorky, slevové poukázky a dárky a výrobcům zakazuje dávat výrobky nebo vzorky zdarma či se slevou veřejnosti, těhotným ženám a matkám — „ani přímo, ani nepřímo prostřednictvím systému zdravotní péče nebo zdravotnických pracovníků“. Výživová a zdravotní tvrzení jsou u počáteční výživy zakázána úplně. A nařízení v článku 10 výslovně dodává: „Členské státy mohou takovou reklamu dále omezit nebo zakázat.“ Česko toho nevyužilo. Jeho § 5e a § 5f zákona o regulaci reklamy, které do zákona přišly novelou v roce 2002, tedy ještě před nařízením, unijní minimum víceméně opisují.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblLawH">
+        <figcaption class="av-figure-h" id="avTblLawH">Co zákon č. 40/1995 Sb. u kojenecké výživy zakazuje, kdo to hlídá a koho lze dnes pokutovat</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Pravidlo</th>
+                <th scope="col">Znění zákona (zkráceno)</th>
+                <th scope="col">Platí pro</th>
+                <th scope="col">Dozor dnes</th>
+                <th scope="col">Přestupek dnes (§ 8, § 8a)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Kanály</th><td>reklama jen v publikacích zaměřených na péči o kojence a ve vědeckých publikacích; jen vědecké a věcně správné údaje; nesmí vést k závěru, že výživa je rovnocenná mateřskému mléku nebo lepší (§ 5e odst. 1)</td><td>počáteční kojenecká výživa</td><td>RRTV ve vysílání, jinak krajský živnostenský úřad</td><td class="av-good">šiřitel, zadavatel i zpracovatel</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Prodejny</th><td>zákaz reklamy způsobilé podněcovat veřejnost ke koupi, zejména rozdáváním vzorků, zvláštním vystavením, slevou nebo zvláštní výhodou (§ 5e odst. 2)</td><td>počáteční kojenecká výživa</td><td>krajský živnostenský úřad</td><td class="av-bad">jen šiřitel — právnická osoba; zadavatel a zpracovatel ne</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Vzorky a dárky</th><td>výrobcům a prodejcům se zakazuje předávat na veřejnosti bezplatně nebo se slevou výrobky, vzorky nebo dary; platí i vůči těhotným ženám, matkám a členům rodin; výjimka pro dary zdravotnickým a charitativním institucím (§ 5e odst. 3)</td><td>výrobci a prodejci počáteční výživy</td><td>krajský živnostenský úřad</td><td class="av-bad">jen šiřitel — právnická osoba; pro výrobce jako zadavatele skutková podstata chybí</td></tr>
+              <tr><th scope="row">Proti kojení</th><td>reklama musí obsahovat informace o správném užití a nesmí působit proti kojení; zákaz slov jako „humanizované“ či „maternizované“ (§ 5f odst. 1)</td><td>počáteční i pokračovací výživa</td><td>RRTV / živnostenský úřad</td><td class="av-good">zadavatel i zpracovatel</td></tr>
+              <tr><th scope="row">Upozornění a obrázky</th><td>povinný text „Důležité upozornění“ o přednosti kojení; zákaz vyobrazení kojence a čehokoli, co idealizuje náhradu mateřského mléka (§ 5f odst. 2)</td><td>počáteční kojenecká výživa</td><td>RRTV / živnostenský úřad</td><td class="av-good">zadavatel i zpracovatel</td></tr>
+              <tr><th scope="row">Tvrzení</th><td>výživová a zdravotní tvrzení jen podle nařízení EU (§ 5d odst. 1); u počáteční výživy je nařízení 2016/127 zakazuje úplně</td><td>všechny potraviny</td><td>SZPI; ve vysílání RRTV</td><td class="av-good">zadavatel — případ Sunar 2017</td></tr>
+              <tr><th scope="row">Batolecí mléka</th><td>žádné zvláštní pravidlo; Kodex a rezoluce WHA 69.9 (2016) doporučují omezit propagaci výrobků pro děti do 36 měsíců</td><td>—</td><td>jen obecná pravidla (nekalé praktiky, § 2c děti)</td><td class="av-bad">nic zvláštního</td></tr>
+              <tr><th scope="row">Dudlíky a lahve</th><td>žádné pravidlo; Kodex je zahrnuje</td><td>—</td><td>—</td><td class="av-bad">nic</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon č. 40/1995 Sb., o regulaci reklamy, ve znění účinném od 10. 10. 2025 — § 5d až 5f, § 7, § 8 odst. 1 písm. k), § 8a odst. 1 až 3 (zakonyprolidi.cz, ověřeno 21. 9. 2026); nařízení Komise v přenesené pravomoci (EU) 2016/127, čl. 8 a 10; rezoluce WHA 69.9. Sloupec „Přestupek dnes“ vychází z výčtů skutkových podstat: u šiřitele-fyzické osoby a u zadavatele a zpracovatele zákon odkazuje jen na § 5e odst. 1 a § 5f, celý § 5e jen u šiřitele-právnické osoby. Důvodová zpráva k tisku 153 mluví o „doplnění chybějících skutkových podstat přestupků“.</p>
+      </figure>
+      <p>
+        Dvě věci z tabulky stojí za pozornost. Za prvé, zákaz vzorků a dárků matkám má v zákoně skutkovou podstatu jen pro „šiřitele“, tedy toho, kdo reklamu šíří; výrobce, který je typicky zadavatelem, lze dnes pokutovat jen za obsah reklamy. Důvodová zpráva k novele, o níž bude řeč níže, to říká suše: cílem je „doplnění chybějících skutkových podstat přestupků“. Za druhé, celá konstrukce míří na počáteční výživu. Pokračovací mléko pro děti od šesti měsíců se v televizi propagovat smí — případ Sunar je toho důkazem — a batolecí mléka pro děti od jednoho roku nemají žádné zvláštní pravidlo, ačkoli krabice vypadá stejně, značka je stejná a číslovka na ní je to jediné, co se mění. Systematický přehled z roku 2024, o němž bude řeč dál, přesně tuhle „křížovou propagaci“ označuje za hlavní díru ve všech zemích, které Kodex uzákonily jen zčásti.
+      </p>
+
+      <h3>Kdo to hlídá: zbytkový orgán a nula bodů za monitoring</h3>
+      <p>
+        Paragraf 7 zákona rozděluje dozor nad reklamou podle komodit: Rada pro rozhlasové a televizní vysílání hlídá vysílání, Státní ústav pro kontrolu léčiv léčiva a zdravotnické prostředky, ministerstvo zdravotnictví zdravotní služby, Státní zemědělská a potravinářská inspekce potraviny a výživová a zdravotní tvrzení — a „v ostatních případech“ krajské živnostenské úřady. Reklama na kojeneckou výživu v tisku, na internetu, v lékárně, v drogerii nebo v porodnici spadá do „ostatních případů“. Předkládací zpráva vlády k novele to pojmenovává bez obalu: platné znění svěřuje dohled „zbytkovému“ dozorovému orgánu, který na to není věcně ani kvalifikačně vybaven. Kolik řízení krajské živnostenské úřady v této věci vedly a kolik pokut uložily, se nedozvíte: statistiku nezveřejňují a neuvádí ji ani důvodová zpráva, ani hodnocení dopadů regulace k novele. Jediné veřejně dohledatelné rozhodnutí o pokutě je tak právě to televizní — a to se netýkalo § 5e, ale klamavosti.
+      </p>
+      <p>
+        To, co se v Česku neměří, měří jednou za dva roky WHO a UNICEF. Jejich zpráva o národním provádění Kodexu z roku 2024 hodnotí právní úpravu všech 194 členských států WHO ve stovkové škále. Právní opatření alespoň k některým ustanovením Kodexu má 146 zemí, 33 z nich je s Kodexem „v podstatě sladěno“, 40 „částečně“, 73 zemí má „některá ustanovení“ a 48 nemá nic. Česko je s 32 body ve třetí skupině — stejně jako Rakousko, Německo, Polsko, Slovensko, Francie, Itálie či Švédsko, protože všechny tyto státy hodnotitelé posuzují podle téhož nařízení 2016/127 a národní zákony k němu nic nepřidávají. Zajímavější než součet je jeho rozklad do sedmi oblastí. Za rozsah pravidel má Česko 8 bodů, za omezení propagace veřejnosti 10, za označování 11, za informační materiály 3. A ve třech oblastech má nulu: za monitoring a vymáhání, za propagaci ve zdravotnických zařízeních a za vztahy výrobců se zdravotníky. Jinými slovy, právě tam, kde se podle evidence rozhoduje — v porodnici a v ordinaci —, česká pravidla neexistují.
+      </p>
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Jak WHO a UNICEF hodnotí soulad národních pravidel s Kodexem — skóre 0 až 100 (status report 2024)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="100" data-unit="">
+          <li class="av-bar-row" data-value="85" data-display="85" data-label="Filipíny" data-note="v podstatě sladěno; opatření z roku 2012"></li>
+          <li class="av-bar-row" data-value="83" data-display="83" data-label="Brazílie" data-note="v podstatě sladěno; zákon NBCAL pro výrobky do 3 let, opatření z roku 2018"></li>
+          <li class="av-bar-row" data-value="78" data-display="78" data-label="Indie" data-note="v podstatě sladěno; opatření z roku 2003"></li>
+          <li class="av-bar-row" data-value="40" data-display="40" data-label="Spojené království" data-note="některá ustanovení; jediná země EU/UK režimu s body za monitoring"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="32" data-display="32" data-label="Česko" data-note="některá ustanovení; opatření z roku 2016 (nařízení EU); stejně Rakousko, Německo, Polsko, Slovensko, Francie, Itálie, Švédsko"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO/UNICEF, Marketing of breast-milk substitutes: national implementation of the International Code, status report 2024 — příloha s celkovým skóre a kategorií podle zemí a tabulka dílčích skóre (rozsah / monitoring a vymáhání / informační materiály / propagace veřejnosti / propagace ve zdravotnických zařízeních / vztahy se zdravotníky / označování; Česko 8 / 0 / 3 / 10 / 0 / 0 / 11). Kategorie: 75 a více bodů „v podstatě sladěno“, 50–74 „částečně sladěno“, pod 50 „některá ustanovení“.</p>
+      </figure>
+      <p>
+        Že nejde o abstraktní bodování, ukázal podnět, který v březnu 2023 schválila Rada vlády pro rovnost žen a mužů ke čtyřicátému výročí Kodexu. Jeho autoři si z registru smluv vytáhli smlouvy nemocnic s výrobci náhrad mateřského mléka: finanční dary neonatologickým oddělením, vybavení, uniformy pro personál i propagační předměty určené rodičům — například plastovou krabici na sušené mléko se vzorky a letáky jednoho výrobce. Podnět také připomíná, že Česká neonatologická společnost uváděla mezi svými partnery Nestlé. Podle dat ÚZIS, která si Úřad vlády vyžádal, zahajuje kojení 95 procent českých rodiček; ministerstvo zdravotnictví přitom podle téhož dokumentu odhaduje, že výlučně kojeno v šesti měsících je méně než 20 procent dětí. Mezi těmito dvěma čísly leží období, kdy se rodiče rozhodují — a kdy na ně podle evidence marketing působí nejvíc. Vláda podnět přijala 27. září 2023 usnesením č. 719. Tisková zpráva ministerstva zdravotnictví z téhož dne to shrnula větou, která by mohla stát i pod klipem z Royal Institution: „Komerční společnosti velmi sofistikovaně zneužívají obav rodičů, aby jim prodaly svoje produkty.“
+      </p>
+
+      <h3>Co mění sněmovní tisk 153 — a co nechává být</h3>
+      <p>
+        Usnesení uložilo ministru průmyslu a obchodu předložit novelu zákona o regulaci reklamy, ministru zdravotnictví do července 2024 vytvořit metodický pokyn pro poskytovatele zdravotních služeb k ukončení nevhodné propagace náhrad, lahví a šidítek a do konce roku 2024 vyhodnotit dodržování Kodexu protokolem NetCode. Novela vznikla, v minulém volebním období došla do Sněmovny jako tisk 918 a s koncem období propadla. Vláda ji 9. března 2026 schválila znovu — beze změn věcného obsahu, a proto bez připomínkového řízení — a 2. dubna ji poslanci dostali jako tisk 153. První čtení proběhlo 24. června, garanční výbor pro zdravotnictví ji 4. září doporučil schválit. Navrhovaná účinnost je 1. ledna 2027. Zveřejnění metodického pokynu ani výsledků hodnocení NetCode jsme nedohledali.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Od Kodexu k tisku 153 — 45 let, dva pokusy a jeden „zbytkový“ úřad</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1981</time>
+            <h4 class="av-timeline-title">Mezinárodní kodex marketingu náhrad mateřského mléka</h4>
+            <p class="av-timeline-desc">Světové zdravotnické shromáždění přijímá Kodex (WHA 34.22). Členské státy ho mají provést „v jeho celistvosti“; navazující rezoluce ho rozšiřují až po výrobky pro děti do 36 měsíců (WHA 69.9, 2016).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2002</time>
+            <h4 class="av-timeline-title">§ 5e a § 5f v zákoně o regulaci reklamy</h4>
+            <p class="av-timeline-desc">Novela vkládá do zákona č. 40/1995 Sb. pravidla pro počáteční a pokračovací kojeneckou výživu podle tehdejší evropské směrnice. Dozor mimo vysílání připadá „zbytkovým“ krajským živnostenským úřadům.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">22. 2. 2020</time>
+            <h4 class="av-timeline-title">Nařízení (EU) 2016/127 se začíná používat</h4>
+            <p class="av-timeline-desc">Přímo použitelná unijní pravidla pro reklamu na počáteční výživu: jen odborné publikace, žádné vzorky ani dárky, žádná tvrzení. Členské státy mohou jít dál; Česko zůstává na minimu.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2. 3. 2023</time>
+            <h4 class="av-timeline-title">Rada vlády pro rovnost žen a mužů: podnět ke 40. výročí Kodexu</h4>
+            <p class="av-timeline-desc">Cituje hodnocení WHO/UNICEF/IBFAN z roku 2020 (39 bodů ze sta), dokumentuje dary výrobců nemocnicím z registru smluv a navrhuje úkoly pro MPO a MZ.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">27. 9. 2023</time>
+            <h4 class="av-timeline-title">Usnesení vlády č. 719</h4>
+            <p class="av-timeline-desc">MPO má předložit novelu zákona o regulaci reklamy, MZ metodický pokyn pro nemocnice (do 1. 7. 2024) a analýzu podle protokolu NetCode (do 31. 12. 2024, poté každých pět let).</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">2025</time>
+            <h4 class="av-timeline-title">Tisk 918 propadá s koncem volebního období</h4>
+            <p class="av-timeline-desc">Novela projde vládou i prvním kolem Sněmovny, legislativní proces se ale nestihne dokončit.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">9. 3. 2026 → 2. 4. 2026</time>
+            <h4 class="av-timeline-title">Vláda schvaluje znovu, Sněmovna dostává tisk 153</h4>
+            <p class="av-timeline-desc">Bez připomínkového řízení, protože proti tisku 918 „nedochází k žádným věcným změnám“. Předkladatelem zůstává ministerstvo průmyslu a obchodu.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">24. 6. 2026 → 4. 9. 2026</time>
+            <h4 class="av-timeline-title">První čtení a doporučení výboru</h4>
+            <p class="av-timeline-desc">Garanční Výbor pro zdravotnictví doporučuje tisk schválit (usnesení 153/1). Čeká se na druhé čtení; zpravodajkou je Zdenka Němečková Crkvenjaš.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">1. 1. 2027</time>
+            <h4 class="av-timeline-title">Navrhovaná účinnost</h4>
+            <p class="av-timeline-desc">Dozor přechází na SZPI; reklama vytvořená podle smluv uzavřených dřív se ještě šest měsíců posuzuje podle starého znění, rozběhnutá řízení dokončí živnostenské úřady.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> WHO (Kodex, WHA 34.22, WHA 69.9); epravo.cz, 26. 9. 2002 (novela vkládající pravidla pro kojeneckou výživu); EUR-Lex, nařízení 2016/127; Doporučení Rady vlády pro rovnost žen a mužů z 2. 3. 2023; tisková zpráva MZ z 27. 9. 2023; VeKLEP KORNDR9CY314 (předkládací zpráva, materiál, důvodová zpráva, čl. II) a psp.cz, historie sněmovního tisku 153 ke dni 21. 9. 2026.</p>
+      </figure>
+      <p>
+        Sama novela je z pohledu kojenecké výživy hlavně úklid: paragrafy 5e a 5f ruší a nahrazuje je jedinou větou, že reklama na počáteční a pokračovací výživu, obilné příkrmy, mléčnou výživu malých dětí, potraviny pro zvláštní lékařské účely a náhrady celodenní stravy se řídí přímo unijními nařízeními. Tři věci ale mění věcně, a všechny míří na vymáhání.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Tři věcné změny tisku 153 u reklamy na kojeneckou výživu</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Dozor: ze čtrnácti živnostenských úřadů na jednu inspekci</h4>
+            <p class="av-flow-desc">Dozor nad reklamou na kojeneckou výživu mimo vysílání přechází na Státní zemědělskou a potravinářskou inspekci, která už dnes kontroluje označování a obchodní úpravu těchto výrobků. Dohodly se na tom MZ, ministerstvo zemědělství a SZPI 21. února 2024.</p>
+            <span class="av-flow-tag">§ 7 písm. g)</span>
+          </li>
+          <li class="av-flow-step av-flow-step-good">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přestupky, které dosud chyběly</h4>
+            <p class="av-flow-desc">Výrobce, který v rozporu s čl. 10 odst. 3 nařízení 2016/127 dá vzorky nebo dárky veřejnosti, těhotným či matkám — i nepřímo přes zdravotníky —, se nově dopouští přestupku. Šiřitel odpovídá za reklamu mimo povolené publikace a za reklamu v prodejnách.</p>
+            <span class="av-flow-tag">pokuta do 2 000 000 Kč</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Přímý odkaz na nařízení EU</h4>
+            <p class="av-flow-desc">Národní paragrafy mizí; platí unijní text pro počáteční výživu a povinný obsah informačních materiálů podle čl. 11. Možnost „dále omezit nebo zakázat“ reklamu, kterou nařízení nabízí, novela nevyužívá.</p>
+            <span class="av-flow-tag">nový § 5d odst. 4</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> sněmovní tisk 153, materiál (novelizační body 25, 26, 34 a 37, § 8 odst. 1 písm. k), odst. 5 písm. b) a odst. 6 písm. d), čl. II) a předkládací zpráva (dohoda o SZPI z 21. 2. 2024); důvodová zpráva k bodům 25–26, 34 a 37. Prostý text příloh přečten z VeKLEP přes Hlídač státu 20. 9. 2026.</p>
+      </figure>
+      <p>
+        Co novela nechává být, je delší seznam než to, co mění. Batolecí mléka a křížová propagace značek zůstávají bez pravidla. Dudlíky a lahve, které Kodex výslovně zahrnuje a které usnesení vlády jmenuje, v návrhu nejsou. Reklama na sociálních sítích, v aplikacích pro rodiče a přes influencery — podle přehledů dnes hlavní kanál — se řeší jen tím, že se na ni vztahují stejná slova jako na tisk. Propagace ve zdravotnických zařízeních a vztahy se zdravotníky, tedy dvě ze tří oblastí, kde má Česko nulu, jsou mimo záběr zákona o reklamě úplně; ty by musel řešit metodický pokyn a monitoring z usnesení 719, o nichž nevíme, zda existují. Stejný tisk přitom v jiné části reklamu uvolňuje: připouští za podmínek reklamu na zdravotnické prostředky vydávané jen na poukaz a upřesňuje, kdy jsou pacientské programy informací, a ne reklamou. Novela tedy zlepší vymahatelnost minima, které Česko převzalo z Bruselu. Skóre 32 bodů ze sta samo o sobě příliš nezmění, protože body se dávají za rozsah pravidel, ne za to, kdo je hlídá.
+      </p>
+
+      <h3>Co říká evidence o reklamě a kojení</h3>
+      <p>
+        Že marketing na rozhodování rodičů působí, není domněnka aktivistů. WHO a UNICEF v únoru 2022 zveřejnily výsledky šetření mezi 8 500 rodiči a těhotnými ženami a 300 zdravotníky v osmi zemích od Bangladéše po Spojené království: s marketingem umělé výživy se setkala více než polovina dotázaných, ve Spojeném království 84 procent, v Číně 97 procent, a více než třetina žen uvedla, že jim konkrétní značku doporučil zdravotník. Série časopisu Lancet z února 2023 popisuje mechanismus: průmysl s ročními tržbami kolem 55 miliard dolarů prezentuje formule jako řešení běžných projevů kojeneckého věku — neklidu, pláče, ublinkávání —, které rodiče i zdravotníci často mylně čtou jako známku nedostatku mléka. Digitální platformy podle autorů dosah marketingu násobí a zároveň obcházejí Kodex, který s nimi v roce 1981 počítat nemohl.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblEvH">
+        <figcaption class="av-figure-h" id="avTblEvH">Co říkají přehledy o marketingu náhrad mateřského mléka a o tom, jak fungují zákony proti němu</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Přehled</th>
+                <th scope="col">Rozsah</th>
+                <th scope="col">Hlavní zjištění</th>
+                <th scope="col">Co z toho plyne pro Česko</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Rollins et al., Lancet 2023</th><td>série tří prací; národní šetření, firemní zprávy, dvě mezinárodní studie</td><td>marketing formulí je systém zachycující rodiče, komunity, vědu i politiku; produkty prezentuje jako řešení běžných projevů kojenců bez opory v evidenci; digitální kanály obcházejí Kodex</td><td>český zákon zná jen „publikace“ a „prodejny“; o digitálním prostoru mlčí</td></tr>
+              <tr><th scope="row">Pérez-Escamilla et al., Lancet 2023</th><td>syntéza přehledů 2016–2021 a případové studie zemí</td><td>subjektivní „nedostatek mléka“ je nejčastější důvod dokrmování; kojení lze na úrovni populace rychle zlepšit vícesložkovými intervencemi</td><td>rozpětí 44–96 % mezi českými porodnicemi ukazuje, že rozhoduje praxe oddělení</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Topothai et al., Int Breastfeed J 2024</th><td>systematický přehled, 60 studií z 28 zemí, které Kodex uzákonily</td><td>zákon omezí propagaci výživy pro děti do 12 měsíců ve veřejném prostoru a v médiích, selhává u batolecích mlék, křížové propagace, digitální reklamy a v místě prodeje; vzorky a kupony matky dostávají dál</td><td>přesně díry, které tisk 153 neřeší</td></tr>
+              <tr><th scope="row">Becker et al., Matern Child Nutr 2022</th><td>scoping review, 153 studií z nejméně 95 zemí, 1981–2021</td><td>porušování Kodexu neustalo; roste podíl digitálního marketingu a rozšiřování značek; klamavá tvrzení na etiketách</td><td>—</td></tr>
+              <tr><th scope="row">Jones et al., Curr Nutr Rep 2022</th><td>systematický scoping review digitálního marketingu</td><td>integrované kampaně napříč sociálními sítěmi, weby, e-shopy, aplikacemi a influencery; doložený negativní vliv na záměr kojit</td><td>—</td></tr>
+              <tr><th scope="row">Cheng et al., Nutr Rev 2026</th><td>systematický scoping review, 66 studií 2003–2025</td><td>na sociálních sítích dominují Facebook a Instagram; nejaktivnější značky Nestlé, Danone a Mead Johnson; taktiky: influenceři, sponzorovaný obsah, živé vysílání, sledování uživatelů</td><td>tytéž značky sponzorují české odborné společnosti (viz náš text o Komisi pro výživu kojenců)</td></tr>
+              <tr><th scope="row">Franco-Lares et al., BMJ Glob Health 2023</th><td>scoping review legislativy k digitálnímu marketingu, 24 zemí</td><td>jen 14 z 24 zemí s pravidly pro digitální marketing má určený orgán a proces monitoringu</td><td>Česko po novele orgán mít bude, proces monitoringu ne</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> citace v sekci Zdroje; všechny práce ověřeny v PubMed 20.–21. 9. 2026 (autoři, rok, časopis, typ publikace, abstrakt). Čtvrtý sloupec je výklad redakce.</p>
+      </figure>
+      <p>
+        Česká data do tohoto obrazu zapadají. Podíl novorozenců, kteří odcházejí z porodnice plně kojeni, klesal dvě desetiletí z přibližně 90 procent v roce 2000 na dno 72,4 procenta v roce 2021 a od té doby mírně roste; v roce 2024 dosáhl 75,1 procenta. Mezi jednotlivými porodnicemi se ale pohybuje od 44,4 do 95,6 procenta — rozdíl, který nevysvětlí zdravotní stav matek, ale to, co se děje na oddělení v prvních dnech. A právě prvních dnů a týdnů se týká nula bodů za propagaci ve zdravotnických zařízeních. Co se děje po propuštění, Česko neměří vůbec: údaj o výlučném kojení v šesti měsících, který WHO používá pro mezinárodní srovnání, národní registr nesleduje.
+      </p>
+
+      <h3>Zpět k plechovce</h3>
+      <p>
+        Klip z Royal Institution není o tom, že by dietní kola byla jed. Je o tom, že etiketa se zelenými semafory je pravdivá a zároveň zavádějící, a že mezi pravdivostí a zavádějícností je prostor, ve kterém se dělá byznys. Reklamní právo ten prostor umí zúžit jen tam, kde se rozhodne regulovat kanál, ne obsah: u tabáku, u léků na předpis a — na papíře — u počáteční kojenecké výživy. Česko si z Kodexu vzalo unijní minimum, dozor nad ním svěřilo úřadu, který k tomu není určen, a výrobce, který v porodnici rozdá vzorky, nemohlo pokutovat. Tisk 153 druhé dvě věci opravuje a první nechává. Mezitím se v prosinci 2025 uvolnila pravidla střetu zájmů v Komisi pro výživu kojenců a malých dětí a do poradního orgánu ministerstva se vrátili zástupci organizací napojených na výrobce, jak jsme <a href="clanek-stret-zajmu-vyziva-kojencu.html">popsali v květnu</a>. Van Tullekenova pointa z BMJ 2024 je právě o tomhle: dokud u stolu, kde vznikají doporučení, sedí ti, kdo prodávají alternativu, žádný zákon o reklamě to nedožene.
+      </p>
+      <p>
+        Co by skóre 32 skutečně posunulo, je v dokumentech, které už existují: pravidla pro zdravotnická zařízení a zdravotníky (metodický pokyn z usnesení 719), nezávislý monitoring podle protokolu NetCode, rozšíření pravidel na batolecí mléka, dudlíky a lahve a výslovná úprava digitálního marketingu. Nic z toho nevyžaduje čekat na Brusel — nařízení samo říká, že členské státy mohou jít dál. Až bude Sněmovna ve druhém čtení tisk 153 projednávat, bude to poprvé od roku 2002, kdy se o tom, komu smí kdo říkat, čím krmit dítě, bude hlasovat. Bylo by dobré vědět, co přesně se hlasuje: lepší dozor nad tím samým, ne jiná pravidla.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a odhadů">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Video z Facebooku jsme nepřepisovali; z klipu přebíráme jen jeho titulek a oficiální popisek Royal Institution, věcné argumenty Chrise van Tullekena čerpáme z jeho publikovaných textů uvedených ve zdrojích. Počty kontrol a pokut krajských živnostenských úřadů v oblasti kojenecké výživy neexistují ve veřejné podobě; tvrzení, že případ Sunar je jediné dohledatelné rozhodnutí o pokutě, se opírá o naše hledání ve veřejných rozhodnutích RRTV a na webu, ne o úplnou evidenci. Zda ministerstvo zdravotnictví vydalo metodický pokyn a provedlo analýzu NetCode podle usnesení vlády č. 719, jsme nedohledali; netvrdíme, že se to nestalo. Rok 2002 u vložení § 5e a § 5f přebíráme z dobového komentáře na epravo.cz, číslo novely neuvádíme. Odhad ministerstva zdravotnictví o výlučném kojení v šesti měsících pod 20 procent a údaj o 95 procentech rodiček citujeme z podkladu Rady vlády pro rovnost žen a mužů, který se odvolává na data ÚZIS; primární data jsme neviděli. Skóre WHO/UNICEF hodnotí právní texty, ne praxi; země s vysokým skóre mohou mít horší dodržování než země s nízkým. Analýza z BMJ 2018 není indexována v PubMed, ověřili jsme ji podle DOI v databázi Consensus.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s reklamou na výživu souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=kojeni_pri_propusteni"><strong>Plné kojení při propuštění z porodnice</strong></a> — 75,1 % (ČR, 2024) · Procesy · vyšší je lepší (signál dobrý; evropský benchmark 72,4 %) · dno 72,4 % v roce 2021, viz <a href="clanek-plne-kojeni-porodnice.html">Z porodnice odchází plně kojeno 73 % dětí</a> a <a href="clanek-kojeni-obrat-porodnice.html">rozdíly mezi porodnicemi</a></li>
+        <li><a href="indicator.html?id=mortalita_kojenecka"><strong>Kojenecká úmrtnost</strong></a> — 2,3 na 1 000 živě narozených (ČR, 2024) · Výsledky · nižší je lepší (signál dobrý; EU 3,5)</li>
+        <li><a href="indicator.html?id=deti_obezita_cosi"><strong>Nadváha a obezita u dětí 6–9 let (WHO COSI)</strong></a> — 26,3 % (ČR, 2019) · Výsledky · nižší je lepší (signál varovný; EU 29,8) · kojení je jedním z ochranných faktorů</li>
+        <li><a href="indicator.html?id=obezita_prevalence"><strong>Obezita dospělých (BMI ≥ 30)</strong></a> — 19,8 % (ČR, 2019) · Výsledky · nižší je lepší (signál špatný; EU 16,5) · druhý konec téže debaty o ultra-zpracovaných potravinách, viz <a href="clanek-napoje-6-dan-regulace.html">co na slazené nápoje opravdu platí</a></li>
+        <li><a href="indicator.html?id=bmi_dospeli"><strong>Nadváha a obezita dospělých (BMI ≥ 25)</strong></a> — 60 % (ČR, 2019) · Výsledky · nižší je lepší (signál špatný; EU 52,7)</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Video a jeho autor</h5>
+        <ul class="article-sources-list">
+          <li><strong>Royal Institution — „Is Diet Coke REALLY that healthy?“</strong> (video na Facebooku, sdílený odkaz; popisek: „Whilst its label might be full of green indicators, how healthy are its raw ingredients? Will drinking Diet Coke help you lose weight? … Chris van Tulleken explores the invention of Ultra Processed Foods.“) — sestřih přednášky „Ultra-processed people: The harsh reality of ultra-processed food“, Royal Institution, Londýn, 19. 9. 2023; celý záznam „The harsh reality of ultra processed food – with Chris Van Tulleken“ na YouTube. Přečteno 20. 9. 2026. <a href="https://www.facebook.com/royalinstitution/videos/651466330467674/" target="_blank" rel="noopener">facebook.com ↗</a> · <a href="https://www.youtube.com/watch?v=5QOTBreQaIk" target="_blank" rel="noopener">youtube.com ↗</a> · <a href="https://www.rigb.org/whats-on/ultra-processed-people-harsh-reality-ultra-processed-food" target="_blank" rel="noopener">rigb.org ↗</a></li>
+          <li><strong>WHO — WHO advises not to use non-sugar sweeteners for weight control in newly released guideline</strong>, tisková zpráva 15. 5. 2023 („use of NSS does not confer any long-term benefit in reducing body fat in adults or children“; podmíněné doporučení). <a href="https://www.who.int/news/item/15-05-2023-who-advises-not-to-use-non-sugar-sweeteners-for-weight-control-in-newly-released-guideline" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>van Tulleken C. Overdiagnosis and industry influence: how cow’s milk protein allergy is extending the reach of infant formula manufacturers. BMJ. 2018;363:k5056.</strong> DOI 10.1136/bmj.k5056. Analýza; není indexována v PubMed, ověřeno podle DOI a záznamu Consensus 21. 9. 2026. Navazující rozhodnutí redakce BMJ: Godlee F. No more infant formula advertising in The BMJ. BMJ 2019;364:l1279, DOI 10.1136/bmj.l1279. <a href="https://doi.org/10.1136/bmj.k5056" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://doi.org/10.1136/bmj.l1279" target="_blank" rel="noopener">doi.org (Godlee) ↗</a></li>
+          <li><strong>van Tulleken C, Wright C, Brown A, McCoy D, Costello A. Marketing of breastmilk substitutes during the COVID-19 pandemic. Lancet. 2020;396(10259):e58.</strong> DOI 10.1016/S0140-6736(20)32119-X. PMID 33038948. Dopis. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(20)32119-X" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>van Tulleken C, Rollins N, Coombes R. Conflicts of interest: moving towards zero tolerance. BMJ. 2024;387:q2574.</strong> DOI 10.1136/bmj.q2574. PMID 39562036. Editorial. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1136/bmj.q2574" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>van Tulleken C. Ultra-processed foods and public health: Evidence of harm and of conflicts of interest in the food industry to evade regulation. Future Healthc J. 2025;12(2):100263.</strong> DOI 10.1016/j.fhj.2025.100263. PMID 40692632. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/j.fhj.2025.100263" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Baker P, Slater S, White M, … van Tulleken C, Nestle M, Barquera S. Towards unified global action on ultra-processed foods: understanding commercial determinants, countering corporate power, and mobilising a public health response. Lancet. 2025;406(10520):2703–2726.</strong> DOI 10.1016/S0140-6736(25)01567-3. PMID 41270764. Třetí práce série Lancet o ultra-zpracovaných potravinách. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(25)01567-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Zákon, nařízení EU a rozhodnutí</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 40/1995 Sb., o regulaci reklamy</strong>, ve znění účinném od 10. 10. 2025 — § 1 odst. 2 (definice reklamy), § 2c, § 5d, § 5e, § 5f, § 7 (orgány dozoru), § 8 odst. 1 písm. k), § 8a odst. 1 až 3. Ověřeno 21. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/1995-40" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Nařízení Komise v přenesené pravomoci (EU) 2016/127</strong>, kterým se doplňuje nařízení (EU) č. 609/2013, pokud jde o počáteční a pokračovací kojeneckou výživu — čl. 6 (označování), čl. 8 (zákaz výživových a zdravotních tvrzení u počáteční výživy), čl. 10 („Členské státy mohou takovou reklamu dále omezit nebo zakázat.“; zákaz vzorků a dárků „ani přímo, ani nepřímo prostřednictvím systému zdravotní péče nebo zdravotnických pracovníků“), čl. 11 (informační materiály); použitelné od 22. 2. 2020. <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32016R0127" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>Nařízení (ES) č. 1924/2006 o výživových a zdravotních tvrzeních při označování potravin</strong> — příloha: podmínky pro tvrzení „light“ (snížení nejméně o 30 %) a „bez energie“ (nejvýše 4 kcal/100 ml). <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32006R1924" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>RRTV — zápis z 9. zasedání 2017 (9. 5. 2017), bod 24, sp. zn. 2016/963/had/HER</strong>: HERO CZECH s.r.o., obchodní sdělení Sunar, Prima COOL 6. 9. 2016 v 19:15:32, pokuta 50 000 Kč za porušení § 5d odst. 2 písm. d) zákona a čl. 7 odst. 1 písm. c) nařízení (EU) č. 1169/2011; slogan „Bystrý mozek, imunita, poznávací funkce a mlsný jazýček. Po kom to má? Po Sunaru.“ <a href="https://rrtv.gov.cz/cz/files/memo/z%C3%A1pis_09_17.pdf" target="_blank" rel="noopener">rrtv.gov.cz (PDF) ↗</a> · <a href="https://www.e15.cz/byznys/obchod-a-sluzby/klamava-reklama-na-sunar-vyrobce-dostal-pokutu-1332460" target="_blank" rel="noopener">e15.cz, 15. 5. 2017 ↗</a></li>
+          <li><strong>Winter F. Pravidla reklamy kojenecké výživy. epravo.cz, 26. 9. 2002</strong> — dobový komentář k novele, která do zákona vložila pravidla pro kojeneckou výživu. <a href="https://www.epravo.cz/top/clanky/pravidla-reklamy-kojenecke-vyzivy-18749.html" target="_blank" rel="noopener">epravo.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Sněmovní tisk 153 a vládní dokumenty</h5>
+        <ul class="article-sources-list">
+          <li><strong>Sněmovní tisk 153 — Novela zákona o regulaci reklamy (EU)</strong>, Poslanecká sněmovna, 10. období: vláda předložila 1. 4. 2026, rozesláno 2. 4. 2026, zpravodajka MUDr. Zdenka Němečková Crkvenjaš, MBA, 1. čtení 24. 6. 2026 na 24. schůzi (usnesení č. 220), garanční Výbor pro zdravotnictví 4. 9. 2026 doporučil schválit (tisk 153/1). Stav ke dni 21. 9. 2026. <a href="https://www.psp.cz/sqw/historie.sqw?o=10&amp;t=153" target="_blank" rel="noopener">psp.cz ↗</a></li>
+          <li><strong>VeKLEP KORNDR9CY314 — Návrh zákona, kterým se mění zákon č. 40/1995 Sb. … a zákon č. 375/2022 Sb.</strong> (předkladatel MPO, schůze vlády 9. 3. 2026): předkládací zpráva („zbytkový“ dozorový orgán; dohoda MZ, MZe a SZPI z 21. 2. 2024; jednání s výrobci 10. 10. 2023; Expertní komise 6. 3. 2024; bez připomínkového řízení, „nedochází k žádným věcným změnám“ proti tisku 918), materiál (zrušení § 5e a 5f, nový § 5d odst. 4, § 7 písm. g), § 8 odst. 1 písm. k), odst. 5 písm. b), odst. 6 písm. d) — pokuta do 2 000 000 Kč, čl. II přechodná ustanovení, účinnost 1. 1. 2027), důvodová zpráva („doplnění chybějících skutkových podstat přestupků či přesun dozorové působnosti z krajských živnostenských úřadů na SZPI“), závěrečná zpráva RIA. Prostý text příloh přečten přes API Hlídače státu 20. 9. 2026. <a href="https://odok.cz/portal/veklep/material/KORNDR9CY314/" target="_blank" rel="noopener">odok.cz ↗</a></li>
+          <li><strong>Doporučení Rady vlády pro rovnost žen a mužů ke 40. výročí přijetí Mezinárodního kodexu marketingu náhrad mateřského mléka</strong>, 2. 3. 2023 (Úřad vlády ČR, Odbor rovnosti žen a mužů, 13 stran): úkoly pro MPO a MZ, hodnocení WHO/UNICEF/IBFAN 2020 (39 bodů ze sta) a výčet mezer, data ÚZIS (95 % rodiček zahajuje kojení), odhad MZ (výlučné kojení v 6 měsících pod 20 %), smlouvy nemocnic s výrobci z registru smluv, partnerství odborných společností. <a href="https://vlada.gov.cz/assets/ppov/rovne-prilezitosti-zen-a-muzu/Aktuality/Doporuceni-Rady-vlady-pro-rovnost-zen-a-muzu-ke-40--vyroci-prijeti-Mezinarodniho-kodexu-marketingu-nahrad-materskeho-mleka.pdf" target="_blank" rel="noopener">vlada.gov.cz (PDF) ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví / Úřad vlády — Vláda upřednostnila zájmy žen a dětí: nová opatření k omezení škodlivého marketingu náhrad mateřského mléka</strong>, tisková zpráva 27. 9. 2023 (usnesení vlády č. 719; citace „Komerční společnosti velmi sofistikovaně zneužívají obav rodičů, aby jim prodaly svoje produkty.“). <a href="https://mzd.gov.cz/tiskove-centrum-mz/vlada-uprednostnila-zajmy-zen-a-deti-nova-opatreni-k-omezeni-skodliveho-marketingu-nahrad-materskeho-mleka/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">WHO a UNICEF</h5>
+        <ul class="article-sources-list">
+          <li><strong>WHO, UNICEF. Marketing of breast-milk substitutes: national implementation of the International Code, status report 2024.</strong> Ženeva 2024, ISBN 978-92-4-009448-2. Souhrn (146 ze 194 států s právními opatřeními; 33 / 40 / 73 / 48), tabulka kategorií (Czechia — European — 2016 — Some provisions of the Code included) a tabulka dílčích skóre (Czechia 8 / 0 / 3 / 10 / 0 / 0 / 11 = 32). <a href="https://www.who.int/publications/i/item/9789240094482" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>WHO, UNICEF. How the marketing of formula milk influences our decisions on infant feeding.</strong> Ženeva 2022; tisková zpráva 22. 2. 2022 (51 % dotázaných rodičů a těhotných; 8 500 rodičů a 300 zdravotníků v 8 zemích; UK 84 %, Vietnam 92 %, Čína 97 %; více než třetina žen: zdravotník doporučil značku; trh 55 mld USD). <a href="https://www.who.int/news/item/22-02-2022-more-than-half-of-parents-and-pregnant-women-exposed-to-aggressive-formula-milk-marketing-who-unicef" target="_blank" rel="noopener">who.int ↗</a></li>
+          <li><strong>WHO. International Code of Marketing of Breast-milk Substitutes</strong> (WHA 34.22, 1981) a navazující rezoluce vč. WHA 69.9 (2016). <a href="https://www.who.int/publications/i/item/9241541601" target="_blank" rel="noopener">who.int ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Rollins N, Piwoz E, Baker P, et al. Marketing of commercial milk formula: a system to capture parents, communities, science, and policy. Lancet. 2023;401(10375):486–502.</strong> DOI 10.1016/S0140-6736(22)01931-6. PMID 36764314. Přehled (série Lancet o kojení). Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(22)01931-6" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Pérez-Escamilla R, Tomori C, Hernández-Cordero S, et al. Breastfeeding: crucially important, but increasingly challenged in a market-driven world. Lancet. 2023;401(10375):472–485.</strong> DOI 10.1016/S0140-6736(22)01932-8. PMID 36764313. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(22)01932-8" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Baker P, Smith JP, Garde A, et al. The political economy of infant and young child feeding: confronting corporate power, overcoming structural barriers, and accelerating progress. Lancet. 2023;401(10375):503–524.</strong> DOI 10.1016/S0140-6736(22)01933-X. PMID 36764315. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(22)01933-X" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Topothai C, Cetthakrikul N, Howard N, Tangcharoensathien V, Chong MF, van der Eijk Y. Outcomes of implementing the International Code of Marketing of Breast-milk Substitutes as national laws: a systematic review. Int Breastfeed J. 2024;19(1):68.</strong> DOI 10.1186/s13006-024-00676-3. PMID 39334400. Systematický přehled, 60 studií z 28 zemí. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1186/s13006-024-00676-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Becker GE, Zambrano P, Ching C, et al. Global evidence of persistent violations of the International Code of Marketing of Breast-milk Substitutes: A systematic scoping review. Matern Child Nutr. 2022;18(Suppl 3):e13335.</strong> DOI 10.1111/mcn.13335. PMID 35313063. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1111/mcn.13335" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Jones A, Bhaumik S, Morelli G, et al. Digital Marketing of Breast-Milk Substitutes: a Systematic Scoping Review. Curr Nutr Rep. 2022;11(3):416–430.</strong> DOI 10.1007/s13668-022-00414-3. PMID 35507274. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1007/s13668-022-00414-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Cheng H, Vu G, House E, et al. Breast Milk Substitutes Marketing on Social Media: A Systematic Scoping Review. Nutr Rev. 2026 (online 21. 5. 2026).</strong> DOI 10.1093/nutrit/nuag044. PMID 42166183. 66 studií 2003–2025. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1093/nutrit/nuag044" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Franco-Lares B, Lara-Mejía V, Lozada-Tequeanes AL, Villanueva-Vázquez C, Hernandez-Cordero S. Legislation on marketing of breast-milk substitutes in digital and social media: a scoping review. BMJ Glob Health. 2023;8(3):e011150.</strong> DOI 10.1136/bmjgh-2022-011150. PMID 36918217. 24 zemí; 14 z 24 s procesem monitoringu. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1136/bmjgh-2022-011150" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-stret-zajmu-vyziva-kojencu.html">Kdo radí o tom, čím krmit české novorozence</a> — Kodex, Komise pro výživu kojenců a malých dětí, reforma 2023 a uvolnění pravidel střetu zájmů v prosinci 2025.</li>
+          <li><a href="clanek-plne-kojeni-porodnice.html">Z porodnice odchází plně kojeno 73 % dětí. Před dvaceti lety to bylo 90 %</a> a <a href="clanek-kojeni-obrat-porodnice.html">Plné kojení při propuštění: mezi porodnicemi rozdíl od 44 do 96 procent</a> — data ÚZIS a co za nimi je.</li>
+          <li><a href="clanek-legislativni-newsletter-mz-zari-2026.html">Legislativní newsletter MZ, září 2026</a> — kde tisk 153 stojí mezi ostatními zdravotnickými tisky; <a href="clanek-napoje-6-dan-regulace.html">Daň, etikety, automaty</a> — co na slazené nápoje opravdu platí.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Znění zákona citujeme podle konsolidovaného textu na zakonyprolidi.cz účinného od 10. 10. 2025; výklad, koho lze dnes pokutovat, vychází z výčtů skutkových podstat v § 8 a § 8a a z formulace důvodové zprávy o „chybějících skutkových podstatách“, nejde o stanovisko dozorového orgánu. Sněmovní tisk 153 je v legislativním procesu a jeho znění i účinnost se mohou změnit. Skóre WHO/UNICEF 2024 hodnotí právní texty, ne jejich dodržování; hodnocení z roku 2020 (39 bodů) používalo jinou metodiku, čísla proto nesrovnáváme jako trend. Údaje WHO/UNICEF 2022 pocházejí z osmi zemí, Česko mezi nimi nebylo. Tržby průmyslu „kolem 55 miliard dolarů“ přebíráme z práce Rollinse et al. (2023). Video jsme nepřepisovali; citace z něj neuvádíme. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
