@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-20
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-20
+    creation_phase: rutina+article-write
+    primary_sources_count: 6
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-09-20. Spouštěč: nová recenzovaná práce Webel CP, The Czech Conundrum:
+      Institutional Trust Erosion and COVID-19 Pandemic Mortality, The Milbank Quarterly 2026, PMID 42732045,
+      DOI 10.1111/1468-0009.70130, PMC13570933, datum publikace 12. 9. 2026, typ Journal Article, JEDINÝ AUTOR
+      (School of International Relations and Communications, University of New York in Prague) — citace proto
+      bez et al. PMC vrací prazdny full_text, k dispozici je pouze strukturovany abstrakt; vsechna cisla ze
+      studie v textu jsou doslova z abstraktu (nadumrtnost 15,24 na 10 000 age-standardized, o 49 % vyssi nez
+      rakouska, priblizne dvojnasobek evropskeho prumeru; duvera ve vladu z priblizne 71 % na 19 %; zpozdeni
+      8-10 tydnu; pet ministru zdravotnictvi za 15 mesicu; nejvyssi hustota luzek intenzivni pece v OECD; ctyri
+      navrzene mechanismy; obdobi brezen 2020 - prosinec 2023; komparatory Rakousko a Slovensko).
+      CENTRÁLNÍ KPI: důvěra v národní vládu v Česku 18,6 % respondentů s vysokou nebo spíše vysokou důvěrou
+      (OECD, Government at a Glance 2025, dataflow DSD_GOV_INT@DF_GOV_TDG_2025, měřítko HMH, referenční rok 2023)
+      — nejnižší ze všech 30 zemí s daty za tuto vlnu; nízká důvěra 71,1 %, neutrální 10,2 %, neví 0,2 %.
+      Bench: OECD average country 39,3 %; druhé nejnižší Spojené království 26,7 %, třetí Slovinsko 27,9 %,
+      nejvyšší Švýcarsko 61,9 %. Rakousko má v témže dataflow data jen za rok 2021 (HMH 25,8 %, nízká 61,4 %) —
+      vlny 2023 se neúčastnilo, přímé srovnání ČR vs AT v téže vlně proto v textu výslovně vylučujeme.
+      PRIMÁRNÍ ZDROJE (vše stazeno 20. 9. 2026 curlem s UA Mozilla/5.0, HTTP 200): (1) Eurostat demo_mexrt
+      (Excess mortality by month, % nad průměrem 2016-2019), JSON-stat API, geo=CZ+AT+EU27_2020, sada
+      updated 2026-09-16T11:00:00+0200, poslední měsíc 2026-06 — literální měsíční hodnoty použité v textu:
+      2020-11 ČR 78,3 / AT 50,3 / EU 40,1 (vrchol všech tří řad); 2021-03 ČR 64,4 / AT 1,9 / EU 10,8 (největší
+      rozestup ČR-AT, 62,5 p. b.); 2021-01 ČR 56,8 / AT 11,0; 2026-06 ČR 5,2 / AT 8,7 / EU 7,1; 2025-01 ČR 6,8
+      / AT 5,4. Roční průměry 2021 (ČR 26,3 / AT 13,0 / EU 15,4) a 2024 (ČR 2,6 / AT 9,1 / EU 3,6) jsou
+      neváženým průměrem 12 měsíčních hodnot, tedy stejnou aproximací jako metodická karta indikátoru
+      nadumrtnost, a byly reprodukovány; roční přepočet 2025 (3,4 %) se v textu NEUVÁDÍ, protože se rozchází
+      s hodnotou indikátoru 2,7 % z jiné vlny dat. VÝPOČET REDAKCE, v textu takto označený: od ledna 2024 do
+      června 2026, tj. 30 měsíců, byla česká měsíční nadúmrtnost nižší než rakouská ve 29 z 30 měsíců, jedinou
+      výjimkou je leden 2025. (2) OECD SDMX, OECD.GOV.GIP, dataflow DSD_GOV_INT@DF_GOV_TDG_2025 (Trust, security
+      and dignity, Government at a glance 2025) — hodnoty důvěry výše, dále Česko 2023: důvěra v místní
+      samosprávu 43,6 %, důvěra ve státní správu 34,2 %. (3) OECD SDMX, dataflow DSD_GOV_INT@DF_GOV_SPS_2025
+      (Satisfaction with public services), měření CS_HC, měřítko SAT, rok 2023 — spokojenost se zdravotnickým
+      systémem Česko 58,7 %, OECD average country 52,4 % (a 62,7 % v roce 2021). Tento kontrast (nejnižší důvěra
+      ve vládu v OECD při nadprůměrné spokojenosti se zdravotnictvím) je hlavní vlastní analytický přínos textu.
+      EVIDENCE (PubMed 8 dotazů, Consensus 2 dotazy, vše 20. 9. 2026): COVID-19 National Preparedness
+      Collaborators (Bollyky TJ et al.) 2022 Lancet 399(10334):1489-1512, PMID 35120592, DOI
+      10.1016/S0140-6736(22)00172-6 — indexy pandemické připravenosti nebyly smysluplně spojeny se
+      standardizovanou nákazovostí ani s IFR, důvěra ve vládu a mezilidská důvěra ano; modelový kontrafaktuál
+      (výslovně podmíněný) 12,9 % (5,7-17,8) méně nákaz při důvěře ve vládu na úrovni 75. percentilu a 40,3 %
+      (24,3-51,4) u mezilidské důvěry; věk populace vysvětlil 46,7 % (18,4-67,6) variability IFR, 44,4 %
+      (29,2-61,7) zůstalo nevysvětleno. Shkolnikov VM, Timonin S, Jdanov D et al. 2026 PLoS One 21(2):e0344003,
+      PMID 41758875, DOI 10.1371/journal.pone.0344003 — nižší proočkovanost a nižší důvěra ve vládu ve východní
+      Evropě vysvětlily přibližně polovinu mezery ve ztrátě naděje dožití v roce 2021, rozdíly nelze přičíst
+      větší fragilitě populací. da Silva RE, Novaes MRCG, de Oliveira C, Guilhem DB 2024 BMC Public Health
+      24(1):1598, PMID 38877440, DOI 10.1186/s12889-024-19076-7 — veřejná důvěra v politiky a důvěra v ostatní
+      spojeny s nižší nadúmrtností napříč 213 zeměmi. Consensus (2 dotazy): první, k souvislosti důvěry a
+      nadúmrtnosti, dal 20 prací, žádná směr tvrzení nevyvrací (SOUHLASÍ); druhý, k limitům ekologických
+      mezizemních designů, potvrdil, že kauzalitu takto prokázat nelze (NEJASNÁ / omezující) — proto sekce
+      s výhradami. Práce nalezené jen přes Consensus a neověřené v PubMed (Jain et al. 2022 JECH,
+      Villeneuve et al. 2022 Environ Epidemiol, Chen et al. 2023 PNAS Nexus) v textu jmenovitě NEJSOU.
+      VĚDOMĚ NEUVEDENO: (a) zdroj a metodika řady důvěry 71 % - 19 % ve studii, velikost korelačních
+      koeficientů lagu, baseline pro 15,24 na 10 000, rakouská a slovenská absolutní hodnota nadúmrtnosti —
+      nic z toho není v abstraktu a plný text není dostupný; (b) jména pěti ministrů zdravotnictví a měsíce
+      jejich výměn — v abstraktu nejsou a nezjišťovali jsme je z médií; (c) datum a měsíce sběru dat OECD Trust
+      Survey — stránka publikace OECD vrací HTTP 403, strojově neověřeno; (d) hodnoty Eurobarometru a CVVM —
+      nedotazovány, bez strojového ověření je nepoužíváme; (e) vlastní roční přepočet nadúmrtnosti za 2025;
+      (f) jakékoli kauzální tvrzení o vztahu důvěry a úmrtí. Navazuje na clanek-nadumrtnost-cesko.html
+      (2. 8. 2026), jehož trajektorii 2020-2025 text neopakuje, jen na ni odkazuje.
+      published:false, audit-status draft, čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vládě věří 18,6 % Čechů, nejméně ze třiceti zemí OECD. Studie navrhuje důvěru měřit jako varovný signál · HSPA Monitor</title>
+<meta name="description" content="Nová práce v The Milbank Quarterly uvádí, že česká nadúmrtnost během pandemie byla o 49 % vyšší než rakouská a přibližně dvojnásobná proti evropskému průměru, a že propad důvěry ve vládu předešel rozevření úmrtnostních řad o 8 až 10 týdnů. Data OECD ukazují, že vládě věří 18,6 % Čechů, nejméně ze třiceti zemí vlny 2023 (průměr OECD 39,3 %), zatímco se zdravotnictvím je spokojeno 58,7 % proti 52,4 % v průměrné zemi OECD. Jde o jednu práci s ekologickým designem, ne o důkaz kauzality. Datový kontrakt HSPA Monitoru zatím žádný ukazatel důvěry neobsahuje.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Vládě věří 18,6 % Čechů, nejméně ze třiceti zemí OECD. Studie navrhuje důvěru měřit jako varovný signál">
+<meta property="og:description" content="Česká nadúmrtnost byla během pandemie o 49 % vyšší než rakouská; propad důvěry ji podle nové studie předešel o 8 až 10 týdnů. Dnes vládě věří 18,6 % Čechů, nejméně z 30 zemí OECD — a přesto jsou se zdravotnictvím nadprůměrně spokojeni.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-duvera-nadumrtnost-covid-studie.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-duvera-nadumrtnost-covid-studie.png">
+<meta property="article:published_time" content="2026-09-21">
+<meta property="article:section" content="Odolnost systému">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-duvera-nadumrtnost-covid-studie.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Vládě věří 18,6 % Čechů, nejméně ze třiceti zemí OECD. Studie navrhuje důvěru měřit jako varovný signál",
+  "description": "Nová práce v The Milbank Quarterly uvádí, že česká nadúmrtnost během pandemie byla o 49 % vyšší než rakouská a přibližně dvojnásobná proti evropskému průměru, a že propad důvěry ve vládu předešel rozevření úmrtnostních řad o 8 až 10 týdnů. Data OECD ukazují, že vládě věří 18,6 % Čechů, nejméně ze třiceti zemí vlny 2023 (průměr OECD 39,3 %), zatímco se zdravotnictvím je spokojeno 58,7 % proti 52,4 % v průměrné zemi OECD. Jde o jednu práci s ekologickým designem, ne o důkaz kauzality. Datový kontrakt HSPA Monitoru zatím žádný ukazatel důvěry neobsahuje.",
+  "datePublished": "2026-09-21T06:00:00+02:00",
+  "dateModified": "2026-09-20",
+  "inLanguage": "cs",
+  "articleSection": "Odolnost systému",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-duvera-nadumrtnost-covid-studie.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-duvera-nadumrtnost-covid-studie.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Odolnost systému</span>
+        <span class="article-tag article-tag-muted">Důvěra · Nadúmrtnost · Pandemická připravenost · Governance · OECD</span>
+      </div>
+      <h1 class="article-title">Vládě věří 18,6 % Čechů, nejméně ze třiceti zemí OECD. Studie navrhuje důvěru měřit jako varovný signál</h1>
+      <p class="article-deck">
+        V <em>The Milbank Quarterly</em> vyšla 12. září práce, která českou pandemickou nadúmrtnost vysvětluje ztrátou důvěry v instituce: byla podle ní o <strong>49 %</strong> vyšší než rakouská a přibližně dvojnásobná proti evropskému průměru, zatímco důvěra ve vládu spadla z asi <strong>71 % na 19 %</strong> a propad předešel rozevření úmrtnostních řad o <strong>8 až 10 týdnů</strong>. Data OECD tu nízkou důvěru potvrzují i dnes: vysokou nebo spíše vysokou důvěru v národní vládu má <strong>18,6 %</strong> Čechů, nejméně ze třiceti zemí vlny 2023, proti průměru OECD <strong>39,3 %</strong>. Se zdravotnictvím je přitom v Česku spokojeno <strong>58,7 %</strong> lidí — víc než v průměrné zemi OECD (52,4 %). Jde o jednu práci s ekologickým designem, ne o důkaz kauzality; přesto otevírá otázku, proč datový kontrakt HSPA Monitoru žádný ukazatel důvěry neobsahuje.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">21. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Česko vstoupilo do pandemie s nejvyšší hustotou lůžek intenzivní péče v OECD, s raným celostátním příkazem k nošení roušek a s funkčním trasováním kontaktů. Skončilo s jednou z nejvyšších nadúmrtností v Evropě. Ten rozpor je v odborné literatuře znám a nová práce v <em>The Milbank Quarterly</em> nabízí vysvětlení, které se do žádné tabulky kapacit nevejde: chyběla důvěra. Tvrzení je silné a opírá se o jednu případovou analýzu, takže si zaslouží číst opatrně. Zajímavější než verdikt je ale jeho praktický důsledek — návrh měřit důvěru jako ukazatel připravenosti systému, ne jako sociologickou zajímavost.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDuvHeroH">
+        <figcaption class="av-figure-h" id="avDuvHeroH">Důvěra a úmrtnost v číslech: Česko, OECD a pandemické srovnání s Rakouskem (OECD Trust Survey 2023; Webel 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="18.6" data-decimals="1" data-suffix=" %">18,6 %</span>
+            <span class="av-counter-label">Čechů má vysokou nebo spíše vysokou důvěru v národní vládu (2023)</span>
+            <span class="av-counter-foot">OECD, Government at a Glance 2025 · nejnižší hodnota ze všech 30 zemí této vlny</span>
+          </div>
+          <div class="av-counter-block">
+            <span class="av-counter" data-value="39.3" data-decimals="1" data-suffix=" %">39,3 %</span>
+            <span class="av-counter-label">tatáž otázka v průměrné zemi OECD (2023)</span>
+            <span class="av-counter-foot">OECD, Government at a Glance 2025 · průměr přes 30 zemí vlny</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="49" data-decimals="0" data-prefix="+" data-suffix=" %">+49 %</span>
+            <span class="av-counter-label">o tolik byla česká pandemická nadúmrtnost vyšší než rakouská</span>
+            <span class="av-counter-foot">Webel 2026, The Milbank Quarterly · standardizovaná na věk, 15,24 na 10 000, březen 2020 – prosinec 2023</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter">8–10 týdnů</span>
+            <span class="av-counter-label">zpoždění mezi propadem důvěry a rozevřením úmrtnostních řad</span>
+            <span class="av-counter-foot">Webel 2026 · exploratorní korelace se zpožděním, ne prokázaná příčinnost</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroje:</strong> OECD, Government at a Glance 2025, dataflow Trust, security and dignity (měření důvěra v národní vládu, kategorie vysoká a spíše vysoká, referenční rok 2023); Webel CP, <em>The Milbank Quarterly</em> 2026, abstrakt.</p>
+      </figure>
+
+      <h3>Co studie zjistila</h3>
+
+      <p>
+        Práce Charlese P. Webela v <em>The Milbank Quarterly</em>, publikovaná 12. září 2026, je podle vlastního popisu smíšená komparativní případová analýza dat od března 2020 do prosince 2023. Rakousko si vybrala jako srovnávací zemi právě proto, že do pandemie vstupovalo s důvěrou ve vládu v rozmezí asi dvou procentních bodů od české; Slovensko slouží jako historicky a geograficky blízký druhý komparátor. Vedle standardizované nadúmrtnosti pracuje s mírami důvěry ve vládu, s indikátory mobility, s daty o vakcinaci a s indexy přísnosti opatření.
+      </p>
+
+      <p>
+        Číselné jádro je krátké. Česká nadúmrtnost standardizovaná na věk dosáhla podle studie <strong>15,24 na 10 000 obyvatel</strong>, tedy přibližně dvojnásobku evropského průměru a o 49 % více než v Rakousku. Důvěra v českou vládu klesla během pandemického období z asi 71 % na 19 %, což autor řadí mezi největší propady v Evropě; rakouská důvěra zůstala poměrně stabilní, slovenská klesla také a doprovázela ji rovněž vysoká nadúmrtnost. Rozevření českých a rakouských úmrtnostních řad nastalo podle exploratorních korelací se zpožděním asi <strong>8 až 10 týdnů</strong> po zhoršení důvěry. A jeden politický údaj: <em>pět ministrů zdravotnictví za patnáct měsíců</em> se podle práce časově potkalo se zhoršováním ochoty veřejnosti spolupracovat.
+      </p>
+
+      <p>
+        Autor sám formuluje závěry opatrně — důvěra podle něj „jak se zdá" tvoří podstatnou složku pandemické připravenosti, mechanismy jsou „navrhovány", ne prokázány. Politické doporučení je přesto konkrétní: pravidelné měření veřejné důvěry může odhalit zhoršování governance dřív, než naroste odvratitelná úmrtnost, a udělat tak z důvěry měřitelný výstup řízení.
+      </p>
+
+      <h3>Datový kontext: co je v měsíčních datech opravdu vidět</h3>
+
+      <p>
+        Studie počítá s vlastní, na věk standardizovanou mírou. Eurostat zveřejňuje jinou metriku, která se s ní nesmí míchat: procentní odchylku počtu zemřelých v daném měsíci od průměru téhož měsíce v letech 2016 až 2019. Její výhodou je měsíční rozlišení, takže se v ní dá načasování divergence přečíst přímo. Rozestup mezi Českem a Rakouskem je v ní výrazný a lokalizovaný.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDuvBarH">
+        <figcaption class="av-figure-h" id="avDuvBarH">Nadúmrtnost ve třech referenčních měsících: Česko, Rakousko, EU-27 (Eurostat demo_mexrt, % nad průměrem 2016–2019)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="80" data-unit=" %">
+          <li class="av-bar-row av-bar-row-bad" data-value="78.3" data-label="ČR · listopad 2020" data-note="vrchol celé české řady"></li>
+          <li class="av-bar-row" data-value="50.3" data-label="Rakousko · listopad 2020" data-note="vrchol rakouské řady"></li>
+          <li class="av-bar-row" data-value="40.1" data-label="EU-27 · listopad 2020" data-note="vrchol unijní řady"></li>
+          <li class="av-bar-row av-bar-row-bad" data-value="64.4" data-label="ČR · březen 2021" data-note="největší rozestup vůči Rakousku, 62,5 p. b."></li>
+          <li class="av-bar-row av-bar-row-good" data-value="1.9" data-label="Rakousko · březen 2021" data-note="téměř normální měsíc"></li>
+          <li class="av-bar-row" data-value="10.8" data-label="EU-27 · březen 2021" data-note="referenční hodnota"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="5.2" data-label="ČR · červen 2026" data-note="poslední měsíc v sadě — dnes pod Rakouskem"></li>
+          <li class="av-bar-row av-bar-row-warn" data-value="8.7" data-label="Rakousko · červen 2026" data-note=""></li>
+          <li class="av-bar-row" data-value="7.1" data-label="EU-27 · červen 2026" data-note=""></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, Excess mortality by month (<code>demo_mexrt</code>), geo CZ, AT, EU27_2020, sada aktualizována 16. 9. 2026, stažena z JSON-stat API 20. 9. 2026; poslední dostupný měsíc je červen 2026. Metrika není totožná s mírou standardizovanou na věk, kterou používá Webelova studie.</p>
+      </figure>
+
+      <p>
+        Listopad 2020 byl nejhorším měsícem pro všechny tři řady současně, takže sám o sobě o české výjimečnosti nevypovídá — tehdy trpěla celá Evropa. Rozhodující je jaro 2021. V březnu 2021 zemřelo v Česku o <strong>64,4 %</strong> lidí víc, než by odpovídalo běžnému březnu, zatímco v Rakousku o <strong>1,9 %</strong> a v celé EU o 10,8 %. Rozestup 62,5 procentního bodu je největší v celé dostupné řadě. To je moment, kdy se česká cesta od té rakouské odděluje nejvýrazněji, a je to shodou okolností přesně období, o kterém Webelova práce tvrdí, že mu předcházel propad důvěry. Jestli tam vede kauzální šňůra, z měsíčních dat poznat nelze. Ale ta sekvence v datech je.
+      </p>
+
+      <p>
+        Celková trajektorie české nadúmrtnosti od roku 2020 do roku 2025 už na portálu popsaná je — <a href="clanek-nadumrtnost-cesko.html">z vrcholu 26,3 % v roce 2021 na 2,6 % v roce 2024, tedy pod průměr EU</a>. Tady stačí přidat jeden nový, dosud nepublikovaný detail z téže sady: od ledna 2024 do června 2026, tedy ve třiceti měsících, byla česká měsíční nadúmrtnost nižší než rakouská ve <strong>dvaceti devíti z třiceti měsíců</strong>; jedinou výjimkou je leden 2025 (výpočet redakce nad měsíčními hodnotami Eurostatu). Země, která během pandemie umírala o 49 % nad rakouskou úrovní, dnes stojí trvale pod ní. To je silný argument proti vysvětlením postaveným na trvalých vlastnostech populace — ty se mezi rokem 2021 a rokem 2026 nezměnily.
+      </p>
+
+      <h3>Mechanismus: jak by se nedůvěra měla proměnit v úmrtí</h3>
+
+      <p>
+        Studie navrhuje čtyři cesty, kterými mohla eroze důvěry ovlivnit úmrtnost: sníženou ochotu dodržovat opatření, váhání s očkováním, zhroucení trasování kontaktů a s governance spojené nesprávné představy o tom, na čem se věda shoduje. Všechny čtyři mají společné to, že nejdou přes kapacity systému, ale přes chování lidí. Právě proto je nejvyšší hustota lůžek intenzivní péče v OECD nezachránila: lůžko pomůže tomu, kdo se už nakazil, nikoli tomu, kdo se nakazit nemusel.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDuvFlowH">
+        <figcaption class="av-figure-h" id="avDuvFlowH">Řetěz, který studie navrhuje: od politické nestability k odvratitelným úmrtím (Webel 2026 — navržené mechanismy, ne prokázaná kauzalita)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step"><strong>Nestabilita vedení</strong><span>pět ministrů zdravotnictví za 15 měsíců</span></li>
+          <li class="av-flow-step av-flow-step-warn"><strong>Propad důvěry ve vládu</strong><span>z asi 71 % na 19 % během pandemického období</span></li>
+          <li class="av-flow-step av-flow-step-warn"><strong>Změna chování</strong><span>méně dodržovaných opatření, váhání s očkováním, rozpad trasování, mylné představy o shodě vědy</span></li>
+          <li class="av-flow-step av-flow-step-bad"><strong>Rozevření úmrtnostních řad</strong><span>asi 8–10 týdnů po zhoršení důvěry</span></li>
+          <li class="av-flow-step av-flow-step-bad"><strong>Nadúmrtnost</strong><span>15,24 na 10 000 · o 49 % nad Rakouskem</span></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Webel CP, The Czech Conundrum, <em>The Milbank Quarterly</em> 2026 (abstrakt); schéma redakce. Autor uvádí mechanismy jako navržené, nikoli prokázané, a zpoždění jako výsledek exploratorní korelační analýzy.</p>
+      </figure>
+
+      <h3>Co říká širší evidence</h3>
+
+      <p>
+        Jedna případová analýza dvou až tří zemí by sama o sobě neunesla tak zásadní tvrzení. Unese ji ale ve společnosti prací, které měřily totéž na velkých vzorcích zemí a došly ke stejnému směru. Nejcitovanější z nich je mezizemní analýza 177 zemí a území za období od ledna 2020 do září 2021 (COVID-19 National Preparedness Collaborators, <em>Lancet</em> 2022). Její nejdůležitější nález je negativní: indexy pandemické připravenosti, tedy přesně ty tabulky kapacit a plánů, <em>nebyly</em> smysluplně spojeny se standardizovanou nákazovostí ani se smrtností nakažených. Míry důvěry ve vládu a mezilidské důvěry, stejně jako nižší korupce, s nižší standardizovanou nákazovostí spojeny byly, a to výrazněji. Autoři dopočítali — s výslovnou podmínkou, že jde o modelové asociace, které nemusejí být kauzální — že kdyby všechny země dosáhly úrovně důvěry 75. percentilu, bylo by globálně o 12,9 % (5,7–17,8) méně nákaz u důvěry ve vládu a o 40,3 % (24,3–51,4) u mezilidské důvěry. Táž práce ukazuje, jak velká část hádanky zůstává otevřená: věková struktura populace vysvětlila 46,7 % rozdílů ve smrtnosti nakažených mezi zeměmi, ale 44,4 % zůstalo nevysvětleno.
+      </p>
+
+      <p>
+        Pro Česko je nejrelevantnější letošní demografická analýza východo-západní mezery v naději dožití (Shkolnikov et al., <em>PLoS One</em> 2026). Východní Evropa měla od října 2020 a v celém roce 2021 výrazně větší ztráty naděje dožití než západní. Autoři ukazují, že to nelze přičíst větší fragilitě východoevropských populací; nižší proočkovanost a nižší důvěra ve vládu podle jejich modelů vysvětlují <strong>přibližně polovinu</strong> mezery v roce 2021. A dodávají zprávu, která ladí s českými daty: po vrcholu pandemie se mezera začala opět zužovat. Třetí práce, retrospektivní analýza 213 zemí (da Silva et al., <em>BMC Public Health</em> 2024), našla souvislost nižší nadúmrtnosti s veřejnou důvěrou v politiky a s důvěrou v ostatní lidi.
+      </p>
+
+      <p>
+        Kontrolní rešerše k témuž tvrzení nenašla práci, která by směr obracela. To neznamená, že je věc uzavřená — znamená to, že Webelova studie není odlehlý nález, ale český případ v už existující linii.
+      </p>
+
+      <h3>Limity studie a metodické výhrady</h3>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Caveat — proč z těchto čísel neplyne příčina">
+        <p class="article-callout-h">Caveat — co tato čísla neumějí</p>
+        <p><strong>1. Jsou to dvě země, ne vzorek.</strong> Komparativní případová analýza Česka a Rakouska nemá statistickou moc oddělit důvěru od desítek dalších rozdílů mezi oběma zeměmi. Metodická literatura o ekologických mezizemních designech je v tomto konzistentní: souběh dvou časových řad nestačí ani k vyloučení obráceného směru (kdo vidí umírat sousedy, přestane věřit vládě), ani k vyloučení třetí příčiny, která hýbe oběma.</p>
+        <p><strong>2. Zpoždění 8 až 10 týdnů je exploratorní.</strong> Autor je sám takto označuje. U dvou řad s jedním velkým společným zlomem lze zpoždění spočítat mnoha způsoby a interval osmi až deseti týdnů je tak spíš popis než změřený parametr.</p>
+        <p><strong>3. Plný text není dostupný.</strong> Práce je v PubMed Central vedena, ale plný text se odtud nevydává; k dispozici je strukturovaný abstrakt. Všechna čísla v tomto článku jsou proto z abstraktu. Metodiku výpočtu hodnoty 15,24 na 10 000, referenční období a zdroj řady důvěry 71 % → 19 % z něj zjistit nelze, a proto je tu neuvádíme.</p>
+        <p><strong>4. Metriky se nesmějí míchat.</strong> Údaj „o 49 % vyšší než rakouská" se týká na věk standardizované nadúmrtnosti za březen 2020 až prosinec 2023. Měsíční procenta Eurostatu v grafu výše jsou jiná metrika s jinou baseline. Obě řady lze čítat vedle sebe, nikoli sečítat.</p>
+        <p><strong>5. Jde o jednu práci jednoho autora.</strong> Recenzovaný časopis s dobrou reputací neruší základní pravidlo: než se z nálezu stane fakt, musí ho někdo zopakovat na jiných datech.</p>
+      </aside>
+
+      <h3>Co vývoj přináší: důvěra ve vládu není důvěra ve zdravotnictví</h3>
+
+      <p>
+        Pokud má být důvěra ukazatelem, musí být měřitelná srovnatelně. Je. OECD ji sbírá ve svém šetření o zdrojích důvěry v instituce a publikuje v edici Government at a Glance. Česká hodnota za referenční rok 2023 je nejnižší v celém souboru: vysokou nebo spíše vysokou důvěru v národní vládu uvedlo <strong>18,6 %</strong> respondentů, nízkou <strong>71,1 %</strong>. Druhé nejnižší Spojené království má 26,7 %, třetí Slovinsko 27,9 %, nejvyšší Švýcarsko 61,9 % a průměrná země OECD 39,3 %. Rakousko se této vlny neúčastnilo — v témže datovém souboru má hodnotu jen za rok 2021 (25,8 %), takže přímé srovnání s Českem v jedné vlně udělat nelze.
+      </p>
+
+      <p>
+        Zajímavější je ale porovnání dovnitř. Ve stejném šetření uvedlo <strong>58,7 %</strong> Čechů, že jsou spokojeni se zdravotnickým systémem, proti <strong>52,4 %</strong> v průměrné zemi OECD. Důvěru v místní samosprávu vyjádřilo 43,6 % a ve státní správu 34,2 %. Obrázek je tedy takový: Čech je se svým zdravotnictvím spokojenější než průměrný obyvatel OECD, s obecní samosprávou také v pořádku — a vládě nevěří nejvíc z celého klubu. Dashboard to potvrzuje z druhé strany: <a href="indicator.html?id=spokojenost_pece">spokojenost s dostupností péče</a> je 75 % proti 67 % v EU a nese zelený signál.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-good">
+          <span class="av-counter" data-value="58.7" data-decimals="1" data-suffix=" %">58,7 %</span>
+          <span class="av-counter-label">Čechů je spokojeno se zdravotnickým systémem (2023), v průměrné zemi OECD 52,4 %</span>
+          <span class="av-counter-foot">OECD, Government at a Glance 2025, Satisfaction with public services · tatáž vlna šetření jako důvěra 18,6 %</span>
+        </div>
+      </aside>
+
+      <p>
+        Pro pandemickou politiku je ten rozdíl klíčový, a dosud ho žádný český text takto nepostavil. Roušky, karanténu a očkování nenařizuje ambulance, ale vláda. Pokud mechanismus popsaný ve studii funguje, pak rozhoduje právě ta nejslabší hodnota z celé trojice — ne spokojenost s vlastním lékařem. A z toho plyne varování na příště: vysoká spokojenost s péčí systém proti krizi neochrání, protože v krizi se lidé nerozhodují podle své praktické lékařky, ale podle toho, komu věří na tiskové konferenci.
+      </p>
+
+      <h3>Co s tím</h3>
+
+      <p>
+        <strong>Za prvé, doplnit ukazatel důvěry do kontraktu.</strong> HSPA Monitor sleduje dnes 235 indikátorů a ani jeden z nich neměří důvěru. Přitom data existují: šetření OECD publikuje srovnatelnou hodnotu pro Česko i pro průměr OECD, směr je jednoznačný (vyšší je lepší) a benchmark je k dispozici. Po Webelově práci je to kandidát na doménu Odolnost systému, ne na sociologickou přílohu. Spolu s ním patří do kontraktu i spokojenost se zdravotnickým systémem z téhož šetření — právě proto, že se od důvěry ve vládu tak výrazně odchyluje.
+      </p>
+
+      <p>
+        <strong>Za druhé, vzít krizovou komunikaci jako kapacitu, ne jako PR.</strong> Nález analýzy 177 zemí, že indexy připravenosti nepředpověděly výsledek, kdežto důvěra ano, má konkrétní překlad: plán, kdo mluví, jak často a s jakou mírou přiznané nejistoty, je součástí pandemické připravenosti stejně jako zásoba respirátorů. Co v tomto oboru funguje na úrovni jednotlivce, portál už popsal — <a href="clanek-epidemiologie-4-nedovera-dezinformace.html">důvěryhodný posel, připomínky, snížení bariér a prebunking</a>; makroúroveň je stejná úloha s jinými nástroji.
+      </p>
+
+      <p>
+        <strong>Za třetí, kontinuita vedení jako sledovatelná položka.</strong> Údaj o pěti ministrech zdravotnictví za patnáct měsíců je ve studii uveden jako souběh, nikoli jako změřená příčina, a autor k němu sám dodává, že kontinuita kompetentního vedení je ochranný faktor, ne garance. I tak jde o jeden z mála údajů o governance, který je veřejný, jednoznačný a spočitatelný.
+      </p>
+
+      <p>
+        <strong>Za čtvrté, nepřetáhnout výklad.</strong> Nejpoctivější věta, která z dnešních dat plyne, zní: existuje konzistentní mezinárodní asociace mezi důvěrou a pandemickými výsledky, česká data do ní zapadají, a příčinnost prokázaná není. Právě to je důvod měřit dál, a nikoli důvod přestat. Kdyby Česko mělo hodnotu důvěry v časové řadě už dnes, byla by při příští krizi k dispozici jako varování — a o to přesně v té studii jde.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-labelledby="databox-h">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h" id="databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=nadumrtnost"><strong>Nadúmrtnost (excess mortality)</strong></a> — 2,7 % (2025), průměr EU 3,6 %, Eurostat</li>
+        <li><a href="indicator.html?id=nadeje_doziti_total"><strong>Naděje dožití při narození</strong></a> — 80,1 roku (2024), průměr EU 81,5, Eurostat</li>
+        <li><a href="indicator.html?id=mortalita_preventabilni"><strong>Preventovatelná mortalita</strong></a> — 173,86 na 100 000 obyvatel (2023), průměr EU 150,85, Eurostat</li>
+        <li><a href="indicator.html?id=vakcinace_chripka_65"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,5 % (2025), průměr OECD 47 %, ÚZIS, NZIS</li>
+        <li><a href="indicator.html?id=spokojenost_pece"><strong>Spokojenost s dostupností péče</strong></a> — 75 % (2024), průměr EU 67 %, OECD Health Statistics</li>
+        <li><a href="indicator.html?id=spokojenost_informovani"><strong>Spokojenost pacientů s informováním</strong></a> — 72 % (2024), průměr OECD 78 %, NRC</li>
+      </ul>
+    </aside>
+
+    <section class="article-related" aria-labelledby="related-h">
+      <h4 id="related-h">Související obsah</h4>
+      <ul class="article-related-list">
+        <li><a href="clanek-nadumrtnost-cesko.html">→ Nadúmrtnost: Česko patřilo k nejhůře zasaženým zemím světa, dnes je pod průměrem EU</a></li>
+        <li><a href="clanek-epidemiologie-4-nedovera-dezinformace.html">→ Jak porazit nedůvěru: co funguje proti váhání s očkováním a dezinformacím</a></li>
+        <li><a href="clanek-epidemiologie-3-modely-rozhodovani.html">→ Modely a rozhodování: jak se z epidemiologických čísel stávají opatření</a></li>
+        <li><a href="indicator.html?id=nadumrtnost">→ Detail ukazatele Nadúmrtnost</a></li>
+        <li><a href="model-systemu.html">→ Model systému: kauzální mapa pák a vazeb</a></li>
+      </ul>
+    </section>
+
+    <section class="article-sources" aria-labelledby="sources-h">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h" id="sources-h">Kde si data sami ověříte</h4>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Webel CP. The Czech Conundrum: Institutional Trust Erosion and COVID-19 Pandemic Mortality. <em>The Milbank Quarterly</em>. 2026. DOI 10.1111/1468-0009.70130. PMID 42732045.</strong> Smíšená komparativní případová analýza, březen 2020 – prosinec 2023, komparátory Rakousko a Slovensko: na věk standardizovaná nadúmrtnost 15,24 na 10 000 (asi dvojnásobek evropského průměru, o 49 % více než v Rakousku), důvěra ve vládu z asi 71 % na 19 %, rozestup úmrtnostních řad asi 8–10 týdnů po zhoršení důvěry, pět ministrů zdravotnictví za 15 měsíců, čtyři navržené mechanismy. Datum publikace 12. 9. 2026; plný text není v PubMed Central k dispozici, čerpáno z abstraktu. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1111/1468-0009.70130" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/42732045/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>COVID-19 National Preparedness Collaborators (Bollyky TJ et al.). Pandemic preparedness and COVID-19: an exploratory analysis of infection and fatality rates, and contextual factors associated with preparedness in 177 countries, from Jan 1, 2020, to Sept 30, 2021. <em>Lancet</em>. 2022;399(10334):1489–1512. DOI 10.1016/S0140-6736(22)00172-6. PMID 35120592.</strong> Indexy pandemické připravenosti nebyly smysluplně spojeny se standardizovanou nákazovostí ani se smrtností nakažených; důvěra ve vládu, mezilidská důvěra a nižší korupce ano. Modelový kontrafaktuál (výslovně podmíněný kauzalitou): −12,9 % (5,7–17,8) nákaz u důvěry ve vládu, −40,3 % (24,3–51,4) u mezilidské důvěry. Věk populace vysvětlil 46,7 % (18,4–67,6) variability smrtnosti nakažených, 44,4 % (29,2–61,7) zůstalo nevysvětleno. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(22)00172-6" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Shkolnikov VM, Timonin S, Jdanov D, Medina-Jaudes N, Islam N, Leon DA. Widening East-West inequality in life expectancy in Europe during the COVID-19 pandemic: An international comparative study. <em>PLoS One</em>. 2026;21(2):e0344003. DOI 10.1371/journal.pone.0344003. PMID 41758875.</strong> Nižší proočkovanost a nižší důvěra ve vládu ve východní Evropě vysvětlily přibližně polovinu mezery ve ztrátě naděje dožití v roce 2021; rozdíly nelze přičíst větší fragilitě východoevropských populací; po vrcholu pandemie se mezera začala zužovat. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1371/journal.pone.0344003" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>da Silva RE, Novaes MRCG, de Oliveira C, Guilhem DB. The impact of social cohesion and risk communication on excess mortality due to COVID-19 in 213 countries: a retrospective analysis. <em>BMC Public Health</em>. 2024;24(1):1598. DOI 10.1186/s12889-024-19076-7. PMID 38877440.</strong> Veřejná důvěra v politiky, důvěra v ostatní lidi, sociální záchytné sítě a rovnější rozdělení zdrojů byly spojeny s nižší nadúmrtností napříč 213 zeměmi. Ověřeno v PubMed 20. 9. 2026. <a href="https://doi.org/10.1186/s12889-024-19076-7" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární data</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Excess mortality by month (<code>demo_mexrt</code>)</strong> — procentní odchylka počtu zemřelých od průměru téhož měsíce 2016–2019; geo CZ, AT, EU27_2020. Použité měsíce: 11/2020 (ČR 78,3 / AT 50,3 / EU 40,1), 03/2021 (64,4 / 1,9 / 10,8), 06/2026 (5,2 / 8,7 / 7,1). Sada aktualizována 16. 9. 2026, stažena z JSON-stat API 20. 9. 2026; poslední dostupný měsíc je červen 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_mexrt/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>OECD — Government at a Glance 2025, Trust, security and dignity (SDMX dataflow <code>DSD_GOV_INT@DF_GOV_TDG_2025</code>)</strong> — důvěra v národní vládu, podíl respondentů s vysokou a spíše vysokou důvěrou, referenční rok 2023: Česko 18,6 % (nízká 71,1 %, neutrální 10,2 %, neví 0,2 %), OECD average country 39,3 %, Spojené království 26,7 %, Slovinsko 27,9 %, Švýcarsko 61,9 %; Česko 2023 též důvěra v místní samosprávu 43,6 % a ve státní správu 34,2 %; Rakousko má v sadě jen rok 2021 (25,8 %). Celkem 30 zemí s daty za vlnu 2023. Staženo 20. 9. 2026. <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>OECD — Government at a Glance 2025, Satisfaction with public services (SDMX dataflow <code>DSD_GOV_INT@DF_GOV_SPS_2025</code>)</strong> — spokojenost se zdravotnickým systémem, podíl spokojených, rok 2023: Česko 58,7 %, OECD average country 52,4 % (v roce 2021 průměr OECD 62,7 %). Staženo 20. 9. 2026. <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">data-explorer.oecd.org ↗</a></li>
+          <li><strong>HSPA Monitor — datový kontrakt <code>data/indicators.json</code></strong> — hodnoty indikátorů v databoxu; stav k 20. 9. 2026, celkem 235 indikátorů, z nich žádný neměří důvěru v instituce. <a href="hspa-prehled.html">Přehled indikátorů HSPA</a></li>
+        </ul>
+      </div>
+
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnoty ze studie Webel 2026 pocházejí výhradně ze strukturovaného abstraktu — plný text není v PubMed Central k dispozici, takže metodiku výpočtu nadúmrtnosti 15,24 na 10 000, její referenční období ani zdroj řady důvěry 71 % → 19 % neuvádíme, protože je z abstraktu nelze zjistit. Údaj „o 49 % vyšší než rakouská" se týká na věk standardizované nadúmrtnosti za březen 2020 až prosinec 2023 a není totožný s měsíčními procenty Eurostatu, která mají jinou baseline (průměr 2016–2019); obě metriky se nesmějí kombinovat do jednoho výpočtu. Zpoždění 8 až 10 týdnů autor sám označuje za výsledek exploratorní korelační analýzy, mechanismy za navržené; žádné číslo v tomto článku neopravňuje ke kauzálnímu čtení. Souběh pěti ministrů zdravotnictví za patnáct měsíců je ve studii uveden jako časová souvislost, ne jako změřená příčina. Údaj, že česká měsíční nadúmrtnost byla od ledna 2024 do června 2026 nižší než rakouská ve 29 z 30 měsíců, je výpočet redakce nad literálními měsíčními hodnotami Eurostatu. Roční hodnoty 26,3 % (2021) a 2,6 % (2024) jsou neváženým průměrem dvanácti měsíčních hodnot, tedy aproximací převzatou z metodické karty indikátoru nadúmrtnosti, ne nadpočtem váženým počtem úmrtí; hodnota indikátoru 2,7 % za rok 2025 pochází z jiné vlny dat než naše stažení a nelze ji s měsíční řadou v grafu sčítat. Datum a měsíce sběru dat šetření OECD jsme strojově neověřili (stránka publikace vrací HTTP 403), proto je neuvádíme; hodnoty Eurobarometru ani CVVM jsme nedotazovali. Rakousko se vlny 2023 šetření OECD neúčastnilo, takže srovnání české a rakouské důvěry v téže vlně v článku není.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
