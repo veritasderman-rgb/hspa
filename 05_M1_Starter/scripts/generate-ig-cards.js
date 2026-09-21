@@ -99,6 +99,18 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-specificke-lecebne-programy-2026': {
+    kicker: 'Léková politika · výjimky pro dovoz', signal: 'warn',
+    stat: '16',
+    claim: 'specifických léčebných programů schválilo ministerstvo za jediné čtvrtletí.',
+    context: 'Věstník MZ č. 11/2026. Dohromady 134 594 balení; sedm souhlasů vyprší do roka.',
+  },
+  'clanek-legislativni-newsletter-mz-zari-2026': {
+    kicker: 'Legislativa · fronta předpisů MZ', signal: 'warn',
+    stat: '11', statSuffix: '/12',
+    claim: 'zpracovávaných předpisů ministerstva nemá žádnou stopu ve VeKLEP.',
+    context: 'Zdravé paragrafy, září 2026: 26 předpisů v pěti fázích.',
+  },
   'clanek-nefrolog-pred-dialyzou': {
     kicker: 'Chronická péče · ledviny', signal: 'warn',
     stat: '358',
