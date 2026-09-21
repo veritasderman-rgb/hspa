@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-21
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-21
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 27
+    visual_elements_count: 8
+    notes: "Vytvořeno na přímé zadání vlastníka z 21. 9. 2026: připravit článek ze dvou zpráv — zdravezpravy.cz 17. 9. 2026
+      „SÚKL vtáhne do dění pacienty. A chystá se na revizi lékové legislativy“ a Zdravotnický deník 12. 9. 2026 „Léků je málo
+      a EU škrtá rozpočet. Europoslanci varují před prázdnými regály“ — s tím, že článek musí vycházet i z legislativního
+      newsletteru MZ Zdravé paragrafy (09/2026) a klást otázky, jak se to dotkne běžného občana a co se bude dít doopravdy.
+      FORMÁT: sedm otázek člověka u výdejního okénka + poctivé odpovědi (co je doloženo, co je slib, co je rétorika).
+      PRIMÁRNÍ ZDROJE (staženy 21. 9. 2026):
+      (1) zdravezpravy.cz 17. 9. 2026 — POPS (9 zástupců pacientských organizací + další), citace Boráně („největší revize
+          legislativy za posledních 20 let“, 5 % hospitalizací seniorů v EU kvůli lékovým interakcím, tamoxifen), plány:
+          vypuštění příbalové informace u některých nedostupných léků, rozšíření prodeje mimo lékárny, online výdej Rx,
+          piktogramy s alergeny, compassionate use, repurposing; Břečťan (ČAVO) a Kolář (AIFP) k zákazu informování
+          pacientů; EMA ePI pilot; lhůty 2 roky / 6 měsíců podle Boráně; text čten přes fetch, citace jen ty, které
+          extrakce zachovala doslovně;
+      (2) Zdravotnický deník 12. 9. 2026 (Nicole Verbeeck) — SANT: EU4Health 661,3 mil. EUR (2026) → 606,8 mil. EUR (2027),
+          pokles o více než 8 %; škrt cca 1 mld EUR v revizi 2024; požadavek +15 %, minimálně úroveň 2026; tři pilíře
+          (továrny na API, společné nákupy, rezervy); 20 % na prevenci ze zákona; zpravodaj Hadjipantela, 87 pozměňovacích
+          návrhů, ~10 kompromisů; hlasování 5. 10. (rozpočtový výbor) a 19. 10. (plénum); 2027 = poslední samostatný
+          rozpočet před sloučením;
+      (3) MZ, Legislativní newsletter — září 2026 (Zdravé paragrafy, vydání 11, PDF ve scratchpadu z PR #1219): novela
+          zákona o léčivech „bude mimo jiné reflektovat na zavedení Rx online nebo na úpravu systému rezervních zásob
+          a rovněž bude zahrnovat regulaci tzv. farmaceutického balíčku v rozsahu dřívější použitelnosti směrnice
+          a nařízení EU“ — „ve fázi před vnitřním připomínkovým řízením“; návrh zákona o humánních léčivých přípravcích —
+          „přípravné práce“, výhled 2027–2029 vládě 1. čtvrtletí 2027 (viz clanek-legislativni-newsletter-mz-zari-2026);
+          novela vyhlášky č. 377/2022 Sb. — hlášení přerušení dodávek zdravotnických prostředků SÚKL, stanovisko komise
+          LRV 3. 8. 2026;
+      (4) SÚKL, TZ „Pacienti jako partneři bezpečné léčby“ 17. 9. 2026 — memoranda se 45 pacientskými organizacemi,
+          citace Boráně („skutečný dialog“), Sehnoutková (NAPO), Kolář (AIFP), Adámková, Růžičková (MZ); SÚKL,
+          Dostupnost léčiv (stránka pro pacientské organizace) — LPOD, objednávání v týdenních objemech, infolinka;
+      (5) Zdravotnický deník / ČTK 17. 9. 2026 — lékový záznam + léky z hospitalizace, AI kontrola interakcí, 12 000 chyb
+          v receptech za 15 dní v dubnu 2025, 372 nevhodných interakcí, pacientské organizace v cenotvorbě orphanů od 2022;
+      (6) Zdravotnický deník 13. 2. 2026 (Rx online, Krebs: možná účinnost leden 2028, citace „Neříkáme, že zásadně
+          podporujeme…“) a 16. 3. 2026 (Nielsen, 1 045 respondentů 18–70: 70 % by využilo, 16 % zvažuje, 80 % považuje
+          za bezpečné, 51 % preferuje boxy; MZ: stabilizovaná chronická onemocnění ano, onkologika ne; mluvčí Novotný);
+      (7) ČT24 11. 11. 2024 — Boráň: „To, že lék označíme jako přípravek s omezenou dostupností, neznamená, že není
+          dostupný pro pacienty…“; Krebs: výrobci nehlásí krátkodobé výpadky;
+      (8) zákon č. 456/2023 Sb. (zakonyprolidi.cz: vyhlášen 20. 12. 2023, účinnost 1. 1. 2024, bod o omezené dostupnosti
+          od 1. 6. 2024); MZ TZ 29. 5. 2024 (1–2 průměrné měsíční dodávky, příznak LPOD + zákaz distribuce do zahraničí,
+          hlášení zásob, eRecept ukazuje lékárny); MZ TZ 14. 6. 2023 (Válek: „jedna z největších reforem lékové legislativy
+          za posledních 15 let“, měsíční zásoby u distributorů na pokyn MZ);
+      (9) EU — Rada, TZ 11. 12. 2025 (předběžná dohoda o farmaceutickém balíčku) a 12. 5. 2026 (Akt o kritických léčivech);
+          consilium.europa.eu vracel z prostředí agenta 403, obsah dohod čten ze shrnutí kanceláří Osborne Clarke
+          (RDP 8 let + 1 rok tržní ochrany s prodlouženími, strop 11 let; plány prevence výpadků povinné pro Rx;
+          unijní seznam kritických léčiv; použitelnost 2028), CMS Law (dohoda 12/2025, COREPER a texty 6. 3. 2026,
+          SANT 18. 3. 2026, plná použitelnost 2028), Van Bael & Bellis/Crowell přes vyhledávání (oznámení nejméně 6 měsíců
+          předem u přerušení delšího než 2 roky), McCann FitzGerald (CMA: společné zadávání od 5 států místo 9, kritéria
+          odolnosti a „evropská preference“ v tendrech, strategické projekty, dobrovolné sdílení dat o zásobách, orphany
+          zahrnuty, Úřední věstník konec 2026, použitelnost neurčena), ESWI (Komise 20. 5. 2026); Evropská komise —
+          stránka EU4Health 2021–2027: 5,3 mld EUR, po revizi VFR 4,4 mld EUR; European Cancer Organisation (návrh VFR
+          2028–2034 z července 2025: 2 bil. EUR, ECF 410 mld EUR, 14 nástrojů vč. EU4Health sloučeno, okno „Health,
+          Biotech, Bioeconomy and Resilience“); CPME 4. 5. 2026 (pozice EP: 10 mld EUR na samostatný EU4Health);
+          Alzheimer Europe (stanovisko SANT 5. 5. 2026); EMA — stránka ePI (pilot 7/2023–8/2024, DK, NL, ES, SE; návrh
+          roadmapy 20. 3. 2026) + PDF roadmapy (CAP go-live od 4. čtvrtletí 2026: vakcíny ATC J07, poté onkologika L01/L04,
+          nejdřív anglicky);
+      (10) PGEU Medicine Shortages Report 2025 (TZ; sběr 15. 1.–15. 2. 2026 dle vyhledávání; 27 zemí EU/EFTA; 96 % zemí
+          s výpadky, 70 % stagnace, >600 léků ve více než třetině zemí, 12 h týdně, 9 z 10 přerušení léčby, 81 %
+          administrativa/finanční ztráty, 15 % povoluje terapeutickou záměnu lékárníkem; citace Konstanty);
+      (11) PubMed 21. 9. 2026: Phuong 2019 (PMID 31050671), Pandey 2025 (39341418), Oscanoa 2017 (28251277), Munshi 2026
+          (42240819), Persaud 2025 (40577011), Mekonnen 2021 (34008195), Khalil 2017 Cochrane (28977687);
+      (12) data/indicators.json — databox literálně (vypadky_leciv_aktivni 1 404, lpod_share_critical 5,4 %,
+          nevydana_baleni_leku_pct 3,8 %, podil_vydaje_leky 9,5 %, farmaceuti_per_100k 76, lekarny_per_100k 25,07);
+      (13) vlastní články portálu: tamoxifen, kvetiapin, esenciální antiinfektiva, nevydaná balení, polypragmazie,
+          legislativní newsletter září 2026, barometr politických prohlášení, farmaceuti, EZKarta, stret zájmů ve výživě
+          kojenců. Snímek indikátoru vypadky_leciv_aktivni: fetched_at 2026-09-06 — v perexu, textu i counteru datováno
+          „k 6. září“, ne „dnes“ (Codex, PR #1227).
+      VÝPOČTY REDAKCE: pokles EU4Health 2027 = 1 − 606,8/661,3 = 8,2 % (ZD píše „o více než 8 procent“); rozdíl 54,5 mil.
+      EUR na zhruba 450 mil. obyvatel EU ≈ 0,12 EUR na obyvatele (Eurostat 1. 1. 2025: 450,4 mil.); použitelnost balíčku
+      EU = vyhlášení podzim 2026 + 20 dní + 24 měsíců ≈ podzim 2028 (Osborne Clarke a CMS uvádějí 2028).
+      VĚDOMĚ NEUVEDENO: (a) statut a jmenný seznam členů POPS — nezveřejněn/nenalezen, v textu řečeno; (b) doslovné znění
+      směrnice a nařízení balíčku — čteno ze shrnutí právních kanceláří, ne z textu Rady (403), v textu i disclaimeru
+      řečeno; (c) aktuální počet LPOD přípravků — SÚKL nepublikuje souhrn, používáme vlastní indikátor 5,4 % s jeho
+      limity; (d) průzkum 86 % z roku 2024 (silapacientu.cz) — nahrazen novějším Nielsen 2026; (e) čerpací stanice —
+      vyhláška z roku 2024 už rozšířila sortiment vyhrazených léčiv (zdravezpravy.cz 29. 1. 2024), Boráňův výrok bez
+      podrobností, jen zmíněn; (f) 5 % hospitalizací seniorů — Boráňův údaj bez zdroje, v textu konfrontován
+      s metaanalýzou 8,7 % (Oscanoa 2017), nepřebírá se jako fakt; (g) usnesení o rozpočtu EP 2027 a přesné termíny
+      hlasování — převzato ze ZD, neověřeno v dokumentech EP.
+      CODEX REVIEW 2026-09-21 (PR #1227): (1) status draft NEdrží publikaci — podle politiky fronty (CLAUDE.md) je běžný
+      draft publikovatelný cronem a při vydání se povýší na review-pending; článek je obsahově hotový, hold se NEnastavuje,
+      redakce ho může zadržet přidáním _review_note do articles.json; (2) 1 404 výpadků datováno ke snímku 6. 9. 2026;
+      (3) 17. 9. 2026 je čtvrtek, opraveno.
+      published:false, audit-status draft — publikovatelný cronem podle politiky fronty (žádný hold marker)."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi · HSPA Monitor</title>
+<meta name="description" content="Ředitel SÚKL Tomáš Boráň ustavil 17. září Poradní orgán pro pacienty a spotřebitele a ohlásil největší revizi lékové legislativy za dvacet let; o pět dní dřív europoslanci varovali, že rozpočet programu EU4Health klesne v roce 2027 z 661,3 na 606,8 milionu eur a Evropě hrozí prázdné regály. Vzali jsme obě zprávy, přidali zářijové Zdravé paragrafy, legislativní newsletter ministerstva zdravotnictví, podle kterého novela zákona o léčivech s léky poštou a rezervními zásobami teprve čeká na vnitřní připomínkové řízení, a položili sedm otázek, které si klade člověk u výdejního okénka: bude můj lék, dostanu ho poštou, zmizí leták z krabičky, pohlídá někdo interakce, kdo za mě mluví, dotknou se mě evropské škrty a co se doopravdy stane. Poctivá odpověď zní: v letech 2026 a 2027 skoro nic z toho, co se ohlašuje. SÚKL k 6. září evidoval 1 404 aktivních výpadků a lékárny v Evropě řeší nedostupnost léků 12 hodin týdně.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi">
+<meta property="og:description" content="Poradní orgán pacientů na SÚKL, revize evropské lékové legislativy, léky na recept poštou, škrt v EU4Health. Sedm otázek člověka u výdejního okénka a poctivé odpovědi, co se z toho doopravdy stane — a kdy.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-21">
+<meta property="article:section" content="Léková politika">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-lekova-legislativa-obcan-2026.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-lekova-legislativa-obcan-2026.png" data-cover-injected="1">
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026#article",
+      "headline": "SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi",
+      "description": "Ředitel SÚKL Tomáš Boráň ustavil 17. září Poradní orgán pro pacienty a spotřebitele a ohlásil největší revizi lékové legislativy za dvacet let; o pět dní dřív europoslanci varovali, že rozpočet programu EU4Health klesne v roce 2027 z 661,3 na 606,8 milionu eur a Evropě hrozí prázdné regály. Vzali jsme obě zprávy, přidali zářijové Zdravé paragrafy, legislativní newsletter ministerstva zdravotnictví, podle kterého novela zákona o léčivech s léky poštou a rezervními zásobami teprve čeká na vnitřní připomínkové řízení, a položili sedm otázek, které si klade člověk u výdejního okénka: bude můj lék, dostanu ho poštou, zmizí leták z krabičky, pohlídá někdo interakce, kdo za mě mluví, dotknou se mě evropské škrty a co se doopravdy stane. Poctivá odpověď zní: v letech 2026 a 2027 skoro nic z toho, co se ohlašuje. SÚKL k 6. září evidoval 1 404 aktivních výpadků a lékárny v Evropě řeší nedostupnost léků 12 hodin týdně.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-lekova-legislativa-obcan-2026.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026"
+      },
+      "datePublished": "2026-09-21",
+      "dateModified": "2026-09-21",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Léková politika"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi",
+          "item": "https://skorezdravotnictvi.cz/clanek-lekova-legislativa-obcan-2026"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <img class="article-cover" src="assets/covers/clanek-lekova-legislativa-obcan-2026.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">SÚKL · výpadky léků · farmaceutický balíček EU · Akt o kritických léčivech · EU4Health · Rx online · Zdravé paragrafy</span>
+      </div>
+      <h1 class="article-title">SÚKL zve pacienty ke stolu, Brusel škrtá na zdraví. Co z lékových novinek dojde až k vám do lékárny — sedm otázek a poctivé odpovědi</h1>
+      <p class="article-deck">
+        Ředitel SÚKL Tomáš Boráň ustavil 17. září Poradní orgán pro pacienty a spotřebitele a ohlásil největší revizi lékové legislativy za dvacet let; o pět dní dřív europoslanci varovali, že rozpočet programu EU4Health klesne v roce 2027 z 661,3 na 606,8 milionu eur a Evropě hrozí prázdné regály. Vzali jsme obě zprávy, přidali zářijové Zdravé paragrafy, legislativní newsletter ministerstva zdravotnictví, podle kterého novela zákona o léčivech s léky poštou a rezervními zásobami teprve čeká na vnitřní připomínkové řízení, a položili sedm otázek, které si klade člověk u výdejního okénka: bude můj lék, dostanu ho poštou, zmizí leták z krabičky, pohlídá někdo interakce, kdo za mě mluví, dotknou se mě evropské škrty a co se doopravdy stane. Poctivá odpověď zní: v letech 2026 a 2027 skoro nic z toho, co se ohlašuje. SÚKL k 6. září evidoval 1 404 aktivních výpadků a lékárny v Evropě řeší nedostupnost léků 12 hodin týdně.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">21. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">16 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Dvě zprávy z jednoho týdne, každá z jiného konce Evropy, a obě o tom samém: o lécích, které mají být a nejsou, a o slibech, které mají věci spravit. Ve čtvrtek 17. září, na Světový den bezpečí pacientů, sezval ředitel Státního ústavu pro kontrolu léčiv Tomáš Boráň zástupce pacientských organizací do nového poradního orgánu a novinářům řekl, že ústav čeká „největší revize legislativy za posledních 20 let“, protože nová evropská léková pravidla vyjdou na podzim v Úředním věstníku. O pět dní dřív psal Zdravotnický deník z Bruselu, že výbor Evropského parlamentu pro veřejné zdraví varuje před prázdnými regály: Akt o kritických léčivech i farmaceutický balíček nemají peníze a rozpočet programu EU4Health má v roce 2027 klesnout. Mezi tím vyšlo jedenácté číslo Zdravých paragrafů, legislativního newsletteru ministerstva zdravotnictví, které bez velkých slov říká, v jakém stavu jsou české zákony, jež mají ty evropské přenést do praxe. Přečetli jsme všechny tři texty a ptali se, jak se to dotkne člověka, který v pondělí ráno stojí v lékárně s eReceptem v telefonu.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Čtyři čísla, o která se dnes opírá debata o lécích</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1404">1 404</span>
+            <span class="av-counter-label">aktivních výpadků léčiv hlášených SÚKL (k 6. 9. 2026)</span>
+            <span class="av-counter-foot">přípravky s hlášeným přerušením dodávek bez obnovení; 5,4 % registrovaných léků nese příznak omezené dostupnosti</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="12" data-suffix=" h">12 h</span>
+            <span class="av-counter-label">týdně řeší evropská lékárna výpadky léků (PGEU, 2025)</span>
+            <span class="av-counter-foot">průzkum v 27 zemích EU a EFTA; dvojnásobek proti době před pěti lety; 9 z 10 zemí hlásí přerušení léčby</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="8.2" data-decimals="1" data-prefix="−" data-suffix=" %">−8,2 %</span>
+            <span class="av-counter-label">rozpočet EU4Health 2027 proti roku 2026</span>
+            <span class="av-counter-foot">z 661,3 na 606,8 milionu eur; po škrtu o zhruba miliardu eur v revizi 2024; výbor SANT chce nejméně o 15 % víc</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter">2028</span>
+            <span class="av-counter-label">rok, kdy začne platit nová evropská léková legislativa</span>
+            <span class="av-counter-foot">24 měsíců po vyhlášení v Úředním věstníku, které se čeká na podzim 2026; česká transpozice ve stejné lhůtě</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SÚKL, otevřená data — hlášení o dodávkách (indikátor HSPA Monitoru, 2026); PGEU Medicine Shortages Report 2025 (tisková zpráva, 27 zemí); Zdravotnický deník 12. 9. 2026 podle stanoviska výboru SANT; Evropská komise a shrnutí kanceláří Osborne Clarke a CMS k farmaceutickému balíčku (použitelnost 2028). Pokles 8,2 % je výpočet redakce z 661,3 a 606,8 mil. EUR.</p>
+      </figure>
+
+      <h3>1. Bude můj lék v lékárně?</h3>
+      <p>
+        Nejdřív to, co se dá spočítat. Státní ústav pro kontrolu léčiv vedl k 6. září 2026 podle svých otevřených dat 1 404 léčivých přípravků, u nichž výrobce nahlásil přerušení dodávek a dosud neohlásil obnovení; z aktivně registrovaných léků nese 5,4 % zákonný příznak „omezená dostupnost“. Za těmi čísly jsou konkrétní krabičky: oba registrované tamoxifeny, základní hormonální lék u rakoviny prsu, vypadly <a href="clanek-tamoxifen-vypadek.html">do léta 2027 a stát skládá balení z dovezených blistrů</a>; kvetiapin s prodlouženým uvolňováním, který berou lidé se schizofrenií a bipolární poruchou, <a href="clanek-kvetiapin-vypadek.html">vypadl ve všech pěti silách</a>; ze seznamu 197 nepostradatelných léků proti infekcím jich <a href="clanek-esencialni-antiinfektiva.html">70 na českém trhu standardně nekoupíte</a>. Není to česká zvláštnost. Průzkum evropských lékárníků PGEU za rok 2025 uvádí, že výpadky hlásí 96 % z 27 zemí, ve více než třetině z nich chybí přes 600 léků a průměrná lékárna tráví jejich řešením 12 hodin týdně, dvakrát víc než před pěti lety; devět z deseti zemí hlásí přerušení léčby pacientů.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="96" data-suffix=" %">96 %</span>
+          <span class="av-counter-label">zemí v průzkumu PGEU hlásí výpadky léků; v 70 % se situace „zastavila na nepřijatelně vysoké úrovni“</span>
+          <span class="av-counter-foot">27 zemí EU a EFTA, zpráva za rok 2025; terapeutickou záměnu lékárníkem povoluje jen 15 % zemí</span>
+        </div>
+      </aside>
+      <p>
+        Co proti tomu platí už dnes: novela zákona o léčivech z prosince 2023, účinná od 1. ledna a v klíčové části od 1. června 2024. Výrobce, který ohlásí přerušení nebo ukončení dodávek, musí zajistit ještě jednu až dvě průměrné měsíční dodávky; SÚKL může lék označit příznakem omezené dostupnosti, čímž automaticky zakáže jeho distribuci do zahraničí, lékárny takový lék objednávají jen v objemu svého obvyklého týdenního výdeje a hlásí zásoby; ministerstvo může distributorům nařídit držet měsíční rezervu a eRecept ukazuje, která lékárna měla lék předchozí den skladem. „To, že lék označíme jako přípravek s omezenou dostupností, neznamená, že není dostupný pro pacienty, ale že vedeme kroky k tomu, že se ten lék ve finále dostane,“ vysvětloval Boráň v listopadu 2024. Prezident lékárnické komory Aleš Krebs tehdy dodal háček, který platí dodnes: část výrobců krátkodobé výpadky nehlásí, a ochranný systém se tak nespustí. Co se chystá, jsou tři vrstvy nad tím. Evropský farmaceutický balíček, na němž se Rada a Parlament shodly 11. prosince 2025 a který výbor SANT potvrdil 18. března 2026, zavádí povinné plány prevence výpadků pro léky na předpis, unijní seznam kritických léčiv a u přerušení delšího než dva roky oznámení nejméně šest měsíců předem; platit začne 24 měsíců po vyhlášení, tedy v roce 2028. Akt o kritických léčivech, dojednaný 12. května 2026, má financovat „strategické projekty“ výroby v Evropě, dovolit společné zadávání už pěti státům místo devíti a nařídit nemocnicím a pojišťovnám, aby v tendrech zohledňovaly odolnost dodávek a evropský původ; v Úředním věstníku se čeká koncem roku 2026 a datum použitelnosti není určeno. A česká novela zákona o léčivech, která má podle Zdravých paragrafů „reflektovat na zavedení Rx online nebo na úpravu systému rezervních zásob“, je k 31. srpnu „ve fázi před vnitřním připomínkovým řízením“, tedy tam, kde byla v srpnu, a ve VeKLEP po ní není stopa.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblLawH">
+        <figcaption class="av-figure-h" id="avTblLawH">Tři vrstvy ochrany před výpadkem: co platí, co je dojednané a co se teprve píše</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Předpis</th>
+                <th scope="col">Co dává pacientovi</th>
+                <th scope="col">Stav</th>
+                <th scope="col">Kdy se vás dotkne</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Zákon č. 456/2023 Sb. (novela zákona o léčivech)</th><td>1–2 měsíce dodávek po ohlášení výpadku; příznak omezené dostupnosti = zákaz vývozu, týdenní objednávky lékáren, hlášení zásob; rezerva u distributorů na pokyn ministerstva; lékárny se zásobou v eReceptu</td><td class="av-good">platí od 1. 1. 2024, klíčová část od 1. 6. 2024</td><td>už dnes — pokud výrobce výpadek ohlásí</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Farmaceutický balíček EU (směrnice + nařízení)</th><td>plány prevence výpadků povinné pro léky na předpis; unijní seznam kritických léčiv; u přerušení nad dva roky oznámení nejméně 6 měsíců předem; ePI; 8 let ochrany dat + 1 rok tržní ochrany s prodlouženími, strop 11 let</td><td class="av-warn">dohoda 11. 12. 2025, potvrzeno 3/2026; vyhlášení podzim 2026</td><td>použitelnost a česká transpozice 2028</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Akt o kritických léčivech (nařízení)</th><td>strategické projekty výroby v EU; společné zadávání od 5 států; kritéria odolnosti a evropské preference v tendrech nemocnic a pojišťoven; dobrovolné sdílení dat o zásobách</td><td class="av-warn">dohoda 12. 5. 2026; Úřední věstník konec 2026</td><td>datum použitelnosti neurčeno; továrny v řádu let</td></tr>
+              <tr><th scope="row">Česká novela zákona o léčivech (Rx online, rezervní zásoby, balíček EU)</th><td>léky na recept zásilkově; úprava systému rezervních zásob; pravidla balíčku v rozsahu dřívější použitelnosti</td><td class="av-bad">před vnitřním připomínkovým řízením (Zdravé paragrafy, stav k 31. 8. 2026); ve VeKLEP bez stopy</td><td>Rx online podle ministerstva nejdřív leden 2028</td></tr>
+              <tr><th scope="row">Nový zákon o humánních léčivých přípravcích</th><td>rozdělení humánních a veterinárních léčiv do dvou zákonů podle balíčku</td><td class="av-bad">„přípravné práce“; výhled vládě 1. čtvrtletí 2027</td><td>2028</td></tr>
+              <tr><th scope="row">Novela vyhlášky č. 377/2022 Sb.</th><td>výrobci zdravotnických prostředků hlásí SÚKL předpokládané přerušení dodávek</td><td class="av-warn">stanovisko komise Legislativní rady vlády 3. 8. 2026</td><td>po vyhlášení; týká se prostředků, ne léků</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon č. 456/2023 Sb. (zakonyprolidi.cz) a tiskové zprávy MZ z 14. 6. 2023 a 29. 5. 2024; Rada EU, tiskové zprávy 11. 12. 2025 a 12. 5. 2026, obsah dohod podle shrnutí kanceláří Osborne Clarke, CMS Law a McCann FitzGerald (texty Rady nebyly z prostředí redakce dostupné); MZ, Legislativní newsletter — září 2026 (Zdravé paragrafy); Zdravotnický deník 13. 2. 2026 (termín Rx online). Sloupec „Kdy se vás dotkne“ je redakční čtení lhůt, ne oficiální harmonogram.</p>
+      </figure>
+      <p>
+        Poctivá odpověď na první otázku tedy zní: jestli bude váš lék v lékárně příští týden, o tom nerozhoduje ani Brusel, ani chystaná novela, ale to, zda výrobce výpadek ohlásil a zda SÚKL a ministerstvo stihly použít nástroje, které mají od roku 2024. Nic z toho, co se v září ohlašuje, nepřidá v letech 2026 a 2027 jedinou tabletu. Evropský balíček zpřísní hlášení a plánování od roku 2028, Akt o kritických léčivech má stavět továrny, což trvá roky, a česká rezervní zásoba je v newsletteru jedna věta bez data.
+      </p>
+
+      <h3>2. Dostanu léky na recept poštou?</h3>
+      <p>
+        Zásilkový výdej léků na předpis, v resortní hantýrce Rx online, je jediná z ohlašovaných novinek, na kterou se běžný pacient ptá sám od sebe. Ministerstvo zdravotnictví ho připravuje, ředitel SÚKL ho podle zdravezpravy.cz podporuje a průzkum agentury Nielsen mezi 1 045 lidmi ve věku 18 až 70 let z března 2026 uvádí, že 70 % dospělých by doručení léků na recept do výdejního místa nebo boxu využilo, dalších 16 % to zvažuje a 80 % považuje službu za bezpečnou. Ministerstvo v březnu upřesnilo, o jaké léky by šlo: o dlouhodobou léčbu stabilizovaných chronických nemocí, například vysokého tlaku nebo cholesterolu; vysoce specializovaná onkologika mají zůstat u výdeje v lékárně. Lékárnická komora je proti, respektive opatrná: prezident Aleš Krebs v únoru řekl „Neříkáme, že zásadně podporujeme zásilkový výdej receptových léků,“ a komora žádá dohled SÚKL, bezpečnou identifikaci pacienta, modul v eReceptu, kde si pacient dopředu zvolí, co chce zásilkově, a seznam vyloučených léků. Podle Zdravotnického deníku se ministerstvo požadavkům komory postupně přibližuje a jako možný termín účinnosti padl leden 2028.
+      </p>
+      <p>
+        Tady je ale místo, kde je newsletter užitečnější než tiskové konference. Zdravé paragrafy uvádějí Rx online jako součást novely zákona o léčivech, která „bude mimo jiné reflektovat na zavedení Rx online nebo na úpravu systému rezervních zásob“ — a ta novela je „ve fázi před vnitřním připomínkovým řízením“. Před ní je tedy vnitřní připomínkové řízení, meziresortní řízení, vláda, Legislativní rada, tři čtení ve Sněmovně, Senát a prezident. Leden 2028 je za takových okolností optimistický, ne konzervativní odhad. Kdo si dnes objednává volně prodejné léky přes internet, což zákon dovoluje dávno, bude na recept čekat nejméně další rok a čtvrt, a to jen pokud novela projde bez zdržení, jaká provázela každou předchozí.
+      </p>
+
+      <h3>3. Zmizí z krabičky příbalový leták?</h3>
+      <p>
+        Boráň v září mluvil o dvou věcech, které se v médiích slily do titulku „letáky můžou zmizet“. První je praktická a už se děje: u některých nedostupných léků, které stát dováží ze zahraničí, se má připustit balení bez české příbalové informace. Kdo v srpnu dostal tamoxifen ze zvláštního léčebného programu, dostal ho z cizojazyčného blistru s informací od lékárny, protože jiná možnost nebyla. Druhá věc je evropská a pomalejší: elektronická informace o přípravku, zkráceně ePI. Evropská agentura pro léčivé přípravky ji zkoušela v pilotu od července 2023 do srpna 2024 v Dánsku, Nizozemsku, Španělsku a Švédsku a 20. března 2026 zveřejnila návrh plánu zavádění. Podle něj se centrálně registrované léky začnou do ePI přihlašovat dobrovolně od čtvrtého čtvrtletí 2026, nejdřív vakcíny, po nich onkologika, a zpočátku jen v angličtině s ostatními jazyky jako volitelnými. Elektronická informace má podle Boráně nést i strukturované údaje o alergenech a piktogramy na obalu. Nová evropská legislativa počítá s centrálním úložištěm ePI; zda a kdy smí papírový leták z krabičky zmizet úplně, rozhodne až konečné znění směrnice a její český přepis, tedy opět rok 2028. Pro pacienta v roce 2026 a 2027 se u obyčejného léku z české lékárny nemění nic: leták v krabičce zůstává.
+      </p>
+
+      <h3>4. Pohlídá někdo, že se mi léky nehádají?</h3>
+      <p>
+        Toto je otázka, kde je rozdíl mezi slibem a doloženou skutečností největší. Boráň v září podle zdravezpravy.cz uvedl, že pět procent hospitalizací všech seniorů v Evropské unii jde na vrub nežádoucích lékových interakcí, a ohlásil, že SÚKL chce do lékového záznamu přidat léky podávané za hospitalizace a nechat záznam prohlížet umělou inteligencí, která by nebezpečné kombinace odhalila. Podkladem je dubnový test z roku 2025: lékárny podle ČTK našly za 15 dní 12 000 chybných receptů, mezi nimi 372 nevhodných interakcí. Recenzovaná literatura dává Boráňovu číslu spíš za pravdu, než že by ho přeháněla. Metaanalýza 42 studií z let 1988 až 2015 odhadla, že 8,7 % hospitalizací lidí nad 60 let je způsobeno nežádoucími účinky léků, nejčastěji nesteroidními antirevmatiky; metaanalýza 50 studií z roku 2026 spočítala, že lidé nad 65 let mají 1,64krát vyšší riziko hospitalizace kvůli lékům než mladší dospělí, byť s velmi nízkou jistotou důkazů. V Česku užívá <a href="clanek-polypragmazie-senioru.html">pět a více léků souběžně 46,6 % lidí nad 65 let</a>.
+      </p>
+      <p>
+        Jenže evidence říká i to, co Boráň neřekl: sama kontrola nestačí. Přehled 118 randomizovaných studií se 417 412 pacienty v JAMA Network Open z roku 2025 zjistil, že intervence proti nevhodné preskripci u starších lidí sníží počet léků zhruba o půl léku na pacienta, ale nezmění počet hospitalizací, návštěv pohotovosti ani úmrtí. Cochranovský přehled z roku 2017 došel k témuž u chyb v primární péči. Jinými slovy, algoritmus, který v záznamu najde interakci, je začátek, ne výsledek; výsledek se rozhoduje v ordinaci, kde má někdo čas lék vysadit a pacientovi to vysvětlit. SÚKL k tomu podle ČTK nemá harmonogram, funkcionality „čekají na technickou analýzu“ a záznam z nemocnic vyžaduje součinnost ministerstva, které provozuje aplikaci EZKarta. Co platí dnes: lékový záznam z eReceptu existuje, lékárník do něj vidí, a od července smí <a href="clanek-preskripce-praktici-2026.html">praktik předepsat přes 1 200 léků, kvůli kterým se dřív obíhal specialista</a>, což počet lidí, kteří mají všechny recepty na jednom místě, spíš zvýší.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblEvH">
+        <figcaption class="av-figure-h" id="avTblEvH">Co říká recenzovaná literatura k výpadkům a k lékovým hospitalizacím</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Studie</th>
+                <th scope="col">Typ a rozsah</th>
+                <th scope="col">Zjištění</th>
+                <th scope="col">Co z toho plyne pro slib</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Phuong et al., PLoS One 2019</th><td>scoping review dopadů výpadků léků na pacienty</td><td>výpadky převážně zhoršují výsledky: vyšší doplatky, více chyb v medikaci, nežádoucích příhod, úmrtí a stížností; v části studií výsledky stejné</td><td class="av-bad">výpadek není jen nepohodlí; „prázdné regály“ mají klinickou cenu</td></tr>
+              <tr><th scope="row">Pandey et al., Clin Microbiol Infect 2025</th><td>systematický přehled, 74 studií o výpadcích antibiotik</td><td>delší hospitalizace, selhání léčby horšími náhradami, oslabení antibiotické politiky; zvládání stojí na týmech v nemocnicích</td><td class="av-warn">seznam kritických léčiv a plány prevence míří správně; bez lidí v nemocnicích nefungují</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Oscanoa et al., Eur J Clin Pharmacol 2017</th><td>metaanalýza 42 studií, pacienti nad 60 let</td><td>8,7 % (95% CI 7,6–9,8) hospitalizací kvůli nežádoucím účinkům léků; nejčastěji nesteroidní antirevmatika</td><td class="av-warn">Boráňových „pět procent“ je spíš podhodnocené; problém je reálný</td></tr>
+              <tr><th scope="row">Munshi et al., Int J Clin Pharm 2026</th><td>metaanalýza 50 studií, 210 514 osob</td><td>riziko lékové hospitalizace u lidí 65+ 1,64krát vyšší než u 16–64 (95% CI 1,15–2,35); velmi nízká jistota důkazů</td><td class="av-warn">věk sám o sobě je nespolehlivý prediktor; záleží na lécích a kontextu</td></tr>
+              <tr><th scope="row">Mekonnen et al., Br J Clin Pharmacol 2021</th><td>metaanalýza 63 studií, hospitalizovaní senioři</td><td>nevhodná preskripce zvyšuje šanci hospitalizace kvůli lékové příhodě o 91 % (AOR 1,91)</td><td class="av-good">kontrola preskripce má na co mířit</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Persaud et al., JAMA Netw Open 2025</th><td>118 randomizovaných studií, 417 412 pacientů primární péče 65+</td><td>intervence sníží počet léků o zhruba 0,5 na pacienta; hospitalizace (RR 0,95), návštěvy pohotovosti ani úmrtnost se nemění</td><td class="av-bad">nalezená interakce ≠ zabráněná hospitalizace; algoritmus je začátek, ne výsledek</td></tr>
+              <tr><th scope="row">Khalil et al., Cochrane 2017</th><td>30 studií, 169 969 osob, primární péče</td><td>profesní a organizační intervence proti chybám v medikaci „pravděpodobně mají malý nebo žádný vliv“ na hospitalizace a úmrtí</td><td class="av-bad">totéž; účinek závisí na provedení, ne na existenci kontroly</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> PubMed, ověřeno 21. 9. 2026 — Phuong 2019 (PMID 31050671), Pandey 2025 (PMID 39341418), Oscanoa 2017 (PMID 28251277), Munshi 2026 (PMID 42240819), Mekonnen 2021 (PMID 34008195), Persaud 2025 (PMID 40577011), Khalil 2017 (PMID 28977687); DOI ve zdrojích. Sloupec „Co z toho plyne pro slib“ je interpretace redakce. AOR = adjustovaný poměr šancí, RR = poměr rizik.</p>
+      </figure>
+
+      <h3>5. Kdo za mě u toho stolu mluví?</h3>
+      <p>
+        Poradní orgán pro pacienty a spotřebitele, zkráceně POPS, má podle zdravezpravy.cz devět zástupců pacientských organizací a další účastníky; ústav má podle vlastní tiskové zprávy memoranda o spolupráci se 45 pacientskými organizacemi. Boráň slibuje „skutečný dialog“, ne formalitu, a chce po členech, aby ústavu okamžitě hlásili, když nějaký lék na trhu chybí — s odkazem na tamoxifen, kde se to nestalo včas. Na ustavujícím setkání mluvili místopředseda České asociace pro vzácná onemocnění René Břečťan, Martina Sehnoutková z Národní asociace pacientských organizací, zástupkyně ministerstva zdravotnictví a také výkonný ředitel Asociace inovativního farmaceutického průmyslu David Kolář. Poslední jméno stojí za zastavení: u stolu, který má být hlasem pacientů, seděl od prvního dne i hlas výrobců. Není to nutně chyba, sdružení AIFP se k pacientským organizacím hlásí dlouhodobě, ale portál má čerstvou zkušenost s tím, jak se poradní orgán ministerstva <a href="clanek-stret-zajmu-vyziva-kojencu.html">tři roky hádal o pravidla střetu zájmů</a>, a statut POPS, který by řekl, kdo má hlasovací právo a kdo je host, jsme nenašli.
+      </p>
+      <p>
+        Téma, na kterém se pacientské organizace i průmysl shodly, je informování: zákon o regulaci reklamy dovoluje mluvit o lécích na předpis jen s odborníky, takže pacientská organizace nesmí oficiálně vysvětlit, co je nový lék na její nemoc. „Paradoxní, že to zákon neumožňuje. Pacienti si ‚všechno‘ najdou na internetu. Ale to ne vždy musí být relevantní,“ řekl Břečťan podle zdravezpravy.cz. Změna by musela přijít novelou téhož zákona, který dnes projednává Sněmovna jako tisk 153 a který se, jak jsme <a href="clanek-reklama-kojenecka-vyziva-zakon.html">psali o kojenecké výživě</a>, informování pacientů nedotýká. Co pacientské organizace mají od roku 2022 skutečně v ruce, je účast v řízeních o cenách a úhradách léků na vzácná onemocnění; POPS k tomu zatím přidává poradní hlas u ředitele ústavu, ne pravomoc.
+      </p>
+
+      <h3>6. Dotkne se mě, že Brusel škrtá?</h3>
+      <p>
+        Čísla ze Zdravotnického deníku jsou přesná a stojí za to je seřadit. Program EU4Health dostal na léta 2021 až 2027 původně 5,3 miliardy eur; při revizi víceletého rozpočtu v roce 2024 mu unijní vlády vzaly zhruba miliardu, takže má 4,4 miliardy. Na rok 2027, poslední samostatný rozpočet programu, navrhla Komise 606,8 milionu eur proti 661,3 milionu v roce 2026, o 8,2 % méně, a členské státy v Radě chtěly škrtnout ještě víc. Výbor Evropského parlamentu pro veřejné zdraví, zkráceně SANT, žádá navýšení nejméně o 15 % a jako minimum návrat na úroveň roku 2026; jeho zpravodaj Michalis Hadjipantela sladil 87 pozměňovacích návrhů do desítky kompromisů, rozpočtový výbor hlasuje 5. října a plénum 19. října. Od roku 2028 pak má podle návrhu Komise z července 2025 EU4Health zaniknout jako samostatný program a rozpustit se spolu s třinácti dalšími nástroji v Evropském fondu pro konkurenceschopnost o objemu 410 miliard eur, kde by zdraví sdílelo „okno“ s biotechnologiemi a bioekonomikou. Parlament chce naopak 10 miliard eur na samostatný zdravotní program; lékařské a sesterské organizace ho v květnu podpořily.
+      </p>
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">EU4Health: roční závazky v návrhu rozpočtu EU, mil. EUR</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="700" data-unit="mil. EUR">
+          <li class="av-bar-row" data-value="661.3" data-display="661,3" data-label="2026" data-note="poslední rok před navrženým škrtem; celý program 2021–2027 má po revizi 4,4 mld EUR"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="606.8" data-display="606,8" data-label="2027 (návrh)" data-note="o 54,5 mil. EUR (8,2 %) méně; členské státy v Radě chtěly škrtnout víc, výbor SANT žádá +15 %"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Zdravotnický deník 12. 9. 2026 podle stanoviska výboru SANT k rozpočtu 2027; celkový rámec programu 5,3 → 4,4 mld EUR podle stránky Evropské komise k EU4Health 2021–2027. Šířky sloupců jsou v poměru k 700 mil. EUR.</p>
+      </figure>
+      <p>
+        A teď to, co se z těch čísel dotkne českého pacienta. EU4Health neplatí léky v českých lékárnách; platí společné nákupy, jaké Unie použila při covidu, zásoby krizových přípravků přes úřad HERA, evropský plán boje proti rakovině, evropský prostor pro zdravotní data a stovky projektů, v nichž jsou i české nemocnice a úřady. Škrt 54,5 milionu eur rozpočítaný na zhruba 450 milionů obyvatel Unie dělá 12 centů na hlavu za rok; to není částka, která vyprázdní regál. Varování europoslanců míří jinam: Akt o kritických léčivech, který má stavět továrny na účinné látky a platit rezervy, nemá vlastní rozpočtovou kapitolu a počítá s penězi právě z těchto programů a z národních rozpočtů. Bez nich zůstane z aktu seznam kritických léčiv a pravidlo pro tendry, které samo o sobě nic nevyrobí. Pro Česko je podstatnější druhá věc: kritéria „evropské preference“ a odolnosti dodávek budou muset uplatňovat české nemocnice a pojišťovny ve svých nákupech, a to znamená v některých případech dražší lék od evropského výrobce místo levnějšího z Asie. Kdo to zaplatí, akt neříká.
+      </p>
+
+      <h3>7. Co se tedy doopravdy stane — a kdy?</h3>
+      <p>
+        Dali jsme sliby z obou zpráv a z newsletteru do jedné tabulky a ke každému připsali, kdo ho vyslovil, kde je doložen a kdy se může dotknout člověka u výdejního okénka. Kritérium je jednoduché: platí to, co má číslo Sbírky nebo Úředního věstníku a datum účinnosti; dojednané je to, co má podepsaný kompromis, ale ne vyhlášení; slib je to, co existuje jako výrok nebo věta v newsletteru.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblPromH">
+        <figcaption class="av-figure-h" id="avTblPromH">Devět lékových novinek ze září 2026: kdo je slibuje, čím jsou doložené a kdy se vás dotknou</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Novinka</th>
+                <th scope="col">Kdo a kde</th>
+                <th scope="col">Stav</th>
+                <th scope="col">Kdy pro pacienta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Poradní orgán pacientů na SÚKL (POPS)</th><td>ředitel SÚKL, tisková zpráva 17. 9. 2026</td><td class="av-good">existuje, první jednání proběhlo</td><td>hned — jako poradní hlas; statut nezveřejněn</td></tr>
+              <tr><th scope="row">Léky na recept poštou (Rx online)</th><td>ministerstvo zdravotnictví; novela zákona o léčivech (Zdravé paragrafy)</td><td class="av-bad">slib; novela před vnitřním připomínkovým řízením</td><td>nejdřív leden 2028, spíš později</td></tr>
+              <tr><th scope="row">Rezervní zásoby léků „robustní“ podle programového prohlášení vlády</th><td>vláda 5. 1. 2026; tatáž novela</td><td class="av-bad">slib; stejná fáze jako v srpnu</td><td>bez data</td></tr>
+              <tr><th scope="row">Plány prevence výpadků, seznam kritických léčiv, oznámení 6 měsíců předem</th><td>farmaceutický balíček EU</td><td class="av-warn">dojednáno, čeká na vyhlášení</td><td>2028</td></tr>
+              <tr><th scope="row">Továrny na účinné látky v Evropě, společné nákupy, evropská preference v tendrech</th><td>Akt o kritických léčivech</td><td class="av-warn">dojednáno 12. 5. 2026; peníze nejisté</td><td>použitelnost neurčena; výroba v řádu let</td></tr>
+              <tr><th scope="row">Elektronický leták (ePI), piktogramy s alergeny</th><td>EMA, návrh roadmapy 20. 3. 2026; Boráň</td><td class="av-warn">dobrovolně od 4. čtvrtletí 2026 pro vakcíny, nejdřív anglicky</td><td>papírový leták zůstává; změna po roce 2028</td></tr>
+              <tr><th scope="row">Balení bez české příbalové informace u nedostupných léků</th><td>Boráň; praxe zvláštních léčebných programů</td><td class="av-good">děje se (tamoxifen, srpen 2026)</td><td>jen u dovážených náhrad</td></tr>
+              <tr><th scope="row">Umělá inteligence hlídá interakce v lékovém záznamu, léky z nemocnic v záznamu</th><td>SÚKL podle ČTK</td><td class="av-bad">slib; „čeká na technickou analýzu“</td><td>bez data; závisí na EZKartě ministerstva</td></tr>
+              <tr><th scope="row">Navýšení EU4Health 2027 o 15 %</th><td>výbor SANT Evropského parlamentu</td><td class="av-warn">stanovisko; hlasování 5. a 19. října</td><td>nepřímo; 12 centů na obyvatele</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zdravezpravy.cz 17. 9. 2026; Zdravotnický deník 12. 9., 13. 2. a 16. 3. 2026 a ČTK 17. 9. 2026; SÚKL, tisková zpráva 17. 9. 2026; MZ, Legislativní newsletter — září 2026; Rada EU 11. 12. 2025 a 12. 5. 2026; EMA, roadmapa ePI; programové prohlášení vlády z 5. 1. 2026 (viz <a href="clanek-barometr-politickych-prohlaseni.html">Barometr politických prohlášení</a>). Hodnocení ve sloupci „Stav“ je redakční.</p>
+      </figure>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Od české novely k evropskému balíčku: co už se stalo a co teprve má přijít</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1. 6. 2024</time>
+            <h4 class="av-timeline-title">Klíčová část české novely zákona o léčivech</h4>
+            <p class="av-timeline-desc">Zákon č. 456/2023 Sb.: příznak omezené dostupnosti se zákazem vývozu, 1–2 měsíce dodávek po ohlášení výpadku, hlášení zásob, rezerva u distributorů na pokyn ministerstva.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">11. 12. 2025 → 18. 3. 2026</time>
+            <h4 class="av-timeline-title">Farmaceutický balíček EU dojednán a potvrzen</h4>
+            <p class="av-timeline-desc">Předběžná dohoda Rady a Parlamentu; texty zveřejněny 6. 3. 2026, výbor SANT je schválil 18. 3. Formální přijetí a vyhlášení se čeká na podzim 2026.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">12. 5. 2026</time>
+            <h4 class="av-timeline-title">Dohoda o Aktu o kritických léčivech</h4>
+            <p class="av-timeline-desc">Strategické projekty, společné zadávání od pěti států, kritéria odolnosti v tendrech. Vyhlášení koncem roku 2026, datum použitelnosti se teprve určí.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-warn">
+            <time class="av-timeline-date">31. 8. 2026</time>
+            <h4 class="av-timeline-title">Zdravé paragrafy: česká novela stále před vnitřním připomínkovým řízením</h4>
+            <p class="av-timeline-desc">Rx online, rezervní zásoby a pravidla balíčku v jedné novele bez data; nový zákon o humánních léčivých přípravcích v „přípravných pracích“ s výhledem na vládu v 1. čtvrtletí 2027.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">17. 9. 2026</time>
+            <h4 class="av-timeline-title">SÚKL ustavuje Poradní orgán pro pacienty a spotřebitele</h4>
+            <p class="av-timeline-desc">Devět zástupců pacientských organizací a další účastníci; Boráň ohlašuje přípravu na „největší revizi legislativy za posledních 20 let“.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">5. 10. → 19. 10. 2026</time>
+            <h4 class="av-timeline-title">Evropský parlament hlasuje o rozpočtu 2027</h4>
+            <p class="av-timeline-desc">Rozpočtový výbor a plénum rozhodnou, zda EU4Health dostane 606,8 milionu eur podle Komise, nebo víc podle výboru SANT.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">4. čtvrtletí 2026</time>
+            <h4 class="av-timeline-title">Vyhlášení balíčku v Úředním věstníku; start ePI pro vakcíny</h4>
+            <p class="av-timeline-desc">Dnem vyhlášení začíná běžet 24 měsíců na použitelnost a českou transpozici. Centrálně registrované vakcíny se mohou dobrovolně přihlásit k elektronické informaci, zprvu anglicky.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">leden 2028</time>
+            <h4 class="av-timeline-title">Nejbližší možný start léků na recept poštou</h4>
+            <p class="av-timeline-desc">Termín, který podle Zdravotnického deníku „padl“ na jednání ministerstva s lékárníky; předpokládá, že novela projde celým legislativním procesem v roce 2027.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">podzim 2028</time>
+            <h4 class="av-timeline-title">Použitelnost farmaceutického balíčku a nový český zákon</h4>
+            <p class="av-timeline-desc">Plány prevence výpadků, seznam kritických léčiv, oznamování 6 měsíců předem, ePI; Česko musí mít nový zákon o humánních léčivých přípravcích.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zakonyprolidi.cz (456/2023 Sb.); Rada EU, tiskové zprávy 11. 12. 2025 a 12. 5. 2026; CMS Law a Osborne Clarke (texty 6. 3. 2026, SANT 18. 3. 2026, použitelnost 2028); MZ, Legislativní newsletter — září 2026; SÚKL 17. 9. 2026; Zdravotnický deník 12. 9. a 13. 2. 2026; EMA, návrh roadmapy ePI 20. 3. 2026.</p>
+      </figure>
+      <p>
+        Odpověď na sedmou otázku je tedy dvojí. Doopravdy se v nejbližším roce stane to, co už běží: SÚKL bude dál označovat léky příznakem omezené dostupnosti, ministerstvo bude dál vyhlašovat zvláštní léčebné programy na dovoz náhrad, lékárníci budou dál obvolávat distributory a pacienti budou dál dostávat cizí krabičky s českým lístkem od lékárnice. Poradní orgán na SÚKL bude mít o tom všem lepší informace než dřív, což není málo, ale není to změna pravidel. A to, co má pravidla změnit, má datum 2028 a předpokládá, že český zákonodárce stihne během dvou let přepsat zákon o léčivech od základu, když jeho novela s pouhými třemi tématy stojí od léta před prvním vnitřním připomínkovým kolem. Kdo se ptá, jestli to víme, dostane poctivou odpověď: víme, co je napsané, a víme, že mezi napsaným a vydaným lékem je v Česku dnes vzdálenost, kterou žádný ze zářijových slibů nezkracuje.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a odhadů">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Výroky ředitele SÚKL a účastníků ustavujícího setkání POPS přebíráme z článku zdravezpravy.cz a z tiskové zprávy SÚKL; redakce na setkání nebyla a citujeme jen věty, které oba zdroje uvádějí doslovně. Údaj „pět procent hospitalizací seniorů v EU“ je Boráňův bez uvedeného zdroje; stavíme vedle něj metaanalýzu, která měří nežádoucí účinky léků, ne jen interakce, a proto čísla nejsou přímo srovnatelná. Obsah farmaceutického balíčku a Aktu o kritických léčivech čteme ze shrnutí právních kanceláří a z tiskových zpráv, protože texty Rady nebyly z našeho prostředí dostupné; konečné znění se před vyhlášením ještě jazykově upravuje. Termíny hlasování Evropského parlamentu o rozpočtu 2027 a požadavek 15 % přebíráme ze Zdravotnického deníku. Počet aktivních výpadků 1 404 je vlastní výpočet HSPA Monitoru z otevřených dat SÚKL stažených 6. 9. 2026 podle metodiky popsané u indikátoru; feed se mění denně a číslo v den vydání může být jiné a podíl 5,4 % léků s omezenou dostupností má známé limity, protože feed SÚKL příznak přímo neobsahuje. Statut POPS a jmenný seznam jeho členů jsme nenašli. Rozdíl 12 centů na obyvatele je aritmetika redakce ze škrtu 54,5 milionu eur a 450 milionů obyvatel Unie, ne odhad dopadu.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, které s dostupností léků souvisejí</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=vypadky_leciv_aktivni"><strong>Aktivní výpadky léčiv hlášené SÚKL</strong></a> — 1 404 přípravků (ČR, 2026) · Procesy · nižší je lepší (signál neutrální; bez benchmarku) · viz <a href="clanek-tamoxifen-vypadek.html">tamoxifen</a> a <a href="clanek-kvetiapin-vypadek.html">kvetiapin</a></li>
+        <li><a href="indicator.html?id=lpod_share_critical"><strong>Podíl léčiv s omezenou dostupností (LPOD)</strong></a> — 5,4 % registrovaných přípravků (ČR, 2026) · Výstupy · nižší je lepší (signál špatný; OECD 4, EU 4,5)</li>
+        <li><a href="indicator.html?id=nevydana_baleni_leku_pct"><strong>Nevydaná balení léků (rozdíl předpis − výdej na eRecept)</strong></a> — 3,8 % (ČR, 2025) · Procesy · nižší je lepší (signál neutrální) · viz <a href="clanek-nevydana-baleni-leku.html">6,5 milionu balení, která lékárny nevydaly</a></li>
+        <li><a href="indicator.html?id=podil_vydaje_leky"><strong>Podíl výdajů zdravotních pojišťoven na léky</strong></a> — 9,5 % (ČR, 2024) · Struktury · závisí na kontextu (signál neutrální)</li>
+        <li><a href="indicator.html?id=farmaceuti_per_100k"><strong>Praktikující farmaceuti na 100 000 obyvatel</strong></a> — 76 (ČR, 2023) · Struktury · vyšší je lepší (signál špatný; OECD 86) · viz <a href="clanek-farmaceuti-pracovni-sila.html">hodně lékáren, málo lékárníků</a></li>
+        <li><a href="indicator.html?id=lekarny_per_100k"><strong>Hustota lékáren na 100 000 obyvatel</strong></a> — 25,07 (ČR, 2026) · Struktury · závisí na kontextu (signál neutrální)</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Zprávy, ze kterých článek vychází</h5>
+        <ul class="article-sources-list">
+          <li><strong>zdravezpravy.cz — SÚKL vtáhne do dění pacienty. A chystá se na revizi lékové legislativy</strong>, 17. 9. 2026 (POPS, devět zástupců pacientských organizací; citace T. Boráně, R. Břečťana a D. Koláře; plány: příbalová informace u nedostupných léků, prodej mimo lékárny, online výdej na předpis, piktogramy s alergeny, compassionate use, repurposing; ePI). <a href="https://www.zdravezpravy.cz/2026/09/17/sukl-vtahne-do-deni-pacienty-a-chysta-se-na-revizi-lekove-legislativy/" target="_blank" rel="noopener">zdravezpravy.cz ↗</a></li>
+          <li><strong>Zdravotnický deník — Léků je málo a EU škrtá rozpočet. Europoslanci varují před prázdnými regály</strong> (Nicole Verbeeck), 12. 9. 2026 (EU4Health 661,3 → 606,8 mil. EUR, škrt cca 1 mld EUR v revizi 2024, požadavek výboru SANT +15 %, tři pilíře, 20 % na prevenci, zpravodaj M. Hadjipantela, 87 pozměňovacích návrhů, hlasování 5. 10. a 19. 10.). <a href="https://www.zdravotnickydenik.cz/2026/09/eu-skrta-rozpocet-europoslanci-varuji-pred-prazdnymi-regaly/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví — Legislativní newsletter – září 2026 (Zdravé paragrafy, vydání 11)</strong>, stav k 31. 8. 2026: novela zákona o léčivech („bude mimo jiné reflektovat na zavedení Rx online nebo na úpravu systému rezervních zásob…“, „ve fázi před vnitřním připomínkovým řízením“), návrh zákona o humánních léčivých přípravcích („přípravné práce“), novela vyhlášky č. 377/2022 Sb. (stanovisko komise LRV 3. 8. 2026). Náš rozbor: <a href="clanek-legislativni-newsletter-mz-zari-2026.html">Jedenáct předpisů, o kterých VeKLEP mlčí</a>. <a href="https://mzd.gov.cz/legislativni-newsletter-zari-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Zdravotnický deník / ČTK — Plán SÚKL: Kombinace léků pohlídá AI. Do záznamu přibude medikace z nemocnice</strong>, 17. 9. 2026 (citace „Naším ideálem bylo do budoucna mít v lékovém záznamu nejen léky vydávané na předpis, ale i léky podávané za hospitalizace“; 12 000 chybných receptů za 15 dní v dubnu 2025, 372 nevhodných interakcí; funkcionality čekají na technickou analýzu). <a href="https://www.zdravotnickydenik.cz/2026/09/erecept-umela-inteligence-sukl-leky-z-nemocnic/" target="_blank" rel="noopener">zdravotnickydenik.cz ↗</a></li>
+          <li><strong>Zdravotnický deník — Léky na recept poštou se blíží. Lékárníci mají výhrady, padl možný termín</strong>, 13. 2. 2026 (možná účinnost leden 2028; požadavky ČLnK; citace A. Krebse) a <strong>Většina Čechů chce léky na recept do boxů. Ministerstvo sdělilo, o které přípravky by šlo</strong>, 16. 3. 2026 (Nielsen, 1 045 respondentů 18–70 let: 70 % / 16 % / 80 % / 51 % boxy; stabilizovaná chronická onemocnění ano, onkologika ne). <a href="https://www.zdravotnickydenik.cz/2026/02/rx-online-krebs/" target="_blank" rel="noopener">13. 2. ↗</a> · <a href="https://www.zdravotnickydenik.cz/2026/03/leky-na-predpis-do-boxu/" target="_blank" rel="noopener">16. 3. ↗</a></li>
+          <li><strong>ČT24 — Omezená dostupnost neznamená, že lék pro pacienty není, říká ředitel SÚKL</strong>, 11. 11. 2024 (citace T. Boráně k příznaku LPOD; A. Krebs: část výrobců krátkodobé výpadky nehlásí). <a href="https://ct24.ceskatelevize.cz/clanek/domaci/zive-sukl-a-ministerstvo-zdravotnictvi-o-dostupnosti-leku-355213" target="_blank" rel="noopener">ct24.ceskatelevize.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">SÚKL, ministerstvo zdravotnictví a zákon</h5>
+        <ul class="article-sources-list">
+          <li><strong>SÚKL — Pacienti jako partneři bezpečné léčby</strong>, tisková zpráva 17. 9. 2026 (ustavující jednání POPS; memoranda se 45 pacientskými organizacemi; citace T. Boráně, R. Břečťana, M. Sehnoutkové, D. Koláře, P. Adámkové, L. Růžičkové). <a href="https://sukl.gov.cz/media/sukl-pro-media/pacienti-jako-partneri-bezpecne-lecby/" target="_blank" rel="noopener">sukl.gov.cz ↗</a></li>
+          <li><strong>SÚKL — Dostupnost léčiv</strong> (stránka pro pacientské organizace: definice omezené dostupnosti, objednávání lékáren v obvyklém týdenním objemu, postup pacienta při nedostupnosti, infolinka 272 185 333). <a href="https://sukl.gov.cz/pacientske-organizace/dostupnost-leciv/" target="_blank" rel="noopener">sukl.gov.cz ↗</a></li>
+          <li><strong>Zákon č. 456/2023 Sb.</strong>, kterým se mění zákon č. 378/2007 Sb., o léčivech (vyhlášen 20. 12. 2023, účinnost 1. 1. 2024; ustanovení o omezené dostupnosti od 1. 6. 2024). <a href="https://www.zakonyprolidi.cz/cs/2023-456" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví — 1. června vstupuje v účinnost zásadní část Zákona o léčivech</strong>, tisková zpráva 29. 5. 2024 (1–2 průměrné měsíční dodávky; příznak „omezená dostupnost“ a zákaz distribuce do zahraničí; hlášení zásob; lékárny se zásobou v eReceptu) a <strong>Vláda schválila novelu zákona o léčivech, která zásadně pomůže odolnosti českého lékového trhu</strong>, 14. 6. 2023 (citace V. Válka; měsíční zásoby u distributorů na pokyn ministerstva). <a href="https://mzd.gov.cz/tiskove-centrum-mz/1-cervna-vstupuje-v-ucinnost-zasadni-cast-zakona-o-lecivech-nove-povinnosti-a-nastroje-ziskaji-drzitele-rozhodnuti-o-registraci-distributori-lekarny-ministerstvo-zdravotnictvi-i-sukl/" target="_blank" rel="noopener">29. 5. 2024 ↗</a> · <a href="https://mzd.gov.cz/tiskove-centrum-mz/vlada-schvalila-novelu-zakona-o-lecivech-ktera-zasadne-pomuze-odolnosti-ceskeho-lekoveho-trhu/" target="_blank" rel="noopener">14. 6. 2023 ↗</a></li>
+          <li><strong>Programové prohlášení vlády z 5. 1. 2026</strong> — slib „robustních rezervních zásob a tvrdého postihu nedovolených reexportů“, sledovaný v <a href="clanek-barometr-politickych-prohlaseni.html">Barometru politických prohlášení</a>.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evropská unie</h5>
+        <ul class="article-sources-list">
+          <li><strong>Rada EU — „Pharma package“: Council and Parliament reach a deal on new rules for a fairer and more competitive EU pharmaceutical sector</strong>, tisková zpráva 11. 12. 2025; <strong>Critical medicines act: Council and Parliament reach provisional deal</strong>, 12. 5. 2026. Servery Rady vracely z prostředí redakce chybu 403; obsah dohod čerpáme ze shrnutí níže. <a href="https://www.consilium.europa.eu/en/press/press-releases/2025/12/11/pharma-package-council-and-parliament-reach-a-deal-on-new-rules-for-a-fairer-and-more-competitive-eu-pharmaceutical-sector/" target="_blank" rel="noopener">11. 12. 2025 ↗</a> · <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/12/critical-medicines-act-council-and-parliament-reach-provisional-deal/" target="_blank" rel="noopener">12. 5. 2026 ↗</a></li>
+          <li><strong>Osborne Clarke — EU overhauls pharmaceutical law with sweeping 2026 reform package</strong> (8 let ochrany dat, tržní ochrana 1 rok s prodlouženími, strop 11 let; povinné plány prevence výpadků pro Rx; unijní seznam kritických léčiv; použitelnost 2028); <strong>CMS Law — EU Pharmaceutical Package: The start of the largest reform in over two decades</strong> (dohoda 12/2025, texty 6. 3. 2026, SANT 18. 3. 2026, plná použitelnost 2028); <strong>McCann FitzGerald — EU Critical Medicines Act: political agreement reached</strong> (společné zadávání od 5 států místo 9, kritéria odolnosti a evropské preference, strategické projekty, Úřední věstník konec 2026). <a href="https://www.osborneclarke.com/insights/eu-overhauls-pharmaceutical-law-sweeping-2026-reform-package" target="_blank" rel="noopener">Osborne Clarke ↗</a> · <a href="https://cms.law/en/int/legal-updates/EU-Pharmaceutical-Package-The-start-of-the-largest-reform-in-over-two-decades" target="_blank" rel="noopener">CMS ↗</a> · <a href="https://www.mccannfitzgerald.com/knowledge/pharma-and-life-sciences/eu-critical-medicines-act-political-agreement-reached-what-life-sciences-companies-need-to-know" target="_blank" rel="noopener">McCann FitzGerald ↗</a></li>
+          <li><strong>Evropská komise — EU4Health programme 2021–2027</strong> (5,3 mld EUR, po revizi VFR 4,4 mld EUR; společné nákupy, zásoby, digitalizace, onkologie). <a href="https://health.ec.europa.eu/funding/eu4health-programme-2021-2027-vision-healthier-european-union_en" target="_blank" rel="noopener">health.ec.europa.eu ↗</a></li>
+          <li><strong>European Cancer Organisation — Flash briefing: proposed new EU budget 2028–2034</strong> (červenec 2025: 2 bil. EUR; Evropský fond pro konkurenceschopnost 410 mld EUR slučující 14 nástrojů včetně EU4Health; okno „Health, Biotech, Bioeconomy and Resilience“) a <strong>CPME — Health is a strategic investment for Europe</strong>, 4. 5. 2026 (pozice Evropského parlamentu: 10 mld EUR na samostatný EU4Health). <a href="https://www.europeancancer.org/policy/flash-briefing-european-commission-publish-proposed-new-eu-budget-2028-2034.html" target="_blank" rel="noopener">ECO ↗</a> · <a href="https://www.cpme.eu/news/health-is-a-strategic-investment-for-europe-member-states-must-match-european-parliaments-ambition-for-eu-health-budget" target="_blank" rel="noopener">CPME ↗</a></li>
+          <li><strong>EMA — Electronic product information (ePI)</strong> (pilot 7/2023–8/2024 v DK, NL, ES a SE; návrh roadmapy 20. 3. 2026) a <strong>ePI implementation roadmap [DRAFT]</strong> (CAP go-live od 4. čtvrtletí 2026: vakcíny ATC J07, poté onkologika L01/L04; zprvu anglicky; centrální úložiště ePI podle nové legislativy). <a href="https://www.ema.europa.eu/en/human-regulatory-overview/marketing-authorisation/product-information-requirements/electronic-product-information-epi" target="_blank" rel="noopener">ema.europa.eu ↗</a> · <a href="https://www.ema.europa.eu/en/documents/other/electronic-product-information-epi-roadmap_en.pdf" target="_blank" rel="noopener">roadmapa (PDF) ↗</a></li>
+          <li><strong>PGEU — Medicine shortages persist across Europe as pharmacies absorb growing pressure</strong>, tisková zpráva k Medicine Shortages Report 2025 (27 zemí EU a EFTA; 96 % zemí s výpadky, 70 % stagnace, více než 600 léků ve více než třetině zemí, 12 hodin týdně, 9 z 10 zemí přerušení léčby, 15 % zemí s terapeutickou záměnou lékárníkem; citace M. Konstantyho). <a href="https://www.pgeu.eu/publications/pgeu-press-release-medicine-shortages-persist-across-europe-as-pharmacies-absorb-growing-pressure-new-pgeu-report-shows/" target="_blank" rel="noopener">pgeu.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Phuong JM, Penm J, Chaar B, Oldfield LD, Moles R. The impacts of medication shortages on patient outcomes: A scoping review. PLoS One. 2019;14(5):e0215837.</strong> DOI 10.1371/journal.pone.0215837. PMID 31050671. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1371/journal.pone.0215837" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Pandey AK, Cohn J, Nampoothiri V, et al. A systematic review of antibiotic drug shortages and the strategies employed for managing these shortages. Clin Microbiol Infect. 2025;31(3):345–353.</strong> DOI 10.1016/j.cmi.2024.09.023. PMID 39341418. 74 studií. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1016/j.cmi.2024.09.023" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Oscanoa TJ, Lizaraso F, Carvajal A. Hospital admissions due to adverse drug reactions in the elderly. A meta-analysis. Eur J Clin Pharmacol. 2017;73(6):759–770.</strong> DOI 10.1007/s00228-017-2225-3. PMID 28251277. 42 studií, 8,7 % (95% CI 7,6–9,8). Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1007/s00228-017-2225-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Munshi RM, Ni Sheachnasaigh E, Strugaru M, Olawoye F, Comiskey C, Grimes T. The association between age and medication-related hospital admission in adults: a systematic review and meta-analysis. Int J Clin Pharm. 2026;48(4):1267–1283.</strong> DOI 10.1007/s11096-026-02167-3. PMID 42240819. 50 studií, 210 514 osob, RR 1,64 (95% CI 1,15–2,35). Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1007/s11096-026-02167-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Mekonnen AB, Redley B, de Courten B, Manias E. Potentially inappropriate prescribing and its associations with health-related and system-related outcomes in hospitalised older adults: A systematic review and meta-analysis. Br J Clin Pharmacol. 2021;87(11):4150–4172.</strong> DOI 10.1111/bcp.14870. PMID 34008195. 63 studií, AOR 1,91 pro hospitalizace kvůli lékové příhodě. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1111/bcp.14870" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Persaud N, Workentin A, Rizvi A, et al. Interventions to Address Potentially Inappropriate Prescribing for Older Primary Care Patients: A Systematic Review and Meta-Analysis. JAMA Netw Open. 2025;8(6):e2517965.</strong> DOI 10.1001/jamanetworkopen.2025.17965. PMID 40577011. 118 RCT, 417 412 pacientů; hospitalizace RR 0,95 (0,89–1,02). Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1001/jamanetworkopen.2025.17965" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Khalil H, Bell B, Chambers H, Sheikh A, Avery AJ. Professional, structural and organisational interventions in primary care for reducing medication errors. Cochrane Database Syst Rev. 2017;10:CD003942.</strong> DOI 10.1002/14651858.CD003942.pub3. PMID 28977687. 30 studií, 169 969 osob. Ověřeno v PubMed 21. 9. 2026. <a href="https://doi.org/10.1002/14651858.CD003942.pub3" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-tamoxifen-vypadek.html">Základní lék na rakovinu prsu vypadl do léta 2027. Stát skládá balení z blistrů</a>, <a href="clanek-kvetiapin-vypadek.html">Kvetiapin s prodlouženým uvolňováním vypadl celý</a> a <a href="clanek-esencialni-antiinfektiva.html">Sedmdesát děr v seznamu nepostradatelných léků proti infekcím</a> — tři výpadky roku 2026 zblízka.</li>
+          <li><a href="clanek-legislativni-newsletter-mz-zari-2026.html">Jedenáct předpisů, o kterých VeKLEP mlčí</a> — rozbor zářijových Zdravých paragrafů; <a href="clanek-barometr-politickych-prohlaseni.html">Barometr politických prohlášení</a> — sliby vlády včetně rezervních zásob léků.</li>
+          <li><a href="clanek-nevydana-baleni-leku.html">Loni se předepsalo o 6,5 milionu balení léků víc, než lékárny vydaly</a>, <a href="clanek-polypragmazie-senioru.html">Polypragmazie u českých seniorů</a>, <a href="clanek-preskripce-praktici-2026.html">Konec obíhání kvůli receptu</a> a <a href="clanek-ezkarta-ehealth.html">Šedesát dva ze sta: EZKarta v telefonu</a> — lékový záznam a to, co v něm chybí.</li>
+          <li><a href="clanek-hta-jca-eu-2026.html">Joint Clinical Assessment startuje</a> — druhá evropská léková novinka roku 2026, hodnocení zdravotnických technologií; <a href="clanek-stret-zajmu-vyziva-kojencu.html">Kdo radí o tom, čím krmit české novorozence</a> — jak se v jiném poradním orgánu tři roky bojovalo o střet zájmů.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Citace ze setkání SÚKL 17. 9. 2026 přebíráme z článku zdravezpravy.cz a z tiskové zprávy ústavu; z reportáže Zdravotnického deníku z Bruselu přebíráme rozpočtová čísla, termíny hlasování a požadavek výboru SANT. Obsah farmaceutického balíčku EU a Aktu o kritických léčivech popisujeme podle tiskových zpráv Rady a shrnutí právních kanceláří, nikoli podle konečného znění, které se před vyhlášením ještě upravuje; lhůty použitelnosti odvozujeme z pravidla 24 měsíců od vstupu v platnost. Legislativní stav českých předpisů je podle Zdravých paragrafů k 31. 8. 2026 a podle VeKLEP k 18. 9. 2026 (viz náš rozbor newsletteru). Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání; počet aktivních výpadků je redakční výpočet z otevřených dat SÚKL.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
