@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-21
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-21
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "Doprovodny clanek k novemu indikatoru cdz_pacienti_osetreni (Vystupy · Dusevni zdravi · Vyuziti komunitni pece o dusevni zdravi, framework hspa, dimension dostupnost, direction higher_is_better, signal neutral — benchmark je prazdny, protoze harmonizovany mezinarodni ukazatel neexistuje; referencni ramec je sit 100 CDZ podle NAPDZ 2020–2030 a 1 CDZ na 100 000 obyvatel podle Strategie reformy psychiatricke pece 2013). Vytvoreno z bloku F rutiny 2026-09-21 (pondeli = INDICATOR-ADD); discovery 2026-09-21 nenaslo nepokryte HOT deni. PRIMARNI ZDROJ HODNOTY: UZIS CR, NZIS Open, sada OIS-04-19 'Pacienti v centrech dusevniho zdravi' (NISDZ, zdrojovy registr NRHZS; CSV + CSVW metadata, dc:modified 2026-02-27; katalog data.gov.cz: poskytovatel MZ CR, licence CC BY 4.0, obdobi 2018-01-01 az 2024-12-31, rocni aktualizace), stazeno a secteno 21. 9. 2026. ROCNI HODNOTA = soucet vsech radku sady za rok (vsech 5 typu center): 2018 = 289 · 2019 = 1 455 · 2020 = 3 229 · 2021 = 6 259 · 2022 = 7 954 · 2023 = 8 481 · 2024 = 9 156. Mezirocne 2023->2024 +675 (+8,0 %); 2018->2024 x31,7; tempo rustu 2019 +404 % · 2020 +122 % · 2021 +94 % · 2022 +27 % · 2023 +6,6 % · 2024 +8,0 %. TYPY CENTER 2024 (sloupec CDZ = kod odbornosti; nazvy podle ciselniku smluvnich odbornosti VZP CR, stranka plus.vzp.cz bonifikace od 1. 1. 2026, overeno 21. 9. 2026): 350 CDZ pro osoby se zavaznym dusevnim onemocnenim 7 070 (77,2 %) · 922 CDZ pro adiktologicke pacienty 1 112 · 360 CDZ pro deti a adolescenty 592 · 355 forenzni multidisciplinarni tym 296 · 370 multidisciplinarni tym pro seniory 86. Rada odbornosti 350: 289 · 1 455 · 3 162 · 5 613 · 6 188 · 6 397 · 7 070; typy 360 a 922 v sade od 2020, 355 a 370 od 2021. NA 100 000 OBYVATEL 2024 = 84,0 (jmenovatel Eurostat demo_r_pjanaggr3, CZ k 1. 1. 2024 = 10 900 555, stazeno 21. 9. 2026 pres API). KRAJE 2024 (bydliste pacienta, vsechny typy, na 100 000 ob. / pocet): Karlovarsky 172,8/510 · Praha 121,0/1 676 · Plzensky 115,4/708 · Pardubicky 100,5/533 · Kralovehradecky 92,5/515 · Ustecky 90,9/737 · Zlinsky 87,3/507 · Stredocesky 82,5/1 201 · Jihocesky 80,7/528 · Moravskoslezsky 77,8/925 · Olomoucky 63,8/404 · Vysocina 48,1/249 · Liberecky 35,1/158 · Jihomoravsky 32,4/397; CZ999 nezarazeno 108. Pomer KVK/JMK = 5,3. Jen odbornost 350 na 100 000: KVK 160,3 · PAK 99,1 · PLK 91,0 · KHK 90,0 · ZLK 87,0 · JHC 76,2 · PHA 70,6 · MSK 70,0 · OLK 62,3 · STC 48,8 · VYS 47,3 · LBK 31,9 · JMK 31,5 · ULK 29,6 (ULK: 240 z 737 v odbornosti 350, 497 v ostatnich). Krajske populace Eurostat k 1. 1. 2024: PHA 1 384 732 · STC 1 455 940 · JHC 654 505 · PLK 613 374 · KVK 295 077 · ULK 811 169 · LBK 450 728 · KHK 556 949 · PAK 530 560 · VYS 517 960 · JMK 1 226 749 · OLK 632 864 · ZLK 580 744 · MSK 1 189 204. VEK 2024: do 19 let 1 070 (11,7 %) · 20–29 1 578 · 30–49 3 927 (42,9 %) · 50–64 1 866 · 65+ 715 (7,8 %); zeny 4 709 (51,4 %), muzi 4 447. ORIENTACNI VYTIZENI: 7 070 / ~40 center pro dospele (indikator centra_dusevniho_zdravi_per_100k, orientacni) = 177 pacientu na centrum. SIT: 5 pilotnich CDZ od zari 2018, 30 z vyzev OPZ do 2021, ~40 pro dospele 2024 (existujici karta), 50 center koncem 2025 z toho 39 pro dospele se SMI (MZ CR TZ 9. 6. 2026, citovano v clanku cdz-iv-vyzva-207-milionu), 4. vyzva na min. 15 novych center vyhlasena 15. 9. 2026 (MZ CR TZ; discovery 2026-09-21). NORMA: NAPDZ 2020–2030 sit 100 CDZ (30 z ESIF do 2022, 100 do 2030), Strategie reformy psychiatricke pece 2013: 1 CDZ na cca 100 000 ob. (nekde 80 000) — obe v repu data/plneni-dusevni-zdravi.json. Standard CDZ-SMI Vestnik MZ CR castka 8/2021 (PDF stazeno 21. 9. 2026, pdftotext): CDZ-A 'fungujici v prirozenem regionu s cca 100 000 obyvateli' — min. personal zdravotni sluzby celkem 9,0 uvazku (psychiatr 1,0; sestry 7,0), socialni sluzby celkem 7,0 uvazku. NKU TZ 7. 10. 2024 (kontrolni akce 23/22): koncem 2023 v provozu necela tretina ze sta planovanych center, chybi vic nez polovina potrebnych specialistu (prevzato z existujici karty a clanku cdz-iv). LEGISLATIVA: zakon c. 372/2011 Sb. § 44b–44d (CDZ, pet druhu center v § 44c odst. 3), zakon c. 108/2006 Sb. § 70a; uhradova vyhlaska 2026 = vyhlaska c. 432/2025 Sb. (PDF z mzd.gov.cz stazeno 21. 9. 2026): bod 7.4 pism. a) — odbornosti 350, 355, 360, 370, 920, 922 a 935 hrazeny hodnotou bodu podle casti A bodu 1 pism. a) prilohy c. 3; koeficient K_CDZ v K_Trans pro poskytovatele s transformacnim planem: 0,02 (350/360/370/922), 0,04 (355), 0,06 (355 + nektera z ostatnich). LITERATURA (vse overeno v PubMed 21. 9. 2026, tvrzeni z abstraktu): Winkler P et al. Int Rev Psychiatry 2026, doi 10.1080/09540261.2026.2619456, PMID 41579112 — case study reformy: vznik CDZ, expanze komunitnich sluzeb, pokles dlouhodobych hospitalizaci, bez cisel v abstraktu. Winkler P, Koeser L, Kondratova L et al. Lancet Psychiatry 2018;5(12):1023–1031, doi 10.1016/S2215-0366(18)30388-2, PMID 30415938 — n = 115 (35 komunitni, 80 hospitalizovani), 12 mesicu 2016; naklady 8 503 vs 16 425 EUR (rozdil 7 922, 95% CI 4 497–11 346); QALY 0,77 vs 0,80 (rozdil 0,03, 95% CI −0,04 az 0,10, nevyznamne); pravdepodobnost nakladove efektivity >= 97 %. Broulikova HM, Dlouhy M, Winkler P. Psychiatr Q 2020;91(1):113–125, doi 10.1007/s11126-019-09688-3, PMID 31773471 — vydaje 2015 = 13,7 mld. Kc = 4,08 %. Dieterich M et al. Cochrane 2017;1:CD007906, doi 10.1002/14651858.CD007906.pub3, PMID 28067944 — 40 RCT, n = 7 524, ICM vs standard MD −0,86 dne/mesic (95% CI −1,37 az −0,34), nizka jistota. Malone D et al. Cochrane 2007;(3):CD000270, doi 10.1002/14651858.CD000270.pub2, PMID 17636625 — 3 RCT, n = 587, hospitalizace RR 0,81 (95% CI 0,7–1,0), NNT 17. Shields-Zeeman L et al. BMJ Glob Health 2025;10(10), doi 10.1136/bmjgh-2024-018594, PMID 41130742 — RECOVER-E, 5 RCT (BG, HR, ME, MK, RO), n = 931, WHODAS −4,55 (p < 0,001), QoL +0,07 za 18 mesicu. Winkler P et al. Br J Psychiatry 2016;208(5):421–428, doi 10.1192/bjp.bp.114.161943, PMID 27143007 — systematicky prehled 23 kohort: bezdomovectvi a vezeni po deinstitucionalizaci sporadicke. Consensus kontrola 21. 9. 2026 (dotazy 'community mental health teams / ACT effect on hospitalisation SMI' a 'deinstitutionalisation CEE'): kandidati Dieterich 2017, Malone 2007, Shields-Zeeman 2025, Winkler 2016 — vsechny nasledne overeny v PubMed; evidence konzistentne ve prospech komunitnich tymu u hospitalizaci (Malone RR 0,81; Dieterich mala velikost ucinku, nizka jistota). CAVEATY: unikatnost jen uvnitr bunky (rok × typ × kraj × pohlavi × vek) — soucet pres typy/kraje = horni odhad; rust rady = hlavne rust site; uzemi = bydliste pacienta; bez vztahu k prevalenci; jen vykazana hrazena pece; pet typu center s ruznymi standardy; bez vysledku pece; posledni rok 2024. Petr z Brna je ilustrativni postava. published:false, robots index,follow (publikacni cron jen povysi status na review-pending a pridel cislo). Ceka na schvaleni redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devět tisíc lidí ročně. Centra duševního zdraví ošetřila v roce 2024 třicetkrát víc pacientů než na startu reformy, Karlovarský kraj pětkrát víc na obyvatele než Jihomoravský · HSPA Monitor</title>
+<meta name="description" content="Centra duševního zdraví, páteř reformy psychiatrické péče, ošetřila v roce 2024 celkem 9 156 pacientů — 289 jich bylo v roce 2018, kdy se první otevírala. Na 100 000 obyvatel to je 84 lidí, v Karlovarském kraji 173, v Jihomoravském 32. Síť má být stovka center, koncem roku 2025 jich bylo padesát. Nový indikátor HSPA Monitoru z otevřených dat ÚZIS.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Devět tisíc lidí ročně. Centra duševního zdraví ošetřila v roce 2024 třicetkrát víc pacientů než na startu reformy, Karlovarský kraj pětkrát víc na obyvatele než Jihomoravský">
+<meta property="og:description" content="9 156 pacientů v roce 2024 proti 289 v roce 2018. Na 100 000 obyvatel 84 lidí, mezi kraji rozdíl 5,3násobný. Síť má být stovka center, je jich padesát. Nový indikátor HSPA Monitoru.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-22">
+<meta property="article:section" content="Duševní zdraví">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Duševní zdraví</span>
+        <span class="article-tag article-tag-muted">centra duševního zdraví · reforma psychiatrie · komunitní péče · regionální nerovnosti</span>
+      </div>
+      <h1 class="article-title">Devět tisíc lidí ročně. Centra duševního zdraví ošetřila v roce 2024 třicetkrát víc pacientů než na startu reformy, Karlovarský kraj pětkrát víc na obyvatele než Jihomoravský</h1>
+      <p class="article-deck">
+        Centra duševního zdraví, páteř reformy psychiatrické péče, ošetřila v roce 2024 celkem <strong>9 156 pacientů</strong> — 289 jich bylo v roce 2018, kdy se první otevírala. Na 100 000 obyvatel to je 84 lidí, v Karlovarském kraji 173, v Jihomoravském 32. Síť má být stovka center, koncem roku 2025 jich bylo padesát. Nový indikátor HSPA Monitoru z otevřených dat ÚZIS.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">22. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Petr z Brna, 34 let, má diagnózu schizofrenie od svých třiadvaceti. Za jedenáct let byl pětkrát hospitalizován v psychiatrické nemocnici, naposledy loni na tři měsíce. Pokaždé se vrátil do bytu, kde nikdo nekontroloval, jestli bere léky, a k ambulantnímu psychiatrovi, který má na kontrolu patnáct minut jednou za dva měsíce. Když mu sestra při propouštění vyprávěla o centrech duševního zdraví, kde tým za člověkem jezdí domů, pomůže s úřady a zavolá, když se týden neozve, znělo to jako služba pro někoho jiného. Jihomoravský kraj měl v roce 2024 v péči center 397 svých obyvatel, 32 na 100 000 — nejméně ze všech krajů.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Pacienti v centrech duševního zdraví: čtyři čísla</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="9156">9 156</span>
+            <span class="av-counter-label">unikátních pacientů ošetřených v centrech duševního zdraví, 2024</span>
+            <span class="av-counter-foot">V roce 2018 jich bylo 289. Meziročně +8,0 %</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="7070">7 070</span>
+            <span class="av-counter-label">z nich v centrech pro osoby se závažným duševním onemocněním</span>
+            <span class="av-counter-foot">77,2 % všech; zbytek adiktologická, dětská, forenzní a seniorská centra</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="5.3" data-decimals="1" data-suffix="×">5,3×</span>
+            <span class="av-counter-label">rozdíl mezi krajem s nejvíc a nejméně pacienty na obyvatele</span>
+            <span class="av-counter-foot">Karlovarský 172,8 vs. Jihomoravský 32,4 na 100 000 obyvatel</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="50" data-suffix=" ze 100">50 ze 100</span>
+            <span class="av-counter-label">center, která slíbil Národní akční plán pro duševní zdraví do roku 2030</span>
+            <span class="av-counter-foot">Stav koncem roku 2025 podle MZ ČR; 39 z nich pro dospělé</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NZIS Open — sada OIS-04-19 „Pacienti v centrech duševního zdraví“ (Národní informační systém péče o duševní zdraví, zdrojový registr NRHZS), staženo a sečteno 21. 9. 2026; krajské přepočty na obyvatelstvo k 1. 1. 2024 podle Eurostatu (demo_r_pjanaggr3). Počet center: MZ ČR, tisková zpráva 9. 6. 2026; cíl 100 center: Národní akční plán pro duševní zdraví 2020–2030.</p>
+      </figure>
+
+      <h3>Co ukazatel měří — a co ne</h3>
+      <p>
+        Reforma psychiatrické péče má od roku 2013 jeden hmatatelný cíl: přesunout péči o lidi s vážným duševním onemocněním z velkých psychiatrických nemocnic do komunity. Nástrojem má být síť center duševního zdraví (CDZ) — multidisciplinárních týmů psychiatra, sester, psychologa, sociálních pracovníků a peer konzultanta, které podle § 44b až 44d zákona o zdravotních službách poskytují péči lidem v jejich přirozeném prostředí. HSPA Monitor dosud sledoval jen to, <a href="indicator.html?id=centra_dusevniho_zdravi_per_100k">kolik center existuje</a>: 0,37 na 100 000 obyvatel v roce 2024, tedy zhruba třetina cílové sítě. Nový indikátor doplňuje druhou polovinu odpovědi: <strong>kolik lidí se do komunitní péče skutečně dostalo</strong>.
+      </p>
+      <p>
+        Číslo publikuje ÚZIS ČR jako otevřená data v sadě OIS-04-19. Za každý rok uvádí počet unikátních pacientů, jejichž péči některé centrum vykázalo zdravotní pojišťovně, v členění podle typu centra, kraje bydliště, pohlaví a pětileté věkové skupiny. Typů je pět a sada je vede pod kódy odborností ze seznamu zdravotních výkonů: centrum pro osoby se závažným duševním onemocněním (350), forenzní tým pro lidi s nařízeným ochranným léčením (355), centrum pro děti a adolescenty (360), tým pro seniory (370) a centrum pro adiktologické pacienty (922). Roční hodnota indikátoru je součet za všech pět typů.
+      </p>
+      <p>
+        Dvě věci je třeba říct hned. Zaprvé je „unikátní pacient“ unikátní jen uvnitř jedné buňky tabulky: kdo byl v témže roce v péči dvou typů center nebo se přestěhoval do jiného kraje, může být započítán dvakrát, takže celostátní součet je horní odhad. Zadruhé sada nerozliší jednotlivá centra, jen jejich typ — takže z ní nejde přečíst, kolik center v kraji funguje, ani kolik pacientů připadá na jedno. Obojí je v metodické kartě zapsáno a obojí hraje ve prospěch systému, ne proti němu.
+      </p>
+
+      <h3>Stav v Česku: od 289 k 9 156, a tempo klesá</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Unikátní pacienti v centrech duševního zdraví, celá ČR, všech pět typů center</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" pacientů" data-max="10000">
+          <li class="av-bar-row" data-value="289" data-label="2018" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="1455" data-label="2019" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="3229" data-label="2020" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="6259" data-label="2021" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="7954" data-label="2022" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="8481" data-label="2023" data-accent="good"></li>
+          <li class="av-bar-row" data-value="9156" data-label="2024" data-accent="good"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NZIS Open, sada OIS-04-19; roční hodnota = součet všech řádků sady za rok, staženo a sečteno 21. 9. 2026. Rok 2018 zahrnuje jen pilotní centra otevřená v jeho druhé polovině.</p>
+      </figure>
+
+      <p>
+        Řada má tvar, který se dal čekat: prudký start a zpomalení. V roce 2018, kdy se v září otevřelo prvních pět pilotních center, prošlo jejich péčí 289 lidí. V roce 2019 to bylo 1 455, v roce 2020 už 3 229 a v roce 2021, kdy dobíhaly tři výzvy z Operačního programu Zaměstnanost na třicet center, <strong>6 259</strong>. Pak se růst zlomil: +27 % v roce 2022, +6,6 % v roce 2023 a +8,0 % v roce 2024, kdy centra ošetřila 9 156 pacientů. Z toho 7 070 lidí se závažným duševním onemocněním, tedy cílová skupina, kvůli které reforma vznikla; dalších 1 112 v adiktologických centrech, 592 v centrech pro děti a adolescenty, 296 ve forenzních týmech a 86 v týmech pro seniory.
+      </p>
+      <p>
+        Přepočteno na obyvatelstvo jde o 84 pacientů na 100 000 obyvatel. Většina je v produktivním věku — 42,9 % má mezi 30 a 49 lety, lidí nad 65 let je 7,8 %, dětí a mladistvých do 19 let 11,7 %. Ženy mírně převažují (51,4 %).
+      </p>
+
+      <h3>Proč růst zpomalil: pacientů přibývá tam, kde přibývají centra</h3>
+      <p>
+        Vysvětlení dává srovnání se sítí. Pět center v roce 2018, třicet podpořených z evropských fondů do roku 2021, zhruba čtyřicet pro dospělé v roce 2024 a padesát všech typů koncem roku 2025 — tak počítá ministerstvo zdravotnictví v tiskové zprávě z 9. 6. 2026, na kterou HSPA Monitor navázal článkem o <a href="clanek-cdz-iv-vyzva-207-milionu.html">čtvrté výzvě na patnáct nových center</a>. Křivka pacientů kopíruje křivku center: dokud síť rostla skokově, rostl počet pacientů o desítky až stovky procent; jakmile se rozšiřovala po jednotkách, spadl růst na jednotky procent.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avFlowH">
+        <figcaption class="av-figure-h" id="avFlowH">Jak se ze sítě center stává počet pacientů</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Plán: 100 center</h4>
+            <p class="av-flow-desc">Národní akční plán pro duševní zdraví 2020–2030: 30 center z evropských projektů do roku 2022, 100 center rovnoměrně po celé ČR do roku 2030.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Skutečnost: 50 center</h4>
+            <p class="av-flow-desc">Koncem roku 2025 fungovalo 50 center všech typů, 39 pro dospělé se závažným onemocněním (MZ ČR). NKÚ v říjnu 2024: koncem roku 2023 necelá třetina plánu.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Kapacita: 16 úvazků na tým</h4>
+            <p class="av-flow-desc">Standard centra pro region o 100 000 obyvatelích žádá nejméně 9,0 úvazku zdravotníků a 7,0 úvazku sociálních pracovníků. NKÚ: chybí víc než polovina potřebných specialistů.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Výsledek: 9 156 pacientů</h4>
+            <p class="av-flow-desc">Řádově 180 pacientů na jedno centrum pro dospělé ročně (orientační výpočet). Růst pacientů zpomalil na +8 % ročně, jakmile zpomalil růst sítě.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroje:</strong> NAPDZ 2020–2030 (MZ ČR); tisková zpráva MZ ČR 9. 6. 2026; NKÚ, kontrolní akce 23/22, tisková zpráva 7. 10. 2024; Standard služeb poskytovaných v CDZ pro osoby se závažným chronickým duševním onemocněním, Věstník MZ ČR částka 8/2021; ÚZIS ČR, sada OIS-04-19. Vytížení na centrum = 7 070 pacientů v centrech pro dospělé / přibližně 40 center (indikátor centra_dusevniho_zdravi_per_100k, orientační počet).</p>
+      </figure>
+
+      <p>
+        Standard centra pro osoby se závažným duševním onemocněním, který ministerstvo vydalo ve Věstníku v roce 2021, počítá s komplexním centrem „fungujícím v přirozeném regionu s cca 100 000 obyvateli“ a s minimálním personálem devíti úvazků zdravotníků (z toho jeden psychiatr a sedm sester, polovina se specializací v psychiatrickém ošetřovatelství) a sedmi úvazků pracovníků sociálních služeb. Tým o šestnácti lidech, který má za sebou v průměru 180 pacientů ročně, není nevytížený. Pokud má indikátor růst dál, musí buď přibýt centra, nebo lidé v nich — a Česko má <a href="indicator.html?id=psychiatri_per_100k">13 psychiatrů na 100 000 obyvatel</a> proti průměru OECD 17,3.
+      </p>
+
+      <h3>Mezinárodní srovnání: evidence pro model, ne pro číslo</h3>
+      <p>
+        Harmonizovaný mezinárodní ukazatel počtu pacientů v komunitních týmech duševního zdraví neexistuje; britské CMHT, italská centri di salute mentale nebo polská Centra Zdrowia Psychicznego mají jinou cílovou skupinu, jiný spád a jiné vykazování, takže počty pacientů nejsou souměřitelné a pole benchmark v datovém kontraktu zůstává prázdné. Co srovnatelné je, jsou ostatní indikátory dashboardu: Česko drží <a href="indicator.html?id=luzka_psychiatricka_per_1000">0,87 psychiatrického lůžka na 1 000 obyvatel</a> proti 0,65 v OECD a <a href="indicator.html?id=psychiatrie_prumerna_delka_hospitalizace">průměrnou psychiatrickou hospitalizaci 43 dní</a> proti 19 dnům v OECD; do duševního zdraví posílá <a href="indicator.html?id=vydaje_dusevni_zdravi_pct">zhruba 4 % zdravotních výdajů</a> proti přibližně 7 % v EU. Systém tedy pořád stojí na lůžkách — a právě to má komunitní péče měnit.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avEvH">
+        <figcaption class="av-figure-h" id="avEvH">Co říká recenzovaná evidence o komunitní péči o lidi se závažným duševním onemocněním</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Studie</th><th scope="col">Design</th><th scope="col">Hlavní zjištění</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Winkler et al., <em>Lancet Psychiatry</em> 2018 (ČR)</td><td>prospektivní srovnání, 115 osob s psychózou, 12 měsíců (2016)</td><td>péče v komunitě 8 503 € na osobu a rok vs. 16 425 € v nemocnici; rozdíl v kvalitě života 0,03 QALY nevýznamný; pravděpodobnost nákladové efektivity ≥ 97 %</td></tr>
+              <tr><td>Malone et al., <em>Cochrane</em> 2007</td><td>meta-analýza 3 RCT, 587 osob</td><td>komunitní tým snižuje riziko hospitalizace, RR 0,81 (95% CI 0,7–1,0), NNT 17</td></tr>
+              <tr><td>Dieterich et al., <em>Cochrane</em> 2017</td><td>meta-analýza 40 RCT, 7 524 osob</td><td>intenzivní case management zkracuje pobyt v nemocnici o 0,86 dne na měsíc (95% CI −1,37 až −0,34), nízká jistota důkazu</td></tr>
+              <tr><td>Shields-Zeeman et al., <em>BMJ Global Health</em> 2025 (RECOVER-E)</td><td>sdružená analýza 5 RCT, 931 osob, jihovýchodní Evropa</td><td>komunitní péče snižuje míru postižení WHODAS o 4,55 bodu a zvyšuje kvalitu života o 0,07 za 18 měsíců</td></tr>
+              <tr><td>Winkler et al., <em>Br J Psychiatry</em> 2016</td><td>systematický přehled 23 kohortových studií</td><td>bezdomovectví a vězení po propuštění z dlouhodobé hospitalizace se vyskytují sporadicky, ve většině studií vůbec</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> citace ověřeny v PubMed 21. 9. 2026 (PMID 30415938, 17636625, 28067944, 41130742, 27143007), tvrzení převzata z abstraktů; plné citace v sekci Zdroje. Evidence dokládá účinek modelu, ne konkrétní počet pacientů v českých centrech.</p>
+      </figure>
+
+      <p>
+        Zahraniční i domácí evidence tedy mluví pro model: komunitní týmy snižují riziko hospitalizace, zkracují pobyt v nemocnici a v české studii Winklera a kolegů stály zhruba polovinu při srovnatelném výsledku. Neříká ale, kolik z 9 156 pacientů by jinak leželo v nemocnici — to sada ÚZIS neměří. Nejnovější práce téhož týmu (Winkler et al., <em>International Review of Psychiatry</em> 2026) shrnuje, že raná fáze reformy přinesla vznik center, rozšíření komunitních služeb a pokles dlouhodobých hospitalizací, a že politické změny ji poté zpomalily; čísla v abstraktu neuvádí.
+      </p>
+
+      <h3>Regiony: kde bydlíte, rozhoduje, jestli za vámi tým přijede</h3>
+
+      <figure class="av-figure" aria-labelledby="avKrajH">
+        <figcaption class="av-figure-h" id="avKrajH">Pacienti v centrech duševního zdraví na 100 000 obyvatel podle kraje bydliště, 2024</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" na 100 tis." data-max="180">
+          <li class="av-bar-row" data-value="172.8" data-label="Karlovarský" data-accent="good"></li>
+          <li class="av-bar-row" data-value="121.0" data-label="Praha" data-accent="good"></li>
+          <li class="av-bar-row" data-value="115.4" data-label="Plzeňský" data-accent="good"></li>
+          <li class="av-bar-row" data-value="100.5" data-label="Pardubický" data-accent="good"></li>
+          <li class="av-bar-row" data-value="92.5" data-label="Královéhradecký" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="90.9" data-label="Ústecký" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="87.3" data-label="Zlínský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="84.0" data-label="ČR celkem" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="82.5" data-label="Středočeský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="80.7" data-label="Jihočeský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="77.8" data-label="Moravskoslezský" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="63.8" data-label="Olomoucký" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="48.1" data-label="Vysočina" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="35.1" data-label="Liberecký" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="32.4" data-label="Jihomoravský" data-accent="bad"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS ČR, NZIS Open, sada OIS-04-19 (kraj bydliště pacienta, všech pět typů center, 2024; 108 pacientů bez zařazení do kraje), jmenovatel Eurostat demo_r_pjanaggr3 (obyvatelstvo k 1. 1. 2024), přepočet HSPA Monitoru 21. 9. 2026. Hodnoty vypovídají o obyvatelích kraje, ne o počtu center v něm.</p>
+      </figure>
+
+      <p>
+        Rozdíl mezi prvním a posledním krajem je <strong>5,3násobný</strong>. Karlovarský kraj, nejmenší v republice, měl v péči center 510 svých obyvatel, tedy 172,8 na 100 000; Jihomoravský kraj s druhou největší metropolí země, psychiatrickou nemocnicí v Brně a lékařskou fakultou 397 obyvatel, tedy 32,4 na 100 000. Nad celostátním průměrem 84,0 jsou Praha (121,0), Plzeňský (115,4), Pardubický (100,5), Královéhradecký (92,5), Ústecký (90,9) a Zlínský kraj (87,3); pod ním Vysočina (48,1), Liberecký (35,1) a Jihomoravský (32,4).
+      </p>
+      <p>
+        Ústecký kraj je zvláštní případ: ze 737 pacientů jich bylo jen 240 v centrech pro osoby se závažným duševním onemocněním a 497 v ostatních typech, takže v samotné cílové skupině reformy stojí s 29,6 pacienta na 100 000 obyvatel na posledním místě. Pořadí podle center pro osoby se závažným duševním onemocněním vede Karlovarský kraj (160,3), následují Pardubický (99,1), Plzeňský (91,0) a Královéhradecký (90,0); Praha je se 70,6 uprostřed. Kraj bydliště přitom není totéž co kraj centra — pacient může dojíždět přes hranici — a sada neuvádí, kolik lidí s vážným duševním onemocněním v kraji žije. Pětinásobný rozdíl ale neodpovídá žádnému známému rozdílu v nemocnosti; odpovídá tomu, kde centra vznikla a kde ne.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="5" data-suffix=" druhů">5 druhů</span>
+          <span class="av-counter-label">center duševního zdraví rozlišuje § 44c zákona o zdravotních službách</span>
+          <span class="av-counter-foot">pro osoby se závažným onemocněním, děti a adolescenty, seniory, lidi se závislostí a lidi s ochranným léčením</span>
+        </div>
+      </aside>
+      <p>
+        Podle § 44b zákona č. 372/2011 Sb. je centrum duševního zdraví poskytovatel zdravotních a zároveň sociálních služeb pro lidi s duševním onemocněním, který pracuje v jejich přirozeném prostředí; sociální složku registruje kraj podle § 70a zákona o sociálních službách. Tým pracuje metodou case managementu: každý klient má klíčového pracovníka, který koordinuje léčbu, bydlení, práci a úřady. Standardy jednotlivých druhů center vydává ministerstvo ve Věstníku (částky 8/2021, 15/2022 a 9/2025).
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Norma existuje, tempo ne: co říká akční plán a úhradová vyhláška</h3>
+      <p>
+        Strategie reformy psychiatrické péče z roku 2013 počítala s jedním centrem na zhruba 100 000 obyvatel; Národní akční plán pro duševní zdraví 2020–2030 to převedl na síť <strong>100 center</strong> rovnoměrně rozložených po celé republice, s třiceti z evropských projektů do roku 2022. Třicet do roku 2022 se splnilo; padesát koncem roku 2025 je polovina cíle pět let před termínem. Nejvyšší kontrolní úřad v říjnu 2024 konstatoval, že koncem roku 2023 fungovala necelá třetina sítě a že pro její dobudování chybí více než polovina potřebných specialistů. HSPA Monitor tento cíl sleduje na stránce <a href="plneni-dusevni-zdravi.html">plnění strategie duševního zdraví</a>.
+      </p>
+      <p>
+        Finanční páky pro rok 2026 jsou dvě. Úhradová vyhláška pro rok 2026 (vyhláška č. 432/2025 Sb.) hradí péči v odbornostech 350, 355, 360, 370, 920, 922 a 935 hodnotou bodu podle přílohy č. 3 a psychiatrické nemocnice s transformačním plánem bonifikuje koeficientem za provoz centra: 0,02 za centrum pro dospělé, děti, seniory nebo adiktologické pacienty, 0,04 za forenzní tým, 0,06 za kombinaci obojího. Všeobecná zdravotní pojišťovna od 1. 1. 2026 bonifikuje uzavření nové smlouvy ve všech pěti odbornostech CDZ na celém území republiky. A ministerstvo vyhlásilo 15. 9. 2026 čtvrtou dotační výzvu na nejméně patnáct nových center. Zda peníze centra přitáhly, ukáže tato sada nejdřív v datech za rok 2026.
+      </p>
+
+      <h3>Co s tím: tři stoly</h3>
+      <p>
+        <strong>Ministerstvo a pojišťovny.</strong> Nová centra cílit tam, kde je pacientů na obyvatele nejméně: Jihomoravský, Liberecký kraj a Vysočina mají méně než polovinu celostátního průměru, Ústecký kraj v cílové skupině reformy stojí poslední. Dotační výzva umí regionální prioritu zapsat do kritérií; pojišťovna umí smlouvu nabídnout dřív, než o ni někdo požádá.
+      </p>
+      <p>
+        <strong>ÚZIS.</strong> Doplnit sadu o počet center v kraji a o rok, od kdy které funguje. Dnes se z ní nedá odlišit, kde chybí tým a kde jen pacienti o týmu nevědí, ani spočítat vytížení na centrum jinak než orientačně. Data v registru hrazených služeb jsou — vykazují se pod pěti odbornostmi a signálními výkony zavedení a ukončení péče.
+      </p>
+      <p>
+        <strong>Psychiatrické nemocnice.</strong> Standard z roku 2021 předpokládá, že nemocnice s transformačním plánem centra zakládají a úhradová vyhláška je za to platí. Kraje s nejnižšími hodnotami mají velké psychiatrické nemocnice; pokud mají centra vzniknout, je nejkratší cesta přes jejich personál a jejich transformační plány.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        <strong>Za prvé je to horní odhad.</strong> Unikátnost pacienta platí uvnitř buňky rok × typ centra × kraj × pohlaví × věk; kdo byl v péči dvou typů center nebo se přestěhoval, může být dvakrát. <strong>Za druhé je růst řady z velké části růst sítě</strong>, ne růst využití na centrum — sada centra nerozliší. <strong>Za třetí je území bydliště pacienta</strong>, ne sídlo centra. <strong>Za čtvrté chybí vztah k potřebě</strong>: kolik lidí s vážným duševním onemocněním v kraji žije, sada neříká, a nízká hodnota může znamenat chybějící centrum i menší poptávku. <strong>Za páté jde jen o vykázanou hrazenou péči</strong>; práce s neidentifikovaným zájemcem ani čistě sociální složka služby v sadě nejsou. A <strong>za šesté</strong> sada neměří výsledek: kolik pacientů se vyhnulo hospitalizaci, získalo bydlení nebo práci, lze doložit jen zahraniční evidencí.
+      </p>
+      <p>
+        A přece z toho zůstává jedna věta, na kterou žádná z těch výhrad nesahá. Stát si v roce 2013 napsal, že člověk s vážným duševním onemocněním má mít v dosahu tým, který za ním přijede domů. V roce 2024 takový tým měl v péči 9 156 lidí — v Karlovarském kraji 173 ze 100 000 obyvatel, v Jihomoravském 32. Petr z Brna se do péče centra nakonec dostal přes sociální pracovnici nemocnice. V datech za rok 2024 ještě není.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=cdz_pacienti_osetreni"><strong>Pacienti ošetření v centrech duševního zdraví</strong></a> — 9 156 unikátních pacientů (2024, ČR), 289 v roce 2018 · Výstupy · signál neutral (mezinárodní ukazatel neexistuje; referenční rámec síť 100 center)</li>
+        <li><a href="indicator.html?id=centra_dusevniho_zdravi_per_100k"><strong>Centra duševního zdraví na 100 000 obyvatel</strong></a> — 0,37 (2024): strukturální protějšek tohoto ukazatele, cíl 1,0</li>
+        <li><a href="indicator.html?id=luzka_psychiatricka_per_1000"><strong>Psychiatrická lůžka na 1 000 obyvatel</strong></a> — 0,87 (2023) proti 0,65 v OECD: péče, kterou mají centra nahrazovat</li>
+        <li><a href="indicator.html?id=psychiatrie_prumerna_delka_hospitalizace"><strong>Průměrná délka psychiatrické hospitalizace</strong></a> — 43 dní (2022) proti 19 dnům v OECD</li>
+        <li><a href="indicator.html?id=psychiatri_per_100k"><strong>Psychiatři na 100 000 obyvatel</strong></a> — 13 (2024) proti 17,3 v OECD: personál, bez kterého tým nevznikne</li>
+        <li><a href="indicator.html?id=vydaje_dusevni_zdravi_pct"><strong>Výdaje na duševní zdraví</strong></a> — 4 % zdravotních výdajů (2022) proti 7 % v EU</li>
+        <li><a href="indicator.html?id=rehospitalizace_schizofrenie_30d"><strong>Rehospitalizace pro schizofrenii do 30 dnů</strong></a> — 15,6 % (2021) proti 13 % v OECD: výsledek, který má komunitní péče zlepšit</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS ČR — NZIS Open, sada OIS-04-19 „Pacienti v centrech duševního zdraví“.</strong> Strojově čitelné CSV se schématem CSVW, Národní informační systém péče o duševní zdraví, zdrojový registr NRHZS; na řádek kombinace rok × typ centra × kraj bydliště × pohlaví × věková skupina s počtem unikátních pacientů; období 2018–2024, metadata naposledy změněna 27. 2. 2026. Staženo a sečteno 21. 9. 2026. <a href="https://datanzis.uzis.gov.cz/data/OIS-04-NISDZ/OIS-04-19/Otevrena-data-OIS-04-19-pacienti-centra-dusevniho-zdravi.csv" target="_blank" rel="noopener">datanzis.uzis.gov.cz ↗</a></li>
+          <li><strong>Národní katalog otevřených dat — záznam sady „Pacienti v centrech duševního zdraví“.</strong> Poskytovatel Ministerstvo zdravotnictví, licence CC BY 4.0, roční aktualizace, časové pokrytí 1. 1. 2018 – 31. 12. 2024, odkaz na číselník věkových skupin NZIS. <a href="https://data.gov.cz/dataset?iri=https%3A%2F%2Fdata.gov.cz%2Fzdroj%2Fdatov%C3%A9-sady%2F00024341%2Fe44abc54554d19ddb0cd3aebc4c0b25a" target="_blank" rel="noopener">data.gov.cz ↗</a></li>
+          <li><strong>Eurostat — demo_r_pjanaggr3, obyvatelstvo k 1. lednu podle regionů NUTS 3.</strong> Jmenovatel pro přepočet na 100 000 obyvatel (ČR 10 900 555 k 1. 1. 2024; kraje viz metodická karta). Staženo 21. 9. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/demo_r_pjanaggr3/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>VZP ČR — bonifikace za uzavření nové smlouvy na pracoviště v preferované oblasti (od 1. 1. 2026).</strong> Zdroj názvů odborností 350 centrum duševního zdraví, 355 forenzní multidisciplinární tým, 360 centrum duševního zdraví pro děti a adolescenty, 370 multidisciplinární tým (CDZ) duševního zdraví pro seniory, 922 centrum duševního zdraví pro adiktologické pacienty. <a href="https://plus.vzp.cz/pro-ambulantni-specialisty-poskytovatele/uzavreni-nove-smlouvy-na-pracoviste-v-aktualne-preferovane-oblasti/" target="_blank" rel="noopener">plus.vzp.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Normy, plán a kontrola</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 372/2011 Sb., o zdravotních službách</strong> — § 44b (centrum duševního zdraví), § 44c (pět druhů center), § 44d (sociální služba); <strong>zákon č. 108/2006 Sb., o sociálních službách</strong> — § 70a. <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Standard služeb poskytovaných v Centrech duševního zdraví (CDZ) pro osoby se závažným chronickým duševním onemocněním (SMI), Věstník MZ ČR částka 8/2021.</strong> Zdroj údajů o přirozeném regionu cca 100 000 obyvatel a minimálním personálu 9,0 úvazku zdravotníků a 7,0 úvazku pracovníků sociálních služeb (kap. 4.1). PDF staženo 21. 9. 2026. <a href="https://mzd.gov.cz/wp-content/uploads/2021/06/Vestnik-MZ_8-2021.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Úhradová vyhláška 2026 (vyhláška č. 432/2025 Sb.).</strong> Bod 7.4 písm. a) přílohy (úhrada odborností 350, 355, 360, 370, 920, 922 a 935) a koeficient bonifikace K_CDZ za provoz centra duševního zdraví (0,02 / 0,04 / 0,06). PDF staženo 21. 9. 2026. <a href="https://mzd.gov.cz/uhradova-vyhlaska-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Národní akční plán pro duševní zdraví 2020–2030 a Strategie reformy psychiatrické péče (2013).</strong> Cíl sítě 100 center (30 z projektů ESIF do roku 2022), 1 centrum na cca 100 000 obyvatel; HSPA Monitor cíle sleduje na stránce plnění strategie. <a href="plneni-dusevni-zdravi.html">plneni-dusevni-zdravi.html</a> · <a href="https://www.reformapsychiatrie.cz/projekty/centra-dusevniho-zdravi-cdz" target="_blank" rel="noopener">reformapsychiatrie.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — tisková zpráva o dalším rozvoji sítě center duševního zdraví (9. 6. 2026)</strong>: koncem roku 2025 celkem 50 center, z toho 39 pro dospělé se závažným duševním onemocněním; <strong>tisková zpráva o dotačním programu na vznik nových center (15. 9. 2026)</strong>: čtvrtá výzva na nejméně 15 center. <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-predstavilo-dalsi-rozvoj-site-center-dusevniho-zdravi-ve-vseobecne-fakultni-nemocnici-v-praze-zahajilo-provoz-nove-centrum-pro-osoby-se-zavislostmi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-otevira-dotacni-program-na-vznik-novych-center-dusevniho-zdravi/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Nejvyšší kontrolní úřad — kontrolní akce 23/22, tisková zpráva (7. 10. 2024).</strong> Koncem roku 2023 v provozu necelá třetina ze sta plánovaných center; pro dobudování sítě chybí více než polovina potřebných specialistů. <a href="https://www.nku.cz/cz/pro-media/tiskove-zpravy/kontrola-nku:-center-dusevniho-zdravi-je-malo--chybi-odborny-personal--neni-zajisteno-financovani-id14289/" target="_blank" rel="noopener">nku.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Winkler P, Koeser L, Kondrátová L et al. Cost-effectiveness of care for people with psychosis in the community and psychiatric hospitals in the Czech Republic: an economic analysis.</strong> <em>Lancet Psychiatry</em> 2018;5(12):1023–1031. Prospektivní srovnání 115 osob (35 v komunitě, 80 hospitalizovaných), 12 měsíců; náklady 8 503 vs. 16 425 € na osobu, rozdíl v QALY 0,03 nevýznamný. Ověřeno v PubMed 21. 9. 2026 (PMID 30415938). <a href="https://doi.org/10.1016/S2215-0366(18)30388-2" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Winkler P, Klimková V, Broulíková HM et al. Learning from mental health reform under political change: lessons for sustainable mental health systems from Czechia.</strong> <em>International Review of Psychiatry</em> 2026. Případová studie reformy: vznik center, rozšíření komunitních služeb, pokles dlouhodobých hospitalizací, zpomalení po politických změnách. Ověřeno v PubMed 21. 9. 2026 (PMID 41579112). <a href="https://doi.org/10.1080/09540261.2026.2619456" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Malone D, Newton-Howes G, Simmonds S, Marriott S, Tyrer P. Community mental health teams (CMHTs) for people with severe mental illnesses and disordered personality.</strong> <em>Cochrane Database of Systematic Reviews</em> 2007;(3):CD000270. Meta-analýza 3 RCT, 587 osob; hospitalizace RR 0,81 (95% CI 0,7–1,0). Ověřeno v PubMed 21. 9. 2026 (PMID 17636625). <a href="https://doi.org/10.1002/14651858.CD000270.pub2" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Dieterich M, Irving CB, Bergman H, Khokhar MA, Park B, Marshall M. Intensive case management for severe mental illness.</strong> <em>Cochrane Database of Systematic Reviews</em> 2017;1:CD007906. Meta-analýza 40 RCT, 7 524 osob; dny v nemocnici za měsíc MD −0,86 (95% CI −1,37 až −0,34), nízká jistota důkazu. Ověřeno v PubMed 21. 9. 2026 (PMID 28067944). <a href="https://doi.org/10.1002/14651858.CD007906.pub3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Shields-Zeeman L, Smit F, Wijnen B et al. Community versus institutionalised care for people with severe mental illness in five countries in Southeast Europe: pooled analysis of five randomised trials.</strong> <em>BMJ Global Health</em> 2025;10(10). RECOVER-E, 931 osob; WHODAS −4,55 bodu, kvalita života +0,07 za 18 měsíců. Ověřeno v PubMed 21. 9. 2026 (PMID 41130742). <a href="https://doi.org/10.1136/bmjgh-2024-018594" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Winkler P, Barrett B, McCrone P, Csémy L, Janoušková M, Höschl C. Deinstitutionalised patients, homelessness and imprisonment: systematic review.</strong> <em>British Journal of Psychiatry</em> 2016;208(5):421–428. Přehled 23 kohortových studií. Ověřeno v PubMed 21. 9. 2026 (PMID 27143007). <a href="https://doi.org/10.1192/bjp.bp.114.161943" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Broulíková HM, Dlouhý M, Winkler P. Expenditures on Mental Health Care in the Czech Republic in 2015.</strong> <em>Psychiatric Quarterly</em> 2020;91(1):113–125. Výdaje 13,7 mld. Kč, 4,08 % zdravotních výdajů. Ověřeno v PubMed 21. 9. 2026 (PMID 31773471). <a href="https://doi.org/10.1007/s11126-019-09688-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Hodnota 9 156 i celá časová, typová a krajská řada vznikly vlastním součtem otevřené sady ÚZIS OIS-04-19 (staženo 21. 9. 2026); unikátnost pacienta platí uvnitř jedné kombinace rok × typ centra × kraj × pohlaví × věk, takže součty jsou horním odhadem počtu osob. Přepočty na 100 000 obyvatel používají obyvatelstvo k 1. 1. 2024 podle Eurostatu. Vytížení „řádově 180 pacientů na centrum“ je orientační výpočet s jmenovatelem zhruba 40 center pro dospělé z jiného zdroje (MZ ČR), sada jednotlivá centra nerozlišuje. Petr z Brna je ilustrativní postava; čísla o jeho kraji ne.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
