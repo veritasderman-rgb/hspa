@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-porodnost-milion-nebo-848-korun': {
+    kicker: 'Porodnost · co může zdravotnictví', signal: 'bad',
+    stat: '848', statSuffix: ' Kč',
+    claim: 'dostane gynekolog za léčbu neplodnosti, nejvýš dvakrát ročně.',
+    context: 'Cyklus IVF: 39 773 Kč. Narozených 2025: 77,6 tis., nejméně od roku 1785.',
+  },
   'clanek-specificke-lecebne-programy-2026': {
     kicker: 'Léková politika · výjimky pro dovoz', signal: 'warn',
     stat: '16',
