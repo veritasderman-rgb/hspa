@@ -99,6 +99,30 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-platba-statni-pojistenci-2027-tri-cisla': {
+    kicker: 'Financování · platba za státní pojištěnce', signal: 'warn',
+    stat: '33', statSuffix: ' Kč',
+    claim: 'měsíčně přidá nařízení za státního pojištěnce. Zákon slibuje 291 Kč.',
+    context: 'Vyrovnaná úhradová vyhláška 2027 stojí na částce, kterou nikdo neschválil.',
+  },
+  'clanek-neockovani-covid-prijem-studie-2026': {
+    kicker: 'Sociální determinanty · očkování', signal: 'bad',
+    stat: '42,1', statSuffix: '%', barPct: 42,
+    claim: 'nejchudších dospělých zůstalo bez dokončeného očkování proti covidu-19.',
+    context: 'V nejbohatší pětině 13,1 %. Vakcína byla zdarma pro všechny.',
+  },
+  'clanek-cdz-devet-tisic-pacientu': {
+    kicker: 'Duševní zdraví · centra duševního zdraví', signal: 'good',
+    stat: '30', statSuffix: '×',
+    claim: 'víc pacientů ošetřila centra duševního zdraví v roce 2024 než v roce prvních center.',
+    context: 'Devět tisíc lidí ročně. Mezi kraji pětinásobný rozdíl na obyvatele.',
+  },
+  'clanek-duvera-nadumrtnost-covid-studie': {
+    kicker: 'Odolnost systému · důvěra', signal: 'bad',
+    stat: '18,6', statSuffix: '%', barPct: 19,
+    claim: 'Čechů věří vládě — nejméně ze třiceti zemí OECD.',
+    context: 'Studie navrhuje měřit důvěru jako varovný signál pro nadúmrtnost.',
+  },
   'clanek-porodnost-milion-nebo-848-korun': {
     kicker: 'Porodnost · co může zdravotnictví', signal: 'bad',
     stat: '848', statSuffix: ' Kč',
