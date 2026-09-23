@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-reforma-verejneho-zdravotniho-pojisteni-2030': {
+    kicker: 'Legislativa · reforma pojištění 2030', signal: 'warn',
+    stat: '1 500', statSuffix: ' Kč',
+    claim: 'nejvýš má dostat pojištěnec ve věku 45–75 let za prohlídku a screeningy.',
+    context: 'Účinnost 2028. Text novely zatím není veřejný.',
+  },
   'clanek-platba-statni-pojistenci-2027-tri-cisla': {
     kicker: 'Financování · platba za státní pojištěnce', signal: 'warn',
     stat: '33', statSuffix: ' Kč',
