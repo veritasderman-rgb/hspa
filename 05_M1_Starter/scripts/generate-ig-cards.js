@@ -826,6 +826,9 @@ const MANIFEST = {
   'clanek-hpv-zatez-miliarda': { kicker: 'Onkologie · zátěž HPV', signal: 'bad', stat: '112 543', claim: 'nových onemocnění spojených s HPV napočítala studie za tři roky.', context: 'Přímé náklady 1,06 mld. Kč. Proočkovanost dívek stagnuje na 69,8 %.' },
   'clanek-cdz-iv-vyzva-207-milionu': { kicker: 'Duševní zdraví · nová centra', signal: 'warn', stat: '207', statSuffix: ' mil.', claim: 'korun na patnáct nových center duševního zdraví.', context: 'Síť tak dosáhne 65 center ze 100 slíbených do roku 2030.' },
   'clanek-test-ledvin-padesatnici-2026': { kicker: 'Prevence · ledviny', signal: 'bad', stat: '530', statSuffix: ' tis.', claim: 'lidí má výrazně sníženou funkci ledvin (G3–G5).', context: 'Na dialýze jich bylo 6 352. Test teď dostane každý padesátník.' },
+  'clanek-reklama-kojenecka-vyziva-zakon': { kicker: 'Veřejné zdraví · kojenecká výživa', signal: 'bad', stat: '32', statSuffix: ' ze 100', claim: 'bodů dává WHO a UNICEF české regulaci reklamy na kojeneckou výživu.', context: 'Monitoring SZÚ 2025: Kodex porušilo 42 % ordinací dětských lékařů.' },
+  'clanek-sebevrazdy-validace-policejni-data': { kicker: 'Duševní zdraví · data', signal: 'warn', stat: '1 561', claim: 'sebevražd napočítal ÚZIS za rok 2024 po opravě 294 úmrtí.', context: 'Bylo 1 253. Nárůst je z propojení s policií, ne z reálného nárůstu.' },
+  'clanek-nevydana-baleni-leku': { kicker: 'Léková politika · preskripce', signal: 'warn', stat: '6,5', statSuffix: ' mil.', claim: 'balení léků se loni předepsalo víc, než lékárny vydaly.', context: '3,8 % ze 171 milionů balení. Srovnatelná studie našla 4,56 %.' },
 };
 
 function escapeXml(s) {
