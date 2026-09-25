@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-25
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-25
+    creation_phase: rutina+article-write
+    primary_sources_count: 9
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-09-25: ČSÚ 24. 9. 2026 vydal publikaci „Výsledky zdravotnických účtů – 2024“ (kód 260005-26,
+      csu.gov.cz/aktualni-produkt/41197, datum vydání ověřeno na produktové stránce). Samotný přeskok novotvarů před oběhovou
+      soustavu ČSÚ ohlásil už 11. 6. 2026 (Statistika&My); nová vlna přináší plné tabulky T3.1–T3.6 (kapitoly MKN-10 2017–2024,
+      věk, pohlaví, kraj). Korpus rozpad podle kapitol MKN-10 dosud nerozebíral.
+      KPI (vše skriptem z xlsx 26000526t3.xlsx a 26000526t1.xlsx, staženo 25. 9. 2026): list T3.2. nadpis verbatim „Tab. 3.2: Výdaje
+      z veřejného zdravotního pojištění podle kapitol klasifikace nemocí (MKN-10), 2015–2024“ (datové sloupce ale začínají rokem 2017);
+      II. Novotvary C6=25,503 / I6=49,629 / J6=55,825 mld.; IX. oběhová C13=30,266 / I13=51,174 / J13=54,211; V. duševní C9=10,302 /
+      I9=21,779 / J9=25,370; na obyvatele J29=5 127,9, J36=4 979,6, J32=2 330,4 Kč. „Poprvé“ doloženo: IX > II v každém roce 2017–2023
+      (rozdíl 2023 1,545 mld.), 2024 II > IX o 1,614 mld. Pozor: v roce 2021 byla nejdražší kapitola XXI (50,4 mld., covid), ne IX —
+      proto text netvrdí, že oběhová soustava byla vždy první, jen že byla vždy před novotvary. Součet 22 kapitol 2024 = 425,7 mld.
+      = 82,8 % z 514,2 mld. výdajů pojišťoven (T1.2); zbytek 88,5 mld. nelze podle ČSÚ přiřadit pacientovi. T1.1 řádek 2024:
+      696,818 mld., +8,54 %, 8,635 % HDP, 64 007 Kč; 2025P 765,048 mld., +9,79 %, 8,924 % HDP („P - předběžné údaje založené na odhadech“).
+      Věk/pohlaví T3.3 (mil. Kč), kraj T3.6 (Kč/obyv.; duševní Praha 2 888,7 max, Liberecký 1 849,5 min).
+      Bench: indikátory kontraktu vydaje_zdravotnictvi_hdp 8,6 % (OECD 9,3, EU 10,4), mortalita_kardiovaskularni 463,75 (EU 312,95),
+      mortalita_onkologicka 250,43 (EU 233,13), naklady_centrove_leky_total 39,8 mld., vydaje_dusevni_zdravi_pct 4 % (EU 7).
+      Mezinárodně: OECD brief „Expenditure by disease, age and gender“ (2016) — ~16 zemí vč. ČR schopno data vykázat, omezená
+      srovnatelnost; aktuální srovnatelná čísla podle diagnóz pro DE/AT/PL/SK nedohledána → uvedeno jako limit.
+      LEGISLATIVA: bez nové normy; kontext úhradová vyhláška 2027 a platba za státní pojištěnce jen odkazem na existující články.
+      EVIDENCE (PubMed, 4 volání): Jönsson 2016 Eur J Cancer PMID 27589247; Hofmarcher 2020 Eur J Cancer PMID 32120274;
+      Gustavsson 2011 Eur Neuropsychopharmacol PMID 21924589. Consensus 2 dotazy (medical_mode, bez preprintů): souhlas s nuancí —
+      náklady na rakovinu rostou rychleji než incidence a táhnou je léky, podíl na celkových výdajích ale v EU zůstával kolem 6 %.
+      SEBEOMEZENÍ: (1) netvrdí se, o kolik růst novotvarů táhnou ceny léků — ČSÚ nerozkládá diagnózy podle druhu péče; příčiny
+      uvádíme jen citací ČSÚ (incidence + moderní léčba); (2) kapitola V ≠ indikátor výdajů na duševní zdraví (jiná definice, jiný
+      jmenovatel) — nesčítá se, nesrovnává se procento s procentem; (3) Eurostat 2024 bez čísla, jen odkaz na clanek-financovani-sha;
+      (4) čísla úhradové vyhlášky a platby za státní pojištěnce nepřebírána (neověřeno v tomto běhu); (5) OECD 2016 grafy
+      nepoužity (data 2011–2013, hodnoty čitelné jen z grafu); (6) kraje jen 1 srovnání (duševní poruchy), s caveatem bydliště.
+      published:false, audit-status draft — čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rakovina poprvé nejdražší diagnózou. Pojišťovny za novotvary zaplatily 55,8 miliardy, víc než za srdce a cévy · HSPA Monitor</title>
+<meta name="description" content="Zdravotní pojišťovny v roce 2024 poprvé od roku 2017, odkdy Český statistický úřad výdaje podle diagnóz zveřejňuje, zaplatily nejvíc za léčbu novotvarů: 55,8 miliardy korun proti 54,2 miliardy za nemoci oběhové soustavy. Výdaje na novotvary se od roku 2017 zvýšily o 119 %, na oběhovou soustavu o 79 %. Ze všech velkých kapitol rostly nejrychleji poruchy duševní a poruchy chování, meziročně o 16,5 % na 25,4 miliardy a od roku 2017 o 146 %. Vyplývá to z tabulek publikace Výsledky zdravotnických účtů – 2024, kterou ČSÚ vydal 24. září. Rozpad podle diagnóz pokrývá jen tu část výdajů pojišťoven, kterou jde přiřadit ke konkrétnímu pacientovi.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Rakovina poprvé nejdražší diagnózou. Pojišťovny za novotvary zaplatily 55,8 miliardy, víc než za srdce a cévy">
+<meta property="og:description" content="Nová data ČSÚ o výdajích zdravotního pojištění podle kapitol MKN-10: novotvary poprvé předstihly nemoci oběhové soustavy, duševní poruchy rostou nejrychleji. Co to znamená pro systém a co s tím.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi.png">
+<meta property="article:published_time" content="2026-09-26">
+<meta property="article:section" content="Financování">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Rakovina poprvé nejdražší diagnózou. Pojišťovny za novotvary zaplatily 55,8 miliardy, víc než za srdce a cévy",
+  "description": "Zdravotní pojišťovny v roce 2024 poprvé od roku 2017, odkdy Český statistický úřad výdaje podle diagnóz zveřejňuje, zaplatily nejvíc za léčbu novotvarů: 55,8 miliardy korun proti 54,2 miliardy za nemoci oběhové soustavy. Výdaje na novotvary se od roku 2017 zvýšily o 119 %, na oběhovou soustavu o 79 %. Ze všech velkých kapitol rostly nejrychleji poruchy duševní a poruchy chování, meziročně o 16,5 % na 25,4 miliardy a od roku 2017 o 146 %. Vyplývá to z tabulek publikace Výsledky zdravotnických účtů – 2024, kterou ČSÚ vydal 24. září. Rozpad podle diagnóz pokrývá jen tu část výdajů pojišťoven, kterou jde přiřadit ke konkrétnímu pacientovi.",
+  "datePublished": "2026-09-26T06:00:00+02:00",
+  "dateModified": "2026-09-25",
+  "inLanguage": "cs",
+  "articleSection": "Financování",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Financování</span>
+        <span class="article-tag article-tag-muted">Zdravotnické účty · ČSÚ · MKN-10 · Onkologie · Duševní zdraví</span>
+      </div>
+      <h1 class="article-title">Rakovina poprvé nejdražší diagnózou. Pojišťovny za novotvary zaplatily 55,8 miliardy, víc než za srdce a cévy</h1>
+      <p class="article-deck">
+        Zdravotní pojišťovny v roce 2024 poprvé od roku 2017, odkdy Český statistický úřad výdaje podle diagnóz zveřejňuje, zaplatily nejvíc za léčbu novotvarů: <strong>55,8 miliardy korun</strong> proti 54,2 miliardy za nemoci oběhové soustavy. Výdaje na novotvary se od roku 2017 zvýšily o 119 %, na oběhovou soustavu o 79 %. Ze všech velkých kapitol rostly nejrychleji <strong>poruchy duševní a poruchy chování</strong>, meziročně o 16,5 % na 25,4 miliardy a od roku 2017 o 146 %. Vyplývá to z tabulek publikace Výsledky zdravotnických účtů – 2024, kterou ČSÚ vydal 24. září. Rozpad podle diagnóz pokrývá jen tu část výdajů pojišťoven, kterou jde přiřadit ke konkrétnímu pacientovi.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">26. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">8 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Že onkologie v roce 2024 předběhla nemoci srdce a cév, oznámil statistický úřad už v červnu jednou větou. Ve čtvrtek 24. září k tomu zveřejnil celé tabulky: výdaje veřejného zdravotního pojištění podle kapitol Mezinárodní klasifikace nemocí (MKN-10) za roky 2017 až 2024, rozdělené podle věku, pohlaví a kraje. Ukazují, kam se posouvají peníze uvnitř systému, který celkem stál <strong>696,8 miliardy korun, tedy 8,6 % HDP a 64&nbsp;007 korun na obyvatele</strong>. Posun je rychlý. Novotvary a duševní poruchy rostou výrazně rychleji než výdaje pojišťoven jako celek, oběhová soustava pomaleji.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDgHeroH">
+        <figcaption class="av-figure-h" id="avDgHeroH">Výdaje z veřejného zdravotního pojištění podle diagnóz v roce 2024 a celkové výdaje na zdravotní péči</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="55.8" data-decimals="1" data-suffix=" mld. Kč">55,8 mld. Kč</span>
+            <span class="av-counter-label">novotvary (kapitola II MKN-10)</span>
+            <span class="av-counter-foot">poprvé v řadě od 2017 nejdražší kapitola</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="54.2" data-decimals="1" data-suffix=" mld. Kč">54,2 mld. Kč</span>
+            <span class="av-counter-label">nemoci oběhové soustavy (kapitola IX)</span>
+            <span class="av-counter-foot">v letech 2017–2023 vždy před novotvary</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="25.4" data-decimals="1" data-suffix=" mld. Kč">25,4 mld. Kč</span>
+            <span class="av-counter-label">poruchy duševní a poruchy chování (kapitola V)</span>
+            <span class="av-counter-foot">+16,5 % meziročně, +146 % od roku 2017</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="696.8" data-decimals="1" data-suffix=" mld. Kč">696,8 mld. Kč</span>
+            <span class="av-counter-label">celkové výdaje na zdravotní péči 2024</span>
+            <span class="av-counter-foot">8,6 % HDP, 64&nbsp;007 Kč na obyvatele</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, Výsledky zdravotnických účtů – 2024 (vydáno 24. 9. 2026), tab. 3.2 (výdaje z v. z. p. podle kapitol MKN-10) a tab. 1.1 (základní ukazatele), staženo 25. 9. 2026. Diagnózy = jen výdaje zdravotních pojišťoven přiřaditelné pacientovi.</p>
+      </figure>
+
+      <h3>Kam tečou peníze podle diagnóz</h3>
+      <p>
+        V roce 2017 zaplatily pojišťovny za nemoci oběhové soustavy 30,3 miliardy a za novotvary 25,5 miliardy korun. Rozdíl se pak zužoval, v roce 2023 činil 1,5 miliardy (51,2 proti 49,6 miliardy). V roce 2024 se pořadí otočilo: novotvary <strong>55,8 miliardy (+12,5 % meziročně)</strong>, oběhová soustava 54,2 miliardy (+5,9 %). V každém roce od 2017 do 2023 byla oběhová soustava před novotvary. Nejdražší kapitolou ale nebyla vždy. V covidovém roce 2021 ji předstihla kapitola XXI „Faktory ovlivňující zdravotní stav a kontakt se zdravotnickými službami“ s 50,4 miliardy, kam patří mimo jiné testování, očkování a prohlídky. Novotvary se na první místo nedostaly nikdy předtím.
+      </p>
+      <p>
+        Na obyvatele to v roce 2024 znamenalo 5&nbsp;128 korun za novotvary a 4&nbsp;980 korun za oběhovou soustavu. Třetí jsou nemoci svalové, kosterní a pojivové tkáně (36,8 miliardy, +8,8 %), dále kapitola XXI (34,6 miliardy) a nemoci trávicí soustavy (34,2 miliardy, +11,7 %). Následují nemoci močové a pohlavní soustavy (27,9 miliardy, +7,3 %), poruchy duševní a poruchy chování (25,4 miliardy) a nemoci dýchací soustavy (25,1 miliardy, +12,0 %). Kapitola XXI jako jediná z velkých meziročně klesla, o 15,5 % z 41,0 miliardy.
+      </p>
+      <p>
+        Za osm let se součet všech kapitol zvýšil o 96 %, z 217,3 na 425,7 miliardy. Novotvary rostly o 119 %, oběhová soustava o 79 %. Nejrychleji ze všech kapitol nad 20 miliard rostly <strong>duševní poruchy: z 10,3 na 25,4 miliardy, o 146 %</strong>. Dýchací nemoci přidaly 134 %, trávicí 95 % a močové a pohlavní 75 %. Podíl novotvarů na výdajích přiřazených k diagnózám tak stoupl z 11,7 % na 13,1 %, podíl duševních poruch na 6,0 %.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avDgTabH">
+        <figcaption class="av-figure-h" id="avDgTabH">Výdaje z veřejného zdravotního pojištění podle vybraných kapitol MKN-10, 2017, 2023 a 2024 (mld. Kč)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Kapitola MKN-10</th>
+                <th scope="col" class="av-num">2017</th>
+                <th scope="col" class="av-num">2023</th>
+                <th scope="col" class="av-num">2024</th>
+                <th scope="col" class="av-num">Změna 2017–2024</th>
+                <th scope="col" class="av-num">Meziročně</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="av-row-highlight">
+                <th scope="row">II. Novotvary</th>
+                <td class="av-num">25,5</td><td class="av-num">49,6</td><td class="av-num">55,8</td><td class="av-num">+119 %</td><td class="av-num">+12,5 %</td>
+              </tr>
+              <tr>
+                <th scope="row">IX. Oběhová soustava</th>
+                <td class="av-num">30,3</td><td class="av-num">51,2</td><td class="av-num">54,2</td><td class="av-num">+79 %</td><td class="av-num">+5,9 %</td>
+              </tr>
+              <tr>
+                <th scope="row">XIII. Svalová, kosterní a pojivová tkáň</th>
+                <td class="av-num">19,2</td><td class="av-num">33,8</td><td class="av-num">36,8</td><td class="av-num">+92 %</td><td class="av-num">+8,8 %</td>
+              </tr>
+              <tr>
+                <th scope="row">XXI. Faktory ovlivňující zdravotní stav</th>
+                <td class="av-num">25,0</td><td class="av-num">41,0</td><td class="av-num">34,6</td><td class="av-num">+38 %</td><td class="av-num av-mut">−15,5 %</td>
+              </tr>
+              <tr>
+                <th scope="row">XI. Trávicí soustava</th>
+                <td class="av-num">17,5</td><td class="av-num">30,6</td><td class="av-num">34,2</td><td class="av-num">+95 %</td><td class="av-num">+11,7 %</td>
+              </tr>
+              <tr>
+                <th scope="row">XIV. Močová a pohlavní soustava</th>
+                <td class="av-num">16,0</td><td class="av-num">26,0</td><td class="av-num">27,9</td><td class="av-num">+75 %</td><td class="av-num">+7,3 %</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">V. Duševní poruchy a poruchy chování</th>
+                <td class="av-num">10,3</td><td class="av-num">21,8</td><td class="av-num">25,4</td><td class="av-num">+146 %</td><td class="av-num">+16,5 %</td>
+              </tr>
+              <tr>
+                <th scope="row">X. Dýchací soustava</th>
+                <td class="av-num">10,7</td><td class="av-num">22,4</td><td class="av-num">25,1</td><td class="av-num">+134 %</td><td class="av-num">+12,0 %</td>
+              </tr>
+              <tr>
+                <th scope="row">Součet všech 22 kapitol</th>
+                <td class="av-num">217,3</td><td class="av-num">396,6</td><td class="av-num">425,7</td><td class="av-num">+96 %</td><td class="av-num">+7,3 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, Výsledky zdravotnických účtů – 2024, tab. 3.2 „Výdaje z veřejného zdravotního pojištění podle kapitol klasifikace nemocí (MKN-10), 2015–2024“ (datová řada začíná rokem 2017), staženo 25. 9. 2026. Změny v procentech přepočítala redakce z nezaokrouhlených hodnot tabulky.</p>
+      </figure>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodické upozornění k výdajům podle diagnóz">
+        <p class="article-callout-h">Co tabulka měří a co ne</p>
+        <p>
+          Rozpad podle diagnóz se týká <strong>jen výdajů zdravotních pojišťoven</strong>, ne celých 696,8 miliardy. Pojišťovny v roce 2024 vydaly 514,2 miliardy (73,8 % celkových výdajů). Součet kapitol ale dává 425,7 miliardy, tedy asi 83 %. Zbytek podle metodiky ČSÚ tvoří souhrnné platby, správní výdaje a další výdaje bez vazby na konkrétního pacienta. Výdaje se přiřazují podle diagnózy uvedené u vykázané zdravotní služby. Jeden pacient tak může spadat do více kapitol a část výdajů se dělí podle metodických pravidel. Kapitola XXI podle poznámky pod tabulkou zahrnuje prohlídky, hospitalizace novorozenců po porodu, laboratorní vyšetření, očkování nebo sledování po léčbě zhoubného novotvaru. ČSÚ sám uvádí, že jde o doplňkový národní pohled nad rámec mezinárodně srovnatelných účtů podle manuálu SHA 2011. Tabulka navíc nese v nadpisu roky 2015–2024, data v ní ale začínají rokem 2017.
+        </p>
+      </aside>
+
+      <h3>Kdo za to platí a v jakém věku</h3>
+      <p>
+        Novotvary a oběhová soustava jsou výdaje stáří, i když každý jinak. U novotvarů připadá na lidi nad 60 let 66 % výdajů. Vrchol leží ve věku 70–79 let se 17,5 miliardy korun. U oběhové soustavy je to 78 %: 18,4 miliardy ve věku 70–79 let a dalších 12,6 miliardy u lidí nad 80 let. Lidem do 30 let připadá u novotvarů 4,1 % výdajů a u oběhové soustavy 1,7 %.
+      </p>
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-neutral">
+          <span class="av-counter" data-value="25.5" data-decimals="1" data-suffix=" %">25,5 %</span>
+          <span class="av-counter-label">výdajů na duševní poruchy připadá lidem do 30 let (6,5 mld. Kč)</span>
+          <span class="av-counter-foot">ČSÚ, tab. 3.3, rok 2024</span>
+        </div>
+      </aside>
+      <p>
+        Duševní poruchy vypadají jinak. Výdaje jsou rozložené po celém životě: 2,5 miliardy ve věku 10–19 let, 3,9 miliardy ve 40–49 letech, 3,4 miliardy nad 80 let. Lidem do 30 let připadá <strong>25,5 % výdajů</strong>, podobně jako u dýchacích nemocí. Dětem a dospívajícím do 19 let připadá 3,75 miliardy korun. U dívek ve věku 10–19 let jde o 1,5 miliardy, u chlapců stejného věku o 0,9 miliardy. V přepočtu na obyvatele jsou nejvyšší výdaje u lidí nad 80 let, 6&nbsp;799 korun, protože do kapitoly V patří i demence.
+      </p>
+      <p>
+        Podle pohlaví jsou novotvary vyrovnané (muži 28,5 z 55,8 miliardy). U oběhové soustavy převažují muži (30,9 z 54,2 miliardy), u duševních poruch ženy (muži 12,1 z 25,4 miliardy). ČSÚ dodává, že u žen byly výdaje na novotvary na obyvatele vyšší než na oběhovou soustavu už druhým rokem. Mezi kraji se výdaje liší podle toho, kde pacient bydlí, ne podle toho, kde se léčil. Na duševní poruchy vydaly pojišťovny nejvíc na obyvatele Prahy (2&nbsp;889 korun) a nejméně na obyvatele Libereckého kraje (1&nbsp;850 korun). Tabulka neříká, jestli rozdíl ukazuje vyšší potřebu, nebo lepší dostupnost péče.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Odkud čísla pocházejí</h3>
+      <p>
+        Zdravotnické účty sestavuje ČSÚ podle manuálu <strong>A System of Health Accounts 2011</strong>, společného rámce OECD, Eurostatu a WHO. Podle něj se vykazují celkové výdaje, zdroje financování a druhy péče. Rozpad podle diagnóz, věku a kraje stojí mimo tento mezinárodní standard. Vychází z Národního registru hrazených zdravotních služeb, který spravuje ÚZIS, a ČSÚ ho dopočítává. Dává tedy dobrý obraz o tom, za co pojišťovny platí. Neukazuje ale, kolik z peněz na jednu diagnózu šlo na léky, na hospitalizace nebo na ambulantní péči.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avDgFlowH">
+        <figcaption class="av-figure-h" id="avDgFlowH">Jak vzniká rozpad výdajů podle diagnóz (metodika ČSÚ, publikace z 24. 9. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Poskytovatel</h4>
+            <p class="av-flow-desc">Vykáže pojišťovně zdravotní službu i s diagnózou pacienta.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Pojišťovna</h4>
+            <p class="av-flow-desc">Službu uhradí výkonově, případově, kapitačně nebo paušálem.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">NRHZS (ÚZIS)</h4>
+            <p class="av-flow-desc">Registr hrazených služeb spojí úhradu s pacientem, věkem, pohlavím a bydlištěm.</p>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">ČSÚ</h4>
+            <p class="av-flow-desc">Přiřadí výdaje ke kapitolám MKN-10; souhrnné platby bez vazby na pacienta zůstanou mimo.</p>
+            <span class="av-flow-tag">nad rámec SHA</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Tabulky 3.1–3.6</h4>
+            <p class="av-flow-desc">Diagnóza × rok, věk, pohlaví a kraj bydliště.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ČSÚ, Výsledky zdravotnických účtů – 2024, metodická část („Výdaje na zdravotní péči podle diagnóz a charakteristik pacienta“) a kapitola 3, staženo 25. 9. 2026.</p>
+      </figure>
+
+      <p>
+        V tomto rámci se odehrává každoroční spor o peníze. O cenách péče pro rok 2027 rozhoduje <a href="clanek-uhradova-vyhlaska-2027.html">úhradová vyhláška</a>, o příjmech pojišťoven mimo jiné <a href="clanek-platba-statni-pojistenci-2027-tri-cisla.html">platba státu za státní pojištěnce</a>. Ani jedno ale nerozděluje peníze podle nemocí. Že se nejvíc platí za rakovinu, nerozhodl nikdo předem. Je to součet tisíců jednotlivých úhrad za konkrétní pacienty. Celkový obraz financování i s druhy péče popisuje rozbor <a href="clanek-financovani-sha.html">Odkud jdou peníze a kam mizí</a>. Pozor na jednu věc: Eurostat vede pro Česko za rok 2024 jiná, nižší čísla než národní publikace ČSÚ, rozdíl vysvětlujeme tamtéž.
+      </p>
+
+      <h3>Mezinárodní srovnání: kde končí data</h3>
+      <p>
+        Srovnat české výdaje podle diagnóz s Německem, Rakouskem, Polskem nebo Slovenskem neumíme. Aktuální srovnatelná čísla jsme v primárních zdrojích nenašli. OECD ve shrnutí „Expenditure by disease, age and gender“ z roku 2016 uvádí, že takové údaje umí vykázat asi 16 zemí včetně Česka. Upozorňuje ale, že se liší zdroje i rozsah, zejména u léků a ambulantní péče, kde výdaj často nejde spojit s diagnózou. Srovnávat proto můžeme jen celek. Česko dává na zdravotnictví <strong>8,6 % HDP</strong>, průměr OECD je v kontraktu HSPA Monitoru 9,3 % a průměr EU 10,4 %. Podrobněji to rozebírá článek <a href="clanek-vydaje-zdravotnictvi.html">8,6 procenta HDP</a>.
+      </p>
+      <p>
+        Evropské studie o nákladech rakoviny ukazují podobný vývoj. <em>Jönsson et al.</em> (2016), <em>European Journal of Cancer</em> (<a href="https://doi.org/10.1016/j.ejca.2016.06.022" target="_blank" rel="noopener">doi.org/10.1016/j.ejca.2016.06.022</a>) spočítali, že zdravotní výdaje na rakovinu v EU vzrostly mezi lety 1995 a 2014 z 35,7 na 83,2 miliardy eur. Výdaje na protinádorové léky vzrostly mezi lety 2005 a 2014 ze 7,6 na 19,1 miliardy eur. Podíl rakoviny na celkových zdravotních výdajích přitom zůstával kolem 6 %. Rostly hlavně léky, ostatní výdaje stagnovaly nebo klesaly. Navazující práce <em>Hofmarcher et al.</em> (2020), <em>European Journal of Cancer</em> (<a href="https://doi.org/10.1016/j.ejca.2020.01.011" target="_blank" rel="noopener">doi.org/10.1016/j.ejca.2020.01.011</a>) odhadla zdravotní výdaje na rakovinu v Evropě v roce 2018 na 103 miliardy eur, z toho 32 miliardy na léky. Za dvě desetiletí podle ní rostly rychleji než počet nových onemocnění. Studie počítají s celkovými zdravotními výdaji, ne jen s výdaji pojišťoven, takže evropských 6 % nelze klást vedle českých 13,1 %.
+      </p>
+      <p>
+        U duševního zdraví je nejznámější odhad <em>Gustavsson et al.</em> (2011), <em>European Neuropsychopharmacology</em> (<a href="https://doi.org/10.1016/j.euroneuro.2011.08.008" target="_blank" rel="noopener">doi.org/10.1016/j.euroneuro.2011.08.008</a>). Náklady duševních a neurologických poruch ve 30 evropských zemích v něm dosáhly 798 miliard eur v roce 2010. Přímé náklady na zdravotní péči tvořily 37 %, zbytek připadl na nezdravotní výdaje a ztráty produktivity. Z toho vyplývá, že výdaje pojišťoven zachycují jen menší část toho, co duševní nemoci společnost stojí.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        <strong>Onkologie: víc pacientů a dražší léčba.</strong> ČSÚ vysvětluje růst výdajů na novotvary dvěma faktory: rostoucí incidencí a rozšířením moderní a velmi nákladné léčby, jako je biologická léčba, imunoterapie nebo genová léčba. Kolik připadá na jednotlivé faktory, publikace neuvádí. Souvislost ale ukazují jiná data. Úhrady za <a href="clanek-centrove-leky-2026.html">centrové léky</a> dosáhly podle ÚZIS v roce 2024 39,8 miliardy korun. Dostupnost diagnostiky rozebírá článek o <a href="clanek-pet-skenery.html">PET skenerech</a>, výsledky léčby <a href="clanek-prezit-rakoviny.html">analýza přežití</a>. Standardizovaná úmrtnost na zhoubné novotvary byla v Česku v roce 2023 podle Eurostatu 250,43 na 100&nbsp;000 obyvatel, v EU 233,13.
+      </p>
+      <p>
+        <strong>Srdce a cévy: pomalejší růst neznamená vyřešený problém.</strong> Výdaje na oběhovou soustavu rostly pomaleji. Úmrtnost na kardiovaskulární nemoci je ale podle Eurostatu stále 463,75 na 100&nbsp;000 obyvatel proti 312,95 v EU (2023). Druhé místo v tabulce tedy neznamená, že je problém menší. Znamená, že onkologie zdražuje rychleji.
+      </p>
+      <p>
+        <strong>Duševní zdraví: rychlý růst z nízkého základu.</strong> Kapitola V odpovídá zhruba 4,9 % výdajů pojišťoven. S indikátorem podílu výdajů na duševní zdraví (4 % za rok 2022 podle Národního akčního plánu, v EU 7 %) ji nelze přímo srovnávat, protože má jiný jmenovatel a jiné vymezení. Starší čísla i souvislosti shrnuje článek <a href="clanek-vydaje-dusevni-zdravi.html">Čtyři procenta na duševní zdraví</a>. Nová data ukazují, že peníze přibývají rychleji než jinde, i když tabulka neříká, kolik z nich jde do komunitní péče, kterou měla přinést <a href="clanek-reforma-psychiatrie-13-let.html">reforma psychiatrie</a> a <a href="clanek-centra-dusevniho-zdravi.html">centra duševního zdraví</a>.
+      </p>
+      <p>
+        <strong>Rok 2025: další zrychlení.</strong> Podle předběžného odhadu ČSÚ, který stojí na odhadech, vzrostly celkové výdaje v roce 2025 o 9,8 % na <strong>765,0 miliardy korun</strong>, tedy 8,9 % HDP a 70&nbsp;245 korun na obyvatele. Rozpad podle diagnóz za rok 2025 zatím k dispozici není.
+      </p>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Rozložit diagnózy podle druhu péče.</strong> Z dnešních tabulek poznáme, <em>za co</em> se platí, ale ne <em>proč</em> to zdražuje. Kdyby ČSÚ a ÚZIS zveřejnily kapitoly MKN-10 zkřížené s druhem péče, bylo by vidět, jestli růst u novotvarů táhnou léky, hospitalizace, nebo počet pacientů. Pomohlo by také popsat 88,5 miliardy korun výdajů pojišťoven, které dnes k žádné diagnóze přiřazené nejsou.
+      </p>
+      <p>
+        <strong>Spojit peníze s výsledky.</strong> Onkologie je nejdražší kapitolou a zároveň oblastí, kde máme data o přežití a úmrtnosti. Výdaje na centrovou léčbu by se měly pravidelně vykazovat spolu s tím, co přinášejí pacientům, například s přežitím a stadiem při diagnóze. U nových léků je dobré ptát se na přínos stejně důsledně jako na cenu.
+      </p>
+      <p>
+        <strong>Sledovat, kam jdou peníze na duševní zdraví.</strong> Růst o 146 % za osm let je velký. Pro reformu je ale důležité, jestli peníze jdou do péče blízko domova, nebo zůstávají v lůžkách. Rozpad kapitoly V podle druhu péče a kraje by ukázal, jestli se výdaje přesouvají tam, kam je reforma chtěla nasměrovat. Zvlášť u dětí a dospívajících, kterým připadá 3,75 miliardy.
+      </p>
+      <p>
+        <strong>Nezapomenout na oběhovou soustavu.</strong> Pomalejší růst výdajů na srdce a cévy je dobrá zpráva, jen pokud se zároveň snižuje úmrtnost. Ta se snižuje, ale od evropského průměru je pořád daleko. Prevence, která tyto nemoci oddaluje, přitom v tabulce skoro není vidět. Kapitola XXI, kam patří prohlídky a očkování, v roce 2024 klesla o 15,5 %.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=vydaje_zdravotnictvi_hdp"><strong>Výdaje na zdravotnictví / HDP</strong></a> — 8,6 % (2024; OECD 9,3 %, EU 10,4 %) · ČSÚ, zdravotnické účty (SHA)</li>
+        <li><a href="indicator.html?id=naklady_centrove_leky_total"><strong>Úhrady za centrové léky</strong></a> — 39,8 mld. Kč za rok (2024) · ÚZIS, NZIP, OIS-11-06</li>
+        <li><a href="indicator.html?id=mortalita_onkologicka"><strong>Mortalita na zhoubné novotvary (standardizovaná)</strong></a> — 250,43 na 100&nbsp;000 obyvatel (2023; EU 233,13) · Eurostat</li>
+        <li><a href="indicator.html?id=mortalita_kardiovaskularni"><strong>Mortalita na kardiovaskulární nemoci (standardizovaná)</strong></a> — 463,75 na 100&nbsp;000 obyvatel (2023; EU 312,95) · Eurostat</li>
+        <li><a href="indicator.html?id=vydaje_dusevni_zdravi_pct"><strong>Podíl výdajů na péči o duševní zdraví</strong></a> — 4 % celkových výdajů (2022; EU 7 %) · MZ ČR, Národní akční plán pro duševní zdraví 2020–2030</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Český statistický úřad</h5>
+        <ul class="article-sources-list">
+          <li><strong>ČSÚ — Výsledky zdravotnických účtů – 2024</strong> (kód 260005-26, datum vydání 24. 9. 2026) — produktová stránka publikace s tabulkami, kapitolami a metodikou. Staženo 25. 9. 2026. <a href="https://csu.gov.cz/aktualni-produkt/41197" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — tabulky 3.1–3.6 (26000526t3.xlsx)</strong> — tab. 3.2 „Výdaje z veřejného zdravotního pojištění podle kapitol klasifikace nemocí (MKN-10), 2015–2024“ (absolutně a na obyvatele), tab. 3.3 a 3.4 (vybrané diagnózy × pohlaví × věk 2024), tab. 3.6 (vybrané diagnózy × kraj bydliště 2024, na obyvatele). Staženo 25. 9. 2026. <a href="https://csu.gov.cz/docs/107508/740cb77f-ef3b-4f8a-d583-22d790136c2c/26000526t3.xlsx?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — tabulky 1.1–1.10 (26000526t1.xlsx)</strong> — tab. 1.1 „Celkové výdaje na zdravotní péči – základní ukazatele“ (2015–2025P; P = předběžné údaje založené na odhadech), tab. 1.2 „podle zdroje financování“ (zdravotní pojišťovny 514,2 mld. Kč v roce 2024). Staženo 25. 9. 2026. <a href="https://csu.gov.cz/docs/107508/f4b6c0ed-db29-8a12-0288-764701217df3/26000526t1.xlsx?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — kapitola 3 „Výdaje z veřejného zdravotního pojištění podle diagnóz, pohlaví, věku a bydliště pacienta“</strong> (PDF) — komentář ČSÚ k příčinám růstu výdajů na novotvary a k výdajům žen a mužů. Staženo 25. 9. 2026. <a href="https://csu.gov.cz/docs/107508/ffd0b44b-2623-1a66-d37f-c1f8a539048b/26000526_k3.pdf?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ, Statistika&amp;My — Zdravotní péče v roce 2024 stála 64 tisíc korun na osobu</strong> (11. 6. 2026) — první zveřejnění předběžných výsledků za rok 2024. <a href="https://statistikaamy.csu.gov.cz/zdravotni-pece-v-roce-2024-stala-64-tisic-korun-na-osobu" target="_blank" rel="noopener">statistikaamy.csu.gov.cz ↗</a></li>
+          <li><strong>ČSÚ — Výdaje na zdravotní péči</strong> — rozcestník statistiky zdravotnických účtů. <a href="https://csu.gov.cz/vydaje-na-zdravotni-peci" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>OECD — Expenditure by disease, age and gender</strong> (2016) — přehled, které země umí vykázat výdaje podle diagnóz (asi 16 včetně Česka), a limity srovnatelnosti. Staženo 25. 9. 2026. <a href="https://www.oecd.org/content/dam/oecd/en/publications/reports/2016/04/health-expenditure-by-disease-age-and-gender_60dce05b/7b219798-en.pdf" target="_blank" rel="noopener">oecd.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Jönsson B, Hofmarcher T, Lindgren P, Wilking N. The cost and burden of cancer in the European Union 1995–2014. Eur J Cancer. 2016;66:162–170.</strong> DOI 10.1016/j.ejca.2016.06.022. PMID 27589247. Analýza nákladů nemoci (cost-of-illness). Ověřeno v PubMed 2026-09-25. <a href="https://doi.org/10.1016/j.ejca.2016.06.022" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Hofmarcher T, Lindgren P, Wilking N, Jönsson B. The cost of cancer in Europe 2018. Eur J Cancer. 2020;129:41–49.</strong> DOI 10.1016/j.ejca.2020.01.011. PMID 32120274. Analýza nákladů nemoci, EU-27 + Island, Norsko, Švýcarsko, Spojené království. Ověřeno v PubMed 2026-09-25. <a href="https://doi.org/10.1016/j.ejca.2020.01.011" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Gustavsson A, Svensson M, Jacobi F, et al. Cost of disorders of the brain in Europe 2010. Eur Neuropsychopharmacol. 2011;21(10):718–779.</strong> DOI 10.1016/j.euroneuro.2011.08.008. PMID 21924589. Systematický přehled a nákladový model, 30 evropských zemí. Ověřeno v PubMed 2026-09-25. <a href="https://doi.org/10.1016/j.euroneuro.2011.08.008" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-vydaje-zdravotnictvi.html">8,6 procenta HDP</a> · <a href="clanek-financovani-sha.html">Odkud jdou peníze a kam mizí</a> · <a href="clanek-vydaje-sprava-zdravotnictvi.html">Výdaje na správu zdravotnictví</a> · <a href="clanek-centrove-leky-2026.html">Čtyřicet miliard za naději</a> · <a href="clanek-vydaje-dusevni-zdravi.html">Čtyři procenta na duševní zdraví</a> · <a href="clanek-reforma-psychiatrie-13-let.html">Reforma psychiatrie po třinácti letech</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Výdaje podle diagnóz zahrnují jen tu část výdajů zdravotních pojišťoven, kterou lze přiřadit ke konkrétnímu pacientovi (v roce 2024 součet kapitol 425,7 z 514,2 mld. Kč). Přiřazení vychází z diagnózy uvedené u vykázané služby a jde o národní výstup nad rámec mezinárodně srovnatelné statistiky SHA. Údaje za rok 2025 jsou předběžné a založené na odhadech. Procentní změny přepočítala redakce z nezaokrouhlených hodnot tabulek ČSÚ.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
