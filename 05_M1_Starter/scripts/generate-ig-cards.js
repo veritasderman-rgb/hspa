@@ -99,6 +99,30 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-metodika-zachyt-ledvin-vestnik-12-2026': {
+    kicker: 'Prevence · metodika záchytu nemoci ledvin', signal: 'warn',
+    stat: '1', statSuffix: ' měsíc',
+    claim: 'na cestu k nefrologovi při velmi vysokém riziku. Metodika vyšla ve Věstníku.',
+    context: 'Test od 50 let každé dva roky. Cíl účasti v metodice chybí.',
+  },
+  'clanek-vydaje-podle-diagnoz-2024-novotvary-poprve-nejdrazsi': {
+    kicker: 'Financování · výdaje podle diagnóz 2024', signal: 'warn',
+    stat: '55,8', statSuffix: ' mld. Kč',
+    claim: 'zaplatily pojišťovny za novotvary. Poprvé víc než za srdce a cévy.',
+    context: 'Od roku 2017 růst o 119 %. Duševní poruchy rostou nejrychleji: +146 %.',
+  },
+  'clanek-padelek-phesgo-overovani-pravosti-leciv-2026': {
+    kicker: 'Léková politika · padělky léčiv', signal: 'neutral',
+    stat: '88',
+    claim: 'výstrah před padělky vydal SÚKL od ledna 2025. V Česku žádný nález.',
+    context: 'Lékárny a distributoři ověří týdně 3,47 milionu balení. Kauza Phesgo.',
+  },
+  'clanek-enterokoky-gentamicin-rezistence': {
+    kicker: 'Infekční nemoci · antibiotická rezistence', signal: 'bad',
+    stat: '32,4', statSuffix: '%', barPct: 32,
+    claim: 'českých enterokoků E. faecalis ztratilo synergii s gentamicinem.',
+    context: 'Unijní průměr 22,6 %. Evropská řada od roku 2020 klesá, česká kolísá.',
+  },
   'clanek-reforma-verejneho-zdravotniho-pojisteni-2030': {
     kicker: 'Legislativa · reforma pojištění 2030', signal: 'warn',
     stat: '1 500', statSuffix: ' Kč',
