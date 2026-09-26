@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-26
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-26
+    creation_phase: rutina+article-write
+    primary_sources_count: 7
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-09-26: Věstník MZ ČR částka 12/2026 (vydáno 24. 9. 2026), jediný obsah
+      „Metodika pro časný záchyt chronického onemocnění ledvin v ČR“ (22 stran). Stránka mzd.gov.cz/vestnik/vestnik-12-2026/
+      a PDF Vestnik-MZD_12-2026.pdf (1 069 441 B) HTTP 200 dne 26. 9. 2026; celý text PDF extrahován a přečten.
+      Navazuje na clanek-test-ledvin-padesatnici-2026.html (TZ MZ 16. 9. 2026, vyhláška 403/2025 Sb., laboratorní kohorta) —
+      kohortu NEopakuje, jen odkazuje.
+      KPI (vše literálně z Věstníku 12/2026): obecná populace každé 2 roky od 50 let v rámci preventivních prohlídek u VPL (kap. 2);
+      rizikové skupiny (DM 1. či 2. typu, arteriální hypertenze, KV onemocnění = ICHS, srdeční selhání, ICHDK, CMP, fibrilace síní)
+      jednou ročně nebo každých 3–12 měsíců (kap. 2, 2.1); eGFR z kreatininu podle CKD-EPI + uACR, výkony 81499, 81902, 81904
+      (eGFR) a 81675, 81499, 81900 (uACR); 81900, 81902, 81904 = signální výkony bez bodového ohodnocení (kap. 3.2 pozn.);
+      laboratoř vždy dopočítá a zařadí G1–G5 / A1–A3 (kap. 3.4, příl. 4); ověření pozitivního nálezu opakováním s odstupem
+      přibližně tří měsíců (3.3); prahy G (ml/s/1,73 m²) ≥1,50 / 1,00–1,49 / 0,75–0,99 / 0,50–0,74 / 0,25–0,49 / <0,25, A (mg/mmol)
+      <3 / 3–30 / >30 (kap. 4); převod 1 ml/s = 60 ml/min, 1 mg/mmol = 8,84 mg/g (příl. 1); matice rizika Tabulka 1 (kap. 5);
+      sledování nízké 2 roky PL / střední ~12 měsíců / vysoké ~6 měsíců + odeslat k nefrologovi / velmi vysoké k nefrologovi
+      zpravidla do jednoho měsíce, sledování 1–3 měsíce (5.1.2); farmakoterapie 5.1.1 B (RAS blokátory, SGLT2i při eGFR > 0,33,
+      finerenon a GLP-1 RA u T2DM A2–A3, statin u DM/ASKVO a nad 50 let, systolický TK přibližně 120 mmHg, po transplantaci
+      130/80, metformin při eGFR > 0,5); pohyb ~150 minut týdně; autorský kolektiv NSC ÚZIS (5 jmen), ČNS (Rychlík, Viklický),
+      SVL (Šonka, Seifert), ČSKB (Pikner, Zima, Rajdl, Springer), ČDS (Prázný); zdroje kap. 7 (zákon 372/2011 Sb., vyhláška
+      70/2012 Sb., vyhláška 134/1998 Sb., DP ČNS 2024, KDIGO). „Každý desátý dospělý obyvatel vyspělých zemí“ = tvrzení
+      metodiky (1.2), v textu tak označeno. Slovo „screening“ se v textu metodiky vyskytuje jen v názvu NSC — ověřeno grepem;
+      stejně 0× NZIS, registr, indikátor, účast, zvaní, pokrytí, monitor.
+      VÝPOČTY REDAKCE (označeno): 0,33 × 60 = 19,8 ≈ 20 ml/min; 0,5 × 60 = 30 ml/min (převodní faktor z příl. 1).
+      Srovnání s prezentací MZ ze 16. 9. 2026 (porucha lipidů, prediabetes, DM2T nad 65 let 2× ročně) přebráno z auditovaného
+      předchozího článku, v textu s odkazem.
+      Bench: kontrola_hypertenze 68 % (2024; OECD 72, EU 70; definice TK < 140/90) vs. cíl metodiky ~120 mmHg systolického.
+      EVIDENCE (PubMed 26. 9. 2026, 12 volání — strop 8 překročen, viz report): KDIGO 2024 Kidney Int 105(4S):S117–S314, PMID 38490803,
+      DOI 10.1016/j.kint.2023.10.018 (bez abstraktu — citováno jen jako existující guideline, žádné číslo); Shlipak 2021 Kidney Int
+      99(1):34–47, PMID 33127436; EMPA-KIDNEY NEJM 2023;388(2):117–127, PMID 36331190 (6 609, 13,1 vs 16,9 %, HR 0,72, eGFR ≥ 20);
+      Nuffield/SMART-C Lancet 2022;400:1788–1801, PMID 36351458 (RR 0,63); Cusick 2023 Ann Intern Med 176(6):788–797, PMID 37216661
+      (86 300 USD/QALY); van Mil SALINE EClinicalMedicine 2025;82:103185, PMID 40247889 (40,1 % vs 21,8 %, 8,7 %; financováno
+      AstraZeneca — uvedeno); Kairys 2022 PLoS One 17(1):e0262227, PMID 34986199 (S-GASM, 2,5 → 2,3 % a 1,8 %, nediskontováno).
+      Consensus 1 dotaz (medical_mode, bez preprintů, 20 prací): SOUHLAS — převaha modelových studií ve prospěch záchytu
+      albuminurie; SALINE výslovně uvádí, že oportunní záchyt u rizikových je „suboptimal“.
+      MEZINÁRODNĚ: plošný program DE/AT/PL/SK nedohledán (limit, jako v předchozím díle); německý údaj je jen model S-GASM.
+      SEBEOMEZENÍ: (1) laboratorní kohorta z TZ neopakována; (2) „10 % dospělých“ není české číslo; (3) netvrdí se, jak se
+      signální výkony promítnou do dat pojišťoven/ÚZIS — metodika to neříká; (4) netvrdí se, kdo hradí roční vyšetření
+      rizikových — metodika to neřeší; (5) KDIGO bez čísel (chybí abstrakt); (6) zahraniční ceny/QALY nepřenášeny na ČR.
+      published:false, audit-status draft — čeká na schválení redakce."
+    notes: "audit K 2026-09-26: nezávislý audit (A–G) proti plnému textu Věstníku 12/2026, 7 PMID přes get_article_metadata (vše shoda, žádná retrakce), 1× Consensus (souhlas), odkazy HTTP 200, databox = indicators.json. Opraveno 4 nálezy: (1) „Před deseti dny“ → „V polovině září“ (předchozí článek vyšel 18. 9., publikace 27. 9. = 9 dní); (2) „Metodika má 22 stran“ / perex „Na 22 stranách“ → 22 stran má částka Věstníku, metodika sama zabírá s. 3–21; (3) „Nepoužívá slovo screening“ → slovo padne v názvu Národního screeningového centra; (4) „americké jednotky KDIGO“ → konvenční jednotky KDIGO (KDIGO je mezinárodní)."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodika k testu ledvin vyšla: čtyři stupně rizika, u nejvyššího nefrolog do měsíce. Cíl účasti v ní chybí · HSPA Monitor</title>
+<meta name="description" content="Ministerstvo zdravotnictví vydalo 24. září 2026 ve Věstníku (částka 12/2026) Metodiku pro časný záchyt chronického onemocnění ledvin. Určuje, že lidé od 50 let mají mít vyšetřenou filtraci ledvin (eGFR) a albumin v moči (uACR) každé dva roky a lidé s diabetem, hypertenzí nebo nemocí srdce a cév jednou ročně nebo každých 3–12 měsíců. Laboratoř musí výsledek vždy zařadit do kategorií G1–G5 a A1–A3. Z jejich kombinace plynou čtyři stupně rizika: od kontroly u praktika za dva roky po odeslání k nefrologovi zpravidla do měsíce. Metodika ale nestanoví cíl účasti ani způsob, jak měřit, kolik lidí test skutečně podstoupí.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Metodika k testu ledvin vyšla: čtyři stupně rizika, u nejvyššího nefrolog do měsíce. Cíl účasti v ní chybí">
+<meta property="og:description" content="Co skutečně říká nová metodika MZ k časnému záchytu chronického onemocnění ledvin: kdo a jak často, co musí udělat laboratoř, kdy k nefrologovi, jaké léky. A co v ní chybí.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-metodika-zachyt-ledvin-vestnik-12-2026.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-metodika-zachyt-ledvin-vestnik-12-2026.png">
+<meta property="article:published_time" content="2026-09-27">
+<meta property="article:section" content="Prevence">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-metodika-zachyt-ledvin-vestnik-12-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Metodika k testu ledvin vyšla: čtyři stupně rizika, u nejvyššího nefrolog do měsíce. Cíl účasti v ní chybí",
+  "description": "Ministerstvo zdravotnictví vydalo 24. září 2026 ve Věstníku (částka 12/2026) Metodiku pro časný záchyt chronického onemocnění ledvin. Určuje, že lidé od 50 let mají mít vyšetřenou filtraci ledvin (eGFR) a albumin v moči (uACR) každé dva roky a lidé s diabetem, hypertenzí nebo nemocí srdce a cév jednou ročně nebo každých 3–12 měsíců. Laboratoř musí výsledek vždy zařadit do kategorií G1–G5 a A1–A3. Z jejich kombinace plynou čtyři stupně rizika: od kontroly u praktika za dva roky po odeslání k nefrologovi zpravidla do měsíce. Metodika ale nestanoví cíl účasti ani způsob, jak měřit, kolik lidí test skutečně podstoupí.",
+  "datePublished": "2026-09-27T06:00:00+02:00",
+  "dateModified": "2026-09-26",
+  "inLanguage": "cs",
+  "articleSection": "Prevence",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-metodika-zachyt-ledvin-vestnik-12-2026.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-metodika-zachyt-ledvin-vestnik-12-2026.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Prevence</span>
+        <span class="article-tag article-tag-muted">Věstník MZ · Ledviny · Primární péče · Laboratoře</span>
+      </div>
+      <h1 class="article-title">Metodika k testu ledvin vyšla: čtyři stupně rizika, u nejvyššího nefrolog do měsíce. Cíl účasti v ní chybí</h1>
+      <p class="article-deck">
+        Ministerstvo zdravotnictví vydalo 24. září ve Věstníku, částce 12/2026, Metodiku pro časný záchyt chronického onemocnění ledvin. Lidé od 50 let mají mít <strong>každé dva roky</strong> vyšetřenou filtraci ledvin (eGFR) a albumin v moči (uACR), lidé s diabetem, hypertenzí nebo nemocí srdce a cév jednou ročně nebo každých 3–12 měsíců. Laboratoř musí každý výsledek zařadit do kategorií G1–G5 a A1–A3 a vykázat k tomu <strong>tři signální výkony bez bodového ohodnocení</strong>. Z kombinace kategorií plynou <strong>čtyři stupně rizika</strong>, na nejvyšším má pacient k nefrologovi zpravidla do měsíce. Cíl účasti ani ukazatel, podle kterého by šlo poznat, jestli postup funguje, metodika nestanoví.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">27. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V polovině září jsme psali, že test ledvin <a href="clanek-test-ledvin-padesatnici-2026.html">dostane každý padesátník</a>. Tehdy existovala vyhláška, tisková zpráva a prezentace. Chyběl dokument, který říká, co dělat s výsledkem. Ten teď vyšel. Částka Věstníku s metodikou má 22 stran a text je věcnější, než by čekal čtenář tiskových zpráv. Slovo screening v ní padne jen v názvu autorského pracoviště. Metodika mluví o <em>časném záchytu</em>. Rozdíl není jen slovní a ukazuje, kde je nový postup silný a kde slabý.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avMzlHeroH">
+        <figcaption class="av-figure-h" id="avMzlHeroH">Metodika pro časný záchyt chronického onemocnění ledvin v číslech (Věstník MZ ČR, částka 12/2026, vydáno 24. 9. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="2" data-suffix=" roky">2 roky</span>
+            <span class="av-counter-label">interval vyšetření eGFR a uACR u všech od 50 let</span>
+            <span class="av-counter-foot">rizikové skupiny ročně nebo každých 3–12 měsíců</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="3" data-suffix=" výkony">3 výkony</span>
+            <span class="av-counter-label">signální výkony laboratoře bez bodového ohodnocení</span>
+            <span class="av-counter-foot">81900, 81902, 81904 · zařazení do G1–G5 a A1–A3</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1" data-suffix=" měsíc">1 měsíc</span>
+            <span class="av-counter-label">lhůta k nefrologovi při velmi vysokém riziku</span>
+            <span class="av-counter-foot">„zpravidla do jednoho měsíce“, v urgentních případech neodkladně</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">cílů účasti a ukazatelů pokrytí v metodice</span>
+            <span class="av-counter-foot">bez zmínky o sběru dat do NZIS</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR, částka 12/2026 (24. 9. 2026), kapitoly 2, 3, 5.1.2 a přílohy 2–3; poslední dlaždice = výsledek čtení celého textu redakcí, 26. 9. 2026.</p>
+      </figure>
+
+      <h3>Co metodika říká</h3>
+      <p>
+        Cílem je podle úvodu zachytit chronické onemocnění ledvin (CKD) v časných stadiích, odhadnout riziko jeho postupu a včas zahájit léčbu. Nemoc metodika definuje jako poruchu struktury nebo funkce ledvin trvající déle než tři měsíce. CKD podle ní „postihuje každého desátého dospělého obyvatele vyspělých zemí“. To je tvrzení metodiky o vyspělých zemích obecně, ne české číslo, protože populační odhad pro Česko neexistuje.
+      </p>
+      <p>
+        Cílová populace má dvě části. <strong>Obecná populace</strong> se vyšetřuje při preventivní prohlídce u praktického lékaře každé dva roky od 50 let. <strong>Rizikové skupiny</strong> jednou ročně nebo každých 3–12 měsíců podle míry rizika a doporučeného postupu České nefrologické společnosti. Rizikové skupiny jsou tři: diabetes 1. nebo 2. typu, arteriální hypertenze a kardiovaskulární onemocnění, výslovně ischemická choroba srdeční, srdeční selhání, ischemická choroba dolních končetin, cévní mozková příhoda a fibrilace síní. Proti prezentaci, kterou ministerstvo ukázalo 16. září, je seznam jiný. Nejsou v něm porucha lipidů a prediabetes a chybí i zvláštní režim dvakrát ročně pro diabetiky nad 65 let. Přibyly srdeční selhání, mozková příhoda a fibrilace síní.
+      </p>
+      <p>
+        Metodika se opírá o zákon č. 372/2011 Sb., o zdravotních službách, o vyhlášku č. 70/2012 Sb., o preventivních prohlídkách, ve znění účinném od 1. ledna 2026, a o vyhlášku č. 134/1998 Sb., seznam výkonů. Odborně vychází z doporučeného postupu ČNS z roku 2024 a z mezinárodních doporučení KDIGO. Připravilo ji <strong>Národní screeningové centrum ÚZIS</strong> spolu s Českou nefrologickou společností, Společností všeobecného lékařství, Českou společností klinické biochemie a Českou diabetologickou společností. Ze strany nefrologů jsou podepsáni Ivan Rychlík a Ondřej Viklický, za praktiky Petr Šonka a Bohumil Seifert, za diabetology Martin Prázný.
+      </p>
+
+      <h3>Jak vypadá cesta pacienta</h3>
+      <p>
+        Stojí na dvou číslech. <strong>eGFR</strong> je odhad, kolik krve ledviny přefiltrují. Počítá se z kreatininu v krvi podle rovnice CKD-EPI. <strong>uACR</strong> je poměr albuminu a kreatininu v moči, přednostně z prvního ranního vzorku. Albumin v moči je často první známka poškození, ještě když filtrace vypadá dobře. Pozitivní nález se podle metodiky musí ověřit opakovaným vyšetřením <strong>s odstupem přibližně tří měsíců</strong>. Tím se odliší trvalá porucha od náhodného nebo přechodného výkyvu. Odběr zajistí ošetřující lékař.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avMzlFlowH">
+        <figcaption class="av-figure-h" id="avMzlFlowH">Cesta pacienta podle metodiky časného záchytu CKD (Věstník MZ ČR 12/2026, kapitoly 2, 3.3, 3.4 a 5.1.2; schéma redakce, 26. 9. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Prohlídka nebo kontrola</h4>
+            <p class="av-flow-desc">Od 50 let každé 2 roky u praktika; diabetes, hypertenze, nemoc srdce a cév ročně nebo po 3–12 měsících.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Krev a moč</h4>
+            <p class="av-flow-desc">Kreatinin v séru → eGFR (CKD-EPI); ranní moč → uACR.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Laboratoř zařadí</h4>
+            <p class="av-flow-desc">Vždy dopočítá a zapíše kategorii G1–G5 a A1–A3 do nálezu.</p>
+            <span class="av-flow-tag">81902 · 81904 · 81900</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Ověření</h4>
+            <p class="av-flow-desc">Pozitivní nález zopakovat s odstupem přibližně 3 měsíců.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Riziko → péče</h4>
+            <p class="av-flow-desc">Čtyři stupně: praktik za 2 roky až nefrolog zpravidla do měsíce.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR, částka 12/2026, Metodika pro časný záchyt chronického onemocnění ledvin v ČR (24. 9. 2026). Rychlý pokles eGFR nebo podezření na akutní poškození ledvin metodika řeší zvlášť: urgentní odeslání, obvykle s hospitalizací.</p>
+      </figure>
+
+      <h3>Klasifikace a riziko: tabulka, která rozhoduje</h3>
+      <p>
+        Metodika používá jednotky SI, ne konvenční jednotky, se kterými pracuje KDIGO. Filtrace se udává v ml/s/1,73 m², albuminurie v mg/mmol. Převod je v příloze: 1 ml/s odpovídá 60 ml/min a 1 mg/mmol odpovídá 8,84 mg/g. Hranice G1 (≥ 1,50 ml/s) tak odpovídá 90 ml/min, G3a (0,75–0,99) rozmezí 45–59 ml/min a G5 (&lt; 0,25) selhání ledvin pod 15 ml/min. U albuminu je A1 pod 3 mg/mmol, A2 3–30 a A3 nad 30 mg/mmol. Kombinace obou os dává čtyři stupně rizika.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMzlTabH">
+        <figcaption class="av-figure-h" id="avMzlTabH">Riziko vzniku a progrese CKD podle kombinace kategorií G a A (Věstník MZ ČR 12/2026, Tabulka 1; vydáno 24. 9. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">eGFR (ml/s/1,73 m²)</th>
+                <th scope="col">A1 (&lt; 3 mg/mmol)</th>
+                <th scope="col">A2 (3–30)</th>
+                <th scope="col">A3 (&gt; 30)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">G1 (≥ 1,50)</th>
+                <td class="av-good">nízké</td><td>střední</td><td class="av-bad">vysoké</td>
+              </tr>
+              <tr>
+                <th scope="row">G2 (1,00–1,49)</th>
+                <td class="av-good">nízké</td><td>střední</td><td class="av-bad">vysoké</td>
+              </tr>
+              <tr>
+                <th scope="row">G3a (0,75–0,99)</th>
+                <td>střední</td><td class="av-bad">vysoké</td><td class="av-bad">velmi vysoké</td>
+              </tr>
+              <tr>
+                <th scope="row">G3b (0,50–0,74)</th>
+                <td class="av-bad">vysoké</td><td class="av-bad">velmi vysoké</td><td class="av-bad">velmi vysoké</td>
+              </tr>
+              <tr>
+                <th scope="row">G4 (0,25–0,49)</th>
+                <td class="av-bad">velmi vysoké</td><td class="av-bad">velmi vysoké</td><td class="av-bad">velmi vysoké</td>
+              </tr>
+              <tr>
+                <th scope="row">G5 (&lt; 0,25)</th>
+                <td class="av-bad">velmi vysoké</td><td class="av-bad">velmi vysoké</td><td class="av-bad">velmi vysoké</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR, částka 12/2026, kapitola 5, Tabulka 1 „Riziko vzniku a progrese CKD“; převod na ml/min a mg/g v příloze 1. Barevné rozlišení doplnila redakce.</p>
+      </figure>
+
+      <p>
+        Z tabulky je vidět hlavní myšlenka metodiky: <strong>samotná filtrace nestačí</strong>. Člověk s normální eGFR a výrazně zvýšeným albuminem v moči (G1, A3) patří do vysokého rizika, přestože by ho vyšetření samotného kreatininu nezachytilo. Proto metodika trvá na obou testech.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avMzlCareH">
+        <figcaption class="av-figure-h" id="avMzlCareH">Kdo pacienta sleduje a jak často podle stupně rizika (Věstník MZ ČR 12/2026, kapitola 5.1.2; vydáno 24. 9. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Riziko</th>
+                <th scope="col">Kdo sleduje</th>
+                <th scope="col">Interval</th>
+                <th scope="col">Nefrolog</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Nízké</th>
+                <td>praktický lékař při preventivní prohlídce</td>
+                <td>2 roky</td>
+                <td class="av-mut">jen z jiných klinických důvodů</td>
+              </tr>
+              <tr>
+                <th scope="row">Střední</th>
+                <td>praktik nebo nefrolog, diabetolog, kardiolog a další</td>
+                <td>přibližně 12 měsíců</td>
+                <td>zejména při progresi</td>
+              </tr>
+              <tr>
+                <th scope="row">Vysoké</th>
+                <td>nefrolog, diabetolog, kardiolog nebo internista</td>
+                <td>přibližně 6 měsíců</td>
+                <td>odeslat ke komplexnímu vyšetření</td>
+              </tr>
+              <tr class="av-row-highlight">
+                <th scope="row">Velmi vysoké</th>
+                <td>nefrolog, multidisciplinárně</td>
+                <td>1–3 měsíce</td>
+                <td class="av-bad">zpravidla do 1 měsíce</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Věstník MZ ČR, částka 12/2026, kapitola 5.1.2 „Doporučená režimová a léčebná opatření podle míry rizika vzniku a progrese CKD“. U velmi vysokého rizika patří k péči i příprava na dialýzu nebo transplantaci.</p>
+      </figure>
+
+      <h3>Kdo co dělá: praktik, laboratoř, specialista</h3>
+      <p>
+        <strong>Laboratoř</strong> dostala nejpřesnější úkoly. Když lékař na žádance požádá o kreatinin v séru nebo o eGFR, laboratoř vždy dopočítá eGFR a zařadí výsledek do kategorií G1–G5. Vykáže přitom výkony 81499 (kreatinin), 81902 (výpočet eGFR) a 81904 (hodnocení stadia). Když lékař požádá o mikroalbuminurii nebo uACR, laboratoř vždy změří uACR, zařadí ho do A1–A3 a vykáže 81675, 81499 a 81900. Tři výkony 81900, 81902 a 81904 jsou podle metodiky „signální výkony bez finančního dopadu“. Laboratoř za ně nic nedostane, jejich vykazování je ale „nezbytné pro správnou diagnostiku a klasifikaci“. Metodika přitom odkazuje na nově zavedené výkony platné od 1. ledna 2026. Praktický lékař tedy už nedostane jen číslo, ale i kategorii, ze které může rovnou odvodit riziko.
+      </p>
+      <p>
+        <strong>Praktický lékař</strong> test indikuje, zajistí ověřovací odběr, vede pacienty s nízkým rizikem a spolu se specialisty i ty se středním. <strong>Specialisté</strong> přebírají vysoké a velmi vysoké riziko. Režimová opatření platí pro všechny: nekouřit, zdravě jíst, zhubnout při nadváze, přiměřeně pít a hýbat se aerobně asi 150 minut týdně.
+      </p>
+      <p>
+        Farmakoterapii metodika shrnuje v „hlavních zásadách“. Blokátory systému renin-angiotenzin (ACEi, ARB) doporučuje všem, pokud nejsou kontraindikované. Stejně tak <strong>inhibitory SGLT2 (glifloziny) při eGFR nad 0,33 ml/s</strong>, tedy podle přepočtu redakce zhruba nad 20 ml/min. U diabetu 2. typu s albuminurií A2–A3 přidává finerenon a agonisty receptoru GLP-1. Statin doporučuje lidem s diabetem nebo aterosklerotickým kardiovaskulárním onemocněním a pacientům nad 50 let. Metformin u diabetu 2. typu při eGFR nad 0,5 ml/s (asi 30 ml/min). Cílový systolický tlak je podle tolerance <strong>přibližně 120 mmHg</strong>, po transplantaci ledviny 130/80.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="68" data-suffix=" %">68 %</span>
+          <span class="av-counter-label">lidí s hypertenzí má tlak pod 140/90 mmHg (2024)</span>
+          <span class="av-counter-foot">SZÚ, EHES · metodika cílí u CKD na systolický tlak přibližně 120 mmHg</span>
+        </div>
+      </aside>
+      <p>
+        Cíl 120 mmHg je výrazně přísnější než to, čeho dnes systém dosahuje. Indikátor dashboardu <a href="indicator.html?id=kontrola_hypertenze">kontrolované hypertenze</a> počítá s hranicí 140/90 mmHg a i té v roce 2024 dosáhlo jen 68 % lidí s vysokým tlakem, proti průměru OECD 72 %. U pacientů s nemocnými ledvinami tedy bude mezi doporučením a praxí velký rozdíl.
+      </p>
+      <div class="av-aside-clear"></div>
+
+      <h3>Mezinárodní kontext a co říká evidence</h3>
+      <p>
+        Postup odpovídá tomu, k čemu se odborná komunita přiklání posledních pět let. Konference KDIGO o časné identifikaci CKD dospěla ke shodě, že záchyt spojený se stratifikací rizika a léčbou je potřeba zavést hned u lidí s vysokým rizikem, ideálně v primární péči a s přizpůsobením místním podmínkám (<em>Shlipak et al.</em> 2021, <em>Kidney International</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/33127436/" target="_blank" rel="noopener">PubMed 33127436</a>). Česká metodika dělá přesně to. Matice G × A podle ní vychází z doporučení KDIGO, jejichž aktuální verze vyšla v roce 2024 (<a href="https://pubmed.ncbi.nlm.nih.gov/38490803/" target="_blank" rel="noopener">PubMed 38490803</a>), i když metodika verzi v seznamu zdrojů neuvádí.
+      </p>
+      <p>
+        Test má smysl kvůli léčbě, která existuje. Ve studii EMPA-KIDNEY (<em>EMPA-KIDNEY Collaborative Group</em> 2023, <em>New England Journal of Medicine</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/36331190/" target="_blank" rel="noopener">PubMed 36331190</a>) dostalo 6&nbsp;609 lidí s CKD empagliflozin nebo placebo. Zahrnovala lidi s filtrací od 20 ml/min, tedy stejnou hranici, jakou teď používá česká metodika. Progrese onemocnění ledvin nebo kardiovaskulární úmrtí nastaly u 13,1 % léčených proti 16,9 % na placebu (poměr rizik 0,72), shodně u lidí s diabetem i bez něj. Metaanalýza 13 studií (<em>Nuffield Department of Population Health Renal Studies Group</em> 2022, <em>Lancet</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/36351458/" target="_blank" rel="noopener">PubMed 36351458</a>) ukázala snížení rizika progrese o 37 %. Nákladovou efektivitu testu u padesátníků a zahraniční modely, například americký odhad 86&nbsp;300 dolarů za získaný rok v plné kvalitě při jednorázovém testu v 55 letech (<em>Cusick et al.</em> 2023, <em>Annals of Internal Medicine</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/37216661/" target="_blank" rel="noopener">PubMed 37216661</a>), jsme rozebrali v <a href="clanek-test-ledvin-padesatnici-2026.html">předchozím článku</a>.
+      </p>
+      <p>
+        Pro souseda, se kterým se nejčastěji srovnáváme, existuje zatím jen model. Německý simulační model S-GASM (<em>Kairys et al.</em> 2022, <em>PLoS One</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/34986199/" target="_blank" rel="noopener">PubMed 34986199</a>) spočítal, že testování albuminurie u všech diabetiků každé dva roky sníží celoživotní výskyt náhrady funkce ledvin z 2,5 % na 2,3 %. Testování všech diabetiků a hypertoniků ho sníží na 2,2 % a plošný screening populace na 1,8 %. Všechny tři scénáře vyšly v nediskontovaném výpočtu včetně ušetřených nákladů na dialýzu jako úsporné. Program vázaný na preventivní prohlídku celé populace nad 50 let jsme v Německu, Rakousku, Polsku ani na Slovensku v primárních zdrojích nedohledali. Je to výsledek našeho hledání, ne tvrzení o jejich systémech.
+      </p>
+
+      <h3>Časný záchyt není screening</h3>
+      <p>
+        Organizovaný populační screening, jaký Česko má u rakoviny prsu, tlustého střeva nebo děložního hrdla, <a href="clanek-mamograf-rakovina-prsu.html">zve lidi adresně</a>, vede o nich data a vyhodnocuje účast i výsledky. Časný záchyt podle nové metodiky je <strong>oportunní</strong>. Proběhne, když člověk přijde na prohlídku nebo ke svému lékaři. Na prohlídku u praktika dnes v dvouletém intervalu chodí <a href="indicator.html?id=prohlidka_prakticky_lekar">52,6 % pojištěnců</a> nad 18 let.
+      </p>
+      <p>
+        Že oportunní záchyt nestačí ani tam, kde ho doporučení výslovně chtějí, ukazuje nizozemská studie SALINE (<em>van Mil et al.</em> 2025, <em>eClinicalMedicine</em>, <a href="https://pubmed.ncbi.nlm.nih.gov/40247889/" target="_blank" rel="noopener">PubMed 40247889</a>). Autoři v úvodu konstatují, že záchyt u lidí s diabetem, hypertenzí nebo nemocí srdce zůstává „suboptimální“. Proto rizikové pacienty ve věku 45–80 let vybrali z elektronické dokumentace praktiků a poslali jim odběrovou sadu domů. Pozvání přes praktického lékaře přijalo 40,1 % lidí, přes lékárnu 21,8 %. Zvýšená albuminurie se potvrdila u 8,7 % účastníků z praxí. Studii financovala společnost AstraZeneca.
+      </p>
+
+      <h3>Co v metodice chybí</h3>
+      <p>
+        Metodika pečlivě popisuje, co udělat s jedním pacientem. O systému jako celku mlčí. Neobsahuje <strong>žádný cíl účasti</strong>, žádný ukazatel pokrytí ani termín, kdy se má postup vyhodnotit. Nezmiňuje Národní zdravotnický informační systém ani žádný registr. Nepopisuje zvaní ani připomínání. Kapitola o dokumentaci ukládá zapsat výsledky do zdravotnické dokumentace pacienta. Tím končí. Je to paradox, protože autorem je Národní screeningové centrum ÚZIS, instituce, která u onkologických programů právě účast a výsledky měří.
+      </p>
+      <p>
+        Dvě věci zůstávají otevřené i pro praxi. Vyhláška o preventivních prohlídkách stanoví vyšetření u rizikových skupin ve dvouletém intervalu, metodika jednou ročně až po třech měsících. Při jaké návštěvě a z jakého titulu se častější vyšetření dělá, metodika neříká. A signální výkony 81900 a 81904 podle přílohy „nabývají hodnoty“ G1–G5 a A1–A3. Metodika ale neuvádí, jestli a jak se tato hodnota dostane do dat pojišťoven a k ÚZIS.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodické upozornění">
+        <p class="article-callout-h">Co tento článek netvrdí</p>
+        <p>
+          Popisujeme znění metodiky, ne její dopad, který zatím nelze změřit. Údaj o „každém desátém dospělém“ je tvrzení metodiky o vyspělých zemích, ne český odhad. Přepočty 0,33 ml/s ≈ 20 ml/min a 0,5 ml/s ≈ 30 ml/min udělala redakce podle převodního faktoru z přílohy 1. Srovnání s prezentací ministerstva ze 16. září vychází z <a href="clanek-test-ledvin-padesatnici-2026.html">předchozího článku</a>. Zahraniční studie pracují s jinými cenami a jinými systémy, jejich čísla na Česko nepřenášíme. Že metodika neobsahuje cíl účasti ani zmínku o NZIS, jsme ověřili přečtením celého textu částky 12/2026.
+        </p>
+      </aside>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Měřit pokrytí.</strong> Nejjednodušší ukazatel je podíl lidí nad 50 let, kteří mají za posledních 24 měsíců vykázanou eGFR i uACR. Výkony se vykazují pojišťovnám, takže data existují. ÚZIS by je mohl zveřejňovat v NZIS Open po krajích a věkových skupinách, stejně jako dnes zveřejňuje účast na preventivních prohlídkách.
+      </p>
+      <p>
+        <strong>Využít signální výkony.</strong> Pokud se kategorie G a A dostanou do dat, vznikne poprvé obraz rozložení rizika v populaci, a ne jen laboratorní kohorta s akutními výkyvy. Ministerstvo by mělo říct, jestli s tím počítá, a pokud ano, doplnit to do metodiky.
+      </p>
+      <p>
+        <strong>Stanovit cíl a termín vyhodnocení.</strong> Bez cílové hodnoty se nedá říct, jestli postup funguje. Nabízí se dva ukazatele, které dashboard už sleduje. Prvním je podíl lidí, kteří k dialýze přicházejí po nefrologické péči (<a href="indicator.html?id=nefrologicka_pece_pred_dialyzou">71,1 % v roce 2024</a>). Pokud metodika funguje, má růst. Druhým je spotřeba antidiabetik, kam glifloziny patří.
+      </p>
+      <p>
+        <strong>Doplnit systematickou složku pro rizikové.</strong> Lidé s diabetem, hypertenzí a nemocí srdce jsou v dokumentaci praktiků vedení. Aktivní pozvání těch, kdo test v posledním roce neměli, je levnější než kampaň. V nizozemské studii SALINE na pozvání přes praktika zareagovalo 40,1 % oslovených.
+      </p>
+      <p>
+        Metodiku a starší obsah Věstníků najdete v <a href="vestniky-mz.html">archivu Věstníků MZ</a>.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=prohlidka_prakticky_lekar"><strong>Pokrytí preventivní prohlídkou u praktického lékaře</strong></a> — 52,6 % pojištěnců 18+ v dvouletém intervalu (2023) · ÚZIS, NZIS — preventivní prohlídky</li>
+        <li><a href="indicator.html?id=nefrologicka_pece_pred_dialyzou"><strong>Nefrologická péče před zahájením chronické dialýzy</strong></a> — 71,1 % (2024) · ÚZIS ČR, NZIS Open PPS-08-08</li>
+        <li><a href="indicator.html?id=kontrola_hypertenze"><strong>Kontrolovaná hypertenze (TK &lt; 140/90 mmHg)</strong></a> — 68 % (2024; OECD 72 %, EU 70 %) · SZÚ, EHES</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % (2023; OECD 7 %, EU 7,5 %) · EHIS, SZÚ</li>
+        <li><a href="indicator.html?id=spotreba_antidiabetik"><strong>Spotřeba antidiabetik</strong></a> — 113,1 DDD na 1&nbsp;000 obyvatel a den (2025; OECD 94,2, EU 92,7) · SÚKL, DIS-13</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární dokument</h5>
+        <ul class="article-sources-list">
+          <li><strong>Věstník MZ ČR, částka 12/2026</strong> (vydáno 24. 9. 2026) — stránka částky s odkazem na PDF. Ověřeno 26. 9. 2026. <a href="https://mzd.gov.cz/vestnik/vestnik-12-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+          <li><strong>Metodika pro časný záchyt chronického onemocnění ledvin v ČR</strong> (PDF, 22 stran) — cílová populace a frekvence (kap. 2), výkony a pokyny pro laboratoře (kap. 3, přílohy 2–4), klasifikace G × A a Tabulka 1 (kap. 4–5), péče podle rizika a farmakoterapie (kap. 5.1), autorský kolektiv a zdroje. Staženo 26. 9. 2026. <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Vestnik-MZD_12-2026.pdf" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní a odborný rámec</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 372/2011 Sb., o zdravotních službách</strong> — právní opora metodiky (zdroj č. 1). <a href="https://www.zakonyprolidi.cz/cs/2011-372" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Vyhláška č. 70/2012 Sb., o preventivních prohlídkách</strong> — ve znění účinném od 1. 1. 2026. <a href="https://www.zakonyprolidi.cz/cs/2012-70" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Vyhláška č. 134/1998 Sb., seznam zdravotních výkonů s bodovými hodnotami</strong> — rámec pro výkony 81900, 81902 a 81904. <a href="https://www.zakonyprolidi.cz/cs/1998-134" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Česká nefrologická společnost — Doporučený postup ČNS pro diagnostiku a léčbu CKD u praktických lékařů</strong> (2024) — odborný základ metodiky. <a href="https://www.nefrol.cz" target="_blank" rel="noopener">nefrol.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Recenzovaná literatura</h5>
+        <ul class="article-sources-list">
+          <li><strong>Kidney Disease: Improving Global Outcomes (KDIGO) CKD Work Group. KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease. Kidney Int. 2024;105(4S):S117–S314.</strong> DOI 10.1016/j.kint.2023.10.018. PMID 38490803. Doporučený postup. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/38490803/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Shlipak MG, Tummalapalli SL, Boulware LE, Grams ME, et al. The case for early identification and intervention of chronic kidney disease: conclusions from a KDIGO Controversies Conference. Kidney Int. 2021;99(1):34–47.</strong> DOI 10.1016/j.kint.2020.10.012. PMID 33127436. Konsenzus konference. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/33127436/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>The EMPA-KIDNEY Collaborative Group; Herrington WG, Staplin N, Wanner C, et al. Empagliflozin in Patients with Chronic Kidney Disease. N Engl J Med. 2023;388(2):117–127.</strong> DOI 10.1056/NEJMoa2204233. PMID 36331190. Randomizovaná kontrolovaná studie. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/36331190/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Nuffield Department of Population Health Renal Studies Group; SGLT2 inhibitor Meta-Analysis Cardio-Renal Trialists' Consortium. Impact of diabetes on the effects of sodium glucose co-transporter-2 inhibitors on kidney outcomes: collaborative meta-analysis of large placebo-controlled trials. Lancet. 2022;400(10365):1788–1801.</strong> DOI 10.1016/S0140-6736(22)02074-8. PMID 36351458. Systematický přehled a metaanalýza. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/36351458/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Cusick MM, Tisdale RL, Chertow GM, Owens DK, Goldhaber-Fiebert JD. Population-Wide Screening for Chronic Kidney Disease: A Cost-Effectiveness Analysis. Ann Intern Med. 2023;176(6):788–797.</strong> DOI 10.7326/M22-3228. PMID 37216661. Markovův model nákladové efektivity. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/37216661/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>van Mil D, Kieneker LM, Harms E, et al. Effectiveness of a systematic home-based albuminuria screening programme to detect chronic kidney disease in high-risk individuals in primary care (SALINE): a cross-sectional screening study. EClinicalMedicine. 2025;82:103185.</strong> DOI 10.1016/j.eclinm.2025.103185. PMID 40247889. Průřezová screeningová studie, financována AstraZeneca Nizozemsko. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/40247889/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Kairys P, Frese T, Voigt P, Horn J, Girndt M, Mikolajczyk R. Development of the simulation-based German albuminuria screening model (S-GASM) for estimating the cost-effectiveness of albuminuria screening in Germany. PLoS One. 2022;17(1):e0262227.</strong> DOI 10.1371/journal.pone.0262227. PMID 34986199. Simulační model. Ověřeno v PubMed 2026-09-26. <a href="https://pubmed.ncbi.nlm.nih.gov/34986199/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-test-ledvin-padesatnici-2026.html">Půl milionu lidí s poškozenými ledvinami, dialýza pro 6 352</a> · <a href="clanek-nefrolog-pred-dialyzou.html">Nefrolog před dialýzou</a> · <a href="clanek-preventivni-prohlidka.html">Preventivní prohlídka</a> · <a href="clanek-mamograf-rakovina-prsu.html">Mamograf a rakovina prsu</a> · <a href="vestniky-mz.html">Archiv Věstníků MZ</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechny prahy, kódy výkonů, intervaly a jména pocházejí z Věstníku MZ ČR, částky 12/2026. Přepočty jednotek na ml/min provedla redakce podle přílohy 1 metodiky. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání článku.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
