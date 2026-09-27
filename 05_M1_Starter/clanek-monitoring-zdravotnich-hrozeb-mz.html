@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-26
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-26
+    creation_phase: zadani-uzivatele
+    primary_sources_count: 12
+    visual_elements_count: 6
+    notes: "Vytvořeno na přímé zadání vlastníka z 26. 9. 2026: přidat MZ Monitoring hrozeb pro veřejné zdraví do sledovaných
+      zdrojů a napsat o něm článek.
+      PRIMÁRNÍ ZDROJE (staženy a přečteny 26. 9. 2026):
+      (1) MZ ČR — Týdenní monitoring zdravotních hrozeb (38. týden 2026), post 24. 9. 2026 11:11 (WP id 227034, kategorie 863
+          „Monitoring hrozeb pro veřejné zdraví“ pod 482 „Ochrana veřejného zdraví“, count=1, RSS feed kategorie 200 OK);
+          PDF Tydenni-monitoring-38_2026.pdf, 22 stran, metadata vytvořeno 24. 9. 2026 08:07 (Word). Text extrahován pdfjs
+          + PyMuPDF; stránky 5, 7, 8, 11, 13, 15, 16, 18, 21 mají jen vložený obrázek (textová vrstva = záhlaví/zápatí,
+          95–157 znaků) — přečteny vizuálně z renderu 110 dpi. Klíčová čísla: ebola 7 773 potvrzených, 7 provincií, 63 zón
+          (k 21. 9., INSP SitRep 128 v textu / 130 na mapě: Ituri 5 966, Nord-Kivu 1 438, Haut-Uélé 316, Tshopo 42, Bas-Uélé 7,
+          Sud-Kivu 3, Sud-Ubangi 1), studie BRAVO 19. 9. do 20 000 osob, Ervebo; Dánsko 6 případů botulismu (Sjælland);
+          dengue 42 (IT 37, FR 5; 2025 FR 29 / IT 4; 2024 IT 213 / FR 83 / ES 8), záhlaví „data k 9. září“ vs text „do 16. září“,
+          zdroj pod dengue = „Seasonal surveillance of chikungunya … Week 36“; chikungunya 76 (FR 75, IT 1), zdroj = „Seasonal
+          surveillance of dengue, Week 36/2026“ (prohozeno); WNV 1 482 v 16 zemích (IT 652, GR 355, ES 114, RO 91, FR 81),
+          180 oblastí, 19 nově, záhlaví „data k 10. září“ vs text „k 17. září“; spalničky EU/EEA 2 339 ve 30 zemích
+          (1. 8. 2025–31. 7. 2026), březen 343, červenec 118, ≥15 let 51,2 %, <5 let 28,6 %, neočkovaní 73,1 % v textu vs
+          73,2 % (1 501 z 2 051) v infografice, 86,0 % lab. potvrzeno, 0 úmrtí, červenec BG 61 / IT 29 / ES 7 / PL 7 / BE 4;
+          Amerika 52 676 případů, 17 zemí, 61 úmrtí (GT 41, MX 19, BO 1), 3,8×, Guatemala 33 334 / 41, Mexiko 12 848 / 19
+          (Jalisco 6 797), USA 3 134 (SC 670, PA 557, UT 526), Kanada 1 119, Peru 1 997, PAHO SitRep 11 z 11. 9.; letištní
+          malárie Frankfurt 8 případů (6 pracovníků + 2 do 5 km), 3 úmrtí, k 18. 9.; Praha ZŠ: >250 nemocných, ≥13 hosp.,
+          Salmonella, stav k 23. 9., první obtíže 21. 9.; domácí tabulka ISIN (38. týden / 1.–38. 2026 / 1.–38. 2025):
+          spalničky 0/4/40, příušnice 2/89/46, zarděnky 0/0/0, pertuse 50/1 212/3 558, VHA 37/1 561/1 591, salmonelóza
+          218/4 601/3 851, kampylobakterióza 330/9 677/9 680, legionelóza 6/328/498; VHA 2026 po krajích k 22. 9.: JMK 491,
+          Praha 340, Ústecký 154, MSK 147, Středočeský 125, Plzeňský 65, Jihočeský 60, Zlínský 48, Karlovarský 34,
+          Olomoucký 32, Vysočina 31, Liberecký 22, Pardubický 15, Královéhradecký 3; týdenní křivka VHA: max 94 (3. týden),
+          min 9 (34. týden), 37 (38. týden); „Princip výběru“ citován doslovně;
+      (2) ECDC — Communicable Disease Threats Report, Week 38, 12–18 September 2026 (18. 9. 2026, PDF 24 stran): 13 témat
+          (Ebola, letištní malárie, iatrogenní botulismus, A(H9N2), A(H5), respirační viry EU/EEA t. 37, WNV, chikungunya,
+          dengue, CCHF, Vibrio, spalničky měsíčně, nasazení expertů); ebola k 17. 9.: 7 475 potvrzených vč. 3 605 úmrtí
+          (data k 16. 9.), 62 ze 167 zón v 7 provinciích, Uganda 20 případů květen–červen, PHEIC 17. 5. 2026; SARS-CoV-2
+          „increasing slightly“; CCHF Španělsko 4; PAHO 7. 9.: 52 480 / 16 zemí; Mexiko 12 939 / 20 úmrtí k 14. 9.;
+      (3) SZÚ — Zpráva ECDC o významných přenosných infekčních nemocech za 38. kalendářní týden (CDTR-38.KT-2026.pdf,
+          12 stran, vytvořeno 25. 9. 2026, „Podle materiálu ECDC volně zpracovalo Oddělení epidemiologie infekčních nemocí,
+          CEM, SZÚ“), stránka cdtr_2026 s 37 PDF (2.–38. týden), stránka cdtr_2025 existuje (200); v překladu 0× „Česk“,
+          0× ISIN;
+      (4) HSHMP — Aktualizace k nákaze v ZŠ Polesná, 25. 9. 2026: 363 nemocných, 50 hospitalizováno, 22 lab. potvrzeno,
+          315 dětí + 21 dospělých hlavní budova, 13 dětí ve 2 MŠ, 8 seniorů, 6 Staroklánovická, oběd 21. 9.; MZ post
+          25. 9. 2026 14:27 „Salmonelóza v Újezdu nad Lesy: aktuální informace hygienické stanice“ (odkaz na HSHMP);
+          ČTK/ČeskéNoviny 25. 9. 2026: prošlá vejce;
+      (5) MZ TZ 2. 6. 2022 — převzetí Národního systému pro zvládání zdravotních hrozeb od AČR („Základem tohoto systému je
+          monitoring situace, včasná detekce a rychlá reakce na zdravotní hrozby“);
+      (6) data/indicators.json — databox literálně (vakcinace_mmr_deti 83,7 % 2022; vakcinace_hexa_deti 86 % 2024;
+          pertuse_incidence 199,4 2024; spalnicky 0,9 2023; klistova_encefalitida 6,1 2024; vakcinace_chripka_65 24,5 % 2025).
+      VÝPOČTY REDAKCE (v textu označené): meziroční změny z tabulky ISIN (4/40 −90 %; 89/46 +93 %; 1 212/3 558 −66 %;
+      1 561/1 591 −2 %; 4 601/3 851 +19 %; 9 677/9 680 0 %; 328/498 −34 %); 3 605/7 475 = 48 %; 1 501/2 051 = 73,2 %;
+      počet stran bez textové vrstvy 9 z 22; počet témat ECDC vynechaných MZ 6 ze 13.
+      SEBEOMEZENÍ: (a) „dosud pravidelně nevydávalo“ se vztahuje k ministerstvu a k týdenní tabulce ISIN v této podobě —
+      SZÚ publikuje souhrny z ISIN po měsících a letech, KHS ad hoc; (b) rozdíl Praha/JMK popisujeme bez přepočtu na
+      obyvatele (repo nemá populace krajů); (c) čísla o pražské salmonelóze se dál mění — datováno k 25. 9.; (d) záměr
+      periodicity odvozujeme z názvu a z názvu kategorie, ministerstvo periodicitu nikde výslovně neslibuje; (e) druhé
+      číslo v době psaní nevyšlo. published:false, audit-status draft, bez _review_note — publikovatelný cronem podle
+      politiky fronty."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých · HSPA Monitor</title>
+<meta name="description" content="Ministerstvo zdravotnictví 24. září bez tiskové zprávy zveřejnilo první číslo Týdenního monitoringu zdravotních hrozeb, bulletinu Operačního centra pro mimořádné události ve veřejném zdraví. Dvaadvacet stran za 38. týden pokrývá sedm témat od eboly v Kongu přes dengue v Itálii po spalničky v Guatemale a přidává domácí část, kterou ministerstvo dosud pravidelně nevydávalo: týdenní tabulku osmi infekcí z ISIN s meziročním srovnáním a mapu hepatitidy A po krajích. Přečetli jsme ho vedle zprávy ECDC za týž týden a jejího českého zpracování ze SZÚ. Pět ze sedmi témat je z ECDC, domácí část je nová a první číslo má mezery: u eboly chybí počet zemřelých, u dengue a chikungunyi jsou prohozené zdroje, devět stran je jen obrázek bez textu a pražská salmonelóza měla při vydání 250 nemocných, o den později 363. Zdroj přidáváme do našeho seznamu a budeme ho číst každý týden.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých">
+<meta property="og:description" content="Ministerstvo spustilo týdenní bulletin o zdravotních hrozbách. Domácí tabulka z ISIN je nová a užitečná, zahraniční část z větší části opakuje ECDC, které už týden co týden zpracovává SZÚ. Co v prvním čísle je, co chybí a proč ho přidáváme mezi sledované zdroje.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-09-26">
+<meta property="article:section" content="Veřejné zdraví">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+
+  <meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-monitoring-zdravotnich-hrozeb-mz.png" data-cover-injected="1">
+  <meta property="og:image:width" content="1200" data-cover-injected="1">
+  <meta property="og:image:height" content="630" data-cover-injected="1">
+  <meta property="og:image:type" content="image/png" data-cover-injected="1">
+  <meta property="og:image:alt" content="Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých" data-cover-injected="1">
+  <meta name="twitter:card" content="summary_large_image" data-cover-injected="1">
+  <meta name="twitter:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-monitoring-zdravotnich-hrozeb-mz.png" data-cover-injected="1">
+
+  <link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz" data-seo-injected="1">
+  <meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz" data-seo-injected="1">
+  <script type="application/ld+json" data-seo-injected="1">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "@id": "https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz#article",
+      "headline": "Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých",
+      "description": "Ministerstvo zdravotnictví 24. září bez tiskové zprávy zveřejnilo první číslo Týdenního monitoringu zdravotních hrozeb, bulletinu Operačního centra pro mimořádné události ve veřejném zdraví. Dvaadvacet stran za 38. týden pokrývá sedm témat od eboly v Kongu přes dengue v Itálii po spalničky v Guatemale a přidává domácí část, kterou ministerstvo dosud pravidelně nevydávalo: týdenní tabulku osmi infekcí z ISIN s meziročním srovnáním a mapu hepatitidy A po krajích. Přečetli jsme ho vedle zprávy ECDC za týž týden a jejího českého zpracování ze SZÚ. Pět ze sedmi témat je z ECDC, domácí část je nová a první číslo má mezery: u eboly chybí počet zemřelých, u dengue a chikungunyi jsou prohozené zdroje, devět stran je jen obrázek bez textu a pražská salmonelóza měla při vydání 250 nemocných, o den později 363. Zdroj přidáváme do našeho seznamu a budeme ho číst každý týden.",
+      "inLanguage": "cs-CZ",
+      "image": [
+        "https://skorezdravotnictvi.cz/assets/covers/clanek-monitoring-zdravotnich-hrozeb-mz.png"
+      ],
+      "url": "https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz"
+      },
+      "datePublished": "2026-09-26",
+      "dateModified": "2026-09-26",
+      "author": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HSPA Monitor",
+        "alternateName": "Skóre zdravotnictví",
+        "url": "https://skorezdravotnictvi.cz/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://skorezdravotnictvi.cz/assets/brand/og-default.png"
+        }
+      },
+      "isAccessibleForFree": true,
+      "articleSection": "Veřejné zdraví"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Domů",
+          "item": "https://skorezdravotnictvi.cz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Články",
+          "item": "https://skorezdravotnictvi.cz/clanky"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých",
+          "item": "https://skorezdravotnictvi.cz/clanek-monitoring-zdravotnich-hrozeb-mz"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+<main id="content">
+  <article class="article-page">
+    <img class="article-cover" src="assets/covers/clanek-monitoring-zdravotnich-hrozeb-mz.png" alt="" width="1200" height="630" loading="eager" decoding="async">
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">surveillance · ISIN · ECDC CDTR · SZÚ · ebola · spalničky · hepatitida A · salmonelóza · nový zdroj</span>
+      </div>
+      <h1 class="article-title">Stát začal týdně počítat hrozby. První Monitoring zdravotních hrozeb má tabulku osmi infekcí z ISIN, pět témat z ECDC a u eboly neuvádí počet mrtvých</h1>
+      <p class="article-deck">
+        Ministerstvo zdravotnictví 24. září bez tiskové zprávy zveřejnilo první číslo Týdenního monitoringu zdravotních hrozeb, bulletinu Operačního centra pro mimořádné události ve veřejném zdraví. Dvaadvacet stran za 38. týden pokrývá sedm témat od eboly v Kongu přes dengue v Itálii po spalničky v Guatemale a přidává domácí část, kterou ministerstvo dosud pravidelně nevydávalo: týdenní tabulku osmi infekcí z ISIN s meziročním srovnáním a mapu hepatitidy A po krajích. Přečetli jsme ho vedle zprávy ECDC za týž týden a jejího českého zpracování ze SZÚ. Pět ze sedmi témat je z ECDC, domácí část je nová a první číslo má mezery: u eboly chybí počet zemřelých, u dengue a chikungunyi jsou prohozené zdroje, devět stran je jen obrázek bez textu a pražská salmonelóza měla při vydání 250 nemocných, o den později 363. Zdroj přidáváme do našeho seznamu a budeme ho číst každý týden.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">26. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">12 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+    <div class="article-body">
+      <p class="article-lead">
+        Ve čtvrtek 24. září 2026 přibyla na webu ministerstva zdravotnictví nová rubrika. Jmenuje se Monitoring hrozeb pro veřejné zdraví, sedí pod Ochranou veřejného zdraví a má zatím jedinou položku: Týdenní monitoring zdravotních hrozeb za 38. týden, tedy za 14. až 20. září. Vydává ho Operační centrum pro mimořádné události ve veřejném zdraví, pracoviště ministerstva pro řízení mimořádných událostí. Když ministerstvo v červnu 2022 přebíralo od armády Chytrou karanténu, slíbilo Národní systém pro zvládání zdravotních hrozeb, jehož „základem je monitoring situace, včasná detekce a rychlá reakce na zdravotní hrozby“. O čtyři roky později je tu první pravidelný veřejný výstup, o kterém víme: dvaadvacetistránkové PDF bez tiskové zprávy, s vlastním RSS kanálem a s týdenní periodicitou v názvu. Přečetli jsme ho celé, včetně devíti stran, které existují jen jako obrázek, a položili ho vedle dvou dokumentů o témže týdnu: zprávy ECDC o hrozbách přenosných nemocí z 18. září a jejího českého zpracování, které Státní zdravotní ústav vydává týden co týden, letos už sedmatřicetkrát. Výsledek je dvojí. Domácí část bulletinu je nová a užitečná. Zahraniční část z větší části opakuje, co už jednou zpracoval SZÚ, a první číslo má chyby, které by týdeník o hrozbách mít neměl.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">První číslo v číslech — Týdenní monitoring zdravotních hrozeb, 38. týden 2026</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="22" data-suffix=" stran">22 stran</span>
+            <span class="av-counter-label">má první číslo; devět z nich je jen vložený obrázek bez textové vrstvy</span>
+            <span class="av-counter-foot">včetně jediné domácí tabulky a mapy hepatitidy A po krajích; text nelze prohledat, zkopírovat ani přečíst čtečkou</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="7" data-suffix=" témat">7 témat</span>
+            <span class="av-counter-label">z toho pět sleduje týž týden zpráva ECDC, kterou už česky zpracovává SZÚ</span>
+            <span class="av-counter-foot">ebola, botulismus v Dánsku, komáří nákazy v Evropě, spalničky v EU a letištní malárie; nové jsou domácí přehled a spalničky v Americe podle PAHO</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="8" data-suffix=" infekcí">8 infekcí</span>
+            <span class="av-counter-label">v týdenní tabulce z ISIN se srovnáním s loňskem, kterou ministerstvo dosud pravidelně nevydávalo</span>
+            <span class="av-counter-foot">spalničky, příušnice, zarděnky, pertuse, hepatitida A, salmonelóza, kampylobakterióza, legionelóza; zdroj ISIN a hlášení krajských hygienických stanic</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="3605" data-suffix="">3 605</span>
+            <span class="av-counter-label">zemřelých na ebolu podle ECDC k 16. září — číslo, které v hlavním tématu bulletinu chybí</span>
+            <span class="av-counter-foot">bulletin uvádí 7 773 potvrzených případů k 21. září, ale žádný počet úmrtí; podle ECDC připadá úmrtí zhruba na každý druhý potvrzený případ (výpočet redakce: 48 %)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Týdenní monitoring zdravotních hrozeb (38. týden 2026), PDF 22 stran, zveřejněno 24. 9. 2026; ECDC, Communicable Disease Threats Report, Week 38 (12.–18. 9. 2026), vydáno 18. 9. 2026; SZÚ, Zpráva ECDC o významných přenosných infekčních nemocech za 38. kalendářní týden (25. 9. 2026). Počet stran bez textové vrstvy a podíl úmrtí jsou zjištění a výpočet redakce.</p>
+      </figure>
+
+      <h2>Co ministerstvo vydalo</h2>
+      <p>
+        Bulletin má pevnou strukturu. Titulní strana vyjmenuje témata týdne, druhá je shrne do jednoho odstavce na téma a vysvětlí, podle čeho se vybírá: „Do úvodního přehledu se zařazují pouze události s významnou změnou, novým hodnocením nebo relevancí pro Českou republiku.“ Každé zahraniční téma pak dostane stejnou osnovu: aktuální situace, hodnocení rizika podle ECDC, hodnocení pro Českou republiku a doporučení pro cestovatele. Právě ta třetí položka je to, co v žádném z existujících dokumentů nebylo. ECDC hodnotí riziko pro EU/EEA jako celek, SZÚ jeho hodnocení překládá. Bulletin ministerstva k tomu poprvé připisuje větu za Česko: u eboly „riziko zavlečení onemocnění do České republiky hodnoceno jako nízké“, u dengue a chikungunyi „pro běžnou populaci v České republice je aktuální riziko nízké“, u letištní malárie a botulotoxinu přebírá hodnocení ECDC. Je to opatrné, ale je to poprvé podepsané českým úřadem, který za připravenost odpovídá.
+      </p>
+      <p>
+        Sedm témat prvního čísla: ebola způsobená virem Bundibugyo v Konžské demokratické republice, epidemiologická situace v Česku, šest případů závažné otravy botulotoxinem v Dánsku po kosmetických a léčebných zákrocích, komáry přenášené nákazy v Evropě (dengue, chikungunya a západonilská horečka), spalničky v EU/EEA za posledních dvanáct měsíců, spalničky v Americe a letištní malárie u Frankfurtu nad Mohanem. U eboly bulletin uvádí 7 773 laboratorně potvrzených případů k 21. září v sedmi provinciích a 63 zdravotních zónách, nejvíc v Ituri a Severním Kivu, a studii BRAVO zahájenou 19. září v Bunii, která má u až 20 000 pracovníků v první linii ověřit, zda vakcína Ervebo registrovaná proti viru Zaire chrání i proti viru Bundibugyo. U komářích nákaz je to 42 autochtonních případů dengue v Evropě (37 v Itálii, pět ve Francii), 76 případů chikungunyi (75 ve Francii, jeden v Itálii) a 1 482 případů západonilské horečky v 16 zemích, nejvíc v Itálii (652) a Řecku (355). U spalniček v EU/EEA 2 339 případů ve 30 zemích od srpna 2025 do července 2026 s vrcholem 343 případů v březnu, a mezi případy se známým očkovacím statusem 73,1 % neočkovaných. V Americe 52 676 potvrzených případů v 17 zemích a 61 úmrtí do 5. září, z toho Guatemala 33 334 případů a 41 úmrtí. U Frankfurtu osm případů malárie bez cestovatelské anamnézy a tři úmrtí.
+      </p>
+      <p>
+        Čísla sedí. Porovnali jsme je s textem ECDC i s překladem SZÚ a nenašli jsme nesrovnalost v samotných hodnotách; v několika případech má ministerstvo dokonce novější údaj než ECDC, protože sáhlo přímo po zdroji. U eboly použilo situační zprávu konžského Národního institutu veřejného zdraví z 21. září (7 773 případů), zatímco ECDC uzavřelo týden s 7 475 případy k 17. září. U spalniček v Americe pracuje se zprávou PAHO z 11. září (52 676 případů), ECDC ještě se zprávou ze 7. září (52 480). To je dobrá redakční práce. O to víc zamrzí, co se při ní ztratilo.
+      </p>
+
+      <h2>Domácí tabulka: osm nemocí, tři sloupce a žádný komentář</h2>
+      <p>
+        Nejcennější stránka bulletinu je sedmá. Je na ní tabulka osmi infekčních nemocí se třemi sloupci: 38. týden 2026, prvních 38 týdnů roku 2026 a totéž období roku 2025. Zdrojem je Informační systém infekčních nemocí a hlášení krajských hygienických stanic, tedy data, která veřejnost dosud dostávala hlavně v měsíčních a ročních souhrnech SZÚ a v tiskových zprávách hygieniků k jednotlivým událostem. Týdenní tabulka s meziročním srovnáním, vydávaná ministerstvem s odstupem čtyř dnů od konce týdne, je nová věc. Přepsali jsme ji, protože v PDF existuje jen jako obrázek, a přidali sloupec, který v ní chybí: meziroční změnu.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblIsinH">
+        <figcaption class="av-figure-h" id="avTblIsinH">Týdenní přehled výskytu infekčních onemocnění podle bulletinu MZ — hlášené případy z ISIN</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Onemocnění</th>
+                <th scope="col">38. týden 2026</th>
+                <th scope="col">1.–38. týden 2026</th>
+                <th scope="col">1.–38. týden 2025</th>
+                <th scope="col">Meziročně (výpočet redakce)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Spalničky</th><td>0</td><td>4</td><td>40</td><td class="av-good">−90 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Příušnice</th><td>2</td><td>89</td><td>46</td><td class="av-bad">+93 %</td></tr>
+              <tr><th scope="row">Zarděnky</th><td>0</td><td>0</td><td>0</td><td>—</td></tr>
+              <tr><th scope="row">Pertuse (černý kašel)</th><td>50</td><td>1 212</td><td>3 558</td><td class="av-good">−66 %</td></tr>
+              <tr><th scope="row">Virová hepatitida A</th><td>37</td><td>1 561</td><td>1 591</td><td class="av-warn">−2 %</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Salmonelóza</th><td>218</td><td>4 601</td><td>3 851</td><td class="av-bad">+19 %</td></tr>
+              <tr><th scope="row">Kampylobakterióza</th><td>330</td><td>9 677</td><td>9 680</td><td>0 %</td></tr>
+              <tr><th scope="row">Legionelóza</th><td>6</td><td>328</td><td>498</td><td class="av-good">−34 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Týdenní monitoring zdravotních hrozeb (38. týden 2026), s. 7, „Týdenní přehled výskytu infekčních onemocnění“; zdroj bulletinu: Informační systém infekčních nemocí (ISIN), hlášení krajských hygienických stanic; „údaje za aktuální období jsou průběžné a mohou být následně aktualizovány“. Poslední sloupec je podíl kumulativních počtů 2026/2025 spočítaný redakcí; barvy vyjadřují směr změny, ne hodnocení bulletinu, který tabulku nekomentuje.</p>
+      </figure>
+      <p>
+        Tabulka vypráví víc, než bulletin říká. Černý kašel, který v roce 2024 přinesl <a href="clanek-cerny-kasel-2024-epidemie.html">nejhorší epidemii od šedesátých let</a> s incidencí 199,4 případu na 100 000 obyvatel, má za 38 týdnů 1 212 případů proti 3 558 loni, tedy o dvě třetiny méně; epidemická vlna doznívá. Spalniček jsou čtyři proti čtyřiceti. Zarděnky nula. Příušnice ale mají 89 případů proti 46, téměř dvojnásobek, a bulletin o tom nemá ani větu; v zemi, kde <a href="indicator.html?id=vakcinace_mmr_deti">proočkovanost MMR u dvouletých dětí</a> spadla na 83,7 % proti 95,2 % v EU, je to číslo, u kterého by měl čtenář dostat aspoň odhad, zda jde o ohnisko, nebo o šum. Salmonelóz je 4 601 proti 3 851, o pětinu víc, a to ještě před tím, než do statistiky vstoupí pražská škola: první obtíže se objevily 21. září, tedy v 39. týdnu, který tabulka nepokrývá. Hepatitida A drží loňské tempo, 1 561 případů proti 1 591, což je pokračování epidemického roku 2025 na skoro stejné úrovni. Legionelóz je o třetinu méně. Nic z toho bulletin nevyhodnocuje. Tabulka nemá práh, který by řekl, co je pro září normální, nemá pětiletý průměr a nemá barvu. Čtenář dostane čísla a musí si sám domyslet, které z nich je hrozba.
+      </p>
+      <p>
+        Osmá strana je věnovaná hepatitidě A: týdenní křivka roku 2026 a mapa krajů k 22. září. Křivka začíná v třetím týdnu na 94 případech, klesá k devíti případům ve 34. týdnu a v 38. týdnu se vrací na 37. Mapa ukazuje, kde epidemie sídlí.
+      </p>
+      <figure class="av-figure" aria-labelledby="avBarVhaH">
+        <figcaption class="av-figure-h" id="avBarVhaH">Virová hepatitida A: vykázaná onemocnění v roce 2026 podle krajů, stav k 22. září 2026</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="500" data-unit="případů">
+          <li class="av-bar-row av-bar-row-highlight" data-value="491" data-display="491" data-label="Jihomoravský" data-note="nejvíc případů v absolutním počtu; bulletin uvádí Jihomoravský kraj a Prahu jako regionální těžiště"></li>
+          <li class="av-bar-row" data-value="340" data-display="340" data-label="Praha" data-note="druhé nejvyšší číslo; Praha má víc obyvatel než Jihomoravský kraj, přepočet na obyvatele bulletin neuvádí"></li>
+          <li class="av-bar-row" data-value="154" data-display="154" data-label="Ústecký" data-note=""></li>
+          <li class="av-bar-row" data-value="147" data-display="147" data-label="Moravskoslezský" data-note=""></li>
+          <li class="av-bar-row" data-value="125" data-display="125" data-label="Středočeský" data-note=""></li>
+          <li class="av-bar-row" data-value="3" data-display="3" data-label="Královéhradecký" data-note="nejméně; mezi 15 (Pardubický) a 65 (Plzeňský) leží dalších osm krajů"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, Týdenní monitoring zdravotních hrozeb (38. týden 2026), s. 8, mapa „Počet vykázaných onemocnění podle krajů“, zdroj ISIN, data k 22. 9. 2026. Zobrazeno pět krajů s nejvyšším počtem a kraj s nejnižším; ostatní: Plzeňský 65, Jihočeský 60, Zlínský 48, Karlovarský 34, Olomoucký 32, Vysočina 31, Liberecký 22, Pardubický 15. Bulletin uvádí absolutní počty bez přepočtu na obyvatele; nejvíc případů hlásí věková skupina 35–44 let.</p>
+      </figure>
+
+      <h2>Pět ze sedmi témat je z ECDC. A ECDC už překládá SZÚ</h2>
+      <p>
+        Zpráva ECDC o hrozbách přenosných nemocí, známá pod zkratkou CDTR, vychází každý pátek a za 38. týden měla třináct témat na 24 stranách. Státní zdravotní ústav ji do týdne zpracuje do češtiny: dvanáct stran, „podle materiálu ECDC volně zpracovalo Oddělení epidemiologie infekčních nemocí“, na webu SZÚ vedle sebe leží 37 letošních čísel a samostatná stránka pro loňský rok. Ministerský bulletin vyšel ve čtvrtek 24. září, překlad SZÚ v pátek 25. září. Tři veřejné instituce tak během osmi dnů zpracovaly týž pramen. Srovnání témat ukazuje, kde se práce zdvojuje a kde bulletin přidává něco, co jinde není.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTblCmpH">
+        <figcaption class="av-figure-h" id="avTblCmpH">Týž týden, tři dokumenty: co pokrývá zpráva ECDC, její české zpracování ze SZÚ a bulletin ministerstva</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Téma 38. týdne</th>
+                <th scope="col">ECDC CDTR (18. 9.)</th>
+                <th scope="col">SZÚ, Zpráva ECDC (25. 9.)</th>
+                <th scope="col">MZ, Týdenní monitoring (24. 9.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Ebola (virus Bundibugyo), KDR</th><td>ano — 7 475 případů a 3 605 úmrtí k 17. 9.</td><td>ano — překlad</td><td class="av-warn">ano — novější data (7 773 k 21. 9.), mapa provincií, hodnocení pro ČR; bez počtu úmrtí</td></tr>
+              <tr><th scope="row">Letištní malárie, Frankfurt</th><td>ano</td><td>ano</td><td>ano — plus doporučení zvažovat malárii u horečky bez cestovní anamnézy</td></tr>
+              <tr><th scope="row">Iatrogenní botulismus, Dánsko</th><td>ano</td><td>ano</td><td>ano</td></tr>
+              <tr><th scope="row">Ptačí chřipka A(H9N2), případ u dítěte v Číně</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr><th scope="row">Chřipka A(H5) u lidí</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Respirační viry v EU/EEA, 37. týden (SARS-CoV-2 „mírně roste“ v několika zemích)</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr><th scope="row">Západonilská horečka</th><td>ano — 1 482 případů, 16 zemí</td><td>ano</td><td>ano — plus hodnocení pro ČR</td></tr>
+              <tr><th scope="row">Chikungunya</th><td>ano — 76 případů</td><td>ano</td><td class="av-warn">ano — pod textem citován zdroj k dengue</td></tr>
+              <tr><th scope="row">Dengue</th><td>ano — 42 případů</td><td>ano</td><td class="av-warn">ano — pod textem citován zdroj k chikungunyi</td></tr>
+              <tr><th scope="row">Krymsko-konžská hemoragická horečka, Španělsko (4 případy)</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr><th scope="row">Vibrio v pobřežních vodách</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr><th scope="row">Spalničky — měsíční monitoring (Evropa i svět)</th><td>ano</td><td>ano</td><td>ano — rozděleno na EU/EEA a Ameriku podle PAHO z 11. 9.</td></tr>
+              <tr><th scope="row">Nasazení expertů ECDC</th><td>ano</td><td>ano</td><td class="av-bad">ne</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Hromadná salmonelóza v pražské škole</th><td>ne</td><td>ne</td><td class="av-good">ano — stav k 23. 9.</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Týdenní tabulka osmi infekcí z ISIN, hepatitida A po krajích</th><td>ne</td><td>ne</td><td class="av-good">ano — jen jako obrázek</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Communicable Disease Threats Report, Week 38, 12–18 September 2026 (obsah: 13 témat); SZÚ, Zpráva ECDC o významných přenosných infekčních nemocech za 38. kalendářní týden, 12.–18. září 2026 (obsah: 13 témat, 12 stran); MZ ČR, Týdenní monitoring zdravotních hrozeb (38. týden 2026). Srovnání témat sestavila redakce podle obsahů dokumentů.</p>
+      </figure>
+      <p>
+        Z třinácti témat ECDC bulletin šest vynechal. Většinu z nich lze obhájit kritériem relevance pro Česko: případ ptačí chřipky u dítěte v Číně, čtyři případy krymsko-konžské horečky ve Španělsku nebo předpověď výskytu bakterií rodu Vibrio v pobřežních vodách skutečně nejsou zprávy pro české čtenáře. Jedno vynechání ale obhájit nejde. Přehled respiračních virů za 37. týden, ve kterém ECDC píše, že „aktivita SARS-CoV-2 v několika zemích EU/EEA mírně roste“ v primární i nemocniční péči, je jediné z třinácti témat, které se týká nemoci, jež v Česku každý podzim plní ordinace a nemocnice. Bulletin o hrozbách vyšel na prahu sezóny respiračních infekcí a respirační infekce v něm nejsou.
+      </p>
+      <p>
+        Otázka dělby práce tím vystupuje sama. SZÚ zprávu ECDC překládá celou a věrně, ministerstvo z ní vybírá a dopisuje hodnocení pro Česko. Obojí má smysl, pokud na sebe navazují. Zatím se míjejí: bulletin ministerstva se na zpracování SZÚ neodkazuje a SZÚ ve svém překladu žádná domácí data nemá. V době, kdy <a href="clanek-szu-pripominky-nivz.html">reforma veřejného zdraví počítá se sloučením SZÚ do nového Národního institutu veřejného zdraví</a>, je otázka, kdo bude v roce 2028 psát který z těchto dvou dokumentů, praktičtější, než vypadá.
+      </p>
+
+      <h2>Kde první číslo drhne</h2>
+      <p>
+        Chyby, které jsme našli, nejsou v číslech. Jsou v tom, co kolem čísel chybí nebo co je přehozené, a týdeník, který má budovat důvěru, by je měl odstranit dřív, než se stanou zvykem.
+      </p>
+      <ul class="article-list-bullets">
+        <li><strong>Ebola bez mrtvých.</strong> Hlavní téma čísla uvádí 7 773 potvrzených případů, sedm provincií, 63 zón, mapu s čísly po provinciích a odstavec o očkování. Nikde neuvádí, kolik lidí zemřelo. ECDC ve své zprávě píše o 3 605 úmrtích při 7 475 potvrzených případech k 16. září, tedy zhruba každý druhý potvrzený případ. U onemocnění, jehož hrozba spočívá právě ve smrtnosti, je to údaj, bez kterého hodnocení „riziko nízké“ visí ve vzduchu. Drobnost navíc: text cituje situační zprávu INSP č. 128 z 19. září, mapa č. 130 z 21. září.</li>
+        <li><strong>Prohozené zdroje u komářích nákaz.</strong> Pod textem o dengue stojí jako zdroj „ECDC, Seasonal surveillance of chikungunya virus disease, Week 36“, pod textem o chikungunyi „ECDC, Seasonal surveillance of dengue, Week 36/2026“. Čísla v textu jsou přitom z 38. týdne (k 16. září) a sedí na zprávu ECDC z 18. září. Záhlaví obou stran uvádí „data k 9. září 2026“, text „do 16. září“; u západonilské horečky záhlaví „data k 10. září“, text „k 17. září“.</li>
+        <li><strong>Dvě hodnoty pro jedno číslo.</strong> Text o spalničkách v EU/EEA uvádí 73,1 % neočkovaných mezi případy se známým očkovacím statusem, infografika o stranu dál 73,2 % (1 501 z 2 051 osob, což je 73,2 %). Rozdíl je kosmetický, ale v dokumentu, který má být citovatelný, by jedno číslo mělo být jedno číslo.</li>
+        <li><strong>Devět stran bez textu.</strong> Mapa eboly, domácí tabulka, hepatitida A po krajích, mapy dengue a chikungunyi, obě mapy západonilské horečky a obě infografiky ke spalničkám jsou v PDF vložené jako obrázky. Textová vrstva těch stran obsahuje jen záhlaví a zápatí. Nejde je prohledat, čísla z nich nejde zkopírovat a čtečka obrazovky je nepřečte. Postihuje to přesně ty stránky, které jsou v bulletinu nové, včetně jediné domácí tabulky.</li>
+        <li><strong>Týdenní PDF proti události, která se mění po hodinách.</strong> Bulletin k 23. září uvádí u pražské školy „více než 250 nemocných, nejméně 13 osob bylo hospitalizováno“ a poctivě dodává, že se čísla budou měnit. O dva dny později hlásila pražská hygienická stanice 363 nemocných, 50 hospitalizovaných a 22 laboratorně potvrzených salmonelóz, nákaza zasáhla i dvě mateřské školy a seniory s rozváženými obědy, a podle hygieniků citovaných ČTK byla na přípravu jídla použita prošlá vejce. Ministerstvo na to reagovalo samostatnou aktualitou s odkazem na hygieniky. Týdenní kadence je pro zahraniční přehled správná; pro domácí ohnisko potřebuje bulletin živou stránku, ne PDF.</li>
+        <li><strong>Čísla bez měřítka.</strong> Domácí tabulka nemá práh ani víceletý průměr, mapa hepatitidy A nemá přepočet na obyvatele, u příušnic ani salmonelóz není řečeno, zda nárůst někoho znepokojuje. Přehled hrozeb, který neřekne, co je hrozba, přenáší tu práci na čtenáře.</li>
+        <li><strong>Bez ohlášení.</strong> Bulletin nevyšel jako tisková zpráva, není v tiskovém centru a nic na webu ministerstva nevysvětluje, komu je určen, kdo ho schvaluje a jak často má vycházet. Kategorie má funkční RSS kanál; komu ale nikdo neřekl, že kanál existuje, ten ho nenajde.</li>
+      </ul>
+
+      <h2>Proč to sledujeme a co budeme hlídat</h2>
+      <p>
+        V hodnocení výkonnosti zdravotního systému patří surveillance a včasné varování mezi struktury, na kterých stojí připravenost. Česko po pandemii slíbilo systém monitoringu a čtyři roky nemělo pravidelný veřejný týdeník, který by z něj vycházel; teď ho má. Že o prvním čísle píšeme kriticky, neznamená, že je zbytečné. Znamená to, že ho bereme vážně: přidáváme ho mezi zdroje, které portál pravidelně sleduje, vedle ECDC, SZÚ, ÚZIS a ČSÚ, a budeme z něj týden co týden přebírat domácí tabulku do našich dat. Naše indikátory ukazují, proč zrovna témata prvního čísla nejsou pro Česko cizí zpráva. Proočkovanost MMR u dvouletých dětí je 83,7 % proti 95,2 % v EU, proočkovanost hexavakcínou 86 % proti 92,4 %, incidence černého kašle byla v roce 2024 čtyřnásobkem průměru EU a klíšťovou encefalitidu, ve které má Česko nejvyšší výskyt v Unii, domácí tabulka bulletinu zatím vůbec neobsahuje.
+      </p>
+      <figure class="av-figure av-figure-wide" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Od Chytré karantény k prvnímu bulletinu: co předcházelo a co přijde</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2. 6. 2022</time>
+            <h4 class="av-timeline-title">Ministerstvo přebírá od armády Chytrou karanténu</h4>
+            <p class="av-timeline-desc">Vzniká Národní systém pro zvládání zdravotních hrozeb; ministerstvo slibuje, že jeho „základem je monitoring situace, včasná detekce a rychlá reakce na zdravotní hrozby“.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">17. 5. 2026</time>
+            <h4 class="av-timeline-title">WHO vyhlašuje ohrožení veřejného zdraví mezinárodního významu</h4>
+            <p class="av-timeline-desc">Epidemie eboly způsobené virem Bundibugyo v Konžské demokratické republice a Ugandě; hlavní téma prvního čísla bulletinu o čtyři měsíce později.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">18. 9. 2026</time>
+            <h4 class="av-timeline-title">ECDC vydává CDTR za 38. týden</h4>
+            <p class="av-timeline-desc">Třináct témat na 24 stranách, včetně přehledu respiračních virů a 3 605 úmrtí na ebolu; pramen pěti ze sedmi témat bulletinu.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">21.–23. 9. 2026</time>
+            <h4 class="av-timeline-title">Uzávěrka domácích dat</h4>
+            <p class="av-timeline-desc">Tabulka ISIN a mapa hepatitidy A k 22. září, pražská salmonelóza k 23. září. Oběd, který ji spustil, se vařil 21. září, tedy už v 39. týdnu.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">24. 9. 2026</time>
+            <h4 class="av-timeline-title">První číslo Týdenního monitoringu zdravotních hrozeb</h4>
+            <p class="av-timeline-desc">Dvaadvacet stran, sedm témat, nová kategorie webu s RSS kanálem, bez tiskové zprávy.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">25. 9. 2026</time>
+            <h4 class="av-timeline-title">SZÚ vydává české zpracování CDTR 38, hygienici aktualizují Prahu</h4>
+            <p class="av-timeline-desc">Dvanáct stran překladu ECDC; pražská hygienická stanice hlásí 363 nemocných a 50 hospitalizovaných, ministerstvo na ni odkazuje samostatnou aktualitou.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">kolem 1. 10. 2026</time>
+            <h4 class="av-timeline-title">Očekávané číslo za 39. týden</h4>
+            <p class="av-timeline-desc">První test periodicity. Budeme sledovat, zda se v domácí tabulce objeví pražská salmonelóza, zda přibude respirační přehled a zda stránky dostanou textovou vrstvu.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> MZ ČR, tisková zpráva 2. 6. 2022; ECDC, CDTR Week 38 (vyhlášení PHEIC 17. 5. 2026); MZ ČR, Týdenní monitoring zdravotních hrozeb (38. týden 2026), data k 22. a 23. 9. 2026, post z 24. 9. 2026; SZÚ, CDTR-38.KT-2026 (25. 9. 2026); HSHMP, aktualizace 25. 9. 2026; MZ ČR, aktualita 25. 9. 2026. Datum příštího čísla je odhad redakce z názvu bulletinu, ministerstvo periodicitu nikde výslovně nestanovilo.</p>
+      </figure>
+      <p>
+        Co budeme hlídat, je jednoduché a dá se to odškrtávat. Zda druhé číslo vyjde do týdne. Zda domácí tabulka poroste o nemoci, které pro Česko něco znamenají: klíšťovou encefalitidu, invazivní meningokoková onemocnění, akutní respirační infekce v sezóně. Zda stránky s tabulkami a mapami dostanou textovou vrstvu, nebo rovnou data ke stažení. Zda se hodnocení pro Českou republiku bude měnit s vývojem, nebo zůstane formulkou. A zda bulletin začne říkat, co v tabulce považuje za signál. První číslo dalo ministerstvu do ruky nástroj, který mu čtyři roky chyběl. Jestli z něj bude zdroj, nebo další PDF, se pozná během října.
+      </p>
+      <aside class="article-callout article-callout-caveat" aria-label="Upozornění na limity použitých dat a odhadů">
+        <p class="article-callout-h">Co v tomto textu není doloženo napevno</p>
+        <p>
+          Tvrzení, že ministerstvo týdenní tabulku z ISIN „dosud pravidelně nevydávalo“, se opírá o to, že kategorie Monitoring hrozeb pro veřejné zdraví má jedinou položku a že jsme obdobný pravidelný výstup ministerstva nenašli; SZÚ zveřejňuje souhrny z ISIN po měsících a po letech a hygienické stanice ad hoc. Čísla z devíti obrázkových stran jsme přepsali ručně z renderu PDF a mohou obsahovat chybu přepisu; kumulativní meziroční změny a podíl úmrtí na ebolu jsou aritmetika redakce. Srovnání Prahy a Jihomoravského kraje uvádíme bez přepočtu na obyvatele. Údaje o pražské salmonelóze platí k 25. září a dál se mění. Periodicitu bulletinu odvozujeme z jeho názvu; ministerstvo ji nikde výslovně nestanovilo a druhé číslo v době psaní nevyšlo. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání.
+        </p>
+      </aside>
+    </div>
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, kterých se témata bulletinu týkají</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=vakcinace_mmr_deti"><strong>Vakcinace MMR u dětí (do 2 let)</strong></a> — 83,7 % (ČR, 2022) · Procesy · vyšší je lepší (signál špatný; OECD 94,8, EU 95,2) · spalničky, příušnice a zarděnky jsou tři z osmi řádků domácí tabulky</li>
+        <li><a href="indicator.html?id=spalnicky"><strong>Incidence spalniček</strong></a> — 0,9 na 100 000 obyvatel (ČR, 2023) · Výsledky · nižší je lepší (signál neutrální) · bulletin: 4 případy za 38 týdnů 2026 proti 40 loni</li>
+        <li><a href="indicator.html?id=pertuse_incidence"><strong>Incidence černého kašle (pertuse)</strong></a> — 199,4 na 100 000 obyvatel (ČR, 2024) · Výsledky · nižší je lepší (signál špatný; EU 50) · bulletin: 1 212 případů za 38 týdnů 2026 proti 3 558 loni</li>
+        <li><a href="indicator.html?id=vakcinace_hexa_deti"><strong>Proočkovanost dětí — hexavalentní (DTP) vakcína</strong></a> — 86 % (ČR, 2024) · Procesy · vyšší je lepší (signál špatný; OECD 91,8, EU 92,4)</li>
+        <li><a href="indicator.html?id=klistova_encefalitida"><strong>Incidence klíšťové encefalitidy</strong></a> — 6,1 na 100 000 obyvatel (ČR, 2024) · Výsledky · nižší je lepší (signál špatný; EU 0,81) · v domácí tabulce bulletinu zatím chybí</li>
+        <li><a href="indicator.html?id=vakcinace_chripka_65"><strong>Proočkovanost proti chřipce (65+)</strong></a> — 24,5 % (ČR, 2025) · Procesy · vyšší je lepší (signál špatný; OECD 47, EU 49) · respirační přehled ECDC bulletin vynechal</li>
+      </ul>
+    </aside>
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Bulletin ministerstva a jeho vydavatel</h5>
+        <ul class="article-sources-list">
+          <li><strong>Ministerstvo zdravotnictví ČR — Týdenní monitoring zdravotních hrozeb (38. týden 2026)</strong>, Operační centrum pro mimořádné události ve veřejném zdraví; zveřejněno 24. 9. 2026 v kategorii Monitoring hrozeb pro veřejné zdraví (Ochrana veřejného zdraví); PDF 22 stran, období 14.–20. 9. 2026, sedm témat; domácí tabulka ISIN (s. 7), hepatitida A po krajích k 22. 9. (s. 8), pražská salmonelóza k 23. 9. (s. 6); „Princip výběru“ (s. 2). Stránky 5, 7, 8, 11, 13, 15, 16, 18 a 21 jsou vložené obrázky bez textové vrstvy; čísla z nich redakce přepsala z renderu. <a href="https://mzd.gov.cz/tydenni-monitoring-zdravotnich-hrozeb-38-tyden-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/09/Tydenni-monitoring-38_2026.pdf" target="_blank" rel="noopener">PDF ↗</a> · <a href="https://mzd.gov.cz/category/ochrana-verejneho-zdravi/monitoring-hrozeb-pro-verejne-zdravi/" target="_blank" rel="noopener">kategorie ↗</a> · <a href="https://mzd.gov.cz/category/ochrana-verejneho-zdravi/monitoring-hrozeb-pro-verejne-zdravi/feed/" target="_blank" rel="noopener">RSS ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Ministerstvo zdravotnictví převzalo od Armády České republiky Národní systém pro zvládání zdravotních hrozeb</strong>, tisková zpráva 2. 6. 2022 („Základem tohoto systému je monitoring situace, včasná detekce a rychlá reakce na zdravotní hrozby“). <a href="https://mzd.gov.cz/tiskove-centrum-mz/ministerstvo-zdravotnictvi-od-armady-ceske-republiky-prevzalo-narodni-system-pro-zvladani-zdravotnich-hrozeb/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">ECDC a Státní zdravotní ústav — týž týden ve dvou dalších dokumentech</h5>
+        <ul class="article-sources-list">
+          <li><strong>ECDC — Communicable Disease Threats Report, Week 38, 12–18 September 2026</strong>, 18. 9. 2026, PDF 24 stran, 13 témat: ebola v KDR (7 475 potvrzených případů vč. 3 605 úmrtí k 17. 9., 62 ze 167 zón v sedmi provinciích; PHEIC 17. 5. 2026), letištní malárie Frankfurt (8 případů, 3 úmrtí), iatrogenní botulismus Dánsko (6), A(H9N2), A(H5), respirační viry EU/EEA t. 37 („SARS-CoV-2 activity is increasing slightly“), WNV (1 482 případů, 16 zemí), chikungunya (76), dengue (42), CCHF Španělsko (4), Vibrio, spalničky (2 339 v EU/EEA; PAHO 7. 9.: 52 480), nasazení expertů. <a href="https://www.ecdc.europa.eu/en/publications-data/communicable-disease-threats-report-12-18-september-week-38" target="_blank" rel="noopener">ecdc.europa.eu ↗</a> · <a href="https://www.ecdc.europa.eu/sites/default/files/documents/communicable-disease-threats-report-week-38-2026.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+          <li><strong>Státní zdravotní ústav — Zpráva ECDC o významných přenosných infekčních nemocech za 38. kalendářní týden, 12.–18. září 2026</strong>, Oddělení epidemiologie infekčních nemocí, CEM, SZÚ, 25. 9. 2026, PDF 12 stran, všech 13 témat ECDC; přehledová stránka ročníku 2026 obsahuje 37 týdenních zpráv (2.–38. týden), ročník 2025 má vlastní stránku. <a href="https://szu.gov.cz/temata-zdravi-a-bezpecnosti/nemoci-a-jejich-prevence/infekcni-nemoci/zpravy-ecdc-o-vyznamnych-prenosnych-infekcnich-nemocech/cdtr_2026/" target="_blank" rel="noopener">szu.gov.cz ↗</a> · <a href="https://szu.gov.cz/wp-content/uploads/2026/09/CDTR-38.KT-2026.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+          <li><strong>Prameny citované bulletinem</strong>, které jsme neověřovali samostatně: INSP RDC, SitRep N°128 (19. 9. 2026) a č. 130 (21. 9. 2026); PAHO/WHO, Regional Situation Report No. 11 – Measles in the Region of the Americas (11. 9. 2026); ECDC, Monthly measles and rubella monitoring report – July 2026; Styrelsen for Patientsikkerhed (9. 9. 2026); Gesundheitsamt Frankfurt am Main; Robert Koch-Institut, Epidemiologisches Bulletin 29/2026.</li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Pražská salmonelóza — jak rychle bulletin stárne</h5>
+        <ul class="article-sources-list">
+          <li><strong>Hygienická stanice hlavního města Prahy — Aktualizace k nákaze v ZŠ Polesná: Hlášeno je 363 nemocných, nákaza zasáhla i seniory a dvě mateřské školy</strong>, 25. 9. 2026 (363 nemocných, 50 hospitalizováno, 22 laboratorně potvrzeno; 315 dětí a 21 dospělých v hlavní budově, 13 dětí ve dvou mateřských školách, 8 seniorů, 6 na odloučeném pracovišti; oběd 21. 9.). <a href="https://www.hygpraha.cz/aktualizace-k-nakaze-v-zs-polesna-hlaseno-je-363-nemocnych-nakaza-zasahla-i-seniory-a-dve-materske-skoly/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>Ministerstvo zdravotnictví ČR — Salmonelóza v Újezdu nad Lesy: aktuální informace hygienické stanice</strong>, aktualita 25. 9. 2026 (odkaz na HSHMP); <strong>ČTK / ČeskéNoviny.cz — Na přípravu jídla ve škole v Újezdu nad Lesy byla použita prošlá vejce</strong>, 25. 9. 2026. <a href="https://mzd.gov.cz/salmoneloza-v-ujezdu-nad-lesy-aktualni-informace-hygienicke-stanice/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://www.ceskenoviny.cz/zpravy/na-pripravu-jidla-ve-skole-v-ujezdu-nad-lesy-byla-pouzita-prosla-vejce/2878325" target="_blank" rel="noopener">ceskenoviny.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení na portálu</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-cerny-kasel-2024-epidemie.html">Černý kašel se vrátil: nejhorší epidemie od 60. let</a> — 199,4 případu na 100 000 v roce 2024; tabulka bulletinu ukazuje doznívání (1 212 případů za 38 týdnů 2026).</li>
+          <li><a href="clanek-spalnicky-usa-2026.html">Rekord za 35 let. Spalničky v USA překonaly loňský rok už v červenci</a> — americký kontext k 52 676 případům v regionu podle PAHO; <a href="clanek-zaskrt-umrti-2026.html">Druhé úmrtí za 57 let. Záškrt zabil neočkovaného předškoláka z Ostravska</a> — proč proočkovanost 86 % není jen statistika.</li>
+          <li><a href="clanek-klistova-encefalitida-proockovanost-2026.html">Sedmnáct procent. Češi jsou v očkování proti klíšťové encefalitidě poslední, případů máme nejvíc v EU</a> — nemoc, která v domácí tabulce bulletinu zatím chybí.</li>
+          <li><a href="clanek-hepatitida-eliminace-2030.html">Hepatitidu B srazilo očkování, hepatitida C láme rekordy</a> — hepatitidy B a C v datech; hepatitida A z bulletinu je jiná nemoc s jinou cestou přenosu.</li>
+          <li><a href="clanek-chripka-ockovani-chronicky-nemocni.html">Čtyři z pěti diabetiků projdou chřipkovou sezónou bez očkování</a> a <a href="clanek-ockovani-dospelych-rezerva.html">Dvacet čtyři procenta. Nejrychleji dostupná rezerva české prevence</a> — respirační sezóna, kterou bulletin vynechal.</li>
+          <li><a href="clanek-epidemiologie-1-proc-verit-cislum.html">Proč věřit číslům: od mapy cholery k reprodukčnímu číslu</a> a <a href="clanek-epidemiologie-3-modely-rozhodovani.html">Modely, trasování a krizové rozhodování</a> — jak se surveillance čte; <a href="clanek-szu-pripominky-nivz.html">Devět stran, jedenáct výhrad</a> — reforma, která rozhodne, kdo bude tyto dokumenty psát.</li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Všechna čísla z bulletinu citujeme podle PDF zveřejněného 24. 9. 2026; hodnoty z devíti obrázkových stran jsou přepis redakce z renderu. Čísla ECDC podle zprávy z 18. 9. 2026, čísla SZÚ podle PDF z 25. 9. 2026, čísla o pražské salmonelóze podle HSHMP k 25. 9. 2026. Meziroční změny v tabulce, podíl úmrtí na ebolu (3 605 / 7 475), podíl neočkovaných (1 501 / 2 051), počet stran bez textové vrstvy a počet vynechaných témat jsou výpočty a zjištění redakce, v textu takto označené. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání.
+      </p>
+    </section>
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
