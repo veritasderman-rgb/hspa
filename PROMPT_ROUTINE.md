@@ -52,7 +52,7 @@ odzadu, ale **A (příprava), B (Buffer), C (discovery), E (obsah dne), K (audit
 | Blok | Kdo |
 |---|---|
 | B Buffer | subagent **Sonnet** (texty podle copywriting manuálu), orchestrátor jen kontroluje limity |
-| C Discovery | **tři paralelní subagenti Sonnet**: (1) powerlist 1–13, (2) Hlídač státu, (3) PubMed + Consensus; každý vrátí strukturovaný seznam nálezů s URL a datem |
+| C Discovery | **tři paralelní subagenti Sonnet**: (1) powerlist 1–14, (2) Hlídač státu, (3) PubMed + Consensus; každý vrátí strukturovaný seznam nálezů s URL a datem |
 | D Legislativa, Barometr | Sonnet (datové změny), Opus (verdikt Ověřovny) |
 | E Článek | **Opus** píše, Sonnet dělá AV obohacení a kontrolu odkazů |
 | F Indikátor | průzkum zdrojů Sonnet, karta + příběh Opus |
@@ -278,7 +278,7 @@ přeskočení s důvodem.
 subagenti (§ 1), každý vrátí seznam nálezů `{zdroj, co, URL, datum, relevance}`. Rozpočet
 30–60 minut celkem — subagent, který nestihne, vrátí, co má, a označí neprojité zdroje.
 
-### 6.1 Powerlist (subagent 1: řádky 1–13; subagent 3: řádky 14–15)
+### 6.1 Powerlist (subagent 1: řádky 1–14; subagent 3: řádky 15–16)
 
 | # | Zdroj | URL / nástroj | Co hledat |
 |---|---|---|---|
@@ -286,17 +286,18 @@ subagenti (§ 1), každý vrátí seznam nálezů `{zdroj, co, URL, datum, relev
 | 2 | NZIP — datasety | nzip.cz/data | nový/aktualizovaný indikátor, otevřená data |
 | 3 | MZ ČR — tiskové zprávy | mzcr.cz/tiskove-centrum/tiskove-zpravy | reforma, strategie, vyhláška |
 | 4 | MZ ČR — Věstník | mzcr.cz/category/uredni-deska/vestnik-mz-cr | nové věstníkové předpisy (srovnej s `data/vestniky.json`) |
-| 5 | VZP — výroční zpráva / ZPP | vzp.cz/o-nas/dokumenty | finanční data, prognóza |
-| 6 | ČSÚ — DataStat / projekce | csu.gov.cz/datastat | demografie, projekce, EHIS |
-| 7 | OECD — HAG, Country Health Profile | oecd.org/en/topics/health.html | nová vlna (HAG 11/rok, profily 10–12/rok) |
-| 8 | Eurostat — `hlth_*` | ec.europa.eu/eurostat/web/health/database | SILC, HLY, mortalita |
-| 9 | WHO Europe | who.int/europe/news-room | guidelines, statistiky |
-| 10 | SÚKL — výpadky | sukl.cz/farmaceuticky-trh/registr-vypadku-leciv | kritická léčiva |
-| 11 | PSP ČR — tisky | psp.cz/sqw/historie.sqw (bez `?o=` = aktuální období; archiv `o=9`, `o=10`…) | nový tisk, hlasování, vyhlášení |
-| 12 | Sbírka zákonů | zakonyprolidi.cz/cs/aktualne | normy v gesci MZ |
-| 13 | NÚKIB | nukib.cz/cs/aktualni-informace | incidenty ve zdravotnictví, NIS2 |
-| 14 | Recenzovaná literatura ČR | `PubMed` → `search_articles`: `("Czech Republic"[Title/Abstract] OR Czechia[Title/Abstract] OR "Czech Republic"[Affiliation] OR Czechia[Affiliation] OR Czech[Affiliation]) AND (health services OR mortality OR screening OR …)`, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date` | nové domácí studie (PMID, DOI, časopis) |
-| 15 | Evidence k tématu dne | `Consensus` → `search` (anglicky, `medical_mode`, `exclude_preprints`; přehledy `study_types`) | ke každé kauze z ř. 1–13, kde článek bude tvrdit něco o účinnosti, riziku nebo dopadu |
+| 5 | MZ ČR — Monitoring hrozeb pro veřejné zdraví | mzd.gov.cz/category/ochrana-verejneho-zdravi/monitoring-hrozeb-pro-verejne-zdravi (RSS: `…/feed/`) | nové číslo Týdenního monitoringu zdravotních hrozeb (čtvrtek); domácí tabulka ISIN → kandidát na aktualizaci indikátorů/claims, hodnocení rizik pro ČR, změna proti minulému číslu; srovnej s ECDC CDTR a překladem SZÚ |
+| 6 | VZP — výroční zpráva / ZPP | vzp.cz/o-nas/dokumenty | finanční data, prognóza |
+| 7 | ČSÚ — DataStat / projekce | csu.gov.cz/datastat | demografie, projekce, EHIS |
+| 8 | OECD — HAG, Country Health Profile | oecd.org/en/topics/health.html | nová vlna (HAG 11/rok, profily 10–12/rok) |
+| 9 | Eurostat — `hlth_*` | ec.europa.eu/eurostat/web/health/database | SILC, HLY, mortalita |
+| 10 | WHO Europe | who.int/europe/news-room | guidelines, statistiky |
+| 11 | SÚKL — výpadky | sukl.cz/farmaceuticky-trh/registr-vypadku-leciv | kritická léčiva |
+| 12 | PSP ČR — tisky | psp.cz/sqw/historie.sqw (bez `?o=` = aktuální období; archiv `o=9`, `o=10`…) | nový tisk, hlasování, vyhlášení |
+| 13 | Sbírka zákonů | zakonyprolidi.cz/cs/aktualne | normy v gesci MZ |
+| 14 | NÚKIB | nukib.cz/cs/aktualni-informace | incidenty ve zdravotnictví, NIS2 |
+| 15 | Recenzovaná literatura ČR | `PubMed` → `search_articles`: `("Czech Republic"[Title/Abstract] OR Czechia[Title/Abstract] OR "Czech Republic"[Affiliation] OR Czechia[Affiliation] OR Czech[Affiliation]) AND (health services OR mortality OR screening OR …)`, `date_from` = poslední běh, `datetype: edat`, `sort: pub_date` | nové domácí studie (PMID, DOI, časopis) |
+| 16 | Evidence k tématu dne | `Consensus` → `search` (anglicky, `medical_mode`, `exclude_preprints`; přehledy `study_types`) | ke každé kauze z ř. 1–14, kde článek bude tvrdit něco o účinnosti, riziku nebo dopadu |
 
 ### 6.2 Hlídač státu (subagent 2)
 
