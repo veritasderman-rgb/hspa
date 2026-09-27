@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-09-20T00:00:00Z",
+  "generated_at": "2026-09-27T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -7516,6 +7516,1377 @@
       ],
       "followup": "Druhé tvrzení (stagnace posledních 10 let: CV mortalita středního věku + podfinancovaná prevence + kouření) zůstává no-evidence — PubMed strop vyčerpán, Consensus nebyl použit; doporučeno dodatečné ověření přes Consensus search 'Czech Republic life expectancy stagnation smoking alcohol cardiovascular middle-aged'.",
       "notes": "Karta nemá method_notes/limitations s kauzálními větami mimo patient_story; measurement tvrzení (standardizace na evropskou populaci, Eurostat demo_mlexpec) je technická poznámka o zdroji dat, ne vědecké tvrzení k ověření. Karta necituje žádnou konkrétní studii (found_via 'article' nepoužito)."
+    },
+    {
+      "id": "clanek-reklama-kojenecka-vyziva-zakon.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "fad570f5d865030df9b5df3e16a4b83f8e1f4cb2",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 4,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "reklama-kojenecka-vyziva-zakon--19",
+          "text": "Série časopisu Lancet z února 2023 popisuje mechanismus: průmysl s ročními tržbami kolem 55 miliard dolarů prezentuje formule jako řešení běžných projevů kojeneckého věku...",
+          "location": "prose (odstavec o mechanismu marketingu, po counteru WHO/UNICEF)",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36764314",
+              "doi": "10.1016/S0140-6736(22)01931-6",
+              "title": "Marketing of commercial milk formula: a system to capture parents, communities, science, and policy.",
+              "year": 2023,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt Rollins 2023 uvádí tržby CMF „about US$55 billion annually“; shoda s číslem v článku. Studie je už citována ve skupině Recenzovaná literatura."
+        },
+        {
+          "claim_id": "reklama-kojenecka-vyziva-zakon--20",
+          "text": "Topothai et al., Int Breastfeed J 2024 — systematický přehled, 60 studií z 28 zemí, které Kodex uzákonily; zákon omezí propagaci výživy pro děti do 12 měsíců ve veřejném prostoru a v médiích, selhává u batolecích mlék, křížové propagace, digitální reklamy a v místě prodeje.",
+          "location": "srovnávací tabulka studií (av-row-highlight)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39334400",
+              "doi": "10.1186/s13006-024-00676-3",
+              "title": "Outcomes of implementing the International Code of Marketing of Breast-milk Substitutes as national laws: a systematic review.",
+              "year": 2024,
+              "journal": "Int Breastfeed J",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt uvádí 60 článků z 28 zemí, účinnou regulaci propagace CMF 0–12 měsíců ve veřejném prostoru a médiích a nedostatečnost u growing-up milk, křížové propagace a digitální reklamy. Již citováno v článku."
+        },
+        {
+          "claim_id": "reklama-kojenecka-vyziva-zakon--21",
+          "text": "Becker et al., Matern Child Nutr 2022 — scoping review, 153 studií z nejméně 95 zemí, 1981–2021; porušování Kodexu neustalo, roste podíl digitálního marketingu a rozšiřování značek, klamavá tvrzení na etiketách.",
+          "location": "srovnávací tabulka studií",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35313063",
+              "doi": "10.1111/mcn.13335",
+              "title": "Global evidence of persistent violations of the International Code of Marketing of Breast-milk Substitutes: A systematic scoping review.",
+              "year": 2022,
+              "journal": "Matern Child Nutr",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt uvádí 153 studií z nejméně 95 zemí (1981–2021) a trvající porušování Kodexu včetně digitálního marketingu a klamavého značení. Již citováno v článku."
+        },
+        {
+          "claim_id": "reklama-kojenecka-vyziva-zakon--22",
+          "text": "Franco-Lares et al., BMJ Glob Health 2023 — scoping review legislativy k digitálnímu marketingu, 24 zemí; jen 14 z 24 zemí s pravidly pro digitální marketing má určený orgán a proces monitoringu.",
+          "location": "srovnávací tabulka studií / prose",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36918217",
+              "doi": "10.1136/bmjgh-2022-011150",
+              "title": "Legislation on marketing of breast-milk substitutes in digital and social media: a scoping review.",
+              "year": 2023,
+              "journal": "BMJ Glob Health",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Adjudikace potvrzuje rešerši: abstrakt „only 14 of 24 (58.3%) stipulate a monitoring process… and have designated an actor responsible for monitoring“. Již citováno v článku."
+        },
+        {
+          "claim_id": "",
+          "text": "V prosinci 2018 publikoval van Tulleken v BMJ analýzu, podle níž má diagnóza alergie na bílkovinu kravského mléka v Británii několikanásobně vyšší výskyt v preskripci speciálních formulí než v epidemiologických studiích a autoři klinických doporučení k této diagnóze mají rozsáhlé vazby na výrobce těchto formulí.",
+          "location": "prose (odstavec „A tady se od koly dostáváme k dětem“)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "doi": "10.1136/bmj.k5056",
+              "title": "Overdiagnosis and industry influence: how cow's milk protein allergy is extending the reach of infant formula manufacturers",
+              "year": 2018,
+              "journal": "BMJ",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": false
+            }
+          ],
+          "note": "Adjudikace: existence, autor, rok a téma analýzy (nadměrná diagnostika CMPA, vliv výrobců formulí) jsou doloženy DOI a záznamem Consensus; PubMed ji neindexuje (lookup podle citace BMJ 2018;363:k5056 bez nálezu, konverze DOI nevrátila PMID/PMCID). Kvantitativní formulace „několikanásobně vyšší výskyt“ a „rozsáhlé vazby autorů doporučení“ nejsou doložitelné z abstraktu dostupného nástrojům → nejvýš partial. Nejde o rozpor ani o šíři tvrzení nad evidencí, jen o neověřitelnost čísla strojově; článek sám v poznámce k datům přiznává, že analýza není v PubMed. Upřesňující věta se nenavrhuje. Kvantitativní část k posouzení redakcí podle plného textu na bmj.com."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u reklama-kojenecka-vyziva-zakon--19 doplněn o „PMID:36764314 / DOI:10.1016/S0140-6736(22)01931-6, ověřeno 2026-09-27 (evidence-audit)“",
+          "ref": "reklama-kojenecka-vyziva-zakon--19"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u reklama-kojenecka-vyziva-zakon--20 doplněn o „PMID:39334400 / DOI:10.1186/s13006-024-00676-3, ověřeno 2026-09-27 (evidence-audit)“",
+          "ref": "reklama-kojenecka-vyziva-zakon--20"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u reklama-kojenecka-vyziva-zakon--21 doplněn o „PMID:35313063 / DOI:10.1111/mcn.13335, ověřeno 2026-09-27 (evidence-audit)“",
+          "ref": "reklama-kojenecka-vyziva-zakon--21"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u reklama-kojenecka-vyziva-zakon--22 doplněn o „PMID:36918217 / DOI:10.1136/bmjgh-2022-011150, ověřeno 2026-09-27 (evidence-audit)“",
+          "ref": "reklama-kojenecka-vyziva-zakon--22"
+        },
+        {
+          "type": "none",
+          "detail": "Žádný source-added (všechny studie včetně van Tulleken BMJ 2018 s DOI článek už cituje), žádná změna prose ani audit-status (zůstává review-pending). Do hlavičky audit: v HTML připojena věta „evidence-audit 2026-09-27: 5 tvrzení, 4× supported, 1× partial; viz data/evidence-audit.json“; záznam v data/articles.json nemá objekt audit, poznámka se proto (podle precedentu dřívějších běhů) zapsala jen do HTML komentáře.",
+          "ref": ""
+        }
+      ],
+      "followup": "van Tulleken BMJ 2018 (DOI 10.1136/bmj.k5056, není v PubMed/PMC): kvantitativní formulace „několikanásobně vyšší výskyt“ CMPA v preskripci a „rozsáhlé vazby autorů doporučení“ neověřeny proti plnému textu — k posouzení redakcí na bmj.com. Tvrzení nemá záznam v data/claims.json. Zbylých ~54 claims článku (administrativní statistiky WHO/UNICEF, SZÚ, ceny, zákony, tržní data) mimo rozsah rešerše.",
+      "notes": "Vybráno 5 z max 8 odborných tvrzení; zbylé claims článku jsou administrativní statistiky mimo rozsah rešerše. Všechny 4 recenzované studie (Rollins 2023, Topothai 2024, Becker 2022, Franco-Lares 2023) článek už cituje s PMID/DOI — ověřeno přes metadata PubMed, abstrakty doslova obsahují čísla z článku. Van Tulleken BMJ 2018 PubMed neindexuje; existence a téma ověřeny přes DOI a Consensus, kvantitativní část strojově neověřitelná → partial/medium, bez upřesňující věty (nejde o rozpor ani o šíři tvrzení nad evidencí). Adjudikace (Opus) potvrdila verdikty rešerše."
+    },
+    {
+      "id": "clanek-reforma-verejneho-zdravotniho-pojisteni-2030.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "46c236238b39a123505d33b916c4ba63daf831f5",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 1,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Přidání pobídky k zaslané pozvánce na kolorektální screening zvýšilo účast jen málo (poměr šancí 1,25; 95% interval 1,05–1,49), z odhadovaných 30 % na 33,5 %.",
+          "location": "sekce „Co říká evidence o placení lidí za prevenci\" — odstavec o Facciorusso et al. (2021)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "34432010",
+              "doi": "10.1001/jamanetworkopen.2021.22581",
+              "title": "Addition of Financial Incentives to Mailed Outreach for Promoting Colorectal Cancer Screening: A Systematic Review and Meta-analysis.",
+              "year": 2021,
+              "journal": "JAMA Network Open",
+              "study_type": "systematic review and meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt (8 amerických RCT, 110 644 účastníků) doslova potvrzuje OR 1,25 (1,05–1,49) a nárůst z 30 % na 33,5 % (95% CI 30,8–36,2). Autoři hodnotí evidenci jako nízké kvality a přínos klesá u nízkopříjmových/menšinových skupin — přesně jak článek uvádí."
+        },
+        {
+          "claim_id": "",
+          "text": "V Texasu nabídka 5 nebo 10 dolarů chudým nepojištěným pacientům účast nezměnila: 36,9 % s pobídkou proti 36,2 % bez ní.",
+          "location": "sekce „Co říká evidence...\" — odstavec o Gupta et al. (2016)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "27481306",
+              "doi": "10.1038/ajg.2016.286",
+              "title": "Financial Incentives for Promoting Colorectal Cancer Screening: A Randomized, Comparative Effectiveness Trial.",
+              "year": 2016,
+              "journal": "American Journal of Gastroenterology",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: FIT completion 36,9 % s pobídkou vs. 36,2 % bez ní (P=0,60), populace nízkopříjmová/nepojištěná ve Fort Worth, TX — číslo i populace v článku sedí přesně."
+        },
+        {
+          "claim_id": "",
+          "text": "Ve Filadelfii žádná forma pobídky v hodnotě 10 dolarů nezvýšila vrácení testu na skryté krvácení.",
+          "location": "sekce „Co říká evidence...\" — odstavec o Mehta et al. (2019)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30901053",
+              "doi": "10.1001/jamanetworkopen.2019.1156",
+              "title": "Effect of Financial Incentives on Patient Use of Mailed Colorectal Cancer Screening Tests: A Randomized Clinical Trial.",
+              "year": 2019,
+              "journal": "JAMA Network Open",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: žádná ze tří forem pobídky (nepodmíněná, podmíněná, loterie, vše ~10 USD) nebyla statisticky lepší než žádná pobídka ani ve 2, ani v 6 měsících (studie z Philadelphie) — shoduje se s textem."
+        },
+        {
+          "claim_id": "",
+          "text": "Ve státě Washington pobídka zvedla vrácení stolicového testu o 7,7 procentního bodu, celkovou účast na screeningu ale významně ne; u pacientů s pojištěním Medicaid byl nárůst 37,7 bodu.",
+          "location": "sekce „Co říká evidence...\" — odstavec o Green et al. (2019)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31276178",
+              "doi": "10.1001/jamanetworkopen.2019.6570",
+              "title": "Financial Incentives to Increase Colorectal Cancer Screening Uptake and Decrease Disparities: A Randomized Clinical Trial.",
+              "year": 2019,
+              "journal": "JAMA Network Open",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: FIT nárůst +7,7 % (95% CI 0,3–15,1) proti jen mailu; celková účast na screeningu nesignifikantní (P=0,11); u pojištěnců Medicaid čistý nárůst FIT 37,7 % (11,0–64,3) proti 5,6 % u nepojištěných Medicaidem — čísla i rozlišení sedí přesně."
+        },
+        {
+          "claim_id": "",
+          "text": "Giles et al. (2014) našli v pěti studiích z vysokopříjmových zemí u účasti na očkování nebo screeningu relativní riziko 1,92 (1,46–2,53).",
+          "location": "sekce „Co říká evidence...\" — odstavec o Giles et al. (2014)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "24618584",
+              "doi": "10.1371/journal.pone.0090347",
+              "title": "The effectiveness of financial incentives for health behaviour change: systematic review and meta-analysis.",
+              "year": 2014,
+              "journal": "PLoS One",
+              "study_type": "systematic review and meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt uvádí pro účast na očkování/screeningu (5 studií) RR 1,92 (95% CI 1,46–2,53) — přesná shoda; přehled zahrnuje jen vysokopříjmové země, jak článek uvádí."
+        },
+        {
+          "claim_id": "",
+          "text": "Starší metaanalýza Stone et al. (2002) ukázala, co funguje víc než peníze: organizační změny (upravené poměry šancí 2,47 až 17,6) před pacientskými pobídkami (1,82 až 3,42) a připomínkami (1,74 až 2,75).",
+          "location": "sekce „Co říká evidence...\" — odstavec o Stone et al. (2002)",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "11992299",
+              "doi": "10.7326/0003-4819-136-9-200205070-00006",
+              "title": "Interventions that increase use of adult immunization and cancer screening services: a meta-analysis.",
+              "year": 2002,
+              "journal": "Annals of Internal Medicine",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: organizační změna adjOR 2,47–17,6, finanční pobídky 1,82–3,42, připomínky 1,74–2,75 — všechny tři rozsahy odpovídají doslova."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Článek už cituje všech 6 studií o finančních pobídkách ke screeningu (Facciorusso 2021, Gupta 2016, Mehta 2019, Green 2019, Giles 2014, Stone 2002) s DOI přímo v textu; ověřeno jedním dávkovým voláním mcp__PubMed__get_article_metadata (6 PMID v jednom callu, dle audit komentáře v hlavičce článku již dříve dohledaných). Všechna čísla a formulace v článku (OR, RR, procenta) odpovídají doslova abstraktům — všechny verdikty supported, confidence high, found_via \"article\". Ostatní tvrzení článku (demografie ČSÚ/Eurostat, lůžka Eurostat, deficit pojištění, legislativní paragrafy, ceny) jsou administrativní/legislativní statistika a podle železného pravidla se neověřují přes PubMed/Consensus. Consensus nebyl potřeba (PubMed dal pro každé tvrzení přímo citovanou, ověřenou studii). data/claims.json neobsahuje pro tento článek žádný existující claim záznam (claim_id ponechán prázdný — nic k source_note přiřazení podle FÁZE 4, o zápis se stará navazující krok, ne tato rešerše)."
+    },
+    {
+      "id": "clanek-platba-statni-pojistenci-2027-tri-cisla.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "4e0c7dc9030cb4881d06608710a9656308c53a71",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 0,
+        "consensus": 0
+      },
+      "claims": [],
+      "summary": {
+        "supported": 0,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Článek je čistě fiskální/legislativní (nařízení vlády o vyměřovacím základu za státní pojištěnce 2027, novela tisku 235, úhradová vyhláška, saldo systému v.z.p., státní rozpočet). Zkontrolováno všech 62 tvrzení v data/claims.json pro tento článek (platba-statni-pojistenci-2027-tri-cisla--01 až --62) i plný text článku (grep na studie/výzkum/účinek/riziko) — žádné odborné tvrzení kategorie effect/efficacy/epidemiology/mechanism/measurement/policy. Všechna tvrzení jsou administrativní statistika (MF/MZ/VeKLEP čísla, ČSÚ CPI index, OECD/ÚZIS databoxy typu výdaje na zdravotnictví/HDP, katastrofické výdaje domácností) nebo legislativní/rozpočtová fakta — podle PROMPT_EVIDENCE_AUDIT.md se neověřují a nezapisují jako claims. Žádné volání PubMed/Consensus nebylo potřeba."
+    },
+    {
+      "id": "clanek-porodnost-milion-nebo-848-korun.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "a804c40778f220efd0bc5f3daaef43b71095258c",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "porodnost-milion-nebo-848-korun--16",
+          "text": "Systematický přehled Bergsvik, Fauske a Hart (2021), Population and Development Review, shrnul 35 experimentálních a kvaziexperimentálních studií z Evropy, USA, Kanady a Austrálie od roku 1970 a uzavřel: rozšíření kapacit péče o děti zvyšuje konečnou plodnost, zatímco zvýšení peněžních transferů má dočasné účinky.",
+          "location": "prose – sekce „Recenzovaná literatura těmto výhradám dává za pravdu jen zčásti“ (a tabulka „Co říká recenzovaná literatura“)",
+          "kind": "effect",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "K posouzení redakcí. Studie (DOI 10.1111/padr.12431) není v PubMed: lookup podle citace NOT_FOUND, dotaz „Bergsvik J[Author] AND fertility“ vrátil jen jinou práci téže autorky (Eur J Popul 2023, PMID 37074468, prostorové shlukování velkých rodin), ne citovaný přehled. Abstrakt nelze ověřit v PubMed; nic nesvědčí ani proti. Článek zdroj cituje s DOI a sám uvádí, že PubMed časopis neindexuje. Bez zásahu."
+        },
+        {
+          "claim_id": "porodnost-milion-nebo-848-korun--17",
+          "text": "Podle vlastního modelu autorů na datech 32 evropských zemí z let 2003 až 2023 je nárůst podílu mladých lidí přetížených náklady na bydlení o 8,6 procentního bodu spojen s poklesem úhrnné plodnosti o 0,06 dítěte na ženu.",
+          "location": "prose – odstavec o bydlení jako nejsilnějším tuzemském faktoru",
+          "kind": "effect",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Vlastní regresní odhad nerecenzovaného policy reportu (Malý, Tachezyová, ECON MUNI PR 2025-03); článek ho tak rámuje („podle vlastního modelu autorů“). Konkrétní koeficient recenzovaná literatura ověřit nemůže. Dotaz v PubMed na směr vztahu (náklady na bydlení × plodnost, Evropa) vrátil 3 záznamy (PMID 42168103, 22397158, 12282492); abstrakty nebyly přečteny kvůli stropu volání v adjudikaci → followup."
+        },
+        {
+          "claim_id": "",
+          "text": "Přehled 61 studií Rahman et al. (2025) v The Lancet Regional Health – Western Pacific označil peněžní dávky za nejvlivnější typ pronatalitní politiky ve vyspělých zemích a modeloval, že Japonsko by zvýšením dávek na úroveň Maďarska či Francie mohlo pokles zvrátit.",
+          "location": "prose – odstavec „Poctivost velí dodat, že literatura není jednohlasná“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40585185",
+              "doi": "10.1016/j.lanwpc.2025.101596",
+              "title": "Reversing fertility decline in Japan with foreign pro-natalist policies, 1990-2035: a systematic review and secondary data analysis",
+              "year": 2025,
+              "journal": "Lancet Reg Health West Pac",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z abstraktu: 61 studií, peněžní dávky nejvlivnější; zvýšení na úroveň Maďarska/Francie zvyšuje pravděpodobnost zvrácení poklesu do 2030 na 70 %/69 % – formulace „mohlo“ odpovídá. Studie už je v article-sources s PMID."
+        },
+        {
+          "claim_id": "",
+          "text": "Scoping review Brydon et al. (2024) v Social Science & Medicine našel mezi 37 studiemi vlivu peněžních transferů na plodnost 23 s nárůstem, což nedosáhlo statistické významnosti; u dávek na děti a rodinu byl podíl pozitivních výsledků vyšší než u transferů vázaných na zaměstnání.",
+          "location": "prose – odstavec „Poctivost velí dodat, že literatura není jednohlasná“; tabulka „Co říká recenzovaná literatura“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "39396395",
+              "doi": "10.1016/j.socscimed.2024.117397",
+              "title": "The effect of cash transfers on health in high-income countries: A scoping review",
+              "year": 2024,
+              "journal": "Soc Sci Med",
+              "study_type": "scoping review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 23 z 37 studií nárůst plodnosti (0,62; 95% CI 0,46–0,76), pod prahem statistické významnosti autorů; vyšší podíl u dávek na děti a rodinu než u transferů vázaných na zaměstnání. Studie už je v article-sources s PMID."
+        },
+        {
+          "claim_id": "",
+          "text": "Analýza zemí OECD Zhang et al. (2023) v International Journal of Environmental Research and Public Health došla k závěru, že rodinné politiky plodnost zvyšují dlouhodobě — ale že se tento efekt „oslabuje v zemích, kde plodnost zůstává pod 1,5“.",
+          "location": "prose – odstavec „Poctivost velí dodat, že literatura není jednohlasná“; tabulka „Co říká recenzovaná literatura“",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36981698",
+              "doi": "10.3390/ijerph20064790",
+              "title": "The Effect of Family Fertility Support Policies on Fertility, Their Contribution, and Policy Pathways to Fertility Improvement in OECD Countries",
+              "year": 2023,
+              "journal": "Int J Environ Res Public Health",
+              "study_type": "observational panel analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: „Family welfare policies notably boost fertility, and the boosting effect is long-lasting. However, this boost will be weakened in countries where fertility rates remain below 1.5.“ Panelová regrese + fsQCA zemí OECD (observační design). Přenos na ČR (1,28) je interpretace redakce, věcně konzistentní s abstraktem. Studie už je v article-sources s PMID."
+        },
+        {
+          "claim_id": "",
+          "text": "Ve Španělsku zvedlo zavedení univerzálního porodného porodnost o 3 procenta a jeho zrušení ji srazilo o 6 procent (González a Trommlerová, 2021, Journal of Human Resources); polské 500+ zvýšilo v krátkém období pravděpodobnost porodu o 1,5 procentního bodu, ale u žen do třiceti let ji snížilo (Bokun, 2024, Demographic Research).",
+          "location": "prose – ilustrace jednotlivých programů za Bergsvikovým přehledem; tabulka „Co říká recenzovaná literatura“",
+          "kind": "effect",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "35512609",
+              "doi": "10.1016/j.jhealeco.2022.102622",
+              "title": "Cash transfers before pregnancy and infant health.",
+              "year": 2022,
+              "journal": "J Health Econ",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Citované práce (J Hum Resour DOI 10.3368/jhr.59.1.0220-10725r2; Demogr Res DOI 10.4054/demres.2024.51.28) v PubMed nejsou: lookup NOT_FOUND, dotaz podle autorů (Bokun A, Trommlerová) je nenašel. PubMed vrátil jen jinou práci týchž autorů o témže španělském porodném (J Health Econ 2022, PMID 35512609): řeší porodní hmotnost dalších dětí a u příjemkyň uvádí nezměněnou následnou plodnost – jiná otázka (individuální plodnost po přijetí dávky, ne agregátní počet porodů po zavedení/zrušení), čísla 3 % / 6 % nepotvrzuje ani nevyvrací. Jen kontext, do zdrojů se nepřidává. Článek je sám rámuje jako ilustraci."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 1,
+        "not_applicable": 0,
+        "unclear": 2
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Bez zásahu do prose, zdrojů ani claims: Rahman (PMID 40585185), Brydon (PMID 39396395) a Zhang (PMID 36981698) článek už cituje v article-sources s PMID. source_note u --16 a --17 nelze doplnit (Bergsvik ani report MUNI ECON v PubMed nejsou). Připsána jen poznámka do audit: komentáře článku (articles.json záznam nemá objekt audit). audit-status beze změny.",
+          "ref": ""
+        },
+        {
+          "type": "claim-note",
+          "detail": "Bez změny source_note (studie není v PubMed); v registru verdikt unclear, k posouzení redakcí.",
+          "ref": "porodnost-milion-nebo-848-korun--16"
+        },
+        {
+          "type": "claim-note",
+          "detail": "Bez změny source_note (vlastní model nerecenzovaného reportu); v registru verdikt no-evidence, followup: přečíst abstrakty PMID 42168103, 22397158, 12282492.",
+          "ref": "porodnost-milion-nebo-848-korun--17"
+        }
+      ],
+      "followup": "claim --17 (bydlení × plodnost): abstrakty PMID 42168103, 22397158 a 12282492 nepřečteny – vyčerpaný strop volání v adjudikaci; posoudit směr vztahu dostupnosti bydlení a plodnosti v Evropě. Vynechána administrativní a indikátorová tvrzení (ČSÚ, vyhláška 432/2025, VeKLEP 2027, odhady nákladů, databoxy --11, --18 až --21) – mimo rozsah evidence-auditu.",
+      "notes": "Adjudikace Opus, run ea-2026-09-27-01. PubMed 5 volání (2 rešerše + 3 adjudikace), Consensus 0 – dotaz neměl smysl, citované studie leží mimo PubMed index a kandidát z Consensu by nešel ověřit v PubMed. 3 supported (Rahman, Brydon, Zhang; potvrzeno z abstraktů, už citováno s PMID), 2 unclear (Bergsvik --16; González/Bokun) k posouzení redakcí, 1 no-evidence (--17, vlastní regresní odhad policy reportu). Nic contradicted → flag ani issue nejsou potřeba, audit-status se nemění. Přesnější study_type: Brydon scoping review, Zhang observační panelová analýza."
+    },
+    {
+      "id": "clanek-neockovani-covid-prijem-studie-2026.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "e2879a237944784c0e9bdefad293d26c1874f04c",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 2,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--07",
+          "text": "Celková prevalence neočkovanosti vyšla na 22,4 %",
+          "location": "prose — sekce „Co studie měřila a proč je jiná než všechno předchozí\"",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Doslova v abstraktu i Results plného textu (PMC13531712): „The prevalence of unvaccinated status was 22.4%.\" Přesná shoda."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--08",
+          "text": "Rozdíl 42,1 proti 13,1 procentu tedy nevznikl u pokladny.",
+          "location": "prose — sekce „Institucionální rámec\"",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Hodnota 42,1 % je i v abstraktu; 13,1 % je z Tabulky 1 plného textu (SES kategorie 6 = nejvyšší, 1 153 440 osob, unvaccinated 13,1 %) — plný text je open-access v PMC, oba údaje doslova sedí."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--09",
+          "text": "zůstává šance zůstat neočkovaný v nejnižší skupině 3,89krát vyšší",
+          "location": "prose — sekce „Kdo zůstal bez očkování\"",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tabulka 2 plného textu (Results): fully adjusted OR pro SES=1 (nejnižší) proti SES=6 (referenční) je 3,89 (95% CI 3,84-3,93) — přesná shoda s článkem. Abstrakt naopak uvádí odlišnou hodnotu 3,91 (3,87-3,96) — jde o skutečnou vnitřní nesrovnalost mezi abstraktem a Tabulkou/Results v samotné studii, kterou článek explicitně přiznává v caveatu; nejde o chybu redakce portálu."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--10",
+          "text": "nemělo dokončené očkování 38,7 % proti 21,1 % u ostatních",
+          "location": "prose — sekce „Kdo zůstal bez očkování\"",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tabulka 1 plného textu: Unemployment Yes 38,7 % unvaccinated, No 21,1 % — přesná shoda. Fully adjusted OR 1,52 (1,50-1,53) v Tabulce 2 rovněž sedí s hodnotou uvedenou v článku."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--11",
+          "text": "mezi nimi bylo neočkovaných 31,6 % proti 22,2 % u registrovaných",
+          "location": "prose — sekce „Kdo zůstal bez očkování\"",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tabulka 1 plného textu: bez registrace u GP 31,6 % unvaccinated, s registrací 22,2 % — přesná shoda; fully adjusted OR 1,25 (1,23-1,26) v Tabulce 2 rovněž sedí."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--12",
+          "text": "Bez jediné komorbidity zůstalo neočkovaných 26,5 %, se třemi a více jen 12,5 %",
+          "location": "prose — sekce „Kdo zůstal bez očkování\"",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Tabulka 1 plného textu: DCCI=0 26,5 % unvaccinated, DCCI=3+ 12,5 % — přesná shoda; fully adjusted OR 0,67 (0,66-0,67) v Tabulce 2 rovněž sedí (kratší text uvádí OR jako pokles šance, což odpovídá směru)."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--14",
+          "text": "Do analýzy nakonec vstoupilo 6 398 768 lidí",
+          "location": "prose — sekce „Co studie měřila a proč je jiná než všechno předchozí\"",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42302189",
+              "doi": "10.1093/pubmed/fdag043",
+              "title": "Predictors of COVID-19 vaccination status: a nationwide linkage study in Czechia",
+              "year": 2026,
+              "journal": "Journal of Public Health (Oxford)",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Metody plného textu: baseline 7 610 761 osob 26+, po vyloučení (hlavně kvůli chybějícímu příjmu, ~16 %) 6 398 768 osob ve studijní populaci — přesná shoda s číslem v článku i s podílem ~16 %."
+        },
+        {
+          "claim_id": "neockovani-covid-prijem-studie-2026--15",
+          "text": "17 z těch 26 přehledů mělo smíšené výsledky",
+          "location": "prose — sekce „Co říká širší evidence\"",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38091273",
+              "doi": "10.1371/journal.pone.0294688",
+              "title": "Socioeconomic inequalities in vaccine uptake: A global umbrella review",
+              "year": 2023,
+              "journal": "PLoS One",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Doslova v abstraktu: „Overall, 26 studies were included... Evidence for lower uptake amongst disadvantaged SES individuals was found in all 26 reviews. However, 17 reviews showed mixed results...\" — přesná shoda včetně poznámky o vysokopříjmových zemích (abstrakt: „Those that explored high-income countries had a greater prevalence of mixed findings\")."
+        }
+      ],
+      "summary": {
+        "supported": 8,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Vybráno 8 z 14 ručně ověřovaných tvrzení (relation: external/derived) — všechna se týkají jediné hlavní studie Dzúrová et al. 2026 (PMID 42302189) a jedné podpůrné (Sacre et al. 2023, PMID 38091273), oba už článek cituje v article-sources. Ověřeno přes get_article_metadata (existence, typ publikace Journal Article, bez retrakce/erraty — u obou) a get_full_text_article (open-access PMC13531712 pro Dzúrová — všechna čísla z Tabulky 1 a 2 i Results doslova sedí, včetně vnitřní nesrovnalosti abstrakt (OR 3,91) vs Results/Tabulka 2 (OR 3,89), kterou už redakce zaznamenala jako caveat). Vynechána tvrzení --13 (rozpětí okresů 15,3-31,9 %, technicky bych ho z plného textu potvrdil také, ale je nad limitem 8) a --16 až --20 (výpočty redakce nad otevřenými daty MZ ČR/ECDC, ne studie — administrativní/vlastní výpočet, mimo rozsah evidence-auditu) a --01 až --06 (indikátory databoxu — administrativní ÚZIS/ČSÚ/OECD data). Norman et al. 2024 (PMID 38831275, také citovaná studie) je v článku použita jen jako narativní kontext („žádný z 23 přehledů se netýkal covid-19\"), bez konkrétního číselného tvrzení v claims.json, proto do formální rešerše nezahrnuta. PubMed 2 volání (get_article_metadata pro 3 PMID, get_full_text_article pro 1 PMC), Consensus 0 (nebylo potřeba — PubMed dal jednoznačné a ověřené výsledky pro všechny vybrané claims). Oba citované studie (Dzúrová 2026, Sacre 2023) už článek uvádí v article-sources, žádný nový zdroj se nepřidával."
+    },
+    {
+      "id": "clanek-duvera-nadumrtnost-covid-studie.html",
+      "type": "article",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "208ee9ab590752b3065b0b5174f5ae6bdb2915c0",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 1,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "duvera-nadumrtnost-covid-studie--04",
+          "text": "tedy přibližně dvojnásobku evropského průměru a o 49 % více než v Rakousku",
+          "location": "prose / perex",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "42732045",
+              "doi": "10.1111/1468-0009.70130",
+              "title": "The Czech Conundrum: Institutional Trust Erosion and COVID-19 Pandemic Mortality",
+              "year": 2026,
+              "journal": "The Milbank Quarterly",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: 'age-standardized excess mortality of 15.24 per 10,000, approximately twice the European mean and 49% higher than neighboring Austria.' Číslo i srovnání s Rakouskem/EU jsou v abstraktu ověřena přesně. Jde o jedinou mixed-methods komparativní případovou studii (ČR, Rakousko, Slovensko), ne o mezizemní vzorek — článek to sám takto rámuje ('jde o jednu práci s ekologickým designem, ne o důkaz kauzality'), proto confidence high na shodu čísla s abstraktem, ale ne na kauzální interpretaci."
+        },
+        {
+          "claim_id": "",
+          "text": "Míry důvěry ve vládu a mezilidské důvěry, stejně jako nižší korupce, s nižší standardizovanou nákazovostí spojeny byly... kdyby všechny země dosáhly úrovně důvěry 75. percentilu, bylo by globálně o 12,9 % (5,7–17,8) méně nákaz u důvěry ve vládu a o 40,3 % (24,3–51,4) u mezilidské důvěry",
+          "location": "prose (sekce o mezizemních studiích) + Zdroje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35120592",
+              "doi": "10.1016/S0140-6736(22)00172-6",
+              "title": "Pandemic preparedness and COVID-19: an exploratory analysis of infection and fatality rates, and contextual factors associated with preparedness in 177 countries, from Jan 1, 2020, to Sept 30, 2021",
+              "year": 2022,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje doslova všechna čísla (12,9 % [5,7-17,8], 40,3 % [24,3-51,4], 46,7 % [18,4-67,6] pro věk, 44,4 % [29,2-61,7] nevysvětleno) i podmíněnou formulaci 'If these modelled associations were to be causal'. Článek podmíněnost korektně zachovává, neprezentuje jako kauzalitu."
+        },
+        {
+          "claim_id": "",
+          "text": "nižší proočkovanost a nižší důvěra ve vládu podle jejich modelů vysvětlují přibližně polovinu mezery v roce 2021",
+          "location": "prose (sekce o mezizemních studiích) + Zdroje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41758875",
+              "doi": "10.1371/journal.pone.0344003",
+              "title": "Widening East-West inequality in life expectancy in Europe during the COVID-19 pandemic: An international comparative study",
+              "year": 2026,
+              "journal": "PLoS One",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: 'lower vaccination coverage and less trust in government in Eastern Europe explained about half of the gap in 2021' a 'could not be attributed to greater frailty' — obě formulace v článku odpovídají."
+        },
+        {
+          "claim_id": "",
+          "text": "da Silva et al., BMC Public Health 2024 — veřejná důvěra v politiky a důvěra v ostatní spojeny s nižší nadúmrtností napříč 213 zeměmi",
+          "location": "prose (sekce o mezizemních studiích) + Zdroje",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38877440",
+              "doi": "10.1186/s12889-024-19076-7",
+              "title": "The impact of social cohesion and risk communication on excess mortality due to COVID-19 in 213 countries: a retrospective analysis",
+              "year": 2024,
+              "journal": "BMC Public Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt potvrzuje 213 zemí a asociaci 'public trust in politicians, trust in others... were associated with lower excess mortality due to COVID-19'."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [],
+      "notes": "Consensus nebyl potřeba (0 dotazů) — všechny čtyři odborné studie zmíněné v článku (Webel 2026 Milbank Quarterly, Bollyky/COVID-19 National Preparedness Collaborators 2022 Lancet, Shkolnikov 2026 PLoS One, da Silva 2024 BMC Public Health) už byly v textu citovány s PMID/DOI, takže ověření proběhlo přes get_article_metadata (1 dávkové volání, 4 PMID), found_via 'article'. Žádná retrakce, žádný errata flag. Ostatní tvrzení v claims.json k tomuto článku (--01, --02, --03, --05, --06) jsou administrativní statistika ČSÚ/Eurostat/OECD (nadúmrtnost, spokojenost s péčí, důvěra ve vládu OECD Trust Survey) a podle zadání se neověřují proti PubMed/Consensus. Poznámka: článek i evidence korektně zachovávají, že Lancet 2022 kontrafaktuál je výslovně podmíněný ('if these modelled associations were to be causal') a že hlavní studie (Webel) je jedna komparativní case-study se dvěma-třemi zeměmi, ne mezizemní vzorek — žádné tvrzení v článku nepřekračuje rámec abstraktů."
+    },
+    {
+      "id": "indicator:obezita_prevalence",
+      "type": "indicator",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "2a451d08b9f4c3a163568ba061a6d91cba6f57b5",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 9,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Self-reportovaná výška/váha podhodnocuje skutečnou obezitu o cca 2–4 %.",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "17135623",
+              "doi": "10.1038/oby.2006.240",
+              "title": "Underreporting of BMI in adults and its effect on obesity prevalence estimations in the period 1998 to 2001",
+              "year": 2006,
+              "journal": "Obesity (Silver Spring)",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29516851",
+              "doi": "10.1017/S1368980018000368",
+              "title": "How accurate is the prevalence of overweight and obesity in children and adolescents derived from self-reported data? A meta-analysis",
+              "year": 2018,
+              "journal": "Public Health Nutr",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32449888",
+              "doi": "10.3238/arztebl.2020.0253",
+              "title": "Misclassification of Self-Reported Body Mass Index Categories",
+              "year": 2020,
+              "journal": "Dtsch Arztebl Int",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr potvrzen i u dospělých, číslo ne. Visscher 2006 (nizozemští dospělí 20–59 let, N = 3 691, reportovaná i měřená výška a váha) doslova uvádí podhodnocení prevalence obezity o 26,1 % u mužů a 30,0 % u žen. Jde ale o relativní podíl skutečné prevalence, ne o procentní body. Abstrakt navíc výslovně říká, že míra podhodnocení je mezi studiemi nekonzistentní (od 7 % nadhodnocení po 74 % podhodnocení). Z karty není jasné, zda „2–4 %“ znamená procentní body, nebo relativní podíl: jako relativní podíl by bylo podstatně menší, než uvádí Visscher. Pásmo 2–4 % v žádném abstraktu dospělé populace není. Nejbližší číslo (19,0 % vs. 23,3 %, tj. 4,3 p. b.) dává He 2018, ale pro děti a adolescenty. Freigang 2020 měří sebezařazení do hmotnostní kategorie, ne BMI ze self-reportované výšky a váhy, proto je veden jen jako kontext. Přímé srovnání EHIS vs. měřená data (EHES) u dospělých v ČR dohledáno nebylo. Pravidlo „číslo mimo abstrakt → nejvýš partial“: verdikt partial. Visscher 2006 byl ověřen v PubMed 2026-09-13 při auditu indicator:bmi_dospeli."
+        },
+        {
+          "claim_id": "",
+          "text": "Obezita je v ČR podle SZÚ asociovaná s 8 % všech úmrtí (cesta přes diabetes, KV, onkologii, osteoartrózu).",
+          "location": "patient_story",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "31371290",
+              "doi": "10.1136/bmjopen-2018-028086",
+              "title": "Impact of obesity on life expectancy among different European countries: secondary analysis of population-level data over the 1975-2012 period",
+              "year": 2019,
+              "journal": "BMJ Open",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35569084",
+              "doi": "10.1007/s00508-022-02039-6",
+              "title": "Trends in obesity-related cancer burden in Czechia",
+              "year": 2022,
+              "journal": "Wien Klin Wochenschr",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rešeršní unclear změněno na partial (confidence low). Směr a mechanismus (obezita jako příčina úmrtí v celé populaci) literatura podporuje. Vidra 2019 počítá úmrtnost přičitatelnou obezitě pro 26 evropských zemí včetně ČR, abstrakt ale uvádí jen zisk naděje dožití (0,86–1,67 roku u mužů, 0,66–1,54 roku u žen, 2012), ne podíl úmrtí. Altová 2022 na českém onkologickém registru dokládá onkologickou cestu: nadváze a obezitě je přičitatelných 11,0 % (muži) a 12,3 % (ženy) vybraných nádorů spojených s obezitou. Číslo „8 % všech úmrtí“ v žádném abstraktu není. Pochází od SZÚ, domácí instituce neindexované v PubMed, a karta ho korektně připisuje SZÚ, ne studii. Proto partial, ne contradicted. Doplňkový dotaz na podíl úmrtí přičitatelných obezitě v ČR žádnou studii s celkovým podílem nenašel. Pozor, k posouzení redakcí: sesterská karta indicators/bmi_dospeli.json připisuje SZÚ „13 % všech úmrtí“. Obě karty si tedy odporují a číslo je třeba ověřit u zdroje SZÚ a sjednotit."
+        },
+        {
+          "claim_id": "",
+          "text": "sugar tax (model UK Soft Drinks Industry Levy 2018 — pokles spotřeby o 21 % během 4 let)",
+          "location": "patient_story",
+          "kind": "policy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "31931800",
+              "doi": "10.1186/s12916-019-1477-4",
+              "title": "Reductions in sugar sales from soft drinks in the UK from 2015 to 2018",
+              "year": 2020,
+              "journal": "BMC Med",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "38052470",
+              "doi": "10.1136/bmjopen-2023-077059",
+              "title": "Changes in soft drinks purchased by British households associated with the UK soft drinks industry levy: a controlled interrupted time series analysis",
+              "year": 2023,
+              "journal": "BMJ Open",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41351382",
+              "doi": "10.3310/GJMW1501",
+              "title": "Population health and health sector cost impacts of the UK Soft Drinks Industry Levy: a modelling study",
+              "year": 2025,
+              "journal": "Public Health Res (Southampton)",
+              "study_type": "methodological",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Druh změněn z efficacy na policy (jde o dopad daně). Směr potvrzen, číslo ani metrika ne. Bandy 2020 (doplněno při adjudikaci) pro období 2015–2018 doslova uvádí: objem cukru prodaného v nealko nápojích na obyvatele a den −30 %, průměrný obsah cukru z 4,4 na 2,9 g/100 ml, objem prodejů nápojů podléhajících dani −50 % a prodeje nízko- a bezcukerných nápojů +40 %. Rogers 2023 (kontrolovaná přerušovaná časová řada, rok po zavedení daně): nákupy nápojů vyšší sazby −37,8 % objemu a −42,6 % cukru; u všech nealko nápojů dohromady objem naopak +2,6 % a cukr jen −2,7 % na domácnost a týden. Číslo „21 % během 4 let“ není v žádném abstraktu a karta neurčuje, spotřeba čeho klesla. Proti jedné interpretaci (celkový objem nápojů) stojí jen jedna studie (Rogers 2023), proto podle pravidla nejde o contradicted, ale o partial. Cobiac 2025 je modelová studie, vedena jen jako kontext. Údaj je zřejmě převzatý nebo zkomolený z neidentifikovaného zdroje, k posouzení a přeformulování redakcí (návrh: podle Bandy 2020)."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Do indicators/obezita_prevalence.json doplněno nové pole \"literature\" se 7 studiemi (karta dosud necitovala žádnou literaturu): Visscher 2006 (PMID 17135623), He 2018 (29516851) a Freigang 2020 (32449888, kontext) k limitations o self-reportu; Vidra 2019 (31371290) a Altová 2022 (35569084) k podílu úmrtí v patient_story; Bandy 2020 (31931800) a Rogers 2023 (38052470) k britské dani SDIL v patient_story. Každá položka nese note s tím, co z abstraktu doslova plyne; verified_at 2026-09-27, u Visscher 2006 2026-09-13 (ověřen při auditu indicator:bmi_dospeli). Cobiac 2025 (41351382, modelová studie) zůstal jen v registru jako kontext.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "Do pole \"limitations\" karty indicators/obezita_prevalence.json připojena jedna upřesňující věta k partial verdiktu measurement tvrzení (rozsah 2–4 % není u dospělých v literatuře doložen, Visscher 2006 uvádí 26–30 % relativního podhodnocení a nekonzistenci mezi studiemi, s citací a PMID 17135623). Stávající věta zůstala beze změny. Prose patient_story, čísla, signal, verification_status ani verified_at se neměnily. Postup shodný se sesterskou kartou indicators/bmi_dospeli.json.",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "K posouzení redakcí (audit to NEaplikuje, prose patient_story se nemění): (a) Karta uvádí, že obezita je v ČR „podle SZÚ asociovaná s 8 % všech úmrtí“, kdežto sesterská karta indicators/bmi_dospeli.json připisuje SZÚ „13 % všech úmrtí“. Obě čísla nemohou pocházet ze stejného odhadu bez upřesnění (obezita vs. nadváha + obezita, rok, metrika). Ani jedno recenzovaná literatura v PubMed nedokládá. Česká data pokrývají jen onkologickou cestu (Altová 2022: 11,0 % / 12,3 % nádorů spojených s obezitou), evropské srovnání včetně ČR měří zisk naděje dožití, ne podíl úmrtí (Vidra 2019). Doporučeno doplnit přímý odkaz na zdroj SZÚ a sjednotit obě karty. (b) Údaj „pokles spotřeby o 21 % během 4 let“ u britské daně SDIL žádná dohledaná recenzovaná studie nedokládá a metrika („spotřeba“ čeho) není určena. Doložené hodnoty: Bandy 2020 (PMID 31931800): cukr prodaný v nealko nápojích −30 % na obyvatele a den (2015–2018), objem prodejů zdaněných nápojů −50 %. Rogers 2023 (PMID 38052470): rok po zavedení daně u všech nealko nápojů dohromady objem +2,6 % a cukr jen −2,7 %. Návrh k přeformulování podle Bandy 2020. Stejný postup zvolila sesterská karta indicators/deti_obezita_cosi.json.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Žádný verdikt contradicted, proto žádný flagged ani issue. Údaj o SDIL (21 %) se s doloženými čísly neshoduje, ale tvrzení je metricky neurčité a proti jedné z možných interpretací (celkový objem nápojů) stojí jen jedna studie (Rogers 2023). Podle pravidla „jedna studie proti ≠ contradicted“ je verdikt partial. Údaj 8 % je atribuován SZÚ, nikoli studii, a směr i mechanismus (KV, diabetes, onkologie) literatura podporuje.",
+          "ref": ""
+        }
+      ],
+      "followup": "Neověřeno zůstává: (a) odhad SZÚ „8 % všech úmrtí v ČR“ je mimo PubMed a je v rozporu s „13 %“ na sesterské kartě bmi_dospeli — ověření proti primární publikaci SZÚ a sjednocení obou karet patří redakci. (b) Původ údaje „pokles spotřeby o 21 % během 4 let“ u UK SDIL nebyl identifikován. (c) Přímé srovnání EHIS (self-report) vs. EHES (měřeno) u dospělých v ČR, na němž by stálo pásmo 2–4 %, nebylo v PubMed dohledáno. (d) Mimo strop 3 tvrzení na indikátor zůstala neauditovaná: sociální gradient obezity 28 % vs. 14 % podle příjmu a zmínka o programu Counterweight Plus (UK).",
+      "notes": "Rešerše (Sonnet): karta obezita_prevalence.json neobsahovala odkazy na literaturu (jen Eurostat data_source a SZÚ jako neformální zdroj v patient_story); vybrána 3 tvrzení dle priorit — measurement (self-report v limitations), epidemiologie (8 % úmrtí podle SZÚ v patient_story), dopad britské daně z cukru (patient_story). 6 volání PubMed (3× search_articles, 3× get_article_metadata) z max 8; PubMed dal ke všem tvrzením ≥ 2 relevantní studie, Consensus proto nebyl použit (0 dotazů). Adjudikace (Opus): 3 volání PubMed z limitu 3 — ověřena metadata a abstrakty PMID 31931800, 38052470, 35569084 a 31371290; doplňkový dotaz na podíl úmrtí přičitatelných obezitě v ČR žádnou studii s podílem všech úmrtí nepřinesl. Celkem 9 volání PubMed. Změny proti rešerši: tvrzení 1 doplněn Visscher 2006 (PMID 17135623, ověřen 2026-09-13 při auditu indicator:bmi_dospeli, dnes znovu nevolán) jako jediný doklad u dospělých, Freigang 2020 ponechán jen jako kontext; tvrzení 2 unclear → partial (low); tvrzení 3 kind efficacy → policy a doplněn Bandy 2020 (PMID 31931800). Žádný contradicted, tedy žádný flag ani issue. U indikátoru se poznámka do data/articles.json nepíše — karta dostala pole literature a jednu upřesňující větu v limitations."
+    },
+    {
+      "id": "indicator:perinatalni_umrtnost",
+      "type": "indicator",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "3268abb0ca723d464f0ca87457ead9b37c7a48f0",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Definice životaschopnosti se mezi zeměmi liší (22. vs. 24. vs. 28. týden) a ovlivňuje mezinárodní srovnatelnost — Eurostat proto pracuje s hranicí pozdní fetální úmrtnosti od 28. týdne / 1000 g.",
+          "location": "indicators/perinatalni_umrtnost.json — limitations",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30269877",
+              "doi": "10.1016/S0140-6736(18)31651-9",
+              "title": "Quantifying the burden of stillbirths before 28 weeks of completed gestational age in high-income countries: a population-based study of 19 European countries",
+              "year": 2018,
+              "journal": "Lancet",
+              "study_type": "cohort",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno z abstraktu (Euro-Peristat, 19 evropských zemí, 2004/2010/2015). Mezinárodní srovnání dnes zahrnují jen mrtvorozenost od 28. týdne. Podíl porodů ve 22.–24. týdnu se mezi zeměmi výrazně liší, což podle autorů ukazuje na rozdílnou evidenci. Studie přidává, že hranice 28. týdne vynechává 32 % mrtvorozených (2015), a doporučuje do srovnání zahrnout i 24.–27. týden. To tvrzení karty nevyvrací, jen doplňuje, proto byla do limitations doplněna jedna věta s citací. Že se Eurostat výslovně řídí hranicí 28. týdne, abstrakt nejmenuje; plyne to z definice datové sady hlth_cd_aperrto (LFOE), kterou karta cituje."
+        },
+        {
+          "claim_id": "",
+          "text": "Za dobrými čísly stojí konkrétní strukturální rozhodnutí — síť perinatologických a intermediárních center a systém in-utero transportu, který koncentruje rizikové a předčasné porody tam, kde je nejvíce zkušeností a techniky.",
+          "location": "indicators/perinatalni_umrtnost.json — patient_story (3. odstavec) + determinants (centralizace rizikových porodů, in-utero transport)",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "20810377",
+              "doi": "10.1001/jama.2010.1226",
+              "title": "Perinatal regionalization for very low-birth-weight and very preterm infants: a meta-analysis",
+              "year": 2010,
+              "journal": "JAMA",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34315416",
+              "doi": "10.1186/s12884-021-03988-y",
+              "title": "Are birth outcomes in low risk birth cohorts related to hospital birth volumes? A systematic review",
+              "year": 2021,
+              "journal": "BMC Pregnancy Childbirth",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Mechanismus je dobře doložený. Metaanalýza 41 studií (Lasswell 2010) ukazuje, že novorozenci pod 1500 g narození mimo centrum úrovně III mají vyšší šanci neonatálního úmrtí nebo úmrtí před propuštěním: 38 % vs 23 %, upravené OR 1,62 (95% CI 1,44–1,83). U velmi nezralých (≤ 32. týden) je OR 1,55, výsledek drží i v kvalitnějších studiích a u dětí pod 1000 g (OR 1,80). Walther 2021 v úvodu označuje přínos porodu ve velkých centrech u rizikových dětí za přesvědčivě doložený. U nízkorizikových porodů ukazují 4 ze 6 studií vyšší perinatální úmrtnost v malých porodnicích, ale pro novorozeneckou úmrtnost a mrtvorozenost je výsledek neprůkazný. Verdikt partial ze tří důvodů. (1) Tvrzení o ČR stojí jen na zahraniční evidenci; český systém in-utero transportu žádná ze studií netestuje, přenositelnost je pravděpodobná, ale neověřená. (2) Kauzální přičtení celostátní hodnoty („za čísly stojí“) evidence nevyčísluje. (3) Lasswell se týká jen živě narozených, ne mrtvorozenosti, která je větší složkou perinatální úmrtnosti. Počet center (12 + 12) je administrativní údaj mimo rozsah literatury. Do patient_story doplněna jedna upřesňující věta s citací Lasswell 2010."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Smith et al., Lancet 2018 (PMID 30269877, DOI 10.1016/S0140-6736(18)31651-9) do nově založeného pole literature karty indicators/perinatalni_umrtnost.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Lasswell et al., JAMA 2010 (PMID 20810377, DOI 10.1001/jama.2010.1226) do pole literature karty indicators/perinatalni_umrtnost.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Walther et al., BMC Pregnancy Childbirth 2021 (PMID 34315416, DOI 10.1186/s12884-021-03988-y) do pole literature karty indicators/perinatalni_umrtnost.json",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/perinatalni_umrtnost.json → limitations: za větu o hranici 28. týdne / 1000 g připojena jedna věta s citací (hranice 28. týdne vynechává 32 % mrtvorozených v 19 evropských zemích, 2015; Smith et al., Lancet 2018, PMID 30269877)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/perinatalni_umrtnost.json → patient_story (3. odstavec): za větu „Rizikové a předčasné porody se tak koncentrují tam, kde je nejvíce zkušeností a techniky.“ vložena jedna upřesňující věta s citací (Lasswell et al., JAMA 2010, PMID 20810377; kauzální podíl centralizace na české hodnotě nevyčíslen) — nově vložená formulace čeká na schválení redakcí",
+          "ref": ""
+        }
+      ],
+      "followup": "Tvrzení z importance („jeden z nejcitlivějších ukazatelů kvality zdravotního systému vůbec“) vynecháno z rozpočtu rešerše (0 zásahů v PubMed, strop 3 tvrzení); tvrzení z patient_story, že riziko mrtvorozenosti je nejvyšší u sociálně vyloučených skupin, neověřeno. Věta vložená do patient_story čeká na schválení redakcí.",
+      "notes": "Karta prošetřena včetně záznamu v data/indicators.json; auditována 2 tvrzení (measurement + mechanism). Consensus nepoužit — PubMed dal použitelné studie na obě tvrzení. V adjudikaci 3 volání PubMed: ověřeny PMID 30269877 a 34315416, nesouvisející kandidát 20736471 (RCT o ADHD) zahozen, doplněna a ověřena metaanalýza Lasswell 2010 (PMID 20810377). Zápis: pole literature založeno (3 studie), jedna věta s citací do limitations (measurement, supported) a jedna upřesňující věta do patient_story (mechanism, partial). Karta nemá audit-status; verification_status, čísla ani verified_at se neměnily."
+    },
+    {
+      "id": "indicator:prevalence_diabetu",
+      "type": "indicator",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "469ffbc6f83f5502a7aab8ef6c22530c60343b8c",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "program „diabetes prevence“ pro prediabetes (UK NHS DPP model — Counterweight, redukce váhy 5 % snižuje riziko diabetu o 58 %)",
+          "location": "patient_story (poslední odstavec, politické páky)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "11832527",
+              "doi": "10.1056/NEJMoa012512",
+              "title": "Reduction in the incidence of type 2 diabetes with lifestyle intervention or metformin.",
+              "year": 2002,
+              "journal": "The New England Journal of Medicine",
+              "study_type": "rct",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Landmark RCT (Diabetes Prevention Program, Knowler et al. 2002, N Engl J Med) doslova uvádí: lifestyle intervence (cíl ≥7% redukce hmotnosti + 150 min pohybu/týdně) snížila incidenci diabetu o 58 % (95% CI 48–66 %) oproti placebu — přesná shoda s číslem v kartě. Karta zmiňuje '5% redukci váhy' a program 'Counterweight' (odlišný britský program), zatímco DPP cílil na ≥7% váhový úbytek; číslo 58 % je nicméně doslova doloženo. Verdikt partial: DPP testoval kombinovanou intervenci (cíl ≥7 % hmotnosti + 150 min pohybu týdně), zatímco karta připisuje 58 % redukci váhy o 5 % a programu Counterweight (UK NHS DPP), který DPP RCT nehodnotil — doloženo je číslo, nikoli tvrzení karty v celku. (Snížení po review PR #1237.)"
+        },
+        {
+          "claim_id": "",
+          "text": "Nezahrnuje nediagnostikovaný diabetes (odhadem +30 % skutečné prevalence).",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "V rámci stropu volání PubMed (systematic[sb]/meta-analysis[pt] filtry, klíčová slova 'undiagnosed diabetes proportion/prevalence/global estimate') se nepodařilo dohledat systematický přehled/metaanalýzu, která by doslova doložila konkrétní číslo '+30 %' jako podíl nediagnostikovaného diabetu na celkové prevalenci. Nalezené studie (retinopatie u nově diagnostikovaného DM2, GBD práce) číslo nepotvrzují ani nevyvracejí."
+        },
+        {
+          "claim_id": "",
+          "text": "riziko komplikací (oční, renální, kardiovaskulární) a 30–50% zvýšení rizika předčasné úmrtí",
+          "location": "patient_story (úvodní odstavec)",
+          "kind": "effect",
+          "verdict": "no-evidence",
+          "confidence": "low",
+          "evidence": [],
+          "note": "Hledání metaanalýz/systematických přehledů excess mortality / hazard ratio u diabetu (více dotazů, filtr systematic[sb]) nedohledalo studii, která by doslova doložila rozpětí '30–50%' zvýšeného rizika předčasného úmrtí; nalezené práce (GLP-1 RA a MI, EAT-Lancet dieta, GBD child growth) se tématu netýkají."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 2,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "card-note",
+          "detail": "literature[] doplněno o Knowler 2002 (PMID 11832527) do indicators/prevalence_diabetu.json",
+          "ref": ""
+        }
+      ],
+      "followup": "claim --02 (+30 % nediagnostikovaný diabetes) a --03 (30–50% zvýšené riziko úmrtí) neověřeny — vyčerpán strop PubMed volání bez shody; doporučeno dořešit cílenějším hledáním (IDF Diabetes Atlas / NHANES-typové práce pro --02; Emerging Risk Factors Collaboration / Diabetologia-Lancet lookup_article_by_citation pro --03) nebo přes Consensus.",
+      "notes": "Karta indikátoru dosud neuvádí žádnou citovanou literaturu (found_via: article se tedy neuplatnil). Consensus nebyl použit — PubMed dal k prvnímu tvrzení jednoznačnou shodu, u zbylých dvou tvrzení byl strop volání PubMed vyčerpán dřív, než bylo možné doplnit Consensus dotazy podle protokolu (max 2)."
+    },
+    {
+      "id": "indicator:sebevrazdy_mladistvi_15_19",
+      "type": "indicator",
+      "checked_at": "2026-09-27",
+      "run_id": "ea-2026-09-27-01",
+      "content_hash": "040174a420bf29ce718f78c8f2ed506d89a49a9f",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 13,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Sebevraždy mladistvých bývají podhodnocené (část je klasifikována jako úraz nebo událost nezjištěného úmyslu, ICD-10 Y10–Y34).",
+          "location": "limitations",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "22883342",
+              "doi": "10.1186/1471-2458-12-644",
+              "title": "Forty years of increasing suicide mortality in Poland: undercounting amidst a hanging epidemic?",
+              "year": 2012,
+              "journal": "BMC Public Health",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "41110668",
+              "doi": "10.1016/j.jad.2025.120443",
+              "title": "Suicide trends in Germany from 1991-2022, considering misclassification of undetermined intent deaths - a time-series analysis.",
+              "year": 2025,
+              "journal": "J Affect Disord",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42746355",
+              "doi": "10.7759/cureus.114601",
+              "title": "Suicide Mortality Among Young People in Brazil: A National Time-Series Analysis, 2000-2023.",
+              "year": 2026,
+              "journal": "Cureus",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Mechanismus podhodnocení skrze kódy nezjištěného úmyslu je v literatuře doložen: Höfer et al. 2012 (Polsko, 1970–2009, všechny věkové skupiny) odhaduje po započtení úmrtí nezjištěného úmyslu citlivost oficiální statistiky sebevražd na 77 % (nižší u žen); Clement et al. 2025 (Německo 1991–2022) ukazuje poměr standardizované míry úmrtí nezjištěného úmyslu k míře sebevražd 0,11–0,37 a odlišné trendy obou řad jako známku skrytých sebevražd. Vitoi et al. 2026 (Brazílie, 10–29 let) jako jediná pracuje s mladými: zahrnutí úmrtí nezjištěného úmyslu zvýšilo odhad úrovně, ale nezměnilo směr trendu. Chybí evidence specifická pro ČR i pro evropskou kohortu 15–19 let; velikost podhodnocení u českých mladistvých není doložena — přenositelnost zahraničních odhadů je omezená (odlišná praxe ohledávání a kódování). Směr tvrzení platí, rozsah nelze kvantifikovat."
+        },
+        {
+          "claim_id": "",
+          "text": "K tomu přistupují tlak sociálních sítí, kyberšikana a rostoucí výkonová úzkost. [determinant: 'Sociální sítě, kyberšikana a tlak na výkon']",
+          "location": "patient_story / determinants",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42651351",
+              "doi": "10.3390/healthcare14162582",
+              "title": "Adolescent Suicide During the COVID-19 Pandemic: Bullying Dynamics, Risk Factors, and Prevention Strategies-A Systematic Review.",
+              "year": 2026,
+              "journal": "Healthcare (Basel)",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "32569425",
+              "doi": "10.1111/camh.12400",
+              "title": "Risk factors for suicide attempt in children, adolescents, and young adults hospitalized for mental health disorders.",
+              "year": 2020,
+              "journal": "Child Adolesc Ment Health",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled 26 studií (Pérez-Jiménez et al. 2026) řadí nadměrné užívání sociálních sítí mezi klíčové rizikové faktory a popisuje přesun od tradiční šikany ke kyberšikaně (nárůst hlášení na národní lince o 264,4 %) jako nové ohrožení; data jsou ale z období pandemie COVID-19 a výstupem jsou deprese, úzkost a sebevražedné myšlenky/chování, ne úmrtí. Ong et al. 2020 (USA, n = 18 018 hospitalizovaných) potvrzuje oběť šikany jako prediktor pokusu o sebevraždu ve všech věkových skupinách. „Rostoucí výkonová úzkost“ ani „tlak na výkon“ abstrakty nedokládají. Žádná studie není z ČR — přenositelnost zahraničních zjištění je rozumná co do směru, ne co do velikosti vlivu. Směr tvrzení (sociální sítě a kyberšikana jako rizikové faktory) podložen, třetí prvek výčtu ne."
+        },
+        {
+          "claim_id": "",
+          "text": "Indikátor je věkově stratifikovaný a doplňuje — neduplikuje — celkovou standardizovanou míru sebevražd..., protože adolescentní sebevražednost má jiné determinanty (školní prostředí, sociální sítě, dostupnost dětské psychiatrie) a jinou politickou páku.",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "32569425",
+              "doi": "10.1111/camh.12400",
+              "title": "Risk factors for suicide attempt in children, adolescents, and young adults hospitalized for mental health disorders.",
+              "year": 2020,
+              "journal": "Child Adolesc Ment Health",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Ong et al. 2020 uzavírá, že prevence u dětí a mladých „musí zohlednit věkově specifické rizikové faktory“, což podporuje obecný princip věkové stratifikace. Abstrakt ale zároveň ukazuje, že hlavní prediktory (ženské pohlaví, deprese, oběť šikany) jsou společné předadolescentům, adolescentům 13–17 i mladým dospělým 18–25 a odlišné faktory (bez pojištění, nebezpečné domácí/školní prostředí) se týkají hlavně dětí do 12 let. Studie se týká pokusů o sebevraždu u hospitalizovaných v USA, ne dokonaných sebevražd, a nesrovnává adolescenty s dospělou populací, z níž se skládá celková míra. Konkrétní výčet (školní prostředí, sociální sítě, dostupnost dětské psychiatrie) ani „jinou politickou páku“ nedokládá. Metodické zdůvodnění je věcně rozumné, ale evidence je slabá — nízká jistota."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Höfer et al., BMC Public Health 2012 (PMID 22883342, DOI 10.1186/1471-2458-12-644) do nově založeného pole literature karty indicators/sebevrazdy_mladistvi_15_19.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Clement et al., J Affect Disord 2025 (PMID 41110668, DOI 10.1016/j.jad.2025.120443) do pole literature karty indicators/sebevrazdy_mladistvi_15_19.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Pérez-Jiménez et al., Healthcare (Basel) 2026 (PMID 42651351, DOI 10.3390/healthcare14162582) do pole literature karty indicators/sebevrazdy_mladistvi_15_19.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Ong et al., Child Adolesc Ment Health 2020 (PMID 32569425, DOI 10.1111/camh.12400) do pole literature karty indicators/sebevrazdy_mladistvi_15_19.json",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/sebevrazdy_mladistvi_15_19.json → limitations: za větu o podhodnocení (ICD-10 Y10–Y34) připojena jedna věta s citací (Polsko: oficiální statistika zachytila odhadem asi 77 % sebevražd; Höfer et al. 2012, PMID 22883342; rozsah u českých mladistvých nedoložen) — nově vložená formulace čeká na schválení redakcí",
+          "ref": ""
+        }
+      ],
+      "followup": "Evidence k míře podhodnocení (Y10–Y34) u českých adolescentů nedohledána — doporučen dotaz na domácí literaturu (NÚDZ, ÚZIS); velikost vlivu determinantu „tlak na výkon“ / výkonová úzkost neověřena (abstrakty ji nedokládají). Věta vložená do limitations čeká na schválení redakcí.",
+      "notes": "Karta necituje žádnou konkrétní studii (jen Eurostat/ČSÚ jako datový zdroj), cestou found_via „article“ nešlo ověřit nic. Vybrána 3 tvrzení dle stropu. Rešerše (Sonnet): 10 volání PubMed (nad doporučeným stropem 8 — první dotazy vrátily 0 nebo irelevantní výsledky), 1 volání Consensus, kandidát z Consensu ověřen v PubMed. Adjudikace (Opus): 3 volání PubMed (metadata tří studií — abstrakty ověřeny, žádná retrakce; cílené hledání adolescentní misklasifikace; metadata kandidátů). Všechna tři tvrzení partial: (1) podhodnocení přes kódy nezjištěného úmyslu doložené pro Polsko a Německo (všechny věkové skupiny), pro mladé jen z Brazílie, pro ČR ani evropskou kohortu 15–19 let nic; (2) sociální sítě a kyberšikana podpořeny systematickým přehledem z pandemického období, tlak na výkon nedoložen; (3) zdůvodnění věkové stratifikace má jen slabou oporu (nízká jistota). Ong 2020 sjednoceně vedena jako „cross-sectional“. Vitoi 2026 (Cureus) jen kontext v registru, do literature karty nezařazena. Věta do limitations obsahuje jen číslo doslova uvedené v abstraktu Höfer 2012."
     }
   ]
 }
