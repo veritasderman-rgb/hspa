@@ -853,6 +853,10 @@ const MANIFEST = {
   'clanek-reklama-kojenecka-vyziva-zakon': { kicker: 'Veřejné zdraví · kojenecká výživa', signal: 'bad', stat: '32', statSuffix: ' ze 100', claim: 'bodů dává WHO a UNICEF české regulaci reklamy na kojeneckou výživu.', context: 'Monitoring SZÚ 2025: Kodex porušilo 42 % ordinací dětských lékařů.' },
   'clanek-sebevrazdy-validace-policejni-data': { kicker: 'Duševní zdraví · data', signal: 'warn', stat: '1 561', claim: 'sebevražd napočítal ÚZIS za rok 2024 po opravě 294 úmrtí.', context: 'Bylo 1 253. Nárůst je z propojení s policií, ne z reálného nárůstu.' },
   'clanek-nevydana-baleni-leku': { kicker: 'Léková politika · preskripce', signal: 'warn', stat: '6,5', statSuffix: ' mil.', claim: 'balení léků se loni předepsalo víc, než lékárny vydaly.', context: '3,8 % ze 171 milionů balení. Srovnatelná studie našla 4,56 %.' },
+  'clanek-umrti-z-ovzdusi': { kicker: 'Životní prostředí · znečištění ovzduší', signal: 'bad', stat: '4 715', claim: 'předčasných úmrtí ročně přisuzuje Česku znečištěné ovzduší.', context: '43 na 100 000 obyvatel — téměř desetkrát víc než na silnicích (4,5).' },
+  'clanek-projekce-bez-centrovych-leciv': { kicker: 'Financování · projekce výdajů 2040', signal: 'warn', stat: '39,8', statSuffix: ' mld. Kč', claim: 'stojí ročně centrová léčiva. Do projekce výdajů ÚZIS 2040 se nepočítají.', context: 'Tři varianty ÚZIS: 836 až 1 014 mld. Kč v roce 2040 — bez téhle položky.' },
+  'clanek-hepatitida-eliminace-2030': { kicker: 'Infekční nemoci · hepatitida C', signal: 'bad', stat: '1 447', claim: 'případů hepatitidy C nahlásilo Česko v roce 2024 — nejvíc od roku 2010.', context: 'Do cíle eliminace 2030 zbývá pět let. Antivirotika vyléčí přes 90 %.' },
+  'clanek-lekari-ze-zahranici': { kicker: 'Pracovní síla · lékaři ze zahraničí', signal: 'neutral', stat: '1', statSuffix: ' z 12', claim: 'lékař v Česku studoval mimo republiku. Dvě třetiny z nich na Slovensku.', context: 'Podíl je 8,6 % — přesně na mediánu Evropské unie, mezi Německem a Polskem.' },
 };
 
 function escapeXml(s) {
