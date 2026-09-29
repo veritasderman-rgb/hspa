@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-29
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-29
+    creation_phase: rutina+article-write
+    primary_sources_count: 21
+    visual_elements_count: 6
+    notes: "Vytvořeno z discovery 2026-09-29: trigger = hromadná salmonelóza ze školní jídelny ZŠ Polesná (Masarykova ZŠ), Praha-Újezd nad Lesy, oběd 21. 9. 2026; navazuje na draft clanek-monitoring-zdravotnich-hrozeb-mz.html (26. 9.), který kauzu zmiňuje jen jako test bulletinu MZ.
+      KPI: 363 nemocných, 50 hospitalizovaných, 22 laboratorně potvrzených (HSHMP, TZ 25. 9. 2026 13:18; staženo 29. 9. 2026; WP API hygpraha.cz zkontrolováno 29. 9. 2026 01:25 UTC, novější TZ s čísly nevyšla). Rozpad 315+21 / 13 / 8 / 6. Příčina citována doslova podle HSHMP 24. 9. 2026 (vejce s DMT do 15. 9., zpracována 21. 9.; pravděpodobné nedodržení správného technologického postupu; provozovatel nedoložil bezpečnost potraviny). Podmínky otevření jídelny: HSHMP 25. 9. 2026.
+      SEKUNDÁRNÍ: SZÚ ISIN PDF (data k 1. 1. 2026, stažena 29. 9. 2026): počty 2018–2025 11 346 → 5 729, nemocnost 106,8 → 52,5; Praha 2025 373 / 26,7; věk 2025 0 let 283,3, 1–4 286,6, 5–9 156,1, 10–14 83,1; měsíce 2025 září 859, červen–říjen 3 568 = 62 % (výpočet redakce z měsíčních tabulek, součet 5 728 vs finální 5 729); 2026 leden–srpen 4 020 vs 3 326 = +21 % (výpočet redakce), srpen 828 vs 750. MZ Týdenní monitoring 38. týden: 218 / 4 601 vs 3 851 (+19 %), období 14.–20. 9.
+      BENCH: EFSA & ECDC, EU One Health 2024 Zoonoses Report, EFSA J 2025;23(12):e9759, DOI 10.2903/j.efsa.2025.9759, PMID 41377167 (ověřeno v PubMed 29. 9. 2026), tab. 8: EU 18,6 / CZ 64,2 / SK 72,2 / HU 47,2 / PL 21,9 / AT 15,4 / DE 14,8 na 100 000; EU 79 703 potvrzených; Salmonella × vejce 83 ohnisek se silnými důkazy 2024 (2020–2023 prům. 61,3); salmonelóza 1 238 ohnisek / 10 164 případů. Poměr 64,2/18,6 = 3,5 výpočet redakce.
+      EVIDENCE (PubMed 7+1 dotazů — 8. dotaz 29. 9. = get_article_metadata všech 7 PMID pro plné citace; Consensus 2: souhlas — dávka–inkubace konzistentní (Glynn 1992, Mintz 1994, Abe 2004, Teunis 2010), školení v souladu s Young 2019): Chai 2019 PMID 31587689; Mintz 1994 PMID 8119352; Glynn & Palmer 1992 PMID 1488963; Abe 2004 PMID 15633679; Young 2019 PMID 31536416; Levy 2022 PMID 35650991.
+      LEGISLATIVA (zakonyprolidi.cz 29. 9. 2026): 258/2000 Sb. § 23, § 24 odst. 1, § 62 odst. 1, § 62a, § 79a, § 82; vyhl. 137/2004 Sb.; vyhl. 107/2005 Sb.; vyhl. 389/2023 Sb. příl. 26 (nahradila 473/2008 Sb., zrušenou k 1. 1. 2024); nařízení (ES) 852/2004 čl. 5. Plán MZ: legislativa.json plan_items vyhled-ochrana-verejneho-zdravi-hygiena (2027-01, nezahájeno).
+      VĚDOMĚ NEUVÁDÍME: jména dětí, zaměstnanců kuchyně a dodavatele vajec; spekulace o vině a o výsledku správního řízení; sérotyp salmonely (HSHMP ho nezveřejnila); laboratorní výsledky surovin a stěrů (ohlášeny na 25. 9., k 29. 9. nezveřejněny); mediální čísla mimo HSHMP/MZ; počet kontrol školních jídelen (nemáme primární zdroj); srovnání krajů přepočtem mimo SZÚ. Čeká na schválení redakce."
+    notes: "audit K 2026-09-29 (nezávislý auditor): A — HSHMP TZ 22.–25. 9. (363/50/22, rozpad 315+21/13/8/6, příčina verbatim, podmínky jídelny), MZ bulletin 38. týden (218/4 601/3 851; stav k 23. 9.), SZÚ PDF (řada 2018–2025 počty i nemocnost, Praha 373/26,7, věk 2025, měsíce 2025, leden–srpen 2026 4 020/3 326, srpen 828/750) a EFSA 2024 tab. 2/8/53 ověřeny proti primárním zdrojům — bez rozporu; WP API hygpraha.cz: po 25. 9. jen rozhovor ČRo bez čísel. OPRAVENO: (1) reforma hygienické služby — Výhled 2027–2029 (usn. vl. č. 175) uvádí předložení vládě 3. Q 2027 a účinnost 01.29, ne „termín leden 2027“; text i zdroj přepsány (data/legislativa.json plan_termin 2027-01 nechává redakci k opravě); (2) odrážka „Evidence ukazuje, že školení samo chování nemění“ zmírněna podle Young 2019 (RCT bez významného efektu; nerandomizované a Insfran-Rivarola 2020 efekt na praxi nacházejí); (3) do zdroje EFSA doplněna tab. 53 (83 ohnisek vejce, prům. 61,3). A2 — 7 PMID ověřeno get_article_metadata (autoři, rok, časopis, DOI, typ; žádná retrakce/erratum). B — externí odkazy 200, doi.org OUP a Wiley 403 (DOI ověřeny v PubMed). PubMed 1 dotaz, Consensus 1 dotaz."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>363 nemocných z jednoho školního oběda: co salmonelóza v Újezdu nad Lesy říká o systému · HSPA Monitor</title>
+<meta name="description" content="Po obědě ze školní jídelny ZŠ Polesná v Praze-Újezdě nad Lesy onemocnělo podle pražské hygienické stanice k 25. září 363 lidí, 50 z nich skončilo v nemocnici a u 22 laboratoř potvrdila salmonelózu. Hygienici jako pravděpodobnou příčinu uvádějí vejce s prošlou minimální trvanlivostí a nedodržení správného technologického postupu. Salmonelóz v Česku za osm let ubylo zhruba na polovinu, letos jich je ale podle SZÚ o 21 % víc než loni a Česko jich na obyvatele hlásí víc než trojnásobek průměru EU. Rozebíráme, jak funguje cesta od hlášení k šetření, co o inkubaci a školení personálu říká výzkum a kde jsou systémové páky.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="363 nemocných z jednoho školního oběda: co salmonelóza v Újezdu nad Lesy říká o systému">
+<meta property="og:description" content="363 nemocných, 50 hospitalizovaných, 22 laboratorně potvrzených (HSHMP, 25. 9. 2026). Jak funguje dozor nad školními jídelnami, co ukazují data SZÚ a EFSA a co říká výzkum.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-salmoneloza-ujezd-nad-lesy-2026.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-salmoneloza-ujezd-nad-lesy-2026.png">
+<meta property="article:published_time" content="2026-09-30">
+<meta property="article:section" content="Veřejné zdraví">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-salmoneloza-ujezd-nad-lesy-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "363 nemocných z jednoho školního oběda: co salmonelóza v Újezdu nad Lesy říká o systému",
+  "description": "Po obědě ze školní jídelny ZŠ Polesná v Praze-Újezdě nad Lesy onemocnělo podle pražské hygienické stanice k 25. září 363 lidí, 50 z nich skončilo v nemocnici a u 22 laboratoř potvrdila salmonelózu. Hygienici jako pravděpodobnou příčinu uvádějí vejce s prošlou minimální trvanlivostí a nedodržení správného technologického postupu. Salmonelóz v Česku za osm let ubylo zhruba na polovinu, letos jich je ale podle SZÚ o 21 % víc než loni a Česko jich na obyvatele hlásí víc než trojnásobek průměru EU. Rozebíráme, jak funguje cesta od hlášení k šetření, co o inkubaci a školení personálu říká výzkum a kde jsou systémové páky.",
+  "datePublished": "2026-09-30T06:00:00+02:00",
+  "dateModified": "2026-09-29",
+  "inLanguage": "cs",
+  "articleSection": "Veřejné zdraví",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-salmoneloza-ujezd-nad-lesy-2026.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-salmoneloza-ujezd-nad-lesy-2026.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Veřejné zdraví</span>
+        <span class="article-tag article-tag-muted">salmonelóza · školní stravování · hygienická služba · ISIN · EFSA · HACCP</span>
+      </div>
+      <h1 class="article-title">363 nemocných z jednoho školního oběda: co salmonelóza v Újezdu nad Lesy říká o systému</h1>
+      <p class="article-deck">
+        Po obědě ze školní jídelny ZŠ Polesná v Praze-Újezdě nad Lesy onemocnělo podle pražské hygienické stanice k 25. září <strong>363 lidí</strong>, 50 z nich skončilo v nemocnici a u 22 laboratoř potvrdila salmonelózu. Hygienici jako pravděpodobnou příčinu uvádějí vejce s prošlou minimální trvanlivostí a nedodržení správného technologického postupu. Salmonelóz v Česku za osm let ubylo zhruba na polovinu, letos jich je ale podle SZÚ o 21 % víc než loni a Česko jich na obyvatele hlásí víc než trojnásobek průměru EU. Rozebíráme, jak funguje cesta od hlášení k šetření, co o inkubaci a školení personálu říká výzkum a kde jsou systémové páky.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">30. září 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V pondělí 21. září se ve stravovacím provozu ZŠ Polesná vařily uhlířské špagety. Jídlo se vydávalo v hlavní budově školy a rozváželo se do dvou mateřských škol, na odloučené pracoviště a pečovatelskou službou k seniorům domů. Do pátku 25. září evidovala Hygienická stanice hlavního města Prahy (HSHMP) 363 nemocných. Ředitel HSHMP rozsah nákazy označil za „zcela výjimečný“. Jak se o kauze dozvěděl týdenní bulletin ministerstva, jsme popsali v <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">rozboru prvního Monitoringu zdravotních hrozeb</a>. Tady se díváme na to, co kauza říká o systému: o datech, pravidlech a o tom, co funguje.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSalHeroH">
+        <figcaption class="av-figure-h" id="avSalHeroH">Hromadná salmonelóza ze ZŠ Polesná, stav k 25. 9. 2026 (HSHMP, tisková zpráva 25. 9. 2026, staženo 29. 9. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="363">363</span>
+            <span class="av-counter-label">nemocných</span>
+            <span class="av-counter-foot">315 dětí a 21 dospělých v hlavní budově, 13 dětí v MŠ, 8 seniorů, 6 na odloučeném pracovišti</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="50">50</span>
+            <span class="av-counter-label">hospitalizovaných</span>
+            <span class="av-counter-foot">24. 9. jich bylo 41</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="22">22</span>
+            <span class="av-counter-label">laboratorně potvrzených salmonelóz</span>
+            <span class="av-counter-foot">u dalších vzorků se čekalo na výsledky</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter">21. 9.</span>
+            <span class="av-counter-label">den oběda, který jedli všichni nemocní</span>
+            <span class="av-counter-foot">podle dotazníkového šetření HSHMP</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> HSHMP, Aktualizace k nákaze v ZŠ Polesná (25. 9. 2026, 13:18) a Šetření na ZŠ v Újezdu nad Lesy (24. 9. 2026). Novější tisková zpráva s čísly do 29. 9. 2026 nevyšla.</p>
+      </figure>
+
+      <h3>Co je doloženo a co ne</h3>
+      <p>
+        Hygienici se o potížích dozvěděli z hlášení v úterý 22. září. Ten den HSHMP odhadovala <strong>zhruba 250 nemocných</strong>, z toho 10 dospělých, a zdůrazňovala, že do laboratorních výsledků „nelze předjímat konkrétní příčinu“. Ve středu 23. září potvrdila laboratoř salmonelu u čtyř dětí. Vejce ve školní kuchyni už odebrat nešlo, protože byla spotřebována, a hygienici začali dohledávat šarži u dodavatele.
+      </p>
+      <p>
+        Ve čtvrtek 24. září HSHMP zveřejnila pravděpodobnou příčinu: uhlířské špagety připravené z vajec s prošlým datem minimální trvanlivosti a <strong>„pravděpodobné nedodržení správného technologického postupu při vaření“</strong>. Vejce měla datum minimální trvanlivosti do 15. září, kuchyně je zpracovala 21. září a provozovatel podle hygieniků nedoložil bezpečnost použité potraviny. Laboratorně potvrzených bylo tehdy 18 lidí, hospitalizovaných 41. Po skončení kontroly má s provozovatelem začít správní řízení.
+      </p>
+      <p>
+        V pátek 25. září HSHMP hlásila 363 nemocných, 50 hospitalizovaných a 22 laboratorně potvrzených případů a upozornila, že se čísla budou měnit. Výsledky rozborů surovin a stěrů z povrchů, ohlášené na pátek, do 29. září zveřejněny nebyly. Příčina tedy není uzavřená: hygienici mluví o pravděpodobném mechanismu a řízení teprve začne.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSalTlH">
+        <figcaption class="av-figure-h" id="avSalTlH">Průběh šetření podle tiskových zpráv HSHMP a bulletinu MZ, 21.–25. 9. 2026 (staženo 29. 9. 2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">21. 9. 2026</time>
+            <h4 class="av-timeline-title">Oběd ze stravovacího provozu ZŠ Polesná</h4>
+            <p class="av-timeline-desc">Uhlířské špagety; vejce s datem minimální trvanlivosti do 15. 9.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">22. 9. 2026</time>
+            <h4 class="av-timeline-title">Začíná epidemiologické šetření</h4>
+            <p class="av-timeline-desc">Zhruba 250 nemocných, z toho 10 dospělých; kontrola kuchyně, odběr vzorků surovin.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">23. 9. 2026</time>
+            <h4 class="av-timeline-title">Salmonela potvrzena u čtyř dětí</h4>
+            <p class="av-timeline-desc">Vejce v kuchyni už nešlo odebrat. Bulletin MZ se stavem k 23. 9.: více než 250 nemocných, nejméně 13 hospitalizovaných.</p>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">24. 9. 2026</time>
+            <h4 class="av-timeline-title">Pravděpodobná příčina</h4>
+            <p class="av-timeline-desc">18 laboratorně potvrzených, 41 hospitalizovaných; ohlášeno správní řízení po skončení kontroly.</p>
+            <span class="av-timeline-tag">HSHMP</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">25. 9. 2026</time>
+            <h4 class="av-timeline-title">363 nemocných, podmínky pro otevření jídelny</h4>
+            <p class="av-timeline-desc">Sanitace, negativní vyšetření stolice všech zaměstnanců kuchyně, revize HACCP a doložené školení.</p>
+            <span class="av-timeline-tag">Poslední čísla</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-future">
+            <time class="av-timeline-date">dosud nezveřejněno</time>
+            <h4 class="av-timeline-title">Výsledky rozborů surovin a stěrů, správní řízení</h4>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> HSHMP, tiskové zprávy 22., 23., 24. a 25. 9. 2026; MZ ČR, Týdenní monitoring zdravotních hrozeb, 38. týden 2026.</p>
+      </figure>
+
+      <h3>Proč senioři a školky onemocněli později</h3>
+      <p>
+        U dětí z hlavní budovy se potíže objevily 21. a 22. září, u seniorů, dětí z mateřských škol a z odloučeného pracoviště až mezi 23. a 25. zářím. HSHMP to vysvětluje tím, že tito strávníci pravděpodobně snědli nižší infekční dávku, což prodlužuje inkubační dobu. Výzkum ohnisek tento vztah popisuje dlouho. <em>Glynn a Palmer</em> (1992, <em>American Journal of Epidemiology</em>, <a href="https://doi.org/10.1093/oxfordjournals.aje.a116449" target="_blank" rel="noopener">DOI</a>) ukázali, že kratší inkubace jde ruku v ruce s těžším průběhem a častější hospitalizací. <em>Mintz et al.</em> (1994, <em>Epidemiology and Infection</em>, <a href="https://doi.org/10.1017/s095026880005737x" target="_blank" rel="noopener">DOI</a>) u ohniska z vaječné holandské omáčky zjistili medián inkubace 37 hodin u lidí s nízkou expozicí proti 17,5 hodiny u vysoké expozice. <em>Abe et al.</em> (2004, <em>Journal of Food Protection</em>, <a href="https://doi.org/10.4315/0362-028x-67.12.2735" target="_blank" rel="noopener">DOI</a>) v rozboru 185 japonských ohnisek <em>Salmonella</em> Enteritidis našli u školních obědů delší medián inkubace a v devíti ohniscích se známou dávkou negativní vztah mezi dávkou a inkubací. Americký přehled ohnisek <em>Chai et al.</em> (2019, <em>Epidemiology and Infection</em>, <a href="https://doi.org/10.1017/S0950268819001651" target="_blank" rel="noopener">DOI</a>) uvádí u salmonely, noroviru a shigel mediány inkubace ohnisek mezi 32 a 45 hodinami. Pro Újezd nad Lesy je to vysvětlení v souladu s literaturou, ne důkaz: dávky, které jednotliví strávníci snědli, nikdo nezměřil.
+      </p>
+
+      <h3>Datový kontext: méně salmonelóz, ale letos víc</h3>
+      <p>
+        Podle Státního zdravotního ústavu (SZÚ), který zveřejňuje data z Informačního systému infekčních nemocí (ISIN), bylo v Česku hlášeno 11 346 salmonelóz v roce 2018, 13 306 v roce 2019, 10 363 v roce 2020, 10 076 v roce 2021, 7 680 v roce 2022, 7 705 v roce 2023, 7 017 v roce 2024 a <strong>5 729 v roce 2025</strong>. Nemocnost na 100 000 obyvatel byla ve stejných letech 106,8, 124,7, 96,8, 96,0, 71,4, 70,8, 64,5 a 52,5; za osm let tedy klesla zhruba na polovinu. Praha měla v roce 2025 373 případů, tedy 26,7 na 100 000.
+      </p>
+      <p>
+        Nejvíc ohrožené jsou nejmenší děti: v roce 2025 měly děti do jednoho roku nemocnost 283,3 a děti ve věku 1–4 roky 286,6 na 100 000, děti 5–9 let 156,1 a 10–14 let 83,1. Salmonelóza je také sezónní. Z měsíčních tabulek SZÚ za rok 2025 připadá na červen až říjen 3 568 případů, tedy 62 % roku, a nejvíc jich bylo v září, 859.
+      </p>
+      <p>
+        Letošní rok klesající trend přerušil. Za leden až srpen 2026 SZÚ eviduje <strong>4 020 salmonelóz proti 3 326</strong> ve stejném období 2025, o 21 % víc (výpočet redakce); jen v srpnu 828 proti 750. Bulletin ministerstva za 38. týden (14.–20. září) uvádí 218 případů za týden a 4 601 od začátku roku proti 3 851 loni, o 19 % víc. Pražská nákaza v těch číslech ještě není, oběd byl až 21. září.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSalTabH">
+        <figcaption class="av-figure-h" id="avSalTabH">Hlášené salmonelózy v Česku 2018–2025 (SZÚ, ISIN, data k 1. 1. 2026, staženo 29. 9. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Rok</th>
+                <th scope="col" class="av-num">Hlášené případy</th>
+                <th scope="col" class="av-num">Nemocnost na 100 000</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">2018</th><td class="av-num">11 346</td><td class="av-num">106,8</td></tr>
+              <tr><th scope="row">2019</th><td class="av-num av-bad">13 306</td><td class="av-num av-bad">124,7</td></tr>
+              <tr><th scope="row">2020</th><td class="av-num">10 363</td><td class="av-num">96,8</td></tr>
+              <tr><th scope="row">2021</th><td class="av-num">10 076</td><td class="av-num">96,0</td></tr>
+              <tr><th scope="row">2022</th><td class="av-num">7 680</td><td class="av-num">71,4</td></tr>
+              <tr><th scope="row">2023</th><td class="av-num">7 705</td><td class="av-num">70,8</td></tr>
+              <tr><th scope="row">2024</th><td class="av-num">7 017</td><td class="av-num">64,5</td></tr>
+              <tr class="av-row-highlight"><th scope="row">2025</th><td class="av-num av-good">5 729</td><td class="av-num av-good">52,5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> SZÚ, Počty onemocnění 2018–2025 a Nemocnost 2018–2025 podle krajů (PDF, publikováno v lednu 2026).</p>
+      </figure>
+
+      <h3>Mezinárodní srovnání: Česko nad průměrem EU</h3>
+      <p>
+        Evropský úřad pro bezpečnost potravin (EFSA) a Evropské středisko pro prevenci a kontrolu nemocí (ECDC) každý rok vydávají souhrnnou zprávu o zoonózách. Podle vydání za rok 2024 (<em>EFSA Journal</em> 2025, <a href="https://doi.org/10.2903/j.efsa.2025.9759" target="_blank" rel="noopener">DOI</a>) bylo v EU potvrzeno 79 703 salmonelóz, <strong>18,6 na 100 000 obyvatel</strong>. Česko vykázalo 7 003 potvrzených případů a <strong>64,2 na 100 000</strong>, zhruba třiapůlkrát víc (výpočet redakce). Slovensko mělo 72,2, Maďarsko 47,2, Polsko 21,9, Rakousko 15,4 a Německo 14,8.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avSalBarH">
+        <figcaption class="av-figure-h" id="avSalBarH">Potvrzené salmonelózy na 100 000 obyvatel, 2024 (EFSA a ECDC, EU One Health 2024 Zoonoses Report, tab. 8)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-max="80">
+          <li class="av-bar-row av-bar-row-bad" data-value="72.2" data-display="72,2" data-label="Slovensko"></li>
+          <li class="av-bar-row av-bar-row-highlight" data-value="64.2" data-display="64,2" data-label="Česko" data-note="7 003 potvrzených případů"></li>
+          <li class="av-bar-row" data-value="47.2" data-display="47,2" data-label="Maďarsko"></li>
+          <li class="av-bar-row" data-value="21.9" data-display="21,9" data-label="Polsko"></li>
+          <li class="av-bar-row av-bar-row-good" data-value="18.6" data-display="18,6" data-label="EU" data-note="79 703 potvrzených případů"></li>
+          <li class="av-bar-row" data-value="15.4" data-display="15,4" data-label="Rakousko"></li>
+          <li class="av-bar-row" data-value="14.8" data-display="14,8" data-label="Německo"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> EFSA &amp; ECDC, EFSA Journal 2025;23(12):e9759, DOI 10.2903/j.efsa.2025.9759 (ověřeno v PubMed 29. 9. 2026). Zpráva sama upozorňuje, že čísla mezi státy nejsou přímo srovnatelná.</p>
+      </figure>
+
+      <p>
+        Zpráva zároveň dokládá, odkud se salmonela bere. V roce 2024 evidovala 1 238 ohnisek salmonelózy z potravin s 10 164 nemocnými. Nejčastější dvojicí původce a potraviny mezi ohnisky se silnými důkazy byla salmonela a vejce a výrobky z vajec: 83 ohnisek proti průměru 61,3 v letech 2020–2023. Pokrm z vajec ve školní kuchyni tedy není výjimečný scénář, ale evropsky nejběžnější.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodické upozornění">
+        <p class="article-callout-h">Co z těch čísel neplyne</p>
+        <p>
+          Vyšší česká nemocnost neznamená automaticky horší bezpečnost potravin. EFSA a ECDC výslovně píší, že výsledky mezi státy nejsou přímo srovnatelné: liší se citlivost surveillance, ochota posílat vzorky do laboratoře a některé státy (například Španělsko, Nizozemsko a Belgie) mají jen výběrové nebo neúplné pokrytí. Země, která víc testuje a hlásí, vypadá hůř. I mezi českými zdroji se čísla liší: SZÚ za rok 2024 uvádí 7 017 hlášených případů, ECDC 7 003 potvrzených, protože používají jiné definice a jiný okamžik zpracování. Čísla pražské kauzy platí k 25. září a dál se mohou měnit. Příčina není uzavřená, dokud nejsou zveřejněny laboratorní výsledky a neskončí správní řízení.
+        </p>
+      </aside>
+
+      <h3>Legislativní a institucionální rámec</h3>
+      <p>
+        Pravidla pro školní kuchyně stojí na několika vrstvách. Zákon č. 258/2000 Sb., o ochraně veřejného zdraví, v <strong>§ 23</strong> vymezuje stravovací službu a v <strong>§ 24 odst. 1</strong> ukládá jejímu provozovateli používat jen suroviny a potraviny, které vyhovují předpisům, a dodržovat podmínky pro přípravu, rozvoz a skladování pokrmů podle prováděcích předpisů a přímo použitelných předpisů EU. Hygienické požadavky na stravovací služby podrobně upravuje vyhláška č. 137/2004 Sb., školní stravování vyhláška č. 107/2005 Sb., kterou vydává ministerstvo školství. Evropské nařízení (ES) č. 852/2004 v článku 5 ukládá provozovatelům postupy založené na zásadách HACCP, tedy analýze nebezpečí a kritických kontrolních bodech.
+      </p>
+      <p>
+        Pak přichází řetězec hlášení a šetření. Podle <strong>§ 62 odst. 1</strong> musí lékař nebo laboratoř, která zjistí infekční onemocnění nebo podezření na ně, ohlásit to neprodleně orgánu ochrany veřejného zdraví. Tím je krajská hygienická stanice, v Praze HSHMP, správní úřad podle <strong>§ 82</strong>. Ta podle <strong>§ 62a</strong> provádí epidemiologické šetření, jehož cílem je ověřit diagnózu a najít ohnisko nákazy. Případy se zapisují do ISIN, který zřizuje <strong>§ 79a</strong>: správcem je ministerstvo zdravotnictví, provozovatelem Ústav zdravotnických informací a statistiky. Definice případu a postup surveillance salmonelóz stanoví vyhláška č. 389/2023 Sb., o systému epidemiologické bdělosti, v příloze č. 26; nahradila dřívější vyhlášku č. 473/2008 Sb., zrušenou k 1. lednu 2024.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avSalFlowH">
+        <figcaption class="av-figure-h" id="avSalFlowH">Od nemocného dítěte k evropské statistice: cesta hlášení salmonelózy (zákon č. 258/2000 Sb. a vyhl. č. 389/2023 Sb. ve znění k 29. 9. 2026)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Lékař nebo laboratoř</h4>
+            <p class="av-flow-desc">Zjistí onemocnění nebo podezření a hlásí ho neprodleně hygieně.</p>
+            <span class="av-flow-tag">§ 62 odst. 1</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Krajská hygienická stanice</h4>
+            <p class="av-flow-desc">V Praze HSHMP; kontroluje provoz podle § 23 a 24 a vyhl. č. 137/2004 Sb.</p>
+            <span class="av-flow-tag">§ 82</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Epidemiologické šetření</h4>
+            <p class="av-flow-desc">Ověření diagnózy, dotazníky, vzorky, hledání ohniska; výsledky rozborů zatím nezveřejněny.</p>
+            <span class="av-flow-tag">§ 62a</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">ISIN</h4>
+            <p class="av-flow-desc">Registr případů; správce MZ, provozovatel ÚZIS; definice případu v příloze č. 26 vyhl. č. 389/2023 Sb.</p>
+            <span class="av-flow-tag">§ 79a</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Veřejné výstupy</h4>
+            <p class="av-flow-desc">Měsíční tabulky SZÚ, týdenní bulletin MZ, roční zpráva EFSA a ECDC.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> zákon č. 258/2000 Sb., vyhl. č. 137/2004 Sb. a č. 389/2023 Sb. (zakonyprolidi.cz, ověřeno 29. 9. 2026); SZÚ; MZ ČR.</p>
+      </figure>
+
+      <p>
+        Stejný systém ISIN je zdrojem i pro indikátory HSPA Monitoru o infekcích, například incidence černého kašle 199,4 na 100 000 obyvatel v roce 2024 nebo klíšťové encefalitidy 6,1 na 100 000 v témže roce (obojí SZÚ, ISIN). O tom, proč takovým číslům lze věřit a kde mají limity, jsme psali v <a href="clanek-epidemiologie-1-proc-verit-cislum.html">prvním dílu série o epidemiologii</a>.
+      </p>
+
+      <h3>Co říká evidence o prevenci v kuchyních</h3>
+      <p>
+        Hygienici podmínili znovuotevření jídelny sanitací, negativním mikrobiologickým vyšetřením stolice všech zaměstnanců kuchyně, revizí systému HACCP zaměřenou na tepelnou úpravu rizikových surovin a doloženým proškolením personálu. Jak účinné takové kroky jsou? Systematický přehled s metaanalýzou <em>Young et al.</em> (2019, <em>Journal of Food Protection</em>, <a href="https://doi.org/10.4315/0362-028X.JFP-19-108" target="_blank" rel="noopener">DOI</a>) zjistil, že školení v bezpečnosti potravin v randomizovaných studiích zlepšuje znalosti personálu (standardizovaný rozdíl průměrů 0,92), ale u skutečného chování a u výsledků inspekcí randomizované studie významný efekt neprokázaly. Jiný přehled, <em>Levy et al.</em> (2022, <em>Food Research International</em>, <a href="https://doi.org/10.1016/j.foodres.2022.111076" target="_blank" rel="noopener">DOI</a>), shrnul osm studií z provozoven společného stravování: opatření bezpečnosti potravin byla spojena s poklesem mikrobiální zátěže o 28,6 % a autoři z toho usuzují, že programy založené na HACCP mohou nákazám předcházet. Zároveň upozorňují na riziko zkreslení v zahrnutých studiích.
+      </p>
+      <p>
+        Z toho plyne praktický závěr: doložené školení je nutná, ale ne postačující podmínka. Rozhoduje, zda systém kritických kontrolních bodů v kuchyni skutečně běží, tedy zda se hlídá trvanlivost surovin a teplota při tepelné úpravě, a zda to někdo zvenčí ověřuje.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        Vláda má ve výhledu legislativních prací na roky 2027–2029 novelu zákona o ochraně veřejného zdraví, která má z krajských hygienických stanic vytvořit jednotně řízenou Státní hygienickou službu. Podle výhledu ji má ministerstvo předložit vládě ve třetím čtvrtletí 2027 s předpokládanou účinností od ledna 2029; podle <a href="legislativa.html">našeho sledování legislativy</a> práce zatím nezačaly. O tom, jak má vypadat instituce pro veřejné zdraví, jsme psali v článku <a href="clanek-institut-verejneho-zdravi.html">o Institutu veřejného zdraví</a>. Kauza z Újezdu nad Lesy je pro tuto debatu konkrétní test: ukazuje, jak rychle a jak otevřeně umí hygienická služba informovat, a kde jsou mezery.
+      </p>
+
+      <h3>Co s tím</h3>
+      <ul>
+        <li><strong>Uzavřít a zveřejnit šetření.</strong> Výsledky rozborů surovin a stěrů, dohledání šarže vajec a závěrečná zpráva o ohnisku by měly být veřejné, stejně jako výsledek správního řízení. Bez toho zůstává příčina „pravděpodobná“ a poučení pro ostatní kuchyně neúplné.</li>
+        <li><strong>Ověřovat HACCP v praxi, ne na papíře.</strong> Randomizované studie nedokládají, že by školení samo spolehlivě měnilo chování personálu. Kontroly školních jídelen by se měly soustředit na kritické body u rizikových surovin: trvanlivost vajec, teplotu a čas tepelné úpravy, rozvoz do dalších zařízení.</li>
+        <li><strong>Zveřejňovat výsledky kontrol stravovacích provozů.</strong> Agregovaný přehled kontrol školních jídelen podle krajů by umožnil sledovat, zda se dozor zlepšuje, a stal by se kandidátem na indikátor.</li>
+        <li><strong>Zrychlit tok dat.</strong> Týdenní bulletin ministerstva zachytil kauzu se stavem k 23. září a o dva dny později už čísla neplatila. U probíhajícího ohniska potřebuje veřejnost průběžně aktualizovanou stránku, jak jsme navrhli v <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">rozboru bulletinu</a>.</li>
+        <li><strong>Využít reformu hygienické služby.</strong> Jednotně řízená služba by mohla sjednotit standard komunikace ohnisek napříč kraji: kdy se zveřejňují čísla, příčina, laboratorní výsledky a závěry řízení.</li>
+        <li><strong>Myslet na nejzranitelnější.</strong> Nejvyšší nemocnost mají děti do čtyř let a jídlo ze školní kuchyně jde i do mateřských škol a k seniorům. Rozvoz jídla z jedné kuchyně znásobuje dopad jedné chyby.</li>
+      </ul>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=pertuse_incidence"><strong>Incidence černého kašle (pertuse)</strong></a> — 199,4 na 100 000 obyvatel (2024; EU 50) · SZÚ — ISIN (surveillance černého kašle)</li>
+        <li><a href="indicator.html?id=klistova_encefalitida"><strong>Incidence klíšťové encefalitidy</strong></a> — 6,1 na 100 000 obyvatel (2024; EU 0,81) · SZÚ — ISIN (surveillance klíšťové encefalitidy) · benchmark ECDC</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Kauza ZŠ Polesná</h5>
+        <ul class="article-sources-list">
+          <li><strong>HSHMP — Aktualizace k nákaze v ZŠ Polesná: Hlášeno je 363 nemocných, nákaza zasáhla i seniory a dvě mateřské školy</strong> (25. 9. 2026, 13:18) — 363 nemocných, 50 hospitalizovaných, 22 laboratorně potvrzených; rozpad podle míst; nástup příznaků a vysvětlení inkubace. Staženo 29. 9. 2026. <a href="https://www.hygpraha.cz/aktualizace-k-nakaze-v-zs-polesna-hlaseno-je-363-nemocnych-nakaza-zasahla-i-seniory-a-dve-materske-skoly/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>HSHMP — Aktualita k situaci ve škole: Provoz výuky může být v úterý obnoven, otevření jídelny podléhá přísným podmínkám</strong> (25. 9. 2026) — podmínky pro znovuotevření jídelny (sanitace, vyšetření personálu, revize HACCP, školení). Staženo 29. 9. 2026. <a href="https://www.hygpraha.cz/aktualita-k-situaci-ve-skole-provoz-vyuky-muze-byt-v-utery-obnoven-otevreni-jidelny-podleha-prisnym-podminkam/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>HSHMP — Šetření na ZŠ v Újezdu nad Lesy: Na přípravu uhlířských špaget byla použita vejce s prošlým datem trvanlivosti</strong> (24. 9. 2026) — pravděpodobná příčina, 18 laboratorně potvrzených, 41 hospitalizovaných, ohlášené správní řízení. Staženo 29. 9. 2026. <a href="https://www.hygpraha.cz/setreni-na-zs-v-ujezdu-nad-lesy-na-pripravu-uhlirskych-spaget-byla-pouzita-vejce-s-proslym-datem-trvanlivosti/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>HSHMP — Aktualizace k šetření na ZŠ v Újezdu nad Lesy: Potvrzena salmonela</strong> (23. 9. 2026) a <strong>Šetření výskytu zažívacích potíží na ZŠ v Újezdu nad Lesy</strong> (22. 9. 2026). Staženo 29. 9. 2026. <a href="https://www.hygpraha.cz/aktualizace-k-setreni-na-zs-v-ujezdu-nad-lesy-potvrzena-salmonela/" target="_blank" rel="noopener">hygpraha.cz ↗</a> · <a href="https://www.hygpraha.cz/setreni-vyskytu-zazivacich-potizi-na-zs-v-ujezdu-nad-lesy/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>HSHMP — Jak zabránit šíření salmonely doma: Praktická pravidla pro rodiče</strong> (24. 9. 2026). <a href="https://www.hygpraha.cz/jak-zabranit-sireni-salmonely-doma-prakticka-pravidla-pro-rodice/" target="_blank" rel="noopener">hygpraha.cz ↗</a></li>
+          <li><strong>MZ ČR — Salmonelóza v Újezdu nad Lesy: aktuální informace hygienické stanice</strong> (25. 9. 2026). <a href="https://mzd.gov.cz/salmoneloza-v-ujezdu-nad-lesy-aktualni-informace-hygienicke-stanice/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data o salmonelózách v Česku</h5>
+        <ul class="article-sources-list">
+          <li><strong>SZÚ — Infekce v ČR, souhrnná data 2018–2025</strong> — Počty onemocnění 2018–2025 podle krajů, Nemocnost 2018–2025 podle krajů a Věkové skupiny 2018–2025 (PDF, data k 1. 1. 2026). Staženo 29. 9. 2026. <a href="https://szu.gov.cz/publikace-szu/data/infekce-v-cr/" target="_blank" rel="noopener">szu.gov.cz ↗</a> · <a href="https://szu.gov.cz/wp-content/uploads/2026/01/Pocty-onemocneni_2018-2025_kraje.pdf" target="_blank" rel="noopener">počty PDF ↗</a> · <a href="https://szu.gov.cz/wp-content/uploads/2026/01/Nemocnost_2018-2025_kraje.pdf" target="_blank" rel="noopener">nemocnost PDF ↗</a> · <a href="https://szu.gov.cz/wp-content/uploads/2026/01/Vekove_skupiny_2018-2025_nemocnost.pdf" target="_blank" rel="noopener">věk PDF ↗</a></li>
+          <li><strong>SZÚ — Infekce v ČR, rok 2025 a rok 2026</strong> — měsíční tabulky (sezónnost 2025; leden–srpen 2026 a srpen 2026). Staženo 29. 9. 2026. <a href="https://szu.gov.cz/publikace-szu/data/infekce-v-cr/rok-2025/" target="_blank" rel="noopener">szu.gov.cz ↗</a> · <a href="https://szu.gov.cz/wp-content/uploads/2026/09/Tabulka_leden-srpen_2026.pdf" target="_blank" rel="noopener">leden–srpen 2026 PDF ↗</a></li>
+          <li><strong>MZ ČR — Týdenní monitoring zdravotních hrozeb, 38. týden 2026</strong> (zveřejněno 24. 9. 2026) — tabulka ISIN za 14.–20. 9. 2026 a informace o pražské nákaze se stavem k 23. 9. <a href="https://mzd.gov.cz/tydenni-monitoring-zdravotnich-hrozeb-38-tyden-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Mezinárodní srovnání</h5>
+        <ul class="article-sources-list">
+          <li><strong>EFSA (European Food Safety Authority), ECDC (European Centre for Disease Prevention and Control). The European Union One Health 2024 Zoonoses Report. EFSA J. 2025;23(12):e9759.</strong> DOI 10.2903/j.efsa.2025.9759. PMID 41377167. Tab. 2 (ohniska), tab. 8 (salmonelóza podle států), tab. 53 (dvojice původce a potraviny u ohnisek se silnými důkazy); upozornění na nesrovnatelnost mezi státy. Ověřeno v PubMed 29. 9. 2026. <a href="https://doi.org/10.2903/j.efsa.2025.9759" target="_blank" rel="noopener">doi.org ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/41377167/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>ECDC — Salmonellosis</strong> — přehled surveillance salmonelózy v EU/EHP. <a href="https://www.ecdc.europa.eu/en/salmonellosis" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní předpisy a plány</h5>
+        <ul class="article-sources-list">
+          <li><strong>Zákon č. 258/2000 Sb., o ochraně veřejného zdraví</strong> — § 23, § 24 odst. 1, § 62 odst. 1, § 62a, § 79a, § 82. Ověřeno 29. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2000-258" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Vyhláška č. 137/2004 Sb., o hygienických požadavcích na stravovací služby</strong>. <a href="https://www.zakonyprolidi.cz/cs/2004-137" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Vyhláška č. 107/2005 Sb., o školním stravování</strong>. <a href="https://www.zakonyprolidi.cz/cs/2005-107" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Vyhláška č. 389/2023 Sb., o systému epidemiologické bdělosti pro vybraná infekční onemocnění</strong> — příloha č. 26 (salmonelózy); nahradila vyhlášku č. 473/2008 Sb. <a href="https://www.zakonyprolidi.cz/cs/2023-389" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Nařízení Evropského parlamentu a Rady (ES) č. 852/2004 o hygieně potravin</strong> — čl. 5 (postupy založené na zásadách HACCP). <a href="https://eur-lex.europa.eu/legal-content/CS/ALL/?uri=CELEX:32004R0852" target="_blank" rel="noopener">eur-lex.europa.eu ↗</a></li>
+          <li><strong>Výhled legislativních prací vlády na léta 2027 až 2029</strong> (příloha č. 2 k usnesení vlády č. 175 z 23. 3. 2026) — novela zákona č. 258/2000 Sb., Státní hygienická služba; předložení vládě 3. čtvrtletí 2027, předpokládaná účinnost 01/2029. <a href="https://vlada.gov.cz/assets/media-centrum/dulezite-dokumenty/1234_2026_priloha_c-_2.pdf" target="_blank" rel="noopener">vlada.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Studie</h5>
+        <ul class="article-sources-list">
+          <li><strong>Glynn JR, Palmer SR. Incubation period, severity of disease, and infecting dose: evidence from a Salmonella outbreak. Am J Epidemiol. 1992;136(11):1369–1377.</strong> DOI 10.1093/oxfordjournals.aje.a116449. PMID 1488963. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/1488963/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Mintz ED, Cartter ML, Hadler JL, Wassell JT, Zingeser JA, Tauxe RV. Dose-response effects in an outbreak of Salmonella enteritidis. Epidemiol Infect. 1994;112(1):13–23.</strong> DOI 10.1017/s095026880005737x. PMID 8119352. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/8119352/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Abe K, Saito N, Kasuga F, Yamamoto S. Prolonged incubation period of salmonellosis associated with low bacterial doses. J Food Prot. 2004;67(12):2735–2740.</strong> DOI 10.4315/0362-028x-67.12.2735. PMID 15633679. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/15633679/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Chai SJ, Gu W, O'Connor KA, Richardson LC, Tauxe RV. Incubation periods of enteric illnesses in foodborne outbreaks, United States, 1998–2013. Epidemiol Infect. 2019;147:e285.</strong> DOI 10.1017/S0950268819001651. PMID 31587689. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/31587689/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Young I, Greig J, Wilhelm BJ, Waddell LA. Effectiveness of food handler training and education interventions: a systematic review and meta-analysis. J Food Prot. 2019;82(10):1714–1728.</strong> DOI 10.4315/0362-028X.JFP-19-108. PMID 31536416. Typ publikace: systematický přehled a metaanalýza. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/31536416/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Levy N, Cravo Oliveira Hashiguchi T, Cecchini M. Food safety policies and their effectiveness to prevent foodborne diseases in catering establishments: a systematic review and meta-analysis. Food Res Int. 2022;156:111076.</strong> DOI 10.1016/j.foodres.2022.111076. PMID 35650991. Typ publikace: systematický přehled a metaanalýza. Ověřeno v PubMed 29. 9. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/35650991/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a> · <a href="clanek-institut-verejneho-zdravi.html">Institut veřejného zdraví</a> · <a href="clanek-epidemiologie-1-proc-verit-cislum.html">Proč věřit číslům</a> · <a href="clanek-cerny-kasel-2024-epidemie.html">Černý kašel se vrátil</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Čísla o kauze platí k 25. 9. 2026 podle HSHMP; nejnovější tiskové zprávy byly zkontrolovány 29. 9. 2026. Meziroční změny, podíl letních měsíců a poměr k průměru EU dopočítala redakce. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání článku.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

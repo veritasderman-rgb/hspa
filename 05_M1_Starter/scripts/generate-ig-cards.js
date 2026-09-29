@@ -857,6 +857,40 @@ const MANIFEST = {
   'clanek-projekce-bez-centrovych-leciv': { kicker: 'Financování · projekce výdajů 2040', signal: 'warn', stat: '39,8', statSuffix: ' mld. Kč', claim: 'stojí ročně centrová léčiva. Do projekce výdajů ÚZIS 2040 se nepočítají.', context: 'Tři varianty ÚZIS: 836 až 1 014 mld. Kč v roce 2040 — bez téhle položky.' },
   'clanek-hepatitida-eliminace-2030': { kicker: 'Infekční nemoci · hepatitida C', signal: 'bad', stat: '1 447', claim: 'případů hepatitidy C nahlásilo Česko v roce 2024 — nejvíc od roku 2010.', context: 'Do cíle eliminace 2030 zbývá pět let. Antivirotika vyléčí přes 90 %.' },
   'clanek-lekari-ze-zahranici': { kicker: 'Pracovní síla · lékaři ze zahraničí', signal: 'neutral', stat: '1', statSuffix: ' z 12', claim: 'lékař v Česku studoval mimo republiku. Dvě třetiny z nich na Slovensku.', context: 'Podíl je 8,6 % — přesně na mediánu Evropské unie, mezi Německem a Polskem.' },
+  'clanek-vcasny-zachyt-autismu': {
+    kicker: 'Děti · screening autismu', signal: 'warn',
+    stat: '79,9', statSuffix: '%', barPct: 80,
+    claim: 'dvouletých dětí mělo v roce 2024 vykázaný screening autismu.',
+    context: 'Od roku 2021 se hodnota nepohnula. Mezi okresy 46,8 p. b.',
+  },
+  'clanek-umrtnost-schizofrenie': {
+    kicker: 'Duševní zdraví · schizofrenie', signal: 'bad',
+    stat: '3,0', statSuffix: '×',
+    claim: 'vyšší úmrtnost mají lidé se schizofrenií než vrstevníci bez ní.',
+    context: 'Většinu rozdílu tvoří infarkty, mrtvice a nádory. Od roku 2012 beze změny.',
+  },
+  'clanek-screening-kycli': {
+    kicker: 'Děti · screening kyčlí', signal: 'warn',
+    stat: '73,7', statSuffix: '%', barPct: 74,
+    claim: 'dětí z ročníku 2024 má zaznamenaná všechna tři vyšetření kyčlí.',
+    context: 'Aspoň jedno má 97,4 %. Mezi okresy je rozdíl osminásobný.',
+  },
+  'clanek-stiznosti-zpetna-vazba-zprava-2026': {
+    kicker: 'Práva pacientů · stížnosti', signal: 'bad',
+    stat: '270', statSuffix: ' dní',
+    claim: 'trvá průměrně šetření stížnosti s odbornou komisí. Zákon dává 120.',
+    context: 'Lhůty jsou podle zprávy MZ „fakticky neúčinné“.',
+  },
+  'clanek-ombudsmani-ve-zdravotnictvi': {
+    kicker: 'Práva pacientů · ombudsmani', signal: 'neutral',
+    headline: 'Pět ombudsmanů, jeden pacient. Kdo hlídá práva nemocných?',
+  },
+  'clanek-casny-zachyt-demence': {
+    kicker: 'Prevence · test paměti', signal: 'warn',
+    stat: '18,1', statSuffix: '%', barPct: 18,
+    claim: 'lidí ve věku 65–80 let mělo za dva roky vykázaný test paměti.',
+    context: 'Test platí pojišťovna. Mezi okresy je pětinásobný rozdíl.',
+  },
 };
 
 function escapeXml(s) {
