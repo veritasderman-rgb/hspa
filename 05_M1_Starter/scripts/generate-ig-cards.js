@@ -99,6 +99,24 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-monitoring-zdravotnich-hrozeb-mz': {
+    kicker: 'Veřejné zdraví · Týdenní monitoring hrozeb MZ', signal: 'warn',
+    stat: '7 773',
+    claim: 'potvrzených případů eboly uvádí první Týdenní monitoring MZ (k 21. září).',
+    context: 'Bez tiskové zprávy. U eboly chybí počet zemřelých.',
+  },
+  'clanek-komise-porodnictvi': {
+    kicker: 'Porodnictví · ministerská komise 2026', signal: 'bad',
+    stat: '0',
+    claim: 'porodních asistentek mezi 16 členy komise pro transformaci péče o rodičky.',
+    context: 'Ze 16 členů je 5 žen (31 %). Chybí i zástupkyně pacientek.',
+  },
+  'clanek-obezita-vzdelani-2025': {
+    kicker: 'Životní styl · obezita podle vzdělání 2025', signal: 'bad',
+    stat: '21,1', statSuffix: '%', barPct: 21,
+    claim: 'českých dospělých je obézních. Průměr EU je 16,3 %.',
+    context: 'Vysokoškoláci: 13,9 % proti 12,6 % v EU.',
+  },
   'clanek-metodika-zachyt-ledvin-vestnik-12-2026': {
     kicker: 'Prevence · metodika záchytu nemoci ledvin', signal: 'warn',
     stat: '1', statSuffix: ' měsíc',
