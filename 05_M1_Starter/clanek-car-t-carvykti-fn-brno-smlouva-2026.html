@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-09-30
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-09-30
+    creation_phase: rutina+article-write
+    primary_sources_count: 16
+    visual_elements_count: 5
+    notes: "Vytvořeno z discovery 2026-09-30: Registr smluv přes Hlídač státu (MCP hlidac-statu, dotazy 2026-09-30; licence (c) Hlídač Státu z.ú., https://texty.hlidacstatu.cz/licence/). Navazuje na pilot rubriky Peníze ve zdravotnictví (clanek-penize-zdravotnictvi-smlouvy-nemocnic, 6. 7. 2026) a clanek-centrove-leky-2026.
+      KPI: hlidacstatu.cz/Detail/39673641 — FN Brno (IČO 65269705) × Janssen-Cilag (IČO 27146928), KP/2371/2026, rámcová kupní smlouva (čl. I.1), dodávky postupně podle objednávek dle potřeb kupujícího (čl. II.1), uzavřena 3. 9. 2026 (Janssen podepsal v Praze 31. 8.), zveřejněna 25. 9. 2026 08:43; hodnotaBezDph 1 291 055 593,10 Kč; calculatedPriceWithVAT 1 562 177 267,65 Kč s příznakem calcutatedPriceQuality=Calculated (= 1,21 × bez DPH, tj. základní sazba). ZJIŠTĚNÍ: léky patří podle přílohy č. 3 zákona č. 235/2004 Sb. (kód 28-30) do snížené sazby, § 47 odst. 1 písm. b) = 12 % (zakonyprolidi.cz, staženo 30. 9. 2026) → dopočet redakce 1 445 982 264,27 Kč. Proto titulek a hlavní KPI = hodnota BEZ DPH; 1,56 mld uváděno jen jako výpočet Hlídače s vysvětlením. Issues 0, skrytaCena 0, smlouvaULimitu 0. Příloha č. 1 = obchodní tajemství; doba trvání v textu neuvedena (netvrzeno).
+      SOUBĚŽNÉ SMLOUVY FN Brno × Janssen z 3. 9. 2026: 39673865 (odběr buněk, bez ceny) a 39674153 = B/2373/2026 SMLOUVA O POSKYTNUTÍ FINANČNÍ KOMPENZACE (text přečten): Janssen poskytne kompenzaci za všechna balení nakoupená po dobu smlouvy (čl. 1.1) formou dobropisu k faktuře (čl. 2.1), výše v příloze 1 = obchodní tajemství (čl. 5.1, 6.2), odběratel není zavázán odebírat v jakémkoli množství (čl. 3.8), účinnost dnem uveřejnění v registru (čl. 9.1), doba určitá — redigováno.
+      KONTEXT 2026 (Hlídač, bez DPH / s DPH výpočet Hlídače): VFN × BMS 39329275 1 025 801 725 / 1 241 220 087,25 (uzavřena 9. 1., zveřejněna 31. 8. 2026); FN Brno × PHOENIX nusinersen 39609253 940 819 842 / 1 138 392 008,82 (3. 9. / 21. 9. 2026); MOÚ × BMS 38053445 917 951 052 / 1 110 720 772,92 (19. 5. / 21. 5. 2026); ÚVN × Roche 38781484 1,004 mld a IKEM × Promedica 37121793 992 mil (diagnostika, jen z výpisu orchestrátora, s DPH). Artefakt FN Bulovka 36828389 50,2 mld (Neplatná cena) nezapočten. Zolgensma 35274193: bez DPH 1 446 102 385,20, s DPH 1 619 634 671,42 (poměr přesně 1,12), uzavřena 16. 10. 2025, zveřejněna 20. 10. 2025; od 26. 8. 2026 u ní Hlídač hlásí issue Neplatná cena → Carvykti = druhá nejvyšší léková smlouva, kterou rubrika od července 2025 našla (bez DPH i s DPH).
+      CAR-T V REGISTRU (search_contracts, bez datového omezení): keyword ciltakabtagen = 8 záznamů, 4 nemocnice (FN Brno 39673641/39673865/39674153; FN HK 37972801 476 697 449,76 bez DPH, uzavř. 13. 5. 2026 + 37942309 odběr buněk; FN Olomouc 39019658 238 348 724,88 bez DPH, uzavř. 9. 7. 2026 + dodatek 39642685; FN Plzeň 39524885 uzavř. 10. 9. 2026 bez ceny, Hlídač: Nulová hodnota smlouvy, skrytaCena 1); součet s cenou 2 427 383 138,97 s DPH (Hlídač) / 2 006 101 767,74 bez DPH (součet redakce). axikabtagen (Yescarta) = 5 záznamů, 950,5 mil s DPH (FN Brno 28083715 2024, FN HK 28103411, FN Plzeň 36865477, ÚHKT 37221545, FN Plzeň rámcová 37267173 bez ceny). axicabtagen = 0 (jiný pravopis). tisagenlecleucel = 15 záznamů smíšených (Kymriah + granty, registry) — v textu jen zmínka bez součtu. Keyword CAR-T nepoužitelný (6 944 výsledků, shoda s CAR-TOUR apod.).
+      INDIKÁTORY (data/indicators.json literálně): naklady_centrove_leky_total 39,8 mld Kč 2024 (2022 31,7; 2023 35,9); podil_vydaje_leky 9,5 % 2024 (2023 10); vydaje_leky_hdp 1,7 % HDP 2024, OECD 1,5, EU 1,4.
+      LEGISLATIVA (zakonyprolidi.cz, staženo 30. 9. 2026): zákon 340/2015 Sb. § 6 odst. 1 (účinnost nejdříve dnem uveřejnění — verbatim); zákon 48/1997 Sb. § 39b odst. 1 (O výši a podmínkách úhrady léčivých přípravků rozhoduje Ústav — verbatim), § 39d (Zásady pro úhradu vysoce inovativních léčivých přípravků, dočasná úhrada), § 39d odst. 6 (smlouva o kompenzaci nákladů — zmíněno v přestupcích), § 39da (vzácná onemocnění), § 16 odst. 1 (výjimečná úhrada — verbatim); zákon 235/2004 Sb. § 47 + příloha 3. Úhradový status Carvykti v ČR NEOVĚŘEN (prehledy.sukl.cz se nenačetl — SPA) → v textu výslovně neuvedeno; žádná cena za pacienta.
+      EVIDENCE (PubMed 4 dotazy: 1 lookup, 2 metadata, 1 search; ověřeno 2026-09-30): San-Miguel J et al. NEJM 2023;389(4):335-347, DOI 10.1056/NEJMoa2303379, PMID 37272512 (RCT fáze 3, 419 pacientů, PFS HR 0,26 [0,18–0,38], PFS 12 m 75,9 % vs 48,6 %, úmrtí HR 0,78 [0,5–1,2], CRS 76,1 %, gr. 3/4 1,1 %; financováno Janssen a Legend). Berdeja JG et al. Lancet 2021;398(10297):314-324, DOI 10.1016/S0140-6736(21)00933-8, PMID 34175021 (fáze 1b/2, 97 pacientů, medián 6 linií, ORR 97 %, sCR 67 %, PFS 12 m 77 %, CRS 95 % / gr. 3–4 4 %, neurotoxicita 21 % / 9 %, 14 úmrtí, 6 z nich na nežádoucí účinky léčby). Consensus 1 dotaz (cost-effectiveness CAR-T MM, medical_mode, exclude_preprints) → Yamamoto C et al. Transplant Cell Ther 2024;30(1):118.e1-118.e15 (epub 2023), DOI 10.1016/j.jtct.2023.10.001, PMID 37802181, ověřeno v PubMed — ICER silně závisí na předpokladu dlouhodobého PFS; souhlas (nákladová efektivita podmíněná dlouhodobým účinkem), žádný kvalitní přehled proti nenalezen v top 20.
+      Čeká na schválení redakce."
+      audit_k_2026-09-30: "Nezávislý audit K (čerstvý pohled). Ověřeno get_contract_detail: 39673641 (strany, KP/2371/2026, uzavř. 3. 9., zveř. 25. 9. 2026 08:43, bez DPH 1 291 055 593,10, Hlídač s DPH 1 562 177 267,65 = ×1,21 Calculated, issues 0, skrytaCena 0, smlouvaULimitu 0; text: rámcová čl. I.1, II.1, přednost souběžné smlouvy čl. I.2, VIII.1 obchodní tajemství, podpisy 31. 8./3. 9.), 39674153 (B/2373/2026, čl. 1.1, 2.1, 3.8, 5.1, 9.1 — sedí), 39673865 (O/2372/2026, bez ceny), 39609253 (KP/2247/2026, 940 819 842 / 1 138 392 008,82, 4 roky, bez povinnosti objednávky — sedí), 39329275, 38053445, 37972801, 39019658, 39524885 (Nulová hodnota), 35274193 (Neplatná cena od 26. 8. 2026, poměr 1,12000), 36828389 (50,2 mld s DPH, Neplatná cena). Součet ciltakabtagen bez DPH 2 006 101 767,74 a ×1,12 = 1 445 982 264,27 přepočteny; 1,29/39,8 = 3,2 %. Pořadí search_contracts (zdrav, od 2026-01-01, PriceDesc): Bulovka > Carvykti > VFN × BMS > nusinersen > MOÚ × BMS > ÚVN × Roche > IKEM. OPRAVY: (1) pořadí v odstavci „Nejvyšší smlouvy roku“ — ÚVN × Roche byla chybně před nusinersenem; je až 6. (830 mil bez DPH / 1,004 mld s DPH), doplněn MOÚ; (2) „Na CAR-T proti myelomu se v registru nakupuje teprve letos“ bylo nepravdivé — idekabtagen vikleucel (Abecma, BMS) má smlouvy z 2025 (FN Ostrava 33842061, FN Olomouc 33502388, FN HK 33565552, ÚHKT 34535689) → přeformulováno na Carvykti + zmínka Abecma; (3) „celé články o kupní ceně a sankcích“ → čl. VII.1 začerněn není, upřesněno; (4) § 16 zákona 48/1997 Sb. zní „hradí ve výjimečných případech“, ne „může“ — opraveno; (5) Bulovka 50,2 mld doplněno „s DPH“. Legislativa ověřena na zakonyprolidi.cz 30. 9. 2026: § 6 odst. 1 z. 340/2015 Sb., § 39b odst. 1, § 39d, § 39da, § 16 z. 48/1997 Sb., § 47 odst. 1 písm. b) 12 % a příloha č. 3 (kódy 28-30 léky) z. 235/2004 Sb. Indikátory doslova dle data/indicators.json (39,8 / 35,9 / 31,7; 9,5 / 10; 1,7 vs OECD 1,5, EU 1,4). PubMed get_article_metadata (1 dotaz): PMID 37272512 DOI 10.1056/NEJMoa2303379 (RCT fáze 3, n 419, HR 0,26 [0,18–0,38], PFS12 75,9 vs 48,6 %, úmrtí HR 0,78 [0,5–1,2]); PMID 34175021 DOI 10.1016/S0140-6736(21)00933-8 (fáze 1b/2, n 97, ORR 97 %, sCR 67 %, PFS12 77 %, CRS 95 %/4 %, neurotox 21 %, 14 úmrtí/6 NÚ); PMID 37802181 DOI 10.1016/j.jtct.2023.10.001 (epub 2023-10-05, TCT 30(1); ICER silně závislé na dlouhodobém PFS) — vše sedí, žádné retrakce. Consensus 1 dotaz (cost-effectiveness cilta-cel MM): Kapinos 2023 Cancer Control a Wu 2023 J Med Econ konzistentní (závislost na dlouhodobém přežití). Odkazy: hlidacstatu 12× 200, zakonyprolidi 3× 200, nzip 200, doi Lancet/TCT 200, doi NEJM 302→nejm.org (403 = bot-block), smlouvy.gov.cz z sandboxu nedostupný (000 i homepage) — URL shodná s polem odkaz v Hlídači; canonical 404 očekávaně (nepublikováno). Interní odkazy a linked_indicators existují; tag Léková politika a rubric financovani platné."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1,29 miliardy korun bez DPH za jeden lék. FN Brno uzavřela letos nejvyšší zdravotnickou smlouvu v registru — na buněčnou terapii CAR-T · HSPA Monitor</title>
+<meta name="description" content="Fakultní nemocnice Brno uzavřela 3. září rámcovou kupní smlouvu s firmou Janssen-Cilag na buněčnou terapii Carvykti (ciltakabtagen autoleucel) proti mnohočetnému myelomu v hodnotě 1,29 miliardy korun bez DPH. Mezi smlouvami v kategorii zdravotnictví zveřejněnými v Registru smluv od ledna 2026 je to nejvyšší reálná částka. Kolik dávek nemocnice koupí a za kolik, ale veřejné není: ceník je obchodní tajemství a souběžná smlouva o finanční kompenzaci vrací nemocnici za každé balení další neveřejnou částku. Vysvětlujeme, co smlouva znamená a co ne.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="1,29 miliardy korun bez DPH za jeden lék. FN Brno uzavřela letos nejvyšší zdravotnickou smlouvu v registru — na buněčnou terapii CAR-T">
+<meta property="og:description" content="Rámcová smlouva FN Brno s Janssen-Cilag na CAR-T terapii Carvykti: 1,29 mld. Kč bez DPH, nejvyšší reálná částka mezi zdravotnickými smlouvami v registru za rok 2026. Cena za dávku je tajná, souběžně běží smlouva o kompenzaci.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-car-t-carvykti-fn-brno-smlouva-2026.html">
+<meta property="article:published_time" content="2026-10-01T06:00:00+02:00">
+<meta property="article:section" content="Léková politika">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-car-t-carvykti-fn-brno-smlouva-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "1,29 miliardy korun bez DPH za jeden lék. FN Brno uzavřela letos nejvyšší zdravotnickou smlouvu v registru — na buněčnou terapii CAR-T",
+  "description": "Fakultní nemocnice Brno uzavřela 3. září rámcovou kupní smlouvu s firmou Janssen-Cilag na buněčnou terapii Carvykti (ciltakabtagen autoleucel) proti mnohočetnému myelomu v hodnotě 1,29 miliardy korun bez DPH. Mezi smlouvami v kategorii zdravotnictví zveřejněnými v Registru smluv od ledna 2026 je to nejvyšší reálná částka. Kolik dávek nemocnice koupí a za kolik, ale veřejné není: ceník je obchodní tajemství a souběžná smlouva o finanční kompenzaci vrací nemocnici za každé balení další neveřejnou částku. Vysvětlujeme, co smlouva znamená a co ne.",
+  "datePublished": "2026-10-01T06:00:00+02:00",
+  "dateModified": "2026-09-30",
+  "inLanguage": "cs",
+  "articleSection": "Léková politika",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-car-t-carvykti-fn-brno-smlouva-2026.html"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Léková politika</span>
+        <span class="article-tag article-tag-muted">peníze ve zdravotnictví · Registr smluv · CAR-T · centrové léky · onkologie</span>
+      </div>
+      <h1 class="article-title">1,29 miliardy korun bez DPH za jeden lék. FN Brno uzavřela letos nejvyšší zdravotnickou smlouvu v registru — na buněčnou terapii CAR-T</h1>
+      <p class="article-deck">
+        Fakultní nemocnice Brno uzavřela 3. září rámcovou kupní smlouvu s firmou Janssen-Cilag na buněčnou terapii Carvykti (ciltakabtagen autoleucel) proti mnohočetnému myelomu v hodnotě <strong>1,29 miliardy korun bez DPH</strong>. Mezi smlouvami v kategorii zdravotnictví zveřejněnými v Registru smluv od ledna 2026 je to nejvyšší reálná částka. Kolik dávek nemocnice koupí a za kolik, ale veřejné není: ceník je obchodní tajemství a souběžná smlouva o finanční kompenzaci vrací nemocnici za každé balení další neveřejnou částku. Vysvětlujeme, co smlouva znamená a co ne.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">1. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        V červenci jsme v <a href="clanek-penize-zdravotnictvi-smlouvy-nemocnic.html">pilotním dílu rubriky Peníze ve zdravotnictví</a> psali, že na vrcholu nákupů fakultních nemocnic nestojí přístroje ani stavby, ale centrové léky. Září to potvrdilo. Dne 25. září 2026 v 8:43 zveřejnila Fakultní nemocnice Brno v Registru smluv kupní smlouvu č. KP/2371/2026 na přípravek Carvykti. Hodnota bez DPH: <strong>1&nbsp;291&nbsp;055&nbsp;593,10&nbsp;Kč</strong>. Je to nejvyšší reálná hodnota mezi smlouvami v kategorii zdravotnictví, které se v registru objevily od 1. ledna 2026 (stav k 30. září, po odečtení jednoho datového artefaktu). Dokud smlouva neležela v registru, neplatila: podle § 6 odst. 1 zákona o registru smluv nabývá účinnosti nejdříve dnem uveřejnění.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCarHeroH">
+        <figcaption class="av-figure-h" id="avCarHeroH">Smlouva FN Brno na Carvykti v číslech (Registr smluv přes Hlídač státu, dotaz 30. 9. 2026; ÚZIS 2024)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="1.29" data-decimals="2" data-suffix=" mld. Kč">1,29 mld. Kč</span>
+            <span class="av-counter-label">hodnota smlouvy bez DPH, jak ji uvedla nemocnice</span>
+            <span class="av-counter-foot">Rámec pro objednávky, ne zaplacená částka</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="1.56" data-decimals="2" data-suffix=" mld. Kč">1,56 mld. Kč</span>
+            <span class="av-counter-label">„s DPH“ podle výpočtu Hlídače státu</span>
+            <span class="av-counter-foot">Počítáno se sazbou 21 %; léky mají sníženou sazbu 12 %, pak by šlo o 1,45 mld.</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="4">4</span>
+            <span class="av-counter-label">fakultní nemocnice se smlouvou na ciltakabtagen autoleucel v registru</span>
+            <span class="av-counter-foot">Brno, Hradec Králové, Olomouc, Plzeň (8 záznamů)</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="39.8" data-decimals="1" data-suffix=" mld. Kč">39,8 mld. Kč</span>
+            <span class="av-counter-label">úhrady pojišťoven za všechny centrové léky v roce 2024</span>
+            <span class="av-counter-foot">V roce 2022 31,7 mld. Kč (ÚZIS)</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Registr smluv, záznamy zpracované Hlídačem státu (hlidacstatu.cz/Detail/39673641 a vyhledávání „ciltakabtagen“), dotaz 30. 9. 2026, © Hlídač Státu z.ú.; ÚZIS · NZIP, datový souhrn OIS-11-06 Centrové léky (indikátor HSPA Monitoru). Přepočet se sazbou 12 % dopočítala redakce podle § 47 a přílohy č. 3 zákona č. 235/2004 Sb.</p>
+      </figure>
+
+      <h3>Co ve smlouvě je</h3>
+      <p>
+        Smluvní strany jsou Fakultní nemocnice Brno (IČO 65269705) a Janssen-Cilag s.r.o. (IČO 27146928). Firma smlouvu podepsala v Praze 31. srpna, nemocnice v Brně 3. září 2026. Předmětem je „léčivý přípravek s účinnou látkou ciltakabtagen autoleucel – Carvykti“ v rámci stejnojmenné veřejné zakázky. Text se sám označuje jako rámcová kupní smlouva: zboží bude dodáváno „postupně, a to dle potřeb Kupujícího“, na základě jednotlivých objednávek.
+      </p>
+      <p>
+        Carvykti není tableta ani infuze ze skladu. Jde o buněčnou terapii CAR-T, kterou výrobce připravuje z vlastních bílých krvinek konkrétního pacienta. Smlouva to odráží: uzavírá se souběžně se „smlouvou o odběru a dodávkách buněk“, která má přednost ve všem, co se týká odběru buněk, výroby přípravku, farmakovigilance a logistiky. Ta druhá smlouva je v registru také, bez uvedené ceny.
+      </p>
+      <p>
+        Co veřejné není: příloha č. 1 se specifikací zboží a kupními cenami je označena jako obchodní tajemství a ve zveřejněném textu je začerněn celý článek o kupní ceně i většina ustanovení o sankcích. Z registru se tedy nedozvíte cenu jedné dávky, ani kolik pacientů nemocnice podle smlouvy předpokládá léčit. Dobu trvání zveřejněný text neuvádí. Hlídač státu u smlouvy nehlásí žádný problém: cena není skrytá, smlouva neleží těsně pod limitem pro veřejné zakázky.
+      </p>
+
+      <h3>Proč 1,29 miliardy neznamená utracených 1,29 miliardy</h3>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="3">3</span>
+          <span class="av-counter-label">smlouvy FN Brno s Janssen-Cilag ke Carvykti z 3. 9. 2026</span>
+          <span class="av-counter-foot">kupní, o odběru buněk, o finanční kompenzaci; cenu má uvedenou jen kupní</span>
+        </div>
+      </aside>
+
+      <p>
+        Registr smluv zapisuje ke každé smlouvě jedno číslo. U rámcové smlouvy je to horní odhad objemu, ne faktura. Nemocnice zaplatí jen to, co skutečně objedná — a objednává podle toho, kolik pacientů lékaři k léčbě indikují a kolik z nich projde výrobou přípravku.
+      </p>
+      <p>
+        Brněnský případ má ještě druhou vrstvu. Tentýž den nemocnice uzavřela s Janssen-Cilag <a href="https://www.hlidacstatu.cz/Detail/39674153" target="_blank" rel="noopener">smlouvu o poskytnutí finanční kompenzace</a> (č. B/2373/2026). Firma v ní nemocnici slibuje kompenzaci „za všechna balení Výrobků“, která nakoupí, a to dobropisem vystaveným spolu s fakturou. Výše kompenzace je v příloze, kterou Janssen považuje za obchodní tajemství, a smlouva výslovně utajuje i „údaje o skutečně poskytnuté výši Kompenzace“. Zároveň uvádí, že nemocnice není zavázána odebírat přípravky v jakémkoli množství. Skutečná čistá cena, kterou FN Brno za Carvykti platí, se tak z veřejných dokumentů zjistit nedá.
+      </p>
+      <p>
+        Třetí vrstva je daň. Hlídač státu dopočítal hodnotu „s DPH“ na 1&nbsp;562&nbsp;177&nbsp;267,65&nbsp;Kč, tedy se základní sazbou 21 %. Léky ale podle přílohy č. 3 zákona o DPH patří do snížené sazby, která činí 12 %. Při ní by hodnota s daní byla 1,45 miliardy korun. Proto v titulku uvádíme částku bez DPH, kterou do registru zapsala sama nemocnice.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Nejvyšší smlouvy roku a CAR-T v registru</h3>
+      <p>
+        Seřadíme-li smlouvy z kategorie zdravotnictví zveřejněné od ledna 2026 podle hodnoty, první místo drží stejný artefakt jako v červenci: „objednávka léků“ FN Bulovka za 50,2 miliardy s DPH, u níž Hlídač sám hlásí neplatnou cenu. Pod ní už leží Carvykti. Následují nákup léčiv VFN od Bristol-Myers Squibb, druhá brněnská smlouva ze stejného dne: nusinersen pro pacienty se spinální svalovou atrofií od velkoobchodu PHOENIX, uzavřená na čtyři roky, bez povinnosti nemocnice vystavit jedinou objednávku, a nákup léčiv Masarykova onkologického ústavu od Bristol-Myers Squibb. Teprve za nimi jsou diagnostické soupravy pro Ústřední vojenskou nemocnici od firmy Roche za 830 milionů korun bez DPH, 1,004 miliardy s DPH podle výpočtu Hlídače (<a href="https://www.hlidacstatu.cz/Detail/38781484" target="_blank" rel="noopener">38781484</a>).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avCarTblH">
+        <figcaption class="av-figure-h" id="avCarTblH">Největší lékové smlouvy zveřejněné v Registru smluv v roce 2026 a smlouvy na ciltakabtagen autoleucel (Hlídač státu, dotaz 30. 9. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Kupující × dodavatel</th><th scope="col">Předmět</th><th scope="col">Uzavřena / zveřejněna</th><th scope="col">Bez DPH (mil. Kč)</th><th scope="col">„S DPH“ dle Hlídače (mil. Kč)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/39673641" target="_blank" rel="noopener">FN Brno × Janssen-Cilag</a></td><td>Carvykti (ciltakabtagen autoleucel)</td><td>3. 9. / 25. 9. 2026</td><td>1 291,1</td><td>1 562,2</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/39329275" target="_blank" rel="noopener">VFN Praha × Bristol-Myers Squibb</a></td><td>nákup léčivých přípravků (dynamický nákupní systém)</td><td>9. 1. / 31. 8. 2026</td><td>1 025,8</td><td>1 241,2</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/39609253" target="_blank" rel="noopener">FN Brno × PHOENIX</a></td><td>nusinersen (Spinraza)</td><td>3. 9. / 21. 9. 2026</td><td>940,8</td><td>1 138,4</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/38053445" target="_blank" rel="noopener">Masarykův onkologický ústav × Bristol-Myers Squibb</a></td><td>kupní smlouva na léčivé přípravky</td><td>19. 5. / 21. 5. 2026</td><td>918,0</td><td>1 110,7</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/37972801" target="_blank" rel="noopener">FN Hradec Králové × Janssen-Cilag</a></td><td>ciltakabtagen autoleucel</td><td>13. 5. / 15. 5. 2026</td><td>476,7</td><td>576,8</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/39019658" target="_blank" rel="noopener">FN Olomouc × Janssen-Cilag</a></td><td>ciltakabtagen autoleucel</td><td>9. 7. / 6. 8. 2026</td><td>238,3</td><td>288,4</td></tr>
+              <tr><td><a href="https://www.hlidacstatu.cz/Detail/39524885" target="_blank" rel="noopener">FN Plzeň × Janssen-Cilag</a></td><td>ciltakabtagen autoleucel</td><td>10. 9. / 15. 9. 2026</td><td>neuvedeno</td><td>neuvedeno</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Registr smluv přes Hlídač státu (get_contract_detail, search_contracts s klíčovým slovem „ciltakabtagen“), dotaz 30. 9. 2026, © Hlídač Státu z.ú. Hodnotu bez DPH zapisuje zveřejňující instituce; hodnotu „s DPH“ u těchto smluv dopočítává Hlídač se sazbou 21 %. Nejsou tu nelékové smlouvy (diagnostika ÚVN a IKEM) ani artefakt FN Bulovka.</p>
+      </figure>
+
+      <p>
+        V delším období byla vyšší jen jedna léková smlouva, kterou rubrika našla od července 2025: Zolgensma pro FN Motol za 1&nbsp;446&nbsp;102&nbsp;385,20&nbsp;Kč bez DPH, uzavřená 16. října 2025. Od 26. srpna 2026 u ní Hlídač státu hlásí příznak „neplatná cena“, přestože poměr uvedených částek s a bez DPH přesně odpovídá sazbě 12 %.
+      </p>
+      <p>
+        Carvykti se v registru nakupuje teprve letos. Vyhledávání „ciltakabtagen“ vrací osm záznamů, všechny uzavřené v roce 2026, od čtyř fakultních nemocnic. Nejde ale o první CAR-T proti myelomu v registru: na idekabtagen vikleucel (Abecma) od Bristol-Myers Squibb uzavřely smlouvy už v roce 2025 fakultní nemocnice v Ostravě, Olomouci a Hradci Králové a Ústav hematologie a krevní transfuze. Tři mají uvedenou cenu, dohromady 2,01 miliardy korun bez DPH. FN Plzeň cenu nevyplnila, Hlídač u její smlouvy hlásí nulovou hodnotu. Starší CAR-T přípravek axikabtagen ciloleucel (Yescarta) má v registru pět záznamů za 950,5 milionu korun s DPH, první z roku 2024 opět z FN Brno. Registr ale nezachycuje nákupy pod 50 tisíc korun ani plnění mimo zveřejňované smlouvy, takže součty nejsou výdajem na CAR-T v Česku.
+      </p>
+
+      <h3>Datový kontext: centrové léky rostou o miliardy ročně</h3>
+      <p>
+        CAR-T terapie patří mezi centrové léky, které smí podávat jen specializovaná centra. Zdravotní pojišťovny za ně podle ÚZIS zaplatily v roce 2024 <strong>39,8 miliardy korun</strong>, o 3,9 miliardy víc než rok předtím a o 8,1 miliardy víc než v roce 2022. Podrobně jsme je rozebrali v článku <a href="clanek-centrove-leky-2026.html">Čtyřicet miliard za naději</a>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCarBarH">
+        <figcaption class="av-figure-h" id="avCarBarH">Úhrady zdravotních pojišťoven za centrové léky, mld. Kč (ÚZIS · NZIP, OIS-11-06, 2022–2024)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit=" mld. Kč" data-max="45">
+          <li class="av-bar-row" data-value="31.7" data-label="2022" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="35.9" data-label="2023" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="39.8" data-label="2024" data-accent="warn"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ÚZIS · NZIP — Datová podpora dohodovacího řízení, OIS-11-06 Centrové léky (NRHZS); indikátor <a href="indicator.html?id=naklady_centrove_leky_total">Úhrady za centrové léky</a>, stav datového kontraktu k 30. 9. 2026.</p>
+      </figure>
+
+      <p>
+        Brněnská smlouva odpovídá zhruba 3,2 % ročních úhrad za centrové léky v roce 2024. Není to výdaj jednoho roku: jde o rámec, jehož délka i skutečné čerpání nejsou známé. Pro celkový obraz: léky tvořily v roce 2024 9,5 % výdajů zdravotních pojišťoven. Výdaje na léčiva dosáhly 1,7 % HDP proti 1,5 % v průměru OECD a 1,4 % v EU. Tyto tři ukazatele mají různé zdroje a definice, nesčítají se.
+      </p>
+
+      <h3>Co terapie umí</h3>
+      <p>
+        Dvě klíčové studie ciltakabtagen autoleucelu jsme ověřili v PubMed. Otevřená studie CARTITUDE-1 (Berdeja et al., <em>Lancet</em> 2021) léčila 97 pacientů s relabujícím nebo refrakterním mnohočetným myelomem, kteří měli za sebou v mediánu šest předchozích léčeb. Na jednu infuzi odpovědělo 97 % z nich, u 67 % nastala přísná kompletní remise a po 12 měsících žilo bez progrese 77 %. Syndrom z uvolnění cytokinů prodělalo 95 % pacientů (4 % v závažném stupni), neurotoxicitu 21 %. Ve studii zemřelo 14 lidí, šest z nich na nežádoucí účinky léčby.
+      </p>
+      <p>
+        Randomizovaná studie fáze 3 CARTITUDE-4 (San-Miguel et al., <em>New England Journal of Medicine</em> 2023) srovnala Carvykti se standardní léčbou u 419 pacientů po jedné až třech předchozích liniích, jejichž myelom přestal reagovat na lenalidomid. Riziko progrese nebo úmrtí bylo po jedné infuzi výrazně nižší (poměr rizik 0,26; 95% interval spolehlivosti 0,18–0,38). Bez progrese bylo po 12 měsících 75,9 % pacientů proti 48,6 %. U celkového přežití v době analýzy rozdíl průkazný nebyl (poměr rizik 0,78; interval 0,5–1,2). Obě studie financovaly firmy Janssen a Legend Biotech.
+      </p>
+      <p>
+        Otázku ceny evidence neřeší jednoznačně. Modelová studie Yamamota a kolegů (<em>Transplantation and Cellular Therapy</em>, 2023) pro Japonsko a USA vyšla u anti-BCMA CAR-T nákladově efektivní jen za předpokladu vysokého dlouhodobého přežití bez progrese. Výsledky podle autorů na tomto předpokladu silně závisejí. Kontrolní vyhledávání v databázi Consensus nenašlo kvalitní přehled, který by tento závěr zpochybňoval. Pro Česko srovnatelnou analýzu nemáme, protože cena u nás veřejná není.
+      </p>
+
+      <h3>Kdo rozhoduje o úhradě</h3>
+      <p>
+        „O výši a podmínkách úhrady léčivých přípravků rozhoduje Ústav,“ stanoví § 39b odst. 1 zákona o veřejném zdravotním pojištění. Tím ústavem je SÚKL. Pro vysoce inovativní léky zná zákon v § 39d dočasnou úhradu, pro léky na vzácná onemocnění zvláštní režim v § 39da. Kde úhrada stanovena není, hradí pojišťovna podle § 16 ve výjimečných případech péči, jejíž poskytnutí je „jedinou možností z hlediska zdravotního stavu pojištěnce“. V jakém režimu se Carvykti v Česku hradí a za jakých podmínek, jsme v rámci tohoto článku z primárního zdroje neověřili; databáze SÚKL se nám nepodařilo načíst. Úhradové rozhodnutí SÚKL a smlouvy pojišťoven s centry jsou jiné dokumenty než kupní smlouva nemocnice; v Registru smluv nemocnic je nenajdete.
+      </p>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Limity tohoto čtení.</strong>
+        (1) Hodnota rámcové smlouvy je strop pro objednávky, ne výdaj; skutečné čerpání registr neukazuje. (2) Jednotková cena, počet dávek a výše kompenzace jsou obchodní tajemství, čistou cenu proto nelze spočítat. (3) Hodnotu „s DPH“ dopočítává Hlídač státu základní sazbou 21 %, u léků platí 12 %. (4) Pořadí vychází z kategorie zdravotnictví a z hodnot zapsaných institucemi; smlouva FN Bulovka za 50,2 miliardy je datový artefakt a nezapočítává se. (5) Vyhledávání podle názvu látky nemusí najít smlouvy, v nichž název chybí nebo je psán jinak.
+      </div>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>Registr ukazuje objem, ne výsledek.</strong> Brněnská kupní smlouva sama uvádí, že se v registru neuveřejní „v rozsahu, ve kterém je její obsah obchodním tajemstvím“ — a tím je právě cena. Objem rámce ale veřejný je a u CAR-T se z něj dá číst, kolik peněz si nemocnice na terapii rezervuje. Co z registru vyčíst nejde, je výsledek: kolik pacientů terapii dostalo a jak dopadli.
+      </p>
+      <p>
+        <strong>Otázka pro redakci i pro politiku:</strong> nestálo by za to, aby centra, pojišťovny nebo ministerstvo zveřejňovaly u terapií za stovky milionů aspoň počet léčených pacientů za rok a centrum? Taková čísla nejsou obchodním tajemstvím a spolu s objemem smluv by umožnila odhadnout, co systém za peníze dostává. Stejně tak lze položit otázku, zda by finanční kompenzace mezi firmou a nemocnicí neměly být vidět aspoň souhrnně. Dokud nejsou, zůstává 1,29 miliardy korun v Brně číslem, které říká, kolik se smí utratit, ne kolik se utratí.
+      </p>
+      <p>
+        Rubrika Peníze ve zdravotnictví bude u CAR-T smluv sledovat dodatky a nové záznamy. Jak číst rizikovost smluvní praxe nemocnic, popisuje <a href="clanek-k-index-nemocnic.html">díl o K-Indexu</a>.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=naklady_centrove_leky_total"><strong>Úhrady za centrové léky</strong></a> — 39,8 mld. Kč (2024); 31,7 mld. v roce 2022 a 35,9 mld. v roce 2023 · ÚZIS · NZIP, OIS-11-06</li>
+        <li><a href="indicator.html?id=podil_vydaje_leky"><strong>Podíl výdajů ZP na léky</strong></a> — 9,5 % (2024), 10 % v roce 2023 · ÚZIS · NRHZS, OIS-11-24</li>
+        <li><a href="indicator.html?id=vydaje_leky_hdp"><strong>Výdaje na léčiva (% HDP)</strong></a> — 1,7 % HDP (2024) proti 1,5 % v OECD a 1,4 % v EU</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Registr smluv (přes Hlídač státu, dotazy 30. 9. 2026)</h5>
+        <ul class="article-sources-list">
+          <li><strong>FN Brno × Janssen-Cilag — Carvykti, nákup (KP/2371/2026).</strong> 1 291 055 593,10 Kč bez DPH; uzavřena 3. 9. 2026, zveřejněna 25. 9. 2026. <a href="https://www.hlidacstatu.cz/Detail/39673641" target="_blank" rel="noopener">hlidacstatu.cz ↗</a> · <a href="https://smlouvy.gov.cz/smlouva/soubor/47825409/KP-2371-2026-Mc_redigov%C3%A1no.docx" target="_blank" rel="noopener">originál, smlouvy.gov.cz ↗</a></li>
+          <li><strong>FN Brno × Janssen-Cilag — Carvykti, smlouva o poskytnutí finanční kompenzace (B/2373/2026)</strong>, cena neuvedena (obchodní tajemství). <a href="https://www.hlidacstatu.cz/Detail/39674153" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>FN Brno × Janssen-Cilag — Carvykti, odběr buněk</strong>, cena neuvedena. <a href="https://www.hlidacstatu.cz/Detail/39673865" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>FN Brno × PHOENIX — nusinersen (KP/2247/2026).</strong> 940 819 842 Kč bez DPH. <a href="https://www.hlidacstatu.cz/Detail/39609253" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>VFN Praha × Bristol-Myers Squibb</strong> <a href="https://www.hlidacstatu.cz/Detail/39329275" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>; <strong>MOÚ × Bristol-Myers Squibb</strong> <a href="https://www.hlidacstatu.cz/Detail/38053445" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>; <strong>ÚVN × Roche</strong> <a href="https://www.hlidacstatu.cz/Detail/38781484" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>.</li>
+          <li><strong>Ciltakabtagen autoleucel v dalších nemocnicích:</strong> FN Hradec Králové <a href="https://www.hlidacstatu.cz/Detail/37972801" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>, FN Olomouc <a href="https://www.hlidacstatu.cz/Detail/39019658" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>, FN Plzeň <a href="https://www.hlidacstatu.cz/Detail/39524885" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>.</li>
+          <li><strong>FN Motol × Novartis — Zolgensma</strong> (srovnání). <a href="https://www.hlidacstatu.cz/Detail/35274193" target="_blank" rel="noopener">hlidacstatu.cz ↗</a>; <strong>FN Bulovka × PHOENIX</strong> (datový artefakt). <a href="https://www.hlidacstatu.cz/Detail/36828389" target="_blank" rel="noopener">hlidacstatu.cz ↗</a></li>
+          <li><strong>Hlídač státu — podmínky použití dat.</strong> © Hlídač Státu z.ú. <a href="https://texty.hlidacstatu.cz/licence/" target="_blank" rel="noopener">texty.hlidacstatu.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Data a legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>ÚZIS · NZIP — Centrové léky, datový souhrn (OIS-11-06).</strong> <a href="https://www.nzip.cz/data/2367-centrove-leky-datovy-souhrn" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+          <li><strong>Zákon č. 340/2015 Sb., o registru smluv</strong> — § 6 odst. 1 (účinnost smlouvy nejdříve dnem uveřejnění). <a href="https://www.zakonyprolidi.cz/cs/2015-340" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 48/1997 Sb., o veřejném zdravotním pojištění</strong> — § 16, § 39b odst. 1, § 39d, § 39da. Staženo 30. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/1997-48" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+          <li><strong>Zákon č. 235/2004 Sb., o dani z přidané hodnoty</strong> — § 47 (sazby 21 % a 12 %) a příloha č. 3 (léky ve snížené sazbě). Staženo 30. 9. 2026. <a href="https://www.zakonyprolidi.cz/cs/2004-235" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>San-Miguel J, Dhakal B, Yong K, Spencer A et al. Cilta-cel or Standard Care in Lenalidomide-Refractory Multiple Myeloma.</strong> <em>N Engl J Med</em> 2023;389(4):335–347. DOI 10.1056/NEJMoa2303379. PMID 37272512. Ověřeno v PubMed 30. 9. 2026. <a href="https://doi.org/10.1056/NEJMoa2303379" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Berdeja JG, Madduri D, Usmani SZ, Jakubowiak A et al. Ciltacabtagene autoleucel, a B-cell maturation antigen-directed chimeric antigen receptor T-cell therapy in patients with relapsed or refractory multiple myeloma (CARTITUDE-1): a phase 1b/2 open-label study.</strong> <em>Lancet</em> 2021;398(10297):314–324. DOI 10.1016/S0140-6736(21)00933-8. PMID 34175021. Ověřeno v PubMed 30. 9. 2026. <a href="https://doi.org/10.1016/S0140-6736(21)00933-8" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Yamamoto C, Minakata D, Yokoyama D et al. Cost-Effectiveness of Anti-BCMA Chimeric Antigen Receptor T Cell Therapy in Relapsed/Refractory Multiple Myeloma.</strong> <em>Transplant Cell Ther</em> 2024;30(1):118.e1–118.e15 (online 2023). DOI 10.1016/j.jtct.2023.10.001. PMID 37802181. Ověřeno v PubMed 30. 9. 2026. <a href="https://doi.org/10.1016/j.jtct.2023.10.001" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Částky pocházejí z Registru smluv v podobě, v jaké je zpracovává Hlídač státu (© Hlídač Státu z.ú.), stav k 30. 9. 2026. Hodnota smlouvy je rámec pro objednávky, nikoli zaplacená částka. Přepočet se sazbou DPH 12 % a součet smluv bez DPH dopočítala redakce. Text popisuje financování na úrovni systému, nejde o individuální zdravotní radu.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
