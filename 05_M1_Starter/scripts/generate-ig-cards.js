@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-salmoneloza-ujezd-nad-lesy-2026': {
+    kicker: 'Veřejné zdraví · salmonelóza ve školní jídelně', signal: 'bad',
+    stat: '363',
+    claim: 'nemocných po jednom obědě školní jídelny v Praze-Újezdě nad Lesy (k 25. září).',
+    context: '50 hospitalizovaných, 22 potvrzených. Letos o 21 % víc salmonelóz než loni.',
+  },
   'clanek-monitoring-zdravotnich-hrozeb-mz': {
     kicker: 'Veřejné zdraví · Týdenní monitoring hrozeb MZ', signal: 'warn',
     stat: '7 773',
