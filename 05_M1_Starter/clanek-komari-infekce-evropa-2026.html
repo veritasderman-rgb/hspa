@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-02
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-02
+    creation_phase: rutina+article-write
+    primary_sources_count: 15
+    visual_elements_count: 6
+    audit_k: "Blok K 2026-10-02 (nezávislý audit): čísla ECDC CDTR 39, ECDC historical, MZ monitoring 39, SZÚ ISIN tabulky, Orlíková 2025, TZ SZÚ 20. 8. 2025 a vyhl. 389/2023 ověřeny proti zdrojům; 6/6 PMID ověřeno v PubMed. Opraveno: likvidace líhnišť patří do příloh č. 40 a 41 (chikungunya, dengue), ne do přílohy č. 15; Cattaneo — medián 35,5 dne do diagnózy indexového případu."
+    notes: "Vytvořeno z discovery 2026-10-02: trigger = MZ ČR, Týdenní monitoring zdravotních hrozeb, 39. týden 2026 (21.–27. 9., zveřejněno 1. 10. 2026; PDF Tydenni-monitoring-zdravotnich-hrozeb-39_2026.pdf, pdftotext 2. 10. 2026), kapitola Vektorově přenášená onemocnění v Evropě.
+      KPI: 1 569 autochtonních případů západonilské horečky (WNV) v 16 zemích Evropy k 23. 9. 2026, 186 oblastí (ECDC, Communicable Disease Threats Report, týden 39, 19.–25. 9. 2026, staženo 2. 10. 2026; seznam 16 zemí bez Česka). Rozpad IT 696, EL 355, ES 125, FR 102, RO 91 podle bulletinu MZ (ECDC CDTR rozpad případů neuvádí).
+      BENCH: ECDC Historical data WNV (staženo 2. 10. 2026): 2025 = 1 112 případů ve 14 zemích (k 3. 12. 2025; IT 779, EL 96, FR 62, RO 49, ES 36), 2024 = 1 436 v 19 zemích (k 4. 12. 2024; IT 455, EL 217, ES 138, RO 99, FR 39, Czechia 2). +41 % proti 2025 = výpočet redakce.
+      ČESKO: SZÚ tabulka leden–srpen 2026 (ISIN, předběžná data k 1. 9. 2026): WNV 0 (2025: 1), dengue 83 (2025: 75), chikungunya 17 (2025: 8). SZÚ tabulka 2025 (k 1. 1. 2026): WNV 2018–2025 7, 2, 0, 0, 2, 0, 5, 2; dengue 2025 111, 2024 119; chikungunya 2025 10. SZÚ prezentace Orlíková 8. 10. 2025: autochtonní WNV v ČR 2013 1, 2018 5, 2019 1, 2024 2; dengue v ČR jen importované. SZÚ TZ 20. 8. 2025: Ae. japonicus usazen (první záznam 2021, zhruba polovina z 60+ lokalit), Ae. koreicus trvalý výskyt potvrzen, Ae. albopictus pravidelně zavlékán, trvalý výskyt nepotvrzen; 2025 dengue/chikungunya/WNV vše importy.
+      DENGUE/CHIK Evropa: MZ 53 (IT 47, FR 6) a 126 (FR 125, IT 1); ECDC CDTR k 23. 9. 52 (IT 47, FR 5) a 91 (FR 90, IT 1) — rozdíl zdrojů a dat uveden v caveatu. MZ hlavička WNV „data k 10.září 20266“ vs text „k 23. září“, chikungunya „data k 9. září“ vs „do konce září“ — nesoulad uveden.
+      LEGISLATIVA: vyhl. č. 389/2023 Sb., příloha č. 15 (zakonyprolidi.cz, ověřeno 2. 10. 2026). Zadání zmiňovalo vyhl. č. 275/2010 Sb. — ta je jen novelou vyhl. č. 473/2008 Sb. a obě zrušila vyhl. č. 389/2023 Sb. k 1. 1. 2024; v textu proto 389/2023. Metodický pokyn Věstník MZ částka 5/2019 podle prezentace SZÚ (samotný Věstník neověřen).
+      EVIDENCE (PubMed ověřeno 2. 10. 2026, 8 dotazů PubMed, 2 Consensus): PMID 38331945, 40381632, 40213502, 32392224, 41842950, 29856987. Consensus kontrola: souhlas (Gossner 2018 Eurosurveillance, Virgillito 2025); nuance Zardini 2024 Lancet Planet Health DOI 10.1016/s2542-5196(23)00252-8 (Ae. aegypti účinnější přenašeč než albopictus) do textu nezařazena — v PubMed neověřena (limit 8 dotazů).
+      VĚDOMĚ NEUVÁDÍME: odhady počtu nakažených v ČR mimo ISIN, mediální čísla, mapu VectorNet pro ČR (stránka ECDC není strojově čitelná), počty komárů pozitivních na WNV v ČR (prezentace SZÚ je jen v grafu). Čeká na schválení redakce."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1 569 případů západonilské horečky v Evropě: co letošní sezóna komárů znamená pro Česko · HSPA Monitor</title>
+<meta name="description" content="Do 23. září hlásilo 16 evropských zemí 1 569 místně získaných případů západonilské horečky, víc než za celou sezónu 2025 (1 112) i 2024 (1 436). Česko mezi nimi podle ECDC není a od ledna do srpna nemělo podle SZÚ žádný případ; dengue a chikungunyu zná zatím jen jako nákazy z cest, letos 83 a 17 hlášených. Místní přenos západonilské horečky ale Česko už zažilo, naposledy v roce 2024, a usadil se tu invazní komár japonský. Rozebíráme, co z evropských čísel plyne pro hlášení, sledování komárů a ochranu dárců krve.">
+<meta name="robots" content="index, follow">
+<meta name="article:audit-status" content="draft">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="1 569 případů západonilské horečky v Evropě: co letošní sezóna komárů znamená pro Česko">
+<meta property="og:description" content="Evropa má letos rekordní sezónu západonilské horečky: 1 569 místních případů v 16 zemích k 23. 9. 2026 (ECDC). Česko místní případ letos nehlásí, dengue a chikungunya přicházejí s cestovateli. Co dělá systém a co říká výzkum.">
+<meta property="og:url" content="https://skorezdravotnictvi.cz/clanek-komari-infekce-evropa-2026.html">
+<meta property="og:image" content="https://skorezdravotnictvi.cz/assets/covers/clanek-komari-infekce-evropa-2026.png">
+<meta property="article:published_time" content="2026-10-03">
+<meta property="article:section" content="Infekční nemoci">
+<link rel="canonical" href="https://skorezdravotnictvi.cz/clanek-komari-infekce-evropa-2026.html">
+<link rel="stylesheet" href="src/styles.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "1 569 případů západonilské horečky v Evropě: co letošní sezóna komárů znamená pro Česko",
+  "description": "Do 23. září hlásilo 16 evropských zemí 1 569 místně získaných případů západonilské horečky, víc než za celou sezónu 2025 (1 112) i 2024 (1 436). Česko mezi nimi podle ECDC není a od ledna do srpna nemělo podle SZÚ žádný případ; dengue a chikungunyu zná zatím jen jako nákazy z cest, letos 83 a 17 hlášených. Místní přenos západonilské horečky ale Česko už zažilo, naposledy v roce 2024, a usadil se tu invazní komár japonský. Rozebíráme, co z evropských čísel plyne pro hlášení, sledování komárů a ochranu dárců krve.",
+  "datePublished": "2026-10-03T06:00:00+02:00",
+  "dateModified": "2026-10-02",
+  "inLanguage": "cs",
+  "articleSection": "Infekční nemoci",
+  "author": { "@type": "Organization", "name": "Redakce HSPA Monitoru" },
+  "publisher": { "@type": "Organization", "name": "HSPA Monitor · Skóre zdravotnictví", "url": "https://skorezdravotnictvi.cz" },
+  "mainEntityOfPage": "https://skorezdravotnictvi.cz/clanek-komari-infekce-evropa-2026.html",
+  "image": "https://skorezdravotnictvi.cz/assets/covers/clanek-komari-infekce-evropa-2026.png"
+}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Infekční nemoci</span>
+        <span class="article-tag article-tag-muted">západonilská horečka · dengue · chikungunya · komáři · ECDC · SZÚ · ISIN</span>
+      </div>
+      <h1 class="article-title">1 569 případů západonilské horečky v Evropě: co letošní sezóna komárů znamená pro Česko</h1>
+      <p class="article-deck">
+        Do 23. září hlásilo 16 evropských zemí <strong>1 569 místně získaných případů západonilské horečky</strong>, víc než za celou sezónu 2025 (1 112) i 2024 (1 436). Česko mezi nimi podle ECDC není a od ledna do srpna nemělo podle SZÚ žádný případ; dengue a chikungunyu zná zatím jen jako nákazy z cest, letos 83 a 17 hlášených. Místní přenos západonilské horečky ale Česko už zažilo, naposledy v roce 2024, a usadil se tu invazní komár japonský. Rozebíráme, co z evropských čísel plyne pro hlášení, sledování komárů a ochranu dárců krve.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">3. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">9 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Týdenní monitoring zdravotních hrozeb ministerstva zdravotnictví za 39. týden, zveřejněný 1. října, věnoval celou kapitolu nemocem, které přenášejí komáři. Shrnul, že „v Evropě přibývají oblasti s autochtonním výskytem vektorově přenášených onemocnění“, tedy s nákazami, které lidé chytili doma, ne na cestách. Pro Česko bulletin hodnotí riziko u dengue i chikungunyi jako nízké. Podívali jsme se do primárních dat ECDC a Státního zdravotního ústavu (SZÚ), kde Česko v tomto vývoji stojí a co by mělo být připravené. Jak bulletin vznikl a jaké má mezery, jsme popsali v <a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">rozboru jeho prvního čísla</a>.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avKomHeroH">
+        <figcaption class="av-figure-h" id="avKomHeroH">Komáry přenášené infekce v Evropě a v Česku, 2026 (ECDC, CDTR týden 39, stav k 23. 9. 2026; SZÚ, ISIN, leden–srpen 2026, předběžná data k 1. 9. 2026; staženo 2. 10. 2026)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="1569">1 569</span>
+            <span class="av-counter-label">místních případů západonilské horečky v Evropě</span>
+            <span class="av-counter-foot">16 zemí, 186 oblastí, k 23. 9. 2026 (ECDC); celá sezóna 2025: 1 112</span>
+          </div>
+          <div class="av-counter-block av-counter-block-good">
+            <span class="av-counter" data-value="0">0</span>
+            <span class="av-counter-label">případů západonilské horečky v Česku</span>
+            <span class="av-counter-foot">leden–srpen 2026, ISIN (SZÚ); stejné období 2025: 1</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="83">83</span>
+            <span class="av-counter-label">hlášených případů dengue v Česku</span>
+            <span class="av-counter-foot">leden–srpen 2026 (SZÚ); stejné období 2025: 75</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-value="17">17</span>
+            <span class="av-counter-label">hlášených případů chikungunyi v Česku</span>
+            <span class="av-counter-foot">leden–srpen 2026 (SZÚ); stejné období 2025: 8</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, Communicable Disease Threats Report, týden 39 (19.–25. 9. 2026); SZÚ, Výskyt vybraných hlášených infekcí v České republice, leden–srpen 2026 (Epidat/ISIN). Tabulky SZÚ místo nákazy nerozlišují; že jde u dengue a chikungunyi o importy, plyne z toho, že ECDC Česko mezi zeměmi s místním přenosem neuvádí.</p>
+      </figure>
+
+      <h3>Datový kontext: rekordní evropská sezóna, česká čísla z cest</h3>
+      <p>
+        Evropské středisko pro prevenci a kontrolu nemocí (ECDC) ve zprávě za 39. týden uvádí, že od začátku přenosové sezóny do 23. září bylo v Evropě identifikováno <strong>186 oblastí zasažených virem západonilské horečky v 16 zemích</strong>, které dohromady hlásí 1 569 místně získaných případů u lidí. Nejvíc oblastí má Itálie (65), Řecko a Rumunsko (po 22), Francie (21) a Nizozemsko (13). Na seznamu jsou i sousedé Česka: Rakousko a Německo po třech oblastech, Maďarsko čtyři. Česko na seznamu není.
+      </p>
+      <p>
+        Podle bulletinu ministerstva připadá nejvíc případů na Itálii (696), Řecko (355), Španělsko (125), Francii (102) a Rumunsko (91). Za celou sezónu 2025 ECDC evidoval 1 112 případů ve 14 zemích, letošní čísla jsou tedy už o 41 % vyšší (výpočet redakce) a sezóna ještě neskončila. Překonala i celou sezónu 2024 s 1 436 případy. ECDC v hodnocení píše, že počasí přenosu dál přeje a v dalších týdnech čeká další případy. Bulletin ministerstva dodává, že podle dosavadních údajů nejsou známky závažnějšího průběhu nemoci než v předchozích sezónách.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avKomTabH">
+        <figcaption class="av-figure-h" id="avKomTabH">Místně získané případy západonilské horečky podle zemí, 2024–2026 (ECDC, Historical data, staženo 2. 10. 2026; 2026 podle MZ ČR, Týdenní monitoring, 39. týden, stav k 23. 9. 2026)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Země</th>
+                <th scope="col" class="av-num">2024 (celá sezóna)</th>
+                <th scope="col" class="av-num">2025 (celá sezóna)</th>
+                <th scope="col" class="av-num">2026 (k 23. 9.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Itálie</th><td class="av-num">455</td><td class="av-num">779</td><td class="av-num">696</td></tr>
+              <tr><th scope="row">Řecko</th><td class="av-num">217</td><td class="av-num">96</td><td class="av-num av-bad">355</td></tr>
+              <tr><th scope="row">Španělsko</th><td class="av-num">138</td><td class="av-num">36</td><td class="av-num av-bad">125</td></tr>
+              <tr><th scope="row">Francie</th><td class="av-num">39</td><td class="av-num">62</td><td class="av-num av-bad">102</td></tr>
+              <tr><th scope="row">Rumunsko</th><td class="av-num">99</td><td class="av-num">49</td><td class="av-num av-bad">91</td></tr>
+              <tr class="av-row-highlight"><th scope="row">Česko</th><td class="av-num">2</td><td class="av-num">0</td><td class="av-num av-good">0</td></tr>
+              <tr><th scope="row">Evropa celkem</th><td class="av-num">1 436</td><td class="av-num">1 112</td><td class="av-num av-bad">1 569</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> ECDC, West Nile virus infections – historical data (2024 k 4. 12. 2024, 19 zemí; 2025 k 3. 12. 2025, 14 zemí); ECDC CDTR týden 39 (celkem 2026, 16 zemí bez Česka); rozpad 2026 podle zemí MZ ČR, Týdenní monitoring zdravotních hrozeb, 39. týden. Česko 2025 a 2026: ECDC zemi mezi hlásícími neuvádí.</p>
+      </figure>
+
+      <p>
+        U dengue a chikungunyi je obraz jiný. ECDC k 23. září eviduje místní přenos dengue jen v Itálii (47 případů) a ve Francii (5) a chikungunyi ve Francii (90) a v Itálii (1). Bulletin ministerstva uvádí 53 případů dengue a 126 chikungunyi; rozdíl vysvětlujeme v rámečku níže. Dengue je letos víc než za celý rok 2025, kdy Francie hlásila 30 a Itálie 4 místní případy, ale výrazně méně než v roce 2024 (Itálie 213, Francie 83, Španělsko 8).
+      </p>
+      <p>
+        V Česku se tytéž nemoci objevují jako nákazy přivezené z cest. Podle měsíčních tabulek SZÚ z Informačního systému infekčních nemocí (ISIN) bylo od ledna do srpna 2026 hlášeno <strong>83 případů dengue</strong> proti 75 ve stejném období loni a <strong>17 případů chikungunyi</strong> proti 8. Za celý rok 2025 to bylo 111 případů dengue a 10 chikungunyi. Západonilskou horečku Česko letos do konce srpna nehlásilo, loni měla jeden případ do srpna a dva za celý rok. SZÚ v srpnu 2025 výslovně uvedl, že u všech tehdy hlášených případů dengue, chikungunyi i západonilské horečky šlo o importy z cest.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-warn">
+          <span class="av-counter" data-value="9">9</span>
+          <span class="av-counter-label">místně získaných případů západonilské horečky v Česku od roku 2013</span>
+          <span class="av-counter-foot">2013: 1, 2018: 5, 2019: 1, 2024: 2 (SZÚ, ISIN; součet redakce)</span>
+        </div>
+      </aside>
+
+      <p>
+        Místní přenos ale Česko zná. Podle přehledu SZÚ z října 2025 se tu západonilskou horečkou nakazili lidé v roce 2013 (jeden případ), 2018 (pět), 2019 (jeden) a 2024 (dva); ostatní případy byly z ciziny. Dva místní případy z roku 2024 eviduje i ECDC. Přenašečem jsou hlavně komáři rodu <em>Culex</em>, včetně domácího komára pisklavého, a virus koluje mezi ptáky. Dengue a chikungunyu přenáší komár tygrovaný (<em>Aedes albopictus</em>), který se v Česku zatím neusadil.
+      </p>
+
+      <div class="av-aside-clear"></div>
+
+      <h3>Kdo hlídá komáry a jak se hlásí</h3>
+      <p>
+        Pravidla dozoru nad západonilskou horečkou stanoví vyhláška č. 389/2023 Sb., o systému epidemiologické bdělosti pro vybraná infekční onemocnění, účinná od 1. ledna 2024, v <strong>příloze č. 15</strong>. Lékař při podezření zajistí odběr vzorku a jeho převoz do Národní referenční laboratoře pro arboviry, která případ potvrdí. Krajská hygienická stanice provede epidemiologické šetření, má určit zdroj a pravděpodobné místo nákazy a zjišťuje i cestovatelskou anamnézu. O potvrzeném případu informuje transfuzní služby a ministerstvo. Případy se zapisují do ISIN, odkud jdou dál ECDC. Vyhláška ukládá také monitorování cirkulace viru ve spolupráci hygieniků, SZÚ a Státní veterinární správy. Likvidaci líhnišť komárů nařizuje orgán ochrany veřejného zdraví podle příloh č. 40 a 41 při chikungunyi a dengue; příloha o západonilské horečce ji neuvádí.
+      </p>
+      <p>
+        SZÚ provádí sezónní surveillance od června do listopadu. Podle prezentace epidemioložky SZÚ Hany Orlíkové z října 2025 při místním případu hygienici vymezují zasaženou oblast do pěti kilometrů od místa přenosu a dárci krve, kteří v rizikové oblasti pobývali, se na 28 dní vyřazují z dárcovství. Stejné 28denní pravidlo platí podle evropských směrnic o krvi pro návrat z rizikových oblastí jinde v Evropě, pokud negativní není individuální test nukleové kyseliny. Proto ECDC každý pátek aktualizuje mapu zasažených oblastí.
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avKomFlowH">
+        <figcaption class="av-figure-h" id="avKomFlowH">Cesta hlášení západonilské horečky v Česku (vyhl. č. 389/2023 Sb., příloha č. 15, ve znění k 2. 10. 2026; SZÚ, 2025)</figcaption>
+        <ol class="av-flow">
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Lékař při podezření</h4>
+            <p class="av-flow-desc">Odběr séra, krve, likvoru nebo moči a neprodlený převoz do referenční laboratoře.</p>
+            <span class="av-flow-tag">čl. 6</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">NRL pro arboviry</h4>
+            <p class="av-flow-desc">Konfirmace; vyloučit jiné flaviviry, např. klíšťovou encefalitidu nebo dengue.</p>
+            <span class="av-flow-tag">čl. 2</span>
+          </li>
+          <li class="av-flow-step av-flow-step-warn">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">Krajská hygienická stanice</h4>
+            <p class="av-flow-desc">Šetření zdroje a místa nákazy; informuje transfuzní služby a MZ.</p>
+            <span class="av-flow-tag">čl. 5 a 6</span>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">ISIN</h4>
+            <p class="av-flow-desc">Registr případů; měsíční tabulky SZÚ, týdenní bulletin MZ.</p>
+          </li>
+          <li class="av-flow-step">
+            <span class="av-flow-num"></span>
+            <h4 class="av-flow-title">ECDC</h4>
+            <p class="av-flow-desc">Hlášení do EpiPulse; týdenní mapa oblastí pro bezpečnost krve.</p>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> vyhláška č. 389/2023 Sb., příloha č. 15 (zakonyprolidi.cz, ověřeno 2. 10. 2026); SZÚ, Aktuální epidemiologická situace ve výskytu arbovirových nákaz přenášených komáry v ČR a Evropě (8. 10. 2025); ECDC CDTR týden 39.</p>
+      </figure>
+
+      <p>
+        Na straně komárů běží výzkumný projekt OH SURVector SZÚ a České zemědělské univerzity zaměřený na surveillance západonilské horečky (podle SZÚ na roky 2024–2026). Jeho výsledky v srpnu 2025 ukázaly, že se v Česku <strong>trvale usadil komár japonský</strong> (<em>Aedes japonicus</em>). Poprvé tu byl zaznamenán v roce 2021 a vědci ho našli zhruba na polovině z více než 60 sledovaných lokalit. Podle SZÚ umí přenášet západonilskou horečku, dengue i chikungunyu a na rozdíl od komára pisklavého saje hlavně na savcích včetně člověka. Bezprostřední riziko pro lidi podle výzkumníků zatím nepředstavuje. Trvale se tu vyskytuje i komár korejský. Komár tygrovaný je do Česka podle SZÚ pravidelně zavlékán automobilovou dopravou, trvalý výskyt zatím potvrzen nebyl, ale „jeho usazení v Česku je v blízké budoucnosti velmi pravděpodobné“, protože je už etablovaný v Rakousku i na Slovensku.
+      </p>
+
+      <h3>Mezinárodní srovnání: proč se to týká i nás</h3>
+      <p>
+        Letošní sezóna se táhne na sever. Mezi 16 zeměmi s místním přenosem jsou Nizozemsko, Belgie a Německo a v těsném sousedství Česka Rakousko a Maďarsko. Česko patřilo mezi hlásící země naposledy v roce 2024, kdy ECDC uvedl dva místní případy a poznamenal, že Česko předtím čtyři až pět let žádný lidský případ nehlásilo. To ukazuje, jak nepravidelně se přenos v okrajových oblastech objevuje.
+      </p>
+      <p>
+        Čísla mezi státy nejsou přímo srovnatelná. Asi 80 % nákaz západonilskou horečkou podle SZÚ probíhá bez příznaků nebo jen lehce a závažně onemocní zhruba jeden ze 150 nakažených. Počty proto závisejí i na tom, jak intenzivně jednotlivé země testují. Systematický přehled <em>Heinrich et al.</em> (2026, <em>European Journal of Microbiology and Immunology</em>, <a href="https://doi.org/10.1556/1886.2026.00010" target="_blank" rel="noopener">DOI</a>) upozorňuje, že v hlášených případech převažují těžké neuroinvazivní formy, což odpovídá podhlášení mírných infekcí.
+      </p>
+
+      <aside class="article-callout article-callout-caveat" aria-label="Metodické upozornění">
+        <p class="article-callout-h">Co z těch čísel neplyne</p>
+        <p>
+          Sezóna ještě běží: evropská čísla jsou ke 23. září a ECDC i ministerstvo čekají další případy. Bulletin ministerstva a ECDC se liší v datech i zdrojích: u chikungunyi uvádí ministerstvo 126 případů (Francie 125), ECDC ke 23. září 91 (Francie 90); u dengue 53 proti 52. Ministerstvo u kapitoly cituje bulletin francouzského úřadu Santé publique France z 2. září a zprávu ECDC za 36. týden; přesný původ vyšších čísel z bulletinu nevyplývá. Hlavička kapitoly o západonilské horečce v bulletinu uvádí „data k 10. září“, text ke 23. září; u chikungunyi hlavička „data k 9. září“, text „do konce září“. Rozpad případů podle zemí za rok 2026 přebíráme z bulletinu, ECDC ho v týdenní zprávě neuvádí. Česká data za rok 2026 jsou předběžná, pouze do konce srpna a nerozlišují místo nákazy.
+        </p>
+      </aside>
+
+      <h3>Co říká výzkum o riziku</h3>
+      <p>
+        Že se přenos šíří kvůli teplejšímu klimatu, podporuje modelová studie <em>Erazo et al.</em> (2024, <em>Nature Communications</em>, <a href="https://doi.org/10.1038/s41467-024-45290-3" target="_blank" rel="noopener">DOI</a>): plocha Evropy ekologicky vhodná pro cirkulaci západonilské horečky se v letech 1901–2019 výrazně zvětšila, zatímco ve srovnávacím scénáři bez klimatické změny zůstala téměř stejná. Zmíněný systematický přehled Heinricha a kolegů zahrnul 27 studií a jako nejkonzistentněji uváděný meteorologický faktor našel rostoucí teploty, spojené s dřívějším začátkem a delší sezónou přenosu.
+      </p>
+      <p>
+        U dengue a chikungunyi je klíčový komár tygrovaný. Analýza <em>Farooq et al.</em> (2025, <em>The Lancet Planetary Health</em>, <a href="https://doi.org/10.1016/S2542-5196(25)00059-2" target="_blank" rel="noopener">DOI</a>) sledovala evropské regiony v letech 1990–2024: doba od usazení komára tygrovaného v regionu do prvního ohniska se zkrátila z 25 let na méně než pět. Zvýšení průměrné letní teploty o 1 °C bylo spojeno s poměrem rizik ohniska 1,55 (95% interval spolehlivosti 1,30–1,85).
+      </p>
+      <p>
+        Rozhoduje i rychlost systému. Systematický přehled <em>Cattaneo et al.</em> (2025, <em>The Lancet Regional Health – Europe</em>, <a href="https://doi.org/10.1016/j.lanepe.2025.101231" target="_blank" rel="noopener">DOI</a>) popsal 56 epizod místního přenosu dengue, chikungunyi a ziky v Evropě v letech 2007–2023. Jejich četnost rostla v průměru 1,25krát ročně a od prvních příznaků prvního nemocného do diagnózy indexového případu, tedy do odhalení ohniska, uplynulo v mediánu 35,5 dne. Studie z jižní Francie <em>Jourdain et al.</em> (2020, <em>PLoS Neglected Tropical Diseases</em>, <a href="https://doi.org/10.1371/journal.pntd.0008320" target="_blank" rel="noopener">DOI</a>) našla jako hlavní faktor místního přenosu pozdní nahlášení importovaného případu, 21 dní a déle. Pro Česko je relevantní i práce <em>Rudolf et al.</em> (2018, <em>Acta Tropica</em>, <a href="https://doi.org/10.1016/j.actatropica.2018.05.020" target="_blank" rel="noopener">DOI</a>): u dálničních vstupů z Rakouska a Slovenska našla komáry tygrované opakovaně, v roce 2012 sedmnáct jedinců, v roce 2016 šedesát šest a v roce 2017 devadesát.
+      </p>
+
+      <h3>Co vývoj přináší</h3>
+      <p>
+        Bez usazeného komára tygrovaného zůstává riziko místní dengue v Česku malé a ministerstvo ho hodnotí jako nízké. U západonilské horečky je situace jiná: přenašeči tu žijí a místní případy už byly. Teplejší sezóny podle citované evidence prodlužují období přenosu, další místní případy proto nelze vyloučit. Kolik případů pak systém zachytí, závisí na tom, zda lékaři u horečky s neurologickými příznaky v létě myslí na test, a na tom, jak rychle se informace dostane k transfuzní službě. Nejznámější nákazou přenášenou členovci je v Česku klíšťová encefalitida, která měla v roce 2024 incidenci 6,1 na 100 000 obyvatel proti 0,81 v EU, jak sledujeme v <a href="indicator.html?id=klistova_encefalitida">indikátoru</a> a v článku o <a href="clanek-klistova-encefalitida-proockovanost-2026.html">proočkovanosti</a>.
+      </p>
+
+      <h3>Co s tím</h3>
+      <ul>
+        <li><strong>Propojit sledování komárů, ptáků a lidí.</strong> Přehled Heinricha a kolegů uvádí, že tam, kde surveillance integruje všechny tři složky, záchyt viru u komárů a ptáků předcházel lidským případům. Projekt OH SURVector, který podle SZÚ běží do roku 2026, by měl mít trvalé pokračování s veřejně dostupnými výsledky.</li>
+        <li><strong>Zveřejňovat místo nákazy.</strong> Měsíční tabulky SZÚ nerozlišují importované a místní případy. Rozlišení by stačilo jako jeden sloupec a bylo by vhodným kandidátem na indikátor.</li>
+        <li><strong>Zkrátit čas od diagnózy k zásahu.</strong> Evidence z Francie a Itálie ukazuje, že o místním přenosu rozhoduje zpoždění hlášení importovaných případů. U dengue a chikungunyi v létě by hygienici měli dostat hlášení rychle i bez čekání na konfirmaci, aby mohli zkontrolovat okolí pacienta.</li>
+        <li><strong>Hlídat komára tygrovaného u dálnic.</strong> Česká data dokládají opakované zavlečení po silnicích z Rakouska a Slovenska. Pravidelný odchyt u hraničních přechodů pomůže zachytit případné usazení včas.</li>
+        <li><strong>Zapojit veřejnost.</strong> SZÚ vyzývá k hlášení invazních komárů a k likvidaci líhnišť: vodu v nádobách, vázách a pod květináči vyměňovat aspoň jednou za dva týdny, sudy zakrýt sítí.</li>
+        <li><strong>Myslet na cestovatele.</strong> Kdo má po návratu z oblastí s přenosem horečku, má vyhledat lékaře a říct, kde byl. Proti dengue a chikungunyi existuje očkování, proti západonilské horečce ne.</li>
+      </ul>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=klistova_encefalitida"><strong>Incidence klíšťové encefalitidy</strong></a> — 6,1 na 100 000 obyvatel (2024; EU 0,81) · SZÚ — ISIN (surveillance klíšťové encefalitidy) · benchmark ECDC. Příbuzná vektorem přenášená nákaza; samostatný indikátor pro nákazy přenášené komáry HSPA Monitor zatím nemá.</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evropa</h5>
+        <ul class="article-sources-list">
+          <li><strong>MZ ČR — Týdenní monitoring zdravotních hrozeb, 39. týden 2026</strong> (21.–27. 9. 2026, zveřejněno 1. 10. 2026) — kapitola Vektorově přenášená onemocnění v Evropě: západonilská horečka (1 569, rozpad podle zemí, 186 oblastí, srovnání s 2025), dengue (53) a chikungunya (126), hodnocení rizika pro ČR. Staženo 2. 10. 2026. <a href="https://mzd.gov.cz/tydenni-monitoring-zdravotnich-hrozeb-39-tyden-2026/" target="_blank" rel="noopener">mzd.gov.cz ↗</a> · <a href="https://mzd.gov.cz/wp-content/uploads/2026/10/Tydenni-monitoring-zdravotnich-hrozeb-39_2026.pdf" target="_blank" rel="noopener">PDF ↗</a></li>
+          <li><strong>ECDC — Communicable Disease Threats Report, Week 39, 19–25 September 2026</strong> — kapitoly 3 (chikungunya), 4 (dengue) a 6 (západonilská horečka: 16 zemí, 186 oblastí, 1 569 případů k 23. 9.; 28denní odklad dárců krve). Staženo 2. 10. 2026. <a href="https://www.ecdc.europa.eu/sites/default/files/documents/communicable-disease-threats-report-week-39-2026.pdf" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — West Nile virus infections: historical data</strong> — souhrny sezón 2024 (1 436 případů, 19 zemí, Czechia 2) a 2025 (1 112 případů, 14 zemí). Staženo 2. 10. 2026. <a href="https://www.ecdc.europa.eu/en/west-nile-fever/surveillance-and-disease-data/historical" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+          <li><strong>ECDC — West Nile virus: weekly updates (dashboard)</strong>. <a href="https://www.ecdc.europa.eu/en/west-nile-fever/surveillance-and-disease-data/disease-data-ecdc" target="_blank" rel="noopener">ecdc.europa.eu ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Česko</h5>
+        <ul class="article-sources-list">
+          <li><strong>SZÚ — Výskyt vybraných hlášených infekcí v ČR, leden–srpen 2026</strong> (Epidat/ISIN, předběžná data k 1. 9. 2026) — A92.3 západonilská horečka, A97 dengue, A92.0 chikungunya. Staženo 2. 10. 2026. <a href="https://szu.gov.cz/wp-content/uploads/2026/09/Tabulka_leden-srpen_2026.pdf" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+          <li><strong>SZÚ — Výskyt vybraných hlášených infekcí v ČR, leden–prosinec 2025</strong> (data k 1. 1. 2026) — roční řady 2016–2025. Staženo 2. 10. 2026. <a href="https://szu.gov.cz/wp-content/uploads/2026/01/Tabulka_leden-prosinec_2025.pdf" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+          <li><strong>SZÚ — Orlíková H. Aktuální epidemiologická situace ve výskytu arbovirových nákaz přenášených komáry v ČR a Evropě</strong> (Konzultační den, 8. 10. 2025) — autochtonní a importované případy západonilské horečky v ČR 2013–2025, sezónní surveillance, opatření při místním přenosu, legislativní podklady. Staženo 2. 10. 2026. <a href="https://szu.gov.cz/wp-content/uploads/2025/11/Orlikova-8-10-2025.pdf" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+          <li><strong>SZÚ — V ČR se trvale usadil invazní komár z východní Asie. Je schopen přenášet nejrůznější nemoci</strong> (tisková zpráva, 20. 8. 2025) — komár japonský, korejský a tygrovaný; projekt OH SURVector; prevence líhnišť. Staženo 2. 10. 2026. <a href="https://szu.gov.cz/tiskove-zpravy/v-cr-se-trvale-usadil-invazni-komar-z-vychodni-asie-je-schopen-prenaset-nejruznejsi-nemoci/" target="_blank" rel="noopener">szu.gov.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Právní předpisy</h5>
+        <ul class="article-sources-list">
+          <li><strong>Vyhláška č. 389/2023 Sb., o systému epidemiologické bdělosti pro vybraná infekční onemocnění</strong> — účinnost od 1. 1. 2024, příloha č. 15 (západonilská horečka); přílohy č. 40 a 41 (chikungunya, dengue: likvidace líhnišť); nahradila vyhlášku č. 473/2008 Sb. Ověřeno 2. 10. 2026. <a href="https://www.zakonyprolidi.cz/cs/2023-389" target="_blank" rel="noopener">zakonyprolidi.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Studie</h5>
+        <ul class="article-sources-list">
+          <li><strong>Erazo D, Grant L, Ghisbain G et al. Contribution of climate change to the spatial expansion of West Nile virus in Europe. Nat Commun. 2024;15(1):1196.</strong> DOI 10.1038/s41467-024-45290-3. PMID 38331945. Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/38331945/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Heinrich PD, Bereswill S, Heimesaat MM. Endemic progression of autochthonous West Nile virus infections in Europe. Eur J Microbiol Immunol (Bp). 2026;16(2):81–91.</strong> DOI 10.1556/1886.2026.00010. PMID 41842950. Typ publikace: přehledový článek (systematický přehled podle abstraktu). Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/41842950/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Farooq Z, Segelmark L, Rocklöv J et al. Impact of climate and Aedes albopictus establishment on dengue and chikungunya outbreaks in Europe: a time-to-event analysis. Lancet Planet Health. 2025;9(5):e374–e383.</strong> DOI 10.1016/S2542-5196(25)00059-2. PMID 40381632. Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/40381632/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Cattaneo P, Salvador E, Manica M et al. Transmission of autochthonous Aedes-borne arboviruses and related public health challenges in Europe 2007–2023: a systematic review and secondary analysis. Lancet Reg Health Eur. 2025;51:101231.</strong> DOI 10.1016/j.lanepe.2025.101231. PMID 40213502. Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/40213502/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Jourdain F, Roiz D, de Valk H et al. From importation to autochthonous transmission: Drivers of chikungunya and dengue emergence in a temperate area. PLoS Negl Trop Dis. 2020;14(5):e0008320.</strong> DOI 10.1371/journal.pntd.0008320. PMID 32392224. Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/32392224/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+          <li><strong>Rudolf I, Blažejová H, Straková P et al. The invasive Asian tiger mosquito Aedes albopictus (Diptera: Culicidae) in the Czech Republic: Repetitive introduction events highlight the need for extended entomological surveillance. Acta Trop. 2018;185:239–241.</strong> DOI 10.1016/j.actatropica.2018.05.020. PMID 29856987. Ověřeno v PubMed 2. 10. 2026. <a href="https://pubmed.ncbi.nlm.nih.gov/29856987/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Související čtení</h5>
+        <ul class="article-sources-list">
+          <li><a href="clanek-monitoring-zdravotnich-hrozeb-mz.html">Stát začal týdně počítat hrozby</a> · <a href="clanek-klistova-encefalitida.html">Klíšťová encefalitida</a> · <a href="clanek-klistova-encefalitida-proockovanost-2026.html">Sedmnáct procent: proočkovanost proti klíšťové encefalitidě</a> · <a href="clanek-salmoneloza-ujezd-nad-lesy-2026.html">Salmonelóza v Újezdu nad Lesy</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Evropská čísla platí k 23. 9. 2026 (ECDC, MZ) a sezóna přenosu pokračuje. Rozpad případů západonilské horečky podle zemí za rok 2026 přebíráme z bulletinu MZ. Česká čísla za rok 2026 jsou předběžná data SZÚ k 1. 9. 2026 a nerozlišují místo nákazy. Meziroční změnu (+41 %) dopočítala redakce. Hodnoty indikátorů odpovídají datovému kontraktu HSPA Monitoru ke dni vydání článku.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+  </article>
+</main>
+<footer class="bottom" id="siteFooter"></footer>
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>
