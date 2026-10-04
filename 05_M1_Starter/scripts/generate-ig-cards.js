@@ -99,6 +99,12 @@ const OUT_DIRS = {
 //   headline    — fallback bez čísla (velký serif nadpis).
 // Žádná nová čísla z paměti — vše vychází z dříve schválených headline.
 const MANIFEST = {
+  'clanek-komari-infekce-evropa-2026': {
+    kicker: 'Infekce · komáři', signal: 'warn',
+    stat: '1 569', statSuffix: ' případů',
+    claim: 'západonilské horečky hlásila Evropa do 23. září. Celá sezóna 2025 měla 1 112.',
+    context: 'Česko letos podle SZÚ žádný případ nemá. Místní přenos ale zažilo v roce 2024.',
+  },
   'clanek-salmoneloza-ujezd-nad-lesy-2026': {
     kicker: 'Veřejné zdraví · salmonelóza ve školní jídelně', signal: 'bad',
     stat: '363',

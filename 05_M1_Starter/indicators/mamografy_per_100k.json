@@ -1,0 +1,81 @@
+{
+  "id": "mamografy_per_100k",
+  "name": "Mamografy (na 100 000 obyvatel)",
+  "area": "Struktury",
+  "domain": "Zdravotnická technika",
+  "subdomain": "Zobrazovací technologie",
+  "definition": "Počet mamografických přístrojů v nemocnicích (HP.1) a v zařízeních ambulantní péče (HP.3) na 100 000 obyvatel k 31. 12. daného roku. Zahrnuje přístroje screeningové i diagnostické. Zdroj: Eurostat, dataset hlth_rs_medim (Devices for medical imaging), facility MAMMO, icha_hp HP1_3, unit P_HTHAB.",
+  "unit": "na 100 000 obyvatel",
+  "direction": "context_dependent",
+  "data_source": {
+    "primary": {
+      "type": "eurostat",
+      "endpoint": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_rs_medim?format=JSON&lang=en&facility=MAMMO&icha_hp=HP1_3&unit=P_HTHAB&sinceTimePeriod=2014",
+      "dataset": "hlth_rs_medim",
+      "dimensions": {
+        "facility": "MAMMO",
+        "icha_hp": "HP1_3",
+        "unit": "P_HTHAB",
+        "geo": "CZ"
+      },
+      "databrowser_url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_medim/default/table",
+      "note": "Ověřeno 4. 10. 2026 (dataset aktualizován Eurostatem 13. 7. 2026). Absolutní počty: stejný dataset s unit=NR (ČR 2024: HP1_3 114, HP1 59, HP3 55). Transform zatím nemá extraktor pro typ eurostat — hodnota se drží jako seed v data/indicators.json."
+    },
+    "fallback": {
+      "type": "none",
+      "note": "Národní zdroj s přístrojovým vybavením (ÚZIS / NRPZS) nebyl při zavedení indikátoru strojově ověřen; doplnit až po ověření distribuční URL. Jako kontext k síti screeningových pracovišť slouží seznam na https://www.mamo.cz/centra/ (75 pracovišť, stav 4. 10. 2026)."
+    }
+  },
+  "benchmark_source": {
+    "type": "eurostat",
+    "code": "hlth_rs_medim",
+    "dataset": "medián 20 vykazujících států EU, 2024 (vlastní výpočet z hlth_rs_medim; agregát EU Eurostat nepublikuje). Nevykazují: BE, DE, IE, FR, HU, NL, PT.",
+    "value": 1.84,
+    "url": "https://ec.europa.eu/eurostat/databrowser/view/hlth_rs_medim/default/table"
+  },
+  "signal_thresholds": {
+    "good": 10,
+    "warn": 25
+  },
+  "frequency": "yearly",
+  "stewards": [
+    "Eurostat",
+    "ÚZIS",
+    "MZ ČR"
+  ],
+  "method_notes": "Směr je context_dependent: víc přístrojů neznamená automaticky lepší péči. ČR má centralizovaný akreditovaný screening — screeningovou mamografii smí provádět jen pracoviště se statutem MZ ČR (uděluje se na 5 let), které podle Doporučeného standardu (Věstník MZ ČR č. 5/2024, doplněn Věstníkem č. 5/2025) provede nejméně 5 000 mamografií ročně, používá výhradně digitální techniku a dvojí čtení. Kapacita se tak soustřeďuje do menšího počtu vytížených přístrojů. Přesto je účast žen 50–69 let (Eurostat hlth_ps_prev, 2024: 61,4 %) nad mediánem 24 vykazujících států EU (56,6 %, vlastní výpočet) při nejnižší hustotě přístrojů v EU. Mezi 17 státy EU s oběma údaji za rok 2024 hustota přístrojů s účastí nekoreluje (Spearman −0,17, vlastní výpočet; ilustrační, ne kauzální). Indikátor proto slouží k hlídání dolní hranice kapacity (objednací doby, geografická dostupnost), ne jako cíl k maximalizaci. Signál zůstává neutral. Benchmark = medián 20 států EU, které hodnotu za rok 2024 vykazují (vlastní výpočet, přepočítávat při každé aktualizaci). Zpráva Eurostatu z 2. 10. 2026 hodnoty zaokrouhluje na jedno desetinné místo (ČR 1,1).",
+  "limitations": "(1) Sedm států EU údaj za rok 2024 nevykazuje (BE, DE, IE, FR, HU, NL, PT), medián je proto počítán z 20 států a mění se se složením vzorku. (2) Dataset nerozlišuje screeningové a diagnostické mamografy ani stáří a typ přístroje (FFDM, tomosyntéza). (3) Jmenovatel je celá populace, ne ženy cílové skupiny 45+ nebo 50–69; státy se starší populací vycházejí relativně hůř. (4) Kategorie HP1_3 zahrnuje jen nemocnice a ambulantní poskytovatele; způsob vykazování se mezi státy může lišit (Eurostat upozorňuje na omezenou srovnatelnost danou organizací péče v jednotlivých státech). (5) Hustota nevypovídá o vytížení, provozní době ani o objednacích dobách; ty v ČR zveřejňují jednotlivá pracoviště na mamo.cz.",
+  "determinants": [
+    "Akreditační standard screeningu (Věstník MZ ČR č. 5/2024): minimální objem 5 000 mamografií ročně na screeningové pracoviště, digitální technika, dvojí čtení",
+    "Statut screeningového pracoviště udělovaný MZ ČR na 5 let a možnost dalšího místa poskytování (Věstník MZ ČR č. 5/2025)",
+    "Podmínky pro diagnostickou mamografii mimo screening: přístroj nejvýše 10 let starý, nejméně 1 500 vyšetření ročně (tentýž standard, čl. 5)",
+    "Úhrady zdravotních pojišťoven a výběrová řízení na smluvní poskytovatele (§ 46 zákona č. 48/1997 Sb.)",
+    "Personální kapacita radiologů a radiologických asistentů"
+  ],
+  "importance": "Mamograf je základní přístroj sekundární prevence nejčastějšího zhoubného nádoru u žen. Indikátor doplňuje účast na screeningu (screening_mamograficky) o stranu kapacity a umožňuje mezinárodní srovnání z harmonizovaného zdroje Eurostatu. Pro ČR je výpovědní hlavně v kombinaci: nejnižší hustota přístrojů v EU spolu s nadprůměrnou účastí ukazuje, že organizovaný, objemově koncentrovaný model funguje — a zároveň že systém nemá kapacitní rezervu, pokud se účast zvedne směrem k 70 % a výš. Systematický přehled Wong et al. 2023 (Clin Breast Cancer, PMID 36792458) uvádí, že vyšší objem čtení u radiologa většinou souvisí s vyšší senzitivitou a nižší mírou zbytečného dovolávání.",
+  "patient_story": "Ostrava, pondělí ráno. Paní Jana, 52 let, dostala pozvánku na screeningovou mamografii a na portálu mamo.cz si vybírá pracoviště. V Moravskoslezském kraji jich program uvádí deset, v celé republice 75. Objednací dobu si každé pracoviště na portálu samo aktualizuje; medián z hlášených údajů je 14 kalendářních dní, nad osm týdnů, které standard ministerstva stanoví jako horní mez, hlásila podle stavu portálu ke 4. říjnu 2026 jen dvě pracoviště. Jana je ilustrativní postava; čísla za ní ne.\n\nČesko mělo v roce 2024 podle Eurostatu 1,05 mamografu na 100 000 obyvatel (114 přístrojů v nemocnicích a ambulancích; dataset hlth_rs_medim). Spolu s Polskem (1,05) je to nejméně ze 20 států EU, které údaj vykazují; Švédsko má 1,08, Rumunsko 1,12. Medián vykazujících států EU je 1,84 (vlastní výpočet, agregát EU Eurostat nepublikuje), Slovensko má 1,62, Rakousko 1,96, Řecko 7,60. Česká hodnota se za deset let téměř nepohnula: 1,01 v roce 2014, vrchol 1,13 v roce 2017. Změnilo se, kde přístroje stojí: v nemocnicích jich bylo 71 v roce 2014 a 59 v roce 2024, v ambulantních zařízeních 35 a 55.\n\nNízká hustota přístrojů neznamená nízkou účast. Podle programových dat Eurostatu (hlth_ps_prev) absolvovalo v roce 2024 mamografii během posledních dvou let 61,4 % českých žen ve věku 50–69 let, víc než medián 24 vykazujících států EU (56,6 %, vlastní výpočet) a výrazně víc než Polsko (33,8 %) se stejnou hustotou přístrojů. Švédsko má podobně málo mamografů a účast 82,0 % (jeho program zve ženy 40–74 let). Rozhoduje organizace: screening smí v Česku dělat jen pracoviště se statutem, který uděluje ministerstvo na pět let, a standard ve Věstníku MZ č. 5/2024 od něj žádá nejméně 5 000 mamografií ročně, dvojí čtení a digitální techniku. Kapacita se tak soustřeďuje do menšího počtu vytížených přístrojů.\n\nPolitická páka proto neleží v nákupu dalších mamografů, ale v jejich rozmístění a v účasti. Věstník MZ č. 5/2025 umožnil screeningovým pracovištím zřídit další místo poskytování, pokud zlepší geografickou dostupnost; ministerstvo a pojišťovny mohou tento nástroj cílit do okresů s dlouhým dojezdem. Druhou pákou je zvaní a připomínání: vyhláška č. 70/2012 Sb. ukládá praktikovi i gynekologovi zkontrolovat, zda žena screening absolvovala. Indikátor proto HSPA Monitor vede jako kontextový: sleduje, zda hustota přístrojů neklesne pod úroveň, kdy by se prodloužily objednací doby, ne zda roste.",
+  "framework": "hspa",
+  "dimension": "dostupnost",
+  "literature": [
+    {
+      "pmid": "36792458",
+      "doi": "10.1016/j.clbc.2023.01.009",
+      "title": "Do Reader Characteristics Affect Diagnostic Efficacy in Screening Mammography? A Systematic Review.",
+      "year": 2023,
+      "journal": "Clin Breast Cancer",
+      "study_type": "systematic review",
+      "note": "28 studií: vyšší objem čtení většinou souvisí s vyšší senzitivitou, záchytem karcinomů a nižší mírou recall; podporuje logiku minimálního objemu ve standardu, ne konkrétní práh 5 000.",
+      "verified_at": "2026-10-04"
+    },
+    {
+      "pmid": "31932175",
+      "doi": "10.1016/j.ejca.2019.12.010",
+      "title": "Evidence for reducing cancer-specific mortality due to screening for breast cancer in Europe: A systematic review.",
+      "year": 2020,
+      "journal": "Eur J Cancer",
+      "study_type": "systematic review",
+      "note": "60 studií z evropských regionů (žádná z východní Evropy): pokles mortality na karcinom prsu 4–31 % u zvaných vs. nezvaných, 12–58 % u účastnic vs. neúčastnic v kvalitních studiích.",
+      "verified_at": "2026-10-04"
+    }
+  ]
+}
