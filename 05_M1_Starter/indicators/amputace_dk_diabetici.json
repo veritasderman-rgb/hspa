@@ -4,15 +4,21 @@
   "area": "Výstupy",
   "domain": "Kvalita péče",
   "subdomain": "Diabetické komplikace",
-  "definition": "Počet velkých amputací dolních končetin (transtibální, transfemorální, exartikulace kyčle — tedy amputace nad nebo v úrovni kotníku) provedených u hospitalizovaných pacientů s primární nebo sekundární diagnózou diabetes mellitus (E10–E14 dle MKN-10) za rok, standardizovaný na 100 000 osob s diabetem v populaci. Indikátor odráží kvalitu preventivní péče o diabetiky — zejména screening diabetické nohy, kompenzaci glykémie a dostupnost multidisciplinárních diabetologicko-chirurgických týmů.",
-  "unit": "na 100 000 diabetiků",
+  "definition": "Počet velkých amputací dolních končetin (transtibální, transfemorální, exartikulace kyčle — tedy amputace nad nebo v úrovni kotníku) provedených u hospitalizovaných pacientů s primární nebo sekundární diagnózou diabetes mellitus (E10–E14 dle MKN-10) za rok, vyjádřený na 100 000 obyvatel a věkově standardizovaný (definice OECD HCQI: hospitalizace osob ve věku 15+ na 100 000 obyvatel). Indikátor odráží kvalitu preventivní péče o diabetiky — zejména screening diabetické nohy, kompenzaci glykémie a dostupnost multidisciplinárních diabetologicko-chirurgických týmů.",
+  "unit": "na 100 000 obyvatel",
   "direction": "lower_is_better",
   "data_source": {
     "primary": {
       "type": "uzis_nrh",
       "endpoint": "https://www.uzis.cz/index.php?pg=registry-sber-dat--narodni-zdravotni-registry--narodni-registr-hospitalizovanych",
-      "dataset": "Národní registr hospitalizovaných (NRH) — výkony amputace DK (kódy 52-01 až 52-09 NRCH) + diagnózy E10–E14; jmenovatel z Národního registru diabetiků (NRDIA)",
-      "dimensions": ["year", "amputation_level", "diabetes_type", "sex", "age_group"]
+      "dataset": "Národní registr hospitalizovaných (NRH) — výkony amputace DK (kódy 52-01 až 52-09 NRCH) + diagnózy E10–E14; jmenovatel je populace ČR (ČSÚ), ne počet diabetiků",
+      "dimensions": [
+        "year",
+        "amputation_level",
+        "diabetes_type",
+        "sex",
+        "age_group"
+      ]
     },
     "fallback": {
       "type": "oecd_api",
@@ -38,8 +44,8 @@
     "MZČR — Diabetologická sekce",
     "OECD HCQI"
   ],
-  "method_notes": "Čitatel: počet hospitalizací s operačním výkonem odpovídajícím velké amputaci DK (nad kotníkem) a primární nebo sekundární diagnózou E10–E14. Zahrnují se pouze první amputace na daném místě (re-amputace pro komplikaci téhož místa ve stejném pobytu se nezapočítávají). Věkové standardizování na evropský standard populace WHO. Jmenovatel: prevalentní počet diabetiků v daném roce z NRDIA nebo epidemiologický odhad ČSÚ. Metodika odpovídá OECD HCQI Lower Limb Amputation Indicator Definition 2019.",
-  "limitations": "NRH zachycuje hospitalizační výkony; ambulantně provedené malé amputace (prsty) nejsou zahrnuty, a indikátor tak podhodnocuje celkovou zátěž amputací. Kvalita záznamu diagnózy DM v NRH závisí na kódovací praxi nemocnice. Jmenovatel z NRDIA nezachycuje nediagnostikované diabetiky (odhadem 20–30 % diabetické populace). Mezinárodní srovnatelnost je omezena různými definicemi velké vs. malé amputace v jednotlivých zemích.",
+  "method_notes": "Čitatel: počet hospitalizací s operačním výkonem odpovídajícím velké amputaci DK (nad kotníkem) a primární nebo sekundární diagnózou E10–E14. Zahrnují se pouze první amputace na daném místě (re-amputace pro komplikaci téhož místa ve stejném pobytu se nezapočítávají). Věkové standardizování na evropský standard populace WHO. Jmenovatel: počet obyvatel ČR (nikoli počet diabetiků) — indikátor sleduje definici OECD HCQI „major lower extremity amputation in adults with diabetes“ jako počet hospitalizací osob 15+ na 100 000 obyvatel, věkově standardizovaně, aby byl srovnatelný s publikovaným benchmarkem. Metodika odpovídá OECD HCQI Lower Limb Amputation Indicator Definition 2019.",
+  "limitations": "NRH zachycuje hospitalizační výkony; ambulantně provedené malé amputace (prsty) nejsou zahrnuty, a indikátor tak podhodnocuje celkovou zátěž amputací. Kvalita záznamu diagnózy DM v NRH závisí na kódovací praxi nemocnice. Jmenovatel z NRDIA nezachycuje nediagnostikované diabetiky (odhadem 20–30 % diabetické populace). Mezinárodní srovnatelnost je omezena různými definicemi velké vs. malé amputace v jednotlivých zemích. Opraveno 5. 10. 2026 (issue #1243, bod 2): karta i datový kontrakt uváděly jednotku „na 100 000 diabetiků“ a jmenovatel z NRDIA. To bylo chybné — OECD HCQI, z něhož pocházejí benchmarky (OECD 9,5; EU 10,3), definuje indikátor jako počet hospitalizací osob 15+ na 100 000 OBYVATEL, věkově standardizovaně (Health at a Glance, metodika HCQI; ověřeno 5. 10. 2026). Potvrzuje to i aritmetika: 12,1 na 100 000 diabetiků by při 930 tisících diabetiků znamenalo 113 amputací ročně, zatímco na 100 000 obyvatel vychází ≈ 1 320, což odpovídá řádu uváděnému v článku. Opravena tedy jednotka a jmenovatel, hodnota 12,1 zůstává. POZOR: hodnota má stále origin seed (ilustrativní) — proti ÚZIS NRH nebyla ověřena a zůstává k doložení.",
   "importance": "Velká amputace dolní končetiny je nejzávažnější preventovatelnou komplikací diabetu — odráží kumulativní selhání v celém řetězci péče: nedostatečný screening diabetické nohy, pozdní záchyt neuropatie/ischémie, špatnou kompenzaci glykémie a nedostupnost cévní chirurgie v záchranném časovém okně. Je primárním OECD HCQI ukazatelem kvality chronické péče. V ČR je míra amputací trvale nad průměrem OECD, což odpovídá slabší koordinaci mezi praktickými lékaři, diabetology a cévními chirurgy.",
   "determinants": [
     "Kvalita kompenzace glykémie — podíl diabetiků s HbA1c < 53 mmol/mol",
