@@ -6,10 +6,11 @@
 // Viz PLAN-TRI-ZIDLE.md.
 
 import './analytics.js';
+import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { loadState, saveAct, resetCampaign, encodeShare, decodeShare } from './hra-stav.js';
-import { verdict as vyhlaskaVerdict } from './vyhlaska-engine.js';
-import { verdict as reditelVerdict } from './reditel-engine.js';
+import { verdict as vyhlaskaVerdict, segmentWaitSignals, trilemma, TRILEMMA_AXES, TRILEMMA_LABELS } from './vyhlaska-engine.js';
+import { verdict as reditelVerdict, budgetFromMinistr } from './reditel-engine.js';
 import { journeyOutcome, waitingFromCampaign } from './pribeh-engine.js';
 
 let VYHLASKA = null;
@@ -40,9 +41,24 @@ function ministrSummary(st) {
   return vyhlaskaVerdict(VYHLASKA.segments, st.ministr.alloc, VYHLASKA.envelope.amount_mld, scale);
 }
 
+/**
+ * Stav aktu I pro další akty: alokace + deficit vyhlášky dopočtený enginem
+ * (sdílený kód nese jen vstupy, takže se deficit nikdy nečte z úložiště).
+ */
+function ministrState(st) {
+  if (!st.ministr?.alloc) return null;
+  const m = ministrSummary(st);
+  return { ...st.ministr, deficit_mld: m ? Math.max(0, Math.round((m.cost - m.envelope) * 10) / 10) : 0 };
+}
+
 function reditelSummary(st) {
   if (!st.reditel?.decisions || !Object.keys(st.reditel.decisions).length) return null;
-  return reditelVerdict(REDITEL, st.reditel.decisions, st.ministr);
+  return reditelVerdict(REDITEL, st.reditel.decisions, ministrState(st));
+}
+
+/** v3: čekárny ambulancí z aktu I (jen když ministr vyhlášku podepsal). */
+function segmentWaits(st) {
+  return st.ministr?.alloc ? segmentWaitSignals(VYHLASKA.segments, st.ministr.alloc) : {};
 }
 
 function pacientSummary(st) {
@@ -50,8 +66,30 @@ function pacientSummary(st) {
   if (!persona) return null;
   const rd = reditelSummary(st);
   const waiting = rd ? rd.waiting : waitingFromCampaign(null);
-  const outcome = journeyOutcome(persona, st.pacient?.decisions || {}, waiting, PRIBEH.waiting_shift_weeks);
+  const outcome = journeyOutcome(persona, st.pacient?.decisions || {}, waiting, PRIBEH.waiting_shift_weeks, segmentWaits(st));
   return { persona, outcome };
+}
+
+/** Co z aktu I skutečně teklo dál — pro výsledovku (poctivá morálka). */
+function flowSummary(st) {
+  const m = ministrSummary(st);
+  if (!m) return '';
+  const budget = budgetFromMinistr(ministrState(st), REDITEL.handoff);
+  const waits = segmentWaits(st);
+  const label = (id) => VYHLASKA.segments.find(s => s.id === id)?.label || id;
+  const waitTxt = Object.keys(waits).length
+    ? Object.entries(waits).map(([id, w]) => `${escapeHtml(label(id))} ${w === 'delsi' ? 'delší' : 'kratší'}`).join(' · ')
+    : 'beze změny (žádný segment v protestu ani s rozšířením péče)';
+  const t = trilemma(m);
+  return `
+    <div class="hra-sum-flow">
+      <h3 class="hra-sum-h">Co teklo mezi akty</h3>
+      <p class="hra-sum-body">
+        <strong>Z vyhlášky do nemocnice:</strong> růst rozpočtu +${czNum(budget.growthPct)} %${budget.haircutPct > 0 ? ` (z toho −${czNum(budget.haircutPct, 2)} p. b. za deficit vyhlášky ${czNum(budget.deficitMld)} mld)` : ''}.
+        <strong>Z vyhlášky do čekáren:</strong> ${waitTxt}.
+        <strong>Trilema vyhlášky:</strong> ${TRILEMMA_AXES.map(a => `${TRILEMMA_LABELS[a]} <strong class="hra-tone-${t.axes[a].tone}">${escapeHtml(t.axes[a].value)}</strong>`).join(' · ')}.
+      </p>
+    </div>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -160,7 +198,8 @@ function renderSummary() {
         ve vaší nemocnici s ${WAIT_LABEL[p.outcome.waiting]}.</p>
       </div>
     </div>
-    <p class="hra-sum-moral">Jeden systém. Tři židle. Každé z těch čísel jste způsobili vy — jen pokaždé z jiné židle.</p>
+    ${flowSummary(st)}
+    <p class="hra-sum-moral">Jeden systém. Tři židle. Rozpočet nemocnice, její čekárny i cesta pacienta — všechno jste nastavili vy, jen pokaždé z jiné židle.</p>
     ${SHARED ? `
       <div class="hra-share">
         <p class="hra-note">Prohlížíte sdílenou kampaň. Chcete ji rozehrát dál jako svou?</p>
@@ -173,8 +212,10 @@ function renderSummary() {
           <input class="hra-share-url" id="hraShareUrl" type="text" readonly value="${escapeHtml(shareUrl)}">
           <button type="button" class="hra-btn" id="hraCopy">Kopírovat</button>
         </div>
+        <p class="hra-note">Seminář nebo třída? <a href="porovnani.html?k=${encodeURIComponent(shareCode)}">Porovnejte kampaně vedle sebe</a> — každý vloží svůj odkaz, tabulka ukáže, kdo komu co dal a co to udělalo.</p>
         <button type="button" class="hra-btn hra-btn-sec" id="hraReset">Smazat kampaň a hrát znovu</button>
       </div>`}`;
+  trackEvent('hra_vysledovka', { sdilena: SHARED ? 1 : 0 });
 
   document.getElementById('hraCopy')?.addEventListener('click', async () => {
     const input = document.getElementById('hraShareUrl');
@@ -197,7 +238,7 @@ function renderSummary() {
     // dopočítáme enginy, aby stepper i hub ukázaly správný stav (dokončeno)
     // bez nutnosti akty znovu prohrát.
     resetCampaign();
-    if (SHARED.ministr) saveAct('ministr', SHARED.ministr);
+    if (SHARED.ministr) saveAct('ministr', ministrState(SHARED));
     if (SHARED.reditel) {
       const r = reditelSummary(SHARED);
       saveAct('reditel', {
@@ -221,7 +262,7 @@ function renderSummary() {
 // ---------------------------------------------------------------------------
 
 async function init() {
-  renderModuleNav('explainers');
+  renderModuleNav('explainers', { popups: 'manual' });
   renderMastheadDate();
   renderRelatedTools('tri-zidle');
 

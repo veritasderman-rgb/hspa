@@ -128,3 +128,36 @@ test('lékařova vrstva: pohledy pacient/lékař se liší i textově (žádný 
     }
   }
 });
+
+// ---------------------------------------------------------------------------
+// v3 — kroky tagované segmentem vyhlášky (čekání z aktu I)
+// ---------------------------------------------------------------------------
+
+test('engine v3: krok tagovaný segmentem se posouvá podle signálu z aktu I; oba akty se sčítají', () => {
+  const p = byId.diabetik;
+  const dia = p.steps.find(s => s.id === 'diabetologie'); // base 4, wait_sensitive, segment ambulantni_specialiste
+  assert.equal(dia.segment, 'ambulantni_specialiste');
+  assert.equal(stepTimeWeeks(dia, {}, 'stejne', SHIFT, { ambulantni_specialiste: 'kratsi' }), 4 - SHIFT);
+  assert.equal(stepTimeWeeks(dia, {}, 'stejne', SHIFT, { ambulantni_specialiste: 'delsi' }), 4 + SHIFT);
+  assert.equal(stepTimeWeeks(dia, {}, 'delsi', SHIFT, { ambulantni_specialiste: 'delsi' }), 4 + 2 * SHIFT, 'akt II + akt I');
+  assert.equal(stepTimeWeeks(dia, {}, 'kratsi', SHIFT, { ambulantni_specialiste: 'delsi' }), 4, 'protichůdné signály se vyruší');
+  assert.equal(stepTimeWeeks(dia, {}, 'stejne', SHIFT, { ambulantni_specialiste: 'nesmysl' }), 4, 'neznámý signál se ignoruje');
+  assert.equal(stepTimeWeeks(dia, {}, 'stejne', SHIFT, {}), 4, 'bez signálů beze změny');
+
+  const noha = p.steps.find(s => s.id === 'noha'); // bez segmentu
+  assert.equal(stepTimeWeeks(noha, {}, 'stejne', SHIFT, { prakticti: 'delsi' }), noha.base_time_weeks, 'netagovaný krok se neposouvá');
+  const proh = p.steps.find(s => s.id === 'prohlidka'); // base 0, segment prakticti
+  assert.equal(stepTimeWeeks(proh, {}, 'stejne', SHIFT, { prakticti: 'kratsi' }), 0, 'nikdy pod nulu');
+
+  const o = journeyOutcome(p, {}, 'stejne', SHIFT, { ambulantni_specialiste: 'kratsi' });
+  assert.equal(o.steps.find(s => s.id === 'diabetologie').segment_shift, 'kratsi');
+  assert.equal(o.steps.find(s => s.id === 'noha').segment_shift, null);
+  const base = journeyOutcome(p, {}, 'stejne', SHIFT);
+  assert.equal(base.weeks - o.weeks, SHIFT);
+});
+
+test('data v3: každá persona má aspoň jeden krok napojený na segment aktu I', () => {
+  for (const p of doc.personas) {
+    assert.ok(p.steps.some(s => s.segment), `${p.id}: žádný krok není tagován segmentem`);
+  }
+});

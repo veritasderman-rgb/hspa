@@ -519,12 +519,19 @@ export function renderBrandMark() {
   }
 }
 
-export function renderModuleNav(activeId) {
+export function renderModuleNav(activeId, { popups = 'auto' } = {}) {
   // Priorita popupů: Týden zdraví > vedra (sezónní servis) > newsletter.
   // Awareness nastaví __awPopupActive, vedra __vedraPopupActive; newsletter
   // (odložený ~10 s) mlčí, když je aktivní kterýkoli z nich.
-  initAwarenessPopup().then((tookOver) => { if (!tookOver) initVedraPopup(); });
-  initNewsletterPopup();
+  // popups: 'manual' = herní stránky (vyhlaska/reditel/pribeh-pacienta/hra):
+  // žádný časový popup — newsletter si vyvolají samy po verdiktu
+  // (hra-newsletter.js) a Týden zdraví na nich mlčí (docs/decisions-log.md).
+  if (popups === 'manual') {
+    initNewsletterPopup({ mode: 'manual' });
+  } else {
+    initAwarenessPopup().then((tookOver) => { if (!tookOver) initVedraPopup(); });
+    initNewsletterPopup();
+  }
   renderBrandMark();
   injectOrgSchema();
   const path = window.location.pathname;
@@ -557,13 +564,13 @@ export function renderModuleNav(activeId) {
         // direct-URL přístup s upozorněním, ale není v navigaci.
       ],
     },
-    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html', 'hra.html', 'pribeh-pacienta.html'],
+    { id: 'explainers',  label: 'Jak funguje',             href: 'jak-funguje.html',        match: ['jak-funguje.html', 'cesta-pacienta.html', 'model-systemu.html', 'simulator.html', 'hra.html', 'pribeh-pacienta.html', 'porovnani.html'],
       children: [
         { id: 'jak-zdravotnictvi', label: 'Zdravotnictví',           href: 'jak-funguje.html',    match: ['jak-funguje.html'] },
         { id: 'cesta-pacienta',    label: 'Cesta pacienta systémem',  href: 'cesta-pacienta.html', match: ['cesta-pacienta.html'] },
         { id: 'model-systemu',     label: 'Model systému',            href: 'model-systemu.html', match: ['model-systemu.html'] },
         { id: 'simulator',         label: 'Simulátor pák',            href: 'simulator.html',     match: ['simulator.html'] },
-        { id: 'tri-zidle',         label: 'Tři židle: hra',           href: 'hra.html',           match: ['hra.html', 'pribeh-pacienta.html'] },
+        { id: 'tri-zidle',         label: 'Tři židle: hra',           href: 'hra.html',           match: ['hra.html', 'pribeh-pacienta.html', 'porovnani.html'] },
       ],
     },
     { id: 'prevention',  label: 'Co s tím můžu dělat já', href: 'prevence.html',           match: ['prevence.html', 'kompas.html', 'vedra.html', 'pohotovosti.html'],

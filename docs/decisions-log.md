@@ -6,6 +6,15 @@ Formát: každá položka má `Datum`, `PR`, `Co`, `Proč`, `Důsledek`.
 
 ---
 
+## 2026-10-05 — Herní stránky bez časových popupů; newsletter až po verdiktu
+
+- **PR**: `claude/sleepy-rubin-5ud558` (vyhláška v3, Tři židle)
+- **Co**: `renderModuleNav(id, { popups: 'manual' })` na `vyhlaska.html`, `reditel.html`, `pribeh-pacienta.html`, `hra.html` a `porovnani.html` vypíná časový newsletter popup i popup Týdne zdraví / veder. Newsletter si herní stránky vyvolají samy (`src/hra-newsletter.js` → `requestNewsletterPopup({ variant: 'hra' })`) až po prvním verdiktu a ~15 s bez interakce, s textem navázaným na hru (`vyhlaska-hra.json → newsletter_hook`, datovaný `valid_until` s fallbackem). Session limit popupu je per varianta (`newsletter-popup.js → sessionBlocks`): generická nejvýš 1× za návštěvu a nikdy po herní, herní nejvýš 1× nezávisle na generické; 30denní stopka a „subscribed" platí pro obě.
+- **Proč**: Priorita „Týden zdraví > vedra > newsletter" umlčela newsletter na celém webu od 23. 9. (ohlášení Dne srdce) nejméně do 11. 10. (Den duševního zdraví) a při hustém podzimním kalendáři prakticky do 1. 11. — vlastník si na hře popup přál, a zjistilo se, že nevyskakuje nikde. Zároveň je 10 s od načtení u hry se 17 posuvníky nejhorší možný okamžik (přeruší tahání) a kampaň Týdne zdraví uprostřed dělení 40 miliard nedává smysl. Herní popup má navíc hák („skutečná vyhláška vyjde do konce října — pošleme srovnání"), který generický text nemá.
+- **Důsledek**: **NEVRACET** časový popup ani Týden zdraví na herní stránky přes `renderModuleNav` bez `popups: 'manual'`; nový herní akt musí volat `armGameNewsletter` sám. Priorita popupů na ostatních stránkách se nemění. Hook v datech má `valid_until` — po termínu ho buď aktualizovat (nový hák), nebo nechat spadnout na fallback; validátor `validate-vyhlaska-hra.js` hlídá úplnost.
+
+---
+
 ## 2026-09-13 — Jedna rutina agenta (`PROMPT_ROUTINE.md`) místo šesti
 
 - **PR**: `claude/emergency-services-map-cz-1errdv` (konsolidace rutin)

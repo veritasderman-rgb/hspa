@@ -5,6 +5,13 @@
 // 2023). Hráč rozděluje modelovou obálku růstu; engine počítá cenu vyhlášky,
 // nové podíly (definitorika — přesná matematika, vč. skupinových efektů),
 // náladu zástupců (gap vs. modelový požadavek) a doložené směrové efekty.
+//
+// v3 (říjen 2026): relativní spravedlnost v náladě (moodContext — segment
+// pod průměrem eskaluje, když jiný dostal víc, než žádal), slovní vysvětlení
+// gapu (moodExplain), víceletá projekce struktury při stejné vyhlášce
+// (newShares years, yearsToShare), trilema verdiktu (dohody × reforma ×
+// bilance), „co si odnést" (takeaways) a signály čekání pro akt III
+// (segmentWaitSignals). Co je modelové, říká komentář u každé funkce.
 // Viz data/vyhlaska-hra.json a PLAN-VYHLASKA-HRA.md.
 
 /** Cena vyhlášky v mld Kč pro dané % růstu per segment (scale = na dnešní objem). */
@@ -24,15 +31,26 @@ export function avgGrowthPct(segments, alloc) {
   return (totalCost(segments, alloc, 1) / base) * 100;
 }
 
+const round1 = (v) => Math.round(v * 10) / 10;
+const fmt = (v) => String(round1(v)).replace('.', ',');
+
+function yearsCount(years) {
+  const y = Number(years);
+  return Number.isFinite(y) ? Math.max(0, Math.round(y)) : 1;
+}
+
 /**
  * Nové podíly segmentů po vyhlášce (definitorický přepočet, žádný model).
  * Podíly jsou nezávislé na scale (škálování je proporční).
+ * `years` > 1 = TATÁŽ vyhláška opakovaná každý rok (složený růst) — projekce
+ * setrvačnosti struktury, ne predikce; 0 = výchozí stav.
  * @returns {Object} { [id]: { mld, share_pct } } — mld v cenách baseline roku
  */
-export function newShares(segments, alloc) {
+export function newShares(segments, alloc, years = 1) {
+  const n = yearsCount(years);
   const grown = segments.map(s => ({
     id: s.id,
-    mld: s.baseline_mld * (1 + (Number(alloc[s.id]) || 0) / 100),
+    mld: s.baseline_mld * (1 + (Number(alloc[s.id]) || 0) / 100) ** n,
   }));
   const total = grown.reduce((a, g) => a + g.mld, 0);
   const out = {};
@@ -43,10 +61,33 @@ export function newShares(segments, alloc) {
 }
 
 /** Součet podílů skupiny segmentů (např. lůžkový blok) v %, zaokrouhlený na 1 dp. */
-export function groupShare(segments, alloc, ids) {
-  const shares = newShares(segments, alloc);
+export function groupShare(segments, alloc, ids, years = 1) {
+  const shares = newShares(segments, alloc, years);
   const sum = ids.reduce((a, id) => a + (shares[id]?.share_pct || 0), 0);
-  return Math.round(sum * 10) / 10;
+  return round1(sum);
+}
+
+/**
+ * Projekce podílu skupiny při stejné vyhlášce každý rok (definitorika).
+ * @returns {Array<{years:number, share:number}>}
+ */
+export function structureProjection(segments, alloc, ids, horizons = [1, 5, 10, 20]) {
+  return horizons.map(y => ({ years: y, share: groupShare(segments, alloc, ids, y) }));
+}
+
+/**
+ * Za kolik let by podíl skupiny klesl na cíl (OECD ~30 %) při stejné vyhlášce
+ * každý rok. 0 = už je pod cílem; null = podíl neklesá nebo to trvá déle než
+ * maxYears (hra pak říká „víc než generaci").
+ */
+export function yearsToShare(segments, alloc, ids, target = 30, maxYears = 100) {
+  const base = groupShare(segments, alloc, ids, 0);
+  if (base <= target) return 0;
+  if (groupShare(segments, alloc, ids, 1) >= base) return null;
+  for (let y = 1; y <= maxYears; y++) {
+    if (groupShare(segments, alloc, ids, y) <= target) return y;
+  }
+  return null;
 }
 
 export const MOOD_ORDER = ['boost', 'agree', 'grudging', 'no_deal', 'protest'];
@@ -57,15 +98,31 @@ export const MOOD_LABELS = {
   no_deal: 'Bez dohody — rozhodne vyhláška',
   protest: 'Protest / stávková pohotovost',
 };
+const MOOD_SHORT = {
+  boost: 'rozšíření péče',
+  agree: 'dohoda',
+  grudging: 'podpis s výhradami',
+  no_deal: 'bez dohody',
+  protest: 'protest',
+};
+
+/** Modelové pravidlo v3 — citováno v UI („Jak hra počítá"). */
+export const FAIRNESS_RULE = 'Segment, který roste pod průměrem systému, zatímco jiný vyjednávací '
+  + 'segment dostal výrazně víc, než žádal (≥ 2 p. b. nad požadavek), eskaluje o jeden stupeň '
+  + '— z podpisu s výhradami na „bez dohody", z „bez dohody" na protest.';
+
+/** Rozdíl přidělené % vs. modelový požadavek segmentu (p. b.). */
+export function gapFor(segment, allocPct) {
+  return (Number(allocPct) || 0) - segment.demand_pct;
+}
 
 /**
- * Nálada zástupce segmentu podle rozdílu přidělené % vs. modelový požadavek.
+ * Základní nálada čistě podle gapu:
  * gap ≥ +2 → boost (pozitivní extrém: segment slibuje konkrétní rozšíření
  * péče — ordinační hodiny, kapacity, vstup nových metod);
  * gap ≥ 0 → agree; ≥ −2 → grudging; ≥ −4 → no_deal; jinak protest.
  */
-export function moodFor(segment, allocPct) {
-  const gap = (Number(allocPct) || 0) - segment.demand_pct;
+export function baseMood(gap) {
   if (gap >= 2) return 'boost';
   if (gap >= 0) return 'agree';
   if (gap >= -2) return 'grudging';
@@ -74,11 +131,71 @@ export function moodFor(segment, allocPct) {
 }
 
 /**
+ * Kontext pro relativní spravedlnost: průměrný růst systému a vyjednávací
+ * segmenty, které dostaly výrazně víc, než žádaly. Zákonné položky
+ * (dr_segment: false) nikoho „neprovokují" — nevyjednávají.
+ */
+export function moodContext(segments, alloc) {
+  return {
+    avgPct: avgGrowthPct(segments, alloc),
+    boostedIds: segments
+      .filter(s => s.dr_segment !== false && gapFor(s, alloc[s.id]) >= 2)
+      .map(s => s.id),
+  };
+}
+
+/**
+ * Modelové pravidlo relativní spravedlnosti (FAIRNESS_RULE): platí jen pro
+ * segmenty v grudging/no_deal, které rostou pod průměrem, a jen když někdo
+ * jiný dostal boost. Bez ctx se nepoužije (zpětně kompatibilní).
+ */
+export function fairnessEscalates(segment, allocPct, ctx) {
+  if (!ctx || !Array.isArray(ctx.boostedIds) || ctx.boostedIds.length === 0) return false;
+  const mood = baseMood(gapFor(segment, allocPct));
+  if (mood !== 'grudging' && mood !== 'no_deal') return false;
+  if (ctx.boostedIds.every(id => id === segment.id)) return false;
+  return (Number(allocPct) || 0) < ctx.avgPct - 1e-9;
+}
+
+/**
+ * Nálada zástupce segmentu: gap vs. modelový požadavek, s volitelným
+ * kontextem relativní spravedlnosti (moodContext).
+ */
+export function moodFor(segment, allocPct, ctx = null) {
+  const mood = baseMood(gapFor(segment, allocPct));
+  if (ctx && fairnessEscalates(segment, allocPct, ctx)) {
+    return mood === 'grudging' ? 'no_deal' : 'protest';
+  }
+  return mood;
+}
+
+/**
+ * Slovní vysvětlení nálady pro UI: „Chybí 3 p. b. k požadavku → bez dohody".
+ * @returns {{gap:number, base:string, mood:string, escalated:boolean, text:string}}
+ */
+export function moodExplain(segment, allocPct, ctx = null) {
+  const gap = gapFor(segment, allocPct);
+  const base = baseMood(gap);
+  const escalated = Boolean(ctx) && fairnessEscalates(segment, allocPct, ctx);
+  const mood = escalated ? (base === 'grudging' ? 'no_deal' : 'protest') : base;
+  const g = Math.abs(gap);
+  let text;
+  if (gap >= 2) text = `+${fmt(g)} p. b. nad požadavek → ${MOOD_SHORT.boost}`;
+  else if (gap > 0) text = `+${fmt(g)} p. b. nad požadavek → ${MOOD_SHORT.agree}`;
+  else if (gap === 0) text = `Přesně na požadavku → ${MOOD_SHORT.agree}`;
+  else text = `Chybí ${fmt(g)} p. b. k požadavku → ${MOOD_SHORT[base]}`;
+  if (escalated) {
+    text += ` · roste pod průměrem systému (${fmt(ctx.avgPct)} %), zatímco jiní dostali víc, než žádali → ${MOOD_SHORT[mood]}`;
+  }
+  return { gap: round1(gap), base, mood, escalated, text };
+}
+
+/**
  * Doložené efekty vaší vyhlášky. Directional efekt se aktivuje, když segment
  * roste NADPRŮMĚRNĚ (relativní posílení mění strukturu; stejný růst pro
  * všechny strukturu nemění). Definitional se přepočítává vždy — buď pro
  * jeden segment, nebo pro skupinu (effect.group_segments).
- * @returns {Array<{segment, kind, indicator?, polarity?, strength?, active, note, source}>}
+ * @returns {Array<{segment, kind, indicator?, polarity?, strength?, active, above_avg_pb?, note, source}>}
  */
 export function effectsFor(segments, alloc, indicatorsById) {
   const avg = avgGrowthPct(segments, alloc);
@@ -97,8 +214,8 @@ export function effectsFor(segments, alloc, indicatorsById) {
         const after = ids.reduce((a, id) => a + (shares[id]?.share_pct || 0), 0);
         out.push({
           segment: s.id, kind: 'definitional', indicator: eff.indicator,
-          before: Math.round(before * 10) / 10,
-          after: Math.round(after * 10) / 10,
+          before: round1(before),
+          after: round1(after),
           active: true, note: eff.note, source: eff.source,
         });
       } else if (eff.kind === 'directional') {
@@ -107,7 +224,8 @@ export function effectsFor(segments, alloc, indicatorsById) {
           segment: s.id, kind: 'directional', indicator: eff.indicator,
           polarity: active ? eff.polarity : null,
           strength: active ? eff.strength : null,
-          active, note: eff.note, source: eff.source, confidence: eff.confidence,
+          active, above_avg_pb: round1(pct - avg),
+          note: eff.note, source: eff.source, confidence: eff.confidence,
         });
       } else {
         // kind: none — poctivé „nedoloženo"
@@ -126,11 +244,17 @@ export const LUZKOVA_GROUP = ['akutni_luzkova', 'centrove_leky', 'nasledna_luzko
  * (vs. reálné DR 2027), posun podílu lůžkového bloku vůči OECD.
  * Dohody se počítají JEN přes vyjednávací segmenty DR (dr_segment !== false)
  * — centrová léčba a zákonné položky se nevyjednávají, takže by srovnání
- * s reálným „12 z 15" zkreslovaly.
+ * s reálným „12 z 15" zkreslovaly. Nálady berou v úvahu relativní
+ * spravedlnost (moodContext).
  */
 export function verdict(segments, alloc, envelopeMld, scale = 1) {
   const cost = totalCost(segments, alloc, scale);
-  const moods = segments.map(s => ({ id: s.id, mood: moodFor(s, alloc[s.id]) }));
+  const ctx = moodContext(segments, alloc);
+  const moods = segments.map(s => ({
+    id: s.id,
+    mood: moodFor(s, alloc[s.id], ctx),
+    escalated: fairnessEscalates(s, alloc[s.id], ctx),
+  }));
   const negotiating = segments.filter(s => s.dr_segment !== false);
   const negMoods = moods.filter(m => negotiating.some(s => s.id === m.id));
   const deals = negMoods.filter(m => ['boost', 'agree', 'grudging'].includes(m.mood)).length;
@@ -141,16 +265,172 @@ export function verdict(segments, alloc, envelopeMld, scale = 1) {
   const before = luzIds.reduce((a, id) => a + segments.find(s => s.id === id).baseline_mld, 0)
     / (totalBase || 1) * 100;
   return {
-    cost: Math.round(cost * 10) / 10,
+    cost: round1(cost),
     envelope: envelopeMld,
-    balance: Math.round((envelopeMld - cost) * 10) / 10, // + rezerva / − deficit
+    balance: round1(envelopeMld - cost), // + rezerva / − deficit
     deficit: cost > envelopeMld,
     deals,
     segmentsTotal: negotiating.length,
     boosts,
     protests,
+    escalations: moods.filter(m => m.escalated).length,
     moods,
-    luzkovaShareBefore: Math.round(before * 10) / 10,
+    avgPct: round1(ctx.avgPct),
+    luzkovaShareBefore: round1(before),
     luzkovaShareAfter: groupShare(segments, alloc, luzIds),
   };
+}
+
+/** Osy trilematu v pořadí zobrazení. */
+export const TRILEMMA_AXES = ['dohody', 'reforma', 'bilance'];
+export const TRILEMMA_LABELS = { dohody: 'Dohody', reforma: 'Reforma struktury', bilance: 'Bilance' };
+
+/**
+ * Trilema vyhlášky — tři cíle, které nejdou maximalizovat najednou. Prahy
+ * jsou modelové (uvedeno v „Jak hra počítá"):
+ *  dohody:  good = všichni podepsali; bad = protest nebo < 2/3 dohod; jinak mid
+ *  reforma: good = lůžkový blok klesl ≥ 0,3 p. b. (směrem k OECD); bad = roste
+ *           o > 0,05 p. b.; jinak mid (plošný růst = beze změny)
+ *  bilance: good = v obálce; mid = deficit ≤ 3 mld (~0,5 % systému); bad = víc
+ * @param {ReturnType<typeof verdict>} v
+ */
+export function trilemma(v) {
+  const need = Math.ceil(v.segmentsTotal * 2 / 3);
+  const dohodyTone = v.protests > 0 || v.deals < need ? 'bad' : v.deals === v.segmentsTotal ? 'good' : 'mid';
+  const drift = round1(v.luzkovaShareAfter - v.luzkovaShareBefore);
+  const reformaTone = drift <= -0.3 ? 'good' : drift <= 0.05 ? 'mid' : 'bad';
+  const deficitMld = Math.max(0, round1(v.cost - v.envelope));
+  const bilanceTone = deficitMld === 0 ? 'good' : deficitMld <= 3 ? 'mid' : 'bad';
+  const axes = {
+    dohody: {
+      tone: dohodyTone,
+      value: `${v.deals} z ${v.segmentsTotal}`,
+      note: v.protests ? `${v.protests}× protest` : v.deals === v.segmentsTotal ? 'všichni podepsali' : 'bez protestu',
+    },
+    reforma: {
+      tone: reformaTone,
+      value: `${drift > 0 ? '+' : drift < 0 ? '−' : ''}${fmt(Math.abs(drift))} p. b.`,
+      note: drift <= -0.3 ? 'lůžkový blok klesá k OECD' : drift > 0.05 ? 'lůžkový blok dál roste' : 'struktura beze změny',
+    },
+    bilance: {
+      tone: bilanceTone,
+      value: deficitMld ? `−${fmt(deficitMld)} mld` : `+${fmt(Math.max(0, v.balance))} mld`,
+      note: deficitMld ? 'nad obálkou' : 'v obálce',
+    },
+  };
+  return {
+    axes,
+    sacrificed: TRILEMMA_AXES.filter(a => axes[a].tone === 'bad'),
+    drift,
+    deficitMld,
+  };
+}
+
+/**
+ * Rozklad obálky: kolik stojí plné požadavky všech, kolik z toho nemocnice
+ * (akutní lůžková) a co po uspokojení všech ostatních zbude na nemocnice.
+ * Čistá aritmetika z dat — pointa „hra je potají jednorozměrná".
+ */
+export function demandSplit(segments, scale, envelopeMld) {
+  const cost = (s) => s.baseline_mld * scale * (s.demand_pct / 100);
+  const total = segments.reduce((a, s) => a + cost(s), 0);
+  const hospital = segments.filter(s => s.id === 'akutni_luzkova').reduce((a, s) => a + cost(s), 0);
+  const others = total - hospital;
+  return {
+    total: round1(total),
+    hospital: round1(hospital),
+    others: round1(others),
+    leftover: round1(envelopeMld - others),
+  };
+}
+
+/**
+ * „Co si odnést" — nejvýš tři věty vybrané podle toho, co hráč udělal.
+ * Pořadí = priorita. Čísla se počítají z dat, ne z textu.
+ * @param {object} opts  { scale, yearsToOecd }
+ * @returns {Array<{id:string, text:string, href?:string}>}
+ */
+export function takeaways(segments, alloc, v, opts = {}) {
+  const out = [];
+  const scale = Number.isFinite(opts.scale) ? opts.scale : 1;
+  const moodOf = (id) => v.moods.find(m => m.id === id)?.mood;
+  const akut = moodOf('akutni_luzkova');
+  const vals = segments.map(s => Number(alloc[s.id]) || 0);
+  const uniform = vals.length > 0 && vals[0] > 0 && Math.max(...vals) - Math.min(...vals) < 0.001;
+  const split = demandSplit(segments, scale, v.envelope);
+
+  if (akut === 'no_deal' || akut === 'protest') {
+    out.push({
+      id: 'dr2027',
+      text: `Právě jste zopakovali reálné dohodovací řízení pro rok 2027: akutní lůžková péče skončila bez dohody a o jejích úhradách rozhodla až vyhláška. Nemocnice jsou ${fmt(segments.find(s => s.id === 'akutni_luzkova')?.baseline_share_pct ?? 0)} % systému — jejich požadavek sám stojí ${fmt(split.hospital)} z ${fmt(split.total)} mld všech požadavků.`,
+      href: 'clanek-dohodovaci-rizeni-2027-vysledek.html',
+    });
+  }
+  if (uniform) {
+    out.push({
+      id: 'status_quo',
+      text: `Všem stejně je vyhláška většiny let. Struktura se nepohne ani o desetinu procentního bodu — přesně tak vzniká setrvačnost, kvůli které má Česko ${fmt(v.luzkovaShareBefore)} % úhrad v lůžkovém bloku proti ~30 % v OECD.`,
+    });
+  }
+  if (v.deficit) {
+    out.push({
+      id: 'deficit',
+      text: `Vyhláška je ${fmt(v.cost - v.envelope)} mld nad obálkou. Pojišťovny to v reálu řeší uměle sníženými zálohami nemocnicím a dluh se přenáší do dalšího roku — v aktu II to pocítíte na rozpočtu.`,
+      href: 'clanek-platba-statni-pojistenci-2027-tri-cisla.html',
+    });
+  }
+  if (v.escalations > 0) {
+    out.push({
+      id: 'fairness',
+      text: `${v.escalations}× eskalace kvůli relativní spravedlnosti: segment pod průměrem vidí, že jiný dostal víc, než žádal. V dohodovacím řízení je srovnání se sousedem silnější než aritmetika.`,
+    });
+  }
+  if (v.protests > 0 && akut !== 'protest') {
+    out.push({
+      id: 'protest',
+      text: `${v.protests}× protest. Precedent: podzim 2023, kdy hromadné výpovědi lékařů z přesčasů skončily memorandem vlády a ČLK.`,
+    });
+  }
+  const drift = round1(v.luzkovaShareAfter - v.luzkovaShareBefore);
+  if (drift <= -0.3) {
+    const y = opts.yearsToOecd;
+    out.push({
+      id: 'reform',
+      text: `Lůžkový blok klesl o ${fmt(Math.abs(drift))} p. b. za jeden rok. ${Number.isFinite(y) && y > 0
+        ? `Tímhle tempem byste na průměr OECD dosáhli za ${y} let — reforma struktury je práce na generaci.`
+        : 'Na průměr OECD je to i tak víc než generace.'}`,
+    });
+  }
+  if (out.length === 0) {
+    out.push({
+      id: 'one_lever',
+      text: `Jediné rozhodnutí, které v téhle hře opravdu bolí, je, kolik ubrat nemocnicím: všech ${segments.length - 1} ostatních segmentů dostane plný požadavek za ${fmt(split.others)} mld — a na nemocnice pak zbude ${fmt(split.leftover)} z ${fmt(split.hospital)} mld, které chtějí.`,
+    });
+  }
+  return out.slice(0, 3);
+}
+
+/** Indikátory čekání, jejichž aktivní pokles znamená kratší čekárnu segmentu. */
+export const WAIT_INDICATORS = ['cekaci_doby_specialist', 'cekaci_doba_kycel'];
+
+/**
+ * Signály čekání pro akt III (Příběh pacienta): u kroků tagovaných segmentem
+ * posouvá čas. Modelové mapování z vlastních eskalačních textů hry:
+ * boost = segment rozšiřuje hodiny/kapacity → 'kratsi'; aktivní doložený
+ * pokles čekání (WAIT_INDICATORS) → 'kratsi'; protest = omezení příjmu
+ * pacientů → 'delsi'. Ostatní stavy čekání nemění (nejsou ve výstupu).
+ * @returns {Object<string, 'kratsi'|'delsi'>}
+ */
+export function segmentWaitSignals(segments, alloc) {
+  const ctx = moodContext(segments, alloc);
+  const effects = effectsFor(segments, alloc);
+  const out = {};
+  for (const s of segments) {
+    const mood = moodFor(s, alloc[s.id], ctx);
+    if (mood === 'protest') { out[s.id] = 'delsi'; continue; }
+    const shorter = mood === 'boost' || effects.some(e => e.segment === s.id && e.kind === 'directional'
+      && e.active && e.polarity === 'down' && WAIT_INDICATORS.includes(e.indicator));
+    if (shorter) out[s.id] = 'kratsi';
+  }
+  return out;
 }

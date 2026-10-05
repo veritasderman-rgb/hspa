@@ -12,13 +12,35 @@
 export function budgetFromMinistr(ministrState, handoff) {
   const alloc = ministrState?.alloc;
   if (!alloc || !handoff.segments.some(s => Number.isFinite(Number(alloc[s.id])))) {
-    return { growthPct: handoff.default_growth_pct, fromCampaign: false };
+    return { growthPct: handoff.default_growth_pct, fromCampaign: false, haircutPct: 0, deficitMld: 0 };
   }
   let growth = 0;
   for (const s of handoff.segments) {
     growth += (Number(alloc[s.id]) || 0) * s.weight;
   }
-  return { growthPct: Math.round(growth * 10) / 10, fromCampaign: true };
+  const { haircutPct, deficitMld } = deficitHaircut(ministrState, handoff);
+  return {
+    growthPct: Math.round(Math.max(0, growth - haircutPct) * 10) / 10,
+    fromCampaign: true,
+    haircutPct,
+    deficitMld,
+  };
+}
+
+/**
+ * v3 — deficit vyhlášky z aktu I krátí růst rozpočtu nemocnice
+ * (handoff.deficit_haircut: pct_per_mld × deficit, nejvýš max_pct).
+ * Modelový koeficient, doložený mechanismus (snížené zálohy pojišťoven).
+ * Bez pravidla v datech nebo bez deficitu = 0.
+ * @returns {{haircutPct:number, deficitMld:number}}
+ */
+export function deficitHaircut(ministrState, handoff) {
+  const rule = handoff?.deficit_haircut;
+  const deficitMld = Math.max(0, Number(ministrState?.deficit_mld) || 0);
+  if (!rule || deficitMld <= 0) return { haircutPct: 0, deficitMld };
+  const raw = deficitMld * (Number(rule.pct_per_mld) || 0);
+  const capped = Math.min(Number.isFinite(rule.max_pct) ? rule.max_pct : raw, raw);
+  return { haircutPct: Math.round(capped * 100) / 100, deficitMld };
 }
 
 /**

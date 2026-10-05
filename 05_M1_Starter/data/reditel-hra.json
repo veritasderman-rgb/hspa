@@ -27,7 +27,13 @@
     "default_growth_pct": 7,
     "default_growth_source": "Aproximace růstu úhrad lůžkové péče dle úhradové vyhlášky č. 432/2025 Sb. pro 2026 (clanek-uhradova-vyhlaska.html); shodná s presetem „status quo“ hry na ministra",
     "demand_ref_pct": 9,
-    "demand_ref_source": "Modelový požadavek segmentu akutní lůžkové péče ve hře na ministra (data/vyhlaska-hra.json, demand_pct akutni_luzkova) — startovní nálada personálu se odvíjí od toho, jak ministr požadavek naplnil"
+    "demand_ref_source": "Modelový požadavek segmentu akutní lůžkové péče ve hře na ministra (data/vyhlaska-hra.json, demand_pct akutni_luzkova) — startovní nálada personálu se odvíjí od toho, jak ministr požadavek naplnil",
+    "deficit_haircut": {
+      "pct_per_mld": 0.1,
+      "max_pct": 2,
+      "note": "Modelové pravidlo v3: je-li vyhláška z aktu I nad obálkou, pojišťovny část dluhu přenesou na nemocnice — za každou 1 mld deficitu ubude 0,1 p. b. z růstu rozpočtu, nejvýš 2 p. b. Velikost koeficientu je modelová; mechanismus (snížené zálohy a dluh přenesený do dalšího roku) je doložený.",
+      "source": "clanek-platba-statni-pojistenci-2027-tri-cisla.html: 7,5 mld na „dorovnání uměle snížených zálohových plateb“, kterými pojišťovny letos kvůli hotovostní krizi platí nemocnicím méně, než jim budou dlužit; závazky po lhůtě splatnosti a snížené zálohy jsou dluh roku 2026 přenesený do roku 2027"
+    }
   },
   "axes": [
     { "id": "hospodareni", "label": "Hospodaření", "desc": "Roční bilance: rozpočet z vyhlášky minus nákladový drift, strukturální deficit a vaše rozhodnutí." },

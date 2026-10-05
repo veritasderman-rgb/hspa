@@ -16,9 +16,11 @@ export function validatePribehPacienta() {
   const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'pribeh-pacienta.json'), 'utf8'));
   const cesta = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'cesta-pacienta.json'), 'utf8'));
   const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicators.json'), 'utf8'));
+  const vyhlaska = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'vyhlaska-hra.json'), 'utf8'));
   const indIds = new Set(indicators.indicators.map(i => i.id));
   const phaseIds = new Set(cesta.phases.map(p => p.id));
   const diseaseIds = new Set(cesta.diseases.map(d => d.id));
+  const segmentIds = new Set((vyhlaska.segments || []).map(s => s.id));
 
   if (!Number.isFinite(doc.waiting_shift_weeks) || doc.waiting_shift_weeks < 0) {
     errors.push('waiting_shift_weeks musí být nezáporné číslo');
@@ -68,6 +70,10 @@ export function validatePribehPacienta() {
       if (!Number.isFinite(s.base_time_weeks) || s.base_time_weeks < 0) errors.push(`${st}: base_time_weeks musí být nezáporné číslo`);
       if (typeof s.wait_sensitive !== 'boolean') errors.push(`${st}: wait_sensitive musí být boolean`);
       if (s.wait_sensitive) hasWaitSensitive = true;
+      // v3: volitelné napojení kroku na segment aktu I (čekání z vyhlášky)
+      if (s.segment !== undefined && !segmentIds.has(s.segment)) {
+        errors.push(`${st}: segment '${s.segment}' neexistuje ve vyhlaska-hra.json`);
+      }
       for (const ind of s.indicators || []) {
         if (!indIds.has(ind)) errors.push(`${st}: indikátor '${ind}' neexistuje v indicators.json`);
       }
