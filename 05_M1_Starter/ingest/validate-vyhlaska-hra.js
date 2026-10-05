@@ -25,6 +25,13 @@ export function validateVyhlaskaHra() {
   if (!doc.envelope || !Number.isFinite(doc.envelope.amount_mld) || !doc.envelope.source) {
     errors.push('envelope: chybí amount_mld nebo source');
   }
+  // v3.1: rezerva systému (krytí vyhlášky) — je-li, musí být číslo ≥ 0 se
+  // zdrojem a vysvětleným modelovým pravidlem
+  if (doc.envelope && doc.envelope.reserve_mld !== undefined) {
+    if (!Number.isFinite(doc.envelope.reserve_mld) || doc.envelope.reserve_mld < 0) errors.push('envelope.reserve_mld musí být nezáporné číslo');
+    if (!doc.envelope.reserve_source) errors.push('envelope: chybí reserve_source');
+    if (!doc.envelope.coverage_note) errors.push('envelope: chybí coverage_note (modelové pravidlo krytí musí být vysvětleno)');
+  }
   if (!Number.isFinite(doc.current_total_mld) || !doc.current_total_source) {
     errors.push('chybí current_total_mld nebo current_total_source (letošní objem systému)');
   }

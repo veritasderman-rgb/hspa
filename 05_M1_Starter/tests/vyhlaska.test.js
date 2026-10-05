@@ -10,6 +10,7 @@ import {
   totalCost, avgGrowthPct, newShares, groupShare, moodFor, effectsFor, verdict, LUZKOVA_GROUP,
   moodContext, fairnessEscalates, moodExplain, structureProjection, yearsToShare,
   trilemma, takeaways, demandSplit, segmentWaitSignals,
+  vyhlaskaParams, coverageFor, effectiveAlloc, promiseBroken, moodDetail,
 } from '../src/vyhlaska-engine.js';
 import { validateVyhlaskaHra } from '../ingest/validate-vyhlaska-hra.js';
 
@@ -20,6 +21,8 @@ const indicators = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'indicator
 const byId = new Map(indicators.indicators.map(i => [i.id, i]));
 const SEG = doc.segments;
 const SCALE = doc.current_total_mld / SEG.reduce((a, s) => a + s.baseline_mld, 0);
+const PARAMS = vyhlaskaParams(doc);
+const RES = doc.envelope.reserve_mld;
 const flat = (pct) => Object.fromEntries(SEG.map(s => [s.id, pct]));
 
 test('vyhlaska-hra.json prochází validátorem (zdroje, eskalace, efekty, presety)', () => {
@@ -269,4 +272,110 @@ test('data v3: newsletter_hook je úplný, datovaný a má fallback po termínu'
   const h = doc.newsletter_hook;
   assert.ok(h.headline && h.lead && h.cta && h.source && h.fallback_headline && h.fallback_lead);
   assert.match(h.valid_until, /^\d{4}-\d{2}-\d{2}$/);
+});
+
+// ---------------------------------------------------------------------------
+// v3.1 — krytí vyhlášky: deficit má následky už v aktu I
+// ---------------------------------------------------------------------------
+
+test('data v3.1: rezerva systému 2,8 mld se zdrojem a vysvětleným pravidlem krytí', () => {
+  assert.equal(doc.envelope.reserve_mld, 2.8);
+  assert.match(doc.envelope.reserve_source, /2,8 miliardy/);
+  assert.ok(doc.envelope.coverage_note.length > 50);
+  assert.equal(PARAMS.reserveMld, 2.8);
+  assert.equal(PARAMS.envelopeMld, 40);
+  assert.ok(Math.abs(PARAMS.scale - SCALE) < 1e-12);
+});
+
+test('engine v3.1: coverageFor — v obálce 1, deficit do rezervy 1 (polštář), nad rezervu poměrné krácení', () => {
+  assert.deepEqual(coverageFor(39.4, 40, 2.8), { ratio: 1, deficitMld: 0, uncoveredMld: 0, fundedMld: 39.4 });
+  const inReserve = coverageFor(42, 40, 2.8);
+  assert.equal(inReserve.ratio, 1);
+  assert.equal(inReserve.deficitMld, 2);
+  assert.equal(inReserve.uncoveredMld, 0);
+  const over = coverageFor(84.5, 40, 2.8);
+  assert.ok(Math.abs(over.ratio - 42.8 / 84.5) < 1e-9);
+  assert.equal(over.deficitMld, 44.5);
+  assert.equal(over.uncoveredMld, 41.7);
+  assert.equal(over.fundedMld, 42.8);
+  assert.equal(coverageFor(0, 40, 2.8).ratio, 1);
+  assert.equal(coverageFor(50, 40).ratio, 0.8, 'bez rezervy krátí hned nad obálkou');
+});
+
+test('engine v3.1: effectiveAlloc — slíbeno × krytí, v obálce beze změny', () => {
+  const eff = effectiveAlloc(SEG, flat(7), PARAMS);
+  assert.ok(Math.abs(eff.akutni_luzkova - 7) < 1e-9, 'status quo je plně kryt');
+  const all15 = effectiveAlloc(SEG, flat(15), PARAMS);
+  assert.ok(Math.abs(all15.akutni_luzkova - 15 * 42.8 / (0.15 * doc.current_total_mld)) < 1e-6);
+  assert.ok(all15.prakticti > 7.5 && all15.prakticti < 7.7, `všem 15 % = reálně ~7,6 % (má ${all15.prakticti})`);
+});
+
+test('engine v3.1: nesplněný slib — krácení ≥ 1 p. b., které zhorší stav, eskaluje o stupeň', () => {
+  const akut = SEG.find(s => s.id === 'akutni_luzkova'); // požadavek 9
+  assert.equal(promiseBroken(akut, 15, 7.6, 'grudging'), true, 'slib boost, realita výhrady → zlomeno');
+  assert.equal(promiseBroken(akut, 8, 7.6, 'grudging'), false, 'krácení 0,4 p. b. je běžná regulace');
+  assert.equal(promiseBroken(akut, 9.5, 8.5, 'grudging'), true, 'přesně 1 p. b. + zhoršení (agree → grudging)');
+  assert.equal(promiseBroken(akut, 5, 3, 'protest'), true, 'slib (bez dohody) byl lepší než realita (protest) → zlomeno; hlouběji než protest to nejde');
+  assert.equal(moodDetail(akut, 3, null, 5).mood, 'protest', 'protest je dno');
+  assert.equal(promiseBroken(akut, 5, 3, 'no_deal'), false, 'slib 5 = no_deal, realita no_deal: žádné zhoršení');
+  assert.equal(promiseBroken(akut, null, 7, 'grudging'), false, 'bez slibu se pravidlo nepoužije');
+  const d = moodDetail(akut, 7.6, null, 15);
+  assert.deepEqual([d.base, d.escalated, d.broken, d.mood], ['grudging', false, true, 'no_deal']);
+  assert.equal(moodFor(akut, 7.6, null, 15), 'no_deal');
+  assert.equal(moodFor(akut, 7.6, null, null), 'grudging', 'bez slibu jen základ');
+  const ex = moodExplain(akut, 7.6, null, 15);
+  assert.match(ex.text, /^Slíbeno \+15 %, kryto \+7,6 %: chybí 1,4 p\. b\. k požadavku → podpis s výhradami · slib bez krytí \(o 7,4 p\. b\. méně/);
+  assert.match(ex.text, /→ bez dohody$/);
+});
+
+test('engine v3.1: „všem 15 %" se rozpadne — krytí ~51 %, většina bez dohody, protesty; status quo nedotčen', () => {
+  const v = verdict(SEG, flat(15), doc.envelope.amount_mld, SCALE, RES);
+  assert.ok(v.coverage > 0.5 && v.coverage < 0.52, `krytí ≈ 0,51 (má ${v.coverage})`);
+  assert.equal(v.deficit, true);
+  assert.ok(v.uncoveredMld > 40, `nekryto > 40 mld (má ${v.uncoveredMld})`);
+  assert.ok(v.deals <= 5, `nejvýš 5 z 15 dohod (má ${v.deals})`);
+  assert.ok(v.protests >= 3, `aspoň 3 protesty (má ${v.protests})`);
+  assert.ok(v.brokenPromises >= 10, `většina segmentů dostala slib bez krytí (má ${v.brokenPromises})`);
+  const drBoosts = v.moods.filter(m => m.mood === 'boost' && SEG.find(s => s.id === m.id).dr_segment !== false).length;
+  assert.equal(drBoosts, 0, 'žádné rozšíření péče ze vzduchu u vyjednávacích segmentů (zákonné položky s požadavkem 5 % jsou kryté i při 7,6 %)');
+  const t = trilemma(v);
+  assert.equal(t.axes.bilance.tone, 'bad');
+  assert.equal(t.axes.dohody.tone, 'bad');
+  assert.match(t.axes.bilance.note, /nekryto/);
+  const tk = takeaways(SEG, flat(15), v, { scale: SCALE });
+  assert.equal(tk[0].id, 'deficit', 'nekrytý deficit je první věta');
+  assert.match(tk[0].text, /51 % slibu/);
+
+  // status quo: plně kryto, stejný verdikt jako dřív
+  const sq = verdict(SEG, preset('status_quo'), doc.envelope.amount_mld, SCALE, RES);
+  assert.equal(sq.coverage, 1);
+  assert.equal(sq.deals, 12);
+  assert.equal(sq.brokenPromises, 0);
+  assert.equal(trilemma(sq).axes.bilance.tone, 'good');
+});
+
+test('engine v3.1: deficit do výše rezervy = polštář (bilance napjatá, žádné krácení), nad ni krátí', () => {
+  // 7,5 % všem ≈ 42,2 mld: deficit 2,2 < rezerva 2,8 → kryto plně
+  const v = verdict(SEG, flat(7.5), doc.envelope.amount_mld, SCALE, RES);
+  assert.equal(v.deficit, true);
+  assert.equal(v.coverage, 1);
+  assert.equal(v.uncoveredMld, 0);
+  assert.equal(trilemma(v).axes.bilance.tone, 'mid');
+  assert.match(trilemma(v).axes.bilance.note, /rezerva/);
+  assert.equal(takeaways(SEG, flat(7.5), v, { scale: SCALE }).find(x => x.id === 'deficit').text.includes('unese'), true);
+  // 8 % všem ≈ 45 mld: deficit 5 > rezerva → krácení ~5 %, ale jen drobné (žádný zlomený slib)
+  const v8 = verdict(SEG, flat(8), doc.envelope.amount_mld, SCALE, RES);
+  assert.ok(v8.coverage > 0.94 && v8.coverage < 0.96, `krytí ≈ 0,95 (má ${v8.coverage})`);
+  assert.equal(v8.brokenPromises, 0, 'krácení 0,4 p. b. nikoho nezlomí');
+  assert.equal(trilemma(v8).axes.bilance.tone, 'bad');
+});
+
+test('engine v3.1: segmentWaitSignals s params — nekrytý slib boostu nezkracuje čekárny, protest z krácení prodlužuje', () => {
+  const sig = segmentWaitSignals(SEG, flat(15), PARAMS);
+  assert.equal(sig.prakticti, undefined, 'slib boostu bez krytí = žádné rozšíření hodin');
+  assert.equal(sig.stomatologie, 'delsi', 'stomatologie po krácení v protestu');
+  const sigNoParams = segmentWaitSignals(SEG, flat(15));
+  assert.equal(sigNoParams.prakticti, 'kratsi', 'bez params se počítá ze slibu (zpětná kompatibilita)');
+  const ref = segmentWaitSignals(SEG, preset('reformni'), PARAMS);
+  assert.equal(ref.prakticti, 'kratsi', 'krytý boost zkracuje');
 });

@@ -47,11 +47,11 @@ function currentDecisions() {
 function renderHandoff() {
   const host = document.getElementById('rdHandoff');
   if (!host) return;
-  const { growthPct, fromCampaign, haircutPct, deficitMld } = budgetFromMinistr(MINISTR, DOC.handoff);
+  const { growthPct, fromCampaign, promisedPct, haircutPct, coverage, deficitMld } = budgetFromMinistr(MINISTR, DOC.handoff);
   const base = DOC.hospital.baseline_budget_mil;
   const extra = base * (growthPct / 100);
   const haircut = haircutPct > 0
-    ? `<p class="rd-handoff-note rd-handoff-haircut">⚠ Vaše vyhláška byla ${czNum(deficitMld)} mld nad obálkou. Pojišťovny část dluhu přenesly na nemocnice: růst rozpočtu je o <strong>${czNum(haircutPct, 2)} p. b.</strong> nižší, než jste lůžkové péči přidělili (${czNum(base * haircutPct / 100, 0)} mil. Kč ročně). ${escapeHtml(DOC.handoff.deficit_haircut?.note || '')}</p>`
+    ? `<p class="rd-handoff-note rd-handoff-haircut">⚠ Vaše vyhláška byla ${czNum(deficitMld)} mld nad obálkou — nad rezervu systému. Pojišťovny kryjí jen <strong>${Math.round(coverage * 100)} %</strong> slibu: lůžkové péči jste přidělili +${czNum(promisedPct)} %, nemocnice reálně dostane +${czNum(growthPct)} % (o ${czNum(base * haircutPct / 100, 0)} mil. Kč ročně méně). ${escapeHtml(DOC.handoff.coverage_note || '')}</p>`
     : '';
   host.innerHTML = `
     <div class="rd-handoff ${fromCampaign ? 'rd-handoff-campaign' : ''}">

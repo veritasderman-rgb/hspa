@@ -9,7 +9,7 @@ import './analytics.js';
 import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { journeyOutcome, bestCaseOutcome, waitingFromCampaign } from './pribeh-engine.js';
-import { segmentWaitSignals } from './vyhlaska-engine.js';
+import { segmentWaitSignals, vyhlaskaParams } from './vyhlaska-engine.js';
 import { loadState, saveAct } from './hra-stav.js';
 import { renderCampaignStepper } from './hra-stepper.js';
 import { armGameNewsletter } from './hra-newsletter.js';
@@ -330,7 +330,7 @@ async function init() {
     const campaign = loadState();
     WAITING = waitingFromCampaign(campaign.reditel);
     // v3: čekárny ambulancí z aktu I — jen když ministr vyhlášku podepsal
-    SEGMENT_WAITS = campaign.ministr?.alloc ? segmentWaitSignals(vyh.segments ?? [], campaign.ministr.alloc) : {};
+    SEGMENT_WAITS = campaign.ministr?.alloc ? segmentWaitSignals(vyh.segments ?? [], campaign.ministr.alloc, vyhlaskaParams(vyh)) : {};
     NL = armGameNewsletter({ hook: vyh.newsletter_hook ?? null, activityEl: document.getElementById('ppJourney') });
 
     renderPicker();

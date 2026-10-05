@@ -68,6 +68,35 @@ Newsletter popup mlčel od 23. 9. kvůli prioritě Týdnů zdraví
 13. **Hub**: blok „Co teklo mezi akty" (`flowSummary`), morálka přeformulovaná
     na to, co opravdu teče; stepper popisek handoffu rozšířen.
 
+### v3.1 — krytí vyhlášky (deficit má následky už v aktu I)
+
+Nález vlastníka po nasazení v3: „když dám všechno všem, je tam jen deficit,
+jinak jsem v pohodě" — 15/15 dohod, 17× rozšíření péče, červený proužek.
+Oprava jedním modelem místo dvou koeficientů:
+
+- `envelope.reserve_mld: 2.8` (zdroj: *„Na konci roku 2026 mají mít
+  pojišťovny v základních fondech podle vlastních plánů 2,8 miliardy korun,
+  necelé dva dny výdajů"*, `clanek-platba-statni-pojistenci-2027-tri-cisla`).
+- `coverageFor(cost, envelope, reserve)`: deficit do rezervy se unese
+  (bilance „mid"), nad ni **pojišťovny krátí všem poměrně** → `ratio`.
+  `effectiveAlloc` = slíbeno × krytí; nálada, struktura, efekty, projekce
+  i signály čekání se počítají z toho, co se vyplatí.
+- `promiseBroken` (`PROMISE_RULE`, `PROMISE_CUT_PB = 1`): krácení ≥ 1 p. b.,
+  které segment posune do horšího stavu, než by měl se slibem → eskalace
+  o stupeň (nesplněný slib bolí víc než poctivá nízká nabídka; precedent
+  podzim 2023). Krácení pod 1 p. b. = běžná regulace, nikoho nezlomí.
+- Výsledek doložený testem: **všem 15 % → krytí 51 %, ≤ 5/15 dohod,
+  ≥ 3 protesty, 0 rozšíření péče**; všem 7,5 % → deficit 2,2 mld v rezervě,
+  plně kryto; všem 8 % → krytí 95 %, žádný zlomený slib, bilance „bad".
+- Akt II: `budgetFromMinistr` = slíbeno × `coverage_ratio` (stav aktu I ho
+  nese, hub a porovnání ho dopočítávají); `handoff.deficit_haircut`
+  z v3 **odstraněn** — jeden model, ne dva. Akt III: `segmentWaitSignals`
+  s `vyhlaskaParams` — nekrytý slib boostu čekárny nezkracuje, protest
+  z krácení je prodlužuje.
+- Trilema: bilance good = v obálce, mid = deficit kryje rezerva, bad = nad
+  rezervu (krátí). Takeaway „deficit" má nekrytou variantu (první v pořadí)
+  a variantu „rezerva to letos unese, příští rok bez polštáře".
+
 ### Co v3 nedělá (a proč)
 
 - **Preset „jak to udělal skutečný ministr"** — nejedukativnější návrh, ale

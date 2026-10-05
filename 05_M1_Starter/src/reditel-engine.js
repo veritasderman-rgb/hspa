@@ -12,35 +12,32 @@
 export function budgetFromMinistr(ministrState, handoff) {
   const alloc = ministrState?.alloc;
   if (!alloc || !handoff.segments.some(s => Number.isFinite(Number(alloc[s.id])))) {
-    return { growthPct: handoff.default_growth_pct, fromCampaign: false, haircutPct: 0, deficitMld: 0 };
+    return { growthPct: handoff.default_growth_pct, fromCampaign: false, promisedPct: handoff.default_growth_pct, haircutPct: 0, coverage: 1, deficitMld: 0 };
   }
-  let growth = 0;
+  let promised = 0;
   for (const s of handoff.segments) {
-    growth += (Number(alloc[s.id]) || 0) * s.weight;
+    promised += (Number(alloc[s.id]) || 0) * s.weight;
   }
-  const { haircutPct, deficitMld } = deficitHaircut(ministrState, handoff);
+  const coverage = coverageRatio(ministrState);
+  const growthPct = Math.round(promised * coverage * 10) / 10;
   return {
-    growthPct: Math.round(Math.max(0, growth - haircutPct) * 10) / 10,
+    growthPct,
     fromCampaign: true,
-    haircutPct,
-    deficitMld,
+    promisedPct: Math.round(promised * 10) / 10,
+    haircutPct: Math.round((promised - promised * coverage) * 100) / 100,
+    coverage,
+    deficitMld: Math.max(0, Number(ministrState?.deficit_mld) || 0),
   };
 }
 
 /**
- * v3 — deficit vyhlášky z aktu I krátí růst rozpočtu nemocnice
- * (handoff.deficit_haircut: pct_per_mld × deficit, nejvýš max_pct).
- * Modelový koeficient, doložený mechanismus (snížené zálohy pojišťoven).
- * Bez pravidla v datech nebo bez deficitu = 0.
- * @returns {{haircutPct:number, deficitMld:number}}
+ * v3.1 — krytí vyhlášky z aktu I (vyhlaska-engine.coverageFor): podíl
+ * slíbeného růstu, který pojišťovny skutečně vyplatí. Stav aktu I ho nese
+ * jako coverage_ratio (hub ho pro sdílené kódy dopočítává); bez něj = 1.
  */
-export function deficitHaircut(ministrState, handoff) {
-  const rule = handoff?.deficit_haircut;
-  const deficitMld = Math.max(0, Number(ministrState?.deficit_mld) || 0);
-  if (!rule || deficitMld <= 0) return { haircutPct: 0, deficitMld };
-  const raw = deficitMld * (Number(rule.pct_per_mld) || 0);
-  const capped = Math.min(Number.isFinite(rule.max_pct) ? rule.max_pct : raw, raw);
-  return { haircutPct: Math.round(capped * 100) / 100, deficitMld };
+export function coverageRatio(ministrState) {
+  const r = Number(ministrState?.coverage_ratio);
+  return Number.isFinite(r) && r >= 0 && r <= 1 ? r : 1;
 }
 
 /**

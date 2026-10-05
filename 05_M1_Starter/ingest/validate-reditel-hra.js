@@ -52,13 +52,10 @@ export function validateReditelHra() {
   if (!Number.isFinite(hf.default_growth_pct) || !hf.default_growth_source) {
     errors.push('handoff: chybí default_growth_pct nebo default_growth_source');
   }
-  // v3: volitelný deficit_haircut — modelový koeficient musí být vysvětlen
-  // (note) a mechanismus doložen (source)
-  if (hf.deficit_haircut !== undefined) {
-    const dh = hf.deficit_haircut || {};
-    if (!Number.isFinite(dh.pct_per_mld) || dh.pct_per_mld < 0) errors.push('handoff.deficit_haircut: pct_per_mld musí být nezáporné číslo');
-    if (!Number.isFinite(dh.max_pct) || dh.max_pct < 0) errors.push('handoff.deficit_haircut: max_pct musí být nezáporné číslo');
-    if (!dh.note || !dh.source) errors.push('handoff.deficit_haircut: chybí note nebo source');
+  // v3.1: krytí vyhlášky (deficit z aktu I krátí rozpočet) — modelové
+  // pravidlo musí být vysvětleno (note) a mechanismus doložen (source)
+  if (!hf.coverage_note || !hf.coverage_source) {
+    errors.push('handoff: chybí coverage_note nebo coverage_source (krytí vyhlášky z aktu I)');
   }
   const akutni = vyhlaska.segments.find(s => s.id === 'akutni_luzkova');
   if (!Number.isFinite(hf.demand_ref_pct) || !hf.demand_ref_source) {
