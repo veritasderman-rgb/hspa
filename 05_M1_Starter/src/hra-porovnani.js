@@ -12,7 +12,7 @@ import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { decodeShare, encodeShare, loadState } from './hra-stav.js';
 import {
-  verdict as vyhlaskaVerdict, trilemma, groupShare, yearsToShare, segmentWaitSignals,
+  verdict as vyhlaskaVerdict, trilemma, groupShare, yearsToShare, segmentWaitSignals, vyhlaskaParams,
   LUZKOVA_GROUP, TRILEMMA_AXES, TRILEMMA_LABELS,
 } from './vyhlaska-engine.js';
 import { verdict as reditelVerdict } from './reditel-engine.js';
@@ -72,22 +72,26 @@ export function parseCampaignInput(text) {
  * @param {{VYHLASKA:object, REDITEL:object, PRIBEH:object}} docs
  */
 export function buildComparison(entries, { VYHLASKA, REDITEL, PRIBEH }) {
-  const scale = VYHLASKA.current_total_mld / VYHLASKA.segments.reduce((a, s) => a + s.baseline_mld, 0);
+  const params = vyhlaskaParams(VYHLASKA);
   const cols = entries.map((e) => {
     const st = e.code ? decodeShare(e.code) : null;
     if (!st) return { label: e.label, invalid: true, code: e.code };
     const alloc = st.ministr?.alloc || null;
-    const m = alloc ? vyhlaskaVerdict(VYHLASKA.segments, alloc, VYHLASKA.envelope.amount_mld, scale) : null;
+    const m = alloc ? vyhlaskaVerdict(VYHLASKA.segments, alloc, params.envelopeMld, params.scale, params.reserveMld) : null;
     const t = m ? trilemma(m) : null;
-    const share10 = alloc ? groupShare(VYHLASKA.segments, alloc, LUZKOVA_GROUP, 10) : null;
-    const years = alloc ? yearsToShare(VYHLASKA.segments, alloc, LUZKOVA_GROUP, 30) : null;
-    const ministr = st.ministr ? { ...st.ministr, deficit_mld: m ? Math.max(0, round1(m.cost - m.envelope)) : 0 } : null;
+    // projekce i „let k OECD" z toho, co se skutečně vyplatí (krytí)
+    const paid = m ? m.effective : null;
+    const share10 = paid ? groupShare(VYHLASKA.segments, paid, LUZKOVA_GROUP, 10) : null;
+    const years = paid ? yearsToShare(VYHLASKA.segments, paid, LUZKOVA_GROUP, 30) : null;
+    const ministr = st.ministr
+      ? { ...st.ministr, deficit_mld: m ? Math.max(0, round1(m.cost - m.envelope)) : 0, coverage_ratio: m ? m.coverage : 1 }
+      : null;
     const r = st.reditel?.decisions && Object.keys(st.reditel.decisions).length
       ? reditelVerdict(REDITEL, st.reditel.decisions, ministr) : null;
     const persona = PRIBEH.personas.find(p => p.id === st.pacient?.persona) || null;
     const p = persona
       ? journeyOutcome(persona, st.pacient?.decisions || {}, r ? r.waiting : waitingFromCampaign(null),
-        PRIBEH.waiting_shift_weeks, alloc ? segmentWaitSignals(VYHLASKA.segments, alloc) : {})
+        PRIBEH.waiting_shift_weeks, alloc ? segmentWaitSignals(VYHLASKA.segments, alloc, params) : {})
       : null;
     return { label: e.label, invalid: false, code: e.code, alloc, m, t, share10, years, r, persona, p };
   });
@@ -102,6 +106,8 @@ export function buildComparison(entries, { VYHLASKA, REDITEL, PRIBEH }) {
   }
   rows.push({ group: 'Vyhláška', label: 'Cena vyhlášky (mld Kč)', kind: 'num', mark: null, values: v(c => c.m?.cost ?? null) });
   rows.push({ group: 'Vyhláška', label: 'Bilance vůči obálce (mld Kč)', kind: 'num', mark: 'max', values: v(c => c.m?.balance ?? null) });
+  rows.push({ group: 'Vyhláška', label: 'Kryto pojišťovnami (% slibu)', kind: 'num', mark: 'max', values: v(c => (c.m ? Math.round(c.m.coverage * 100) : null)) });
+  rows.push({ group: 'Vyhláška', label: 'Sliby bez krytí', kind: 'num', mark: 'min', values: v(c => c.m?.brokenPromises ?? null) });
   rows.push({ group: 'Vyhláška', label: 'Dohody (z 15 vyjednávacích)', kind: 'num', mark: 'max', values: v(c => c.m?.deals ?? null) });
   rows.push({ group: 'Vyhláška', label: 'Protesty', kind: 'num', mark: 'min', values: v(c => c.m?.protests ?? null) });
   rows.push({ group: 'Vyhláška', label: 'Eskalace (relativní spravedlnost)', kind: 'num', mark: 'min', values: v(c => c.m?.escalations ?? null) });

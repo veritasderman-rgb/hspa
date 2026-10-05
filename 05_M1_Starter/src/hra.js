@@ -9,7 +9,7 @@ import './analytics.js';
 import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import { loadState, saveAct, resetCampaign, encodeShare, decodeShare } from './hra-stav.js';
-import { verdict as vyhlaskaVerdict, segmentWaitSignals, trilemma, TRILEMMA_AXES, TRILEMMA_LABELS } from './vyhlaska-engine.js';
+import { verdict as vyhlaskaVerdict, segmentWaitSignals, trilemma, vyhlaskaParams, TRILEMMA_AXES, TRILEMMA_LABELS } from './vyhlaska-engine.js';
 import { verdict as reditelVerdict, budgetFromMinistr } from './reditel-engine.js';
 import { journeyOutcome, waitingFromCampaign } from './pribeh-engine.js';
 
@@ -37,18 +37,22 @@ function state() {
 
 function ministrSummary(st) {
   if (!st.ministr?.alloc) return null;
-  const scale = VYHLASKA.current_total_mld / VYHLASKA.segments.reduce((a, s) => a + s.baseline_mld, 0);
-  return vyhlaskaVerdict(VYHLASKA.segments, st.ministr.alloc, VYHLASKA.envelope.amount_mld, scale);
+  const p = vyhlaskaParams(VYHLASKA);
+  return vyhlaskaVerdict(VYHLASKA.segments, st.ministr.alloc, p.envelopeMld, p.scale, p.reserveMld);
 }
 
 /**
- * Stav aktu I pro další akty: alokace + deficit vyhlášky dopočtený enginem
- * (sdílený kód nese jen vstupy, takže se deficit nikdy nečte z úložiště).
+ * Stav aktu I pro další akty: alokace + deficit a krytí vyhlášky dopočtené
+ * enginem (sdílený kód nese jen vstupy, takže se nikdy nečtou z úložiště).
  */
 function ministrState(st) {
   if (!st.ministr?.alloc) return null;
   const m = ministrSummary(st);
-  return { ...st.ministr, deficit_mld: m ? Math.max(0, Math.round((m.cost - m.envelope) * 10) / 10) : 0 };
+  return {
+    ...st.ministr,
+    deficit_mld: m ? Math.max(0, Math.round((m.cost - m.envelope) * 10) / 10) : 0,
+    coverage_ratio: m ? m.coverage : 1,
+  };
 }
 
 function reditelSummary(st) {
@@ -58,7 +62,7 @@ function reditelSummary(st) {
 
 /** v3: čekárny ambulancí z aktu I (jen když ministr vyhlášku podepsal). */
 function segmentWaits(st) {
-  return st.ministr?.alloc ? segmentWaitSignals(VYHLASKA.segments, st.ministr.alloc) : {};
+  return st.ministr?.alloc ? segmentWaitSignals(VYHLASKA.segments, st.ministr.alloc, vyhlaskaParams(VYHLASKA)) : {};
 }
 
 function pacientSummary(st) {
@@ -85,7 +89,7 @@ function flowSummary(st) {
     <div class="hra-sum-flow">
       <h3 class="hra-sum-h">Co teklo mezi akty</h3>
       <p class="hra-sum-body">
-        <strong>Z vyhlášky do nemocnice:</strong> růst rozpočtu +${czNum(budget.growthPct)} %${budget.haircutPct > 0 ? ` (z toho −${czNum(budget.haircutPct, 2)} p. b. za deficit vyhlášky ${czNum(budget.deficitMld)} mld)` : ''}.
+        <strong>Z vyhlášky do nemocnice:</strong> růst rozpočtu +${czNum(budget.growthPct)} %${budget.haircutPct > 0 ? ` (slíbeno +${czNum(budget.promisedPct)} %, pojišťovny kryjí ${Math.round(budget.coverage * 100)} % — deficit vyhlášky ${czNum(budget.deficitMld)} mld nad rezervu systému)` : ''}.
         <strong>Z vyhlášky do čekáren:</strong> ${waitTxt}.
         <strong>Trilema vyhlášky:</strong> ${TRILEMMA_AXES.map(a => `${TRILEMMA_LABELS[a]} <strong class="hra-tone-${t.axes[a].tone}">${escapeHtml(t.axes[a].value)}</strong>`).join(' · ')}.
       </p>

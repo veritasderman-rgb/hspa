@@ -14,8 +14,9 @@ import './analytics.js';
 import { trackEvent } from './analytics.js';
 import { renderModuleNav, renderMastheadDate, escapeHtml, renderErrorState, renderRelatedTools } from './page-shared.js';
 import {
-  totalCost, moodFor, moodContext, moodExplain, effectsFor, verdict, trilemma, takeaways,
-  structureProjection, yearsToShare, LUZKOVA_GROUP, MOOD_LABELS, TRILEMMA_AXES, TRILEMMA_LABELS,
+  totalCost, moodContext, moodExplain, effectsFor, verdict, trilemma, takeaways,
+  structureProjection, yearsToShare, vyhlaskaParams, coverageFor, effectiveAlloc,
+  LUZKOVA_GROUP, MOOD_LABELS, TRILEMMA_AXES, TRILEMMA_LABELS,
 } from './vyhlaska-engine.js';
 import { saveAct, loadState, encodeShare } from './hra-stav.js';
 import { renderCampaignStepper } from './hra-stepper.js';
@@ -26,6 +27,7 @@ let DOC = null;
 let SEGMENTS = [];
 let INDICATORS = new Map();
 let SCALE = 1; // objem dnešního roku / součet baseline (viz DOC.scale_note)
+let PARAMS = { envelopeMld: 0, scale: 1, reserveMld: 0 }; // vyhlaskaParams(DOC): obálka, škála, rezerva
 let HORIZON = 1; // projekce struktury: 1 | 5 | 10 | 20 let téže vyhlášky
 let NL = null; // herní newsletter (hra-newsletter.js)
 let verdictTracked = false;
@@ -143,19 +145,22 @@ function renderSegment(s) {
     </div>`;
 }
 
-function updateSegmentUi(s, alloc, ctx) {
+function updateSegmentUi(s, alloc, eff, ctx) {
   const pct = alloc[s.id] || 0;
+  const paid = eff[s.id] ?? pct;
   const out = document.getElementById(`vh-out-${s.id}`);
   const slider = document.getElementById(`vh-${s.id}`);
-  const txt = `+${czNum(pct)} %`;
+  const cut = pct - paid >= 0.05;
+  const txt = cut ? `+${czNum(pct)} % → kryto +${czNum(paid)} %` : `+${czNum(pct)} %`;
   if (out) out.textContent = txt;
   if (slider) slider.setAttribute('aria-valuetext', txt);
 
-  const ex = moodExplain(s, pct, ctx);
+  // nálada z toho, co segment skutečně dostane (krytí), se slibem pro pravidlo nesplněného slibu
+  const ex = moodExplain(s, paid, ctx, pct);
   const gapEl = document.getElementById(`vh-gap-${s.id}`);
   if (gapEl) {
     gapEl.textContent = ex.text;
-    gapEl.className = `vh-gap${ex.escalated ? ' vh-gap-escalated' : ''}`;
+    gapEl.className = `vh-gap${ex.escalated || ex.broken ? ' vh-gap-escalated' : ''}`;
   }
 
   const mood = ex.mood;
@@ -187,7 +192,10 @@ function renderEnvelope(alloc) {
   }
   if (noteEl) {
     if (cost > cap) {
-      noteEl.innerHTML = `⚠ <strong>Deficit ${czNum(cost - cap)} mld Kč.</strong> Vyhláška nad možnosti pojistného prohlubuje schodek systému — viz <a href="clanek-deficit-vzp-2026.html">deficit VZP</a>. V aktu II to nemocnice pocítí na rozpočtu.`;
+      const cov = coverageFor(cost, cap, PARAMS.reserveMld);
+      noteEl.innerHTML = cov.uncoveredMld > 0
+        ? `⚠ <strong>Deficit ${czNum(cost - cap)} mld Kč — nad rezervu systému (${czNum(PARAMS.reserveMld)} mld).</strong> Pojišťovny kryjí jen <strong>${Math.round(cov.ratio * 100)} %</strong> slibu a krátí všem poměrně; zástupci reagují na to, co dostanou. Viz <a href="clanek-deficit-vzp-2026.html">deficit VZP</a>.`
+        : `⚠ <strong>Deficit ${czNum(cost - cap)} mld Kč.</strong> Rezerva systému (${czNum(PARAMS.reserveMld)} mld, necelé dva dny výdajů) to letos unese — příští rok ale začínáte bez polštáře. Viz <a href="clanek-deficit-vzp-2026.html">deficit VZP</a>.`;
       noteEl.className = 'vh-envelope-note vh-envelope-note-over';
     } else {
       noteEl.textContent = `Rezerva ${czNum(cap - cost)} mld Kč. ${escapeHtml(DOC.envelope.note || '')}`;
@@ -288,8 +296,9 @@ function renderResults(alloc) {
     return;
   }
 
-  const v = verdict(SEGMENTS, alloc, DOC.envelope.amount_mld, SCALE);
-  const effects = effectsFor(SEGMENTS, alloc, INDICATORS);
+  const v = verdict(SEGMENTS, alloc, PARAMS.envelopeMld, SCALE, PARAMS.reserveMld);
+  const paid = v.effective; // co se skutečně vyplatí (krytí) — struktura, efekty i projekce z toho
+  const effects = effectsFor(SEGMENTS, paid, INDICATORS);
 
   // 1) Trilema — syntéza před detaily
   const triHtml = renderTrilemma(v);
@@ -300,11 +309,11 @@ function renderResults(alloc) {
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Dohody</h3>
       <p class="vh-verdict-big vh-tone-${dealsTone}">${v.deals} z ${v.segmentsTotal} vyjednávacích segmentů podepsalo</p>
-      <p class="vh-verdict-note">${v.boosts > 0 ? `✚ ${v.boosts}× rozšíření péče (výrazně nad požadavek → delší ordinační hodiny, nové kapacity, vstup nových metod). ` : ''}${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}${v.escalations > 0 ? `↑ ${v.escalations}× eskalace o stupeň kvůli relativní spravedlnosti (segment pod průměrem ${czNum(v.avgPct)} %, zatímco jiný dostal víc, než žádal). ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
+      <p class="vh-verdict-note">${v.coverage < 1 ? `⚠ Pojišťovny kryjí jen <strong>${Math.round(v.coverage * 100)} %</strong> slibu (deficit ${czNum(v.deficitMld)} mld nad rezervu ${czNum(v.reserve)} mld) — zástupci reagují na to, co dostanou. ` : ''}${v.brokenPromises > 0 ? `✕ ${v.brokenPromises}× slib bez krytí (eskalace o stupeň). ` : ''}${v.boosts > 0 ? `✚ ${v.boosts}× rozšíření péče (výrazně nad požadavek → delší ordinační hodiny, nové kapacity, vstup nových metod). ` : ''}${v.protests > 0 ? `⚠ ${v.protests}× protest/stávková pohotovost. ` : ''}${v.escalations > 0 ? `↑ ${v.escalations}× eskalace o stupeň kvůli relativní spravedlnosti (segment pod průměrem ${czNum(v.avgPct)} %, zatímco jiný dostal víc, než žádal). ` : ''}Realita DR 2027: dohoda ve 12 z 15 segmentů (jedna částečná); bez dohody akutní i následná lůžková péče a mimolůžkoví ambulantní specialisté.</p>
     </div>`;
 
   // 3) Struktura — podíl lůžkového bloku vs. OECD, s projekcí
-  const structHtml = renderStructure(v, alloc);
+  const structHtml = renderStructure(v, paid);
 
   // 4) Efekty na indikátory
   const active = effects.filter(e => e.kind === 'directional' && e.active);
@@ -323,7 +332,7 @@ function renderResults(alloc) {
     </div>`;
 
   // 5) Co si odnést — podle toho, co hráč udělal
-  const years = yearsToShare(SEGMENTS, alloc, LUZKOVA_GROUP, 30);
+  const years = yearsToShare(SEGMENTS, paid, LUZKOVA_GROUP, 30);
   const tk = takeaways(SEGMENTS, alloc, v, { scale: SCALE, yearsToOecd: years });
   const tkHtml = `
     <div class="vh-verdict-block">
@@ -335,14 +344,15 @@ function renderResults(alloc) {
   saveAct('ministr', {
     alloc,
     deficit_mld: Math.max(0, Math.round((v.cost - v.envelope) * 10) / 10),
-    verdict: { deals: v.deals, boosts: v.boosts, protests: v.protests, escalations: v.escalations, deficit: v.deficit, cost: v.cost },
+    coverage_ratio: v.coverage,
+    verdict: { deals: v.deals, boosts: v.boosts, protests: v.protests, escalations: v.escalations, brokenPromises: v.brokenPromises, deficit: v.deficit, coverage: v.coverage, cost: v.cost },
   });
   const shareCode = encodeShare(loadState());
   const ctaHtml = `
     <div class="vh-verdict-block vh-campaign-cta">
       <h3 class="vh-verdict-h">Kampaň Tři židle</h3>
       <p class="vh-verdict-note">Vyhláška je na světě. Teď si vyzkoušejte, jak se s ní žije o patro níž —
-        rozpočet vaší modelové nemocnice se odvodí z růstu, který jste právě přidělili lůžkové péči${v.deficit ? ', a deficit vyhlášky ho ještě zkrátí' : ''}. Čekárny ambulancí si do aktu III ponese to, co jste jim tady nastavili.</p>
+        rozpočet vaší modelové nemocnice se odvodí z růstu, který jste právě přidělili lůžkové péči${v.coverage < 1 ? `, krácený na ${Math.round(v.coverage * 100)} % — pojišťovny víc nemají` : ''}. Čekárny ambulancí si do aktu III ponese to, co jste jim tady nastavili.</p>
       <a class="vh-campaign-link" href="reditel.html" data-track="pokracovat">Pokračovat jako ředitel nemocnice →</a>
       <a class="vh-campaign-link vh-campaign-link-sec" href="porovnani.html?k=${encodeURIComponent(shareCode)}" data-track="porovnani">Porovnat svou vyhlášku s kolegy →</a>
     </div>`;
@@ -369,7 +379,7 @@ function renderMobileBar(v) {
   bar.hidden = false;
   document.body.classList.add('vh-has-bar');
   bar.innerHTML = `
-    <span class="vh-mobile-bar-txt"><strong class="${v.deficit ? 'vh-tone-bad' : ''}">${czNum(v.cost)} / ${czNum(v.envelope)} mld</strong> · ${v.deals}/${v.segmentsTotal} dohod${v.protests ? ` · <span class="vh-tone-bad">${v.protests}× protest</span>` : ''}</span>
+    <span class="vh-mobile-bar-txt"><strong class="${v.deficit ? 'vh-tone-bad' : ''}">${czNum(v.cost)} / ${czNum(v.envelope)} mld</strong>${v.coverage < 1 ? ` · <span class="vh-tone-bad">kryto ${Math.round(v.coverage * 100)} %</span>` : ''} · ${v.deals}/${v.segmentsTotal} dohod${v.protests ? ` · <span class="vh-tone-bad">${v.protests}× protest</span>` : ''}</span>
     <a class="vh-mobile-bar-btn" href="#vhResults">Verdikt ↓</a>`;
 }
 
@@ -381,6 +391,7 @@ function renderSources() {
   const push = (s) => { if (s && !seen.has(s)) { seen.add(s); items.push(s); } };
   push(DOC.baseline_total_source);
   push(DOC.envelope?.source);
+  push(DOC.envelope?.reserve_source);
   push(DOC.real_2027_context?.source);
   for (const s of SEGMENTS) {
     push(s.baseline_source);
@@ -421,8 +432,9 @@ async function initGlossary() {
 
 function refresh() {
   const alloc = currentAlloc();
-  const ctx = moodContext(SEGMENTS, alloc);
-  SEGMENTS.forEach(s => updateSegmentUi(s, alloc, ctx));
+  const eff = effectiveAlloc(SEGMENTS, alloc, PARAMS);
+  const ctx = moodContext(SEGMENTS, eff);
+  SEGMENTS.forEach(s => updateSegmentUi(s, alloc, eff, ctx));
   renderEnvelope(alloc);
   renderResults(alloc);
   renderCampaignStepper('ministr');
@@ -443,9 +455,8 @@ async function init() {
     DOC = doc;
     SEGMENTS = doc.segments ?? [];
     INDICATORS = new Map((inds.indicators ?? []).map(i => [i.id, i]));
-    const baseSum = SEGMENTS.reduce((a, s) => a + s.baseline_mld, 0);
-    SCALE = Number.isFinite(doc.current_total_mld) && baseSum > 0
-      ? doc.current_total_mld / baseSum : 1;
+    PARAMS = vyhlaskaParams(doc);
+    SCALE = PARAMS.scale;
 
     renderSegments();
     renderPresets();

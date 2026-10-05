@@ -124,30 +124,28 @@ test('engine: verdict — kompletnost, tóny dle pásem, kampaňový rozpočet s
 });
 
 // ---------------------------------------------------------------------------
-// v3 — deficit vyhlášky z aktu I krátí rozpočet nemocnice
+// v3.1 — krytí vyhlášky z aktu I určuje, co nemocnice skutečně dostane
 // ---------------------------------------------------------------------------
 
-test('engine v3: deficit z aktu I krátí růst rozpočtu (haircut) — koeficient, strop, propsání do bilance', () => {
-  const dh = doc.handoff.deficit_haircut;
-  assert.ok(dh && dh.note && dh.source, 'pravidlo je vysvětlené a mechanismus doložený');
+test('engine v3.1: krytí vyhlášky z aktu I krátí růst rozpočtu — slíbeno × krytí, propsáno do bilance', () => {
+  assert.ok(doc.handoff.coverage_note && doc.handoff.coverage_source, 'pravidlo je vysvětlené a mechanismus doložený');
   const alloc = { akutni_luzkova: 9, nasledna_luzkova: 9 };
-  const clean = budgetFromMinistr({ alloc }, doc.handoff);
-  assert.equal(clean.haircutPct, 0);
-  assert.equal(clean.growthPct, 9);
+  const full = budgetFromMinistr({ alloc }, doc.handoff);
+  assert.equal(full.growthPct, 9);
+  assert.equal(full.coverage, 1);
+  assert.equal(full.haircutPct, 0);
 
-  const over = budgetFromMinistr({ alloc, deficit_mld: 10 }, doc.handoff);
-  assert.equal(over.haircutPct, Math.round(Math.min(dh.max_pct, 10 * dh.pct_per_mld) * 100) / 100);
-  assert.ok(over.growthPct < clean.growthPct, 'deficit → menší rozpočet');
-  assert.equal(over.deficitMld, 10);
+  const half = budgetFromMinistr({ alloc, coverage_ratio: 0.5, deficit_mld: 20 }, doc.handoff);
+  assert.equal(half.promisedPct, 9, 'slíbený růst zůstává viditelný');
+  assert.equal(half.growthPct, 4.5, 'vyplaceno jen kryté');
+  assert.equal(half.haircutPct, 4.5);
+  assert.equal(half.deficitMld, 20);
 
-  const huge = budgetFromMinistr({ alloc, deficit_mld: 500 }, doc.handoff);
-  assert.equal(huge.haircutPct, dh.max_pct, 'strop max_pct');
-  assert.ok(huge.growthPct >= 0, 'růst nejde pod nulu');
-
-  assert.equal(budgetFromMinistr(null, doc.handoff).haircutPct, 0, 'bez kampaně žádný haircut');
-  assert.equal(budgetFromMinistr({ alloc, deficit_mld: -3 }, doc.handoff).haircutPct, 0, 'záporný deficit = žádný');
+  assert.equal(budgetFromMinistr({ alloc, coverage_ratio: 1.7 }, doc.handoff).growthPct, 9, 'nesmyslné krytí > 1 se ignoruje');
+  assert.equal(budgetFromMinistr({ alloc, coverage_ratio: -1 }, doc.handoff).growthPct, 9, 'záporné krytí se ignoruje');
+  assert.equal(budgetFromMinistr(null, doc.handoff).coverage, 1, 'bez kampaně plné krytí');
 
   const v1 = verdict(doc, {}, { alloc });
-  const v2 = verdict(doc, {}, { alloc, deficit_mld: 20 });
-  assert.ok(v2.axes.hospodareni < v1.axes.hospodareni, 'deficit vyhlášky se propíše do bilance nemocnice');
+  const v2 = verdict(doc, {}, { alloc, coverage_ratio: 0.76 });
+  assert.ok(v2.axes.hospodareni < v1.axes.hospodareni, 'nekrytá vyhláška se propíše do bilance nemocnice');
 });
