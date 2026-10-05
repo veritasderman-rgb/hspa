@@ -22,6 +22,7 @@ import { saveAct, loadState, encodeShare } from './hra-stav.js';
 import { renderCampaignStepper } from './hra-stepper.js';
 import { armGameNewsletter } from './hra-newsletter.js';
 import { enhanceInlineGlossary } from './glossary-inline.js';
+import { initGlossaryPopover } from './glossary-popover.js';
 
 let DOC = null;
 let SEGMENTS = [];
@@ -30,10 +31,12 @@ let SCALE = 1; // objem dnešního roku / součet baseline (viz DOC.scale_note)
 let PARAMS = { envelopeMld: 0, scale: 1, reserveMld: 0 }; // vyhlaskaParams(DOC): obálka, škála, rezerva
 let HORIZON = 1; // projekce struktury: 1 | 5 | 10 | 20 let téže vyhlášky
 let NL = null; // herní newsletter (hra-newsletter.js)
+let GLOSS = null; // rozšířená hesla glosáře (aliasy) pro inline označení
 let verdictTracked = false;
 
 const STRENGTH_LABEL = { weak: 'slabě', medium: 'středně', strong: 'silně' };
 const MOOD_CLASS = { boost: 'boost', agree: 'agree', grudging: 'grudging', no_deal: 'nodeal', protest: 'protest' };
+const MOOD_CHIP = { boost: 'Rozšíření péče', agree: 'Dohoda', grudging: 'S výhradami', no_deal: 'Bez dohody', protest: 'Protest' };
 const SLIDER_MAX = 15;
 const HORIZONS = [1, 5, 10, 20];
 const TONE_LABEL = { good: 'v pořádku', mid: 'napjaté', bad: 'obětováno' };
@@ -74,13 +77,31 @@ function renderSegments() {
     if (!g) { g = { name: s.group || 'Segmenty', items: [] }; groups.push(g); }
     g.items.push(s);
   }
-  host.innerHTML = groups.map(g => `
-    <div class="vh-group">
+  host.innerHTML = groups.map((g, i) => `
+    <div class="vh-group" id="vh-group-${i}">
       <h3 class="vh-group-h">${escapeHtml(g.name)}
-        <span class="vh-group-sum">${czNum(g.items.reduce((a, s) => a + s.baseline_share_pct, 0))} % úhrad</span>
+        <span class="vh-group-sum">${czNum(g.items.reduce((a, s) => a + s.baseline_share_pct, 0))} % úhrad · ${g.items.length} ${g.items.length === 1 ? 'segment' : g.items.length < 5 ? 'segmenty' : 'segmentů'}</span>
       </h3>
       ${g.items.map(renderSegment).join('')}
     </div>`).join('');
+  const nav = document.getElementById('vhGroupNav');
+  if (nav) {
+    nav.innerHTML = groups.map((g, i) => `<a class="vh-group-pill" href="#vh-group-${i}">${escapeHtml(g.name)} <span>${czNum(g.items.reduce((a, s) => a + s.baseline_share_pct, 0), 0)} %</span></a>`).join('');
+  }
+}
+
+/** Klíčová čísla hry nad posuvníky — z dat, ne z textu. */
+function renderHeroStats() {
+  const host = document.getElementById('vhHeroStats');
+  if (!host) return;
+  const negotiating = SEGMENTS.filter(s => s.dr_segment !== false).length;
+  const tiles = [
+    { v: `${czNum(DOC.current_total_mld, 0)} mld`, l: `proteče letos systémem (${DOC.current_year})` },
+    { v: `${czNum(PARAMS.envelopeMld, 0)} mld`, l: 'obálka růstu, kterou rozdělujete' },
+    { v: `${czNum(PARAMS.reserveMld)} mld`, l: 'rezerva pojišťoven — necelé dva dny výdajů' },
+    { v: `${SEGMENTS.length}`, l: `segmentů péče, ${negotiating} z nich vyjednává` },
+  ];
+  host.innerHTML = tiles.map(t => `<div class="vh-stat"><span class="vh-stat-v">${escapeHtml(t.v)}</span><span class="vh-stat-l">${escapeHtml(t.l)}</span></div>`).join('');
 }
 
 /**
@@ -114,21 +135,20 @@ function renderSegment(s) {
   const r = s.representative || {};
   const initials = escapeHtml((r.role || '?').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase());
   return `
-    <div class="vh-segment" data-segment-id="${id}">
+    <div class="vh-segment" data-segment-id="${id}" data-mood="none">
       <div class="vh-seg-head">
         <div class="vh-seg-title-wrap">
           <span class="vh-seg-label">${escapeHtml(s.label)}</span>
-          <span class="vh-seg-sublabel">${escapeHtml(s.sublabel || '')}</span>
+          <span class="vh-seg-sublabel">${escapeHtml(s.sublabel || '')} · ${czNum(s.baseline_share_pct)} % úhrad · ${czNum(s.baseline_mld)} mld (${DOC.baseline_year})</span>
         </div>
-        <span class="vh-seg-baseline">${czNum(s.baseline_share_pct)} % úhrad · ${czNum(s.baseline_mld)} mld (${DOC.baseline_year})</span>
+        <span class="vh-seg-state vh-seg-state-none" id="vh-state-${id}" aria-live="off">nenastaveno</span>
       </div>
       <div class="vh-rep">
         <span class="vh-rep-avatar" aria-hidden="true">${initials}</span>
         <div class="vh-rep-body">
-          <span class="vh-rep-role">${escapeHtml(r.role || '')}</span>
+          <span class="vh-rep-role">${escapeHtml(r.role || '')} <span class="vh-rep-demand-chip">žádá +${czNum(s.demand_pct)} %</span></span>
           <p class="vh-rep-arg">„${escapeHtml(r.argument || '')}“</p>
-          <p class="vh-rep-demand">Požaduje <strong>+${czNum(s.demand_pct)} %</strong>
-            <span class="vh-rep-demand-why">(${escapeHtml(s.demand_reasoning || '')})</span></p>
+          <p class="vh-rep-demand"><span class="vh-rep-demand-why">${escapeHtml(s.demand_reasoning || '')}</span></p>
         </div>
       </div>
       <div class="vh-seg-control">
@@ -164,6 +184,14 @@ function updateSegmentUi(s, alloc, eff, ctx) {
   }
 
   const mood = ex.mood;
+  const card = slider?.closest('.vh-segment');
+  if (card) card.dataset.mood = pct > 0 ? MOOD_CLASS[mood] : 'none';
+  const chip = document.getElementById(`vh-state-${s.id}`);
+  if (chip) {
+    chip.textContent = pct > 0 ? MOOD_CHIP[mood] : 'nenastaveno';
+    chip.className = `vh-seg-state vh-seg-state-${pct > 0 ? MOOD_CLASS[mood] : 'none'}`;
+  }
+  if (out) out.className = `vh-seg-value vh-seg-value-${pct > 0 ? MOOD_CLASS[mood] : 'none'}`;
   const moodEl = document.getElementById(`vh-mood-${s.id}`);
   if (moodEl) {
     moodEl.className = `vh-mood vh-mood-${MOOD_CLASS[mood]}`;
@@ -188,7 +216,9 @@ function renderEnvelope(alloc) {
   if (valEl) valEl.textContent = `${czNum(cost)} / ${czNum(cap)} mld Kč`;
   if (fillEl) {
     fillEl.style.width = `${Math.min(100, (cost / cap) * 100)}%`;
-    fillEl.classList.toggle('vh-envelope-over', cost > cap);
+    const within = cost > cap && cost <= cap + PARAMS.reserveMld;
+    fillEl.classList.toggle('vh-envelope-over', cost > cap + PARAMS.reserveMld);
+    fillEl.classList.toggle('vh-envelope-warn', within);
   }
   if (noteEl) {
     if (cost > cap) {
@@ -250,9 +280,25 @@ function renderTrilemma(v) {
   return `
     <div class="vh-verdict-block">
       <h3 class="vh-verdict-h">Trilema vyhlášky</h3>
-      <div class="vh-trilemma" role="group" aria-label="Tři cíle vyhlášky">${chips}</div>
+      <div class="vh-tri-wrap">
+        ${renderTriangle(t)}
+        <div class="vh-trilemma" role="group" aria-label="Tři cíle vyhlášky">${chips}</div>
+      </div>
       <p class="vh-tri-sentence">${sentence}</p>
     </div>`;
+}
+
+/** Trojúhelník trilematu: vrcholy obarvené tónem osy, spojnice slabě. Dekorativní (chipy nesou text). */
+function renderTriangle(t) {
+  const P = { dohody: [75, 16], reforma: [24, 96], bilance: [126, 96] };
+  const L = { dohody: [75, 8], reforma: [24, 113], bilance: [126, 113] };
+  const SHORT = { dohody: 'Dohody', reforma: 'Reforma', bilance: 'Bilance' };
+  const tone = (a) => t.axes[a].tone;
+  return `<svg class="vh-tri-svg" viewBox="0 0 150 120" width="150" height="120" aria-hidden="true" focusable="false">
+    <polygon points="75,16 24,96 126,96" class="vh-tri-edge"></polygon>
+    ${TRILEMMA_AXES.map(a => `<circle cx="${P[a][0]}" cy="${P[a][1]}" r="9" class="vh-tri-node vh-tri-node-${tone(a)}"></circle>`).join('')}
+    ${TRILEMMA_AXES.map(a => `<text x="${L[a][0]}" y="${L[a][1]}" text-anchor="middle" class="vh-tri-txt">${SHORT[a]}</text>`).join('')}
+  </svg>`;
 }
 
 function renderStructure(v, alloc) {
@@ -358,6 +404,7 @@ function renderResults(alloc) {
     </div>`;
 
   host.innerHTML = triHtml + dealsHtml + structHtml + effHtml + tkHtml + ctaHtml;
+  if (GLOSS) { delete host.dataset.glossInlineInit; enhanceInlineGlossary(GLOSS, host); }
   renderMobileBar(v);
 
   if (!verdictTracked) {
@@ -418,12 +465,36 @@ async function initGlossary() {
     const byKey = new Map(terms.map(t => [t.key, t]));
     const items = GAME_TERMS.map(k => byKey.get(k)).filter(Boolean);
     host.innerHTML = items.length ? `
-      <h3 class="vh-glossary-h">Slovníček k této hře</h3>
-      <dl class="vh-glossary-list">
-        ${items.map(t => `<dt><a href="glosar.html#${escapeHtml(t.anchor)}">${escapeHtml(t.key)}</a>${t.full && t.full !== t.key ? ` <span class="vh-glossary-full">— ${escapeHtml(t.full)}</span>` : ''}</dt><dd>${escapeHtml(t.short_def)}</dd>`).join('')}
-      </dl>` : '';
+      <div class="vh-glossary-grid">
+        ${items.map(t => `<article class="vh-gloss-card">
+          <h3 class="vh-gloss-key"><a href="glosar.html#${escapeHtml(t.anchor)}">${escapeHtml(t.key)}</a></h3>
+          ${t.full && t.full !== t.key ? `<p class="vh-gloss-full">${escapeHtml(t.full)}</p>` : ''}
+          <p class="vh-gloss-def">${escapeHtml(t.short_def)}</p>
+        </article>`).join('')}
+      </div>` : '';
   }
-  document.querySelectorAll('[data-gloss-scope]').forEach(el => enhanceInlineGlossary(terms, el));
+  // Skloněné tvary (glossary.json → aliases) + varianta s velkým počátečním
+  // písmenem: inline matcher hledá přesný tvar, herní text hesla skloňuje.
+  const expanded = expandGlossaryAliases(terms);
+  GLOSS = expanded;
+  document.querySelectorAll('[data-gloss-scope]').forEach(el => enhanceInlineGlossary(expanded, el));
+  initGlossaryPopover(expanded);
+}
+
+/** Heslo → [heslo, aliasy, velká počáteční písmena]; alias nese `canonical` a `display` (kanonické heslo). */
+export function expandGlossaryAliases(terms) {
+  const out = [];
+  for (const t of terms) {
+    const forms = new Set([t.key, ...(Array.isArray(t.aliases) ? t.aliases : [])]);
+    for (const f of [...forms]) {
+      if (f && /^[a-záčďéěíňóřšťúůýž]/.test(f)) forms.add(f[0].toUpperCase() + f.slice(1));
+    }
+    for (const f of forms) {
+      if (!f) continue;
+      out.push(f === t.key ? { ...t, display: t.key } : { ...t, key: f, canonical: t.key, display: t.key });
+    }
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -458,6 +529,7 @@ async function init() {
     PARAMS = vyhlaskaParams(doc);
     SCALE = PARAMS.scale;
 
+    renderHeroStats();
     renderSegments();
     renderPresets();
     renderSources();
