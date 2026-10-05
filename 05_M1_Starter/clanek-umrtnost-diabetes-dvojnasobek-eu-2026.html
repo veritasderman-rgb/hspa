@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<!--
+  audit:
+    last_reviewed: 2026-10-05
+    reviewer: claude-code-agent
+    status: draft
+    created_at: 2026-10-05
+    creation_phase: rutina+indicator-add
+    primary_sources_count: 9
+    visual_elements_count: 6
+    notes: "Doprovodny clanek k novemu indikatoru umrtnost_diabetes (Vysledky · Mortalita · Umrtnost na diabetes, framework hspa, dimension zdravi, direction lower_is_better, signal bad, benchmark EU27 23,53). Vytvoreno z bloku F rutiny 2026-10-05 (pondeli = INDICATOR-ADD; vitez matice 8 kandidatu, skore 13/15). KPI: 49,37 umrti na 100 000 obyvatel (Eurostat hlth_cd_asdr2, CZ, sex=T, age=TOTAL, icd10=E10-E14, unit=RT, ESP 2013; dataset aktualizovan 8. 6. 2026; stazeno 5. 10. 2026 z API). Bench: EU27_2020 23,53 (2023, tataz rada). Pomer 49,37/23,53 = 2,10 (vypocet redakce). Sousede 2023: DE 25,47 · AT 35,42 · PL 28,12 · SK 10,76 · HU 33,17 · SI 14,02. RADA CZ: 2011 29,20 · 2012 26,98 · 2013 45,10 · 2014 41,80 · 2015 43,48 · 2016 43,26 · 2017 41,53 · 2018 46,51 · 2019 45,56 · 2020 52,46 · 2021 52,62 · 2022 49,82 · 2023 49,37. EU: 2019 23,27 · 2020 26,18 · 2021 25,56 · 2022 25,30 · 2023 23,53. POHLAVI 2023 CZ M 60,27 / F 41,72; EU M 28,66 / F 19,52. VEK 2023 CZ <65 4,32 / 65+ 235,36; EU 2,88 / 108,78. NUTS2 2023: CZ01 35,29 · CZ02 56,56 · CZ03 51,53 · CZ04 70,26 · CZ05 38,41 · CZ06 43,95 · CZ07 53,09 · CZ08 56,29 (2022: 30,79 · 58,70 · 53,04 · 71,20 · 43,38 · 43,40 · 47,45 · 61,08). ABSOLUTNE: Eurostat hlth_cd_aro (TOT_RESID) CZ 2012 2 250 · 2013 3 753 · 2019 4 271 · 2021 5 094 · 2022 4 842 · 2023 4 856; CSU Tab. 1 Zemreli podle priciny smrti v Cesku (publikace 130206-25, PDF 13020625001.pdf, stazeno 5. 10. 2026): E10-E14 2015 3 728 · 2016 3 766 · 2017 3 725 · 2018 4 280 · 2019 4 268 · 2020 4 993 · 2021 5 092 · 2022 4 839 · 2023 4 851 · 2024 4 884; celkem zemrelych 2024 112 211 (podil 4,4 %, vypocet redakce); kapitola IV 2024 5 747. Vypocty redakce oznacene v textu: +67 % (3 753/2 250 = 1,668), 2,0x Severozapad/Praha (70,26/35,29 = 1,99), +109,8 % odchylka od EU. METODIKA: Eurostat ESMS hlth_cdeath_sims § 3.1 (WHO definice zakladni priciny), § 3.4 (ESP, nevazeny prumer populaci EU+EFTA, projekce 2011-30), § 14.2 (2023 posledni ref. rok); narodni metadata CZ hlth_cdeath_simscd_cz § 15.2 verbatim '2011: implementation of IRIS automated coding software' a '2013: introduction of a new death certificate with four lines in part I for certification of causes of death', § 18.3.2 'Underlying cause of death is selected on the basis of ICD-10 rules automatically in IRIS; rejects are coded manually'. UZIS prezentace LPZ (uzis.cz/res/file/registry/lpz/lpz-prezentace.pdf): vyhlaska 297/2012 Sb. o Listu o prohlidce zemreleho od 1. 1. 2013; IRIS zaveden 2011, manualni vyber cca 20 % umrti. UZIS otevrena data NR-06-36 'Priciny umrti u pacientu s vybranymi chronickymi diagnozami' (metodicky popis verze 2026-01.01, 17. 2. 2026; kategorie diabetes E10-E14, kraje NUTS 3 + okresy LAU 1, od 1994, absolutni pocty). Pricinna souvislost zlomu 2013 s novym Listem NENI primarnim zdrojem kvantifikovana — text uvadi jen casovou shodu a rika to vyslovne. EVIDENCE (vse overeno v PubMed 5. 10. 2026 pres get_article_metadata): Bishop K et al. Int J Epidemiol 2023, PMID 35984318, doi 10.1093/ije/dyac167 (Australie 2006-2017, 1 773 399 umrti, jakakoli zminka diabetu 3,5x vs zakladni pricina; 18,5 vs 24,0 na 100 000); Goldberger N et al. Isr J Health Policy Res 2015, PMID 26430506, doi 10.1186/s13584-015-0027-6 (SRMU Izrael 2,7 vs 3,0-3,5 v USA, Francii, Italii, Australii a CR; 40 % umrti se zakladni pricinou diabetes melo i ICHS); Emdin CA et al. JAMA 2015, PMID 25668264, doi 10.1001/jama.2014.18574 (40 RCT, 100 354 osob, -10 mm Hg STK: RR umrti 0,87, CMP 0,73); Hemmingsen B et al. BMJ 2011, PMID 22115901, doi 10.1136/bmj.d6898 (14 RCT, 28 614 osob, intenzivni glykemie RR umrti 1,02, tezka hypoglykemie RR 2,39); Nazarzadeh M et al. Lancet Diabetes Endocrinol 2022, PMID 35878651, doi 10.1016/S2213-8587(22)00172-3 (51 RCT, 103 325 s T2DM, -5 mm Hg HR 0,94). Consensus 5. 10. 2026 (1 dotaz, TK a glykemie u T2DM): v souladu, zadny kvalitni prehled proti; ceska studie o vlivu IRIS/LPZ 2013 na diabetes v PubMed nenalezena (6 dotazu) — rika se vyslovne. Databox: 5 indikatoru literalne z data/indicators.json (prevalence_diabetu 9,5 % 2023 vs EU 7,5; amputace_dk_diabetici 12,1 vs OECD 9,5 2023; spotreba_antidiabetik 113,1 vs OECD 94,2 2025; mortalita_lecitelna 107,19 vs EU 86,81 2023). Jaroslav z Mostu je ilustrativni postava. Ceka na schvaleni redakce."
+    audit_k_2026-10-05: "Nezavisly audit K (cerstvy pohled): vsechna cisla overena primo z Eurostat API (hlth_cd_asdr2 CZ/EU/sousede/NUTS2 2022-2023/pohlavi/vek/rada 2011-2023; hlth_cd_aro), CSU Tab. 1 (PDF), metadat Eurostat (§ 15.2 verbatim; veta o IRIS a rejects verbatim v CZ metadatech) a UZIS PDF - bez rozporu. Vypocty 2,10x; +66,8 %; 4,35 %; pomery regionu; +109,8 % sedi. OPRAVENO: (1) Bishop 2023 - chybny nazev studie nahrazen skutecnym (PubMed 35984318) + 52(1):284-294; (2) Nazarzadeh 2022 - text tvrdil vyssi absolutni prinos u diabetiku, abstrakt rika podobny (HR 0,94 vs 0,89 bez diabetu); (3) Hemmingsen 2011 - snizeni nefatalniho IM jen mozna (RR 0,85, TSA nepotvrdila); (4) H3 petinasobek Slovenska -> temer petinasobek (49,37/10,76 = 4,59); (5) timeline UZIS NR-06-36 17. 2. 2026 -> Unor 2026 (17. 2. je datum vytvoreni metodiky, schvaleni 24. 2.); (6) mechanismus 4. radku zmirnen na muze. Karta: Horsi je jen Rakousko (logicka chyba) opraveno; nedolozene tvrzeni o OECD agregatech a o covid certifikatech odstraneno. Pozn. k notes vyse: Bishop 24,0 je vazena mira ASRW, ne jakakoli zminka; Goldbergerovych 40 % s ICHS plati pro Izrael. EU27 agregat 2012->2013 skace take (15,50->24,57; slozeni agregatu) - clanek o EU nic netvrdi. DOI JAMA/OUP/BMJ vraci botum 403, presmerovani overeno. Consensus: Bishop RR 3,5 neni odlehly (Fedeli 2015 Italie ~4,2; Romon 2008 Francie 2,6); Zucker 2016 potvrzuje vliv certifikacni praxe."
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Na diabetes umírá v Česku dvakrát víc lidí než v průměru EU. Část rozdílu vznikla v roce 2013 na úmrtním listu · HSPA Monitor</title>
+<meta name="description" content="Česko má podle Eurostatu 49,4 úmrtí na diabetes na 100 000 obyvatel, průměr EU je 23,5 a Slovensko 10,8. Severozápad Čech je na dvojnásobku Prahy. Řada se přitom zlomila v roce 2013, kdy začal platit nový List o prohlídce zemřelého, a počet úmrtí „na diabetes“ skočil o dvě třetiny. Nový indikátor HSPA Monitoru ukazuje, co je v tom čísle nemoc a co statistika.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Na diabetes umírá v Česku dvakrát víc lidí než v průměru EU. Část rozdílu vznikla v roce 2013 na úmrtním listu">
+<meta property="og:description" content="49,4 úmrtí na diabetes na 100 000 obyvatel v Česku proti 23,5 v EU (Eurostat 2023). Severozápad na dvojnásobku Prahy. Zlom v roce 2013 po novém Listu o prohlídce zemřelého. Nový indikátor HSPA Monitoru.">
+<meta property="og:locale" content="cs_CZ">
+<meta property="article:published_time" content="2026-10-06T06:00:00+02:00">
+<meta property="article:section" content="Mortalita a zátěž nemocí">
+<meta name="article:audit-status" content="draft">
+<link rel="stylesheet" href="src/styles.min.css">
+<link rel="alternate" type="application/rss+xml" title="HSPA Monitor — články" href="/feed.xml">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="brand-link"><p class="brand-title"><abbr class="hspa-abbr" title="Health System Performance Assessment — hodnocení výkonnosti zdravotního systému (WHO 2000, OECD 2023)">HSPA</abbr> <em>monitor</em>
+      <small>skorezdravotnictvi.cz · Článek</small>
+    </p></a>
+  </div>
+  <nav class="module-nav" id="moduleNav" aria-label="Moduly dashboardu"></nav>
+</header>
+
+<aside class="masthead-strip" aria-label="Aktuální datum vydání">
+  <span class="masthead-date" id="mastheadDate"></span>
+</aside>
+
+<main id="content">
+
+  <article class="article-page">
+
+    <nav class="article-breadcrumb" aria-label="Drobečková navigace">
+      <a href="clanky.html">← Zpět na Články</a>
+    </nav>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="article-tag">Mortalita a zátěž nemocí</span>
+        <span class="article-tag article-tag-muted">diabetes · příčiny smrti · Eurostat · List o prohlídce zemřelého</span>
+      </div>
+      <h1 class="article-title">Na diabetes umírá v Česku dvakrát víc lidí než v průměru EU. Část rozdílu vznikla v roce 2013 na úmrtním listu</h1>
+      <p class="article-deck">
+        Česko má podle Eurostatu 49,4 úmrtí na diabetes na 100 000 obyvatel, průměr EU je 23,5 a Slovensko 10,8. Severozápad Čech je na dvojnásobku Prahy. Řada se přitom zlomila v roce 2013, kdy začal platit nový List o prohlídce zemřelého, a počet úmrtí „na diabetes“ skočil o dvě třetiny. Nový indikátor HSPA Monitoru ukazuje, co je v tom čísle nemoc a co statistika.
+      </p>
+      <div class="article-meta">
+        <span class="article-meta-date">6. října 2026</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-time">10 minut čtení</span>
+        <span class="article-meta-sep">·</span>
+        <span class="article-meta-author">redakce HSPA Monitoru</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p class="article-lead">
+        Jaroslav z Mostu, 71 let, má diabetes 2. typu dvacet let. Praktický lékař ho vidí jednou za půl roku, na diabetologii jezdí hodinu autobusem do Ústí nad Labem a dvakrát tam nedojel. Tlak má „trochu vyšší“, statin bere, když si vzpomene. Jaroslav je ilustrativní postava. Čísla, která za jeho příběhem stojí, ne: v roce 2023 zemřelo v Česku na diabetes mellitus jako základní příčinu <strong>49,37 lidí na 100 000 obyvatel</strong>, v průměru EU-27 to bylo 23,53. A region Severozápad, kam Most patří, měl 70,26 — dvojnásobek Prahy.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avCntH">
+        <figcaption class="av-figure-h" id="avCntH">Úmrtnost na diabetes mellitus: čtyři čísla za rok 2023 (Eurostat hlth_cd_asdr2, ČSÚ)</figcaption>
+        <div class="av-counter-grid">
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="49.37" data-decimals="2">49,37</span>
+            <span class="av-counter-label">úmrtí na diabetes na 100 000 obyvatel v Česku, 2023 (věkově standardizováno)</span>
+            <span class="av-counter-foot">Průměr EU-27: 23,53. Česko je na 2,1násobku.</span>
+          </div>
+          <div class="av-counter-block av-counter-block-neutral">
+            <span class="av-counter" data-value="4884">4 884</span>
+            <span class="av-counter-label">lidí zemřelo na diabetes v roce 2024</span>
+            <span class="av-counter-foot">ČSÚ; 4,4 % ze 112 211 zemřelých. V roce 2023 to bylo 4 851.</span>
+          </div>
+          <div class="av-counter-block av-counter-block-bad">
+            <span class="av-counter" data-value="70.26" data-decimals="2">70,26</span>
+            <span class="av-counter-label">na 100 000 v regionu Severozápad (Ústecký a Karlovarský kraj), 2023</span>
+            <span class="av-counter-foot">Praha 35,29; rozpětí mezi regiony je dvojnásobné</span>
+          </div>
+          <div class="av-counter-block av-counter-block-warn">
+            <span class="av-counter" data-prefix="+" data-value="67" data-suffix=" %">+67 %</span>
+            <span class="av-counter-label">skok počtu úmrtí na diabetes mezi roky 2012 a 2013</span>
+            <span class="av-counter-foot">2 250 → 3 753 úmrtí; od 1. 1. 2013 platí nový List o prohlídce zemřelého</span>
+          </div>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2 (standardizovaná míra, ESP 2013, E10–E14) a hlth_cd_aro (absolutní počty, rezidenti), staženo z API 5. 10. 2026; ČSÚ, Zemřelí podle příčiny smrti v Česku 2015–2024 (Tab. 1). Podíl 4,4 % a nárůst o 67 % jsou výpočty redakce.</p>
+      </figure>
+
+      <h3>Co indikátor měří</h3>
+      <p>
+        Nový indikátor <a href="indicator.html?id=umrtnost_diabetes">Úmrtnost na diabetes mellitus</a> přebírá řadu Eurostatu <em>hlth_cd_asdr2</em>: věkově standardizovanou míru úmrtí, u nichž byl jako základní příčina smrti vybrán diabetes (kódy MKN-10 E10–E14), na 100 000 obyvatel. Standardizace na evropskou standardní populaci (ESP 2013) odstraňuje vliv toho, že některé země jsou starší než jiné; hodnoty Česka, Německa i průměru EU jsou proto přímo srovnatelné. Základní příčina smrti je podle definice WHO, kterou Eurostat přebírá, „nemoc nebo úraz, který zahájil řetězec chorobných stavů vedoucích přímo ke smrti“.
+      </p>
+      <p>
+        To je důležitá výhrada. Většina lidí s diabetem neumírá „na diabetes“, ale na infarkt, mrtvici nebo selhání ledvin — a na úmrtním listu je pak základní příčinou kardiovaskulární nemoc, diabetes je uveden jako přispívající stav. Indikátor tedy neměří, kolik diabetiků zemřelo. Měří, jak často lékař a kódovací pravidla označily diabetes za výchozí nemoc. Australská analýza 1,77 milionu úmrtí z let 2006–2017 (Bishop et al. 2023, <em>International Journal of Epidemiology</em>) ukázala, že míra úmrtnosti podle jakékoli zmínky diabetu na certifikátu je 3,5krát vyšší než podle základní příčiny. Prvotním zdrojem jsou v Česku Listy o prohlídce zemřelého, které ČSÚ zpracuje a základní příčinu vybere podle pravidel MKN-10 automatizovaným systémem IRIS; Eurostat je pak harmonizuje. V datovém kontraktu HSPA Monitoru má indikátor směr „nižší je lepší“ a signál <strong>bad</strong>: Česko je od průměru EU vzdáleno o 110 %.
+      </p>
+
+      <h3>Stav v Česku: dvojnásobek Evropy, téměř pětinásobek Slovenska</h3>
+
+      <figure class="av-figure" aria-labelledby="avBarH">
+        <figcaption class="av-figure-h" id="avBarH">Úmrtnost na diabetes mellitus, na 100 000 obyvatel, věkově standardizováno (Eurostat, 2023)</figcaption>
+        <ol class="av-bar-compare av-bar-compare-list" data-unit="" data-max="75">
+          <li class="av-bar-row" data-value="49.37" data-label="Česko" data-accent="bad"></li>
+          <li class="av-bar-row" data-value="35.42" data-label="Rakousko" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="33.17" data-label="Maďarsko" data-accent="warn"></li>
+          <li class="av-bar-row" data-value="28.12" data-label="Polsko" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="25.47" data-label="Německo" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="23.53" data-label="EU-27" data-accent="neutral"></li>
+          <li class="av-bar-row" data-value="14.02" data-label="Slovinsko" data-accent="good"></li>
+          <li class="av-bar-row" data-value="10.76" data-label="Slovensko" data-accent="good"></li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, sex=T, age=TOTAL, icd10=E10–E14, unit=RT; referenční rok 2023 (poslední dostupný), dataset aktualizován 8. 6. 2026, staženo 5. 10. 2026.</p>
+      </figure>
+
+      <p>
+        Mezi sousedy a zeměmi střední Evropy je Česko na prvním místě s velkým odstupem: Rakousko má 35,42, Maďarsko 33,17, Polsko 28,12, Německo 25,47. Slovensko vykazuje 10,76 — pětinu české hodnoty, i když jde o populaci s podobnou historií, stravou i zdravotním systémem. Právě ten slovenský údaj je první nápovědou, že srovnání nevypovídá jen o zdraví. Rozdíl mezi Českem a Slovenskem v prevalenci diabetu, obezitě ani kardiovaskulární úmrtnosti není pětinásobný; rozdíl v tom, co lékaři píší na první řádek úmrtního listu, takový být může.
+      </p>
+      <p>
+        Uvnitř Česka jsou rozdíly také dvojnásobné. Praha má 35,29 úmrtí na 100 000, Severozápad 70,26; mezi nimi leží Střední Čechy (56,56), Moravskoslezsko (56,29), Střední Morava (53,09), Jihozápad (51,53), Jihovýchod (43,95) a Severovýchod (38,41). Pořadí kopíruje mapu, kterou HSPA Monitor zná z jiných indikátorů: <a href="indicator.html?id=mortalita_lecitelna">léčitelné mortality</a>, dostupnosti praktických lékařů i vzdělanostní struktury. Muži umírají na diabetes častěji než ženy (60,27 proti 41,72) a téměř všechna úmrtí připadají na lidi nad 65 let (235,36 na 100 000 v této věkové skupině proti 4,32 u mladších).
+      </p>
+
+      <figure class="av-figure av-figure-wide" aria-labelledby="avRegH">
+        <figcaption class="av-figure-h" id="avRegH">Úmrtnost na diabetes podle regionů soudržnosti ČR, na 100 000 obyvatel, standardizováno (Eurostat, 2022–2023)</figcaption>
+        <div class="av-data-table-wrap">
+          <table class="av-data-table">
+            <thead>
+              <tr><th scope="col">Region (NUTS 2)</th><th scope="col">Kraje</th><th scope="col">2022</th><th scope="col">2023</th><th scope="col">Proti Praze 2023</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Severozápad</td><td>Ústecký, Karlovarský</td><td>71,20</td><td><strong>70,26</strong></td><td>2,0×</td></tr>
+              <tr><td>Střední Čechy</td><td>Středočeský</td><td>58,70</td><td>56,56</td><td>1,6×</td></tr>
+              <tr><td>Moravskoslezsko</td><td>Moravskoslezský</td><td>61,08</td><td>56,29</td><td>1,6×</td></tr>
+              <tr><td>Střední Morava</td><td>Olomoucký, Zlínský</td><td>47,45</td><td>53,09</td><td>1,5×</td></tr>
+              <tr><td>Jihozápad</td><td>Jihočeský, Plzeňský</td><td>53,04</td><td>51,53</td><td>1,5×</td></tr>
+              <tr><td>Jihovýchod</td><td>Jihomoravský, Vysočina</td><td>43,40</td><td>43,95</td><td>1,2×</td></tr>
+              <tr><td>Severovýchod</td><td>Liberecký, Královéhradecký, Pardubický</td><td>43,38</td><td>38,41</td><td>1,1×</td></tr>
+              <tr><td>Praha</td><td>Hl. m. Praha</td><td>30,79</td><td>35,29</td><td>1,0×</td></tr>
+              <tr><td><strong>Česko</strong></td><td></td><td>49,82</td><td><strong>49,37</strong></td><td>1,4×</td></tr>
+              <tr><td>EU-27</td><td></td><td>25,30</td><td>23,53</td><td>0,7×</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, hlth_cd_asdr2, geo CZ01–CZ08, CZ a EU27_2020; staženo 5. 10. 2026. Poměry proti Praze jsou výpočet redakce (zaokrouhleno na jedno desetinné místo).</p>
+      </figure>
+
+      <h3>Rok 2013: číslo se zlomilo, zdraví ne</h3>
+      <p>
+        Časová řada má jedno místo, které se nedá přehlédnout. V roce 2012 zemřelo v Česku na diabetes 2 250 lidí (26,98 na 100 000), v roce 2013 už 3 753 (45,10). Nárůst o 67 % během jednoho roku žádná epidemie nevysvětlí. Od 1. ledna 2013 ale platí vyhláška č. 297/2012 Sb., která zavedla nový List o prohlídce zemřelého; Eurostat v národních metadatech Česka uvádí k roku 2013 doslova „zavedení nového úmrtního listu se čtyřmi řádky v části I pro certifikaci příčin smrti“ a k roku 2011 zavedení automatizovaného kódování IRIS. Čtvrtý řádek dává lékaři víc místa popsat řetězec nemocí — a chronická nemoc jako diabetes se tak může častěji dostat na místo, odkud ji kódovací pravidla vyberou jako příčinu výchozí.
+      </p>
+
+      <figure class="av-figure" aria-labelledby="avTlH">
+        <figcaption class="av-figure-h" id="avTlH">Co se dělo s českou řadou úmrtnosti na diabetes (Eurostat, ČSÚ, ÚZIS, 2011–2026)</figcaption>
+        <ol class="av-timeline">
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2011</time>
+            <h4 class="av-timeline-title">Automatizované kódování IRIS</h4>
+            <p class="av-timeline-desc">ČSÚ zavádí software IRIS pro výběr základní příčiny smrti podle pravidel MKN-10; přibližně pětinu úmrtí dál kóduje ručně. Úmrtnost na diabetes 29,20 na 100 000.</p>
+            <span class="av-timeline-tag">Metodika</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">1. 1. 2013</time>
+            <h4 class="av-timeline-title">Nový List o prohlídce zemřelého</h4>
+            <p class="av-timeline-desc">Vyhláška č. 297/2012 Sb.: část I má čtyři řádky pro řetězec příčin smrti. Počet úmrtí na diabetes stoupá z 2 250 na 3 753, míra z 26,98 na 45,10.</p>
+            <span class="av-timeline-tag">Sbírka</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">2020–2021</time>
+            <h4 class="av-timeline-title">Pandemie</h4>
+            <p class="av-timeline-desc">Míra stoupá na 52,46 a 52,62; v roce 2021 umírá na diabetes 5 094 lidí, nejvíc v řadě. Po pandemii se vrací na 49,82 (2022) a 49,37 (2023).</p>
+            <span class="av-timeline-tag">Covid-19</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-done">
+            <time class="av-timeline-date">Únor 2026</time>
+            <h4 class="av-timeline-title">ÚZIS otevírá data o úmrtích chronicky nemocných</h4>
+            <p class="av-timeline-desc">Datová sada NR-06-36 „Příčiny úmrtí u pacientů s vybranými chronickými diagnózami“: počty zemřelých na diabetes (E10–E14) po krajích a okresech od roku 1994, absolutní počty bez standardizace.</p>
+            <span class="av-timeline-tag">Otevřená data</span>
+          </li>
+          <li class="av-timeline-item av-timeline-item-now">
+            <time class="av-timeline-date">8. 6. 2026</time>
+            <h4 class="av-timeline-title">Eurostat publikuje rok 2023</h4>
+            <p class="av-timeline-desc">Česko 49,37, EU-27 23,53. HSPA Monitor řadu přebírá jako nový indikátor; rok 2024 má zatím jen ČSÚ v absolutních počtech (4 884 úmrtí).</p>
+            <span class="av-timeline-tag">Indikátor</span>
+          </li>
+        </ol>
+        <p class="av-figure-note"><strong>Zdroj:</strong> Eurostat, národní metadata ČR k statistice příčin smrti (hlth_cdeath_simscd_cz, § 15.2 a 18.3.2); ÚZIS, prezentace List o prohlídce zemřelého a metodický popis NR-06-36 (verze 2026-01.01); ČSÚ, Zemřelí podle příčiny smrti. Staženo 5. 10. 2026.</p>
+      </figure>
+
+      <div class="article-callout-caveat" role="note">
+        <strong>Co z toho plyne a co ne.</strong>
+        Časová shoda zlomu s novým Listem je doložená v metadatech Eurostatu i ve vyhlášce. Příčinnou souvislost ale ani ČSÚ, ani Eurostat nekvantifikují a HSPA Monitor v recenzované literatuře nenašel českou studii, která by změřila, o kolik nový formulář a kódování IRIS zvýšily výběr diabetu jako základní příčiny. Mezinárodní srovnání ukazuje, že volba základní příčiny u diabetu se mezi zeměmi liší: Goldberger a kolegové (2015) spočítali, že v Izraeli připadá na jedno úmrtí se základní příčinou diabetes 2,7 úmrtí s diabetem kdekoli na certifikátu, zatímco v USA, Francii, Itálii, Austrálii a Česku 3,0–3,5. Jak velká část českého dvojnásobku proti EU je zdravotní a jak velká metodická, z dostupných dat říct nelze — a to je samo o sobě zjištění, které indikátor nese.
+      </div>
+
+      <h3>Co říká evidence: tlak a lipidy rozhodují víc než glykémie</h3>
+      <p>
+        Pokud je část úmrtí na diabetes skutečná a odvratitelná, kde je páka? Recenzovaná literatura dává poměrně jasnou odpověď, a ne tu, kterou by laik čekal. Metaanalýza 40 randomizovaných studií se 100 354 účastníky (Emdin et al. 2015, <em>JAMA</em>) ukázala, že každé snížení systolického tlaku o 10 mm Hg u lidí s diabetem 2. typu snižuje riziko úmrtí o 13 % (relativní riziko 0,87), riziko mrtvice o 27 % a riziko kardiovaskulárních příhod o 11 %. Metaanalýza individuálních dat z 51 studií (Nazarzadeh et al. 2022, <em>Lancet Diabetes &amp; Endocrinology</em>; 103 325 osob s diabetem) potvrdila, že snížení tlaku o 5 mm Hg snižuje riziko velkých kardiovaskulárních příhod i u diabetiků (HR 0,94); relativní účinek je u nich o něco slabší než u lidí bez diabetu (HR 0,89), absolutní přínos je ale podobný, protože vycházejí z vyššího rizika.
+      </p>
+      <p>
+        Naopak samotná intenzivní kontrola cukru v krvi úmrtnost neprokazatelně nesnižuje: systematický přehled 14 studií s 28 614 pacienty (Hemmingsen et al. 2011, <em>BMJ</em>) nenašel vliv na celkovou úmrtnost (RR 1,02) ani na úmrtnost kardiovaskulární, riziko nefatálního infarktu možná snížil (RR 0,85; sekvenční analýza to nepotvrdila), ale zvýšil riziko těžké hypoglykemie na 2,4násobek. Kontrolní vyhledávání v databázi Consensus nenašlo kvalitní přehled, který by tento obraz zpochybňoval. Jinými slovy: lidé s diabetem umírají hlavně na cévy, a cévy chrání tlak, lipidy a kontrola komplikací. Česko má v těchto parametrech rezervy, které HSPA Monitor sleduje jinde — <a href="indicator.html?id=amputace_dk_diabetici">amputace dolních končetin u diabetiků</a> jsou nad průměrem OECD (12,1 proti 9,5 v téže metrice OECD HCQI) a <a href="indicator.html?id=kontrola_hypertenze">kontrola hypertenze</a> patří k slabším místům primární péče.
+      </p>
+
+      <aside class="av-aside">
+        <div class="av-counter-block av-counter-block-bad">
+          <span class="av-counter" data-value="9.5" data-decimals="1" data-suffix=" %">9,5 %</span>
+          <span class="av-counter-label">lidí nad 15 let v Česku má diabetes (2023)</span>
+          <span class="av-counter-foot">Průměr EU 7,5 %, OECD 7,0 %. Spotřeba antidiabetik 113,1 DDD na 1 000 obyvatel denně (2025) je nad průměrem OECD (94,2) — péče dostupná je, otázka je její výsledek.</span>
+        </div>
+      </aside>
+
+      <h3>Co s tím</h3>
+      <p>
+        <strong>ČSÚ a ÚZIS: změřit, co udělal rok 2013.</strong> Eurostat v metadatech přiznává zlom, ale nikdo ho nevyčíslil. Standardní nástroj existuje — tzv. bridge coding, kdy se vzorek úmrtních listů zakóduje starým i novým postupem a rozdíl se publikuje jako přepočítací koeficient. Bez něj zůstává česká řada před rokem 2013 a po něm nesrovnatelná a mezinárodní srovnání stojí na nejistém základu. ÚZIS letos v únoru otevřel data o úmrtích pacientů s chronickými diagnózami po okresech od roku 1994; to je dobrý krok, metodická studie zlomu by byl druhý.
+      </p>
+      <p>
+        <strong>Primární péče: tlak, lipidy, nohy.</strong> Evidence je jednoznačná v tom, že u diabetiků zachraňuje životy kontrola krevního tlaku a cholesterolu víc než honba za ideální glykémií. Všeobecná preventivní prohlídka podle vyhlášky č. 70/2012 Sb. i úhradové bonifikace za péči o chronicky nemocné jsou nástroje, které už existují; indikátor úmrtnosti na diabetes spolu s amputacemi ukáže, zda fungují — a regionální členění ukáže, kde ne. Severozápad s dvojnásobkem Prahy je přesně ten typ rozdílu, na který mají mířit krajské plány dostupnosti diabetologických ambulancí a praktických lékařů.
+      </p>
+      <p>
+        <strong>Čtenáři dat: číst spolu s prevalencí a amputacemi.</strong> Samotná úmrtnost na diabetes jako základní příčinu je křehké číslo. HSPA Monitor ji proto zařazuje vedle <a href="indicator.html?id=prevalence_diabetu">prevalence diabetu</a>, <a href="indicator.html?id=spotreba_antidiabetik">spotřeby antidiabetik</a>, <a href="indicator.html?id=amputace_dk_diabetici">amputací</a> a <a href="indicator.html?id=mortalita_lecitelna">léčitelné mortality</a>. Teprve dohromady říkají, zda systém diabetes zachytí, léčí a udrží bez komplikací — nebo zda jen jinak píše úmrtní listy.
+      </p>
+
+      <h3>Co tenhle ukazatel nedokáže</h3>
+      <p>
+        <strong>Za prvé</strong> počítá jen úmrtí se základní příčinou diabetes, ne všechna úmrtí diabetiků — ta jsou podle australských dat zhruba 3,5krát četnější. <strong>Za druhé</strong> je citlivý na to, jak se v které zemi vyplňují a kódují úmrtní listy; slovenská pětina české hodnoty i český zlom roku 2013 jsou toho dokladem. <strong>Za třetí</strong> roky 2020–2021 nesou nadúmrtnost pandemie. <strong>Za čtvrté</strong> přichází s odstupem dva a půl roku; za rok 2024 má Česko zatím jen 4 884 úmrtí v absolutním počtu. <strong>Za páté</strong> nerozlišuje diabetes 1. a 2. typu a velká část certifikátů spadá do kódu E14 „neurčený diabetes“. Jaroslav z Mostu v této statistice jednou bude, nebo nebude — podle toho, co lékař napíše na první řádek Listu. Jestli měl dobře léčený tlak, se z ní nikdo nedozví.
+      </p>
+
+    </div>
+
+    <aside class="article-databox" aria-label="Datový rámec článku">
+      <div class="ed-kicker">Data v tomto článku</div>
+      <h4 class="article-databox-h">Indikátory HSPA Monitoru, ze kterých text vychází</h4>
+      <ul class="article-databox-list">
+        <li><a href="indicator.html?id=umrtnost_diabetes"><strong>Úmrtnost na diabetes mellitus (standardizovaná)</strong></a> — 49,37 na 100 000 ob. (2023, ČR) proti 23,53 v EU-27 · Výsledky · signál bad · nový indikátor (Eurostat hlth_cd_asdr2)</li>
+        <li><a href="indicator.html?id=prevalence_diabetu"><strong>Prevalence diabetu (15+)</strong></a> — 9,5 % (2023) proti 7,5 % v EU a 7,0 % v OECD · signál bad</li>
+        <li><a href="indicator.html?id=amputace_dk_diabetici"><strong>Amputace dolních končetin u diabetiků</strong></a> — 12,1 na 100 000 diabetiků (2023) proti 9,5 v OECD · signál bad</li>
+        <li><a href="indicator.html?id=spotreba_antidiabetik"><strong>Spotřeba antidiabetik</strong></a> — 113,1 DDD/1000/den (2025) proti 94,2 v OECD · signál neutral</li>
+        <li><a href="indicator.html?id=mortalita_lecitelna"><strong>Léčitelná mortalita</strong></a> — 107,19 na 100 000 ob. (2023) proti 86,81 v EU · signál bad</li>
+      </ul>
+    </aside>
+
+    <section class="article-sources">
+      <div class="ed-kicker">Zdroje</div>
+      <h4 class="article-sources-h">Kde si data sami ověříte</h4>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Primární zdroje dat</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — hlth_cd_asdr2, Causes of death: standardised death rate by NUTS 2 region of residence.</strong> Dimenze icd10 = E10-E14, sex = T, age = TOTAL, unit = RT; referenční rok 2023, dataset aktualizován 8. 6. 2026. Hodnoty pro ČR, EU-27, sousedy, pohlaví, věk a regiony CZ01–CZ08. Staženo z API 5. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_asdr2/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — hlth_cd_aro, Causes of death: deaths by country of residence and occurrence.</strong> Absolutní počty úmrtí na E10–E14 u rezidentů ČR: 2 250 (2012), 3 753 (2013), 4 856 (2023). Staženo 5. 10. 2026. <a href="https://ec.europa.eu/eurostat/databrowser/view/hlth_cd_aro/default/table" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>ČSÚ — Zemřelí podle zkráceného seznamu příčin smrti, pohlaví a věku v ČR, krajích a okresech (2024), Tab. 1 Zemřelí podle příčiny smrti v Česku.</strong> E10–E14: 3 728 (2015) až 4 884 (2024); celkem zemřelých 112 211 (2024). Staženo 5. 10. 2026. <a href="https://csu.gov.cz/docs/107508/59d1a2e9-5159-0b98-e5a3-2df2f1497462/13020625001.pdf?version=1.0" target="_blank" rel="noopener">csu.gov.cz ↗</a></li>
+          <li><strong>ÚZIS — Příčiny úmrtí u pacientů s vybranými chronickými diagnózami (NR-06-36), metodický popis verze 2026-01.01.</strong> Otevřená data: počty zemřelých podle kategorií chronických příčin (diabetes = E10–E14), kraj a okres bydliště, od roku 1994. <a href="https://www.nzip.cz/data/lpz/metodicke-popisy/Otevrena-data-NR-06-36-pacienti-umrti-priciny-vybrane-chronicke-diagnozy-2026-01.pdf" target="_blank" rel="noopener">nzip.cz ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Metodika a legislativa</h5>
+        <ul class="article-sources-list">
+          <li><strong>Eurostat — Causes of death statistics, reference metadata (ESMS).</strong> § 3.1 definice základní příčiny smrti (WHO), § 3.4 evropská standardní populace (nevážený průměr populací EU a EFTA, projekce 2011–2030), § 14.2 rok 2023 jako poslední referenční. <a href="https://ec.europa.eu/eurostat/cache/metadata/en/hlth_cdeath_sims.htm" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>Eurostat — národní metadata Česko, Causes of death (SIMS-CD).</strong> § 15.2 srovnatelnost v čase: „2011: implementation of IRIS automated coding software“, „2013: introduction of a new death certificate with four lines in part I for certification of causes of death“; § 18.3.2 výběr základní příčiny systémem IRIS. <a href="https://ec.europa.eu/eurostat/cache/metadata/EN/hlth_cdeath_simscd_cz.htm" target="_blank" rel="noopener">ec.europa.eu/eurostat ↗</a></li>
+          <li><strong>ÚZIS — List o prohlídce zemřelého, jeho vyplňování a statistika zemřelých (prezentace).</strong> Vyhláška č. 297/2012 Sb. účinná od 1. 1. 2013, zavedení IRIS v roce 2011, manuální výběr u přibližně 20 % úmrtí. <a href="https://www.uzis.cz/res/file/registry/lpz/lpz-prezentace.pdf" target="_blank" rel="noopener">uzis.cz ↗</a></li>
+          <li><strong>Vyhláška č. 297/2012 Sb., o náležitostech Listu o prohlídce zemřelého</strong> (účinnost 1. 1. 2013) a <strong>vyhláška č. 70/2012 Sb., o preventivních prohlídkách.</strong> <a href="https://www.zakonyprolidi.cz/cs/2012-297" target="_blank" rel="noopener">zakonyprolidi.cz (297/2012) ↗</a> · <a href="https://www.zakonyprolidi.cz/cs/2012-70" target="_blank" rel="noopener">zakonyprolidi.cz (70/2012) ↗</a></li>
+        </ul>
+      </div>
+      <div class="sources-group">
+        <h5 class="sources-group-h">Evidence</h5>
+        <ul class="article-sources-list">
+          <li><strong>Bishop K, Moreno-Betancur M, Balogun S et al. Quantifying cause-related mortality in Australia, incorporating multiple causes: observed patterns, trends and practical considerations.</strong> <em>International Journal of Epidemiology</em> 2023;52(1):284–294. 1 773 399 úmrtí 2006–2017. DOI 10.1093/ije/dyac167. PMID 35984318. Ověřeno v PubMed 5. 10. 2026. <a href="https://doi.org/10.1093/ije/dyac167" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Goldberger N, Applbaum Y, Meron J, Haklai Z. High Israeli mortality rates from diabetes and renal failure: can international comparison of multiple causes of death reflect differences in choice of underlying cause?</strong> <em>Israel Journal of Health Policy Research</em> 2015;4:31. DOI 10.1186/s13584-015-0027-6. PMID 26430506. Ověřeno v PubMed 5. 10. 2026. <a href="https://doi.org/10.1186/s13584-015-0027-6" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Emdin CA, Rahimi K, Neal B, Callender T, Perkovic V, Patel A. Blood pressure lowering in type 2 diabetes: a systematic review and meta-analysis.</strong> <em>JAMA</em> 2015;313(6):603–615. 40 RCT, 100 354 osob. DOI 10.1001/jama.2014.18574. PMID 25668264. Ověřeno v PubMed 5. 10. 2026. <a href="https://doi.org/10.1001/jama.2014.18574" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Nazarzadeh M, Bidel Z, Canoy D et al. Blood pressure-lowering treatment for prevention of major cardiovascular diseases in people with and without type 2 diabetes: an individual participant-level data meta-analysis.</strong> <em>Lancet Diabetes &amp; Endocrinology</em> 2022;10(9):645–654. 51 RCT, 358 533 osob. DOI 10.1016/S2213-8587(22)00172-3. PMID 35878651. Ověřeno v PubMed 5. 10. 2026. <a href="https://doi.org/10.1016/S2213-8587(22)00172-3" target="_blank" rel="noopener">doi.org ↗</a></li>
+          <li><strong>Hemmingsen B, Lund SS, Gluud C et al. Intensive glycaemic control for patients with type 2 diabetes: systematic review with meta-analysis and trial sequential analysis of randomised clinical trials.</strong> <em>BMJ</em> 2011;343:d6898. 14 RCT, 28 614 osob. DOI 10.1136/bmj.d6898. PMID 22115901. Ověřeno v PubMed 5. 10. 2026. <a href="https://doi.org/10.1136/bmj.d6898" target="_blank" rel="noopener">doi.org ↗</a></li>
+        </ul>
+      </div>
+      <p class="article-sources-disclaimer">
+        <strong>Pozn. k údajům:</strong> Standardizované míry pocházejí z jediné řady Eurostatu (hlth_cd_asdr2, ESP 2013), aby byly ČR, EU-27 i sousedé souměřitelní; absolutní počty za rok 2024 publikuje jen ČSÚ a nejsou standardizované. Poměr ČR/EU (2,1), nárůst 2012–2013 (+67 %), podíl diabetu na všech úmrtích (4,4 %) a poměry regionů proti Praze jsou výpočty redakce z uvedených hodnot. Příčinná souvislost zlomu roku 2013 s novým Listem o prohlídce zemřelého není primárními zdroji vyčíslena; článek uvádí jen doloženou časovou shodu. Jaroslav z Mostu je ilustrativní postava.
+      </p>
+    </section>
+
+    <nav class="article-nav-bottom" aria-label="Pokračovat ve čtení">
+      <a class="article-nav-back" href="clanky.html">← Všechny články</a>
+    </nav>
+
+  </article>
+
+</main>
+
+<footer class="bottom" id="siteFooter"></footer>
+
+<script type="module" src="src/clanky.js"></script>
+</body>
+</html>

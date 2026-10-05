@@ -887,6 +887,7 @@ const MANIFEST = {
   'clanek-projekce-bez-centrovych-leciv': { kicker: 'Financování · projekce výdajů 2040', signal: 'warn', stat: '39,8', statSuffix: ' mld. Kč', claim: 'stojí ročně centrová léčiva. Do projekce výdajů ÚZIS 2040 se nepočítají.', context: 'Tři varianty ÚZIS: 836 až 1 014 mld. Kč v roce 2040 — bez téhle položky.' },
   'clanek-hepatitida-eliminace-2030': { kicker: 'Infekční nemoci · hepatitida C', signal: 'bad', stat: '1 447', claim: 'případů hepatitidy C nahlásilo Česko v roce 2024 — nejvíc od roku 2010.', context: 'Do cíle eliminace 2030 zbývá pět let. Antivirotika vyléčí přes 90 %.' },
   'clanek-lekari-ze-zahranici': { kicker: 'Pracovní síla · lékaři ze zahraničí', signal: 'neutral', stat: '1', statSuffix: ' z 12', claim: 'lékař v Česku studoval mimo republiku. Dvě třetiny z nich na Slovensku.', context: 'Podíl je 8,6 % — přesně na mediánu Evropské unie, mezi Německem a Polskem.' },
+  'clanek-zp-mv-cr-trestni-oznameni-kontrola-2026': { kicker: 'Zdravotní pojišťovny · ZP MV ČR', signal: 'warn', stat: '10,0', statSuffix: ' mil. Kč', claim: 'odměny členům orgánů ZP MV ČR v roce 2024. Částky z kontroly nikdo nezveřejnil.', context: 'Provozní fond 2024: 1 427,6 mil. Kč. Trestní oznámení není obvinění.' },
   'clanek-vcasny-zachyt-autismu': {
     kicker: 'Děti · screening autismu', signal: 'warn',
     stat: '79,9', statSuffix: '%', barPct: 80,
