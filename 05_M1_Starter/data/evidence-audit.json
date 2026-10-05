@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-09-27T00:00:00Z",
+  "generated_at": "2026-10-04T00:00:00Z",
   "_doc": "Registr evidence-auditu (PROMPT_EVIDENCE_AUDIT.md): pro každý ověřený článek / indikátor seznam tvrzení, které studie z PubMed/Consensus je řeší, a verdikt (supported / partial / contradicted / no-evidence / not-applicable / unclear). Zapisuje jen orchestrace (Sonnet hledá, Opus rozhoduje), mění se výhradně commitem. content_hash = sha1 souboru v době kontroly; scripts/evidence-audit-queue.js podle něj pozná, že se obsah změnil (stale). Consensus i PubMed jsou nástroje, ne zdroje — do registru patří jen ověřené studie s PMID/DOI, nikdy provozní texty nástrojů.",
   "items": [
     {
@@ -8891,6 +8891,1841 @@
       ],
       "followup": "Evidence k míře podhodnocení (Y10–Y34) u českých adolescentů nedohledána — doporučen dotaz na domácí literaturu (NÚDZ, ÚZIS); velikost vlivu determinantu „tlak na výkon“ / výkonová úzkost neověřena (abstrakty ji nedokládají). Věta vložená do limitations čeká na schválení redakcí.",
       "notes": "Karta necituje žádnou konkrétní studii (jen Eurostat/ČSÚ jako datový zdroj), cestou found_via „article“ nešlo ověřit nic. Vybrána 3 tvrzení dle stropu. Rešerše (Sonnet): 10 volání PubMed (nad doporučeným stropem 8 — první dotazy vrátily 0 nebo irelevantní výsledky), 1 volání Consensus, kandidát z Consensu ověřen v PubMed. Adjudikace (Opus): 3 volání PubMed (metadata tří studií — abstrakty ověřeny, žádná retrakce; cílené hledání adolescentní misklasifikace; metadata kandidátů). Všechna tři tvrzení partial: (1) podhodnocení přes kódy nezjištěného úmyslu doložené pro Polsko a Německo (všechny věkové skupiny), pro mladé jen z Brazílie, pro ČR ani evropskou kohortu 15–19 let nic; (2) sociální sítě a kyberšikana podpořeny systematickým přehledem z pandemického období, tlak na výkon nedoložen; (3) zdůvodnění věkové stratifikace má jen slabou oporu (nízká jistota). Ong 2020 sjednoceně vedena jako „cross-sectional“. Vitoi 2026 (Cureus) jen kontext v registru, do literature karty nezařazena. Věta do limitations obsahuje jen číslo doslova uvedené v abstraktu Höfer 2012."
+    },
+    {
+      "id": "clanek-salmoneloza-ujezd-nad-lesy-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "00b3c228697322d3466b5513ecf26a9b541734d5",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 3,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Glynn a Palmer (1992, American Journal of Epidemiology, DOI) ukázali, že kratší inkubace jde ruku v ruce s těžším průběhem a častější hospitalizací.",
+          "location": "sekce o inkubační době a dávce (odstavec o nástupu příznaků 21.–25. 9.)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "1488963",
+              "doi": "10.1093/oxfordjournals.aje.a116449",
+              "title": "Incubation period, severity of disease, and infecting dose: evidence from a Salmonella outbreak.",
+              "year": 1992,
+              "journal": "American Journal of Epidemiology",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: inkubace záporně koreluje s počtem stolic, maximální teplotou, délkou nemoci a absencí; kratší inkubace častěji hospitalizace. Jde o jedno ohnisko S. Typhimurium (ne Enteritidis); souvislost dávky se závažností autoři v abstraktu přímo neprokázali. Věta článku tvrdí jen vztah inkubace–závažnost, a ten abstrakt doslova nese."
+        },
+        {
+          "claim_id": "salmoneloza-ujezd-nad-lesy-2026--05",
+          "text": "Mintz et al. (1994, Epidemiology and Infection, DOI) u ohniska z vaječné holandské omáčky zjistili medián inkubace 37 hodin u lidí s nízkou expozicí proti 17,5 hodiny u vysoké expozice.",
+          "location": "sekce o inkubační době a dávce",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "8119352",
+              "doi": "10.1017/s095026880005737x",
+              "title": "Dose-response effects in an outbreak of Salmonella enteritidis.",
+              "year": 1994,
+              "journal": "Epidemiology and Infection",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: kohorta 169 osob, holandská omáčka z vajec, medián inkubace 37 h (nízká) / 21 h (střední) / 17,5 h (vysoká expozice), P = 0,006. Obě čísla článku sedí doslova; source_note v claims.json už PMID/DOI nese."
+        },
+        {
+          "claim_id": "",
+          "text": "Abe et al. (2004, Journal of Food Protection, DOI) v rozboru 185 japonských ohnisek Salmonella Enteritidis našli u školních obědů delší medián inkubace a v devíti ohniscích se známou dávkou negativní vztah mezi dávkou a inkubací.",
+          "location": "sekce o inkubační době a dávce",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "15633679",
+              "doi": "10.4315/0362-028x-67.12.2735",
+              "title": "Prolonged incubation period of salmonellosis associated with low bacterial doses.",
+              "year": 2004,
+              "journal": "Journal of Food Protection",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: 185 ohnisek S. Enteritidis, signifikantně delší medián inkubace u školních a školkových obědů, 9 ohnisek s odhadnutou dávkou a signifikantní negativní korelace dávka–inkubace. Dávka byla odhadnuta z koncentrace v potravině, ne měřena u strávníků; článek ji označuje jako „známou“, což je mírné zjednodušení, ne zkreslení."
+        },
+        {
+          "claim_id": "",
+          "text": "Americký přehled ohnisek Chai et al. (2019, Epidemiology and Infection, DOI) uvádí u salmonely, noroviru a shigel mediány inkubace ohnisek mezi 32 a 45 hodinami.",
+          "location": "sekce o inkubační době a dávce",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31587689",
+              "doi": "10.1017/S0950268819001651",
+              "title": "Incubation periods of enteric illnesses in foodborne outbreaks, United States, 1998-2013.",
+              "year": 2019,
+              "journal": "Epidemiology and Infection",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: norovirus, Salmonella a Shigella mají podobné mediány inkubace ohnisek 32–45 h. Rozsah v článku sedí; údaj platí pro rod Salmonella celkově, ne specificky pro Enteritidis."
+        },
+        {
+          "claim_id": "",
+          "text": "Pro Újezd nad Lesy je to vysvětlení v souladu s literaturou, ne důkaz: dávky, které jednotliví strávníci snědli, nikdo nezměřil.",
+          "location": "sekce o inkubační době a dávce (závěr odstavce; navazuje na vysvětlení HSHMP o nižší infekční dávce)",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "8119352",
+              "doi": "10.1017/s095026880005737x",
+              "title": "Dose-response effects in an outbreak of Salmonella enteritidis.",
+              "year": 1994,
+              "journal": "Epidemiology and Infection",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "15633679",
+              "doi": "10.4315/0362-028x-67.12.2735",
+              "title": "Prolonged incubation period of salmonellosis associated with low bacterial doses.",
+              "year": 2004,
+              "journal": "Journal of Food Protection",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Vztah nižší dávka → delší inkubace doložen u S. Enteritidis dvěma nezávislými pracemi (Mintz 1994 dávka–odpověď v kohortě, Abe 2004 u 185 ohnisek včetně školních obědů). Věta netvrdí, že mechanismus v pražském ohnisku platí, jen že vysvětlení HSHMP je s literaturou konzistentní, a výslovně odmítá, že jde o důkaz. Formulace přesně odpovídá síle evidence."
+        },
+        {
+          "claim_id": "",
+          "text": "Systematický přehled s metaanalýzou Young et al. (2019, Journal of Food Protection, DOI) zjistil, že školení v bezpečnosti potravin v randomizovaných studiích zlepšuje znalosti personálu (standardizovaný rozdíl průměrů 0,92), ale u skutečného chování a u výsledků inspekcí randomizované studie významný efekt neprokázaly.",
+          "location": "sekce o opatřeních po ohnisku (podmínky znovuotevření jídelny, školení personálu)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "31536416",
+              "doi": "10.4315/0362-028X.JFP-19-108",
+              "title": "Effectiveness of Food Handler Training and Education Interventions: A Systematic Review and Meta-Analysis.",
+              "year": 2019,
+              "journal": "Journal of Food Protection",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: 8 RCT, SMD 0,92 (95% CI 0,03–1,81) pro znalosti; u postojů, chování a inspekčních skóre v RCT bez významného efektu; nerandomizované studie efekt nacházejí s velmi nízkou důvěrou. Interval spolehlivosti je velmi široký; článek ho neuvádí, ale tvrzení tím nepřestřeluje."
+        },
+        {
+          "claim_id": "",
+          "text": "Jiný přehled, Levy et al. (2022, Food Research International, DOI), shrnul osm studií z provozoven společného stravování: opatření bezpečnosti potravin byla spojena s poklesem mikrobiální zátěže o 28,6 % a autoři z toho usuzují, že programy založené na HACCP mohou nákazám předcházet. Zároveň upozorňují na riziko zkreslení v zahrnutých studiích.",
+          "location": "sekce o opatřeních po ohnisku (HACCP)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35650991",
+              "doi": "10.1016/j.foodres.2022.111076",
+              "title": "Food safety policies and their effectiveness to prevent foodborne diseases in catering establishments: A systematic review and meta-analysis.",
+              "year": 2022,
+              "journal": "Food Research International",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzen verdikt rešerše. Abstrakt: 8 studií, pokles mikrobiální zátěže o 28,6 % (95% CI −30,6 až −26,7), HACCP programy by mohly být účinné, evidence s rizikem zkreslení. Výstupem je mikrobiální počet, ne incidence nákaz; článek závěr o prevenci nákaz správně připisuje autorům a riziko zkreslení uvádí."
+        },
+        {
+          "claim_id": "salmoneloza-ujezd-nad-lesy-2026--04",
+          "text": "Podle vydání za rok 2024 (EFSA Journal 2025, DOI) bylo v EU potvrzeno 79 703 salmonelóz, 18,6 na 100 000 obyvatel. Česko vykázalo 7 003 potvrzených případů a 64,2 na 100 000, zhruba třiapůlkrát víc (výpočet redakce).",
+          "location": "sekce srovnání s EU (EFSA/ECDC 2024)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41377167",
+              "doi": "10.2903/j.efsa.2025.9759",
+              "title": "The European Union One Health 2024 Zoonoses Report.",
+              "year": 2025,
+              "journal": "EFSA Journal",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Verdikt povýšen z partial na supported: adjudikace otevřela open-access plný text v PMC (PMC12686834). Text kapitoly o salmonelóze: 79,703 confirmed cases, EU notification rate 18.6 per 100,000, Czechia 64.2 per 100,000; tabulka podle států: Czechia 7003 / 64.2. Poměr 3,5× je správně označen jako výpočet redakce. Výhrada o nesrovnatelnosti mezi státy je ve zprávě rovněž. Jde o surveillance zprávu, ne o studii; ověřuje se věrnost převzetí čísel."
+        },
+        {
+          "claim_id": "",
+          "text": "V roce 2024 evidovala 1 238 ohnisek salmonelózy z potravin s 10 164 nemocnými. Nejčastější dvojicí původce a potraviny mezi ohnisky se silnými důkazy byla salmonela a vejce a výrobky z vajec: 83 ohnisek proti průměru 61,3 v letech 2020–2023.",
+          "location": "sekce srovnání s EU (odkud se salmonela bere)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41377167",
+              "doi": "10.2903/j.efsa.2025.9759",
+              "title": "The European Union One Health 2024 Zoonoses Report.",
+              "year": 2025,
+              "journal": "EFSA Journal",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Rešerše tato čísla sloučila s tvrzením --04 a dala partial; adjudikace je ověřila v plném textu PMC12686834. Souhrnná tabulka salmonelózy 2020–2024: 10,164 případů souvisejících s ohnisky, 1238 ohnisek. Tab. 53 (strong-evidence outbreaks, 2024): pořadí 1 Salmonella × Eggs and egg products, 83 ohnisek, 2020–2023 průměr 61,3/rok. Pozor na odlišnou metriku jinde ve zprávě: eggs and egg products napříč všemi původci je třetí nejčastější (89 ohnisek); článek správně mluví o dvojici původce–potravina."
+        }
+      ],
+      "summary": {
+        "supported": 9,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "claim-note",
+          "detail": "source_note u salmoneloza-ujezd-nad-lesy-2026--04 doplněn o ověření v plném textu PMC12686834 (tab. 8, tab. 53), 2026-10-04",
+          "ref": "salmoneloza-ujezd-nad-lesy-2026--04"
+        },
+        {
+          "type": "none",
+          "detail": "source-added není třeba: všech 7 studií článek už v article-sources cituje s DOI a PMID; žádné contradicted; prose beze změny.",
+          "ref": ""
+        }
+      ],
+      "notes": "PubMed: get_article_metadata pro všech 7 citovaných PMID (existují, DOI sedí, bez retrakce); adjudikace: convert_article_ids a get_full_text_article (PMC12686834). Consensus nepoužit. Vynechána administrativní data/legislativa (HSHMP a MZ počty, SZÚ ISIN, černý kašel, legislativa, kroky HSHMP). Souhrnné tvrzení o EFSA číslech rozděleno na --04 a samostatné tvrzení o ohniscích, obě povýšena z partial na supported podle plného textu. Výhrady přenositelnosti: Glynn 1992 je S. Typhimurium, Chai 2019 rod Salmonella celkově; článek pro Újezd tvrdí jen konzistenci, ne důkaz."
+    },
+    {
+      "id": "clanek-komari-infekce-evropa-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "85bedc04707d6ad12f50364851e3ffe2bcdde3df",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 5,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "Že se přenos šíří kvůli teplejšímu klimatu, podporuje modelová studie Erazo et al. (2024, Nature Communications): plocha Evropy ekologicky vhodná pro cirkulaci západonilské horečky se v letech 1901–2019 výrazně zvětšila, zatímco ve srovnávacím scénáři bez klimatické změny zůstala téměř stejná.",
+          "location": "Co říká výzkum o riziku",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38331945",
+              "doi": "10.1038/s41467-024-45290-3",
+              "title": "Contribution of climate change to the spatial expansion of West Nile virus in Europe.",
+              "year": 2024,
+              "journal": "Nature Communications",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno beze změny proti rešerši. Abstrakt uvádí výrazné zvětšení vhodné plochy v letech 1901–2019, kdežto v kontrafaktuálním scénáři bez klimatické změny zůstala plocha téměř stejná. Jde o ekologické modelování, ne o měření případů, a článek ho správně nazývá modelovou studií."
+        },
+        {
+          "text": "Systematický přehled Heinricha a kolegů zahrnul 27 studií a jako nejkonzistentněji uváděný meteorologický faktor našel rostoucí teploty, spojené s dřívějším začátkem a delší sezónou přenosu.",
+          "location": "Co říká výzkum o riziku",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41842950",
+              "doi": "10.1556/1886.2026.00010",
+              "title": "Endemic progression of autochthonous West Nile virus infections in Europe.",
+              "year": 2026,
+              "journal": "European Journal of Microbiology & Immunology",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt jsem při adjudikaci znovu načetl a sedí doslova. Přehled zahrnul 27 studií od roku 2015. Rostoucí teploty jsou v něm „the most consistently reported meteorological correlate“ a jsou spojené s dřívějším nástupem sezóny a delším přenosem. Jde o narativní syntézu bez metaanalýzy a o korelát, ne o prokázanou příčinu."
+        },
+        {
+          "text": "Systematický přehled Heinrich et al. (2026) upozorňuje, že v hlášených případech převažují těžké neuroinvazivní formy, což odpovídá podhlášení mírných infekcí.",
+          "location": "Mezinárodní srovnání: proč se to týká i nás",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41842950",
+              "doi": "10.1556/1886.2026.00010",
+              "title": "Endemic progression of autochthonous West Nile virus infections in Europe.",
+              "year": 2026,
+              "journal": "European Journal of Microbiology & Immunology",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt mluví o nadměrném zastoupení WNND mezi hlášenými případy (over-representation), slučitelném s podhodnocením mírných a bezpříznakových infekcí. Závěr o podhlášení článek přebírá správně. Slovo „převažují“ znamená nadpoloviční většinu, kdežto abstrakt mluví jen o nadměrném zastoupení. Je to jen drobný posun ve formulaci, proto confidence medium a žádná akce."
+        },
+        {
+          "text": "Přehled Heinricha a kolegů uvádí, že tam, kde surveillance integruje všechny tři složky, záchyt viru u komárů a ptáků předcházel lidským případům.",
+          "location": "Co s tím",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41842950",
+              "doi": "10.1556/1886.2026.00010",
+              "title": "Endemic progression of autochthonous West Nile virus infections in Europe.",
+              "year": 2026,
+              "journal": "European Journal of Microbiology & Immunology",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova říká „In selected integrated surveillance settings, detection of WNV in mosquito pools and birds preceded detection of human infections“. Článek formulací „tam, kde“ zobecňuje na všechny integrované systémy, ačkoli přehled to dokládá jen u vybraných. Navíc jde o časový předstih záchytu, ne o prokázaný přínos pro zdravotní výsledky. Doporučení v sekci „Co s tím“ zůstává obhajitelné, rozsah tvrzení je ale širší než evidence, proto jedna upřesňující věta (vložena za tvrzení)."
+        },
+        {
+          "text": "Analýza Farooq et al. (2025, The Lancet Planetary Health) sledovala evropské regiony v letech 1990–2024: doba od usazení komára tygrovaného v regionu do prvního ohniska se zkrátila z 25 let na méně než pět. Zvýšení průměrné letní teploty o 1 °C bylo spojeno s poměrem rizik ohniska 1,55 (95% interval spolehlivosti 1,30–1,85).",
+          "location": "Co říká výzkum o riziku",
+          "kind": "effect",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40381632",
+              "doi": "10.1016/S2542-5196(25)00059-2",
+              "title": "Impact of climate and Aedes albopictus establishment on dengue and chikungunya outbreaks in Europe: a time-to-event analysis.",
+              "year": 2025,
+              "journal": "The Lancet Planetary Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Čísla (z 25 let na méně než 5; HR 1,55, 95% CI 1,30–1,85) jsou v abstraktu doslova. Jde o ekologickou time-to-event analýzu na úrovni regionů NUTS 3, tedy o asociaci. Článek správně píše „bylo spojeno“."
+        },
+        {
+          "text": "Systematický přehled Cattaneo et al. (2025, The Lancet Regional Health – Europe) popsal 56 epizod místního přenosu dengue, chikungunyi a ziky v Evropě v letech 2007–2023. Jejich četnost rostla v průměru 1,25krát ročně a od prvních příznaků prvního nemocného do diagnózy indexového případu uplynulo v mediánu 35,5 dne.",
+          "location": "Co říká výzkum o riziku",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "40213502",
+              "doi": "10.1016/j.lanepe.2025.101231",
+              "title": "Transmission of autochthonous Aedes-borne arboviruses and related public health challenges in Europe 2007-2023: a systematic review and secondary analysis.",
+              "year": 2025,
+              "journal": "The Lancet Regional Health - Europe",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Abstrakt uvádí 56 epizod místního přenosu (LTE), nárůst 1,25krát ročně (95% CI 1,17–1,35) a medián 35,5 dne (23–76)."
+        },
+        {
+          "text": "Studie z jižní Francie Jourdain et al. (2020, PLoS Neglected Tropical Diseases) našla jako hlavní faktor místního přenosu pozdní nahlášení importovaného případu, 21 dní a déle.",
+          "location": "Co říká výzkum o riziku",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "32392224",
+              "doi": "10.1371/journal.pntd.0008320",
+              "title": "From importation to autochthonous transmission: Drivers of chikungunya and dengue emergence in a temperate area.",
+              "year": 2020,
+              "journal": "PLoS Neglected Tropical Diseases",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Studie analyzuje francouzskou surveillance 2010–2018 a hlavním faktorem místního přenosu je zpoždění hlášení importovaného případu o 21 dní a více. Jde o observační asociaci."
+        },
+        {
+          "text": "Pro Česko je relevantní i práce Rudolf et al. (2018, Acta Tropica): u dálničních vstupů z Rakouska a Slovenska našla komáry tygrované opakovaně, v roce 2012 sedmnáct jedinců, v roce 2016 šedesát šest a v roce 2017 devadesát.",
+          "location": "Co říká výzkum o riziku",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29856987",
+              "doi": "10.1016/j.actatropica.2018.05.020",
+              "title": "The invasive Asian tiger mosquito Aedes albopictus (Diptera: Culicidae) in the Czech Republic: Repetitive introduction events highlight the need for extended entomological surveillance.",
+              "year": 2018,
+              "journal": "Acta Tropica",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno. Abstrakt uvádí 17 jedinců (2012), 66 (2016) a 90 (2017) u hlavních silničních vstupů E461 a E65 z Rakouska a Slovenska. Jde o česká data, takže otázka přenositelnosti nevzniká."
+        },
+        {
+          "text": "Asi 80 % nákaz západonilskou horečkou podle SZÚ probíhá bez příznaků nebo jen lehce a závažně onemocní zhruba jeden ze 150 nakažených.",
+          "location": "Mezinárodní srovnání: proč se to týká i nás",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29929468",
+              "doi": "10.1186/s12879-018-3186-6",
+              "title": "Identification of genetic variants associated with dengue or West Nile virus disease: a systematic review and meta-analysis.",
+              "year": 2018,
+              "journal": "BMC Infectious Diseases",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40008684",
+              "doi": "10.1002/ana.27220",
+              "title": "Clinical, Prognostic, and Longitudinal Functional and Neuropsychological Features of West Nile Virus Neuroinvasive Disease in the United States: A Systematic Review and Meta-Analysis.",
+              "year": 2025,
+              "journal": "Annals of Neurology",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Údaj článek přisuzuje SZÚ, tedy administrativnímu zdroji. Proti literatuře: abstrakt Cahill 2018 uvádí, že více než 80 % infekcí WNV je bezpříznakových (úvodní kontext genetického přehledu, ne vlastní odhad). Formulace článku „bez příznaků nebo jen lehce“ je tedy konzervativní a s tím slučitelná. Číslo „1 ze 150“ žádný dohledaný abstrakt neobsahuje. Roberts 2025 (data z USA) uvádí, že nervový systém postihuje přibližně 1 % infekcí, což je stejný řád jako 1/150 (≈ 0,7 %), ale ne totéž číslo. Proto podle pravidla nejvýš partial. Číslo je v řádu správné a odpovídá běžně uváděnému odhadu, úprava textu není nutná. Zdroj nepřidávám, protože Cahill je genetický přehled s údajem jen v úvodu a Roberts dává jiné číslo."
+        }
+      ],
+      "summary": {
+        "supported": 7,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "source-added se neprovádí: všech 6 studií s PMID (Erazo, Heinrich, Farooq, Cattaneo, Jourdain, Rudolf) už článek cituje v article-sources (skupina Studie); Cahill 2018 a Roberts 2025 nejsou vhodné k doplnění (genetický přehled s údajem jen v úvodu; jiné číslo než 1/150). claim-note se neprovádí: data/claims.json pro článek nemá žádné tvrzení. Bez contradicted, tedy bez flagged a issue.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Upřesňující věta (Opus, partial) vložena do sekce „Co s tím“ za tvrzení o integrované surveillance: „Přehled ale tento předstih dokládá jen u vybraných integrovaných systémů a nehodnotí, zda dřívější záchyt u komárů a ptáků snížil počet nemocných (Heinrich et al., 2026).“ audit-status zůstává review-pending (articles.json i meta article:audit-status; status v audit: komentáři srovnán z draft na review-pending).",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Do audit: komentáře článku (notes) připojena věta „evidence-audit 2026-10-04: 9 tvrzení, 7 supported, 2 partial; …; viz data/evidence-audit.json“. Záznam v data/articles.json nemá objekt audit, proto se poznámka píše jen do HTML komentáře.",
+          "ref": ""
+        }
+      ],
+      "notes": "V data/claims.json nejsou pro tento článek žádná tvrzení (claim_id prázdné). Rešerše (Sonnet): 6 studií citovaných článkem ověřeno v PubMed (metadata, bez retrakce, publikační typy sedí), 1 dodatečné hledání podílu bezpříznakových/závažných infekcí WNV bez použitelného výsledku; Consensus nepoužit. Administrativní data ECDC/MZ/SZÚ, vyhláška 389/2023 a počty případů se literaturou neověřují. Adjudikace (Opus), 3 volání PubMed: abstrakt Heinrich (PMID 41842950) znovu ověřen; cílené hledání přehledů o podílu bezpříznakových a neuroinvazivních infekcí. Proti rešerši dvě změny: tvrzení o 80 % / 1 ze 150 posunuto z unclear na partial (≥ 80 % bezpříznakových podporuje Cahill 2018, PMID 29929468; číslo 1/150 v abstraktech není, Roberts 2025 uvádí ~1 % pro USA); tvrzení o převaze neuroinvazivních forem supported s confidence medium (převažují vs. over-representation). Farooq et al. je asociační time-to-event analýza."
+    },
+    {
+      "id": "clanek-cdz-devet-tisic-pacientu.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "198e4f0b1cc25945733c6bd7b1bb2c01fa0ac1c2",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "write": "sonnet"
+      },
+      "calls": {
+        "pubmed": 1,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "text": "péče v komunitě 8 503 € na osobu a rok vs. 16 425 € v nemocnici; rozdíl v kvalitě života 0,03 QALY nevýznamný; pravděpodobnost nákladové efektivity ≥ 97 %",
+          "location": "Tabulka studií (Winkler et al., Lancet Psychiatry 2018)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30415938",
+              "doi": "10.1016/S2215-0366(18)30388-2",
+              "title": "Cost-effectiveness of care for people with psychosis in the community and psychiatric hospitals in the Czech Republic: an economic analysis.",
+              "year": 2018,
+              "journal": "Lancet Psychiatry",
+              "study_type": "cohort",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt doslova: n=115 (35 komunita, 80 hospitalizovaní), 12 měsíců, QALY 0,77 vs 0,80 (rozdíl 0,03, 95% CI −0,04 až 0,10), náklady 8 503 vs 16 425 € (rozdíl 7 922), pravděpodobnost nákladové efektivity ≥97 %. Prospektivní observační studie s úpravou na baseline, ne RCT; skupiny: propuštění do komunity vs. dlouhodobě hospitalizovaní. Malý vzorek (35 v komunitě)."
+        },
+        {
+          "text": "komunitní tým snižuje riziko hospitalizace, RR 0,81 (95% CI 0,7–1,0), NNT 17 (meta-analýza 3 RCT, 587 osob)",
+          "location": "Tabulka studií (Malone et al., Cochrane 2007)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "17636625",
+              "doi": "10.1002/14651858.CD000270.pub2",
+              "title": "Community mental health teams (CMHTs) for people with severe mental illnesses and disordered personality.",
+              "year": 2007,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: hospital admission rates significantly lower in CMHT group (n=587, 3 RCTs, RR 0.81 CI 0.7 to 1.0, NNT 17 CI 10 to 104). Horní mez CI 1,0 je na hranici významnosti; autoři uvádějí, že evidence je 'insubstantial' (malá, stará z roku 2007). Článek v textu tuto hranici uvádí (CI)."
+        },
+        {
+          "text": "intenzivní case management proti standardní péči (24 RCT, 3 595 osob) zkracuje pobyt v nemocnici o 0,86 dne na měsíc (95% CI −1,37 až −0,34), nízká jistota důkazu",
+          "location": "Tabulka studií (Dieterich et al., Cochrane 2017)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "28067944",
+              "doi": "10.1002/14651858.CD007906.pub3",
+              "title": "Intensive case management for severe mental illness.",
+              "year": 2017,
+              "journal": "Cochrane Database Syst Rev",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 40 RCT, 7 524 osob celkem; ICM vs. standardní péče: n=3595, 24 RCT, MD −0,86 (95% CI −1,37 až −0,34), low-quality evidence ('slightly reduced'). Oproti non-ICM žádný rozdíl (MD −0,08). Článek podskupinu uvádí správně; ICM (case management) není totéž co česká CDZ, ale model je příbuzný."
+        },
+        {
+          "text": "komunitní péče snižuje míru postižení WHODAS o 4,55 bodu a zvyšuje kvalitu života o 0,07 za 18 měsíců (sdružená analýza 5 RCT, 931 osob, jihovýchodní Evropa)",
+          "location": "Tabulka studií (Shields-Zeeman et al., BMJ Global Health 2025, RECOVER-E)",
+          "kind": "efficacy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41130742",
+              "doi": "10.1136/bmjgh-2024-018594",
+              "title": "Community versus institutionalised care for people with severe mental illness in five countries in Southeast Europe: pooled analysis of five randomised trials.",
+              "year": 2025,
+              "journal": "BMJ Glob Health",
+              "study_type": "rct",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: N=931, po 18 měsících WHODAS −4,55 (p<0,001), QoL +0,07 utility (p<0,001). Srovnání CMH vs. treatment as usual (ústavní péče) v BG, HR, ME, MK, RO; ne v ČR."
+        },
+        {
+          "text": "bezdomovectví a vězení po propuštění z dlouhodobé hospitalizace se vyskytují sporadicky, ve většině studií vůbec (systematický přehled 23 kohortových studií)",
+          "location": "Tabulka studií (Winkler et al., Br J Psychiatry 2016)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "27143007",
+              "doi": "10.1192/bjp.bp.114.161943",
+              "title": "Deinstitutionalised patients, homelessness and imprisonment: systematic review.",
+              "year": 2016,
+              "journal": "Br J Psychiatry",
+              "study_type": "systematic review",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: 23 studií unikátních populací; homelessness and imprisonment occurred sporadically; in the majority of studies no single case reported. Odpovídá."
+        },
+        {
+          "text": "raná fáze reformy přinesla vznik center, rozšíření komunitních služeb a pokles dlouhodobých hospitalizací, a politické změny ji poté zpomalily; čísla v abstraktu neuvádí",
+          "location": "Sekce o evidenci (Winkler et al., International Review of Psychiatry 2026)",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41579112",
+              "doi": "10.1080/09540261.2026.2619456",
+              "title": "Learning from mental health reform under political change: lessons for sustainable mental health systems from Czechia.",
+              "year": 2026,
+              "journal": "Int Rev Psychiatry",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakt: case study; včasný pokrok zahrnoval expanzi komunitních služeb, snížení dlouhodobé hospitalizace, vznik center; pozdější politické změny zpomalily reformu. Kvalitativní/policy případová studie, bez čísel; článek to sám přiznává. Autor Winkler je zároveň autorem části dalších citovaných prací (nezávislost evidence)."
+        }
+      ],
+      "summary": {
+        "supported": 6,
+        "partial": 0,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "source-added se neprovádí: všech 6 studií (Winkler 2018, Malone 2007, Dieterich 2017, Shields-Zeeman 2025, Winkler 2016, Winkler 2026) už článek cituje v article-sources. claim-note se neprovádí: data/claims.json pro článek nemá žádné tvrzení. Bez contradicted, tedy bez flagged a issue. Do audit: komentáře článku (notes) připojena věta „evidence-audit 2026-10-04: 6 tvrzení, 6 supported; viz data/evidence-audit.json“; záznam v data/articles.json nemá objekt audit, proto se poznámka píše jen do HTML komentáře.",
+          "ref": ""
+        }
+      ],
+      "followup": "Nevyhledávány nové studie ani Consensus; Broulíková 2020 (výdaje na duševní zdraví) vynechána jako administrativní statistika; data ÚZIS OIS-04-19 se literaturou neověřují.",
+      "notes": "V data/claims.json nejsou pro tento článek žádná tvrzení (claim_id prázdné). Vybráno 6 odborných tvrzení z tabulky studií a sekce o evidenci; všech 6 studií ověřeno jedním voláním get_article_metadata (PMID existují, bez retrakce, čísla v abstraktech sedí). Winkler 2018 je observační studie, ne přímý důkaz o účinnosti českých CDZ; Winkler je autorem části citovaných prací (nezávislost evidence)."
+    },
+    {
+      "id": "clanek-padelek-phesgo-overovani-pravosti-leciv-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "73d10216eb3ecb616570d1b7340b40c3cdaa9e1e",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Z 96 studií, které testovaly alespoň 50 vzorků (dohromady 67 839 vzorků), vyšel podíl nekvalitních, tedy nevyhovujících nebo padělaných esenciálních léků, 13,6 %. V Africe to bylo 18,7 %, v Asii 13,7 %. Ekonomické odhady se pohybovaly od 10 do 200 miliard dolarů, autoři je ale sami označili za metodicky slabé.",
+          "location": "Co říká evidence a proč ji nelze přenášet",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "30646106",
+              "doi": "10.1001/jamanetworkopen.2018.1662",
+              "title": "Prevalence and Estimated Economic Burden of Substandard and Falsified Medicines in Low- and Middle-Income Countries: A Systematic Review and Meta-analysis.",
+              "year": 2018,
+              "journal": "JAMA Network Open",
+              "study_type": "meta-analysis",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno adjudikací. Všechna čísla jsou v abstraktu (96 studií, 67 839 vzorků, 13,6 %, Afrika 18,7 %, Asie 13,7 %, 10–200 mld. USD). 'Metodicky slabé' věrně parafrázuje 'poor or undisclosed methods'. Evidence se týká jen zemí s nízkými a středními příjmy a článek to výslovně říká; na ČR ji nepřenáší."
+        },
+        {
+          "claim_id": "",
+          "text": "Podle něj byly protinádorové léky v roce 2016 pátou nejčastěji padělanou skupinou v hlášeních, která shromažďuje Pharmaceutical Security Institute. Jejich výskyt v legálním řetězci se autorům zdá malý, v klinické praxi je ale těžké je odhalit.",
+          "location": "Co říká evidence a proč ji nelze přenášet",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "29611529",
+              "doi": "10.1016/S1470-2045(18)30101-3",
+              "title": "Oncology drugs in the crosshairs of pharmaceutical crime.",
+              "year": 2018,
+              "journal": "The Lancet. Oncology",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno adjudikací. Abstrakt obsahuje pořadí (pátá kategorie v hlášeních PSI za rok 2016), formulaci 'appears to be small' i obtížnou odhalitelnost. Jde o nesystematický přehled a článek ho tak také označuje."
+        },
+        {
+          "claim_id": "",
+          "text": "Hlášení nežádoucích účinků je podle přehledu v The Lancet Oncology jedním z mála způsobů, jak padělek odhalit v praxi.",
+          "location": "Co s tím / Pro pacienty",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29611529",
+              "doi": "10.1016/S1470-2045(18)30101-3",
+              "title": "Oncology drugs in the crosshairs of pharmaceutical crime.",
+              "year": 2018,
+              "journal": "The Lancet. Oncology",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno adjudikací. Abstrakt uvádí, že pro odhalitelnost v klinické praxi je hlášení neúčinnosti a neobvyklých účinků 'essential'. Slova 'jedním z mála' jsou mírná redakční interpretace, smysl ale sedí: přehled vedle toho zmiňuje nízkou odhalitelnost v praxi. Přehled je z roku 2018, tedy z doby před plným provozem evropského ověřování (od 9. 2. 2019)."
+        },
+        {
+          "claim_id": "",
+          "text": "V Rumunsku vedla kombinace nízkých cen, zdanění a souběžného vývozu k trvalým výpadkům léků. Ty pak tlačily pacienty i zdravotníky na neregulované trhy, kde je riziko padělku vysoké. Autoři z toho vyvozují, že ochrana samotného legálního řetězce nestačí: stát musí zajistit také dostupnost.",
+          "location": "Co říká evidence a proč ji nelze přenášet",
+          "kind": "mechanism",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "36731920",
+              "doi": "10.1136/bmjgh-2022-009918",
+              "title": "Why falsified medicines reach patients: an analysis of political and economic factors in Romania.",
+              "year": 2023,
+              "journal": "BMJ Global Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzeno adjudikací. Abstrakt dokládá celý řetězec: zdanění, snížení cen, souběžný obchod, výpadky, neregulované trhy a závěr, že úzké zaměření na regulovaný řetězec nestačí. Jde o kvalitativní případovou studii (131 dokumentů, 22 rozhovorů) a článek ji tak označuje. Pro ČR ji podává jen jako otázku ke sledování, nic na ni nepřenáší."
+        },
+        {
+          "claim_id": "",
+          "text": "HER2 je bílkovina, které má ve velkém množství zhruba čtvrtina nádorů prsu.",
+          "location": "Co SÚKL 22. září oznámil",
+          "kind": "epidemiology",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [],
+          "note": "K posouzení redakcí. Rešerše (2 dotazy) ani adjudikace (2 cílené dotazy a metadata) nenašly v PubMed přehled ani metaanalýzu, jejíž abstrakt by podíl HER2-pozitivních nádorů prsu uváděl. Jediný vrácený záznam (PMID 23463626, CNS metastázy po trastuzumabu) se k tvrzení nevztahuje a použit nebyl. Dnes se v literatuře obvykle uvádí kolem 15–20 % a starší práce udávaly 20–30 %. Formulace 'zhruba čtvrtina' je tak spíš na horní hraně, to ale tento běh abstraktem nedoložil. Článek k větě neuvádí zdroj; EPAR Phesgo je v audit komentáři zmíněn jen k indikaci. Doporučení: doplnit zdroj (EPAR/SPC Phesgo, ESMO guideline nebo populační registr) nebo formulaci upravit podle něj."
+        },
+        {
+          "claim_id": "",
+          "text": "Kontrola 2D kódu je silná hráz, chrání ale jen legální cestu.",
+          "location": "Co s tím / Pro lékovou politiku",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "36731920",
+              "doi": "10.1136/bmjgh-2022-009918",
+              "title": "Why falsified medicines reach patients: an analysis of political and economic factors in Romania.",
+              "year": 2023,
+              "journal": "BMJ Global Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29611529",
+              "doi": "10.1016/S1470-2045(18)30101-3",
+              "title": "Oncology drugs in the crosshairs of pharmaceutical crime.",
+              "year": 2018,
+              "journal": "The Lancet. Oncology",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Druhá polovina ('chrání jen legální cestu') je podložená: Nistor 2023 ukazuje, že pacienti při výpadcích odcházejí na neregulované trhy, kam ochrana regulovaného řetězce nedosáhne. Hodnocení 'silná hráz' ale v recenzované literatuře empiricky měřené není. Účinnost evropského ověřování (FMD/EMVS) v reálném provozu žádný dohledaný abstrakt neměří a Venhuis 2018 o protiopatřeních mluví jen jako o 'forthcoming'. Článek sám o odstavec výš píše, že bez počtu potvrzených padělků z alertů nejde doložit, že systém plní hlavní účel, takže 'silná hráz' je hodnotící soud redakce, ne evidence. Kandidát z Consensu (Naughton et al. 2016, BMJ Open, DOI 10.1136/bmjopen-2016-013837: operační detekce padělků v simulaci 31,8 %) zůstal v PubMed neověřený, proto není v evidence. Upřesňující věta se nenavrhuje: chybí recenzovaný zdroj, kterým by šla doložit."
+        }
+      ],
+      "summary": {
+        "supported": 4,
+        "partial": 1,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "Žádný source-added: všechny tři studie s verdiktem supported/partial (Ozawa PMID 30646106, Venhuis PMID 29611529, Nistor PMID 36731920) článek už cituje ve skupině 'Recenzovaná literatura'. V data/claims.json nemá článek žádná tvrzení, claim-note se proto nedělá. Contradicted není žádné, takže ani flagged či issue. audit-status zůstává review-pending beze změny; prose_change se nenavrhuje.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Do hlavičky audit: (HTML komentář) připojena věta 'evidence-audit 2026-10-04: 6 tvrzení, 4 supported, 1 partial, 1 unclear; viz data/evidence-audit.json'. Záznam v data/articles.json nemá objekt audit, takže se audit.notes nezakládá (stejný postup jako u dřívějších položek bez objektu audit).",
+          "ref": ""
+        }
+      ],
+      "followup": "(1) HER2 'zhruba čtvrtina nádorů prsu' (sekce Co SÚKL 22. září oznámil) je bez zdroje a v PubMed nedoložená (unclear), k posouzení redakcí: doplnit EPAR/SPC Phesgo, ESMO guideline nebo přehled prevalence HER2+. (2) Naughton et al. 2016 BMJ Open (DOI 10.1136/bmjopen-2016-013837) ověřit v PubMed jako možný zdroj k účinnosti ověřování 2D kódu ('silná hráz', verdikt partial). (3) Vynechaná tvrzení mimo rozsah literatury: administrativní statistika SÚKL/NOOL/ÚZIS (88 výstrah, 121 432 alertů, 3,47 mil. balení, 4 250 eur, výdaje pojišťoven), legislativa (směrnice 2011/62/EU, nařízení 2016/161, zákon 378/2007 Sb.) a údaje EMA o Phesgo.",
+      "notes": "PubMed: 10 volání celkem (rešerše 7: metadata 3 citovaných studií, 3 search dotazy HER2/FMD, další metadata a 1 neúspěšný lookup_article_by_citation; adjudikace 3: 2 vyhledávání a 1 metadata). Consensus: 1 dotaz. Všechny tři citované studie (Ozawa PMID 30646106, Venhuis 29611529, Nistor 36731920) v PubMed existují, shodují se s citacemi v článku (autoři, rok, časopis, DOI) a nejsou retrahované. data/claims.json u tohoto článku neobsahuje žádná tvrzení (claim_id prázdné). Adjudikace 2026-10-04 (ea-2026-10-04-01): 4 supported, 1 partial, 1 unclear, 0 contradicted. '2D kód je silná hráz' je partial: omezení na legální cestu je podložené, síla hráze je hodnotící a neměřená a stojí v napětí s vlastní větou článku, že účinnost systému nejde bez dat o potvrzených padělcích doložit. Prose_change se nenavrhuje, protože chybí recenzovaný zdroj k citaci."
+    },
+    {
+      "id": "clanek-specificke-lecebne-programy-2026.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "ac16e815e02ec2250ef8ecf2ca51b5520d8e838d",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 3,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "zjistila, že 52,2 % pacientů zažilo za posledních dvanáct měsíců výpadek léku, 21,5 % muselo kvůli změně receptu znovu k lékaři a 5,7 % uvedlo, že kvůli tomu léčbu přerušilo.",
+          "location": "sekce o dopadu výpadků na pacienty (Romano et al., 2022)",
+          "kind": "epidemiology",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "35115262",
+              "doi": "10.1016/j.japh.2021.12.017",
+              "title": "Drug shortages in community pharmacies: Impact on patients and on the health system.",
+              "year": 2022,
+              "journal": "J Am Pharm Assoc (2003)",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "supports"
+            }
+          ],
+          "note": "Potvrzeno, abstrakt znovu přečten v PubMed 4. 10. 2026: celostátní průřezová multicentrická studie v portugalských lékárnách, duben 2019, 22 830 dotazníků; 52,2 % pacientů zažilo výpadek za posledních 12 měsíců, 21,5 % muselo k lékaři kvůli změně receptu, 5,7 % přerušilo léčbu. Čísla i design souhlasí doslova. Typ publikace: Journal Article, Multicenter Study; nebyla stažena. Článek tvrzení vztahuje jen na Portugalsko a výslovně říká, že česká obdoba měření neexistuje, takže problém s přenositelností nevzniká."
+        },
+        {
+          "claim_id": "",
+          "text": "Náklad samotných návštěv lékaře navíc autoři odhadli na 35,3 až 43,8 milionu eur ročně pro portugalský zdravotní systém.",
+          "location": "sekce o dopadu výpadků na pacienty (Romano et al., 2022)",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35115262",
+              "doi": "10.1016/j.japh.2021.12.017",
+              "title": "Drug shortages in community pharmacies: Impact on patients and on the health system.",
+              "year": 2022,
+              "journal": "J Am Pharm Assoc (2003)",
+              "study_type": "cross-sectional",
+              "found_via": "article",
+              "verified_in_pubmed": true,
+              "relation": "partial"
+            }
+          ],
+          "note": "Abstrakt uvádí odhad ekonomického dopadu výpadků spojeného s dodatečnými návštěvami lékaře 35,3 až 43,8 mil. EUR pro portugalskou NHS (pro pacienty navíc 2,1 až 4,4 mil. EUR). Částka sedí, ale slovo „ročně“ abstrakt neobsahuje. Jako roční odhad to dává smysl, protože se pacientů ptali na posledních 12 měsíců, výslovně to ale stojí jen v plném textu. Ten v PMC není (PMID nemá PMCID), proto verdikt nejvýš partial. Upřesňující věta není potřeba: rozsah tvrzení evidenci nepřesahuje, jde jen o časový rámec. Časový rámec odhadu ponechávám k posouzení redakcí podle plného textu."
+        },
+        {
+          "claim_id": "",
+          "text": "v evropských registrech tvoří skupiny antiinfektiv pro systémové použití a léčiv na nervový systém nadproporční podíl kritických výpadků. Nejde tedy o českou zvláštnost, ale o evropský vzorec, který Věstník jen zviditelňuje.",
+          "location": "sekce o terapeutickém těžišti seznamu (Turbucz et al., 2022), odstavec „Druhá věc, kterou seznam ukazuje…“",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35409787",
+              "doi": "10.3390/ijerph19074102",
+              "title": "Proposal for Handling of Medicine Shortages Based on a Comparison of Retrospective Risk Analysis.",
+              "year": 2022,
+              "journal": "Int J Environ Res Public Health",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Přečten abstrakt i plný text (PMC8998354). Že skupiny J a N tvoří v evropských zemích výrazně vyšší podíl kritických výpadků než v USA a Austrálii, studie podporuje. Evidence je ale užší, než jak ji článek zobecňuje. Studie (1) srovnávala jen čtyři předem vybrané skupiny ATC (C, J, L, N). (2) Šlo o jednorázový snímek registrů z 4.–9. 3. 2021, bez longitudinální analýzy. (3) „Outstandingly higher“ podíl J a N výslovně popsala v Belgii, Maďarsku a Švýcarsku. (4) Česko ve vzorku není. (5) Autoři sami upozorňují na vysokou nesrovnatelnost registrů. Věta „nejde o českou zvláštnost, ale o evropský vzorec“ je tedy přenos zahraniční evidence na ČR, a proto partial s poznámkou o přenositelnosti. Neodporuje jí žádná evidence, a contradicted proto nepřipadá v úvahu. V PubMed je publikace vedená jako Review. Označení „srovnávací analýza šesti zemí“ je přijatelné, zdroje ji už popisují jako přehledovou srovnávací analýzu. Do článku doplněna jedna upřesňující věta s citací o rozsahu studie (čtyři skupiny ATC, snímek z března 2021, Česko ve vzorku není)."
+        },
+        {
+          "claim_id": "",
+          "text": "34 zemí vyžaduje hlášení chystaných výpadků do národního registru, 20 zemí ukládá povinné zásoby, 18 zemí zákazy vývozu a 35 zemí má regulatorní nástroj usnadňující dovoz a použití alternativních léčiv.",
+          "location": "sekce o mezinárodním srovnání nástrojů (Vogler, 2024)",
+          "kind": "policy",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "38484475",
+              "doi": "10.1016/j.healthpol.2024.105030",
+              "title": "Tackling medicine shortages during and after the COVID-19 pandemic: Compilation of governmental policy measures and developments in 38 countries.",
+              "year": 2024,
+              "journal": "Health Policy",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzuji výsledek rešerše. Podle abstraktu (38 zemí, šetření sítě PPRI 2023) vyžaduje 34 zemí hlášení výpadků, 20 ukládá povinné zásoby, 18 zakazuje vývoz a 35 má opatření, které usnadňuje dovoz alternativ. Čísla sedí doslova. Jde o přehled vládních opatření, ne o studii účinnosti. Článek z něj nedělá závěry o účinku, takže tvrzení odpovídá evidenci."
+        },
+        {
+          "claim_id": "",
+          "text": "Tím, čemu se v odborné literatuře o přístupu k lékům na opomíjené tropické nemoci v Evropě říká „bricolage“ — provizorní řešení složené z darů, dovozů případ od případu a magistraliter přípravy (Ravinetto et al., 2026 ...; jde o stanovisko odborníků, ne o originální studii)",
+          "location": "sekce o geografii a VFN/TIS (Ravinetto et al., 2026)",
+          "kind": "other",
+          "verdict": "supported",
+          "confidence": "high",
+          "evidence": [
+            {
+              "pmid": "41757222",
+              "doi": "10.1016/j.lanepe.2026.101616",
+              "title": "Inequitable access to medicines for neglected tropical diseases in Europe: health system vulnerabilities and a call for coordinated action.",
+              "year": 2026,
+              "journal": "Lancet Reg Health Eur",
+              "study_type": "other",
+              "found_via": "article",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Potvrzuji výsledek rešerše. Abstrakt popisuje „bricolage solutions“ evropských klinických lékařů: dary od firem, dary přes WHO, dovoz případ od případu a možná magistraliter přípravu. Publikaci sám označuje jako viewpoint, takže označení „stanovisko odborníků, ne originální studie“ je správné. Drobnost bez vlivu na verdikt: abstrakt u magistraliter přípravy uvádí „possibly“, článek ji vyjmenovává bez výhrady. Publikace nebyla stažena. Článek popisuje pojem, nedovozuje z něj efekt."
+        }
+      ],
+      "summary": {
+        "supported": 3,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "none",
+          "detail": "source-added se nenavrhuje: všechny čtyři ověřené studie (Romano 2022, Turbucz 2022, Vogler 2024, Ravinetto 2026) už článek cituje v article-sources, ve skupině „Evidence: dopady výpadků a politiky států“, s DOI i PMID.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "claim-note se nenavrhuje: data/claims.json má pro tento článek záznamy specificke-lecebne-programy-2026--01 a dál, jejich quote ale odpovídá administrativním a datovým tvrzením (SÚKL, Věstník, NRL), ne větám ověřovaným proti literatuře. Nové claims audit nezakládá.",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Jedna upřesňující věta k Turbucz et al. 2022 vložena za větu končící „…nadproporční podíl kritických výpadků.“ v odstavci „Druhá věc, kterou seznam ukazuje…“ (rozsah studie: čtyři skupiny ATC, snímek registrů z března 2021, převis J a N popsán v Belgii, Maďarsku a Švýcarsku, Česko ve vzorku není). audit-status zůstává review-pending v articles.json i v meta article:audit-status; status v hlavičce audit: srovnán z draft na review-pending. Žádné flagged ani issue, contradicted nepadl.",
+          "ref": ""
+        }
+      ],
+      "followup": "Časový rámec odhadu 35,3–43,8 mil. EUR („ročně“) u Romano et al. 2022 zůstává neověřený: abstrakt slovo ročně neobsahuje a plný text není v PMC; k posouzení redakcí podle plného textu.",
+      "notes": "Rešerše: 1 hromadný dotaz get_article_metadata na všechny 4 studie citované v článku (existence, typ publikace, abstrakt; žádná retrakce); Consensus se nepoužil, protože článek studie cituje s PMID/DOI. Adjudikace (Opus): get_article_metadata pro PMID 35115262 a 35409787 a get_full_text_article pro PMC8998354 (Turbucz). Finální verdikty: 3 supported (Romano procenta, Vogler, Ravinetto), 2 partial (Romano „ročně“ u částky; Turbucz zobecnění na evropský vzorec a na ČR). Administrativní tvrzení článku (počty SLP, balení, výpadky SÚKL, haloperidol, spotřeba antibiotik) nejsou předmětem evidence-auditu a mezi ověřená tvrzení se nepočítají. Tvrzení nemají claim_id v data/claims.json."
+    },
+    {
+      "id": "clanek-monitoring-zdravotnich-hrozeb-mz.html",
+      "type": "article",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "0e99eb9b09e8ac28c5d1e8e62b86e841ffdb0c7e",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 7,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "monitoring-zdravotnich-hrozeb-mz--07",
+          "text": "podle ECDC připadá úmrtí zhruba na každý druhý potvrzený případ (výpočet redakce: 48 %)",
+          "location": "counter (ebola)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "42776651",
+              "doi": "10.3390/idr18050100",
+              "title": "Field Investigation of the Bundibugyo Ebola Virus Disease (BDBV) Outbreak in Ituri Province, Democratic Republic of the Congo: Challenges, Strategies, and Priority Actions for Outbreak Control-An Outbreak Investigation Review.",
+              "year": 2026,
+              "journal": "Infectious disease reports",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "42810990",
+              "doi": "10.3201/eid3210.261411",
+              "title": "Early Action Review of Detection, Notification, and Response Timeliness during Cross-Border Bundibugyo Virus Disease Outbreak, Uganda, 2026.",
+              "year": 2026,
+              "journal": "Emerging infectious diseases",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Aritmetika redakce sedí (3 605 / 7 475 = 48,2 %; druhé číslo bulletinu uvádí k 29. 9. letalitu 48,4 %). Recenzovaná literatura k témuž ohnisku potvrzuje vysokou smrtnost BDBV v KDR, ale s nižší hodnotou k dřívějšímu datu: Milambo 2026 (abstrakt) k 12. 7. 2026 1 926 potvrzených případů a 702 úmrtí, CFR 36,4 %; Uganda k 8. 7. CFR 15 % u 20 případů (Kayiwa 2026). Hodnota 48 % k 16. 9. je surveillance údaj ECDC, který abstrakty neobsahují a nemohou obsahovat → nejvýš partial. Výhrada: u probíhajícího ohniska je podíl úmrtí na potvrzených případech nestabilní (nedokončené případy, abstrakt Milambo 2026 sám zmiňuje mezery v klasifikaci výsledků i vnitřně nesouhlasné počty 1 926 vs 1 877). Článek tento podíl správně označuje jako výpočet redakce a nevydává ho za definitivní letalitu; upřesňující věta není nutná."
+        },
+        {
+          "claim_id": "monitoring-zdravotnich-hrozeb-mz--15",
+          "text": "U Frankfurtu osm případů malárie bez cestovatelské anamnézy a tři úmrtí",
+          "location": "prose (letištní malárie)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "35451360",
+              "doi": "10.2807/1560-7917.ES.2022.27.16.2100724",
+              "title": "Two fatal autochthonous cases of airport malaria, Belgium, 2020.",
+              "year": 2022,
+              "journal": "Euro surveillance",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Jev, o který se tvrzení opírá, literatura dokládá: autochtonní (letištní) malárie P. falciparum u osob bez cestovní anamnézy žijících do 5 km od letiště, přenesená importovaným komárem, s fatálním průběhem při opožděné diagnóze; autoři doporučují zvýšenou ostražitost lékařů v okolí letišť (Van Bortel 2022, Belgie 2020, 2 úmrtí). To podporuje i doporučení bulletinu zvažovat malárii u horečky bez cestovní anamnézy. Počty frankfurtského klastru 2026 (8 případů, 3 úmrtí) jsou surveillance údaje ECDC/místních úřadů a v PubMed nejsou → partial. Evidence je zahraniční (Belgie) k události v Německu; tvrzení se ČR netýká."
+        },
+        {
+          "claim_id": "monitoring-zdravotnich-hrozeb-mz--19",
+          "text": "incidencí 199,4 případu na 100 000 obyvatel",
+          "location": "prose (pertuse)",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41055058",
+              "doi": "10.61568/emi/11-6568/20250808/141314",
+              "title": "Pertussis surveillance data from the South Moravian Region, 2024.",
+              "year": 2025,
+              "journal": "Epidemiologie, mikrobiologie, imunologie",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "40694423",
+              "doi": "10.1556/030.2025.02654",
+              "title": "Resurgence of pertussis in Slovak Republic and surrounding Central European countries.",
+              "year": 2025,
+              "journal": "Acta microbiologica et immunologica Hungarica",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Domácí recenzovaná práce (Šponiar Ovesná 2025, data ISIN) potvrzuje výrazný nárůst pertuse v ČR v roce 2024 a řád velikosti: Jihomoravský kraj 3 524 případů, 287,3/100 000, 89,2 % nemocných očkovaných; Neuschlova 2025 dokládá souběžný nárůst ve střední Evropě včetně ČR. Celostátní incidence 199,4/100 000 v abstraktech není (jde o hodnotu indikátoru pertuse_incidence z administrativních dat, kterou hlídá claims.json) → partial. Formulace „nejhorší epidemie od šedesátých let“ v téže větě abstrakty ani nepotvrzují, ani nevyvracejí."
+        },
+        {
+          "claim_id": "monitoring-zdravotnich-hrozeb-mz--12",
+          "text": "mezi případy se známým očkovacím statusem 73,1 % neočkovaných",
+          "location": "prose (spalničky EU/EEA)",
+          "kind": "epidemiology",
+          "verdict": "not-applicable",
+          "confidence": "high",
+          "evidence": [],
+          "note": "Surveillance statistika ECDC (měsíční monitoring spalniček EU/EEA) převzatá bulletinem MZ; pointou článku je nesoulad 73,1 % v textu vs 73,2 % v infografice téhož bulletinu (1 501 / 2 051 = 73,2 %, aritmetika sedí). Recenzovaná literatura není správný soudce; údaj hlídá claims.json. Rešerše: 2 dotazy PubMed bez výsledku. Mezi auditovaná tvrzení se nepočítá."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 1,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Nová skupina Recenzovaná literatura v article-sources (před „Související čtení na portálu“): Milambo & Ngandu 2026, Infect Dis Rep 18(5):100 (PMID 42776651, DOI 10.3390/idr18050100) — kontext k podílu úmrtí na ebolu (letalita 36,4 % k 12. 7. 2026 vs výpočet redakce 48 % k 16. 9.)",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--07"
+        },
+        {
+          "type": "source-added",
+          "detail": "Van Bortel et al. 2022, Euro Surveill 27(16):2100724 (PMID 35451360, DOI 10.2807/1560-7917.ES.2022.27.16.2100724) do skupiny Recenzovaná literatura — k letištní malárii u Frankfurtu",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--15"
+        },
+        {
+          "type": "source-added",
+          "detail": "Šponiar Ovesná et al. 2025, Epidemiol Mikrobiol Imunol 74(3):149-157 (PMID 41055058, DOI 10.61568/emi/11-6568/20250808/141314) do skupiny Recenzovaná literatura — k epidemii pertuse 2024",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--19"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u monitoring-zdravotnich-hrozeb-mz--07 doplněn o PMID:42776651 / DOI:10.3390/idr18050100, ověřeno 2026-10-04",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--07"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u monitoring-zdravotnich-hrozeb-mz--15 doplněn o PMID:35451360 / DOI:10.2807/1560-7917.ES.2022.27.16.2100724, ověřeno 2026-10-04",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--15"
+        },
+        {
+          "type": "claim-note",
+          "detail": "source_note u monitoring-zdravotnich-hrozeb-mz--19 doplněn o PMID:41055058 / DOI:10.61568/emi/11-6568/20250808/141314, ověřeno 2026-10-04",
+          "ref": "monitoring-zdravotnich-hrozeb-mz--19"
+        }
+      ],
+      "notes": "Článek je téměř celý surveillance statistika (MZ/ISIN/ECDC/PAHO/HSHMP), mimo rozsah auditu. Auditována 3 odborná tvrzení (podíl úmrtí na ebolu, letištní malárie, pertuse ČR 2024); tvrzení --12 (podíl neočkovaných u spalniček EU/EEA) vyřazeno jako surveillance statistika ECDC (not-applicable). Článek předtím necitoval žádnou studii s PMID/DOI. PubMed 7 volání (rešerše 6, adjudikace 1 — metadata 5 PMID, žádná retrakce); Consensus nepoužit. Adjudikace Opus: --07 partial s confidence medium (aritmetika 48,2 % sedí, literatura k témuž ohnisku dává 36,4 % k 12. 7.; článek podíl férově značí jako výpočet redakce), --12 přeřazeno z no-evidence na not-applicable. Žádné contradicted → bez flagu a issue; prose beze změny, audit-status zůstává review-pending, audit.last_reviewed beze změny. Neuschlova 2025 (PMID 40694423) jen v registru, do zdrojů článku nepřidána. Kayiwa 2026 (PMID 42810990) jen kontext v registru."
+    },
+    {
+      "id": "indicator:sebevrazdy_per_100k",
+      "type": "indicator",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "1afdecf5178bc6634958be56c5d596384a4b1b1a",
+      "tools": {
+        "pubmed": true,
+        "consensus": false
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Sebevraždy jsou chronicky podregistrované — skutečné číslo může být o 10–20 % vyšší.",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "40873674",
+              "doi": "10.3389/fpsyt.2025.1609580",
+              "title": "How many people die by suicide each year? Not 727,000: a systematic review and meta-analysis of suicide underreporting across 71 countries over 122 years.",
+              "year": 2025,
+              "journal": "Frontiers in psychiatry",
+              "study_type": "meta-analysis",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled (42 studií, 71 zemí, 14 v metaanalýze) odhaduje globální podregistraci 17,9 % (95% CI 10,9–28,1), v zemích s vysokými příjmy 11,5 % (95% CI 6,6–19,3); jako příčiny uvádí stigma, nedostatečnou forenzní kapacitu a nejednotné kódování MKN. Fakt podregistrace je doložen a rozmezí 10–20 % je s odhadem pro země s vysokými příjmy slučitelné, ale abstrakt neuvádí údaj pro ČR ani rozmezí 10–20 % jako takové (horní mez 20 % odpovídá spíš globálnímu průměru včetně zemí s neúplnou registrací úmrtí). Tvrzení o ČR opřené o zahraniční agregát → partial s výhradou přenositelnosti. Cílené hledání české studie o reklasifikaci úmrtí s nezjištěným úmyslem nic nevrátilo."
+        },
+        {
+          "claim_id": "",
+          "text": "Politické páky jsou jasné: ... regulace dostupnosti smrtících látek (paracetamol balení, pesticidy) ...",
+          "location": "patient_story (závěrečný odstavec)",
+          "kind": "efficacy",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "41365522",
+              "doi": "10.1136/bmjment-2025-302069",
+              "title": "Effectiveness of suicide means restriction: an overview of systematic reviews.",
+              "year": 2025,
+              "journal": "BMJ mental health",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "35977165",
+              "doi": "10.1001/jamahealthforum.2021.3042",
+              "title": "Association Between Means Restriction of Poison and Method-Specific Suicide Rates: A Systematic Review.",
+              "year": 2021,
+              "journal": "JAMA health forum",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Omezení dostupnosti prostředků je jako populační páka doloženo: umbrella review (20 přehledů, 179 primárních studií) uvádí, že zákazy vysoce nebezpečných pesticidů snížily míru sebevražd a že omezení velikosti balení paracetamolu snížilo počet přijetí pro otravu, s nejednoznačným dopadem na úmrtnost (12 z 20 přehledů má kriticky nízkou kvalitu). Přehled 62 studií z 26 zemí: po omezení jedů klesla míra sebevražd danou metodou (medián −1,18/100 000) bez přesunu k jiným metodám. Výhrady: u paracetamolu je efekt doložen na hospitalizacích, ne jednoznačně na úmrtích; evidence k pesticidům pochází hlavně ze zemí s nízkými a středními příjmy, kde jde o častou metodu, což pro ČR neplatí. Doporučení pro ČR stojí jen na zahraniční evidenci → partial. Studie 40551600 (zásahy na místech častých sebevražd) se jedů netýká, proto ji jako zdroj nenavrhuji."
+        },
+        {
+          "claim_id": "",
+          "text": "Mužská mortalita je zhruba 4× vyšší než ženská.",
+          "location": "patient_story (2. odstavec)",
+          "kind": "epidemiology",
+          "verdict": "unclear",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "38440131",
+              "doi": "10.1016/j.eclinm.2024.102506",
+              "title": "Global trends in youth suicide from 1990 to 2020: an analysis of data from the WHO mortality database.",
+              "year": 2024,
+              "journal": "EClinicalMedicine",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "K posouzení redakcí. Jediná nalezená práce se týká jen věku 10–24 let a uvádí poměr mužů a žen 2 až 5 napříč 52 zeměmi; o celé populaci ČR nic neříká, takže tvrzení ani nepotvrzuje, ani nevyvrací. Jde o statistický údaj, který se ověřuje z dat, ne z literatury: redakce by měla poměr spočítat z Eurostat hlth_cd_asdr2 (sex=M a sex=F, CZ, X60-X84_Y870), tedy ze stejné řady, jakou používá karta. Zdroj do literature se nepřidává."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 1
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Meda et al., Front Psychiatry 2025 (PMID 40873674, DOI 10.3389/fpsyt.2025.1609580) do nově založeného pole literature karty indicators/sebevrazdy_per_100k.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Steeg et al., BMJ Ment Health 2025 (PMID 41365522, DOI 10.1136/bmjment-2025-302069) do pole literature karty indicators/sebevrazdy_per_100k.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Lim et al., JAMA Health Forum 2021 (PMID 35977165, DOI 10.1001/jamahealthforum.2021.3042) do pole literature karty indicators/sebevrazdy_per_100k.json",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/sebevrazdy_per_100k.json → limitations: za stávající text připojena jedna věta s citací (podregistrace v zemích s vysokými příjmy 11,5 %, globálně 17,9 %, údaj pro ČR neuveden; Meda et al. 2025, PMID 40873674) — verdikt measurement, nově vložená formulace čeká na schválení redakcí",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "Tvrzení „mužská mortalita zhruba 4× vyšší než ženská“ (unclear): karta beze změny, ověření z dat Eurostat hlth_cd_asdr2 (sex=M/F) předáno redakci přes followup. patient_story ani method_notes se nemění, verification_status beze změny.",
+          "ref": ""
+        }
+      ],
+      "followup": "Poměr mužské a ženské mortality „zhruba 4×“ (unclear) ověřit z dat Eurostat hlth_cd_asdr2 (CZ, sex=M/F, X60-X84_Y870); kandidáti z PubMed k poměru pohlaví a trendu v ČR (PMID 41869896, 35322761, 34646174) nalezeni, abstrakty neprojity kvůli stropu volání. Z rešerše vynechána statistická tvrzení patient_story: „3 psychiatři na 10 000 vs. OECD 5,8“, „sebevražda nejčastější příčinou úmrtí mužů 25–44 let“ a „přes 1 200 lidí ročně“ (ověřit proti ČSÚ/ÚZIS/OECD). Česká studie o podregistraci (reklasifikace úmrtí nezjištěného úmyslu) nedohledána. Věta vložená do limitations čeká na schválení redakcí.",
+      "notes": "Karta necitovala žádnou literaturu, všechny studie nalezeny přes PubMed; Consensus nepoužit (PubMed dal pro 2 ze 3 tvrzení přehledy/metaanalýzy). Rešerše (Sonnet): 7 volání PubMed, dotaz na pohlavní rozdíl (systematic) vrátil 0 výsledků, následný dotaz jen mládežnickou studii. Adjudikace (Opus): 3 volání PubMed — ověření metadat a abstraktů čtyř PMID z rešerše (bez retrakce), cílené hledání české studie o podregistraci (bez výsledku), hledání trendů sebevražd v ČR (kandidáti do followup). Verdikty: 0 supported, 2 partial, 1 unclear. Podregistrace snížena ze supported na partial: tvrzení o ČR, rozmezí 10–20 % v abstraktu doslova není, evidence zahraniční. Regulace smrtících látek snížena ze supported na partial: u paracetamolu efekt doložen na hospitalizacích, ne na úmrtnosti; pesticidy hlavně v zemích s nízkými a středními příjmy. Poměr 4× unclear — datový údaj, ověřuje se proti Eurostatu, ne literaturou. Jediná vložená věta do limitations (výjimka pro measurement, s citací). Žádné contradicted → bez flagu a issue. Karta nemá audit-status; verification_status beze změny. Studie EClinicalMedicine 2024 (PMID 38440131) jen kontext v registru, do literature karty nezařazena."
+    },
+    {
+      "id": "indicator:unmet_need_medical",
+      "type": "indicator",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "09d7f1433dd7999e82f249e6d1841e56f8ef8dc6",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 10,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Nesplněná potřeba lékařské péče je v rámci OECD HSPA považována za klíčový proxy indikátor dostupnosti — operacionalizuje pojem „universal health coverage v praxi“.",
+          "location": "importance, 1. odstavec",
+          "kind": "measurement",
+          "verdict": "supported",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "38362555",
+              "doi": "10.1016/j.lanepe.2023.100826",
+              "title": "Monitoring progress towards universal health coverage in Europe: a descriptive analysis of financial protection in 40 countries.",
+              "year": 2023,
+              "journal": "Lancet Reg Health Eur",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "39471180",
+              "doi": "10.1371/journal.pone.0312475",
+              "title": "The prevalence and determinants of unmet healthcare needs in Bulgaria.",
+              "year": 2024,
+              "journal": "PLoS One",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37669794",
+              "doi": "10.1136/bmj-2023-075476",
+              "title": "Better data on unmet healthcare need can strengthen global monitoring of universal health coverage.",
+              "year": 2023,
+              "journal": "BMJ",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Abstrakty doslova dokládají dvě věci. Sebehodnocená nesplněná potřeba je užitečný ukazatel přístupu k péči (Maslyankov 2024). Nesplněná potřeba je standardní ukazatel finančních bariér přístupu při měření finanční ochrany, která je pro UHC ústřední (Thomson 2023, WHO Europe, 40 zemí). Rosenberg 2023 (analytický článek WHO, ověřen v PubMed) zdůrazňuje roli dat o nesplněné potřebě v monitoringu UHC. Přívlastek „klíčový“ a přiřazení k rámci OECD HSPA jsou institucionální rámování, které literatura nehodnotí. Systematický přehled validity ukazatele nebyl nalezen."
+        },
+        {
+          "claim_id": "",
+          "text": "Zubní péče, optika, doplatky léků a vybrané screening výkony jsou v ČR významně hrazeny z kapsy — domácnosti s nízkým příjmem to vede k odkládání péče.",
+          "location": "factors, „Doplatky a platba z kapsy“",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "38362555",
+              "doi": "10.1016/j.lanepe.2023.100826",
+              "title": "Monitoring progress towards universal health coverage in Europe: a descriptive analysis of financial protection in 40 countries.",
+              "year": 2023,
+              "journal": "Lancet Reg Health Eur",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "27388561",
+              "doi": "10.1186/s12939-016-0389-6",
+              "title": "Income inequality and foregone medical care in Europe during The Great Recession: multilevel analyses of EU-SILC surveys 2008-2013.",
+              "year": 2016,
+              "journal": "Int J Equity Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "26944542",
+              "doi": "10.1186/s12939-016-0335-7",
+              "title": "How social policies can improve financial accessibility of healthcare: a multi-level analysis of unmet medical need in European countries.",
+              "year": 2016,
+              "journal": "Int J Equity Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr vztahu potvrzují tři nezávislé průřezové studie: platby z kapsy a nízký příjem souvisejí s vyšší nesplněnou potřebou. Thomson 2023 to ukazuje na 40 zemích, platí to zejména u nízkopříjmových a katastrofické výdaje táhnou ambulantní léky, zdravotnické prostředky a zubní péče. Elstad 2016 (EU-SILC 2008–2013, N = 1,24 mil.) a Israel 2016 (EU-SILC 2012) potvrzují sociální gradient. Jde o asociace, ne o kauzalitu. Tvrzení o ČR (optika, screeningové výkony, „významně“) stojí jen na zahraniční evidenci, proto partial s výhradou přenositelnosti. Výsledky pro ČR abstrakty neuvádějí. Karta navíc sama v patient_story označuje finanční důvod v ČR za marginální (viz card-note)."
+        },
+        {
+          "claim_id": "",
+          "text": "Souhrnný indikátor maskuje rozdíly mezi důvody (cena vs. čekání); self-report neměří objektivní dostupnost, ale subjektivní zkušenost (recall bias, sub-skupinová heterogenita).",
+          "location": "limitations / method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "28355635",
+              "doi": "10.1093/eurpub/ckw219",
+              "title": "Subjective perceptions of unmet need for health care in Europe among social groups: Findings from the European social survey (2014) special module on the social determinants of health.",
+              "year": 2017,
+              "journal": "Eur J Public Health",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34344682",
+              "doi": "10.1136/bmjopen-2021-048860",
+              "title": "Investigating unmet need for healthcare using the European Health Interview Survey: a cross-sectional survey study of Luxembourg.",
+              "year": 2021,
+              "journal": "BMJ Open",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "29117216",
+              "doi": "10.1371/journal.pone.0187866",
+              "title": "Predictors of unmet health care needs in Serbia; Analysis based on EU-SILC data.",
+              "year": 2017,
+              "journal": "PLoS One",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37669794",
+              "doi": "10.1136/bmj-2023-075476",
+              "title": "Better data on unmet healthcare need can strengthen global monitoring of universal health coverage.",
+              "year": 2023,
+              "journal": "BMJ",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Fjær 2017 definuje nesplněnou potřebu jako individuálně vnímaný subjektivní rozdíl mezi potřebnou a obdrženou péčí. V ESS 2014 (25–75 let, nejde o EU-SILC) připadaly dvě třetiny případů na čekací listiny a dostupnost termínu. Tím je doložena subjektivní povaha ukazatele i to, že se důvody liší. Rozložení důvodů se výrazně liší mezi zeměmi a skupinami: v Lucembursku převažuje čekání (Moran 2021), v Srbsku finanční důvod (Popović 2017). Část o recall biasu ani srovnatelnosti EU-SILC napříč zeměmi žádný abstrakt nedokládá. Rosenberg 2023 jen obecně volá po standardizaci otázek. Proto partial, návrh jedné věty do limitations viz prose_change."
+        }
+      ],
+      "summary": {
+        "supported": 1,
+        "partial": 2,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "Thomson et al., Lancet Reg Health Eur 2023 (PMID 38362555, DOI 10.1016/j.lanepe.2023.100826) do nově založeného pole literature karty indicators/unmet_need_medical.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Fjær et al., Eur J Public Health 2017 (PMID 28355635, DOI 10.1093/eurpub/ckw219) do pole literature karty indicators/unmet_need_medical.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Maslyankov et al., PLoS One 2024 (PMID 39471180, DOI 10.1371/journal.pone.0312475) do pole literature karty indicators/unmet_need_medical.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Elstad, Int J Equity Health 2016 (PMID 27388561, DOI 10.1186/s12939-016-0389-6) do pole literature karty indicators/unmet_need_medical.json",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "Rosenberg et al., BMJ 2023 (PMID 37669794, DOI 10.1136/bmj-2023-075476) do pole literature karty indicators/unmet_need_medical.json (kontext, analytický článek WHO)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/unmet_need_medical.json → limitations: za větu „Souhrnný indikátor maskuje rozdíly mezi důvody (cena vs. čekání).“ vložena jedna věta s citací (dvě třetiny nesplněné potřeby v European Social Survey 2014 připadaly na čekací listiny a dostupnost termínu; Fjær et al. 2017, PMID 28355635; ESS, ne EU-SILC, výslovně uvedeno). Verdikt partial, kind measurement; nově vložená formulace čeká na schválení redakcí. Část o recall bias zůstává bez doložení v literatuře, audit ji nemazal.",
+          "ref": "indicator:unmet_need_medical"
+        },
+        {
+          "type": "card-note",
+          "detail": "Poznámka redakci (audit prose karty neměnil): tvrzení ve factors „Doplatky a platba z kapsy“ mluví o ČR, ale opírá se jen o mezinárodní evidenci. Vztah mezi platbami z kapsy, nízkým příjmem a odkládáním péče dokládají Thomson et al. 2023 (PMID 38362555; 40 zemí) a Elstad 2016 (PMID 27388561; EU-SILC 2008–2013). Česká data o rozsahu plateb z kapsy za optiku a screeningové výkony a o jejich dopadu na odklad péče z abstraktů neplynou, proto je verdikt partial s výhradou přenositelnosti. Karta navíc sama v patient_story označuje finanční důvod nesplněné potřeby v ČR za marginální (celková hodnota 0,3 %, EU-SILC 2025). To je s formulací „významně hrazeny z kapsy … vede k odkládání péče“ ve vnitřním napětí. Doporučeno doložit české tvrzení domácím zdrojem (např. platba_z_kapsy_pct, rozpad hlth_silc_08 podle důvodu a kvintilu pro CZ) nebo formulaci zmírnit. Rozhodnutí je na redakci.",
+          "ref": "indicator:unmet_need_medical"
+        }
+      ],
+      "notes": "Karta nemá odkazy na literaturu, prahy (good 2 / warn 5 %) a směr se na literaturu neodvolávají, proto nejsou tvrzeními k ověření. Nalezené studie jsou průřezové (žádný systematický přehled k validitě EU-SILC ukazatele; PubMed dotazy s EU-SILC + systematic[sb] a validity/comparability vrátily 0 výsledků). Consensus: 1 dotaz, bez rate-limitu; jediný relevantní nový kandidát (Rosenberg, BMJ 2023, komentář/viewpoint) nebyl v rešerši ověřen v PubMed kvůli stropu volání. Volání PubMed v rešerši: 7 (5 vyhledávání, 2 načtení metadat). Žádná studie o ČR nenalezena. Všechny studie ověřeny přes get_article_metadata (typ: Journal Article, bez retrakce v metadatech). | Adjudikace (Opus) proběhla v rámci stropu 3 volání PubMed. Volání 1 (get_article_metadata) znovu načetlo abstrakty všech 7 studií z rešerše; žádná není retrahovaná, všechny mají typ Journal Article. Volání 2 a 3 (convert_article_ids a get_article_metadata) ověřila kandidáta z Consensu Rosenberg et al. 2023: PMID 37669794, PMC10477915 — analytický článek autorů z WHO o standardizaci otázek na nesplněnou potřebu pro monitoring UHC; v evidenci jako found_via consensus, verified_in_pubmed true, relation context, study_type other. Tím je followup z rešerše uzavřený. Výsledek: 3 tvrzení, 1 supported a 2 partial; žádný contradicted, proto bez akce flagged ani issue. Do pole literature karty zapsáno 5 položek; do limitations vložena jedna věta s citací Fjær et al. 2017 (čeká na schválení redakcí). Recall bias a srovnatelnost EU-SILC napříč zeměmi literatura v abstraktech nedokládá (systematic[sb] 0 výsledků); na verdikt partial to nemá vliv. Rozpad podle důvodů a kvintilů pro ČR (hlth_silc_08) by tvrzení 2 a 3 posílil, jde ale o administrativní statistiku mimo rozsah evidence-auditu."
+    },
+    {
+      "id": "indicator:vakcinace_hexa_deti",
+      "type": "indicator",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "a5fbc91a2b8f8278484642a5dbbd050666ac7b22",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 0
+      },
+      "claims": [
+        {
+          "claim_id": "",
+          "text": "Práh kolektivní (stádní) imunity se u dávivého kašle a obrny běžně uvádí na úrovni 95 % — pod ní se zvyšuje riziko lokálních epidemií.",
+          "location": "method_notes",
+          "kind": "mechanism",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "28060041",
+              "doi": "10.1097/INF.0000000000001537",
+              "title": "Estimating Pertussis Susceptibility Among 0-23-Month-Old Children in the United States: Using National Immunization Survey (NIS) 2013.",
+              "year": 2017,
+              "journal": "The Pediatric infectious disease journal",
+              "study_type": "cross-sectional",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30994164",
+              "doi": "10.7416/ai.2019.2277",
+              "title": "Today's vaccination policies in Italy: The National Plan for Vaccine Prevention 2017-2019 and the Law 119/2017 on the mandatory vaccinations.",
+              "year": 2019,
+              "journal": "Annali di igiene",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34201199",
+              "doi": "10.3390/jcm10122540",
+              "title": "Improved Temporal Trends of Vaccination Coverage Rates in Childhood after the Mandatory Vaccination Act, Italy 2014-2019.",
+              "year": 2021,
+              "journal": "Journal of clinical medicine",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr tvrzení (nižší proočkovanost = vyšší riziko přenosu) je v souladu s evidencí: Childs a Bednarczyk 2017 (USA) ukazují, že při zohlednění slábnoucí imunity po 4. dávce práh kolektivní ochrany proti pertusi dosažen nebyl. Konkrétní hodnota 95 % jako práh kolektivní imunity specificky pro pertusi a obrnu v ověřených abstraktech není; 95 % figuruje v italských pracích jako cílová proočkovanost, ne jako odvozený práh pro jednotlivé nemoci (prahy se mezi nemocemi liší, u pertuse jej komplikuje slábnoucí imunita). Číslo mimo abstrakt → nejvýš partial. Formulace by přesněji zněla „cílová proočkovanost 95 %“ — k posouzení redakcí."
+        },
+        {
+          "claim_id": "",
+          "text": "Po roce 2020 nastal souvislý pokles — část rodičů odkládá nebo odmítá očkování pod vlivem dezinformací a obecné nedůvěry vůči institucím.",
+          "location": "determinants",
+          "kind": "epidemiology",
+          "verdict": "partial",
+          "confidence": "low",
+          "evidence": [
+            {
+              "pmid": "40578370",
+              "doi": "10.1016/S0140-6736(25)01037-2",
+              "title": "Global, regional, and national trends in routine childhood vaccination coverage from 1980 to 2023 with forecasts to 2030: a systematic analysis for the Global Burden of Disease Study 2023.",
+              "year": 2025,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34273292",
+              "doi": "10.1016/S0140-6736(21)01337-4",
+              "title": "Estimating global and regional disruptions to routine childhood vaccine coverage during the COVID-19 pandemic in 2020: a modelling study.",
+              "year": 2021,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "37304497",
+              "doi": "10.1016/j.eclinm.2023.102042",
+              "title": "Estimating global and regional between-country inequality in routine childhood vaccine coverage in 195 countries and territories from 2019 to 2021: a longitudinal study.",
+              "year": 2023,
+              "journal": "EClinicalMedicine",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "context",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "GBD 2023 (Lancet 2025) dokládá pokles pokrytí DTP3 od roku 2020 bez návratu na předpandemickou úroveň do roku 2023 a pokles už v letech 2010–2019 ve 21 z 36 zemí s vysokými příjmy; jako nutnost uvádí řešit dezinformace a váhání s očkováním. Příčinnou vazbu poklesu v ČR na dezinformace a nedůvěru vůči institucím abstrakt nedokládá (popisuje globální trendy a narušení služeb). Jen zahraniční/globální evidence k tvrzení o ČR → partial; přenositelnost omezená. České práce o váhání rodičů existují v PubMed (17 záznamů), ale pro vyčerpaný strop volání nebyly ověřeny."
+        },
+        {
+          "claim_id": "",
+          "text": "Země s mandatorním očkováním se obvykle drží nad 95 % — český propad je proto strukturální selhání, ne objektivní nutnost.",
+          "location": "importance (Mezinárodní pozice) a determinants (Povinné očkování a slabé vymáhání)",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "34696280",
+              "doi": "10.3390/vaccines9101173",
+              "title": "Effectiveness of Mandatory and Incentive-Based Routine Childhood Immunization Programs in Europe: A Systematic Review of the Literature.",
+              "year": 2021,
+              "journal": "Vaccines",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "34201199",
+              "doi": "10.3390/jcm10122540",
+              "title": "Improved Temporal Trends of Vaccination Coverage Rates in Childhood after the Mandatory Vaccination Act, Italy 2014-2019.",
+              "year": 2021,
+              "journal": "Journal of clinical medicine",
+              "study_type": "other",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Systematický přehled Kuznetsova et al. 2021 (26 studií, 7 evropských zemí) dokládá, že zavedení povinného očkování zvyšuje proočkovanost a snižuje výskyt nemocí oproti stavu před zavedením — tedy srovnání v čase, ne tvrzení, že země s povinností se obvykle drží nad 95 %. Italská studie ukazuje dosažení 95 % u 9 z 10 povinných očkování po zpřísnění zákona v roce 2017 (jedna země). Kvantifikace „obvykle nad 95 %“ v abstraktech není a samotná ČR je zemí s povinným očkováním pod touto hranicí, takže efekt zjevně závisí na vymáhání. Hodnotící závěr „strukturální selhání“ je interpretace, kterou studie netestují. Zahraniční evidence k tvrzení o ČR → partial s výhradou přenositelnosti."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_hexa_deti.json → literature: {\"pmid\":\"34696280\",\"doi\":\"10.3390/vaccines9101173\",\"title\":\"Effectiveness of Mandatory and Incentive-Based Routine Childhood Immunization Programs in Europe: A Systematic Review of the Literature.\",\"year\":2021,\"journal\":\"Vaccines (Basel)\",\"study_type\":\"systematic review\",\"note\":\"Kuznetsova L, Cortassa G, Trilla A. Systematický přehled 26 studií ze 7 evropských zemí: zavedení povinného očkování dětí zvyšuje proočkovanost a snižuje výskyt nemocí oproti stavu před zavedením. K tvrzení o povinném očkování (importance, determinants); práh 95 % ani vliv vymáhání sankcí v ČR z abstraktu neplyne.\",\"verified_at\":\"2026-10-04\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_hexa_deti.json → literature: {\"pmid\":\"34201199\",\"doi\":\"10.3390/jcm10122540\",\"title\":\"Improved Temporal Trends of Vaccination Coverage Rates in Childhood after the Mandatory Vaccination Act, Italy 2014-2019.\",\"year\":2021,\"journal\":\"J Clin Med\",\"study_type\":\"other\",\"note\":\"Itálie po zákonu 119/2017 o povinném očkování: 9 z 10 povinných očkování dosáhlo cílové proočkovanosti 95 %. K tvrzení o zemích s povinným očkováním; jedna země, přenositelnost na ČR omezená.\",\"verified_at\":\"2026-10-04\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_hexa_deti.json → literature: {\"pmid\":\"40578370\",\"doi\":\"10.1016/S0140-6736(25)01037-2\",\"title\":\"Global, regional, and national trends in routine childhood vaccination coverage from 1980 to 2023 with forecasts to 2030: a systematic analysis for the Global Burden of Disease Study 2023.\",\"year\":2025,\"journal\":\"Lancet\",\"study_type\":\"other\",\"note\":\"GBD 2023 Vaccine Coverage Collaborators. Globální pokrytí DTP3 od roku 2020 kleslo a do roku 2023 se nevrátilo na předpandemickou úroveň; už v letech 2010–2019 poklesy ve 21 z 36 zemí s vysokými příjmy; doporučuje řešit dezinformace a váhání s očkováním. K tvrzení o poklesu po roce 2020 (determinants); příčinu poklesu v ČR přímo nedokládá.\",\"verified_at\":\"2026-10-04\"}",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/vakcinace_hexa_deti.json → literature: {\"pmid\":\"28060041\",\"doi\":\"10.1097/INF.0000000000001537\",\"title\":\"Estimating Pertussis Susceptibility Among 0-23-Month-Old Children in the United States: Using National Immunization Survey (NIS) 2013.\",\"year\":2017,\"journal\":\"Pediatr Infect Dis J\",\"study_type\":\"cross-sectional\",\"note\":\"Childs L, Bednarczyk RA. Pediatr Infect Dis J. 2017;36(8):705-711. Asi 22 % dětí 0–23 měsíců v USA je vnímavých k pertusi; při zohlednění slábnoucí imunity po 4. dávce práh kolektivní ochrany dosažen nebyl. Kontext k větě o prahu kolektivní imunity (method_notes): práh u pertuse není pevná hodnota, 95 % z abstraktu neplyne.\",\"verified_at\":\"2026-10-04\"}",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "claim-note neprovedena: žádné existující tvrzení v data/claims.json (indicator_id vakcinace_hexa_deti) nemá quote odpovídající auditovaným větám karty; claims se týkají hodnot 97/86 % a benchmarku, ne prahu, příčin poklesu či povinného očkování. Žádný verdikt contradicted → bez flagged/issue. Limitations beze změny (žádný verdikt measurement).",
+          "ref": ""
+        }
+      ],
+      "followup": "Tvrzení 2 (příčiny poklesu po roce 2020 v ČR): české práce o váhání a odmítání očkování rodiči (PubMed: vaccine hesitancy AND Czech Republic AND parents/children, 17 záznamů) neověřeny — vyčerpaný strop volání. Tvrzení 1: práh kolektivní imunity pro pertusi a polio z přehledové práce neověřen — vyčerpaný strop volání.",
+      "notes": "Rešerše (Sonnet): PubMed 8 volání (strop), Consensus nepoužit, PubMed dal relevantní nálezy. Karta neměla odkazy na literaturu; found_via article nepoužito. Systematické filtry u 95% prahu a poklesu po COVID nic nevrátily, dohledáno bez filtru. Česká práce nenalezena. Adjudikace (Opus): PubMed 3 volání (strop); všechna 3 tvrzení finálně partial (1 low, 2 low, 3 medium), žádné contradicted; metadata 34696280/28060041/40578370 ověřena, studie 30994164, 34201199, 34273292, 37304497 převzaty z rešerše (verified_in_pubmed). Karta indikátoru připouští jen pole literature a větu do limitations u measurement verdiktu, proto bez změny prose. K posouzení redakcí: formulace „práh kolektivní imunity 95 %“ u pertuse a obrny (přesněji cílová proočkovanost WHO) a hodnotící věta „strukturální selhání“."
+    },
+    {
+      "id": "indicator:cezarsky_rez_pct",
+      "type": "indicator",
+      "checked_at": "2026-10-04",
+      "run_id": "ea-2026-10-04-01",
+      "content_hash": "0e4b30279b52c8531cfaadc2155fb906dd844372",
+      "tools": {
+        "pubmed": true,
+        "consensus": true
+      },
+      "models": {
+        "search": "sonnet",
+        "adjudicate": "opus",
+        "write": "opus"
+      },
+      "calls": {
+        "pubmed": 11,
+        "consensus": 1
+      },
+      "claims": [
+        {
+          "text": "WHO doporučuje 10–15 % jako optimální míru SC.",
+          "location": "method_notes",
+          "kind": "measurement",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26093498",
+              "doi": "10.1186/s12978-015-0043-6",
+              "title": "What is the optimal rate of caesarean section at population level? A systematic review of ecologic studies.",
+              "year": 2015,
+              "journal": "Reprod Health",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Betrán 2015 potvrzuje, že rozmezí 10–15 % pochází z prohlášení WHO z roku 1985 (nad tuto míru nelze SC na úrovni populace ospravedlnit). Ekologický práh, nad kterým se úmrtnost dál nesnižuje, je 9–16 % a po úpravě o socioekonomické faktory se oslabuje. Formulace „doporučuje jako optimální“ vyznívá jako aktuální cílová hodnota, a to abstrakt nedokládá. Novější prohlášení WHO 2015 (PMID 26681211) je dohledané, jeho abstrakt ale zatím nečtený."
+        },
+        {
+          "text": "Hodnoty nad 20 % nemají prokázaný přínos pro matku ani dítě.",
+          "location": "method_notes",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "26093498",
+              "doi": "10.1186/s12978-015-0043-6",
+              "title": "What is the optimal rate of caesarean section at population level? A systematic review of ecologic studies.",
+              "year": 2015,
+              "journal": "Reprod Health",
+              "study_type": "systematic review",
+              "found_via": "pubmed",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Směr sedí: nad prahem 9–16 % se populační mateřská, novorozenecká a kojenecká úmrtnost dál nesnižuje, takže ani nad 20 % není přínos pro úmrtnost doložen. Číslo 20 % ale v abstraktu není, morbiditu autoři nehodnotili a data jsou ekologická. Část „ani dítě“ je proto doložená jen pro úmrtnost."
+        },
+        {
+          "text": "Vysoký SC procent znamená vyšší peri- a postoperační rizika pro matku (krvácení, infekce, tromboembolismus), pozdější obtíže (placenta accreta v dalším těhotenství, problematické vaginální porody po SC).",
+          "location": "patient_story",
+          "kind": "effect",
+          "verdict": "partial",
+          "confidence": "medium",
+          "evidence": [
+            {
+              "pmid": "29360829",
+              "doi": "10.1371/journal.pmed.1002494",
+              "title": "Long-term risks and benefits associated with cesarean delivery for mother, baby, and subsequent pregnancies: Systematic review and meta-analysis.",
+              "year": 2018,
+              "journal": "PLoS Med",
+              "study_type": "meta-analysis",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "30322585",
+              "doi": "10.1016/S0140-6736(18)31930-5",
+              "title": "Short-term and long-term effects of caesarean section on the health of women and children.",
+              "year": 2018,
+              "journal": "Lancet",
+              "study_type": "other",
+              "found_via": "consensus",
+              "relation": "supports",
+              "verified_in_pubmed": true
+            },
+            {
+              "pmid": "21067593",
+              "doi": "10.1186/1741-7015-8-71",
+              "title": "Caesarean section without medical indications is associated with an increased risk of adverse short-term maternal outcomes: the 2004-2008 WHO Global Survey on Maternal and Perinatal Health.",
+              "year": 2010,
+              "journal": "BMC Med",
+              "study_type": "cross-sectional",
+              "found_via": "consensus",
+              "relation": "partial",
+              "verified_in_pubmed": true
+            }
+          ],
+          "note": "Povýšeno z unclear na partial.\n- Keag 2018: v těhotenství po SC je vyšší riziko placenta accreta (OR 2,95), praevia (OR 1,74) a abrupce (OR 1,38); data jsou observační.\n- Sandall 2018: mateřská morbidita a mortalita jsou po SC vyšší, roste riziko ruptury dělohy a abnormální placentace, a to s počtem SC.\n- Souza 2010: SC bez indikace je spojen s úmrtím, JIP, transfuzí a hysterektomií (rozvojové země).\nInfekci a tromboembolismus jmenovitě žádný ověřený abstrakt neuvádí. Věta navíc spojuje populační míru s individuálním rizikem. K posouzení redakcí."
+        }
+      ],
+      "summary": {
+        "supported": 0,
+        "partial": 3,
+        "contradicted": 0,
+        "no_evidence": 0,
+        "not_applicable": 0,
+        "unclear": 0
+      },
+      "actions": [
+        {
+          "type": "source-added",
+          "detail": "indicators/cezarsky_rez_pct.json → literature: Betrán 2015, Reprod Health, PMID 26093498, DOI 10.1186/s12978-015-0043-6 (doklad k method_notes: WHO 10–15 %, hodnoty nad 20 %)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/cezarsky_rez_pct.json → literature: Keag 2018, PLoS Med, PMID 29360829, DOI 10.1371/journal.pmed.1002494 (doklad k patient_story: placenta accreta v dalším těhotenství)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/cezarsky_rez_pct.json → literature: Sandall 2018, Lancet, PMID 30322585, DOI 10.1016/S0140-6736(18)31930-5 (doklad k patient_story: rizika SC pro matku)",
+          "ref": ""
+        },
+        {
+          "type": "source-added",
+          "detail": "indicators/cezarsky_rez_pct.json → literature: Souza 2010, BMC Med, PMID 21067593, DOI 10.1186/1741-7015-8-71 (doklad k patient_story: peri- a postoperační rizika)",
+          "ref": ""
+        },
+        {
+          "type": "card-note",
+          "detail": "indicators/cezarsky_rez_pct.json → limitations: připojena jedna věta k measurement verdiktu WHO 10–15 % (Betrán 2015, PMID 26093498): „Hranice 10–15 % pochází z prohlášení WHO z roku 1985; podle systematického přehledu ekologických studií (Betrán et al., Reprod Health 2015, PMID 26093498) nad mírou zhruba 9–16 % populační mateřská, novorozenecká a kojenecká úmrtnost dál neklesá, po úpravě o socioekonomické faktory se tento vztah oslabuje a vliv na morbiditu hodnocen nebyl.“",
+          "ref": ""
+        },
+        {
+          "type": "none",
+          "detail": "claim-note neprovedena: rozhodnutí žádnou claim-note neobsahuje. Žádný verdikt contradicted, takže flagged ani issue nejsou potřeba. method_notes a patient_story beze změny (karta připouští jen literature a větu do limitations).",
+          "ref": ""
+        }
+      ],
+      "followup": "Tvrzení 1 (WHO 10–15 %): abstrakt prohlášení WHO 2015 (Betrán et al., BJOG 2016;123:667, PMID 26681211) nečtený, vyčerpaný strop volání. Tvrzení 3: infekce a tromboembolismus po SC nejsou doloženy žádným ověřeným abstraktem, vyčerpaný strop volání.",
+      "notes": "Karta cituje jen NICE NG192 (jako politickou páku), bez studií, takže found_via article se nepoužilo. PubMed: 8 volání vyčerpáno (5 hledání, 3 metadata); 40679824 a 39884567 jsou irelevantní (PAS guidelines/management), vyřazeny. Consensus: 1 dotaz (bez 429), kandidáti Keag 2018, Sandall 2018, Souza 2010 nebyli ověřeni v PubMed kvůli stropu, proto nejsou v evidence a třetí tvrzení je unclear. Doporučení pro Opus: ověřit tyto tři DOI v PubMed a případně povýšit tvrzení 3 na partial/supported; u tvrzení 1 a 2 navrhnout upřesnění method_notes (WHO 1985, ekologický práh 9–16 %, jen mortalita). Nad rámec: Chen 2018 Cochrane (PMID 30264405, DOI 10.1002/14651858.CD005528.pub3) ověřen: guidelines + druhý názor / audit se zpětnou vazbou mírně snižují míru SC bez rozdílu v mateřské a novorozenecké mortalitě/morbiditě, relevantní kontext k politickým pákám (NG192, audit per nemocnice), ale není to claim z karty. | Adjudikace (Opus), 3 volání PubMed:\n1. převod tří DOI na PMID,\n2. metadata s abstrakty (Keag 2018 = PMID 29360829, Sandall 2018 = PMID 30322585, Souza 2010 = PMID 21067593),\n3. vyhledání prohlášení WHO 2015 podle citace (Betrán et al., BJOG 2016;123:667, PMID 26681211).\n\nVerdikty:\n- Tvrzení 1 (WHO 10–15 %): partial. Rozmezí je z WHO 1985 a ekologický práh je 9–16 %. Formulace „doporučuje jako optimální“ zní jako aktuální cíl, a to abstrakt nepotvrzuje.\n- Tvrzení 2 (nad 20 % bez přínosu): partial. Platí jen pro úmrtnost, číslo 20 % v abstraktu není, morbidita nehodnocena.\n- Tvrzení 3 (rizika pro matku): povýšeno z unclear na partial. Dokládají ho tři ověřené studie z Consensu (Keag, Sandall, Souza). Infekce a tromboembolismus zůstávají nedoložené.\n\nŽádný verdikt není contradicted, takže flagged ani issue nejsou potřeba.\n\nFOLLOWUP:\n- Abstrakt prohlášení WHO 2015 (PMID 26681211) jsem nečetl, protože došel strop volání. Je kandidátem k tvrzení 1.\n- Infekce a tromboembolismus po SC (tvrzení 3) zůstávají neověřené.\n\nPro redakci (mimo audit):\n- V patient_story je text „mírně nad WHO doporučeným optimem 10–15 %“ u hodnoty 28,3 %, což je asi dvojnásobek horní hranice. Má stejnou vadu jako tvrzení 1.\n- Chen 2018 Cochrane (PMID 30264405, ověřil Sonnet) je relevantní kontext k politickým pákám: doporučené postupy a audit se zpětnou vazbou mírně snižují míru SC. Do literature jsem ho nedal, protože se netýká auditovaného tvrzení."
     }
   ]
 }
