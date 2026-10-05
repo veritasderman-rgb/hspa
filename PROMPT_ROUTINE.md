@@ -187,7 +187,8 @@ npm run evidence:queue -- --status       # jen v neděli (blok I)
 ## 5. Blok B — Distribuce: fronta Bufferu
 
 **Účel**: udržet na každém připojeném kanálu **10 naplánovaných feed příspěvků**
-+ na Facebooku a Instagramu **1 vertikální Story/Reels slot** za běh. Texty podle
++ na Facebooku a Instagramu **1 vertikální Story/Reels slot** za běh, pokud se do stropu vejde
+(viz pravidlo 4 — na Free plánu se Story počítá do téhož limitu 10). Texty podle
 `docs/social-copywriting-manual.md` (hlavní věc do 1. věty, jeden hák, věcně ale
 poutavě) a etalonu `docs/social-buffer-prvni-prispevky.md`. Portál = **HSPA Monitor**,
 doména v CTA `skorezdravotnictvi.cz`.
@@ -258,7 +259,15 @@ FB `Skóre zdravotnictví Česko` `6a26b01d8f1d11f9b263c41b`, IG `skorezdravotni
    formátu: FB/IG „Čtvercová grafika článku … na portálu HSPA Monitor.", X „Grafika článku
    …", Story „Vertikální grafika článku …".
 4. **Vertikální slot** (FB i IG po 1): jen články s živou `ig-story/` kartou, stejná
-   priorita a cooldown (klíč = URL vertikální karty). Story = výchozí: IG
+   priorita a cooldown (klíč = URL vertikální karty). **Pozor na strop plánu** (rozhodnuto
+   5. 10. 2026, issue #1233): Buffer na Free plánu počítá Story do téhož limitu 10
+   naplánovaných příspěvků na kanál, ne zvlášť — po doplnění feedu na 10 proto Story
+   vrátí `Limit reached: Scheduled posts limit reached. You have 10 scheduled posts out of
+   10 allowed.` Platí varianta (a) z issue: **feed má přednost**, Story se plní jen v dnech,
+   kdy fronta po doplnění nedosáhne 10. Nic se kvůli Story nemaže ani nepřeplánovává;
+   nevyužitý slot se jen nahlásí v reportu („Story vynechána — strop plánu 10/10“).
+   Odpadne to samo, až bude plán placený (pak Story sloty běží zvlášť a pravidlo se vrátí
+   k původnímu znění). Story = výchozí: IG
    `metadata.instagram = { type: "story", shouldShareToFeed: false, link: "<URL článku>" }`,
    FB `metadata.facebook = { type: "story" }`. Reel jen když existuje video
    (`assets/social/reels/<slug>.mp4`). Caption ultra-stručně. Bez kandidáta slot vynech
